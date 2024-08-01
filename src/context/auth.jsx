@@ -1,7 +1,7 @@
-import { ShowToast } from "@/components/Toast";
-import { useCookie, useLocalStorage } from "@/hooks";
-import { api } from "@lib/api";
-import { createContext, useContext, useEffect, useState } from "react";
+import { ShowToast } from '@/components/Toast';
+import { useCookie, useLocalStorage } from '@/hooks';
+import { api } from '@lib/api';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const AuthContext = createContext({});
 
@@ -10,10 +10,12 @@ const AuthProvider = ({ children }) => {
 	const [canAccess, setCanAccess] = useState(null);
 	const [loading, setLoading] = useState(true);
 
-	const [authCookie, updateAuthCookie, removeAuthCookie] = useCookie("auth");
-	const [userCookie, updateUserCookie, removeUserCookie] = useCookie("user");
-	const [userCanAccess, updateUserCanAccess, removeUserCanAccess] =
-		useLocalStorage("can_access", "");
+	const [authCookie, updateAuthCookie, removeAuthCookie] = useCookie('auth');
+	const [userCookie, updateUserCookie, removeUserCookie] = useCookie('user');
+	const [userCanAccess, updateUserCanAccess, removeUserCanAccess] = useLocalStorage(
+		'can_access',
+		''
+	);
 
 	useEffect(() => {
 		async function loadCookieData() {
@@ -29,25 +31,25 @@ const AuthProvider = ({ children }) => {
 
 	const Login = async (data) => {
 		try {
-			const res = await api.post("/user/login", data);
+			const res = await api.post('/hr/user/login', data);
 			const { token, user: loginUser, can_access: hasAccess } = res?.data;
 
-			updateAuthCookie(token || "");
+			updateAuthCookie(`Bearer ` + token || '');
 
 			const userData = JSON.stringify(loginUser);
 			const can_access = hasAccess;
 
-			updateUserCanAccess(can_access || "");
-			updateUserCookie(userData || "");
+			updateUserCanAccess(can_access || '');
+			updateUserCookie(userData || '');
 
 			setUser(userData);
 			setCanAccess(can_access);
 
 			ShowToast(res);
 
-			if (token && userData) return (window.location.href = "/dashboard");
+			if (token && userData) return (window.location.href = '/dashboard');
 
-			ShowToast("Invalid login credentials");
+			ShowToast('Invalid login credentials');
 		} catch (error) {
 			ShowToast(error.response);
 		}
@@ -70,9 +72,7 @@ const AuthProvider = ({ children }) => {
 	};
 	// const value = { signed: true, user, canAccess, loading, Login, Logout };
 
-	return (
-		<AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-	);
+	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

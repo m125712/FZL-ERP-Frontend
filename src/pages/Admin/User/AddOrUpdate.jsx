@@ -1,50 +1,36 @@
-import { AddModal } from "@/components/Modal";
-import {
-	useFetch,
-	useFetchForRhfReset,
-	usePostFunc,
-	useRHF,
-	useUpdateFunc,
-} from "@/hooks";
-import { FormField, Input, PasswordInput, ReactSelect, Textarea } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { PASSWORD, USER_NULL, USER_SCHEMA } from "@util/Schema";
-import * as yup from "yup";
+import { AddModal } from '@/components/Modal';
+import { useFetch, useFetchForRhfReset, usePostFunc, useRHF, useUpdateFunc } from '@/hooks';
+import { FormField, Input, PasswordInput, ReactSelect, Textarea } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { PASSWORD, USER_NULL, USER_SCHEMA } from '@util/Schema';
+import * as yup from 'yup';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setUsers,
-	updateUser = { id: null, department_designation: null },
+	updateUser = { uuid: null, department_designation: null },
 	setUpdateUser,
 }) {
 	var schema = USER_SCHEMA;
 
-	if (updateUser?.id == null) {
+	if (updateUser?.uuid == null) {
 		schema = {
 			...USER_SCHEMA,
 			pass: PASSWORD,
-			repeatPass: PASSWORD.oneOf(
-				[yup.ref("pass")],
-				"Passwords do not match"
-			),
+			repeatPass: PASSWORD.oneOf([yup.ref('pass')], 'Passwords do not match'),
 		};
 	}
-	const {
-		register,
-		handleSubmit,
-		errors,
-		reset,
-		Controller,
-		control,
-		getValues,
-	} = useRHF(schema, USER_NULL);
+	const { register, handleSubmit, errors, reset, Controller, control, getValues } = useRHF(
+		schema,
+		USER_NULL
+	);
 
-	useFetchForRhfReset(`/user/${updateUser?.id}`, updateUser?.id, reset);
+	useFetchForRhfReset(`hr/user/${updateUser?.uuid}`, updateUser?.uuid, reset);
 
 	const onClose = () => {
 		setUpdateUser((prev) => ({
 			...prev,
-			id: null,
+			uuid: null,
 			department_designation: null,
 		}));
 		reset(USER_NULL);
@@ -53,14 +39,14 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateUser?.id !== null) {
+		if (updateUser?.uuid !== null) {
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
 			};
 			await useUpdateFunc({
-				uri: `/user/${updateUser?.id}/${data?.name}`,
-				itemId: updateUser.id,
+				uri: `/hr/user/${updateUser?.uuid}/${data?.name}`,
+				itemId: updateUser.uuid,
 				data: data,
 				updatedData: updatedData,
 				setItems: setUsers,
@@ -78,42 +64,33 @@ export default function Index({
 		};
 
 		await usePostFunc({
-			uri: "/user",
+			uri: '/hr/user',
 			data: updatedData,
 			setItems: setUsers,
 			onClose: onClose,
 		});
 	};
 
-	const { value: userDepartment } = useFetch(
-		"/user-department-designation/value/label"
-	);
+	const { value: userDepartment } = useFetch('/user-department-designation/value/label');
 
 	return (
 		<AddModal
-			id={modalId}
-			title={updateUser?.id !== null ? "Update User" : "New User"}
+			uuid={modalId}
+			title={updateUser?.uuid !== null ? 'Update User' : 'New User'}
 			onSubmit={handleSubmit(onSubmit)}
-			onClose={onClose}
-		>
-			<div className="flex flex-col gap-2 md:flex-row">
-				<FormField
-					label="department_designation"
-					title="Department"
-					errors={errors}
-				>
+			onClose={onClose}>
+			<div className='flex flex-col gap-2 md:flex-row'>
+				<FormField label='department_designation' title='Department' errors={errors}>
 					<Controller
-						name={"department_designation"}
+						name={'department_designation'}
 						control={control}
 						render={({ field: { onChange } }) => {
 							return (
 								<ReactSelect
-									placeholder="Select Department"
+									placeholder='Select Department'
 									options={userDepartment}
 									value={userDepartment?.find(
-										(item) =>
-											item.value ==
-											getValues("department_designation")
+										(item) => item.value == getValues('department_designation')
 									)}
 									onChange={(e) => onChange(e.value)}
 								/>
@@ -121,25 +98,21 @@ export default function Index({
 						}}
 					/>
 				</FormField>
-				<Input label="name" {...{ register, errors }} />
-				<Input label="email" {...{ register, errors }} />
+				<Input label='name' {...{ register, errors }} />
+				<Input label='email' {...{ register, errors }} />
 			</div>
-			<div className="mb-4 flex flex-col gap-2 md:flex-row">
-				<Input label="ext" {...{ register, errors }} />
-				<Input label="phone" {...{ register, errors }} />
-				<Textarea label="remarks" {...{ register, errors }} />
+			<div className='mb-4 flex flex-col gap-2 md:flex-row'>
+				<Input label='ext' {...{ register, errors }} />
+				<Input label='phone' {...{ register, errors }} />
+				<Textarea label='remarks' {...{ register, errors }} />
 			</div>
 
-			{updateUser?.id === null && (
-				<div className="mb-4 flex flex-col gap-2 md:flex-row">
+			{updateUser?.uuid === null && (
+				<div className='mb-4 flex flex-col gap-2 md:flex-row'>
+					<PasswordInput title='Password' label='pass' {...{ register, errors }} />
 					<PasswordInput
-						title="Password"
-						label="pass"
-						{...{ register, errors }}
-					/>
-					<PasswordInput
-						title="Repeat Password"
-						label="repeatPass"
+						title='Repeat Password'
+						label='repeatPass'
 						{...{ register, errors }}
 					/>
 				</div>

@@ -1,0 +1,67 @@
+export const CARD_DATA = [
+	{
+		id: 1,
+		type: "policy",
+		title: "Anti-Harassment Policy",
+		subtitle: "Subtitle for Anti-Harassment Policy",
+		path: "https://portal.fortunezipperbd.com/wp-content/uploads/2023/05/Anti-Harassment-Policy.pdf",
+		updated_at: "2024-04-03 06:00:00",
+	},
+	{
+		id: 2,
+		type: "policy",
+		title: "Compensation and Salary Policy",
+		subtitle: "Subtitle for Compensation and Salary Policy",
+		path: "https://portal.fortunezipperbd.com/wp-content/uploads/2023/05/Compensation-and-Salary-Policy.pdf",
+		updated_at: "2024-04-03 06:00:00",
+	},
+	{
+		id: 3,
+		type: "policy",
+		title: "Disciplinary Policy",
+		subtitle: "Subtitle for Disciplinary Policy",
+		path: "https://portal.fortunezipperbd.com/wp-content/uploads/2023/05/Disciplinary-Policy.pdf",
+		updated_at: "2024-04-03 06:00:00",
+	},
+	{
+		id: 4,
+		type: "policy",
+		title: "Employee Code of Conduct",
+		subtitle: "Subtitle for Employee Code of Conduct",
+		path: "https://portal.fortunezipperbd.com/wp-content/uploads/2023/05/Employee-Code-of-Conduct.pdf",
+		updated_at: "2024-04-03 06:00:00",
+	},
+	{
+		id: 5,
+		type: "policy",
+		title: "Grievance Procedure",
+		subtitle: "Subtitle for Grievance Procedure",
+		path: "https://portal.fortunezipperbd.com/wp-content/uploads/2023/05/Grievance-Procedure.pdf",
+		updated_at: "2024-04-03 06:00:00",
+	},
+	{
+		id: 6,
+		type: "policy",
+		title: "Health and Safety Policy",
+		subtitle: "Subtitle for Health and Safety Policy",
+		path: "https://portal.fortunezipperbd.com/wp-content/uploads/2023/05/Health-and-Safety-Policy.pdf",
+		updated_at: "2024-04-03 06:00:00",
+	},
+	{
+		id: 7,
+		type: "policy",
+		title: "Termination",
+		subtitle: "Subtitle for Termination",
+		path: "https://portal.fortunezipperbd.com/wp-content/uploads/2023/05/Termination.pdf",
+		updated_at: "2024-04-03 06:00:00",
+	},
+];
+
+// INSERT INTO policy_and_notice (type, title, sub_title, url, updated_at) VALUES 
+// ('policy', 'Anti-Harassment Policy', 'Subtitle for Anti-Harassment Policy', 'https://portal.fortunezipperbd.com/wp-content/uploads/2023/05/Anti-Harassment-Policy.pdf', '2024-04-03 06:00:00'),
+// ('policy', 'Compensation and Salary Policy', 'Subtitle for Compensation and Salary Policy', 'https://portal.fortunezipperbd.com/wp-content/uploads/2023/05/Compensation-and-Salary-Policy.pdf', '2024-04-03 06:00:00'),
+// ('policy', 'Disciplinary Policy', 'Subtitle for Disciplinary Policy', 'https://portal.fortunezipperbd.com/wp-content/uploads/2023/05/Disciplinary-Policy.pdf', '2024-04-03 06:00:00'),
+// ('policy', 'Employee Code of Conduct', 'Subtitle for Employee Code of Conduct', 'https://portal.fortunezipperbd.com/wp-content/uploads/2023/05/Employee-Code-of-Conduct.pdf', '2024-04-03 06:00:00'),
+// ('policy', 'Grievance Procedure', 'Subtitle for Grievance Procedure', 'https://portal.fortunezipperbd.com/wp-content/uploads/2023/05/Grievance-Procedure.pdf', '2024-04-03 06:00:00'),
+// ('policy', 'Health and Safety Policy', 'Subtitle for Health and Safety Policy', 'https://portal.fortunezipperbd.com/wp-content/uploads/2023/05/Health-and-Safety-Policy.pdf', '2024-04-03 06:00:00'),
+// ('policy', 'Termination', 'Subtitle for Termination', 'https://portal.fortunezipperbd.com/wp-content/uploads/2023/05/Termination.pdf', '2024-04-03 06:00:00');

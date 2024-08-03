@@ -49,7 +49,7 @@ const AuthProvider = ({ children }) => {
 
 			if (token && userData) return (window.location.href = '/dashboard');
 
-			ShowToast('Invalid login credentials');
+			ShowToast({ type: 'error', message: 'Invalid login credentials' });
 		} catch (error) {
 			ShowToast(error.response);
 		}

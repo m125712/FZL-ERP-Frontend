@@ -1,6 +1,6 @@
-import { customAlphabet } from "nanoid";
-import { NANOID_CHARSET, NANOID_SIZE } from "./secret";
+import { customAlphabet } from 'nanoid';
 
-const nanoid = customAlphabet(NANOID_CHARSET, NANOID_SIZE);
+const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const nanoid = customAlphabet(alphabet, 15);
 
-export { nanoid };
+export default nanoid;

@@ -1,14 +1,14 @@
-import { PRIVATE_ROUTES } from '@/routes';
-import { api } from '@lib/api';
-import { BASE_API } from '@lib/secret';
-import Cookies from 'js-cookie';
-import { useEffect } from 'react';
-import useAsync from './useAsync';
+import { PRIVATE_ROUTES } from "@/routes";
+import { api } from "@lib/api";
+import { BASE_API } from "@lib/secret";
+import Cookies from "js-cookie";
+import { useEffect } from "react";
+import useAsync from "./useAsync";
 
 const DEFAULT_OPTIONS = {
 	headers: {
-		'Content-Type': 'application/json',
-		authorization: Cookies.get('auth'),
+		"Content-Type": "application/json",
+		authorization: Cookies.get("auth"),
 	},
 };
 
@@ -55,9 +55,9 @@ async function useFetchFuncForReport(url, setData, setLoading, setError) {
 
 const useFetchForRhfReset = async (uri, returnId, reset) => {
 	useEffect(() => {
-		if (returnId === null || returnId === undefined) return;
+		if (returnId === null) return;
 
-		api.get(uri).then((res) => reset(res?.data?.data[0]));
+		api.get(uri).then((res) => reset(res?.data[0]));
 	}, [returnId]);
 };
 
@@ -81,7 +81,7 @@ const useFetchForRhfResetForUserAccess = async (uri, returnId, reset) => {
 				const val = JSON.parse(value);
 				Object.entries(val).forEach(([k, v]) => {
 					v.forEach((item) => {
-						const obj_key = k + '___' + item;
+						const obj_key = k + "___" + item;
 						result[obj_key] = true;
 					});
 				});
@@ -91,7 +91,7 @@ const useFetchForRhfResetForUserAccess = async (uri, returnId, reset) => {
 				(item) => item.actions !== undefined
 			)?.reduce((acc, { page_name, actions }) => {
 				actions.forEach((action) => {
-					const key = page_name + '___' + action;
+					const key = page_name + "___" + action;
 					acc[key] = Boolean(result?.[key]);
 				});
 				return acc;

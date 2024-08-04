@@ -10,10 +10,13 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, isError } = useOrderBuyer();
-	const info = new PageInfo('Buyer', 'public/buyer', 'order__buyer');
+	const { data, isLoading, isError, updateData } = useOrderBuyer();
+	const info = new PageInfo('Buyer', 'buyer', 'order__buyer');
 	const haveAccess = useAccess('order__buyer');
-	// console.log(haveAccess);
+
+	const [buyer, setBuyer] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
 
 	const columns = useMemo(
 		() => [
@@ -67,13 +70,13 @@ export default function Index() {
 
 	// Update
 	const [updateBuyer, setUpdateBuyer] = useState({
-		uuid: null,
+		id: null,
 	});
 
 	const handelUpdate = (idx) => {
 		setUpdateBuyer((prev) => ({
 			...prev,
-			uuid: data[idx].uuid,
+			id: data[idx].id,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -93,8 +96,7 @@ export default function Index() {
 		window[info.getDeleteModalId()].showModal();
 	};
 
-	if (isLoading)
-		return <span className='loading loading-dots loading-lg z-50' />;
+	if (isLoading) return <span className='loading loading-dots loading-lg z-50' />;
 
 	// if (error) return <h1>Error:{error}</h1>;
 
@@ -122,9 +124,10 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					uri={info.getDeleteUrl()}
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
+					setItems={setBuyer}
+					uri={info.getDeleteUrl()}
 				/>
 			</Suspense>
 		</div>

@@ -1,4 +1,4 @@
-import * as yup from 'yup';
+import * as yup from "yup";
 import {
 	BOOLEAN, // default
 	BOOLEAN_REQUIRED,
@@ -18,7 +18,7 @@ import {
 	PHONE_NUMBER_REQUIRED, // default
 	STRING, // default
 	STRING_REQUIRED, // default
-} from './utils';
+} from "./utils";
 
 export {
 	BOOLEAN,
@@ -52,11 +52,11 @@ export const POLICY_SCHEMA = {
 
 export const POLICY_NULL = {
 	id: null,
-	type: '',
-	title: '',
-	sub_title: '',
-	url: '',
-	updated_at: '',
+	type: "",
+	title: "",
+	sub_title: "",
+	url: "",
+	updated_at: "",
 };
 
 // Section
@@ -67,9 +67,9 @@ export const SECTION_SCHEMA = {
 
 export const SECTION_NULL = {
 	id: null,
-	name: '',
-	short_name: '',
-	remarks: '',
+	name: "",
+	short_name: "",
+	remarks: "",
 };
 
 // Buyer
@@ -80,10 +80,10 @@ export const BUYER_SCHEMA = {
 };
 
 export const BUYER_NULL = {
-	uuid: null,
-	name: '',
-	short_name: '',
-	remarks: '',
+	id: null,
+	name: "",
+	short_name: "",
+	remarks: "",
 };
 
 // Merchandiser
@@ -98,10 +98,10 @@ export const MERCHANDISER_SCHEMA = {
 export const MERCHANDISER_NULL = {
 	id: null,
 	party_id: null,
-	name: '',
-	email: '',
-	phone: '',
-	address: '',
+	name: "",
+	email: "",
+	phone: "",
+	address: "",
 };
 
 // Factory
@@ -116,9 +116,9 @@ export const FACTORY_SCHEMA = {
 export const FACTORY_NULL = {
 	id: null,
 	party_id: null,
-	name: '',
-	phone: '',
-	address: '',
+	name: "",
+	phone: "",
+	address: "",
 };
 
 // Marketing
@@ -132,9 +132,9 @@ export const MARKETING_SCHEMA = {
 export const MARKETING_NULL = {
 	id: null,
 	user_id: null,
-	name: '',
-	short_name: '',
-	remarks: '',
+	name: "",
+	short_name: "",
+	remarks: "",
 };
 
 // Material
@@ -149,15 +149,15 @@ export const MATERIAL_SCHEMA = {
 
 export const MATERIAL_NULL = {
 	id: null,
-	name: '',
-	short_name: '',
-	quantity: '',
-	unit: '',
+	name: "",
+	short_name: "",
+	quantity: "",
+	unit: "",
 	threshold: 0,
-	description: '',
+	description: "",
 	section_id: null,
 	type_id: null,
-	remarks: '',
+	remarks: "",
 };
 
 export const MATERIAL_STOCK_SCHEMA = {
@@ -170,10 +170,10 @@ export const MATERIAL_STOCK_NULL = {
 	id: null,
 	material_stock_id: null,
 	material_name: null,
-	trx_to: '',
-	quantity: '',
-	issued_by: '',
-	remarks: '',
+	trx_to: "",
+	quantity: "",
+	issued_by: "",
+	remarks: "",
 };
 
 export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
@@ -188,10 +188,10 @@ export const MATERIAL_TRX_AGAINST_ORDER_NULL = {
 	material_stock_id: null,
 	order_entry_id: null,
 	material_name: null,
-	trx_to: '',
-	trx_quantity: '',
-	issued_by: '',
-	remarks: '',
+	trx_to: "",
+	trx_quantity: "",
+	issued_by: "",
+	remarks: "",
 };
 
 export const SFG_TRANSFER_LOG_SCHEMA = {
@@ -203,11 +203,11 @@ export const SFG_TRANSFER_LOG_SCHEMA = {
 export const SFG_TRANSFER_LOG_NULL = {
 	id: null,
 	order_entry_id: null,
-	trx_from: '',
-	trx_to: '',
-	trx_quantity: '',
-	issued_by: '',
-	remarks: '',
+	trx_from: "",
+	trx_to: "",
+	trx_quantity: "",
+	issued_by: "",
+	remarks: "",
 };
 
 export const SFG_PRODUCTION_LOG_SCHEMA = {
@@ -218,11 +218,11 @@ export const SFG_PRODUCTION_LOG_SCHEMA = {
 export const SFG_PRODUCTION_LOG_NULL = {
 	id: null,
 	order_entry_id: null,
-	section: '',
+	section: "",
 	used_quantity: null,
 	production_quantity: null,
 	wastage: null,
-	remarks: '',
+	remarks: "",
 };
 
 // Purchase
@@ -239,11 +239,11 @@ export const VENDOR_SCHEMA = {
 
 export const VENDOR_NULL = {
 	id: null,
-	name: '',
-	contact_number: '',
-	email: '',
-	office_address: '',
-	remarks: '',
+	name: "",
+	contact_number: "",
+	email: "",
+	office_address: "",
+	remarks: "",
 };
 // purchase page
 export const PURCHASE_SCHEMA = {
@@ -263,13 +263,13 @@ export const PURCHASE_NULL = {
 	id: null,
 	vendor_id: null,
 	section_id: null,
-	is_local: '',
-	remarks: '',
+	is_local: "",
+	remarks: "",
 	purchase: [
 		{
 			material_id: null,
-			quantity: '',
-			price: '',
+			quantity: "",
+			price: "",
 		},
 	],
 };
@@ -296,15 +296,15 @@ export const PURCHASE_ENTRY_NULL = {
 	section_id: null,
 	purchase_description_uuid: null,
 	is_local: null,
-	lc_number: '',
-	remarks: '',
+	lc_number: "",
+	remarks: "",
 	purchase: [
 		{
 			purchase_description_uuid: null,
 			material_id: null,
-			quantity: '',
-			price: '',
-			remarks: '',
+			quantity: "",
+			price: "",
+			remarks: "",
 		},
 	],
 };
@@ -319,10 +319,10 @@ export const RECEIVED_NULL = {
 	id: null,
 	vendor_id: null,
 	material_id: null,
-	received_quantity: '',
-	price: '',
-	is_local: '',
-	remarks: '',
+	received_quantity: "",
+	price: "",
+	is_local: "",
+	remarks: "",
 };
 
 // Order
@@ -335,14 +335,15 @@ export const PROPERTIES_SCHEMA = {
 
 export const PROPERTIES_NULL = {
 	id: null,
-	type: '',
-	name: '',
-	short_name: '',
-	remarks: '',
+	type: "",
+	name: "",
+	short_name: "",
+	remarks: "",
 };
 
 // Product Order
-export const handelNumberDefaultValue = (value) => (value === null ? undefined : value);
+export const handelNumberDefaultValue = (value) =>
+	value === null ? undefined : value;
 // Order Info
 export const ORDER_INFO_SCHEMA = {
 	reference_order: STRING.nullable(),
@@ -362,9 +363,9 @@ export const ORDER_INFO_SCHEMA = {
 
 export const ORDER_INFO_NULL = {
 	id: null,
-	reference_order: '',
+	reference_order: "",
 	is_zipper: false,
-	order_info_id: '',
+	order_info_id: "",
 	is_sample: false,
 	is_bill: false,
 	is_cash: false,
@@ -374,9 +375,9 @@ export const ORDER_INFO_NULL = {
 	factory_id: null,
 	party_id: null,
 	buyer_id: null,
-	marketing_priority: '',
-	factory_priority: '',
-	remarks: '',
+	marketing_priority: "",
+	factory_priority: "",
+	remarks: "",
 };
 
 export const ORDER_SCHEMA = {
@@ -395,7 +396,9 @@ export const ORDER_SCHEMA = {
 	remarks: STRING.nullable(),
 	coloring_type: NUMBER_REQUIRED,
 	slider: NUMBER_REQUIRED,
-	is_slider_provided: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+	is_slider_provided: BOOLEAN.transform(handelNumberDefaultValue).default(
+		false
+	),
 	top_stopper: NUMBER_REQUIRED,
 	bottom_stopper: NUMBER_REQUIRED,
 	logo_type: STRING_REQUIRED,
@@ -407,8 +410,12 @@ export const ORDER_SCHEMA = {
 			color: STRING_REQUIRED,
 			size: NUMBER_DOUBLE_REQUIRED,
 			quantity: NUMBER_REQUIRED,
-			company_price: NUMBER_DOUBLE_REQUIRED.transform(handelNumberDefaultValue).default(0),
-			party_price: NUMBER_DOUBLE_REQUIRED.transform(handelNumberDefaultValue).default(0),
+			company_price: NUMBER_DOUBLE_REQUIRED.transform(
+				handelNumberDefaultValue
+			).default(0),
+			party_price: NUMBER_DOUBLE_REQUIRED.transform(
+				handelNumberDefaultValue
+			).default(0),
 			remarks: STRING.nullable(),
 		})
 	),
@@ -426,20 +433,20 @@ export const ORDER_NULL = {
 	teeth_color: null,
 	puller_color: null,
 	hand: null,
-	special_requirement: '',
-	description: '',
-	remarks: '',
+	special_requirement: "",
+	description: "",
+	remarks: "",
 	slider_starting_section: null,
 	order_entry: [
 		{
 			order_description_uuid: null,
-			style: '',
-			color: '',
-			size: '',
-			quantity: '',
+			style: "",
+			color: "",
+			size: "",
+			quantity: "",
 			company_price: 0,
 			party_price: 0,
-			remarks: '',
+			remarks: "",
 			status: 1,
 			swatch_approval_date: null,
 		},
@@ -457,10 +464,10 @@ export const WASTAGE_SCHEMA = {
 
 export const WASTAGE_NULL = {
 	id: null,
-	order_uuid: '',
-	material_id: '',
-	quantity: '',
-	remarks: '',
+	order_uuid: "",
+	material_id: "",
+	quantity: "",
+	remarks: "",
 };
 // ISSUE Order page
 export const ORDER_ISSUE_SCHEMA = {
@@ -473,9 +480,9 @@ export const ORDER_ISSUE_NULL = {
 	id: null,
 	order_uuid: null,
 	material_id: null,
-	quantity: '',
+	quantity: "",
 	isWastage: null,
-	remarks: '',
+	remarks: "",
 };
 
 // Maintenance
@@ -489,9 +496,9 @@ export const MAINTENANCE_SCHEMA = {
 export const MAINTENANCE_NULL = {
 	id: null,
 	material_id: null,
-	quantity: '',
-	description: '',
-	remarks: '',
+	quantity: "",
+	description: "",
+	remarks: "",
 };
 
 // Spare Parts
@@ -505,9 +512,9 @@ export const SPARE_PARTS_SCHEMA = {
 export const SPARE_PARTS_NULL = {
 	id: null,
 	material_id: null,
-	quantity: '',
-	description: '',
-	remarks: '',
+	quantity: "",
+	description: "",
+	remarks: "",
 };
 
 // Material Entry
@@ -522,11 +529,11 @@ export const MATERIAL_ENTRY_SCHEMA = {
 
 export const MATERIAL_ENTRY_NULL = {
 	id: null,
-	price: '',
-	quantity: '',
-	purchase_type: '',
+	price: "",
+	quantity: "",
+	purchase_type: "",
 	material_id: null,
-	remarks: '',
+	remarks: "",
 };
 
 // Consumption to Issue
@@ -542,8 +549,8 @@ export const CONSUMPTION_TO_ISSUE_NULL = {
 	material_id: null,
 	material_name: null,
 	material_unit: null,
-	quantity: '',
-	remarks: '',
+	quantity: "",
+	remarks: "",
 };
 
 // Waste to Issue
@@ -556,8 +563,8 @@ export const WASTE_TO_ISSUE_NULL = {
 	id: null,
 	order_uuid: null,
 	material_id: null,
-	quantity: '',
-	remarks: '',
+	quantity: "",
+	remarks: "",
 };
 
 // Login
@@ -567,8 +574,8 @@ export const LOGIN_SCHEMA = {
 };
 
 export const LOGIN_NULL = {
-	email: '',
-	pass: '',
+	email: "",
+	pass: "",
 };
 
 // User
@@ -589,14 +596,14 @@ export const USER_SCHEMA = {
 
 export const USER_NULL = {
 	id: null,
-	name: '',
-	email: '',
+	name: "",
+	email: "",
 	department_designation: null,
-	pass: '',
-	repeatPass: '',
-	ext: '',
-	phone: '',
-	remarks: '',
+	pass: "",
+	repeatPass: "",
+	ext: "",
+	phone: "",
+	remarks: "",
 };
 
 export const USER_DEPARTMENT_SCHEMA = {
@@ -606,19 +613,19 @@ export const USER_DEPARTMENT_SCHEMA = {
 
 export const USER_DEPARTMENT_NULL = {
 	id: null,
-	department: '',
-	designation: '',
+	department: "",
+	designation: "",
 };
 
 // Reset Password
 export const RESET_PASSWORD_SCHEMA = {
 	pass: PASSWORD,
-	repeatPass: PASSWORD.oneOf([yup.ref('pass')], 'Passwords do not match'),
+	repeatPass: PASSWORD.oneOf([yup.ref("pass")], "Passwords do not match"),
 };
 
 export const RESET_PASSWORD_NULL = {
-	pass: '',
-	repeatPass: '',
+	pass: "",
+	repeatPass: "",
 };
 
 // Common
@@ -631,9 +638,9 @@ export const TAPE_STOCK_ADD_SCHEMA = {
 
 export const TAPE_STOCK_ADD_NULL = {
 	id: null,
-	type: '',
-	zipper_number: '',
-	remarks: '',
+	type: "",
+	zipper_number: "",
+	remarks: "",
 };
 // Tape Production
 export const TAPE_PROD_SCHEMA = {
@@ -644,11 +651,11 @@ export const TAPE_PROD_SCHEMA = {
 
 export const TAPE_PROD_NULL = {
 	id: null,
-	section: '',
-	tape_or_coil_stock_id: '',
-	quantity: '',
-	wastage: '',
-	remarks: '',
+	section: "",
+	tape_or_coil_stock_id: "",
+	quantity: "",
+	wastage: "",
+	remarks: "",
 };
 
 export const TAPE_TO_COIL_TRX_SCHEMA = {
@@ -658,10 +665,10 @@ export const TAPE_TO_COIL_TRX_SCHEMA = {
 
 export const TAPE_TO_COIL_TRX_NULL = {
 	id: null,
-	tape_or_coil_stock_id: '',
-	trx_quantity: '',
-	wastage: '',
-	remarks: '',
+	tape_or_coil_stock_id: "",
+	trx_quantity: "",
+	wastage: "",
+	remarks: "",
 };
 
 export const TAPE_STOCK_TRX_TO_DYING_SCHEMA = {
@@ -672,12 +679,12 @@ export const TAPE_STOCK_TRX_TO_DYING_SCHEMA = {
 
 export const TAPE_STOCK_TRX_TO_DYING_NULL = {
 	id: null,
-	order_entry_id: '',
-	trx_quantity: '',
-	trx_from: 'tape_making',
-	trx_to: 'dying_and_iron_stock',
-	issued_by: '',
-	remarks: '',
+	order_entry_id: "",
+	trx_quantity: "",
+	trx_from: "tape_making",
+	trx_to: "dying_and_iron_stock",
+	issued_by: "",
+	remarks: "",
 };
 
 export const TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA = {
@@ -703,11 +710,11 @@ export const COIL_PROD_SCHEMA = {
 
 export const COIL_PROD_NULL = {
 	id: null,
-	section: '',
-	tape_or_coil_stock_id: '',
-	quantity: '',
-	wastage: '',
-	remarks: '',
+	section: "",
+	tape_or_coil_stock_id: "",
+	quantity: "",
+	wastage: "",
+	remarks: "",
 };
 
 // Coil Stock
@@ -721,8 +728,8 @@ export const COIL_STOCK_NULL = {
 	id: null,
 	order_entry_id: null,
 	tape_or_coil_stock_id: null,
-	quantity: '',
-	remarks: '',
+	quantity: "",
+	remarks: "",
 	zipper_number: null,
 };
 
@@ -738,11 +745,11 @@ export const RM_MATERIAL_USED_SCHEMA = {
 export const RM_MATERIAL_USED_NULL = {
 	id: null,
 	material_stock_id: null,
-	section: '',
-	remaining: '',
-	wastage: '',
-	issued_by: '',
-	remarks: '',
+	section: "",
+	remaining: "",
+	wastage: "",
+	issued_by: "",
+	remarks: "",
 };
 
 export const RM_MATERIAL_USED_EDIT_SCHEMA = {
@@ -754,11 +761,11 @@ export const RM_MATERIAL_USED_EDIT_SCHEMA = {
 export const RM_MATERIAL_USED_EDIT_NULL = {
 	id: null,
 	material_stock_id: null,
-	section: '',
-	used_quantity: '',
-	wastage: '',
-	issued_by: '',
-	remarks: '',
+	section: "",
+	used_quantity: "",
+	wastage: "",
+	issued_by: "",
+	remarks: "",
 };
 
 // Swatch Schema
@@ -768,7 +775,7 @@ export const SWATCH_SCHEMA = {
 
 export const SWATCH_NULL = {
 	order_entry_id: null,
-	remarks: '',
+	remarks: "",
 };
 
 // SFG Production
@@ -782,12 +789,12 @@ export const SFG_PRODUCTION_SCHEMA = {
 export const SFG_PRODUCTION_NULL = {
 	id: null,
 	order_entry_id: null,
-	section: '',
-	used_quantity: '',
-	production_quantity: '',
-	wastage: '',
-	issued_by: '',
-	remarks: '',
+	section: "",
+	used_quantity: "",
+	production_quantity: "",
+	wastage: "",
+	issued_by: "",
+	remarks: "",
 };
 
 // SFG Transaction
@@ -801,11 +808,11 @@ export const SFG_TRX_SCHEMA = {
 export const SFG_TRX_NULL = {
 	id: null,
 	order_entry_id: null,
-	trx_from: '',
-	trx_to: '',
-	trx_quantity: '',
-	issued_by: '',
-	remarks: '',
+	trx_from: "",
+	trx_to: "",
+	trx_quantity: "",
+	issued_by: "",
+	remarks: "",
 };
 
 // Slider Die Casting
@@ -828,15 +835,15 @@ export const SLIDER_DIE_CASTING_SCHEMA = {
 export const SLIDER_DIE_CASTING_NULL = {
 	slider_die_casting_details: [
 		{
-			mc_no: '',
-			slider_item_id: '',
-			item_type: '',
-			cavity_goods: '',
-			cavity_reject: '',
-			push_value: '',
-			order_number: '',
-			weight: '',
-			remarks: '',
+			mc_no: "",
+			slider_item_id: "",
+			item_type: "",
+			cavity_goods: "",
+			cavity_reject: "",
+			push_value: "",
+			order_number: "",
+			weight: "",
+			remarks: "",
 		},
 	],
 };
@@ -860,13 +867,13 @@ export const SLIDER_SLIDER_ASSEMBLY_SCHEMA = {
 export const SLIDER_SLIDER_ASSEMBLY_NULL = {
 	slider_slider_assembly_details: [
 		{
-			slider_slider_assembly_uuid: '',
-			order_number: '',
-			party: '',
-			slider_item_id: '',
-			production_quantity: '',
-			production_weight: '',
-			remarks: '',
+			slider_slider_assembly_uuid: "",
+			order_number: "",
+			party: "",
+			slider_item_id: "",
+			production_quantity: "",
+			production_weight: "",
+			remarks: "",
 		},
 	],
 };
@@ -881,10 +888,10 @@ export const ITEM_LIBRARY_SCHEMA = {
 
 export const ITEM_LIBRARY_NULL = {
 	id: null,
-	name: '',
-	short_name: '',
-	section: '',
-	remarks: '',
+	name: "",
+	short_name: "",
+	section: "",
+	remarks: "",
 };
 
 // Slider Item Transaction (Die Casting, Slider Assembly)
@@ -897,11 +904,11 @@ export const SLIDER_ITEM_TRANSACTION_SCHEMA = {
 export const SLIDER_ITEM_TRANSACTION_NULL = {
 	id: null,
 	order_entry_id: null,
-	trx_from: '',
-	trx_to: '',
-	trx_quantity: '',
-	issued_by: '',
-	remarks: '',
+	trx_from: "",
+	trx_to: "",
+	trx_quantity: "",
+	issued_by: "",
+	remarks: "",
 };
 
 // Delivery
@@ -913,7 +920,10 @@ export const CHALLAN_SCHEMA = {
 		yup.object().shape({
 			sfg_id: NUMBER,
 			max_assign: NUMBER,
-			delivery_quantity: NUMBER.max(yup.ref('max_assign'), 'Beyond Max Quantity'),
+			delivery_quantity: NUMBER.max(
+				yup.ref("max_assign"),
+				"Beyond Max Quantity"
+			),
 			remarks: STRING.nullable(),
 		})
 	),
@@ -921,14 +931,14 @@ export const CHALLAN_SCHEMA = {
 
 export const CHALLAN_NULL = {
 	id: null,
-	order_info_id: '',
-	carton_quantity: '',
+	order_info_id: "",
+	carton_quantity: "",
 	challan_entry: [
 		{
 			sfg_id: null,
 			max_assign: null,
 			delivery_quantity: null,
-			remarks: '',
+			remarks: "",
 		},
 	],
 };
@@ -950,7 +960,10 @@ export const PI_SCHEMA = {
 		yup.object().shape({
 			sfg_id: NUMBER_REQUIRED,
 			max_quantity: NUMBER,
-			pi_quantity: NUMBER_REQUIRED.max(yup.ref('max_quantity'), 'Beyond Max Quantity'),
+			pi_quantity: NUMBER_REQUIRED.max(
+				yup.ref("max_quantity"),
+				"Beyond Max Quantity"
+			),
 			remarks: STRING.nullable(),
 		})
 	),
@@ -964,15 +977,15 @@ export const PI_NULL = {
 	merchandiser_id: null,
 	factory_id: null,
 	bank_id: null,
-	validity: '',
-	payment: '',
-	remarks: '',
+	validity: "",
+	payment: "",
+	remarks: "",
 	pi_entry: [
 		{
 			sfg_id: null,
 			max_quantity: null,
 			pi_quantity: null,
-			remarks: '',
+			remarks: "",
 		},
 	],
 };
@@ -986,12 +999,12 @@ export const BANK_SCHEMA = {
 
 export const BANK_NULL = {
 	id: null,
-	name: '',
-	swift_code: '',
-	address: '',
-	policy: '',
-	created_at: '',
-	updated_at: '',
+	name: "",
+	swift_code: "",
+	address: "",
+	policy: "",
+	created_at: "",
+	updated_at: "",
 };
 
 // LC
@@ -1025,29 +1038,29 @@ export const LC_SCHEMA = {
 export const LC_NULL = {
 	id: null,
 	party_id: null,
-	file_no: '',
-	lc_number: '',
-	lc_date: '',
-	payment_value: '',
-	payment_date: '',
-	ldbc_fdbc: '',
-	acceptance_date: '',
-	maturity_date: '',
-	commercial_executive: '',
-	party_bank: '',
+	file_no: "",
+	lc_number: "",
+	lc_date: "",
+	payment_value: "",
+	payment_date: "",
+	ldbc_fdbc: "",
+	acceptance_date: "",
+	maturity_date: "",
+	commercial_executive: "",
+	party_bank: "",
 	production_complete: false,
 	lc_cancel: false,
-	handover_date: '',
-	shipment_date: '',
-	expiry_date: '',
-	ud_no: '',
+	handover_date: "",
+	shipment_date: "",
+	expiry_date: "",
+	ud_no: "",
 	ud_received: false,
 	at_sight: false,
-	amd_date: '',
-	amd_count: '',
+	amd_date: "",
+	amd_count: "",
 	problematical: false,
 	epz: false,
-	remarks: '',
+	remarks: "",
 };
 
 // Thread
@@ -1061,10 +1074,10 @@ export const THREAD_COUNT_LENGTH_SCHEMA = {
 
 export const THREAD_COUNT_LENGTH_NULL = {
 	id: null,
-	count_length: '',
+	count_length: "",
 	weight: null,
-	sst: '',
-	remarks: '',
+	sst: "",
+	remarks: "",
 };
 
 // Shade Recipe
@@ -1084,18 +1097,18 @@ export const THREAD_SHADE_RECIPE_SCHEMA = {
 
 export const THREAD_SHADE_RECIPE_NULL = {
 	id: null,
-	name: '',
+	name: "",
 	thread_shade_recipe_uuid: null,
-	sub_streat: '',
-	lab_status: '',
-	remarks: '',
+	sub_streat: "",
+	lab_status: "",
+	remarks: "",
 	thread_shade_recipe_entry: [
 		{
 			id: null,
 			thread_shade_recipe_uuid: null,
 			material_id: null,
-			quantity: '',
-			remarks: '',
+			quantity: "",
+			remarks: "",
 		},
 	],
 };
@@ -1139,24 +1152,24 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 	is_sample: false,
 	is_bill: false,
 	issued_by: null,
-	remarks: '',
+	remarks: "",
 	thread_order_info_entry: [
 		{
 			id: null,
 			thread_order_info_uuid: null,
-			lab_ref: '',
-			po: '',
+			lab_ref: "",
+			po: "",
 			shade_id: null,
-			style: '',
-			color: '',
+			style: "",
+			color: "",
 			count_length_id: null,
-			type: '',
+			type: "",
 			quantity: null,
 			company_price: 0,
 			party_price: 0,
-			swatch_status: '',
-			swatch_approval_date: '',
-			remarks: '',
+			swatch_status: "",
+			swatch_approval_date: "",
+			remarks: "",
 		},
 	],
 };

@@ -3,17 +3,17 @@
 // https://tkdodo.eu/blog/leveraging-the-query-function-context#query-key-factories
 
 export const orderQK = {
-	all: () => ["order"],
+	all: () => ['order'],
 
 	// details
-	details: () => [...orderQK.all(), "details"],
+	details: () => [...orderQK.all(), 'details'],
 	detail: (id) => [...orderQK.details(), id],
 
 	// info
-	infos: () => [...orderQK.all(), "info"],
+	infos: () => [...orderQK.all(), 'info'],
 	info: (id) => [...orderQK.infos(), id],
 
 	// buyers
-	buyers: () => [...orderQK.all(), "buyers"],
-	buyer: (id) => [...orderQK.buyers(), id],
+	buyers: () => [...orderQK.all(), 'buyers'],
+	buyer: (uuid) => [...orderQK.buyers(), uuid],
 };

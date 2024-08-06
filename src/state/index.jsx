@@ -1,155 +1,9 @@
-// import { ShowToast } from "@/components/Toast";
-// import { defaultFetch } from "@/hooks";
-// import { api } from "@/lib/api";
-// import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-// import { deleteItem, updateItem } from "./utils";
-
-// export default function createGlobalState({ queryKey, url }) {
-// 	const queryClient = useQueryClient();
-
-// 	const { data, isError, isLoading } = useQuery({
-// 		queryKey: queryKey,
-// 		queryFn: () => defaultFetch(url),
-// 		refetchInterval: false,
-// 		refetchOnMount: false,
-// 		refetchOnWindowFocus: false,
-// 		refetchOnReconnect: false,
-// 		refetchIntervalInBackground: false,
-// 	});
-
-// 	async function postData({ url, newData, onClose }) {
-// 		return useMutation({
-// 			mutationFn: async () => {
-// 				const response = await api.post(url, newData);
-// 				return response.data;
-// 			},
-// 			onMutate: async () => {
-// 				await queryClient.cancelQueries({ queryKey });
-// 			},
-// 			onSuccess: (response) => ShowToast(response),
-// 			onError: (err, newUser, context) => {
-// 				queryClient.setQueryData(queryKey, context.previousUsers);
-// 			},
-// 			onSettled: () => {
-// 				queryClient.invalidateQueries({ queryKey });
-// 				onClose();
-// 			},
-// 		});
-// 	}
-
-// 	async function updateData({ url, id, updatedData, onClose }) {
-// 		// * https://react-query.tanstack.com/guides/optimistic-updates#updating-a-single-todo
-// 		return useMutation({
-// 			mutationFn: async () => {
-// 				const response = await api.put(url, updatedData);
-// 				return response;
-// 			},
-// 			onMutate: async (updatedData) => {
-// 				await queryClient.cancelQueries(queryKey);
-// 				const previousUser = queryClient.getQueryData(queryKey);
-
-// 				queryClient.setQueryData(
-// 					queryKey,
-// 					updateItem(id, data, updatedData)
-// 				);
-
-// 				return { previousUser: previousUser, updatedData: updatedData };
-// 			},
-// 			onSuccess: (response) => ShowToast(response),
-// 			onError: (err, updatedData, context) => {
-// 				queryClient.setQueryData(queryKey, context.previousUser);
-// 				ShowToast(err?.response);
-// 			},
-// 			onSettled: () => {
-// 				queryClient.invalidateQueries(queryKey); // userQueryKeys.all
-// 				onClose();
-// 			},
-// 		});
-// 	}
-
-// 	async function deleteData(url, onClose) {
-// 		return useMutation({
-// 			mutationFn: async () => {
-// 				const response = await api.delete(url);
-// 				return response;
-// 			},
-// 			onMutate: async () => {
-// 				await queryClient.cancelQueries({
-// 					queryKey,
-// 				});
-// 			},
-// 			onSuccess: (response) => ShowToast(response),
-// 			onError: (error) => {
-// 				queryClient.invalidateQueries({ queryKey });
-// 				ShowToast(error?.response);
-// 			},
-// 			onSettled: () => {
-// 				queryClient.invalidateQueries({ queryKey });
-// 				onClose();
-// 			},
-// 		});
-// 	}
-
-// 	return { data, isLoading, isError, updateData, postData, deleteData };
-// }
-
 import { ShowToast } from '@/components/Toast';
 import { defaultFetch } from '@/hooks';
 import { api } from '@/lib/api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { deleteItemByUUID, updateItemByID, updateItemByUUID } from './utils';
 
-export async function postData({ queryKey, url, newData, onClose }) {
-	const queryClient = useQueryClient();
-
-	const mutation = useMutation({
-		mutationFn: async () => {
-			const response = await api.post(url, newData);
-			return response.data;
-		},
-		onMutate: async () => {
-			await queryClient.cancelQueries({ queryKey });
-		},
-		onSuccess: (response) => ShowToast(response),
-		onError: (error, variables, context) => {
-			queryClient.setQueryData(queryKey, context.previousUsers);
-		},
-		onSettled: (data, error, variables, context) => {
-			queryClient.invalidateQueries({ queryKey });
-			onClose();
-		},
-	});
-
-	return mutation;
-}
-
-export function usePostData(queryKey) {
-	const queryClient = useQueryClient();
-
-	const postData = useMutation({
-		mutationFn: async ({ url, newData }) => {
-			const response = await api.post(url, newData);
-			return response.data;
-		},
-		onMutate: async () => {
-			await queryClient.cancelQueries({ queryKey });
-		},
-		onSuccess: (data, variables, context) => {
-			ShowToast(data);
-		},
-		onError: (err, newUser, context) => {
-			queryClient.setQueryData(queryKey, context.previousUsers);
-		},
-		onSettled: (data, error, variables, context) => {
-			queryClient.invalidateQueries({ queryKey });
-			variables.onClose();
-		},
-	});
-
-	return postData;
-}
-
-export default function useGlobalState({ queryKey, url }) {
+export default function createGlobalState({ queryKey, url }) {
 	const queryClient = useQueryClient();
 
 	const { data, isError, isLoading } = useQuery({
@@ -170,27 +24,31 @@ export default function useGlobalState({ queryKey, url }) {
 		onMutate: async ({ newData }) => {
 			await queryClient.cancelQueries({ queryKey });
 
-			queryClient.setQueryData(queryKey, (old) => [...old, newData]);
+			queryClient.setQueryData(queryKey, ({ data }) => [
+				newData,
+				...data,
+			]);
 
 			return { newData };
 		},
 		onSuccess: (data, variables, context) => {
-			queryClient.setQueryData(queryKey, (old) =>
-				old.map((val) =>
+			queryClient.setQueryData(queryKey, ({ data }) =>
+				data?.map((val) =>
 					val.uuid === context.newData.uuid ? data : val
 				)
 			);
+
 			ShowToast(data?.toast);
 		},
 		onError: (error, newUser, context) => {
-			queryClient.setQueryData(queryKey, (old) =>
-				old.filter((val) => val.id !== context.newData.uuid)
+			queryClient.setQueryData(queryKey, ({ data }) =>
+				data?.filter((val) => val.id !== context.newData.uuid)
 			);
 
-			console.log('react query error: ', error);
+			ShowToast(error?.response?.data?.toast);
 		},
 		onSettled: (data, error, variables, context) => {
-			// queryClient.invalidateQueries({ queryKey });
+			queryClient.invalidateQueries({ queryKey });
 			variables.onClose();
 		},
 	});
@@ -208,15 +66,12 @@ export default function useGlobalState({ queryKey, url }) {
 			return { previousData: previousData };
 		},
 		onSuccess: (data, variables, context) => {
-			queryClient.setQueryData(
-				queryKey,
-				updateItemByUUID(variables.uuid, data, variables.updatedData)
-			);
-
 			ShowToast(data?.toast);
 		},
 		onError: (error, variables, context) => {
 			queryClient.setQueryData(queryKey, context.previousData);
+			console.log(error);
+
 			ShowToast(error?.response);
 		},
 		onSettled: (data, error, variables, context) => {
@@ -237,8 +92,7 @@ export default function useGlobalState({ queryKey, url }) {
 			ShowToast(data?.toast);
 		},
 		onError: (error, variables, context) => {
-			queryClient.invalidateQueries({ queryKey });
-			ShowToast(error?.response);
+			ShowToast(error?.response?.data?.toast);
 		},
 		onSettled: (data, error, variables, context) => {
 			queryClient.invalidateQueries({ queryKey });
@@ -247,6 +101,7 @@ export default function useGlobalState({ queryKey, url }) {
 	});
 
 	return {
+		url,
 		data: data?.data,
 		toast: data?.toast,
 		isLoading,

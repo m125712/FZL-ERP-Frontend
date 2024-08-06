@@ -1,7 +1,7 @@
 import { AddModal } from '@/components/Modal';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useOrderBuyer } from '@/state/Order/buyer';
+import { useOrderBuyer } from '@/state/Order';
 import { Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
@@ -14,15 +14,14 @@ export default function Index({
 	},
 	setUpdateBuyer,
 }) {
-	const { updateData, postData } = useOrderBuyer();
-	// const { data, isLoading, isError, updateData } = useOrderBuyerById();
+	const { url, updateData, postData } = useOrderBuyer();
 	const { register, handleSubmit, errors, reset, control } = useRHF(
 		BUYER_SCHEMA,
 		BUYER_NULL
 	);
 
 	useFetchForRhfReset(
-		`/public/buyer/${updateBuyer?.uuid}`,
+		`${url}/${updateBuyer?.uuid}`,
 		updateBuyer?.uuid,
 		reset
 	);
@@ -30,25 +29,23 @@ export default function Index({
 	const onClose = () => {
 		setUpdateBuyer((prev) => ({
 			...prev,
-			id: null,
+			uuid: null,
 		}));
 		reset(BUYER_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
-		// console.log(updateBuyer?.uuid);
-
 		// Update item
-		if (updateBuyer?.uuid !== null) {
+		if (updateBuyer?.uuid !== null && updateBuyer?.uuid !== undefined) {
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
 			};
 
 			await updateData.mutateAsync({
-				url: `/public/buyer/${updateBuyer?.uuid}/${data?.name}`,
-				uuid: updateBuyer.uuid,
+				url: `${url}/${updateBuyer?.uuid}`,
+				uuid: updateBuyer?.uuid,
 				updatedData,
 				onClose,
 			});
@@ -59,11 +56,12 @@ export default function Index({
 		// Add new item
 		const updatedData = {
 			...data,
+			uuid: nanoid(),
 			created_at: GetDateTime(),
 		};
 
-		postData.mutate({
-			url: '/public/buyer',
+		await postData.mutateAsync({
+			url,
 			newData: updatedData,
 			onClose,
 		});

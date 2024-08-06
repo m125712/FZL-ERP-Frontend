@@ -164,8 +164,6 @@ export default function useGlobalState({ queryKey, url }) {
 
 	const postData = useMutation({
 		mutationFn: async ({ url, newData }) => {
-			console.log('postData -> newData', newData);
-
 			const response = await api.post(url, newData);
 			return response.data;
 		},
@@ -188,6 +186,8 @@ export default function useGlobalState({ queryKey, url }) {
 			queryClient.setQueryData(queryKey, (old) =>
 				old.filter((val) => val.id !== context.newData.uuid)
 			);
+
+			console.log('react query error: ', error);
 		},
 		onSettled: (data, error, variables, context) => {
 			// queryClient.invalidateQueries({ queryKey });

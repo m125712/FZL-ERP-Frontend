@@ -1,6 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc, useUpdateFunc } from '@/hooks';
+import { useAdminUsers } from '@/state/Admin/user';
 import { DateTime, EditDelete, ResetPassword, StatusButton } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
@@ -13,6 +14,7 @@ const PageAssign = lazy(() => import('./PageAssign'));
 
 export default function Order() {
 	const info = new PageInfo('User', 'hr/user', 'admin__user');
+	const { data, isLoading, isError, updateData } = useAdminUsers();
 	const [users, setUsers] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
@@ -74,7 +76,11 @@ export default function Order() {
 				enableSorting: false,
 				width: 'w-24',
 				hidden: !haveAccess.includes('click_reset_password'),
-				cell: (info) => <ResetPassword onClick={() => handelResetPass(info.row.index)} />,
+				cell: (info) => (
+					<ResetPassword
+						onClick={() => handelResetPass(info.row.index)}
+					/>
+				),
 			},
 			{
 				accessorKey: 'page_assign_actions',
@@ -90,7 +96,11 @@ export default function Order() {
 				width: 'w-24',
 				hidden: !haveAccess.includes('click_page_assign'),
 				cell: (info) => {
-					return <ResetPassword onClick={() => handelPageAssign(info.row.index)} />;
+					return (
+						<ResetPassword
+							onClick={() => handelPageAssign(info.row.index)}
+						/>
+					);
 				},
 			},
 			{
@@ -131,17 +141,18 @@ export default function Order() {
 				},
 			},
 		],
-		[users]
+		[data]
 	);
 
 	// Fetching data from server
 	useEffect(() => {
 		document.title = info.getTabName();
-		useFetchFunc(info.getFetchUrl(), setUsers, setLoading, setError);
 	}, []);
 
 	const handelAdd = () => {
-		window[info.getAddOrUpdateModalId()].showModal();
+		console.log(window[info?.getAddOrUpdateModalId()]);
+
+		window[info?.getAddOrUpdateModalId()]?.showModal();
 	};
 
 	// Update
@@ -152,10 +163,11 @@ export default function Order() {
 
 	const handelUpdate = (idx) => {
 		setUpdateUser({
-			uuid: users[idx].uuid,
-			department_designation: users[idx].department_designation,
+			uuid: data[idx].uuid,
+			department_designation: data[idx].department_designation,
 		});
-		window[info.getAddOrUpdateModalId()].showModal();
+
+		window[info.getAddOrUpdateModalId()]?.showModal();
 	};
 
 	// Delete
@@ -166,8 +178,8 @@ export default function Order() {
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: users[idx].uuid,
-			itemName: users[idx].name,
+			itemId: data[idx].uuid,
+			itemName: data[idx].name,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -175,7 +187,7 @@ export default function Order() {
 
 	// Status
 	const handelStatus = async (idx) => {
-		const user = users[idx];
+		const user = data[idx];
 		const status = user?.status == 1 ? 0 : 1;
 		const updated_at = GetDateTime();
 
@@ -196,8 +208,8 @@ export default function Order() {
 	const handelResetPass = async (idx) => {
 		setResPass((prev) => ({
 			...prev,
-			uuid: users[idx]?.uuid,
-			name: users[idx]?.name,
+			uuid: data[idx]?.uuid,
+			name: data[idx]?.name,
 		}));
 
 		window['reset_pass_modal'].showModal();
@@ -212,15 +224,16 @@ export default function Order() {
 	const handelPageAssign = async (idx) => {
 		setPageAssign((prev) => ({
 			...prev,
-			uuid: users[idx]?.uuid,
-			name: users[idx]?.name,
-			can_access: JSON?.parse(users[idx]?.can_access),
+			uuid: data[idx]?.uuid,
+			name: data[idx]?.name,
+			can_access: JSON?.parse(data[idx]?.can_access),
 		}));
 
 		window['page_assign_modal'].showModal();
 	};
 
-	if (loading) return <span className='loading loading-dots loading-lg z-50' />;
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
@@ -229,7 +242,7 @@ export default function Order() {
 				title={info.getTitle()}
 				handelAdd={handelAdd}
 				accessor={haveAccess.includes('create')}
-				data={users}
+				data={data}
 				columns={columns}
 				extraClass={!haveAccess.includes('create') && 'py-2'}
 			/>

@@ -1,5 +1,11 @@
 import { AddModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfReset, usePostFunc, useRHF, useUpdateFunc } from '@/hooks';
+import {
+	useFetch,
+	useFetchForRhfReset,
+	usePostFunc,
+	useRHF,
+	useUpdateFunc,
+} from '@/hooks';
 import { FormField, Input, PasswordInput, ReactSelect, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { PASSWORD, USER_NULL, USER_SCHEMA } from '@util/Schema';
@@ -17,13 +23,21 @@ export default function Index({
 		schema = {
 			...USER_SCHEMA,
 			pass: PASSWORD,
-			repeatPass: PASSWORD.oneOf([yup.ref('pass')], 'Passwords do not match'),
+			repeatPass: PASSWORD.oneOf(
+				[yup.ref('pass')],
+				'Passwords do not match'
+			),
 		};
 	}
-	const { register, handleSubmit, errors, reset, Controller, control, getValues } = useRHF(
-		schema,
-		USER_NULL
-	);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		Controller,
+		control,
+		getValues,
+	} = useRHF(schema, USER_NULL);
 
 	useFetchForRhfReset(`hr/user/${updateUser?.uuid}`, updateUser?.uuid, reset);
 
@@ -71,7 +85,9 @@ export default function Index({
 		});
 	};
 
-	const { value: userDepartment } = useFetch('/user-department-designation/value/label');
+	const { value: userDepartment } = useFetch(
+		'/user-department-designation/value/label'
+	);
 
 	return (
 		<AddModal
@@ -80,7 +96,10 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}>
 			<div className='flex flex-col gap-2 md:flex-row'>
-				<FormField label='department_designation' title='Department' errors={errors}>
+				<FormField
+					label='department_designation'
+					title='Department'
+					errors={errors}>
 					<Controller
 						name={'department_designation'}
 						control={control}
@@ -90,7 +109,9 @@ export default function Index({
 									placeholder='Select Department'
 									options={userDepartment}
 									value={userDepartment?.find(
-										(item) => item.value == getValues('department_designation')
+										(item) =>
+											item.value ==
+											getValues('department_designation')
 									)}
 									onChange={(e) => onChange(e.value)}
 								/>
@@ -109,7 +130,11 @@ export default function Index({
 
 			{updateUser?.uuid === null && (
 				<div className='mb-4 flex flex-col gap-2 md:flex-row'>
-					<PasswordInput title='Password' label='pass' {...{ register, errors }} />
+					<PasswordInput
+						title='Password'
+						label='pass'
+						{...{ register, errors }}
+					/>
 					<PasswordInput
 						title='Repeat Password'
 						label='repeatPass'

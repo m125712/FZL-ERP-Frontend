@@ -13,7 +13,7 @@ export default class PageInfo {
 		return this.url;
 	}
 
-	getTabName() {
+	getTab() {
 		return this.tabName;
 	}
 
@@ -34,12 +34,12 @@ export default class PageInfo {
 	}
 	getTabName() {
 		return this.tabName
-			.split("__")
+			.split('__')
 			.map(
 				(word) =>
 					word.charAt(0).toUpperCase() +
-					word.slice(1).replace(/_/g, " ")
+					word.slice(1).replace(/_/g, ' ')
 			)
-			.join(": ");
+			.join(': ');
 	}
 }

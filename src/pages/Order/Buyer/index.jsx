@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
-import { useOrderBuyer } from '@/state/Order/buyer';
+import { useAccess } from '@/hooks';
+import { useOrderBuyer } from '@/state/Order';
 import { EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -10,13 +10,9 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, isError, updateData } = useOrderBuyer();
-	const info = new PageInfo('Buyer', 'buyer', 'order__buyer');
-	const haveAccess = useAccess('order__buyer');
-
-	const [buyer, setBuyer] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+	const { data, isLoading, url, deleteData } = useOrderBuyer();
+	const info = new PageInfo('Order/Buyer', url, 'order__buyer');
+	const haveAccess = useAccess(info.getTab());
 
 	const columns = useMemo(
 		() => [
@@ -43,13 +39,16 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
 				width: 'w-24',
 				cell: (info) => (
 					<EditDelete
 						idx={info.row.index}
 						handelUpdate={handelUpdate}
 						handelDelete={handelDelete}
+						showEdit={haveAccess.includes('update')}
 						showDelete={haveAccess.includes('delete')}
 					/>
 				),
@@ -70,13 +69,13 @@ export default function Index() {
 
 	// Update
 	const [updateBuyer, setUpdateBuyer] = useState({
-		id: null,
+		uuid: null,
 	});
 
 	const handelUpdate = (idx) => {
 		setUpdateBuyer((prev) => ({
 			...prev,
-			id: data[idx].id,
+			uuid: data[idx].uuid,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -89,16 +88,15 @@ export default function Index() {
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: data[idx].id,
+			itemId: data[idx].uuid,
 			itemName: data[idx].name,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
 
-	if (isLoading) return <span className='loading loading-dots loading-lg z-50' />;
-
-	// if (error) return <h1>Error:{error}</h1>;
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
 		<div className='container mx-auto px-2 md:px-4'>
@@ -108,7 +106,6 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				data={data}
 				columns={columns}
-				extraClass='py-2'
 			/>
 
 			<Suspense>
@@ -124,10 +121,12 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					setItems={setBuyer}
-					uri={info.getDeleteUrl()}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url,
+						deleteData,
+					}}
 				/>
 			</Suspense>
 		</div>

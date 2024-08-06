@@ -30,7 +30,6 @@ const ShowLocalToast = ({ type, message }) => {
 };
 
 const ShowToast = (toast) => {
-	console.log('ShowToast -> toast', toast);
 	const { type, message } = toast;
 	ShowLocalToast({ ...{ type, message } });
 };

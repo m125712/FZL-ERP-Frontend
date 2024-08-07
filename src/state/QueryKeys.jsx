@@ -16,4 +16,7 @@ export const orderQK = {
 	// buyers
 	buyers: () => [...orderQK.all(), 'buyers'],
 	buyer: (uuid) => [...orderQK.buyers(), uuid],
+	//Party
+	party: () => [...orderQK.all(), 'party'],
+	partyByUUID: (uuid) => [...orderQK.party(), uuid],
 };

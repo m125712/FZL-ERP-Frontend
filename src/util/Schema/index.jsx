@@ -85,6 +85,18 @@ export const BUYER_NULL = {
 	short_name: '',
 	remarks: '',
 };
+export const PARTY_SCHEMA = {
+	name: STRING_REQUIRED,
+	short_name: STRING.nullable(),
+	remarks: STRING.nullable(),
+};
+
+export const PARTY_NULL = {
+	uuid: null,
+	name: '',
+	short_name: '',
+	remarks: '',
+};
 
 // Merchandiser
 export const MERCHANDISER_SCHEMA = {

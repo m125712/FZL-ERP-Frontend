@@ -35,6 +35,32 @@ export const useOrderBuyerByUUID = (uuid) =>
 		url: `/public/buyer/${uuid}`,
 	});
 
+// * Marketing * //
+export const useOrderMarketing = () =>
+	createGlobalState({
+		queryKey: orderQK.marketings(),
+		url: '/public/marketing',
+	});
+
+export const useOrderMarketingByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: orderQK.marketing(uuid),
+		url: `/public/marketing/${uuid}`,
+	});
+
+// * Factory * //
+export const useOrderFactory = () =>
+	createGlobalState({
+		queryKey: orderQK.factories(),
+		url: '/public/factory',
+	});
+
+export const useOrderFactoryByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: orderQK.factory(uuid),
+		url: `/public/factory/${uuid}`,
+	});
+
 // * Merchandiser * //
 export const useOrderMerchandiser = () =>
 	createGlobalState({

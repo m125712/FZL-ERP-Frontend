@@ -1,83 +1,83 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useAccess, useFetchFunc } from "@/hooks";
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useAccess, useFetchFunc } from '@/hooks';
+import { useOrderFactory } from '@/state/Order';
 
-import { DateTime, EditDelete } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+import { DateTime, EditDelete } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-const AddOrUpdate = lazy(() => import("./AddOrUpdate"));
-const DeleteModal = lazy(() => import("@/components/Modal/Delete"));
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
+const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const info = new PageInfo("Factory", "factory", "order__factory");
+	const { data, isLoading, url, deleteData } = useOrderFactory();
+	const info = new PageInfo('Order/Factory', url, 'order__factory');
+	const haveAccess = useAccess('order__factory');
 
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
 
 	const [factory, setFactory] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-	const haveAccess = useAccess("order__factory");
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "name",
-				header: "Name",
+				accessorKey: 'name',
+				header: 'Name',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "party_name",
-				header: "Party Name",
+				accessorKey: 'party_name',
+				header: 'Party Name',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "phone",
-				header: "Phone",
+				accessorKey: 'phone',
+				header: 'Phone',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "address",
-				header: "Address",
+				accessorKey: 'address',
+				header: 'Address',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "created_at",
-				header: "Created At",
+				accessorKey: 'created_at',
+				header: 'Created At',
 				enableColumnFilter: false,
-				filterFn: "isWithinRange",
+				filterFn: 'isWithinRange',
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
 			{
-				accessorKey: "updated_at",
-				header: "Updated",
+				accessorKey: 'updated_at',
+				header: 'Updated',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
 			{
-				accessorKey: "actions",
-				header: "Actions",
+				accessorKey: 'actions',
+				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("update"),
-				width: "w-24",
+				hidden: !haveAccess.includes('update'),
+				width: 'w-24',
 				cell: (info) => {
 					return (
 						<EditDelete
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes("delete")}
+							showDelete={haveAccess.includes('delete')}
 						/>
 					);
 				},
@@ -88,7 +88,7 @@ export default function Index() {
 
 	// Fetching data from server
 	useEffect(() => {
-		useFetchFunc(info.getFetchUrl(), setFactory, setLoading, setError);
+		document.title = info.getTabName();
 	}, []);
 
 	// Add
@@ -98,13 +98,13 @@ export default function Index() {
 
 	// Update
 	const [updateFactory, setUpdateFactory] = useState({
-		id: null,
+		uuid: null,
 	});
 
 	const handelUpdate = (idx) => {
 		setUpdateFactory((prev) => ({
 			...prev,
-			id: factory[idx].id,
+			uuid: factory[idx].uuid,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -117,26 +117,25 @@ export default function Index() {
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: factory[idx].id,
+			itemId: factory[idx].uuid,
 			itemName: factory[idx].name,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
 
-	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
-	// if (error) return <h1>Error:{error}</h1>;
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className='container mx-auto px-2 md:px-4'>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}
-				accessor={haveAccess.includes("create")}
+				accessor={haveAccess.includes('create')}
 				data={factory}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 
 			<Suspense>

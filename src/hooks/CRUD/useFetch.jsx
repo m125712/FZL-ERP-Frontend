@@ -29,6 +29,12 @@ function useFetch(url, dependencies = []) {
 	}, dependencies);
 }
 
+// async function useFetch(url, dependencies = []) {
+// 	const val = await api.get(url).then((res) => res?.data?.data);
+
+// 	return val;
+// }
+
 async function defaultFetchFunc(
 	url,
 	setData,

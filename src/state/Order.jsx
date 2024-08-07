@@ -47,3 +47,16 @@ export const useOrderMarketingByUUID = (uuid) =>
 		queryKey: orderQK.marketing(uuid),
 		url: `/public/marketing/${uuid}`,
 	});
+
+// * Factory * //
+export const useOrderFactory = () =>
+	createGlobalState({
+		queryKey: orderQK.factories(),
+		url: '/public/factory',
+	});
+
+export const useOrderFactoryByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: orderQK.factory(uuid),
+		url: `/public/factory/${uuid}`,
+	});

@@ -107,14 +107,14 @@ export const MERCHANDISER_NULL = {
 // Factory
 // party_id	name	email	phone	address	created_at	updated_at
 export const FACTORY_SCHEMA = {
-	party_id: NUMBER_REQUIRED,
+	party_id: STRING_REQUIRED,
 	name: STRING_REQUIRED,
 	phone: STRING.nullable(),
 	address: STRING_REQUIRED,
 };
 
 export const FACTORY_NULL = {
-	id: null,
+	uuid: null,
 	party_id: null,
 	name: '',
 	phone: '',

@@ -35,6 +35,18 @@ export const useOrderBuyerByUUID = (uuid) =>
 		url: `/public/buyer/${uuid}`,
 	});
 
+//*Party */
+export const useOrderParty = () =>
+	createGlobalState({
+		queryKey: orderQK.party(),
+		url: '/public/party',
+	});
+export const useOrderPartyByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: orderQK.party(uuid),
+		url: `/public/party/${uuid}`,
+	});
+
 // * Marketing * //
 export const useOrderMarketing = () =>
 	createGlobalState({

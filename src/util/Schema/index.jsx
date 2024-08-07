@@ -123,15 +123,15 @@ export const FACTORY_NULL = {
 
 // Marketing
 export const MARKETING_SCHEMA = {
-	user_id: NUMBER_REQUIRED,
+	user_uuid: STRING_REQUIRED,
 	name: STRING_REQUIRED,
 	short_name: STRING.nullable(),
 	remarks: STRING.nullable(),
 };
 
 export const MARKETING_NULL = {
-	id: null,
-	user_id: null,
+	uuid: null,
+	user_uuid: null,
 	name: '',
 	short_name: '',
 	remarks: '',

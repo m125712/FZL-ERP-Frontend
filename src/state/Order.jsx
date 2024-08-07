@@ -34,3 +34,16 @@ export const useOrderBuyerByUUID = (uuid) =>
 		queryKey: orderQK.buyer(uuid),
 		url: `/public/buyer/${uuid}`,
 	});
+
+// * Marketing * //
+export const useOrderMarketing = () =>
+	createGlobalState({
+		queryKey: orderQK.marketings(),
+		url: '/public/marketing',
+	});
+
+export const useOrderMarketingByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: orderQK.marketing(uuid),
+		url: `/public/marketing/${uuid}`,
+	});

@@ -16,6 +16,18 @@ export const orderQK = {
 	// buyers
 	buyers: () => [...orderQK.all(), 'buyers'],
 	buyer: (uuid) => [...orderQK.buyers(), uuid],
+
+	// marketing
+	marketings: () => [...orderQK.all(), 'marketing'],
+	marketing: (uuid) => [...orderQK.marketings(), uuid],
+
+	// marketing
+	factories: () => [...orderQK.all(), 'factory'],
+	factory: (uuid) => [...orderQK.factories(), uuid],
+    
+	// merchandisers
+	merchandisers: () => [...orderQK.all(), 'merchandisers'],
+	merchandiser: (uuid) => [...orderQK.merchandisers(), uuid],
 	//Party
 	party: () => [...orderQK.all(), 'party'],
 	partyByUUID: (uuid) => [...orderQK.party(), uuid],

@@ -34,6 +34,7 @@ export const useOrderBuyerByUUID = (uuid) =>
 		queryKey: orderQK.buyer(uuid),
 		url: `/public/buyer/${uuid}`,
 	});
+
 //*Party */
 export const useOrderParty = () =>
 	createGlobalState({
@@ -45,3 +46,43 @@ export const useOrderPartyByUUID = (uuid) =>
 		queryKey: orderQK.party(uuid),
 		url: `/public/party/${uuid}`,
 	});
+
+// * Marketing * //
+export const useOrderMarketing = () =>
+	createGlobalState({
+		queryKey: orderQK.marketings(),
+		url: '/public/marketing',
+	});
+
+export const useOrderMarketingByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: orderQK.marketing(uuid),
+		url: `/public/marketing/${uuid}`,
+	});
+
+// * Factory * //
+export const useOrderFactory = () =>
+	createGlobalState({
+		queryKey: orderQK.factories(),
+		url: '/public/factory',
+	});
+
+export const useOrderFactoryByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: orderQK.factory(uuid),
+		url: `/public/factory/${uuid}`,
+	});
+
+// * Merchandiser * //
+export const useOrderMerchandiser = () =>
+	createGlobalState({
+		queryKey: orderQK.merchandisers(),
+		url: '/public/merchandiser',
+	});
+
+export const useOrderMerchandiserByUUID = (uuid) => {
+	createGlobalState({
+		queryKey: orderQK.merchandiser(uuid),
+		url: `/public/merchandiser/${uuid}`,
+	});
+};

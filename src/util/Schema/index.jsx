@@ -88,7 +88,7 @@ export const BUYER_NULL = {
 
 // Merchandiser
 export const MERCHANDISER_SCHEMA = {
-	party_id: NUMBER_REQUIRED,
+	party_uuid: STRING_REQUIRED,
 	name: STRING_REQUIRED,
 	email: EMAIL.nullable(),
 	phone: STRING.nullable(),
@@ -96,8 +96,8 @@ export const MERCHANDISER_SCHEMA = {
 };
 
 export const MERCHANDISER_NULL = {
-	id: null,
-	party_id: null,
+	uuid: null,
+	party_uuid: null,
 	name: '',
 	email: '',
 	phone: '',

@@ -24,4 +24,8 @@ export const orderQK = {
 	// marketing
 	factories: () => [...orderQK.all(), 'factory'],
 	factory: (uuid) => [...orderQK.factories(), uuid],
+    
+	// merchandisers
+	merchandisers: () => [...orderQK.all(), 'merchandisers'],
+	merchandiser: (uuid) => [...orderQK.merchandisers(), uuid],
 };

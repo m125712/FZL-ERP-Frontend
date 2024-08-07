@@ -60,3 +60,17 @@ export const useOrderFactoryByUUID = (uuid) =>
 		queryKey: orderQK.factory(uuid),
 		url: `/public/factory/${uuid}`,
 	});
+
+// * Merchandiser * //
+export const useOrderMerchandiser = () =>
+	createGlobalState({
+		queryKey: orderQK.merchandisers(),
+		url: '/public/merchandiser',
+	});
+
+export const useOrderMerchandiserByUUID = (uuid) => {
+	createGlobalState({
+		queryKey: orderQK.merchandiser(uuid),
+		url: `/public/merchandiser/${uuid}`,
+	});
+};

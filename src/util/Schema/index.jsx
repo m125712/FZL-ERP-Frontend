@@ -103,7 +103,7 @@ export const MERCHANDISER_SCHEMA = {
 	party_uuid: STRING_REQUIRED,
 	name: STRING_REQUIRED,
 	email: EMAIL.nullable(),
-	phone: STRING.nullable(),
+	phone: PHONE_NUMBER.nullable(),
 	address: STRING.nullable(),
 };
 

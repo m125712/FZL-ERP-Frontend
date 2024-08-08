@@ -6,11 +6,11 @@ import {
 	useRHF,
 	useUpdateFunc,
 } from '@/hooks';
+import nanoid from '@/lib/nanoid';
+import { useOrderMerchandiser } from '@/state/Order';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { MERCHANDISER_NULL, MERCHANDISER_SCHEMA } from '@util/Schema';
-import { useOrderMerchandiser } from '@/state/Order';
-import nanoid from '@/lib/nanoid';
 
 export default function Index({
 	modalId = '',
@@ -76,7 +76,7 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			party_name: party_name,
-			created_at: new Date(),
+			created_at: GetDateTime(),
 		};
 
 		console.log(updatedData);

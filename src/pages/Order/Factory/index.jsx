@@ -1,6 +1,6 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
+import { useAccess } from '@/hooks';
 import { useOrderFactory } from '@/state/Order';
 
 import { DateTime, EditDelete } from '@/ui';
@@ -18,8 +18,6 @@ export default function Index() {
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
-
-	const [factory, setFactory] = useState([]);
 
 	const columns = useMemo(
 		() => [
@@ -83,13 +81,8 @@ export default function Index() {
 				},
 			},
 		],
-		[factory]
+		[data]
 	);
-
-	// Fetching data from server
-	useEffect(() => {
-		document.title = info.getTabName();
-	}, []);
 
 	// Add
 	const handelAdd = () => {
@@ -104,7 +97,7 @@ export default function Index() {
 	const handelUpdate = (idx) => {
 		setUpdateFactory((prev) => ({
 			...prev,
-			uuid: factory[idx].uuid,
+			uuid: data[idx].uuid,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -117,8 +110,8 @@ export default function Index() {
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: factory[idx].uuid,
-			itemName: factory[idx].name,
+			itemId: data[idx].uuid,
+			itemName: data[idx].name,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -133,7 +126,7 @@ export default function Index() {
 				title={info.getTitle()}
 				handelAdd={handelAdd}
 				accessor={haveAccess.includes('create')}
-				data={factory}
+				data={data}
 				columns={columns}
 				extraClass='py-2'
 			/>
@@ -142,7 +135,6 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						setFactory,
 						updateFactory,
 						setUpdateFactory,
 					}}
@@ -152,10 +144,12 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					setItems={setFactory}
-					uri={info.getDeleteUrl()}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url,
+						deleteData,
+					}}
 				/>
 			</Suspense>
 		</div>

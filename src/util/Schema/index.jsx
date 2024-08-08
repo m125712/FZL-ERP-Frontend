@@ -66,7 +66,7 @@ export const SECTION_SCHEMA = {
 };
 
 export const SECTION_NULL = {
-	id: null,
+	uuid: null,
 	name: '',
 	short_name: '',
 	remarks: '',
@@ -119,7 +119,7 @@ export const MERCHANDISER_NULL = {
 // Factory
 // party_id	name	email	phone	address	created_at	updated_at
 export const FACTORY_SCHEMA = {
-	party_id: STRING_REQUIRED,
+	party_uuid: STRING_REQUIRED,
 	name: STRING_REQUIRED,
 	phone: STRING.nullable(),
 	address: STRING_REQUIRED,
@@ -127,7 +127,7 @@ export const FACTORY_SCHEMA = {
 
 export const FACTORY_NULL = {
 	uuid: null,
-	party_id: null,
+	party_uuid: null,
 	name: '',
 	phone: '',
 	address: '',
@@ -250,7 +250,7 @@ export const VENDOR_SCHEMA = {
 };
 
 export const VENDOR_NULL = {
-	id: null,
+	uuid: null,
 	name: '',
 	contact_number: '',
 	email: '',
@@ -1016,7 +1016,7 @@ export const BANK_SCHEMA = {
 };
 
 export const BANK_NULL = {
-	id: null,
+	uuid: null,
 	name: '',
 	swift_code: '',
 	address: '',

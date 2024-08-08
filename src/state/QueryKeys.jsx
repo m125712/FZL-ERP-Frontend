@@ -35,3 +35,31 @@ export const orderQK = {
 	properties: () => [...orderQK.all(), 'properties'],
 	propertiesByUUID: (uuid) => [...orderQK.party(), uuid],
 };
+
+export const commercialQK = {
+	all: () => ['commercial'],
+
+	// bank
+	banks: () => [...commercialQK.all(), 'bank'],
+	bank: (uuid) => [...commercialQK.banks(), uuid],
+};
+
+export const materialQK = {
+	all: () => ['material'],
+
+	// section
+	sections: () => [...materialQK.all(), 'sections'],
+	section: (uuid) => [...materialQK.sections(), uuid],
+
+	// types
+	types: () => [...materialQK.all(), 'types'],
+	type: (uuid) => [...materialQK.types(), uuid],
+};
+
+export const purchaseQK = {
+	all: () => ['purchase'],
+
+	// vendor
+	vendors: () => [...purchaseQK.all(), 'vendors'],
+	vendor: (uuid) => [...purchaseQK.vendors(), uuid],
+};

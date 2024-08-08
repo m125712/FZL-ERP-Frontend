@@ -31,4 +31,8 @@ export const orderQK = {
 	//Party
 	party: () => [...orderQK.all(), 'party'],
 	partyByUUID: (uuid) => [...orderQK.party(), uuid],
+
+	// info
+	info: () => [...orderQK.all(), 'info'],
+	infoByUUID: (uuid) => [...orderQK.info(), uuid],
 };

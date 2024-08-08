@@ -86,3 +86,17 @@ export const useOrderMerchandiserByUUID = (uuid) => {
 		url: `/public/merchandiser/${uuid}`,
 	});
 };
+
+// * Info * //
+export const useOrderInfo = () =>
+	createGlobalState({
+		queryKey: orderQK.info(),
+		url: '/zipper/order-info',
+	});
+
+export const useOrderInfoByUUID = (uuid) => {
+	createGlobalState({
+		queryKey: orderQK.infoByUUID(uuid),
+		url: `/zipper/order-info/${uuid}`,
+	});
+};

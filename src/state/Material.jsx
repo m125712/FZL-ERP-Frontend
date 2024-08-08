@@ -13,3 +13,16 @@ export const useMaterialSectionByUUID = (uuid) =>
 		queryKey: materialQK.section(uuid),
 		url: `/material/section/${uuid}`,
 	});
+
+// * Types * //
+export const useMaterialType = () =>
+	createGlobalState({
+		queryKey: materialQK.types(),
+		url: '/material/type',
+	});
+
+export const useMaterialTypeByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: materialQK.type(uuid),
+		url: `/material/type/${uuid}`,
+	});

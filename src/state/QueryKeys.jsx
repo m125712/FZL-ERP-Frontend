@@ -44,7 +44,11 @@ export const commercialQK = {
 export const materialQK = {
 	all: () => ['material'],
 
-	// bank
-	sections: () => [...materialQK.all(), 'bank'],
+	// section
+	sections: () => [...materialQK.all(), 'sections'],
 	section: (uuid) => [...materialQK.sections(), uuid],
+
+	// types
+	types: () => [...materialQK.all(), 'types'],
+	type: (uuid) => [...materialQK.types(), uuid],
 };

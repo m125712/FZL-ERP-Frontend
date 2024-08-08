@@ -34,6 +34,10 @@ export const orderQK = {
 	//properties
 	properties: () => [...orderQK.all(), 'properties'],
 	propertiesByUUID: (uuid) => [...orderQK.party(), uuid],
+
+	// info
+	info: () => [...orderQK.all(), 'info'],
+	infoByUUID: (uuid) => [...orderQK.info(), uuid],
 };
 
 export const commercialQK = {

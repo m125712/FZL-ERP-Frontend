@@ -103,7 +103,7 @@ export const MERCHANDISER_SCHEMA = {
 	party_uuid: STRING_REQUIRED,
 	name: STRING_REQUIRED,
 	email: EMAIL.nullable(),
-	phone: STRING.nullable(),
+	phone: PHONE_NUMBER.nullable(),
 	address: STRING.nullable(),
 };
 
@@ -362,37 +362,36 @@ export const PROPERTIES_NULL = {
 // Product Order
 export const handelNumberDefaultValue = (value) =>
 	value === null ? undefined : value;
+
 // Order Info
 export const ORDER_INFO_SCHEMA = {
-	reference_order: STRING.nullable(),
+	reference_order_info_uuid: STRING.nullable(),
 	is_sample: BOOLEAN_REQUIRED.default(false),
 	is_bill: BOOLEAN.default(false),
 	is_cash: BOOLEAN_REQUIRED,
 	status: BOOLEAN_REQUIRED.default(false),
-	marketing_id: NUMBER_REQUIRED,
-	merchandiser_id: NUMBER.transform(handelNumberDefaultValue).default(0), // No Merchandiser
-	factory_id: NUMBER.transform(handelNumberDefaultValue).default(0), // No Factory
-	party_id: NUMBER_REQUIRED,
-	buyer_id: NUMBER_REQUIRED,
+	marketing_uuid: STRING_REQUIRED,
+	merchandiser_uuid: STRING.transform(handelNumberDefaultValue).default(0), // No Merchandiser
+	factory_uuid: STRING.transform(handelNumberDefaultValue).default(0), // No Factory
+	party_uuid: STRING_REQUIRED,
+	buyer_uuid: STRING_REQUIRED,
 	marketing_priority: STRING,
 	factory_priority: STRING,
 	remarks: STRING.nullable(),
 };
 
 export const ORDER_INFO_NULL = {
-	id: null,
-	reference_order: '',
-	is_zipper: false,
-	order_info_id: '',
+	uuid: null,
+	reference_order_info_uuid: '',
 	is_sample: false,
 	is_bill: false,
 	is_cash: false,
-	order_status: false,
-	marketing_id: null,
-	merchandiser_id: null,
-	factory_id: null,
-	party_id: null,
-	buyer_id: null,
+	status: false,
+	marketing_uuid: null,
+	merchandiser_uuid: null,
+	factory_uuid: null,
+	party_uuid: null,
+	buyer_uuid: null,
 	marketing_priority: '',
 	factory_priority: '',
 	remarks: '',

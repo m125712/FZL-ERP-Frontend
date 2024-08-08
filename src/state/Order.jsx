@@ -97,3 +97,16 @@ export const useOrderPropertiesByUUID = (uuid) =>
 		queryKey: orderQK.property(uuid),
 		url: `/public/properties/${uuid}`,
 	});
+// * Info * //
+export const useOrderInfo = () =>
+	createGlobalState({
+		queryKey: orderQK.info(),
+		url: '/zipper/order-info',
+	});
+
+export const useOrderInfoByUUID = (uuid) => {
+	createGlobalState({
+		queryKey: orderQK.infoByUUID(uuid),
+		url: `/zipper/order-info/${uuid}`,
+	});
+};

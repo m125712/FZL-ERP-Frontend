@@ -86,3 +86,14 @@ export const useOrderMerchandiserByUUID = (uuid) => {
 		url: `/public/merchandiser/${uuid}`,
 	});
 };
+// * Properties * //
+export const useOrderProperties = () =>
+	createGlobalState({
+		queryKey: orderQK.properties(),
+		url: '/public/properties',
+	});
+export const useOrderPropertiesByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: orderQK.property(uuid),
+		url: `/public/properties/${uuid}`,
+	});

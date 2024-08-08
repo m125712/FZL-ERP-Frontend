@@ -42,7 +42,7 @@ export default function Index({
 	const onClose = () => {
 		setUpdateFactory((prev) => ({
 			...prev,
-			id: null,
+			uuid: null,
 		}));
 		reset(FACTORY_NULL);
 		window[modalId].close();
@@ -50,7 +50,7 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		let party_name = party.find(
-			(item) => item.value === data.party_id
+			(item) => item.value === data.party_uuid
 		).label;
 		// Update item
 		if (updateFactory?.uuid !== null && updateFactory?.uuid !== undefined) {
@@ -59,6 +59,7 @@ export default function Index({
 				party_name: party_name,
 				updated_at: GetDateTime(),
 			};
+
 			await updateData.mutateAsync({
 				url: `${url}/${updateFactory?.uuid}`,
 				uuid: updateFactory?.uuid,
@@ -82,13 +83,6 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
-
-		// usePostFunc({
-		// 	uri: '/factory',
-		// 	data: updatedData,
-		// 	setItems: setFactory,
-		// 	onClose: onClose,
-		// });
 	};
 
 	return (
@@ -98,9 +92,9 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<FormField label='party_id' title='Party' errors={errors}>
+			<FormField label='party_uuid' title='Party' errors={errors}>
 				<Controller
-					name={'party_id'}
+					name={'party_uuid'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
@@ -109,9 +103,11 @@ export default function Index({
 								options={party}
 								value={party?.find(
 									(item) =>
-										item.value === getValues('party_id')
+										item.value === getValues('party_uuid')
 								)}
-								onChange={(e) => onChange(e.value)}
+								onChange={(e) => {
+									onChange(e.value);
+								}}
 							/>
 						);
 					}}

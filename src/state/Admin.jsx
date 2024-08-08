@@ -9,16 +9,15 @@ export const useAdminUsers = () =>
 		url: '/hr/user',
 	});
 
-// const useFetchForRhfReset = async (uri, returnId, reset) => {
-// 	useEffect(async () => {
-// 		if (returnId === null || returnId === undefined) return;
-
-// 		await api.get(uri).then((res) => reset(res?.data[0]));
-// 	}, [returnId]);
-// };
-
 export const useOrderBuyerByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: orderQK.buyer(uuid),
 		url: `/public/buyer/${uuid}`,
+	});
+
+// * Department
+export const useAdminDepartments = () =>
+	createGlobalState({
+		queryKey: adminQK.departments(),
+		url: '/hr/department',
 	});

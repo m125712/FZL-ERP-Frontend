@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc, useUpdateFunc } from '@/hooks';
-import { useAdminUsers } from '@/state/Admin/user';
+import { useAccess, useUpdateFunc } from '@/hooks';
+import { useAdminUsers } from '@/state/Admin';
 import { DateTime, EditDelete, ResetPassword, StatusButton } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
@@ -13,12 +13,9 @@ const ResetPass = lazy(() => import('./ResetPass'));
 const PageAssign = lazy(() => import('./PageAssign'));
 
 export default function Order() {
-	const info = new PageInfo('User', 'hr/user', 'admin__user');
-	const { data, isLoading, isError, updateData } = useAdminUsers();
-	const [users, setUsers] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-	const haveAccess = useAccess('admin__user');
+	const { data, url, isLoading, deleteData } = useAdminUsers();
+	const info = new PageInfo('Admin/User', url, 'admin__user');
+	const haveAccess = useAccess(info.getTab());
 
 	const columns = useMemo(
 		() => [
@@ -150,8 +147,6 @@ export default function Order() {
 	}, []);
 
 	const handelAdd = () => {
-		console.log(window[info?.getAddOrUpdateModalId()]);
-
 		window[info?.getAddOrUpdateModalId()]?.showModal();
 	};
 
@@ -251,7 +246,6 @@ export default function Order() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						setUsers,
 						updateUser,
 						setUpdateUser,
 					}}
@@ -261,10 +255,12 @@ export default function Order() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					setItems={setUsers}
-					uri={info.getDeleteUrl()}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url,
+						deleteData,
+					}}
 				/>
 			</Suspense>
 			<Suspense>
@@ -273,7 +269,6 @@ export default function Order() {
 					{...{
 						resPass,
 						setResPass,
-						setUsers,
 					}}
 				/>
 			</Suspense>
@@ -283,7 +278,6 @@ export default function Order() {
 					{...{
 						pageAssign,
 						setPageAssign,
-						setUsers,
 					}}
 				/>
 			</Suspense>

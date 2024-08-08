@@ -595,7 +595,7 @@ export const USER_SCHEMA = {
 };
 
 export const USER_NULL = {
-	id: null,
+	uuid: null,
 	name: '',
 	email: '',
 	department_designation: null,
@@ -606,15 +606,24 @@ export const USER_NULL = {
 	remarks: '',
 };
 
+// export const USER_DEPARTMENT_SCHEMA = {
+// 	department: STRING_REQUIRED,
+// 	designation: STRING_REQUIRED,
+// };
+
+// export const USER_DEPARTMENT_NULL = {
+// 	uuid: null,
+// 	department: '',
+// 	designation: '',
+// };
+
 export const USER_DEPARTMENT_SCHEMA = {
 	department: STRING_REQUIRED,
-	designation: STRING_REQUIRED,
 };
 
 export const USER_DEPARTMENT_NULL = {
-	id: null,
+	uuid: null,
 	department: '',
-	designation: '',
 };
 
 // Reset Password

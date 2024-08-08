@@ -340,17 +340,23 @@ export const RECEIVED_NULL = {
 // Order
 // Order Properties
 export const PROPERTIES_SCHEMA = {
+	item_for: STRING_REQUIRED,
 	type: STRING_REQUIRED,
 	name: STRING_REQUIRED,
+	short_name: STRING.nullable(),
 	remarks: STRING.nullable(),
 };
 
 export const PROPERTIES_NULL = {
-	id: null,
+	uuid: null,
+	item_for: '',
 	type: '',
 	name: '',
 	short_name: '',
 	remarks: '',
+	created_by: '',
+	created_at: '',
+	updated_at: '',
 };
 
 // Product Order

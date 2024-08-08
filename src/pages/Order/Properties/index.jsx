@@ -27,33 +27,45 @@ export default function Index() {
 	// const [error, setError] = useState(null);
 	// const haveAccess = useAccess("order__properties");
 
-
-
 	const columns = useMemo(
 		() => [
 			{
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
 			},
 			{
 				accessorKey: 'type',
 				header: 'Type',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					return (
+						<span className='capitalize'>
+							{info.getValue().split('_').join(' ')}
+						</span>
+					);
+				},
 			},
 			{
 				accessorKey: 'item_for',
 				header: 'Item For',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<span className='capitalize'>
+						{info.getValue().split('_').join(' ')}
+					</span>
+				),
 			},
 			{
 				accessorKey: 'short_name',
 				header: 'Short Name',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
 			},
 			{
 				accessorKey: 'created_by',

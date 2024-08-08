@@ -1191,3 +1191,20 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 		},
 	],
 };
+//LibraryUser
+export const LIBRARY_USER_SCHEMA = {
+	name: STRING_REQUIRED,
+	email: FORTUNE_ZIP_EMAIL_PATTERN,
+	department_designation: STRING_REQUIRED,
+	ext: STRING.nullable(),
+	phone: PHONE_NUMBER_REQUIRED,
+};
+export const LIBRARY_USER_NULL = {
+	id: null,
+	name: '',
+	email: '',
+	department_designation: null,
+	designation_uuid: null,
+	ext: '',
+	phone: '',
+};

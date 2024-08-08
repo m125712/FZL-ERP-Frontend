@@ -2,7 +2,7 @@ import { lazy } from "react";
 
 // Pages
 // Admin
-const User = lazy(() => import("@pages/Library/Users"));
+const User = lazy(() => import("@pages/Library/User"));
 const Policy = lazy(() => import("@pages/Library/Policy"));
 
 export const LibraryRoutes = [

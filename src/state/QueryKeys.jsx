@@ -35,3 +35,11 @@ export const orderQK = {
 	properties: () => [...orderQK.all(), 'properties'],
 	propertiesByUUID: (uuid) => [...orderQK.party(), uuid],
 };
+
+//Library
+export const libraryQK = {
+	all: () => ['library'],
+	// users
+	users: () => [...libraryQK.all(), 'users'],
+	usersByUUID: (uuid) => [...libraryQK.users(), uuid],
+};

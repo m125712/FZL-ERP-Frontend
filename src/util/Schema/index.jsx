@@ -339,18 +339,6 @@ export const RECEIVED_NULL = {
 
 // Order
 // Order Properties
-
-// {
-//   "uuid": "string",
-//   "item_for": "string",
-//   "type": "string",
-//   "name": "string",
-//   "short_name": "string",
-//   "created_by": "string",
-//   "created_at": "2024-01-01 00:00:00",
-//   "updated_at": "2024-01-01 00:00:00",
-//   "remarks": "string"
-// }
 export const PROPERTIES_SCHEMA = {
 	item_for: STRING_REQUIRED,
 	type: STRING_REQUIRED,

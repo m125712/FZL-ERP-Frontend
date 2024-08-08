@@ -9,23 +9,11 @@ import { lazy, useEffect, useMemo, useState } from 'react';
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
-// const NameCell = ({ value }) => (
-// 	<span className='capitalize'>{value().replace(/_/g, ' ')}</span>
-// );
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useOrderProperties();
 	const info = new PageInfo('Order/Properties', url, 'order__properties');
 	const haveAccess = useAccess(info.getTab());
-	// const info = new PageInfo(
-	// 	"Properties",
-	// 	"order/properties",
-	// 	"order__properties"
-	// );
 
-	// const [orderProperties, setOrderProperties] = useState([]);
-	// const [loading, setLoading] = useState(true);
-	// const [error, setError] = useState(null);
-	// const haveAccess = useAccess("order__properties");
 
 	const columns = useMemo(
 		() => [
@@ -124,16 +112,6 @@ export default function Index() {
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
-
-	// Fetching data from server
-	// useEffect(() => {
-	// 	useFetchFunc(
-	// 		info.getFetchUrl(),
-	// 		setOrderProperties,
-	// 		setLoading,
-	// 		setError
-	// 	);
-	// }, []);
 
 	// Add
 	const handelAdd = () => {

@@ -40,3 +40,11 @@ export const commercialQK = {
 	banks: () => [...commercialQK.all(), 'bank'],
 	bank: (uuid) => [...commercialQK.banks(), uuid],
 };
+
+export const materialQK = {
+	all: () => ['material'],
+
+	// bank
+	sections: () => [...materialQK.all(), 'bank'],
+	section: (uuid) => [...materialQK.sections(), uuid],
+};

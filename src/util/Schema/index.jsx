@@ -66,7 +66,7 @@ export const SECTION_SCHEMA = {
 };
 
 export const SECTION_NULL = {
-	id: null,
+	uuid: null,
 	name: '',
 	short_name: '',
 	remarks: '',

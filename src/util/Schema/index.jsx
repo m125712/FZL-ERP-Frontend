@@ -250,7 +250,7 @@ export const VENDOR_SCHEMA = {
 };
 
 export const VENDOR_NULL = {
-	id: null,
+	uuid: null,
 	name: '',
 	contact_number: '',
 	email: '',

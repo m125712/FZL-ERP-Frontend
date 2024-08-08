@@ -52,3 +52,11 @@ export const materialQK = {
 	types: () => [...materialQK.all(), 'types'],
 	type: (uuid) => [...materialQK.types(), uuid],
 };
+
+export const purchaseQK = {
+	all: () => ['purchase'],
+
+	// vendor
+	vendors: () => [...purchaseQK.all(), 'vendors'],
+	vendor: (uuid) => [...purchaseQK.vendors(), uuid],
+};

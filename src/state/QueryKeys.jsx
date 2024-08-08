@@ -24,11 +24,19 @@ export const orderQK = {
 	// marketing
 	factories: () => [...orderQK.all(), 'factory'],
 	factory: (uuid) => [...orderQK.factories(), uuid],
-    
+
 	// merchandisers
 	merchandisers: () => [...orderQK.all(), 'merchandisers'],
 	merchandiser: (uuid) => [...orderQK.merchandisers(), uuid],
 	//Party
 	party: () => [...orderQK.all(), 'party'],
 	partyByUUID: (uuid) => [...orderQK.party(), uuid],
+};
+
+export const commercialQK = {
+	all: () => ['commercial'],
+
+	// bank
+	banks: () => [...commercialQK.all(), 'bank'],
+	bank: (uuid) => [...commercialQK.banks(), uuid],
 };

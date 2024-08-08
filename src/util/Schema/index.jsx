@@ -1010,7 +1010,7 @@ export const BANK_SCHEMA = {
 };
 
 export const BANK_NULL = {
-	id: null,
+	uuid: null,
 	name: '',
 	swift_code: '',
 	address: '',

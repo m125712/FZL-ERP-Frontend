@@ -32,6 +32,6 @@ export const orderQK = {
 	party: () => [...orderQK.all(), 'party'],
 	partyByUUID: (uuid) => [...orderQK.party(), uuid],
 	//properties
-	properties: () => [...orderQK.all(), 'party'],
+	properties: () => [...orderQK.all(), 'properties'],
 	propertiesByUUID: (uuid) => [...orderQK.party(), uuid],
 };

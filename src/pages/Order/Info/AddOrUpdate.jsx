@@ -7,115 +7,14 @@ import {
 	useRHF,
 	useUpdateFunc,
 } from '@/hooks';
+import nanoid from '@/lib/nanoid';
+import { useOrderInfo } from '@/state/Order';
 import { CheckBox, FormField, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
+import { DevTool } from '@hookform/devtools';
 import { ORDER_INFO_NULL, ORDER_INFO_SCHEMA } from '@util/Schema';
 import { useEffect, useState } from 'react';
-import { useOrderInfo } from '@/state/Order';
-import { DevTool } from '@hookform/devtools';
-import nanoid from '@/lib/nanoid';
 
-/*
-buyer_name
-: 
-"Admin"
-buyer_uuid
-: 
-"igD0v9DIJQhJeet"
-created_at
-: 
-"2024-08-08 16:26:14"
-factory_name
-: 
-"ggwop"
-factory_priority
-: 
-"FIFO"
-factory_uuid
-: 
-"cf-daf86b3eedf1"
-is_bill
-: 
-1
-is_cash
-: 
-1
-is_sample
-: 
-1
-is_zipper
-: 
-false
-issued_by
-: 
-"igD0v9DIJQhJeet"
-issued_by_name
-: 
-"admin"
-marketing_name
-: 
-"Admin"
-marketing_priority
-: 
-"URGENT"
-marketing_uuid
-: 
-"j14NcevenyrWSei"
-merchandiser_name
-: 
-"Anik"
-merchandiser_uuid
-: 
-"3JNNFm197iC0Iu2"
-order_info_id
-: 
-""
-order_status
-: 
-false
-party_name
-: 
-"Mayce  Of  Jolo Fashion"
-party_uuid
-: 
-"cf-daf86b3eedf1"
-reference_order
-: 
-undefined
-reference_order_info_uuid
-: 
-""
-remarks
-: 
-""
-status
-: 
-false
-uuid
-: 
-null
-
-{
-  "uuid": "string",
-  "reference_order_info_uuid": "string",
-  "buyer_uuid": "string",
-  "party_uuid": "string",
-  "marketing_uuid": "string",
-  "merchandiser_uuid": "string",
-  "factory_uuid": "string",
-  "is_sample": 0,
-  "is_bill": 0,
-  "is_cash": 0,
-  "marketing_priority": "string",
-  "factory_priority": "string",
-  "status": 0,
-  "created_by": "string",
-  "created_at": "2024-01-01 00:00:00",
-  "updated_at": "2024-01-01 00:00:00",
-  "remarks": "string"
-}
-
-*/
 export default function Index({
 	modalId = '',
 
@@ -143,8 +42,6 @@ export default function Index({
 		control,
 		getValues,
 	} = useRHF(ORDER_INFO_SCHEMA, ORDER_INFO_NULL);
-
-	console.log(url);
 
 	const [partyId, setPartyId] = useState(getValues('party_uuid'));
 	const { value: ref_order } = useFetch('/other/order/info/value/label');
@@ -213,14 +110,12 @@ export default function Index({
 				is_sample: isSample ? 1 : 0,
 				is_bill: isBill ? 1 : 0,
 				is_cash: data.is_cash ? 1 : 0,
-				status: data.satus ? 1 : 0,
+				status: data.status ? 1 : 0,
 				updated_at: GetDateTime(),
 			};
 
-			console.log(updatedData)
-
 			await updateData.mutateAsync({
-				url: `${url}/${updateOrderInfo?.uuid}}`,
+				url: `${url}/${updateOrderInfo?.uuid}`,
 				uuid: updateOrderInfo?.uuid,
 				updatedData,
 				onClose: onClose,
@@ -240,7 +135,6 @@ export default function Index({
 			created_at: GetDateTime(),
 		};
 
-		
 		await postData.mutateAsync({
 			url,
 			newData: updatedData,
@@ -304,7 +198,9 @@ export default function Index({
 									value={ref_order?.find(
 										(item) =>
 											item.value ==
-											getValues('reference_order_info_uuid')
+											getValues(
+												'reference_order_info_uuid'
+											)
 									)}
 									onChange={(e) => onChange(e.value)}
 									isDisabled={updateOrderInfo?.uuid !== null}

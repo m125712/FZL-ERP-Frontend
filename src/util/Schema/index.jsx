@@ -18,6 +18,8 @@ import {
 	PHONE_NUMBER_REQUIRED, // default
 	STRING, // default
 	STRING_REQUIRED, // default
+	URL,
+	URL_REQUIRED,
 } from './utils';
 
 export {
@@ -42,21 +44,42 @@ export {
 };
 
 // Library
+//User
+export const LIBRARY_USER_SCHEMA = {
+	name: STRING_REQUIRED,
+	email: FORTUNE_ZIP_EMAIL_PATTERN,
+	department_designation: STRING_REQUIRED,
+	ext: STRING.nullable(),
+	phone: PHONE_NUMBER_REQUIRED,
+};
+export const LIBRARY_USER_NULL = {
+	id: null,
+	name: '',
+	email: '',
+	department_designation: null,
+	designation_uuid: null,
+	ext: '',
+	phone: '',
+};
 // Policy
 export const POLICY_SCHEMA = {
 	type: STRING_REQUIRED,
 	title: STRING_REQUIRED,
 	sub_title: STRING_REQUIRED,
-	url: STRING_REQUIRED,
+	status: NUMBER_REQUIRED,
+	url: URL_REQUIRED,
+	remarks: STRING.nullable(),
 };
 
 export const POLICY_NULL = {
-	id: null,
+	uuid: null,
 	type: '',
 	title: '',
 	sub_title: '',
+	status: 1,
 	url: '',
 	updated_at: '',
+	remarks: '',
 };
 
 // Section
@@ -1190,21 +1213,4 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 			remarks: '',
 		},
 	],
-};
-//LibraryUser
-export const LIBRARY_USER_SCHEMA = {
-	name: STRING_REQUIRED,
-	email: FORTUNE_ZIP_EMAIL_PATTERN,
-	department_designation: STRING_REQUIRED,
-	ext: STRING.nullable(),
-	phone: PHONE_NUMBER_REQUIRED,
-};
-export const LIBRARY_USER_NULL = {
-	id: null,
-	name: '',
-	email: '',
-	department_designation: null,
-	designation_uuid: null,
-	ext: '',
-	phone: '',
 };

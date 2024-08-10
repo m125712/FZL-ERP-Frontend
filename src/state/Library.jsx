@@ -11,3 +11,14 @@ export const useLibraryUserByUUID = (uuid) =>
 		queryKey: libraryQK.user(uuid),
 		url: `/hr/user-common${uuid}`,
 	});
+// * Policy * //
+export const useLibraryPolicy = () =>
+	createGlobalState({
+		queryKey: libraryQK.policies(),
+		url: '/hr/policy-and-notice',
+	});
+export const useLibraryPolicyByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: libraryQK.policy(uuid),
+		url: `/hr/policy-and-notice${uuid}`,
+	});

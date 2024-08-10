@@ -41,5 +41,8 @@ export const libraryQK = {
 	all: () => ['library'],
 	// users
 	users: () => [...libraryQK.all(), 'users'],
-	usersByUUID: (uuid) => [...libraryQK.users(), uuid],
+	userByUUID: (uuid) => [...libraryQK.users(), uuid],
+	// policies
+	policies: () => [...libraryQK.all(), 'policies'],
+	policyByUUID: (uuid) => [...libraryQK.policies(), uuid],
 };

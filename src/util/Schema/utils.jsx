@@ -50,3 +50,5 @@ export const ORDER_NUMBER = STRING_REQUIRED.matches(
 	/^(?:[0-9]{4}-[2]{1}[3-9]{1}|[C]{1}[S]{1}[0-9]{4}-[2]{1}[3-9]{1}|[S]{1}[0-9]{4}-[2]{1}[3-9]{1})$/,
 	'O/N format: XXXX-23, CSXXXX-23, SXXXX-23'
 );
+export const URL = STRING.url('Invalid URL');
+export const URL_REQUIRED = URL.required('Required');

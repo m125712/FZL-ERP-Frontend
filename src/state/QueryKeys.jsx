@@ -67,3 +67,14 @@ export const purchaseQK = {
 	vendors: () => [...purchaseQK.all(), 'vendors'],
 	vendor: (uuid) => [...purchaseQK.vendors(), uuid],
 };
+
+//Library
+export const libraryQK = {
+	all: () => ['library'],
+	// users
+	users: () => [...libraryQK.all(), 'users'],
+	userByUUID: (uuid) => [...libraryQK.users(), uuid],
+	// policies
+	policies: () => [...libraryQK.all(), 'policies'],
+	policyByUUID: (uuid) => [...libraryQK.policies(), uuid],
+};

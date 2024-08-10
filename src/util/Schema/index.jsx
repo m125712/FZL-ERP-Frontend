@@ -18,6 +18,7 @@ import {
 	PHONE_NUMBER_REQUIRED, // default
 	STRING, // default
 	STRING_REQUIRED, // default
+	UUID_PK, // default
 } from './utils';
 
 export {
@@ -606,17 +607,7 @@ export const USER_NULL = {
 	remarks: '',
 };
 
-// export const USER_DEPARTMENT_SCHEMA = {
-// 	department: STRING_REQUIRED,
-// 	designation: STRING_REQUIRED,
-// };
-
-// export const USER_DEPARTMENT_NULL = {
-// 	uuid: null,
-// 	department: '',
-// 	designation: '',
-// };
-
+// * User -> Department
 export const USER_DEPARTMENT_SCHEMA = {
 	department: STRING_REQUIRED,
 };
@@ -624,6 +615,19 @@ export const USER_DEPARTMENT_SCHEMA = {
 export const USER_DEPARTMENT_NULL = {
 	uuid: null,
 	department: '',
+};
+
+// * User -> Designation
+export const USER_DESIGNATION_SCHEMA = {
+	department_uuid: UUID_PK,
+	designation: STRING_REQUIRED,
+};
+
+export const USER_DESIGNATION_NULL = {
+	uuid: null,
+	department_uuid: null,
+	department: '',
+	designation: '',
 };
 
 // Reset Password

@@ -1,5 +1,5 @@
 /**
- ** Effective React Query Keys
+ *? Effective React Query Keys
  ** https://tkdodo.eu/blog/effective-react-query-keys#use-query-key-factories
  ** https://tkdodo.eu/blog/leveraging-the-query-function-context#query-key-factories
  **/
@@ -23,19 +23,15 @@ export const orderQK = {
 export const adminQK = {
 	all: () => ['admin'],
 
-	// details
-	details: () => [...adminQK.all(), 'details'],
-	detail: (id) => [...adminQK.details(), id],
-
-	// info
-	users: () => [...adminQK.all(), 'users'],
-	user: (uuid) => [...adminQK.infos(), uuid],
-
-	// buyers
-	buyers: () => [...adminQK.all(), 'buyers'],
-	buyer: (uuid) => [...adminQK.buyers(), uuid],
-
 	// departments
 	departments: () => [...adminQK.all(), 'departments'],
 	department: (uuid) => [...adminQK.departments(), uuid],
+
+	// designation
+	designations: () => [...adminQK.all(), 'designations'],
+	designation: (uuid) => [...adminQK.designations(), uuid],
+
+	// users
+	users: () => [...adminQK.all(), 'users'],
+	user: (uuid) => [...adminQK.users(), uuid],
 };

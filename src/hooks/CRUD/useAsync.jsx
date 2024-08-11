@@ -10,7 +10,7 @@ export default function useAsync(callback, dependencies = []) {
 		setError(undefined);
 		setValue(undefined);
 		callback()
-			.then((res) => setValue(res?.data))
+			.then((res)=>setValue(res?.data))
 			.catch(setError)
 			.finally(() => setLoading(false));
 	}, dependencies);

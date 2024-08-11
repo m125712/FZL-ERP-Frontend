@@ -34,4 +34,65 @@ export const adminQK = {
 	// users
 	users: () => [...adminQK.all(), 'users'],
 	user: (uuid) => [...adminQK.users(), uuid],
+
+	// marketing
+	marketings: () => [...orderQK.all(), 'marketing'],
+	marketing: (uuid) => [...orderQK.marketings(), uuid],
+
+	// marketing
+	factories: () => [...orderQK.all(), 'factory'],
+	factory: (uuid) => [...orderQK.factories(), uuid],
+
+	// merchandisers
+	merchandisers: () => [...orderQK.all(), 'merchandisers'],
+	merchandiser: (uuid) => [...orderQK.merchandisers(), uuid],
+	//Party
+	party: () => [...orderQK.all(), 'party'],
+	partyByUUID: (uuid) => [...orderQK.party(), uuid],
+	//properties
+	properties: () => [...orderQK.all(), 'properties'],
+	propertiesByUUID: (uuid) => [...orderQK.party(), uuid],
+
+	// info
+	info: () => [...orderQK.all(), 'info'],
+	infoByUUID: (uuid) => [...orderQK.info(), uuid],
+};
+
+export const commercialQK = {
+	all: () => ['commercial'],
+
+	// bank
+	banks: () => [...commercialQK.all(), 'bank'],
+	bank: (uuid) => [...commercialQK.banks(), uuid],
+};
+
+export const materialQK = {
+	all: () => ['material'],
+
+	// section
+	sections: () => [...materialQK.all(), 'sections'],
+	section: (uuid) => [...materialQK.sections(), uuid],
+
+	// types
+	types: () => [...materialQK.all(), 'types'],
+	type: (uuid) => [...materialQK.types(), uuid],
+};
+
+export const purchaseQK = {
+	all: () => ['purchase'],
+
+	// vendor
+	vendors: () => [...purchaseQK.all(), 'vendors'],
+	vendor: (uuid) => [...purchaseQK.vendors(), uuid],
+};
+
+//Library
+export const libraryQK = {
+	all: () => ['library'],
+	// users
+	users: () => [...libraryQK.all(), 'users'],
+	userByUUID: (uuid) => [...libraryQK.users(), uuid],
+	// policies
+	policies: () => [...libraryQK.all(), 'policies'],
+	policyByUUID: (uuid) => [...libraryQK.policies(), uuid],
 };

@@ -8,6 +8,11 @@ export const UUID_PK = STRING_REQUIRED.length(
 	'Invalid Primary Key UUID Length'
 );
 
+
+// export const NAME_STRING = STRING.matches(
+
+// 	, "Invalid Name");
+
 export const EMAIL = yup.string().email('Invalid Email');
 export const EMAIL_REQUIRED = EMAIL.required('Required');
 
@@ -43,7 +48,7 @@ export const PASSWORD = STRING_REQUIRED.min(
 ).max(12, 'Password cannot exceed more than 12 characters');
 
 export const ORDER_NUMBER_NOT_REQUIRED = STRING.matches(
-	/^(?:[0-9]{4}-[2]{1}[3-9]{1}|[C]{1}[S]{1}[0-9]{4}-[2]{1}[3-9]{1}|[S]{1}[0-9]{4}-[2]{1}[3-9]{1})$/,
+	/^(?:[0-9]{4}-[2]{1}[3-9]{1}|[C]{1}[S]{1}[0-9]{4}-[2]{1}[3-9]{1}|[S]{1}[0-9]{4}-[2]{1}[3-9]{1})$/, // 09877-24
 	'O/N format: XXXX-23, CSXXXX-23, SXXXX-23'
 );
 export const ORDER_NUMBER = STRING_REQUIRED.matches(
@@ -51,3 +56,5 @@ export const ORDER_NUMBER = STRING_REQUIRED.matches(
 	/^(?:[0-9]{4}-[2]{1}[3-9]{1}|[C]{1}[S]{1}[0-9]{4}-[2]{1}[3-9]{1}|[S]{1}[0-9]{4}-[2]{1}[3-9]{1})$/,
 	'O/N format: XXXX-23, CSXXXX-23, SXXXX-23'
 );
+export const URL = STRING.url('Invalid URL');
+export const URL_REQUIRED = URL.required('Required');

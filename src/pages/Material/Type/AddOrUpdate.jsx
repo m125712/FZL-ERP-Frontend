@@ -1,37 +1,34 @@
-import { AddModal } from "@/components/Modal";
-import {
-	useFetchForRhfReset,
-	usePostFunc,
-	useRHF,
-	useUpdateFunc,
-} from "@/hooks";
-import { Input } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { SECTION_NULL, SECTION_SCHEMA } from "@util/Schema";
+import { AddModal } from '@/components/Modal';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+import nanoid from '@/lib/nanoid';
+import { useMaterialType } from '@/state/Material';
+import { Input } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { SECTION_NULL, SECTION_SCHEMA } from '@util/Schema';
 
 export default function Index({
-	modalId = "",
-	setMaterialType,
+	modalId = '',
 	updateMaterialType = {
 		id: null,
 	},
 	setUpdateMaterialType,
 }) {
+	const { url, updateData, postData } = useMaterialType();
 	const { register, handleSubmit, errors, reset } = useRHF(
 		SECTION_SCHEMA,
 		SECTION_NULL
 	);
 
 	useFetchForRhfReset(
-		`/material/type/${updateMaterialType?.id}`,
-		updateMaterialType?.id,
+		`/material/type/${updateMaterialType?.uuid}`,
+		updateMaterialType?.uuid,
 		reset
 	);
 
 	const onClose = () => {
 		setUpdateMaterialType((prev) => ({
 			...prev,
-			id: null,
+			uuid: null,
 		}));
 		reset(SECTION_NULL);
 		window[modalId].close();
@@ -39,32 +36,31 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateMaterialType?.id !== null) {
+		if (updateMaterialType?.uuid !== null) {
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
 			};
-			useUpdateFunc({
-				uri: `/material/type/${updateMaterialType?.id}/${data?.name}`,
-				itemId: updateMaterialType.id,
-				data: data,
-				updatedData: updatedData,
-				setItems: setMaterialType,
-				onClose: onClose,
+
+			await updateData.mutateAsync({
+				url: `${url}/${updateMaterialType?.uuid}`,
+				uuid: updateMaterialType?.uuid,
+				updatedData,
+				onClose,
 			});
 
 			return;
 		}
 		const updatedData = {
 			...data,
+			uuid: nanoid(),
 			created_at: GetDateTime(),
 		};
 
-		usePostFunc({
-			uri: "/material/type",
-			data: updatedData,
-			setItems: setMaterialType,
-			onClose: onClose,
+		await postData.mutateAsync({
+			url,
+			newData: updatedData,
+			onClose,
 		});
 	};
 
@@ -72,17 +68,16 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={
-				updateMaterialType?.id !== null
-					? "Update Material Type"
-					: "Material Type"
+				updateMaterialType?.uuid !== null
+					? 'Update Material Type'
+					: 'Material Type'
 			}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
-			<Input label="name" {...{ register, errors }} />
-			<Input label="short_name" {...{ register, errors }} />
-			<Input label="remarks" {...{ register, errors }} />
+			isSmall={true}>
+			<Input label='name' {...{ register, errors }} />
+			<Input label='short_name' {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

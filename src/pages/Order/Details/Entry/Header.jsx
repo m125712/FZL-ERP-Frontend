@@ -20,7 +20,7 @@ export default function Header({
 	is_logo_body,
 	is_logo_puller,
 }) {
-	const { order_info_uuid, order_description_uuid } = useParams();
+	const { order_number, order_description_uuid } = useParams();
 
 	const { value: item } = useFetch(`/other/order-properties/by/item`);
 	const { value: zipper_number } = useFetch(
@@ -116,7 +116,7 @@ export default function Header({
 										)}
 										onChange={(e) => onChange(e.value)}
 										isDisabled={
-											order_info_uuid !== undefined
+											order_number !== undefined
 										}
 									/>
 								);

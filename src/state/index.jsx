@@ -42,7 +42,7 @@ export default function createGlobalState({ queryKey, url }) {
 		},
 		onError: (error, newUser, context) => {
 			queryClient.setQueryData(queryKey, ({ data }) =>
-				data?.filter((val) => val.id !== context.newData.uuid)
+			data?.filter((val) => val.id !== context.newData.uuid)
 			);
 
 			ShowToast(error?.response?.data?.toast);

@@ -26,3 +26,42 @@ export const useMaterialTypeByUUID = (uuid) =>
 		queryKey: materialQK.type(uuid),
 		url: `/material/type/${uuid}`,
 	});
+
+// * Info * //
+export const useMaterialInfo = () =>
+	createGlobalState({
+		queryKey: materialQK.infos(),
+		url: '/material/info',
+	});
+
+export const useMaterialInfoByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: materialQK.infos(uuid),
+		url: `/material/info/${uuid}`,
+	});
+
+// * Trx * //
+export const useMaterialTrx = () =>
+	createGlobalState({
+		queryKey: materialQK.infos(),
+		url: '/material/trx',
+	});
+
+export const useMaterialTrxByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: materialQK.infos(uuid),
+		url: `/material/trx/${uuid}`,
+	});
+
+// * Stock to sfg * //
+export const useMaterialStockToSFG = () =>
+	createGlobalState({
+		queryKey: materialQK.stockToSGFs(),
+		url: '/material/stock-to-sfg',
+	});
+
+export const useMaterialStockToSFGByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: materialQK.stockToSFG(uuid),
+		url: `/material/stock-to-sfg/${uuid}`,
+	});

@@ -78,12 +78,24 @@ export const materialQK = {
 	all: () => ['material'],
 
 	// section
-	sections: () => [...materialQK.all(), 'sections'],
+	sections: () => [...materialQK.all(), 'section'],
 	section: (uuid) => [...materialQK.sections(), uuid],
 
 	// types
-	types: () => [...materialQK.all(), 'types'],
+	types: () => [...materialQK.all(), 'type'],
 	type: (uuid) => [...materialQK.types(), uuid],
+
+	// infos
+	infos: () => [...materialQK.all(), 'info'],
+	info: (uuid) => [...materialQK.infos(), uuid],
+
+	// trx
+	trxs: () => [...materialQK.all(), 'trx'],
+	trx: (uuid) => [...materialQK.trxs(), uuid],
+
+	// stock to sfg
+	stockToSGFs: () => [...materialQK.all(), 'stock-to-sfg'],
+	stockToSFG: (uuid) => [...materialQK.stockToSGFs(), uuid],
 };
 
 export const purchaseQK = {

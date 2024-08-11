@@ -1,24 +1,24 @@
-import ReactTable from "@/components/Table";
-import { useAccess } from "@/hooks";
-import { useOrderDetails } from "@/state/Order";
-import { EditDelete, LinkWithCopy, StatusButton, UserName } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import ReactTable from '@/components/Table';
+import { useAccess } from '@/hooks';
+import { useOrderDetails } from '@/state/Order';
+import { EditDelete, LinkWithCopy, StatusButton, UserName } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Progress = ({ value }) => {
-	let cls = "progress-error tooltip-error";
-	if (value >= 100) cls = "progress-success tooltip-success";
-	else if (value >= 75) cls = "progress-primary tooltip-primary";
-	else if (value >= 50) cls = "progress-info tooltip-info";
-	else if (value >= 25) cls = "progress-warning tooltip-warning";
+	let cls = 'progress-error tooltip-error';
+	if (value >= 100) cls = 'progress-success tooltip-success';
+	else if (value >= 75) cls = 'progress-primary tooltip-primary';
+	else if (value >= 50) cls = 'progress-info tooltip-info';
+	else if (value >= 25) cls = 'progress-warning tooltip-warning';
 
 	return (
-		<div className={`tooltip text-xs ${cls}`} data-tip={value + "%"}>
+		<div className={`tooltip text-xs ${cls}`} data-tip={value + '%'}>
 			<progress
 				className={`progress w-20 ${cls}`}
 				value={value}
-				max="100"
+				max='100'
 			/>
 		</div>
 	);
@@ -28,41 +28,41 @@ export default function Index() {
 	const { data, isLoading, isError } = useOrderDetails();
 	const navigate = useNavigate();
 	const info = new PageInfo(
-		"Order/Details",
-		"/order/details",
-		"order__details"
+		'Order/Details',
+		'/order/details',
+		'order__details'
 	);
-	const haveAccess = useAccess("order__details");
+	const haveAccess = useAccess('order__details');
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "order_number",
-				header: "O/N",
-				width: "w-12",
+				accessorKey: 'order_number',
+				header: 'O/N',
+				width: 'w-12',
 				cell: (info) => {
 					return (
 						<LinkWithCopy
 							title={info.getValue()}
 							id={info.getValue()}
-							uri="/order/details"
+							uri='/order/details'
 						/>
 					);
 				},
 			},
 			{
-				accessorKey: "order_number_wise_rank",
-				header: "Count",
+				accessorKey: 'order_number_wise_rank',
+				header: 'Count',
 				enableColumnFilter: false,
-				width: "w-12",
+				width: 'w-12',
 				cell: (info) => {
 					const { order_number_wise_count } = info.row.original;
 					return `${info.getValue()} / ${order_number_wise_count}`;
 				},
 			},
 			{
-				accessorKey: "item_description",
-				header: "Item Description",
+				accessorKey: 'item_description',
+				header: 'Item Description',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { order_description_uuid, order_number } =
@@ -77,59 +77,60 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: "production_percentage",
-				header: "Progress",
+				accessorKey: 'production_percentage',
+				header: 'Progress',
 				enableColumnFilter: false,
-				cell: (info) => <Progress value={info.getValue()} />,
+				cell: (info) => <Progress value={info.getValue() || 0} />,
 			},
 			{
-				accessorKey: "marketing_name",
-				header: "Marketing",
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: "buyer_name",
-				header: "Buyer",
-				width: "w-20",
+				accessorKey: 'marketing_name',
+				header: 'Marketing',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "user_name",
-				header: "Created By",
+				accessorKey: 'buyer_name',
+				header: 'Buyer',
+				width: 'w-20',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+				// cell: (info) => {
+				// 	const { user_name, user_department } = info.row.original;
+				// 	return (
+				// 		<UserName
+				// 			name={user_name}
+				// 			department={user_department}
+				// 		/>
+				// 	);
+				// },
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'price_approval_status',
+				header: 'Status',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const { user_name, user_department } = info.row.original;
 					return (
-						<UserName
-							name={user_name}
-							department={user_department}
-						/>
+						<StatusButton size='btn-sm' value={info.getValue()} />
 					);
 				},
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'action',
+				header: 'Action',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: "price_approval_status",
-				header: "Status",
-				enableColumnFilter: false,
-				cell: (info) => {
-					return (
-						<StatusButton size="btn-sm" value={info.getValue()} />
-					);
-				},
-			},
-			{
-				accessorKey: "action",
-				header: "Action",
-				enableColumnFilter: false,
-				hidden: !haveAccess.includes("update"),
+				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
 					return (
 						<EditDelete
@@ -150,7 +151,7 @@ export default function Index() {
 	}, []);
 
 	// Add
-	const handelAdd = () => navigate("/order/entry");
+	const handelAdd = () => navigate('/order/entry');
 
 	// Update
 	const handelUpdate = (idx) => {
@@ -159,17 +160,17 @@ export default function Index() {
 	};
 
 	if (isLoading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className='container mx-auto px-2 md:px-4'>
 			<ReactTable
 				title={info.getTitle()}
-				accessor={haveAccess.includes("create")}
+				accessor={haveAccess.includes('create')}
 				data={data}
 				columns={columns}
 				handelAdd={handelAdd}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 		</div>
 	);

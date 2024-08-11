@@ -115,7 +115,9 @@ export default function Header({
 												getValues('order_info_uuid')
 										)}
 										onChange={(e) => onChange(e.value)}
-										isDisabled={order_info_uuid !== undefined}
+										isDisabled={
+											order_info_uuid !== undefined
+										}
 									/>
 								);
 							}}

@@ -7,7 +7,7 @@ import { orderQK } from './QueryKeys';
 export const useOrderDetails = () =>
 	createGlobalState({
 		queryKey: orderQK.details(),
-		url: '/zipper/order-detail',
+		url: '/zipper/order/details',
 	});
 
 export const useOrderDetailsByUUID = (uuid) =>

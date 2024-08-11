@@ -6,21 +6,22 @@ import {
 	useRHF,
 	useUpdateFunc,
 } from '@/hooks';
+import nanoid from '@/lib/nanoid';
+import { useOrderDescription, useOrderDetails } from '@/state/Order';
 import { ActionButtons, DynamicField, Input, JoinInput, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
+import { DevTool } from '@hookform/devtools';
 import { ORDER_NULL, ORDER_SCHEMA } from '@util/Schema';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { DevTool } from '@hookform/devtools';
-import { useOrderDescription } from '@/state/Order';
-import nanoid from '@/lib/nanoid';
 
 import Header from './Header';
 
 export default function Index() {
 	const { url, updateData, postData } = useOrderDescription();
+	const { invalidateQuery: OrderDetailsInvalidate } = useOrderDetails();
 
 	const { order_number, order_description_uuid } = useParams();
 	const { user } = useAuth();
@@ -181,8 +182,6 @@ export default function Index() {
 			values: data?.special_requirement || [],
 		});
 
-		console.log('special_requirement', special_requirement);
-
 		const order_description = {
 			...data,
 			is_slider_provided: data?.is_slider_provided ? 1 : 0,
@@ -196,6 +195,12 @@ export default function Index() {
 			created_by: user?.uuid,
 			// issued_by: user.uuid,
 		};
+
+		await postData.mutateAsync({
+			url,
+			newData: order_description,
+			isOnCloseNeeded: false,
+		});
 
 		const order_entry = [...data.order_entry].map((item) => ({
 			...item,
@@ -218,17 +223,12 @@ export default function Index() {
 			),
 		];
 
-		console.log('Order Entry Promises:', order_entry_promises);
-		console.log(order_entry);
-
-		await postData.mutateAsync({
-			url,
-			newData: order_description,
-			isOnCloseNeeded: false,
-		});
 		await Promise.all(order_entry_promises)
 			.then(() => reset(Object.assign({}, ORDER_NULL)))
-			.then(() => navigate(`/order/details`))
+			.then(async () => {
+				await OrderDetailsInvalidate();
+				navigate(`/order/details`);
+			})
 			.catch((err) => console.log(err));
 	};
 
@@ -430,7 +430,7 @@ export default function Index() {
 					uri={`/order/entry`}
 				/>
 			</Suspense>
-			<DevTool control={control} placement='top-left' />
+			{/* <DevTool control={control} placement='top-left' /> */}
 		</div>
 	);
 }

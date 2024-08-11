@@ -22,12 +22,14 @@ import Header from './Header';
 export default function Index() {
 	const { url, updateData, postData } = useOrderDescription();
 	const { invalidateQuery: OrderDetailsInvalidate } = useOrderDetails();
-
 	const { order_number, order_description_uuid } = useParams();
+	
+	
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const isUpdate =
 		order_description_uuid !== undefined && order_number !== undefined;
+		
 	const {
 		register,
 		handleSubmit,
@@ -48,10 +50,11 @@ export default function Index() {
 
 	if (isUpdate)
 		useFetchForRhfResetForOrder(
-			`/order/details/single-order/by/${order_description_uuid}/UUID`,
+			`/zipper/order/details/single-order/by/${order_description_uuid}/UUID`,
 			order_description_uuid,
 			reset
 		);
+	
 
 	const { value: order } = useFetch(`/other/order/info/value/label`);
 

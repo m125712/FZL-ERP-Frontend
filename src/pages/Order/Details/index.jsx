@@ -3,8 +3,11 @@ import { useAccess } from '@/hooks';
 import { useOrderDetails } from '@/state/Order';
 import { EditDelete, LinkWithCopy, StatusButton, UserName } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState, lazy } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Suspense } from '@/components/Feedback';
+
+const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 const Progress = ({ value }) => {
 	let cls = 'progress-error tooltip-error';
@@ -25,11 +28,11 @@ const Progress = ({ value }) => {
 };
 
 export default function Index() {
-	const { data, isLoading, isError } = useOrderDetails();
+	const { data, isLoading, isError, url, deleteData } = useOrderDetails();
 	const navigate = useNavigate();
 	const info = new PageInfo(
 		'Order/Details',
-		'/order/details',
+		url,
 		'order__details'
 	);
 	const haveAccess = useAccess('order__details');
@@ -130,13 +133,18 @@ export default function Index() {
 				accessorKey: 'action',
 				header: 'Action',
 				enableColumnFilter: false,
-				hidden: !haveAccess.includes('update'),
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
+				width: 'w-24',
 				cell: (info) => {
 					return (
 						<EditDelete
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
-							showDelete={false}
+							handelDelete={handelDelete}
+							showEdit={haveAccess.includes('update')}
+							showDelete={haveAccess.includes('delete')}
 						/>
 					);
 				},
@@ -144,6 +152,21 @@ export default function Index() {
 		],
 		[data]
 	);
+
+	// Delete
+	const [deleteItem, setDeleteItem] = useState({
+		itemId: null,
+		itemName: null,
+	});
+	const handelDelete = (idx) => {
+		setDeleteItem((prev) => ({
+			...prev,
+			itemId: data[idx].uuid,
+			itemName: data[idx].order_number,
+		}));
+
+		window[info.getDeleteModalId()].showModal();
+	};
 
 	// Fetching data from server
 	useEffect(() => {
@@ -155,7 +178,10 @@ export default function Index() {
 
 	// Update
 	const handelUpdate = (idx) => {
+
 		const { order_description_uuid, order_number } = data[idx];
+		console.log(order_description_uuid, order_number);
+		
 		navigate(`/order/update/${order_number}/${order_description_uuid}`);
 	};
 
@@ -172,6 +198,19 @@ export default function Index() {
 				handelAdd={handelAdd}
 				extraClass='py-2'
 			/>
+
+			<Suspense>
+				<DeleteModal
+					modalId={info.getDeleteModalId()}
+					title={info.getTitle()}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url,
+						deleteData,
+					}}
+				/>
+			</Suspense>
 		</div>
 	);
 }

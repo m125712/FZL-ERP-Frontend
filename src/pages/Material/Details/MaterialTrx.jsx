@@ -1,18 +1,18 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useMaterialTrx } from '@/state/Material';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { MATERIAL_STOCK_NULL, MATERIAL_STOCK_SCHEMA } from '@util/Schema';
 
 export default function Index({
 	modalId = '',
-	setMaterialDetails,
 	updateMaterialDetails = {
 		uuid: null,
-		section_id: null,
+		section_uuid: null,
 		section_name: null,
-		type_id: null,
+		type_uuid: null,
 		type_name: null,
 		name: null,
 		threshold: null,
@@ -20,10 +20,11 @@ export default function Index({
 		unit: null,
 		description: null,
 		remarks: null,
-		material_stock_id: null,
+		material_stock_uuid: null,
 	},
 	setUpdateMaterialDetails,
 }) {
+	const { url, updateData } = useMaterialTrx();
 	const { user } = useAuth();
 
 	const schema = {
@@ -37,8 +38,8 @@ export default function Index({
 		useRHF(schema, MATERIAL_STOCK_NULL);
 
 	useFetchForRhfReset(
-		`/material/stock/${updateMaterialDetails?.material_stock_id}`,
-		updateMaterialDetails?.material_stock_id,
+		`/material/stock/${updateMaterialDetails?.material_stock_uuid}`,
+		updateMaterialDetails?.material_stock_uuid,
 		reset
 	);
 
@@ -46,9 +47,9 @@ export default function Index({
 		setUpdateMaterialDetails((prev) => ({
 			...prev,
 			uuid: null,
-			section_id: null,
+			section_uuid: null,
 			section_name: null,
-			type_id: null,
+			type_uuid: null,
 			type_name: null,
 			name: null,
 			threshold: null,
@@ -56,7 +57,7 @@ export default function Index({
 			unit: null,
 			description: null,
 			remarks: null,
-			material_stock_id: null,
+			material_stock_uuid: null,
 		}));
 		reset(MATERIAL_STOCK_NULL);
 		window[modalId].close();
@@ -64,11 +65,11 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateMaterialDetails?.material_stock_id !== null) {
+		if (updateMaterialDetails?.material_stock_uuid !== null) {
 			const updatedData = {
 				...data,
 				...updateMaterialDetails,
-				material_stock_id: updateMaterialDetails.material_stock_id,
+				material_stock_uuid: updateMaterialDetails.material_stock_uuid,
 				name: updateMaterialDetails?.name.replace(/[#&/]/g, ''),
 				stock: updateMaterialDetails.stock - data?.quantity,
 				[`${data.trx_to}`]:
@@ -77,13 +78,11 @@ export default function Index({
 				created_at: GetDateTime(),
 			};
 
-			await useUpdateFunc({
-				uri: `/material/trx`,
-				itemId: updateMaterialDetails?.id,
-				data: data,
-				updatedData: updatedData,
-				setItems: setMaterialDetails,
-				onClose: onClose,
+			await updateData.mutateAsync({
+				url: `${url}/${updateMaterialDetails?.uuid}`,
+				uuid: updateMaterialDetails?.uuid,
+				updatedData,
+				onClose,
 			});
 
 			return;

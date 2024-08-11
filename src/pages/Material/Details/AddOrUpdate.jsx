@@ -11,8 +11,8 @@ export default function Index({
 	setMaterialDetails,
 	updateMaterialDetails = {
 		uuid: null,
-		section_id: null,
-		type_id: null,
+		section_uuid: null,
+		type_uuid: null,
 	},
 	setUpdateMaterialDetails,
 }) {
@@ -35,8 +35,8 @@ export default function Index({
 		setUpdateMaterialDetails((prev) => ({
 			...prev,
 			uuid: null,
-			section_id: null,
-			type_id: null,
+			section_uuid: null,
+			type_uuid: null,
 		}));
 		reset(MATERIAL_NULL);
 		window[modalId].close();
@@ -44,10 +44,10 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		const section_name = section?.find(
-			(item) => item.value == data?.section_id
+			(item) => item.value == data?.section_uuid
 		)?.label;
 		const material_type = materialType?.find(
-			(item) => item.value == data?.type_id
+			(item) => item.value == data?.type_uuid
 		)?.label;
 
 		// Update item
@@ -105,7 +105,7 @@ export default function Index({
 			<div className='mb-4 flex flex-col gap-2 rounded-md bg-primary/30 p-2 md:flex-row'>
 				<FormField label='section_id' title='Section' errors={errors}>
 					<Controller
-						name={'section_id'}
+						name={'section_uuid'}
 						control={control}
 						render={({ field: { onChange } }) => {
 							return (
@@ -115,10 +115,10 @@ export default function Index({
 									value={section?.find(
 										(item) =>
 											item.value ==
-											updateMaterialDetails?.section_id
+											updateMaterialDetails?.section_uuid
 									)}
 									onChange={(e) => {
-										onChange(parseInt(e.value));
+										onChange(e.value);
 									}}
 									isDisabled={
 										updateMaterialDetails?.uuid !== null
@@ -128,9 +128,9 @@ export default function Index({
 						}}
 					/>
 				</FormField>
-				<FormField label='type_id' title='Type' errors={errors}>
+				<FormField label='type_uuid' title='Type' errors={errors}>
 					<Controller
-						name={'type_id'}
+						name={'type_uuid'}
 						control={control}
 						render={({ field: { onChange } }) => {
 							return (
@@ -140,13 +140,13 @@ export default function Index({
 									value={materialType?.find(
 										(item) =>
 											item.value ==
-											updateMaterialDetails?.type_id
+											updateMaterialDetails?.type_uuid
 									)}
 									onChange={(e) => {
-										onChange(parseInt(e.value));
+										onChange(e.value);
 									}}
 									isDisabled={
-										updateMaterialDetails?.id !== null
+										updateMaterialDetails?.uuid !== null
 									}
 								/>
 							);

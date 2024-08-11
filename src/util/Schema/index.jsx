@@ -190,8 +190,8 @@ export const MATERIAL_NULL = {
 	unit: '',
 	threshold: 0,
 	description: '',
-	section_id: null,
-	type_id: null,
+	section_uuid: null,
+	type_uuid: null,
 	remarks: '',
 };
 
@@ -203,7 +203,7 @@ export const MATERIAL_STOCK_SCHEMA = {
 
 export const MATERIAL_STOCK_NULL = {
 	uuid: null,
-	material_stock_id: null,
+	material_stock_uuid: null,
 	material_name: null,
 	trx_to: '',
 	quantity: '',
@@ -212,7 +212,7 @@ export const MATERIAL_STOCK_NULL = {
 };
 
 export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
-	order_entry_id: NUMBER_REQUIRED,
+	order_entry_uuid: NUMBER_REQUIRED,
 	trx_to: STRING_REQUIRED,
 	trx_quantity: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
@@ -220,8 +220,8 @@ export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
 
 export const MATERIAL_TRX_AGAINST_ORDER_NULL = {
 	uuid: null,
-	material_stock_id: null,
-	order_entry_id: null,
+	material_stock_uuid: null,
+	order_entry_uuid: null,
 	material_name: null,
 	trx_to: '',
 	trx_quantity: '',

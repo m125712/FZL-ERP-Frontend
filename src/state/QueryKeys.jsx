@@ -62,6 +62,14 @@ export const materialQK = {
 	// infos
 	infos: () => [...materialQK.all(), 'info'],
 	info: (uuid) => [...materialQK.infos(), uuid],
+
+	// trx
+	trxs: () => [...materialQK.all(), 'trx'],
+	trx: (uuid) => [...materialQK.trxs(), uuid],
+
+	// stock to sfg
+	stockToSGFs: () => [...materialQK.all(), 'stock-to-sfg'],
+	stockToSFG: (uuid) => [...materialQK.stockToSGFs(), uuid],
 };
 
 export const purchaseQK = {

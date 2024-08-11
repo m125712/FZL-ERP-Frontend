@@ -16,10 +16,10 @@ export default function Index() {
 	const info = new PageInfo('Material/Info', url, 'store__stock');
 	const haveAccess = useAccess('store__stock');
 
-	const belowThreshold = useMemo(
-		() => data.filter(({ threshold, stock }) => threshold > stock)?.length,
-		[data]
-	);
+	// const belowThreshold = useMemo(
+	// 	() => data.filter(({ threshold, stock }) => threshold > stock)?.length,
+	// 	[data]
+	// );
 
 	const columns = useMemo(
 		() => [
@@ -68,10 +68,13 @@ export default function Index() {
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_action'),
 				width: 'w-24',
-				cell: (info) =>
-					info.row.original.stock > 0 && (
-						<Transfer onClick={() => handleTrx(info.row.index)} />
-					),
+				cell: (info) => (
+					<Transfer onClick={() => handleTrx(info.row.index)} />
+				),
+				// cell: (info) =>
+				// 	Number(info.row.original.stock) > 0 && (
+				// 		<Transfer onClick={() => handleTrx(info.row.index)} />
+				// 	),
 			},
 			{
 				accessorKey: 'action_trx_against_order',
@@ -96,7 +99,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'material_type',
+				accessorKey: 'type_name',
 				header: 'Type',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -148,9 +151,9 @@ export default function Index() {
 	// Update
 	const [updateMaterialDetails, setUpdateMaterialDetails] = useState({
 		uuid: null,
-		section_id: null,
+		section_uuid: null,
 		section_name: null,
-		type_id: null,
+		type_uuid: null,
 		type_name: null,
 		name: null,
 		threshold: null,
@@ -215,7 +218,7 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				extraClass='py-2'
-				indicatorValue={belowThreshold}
+				// indicatorValue={belowThreshold}
 			/>
 
 			<Suspense>

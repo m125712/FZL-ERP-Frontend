@@ -9,7 +9,7 @@ import { SECTION_NULL, SECTION_SCHEMA } from '@util/Schema';
 export default function Index({
 	modalId = '',
 	updateMaterialType = {
-		id: null,
+		uuid: null,
 	},
 	setUpdateMaterialType,
 }) {

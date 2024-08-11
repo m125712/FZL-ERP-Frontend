@@ -13,9 +13,9 @@ export default function Index({
 	setMaterialDetails,
 	updateMaterialDetails = {
 		uuid: null,
-		section_id: null,
+		section_uuid: null,
 		section_name: null,
-		type_id: null,
+		type_uuid: null,
 		type_name: null,
 		name: null,
 		threshold: null,
@@ -23,7 +23,7 @@ export default function Index({
 		unit: null,
 		description: null,
 		remarks: null,
-		material_stock_id: null,
+		material_stock_uuid: null,
 	},
 	setUpdateMaterialDetails,
 }) {
@@ -42,8 +42,8 @@ export default function Index({
 		useRHF(schema, MATERIAL_TRX_AGAINST_ORDER_NULL);
 
 	useFetchForRhfReset(
-		`/material/stock/${updateMaterialDetails?.material_stock_id}`,
-		updateMaterialDetails?.material_stock_id,
+		`/material/stock/${updateMaterialDetails?.material_stock_uuid}`,
+		updateMaterialDetails?.material_stock_uuid,
 		reset
 	);
 
@@ -51,9 +51,9 @@ export default function Index({
 		setUpdateMaterialDetails((prev) => ({
 			...prev,
 			uuid: null,
-			section_id: null,
+			section_uuid: null,
 			section_name: null,
-			type_id: null,
+			type_uuid: null,
 			type_name: null,
 			name: null,
 			threshold: null,
@@ -61,7 +61,7 @@ export default function Index({
 			unit: null,
 			description: null,
 			remarks: null,
-			material_stock_id: null,
+			material_stock_uuid: null,
 		}));
 		reset(MATERIAL_TRX_AGAINST_ORDER_NULL);
 		window[modalId].close();
@@ -69,7 +69,7 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateMaterialDetails?.material_stock_id !== null) {
+		if (updateMaterialDetails?.material_stock_uuid !== null) {
 			const updatedData = {
 				...data,
 				...updateMaterialDetails,
@@ -111,9 +111,9 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<FormField label='order_entry_id' title='Order' errors={errors}>
+			<FormField label='order_entry_uuid' title='Order' errors={errors}>
 				<Controller
-					name={'order_entry_id'}
+					name={'order_entry_uuid'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (

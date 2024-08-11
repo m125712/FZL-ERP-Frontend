@@ -51,6 +51,7 @@ export default function Index({
 
 			return;
 		}
+
 		const updatedData = {
 			...data,
 			uuid: nanoid(),

@@ -26,3 +26,16 @@ export const useMaterialTypeByUUID = (uuid) =>
 		queryKey: materialQK.type(uuid),
 		url: `/material/type/${uuid}`,
 	});
+
+// * Info * //
+export const useMaterialInfo = () =>
+	createGlobalState({
+		queryKey: materialQK.infos(),
+		url: '/material/info',
+	});
+
+export const useMaterialInfoByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: materialQK.infos(uuid),
+		url: `/material/info/${uuid}`,
+	});

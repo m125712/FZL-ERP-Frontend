@@ -1,88 +1,85 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useAccess, useFetchFunc } from "@/hooks";
-import { EditDelete, LinkWithCopy, Transfer } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useAccess } from '@/hooks';
+import { useMaterialInfo } from '@/state/Material';
+import { EditDelete, LinkWithCopy, Transfer } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-const AddOrUpdate = lazy(() => import("./AddOrUpdate"));
-const DeleteModal = lazy(() => import("@/components/Modal/Delete"));
-const AgainstOrderTransfer = lazy(() => import("./AgainstOrderTransfer"));
-const MaterialTrx = lazy(() => import("./MaterialTrx"));
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
+const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
+const AgainstOrderTransfer = lazy(() => import('./AgainstOrderTransfer'));
+const MaterialTrx = lazy(() => import('./MaterialTrx'));
 
 export default function Index() {
-	const info = new PageInfo("Stock", "material/details", "store__stock");
-	const [materialDetails, setMaterialDetails] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-	const haveAccess = useAccess("store__stock");
+	const { data, isLoading, url, deleteData } = useMaterialInfo();
+	const info = new PageInfo('Material/Info', url, 'store__stock');
+	const haveAccess = useAccess('store__stock');
 
 	const belowThreshold = useMemo(
-		() =>
-			materialDetails.filter(({ threshold, stock }) => threshold > stock)
-				?.length,
-		[materialDetails]
+		() => data.filter(({ threshold, stock }) => threshold > stock)?.length,
+		[data]
 	);
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "name",
-				header: "Name",
+				accessorKey: 'name',
+				header: 'Name',
 				enableColumnFilter: false,
-				width: "w-48",
+				width: 'w-48',
 				cell: (info) => (
 					<LinkWithCopy
 						title={info.getValue()}
 						id={info.row.original.id}
-						uri="/material"
+						uri='/material'
 					/>
 				),
 			},
 			{
-				accessorKey: "threshold",
-				header: "Threshold",
+				accessorKey: 'threshold',
+				header: 'Threshold',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "stock",
-				header: "Stock",
+				accessorKey: 'stock',
+				header: 'Stock',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const cls =
 						Number(info.row.original.threshold) >
 						Number(info.getValue())
-							? "text-error bg-error/10 px-2 py-1 rounded-md"
-							: "";
+							? 'text-error bg-error/10 px-2 py-1 rounded-md'
+							: '';
 					return <span className={cls}>{info.getValue()}</span>;
 				},
 			},
 			{
-				accessorKey: "unit",
-				header: "Unit",
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "action_trx",
-				header: "Action",
+				accessorKey: 'action_trx',
+				header: 'Action',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_action"),
-				width: "w-24",
+				hidden: !haveAccess.includes('click_action'),
+				width: 'w-24',
 				cell: (info) =>
 					info.row.original.stock > 0 && (
 						<Transfer onClick={() => handleTrx(info.row.index)} />
 					),
 			},
 			{
-				accessorKey: "action_trx_against_order",
-				header: "Trx Against Order",
+				accessorKey: 'action_trx_against_order',
+				header: 'Trx Against Order',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_trx_against_order"),
-				width: "w-24",
+				hidden: !haveAccess.includes('click_trx_against_order'),
+				width: 'w-24',
 				cell: (info) =>
 					info.row.original.stock > 0 && (
 						<Transfer
@@ -93,60 +90,54 @@ export default function Index() {
 					),
 			},
 			{
-				accessorKey: "section_name",
-				header: "Section",
+				accessorKey: 'section_name',
+				header: 'Section',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "material_type",
-				header: "Type",
+				accessorKey: 'material_type',
+				header: 'Type',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "description",
-				header: "Description",
+				accessorKey: 'description',
+				header: 'Description',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "actions",
-				header: "Actions",
+				accessorKey: 'actions',
+				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("update"),
-				width: "w-24",
+				hidden: !haveAccess.includes('update'),
+				width: 'w-24',
 				cell: (info) => {
 					return (
 						<EditDelete
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes("delete")}
+							showDelete={haveAccess.includes('delete')}
 						/>
 					);
 				},
 			},
 		],
-		[materialDetails]
+		[data]
 	);
 
 	// Fetching data from server
 	useEffect(() => {
 		document.title = info.getTabName();
-		useFetchFunc(
-			info.getFetchUrl(),
-			setMaterialDetails,
-			setLoading,
-			setError
-		);
 	}, []);
 
 	// Add
@@ -156,7 +147,7 @@ export default function Index() {
 
 	// Update
 	const [updateMaterialDetails, setUpdateMaterialDetails] = useState({
-		id: null,
+		uuid: null,
 		section_id: null,
 		section_name: null,
 		type_id: null,
@@ -171,7 +162,7 @@ export default function Index() {
 	});
 
 	const handelUpdate = (idx) => {
-		const selectedItem = materialDetails[idx];
+		const selectedItem = data[idx];
 		setUpdateMaterialDetails((prev) => ({
 			...prev,
 			...selectedItem,
@@ -180,21 +171,21 @@ export default function Index() {
 	};
 
 	const handleTrx = (index) => {
-		const selectedItem = materialDetails[index];
+		const selectedItem = data[index];
 		setUpdateMaterialDetails((prev) => ({
 			...prev,
 			...selectedItem,
 		}));
-		window["MaterialTrx"].showModal();
+		window['MaterialTrx'].showModal();
 	};
 
 	const handleTrxAgainstOrder = (index) => {
-		const selectedItem = materialDetails[index];
+		const selectedItem = data[index];
 		setUpdateMaterialDetails((prev) => ({
 			...prev,
 			...selectedItem,
 		}));
-		window["MaterialTrxAgainstOrder"].showModal();
+		window['MaterialTrxAgainstOrder'].showModal();
 	};
 
 	// Delete
@@ -205,28 +196,25 @@ export default function Index() {
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: materialDetails[idx].id,
-			itemName: materialDetails[idx].name
-				.replace(/#/g, "")
-				.replace(/\//g, "-"),
+			itemId: data[idx].uuid,
+			itemName: data[idx].name.replace(/#/g, '').replace(/\//g, '-'),
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
 
-	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
-	// if (error) return <h1>Error:{error}</h1>;
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className='container mx-auto px-2 md:px-4'>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}
-				accessor={haveAccess.includes("create")}
-				data={materialDetails}
+				accessor={haveAccess.includes('create')}
+				data={data}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 				indicatorValue={belowThreshold}
 			/>
 
@@ -234,7 +222,6 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						setMaterialDetails,
 						updateMaterialDetails,
 						setUpdateMaterialDetails,
 					}}
@@ -242,16 +229,14 @@ export default function Index() {
 			</Suspense>
 			<Suspense>
 				<AgainstOrderTransfer
-					modalId={"MaterialTrxAgainstOrder"}
-					setMaterialDetails={setMaterialDetails}
+					modalId={'MaterialTrxAgainstOrder'}
 					updateMaterialDetails={updateMaterialDetails}
 					setUpdateMaterialDetails={setUpdateMaterialDetails}
 				/>
 			</Suspense>
 			<Suspense>
 				<MaterialTrx
-					modalId={"MaterialTrx"}
-					setMaterialDetails={setMaterialDetails}
+					modalId={'MaterialTrx'}
 					updateMaterialDetails={updateMaterialDetails}
 					setUpdateMaterialDetails={setUpdateMaterialDetails}
 				/>
@@ -260,10 +245,12 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					setItems={setMaterialDetails}
-					uri={info.getDeleteUrl()}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url,
+						deleteData,
+					}}
 				/>
 			</Suspense>
 		</div>

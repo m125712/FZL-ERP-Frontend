@@ -183,7 +183,7 @@ export const MATERIAL_SCHEMA = {
 };
 
 export const MATERIAL_NULL = {
-	id: null,
+	uuid: null,
 	name: '',
 	short_name: '',
 	quantity: '',
@@ -202,7 +202,7 @@ export const MATERIAL_STOCK_SCHEMA = {
 };
 
 export const MATERIAL_STOCK_NULL = {
-	id: null,
+	uuid: null,
 	material_stock_id: null,
 	material_name: null,
 	trx_to: '',
@@ -219,7 +219,7 @@ export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
 };
 
 export const MATERIAL_TRX_AGAINST_ORDER_NULL = {
-	id: null,
+	uuid: null,
 	material_stock_id: null,
 	order_entry_id: null,
 	material_name: null,

@@ -1,48 +1,40 @@
-import { AddModal } from "@/components/Modal";
-import {
-	useFetch,
-	useFetchForRhfReset,
-	usePostFunc,
-	useRHF,
-	useUpdateFunc,
-} from "@/hooks";
-import {
-	FormField,
-	Input,
-	JoinInputSelect,
-	ReactSelect,
-	Select,
-	Textarea,
-} from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { MATERIAL_NULL, MATERIAL_SCHEMA } from "@util/Schema";
+import { AddModal } from '@/components/Modal';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import nanoid from '@/lib/nanoid';
+import { useMaterialInfo } from '@/state/Material';
+import { FormField, Input, JoinInputSelect, ReactSelect, Textarea } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { MATERIAL_NULL, MATERIAL_SCHEMA } from '@util/Schema';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setMaterialDetails,
 	updateMaterialDetails = {
-		id: null,
+		uuid: null,
 		section_id: null,
 		type_id: null,
 	},
 	setUpdateMaterialDetails,
 }) {
+	const { url, updateData, postData } = useMaterialInfo();
 	const { register, handleSubmit, errors, reset, Controller, control } =
 		useRHF(MATERIAL_SCHEMA, MATERIAL_NULL);
 
 	useFetchForRhfReset(
-		`/material/details/${updateMaterialDetails?.id}`,
-		updateMaterialDetails?.id,
+		`/material/info/${updateMaterialDetails?.uuid}`,
+		updateMaterialDetails?.uuid,
 		reset
 	);
 
-	const { value: section } = useFetch("/material-section/value/label");
-	const { value: materialType } = useFetch("/material-type/value/label");
+	const { value: section } = useFetch('/other/material-section/value/label');
+	const { value: materialType } = useFetch(
+		'/other/material-type/value/label'
+	);
 
 	const onClose = () => {
 		setUpdateMaterialDetails((prev) => ({
 			...prev,
-			id: null,
+			uuid: null,
 			section_id: null,
 			type_id: null,
 		}));
@@ -57,69 +49,68 @@ export default function Index({
 		const material_type = materialType?.find(
 			(item) => item.value == data?.type_id
 		)?.label;
+
 		// Update item
-		if (updateMaterialDetails?.id !== null) {
+		if (updateMaterialDetails?.uuid !== null) {
 			const updatedData = {
 				...data,
 				section_name,
 				material_type,
 				updated_at: GetDateTime(),
 			};
-			useUpdateFunc({
-				uri: `/material/details/${
-					updateMaterialDetails?.id
-				}/${data?.name.replace(/#/g, "").replace(/\//g, "-")}`,
-				itemId: updateMaterialDetails.id,
-				data: data,
-				updatedData: updatedData,
-				setItems: setMaterialDetails,
-				onClose: onClose,
+
+			await updateData.mutateAsync({
+				url: `${url}/${updateMaterialDetails?.uuid}`,
+				uuid: updateMaterialDetails?.uuid,
+				updatedData,
+				onClose,
 			});
 
 			return;
 		}
+
+		// Add Item
 		const updatedData = {
 			...data,
 			section_name,
 			material_type,
+			uuid: nanoid(),
 			created_at: GetDateTime(),
 		};
 
-		await usePostFunc({
-			uri: "/material/details",
-			data: updatedData,
-			setItems: setMaterialDetails,
-			onClose: onClose,
+		await postData.mutateAsync({
+			url,
+			newData: updatedData,
+			onClose,
 		});
 	};
 
 	const selectUnit = [
-		{ label: "kg", value: "kg" },
-		{ label: "Litre", value: "ltr" },
-		{ label: "Meter", value: "mtr" },
-		{ label: "Piece", value: "pcs" },
+		{ label: 'kg', value: 'kg' },
+		{ label: 'Litre', value: 'ltr' },
+		{ label: 'Meter', value: 'mtr' },
+		{ label: 'Piece', value: 'pcs' },
 	];
 
 	return (
 		<AddModal
 			id={modalId}
 			title={
-				updateMaterialDetails?.id !== null
-					? "Update Material"
-					: "Material"
+				updateMaterialDetails?.uuid !== null
+					? 'Update Material'
+					: 'Material'
 			}
 			onSubmit={handleSubmit(onSubmit)}
-			onClose={onClose}
-		>
-			<div className="mb-4 flex flex-col gap-2 rounded-md bg-primary/30 p-2 md:flex-row">
-				<FormField label="section_id" title="Section" errors={errors}>
+			onClose={onClose}>
+			<div className='mb-4 flex flex-col gap-2 rounded-md bg-primary/30 p-2 md:flex-row'>
+				<FormField label='section_id' title='Section' errors={errors}>
 					<Controller
-						name={"section_id"}
+						name={'section_id'}
 						control={control}
 						render={({ field: { onChange } }) => {
 							return (
 								<ReactSelect
-									placeholder="Select Section"
+									placeholder='Select Section'
 									options={section}
 									value={section?.find(
 										(item) =>
@@ -130,21 +121,21 @@ export default function Index({
 										onChange(parseInt(e.value));
 									}}
 									isDisabled={
-										updateMaterialDetails?.id !== null
+										updateMaterialDetails?.uuid !== null
 									}
 								/>
 							);
 						}}
 					/>
 				</FormField>
-				<FormField label="type_id" title="Type" errors={errors}>
+				<FormField label='type_id' title='Type' errors={errors}>
 					<Controller
-						name={"type_id"}
+						name={'type_id'}
 						control={control}
 						render={({ field: { onChange } }) => {
 							return (
 								<ReactSelect
-									placeholder="Select Material Type"
+									placeholder='Select Material Type'
 									options={materialType}
 									value={materialType?.find(
 										(item) =>
@@ -163,19 +154,19 @@ export default function Index({
 					/>
 				</FormField>
 			</div>
-			<div className="mb-4 flex flex-col gap-2 rounded-md bg-primary/30 p-2 md:flex-row">
-				<Input label="name" {...{ register, errors }} />
-				<Input label="short_name" {...{ register, errors }} />
+			<div className='mb-4 flex flex-col gap-2 rounded-md bg-primary/30 p-2 md:flex-row'>
+				<Input label='name' {...{ register, errors }} />
+				<Input label='short_name' {...{ register, errors }} />
 				<JoinInputSelect
-					label="threshold"
-					join="unit"
+					label='threshold'
+					join='unit'
 					option={selectUnit}
 					{...{ register, errors }}
 				/>
 			</div>
-			<div className="mb-4 flex flex-col gap-2 rounded-md bg-primary/30 p-2 md:flex-row">
-				<Input label="remarks" {...{ register, errors }} />
-				<Textarea label="description" {...{ register, errors }} />
+			<div className='mb-4 flex flex-col gap-2 rounded-md bg-primary/30 p-2 md:flex-row'>
+				<Input label='remarks' {...{ register, errors }} />
+				<Textarea label='description' {...{ register, errors }} />
 			</div>
 		</AddModal>
 	);

@@ -1,18 +1,18 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
-import { useFetch, useFetchForRhfReset, useRHF, useUpdateFunc } from "@/hooks";
-import { FormField, Input, ReactSelect } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
+import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
+import { useFetch, useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { FormField, Input, ReactSelect } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
 import {
 	MATERIAL_TRX_AGAINST_ORDER_NULL,
 	MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
-} from "@util/Schema";
+} from '@util/Schema';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setMaterialDetails,
 	updateMaterialDetails = {
-		id: null,
+		uuid: null,
 		section_id: null,
 		section_name: null,
 		type_id: null,
@@ -50,7 +50,7 @@ export default function Index({
 	const onClose = () => {
 		setUpdateMaterialDetails((prev) => ({
 			...prev,
-			id: null,
+			uuid: null,
 			section_id: null,
 			section_name: null,
 			type_id: null,
@@ -74,7 +74,7 @@ export default function Index({
 				...data,
 				...updateMaterialDetails,
 				material_stock_id: updateMaterialDetails.material_stock_id,
-				name: updateMaterialDetails?.name.replace(/[#&/]/g, ""),
+				name: updateMaterialDetails?.name.replace(/[#&/]/g, ''),
 				stock: updateMaterialDetails.stock - data.trx_quantity,
 				issued_by: user?.id,
 				created_at: GetDateTime(),
@@ -94,32 +94,31 @@ export default function Index({
 	};
 
 	const transactionArea = [
-		{ label: "Dying and Iron", value: "dying_and_iron" },
-		{ label: "Teeth Molding", value: "teeth_molding" },
-		{ label: "Teeth Cleaning", value: "teeth_coloring" },
-		{ label: "Finishing", value: "finishing" },
-		{ label: "Slider Assembly", value: "slider_assembly" },
-		{ label: "Coloring", value: "coloring" },
+		{ label: 'Dying and Iron', value: 'dying_and_iron' },
+		{ label: 'Teeth Molding', value: 'teeth_molding' },
+		{ label: 'Teeth Cleaning', value: 'teeth_coloring' },
+		{ label: 'Finishing', value: 'finishing' },
+		{ label: 'Slider Assembly', value: 'slider_assembly' },
+		{ label: 'Coloring', value: 'coloring' },
 	];
 
 	return (
 		<AddModal
 			id={`MaterialTrxAgainstOrder`}
 			title={
-				"Material Trx Against Order of " + updateMaterialDetails?.name
+				'Material Trx Against Order of ' + updateMaterialDetails?.name
 			}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
-			<FormField label="order_entry_id" title="Order" errors={errors}>
+			isSmall={true}>
+			<FormField label='order_entry_id' title='Order' errors={errors}>
 				<Controller
-					name={"order_entry_id"}
+					name={'order_entry_id'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder="Select Order"
+								placeholder='Select Order'
 								options={order}
 								onChange={(e) => {
 									onChange(parseInt(e.value));
@@ -130,14 +129,14 @@ export default function Index({
 				/>
 			</FormField>
 
-			<FormField label="trx_to" title="Transfer To" errors={errors}>
+			<FormField label='trx_to' title='Transfer To' errors={errors}>
 				<Controller
-					name={"trx_to"}
+					name={'trx_to'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder="Select Transaction Area"
+								placeholder='Select Transaction Area'
 								options={transactionArea}
 								onChange={(e) => onChange(e.value)}
 							/>
@@ -147,12 +146,12 @@ export default function Index({
 			</FormField>
 
 			<Input
-				label="trx_quantity"
+				label='trx_quantity'
 				sub_label={`Max: ${updateMaterialDetails?.stock}`}
 				placeholder={`Max: ${updateMaterialDetails?.stock}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

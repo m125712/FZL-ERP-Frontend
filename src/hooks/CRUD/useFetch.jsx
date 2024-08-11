@@ -74,7 +74,7 @@ const useFetchForRhfResetForUserAccess = async (uri, returnId, reset) => {
 		if (returnId === null) return;
 
 		api.get(uri).then((res) => {
-			const data = res?.data[0];
+			const data = res?.data?.data[0];
 			const result = {};
 
 			Object.entries(data).forEach(([key, value]) => {

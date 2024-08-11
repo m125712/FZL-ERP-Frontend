@@ -20,15 +20,36 @@ export default function Order() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'page_assign_actions',
+				header: (
+					<span>
+						Page
+						<br />
+						Assign
+					</span>
+				),
+				enableColumnFilter: false,
+				enableSorting: false,
+				width: 'w-24',
+				hidden: !haveAccess.includes('click_page_assign'),
+				cell: (info) => {
+					return (
+						<ResetPassword
+							onClick={() => handelPageAssign(info.row.index)}
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'status',
 				header: 'Status',
 				enableColumnFilter: false,
-				width: 'w-24',
+				width: 'w-8',
 				hidden: !haveAccess.includes('click_status'),
 				cell: (info) => {
 					return (
 						<StatusButton
-							size='btn-sm'
+							size='btn-xs'
 							value={info.getValue()}
 							onClick={() => handelStatus(info.row.index)}
 						/>
@@ -39,7 +60,9 @@ export default function Order() {
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
 			},
 			{
 				accessorKey: 'email',
@@ -48,10 +71,21 @@ export default function Order() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'user_department',
+				accessorKey: 'department',
 				header: 'Department',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { department, designation } = info.row.original;
+
+					return (
+						<div className='flex flex-col'>
+							<span className='capitalize'>{department}</span>
+							<span className='text-xs capitalize text-gray-400'>
+								{designation}
+							</span>
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'remarks',
@@ -79,27 +113,7 @@ export default function Order() {
 					/>
 				),
 			},
-			{
-				accessorKey: 'page_assign_actions',
-				header: (
-					<span>
-						Page
-						<br />
-						Assign
-					</span>
-				),
-				enableColumnFilter: false,
-				enableSorting: false,
-				width: 'w-24',
-				hidden: !haveAccess.includes('click_page_assign'),
-				cell: (info) => {
-					return (
-						<ResetPassword
-							onClick={() => handelPageAssign(info.row.index)}
-						/>
-					);
-				},
-			},
+
 			{
 				accessorKey: 'created_at',
 				header: 'Created',
@@ -214,14 +228,14 @@ export default function Order() {
 	const [pageAssign, setPageAssign] = useState({
 		uuid: null,
 		name: null,
-		can_access: null,
 	});
 	const handelPageAssign = async (idx) => {
+		console.log(data[idx]);
+		
 		setPageAssign((prev) => ({
 			...prev,
 			uuid: data[idx]?.uuid,
 			name: data[idx]?.name,
-			can_access: JSON?.parse(data[idx]?.can_access),
 		}));
 
 		window['page_assign_modal'].showModal();

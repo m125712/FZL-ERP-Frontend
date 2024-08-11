@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 
 export default function Index({
 	modalId = '',
-	pageAssign = { uuid: null, name: null, can_access: null },
+	pageAssign = { uuid: null, name: null },
 	setPageAssign,
 }) {
 	const { url, updateData } = useAdminUsers();
@@ -49,13 +49,11 @@ export default function Index({
 		PAGE_ACTIONS_NULL[key] = value.null;
 	});
 
-	const { register, handleSubmit, errors, reset, getValues } = useRHF(
-		PAGE_ACTIONS_SCHEMA,
-		{}
-	);
+	const { register, handleSubmit, errors, reset, getValues } =
+		useRHF(PAGE_ACTIONS_SCHEMA);
 
 	useFetchForRhfResetForUserAccess(
-		`/hr/user/can-access/${pageAssign?.uuid}`,
+		`${url}/can-access/${pageAssign?.uuid}`,
 		pageAssign?.uuid,
 		reset
 	);
@@ -65,9 +63,8 @@ export default function Index({
 			...prev,
 			uuid: null,
 			name: null,
-			can_access: null,
 		}));
-		reset({});
+		reset(PAGE_ACTIONS_NULL);
 		window[modalId].close();
 	};
 

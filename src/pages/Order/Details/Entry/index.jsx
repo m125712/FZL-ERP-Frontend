@@ -1,27 +1,27 @@
-import { DeleteModal } from "@/components/Modal";
+import { DeleteModal } from '@/components/Modal';
 import {
 	useFetch,
 	useFetchForRhfResetForOrder,
 	usePostFunc,
 	useRHF,
 	useUpdateFunc,
-} from "@/hooks";
-import { ActionButtons, DynamicField, Input, JoinInput, Textarea } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { useAuth } from "@context/auth";
-import { ORDER_NULL, ORDER_SCHEMA } from "@util/Schema";
-import { customAlphabet } from "nanoid";
-import { Suspense, useCallback, useEffect, useState } from "react";
-import { HotKeys, configure } from "react-hotkeys";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+} from '@/hooks';
+import { ActionButtons, DynamicField, Input, JoinInput, Textarea } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { useAuth } from '@context/auth';
+import { ORDER_NULL, ORDER_SCHEMA } from '@util/Schema';
+import { Suspense, useCallback, useEffect, useState } from 'react';
+import { HotKeys, configure } from 'react-hotkeys';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { DevTool } from '@hookform/devtools';
+import { useOrderDescription } from '@/state/Order';
+import nanoid from '@/lib/nanoid';
 
-const alphabet =
-	"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-const nanoid = customAlphabet(alphabet, 10);
-
-import Header from "./Header";
+import Header from './Header';
 
 export default function Index() {
+	const { url, updateData, postData } = useOrderDescription();
+
 	const { order_number, order_description_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
@@ -42,7 +42,7 @@ export default function Index() {
 	useEffect(() => {
 		order_number !== undefined
 			? (document.title = `Order: Update ${order_number}`)
-			: (document.title = "Order: Entry");
+			: (document.title = 'Order: Entry');
 	}, []);
 
 	if (isUpdate)
@@ -52,7 +52,7 @@ export default function Index() {
 			reset
 		);
 
-	const { value: order } = useFetch(`/order/info/value/label`);
+	const { value: order } = useFetch(`/other/order/info/value/label`);
 
 	// order_entry
 	const {
@@ -61,7 +61,7 @@ export default function Index() {
 		remove: orderEntryRemove,
 	} = useFieldArray({
 		control,
-		name: "order_entry",
+		name: 'order_entry',
 	});
 
 	const [deleteItem, setDeleteItem] = useState({
@@ -75,21 +75,21 @@ export default function Index() {
 				itemId: getValues(`order_entry[${index}].id`),
 				itemName: getValues(`order_entry[${index}].id`),
 			});
-			window["order_entry_delete"].showModal();
+			window['order_entry_delete'].showModal();
 		}
 		orderEntryRemove(index);
 	};
 
 	const handelOrderEntryAppend = () => {
 		orderEntryAppend({
-			style: "",
-			color: "",
-			size: "",
-			quantity: "",
+			style: '',
+			color: '',
+			size: '',
+			quantity: '',
 			company_price: 0,
 			party_price: 0,
 			status: 1,
-			remarks: "",
+			remarks: '',
 		});
 	};
 	const onClose = () => reset(ORDER_NULL);
@@ -99,80 +99,80 @@ export default function Index() {
 		const DEFAULT_SWATCH_APPROVAL_DATE = null;
 
 		// Update
-		if (isUpdate) {
-			// order description
-			const order_description_data = {
-				...data,
-				is_slider_provided: data?.is_slider_provided ? 1 : 0,
-				is_logo_body: data?.is_logo_body ? 1 : 0,
-				is_logo_puller: data?.is_logo_puller ? 1 : 0,
-				hand: data?.hand ? data?.hand : 1,
-				updated_at: GetDateTime(),
-			};
+		// if (isUpdate) {
+		// 	// order description
+		// 	const order_description_data = {
+		// 		...data,
+		// 		is_slider_provided: data?.is_slider_provided ? 1 : 0,
+		// 		is_logo_body: data?.is_logo_body ? 1 : 0,
+		// 		is_logo_puller: data?.is_logo_puller ? 1 : 0,
+		// 		hand: data?.hand ? data?.hand : 1,
+		// 		updated_at: GetDateTime(),
+		// 	};
 
-			let order_description_promise = await useUpdateFunc({
-				uri: `/order/description/${data?.order_description_id}/${data?.order_number}`,
-				itemId: data.id,
-				data: data,
-				updatedData: order_description_data,
-				onClose: onClose,
-			}).catch((err) => console.error(`Error updating data: ${err}`));
+		// 	let order_description_promise = await useUpdateFunc({
+		// 		uri: `/order/description/${data?.order_description_id}/${data?.order_number}`,
+		// 		itemId: data.id,
+		// 		data: data,
+		// 		updatedData: order_description_data,
+		// 		onClose: onClose,
+		// 	}).catch((err) => console.error(`Error updating data: ${err}`));
 
-			// order entry
-			let order_entry_promises = data.order_entry.map(async (item) => {
-				if (item.id === undefined) {
-					item.order_description_uuid = order_description_uuid;
-					item.status = item?.order_entry_status ? 1 : 0;
-					item.swatch_approval_date =
-						item.order_entry_status == 1
-							? GetDateTime()
-							: DEFAULT_SWATCH_APPROVAL_DATE;
-					item.created_at = GetDateTime();
-					return await usePostFunc({
-						uri: "/order/entry",
-						data: item,
-					}).catch((err) => console.error(`Error: ${err}`));
-				}
-				const updatedData = {
-					...item,
-					status: item.order_entry_status ? 1 : 0,
-					swatch_approval_date:
-						item?.swatch_approval_date == null &&
-						item?.order_entry_status
-							? GetDateTime()
-							: item?.swatch_approval_date,
-					updated_at: GetDateTime(),
-					remarks: null,
-				};
+		// 	// order entry
+		// 	let order_entry_promises = data.order_entry.map(async (item) => {
+		// 		if (item.id === undefined) {
+		// 			item.order_description_uuid = order_description_uuid;
+		// 			item.status = item?.order_entry_status ? 1 : 0;
+		// 			item.swatch_approval_date =
+		// 				item.order_entry_status == 1
+		// 					? GetDateTime()
+		// 					: DEFAULT_SWATCH_APPROVAL_DATE;
+		// 			item.created_at = GetDateTime();
+		// 			return await usePostFunc({
+		// 				uri: '/order/entry',
+		// 				data: item,
+		// 			}).catch((err) => console.error(`Error: ${err}`));
+		// 		}
+		// 		const updatedData = {
+		// 			...item,
+		// 			status: item.order_entry_status ? 1 : 0,
+		// 			swatch_approval_date:
+		// 				item?.swatch_approval_date == null &&
+		// 				item?.order_entry_status
+		// 					? GetDateTime()
+		// 					: item?.swatch_approval_date,
+		// 			updated_at: GetDateTime(),
+		// 			remarks: null,
+		// 		};
 
-				return await useUpdateFunc({
-					// replace style brackets, /, #, & with space
-					uri: `/order/entry/${item?.id}/${item?.style.replace(/[#&/]/g, "")}`,
-					itemId: item.id,
-					data: item,
-					updatedData: updatedData,
-					onClose: onClose,
-				}).catch((err) => console.error(`Error updating data: ${err}`));
-			});
+		// 		return await useUpdateFunc({
+		// 			// replace style brackets, /, #, & with space
+		// 			uri: `/order/entry/${item?.id}/${item?.style.replace(/[#&/]/g, '')}`,
+		// 			itemId: item.id,
+		// 			data: item,
+		// 			updatedData: updatedData,
+		// 			onClose: onClose,
+		// 		}).catch((err) => console.error(`Error updating data: ${err}`));
+		// 	});
 
-			try {
-				await Promise.all([
-					order_description_promise,
-					...order_entry_promises,
-				])
-					.then(() => reset(Object.assign({}, ORDER_NULL)))
-					.then(() => {
-						navigate(
-							`/order/details/${order_number}/${order_description_uuid}`,
-							{ replace: true }
-						);
-					});
-			} catch (err) {
-				console.error(`Error with Promise.all: ${err}`);
-			}
+		// 	try {
+		// 		await Promise.all([
+		// 			order_description_promise,
+		// 			...order_entry_promises,
+		// 		])
+		// 			.then(() => reset(Object.assign({}, ORDER_NULL)))
+		// 			.then(() => {
+		// 				navigate(
+		// 					`/order/details/${order_number}/${order_description_uuid}`,
+		// 					{ replace: true }
+		// 				);
+		// 			});
+		// 	} catch (err) {
+		// 		console.error(`Error with Promise.all: ${err}`);
+		// 	}
 
-			return;
-		}
+		// 	return;
+		// }
 
 		// Add
 		const new_order_description_uuid = nanoid();
@@ -180,52 +180,60 @@ export default function Index() {
 		const special_requirement = JSON.stringify({
 			values: data?.special_requirement || [],
 		});
-		const order_num = order.find(
-			(item) => item.value === data?.order_info_id
-		)?.label;
+
+		console.log('special_requirement', special_requirement);
 
 		const order_description = {
 			...data,
-			order_number: order_num,
 			is_slider_provided: data?.is_slider_provided ? 1 : 0,
 			is_logo_body: data?.is_logo_body ? 1 : 0,
 			is_logo_puller: data?.is_logo_puller ? 1 : 0,
-			hand: data?.hand ? data?.hand : 1,
+			hand: data?.hand,
 			status: 0,
 			special_requirement,
-			order_description_uuid: new_order_description_uuid,
+			uuid: new_order_description_uuid,
 			created_at,
-			issued_by: user.id,
+			created_by: user?.uuid,
+			// issued_by: user.uuid,
 		};
-		const order_description_promise = await usePostFunc({
-			uri: "/order/description",
-			data: order_description,
-		});
 
 		const order_entry = [...data.order_entry].map((item) => ({
 			...item,
+			uuid: nanoid(),
 			status: item.order_entry_status ? 1 : 0,
+			swatch_status: 'pending',
 			swatch_approval_date: DEFAULT_SWATCH_APPROVAL_DATE,
 			order_description_uuid: new_order_description_uuid,
 			created_at,
 		}));
+
 		let order_entry_promises = [
-			...order_entry.map((item) =>
-				usePostFunc({
-					uri: "/order/entry",
-					data: item,
-				})
+			...order_entry.map(
+				async (item) =>
+					await postData.mutateAsync({
+						url: '/zipper/order-entry',
+						newData: item,
+						isOnCloseNeeded: false,
+					})
 			),
 		];
 
-		await Promise.all([order_description_promise, ...order_entry_promises])
+		console.log('Order Entry Promises:', order_entry_promises);
+		console.log(order_entry);
+
+		await postData.mutateAsync({
+			url,
+			newData: order_description,
+			isOnCloseNeeded: false,
+		});
+		await Promise.all(order_entry_promises)
 			.then(() => reset(Object.assign({}, ORDER_NULL)))
-			.then(() => navigate(`/order/details/${order_number}`))
+			.then(() => navigate(`/order/details`))
 			.catch((err) => console.log(err));
 	};
 
 	// Check if order_number is valid
-	if (getValues("quantity") === null) return <Navigate to="/not-found" />;
+	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 
 	const handelDuplicateDynamicField = useCallback(
 		(index) => {
@@ -241,9 +249,9 @@ export default function Index() {
 	};
 
 	const keyMap = {
-		NEW_ROW: "alt+n",
-		COPY_LAST_ROW: "alt+c",
-		ENTER: "enter",
+		NEW_ROW: 'alt+n',
+		COPY_LAST_ROW: 'alt+c',
+		ENTER: 'enter',
 	};
 
 	const handlers = {
@@ -254,21 +262,20 @@ export default function Index() {
 	};
 
 	configure({
-		ignoreTags: ["input", "select", "textarea"],
+		ignoreTags: ['input', 'select', 'textarea'],
 		ignoreEventsCondition: function () {},
 	});
 
 	const rowClass =
-		"group whitespace-nowrap text-left text-sm font-normal tracking-wide";
+		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	return (
-		<div className="container mx-auto mt-2 px-2 pb-2 md:px-4">
+		<div className='container mx-auto mt-2 px-2 pb-2 md:px-4'>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
-					className="flex flex-col gap-4"
-				>
+					className='flex flex-col gap-4'>
 					<Header
 						{...{
 							order,
@@ -278,37 +285,35 @@ export default function Index() {
 							getValues,
 							Controller,
 							watch,
-							is_logo_body: getValues("is_logo_body"),
-							is_logo_puller: getValues("is_logo_puller"),
+							is_logo_body: getValues('is_logo_body'),
+							is_logo_puller: getValues('is_logo_puller'),
 						}}
 					/>
 					<DynamicField
-						title="Details"
+						title='Details'
 						handelAppend={handelOrderEntryAppend}
 						tableHead={[
-							"Style",
-							"Color",
-							"Size",
-							"Quantity",
-							"Price (USD) (Com/Party)",
-							"Action",
+							'Style',
+							'Color',
+							'Size',
+							'Quantity',
+							'Price (USD) (Com/Party)',
+							'Action',
 						].map((item) => (
 							<th
 								key={item}
-								scope="col"
-								className="group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2"
-							>
+								scope='col'
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
 								{item}
 							</th>
-						))}
-					>
+						))}>
 						{orderEntryField.map((item, index) => (
 							<tr key={item.id}>
 								<td className={`pl-1 ${rowClass}`}>
 									<Textarea
-										title="style"
+										title='style'
 										label={`order_entry[${index}].style`}
-										is_title_needed="false"
+										is_title_needed='false'
 										dynamicerror={
 											errors?.order_entry?.[index]?.style
 										}
@@ -317,9 +322,9 @@ export default function Index() {
 								</td>
 								<td className={rowClass}>
 									<Textarea
-										title="color"
+										title='color'
 										label={`order_entry[${index}].color`}
-										is_title_needed="false"
+										is_title_needed='false'
 										dynamicerror={
 											errors?.order_entry?.[index]?.color
 										}
@@ -328,10 +333,10 @@ export default function Index() {
 								</td>
 								<td className={`w-40 ${rowClass}`}>
 									<JoinInput
-										title="size"
+										title='size'
 										label={`order_entry[${index}].size`}
-										is_title_needed="false"
-										unit="cm"
+										is_title_needed='false'
+										unit='cm'
 										dynamicerror={
 											errors?.order_entry?.[index]?.size
 										}
@@ -340,10 +345,10 @@ export default function Index() {
 								</td>
 								<td className={`w-40 ${rowClass}`}>
 									<JoinInput
-										title="quantity"
+										title='quantity'
 										label={`order_entry[${index}].quantity`}
-										is_title_needed="false"
-										unit="pcs"
+										is_title_needed='false'
+										unit='pcs'
 										dynamicerror={
 											errors?.order_entry?.[index]
 												?.quantity
@@ -352,10 +357,10 @@ export default function Index() {
 									/>
 								</td>
 								<td className={`w-24 ${rowClass}`}>
-									<div className="flex">
+									<div className='flex'>
 										<Input
 											label={`order_entry[${index}].company_price`}
-											is_title_needed="false"
+											is_title_needed='false'
 											dynamicerror={
 												errors?.order_entry?.[index]
 													?.company_price
@@ -364,7 +369,7 @@ export default function Index() {
 										/>
 										<Input
 											label={`order_entry[${index}].party_price`}
-											is_title_needed="false"
+											is_title_needed='false'
 											dynamicerror={
 												errors?.order_entry?.[index]
 													?.party_price
@@ -390,8 +395,7 @@ export default function Index() {
 									/>
 								</td> */}
 								<td
-									className={`w-16 ${rowClass} border-l-4 border-l-primary`}
-								>
+									className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
 									<ActionButtons
 										duplicateClick={() =>
 											handelDuplicateDynamicField(index)
@@ -407,11 +411,10 @@ export default function Index() {
 							</tr>
 						))}
 					</DynamicField>
-					<div className="modal-action">
+					<div className='modal-action'>
 						<button
-							type="submit"
-							className="text-md btn btn-primary btn-block"
-						>
+							type='submit'
+							className='text-md btn btn-primary btn-block'>
 							Save
 						</button>
 					</div>
@@ -419,14 +422,15 @@ export default function Index() {
 			</HotKeys>
 			<Suspense>
 				<DeleteModal
-					modalId={"order_entry_delete"}
-					title={"Order Entry"}
+					modalId={'order_entry_delete'}
+					title={'Order Entry'}
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
 					setItems={orderEntryField}
 					uri={`/order/entry`}
 				/>
 			</Suspense>
+			<DevTool control={control} placement='top-left' />
 		</div>
 	);
 }

@@ -3,6 +3,11 @@ import * as yup from 'yup';
 export const STRING = yup.string().trim();
 export const STRING_REQUIRED = STRING.required('Required');
 
+export const UUID = STRING.length(15, 'Invalid Primary Key UUID Length');
+export const UUID_REQUIRED = UUID.required('Required');
+export const UUID_FK = UUID;
+export const UUID_PK = UUID_REQUIRED;
+
 // export const NAME_STRING = STRING.matches(
 
 // 	, "Invalid Name");

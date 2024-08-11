@@ -45,11 +45,16 @@ export default function createGlobalState({ queryKey, url }) {
 				data?.filter((val) => val.id !== context.newData.uuid)
 			);
 
-			ShowToast(error?.response?.data?.toast);
+			console.log(error);
+			
+
+			// ShowToast(error?.response?.data?.toast);
 		},
 		onSettled: (data, error, variables, context) => {
 			queryClient.invalidateQueries({ queryKey });
-			variables.onClose();
+			if(variables?.isOnCloseNeeded !== false){
+				variables?.onClose();
+			}
 		},
 	});
 

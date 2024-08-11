@@ -78,3 +78,11 @@ export const libraryQK = {
 	policies: () => [...libraryQK.all(), 'policies'],
 	policyByUUID: (uuid) => [...libraryQK.policies(), uuid],
 };
+//Common
+export const commonQK = {
+	all: () => ['common'],
+
+	// tapeSFG
+	tapeSFG: () => [...commonQK.all(), 'tape/SFG'],
+	tapeSFGByUUID: (uuid) => [...commonQK.tapeSFG(), uuid],
+};

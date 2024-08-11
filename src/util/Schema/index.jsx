@@ -677,7 +677,7 @@ export const TAPE_STOCK_ADD_SCHEMA = {
 };
 
 export const TAPE_STOCK_ADD_NULL = {
-	id: null,
+	uuid: null,
 	type: '',
 	zipper_number: '',
 	remarks: '',

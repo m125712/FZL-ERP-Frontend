@@ -75,9 +75,8 @@ export default function createGlobalState({ queryKey, url }) {
 		},
 		onError: (error, variables, context) => {
 			queryClient.setQueryData(queryKey, context.previousData);
-			console.log(error);
 
-			ShowToast(error?.response);
+			ShowToast(error?.response?.data?.toast);
 		},
 		onSettled: (data, error, variables, context) => {
 			queryClient.invalidateQueries(queryKey);
@@ -109,6 +108,7 @@ export default function createGlobalState({ queryKey, url }) {
 		url,
 		data: data?.data,
 		toast: data?.toast,
+		invalidateQuery: queryClient.invalidateQueries({ queryKey }),
 		isLoading,
 		isError,
 		updateData,

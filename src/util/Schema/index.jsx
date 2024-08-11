@@ -638,7 +638,7 @@ export const USER_SCHEMA = {
 };
 
 export const USER_NULL = {
-	id: null,
+	uuid: null,
 	name: '',
 	email: '',
 	department_designation: null,
@@ -649,13 +649,25 @@ export const USER_NULL = {
 	remarks: '',
 };
 
+// * User -> Department
 export const USER_DEPARTMENT_SCHEMA = {
 	department: STRING_REQUIRED,
-	designation: STRING_REQUIRED,
 };
 
 export const USER_DEPARTMENT_NULL = {
-	id: null,
+	uuid: null,
+	department: '',
+};
+
+// * User -> Designation
+export const USER_DESIGNATION_SCHEMA = {
+	department_uuid: UUID_PK,
+	designation: STRING_REQUIRED,
+};
+
+export const USER_DESIGNATION_NULL = {
+	uuid: null,
+	department_uuid: null,
 	department: '',
 	designation: '',
 };

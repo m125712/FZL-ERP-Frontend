@@ -9,7 +9,15 @@ export const orderQK = {
 
 	// details
 	details: () => [...orderQK.all(), 'details'],
-	detail: (id) => [...orderQK.details(), id],
+	detail: (uuid) => [...orderQK.details(), uuid],
+
+	// Description
+	descriptions: () => [...orderQK.all(), 'description'],
+	description: (uuid) => [...orderQK.descriptions(), uuid],
+
+	// Entry
+	entries: () => [...orderQK.all(), 'entries'],
+	entry: (uuid) => [...orderQK.entries(), uuid],
 
 	// info
 	infos: () => [...orderQK.all(), 'info'],

@@ -1,6 +1,6 @@
 import ReactTable from "@/components/Table";
 import { useAccess } from "@/hooks";
-import { useOrderDetails } from "@/state/Order/details";
+import { useOrderDetails } from "@/state/Order";
 import { EditDelete, LinkWithCopy, StatusButton, UserName } from "@/ui";
 import PageInfo from "@/util/PageInfo";
 import { useEffect, useMemo } from "react";

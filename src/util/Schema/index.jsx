@@ -18,8 +18,12 @@ import {
 	PHONE_NUMBER_REQUIRED, // default
 	STRING, // default
 	STRING_REQUIRED, // default
+	URL, // default
 	URL_REQUIRED, // default
 	UUID_PK, // default
+	UUID_FK, // default
+	UUID_REQUIRED, // default
+	UUID, // default
 } from './utils';
 
 export {
@@ -421,32 +425,33 @@ export const ORDER_INFO_NULL = {
 };
 
 export const ORDER_SCHEMA = {
-	order_info_id: NUMBER_REQUIRED,
-	item: NUMBER_REQUIRED,
-	zipper_number: NUMBER_REQUIRED,
-	end_type: NUMBER_REQUIRED,
-	lock_type: NUMBER_REQUIRED,
-	puller_type: NUMBER_REQUIRED,
-	teeth_color: NUMBER_REQUIRED,
-	puller_color: NUMBER_REQUIRED,
-	hand: NUMBER.transform(handelNumberDefaultValue).default(67), // 67 = No Hand
-	stopper_type: NUMBER_REQUIRED,
+	order_info_uuid: UUID_REQUIRED,
+	item: UUID_REQUIRED,
+	zipper_number: UUID_REQUIRED,
+	end_type: UUID_REQUIRED,
+	lock_type: UUID_REQUIRED,
+	puller_type: UUID_REQUIRED,
+	teeth_color: UUID_REQUIRED,
+	puller_color: UUID_REQUIRED,
+	hand: UUID, // 67 = No Hand
+	stopper_type: UUID_REQUIRED,
 	special_requirement: JSON_STRING_REQUIRED,
 	description: STRING,
 	remarks: STRING.nullable(),
-	coloring_type: NUMBER_REQUIRED,
-	slider: NUMBER_REQUIRED,
+	coloring_type: UUID_REQUIRED,
+	slider: UUID_REQUIRED,
+	slider_starting_section: STRING_REQUIRED,
 	is_slider_provided: BOOLEAN.transform(handelNumberDefaultValue).default(
 		false
 	),
-	top_stopper: NUMBER_REQUIRED,
-	bottom_stopper: NUMBER_REQUIRED,
-	logo_type: STRING_REQUIRED,
+	top_stopper: UUID,
+	bottom_stopper: UUID,
+	logo_type: UUID,
 	is_logo_body: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	is_logo_puller: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	order_entry: yup.array().of(
 		yup.object().shape({
-			style: STRING_REQUIRED,
+			style: STRING.nullable(),
 			color: STRING_REQUIRED,
 			size: NUMBER_DOUBLE_REQUIRED,
 			quantity: NUMBER_REQUIRED,
@@ -456,14 +461,13 @@ export const ORDER_SCHEMA = {
 			party_price: NUMBER_DOUBLE_REQUIRED.transform(
 				handelNumberDefaultValue
 			).default(0),
-			remarks: STRING.nullable(),
 		})
 	),
 };
 
 export const ORDER_NULL = {
 	id: null,
-	order_info_id: null,
+	order_info_uuid: null,
 	order_description_uuid: null,
 	item: null,
 	zipper_number: null,
@@ -486,7 +490,6 @@ export const ORDER_NULL = {
 			quantity: '',
 			company_price: 0,
 			party_price: 0,
-			remarks: '',
 			status: 1,
 			swatch_approval_date: null,
 		},

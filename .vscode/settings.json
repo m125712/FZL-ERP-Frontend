@@ -65,7 +65,10 @@
 			]
 		},
 		"Command Prompt": {
-			"path": ["${env:windir}\\Sysnative\\cmd.exe", "${env:windir}\\System32\\cmd.exe"],
+			"path": [
+				"${env:windir}\\Sysnative\\cmd.exe",
+				"${env:windir}\\System32\\cmd.exe"
+			],
 			"args": [],
 			"icon": "terminal-cmd"
 		}
@@ -142,7 +145,13 @@
 		["tw\\(([^)]*)\\)", "(?:'|\"|`)([^\"'`]*)(?:'|\"|`)"],
 		["tw\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
 	],
-	"tailwindCSS.classAttributes": ["class", "className", "ngClass", "clsx", "tw"],
+	"tailwindCSS.classAttributes": [
+		"class",
+		"className",
+		"ngClass",
+		"clsx",
+		"tw"
+	],
 
 	// important
 	"liveServer.settings.donotShowInfoMsg": true,
@@ -295,7 +304,7 @@
 	"github.copilot.editor.enableAutoCompletions": true,
 	"workbench.productIconTheme": "a-file-icon-vscode-product-icon-theme",
 	"diffEditor.ignoreTrimWhitespace": true,
-	"diffEditor.hideUnchangedRegions.enabled": true,
+	"diffEditor.hideUnchangedRegions.enabled": false,
 
 	// todo highlight
 	"todohighlight.keywords": [

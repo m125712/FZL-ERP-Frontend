@@ -1,6 +1,7 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
+import nanoid from '@/lib/nanoid';
 import { useMaterialTrx } from '@/state/Material';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
@@ -20,16 +21,15 @@ export default function Index({
 		unit: null,
 		description: null,
 		remarks: null,
-		material_stock_uuid: null,
 	},
 	setUpdateMaterialDetails,
 }) {
-	const { url, updateData } = useMaterialTrx();
+	const { url, postData } = useMaterialTrx();
 	const { user } = useAuth();
 
 	const schema = {
 		...MATERIAL_STOCK_SCHEMA,
-		quantity: MATERIAL_STOCK_SCHEMA.quantity
+		trx_quantity: MATERIAL_STOCK_SCHEMA.trx_quantity
 			.moreThan(0)
 			.max(updateMaterialDetails?.stock),
 	};
@@ -64,28 +64,37 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
-		// Update item
-		if (updateMaterialDetails?.material_stock_uuid !== null) {
+		// Create Item
+		if (updateMaterialDetails?.uuid !== null) {
 			const updatedData = {
 				...data,
 				...updateMaterialDetails,
-				material_stock_uuid: updateMaterialDetails.material_stock_uuid,
-				name: updateMaterialDetails?.name.replace(/[#&/]/g, ''),
-				stock: updateMaterialDetails.stock - data?.quantity,
-				[`${data.trx_to}`]:
-					updateMaterialDetails[`${data.trx_to}`] + data?.quantity,
-				issued_by: user?.id,
+				material_uuid: updateMaterialDetails.uuid,
+				// material_name: updateMaterialDetails?.name.replace(
+				// 	/[#&/]/g,
+				// 	''
+				// ),
+
+				// stock: updateMaterialDetails.stock - data?.quantity,
+				// [`${data.trx_to}`]:
+				// 	updateMaterialDetails[`${data.trx_to}`] + data?.quantity,
+				created_by: user?.uuid,
+				uuid: nanoid(),
 				created_at: GetDateTime(),
 			};
 
-			await updateData.mutateAsync({
-				url: `${url}/${updateMaterialDetails?.uuid}`,
-				uuid: updateMaterialDetails?.uuid,
+			console.log({
 				updatedData,
-				onClose,
 			});
 
 			return;
+			// await postData.mutateAsync({
+			// 	url,
+			// 	newData: updatedData,
+			// 	onClose,
+			// });
+
+			// return;
 		}
 	};
 
@@ -134,7 +143,10 @@ export default function Index({
 							<ReactSelect
 								placeholder='Select Transaction Area'
 								options={transactionArea}
-								onChange={(e) => onChange(e.value)}
+								onChange={(e) => {
+									console.log({ e });
+									onChange(e.value);
+								}}
 							/>
 						);
 					}}
@@ -142,7 +154,7 @@ export default function Index({
 			</FormField>
 
 			<Input
-				label='quantity'
+				label='trx_quantity'
 				sub_label={`Max: ${updateMaterialDetails?.stock}`}
 				placeholder={`Max: ${updateMaterialDetails?.stock}`}
 				{...{ register, errors }}

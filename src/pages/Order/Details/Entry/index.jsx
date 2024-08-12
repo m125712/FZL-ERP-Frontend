@@ -1,11 +1,5 @@
 import { DeleteModal } from '@/components/Modal';
-import {
-	useFetch,
-	useFetchForRhfResetForOrder,
-	usePostFunc,
-	useRHF,
-	useUpdateFunc,
-} from '@/hooks';
+import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useOrderDescription, useOrderDetails } from '@/state/Order';
 import { ActionButtons, DynamicField, Input, JoinInput, Textarea } from '@/ui';
@@ -53,7 +47,6 @@ export default function Index() {
 			order_description_uuid,
 			reset
 		);
-
 
 	const { value: order } = useFetch(`/other/order/info/value/label`);
 
@@ -113,7 +106,6 @@ export default function Index() {
 				updated_at: GetDateTime(),
 			};
 
-			//* Post updated order description */ //
 			await updateData.mutateAsync({
 				url: `/zipper/order-description/${data?.order_description_uuid}`,
 				updatedData: order_description_updated,
@@ -121,17 +113,13 @@ export default function Index() {
 			});
 
 			// * updated order entry * //
-
 			const order_entry_updated = [...data.order_entry].map((item) => ({
 				...item,
 				status: item.order_entry_status ? 1 : 0,
 				swatch_status: 'pending',
 				swatch_approval_date: DEFAULT_SWATCH_APPROVAL_DATE,
 				updated_at: GetDateTime(),
-				// uuid: item.order_entry_uuid ? item.order_entry_uuid : null,
 			}));
-
-
 
 			//* Post new entry */ //
 			let order_entry_updated_promises = [
@@ -162,11 +150,9 @@ export default function Index() {
 				}),
 			];
 
-			// console.log("ddddd",order_entry_updated);
-
-			// await Promise.all(order_entry_updated_promises)
-			// 	.then(() => reset(Object.assign({}, ORDER_NULL)))
-			// 	.catch((err) => console.log(err));
+			navigate(
+				`/order/details/${order_number}/${order_description_uuid}`
+			);
 
 			return;
 		}

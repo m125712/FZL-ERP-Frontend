@@ -12,14 +12,6 @@ export default function Index({
 }) {
 	const haveAccess = useAccess('order__details_by_uuid');
 
-	console.log({
-		item_name: item_name.toLowerCase(),
-		end_type_name,
-		stopper_type_name,
-		zipper_number_name,
-		show_price: haveAccess?.includes('show_price'),
-	});
-
 	const columns = useMemo(
 		() =>
 			getColumn({

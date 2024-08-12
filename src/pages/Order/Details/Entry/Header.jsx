@@ -3,10 +3,10 @@ import { useFetch } from '@/hooks';
 import {
 	CheckBox,
 	FormField,
+	Input,
 	ReactSelect,
 	SectionEntryBody,
 	Textarea,
-	Input,
 } from '@/ui';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -748,6 +748,7 @@ export default function Header({
 							}}
 						/>
 					</FormField>
+
 					<FormField
 						label='end_user'
 						title='End User'
@@ -772,8 +773,13 @@ export default function Header({
 							}}
 						/>
 					</FormField>
+
+					<Textarea
+						label='garments_remarks'
+						title='Remarks'
+						{...{ register, errors }}
+					/>
 				</div>
-				<Textarea label='garments_remarks' {...{ register, errors }} />
 			</SectionEntryBody>
 		</div>
 	);

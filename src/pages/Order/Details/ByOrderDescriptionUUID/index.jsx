@@ -17,6 +17,8 @@ export default function Index({ initial_order, idx }) {
 	const hasInitialOrder =
 		Object.keys(initial_order || []).length > 0 ? true : false;
 
+	console.log(hasInitialOrder);
+
 	useEffect(() => {
 		document.title = order_number;
 		if (order_description_uuid !== undefined) {

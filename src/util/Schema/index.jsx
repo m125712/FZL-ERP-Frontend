@@ -20,10 +20,10 @@ import {
 	STRING_REQUIRED, // default
 	URL, // default
 	URL_REQUIRED, // default
-	UUID_PK, // default
-	UUID_FK, // default
-	UUID_REQUIRED, // default
 	UUID, // default
+	UUID_FK, // default
+	UUID_PK, // default
+	UUID_REQUIRED, // default
 } from './utils';
 
 export {
@@ -712,15 +712,16 @@ export const TAPE_PROD_NULL = {
 	wastage: '',
 	remarks: '',
 };
-
+//Tape To Coil
 export const TAPE_TO_COIL_TRX_SCHEMA = {
 	trx_quantity: NUMBER_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
 export const TAPE_TO_COIL_TRX_NULL = {
-	id: null,
-	tape_or_coil_stock_id: '',
+	uuid: null,
+	tape_coil_stock_uuid: '',
+	created_by: '',
 	trx_quantity: '',
 	wastage: '',
 	remarks: '',

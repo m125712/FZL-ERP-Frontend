@@ -76,7 +76,7 @@ export default function Index() {
 				hidden: !haveAccess.includes('click_to_coil'),
 				width: 'w-24',
 				cell: (info) =>
-					info.row.original.type === 'nylon' && (
+					info.row.original.type.toLowerCase() === 'nylon' && (
 						<Transfer
 							onClick={() => handleTrxToCoil(info.row.index)}
 						/>
@@ -138,6 +138,7 @@ export default function Index() {
 			tape_or_coil_stock_id: selectedProd?.id,
 			type_of_zipper:
 				selectedProd.type + ' ' + selectedProd.zipper_number,
+			quantity: selectedProd.quantity,
 		}));
 		window['trx_to_coil_modal'].showModal();
 	};

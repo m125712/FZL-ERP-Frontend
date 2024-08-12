@@ -20,7 +20,7 @@ export default function Index({
 	setUpdateTapeProd,
 }) {
 	const { user } = useAuth();
-	const { updateData } = useCommonTapeSFG();
+	const { postData } = useCommonTapeSFG();
 
 	const { register, handleSubmit, errors, reset } = useRHF(
 		TAPE_PROD_SCHEMA,
@@ -53,10 +53,9 @@ export default function Index({
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
-		await updateData.mutateAsync({
+		await postData.mutateAsync({
 			url: `/zipper/tape-coil-production`,
-			uuid: updateTapeProd?.uuid,
-			updatedData,
+			newData: updatedData,
 			onClose,
 		});
 	};

@@ -1,26 +1,25 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
+import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
 import {
 	useFetch,
 	useFetchForRhfReset,
 	useFetchFunc,
 	useRHF,
 	useUpdateFunc,
-} from "@/hooks";
-import { FormField, Input, JoinInput, ReactSelect } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { Need } from "@/util/Need";
+} from '@/hooks';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { Need } from '@/util/Need';
 import {
 	TAPE_STOCK_TRX_TO_DYING_NULL,
 	TAPE_STOCK_TRX_TO_DYING_SCHEMA,
-} from "@util/Schema";
-import { useEffect, useState } from "react";
+} from '@util/Schema';
+import { useEffect, useState } from 'react';
 
 export default function Index({
-	modalId = "",
-	setTapeProd,
+	modalId = '',
 	updateTapeProd = {
-		id: null,
+		uuid: null,
 		name: null,
 		quantity: null,
 		item_name: null,
@@ -86,7 +85,7 @@ export default function Index({
 	const onClose = () => {
 		setUpdateTapeProd((prev) => ({
 			...prev,
-			id: null,
+			uuid: null,
 			type: null,
 			quantity: null,
 			zipper_number: null,
@@ -106,8 +105,8 @@ export default function Index({
 
 		const updatedData = {
 			...data,
-			trx_from: "tape_making",
-			trx_to: "dying_and_iron_stock",
+			trx_from: 'tape_making',
+			trx_to: 'dying_and_iron_stock',
 			type: updateTapeProd?.type,
 			quantity: updateTapeProd?.quantity - data?.trx_quantity,
 			zipper_number: updateTapeProd?.zipper_number,
@@ -132,23 +131,21 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={updateTapeProd?.id !== null && "Tape to Dying"}
+			title={updateTapeProd?.id !== null && 'Tape to Dying'}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
+			isSmall={true}>
 			<FormField
-				label="order_entry_id"
-				title="Order Entry ID"
-				errors={errors}
-			>
+				label='order_entry_id'
+				title='Order Entry ID'
+				errors={errors}>
 				<Controller
-					name={"order_entry_id"}
+					name={'order_entry_id'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder="Select Order Entry ID"
+								placeholder='Select Order Entry ID'
 								options={sfg}
 								value={sfg?.find(
 									(item) => item.value == updateTapeProd?.id
@@ -164,8 +161,8 @@ export default function Index({
 				/>
 			</FormField>
 			<JoinInput
-				label="trx_quantity"
-				unit="KG"
+				label='trx_quantity'
+				unit='KG'
 				sub_label={`Maximum For this Order: ${getMaxQuantity()}`}
 				placeholder={`Max: ${
 					getMaxQuantity() < updateTapeProd?.quantity
@@ -174,7 +171,7 @@ export default function Index({
 				}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

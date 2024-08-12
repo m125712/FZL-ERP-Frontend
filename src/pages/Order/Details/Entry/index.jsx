@@ -54,7 +54,6 @@ export default function Index() {
 			reset
 		);
 
-	console.log(getValues());
 
 	const { value: order } = useFetch(`/other/order/info/value/label`);
 
@@ -132,8 +131,7 @@ export default function Index() {
 				// uuid: item.order_entry_uuid ? item.order_entry_uuid : null,
 			}));
 
-			// console.log('Order Description Updated:', order_description_updated);
-			console.log('Order Entry Updated:', order_entry_updated);
+
 
 			//* Post new entry */ //
 			let order_entry_updated_promises = [

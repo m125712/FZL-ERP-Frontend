@@ -21,6 +21,8 @@ export default function Index() {
 		document.title = info.getTabName();
 	}, []);
 
+	console.log(data);
+
 	const columns = useMemo(
 		() => [
 			{
@@ -118,7 +120,7 @@ export default function Index() {
 			...prev,
 			...selectedProd,
 			item_name: selectedProd.type,
-			tape_or_coil_stock_id: selectedProd?.id,
+			tape_or_coil_stock_id: selectedProd?.uuid,
 			type_of_zipper:
 				selectedProd.type + ' ' + selectedProd.zipper_number,
 		}));
@@ -135,7 +137,7 @@ export default function Index() {
 			...prev,
 			...selectedProd,
 			item_name: selectedProd.type,
-			tape_or_coil_stock_id: selectedProd?.id,
+			tape_or_coil_stock_id: selectedProd?.uuid,
 			type_of_zipper:
 				selectedProd.type + ' ' + selectedProd.zipper_number,
 			quantity: selectedProd.quantity,
@@ -148,7 +150,7 @@ export default function Index() {
 			...prev,
 			...selectedProd,
 			item_name: selectedProd.type,
-			tape_or_coil_stock_id: selectedProd.id,
+			tape_or_coil_stock_id: selectedProd.uuid,
 			type_of_zipper:
 				selectedProd.type + ' ' + selectedProd.zipper_number,
 		}));

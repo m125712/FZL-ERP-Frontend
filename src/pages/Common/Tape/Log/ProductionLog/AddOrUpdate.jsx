@@ -1,20 +1,20 @@
-import { AddModal } from "@/components/Modal";
-import { useRHF, useUpdateFunc } from "@/hooks";
-import { Input, JoinInput } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
+import { AddModal } from '@/components/Modal';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { useCommonTapeProduction } from '@/state/Common';
+import { Input, JoinInput } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
 import {
 	TAPE_OR_COIL_PRODUCTION_LOG_NULL,
 	TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
-} from "@util/Schema";
+} from '@util/Schema';
 
 export default function Index({
-	modalId = "",
-	setTapeLog,
+	modalId = '',
 	updateTapeLog = {
-		id: null,
-		type_of_zipper: null,
+		uuid: null,
+		tape_type: null,
 		tape_or_coil_stock_id: null,
-		prod_quantity: null,
+		production_quantity: null,
 		tape_prod: null,
 		coil_stock: null,
 		wastage: null,
@@ -22,16 +22,20 @@ export default function Index({
 	},
 	setUpdateTapeLog,
 }) {
+	const { url, updateData } = useCommonTapeProduction();
+
 	const MIN_QUANTITY =
 		Number(updateTapeLog?.tape_prod) -
-			Number(updateTapeLog?.prod_quantity) <
+			Number(updateTapeLog?.production_quantity) <
 		0
-			? Number(updateTapeLog?.prod_quantity)
+			? Number(updateTapeLog?.production_quantity)
 			: 0;
 	const schema = {
 		...TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
-		prod_quantity:
-			TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA.prod_quantity.min(MIN_QUANTITY),
+		production_quantity:
+			TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA.production_quantity.min(
+				MIN_QUANTITY
+			),
 	};
 
 	const { register, handleSubmit, errors, reset } = useRHF(
@@ -39,17 +43,17 @@ export default function Index({
 		TAPE_OR_COIL_PRODUCTION_LOG_NULL
 	);
 
-	// useFetchForRhfReset(
-	// 	`tape-or-coil-prod/by-id/${updateTapeLog?.id}`,
-	// 	updateTapeLog?.id,
-	// 	reset
-	// );
+	useFetchForRhfReset(
+		`${url}/${updateTapeLog?.uuid}`,
+		updateTapeLog?.uuid,
+		reset
+	);
 
 	const onClose = () => {
 		setUpdateTapeLog((prev) => ({
 			...prev,
-			id: null,
-			type_of_zipper: null,
+			uuid: null,
+			tape_type: null,
 			tape_or_coil_stock_id: null,
 			prod_quantity: null,
 			tape_prod: null,
@@ -63,22 +67,19 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateTapeLog?.id !== null) {
+		if (updateTapeLog?.uuid !== null && updateTapeLog?.uuid !== undefined) {
 			const updatedData = {
 				...data,
 				type_of_zipper: updateTapeLog?.type_of_zipper,
 				updated_at: GetDateTime(),
 			};
 
-			await useUpdateFunc({
-				uri: `/tape-or-coil-prod/${updateTapeLog?.id}/${updateTapeLog?.type_of_zipper}`,
-				itemId: updateTapeLog?.id,
-				data: data,
-				updatedData: updatedData,
-				setItems: setTapeLog,
-				onClose: onClose,
+			await updateData.mutateAsync({
+				url: `${url}/${updateTapeLog?.uuid}`,
+				uuid: updateTapeLog?.uuid,
+				updatedData,
+				onClose,
 			});
-
 			return;
 		}
 	};
@@ -86,20 +87,19 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Update Production Log of ${updateTapeLog?.type_of_zipper}`}
+			title={`Update Production Log of ${updateTapeLog?.tape_type}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
+			isSmall={true}>
 			<JoinInput
-				title="Production Quantity"
-				label="prod_quantity"
+				title='Production Quantity'
+				label='production_quantity'
 				sub_label={`Min: ${MIN_QUANTITY}`}
-				unit="KG"
+				unit='KG'
 				placeholder={`Min: ${MIN_QUANTITY}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

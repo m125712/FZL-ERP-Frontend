@@ -744,7 +744,7 @@ export const TAPE_STOCK_TRX_TO_DYING_NULL = {
 };
 
 export const TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA = {
-	prod_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0),
+	production_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0),
 	remarks: STRING.nullable(),
 };
 

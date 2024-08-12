@@ -8,7 +8,6 @@ import { MATERIAL_NULL, MATERIAL_SCHEMA } from '@util/Schema';
 
 export default function Index({
 	modalId = '',
-	setMaterialDetails,
 	updateMaterialDetails = {
 		uuid: null,
 		section_uuid: null,

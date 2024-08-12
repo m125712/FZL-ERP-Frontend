@@ -10,7 +10,7 @@ export default function Index() {
 		<div className='container mx-auto'>
 			<TrxLog key='TrxLog' />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
-			{/* <OrderTrxLog key="OrderTrxLog" /> */}
+			<OrderTrxLog key="OrderTrxLog" />
 		</div>
 	);
 }

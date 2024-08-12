@@ -12,7 +12,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useMaterialTrx();
-	const info = new PageInfo('Material/Log', url, 'material/trx');
+	const info = new PageInfo('Material/Log', url);
 	const haveAccess = useAccess('store__log');
 
 	const columns = useMemo(

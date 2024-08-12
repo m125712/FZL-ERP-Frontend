@@ -7,7 +7,6 @@ import { MATERIAL_STOCK_NULL, MATERIAL_STOCK_SCHEMA } from '@util/Schema';
 
 export default function Index({
 	modalId = '',
-	setMaterialTrx,
 	updateMaterialTrx = {
 		uuid: null,
 		material_name: null,
@@ -15,9 +14,6 @@ export default function Index({
 	},
 	setUpdateMaterialTrx,
 }) {
-	console.log({
-		updateMaterialTrx,
-	});
 	const { url, updateData } = useMaterialTrx();
 	const MAX_QUANTITY = updateMaterialTrx?.stock;
 	const schema = {

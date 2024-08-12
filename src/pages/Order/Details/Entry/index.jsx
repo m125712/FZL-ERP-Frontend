@@ -14,7 +14,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
 
 export default function Index() {
-	const { url, updateData, postData } = useOrderDescription();
+	const { url, updateData, postData, deleteData } = useOrderDescription();
 	const { invalidateQuery: OrderDetailsInvalidate } = useOrderDetails();
 	const { order_number, order_description_uuid } = useParams();
 
@@ -66,10 +66,10 @@ export default function Index() {
 	});
 
 	const handleOrderEntryRemove = (index) => {
-		if (getValues(`order_entry[${index}].id`) !== undefined) {
+		if (getValues(`order_entry[${index}].order_entry_uuid`) !== undefined) {
 			setDeleteItem({
-				itemId: getValues(`order_entry[${index}].id`),
-				itemName: getValues(`order_entry[${index}].id`),
+				itemId: getValues(`order_entry[${index}].order_entry_uuid`),
+				itemName: getValues(`order_entry[${index}].order_entry_uuid`),
 			});
 			window['order_entry_delete'].showModal();
 		}
@@ -414,9 +414,11 @@ export default function Index() {
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
 					setItems={orderEntryField}
-					uri={`/order/entry`}
+					url={`/zipper/order-entry`}
+					deleteData={deleteData}
 				/>
 			</Suspense>
+
 			{/* <DevTool control={control} placement='top-left' /> */}
 		</div>
 	);

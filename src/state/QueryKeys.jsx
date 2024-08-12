@@ -10,6 +10,12 @@ export const orderQK = {
 	// details
 	details: () => [...orderQK.all(), 'details'],
 	detail: (uuid) => [...orderQK.details(), uuid],
+	detailByOrderNumber: (orderNumber) => [...orderQK.details(), orderNumber],
+	detailsByOrderDescription: (orderNumber, uuid) => [
+		...orderQK.details(),
+		orderNumber,
+		uuid,
+	],
 
 	// Description
 	descriptions: () => [...orderQK.all(), 'description'],
@@ -115,4 +121,15 @@ export const libraryQK = {
 	// policies
 	policies: () => [...libraryQK.all(), 'policies'],
 	policyByUUID: (uuid) => [...libraryQK.policies(), uuid],
+};
+//Common
+export const commonQK = {
+	all: () => ['common'],
+
+	// tapeSFG
+	tapeSFG: () => [...commonQK.all(), 'tape/SFG'],
+	tapeSFGByUUID: (uuid) => [...commonQK.tapeSFG(), uuid],
+	// tapeProduction
+	tapeProduction: () => [...commonQK.all(), 'tape/production'],
+	tapeProductionByUUID: (uuid) => [...commonQK.tapeProduction(), uuid],
 };

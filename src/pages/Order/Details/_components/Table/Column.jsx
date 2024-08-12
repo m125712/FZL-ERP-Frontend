@@ -1,5 +1,5 @@
-import { StatusButton } from "@/ui";
-import { getMeasurement, getTapeRequired } from "@/util/Need";
+import { StatusButton } from '@/ui';
+import { getMeasurement, getTapeRequired } from '@/util/Need';
 
 const createColumn = (props) => ({
 	...props,
@@ -25,17 +25,17 @@ const createStatusColumn = ({ accessorKey, header }) =>
 		cell: (info) => {
 			const { company_price, party_price } = info.row.original;
 			return (
-				<div className="flex items-center justify-start gap-2">
-					<span className="font-semibold">{info.row.index + 1}</span>
+				<div className='flex items-center justify-start gap-2'>
+					<span className='font-semibold'>{info.row.index + 1}</span>
 					<StatusButton
-						size="btn-xs"
+						size='btn-xs'
 						value={company_price > 0 && party_price > 0 ? 1 : 0}
 						idx={info.row.index + 1}
 						// showIdx={true}
 					/>
 					<StatusButton
-						size="btn-xs"
-						value={info.getValue() === "approved" ? 1 : 0}
+						size='btn-xs'
+						value={info.getValue() === 'approved' ? 1 : 0}
 						idx={info.row.index + 1}
 						// showIdx={true}
 					/>
@@ -46,7 +46,7 @@ const createStatusColumn = ({ accessorKey, header }) =>
 
 const createTapRequiredColumn = ({ measurement }) =>
 	createColumn({
-		accessorKey: "tape_need",
+		accessorKey: 'tape_need',
 		header: (
 			<span>
 				Tape Req (kg) <br /> [3% extra]
@@ -82,7 +82,7 @@ const getColumn = ({
 	// default columns
 	const DefaultStartColumn = [
 		createStatusColumn({
-			accessorKey: "swatch_status",
+			accessorKey: 'swatch_status',
 			header: (
 				<span>
 					Status <br /> (Price/Swatch)
@@ -90,32 +90,32 @@ const getColumn = ({
 			),
 		}),
 		createColumn({
-			accessorKey: "style",
-			header: "Style",
+			accessorKey: 'style',
+			header: 'Style',
 			enableColumnFilter: true,
 			cell: (info) => info.getValue(),
 		}),
 		createColumn({
-			accessorKey: "color",
-			header: "Color",
+			accessorKey: 'color',
+			header: 'Color',
 			enableColumnFilter: true,
 			cell: (info) => info.getValue(),
 		}),
 		createColumn({
-			accessorKey: "size",
-			header: "Size",
+			accessorKey: 'size',
+			header: 'Size',
 			enableColumnFilter: true,
 			cell: (info) => info.getValue(),
 		}),
 		createColumn({
-			accessorKey: "quantity",
-			header: "Quantity",
+			accessorKey: 'quantity',
+			header: 'Quantity',
 			enableColumnFilter: false,
 			cell: (info) => info.getValue(),
 		}),
 		createTapRequiredColumn({ measurement }),
 		createStockProdColumn({
-			accessorKey: "dying_and_iron",
+			accessorKey: 'dying_and_iron',
 			header: (
 				<span>
 					Dying <br /> & Iron
@@ -124,13 +124,13 @@ const getColumn = ({
 		}),
 	];
 	const DefaultEndColumn = [
-		createStockProdColumn({ accessorKey: "coloring", header: "Coloring" }),
+		createStockProdColumn({ accessorKey: 'coloring', header: 'Coloring' }),
 		createStockProdColumn({
-			accessorKey: "finishing",
-			header: "Finishing",
+			accessorKey: 'finishing',
+			header: 'Finishing',
 		}),
 		createColumn({
-			accessorKey: "company_price",
+			accessorKey: 'company_price',
 			header: (
 				<span>
 					Price (USD) <br /> (Company/Party)
@@ -139,19 +139,19 @@ const getColumn = ({
 			enableColumnFilter: false,
 			hidden: !show_price,
 			cell: (info) =>
-				info.getValue() + " / " + info.row.original.party_price,
+				info.getValue() + ' / ' + info.row.original.party_price,
 		}),
 	];
 
 	// return columns based on item_name
-	if (item_name === "nylon") {
+	if (item_name === 'nylon') {
 		return [...DefaultStartColumn, ...DefaultEndColumn];
 	}
-	if (item_name === "vislon") {
+	if (item_name === 'vislon') {
 		return [
 			...DefaultStartColumn,
 			createStockProdColumn({
-				accessorKey: "teeth_molding",
+				accessorKey: 'teeth_molding',
 				header: (
 					<span>
 						Teeth <br /> Molding
@@ -161,11 +161,11 @@ const getColumn = ({
 			...DefaultEndColumn,
 		];
 	}
-	if (item_name === "metal") {
+	if (item_name === 'metal') {
 		return [
 			...DefaultStartColumn,
 			createStockProdColumn({
-				accessorKey: "teeth_molding",
+				accessorKey: 'teeth_molding',
 				header: (
 					<span>
 						Teeth <br /> Molding
@@ -173,7 +173,7 @@ const getColumn = ({
 				),
 			}),
 			createStockProdColumn({
-				accessorKey: "teeth_coloring",
+				accessorKey: 'teeth_coloring',
 				header: (
 					<span>
 						Teeth <br /> Coloring

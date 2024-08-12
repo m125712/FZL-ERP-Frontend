@@ -12,8 +12,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useAdminDesignations();
 	const info = new PageInfo('HR/Designation', url, 'admin__user_designation');
-	// const haveAccess = useAccess(info.getTab());
-	const haveAccess = ['update', 'delete', 'create'];
+	const haveAccess = useAccess(info.getTab());
 
 	const columns = useMemo(
 		() => [

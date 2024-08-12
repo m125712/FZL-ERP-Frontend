@@ -70,7 +70,10 @@ export default function createGlobalState({ queryKey, url }) {
 		},
 		onSettled: (data, error, variables, context) => {
 			queryClient.invalidateQueries(queryKey);
-			variables.onClose();
+
+			if (variables?.isOnCloseNeeded !== false) {
+				variables?.onClose();
+			}
 		},
 	});
 

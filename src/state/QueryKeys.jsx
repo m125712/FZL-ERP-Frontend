@@ -9,7 +9,15 @@ export const orderQK = {
 
 	// details
 	details: () => [...orderQK.all(), 'details'],
-	detail: (id) => [...orderQK.details(), id],
+	detail: (uuid) => [...orderQK.details(), uuid],
+
+	// Description
+	descriptions: () => [...orderQK.all(), 'description'],
+	description: (uuid) => [...orderQK.descriptions(), uuid],
+
+	// Entry
+	entries: () => [...orderQK.all(), 'entries'],
+	entry: (uuid) => [...orderQK.entries(), uuid],
 
 	// info
 	infos: () => [...orderQK.all(), 'info'],
@@ -70,12 +78,24 @@ export const materialQK = {
 	all: () => ['material'],
 
 	// section
-	sections: () => [...materialQK.all(), 'sections'],
+	sections: () => [...materialQK.all(), 'section'],
 	section: (uuid) => [...materialQK.sections(), uuid],
 
 	// types
-	types: () => [...materialQK.all(), 'types'],
+	types: () => [...materialQK.all(), 'type'],
 	type: (uuid) => [...materialQK.types(), uuid],
+
+	// infos
+	infos: () => [...materialQK.all(), 'info'],
+	info: (uuid) => [...materialQK.infos(), uuid],
+
+	// trx
+	trxs: () => [...materialQK.all(), 'trx'],
+	trx: (uuid) => [...materialQK.trxs(), uuid],
+
+	// stock to sfg
+	stockToSGFs: () => [...materialQK.all(), 'stock-to-sfg'],
+	stockToSFG: (uuid) => [...materialQK.stockToSGFs(), uuid],
 };
 
 export const purchaseQK = {

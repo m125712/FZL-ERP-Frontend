@@ -3,23 +3,43 @@ import { useAccess } from '@/hooks';
 import createGlobalState from '.';
 import { orderQK } from './QueryKeys';
 
-const useOrderPath = () => {
-	const { user } = useAuth();
-	const haveAccess = useAccess('order__details');
-
-	if (haveAccess.includes('show_own_orders'))
-		return `order/details/marketing/${user?.id}`;
-
-	if (haveAccess.includes('show_approved_orders'))
-		return 'order/details/approved';
-
-	return 'order/details';
-};
-
+// * Details * //
 export const useOrderDetails = () =>
 	createGlobalState({
 		queryKey: orderQK.details(),
-		url: useOrderPath(),
+		url: '/zipper/order/details',
+	});
+
+export const useOrderDetailsByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: orderQK.detail(uuid),
+		url: `/zipper/order-detail/${uuid}`,
+	});
+
+// * Description * //
+export const useOrderDescription = () =>
+	createGlobalState({
+		queryKey: orderQK.descriptions(),
+		url: '/zipper/order-description',
+	});
+
+export const useOrderDescriptionByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: orderQK.descriptions(uuid),
+		url: `/zipper/order-description/${uuid}`,
+	});
+
+// * Entry * //
+export const useOrderEntries = () =>
+	createGlobalState({
+		queryKey: orderQK.entries(),
+		url: '/zipper/order-entry',
+	});
+
+export const useOrderEntriesByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: orderQK.entry(uuid),
+		url: `/zipper/order-entry/${uuid}`,
 	});
 
 // * Buyer * //
@@ -97,6 +117,7 @@ export const useOrderPropertiesByUUID = (uuid) =>
 		queryKey: orderQK.property(uuid),
 		url: `/public/properties/${uuid}`,
 	});
+
 // * Info * //
 export const useOrderInfo = () =>
 	createGlobalState({

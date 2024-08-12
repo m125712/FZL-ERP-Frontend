@@ -1,102 +1,96 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useAccess, useFetchFunc } from "@/hooks";
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useAccess } from '@/hooks';
+import { useMaterialTrx } from '@/state/Material';
 
-import { DateTime, EditDelete, SectionName } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+import { DateTime, EditDelete, SectionName } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useMemo, useState } from 'react';
 
-const TrxLogAddOrUpdate = lazy(() => import("./TrxLogAddOrUpdate"));
-const DeleteModal = lazy(() => import("@/components/Modal/Delete"));
+const TrxLogAddOrUpdate = lazy(() => import('./TrxLogAddOrUpdate'));
+const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const info = new PageInfo("Log", "material/trx");
-	const [materialTrx, setMaterialTrx] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-	const haveAccess = useAccess("store__log");
+	const { data, isLoading, url, deleteData } = useMaterialTrx();
+	const info = new PageInfo('Material/Log', url, 'material/trx');
+	const haveAccess = useAccess('store__log');
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "material_name",
-				header: "Name",
+				accessorKey: 'material_name',
+				header: 'Name',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "trx_to",
-				header: "Section",
+				accessorKey: 'trx_to',
+				header: 'Section',
 				enableColumnFilter: false,
 				cell: (info) => <SectionName section={info.getValue()} />,
 			},
 			{
-				accessorKey: "quantity",
-				header: "Quantity",
+				accessorKey: 'trx_quantity',
+				header: 'Quantity',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "unit",
-				header: "Unit",
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "issued_by_name",
-				header: "Issued By",
+				accessorKey: 'created_by_name',
+				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "created_at",
-				header: "Created At",
-				filterFn: "isWithinRange",
+				accessorKey: 'created_at',
+				header: 'Created At',
+				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
 			{
-				accessorKey: "updated_at",
-				header: "Updated At",
+				accessorKey: 'updated_at',
+				header: 'Updated At',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
 			{
-				accessorKey: "actions",
-				header: "Actions",
+				accessorKey: 'actions',
+				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("update_log"),
-				width: "w-24",
+				hidden: !haveAccess.includes('update_log'),
+				width: 'w-24',
 				cell: (info) => {
 					return (
 						<EditDelete
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes("delete_log")}
+							showDelete={haveAccess.includes('delete_log')}
 						/>
 					);
 				},
 			},
 		],
-		[materialTrx]
+		[data]
 	);
-
-	// Fetching data from server
-	useEffect(() => {
-		useFetchFunc(info.getFetchUrl(), setMaterialTrx, setLoading, setError);
-	}, []);
 
 	// Add
 	const handelAdd = () => {
@@ -105,7 +99,7 @@ export default function Index() {
 
 	// Update
 	const [updateMaterialTrx, setUpdateMaterialTrx] = useState({
-		id: null,
+		uuid: null,
 		material_name: null,
 		stock: null,
 	});
@@ -113,11 +107,11 @@ export default function Index() {
 	const handelUpdate = (idx) => {
 		setUpdateMaterialTrx((prev) => ({
 			...prev,
-			id: materialTrx[idx]?.id,
-			material_name: materialTrx[idx]?.material_name
-				.replace(/#/g, "")
-				.replace(/\//g, "-"),
-			stock: materialTrx[idx]?.stock,
+			uuid: data[idx]?.uuid,
+			material_name: data[idx]?.material_name
+				.replace(/#/g, '')
+				.replace(/\//g, '-'),
+			stock: data[idx]?.stock,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -130,33 +124,31 @@ export default function Index() {
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: materialTrx[idx].id,
-			itemName: materialTrx[idx].material_name
-				.replace(/#/g, "")
-				.replace(/\//g, "-"),
+			itemId: data[idx].uuid,
+			itemName: data[idx].material_name
+				.replace(/#/g, '')
+				.replace(/\//g, '-'),
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
 
-	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
-	// if (error) return <h1>Error:{error}</h1>;
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className="container px-2 md:px-4">
+		<div className='container px-2 md:px-4'>
 			<ReactTable
 				title={info.getTitle()}
-				data={materialTrx}
+				data={data}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 
 			<Suspense>
 				<TrxLogAddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						setMaterialTrx,
 						updateMaterialTrx,
 						setUpdateMaterialTrx,
 					}}
@@ -166,10 +158,12 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					setItems={setMaterialTrx}
-					uri={info.getDeleteUrl()}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url,
+						deleteData,
+					}}
 				/>
 			</Suspense>
 		</div>

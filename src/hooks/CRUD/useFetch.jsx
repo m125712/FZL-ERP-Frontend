@@ -46,7 +46,9 @@ async function defaultFetchFunc(
 	setError(null);
 	await api
 		.get(url)
-		.then((res) => setData(singleData ? res?.data[0] : res?.data))
+		.then((res) =>
+			setData(singleData ? res?.data?.data[0] : res?.data?.data)
+		)
 		.catch((err) => setError(err?.response?.data))
 		.finally(() => setLoading(false));
 }
@@ -69,25 +71,23 @@ const useFetchForRhfReset = async (uri, returnId, reset) => {
 
 const useFetchForRhfResetForOrder = async (uri, returnId, reset) => {
 	useEffect(() => {
-		
 		if (returnId === null || returnId === undefined) return;
 
 		api.get(uri).then((res) => {
-			console.log("res?.data?.data", res?.data?.data);
-			
-			return reset(res?.data?.data)});
+			return reset(res?.data?.data);
+		});
 	}, [returnId]);
 };
 
-const useFetchForRhfResetForUserAccess = async (uri, returnId, reset) => {
+const useFetchForRhfResetForUserAccess = async (url, returnId, reset) => {
 	useEffect(() => {
 		if (returnId === null) return;
 
-		api.get(uri).then((res) => {
+		api.get(url).then((res) => {
 			const data = res?.data?.data[0];
 			const result = {};
 
-			Object.entries(data).forEach(([key, value]) => {
+			Object.entries(data)?.forEach(([key, value]) => {
 				const val = JSON.parse(value);
 				Object.entries(val).forEach(([k, v]) => {
 					v.forEach((item) => {
@@ -97,15 +97,21 @@ const useFetchForRhfResetForUserAccess = async (uri, returnId, reset) => {
 				});
 			});
 
-			const PAGE_ACTIONS = PRIVATE_ROUTES?.filter(
+			const filterRoutes = PRIVATE_ROUTES?.filter(
 				(item) => item.actions !== undefined
-			)?.reduce((acc, { page_name, actions }) => {
-				actions.forEach((action) => {
-					const key = page_name + '___' + action;
-					acc[key] = Boolean(result?.[key]);
-				});
-				return acc;
-			}, {});
+			);
+
+			const PAGE_ACTIONS = filterRoutes?.reduce(
+				(acc, { page_name, actions }) => {
+					actions.forEach((action) => {
+						const key = page_name + '___' + action;
+
+						acc[key] = result?.[key] === true ? true : false;
+					});
+					return acc;
+				},
+				{}
+			);
 
 			reset(PAGE_ACTIONS);
 		});

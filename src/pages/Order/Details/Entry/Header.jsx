@@ -3,6 +3,7 @@ import { useFetch } from '@/hooks';
 import {
 	CheckBox,
 	FormField,
+	Input,
 	ReactSelect,
 	SectionEntryBody,
 	Textarea,
@@ -27,11 +28,34 @@ export default function Header({
 		`/other/order-properties/by/zipper_number`
 	);
 	const { value: end_type } = useFetch(`/other/order-properties/by/end_type`);
+
+	// * garments info*//
+	const { value: garments_wash } = useFetch(
+		`/other/order-properties/by/garments_wash`
+	);
+	const { value: light_preference } = useFetch(
+		`/other/order-properties/by/light_preference`
+	);
+	const { value: end_user } = useFetch(`/other/order-properties/by/end_user`);
+
+	//* slider info*//
+	const { value: slider_body_shape } = useFetch(
+		`/other/order-properties/by/slider_body_shape`
+	);
+	const { value: slider_link } = useFetch(
+		`/other/order-properties/by/slider_link`
+	);
+
 	const { value: lock_type } = useFetch(
 		`/other/order-properties/by/lock_type`
 	);
+
+	//* puller info*//
 	const { value: puller_type } = useFetch(
 		`/other/order-properties/by/puller_type`
+	);
+	const { value: puller_link } = useFetch(
+		`/other/order-properties/by/puller_link`
 	);
 	const { value: color } = useFetch(`/other/order-properties/by/color`);
 	const { value: hand } = useFetch(`/other/order-properties/by/hand`);
@@ -115,9 +139,7 @@ export default function Header({
 												getValues('order_info_uuid')
 										)}
 										onChange={(e) => onChange(e.value)}
-										isDisabled={
-											order_number !== undefined
-										}
+										isDisabled={order_number !== undefined}
 									/>
 								);
 							}}
@@ -448,6 +470,82 @@ export default function Header({
 						/>
 					</FormField>
 				</div>
+
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+					<FormField
+						label='puller_link'
+						title='Puller Link'
+						errors={errors}>
+						<Controller
+							name={'puller_link'}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select Puller Link'
+										options={puller_link}
+										value={puller_link?.find(
+											(item) =>
+												item.value ==
+												getValues('puller_link')
+										)}
+										onChange={(e) => onChange(e.value)}
+										// isDisabled={order_info_id !== undefined}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+					<FormField
+						label='slider_body_shape'
+						title='Slider Body Shape'
+						errors={errors}>
+						<Controller
+							name={'slider_body_shape'}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select slider body shape'
+										options={slider_body_shape}
+										value={slider_body_shape?.find(
+											(item) =>
+												item.value ==
+												getValues('slider_body_shape')
+										)}
+										onChange={(e) => onChange(e.value)}
+										// isDisabled={order_info_id !== undefined}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+					<FormField
+						label='slider_link'
+						title='Slider Link'
+						errors={errors}>
+						<Controller
+							name={'slider_link'}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select Slider Link'
+										options={slider_link}
+										value={slider_link?.find(
+											(item) =>
+												item.value ==
+												getValues('slider_link')
+										)}
+										onChange={(e) => onChange(e.value)}
+										// isDisabled={order_info_id !== undefined}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+				</div>
+
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<div className='flex basis-3/4 flex-col gap-1 text-secondary-content md:flex-row'>
 						<FormField
@@ -596,6 +694,91 @@ export default function Header({
 						{...{ register, errors }}
 						onChange={(e) => setIsLogoPuller(e.target.checked)}
 					/> */}
+				</div>
+			</SectionEntryBody>
+
+			<SectionEntryBody title='Garments'>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+					<Input label={`garment`} {...{ register, errors }} />
+
+					<FormField
+						label='garments_wash'
+						title='Garments Wash'
+						errors={errors}>
+						<Controller
+							name={'garments_wash'}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select garments wash'
+										options={garments_wash}
+										value={garments_wash?.find(
+											(item) =>
+												item.value ==
+												getValues('garments_wash')
+										)}
+										onChange={(e) => onChange(e.value)}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+
+					<FormField
+						label='light_preference'
+						title='Light Preference'
+						errors={errors}>
+						<Controller
+							name={'light_preference'}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select light preference'
+										options={light_preference}
+										value={light_preference?.find(
+											(item) =>
+												item.value ==
+												getValues('light_preference')
+										)}
+										onChange={(e) => onChange(e.value)}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+
+					<FormField
+						label='end_user'
+						title='End User'
+						errors={errors}>
+						<Controller
+							name={'end_user'}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select End User'
+										options={end_user}
+										value={end_user?.find(
+											(item) =>
+												item.value ==
+												getValues('end_user')
+										)}
+										onChange={(e) => onChange(e.value)}
+										// isDisabled={order_info_id !== undefined}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+
+					<Textarea
+						label='garments_remarks'
+						title='Remarks'
+						{...{ register, errors }}
+					/>
 				</div>
 			</SectionEntryBody>
 		</div>

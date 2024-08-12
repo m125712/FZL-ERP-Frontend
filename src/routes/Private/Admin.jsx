@@ -37,7 +37,7 @@ export const AdminRoutes = [
 	},
 	{
 		id: 11,
-		name: 'Department',
+		name: 'Designation',
 		path: '/hr/designation',
 		element: Designation,
 		type: 'hr',

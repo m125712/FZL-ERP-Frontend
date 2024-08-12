@@ -1,38 +1,38 @@
-import { Suspense } from "@/components/Feedback";
-import OrderSheetPdf from "@/components/Pdf/OrderSheet";
-import { useAuth } from "@/context/auth";
-import { useAccess, useFetchFunc } from "@/hooks";
-import { format } from "date-fns";
-import { lazy, useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
-import { OrderInformation } from "../_components/Information";
+import { Suspense } from '@/components/Feedback';
+import OrderSheetPdf from '@/components/Pdf/OrderSheet';
+import { useAuth } from '@/context/auth';
+import { useAccess, useFetchFunc } from '@/hooks';
+import { format } from 'date-fns';
+import { lazy, useEffect, useState } from 'react';
+import { Navigate, useParams } from 'react-router-dom';
+import { OrderInformation } from '../_components/Information';
 
-const OrderDescriptionUUID = lazy(() => import("../ByOrderDescriptionUUID"));
+const OrderDescriptionUUID = lazy(() => import('../ByOrderDescriptionUUID'));
 
 const getPath = (haveAccess, order_number, userId) => {
-	if (haveAccess.includes("show_own_orders"))
-		return `order/details/single-order/by/${order_number}/marketing/${userId}`;
+	if (haveAccess.includes('show_own_orders'))
+		return `/zipper/order/details/single-order/by/${order_number}/marketing/${userId}`;
 
-	return `/order/details/single-order/by/${order_number}`;
+	return `/zipper/order/details/single-order/by/${order_number}`;
 };
 
 const renderHr = (showHr = false) => {
 	if (!showHr) return null;
 
 	return (
-		<hr className="my-12 border-2 border-dashed border-secondary-content" />
+		<hr className='my-12 border-2 border-dashed border-secondary-content' />
 	);
 };
 
 export default function Index() {
 	const { user } = useAuth();
 	const { order_number } = useParams();
-	const haveAccess = useAccess("order__details");
+	const haveAccess = useAccess('order__details');
 
 	const [orders, setOrders] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const [data, setData] = useState("");
+	const [data, setData] = useState('');
 	const [getPdfData, setGetPdfData] = useState(null);
 
 	const path = getPath(haveAccess, order_number, user.id);
@@ -58,7 +58,7 @@ export default function Index() {
 				factory_name: orders[0]?.factory_name,
 				factory_address: orders[0]?.factory_address,
 				user_name: orders[0]?.user_name,
-				date: format(new Date(orders[0]?.created_at), "dd/MM/yyyy"),
+				// date: format(new Date(orders[0]?.created_at), 'dd/MM/yyyy'),
 				updated_at: orders[0]?.updated_at,
 			};
 
@@ -79,7 +79,7 @@ export default function Index() {
 	}, [orders]);
 
 	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+		return <span className='loading loading-dots loading-lg z-50' />;
 
 	const order_info = {
 		id: orders[0]?.id,
@@ -99,16 +99,16 @@ export default function Index() {
 		updated_at: orders[0]?.updated_at,
 	};
 
-	if (!orders) return <Navigate to="/not-found" />;
+	if (!orders) return <Navigate to='/not-found' />;
 	if (orders?.length === 0)
 		return (
-			<div className="flex h-screen items-center justify-center text-4xl">
+			<div className='flex h-screen items-center justify-center text-4xl'>
 				Not Found
 			</div>
 		);
 
 	return (
-		<div className="flex flex-col">
+		<div className='flex flex-col'>
 			{/* <iframe
 				id="iframeContainer"
 				src={data}
@@ -117,9 +117,9 @@ export default function Index() {
 
 			<OrderInformation
 				order={order_info}
-				handelPdfDownload={() =>
-					getPdfData?.download(`Order Sheet ${order_number}.pdf`)
-				}
+				// handelPdfDownload={() =>
+				// 	getPdfData?.download(`Order Sheet ${order_number}.pdf`)
+				// }
 			/>
 
 			{orders?.map((order, idx) => (

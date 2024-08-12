@@ -68,6 +68,8 @@ export default function Index({
 		window[modalId].close();
 	};
 
+	// console.log(getValues());
+
 	const onSubmit = async (data) => {
 		const result = {};
 

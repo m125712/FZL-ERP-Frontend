@@ -6,6 +6,8 @@ import OrderDescription from "./Order";
 import SliderDescription from "./Slider";
 
 export default function SingleInformation({ order, idx, hasInitialOrder }) {
+	console.log(order);
+	
 	return (
 		<div className="my-2 flex flex-col rounded-md px-2 shadow-md">
 			<span className="flex items-center gap-2 text-2xl font-semibold capitalize leading-tight text-primary md:text-3xl">

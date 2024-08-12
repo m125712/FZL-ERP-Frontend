@@ -7,28 +7,28 @@ import {
 	getPaginationRowModel,
 	getSortedRowModel,
 	useReactTable,
-} from "@tanstack/react-table";
-import clsx from "clsx";
-import { lazy, useState } from "react";
-import { Suspense } from "../Feedback";
+} from '@tanstack/react-table';
+import clsx from 'clsx';
+import { lazy, useState } from 'react';
+import { Suspense } from '../Feedback';
 
-import { NoDataFound, TitleOnly } from "./ui";
-import { FuzzyFilter, isWithinRange } from "./utils";
+import { NoDataFound, TitleOnly } from './ui';
+import { FuzzyFilter, isWithinRange } from './utils';
 
-const Header = lazy(() => import("./Header"));
-const TableHead = lazy(() => import("./TableHead"));
-const Row = lazy(() => import("./Row"));
-const Pagination = lazy(() => import("./Pagination"));
+const Header = lazy(() => import('./Header'));
+const TableHead = lazy(() => import('./TableHead'));
+const Row = lazy(() => import('./Row'));
+const Pagination = lazy(() => import('./Pagination'));
 
 function Table({
-	title = "",
-	subtitle = "",
+	title = '',
+	subtitle = '',
 	handelAdd = () => {},
 	accessor,
 	data = [],
 	columns,
-	searchData = "",
-	extraClass = "",
+	searchData = '',
+	extraClass = '',
 	showSearchBox = true,
 	showPagination = true,
 	showColumns = true,
@@ -45,7 +45,7 @@ function Table({
 	const [columnFilters, setColumnFilters] = useState([]);
 	const [globalFilter, setGlobalFilter] = useState(searchData);
 	const [columnVisibility, setColumnVisibility] = useState(
-		columns.reduce((acc, { accessorKey, hidden }) => {
+		columns?.reduce((acc, { accessorKey, hidden }) => {
 			acc[accessorKey] = !hidden;
 			return acc;
 		}, {})
@@ -137,21 +137,20 @@ function Table({
 
 	// Render table components
 	return (
-		<div className="flex flex-col">
+		<div className='flex flex-col'>
 			{renderHeader(showTitleOnly)}
 			<Suspense>
 				<div
 					className={clsx(
-						"overflow-x-auto rounded-md border border-gray-200 shadow-md",
-						showTitleOnly && "mb-6"
-					)}
-				>
-					<table className="w-full">
+						'overflow-x-auto rounded-md border border-gray-200 shadow-md',
+						showTitleOnly && 'mb-6'
+					)}>
+					<table className='w-full'>
 						<TableHead
 							{...{ getHeaderGroups, getPreFilteredRowModel }}
 						/>
 
-						<tbody className="divide-y-2 divide-secondary">
+						<tbody className='divide-y-2 divide-secondary'>
 							{renderRow(hasAnyRow)}
 							{children}
 						</tbody>

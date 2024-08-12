@@ -1,11 +1,5 @@
 import { DeleteModal } from '@/components/Modal';
-import {
-	useFetch,
-	useFetchForRhfResetForOrder,
-	usePostFunc,
-	useRHF,
-	useUpdateFunc,
-} from '@/hooks';
+import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useOrderDescription, useOrderDetails } from '@/state/Order';
 import { ActionButtons, DynamicField, Input, JoinInput, Textarea } from '@/ui';
@@ -23,13 +17,12 @@ export default function Index() {
 	const { url, updateData, postData } = useOrderDescription();
 	const { invalidateQuery: OrderDetailsInvalidate } = useOrderDetails();
 	const { order_number, order_description_uuid } = useParams();
-	
-	
+
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const isUpdate =
 		order_description_uuid !== undefined && order_number !== undefined;
-		
+
 	const {
 		register,
 		handleSubmit,
@@ -54,7 +47,6 @@ export default function Index() {
 			order_description_uuid,
 			reset
 		);
-	
 
 	const { value: order } = useFetch(`/other/order/info/value/label`);
 
@@ -102,83 +94,70 @@ export default function Index() {
 	const onSubmit = async (data) => {
 		const DEFAULT_SWATCH_APPROVAL_DATE = null;
 
-		// Update
-		// if (isUpdate) {
-		// 	// order description
-		// 	const order_description_data = {
-		// 		...data,
-		// 		is_slider_provided: data?.is_slider_provided ? 1 : 0,
-		// 		is_logo_body: data?.is_logo_body ? 1 : 0,
-		// 		is_logo_puller: data?.is_logo_puller ? 1 : 0,
-		// 		hand: data?.hand ? data?.hand : 1,
-		// 		updated_at: GetDateTime(),
-		// 	};
+		// * Update data * //
+		if (isUpdate) {
+			// * updated order description * //
+			const order_description_updated = {
+				...data,
+				is_slider_provided: data?.is_slider_provided ? 1 : 0,
+				is_logo_body: data?.is_logo_body ? 1 : 0,
+				is_logo_puller: data?.is_logo_puller ? 1 : 0,
+				hand: data?.hand,
+				updated_at: GetDateTime(),
+			};
 
-		// 	let order_description_promise = await useUpdateFunc({
-		// 		uri: `/order/description/${data?.order_description_id}/${data?.order_number}`,
-		// 		itemId: data.id,
-		// 		data: data,
-		// 		updatedData: order_description_data,
-		// 		onClose: onClose,
-		// 	}).catch((err) => console.error(`Error updating data: ${err}`));
+			await updateData.mutateAsync({
+				url: `/zipper/order-description/${data?.order_description_uuid}`,
+				updatedData: order_description_updated,
+				isOnCloseNeeded: false,
+			});
 
-		// 	// order entry
-		// 	let order_entry_promises = data.order_entry.map(async (item) => {
-		// 		if (item.id === undefined) {
-		// 			item.order_description_uuid = order_description_uuid;
-		// 			item.status = item?.order_entry_status ? 1 : 0;
-		// 			item.swatch_approval_date =
-		// 				item.order_entry_status == 1
-		// 					? GetDateTime()
-		// 					: DEFAULT_SWATCH_APPROVAL_DATE;
-		// 			item.created_at = GetDateTime();
-		// 			return await usePostFunc({
-		// 				uri: '/order/entry',
-		// 				data: item,
-		// 			}).catch((err) => console.error(`Error: ${err}`));
-		// 		}
-		// 		const updatedData = {
-		// 			...item,
-		// 			status: item.order_entry_status ? 1 : 0,
-		// 			swatch_approval_date:
-		// 				item?.swatch_approval_date == null &&
-		// 				item?.order_entry_status
-		// 					? GetDateTime()
-		// 					: item?.swatch_approval_date,
-		// 			updated_at: GetDateTime(),
-		// 			remarks: null,
-		// 		};
+			// * updated order entry * //
+			const order_entry_updated = [...data.order_entry].map((item) => ({
+				...item,
+				status: item.order_entry_status ? 1 : 0,
+				swatch_status: 'pending',
+				swatch_approval_date: DEFAULT_SWATCH_APPROVAL_DATE,
+				updated_at: GetDateTime(),
+			}));
 
-		// 		return await useUpdateFunc({
-		// 			// replace style brackets, /, #, & with space
-		// 			uri: `/order/entry/${item?.id}/${item?.style.replace(/[#&/]/g, '')}`,
-		// 			itemId: item.id,
-		// 			data: item,
-		// 			updatedData: updatedData,
-		// 			onClose: onClose,
-		// 		}).catch((err) => console.error(`Error updating data: ${err}`));
-		// 	});
+			//* Post new entry */ //
+			let order_entry_updated_promises = [
+				...order_entry_updated.map(async (item) => {
+					if (item.order_entry_uuid) {
+						await updateData.mutateAsync({
+							url: `/zipper/order-entry/${item.order_entry_uuid}`,
+							updatedData: item,
+							isOnCloseNeeded: false,
+						});
+					} else {
+						await postData.mutateAsync({
+							url: '/zipper/order-entry',
+							newData: {
+								...item,
+								uuid: nanoid(),
+								status: item.order_entry_status ? 1 : 0,
+								swatch_status: 'pending',
+								swatch_approval_date:
+									DEFAULT_SWATCH_APPROVAL_DATE,
+								order_description_uuid:
+									data?.order_description_uuid,
+								created_at: GetDateTime(),
+							},
+							isOnCloseNeeded: false,
+						});
+					}
+				}),
+			];
 
-		// 	try {
-		// 		await Promise.all([
-		// 			order_description_promise,
-		// 			...order_entry_promises,
-		// 		])
-		// 			.then(() => reset(Object.assign({}, ORDER_NULL)))
-		// 			.then(() => {
-		// 				navigate(
-		// 					`/order/details/${order_number}/${order_description_uuid}`,
-		// 					{ replace: true }
-		// 				);
-		// 			});
-		// 	} catch (err) {
-		// 		console.error(`Error with Promise.all: ${err}`);
-		// 	}
+			navigate(
+				`/order/details/${order_number}/${order_description_uuid}`
+			);
 
-		// 	return;
-		// }
+			return;
+		}
 
-		// Add
+		// * Add new data*//
 		const new_order_description_uuid = nanoid();
 		const created_at = GetDateTime();
 		const special_requirement = JSON.stringify({
@@ -199,6 +178,7 @@ export default function Index() {
 			// issued_by: user.uuid,
 		};
 
+		//* Post new order description */ //
 		await postData.mutateAsync({
 			url,
 			newData: order_description,
@@ -215,6 +195,10 @@ export default function Index() {
 			created_at,
 		}));
 
+		// console.log('Order Description:', order_description);
+		// console.log('Order Entry:', order_entry);
+
+		//* Post new entry */ //
 		let order_entry_promises = [
 			...order_entry.map(
 				async (item) =>
@@ -241,7 +225,7 @@ export default function Index() {
 	const handelDuplicateDynamicField = useCallback(
 		(index) => {
 			const item = getValues(`order_entry[${index}]`);
-			orderEntryAppend({ ...item, id: undefined });
+			orderEntryAppend({ ...item, order_entry_uuid: undefined });
 		},
 		[getValues, orderEntryAppend]
 	);

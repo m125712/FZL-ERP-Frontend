@@ -39,7 +39,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'actions1',
-				header: '',
+				header: 'Production Action',
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_production'),

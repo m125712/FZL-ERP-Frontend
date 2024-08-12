@@ -8,6 +8,16 @@ export const useCommonTapeSFG = () =>
 	});
 export const useCommonTapeSFGByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: libraryQK.tapeSFG(uuid),
+		queryKey: commonQK.tapeSFG(uuid),
 		url: `/zipper/tape-coil${uuid}`,
+	});
+export const useCommonTapeProduction = () =>
+	createGlobalState({
+		queryKey: commonQK.tapeSFG(),
+		url: `/zipper/tape-coil-production`,
+	});
+export const useCommonTapeProductionByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.tapeProduction(uuid),
+		url: `/zipper/tape-coil-production${uuid}`,
 	});

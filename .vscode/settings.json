@@ -53,7 +53,7 @@
 	// terminal
 	"terminal.integrated.cursorStyle": "line",
 	"terminal.integrated.gpuAcceleration": "auto",
-	"terminal.integrated.fontFamily": "'Fira Code'",
+	"terminal.integrated.fontFamily": "monospace",
 	"terminal.integrated.defaultProfile.windows": "PowerShell",
 	"terminal.integrated.profiles.windows": {
 		"PowerShell": {

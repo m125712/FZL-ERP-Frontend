@@ -103,4 +103,7 @@ export const commonQK = {
 	// tapeSFG
 	tapeSFG: () => [...commonQK.all(), 'tape/SFG'],
 	tapeSFGByUUID: (uuid) => [...commonQK.tapeSFG(), uuid],
+	// tapeProduction
+	tapeProduction: () => [...commonQK.all(), 'tape/production'],
+	tapeProductionByUUID: (uuid) => [...commonQK.tapeProduction(), uuid],
 };

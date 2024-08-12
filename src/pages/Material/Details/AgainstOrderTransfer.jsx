@@ -1,6 +1,8 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetch, useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import nanoid from '@/lib/nanoid';
+import { useMaterialInfo } from '@/state/Material';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -10,7 +12,6 @@ import {
 
 export default function Index({
 	modalId = '',
-	setMaterialDetails,
 	updateMaterialDetails = {
 		uuid: null,
 		section_uuid: null,
@@ -23,10 +24,10 @@ export default function Index({
 		unit: null,
 		description: null,
 		remarks: null,
-		material_stock_uuid: null,
 	},
 	setUpdateMaterialDetails,
 }) {
+	const { postData } = useMaterialInfo();
 	const { user } = useAuth();
 
 	const schema = {
@@ -36,7 +37,7 @@ export default function Index({
 			.max(updateMaterialDetails?.stock),
 	};
 
-	const { value: order } = useFetch(`/order/entry/value/label`);
+	const { value: order } = useFetch(`/other/order/entry/value/label`);
 
 	const { register, handleSubmit, errors, control, Controller, reset } =
 		useRHF(schema, MATERIAL_TRX_AGAINST_ORDER_NULL);
@@ -61,7 +62,6 @@ export default function Index({
 			unit: null,
 			description: null,
 			remarks: null,
-			material_stock_uuid: null,
 		}));
 		reset(MATERIAL_TRX_AGAINST_ORDER_NULL);
 		window[modalId].close();
@@ -69,24 +69,25 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateMaterialDetails?.material_stock_uuid !== null) {
+		if (updateMaterialDetails?.uuid !== null) {
 			const updatedData = {
 				...data,
 				...updateMaterialDetails,
-				material_stock_id: updateMaterialDetails.material_stock_id,
-				name: updateMaterialDetails?.name.replace(/[#&/]/g, ''),
+				material_uuid: updateMaterialDetails.uuid,
+				material_name: updateMaterialDetails?.name.replace(
+					/[#&/]/g,
+					''
+				),
 				stock: updateMaterialDetails.stock - data.trx_quantity,
-				issued_by: user?.id,
+				created_by: user?.uuid,
+				uuid: nanoid(),
 				created_at: GetDateTime(),
 			};
 
-			await useUpdateFunc({
-				uri: `/material/trx-to/sfg`,
-				itemId: updateMaterialDetails?.id,
-				data: data,
-				updatedData: updatedData,
-				setItems: setMaterialDetails,
-				onClose: onClose,
+			await postData.mutateAsync({
+				url: '/material/stock-to-sfg',
+				newData: updatedData,
+				onClose,
 			});
 
 			return;
@@ -121,7 +122,7 @@ export default function Index({
 								placeholder='Select Order'
 								options={order}
 								onChange={(e) => {
-									onChange(parseInt(e.value));
+									onChange(e.value);
 								}}
 							/>
 						);

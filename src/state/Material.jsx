@@ -36,20 +36,20 @@ export const useMaterialInfo = () =>
 
 export const useMaterialInfoByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: materialQK.infos(uuid),
+		queryKey: materialQK.info(uuid),
 		url: `/material/info/${uuid}`,
 	});
 
 // * Trx * //
 export const useMaterialTrx = () =>
 	createGlobalState({
-		queryKey: materialQK.infos(),
+		queryKey: materialQK.trxs(),
 		url: '/material/trx',
 	});
 
 export const useMaterialTrxByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: materialQK.infos(uuid),
+		queryKey: materialQK.trx(uuid),
 		url: `/material/trx/${uuid}`,
 	});
 

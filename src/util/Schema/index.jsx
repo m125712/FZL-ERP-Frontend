@@ -20,10 +20,10 @@ import {
 	STRING_REQUIRED, // default
 	URL, // default
 	URL_REQUIRED, // default
-	UUID_PK, // default
-	UUID_FK, // default
-	UUID_REQUIRED, // default
 	UUID, // default
+	UUID_FK, // default
+	UUID_PK, // default
+	UUID_REQUIRED, // default
 } from './utils';
 
 export {
@@ -201,22 +201,22 @@ export const MATERIAL_NULL = {
 
 export const MATERIAL_STOCK_SCHEMA = {
 	trx_to: STRING_REQUIRED,
-	quantity: NUMBER_DOUBLE_REQUIRED,
+	trx_quantity: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
 export const MATERIAL_STOCK_NULL = {
 	uuid: null,
-	material_stock_uuid: null,
+	material_uuid: null,
 	material_name: null,
 	trx_to: '',
-	quantity: '',
-	issued_by: '',
+	trx_quantity: '',
+	created_by: '',
 	remarks: '',
 };
 
 export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
-	order_entry_uuid: NUMBER_REQUIRED,
+	order_entry_uuid: STRING_REQUIRED,
 	trx_to: STRING_REQUIRED,
 	trx_quantity: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
@@ -224,12 +224,12 @@ export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
 
 export const MATERIAL_TRX_AGAINST_ORDER_NULL = {
 	uuid: null,
-	material_stock_uuid: null,
+	material_uuid: null,
 	order_entry_uuid: null,
 	material_name: null,
 	trx_to: '',
 	trx_quantity: '',
-	issued_by: '',
+	created_by: '',
 	remarks: '',
 };
 
@@ -245,7 +245,7 @@ export const SFG_TRANSFER_LOG_NULL = {
 	trx_from: '',
 	trx_to: '',
 	trx_quantity: '',
-	issued_by: '',
+	created_by: '',
 	remarks: '',
 };
 

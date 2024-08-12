@@ -83,14 +83,20 @@ export default function Index() {
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_trx_against_order'),
 				width: 'w-24',
-				cell: (info) =>
-					info.row.original.stock > 0 && (
-						<Transfer
-							onClick={() =>
-								handleTrxAgainstOrder(info.row.index)
-							}
-						/>
-					),
+				// cell: (info) =>
+				// 	info.row.original.stock > 0 && (
+				// 		<Transfer
+				// 			onClick={() =>
+				// 				handleTrxAgainstOrder(info.row.index)
+				// 			}
+				// 		/>
+				// 	),
+
+				cell: (info) => (
+					<Transfer
+						onClick={() => handleTrxAgainstOrder(info.row.index)}
+					/>
+				),
 			},
 			{
 				accessorKey: 'section_name',
@@ -161,7 +167,6 @@ export default function Index() {
 		unit: null,
 		description: null,
 		remarks: null,
-		material_stock_id: null,
 	});
 
 	const handelUpdate = (idx) => {

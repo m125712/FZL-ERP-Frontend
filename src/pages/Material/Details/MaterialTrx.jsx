@@ -1,7 +1,8 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
-import { useMaterialTrx } from '@/state/Material';
+import nanoid from '@/lib/nanoid';
+import { useMaterialInfo, useMaterialTrx } from '@/state/Material';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { MATERIAL_STOCK_NULL, MATERIAL_STOCK_SCHEMA } from '@util/Schema';
@@ -20,18 +21,17 @@ export default function Index({
 		unit: null,
 		description: null,
 		remarks: null,
-		material_stock_uuid: null,
 	},
 	setUpdateMaterialDetails,
 }) {
-	const { url, updateData } = useMaterialTrx();
+	const { postData } = useMaterialInfo();
 	const { user } = useAuth();
 
 	const schema = {
 		...MATERIAL_STOCK_SCHEMA,
-		quantity: MATERIAL_STOCK_SCHEMA.quantity
-			.moreThan(0)
-			.max(updateMaterialDetails?.stock),
+		trx_quantity: MATERIAL_STOCK_SCHEMA.trx_quantity
+			.moreThan(0, "Quantity can't be zero.")
+			.max(updateMaterialDetails?.stock, 'Quantity Exceeds Stock'),
 	};
 
 	const { register, handleSubmit, errors, control, Controller, reset } =
@@ -64,24 +64,28 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
-		// Update item
-		if (updateMaterialDetails?.material_stock_uuid !== null) {
+		// Create Item
+		if (updateMaterialDetails?.uuid !== null) {
 			const updatedData = {
 				...data,
 				...updateMaterialDetails,
-				material_stock_uuid: updateMaterialDetails.material_stock_uuid,
-				name: updateMaterialDetails?.name.replace(/[#&/]/g, ''),
+				material_uuid: updateMaterialDetails.uuid,
+				material_name: updateMaterialDetails?.name.replace(
+					/[#&/]/g,
+					''
+				),
+
 				stock: updateMaterialDetails.stock - data?.quantity,
 				[`${data.trx_to}`]:
 					updateMaterialDetails[`${data.trx_to}`] + data?.quantity,
-				issued_by: user?.id,
+				created_by: user?.uuid,
+				uuid: nanoid(),
 				created_at: GetDateTime(),
 			};
 
-			await updateData.mutateAsync({
-				url: `${url}/${updateMaterialDetails?.uuid}`,
-				uuid: updateMaterialDetails?.uuid,
-				updatedData,
+			await postData.mutateAsync({
+				url: '/material/trx',
+				newData: updatedData,
 				onClose,
 			});
 
@@ -134,7 +138,9 @@ export default function Index({
 							<ReactSelect
 								placeholder='Select Transaction Area'
 								options={transactionArea}
-								onChange={(e) => onChange(e.value)}
+								onChange={(e) => {
+									onChange(e.value);
+								}}
 							/>
 						);
 					}}
@@ -142,7 +148,7 @@ export default function Index({
 			</FormField>
 
 			<Input
-				label='quantity'
+				label='trx_quantity'
 				sub_label={`Max: ${updateMaterialDetails?.stock}`}
 				placeholder={`Max: ${updateMaterialDetails?.stock}`}
 				{...{ register, errors }}

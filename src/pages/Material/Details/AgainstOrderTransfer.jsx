@@ -1,7 +1,8 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-import { useMaterialStockToSFG } from '@/state/Material';
+import nanoid from '@/lib/nanoid';
+import { useMaterialInfo } from '@/state/Material';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -26,7 +27,7 @@ export default function Index({
 	},
 	setUpdateMaterialDetails,
 }) {
-	const { url, postData } = useMaterialStockToSFG();
+	const { postData } = useMaterialInfo();
 	const { user } = useAuth();
 
 	const schema = {
@@ -37,10 +38,6 @@ export default function Index({
 	};
 
 	const { value: order } = useFetch(`/other/order/entry/value/label`);
-
-	console.log({
-		order,
-	});
 
 	const { register, handleSubmit, errors, control, Controller, reset } =
 		useRHF(schema, MATERIAL_TRX_AGAINST_ORDER_NULL);
@@ -76,15 +73,19 @@ export default function Index({
 			const updatedData = {
 				...data,
 				...updateMaterialDetails,
-				material_uuid: updateMaterialDetails.material_stock_uuid,
-				// name: updateMaterialDetails?.name.replace(/[#&/]/g, ''),
-				// stock: updateMaterialDetails.stock - data.trx_quantity,
+				material_uuid: updateMaterialDetails.uuid,
+				material_name: updateMaterialDetails?.name.replace(
+					/[#&/]/g,
+					''
+				),
+				stock: updateMaterialDetails.stock - data.trx_quantity,
 				created_by: user?.uuid,
+				uuid: nanoid(),
 				created_at: GetDateTime(),
 			};
 
 			await postData.mutateAsync({
-				url,
+				url: '/material/stock-to-sfg',
 				newData: updatedData,
 				onClose,
 			});
@@ -121,7 +122,7 @@ export default function Index({
 								placeholder='Select Order'
 								options={order}
 								onChange={(e) => {
-									onChange(parseInt(e.value));
+									onChange(e.value);
 								}}
 							/>
 						);

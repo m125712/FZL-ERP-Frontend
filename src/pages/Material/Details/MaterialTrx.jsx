@@ -2,7 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useMaterialTrx } from '@/state/Material';
+import { useMaterialInfo, useMaterialTrx } from '@/state/Material';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { MATERIAL_STOCK_NULL, MATERIAL_STOCK_SCHEMA } from '@util/Schema';
@@ -24,14 +24,14 @@ export default function Index({
 	},
 	setUpdateMaterialDetails,
 }) {
-	const { url, postData } = useMaterialTrx();
+	const { postData } = useMaterialInfo();
 	const { user } = useAuth();
 
 	const schema = {
 		...MATERIAL_STOCK_SCHEMA,
 		trx_quantity: MATERIAL_STOCK_SCHEMA.trx_quantity
-			.moreThan(0)
-			.max(updateMaterialDetails?.stock),
+			.moreThan(0, "Quantity can't be zero.")
+			.max(updateMaterialDetails?.stock, 'Quantity Exceeds Stock'),
 	};
 
 	const { register, handleSubmit, errors, control, Controller, reset } =
@@ -70,31 +70,26 @@ export default function Index({
 				...data,
 				...updateMaterialDetails,
 				material_uuid: updateMaterialDetails.uuid,
-				// material_name: updateMaterialDetails?.name.replace(
-				// 	/[#&/]/g,
-				// 	''
-				// ),
+				material_name: updateMaterialDetails?.name.replace(
+					/[#&/]/g,
+					''
+				),
 
-				// stock: updateMaterialDetails.stock - data?.quantity,
-				// [`${data.trx_to}`]:
-				// 	updateMaterialDetails[`${data.trx_to}`] + data?.quantity,
+				stock: updateMaterialDetails.stock - data?.quantity,
+				[`${data.trx_to}`]:
+					updateMaterialDetails[`${data.trx_to}`] + data?.quantity,
 				created_by: user?.uuid,
 				uuid: nanoid(),
 				created_at: GetDateTime(),
 			};
 
-			console.log({
-				updatedData,
+			await postData.mutateAsync({
+				url: '/material/trx',
+				newData: updatedData,
+				onClose,
 			});
 
 			return;
-			// await postData.mutateAsync({
-			// 	url,
-			// 	newData: updatedData,
-			// 	onClose,
-			// });
-
-			// return;
 		}
 	};
 
@@ -144,7 +139,6 @@ export default function Index({
 								placeholder='Select Transaction Area'
 								options={transactionArea}
 								onChange={(e) => {
-									console.log({ e });
 									onChange(e.value);
 								}}
 							/>

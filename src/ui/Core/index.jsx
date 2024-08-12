@@ -26,6 +26,7 @@ export const Input = ({ register, ...props }) => (
 			{...register(props?.label)}
 			{...props}
 		/>
+
 	</FormField>
 );
 

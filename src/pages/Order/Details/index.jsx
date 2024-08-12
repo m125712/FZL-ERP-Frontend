@@ -7,7 +7,6 @@ import { useEffect, useMemo, useState, lazy } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Suspense } from '@/components/Feedback';
 
-const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 const Progress = ({ value }) => {
 	let cls = 'progress-error tooltip-error';
@@ -28,7 +27,7 @@ const Progress = ({ value }) => {
 };
 
 export default function Index() {
-	const { data, isLoading, isError, url, deleteData } = useOrderDetails();
+	const { data, isLoading, isError, url } = useOrderDetails();
 	const navigate = useNavigate();
 	const info = new PageInfo(
 		'Order/Details',
@@ -134,17 +133,15 @@ export default function Index() {
 				header: 'Action',
 				enableColumnFilter: false,
 				hidden:
-					!haveAccess.includes('update') &&
-					!haveAccess.includes('delete'),
+					!haveAccess.includes('update') ,
 				width: 'w-24',
 				cell: (info) => {
 					return (
 						<EditDelete
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
-							handelDelete={handelDelete}
 							showEdit={haveAccess.includes('update')}
-							showDelete={haveAccess.includes('delete')}
+							showDelete={false}
 						/>
 					);
 				},
@@ -153,20 +150,7 @@ export default function Index() {
 		[data]
 	);
 
-	// Delete
-	const [deleteItem, setDeleteItem] = useState({
-		itemId: null,
-		itemName: null,
-	});
-	const handelDelete = (idx) => {
-		setDeleteItem((prev) => ({
-			...prev,
-			itemId: data[idx].uuid,
-			itemName: data[idx].order_number,
-		}));
 
-		window[info.getDeleteModalId()].showModal();
-	};
 
 	// Fetching data from server
 	useEffect(() => {
@@ -199,18 +183,7 @@ export default function Index() {
 				extraClass='py-2'
 			/>
 
-			<Suspense>
-				<DeleteModal
-					modalId={info.getDeleteModalId()}
-					title={info.getTitle()}
-					{...{
-						deleteItem,
-						setDeleteItem,
-						url,
-						deleteData,
-					}}
-				/>
-			</Suspense>
+			
 		</div>
 	);
 }

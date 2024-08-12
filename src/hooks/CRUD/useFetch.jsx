@@ -74,8 +74,6 @@ const useFetchForRhfResetForOrder = async (uri, returnId, reset) => {
 		if (returnId === null || returnId === undefined) return;
 
 		api.get(uri).then((res) => {
-			console.log('res?.data?.data', res?.data?.data);
-
 			return reset(res?.data?.data);
 		});
 	}, [returnId]);

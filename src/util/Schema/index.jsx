@@ -692,23 +692,23 @@ export const TAPE_STOCK_ADD_SCHEMA = {
 };
 
 export const TAPE_STOCK_ADD_NULL = {
-	id: null,
+	uuid: null,
 	type: '',
 	zipper_number: '',
 	remarks: '',
 };
 // Tape Production
 export const TAPE_PROD_SCHEMA = {
-	quantity: NUMBER_REQUIRED.moreThan(0),
+	production_quantity: NUMBER_REQUIRED.moreThan(0),
 	wastage: NUMBER.moreThan(0),
 	remarks: STRING.nullable(),
 };
 
 export const TAPE_PROD_NULL = {
-	id: null,
+	uuid: null,
 	section: '',
 	tape_or_coil_stock_id: '',
-	quantity: '',
+	production_quantity: '',
 	wastage: '',
 	remarks: '',
 };

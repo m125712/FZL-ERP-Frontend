@@ -24,20 +24,9 @@ export default function createGlobalState({ queryKey, url }) {
 		onMutate: async ({ newData }) => {
 			await queryClient.cancelQueries({ queryKey });
 
-			queryClient.setQueryData(queryKey, ({ data }) => [
-				newData,
-				...data,
-			]);
-
 			return { newData };
 		},
 		onSuccess: (data, variables, context) => {
-			queryClient.setQueryData(queryKey, ({ data }) =>
-				data?.map((val) =>
-					val.uuid === context.newData.uuid ? data : val
-				)
-			);
-
 			ShowToast(data?.toast);
 		},
 		onError: (error, newUser, context) => {
@@ -45,11 +34,15 @@ export default function createGlobalState({ queryKey, url }) {
 			data?.filter((val) => val.id !== context.newData.uuid)
 			);
 
+			console.log(error);
+
 			ShowToast(error?.response?.data?.toast);
 		},
 		onSettled: (data, error, variables, context) => {
 			queryClient.invalidateQueries({ queryKey });
-			variables.onClose();
+			if (variables?.isOnCloseNeeded !== false) {
+				variables?.onClose();
+			}
 		},
 	});
 
@@ -71,6 +64,8 @@ export default function createGlobalState({ queryKey, url }) {
 		onError: (error, variables, context) => {
 			queryClient.setQueryData(queryKey, context.previousData);
 
+			console.log(error);
+
 			ShowToast(error?.response?.data?.toast);
 		},
 		onSettled: (data, error, variables, context) => {
@@ -91,6 +86,7 @@ export default function createGlobalState({ queryKey, url }) {
 			ShowToast(data?.toast);
 		},
 		onError: (error, variables, context) => {
+			console.log(error);
 			ShowToast(error?.response?.data?.toast);
 		},
 		onSettled: (data, error, variables, context) => {
@@ -103,7 +99,7 @@ export default function createGlobalState({ queryKey, url }) {
 		url,
 		data: data?.data,
 		toast: data?.toast,
-		invalidateQuery: queryClient.invalidateQueries({ queryKey }),
+		invalidateQuery: () => queryClient.invalidateQueries({ queryKey }),
 		isLoading,
 		isError,
 		updateData,

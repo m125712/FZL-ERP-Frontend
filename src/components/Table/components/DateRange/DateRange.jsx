@@ -1,28 +1,27 @@
-import { addDays, format } from "date-fns";
-import Cookies from "js-cookie";
-import { useCallback, useMemo, useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { addDays, format, getDate, isEqual, isSameDay } from 'date-fns';
+import Cookies from 'js-cookie';
+import { useCallback, useMemo, useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
-const DateFormate = (date) => format(date, "yyyy-MM-dd") + " 23:59:59";
+const DateFormate = (date) => format(date, 'yyyy-MM-dd') + ' 23:59:59';
 
 const DefaultConfig = {
-	dateFormat: "dd/MM/yy",
+	dateFormat: 'dd/MM/yy',
 	selectsRange: true,
 	isClearable: true,
 	closeOnScroll: true,
 	fixedHeight: true,
-	weekDayClassName: () => "font-semibold text-primary",
+	weekDayClassName: () => 'font-medium text-primary ',
 	peekNextMonth: true,
 };
 
 // Button Component
 const Button = ({ onClick, disabled, children }) => (
 	<button
-		className="btn btn-circle btn-primary btn-xs rounded-full"
+		className='btn btn-circle btn-primary btn-sm rounded-full'
 		onClick={onClick}
-		disabled={disabled}
-	>
+		disabled={disabled}>
 		{children}
 	</button>
 );
@@ -30,10 +29,9 @@ const Button = ({ onClick, disabled, children }) => (
 // Select Component
 const Select = ({ value, onChange, options }) => (
 	<select
-		className="select select-primary select-xs flex w-auto items-center justify-between rounded-full font-semibold text-primary shadow-md transition-all duration-100 ease-in-out"
+		className='text-md select select-primary select-sm flex flex-1 items-center justify-between rounded-md font-semibold text-primary shadow-md transition-all duration-100 ease-in-out'
 		value={value}
-		onChange={onChange}
-	>
+		onChange={onChange}>
 		{options?.map((option) => (
 			<option key={option} value={option}>
 				{option}
@@ -52,8 +50,8 @@ const utilFunc = (start, end, setFilterValue, setStartDate, setEndDate) => {
 
 	setFilterValue([startFilter, endFilter]);
 
-	Cookies.set("startDate", startFilter);
-	Cookies.set("endDate", endFilter);
+	Cookies.set('startDate', startFilter);
+	Cookies.set('endDate', endFilter);
 };
 
 //
@@ -75,7 +73,7 @@ const handleChangeRaw = (rawInput) => {
 function DateRange({ getHeaderGroups }) {
 	const column = getHeaderGroups()
 		.flatMap(({ headers }) => headers)
-		.find(({ id }) => id === "created_at")?.column;
+		.find(({ id }) => id === 'created_at')?.column;
 
 	if (!column) return null;
 
@@ -87,6 +85,11 @@ function DateRange({ getHeaderGroups }) {
 
 	const [startDate, setStartDate] = useState(oldStartDate);
 	const [endDate, setEndDate] = useState(oldEndDate);
+
+	// console.log({
+	// 	startDate,
+	// 	endDate,
+	// });
 
 	const handleOnChange = useCallback(
 		(dates) => {
@@ -115,18 +118,18 @@ function DateRange({ getHeaderGroups }) {
 		);
 
 		const months = [
-			"JAN",
-			"FEB",
-			"MAR",
-			"APR",
-			"MAY",
-			"JUN",
-			"JUL",
-			"AUG",
-			"SEP",
-			"OCT",
-			"NOV",
-			"DEC",
+			'JAN',
+			'FEB',
+			'MAR',
+			'APR',
+			'MAY',
+			'JUN',
+			'JUL',
+			'AUG',
+			'SEP',
+			'OCT',
+			'NOV',
+			'DEC',
 		];
 
 		return { years, months };
@@ -142,20 +145,19 @@ function DateRange({ getHeaderGroups }) {
 		nextMonthButtonDisabled,
 	}) {
 		return (
-			<div className="flex w-full flex-row items-center justify-around gap-1 rounded-t-md bg-secondary py-1.5 shadow-md transition-all duration-100 ease-in-out">
+			<div className='flex w-full flex-row items-center justify-around gap-4 rounded-t-md bg-secondary px-4 py-3.5 shadow-md transition-all duration-100 ease-in-out'>
 				<Button
 					onClick={decreaseMonth}
-					disabled={prevMonthButtonDisabled}
-				>
-					{"<"}
+					disabled={prevMonthButtonDisabled}>
+					{'<'}
 				</Button>
 				<Select
-					value={format(date, "yyyy")}
+					value={format(date, 'yyyy')}
 					onChange={({ target: { value } }) => changeYear(value)}
 					options={years}
 				/>
 				<Select
-					value={months[format(date, "M") - 1]}
+					value={months[format(date, 'M') - 1]}
 					onChange={({ target: { value } }) =>
 						changeMonth(months.indexOf(value))
 					}
@@ -163,9 +165,8 @@ function DateRange({ getHeaderGroups }) {
 				/>
 				<Button
 					onClick={increaseMonth}
-					disabled={nextMonthButtonDisabled}
-				>
-					{">"}
+					disabled={nextMonthButtonDisabled}>
+					{'>'}
 				</Button>
 			</div>
 		);
@@ -173,13 +174,16 @@ function DateRange({ getHeaderGroups }) {
 
 	return (
 		<DatePicker
-			className="input input-xs input-bordered input-primary flex w-auto items-center justify-between rounded-full font-semibold text-primary transition-all duration-100 ease-in-out"
+			className='input input-xs input-bordered input-primary flex w-auto items-center justify-between rounded-full font-semibold text-primary transition-all duration-100 ease-in-out'
 			// className="flex items-center justify-between rounded-full border-2 border-primary px-2 py-0.5 text-xs font-semibold text-primary"
 			minDate={oldStartDate}
 			maxDate={oldEndDate}
 			startDate={startDate}
 			endDate={endDate}
 			onChange={handleOnChange}
+			selectsRange
+			withPortal
+			// shouldCloseOnSelect={false}
 			// onChangeRaw={handleChangeRaw}
 			// customInput={
 			// 	<>

@@ -87,10 +87,10 @@
 }
 
 .react-datepicker__day.react-datepicker__day--today {
-	border: solid var(--secondary-color) !important;
 	border-radius: 50% !important;
-	/* background-color: #4f496f;
-	color: #fff; */
+	background-color: var(--secondary-color) !important;
+	color: #fff;
+	font-weight: 500 !important;
 }
 
 .react-datepicker__day.react-datepicker__day--selected {
@@ -105,6 +105,13 @@
 	border-radius: 7px;
 	background-color: black;
 	color: rgb(149, 20, 20);
+}
+
+.react-datepicker__portal .react-datepicker__day-name,
+.react-datepicker__portal .react-datepicker__day,
+.react-datepicker__portal .react-datepicker__time-name {
+	width: 2.4rem !important;
+	line-height: 2.4rem !important;
 }
 
 .react-datepicker__day.react-datepicker__day--in-selecting-range {

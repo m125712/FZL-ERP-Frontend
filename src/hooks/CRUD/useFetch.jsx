@@ -69,9 +69,13 @@ const useFetchForRhfReset = async (uri, returnId, reset) => {
 
 const useFetchForRhfResetForOrder = async (uri, returnId, reset) => {
 	useEffect(() => {
+		
 		if (returnId === null || returnId === undefined) return;
 
-		api.get(uri).then((res) => reset(res?.data));
+		api.get(uri).then((res) => {
+			console.log("res?.data?.data", res?.data?.data);
+			
+			return reset(res?.data?.data)});
 	}, [returnId]);
 };
 

@@ -46,7 +46,9 @@ async function defaultFetchFunc(
 	setError(null);
 	await api
 		.get(url)
-		.then((res) => setData(singleData ? res?.data[0] : res?.data))
+		.then((res) =>
+			setData(singleData ? res?.data?.data[0] : res?.data?.data)
+		)
 		.catch((err) => setError(err?.response?.data))
 		.finally(() => setLoading(false));
 }
@@ -69,13 +71,13 @@ const useFetchForRhfReset = async (uri, returnId, reset) => {
 
 const useFetchForRhfResetForOrder = async (uri, returnId, reset) => {
 	useEffect(() => {
-		
 		if (returnId === null || returnId === undefined) return;
 
 		api.get(uri).then((res) => {
-			console.log("res?.data?.data", res?.data?.data);
-			
-			return reset(res?.data?.data)});
+			console.log('res?.data?.data', res?.data?.data);
+
+			return reset(res?.data?.data);
+		});
 	}, [returnId]);
 };
 

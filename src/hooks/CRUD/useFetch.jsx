@@ -81,15 +81,15 @@ const useFetchForRhfResetForOrder = async (uri, returnId, reset) => {
 	}, [returnId]);
 };
 
-const useFetchForRhfResetForUserAccess = async (uri, returnId, reset) => {
+const useFetchForRhfResetForUserAccess = async (url, returnId, reset) => {
 	useEffect(() => {
 		if (returnId === null) return;
 
-		api.get(uri).then((res) => {
+		api.get(url).then((res) => {
 			const data = res?.data?.data[0];
 			const result = {};
 
-			Object.entries(data).forEach(([key, value]) => {
+			Object.entries(data)?.forEach(([key, value]) => {
 				const val = JSON.parse(value);
 				Object.entries(val).forEach(([k, v]) => {
 					v.forEach((item) => {
@@ -99,15 +99,21 @@ const useFetchForRhfResetForUserAccess = async (uri, returnId, reset) => {
 				});
 			});
 
-			const PAGE_ACTIONS = PRIVATE_ROUTES?.filter(
+			const filterRoutes = PRIVATE_ROUTES?.filter(
 				(item) => item.actions !== undefined
-			)?.reduce((acc, { page_name, actions }) => {
-				actions.forEach((action) => {
-					const key = page_name + '___' + action;
-					acc[key] = Boolean(result?.[key]);
-				});
-				return acc;
-			}, {});
+			);
+
+			const PAGE_ACTIONS = filterRoutes?.reduce(
+				(acc, { page_name, actions }) => {
+					actions.forEach((action) => {
+						const key = page_name + '___' + action;
+
+						acc[key] = result?.[key] === true ? true : false;
+					});
+					return acc;
+				},
+				{}
+			);
 
 			reset(PAGE_ACTIONS);
 		});

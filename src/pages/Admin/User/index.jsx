@@ -20,27 +20,6 @@ export default function Order() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'page_assign_actions',
-				header: (
-					<span>
-						Page
-						<br />
-						Assign
-					</span>
-				),
-				enableColumnFilter: false,
-				enableSorting: false,
-				width: 'w-24',
-				hidden: !haveAccess.includes('click_page_assign'),
-				cell: (info) => {
-					return (
-						<ResetPassword
-							onClick={() => handelPageAssign(info.row.index)}
-						/>
-					);
-				},
-			},
-			{
 				accessorKey: 'status',
 				header: 'Status',
 				enableColumnFilter: false,
@@ -113,7 +92,25 @@ export default function Order() {
 					/>
 				),
 			},
-
+			{
+				accessorKey: 'page_assign_actions',
+				header: (
+					<span>
+						Page
+						<br />
+						Assign
+					</span>
+				),
+				enableColumnFilter: false,
+				enableSorting: false,
+				width: 'w-24',
+				hidden: !haveAccess.includes('click_page_assign'),
+				cell: (info) => (
+					<ResetPassword
+						onClick={() => handelPageAssign(info.row.index)}
+					/>
+				),
+			},
 			{
 				accessorKey: 'created_at',
 				header: 'Created',
@@ -230,8 +227,6 @@ export default function Order() {
 		name: null,
 	});
 	const handelPageAssign = async (idx) => {
-		console.log(data[idx]);
-		
 		setPageAssign((prev) => ({
 			...prev,
 			uuid: data[idx]?.uuid,

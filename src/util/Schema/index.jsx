@@ -6,7 +6,8 @@ import {
 	EMAIL_REQUIRED, // default
 	FORTUNE_ZIP_EMAIL_PATTERN, // default
 	JSON_STRING, // default
-	JSON_STRING_REQUIRED, // default
+	JSON_STRING_REQUIRED,
+	NAME_REQUIRED, // default
 	NUMBER, // default
 	NUMBER_DOUBLE, // default
 	NUMBER_DOUBLE_REQUIRED, // default
@@ -50,7 +51,7 @@ export {
 // Library
 //User
 export const LIBRARY_USER_SCHEMA = {
-	name: STRING_REQUIRED,
+	name: NAME_REQUIRED,
 	email: FORTUNE_ZIP_EMAIL_PATTERN,
 	department_designation: STRING_REQUIRED,
 	ext: STRING.nullable(),
@@ -101,7 +102,7 @@ export const SECTION_NULL = {
 
 // Buyer
 export const BUYER_SCHEMA = {
-	name: STRING_REQUIRED,
+	name: NAME_REQUIRED,
 	short_name: STRING.nullable(),
 	remarks: STRING.nullable(),
 };
@@ -759,16 +760,16 @@ export const TAPE_OR_COIL_PRODUCTION_LOG_NULL = {
 
 // Coil Production
 export const COIL_PROD_SCHEMA = {
-	quantity: NUMBER_REQUIRED,
-	wastage: NUMBER_REQUIRED,
+	production_quantity: NUMBER_REQUIRED.moreThan(0),
+	wastage: NUMBER.moreThan(0),
 	remarks: STRING.nullable(),
 };
 
 export const COIL_PROD_NULL = {
-	id: null,
+	uuid: null,
 	section: '',
 	tape_or_coil_stock_id: '',
-	quantity: '',
+	production_quantity: '',
 	wastage: '',
 	remarks: '',
 };

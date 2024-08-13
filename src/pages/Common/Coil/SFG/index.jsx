@@ -1,16 +1,17 @@
-import { TransferIn } from '@/assets/icons';
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc } from '@/hooks';
+import { useCommonCoilSFG } from '@/state/Common';
+
 import { Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 
-const TrxToDyeing = lazy(() => import('./TrxToDyeing'));
+const TrxToDying = lazy(() => import('./TrxToDyeing'));
 const Production = lazy(() => import('./Production'));
 
 export default function Index() {
-	const { data, isLoading, url } = useCommonTapeSFG();
+	const { data, isLoading, url } = useCommonCoilSFG();
 	const info = new PageInfo('Common/Coil/SFG', url, 'common__coil_sfg');
 	const haveAccess = useAccess(info.getTab());
 
@@ -18,7 +19,6 @@ export default function Index() {
 		document.title = info.getTabName();
 	}, []);
 
-	// type	zipper_number	quantity	trx_quantity_in_coil	quantity_in_coil
 
 	const columns = useMemo(
 		() => [
@@ -38,23 +38,32 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'trx_quantity_in_coil',
-				header: 'Stock (KG)',
+				header: (
+					<span>
+						Stock
+						<br />
+						(KG)
+					</span>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'production_actions',
-				header: '',
+				accessorKey: 'actions1',
+				header: 'Production Action',
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_production'),
 				width: 'w-24',
 				cell: (info) => (
-					<Transfer onClick={() => handelAdd(info.row.index)} />
+					<Transfer
+						onClick={() => handelProduction(info.row.index)}
+					/>
 				),
 			},
 			{
 				accessorKey: 'quantity_in_coil',
+
 				header: (
 					<span>
 						Production
@@ -71,9 +80,10 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
 			{
-				accessorKey: 'actions',
-				header: 'To Dyeing',
+				accessorKey: 'action',
+				header: 'To Dying',
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_to_dyeing'),
@@ -85,58 +95,62 @@ export default function Index() {
 				),
 			},
 		],
-		[coilProd]
+		[data]
 	);
+
+	// Fetching data from server
 
 	// Update
 	const [updateCoilProd, setUpdateCoilProd] = useState({
-		id: null,
+		uuid: null,
+		name: null,
 		type: null,
+		quantity: null,
+		item_name: null,
 		zipper_number: null,
-		trx_quantity_in_coil: null,
-		quantity_in_coil: null,
 	});
 
-	const handleTrxToDying = (idx) => {
-		const selectedProd = coilProd[idx];
+	const handelProduction = (idx) => {
+		const selectedProd = data[idx];
 		setUpdateCoilProd((prev) => ({
 			...prev,
 			...selectedProd,
-			tape_or_coil_stock_id: coilProd[idx].id,
+			item_name: selectedProd.type,
+			tape_or_coil_stock_id: selectedProd?.uuid,
 			type_of_zipper:
-				coilProd[idx].type + ' ' + coilProd[idx].zipper_number,
-		}));
-		window['add_or_update_coil_stock_modal'].showModal();
-	};
-
-	// Fetching data from server
-	useEffect(() => {
-		useFetchFunc(info.getFetchUrl(), setCoilProd, setLoading, setError);
-	}, []);
-
-	const handelAdd = (idx) => {
-		const selectedProd = coilProd[idx];
-		setUpdateCoilProd((prev) => ({
-			...prev,
-			...selectedProd,
-			tape_or_coil_stock_id: coilProd[idx].id,
-			type_of_zipper:
-				coilProd[idx].type + ' ' + coilProd[idx].zipper_number,
+				selectedProd.type + ' ' + selectedProd.zipper_number,
+			quantity: selectedProd.trx_quantity_in_coil,
 		}));
 		window['CoilProdModal'].showModal();
 	};
 
-	if (loading)
+	const handelAdd = () => {
+		window[info.getAddOrUpdateModalId()].showModal();
+	};
+
+	const handleTrxToDying = (idx) => {
+		const selectedProd = data[idx];
+		setUpdateCoilProd((prev) => ({
+			...prev,
+			...selectedProd,
+			item_name: selectedProd.type,
+			tape_or_coil_stock_id: selectedProd.uuid,
+			type_of_zipper:
+				selectedProd.type + ' ' + selectedProd.zipper_number,
+		}));
+		window['trx_to_dying_modal'].showModal();
+	};
+
+	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
 		<div className='container mx-auto px-2 md:px-4'>
-			
 			<ReactTable
 				title={info.getTitle()}
-				
-				data={coilProd}
+				//accessor={haveAccess.includes('click_production')}
+				data={data}
 				columns={columns}
 				extraClass='py-2'
 			/>
@@ -144,17 +158,16 @@ export default function Index() {
 				<Production
 					modalId={'CoilProdModal'}
 					{...{
-						setCoilProd,
 						updateCoilProd,
 						setUpdateCoilProd,
 					}}
 				/>
 			</Suspense>
+
 			<Suspense>
-				<TrxToDyeing
-					modalId='add_or_update_coil_stock_modal'
+				<TrxToDying
+					modalId={'trx_to_dying_modal'}
 					{...{
-						setCoilProd,
 						updateCoilProd,
 						setUpdateCoilProd,
 					}}

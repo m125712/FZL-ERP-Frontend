@@ -1,34 +1,34 @@
-import { Suspense } from "@/components/Feedback";
-import { DeleteModal } from "@/components/Modal";
-import ReactTable from "@/components/Table";
-import { useAccess, useFetchFunc } from "@/hooks";
-import { EditDelete } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import React, { useEffect, useMemo, useState } from "react";
-import AddOrUpdate from "./AddOrUpdate";
+import { Suspense } from '@/components/Feedback';
+import { DeleteModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
+import { useAccess, useFetchFunc } from '@/hooks';
+import { useCommonCoilProduction } from '@/state/Common';
+import { EditDelete } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import React, { useEffect, useMemo, useState } from 'react';
+import AddOrUpdate from './AddOrUpdate';
 
 export default function ProductionLog() {
 	const info = new PageInfo(
-		"Coil Production Log",
-		"tape-or-coil-prod-section/coil"
+		'Coil Production Log',
+		'tape-or-coil-prod-section/coil'
 	);
-	const [coilLog, setCoilLog] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-	const haveAccess = useAccess("common__coil_log");
+
+	const { data, isLoading, url, deleteData } = useCommonCoilProduction();
+	const haveAccess = useAccess('common__coil_log');
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "type_of_zipper",
-				header: "Type of Zipper",
+				accessorKey: 'type_of_zipper',
+				header: 'Type of Zipper',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className="capitalize">{info.getValue()}</span>
+					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: "prod_quantity",
+				accessorKey: 'production_quantity',
 				header: (
 					<span>
 						Quantity
@@ -40,7 +40,7 @@ export default function ProductionLog() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "wastage",
+				accessorKey: 'wastage',
 				header: (
 					<span>
 						Wastage
@@ -52,24 +52,24 @@ export default function ProductionLog() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "issued_by_name",
-				header: "Issued By",
+				accessorKey: 'created_by_name',
+				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "actions",
-				header: "Actions",
+				accessorKey: 'actions',
+				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_update_coil_production"),
-				width: "w-24",
+				hidden: !haveAccess.includes('click_update_coil_production'),
+				width: 'w-24',
 				cell: (info) => {
 					return (
 						<EditDelete
@@ -77,30 +77,31 @@ export default function ProductionLog() {
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
 							showDelete={haveAccess.includes(
-								"click_delete_coil_production"
+								'click_delete_coil_production'
 							)}
 						/>
 					);
 				},
 			},
 		],
-		[coilLog]
+		[data]
 	);
 
 	// Update
 	const [updateCoilLog, setUpdateCoilLog] = useState({
-		id: null,
-		type_of_zipper: null,
+		uuid: null,
+		tape_type: null,
 		tape_or_coil_stock_id: null,
-		prod_quantity: null,
+		production_quantity: null,
+		tape_prod: null,
 		coil_stock: null,
-		coil_prod: null,
 		wastage: null,
 		issued_by_name: null,
 	});
 
 	const handelUpdate = (idx) => {
-		const selected = coilLog[idx];
+		const selected = data[idx];
+
 		setUpdateCoilLog((prev) => ({
 			...prev,
 			...selected,
@@ -116,8 +117,8 @@ export default function ProductionLog() {
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: coilLog[idx].id,
-			itemName: coilLog[idx].type_of_zipper,
+			itemId: data[idx].uuid,
+			itemName: data[idx].type_of_zipper,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -126,26 +127,22 @@ export default function ProductionLog() {
 	// if (error) return <h1>Error:{error}</h1>;
 
 	// Fetching data from server
-	useEffect(() => {
-		useFetchFunc(info.getFetchUrl(), setCoilLog, setLoading, setError);
-	}, []);
 
-	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className='container mx-auto px-2 md:px-4'>
 			<ReactTable
 				title={info.getTitle()}
-				data={coilLog}
+				data={data}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 			<Suspense>
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						setCoilLog,
 						updateCoilLog,
 						setUpdateCoilLog,
 					}}
@@ -155,10 +152,12 @@ export default function ProductionLog() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					setItems={setCoilLog}
-					uri={`/tape-to-coil-trx`}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url: `/zipper/tape-coil-production`,
+						deleteData,
+					}}
 				/>
 			</Suspense>
 		</div>

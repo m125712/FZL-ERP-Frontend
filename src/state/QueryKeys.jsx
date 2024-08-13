@@ -126,14 +126,21 @@ export const libraryQK = {
 export const commonQK = {
 	all: () => ['common'],
 
-	// tapeSFG
+	// * tapeSFG
 	tapeSFG: () => [...commonQK.all(), 'tape/SFG'],
 	tapeSFGByUUID: (uuid) => [...commonQK.tapeSFG(), uuid],
-	// tapeProduction
+	// * tapeProduction
 	tapeProduction: () => [...commonQK.all(), 'tape/production'],
 	tapeProductionByUUID: (uuid) => [...commonQK.tapeProduction(), uuid],
 
-	// tapeToCoil
+	// * tapeToCoil
 	tapeToCoil: () => [...commonQK.all(), 'tape/to-coil'],
 	tapeToCoilByUUID: (uuid) => [...commonQK.tapeToCoil(), uuid],
+	// * coilSFG
+	coilSFG: () => [...commonQK.all(), 'coil/SFG'],
+	coilSFGByUUID: (uuid) => [...commonQK.coilSFG(), uuid],
+
+	// * coilProduction
+	coilProduction: () => [...commonQK.all(), 'coil/production'],
+	coilProductionByUUID: (uuid) => [...commonQK.coilProduction(), uuid],
 };

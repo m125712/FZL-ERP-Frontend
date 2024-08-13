@@ -13,16 +13,15 @@ export default function ProductionLog() {
 		'Tape Production Log',
 		'tape-or-coil-prod-section/tape'
 	);
-
 	const { data, isLoading, url, deleteData } = useCommonTapeProduction();
 	const haveAccess = useAccess('common__tape_log');
 
-	console.log(data);
+	//console.log(data);
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'tape_type',
+				accessorKey: 'type_of_zipper',
 				header: 'Type of Zipper',
 				enableColumnFilter: false,
 				cell: (info) => (
@@ -39,7 +38,7 @@ export default function ProductionLog() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'wastage',
@@ -88,6 +87,7 @@ export default function ProductionLog() {
 		],
 		[data]
 	);
+	//const deleteUrl = '/zipper/tape-coil-production';
 
 	// Update
 	const [updateTapeLog, setUpdateTapeLog] = useState({
@@ -156,7 +156,7 @@ export default function ProductionLog() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: `/zipper/tape-coil-production`,
 						deleteData,
 					}}
 				/>

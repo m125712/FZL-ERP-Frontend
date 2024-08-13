@@ -92,7 +92,7 @@ export default function Index() {
 				hidden: !haveAccess.includes('click_to_dyeing'),
 				width: 'w-24',
 				cell: (info) =>
-					info.row.original.type !== 'nylon' && (
+					info.row.original.type.toLowerCase() !== 'nylon' && (
 						<Transfer
 							onClick={() => handleTrxToDying(info.row.index)}
 						/>

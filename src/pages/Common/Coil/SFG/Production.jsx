@@ -1,52 +1,51 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
-import { useRHF, useUpdateFunc } from "@/hooks";
-import { Input, JoinInput } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
+import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
+import { useRHF, useUpdateFunc } from '@/hooks';
+import nanoid from '@/lib/nanoid';
+import { useCommonCoilSFG } from '@/state/Common';
+import { Input, JoinInput } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
 import {
 	COIL_PROD_NULL,
 	COIL_PROD_SCHEMA,
 	NUMBER_REQUIRED,
-} from "@util/Schema";
+} from '@util/Schema';
 
 export default function Index({
-	modalId = "",
-	setCoilProd,
+	modalId = '',
 	updateCoilProd = {
-		id: null,
-		type_of_zipper: null,
+		uuid: null,
 		type: null,
+		production_quantity: null,
 		zipper_number: null,
-		trx_quantity_in_coil: null,
-		quantity_in_coil: null,
+		type_of_zipper: null,
 		tape_or_coil_stock_id: null,
 	},
 	setUpdateCoilProd,
 }) {
 	const { user } = useAuth();
+	const { postData } = useCommonCoilSFG();
 
 	const MAX_PRODUCTION_QTY = updateCoilProd?.trx_quantity_in_coil;
 	const schema = {
 		...COIL_PROD_SCHEMA,
-		quantity: NUMBER_REQUIRED.max(MAX_PRODUCTION_QTY),
+		production_quantity: NUMBER_REQUIRED.max(MAX_PRODUCTION_QTY),
 		wastage: NUMBER_REQUIRED.max(MAX_PRODUCTION_QTY),
 	};
 
-	const { register, handleSubmit, errors, reset, watch } = useRHF(
+	const { register, handleSubmit, errors, reset } = useRHF(
 		schema,
 		COIL_PROD_NULL
 	);
-	watch();
 
 	const onClose = () => {
 		setUpdateCoilProd((prev) => ({
 			...prev,
-			id: null,
-			type_of_zipper: null,
+			uuid: null,
 			type: null,
+			production_quantity: null,
 			zipper_number: null,
-			trx_quantity_in_coil: null,
-			quantity_in_coil: null,
+			type_of_zipper: null,
 			tape_or_coil_stock_id: null,
 		}));
 		reset(COIL_PROD_NULL);
@@ -54,59 +53,42 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
+		const section = 'coil';
+		console.log(data);
+		// Update item
 		const updatedData = {
 			...data,
-			type: updateCoilProd?.type,
-			zipper_number: updateCoilProd?.zipper_number,
-			prod_quantity: data?.quantity,
-			trx_quantity_in_coil:
-				updateCoilProd?.trx_quantity_in_coil - data?.quantity,
-			quantity_in_coil: updateCoilProd?.quantity_in_coil + data?.quantity,
-			section: "coil",
-			tape_or_coil_stock_id: updateCoilProd?.tape_or_coil_stock_id,
-			issued_by: user?.id,
-			issued_by_name: user?.name,
-			type_of_zipper: updateCoilProd?.type_of_zipper,
+			section,
+			uuid: nanoid(),
+			tape_coil_uuid: updateCoilProd?.uuid,
+			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
-
-		await useUpdateFunc({
-			uri: "/tape-or-coil-prod",
-			itemId: updateCoilProd.id,
-			data: data,
-			updatedData: updatedData,
-			setItems: setCoilProd,
-			onClose: onClose,
+		await postData.mutateAsync({
+			url: `/zipper/tape-coil-production`,
+			newData: updatedData,
+			onClose,
 		});
 	};
 
 	return (
 		<AddModal
-			id={"CoilProdModal"}
+			id={'CoilProdModal'}
 			title={`Coil Production: ${
 				updateCoilProd?.type_of_zipper
-					? updateCoilProd.type_of_zipper.toUpperCase()
-					: ""
-			}`}
+					? updateCoilProd?.type_of_zipper.toUpperCase()
+					: ''
+			} `}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
+			isSmall={true}>
 			<JoinInput
-				label="quantity"
-				unit="KG"
-				placeholder={`Max: ${MAX_PRODUCTION_QTY}`}
+				label='production_quantity'
+				unit='KG'
 				{...{ register, errors }}
 			/>
-			<JoinInput
-				label="wastage"
-				unit="KG"
-				placeholder={`Max: ${(
-					MAX_PRODUCTION_QTY - watch("quantity")
-				).toFixed(2)}`}
-				{...{ register, errors }}
-			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<JoinInput label='wastage' unit='KG' {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

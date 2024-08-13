@@ -24,27 +24,27 @@ export default function Index({
 }) {
 	const { url, updateData } = useCommonTapeProduction();
 
-	const MIN_QUANTITY =
-		Number(updateTapeLog?.tape_prod) -
-			Number(updateTapeLog?.production_quantity) <
-		0
-			? Number(updateTapeLog?.production_quantity)
-			: 0;
-	const schema = {
-		...TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
-		production_quantity:
-			TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA.production_quantity.min(
-				MIN_QUANTITY
-			),
-	};
+	// const MIN_QUANTITY =
+	// 	Number(updateTapeLog?.tape_prod) -
+	// 		Number(updateTapeLog?.production_quantity) <
+	// 	0
+	// 		? Number(updateTapeLog?.production_quantity)
+	// 		: 0;
+	// const schema = {
+	// 	...TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
+	// 	production_quantity:
+	// 		TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA.production_quantity.min(
+	// 			MIN_QUANTITY
+	// 		),
+	// };
 
 	const { register, handleSubmit, errors, reset } = useRHF(
-		schema,
+		TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
 		TAPE_OR_COIL_PRODUCTION_LOG_NULL
 	);
 
 	useFetchForRhfReset(
-		`${url}/${updateTapeLog?.uuid}`,
+		`${'/zipper/tape-coil-production'}/${updateTapeLog?.uuid}`,
 		updateTapeLog?.uuid,
 		reset
 	);
@@ -75,7 +75,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateTapeLog?.uuid}`,
+				url: `${'/zipper/tape-coil-production'}/${updateTapeLog?.uuid}`,
 				uuid: updateTapeLog?.uuid,
 				updatedData,
 				onClose,
@@ -94,9 +94,9 @@ export default function Index({
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'
-				sub_label={`Min: ${MIN_QUANTITY}`}
+				//sub_label={`Min: ${//MIN_QUANTITY}`}
 				unit='KG'
-				placeholder={`Min: ${MIN_QUANTITY}`}
+				//placeholder={`Min: ${//MIN_QUANTITY}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

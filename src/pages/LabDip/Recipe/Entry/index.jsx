@@ -1,5 +1,5 @@
 import { DeleteModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
+import { useFetchForRhfResetForOrder, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useLabDipRecipe } from '@/state/LabDip';
 import { ActionButtons, DynamicField, Input, JoinInput, Textarea } from '@/ui';
@@ -41,7 +41,6 @@ export default function Index() {
 	}, []);
 
 	if (isUpdate)
-		// TODO: Change it //
 		useFetchForRhfResetForOrder(
 			`/lab-dip/recipe/details/${recipe_uuid}`,
 			recipe_uuid,
@@ -125,8 +124,7 @@ export default function Index() {
 							newData: {
 								...item,
 								uuid: nanoid(),
-								recipe_uuid:
-									data?.uuid,
+								recipe_uuid: data?.uuid,
 								created_at: GetDateTime(),
 							},
 							isOnCloseNeeded: false,
@@ -135,11 +133,8 @@ export default function Index() {
 				}),
 			];
 
-		
-
-			// navigate(
-			// 	`/order/details/${recipe_id}/${recipe_uuid}`
-			// );
+			// TODO: ReferenceError: Cannot access 'recipe_uuid' before initialization
+			navigate(`/lab-dip/recipe/details/${recipe_uuid}`);
 
 			return;
 		}
@@ -171,7 +166,6 @@ export default function Index() {
 			recipe_uuid,
 			created_at,
 		}));
-
 
 		//* Post new entry */ //
 		let recipe_entry_promises = [

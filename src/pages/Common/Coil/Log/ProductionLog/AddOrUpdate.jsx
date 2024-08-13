@@ -1,59 +1,63 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
-import { useRHF, useUpdateFunc } from "@/hooks";
-import { Input, JoinInput } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
+import { AddModal } from '@/components/Modal';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { useCommonCoilProduction } from '@/state/Common';
+import { Input, JoinInput } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
 import {
 	TAPE_OR_COIL_PRODUCTION_LOG_NULL,
 	TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
-} from "@util/Schema";
+} from '@util/Schema';
 
 export default function Index({
-	modalId = "",
-	setCoilLog,
+	modalId = '',
 	updateCoilLog = {
-		id: null,
-		type_of_zipper: null,
+		uuid: null,
+		tape_type: null,
 		tape_or_coil_stock_id: null,
-		prod_quantity: null,
+		production_quantity: null,
+		tape_prod: null,
 		coil_stock: null,
-		coil_prod: null,
 		wastage: null,
 		issued_by_name: null,
 	},
 	setUpdateCoilLog,
 }) {
-	const { user } = useAuth();
-	const MIN_QUANTITY = 0;
-	const MAX_QUANTITY =
-		updateCoilLog?.coil_stock + updateCoilLog?.prod_quantity;
-	const schema = {
-		...TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
-		prod_quantity: TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA.prod_quantity
-			.min(MIN_QUANTITY)
-			.max(MAX_QUANTITY),
-	};
+	const { url, updateData } = useCommonCoilProduction();
+
+	// const MIN_QUANTITY =
+	// 	Number(updateCoilLog?.tape_prod) -
+	// 		Number(updateCoilLog?.production_quantity) <
+	// 	0
+	// 		? Number(updateCoilLog?.production_quantity)
+	// 		: 0;
+	// const schema = {
+	// 	...TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
+	// 	production_quantity:
+	// 		TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA.production_quantity.min(
+	// 			MIN_QUANTITY
+	// 		),
+	// };
 
 	const { register, handleSubmit, errors, reset } = useRHF(
-		schema,
+		TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
 		TAPE_OR_COIL_PRODUCTION_LOG_NULL
 	);
 
-	// useFetchForRhfReset(
-	// 	`tape-or-coil-prod/by-id/${updateCoilLog?.id}`,
-	// 	updateCoilLog?.id,
-	// 	reset
-	// );
+	useFetchForRhfReset(
+		`${`/zipper/tape-coil-production`}/${updateCoilLog?.uuid}`,
+		updateCoilLog?.uuid,
+		reset
+	);
 
 	const onClose = () => {
 		setUpdateCoilLog((prev) => ({
 			...prev,
-			id: null,
-			type_of_zipper: null,
+			uuid: null,
+			tape_type: null,
 			tape_or_coil_stock_id: null,
 			prod_quantity: null,
+			tape_prod: null,
 			coil_stock: null,
-			coil_prod: null,
 			wastage: null,
 			issued_by_name: null,
 		}));
@@ -63,25 +67,19 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateCoilLog?.id !== null) {
+		if (updateCoilLog?.uuid !== null && updateCoilLog?.uuid !== undefined) {
 			const updatedData = {
 				...data,
 				type_of_zipper: updateCoilLog?.type_of_zipper,
-				wastage: updateCoilLog?.wastage,
-				issued_by_name: updateCoilLog?.issued_by_name,
-				issued_by: user?.id,
 				updated_at: GetDateTime(),
 			};
 
-			await useUpdateFunc({
-				uri: `/tape-or-coil-prod/${updateCoilLog?.id}/${updateCoilLog?.type_of_zipper}`,
-				itemId: updateCoilLog?.id,
-				data: data,
-				updatedData: updatedData,
-				setItems: setCoilLog,
-				onClose: onClose,
+			await updateData.mutateAsync({
+				url: `${'/zipper/tape-coil-production'}/${updateCoilLog?.uuid}`,
+				uuid: updateCoilLog?.uuid,
+				updatedData,
+				onClose,
 			});
-
 			return;
 		}
 	};
@@ -89,20 +87,19 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Update Production Log of ${updateCoilLog?.type_of_zipper}`}
+			title={`Update Production Log of ${updateCoilLog?.tape_type}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
+			isSmall={true}>
 			<JoinInput
-				title="Production Quantity"
-				label="prod_quantity"
-				sub_label={`Max: ${MAX_QUANTITY}, Min: ${MIN_QUANTITY}`}
-				unit="KG"
-				placeholder={`Max: ${MAX_QUANTITY}, Min: ${MIN_QUANTITY}`}
+				title='Production Quantity'
+				label='production_quantity'
+				//sub_label={`Min: ${MIN_QUANTITY}`}
+				unit='KG'
+				//placeholder={`Min: ${MIN_QUANTITY}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

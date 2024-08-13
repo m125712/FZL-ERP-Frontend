@@ -9,7 +9,7 @@ const TapeLog = lazy(() => import('@/pages/Common/Tape/Log'));
 
 // * Coil
 const CoilStock = lazy(() => import('@/pages/Common/Coil/Stock'));
-const CoilProd = lazy(() => import('@/pages/Common/Coil/Prod'));
+const CoilProd = lazy(() => import('@/pages/Common/Coil/SFG'));
 const CoilLog = lazy(() => import('@/pages/Common/Coil/Log'));
 
 export const CommonRoutes = [

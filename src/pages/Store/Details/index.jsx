@@ -159,6 +159,8 @@ export default function Index() {
 		uuid: null,
 		stock: null,
 		name: null,
+		section_uuid: null,
+		type_uuid: null,
 	});
 
 	const handelUpdate = (idx) => {
@@ -166,6 +168,8 @@ export default function Index() {
 			...prev,
 			uuid: data[idx].uuid,
 			stock: data[idx].stock,
+			section_uuid: data[idx].section_uuid,
+			type_uuid: data[idx].type_uuid,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};

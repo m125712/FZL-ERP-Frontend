@@ -208,7 +208,6 @@ export const MATERIAL_STOCK_SCHEMA = {
 export const MATERIAL_STOCK_NULL = {
 	uuid: null,
 	material_uuid: null,
-	material_name: null,
 	trx_to: '',
 	trx_quantity: '',
 	created_by: '',
@@ -226,7 +225,6 @@ export const MATERIAL_TRX_AGAINST_ORDER_NULL = {
 	uuid: null,
 	material_uuid: null,
 	order_entry_uuid: null,
-	material_name: null,
 	trx_to: '',
 	trx_quantity: '',
 	created_by: '',

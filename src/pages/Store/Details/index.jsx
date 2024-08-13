@@ -157,41 +157,34 @@ export default function Index() {
 	// Update
 	const [updateMaterialDetails, setUpdateMaterialDetails] = useState({
 		uuid: null,
-		section_uuid: null,
-		section_name: null,
-		type_uuid: null,
-		type_name: null,
-		name: null,
-		threshold: null,
 		stock: null,
-		unit: null,
-		description: null,
-		remarks: null,
+		name: null,
 	});
 
 	const handelUpdate = (idx) => {
-		const selectedItem = data[idx];
 		setUpdateMaterialDetails((prev) => ({
 			...prev,
-			...selectedItem,
+			uuid: data[idx].uuid,
+			stock: data[idx].stock,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
 
-	const handleTrx = (index) => {
-		const selectedItem = data[index];
+	const handleTrx = (idx) => {
 		setUpdateMaterialDetails((prev) => ({
 			...prev,
-			...selectedItem,
+			uuid: data[idx].uuid,
+			stock: data[idx].stock,
 		}));
 		window['MaterialTrx'].showModal();
 	};
 
-	const handleTrxAgainstOrder = (index) => {
-		const selectedItem = data[index];
+	const handleTrxAgainstOrder = (idx) => {
 		setUpdateMaterialDetails((prev) => ({
 			...prev,
-			...selectedItem,
+			uuid: data[idx].uuid,
+			stock: data[idx].stock,
+			name: data[idx].name,
 		}));
 		window['MaterialTrxAgainstOrder'].showModal();
 	};

@@ -7,15 +7,14 @@ import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = usePurchaseDescription();
+
 	console.log({
 		data,
 	});
-
 	const navigate = useNavigate();
 	const info = new PageInfo('Details', url, 'store__receive');
 	const haveAccess = useAccess('store__receive');
@@ -27,15 +26,15 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'pd_id',
+				accessorKey: 'uuid',
 				header: 'ID',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const { purchase_description_uuid } = info.row.original;
+					const { uuid } = info.row.original;
 					return (
 						<LinkOnly
 							uri='/store/receive'
-							id={purchase_description_uuid}
+							id={uuid}
 							title={info.getValue()}
 						/>
 					);
@@ -105,19 +104,8 @@ export default function Index() {
 	// Add
 	const handelAdd = () => navigate('/store/receive/entry');
 
-	// Update
-	const [updatePurchase, setUpdatePurchase] = useState({
-		uuid: null,
-		vendor_uuid: null,
-		material_uuid: null,
-		section_uuid: null,
-		unit: null,
-		is_local: null,
-	});
-
 	const handelUpdate = (idx) => {
-		const { purchase_description_uuid, uuid } = data[idx];
-		navigate(`/store/receive/update/${uuid}/${purchase_description_uuid}`);
+		navigate(`/store/receive/update/${data[idx].uuid}`);
 	};
 
 	// Delete
@@ -149,15 +137,6 @@ export default function Index() {
 				extraClass='py-2'
 			/>
 
-			{/* <Suspense>
-				<AddOrUpdate
-					modalId={info.getAddOrUpdateModalId()}
-					{...{
-						updatePurchase,
-						setUpdatePurchase,
-					}}
-				/>
-			</Suspense> */}
 			<Suspense>
 				<DeleteModal
 					modalId={info.getDeleteModalId()}

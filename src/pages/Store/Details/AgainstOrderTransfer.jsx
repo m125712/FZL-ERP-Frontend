@@ -14,16 +14,8 @@ export default function Index({
 	modalId = '',
 	updateMaterialDetails = {
 		uuid: null,
-		section_uuid: null,
-		section_name: null,
-		type_uuid: null,
-		type_name: null,
 		name: null,
-		threshold: null,
 		stock: null,
-		unit: null,
-		description: null,
-		remarks: null,
 	},
 	setUpdateMaterialDetails,
 }) {
@@ -52,33 +44,28 @@ export default function Index({
 		setUpdateMaterialDetails((prev) => ({
 			...prev,
 			uuid: null,
-			section_uuid: null,
-			section_name: null,
-			type_uuid: null,
-			type_name: null,
-			name: null,
-			threshold: null,
-			stock: null,
-			unit: null,
-			description: null,
-			remarks: null,
+			stock: 0,
 		}));
 		reset(MATERIAL_TRX_AGAINST_ORDER_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
+		// "uuid": "string",
+		// "material_uuid": "string",
+		// "order_entry_uuid": "string",
+		// "trx_to": "string",
+		// "trx_quantity": 0,
+		// "created_by": "string",
+		// "created_at": "2024-01-01 00:00:00",
+		// "updated_at": "2024-01-01 00:00:00",
+		// "remarks": "string"
+
 		// Update item
 		if (updateMaterialDetails?.uuid !== null) {
 			const updatedData = {
 				...data,
-				...updateMaterialDetails,
 				material_uuid: updateMaterialDetails.uuid,
-				material_name: updateMaterialDetails?.name.replace(
-					/[#&/]/g,
-					''
-				),
-				stock: updateMaterialDetails.stock - data.trx_quantity,
 				created_by: user?.uuid,
 				uuid: nanoid(),
 				created_at: GetDateTime(),

@@ -286,12 +286,12 @@ export const VENDOR_NULL = {
 };
 // purchase page
 export const PURCHASE_SCHEMA = {
-	vendor_id: NUMBER_REQUIRED,
+	vendor_uuid: NUMBER_REQUIRED,
 	is_local: NUMBER_REQUIRED.default(0),
 	remarks: STRING.nullable(),
 	purchase: yup.array().of(
 		yup.object().shape({
-			material_id: NUMBER_REQUIRED,
+			material_uuid: NUMBER_REQUIRED,
 			quantity: NUMBER_DOUBLE_REQUIRED,
 			price: NUMBER_DOUBLE_REQUIRED,
 		})
@@ -299,14 +299,14 @@ export const PURCHASE_SCHEMA = {
 };
 
 export const PURCHASE_NULL = {
-	id: null,
-	vendor_id: null,
-	section_id: null,
+	uuid: null,
+	vendor_uuid: null,
+	section_uuid: null,
 	is_local: '',
 	remarks: '',
 	purchase: [
 		{
-			material_id: null,
+			material_uuid: null,
 			quantity: '',
 			price: '',
 		},
@@ -315,13 +315,13 @@ export const PURCHASE_NULL = {
 
 // purchase entry page
 export const PURCHASE_ENTRY_SCHEMA = {
-	vendor_uuid: NUMBER_REQUIRED,
+	vendor_uuid: STRING_REQUIRED,
 	is_local: NUMBER_REQUIRED.default(0),
 	lc_number: STRING.nullable(),
 	remarks: STRING.nullable(),
 	purchase: yup.array().of(
 		yup.object().shape({
-			material_uuid: NUMBER_REQUIRED,
+			material_uuid: STRING_REQUIRED,
 			quantity: NUMBER_DOUBLE_REQUIRED,
 			price: NUMBER_DOUBLE_REQUIRED,
 			remarks: STRING.nullable(),

@@ -1,14 +1,11 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useMaterialInfo } from '@/state/Material';
+import { useStoreInfo } from '@/state/Store';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
-import {
-	MATERIAL_TRX_AGAINST_ORDER_NULL,
-	MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
-} from '@util/Schema';
+import { MATERIAL_STOCK_NULL, MATERIAL_STOCK_SCHEMA } from '@util/Schema';
 
 export default function Index({
 	modalId = '',
@@ -27,20 +24,18 @@ export default function Index({
 	},
 	setUpdateMaterialDetails,
 }) {
-	const { postData } = useMaterialInfo();
+	const { postData } = useStoreInfo();
 	const { user } = useAuth();
 
 	const schema = {
-		...MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
-		trx_quantity: MATERIAL_TRX_AGAINST_ORDER_SCHEMA.trx_quantity
-			.moreThan(0)
-			.max(updateMaterialDetails?.stock),
+		...MATERIAL_STOCK_SCHEMA,
+		trx_quantity: MATERIAL_STOCK_SCHEMA.trx_quantity
+			.moreThan(0, "Quantity can't be zero.")
+			.max(updateMaterialDetails?.stock, 'Quantity Exceeds Stock'),
 	};
 
-	const { value: order } = useFetch(`/other/order/entry/value/label`);
-
 	const { register, handleSubmit, errors, control, Controller, reset } =
-		useRHF(schema, MATERIAL_TRX_AGAINST_ORDER_NULL);
+		useRHF(schema, MATERIAL_STOCK_NULL);
 
 	useFetchForRhfReset(
 		`/material/stock/${updateMaterialDetails?.material_stock_uuid}`,
@@ -62,13 +57,14 @@ export default function Index({
 			unit: null,
 			description: null,
 			remarks: null,
+			material_stock_uuid: null,
 		}));
-		reset(MATERIAL_TRX_AGAINST_ORDER_NULL);
+		reset(MATERIAL_STOCK_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
-		// Update item
+		// Create Item
 		if (updateMaterialDetails?.uuid !== null) {
 			const updatedData = {
 				...data,
@@ -78,14 +74,17 @@ export default function Index({
 					/[#&/]/g,
 					''
 				),
-				stock: updateMaterialDetails.stock - data.trx_quantity,
+
+				stock: updateMaterialDetails.stock - data?.quantity,
+				[`${data.trx_to}`]:
+					updateMaterialDetails[`${data.trx_to}`] + data?.quantity,
 				created_by: user?.uuid,
 				uuid: nanoid(),
 				created_at: GetDateTime(),
 			};
 
 			await postData.mutateAsync({
-				url: '/material/stock-to-sfg',
+				url: '/material/trx',
 				newData: updatedData,
 				onClose,
 			});
@@ -95,41 +94,41 @@ export default function Index({
 	};
 
 	const transactionArea = [
+		{ label: 'Tape Making', value: 'tape_making' },
+		{ label: 'Coil Forming', value: 'coil_forming' },
 		{ label: 'Dying and Iron', value: 'dying_and_iron' },
-		{ label: 'Teeth Molding', value: 'teeth_molding' },
-		{ label: 'Teeth Cleaning', value: 'teeth_coloring' },
-		{ label: 'Finishing', value: 'finishing' },
+		{ label: 'Metal Gapping', value: 'm_gapping' },
+		{ label: 'Vislon Gapping', value: 'v_gapping' },
+		{ label: 'Vislon Teeth Molding', value: 'v_teeth_molding' },
+		{ label: 'Metal Teeth Molding', value: 'm_teeth_molding' },
+		{
+			label: 'Teeth Assembling and Polishing',
+			value: 'teeth_assembling_and_polishing',
+		},
+		{ label: 'Metal Teeth Cleaning', value: 'm_teeth_cleaning' },
+		{ label: 'Vislon Teeth Cleaning', value: 'v_teeth_cleaning' },
+		{ label: 'Plating and Iron', value: 'plating_and_iron' },
+		{ label: 'Metal Sealing', value: 'm_sealing' },
+		{ label: 'Vislon Sealing', value: 'v_sealing' },
+		{ label: 'Nylon T Cutting', value: 'n_t_cutting' },
+		{ label: 'Vislon T Cutting', value: 'v_t_cutting' },
+		{ label: 'Metal Stopper', value: 'm_stopper' },
+		{ label: 'Vislon Stopper', value: 'v_stopper' },
+		{ label: 'Nylon Stopper', value: 'n_stopper' },
+		{ label: 'Cutting', value: 'cutting' },
+		{ label: 'QC and Packing', value: 'qc_and_packing' },
+		{ label: 'Die Casting', value: 'die_casting' },
 		{ label: 'Slider Assembly', value: 'slider_assembly' },
 		{ label: 'Coloring', value: 'coloring' },
 	];
 
 	return (
 		<AddModal
-			id={`MaterialTrxAgainstOrder`}
-			title={
-				'Material Trx Against Order of ' + updateMaterialDetails?.name
-			}
+			id={`MaterialTrx`}
+			title={'Material Trx of ' + updateMaterialDetails?.name}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<FormField label='order_entry_uuid' title='Order' errors={errors}>
-				<Controller
-					name={'order_entry_uuid'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select Order'
-								options={order}
-								onChange={(e) => {
-									onChange(e.value);
-								}}
-							/>
-						);
-					}}
-				/>
-			</FormField>
-
 			<FormField label='trx_to' title='Transfer To' errors={errors}>
 				<Controller
 					name={'trx_to'}
@@ -139,7 +138,9 @@ export default function Index({
 							<ReactSelect
 								placeholder='Select Transaction Area'
 								options={transactionArea}
-								onChange={(e) => onChange(e.value)}
+								onChange={(e) => {
+									onChange(e.value);
+								}}
 							/>
 						);
 					}}

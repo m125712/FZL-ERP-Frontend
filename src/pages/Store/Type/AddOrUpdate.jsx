@@ -1,33 +1,32 @@
 import { AddModal } from '@/components/Modal';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useMaterialSection } from '@/state/Material';
+import { useStoreType } from '@/state/Store';
 import { Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { SECTION_NULL, SECTION_SCHEMA } from '@util/Schema';
 
 export default function Index({
 	modalId = '',
-	setSection,
-	updateSection = {
+	updateMaterialType = {
 		uuid: null,
 	},
-	setUpdateSection,
+	setUpdateMaterialType,
 }) {
-	const { url, updateData, postData } = useMaterialSection();
+	const { url, updateData, postData } = useStoreType();
 	const { register, handleSubmit, errors, reset } = useRHF(
 		SECTION_SCHEMA,
 		SECTION_NULL
 	);
 
 	useFetchForRhfReset(
-		`/material/section/${updateSection?.uuid}`,
-		updateSection?.uuid,
+		`/material/type/${updateMaterialType?.uuid}`,
+		updateMaterialType?.uuid,
 		reset
 	);
 
 	const onClose = () => {
-		setUpdateSection((prev) => ({
+		setUpdateMaterialType((prev) => ({
 			...prev,
 			uuid: null,
 		}));
@@ -37,21 +36,22 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateSection?.uuid !== null) {
+		if (updateMaterialType?.uuid !== null) {
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateSection?.uuid}`,
-				uuid: updateSection?.uuid,
+				url: `${url}/${updateMaterialType?.uuid}`,
+				uuid: updateMaterialType?.uuid,
 				updatedData,
 				onClose,
 			});
 
 			return;
 		}
+
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
@@ -68,7 +68,11 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={updateSection?.uuid !== null ? 'Update Section' : 'Section'}
+			title={
+				updateMaterialType?.uuid !== null
+					? 'Update Material Type'
+					: 'Material Type'
+			}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

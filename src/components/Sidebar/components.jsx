@@ -134,7 +134,8 @@ const Sidebar = () => {
 	const pages = {
 		// if it is a nested route, then the parent name should be in ⇾ showingColumns
 		order: filterRoutes('order'),
-		thread: filterRoutes('thread'),
+		lab_dip: filterRoutes('lab_dip'),
+		// thread: filterRoutes('thread'),
 		commercial: filterRoutes('commercial'),
 		delivery: filterRoutes('delivery'),
 		store: filterRoutes('store'),

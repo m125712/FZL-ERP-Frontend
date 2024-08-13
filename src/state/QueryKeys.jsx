@@ -122,6 +122,7 @@ export const libraryQK = {
 	policies: () => [...libraryQK.all(), 'policies'],
 	policyByUUID: (uuid) => [...libraryQK.policies(), uuid],
 };
+
 //Common
 export const commonQK = {
 	all: () => ['common'],
@@ -132,4 +133,12 @@ export const commonQK = {
 	// tapeProduction
 	tapeProduction: () => [...commonQK.all(), 'tape/production'],
 	tapeProductionByUUID: (uuid) => [...commonQK.tapeProduction(), uuid],
+};
+
+// * LabDip * //
+export const labDipQK = {
+	all: () => ['labDip'],
+	// recipe
+	recipe: () => [...labDipQK.all(), 'recipe'],
+	recipeByUUID: (uuid) => [...labDipQK.recipe(), uuid],
 };

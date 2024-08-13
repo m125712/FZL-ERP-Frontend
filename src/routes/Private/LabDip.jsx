@@ -6,6 +6,7 @@ const InfoEntry = lazy(() => import('@pages/LabDip/Info/Entry'));
 
 const Recipe = lazy(() => import('@pages/LabDip/Recipe'));
 const RecipeEntry = lazy(() => import('@pages/LabDip/Recipe/Entry'));
+const RecipeDetails = lazy(() => import('@pages/LabDip/Recipe/ByRecipeId'));
 
 export const LabDipRoutes = [
 	{
@@ -64,6 +65,17 @@ export const LabDipRoutes = [
 		page_name: 'lab_dip__recipe_entry_update',
 		hidden: true,
 		actions: ['create', 'read', 'update', 'delete'],
+		isDynamic: true,
+	},
+	{
+		id: 142,
+		name: 'Recipe Details',
+		path: '/lab-dip/recipe/details/:recipe_uuid',
+		element: RecipeDetails,
+		type: 'lab_dip',
+		hidden: true,
+		page_name: 'lab_dip__recipe_details',
+		actions: ['read', 'update'],
 		isDynamic: true,
 	},
 ];

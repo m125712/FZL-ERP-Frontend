@@ -1,7 +1,7 @@
 import { AddModal } from '@/components/Modal';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useMaterialType } from '@/state/Material';
+import { useMaterialType } from '@/state/Store';
 import { Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { SECTION_NULL, SECTION_SCHEMA } from '@util/Schema';

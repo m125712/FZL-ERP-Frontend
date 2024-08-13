@@ -315,13 +315,13 @@ export const PURCHASE_NULL = {
 
 // purchase entry page
 export const PURCHASE_ENTRY_SCHEMA = {
-	vendor_id: NUMBER_REQUIRED,
+	vendor_uuid: NUMBER_REQUIRED,
 	is_local: NUMBER_REQUIRED.default(0),
 	lc_number: STRING.nullable(),
 	remarks: STRING.nullable(),
 	purchase: yup.array().of(
 		yup.object().shape({
-			material_id: NUMBER_REQUIRED,
+			material_uuid: NUMBER_REQUIRED,
 			quantity: NUMBER_DOUBLE_REQUIRED,
 			price: NUMBER_DOUBLE_REQUIRED,
 			remarks: STRING.nullable(),
@@ -330,9 +330,9 @@ export const PURCHASE_ENTRY_SCHEMA = {
 };
 
 export const PURCHASE_ENTRY_NULL = {
-	id: null,
-	vendor_id: null,
-	section_id: null,
+	uuid: null,
+	vendor_uuid: null,
+	section_uuid: null,
 	purchase_description_uuid: null,
 	is_local: null,
 	lc_number: '',
@@ -340,7 +340,7 @@ export const PURCHASE_ENTRY_NULL = {
 	purchase: [
 		{
 			purchase_description_uuid: null,
-			material_id: null,
+			material_uuid: null,
 			quantity: '',
 			price: '',
 			remarks: '',
@@ -355,9 +355,9 @@ export const RECEIVED_SCHEMA = {
 };
 
 export const RECEIVED_NULL = {
-	id: null,
-	vendor_id: null,
-	material_id: null,
+	uuid: null,
+	vendor_uuid: null,
+	material_uuid: null,
 	received_quantity: '',
 	price: '',
 	is_local: '',

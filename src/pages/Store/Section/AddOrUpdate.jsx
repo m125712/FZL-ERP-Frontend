@@ -8,7 +8,6 @@ import { SECTION_NULL, SECTION_SCHEMA } from '@util/Schema';
 
 export default function Index({
 	modalId = '',
-	setSection,
 	updateSection = {
 		uuid: null,
 	},
@@ -52,6 +51,8 @@ export default function Index({
 
 			return;
 		}
+
+		// New item
 		const updatedData = {
 			...data,
 			uuid: nanoid(),

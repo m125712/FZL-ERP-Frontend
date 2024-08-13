@@ -8,7 +8,6 @@ import { VENDOR_NULL, VENDOR_SCHEMA } from '@util/Schema';
 
 export default function Index({
 	modalId = '',
-	setVendor,
 	updateVendor = {
 		uuid: null,
 	},
@@ -52,6 +51,8 @@ export default function Index({
 
 			return;
 		}
+
+		// Add new item
 		const updatedData = {
 			...data,
 			created_at: GetDateTime(),

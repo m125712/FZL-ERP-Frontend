@@ -1,6 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
+import { useAccess } from '@/hooks';
+import { usePurchaseDescription } from '@/state/Store';
 import { DateTime, EditDelete, LinkOnly } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -10,13 +11,13 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
+	const { data, isLoading, url, deleteData } = usePurchaseDescription();
+	console.log({
+		data,
+	});
+
 	const navigate = useNavigate();
-
-	const info = new PageInfo('Details', 'purchase-details', 'store__receive');
-	const [purchase, setPurchase] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-
+	const info = new PageInfo('Details', url, 'store__receive');
 	const haveAccess = useAccess('store__receive');
 
 	useEffect(() => {
@@ -98,30 +99,25 @@ export default function Index() {
 				},
 			},
 		],
-		[purchase]
+		[data]
 	);
-
-	// Fetching data from server
-	useEffect(() => {
-		useFetchFunc(info.getFetchUrl(), setPurchase, setLoading, setError);
-	}, []);
 
 	// Add
 	const handelAdd = () => navigate('/store/receive/entry');
 
 	// Update
 	const [updatePurchase, setUpdatePurchase] = useState({
-		id: null,
-		vendor_id: null,
-		material_id: null,
-		section_id: null,
+		uuid: null,
+		vendor_uuid: null,
+		material_uuid: null,
+		section_uuid: null,
 		unit: null,
 		is_local: null,
 	});
 
 	const handelUpdate = (idx) => {
-		const { purchase_description_uuid, id } = purchase[idx];
-		navigate(`/store/receive/update/${id}/${purchase_description_uuid}`);
+		const { purchase_description_uuid, uuid } = data[idx];
+		navigate(`/store/receive/update/${uuid}/${purchase_description_uuid}`);
 	};
 
 	// Delete
@@ -132,16 +128,15 @@ export default function Index() {
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: purchase[idx].purchase_description_uuid,
-			itemName: purchase[idx].purchase_description_uuid,
+			itemId: data[idx].uuid,
+			itemName: data[idx].uuid,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
 
-	if (loading)
+	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
-	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
 		<div className='container mx-auto px-2 md:px-4'>
@@ -149,29 +144,30 @@ export default function Index() {
 				title={info.getTitle()}
 				handelAdd={handelAdd}
 				accessor={haveAccess.includes('create')}
-				data={purchase}
+				data={data}
 				columns={columns}
 				extraClass='py-2'
 			/>
 
-			<Suspense>
+			{/* <Suspense>
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						setPurchase,
 						updatePurchase,
 						setUpdatePurchase,
 					}}
 				/>
-			</Suspense>
+			</Suspense> */}
 			<Suspense>
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					setItems={setPurchase}
-					uri={info.getDeleteUrl()}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url,
+						deleteData,
+					}}
 				/>
 			</Suspense>
 		</div>

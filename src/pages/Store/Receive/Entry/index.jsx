@@ -1,11 +1,11 @@
-import { DeleteModal } from "@/components/Modal";
+import { DeleteModal } from '@/components/Modal';
 import {
 	useFetch,
 	useFetchForRhfResetForOrder,
 	usePostFunc,
 	useRHF,
 	useUpdateFunc,
-} from "@/hooks";
+} from '@/hooks';
 import {
 	DynamicField,
 	FormField,
@@ -13,19 +13,19 @@ import {
 	JoinInput,
 	ReactSelect,
 	RemoveButton,
-} from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { useAuth } from "@context/auth";
-import { DevTool } from "@hookform/devtools";
-import { PURCHASE_ENTRY_NULL, PURCHASE_ENTRY_SCHEMA } from "@util/Schema";
-import { customAlphabet } from "nanoid";
-import { Suspense, useCallback, useEffect, useState } from "react";
-import { HotKeys, configure } from "react-hotkeys";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
-import Header from "./Header";
+} from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { useAuth } from '@context/auth';
+import { DevTool } from '@hookform/devtools';
+import { PURCHASE_ENTRY_NULL, PURCHASE_ENTRY_SCHEMA } from '@util/Schema';
+import { customAlphabet } from 'nanoid';
+import { Suspense, useCallback, useEffect, useState } from 'react';
+import { HotKeys, configure } from 'react-hotkeys';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import Header from './Header';
 
 const alphabet =
-	"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const nanoid = customAlphabet(alphabet, 10);
 
 // UPDATE IS NOT WORKING
@@ -38,8 +38,8 @@ export default function Index() {
 
 	useEffect(() => {
 		id !== undefined
-			? (document.title = "Update Purchase: " + id)
-			: (document.title = "Purchase Entry");
+			? (document.title = 'Update Purchase: ' + id)
+			: (document.title = 'Purchase Entry');
 	}, []);
 
 	const {
@@ -64,8 +64,10 @@ export default function Index() {
 			reset
 		);
 
-	const { value: material } = useFetch("/material/value/label/unit");
-	const { value: vendor } = useFetch("/vendor/value/label");
+	const { value: material } = useFetch(
+		'/other/material/value/label/unit/quantity'
+	);
+	const { value: vendor } = useFetch('/other/vendor/value/label');
 
 	// purchase
 	const {
@@ -74,7 +76,7 @@ export default function Index() {
 		remove: purchaseRemove,
 	} = useFieldArray({
 		control,
-		name: "purchase",
+		name: 'purchase',
 	});
 
 	const [deleteItem, setDeleteItem] = useState({
@@ -83,22 +85,22 @@ export default function Index() {
 	});
 
 	const handlePurchaseRemove = (index) => {
-		if (getValues(`purchase[${index}].id`) !== undefined) {
+		if (getValues(`purchase[${index}].uuid`) !== undefined) {
 			setDeleteItem({
-				itemId: getValues(`purchase[${index}].material_id`),
-				itemName: getValues(`purchase[${index}].material_id`),
+				itemId: getValues(`purchase[${index}].material_uuid`),
+				itemName: getValues(`purchase[${index}].material_uuid`),
 			});
-			window["purchase_delete"].showModal();
+			window['purchase_delete'].showModal();
 		}
 		purchaseRemove(index);
 	};
 
 	const handelPurchaseAppend = () => {
 		purchaseAppend({
-			material_id: "",
-			quantity: "",
-			price: "",
-			remarks: "",
+			material_uuid: '',
+			quantity: '',
+			price: '',
+			remarks: '',
 		});
 	};
 	const onClose = () => reset(PURCHASE_ENTRY_NULL);
@@ -106,7 +108,7 @@ export default function Index() {
 	// Submit
 	const onSubmit = async (data) => {
 		const vendor_name = vendor?.find(
-			(item) => item.value == data?.vendor_id
+			(item) => item.value == data?.vendor_uuid
 		)?.label;
 		// Update
 		if (isUpdate) {
@@ -131,7 +133,7 @@ export default function Index() {
 					item.purchase_description_uuid = purchase_description_uuid;
 					item.created_at = GetDateTime();
 					return await usePostFunc({
-						uri: "/purchase",
+						uri: '/purchase',
 						data: item,
 					}).catch((err) => console.error(`Error: ${err}`));
 				} else {
@@ -144,7 +146,7 @@ export default function Index() {
 						uri: `/purchase/${
 							item?.id
 							// replace #,/, & from material_name
-						}/${updatedData?.material_name.replace(/[#&/]/g, "")}`,
+						}/${updatedData?.material_name.replace(/[#&/]/g, '')}`,
 						itemId: item.id,
 						data: item,
 						updatedData: updatedData,
@@ -185,7 +187,7 @@ export default function Index() {
 			issued_by: user.id,
 		};
 		await usePostFunc({
-			uri: "/purchase/description",
+			uri: '/purchase/description',
 			data: purchase_details,
 		});
 
@@ -197,7 +199,7 @@ export default function Index() {
 		let promises = [
 			...purchase.map((item) =>
 				usePostFunc({
-					uri: "/purchase",
+					uri: '/purchase',
 					data: item,
 				})
 			),
@@ -211,11 +213,11 @@ export default function Index() {
 	};
 
 	// Check if id is valid
-	if (getValues("quantity") === null) return <Navigate to="/not-found" />;
+	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 
 	const keyMap = {
-		NEW_ROW: "alt+n",
-		COPY_LAST_ROW: "alt+c",
+		NEW_ROW: 'alt+n',
+		COPY_LAST_ROW: 'alt+c',
 	};
 
 	const handlers = {
@@ -223,12 +225,12 @@ export default function Index() {
 	};
 
 	configure({
-		ignoreTags: ["input", "select", "textarea"],
+		ignoreTags: ['input', 'select', 'textarea'],
 		ignoreEventsCondition: function () {},
 	});
 
 	const rowClass =
-		"group whitespace-nowrap text-left text-sm font-normal tracking-wide";
+		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	const getTotalPrice = useCallback(
 		(purchase) =>
@@ -239,13 +241,12 @@ export default function Index() {
 	);
 
 	return (
-		<div className="container mx-auto mt-4 px-2 pb-2 md:px-4">
+		<div className='container mx-auto mt-4 px-2 pb-2 md:px-4'>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
-					className="flex flex-col gap-8"
-				>
+					className='flex flex-col gap-8'>
 					<Header
 						{...{
 							register,
@@ -258,33 +259,30 @@ export default function Index() {
 					/>
 
 					<DynamicField
-						title="Details"
+						title='Details'
 						handelAppend={handelPurchaseAppend}
 						tableHead={[
-							"Material",
-							"Quantity",
-							"Total Price",
-							"Remarks",
-							"Action",
+							'Material',
+							'Quantity',
+							'Total Price',
+							'Remarks',
+							'Action',
 						].map((item) => (
 							<th
 								key={item}
-								scope="col"
-								className="group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2"
-							>
+								scope='col'
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
 								{item}
 							</th>
-						))}
-					>
+						))}>
 						{purchaseField.map((item, index) => (
-							<tr key={item.id} className="w-full">
+							<tr key={item.id} className='w-full'>
 								<td className={`pl-1 ${rowClass}`}>
 									<FormField
 										label={`purchase[${index}].material_id`}
-										title="Material"
-										is_title_needed="false"
-										errors={errors}
-									>
+										title='Material'
+										is_title_needed='false'
+										errors={errors}>
 										<Controller
 											name={`purchase[${index}].material_id`}
 											control={control}
@@ -293,7 +291,7 @@ export default function Index() {
 											}) => {
 												return (
 													<ReactSelect
-														placeholder="Select Material"
+														placeholder='Select Material'
 														options={material}
 														value={material?.find(
 															(inItem) =>
@@ -326,11 +324,11 @@ export default function Index() {
 										/>
 									</FormField>
 								</td>
-								<td className="w-40">
+								<td className='w-40'>
 									<JoinInput
-										title="quantity"
+										title='quantity'
 										label={`purchase[${index}].quantity`}
-										is_title_needed="false"
+										is_title_needed='false'
 										dynamicerror={
 											errors?.purchase?.[index]?.quantity
 										}
@@ -348,9 +346,9 @@ export default function Index() {
 								</td>
 								<td className={`w-40 ${rowClass}`}>
 									<Input
-										title="price"
+										title='price'
 										label={`purchase[${index}].price`}
-										is_title_needed="false"
+										is_title_needed='false'
 										dynamicerror={
 											errors?.purchase?.[index]?.price
 										}
@@ -359,9 +357,9 @@ export default function Index() {
 								</td>
 								<td className={`w-40 ${rowClass}`}>
 									<Input
-										title="remarks"
+										title='remarks'
 										label={`purchase[${index}].remarks`}
-										is_title_needed="false"
+										is_title_needed='false'
 										dynamicerror={
 											errors?.purchase?.[index]?.remarks
 										}
@@ -369,8 +367,7 @@ export default function Index() {
 									/>
 								</td>
 								<td
-									className={`w-16 border-l-4 border-l-primary ${rowClass}`}
-								>
+									className={`w-16 border-l-4 border-l-primary ${rowClass}`}>
 									<RemoveButton
 										onClick={() =>
 											handlePurchaseRemove(index)
@@ -382,21 +379,19 @@ export default function Index() {
 						))}
 						<tr>
 							<td
-								className="py-2 text-right font-bold"
-								colSpan="2"
-							>
+								className='py-2 text-right font-bold'
+								colSpan='2'>
 								Total Price:
 							</td>
-							<td className="py-2 font-bold">
-								{getTotalPrice(watch("purchase"))}
+							<td className='py-2 font-bold'>
+								{getTotalPrice(watch('purchase'))}
 							</td>
 						</tr>
 					</DynamicField>
-					<div className="modal-action">
+					<div className='modal-action'>
 						<button
-							type="submit"
-							className="text-md btn btn-primary btn-block"
-						>
+							type='submit'
+							className='text-md btn btn-primary btn-block'>
 							Save
 						</button>
 					</div>
@@ -404,15 +399,15 @@ export default function Index() {
 			</HotKeys>
 			<Suspense>
 				<DeleteModal
-					modalId={"purchase_delete"}
-					title={"Purchase Entry"}
+					modalId={'purchase_delete'}
+					title={'Purchase Entry'}
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
 					setItems={purchaseField}
 					uri={`/purchase`}
 				/>
 			</Suspense>
-			<DevTool control={control} placement="top-left" />
+			<DevTool control={control} placement='top-left' />
 		</div>
 	);
 }

@@ -16,7 +16,7 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'id',
+				accessorKey: 'recipe_id',
 				header: 'ID',
 				width: 'w-12',
 				cell: (info) => {
@@ -30,45 +30,10 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'recipe_name',
+				accessorKey: 'name',
 				header: 'Recipe Name',
 				enableColumnFilter: false,
-				width: 'w-12',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'item_description',
-				header: 'Item Description',
-				enableColumnFilter: false,
-				cell: (info) => {
-					const { order_description_uuid, order_number } =
-						info.row.original;
-					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={order_description_uuid}
-							uri={`/order/details/${order_number}`}
-						/>
-					);
-				},
-			},
-			{
-				accessorKey: 'production_percentage',
-				header: 'Progress',
-				enableColumnFilter: false,
-				cell: (info) => <Progress value={info.getValue() || 0} />,
-			},
-			{
-				accessorKey: 'marketing_name',
-				header: 'Marketing',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'buyer_name',
-				header: 'Buyer',
-				width: 'w-20',
-				enableColumnFilter: false,
+				// width: 'w-12',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -130,11 +95,9 @@ export default function Index() {
 
 	// Update
 	const handelUpdate = (idx) => {
-		const { order_description_uuid, order_number } = data[idx];
+		const { recipe_id, uuid } = data[idx];
 
-		navigate(
-			`/lab-dip/recipe/update/${order_number}/${order_description_uuid}`
-		);
+		navigate(`/lab-dip/recipe/update/${recipe_id}/${uuid}`);
 	};
 
 	if (isLoading)

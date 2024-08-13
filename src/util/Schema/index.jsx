@@ -202,22 +202,22 @@ export const MATERIAL_NULL = {
 
 export const MATERIAL_STOCK_SCHEMA = {
 	trx_to: STRING_REQUIRED,
-	quantity: NUMBER_DOUBLE_REQUIRED,
+	trx_quantity: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
 export const MATERIAL_STOCK_NULL = {
 	uuid: null,
-	material_stock_uuid: null,
+	material_uuid: null,
 	material_name: null,
 	trx_to: '',
-	quantity: '',
-	issued_by: '',
+	trx_quantity: '',
+	created_by: '',
 	remarks: '',
 };
 
 export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
-	order_entry_uuid: NUMBER_REQUIRED,
+	order_entry_uuid: STRING_REQUIRED,
 	trx_to: STRING_REQUIRED,
 	trx_quantity: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
@@ -225,12 +225,12 @@ export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
 
 export const MATERIAL_TRX_AGAINST_ORDER_NULL = {
 	uuid: null,
-	material_stock_uuid: null,
+	material_uuid: null,
 	order_entry_uuid: null,
 	material_name: null,
 	trx_to: '',
 	trx_quantity: '',
-	issued_by: '',
+	created_by: '',
 	remarks: '',
 };
 
@@ -246,7 +246,7 @@ export const SFG_TRANSFER_LOG_NULL = {
 	trx_from: '',
 	trx_to: '',
 	trx_quantity: '',
-	issued_by: '',
+	created_by: '',
 	remarks: '',
 };
 
@@ -316,13 +316,13 @@ export const PURCHASE_NULL = {
 
 // purchase entry page
 export const PURCHASE_ENTRY_SCHEMA = {
-	vendor_id: NUMBER_REQUIRED,
+	vendor_uuid: NUMBER_REQUIRED,
 	is_local: NUMBER_REQUIRED.default(0),
 	lc_number: STRING.nullable(),
 	remarks: STRING.nullable(),
 	purchase: yup.array().of(
 		yup.object().shape({
-			material_id: NUMBER_REQUIRED,
+			material_uuid: NUMBER_REQUIRED,
 			quantity: NUMBER_DOUBLE_REQUIRED,
 			price: NUMBER_DOUBLE_REQUIRED,
 			remarks: STRING.nullable(),
@@ -331,9 +331,9 @@ export const PURCHASE_ENTRY_SCHEMA = {
 };
 
 export const PURCHASE_ENTRY_NULL = {
-	id: null,
-	vendor_id: null,
-	section_id: null,
+	uuid: null,
+	vendor_uuid: null,
+	section_uuid: null,
 	purchase_description_uuid: null,
 	is_local: null,
 	lc_number: '',
@@ -341,7 +341,7 @@ export const PURCHASE_ENTRY_NULL = {
 	purchase: [
 		{
 			purchase_description_uuid: null,
-			material_id: null,
+			material_uuid: null,
 			quantity: '',
 			price: '',
 			remarks: '',
@@ -356,9 +356,9 @@ export const RECEIVED_SCHEMA = {
 };
 
 export const RECEIVED_NULL = {
-	id: null,
-	vendor_id: null,
-	material_id: null,
+	uuid: null,
+	vendor_uuid: null,
+	material_uuid: null,
 	received_quantity: '',
 	price: '',
 	is_local: '',
@@ -493,6 +493,37 @@ export const ORDER_NULL = {
 			party_price: 0,
 			status: 1,
 			swatch_approval_date: null,
+		},
+	],
+};
+
+// * Lab recipe schema*//
+export const LAB_RECIPE_SCHEMA = {
+	lab_dip_info_uuid: null,
+	name: STRING_REQUIRED,
+	approved: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+	status: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+	remarks: STRING.nullable(),
+	recipe_entry: yup.array().of(
+		yup.object().shape({
+			color: STRING_REQUIRED,
+			quantity: NUMBER_REQUIRED,
+			remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const LAB_RECIPE_NULL = {
+	lab_dip_info_uuid: null,
+	name: '',
+	approved: 0,
+	status: 0,
+	remarks: '',
+	recipe_entry: [
+		{
+			color: '',
+			quantity: '',
+			remarks: '',
 		},
 	],
 };

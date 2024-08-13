@@ -81,6 +81,7 @@ export default function Index({
 		{ value: 'item', label: 'Item' },
 		{ value: 'zipper_number', label: 'Zipper Number' },
 		{ value: 'puller_type', label: 'Puller Type' },
+		{ value: 'puller_link', label: 'Puller Link' },
 		{ value: 'hand', label: 'Hand' },
 		{ value: 'special_requirement', label: 'Special Requirement' },
 		{ value: 'color', label: 'Color' },
@@ -90,6 +91,14 @@ export default function Index({
 		{ value: 'top_stopper', label: 'Top Stopper' },
 		{ value: 'bottom_stopper', label: 'Bottom Stopper' },
 		{ value: 'logo_type', label: 'Logo Type' },
+		// * new fields * //
+		{ value: 'light_preference', label: 'Light Preference' },
+		{ value: 'garments_wash', label: 'Garments Wash' },
+
+		{ value: 'slider_body_shape', label: 'Slider Body Shape' },
+		{ value: 'slider_link', label: 'Slider Link' },
+
+		{ value: 'end_user', label: 'End User' },
 	];
 
 	const itemForOptions = [

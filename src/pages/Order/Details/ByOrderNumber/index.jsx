@@ -58,7 +58,7 @@ export default function Index() {
 				factory_name: orders[0]?.factory_name,
 				factory_address: orders[0]?.factory_address,
 				user_name: orders[0]?.user_name,
-				date: format(new Date(orders[0]?.created_at), 'dd/MM/yyyy'),
+				// date: format(new Date(orders[0]?.created_at), 'dd/MM/yyyy'),
 				updated_at: orders[0]?.updated_at,
 			};
 
@@ -117,9 +117,9 @@ export default function Index() {
 
 			<OrderInformation
 				order={order_info}
-				handelPdfDownload={() =>
-					getPdfData?.download(`Order Sheet ${order_number}.pdf`)
-				}
+				// handelPdfDownload={() =>
+				// 	getPdfData?.download(`Order Sheet ${order_number}.pdf`)
+				// }
 			/>
 
 			{orders?.map((order, idx) => (

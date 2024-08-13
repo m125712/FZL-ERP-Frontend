@@ -76,7 +76,7 @@
 
 	// workbench
 	"workbench.startupEditor": "none",
-	"workbench.iconTheme": "a-file-icon-vscode",
+	"workbench.iconTheme": "material-icon-theme",
 	"security.workspace.trust.untrustedFiles": "open",
 	"workbench.colorCustomizations": {},
 	"workbench.editorAssociations": {

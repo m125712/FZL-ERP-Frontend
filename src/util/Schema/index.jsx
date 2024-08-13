@@ -527,6 +527,31 @@ export const LAB_RECIPE_NULL = {
 	],
 };
 
+// * Lab info schema*//
+export const LAB_INFO_SCHEMA = {
+	order_info_uuid: UUID_FK,
+	name: STRING_REQUIRED,
+	lab_status: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+	remarks: STRING.nullable(),
+	recipe: yup.array().of(
+		yup.object().shape({
+			recipe_uuid: UUID_FK,
+		})
+	),
+};
+
+export const LAB_INFO_NULL = {
+	order_info_uuid: null,
+	name: '',
+	lab_status: 0,
+	remarks: '',
+	recipe: [
+		{
+			recipe_uuid: null,
+		},
+	],
+};
+
 // Issue
 // Wastage
 export const WASTAGE_SCHEMA = {

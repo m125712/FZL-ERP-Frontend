@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useStoreType } from '@/state/Store';
+import { useMaterialType } from '@/state/Store';
 
 import { EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
@@ -11,7 +11,7 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useStoreType();
+	const { data, isLoading, url, deleteData } = useMaterialType();
 	const info = new PageInfo('Material/Type', url, 'store__type');
 	const haveAccess = useAccess('store__type');
 

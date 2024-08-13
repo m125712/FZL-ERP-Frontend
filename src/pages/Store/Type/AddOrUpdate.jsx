@@ -1,7 +1,7 @@
 import { AddModal } from '@/components/Modal';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useStoreType } from '@/state/Store';
+import { useMaterialType } from '@/state/Store';
 import { Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { SECTION_NULL, SECTION_SCHEMA } from '@util/Schema';
@@ -13,7 +13,7 @@ export default function Index({
 	},
 	setUpdateMaterialType,
 }) {
-	const { url, updateData, postData } = useStoreType();
+	const { url, updateData, postData } = useMaterialType();
 	const { register, handleSubmit, errors, reset } = useRHF(
 		SECTION_SCHEMA,
 		SECTION_NULL

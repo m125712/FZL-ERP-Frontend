@@ -1,6 +1,6 @@
 import { AddModal } from '@/components/Modal';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
-import { useStoreStockToSFG } from '@/state/Store';
+import { useMaterialStockToSFG } from '@/state/Store';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -18,7 +18,7 @@ export default function Index({
 	},
 	setUpdateMaterialTrxToOrder,
 }) {
-	const { url, updateData } = useStoreStockToSFG();
+	const { url, updateData } = useMaterialStockToSFG();
 	const schema = {
 		...MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
 		trx_quantity: MATERIAL_TRX_AGAINST_ORDER_SCHEMA.trx_quantity.max(

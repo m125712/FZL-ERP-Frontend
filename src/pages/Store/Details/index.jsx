@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useStoreInfo } from '@/state/Store';
+import { useMaterialInfo } from '@/state/Store';
 import { EditDelete, LinkWithCopy, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -12,7 +12,7 @@ const AgainstOrderTransfer = lazy(() => import('./AgainstOrderTransfer'));
 const MaterialTrx = lazy(() => import('./MaterialTrx'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useStoreInfo();
+	const { data, isLoading, url, deleteData } = useMaterialInfo();
 	const info = new PageInfo('Material/Info', url, 'store__stock');
 	const haveAccess = useAccess('store__stock');
 

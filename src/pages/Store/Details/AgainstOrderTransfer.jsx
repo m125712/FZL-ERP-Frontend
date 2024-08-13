@@ -2,7 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useStoreInfo } from '@/state/Store';
+import { useMaterialInfo } from '@/state/Store';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -27,7 +27,7 @@ export default function Index({
 	},
 	setUpdateMaterialDetails,
 }) {
-	const { postData } = useStoreInfo();
+	const { postData } = useMaterialInfo();
 	const { user } = useAuth();
 
 	const schema = {

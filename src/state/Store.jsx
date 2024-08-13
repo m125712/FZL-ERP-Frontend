@@ -1,67 +1,67 @@
 import createGlobalState from '.';
-import { storeQK } from './QueryKeys';
+import { materialQK } from './QueryKeys';
 
 // * Section * //
-export const useStoreSection = () =>
+export const useMaterialSection = () =>
 	createGlobalState({
-		queryKey: storeQK.sections(),
+		queryKey: materialQK.sections(),
 		url: '/material/section',
 	});
 
-export const useStoreSectionByUUID = (uuid) =>
+export const useMaterialSectionByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: storeQK.section(uuid),
+		queryKey: materialQK.section(uuid),
 		url: `/material/section/${uuid}`,
 	});
 
 // * Types * //
-export const useStoreType = () =>
+export const useMaterialType = () =>
 	createGlobalState({
-		queryKey: storeQK.types(),
+		queryKey: materialQK.types(),
 		url: '/material/type',
 	});
 
-export const useStoreTypeByUUID = (uuid) =>
+export const useMaterialTypeByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: storeQK.type(uuid),
+		queryKey: materialQK.type(uuid),
 		url: `/material/type/${uuid}`,
 	});
 
 // * Info * //
-export const useStoreInfo = () =>
+export const useMaterialInfo = () =>
 	createGlobalState({
-		queryKey: storeQK.infos(),
+		queryKey: materialQK.infos(),
 		url: '/material/info',
 	});
 
-export const useStoreInfoByUUID = (uuid) =>
+export const useMaterialInfoByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: storeQK.info(uuid),
+		queryKey: materialQK.info(uuid),
 		url: `/material/info/${uuid}`,
 	});
 
 // * Trx * //
-export const useStoreTrx = () =>
+export const useMaterialTrx = () =>
 	createGlobalState({
-		queryKey: storeQK.trxs(),
+		queryKey: materialQK.trxs(),
 		url: '/material/trx',
 	});
 
-export const useStoreTrxByUUID = (uuid) =>
+export const useMaterialTrxByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: storeQK.trx(uuid),
+		queryKey: materialQK.trx(uuid),
 		url: `/material/trx/${uuid}`,
 	});
 
 // * Stock to sfg * //
-export const useStoreStockToSFG = () =>
+export const useMaterialStockToSFG = () =>
 	createGlobalState({
-		queryKey: storeQK.stockToSGFs(),
+		queryKey: materialQK.stockToSGFs(),
 		url: '/material/stock-to-sfg',
 	});
 
-export const useStoreStockToSFGByUUID = (uuid) =>
+export const useMaterialStockToSFGByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: storeQK.stockToSFG(uuid),
+		queryKey: materialQK.stockToSFG(uuid),
 		url: `/material/stock-to-sfg/${uuid}`,
 	});

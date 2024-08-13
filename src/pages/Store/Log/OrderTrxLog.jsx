@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useStoreStockToSFG } from '@/state/Store';
+import { useMaterialStockToSFG } from '@/state/Store';
 
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
@@ -11,7 +11,7 @@ const OrderTrxLogAddOrUpdate = lazy(() => import('./OrderTrxLogAddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useStoreStockToSFG();
+	const { data, isLoading, url, deleteData } = useMaterialStockToSFG();
 	const info = new PageInfo('Log Against Order', url);
 	const haveAccess = useAccess('store__log');
 

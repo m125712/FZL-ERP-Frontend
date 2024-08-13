@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useStoreTrx } from '@/state/Store';
+import { useMaterialTrx } from '@/state/Store';
 
 import { DateTime, EditDelete, SectionName } from '@/ui';
 import PageInfo from '@/util/PageInfo';
@@ -11,7 +11,7 @@ const TrxLogAddOrUpdate = lazy(() => import('./TrxLogAddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useStoreTrx();
+	const { data, isLoading, url, deleteData } = useMaterialTrx();
 	const info = new PageInfo('Material/Log', url);
 	const haveAccess = useAccess('store__log');
 

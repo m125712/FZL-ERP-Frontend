@@ -1,7 +1,7 @@
 import { AddModal } from '@/components/Modal';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useStoreInfo } from '@/state/Store';
+import { useMaterialInfo } from '@/state/Store';
 import { FormField, Input, JoinInputSelect, ReactSelect, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { MATERIAL_NULL, MATERIAL_SCHEMA } from '@util/Schema';
@@ -15,7 +15,7 @@ export default function Index({
 	},
 	setUpdateMaterialDetails,
 }) {
-	const { url, updateData, postData } = useStoreInfo();
+	const { url, updateData, postData } = useMaterialInfo();
 	const { register, handleSubmit, errors, reset, Controller, control } =
 		useRHF(MATERIAL_SCHEMA, MATERIAL_NULL);
 

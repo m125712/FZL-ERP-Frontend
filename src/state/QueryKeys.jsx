@@ -80,28 +80,28 @@ export const commercialQK = {
 	bank: (uuid) => [...commercialQK.banks(), uuid],
 };
 
-export const storeQK = {
+export const materialQK = {
 	all: () => ['material'],
 
 	// section
-	sections: () => [...storeQK.all(), 'section'],
-	section: (uuid) => [...storeQK.sections(), uuid],
+	sections: () => [...materialQK.all(), 'section'],
+	section: (uuid) => [...materialQK.sections(), uuid],
 
 	// types
-	types: () => [...storeQK.all(), 'type'],
-	type: (uuid) => [...storeQK.types(), uuid],
+	types: () => [...materialQK.all(), 'type'],
+	type: (uuid) => [...materialQK.types(), uuid],
 
 	// infos
-	infos: () => [...storeQK.all(), 'info'],
-	info: (uuid) => [...storeQK.infos(), uuid],
+	infos: () => [...materialQK.all(), 'info'],
+	info: (uuid) => [...materialQK.infos(), uuid],
 
 	// trx
-	trxs: () => [...storeQK.all(), 'trx'],
-	trx: (uuid) => [...storeQK.trxs(), uuid],
+	trxs: () => [...materialQK.all(), 'trx'],
+	trx: (uuid) => [...materialQK.trxs(), uuid],
 
 	// stock to sfg
-	stockToSGFs: () => [...storeQK.all(), 'stock-to-sfg'],
-	stockToSFG: (uuid) => [...storeQK.stockToSGFs(), uuid],
+	stockToSGFs: () => [...materialQK.all(), 'stock-to-sfg'],
+	stockToSFG: (uuid) => [...materialQK.stockToSGFs(), uuid],
 };
 
 export const purchaseQK = {

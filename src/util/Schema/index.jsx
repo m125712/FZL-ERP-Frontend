@@ -496,6 +496,37 @@ export const ORDER_NULL = {
 	],
 };
 
+// * Lab recipe schema*//
+export const LAB_RECIPE_SCHEMA = {
+	lab_dip_info_uuid: null,
+	name: STRING_REQUIRED,
+	approved: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+	status: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+	remarks: STRING.nullable(),
+	recipe_entry: yup.array().of(
+		yup.object().shape({
+			color: STRING_REQUIRED,
+			quantity: NUMBER_REQUIRED,
+			remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const LAB_RECIPE_NULL = {
+	lab_dip_info_uuid: null,
+	name: '',
+	approved: 0,
+	status: 0,
+	remarks: '',
+	recipe_entry: [
+		{
+			color: '',
+			quantity: '',
+			remarks: '',
+		},
+	],
+};
+
 // Issue
 // Wastage
 export const WASTAGE_SCHEMA = {

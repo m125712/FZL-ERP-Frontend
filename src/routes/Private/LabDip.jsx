@@ -35,7 +35,7 @@ export const LabDipRoutes = [
 	{
 		id: 151,
 		name: 'Recipe Update',
-		path: '/lab-dip/recipe/update/:recipe_number/:recipe_uuid',
+		path: '/lab-dip/recipe/update/:recipe_id/:recipe_uuid',
 		element: RecipeEntry,
 		page_name: 'lab_dip__recipe_entry_update',
 		hidden: true,

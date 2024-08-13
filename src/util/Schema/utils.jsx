@@ -58,5 +58,5 @@ export const ORDER_NUMBER = STRING_REQUIRED.matches(
 export const URL = STRING.url('Invalid URL');
 export const URL_REQUIRED = URL.required('Required');
 
-export const NAME = STRING.matches(/^[a-zA-Z0-9 ._#]*$/, 'Invalid Name');
+export const NAME = STRING.matches(/^[a-zA-Z0-9 ._#-/"'()]*$/, 'Invalid Name');
 export const NAME_REQUIRED = NAME.required('Required');

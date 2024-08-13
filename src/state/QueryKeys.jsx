@@ -143,4 +143,8 @@ export const commonQK = {
 	// * coilProduction
 	coilProduction: () => [...commonQK.all(), 'coil/production'],
 	coilProductionByUUID: (uuid) => [...commonQK.coilProduction(), uuid],
+
+	// * rm
+	coilRM: () => [...commonQK.all(), 'rm'],
+	coilRMByUUID: (uuid) => [...commonQK.coilRM(), uuid],
 };

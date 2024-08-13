@@ -63,3 +63,14 @@ export const useCommonCoilProductionByUUID = (uuid) =>
 		queryKey: commonQK.coilProduction(uuid),
 		url: `/zipper/tape-coil-production/by/coil/${uuid}`,
 	});
+//* RM *//
+export const useCommonCoilRM = () =>
+	createGlobalState({
+		queryKey: commonQK.coilRM(),
+		url: `/material/stock/by/single-field/coil_forming`,
+	});
+export const useCommonCoilRMByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.coilRM(uuid),
+		url: `/material/stock/by/single-field/coil_forming${uuid}`,
+	});

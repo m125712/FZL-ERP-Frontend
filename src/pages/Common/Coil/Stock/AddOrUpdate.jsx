@@ -1,16 +1,15 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from "@/hooks";
-import { Input, JoinInput } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from "@util/Schema";
+import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { Input, JoinInput } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
 
 export default function Index({
-	modalId = "",
-	setCoilStock,
+	modalId = '',
 	updateCoilStock = {
-		id: null,
-		quantity: null,
+		uuid: null,
+		stock: null,
 		unit: null,
 	},
 	setUpdateCoilStock,
@@ -32,16 +31,16 @@ export default function Index({
 	);
 
 	useFetchForRhfReset(
-		`/material/stock/${updateCoilStock?.id}`,
-		updateCoilStock?.id,
+		`/material/stock/${updateCoilStock?.uuid}`,
+		updateCoilStock?.uuid,
 		reset
 	);
 
 	const onClose = () => {
 		setUpdateCoilStock((prev) => ({
 			...prev,
-			id: null,
-			quantity: null,
+			uuid: null,
+			stock: null,
 			unit: null,
 		}));
 		reset(RM_MATERIAL_USED_NULL);
@@ -54,9 +53,9 @@ export default function Index({
 			quantity: data.remaining,
 			used_quantity:
 				updateCoilStock?.quantity - data.remaining - data.wastage,
-			material_stock_id: updateCoilStock?.id,
-			section: "coil_forming",
-			issued_by: user?.id,
+			material_stock_id: updateCoilStock?.uuid,
+			section: 'coil_forming',
+			issued_by: user?.uuid,
 			issued_by_name: user?.name,
 			created_at: GetDateTime(),
 		};
@@ -78,27 +77,26 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={updateCoilStock?.id !== null && "Material Usage Entry"}
+			title={updateCoilStock?.id !== null && 'Material Usage Entry'}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
+			isSmall={true}>
 			<JoinInput
-				label="remaining"
+				label='remaining'
 				unit={updateCoilStock?.unit}
 				max={updateCoilStock?.quantity}
 				placeholder={`Max: ${updateCoilStock?.quantity}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				label="wastage"
+				label='wastage'
 				unit={updateCoilStock?.unit}
 				placeholder={`Max: ${(
-					updateCoilStock?.quantity - watch("remaining")
+					updateCoilStock?.quantity - watch('remaining')
 				).toFixed(2)}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

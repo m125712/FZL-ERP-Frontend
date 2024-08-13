@@ -1,7 +1,7 @@
 import createGlobalState from '.';
-import { materialQK } from './QueryKeys';
+import { materialQK, purchaseQK } from './QueryKeys';
 
-// * Section * //
+// * Material Section * //
 export const useMaterialSection = () =>
 	createGlobalState({
 		queryKey: materialQK.sections(),
@@ -14,7 +14,7 @@ export const useMaterialSectionByUUID = (uuid) =>
 		url: `/material/section/${uuid}`,
 	});
 
-// * Types * //
+// * Material Types * //
 export const useMaterialType = () =>
 	createGlobalState({
 		queryKey: materialQK.types(),
@@ -27,7 +27,7 @@ export const useMaterialTypeByUUID = (uuid) =>
 		url: `/material/type/${uuid}`,
 	});
 
-// * Info * //
+// * Material Info * //
 export const useMaterialInfo = () =>
 	createGlobalState({
 		queryKey: materialQK.infos(),
@@ -40,7 +40,7 @@ export const useMaterialInfoByUUID = (uuid) =>
 		url: `/material/info/${uuid}`,
 	});
 
-// * Trx * //
+// * Material Trx * //
 export const useMaterialTrx = () =>
 	createGlobalState({
 		queryKey: materialQK.trxs(),
@@ -53,7 +53,7 @@ export const useMaterialTrxByUUID = (uuid) =>
 		url: `/material/trx/${uuid}`,
 	});
 
-// * Stock to sfg * //
+// * Material Stock to sfg * //
 export const useMaterialStockToSFG = () =>
 	createGlobalState({
 		queryKey: materialQK.stockToSGFs(),
@@ -64,4 +64,43 @@ export const useMaterialStockToSFGByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: materialQK.stockToSFG(uuid),
 		url: `/material/stock-to-sfg/${uuid}`,
+	});
+
+// * Purchase Vendor * //
+export const usePurchaseVendor = () =>
+	createGlobalState({
+		queryKey: purchaseQK.vendors(),
+		url: '/purchase/vendor',
+	});
+
+export const usePurchaseVendorByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: purchaseQK.vendor(uuid),
+		url: `/purchase/vendor/${uuid}`,
+	});
+
+// * Purchase Description * //
+export const usePurchaseDescription = () =>
+	createGlobalState({
+		queryKey: purchaseQK.descriptions(),
+		url: '/purchase/description',
+	});
+
+export const usePurchaseDescriptionByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: purchaseQK.description(uuid),
+		url: `/purchase/description/${uuid}`,
+	});
+
+// * Purchase Entry * //
+export const usePurchaseEntry = () =>
+	createGlobalState({
+		queryKey: purchaseQK.entries(),
+		url: '/purchase/entry',
+	});
+
+export const usePurchaseEntryByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: purchaseQK.entry(uuid),
+		url: `/purchase/entry/${uuid}`,
 	});

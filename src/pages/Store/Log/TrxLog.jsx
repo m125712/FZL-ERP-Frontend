@@ -1,18 +1,18 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useMaterialStockToSFG } from '@/state/Material';
+import { useMaterialTrx } from '@/state/Store';
 
-import { DateTime, EditDelete } from '@/ui';
+import { DateTime, EditDelete, SectionName } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useMemo, useState } from 'react';
 
-const OrderTrxLogAddOrUpdate = lazy(() => import('./OrderTrxLogAddOrUpdate'));
+const TrxLogAddOrUpdate = lazy(() => import('./TrxLogAddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useMaterialStockToSFG();
-	const info = new PageInfo('Log Against Order', url);
+	const { data, isLoading, url, deleteData } = useMaterialTrx();
+	const info = new PageInfo('Material/Log', url);
 	const haveAccess = useAccess('store__log');
 
 	const columns = useMemo(
@@ -24,37 +24,14 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'order_number',
-				header: 'Order Number',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'item_description',
-				header: 'Item Description',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'style_color_size',
-				header: 'Style / Size / Color',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'trx_to',
 				header: 'Section',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<span className='capitalize'>
-						{/* replace _ with space */}
-						{info.getValue().replace(/_/g, ' ')}
-					</span>
-				),
+				cell: (info) => <SectionName section={info.getValue()} />,
 			},
 			{
 				accessorKey: 'trx_quantity',
-				header: 'Transferred QTY',
+				header: 'Quantity',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -98,7 +75,7 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update_log_against_order'),
+				hidden: !haveAccess.includes('update_log'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -106,9 +83,7 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes(
-								'delete_log_against_order'
-							)}
+							showDelete={haveAccess.includes('delete_log')}
 						/>
 					);
 				},
@@ -123,21 +98,19 @@ export default function Index() {
 	};
 
 	// Update
-	const [updateMaterialTrxToOrder, setUpdateMaterialTrxToOrder] = useState({
+	const [updateMaterialTrx, setUpdateMaterialTrx] = useState({
 		uuid: null,
 		material_name: null,
-		trx_quantity: null,
 		stock: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateMaterialTrxToOrder((prev) => ({
+		setUpdateMaterialTrx((prev) => ({
 			...prev,
 			uuid: data[idx]?.uuid,
 			material_name: data[idx]?.material_name
 				.replace(/#/g, '')
 				.replace(/\//g, '-'),
-			trx_quantity: data[idx]?.trx_quantity,
 			stock: data[idx]?.stock,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
@@ -173,11 +146,11 @@ export default function Index() {
 			/>
 
 			<Suspense>
-				<OrderTrxLogAddOrUpdate
+				<TrxLogAddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateMaterialTrxToOrder,
-						setUpdateMaterialTrxToOrder,
+						updateMaterialTrx,
+						setUpdateMaterialTrx,
 					}}
 				/>
 			</Suspense>

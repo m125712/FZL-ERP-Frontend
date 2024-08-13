@@ -80,6 +80,7 @@ export const commercialQK = {
 	bank: (uuid) => [...commercialQK.banks(), uuid],
 };
 
+// Material Query Keys
 export const materialQK = {
 	all: () => ['material'],
 
@@ -104,12 +105,21 @@ export const materialQK = {
 	stockToSFG: (uuid) => [...materialQK.stockToSGFs(), uuid],
 };
 
+// Purchase Query Keys
 export const purchaseQK = {
 	all: () => ['purchase'],
 
 	// vendor
 	vendors: () => [...purchaseQK.all(), 'vendors'],
 	vendor: (uuid) => [...purchaseQK.vendors(), uuid],
+
+	// description
+	descriptions: () => [...purchaseQK.all(), 'description'],
+	description: (uuid) => [...purchaseQK.descriptions(), uuid],
+
+	// entry
+	entries: () => [...purchaseQK.all(), 'entries'],
+	entry: (uuid) => [...purchaseQK.entries(), uuid],
 };
 
 //Library
@@ -127,12 +137,27 @@ export const libraryQK = {
 export const commonQK = {
 	all: () => ['common'],
 
-	// tapeSFG
+	// * tapeSFG
 	tapeSFG: () => [...commonQK.all(), 'tape/SFG'],
 	tapeSFGByUUID: (uuid) => [...commonQK.tapeSFG(), uuid],
-	// tapeProduction
+	// * tapeProduction
 	tapeProduction: () => [...commonQK.all(), 'tape/production'],
 	tapeProductionByUUID: (uuid) => [...commonQK.tapeProduction(), uuid],
+
+	// * tapeToCoil
+	tapeToCoil: () => [...commonQK.all(), 'tape/to-coil'],
+	tapeToCoilByUUID: (uuid) => [...commonQK.tapeToCoil(), uuid],
+	// * coilSFG
+	coilSFG: () => [...commonQK.all(), 'coil/SFG'],
+	coilSFGByUUID: (uuid) => [...commonQK.coilSFG(), uuid],
+
+	// * coilProduction
+	coilProduction: () => [...commonQK.all(), 'coil/production'],
+	coilProductionByUUID: (uuid) => [...commonQK.coilProduction(), uuid],
+
+	// * rm
+	coilRM: () => [...commonQK.all(), 'rm'],
+	coilRMByUUID: (uuid) => [...commonQK.coilRM(), uuid],
 };
 
 // * LabDip * //

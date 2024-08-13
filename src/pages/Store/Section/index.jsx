@@ -1,49 +1,34 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useMaterialTrx } from '@/state/Material';
-
-import { DateTime, EditDelete, SectionName } from '@/ui';
+import { useMaterialSection } from '@/state/Store';
+import { EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useMemo, useState } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-const TrxLogAddOrUpdate = lazy(() => import('./TrxLogAddOrUpdate'));
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useMaterialTrx();
-	const info = new PageInfo('Material/Log', url);
-	const haveAccess = useAccess('store__log');
+	const { data, isLoading, url, deleteData } = useMaterialSection();
+	const info = new PageInfo('Material/Section', url, 'store__section');
+	const haveAccess = useAccess('store__section');
+
+	useEffect(() => {
+		document.title = info.getTabName();
+	}, []);
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'material_name',
+				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'trx_to',
-				header: 'Section',
-				enableColumnFilter: false,
-				cell: (info) => <SectionName section={info.getValue()} />,
-			},
-			{
-				accessorKey: 'trx_quantity',
-				header: 'Quantity',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'unit',
-				header: 'Unit',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'created_by_name',
-				header: 'Created By',
+				accessorKey: 'short_name',
+				header: 'Short Name',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -54,28 +39,11 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'created_at',
-				header: 'Created At',
-				filterFn: 'isWithinRange',
-				enableColumnFilter: false,
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
-				accessorKey: 'updated_at',
-				header: 'Updated At',
-				enableColumnFilter: false,
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
 				accessorKey: 'actions',
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update_log'),
+				hidden: !haveAccess?.includes('update'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -83,7 +51,7 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('delete_log')}
+							showDelete={haveAccess?.includes('delete')}
 						/>
 					);
 				},
@@ -98,20 +66,14 @@ export default function Index() {
 	};
 
 	// Update
-	const [updateMaterialTrx, setUpdateMaterialTrx] = useState({
+	const [updateSection, setUpdateSection] = useState({
 		uuid: null,
-		material_name: null,
-		stock: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateMaterialTrx((prev) => ({
+		setUpdateSection((prev) => ({
 			...prev,
-			uuid: data[idx]?.uuid,
-			material_name: data[idx]?.material_name
-				.replace(/#/g, '')
-				.replace(/\//g, '-'),
-			stock: data[idx]?.stock,
+			uuid: data[idx].uuid,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -125,9 +87,7 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].material_name
-				.replace(/#/g, '')
-				.replace(/\//g, '-'),
+			itemName: data[idx].name,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -137,20 +97,22 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className='container px-2 md:px-4'>
+		<div className='container mx-auto px-2 md:px-4'>
 			<ReactTable
 				title={info.getTitle()}
+				handelAdd={handelAdd}
+				accessor={haveAccess.includes('create')}
 				data={data}
 				columns={columns}
 				extraClass='py-2'
 			/>
 
 			<Suspense>
-				<TrxLogAddOrUpdate
+				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateMaterialTrx,
-						setUpdateMaterialTrx,
+						updateSection,
+						setUpdateSection,
 					}}
 				/>
 			</Suspense>

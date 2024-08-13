@@ -1,19 +1,24 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useMaterialType } from '@/state/Material';
-
-import { EditDelete } from '@/ui';
+import { usePurchaseDescription } from '@/state/Store';
+import { DateTime, EditDelete, LinkOnly } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useMaterialType();
-	const info = new PageInfo('Material/Type', url, 'store__type');
-	const haveAccess = useAccess('store__type');
+	const { data, isLoading, url, deleteData } = usePurchaseDescription();
+	console.log({
+		data,
+	});
+
+	const navigate = useNavigate();
+	const info = new PageInfo('Details', url, 'store__receive');
+	const haveAccess = useAccess('store__receive');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -22,22 +27,58 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'name',
-				header: 'Name',
+				accessorKey: 'pd_id',
+				header: 'ID',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { purchase_description_uuid } = info.row.original;
+					return (
+						<LinkOnly
+							uri='/store/receive'
+							id={purchase_description_uuid}
+							title={info.getValue()}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'vendor_name',
+				header: 'Vendor',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'short_name',
-				header: 'Short Name',
+				accessorKey: 'is_local',
+				header: 'Local/LC',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					return info.getValue() == 1 ? 'Local' : 'LC';
+				},
 			},
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
 			},
 			{
 				accessorKey: 'actions',
@@ -52,7 +93,7 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('delete')}
+							// showDelete={false}
 						/>
 					);
 				},
@@ -62,21 +103,21 @@ export default function Index() {
 	);
 
 	// Add
-	const handelAdd = () => {
-		window[info.getAddOrUpdateModalId()].showModal();
-	};
+	const handelAdd = () => navigate('/store/receive/entry');
 
 	// Update
-	const [updateMaterialType, setUpdateMaterialType] = useState({
+	const [updatePurchase, setUpdatePurchase] = useState({
 		uuid: null,
+		vendor_uuid: null,
+		material_uuid: null,
+		section_uuid: null,
+		unit: null,
+		is_local: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateMaterialType((prev) => ({
-			...prev,
-			uuid: data[idx].uuid,
-		}));
-		window[info.getAddOrUpdateModalId()].showModal();
+		const { purchase_description_uuid, uuid } = data[idx];
+		navigate(`/store/receive/update/${uuid}/${purchase_description_uuid}`);
 	};
 
 	// Delete
@@ -88,7 +129,7 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].name,
+			itemName: data[idx].uuid,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -108,15 +149,15 @@ export default function Index() {
 				extraClass='py-2'
 			/>
 
-			<Suspense>
+			{/* <Suspense>
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateMaterialType,
-						setUpdateMaterialType,
+						updatePurchase,
+						setUpdatePurchase,
 					}}
 				/>
-			</Suspense>
+			</Suspense> */}
 			<Suspense>
 				<DeleteModal
 					modalId={info.getDeleteModalId()}

@@ -6,7 +6,8 @@ import {
 	EMAIL_REQUIRED, // default
 	FORTUNE_ZIP_EMAIL_PATTERN, // default
 	JSON_STRING, // default
-	JSON_STRING_REQUIRED, // default
+	JSON_STRING_REQUIRED,
+	NAME_REQUIRED, // default
 	NUMBER, // default
 	NUMBER_DOUBLE, // default
 	NUMBER_DOUBLE_REQUIRED, // default
@@ -50,7 +51,7 @@ export {
 // Library
 //User
 export const LIBRARY_USER_SCHEMA = {
-	name: STRING_REQUIRED,
+	name: NAME_REQUIRED,
 	email: FORTUNE_ZIP_EMAIL_PATTERN,
 	department_designation: STRING_REQUIRED,
 	ext: STRING.nullable(),
@@ -101,7 +102,7 @@ export const SECTION_NULL = {
 
 // Buyer
 export const BUYER_SCHEMA = {
-	name: STRING_REQUIRED,
+	name: NAME_REQUIRED,
 	short_name: STRING.nullable(),
 	remarks: STRING.nullable(),
 };
@@ -315,13 +316,13 @@ export const PURCHASE_NULL = {
 
 // purchase entry page
 export const PURCHASE_ENTRY_SCHEMA = {
-	vendor_id: NUMBER_REQUIRED,
+	vendor_uuid: NUMBER_REQUIRED,
 	is_local: NUMBER_REQUIRED.default(0),
 	lc_number: STRING.nullable(),
 	remarks: STRING.nullable(),
 	purchase: yup.array().of(
 		yup.object().shape({
-			material_id: NUMBER_REQUIRED,
+			material_uuid: NUMBER_REQUIRED,
 			quantity: NUMBER_DOUBLE_REQUIRED,
 			price: NUMBER_DOUBLE_REQUIRED,
 			remarks: STRING.nullable(),
@@ -330,9 +331,9 @@ export const PURCHASE_ENTRY_SCHEMA = {
 };
 
 export const PURCHASE_ENTRY_NULL = {
-	id: null,
-	vendor_id: null,
-	section_id: null,
+	uuid: null,
+	vendor_uuid: null,
+	section_uuid: null,
 	purchase_description_uuid: null,
 	is_local: null,
 	lc_number: '',
@@ -340,7 +341,7 @@ export const PURCHASE_ENTRY_NULL = {
 	purchase: [
 		{
 			purchase_description_uuid: null,
-			material_id: null,
+			material_uuid: null,
 			quantity: '',
 			price: '',
 			remarks: '',
@@ -355,9 +356,9 @@ export const RECEIVED_SCHEMA = {
 };
 
 export const RECEIVED_NULL = {
-	id: null,
-	vendor_id: null,
-	material_id: null,
+	uuid: null,
+	vendor_uuid: null,
+	material_uuid: null,
 	received_quantity: '',
 	price: '',
 	is_local: '',
@@ -743,15 +744,16 @@ export const TAPE_PROD_NULL = {
 	wastage: '',
 	remarks: '',
 };
-
+//Tape To Coil
 export const TAPE_TO_COIL_TRX_SCHEMA = {
 	trx_quantity: NUMBER_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
 export const TAPE_TO_COIL_TRX_NULL = {
-	id: null,
-	tape_or_coil_stock_id: '',
+	uuid: null,
+	tape_coil_stock_uuid: '',
+	created_by: '',
 	trx_quantity: '',
 	wastage: '',
 	remarks: '',
@@ -774,7 +776,7 @@ export const TAPE_STOCK_TRX_TO_DYING_NULL = {
 };
 
 export const TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA = {
-	prod_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0),
+	production_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0),
 	remarks: STRING.nullable(),
 };
 
@@ -789,16 +791,16 @@ export const TAPE_OR_COIL_PRODUCTION_LOG_NULL = {
 
 // Coil Production
 export const COIL_PROD_SCHEMA = {
-	quantity: NUMBER_REQUIRED,
-	wastage: NUMBER_REQUIRED,
+	production_quantity: NUMBER_REQUIRED.moreThan(0),
+	wastage: NUMBER.moreThan(0),
 	remarks: STRING.nullable(),
 };
 
 export const COIL_PROD_NULL = {
-	id: null,
+	uuid: null,
 	section: '',
 	tape_or_coil_stock_id: '',
-	quantity: '',
+	production_quantity: '',
 	wastage: '',
 	remarks: '',
 };

@@ -11,10 +11,6 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = usePurchaseDescription();
-
-	console.log({
-		data,
-	});
 	const navigate = useNavigate();
 	const info = new PageInfo('Details', url, 'store__receive');
 	const haveAccess = useAccess('store__receive');

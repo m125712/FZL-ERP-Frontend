@@ -51,16 +51,6 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
-		// "uuid": "string",
-		// "material_uuid": "string",
-		// "order_entry_uuid": "string",
-		// "trx_to": "string",
-		// "trx_quantity": 0,
-		// "created_by": "string",
-		// "created_at": "2024-01-01 00:00:00",
-		// "updated_at": "2024-01-01 00:00:00",
-		// "remarks": "string"
-
 		// Update item
 		if (updateMaterialDetails?.uuid !== null) {
 			const updatedData = {

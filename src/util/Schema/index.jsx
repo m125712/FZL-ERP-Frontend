@@ -191,7 +191,6 @@ export const MATERIAL_NULL = {
 	uuid: null,
 	name: '',
 	short_name: '',
-	quantity: '',
 	unit: '',
 	threshold: 0,
 	description: '',

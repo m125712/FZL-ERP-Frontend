@@ -299,7 +299,6 @@ export const PURCHASE_SCHEMA = {
 export const PURCHASE_NULL = {
 	uuid: null,
 	vendor_uuid: null,
-	section_uuid: null,
 	is_local: '',
 	remarks: '',
 	purchase: [
@@ -330,8 +329,6 @@ export const PURCHASE_ENTRY_SCHEMA = {
 export const PURCHASE_ENTRY_NULL = {
 	uuid: null,
 	vendor_uuid: null,
-	section_uuid: null,
-	purchase_description_uuid: null,
 	is_local: null,
 	lc_number: '',
 	remarks: '',

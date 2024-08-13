@@ -12,10 +12,6 @@ export default function Index() {
 	const [error, setError] = useState(null);
 	const haveAccess = useAccess('store__receive_by_uuid');
 
-	console.log({
-		purchase,
-	});
-
 	useEffect(() => {
 		document.title = 'Purchase Details';
 	}, []);

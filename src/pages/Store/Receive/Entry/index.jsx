@@ -1,11 +1,7 @@
 import { DeleteModal } from '@/components/Modal';
-import {
-	useFetch,
-	useFetchForRhfResetForOrder,
-	usePostFunc,
-	useRHF,
-	useUpdateFunc,
-} from '@/hooks';
+import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
+import nanoid from '@/lib/nanoid';
+import { usePurchaseDescription, usePurchaseEntry } from '@/state/Store';
 import {
 	DynamicField,
 	FormField,
@@ -22,10 +18,13 @@ import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
-import nanoid from '@/lib/nanoid';
 
 // UPDATE IS NOT WORKING
 export default function Index() {
+	const { url: purchaseDescriptionUrl } = usePurchaseDescription();
+	const { url: purchaseEntryUrl } = usePurchaseEntry();
+	const { updateData, postData, deleteData } = usePurchaseDescription();
+
 	const { purchase_description_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
@@ -62,7 +61,6 @@ export default function Index() {
 	const { value: material } = useFetch(
 		'/other/material/value/label/unit/quantity'
 	);
-	const { value: vendor } = useFetch('/other/vendor/value/label');
 
 	// purchase
 	const {
@@ -102,57 +100,48 @@ export default function Index() {
 
 	// Submit
 	const onSubmit = async (data) => {
-		const vendor_name = vendor?.find(
-			(item) => item.value == data?.vendor_uuid
-		)?.label;
-		// Update
+		// Update item
 		if (isUpdate) {
 			const purchase_description_data = {
 				...data,
-				vendor_name: vendor_name,
 				updated_at: GetDateTime(),
 			};
 
-			let purchase_description_promise = useUpdateFunc({
-				uri: `/purchase/description/${data?.uuid}`,
-				itemId: data.uuid,
-				data: data,
+			const purchase_description_promise = await updateData.mutateAsync({
+				url: `${purchaseDescriptionUrl}/${data?.uuid}`,
 				updatedData: purchase_description_data,
+				uuid: data.uuid,
 				onClose: onClose,
-			}).catch((err) => console.error(`Error updating data: ${err}`));
-			let promises = data.purchase.map(async (item) => {
-				const material_name = material?.find(
-					(inItem) => inItem.value == item.material_uuid
-				).label;
+			});
+
+			const purchase_entries_promise = data.purchase.map(async (item) => {
 				if (item.uuid === undefined) {
 					item.purchase_description_uuid = purchase_description_uuid;
 					item.created_at = GetDateTime();
-					return await usePostFunc({
-						uri: '/purchase/entry',
-						data: item,
-					}).catch((err) => console.error(`Error: ${err}`));
+					return await postData.mutateAsync({
+						url: purchaseEntryUrl,
+						newData: item,
+					});
 				} else {
 					item.updated_at = GetDateTime();
 					const updatedData = {
 						...item,
-						material_name: material_name,
 					};
-					return await useUpdateFunc({
-						uri: `/purchase/entry/${item?.uuid}`,
-						itemId: item.uuid,
-						data: item,
-						updatedData: updatedData,
+					return await updateData.mutateAsync({
+						url: `${purchaseEntryUrl}/${item.uuid}`,
+						uuid: item.uuid,
+						updatedData,
 						onClose: onClose,
-					}).catch((err) =>
-						console.error(`Error updating data: ${err}`)
-					);
+					});
 				}
 			});
-			// console.log(promises);
 
 			try {
-				await Promise.all([purchase_description_promise, ...promises])
-					.then(() => reset(Object.assign({}, PURCHASE_ENTRY_NULL)))
+				Promise.all([
+					purchase_description_promise,
+					...purchase_entries_promise,
+				])
+					.then(() => reset(PURCHASE_ENTRY_NULL))
 					.then(() =>
 						navigate(`/store/receive/${purchase_description_uuid}`)
 					);
@@ -163,46 +152,60 @@ export default function Index() {
 			return;
 		}
 
-		// Add
-		var new_purchase_description_uuid = nanoid();
-
+		// Add new item
+		const new_purchase_description_uuid = nanoid();
 		const created_at = GetDateTime();
-		const special_requirement = JSON.stringify({
-			values: data?.special_requirement || [],
-		});
+		const created_by = user.uuid;
 
-		const purchase_details = {
+		// Create purchase description
+		const purchase_description_data = {
 			...data,
-			special_requirement,
 			uuid: new_purchase_description_uuid,
 			created_at,
-			created_by: user.uuid,
+			created_by,
 		};
-		await usePostFunc({
-			uri: '/purchase/description',
-			data: purchase_details,
+
+		// delete purchase field from data to be sent
+		delete purchase_description_data['purchase'];
+
+		const purchase_description_promise = await postData.mutateAsync({
+			url: purchaseDescriptionUrl,
+			newData: purchase_description_data,
+			isOnCloseNeeded: false,
 		});
 
-		const purchase = [...data.purchase].map((item) => ({
+		// Create purchase entries
+		const purchase_entries = [...data.purchase].map((item) => ({
 			...item,
 			purchase_description_uuid: new_purchase_description_uuid,
 			uuid: nanoid(),
 			created_at,
+			created_by,
 		}));
-		let promises = [
-			...purchase.map((item) =>
-				usePostFunc({
-					uri: '/purchase/entry',
-					data: item,
-				})
+
+		const purchase_entries_promise = [
+			...purchase_entries.map(
+				async (item) =>
+					await postData.mutateAsync({
+						url: purchaseEntryUrl,
+						newData: item,
+						isOnCloseNeeded: false,
+					})
 			),
 		];
-		await Promise.all(promises)
-			.then(() => reset(Object.assign({}, PURCHASE_ENTRY_NULL)))
-			.then(() =>
-				navigate(`/store/receive/${new_purchase_description_uuid}`)
-			)
-			.catch((err) => console.log(err));
+
+		try {
+			await Promise.all([
+				purchase_description_promise,
+				...purchase_entries_promise,
+			])
+				.then(() => reset(PURCHASE_ENTRY_NULL))
+				.then(() => {
+					navigate(`/store/receive/${new_purchase_description_uuid}`);
+				});
+		} catch (err) {
+			console.error(`Error with Promise.all: ${err}`);
+		}
 	};
 
 	// Check if id is valid
@@ -394,6 +397,7 @@ export default function Index() {
 					setDeleteItem={setDeleteItem}
 					setItems={purchaseField}
 					uri={`/purchase`}
+					deleteData={deleteData}
 				/>
 			</Suspense>
 			<DevTool control={control} placement='top-left' />

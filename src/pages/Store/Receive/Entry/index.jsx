@@ -84,6 +84,7 @@ export default function Index() {
 			});
 			window['purchase_delete'].showModal();
 		}
+
 		purchaseRemove(index);
 	};
 
@@ -95,7 +96,6 @@ export default function Index() {
 			remarks: '',
 		});
 	};
-	const onClose = () => reset(PURCHASE_ENTRY_NULL);
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -110,7 +110,7 @@ export default function Index() {
 				url: `${purchaseDescriptionUrl}/${data?.uuid}`,
 				updatedData: purchase_description_data,
 				uuid: data.uuid,
-				onClose: onClose,
+				isOnCloseNeeded: false,
 			});
 
 			const purchase_entries_promise = data.purchase.map(async (item) => {
@@ -121,6 +121,7 @@ export default function Index() {
 					return await postData.mutateAsync({
 						url: purchaseEntryUrl,
 						newData: item,
+						isOnCloseNeeded: false,
 					});
 				} else {
 					item.updated_at = GetDateTime();
@@ -131,7 +132,7 @@ export default function Index() {
 						url: `${purchaseEntryUrl}/${item.uuid}`,
 						uuid: item.uuid,
 						updatedData,
-						onClose: onClose,
+						isOnCloseNeeded: false,
 					});
 				}
 			});

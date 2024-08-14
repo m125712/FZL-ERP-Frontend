@@ -117,11 +117,6 @@ export default function Index() {
 		[data]
 	);
 
-	// Add
-	const handelAdd = () => {
-		window[info.getAddOrUpdateModalId()].showModal();
-	};
-
 	// Update
 	const [updateMaterialTrxToOrder, setUpdateMaterialTrxToOrder] = useState({
 		uuid: null,

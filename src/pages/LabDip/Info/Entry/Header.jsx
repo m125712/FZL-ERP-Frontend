@@ -18,11 +18,11 @@ export default function Header({
 	lab_status,
 }) {
 
-	// * state for lab status field*//
+	// * state for lab status field *//
 	const [labStatus, setLabStatus] = useState(
-		typeof lab_status !== 'boolean' && lab_status === 1 ? true : false
+		typeof lab_status !== 'boolean' && Number(lab_status) === 1 ? true : false
 	);
-
+	
 	const { value: order_info_uuid } = useFetch(`/other/order/info/value/label`);
 
 	return (
@@ -63,13 +63,13 @@ export default function Header({
 						<div className='rounded-md border border-primary px-1 w-32'>
 							<CheckBox
 								label='lab_status'
-								title='Lab Status'
+								title='Status'
 								height='h-[2.9rem]'
-								
 								defaultChecked={labStatus}
-								{...{ register, errors }}
 								onChange={(e) => setLabStatus(e.target.checked)}
+								{...{ register, errors }}
 							/>
+							
 						</div>
 					</div>
 				</div>

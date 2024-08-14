@@ -228,10 +228,6 @@ export default function Index() {
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
-	//   "color": "Red",
-	//   "quantity": 10,
-	//   "remarks": "Remarks"
-
 	return (
 		<div className='container mx-auto mt-2 px-2 pb-2 md:px-4'>
 			<HotKeys {...{ keyMap, handlers }}>

@@ -1,4 +1,4 @@
-import { DeleteModal } from '@/components/Modal';
+import { UpdateModal } from '@/components/Modal';
 import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useLabDipInfo } from '@/state/LabDip';
@@ -49,7 +49,6 @@ export default function Index() {
 	}, []);
 
 	if (isUpdate)
-		// TODO: Change it //
 		useFetchForRhfResetForOrder(
 			`/lab-dip/info/details/${info_uuid}`,
 			info_uuid,
@@ -67,18 +66,21 @@ export default function Index() {
 		name: 'recipe',
 	});
 
-	const [deleteItem, setDeleteItem] = useState({
+	const [updateItem, setUpdateItem] = useState({
 		itemId: null,
 		itemName: null,
 	});
 
 	const handleRecipeRemove = (index) => {
-		if (getValues(`recipe[${index}].uuid`) !== undefined) {
-			setDeleteItem({
-				itemId: getValues(`recipe[${index}].uuid`),
-				itemName: getValues(`recipe[${index}].uuid`),
-			});
-			window['recipe_delete'].showModal();
+		if (getValues(`recipe[${index}].recipe_uuid`) !== undefined) {
+			setUpdateItem((prev) => ({
+				...prev,
+				itemId: getValues(`recipe[${index}].recipe_uuid`),
+				itemName: getValues(`recipe[${index}].recipe_uuid`),
+			}));
+			console.log('into close modal');
+
+			window['recipe_update'].showModal();
 		}
 		recipeRemove(index);
 	};
@@ -92,61 +94,72 @@ export default function Index() {
 	const onClose = () => reset(LAB_INFO_NULL);
 
 	// Submit
-	const onSubmit = async (data) => {  //  TODO: Fix insert and update //
+	const onSubmit = async (data) => {
 		// * Update data * //
-		// if (isUpdate) {
-		// 	// * updated order description * //
-		// 	const lab_info_updated = {
-		// 		...data,
-		// 		// info_uuid: null,
-		// 		approved: data.approved ? 1 : 0,
-		// 		status: data.status ? 1 : 0,
-		// 		updated_at: GetDateTime(),
-		// 	};
+		if (isUpdate) {
+			// * updated order description * //
+			const lab_info_updated = {
+				...data,
+				lab_status: data.lab_status ? 1 : 0,
+				updated_at: GetDateTime(),
+			};
 
-		// 	await updateData.mutateAsync({
-		// 		url: `/lab-dip/recipe/${data?.uuid}`,
-		// 		updatedData: recipe_updated,
-		// 		isOnCloseNeeded: false,
-		// 	});
+			await updateData.mutateAsync({
+				url: `/lab-dip/info/${data?.uuid}`,
+				updatedData: lab_info_updated,
+				isOnCloseNeeded: false,
+			});
 
-		// 	// * updated order entry * //
-		// 	const recipe_updated = [...data.recipe].map((item) => ({
-		// 		...item,
-		// 		updated_at: GetDateTime(),
-		// 	}));
+			// * updated recipe * //
+			const recipe_updated = [...data.recipe].map((item) => ({
+				...item,
+				lab_dip_info_uuid: data.uuid,
+				updated_at: GetDateTime(),
+			}));
 
-		// 	//* Post new entry */ //
-		// 	let order_entry_updated_promises = [
-		// 		...recipe_updated.map(async (item) => {
-		// 			if (item.uuid) {
-		// 				await updateData.mutateAsync({
-		// 					url: `/lab-dip/recipe-entry/${item.uuid}`,
-		// 					updatedData: item,
-		// 					isOnCloseNeeded: false,
-		// 				});
-		// 			} else {
-		// 				await postData.mutateAsync({
-		// 					url: '/lab-dip/recipe-entry',
-		// 					newData: {
-		// 						...item,
-		// 						uuid: nanoid(),
-		// 						recipe_uuid:
-		// 							data?.uuid,
-		// 						created_at: GetDateTime(),
-		// 					},
-		// 					isOnCloseNeeded: false,
-		// 				});
-		// 			}
-		// 		}),
-		// 	];
+			// * insert the recipe data using update function * //
+			let recipe_updated_promises = [
+				...lab_info_updated.recipe.map(
+					async (item) =>
+						await updateData.mutateAsync({
+							url: `/lab-dip/update-recipe/by/${item.recipe_uuid}`,
+							updatedData: recipe_updated,
+							isOnCloseNeeded: false,
+						})
+				),
+			];
 
-		// 	// navigate(
-		// 	// 	`/order/details/${recipe_id}/${recipe_uuid}`
-		// 	// );
+			// * old code* //
+			// let order_entry_updated_promises = [
+			// 	...recipe_updated.map(async (item) => {
+			// 		if (item.uuid) {
+			// 			await updateData.mutateAsync({
+			// 				url: `/lab-dip/recipe-entry/${item.uuid}`,
+			// 				updatedData: item,
+			// 				isOnCloseNeeded: false,
+			// 			});
+			// 		} else {
+			// 			await postData.mutateAsync({
+			// 				url: '/lab-dip/recipe-entry',
+			// 				newData: {
+			// 					...item,
+			// 					uuid: nanoid(),
+			// 					recipe_uuid:
+			// 						data?.uuid,
+			// 					created_at: GetDateTime(),
+			// 				},
+			// 				isOnCloseNeeded: false,
+			// 			});
+			// 		}
+			// 	}),
+			// ];
 
-		// 	return;
-		// }
+			// navigate(
+			// 	`/order/details/${recipe_id}/${recipe_uuid}`
+			// );
+
+			return;
+		}
 
 		// * Add new data*//
 		const lab_dip_info_uuid = nanoid();
@@ -168,27 +181,23 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 
-	
-		// * recipe update as insert
+		const recipe = [...data.recipe].map((item) => ({
+			lab_dip_info_uuid,
+		}));
+
+		// * insert the recipe data using update function
 		let recipe_promises = [
 			...lab_info.recipe.map(
 				async (item) =>
 					await updateData.mutateAsync({
 						url: `/lab-dip/update-recipe/by/${item.recipe_uuid}`,
-						updatedData: lab_dip_info_uuid,
+						updatedData: recipe,
 						isOnCloseNeeded: false,
 					})
 			),
 		];
 
-		// const lab_info_entry = [...data.recipe].map((item) => ({
-		// 	...item,
-		// 	uuid: nanoid(),
-		// 	recipe_uuid,
-		// 	created_at,
-		// }));
-
-		//* Post new entry */ //
+		//* Post new entry *//
 		// let recipe_entry_promises = [
 		// 	...recipe_entry.map(
 		// 		async (item) =>
@@ -260,7 +269,7 @@ export default function Index() {
 							getValues,
 							Controller,
 							watch,
-							lab_status: getValues('status'),
+							lab_status: getValues('lab_status'),
 						}}
 					/>
 					<DynamicField
@@ -325,9 +334,7 @@ export default function Index() {
 										removeClick={() =>
 											handleRecipeRemove(index)
 										}
-										showRemoveButton={
-											recipeField.length > 1
-										}
+										showRemoveButton={true}
 									/>
 								</td>
 							</tr>
@@ -343,14 +350,13 @@ export default function Index() {
 				</form>
 			</HotKeys>
 			<Suspense>
-				<DeleteModal
-					modalId={'recipe_delete'}
+				<UpdateModal
+					modalId={'recipe_update'}
 					title={'Recipe Entry'}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					setItems={recipeField}
-					url={`/lab-dip/recipe-entry`}
-					deleteData={deleteData}
+					updateItem={updateItem}
+					setUpdateItem={setUpdateItem}
+					url={`/lab-dip/update-recipe/remove-lab-dip-info-uuid/by`}
+					updateData={updateData}
 				/>
 			</Suspense>
 

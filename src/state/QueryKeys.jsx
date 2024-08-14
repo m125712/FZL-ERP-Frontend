@@ -78,6 +78,14 @@ export const commercialQK = {
 	// bank
 	banks: () => [...commercialQK.all(), 'bank'],
 	bank: (uuid) => [...commercialQK.banks(), uuid],
+
+	// pi
+	pis: () => [...commercialQK.all(), 'pi'],
+	pi: (uuid) => [...commercialQK.pis(), uuid],
+
+	// pi-entry
+	piEntries: () => [...commercialQK.all(), 'pi-entry'],
+	piEntry: (uuid) => [...commercialQK.piEntries(), uuid],
 };
 
 // Material Query Keys

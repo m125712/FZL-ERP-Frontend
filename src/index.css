@@ -232,4 +232,19 @@
 	.animate-flash {
 		animation: flash 1s linear infinite;
 	}
+	.sb-red {
+		@apply border border-red-500;
+	}
+
+	.sb-green {
+		@apply border border-green-500;
+	}
+
+	.sb-blue {
+		@apply border border-blue-500;
+	}
+
+	.sb-yellow {
+		@apply border border-yellow-500;
+	}
 }

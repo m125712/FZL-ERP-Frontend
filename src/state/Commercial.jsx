@@ -1,7 +1,7 @@
 import createGlobalState from '.';
 import { commercialQK } from './QueryKeys';
 
-// * Buyer * //
+// * Bank * //
 export const useCommercialBank = () =>
 	createGlobalState({
 		queryKey: commercialQK.banks(),
@@ -12,4 +12,30 @@ export const useCommercialBankByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: commercialQK.bank(uuid),
 		url: `/commercial/bank/${uuid}`,
+	});
+
+// * PI * //
+export const useCommercialPI = () =>
+	createGlobalState({
+		queryKey: commercialQK.pis(),
+		url: '/commercial/pi',
+	});
+
+export const useCommercialPIByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commercialQK.pi(uuid),
+		url: `/commercial/pi/${uuid}`,
+	});
+
+// * PI Entry * //
+export const useCommercialPIEntry = () =>
+	createGlobalState({
+		queryKey: commercialQK.piEntries(),
+		url: '/commercial/pi-entry',
+	});
+
+export const useCommercialPIEntryByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commercialQK.piEntry(uuid),
+		url: `/commercial/pi-entry/${uuid}`,
 	});

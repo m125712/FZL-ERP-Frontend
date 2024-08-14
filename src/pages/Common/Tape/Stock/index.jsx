@@ -75,7 +75,6 @@ export default function Index() {
 
 	const [updateTapeStock, setUpdateTapeStock] = useState({
 		uuid: null,
-		stock: null,
 		unit: null,
 	});
 
@@ -83,8 +82,8 @@ export default function Index() {
 		setUpdateTapeStock((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
-			stock: data[idx].quantity,
 			unit: data[idx].unit,
+			tape_making: data[idx].tape_making,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};

@@ -150,6 +150,10 @@ export const commonQK = {
 	// * tapeRM
 	tapeRM: () => [...commonQK.all(), 'tape/rm'],
 	tapeRMByUUID: (uuid) => [...commonQK.tapeRM(), uuid],
+
+	// * tapeRMLog
+	tapeRMLog: () => [...commonQK.all(), 'tape/rm-log'],
+	tapeRMLogByUUID: (uuid) => [...commonQK.tapeRMLog(), uuid],
 	// * coilSFG
 	coilSFG: () => [...commonQK.all(), 'coil/SFG'],
 	coilSFGByUUID: (uuid) => [...commonQK.coilSFG(), uuid],

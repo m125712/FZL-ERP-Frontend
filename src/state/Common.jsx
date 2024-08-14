@@ -50,6 +50,18 @@ export const useCommonTapeRMByUUID = (uuid) =>
 		url: `/material/stock/by/single-field/tape_making/${uuid}`,
 	});
 
+//* RM LOG *//
+export const useCommonTapeRMLog = () =>
+	createGlobalState({
+		queryKey: commonQK.tapeRMLog(),
+		url: `/material/used/by/tape_making`,
+	});
+export const useCommonTapeRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.tapeRMLog(uuid),
+		url: `/material/used/by/tape_making${uuid}`,
+	});
+
 // * COIL * //
 // * SFG * //
 export const useCommonCoilSFG = () =>

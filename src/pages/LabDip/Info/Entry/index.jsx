@@ -1,27 +1,34 @@
-import { DeleteModal } from '@/components/Modal';
-import { useFetchForRhfResetForOrder, useRHF } from '@/hooks';
+import { UpdateModal } from '@/components/Modal';
+import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useOrderDescription, useOrderDetails } from '@/state/Order';
-import { ActionButtons, DynamicField, Input, JoinInput, Textarea } from '@/ui';
+import { useLabDipInfo } from '@/state/LabDip';
+import {
+	ActionButtons,
+	DynamicField,
+	Input,
+	JoinInput,
+	Textarea,
+	ReactSelect,
+	FormField,
+} from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { ORDER_NULL, ORDER_SCHEMA } from '@util/Schema';
+import { LAB_INFO_SCHEMA, LAB_INFO_NULL } from '@util/Schema';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-
 import Header from './Header';
 
 export default function Index() {
-	const { url, updateData, postData, deleteData } = useOrderDescription();
-	const { invalidateQuery: OrderDetailsInvalidate } = useOrderDetails();
-	const { order_number, order_description_uuid } = useParams();
+	const { url, updateData, postData, deleteData } = useLabDipInfo();
+	const { info_number, info_uuid } = useParams();
 
 	const { user } = useAuth();
 	const navigate = useNavigate();
-	const isUpdate =
-		order_description_uuid !== undefined && order_number !== undefined;
+
+	// * used for checking if it is for update*//
+	const isUpdate = info_uuid !== undefined && info_number !== undefined;
 
 	const {
 		register,
@@ -33,199 +40,190 @@ export default function Index() {
 		useFieldArray,
 		getValues,
 		watch,
-	} = useRHF(ORDER_SCHEMA, ORDER_NULL);
+	} = useRHF(LAB_INFO_SCHEMA, LAB_INFO_NULL);
 
 	useEffect(() => {
-		order_number !== undefined
-			? (document.title = `Order: Update ${order_number}`)
+		info_number !== undefined
+			? (document.title = `Order: Update ${info_number}`)
 			: (document.title = 'Order: Entry');
 	}, []);
 
 	if (isUpdate)
 		useFetchForRhfResetForOrder(
-			`/zipper/order/details/single-order/by/${order_description_uuid}/UUID`,
-			order_description_uuid,
+			`/lab-dip/info/details/${info_uuid}`,
+			info_uuid,
 			reset
 		);
 
-	// order_entry
+	console.log(getValues());
+	// recipe
 	const {
-		fields: orderEntryField,
-		append: orderEntryAppend,
-		remove: orderEntryRemove,
+		fields: recipeField,
+		append: recipeAppend,
+		remove: recipeRemove,
 	} = useFieldArray({
 		control,
-		name: 'order_entry',
+		name: 'recipe',
 	});
 
-	const [deleteItem, setDeleteItem] = useState({
+	const [updateItem, setUpdateItem] = useState({
 		itemId: null,
 		itemName: null,
 	});
 
-	const handleOrderEntryRemove = (index) => {
-		if (getValues(`order_entry[${index}].order_entry_uuid`) !== undefined) {
-			setDeleteItem({
-				itemId: getValues(`order_entry[${index}].order_entry_uuid`),
-				itemName: getValues(`order_entry[${index}].order_entry_uuid`),
-			});
-			window['order_entry_delete'].showModal();
+	const handleRecipeRemove = (index) => {
+		if (getValues(`recipe[${index}].recipe_uuid`) !== undefined) {
+			setUpdateItem((prev) => ({
+				...prev,
+				itemId: getValues(`recipe[${index}].recipe_uuid`),
+				itemName: getValues(`recipe[${index}].recipe_uuid`),
+			}));
+			console.log('into close modal');
+
+			window['recipe_update'].showModal();
 		}
-		orderEntryRemove(index);
+		recipeRemove(index);
 	};
 
-	const handelOrderEntryAppend = () => {
-		orderEntryAppend({
-			style: '',
-			color: '',
-			size: '',
-			quantity: '',
-			company_price: 0,
-			party_price: 0,
-			status: 1,
-			remarks: '',
+	const handelRecipeAppend = () => {
+		recipeAppend({
+			recipe_uuid: '',
 		});
 	};
-	const onClose = () => reset(ORDER_NULL);
+
+	const onClose = () => reset(LAB_INFO_NULL);
 
 	// Submit
 	const onSubmit = async (data) => {
-		const DEFAULT_SWATCH_APPROVAL_DATE = null;
-
 		// * Update data * //
 		if (isUpdate) {
 			// * updated order description * //
-			const order_description_updated = {
+			const lab_info_updated = {
 				...data,
-				is_slider_provided: data?.is_slider_provided ? 1 : 0,
-				is_logo_body: data?.is_logo_body ? 1 : 0,
-				is_logo_puller: data?.is_logo_puller ? 1 : 0,
-				hand: data?.hand,
+				lab_status: data.lab_status ? 1 : 0,
 				updated_at: GetDateTime(),
 			};
 
 			await updateData.mutateAsync({
-				url: `/zipper/order-description/${data?.order_description_uuid}`,
-				updatedData: order_description_updated,
+				url: `/lab-dip/info/${data?.uuid}`,
+				updatedData: lab_info_updated,
 				isOnCloseNeeded: false,
 			});
 
-			// * updated order entry * //
-			const order_entry_updated = [...data.order_entry].map((item) => ({
+			// * updated recipe * //
+			const recipe_updated = [...data.recipe].map((item) => ({
 				...item,
-				status: item.order_entry_status ? 1 : 0,
-				swatch_status: 'pending',
-				swatch_approval_date: DEFAULT_SWATCH_APPROVAL_DATE,
+				lab_dip_info_uuid: data.uuid,
 				updated_at: GetDateTime(),
 			}));
 
-			//* Post new entry */ //
-			let order_entry_updated_promises = [
-				...order_entry_updated.map(async (item) => {
-					if (item.order_entry_uuid) {
+			// * insert the recipe data using update function * //
+			let recipe_updated_promises = [
+				...lab_info_updated.recipe.map(
+					async (item) =>
 						await updateData.mutateAsync({
-							url: `/zipper/order-entry/${item.order_entry_uuid}`,
-							updatedData: item,
+							url: `/lab-dip/update-recipe/by/${item.recipe_uuid}`,
+							updatedData: recipe_updated,
 							isOnCloseNeeded: false,
-						});
-					} else {
-						await postData.mutateAsync({
-							url: '/zipper/order-entry',
-							newData: {
-								...item,
-								uuid: nanoid(),
-								status: item.order_entry_status ? 1 : 0,
-								swatch_status: 'pending',
-								swatch_approval_date:
-									DEFAULT_SWATCH_APPROVAL_DATE,
-								order_description_uuid:
-									data?.order_description_uuid,
-								created_at: GetDateTime(),
-							},
-							isOnCloseNeeded: false,
-						});
-					}
-				}),
+						})
+				),
 			];
 
-			navigate(
-				`/order/details/${order_number}/${order_description_uuid}`
-			);
+			// * old code* //
+			// let order_entry_updated_promises = [
+			// 	...recipe_updated.map(async (item) => {
+			// 		if (item.uuid) {
+			// 			await updateData.mutateAsync({
+			// 				url: `/lab-dip/recipe-entry/${item.uuid}`,
+			// 				updatedData: item,
+			// 				isOnCloseNeeded: false,
+			// 			});
+			// 		} else {
+			// 			await postData.mutateAsync({
+			// 				url: '/lab-dip/recipe-entry',
+			// 				newData: {
+			// 					...item,
+			// 					uuid: nanoid(),
+			// 					recipe_uuid:
+			// 						data?.uuid,
+			// 					created_at: GetDateTime(),
+			// 				},
+			// 				isOnCloseNeeded: false,
+			// 			});
+			// 		}
+			// 	}),
+			// ];
+
+			// navigate(
+			// 	`/order/details/${recipe_id}/${recipe_uuid}`
+			// );
 
 			return;
 		}
 
 		// * Add new data*//
-		const new_order_description_uuid = nanoid();
+		const lab_dip_info_uuid = nanoid();
 		const created_at = GetDateTime();
-		const special_requirement = JSON.stringify({
-			values: data?.special_requirement || [],
-		});
 
-		const order_description = {
+		const lab_info = {
 			...data,
-			is_slider_provided: data?.is_slider_provided ? 1 : 0,
-			is_logo_body: data?.is_logo_body ? 1 : 0,
-			is_logo_puller: data?.is_logo_puller ? 1 : 0,
-			hand: data?.hand,
-			status: 0,
-			special_requirement,
-			uuid: new_order_description_uuid,
+			uuid: lab_dip_info_uuid,
+			lab_status: data.lab_status ? 1 : 0,
 			created_at,
 			created_by: user?.uuid,
-			// issued_by: user.uuid,
 		};
 
+		console.log('lab_info:', lab_info);
 		//* Post new order description */ //
 		await postData.mutateAsync({
 			url,
-			newData: order_description,
+			newData: lab_info,
 			isOnCloseNeeded: false,
 		});
 
-		const order_entry = [...data.order_entry].map((item) => ({
-			...item,
-			uuid: nanoid(),
-			status: item.order_entry_status ? 1 : 0,
-			swatch_status: 'pending',
-			swatch_approval_date: DEFAULT_SWATCH_APPROVAL_DATE,
-			order_description_uuid: new_order_description_uuid,
-			created_at,
+		const recipe = [...data.recipe].map((item) => ({
+			lab_dip_info_uuid,
 		}));
 
-		// console.log('Order Description:', order_description);
-		// console.log('Order Entry:', order_entry);
-
-		//* Post new entry */ //
-		let order_entry_promises = [
-			...order_entry.map(
+		// * insert the recipe data using update function
+		let recipe_promises = [
+			...lab_info.recipe.map(
 				async (item) =>
-					await postData.mutateAsync({
-						url: '/zipper/order-entry',
-						newData: item,
+					await updateData.mutateAsync({
+						url: `/lab-dip/update-recipe/by/${item.recipe_uuid}`,
+						updatedData: recipe,
 						isOnCloseNeeded: false,
 					})
 			),
 		];
 
-		await Promise.all(order_entry_promises)
+		//* Post new entry *//
+		// let recipe_entry_promises = [
+		// 	...recipe_entry.map(
+		// 		async (item) =>
+		// 			await postData.mutateAsync({
+		// 				url: '/lab-dip/recipe-entry',
+		// 				newData: item,
+		// 				isOnCloseNeeded: false,
+		// 			})
+		// 	),
+		// ];
+
+		await Promise.all(recipe_promises)
 			.then(() => reset(Object.assign({}, ORDER_NULL)))
-			.then(async () => {
-				await OrderDetailsInvalidate();
-				navigate(`/order/details`);
-			})
+			.then(navigate(`/lab-dip/info`))
 			.catch((err) => console.log(err));
 	};
 
-	// Check if order_number is valid
+	// Check if recipe_id is valid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 
 	const handelDuplicateDynamicField = useCallback(
 		(index) => {
-			const item = getValues(`order_entry[${index}]`);
-			orderEntryAppend({ ...item, order_entry_uuid: undefined });
+			const item = getValues(`recipe[${index}]`);
+			recipeAppend({ ...item, uuid: undefined });
 		},
-		[getValues, orderEntryAppend]
+		[getValues, recipeAppend]
 	);
 
 	const handleEnter = (event) => {
@@ -240,9 +238,9 @@ export default function Index() {
 	};
 
 	const handlers = {
-		NEW_ROW: handelOrderEntryAppend,
+		NEW_ROW: handelRecipeAppend,
 		COPY_LAST_ROW: () =>
-			handelDuplicateDynamicField(orderEntryField.length - 1),
+			handelDuplicateDynamicField(recipeField.length - 1),
 		ENTER: (event) => handleEnter(event),
 	};
 
@@ -250,6 +248,8 @@ export default function Index() {
 		ignoreTags: ['input', 'select', 'textarea'],
 		ignoreEventsCondition: function () {},
 	});
+
+	const { value: rec_uuid } = useFetch(`/other/lab-dip/recipe/value/label`);
 
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
@@ -269,21 +269,13 @@ export default function Index() {
 							getValues,
 							Controller,
 							watch,
-							is_logo_body: getValues('is_logo_body'),
-							is_logo_puller: getValues('is_logo_puller'),
+							lab_status: getValues('lab_status'),
 						}}
 					/>
 					<DynamicField
-						title='Details'
-						handelAppend={handelOrderEntryAppend}
-						tableHead={[
-							'Style',
-							'Color',
-							'Size',
-							'Quantity',
-							'Price (USD) (Com/Party)',
-							'Action',
-						].map((item) => (
+						title='Recipe'
+						handelAppend={handelRecipeAppend}
+						tableHead={['Recipe', 'Action'].map((item) => (
 							<th
 								key={item}
 								scope='col'
@@ -291,93 +283,48 @@ export default function Index() {
 								{item}
 							</th>
 						))}>
-						{orderEntryField.map((item, index) => (
+						{recipeField.map((item, index) => (
 							<tr key={item.id}>
-								<td className={`pl-1 ${rowClass}`}>
-									<Textarea
-										title='style'
-										label={`order_entry[${index}].style`}
-										is_title_needed='false'
-										dynamicerror={
-											errors?.order_entry?.[index]?.style
-										}
-										register={register}
-									/>
-								</td>
+								{/* Recipe */}
 								<td className={rowClass}>
-									<Textarea
-										title='color'
-										label={`order_entry[${index}].color`}
-										is_title_needed='false'
-										dynamicerror={
-											errors?.order_entry?.[index]?.color
-										}
-										register={register}
-									/>
-								</td>
-								<td className={`w-40 ${rowClass}`}>
-									<JoinInput
-										title='size'
-										label={`order_entry[${index}].size`}
-										is_title_needed='false'
-										unit='cm'
-										dynamicerror={
-											errors?.order_entry?.[index]?.size
-										}
-										register={register}
-									/>
-								</td>
-								<td className={`w-40 ${rowClass}`}>
-									<JoinInput
-										title='quantity'
-										label={`order_entry[${index}].quantity`}
-										is_title_needed='false'
-										unit='pcs'
-										dynamicerror={
-											errors?.order_entry?.[index]
-												?.quantity
-										}
-										register={register}
-									/>
-								</td>
-								<td className={`w-24 ${rowClass}`}>
-									<div className='flex'>
-										<Input
-											label={`order_entry[${index}].company_price`}
-											is_title_needed='false'
-											dynamicerror={
-												errors?.order_entry?.[index]
-													?.company_price
-											}
-											{...{ register, errors }}
+									<FormField
+										label={`recipe[${index}].recipe_uuid`}
+										title='Recipe uuid'
+										errors={errors}>
+										<Controller
+											name={`recipe[${index}].recipe_uuid`}
+											control={control}
+											render={({
+												field: { onChange },
+											}) => {
+												return (
+													<ReactSelect
+														placeholder='Select recipe uuid'
+														options={rec_uuid}
+														value={rec_uuid?.find(
+															(item) =>
+																item.value ==
+																getValues(
+																	`recipe[${index}].recipe_uuid`
+																)
+														)}
+														onChange={(e) =>
+															onChange(e.value)
+														}
+														isDisabled={
+															rec_uuid ==
+															undefined
+														}
+														menuPortalTarget={
+															document.body
+														}
+													/>
+												);
+											}}
 										/>
-										<Input
-											label={`order_entry[${index}].party_price`}
-											is_title_needed='false'
-											dynamicerror={
-												errors?.order_entry?.[index]
-													?.party_price
-											}
-											{...{ register, errors }}
-										/>
-									</div>
+									</FormField>
 								</td>
-								{/* <td className={`w-16 ${rowClass}`}>
-									<Switch
-										title="status"
-										label={`order_entry[${index}].order_entry_status`}
-										is_title_needed="false"
-										dynamicerror={
-											errors?.order_entry?.[index]
-												?.order_entry_status
-										}
-										register={register}
-										defaultChecked={
-											item.order_entry_status === 1
-										}
-										disabled={isSwatchButtonDisabled(index)}
-									/>
-								</td> */}
+
 								<td
 									className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
 									<ActionButtons
@@ -385,11 +332,9 @@ export default function Index() {
 											handelDuplicateDynamicField(index)
 										}
 										removeClick={() =>
-											handleOrderEntryRemove(index)
+											handleRecipeRemove(index)
 										}
-										showRemoveButton={
-											orderEntryField.length > 1
-										}
+										showRemoveButton={true}
 									/>
 								</td>
 							</tr>
@@ -405,18 +350,17 @@ export default function Index() {
 				</form>
 			</HotKeys>
 			<Suspense>
-				<DeleteModal
-					modalId={'order_entry_delete'}
-					title={'Order Entry'}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					setItems={orderEntryField}
-					url={`/zipper/order-entry`}
-					deleteData={deleteData}
+				<UpdateModal
+					modalId={'recipe_update'}
+					title={'Recipe Entry'}
+					updateItem={updateItem}
+					setUpdateItem={setUpdateItem}
+					url={`/lab-dip/update-recipe/remove-lab-dip-info-uuid/by`}
+					updateData={updateData}
 				/>
 			</Suspense>
 
-			{/* <DevTool control={control} placement='top-left' /> */}
+			<DevTool control={control} placement='top-left' />
 		</div>
 	);
 }

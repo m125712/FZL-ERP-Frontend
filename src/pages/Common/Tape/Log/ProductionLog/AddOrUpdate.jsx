@@ -87,7 +87,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Update Production Log of ${updateTapeLog?.tape_type}`}
+			title={`Update Production Log of ${updateTapeLog?.type_of_zipper}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

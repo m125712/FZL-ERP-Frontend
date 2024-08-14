@@ -15,17 +15,19 @@ export default function Index({
 		uuid: null,
 		section: null,
 		used_quantity: null,
+		tape_making: null,
 	},
 	setUpdateTapeLog,
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
-	// const MAX_QUANTITY =
-	// 	updateCoilLog?.coil_forming + updateCoilLog?.used_quantity;
-	// const schema = {
-	// 	...RM_MATERIAL_USED_EDIT_SCHEMA,
-	// 	used_quantity:
-	// 		RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
-	// };
+	const MAX_QUANTITY =
+		Number(updateTapeLog?.tape_making) +
+		Number(updateTapeLog?.used_quantity);
+	const schema = {
+		...RM_MATERIAL_USED_EDIT_SCHEMA,
+		used_quantity:
+			RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
+	};
 
 	const {
 		register,
@@ -35,7 +37,7 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-	} = useRHF(RM_MATERIAL_USED_EDIT_SCHEMA, RM_MATERIAL_USED_EDIT_NULL);
+	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
 		`${url}/${updateTapeLog?.uuid}`,
@@ -49,6 +51,7 @@ export default function Index({
 			uuid: null,
 			section: null,
 			used_quantity: null,
+			tape_making: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
@@ -134,8 +137,8 @@ export default function Index({
 			</FormField>
 			<Input
 				label='used_quantity'
-				// sub_label={`Max: ${MAX_QUANTITY}`}
-				// placeholder={`Max: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${Number(updateTapeLog?.tape_making) + Number(updateTapeLog?.used_quantity)}`}
+				placeholder={`Max: ${Number(updateTapeLog?.tape_making) + Number(updateTapeLog?.used_quantity)}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

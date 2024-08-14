@@ -24,22 +24,19 @@ export default function Index({
 }) {
 	const { url, updateData } = useCommonCoilProduction();
 
-	// const MIN_QUANTITY =
-	// 	Number(updateCoilLog?.tape_prod) -
-	// 		Number(updateCoilLog?.production_quantity) <
-	// 	0
-	// 		? Number(updateCoilLog?.production_quantity)
-	// 		: 0;
-	// const schema = {
-	// 	...TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
-	// 	production_quantity:
-	// 		TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA.production_quantity.min(
-	// 			MIN_QUANTITY
-	// 		),
-	// };
+	const MAX_QUANTITY =
+		Number(updateCoilLog.trx_quantity_in_coil) +
+		Number(updateCoilLog.production_quantity);
+	const schema = {
+		...TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
+		production_quantity:
+			TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA.production_quantity.max(
+				MAX_QUANTITY
+			),
+	};
 
 	const { register, handleSubmit, errors, reset } = useRHF(
-		TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
+		schema,
 		TAPE_OR_COIL_PRODUCTION_LOG_NULL
 	);
 
@@ -87,16 +84,16 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Update Production Log of ${updateCoilLog?.tape_type}`}
+			title={`Update Production Log of ${updateCoilLog?.type_of_zipper}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'
-				//sub_label={`Min: ${MIN_QUANTITY}`}
+				sub_label={`Min: ${MAX_QUANTITY}`}
 				unit='KG'
-				//placeholder={`Min: ${MIN_QUANTITY}`}
+				placeholder={`Min: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

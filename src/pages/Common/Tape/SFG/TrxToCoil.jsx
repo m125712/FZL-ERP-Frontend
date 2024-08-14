@@ -72,6 +72,7 @@ export default function Index({
 			isSmall={true}>
 			<JoinInput
 				label='trx_quantity'
+				sub_label={`Max: ${updateTapeProd?.quantity}`}
 				unit='KG'
 				placeholder={`Max: ${updateTapeProd?.quantity}`}
 				{...{ register, errors }}

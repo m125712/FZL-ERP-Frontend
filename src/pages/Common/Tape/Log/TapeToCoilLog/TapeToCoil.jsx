@@ -76,6 +76,7 @@ export default function TapeToCoil() {
 		uuid: null,
 		type_of_zipper: null,
 		tape_or_coil_stock_id: null,
+		quantity: null,
 		tape_prod: null,
 		coil_stock: null,
 		trx_quantity: null,

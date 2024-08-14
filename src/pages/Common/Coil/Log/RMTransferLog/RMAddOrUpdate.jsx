@@ -19,13 +19,14 @@ export default function Index({
 	setUpdateCoilLog,
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
-	// const MAX_QUANTITY =
-	// 	updateCoilLog?.coil_forming + updateCoilLog?.used_quantity;
-	// const schema = {
-	// 	...RM_MATERIAL_USED_EDIT_SCHEMA,
-	// 	used_quantity:
-	// 		RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
-	// };
+	const MAX_QUANTITY =
+		Number(updateCoilLog?.coil_forming) +
+		Number(updateCoilLog?.used_quantity);
+	const schema = {
+		...RM_MATERIAL_USED_EDIT_SCHEMA,
+		used_quantity:
+			RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
+	};
 
 	const {
 		register,
@@ -35,7 +36,7 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-	} = useRHF(RM_MATERIAL_USED_EDIT_SCHEMA, RM_MATERIAL_USED_EDIT_NULL);
+	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
 		`${url}/${updateCoilLog?.uuid}`,
@@ -134,8 +135,8 @@ export default function Index({
 			</FormField>
 			<Input
 				label='used_quantity'
-				// sub_label={`Max: ${MAX_QUANTITY}`}
-				// placeholder={`Max: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${MAX_QUANTITY}`}
+				placeholder={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

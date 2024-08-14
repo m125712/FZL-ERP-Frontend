@@ -13,12 +13,6 @@ export default function Index() {
 	const info = new PageInfo('RM Tape Log', url, 'common__tape_log');
 	const haveAccess = useAccess(info.getTab());
 
-	// const info = new PageInfo('RM Coil Log', 'material/used/by/coil_forming');
-	// const [coilLog, setCoilLog] = useState([]);
-	// const [loading, setLoading] = useState(true);
-	// const [error, setError] = useState(null);
-	// const haveAccess = useAccess('common__coil_log');
-
 	const columns = useMemo(
 		() => [
 			{
@@ -119,8 +113,7 @@ export default function Index() {
 		uuid: null,
 		section: null,
 		material_name: null,
-		teeth_assembling_and_polishing: null,
-		plating_and_iron: null,
+		tape_making: null,
 		used_quantity: null,
 	});
 

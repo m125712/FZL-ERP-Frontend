@@ -16,7 +16,6 @@ export default function ProductionLog() {
 
 	const { data, isLoading, url, deleteData } = useCommonCoilProduction();
 	const haveAccess = useAccess('common__coil_log');
-
 	const columns = useMemo(
 		() => [
 			{

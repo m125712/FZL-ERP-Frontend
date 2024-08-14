@@ -726,7 +726,7 @@ export const TAPE_STOCK_ADD_NULL = {
 // Tape Production
 export const TAPE_PROD_SCHEMA = {
 	production_quantity: NUMBER_REQUIRED.moreThan(0),
-	wastage: NUMBER.moreThan(0),
+	wastage: NUMBER,
 	remarks: STRING.nullable(),
 };
 
@@ -775,7 +775,7 @@ export const TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA = {
 };
 
 export const TAPE_OR_COIL_PRODUCTION_LOG_NULL = {
-	id: null,
+	uuid: null,
 	type_of_zipper: null,
 	tape_or_coil_stock_id: null,
 	prod_quantity: null,
@@ -785,8 +785,8 @@ export const TAPE_OR_COIL_PRODUCTION_LOG_NULL = {
 
 // Coil Production
 export const COIL_PROD_SCHEMA = {
-	production_quantity: NUMBER_REQUIRED.moreThan(0),
-	wastage: NUMBER.moreThan(0),
+	production_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0),
+	wastage: NUMBER_DOUBLE.moreThan(0),
 	remarks: STRING.nullable(),
 };
 
@@ -841,7 +841,7 @@ export const RM_MATERIAL_USED_EDIT_SCHEMA = {
 };
 
 export const RM_MATERIAL_USED_EDIT_NULL = {
-	id: null,
+	uuid: null,
 	material_stock_id: null,
 	section: '',
 	used_quantity: '',

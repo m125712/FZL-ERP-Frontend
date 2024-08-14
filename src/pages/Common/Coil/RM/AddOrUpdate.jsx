@@ -6,6 +6,7 @@ import { useCommonCoilRM } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
+import * as yup from 'yup';
 
 export default function Index({
 	modalId = '',
@@ -16,23 +17,13 @@ export default function Index({
 	},
 	setUpdateCoilStock,
 }) {
-	//       "uuid": "0UEnxvp0dRSNN3O",
-	//   "material_uuid": "0UEnxvp0dRSNN3O",
-	//   "material_name": "Tape Material",
-	//   "stock": "935.0000",
-	//   "unit": "kg",
-	//   "tape_making": "60.0000",
-	//   "remarks": null
-	const { user } = useAuth();
 	const { url, postData } = useCommonCoilRM();
-
+	const MAX_QUANTITY = updateCoilStock?.coil_forming;
 	const schema = {
 		used_quantity: RM_MATERIAL_USED_SCHEMA.remaining.max(
 			updateCoilStock?.coil_forming
 		),
-		wastage: RM_MATERIAL_USED_SCHEMA.remaining.max(
-			updateCoilStock?.coil_forming
-		),
+		wastage: RM_MATERIAL_USED_SCHEMA.remaining.max(MAX_QUANTITY),
 	};
 
 	const { register, handleSubmit, errors, reset, watch } = useRHF(
@@ -55,20 +46,11 @@ export default function Index({
 		reset(RM_MATERIAL_USED_NULL);
 		window[modalId].close();
 	};
-	//  "uuid": "string",
-	//   "material_uuid": "string",
-	//   "section": "string",
-	//   "used_quantity": 0,
-	//   "wastage": 0,
-	//   "created_at": "2024-01-01 00:00:00",
-	//   "updated_at": "2024-01-01 00:00:00",
-	//   "remarks": "string"
+
 	const onSubmit = async (data) => {
 		const updatedData = {
 			...data,
-			// /coil_forming: data.remaining,
-			// used_quantity:
-			// 	updateCoilStock?.coil_forming - data.remaining - data.wastage,
+
 			material_uuid: updateCoilStock?.uuid,
 			section: 'coil_forming',
 			created_by: user?.uuid,
@@ -77,10 +59,6 @@ export default function Index({
 			created_at: GetDateTime(),
 		};
 
-		// if (updatedData?.used_quantity < 0) {
-		// 	alert("Wastage can't be greater than remaining");
-		// 	return;
-		// }
 		await postData.mutateAsync({
 			url: '/material/used',
 			newData: updatedData,
@@ -97,6 +75,7 @@ export default function Index({
 			isSmall={true}>
 			<JoinInput
 				label='used_quantity'
+				sub_label={`Max: ${updateCoilStock?.coil_forming}`}
 				unit={updateCoilStock?.unit}
 				max={updateCoilStock?.coil_forming}
 				placeholder={`Max: ${updateCoilStock?.coil_forming}`}
@@ -104,9 +83,18 @@ export default function Index({
 			/>
 			<JoinInput
 				label='wastage'
+				sub_label={`Max: ${(updateCoilStock?.coil_forming -
+					watch('used_quantity') <
+				0
+					? 0
+					: updateCoilStock?.coil_forming - watch('used_quantity')
+				).toFixed(2)}`}
 				unit={updateCoilStock?.unit}
-				placeholder={`Max: ${(
-					updateCoilStock?.coil_forming - watch('used_quantity')
+				placeholder={`Max: ${(updateCoilStock?.coil_forming -
+					watch('used_quantity') <
+				0
+					? 0
+					: updateCoilStock?.coil_forming - watch('used_quantity')
 				).toFixed(2)}`}
 				{...{ register, errors }}
 			/>

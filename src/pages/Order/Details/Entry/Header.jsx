@@ -1,4 +1,3 @@
-import { ShowToast } from '@/components/Toast';
 import { useFetch } from '@/hooks';
 import {
 	CheckBox,
@@ -108,14 +107,14 @@ export default function Header({
 		if (order_description_uuid !== undefined) {
 			setSpReq((prev) => ({
 				...prev,
-				special_req: getValues('special_requirement_ids')
-					? getValues('special_requirement_ids')
+				special_req: getValues('special_requirement')
+					? getValues('special_requirement')
 					: '',
 			}));
 		}
 		setIsLogoBody(is_logo_body === 1 ? true : false);
 		setIsLogoPuller(is_logo_puller === 1 ? true : false);
-	}, [getValues('special_requirement_ids'), is_logo_body, is_logo_puller]);
+	}, [getValues('special_requirement'), is_logo_body, is_logo_puller]);
 
 	return (
 		<div className='flex flex-col gap-4'>

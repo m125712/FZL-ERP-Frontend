@@ -5,7 +5,6 @@ import { useOrderDescription, useOrderDetails } from '@/state/Order';
 import { ActionButtons, DynamicField, Input, JoinInput, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { ORDER_NULL, ORDER_SCHEMA } from '@util/Schema';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';

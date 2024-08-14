@@ -16,7 +16,7 @@ export default function TapeToCoil() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'tape_type',
+				accessorKey: 'type_of_zipper',
 				header: 'Type of zipper',
 				enableColumnFilter: false,
 				cell: (info) => (

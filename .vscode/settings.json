@@ -288,7 +288,7 @@
 		"editor.formatOnPaste": true
 	},
 	"typescript.updateImportsOnFileMove.enabled": "always",
-	"workbench.colorTheme": "Andromeda Italic Bordered",
+	"workbench.colorTheme": "Atom Material Theme",
 	"diffEditor.maxComputationTime": 0,
 	"tailwind-fold.autoFold": false,
 	"scm.showIncomingChanges": "always",

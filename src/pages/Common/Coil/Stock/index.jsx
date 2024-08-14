@@ -75,7 +75,6 @@ export default function Index() {
 
 	const [updateCoilStock, setUpdateCoilStock] = useState({
 		uuid: null,
-		stock: null,
 		unit: null,
 	});
 
@@ -83,8 +82,8 @@ export default function Index() {
 		setUpdateCoilStock((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
-			stock: data[idx].quantity,
 			unit: data[idx].unit,
+			coil_forming: data[idx].coil_forming,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};

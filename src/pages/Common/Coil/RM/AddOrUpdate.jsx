@@ -12,6 +12,7 @@ export default function Index({
 	updateCoilStock = {
 		uuid: null,
 		unit: null,
+		coil_forming: null,
 	},
 	setUpdateCoilStock,
 }) {
@@ -23,7 +24,7 @@ export default function Index({
 	//   "tape_making": "60.0000",
 	//   "remarks": null
 	const { user } = useAuth();
-	const { url, updateData, postData } = useCommonCoilRM();
+	const { url, postData } = useCommonCoilRM();
 
 	const schema = {
 		used_quantity: RM_MATERIAL_USED_SCHEMA.remaining.max(

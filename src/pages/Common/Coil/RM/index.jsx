@@ -9,7 +9,7 @@ import { lazy, useEffect, useMemo, useState } from 'react';
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useCommonCoilRM();
+	const { data, isLoading, url } = useCommonCoilRM();
 	const info = new PageInfo('Coil Stock', url, 'common__coil_rm');
 	const haveAccess = useAccess(info.getTab());
 
@@ -76,6 +76,7 @@ export default function Index() {
 	const [updateCoilStock, setUpdateCoilStock] = useState({
 		uuid: null,
 		unit: null,
+		coil_forming: null,
 	});
 
 	const handelUpdate = (idx) => {

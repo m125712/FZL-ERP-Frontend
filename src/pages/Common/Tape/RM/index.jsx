@@ -10,7 +10,7 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useCommonTapeRM();
-	const info = new PageInfo('Tape Stock', url, 'common__tape_rm');
+	const info = new PageInfo('Tape RM', url, 'common__tape_rm');
 	const haveAccess = useAccess(info.getTab());
 
 	//   "uuid": "0UEnxvp0dRSNN3O",
@@ -76,6 +76,7 @@ export default function Index() {
 	const [updateTapeStock, setUpdateTapeStock] = useState({
 		uuid: null,
 		unit: null,
+		tape_making: null,
 	});
 
 	const handelUpdate = (idx) => {

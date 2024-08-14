@@ -12,18 +12,12 @@ export default function Index({
 	updateTapeStock = {
 		uuid: null,
 		unit: null,
+		tape_making: null,
 	},
 	setUpdateTapeStock,
 }) {
-	//       "uuid": "0UEnxvp0dRSNN3O",
-	//   "material_uuid": "0UEnxvp0dRSNN3O",
-	//   "material_name": "Tape Material",
-	//   "stock": "935.0000",
-	//   "unit": "kg",
-	//   "tape_making": "60.0000",
-	//   "remarks": null
 	const { user } = useAuth();
-	const { url, updateData, postData } = useCommonTapeRM();
+	const { url, postData } = useCommonTapeRM();
 
 	const schema = {
 		used_quantity: RM_MATERIAL_USED_SCHEMA.remaining.max(
@@ -50,6 +44,7 @@ export default function Index({
 			...prev,
 			uuid: null,
 			unit: null,
+			tape_making: null,
 		}));
 		reset(RM_MATERIAL_USED_NULL);
 		window[modalId].close();
@@ -97,14 +92,18 @@ export default function Index({
 			isSmall={true}>
 			<JoinInput
 				label='used_quantity'
+				sub_label={`Max: ${Number(updateTapeStock?.tape_making)}`}
 				unit={updateTapeStock?.unit}
 				max={updateTapeStock?.tape_making}
-				placeholder={`Max: ${updateTapeStock?.tape_making}`}
+				placeholder={`Max: ${Number(updateTapeStock?.tape_making)}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
 				label='wastage'
 				unit={updateTapeStock?.unit}
+				sub_label={`Max: ${(
+					updateTapeStock?.tape_making - watch('used_quantity')
+				).toFixed(2)}`}
 				placeholder={`Max: ${(
 					updateTapeStock?.tape_making - watch('used_quantity')
 				).toFixed(2)}`}

@@ -38,6 +38,18 @@ export const useCommonTapeToCoilByUUID = (uuid) =>
 		url: `/zipper/tape-to-coil${uuid}`,
 	});
 
+// * RM * //
+export const useCommonTapeRM = () =>
+	createGlobalState({
+		queryKey: commonQK.tapeRM(),
+		url: `/material/stock/by/single-field/tape_making`,
+	});
+export const useCommonTapeRMByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.tapeRM(uuid),
+		url: `/material/stock/by/single-field/tape_making/${uuid}`,
+	});
+
 // * COIL * //
 // * SFG * //
 export const useCommonCoilSFG = () =>

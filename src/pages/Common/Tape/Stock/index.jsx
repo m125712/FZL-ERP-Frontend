@@ -1,110 +1,110 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useAccess, useFetchFunc, useFetchFuncForReport } from "@/hooks";
-import { Transfer } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useAccess, useFetchFunc, useFetchFuncForReport } from '@/hooks';
+import { useCommonCoilRM, useCommonTapeRM } from '@/state/Common';
+import { EditDelete, Transfer } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-const AddOrUpdate = lazy(() => import("./AddOrUpdate"));
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const info = new PageInfo(
-		"Tape Stock",
-		"/material/stock/by/single-field/tape_making",
-		"common__tape_rm"
-	);
-	const [tapeStock, setTapeStock] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-	const haveAccess = useAccess("common__tape_rm");
+	const { data, isLoading, url, deleteData } = useCommonTapeRM();
+	const info = new PageInfo('Tape Stock', url, 'common__tape_rm');
+	const haveAccess = useAccess(info.getTab());
 
-	console.log("tapeStock", tapeStock);
+	//   "uuid": "0UEnxvp0dRSNN3O",
+	//   "material_uuid": "0UEnxvp0dRSNN3O",
+	//   "material_name": "Tape Material",
+	//   "stock": "950.0000",
+	//   "tape_making": "50.0000",
+	//   "remarks": null
 
 	useEffect(() => {
 		document.title = info.getTabName();
-		useFetchFunc(info.getUrl(), setTapeStock, setLoading, setError);
 	}, []);
-
-	// section	tape_or_coil_stock_id	quantity	wastage	issued_by
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "name",
-				header: "Material Name",
+				accessorKey: 'material_name',
+				header: 'Material Name',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className="capitalize">{info.getValue()}</span>
+					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: "quantity",
-				header: "Stock",
+				accessorKey: 'tape_making',
+				header: 'Stock',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "unit",
-				header: "Unit",
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "action",
-				header: "Used",
+				accessorKey: 'action',
+				header: 'Used',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_used"),
-				width: "w-24",
+				hidden: !haveAccess.includes('click_used'),
+				width: 'w-24',
 				cell: (info) => (
 					<Transfer onClick={() => handelUpdate(info.row.index)} />
 				),
 			},
 		],
-		[tapeStock]
+		[data]
 	);
-
-	// console.log("tapeStock", tapeStock);
+	//   "uuid": "0UEnxvp0dRSNN3O",
+	//   "material_uuid": "0UEnxvp0dRSNN3O",
+	//   "material_name": "Tape Material",
+	//   "stock": "950.0000",
+	//   "tape_making": "50.0000",
+	//   "remarks": null
 
 	const [updateTapeStock, setUpdateTapeStock] = useState({
-		id: null,
-		quantity: null,
+		uuid: null,
+		stock: null,
 		unit: null,
 	});
 
 	const handelUpdate = (idx) => {
 		setUpdateTapeStock((prev) => ({
 			...prev,
-			id: tapeStock[idx].id,
-			quantity: tapeStock[idx].quantity,
-			unit: tapeStock[idx].unit,
+			uuid: data[idx].uuid,
+			stock: data[idx].quantity,
+			unit: data[idx].unit,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
 
-	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className='container mx-auto px-2 md:px-4'>
 			<ReactTable
 				title={info.getTitle()}
-				data={tapeStock}
+				data={data}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 			<Suspense>
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						setTapeStock,
 						updateTapeStock,
 						setUpdateTapeStock,
 					}}

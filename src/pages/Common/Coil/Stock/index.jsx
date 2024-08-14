@@ -9,10 +9,10 @@ import { lazy, useEffect, useMemo, useState } from 'react';
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const { data, isLoading, url } = useCommonCoilRM();
+	const { data, isLoading, url, deleteData } = useCommonCoilRM();
 	const info = new PageInfo('Coil Stock', url, 'common__coil_rm');
 	const haveAccess = useAccess(info.getTab());
-	console.log(data);
+
 	//   "uuid": "0UEnxvp0dRSNN3O",
 	//   "material_uuid": "0UEnxvp0dRSNN3O",
 	//   "material_name": "Tape Material",
@@ -35,7 +35,7 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'stock',
+				accessorKey: 'coil_forming',
 				header: 'Stock',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),

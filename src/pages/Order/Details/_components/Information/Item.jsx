@@ -1,5 +1,4 @@
 import { useFetch } from '@/hooks';
-import { TitleList, TitleValue } from '@/ui';
 
 const getSpecialRequirement = (special_requirement) =>
 	special_requirement
@@ -95,85 +94,49 @@ export default function ItemDescription({ order_description }) {
 				Item Details
 			</h4>
 
-			<div className='overflow-x-auto'>
-				<table className='table table-sm'>
-					<tbody>
-						{renderItems().map((item, index) => (
-							<tr
-								key={index}
-								className='odd:bg-secondary-content/5'>
-								<th className='capitalize'>{item.title}</th>
-								<td>{item.value || '--'}</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
+			<div className='flex flex-col md:flex-row md:gap-8'>
+				<div className='w-full flex-1'>
+					<div className='overflow-x-auto'>
+						<table className='table table-sm'>
+							<tbody>
+								{renderItems()
+									.slice(0, 6)
+									.map((item, index) => (
+										<tr
+											key={index}
+											className='odd:bg-secondary-content/5'>
+											<th className='capitalize'>
+												{item.title}
+											</th>
+											<td>{item.value || '--'}</td>
+										</tr>
+									))}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div className='w-full flex-1'>
+					<div className='overflow-x-auto'>
+						<table className='table table-sm'>
+							<tbody>
+								{renderItems()
+									.slice(6, renderItems().length)
+									.map((item, index) => (
+										<tr
+											key={index}
+											className='odd:bg-secondary-content/5'>
+											<th className='capitalize'>
+												{item.title}
+											</th>
+											<td>{item.value || '--'}</td>
+										</tr>
+									))}
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
-
-			{/* <div className='flex w-full flex-col gap-8 px-4 py-2 md:w-auto md:flex-row'>
-				<div className='flex flex-1 flex-col gap-0.5 divide-y-[1px] divide-secondary-content/20 rounded-sm'>
-					<TitleValue
-						title='item'
-						value={order_description?.item_name}
-					/>
-					<TitleValue
-						title='zipper no'
-						value={order_description?.zipper_number_name}
-					/>
-					<TitleValue
-						title='end'
-						value={order_description?.end_type_name}
-					/>
-					<TitleValue
-						title='lock'
-						value={order_description?.lock_type_name}
-					/>
-					<TitleValue
-						title='stopper'
-						value={order_description?.stopper_type_name}
-					/>
-					<TitleValue
-						title='puller'
-						value={order_description?.puller_type_name}
-					/>
-				</div>
-
-				<div className='flex flex-1 flex-col gap-0.5 divide-y-[1px] divide-secondary-content/20 rounded-sm border-t-2 border-primary/20 md:border-t-0'>
-					<TitleValue
-						title='teeth color'
-						value={order_description?.teeth_color_name}
-					/>
-					<TitleValue
-						title='puller color'
-						value={order_description?.puller_color_name}
-					/>
-					<TitleValue
-						title='special req'
-						value={
-							order_description?.special_requirement_name == null
-								? 'M/F'
-								: order_description?.special_requirement_name +
-									', M/F'
-						}
-					/>
-					<TitleValue
-						title='hand'
-						value={order_description?.hand_name}
-					/>
-					<TitleValue
-						title='coloring'
-						value={order_description?.coloring_type_name}
-					/>
-					<TitleValue
-						title='description'
-						value={order_description?.description}
-					/>
-					<TitleList
-						title='remarks'
-						value={order_description?.remarks}
-					/>
-				</div>
-			</div> */}
 		</div>
 	);
 }

@@ -166,7 +166,7 @@ export function OrderInformation({ order, handelPdfDownload }) {
 					</button>
 				</span>
 				<hr className='border-1 border-secondary-content' />
-				<div className='flex flex-col gap-8 bg-secondary-content/5 text-sm md:flex-row'>
+				<div className='flex flex-col bg-secondary-content/5 text-sm md:flex-row md:gap-8'>
 					<div className='w-full flex-1'>
 						<div className='overflow-x-auto'>
 							<table className='table table-sm'>

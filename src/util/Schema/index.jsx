@@ -191,7 +191,6 @@ export const MATERIAL_NULL = {
 	uuid: null,
 	name: '',
 	short_name: '',
-	quantity: '',
 	unit: '',
 	threshold: 0,
 	description: '',
@@ -209,7 +208,6 @@ export const MATERIAL_STOCK_SCHEMA = {
 export const MATERIAL_STOCK_NULL = {
 	uuid: null,
 	material_uuid: null,
-	material_name: null,
 	trx_to: '',
 	trx_quantity: '',
 	created_by: '',
@@ -227,7 +225,6 @@ export const MATERIAL_TRX_AGAINST_ORDER_NULL = {
 	uuid: null,
 	material_uuid: null,
 	order_entry_uuid: null,
-	material_name: null,
 	trx_to: '',
 	trx_quantity: '',
 	created_by: '',
@@ -287,12 +284,12 @@ export const VENDOR_NULL = {
 };
 // purchase page
 export const PURCHASE_SCHEMA = {
-	vendor_id: NUMBER_REQUIRED,
+	vendor_uuid: NUMBER_REQUIRED,
 	is_local: NUMBER_REQUIRED.default(0),
 	remarks: STRING.nullable(),
 	purchase: yup.array().of(
 		yup.object().shape({
-			material_id: NUMBER_REQUIRED,
+			material_uuid: NUMBER_REQUIRED,
 			quantity: NUMBER_DOUBLE_REQUIRED,
 			price: NUMBER_DOUBLE_REQUIRED,
 		})
@@ -300,14 +297,13 @@ export const PURCHASE_SCHEMA = {
 };
 
 export const PURCHASE_NULL = {
-	id: null,
-	vendor_id: null,
-	section_id: null,
+	uuid: null,
+	vendor_uuid: null,
 	is_local: '',
 	remarks: '',
 	purchase: [
 		{
-			material_id: null,
+			material_uuid: null,
 			quantity: '',
 			price: '',
 		},
@@ -316,13 +312,13 @@ export const PURCHASE_NULL = {
 
 // purchase entry page
 export const PURCHASE_ENTRY_SCHEMA = {
-	vendor_uuid: NUMBER_REQUIRED,
+	vendor_uuid: STRING_REQUIRED,
 	is_local: NUMBER_REQUIRED.default(0),
 	lc_number: STRING.nullable(),
 	remarks: STRING.nullable(),
 	purchase: yup.array().of(
 		yup.object().shape({
-			material_uuid: NUMBER_REQUIRED,
+			material_uuid: STRING_REQUIRED,
 			quantity: NUMBER_DOUBLE_REQUIRED,
 			price: NUMBER_DOUBLE_REQUIRED,
 			remarks: STRING.nullable(),
@@ -333,8 +329,6 @@ export const PURCHASE_ENTRY_SCHEMA = {
 export const PURCHASE_ENTRY_NULL = {
 	uuid: null,
 	vendor_uuid: null,
-	section_uuid: null,
-	purchase_description_uuid: null,
 	is_local: null,
 	lc_number: '',
 	remarks: '',

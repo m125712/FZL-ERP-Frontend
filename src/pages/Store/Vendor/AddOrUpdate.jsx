@@ -1,14 +1,13 @@
 import { AddModal } from '@/components/Modal';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { usePurchaseVendor } from '@/state/Purchase';
+import { usePurchaseVendor } from '@/state/Store';
 import { Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { VENDOR_NULL, VENDOR_SCHEMA } from '@util/Schema';
 
 export default function Index({
 	modalId = '',
-	setVendor,
 	updateVendor = {
 		uuid: null,
 	},
@@ -52,6 +51,8 @@ export default function Index({
 
 			return;
 		}
+
+		// Add new item
 		const updatedData = {
 			...data,
 			created_at: GetDateTime(),

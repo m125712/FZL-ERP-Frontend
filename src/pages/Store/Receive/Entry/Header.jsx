@@ -1,4 +1,4 @@
-import { useFetch } from "@/hooks";
+import { useFetch } from '@/hooks';
 import {
 	FormField,
 	Input,
@@ -6,8 +6,8 @@ import {
 	SectionEntryBody,
 	Select,
 	Textarea,
-} from "@/ui";
-import { useParams } from "react-router-dom";
+} from '@/ui';
+import { useParams } from 'react-router-dom';
 
 export default function Header({
 	register,
@@ -17,32 +17,31 @@ export default function Header({
 	Controller,
 }) {
 	const { purchase_description_uuid } = useParams();
-	const { value: vendor } = useFetch("/vendor/value/label");
+	const { value: vendor } = useFetch('/other/vendor/value/label');
 
 	const purchaseOptions = [
-		{ label: "Import", value: 0 },
-		{ label: "Local", value: 1 },
+		{ label: 'Import', value: 0 },
+		{ label: 'Local', value: 1 },
 	];
 
 	return (
-		<SectionEntryBody title="Information">
-			<div className="flex flex-col gap-1 px-2 text-secondary-content md:flex-row">
-				<FormField label="vendor_id" title="Vendor" errors={errors}>
+		<SectionEntryBody title='Information'>
+			<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<FormField label='vendor_uuid' title='Vendor' errors={errors}>
 					<Controller
-						name={"vendor_id"}
+						name={'vendor_uuid'}
 						control={control}
 						render={({ field: { onChange } }) => {
 							return (
 								<ReactSelect
-									placeholder="Select Vendor"
+									placeholder='Select Vendor'
 									options={vendor}
 									value={vendor?.find(
 										(item) =>
-											item.value == getValues("vendor_id")
+											item.value ==
+											getValues('vendor_uuid')
 									)}
-									onChange={(e) =>
-										onChange(parseInt(e.value))
-									}
+									onChange={(e) => onChange(e.value)}
 									isDisabled={
 										purchase_description_uuid !== undefined
 									}
@@ -52,14 +51,14 @@ export default function Header({
 					/>
 				</FormField>
 				<Select
-					label="is_local"
-					title="Import / Local"
-					type="select"
+					label='is_local'
+					title='Import / Local'
+					type='select'
 					option={purchaseOptions}
 					{...{ register, errors }}
 				/>
-				<Input label="lc_number" {...{ register, errors }} />
-				<Textarea label="remarks" {...{ register, errors }} />
+				<Input label='lc_number' {...{ register, errors }} />
+				<Textarea label='remarks' {...{ register, errors }} />
 			</div>
 		</SectionEntryBody>
 	);

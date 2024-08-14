@@ -58,7 +58,6 @@ export default function Index({
 		if (updateMaterialTrxToOrder?.uuid !== null) {
 			const updatedData = {
 				...data,
-				material_name: updateMaterialTrxToOrder?.material_name,
 				updated_at: GetDateTime(),
 			};
 			await updateData.mutateAsync({

@@ -11,7 +11,7 @@ const MaterialLog = lazy(() => import('@/pages/Store/Log'));
 
 // Purchase
 const Vendor = lazy(() => import('@/pages/Store/Vendor'));
-const Purchase = lazy(() => import('@/pages/Store/Receive/Details'));
+const Purchase = lazy(() => import('@/pages/Store/Receive'));
 const PurchaseEntry = lazy(() => import('@/pages/Store/Receive/Entry'));
 const PurchaseInd = lazy(
 	() => import('@/pages/Store/Receive/Details/ByPurchaseDescriptionUUID')
@@ -131,7 +131,7 @@ export const StoreRoutes = [
 	{
 		id: 10,
 		name: 'Entry',
-		path: '/store/receive/update/:id/:purchase_description_uuid',
+		path: '/store/receive/update/:purchase_description_uuid',
 		element: PurchaseEntry,
 		type: 'store',
 		hidden: true,

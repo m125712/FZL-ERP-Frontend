@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { usePurchaseVendor } from '@/state/Purchase';
+import { usePurchaseVendor } from '@/state/Store';
 
 import { EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';

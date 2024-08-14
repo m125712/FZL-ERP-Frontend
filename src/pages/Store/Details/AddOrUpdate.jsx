@@ -42,19 +42,10 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
-		const section_name = section?.find(
-			(item) => item.value == data?.section_uuid
-		)?.label;
-		const material_type = materialType?.find(
-			(item) => item.value == data?.type_uuid
-		)?.label;
-
 		// Update item
 		if (updateMaterialDetails?.uuid !== null) {
 			const updatedData = {
 				...data,
-				section_name,
-				material_type,
 				updated_at: GetDateTime(),
 			};
 
@@ -71,8 +62,6 @@ export default function Index({
 		// Add Item
 		const updatedData = {
 			...data,
-			section_name,
-			material_type,
 			uuid: nanoid(),
 			created_at: GetDateTime(),
 		};

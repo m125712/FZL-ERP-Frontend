@@ -156,7 +156,7 @@ export default function Index() {
 		//* Post new order description */ //
 		await postData.mutateAsync({
 			url,
-			newData: recipe,
+			newData: recipe, 
 			isOnCloseNeeded: false,
 		});
 

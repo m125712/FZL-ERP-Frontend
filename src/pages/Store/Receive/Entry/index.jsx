@@ -19,7 +19,6 @@ import { HotKeys, configure } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
 
-// UPDATE IS NOT WORKING
 export default function Index() {
 	const { url: purchaseDescriptionUrl } = usePurchaseDescription();
 	const { url: purchaseEntryUrl } = usePurchaseEntry();
@@ -80,8 +79,8 @@ export default function Index() {
 	const handlePurchaseRemove = (index) => {
 		if (getValues(`purchase[${index}].uuid`) !== undefined) {
 			setDeleteItem({
-				itemId: getValues(`purchase[${index}].material_uuid`),
-				itemName: getValues(`purchase[${index}].material_uuid`),
+				itemId: getValues(`purchase[${index}].uuid`),
+				itemName: getValues(`purchase[${index}].material_name`),
 			});
 			window['purchase_delete'].showModal();
 		}
@@ -118,6 +117,7 @@ export default function Index() {
 				if (item.uuid === undefined) {
 					item.purchase_description_uuid = purchase_description_uuid;
 					item.created_at = GetDateTime();
+					item.uuid = nanoid();
 					return await postData.mutateAsync({
 						url: purchaseEntryUrl,
 						newData: item,
@@ -137,7 +137,7 @@ export default function Index() {
 			});
 
 			try {
-				Promise.all([
+				await Promise.all([
 					purchase_description_promise,
 					...purchase_entries_promise,
 				])
@@ -396,7 +396,7 @@ export default function Index() {
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
 					setItems={purchaseField}
-					uri={`/purchase`}
+					url={purchaseEntryUrl}
 					deleteData={deleteData}
 				/>
 			</Suspense>

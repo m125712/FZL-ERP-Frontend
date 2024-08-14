@@ -120,6 +120,10 @@ export const purchaseQK = {
 	// entry
 	entries: () => [...purchaseQK.all(), 'entries'],
 	entry: (uuid) => [...purchaseQK.entries(), uuid],
+
+	// details
+	details: () => [...purchaseQK.all(), 'details'],
+	detail: (uuid) => [...purchaseQK.details(), uuid],
 };
 
 //Library

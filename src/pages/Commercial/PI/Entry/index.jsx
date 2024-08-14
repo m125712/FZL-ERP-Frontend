@@ -1,28 +1,28 @@
-import { DeleteModal } from "@/components/Modal";
+import { DeleteModal } from '@/components/Modal';
 import {
 	useFetchForRhfResetForOrder,
 	usePostFunc,
 	useRHF,
 	useUpdateFunc,
-} from "@/hooks";
-import { CheckBoxWithoutLabel, DynamicDeliveryField, Input } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { useAuth } from "@context/auth";
-import { DevTool } from "@hookform/devtools";
-import { PI_NULL, PI_SCHEMA } from "@util/Schema";
-import { customAlphabet } from "nanoid";
-import { Suspense, useEffect, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+} from '@/hooks';
+import { CheckBoxWithoutLabel, DynamicDeliveryField, Input } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { useAuth } from '@context/auth';
+import { DevTool } from '@hookform/devtools';
+import { PI_NULL, PI_SCHEMA } from '@util/Schema';
+import { customAlphabet } from 'nanoid';
+import { Suspense, useEffect, useState } from 'react';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
-import Header from "./Header";
+import Header from './Header';
 
 const alphabet =
-	"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const nanoid = customAlphabet(alphabet, 10);
 
 // UPDATE IS WORKING
 export default function Index() {
-	const { pi_id, pi_uuid } = useParams();
+	const { pi_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const [isAllChecked, setIsAllChecked] = useState(false);
@@ -46,7 +46,7 @@ export default function Index() {
 	// pi_entry
 	const { fields: orderEntryField } = useFieldArray({
 		control,
-		name: "pi_entry",
+		name: 'pi_entry',
 	});
 
 	const [deleteItem, setDeleteItem] = useState({
@@ -57,13 +57,17 @@ export default function Index() {
 	const onClose = () => reset(PI_NULL);
 	let order_info_ids;
 	isUpdate
-		? (order_info_ids = JSON.parse(getValues("order_info_ids")))
-		: (order_info_ids = orderInfoIds?.order_info_ids?.join(",") || null);
+		? (order_info_ids = JSON.parse(getValues('order_info_ids')))
+		: (order_info_ids = orderInfoIds?.order_info_ids?.join(',') || null);
 
 	isUpdate
-		? useFetchForRhfResetForOrder(`/pi/details/by/${pi_id}`, pi_id, reset)
+		? useFetchForRhfResetForOrder(
+				`/commercial/pi/details/${pi_uuid}`,
+				pi_uuid,
+				reset
+			)
 		: useFetchForRhfResetForOrder(
-				`/pi/details/by/order-info-ids/${order_info_ids}/${watch("party_id")}/${watch("marketing_id")}`,
+				`/pi/details/by/order-info-ids/${order_info_ids}/${watch('party_id')}/${watch('marketing_id')}`,
 				orderInfoIds,
 				reset
 			);
@@ -75,7 +79,7 @@ export default function Index() {
 				order_info_ids,
 			}));
 		}
-	}, [getValues("order_info_ids")]);
+	}, [getValues('order_info_ids')]);
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -101,7 +105,7 @@ export default function Index() {
 					item.created_at = GetDateTime();
 
 					return await usePostFunc({
-						uri: "/pi-entry",
+						uri: '/pi-entry',
 						data: item,
 					}).catch((err) => console.error(`Error: ${err}`));
 				}
@@ -159,10 +163,10 @@ export default function Index() {
 			}));
 
 		if (pi_entry.length === 0) {
-			alert("Select at least one item to proceed.");
+			alert('Select at least one item to proceed.');
 		} else {
 			await usePostFunc({
-				uri: "/pi",
+				uri: '/pi',
 				data: pi,
 			});
 
@@ -170,7 +174,7 @@ export default function Index() {
 				...pi_entry.map(
 					async (item) =>
 						await usePostFunc({
-							uri: "/pi-entry",
+							uri: '/pi-entry',
 							data: item,
 						})
 				),
@@ -183,9 +187,9 @@ export default function Index() {
 	};
 
 	// Check if order_number is valid
-	if (getValues("quantity") === null) return <Navigate to="/not-found" />;
+	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 	const rowClass =
-		"group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide";
+		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	useEffect(() => {
 		if (isAllChecked || isSomeChecked) {
@@ -207,7 +211,7 @@ export default function Index() {
 		let isEveryChecked = true,
 			isSomeChecked = false;
 
-		for (let item of watch("pi_entry")) {
+		for (let item of watch('pi_entry')) {
 			if (item.is_checked) {
 				isSomeChecked = true;
 			} else {
@@ -224,12 +228,11 @@ export default function Index() {
 	};
 
 	return (
-		<div className="container mx-auto mt-4 px-2 pb-2 md:px-4">
+		<div className='container mx-auto mt-4 px-2 pb-2 md:px-4'>
 			<form
-				className="flex flex-col gap-4"
+				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}
-				noValidate
-			>
+				noValidate>
 				<Header
 					{...{
 						register,
@@ -255,12 +258,11 @@ export default function Index() {
 					tableHead={
 						<>
 							<th
-								key="is_all_checked"
-								scope="col"
-								className="group w-20 cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300"
-							>
+								key='is_all_checked'
+								scope='col'
+								className='group w-20 cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
 								<CheckBoxWithoutLabel
-									label="is_all_checked"
+									label='is_all_checked'
 									checked={isAllChecked}
 									onChange={(e) => {
 										setIsAllChecked(e.target.checked);
@@ -270,32 +272,29 @@ export default function Index() {
 								/>
 							</th>
 							{[
-								"O/N",
-								"Item Description",
-								"Style",
-								"Color",
-								"Size (CM)",
-								"QTY (PCS)",
-								"Given",
-								"PI QTY",
-								"Balance QTY",
+								'O/N',
+								'Item Description',
+								'Style',
+								'Color',
+								'Size (CM)',
+								'QTY (PCS)',
+								'Given',
+								'PI QTY',
+								'Balance QTY',
 							].map((item) => (
 								<th
 									key={item}
-									scope="col"
-									className="group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300"
-								>
+									scope='col'
+									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
 									{item}
 								</th>
 							))}
 						</>
-					}
-				>
+					}>
 					{orderEntryField.map((item, index) => (
 						<tr
 							key={item.id}
-							className="cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30"
-						>
+							className='cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30'>
 							<td className={`w-8 ${rowClass}`}>
 								<CheckBoxWithoutLabel
 									label={`pi_entry[${index}].is_checked`}
@@ -339,8 +338,8 @@ export default function Index() {
 							<td className={`w-32 ${rowClass}`}>
 								<Input
 									label={`pi_entry[${index}].pi_quantity`}
-									is_title_needed="false"
-									height="h-8"
+									is_title_needed='false'
+									height='h-8'
 									dynamicerror={
 										errors?.pi_entry?.[index]?.pi_quantity
 									}
@@ -352,9 +351,9 @@ export default function Index() {
 									{...{ register, errors }}
 								/>
 								<Input
-									label={`pi_entry[${index}].sfg_id`}
-									is_title_needed="false"
-									className="hidden"
+									label={`pi_entry[${index}].sfg_uuid`}
+									is_title_needed='false'
+									className='hidden'
 									{...{ register, errors }}
 								/>
 							</td>
@@ -366,11 +365,10 @@ export default function Index() {
 						</tr>
 					))}
 				</DynamicDeliveryField>
-				<div className="modal-action">
+				<div className='modal-action'>
 					<button
-						type="submit"
-						className="text-md btn btn-primary btn-block"
-					>
+						type='submit'
+						className='text-md btn btn-primary btn-block'>
 						Save
 					</button>
 				</div>
@@ -378,15 +376,15 @@ export default function Index() {
 
 			<Suspense>
 				<DeleteModal
-					modalId={"pi_entry_delete"}
-					title={"Order Entry"}
+					modalId={'pi_entry_delete'}
+					title={'Order Entry'}
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
 					setItems={orderEntryField}
 					uri={`/order/entry`}
 				/>
 			</Suspense>
-			<DevTool control={control} placement="top-left" />
+			<DevTool control={control} placement='top-left' />
 		</div>
 	);
 }

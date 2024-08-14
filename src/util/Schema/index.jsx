@@ -1053,19 +1053,20 @@ export const CHALLAN_NULL = {
 // Commercial
 // PI
 export const PI_SCHEMA = {
-	lc_id: NUMBER.nullable(),
-	marketing_id: NUMBER_REQUIRED,
-	party_id: NUMBER_REQUIRED,
+	lc_uuid: STRING_REQUIRED,
+	marketing_uuid: STRING_REQUIRED,
+	party_uuid: STRING_REQUIRED,
 	order_info_ids: JSON_STRING_REQUIRED,
-	merchandiser_id: NUMBER_REQUIRED,
-	factory_id: NUMBER_REQUIRED,
-	bank_id: NUMBER_REQUIRED,
+	merchandiser_uuid: STRING_REQUIRED,
+	factory_uuid: STRING_REQUIRED,
+	bank_uuid: STRING_REQUIRED,
 	validity: NUMBER_REQUIRED,
 	payment: NUMBER_REQUIRED,
 	remarks: STRING.nullable(),
 	pi_entry: yup.array().of(
 		yup.object().shape({
-			sfg_id: NUMBER_REQUIRED,
+			sfg_uuid: STRING_REQUIRED,
+			pi_uuid: STRING_REQUIRED,
 			max_quantity: NUMBER,
 			pi_quantity: NUMBER_REQUIRED.max(
 				yup.ref('max_quantity'),
@@ -1077,19 +1078,20 @@ export const PI_SCHEMA = {
 };
 
 export const PI_NULL = {
-	id: null,
-	marketing_id: null,
-	party_id: null,
+	uuid: null,
+	marketing_uuid: '',
+	party_uuid: '',
 	order_info_ids: null,
-	merchandiser_id: null,
-	factory_id: null,
-	bank_id: null,
+	merchandiser_uuid: '',
+	factory_uuid: '',
+	bank_uuid: '',
 	validity: '',
 	payment: '',
 	remarks: '',
 	pi_entry: [
 		{
-			sfg_id: null,
+			sfg_uuid: '',
+			pi_uuid: '',
 			max_quantity: null,
 			pi_quantity: null,
 			remarks: '',

@@ -27,6 +27,8 @@ export default function Index({
 	return (
 		<ReactTable
 			title='Details'
+			headerClassName='px-4 py-3 bg-secondary-content/5 mb-0 rounded-t-md'
+			containerClassName='mb-0'
 			data={order_entry}
 			columns={columns}
 			extraClass='py-2'

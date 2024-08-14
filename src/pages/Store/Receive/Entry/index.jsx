@@ -19,7 +19,6 @@ import { HotKeys, configure } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
 
-// UPDATE IS NOT WORKING
 export default function Index() {
 	const { url: purchaseDescriptionUrl } = usePurchaseDescription();
 	const { url: purchaseEntryUrl } = usePurchaseEntry();
@@ -80,11 +79,12 @@ export default function Index() {
 	const handlePurchaseRemove = (index) => {
 		if (getValues(`purchase[${index}].uuid`) !== undefined) {
 			setDeleteItem({
-				itemId: getValues(`purchase[${index}].material_uuid`),
-				itemName: getValues(`purchase[${index}].material_uuid`),
+				itemId: getValues(`purchase[${index}].uuid`),
+				itemName: getValues(`purchase[${index}].material_name`),
 			});
 			window['purchase_delete'].showModal();
 		}
+
 		purchaseRemove(index);
 	};
 
@@ -96,7 +96,6 @@ export default function Index() {
 			remarks: '',
 		});
 	};
-	const onClose = () => reset(PURCHASE_ENTRY_NULL);
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -111,16 +110,18 @@ export default function Index() {
 				url: `${purchaseDescriptionUrl}/${data?.uuid}`,
 				updatedData: purchase_description_data,
 				uuid: data.uuid,
-				onClose: onClose,
+				isOnCloseNeeded: false,
 			});
 
 			const purchase_entries_promise = data.purchase.map(async (item) => {
 				if (item.uuid === undefined) {
 					item.purchase_description_uuid = purchase_description_uuid;
 					item.created_at = GetDateTime();
+					item.uuid = nanoid();
 					return await postData.mutateAsync({
 						url: purchaseEntryUrl,
 						newData: item,
+						isOnCloseNeeded: false,
 					});
 				} else {
 					item.updated_at = GetDateTime();
@@ -131,13 +132,13 @@ export default function Index() {
 						url: `${purchaseEntryUrl}/${item.uuid}`,
 						uuid: item.uuid,
 						updatedData,
-						onClose: onClose,
+						isOnCloseNeeded: false,
 					});
 				}
 			});
 
 			try {
-				Promise.all([
+				await Promise.all([
 					purchase_description_promise,
 					...purchase_entries_promise,
 				])
@@ -396,7 +397,7 @@ export default function Index() {
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
 					setItems={purchaseField}
-					uri={`/purchase`}
+					url={purchaseEntryUrl}
 					deleteData={deleteData}
 				/>
 			</Suspense>

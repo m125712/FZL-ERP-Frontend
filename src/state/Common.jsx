@@ -86,3 +86,14 @@ export const useCommonCoilRMByUUID = (uuid) =>
 		queryKey: commonQK.coilRM(uuid),
 		url: `/material/stock/by/single-field/coil_forming${uuid}`,
 	});
+//* RM LOG *//
+export const useCommonCoilRMLog = () =>
+	createGlobalState({
+		queryKey: commonQK.coilRMLog(),
+		url: `/material/used/by/coil_forming`,
+	});
+export const useCommonCoilRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.coilRMLog(uuid),
+		url: `/material/used/by/coil_forming${uuid}`,
+	});

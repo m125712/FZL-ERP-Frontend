@@ -70,8 +70,8 @@ export default function Index({
 			// 	updateCoilStock?.coil_forming - data.remaining - data.wastage,
 			material_uuid: updateCoilStock?.uuid,
 			section: 'coil_forming',
-			issued_by: user?.uuid,
-			issued_by_name: user?.name,
+			created_by: user?.uuid,
+			created_by_name: user?.name,
 			uuid: nanoid(),
 			created_at: GetDateTime(),
 		};

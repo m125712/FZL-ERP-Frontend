@@ -65,13 +65,14 @@ export default function Index({
 	const onSubmit = async (data) => {
 		const updatedData = {
 			...data,
+
 			// /coil_forming: data.remaining,
 			// used_quantity:
 			// 	updateCoilStock?.coil_forming - data.remaining - data.wastage,
 			material_uuid: updateTapeStock?.uuid,
 			section: 'tape_making',
-			issued_by: user?.uuid,
-			issued_by_name: user?.name,
+			created_by: user?.uuid,
+			created_by_name: user?.name,
 			uuid: nanoid(),
 			created_at: GetDateTime(),
 		};

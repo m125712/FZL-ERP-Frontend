@@ -161,6 +161,9 @@ export const commonQK = {
 	// * coilRM
 	coilRM: () => [...commonQK.all(), 'coil/rm'],
 	coilRMByUUID: (uuid) => [...commonQK.coilRM(), uuid],
+	// * coilRMLog
+	coilRMLog: () => [...commonQK.all(), 'coil/rm-log'],
+	coilRMLogByUUID: (uuid) => [...commonQK.coilRMLog(), uuid],
 };
 
 // * LabDip * //

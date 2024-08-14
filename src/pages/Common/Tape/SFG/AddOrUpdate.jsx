@@ -30,11 +30,11 @@ export default function Index({
 		TAPE_STOCK_ADD_NULL
 	);
 
-	useFetchForRhfReset(
-		`${url}/${updateTapeProd?.uuid}`,
-		updateTapeProd?.uuid,
-		reset
-	);
+	// useFetchForRhfReset(
+	// 	`${url}/${updateTapeProd?.uuid}`,
+	// 	updateTapeProd?.uuid,
+	// 	reset
+	// );
 
 	const onClose = () => {
 		setUpdateTapeProd((prev) => ({

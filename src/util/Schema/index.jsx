@@ -831,7 +831,7 @@ export const RM_MATERIAL_USED_SCHEMA = {
 };
 
 export const RM_MATERIAL_USED_NULL = {
-	id: null,
+	uuid: null,
 	material_stock_id: null,
 	section: '',
 	remaining: '',

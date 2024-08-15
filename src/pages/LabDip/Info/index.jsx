@@ -20,11 +20,12 @@ export default function Index() {
 				header: 'ID',
 				width: 'w-8',
 				cell: (info) => {
+					const { uuid } = info.row.original;
 					return (
 						<LinkWithCopy
 							title={info.getValue()}
-							id={info.getValue()}
-							uri='/order/details'
+							id={uuid}
+							uri='/lab-dip/info/details'
 						/>
 					);
 				},

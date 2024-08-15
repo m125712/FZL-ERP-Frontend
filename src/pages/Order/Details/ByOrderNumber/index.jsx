@@ -108,7 +108,7 @@ export default function Index() {
 		);
 
 	return (
-		<div className='flex flex-col'>
+		<div className='flex flex-col pb-8'>
 			{/* <iframe
 				id="iframeContainer"
 				src={data}

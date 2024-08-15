@@ -12,6 +12,7 @@ import clsx from 'clsx';
 import { lazy, useState } from 'react';
 import { Suspense } from '../Feedback';
 
+import cn from '@/lib/cn';
 import { NoDataFound, TitleOnly } from './ui';
 import { FuzzyFilter, isWithinRange } from './utils';
 
@@ -39,6 +40,8 @@ function Table({
 	select,
 	error = null,
 	indicatorValue,
+	headerClassName = '',
+	containerClassName = '',
 	...props
 }) {
 	// Define state variables
@@ -100,6 +103,7 @@ function Table({
 					<TitleOnly
 						title={title}
 						subtitle={subtitle}
+						className={headerClassName}
 						handelAdd={handelAdd}
 					/>
 				</Suspense>
@@ -141,9 +145,10 @@ function Table({
 			{renderHeader(showTitleOnly)}
 			<Suspense>
 				<div
-					className={clsx(
+					className={cn(
 						'overflow-x-auto rounded-md border border-gray-200 shadow-md',
-						showTitleOnly && 'mb-6'
+						showTitleOnly && 'mb-6',
+						containerClassName
 					)}>
 					<table className='w-full'>
 						<TableHead

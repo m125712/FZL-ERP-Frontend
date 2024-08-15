@@ -1,7 +1,13 @@
-import { useFetch } from '@/hooks';
-import { StatusButton, TitleValue } from '@/ui';
+import { TitleValue } from '@/ui';
 
-export default function Information({ purchase }) {
+export default function Information({
+	purchase = {
+		uuid: null,
+		vendor_name: null,
+		lc_number: null,
+		is_local: null,
+	},
+}) {
 	return (
 		<div className='my-2 flex flex-col rounded-md px-2 shadow-md'>
 			<span className='flex items-center gap-2 text-2xl font-semibold capitalize leading-tight text-primary md:text-3xl'>

@@ -1,18 +1,18 @@
-import { capitalize } from "@/ui/Core/utils";
-import { getMeasurement } from "@/util/Need";
-import clsx from "clsx";
-import { getPercent, getTotals } from "./utils";
+import { capitalize } from '@/ui/Core/utils';
+import { getMeasurement } from '@/util/Need';
+import clsx from 'clsx';
+import { getPercent, getTotals } from './utils';
 
 const timelines = {
-	vislon: ["dying_and_iron", "teeth_molding", "finishing", "coloring"],
+	vislon: ['dying_and_iron', 'teeth_molding', 'finishing', 'coloring'],
 	metal: [
-		"dying_and_iron",
-		"teeth_molding",
-		"teeth_coloring",
-		"finishing",
-		"coloring",
+		'dying_and_iron',
+		'teeth_molding',
+		'teeth_coloring',
+		'finishing',
+		'coloring',
 	],
-	nylon: ["dying_and_iron", "finishing", "coloring"],
+	nylon: ['dying_and_iron', 'finishing', 'coloring'],
 };
 
 const getActualValue = (props, item) => {
@@ -20,26 +20,25 @@ const getActualValue = (props, item) => {
 		props[`total_${item}`],
 		props[`req_${item}`]?.toFixed(3) || props?.total_quantity
 	);
-	return isNaN(values) ? "0%" : values + "%";
+	return isNaN(values) ? '0%' : values + '%';
 };
 
 const Timeline = ({ type, props }) => {
 	const timelineItems = timelines[type];
 
 	return (
-		<ul className="timeline flex justify-start overflow-x-auto text-xs md:justify-center">
+		<ul className='sb-green timeline flex justify-start overflow-x-auto text-xs md:justify-center'>
 			{timelineItems.map((item, idx) => (
 				<li key={item}>
 					{idx !== 0 && <hr />}
 					<div
 						className={clsx(
-							"btn btn-circle btn-primary timeline-middle",
-							item === "finishing" && "bg-success"
-						)}
-					>
+							'btn btn-circle btn-primary timeline-middle',
+							item === 'finishing' && 'bg-success'
+						)}>
 						{getActualValue(props, item)}
 					</div>
-					<div className="badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50">
+					<div className='badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50'>
 						{capitalize(item)}
 					</div>
 					{idx !== timelineItems.length - 1 && <hr />}
@@ -57,26 +56,26 @@ export default function Index(props) {
 		end_type: props.end_type_name,
 	});
 
-	if (props?.item_name === "vislon") {
+	if (props?.item_name === 'vislon') {
 		return (
 			<Timeline
-				type="vislon"
+				type='vislon'
 				props={getTotals(props.order_entry, measurement)}
 			/>
 		);
 	}
-	if (props?.item_name === "metal") {
+	if (props?.item_name === 'metal') {
 		return (
 			<Timeline
-				type="metal"
+				type='metal'
 				props={getTotals(props.order_entry, measurement)}
 			/>
 		);
 	}
-	if (props?.item_name === "nylon") {
+	if (props?.item_name === 'nylon') {
 		return (
 			<Timeline
-				type="nylon"
+				type='nylon'
 				props={getTotals(props.order_entry, measurement)}
 			/>
 		);

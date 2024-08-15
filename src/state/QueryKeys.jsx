@@ -4,6 +4,8 @@
  ** https://tkdodo.eu/blog/leveraging-the-query-function-context#query-key-factories
  **/
 
+import { all } from "axios";
+
 export const orderQK = {
 	all: () => ['order'],
 
@@ -78,6 +80,14 @@ export const commercialQK = {
 	// bank
 	banks: () => [...commercialQK.all(), 'bank'],
 	bank: (uuid) => [...commercialQK.banks(), uuid],
+
+	// pi
+	pis: () => [...commercialQK.all(), 'pi'],
+	pi: (uuid) => [...commercialQK.pis(), uuid],
+
+	// pi-entry
+	piEntries: () => [...commercialQK.all(), 'pi-entry'],
+	piEntry: (uuid) => [...commercialQK.piEntries(), uuid],
 };
 
 // Material Query Keys
@@ -120,6 +130,10 @@ export const purchaseQK = {
 	// entry
 	entries: () => [...purchaseQK.all(), 'entries'],
 	entry: (uuid) => [...purchaseQK.entries(), uuid],
+
+	// details
+	details: () => [...purchaseQK.all(), 'details'],
+	detail: (uuid) => [...purchaseQK.details(), uuid],
 };
 
 //Library
@@ -184,3 +198,11 @@ export const labDipQK = {
 	info: () => [...labDipQK.all(), 'info'],
 	infoByUUID: (uuid) => [...labDipQK.info(), uuid],
 };
+
+// * Dyeing
+
+export const dyeingQK ={
+	all: () => ['dyeingSwatch'],
+	swatch: () => [...dyeingQK.all(), 'swatch'],
+	swatchByUUID: (uuid) => [...dyeingQK.all(), uuid]
+}

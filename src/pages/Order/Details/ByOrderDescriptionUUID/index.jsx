@@ -38,7 +38,7 @@ export default function Index({ initial_order, idx }) {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className='container mx-auto my-2 w-full space-y-2 px-2 md:px-4'>
+		<div className='container mx-auto w-full space-y-6'>
 			<Suspense fallback={<InformationSkeleton />}>
 				<SingleInformation
 					order={order}

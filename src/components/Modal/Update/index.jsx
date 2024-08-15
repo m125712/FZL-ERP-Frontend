@@ -2,7 +2,7 @@ import { DeleteFooter, Header } from '../ui';
 
 const Body = ({ item }) => (
 	<p className='text-center text-2xl font-light text-black'>
-		Do you want to delete <span className='font-semibold'>{item}</span>?
+		Do you want to update <span className='font-semibold'>{item}</span>?
 	</p>
 );
 
@@ -10,12 +10,12 @@ export default function Index({
 	modalId = '',
 	title = '',
 	url = '',
-	deleteItem,
-	setDeleteItem,
-	deleteData,
+	updateItem,
+	setUpdateItem,
+	updateData,
 }) {
 	const handelClose = () => {
-		setDeleteItem((prev) => ({
+		setUpdateItem((prev) => ({
 			...prev,
 			itemId: null,
 			itemName: null,
@@ -28,12 +28,11 @@ export default function Index({
 	};
 
 	const onSubmit = async () => {
-
-		await deleteData.mutateAsync({
-			url: `${url}/${deleteItem?.itemId}`,
+		await updateData.mutateAsync({
+			url: `${url}/${updateItem?.itemId}`,
+			updatedData: updateItem,
 			onClose: handelClose,
 		});
-
 	};
 
 	return (
@@ -42,9 +41,9 @@ export default function Index({
 				onSubmit={onSubmit}
 				noValidate
 				method='dialog'
-				className='modal-box bg-secondary text-secondary-content'>
-				<Header title={`Delete ${title}`} onClose={handelCancelClick} />
-				<Body item={deleteItem?.itemName} />
+				className='modal-box bg-warning text-secondary-content'>
+				<Header title={`Update ${title}`} onClose={handelCancelClick} />
+				<Body item={updateItem?.itemName} />
 				<DeleteFooter {...{ handelCancelClick }} />
 			</form>
 		</dialog>

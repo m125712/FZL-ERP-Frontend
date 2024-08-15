@@ -104,3 +104,10 @@ export const usePurchaseEntryByUUID = (uuid) =>
 		queryKey: purchaseQK.entry(uuid),
 		url: `/purchase/entry/${uuid}`,
 	});
+
+// * Purchase Details * //
+export const usePurchaseDetailsByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: purchaseQK.detail(uuid),
+		url: `/purchase/purchase-details/by/${uuid}`,
+	});

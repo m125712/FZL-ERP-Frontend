@@ -3,8 +3,7 @@ import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 
-import { useDyeingRM } from '@/state/Dyeing';
-
+import { useLabDipRM, useLabDipRMLog } from '@/state/LabDip';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
@@ -12,21 +11,21 @@ import * as yup from 'yup';
 
 export default function Index({
 	modalId = '',
-	updateDyeingStock = {
+	updateLabDipStock = {
 		uuid: null,
 		unit: null,
-		dying_and_iron: null,
+		lab_dip: null,
 	},
-	setUpdateDyeingStock,
+	setUpdateLabDipStock,
 }) {
 	const { user } = useAuth();
-	const { url, postData } = useDyeingRM();
-	//const { invalidateQuery: invalidateDyeingRMLog } = useDyeingRMLog();
-	const MAX_QUANTITY = updateDyeingStock?.dying_and_iron;
+	const { url, postData } = useLabDipRM();
+	const { invalidateQuery: invalidateLabDipRMLog } = useLabDipRMLog();
+	const MAX_QUANTITY = updateLabDipStock?.lab_dip;
 
 	const schema = {
 		used_quantity: RM_MATERIAL_USED_SCHEMA.remaining.max(
-			updateDyeingStock?.dying_and_iron
+			updateLabDipStock?.lab_dip
 		),
 		wastage: RM_MATERIAL_USED_SCHEMA.remaining.max(
 			MAX_QUANTITY,
@@ -40,11 +39,11 @@ export default function Index({
 	);
 
 	const onClose = () => {
-		setUpdateDyeingStock((prev) => ({
+		setUpdateLabDipStock((prev) => ({
 			...prev,
 			uuid: null,
 			unit: null,
-			dying_and_iron: null,
+			lab_dip: null,
 		}));
 		reset(RM_MATERIAL_USED_NULL);
 		window[modalId].close();
@@ -54,8 +53,8 @@ export default function Index({
 		const updatedData = {
 			...data,
 
-			material_uuid: updateDyeingStock?.uuid,
-			section: 'dying_and_iron',
+			material_uuid: updateLabDipStock?.uuid,
+			section: 'lab_dip',
 			created_by: user?.uuid,
 			created_by_name: user?.name,
 			uuid: nanoid(),
@@ -66,38 +65,38 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
-		//invalidateDyeingRMLog();
+		invalidateLabDipRMLog();
 	};
 
 	return (
 		<AddModal
 			id={modalId}
-			title={updateDyeingStock?.uuid !== null && 'Material Usage Entry'}
+			title={updateLabDipStock?.uuid !== null && 'Material Usage Entry'}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
 			<JoinInput
 				label='used_quantity'
-				sub_label={`Max: ${Number(updateDyeingStock?.dying_and_iron)}`}
-				unit={updateDyeingStock?.unit}
-				max={updateDyeingStock?.dying_and_iron}
-				placeholder={`Max: ${Number(updateDyeingStock?.dying_and_iron)}`}
+				sub_label={`Max: ${Number(updateLabDipStock?.lab_dip)}`}
+				unit={updateLabDipStock?.unit}
+				max={updateLabDipStock?.lab_dip}
+				placeholder={`Max: ${Number(updateLabDipStock?.lab_dip)}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
 				label='wastage'
-				unit={updateDyeingStock?.unit}
-				sub_label={`Max: ${(updateDyeingStock?.dying_and_iron -
+				unit={updateLabDipStock?.unit}
+				sub_label={`Max: ${(updateLabDipStock?.lab_dip -
 					watch('used_quantity') <
 				0
 					? 0
-					: updateDyeingStock?.dying_and_iron - watch('used_quantity')
+					: updateLabDipStock?.lab_dip - watch('used_quantity')
 				).toFixed(2)}`}
-				placeholder={`Max: ${(updateDyeingStock?.dying_and_iron -
+				placeholder={`Max: ${(updateLabDipStock?.lab_dip -
 					watch('used_quantity') <
 				0
 					? 0
-					: updateDyeingStock?.dying_and_iron - watch('used_quantity')
+					: updateLabDipStock?.lab_dip - watch('used_quantity')
 				).toFixed(2)}`}
 				{...{ register, errors }}
 			/>

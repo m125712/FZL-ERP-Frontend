@@ -25,3 +25,25 @@ export const useLabDipInfoByUUID = (uuid) =>
 		queryKey: labDipQK.infoByUUID(uuid),
 		url: `/lab-dip/info/${uuid}`,
 	});
+// * RM
+export const useLabDipRM = () =>
+	createGlobalState({
+		queryKey: labDipQK.LabDipRM(),
+		url: `/material/stock/by/single-field/lab_dip`,
+	});
+export const useLabDipRMByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: labDipQK.LabDipRM(uuid),
+		url: `/material/stock/by/single-field/lab_dip/${uuid}`,
+	});
+// * RM Log
+export const useLabDipRMLog = () =>
+	createGlobalState({
+		queryKey: labDipQK.LabDipRMLog(),
+		url: `/material/used/by/lab_dip`,
+	});
+export const useLabDipRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: labDipQK.LabDipRMLog(uuid),
+		url: `/material/used/by/lab_dip${uuid}`,
+	});

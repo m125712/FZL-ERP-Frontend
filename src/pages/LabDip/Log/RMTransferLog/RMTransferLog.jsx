@@ -2,21 +2,18 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useDyeingRM, useDyeingRMLog } from '@/state/Dyeing';
+
+import { useLabDipRM, useLabDipRMLog } from '@/state/LabDip';
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo, useState } from 'react';
 import RMAddOrUpdate from './RMAddOrUpdate';
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useDyeingRMLog();
-	const info = new PageInfo(
-		'RM Dyeing Log',
-		url,
-		'dyeing__dyeing_and_iron_log'
-	);
+	const { data, isLoading, url, deleteData } = useLabDipRMLog();
+	const info = new PageInfo('RM LabDip Log', url, 'lab_dip__log');
 	const haveAccess = useAccess(info.getTab());
-	const { invalidateQuery: invalidateDyeingRM } = useDyeingRM();
+	const { invalidateQuery: invalidateLabDipRM } = useLabDipRM();
 
 	const columns = useMemo(
 		() => [
@@ -96,7 +93,7 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_rm'),
+				hidden: !haveAccess.includes('update'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -104,7 +101,7 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('click_delete_rm')}
+							showDelete={haveAccess.includes('delete')}
 						/>
 					);
 				},
@@ -114,7 +111,7 @@ export default function Index() {
 	);
 
 	// Update
-	const [updateDyeingLog, setUpdateDyeingLog] = useState({
+	const [updateLabDipRMLog, setUpdateLabDipRMLog] = useState({
 		uuid: null,
 		section: null,
 		material_name: null,
@@ -124,7 +121,7 @@ export default function Index() {
 
 	const handelUpdate = (idx) => {
 		const selected = data[idx];
-		setUpdateDyeingLog((prev) => ({
+		setUpdateLabDipRMLog((prev) => ({
 			...prev,
 			...selected,
 		}));
@@ -147,7 +144,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateDyeingRM();
+	invalidateLabDipRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -165,8 +162,8 @@ export default function Index() {
 				<RMAddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateDyeingLog,
-						setUpdateDyeingLog,
+						updateLabDipRMLog,
+						setUpdateLabDipRMLog,
 					}}
 				/>
 			</Suspense>

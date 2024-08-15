@@ -2,7 +2,8 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
-import { useDyeingRM } from '@/state/Dyeing';
+import { useLabDipRM } from '@/state/LabDip';
+
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -12,19 +13,19 @@ import {
 
 export default function Index({
 	modalId = '',
-	updateDyeingLog = {
+	updateLabDipRMLog = {
 		uuid: null,
 		section: null,
 		used_quantity: null,
 		dying_and_iron: null,
 	},
-	setUpdateDyeingLog,
+	setUpdateLabDipRMLog,
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
-	const { invalidateQuery: invalidateDyeingRM } = useDyeingRM();
+	const { invalidateQuery: invalidateLabDipRM } = useLabDipRM();
 	const MAX_QUANTITY =
-		Number(updateDyeingLog?.dying_and_iron) +
-		Number(updateDyeingLog?.used_quantity);
+		Number(updateLabDipRMLog?.dying_and_iron) +
+		Number(updateLabDipRMLog?.used_quantity);
 	const schema = {
 		...RM_MATERIAL_USED_EDIT_SCHEMA,
 		used_quantity:
@@ -43,13 +44,13 @@ export default function Index({
 	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
-		`${url}/${updateDyeingLog?.uuid}`,
-		updateDyeingLog?.uuid,
+		`${url}/${updateLabDipRMLog?.uuid}`,
+		updateLabDipRMLog?.uuid,
 		reset
 	);
 
 	const onClose = () => {
-		setUpdateDyeingLog((prev) => ({
+		setUpdateLabDipRMLog((prev) => ({
 			...prev,
 			uuid: null,
 			section: null,
@@ -62,20 +63,20 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateDyeingLog?.uuid !== null) {
+		if (updateLabDipRMLog?.uuid !== null) {
 			const updatedData = {
 				...data,
-				material_name: updateDyeingLog?.material_name,
+				material_name: updateLabDipRMLog?.material_name,
 				updated_at: GetDateTime(),
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateDyeingLog?.uuid}`,
-				uuid: updateDyeingLog?.uuid,
+				url: `${url}/${updateLabDipRMLog?.uuid}`,
+				uuid: updateLabDipRMLog?.uuid,
 				updatedData,
 				onClose,
 			});
-			invalidateDyeingRM();
+			invalidateLabDipRM();
 
 			return;
 		}
@@ -111,12 +112,13 @@ export default function Index({
 		{ label: 'Die Casting', value: 'die_casting' },
 		{ label: 'Slider Assembly', value: 'slider_assembly' },
 		{ label: 'Coloring', value: 'coloring' },
+		{ label: 'Lab Dip', value: 'lab_dip' },
 	];
 
 	return (
 		<AddModal
 			id={modalId}
-			title={`Teeth Coloring Log of ${updateDyeingLog?.material_name}`}
+			title={`Teeth Coloring Log of ${updateLabDipRMLog?.material_name}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
@@ -141,14 +143,14 @@ export default function Index({
 			</FormField>
 			<Input
 				label='used_quantity'
-				sub_label={`Max: ${Number(updateDyeingLog?.dying_and_iron) + Number(updateDyeingLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateDyeingLog?.dying_and_iron) + Number(updateDyeingLog?.used_quantity)}`}
+				sub_label={`Max: ${Number(updateLabDipRMLog?.dying_and_iron) + Number(updateLabDipRMLog?.used_quantity)}`}
+				placeholder={`Max: ${Number(updateLabDipRMLog?.dying_and_iron) + Number(updateLabDipRMLog?.used_quantity)}`}
 				{...{ register, errors }}
 			/>
 			<Input
 				label='wastage'
-				sub_label={`Max: ${Number(updateDyeingLog?.dying_and_iron) + Number(updateDyeingLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateDyeingLog?.dying_and_iron) + Number(updateDyeingLog?.used_quantity)}`}
+				sub_label={`Max: ${Number(updateLabDipRMLog?.dying_and_iron) + Number(updateLabDipRMLog?.used_quantity)}`}
+				placeholder={`Max: ${Number(updateLabDipRMLog?.dying_and_iron) + Number(updateLabDipRMLog?.used_quantity)}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

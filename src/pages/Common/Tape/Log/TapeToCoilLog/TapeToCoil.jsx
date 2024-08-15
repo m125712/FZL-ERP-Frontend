@@ -2,7 +2,7 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc } from '@/hooks';
-import { useCommonTapeToCoil } from '@/state/Common';
+import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
 import { EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -10,13 +10,14 @@ import TapeToCoilAddOrUpdate from './TapeToCoilAddOrUpdate';
 
 export default function TapeToCoil() {
 	const { data, isLoading, url, deleteData } = useCommonTapeToCoil();
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 	const info = new PageInfo('Tape to Coil Log', 'tape-to-coil-trx');
 	const haveAccess = useAccess('common__tape_log');
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'tape_type',
+				accessorKey: 'type_of_zipper',
 				header: 'Type of zipper',
 				enableColumnFilter: false,
 				cell: (info) => (
@@ -76,6 +77,7 @@ export default function TapeToCoil() {
 		uuid: null,
 		type_of_zipper: null,
 		tape_or_coil_stock_id: null,
+		quantity: null,
 		tape_prod: null,
 		coil_stock: null,
 		trx_quantity: null,
@@ -104,6 +106,7 @@ export default function TapeToCoil() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
+	invalidateCommonTapeSFG();
 
 	// if (error) return <h1>Error:{error}</h1>;
 

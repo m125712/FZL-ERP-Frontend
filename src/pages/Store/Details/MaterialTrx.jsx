@@ -2,6 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
+import { useCommonCoilRM, useCommonTapeRM } from '@/state/Common';
 import { useMaterialInfo } from '@/state/Store';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
@@ -17,7 +18,8 @@ export default function Index({
 }) {
 	const { postData } = useMaterialInfo();
 	const { user } = useAuth();
-
+	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
+	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
 	const schema = {
 		...MATERIAL_STOCK_SCHEMA,
 		trx_quantity: MATERIAL_STOCK_SCHEMA.trx_quantity
@@ -60,6 +62,8 @@ export default function Index({
 				newData: updatedData,
 				onClose,
 			});
+			invalidateCommonTapeRM();
+			invalidateCommonCoilRM();
 
 			return;
 		}

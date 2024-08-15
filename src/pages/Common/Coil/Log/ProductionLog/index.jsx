@@ -2,7 +2,7 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc } from '@/hooks';
-import { useCommonCoilProduction } from '@/state/Common';
+import { useCommonCoilProduction, useCommonCoilSFG } from '@/state/Common';
 import { EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -15,8 +15,8 @@ export default function ProductionLog() {
 	);
 
 	const { data, isLoading, url, deleteData } = useCommonCoilProduction();
+	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
 	const haveAccess = useAccess('common__coil_log');
-
 	const columns = useMemo(
 		() => [
 			{
@@ -120,9 +120,9 @@ export default function ProductionLog() {
 			itemId: data[idx].uuid,
 			itemName: data[idx].type_of_zipper,
 		}));
-
 		window[info.getDeleteModalId()].showModal();
 	};
+	invalidateCommonCoilSFG();
 
 	// if (error) return <h1>Error:{error}</h1>;
 

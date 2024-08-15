@@ -2,7 +2,7 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc } from '@/hooks';
-import { useCommonTapeToCoil } from '@/state/Common';
+import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
 import { EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -10,6 +10,7 @@ import TapeToCoilAddOrUpdate from './TapeToCoilAddOrUpdate';
 
 export default function TapeToCoil() {
 	const { data, isLoading, url, deleteData } = useCommonTapeToCoil();
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 	const info = new PageInfo('Tape to Coil Log', 'tape-to-coil-trx');
 	const haveAccess = useAccess('common__tape_log');
 
@@ -105,6 +106,7 @@ export default function TapeToCoil() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
+	invalidateCommonTapeSFG();
 
 	// if (error) return <h1>Error:{error}</h1>;
 

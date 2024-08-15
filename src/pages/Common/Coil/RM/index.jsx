@@ -13,12 +13,6 @@ export default function Index() {
 	const info = new PageInfo('Coil Stock', url, 'common__coil_rm');
 	const haveAccess = useAccess(info.getTab());
 
-	//   "uuid": "0UEnxvp0dRSNN3O",
-	//   "material_uuid": "0UEnxvp0dRSNN3O",
-	//   "material_name": "Tape Material",
-	//   "stock": "950.0000",
-	//   "tape_making": "50.0000",
-	//   "remarks": null
 
 	useEffect(() => {
 		document.title = info.getTabName();

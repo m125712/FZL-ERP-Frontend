@@ -1,6 +1,6 @@
 import { AddModal } from '@/components/Modal';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import { useCommonCoilProduction } from '@/state/Common';
+import { useCommonCoilProduction, useCommonCoilSFG } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -23,6 +23,7 @@ export default function Index({
 	setUpdateCoilLog,
 }) {
 	const { updateData } = useCommonCoilProduction();
+	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
 
 	const MAX_QUANTITY =
 		Number(updateCoilLog.trx_quantity_in_coil) +
@@ -77,6 +78,7 @@ export default function Index({
 				updatedData,
 				onClose,
 			});
+			invalidateCommonCoilSFG();
 			return;
 		}
 	};
@@ -91,6 +93,14 @@ export default function Index({
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'
+				sub_label={`Min: ${MAX_QUANTITY}`}
+				unit='KG'
+				placeholder={`Min: ${MAX_QUANTITY}`}
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				title='Wastage'
+				label='wastage'
 				sub_label={`Min: ${MAX_QUANTITY}`}
 				unit='KG'
 				placeholder={`Min: ${MAX_QUANTITY}`}

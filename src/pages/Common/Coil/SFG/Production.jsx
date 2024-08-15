@@ -2,7 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useRHF, useUpdateFunc } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useCommonCoilSFG } from '@/state/Common';
+import { useCommonCoilProduction, useCommonCoilSFG } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -10,7 +10,6 @@ import {
 	COIL_PROD_SCHEMA,
 	NUMBER_DOUBLE_REQUIRED,
 } from '@util/Schema';
-import * as yup from 'yup';
 
 export default function Index({
 	modalId = '',
@@ -26,9 +25,11 @@ export default function Index({
 }) {
 	const { user } = useAuth();
 	const { postData } = useCommonCoilSFG();
+	const { invalidateQuery: invalidateCommonCoilProduction } =
+		useCommonCoilProduction();
 
 	const MAX_PRODUCTION_QTY = updateCoilProd?.trx_quantity_in_coil;
-	console.log(yup.ref('production_quantity'));
+
 	const schema = {
 		...COIL_PROD_SCHEMA,
 		production_quantity: NUMBER_DOUBLE_REQUIRED.max(MAX_PRODUCTION_QTY),
@@ -70,6 +71,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateCommonCoilProduction();
 	};
 
 	return (

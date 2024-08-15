@@ -13,13 +13,6 @@ export default function Index() {
 	const info = new PageInfo('Tape RM', url, 'common__tape_rm');
 	const haveAccess = useAccess(info.getTab());
 
-	//   "uuid": "0UEnxvp0dRSNN3O",
-	//   "material_uuid": "0UEnxvp0dRSNN3O",
-	//   "material_name": "Tape Material",
-	//   "stock": "950.0000",
-	//   "tape_making": "50.0000",
-	//   "remarks": null
-
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
@@ -66,12 +59,6 @@ export default function Index() {
 		],
 		[data]
 	);
-	//   "uuid": "0UEnxvp0dRSNN3O",
-	//   "material_uuid": "0UEnxvp0dRSNN3O",
-	//   "material_name": "Tape Material",
-	//   "stock": "950.0000",
-	//   "tape_making": "50.0000",
-	//   "remarks": null
 
 	const [updateTapeStock, setUpdateTapeStock] = useState({
 		uuid: null,

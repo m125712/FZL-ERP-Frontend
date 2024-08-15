@@ -808,12 +808,13 @@ export const COIL_STOCK_SCHEMA = {
 };
 
 export const COIL_STOCK_NULL = {
-	id: null,
+	uuid: null,
 	order_entry_id: null,
 	tape_or_coil_stock_id: null,
 	quantity: '',
 	remarks: '',
 	zipper_number: null,
+	trx_quantity: '',
 };
 
 // RM Material Used
@@ -828,11 +829,14 @@ export const RM_MATERIAL_USED_SCHEMA = {
 export const RM_MATERIAL_USED_NULL = {
 	uuid: null,
 	material_stock_id: null,
+	used_quantity: '',
 	section: '',
 	remaining: '',
 	wastage: '',
 	issued_by: '',
 	remarks: '',
+	tape_making: '',
+	coil_forming: '',
 };
 
 export const RM_MATERIAL_USED_EDIT_SCHEMA = {

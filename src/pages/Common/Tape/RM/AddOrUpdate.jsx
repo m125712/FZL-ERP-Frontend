@@ -2,7 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useCommonTapeRM } from '@/state/Common';
+import { useCommonTapeRM, useCommonTapeRMLog } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
@@ -19,6 +19,7 @@ export default function Index({
 }) {
 	const { user } = useAuth();
 	const { url, postData } = useCommonTapeRM();
+	const { invalidateQuery: invalidateCommonTapeRMLog } = useCommonTapeRMLog();
 	const MAX_QUANTITY = updateTapeStock?.tape_making;
 
 	const schema = {
@@ -35,12 +36,6 @@ export default function Index({
 		schema,
 		RM_MATERIAL_USED_NULL
 	);
-
-	// useFetchForRhfReset(
-	// 	`${url}/${updateTapeStock?.uuid}`,
-	// 	updateTapeStock?.uuid,
-	// 	reset
-	// );
 
 	const onClose = () => {
 		setUpdateTapeStock((prev) => ({
@@ -69,6 +64,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateCommonTapeRMLog(); 
 	};
 
 	return (

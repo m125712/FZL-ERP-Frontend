@@ -2,7 +2,7 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc } from '@/hooks';
-import { useCommonCoilRMLog } from '@/state/Common';
+import { useCommonCoilRM, useCommonCoilRMLog } from '@/state/Common';
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo, useState } from 'react';
@@ -10,6 +10,7 @@ import RMAddOrUpdate from './RMAddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useCommonCoilRMLog();
+	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
 	const info = new PageInfo('RM Coil Log', url, 'common__coil_log');
 	const haveAccess = useAccess(info.getTab());
 
@@ -143,6 +144,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
+	invalidateCommonCoilRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

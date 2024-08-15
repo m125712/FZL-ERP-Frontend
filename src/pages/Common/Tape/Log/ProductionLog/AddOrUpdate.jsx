@@ -1,6 +1,6 @@
 import { AddModal } from '@/components/Modal';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import { useCommonTapeProduction } from '@/state/Common';
+import { useCommonTapeProduction, useCommonTapeSFG } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -23,20 +23,7 @@ export default function Index({
 	setUpdateTapeLog,
 }) {
 	const { url, updateData } = useCommonTapeProduction();
-
-	// const MIN_QUANTITY =
-	// 	Number(updateTapeLog?.tape_prod) -
-	// 		Number(updateTapeLog?.production_quantity) <
-	// 	0
-	// 		? Number(updateTapeLog?.production_quantity)
-	// 		: 0;
-	// const schema = {
-	// 	...TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
-	// 	production_quantity:
-	// 		TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA.production_quantity.min(
-	// 			MIN_QUANTITY
-	// 		),
-	// };
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 
 	const { register, handleSubmit, errors, reset } = useRHF(
 		TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
@@ -80,6 +67,7 @@ export default function Index({
 				updatedData,
 				onClose,
 			});
+			invalidateCommonTapeSFG();
 			return;
 		}
 	};
@@ -94,6 +82,14 @@ export default function Index({
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'
+				//sub_label={`Min: ${//MIN_QUANTITY}`}
+				unit='KG'
+				//placeholder={`Min: ${//MIN_QUANTITY}`}
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				title='Wastage'
+				label='wastage'
 				//sub_label={`Min: ${//MIN_QUANTITY}`}
 				unit='KG'
 				//placeholder={`Min: ${//MIN_QUANTITY}`}

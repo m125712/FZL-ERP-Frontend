@@ -1,7 +1,7 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import { useCommonTapeToCoil } from '@/state/Common';
+import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { TAPE_TO_COIL_TRX_NULL, TAPE_TO_COIL_TRX_SCHEMA } from '@util/Schema';
@@ -20,6 +20,7 @@ export default function Index({
 	setUpdateTapeLog,
 }) {
 	const { url, updateData } = useCommonTapeToCoil();
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 
 	const MAX_QUANTITY =
 		Number(updateTapeLog?.quantity) + Number(updateTapeLog?.trx_quantity);
@@ -65,7 +66,7 @@ export default function Index({
 				updatedData,
 				onClose,
 			});
-
+			invalidateCommonTapeSFG();
 			return;
 		}
 	};

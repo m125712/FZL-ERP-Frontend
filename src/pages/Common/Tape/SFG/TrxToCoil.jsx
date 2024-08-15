@@ -2,7 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useCommonTapeSFG } from '@/state/Common';
+import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -23,6 +23,8 @@ export default function Index({
 }) {
 	const { user } = useAuth();
 	const { postData } = useCommonTapeSFG();
+	const { invalidateQuery: invalidateCommonTapeToCoil } =
+		useCommonTapeToCoil();
 	const schema = {
 		...TAPE_TO_COIL_TRX_SCHEMA,
 
@@ -62,6 +64,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateCommonTapeToCoil();
 	};
 
 	return (

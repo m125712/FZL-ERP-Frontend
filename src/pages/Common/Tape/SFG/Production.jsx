@@ -2,7 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useRHF, useUpdateFunc } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useCommonTapeSFG } from '@/state/Common';
+import { useCommonTapeProduction, useCommonTapeSFG } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { TAPE_PROD_NULL, TAPE_PROD_SCHEMA } from '@util/Schema';
@@ -21,6 +21,8 @@ export default function Index({
 }) {
 	const { user } = useAuth();
 	const { postData } = useCommonTapeSFG();
+	const { invalidateQuery: invalidateCommonTapeSFG } =
+		useCommonTapeProduction();
 
 	const { register, handleSubmit, errors, reset } = useRHF(
 		TAPE_PROD_SCHEMA,
@@ -58,6 +60,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateCommonTapeSFG();
 	};
 
 	return (

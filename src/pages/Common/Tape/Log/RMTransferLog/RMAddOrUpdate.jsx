@@ -1,7 +1,7 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import { useCommonMaterialUsed } from '@/state/Common';
+import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -20,6 +20,7 @@ export default function Index({
 	setUpdateTapeLog,
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
+	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
 	const MAX_QUANTITY =
 		Number(updateTapeLog?.tape_making) +
 		Number(updateTapeLog?.used_quantity);
@@ -37,6 +38,7 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
+		wa,
 	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
@@ -72,6 +74,7 @@ export default function Index({
 				updatedData,
 				onClose,
 			});
+			invalidateCommonTapeRM();
 
 			return;
 		}
@@ -137,6 +140,12 @@ export default function Index({
 			</FormField>
 			<Input
 				label='used_quantity'
+				sub_label={`Max: ${Number(updateTapeLog?.tape_making) + Number(updateTapeLog?.used_quantity)}`}
+				placeholder={`Max: ${Number(updateTapeLog?.tape_making) + Number(updateTapeLog?.used_quantity)}`}
+				{...{ register, errors }}
+			/>
+			<Input
+				label='wastage'
 				sub_label={`Max: ${Number(updateTapeLog?.tape_making) + Number(updateTapeLog?.used_quantity)}`}
 				placeholder={`Max: ${Number(updateTapeLog?.tape_making) + Number(updateTapeLog?.used_quantity)}`}
 				{...{ register, errors }}

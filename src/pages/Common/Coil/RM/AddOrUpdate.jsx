@@ -2,7 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useCommonCoilRM } from '@/state/Common';
+import { useCommonCoilRM, useCommonCoilRMLog } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
@@ -18,6 +18,7 @@ export default function Index({
 	setUpdateCoilStock,
 }) {
 	const { url, postData } = useCommonCoilRM();
+	const { invalidateQuery: invalidateCoilRMLog } = useCommonCoilRMLog();
 	const MAX_QUANTITY = updateCoilStock?.coil_forming;
 	const { user } = useAuth();
 	const schema = {
@@ -32,17 +33,12 @@ export default function Index({
 		RM_MATERIAL_USED_NULL
 	);
 
-	useFetchForRhfReset(
-		`${url}/${updateCoilStock?.uuid}`,
-		updateCoilStock?.uuid,
-		reset
-	);
-
 	const onClose = () => {
 		setUpdateCoilStock((prev) => ({
 			...prev,
 			uuid: null,
 			unit: null,
+			coil_forming: null,
 		}));
 		reset(RM_MATERIAL_USED_NULL);
 		window[modalId].close();
@@ -65,6 +61,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateCoilRMLog();
 	};
 
 	return (

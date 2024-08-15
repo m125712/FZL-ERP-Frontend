@@ -1,7 +1,11 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import { useCommonMaterialUsed } from '@/state/Common';
+import {
+	useCommonCoilRM,
+	useCommonCoilSFG,
+	useCommonMaterialUsed,
+} from '@/state/Common';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -19,6 +23,7 @@ export default function Index({
 	setUpdateCoilLog,
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
+	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
 	const MAX_QUANTITY =
 		Number(updateCoilLog?.coil_forming) +
 		Number(updateCoilLog?.used_quantity);
@@ -70,7 +75,7 @@ export default function Index({
 				updatedData,
 				onClose,
 			});
-
+			invalidateCommonCoilRM();
 			return;
 		}
 	};
@@ -135,6 +140,12 @@ export default function Index({
 			</FormField>
 			<Input
 				label='used_quantity'
+				sub_label={`Max: ${MAX_QUANTITY}`}
+				placeholder={`Max: ${MAX_QUANTITY}`}
+				{...{ register, errors }}
+			/>
+			<Input
+				label='wastage'
 				sub_label={`Max: ${MAX_QUANTITY}`}
 				placeholder={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}

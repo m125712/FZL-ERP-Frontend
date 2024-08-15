@@ -6,6 +6,7 @@ import {
 	SectionEntryBody,
 	Textarea,
 } from '@/ui';
+import isJSON from '@/util/isJson';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -16,8 +17,6 @@ export default function Header({
 	getValues,
 	Controller,
 	isUpdate,
-	orderInfoIds,
-	setOrderInfoIds,
 }) {
 	const { pi_uuid } = useParams();
 	const [marketingId, setMarketingId] = useState(
@@ -27,12 +26,13 @@ export default function Header({
 		pi_uuid != undefined ? getValues('party_uuid') : null
 	); // 47 is the default value
 
-	const { value: marketing } = useFetch('/other/marketing-user/value/label');
+	const { value: marketing } = useFetch('/other/marketing/value/label');
 	const { value: party } = useFetch('/other/party/value/label');
 	const { value: order_number } = useFetch(
-		`/order-number-for-pi/value/label/by/${marketingId}/${partyId}`,
+		`/other/order-number-for-pi/value/label/${marketingId}/${partyId}`,
 		[marketingId, partyId]
 	);
+
 	const { value: merchandiser } = useFetch(
 		`/other/merchandiser/value/label/${partyId}`,
 		[partyId]
@@ -43,7 +43,9 @@ export default function Header({
 	);
 	const { value: bank } = useFetch('/other/bank/value/label');
 
-	const { value: lc } = useFetch(`/lc/value/label/by/${partyId}`, [partyId]);
+	const { value: lc } = useFetch(`/other/lc/value/label/${partyId}`, [
+		partyId,
+	]);
 
 	useEffect(() => {
 		if (isUpdate) {
@@ -109,7 +111,7 @@ export default function Header({
 					</FormField>
 					<FormField label='party_uuid' title='Party' errors={errors}>
 						<Controller
-							name='party_id'
+							name='party_uuid'
 							control={control}
 							render={({ field: { onChange } }) => {
 								return (
@@ -133,11 +135,11 @@ export default function Header({
 						/>
 					</FormField>
 					<FormField
-						label='order_info_ids'
+						label='order_info_uuids'
 						title='Order Numbers'
 						errors={errors}>
 						<Controller
-							name='order_info_ids'
+							name='order_info_uuids'
 							control={control}
 							render={({ field: { onChange } }) => {
 								return (
@@ -145,25 +147,29 @@ export default function Header({
 										isMulti
 										placeholder='Select Order Numbers'
 										options={order_number}
-										value={order_number?.filter((item) =>
-											orderInfoIds?.order_info_ids?.includes(
-												item.value
-											)
-										)}
-										onChange={(e) => {
-											setOrderInfoIds((prev) => ({
-												...prev,
-												order_info_ids: e.map(
-													({ value }) => value
-												),
-											}));
+										value={order_number?.filter((item) => {
+											const order_info_uuids =
+												getValues('order_info_uuids');
 
+											if (order_info_uuids === null) {
+												return false;
+											} else {
+												if (isJSON(order_info_uuids)) {
+													return JSON.parse(
+														order_info_uuids
+													)
+														.split(',')
+														.includes(item.value);
+												} else {
+													return order_info_uuids
+														.flat()
+														.includes(item.value);
+												}
+											}
+										})}
+										onChange={(e) => {
 											onChange(
-												JSON.stringify({
-													values: e.map(
-														({ value }) => value
-													),
-												})
+												e.map(({ value }) => value)
 											);
 										}}
 									/>

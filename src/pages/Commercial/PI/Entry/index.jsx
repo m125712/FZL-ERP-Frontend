@@ -1,34 +1,33 @@
 import { DeleteModal } from '@/components/Modal';
-import {
-	useFetchForRhfResetForOrder,
-	usePostFunc,
-	useRHF,
-	useUpdateFunc,
-} from '@/hooks';
+import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
 import { CheckBoxWithoutLabel, DynamicDeliveryField, Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { PI_NULL, PI_SCHEMA } from '@util/Schema';
-import { customAlphabet } from 'nanoid';
 import { Suspense, useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 import Header from './Header';
+import nanoid from '@/lib/nanoid';
+import {
+	useCommercialPI,
+	useCommercialPIByOrderInfo,
+	useCommercialPIEntry,
+} from '@/state/Commercial';
+import isJSON from '@/util/isJson';
 
-const alphabet =
-	'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-const nanoid = customAlphabet(alphabet, 10);
-
-// UPDATE IS WORKING
+// NEEDTOFIX: OrderInfoIds is not working correctly while updating
 export default function Index() {
+	const { url: commercialPiEntryUrl } = useCommercialPIEntry();
+	const { url: commercialPiUrl, postData, updateData } = useCommercialPI();
 	const { pi_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
 	const isUpdate = pi_uuid !== undefined;
-	const [orderInfoIds, setOrderInfoIds] = useState({});
+	const [orderInfoIds, setOrderInfoIds] = useState('');
 
 	const {
 		register,
@@ -41,6 +40,7 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
+		getFieldState,
 	} = useRHF(PI_SCHEMA, PI_NULL);
 
 	// pi_entry
@@ -54,12 +54,6 @@ export default function Index() {
 		itemName: null,
 	});
 
-	const onClose = () => reset(PI_NULL);
-	let order_info_ids;
-	isUpdate
-		? (order_info_ids = JSON.parse(getValues('order_info_ids')))
-		: (order_info_ids = orderInfoIds?.order_info_ids?.join(',') || null);
-
 	isUpdate
 		? useFetchForRhfResetForOrder(
 				`/commercial/pi/details/${pi_uuid}`,
@@ -67,74 +61,113 @@ export default function Index() {
 				reset
 			)
 		: useFetchForRhfResetForOrder(
-				`/pi/details/by/order-info-ids/${order_info_ids}/${watch('party_id')}/${watch('marketing_id')}`,
+				`/commercial/pi/details/by/order-info-ids/${orderInfoIds}/${watch('party_uuid')}/${watch('marketing_uuid')}`,
 				orderInfoIds,
 				reset
 			);
 
-	useEffect(() => {
-		if (pi_uuid !== undefined) {
-			setOrderInfoIds((prev) => ({
-				...prev,
-				order_info_ids,
-			}));
+	// Fetch Pi Order Info for Update PI if new Order Infos are selected
+	const { data: piOrderInfo } = useCommercialPIByOrderInfo(
+		orderInfoIds,
+		watch('party_uuid'),
+		watch('marketing_uuid'),
+		{
+			enabled:
+				isUpdate &&
+				!!orderInfoIds &&
+				!!watch('party_uuid') &&
+				!!watch('marketing_uuid') &&
+				getFieldState('order_info_uuids').isDirty,
 		}
-	}, [getValues('order_info_ids')]);
+	);
+
+	useEffect(() => {
+		if (!isUpdate) return;
+
+		setValue('pi_entry', piOrderInfo?.pi_entry);
+	}, [piOrderInfo, isUpdate]);
+
+	useEffect(() => {
+		const order_info_uuids = getValues('order_info_uuids');
+
+		if (order_info_uuids === null) {
+			setOrderInfoIds(null);
+		} else {
+			if (isJSON(order_info_uuids)) {
+				setOrderInfoIds(() =>
+					JSON.parse(order_info_uuids).split(',').join(',')
+				);
+			} else {
+				const order_info_uuids = getValues('order_info_uuids').flat();
+				setOrderInfoIds(() => order_info_uuids.join(','));
+			}
+		}
+	}, [watch('order_info_uuids')]);
 
 	// Submit
 	const onSubmit = async (data) => {
-		// Update
+		// Update item
 		if (isUpdate) {
-			// Style / Color / Size
-			const pi_data = {
-				...data,
+			const commercialPiData = {
+				order_info_uuids: JSON.stringify(orderInfoIds),
+				bank_uuid: data?.bank_uuid,
+				validity: data?.validity,
+				payment: data?.payment,
+				remarks: data?.remarks,
 				updated_at: GetDateTime(),
 			};
-			let pi_promise = useUpdateFunc({
-				uri: `/pi/${data?.id}/${data?.order_number}`,
-				itemId: data.id,
-				data: data,
-				updatedData: pi_data,
-				onClose: onClose,
-			}).catch((err) => console.error(`Error updating data: ${err}`));
 
-			// pi entry
-			let promises = data.pi_entry.map(async (item) => {
-				if (item.id === null && item.pi_quantity > 0) {
-					item.pi_uuid = pi_uuid;
-					item.created_at = GetDateTime();
-
-					return await usePostFunc({
-						uri: '/pi-entry',
-						data: item,
-					}).catch((err) => console.error(`Error: ${err}`));
-				}
-
-				if (item.id && item.pi_quantity >= 0) {
-					const updatedData = {
-						...item,
-						updated_at: GetDateTime(),
-						remarks: null,
-					};
-
-					return await useUpdateFunc({
-						// replace style brackets, /, #, & with space
-						uri: `/pi-entry/${item?.id}/${pi_uuid}`,
-						itemId: item.id,
-						data: item,
-						updatedData: updatedData,
-						onClose: onClose,
-					}).catch((err) =>
-						console.error(`Error updating data: ${err}`)
-					);
-				}
-				return null;
+			// update /commercial/pi/{uuid}
+			const commercialPiPromise = await updateData.mutateAsync({
+				url: `${commercialPiUrl}/${data?.uuid}`,
+				updatedData: commercialPiData,
+				uuid: data.uuid,
+				isOnCloseNeeded: false,
 			});
 
+			// pi entry
+			let commercialPiEntryPromises = data.pi_entry
+				.filter((item) => item.is_checked && item.pi_quantity > 0)
+				.map(async (item) => {
+					if (item.uuid === null && item.pi_quantity > 0) {
+						return await postData.mutateAsync({
+							url: commercialPiEntryUrl,
+							newData: {
+								uuid: nanoid(),
+								is_checked: true,
+								sfg_uuid: item?.sfg_uuid,
+								pi_quantity: item?.pi_quantity,
+								pi_uuid: pi_uuid,
+								created_at: GetDateTime(),
+								remarks: item?.remarks || null,
+							},
+							isOnCloseNeeded: false,
+						});
+					}
+
+					if (item.uuid && item.pi_quantity >= 0) {
+						const updatedData = {
+							pi_quantity: item.pi_quantity,
+							updated_at: GetDateTime(),
+						};
+
+						return await updateData.mutateAsync({
+							url: `${commercialPiEntryUrl}/${item?.uuid}`,
+							updatedData: updatedData,
+							uuid: item.uuid,
+							isOnCloseNeeded: false,
+						});
+					}
+					return null;
+				});
+
 			try {
-				await Promise.all([pi_promise, ...promises])
+				await Promise.all([
+					commercialPiPromise,
+					...commercialPiEntryPromises,
+				])
 					.then(() => reset(Object.assign({}, PI_NULL)))
-					.then(() => navigate(`/commercial/pi/details/${pi_id}`));
+					.then(() => navigate(`/commercial/pi/details/${pi_uuid}`));
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
 			}
@@ -142,47 +175,60 @@ export default function Index() {
 			return;
 		}
 
-		// Add
+		// Add new item
 		var new_pi_uuid = nanoid();
 		const created_at = GetDateTime();
 
-		const pi = {
+		const commercialPiData = {
 			...data,
-			pi_uuid: new_pi_uuid,
-			order_info_ids: JSON.stringify(order_info_ids),
+			uuid: new_pi_uuid,
+			order_info_uuids: JSON.stringify(orderInfoIds),
 			created_at,
-			issued_by: user.id,
+			created_by: user.uuid,
 		};
 
-		const pi_entry = [...data.pi_entry]
+		delete commercialPiData['is_all_checked'];
+		delete commercialPiData['pi_entry'];
+
+		const commercialPiEntryData = [...data.pi_entry]
 			.filter((item) => item.is_checked && item.pi_quantity > 0)
 			.map((item) => ({
-				...item,
+				uuid: nanoid(),
+				is_checked: true,
+				sfg_uuid: item?.sfg_uuid,
+				pi_quantity: item?.pi_quantity,
 				pi_uuid: new_pi_uuid,
 				created_at,
+				remarks: item?.remarks || null,
 			}));
 
-		if (pi_entry.length === 0) {
+		if (commercialPiEntryData.length === 0) {
 			alert('Select at least one item to proceed.');
 		} else {
-			await usePostFunc({
-				uri: '/pi',
-				data: pi,
+			// create new /commercial/pi
+			await postData.mutateAsync({
+				url: commercialPiUrl,
+				newData: commercialPiData,
+				isOnCloseNeeded: false,
 			});
 
-			let promises = [
-				...pi_entry.map(
-					async (item) =>
-						await usePostFunc({
-							uri: '/pi-entry',
-							data: item,
-						})
-				),
-			];
-			await Promise.all(promises)
-				.then(() => reset(Object.assign({}, PI_NULL)))
-				.then(() => navigate(`/commercial/pi`))
-				.catch((err) => console.log(err));
+			// create new /commercial/pi-entry
+			const commercial_pi_entry_promises = commercialPiEntryData.map(
+				(item) =>
+					postData.mutateAsync({
+						url: commercialPiEntryUrl,
+						newData: item,
+						isOnCloseNeeded: false,
+					})
+			);
+
+			try {
+				await Promise.all([...commercial_pi_entry_promises])
+					.then(() => reset(Object.assign({}, PI_NULL)))
+					.then(() => navigate(`/commercial/pi`));
+			} catch (err) {
+				console.error(`Error with Promise.all: ${err}`);
+			}
 		}
 	};
 
@@ -241,8 +287,6 @@ export default function Index() {
 						getValues,
 						Controller,
 						isUpdate,
-						orderInfoIds,
-						setOrderInfoIds,
 					}}
 				/>
 				<DynamicDeliveryField

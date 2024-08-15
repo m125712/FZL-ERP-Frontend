@@ -44,7 +44,7 @@ export const CommercialRoutes = [
 	{
 		id: 11,
 		name: 'PI',
-		path: '/commercial/pi/details/:pi_id',
+		path: '/commercial/pi/details/:pi_uuid',
 		element: PiDetails,
 		type: 'commercial',
 		page_name: 'commercial__pi_details',

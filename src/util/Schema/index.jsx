@@ -1053,10 +1053,10 @@ export const CHALLAN_NULL = {
 // Commercial
 // PI
 export const PI_SCHEMA = {
-	lc_uuid: STRING_REQUIRED,
+	lc_uuid: STRING.nullable(),
 	marketing_uuid: STRING_REQUIRED,
 	party_uuid: STRING_REQUIRED,
-	order_info_ids: JSON_STRING_REQUIRED,
+	order_info_uuids: JSON_STRING_REQUIRED,
 	merchandiser_uuid: STRING_REQUIRED,
 	factory_uuid: STRING_REQUIRED,
 	bank_uuid: STRING_REQUIRED,
@@ -1065,8 +1065,9 @@ export const PI_SCHEMA = {
 	remarks: STRING.nullable(),
 	pi_entry: yup.array().of(
 		yup.object().shape({
+			is_checked: BOOLEAN,
 			sfg_uuid: STRING_REQUIRED,
-			pi_uuid: STRING_REQUIRED,
+			pi_uuid: STRING,
 			max_quantity: NUMBER,
 			pi_quantity: NUMBER_REQUIRED.max(
 				yup.ref('max_quantity'),
@@ -1081,7 +1082,7 @@ export const PI_NULL = {
 	uuid: null,
 	marketing_uuid: '',
 	party_uuid: '',
-	order_info_ids: null,
+	order_info_uuids: null,
 	merchandiser_uuid: '',
 	factory_uuid: '',
 	bank_uuid: '',
@@ -1090,6 +1091,7 @@ export const PI_NULL = {
 	remarks: '',
 	pi_entry: [
 		{
+			is_checked: false,
 			sfg_uuid: '',
 			pi_uuid: '',
 			max_quantity: null,

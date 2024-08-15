@@ -118,8 +118,10 @@ export default function Index() {
 
 	const handelAdd = () => navigate('/commercial/pi/entry');
 
-	const handelUpdate = (idx) =>
-		navigate(`/commercial/pi/update/${data[idx].uuid}}`);
+	const handelUpdate = (idx) => {
+		const uuid = data[idx]?.uuid;
+		navigate(`/commercial/pi/update/${uuid}`);
+	};
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

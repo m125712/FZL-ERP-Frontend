@@ -39,3 +39,20 @@ export const useCommercialPIEntryByUUID = (uuid) =>
 		queryKey: commercialQK.piEntry(uuid),
 		url: `/commercial/pi-entry/${uuid}`,
 	});
+
+// * PI by orderInfoIds * //
+export const useCommercialPIByOrderInfo = (
+	orderInfoIds,
+	partyId,
+	marketingId,
+	{ enabled = true }
+) =>
+	createGlobalState({
+		queryKey: commercialQK.piByOrderInfo(
+			orderInfoIds,
+			partyId,
+			marketingId
+		),
+		url: `/commercial/pi/details/by/order-info-ids/${orderInfoIds}/${partyId}/${marketingId}`,
+		enabled,
+	});

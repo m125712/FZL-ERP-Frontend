@@ -1,6 +1,6 @@
 import { AddModal } from '@/components/Modal';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import { useCommonCoilProduction } from '@/state/Common';
+import { useCommonCoilProduction, useCommonCoilSFG } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -12,34 +12,32 @@ export default function Index({
 	modalId = '',
 	updateCoilLog = {
 		uuid: null,
-		tape_type: null,
-		tape_or_coil_stock_id: null,
+		type_of_zipper: null,
+		tape_coil_uuid: null,
 		production_quantity: null,
-		tape_prod: null,
+		quantity: null,
 		coil_stock: null,
 		wastage: null,
-		issued_by_name: null,
+		created_by_name: null,
 	},
 	setUpdateCoilLog,
 }) {
-	const { url, updateData } = useCommonCoilProduction();
+	const { updateData } = useCommonCoilProduction();
+	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
 
-	// const MIN_QUANTITY =
-	// 	Number(updateCoilLog?.tape_prod) -
-	// 		Number(updateCoilLog?.production_quantity) <
-	// 	0
-	// 		? Number(updateCoilLog?.production_quantity)
-	// 		: 0;
-	// const schema = {
-	// 	...TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
-	// 	production_quantity:
-	// 		TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA.production_quantity.min(
-	// 			MIN_QUANTITY
-	// 		),
-	// };
+	const MAX_QUANTITY =
+		Number(updateCoilLog.trx_quantity_in_coil) +
+		Number(updateCoilLog.production_quantity);
+	const schema = {
+		...TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
+		production_quantity:
+			TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA.production_quantity.max(
+				MAX_QUANTITY
+			),
+	};
 
 	const { register, handleSubmit, errors, reset } = useRHF(
-		TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
+		schema,
 		TAPE_OR_COIL_PRODUCTION_LOG_NULL
 	);
 
@@ -53,13 +51,13 @@ export default function Index({
 		setUpdateCoilLog((prev) => ({
 			...prev,
 			uuid: null,
-			tape_type: null,
-			tape_or_coil_stock_id: null,
-			prod_quantity: null,
-			tape_prod: null,
+			type_of_zipper: null,
+			tape_coil_uuid: null,
+			production_quantity: null,
+			quantity: null,
 			coil_stock: null,
 			wastage: null,
-			issued_by_name: null,
+			created_by_name: null,
 		}));
 		reset(TAPE_OR_COIL_PRODUCTION_LOG_NULL);
 		window[modalId].close();
@@ -80,6 +78,7 @@ export default function Index({
 				updatedData,
 				onClose,
 			});
+			invalidateCommonCoilSFG();
 			return;
 		}
 	};
@@ -87,16 +86,24 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Update Production Log of ${updateCoilLog?.tape_type}`}
+			title={`Update Production Log of ${updateCoilLog?.type_of_zipper}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'
-				//sub_label={`Min: ${MIN_QUANTITY}`}
+				sub_label={`Min: ${MAX_QUANTITY}`}
 				unit='KG'
-				//placeholder={`Min: ${MIN_QUANTITY}`}
+				placeholder={`Min: ${MAX_QUANTITY}`}
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				title='Wastage'
+				label='wastage'
+				sub_label={`Min: ${MAX_QUANTITY}`}
+				unit='KG'
+				placeholder={`Min: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

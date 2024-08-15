@@ -21,8 +21,6 @@ export default function Index() {
 		document.title = info.getTabName();
 	}, []);
 
-	console.log(data);
-
 	const columns = useMemo(
 		() => [
 			{
@@ -112,6 +110,7 @@ export default function Index() {
 		quantity: null,
 		item_name: null,
 		zipper_number: null,
+		trx_quantity: null,
 	});
 
 	const handelProduction = (idx) => {

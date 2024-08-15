@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc, useFetchFuncForReport } from '@/hooks';
-import { useCommonCoilRM } from '@/state/Common';
+import { useCommonCoilRM, useCommonTapeRM } from '@/state/Common';
 import { EditDelete, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -9,16 +9,9 @@ import { lazy, useEffect, useMemo, useState } from 'react';
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const { data, isLoading, url } = useCommonCoilRM();
-	const info = new PageInfo('Coil Stock', url, 'common__coil_rm');
+	const { data, isLoading, url, deleteData } = useCommonTapeRM();
+	const info = new PageInfo('Tape RM', url, 'common__tape_rm');
 	const haveAccess = useAccess(info.getTab());
-	console.log(data);
-	//   "uuid": "0UEnxvp0dRSNN3O",
-	//   "material_uuid": "0UEnxvp0dRSNN3O",
-	//   "material_name": "Tape Material",
-	//   "stock": "950.0000",
-	//   "tape_making": "50.0000",
-	//   "remarks": null
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -35,7 +28,7 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'stock',
+				accessorKey: 'tape_making',
 				header: 'Stock',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -66,25 +59,19 @@ export default function Index() {
 		],
 		[data]
 	);
-	//   "uuid": "0UEnxvp0dRSNN3O",
-	//   "material_uuid": "0UEnxvp0dRSNN3O",
-	//   "material_name": "Tape Material",
-	//   "stock": "950.0000",
-	//   "tape_making": "50.0000",
-	//   "remarks": null
 
-	const [updateCoilStock, setUpdateCoilStock] = useState({
+	const [updateTapeStock, setUpdateTapeStock] = useState({
 		uuid: null,
-		stock: null,
 		unit: null,
+		tape_making: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateCoilStock((prev) => ({
+		setUpdateTapeStock((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
-			stock: data[idx].quantity,
 			unit: data[idx].unit,
+			tape_making: data[idx].tape_making,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -105,8 +92,8 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateCoilStock,
-						setUpdateCoilStock,
+						updateTapeStock,
+						setUpdateTapeStock,
 					}}
 				/>
 			</Suspense>

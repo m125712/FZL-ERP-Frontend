@@ -3,12 +3,12 @@ import { lazy } from 'react';
 // ? Common
 
 // * Tape
-const TapeStock = lazy(() => import('@/pages/Common/Tape/Stock'));
+const TapeStock = lazy(() => import('@/pages/Common/Tape/RM'));
 const TapeProd = lazy(() => import('@/pages/Common/Tape/SFG'));
 const TapeLog = lazy(() => import('@/pages/Common/Tape/Log'));
 
 // * Coil
-const CoilStock = lazy(() => import('@/pages/Common/Coil/Stock'));
+const CoilStock = lazy(() => import('@/pages/Common/Coil/RM'));
 const CoilProd = lazy(() => import('@/pages/Common/Coil/SFG'));
 const CoilLog = lazy(() => import('@/pages/Common/Coil/Log'));
 

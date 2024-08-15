@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
+import { useAccess, useFetch, useFetchFunc, useUpdateFunc } from '@/hooks';
 import { useDyeingSwatch } from '@/state/Dyeing';
-import { useAccess, useFetchFunc, useUpdateFunc, useFetch } from '@/hooks';
 import { EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
@@ -12,23 +12,15 @@ export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
 		useDyeingSwatch();
 	const info = new PageInfo(
-		'Swatch',
+		'Dyeing/Swatch',
 		'order/swatch',
 		'dyeing__dyeing_and_iron_swatch'
 	);
 	const haveAccess = useAccess('dyeing__dyeing_and_iron_swatch');
+	console.log(data);
 
-	// * fetching the datat
-
+	// * fetching the data
 	const { value: recipe } = useFetch('/other/lab-dip/recipe/value/label');
-
-
-
-	const [swatch, setSwatch] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-
-
 
 	const columns = useMemo(
 		() => [
@@ -104,21 +96,6 @@ export default function Index() {
 					const { recipe_uuid } = info.row.original;
 
 					return (
-						// <select
-						// 	className="select select-bordered select-primary select-sm"
-						// 	name="swatch_status"
-						// 	defaultValue={info.getValue()}
-						// 	onChange={(e) =>
-						// 		handleSwatchStatus(e, info.row.index)
-						// 	}
-						// >
-						// 	<option>--</option>
-						// 	{statusOption?.map((item) => (
-						// 		<option key={item.value} value={item.value}>
-						// 			{item.label}
-						// 		</option>
-						// 	))}
-						// </select>
 						<ReactSelect
 							key={recipe_uuid}
 							placeholder='Select order info uuid'
@@ -130,35 +107,12 @@ export default function Index() {
 							onChange={(e) =>
 								handleSwatchStatus(e, info.row.index)
 							}
-							isDisabled={recipe !== undefined ? false : true}
+							// isDisabled={recipe !== undefined ? false : true}
 							menuPortalTarget={document.body}
 						/>
 					);
 				},
 			},
-			// {
-			// 	accessorKey: "remarks",
-			// 	header: "Remarks",
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: "actions",
-			// 	header: "Actions",
-			// 	enableColumnFilter: false,
-			// 	enableSorting: false,
-			// 	hidden: !haveAccess.includes("update"),
-			// 	width: "w-24",
-			// 	cell: (info) => {
-			// 		return (
-			// 			<EditDelete
-			// 				idx={info.row.index}
-			// 				handelUpdate={handelUpdate}
-			// 				showDelete={false}
-			// 			/>
-			// 		);
-			// 	},
-			// },
 		],
 		[data, recipe]
 	);
@@ -170,7 +124,6 @@ export default function Index() {
 	// }, []);
 
 	const handleSwatchStatus = async (e, idx) => {
-
 		await updateData.mutateAsync({
 			url: `/zipper/sfg-swatch/${data[idx]?.uuid}`,
 			updatedData: { recipe_uuid: e.value },

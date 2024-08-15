@@ -25,7 +25,6 @@ export default function Header({
 	
 	const { value: order_info_uuid } = useFetch(`/other/order/info/value/label`);
 
-	console.log(order_info_uuid);
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody title='Recipe'>

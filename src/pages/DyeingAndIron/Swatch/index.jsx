@@ -22,28 +22,13 @@ export default function Index() {
 
 	const { value: recipe } = useFetch('/other/lab-dip/recipe/value/label');
 
-	// console.log(data);
-	// console.log(recipe)
 
-	// color: "black"
-	// item_description: "N-3-OE-RP"
-	// order_description_uuid: "GFMuc3MbSQJg8FH"
-	// order_entry_uuid: "PjCnW73l3A1l44h"
-	// order_number: "Z24-0010"
-	// quantity: "10.0000"
-	// recipe_name: null
-	// recipe_uuid: null
-	// remarks: null
-	// size: "10"
-	// style: "st1"
-	// uuid: "PjCnW73l3A1l44h"
 
 	const [swatch, setSwatch] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
-	// console.log(recipe);
-	console.log(data);
+
 
 	const columns = useMemo(
 		() => [
@@ -185,7 +170,6 @@ export default function Index() {
 	// }, []);
 
 	const handleSwatchStatus = async (e, idx) => {
-		console.log('recipe_uuid', e.value, 'swatch_uuid', data[idx].uuid);
 
 		await updateData.mutateAsync({
 			url: `/zipper/sfg-swatch/${data[idx]?.uuid}`,

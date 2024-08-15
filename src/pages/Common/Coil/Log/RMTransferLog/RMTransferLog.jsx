@@ -13,12 +13,6 @@ export default function Index() {
 	const info = new PageInfo('RM Coil Log', url, 'common__coil_log');
 	const haveAccess = useAccess(info.getTab());
 
-	// const info = new PageInfo('RM Coil Log', 'material/used/by/coil_forming');
-	// const [coilLog, setCoilLog] = useState([]);
-	// const [loading, setLoading] = useState(true);
-	// const [error, setError] = useState(null);
-	// const haveAccess = useAccess('common__coil_log');
-
 	const columns = useMemo(
 		() => [
 			{

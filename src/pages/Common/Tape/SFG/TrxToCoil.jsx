@@ -42,6 +42,7 @@ export default function Index({
 			...prev,
 			uuid: null,
 			trx_quantity: null,
+			quantity: null,
 		}));
 		reset(COIL_STOCK_NULL);
 		window[modalId].close();

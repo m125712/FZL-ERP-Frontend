@@ -66,12 +66,6 @@ export default function Index() {
 		],
 		[data]
 	);
-	//   "uuid": "0UEnxvp0dRSNN3O",
-	//   "material_uuid": "0UEnxvp0dRSNN3O",
-	//   "material_name": "Tape Material",
-	//   "stock": "950.0000",
-	//   "tape_making": "50.0000",
-	//   "remarks": null
 
 	const [updateCoilStock, setUpdateCoilStock] = useState({
 		uuid: null,

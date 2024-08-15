@@ -749,6 +749,7 @@ export const TAPE_TO_COIL_TRX_NULL = {
 	tape_coil_stock_uuid: '',
 	created_by: '',
 	trx_quantity: '',
+	quantity: '',
 	wastage: '',
 	remarks: '',
 };

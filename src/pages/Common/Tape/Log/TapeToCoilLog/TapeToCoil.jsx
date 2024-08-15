@@ -100,7 +100,7 @@ export default function TapeToCoil() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].tape_type,
+			itemName: data[idx].type_of_zipper,
 		}));
 
 		window[info.getDeleteModalId()].showModal();

@@ -19,6 +19,7 @@ export default function Index({
 }) {
 	const { url, postData } = useCommonCoilRM();
 	const MAX_QUANTITY = updateCoilStock?.coil_forming;
+	const { user } = useAuth();
 	const schema = {
 		used_quantity: RM_MATERIAL_USED_SCHEMA.remaining.max(
 			updateCoilStock?.coil_forming

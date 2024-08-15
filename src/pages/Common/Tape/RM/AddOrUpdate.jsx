@@ -36,11 +36,11 @@ export default function Index({
 		RM_MATERIAL_USED_NULL
 	);
 
-	useFetchForRhfReset(
-		`${url}/${updateTapeStock?.uuid}`,
-		updateTapeStock?.uuid,
-		reset
-	);
+	// useFetchForRhfReset(
+	// 	`${url}/${updateTapeStock?.uuid}`,
+	// 	updateTapeStock?.uuid,
+	// 	reset
+	// );
 
 	const onClose = () => {
 		setUpdateTapeStock((prev) => ({

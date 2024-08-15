@@ -12,17 +12,17 @@ export default function Index({
 	modalId = '',
 	updateCoilLog = {
 		uuid: null,
-		tape_type: null,
-		tape_or_coil_stock_id: null,
+		type_of_zipper: null,
+		tape_coil_uuid: null,
 		production_quantity: null,
-		tape_prod: null,
+		quantity: null,
 		coil_stock: null,
 		wastage: null,
-		issued_by_name: null,
+		created_by_name: null,
 	},
 	setUpdateCoilLog,
 }) {
-	const { url, updateData } = useCommonCoilProduction();
+	const { updateData } = useCommonCoilProduction();
 
 	const MAX_QUANTITY =
 		Number(updateCoilLog.trx_quantity_in_coil) +
@@ -50,13 +50,13 @@ export default function Index({
 		setUpdateCoilLog((prev) => ({
 			...prev,
 			uuid: null,
-			tape_type: null,
-			tape_or_coil_stock_id: null,
-			prod_quantity: null,
-			tape_prod: null,
+			type_of_zipper: null,
+			tape_coil_uuid: null,
+			production_quantity: null,
+			quantity: null,
 			coil_stock: null,
 			wastage: null,
-			issued_by_name: null,
+			created_by_name: null,
 		}));
 		reset(TAPE_OR_COIL_PRODUCTION_LOG_NULL);
 		window[modalId].close();

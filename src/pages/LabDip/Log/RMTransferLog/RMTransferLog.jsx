@@ -14,7 +14,6 @@ export default function Index() {
 	const info = new PageInfo('RM LabDip Log', url, 'lab_dip__log');
 	const haveAccess = useAccess(info.getTab());
 	const { invalidateQuery: invalidateLabDipRM } = useLabDipRM();
-
 	const columns = useMemo(
 		() => [
 			{
@@ -115,7 +114,7 @@ export default function Index() {
 		uuid: null,
 		section: null,
 		material_name: null,
-		dying_and_iron: null,
+		lab_dip: null,
 		used_quantity: null,
 	});
 

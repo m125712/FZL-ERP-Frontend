@@ -17,14 +17,15 @@ export default function Index({
 		uuid: null,
 		section: null,
 		used_quantity: null,
-		dying_and_iron: null,
+		lab_dip: null,
 	},
 	setUpdateLabDipRMLog,
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateLabDipRM } = useLabDipRM();
+
 	const MAX_QUANTITY =
-		Number(updateLabDipRMLog?.dying_and_iron) +
+		Number(updateLabDipRMLog?.lab_dip) +
 		Number(updateLabDipRMLog?.used_quantity);
 	const schema = {
 		...RM_MATERIAL_USED_EDIT_SCHEMA,
@@ -55,7 +56,7 @@ export default function Index({
 			uuid: null,
 			section: null,
 			used_quantity: null,
-			dying_and_iron: null,
+			lab_dip: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
@@ -143,14 +144,14 @@ export default function Index({
 			</FormField>
 			<Input
 				label='used_quantity'
-				sub_label={`Max: ${Number(updateLabDipRMLog?.dying_and_iron) + Number(updateLabDipRMLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateLabDipRMLog?.dying_and_iron) + Number(updateLabDipRMLog?.used_quantity)}`}
+				sub_label={`Max: ${Number(updateLabDipRMLog?.lab_dip) + Number(updateLabDipRMLog?.used_quantity)}`}
+				placeholder={`Max: ${Number(updateLabDipRMLog?.lab_dip) + Number(updateLabDipRMLog?.used_quantity)}`}
 				{...{ register, errors }}
 			/>
 			<Input
 				label='wastage'
-				sub_label={`Max: ${Number(updateLabDipRMLog?.dying_and_iron) + Number(updateLabDipRMLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateLabDipRMLog?.dying_and_iron) + Number(updateLabDipRMLog?.used_quantity)}`}
+				sub_label={`Max: ${Number(updateLabDipRMLog?.lab_dip) + Number(updateLabDipRMLog?.used_quantity)}`}
+				placeholder={`Max: ${Number(updateLabDipRMLog?.lab_dip) + Number(updateLabDipRMLog?.used_quantity)}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

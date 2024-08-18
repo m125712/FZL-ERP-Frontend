@@ -84,6 +84,12 @@ export const commercialQK = {
 	// pi
 	pis: () => [...commercialQK.all(), 'pi'],
 	pi: (uuid) => [...commercialQK.pis(), uuid],
+	piByOrderInfo: (orderId, partyId, marketingId) => [
+		...commercialQK.pis(),
+		orderId,
+		partyId,
+		marketingId,
+	],
 
 	// pi-entry
 	piEntries: () => [...commercialQK.all(), 'pi-entry'],

@@ -1,6 +1,6 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useDyeingPlanningSNO } from '@/state/Dyeing';
+import { useDyeingPlanning } from '@/state/Dyeing';
 import { useAccess, useFetch } from '@/hooks';
 import { EditDelete, LinkWithCopy, DateTime } from '@/ui';
 import PageInfo from '@/util/PageInfo';
@@ -9,12 +9,11 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
-		useDyeingPlanningSNO();
+		useDyeingPlanning();
 	const info = new PageInfo('Planning SNO', url, 'dyeing__planning_sno');
 	const haveAccess = useAccess('dyeing__planning_sno');
 	const navigate = useNavigate();
 
-	console.log(data);
 
 	const columns = useMemo(
 		() => [
@@ -39,7 +38,7 @@ export default function Index() {
 								className='btn btn-primary btn-xs'
 								onClick={() =>
 									navigate(
-										`/dyeing-and-iron/planning-sno/entry/${week}`
+										`/dyeing-and-iron/planning-head-office/entry/${week}`
 									)
 								}>
 								Add
@@ -100,13 +99,13 @@ export default function Index() {
 	);
 
 	// Add
-	const handelAdd = () => navigate('/dyeing-and-iron/planning-sno/entry');
+	const handelAdd = () => navigate('/dyeing-and-iron/planning-head-office/entry');
 
 	// Update
 	const handelUpdate = (idx) => {
 		const { uuid } = data[idx];
 
-		navigate(`/dyeing-and-iron/planning-sno/update/${uuid}`);
+		navigate(`/dyeing-and-iron/planning-head-office/update/${uuid}`);
 	};
 
 	// get tabname

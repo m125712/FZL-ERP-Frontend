@@ -195,7 +195,7 @@ export const dyeingQK = {
 	swatch: () => [...dyeingQK.all(), 'swatch'],
 	swatchByUUID: (uuid) => [...dyeingQK.swatch(), uuid],
 
-	// planning_sno
-	planning_sno: () => [...dyeingQK.all(), 'planning_sno'],
-	planning_snoByUUID: (uuid) => [...dyeingQK.planning_sno(), uuid],
+	// planning
+	planning: () => [...dyeingQK.all(), 'planning'],
+	planningByUUID: (uuid) => [...dyeingQK.planning(), uuid],
 };

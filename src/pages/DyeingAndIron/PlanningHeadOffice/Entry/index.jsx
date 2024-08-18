@@ -17,13 +17,10 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import {
-	DYEING_PLANNING_SNO_SCHEMA,
-	DYEING_PLANNING_SNO_NULL,
-} from '@util/Schema';
+import { DYEING_PLANNING_SCHEMA, DYEING_PLANNING_NULL } from '@util/Schema';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useDyeingPlanningSNO } from '@/state/Dyeing';
+import { useDyeingPlanning } from '@/state/Dyeing';
 import nanoid from '@/lib/nanoid';
 
 import Header from './Header';
@@ -31,7 +28,7 @@ import Header from './Header';
 // UPDATE IS WORKING
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
-		useDyeingPlanningSNO();
+		useDyeingPlanning();
 	const { planning_id, week_id } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
@@ -51,7 +48,7 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
-	} = useRHF(DYEING_PLANNING_SNO_SCHEMA, DYEING_PLANNING_SNO_NULL);
+	} = useRHF(DYEING_PLANNING_SCHEMA, DYEING_PLANNING_NULL);
 
 	// planning_entry
 	const { fields: PlanningEntryField } = useFieldArray({
@@ -64,7 +61,7 @@ export default function Index() {
 		itemName: null,
 	});
 
-	const onClose = () => reset(DYEING_PLANNING_SNO_NULL);
+	const onClose = () => reset(DYEING_PLANNING_NULL);
 
 	// * Fetch initial data
 	isUpdate
@@ -240,7 +237,6 @@ export default function Index() {
 		setIsSomeChecked(isSomeChecked);
 	};
 
-	console.log(isAllChecked);
 	// Todo: react-table-column
 	const columns = useMemo(
 		() => [
@@ -248,7 +244,7 @@ export default function Index() {
 				accessorKey: 'checkbox',
 				header: () => (
 					<CheckBoxWithoutLabel
-					className='bg-white'
+						className='bg-white'
 						label='is_all_checked'
 						checked={isAllChecked}
 						onChange={(e) => {
@@ -313,15 +309,18 @@ export default function Index() {
 				enableSorting: true,
 			},
 			{
-				accessorKey: 'sno_qty',
-				header: 'SNO QTY',
+				accessorKey: 'factory_quantity',
+				header: 'Factory QTY',
 				enableColumnFilter: false,
 				enableSorting: false,
 				cell: (info) => (
 					<Input
-						label={`planning_entry[${info.row.index}].sno_quantity`}
+						label={`planning_entry[${info.row.index}].factory_quantity`}
 						is_title_needed='false'
 						height='h-8'
+						dynamicerror={
+							errors?.planning_entry?.[info.row.index]?.factory_quantity
+						}
 						{...{ register, errors }}
 					/>
 				),
@@ -344,6 +343,8 @@ export default function Index() {
 		[isAllChecked]
 	);
 
+	console.log("Error:",errors);
+
 	return (
 		<div className='container mx-auto mt-4 px-2 pb-2 md:px-4'>
 			<form
@@ -362,13 +363,12 @@ export default function Index() {
 				/>
 
 				{/* todo: react-table  */}
-				
-					<ReactTable
-						data={PlanningEntryField}
-						columns={columns}
-						extraClass='py-2'
-					/>
 
+				<ReactTable
+					data={PlanningEntryField}
+					columns={columns}
+					extraClass='py-2'
+				/>
 
 				<div className='modal-action'>
 					<button

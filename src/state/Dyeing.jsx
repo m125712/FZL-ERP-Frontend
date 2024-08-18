@@ -15,14 +15,14 @@ export const useDyeingSwatchByUUID = (uuid) =>
 	});
 
 // * Planning_sno
-export const useDyeingPlanningSNO = () =>
+export const useDyeingPlanning = () =>
 	createGlobalState({
-		queryKey: dyeingQK.planning_sno(),
+		queryKey: dyeingQK.planning(),
 		url: '/zipper/planning',
 	});
 
-export const useDyeingPlanningSNOByUUID = (uuid) =>
+export const useDyeingPlanningByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: dyeingQK.swatchByUUID(uuid),
+		queryKey: dyeingQK.planningByUUID(uuid),
 		url: `/zipper/planning/${uuid}`,
 	});

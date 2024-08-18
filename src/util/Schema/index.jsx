@@ -1284,29 +1284,32 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 };
 
 // * Dyeing Planning SNO schema*//
-export const DYEING_PLANNING_SNO_SCHEMA = {
-	week: STRING_REQUIRED,
+export const DYEING_PLANNING_SCHEMA = {
 	remarks: STRING.nullable(),
 	planning_entry: yup.array().of(
 		yup.object().shape({
-			sno_quantity: NUMBER.nullable(),
-			factory_quantity: NUMBER.nullable(),
-			production_quantity: NUMBER.nullable(),
-			batch_production_quantity: NUMBER.nullable(),
+			sno_quantity: NUMBER.nullable() // Allows the field to be null
+				.transform((value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+				) // Transforms empty strings to null
+				.max(yup.ref('order_quantity'), 'Beyond Max Quantity'),
+			factory_quantity: NUMBER.nullable() // Allows the field to be null
+				.transform((value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+				) // Transforms empty strings to null
+				.max(yup.ref('order_quantity'), 'Beyond Max Quantity'),
 			plan_entry_remarks: STRING.nullable(),
 		})
 	),
 };
 
-export const DYEING_PLANNING_SNO_NULL = {
+export const DYEING_PLANNING_NULL = {
 	week: '',
 	remarks: '',
 	planning_entry: yup.array().of(
 		yup.object().shape({
-			sno_quantity: 0,
-			factory_quantity: 0,
-			production_quantity: 0,
-			batch_production_quantity: 0,
+			sno_quantity: null,
+			factory_quantity: null,
 			plan_entry_remarks: '',
 		})
 	),

@@ -1129,7 +1129,7 @@ export const BANK_NULL = {
 
 // LC
 export const LC_SCHEMA = {
-	party_id: NUMBER_REQUIRED,
+	party_uuid: STRING_REQUIRED,
 	file_no: STRING_REQUIRED,
 	lc_number: STRING_REQUIRED,
 	lc_date: STRING_REQUIRED,
@@ -1153,11 +1153,16 @@ export const LC_SCHEMA = {
 	problematical: BOOLEAN_REQUIRED,
 	epz: BOOLEAN_REQUIRED,
 	remarks: STRING.nullable(),
+	pi: yup.array().of(
+		yup.object().shape({
+			uuid: STRING_REQUIRED,
+		})
+	),
 };
 
 export const LC_NULL = {
-	id: null,
-	party_id: null,
+	uuid: null,
+	party_uuid: null,
 	file_no: '',
 	lc_number: '',
 	lc_date: '',
@@ -1181,6 +1186,11 @@ export const LC_NULL = {
 	problematical: false,
 	epz: false,
 	remarks: '',
+	pi: [
+		{
+			uuid: '',
+		},
+	],
 };
 
 // Thread

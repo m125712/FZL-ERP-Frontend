@@ -94,6 +94,10 @@ export const commercialQK = {
 	// pi-entry
 	piEntries: () => [...commercialQK.all(), 'pi-entry'],
 	piEntry: (uuid) => [...commercialQK.piEntries(), uuid],
+
+	// lc
+	lcs: () => [...commercialQK.all(), 'lc'],
+	lc: (uuid) => [...commercialQK.lcs(), uuid],
 };
 
 // Material Query Keys

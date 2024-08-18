@@ -12,7 +12,6 @@ import Header from './Header';
 import nanoid from '@/lib/nanoid';
 import { useCommercialPI, useCommercialPIEntry } from '@/state/Commercial';
 import isJSON from '@/util/isJson';
-import { Trash } from '@/assets/icons';
 import cn from '@/lib/cn';
 
 export default function Index() {

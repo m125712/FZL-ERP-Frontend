@@ -1,6 +1,12 @@
 import { DeleteModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
-import { CheckBoxWithoutLabel, DynamicDeliveryField, Input } from '@/ui';
+import { useFetchForRhfResetForOrder, useRHF } from '@/hooks';
+import {
+	ActionButtons,
+	CheckBox,
+	CheckBoxWithoutLabel,
+	DynamicDeliveryField,
+	Input,
+} from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -16,11 +22,18 @@ import {
 	useCommercialPIEntry,
 } from '@/state/Commercial';
 import isJSON from '@/util/isJson';
+import { Trash } from '@/assets/icons';
+import cn from '@/lib/cn';
 
 // NEEDTOFIX: OrderInfoIds is not working correctly while updating
 export default function Index() {
 	const { url: commercialPiEntryUrl } = useCommercialPIEntry();
-	const { url: commercialPiUrl, postData, updateData } = useCommercialPI();
+	const {
+		url: commercialPiUrl,
+		postData,
+		updateData,
+		deleteData,
+	} = useCommercialPI();
 	const { pi_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
@@ -66,31 +79,28 @@ export default function Index() {
 				reset
 			);
 
-	// Fetch Pi Order Info for Update PI if new Order Infos are selected
-	const { data: piOrderInfo } = useCommercialPIByOrderInfo(
-		orderInfoIds,
-		watch('party_uuid'),
-		watch('marketing_uuid'),
-		{
-			enabled:
-				isUpdate &&
-				!!orderInfoIds &&
-				!!watch('party_uuid') &&
-				!!watch('marketing_uuid') &&
-				getFieldState('order_info_uuids').isDirty,
-		}
-	);
-
 	useEffect(() => {
 		if (!isUpdate) return;
+		if (orderInfoIds === null) return;
 
-		setValue('pi_entry', piOrderInfo?.pi_entry);
-	}, [piOrderInfo, isUpdate]);
+		const updatedPiEntries = getValues('pi_entry').map((item) => {
+			if (!orderInfoIds.includes(item.order_info_uuid)) {
+				return {
+					...item,
+					isDeletable: true,
+				};
+			}
+
+			return item;
+		});
+
+		setValue('pi_entry', updatedPiEntries);
+	}, [isUpdate, orderInfoIds]);
 
 	useEffect(() => {
 		const order_info_uuids = getValues('order_info_uuids');
 
-		if (order_info_uuids === null) {
+		if (order_info_uuids === null || order_info_uuids === '') {
 			setOrderInfoIds(null);
 		} else {
 			if (isJSON(order_info_uuids)) {
@@ -98,8 +108,12 @@ export default function Index() {
 					JSON.parse(order_info_uuids).split(',').join(',')
 				);
 			} else {
-				const order_info_uuids = getValues('order_info_uuids').flat();
-				setOrderInfoIds(() => order_info_uuids.join(','));
+				const order_info_uuids = getValues('order_info_uuids');
+				if (!Array.isArray(order_info_uuids)) {
+					setOrderInfoIds(() => order_info_uuids);
+				} else {
+					setOrderInfoIds(() => order_info_uuids.join(','));
+				}
 			}
 		}
 	}, [watch('order_info_uuids')]);
@@ -109,7 +123,9 @@ export default function Index() {
 		// Update item
 		if (isUpdate) {
 			const commercialPiData = {
-				order_info_uuids: JSON.stringify(orderInfoIds),
+				order_info_uuids: orderInfoIds
+					? JSON.stringify(orderInfoIds)
+					: '',
 				bank_uuid: data?.bank_uuid,
 				validity: data?.validity,
 				payment: data?.payment,
@@ -126,15 +142,15 @@ export default function Index() {
 			});
 
 			// pi entry
-			let commercialPiEntryPromises = data.pi_entry
-				.filter((item) => item.is_checked && item.pi_quantity > 0)
+			let updatedableCommercialPiEntryPromises = data.pi_entry
+				.filter((item) => item.pi_quantity > 0 && !item.isDeletable)
 				.map(async (item) => {
 					if (item.uuid === null && item.pi_quantity > 0) {
 						return await postData.mutateAsync({
 							url: commercialPiEntryUrl,
 							newData: {
 								uuid: nanoid(),
-								is_checked: true,
+								is_checked: item.is_checked,
 								sfg_uuid: item?.sfg_uuid,
 								pi_quantity: item?.pi_quantity,
 								pi_uuid: pi_uuid,
@@ -148,6 +164,7 @@ export default function Index() {
 					if (item.uuid && item.pi_quantity >= 0) {
 						const updatedData = {
 							pi_quantity: item.pi_quantity,
+							is_checked: item.is_checked,
 							updated_at: GetDateTime(),
 						};
 
@@ -161,10 +178,20 @@ export default function Index() {
 					return null;
 				});
 
+			let deleteableCommercialPiEntryPromises = data.pi_entry
+				.filter((item) => item.isDeletable)
+				.map(async (item) => {
+					return await deleteData.mutateAsync({
+						url: `${commercialPiEntryUrl}/${item?.uuid}`,
+						isOnCloseNeeded: false,
+					});
+				});
+
 			try {
 				await Promise.all([
 					commercialPiPromise,
-					...commercialPiEntryPromises,
+					...updatedableCommercialPiEntryPromises,
+					deleteableCommercialPiEntryPromises,
 				])
 					.then(() => reset(Object.assign({}, PI_NULL)))
 					.then(() => navigate(`/commercial/pi/details/${pi_uuid}`));
@@ -301,20 +328,22 @@ export default function Index() {
 					// handelAppend={handelOrderEntryAppend}
 					tableHead={
 						<>
-							<th
-								key='is_all_checked'
-								scope='col'
-								className='group w-20 cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
-								<CheckBoxWithoutLabel
-									label='is_all_checked'
-									checked={isAllChecked}
-									onChange={(e) => {
-										setIsAllChecked(e.target.checked);
-										setIsSomeChecked(e.target.checked);
-									}}
-									{...{ register, errors }}
-								/>
-							</th>
+							{!isUpdate && (
+								<th
+									key='is_all_checked'
+									scope='col'
+									className='group w-20 cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
+									<CheckBoxWithoutLabel
+										label='is_all_checked'
+										checked={isAllChecked}
+										onChange={(e) => {
+											setIsAllChecked(e.target.checked);
+											setIsSomeChecked(e.target.checked);
+										}}
+										{...{ register, errors }}
+									/>
+								</th>
+							)}
 							{[
 								'O/N',
 								'Item Description',
@@ -333,27 +362,52 @@ export default function Index() {
 									{item}
 								</th>
 							))}
+
+							{isUpdate && (
+								<th
+									key='action'
+									scope='col'
+									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
+									Delete
+								</th>
+							)}
 						</>
 					}>
 					{orderEntryField.map((item, index) => (
 						<tr
 							key={item.id}
-							className='cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30'>
-							<td className={`w-8 ${rowClass}`}>
-								<CheckBoxWithoutLabel
-									label={`pi_entry[${index}].is_checked`}
-									checked={watch(
-										`pi_entry[${index}].is_checked`
-									)}
-									onChange={(e) => handleRowChecked(e, index)}
-									disabled={
-										getValues(
-											`pi_entry[${index}].pi_quantity`
-										) == 0
-									}
-									{...{ register, errors }}
-								/>
-							</td>
+							className={cn(
+								'relative cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30',
+								isUpdate &&
+									watch(`pi_entry[${index}].isDeletable`) &&
+									'bg-red-400 text-white even:bg-red-400 hover:bg-red-300'
+							)}>
+							{!isUpdate && (
+								<td className={cn(`w-8 ${rowClass}`)}>
+									<CheckBoxWithoutLabel
+										label={`pi_entry[${index}].is_checked`}
+										checked={watch(
+											`pi_entry[${index}].is_checked`
+										)}
+										onChange={(e) =>
+											handleRowChecked(e, index)
+										}
+										disabled={
+											getValues(
+												`pi_entry[${index}].pi_quantity`
+											) == 0
+										}
+										{...{ register, errors }}
+									/>
+								</td>
+							)}
+							{/* {isUpdate &&
+								getValues(`pi_entry[${index}].isDeletable`) && (
+									<div className='absolute left-0 top-0 z-50 block h-full w-0 bg-red-500'>
+										<span className=''></span>
+									</div>
+								)} */}
+
 							<td className={`w-32 ${rowClass}`}>
 								{getValues(`pi_entry[${index}].order_number`)}
 							</td>
@@ -406,6 +460,20 @@ export default function Index() {
 									`pi_entry[${index}].balance_quantity`
 								)}
 							</td>
+							{isUpdate && (
+								<td className={`${rowClass}`}>
+									<CheckBoxWithoutLabel
+										className='checkbox-error'
+										label={`pi_entry[${index}].isDeletable`}
+										{...{ register, errors }}
+									/>
+									{/* <button
+										className='btn btn-circle btn-ghost btn-sm transition-all duration-300'
+										type='button'>
+										<Trash className='w-6 bg-transparent text-error' />
+									</button> */}
+								</td>
+							)}
 						</tr>
 					))}
 				</DynamicDeliveryField>

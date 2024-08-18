@@ -75,7 +75,7 @@ export default function Header({
 										onChange={(e) => {
 											onChange(e.value);
 										}}
-										// isDisabled={pi_uuid != undefined}
+										isDisabled={true}
 									/>
 								);
 							}}
@@ -146,7 +146,54 @@ export default function Header({
 									<ReactSelect
 										isMulti
 										placeholder='Select Order Numbers'
-										options={order_number}
+										options={
+											!isUpdate
+												? order_number
+												: order_number?.filter(
+														(item) => {
+															const order_info_uuids =
+																getValues(
+																	'order_info_uuids'
+																);
+															if (
+																order_info_uuids ===
+																null
+															) {
+																return false;
+															} else {
+																if (
+																	isJSON(
+																		order_info_uuids
+																	)
+																) {
+																	return JSON.parse(
+																		order_info_uuids
+																	)
+																		.split(
+																			','
+																		)
+																		.includes(
+																			item.value
+																		);
+																} else {
+																	if (
+																		!Array.isArray(
+																			order_info_uuids
+																		)
+																	) {
+																		return (
+																			order_info_uuids ===
+																			item.value
+																		);
+																	}
+																	return order_info_uuids.includes(
+																		item.value
+																	);
+																}
+															}
+														}
+													)
+										}
 										value={order_number?.filter((item) => {
 											const order_info_uuids =
 												getValues('order_info_uuids');
@@ -161,9 +208,19 @@ export default function Header({
 														.split(',')
 														.includes(item.value);
 												} else {
-													return order_info_uuids
-														.flat()
-														.includes(item.value);
+													if (
+														!Array.isArray(
+															order_info_uuids
+														)
+													) {
+														return (
+															order_info_uuids ===
+															item.value
+														);
+													}
+													return order_info_uuids.includes(
+														item.value
+													);
 												}
 											}
 										})}

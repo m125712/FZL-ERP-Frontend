@@ -1077,10 +1077,11 @@ export const PI_SCHEMA = {
 			pi_uuid: STRING,
 			max_quantity: NUMBER,
 			pi_quantity: NUMBER_REQUIRED.max(
-				yup.ref('max_quantity'),
+				yup.ref('quantity'),
 				'Beyond Max Quantity'
 			),
 			remarks: STRING.nullable(),
+			isDeletable: BOOLEAN,
 		})
 	),
 };
@@ -1104,6 +1105,7 @@ export const PI_NULL = {
 			max_quantity: null,
 			pi_quantity: null,
 			remarks: '',
+			isDeletable: false,
 		},
 	],
 };

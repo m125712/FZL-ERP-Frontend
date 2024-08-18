@@ -101,11 +101,7 @@ export default function Index() {
 		unit: null,
 		stock: null,
 	});
-	// { label: 'Vislon Gapping', value: 'v_gapping' },
-	// { label: 'Vislon Teeth Cleaning', value: 'v_teeth_cleaning' },
-	// { label: 'Vislon Sealing', value: 'v_sealing' },
-	// 	{ label: 'Vislon Stopper', value: 'v_stopper' },
-	//{ label: 'Vislon T Cutting', value: 'v_t_cutting' }
+
 	const handelUpdate = (idx) => {
 		setUpdateFinishingStock((prev) => ({
 			...prev,

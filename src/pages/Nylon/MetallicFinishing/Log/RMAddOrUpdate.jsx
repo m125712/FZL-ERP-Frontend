@@ -18,7 +18,8 @@ export default function Index({
 		uuid: null,
 		section: null,
 		used_quantity: null,
-		lab_dip: null,
+		n_t_cutting: null,
+		n_stopper: null,
 	},
 	setUpdateFinishingRMLog,
 }) {
@@ -28,8 +29,10 @@ export default function Index({
 
 	const MAX_QUANTITY =
 		updateFinishingRMLog?.section === 'n_t_cutting'
-			? updateFinishingRMLog?.n_t_cutting
-			: updateFinishingRMLog?.n_stopper;
+			? Number(updateFinishingRMLog?.n_t_cutting) +
+				Number(updateFinishingRMLog?.used_quantity)
+			: Number(updateFinishingRMLog?.n_stopper) +
+				Number(updateFinishingRMLog?.used_quantity);
 	const schema = {
 		...RM_MATERIAL_USED_EDIT_SCHEMA,
 		used_quantity:
@@ -59,7 +62,8 @@ export default function Index({
 			uuid: null,
 			section: null,
 			used_quantity: null,
-			lab_dip: null,
+			n_t_cutting: null,
+			n_stopper: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();

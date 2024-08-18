@@ -5,6 +5,7 @@
  **/
 
 import { all } from 'axios';
+import { useVislonFinishingRM } from './Vislon';
 
 export const orderQK = {
 	all: () => ['order'],
@@ -246,6 +247,26 @@ export const nylonQK = {
 	nylonMetallicFinishingRMLog: () => [...nylonQK.all(), 'rm-log'],
 	nylonMetallicFinishingLogByUUID: (uuid) => [
 		...nylonQK.nylonMetallicFinishingRMLog(),
+		uuid,
+	],
+};
+// *Vislon
+export const vislonQK = {
+	all: () => ['vislon'],
+
+	//*RM
+	VislonFinishingRM: () => [...vislonQK.all(), 'rm'],
+	VislonFinishingRMByUUID: (uuid) => [
+		...vislonQK.VislonFinishingRM(),
+		'rm',
+		uuid,
+	],
+
+	//*RM Log
+	VislonFinishingRMLog: () => [...vislonQK.all(), 'rm-log'],
+	VislonFinishingRMLogByUUID: (uuid) => [
+		...vislonQK.VislonFinishingRMLog(),
+		'rm-log',
 		uuid,
 	],
 };

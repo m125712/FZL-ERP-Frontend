@@ -1,131 +1,156 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useAccess, useFetchFunc, useFetchFuncForReport } from "@/hooks";
+// const info = new PageInfo(
+// 	'Finishing RM Stock',
+// 	// "/material/stock"
+// 	'/material/stock/by/field-names/v_gapping,v_teeth_cleaning,v_sealing,v_t_cutting,v_stopper',
+// 	'vislon__finishing_rm'
+// );
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useAccess } from '@/hooks';
+import { useVislonFinishingRM } from '@/state/Vislon';
+import { EditDelete, Transfer } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-import { EditDelete, Transfer } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
-
-const AddOrUpdate = lazy(() => import("./AddOrUpdate"));
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
+	const { data, isLoading, url } = useVislonFinishingRM();
 	const info = new PageInfo(
-		"Finishing RM Stock",
-		// "/material/stock"
-		"/material/stock/by/field-names/v_gapping,v_teeth_cleaning,v_sealing,v_t_cutting,v_stopper",
-		"vislon__finishing_rm"
+		'Finishing RM Stock',
+		url,
+		'vislon__finishing_rm'
 	);
-	const [finishing, setFinishing] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-	const haveAccess = useAccess("vislon__finishing_rm");
+	const haveAccess = useAccess(info.getTab());
 
+	console.log(data);
 	useEffect(() => {
 		document.title = info.getTabName();
-		useFetchFuncForReport(
-			info.getUrl(),
-			setFinishing,
-			setLoading,
-			setError
-		);
 	}, []);
-
-	// section	tape_or_coil_stock_id	quantity	wastage	issued_by
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "name",
-				header: "Material Name",
+				accessorKey: 'material_name',
+				header: 'Material Name',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className="capitalize">{info.getValue()}</span>
+					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: "section",
-				header: "Section",
+				accessorKey: 'v_gapping',
+				header: 'Gapping',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<span className="capitalize">
-						{info.getValue()?.replace(/_|v_/g, " ")}
-					</span>
-				),
+				cell: (info) => info.getValue(),
 			},
+
 			{
-				accessorKey: "quantity",
-				header: "Quantity",
+				accessorKey: 'v_teeth_cleaning',
+				header: 'T Cleaning',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "unit",
-				header: "Unit",
+				accessorKey: 'v_sealing',
+				header: 'Sealing',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'v_t_cutting',
+				header: 'cutting',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "actions",
-				header: "Actions",
+				accessorKey: 'v_stopper',
+				header: 'Stopper',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'unit',
+				header: 'Unit',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'action',
+				header: 'Used',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_used"),
-				width: "w-24",
-				cell: (info) => {
-					return (
-						<Transfer
-							onClick={() => handelUpdate(info.row.index)}
-						/>
-					);
-				},
+				hidden: !haveAccess.includes('click_used'),
+				width: 'w-24',
+				cell: (info) => (
+					<Transfer onClick={() => handelUpdate(info.row.index)} />
+				),
 			},
 		],
-		[finishing]
+		[data]
 	);
 
-	const [updateFinishing, setUpdateFinishing] = useState({
-		id: null,
-		section: "",
-		quantity: null,
-		unit: "",
+	const [updateFinishingStock, setUpdateFinishingStock] = useState({
+		uuid: null,
+		unit: null,
+		stock: null,
 	});
-
+	// { label: 'Vislon Gapping', value: 'v_gapping' },
+	// { label: 'Vislon Teeth Cleaning', value: 'v_teeth_cleaning' },
+	// { label: 'Vislon Sealing', value: 'v_sealing' },
+	// 	{ label: 'Vislon Stopper', value: 'v_stopper' },
+	//{ label: 'Vislon T Cutting', value: 'v_t_cutting' }
 	const handelUpdate = (idx) => {
-		const selected = finishing[idx];
-		setUpdateFinishing((prev) => ({
+		setUpdateFinishingStock((prev) => ({
 			...prev,
-			...selected,
+			uuid: data[idx].uuid,
+			unit: data[idx].unit,
+			stock: data[idx].v_gapping
+				? data[idx].v_gapping
+				: data[idx].v_teeth_cleaning
+					? data[idx].v_teeth_cleaning
+					: data[idx].v_sealing
+						? data[idx].v_sealing
+						: data[idx].v_t_cutting
+							? data[idx].v_t_cutting
+							: data[idx].v_stopper,
+			section: data[idx].v_gapping
+				? 'v_gapping'
+				: data[idx].v_teeth_cleaning
+					? 'v_teeth_cleaning'
+					: data[idx].v_sealing
+						? 'v_sealing'
+						: data[idx].v_t_cutting
+							? 'v_t_cutting'
+							: 'v_stopper',
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
 
-	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className='container mx-auto px-2 md:px-4'>
 			<ReactTable
 				title={info.getTitle()}
-				// handelAdd={handelAdd}
-				accessor={haveAccess.includes("click_used")}
-				data={finishing}
+				data={data}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 			<Suspense>
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						setFinishing,
-						updateFinishing,
-						setUpdateFinishing,
+						updateFinishingStock,
+						setUpdateFinishingStock,
 					}}
 				/>
 			</Suspense>

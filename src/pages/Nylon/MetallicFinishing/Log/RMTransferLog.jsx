@@ -7,7 +7,6 @@ import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 
-import { useLabDipRM, useLabDipRMLog } from '@/state/LabDip';
 import {
 	useNylonMetallicFinishingRM,
 	useNylonMetallicFinishingRMLog,
@@ -20,7 +19,11 @@ import RMAddOrUpdate from './RMAddOrUpdate';
 export default function Index() {
 	const { data, isLoading, url, deleteData } =
 		useNylonMetallicFinishingRMLog();
-	const info = new PageInfo('Finishing RM Used Log', url, 'lab_dip__log');
+	const info = new PageInfo(
+		'Finishing RM Used Log',
+		url,
+		'nylon__metallic_finishing_log'
+	);
 	const haveAccess = useAccess(info.getTab());
 	const { invalidateQuery: invalidateFinishingRM } =
 		useNylonMetallicFinishingRM();
@@ -103,7 +106,7 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
+				hidden: !haveAccess.includes('click_update_rm'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -111,7 +114,7 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('delete')}
+							showDelete={haveAccess.includes('click_delete_rm')}
 						/>
 					);
 				},
@@ -125,7 +128,8 @@ export default function Index() {
 		uuid: null,
 		section: null,
 		material_name: null,
-		lab_dip: null,
+		n_t_cutting: null,
+		n_stopper: null,
 		used_quantity: null,
 	});
 

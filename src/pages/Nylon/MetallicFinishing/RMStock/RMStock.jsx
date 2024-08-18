@@ -1,14 +1,6 @@
-// const info = new PageInfo(
-// 	'Finishing RM Stock',
-// 	'/material/stock/by/field-names/n_t_cutting,n_stopper',
-// 	'nylon__metallic_finishing_rm'
-// );
-
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-
-import { useLabDipRM } from '@/state/LabDip';
 import { useNylonMetallicFinishingRM } from '@/state/Nylon';
 import { EditDelete, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
@@ -42,13 +34,13 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'n_t_cutting',
-				header: 'Stock',
+				header: 'T Cutting',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'n_stopper',
-				header: 'Stock',
+				header: 'Stopper',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -79,18 +71,21 @@ export default function Index() {
 		[data]
 	);
 
-	const [updateLabDipStock, setUpdateLabDipStock] = useState({
+	const [updateFinishingStock, setUpdateFinishingStock] = useState({
 		uuid: null,
 		unit: null,
-		lab_dip: null,
+		stock: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateLabDipStock((prev) => ({
+		setUpdateFinishingStock((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
 			unit: data[idx].unit,
-			lab_dip: data[idx].lab_dip,
+			stock: data[idx].n_t_cutting
+				? data[idx].n_t_cutting
+				: data[idx].n_stopper,
+			section: data[idx].n_t_cutting ? 'n_t_cutting' : 'n_stopper',
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -111,8 +106,8 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateLabDipStock,
-						setUpdateLabDipStock,
+						updateFinishingStock,
+						setUpdateFinishingStock,
 					}}
 				/>
 			</Suspense>

@@ -237,13 +237,13 @@ export const nylonQK = {
 	//* RM
 
 	nylonMetallicFinishingRM: () => [...nylonQK.all(), 'rm'],
-	nylonMetallicFinishingByUUID: (uuid) => [
+	nylonMetallicFinishingRMByUUID: (uuid) => [
 		...nylonQK.nylonMetallicFinishingRM(),
 		uuid,
 	],
 
 	//* RM Log
-	nylonMetallicFinishingLog: () => [...nylonQK.all(), 'rm-log'],
+	nylonMetallicFinishingRMLog: () => [...nylonQK.all(), 'rm-log'],
 	nylonMetallicFinishingLogByUUID: (uuid) => [
 		...nylonQK.nylonMetallicFinishingRMLog(),
 		uuid,

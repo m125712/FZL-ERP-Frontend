@@ -13,3 +13,14 @@ export const useNylonMetallicFinishingRMByUUID = (uuid) =>
 		queryKey: nylonQK.nylonMetallicFinishingRMByUUID(uuid),
 		url: `/material/stock/by/multi-field/n_t_cutting,n_stopper/${uuid}`,
 	});
+//* RM Log
+export const useNylonMetallicFinishingRMLog = () =>
+	createGlobalState({
+		queryKey: nylonQK.nylonMetallicFinishingRMLog(),
+		url: '/material/used/multi-section/by/n_t_cutting,n_stopper',
+	});
+export const useNylonMetallicFinishingRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: nylonQK.nylonMetallicFinishingRMLogByUUID(uuid),
+		url: `/material/used/multi-section/by/n_t_cutting,n_stopper/${uuid}`,
+	});

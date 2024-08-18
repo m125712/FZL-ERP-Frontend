@@ -4,7 +4,7 @@
  ** https://tkdodo.eu/blog/leveraging-the-query-function-context#query-key-factories
  **/
 
-import { all } from "axios";
+import { all } from 'axios';
 
 export const orderQK = {
 	all: () => ['order'],
@@ -188,8 +188,14 @@ export const labDipQK = {
 
 // * Dyeing
 
-export const dyeingQK ={
-	all: () => ['dyeingSwatch'],
+export const dyeingQK = {
+	all: () => ['dyeing'],
+
+	// swatch
 	swatch: () => [...dyeingQK.all(), 'swatch'],
-	swatchByUUID: (uuid) => [...dyeingQK.all(), uuid]
-}
+	swatchByUUID: (uuid) => [...dyeingQK.swatch(), uuid],
+
+	// planning_sno
+	planning_sno: () => [...dyeingQK.all(), 'planning_sno'],
+	planning_snoByUUID: (uuid) => [...dyeingQK.planning_sno(), uuid],
+};

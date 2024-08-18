@@ -1,9 +1,8 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc, useFetchFuncForReport } from '@/hooks';
+import { useAccess } from '@/hooks';
 
-import { useDyeingRM } from '@/state/Dyeing';
-
+import { useLabDipRM } from '@/state/LabDip';
 import { EditDelete, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -11,8 +10,8 @@ import { lazy, useEffect, useMemo, useState } from 'react';
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const { data, isLoading, url } = useDyeingRM();
-	const info = new PageInfo('Dyeing/RM', url, 'dyeing__dyeing_and_iron_rm');
+	const { data, isLoading, url } = useLabDipRM();
+	const info = new PageInfo('Lab Dip/RM', url, 'lab_dip__rm');
 	const haveAccess = useAccess(info.getTab());
 
 	useEffect(() => {
@@ -30,7 +29,7 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'dying_and_iron',
+				accessorKey: 'lab_dip',
 				header: 'Stock',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -62,18 +61,18 @@ export default function Index() {
 		[data]
 	);
 
-	const [updateDyeingStock, setUpdateDyeingStock] = useState({
+	const [updateLabDipStock, setUpdateLabDipStock] = useState({
 		uuid: null,
 		unit: null,
-		dying_and_iron: null,
+		lab_dip: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateDyeingStock((prev) => ({
+		setUpdateLabDipStock((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
 			unit: data[idx].unit,
-			dying_and_iron: data[idx].dying_and_iron,
+			lab_dip: data[idx].lab_dip,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -94,8 +93,8 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateDyeingStock,
-						setUpdateDyeingStock,
+						updateLabDipStock,
+						setUpdateLabDipStock,
 					}}
 				/>
 			</Suspense>

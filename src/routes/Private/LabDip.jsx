@@ -4,7 +4,8 @@ import { lazy } from 'react';
 const Info = lazy(() => import('@pages/LabDip/Info'));
 const InfoEntry = lazy(() => import('@pages/LabDip/Info/Entry'));
 const InfoDetails = lazy(() => import('@pages/LabDip/Info/ByUUID'));
-
+const RM = lazy(() => import('@/pages/LabDip/RM'));
+const Log = lazy(() => import('@/pages/LabDip/Log'));
 const Recipe = lazy(() => import('@pages/LabDip/Recipe'));
 const RecipeEntry = lazy(() => import('@pages/LabDip/Recipe/Entry'));
 const RecipeDetails = lazy(() => import('@pages/LabDip/Recipe/ByRecipeId'));
@@ -87,7 +88,43 @@ export const LabDipRoutes = [
 		type: 'lab_dip',
 		hidden: true,
 		page_name: 'lab_dip__recipe_details',
-		actions: ['read', 'update'],
+		actions: ['create', 'read', 'update', 'delete'],
+		isDynamic: true,
+	},
+	{
+		id: 170,
+		name: 'RM',
+		path: '/lab-dip/rm',
+		element: RM,
+		type: 'lab_dip',
+
+		page_name: 'lab_dip__rm',
+		actions: [
+			'create',
+			'read',
+			'update',
+			'delete',
+			'click_name',
+			'click_used',
+		],
+		isDynamic: true,
+	},
+	{
+		id: 172,
+		name: 'Log',
+		path: '/lab-dip/log',
+		element: Log,
+		type: 'lab_dip',
+
+		page_name: 'lab_dip__log',
+		actions: [
+			'create',
+			'read',
+			'update',
+			'delete',
+			'click_name',
+			'click_used',
+		],
 		isDynamic: true,
 	},
 ];

@@ -22,7 +22,7 @@ export default function Index() {
 	const info = new PageInfo(
 		'Finishing RM Used Log',
 		url,
-		'nylon__metallic_finishing_log'
+		'nylon__plastic_finishing_log'
 	);
 	const haveAccess = useAccess(info.getTab());
 	const { invalidateQuery: invalidateFinishingRM } =

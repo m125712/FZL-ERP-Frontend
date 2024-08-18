@@ -18,7 +18,7 @@ export default function Index() {
 	const info = new PageInfo(
 		'Finishing RM Stock',
 		url,
-		'nylon__metallic_finishing_rm'
+		'nylon__plastic_finishing_rm'
 	);
 	const haveAccess = useAccess(info.getTab());
 

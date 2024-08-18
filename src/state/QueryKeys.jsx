@@ -222,3 +222,24 @@ export const dyeingQK = {
 	dyeingRMLog: () => [...dyeingQK.all(), 'rm-log'],
 	dyeingRMLogByUUID: (uuid) => [...dyeingQK.dyeingRMLog(), uuid],
 };
+
+// *Nylon
+export const nylonQK = {
+	all: () => ['nylon'],
+
+	// * Metallic Finishing
+	//* RM
+
+	nylonMetallicFinishingRM: () => [...nylonQK.all(), 'rm'],
+	nylonMetallicFinishingByUUID: (uuid) => [
+		...nylonQK.nylonMetallicFinishingRM(),
+		uuid,
+	],
+
+	//* RM Log
+	nylonMetallicFinishingLog: () => [...nylonQK.all(), 'rm-log'],
+	nylonMetallicFinishingLogByUUID: (uuid) => [
+		...nylonQK.nylonMetallicFinishingRMLog(),
+		uuid,
+	],
+};

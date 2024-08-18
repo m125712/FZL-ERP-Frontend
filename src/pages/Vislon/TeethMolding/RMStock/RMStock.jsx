@@ -1,14 +1,14 @@
 // const info = new PageInfo(
 // 	'Teeth Molding RM Stock',
 // 	'/material/stock/by/single-field/v_teeth_molding'',
-// 	'vislon__teeth_molding_rm'
+// 	'VislonTM__teeth_molding_rm'
 // );
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 
-import { useVislonRM } from '@/state/Vislon';
+import { useVislonTMRM } from '@/state/Vislon';
 import { EditDelete, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -16,8 +16,13 @@ import { lazy, useEffect, useMemo, useState } from 'react';
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const { data, isLoading, url } = useVislonRM();
-	const info = new PageInfo('Lab Dip/RM', url, 'lab_dip__rm');
+	const { data, isLoading, url } = useVislonTMRM();
+	console.log(data);
+	const info = new PageInfo(
+		'Teeth Molding RM Stock',
+		url,
+		'vislon__teeth_molding_rm'
+	);
 	const haveAccess = useAccess(info.getTab());
 
 	useEffect(() => {
@@ -35,7 +40,7 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'lab_dip',
+				accessorKey: 'v_teeth_molding',
 				header: 'Stock',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -67,18 +72,18 @@ export default function Index() {
 		[data]
 	);
 
-	const [updateVislonStock, setUpdateVislonStock] = useState({
+	const [updateVislonTMStock, setUpdateVislonTMStock] = useState({
 		uuid: null,
 		unit: null,
-		lab_dip: null,
+		v_teeth_molding: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateVislonStock((prev) => ({
+		setUpdateVislonTMStock((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
 			unit: data[idx].unit,
-			lab_dip: data[idx].lab_dip,
+			v_teeth_molding: data[idx].v_teeth_molding,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -99,12 +104,11 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateVislonStock,
-						setUpdateVislonStock,
+						updateVislonTMStock,
+						setUpdateVislonTMStock,
 					}}
 				/>
 			</Suspense>
 		</div>
 	);
 }
-

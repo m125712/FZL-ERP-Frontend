@@ -6,23 +6,24 @@ import { vislonQK } from './QueryKeys';
 export const useVislonTMRM = () =>
 	createGlobalState({
 		queryKey: vislonQK.VislonTMRM(),
-		url: '/material/stock/by/multi-field/v_gapping,v_teeth_cleaning,v_sealing,v_t_cutting,v_stopper',
+		url: '/material/stock/by/single-field/v_teeth_molding',
 	});
 export const useVislonTMRMByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: vislonQK.VislonTMRMByUUID(uuid),
-		url: `/material/stock/by/multi-field/v_gapping,v_teeth_cleaning,v_sealing,v_t_cutting,v_stopper/${uuid}`,
+		url: `/material/stock/by/single-field/v_teeth_molding${uuid}`,
 	});
 //* RM Log
 export const useVislonTMRMLog = () =>
 	createGlobalState({
 		queryKey: vislonQK.VislonTMRMLog(),
-		url: '/material/used/multi-section/by/v_gapping,v_teeth_cleaning,v_sealing,v_t_cutting,v_stopper',
+		url: '/material/used/by/v_teeth_molding',
 	});
 export const useVislonTMRMLogByUUID = (uuid) =>
 	createGlobalState({
-	
-})
+		queryKey: vislonQK.VislonTMRMLogByUUID(uuid),
+		url: `/material/used/by/v_teeth_molding${uuid}`,
+	});
 
 //* Finishing
 // * RM

@@ -253,6 +253,17 @@ export const nylonQK = {
 // *Vislon
 export const vislonQK = {
 	all: () => ['vislon'],
+	//* Teeth Molding
+
+	// * RM
+	VislonTMRM: () => [...vislonQK.all(), 'rm'],
+	VislonTMRMByUUID: (uuid) => [...vislonQK.VislonTMRM(), uuid],
+
+	// * RM Log
+	VislonTMRMLog: () => [...vislonQK.all(), 'rm-log'],
+	VislonTMRMLogByUUID: (uuid) => [...vislonQK.VislonTMRMLog(), uuid],
+
+	// * Finishing
 
 	//*RM
 	VislonFinishingRM: () => [...vislonQK.all(), 'rm'],

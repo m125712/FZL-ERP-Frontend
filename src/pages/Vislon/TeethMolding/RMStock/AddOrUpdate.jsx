@@ -1,29 +1,35 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from "@/hooks";
-import { Input, JoinInput } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from "@util/Schema";
+import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import nanoid from '@/lib/nanoid';
+
+import { useVislonTMRM, useVislonTMRMLog } from '@/state/Vislon';
+import { Input, JoinInput } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
+import * as yup from 'yup';
 
 export default function Index({
-	modalId = "",
-	setTeethMolding,
-	updateTeethMolding = {
-		id: null,
-		section: "",
-		quantity: null,
-		unit: "",
+	modalId = '',
+	updateVislonTMStock = {
+		uuid: null,
+		unit: null,
+		v_teeth_molding: null,
 	},
-	setUpdateTeethMolding,
+	setUpdateVislonTMStock,
 }) {
 	const { user } = useAuth();
+	const { url, postData } = useVislonTMRM();
+	const { invalidateQuery: invalidateVislonTMRMLog } = useVislonTMRMLog();
+	const MAX_QUANTITY = updateVislonTMStock?.v_teeth_molding;
 
 	const schema = {
-		remaining: RM_MATERIAL_USED_SCHEMA.remaining.max(
-			updateTeethMolding?.quantity
+		used_quantity: RM_MATERIAL_USED_SCHEMA.remaining.max(
+			updateVislonTMStock?.v_teeth_molding
 		),
-		wastage: RM_MATERIAL_USED_SCHEMA.wastage.max(
-			updateTeethMolding?.quantity
+		wastage: RM_MATERIAL_USED_SCHEMA.remaining.max(
+			MAX_QUANTITY,
+			'Must be less than or equal ${MAX_QUANTITY}'
 		),
 	};
 
@@ -32,19 +38,12 @@ export default function Index({
 		RM_MATERIAL_USED_NULL
 	);
 
-	useFetchForRhfReset(
-		`/material/stock/${updateTeethMolding?.id}`,
-		updateTeethMolding?.id,
-		reset
-	);
-
 	const onClose = () => {
-		setUpdateTeethMolding((prev) => ({
+		setUpdateVislonTMStock((prev) => ({
 			...prev,
-			id: null,
-			quantity: null,
-			section: "",
-			unit: "",
+			uuid: null,
+			unit: null,
+			v_teeth_molding: null,
 		}));
 		reset(RM_MATERIAL_USED_NULL);
 		window[modalId].close();
@@ -53,55 +52,57 @@ export default function Index({
 	const onSubmit = async (data) => {
 		const updatedData = {
 			...data,
-			used_quantity:
-				updateTeethMolding?.quantity - data.remaining - data.wastage,
-			quantity: data.remaining,
-			material_stock_id: updateTeethMolding?.id,
-			section: updateTeethMolding?.section,
-			issued_by: user?.id,
-			issued_by_name: user?.name,
+
+			material_uuid: updateVislonTMStock?.uuid,
+			section: 'v_teeth_molding',
+			created_by: user?.uuid,
+			created_by_name: user?.name,
+			uuid: nanoid(),
 			created_at: GetDateTime(),
 		};
-
-		if (updatedData?.used_quantity < 0) {
-			alert("Wastage can't be greater than remaining");
-			return;
-		}
-
-		await useUpdateFunc({
-			uri: "/material/used",
-			itemId: updateTeethMolding?.id,
-			data: data,
-			updatedData: updatedData,
-			setItems: setTeethMolding,
-			onClose: onClose,
+		await postData.mutateAsync({
+			url: '/material/used',
+			newData: updatedData,
+			onClose,
 		});
+		invalidateVislonTMRMLog();
 	};
 
 	return (
 		<AddModal
 			id={modalId}
-			title={updateTeethMolding?.id !== null && "Material Usage Entry"}
+			title={updateVislonTMStock?.uuid !== null && 'Material Usage Entry'}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
+			isSmall={true}>
 			<JoinInput
-				label="remaining"
-				max={updateTeethMolding?.quantity}
-				unit={updateTeethMolding?.unit}
-				placeholder={`Max: ${updateTeethMolding?.quantity}`}
+				label='used_quantity'
+				sub_label={`Max: ${Number(updateVislonTMStock?.v_teeth_molding)}`}
+				unit={updateVislonTMStock?.unit}
+				max={updateVislonTMStock?.v_teeth_molding}
+				placeholder={`Max: ${Number(updateVislonTMStock?.v_teeth_molding)}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				label="wastage"
-				unit={updateTeethMolding?.unit}
-				placeholder={`Max: ${(
-					updateTeethMolding?.quantity - watch("remaining")
+				label='wastage'
+				unit={updateVislonTMStock?.unit}
+				sub_label={`Max: ${(updateVislonTMStock?.v_teeth_molding -
+					watch('used_quantity') <
+				0
+					? 0
+					: updateVislonTMStock?.v_teeth_molding -
+						watch('used_quantity')
+				).toFixed(2)}`}
+				placeholder={`Max: ${(updateVislonTMStock?.v_teeth_molding -
+					watch('used_quantity') <
+				0
+					? 0
+					: updateVislonTMStock?.v_teeth_molding -
+						watch('used_quantity')
 				).toFixed(2)}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

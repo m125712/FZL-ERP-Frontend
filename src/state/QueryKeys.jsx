@@ -281,3 +281,42 @@ export const vislonQK = {
 		uuid,
 	],
 };
+
+// * Metal
+
+export const metalQK = {
+	all: () => ['metal'],
+
+	//* Teeth Molding
+
+	// * RM
+	metalTMRM: () => [...metalQK.all(), 'rm'],
+	metalTMRMByUUID: (uuid) => [...metalQK.metalTMRM(), uuid],
+
+	// * RM Log
+	metalTMRMLog: () => [...metalQK.all(), 'rm-log'],
+	metalTMRMLogByUUID: (uuid) => [...metalQK.metalTMRMLog(), uuid],
+
+	// * Finishing
+
+	//*RM
+	metalFinishingRM: () => [...metalQK.all(), 'rm'],
+	metalFinishingRMByUUID: (uuid) => [...metalQK.metalFinishingRM(), uuid],
+
+	//*RM Log
+	metalFinishingRMLog: () => [...metalQK.all(), 'rm-log'],
+	metalFinishingRMLogByUUID: (uuid) => [
+		...metalQK.metalFinishingRMLog(),
+		uuid,
+	],
+
+	//* Teeth Coloring
+
+	// * RM
+	metalTCRM: () => [...metalQK.all(), 'rm'],
+	metalTCRMByUUID: (uuid) => [...metalQK.metalTCRM(), uuid],
+
+	// * RM Log
+	metalTCRMLog: () => [...metalQK.all(), 'rm-log'],
+	metalTCRMLogByUUID: (uuid) => [...metalQK.metalTCRMLog(), uuid],
+};

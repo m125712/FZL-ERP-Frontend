@@ -1,123 +1,123 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useAccess, useFetchFunc, useFetchFuncForReport } from "@/hooks";
-import { EditDelete, Transfer } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+// const info = new PageInfo(
+// 	'Teeth Coloring RM Stock',
+// 	'/material/stock/by/field-names/teeth_assembling_and_polishing,plating_and_iron',
+// 	'metal__teeth_coloring_rm'
+// );
+// teeth_assembling_and_polishing, plating_and_iron;
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useAccess } from '@/hooks';
+import { useMetalTCRM } from '@/state/Metal';
+import { EditDelete, Transfer } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-const AddOrUpdate = lazy(() => import("./AddOrUpdate"));
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
+	const { data, isLoading, url } = useMetalTCRM();
 	const info = new PageInfo(
-		"Teeth Coloring RM Stock",
-		"/material/stock/by/field-names/teeth_assembling_and_polishing,plating_and_iron",
-		"metal__teeth_coloring_rm"
+		'Teeth Coloring RM Stock',
+		url,
+		'metal__teeth_coloring_rm'
 	);
-	const [teethColoring, setTeethColoring] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-	const haveAccess = useAccess("metal__teeth_coloring_rm");
+	const haveAccess = useAccess(info.getTab());
 
+	console.log(data);
 	useEffect(() => {
 		document.title = info.getTabName();
-		useFetchFuncForReport(
-			info.getUrl(),
-			setTeethColoring,
-			setLoading,
-			setError
-		);
 	}, []);
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "name",
-				header: "Material Name",
+				accessorKey: 'material_name',
+				header: 'Material Name',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className="capitalize">{info.getValue()}</span>
+					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: "section",
-				header: "Section",
+				accessorKey: 'teeth_assembling_and_polishing',
+				header: 'Teeth Assembling And Polishing',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<span className="capitalize">
-						{info.getValue()?.replace(/_|m_/g, " ")}
-					</span>
-				),
+				cell: (info) => info.getValue(),
 			},
+
 			{
-				accessorKey: "quantity",
-				header: "Quantity",
+				accessorKey: 'plating_and_iron',
+				header: 'Planting and Iron',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
+			{
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "unit",
-				header: "Unit",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: "action",
-				header: "Used",
+				accessorKey: 'action',
+				header: 'Used',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_used"),
-				width: "w-24",
+				hidden: !haveAccess.includes('click_used'),
+				width: 'w-24',
 				cell: (info) => (
 					<Transfer onClick={() => handelUpdate(info.row.index)} />
 				),
 			},
 		],
-		[teethColoring]
+		[data]
 	);
 
-	const [updateTeethColoring, setUpdateTeethColoring] = useState({
-		id: null,
-		section: "",
-		quantity: null,
+	const [updateTCStock, setUpdateTCStock] = useState({
+		uuid: null,
 		unit: null,
+		stock: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateTeethColoring((prev) => ({
+		setUpdateTCStock((prev) => ({
 			...prev,
-			id: teethColoring[idx].id,
-			section: teethColoring[idx].section,
-			quantity: teethColoring[idx].quantity,
-			unit: teethColoring[idx].unit,
+			uuid: data[idx].uuid,
+			unit: data[idx].unit,
+			stock: data[idx].teeth_assembling_and_polishing
+				? data[idx].teeth_assembling_and_polishing
+				: data[idx].plating_and_iron,
+			section: data[idx].teeth_assembling_and_polishing
+				? 'teeth_assembling_and_polishing'
+				: 'plating_and_iron',
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
 
-	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className='container mx-auto px-2 md:px-4'>
 			<ReactTable
 				title={info.getTitle()}
-				data={teethColoring}
+				data={data}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 			<Suspense>
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						setTeethColoring,
-						updateTeethColoring,
-						setUpdateTeethColoring,
+						updateTCStock,
+						setUpdateTCStock,
 					}}
 				/>
 			</Suspense>

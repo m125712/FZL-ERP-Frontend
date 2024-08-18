@@ -54,18 +54,18 @@ export const useMetalFinishingRM = () =>
 		queryKey: metalQK.metalFinishingRM(),
 		url: '/material/stock/by/multi-field/m_gapping,m_teeth_cleaning,m_sealing,m_stopper',
 	});
-export const usemetalFinishingRMByUUID = (uuid) =>
+export const useMetalFinishingRMByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: metalQK.metalFinishingRMByUUID(uuid),
 		url: `/material/stock/by/multi-field/m_gapping,m_teeth_cleaning,m_sealing,m_stopper/${uuid}`,
 	});
 //* RM Log
-export const usemetalFinishingRMLog = () =>
+export const useMetalFinishingRMLog = () =>
 	createGlobalState({
 		queryKey: metalQK.metalFinishingRMLog(),
 		url: '/material/used/multi-section/by/m_gapping,m_teeth_cleaning,m_sealing,m_stopper',
 	});
-export const usemetalFinishingRMLogByUUID = (uuid) =>
+export const useMetalFinishingRMLogByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: metalQK.metalFinishingRMLogByUUID(uuid),
 		url: `/material/used/multi-section/by/m_gapping,m_teeth_cleaning,m_sealing,m_stopper/${uuid}`,

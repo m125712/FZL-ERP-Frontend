@@ -1,130 +1,118 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useAccess, useFetchFuncForReport } from "@/hooks";
-import { Transfer } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+// const info = new PageInfo(
+// 	'Finishing RM Stock',
+// 	'/material/stock/by/field-names/n_t_cutting,n_stopper',
+// 	'nylon__metallic_finishing_rm'
+// );
 
-const AddOrUpdate = lazy(() => import("./AddOrUpdate"));
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useAccess } from '@/hooks';
+
+import { useLabDipRM } from '@/state/LabDip';
+import { useNylonMetallicFinishingRM } from '@/state/Nylon';
+import { EditDelete, Transfer } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
+
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
+	const { data, isLoading, url } = useNylonMetallicFinishingRM();
 	const info = new PageInfo(
-		"Finishing RM Stock",
-		"/material/stock/by/field-names/n_t_cutting,n_stopper",
-		"nylon__metallic_finishing_rm"
+		'Finishing RM Stock',
+		url,
+		'nylon__metallic_finishing_rm'
 	);
-	const [finishing, setFinishing] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+	const haveAccess = useAccess(info.getTab());
 
+	console.log(data);
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
 
-	const haveAccess = useAccess("nylon__metallic_finishing_rm");
-
-	useEffect(() => {
-		useFetchFuncForReport(
-			info.getUrl(),
-			setFinishing,
-			setLoading,
-			setError
-		);
-	}, []);
-
-	// section	tape_or_coil_stock_id	quantity	wastage	issued_by
-
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "name",
-				header: "Material Name",
+				accessorKey: 'material_name',
+				header: 'Material Name',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className="capitalize">{info.getValue()}</span>
+					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: "section",
-				header: "Section",
-				enableColumnFilter: false,
-				cell: (info) => (
-					<span className="capitalize">
-						{info.getValue()?.replace(/_|n_/g, " ")}
-					</span>
-				),
-			},
-			{
-				accessorKey: "quantity",
-				header: "Quantity",
+				accessorKey: 'n_t_cutting',
+				header: 'Stock',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "unit",
-				header: "Unit",
+				accessorKey: 'n_stopper',
+				header: 'Stock',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "action",
-				header: "Used",
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'action',
+				header: 'Used',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_name", "click_used"),
-				width: "w-24",
+				hidden: !haveAccess.includes('click_used'),
+				width: 'w-24',
 				cell: (info) => (
 					<Transfer onClick={() => handelUpdate(info.row.index)} />
 				),
 			},
 		],
-		[finishing]
+		[data]
 	);
 
-	const [updateFinishing, setUpdateFinishing] = useState({
-		id: null,
-		section: "",
-		quantity: null,
+	const [updateLabDipStock, setUpdateLabDipStock] = useState({
+		uuid: null,
 		unit: null,
+		lab_dip: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateFinishing((prev) => ({
+		setUpdateLabDipStock((prev) => ({
 			...prev,
-			id: finishing[idx].id,
-			section: finishing[idx].section,
-			quantity: finishing[idx].quantity,
-			unit: finishing[idx].unit,
+			uuid: data[idx].uuid,
+			unit: data[idx].unit,
+			lab_dip: data[idx].lab_dip,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
 
-	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className='container mx-auto px-2 md:px-4'>
 			<ReactTable
 				title={info.getTitle()}
-				// handelAdd={handelAdd}
-				data={finishing}
+				data={data}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 			<Suspense>
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						setFinishing,
-						updateFinishing,
-						setUpdateFinishing,
+						updateLabDipStock,
+						setUpdateLabDipStock,
 					}}
 				/>
 			</Suspense>

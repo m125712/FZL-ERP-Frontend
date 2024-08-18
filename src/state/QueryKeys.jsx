@@ -4,7 +4,7 @@
  ** https://tkdodo.eu/blog/leveraging-the-query-function-context#query-key-factories
  **/
 
-import { all } from "axios";
+import { all } from 'axios';
 
 export const orderQK = {
 	all: () => ['order'],
@@ -197,12 +197,28 @@ export const labDipQK = {
 	// info
 	info: () => [...labDipQK.all(), 'info'],
 	infoByUUID: (uuid) => [...labDipQK.info(), uuid],
+
+	// * RM
+	LabDipRM: () => [...labDipQK.all(), 'rm'],
+	LabDipRMByUUID: (uuid) => [...labDipQK.LabDipRM(), uuid],
+
+	// * RM Log
+	LabDipRMLog: () => [...labDipQK.all(), 'rm-log'],
+	LabDipRMLogByUUID: (uuid) => [...labDipQK.LabDipRMLog(), uuid],
 };
 
 // * Dyeing
 
-export const dyeingQK ={
+export const dyeingQK = {
 	all: () => ['dyeingSwatch'],
 	swatch: () => [...dyeingQK.all(), 'swatch'],
-	swatchByUUID: (uuid) => [...dyeingQK.all(), uuid]
-}
+	swatchByUUID: (uuid) => [...dyeingQK.all(), uuid],
+
+	// * RM
+	dyeingRM: () => [...dyeingQK.all(), 'rm'],
+	dyeingRMByUUID: (uuid) => [...dyeingQK.dyeingRM(), uuid],
+
+	// * RM Log
+	dyeingRMLog: () => [...dyeingQK.all(), 'rm-log'],
+	dyeingRMLogByUUID: (uuid) => [...dyeingQK.dyeingRMLog(), uuid],
+};

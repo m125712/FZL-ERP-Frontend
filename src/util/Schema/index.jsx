@@ -862,6 +862,8 @@ export const RM_MATERIAL_USED_NULL = {
 	remarks: '',
 	tape_making: '',
 	coil_forming: '',
+	dying_and_iron: '',
+	lab_dip: '',
 };
 
 export const RM_MATERIAL_USED_EDIT_SCHEMA = {

@@ -1,13 +1,20 @@
-import { DateTime, TitleValue } from '@/ui';
+import { DateTime, LinkWithCopy, TitleValue } from '@/ui';
 
 const LCInfo = (lc) => {
-	console.log({
-		lc,
-	});
 	return (
 		<div className=''>
 			<TitleValue title='LC ID' value={lc?.uuid} />
-			<TitleValue title='PI ID' value={lc?.pi_ids} />
+			<TitleValue
+				title='PI ID'
+				value={lc?.pi_ids.map((piId) => (
+					<LinkWithCopy
+						key={piId}
+						title={piId}
+						id={piId}
+						uri='/commercial/pi/details'
+					/>
+				))}
+			/>
 			<TitleValue title='LC Number' value={lc?.lc_number} />
 			<TitleValue title='File Number' value={lc?.file_no} />
 			<TitleValue title='LC Date' value={lc?.lc_date} />
@@ -67,40 +74,14 @@ function BankInfo(lc) {
 		</div>
 	);
 }
-// function OrderNumbersAndStyles(lc) {
-// 	const getUniqueValues = (field) =>
-// 		Array.from(new Set(lc.pi_entry.map((item) => item[field]))).join(", ");
-// 	const buyers = getUniqueValues("buyer_name");
-// 	const orderNumbers = getUniqueValues("order_number");
-// 	const styles = getUniqueValues("style");
-// 	return (
-// 		<div className="">
-// 			<TitleValue title="Buyers" value={buyers} />
-// 			<TitleValue title="O/N" value={orderNumbers} />
-// 			<TitleValue title="Styles" value={styles} />
-// 		</div>
-// 	);
-// }
 
 export default function Information({ lc }) {
 	return (
 		<div className='my-2 flex flex-col rounded-md px-2 shadow-md'>
 			<span className='flex items-center gap-2 text-2xl font-semibold capitalize leading-tight text-primary md:text-3xl'>
 				Information
-				{/* <button
-					type="button"
-					className="btn btn-primary btn-sm rounded-badge"
-					onClick={() => PiPdf(PDFInfo)}
-				>
-					<PDF className="w-4" /> PDF
-				</button> */}
 			</span>
 			<hr className='border-1 my-2 border-secondary-content' />
-
-			{/* <iframe
-				src={PiPdf(PDFInfo)}
-				className="h-[40rem] w-full rounded-md border-none"
-			/> */}
 
 			<div className='flex flex-col items-baseline justify-start text-sm md:flex-row'>
 				<LCInfo {...lc} />
@@ -108,8 +89,6 @@ export default function Information({ lc }) {
 				<OthersInfo {...lc} />
 				<hr className='divider divider-primary divider-vertical md:divider-horizontal' />
 				<BankInfo {...lc} />
-				<hr className='divider divider-primary divider-vertical md:divider-horizontal' />
-				{/* <OrderNumbersAndStyles {...lc} /> */}
 			</div>
 		</div>
 	);

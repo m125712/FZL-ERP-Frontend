@@ -365,3 +365,15 @@ export const sliderQK = {
 		uuid,
 	],
 };
+//* Delivery
+
+export const deliveryQk = {
+	all: () => ['delivery'],
+	// *RM
+	deliveryRM: () => [...deliveryQk.all(), 'rm'],
+	deliveryRMByUUID: (uuid) => [...deliveryQk.deliveryRM(), uuid],
+
+	// *RM Log
+	deliveryRMLog: () => [...deliveryQk.all(), 'rm-log'],
+	deliveryRMLogByUUID: (uuid) => [...deliveryQk.deliveryRMLog(), uuid],
+};

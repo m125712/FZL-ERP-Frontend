@@ -1,3 +1,4 @@
+import { elements } from 'chart.js';
 import { lazy } from 'react';
 
 // Dyeing And Iron
@@ -8,6 +9,18 @@ const DyeingSFG = lazy(() => import('@/pages/DyeingAndIron/SFG'));
 const DyeingLog = lazy(() => import('@/pages/DyeingAndIron/Log'));
 const DyeingSwatch = lazy(() => import('@/pages/DyeingAndIron/Swatch'));
 const DyeingPlanning = lazy(() => import('@/pages/DyeingAndIron/Planning'));
+const DyeingPlanningSNO = lazy(
+	() => import('@/pages/DyeingAndIron/PlanningSNO')
+);
+const DyeingPlanningSNOEntry = lazy(
+	() => import('@/pages/DyeingAndIron/PlanningSNO/Entry')
+);
+const DyeingPlanningHeadOffice = lazy(
+	() => import('@/pages/DyeingAndIron/PlanningHeadOffice')
+);
+const DyeingPlanningHeadOfficeEntry = lazy(
+	() => import('@/pages/DyeingAndIron/PlanningHeadOffice/Entry')
+);
 
 export const DyeingAndIronRoutes = [
 	{
@@ -62,5 +75,63 @@ export const DyeingAndIronRoutes = [
 		type: 'dyeing',
 		page_name: 'dyeing__planning',
 		actions: ['read'],
+	},
+	{
+		id: 285,
+		name: 'Planning SNO',
+		path: '/dyeing-and-iron/planning-sno',
+		element: DyeingPlanningSNO,
+		type: 'dyeing',
+		page_name: 'dyeing__planning_sno',
+		actions: ['create', 'read', 'update'],
+	},
+	{
+		id: 286,
+		name: 'Planning SNO Entry',
+		path: '/dyeing-and-iron/planning-sno/entry/:weeks',
+		element: DyeingPlanningSNOEntry,
+		type: 'dyeing',
+		hidden: true,
+		page_name: 'dyeing__planning_sno_entry',
+		actions: ['create', 'read', 'update'],
+	},
+	{
+		id: 287,
+		name: 'Planning SNO Update',
+		path: '/dyeing-and-iron/planning-sno/update/:week_id',
+		element: DyeingPlanningSNOEntry,
+		type: 'dyeing',
+		hidden: true,
+		page_name: 'dyeing__planning_sno_entry_update',
+		actions: ['create', 'read', 'update'],
+	},
+	{
+		id: 285,
+		name: 'Planning Head Office',
+		path: '/dyeing-and-iron/planning-head-office',
+		element: DyeingPlanningHeadOffice,
+		type: 'dyeing',
+		page_name: 'dyeing__planning_head_office',
+		actions: ['create', 'read', 'update'],
+	},
+	{
+		id: 286,
+		name: 'Planning Head Office',
+		path: '/dyeing-and-iron/planning-head-office/entry/:weeks',
+		element: DyeingPlanningHeadOfficeEntry,
+		type: 'dyeing',
+		hidden: true,
+		page_name: 'dyeing__planning_head_office_entry',
+		actions: ['create', 'read', 'update'],
+	},
+	{
+		id: 287,
+		name: 'Planning Head Office Update',
+		path: '/dyeing-and-iron/planning-head-office/update/:week_id',
+		element: DyeingPlanningHeadOfficeEntry,
+		type: 'dyeing',
+		hidden: true,
+		page_name: 'dyeing__planning_head_office_entry_update',
+		actions: ['create', 'read', 'update'],
 	},
 ];

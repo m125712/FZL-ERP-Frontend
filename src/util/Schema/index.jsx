@@ -1317,3 +1317,35 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 		},
 	],
 };
+
+// * Dyeing Planning SNO schema*//
+export const DYEING_PLANNING_SCHEMA = {
+	remarks: STRING.nullable(),
+	planning_entry: yup.array().of(
+		yup.object().shape({
+			sno_quantity: NUMBER.nullable() // Allows the field to be null
+				.transform((value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+				) // Transforms empty strings to null
+				.max(yup.ref('order_quantity'), 'Beyond Max Quantity'),
+			factory_quantity: NUMBER.nullable() // Allows the field to be null
+				.transform((value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+				) // Transforms empty strings to null
+				.max(yup.ref('order_quantity'), 'Beyond Max Quantity'),
+			plan_entry_remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const DYEING_PLANNING_NULL = {
+	week: '',
+	remarks: '',
+	planning_entry: yup.array().of(
+		yup.object().shape({
+			sno_quantity: null,
+			factory_quantity: null,
+			plan_entry_remarks: '',
+		})
+	),
+};

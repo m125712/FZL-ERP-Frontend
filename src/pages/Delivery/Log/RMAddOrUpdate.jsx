@@ -133,7 +133,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Delivery Log of ${updateRMLog?.material_name}`}
+			title={`Delivery RM Log of ${updateRMLog?.material_name}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

@@ -126,7 +126,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Teeth Coloring Log of ${updateFinishingRMLog?.material_name}`}
+			title={`Metallic Finishing RM Log of ${updateFinishingRMLog?.material_name}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

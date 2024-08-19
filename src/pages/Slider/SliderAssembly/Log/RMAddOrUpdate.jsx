@@ -121,7 +121,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Teeth Coloring Log of ${updateSliderAssemblyRMLog?.material_name}`}
+			title={`Slider Assembly RM Log of ${updateSliderAssemblyRMLog?.material_name}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

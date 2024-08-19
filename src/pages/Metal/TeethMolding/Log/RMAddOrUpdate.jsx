@@ -116,12 +116,10 @@ export default function Index({
 		{ label: 'Lab Dip', value: 'lab_dip' },
 	];
 
-
-
 	return (
 		<AddModal
 			id={modalId}
-			title={`Teeth Coloring Log of ${updateMetalTMRMLog?.material_name}`}
+			title={`Teeth Molding RM Log of ${updateMetalTMRMLog?.material_name}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

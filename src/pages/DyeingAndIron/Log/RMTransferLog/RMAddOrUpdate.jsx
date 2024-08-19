@@ -117,7 +117,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Dyeing Log of ${updateDyeingLog?.material_name}`}
+			title={`Dyeing and Iron RM Log of ${updateDyeingLog?.material_name}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

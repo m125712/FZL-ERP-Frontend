@@ -113,11 +113,7 @@ export default function Index() {
 		],
 		[data]
 	);
-	// { label: 'Metal Gapping', value: 'v_gapping' },
-	// { label: 'Metal Teeth Cleaning', value: 'v_teeth_cleaning' },
-	// { label: 'Metal Sealing', value: 'v_sealing' },
-	// 	{ label: 'Metal Stopper', value: 'v_stopper' },
-	//{ label: 'Metal T Cutting', value: 'v_t_cutting' }
+
 	// Update
 	const [updateFinishingRMLog, setUpdateFinishingRMLog] = useState({
 		uuid: null,

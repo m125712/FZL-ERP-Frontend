@@ -119,7 +119,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Teeth Coloring Log of ${updateVislonTMRMLog?.material_name}`}
+			title={`Teeth Molding RM Log of ${updateVislonTMRMLog?.material_name}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

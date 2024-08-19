@@ -89,7 +89,7 @@ export default function Index() {
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<dim className='container mx-auto px-2 md:px-4'>
+		<div className='container mx-auto px-2 md:px-4'>
 			<ReactTable
 				title={info.getTitle()}
 				data={data}
@@ -105,6 +105,6 @@ export default function Index() {
 					}}
 				/>
 			</Suspense>
-		</dim>
+		</div>
 	);
 }

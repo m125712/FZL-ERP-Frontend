@@ -55,7 +55,6 @@ export default function Index() {
 			reset
 		);
 
-	console.log(getValues());
 	// recipe
 	const {
 		fields: recipeField,
@@ -78,7 +77,6 @@ export default function Index() {
 				itemId: getValues(`recipe[${index}].recipe_uuid`),
 				itemName: getValues(`recipe[${index}].recipe_uuid`),
 			}));
-			console.log('into close modal');
 
 			window['recipe_update'].showModal();
 		}

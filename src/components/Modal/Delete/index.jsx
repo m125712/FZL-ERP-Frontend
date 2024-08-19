@@ -13,6 +13,7 @@ export default function Index({
 	deleteItem,
 	setDeleteItem,
 	deleteData,
+	onSuccess,
 }) {
 	const handelClose = () => {
 		setDeleteItem((prev) => ({
@@ -32,6 +33,8 @@ export default function Index({
 			url: `${url}/${deleteItem?.itemId}`,
 			onClose: handelClose,
 		});
+
+		onSuccess && onSuccess();
 	};
 
 	return (

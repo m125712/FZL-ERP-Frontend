@@ -69,3 +69,15 @@ export const useCommercialLCByUUID = (uuid) =>
 		queryKey: commercialQK.lc(uuid),
 		url: `/commercial/lc/${uuid}`,
 	});
+
+export const useCommercialLCPIByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commercialQK.lcPi(uuid),
+		url: `/commercial/lc-pi/by/${uuid}`,
+	});
+
+export const useCommercialLCByNumber = (uuid) =>
+	createGlobalState({
+		queryKey: commercialQK.lcPi(uuid),
+		url: `/commercial/lc/by/lc-number/${uuid}`,
+	});

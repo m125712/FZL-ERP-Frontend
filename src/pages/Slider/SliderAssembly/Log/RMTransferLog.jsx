@@ -1,8 +1,4 @@
-// const info = new PageInfo(
-// 	'RM Assembly Log',
-// 	'material/used/by/slider_assembly',
-// 	'slider__assembly_log'
-// );
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';

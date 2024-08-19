@@ -1,9 +1,4 @@
-// const info = new PageInfo(
-// 	'Teeth Coloring RM Stock',
-// 	'/material/stock/by/field-names/teeth_assembling_and_polishing,plating_and_iron',
-// 	'metal__teeth_coloring_rm'
-// );
-// teeth_assembling_and_polishing, plating_and_iron;
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';

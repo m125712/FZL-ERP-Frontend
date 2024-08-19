@@ -2,8 +2,6 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-
-//import { useLabDipRM, useLabDipRMLog } from '@/state/LabDip';
 import { useMetalFinishingRM, useMetalFinishingRMLog } from '@/state/Metal';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';

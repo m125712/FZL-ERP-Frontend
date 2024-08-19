@@ -1,8 +1,4 @@
-// const info = new PageInfo(
-// 	'Assembly RM Stock',
-// 	'/material/stock/by/single-field/slider_assembly',
-// 	'slider__assembly_rm'
-// );
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';

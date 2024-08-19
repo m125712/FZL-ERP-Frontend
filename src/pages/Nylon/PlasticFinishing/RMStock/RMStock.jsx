@@ -1,8 +1,4 @@
-// const info = new PageInfo(
-// 	'Finishing RM Stock',
-// 	'/material/stock/by/field-names/n_t_cutting,n_stopper',
-// 	'nylon__metallic_finishing_rm'
-// );
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';

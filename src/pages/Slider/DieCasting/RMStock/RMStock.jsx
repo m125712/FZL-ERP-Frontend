@@ -1,8 +1,4 @@
-// const info = new PageInfo(
-// 	'Die Casting RM Stock',
-// 	'/material/stock/by/single-field/die_casting',
-// 	'slider__die_casting_rm'
-// );
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';

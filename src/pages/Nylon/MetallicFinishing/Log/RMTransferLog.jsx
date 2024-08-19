@@ -1,7 +1,4 @@
-// const info = new PageInfo(
-// 	'Finishing RM Used Log',
-// 	'material/used/by/field-names/n_t_cutting,n_stopper'
-// );
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';

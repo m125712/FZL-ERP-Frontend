@@ -1,9 +1,3 @@
-// const info = new PageInfo(
-// 	'Teeth Molding RM Stock',
-// 	'/material/stock/by/single-field/v_teeth_molding'',
-// 	'VislonTM__teeth_molding_rm'
-// );
-
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';

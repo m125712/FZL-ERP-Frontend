@@ -1,8 +1,4 @@
-// const info = new PageInfo(
-// 	'Teeth Molding RM Used Log',
-// 	'material/used/by/v_teeth_molding',
-// 	'vislon__teeth_molding_log'
-// );
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';

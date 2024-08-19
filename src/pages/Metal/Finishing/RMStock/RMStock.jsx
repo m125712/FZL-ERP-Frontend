@@ -1,8 +1,4 @@
-// const info = new PageInfo(
-// 	'Finishing RM Stock',
-// 	'/material/stock/by/field-names/m_gapping,m_teeth_cleaning,m_sealing,m_stopper',
-// 	'metal__finishing_rm'
-// );
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';

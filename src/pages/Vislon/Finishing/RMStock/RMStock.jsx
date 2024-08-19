@@ -1,9 +1,4 @@
-// const info = new PageInfo(
-// 	'Finishing RM Stock',
-// 	// "/material/stock"
-// 	'/material/stock/by/field-names/v_gapping,v_teeth_cleaning,v_sealing,v_t_cutting,v_stopper',
-// 	'vislon__finishing_rm'
-// );
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';

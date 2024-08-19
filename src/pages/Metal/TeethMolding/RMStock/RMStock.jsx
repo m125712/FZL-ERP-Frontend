@@ -1,8 +1,3 @@
-// const info = new PageInfo(
-// 	'Teeth Molding RM Stock',
-// 	'/material/stock/by/single-field/m_teeth_molding'',
-// 	'MetalTM__teeth_molding_rm'
-// );
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';

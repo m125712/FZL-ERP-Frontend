@@ -1,7 +1,4 @@
-// const info = new PageInfo(
-// 	'Finishing RM Used Log',
-// 	'material/used/by/field-names/v_gapping,v_teeth_cleaning,v_sealing,v_t_cutting,v_stopper'
-// );
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';

@@ -1,7 +1,8 @@
 import * as yup from 'yup';
 import {
 	BOOLEAN, // default
-	BOOLEAN_REQUIRED,
+	BOOLEAN_DEFAULT_VALUE, // default
+	BOOLEAN_REQUIRED, // default
 	EMAIL, // default
 	EMAIL_REQUIRED, // default
 	FORTUNE_ZIP_EMAIL_PATTERN, // default
@@ -393,8 +394,8 @@ export const ORDER_INFO_SCHEMA = {
 	is_cash: BOOLEAN_REQUIRED,
 	status: BOOLEAN_REQUIRED.default(false),
 	marketing_uuid: STRING_REQUIRED,
-	merchandiser_uuid: STRING.transform(handelNumberDefaultValue).default(0), // No Merchandiser
-	factory_uuid: STRING.transform(handelNumberDefaultValue).default(0), // No Factory
+	merchandiser_uuid: STRING, // No Merchandiser
+	factory_uuid: STRING, // No Factory
 	party_uuid: STRING_REQUIRED,
 	buyer_uuid: STRING_REQUIRED,
 	marketing_priority: STRING,
@@ -423,27 +424,44 @@ export const ORDER_SCHEMA = {
 	order_info_uuid: UUID_REQUIRED,
 	item: UUID_REQUIRED,
 	zipper_number: UUID_REQUIRED,
-	end_type: UUID_REQUIRED,
-	lock_type: UUID_REQUIRED,
-	puller_type: UUID_REQUIRED,
 	teeth_color: UUID_REQUIRED,
-	puller_color: UUID_REQUIRED,
-	hand: UUID, // 67 = No Hand
-	stopper_type: UUID_REQUIRED,
+	coloring_type: UUID_REQUIRED,
 	special_requirement: JSON_STRING_REQUIRED,
 	description: STRING,
 	remarks: STRING.nullable(),
-	coloring_type: UUID_REQUIRED,
-	slider: UUID_REQUIRED,
+
+	// slider
 	slider_starting_section: STRING_REQUIRED,
-	is_slider_provided: BOOLEAN.transform(handelNumberDefaultValue).default(
-		false
-	),
+	end_type: UUID_REQUIRED,
+	hand: UUID,
+	lock_type: UUID_REQUIRED,
+	slider: UUID_REQUIRED,
+	slider_body_shape: UUID,
+	slider_link: UUID,
+
+	// puller
+	puller_type: UUID_REQUIRED,
+	puller_color: UUID_REQUIRED,
+	puller_link: UUID_FK,
+
+	// logo
+	logo_type: UUID,
+	is_logo_body: BOOLEAN_DEFAULT_VALUE(false),
+	is_logo_puller: BOOLEAN_DEFAULT_VALUE(false),
+	is_slider_provided: BOOLEAN_DEFAULT_VALUE(false),
+
+	// stopper
+	stopper_type: UUID_REQUIRED,
 	top_stopper: UUID,
 	bottom_stopper: UUID,
-	logo_type: UUID,
-	is_logo_body: BOOLEAN.transform(handelNumberDefaultValue).default(false),
-	is_logo_puller: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+
+	// garments
+	end_user: UUID,
+	garment: STRING.nullable(),
+	light_preference: UUID,
+	garments_wash: UUID,
+	garments_remarks: STRING.nullable(),
+
 	order_entry: yup.array().of(
 		yup.object().shape({
 			style: STRING.nullable(),

@@ -28,12 +28,10 @@ export default function Index({
 	};
 
 	const onSubmit = async () => {
-
 		await deleteData.mutateAsync({
 			url: `${url}/${deleteItem?.itemId}`,
 			onClose: handelClose,
 		});
-
 	};
 
 	return (

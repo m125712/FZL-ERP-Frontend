@@ -256,17 +256,17 @@ export const vislonQK = {
 	//* Teeth Molding
 
 	// * RM
-	VislonTMRM: () => [...vislonQK.all(), 'rm'],
+	VislonTMRM: () => [...vislonQK.all(), 'tm-rm'],
 	VislonTMRMByUUID: (uuid) => [...vislonQK.VislonTMRM(), uuid],
 
 	// * RM Log
-	VislonTMRMLog: () => [...vislonQK.all(), 'rm-log'],
+	VislonTMRMLog: () => [...vislonQK.all(), 'tm-rm-log'],
 	VislonTMRMLogByUUID: (uuid) => [...vislonQK.VislonTMRMLog(), uuid],
 
 	// * Finishing
 
 	//*RM
-	VislonFinishingRM: () => [...vislonQK.all(), 'rm'],
+	VislonFinishingRM: () => [...vislonQK.all(), 'fin-rm'],
 	VislonFinishingRMByUUID: (uuid) => [
 		...vislonQK.VislonFinishingRM(),
 		'rm',
@@ -274,7 +274,7 @@ export const vislonQK = {
 	],
 
 	//*RM Log
-	VislonFinishingRMLog: () => [...vislonQK.all(), 'rm-log'],
+	VislonFinishingRMLog: () => [...vislonQK.all(), 'fin-rm-log'],
 	VislonFinishingRMLogByUUID: (uuid) => [
 		...vislonQK.VislonFinishingRMLog(),
 		'rm-log',
@@ -290,21 +290,21 @@ export const metalQK = {
 	//* Teeth Molding
 
 	// * RM
-	metalTMRM: () => [...metalQK.all(), 'rm'],
+	metalTMRM: () => [...metalQK.all(), 'tm-rm'],
 	metalTMRMByUUID: (uuid) => [...metalQK.metalTMRM(), uuid],
 
 	// * RM Log
-	metalTMRMLog: () => [...metalQK.all(), 'rm-log'],
+	metalTMRMLog: () => [...metalQK.all(), 'tm-rm-log'],
 	metalTMRMLogByUUID: (uuid) => [...metalQK.metalTMRMLog(), uuid],
 
 	// * Finishing
 
 	//*RM
-	metalFinishingRM: () => [...metalQK.all(), 'rm'],
+	metalFinishingRM: () => [...metalQK.all(), 'fin-rm'],
 	metalFinishingRMByUUID: (uuid) => [...metalQK.metalFinishingRM(), uuid],
 
 	//*RM Log
-	metalFinishingRMLog: () => [...metalQK.all(), 'rm-log'],
+	metalFinishingRMLog: () => [...metalQK.all(), 'fin-rm-log'],
 	metalFinishingRMLogByUUID: (uuid) => [
 		...metalQK.metalFinishingRMLog(),
 		uuid,
@@ -313,11 +313,11 @@ export const metalQK = {
 	//* Teeth Coloring
 
 	// * RM
-	metalTCRM: () => [...metalQK.all(), 'rm'],
+	metalTCRM: () => [...metalQK.all(), 'tc-rm'],
 	metalTCRMByUUID: (uuid) => [...metalQK.metalTCRM(), uuid],
 
 	// * RM Log
-	metalTCRMLog: () => [...metalQK.all(), 'rm-log'],
+	metalTCRMLog: () => [...metalQK.all(), 'tc-rm-log'],
 	metalTCRMLogByUUID: (uuid) => [...metalQK.metalTCRMLog(), uuid],
 };
 
@@ -328,11 +328,11 @@ export const sliderQK = {
 	// *Slider Assembly
 
 	// * RM
-	sliderAssemblyRM: () => [...sliderQK.all(), 'rm'],
+	sliderAssemblyRM: () => [...sliderQK.all(), 'assembly-rm'],
 	sliderAssemblyRMByUUID: (uuid) => [...sliderQK.sliderAssemblyRM(), uuid],
 
 	// * RM Log
-	sliderAssemblyRMLog: () => [...sliderQK.all(), 'rm-log'],
+	sliderAssemblyRMLog: () => [...sliderQK.all(), 'assembly-rm-log'],
 	sliderAssemblyRMLogByUUID: (uuid) => [
 		...sliderQK.sliderAssemblyRMLog(),
 		uuid,
@@ -340,14 +340,14 @@ export const sliderQK = {
 
 	//* Die Casting
 	// * RM
-	sliderDieCastingRM: () => [...sliderQK.all(), 'rm'],
+	sliderDieCastingRM: () => [...sliderQK.all(), 'dc-rm'],
 	sliderDieCastingRMByUUID: (uuid) => [
 		...sliderQK.sliderDieCastingRM(),
 		uuid,
 	],
 
 	// * RM Log
-	sliderDieCastingRMLog: () => [...sliderQK.all(), 'rm-log'],
+	sliderDieCastingRMLog: () => [...sliderQK.all(), 'dc-rm-log'],
 	sliderDieCastingRMLogByUUID: (uuid) => [
 		...sliderQK.sliderDieCastingRMLog(),
 		uuid,
@@ -355,11 +355,11 @@ export const sliderQK = {
 
 	//* Coloring
 	// * RM
-	sliderColoringRM: () => [...sliderQK.all(), 'rm'],
+	sliderColoringRM: () => [...sliderQK.all(), 'c-rm'],
 	sliderColoringRMByUUID: (uuid) => [...sliderQK.sliderColoringRM(), uuid],
 
 	// * RM Log
-	sliderColoringRMLog: () => [...sliderQK.all(), 'rm-log'],
+	sliderColoringRMLog: () => [...sliderQK.all(), 'c-rm-log'],
 	sliderColoringRMLogByUUID: (uuid) => [
 		...sliderQK.sliderColoringRMLog(),
 		uuid,

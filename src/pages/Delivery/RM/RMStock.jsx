@@ -10,7 +10,7 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
 	const { data, isLoading, url } = useDeliveryRM();
-	const info = new PageInfo('Delivery RM', url, 'delivery_rm');
+	const info = new PageInfo('Delivery RM', url, 'delivery__rm');
 	const haveAccess = useAccess(info.getTab());
 
 	console.log(data);
@@ -71,7 +71,7 @@ export default function Index() {
 				header: 'Used',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_used'),
+				hidden: !haveAccess.includes('used'),
 				width: 'w-24',
 				cell: (info) => (
 					<Transfer onClick={() => handelUpdate(info.row.index)} />

@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import RMTransferLog from './RMTransferLog';
-import SFGTransferLog from './SFGTransferLog';
 
 export default function Index() {
 	useEffect(() => {

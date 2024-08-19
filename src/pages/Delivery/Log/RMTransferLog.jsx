@@ -9,17 +9,12 @@ import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo, useState } from 'react';
 import RMAddOrUpdate from './RMAddOrUpdate';
 
-
-
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useDeliveryRMLog();
-	const info = new PageInfo(
-		' RM Used Log',
-		url,
-		'Delivery___log'
-	);
+	const info = new PageInfo(' RM Used Log', url, 'delivery__log');
 	const haveAccess = useAccess(info.getTab());
 	const { invalidateQuery: invalidateRM } = useDeliveryRM();
+	console.log(url);
 	console.log(data);
 	const columns = useMemo(
 		() => [
@@ -99,7 +94,7 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_rm'),
+				hidden: !haveAccess.includes('update'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -107,7 +102,7 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('click_delete_rm')}
+							showDelete={haveAccess.includes('delete')}
 						/>
 					);
 				},

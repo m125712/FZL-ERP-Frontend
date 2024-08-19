@@ -1,4 +1,4 @@
-import { useAuth } from "@/context/auth";
+import { useAuth } from '@/context/auth';
 
 export default function useAccess(key) {
 	const { can_access } = useAuth();

@@ -1,7 +1,7 @@
 import { CalenderIcon, IconKey, IconKeyOff } from '@/assets/icons';
 import cn from '@lib/cn';
 import { format } from 'date-fns';
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { forwardRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import {

@@ -1,5 +1,5 @@
-import { Close, MenuDown } from "@/assets/icons";
-import { components } from "react-select";
+import { Close, MenuDown } from '@/assets/icons';
+import { components } from 'react-select';
 
 const DropdownIndicator = (props) => {
 	const { menuIsOpen } = props.selectProps;
@@ -8,7 +8,7 @@ const DropdownIndicator = (props) => {
 		<components.DropdownIndicator {...props}>
 			<MenuDown
 				className={`h-4 transform text-primary transition-transform duration-500 ${
-					menuIsOpen ? "rotate-0" : "-rotate-90"
+					menuIsOpen ? 'rotate-0' : '-rotate-90'
 				}`}
 			/>
 		</components.DropdownIndicator>

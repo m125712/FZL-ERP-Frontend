@@ -1,5 +1,5 @@
-import cn from '@/lib/cn';
 import { Trash } from '@/assets/icons';
+import cn from '@/lib/cn';
 
 export default function RemoveButton({ showButton, onClick, className }) {
 	if (!showButton) return null;

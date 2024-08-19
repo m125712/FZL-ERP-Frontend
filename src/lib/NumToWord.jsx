@@ -1,20 +1,20 @@
-import { ToWords } from "to-words";
+import { ToWords } from 'to-words';
 
 const toWords = new ToWords({
-	localeCode: "en-US",
+	localeCode: 'en-US',
 });
 
 export const NumToWord = (number) => toWords.convert(number);
 
 const dollarToWords = new ToWords({
-	localeCode: "en-US",
+	localeCode: 'en-US',
 	currencyOptions: {
-		name: "Dollar",
-		plural: "Dollars",
-		symbol: "$",
+		name: 'Dollar',
+		plural: 'Dollars',
+		symbol: '$',
 		fraction: {
-			name: "Cent",
-			plural: "Cents",
+			name: 'Cent',
+			plural: 'Cents',
 		},
 	},
 });

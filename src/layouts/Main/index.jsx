@@ -1,6 +1,5 @@
-import { Suspense } from "@/components/Feedback";
-import { Toast } from "@/components/Toast";
-import AuthProvider from "@context/auth";
+import { Toast } from '@/components/Toast';
+import AuthProvider from '@context/auth';
 
 function MainLayout({ children }) {
 	return (

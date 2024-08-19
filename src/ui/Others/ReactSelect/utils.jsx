@@ -5,7 +5,7 @@ const controlStyles = {
 	focus: 'outline outline-offset-2 outline-8',
 	nonFocus: 'border-primary/30',
 	disabled:
-		'bg-primary/5 border-2 border-primary/30 text-primary/40 cursor-not-allowed',
+		'bg-primary/5 border-2 border-error/40 text-error/80 cursor-not-allowed',
 };
 const placeholderStyles = 'text-white text-[0.1rem]';
 

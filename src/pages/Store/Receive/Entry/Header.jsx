@@ -26,7 +26,7 @@ export default function Header({
 
 	return (
 		<SectionEntryBody title='Information'>
-			<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+			<div className='flex flex-col gap-6 px-2 text-secondary-content md:flex-row'>
 				<FormField label='vendor_uuid' title='Vendor' errors={errors}>
 					<Controller
 						name={'vendor_uuid'}
@@ -50,6 +50,7 @@ export default function Header({
 						}}
 					/>
 				</FormField>
+
 				<Select
 					label='is_local'
 					title='Import / Local'

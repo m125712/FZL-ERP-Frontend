@@ -3,6 +3,7 @@ import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useMaterialInfo } from '@/state/Store';
 import { EditDelete, LinkWithCopy, Transfer } from '@/ui';
+import PageContainer from '@/ui/Others/PageContainer';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 
@@ -15,6 +16,18 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } = useMaterialInfo();
 	const info = new PageInfo('Material/Info', url, 'store__stock');
 	const haveAccess = useAccess('store__stock');
+
+	const breadcrumbs = [
+		{
+			label: 'Store',
+			href: '/store',
+			isDisabled: true,
+		},
+		{
+			label: 'Info',
+			href: '/store/details',
+		},
+	];
 
 	// const belowThreshold = useMemo(
 	// 	() => data.filter(({ threshold, stock }) => threshold > stock)?.length,
@@ -212,7 +225,7 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
+		<PageContainer title='Material Info' breadcrumbs={breadcrumbs}>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}
@@ -258,6 +271,6 @@ export default function Index() {
 					}}
 				/>
 			</Suspense>
-		</div>
+		</PageContainer>
 	);
 }

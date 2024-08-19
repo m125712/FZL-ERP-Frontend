@@ -15,7 +15,7 @@ export const Input = ({ register, ...props }) => (
 	<FormField {...props}>
 		<input
 			className={cn(
-				'input input-primary w-full rounded-md px-2 text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-primary/20',
+				'input input-primary w-full rounded border-primary/30 bg-primary/5 px-2 text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-primary/20',
 				props?.width,
 				props?.height,
 				props?.className
@@ -33,7 +33,7 @@ export const DateInput = ({ register, selected, ...props }) => {
 	const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
 		<button
 			type='button'
-			className='input input-primary flex w-full items-center justify-between rounded-md px-2 text-left text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-white'
+			className='input input-primary flex w-full items-center justify-between rounded px-2 text-left text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-white'
 			onClick={onClick}
 			ref={ref}>
 			{value || 'Select Date'}
@@ -65,7 +65,7 @@ export const PasswordInput = ({ register, ...props }) => {
 	const [show, setShow] = useState(false);
 	return (
 		<FormField {...props}>
-			<label className='input input-bordered input-primary flex items-center gap-2 rounded-md px-2 text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-primary/20'>
+			<label className='input input-bordered input-primary flex items-center gap-2 rounded px-2 text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-primary/20'>
 				<input
 					type={show ? 'text' : 'password'}
 					className={cn(props?.width ? props.width : 'w-full')}
@@ -161,7 +161,7 @@ export const SwitchOnly = ({ register, ...props }) => (
 export const Select = ({ register, ...props }) => (
 	<FormField {...props}>
 		<select
-			className='select select-bordered select-primary w-full'
+			className='select select-bordered select-primary w-full border-primary/30 bg-primary/5'
 			{...register(props.label)}>
 			{props.option?.map((item, index) => (
 				<option key={index} value={item.value}>
@@ -174,7 +174,7 @@ export const Select = ({ register, ...props }) => (
 
 export const Radio = ({ register, checker = 0, value, rest, ...props }) => (
 	<FormField {...props}>
-		<div className='flex gap-6 rounded-md border border-primary bg-white px-2 py-2.5'>
+		<div className='flex gap-6 rounded border border-primary bg-white px-2 py-2.5'>
 			{props.option?.map((item) => (
 				<label
 					key={item.value}
@@ -196,7 +196,7 @@ export const Radio = ({ register, checker = 0, value, rest, ...props }) => (
 export const Textarea = ({ register, ...props }) => (
 	<FormField {...props}>
 		<textarea
-			className='textarea textarea-bordered textarea-primary w-full'
+			className='textarea textarea-bordered textarea-primary w-full border-primary/30 bg-primary/5'
 			rows={props.rows ? props.rows : 1}
 			{...register(props.label)}
 			{...props}
@@ -220,7 +220,7 @@ export const JoinInput = ({ register, ...props }) => (
 		<div className='join w-full'>
 			<input
 				className={cn(
-					'input join-item input-primary rounded-md px-2 text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-primary/20',
+					'input join-item input-primary rounded border-primary/30 bg-primary/5 px-2 text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-primary/20',
 					props?.width ? props.width : 'w-full'
 				)}
 				{...register(props.label)}
@@ -237,13 +237,13 @@ export const JoinInputSelect = ({ register, ...props }) => (
 	<FormField {...props}>
 		<div className='join'>
 			<input
-				className='input join-item input-primary w-full text-primary transition-all duration-100 ease-in-out'
+				className='input join-item input-primary w-full border-primary/30 bg-primary/5 text-primary transition-all duration-100 ease-in-out'
 				id={props.label}
 				{...register(props?.label)}
 			/>
 
 			<select
-				className='join-item select select-bordered select-primary'
+				className='join-item select select-primary border-primary/30 bg-primary text-white'
 				{...register(props.join)}>
 				{props.option?.map((item, index) => (
 					<option key={index} value={item.value}>
@@ -258,7 +258,7 @@ export const JoinInputSelect = ({ register, ...props }) => (
 export const SearchBox = ({ ...props }) => (
 	<input
 		className={cn(
-			'input input-xs input-primary h-10 rounded-md border-[0.1px] border-primary p-2 text-sm text-primary shadow-md duration-100 placeholder:text-primary placeholder:text-primary/40',
+			'input input-xs input-primary h-10 rounded border-[0.1px] border-primary p-2 text-sm text-primary shadow-md duration-100 placeholder:text-primary placeholder:text-primary/40',
 			props?.width ? props.width : 'w-full'
 		)}
 		{...props}
@@ -266,7 +266,7 @@ export const SearchBox = ({ ...props }) => (
 );
 
 export const DescriptionStyle = ({ description }) => (
-	<span className='text-md rounded-md bg-indigo-50 px-1 font-sans font-semibold capitalize text-indigo-600'>
+	<span className='text-md rounded bg-indigo-50 px-1 font-sans font-semibold capitalize text-indigo-600'>
 		{description}
 	</span>
 );

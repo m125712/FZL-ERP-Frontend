@@ -69,7 +69,9 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={updateVendor?.uuid !== null ? 'Update Vendor' : 'Vendor'}
+			title={
+				updateVendor?.uuid !== null ? 'Update Vendor' : 'Create Vendor'
+			}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

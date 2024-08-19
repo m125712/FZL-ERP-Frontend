@@ -33,7 +33,6 @@ export default function Index({
 			url: `${url}/${deleteItem?.itemId}`,
 			onClose: handelClose,
 		});
-
 		onSuccess && onSuccess();
 	};
 

@@ -19,7 +19,6 @@ export default function Header({
 	getValues,
 	Controller,
 	watch,
-	isUpdate,
 }) {
 	const { lc_uuid } = useParams();
 

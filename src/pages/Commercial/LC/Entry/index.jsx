@@ -1,36 +1,28 @@
-import { useFetch, useRHF } from '@/hooks';
+import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
 import { DynamicField, FormField, ReactSelect, RemoveButton } from '@/ui';
 import { useAuth } from '@context/auth';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCommercialLC } from '@/state/Commercial';
 import Header from './Header';
 import { LC_NULL, LC_SCHEMA } from '@util/Schema';
-import { useFetchForRhfReset } from '@/hooks';
 import { useFieldArray } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { DevTool } from '@hookform/devtools';
 import { format } from 'date-fns';
 import GetDateTime from '@/util/GetDateTime';
 import nanoid from '@/lib/nanoid';
+import { useEffect, useState } from 'react';
 
 export default function Index() {
-	const {
-		url: commercialLcUrl,
-		postData,
-		updateData,
-		deleteData,
-	} = useCommercialLC();
+	const { url: commercialLcUrl, postData, updateData } = useCommercialLC();
 	const { lc_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
+	const [deletablePi, setDeletablePi] = useState([]);
 
 	const isUpdate = lc_uuid !== undefined;
 
 	const { value: pi } = useFetch('/other/pi/value/label');
-
-	console.log({
-		pi,
-	});
 
 	const {
 		register,
@@ -43,10 +35,6 @@ export default function Index() {
 		watch,
 	} = useRHF(LC_SCHEMA, LC_NULL);
 
-	console.log({
-		errors,
-	});
-
 	// purchase
 	const {
 		fields: piFields,
@@ -57,7 +45,11 @@ export default function Index() {
 		name: 'pi',
 	});
 
-	useFetchForRhfReset(`/commercial/lc/${lc_uuid}`, lc_uuid, reset);
+	useFetchForRhfResetForOrder(
+		`/commercial/lc-pi/by/${lc_uuid}`,
+		lc_uuid,
+		reset
+	);
 
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
@@ -83,15 +75,93 @@ export default function Index() {
 		ignoreEventsCondition: function () {},
 	});
 
+	useEffect(() => {
+		console.log({
+			deletablePi,
+		});
+	}, [deletablePi]);
+
+	const handleDeletePi = (uuid) => {
+		if (!isUpdate || deletablePi.includes(uuid)) return;
+		setDeletablePi((prev) => [...prev, uuid]);
+	};
+
 	// Submit
 	const onSubmit = async (data) => {
-		// Update
-		if (isUpdate) {
-			return;
-		}
-
 		const formatDate = (dateString) =>
 			dateString ? format(new Date(dateString), 'yyyy-MM-dd') : '';
+
+		const lc_uuid = data.uuid;
+
+		// Update
+		if (isUpdate) {
+			const updated_at = GetDateTime();
+			const lc_updated_data = {
+				...data,
+				lc_date: formatDate(data?.lc_date),
+				payment_date: formatDate(data?.payment_date),
+				acceptance_date: formatDate(data?.acceptance_date),
+				maturity_date: formatDate(data?.maturity_date),
+				handover_date: formatDate(data?.handover_date),
+				shipment_date: formatDate(data?.shipment_date),
+				expiry_date: formatDate(data?.expiry_date),
+				ud_received: data.ud_received ? 1 : 0,
+				ud_no: data.ud_no ? 1 : 0,
+				problematical: data.problematical ? 1 : 0,
+				epz: data.epz ? 1 : 0,
+				production_complete: data.production_complete ? 1 : 0,
+				lc_cancel: data.lc_cancel ? 1 : 0,
+				updated_at,
+			};
+
+			delete lc_updated_data['pi'];
+
+			// Update LC data
+			await updateData.mutateAsync({
+				url: `${commercialLcUrl}/${data?.uuid}`,
+				updatedData: lc_updated_data,
+				isOnCloseNeeded: false,
+			});
+
+			// Delete Pi Numbers
+			const deletable_pi_promises = deletablePi.map(
+				async (item) =>
+					await updateData.mutateAsync({
+						url: `/commercial/pi-lc-null/${item}`,
+						isOnCloseNeeded: false,
+					})
+			);
+
+			await Promise.all(deletable_pi_promises)
+				.then(() => setDeletablePi([]))
+				.catch((err) => console.log(err));
+
+			// Update Pi Numbers
+			const pi_numbers = [...data.pi].map((item) => ({
+				...item,
+				lc_uuid,
+			}));
+
+			const pi_numbers_promise = [
+				...pi_numbers.map(
+					async (item) =>
+						await updateData.mutateAsync({
+							url: `/commercial/pi-lc-uuid/${item.uuid}`,
+							updatedData: item,
+							isOnCloseNeeded: false,
+						})
+				),
+			];
+
+			await Promise.all(pi_numbers_promise)
+				.then(() => reset(LC_NULL))
+				.then(() => {
+					navigate(`/commercial/lc/details/${lc_uuid}`);
+				})
+				.catch((err) => console.log(err));
+
+			return;
+		}
 
 		// Add new item
 		const new_lc_uuid = nanoid();
@@ -129,7 +199,7 @@ export default function Index() {
 
 		// Update Pi Numbers
 		const pi_numbers = [...data.pi].map((item) => ({
-			...item,
+			uuid: item.uuid,
 			lc_uuid: new_lc_uuid,
 		}));
 
@@ -166,7 +236,7 @@ export default function Index() {
 							getValues,
 							Controller,
 							watch,
-							isUpdate,
+							handleDeletePi,
 						}}
 					/>
 
@@ -207,15 +277,15 @@ export default function Index() {
 																)
 														)}
 														onChange={(e) => {
+															handleDeletePi(
+																piFields[index]
+																	.uuid
+															);
 															onChange(e.value);
 														}}
 														menuPortalTarget={
 															document.body
 														}
-														// isDisabled={
-														// 	purchase_description_uuid !==
-														// 	undefined
-														// }
 													/>
 												);
 											}}
@@ -226,7 +296,12 @@ export default function Index() {
 								<td
 									className={`w-16 border-l-4 border-l-primary ${rowClass}`}>
 									<RemoveButton
-										onClick={() => PiRemove(index)}
+										onClick={() => {
+											handleDeletePi(
+												piFields[index].uuid
+											);
+											PiRemove(index);
+										}}
 										showButton={piFields.length > 1}
 									/>
 								</td>

@@ -427,17 +427,17 @@ export const ORDER_SCHEMA = {
 	teeth_color: UUID_REQUIRED,
 	coloring_type: UUID_REQUIRED,
 	special_requirement: JSON_STRING_REQUIRED,
-	description: STRING,
+	description: STRING.nullable(),
 	remarks: STRING.nullable(),
 
 	// slider
 	slider_starting_section: STRING_REQUIRED,
 	end_type: UUID_REQUIRED,
-	hand: UUID,
+	hand: UUID_FK,
 	lock_type: UUID_REQUIRED,
 	slider: UUID_REQUIRED,
-	slider_body_shape: UUID,
-	slider_link: UUID,
+	slider_body_shape: UUID_FK,
+	slider_link: UUID_FK,
 
 	// puller
 	puller_type: UUID_REQUIRED,
@@ -445,21 +445,21 @@ export const ORDER_SCHEMA = {
 	puller_link: UUID_FK,
 
 	// logo
-	logo_type: UUID,
+	logo_type: UUID_FK,
 	is_logo_body: BOOLEAN_DEFAULT_VALUE(false),
 	is_logo_puller: BOOLEAN_DEFAULT_VALUE(false),
 	is_slider_provided: BOOLEAN_DEFAULT_VALUE(false),
 
 	// stopper
 	stopper_type: UUID_REQUIRED,
-	top_stopper: UUID,
-	bottom_stopper: UUID,
+	top_stopper: UUID_FK,
+	bottom_stopper: UUID_FK,
 
 	// garments
-	end_user: UUID,
+	end_user: UUID_FK,
 	garment: STRING.nullable(),
-	light_preference: UUID,
-	garments_wash: UUID,
+	light_preference: UUID_FK,
+	garments_wash: UUID_FK,
 	garments_remarks: STRING.nullable(),
 
 	order_entry: yup.array().of(

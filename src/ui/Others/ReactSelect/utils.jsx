@@ -34,8 +34,8 @@ const menuStyles =
 // group heading
 const groupHeadingStyles = 'text-gray-500 text-sm bg-error';
 const optionStyles = {
-	base: 'p-2  border-b border-primary/30 shadow-2xl text-sm hover:cursor-pointer hover:bg-secondary',
-	focus: 'bg-secondary text-primary active:bg-primary',
+	base: 'p-2  border-b border-primary/30 text-black shadow-2xl text-sm hover:cursor-pointer hover:bg-secondary',
+	focus: 'bg-secondary text-black active:bg-primary',
 	selected:
 		"after:content-['✔'] after:ml-2 after:text-success flex justify-between bg-primary text-primary-content active:bg-primary",
 };

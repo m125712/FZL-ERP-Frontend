@@ -205,12 +205,22 @@ export default function Index() {
 			),
 		];
 
+		// * All promises
+		await Promise.all(order_entry_promises)
+			.then(() => reset(Object.assign({}, ORDER_NULL)))
+			.then(async () => {
+				await OrderDetailsInvalidate();
+				navigate(`/order/details`);
+			})
+			.catch((err) => console.log(err));
+
 		// * Slider
 		const slider_quantity = [...data.order_entry].reduce(
-			(prev, curr) => prev + curr.quantity
+			(prev, curr) => prev.quantity + curr.quantity
 		);
 
 		const slider_info = {
+			uuid: nanoid(),
 			order_info_uuid: data.order_info_uuid,
 			item: data.item,
 			zipper_number: data.zipper_number,
@@ -218,6 +228,7 @@ export default function Index() {
 			lock_type: data.lock_type,
 			puller_type: data.puller_type,
 			puller_color: data.puller_color,
+			coloring_type: data.coloring_type,
 			puller_link: data.puller_link,
 			slider: data?.slider,
 			slider_body_shape: data?.slider_body_shape,
@@ -229,14 +240,11 @@ export default function Index() {
 			created_at: GetDateTime(),
 		};
 
-		// * All promises
-		await Promise.all(order_entry_promises)
-			.then(() => reset(Object.assign({}, ORDER_NULL)))
-			.then(async () => {
-				await OrderDetailsInvalidate();
-				navigate(`/order/details`);
-			})
-			.catch((err) => console.log(err));
+		await postData.mutateAsync({
+			url: '/slider/stock',
+			newData: slider_info,
+			isOnCloseNeeded: false,
+		});
 	};
 
 	// Check if order_number is valid

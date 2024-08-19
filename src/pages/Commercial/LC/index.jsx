@@ -36,15 +36,17 @@ export default function Index() {
 				width: 'w-28',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const piIds = info?.getValue();
-					return piIds.map((piId) => (
-						<LinkWithCopy
-							key={piId}
-							title={piId}
-							id={piId}
-							uri='/commercial/pi/details'
-						/>
-					));
+					return info?.getValue()?.map((piId) => {
+						if (piId === 'PI-') return '-';
+						return (
+							<LinkWithCopy
+								key={piId}
+								title={piId}
+								id={piId}
+								uri='/commercial/pi/details'
+							/>
+						);
+					});
 				},
 			},
 			{
@@ -63,7 +65,9 @@ export default function Index() {
 				accessorKey: 'lc_date',
 				header: 'LC Date',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
 			},
 			{
 				accessorKey: 'payment_value',
@@ -75,7 +79,9 @@ export default function Index() {
 				accessorKey: 'payment_date',
 				header: 'Payment Date',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
 			},
 			{
 				accessorKey: 'ldbc_fdbc',
@@ -87,13 +93,17 @@ export default function Index() {
 				accessorKey: 'acceptance_date',
 				header: 'Acceptance Date',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
 			},
 			{
 				accessorKey: 'maturity_date',
 				header: 'Maturity Date',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
 			},
 			{
 				accessorKey: 'commercial_executive',
@@ -123,19 +133,25 @@ export default function Index() {
 				accessorKey: 'handover_date',
 				header: 'Handover Date',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
 			},
 			{
 				accessorKey: 'shipment_date',
 				header: 'Shipment Date',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
 			},
 			{
 				accessorKey: 'expiry_date',
 				header: 'Expiry Date',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
 			},
 			{
 				accessorKey: 'ud_no',
@@ -159,7 +175,9 @@ export default function Index() {
 				accessorKey: 'amd_date',
 				header: 'Amendment Date',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
 			},
 			{
 				accessorKey: 'amd_count',
@@ -183,17 +201,13 @@ export default function Index() {
 				accessorKey: 'created_at',
 				header: 'Created At',
 				enableColumnFilter: false,
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated',
 				enableColumnFilter: false,
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'remarks',

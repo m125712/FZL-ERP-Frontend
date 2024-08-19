@@ -108,7 +108,7 @@ export default function Index() {
 		);
 
 	return (
-		<div className='flex flex-col pb-8'>
+		<div className='flex flex-col py-8'>
 			{/* <iframe
 				id="iframeContainer"
 				src={data}

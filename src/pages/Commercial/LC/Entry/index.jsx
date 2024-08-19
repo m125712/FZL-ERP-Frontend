@@ -1,4 +1,4 @@
-import { useFetch, useRHF } from '@/hooks';
+import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
 import { DynamicField, FormField, ReactSelect, RemoveButton } from '@/ui';
 import { useAuth } from '@context/auth';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -43,10 +43,6 @@ export default function Index() {
 		watch,
 	} = useRHF(LC_SCHEMA, LC_NULL);
 
-	console.log({
-		errors,
-	});
-
 	// purchase
 	const {
 		fields: piFields,
@@ -57,7 +53,11 @@ export default function Index() {
 		name: 'pi',
 	});
 
-	useFetchForRhfReset(`/commercial/lc/${lc_uuid}`, lc_uuid, reset);
+	useFetchForRhfResetForOrder(
+		`/commercial/lc-pi/by/${lc_uuid}`,
+		lc_uuid,
+		reset
+	);
 
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
@@ -85,13 +85,39 @@ export default function Index() {
 
 	// Submit
 	const onSubmit = async (data) => {
-		// Update
-		if (isUpdate) {
-			return;
-		}
-
 		const formatDate = (dateString) =>
 			dateString ? format(new Date(dateString), 'yyyy-MM-dd') : '';
+
+		// Update
+		if (isUpdate) {
+			const updated_at = GetDateTime();
+			const lc_updated_data = {
+				...data,
+				lc_date: formatDate(data?.lc_date),
+				payment_date: formatDate(data?.payment_date),
+				acceptance_date: formatDate(data?.acceptance_date),
+				maturity_date: formatDate(data?.maturity_date),
+				handover_date: formatDate(data?.handover_date),
+				shipment_date: formatDate(data?.shipment_date),
+				expiry_date: formatDate(data?.expiry_date),
+				ud_received: data.ud_received ? 1 : 0,
+				ud_no: data.ud_no ? 1 : 0,
+				problematical: data.problematical ? 1 : 0,
+				epz: data.epz ? 1 : 0,
+				production_complete: data.production_complete ? 1 : 0,
+				lc_cancel: data.lc_cancel ? 1 : 0,
+				updated_at,
+			};
+
+			delete lc_updated_data['pi'];
+
+			// Update LC data
+			await updateData.mutateAsync({
+				url: `${commercialLcUrl}/${data?.uuid}`,
+				updatedData: lc_updated_data,
+				isOnCloseNeeded: false,
+			});
+		}
 
 		// Add new item
 		const new_lc_uuid = nanoid();

@@ -40,7 +40,7 @@ export const CommercialRoutes = [
 		path: '/commercial/lc/entry',
 		element: LCEntry,
 		type: 'commercial',
-		page_name: 'commercial__pi',
+		page_name: 'commercial__lc_entry',
 		actions: ['create', 'read', 'update', 'delete'],
 		hidden: true,
 	},

@@ -1,7 +1,7 @@
 import { DeleteFooter, Header } from '../ui';
 
 const Body = ({ item }) => (
-	<p className='text-center text-2xl font-light text-black'>
+	<p className='text-xl font-light text-black'>
 		Do you want to delete <span className='font-semibold'>{item}</span>?
 	</p>
 );
@@ -42,7 +42,7 @@ export default function Index({
 				onSubmit={onSubmit}
 				noValidate
 				method='dialog'
-				className='modal-box bg-secondary text-secondary-content'>
+				className='modal-box bg-gray-50 text-error'>
 				<Header title={`Delete ${title}`} onClose={handelCancelClick} />
 				<Body item={deleteItem?.itemName} />
 				<DeleteFooter {...{ handelCancelClick }} />

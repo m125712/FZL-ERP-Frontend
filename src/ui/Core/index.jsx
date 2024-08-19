@@ -237,13 +237,13 @@ export const JoinInputSelect = ({ register, ...props }) => (
 	<FormField {...props}>
 		<div className='join'>
 			<input
-				className='input join-item input-primary w-full text-primary transition-all duration-100 ease-in-out'
+				className='input join-item input-primary w-full border-primary/30 bg-primary/5 text-primary transition-all duration-100 ease-in-out'
 				id={props.label}
 				{...register(props?.label)}
 			/>
 
 			<select
-				className='join-item select select-bordered select-primary'
+				className='join-item select select-primary border-primary/30 bg-primary text-white'
 				{...register(props.join)}>
 				{props.option?.map((item, index) => (
 					<option key={index} value={item.value}>

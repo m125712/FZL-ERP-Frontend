@@ -136,7 +136,7 @@ export default function Index() {
 	];
 
 	return (
-		<PageContainer title='List of Purchases' breadcrumbs={breadcrumbs}>
+		<PageContainer title='Purchase Lists' breadcrumbs={breadcrumbs}>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}

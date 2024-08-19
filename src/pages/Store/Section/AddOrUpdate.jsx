@@ -69,7 +69,11 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={updateSection?.uuid !== null ? 'Update Section' : 'Section'}
+			title={
+				updateSection?.uuid !== null
+					? 'Update Section'
+					: 'Create Section'
+			}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

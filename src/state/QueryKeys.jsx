@@ -94,6 +94,12 @@ export const commercialQK = {
 	// pi-entry
 	piEntries: () => [...commercialQK.all(), 'pi-entry'],
 	piEntry: (uuid) => [...commercialQK.piEntries(), uuid],
+
+	// lc
+	lcs: () => [...commercialQK.all(), 'lc'],
+	lc: (uuid) => [...commercialQK.lcs(), uuid],
+	lcPi: (uuid) => [...commercialQK.all(), 'lc-pi', uuid],
+	lcNumber: (uuid) => [...commercialQK.all(), 'lc-number', uuid],
 };
 
 // Material Query Keys
@@ -225,4 +231,25 @@ export const dyeingQK = {
 	// planning
 	planning: () => [...dyeingQK.all(), 'planning'],
 	planningByUUID: (uuid) => [...dyeingQK.planning(), uuid],
+};
+
+// *Nylon
+export const nylonQK = {
+	all: () => ['nylon'],
+
+	// * Metallic Finishing
+	//* RM
+
+	nylonMetallicFinishingRM: () => [...nylonQK.all(), 'rm'],
+	nylonMetallicFinishingByUUID: (uuid) => [
+		...nylonQK.nylonMetallicFinishingRM(),
+		uuid,
+	],
+
+	//* RM Log
+	nylonMetallicFinishingLog: () => [...nylonQK.all(), 'rm-log'],
+	nylonMetallicFinishingLogByUUID: (uuid) => [
+		...nylonQK.nylonMetallicFinishingRMLog(),
+		uuid,
+	],
 };

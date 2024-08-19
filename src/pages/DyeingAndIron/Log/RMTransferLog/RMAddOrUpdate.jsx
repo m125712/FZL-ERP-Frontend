@@ -88,10 +88,7 @@ export default function Index({
 		{ label: 'Metal Gapping', value: 'm_gapping' },
 		{ label: 'Vislon Gapping', value: 'v_gapping' },
 		{ label: 'Vislon Teeth Molding', value: 'v_teeth_molding' },
-		{
-			label: 'Metal Teeth Molding',
-			value: 'm_teeth_molding',
-		},
+		{ label: 'Metal Teeth Molding', value: 'm_teeth_molding' },
 		{
 			label: 'Teeth Assembling and Polishing',
 			value: 'teeth_assembling_and_polishing',
@@ -107,10 +104,14 @@ export default function Index({
 		{ label: 'Vislon Stopper', value: 'v_stopper' },
 		{ label: 'Nylon Stopper', value: 'n_stopper' },
 		{ label: 'Cutting', value: 'cutting' },
-		{ label: 'QC and Packing', value: 'qc_and_packing' },
+		{ label: 'Metal QC and Packing', value: 'm_qc_and_packing' },
+		{ label: 'Nylon QC and Packing', value: 'n_qc_and_packing' },
+		{ label: 'Vislon QC and Packing', value: 'v_qc_and_packing' },
+		{ label: 'Slider QC and Packing', value: 's_qc_and_packing' },
 		{ label: 'Die Casting', value: 'die_casting' },
 		{ label: 'Slider Assembly', value: 'slider_assembly' },
 		{ label: 'Coloring', value: 'coloring' },
+		{ label: 'Lab Dip', value: 'lab_dip' },
 	];
 
 	return (

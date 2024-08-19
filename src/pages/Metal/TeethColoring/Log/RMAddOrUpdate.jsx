@@ -29,7 +29,7 @@ export default function Index({
 	console.log(updateMetalTCRMLog);
 	const MAX_QUANTITY =
 		Number(
-			setUpdateMetalTCRMLog?.section === 'teeth_assembling_and_polishing'
+			updateMetalTCRMLog?.section === 'teeth_assembling_and_polishing'
 				? updateMetalTCRMLog?.teeth_assembling_and_polishing
 				: updateMetalTCRMLog?.plating_and_iron
 		) + Number(updateMetalTCRMLog?.used_quantity);
@@ -122,7 +122,6 @@ export default function Index({
 		{ label: 'Coloring', value: 'coloring' },
 		{ label: 'Lab Dip', value: 'lab_dip' },
 	];
-
 
 	return (
 		<AddModal

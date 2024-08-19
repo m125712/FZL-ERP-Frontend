@@ -3,7 +3,7 @@ import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
 
-import { useMetalFinishingRM } from '@/state/Metal';
+import { useDeliveryRM } from '@/state/Delivery';
 
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
@@ -14,30 +14,30 @@ import {
 
 export default function Index({
 	modalId = '',
-	updateFinishingRMLog = {
+	updateRMLog = {
 		uuid: null,
 		section: null,
 		used_quantity: null,
-		m_teeth_cleaning: null,
-		m_gapping: null,
-		m_sealing: null,
-		m_stopper: null,
+		m_qc_and_packing: null,
+		n_qc_and_packing: null,
+		v_qc_and_packing: null,
+		s_qc_and_packing: null,
 	},
-	setUpdateFinishingRMLog,
+	setUpdateRMLog,
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
-	const { invalidateQuery: invalidateFinishingRM } = useMetalFinishingRM();
+	const { invalidateQuery: invalidateRM } = useDeliveryRM();
 
 	const MAX_QUANTITY =
 		Number(
-			updateFinishingRMLog?.section === 'm_gapping'
-				? updateFinishingRMLog?.m_gapping
-				: updateFinishingRMLog?.section === 'm_teeth_cleaning'
-					? updateFinishingRMLog?.m_teeth_cleaning
-					: updateFinishingRMLog?.section === 'm_sealing'
-						? updateFinishingRMLog?.m_sealing
-						: updateFinishingRMLog?.m_stopper
-		) + Number(updateFinishingRMLog?.used_quantity);
+			updateRMLog?.section === 'n_qc_and_packing'
+				? updateRMLog?.n_qc_and_packing
+				: updateRMLog?.section === 'm_qc_and_packing'
+					? updateRMLog?.m_qc_and_packing
+					: updateRMLog?.section === 'v_qc_and_packing'
+						? updateRMLog?.v_qc_and_packing
+						: updateRMLog?.s_qc_and_packing
+		) + Number(updateRMLog?.used_quantity);
 	const schema = {
 		...RM_MATERIAL_USED_EDIT_SCHEMA,
 		used_quantity:
@@ -56,21 +56,21 @@ export default function Index({
 	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
-		`${url}/${updateFinishingRMLog?.uuid}`,
-		updateFinishingRMLog?.uuid,
+		`${url}/${updateRMLog?.uuid}`,
+		updateRMLog?.uuid,
 		reset
 	);
 
 	const onClose = () => {
-		setUpdateFinishingRMLog((prev) => ({
+		setUpdateRMLog((prev) => ({
 			...prev,
 			uuid: null,
 			section: null,
 			used_quantity: null,
-			m_teeth_cleaning: null,
-			m_gapping: null,
-			m_sealing: null,
-			m_stopper: null,
+			m_qc_and_packing: null,
+			n_qc_and_packing: null,
+			v_qc_and_packing: null,
+			s_qc_and_packing: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
@@ -78,20 +78,20 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateFinishingRMLog?.uuid !== null) {
+		if (updateRMLog?.uuid !== null) {
 			const updatedData = {
 				...data,
-				material_name: updateFinishingRMLog?.material_name,
+				material_name: updateRMLog?.material_name,
 				updated_at: GetDateTime(),
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateFinishingRMLog?.uuid}`,
-				uuid: updateFinishingRMLog?.uuid,
+				url: `${url}/${updateRMLog?.uuid}`,
+				uuid: updateRMLog?.uuid,
 				updatedData,
 				onClose,
 			});
-			invalidateFinishingRM();
+			invalidateRM();
 
 			return;
 		}
@@ -101,29 +101,29 @@ export default function Index({
 		{ label: 'Tape Making', value: 'tape_making' },
 		{ label: 'Coil Forming', value: 'coil_forming' },
 		{ label: 'Dying and Iron', value: 'dying_and_iron' },
-		{ label: 'Metal Gapping', value: 'm_gapping' },
-		{ label: 'Metal Gapping', value: 'v_gapping' },
-		{ label: 'Metal Teeth Molding', value: 'v_teeth_molding' },
-		{
-			label: 'Metal Teeth Molding',
-			value: 'm_teeth_molding',
-		},
+		{ label: 'Delivery Gapping', value: 'm_gapping' },
+		{ label: 'Vislon Gapping', value: 'v_gapping' },
+		{ label: 'Vislon Teeth Molding', value: 'v_teeth_molding' },
+		{ label: 'Delivery Teeth Molding', value: 'm_teeth_molding' },
 		{
 			label: 'Teeth Assembling and Polishing',
 			value: 'teeth_assembling_and_polishing',
 		},
-		{ label: 'Metal Teeth Cleaning', value: 'm_teeth_cleaning' },
-		{ label: 'Metal Teeth Cleaning', value: 'v_teeth_cleaning' },
+		{ label: 'Delivery Teeth Cleaning', value: 'm_teeth_cleaning' },
+		{ label: 'Vislon Teeth Cleaning', value: 'v_teeth_cleaning' },
 		{ label: 'Plating and Iron', value: 'plating_and_iron' },
-		{ label: 'Metal Sealing', value: 'm_sealing' },
-		{ label: 'Metal Sealing', value: 'v_sealing' },
-		{ label: 'Metal T Cutting', value: 'n_t_cutting' },
-		{ label: 'Metal T Cutting', value: 'v_t_cutting' },
-		{ label: 'Metal Stopper', value: 'm_stopper' },
-		{ label: 'Metal Stopper', value: 'v_stopper' },
-		{ label: 'Metal Stopper', value: 'n_stopper' },
+		{ label: 'Delivery Sealing', value: 'm_sealing' },
+		{ label: 'Vislon Sealing', value: 'v_sealing' },
+		{ label: 'Nylon T Cutting', value: 'n_t_cutting' },
+		{ label: 'Vislon T Cutting', value: 'v_t_cutting' },
+		{ label: 'Delivery Stopper', value: 'm_stopper' },
+		{ label: 'Vislon Stopper', value: 'v_stopper' },
+		{ label: 'Nylon Stopper', value: 'n_stopper' },
 		{ label: 'Cutting', value: 'cutting' },
-		{ label: 'QC and Packing', value: 'qc_and_packing' },
+		{ label: 'Delivery QC and Packing', value: 'm_qc_and_packing' },
+		{ label: 'Nylon QC and Packing', value: 'n_qc_and_packing' },
+		{ label: 'Vislon QC and Packing', value: 'v_qc_and_packing' },
+		{ label: 'Slider QC and Packing', value: 's_qc_and_packing' },
 		{ label: 'Die Casting', value: 'die_casting' },
 		{ label: 'Slider Assembly', value: 'slider_assembly' },
 		{ label: 'Coloring', value: 'coloring' },
@@ -133,7 +133,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Teeth Coloring Log of ${updateFinishingRMLog?.material_name}`}
+			title={`Teeth Coloring Log of ${updateRMLog?.material_name}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

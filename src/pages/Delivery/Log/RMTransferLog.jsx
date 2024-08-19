@@ -3,21 +3,23 @@ import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 
-import { useMetalFinishingRM, useMetalFinishingRMLog } from '@/state/Metal';
+import { useDeliveryRM, useDeliveryRMLog } from '@/state/Delivery';
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo, useState } from 'react';
 import RMAddOrUpdate from './RMAddOrUpdate';
 
+
+
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useMetalFinishingRMLog();
+	const { data, isLoading, url, deleteData } = useDeliveryRMLog();
 	const info = new PageInfo(
-		'Finishing RM Used Log',
+		' RM Used Log',
 		url,
-		'metal__finishing_log'
+		'Delivery___log'
 	);
 	const haveAccess = useAccess(info.getTab());
-	const { invalidateQuery: invalidateFinishingRM } = useMetalFinishingRM();
+	const { invalidateQuery: invalidateRM } = useDeliveryRM();
 	console.log(data);
 	const columns = useMemo(
 		() => [
@@ -113,26 +115,25 @@ export default function Index() {
 		],
 		[data]
 	);
-	// { label: 'Metal Gapping', value: 'v_gapping' },
-	// { label: 'Metal Teeth Cleaning', value: 'v_teeth_cleaning' },
-	// { label: 'Metal Sealing', value: 'v_sealing' },
-	// 	{ label: 'Metal Stopper', value: 'v_stopper' },
-	//{ label: 'Metal T Cutting', value: 'v_t_cutting' }
+	// { label: 'Delivery QC and Packing', value: 'm_qc_and_packing' },
+	// 		{ label: 'Nylon QC and Packing', value: 'n_qc_and_packing' },
+	// 		{ label: 'Vislon QC and Packing', value: 'v_qc_and_packing' },
+	// 		{ label: 'Slider QC and Packing', value: 's_qc_and_packing' },
 	// Update
-	const [updateFinishingRMLog, setUpdateFinishingRMLog] = useState({
+	const [updateRMLog, setUpdateRMLog] = useState({
 		uuid: null,
 		section: null,
 		material_name: null,
-		m_teeth_cleaning: null,
-		m_gapping: null,
-		m_sealing: null,
-		m_stopper: null,
+		m_qc_and_packing: null,
+		n_qc_and_packing: null,
+		v_qc_and_packing: null,
+		s_qc_and_packing: null,
 		used_quantity: null,
 	});
 
 	const handelUpdate = (idx) => {
 		const selected = data[idx];
-		setUpdateFinishingRMLog((prev) => ({
+		setUpdateRMLog((prev) => ({
 			...prev,
 			...selected,
 		}));
@@ -155,7 +156,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateFinishingRM();
+	invalidateRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -173,8 +174,8 @@ export default function Index() {
 				<RMAddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateFinishingRMLog,
-						setUpdateFinishingRMLog,
+						updateRMLog,
+						setUpdateRMLog,
 					}}
 				/>
 			</Suspense>

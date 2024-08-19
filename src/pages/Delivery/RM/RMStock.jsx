@@ -1,8 +1,7 @@
-
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useMetalFinishingRM } from '@/state/Metal';
+import { useMetalRM } from '@/state/Metal';
 import { EditDelete, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -10,7 +9,7 @@ import { lazy, useEffect, useMemo, useState } from 'react';
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const { data, isLoading, url } = useMetalFinishingRM();
+	const { data, isLoading, url } = useDeliveryRM();
 	const info = new PageInfo('Delivery RM', url, 'delivery_rm');
 	const haveAccess = useAccess(info.getTab());
 
@@ -30,27 +29,27 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'm_gapping',
+				accessorKey: 'm_qc_and_packing',
 				header: 'Gapping',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 
 			{
-				accessorKey: 'm_teeth_cleaning',
+				accessorKey: 'n_qc_and_packing',
 				header: 'T Cleaning',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'm_sealing',
+				accessorKey: 'v_qc_and_packing',
 				header: 'Sealing',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 
 			{
-				accessorKey: 'm_stopper',
+				accessorKey: 's_qc_and_packing',
 				header: 'Stopper',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -82,31 +81,31 @@ export default function Index() {
 		[data]
 	);
 
-	const [updateFinishingStock, setUpdateFinishingStock] = useState({
+	const [updateStock, setUpdateStock] = useState({
 		uuid: null,
 		unit: null,
 		stock: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateFinishingStock((prev) => ({
+		setUpdateStock((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
 			unit: data[idx].unit,
-			stock: data[idx].m_gapping
-				? data[idx].m_gapping
-				: data[idx].m_teeth_cleaning
-					? data[idx].m_teeth_cleaning
-					: data[idx].m_sealing
-						? data[idx].m_sealing
-						: data[idx].m_stopper,
-			section: data[idx].m_gapping
-				? 'm_gapping'
-				: data[idx].m_teeth_cleaning
-					? 'm_teeth_cleaning'
-					: data[idx].m_sealing
-						? 'm_sealing'
-						: 'm_stopper',
+			stock: data[idx].m_qc_and_packing
+				? data[idx].m_qc_and_packing
+				: data[idx].n_qc_and_packing
+					? data[idx].n_qc_and_packing
+					: data[idx].v_qc_and_packing
+						? data[idx].v_qc_and_packing
+						: data[idx].s_qc_and_packing,
+			section: data[idx].m_qc_and_packing
+				? 'm_qc_and_packing'
+				: data[idx].n_qc_and_packing
+					? 'n_qc_and_packing'
+					: data[idx].v_qc_and_packing
+						? 'v_qc_and_packing'
+						: 's_qc_and_packing',
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -127,8 +126,8 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateFinishingStock,
-						setUpdateFinishingStock,
+						updateStock,
+						setUpdateStock,
 					}}
 				/>
 			</Suspense>

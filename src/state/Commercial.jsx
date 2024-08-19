@@ -56,3 +56,16 @@ export const useCommercialPIByOrderInfo = (
 		url: `/commercial/pi/details/by/order-info-ids/${orderInfoIds}/${partyId}/${marketingId}`,
 		enabled,
 	});
+
+// * LC * //
+export const useCommercialLC = () =>
+	createGlobalState({
+		queryKey: commercialQK.lcs(),
+		url: '/commercial/lc',
+	});
+
+export const useCommercialLCByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commercialQK.lc(uuid),
+		url: `/commercial/lc/${uuid}`,
+	});

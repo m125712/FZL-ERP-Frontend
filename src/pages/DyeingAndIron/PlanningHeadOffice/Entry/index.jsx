@@ -29,12 +29,12 @@ import Header from './Header';
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
 		useDyeingPlanning();
-	const { planning_id, week_id } = useParams();
+	const { weeks, week_id } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
-	const isUpdate = planning_id !== undefined;
+	const isUpdate = week_id !== undefined;
 	const [orderInfoIds, setOrderInfoIds] = useState({});
 
 	const {
@@ -63,18 +63,19 @@ export default function Index() {
 
 	const onClose = () => reset(DYEING_PLANNING_NULL);
 
+
 	// * Fetch initial data
 	isUpdate
 		? useFetchForRhfResetForOrder(
-				`/zipper/planning-details/by/${planning_id}`,
-				planning_id,
+				`/zipper/planning-details/by/${week_id}`,
+				week_id,
 				reset
 			)
 		: useFetchForRhfResetForPlanning(`/zipper/order-planning`, reset);
 
 	// const { value: data } = useFetch('/zipper/order-planning');
 
-	console.log('Form array fields:', PlanningEntryField);
+	// console.log('Form array fields:', PlanningEntryField);
 	// console.log('Form data:', getValues());
 
 	// TODO: Not sure if this is needed. need further checking
@@ -107,7 +108,7 @@ export default function Index() {
 		},
 	};
 
-	// TODO: Submit
+
 	const onSubmit = async (data) => {
 		// * Update
 		if (isUpdate) {
@@ -117,7 +118,7 @@ export default function Index() {
 			};
 
 			await updateData.mutateAsync({
-				url: `/zipper/planning/${data?.uuid}`,
+				url: `/zipper/planning/${data?.week}`,
 				updatedData: planning_data_updated,
 				isOnCloseNeeded: false,
 			});
@@ -130,6 +131,7 @@ export default function Index() {
 					updated_at: GetDateTime(),
 				})
 			);
+			// console.log(planning_entry_updated);
 
 			let planning_entry_updated_promises = [
 				...planning_entry_updated.map(async (item) => {
@@ -145,12 +147,10 @@ export default function Index() {
 		}
 
 		// * ADD data
-		var planning_uuid = nanoid();
 		const created_at = GetDateTime();
 		const planning_data = {
 			...data,
-			uuid: planning_uuid,
-			week: week[week_id].value,
+			week: weeks,
 			created_at,
 			created_by: user.uuid,
 		};
@@ -162,12 +162,12 @@ export default function Index() {
 			.map((item) => ({
 				...item,
 				uuid: nanoid(),
-				planning_uuid,
+				planning_week: weeks,
 				remarks: item.plan_entry_remarks,
 				created_at,
 			}));
 
-		// console.log('planning_entry_data:', planning_entry);
+		console.log('planning_entry_data:', planning_entry);
 
 		if (planning_entry.length === 0) {
 			alert('Select at least one item to proceed.');
@@ -182,7 +182,7 @@ export default function Index() {
 				...planning_entry.map(
 					async (item) =>
 						await postData.mutateAsync({
-							url: '/zipper/planning-entry',
+							url: '/zipper/planning-entry/for/factory',
 							newData: item,
 							isOnCloseNeeded: false,
 						})
@@ -237,7 +237,6 @@ export default function Index() {
 		setIsSomeChecked(isSomeChecked);
 	};
 
-	// Todo: react-table-column
 	const columns = useMemo(
 		() => [
 			{
@@ -343,7 +342,7 @@ export default function Index() {
 		[isAllChecked]
 	);
 
-	console.log("Error:",errors);
+	// console.log(PlanningEntryField);
 
 	return (
 		<div className='container mx-auto mt-4 px-2 pb-2 md:px-4'>

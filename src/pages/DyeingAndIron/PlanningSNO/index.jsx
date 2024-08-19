@@ -1,6 +1,6 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useDyeingPlanningSNO } from '@/state/Dyeing';
+import { useDyeingPlanning } from '@/state/Dyeing';
 import { useAccess, useFetch } from '@/hooks';
 import { EditDelete, LinkWithCopy, DateTime } from '@/ui';
 import PageInfo from '@/util/PageInfo';
@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
-		useDyeingPlanningSNO();
+		useDyeingPlanning();
 	const info = new PageInfo('Planning SNO', url, 'dyeing__planning_sno');
 	const haveAccess = useAccess('dyeing__planning_sno');
 	const navigate = useNavigate();
@@ -104,9 +104,9 @@ export default function Index() {
 
 	// Update
 	const handelUpdate = (idx) => {
-		const { uuid } = data[idx];
+		const { week } = data[idx];
 
-		navigate(`/dyeing-and-iron/planning-sno/update/${uuid}`);
+		navigate(`/dyeing-and-iron/planning-sno/update/${week}`);
 	};
 
 	// get tabname

@@ -88,7 +88,7 @@ export const DyeingAndIronRoutes = [
 	{
 		id: 286,
 		name: 'Planning SNO Entry',
-		path: '/dyeing-and-iron/planning-sno/entry/:week_id',
+		path: '/dyeing-and-iron/planning-sno/entry/:weeks',
 		element: DyeingPlanningSNOEntry,
 		type: 'dyeing',
 		hidden: true,
@@ -98,7 +98,7 @@ export const DyeingAndIronRoutes = [
 	{
 		id: 287,
 		name: 'Planning SNO Update',
-		path: '/dyeing-and-iron/planning-sno/update/:planning_id',
+		path: '/dyeing-and-iron/planning-sno/update/:week_id',
 		element: DyeingPlanningSNOEntry,
 		type: 'dyeing',
 		hidden: true,
@@ -117,7 +117,7 @@ export const DyeingAndIronRoutes = [
 	{
 		id: 286,
 		name: 'Planning Head Office',
-		path: '/dyeing-and-iron/planning-head-office/entry/:week_id',
+		path: '/dyeing-and-iron/planning-head-office/entry/:weeks',
 		element: DyeingPlanningHeadOfficeEntry,
 		type: 'dyeing',
 		hidden: true,
@@ -127,7 +127,7 @@ export const DyeingAndIronRoutes = [
 	{
 		id: 287,
 		name: 'Planning Head Office Update',
-		path: '/dyeing-and-iron/planning-head-office/update/:planning_id',
+		path: '/dyeing-and-iron/planning-head-office/update/:week_id',
 		element: DyeingPlanningHeadOfficeEntry,
 		type: 'dyeing',
 		hidden: true,

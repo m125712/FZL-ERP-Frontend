@@ -23,6 +23,7 @@ import Header from './Header';
 export default function Index() {
 	const { url, updateData, postData, deleteData } = useLabDipInfo();
 	const { info_number, info_uuid } = useParams();
+	const [deletablerecipe, setDeletableRecipe] = useState([]);
 
 	const { user } = useAuth();
 	const navigate = useNavigate();
@@ -56,6 +57,7 @@ export default function Index() {
 		);
 
 	console.log(getValues());
+
 	// recipe
 	const {
 		fields: recipeField,
@@ -93,6 +95,13 @@ export default function Index() {
 
 	const onClose = () => reset(LAB_INFO_NULL);
 
+	// * function for deleting previous lab-dip info id from recipe
+	const handleDeleteRecipe = (uuid) => {
+		if (!isUpdate || !uuid || deletablerecipe.includes(uuid)) return;
+
+		setDeletableRecipe((prev) => [...prev, uuid]);
+	};
+
 	// Submit
 	const onSubmit = async (data) => {
 		// * Update data * //
@@ -128,6 +137,23 @@ export default function Index() {
 						})
 				),
 			];
+
+			// * Update Deletable Pi
+            if (deletablerecipe.length > 0) {
+                const deletable_recipe_promises = deletablerecipe.map(async (item) => {
+                    await updateData.mutateAsync({
+                        url: `/lab-dip/update-recipe/remove-lab-dip-info-uuid/by/${item}`,
+                        isOnCloseNeeded: false,
+                    });
+                });
+
+                await Promise.all(deletable_recipe_promises)
+                    .then(() => {
+                        setDeletableRecipe([]);
+                        invalidateQuery();
+                    })
+                    .catch((err) => console.log(err));
+            }
 
 			// * old code* //
 			// let order_entry_updated_promises = [
@@ -290,6 +316,7 @@ export default function Index() {
 									<FormField
 										label={`recipe[${index}].recipe_uuid`}
 										title='Recipe uuid'
+										is_title_needed={false}
 										errors={errors}>
 										<Controller
 											name={`recipe[${index}].recipe_uuid`}
@@ -308,9 +335,14 @@ export default function Index() {
 																	`recipe[${index}].recipe_uuid`
 																)
 														)}
-														onChange={(e) =>
-															onChange(e.value)
-														}
+														onChange={(e) => {
+															handleDeleteRecipe(
+																getValues(
+																	`recipe[${index}].recipe_uuid`
+																)
+															);
+															onChange(e.value);
+														}}
 														isDisabled={
 															rec_uuid ==
 															undefined

@@ -10,8 +10,8 @@ import { useNavigate } from 'react-router-dom';
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
 		useDyeingPlanning();
-	const info = new PageInfo('Planning SNO', url, 'dyeing__planning_sno');
-	const haveAccess = useAccess('dyeing__planning_sno');
+	const info = new PageInfo('Planning Head Office', url, 'dyeing__planning_head_office');
+	const haveAccess = useAccess('dyeing__planning_head_office');
 	const navigate = useNavigate();
 
 
@@ -103,9 +103,9 @@ export default function Index() {
 
 	// Update
 	const handelUpdate = (idx) => {
-		const { uuid } = data[idx];
+		const { week } = data[idx];
 
-		navigate(`/dyeing-and-iron/planning-head-office/update/${uuid}`);
+		navigate(`/dyeing-and-iron/planning-head-office/update/${week}`);
 	};
 
 	// get tabname

@@ -18,12 +18,12 @@ import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import {
-	DYEING_PLANNING_SNO_SCHEMA,
-	DYEING_PLANNING_SNO_NULL,
+	DYEING_PLANNING_SCHEMA,
+	DYEING_PLANNING_NULL,
 } from '@util/Schema';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useDyeingPlanningSNO } from '@/state/Dyeing';
+import { useDyeingPlanning } from '@/state/Dyeing';
 import nanoid from '@/lib/nanoid';
 
 import Header from './Header';
@@ -31,13 +31,13 @@ import Header from './Header';
 // UPDATE IS WORKING
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
-		useDyeingPlanningSNO();
-	const { planning_id, week_id } = useParams();
+		useDyeingPlanning();
+	const { weeks, week_id } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
-	const isUpdate = planning_id !== undefined;
+	const isUpdate = week_id !== undefined;
 	const [orderInfoIds, setOrderInfoIds] = useState({});
 
 	const {
@@ -51,7 +51,7 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
-	} = useRHF(DYEING_PLANNING_SNO_SCHEMA, DYEING_PLANNING_SNO_NULL);
+	} = useRHF(DYEING_PLANNING_SCHEMA, DYEING_PLANNING_NULL);
 
 	// planning_entry
 	const { fields: PlanningEntryField } = useFieldArray({
@@ -64,20 +64,20 @@ export default function Index() {
 		itemName: null,
 	});
 
-	const onClose = () => reset(DYEING_PLANNING_SNO_NULL);
+	const onClose = () => reset(DYEING_PLANNING_NULL);
 
 	// * Fetch initial data
 	isUpdate
 		? useFetchForRhfResetForOrder(
-				`/zipper/planning-details/by/${planning_id}`,
-				planning_id,
+				`/zipper/planning-details/by/${week_id}`,
+				week_id,
 				reset
 			)
 		: useFetchForRhfResetForPlanning(`/zipper/order-planning`, reset);
 
 	// const { value: data } = useFetch('/zipper/order-planning');
 
-	console.log('Form array fields:', PlanningEntryField);
+	// console.log('Form array fields:', PlanningEntryField);
 	// console.log('Form data:', getValues());
 
 	// TODO: Not sure if this is needed. need further checking
@@ -110,6 +110,7 @@ export default function Index() {
 		},
 	};
 
+	// console.log(PlanningEntryField);
 	// TODO: Submit
 	const onSubmit = async (data) => {
 		// * Update
@@ -120,7 +121,7 @@ export default function Index() {
 			};
 
 			await updateData.mutateAsync({
-				url: `/zipper/planning/${data?.uuid}`,
+				url: `/zipper/planning/${data?.week}`,
 				updatedData: planning_data_updated,
 				isOnCloseNeeded: false,
 			});
@@ -133,6 +134,8 @@ export default function Index() {
 					updated_at: GetDateTime(),
 				})
 			);
+
+			// console.log(planning_entry_updated);
 
 			let planning_entry_updated_promises = [
 				...planning_entry_updated.map(async (item) => {
@@ -148,12 +151,10 @@ export default function Index() {
 		}
 
 		// * ADD data
-		var planning_uuid = nanoid();
 		const created_at = GetDateTime();
 		const planning_data = {
 			...data,
-			uuid: planning_uuid,
-			week: week[week_id].value,
+			week: weeks,
 			created_at,
 			created_by: user.uuid,
 		};
@@ -165,10 +166,12 @@ export default function Index() {
 			.map((item) => ({
 				...item,
 				uuid: nanoid(),
-				planning_uuid,
+				planning_week: weeks,
 				remarks: item.plan_entry_remarks,
 				created_at,
 			}));
+
+		
 
 		// console.log('planning_entry_data:', planning_entry);
 
@@ -240,7 +243,6 @@ export default function Index() {
 		setIsSomeChecked(isSomeChecked);
 	};
 
-	console.log(isAllChecked);
 	// Todo: react-table-column
 	const columns = useMemo(
 		() => [

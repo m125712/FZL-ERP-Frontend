@@ -1,115 +1,109 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useAccess, useFetchFunc, useFetchFuncForReport } from "@/hooks";
-import { EditDelete, Transfer } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+// const info = new PageInfo(
+// 	'Assembly RM Stock',
+// 	'/material/stock/by/single-field/slider_assembly',
+// 	'slider__assembly_rm'
+// );
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useAccess } from '@/hooks';
 
-const AddOrUpdate = lazy(() => import("./AddOrUpdate"));
+import { useSliderAssemblyRM } from '@/state/Slider';
+import { EditDelete, Transfer } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
+
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const info = new PageInfo("Assembly RM Stock", "", "slider__assembly_rm");
-	const [sliderAssembly, setSliderAssembly] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+	const { data, isLoading, url } = useSliderAssemblyRM();
+	console.log(data);
+	const info = new PageInfo('Assembly RM Stock', url, 'slider__assembly_rm');
+	const hameAccess = useAccess(info.getTab());
 
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
 
-	const haveAccess = useAccess("slider__assembly_rm");
-
-	useEffect(() => {
-		useFetchFuncForReport(
-			"/material/stock/by/single-field/slider_assembly",
-			setSliderAssembly,
-			setLoading,
-			setError
-		);
-	}, []);
-
-	// section	tape_or_coil_stock_id	quantity	wastage	issued_by
-
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "name",
-				header: "Material Name",
+				accessorKey: 'material_name',
+				header: 'Material Name',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className="capitalize">{info.getValue()}</span>
+					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: "quantity",
-				header: "Stock",
+				accessorKey: 'slider_assembly',
+				header: 'Stock',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "unit",
-				header: "Unit",
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "action",
-				header: "Used",
+				accessorKey: 'action',
+				header: 'Used',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_used"),
-				width: "w-24",
+				hidden: !hameAccess.includes('click_used'),
+				width: 'w-24',
 				cell: (info) => (
 					<Transfer onClick={() => handelUpdate(info.row.index)} />
 				),
 			},
 		],
-		[sliderAssembly]
+		[data]
 	);
 
-	const [updateSliderAssembly, setUpdateSliderAssembly] = useState({
-		id: null,
-		quantity: null,
+	const [updateSliderAssemblyStock, setUpdateSliderAssemblyStock] = useState({
+		uuid: null,
 		unit: null,
+		slider_assembly: null,
 	});
 
 	const handelUpdate = (idx) => {
-		const selected = updateSliderAssembly[idx];
-		setUpdateSliderAssembly((prev) => ({
-			...prev,
-			...selected,
+		setUpdateSliderAssemblyStock((prem) => ({
+			...prem,
+			uuid: data[idx].uuid,
+			unit: data[idx].unit,
+			slider_assembly: data[idx].slider_assembly,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
 
-	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<dim className='container mx-auto px-2 md:px-4'>
 			<ReactTable
 				title={info.getTitle()}
-				data={sliderAssembly}
+				data={data}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 			<Suspense>
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						setSliderAssembly,
-						updateSliderAssembly,
-						setUpdateSliderAssembly,
+						updateSliderAssemblyStock,
+						setUpdateSliderAssemblyStock,
 					}}
 				/>
 			</Suspense>
-		</div>
+		</dim>
 	);
 }

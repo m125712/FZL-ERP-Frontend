@@ -1,27 +1,39 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from "@/hooks";
-import { Input, JoinInput } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from "@util/Schema";
+import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import nanoid from '@/lib/nanoid';
+
+import {
+	useSliderDieCastingRM,
+	useSliderDieCastingRMLog,
+} from '@/state/Slider';
+import { Input, JoinInput } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
+import * as yup from 'yup';
 
 export default function Index({
-	modalId = "",
-	setDieCasting,
-	updateDieCasting = {
-		id: null,
-		quantity: null,
+	modalId = '',
+	updateSliderDieCastingStock = {
+		uuid: null,
 		unit: null,
+		die_casting: null,
 	},
-	setUpdateDieCasting,
+	setUpdateSliderDieCastingStock,
 }) {
 	const { user } = useAuth();
+	const { url, postData } = useSliderDieCastingRM();
+	const { invalidateQuery: invalidateSliderDieCastingRMLog } =
+		useSliderDieCastingRMLog();
+	const MAX_QUANTITY = updateSliderDieCastingStock?.die_casting;
+
 	const schema = {
-		remaining: RM_MATERIAL_USED_SCHEMA.remaining.max(
-			updateDieCasting?.quantity
+		used_quantity: RM_MATERIAL_USED_SCHEMA.remaining.max(
+			updateSliderDieCastingStock?.die_casting
 		),
-		wastage: RM_MATERIAL_USED_SCHEMA.wastage.max(
-			updateDieCasting?.quantity
+		wastage: RM_MATERIAL_USED_SCHEMA.remaining.max(
+			MAX_QUANTITY,
+			'Must be less than or equal ${MAX_QUANTITY}'
 		),
 	};
 
@@ -30,18 +42,12 @@ export default function Index({
 		RM_MATERIAL_USED_NULL
 	);
 
-	useFetchForRhfReset(
-		`/material/stock/${updateDieCasting?.id}`,
-		updateDieCasting?.id,
-		reset
-	);
-
 	const onClose = () => {
-		setUpdateDieCasting((prev) => ({
+		setUpdateSliderDieCastingStock((prev) => ({
 			...prev,
-			id: null,
-			quantity: null,
+			uuid: null,
 			unit: null,
+			die_casting: null,
 		}));
 		reset(RM_MATERIAL_USED_NULL);
 		window[modalId].close();
@@ -50,55 +56,60 @@ export default function Index({
 	const onSubmit = async (data) => {
 		const updatedData = {
 			...data,
-			used_quantity:
-				updateDieCasting?.quantity - data.remaining - data.wastage,
-			quantity: data.remaining,
-			material_stock_id: updateDieCasting?.id,
-			section: "die_casting",
-			issued_by: user?.id,
-			issued_by_name: user?.name,
+
+			material_uuid: updateSliderDieCastingStock?.uuid,
+			section: 'die_casting',
+			created_by: user?.uuid,
+			created_by_name: user?.name,
+			uuid: nanoid(),
 			created_at: GetDateTime(),
 		};
-
-		if (updatedData?.used_quantity < 0) {
-			alert("Wastage can't be greater than remaining");
-			return;
-		}
-
-		await useUpdateFunc({
-			uri: "/material/used",
-			itemId: updateDieCasting?.id,
-			data: data,
-			updatedData: updatedData,
-			setItems: setDieCasting,
-			onClose: onClose,
+		await postData.mutateAsync({
+			url: '/material/used',
+			newData: updatedData,
+			onClose,
 		});
+		invalidateSliderDieCastingRMLog();
 	};
 
 	return (
 		<AddModal
 			id={modalId}
-			title={updateDieCasting?.id !== null && "Material Usage Entry"}
+			title={
+				updateSliderDieCastingStock?.uuid !== null &&
+				'Material Usage Entry'
+			}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
+			isSmall={true}>
 			<JoinInput
-				label="remaining"
-				max={updateDieCasting?.quantity}
-				unit={updateDieCasting?.unit}
-				placeholder={`Max: ${updateDieCasting?.quantity}`}
+				label='used_quantity'
+				sub_label={`Max: ${Number(updateSliderDieCastingStock?.die_casting)}`}
+				unit={updateSliderDieCastingStock?.unit}
+				max={updateSliderDieCastingStock?.die_casting}
+				placeholder={`Max: ${Number(updateSliderDieCastingStock?.die_casting)}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				label="wastage"
-				unit={updateDieCasting?.unit}
-				placeholder={`Max: ${(
-					updateDieCasting?.quantity - watch("remaining")
+				label='wastage'
+				unit={updateSliderDieCastingStock?.unit}
+				sub_label={`Max: ${(updateSliderDieCastingStock?.die_casting -
+					watch('used_quantity') <
+				0
+					? 0
+					: updateSliderDieCastingStock?.die_casting -
+						watch('used_quantity')
+				).toFixed(2)}`}
+				placeholder={`Max: ${(updateSliderDieCastingStock?.die_casting -
+					watch('used_quantity') <
+				0
+					? 0
+					: updateSliderDieCastingStock?.die_casting -
+						watch('used_quantity')
 				).toFixed(2)}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

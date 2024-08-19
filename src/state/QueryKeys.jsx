@@ -320,3 +320,48 @@ export const metalQK = {
 	metalTCRMLog: () => [...metalQK.all(), 'rm-log'],
 	metalTCRMLogByUUID: (uuid) => [...metalQK.metalTCRMLog(), uuid],
 };
+
+// *Slider
+
+export const sliderQK = {
+	all: () => ['slider'],
+	// *Slider Assembly
+
+	// * RM
+	sliderAssemblyRM: () => [...sliderQK.all(), 'rm'],
+	sliderAssemblyRMByUUID: (uuid) => [...sliderQK.sliderAssemblyRM(), uuid],
+
+	// * RM Log
+	sliderAssemblyRMLog: () => [...sliderQK.all(), 'rm-log'],
+	sliderAssemblyRMLogByUUID: (uuid) => [
+		...sliderQK.sliderAssemblyRMLog(),
+		uuid,
+	],
+
+	//* Die Casting
+	// * RM
+	sliderDieCastingRM: () => [...sliderQK.all(), 'rm'],
+	sliderDieCastingRMByUUID: (uuid) => [
+		...sliderQK.sliderDieCastingRM(),
+		uuid,
+	],
+
+	// * RM Log
+	sliderDieCastingRMLog: () => [...sliderQK.all(), 'rm-log'],
+	sliderDieCastingRMLogByUUID: (uuid) => [
+		...sliderQK.sliderDieCastingRMLog(),
+		uuid,
+	],
+
+	//* Coloring
+	// * RM
+	sliderColoringRM: () => [...sliderQK.all(), 'rm'],
+	sliderColoringRMByUUID: (uuid) => [...sliderQK.sliderColoringRM(), uuid],
+
+	// * RM Log
+	sliderColoringRMLog: () => [...sliderQK.all(), 'rm-log'],
+	sliderColoringRMLogByUUID: (uuid) => [
+		...sliderQK.sliderColoringRMLog(),
+		uuid,
+	],
+};

@@ -120,7 +120,7 @@ export default function Index({
 		{ label: 'Vislon Stopper', value: 'v_stopper' },
 		{ label: 'Nylon Stopper', value: 'n_stopper' },
 		{ label: 'Cutting', value: 'cutting' },
-		{ label: 'Delivery QC and Packing', value: 'm_qc_and_packing' },
+		{ label: 'Metal QC and Packing', value: 'm_qc_and_packing' },
 		{ label: 'Nylon QC and Packing', value: 'n_qc_and_packing' },
 		{ label: 'Vislon QC and Packing', value: 'v_qc_and_packing' },
 		{ label: 'Slider QC and Packing', value: 's_qc_and_packing' },
@@ -133,7 +133,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Teeth Coloring Log of ${updateRMLog?.material_name}`}
+			title={`Delivery Log of ${updateRMLog?.material_name}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

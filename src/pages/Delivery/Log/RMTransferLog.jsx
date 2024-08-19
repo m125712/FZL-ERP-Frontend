@@ -32,8 +32,16 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => {
 					return (
-						<span className='capitalize'>
-							{info.getValue()?.replace(/_|n_/g, ' ')}
+						<span>
+							{info.getValue() === 'm_qc_and_packing'
+								? 'Metal'
+								: info.getValue() === 'n_qc_and_packing'
+									? 'Nylon'
+									: info.getValue() === 'v_qc_and_packing'
+										? 'Vislon'
+										: info.getValue() === 's_qc_and_packing'
+											? 'Slider'
+											: 'Other'}
 						</span>
 					);
 				},

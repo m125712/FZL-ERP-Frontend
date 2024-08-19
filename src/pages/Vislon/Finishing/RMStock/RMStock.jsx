@@ -1,4 +1,3 @@
-
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
@@ -54,7 +53,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'v_t_cutting',
-				header: 'cutting',
+				header: 'T Cutting',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

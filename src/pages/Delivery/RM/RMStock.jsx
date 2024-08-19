@@ -30,27 +30,27 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'm_qc_and_packing',
-				header: 'Gapping',
+				header: 'Metal',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 
 			{
 				accessorKey: 'n_qc_and_packing',
-				header: 'T Cleaning',
+				header: 'Nylon',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'v_qc_and_packing',
-				header: 'Sealing',
+				header: 'Vislon',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 
 			{
 				accessorKey: 's_qc_and_packing',
-				header: 'Stopper',
+				header: 'Slider',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

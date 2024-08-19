@@ -40,7 +40,10 @@ export default function Index() {
 	];
 
 	return (
-		<PageContainer title='Purchase Details' breadcrumbs={breadcrumbs}>
+		<PageContainer
+			title='Purchase Details'
+			breadcrumbs={breadcrumbs}
+			className={'space-y-8'}>
 			<Information purchase={data} />
 			<Table {...data} />
 		</PageContainer>

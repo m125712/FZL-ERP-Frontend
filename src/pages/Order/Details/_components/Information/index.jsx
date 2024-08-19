@@ -5,19 +5,22 @@ import ItemDescription from './Item';
 import OrderDescription from './Order';
 import SliderDescription from './Slider';
 import RenderTable from '@/ui/Others/Table/RenderTable';
+import SectionContainer from '@/ui/Others/SectionContainer';
 
 export default function SingleInformation({ order, idx, hasInitialOrder }) {
+	const renderButtons = () => {
+		return [
+			<StatusButton
+				key={'swatch_approval_status'}
+				size='btn-xs md:btn-sm'
+				value={order?.swatch_approval_status}
+			/>,
+		];
+	};
 	return (
-		<div className='flex flex-col rounded-md shadow-md'>
-			<span className='flex items-center gap-2 bg-secondary-content/5 px-4 py-3 text-2xl font-semibold capitalize leading-tight text-primary md:text-3xl'>
-				Information {idx !== undefined && `#${idx + 1}`}
-				<StatusButton
-					size='btn-xs md:btn-sm'
-					value={order?.swatch_approval_status}
-				/>
-			</span>
-			<hr className='border-1 border-secondary-content' />
-
+		<SectionContainer
+			title={`Information ${idx !== undefined && `#${idx + 1}`}`}
+			buttons={renderButtons()}>
 			{hasInitialOrder ? (
 				<div className='flex flex-col items-baseline gap-8 bg-secondary-content/5 text-sm md:flex-row'>
 					<div className='w-full flex-1'>
@@ -45,7 +48,7 @@ export default function SingleInformation({ order, idx, hasInitialOrder }) {
 					</div>
 				</div>
 			)}
-		</div>
+		</SectionContainer>
 	);
 }
 
@@ -160,35 +163,35 @@ export function OrderInformation({ order, handelPdfDownload }) {
 		};
 	};
 
-	return (
-		<div className='container mx-auto pb-8'>
-			<div className='flex flex-col rounded-md bg-white shadow-md md:justify-between'>
-				<span className='flex items-center gap-2 bg-secondary-content/5 px-4 py-3 text-2xl font-semibold capitalize leading-tight text-primary md:text-3xl'>
-					Order
-					<button
-						type='button'
-						className='btn btn-primary btn-sm rounded-badge'
-						onClick={handelPdfDownload}>
-						<PDF className='w-4' /> PDF
-					</button>
-				</span>
-				<hr className='border-1 border-secondary-content' />
-				<div className='flex flex-col gap-4 bg-secondary-content/5 text-sm md:flex-row md:gap-8'>
-					<div className='w-full flex-1'>
-						<RenderTable
-							title='Order Details'
-							items={renderItems().order_details}
-						/>
-					</div>
+	const renderButtons = () => {
+		return [
+			<button
+				key='pdf'
+				type='button'
+				className='btn btn-primary btn-sm rounded-badge'
+				onClick={handelPdfDownload}>
+				<PDF className='w-4' /> PDF
+			</button>,
+		];
+	};
 
-					<div className='w-full flex-1'>
-						<RenderTable
-							title='Buyer Details'
-							items={renderItems().buyer_details}
-						/>
-					</div>
+	return (
+		<SectionContainer title='Order Information' buttons={renderButtons()}>
+			<div className='flex flex-col gap-4 bg-secondary-content/5 text-sm md:flex-row md:gap-8'>
+				<div className='w-full flex-1'>
+					<RenderTable
+						title='Order Details'
+						items={renderItems().order_details}
+					/>
+				</div>
+
+				<div className='w-full flex-1'>
+					<RenderTable
+						title='Buyer Details'
+						items={renderItems().buyer_details}
+					/>
 				</div>
 			</div>
-		</div>
+		</SectionContainer>
 	);
 }

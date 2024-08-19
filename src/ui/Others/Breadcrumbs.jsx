@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Breadcrumbs = ({ items }) => {
 	return (
-		<div className='flex gap-1'>
+		<div className='flex gap-1 text-sm'>
 			<div className='flex items-center'>
 				<Link to='/dashboard' className=''>
 					Dashboard

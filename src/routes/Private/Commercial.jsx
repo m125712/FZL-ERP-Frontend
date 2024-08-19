@@ -26,7 +26,7 @@ export const CommercialRoutes = [
 	{
 		id: 7,
 		name: 'LC Details',
-		path: '/commercial/lc/details/:lc_uuid',
+		path: '/commercial/lc/details/:lc_number',
 		element: LCDetails,
 		type: 'commercial',
 		page_name: 'commercial__lc_details',

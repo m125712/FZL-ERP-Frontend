@@ -1,8 +1,8 @@
-import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
+import { useFetch, useRHF } from '@/hooks';
 import { DynamicField, FormField, ReactSelect, RemoveButton } from '@/ui';
 import { useAuth } from '@context/auth';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useCommercialLC } from '@/state/Commercial';
+import { useCommercialLC, useCommercialLCPIByUUID } from '@/state/Commercial';
 import Header from './Header';
 import { LC_NULL, LC_SCHEMA } from '@util/Schema';
 import { useFieldArray } from 'react-hook-form';
@@ -11,14 +11,22 @@ import { DevTool } from '@hookform/devtools';
 import { format } from 'date-fns';
 import GetDateTime from '@/util/GetDateTime';
 import nanoid from '@/lib/nanoid';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import { UpdateModal } from '@/components/Modal';
 
 export default function Index() {
-	const { url: commercialLcUrl, postData, updateData } = useCommercialLC();
 	const { lc_uuid } = useParams();
+	const { url: commercialLcUrl, postData, updateData } = useCommercialLC();
+	const { data, invalidateQuery } = useCommercialLCPIByUUID(lc_uuid);
+
 	const { user } = useAuth();
 	const navigate = useNavigate();
+
 	const [deletablePi, setDeletablePi] = useState([]);
+	const [updateItem, setUpdateItem] = useState({
+		itemId: null,
+		itemName: null,
+	});
 
 	const isUpdate = lc_uuid !== undefined;
 
@@ -45,18 +53,17 @@ export default function Index() {
 		name: 'pi',
 	});
 
-	useFetchForRhfResetForOrder(
-		`/commercial/lc-pi/by/${lc_uuid}`,
-		lc_uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	const handelPiAppend = () => {
 		PiAppend({
-			uuid: '',
 			lc_uuid,
 		});
 	};
@@ -75,14 +82,9 @@ export default function Index() {
 		ignoreEventsCondition: function () {},
 	});
 
-	useEffect(() => {
-		console.log({
-			deletablePi,
-		});
-	}, [deletablePi]);
-
 	const handleDeletePi = (uuid) => {
-		if (!isUpdate || deletablePi.includes(uuid)) return;
+		if (!isUpdate || !uuid || deletablePi.includes(uuid)) return;
+
 		setDeletablePi((prev) => [...prev, uuid]);
 	};
 
@@ -114,8 +116,6 @@ export default function Index() {
 				updated_at,
 			};
 
-			delete lc_updated_data['pi'];
-
 			// Update LC data
 			await updateData.mutateAsync({
 				url: `${commercialLcUrl}/${data?.uuid}`,
@@ -123,18 +123,22 @@ export default function Index() {
 				isOnCloseNeeded: false,
 			});
 
-			// Delete Pi Numbers
-			const deletable_pi_promises = deletablePi.map(
-				async (item) =>
+			// Update Deletable Pi
+			if (deletablePi.length > 0) {
+				const deletable_pi_promises = deletablePi.map(async (item) => {
 					await updateData.mutateAsync({
 						url: `/commercial/pi-lc-null/${item}`,
 						isOnCloseNeeded: false,
-					})
-			);
+					});
+				});
 
-			await Promise.all(deletable_pi_promises)
-				.then(() => setDeletablePi([]))
-				.catch((err) => console.log(err));
+				await Promise.all(deletable_pi_promises)
+					.then(() => {
+						setDeletablePi([]);
+						invalidateQuery();
+					})
+					.catch((err) => console.log(err));
+			}
 
 			// Update Pi Numbers
 			const pi_numbers = [...data.pi].map((item) => ({
@@ -156,10 +160,10 @@ export default function Index() {
 			await Promise.all(pi_numbers_promise)
 				.then(() => reset(LC_NULL))
 				.then(() => {
+					invalidateQuery();
 					navigate(`/commercial/lc/details/${lc_uuid}`);
 				})
 				.catch((err) => console.log(err));
-
 			return;
 		}
 
@@ -221,6 +225,18 @@ export default function Index() {
 			.catch((err) => console.log(err));
 	};
 
+	const handlePIRemove = (index) => {
+		if (getValues(`pi[${index}].id`) !== undefined) {
+			setUpdateItem({
+				itemId: getValues(`pi[${index}].uuid`),
+				itemName: getValues(`pi[${index}].id`),
+			});
+			window['lc_pi_delete'].showModal();
+		}
+
+		PiRemove(index);
+	};
+
 	return (
 		<div className='container mx-auto mt-4 px-2 pb-2 md:px-4'>
 			<HotKeys {...{ keyMap, handlers }}>
@@ -236,7 +252,6 @@ export default function Index() {
 							getValues,
 							Controller,
 							watch,
-							handleDeletePi,
 						}}
 					/>
 
@@ -271,15 +286,16 @@ export default function Index() {
 														options={pi}
 														value={pi?.find(
 															(inItem) =>
-																inItem.value ==
+																inItem.value ===
 																getValues(
 																	`pi[${index}].uuid`
 																)
 														)}
 														onChange={(e) => {
 															handleDeletePi(
-																piFields[index]
-																	.uuid
+																getValues(
+																	`pi[${index}].uuid`
+																)
 															);
 															onChange(e.value);
 														}}
@@ -297,10 +313,7 @@ export default function Index() {
 									className={`w-16 border-l-4 border-l-primary ${rowClass}`}>
 									<RemoveButton
 										onClick={() => {
-											handleDeletePi(
-												piFields[index].uuid
-											);
-											PiRemove(index);
+											handlePIRemove(index);
 										}}
 										showButton={piFields.length > 1}
 									/>
@@ -318,6 +331,17 @@ export default function Index() {
 					</div>
 				</form>
 			</HotKeys>
+
+			<Suspense>
+				<UpdateModal
+					modalId={'lc_pi_delete'}
+					title={'PI'}
+					updateItem={updateItem}
+					setUpdateItem={setUpdateItem}
+					url={`/commercial/pi-lc-null`}
+					updateData={updateData}
+				/>
+			</Suspense>
 
 			<DevTool control={control} placement='top-left' />
 		</div>

@@ -1153,11 +1153,7 @@ export const LC_SCHEMA = {
 	problematical: BOOLEAN_REQUIRED,
 	epz: BOOLEAN_REQUIRED,
 	remarks: STRING.nullable(),
-	pi: yup.array().of(
-		yup.object().shape({
-			uuid: STRING_REQUIRED,
-		})
-	),
+	pi: yup.array().of(yup.object().shape({})),
 };
 
 export const LC_NULL = {
@@ -1188,7 +1184,7 @@ export const LC_NULL = {
 	remarks: '',
 	pi: [
 		{
-			uuid: '',
+			uuid: null,
 		},
 	],
 };

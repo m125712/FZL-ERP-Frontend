@@ -31,16 +31,12 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'pi_uuid',
+				accessorKey: 'pi_ids',
 				header: 'PI ID',
 				width: 'w-28',
 				enableColumnFilter: false,
 				cell: (info) => {
-					console.log({
-						piIds: info.getValue(),
-					});
-					return <span>1</span>;
-					const piIds = info.getValue();
+					const piIds = info?.getValue();
 					return piIds.map((piId) => (
 						<LinkWithCopy
 							key={piId}

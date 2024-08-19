@@ -98,6 +98,8 @@ export const commercialQK = {
 	// lc
 	lcs: () => [...commercialQK.all(), 'lc'],
 	lc: (uuid) => [...commercialQK.lcs(), uuid],
+	lcPi: (uuid) => [...commercialQK.all(), 'lc-pi', uuid],
+	lcNumber: (uuid) => [...commercialQK.all(), 'lc-number', uuid],
 };
 
 // Material Query Keys

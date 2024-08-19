@@ -1,9 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc, useFetchFuncForReport } from '@/hooks';
-
-import { useDyeingRM } from '@/state/Dyeing';
-
+import { useCommonCoilRM } from '@/state/Common';
 import { EditDelete, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -11,9 +9,10 @@ import { lazy, useEffect, useMemo, useState } from 'react';
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const { data, isLoading, url } = useDyeingRM();
-	const info = new PageInfo('Dyeing/RM', url, 'dyeing__dyeing_and_iron_rm');
+	const { data, isLoading, url } = useCommonCoilRM();
+	const info = new PageInfo('Coil Stock', url, 'common__coil_rm');
 	const haveAccess = useAccess(info.getTab());
+
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -30,7 +29,7 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'dying_and_iron',
+				accessorKey: 'coil_forming',
 				header: 'Stock',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -62,18 +61,18 @@ export default function Index() {
 		[data]
 	);
 
-	const [updateDyeingStock, setUpdateDyeingStock] = useState({
+	const [updateCoilStock, setUpdateCoilStock] = useState({
 		uuid: null,
 		unit: null,
-		dying_and_iron: null,
+		coil_forming: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateDyeingStock((prev) => ({
+		setUpdateCoilStock((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
 			unit: data[idx].unit,
-			dying_and_iron: data[idx].dying_and_iron,
+			coil_forming: data[idx].coil_forming,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -94,8 +93,8 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateDyeingStock,
-						setUpdateDyeingStock,
+						updateCoilStock,
+						setUpdateCoilStock,
 					}}
 				/>
 			</Suspense>

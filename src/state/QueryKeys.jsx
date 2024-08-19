@@ -84,6 +84,12 @@ export const commercialQK = {
 	// pi
 	pis: () => [...commercialQK.all(), 'pi'],
 	pi: (uuid) => [...commercialQK.pis(), uuid],
+	piByOrderInfo: (orderId, partyId, marketingId) => [
+		...commercialQK.pis(),
+		orderId,
+		partyId,
+		marketingId,
+	],
 
 	// pi-entry
 	piEntries: () => [...commercialQK.all(), 'pi-entry'],
@@ -161,6 +167,13 @@ export const commonQK = {
 	// * tapeToCoil
 	tapeToCoil: () => [...commonQK.all(), 'tape/to-coil'],
 	tapeToCoilByUUID: (uuid) => [...commonQK.tapeToCoil(), uuid],
+	// * tapeRM
+	tapeRM: () => [...commonQK.all(), 'tape/rm'],
+	tapeRMByUUID: (uuid) => [...commonQK.tapeRM(), uuid],
+
+	// * tapeRMLog
+	tapeRMLog: () => [...commonQK.all(), 'tape/rm-log'],
+	tapeRMLogByUUID: (uuid) => [...commonQK.tapeRMLog(), uuid],
 	// * coilSFG
 	coilSFG: () => [...commonQK.all(), 'coil/SFG'],
 	coilSFGByUUID: (uuid) => [...commonQK.coilSFG(), uuid],
@@ -169,9 +182,15 @@ export const commonQK = {
 	coilProduction: () => [...commonQK.all(), 'coil/production'],
 	coilProductionByUUID: (uuid) => [...commonQK.coilProduction(), uuid],
 
-	// * rm
-	coilRM: () => [...commonQK.all(), 'rm'],
+	// * coilRM
+	coilRM: () => [...commonQK.all(), 'coil/rm'],
 	coilRMByUUID: (uuid) => [...commonQK.coilRM(), uuid],
+	// * coilRMLog
+	coilRMLog: () => [...commonQK.all(), 'coil/rm-log'],
+	coilRMLogByUUID: (uuid) => [...commonQK.coilRMLog(), uuid],
+	// * materialUsed
+	materialUsed: () => [...commonQK.all(), 'material/used'],
+	materialUsedByUUID: (uuid) => [...commonQK.materialUsed(), uuid],
 };
 
 // * LabDip * //
@@ -184,6 +203,14 @@ export const labDipQK = {
 	// info
 	info: () => [...labDipQK.all(), 'info'],
 	infoByUUID: (uuid) => [...labDipQK.info(), uuid],
+
+	// * RM
+	LabDipRM: () => [...labDipQK.all(), 'rm'],
+	LabDipRMByUUID: (uuid) => [...labDipQK.LabDipRM(), uuid],
+
+	// * RM Log
+	LabDipRMLog: () => [...labDipQK.all(), 'rm-log'],
+	LabDipRMLogByUUID: (uuid) => [...labDipQK.LabDipRMLog(), uuid],
 };
 
 // * Dyeing

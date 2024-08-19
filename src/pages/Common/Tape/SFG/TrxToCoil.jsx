@@ -2,7 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useCommonTapeSFG } from '@/state/Common';
+import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -23,6 +23,8 @@ export default function Index({
 }) {
 	const { user } = useAuth();
 	const { postData } = useCommonTapeSFG();
+	const { invalidateQuery: invalidateCommonTapeToCoil } =
+		useCommonTapeToCoil();
 	const schema = {
 		...TAPE_TO_COIL_TRX_SCHEMA,
 
@@ -42,6 +44,7 @@ export default function Index({
 			...prev,
 			uuid: null,
 			trx_quantity: null,
+			quantity: null,
 		}));
 		reset(COIL_STOCK_NULL);
 		window[modalId].close();
@@ -61,6 +64,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateCommonTapeToCoil();
 	};
 
 	return (
@@ -72,6 +76,7 @@ export default function Index({
 			isSmall={true}>
 			<JoinInput
 				label='trx_quantity'
+				sub_label={`Max: ${updateTapeProd?.quantity}`}
 				unit='KG'
 				placeholder={`Max: ${updateTapeProd?.quantity}`}
 				{...{ register, errors }}

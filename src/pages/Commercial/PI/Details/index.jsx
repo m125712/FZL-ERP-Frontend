@@ -1,29 +1,31 @@
-import { useFetchFunc } from "@/hooks";
-import { useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
-import Information from "./Information";
-import Table from "./Table";
+import { useFetch } from '@/hooks';
+import { useEffect } from 'react';
+import { Navigate, useParams } from 'react-router-dom';
+import Information from './Information';
+import Table from './Table';
 
 export default function Index() {
-	const { pi_id } = useParams();
+	const { pi_uuid } = useParams();
 
-	const [pi, setPi] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+	const { value: data, loading } = useFetch(
+		`/commercial/pi/details/${pi_uuid}`,
+		[pi_uuid]
+	);
 
 	useEffect(() => {
-		document.title = `PI: ${pi_id}`;
-		useFetchFunc(`/pi/details/by/${pi_id}`, setPi, setLoading, setError);
-	}, [pi_id]);
+		document.title = `PI: ${pi_uuid}`;
+	}, [pi_uuid]);
 
-	if (!pi) return <Navigate to="/not-found" />;
 	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+		return <span className='loading loading-dots loading-lg z-50' />;
 
+	if (!data) return <Navigate to='/not-found' />;
+
+	// return <>Hello</>;
 	return (
-		<div className="container mx-auto my-2 w-full space-y-2 px-2 md:px-4">
-			<Information pi={pi} />
-			<Table pi={pi.pi_entry} />
+		<div className='container mx-auto my-2 w-full space-y-2 px-2 md:px-4'>
+			<Information pi={data} />
+			<Table pi={data?.pi_entry} />
 		</div>
 	);
 }

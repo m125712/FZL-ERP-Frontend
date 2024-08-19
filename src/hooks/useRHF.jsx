@@ -1,11 +1,11 @@
-import { yupResolver } from "@hookform/resolvers/yup";
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
 	Controller,
 	useController,
 	useFieldArray,
 	useForm,
-} from "react-hook-form";
-import { object } from "yup";
+} from 'react-hook-form';
+import { object } from 'yup';
 
 export default function useRHF(schema = {}, defaultValues = {}) {
 	const form = useForm({
@@ -21,6 +21,9 @@ export default function useRHF(schema = {}, defaultValues = {}) {
 		getValues,
 		setValue,
 		watch,
+		trigger,
+		unregister,
+		getFieldState,
 	} = form;
 
 	return {
@@ -33,7 +36,10 @@ export default function useRHF(schema = {}, defaultValues = {}) {
 		reset,
 		register,
 		setValue,
+		trigger,
+		unregister,
 		useController,
 		useFieldArray,
+		getFieldState,
 	};
 }

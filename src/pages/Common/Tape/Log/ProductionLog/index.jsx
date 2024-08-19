@@ -2,7 +2,7 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc } from '@/hooks';
-import { useCommonTapeProduction } from '@/state/Common';
+import { useCommonTapeProduction, useCommonTapeSFG } from '@/state/Common';
 import { EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -14,9 +14,8 @@ export default function ProductionLog() {
 		'tape-or-coil-prod-section/tape'
 	);
 	const { data, isLoading, url, deleteData } = useCommonTapeProduction();
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 	const haveAccess = useAccess('common__tape_log');
-
-	//console.log(data);
 
 	const columns = useMemo(
 		() => [
@@ -124,6 +123,7 @@ export default function ProductionLog() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
+	invalidateCommonTapeSFG();
 
 	// if (error) return <h1>Error:{error}</h1>;
 

@@ -2,9 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-
-import { useDyeingRM } from '@/state/Dyeing';
-
+import { useCommonCoilRM, useCommonCoilRMLog } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
@@ -12,26 +10,22 @@ import * as yup from 'yup';
 
 export default function Index({
 	modalId = '',
-	updateDyeingStock = {
+	updateCoilStock = {
 		uuid: null,
 		unit: null,
-		dying_and_iron: null,
+		coil_forming: null,
 	},
-	setUpdateDyeingStock,
+	setUpdateCoilStock,
 }) {
+	const { url, postData } = useCommonCoilRM();
+	const { invalidateQuery: invalidateCoilRMLog } = useCommonCoilRMLog();
+	const MAX_QUANTITY = updateCoilStock?.coil_forming;
 	const { user } = useAuth();
-	const { url, postData } = useDyeingRM();
-	//const { invalidateQuery: invalidateDyeingRMLog } = useDyeingRMLog();
-	const MAX_QUANTITY = updateDyeingStock?.dying_and_iron;
-
 	const schema = {
 		used_quantity: RM_MATERIAL_USED_SCHEMA.remaining.max(
-			updateDyeingStock?.dying_and_iron
+			updateCoilStock?.coil_forming
 		),
-		wastage: RM_MATERIAL_USED_SCHEMA.remaining.max(
-			MAX_QUANTITY,
-			'Must be less than or equal ${MAX_QUANTITY}'
-		),
+		wastage: RM_MATERIAL_USED_SCHEMA.remaining.max(MAX_QUANTITY),
 	};
 
 	const { register, handleSubmit, errors, reset, watch } = useRHF(
@@ -40,11 +34,11 @@ export default function Index({
 	);
 
 	const onClose = () => {
-		setUpdateDyeingStock((prev) => ({
+		setUpdateCoilStock((prev) => ({
 			...prev,
 			uuid: null,
 			unit: null,
-			dying_and_iron: null,
+			coil_forming: null,
 		}));
 		reset(RM_MATERIAL_USED_NULL);
 		window[modalId].close();
@@ -54,50 +48,51 @@ export default function Index({
 		const updatedData = {
 			...data,
 
-			material_uuid: updateDyeingStock?.uuid,
-			section: 'dying_and_iron',
+			material_uuid: updateCoilStock?.uuid,
+			section: 'coil_forming',
 			created_by: user?.uuid,
 			created_by_name: user?.name,
 			uuid: nanoid(),
 			created_at: GetDateTime(),
 		};
+
 		await postData.mutateAsync({
 			url: '/material/used',
 			newData: updatedData,
 			onClose,
 		});
-		//invalidateDyeingRMLog();
+		invalidateCoilRMLog();
 	};
 
 	return (
 		<AddModal
 			id={modalId}
-			title={updateDyeingStock?.uuid !== null && 'Material Usage Entry'}
+			title={updateCoilStock?.uuid !== null && 'Material Usage Entry'}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
 			<JoinInput
 				label='used_quantity'
-				sub_label={`Max: ${Number(updateDyeingStock?.dying_and_iron)}`}
-				unit={updateDyeingStock?.unit}
-				max={updateDyeingStock?.dying_and_iron}
-				placeholder={`Max: ${Number(updateDyeingStock?.dying_and_iron)}`}
+				sub_label={`Max: ${updateCoilStock?.coil_forming}`}
+				unit={updateCoilStock?.unit}
+				max={updateCoilStock?.coil_forming}
+				placeholder={`Max: ${updateCoilStock?.coil_forming}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
 				label='wastage'
-				unit={updateDyeingStock?.unit}
-				sub_label={`Max: ${(updateDyeingStock?.dying_and_iron -
+				sub_label={`Max: ${(updateCoilStock?.coil_forming -
 					watch('used_quantity') <
 				0
 					? 0
-					: updateDyeingStock?.dying_and_iron - watch('used_quantity')
+					: updateCoilStock?.coil_forming - watch('used_quantity')
 				).toFixed(2)}`}
-				placeholder={`Max: ${(updateDyeingStock?.dying_and_iron -
+				unit={updateCoilStock?.unit}
+				placeholder={`Max: ${(updateCoilStock?.coil_forming -
 					watch('used_quantity') <
 				0
 					? 0
-					: updateDyeingStock?.dying_and_iron - watch('used_quantity')
+					: updateCoilStock?.coil_forming - watch('used_quantity')
 				).toFixed(2)}`}
 				{...{ register, errors }}
 			/>

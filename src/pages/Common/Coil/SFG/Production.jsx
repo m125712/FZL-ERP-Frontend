@@ -2,13 +2,13 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useRHF, useUpdateFunc } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useCommonCoilSFG } from '@/state/Common';
+import { useCommonCoilProduction, useCommonCoilSFG } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
 	COIL_PROD_NULL,
 	COIL_PROD_SCHEMA,
-	NUMBER_REQUIRED,
+	NUMBER_DOUBLE_REQUIRED,
 } from '@util/Schema';
 
 export default function Index({
@@ -25,15 +25,18 @@ export default function Index({
 }) {
 	const { user } = useAuth();
 	const { postData } = useCommonCoilSFG();
+	const { invalidateQuery: invalidateCommonCoilProduction } =
+		useCommonCoilProduction();
 
 	const MAX_PRODUCTION_QTY = updateCoilProd?.trx_quantity_in_coil;
+
 	const schema = {
 		...COIL_PROD_SCHEMA,
-		production_quantity: NUMBER_REQUIRED.max(MAX_PRODUCTION_QTY),
-		wastage: NUMBER_REQUIRED.max(MAX_PRODUCTION_QTY),
+		production_quantity: NUMBER_DOUBLE_REQUIRED.max(MAX_PRODUCTION_QTY),
+		wastage: NUMBER_DOUBLE_REQUIRED.max(MAX_PRODUCTION_QTY),
 	};
 
-	const { register, handleSubmit, errors, reset } = useRHF(
+	const { register, handleSubmit, errors, reset, watch } = useRHF(
 		schema,
 		COIL_PROD_NULL
 	);
@@ -54,7 +57,6 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		const section = 'coil';
-		console.log(data);
 		// Update item
 		const updatedData = {
 			...data,
@@ -69,6 +71,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateCommonCoilProduction();
 	};
 
 	return (
@@ -84,10 +87,18 @@ export default function Index({
 			isSmall={true}>
 			<JoinInput
 				label='production_quantity'
+				sub_label={`Max: ${MAX_PRODUCTION_QTY}`}
+				placeholder={`Max: ${MAX_PRODUCTION_QTY}`}
 				unit='KG'
 				{...{ register, errors }}
 			/>
-			<JoinInput label='wastage' unit='KG' {...{ register, errors }} />
+			<JoinInput
+				label='wastage'
+				sub_label={`Max: ${MAX_PRODUCTION_QTY - watch('production_quantity') < 0 ? 0 : MAX_PRODUCTION_QTY - watch('production_quantity')}`}
+				placeholder={`Max: ${MAX_PRODUCTION_QTY - watch('production_quantity') < 0 ? 0 : MAX_PRODUCTION_QTY - watch('production_quantity')}`}
+				unit='KG'
+				{...{ register, errors }}
+			/>
 			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);

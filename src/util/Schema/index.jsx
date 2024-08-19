@@ -751,7 +751,7 @@ export const TAPE_STOCK_ADD_NULL = {
 // Tape Production
 export const TAPE_PROD_SCHEMA = {
 	production_quantity: NUMBER_REQUIRED.moreThan(0),
-	wastage: NUMBER.moreThan(0),
+	wastage: NUMBER,
 	remarks: STRING.nullable(),
 };
 
@@ -774,6 +774,7 @@ export const TAPE_TO_COIL_TRX_NULL = {
 	tape_coil_stock_uuid: '',
 	created_by: '',
 	trx_quantity: '',
+	quantity: '',
 	wastage: '',
 	remarks: '',
 };
@@ -800,7 +801,7 @@ export const TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA = {
 };
 
 export const TAPE_OR_COIL_PRODUCTION_LOG_NULL = {
-	id: null,
+	uuid: null,
 	type_of_zipper: null,
 	tape_or_coil_stock_id: null,
 	prod_quantity: null,
@@ -810,8 +811,8 @@ export const TAPE_OR_COIL_PRODUCTION_LOG_NULL = {
 
 // Coil Production
 export const COIL_PROD_SCHEMA = {
-	production_quantity: NUMBER_REQUIRED.moreThan(0),
-	wastage: NUMBER.moreThan(0),
+	production_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0),
+	wastage: NUMBER_DOUBLE.moreThan(0),
 	remarks: STRING.nullable(),
 };
 
@@ -832,12 +833,13 @@ export const COIL_STOCK_SCHEMA = {
 };
 
 export const COIL_STOCK_NULL = {
-	id: null,
+	uuid: null,
 	order_entry_id: null,
 	tape_or_coil_stock_id: null,
 	quantity: '',
 	remarks: '',
 	zipper_number: null,
+	trx_quantity: '',
 };
 
 // RM Material Used
@@ -850,13 +852,18 @@ export const RM_MATERIAL_USED_SCHEMA = {
 };
 
 export const RM_MATERIAL_USED_NULL = {
-	id: null,
+	uuid: null,
 	material_stock_id: null,
+	used_quantity: '',
 	section: '',
 	remaining: '',
 	wastage: '',
 	issued_by: '',
 	remarks: '',
+	tape_making: '',
+	coil_forming: '',
+	dying_and_iron: '',
+	lab_dip: '',
 };
 
 export const RM_MATERIAL_USED_EDIT_SCHEMA = {
@@ -866,7 +873,7 @@ export const RM_MATERIAL_USED_EDIT_SCHEMA = {
 };
 
 export const RM_MATERIAL_USED_EDIT_NULL = {
-	id: null,
+	uuid: null,
 	material_stock_id: null,
 	section: '',
 	used_quantity: '',
@@ -1053,10 +1060,10 @@ export const CHALLAN_NULL = {
 // Commercial
 // PI
 export const PI_SCHEMA = {
-	lc_uuid: STRING_REQUIRED,
+	lc_uuid: STRING.nullable(),
 	marketing_uuid: STRING_REQUIRED,
 	party_uuid: STRING_REQUIRED,
-	order_info_ids: JSON_STRING_REQUIRED,
+	order_info_uuids: JSON_STRING_REQUIRED,
 	merchandiser_uuid: STRING_REQUIRED,
 	factory_uuid: STRING_REQUIRED,
 	bank_uuid: STRING_REQUIRED,
@@ -1065,8 +1072,9 @@ export const PI_SCHEMA = {
 	remarks: STRING.nullable(),
 	pi_entry: yup.array().of(
 		yup.object().shape({
+			is_checked: BOOLEAN,
 			sfg_uuid: STRING_REQUIRED,
-			pi_uuid: STRING_REQUIRED,
+			pi_uuid: STRING,
 			max_quantity: NUMBER,
 			pi_quantity: NUMBER_REQUIRED.max(
 				yup.ref('max_quantity'),
@@ -1081,7 +1089,7 @@ export const PI_NULL = {
 	uuid: null,
 	marketing_uuid: '',
 	party_uuid: '',
-	order_info_ids: null,
+	order_info_uuids: null,
 	merchandiser_uuid: '',
 	factory_uuid: '',
 	bank_uuid: '',
@@ -1090,6 +1098,7 @@ export const PI_NULL = {
 	remarks: '',
 	pi_entry: [
 		{
+			is_checked: false,
 			sfg_uuid: '',
 			pi_uuid: '',
 			max_quantity: null,

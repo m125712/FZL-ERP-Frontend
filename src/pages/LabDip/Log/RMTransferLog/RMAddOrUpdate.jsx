@@ -2,6 +2,8 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
+import { useLabDipRM } from '@/state/LabDip';
+
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -11,19 +13,20 @@ import {
 
 export default function Index({
 	modalId = '',
-	updateTapeLog = {
+	updateLabDipRMLog = {
 		uuid: null,
 		section: null,
 		used_quantity: null,
-		tape_making: null,
+		lab_dip: null,
 	},
-	setUpdateTapeLog,
+	setUpdateLabDipRMLog,
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
-	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
+	const { invalidateQuery: invalidateLabDipRM } = useLabDipRM();
+
 	const MAX_QUANTITY =
-		Number(updateTapeLog?.tape_making) +
-		Number(updateTapeLog?.used_quantity);
+		Number(updateLabDipRMLog?.lab_dip) +
+		Number(updateLabDipRMLog?.used_quantity);
 	const schema = {
 		...RM_MATERIAL_USED_EDIT_SCHEMA,
 		used_quantity:
@@ -42,18 +45,18 @@ export default function Index({
 	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
-		`${url}/${updateTapeLog?.uuid}`,
-		updateTapeLog?.uuid,
+		`${url}/${updateLabDipRMLog?.uuid}`,
+		updateLabDipRMLog?.uuid,
 		reset
 	);
 
 	const onClose = () => {
-		setUpdateTapeLog((prev) => ({
+		setUpdateLabDipRMLog((prev) => ({
 			...prev,
 			uuid: null,
 			section: null,
 			used_quantity: null,
-			tape_making: null,
+			lab_dip: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
@@ -61,20 +64,20 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateTapeLog?.uuid !== null) {
+		if (updateLabDipRMLog?.uuid !== null) {
 			const updatedData = {
 				...data,
-				material_name: updateTapeLog?.material_name,
+				material_name: updateLabDipRMLog?.material_name,
 				updated_at: GetDateTime(),
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateTapeLog?.uuid}`,
-				uuid: updateTapeLog?.uuid,
+				url: `${url}/${updateLabDipRMLog?.uuid}`,
+				uuid: updateLabDipRMLog?.uuid,
 				updatedData,
 				onClose,
 			});
-			invalidateCommonTapeRM();
+			invalidateLabDipRM();
 
 			return;
 		}
@@ -110,12 +113,13 @@ export default function Index({
 		{ label: 'Die Casting', value: 'die_casting' },
 		{ label: 'Slider Assembly', value: 'slider_assembly' },
 		{ label: 'Coloring', value: 'coloring' },
+		{ label: 'Lab Dip', value: 'lab_dip' },
 	];
 
 	return (
 		<AddModal
 			id={modalId}
-			title={`Teeth Coloring Log of ${updateTapeLog?.material_name}`}
+			title={`Teeth Coloring Log of ${updateLabDipRMLog?.material_name}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
@@ -140,14 +144,14 @@ export default function Index({
 			</FormField>
 			<Input
 				label='used_quantity'
-				sub_label={`Max: ${Number(updateTapeLog?.tape_making) + Number(updateTapeLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateTapeLog?.tape_making) + Number(updateTapeLog?.used_quantity)}`}
+				sub_label={`Max: ${Number(updateLabDipRMLog?.lab_dip) + Number(updateLabDipRMLog?.used_quantity)}`}
+				placeholder={`Max: ${Number(updateLabDipRMLog?.lab_dip) + Number(updateLabDipRMLog?.used_quantity)}`}
 				{...{ register, errors }}
 			/>
 			<Input
 				label='wastage'
-				sub_label={`Max: ${Number(updateTapeLog?.tape_making) + Number(updateTapeLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateTapeLog?.tape_making) + Number(updateTapeLog?.used_quantity)}`}
+				sub_label={`Max: ${Number(updateLabDipRMLog?.lab_dip) + Number(updateLabDipRMLog?.used_quantity)}`}
+				placeholder={`Max: ${Number(updateLabDipRMLog?.lab_dip) + Number(updateLabDipRMLog?.used_quantity)}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

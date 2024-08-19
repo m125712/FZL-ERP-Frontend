@@ -1,7 +1,7 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import { useCommonTapeToCoil } from '@/state/Common';
+import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { TAPE_TO_COIL_TRX_NULL, TAPE_TO_COIL_TRX_SCHEMA } from '@util/Schema';
@@ -15,24 +15,19 @@ export default function Index({
 		tape_prod: null,
 		coil_stock: null,
 		trx_quantity: null,
+		quantity: null,
 	},
 	setUpdateTapeLog,
 }) {
 	const { url, updateData } = useCommonTapeToCoil();
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 
 	const MAX_QUANTITY =
-		Number(updateTapeLog?.tape_prod) + Number(updateTapeLog?.trx_quantity);
-	const MIN_QUANTITY =
-		Number(updateTapeLog?.tape_prod) -
-			Number(updateTapeLog?.production_quantity) <
-		0
-			? Number(updateTapeLog?.production_quantity)
-			: 0;
+		Number(updateTapeLog?.quantity) + Number(updateTapeLog?.trx_quantity);
+
 	const schema = {
 		...TAPE_TO_COIL_TRX_SCHEMA,
-		trx_quantity: TAPE_TO_COIL_TRX_SCHEMA.trx_quantity
-			.min(MIN_QUANTITY)
-			.max(MAX_QUANTITY),
+		trx_quantity: TAPE_TO_COIL_TRX_SCHEMA.trx_quantity.max(MAX_QUANTITY),
 	};
 
 	const { register, handleSubmit, errors, reset } = useRHF(
@@ -71,7 +66,7 @@ export default function Index({
 				updatedData,
 				onClose,
 			});
-
+			invalidateCommonTapeSFG();
 			return;
 		}
 	};
@@ -85,9 +80,9 @@ export default function Index({
 			isSmall={true}>
 			<JoinInput
 				label='trx_quantity'
-				sub_label={`Max: ${MAX_QUANTITY}, Min: ${MIN_QUANTITY}`}
+				sub_label={`Max: ${Number(updateTapeLog?.quantity) + Number(updateTapeLog?.trx_quantity)}`}
 				unit='KG'
-				placeholder={`Max: ${MAX_QUANTITY}, Min: ${MIN_QUANTITY}`}
+				placeholder={`Max: ${Number(updateTapeLog?.quantity) + Number(updateTapeLog?.trx_quantity)}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

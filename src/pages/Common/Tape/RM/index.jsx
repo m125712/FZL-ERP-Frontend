@@ -1,9 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc, useFetchFuncForReport } from '@/hooks';
-
-import { useDyeingRM } from '@/state/Dyeing';
-
+import { useCommonCoilRM, useCommonTapeRM } from '@/state/Common';
 import { EditDelete, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -11,8 +9,8 @@ import { lazy, useEffect, useMemo, useState } from 'react';
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const { data, isLoading, url } = useDyeingRM();
-	const info = new PageInfo('Dyeing/RM', url, 'dyeing__dyeing_and_iron_rm');
+	const { data, isLoading, url, deleteData } = useCommonTapeRM();
+	const info = new PageInfo('Tape RM', url, 'common__tape_rm');
 	const haveAccess = useAccess(info.getTab());
 
 	useEffect(() => {
@@ -30,7 +28,7 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'dying_and_iron',
+				accessorKey: 'tape_making',
 				header: 'Stock',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -62,18 +60,18 @@ export default function Index() {
 		[data]
 	);
 
-	const [updateDyeingStock, setUpdateDyeingStock] = useState({
+	const [updateTapeStock, setUpdateTapeStock] = useState({
 		uuid: null,
 		unit: null,
-		dying_and_iron: null,
+		tape_making: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateDyeingStock((prev) => ({
+		setUpdateTapeStock((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
 			unit: data[idx].unit,
-			dying_and_iron: data[idx].dying_and_iron,
+			tape_making: data[idx].tape_making,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -94,8 +92,8 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateDyeingStock,
-						setUpdateDyeingStock,
+						updateTapeStock,
+						setUpdateTapeStock,
 					}}
 				/>
 			</Suspense>

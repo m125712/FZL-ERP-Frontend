@@ -1,19 +1,19 @@
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
-import { useCommonCoilRM, useCommonCoilRMLog } from '@/state/Common';
+import { useAccess } from '@/hooks';
+
+import { useLabDipRM, useLabDipRMLog } from '@/state/LabDip';
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo, useState } from 'react';
 import RMAddOrUpdate from './RMAddOrUpdate';
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useCommonCoilRMLog();
-	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
-	const info = new PageInfo('RM Coil Log', url, 'common__coil_log');
+	const { data, isLoading, url, deleteData } = useLabDipRMLog();
+	const info = new PageInfo('RM LabDip Log', url, 'lab_dip__log');
 	const haveAccess = useAccess(info.getTab());
-
+	const { invalidateQuery: invalidateLabDipRM } = useLabDipRM();
 	const columns = useMemo(
 		() => [
 			{
@@ -92,7 +92,7 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_rm'),
+				hidden: !haveAccess.includes('update'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -100,7 +100,7 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('click_delete_rm')}
+							showDelete={haveAccess.includes('delete')}
 						/>
 					);
 				},
@@ -110,18 +110,17 @@ export default function Index() {
 	);
 
 	// Update
-	const [updateCoilLog, setUpdateCoilLog] = useState({
+	const [updateLabDipRMLog, setUpdateLabDipRMLog] = useState({
 		uuid: null,
 		section: null,
 		material_name: null,
-		teeth_assembling_and_polishing: null,
-		plating_and_iron: null,
+		lab_dip: null,
 		used_quantity: null,
 	});
 
 	const handelUpdate = (idx) => {
 		const selected = data[idx];
-		setUpdateCoilLog((prev) => ({
+		setUpdateLabDipRMLog((prev) => ({
 			...prev,
 			...selected,
 		}));
@@ -144,7 +143,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateCommonCoilRM();
+	invalidateLabDipRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -162,8 +161,8 @@ export default function Index() {
 				<RMAddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateCoilLog,
-						setUpdateCoilLog,
+						updateLabDipRMLog,
+						setUpdateLabDipRMLog,
 					}}
 				/>
 			</Suspense>

@@ -38,6 +38,30 @@ export const useCommonTapeToCoilByUUID = (uuid) =>
 		url: `/zipper/tape-to-coil${uuid}`,
 	});
 
+// * RM * //
+export const useCommonTapeRM = () =>
+	createGlobalState({
+		queryKey: commonQK.tapeRM(),
+		url: `/material/stock/by/single-field/tape_making`,
+	});
+export const useCommonTapeRMByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.tapeRM(uuid),
+		url: `/material/stock/by/single-field/tape_making/${uuid}`,
+	});
+
+//* RM LOG *//
+export const useCommonTapeRMLog = () =>
+	createGlobalState({
+		queryKey: commonQK.tapeRMLog(),
+		url: `/material/used/by/tape_making`,
+	});
+export const useCommonTapeRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.tapeRMLog(uuid),
+		url: `/material/used/by/tape_making${uuid}`,
+	});
+
 // * COIL * //
 // * SFG * //
 export const useCommonCoilSFG = () =>
@@ -73,4 +97,26 @@ export const useCommonCoilRMByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: commonQK.coilRM(uuid),
 		url: `/material/stock/by/single-field/coil_forming${uuid}`,
+	});
+//* RM LOG *//
+export const useCommonCoilRMLog = () =>
+	createGlobalState({
+		queryKey: commonQK.coilRMLog(),
+		url: `/material/used/by/coil_forming`,
+	});
+export const useCommonCoilRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.coilRMLog(uuid),
+		url: `/material/used/by/coil_forming${uuid}`,
+	});
+//* MATERIAL USED *//
+export const useCommonMaterialUsed = () =>
+	createGlobalState({
+		queryKey: commonQK.materialUsed(),
+		url: `/material/used`,
+	});
+export const useCommonMaterialUsedByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.materialUsed(uuid),
+		url: `/material/used${uuid}`,
 	});

@@ -3,7 +3,7 @@ import { defaultFetch } from '@/hooks';
 import { api } from '@/lib/api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-export default function createGlobalState({ queryKey, url }) {
+export default function createGlobalState({ queryKey, url, enabled = true }) {
 	const queryClient = useQueryClient();
 
 	const { data, isError, isLoading } = useQuery({
@@ -14,6 +14,7 @@ export default function createGlobalState({ queryKey, url }) {
 		refetchOnWindowFocus: false,
 		refetchOnReconnect: false,
 		refetchIntervalInBackground: false,
+		enabled,
 	});
 
 	const postData = useMutation({

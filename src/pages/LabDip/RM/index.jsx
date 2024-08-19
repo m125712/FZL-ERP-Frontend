@@ -1,7 +1,8 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc, useFetchFuncForReport } from '@/hooks';
-import { useCommonCoilRM } from '@/state/Common';
+import { useAccess } from '@/hooks';
+
+import { useLabDipRM } from '@/state/LabDip';
 import { EditDelete, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -9,16 +10,9 @@ import { lazy, useEffect, useMemo, useState } from 'react';
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const { data, isLoading, url } = useCommonCoilRM();
-	const info = new PageInfo('Coil Stock', url, 'common__coil_rm');
+	const { data, isLoading, url } = useLabDipRM();
+	const info = new PageInfo('Lab Dip/RM', url, 'lab_dip__rm');
 	const haveAccess = useAccess(info.getTab());
-	console.log(data);
-	//   "uuid": "0UEnxvp0dRSNN3O",
-	//   "material_uuid": "0UEnxvp0dRSNN3O",
-	//   "material_name": "Tape Material",
-	//   "stock": "950.0000",
-	//   "tape_making": "50.0000",
-	//   "remarks": null
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -35,7 +29,7 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'stock',
+				accessorKey: 'lab_dip',
 				header: 'Stock',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -66,25 +60,19 @@ export default function Index() {
 		],
 		[data]
 	);
-	//   "uuid": "0UEnxvp0dRSNN3O",
-	//   "material_uuid": "0UEnxvp0dRSNN3O",
-	//   "material_name": "Tape Material",
-	//   "stock": "950.0000",
-	//   "tape_making": "50.0000",
-	//   "remarks": null
 
-	const [updateCoilStock, setUpdateCoilStock] = useState({
+	const [updateLabDipStock, setUpdateLabDipStock] = useState({
 		uuid: null,
-		stock: null,
 		unit: null,
+		lab_dip: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateCoilStock((prev) => ({
+		setUpdateLabDipStock((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
-			stock: data[idx].quantity,
 			unit: data[idx].unit,
+			lab_dip: data[idx].lab_dip,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -105,8 +93,8 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateCoilStock,
-						setUpdateCoilStock,
+						updateLabDipStock,
+						setUpdateLabDipStock,
 					}}
 				/>
 			</Suspense>

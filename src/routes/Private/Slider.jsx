@@ -77,7 +77,13 @@ export const SliderRoutes = [
 		element: DieCastingLog,
 		type: ['slider', 'die-casting'],
 		page_name: 'slider__die_casting_log',
-		actions: ['read', 'update', 'delete'],
+		actions: [
+			'read',
+			'update',
+			'delete',
+			'click_update_rm_order',
+			'click_delete_rm_order',
+		],
 	},
 	{
 		id: 24,

@@ -13,16 +13,25 @@ export const useDyeingSwatchByUUID = (uuid) =>
 		queryKey: dyeingQK.swatchByUUID(uuid),
 		url: `/zipper/sfg-swatch/${uuid}`,
 	});
-
-// * Planning_sno
-export const useDyeingPlanning = () =>
+//* RM
+export const useDyeingRM = () =>
 	createGlobalState({
-		queryKey: dyeingQK.planning(),
-		url: '/zipper/planning',
+		queryKey: dyeingQK.dyeingRM(),
+		url: `/material/stock/by/single-field/dying_and_iron`,
 	});
-
-export const useDyeingPlanningByUUID = (uuid) =>
+export const useDyeingRMByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: dyeingQK.planningByUUID(uuid),
-		url: `/zipper/planning/${uuid}`,
+		queryKey: dyeingQK.dyeingRM(uuid),
+		url: `/material/stock/by/single-field/dying_and_iron/${uuid}`,
+	});
+//* RM Log
+export const useDyeingRMLog = () =>
+	createGlobalState({
+		queryKey: dyeingQK.dyeingRMLog(),
+		url: `/material/used/by/dying_and_iron`,
+	});
+export const useDyeingRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: dyeingQK.dyeingRMLog(uuid),
+		url: `/material/used/by/dying_and_iron${uuid}`,
 	});

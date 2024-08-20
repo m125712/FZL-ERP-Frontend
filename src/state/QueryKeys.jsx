@@ -225,21 +225,29 @@ export const labDipQK = {
 export const dyeingQK = {
 	all: () => ['dyeing'],
 
-	// swatch
+	// * RM
+	dyeingRM: () => [...dyeingQK.all(), 'rm'],
+	dyeingRMByUUID: (uuid) => [...dyeingQK.dyeingRM(), uuid],
+
+	// * RM Log
+	dyeingRMLog: () => [...dyeingQK.all(), 'rm-log'],
+	dyeingRMLogByUUID: (uuid) => [...dyeingQK.dyeingRMLog(), uuid],
+
+	// * swatch
 	swatch: () => [...dyeingQK.all(), 'swatch'],
 	swatchByUUID: (uuid) => [...dyeingQK.swatch(), uuid],
 
-	// planning
+	// * planning
 	planning: () => [...dyeingQK.all(), 'planning'],
 	planningByUUID: (uuid) => [...dyeingQK.planning(), uuid],
 };
 
-// *Nylon
+// * Nylon
 export const nylonQK = {
 	all: () => ['nylon'],
 
 	// * Metallic Finishing
-	//* RM
+	// * RM
 
 	nylonMetallicFinishingRM: () => [...nylonQK.all(), 'rm'],
 	nylonMetallicFinishingRMByUUID: (uuid) => [

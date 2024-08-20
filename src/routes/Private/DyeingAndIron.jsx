@@ -9,17 +9,27 @@ const DyeingSFG = lazy(() => import('@/pages/DyeingAndIron/SFG'));
 const DyeingLog = lazy(() => import('@/pages/DyeingAndIron/Log'));
 const DyeingSwatch = lazy(() => import('@/pages/DyeingAndIron/Swatch'));
 const DyeingPlanning = lazy(() => import('@/pages/DyeingAndIron/Planning'));
+
+// * SNO
 const DyeingPlanningSNO = lazy(
 	() => import('@/pages/DyeingAndIron/PlanningSNO')
 );
 const DyeingPlanningSNOEntry = lazy(
 	() => import('@/pages/DyeingAndIron/PlanningSNO/Entry')
 );
+const DyeingPlanningSNODetails = lazy(
+	() => import('@/pages/DyeingAndIron/PlanningSNO/Details')
+);
+
+// * Head office
 const DyeingPlanningHeadOffice = lazy(
 	() => import('@/pages/DyeingAndIron/PlanningHeadOffice')
 );
 const DyeingPlanningHeadOfficeEntry = lazy(
 	() => import('@/pages/DyeingAndIron/PlanningHeadOffice/Entry')
+);
+const DyeingPlanningHeadOfficeDetails = lazy(
+	() => import('@/pages/DyeingAndIron/PlanningHeadOffice/Details')
 );
 
 export const DyeingAndIronRoutes = [
@@ -106,6 +116,16 @@ export const DyeingAndIronRoutes = [
 		actions: ['create', 'read', 'update'],
 	},
 	{
+		id: 287,
+		name: 'Planning SNO Details',
+		path: '/dyeing-and-iron/planning-sno/details/:week_id',
+		element: DyeingPlanningSNODetails,
+		type: 'dyeing',
+		hidden: true,
+		page_name: 'dyeing__planning_sno_entry_details',
+		actions: ['read'],
+	},
+	{
 		id: 285,
 		name: 'Planning Head Office',
 		path: '/dyeing-and-iron/planning-head-office',
@@ -133,5 +153,15 @@ export const DyeingAndIronRoutes = [
 		hidden: true,
 		page_name: 'dyeing__planning_head_office_entry_update',
 		actions: ['create', 'read', 'update'],
+	},
+	{
+		id: 287,
+		name: 'Planning Head Office Details',
+		path: '/dyeing-and-iron/planning-head-office/details/:week_id',
+		element: DyeingPlanningHeadOfficeDetails,
+		type: 'dyeing',
+		hidden: true,
+		page_name: 'dyeing__planning_head_office_details',
+		actions: ['read'],
 	},
 ];

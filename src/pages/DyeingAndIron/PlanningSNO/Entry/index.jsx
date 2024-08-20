@@ -17,10 +17,7 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import {
-	DYEING_PLANNING_SCHEMA,
-	DYEING_PLANNING_NULL,
-} from '@util/Schema';
+import { DYEING_PLANNING_SCHEMA, DYEING_PLANNING_NULL } from '@util/Schema';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useDyeingPlanning } from '@/state/Dyeing';
@@ -120,32 +117,45 @@ export default function Index() {
 				updated_at: GetDateTime(),
 			};
 
-			await updateData.mutateAsync({
-				url: `/zipper/planning/${data?.week}`,
-				updatedData: planning_data_updated,
-				isOnCloseNeeded: false,
-			});
-
-			const planning_entry_updated = [...data?.planning_entry].map(
-				(item) => ({
+			const planning_entry_updated = [...data?.planning_entry]
+				.filter((item) => item.is_checked)
+				.map((item) => ({
 					...item,
-					remarks: item.plan_entry_remarks,
+					sno_remarks: item.sno_remarks,
 					uuid: item.planning_entry_uuid,
 					updated_at: GetDateTime(),
-				})
-			);
+				}));
 
-			// console.log(planning_entry_updated);
+			if (planning_entry_updated.length === 0) {
+				alert('Select at least one item to proceed.');
+			} else {
+				await updateData.mutateAsync({
+					url: `/zipper/planning/${data?.week}`,
+					updatedData: planning_data_updated,
+					isOnCloseNeeded: false,
+				});
 
-			let planning_entry_updated_promises = [
-				...planning_entry_updated.map(async (item) => {
-					await updateData.mutateAsync({
-						url: `/zipper/planning-entry/${item.uuid}`,
-						updatedData: item,
-						isOnCloseNeeded: false,
-					});
-				}),
-			];
+				let planning_entry_updated_promises = [
+					...planning_entry_updated.map(async (item) => {
+						await updateData.mutateAsync({
+							url: `/zipper/planning-entry/${item.uuid}`,
+							updatedData: item,
+							isOnCloseNeeded: false,
+						});
+					}),
+				];
+
+				await Promise.all(planning_entry_updated_promises)
+					.then(() => reset(Object.assign({}, DYEING_PLANNING_NULL)))
+					.then(
+						navigate(
+							`/dyeing-and-iron/planning-sno/details/${week_id}`
+						)
+					)
+					.catch((err) => console.log(err));
+			}
+
+			// navigate(`/dyeing-and-iron/planning-sno/details/${weeks}`);
 
 			return;
 		}
@@ -167,11 +177,9 @@ export default function Index() {
 				...item,
 				uuid: nanoid(),
 				planning_week: weeks,
-				remarks: item.plan_entry_remarks,
+				sno_remarks: item.sno_remarks,
 				created_at,
 			}));
-
-		
 
 		// console.log('planning_entry_data:', planning_entry);
 
@@ -195,11 +203,14 @@ export default function Index() {
 				),
 			];
 
-			// await Promise.all(promises)
-			// 	.then(() => reset(Object.assign({}, PI_NULL)))
-			// 	.then(() => navigate(`/commercial/pi`))
-			// 	.catch((err) => console.log(err));
+			await Promise.all(promises)
+				.then(() => reset(Object.assign({}, DYEING_PLANNING_NULL)))
+				.then(
+					navigate(`/dyeing-and-iron/planning-sno/details/${weeks}`)
+				)
+				.catch((err) => console.log(err));
 		}
+		return;
 	};
 
 	// Check if order_number is valid
@@ -250,7 +261,7 @@ export default function Index() {
 				accessorKey: 'checkbox',
 				header: () => (
 					<CheckBoxWithoutLabel
-					className='bg-white'
+						className='bg-white'
 						label='is_all_checked'
 						checked={isAllChecked}
 						onChange={(e) => {
@@ -313,29 +324,43 @@ export default function Index() {
 				header: 'Order QTY',
 				enableColumnFilter: true,
 				enableSorting: true,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'balance_sno_quantity',
+				header: 'Balanced SNO',
+				enableColumnFilter: true,
+				enableSorting: true,
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'sno_qty',
 				header: 'SNO QTY',
 				enableColumnFilter: false,
 				enableSorting: false,
-				cell: (info) => (
-					<Input
-						label={`planning_entry[${info.row.index}].sno_quantity`}
-						is_title_needed='false'
-						height='h-8'
-						{...{ register, errors }}
-					/>
-				),
+				cell: (info) => {
+					const idx = info.row.index;
+					const dynamicerror =
+						errors?.planning_entry?.[idx]?.sno_quantity;
+					return (
+						<Input
+							label={`planning_entry[${info.row.index}].sno_quantity`}
+							is_title_needed='false'
+							height='h-8'
+							dynamicerror={dynamicerror}
+							{...{ register, errors }}
+						/>
+					);
+				},
 			},
 			{
-				accessorKey: 'remarks',
+				accessorKey: 'sno_remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
 				enableSorting: false,
 				cell: (info) => (
 					<Textarea
-						label={`planning_entry[${info.row.index}].plan_entry_remarks`}
+						label={`planning_entry[${info.row.index}].sno_remarks`}
 						is_title_needed='false'
 						height='h-8'
 						{...{ register, errors }}
@@ -343,7 +368,7 @@ export default function Index() {
 				),
 			},
 		],
-		[isAllChecked]
+		[isAllChecked, isSomeChecked, PlanningEntryField, register, errors]
 	);
 
 	return (
@@ -364,13 +389,12 @@ export default function Index() {
 				/>
 
 				{/* todo: react-table  */}
-				
-					<ReactTable
-						data={PlanningEntryField}
-						columns={columns}
-						extraClass='py-2'
-					/>
 
+				<ReactTable
+					data={PlanningEntryField}
+					columns={columns}
+					extraClass='py-2'
+				/>
 
 				<div className='modal-action'>
 					<button

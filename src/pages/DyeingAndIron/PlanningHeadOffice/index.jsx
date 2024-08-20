@@ -10,10 +10,13 @@ import { useNavigate } from 'react-router-dom';
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
 		useDyeingPlanning();
-	const info = new PageInfo('Planning Head Office', url, 'dyeing__planning_head_office');
+	const info = new PageInfo(
+		'Planning Head Office',
+		url,
+		'dyeing__planning_head_office'
+	);
 	const haveAccess = useAccess('dyeing__planning_head_office');
 	const navigate = useNavigate();
-
 
 	const columns = useMemo(
 		() => [
@@ -22,7 +25,13 @@ export default function Index() {
 				accessorKey: 'week',
 				header: 'Week',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<LinkWithCopy
+						title={info.getValue()}
+						id={info.getValue()}
+						uri='/dyeing-and-iron/planning-head-office/details'
+					/>
+				),
 			},
 			{
 				accessorKey: 'add_actions',
@@ -35,14 +44,14 @@ export default function Index() {
 					const { week } = info.row.original;
 					return (
 						<button
-								className='btn btn-primary btn-xs'
-								onClick={() =>
-									navigate(
-										`/dyeing-and-iron/planning-head-office/entry/${week}`
-									)
-								}>
-								Add
-							</button>
+							className='btn btn-primary btn-xs'
+							onClick={() =>
+								navigate(
+									`/dyeing-and-iron/planning-head-office/entry/${week}`
+								)
+							}>
+							Add
+						</button>
 					);
 				},
 			},
@@ -87,19 +96,22 @@ export default function Index() {
 				enableSorting: false,
 				hidden: !haveAccess.includes('update'),
 				width: 'w-24',
-				cell: (info) => <EditDelete
-							idx={info.row.index}
-							handelUpdate={handelUpdate}
-							showEdit={haveAccess.includes('update')}
-							showDelete={false}
-						/>,
+				cell: (info) => (
+					<EditDelete
+						idx={info.row.index}
+						handelUpdate={handelUpdate}
+						showEdit={haveAccess.includes('update')}
+						showDelete={false}
+					/>
+				),
 			},
 		],
 		[data]
 	);
 
 	// Add
-	const handelAdd = () => navigate('/dyeing-and-iron/planning-head-office/entry');
+	const handelAdd = () =>
+		navigate('/dyeing-and-iron/planning-head-office/entry');
 
 	// Update
 	const handelUpdate = (idx) => {

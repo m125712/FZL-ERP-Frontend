@@ -23,7 +23,13 @@ export default function Index() {
 				accessorKey: 'week',
 				header: 'Week',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<LinkWithCopy
+						title={info.getValue()}
+						id={info.getValue()}
+						uri='/dyeing-and-iron/planning-sno/details'
+					/>
+				),
 			},
 			{
 				accessorKey: 'add_actions',
@@ -36,14 +42,14 @@ export default function Index() {
 					const { week } = info.row.original;
 					return (
 						<button
-								className='btn btn-primary btn-xs'
-								onClick={() =>
-									navigate(
-										`/dyeing-and-iron/planning-sno/entry/${week}`
-									)
-								}>
-								Add
-							</button>
+							className='btn btn-primary btn-xs'
+							onClick={() =>
+								navigate(
+									`/dyeing-and-iron/planning-sno/entry/${week}`
+								)
+							}>
+							Add
+						</button>
 					);
 				},
 			},
@@ -88,12 +94,14 @@ export default function Index() {
 				enableSorting: false,
 				hidden: !haveAccess.includes('update'),
 				width: 'w-24',
-				cell: (info) => <EditDelete
-							idx={info.row.index}
-							handelUpdate={handelUpdate}
-							showEdit={haveAccess.includes('update')}
-							showDelete={false}
-						/>,
+				cell: (info) => (
+					<EditDelete
+						idx={info.row.index}
+						handelUpdate={handelUpdate}
+						showEdit={haveAccess.includes('update')}
+						showDelete={false}
+					/>
+				),
 			},
 		],
 		[data]

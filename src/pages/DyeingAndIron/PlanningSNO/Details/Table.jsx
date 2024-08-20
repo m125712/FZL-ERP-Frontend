@@ -3,8 +3,8 @@ import ReactTable from '@/components/Table';
 import { DateTime } from '@/ui';
 import { useMemo } from 'react';
 
-export default function Index({ recipe_entry }) {
-	// console.log(recipe_entry);
+export default function Index({ planning_entry }) {
+	console.log(planning_entry);
 
 	const columns = useMemo(
 		() => [
@@ -15,22 +15,52 @@ export default function Index({ recipe_entry }) {
 			// 	cell: (info) => info.getValue(),
 			// },
 			{
+				accessorKey: 'order_number',
+				header: 'O/N',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'item_description',
+				header: 'Item Description',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'style',
+				header: 'Style',
+				enableColumnFilter: false,
+			},
+			{
 				accessorKey: 'color',
 				header: 'Color',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'quantity',
-				header: 'Quantity (Liter)',
+				accessorKey: 'size',
+				header: 'Size (CM)',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'order_quantity',
+				header: 'Order Quantity',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'remarks',
+				accessorKey: 'balance_sno_quantity',
+				header: 'Balanced SNO',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'sno_quantity',
+				header: 'SNO Quantity',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'sno_remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_at',
@@ -52,13 +82,13 @@ export default function Index({ recipe_entry }) {
 				},
 			},
 		],
-		[recipe_entry]
+		[planning_entry]
 	);
 
 	return (
 		<ReactTable
 			title='Details'
-			data={recipe_entry}
+			data={planning_entry}
 			columns={columns}
 			extraClass='py-2'
 			showTitleOnly

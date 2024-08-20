@@ -27,11 +27,11 @@ export const useNylonMetallicFinishingRMLogByUUID = (uuid) =>
 // * Order Against RM Log
 export const useOrderAgainstNylonMetallicFinishingRMLog = () =>
 	createGlobalState({
-		queryKey: nylonQK.orderAgainstNylonMetallicFinishingRMLog(),
-		url: '/zipper/material-trx-against-order/by/n_t_cutting,n_stopper',
+		queryKey: nylonQK.orderAgainstNylonFinishingRMLog(),
+		url: '/zipper/material-trx-against-order/by/n_t_cutting',
 	});
 export const useOrderAgainstNylonMetallicFinishingRMLogByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: nylonQK.orderAgainstNylonMetallicFinishingRMLogByUUID(uuid),
-		url: `/zipper/material-trx-against-order/by/n_t_cutting,n_stopper/${uuid}`,
+		queryKey: nylonQK.orderAgainstNylonFinishingRMLogByUUID(uuid),
+		url: `/zipper/material-trx-against-order/by/n_t_cutting${uuid}`,
 	});

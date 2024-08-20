@@ -2,22 +2,18 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc } from '@/hooks';
-import {
-	useCommonDeliveryRMLog,
-	useCommonOrderAgainstDeliveryRMLog,
-} from '@/state/Common';
+
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo, useState } from 'react';
 
+import { useOrderAgainstDeliveryRMLog } from '@/state/Delivery';
 import { useMaterialInfo } from '@/state/Store';
 import { SFG_TRX_NULL } from '@/util/Schema';
 import RMAddOrUpdate from './AddOrUpdate';
-import { useOrderAgainstDeliveryRMLog } from '@/state/Delivery';
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } =
-		useOrderAgainstDeliveryRMLog;
+	const { data, isLoading, url, deleteData } = useOrderAgainstDeliveryRMLog;
 
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	console.log(data);

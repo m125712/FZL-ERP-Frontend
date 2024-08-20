@@ -63,10 +63,10 @@ export const useVislonFinishingRMLogByUUID = (uuid) =>
 export const useOrderAgainstVislonFinishingRMLog = () =>
 	createGlobalState({
 		queryKey: vislonQK.orderAgainstVislonFinishingRMLog(),
-		url: '/zipper/material-trx-against-order/by/v_gapping,v_teeth_cleaning,v_sealing,v_t_cutting,v_stopper',
+		url: '/zipper/material-trx-against-order/by/v_gapping',
 	});
 export const useOrderAgainstVislonFinishingRMLogByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: vislonQK.orderAgainstVislonFinishingRMLogByUUID(uuid),
-		url: `/zipper/material-trx-against-order/by/v_gapping,v_teeth_cleaning,v_sealing,v_t_cutting,v_stopper/${uuid}`,
+		url: `/zipper/material-trx-against-order/by/v_gapping${uuid}`,
 	});

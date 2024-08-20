@@ -62,12 +62,12 @@ export const useMetalTCRMLogByUUID = (uuid) =>
 export const useOrderAgainstMetalTCRMLog = () =>
 	createGlobalState({
 		queryKey: metalQK.orderAgainstMetalTCRMLog(),
-		url: '/zipper/material-trx-against-order/by/teeth_assembling_and_polishing,plating_and_iron',
+		url: '/zipper/material-trx-against-order/by/teeth_assembling_and_polishing',
 	});
 export const useOrderAgainstMetalTCRMLogByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: metalQK.orderAgainstMetalTCRMLogByUUID(uuid),
-		url: `/zipper/material-trx-against-order/by/teeth_assembling_and_polishing,plating_and_iron${uuid}`,
+		url: `/zipper/material-trx-against-order/by/teeth_assembling_and_polishing${uuid}`,
 	});
 //* Finishing
 // * RM
@@ -96,10 +96,10 @@ export const useMetalFinishingRMLogByUUID = (uuid) =>
 export const useOrderAgainstMetalFinishingRMLog = () =>
 	createGlobalState({
 		queryKey: metalQK.orderAgainstMetalFinishingRMLog(),
-		url: '/zipper/material-trx-against-order/by/m_gapping,m_teeth_cleaning,m_sealing,m_stopper',
+		url: '/zipper/material-trx-against-order/by/m_gapping',
 	});
 export const useOrderAgainstMetalFinishingRMLogByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: metalQK.orderAgainstMetalFinishingRMLogByUUID(uuid),
-		url: `/zipper/material-trx-against-order/by/m_gapping,m_teeth_cleaning,m_sealing,m_stopper/${uuid}`,
+		url: `/zipper/material-trx-against-order/by/m_gapping${uuid}`,
 	});

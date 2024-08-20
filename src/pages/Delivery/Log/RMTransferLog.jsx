@@ -3,18 +3,19 @@ import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 
-import { useSliderColoringRM, useSliderColoringRMLog } from '@/state/Slider';
+import { useDeliveryRM, useDeliveryRMLog } from '@/state/Delivery';
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo, useState } from 'react';
 import RMAddOrUpdate from './RMAddOrUpdate';
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useSliderColoringRMLog();
-	const info = new PageInfo('RM Coloring Log', url, 'slider__coloring_log');
+	const { data, isLoading, url, deleteData } = useDeliveryRMLog();
+	const info = new PageInfo(' RM Used Log', url, 'delivery__log');
 	const haveAccess = useAccess(info.getTab());
-	const { invalidateQuery: invalidateSliderColoringRM } =
-		useSliderColoringRM();
+	const { invalidateQuery: invalidateRM } = useDeliveryRM();
+	console.log(url);
+	console.log(data);
 	const columns = useMemo(
 		() => [
 			{
@@ -31,8 +32,16 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => {
 					return (
-						<span className='capitalize'>
-							{info.getValue()?.replace(/_|n_/g, ' ')}
+						<span>
+							{info.getValue() === 'm_qc_and_packing'
+								? 'Metal'
+								: info.getValue() === 'n_qc_and_packing'
+									? 'Nylon'
+									: info.getValue() === 'v_qc_and_packing'
+										? 'Vislon'
+										: info.getValue() === 's_qc_and_packing'
+											? 'Slider'
+											: 'Other'}
 						</span>
 					);
 				},
@@ -93,7 +102,7 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_rm'),
+				hidden: !haveAccess.includes('update'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -101,7 +110,7 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('click_delete_rm')}
+							showDelete={haveAccess.includes('delete')}
 						/>
 					);
 				},
@@ -109,19 +118,25 @@ export default function Index() {
 		],
 		[data]
 	);
-
+	// { label: 'Delivery QC and Packing', value: 'm_qc_and_packing' },
+	// 		{ label: 'Nylon QC and Packing', value: 'n_qc_and_packing' },
+	// 		{ label: 'Vislon QC and Packing', value: 'v_qc_and_packing' },
+	// 		{ label: 'Slider QC and Packing', value: 's_qc_and_packing' },
 	// Update
-	const [updateSliderColoringRMLog, setUpdateSliderColoringRMLog] = useState({
+	const [updateRMLog, setUpdateRMLog] = useState({
 		uuid: null,
 		section: null,
 		material_name: null,
-		coloring: null,
+		m_qc_and_packing: null,
+		n_qc_and_packing: null,
+		v_qc_and_packing: null,
+		s_qc_and_packing: null,
 		used_quantity: null,
 	});
 
 	const handelUpdate = (idx) => {
 		const selected = data[idx];
-		setUpdateSliderColoringRMLog((prev) => ({
+		setUpdateRMLog((prev) => ({
 			...prev,
 			...selected,
 		}));
@@ -144,7 +159,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateSliderColoringRM();
+	invalidateRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -162,8 +177,8 @@ export default function Index() {
 				<RMAddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateSliderColoringRMLog,
-						setUpdateSliderColoringRMLog,
+						updateRMLog,
+						setUpdateRMLog,
 					}}
 				/>
 			</Suspense>

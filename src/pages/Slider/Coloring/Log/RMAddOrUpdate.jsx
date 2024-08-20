@@ -1,34 +1,39 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from "@/hooks";
-import { FormField, Input, JoinInput, ReactSelect } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
+import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
+import { useSliderColoringRM } from '@/state/Slider';
+
+import { FormField, Input, ReactSelect } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
 import {
 	RM_MATERIAL_USED_EDIT_NULL,
 	RM_MATERIAL_USED_EDIT_SCHEMA,
-} from "@util/Schema";
+} from '@util/Schema';
 
 export default function Index({
-	modalId = "",
-	setColoring,
-	updateColoring = {
-		id: null,
+	modalId = '',
+	updateSliderColoringRMLog = {
+		uuid: null,
 		section: null,
-		material_name: null,
-		coloring: null,
 		used_quantity: null,
-		unit: null,
+		coloring: null,
 	},
-	setUpdateColoring,
+	setUpdateSliderColoringRMLog,
 }) {
-	const { user } = useAuth();
+	const { url, updateData } = useCommonMaterialUsed();
+	const { invalidateQuery: invalidateSliderColoringRM } =
+		useSliderColoringRM();
+
 	const MAX_QUANTITY =
-		updateColoring?.coloring + updateColoring?.used_quantity;
+		Number(updateSliderColoringRMLog?.coloring) +
+		Number(updateSliderColoringRMLog?.used_quantity);
 	const schema = {
 		...RM_MATERIAL_USED_EDIT_SCHEMA,
 		used_quantity:
 			RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
 	};
+
 	const {
 		register,
 		handleSubmit,
@@ -37,23 +42,22 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
+		wa,
 	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
-		`material/used/${updateColoring?.id}`,
-		updateColoring?.id,
+		`${url}/${updateSliderColoringRMLog?.uuid}`,
+		updateSliderColoringRMLog?.uuid,
 		reset
 	);
 
 	const onClose = () => {
-		setUpdateColoring((prev) => ({
+		setUpdateSliderColoringRMLog((prev) => ({
 			...prev,
-			id: null,
+			uuid: null,
 			section: null,
-			material_name: null,
-			coloring: null,
 			used_quantity: null,
-			unit: null,
+			coloring: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
@@ -61,92 +65,97 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateColoring?.id !== null) {
+		if (updateSliderColoringRMLog?.uuid !== null) {
 			const updatedData = {
 				...data,
-				material_name: updateColoring?.material_name,
+				material_name: updateSliderColoringRMLog?.material_name,
 				updated_at: GetDateTime(),
 			};
 
-			await useUpdateFunc({
-				uri: `/material/used/${
-					updateColoring?.id
-				}/${updateColoring?.material_name.replace(/[#&/]/g, "")}`,
-				itemId: updateColoring?.id,
-				data: data,
-				updatedData: updatedData,
-				setItems: setColoring,
-				onClose: onClose,
+			await updateData.mutateAsync({
+				url: `${url}/${updateSliderColoringRMLog?.uuid}`,
+				uuid: updateSliderColoringRMLog?.uuid,
+				updatedData,
+				onClose,
 			});
+			invalidateSliderColoringRM();
 
 			return;
 		}
 	};
 
 	const transactionArea = [
-		{ label: "Tape Making", value: "tape_making" },
-		{ label: "Coil Forming", value: "coil_forming" },
-		{ label: "Dying and Iron", value: "dying_and_iron" },
-		{ label: "Metal Gapping", value: "m_gapping" },
-		{ label: "Vislon Gapping", value: "v_gapping" },
-		{ label: "Vislon Teeth Molding", value: "v_teeth_molding" },
-		{ label: "Metal Teeth Molding", value: "m_teeth_molding" },
+		{ label: 'Tape Making', value: 'tape_making' },
+		{ label: 'Coil Forming', value: 'coil_forming' },
+		{ label: 'Dying and Iron', value: 'dying_and_iron' },
+		{ label: 'Metal Gapping', value: 'm_gapping' },
+		{ label: 'Vislon Gapping', value: 'v_gapping' },
+		{ label: 'Vislon Teeth Molding', value: 'v_teeth_molding' },
+		{ label: 'Metal Teeth Molding', value: 'm_teeth_molding' },
 		{
-			label: "Teeth Assembling and Polishing",
-			value: "teeth_assembling_and_polishing",
+			label: 'Teeth Assembling and Polishing',
+			value: 'teeth_assembling_and_polishing',
 		},
-		{ label: "Metal Teeth Cleaning", value: "m_teeth_cleaning" },
-		{ label: "Vislon Teeth Cleaning", value: "v_teeth_cleaning" },
-		{ label: "Plating and Iron", value: "plating_and_iron" },
-		{ label: "Metal Sealing", value: "m_sealing" },
-		{ label: "Vislon Sealing", value: "v_sealing" },
-		{ label: "Nylon T Cutting", value: "n_t_cutting" },
-		{ label: "Vislon T Cutting", value: "v_t_cutting" },
-		{ label: "Metal Stopper", value: "m_stopper" },
-		{ label: "Vislon Stopper", value: "v_stopper" },
-		{ label: "Nylon Stopper", value: "n_stopper" },
-		{ label: "Cutting", value: "cutting" },
-		{ label: "QC and Packing", value: "qc_and_packing" },
-		{ label: "Die Casting", value: "die_casting" },
-		{ label: "Slider Assembly", value: "slider_assembly" },
-		{ label: "Coloring", value: "coloring" },
+		{ label: 'Metal Teeth Cleaning', value: 'm_teeth_cleaning' },
+		{ label: 'Vislon Teeth Cleaning', value: 'v_teeth_cleaning' },
+		{ label: 'Plating and Iron', value: 'plating_and_iron' },
+		{ label: 'Metal Sealing', value: 'm_sealing' },
+		{ label: 'Vislon Sealing', value: 'v_sealing' },
+		{ label: 'Nylon T Cutting', value: 'n_t_cutting' },
+		{ label: 'Vislon T Cutting', value: 'v_t_cutting' },
+		{ label: 'Metal Stopper', value: 'm_stopper' },
+		{ label: 'Vislon Stopper', value: 'v_stopper' },
+		{ label: 'Nylon Stopper', value: 'n_stopper' },
+		{ label: 'Cutting', value: 'cutting' },
+		{ label: 'Metal QC and Packing', value: 'm_qc_and_packing' },
+		{ label: 'Nylon QC and Packing', value: 'n_qc_and_packing' },
+		{ label: 'Vislon QC and Packing', value: 'v_qc_and_packing' },
+		{ label: 'Slider QC and Packing', value: 's_qc_and_packing' },
+		{ label: 'Die Casting', value: 'die_casting' },
+		{ label: 'Slider Assembly', value: 'slider_assembly' },
+		{ label: 'Coloring', value: 'coloring' },
+		{ label: 'Lab Dip', value: 'lab_dip' },
 	];
 
 	return (
 		<AddModal
 			id={modalId}
-			title={`Teeth Molding Log of ${updateColoring?.material_name}`}
+			title={`Coloring RM Log of ${updateSliderColoringRMLog?.material_name}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
-			<FormField label="section" title="Section" errors={errors}>
+			isSmall={true}>
+			<FormField label='section' title='Section' errors={errors}>
 				<Controller
-					name={"section"}
+					name={'section'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder="Select Section"
+								placeholder='Select Section'
 								options={transactionArea}
 								value={transactionArea?.find(
-									(item) => item.value == getValues("section")
+									(item) => item.value == getValues('section')
 								)}
 								onChange={(e) => onChange(e.value)}
-								isDisabled={updateColoring?.id !== null}
+								isDisabled='1'
 							/>
 						);
 					}}
 				/>
 			</FormField>
-			<JoinInput
-				label="used_quantity"
-				sub_label={`Max: ${MAX_QUANTITY}`}
-				unit={updateColoring?.unit}
-				placeholder={`Max: ${MAX_QUANTITY}`}
+			<Input
+				label='used_quantity'
+				sub_label={`Max: ${Number(updateSliderColoringRMLog?.coloring) + Number(updateSliderColoringRMLog?.used_quantity)}`}
+				placeholder={`Max: ${Number(updateSliderColoringRMLog?.coloring) + Number(updateSliderColoringRMLog?.used_quantity)}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input
+				label='wastage'
+				sub_label={`Max: ${Number(updateSliderColoringRMLog?.coloring) + Number(updateSliderColoringRMLog?.used_quantity)}`}
+				placeholder={`Max: ${Number(updateSliderColoringRMLog?.coloring) + Number(updateSliderColoringRMLog?.used_quantity)}`}
+				{...{ register, errors }}
+			/>
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

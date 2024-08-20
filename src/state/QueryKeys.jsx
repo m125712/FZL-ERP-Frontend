@@ -5,6 +5,7 @@
  **/
 
 import { all } from 'axios';
+import { useVislonFinishingRM } from './Vislon';
 
 export const orderQK = {
 	all: () => ['order'],
@@ -241,15 +242,142 @@ export const nylonQK = {
 	//* RM
 
 	nylonMetallicFinishingRM: () => [...nylonQK.all(), 'rm'],
-	nylonMetallicFinishingByUUID: (uuid) => [
+	nylonMetallicFinishingRMByUUID: (uuid) => [
 		...nylonQK.nylonMetallicFinishingRM(),
 		uuid,
 	],
 
 	//* RM Log
-	nylonMetallicFinishingLog: () => [...nylonQK.all(), 'rm-log'],
+	nylonMetallicFinishingRMLog: () => [...nylonQK.all(), 'rm-log'],
 	nylonMetallicFinishingLogByUUID: (uuid) => [
 		...nylonQK.nylonMetallicFinishingRMLog(),
 		uuid,
 	],
+};
+// *Vislon
+export const vislonQK = {
+	all: () => ['vislon'],
+	//* Teeth Molding
+
+	// * RM
+	VislonTMRM: () => [...vislonQK.all(), 'tm-rm'],
+	VislonTMRMByUUID: (uuid) => [...vislonQK.VislonTMRM(), uuid],
+
+	// * RM Log
+	VislonTMRMLog: () => [...vislonQK.all(), 'tm-rm-log'],
+	VislonTMRMLogByUUID: (uuid) => [...vislonQK.VislonTMRMLog(), uuid],
+
+	// * Finishing
+
+	//*RM
+	VislonFinishingRM: () => [...vislonQK.all(), 'fin-rm'],
+	VislonFinishingRMByUUID: (uuid) => [
+		...vislonQK.VislonFinishingRM(),
+		'rm',
+		uuid,
+	],
+
+	//*RM Log
+	VislonFinishingRMLog: () => [...vislonQK.all(), 'fin-rm-log'],
+	VislonFinishingRMLogByUUID: (uuid) => [
+		...vislonQK.VislonFinishingRMLog(),
+		'rm-log',
+		uuid,
+	],
+};
+
+// * Metal
+
+export const metalQK = {
+	all: () => ['metal'],
+
+	//* Teeth Molding
+
+	// * RM
+	metalTMRM: () => [...metalQK.all(), 'tm-rm'],
+	metalTMRMByUUID: (uuid) => [...metalQK.metalTMRM(), uuid],
+
+	// * RM Log
+	metalTMRMLog: () => [...metalQK.all(), 'tm-rm-log'],
+	metalTMRMLogByUUID: (uuid) => [...metalQK.metalTMRMLog(), uuid],
+
+	// * Finishing
+
+	//*RM
+	metalFinishingRM: () => [...metalQK.all(), 'fin-rm'],
+	metalFinishingRMByUUID: (uuid) => [...metalQK.metalFinishingRM(), uuid],
+
+	//*RM Log
+	metalFinishingRMLog: () => [...metalQK.all(), 'fin-rm-log'],
+	metalFinishingRMLogByUUID: (uuid) => [
+		...metalQK.metalFinishingRMLog(),
+		uuid,
+	],
+
+	//* Teeth Coloring
+
+	// * RM
+	metalTCRM: () => [...metalQK.all(), 'tc-rm'],
+	metalTCRMByUUID: (uuid) => [...metalQK.metalTCRM(), uuid],
+
+	// * RM Log
+	metalTCRMLog: () => [...metalQK.all(), 'tc-rm-log'],
+	metalTCRMLogByUUID: (uuid) => [...metalQK.metalTCRMLog(), uuid],
+};
+
+// *Slider
+
+export const sliderQK = {
+	all: () => ['slider'],
+	// *Slider Assembly
+
+	// * RM
+	sliderAssemblyRM: () => [...sliderQK.all(), 'assembly-rm'],
+	sliderAssemblyRMByUUID: (uuid) => [...sliderQK.sliderAssemblyRM(), uuid],
+
+	// * RM Log
+	sliderAssemblyRMLog: () => [...sliderQK.all(), 'assembly-rm-log'],
+	sliderAssemblyRMLogByUUID: (uuid) => [
+		...sliderQK.sliderAssemblyRMLog(),
+		uuid,
+	],
+
+	//* Die Casting
+	// * RM
+	sliderDieCastingRM: () => [...sliderQK.all(), 'dc-rm'],
+	sliderDieCastingRMByUUID: (uuid) => [
+		...sliderQK.sliderDieCastingRM(),
+		uuid,
+	],
+
+	// * RM Log
+	sliderDieCastingRMLog: () => [...sliderQK.all(), 'dc-rm-log'],
+	sliderDieCastingRMLogByUUID: (uuid) => [
+		...sliderQK.sliderDieCastingRMLog(),
+		uuid,
+	],
+
+	//* Coloring
+	// * RM
+	sliderColoringRM: () => [...sliderQK.all(), 'c-rm'],
+	sliderColoringRMByUUID: (uuid) => [...sliderQK.sliderColoringRM(), uuid],
+
+	// * RM Log
+	sliderColoringRMLog: () => [...sliderQK.all(), 'c-rm-log'],
+	sliderColoringRMLogByUUID: (uuid) => [
+		...sliderQK.sliderColoringRMLog(),
+		uuid,
+	],
+};
+//* Delivery
+
+export const deliveryQk = {
+	all: () => ['delivery'],
+	// *RM
+	deliveryRM: () => [...deliveryQk.all(), 'rm'],
+	deliveryRMByUUID: (uuid) => [...deliveryQk.deliveryRM(), uuid],
+
+	// *RM Log
+	deliveryRMLog: () => [...deliveryQk.all(), 'rm-log'],
+	deliveryRMLogByUUID: (uuid) => [...deliveryQk.deliveryRMLog(), uuid],
 };

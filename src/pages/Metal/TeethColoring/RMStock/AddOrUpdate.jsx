@@ -1,29 +1,37 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from "@/hooks";
-import { Input, JoinInput } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from "@util/Schema";
+import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import nanoid from '@/lib/nanoid';
+
+//import { useLabDipRM, useLabDipRMLog } from '@/state/LabDip';
+import { useMetalTCRM, useMetalTCRMLog } from '@/state/Metal';
+import { Input, JoinInput } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
+import * as yup from 'yup';
 
 export default function Index({
-	modalId = "",
-	setTeethColoring,
-	updateTeethColoring = {
-		id: null,
-		section: "",
-		quantity: null,
+	modalId = '',
+	updateTCStock = {
+		uuid: null,
 		unit: null,
+		stock: null,
+		section: null,
 	},
-	setUpdateTeethColoring,
+	setUpdateTCStock,
 }) {
 	const { user } = useAuth();
+	const { url, postData } = useMetalTCRM();
+	const { invalidateQuery: invalidateTCRMLog } = useMetalTCRMLog();
+	const MAX_QUANTITY = updateTCStock?.stock;
 
 	const schema = {
-		remaining: RM_MATERIAL_USED_SCHEMA.remaining.max(
-			updateTeethColoring?.quantity
+		used_quantity: RM_MATERIAL_USED_SCHEMA.remaining.max(
+			updateTCStock?.stock
 		),
-		wastage: RM_MATERIAL_USED_SCHEMA.wastage.max(
-			updateTeethColoring?.quantity
+		wastage: RM_MATERIAL_USED_SCHEMA.remaining.max(
+			MAX_QUANTITY,
+			'Must be less than or equal ${MAX_QUANTITY}'
 		),
 	};
 
@@ -32,18 +40,13 @@ export default function Index({
 		RM_MATERIAL_USED_NULL
 	);
 
-	useFetchForRhfReset(
-		`/material/stock/${updateTeethColoring?.id}`,
-		updateTeethColoring?.id,
-		reset
-	);
-
 	const onClose = () => {
-		setUpdateTeethColoring((prev) => ({
+		setUpdateTCStock((prev) => ({
 			...prev,
-			id: null,
-			quantity: null,
+			uuid: null,
 			unit: null,
+			stock: null,
+			section: null,
 		}));
 		reset(RM_MATERIAL_USED_NULL);
 		window[modalId].close();
@@ -52,55 +55,55 @@ export default function Index({
 	const onSubmit = async (data) => {
 		const updatedData = {
 			...data,
-			used_quantity:
-				updateTeethColoring?.quantity - data.remaining - data.wastage,
-			quantity: data.remaining,
-			material_stock_id: updateTeethColoring?.id,
-			section: updateTeethColoring?.section,
-			issued_by: user?.id,
-			issued_by_name: user?.name,
+
+			material_uuid: updateTCStock?.uuid,
+			section: updateTCStock?.section,
+			created_by: user?.uuid,
+			created_by_name: user?.name,
+			uuid: nanoid(),
 			created_at: GetDateTime(),
 		};
-
-		if (updatedData?.used_quantity < 0) {
-			alert("Wastage can't be greater than remaining");
-			return;
-		}
-
-		await useUpdateFunc({
-			uri: "/material/used",
-			itemId: updateTeethColoring?.id,
-			data: data,
-			updatedData: updatedData,
-			setItems: setTeethColoring,
-			onClose: onClose,
+		await postData.mutateAsync({
+			url: '/material/used',
+			newData: updatedData,
+			onClose,
 		});
+		invalidateTCRMLog();
 	};
 
 	return (
 		<AddModal
 			id={modalId}
-			title={updateTeethColoring?.id !== null && "Material Usage Entry"}
+			title={updateTCStock?.uuid !== null && 'Material Usage Entry'}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
+			isSmall={true}>
 			<JoinInput
-				label="remaining"
-				unit={updateTeethColoring?.unit}
-				max={updateTeethColoring?.quantity}
-				placeholder={`Max: ${updateTeethColoring?.quantity}`}
+				label='used_quantity'
+				sub_label={`Max: ${Number(updateTCStock?.stock)}`}
+				unit={updateTCStock?.unit}
+				max={updateTCStock?.stock}
+				placeholder={`Max: ${Number(updateTCStock?.stock)}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				label="wastage"
-				unit={updateTeethColoring?.unit}
-				placeholder={`Max: ${(
-					updateTeethColoring?.quantity - watch("remaining")
+				label='wastage'
+				unit={updateTCStock?.unit}
+				sub_label={`Max: ${(updateTCStock?.stock -
+					watch('used_quantity') <
+				0
+					? 0
+					: updateTCStock?.stock - watch('used_quantity')
+				).toFixed(2)}`}
+				placeholder={`Max: ${(updateTCStock?.stock -
+					watch('used_quantity') <
+				0
+					? 0
+					: updateTCStock?.stock - watch('used_quantity')
 				).toFixed(2)}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

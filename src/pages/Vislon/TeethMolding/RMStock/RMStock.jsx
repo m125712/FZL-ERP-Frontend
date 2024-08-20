@@ -1,116 +1,105 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useAccess, useFetchFunc, useFetchFuncForReport } from "@/hooks";
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useAccess } from '@/hooks';
 
-import { EditDelete, Transfer } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+import { useVislonTMRM } from '@/state/Vislon';
+import { EditDelete, Transfer } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-const AddOrUpdate = lazy(() => import("./AddOrUpdate"));
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
+	const { data, isLoading, url } = useVislonTMRM();
+	console.log(data);
 	const info = new PageInfo(
-		"Teeth Molding RM Stock",
-		"",
-		"vislon__teeth_molding_rm"
+		'Teeth Molding RM Stock',
+		url,
+		'vislon__teeth_molding_rm'
 	);
-	const [teethMolding, setTeethMolding] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-	const haveAccess = useAccess("vislon__teeth_molding_rm");
+	const haveAccess = useAccess(info.getTab());
 
 	useEffect(() => {
 		document.title = info.getTabName();
-		useFetchFuncForReport(
-			"/material/stock/by/single-field/v_teeth_molding",
-			setTeethMolding,
-			setLoading,
-			setError
-		);
 	}, []);
-
-	// section	tape_or_coil_stock_id	quantity	wastage	issued_by
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "name",
-				header: "Material Name",
+				accessorKey: 'material_name',
+				header: 'Material Name',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className="capitalize">{info.getValue()}</span>
+					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: "unit",
-				header: "Unit",
+				accessorKey: 'v_teeth_molding',
+				header: 'Stock',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "quantity",
-				header: "Stock",
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "action",
-				header: "Used",
+				accessorKey: 'action',
+				header: 'Used',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_used"),
-				width: "w-24",
+				hidden: !haveAccess.includes('click_used'),
+				width: 'w-24',
 				cell: (info) => (
 					<Transfer onClick={() => handelUpdate(info.row.index)} />
 				),
 			},
 		],
-		[teethMolding]
+		[data]
 	);
 
-	const [updateTeethMolding, setUpdateTeethMolding] = useState({
-		id: null,
-		section: "",
-		quantity: null,
-		unit: "",
+	const [updateVislonTMStock, setUpdateVislonTMStock] = useState({
+		uuid: null,
+		unit: null,
+		v_teeth_molding: null,
 	});
 
 	const handelUpdate = (idx) => {
-		const selected = teethMolding[idx];
-		setUpdateTeethMolding((prev) => ({
+		setUpdateVislonTMStock((prev) => ({
 			...prev,
-			...selected,
+			uuid: data[idx].uuid,
+			unit: data[idx].unit,
+			v_teeth_molding: data[idx].v_teeth_molding,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
 
-	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className='container mx-auto px-2 md:px-4'>
 			<ReactTable
 				title={info.getTitle()}
-				// handelAdd={handelAdd}
-				// accessor={haveAccess.includes("click_used")}
-				data={teethMolding}
+				data={data}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 			<Suspense>
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						setTeethMolding,
-						updateTeethMolding,
-						setUpdateTeethMolding,
+						updateVislonTMStock,
+						setUpdateVislonTMStock,
 					}}
 				/>
 			</Suspense>

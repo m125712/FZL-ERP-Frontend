@@ -1,27 +1,37 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from "@/hooks";
-import { Input, JoinInput } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from "@util/Schema";
+import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import nanoid from '@/lib/nanoid';
+
+import { useSliderColoringRM, useSliderColoringRMLog } from '@/state/Slider';
+import { Input, JoinInput } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
+import * as yup from 'yup';
 
 export default function Index({
-	modalId = "",
-	setColoring,
-	updateColoring = {
-		id: null,
-		quantity: null,
+	modalId = '',
+	updateSliderColoringStock = {
+		uuid: null,
 		unit: null,
+		coloring: null,
 	},
-	setUpdateColoring,
+	setUpdateSliderColoringStock,
 }) {
 	const { user } = useAuth();
+	const { url, postData } = useSliderColoringRM();
+	const { invalidateQuery: invalidateSliderColoringRMLog } =
+		useSliderColoringRMLog();
+	const MAX_QUANTITY = updateSliderColoringStock?.coloring;
 
 	const schema = {
-		remaining: RM_MATERIAL_USED_SCHEMA.remaining.max(
-			updateColoring?.quantity
+		used_quantity: RM_MATERIAL_USED_SCHEMA.remaining.max(
+			updateSliderColoringStock?.coloring
 		),
-		wastage: RM_MATERIAL_USED_SCHEMA.wastage.max(updateColoring?.quantity),
+		wastage: RM_MATERIAL_USED_SCHEMA.remaining.max(
+			MAX_QUANTITY,
+			'Must be less than or equal ${MAX_QUANTITY}'
+		),
 	};
 
 	const { register, handleSubmit, errors, reset, watch } = useRHF(
@@ -29,18 +39,12 @@ export default function Index({
 		RM_MATERIAL_USED_NULL
 	);
 
-	useFetchForRhfReset(
-		`/material/stock/${updateColoring?.id}`,
-		updateColoring?.id,
-		reset
-	);
-
 	const onClose = () => {
-		setUpdateColoring((prev) => ({
+		setUpdateSliderColoringStock((prev) => ({
 			...prev,
-			id: null,
-			quantity: null,
+			uuid: null,
 			unit: null,
+			coloring: null,
 		}));
 		reset(RM_MATERIAL_USED_NULL);
 		window[modalId].close();
@@ -49,55 +53,60 @@ export default function Index({
 	const onSubmit = async (data) => {
 		const updatedData = {
 			...data,
-			used_quantity:
-				updateColoring?.quantity - data.remaining - data.wastage,
-			quantity: data.remaining,
-			material_stock_id: updateColoring?.id,
-			section: "coloring",
-			issued_by: user?.id,
-			issued_by_name: user?.name,
+
+			material_uuid: updateSliderColoringStock?.uuid,
+			section: 'coloring',
+			created_by: user?.uuid,
+			created_by_name: user?.name,
+			uuid: nanoid(),
 			created_at: GetDateTime(),
 		};
-
-		if (updatedData?.used_quantity < 0) {
-			alert("Wastage can't be greater than remaining");
-			return;
-		}
-
-		await useUpdateFunc({
-			uri: "/material/used",
-			itemId: updateColoring?.id,
-			data: data,
-			updatedData: updatedData,
-			setItems: setColoring,
-			onClose: onClose,
+		await postData.mutateAsync({
+			url: '/material/used',
+			newData: updatedData,
+			onClose,
 		});
+		invalidateSliderColoringRMLog();
 	};
 
 	return (
 		<AddModal
 			id={modalId}
-			title={updateColoring?.id !== null && "Material Usage Entry"}
+			title={
+				updateSliderColoringStock?.uuid !== null &&
+				'Material Usage Entry'
+			}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
+			isSmall={true}>
 			<JoinInput
-				label="remaining"
-				max={updateColoring?.quantity}
-				unit={updateColoring?.unit}
-				placeholder={`Max: ${updateColoring?.quantity}`}
+				label='used_quantity'
+				sub_label={`Max: ${Number(updateSliderColoringStock?.coloring)}`}
+				unit={updateSliderColoringStock?.unit}
+				max={updateSliderColoringStock?.coloring}
+				placeholder={`Max: ${Number(updateSliderColoringStock?.coloring)}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				label="wastage"
-				unit={updateColoring?.unit}
-				placeholder={`Max: ${(
-					updateColoring?.quantity - watch("remaining")
+				label='wastage'
+				unit={updateSliderColoringStock?.unit}
+				sub_label={`Max: ${(updateSliderColoringStock?.coloring -
+					watch('used_quantity') <
+				0
+					? 0
+					: updateSliderColoringStock?.coloring -
+						watch('used_quantity')
+				).toFixed(2)}`}
+				placeholder={`Max: ${(updateSliderColoringStock?.coloring -
+					watch('used_quantity') <
+				0
+					? 0
+					: updateSliderColoringStock?.coloring -
+						watch('used_quantity')
 				).toFixed(2)}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

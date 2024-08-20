@@ -3,9 +3,18 @@ import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useCommonCoilRM, useCommonTapeRM } from '@/state/Common';
+import { useDeliveryRM } from '@/state/Delivery';
 import { useDyeingRM } from '@/state/Dyeing';
 import { useLabDipRM } from '@/state/LabDip';
+import { useMetalFinishingRM, useMetalTCRM, useMetalTMRM } from '@/state/Metal';
+import { useNylonMetallicFinishingRM } from '@/state/Nylon';
+import {
+	useSliderAssemblyRM,
+	useSliderColoringRM,
+	useSliderDieCastingRM,
+} from '@/state/Slider';
 import { useMaterialInfo } from '@/state/Store';
+import { useVislonFinishingRM, useVislonTMRM } from '@/state/Vislon';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { MATERIAL_STOCK_NULL, MATERIAL_STOCK_SCHEMA } from '@util/Schema';
@@ -24,6 +33,21 @@ export default function Index({
 	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
 	const { invalidateQuery: invalidateLabDipRM } = useLabDipRM();
 	const { invalidateQuery: invalidateDyeingRM } = useDyeingRM();
+	const { invalidateQuery: invalidateFinishingRM } = useMetalFinishingRM();
+	const { invalidateQuery: invalidateMetalTCRM } = useMetalTCRM();
+	const { invalidateQuery: invalidateMetalTMRM } = useMetalTMRM();
+	const { invalidateQuery: invalidateNylonMetallicFinishingRM } =
+		useNylonMetallicFinishingRM();
+	const { invalidateQuery: invalidateVislonFinishingRM } =
+		useVislonFinishingRM();
+	const { invalidateQuery: invalidateVislonTMRM } = useVislonTMRM();
+	const { invalidateQuery: invalidateSliderAssemblyRM } =
+		useSliderAssemblyRM();
+	const { invalidateQuery: invalidateSliderColoringRM } =
+		useSliderColoringRM();
+	const { invalidateQuery: invalidateDieCastingRM } = useSliderDieCastingRM();
+	const { invalidateQuery: invalidateDeliveryRM } = useDeliveryRM();
+
 	const schema = {
 		...MATERIAL_STOCK_SCHEMA,
 		trx_quantity: MATERIAL_STOCK_SCHEMA.trx_quantity
@@ -34,11 +58,11 @@ export default function Index({
 	const { register, handleSubmit, errors, control, Controller, reset } =
 		useRHF(schema, MATERIAL_STOCK_NULL);
 
-	useFetchForRhfReset(
-		`/material/stock/${updateMaterialDetails?.material_stock_uuid}`,
-		updateMaterialDetails?.material_stock_uuid,
-		reset
-	);
+	// useFetchForRhfReset(
+	// 	`/material/stock/${updateMaterialDetails?.material_stock_uuid}`,
+	// 	updateMaterialDetails?.material_stock_uuid,
+	// 	reset
+	// );
 
 	const onClose = () => {
 		setUpdateMaterialDetails((prev) => ({
@@ -51,6 +75,7 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
+		console.log(data);
 		// Create Item
 		if (updateMaterialDetails?.uuid !== null) {
 			const updatedData = {
@@ -70,6 +95,17 @@ export default function Index({
 			invalidateCommonCoilRM();
 			invalidateLabDipRM();
 			invalidateDyeingRM();
+			invalidateFinishingRM();
+			invalidateMetalTCRM();
+			invalidateMetalTMRM();
+			invalidateNylonMetallicFinishingRM();
+			invalidateVislonFinishingRM();
+			invalidateVislonTMRM();
+			invalidateSliderAssemblyRM();
+			invalidateSliderColoringRM();
+			invalidateDieCastingRM();
+			invalidateDeliveryRM();
+
 			return;
 		}
 	};
@@ -97,7 +133,10 @@ export default function Index({
 		{ label: 'Vislon Stopper', value: 'v_stopper' },
 		{ label: 'Nylon Stopper', value: 'n_stopper' },
 		{ label: 'Cutting', value: 'cutting' },
-		{ label: 'QC and Packing', value: 'qc_and_packing' },
+		{ label: 'Metal QC and Packing', value: 'm_qc_and_packing' },
+		{ label: 'Nylon QC and Packing', value: 'n_qc_and_packing' },
+		{ label: 'Vislon QC and Packing', value: 'v_qc_and_packing' },
+		{ label: 'Slider QC and Packing', value: 's_qc_and_packing' },
 		{ label: 'Die Casting', value: 'die_casting' },
 		{ label: 'Slider Assembly', value: 'slider_assembly' },
 		{ label: 'Coloring', value: 'coloring' },

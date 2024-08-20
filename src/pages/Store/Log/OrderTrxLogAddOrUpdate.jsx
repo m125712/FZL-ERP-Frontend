@@ -24,6 +24,7 @@ export default function Index({
 }) {
 	const { url, updateData } = useMaterialTrxAgainstOrderDescription();
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+
 	const schema = {
 		...MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
 		// trx_quantity: MATERIAL_TRX_AGAINST_ORDER_SCHEMA.trx_quantity.max(

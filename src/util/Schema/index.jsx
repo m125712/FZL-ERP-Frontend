@@ -900,6 +900,21 @@ export const RM_MATERIAL_USED_EDIT_NULL = {
 	issued_by: '',
 	remarks: '',
 };
+export const RM_MATERIAL_ORDER_AGAINST_EDIT_SCHEMA = {
+	trx_quantity: NUMBER_DOUBLE_REQUIRED,
+	wastage: NUMBER_DOUBLE,
+	remarks: STRING.nullable(),
+};
+
+export const RM_MATERIAL_ORDER_AGAINST_EDIT_NULL = {
+	uuid: null,
+	material_stock_id: null,
+	section: '',
+	trx_quantity: '',
+	wastage: '',
+	issued_by: '',
+	remarks: '',
+};
 
 // Swatch Schema
 export const SWATCH_SCHEMA = {

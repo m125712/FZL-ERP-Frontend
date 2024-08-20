@@ -1,81 +1,78 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useCommonOrderAgainstCoilRMLog } from '@/state/Common';
-import { useMaterialInfo, useMaterialStockToSFG } from '@/state/Store';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { useCommonMaterialTrx } from '@/state/Common';
+import { useMaterialInfo } from '@/state/Store';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
-import { DevTool } from '@hookform/devtools';
 import {
-	MATERIAL_TRX_AGAINST_ORDER_NULL,
-	MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
+	RM_MATERIAL_ORDER_AGAINST_EDIT_NULL,
+	RM_MATERIAL_ORDER_AGAINST_EDIT_SCHEMA,
 } from '@util/Schema';
 
 export default function Index({
 	modalId = '',
-	updateMaterialDetails = {
+	updateLog = {
 		uuid: null,
-		name: null,
+		trx_to: null,
+		trx_quantity: null,
 		stock: null,
 	},
-	setUpdateMaterialDetails,
+	setUpdateLog,
 }) {
-	const { postData } = useMaterialInfo();
-	const { invalidateQuery: invalidateMaterialStockToSFG } =
-		useMaterialStockToSFG();
-	const { invalidateQuery: invalidateCommonOrderAgainstCoilRM } =
-		useCommonOrderAgainstCoilRMLog();
+	const { url, updateData } = useCommonMaterialTrx();
+	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 
-	const { user } = useAuth();
-
+	const MAX_QUANTITY =
+		Number(updateLog?.stock) + Number(updateLog?.trx_quantity);
 	const schema = {
-		...MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
-		trx_quantity: MATERIAL_TRX_AGAINST_ORDER_SCHEMA.trx_quantity
-			.moreThan(0)
-			.max(updateMaterialDetails?.stock),
+		...RM_MATERIAL_ORDER_AGAINST_EDIT_SCHEMA,
+		trx_quantity:
+			RM_MATERIAL_ORDER_AGAINST_EDIT_SCHEMA.trx_quantity.max(
+				MAX_QUANTITY
+			),
 	};
 
-	const { value: order } = useFetch(`/other/order/description/value/label`);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		control,
+		Controller,
+		reset,
+		getValues,
+	} = useRHF(schema, RM_MATERIAL_ORDER_AGAINST_EDIT_NULL);
 
-	const { register, handleSubmit, errors, control, Controller, reset } =
-		useRHF(schema, MATERIAL_TRX_AGAINST_ORDER_NULL);
-
-	useFetchForRhfReset(
-		`/material/stock/${updateMaterialDetails?.material_stock_uuid}`,
-		updateMaterialDetails?.material_stock_uuid,
-		reset
-	);
+	useFetchForRhfReset(`${url}/${updateLog?.uuid}`, updateLog?.uuid, reset);
 
 	const onClose = () => {
-		setUpdateMaterialDetails((prev) => ({
+		setUpdateLog((prev) => ({
 			...prev,
 			uuid: null,
-			stock: 0,
+			trx_to: null,
+			trx_quantity: null,
+			stock: null,
 		}));
-		reset(MATERIAL_TRX_AGAINST_ORDER_NULL);
+		reset(RM_MATERIAL_ORDER_AGAINST_EDIT_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateMaterialDetails?.uuid !== null) {
+		if (updateLog?.uuid !== null) {
 			const updatedData = {
 				...data,
-				material_uuid: updateMaterialDetails.uuid,
-				created_by: user?.uuid,
-				uuid: nanoid(),
-				created_at: GetDateTime(),
+				material_name: updateLog?.material_name,
+				updated_at: GetDateTime(),
 			};
 
-			await postData.mutateAsync({
-				url: '/zipper/material-trx-against-order',
-				newData: updatedData,
+			await updateData.mutateAsync({
+				url: `${url}/${updateLog?.uuid}`,
+				uuid: updateLog?.uuid,
+				updatedData,
 				onClose,
 			});
-
-			invalidateMaterialStockToSFG();
-			invalidateCommonOrderAgainstCoilRM();
+			invalidateMaterialInfo();
 			return;
 		}
 	};
@@ -115,58 +112,38 @@ export default function Index({
 
 	return (
 		<AddModal
-			id={`MaterialTrxAgainstOrder`}
-			title={
-				'Material Trx Against Order of ' + updateMaterialDetails?.name
-			}
+			id={modalId}
+			title={`Coil Forming RM Log of ${updateLog?.material_name}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<FormField
-				label='order_description_uuid'
-				title='Order'
-				errors={errors}>
-				<Controller
-					name={'order_description_uuid'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select Order'
-								options={order}
-								onChange={(e) => {
-									onChange(e.value);
-								}}
-							/>
-						);
-					}}
-				/>
-			</FormField>
-
-			<FormField label='trx_to' title='Transfer To' errors={errors}>
+			<FormField label='trx_to' title='trx_to' errors={errors}>
 				<Controller
 					name={'trx_to'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder='Select Transaction Area'
+								placeholder='Select trx_to'
 								options={transactionArea}
+								value={transactionArea?.find(
+									(item) => item.value == getValues('trx_to')
+								)}
 								onChange={(e) => onChange(e.value)}
+								isDisabled='1'
 							/>
 						);
 					}}
 				/>
 			</FormField>
-
 			<Input
 				label='trx_quantity'
-				sub_label={`Max: ${updateMaterialDetails?.stock}`}
-				placeholder={`Max: ${updateMaterialDetails?.stock}`}
+				sub_label={`Max: ${MAX_QUANTITY}`}
+				placeholder={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>
+
 			<Input label='remarks' {...{ register, errors }} />
-			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);
 }

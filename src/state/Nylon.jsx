@@ -24,3 +24,14 @@ export const useNylonMetallicFinishingRMLogByUUID = (uuid) =>
 		queryKey: nylonQK.nylonMetallicFinishingRMLogByUUID(uuid),
 		url: `/material/used/multi-section/by/n_t_cutting,n_stopper/${uuid}`,
 	});
+// * Order Against RM Log
+export const useOrderAgainstNylonMetallicFinishingRMLog = () =>
+	createGlobalState({
+		queryKey: nylonQK.orderAgainstNylonMetallicFinishingRMLog(),
+		url: '/zipper/material-trx-against-order/by/n_t_cutting,n_stopper',
+	});
+export const useOrderAgainstNylonMetallicFinishingRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: nylonQK.orderAgainstNylonMetallicFinishingRMLogByUUID(uuid),
+		url: `/zipper/material-trx-against-order/by/n_t_cutting,n_stopper/${uuid}`,
+	});

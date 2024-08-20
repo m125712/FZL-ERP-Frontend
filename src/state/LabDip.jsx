@@ -47,3 +47,14 @@ export const useLabDipRMLogByUUID = (uuid) =>
 		queryKey: labDipQK.LabDipRMLog(uuid),
 		url: `/material/used/by/lab_dip${uuid}`,
 	});
+// * Order Against RM Log
+export const useOrderAgainstLabDipRMLog = () =>
+	createGlobalState({
+		queryKey: labDipQK.orderAgainstLabDipRMLog(),
+		url: `/zipper/material-trx-against-order/by/lab_dip`,
+	});
+export const useOrderAgainstLabDipRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: labDipQK.orderAgainstLabDipRMLogByUUID(uuid),
+		url: `/zipper/material-trx-against-order/by/lab_dip${uuid}`,
+	});

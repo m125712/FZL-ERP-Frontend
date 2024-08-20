@@ -63,6 +63,13 @@ export const DeliveryRoutes = [
 		element: Log,
 		type: 'delivery',
 		page_name: 'delivery__log',
-		actions: ['create', 'read', 'update', 'delete'],
+		actions: [
+			'create',
+			'read',
+			'update',
+			'delete',
+			'click_update_rm_order',
+			'click_delete_rm_order',
+		],
 	},
 ];

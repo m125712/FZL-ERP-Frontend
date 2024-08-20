@@ -61,6 +61,19 @@ export const useCommonTapeRMLogByUUID = (uuid) =>
 		queryKey: commonQK.tapeRMLog(uuid),
 		url: `/material/used/by/tape_making${uuid}`,
 	});
+// * Order Against RM Log * //
+
+export const useCommonOrderAgainstTapeRMLog = () =>
+	createGlobalState({
+		queryKey: commonQK.orderAgainstTapeRMLog(),
+		url: `/zipper/material-trx-against-order/by/tape_making`,
+	});
+export const useCommonOrderAgainstTapeRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.orderAgainstTapeRMLog(uuid),
+		url: `/zipper/material-trx-against-order/by/tape_making${uuid}`,
+	});
+
 
 // * COIL * //
 // * SFG * //
@@ -119,4 +132,29 @@ export const useCommonMaterialUsedByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: commonQK.materialUsed(uuid),
 		url: `/material/used${uuid}`,
+	});
+// * Order Against RM Log * //
+
+export const useCommonOrderAgainstCoilRMLog = () =>
+	createGlobalState({
+		queryKey: commonQK.orderAgainstCoilRMLog(),
+		url: `/zipper/material-trx-against-order/by/coil_forming`,
+	});
+export const useCommonOrderAgainstCoilRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.orderAgainstCoilRMLog(uuid),
+		url: `/zipper/material-trx-against-order/by/coil_forming${uuid}`,
+	});
+
+// * MATERIAL TRX *//
+
+export const useCommonMaterialTrx = () =>
+	createGlobalState({
+		queryKey: commonQK.materialTrx(),
+		url: `/zipper/material-trx-against-order`,
+	});
+export const useCommonMaterialTrxByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.materialTrx(uuid),
+		url: `/zipper/material-trx-against-order${uuid}`,
 	});

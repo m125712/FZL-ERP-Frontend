@@ -191,6 +191,16 @@ export const commonQK = {
 	// * tapeRMLog
 	tapeRMLog: () => [...commonQK.all(), 'tape/rm-log'],
 	tapeRMLogByUUID: (uuid) => [...commonQK.tapeRMLog(), uuid],
+
+	// *  Order Against Tape RM Log * //
+	orderAgainstTapeRMLog: () => [
+		...commonQK.all(),
+		'tape/order/against/rm-log',
+	],
+	orderAgainstTapeRMLogByUUID: (uuid) => [
+		...commonQK.orderAgainstTapeRMLog(),
+		uuid,
+	],
 	// * coilSFG
 	coilSFG: () => [...commonQK.all(), 'coil/SFG'],
 	coilSFGByUUID: (uuid) => [...commonQK.coilSFG(), uuid],
@@ -208,6 +218,19 @@ export const commonQK = {
 	// * materialUsed
 	materialUsed: () => [...commonQK.all(), 'material/used'],
 	materialUsedByUUID: (uuid) => [...commonQK.materialUsed(), uuid],
+
+	// * Coil Order Against Coil RM Log * //
+	orderAgainstCoilRMLog: () => [
+		...commonQK.all(),
+		'coil/order/against/rm-log',
+	],
+	orderAgainstCoilRMLogByUUID: (uuid) => [
+		...commonQK.orderAgainstCoilRMLog(),
+		uuid,
+	],
+	// * MATERIAL TRX *//
+	materialTrx: () => [...commonQK.all(), 'material/trx'],
+	materialTrxByUUID: (uuid) => [...commonQK.materialTrx(), uuid],
 };
 
 // * LabDip * //
@@ -228,6 +251,16 @@ export const labDipQK = {
 	// * RM Log
 	LabDipRMLog: () => [...labDipQK.all(), 'rm-log'],
 	LabDipRMLogByUUID: (uuid) => [...labDipQK.LabDipRMLog(), uuid],
+
+	// * Order Against lab_dip RM Log * //
+	orderAgainstLabDipRMLog: () => [
+		...labDipQk.all(),
+		'lab_dip/order-against-rm-log',
+	],
+	orderAgainstLabDipRMLogByUUID: (uuid) => [
+		...labDipQk.orderAgainstLabDipRMLog(),
+		uuid,
+	],
 };
 
 // * Dyeing
@@ -250,6 +283,15 @@ export const dyeingQK = {
 	// * planning
 	planning: () => [...dyeingQK.all(), 'planning'],
 	planningByUUID: (uuid) => [...dyeingQK.planning(), uuid],
+	// * Order Against dyeing RM Log * //
+	orderAgainstDyeingRMLog: () => [
+		...dyeingQk.all(),
+		'dyeing/order-against-rm-log',
+	],
+	orderAgainstDyeingRMLogByUUID: (uuid) => [
+		...dyeingQk.orderAgainstDyeingRMLog(),
+		uuid,
+	],
 };
 
 // * Nylon
@@ -271,6 +313,16 @@ export const nylonQK = {
 		...nylonQK.nylonMetallicFinishingRMLog(),
 		uuid,
 	],
+
+	// * Order Against nylonFinishing RM Log * //
+	orderAgainstNylonFinishingRMLog: () => [
+		...nylonFinishingQk.all(),
+		'nylonFinishing/order-against-rm-log',
+	],
+	orderAgainstNylonFinishingRMLogByUUID: (uuid) => [
+		...nylonFinishingQk.orderAgainstNylonFinishingRMLog(),
+		uuid,
+	],
 };
 // *Vislon
 export const vislonQK = {
@@ -284,6 +336,16 @@ export const vislonQK = {
 	// * RM Log
 	VislonTMRMLog: () => [...vislonQK.all(), 'tm-rm-log'],
 	VislonTMRMLogByUUID: (uuid) => [...vislonQK.VislonTMRMLog(), uuid],
+
+	// * Order Against vislonTMRMLog * //// * Order Against vislonTM RM Log * //
+	orderAgainstVislonTMRMLog: () => [
+		...vislonTMQk.all(),
+		'vislonTM/order-against-rm-log',
+	],
+	orderAgainstVislonTMRMLogByUUID: (uuid) => [
+		...vislonTMQk.orderAgainstVislonTMRMLog(),
+		uuid,
+	],
 
 	// * Finishing
 
@@ -300,6 +362,16 @@ export const vislonQK = {
 	VislonFinishingRMLogByUUID: (uuid) => [
 		...vislonQK.VislonFinishingRMLog(),
 		'rm-log',
+		uuid,
+	],
+
+	// * Order Against vislonFinishing RM Log * //
+	orderAgainstVislonFinishingRMLog: () => [
+		...vislonFinishingQk.all(),
+		'vislonFinishing/order-against-rm-log',
+	],
+	orderAgainstVislonFinishingRMLogByUUID: (uuid) => [
+		...vislonFinishingQk.orderAgainstVislonFinishingRMLog(),
 		uuid,
 	],
 };
@@ -319,6 +391,16 @@ export const metalQK = {
 	metalTMRMLog: () => [...metalQK.all(), 'tm-rm-log'],
 	metalTMRMLogByUUID: (uuid) => [...metalQK.metalTMRMLog(), uuid],
 
+	// * Order Against Metal TM RM Log * //
+	orderAgainstMetalTMRMLog: () => [
+		...metalTMQk.all(),
+		'metalTM/order-against-rm-log',
+	],
+	orderAgainstMetalTMRMLogByUUID: (uuid) => [
+		...metalTMQk.orderAgainstMetalTMRMLog(),
+		uuid,
+	],
+
 	// * Finishing
 
 	//*RM
@@ -332,6 +414,16 @@ export const metalQK = {
 		uuid,
 	],
 
+	// * Order Against metalFinishing RM Log * //
+	orderAgainstMetalFinishingRMLog: () => [
+		...metalFinishingQk.all(),
+		'metalFinishing/order-against-rm-log',
+	],
+	orderAgainstMetalFinishingRMLogByUUID: (uuid) => [
+		...metalFinishingQk.orderAgainstmetalFinishingRMLog(),
+		uuid,
+	],
+
 	//* Teeth Coloring
 
 	// * RM
@@ -341,6 +433,15 @@ export const metalQK = {
 	// * RM Log
 	metalTCRMLog: () => [...metalQK.all(), 'tc-rm-log'],
 	metalTCRMLogByUUID: (uuid) => [...metalQK.metalTCRMLog(), uuid],
+	// * Order Against metalTC RM Log * //
+	orderAgainstMetalTCRMLog: () => [
+		...metalTCQk.all(),
+		'metalTC/order-against-rm-log',
+	],
+	orderAgainstMetalTCRMLogByUUID: (uuid) => [
+		...metalTCQk.orderAgainstMetalTCRMLog(),
+		uuid,
+	],
 };
 
 // *Slider
@@ -360,6 +461,16 @@ export const sliderQK = {
 		uuid,
 	],
 
+	// * Order Against sliderAssembly RM Log * //
+	orderAgainstSliderAssemblyRMLog: () => [
+		...sliderAssemblyQk.all(),
+		'sliderAssembly/order-against-rm-log',
+	],
+	orderAgainstSliderAssemblyRMLogByUUID: (uuid) => [
+		...sliderAssemblyQk.orderAgainstSliderAssemblyRMLog(),
+		uuid,
+	],
+
 	//* Die Casting
 	// * RM
 	sliderDieCastingRM: () => [...sliderQK.all(), 'dc-rm'],
@@ -374,6 +485,15 @@ export const sliderQK = {
 		...sliderQK.sliderDieCastingRMLog(),
 		uuid,
 	],
+	// * Order Against dieCasting RM Log * //
+	orderAgainstDieCastingRMLog: () => [
+		...dieCastingQk.all(),
+		'dieCasting/order-against-rm-log',
+	],
+	orderAgainstDieCastingRMLogByUUID: (uuid) => [
+		...dieCastingQk.orderAgainstDieCastingRMLog(),
+		uuid,
+	],
 
 	//* Coloring
 	// * RM
@@ -384,6 +504,15 @@ export const sliderQK = {
 	sliderColoringRMLog: () => [...sliderQK.all(), 'c-rm-log'],
 	sliderColoringRMLogByUUID: (uuid) => [
 		...sliderQK.sliderColoringRMLog(),
+		uuid,
+	],
+	// * Order Against sliderColor RM Log * //
+	orderAgainstSliderColorRMLog: () => [
+		...sliderColorQk.all(),
+		'sliderFinishing/order-against-rm-log',
+	],
+	orderAgainstSliderColorRMLogByUUID: (uuid) => [
+		...sliderColorQk.orderAgainstSliderColorRMLog(),
 		uuid,
 	],
 };
@@ -398,4 +527,14 @@ export const deliveryQk = {
 	// *RM Log
 	deliveryRMLog: () => [...deliveryQk.all(), 'rm-log'],
 	deliveryRMLogByUUID: (uuid) => [...deliveryQk.deliveryRMLog(), uuid],
+
+	// *  Order Against Delivery RM Log * //
+	orderAgainstDeliveryRMLog: () => [
+		...deliveryQk.all(),
+		'delivery/order-against-rm-log',
+	],
+	orderAgainstDeliveryRMLogByUUID: (uuid) => [
+		...deliveryQk.orderAgainstDeliveryRMLog(),
+		uuid,
+	],
 };

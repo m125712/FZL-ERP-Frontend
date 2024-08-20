@@ -63,7 +63,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'action_trx',
-				header: 'Action',
+				header: 'Material Trx',
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_action'),
@@ -179,6 +179,7 @@ export default function Index() {
 			...prev,
 			uuid: data[idx].uuid,
 			stock: data[idx].stock,
+			name: data[idx].name,
 		}));
 		window['MaterialTrx'].showModal();
 	};

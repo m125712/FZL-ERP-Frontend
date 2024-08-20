@@ -58,11 +58,11 @@ export default function Index({
 	const { register, handleSubmit, errors, control, Controller, reset } =
 		useRHF(schema, MATERIAL_STOCK_NULL);
 
-	useFetchForRhfReset(
-		`/material/stock/${updateMaterialDetails?.material_stock_uuid}`,
-		updateMaterialDetails?.material_stock_uuid,
-		reset
-	);
+	// useFetchForRhfReset(
+	// 	`/material/stock/${updateMaterialDetails?.material_stock_uuid}`,
+	// 	updateMaterialDetails?.material_stock_uuid,
+	// 	reset
+	// );
 
 	const onClose = () => {
 		setUpdateMaterialDetails((prev) => ({
@@ -75,6 +75,7 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
+		console.log(data);
 		// Create Item
 		if (updateMaterialDetails?.uuid !== null) {
 			const updatedData = {

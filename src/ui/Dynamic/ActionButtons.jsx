@@ -1,5 +1,5 @@
-import CopyButton from "./CopyButton";
-import RemoveButton from "./RemoveButton";
+import CopyButton from './CopyButton';
+import RemoveButton from './RemoveButton';
 
 export default function ActionButtons({
 	duplicateClick,
@@ -7,7 +7,7 @@ export default function ActionButtons({
 	showRemoveButton,
 }) {
 	return (
-		<div className="flex w-10 gap-2">
+		<div className='flex w-10 gap-2'>
 			<CopyButton onClick={duplicateClick} />
 			<RemoveButton onClick={removeClick} showButton={showRemoveButton} />
 		</div>

@@ -1,5 +1,5 @@
-import { ShowToast } from "@/components/Toast";
-import { api } from "@lib/api";
+import { ShowToast } from '@/components/Toast';
+import { api } from '@lib/api';
 
 const updateItem = ({ prev, itemId, data, updatedData }) => {
 	const index = prev.findIndex((item) => item.id === itemId);

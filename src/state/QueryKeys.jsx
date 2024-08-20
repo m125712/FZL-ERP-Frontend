@@ -95,6 +95,12 @@ export const commercialQK = {
 	// pi-entry
 	piEntries: () => [...commercialQK.all(), 'pi-entry'],
 	piEntry: (uuid) => [...commercialQK.piEntries(), uuid],
+
+	// lc
+	lcs: () => [...commercialQK.all(), 'lc'],
+	lc: (uuid) => [...commercialQK.lcs(), uuid],
+	lcPi: (uuid) => [...commercialQK.all(), 'lc-pi', uuid],
+	lcNumber: (uuid) => [...commercialQK.all(), 'lc-number', uuid],
 };
 
 // Material Query Keys
@@ -217,17 +223,15 @@ export const labDipQK = {
 // * Dyeing
 
 export const dyeingQK = {
-	all: () => ['dyeingSwatch'],
+	all: () => ['dyeing'],
+
+	// swatch
 	swatch: () => [...dyeingQK.all(), 'swatch'],
-	swatchByUUID: (uuid) => [...dyeingQK.all(), uuid],
+	swatchByUUID: (uuid) => [...dyeingQK.swatch(), uuid],
 
-	// * RM
-	dyeingRM: () => [...dyeingQK.all(), 'rm'],
-	dyeingRMByUUID: (uuid) => [...dyeingQK.dyeingRM(), uuid],
-
-	// * RM Log
-	dyeingRMLog: () => [...dyeingQK.all(), 'rm-log'],
-	dyeingRMLogByUUID: (uuid) => [...dyeingQK.dyeingRMLog(), uuid],
+	// planning
+	planning: () => [...dyeingQK.all(), 'planning'],
+	planningByUUID: (uuid) => [...dyeingQK.planning(), uuid],
 };
 
 // *Nylon

@@ -14,14 +14,14 @@ import {
 	Switch,
 	SwitchOnly,
 	Textarea,
-} from "./Core";
+} from './Core';
 import {
 	ActionButtons,
 	CopyButton,
 	DynamicDeliveryField,
 	DynamicField,
 	RemoveButton,
-} from "./Dynamic";
+} from './Dynamic';
 import {
 	BadgeCheckbox,
 	DateTime,
@@ -41,7 +41,7 @@ import {
 	TitleValue,
 	Transfer,
 	UserName,
-} from "./Others";
+} from './Others';
 
 export {
 	ActionButtons,

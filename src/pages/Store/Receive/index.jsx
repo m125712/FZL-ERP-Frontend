@@ -3,6 +3,7 @@ import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { usePurchaseDescription } from '@/state/Store';
 import { DateTime, EditDelete, LinkOnly } from '@/ui';
+import PageContainer from '@/ui/Others/PageContainer';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -122,8 +123,20 @@ export default function Index() {
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
+	const breadcrumbs = [
+		{
+			label: 'Store',
+			href: '/store',
+			isDisabled: true,
+		},
+		{
+			label: 'Receive',
+			href: '/store/receive',
+		},
+	];
+
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
+		<PageContainer title='Purchase Lists' breadcrumbs={breadcrumbs}>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}
@@ -145,6 +158,6 @@ export default function Index() {
 					}}
 				/>
 			</Suspense>
-		</div>
+		</PageContainer>
 	);
 }

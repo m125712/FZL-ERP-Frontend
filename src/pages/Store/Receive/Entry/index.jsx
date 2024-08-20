@@ -18,6 +18,7 @@ import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
+import PageContainer from '@/ui/Others/PageContainer';
 
 export default function Index() {
 	const { url: purchaseDescriptionUrl } = usePurchaseDescription();
@@ -75,6 +76,24 @@ export default function Index() {
 		itemId: null,
 		itemName: null,
 	});
+
+	const breadcrumbs = [
+		{
+			label: 'Store',
+			href: '/store',
+			isDisabled: true,
+		},
+		{
+			label: 'Receive',
+			href: '/store/receive',
+		},
+		{
+			label: isUpdate ? 'Update' : 'Create',
+			href: isUpdate
+				? `/store/receive/update/${getValues('uuid')}`
+				: '/store/receive/entry',
+		},
+	];
 
 	const handlePurchaseRemove = (index) => {
 		if (getValues(`purchase[${index}].uuid`) !== undefined) {
@@ -227,7 +246,7 @@ export default function Index() {
 	});
 
 	const rowClass =
-		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
+		'group whitespace-nowrap text-left text-sm font-normal tracking-wide  p-3';
 
 	const getTotalPrice = useCallback(
 		(purchase) =>
@@ -238,153 +257,165 @@ export default function Index() {
 	);
 
 	return (
-		<div className='container mx-auto mt-4 px-2 pb-2 md:px-4'>
+		<PageContainer
+			breadcrumbs={breadcrumbs}
+			title={isUpdate ? 'Update Purchase' : 'Create Purchase'}>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
-					className='flex flex-col gap-8'>
-					<Header
-						{...{
-							register,
-							errors,
-							control,
-							getValues,
-							Controller,
-							watch,
-						}}
-					/>
+					className='flex flex-col'>
+					<div className='space-y-6'>
+						<Header
+							{...{
+								register,
+								errors,
+								control,
+								getValues,
+								Controller,
+								watch,
+							}}
+						/>
 
-					<DynamicField
-						title='Details'
-						handelAppend={handelPurchaseAppend}
-						tableHead={[
-							'Material',
-							'Quantity',
-							'Total Price',
-							'Remarks',
-							'Action',
-						].map((item) => (
-							<th
-								key={item}
-								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
-								{item}
-							</th>
-						))}>
-						{purchaseField.map((item, index) => (
-							<tr key={item.id} className='w-full'>
-								<td className={`pl-1 ${rowClass}`}>
-									<FormField
-										label={`purchase[${index}].material_uuid`}
-										title='Material'
-										is_title_needed='false'
-										errors={errors}>
-										<Controller
-											name={`purchase[${index}].material_uuid`}
-											control={control}
-											render={({
-												field: { onChange },
-											}) => {
-												return (
-													<ReactSelect
-														placeholder='Select Material'
-														options={material}
-														value={material?.find(
-															(inItem) =>
-																inItem.value ==
-																getValues(
-																	`purchase[${index}].material_uuid`
-																)
-														)}
-														onChange={(e) => {
-															onChange(e.value);
-															setUnit({
-																...unit,
-																[index]: e.unit,
-															});
-														}}
-														menuPortalTarget={
-															document.body
-														}
-														// isDisabled={
-														// 	purchase_description_uuid !==
-														// 	undefined
-														// }
-													/>
-												);
-											}}
+						<DynamicField
+							title='Details'
+							handelAppend={handelPurchaseAppend}
+							tableHead={[
+								'Material',
+								'Quantity',
+								'Total Price',
+								'Remarks',
+								'Action',
+							].map((item) => (
+								<th
+									key={item}
+									scope='col'
+									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-4 py-2 text-left font-semibold tracking-wide text-primary transition duration-300'>
+									{item}
+								</th>
+							))}>
+							{purchaseField.map((item, index) => (
+								<tr key={item.id} className=''>
+									<td className={`${rowClass}`}>
+										<FormField
+											label={`purchase[${index}].material_uuid`}
+											title='Material'
+											is_title_needed='false'
+											errors={errors}>
+											<Controller
+												name={`purchase[${index}].material_uuid`}
+												control={control}
+												render={({
+													field: { onChange },
+												}) => {
+													return (
+														<ReactSelect
+															placeholder='Select Material'
+															options={material}
+															value={material?.find(
+																(inItem) =>
+																	inItem.value ==
+																	getValues(
+																		`purchase[${index}].material_uuid`
+																	)
+															)}
+															onChange={(e) => {
+																onChange(
+																	e.value
+																);
+																setUnit({
+																	...unit,
+																	[index]:
+																		e.unit,
+																});
+															}}
+															menuPortalTarget={
+																document.body
+															}
+															// isDisabled={
+															// 	purchase_description_uuid !==
+															// 	undefined
+															// }
+														/>
+													);
+												}}
+											/>
+										</FormField>
+									</td>
+									<td className={`w-48 ${rowClass}`}>
+										<JoinInput
+											title='quantity'
+											label={`purchase[${index}].quantity`}
+											is_title_needed='false'
+											dynamicerror={
+												errors?.purchase?.[index]
+													?.quantity
+											}
+											unit={
+												material?.find(
+													(inItem) =>
+														inItem.value ==
+														getValues(
+															`purchase[${index}].material_uuid`
+														)
+												)?.unit
+											}
+											register={register}
 										/>
-									</FormField>
-								</td>
-								<td className='w-40'>
-									<JoinInput
-										title='quantity'
-										label={`purchase[${index}].quantity`}
-										is_title_needed='false'
-										dynamicerror={
-											errors?.purchase?.[index]?.quantity
-										}
-										unit={
-											material?.find(
-												(inItem) =>
-													inItem.value ==
-													getValues(
-														`purchase[${index}].material_uuid`
-													)
-											)?.unit
-										}
-										register={register}
-									/>
-								</td>
-								<td className={`w-40 ${rowClass}`}>
-									<Input
-										title='price'
-										label={`purchase[${index}].price`}
-										is_title_needed='false'
-										dynamicerror={
-											errors?.purchase?.[index]?.price
-										}
-										register={register}
-									/>
-								</td>
-								<td className={`w-40 ${rowClass}`}>
-									<Input
-										title='remarks'
-										label={`purchase[${index}].remarks`}
-										is_title_needed='false'
-										dynamicerror={
-											errors?.purchase?.[index]?.remarks
-										}
-										register={register}
-									/>
-								</td>
+									</td>
+									<td className={`w-48 ${rowClass}`}>
+										<Input
+											title='price'
+											label={`purchase[${index}].price`}
+											is_title_needed='false'
+											dynamicerror={
+												errors?.purchase?.[index]?.price
+											}
+											register={register}
+										/>
+									</td>
+									<td className={`w-48 ${rowClass}`}>
+										<Input
+											title='remarks'
+											label={`purchase[${index}].remarks`}
+											is_title_needed='false'
+											dynamicerror={
+												errors?.purchase?.[index]
+													?.remarks
+											}
+											register={register}
+										/>
+									</td>
+									<td className={`w-12 ${rowClass} pl-0`}>
+										<RemoveButton
+											className={'justify-center'}
+											onClick={() =>
+												handlePurchaseRemove(index)
+											}
+											showButton={
+												purchaseField.length > 1
+											}
+										/>
+									</td>
+								</tr>
+							))}
+							<tr className='border-t border-primary/30'>
 								<td
-									className={`w-16 border-l-4 border-l-primary ${rowClass}`}>
-									<RemoveButton
-										onClick={() =>
-											handlePurchaseRemove(index)
-										}
-										showButton={purchaseField.length > 1}
-									/>
+									className='py-4 text-right font-bold'
+									colSpan='2'>
+									Total Price:
+								</td>
+								<td className='py-4 font-bold'>
+									{getTotalPrice(watch('purchase'))}
 								</td>
 							</tr>
-						))}
-						<tr>
-							<td
-								className='py-2 text-right font-bold'
-								colSpan='2'>
-								Total Price:
-							</td>
-							<td className='py-2 font-bold'>
-								{getTotalPrice(watch('purchase'))}
-							</td>
-						</tr>
-					</DynamicField>
+						</DynamicField>
+					</div>
+
 					<div className='modal-action'>
 						<button
 							type='submit'
-							className='text-md btn btn-primary btn-block'>
+							className='text-md btn btn-primary btn-block rounded'>
 							Save
 						</button>
 					</div>
@@ -402,6 +433,6 @@ export default function Index() {
 				/>
 			</Suspense>
 			<DevTool control={control} placement='top-left' />
-		</div>
+		</PageContainer>
 	);
 }

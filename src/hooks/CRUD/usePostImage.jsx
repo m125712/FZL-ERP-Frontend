@@ -1,5 +1,5 @@
-import { ShowToast } from "@/components/Toast";
-import { image_api } from "@/lib/api";
+import { ShowToast } from '@/components/Toast';
+import { image_api } from '@/lib/api';
 
 const postItem = (prev, data, id) => {
 	return [

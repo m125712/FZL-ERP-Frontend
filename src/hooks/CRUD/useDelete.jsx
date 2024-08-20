@@ -1,5 +1,5 @@
-import { ShowToast } from "@/components/Toast";
-import { api } from "@lib/api";
+import { ShowToast } from '@/components/Toast';
+import { api } from '@lib/api';
 
 const deleteItem = (prev, itemId) => {
 	const index = prev.findIndex(({ id }) => id === itemId);

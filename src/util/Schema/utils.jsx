@@ -1,35 +1,44 @@
 import * as yup from 'yup';
 
+export const handelNumberDefaultValue = (value) =>
+	value === null ? undefined : value;
+
+// * STRING
 export const STRING = yup.string().trim();
 export const STRING_REQUIRED = STRING.required('Required');
 
 export const UUID = STRING.length(15, 'Invalid Primary Key UUID Length');
 export const UUID_REQUIRED = UUID.required('Required');
-export const UUID_FK = UUID;
+export const UUID_FK = UUID.nullable();
 export const UUID_PK = UUID_REQUIRED;
 
-// export const NAME_STRING = STRING.matches(
+export const URL = STRING.url('Invalid URL');
+export const URL_REQUIRED = URL.required('Required');
 
-// 	, "Invalid Name");
+export const NAME = STRING.matches(/^[a-zA-Z0-9 ._#-/"'()]*$/, 'Invalid Name');
+export const NAME_REQUIRED = NAME.required('Required');
 
 export const EMAIL = yup.string().email('Invalid Email');
 export const EMAIL_REQUIRED = EMAIL.required('Required');
 
-// boolean
-export const BOOLEAN = yup.boolean();
-export const BOOLEAN_REQUIRED = BOOLEAN.required('Required');
-
-// Json String
+// * Json String
 export const JSON_STRING = yup.mixed();
 export const JSON_STRING_REQUIRED = JSON_STRING.required('Required');
 
-// email pattern will be after @ is fortunezip.com
+// * boolean
+export const BOOLEAN = yup.boolean();
+export const BOOLEAN_DEFAULT_VALUE = (value = false) =>
+	BOOLEAN.transform(handelNumberDefaultValue).default(value);
+export const BOOLEAN_REQUIRED = BOOLEAN.required('Required');
+
+// ? email pattern will be after @ is fortunezip.com
 // export const FORTUNE_ZIP_EMAIL_PATTERN = EMAIL_REQUIRED.matches(
 // 	/^[a-zA-Z0-9._%+-]+@fortunezip.com$/,
 // 	"Email: XXXXX@fortunezip.com"
 // );
 export const FORTUNE_ZIP_EMAIL_PATTERN = EMAIL_REQUIRED;
 
+// * NUMBER
 export const NUMBER = yup.number().integer().typeError('Invalid Number');
 export const NUMBER_REQUIRED = NUMBER.required('Required');
 
@@ -46,6 +55,7 @@ export const PASSWORD = STRING_REQUIRED.min(
 	'Password length should be at least 4 characters'
 ).max(12, 'Password cannot exceed more than 12 characters');
 
+// * ORDER NUMBER
 export const ORDER_NUMBER_NOT_REQUIRED = STRING.matches(
 	/^(?:[0-9]{4}-[2]{1}[3-9]{1}|[C]{1}[S]{1}[0-9]{4}-[2]{1}[3-9]{1}|[S]{1}[0-9]{4}-[2]{1}[3-9]{1})$/, // 09877-24
 	'O/N format: XXXX-23, CSXXXX-23, SXXXX-23'
@@ -55,8 +65,3 @@ export const ORDER_NUMBER = STRING_REQUIRED.matches(
 	/^(?:[0-9]{4}-[2]{1}[3-9]{1}|[C]{1}[S]{1}[0-9]{4}-[2]{1}[3-9]{1}|[S]{1}[0-9]{4}-[2]{1}[3-9]{1})$/,
 	'O/N format: XXXX-23, CSXXXX-23, SXXXX-23'
 );
-export const URL = STRING.url('Invalid URL');
-export const URL_REQUIRED = URL.required('Required');
-
-export const NAME = STRING.matches(/^[a-zA-Z0-9 ._#-/"'()]*$/, 'Invalid Name');
-export const NAME_REQUIRED = NAME.required('Required');

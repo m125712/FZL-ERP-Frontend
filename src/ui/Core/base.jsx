@@ -9,7 +9,7 @@ const renderError = (error) => {
 		error?.message && (
 			<label className='label px-2 pb-0 pt-[0.02rem]'>
 				<span className='label-text-alt' />
-				<span className='label-text-alt text-xs font-medium capitalize text-error'>
+				<span className='label-text-alt text-xs font-medium capitalize text-error/80'>
 					{error?.message}
 				</span>
 			</label>
@@ -129,4 +129,3 @@ export function DatePickerCustomHeader({
 		</div>
 	);
 }
-

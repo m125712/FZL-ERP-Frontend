@@ -1,7 +1,8 @@
 import * as yup from 'yup';
 import {
 	BOOLEAN, // default
-	BOOLEAN_REQUIRED,
+	BOOLEAN_DEFAULT_VALUE, // default
+	BOOLEAN_REQUIRED, // default
 	EMAIL, // default
 	EMAIL_REQUIRED, // default
 	FORTUNE_ZIP_EMAIL_PATTERN, // default
@@ -393,8 +394,8 @@ export const ORDER_INFO_SCHEMA = {
 	is_cash: BOOLEAN_REQUIRED,
 	status: BOOLEAN_REQUIRED.default(false),
 	marketing_uuid: STRING_REQUIRED,
-	merchandiser_uuid: STRING.transform(handelNumberDefaultValue).default(0), // No Merchandiser
-	factory_uuid: STRING.transform(handelNumberDefaultValue).default(0), // No Factory
+	merchandiser_uuid: STRING, // No Merchandiser
+	factory_uuid: STRING, // No Factory
 	party_uuid: STRING_REQUIRED,
 	buyer_uuid: STRING_REQUIRED,
 	marketing_priority: STRING,
@@ -423,27 +424,44 @@ export const ORDER_SCHEMA = {
 	order_info_uuid: UUID_REQUIRED,
 	item: UUID_REQUIRED,
 	zipper_number: UUID_REQUIRED,
-	end_type: UUID_REQUIRED,
-	lock_type: UUID_REQUIRED,
-	puller_type: UUID_REQUIRED,
 	teeth_color: UUID_REQUIRED,
-	puller_color: UUID_REQUIRED,
-	hand: UUID, // 67 = No Hand
-	stopper_type: UUID_REQUIRED,
-	special_requirement: JSON_STRING_REQUIRED,
-	description: STRING,
-	remarks: STRING.nullable(),
 	coloring_type: UUID_REQUIRED,
-	slider: UUID_REQUIRED,
+	special_requirement: JSON_STRING_REQUIRED,
+	description: STRING.nullable(),
+	remarks: STRING.nullable(),
+
+	// slider
 	slider_starting_section: STRING_REQUIRED,
-	is_slider_provided: BOOLEAN.transform(handelNumberDefaultValue).default(
-		false
-	),
-	top_stopper: UUID,
-	bottom_stopper: UUID,
-	logo_type: UUID,
-	is_logo_body: BOOLEAN.transform(handelNumberDefaultValue).default(false),
-	is_logo_puller: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+	end_type: UUID_REQUIRED,
+	hand: UUID_FK,
+	lock_type: UUID_REQUIRED,
+	slider: UUID_REQUIRED,
+	slider_body_shape: UUID_FK,
+	slider_link: UUID_FK,
+
+	// puller
+	puller_type: UUID_REQUIRED,
+	puller_color: UUID_REQUIRED,
+	puller_link: UUID_FK,
+
+	// logo
+	logo_type: UUID_FK,
+	is_logo_body: BOOLEAN_DEFAULT_VALUE(false),
+	is_logo_puller: BOOLEAN_DEFAULT_VALUE(false),
+	is_slider_provided: BOOLEAN_DEFAULT_VALUE(false),
+
+	// stopper
+	stopper_type: UUID_REQUIRED,
+	top_stopper: UUID_FK,
+	bottom_stopper: UUID_FK,
+
+	// garments
+	end_user: UUID_FK,
+	garment: STRING.nullable(),
+	light_preference: UUID_FK,
+	garments_wash: UUID_FK,
+	garments_remarks: STRING.nullable(),
+
 	order_entry: yup.array().of(
 		yup.object().shape({
 			style: STRING.nullable(),
@@ -1077,10 +1095,11 @@ export const PI_SCHEMA = {
 			pi_uuid: STRING,
 			max_quantity: NUMBER,
 			pi_quantity: NUMBER_REQUIRED.max(
-				yup.ref('max_quantity'),
+				yup.ref('quantity'),
 				'Beyond Max Quantity'
 			),
 			remarks: STRING.nullable(),
+			isDeletable: BOOLEAN,
 		})
 	),
 };
@@ -1104,6 +1123,7 @@ export const PI_NULL = {
 			max_quantity: null,
 			pi_quantity: null,
 			remarks: '',
+			isDeletable: false,
 		},
 	],
 };
@@ -1127,7 +1147,7 @@ export const BANK_NULL = {
 
 // LC
 export const LC_SCHEMA = {
-	party_id: NUMBER_REQUIRED,
+	party_uuid: STRING_REQUIRED,
 	file_no: STRING_REQUIRED,
 	lc_number: STRING_REQUIRED,
 	lc_date: STRING_REQUIRED,
@@ -1151,11 +1171,12 @@ export const LC_SCHEMA = {
 	problematical: BOOLEAN_REQUIRED,
 	epz: BOOLEAN_REQUIRED,
 	remarks: STRING.nullable(),
+	pi: yup.array().of(yup.object().shape({})),
 };
 
 export const LC_NULL = {
-	id: null,
-	party_id: null,
+	uuid: null,
+	party_uuid: null,
 	file_no: '',
 	lc_number: '',
 	lc_date: '',
@@ -1179,6 +1200,11 @@ export const LC_NULL = {
 	problematical: false,
 	epz: false,
 	remarks: '',
+	pi: [
+		{
+			uuid: null,
+		},
+	],
 };
 
 // Thread
@@ -1290,4 +1316,36 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 			remarks: '',
 		},
 	],
+};
+
+// * Dyeing Planning SNO schema*//
+export const DYEING_PLANNING_SCHEMA = {
+	remarks: STRING.nullable(),
+	planning_entry: yup.array().of(
+		yup.object().shape({
+			sno_quantity: NUMBER.nullable() // Allows the field to be null
+				.transform((value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+				) // Transforms empty strings to null
+				.max(yup.ref('order_quantity'), 'Beyond Max Quantity'),
+			factory_quantity: NUMBER.nullable() // Allows the field to be null
+				.transform((value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+				) // Transforms empty strings to null
+				.max(yup.ref('order_quantity'), 'Beyond Max Quantity'),
+			plan_entry_remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const DYEING_PLANNING_NULL = {
+	week: '',
+	remarks: '',
+	planning_entry: yup.array().of(
+		yup.object().shape({
+			sno_quantity: null,
+			factory_quantity: null,
+			plan_entry_remarks: '',
+		})
+	),
 };

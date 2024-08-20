@@ -166,7 +166,7 @@ export default function Header({
 					</FormField>
 					<FormField
 						label='zipper_number'
-						title='Zipper'
+						title='Zipper Number'
 						errors={errors}>
 						<Controller
 							name={'zipper_number'}

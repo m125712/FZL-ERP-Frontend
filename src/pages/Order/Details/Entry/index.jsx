@@ -5,6 +5,7 @@ import { useOrderDescription, useOrderDetails } from '@/state/Order';
 import { ActionButtons, DynamicField, Input, JoinInput, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
+import { DevTool } from '@hookform/devtools';
 import { ORDER_NULL, ORDER_SCHEMA } from '@util/Schema';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
@@ -192,9 +193,6 @@ export default function Index() {
 			created_at,
 		}));
 
-		// console.log('Order Description:', order_description);
-		// console.log('Order Entry:', order_entry);
-
 		//* Post new entry */ //
 		let order_entry_promises = [
 			...order_entry.map(
@@ -207,6 +205,7 @@ export default function Index() {
 			),
 		];
 
+		// * All promises
 		await Promise.all(order_entry_promises)
 			.then(() => reset(Object.assign({}, ORDER_NULL)))
 			.then(async () => {
@@ -214,6 +213,38 @@ export default function Index() {
 				navigate(`/order/details`);
 			})
 			.catch((err) => console.log(err));
+
+		// * Slider
+		const slider_quantity = [...data.order_entry].reduce(
+			(prev, curr) => prev.quantity + curr.quantity
+		);
+
+		const slider_info = {
+			uuid: nanoid(),
+			order_info_uuid: data.order_info_uuid,
+			item: data.item,
+			zipper_number: data.zipper_number,
+			end_type: data.end_type,
+			lock_type: data.lock_type,
+			puller_type: data.puller_type,
+			puller_color: data.puller_color,
+			coloring_type: data.coloring_type,
+			puller_link: data.puller_link,
+			slider: data?.slider,
+			slider_body_shape: data?.slider_body_shape,
+			slider_link: data?.slider_link,
+			logo_type: data.logo_type,
+			is_logo_body: data?.is_logo_body ? 1 : 0,
+			is_logo_puller: data?.is_logo_puller ? 1 : 0,
+			order_quantity: slider_quantity,
+			created_at: GetDateTime(),
+		};
+
+		await postData.mutateAsync({
+			url: '/slider/stock',
+			newData: slider_info,
+			isOnCloseNeeded: false,
+		});
 	};
 
 	// Check if order_number is valid
@@ -415,7 +446,7 @@ export default function Index() {
 				/>
 			</Suspense>
 
-			{/* <DevTool control={control} placement='top-left' /> */}
+			<DevTool control={control} placement='top-left' />
 		</div>
 	);
 }

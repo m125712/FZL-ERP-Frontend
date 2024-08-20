@@ -11,7 +11,7 @@ function AddModal({ id, title, onSubmit, onClose, children, isSmall = false }) {
 				noValidate
 				method='dialog'
 				className={cn(
-					'modal-box flex w-full flex-col justify-between bg-secondary p-6 text-secondary-content',
+					'modal-box flex w-full flex-col justify-between bg-gray-50 p-6 text-secondary-content',
 					!isSmall && 'sm:max-w-5xl'
 				)}>
 				<Header title={title} onClose={onClose} />

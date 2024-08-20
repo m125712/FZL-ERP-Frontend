@@ -1,7 +1,7 @@
-import ActionButtons from "./ActionButtons";
-import CopyButton from "./CopyButton";
-import DynamicField, { DynamicDeliveryField } from "./DynamicField";
-import RemoveButton from "./RemoveButton";
+import ActionButtons from './ActionButtons';
+import CopyButton from './CopyButton';
+import DynamicField, { DynamicDeliveryField } from './DynamicField';
+import RemoveButton from './RemoveButton';
 
 export {
 	ActionButtons,

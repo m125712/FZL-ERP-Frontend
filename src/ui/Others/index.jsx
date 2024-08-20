@@ -5,15 +5,15 @@ import {
 	ResetPassword,
 	StatusButton,
 	Transfer,
-} from "./Button";
-import { DateTime } from "./DateTime";
-import { DepartmentShow, UserName } from "./DepartmentShow";
-import { ItemName } from "./ItemName";
-import { LinkCopyOnly, LinkOnly, LinkWithCopy } from "./LinkWithCopy";
-import ReactSelect from "./ReactSelect";
-import SectionEntryBody from "./SectionEntryBody";
-import SectionName from "./SectionName";
-import { TitleList, TitleValue } from "./TitleValue";
+} from './Button';
+import { DateTime } from './DateTime';
+import { DepartmentShow, UserName } from './DepartmentShow';
+import { ItemName } from './ItemName';
+import { LinkCopyOnly, LinkOnly, LinkWithCopy } from './LinkWithCopy';
+import ReactSelect from './ReactSelect';
+import SectionEntryBody from './SectionEntryBody';
+import SectionName from './SectionName';
+import { TitleList, TitleValue } from './TitleValue';
 
 export {
 	BadgeCheckbox,

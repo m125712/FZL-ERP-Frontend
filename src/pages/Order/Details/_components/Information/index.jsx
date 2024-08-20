@@ -4,21 +4,23 @@ import { format } from 'date-fns';
 import ItemDescription from './Item';
 import OrderDescription from './Order';
 import SliderDescription from './Slider';
+import RenderTable from '@/ui/Others/Table/RenderTable';
+import SectionContainer from '@/ui/Others/SectionContainer';
 
 export default function SingleInformation({ order, idx, hasInitialOrder }) {
-	console.log(order);
-
+	const renderButtons = () => {
+		return [
+			<StatusButton
+				key={'swatch_approval_status'}
+				size='btn-xs md:btn-sm'
+				value={order?.swatch_approval_status}
+			/>,
+		];
+	};
 	return (
-		<div className='flex flex-col rounded-md shadow-md'>
-			<span className='flex items-center gap-2 bg-secondary-content/5 px-4 py-3 text-2xl font-semibold capitalize leading-tight text-primary md:text-3xl'>
-				Information {idx !== undefined && `#${idx + 1}`}
-				<StatusButton
-					size='btn-xs md:btn-sm'
-					value={order?.swatch_approval_status}
-				/>
-			</span>
-			<hr className='border-1 border-secondary-content' />
-
+		<SectionContainer
+			title={`Information ${idx !== undefined && `#${idx + 1}`}`}
+			buttons={renderButtons()}>
 			{hasInitialOrder ? (
 				<div className='flex flex-col items-baseline gap-8 bg-secondary-content/5 text-sm md:flex-row'>
 					<div className='w-full flex-1'>
@@ -30,15 +32,23 @@ export default function SingleInformation({ order, idx, hasInitialOrder }) {
 					</div>
 				</div>
 			) : (
-				<div className='flex flex-col items-baseline px-4 py-2 text-sm md:flex-row'>
-					<OrderDescription order={order} />
-					<hr className='divider divider-primary divider-vertical md:divider-horizontal' />
-					<ItemDescription order_description={order} />
-					<hr className='divider divider-primary divider-vertical md:divider-horizontal' />
-					<SliderDescription order_description={order} />
+				<div>
+					<div className=''>
+						<OrderDescription order={order} />
+					</div>
+
+					<div className='flex flex-col items-baseline gap-8 py-2 text-sm md:flex-row'>
+						<div className='w-full flex-1'>
+							<ItemDescription order_description={order} />
+						</div>
+
+						<div className='w-full flex-1'>
+							<SliderDescription order_description={order} />
+						</div>
+					</div>
 				</div>
 			)}
-		</div>
+		</SectionContainer>
 	);
 }
 
@@ -71,14 +81,14 @@ export function OrderInformation({ order, handelPdfDownload }) {
 		factory_name,
 		factory_address,
 	} = order;
-	const renderOrderDetails = () => {
-		const items = [
+	const renderItems = () => {
+		const order_details = [
 			{
-				title: 'O/N',
+				label: 'O/N',
 				value: order_number,
 			},
 			{
-				title: 'Ref. O/N',
+				label: 'Ref. O/N',
 				value: reference_order && (
 					<LinkWithCopy
 						title={reference_order}
@@ -89,7 +99,7 @@ export function OrderInformation({ order, handelPdfDownload }) {
 			},
 
 			{
-				title: 'Cash / LC',
+				label: 'Cash / LC',
 				value: renderCashOrLC(
 					order?.is_cash,
 					order?.is_sample,
@@ -99,7 +109,7 @@ export function OrderInformation({ order, handelPdfDownload }) {
 			},
 
 			{
-				title: 'Priority (Mark / Fact)',
+				label: 'Priority (Mark / Fact)',
 				value:
 					(marketing_priority || '-') +
 					' / ' +
@@ -107,107 +117,81 @@ export function OrderInformation({ order, handelPdfDownload }) {
 			},
 
 			{
-				title: 'Created By',
+				label: 'Created By',
 				value: user_name,
 			},
 
 			{
-				title: 'Created At',
+				label: 'Created At',
 				value: created_at && format(new Date(created_at), 'dd/MM/yyyy'),
 			},
 		];
-		return items;
-	};
 
-	const renderOrderOtherDetails = () => {
-		const items = [
+		const buyer_details = [
 			{
-				title: 'Marketing',
+				label: 'Marketing',
 				value: marketing_name,
 			},
 			{
-				title: 'Buyer',
+				label: 'Buyer',
 				value: buyer_name,
 			},
 
 			{
-				title: 'Party',
+				label: 'Party',
 				value: party_name,
 			},
 
 			{
-				title: 'Merchandiser',
+				label: 'Merchandiser',
 				value: merchandiser_name,
 			},
 
 			{
-				title: 'Factory',
+				label: 'Factory',
 				value: factory_name,
 			},
 
 			{
-				title: 'Factory Address',
+				label: 'Factory Address',
 				value: factory_address,
 			},
 		];
-		return items;
+		return {
+			order_details,
+			buyer_details,
+		};
+	};
+
+	const renderButtons = () => {
+		return [
+			<button
+				key='pdf'
+				type='button'
+				className='btn btn-primary btn-sm rounded-badge'
+				onClick={handelPdfDownload}>
+				<PDF className='w-4' /> PDF
+			</button>,
+		];
 	};
 
 	return (
-		<div className='container mx-auto my-8'>
-			<div className='flex flex-col rounded-md bg-white shadow-md md:justify-between'>
-				<span className='flex items-center gap-2 bg-secondary-content/5 px-4 py-3 text-2xl font-semibold capitalize leading-tight text-primary md:text-3xl'>
-					Order
-					<button
-						type='button'
-						className='btn btn-primary btn-sm rounded-badge'
-						onClick={handelPdfDownload}>
-						<PDF className='w-4' /> PDF
-					</button>
-				</span>
-				<hr className='border-1 border-secondary-content' />
-				<div className='flex flex-col bg-secondary-content/5 text-sm md:flex-row md:gap-8'>
-					<div className='w-full flex-1'>
-						<div className='overflow-x-auto'>
-							<table className='table table-sm'>
-								<tbody>
-									{renderOrderDetails().map((item, index) => (
-										<tr
-											key={index}
-											className='odd:bg-secondary-content/5'>
-											<th className='capitalize'>
-												{item.title}
-											</th>
-											<td>{item.value || '--'}</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
-						</div>
-					</div>
+		<SectionContainer title='Order Information' buttons={renderButtons()}>
+			<div className='flex flex-col gap-4 bg-secondary-content/5 text-sm md:flex-row md:gap-8'>
+				<div className='w-full flex-1'>
+					<RenderTable
+						title='Order Details'
+						items={renderItems().order_details}
+					/>
+				</div>
 
-					<div className='w-full flex-1'>
-						<div className='overflow-x-auto'>
-							<table className='table table-sm'>
-								<tbody>
-									{renderOrderOtherDetails().map(
-										(item, index) => (
-											<tr
-												key={index}
-												className='odd:bg-secondary-content/5'>
-												<th className='capitalize'>
-													{item.title}
-												</th>
-												<td>{item.value || '--'}</td>
-											</tr>
-										)
-									)}
-								</tbody>
-							</table>
-						</div>
-					</div>
+				<div className='w-full flex-1'>
+					<RenderTable
+						title='Buyer Details'
+						items={renderItems().buyer_details}
+					/>
 				</div>
 			</div>
-		</div>
+		</SectionContainer>
 	);
 }

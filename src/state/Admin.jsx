@@ -1,16 +1,11 @@
 import createGlobalState from '@/state';
 import { adminQK } from './QueryKeys';
 
+// * User
 export const useAdminUsers = () =>
 	createGlobalState({
 		queryKey: adminQK.users(),
 		url: '/hr/user',
-	});
-
-export const useOrderBuyerByUUID = (uuid) =>
-	createGlobalState({
-		queryKey: orderQK.buyer(uuid),
-		url: `/public/buyer/${uuid}`,
 	});
 
 // * Department

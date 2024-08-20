@@ -1,12 +1,11 @@
-import { Edit, Trash } from "@/assets/icons";
+import { Edit, Trash } from '@/assets/icons';
 
-const ActionButton = ({ children, className = "", ...rest }) => {
+const ActionButton = ({ children, className = '', ...rest }) => {
 	return (
 		<button
-			className="btn btn-circle btn-ghost btn-sm transition-all duration-300"
-			type="button"
-			{...rest}
-		>
+			className='btn btn-circle btn-ghost btn-sm transition-all duration-300'
+			type='button'
+			{...rest}>
 			{children}
 		</button>
 	);
@@ -22,15 +21,15 @@ function EditDelete({
 }) {
 	if (!showAction) return null;
 	return (
-		<div className="flex w-16 items-center justify-evenly gap-2">
+		<div className='flex w-16 items-center justify-evenly gap-2'>
 			{showUpdate && (
 				<ActionButton onClick={() => handelUpdate(idx)}>
-					<Edit className="w-6 bg-transparent text-primary" />
+					<Edit className='w-6 bg-transparent text-primary' />
 				</ActionButton>
 			)}
 			{showDelete && (
 				<ActionButton onClick={() => handelDelete(idx)}>
-					<Trash className="w-6 bg-transparent text-error" />
+					<Trash className='w-6 bg-transparent text-error' />
 				</ActionButton>
 			)}
 		</div>

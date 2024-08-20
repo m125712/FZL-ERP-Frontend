@@ -1,14 +1,14 @@
-import Cookies from "js-cookie";
-import { useState } from "react";
+import Cookies from 'js-cookie';
+import { useState } from 'react';
 
 const useToken = () => {
 	const getToken = (id) => Cookies?.get(id);
 
 	const [token, setToken] = useState({
-		auth: getToken("auth") || null,
-		id: getToken("id") || null,
-		name: getToken("name") || null,
-		department: getToken("department") || null,
+		auth: getToken('auth') || null,
+		id: getToken('id') || null,
+		name: getToken('name') || null,
+		department: getToken('department') || null,
 	});
 
 	// useEffect(() => {

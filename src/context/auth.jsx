@@ -12,10 +12,8 @@ const AuthProvider = ({ children }) => {
 
 	const [authCookie, updateAuthCookie, removeAuthCookie] = useCookie('auth');
 	const [userCookie, updateUserCookie, removeUserCookie] = useCookie('user');
-	const [userCanAccess, updateUserCanAccess, removeUserCanAccess] = useLocalStorage(
-		'can_access',
-		''
-	);
+	const [userCanAccess, updateUserCanAccess, removeUserCanAccess] =
+		useLocalStorage('can_access', '');
 
 	useEffect(() => {
 		async function loadCookieData() {
@@ -72,7 +70,9 @@ const AuthProvider = ({ children }) => {
 	};
 	// const value = { signed: true, user, canAccess, loading, Login, Logout };
 
-	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+	return (
+		<AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+	);
 };
 
 export const useAuth = () => {

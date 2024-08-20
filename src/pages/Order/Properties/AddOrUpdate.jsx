@@ -91,13 +91,10 @@ export default function Index({
 		{ value: 'top_stopper', label: 'Top Stopper' },
 		{ value: 'bottom_stopper', label: 'Bottom Stopper' },
 		{ value: 'logo_type', label: 'Logo Type' },
-		// * new fields * //
 		{ value: 'light_preference', label: 'Light Preference' },
 		{ value: 'garments_wash', label: 'Garments Wash' },
-
 		{ value: 'slider_body_shape', label: 'Slider Body Shape' },
 		{ value: 'slider_link', label: 'Slider Link' },
-
 		{ value: 'end_user', label: 'End User' },
 	];
 
@@ -105,7 +102,6 @@ export default function Index({
 		{ value: 'zipper', label: 'Zipper' },
 		{ value: 'thread', label: 'Thread' },
 	];
-
 
 	return (
 		<AddModal
@@ -127,8 +123,8 @@ export default function Index({
 							<ReactSelect
 								placeholder='Select Type'
 								options={typeOptions}
-								value={typeOptions?.filter((item) =>
-									getValues('type').includes(item.value)
+								value={typeOptions?.filter(
+									(item) => item.value === getValues('type')
 								)}
 								onChange={(e) => {
 									onChange(e.value);

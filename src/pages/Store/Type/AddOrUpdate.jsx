@@ -72,7 +72,7 @@ export default function Index({
 			title={
 				updateMaterialType?.uuid !== null
 					? 'Update Material Type'
-					: 'Material Type'
+					: 'Create Material Type'
 			}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}

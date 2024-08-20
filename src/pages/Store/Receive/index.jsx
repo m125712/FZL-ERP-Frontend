@@ -24,7 +24,7 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'uuid',
+				accessorKey: 'purchase_id',
 				header: 'ID',
 				enableColumnFilter: false,
 				cell: (info) => {

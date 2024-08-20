@@ -1,6 +1,10 @@
 import { AddModal } from '@/components/Modal';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
-import { useMaterialInfo, useMaterialStockToSFG } from '@/state/Store';
+import {
+	useMaterialInfo,
+	useMaterialStockToSFG,
+	useMaterialTrxAgainstOrderDescription,
+} from '@/state/Store';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -18,13 +22,13 @@ export default function Index({
 	},
 	setUpdateMaterialTrxToOrder,
 }) {
-	const { url, updateData } = useMaterialStockToSFG();
+	const { url, updateData } = useMaterialTrxAgainstOrderDescription();
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const schema = {
 		...MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
-		trx_quantity: MATERIAL_TRX_AGAINST_ORDER_SCHEMA.trx_quantity.max(
-			updateMaterialTrxToOrder?.stock
-		),
+		// trx_quantity: MATERIAL_TRX_AGAINST_ORDER_SCHEMA.trx_quantity.max(
+		// 	updateMaterialTrxToOrder?.stock
+		// ),
 	};
 	const {
 		register,
@@ -37,7 +41,7 @@ export default function Index({
 	} = useRHF(schema, MATERIAL_TRX_AGAINST_ORDER_NULL);
 
 	useFetchForRhfReset(
-		`/material/stock-to-sfg/${updateMaterialTrxToOrder?.uuid}`,
+		`${url}/${updateMaterialTrxToOrder?.uuid}`,
 		updateMaterialTrxToOrder?.uuid,
 		reset
 	);
@@ -99,7 +103,7 @@ export default function Index({
 							<ReactSelect
 								placeholder='Select Transaction Area'
 								options={transactionArea}
-								value={transactionArea?.find(
+								value={transactionArea?.filter(
 									(item) => item.value == getValues('trx_to')
 								)}
 								onChange={(e) => onChange(e.value)}
@@ -113,7 +117,7 @@ export default function Index({
 			</FormField>
 			<Input
 				label='trx_quantity'
-				sub_label={`Max: ${updateMaterialTrxToOrder?.stock}`}
+				// sub_label={`Max: ${updateMaterialTrxToOrder?.stock}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

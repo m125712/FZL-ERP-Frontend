@@ -5,6 +5,7 @@ import nanoid from '@/lib/nanoid';
 import { useMaterialInfo, useMaterialStockToSFG } from '@/state/Store';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
+import { DevTool } from '@hookform/devtools';
 import {
 	MATERIAL_TRX_AGAINST_ORDER_NULL,
 	MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
@@ -31,7 +32,7 @@ export default function Index({
 			.max(updateMaterialDetails?.stock),
 	};
 
-	const { value: order } = useFetch(`/other/order/entry/value/label`);
+	const { value: order } = useFetch(`/other/order/description/value/label`);
 
 	const { register, handleSubmit, errors, control, Controller, reset } =
 		useRHF(schema, MATERIAL_TRX_AGAINST_ORDER_NULL);
@@ -64,7 +65,7 @@ export default function Index({
 			};
 
 			await postData.mutateAsync({
-				url: '/material/stock-to-sfg',
+				url: '/zipper/material-trx-against-order',
 				newData: updatedData,
 				onClose,
 			});
@@ -92,9 +93,12 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<FormField label='order_entry_uuid' title='Order' errors={errors}>
+			<FormField
+				label='order_description_uuid'
+				title='Order'
+				errors={errors}>
 				<Controller
-					name={'order_entry_uuid'}
+					name={'order_description_uuid'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
@@ -133,6 +137,7 @@ export default function Index({
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />
+			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);
 }

@@ -217,7 +217,7 @@ export const MATERIAL_STOCK_NULL = {
 };
 
 export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
-	order_entry_uuid: STRING_REQUIRED,
+	order_description_uuid: STRING_REQUIRED,
 	trx_to: STRING_REQUIRED,
 	trx_quantity: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
@@ -226,7 +226,7 @@ export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
 export const MATERIAL_TRX_AGAINST_ORDER_NULL = {
 	uuid: null,
 	material_uuid: null,
-	order_entry_uuid: null,
+	order_description_uuid: null,
 	trx_to: '',
 	trx_quantity: '',
 	created_by: '',

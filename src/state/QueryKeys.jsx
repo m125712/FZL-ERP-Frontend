@@ -126,6 +126,16 @@ export const materialQK = {
 	// stock to sfg
 	stockToSGFs: () => [...materialQK.all(), 'stock-to-sfg'],
 	stockToSFG: (uuid) => [...materialQK.stockToSGFs(), uuid],
+
+	// *TrxAgainstOrderDescription//
+	trxAgainstOrderDescriptions: () => [
+		...materialQK.all(),
+		'trx-against-order-description',
+	],
+	trxAgainstOrderDescription: (uuid) => [
+		...materialQK.trxAgainstOrderDescriptions(),
+		uuid,
+	],
 };
 
 // Purchase Query Keys

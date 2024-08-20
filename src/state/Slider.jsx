@@ -27,7 +27,12 @@ export const useSliderAssemblyRMLogByUUID = (uuid) =>
 		url: `/material/used/by/slider_assembly${uuid}`,
 	});
 
-// * Die Casting
+// * Die Casting --> (STOCK)
+export const useSliderDieCastingStock = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDieCastingRM(),
+		url: '/slider/die-casting',
+	});
 
 // * RM
 export const useSliderDieCastingRM = () =>

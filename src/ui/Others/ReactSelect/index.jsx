@@ -14,6 +14,7 @@ const ReactSelect = (props) => {
 			closeMenuOnSelect={!props.isMulti}
 			hideSelectedOptions
 			maxMenuHeight={150}
+			placeholder={props.placeholder}
 			{...props}
 		/>
 	);

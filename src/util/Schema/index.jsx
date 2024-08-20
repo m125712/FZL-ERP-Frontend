@@ -1349,3 +1349,55 @@ export const DYEING_PLANNING_NULL = {
 		})
 	),
 };
+
+// * Slide Die Casting Stock*//
+export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
+	name: STRING_REQUIRED, //
+	item: STRING_REQUIRED, //
+	zipper_number: STRING_REQUIRED, //
+	end_type: STRING_REQUIRED, //
+	puller_type: STRING_REQUIRED, //
+	logo_type: STRING_REQUIRED, //
+	slider_body_shape: STRING_REQUIRED, //
+	puller_link: STRING_REQUIRED, //
+	stopper_type: STRING_REQUIRED, //
+	// quantity: NUMBER_REQUIRED, //
+	// weight: NUMBER_REQUIRED, //
+	// pcs_per_kg: NUMBER_REQUIRED, //
+	remarks: STRING.nullable(),
+	is_body: BOOLEAN_REQUIRED,
+	is_puller: BOOLEAN_REQUIRED,
+	is_cap: BOOLEAN_REQUIRED,
+	is_link: BOOLEAN_REQUIRED,
+	is_h_bottom: BOOLEAN_REQUIRED,
+	is_u_top: BOOLEAN_REQUIRED,
+	is_box_pin: BOOLEAN_REQUIRED,
+	is_two_way_pin: BOOLEAN_REQUIRED,
+};
+
+export const SLIDER_DIE_CASTING_STOCK_NULL = {
+	uuid: null,
+	name: '',
+	item: '',
+	zipper_number: '',
+	end_type: '',
+	puller_type: '',
+	logo_type: '',
+	slider_body_shape: '',
+	puller_link: '',
+	stopper_type: '',
+	// quantity: null,
+	// weight: null,
+	// pcs_per_kg: null,
+	created_at: '',
+	updated_at: '',
+	remarks: '',
+	is_body: false,
+	is_puller: false,
+	is_cap: false,
+	is_link: false,
+	is_h_bottom: false,
+	is_u_top: false,
+	is_box_pin: false,
+	is_two_way_pin: false,
+};

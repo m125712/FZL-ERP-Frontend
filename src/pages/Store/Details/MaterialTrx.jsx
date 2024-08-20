@@ -13,7 +13,11 @@ import {
 	useSliderColoringRM,
 	useSliderDieCastingRM,
 } from '@/state/Slider';
-import { useMaterialInfo } from '@/state/Store';
+import {
+	useMaterialInfo,
+	useMaterialStockToSFG,
+	useMaterialTrx,
+} from '@/state/Store';
 import { useVislonFinishingRM, useVislonTMRM } from '@/state/Vislon';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
@@ -47,6 +51,7 @@ export default function Index({
 		useSliderColoringRM();
 	const { invalidateQuery: invalidateDieCastingRM } = useSliderDieCastingRM();
 	const { invalidateQuery: invalidateDeliveryRM } = useDeliveryRM();
+	const { invalidateQuery: invalidateMaterialTrx } = useMaterialTrx();
 
 	const schema = {
 		...MATERIAL_STOCK_SCHEMA,
@@ -105,6 +110,7 @@ export default function Index({
 			invalidateSliderColoringRM();
 			invalidateDieCastingRM();
 			invalidateDeliveryRM();
+			invalidateMaterialTrx();
 
 			return;
 		}

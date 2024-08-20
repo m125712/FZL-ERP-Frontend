@@ -2,7 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useMaterialInfo } from '@/state/Store';
+import { useMaterialInfo, useMaterialStockToSFG } from '@/state/Store';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -20,6 +20,8 @@ export default function Index({
 	setUpdateMaterialDetails,
 }) {
 	const { postData } = useMaterialInfo();
+	const { invalidateQuery: invalidateMaterialStockToSFG } =
+		useMaterialStockToSFG();
 	const { user } = useAuth();
 
 	const schema = {
@@ -67,6 +69,7 @@ export default function Index({
 				onClose,
 			});
 
+			invalidateMaterialStockToSFG();
 			return;
 		}
 	};

@@ -7,7 +7,8 @@ import {
 	EMAIL_REQUIRED, // default
 	FORTUNE_ZIP_EMAIL_PATTERN, // default
 	JSON_STRING, // default
-	JSON_STRING_REQUIRED,
+	JSON_STRING_REQUIRED, // default
+	NAME,
 	NAME_REQUIRED, // default
 	NUMBER, // default
 	NUMBER_DOUBLE, // default
@@ -25,7 +26,7 @@ import {
 	UUID, // default
 	UUID_FK, // default
 	UUID_PK, // default
-	UUID_REQUIRED, // default
+	UUID_REQUIRED,
 } from './utils';
 
 export {
@@ -192,7 +193,7 @@ export const MATERIAL_NULL = {
 	uuid: null,
 	name: '',
 	short_name: '',
-	unit: '',
+	unit: 'kg',
 	threshold: 0,
 	description: '',
 	section_uuid: null,
@@ -267,9 +268,9 @@ export const SFG_PRODUCTION_LOG_NULL = {
 
 // vendor page
 export const VENDOR_SCHEMA = {
-	name: STRING_REQUIRED,
+	name: NAME_REQUIRED,
 	contact_name: STRING.nullable(),
-	contact_number: STRING.nullable(),
+	contact_number: PHONE_NUMBER.nullable(),
 	email: EMAIL.nullable(),
 	office_address: STRING.nullable(),
 	remarks: STRING.nullable(),

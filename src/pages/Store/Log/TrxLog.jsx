@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useMaterialTrx } from '@/state/Store';
+import { useMaterialInfo, useMaterialTrx } from '@/state/Store';
 
 import { DateTime, EditDelete, SectionName } from '@/ui';
 import PageInfo from '@/util/PageInfo';
@@ -12,6 +12,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useMaterialTrx();
+	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const info = new PageInfo('Material/Log', url);
 	const haveAccess = useAccess('store__log');
 
@@ -33,7 +34,7 @@ export default function Index() {
 				accessorKey: 'trx_quantity',
 				header: 'Quantity',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'unit',
@@ -127,6 +128,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
+	invalidateMaterialInfo();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

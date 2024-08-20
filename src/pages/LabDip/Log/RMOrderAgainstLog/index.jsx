@@ -17,7 +17,7 @@ export default function Index() {
 		useOrderAgainstLabDipRMLog();
 
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-	console.log(data);
+	
 	const info = new PageInfo(
 		'RM Order Against LabDip Log',
 		url,

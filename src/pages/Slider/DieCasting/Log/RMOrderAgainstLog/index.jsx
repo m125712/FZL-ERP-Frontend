@@ -19,7 +19,7 @@ export default function Index() {
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	console.log(data);
 	const info = new PageInfo(
-		'RM Order Against Coil Log',
+		'RM Order Against Die Casting Log',
 		url,
 		'slider__die_casting_log'
 	);

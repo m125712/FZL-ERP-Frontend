@@ -26,7 +26,7 @@ export default function Index({
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateMetalTCRM } = useMetalTCRM();
 
-	console.log(updateMetalTCRMLog);
+	
 	const MAX_QUANTITY =
 		Number(
 			updateMetalTCRMLog?.section === 'teeth_assembling_and_polishing'

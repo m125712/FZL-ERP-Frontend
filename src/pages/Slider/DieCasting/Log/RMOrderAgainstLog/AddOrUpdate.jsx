@@ -82,7 +82,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Coil Forming RM Log of ${updateLog?.material_name}`}
+			title={`Die Casting RM Log of ${updateLog?.material_name}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

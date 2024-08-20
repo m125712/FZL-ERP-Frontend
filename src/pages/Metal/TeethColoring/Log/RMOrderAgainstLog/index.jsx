@@ -16,7 +16,7 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } = useOrderAgainstMetalTCRMLog();
 
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-	console.log(data);
+
 	const info = new PageInfo(
 		'RM Order Against Metal TC Log',
 		url,

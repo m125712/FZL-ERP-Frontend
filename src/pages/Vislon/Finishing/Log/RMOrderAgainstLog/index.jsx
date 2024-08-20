@@ -17,9 +17,9 @@ export default function Index() {
 		useOrderAgainstVislonFinishingRMLog();
 
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-	console.log(data);
+
 	const info = new PageInfo(
-		'RM Order Against Coil Log',
+		'RM Order Against Finishing Log',
 		url,
 		'vislon__finishing_log'
 	);

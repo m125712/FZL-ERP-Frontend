@@ -16,7 +16,7 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } = useOrderAgainstDyeingRMLog();
 
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-	console.log(data);
+	
 	const info = new PageInfo(
 		'RM Order Against Dyeing Log',
 		url,

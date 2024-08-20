@@ -16,9 +16,9 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } = useOrderAgainstVislonTMRMLog();
 
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-	console.log(data);
+
 	const info = new PageInfo(
-		'RM Order Against Coil Log',
+		'RM Order Against Teeth Molding Log',
 		url,
 		'vislon__teeth_molding_log'
 	);

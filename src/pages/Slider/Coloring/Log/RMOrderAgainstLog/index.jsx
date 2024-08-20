@@ -2,27 +2,24 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc } from '@/hooks';
-import {
-	useCommonCoilRMLog,
-	useCommonOrderAgainstCoilRMLog,
-} from '@/state/Common';
+
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo, useState } from 'react';
 
+import { useOrderAgainstSliderColorRMLog } from '@/state/Slider';
 import { useMaterialInfo } from '@/state/Store';
 import { SFG_TRX_NULL } from '@/util/Schema';
 import RMAddOrUpdate from './AddOrUpdate';
-import { useOrderAgainstSliderColorRMLog } from '@/state/Slider';
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } =
 		useOrderAgainstSliderColorRMLog();
 
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-	console.log(data);
+	
 	const info = new PageInfo(
-		'RM Order Against Coil Log',
+		'RM Order Against Color Log',
 		url,
 		'slider__coloring_log'
 	);

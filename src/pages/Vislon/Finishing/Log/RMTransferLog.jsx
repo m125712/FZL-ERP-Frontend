@@ -19,7 +19,7 @@ export default function Index() {
 	);
 	const haveAccess = useAccess(info.getTab());
 	const { invalidateQuery: invalidateFinishingRM } = useVislonFinishingRM();
-	console.log(data);
+	
 	const columns = useMemo(
 		() => [
 			{

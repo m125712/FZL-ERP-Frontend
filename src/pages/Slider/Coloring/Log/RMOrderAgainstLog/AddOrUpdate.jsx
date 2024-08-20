@@ -5,11 +5,11 @@ import { useCommonMaterialTrx } from '@/state/Common';
 import { useMaterialInfo } from '@/state/Store';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
+import getTransactionArea from '@/util/TransactionArea';
 import {
 	RM_MATERIAL_ORDER_AGAINST_EDIT_NULL,
 	RM_MATERIAL_ORDER_AGAINST_EDIT_SCHEMA,
 } from '@util/Schema';
-import getTransactionArea from '@/util/TransactionArea';
 export default function Index({
 	modalId = '',
 	updateLog = {
@@ -82,7 +82,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Coil Forming RM Log of ${updateLog?.material_name}`}
+			title={`Coloring RM Log of ${updateLog?.material_name}`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

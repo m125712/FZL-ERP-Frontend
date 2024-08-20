@@ -17,9 +17,9 @@ export default function Index() {
 		useOrderAgainstNylonMetallicFinishingRMLog();
 
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-	console.log(data);
+
 	const info = new PageInfo(
-		'RM Order Against Coil Log',
+		'RM Order Against Nylon Plastic Finishing Log',
 		url,
 		'nylon__plastic_finishing_log'
 	);

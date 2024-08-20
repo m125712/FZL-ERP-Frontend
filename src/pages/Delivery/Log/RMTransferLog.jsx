@@ -14,8 +14,7 @@ export default function Index() {
 	const info = new PageInfo(' RM Used Log', url, 'delivery__log');
 	const haveAccess = useAccess(info.getTab());
 	const { invalidateQuery: invalidateRM } = useDeliveryRM();
-	console.log(url);
-	console.log(data);
+
 	const columns = useMemo(
 		() => [
 			{

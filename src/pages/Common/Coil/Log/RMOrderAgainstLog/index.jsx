@@ -19,7 +19,7 @@ export default function Index() {
 		useCommonOrderAgainstCoilRMLog();
 
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-	console.log(data);
+	
 	const info = new PageInfo(
 		'RM Order Against Coil Log',
 		url,

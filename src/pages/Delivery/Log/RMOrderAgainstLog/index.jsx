@@ -16,7 +16,7 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } = useOrderAgainstDeliveryRMLog;
 
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-	console.log(data);
+	
 	const info = new PageInfo(
 		'RM Order Against Delivery Log',
 		url,

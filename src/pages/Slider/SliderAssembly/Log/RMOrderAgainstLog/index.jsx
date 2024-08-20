@@ -17,9 +17,9 @@ export default function Index() {
 		useOrderAgainstSliderAssemblyRMLog();
 
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-	console.log(data);
+	
 	const info = new PageInfo(
-		'RM Order Against Coil Log',
+		'RM Order Against Slider Assembly Log',
 		url,
 		'slider__assembly_log'
 	);

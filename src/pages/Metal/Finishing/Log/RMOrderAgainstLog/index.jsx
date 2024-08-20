@@ -17,7 +17,7 @@ export default function Index() {
 		useOrderAgainstMetalFinishingRMLog();
 
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-	console.log(data);
+	
 	const info = new PageInfo(
 		'RM Order Against Metal Finishing Log',
 		url,

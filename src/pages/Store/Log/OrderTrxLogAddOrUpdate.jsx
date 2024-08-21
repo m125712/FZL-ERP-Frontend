@@ -34,6 +34,8 @@ import {
 	MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
 } from '@util/Schema';
 
+import getTransactionArea from '@/util/TransactionArea';
+
 export default function Index({
 	modalId = '',
 	updateMaterialTrxToOrder = {
@@ -143,15 +145,7 @@ export default function Index({
 		}
 	};
 
-	const transactionArea = [
-		{ label: 'Dying and Iron', value: 'dying_and_iron' },
-		{ label: 'Teeth Molding', value: 'teeth_molding' },
-		{ label: 'Teeth Cleaning', value: 'teeth_coloring' },
-		{ label: 'Finishing', value: 'finishing' },
-		{ label: 'Slider Assembly', value: 'slider_assembly' },
-		{ label: 'Coloring', value: 'coloring' },
-	];
-
+	const transactionArea = getTransactionArea();
 	return (
 		<AddModal
 			id={modalId}

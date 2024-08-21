@@ -34,13 +34,19 @@ export default function Index({
 		...MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
 		trx_quantity: MATERIAL_TRX_AGAINST_ORDER_SCHEMA.trx_quantity
 			.moreThan(0)
-			.max(updateMaterialDetails?.stock),
+			.max(Number(updateMaterialDetails?.stock).toFixed(3)),
 	};
-
 	const { value: order } = useFetch(`/other/order/description/value/label`);
 
-	const { register, handleSubmit, errors, control, Controller, reset } =
-		useRHF(schema, MATERIAL_TRX_AGAINST_ORDER_NULL);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		control,
+		Controller,
+		reset,
+		getValues,
+	} = useRHF(schema, MATERIAL_TRX_AGAINST_ORDER_NULL);
 
 	useFetchForRhfReset(
 		`/material/stock/${updateMaterialDetails?.material_stock_uuid}`,
@@ -81,14 +87,10 @@ export default function Index({
 		}
 	};
 
-	const transactionArea = getTransactionArea();
-
 	return (
 		<AddModal
-			id={`MaterialTrxAgainstOrder`}
-			title={
-				'Material Trx Against Order of ' + updateMaterialDetails?.name
-			}
+			id={modalId}
+			title={'Material Trx Against Order: ' + updateMaterialDetails?.name}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
@@ -104,9 +106,14 @@ export default function Index({
 							<ReactSelect
 								placeholder='Select Order'
 								options={order}
-								onChange={(e) => {
-									onChange(e.value);
-								}}
+								value={
+									order?.filter(
+										(item) =>
+											item.value ===
+											getValues('order_description_uuid')
+									) || null
+								}
+								onChange={(e) => onChange(e.value)}
 							/>
 						);
 					}}
@@ -120,8 +127,14 @@ export default function Index({
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder='Select Transaction Area'
-								options={transactionArea}
+								placeholder='Select Transaction Section'
+								options={getTransactionArea()}
+								value={
+									getTransactionArea().filter(
+										(item) =>
+											item.value === getValues('trx_to')
+									) || null
+								}
 								onChange={(e) => onChange(e.value)}
 							/>
 						);
@@ -131,8 +144,8 @@ export default function Index({
 
 			<Input
 				label='trx_quantity'
-				sub_label={`Max: ${updateMaterialDetails?.stock}`}
-				placeholder={`Max: ${updateMaterialDetails?.stock}`}
+				sub_label={`Max: ${Number(updateMaterialDetails?.stock).toFixed(3)}`}
+				placeholder={`Max: ${Number(updateMaterialDetails?.stock).toFixed(3)}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

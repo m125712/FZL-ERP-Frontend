@@ -41,7 +41,7 @@ export default function Index() {
 				cell: (info) => {
 					return (
 						<span className='capitalize'>
-							{info.getValue()?.replace(/_|n_/g, ' ')}
+							{info.getValue()?.replace(/_/g, ' ')}
 						</span>
 					);
 				},

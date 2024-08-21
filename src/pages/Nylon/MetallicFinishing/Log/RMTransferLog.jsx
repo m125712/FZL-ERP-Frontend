@@ -24,7 +24,7 @@ export default function Index() {
 	const haveAccess = useAccess(info.getTab());
 	const { invalidateQuery: invalidateFinishingRM } =
 		useNylonMetallicFinishingRM();
-	console.log(data);
+	
 	const columns = useMemo(
 		() => [
 			{

@@ -124,6 +124,8 @@ export const LabDipRoutes = [
 			'delete',
 			'click_name',
 			'click_used',
+			'click_update_rm_order',
+			'click_delete_rm_order',
 		],
 		isDynamic: true,
 	},

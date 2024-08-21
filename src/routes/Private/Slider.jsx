@@ -34,6 +34,11 @@ const DieCastingEntry = lazy(
 );
 const DieCastingProduction = lazy(
 	() => import('@/pages/Slider/DieCasting/Production')
+const DieCastingDetails = lazy(
+	() => import('@/pages/Slider/DieCasting/Details')
+);
+const DieCastingBySliderDieCastingUUID = lazy(
+	() => import('@/pages/Slider/DieCasting/Details/BySliderDieCastingUUID')
 );
 
 const DieCastingItemLibrary = lazy(
@@ -89,7 +94,13 @@ export const SliderRoutes = [
 		element: DieCastingLog,
 		type: ['slider', 'die-casting'],
 		page_name: 'slider__die_casting_log',
-		actions: ['read', 'update', 'delete'],
+		actions: [
+			'read',
+			'update',
+			'delete',
+			'click_update_rm_order',
+			'click_delete_rm_order',
+		],
 	},
 	{
 		id: 24,
@@ -118,6 +129,29 @@ export const SliderRoutes = [
 		type: ['slider', 'die-casting'],
 		hidden: true,
 		page_name: 'slider__die_casting_production_entry',
+		element: DieCastingDetails,
+		type: ['slider', 'die-casting'],
+		page_name: 'slider__die_casting_details',
+		actions: ['read', 'create', 'update', 'delete'],
+	},
+	{
+		id: 243,
+		name: 'In Details',
+		path: '/slider/die-casting/production/:slider_die_casting_uuid',
+		element: DieCastingBySliderDieCastingUUID,
+		type: ['slider', 'die-casting'],
+		hidden: true,
+		page_name: 'slider__die_casting_details_by_uuid',
+		actions: ['read', 'update', 'delete'],
+	},
+	{
+		id: 241,
+		name: 'Entry',
+		path: '/slider/die-casting/entry',
+		element: DieCastingEntry,
+		type: ['slider', 'die-casting'],
+		hidden: true,
+		page_name: 'slider__die_casting_entry',
 		actions: ['read', 'create'],
 	},
 	{
@@ -128,6 +162,11 @@ export const SliderRoutes = [
 		type: ['slider', 'die-casting'],
 		hidden: true,
 		page_name: 'slider__die_casting_production_update',
+		path: '/slider/die-casting/update/:slider_die_casting_uuid',
+		element: DieCastingEntry,
+		type: ['slider', 'die-casting'],
+		hidden: true,
+		page_name: 'slider__die_casting_update',
 		actions: ['read', 'update'],
 	},
 	// Slider Assembly
@@ -162,6 +201,8 @@ export const SliderRoutes = [
 			'click_delete_sfg',
 			'click_update_rm',
 			'click_delete_rm',
+			'click_update_rm_order',
+			'click_delete_rm_order',
 		],
 	},
 
@@ -245,6 +286,8 @@ export const SliderRoutes = [
 			'click_delete_sfg',
 			'click_update_rm',
 			'click_delete_rm',
+			'click_update_rm_order',
+			'click_delete_rm_order',
 		],
 	},
 ];

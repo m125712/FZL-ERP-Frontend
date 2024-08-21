@@ -12,7 +12,7 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
 	const { data, isLoading, url } = useSliderDieCastingRM();
-	console.log(data);
+	
 	const info = new PageInfo(
 		'Die Casting RM Stock',
 		url,

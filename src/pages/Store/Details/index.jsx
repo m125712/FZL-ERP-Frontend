@@ -41,19 +41,22 @@ export default function Index() {
 				header: 'Name',
 				enableColumnFilter: false,
 				width: 'w-48',
+				// cell: (info) => (
+				// 	<LinkWithCopy
+				// 		title={info.getValue()}
+				// 		id={info.row.original.id}
+				// 		uri='/material'
+				// 	/>
+				// ),
 				cell: (info) => (
-					<LinkWithCopy
-						title={info.getValue()}
-						id={info.row.original.id}
-						uri='/material'
-					/>
+					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
 				accessorKey: 'threshold',
 				header: 'Threshold',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'stock',
@@ -65,7 +68,9 @@ export default function Index() {
 						Number(info.getValue())
 							? 'text-error bg-error/10 px-2 py-1 rounded-md'
 							: '';
-					return <span className={cls}>{info.getValue()}</span>;
+					return (
+						<span className={cls}>{Number(info.getValue())}</span>
+					);
 				},
 			},
 			{

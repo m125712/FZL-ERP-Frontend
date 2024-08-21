@@ -126,6 +126,16 @@ export const materialQK = {
 	// stock to sfg
 	stockToSGFs: () => [...materialQK.all(), 'stock-to-sfg'],
 	stockToSFG: (uuid) => [...materialQK.stockToSGFs(), uuid],
+
+	// *TrxAgainstOrderDescription//
+	trxAgainstOrderDescriptions: () => [
+		...materialQK.all(),
+		'trx-against-order-description',
+	],
+	trxAgainstOrderDescription: (uuid) => [
+		...materialQK.trxAgainstOrderDescriptions(),
+		uuid,
+	],
 };
 
 // Purchase Query Keys
@@ -181,6 +191,16 @@ export const commonQK = {
 	// * tapeRMLog
 	tapeRMLog: () => [...commonQK.all(), 'tape/rm-log'],
 	tapeRMLogByUUID: (uuid) => [...commonQK.tapeRMLog(), uuid],
+
+	// *  Order Against Tape RM Log * //
+	orderAgainstTapeRMLog: () => [
+		...commonQK.all(),
+		'tape/order/against/rm-log',
+	],
+	orderAgainstTapeRMLogByUUID: (uuid) => [
+		...commonQK.orderAgainstTapeRMLog(),
+		uuid,
+	],
 	// * coilSFG
 	coilSFG: () => [...commonQK.all(), 'coil/SFG'],
 	coilSFGByUUID: (uuid) => [...commonQK.coilSFG(), uuid],
@@ -198,6 +218,19 @@ export const commonQK = {
 	// * materialUsed
 	materialUsed: () => [...commonQK.all(), 'material/used'],
 	materialUsedByUUID: (uuid) => [...commonQK.materialUsed(), uuid],
+
+	// * Coil Order Against Coil RM Log * //
+	orderAgainstCoilRMLog: () => [
+		...commonQK.all(),
+		'coil/order/against/rm-log',
+	],
+	orderAgainstCoilRMLogByUUID: (uuid) => [
+		...commonQK.orderAgainstCoilRMLog(),
+		uuid,
+	],
+	// * MATERIAL TRX *//
+	materialTrx: () => [...commonQK.all(), 'material/trx'],
+	materialTrxByUUID: (uuid) => [...commonQK.materialTrx(), uuid],
 };
 
 // * LabDip * //
@@ -218,6 +251,16 @@ export const labDipQK = {
 	// * RM Log
 	LabDipRMLog: () => [...labDipQK.all(), 'rm-log'],
 	LabDipRMLogByUUID: (uuid) => [...labDipQK.LabDipRMLog(), uuid],
+
+	// * Order Against lab_dip RM Log * //
+	orderAgainstLabDipRMLog: () => [
+		...labDipQK.all(),
+		'lab_dip/order-against-rm-log',
+	],
+	orderAgainstLabDipRMLogByUUID: (uuid) => [
+		...labDipQK.orderAgainstLabDipRMLog(),
+		uuid,
+	],
 };
 
 // * Dyeing
@@ -240,6 +283,15 @@ export const dyeingQK = {
 	// * planning
 	planning: () => [...dyeingQK.all(), 'planning'],
 	planningByUUID: (uuid) => [...dyeingQK.planning(), uuid],
+	// * Order Against dyeing RM Log * //
+	orderAgainstDyeingRMLog: () => [
+		...dyeingQK.all(),
+		'dyeing/order-against-rm-log',
+	],
+	orderAgainstDyeingRMLogByUUID: (uuid) => [
+		...dyeingQK.orderAgainstDyeingRMLog(),
+		uuid,
+	],
 };
 
 // * Nylon
@@ -257,8 +309,18 @@ export const nylonQK = {
 
 	//* RM Log
 	nylonMetallicFinishingRMLog: () => [...nylonQK.all(), 'rm-log'],
-	nylonMetallicFinishingLogByUUID: (uuid) => [
+	nylonMetallicFinishingRMLogByUUID: (uuid) => [
 		...nylonQK.nylonMetallicFinishingRMLog(),
+		uuid,
+	],
+
+	// * Order Against nylonFinishing RM Log * //
+	orderAgainstNylonFinishingRMLog: () => [
+		...nylonQK.all(),
+		'nylonFinishing/order-against-rm-log',
+	],
+	orderAgainstNylonFinishingRMLogByUUID: (uuid) => [
+		...nylonQK.orderAgainstNylonFinishingRMLog(),
 		uuid,
 	],
 };
@@ -275,6 +337,16 @@ export const vislonQK = {
 	VislonTMRMLog: () => [...vislonQK.all(), 'tm-rm-log'],
 	VislonTMRMLogByUUID: (uuid) => [...vislonQK.VislonTMRMLog(), uuid],
 
+	// * Order Against vislonTMRMLog * //// * Order Against vislonTM RM Log * //
+	orderAgainstVislonTMRMLog: () => [
+		...vislonQK.all(),
+		'vislonTM/order-against-rm-log',
+	],
+	orderAgainstVislonTMRMLogByUUID: (uuid) => [
+		...vislonQK.orderAgainstVislonTMRMLog(),
+		uuid,
+	],
+
 	// * Finishing
 
 	//*RM
@@ -290,6 +362,16 @@ export const vislonQK = {
 	VislonFinishingRMLogByUUID: (uuid) => [
 		...vislonQK.VislonFinishingRMLog(),
 		'rm-log',
+		uuid,
+	],
+
+	// * Order Against vislonFinishing RM Log * //
+	orderAgainstVislonFinishingRMLog: () => [
+		...vislonQK.all(),
+		'vislonFinishing/order-against-rm-log',
+	],
+	orderAgainstVislonFinishingRMLogByUUID: (uuid) => [
+		...vislonQK.orderAgainstVislonFinishingRMLog(),
 		uuid,
 	],
 };
@@ -309,6 +391,16 @@ export const metalQK = {
 	metalTMRMLog: () => [...metalQK.all(), 'tm-rm-log'],
 	metalTMRMLogByUUID: (uuid) => [...metalQK.metalTMRMLog(), uuid],
 
+	// * Order Against Metal TM RM Log * //
+	orderAgainstMetalTMRMLog: () => [
+		...metalQK.all(),
+		'metalTM/order-against-rm-log',
+	],
+	orderAgainstMetalTMRMLogByUUID: (uuid) => [
+		...metalQK.orderAgainstMetalTMRMLog(),
+		uuid,
+	],
+
 	// * Finishing
 
 	//*RM
@@ -322,6 +414,16 @@ export const metalQK = {
 		uuid,
 	],
 
+	// * Order Against metalFinishing RM Log * //
+	orderAgainstMetalFinishingRMLog: () => [
+		...metalQK.all(),
+		'metalFinishing/order-against-rm-log',
+	],
+	orderAgainstMetalFinishingRMLogByUUID: (uuid) => [
+		...metalQK.orderAgainstmetalFinishingRMLog(),
+		uuid,
+	],
+
 	//* Teeth Coloring
 
 	// * RM
@@ -331,6 +433,15 @@ export const metalQK = {
 	// * RM Log
 	metalTCRMLog: () => [...metalQK.all(), 'tc-rm-log'],
 	metalTCRMLogByUUID: (uuid) => [...metalQK.metalTCRMLog(), uuid],
+	// * Order Against metalTC RM Log * //
+	orderAgainstMetalTCRMLog: () => [
+		...metalQK.all(),
+		'metalTC/order-against-rm-log',
+	],
+	orderAgainstMetalTCRMLogByUUID: (uuid) => [
+		...metalQK.orderAgainstMetalTCRMLog(),
+		uuid,
+	],
 };
 
 // *Slider
@@ -364,6 +475,17 @@ export const sliderQK = {
 		uuid,
 	],
 
+	// * Order Against sliderAssembly RM Log * //
+	orderAgainstSliderAssemblyRMLog: () => [
+		...sliderQK.all(),
+		'sliderAssembly/order-against-rm-log',
+	],
+	orderAgainstSliderAssemblyRMLogByUUID: (uuid) => [
+		...sliderQK.orderAgainstSliderAssemblyRMLog(),
+		uuid,
+	],
+
+	//* Die Casting
 	// * RM
 	sliderDieCastingRM: () => [...sliderQK.all(), 'dc-rm'],
 	sliderDieCastingRMByUUID: (uuid) => [
@@ -375,6 +497,15 @@ export const sliderQK = {
 	sliderDieCastingRMLog: () => [...sliderQK.all(), 'dc-rm-log'],
 	sliderDieCastingRMLogByUUID: (uuid) => [
 		...sliderQK.sliderDieCastingRMLog(),
+		uuid,
+	],
+	// * Order Against dieCasting RM Log * //
+	orderAgainstDieCastingRMLog: () => [
+		...sliderQK.all(),
+		'dieCasting/order-against-rm-log',
+	],
+	orderAgainstDieCastingRMLogByUUID: (uuid) => [
+		...sliderQK.orderAgainstDieCastingRMLog(),
 		uuid,
 	],
 
@@ -389,6 +520,15 @@ export const sliderQK = {
 		...sliderQK.sliderColoringRMLog(),
 		uuid,
 	],
+	// * Order Against sliderColor RM Log * //
+	orderAgainstSliderColorRMLog: () => [
+		...sliderQK.all(),
+		'sliderFinishing/order-against-rm-log',
+	],
+	orderAgainstSliderColorRMLogByUUID: (uuid) => [
+		...sliderQK.orderAgainstSliderColorRMLog(),
+		uuid,
+	],
 };
 //* Delivery
 
@@ -401,6 +541,16 @@ export const deliveryQk = {
 	// *RM Log
 	deliveryRMLog: () => [...deliveryQk.all(), 'rm-log'],
 	deliveryRMLogByUUID: (uuid) => [...deliveryQk.deliveryRMLog(), uuid],
+
+	// *  Order Against Delivery RM Log * //
+	orderAgainstDeliveryRMLog: () => [
+		...deliveryQk.all(),
+		'order-against-rm-log',
+	],
+	orderAgainstDeliveryRMLogByUUID: (uuid) => [
+		...deliveryQk.orderAgainstDeliveryRMLog(),
+		uuid,
+	],
 };
 
 //* OTHER QUERY KEYS

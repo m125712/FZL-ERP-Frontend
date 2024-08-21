@@ -28,10 +28,10 @@ export const useDeliveryRMLogByUUID = (uuid) =>
 export const useOrderAgainstDeliveryRMLog = () =>
 	createGlobalState({
 		queryKey: deliveryQk.orderAgainstDeliveryRMLog(),
-		url: '/zipper/material-trx-against-order/by/m_qc_and_packing',
+		url: '/zipper/material-trx-against-order/multiple/by/m_qc_and_packing,n_qc_and_packing,v_qc_and_packing,s_qc_and_packing',
 	});
 export const useOrderAgainstDeliveryRMLogByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: deliveryQk.orderAgainstDeliveryRMLogByUUID(uuid),
-		url: '/zipper/material-trx-against-order/by/m_qc_and_packing',
+		url: '/zipper/material-trx-against-order/multiple/by/m_qc_and_packing,n_qc_and_packing,v_qc_and_packing,s_qc_and_packing',
 	});

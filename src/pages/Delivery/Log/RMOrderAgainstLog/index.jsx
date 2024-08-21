@@ -13,10 +13,10 @@ import { SFG_TRX_NULL } from '@/util/Schema';
 import RMAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useOrderAgainstDeliveryRMLog;
+	const { data, isLoading, url, deleteData } = useOrderAgainstDeliveryRMLog();
 
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-	
+
 	const info = new PageInfo(
 		'RM Order Against Delivery Log',
 		url,

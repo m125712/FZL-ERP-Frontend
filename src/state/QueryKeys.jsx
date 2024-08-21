@@ -254,11 +254,11 @@ export const labDipQK = {
 
 	// * Order Against lab_dip RM Log * //
 	orderAgainstLabDipRMLog: () => [
-		...labDipQk.all(),
+		...labDipQK.all(),
 		'lab_dip/order-against-rm-log',
 	],
 	orderAgainstLabDipRMLogByUUID: (uuid) => [
-		...labDipQk.orderAgainstLabDipRMLog(),
+		...labDipQK.orderAgainstLabDipRMLog(),
 		uuid,
 	],
 };
@@ -339,11 +339,11 @@ export const vislonQK = {
 
 	// * Order Against vislonTMRMLog * //// * Order Against vislonTM RM Log * //
 	orderAgainstVislonTMRMLog: () => [
-		...vislonTMQk.all(),
+		...vislonQK.all(),
 		'vislonTM/order-against-rm-log',
 	],
 	orderAgainstVislonTMRMLogByUUID: (uuid) => [
-		...vislonTMQk.orderAgainstVislonTMRMLog(),
+		...vislonQK.orderAgainstVislonTMRMLog(),
 		uuid,
 	],
 
@@ -367,11 +367,11 @@ export const vislonQK = {
 
 	// * Order Against vislonFinishing RM Log * //
 	orderAgainstVislonFinishingRMLog: () => [
-		...vislonFinishingQk.all(),
+		...vislonQK.all(),
 		'vislonFinishing/order-against-rm-log',
 	],
 	orderAgainstVislonFinishingRMLogByUUID: (uuid) => [
-		...vislonFinishingQk.orderAgainstVislonFinishingRMLog(),
+		...vislonQK.orderAgainstVislonFinishingRMLog(),
 		uuid,
 	],
 };
@@ -531,7 +531,7 @@ export const deliveryQk = {
 	// *  Order Against Delivery RM Log * //
 	orderAgainstDeliveryRMLog: () => [
 		...deliveryQk.all(),
-		'delivery/order-against-rm-log',
+		'order-against-rm-log',
 	],
 	orderAgainstDeliveryRMLogByUUID: (uuid) => [
 		...deliveryQk.orderAgainstDeliveryRMLog(),

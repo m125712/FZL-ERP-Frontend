@@ -966,14 +966,14 @@ export const SFG_TRX_NULL = {
 // Slider Die Casting
 
 export const SLIDER_DIE_CASTING_SCHEMA = {
-	slider_die_casting_details: yup.array().of(
+	array: yup.array().of(
 		yup.object().shape({
 			mc_no: NUMBER_REQUIRED,
-			slider_item_id: STRING_REQUIRED,
-			item_type: STRING_REQUIRED,
+			die_casting_uuid: STRING_REQUIRED,
+			order_info_uuid: STRING_REQUIRED,
 			cavity_goods: NUMBER_DOUBLE_REQUIRED,
-			cavity_reject: NUMBER_DOUBLE_REQUIRED,
-			push_value: NUMBER_DOUBLE_REQUIRED,
+			cavity_defect: NUMBER_DOUBLE_REQUIRED,
+			push: NUMBER_DOUBLE_REQUIRED,
 			weight: NUMBER_DOUBLE_REQUIRED,
 			remarks: STRING.nullable(),
 		})
@@ -981,15 +981,14 @@ export const SLIDER_DIE_CASTING_SCHEMA = {
 };
 
 export const SLIDER_DIE_CASTING_NULL = {
-	slider_die_casting_details: [
+	array: [
 		{
 			mc_no: '',
-			slider_item_id: '',
-			item_type: '',
+			die_casting_uuid: '',
+			order_info_uuid: '',
 			cavity_goods: '',
-			cavity_reject: '',
-			push_value: '',
-			order_number: '',
+			cavity_defect: '',
+			push: '',
 			weight: '',
 			remarks: '',
 		},
@@ -1364,4 +1363,56 @@ export const DYEING_PLANNING_NULL = {
 			plan_entry_remarks: '',
 		})
 	),
+};
+
+// * Slide Die Casting Stock*//
+export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
+	name: STRING_REQUIRED, //
+	item: STRING_REQUIRED, //
+	zipper_number: STRING_REQUIRED, //
+	end_type: STRING_REQUIRED, //
+	puller_type: STRING_REQUIRED, //
+	logo_type: STRING_REQUIRED, //
+	slider_body_shape: STRING_REQUIRED, //
+	puller_link: STRING_REQUIRED, //
+	stopper_type: STRING_REQUIRED, //
+	// quantity: NUMBER_REQUIRED, //
+	// weight: NUMBER_REQUIRED, //
+	// pcs_per_kg: NUMBER_REQUIRED, //
+	remarks: STRING.nullable(),
+	is_body: BOOLEAN_REQUIRED,
+	is_puller: BOOLEAN_REQUIRED,
+	is_cap: BOOLEAN_REQUIRED,
+	is_link: BOOLEAN_REQUIRED,
+	is_h_bottom: BOOLEAN_REQUIRED,
+	is_u_top: BOOLEAN_REQUIRED,
+	is_box_pin: BOOLEAN_REQUIRED,
+	is_two_way_pin: BOOLEAN_REQUIRED,
+};
+
+export const SLIDER_DIE_CASTING_STOCK_NULL = {
+	uuid: null,
+	name: '',
+	item: '',
+	zipper_number: '',
+	end_type: '',
+	puller_type: '',
+	logo_type: '',
+	slider_body_shape: '',
+	puller_link: '',
+	stopper_type: '',
+	// quantity: null,
+	// weight: null,
+	// pcs_per_kg: null,
+	created_at: '',
+	updated_at: '',
+	remarks: '',
+	is_body: false,
+	is_puller: false,
+	is_cap: false,
+	is_link: false,
+	is_h_bottom: false,
+	is_u_top: false,
+	is_box_pin: false,
+	is_two_way_pin: false,
 };

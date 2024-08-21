@@ -8,6 +8,9 @@ const ColoringLog = lazy(() => import('@/pages/Slider/Coloring/Log'));
 const ColoringSFG = lazy(() => import('@/pages/Slider/Coloring/SFG'));
 
 // Die Casting
+
+const DieCastingStock = lazy(() => import('@/pages/Slider/DieCasting/Stock'));
+
 const DieCastingRMStock = lazy(
 	() => import('@/pages/Slider/DieCasting/RMStock/RMStock')
 );
@@ -26,13 +29,18 @@ const SliderAssemblySFG = lazy(
 );
 
 // Die Casting Entry
-const DieCastingEntry = lazy(() => import('@/pages/Slider/DieCasting/Entry'));
+const DieCastingEntry = lazy(
+	() => import('@/pages/Slider/DieCasting/Production/Entry')
+);
+const DieCastingProduction = lazy(
+	() => import('@/pages/Slider/DieCasting/Production')
 const DieCastingDetails = lazy(
 	() => import('@/pages/Slider/DieCasting/Details')
 );
 const DieCastingBySliderDieCastingUUID = lazy(
 	() => import('@/pages/Slider/DieCasting/Details/BySliderDieCastingUUID')
 );
+
 const DieCastingItemLibrary = lazy(
 	() => import('@/pages/Slider/DieCasting/ItemLibrary')
 );
@@ -52,6 +60,15 @@ const SliderAssemblyItemLibrary = lazy(
 );
 
 export const SliderRoutes = [
+	{
+		id: 21,
+		name: 'Stock',
+		path: '/slider/die-casting/stock',
+		element: DieCastingStock,
+		type: ['slider', 'die-casting'],
+		page_name: 'slider__die_casting_stock',
+		actions: ['read', 'create', 'update', 'delete'],
+	},
 	{
 		id: 21,
 		name: 'RM',
@@ -89,6 +106,29 @@ export const SliderRoutes = [
 		id: 24,
 		name: 'Production',
 		path: '/slider/die-casting/production',
+		element: DieCastingProduction,
+		type: ['slider', 'die-casting'],
+		page_name: 'slider__die_casting_production',
+		actions: ['read', 'create', 'update', 'delete'],
+	},
+	// {
+	// 	id: 243,
+	// 	name: 'In Details',
+	// 	path: '/slider/die-casting/production/:slider_die_casting_uuid',
+	// 	element: DieCastingProductionByUUID,
+	// 	type: ['slider', 'die-casting'],
+	// 	hidden: true,
+	// 	page_name: 'slider__die_casting_details_by_uuid',
+	// 	actions: ['read', 'update', 'delete'],
+	// },
+	{
+		id: 241,
+		name: 'Entry',
+		path: '/slider/die-casting/production/entry',
+		element: DieCastingEntry,
+		type: ['slider', 'die-casting'],
+		hidden: true,
+		page_name: 'slider__die_casting_production_entry',
 		element: DieCastingDetails,
 		type: ['slider', 'die-casting'],
 		page_name: 'slider__die_casting_details',
@@ -117,6 +157,11 @@ export const SliderRoutes = [
 	{
 		id: 242,
 		name: 'Update',
+		path: '/slider/die-casting/production/update/:uuid',
+		element: DieCastingEntry,
+		type: ['slider', 'die-casting'],
+		hidden: true,
+		page_name: 'slider__die_casting_production_update',
 		path: '/slider/die-casting/update/:slider_die_casting_uuid',
 		element: DieCastingEntry,
 		type: ['slider', 'die-casting'],

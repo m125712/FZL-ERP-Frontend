@@ -1,8 +1,24 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useMaterialInfo, useMaterialTrx } from '@/state/Store';
 
+import {
+	useCommonCoilRM,
+	useCommonTapeRM,
+	useCommonTapeRMLog,
+} from '@/state/Common';
+import { useDeliveryRM } from '@/state/Delivery';
+import { useDyeingRM } from '@/state/Dyeing';
+import { useLabDipRM } from '@/state/LabDip';
+import { useMetalFinishingRM, useMetalTCRM, useMetalTMRM } from '@/state/Metal';
+import { useNylonMetallicFinishingRM } from '@/state/Nylon';
+import {
+	useSliderAssemblyRM,
+	useSliderColoringRM,
+	useSliderDieCastingRM,
+} from '@/state/Slider';
+import { useMaterialInfo, useMaterialTrx } from '@/state/Store';
+import { useVislonFinishingRM, useVislonTMRM } from '@/state/Vislon';
 import { DateTime, EditDelete, SectionName } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useMemo, useState } from 'react';
@@ -13,6 +29,25 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useMaterialTrx();
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRMLog();
+	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
+	const { invalidateQuery: invalidateLabDipRM } = useLabDipRM();
+	const { invalidateQuery: invalidateDyeingRM } = useDyeingRM();
+	const { invalidateQuery: invalidateFinishingRM } = useMetalFinishingRM();
+	const { invalidateQuery: invalidateMetalTCRM } = useMetalTCRM();
+	const { invalidateQuery: invalidateMetalTMRM } = useMetalTMRM();
+	const { invalidateQuery: invalidateNylonMetallicFinishingRM } =
+		useNylonMetallicFinishingRM();
+	const { invalidateQuery: invalidateVislonFinishingRM } =
+		useVislonFinishingRM();
+	const { invalidateQuery: invalidateVislonTMRM } = useVislonTMRM();
+	const { invalidateQuery: invalidateSliderAssemblyRM } =
+		useSliderAssemblyRM();
+	const { invalidateQuery: invalidateSliderColoringRM } =
+		useSliderColoringRM();
+	const { invalidateQuery: invalidateDieCastingRM } = useSliderDieCastingRM();
+	const { invalidateQuery: invalidateDeliveryRM } = useDeliveryRM();
+
 	const info = new PageInfo('Material/Log', url);
 	const haveAccess = useAccess('store__log');
 
@@ -129,6 +164,20 @@ export default function Index() {
 		window[info.getDeleteModalId()].showModal();
 	};
 	invalidateMaterialInfo();
+	invalidateCommonTapeRM();
+	invalidateCommonCoilRM();
+	invalidateLabDipRM();
+	invalidateDyeingRM();
+	invalidateFinishingRM();
+	invalidateMetalTCRM();
+	invalidateMetalTMRM();
+	invalidateNylonMetallicFinishingRM();
+	invalidateVislonFinishingRM();
+	invalidateVislonTMRM();
+	invalidateSliderAssemblyRM();
+	invalidateSliderColoringRM();
+	invalidateDieCastingRM();
+	invalidateDeliveryRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

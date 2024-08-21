@@ -1,6 +1,18 @@
 import { AddModal } from '@/components/Modal';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useCommonCoilRM, useCommonTapeRM } from '@/state/Common';
+import { useDeliveryRM } from '@/state/Delivery';
+import { useDyeingRM } from '@/state/Dyeing';
+import { useLabDipRM } from '@/state/LabDip';
+import { useMetalFinishingRM, useMetalTCRM, useMetalTMRM } from '@/state/Metal';
+import { useNylonMetallicFinishingRM } from '@/state/Nylon';
+import {
+	useSliderAssemblyRM,
+	useSliderColoringRM,
+	useSliderDieCastingRM,
+} from '@/state/Slider';
 import { useMaterialInfo, useMaterialTrx } from '@/state/Store';
+import { useVislonFinishingRM, useVislonTMRM } from '@/state/Vislon';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
@@ -17,6 +29,25 @@ export default function Index({
 }) {
 	const { url, updateData } = useMaterialTrx();
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
+	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
+	const { invalidateQuery: invalidateLabDipRM } = useLabDipRM();
+	const { invalidateQuery: invalidateDyeingRM } = useDyeingRM();
+	const { invalidateQuery: invalidateFinishingRM } = useMetalFinishingRM();
+	const { invalidateQuery: invalidateMetalTCRM } = useMetalTCRM();
+	const { invalidateQuery: invalidateMetalTMRM } = useMetalTMRM();
+	const { invalidateQuery: invalidateNylonMetallicFinishingRM } =
+		useNylonMetallicFinishingRM();
+	const { invalidateQuery: invalidateVislonFinishingRM } =
+		useVislonFinishingRM();
+	const { invalidateQuery: invalidateVislonTMRM } = useVislonTMRM();
+	const { invalidateQuery: invalidateSliderAssemblyRM } =
+		useSliderAssemblyRM();
+	const { invalidateQuery: invalidateSliderColoringRM } =
+		useSliderColoringRM();
+	const { invalidateQuery: invalidateDieCastingRM } = useSliderDieCastingRM();
+	const { invalidateQuery: invalidateDeliveryRM } = useDeliveryRM();
+
 	const MAX_QUANTITY = updateMaterialTrx?.stock;
 	const schema = {
 		...MATERIAL_STOCK_SCHEMA,
@@ -64,6 +95,20 @@ export default function Index({
 			});
 
 			invalidateMaterialInfo();
+			invalidateCommonTapeRM();
+			invalidateCommonCoilRM();
+			invalidateLabDipRM();
+			invalidateDyeingRM();
+			invalidateFinishingRM();
+			invalidateMetalTCRM();
+			invalidateMetalTMRM();
+			invalidateNylonMetallicFinishingRM();
+			invalidateVislonFinishingRM();
+			invalidateVislonTMRM();
+			invalidateSliderAssemblyRM();
+			invalidateSliderColoringRM();
+			invalidateDieCastingRM();
+			invalidateDeliveryRM();
 
 			return;
 		}

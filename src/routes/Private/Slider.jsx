@@ -34,12 +34,13 @@ const DieCastingEntry = lazy(
 );
 const DieCastingProduction = lazy(
 	() => import('@/pages/Slider/DieCasting/Production')
-const DieCastingDetails = lazy(
-	() => import('@/pages/Slider/DieCasting/Details')
 );
-const DieCastingBySliderDieCastingUUID = lazy(
-	() => import('@/pages/Slider/DieCasting/Details/BySliderDieCastingUUID')
-);
+// const DieCastingDetails = lazy(
+// 	() => import('@/pages/Slider/DieCasting/Details')
+// );
+// const DieCastingBySliderDieCastingUUID = lazy(
+// 	() => import('@/pages/Slider/DieCasting/Details/BySliderDieCastingUUID')
+// );
 
 const DieCastingItemLibrary = lazy(
 	() => import('@/pages/Slider/DieCasting/ItemLibrary')
@@ -121,29 +122,29 @@ export const SliderRoutes = [
 	// 	page_name: 'slider__die_casting_details_by_uuid',
 	// 	actions: ['read', 'update', 'delete'],
 	// },
-	{
-		id: 241,
-		name: 'Entry',
-		path: '/slider/die-casting/production/entry',
-		element: DieCastingEntry,
-		type: ['slider', 'die-casting'],
-		hidden: true,
-		page_name: 'slider__die_casting_production_entry',
-		element: DieCastingDetails,
-		type: ['slider', 'die-casting'],
-		page_name: 'slider__die_casting_details',
-		actions: ['read', 'create', 'update', 'delete'],
-	},
-	{
-		id: 243,
-		name: 'In Details',
-		path: '/slider/die-casting/production/:slider_die_casting_uuid',
-		element: DieCastingBySliderDieCastingUUID,
-		type: ['slider', 'die-casting'],
-		hidden: true,
-		page_name: 'slider__die_casting_details_by_uuid',
-		actions: ['read', 'update', 'delete'],
-	},
+	// {
+	// 	id: 241,
+	// 	name: 'Entry',
+	// 	path: '/slider/die-casting/production/entry',
+	// 	element: DieCastingEntry,
+	// 	type: ['slider', 'die-casting'],
+	// 	hidden: true,
+	// 	page_name: 'slider__die_casting_production_entry',
+	// 	element: DieCastingDetails,
+	// 	type: ['slider', 'die-casting'],
+	// 	page_name: 'slider__die_casting_details',
+	// 	actions: ['read', 'create', 'update', 'delete'],
+	// },
+	// {
+	// 	id: 243,
+	// 	name: 'In Details',
+	// 	path: '/slider/die-casting/production/:slider_die_casting_uuid',
+	// 	element: DieCastingBySliderDieCastingUUID,
+	// 	type: ['slider', 'die-casting'],
+	// 	hidden: true,
+	// 	page_name: 'slider__die_casting_details_by_uuid',
+	// 	actions: ['read', 'update', 'delete'],
+	// },
 	{
 		id: 241,
 		name: 'Entry',

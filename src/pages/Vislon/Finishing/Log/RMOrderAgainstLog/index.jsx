@@ -7,16 +7,21 @@ import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo, useState } from 'react';
 
-import { useMaterialInfo } from '@/state/Store';
+import {
+	useMaterialInfo,
+	useMaterialTrxAgainstOrderDescription,
+} from '@/state/Store';
+import { useOrderAgainstVislonFinishingRMLog } from '@/state/Vislon';
 import { SFG_TRX_NULL } from '@/util/Schema';
 import RMAddOrUpdate from './AddOrUpdate';
-import { useOrderAgainstVislonFinishingRMLog } from '@/state/Vislon';
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } =
 		useOrderAgainstVislonFinishingRMLog();
 
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { invalidateQuery: invalidateMaterialTrx } =
+		useMaterialTrxAgainstOrderDescription();
 
 	const info = new PageInfo(
 		'RM Order Against Finishing Log',
@@ -175,6 +180,7 @@ export default function Index() {
 		window[info.getDeleteModalId()].showModal();
 	};
 	invalidateMaterialInfo();
+	invalidateMaterialTrx();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

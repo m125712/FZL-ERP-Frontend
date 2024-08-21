@@ -8,7 +8,10 @@ import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo, useState } from 'react';
 
 import { useOrderAgainstDieCastingRMLog } from '@/state/Slider';
-import { useMaterialInfo } from '@/state/Store';
+import {
+	useMaterialInfo,
+	useMaterialTrxAgainstOrderDescription,
+} from '@/state/Store';
 import { SFG_TRX_NULL } from '@/util/Schema';
 import RMAddOrUpdate from './AddOrUpdate';
 
@@ -17,6 +20,8 @@ export default function Index() {
 		useOrderAgainstDieCastingRMLog();
 
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { invalidateQuery: invalidateMaterialTrx } =
+		useMaterialTrxAgainstOrderDescription();
 	console.log(data);
 	const info = new PageInfo(
 		'RM Order Against Die Casting Log',
@@ -175,6 +180,7 @@ export default function Index() {
 		window[info.getDeleteModalId()].showModal();
 	};
 	invalidateMaterialInfo();
+	invalidateMaterialTrx();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

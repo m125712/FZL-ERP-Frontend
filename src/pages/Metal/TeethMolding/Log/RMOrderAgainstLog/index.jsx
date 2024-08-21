@@ -8,7 +8,10 @@ import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo, useState } from 'react';
 
 import { useOrderAgainstMetalTMRMLog } from '@/state/Metal';
-import { useMaterialInfo } from '@/state/Store';
+import {
+	useMaterialInfo,
+	useMaterialTrxAgainstOrderDescription,
+} from '@/state/Store';
 import { SFG_TRX_NULL } from '@/util/Schema';
 import RMAddOrUpdate from './AddOrUpdate';
 
@@ -16,6 +19,8 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } = useOrderAgainstMetalTMRMLog();
 
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { invalidateQuery: invalidateMaterialTrx } =
+		useMaterialTrxAgainstOrderDescription();
 	console.log(data);
 	const info = new PageInfo(
 		'RM Order Against Metal TM Log',
@@ -174,6 +179,7 @@ export default function Index() {
 		window[info.getDeleteModalId()].showModal();
 	};
 	invalidateMaterialInfo();
+	invalidateMaterialTrx();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

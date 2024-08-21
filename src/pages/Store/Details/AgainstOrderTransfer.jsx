@@ -2,8 +2,33 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useCommonOrderAgainstCoilRMLog } from '@/state/Common';
-import { useMaterialInfo, useMaterialStockToSFG } from '@/state/Store';
+import {
+	useCommonOrderAgainstCoilRMLog,
+	useCommonOrderAgainstTapeRMLog,
+} from '@/state/Common';
+import { useOrderAgainstDeliveryRMLog } from '@/state/Delivery';
+import { useOrderAgainstDyeingRMLog } from '@/state/Dyeing';
+import { useOrderAgainstLabDipRMLog } from '@/state/LabDip';
+import {
+	useOrderAgainstMetalFinishingRMLog,
+	useOrderAgainstMetalTCRMLog,
+	useOrderAgainstMetalTMRMLog,
+} from '@/state/Metal';
+import { useOrderAgainstNylonMetallicFinishingRMLog } from '@/state/Nylon';
+import {
+	useOrderAgainstDieCastingRMLog,
+	useOrderAgainstSliderAssemblyRMLog,
+	useOrderAgainstSliderColorRMLog,
+} from '@/state/Slider';
+import {
+	useMaterialInfo,
+	useMaterialStockToSFG,
+	useMaterialTrxAgainstOrderDescription,
+} from '@/state/Store';
+import {
+	useOrderAgainstVislonFinishingRMLog,
+	useOrderAgainstVislonTMRMLog,
+} from '@/state/Vislon';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
@@ -12,7 +37,6 @@ import {
 	MATERIAL_TRX_AGAINST_ORDER_NULL,
 	MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
 } from '@util/Schema';
-
 export default function Index({
 	modalId = '',
 	updateMaterialDetails = {
@@ -25,8 +49,36 @@ export default function Index({
 	const { postData } = useMaterialInfo();
 	const { invalidateQuery: invalidateMaterialStockToSFG } =
 		useMaterialStockToSFG();
-	const { invalidateQuery: invalidateCommonOrderAgainstCoilRM } =
+	const { url, updateData } = useMaterialTrxAgainstOrderDescription();
+	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { invalidateQuery: invalidateOrderAgainstDeliveryRMLog } =
+		useOrderAgainstDeliveryRMLog();
+	const { invalidateQuery: invalidateOrderAgainstDieCastingRMLog } =
+		useOrderAgainstDieCastingRMLog();
+	const { invalidateQuery: invalidateOrderAgainstLabDipRMLog } =
+		useOrderAgainstLabDipRMLog();
+	const { invalidateQuery: invalidateOrderAgainstMetaFinishingRMLog } =
+		useOrderAgainstMetalFinishingRMLog();
+	const { invalidateQuery: invalidateOrderAgainstMetalTCRMLog } =
+		useOrderAgainstMetalTCRMLog();
+	const { invalidateQuery: invalidateOrderAgainstMetalTMRMLog } =
+		useOrderAgainstMetalTMRMLog();
+	const { invalidateQuery: invalidateOrderAgainstDyeingRMLog } =
+		useOrderAgainstDyeingRMLog();
+	const { invalidateQuery: invalidateOrderAgainstCoilRMLog } =
 		useCommonOrderAgainstCoilRMLog();
+	const { invalidateQuery: invalidateOrderAgainstTapeRMLog } =
+		useCommonOrderAgainstTapeRMLog();
+	const { invalidateQuery: invalidateOrderAgainstMetallicFinishingRMLog } =
+		useOrderAgainstNylonMetallicFinishingRMLog();
+	const { invalidateQuery: invalidateOrderAgainstVislonFinishingRMLog } =
+		useOrderAgainstVislonFinishingRMLog();
+	const { invalidateQuery: invalidateOrderAgainstTMRMLog } =
+		useOrderAgainstVislonTMRMLog();
+	const { invalidateQuery: invalidateOrderAgainstSliderAssemblyRMLog } =
+		useOrderAgainstSliderAssemblyRMLog();
+	const { invalidateQuery: invalidateOrderAgainstSliderColorRMLog } =
+		useOrderAgainstSliderColorRMLog();
 
 	const { user } = useAuth();
 
@@ -82,7 +134,22 @@ export default function Index({
 			});
 
 			invalidateMaterialStockToSFG();
-			invalidateCommonOrderAgainstCoilRM();
+			invalidateMaterialInfo();
+			invalidateOrderAgainstDeliveryRMLog();
+			invalidateOrderAgainstDieCastingRMLog();
+			invalidateOrderAgainstLabDipRMLog();
+			invalidateOrderAgainstMetaFinishingRMLog();
+			invalidateOrderAgainstMetalTCRMLog();
+			invalidateOrderAgainstMetalTMRMLog();
+			invalidateOrderAgainstDyeingRMLog();
+			invalidateOrderAgainstCoilRMLog();
+			invalidateOrderAgainstTapeRMLog();
+			invalidateOrderAgainstMetallicFinishingRMLog();
+			invalidateOrderAgainstVislonFinishingRMLog();
+			invalidateOrderAgainstTMRMLog();
+			invalidateOrderAgainstSliderAssemblyRMLog();
+			invalidateOrderAgainstSliderColorRMLog();
+
 			return;
 		}
 	};

@@ -2,7 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import { useCommonMaterialTrx } from '@/state/Common';
-import { useMaterialInfo } from '@/state/Store';
+import { useMaterialInfo, useMaterialTrxAgainstOrderDescription } from '@/state/Store';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -22,6 +22,9 @@ export default function Index({
 }) {
 	const { url, updateData } = useCommonMaterialTrx();
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { invalidateQuery: invalidateMaterialTrx } =
+			useMaterialTrxAgainstOrderDescription();
+
 
 	const MAX_QUANTITY =
 		Number(updateLog?.stock) + Number(updateLog?.trx_quantity);
@@ -73,6 +76,7 @@ export default function Index({
 				onClose,
 			});
 			invalidateMaterialInfo();
+			invalidateMaterialTrx();
 			return;
 		}
 	};

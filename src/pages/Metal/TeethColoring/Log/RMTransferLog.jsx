@@ -18,7 +18,7 @@ export default function Index() {
 	);
 	const haveAccess = useAccess(info.getTab());
 	const { invalidateQuery: invalidateMetalTCRM } = useMetalTCRM();
-	console.log(data);
+	
 	const columns = useMemo(
 		() => [
 			{

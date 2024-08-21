@@ -11,7 +11,7 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
 	const { data, isLoading, url } = useSliderAssemblyRM();
-	console.log(data);
+	
 	const info = new PageInfo('Assembly RM Stock', url, 'slider__assembly_rm');
 	const hameAccess = useAccess(info.getTab());
 

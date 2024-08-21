@@ -16,8 +16,15 @@ export default function Index({
 	setUpdateMaterialDetails,
 }) {
 	const { url, updateData, postData } = useMaterialInfo();
-	const { register, handleSubmit, errors, reset, Controller, control } =
-		useRHF(MATERIAL_SCHEMA, MATERIAL_NULL);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		Controller,
+		control,
+		getValues,
+	} = useRHF(MATERIAL_SCHEMA, MATERIAL_NULL);
 
 	useFetchForRhfReset(
 		`/material/info/${updateMaterialDetails?.uuid}`,
@@ -100,14 +107,12 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Section'
 									options={section}
-									value={section?.find(
+									value={section?.filter(
 										(item) =>
-											item.value ==
-											updateMaterialDetails?.section_uuid
+											item.value ===
+											getValues('section_uuid')
 									)}
-									onChange={(e) => {
-										onChange(e.value);
-									}}
+									onChange={(e) => onChange(e.value)}
 									isDisabled={
 										updateMaterialDetails?.uuid !== null
 									}
@@ -125,14 +130,12 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Material Type'
 									options={materialType}
-									value={materialType?.find(
+									value={materialType?.filter(
 										(item) =>
-											item.value ==
-											updateMaterialDetails?.type_uuid
+											item.value ===
+											getValues('type_uuid')
 									)}
-									onChange={(e) => {
-										onChange(e.value);
-									}}
+									onChange={(e) => onChange(e.value)}
 									isDisabled={
 										updateMaterialDetails?.uuid !== null
 									}
@@ -146,6 +149,7 @@ export default function Index({
 				<Input label='name' {...{ register, errors }} />
 				<Input label='short_name' {...{ register, errors }} />
 				<JoinInputSelect
+					//defaultUnitValue='kg'
 					label='threshold'
 					join='unit'
 					option={selectUnit}

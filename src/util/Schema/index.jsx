@@ -7,7 +7,8 @@ import {
 	EMAIL_REQUIRED, // default
 	FORTUNE_ZIP_EMAIL_PATTERN, // default
 	JSON_STRING, // default
-	JSON_STRING_REQUIRED,
+	JSON_STRING_REQUIRED, // default
+	NAME,
 	NAME_REQUIRED, // default
 	NUMBER, // default
 	NUMBER_DOUBLE, // default
@@ -25,7 +26,7 @@ import {
 	UUID, // default
 	UUID_FK, // default
 	UUID_PK, // default
-	UUID_REQUIRED, // default
+	UUID_REQUIRED,
 } from './utils';
 
 export {
@@ -192,7 +193,7 @@ export const MATERIAL_NULL = {
 	uuid: null,
 	name: '',
 	short_name: '',
-	unit: '',
+	unit: 'kg',
 	threshold: 0,
 	description: '',
 	section_uuid: null,
@@ -216,7 +217,7 @@ export const MATERIAL_STOCK_NULL = {
 };
 
 export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
-	order_entry_uuid: STRING_REQUIRED,
+	order_description_uuid: STRING_REQUIRED,
 	trx_to: STRING_REQUIRED,
 	trx_quantity: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
@@ -225,7 +226,7 @@ export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
 export const MATERIAL_TRX_AGAINST_ORDER_NULL = {
 	uuid: null,
 	material_uuid: null,
-	order_entry_uuid: null,
+	order_description_uuid: null,
 	trx_to: '',
 	trx_quantity: '',
 	created_by: '',
@@ -267,9 +268,9 @@ export const SFG_PRODUCTION_LOG_NULL = {
 
 // vendor page
 export const VENDOR_SCHEMA = {
-	name: STRING_REQUIRED,
+	name: NAME_REQUIRED,
 	contact_name: STRING.nullable(),
-	contact_number: STRING.nullable(),
+	contact_number: PHONE_NUMBER.nullable(),
 	email: EMAIL.nullable(),
 	office_address: STRING.nullable(),
 	remarks: STRING.nullable(),
@@ -895,6 +896,21 @@ export const RM_MATERIAL_USED_EDIT_NULL = {
 	material_stock_id: null,
 	section: '',
 	used_quantity: '',
+	wastage: '',
+	issued_by: '',
+	remarks: '',
+};
+export const RM_MATERIAL_ORDER_AGAINST_EDIT_SCHEMA = {
+	trx_quantity: NUMBER_DOUBLE_REQUIRED,
+	wastage: NUMBER_DOUBLE,
+	remarks: STRING.nullable(),
+};
+
+export const RM_MATERIAL_ORDER_AGAINST_EDIT_NULL = {
+	uuid: null,
+	material_stock_id: null,
+	section: '',
+	trx_quantity: '',
 	wastage: '',
 	issued_by: '',
 	remarks: '',

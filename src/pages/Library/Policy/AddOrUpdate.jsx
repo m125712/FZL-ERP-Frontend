@@ -40,7 +40,7 @@ export default function Index({
 				...data,
 				updated_at: GetDateTime(),
 			};
-			console.log(`${url}/${updatePolicy?.uuid}`);
+			
 
 			await updateData.mutateAsync({
 				url: `${url}/${updatePolicy?.uuid}`,
@@ -57,7 +57,7 @@ export default function Index({
 			created_at: GetDateTime(),
 		};
 
-		console.log(url);
+		
 
 		await postData.mutateAsync({
 			url,

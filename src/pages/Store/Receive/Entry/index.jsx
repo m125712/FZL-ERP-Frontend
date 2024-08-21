@@ -1,7 +1,11 @@
 import { DeleteModal } from '@/components/Modal';
 import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { usePurchaseDescription, usePurchaseEntry } from '@/state/Store';
+import {
+	useMaterialInfo,
+	usePurchaseDescription,
+	usePurchaseEntry,
+} from '@/state/Store';
 import {
 	DynamicField,
 	FormField,
@@ -10,6 +14,7 @@ import {
 	ReactSelect,
 	RemoveButton,
 } from '@/ui';
+import PageContainer from '@/ui/Others/PageContainer';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -18,12 +23,12 @@ import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
-import PageContainer from '@/ui/Others/PageContainer';
 
 export default function Index() {
 	const { url: purchaseDescriptionUrl } = usePurchaseDescription();
 	const { url: purchaseEntryUrl } = usePurchaseEntry();
 	const { updateData, postData, deleteData } = usePurchaseDescription();
+	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 
 	const { purchase_description_uuid } = useParams();
 	const { user } = useAuth();
@@ -162,9 +167,10 @@ export default function Index() {
 					...purchase_entries_promise,
 				])
 					.then(() => reset(PURCHASE_ENTRY_NULL))
-					.then(() =>
-						navigate(`/store/receive/${purchase_description_uuid}`)
-					);
+					.then(() => {
+						invalidateMaterialInfo();
+						navigate(`/store/receive/${purchase_description_uuid}`);
+					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
 			}
@@ -221,6 +227,7 @@ export default function Index() {
 			])
 				.then(() => reset(PURCHASE_ENTRY_NULL))
 				.then(() => {
+					invalidateMaterialInfo();
 					navigate(`/store/receive/${new_purchase_description_uuid}`);
 				});
 		} catch (err) {

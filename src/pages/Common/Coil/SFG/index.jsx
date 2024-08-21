@@ -14,7 +14,7 @@ export default function Index() {
 	const { data, isLoading, url } = useCommonCoilSFG();
 	const info = new PageInfo('Common/Coil/SFG', url, 'common__coil_sfg');
 	const haveAccess = useAccess(info.getTab());
-	console.log(data);
+	
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);

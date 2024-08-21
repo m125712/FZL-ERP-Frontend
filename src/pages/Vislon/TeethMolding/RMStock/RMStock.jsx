@@ -11,7 +11,7 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
 	const { data, isLoading, url } = useVislonTMRM();
-	console.log(data);
+	
 	const info = new PageInfo(
 		'Teeth Molding RM Stock',
 		url,

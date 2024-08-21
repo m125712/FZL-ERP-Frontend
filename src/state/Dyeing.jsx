@@ -50,3 +50,14 @@ export const useDyeingPlanningByUUID = (uuid) =>
 		queryKey: dyeingQK.planningByUUID(uuid),
 		url: `/zipper/planning/${uuid}`,
 	});
+//* Order Against RM Log
+export const useOrderAgainstDyeingRMLog = () =>
+	createGlobalState({
+		queryKey: dyeingQK.orderAgainstDyeingRMLog(),
+		url: `/zipper/material-trx-against-order/by/dying_and_iron`,
+	});
+export const useOrderAgainstDyeingRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: dyeingQK.orderAgainstDyeingRMLogByUUID(uuid),
+		url: `/zipper/material-trx-against-order/by/dying_and_iron${uuid}`,
+	});

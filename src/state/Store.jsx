@@ -111,3 +111,15 @@ export const usePurchaseDetailsByUUID = (uuid) =>
 		queryKey: purchaseQK.detail(uuid),
 		url: `/purchase/purchase-details/by/${uuid}`,
 	});
+// * Material_trx_against_order_description *//
+export const useMaterialTrxAgainstOrderDescription = () =>
+	createGlobalState({
+		queryKey: materialQK.trxAgainstOrderDescriptions(),
+		url: '/zipper/material-trx-against-order',
+	});
+
+export const useMaterialTrxAgainstOrderDescriptionByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: materialQK.trxAgainstOrderDescription(uuid),
+		url: `/zipper/material-trx-against-order/${uuid}`,
+	});

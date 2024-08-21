@@ -1,12 +1,40 @@
 import { AddModal } from '@/components/Modal';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
-import { useMaterialStockToSFG } from '@/state/Store';
+import {
+	useCommonOrderAgainstCoilRMLog,
+	useCommonOrderAgainstTapeRMLog,
+} from '@/state/Common';
+import { useOrderAgainstDeliveryRMLog } from '@/state/Delivery';
+import { useOrderAgainstDyeingRMLog } from '@/state/Dyeing';
+import { useOrderAgainstLabDipRMLog } from '@/state/LabDip';
+import {
+	useOrderAgainstMetalFinishingRMLog,
+	useOrderAgainstMetalTCRMLog,
+	useOrderAgainstMetalTMRMLog,
+} from '@/state/Metal';
+import { useOrderAgainstNylonMetallicFinishingRMLog } from '@/state/Nylon';
+import {
+	useOrderAgainstDieCastingRMLog,
+	useOrderAgainstSliderAssemblyRMLog,
+	useOrderAgainstSliderColorRMLog,
+} from '@/state/Slider';
+import {
+	useMaterialInfo,
+	useMaterialStockToSFG,
+	useMaterialTrxAgainstOrderDescription,
+} from '@/state/Store';
+import {
+	useOrderAgainstVislonFinishingRMLog,
+	useOrderAgainstVislonTMRMLog,
+} from '@/state/Vislon';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
 	MATERIAL_TRX_AGAINST_ORDER_NULL,
 	MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
 } from '@util/Schema';
+
+import getTransactionArea from '@/util/TransactionArea';
 
 export default function Index({
 	modalId = '',
@@ -18,12 +46,42 @@ export default function Index({
 	},
 	setUpdateMaterialTrxToOrder,
 }) {
-	const { url, updateData } = useMaterialStockToSFG();
+	const { url, updateData } = useMaterialTrxAgainstOrderDescription();
+	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { invalidateQuery: invalidateOrderAgainstDeliveryRMLog } =
+		useOrderAgainstDeliveryRMLog();
+	const { invalidateQuery: invalidateOrderAgainstDieCastingRMLog } =
+		useOrderAgainstDieCastingRMLog();
+	const { invalidateQuery: invalidateOrderAgainstLabDipRMLog } =
+		useOrderAgainstLabDipRMLog();
+	const { invalidateQuery: invalidateOrderAgainstMetaFinishingRMLog } =
+		useOrderAgainstMetalFinishingRMLog();
+	const { invalidateQuery: invalidateOrderAgainstMetalTCRMLog } =
+		useOrderAgainstMetalTCRMLog();
+	const { invalidateQuery: invalidateOrderAgainstMetalTMRMLog } =
+		useOrderAgainstMetalTMRMLog();
+	const { invalidateQuery: invalidateOrderAgainstDyeingRMLog } =
+		useOrderAgainstDyeingRMLog();
+	const { invalidateQuery: invalidateOrderAgainstCoilRMLog } =
+		useCommonOrderAgainstCoilRMLog();
+	const { invalidateQuery: invalidateOrderAgainstTapeRMLog } =
+		useCommonOrderAgainstTapeRMLog();
+	const { invalidateQuery: invalidateOrderAgainstMetallicFinishingRMLog } =
+		useOrderAgainstNylonMetallicFinishingRMLog();
+	const { invalidateQuery: invalidateOrderAgainstVislonFinishingRMLog } =
+		useOrderAgainstVislonFinishingRMLog();
+	const { invalidateQuery: invalidateOrderAgainstTMRMLog } =
+		useOrderAgainstVislonTMRMLog();
+	const { invalidateQuery: invalidateOrderAgainstSliderAssemblyRMLog } =
+		useOrderAgainstSliderAssemblyRMLog();
+	const { invalidateQuery: invalidateOrderAgainstSliderColorRMLog } =
+		useOrderAgainstSliderColorRMLog();
+
 	const schema = {
 		...MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
-		trx_quantity: MATERIAL_TRX_AGAINST_ORDER_SCHEMA.trx_quantity.max(
-			updateMaterialTrxToOrder?.stock
-		),
+		// trx_quantity: MATERIAL_TRX_AGAINST_ORDER_SCHEMA.trx_quantity.max(
+		// 	updateMaterialTrxToOrder?.stock
+		// ),
 	};
 	const {
 		register,
@@ -36,7 +94,7 @@ export default function Index({
 	} = useRHF(schema, MATERIAL_TRX_AGAINST_ORDER_NULL);
 
 	useFetchForRhfReset(
-		`/material/stock-to-sfg/${updateMaterialTrxToOrder?.uuid}`,
+		`${url}/${updateMaterialTrxToOrder?.uuid}`,
 		updateMaterialTrxToOrder?.uuid,
 		reset
 	);
@@ -67,19 +125,27 @@ export default function Index({
 				onClose,
 			});
 
+			invalidateMaterialInfo();
+			invalidateOrderAgainstDeliveryRMLog();
+			invalidateOrderAgainstDieCastingRMLog();
+			invalidateOrderAgainstLabDipRMLog();
+			invalidateOrderAgainstMetaFinishingRMLog();
+			invalidateOrderAgainstMetalTCRMLog();
+			invalidateOrderAgainstMetalTMRMLog();
+			invalidateOrderAgainstDyeingRMLog();
+			invalidateOrderAgainstCoilRMLog();
+			invalidateOrderAgainstTapeRMLog();
+			invalidateOrderAgainstMetallicFinishingRMLog();
+			invalidateOrderAgainstVislonFinishingRMLog();
+			invalidateOrderAgainstTMRMLog();
+			invalidateOrderAgainstSliderAssemblyRMLog();
+			invalidateOrderAgainstSliderColorRMLog();
+
 			return;
 		}
 	};
 
-	const transactionArea = [
-		{ label: 'Dying and Iron', value: 'dying_and_iron' },
-		{ label: 'Teeth Molding', value: 'teeth_molding' },
-		{ label: 'Teeth Cleaning', value: 'teeth_coloring' },
-		{ label: 'Finishing', value: 'finishing' },
-		{ label: 'Slider Assembly', value: 'slider_assembly' },
-		{ label: 'Coloring', value: 'coloring' },
-	];
-
+	const transactionArea = getTransactionArea();
 	return (
 		<AddModal
 			id={modalId}
@@ -96,7 +162,7 @@ export default function Index({
 							<ReactSelect
 								placeholder='Select Transaction Area'
 								options={transactionArea}
-								value={transactionArea?.find(
+								value={transactionArea?.filter(
 									(item) => item.value == getValues('trx_to')
 								)}
 								onChange={(e) => onChange(e.value)}
@@ -110,7 +176,7 @@ export default function Index({
 			</FormField>
 			<Input
 				label='trx_quantity'
-				sub_label={`Max: ${updateMaterialTrxToOrder?.stock}`}
+				// sub_label={`Max: ${updateMaterialTrxToOrder?.stock}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

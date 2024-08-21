@@ -29,13 +29,13 @@ const SliderAssemblySFG = lazy(
 );
 
 // Die Casting Entry
-const DieCastingEntry = lazy(() => import('@/pages/Slider/DieCasting/Entry'));
-const DieCastingDetails = lazy(
-	() => import('@/pages/Slider/DieCasting/Details')
+const DieCastingEntry = lazy(
+	() => import('@/pages/Slider/DieCasting/Production/Entry')
 );
-const DieCastingBySliderDieCastingUUID = lazy(
-	() => import('@/pages/Slider/DieCasting/Details/BySliderDieCastingUUID')
+const DieCastingProduction = lazy(
+	() => import('@/pages/Slider/DieCasting/Production')
 );
+
 const DieCastingItemLibrary = lazy(
 	() => import('@/pages/Slider/DieCasting/ItemLibrary')
 );
@@ -95,39 +95,39 @@ export const SliderRoutes = [
 		id: 24,
 		name: 'Production',
 		path: '/slider/die-casting/production',
-		element: DieCastingDetails,
+		element: DieCastingProduction,
 		type: ['slider', 'die-casting'],
-		page_name: 'slider__die_casting_details',
+		page_name: 'slider__die_casting_production',
 		actions: ['read', 'create', 'update', 'delete'],
 	},
-	{
-		id: 243,
-		name: 'In Details',
-		path: '/slider/die-casting/production/:slider_die_casting_uuid',
-		element: DieCastingBySliderDieCastingUUID,
-		type: ['slider', 'die-casting'],
-		hidden: true,
-		page_name: 'slider__die_casting_details_by_uuid',
-		actions: ['read', 'update', 'delete'],
-	},
+	// {
+	// 	id: 243,
+	// 	name: 'In Details',
+	// 	path: '/slider/die-casting/production/:slider_die_casting_uuid',
+	// 	element: DieCastingProductionByUUID,
+	// 	type: ['slider', 'die-casting'],
+	// 	hidden: true,
+	// 	page_name: 'slider__die_casting_details_by_uuid',
+	// 	actions: ['read', 'update', 'delete'],
+	// },
 	{
 		id: 241,
 		name: 'Entry',
-		path: '/slider/die-casting/entry',
+		path: '/slider/die-casting/production/entry',
 		element: DieCastingEntry,
 		type: ['slider', 'die-casting'],
 		hidden: true,
-		page_name: 'slider__die_casting_entry',
+		page_name: 'slider__die_casting_production_entry',
 		actions: ['read', 'create'],
 	},
 	{
 		id: 242,
 		name: 'Update',
-		path: '/slider/die-casting/update/:slider_die_casting_uuid',
+		path: '/slider/die-casting/production/update/:uuid',
 		element: DieCastingEntry,
 		type: ['slider', 'die-casting'],
 		hidden: true,
-		page_name: 'slider__die_casting_update',
+		page_name: 'slider__die_casting_production_update',
 		actions: ['read', 'update'],
 	},
 	// Slider Assembly

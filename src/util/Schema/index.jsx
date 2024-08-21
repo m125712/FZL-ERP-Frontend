@@ -950,14 +950,14 @@ export const SFG_TRX_NULL = {
 // Slider Die Casting
 
 export const SLIDER_DIE_CASTING_SCHEMA = {
-	slider_die_casting_details: yup.array().of(
+	array: yup.array().of(
 		yup.object().shape({
 			mc_no: NUMBER_REQUIRED,
-			slider_item_id: STRING_REQUIRED,
-			item_type: STRING_REQUIRED,
+			die_casting_uuid: STRING_REQUIRED,
+			order_info_uuid: STRING_REQUIRED,
 			cavity_goods: NUMBER_DOUBLE_REQUIRED,
-			cavity_reject: NUMBER_DOUBLE_REQUIRED,
-			push_value: NUMBER_DOUBLE_REQUIRED,
+			cavity_defect: NUMBER_DOUBLE_REQUIRED,
+			push: NUMBER_DOUBLE_REQUIRED,
 			weight: NUMBER_DOUBLE_REQUIRED,
 			remarks: STRING.nullable(),
 		})
@@ -965,15 +965,14 @@ export const SLIDER_DIE_CASTING_SCHEMA = {
 };
 
 export const SLIDER_DIE_CASTING_NULL = {
-	slider_die_casting_details: [
+	array: [
 		{
 			mc_no: '',
-			slider_item_id: '',
-			item_type: '',
+			die_casting_uuid: '',
+			order_info_uuid: '',
 			cavity_goods: '',
-			cavity_reject: '',
-			push_value: '',
-			order_number: '',
+			cavity_defect: '',
+			push: '',
 			weight: '',
 			remarks: '',
 		},

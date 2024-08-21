@@ -146,3 +146,10 @@ export const useOtherLabDip = () =>
 		queryKey: otherQK.labDip(),
 		url: `/other/lab-dip/recipe/value/label`,
 	});
+
+// GET OTHER SLIDER ITEM
+export const useOtherSliderItem = () =>
+	createGlobalState({
+		queryKey: otherQK.sliderItem(),
+		url: `/other/slider-item-name/value/label`,
+	});

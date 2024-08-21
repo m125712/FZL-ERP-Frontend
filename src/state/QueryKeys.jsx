@@ -352,7 +352,17 @@ export const sliderQK = {
 
 	//* Die Casting --> (STOCK)
 	sliderDieCastingStock: () => [...sliderQK.all(), 'dc-stock'],
-	sliderDieCastingStockByUUID: (uuid) => [...sliderQK.all(), uuid],
+	sliderDieCastingStockByUUID: (uuid) => [
+		...sliderQK.sliderDieCastingStock(),
+		uuid,
+	],
+
+	//* Die Casting --> (PRODUCTION)
+	sliderDieCastingProduction: () => [...sliderQK.all(), 'dc-production'],
+	sliderDieCastingProductionByUUID: (uuid) => [
+		...sliderQK.sliderDieCastingProduction(),
+		uuid,
+	],
 
 	// * RM
 	sliderDieCastingRM: () => [...sliderQK.all(), 'dc-rm'],
@@ -409,6 +419,7 @@ export const otherQK = {
 	materialType: () => [...otherQK.all(), 'material-type'],
 	department: () => [...otherQK.all(), 'department'],
 	labDip: () => [...otherQK.all(), 'lab-dip'],
+	sliderItem: () => [...otherQK.all(), 'slider-item'],
 	lcByPartyUUID: (uuid) => [...otherQK.all(), 'lc-by-party', uuid],
 	pi: () => [...otherQK.all(), 'pi'],
 	orderDescriptionByOrderNumber: (orderNumber) => [

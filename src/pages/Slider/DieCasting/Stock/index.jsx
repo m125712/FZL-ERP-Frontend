@@ -4,7 +4,6 @@ import { useAccess } from '@/hooks';
 import { useSliderDieCastingStock } from '@/state/Slider';
 
 import { DateTime, EditDelete } from '@/ui';
-import { CheckboxWithoutForm } from '@/ui/Core';
 import PageContainer from '@/ui/Others/PageContainer';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';

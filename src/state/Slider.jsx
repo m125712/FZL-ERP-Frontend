@@ -30,8 +30,22 @@ export const useSliderAssemblyRMLogByUUID = (uuid) =>
 // * Die Casting --> (STOCK)
 export const useSliderDieCastingStock = () =>
 	createGlobalState({
-		queryKey: sliderQK.sliderDieCastingRM(),
+		queryKey: sliderQK.sliderDieCastingStock(),
 		url: '/slider/die-casting',
+	});
+
+// * Die Casting --> (PRODUCTION)
+export const useSliderDieCastingProduction = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDieCastingProduction(),
+		url: '/slider/die-casting-production',
+	});
+
+export const useSliderDieCastingProductionByUUID = (uuid, { enabled = true }) =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDieCastingProductionByUUID(uuid),
+		url: `/slider/die-casting-production/${uuid}`,
+		enabled,
 	});
 
 // * RM

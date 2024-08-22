@@ -17,7 +17,7 @@ import {
 	RemoveButton,
 } from "@/ui";
 import GetDateTime from "@/util/GetDateTime";
-import { nanoid } from "@/util/nanoid";
+import nanoid from '@/lib/nanoid';
 import { useAuth } from "@context/auth";
 import {
 	SLIDER_SLIDER_ASSEMBLY_NULL,

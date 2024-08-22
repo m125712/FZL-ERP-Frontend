@@ -42,6 +42,6 @@ export default defineConfig({
 	// plugins: [react(), eslintPlugin()],
 	server: {
 		// port: 3000,
-		port: isProduction ? 4173 : 3000,
+		port: isProduction ? 4015 : 3000,
 	},
 });

@@ -21,7 +21,7 @@ export default function Index({
 
 	const schema = {
 		...MATERIAL_STOCK_SCHEMA,
-		quantity: MATERIAL_STOCK_SCHEMA.quantity
+		trx_quantity: MATERIAL_STOCK_SCHEMA.trx_quantity
 			.moreThan(0)
 			.max(updateMaterialStock?.stock),
 	};

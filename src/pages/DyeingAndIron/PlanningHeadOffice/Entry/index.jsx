@@ -17,7 +17,7 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { DYEING_PLANNING_SCHEMA, DYEING_PLANNING_NULL } from '@util/Schema';
+import { DYEING_PLANNING_HEADOFFICE_SCHEMA, DYEING_PLANNING_HEADOFFICE_NULL } from '@util/Schema';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useDyeingPlanning } from '@/state/Dyeing';
@@ -48,7 +48,7 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
-	} = useRHF(DYEING_PLANNING_SCHEMA, DYEING_PLANNING_NULL);
+	} = useRHF(DYEING_PLANNING_HEADOFFICE_SCHEMA, DYEING_PLANNING_HEADOFFICE_NULL);
 
 	// planning_entry
 	const { fields: PlanningEntryField } = useFieldArray({
@@ -61,8 +61,7 @@ export default function Index() {
 		itemName: null,
 	});
 
-	const onClose = () => reset(DYEING_PLANNING_NULL);
-
+	const onClose = () => reset(DYEING_PLANNING_HEADOFFICE_NULL);
 
 	// * Fetch initial data
 	isUpdate
@@ -73,41 +72,6 @@ export default function Index() {
 			)
 		: useFetchForRhfResetForPlanning(`/zipper/order-planning`, reset);
 
-	// const { value: data } = useFetch('/zipper/order-planning');
-
-	// console.log('Form array fields:', PlanningEntryField);
-	// console.log('Form data:', getValues());
-
-	// TODO: Not sure if this is needed. need further checking
-	let order_info_ids;
-	// useEffect(() => {
-	// 	if (pi_uuid !== undefined) {
-	// 		setOrderInfoIds((prev) => ({
-	// 			...prev,
-	// 			order_info_ids,
-	// 		}));
-	// 	}
-	// }, [getValues('order_info_ids')]);
-
-	const week = {
-		'24-32': {
-			label: '24-32',
-			value: '24-32',
-		},
-		'24-33': {
-			label: '24-33',
-			value: '24-33',
-		},
-		'24-34': {
-			label: '24-34',
-			value: '24-34',
-		},
-		'24-35': {
-			label: '24-35',
-			value: '24-35',
-		},
-	};
-
 
 	const onSubmit = async (data) => {
 		// * Update
@@ -117,32 +81,43 @@ export default function Index() {
 				updated_at: GetDateTime(),
 			};
 
-			await updateData.mutateAsync({
-				url: `/zipper/planning/${data?.week}`,
-				updatedData: planning_data_updated,
-				isOnCloseNeeded: false,
-			});
-
-			const planning_entry_updated = [...data?.planning_entry].map(
-				(item) => ({
+			const planning_entry_updated = [...data?.planning_entry]
+				.filter((item) => item.is_checked)
+				.map((item) => ({
 					...item,
-					remarks: item.plan_entry_remarks,
+					factory_remarks: item.factory_remarks,
 					uuid: item.planning_entry_uuid,
 					updated_at: GetDateTime(),
-				})
-			);
-			// console.log(planning_entry_updated);
+				}));
 
-			let planning_entry_updated_promises = [
-				...planning_entry_updated.map(async (item) => {
-					await updateData.mutateAsync({
-						url: `/zipper/planning-entry/${item.uuid}`,
-						updatedData: item,
-						isOnCloseNeeded: false,
-					});
-				}),
-			];
+			if (planning_entry_updated.length === 0) {
+				alert('Select at least one item to proceed.');
+			} else {
+				await updateData.mutateAsync({
+					url: `/zipper/planning/${data?.week}`,
+					updatedData: planning_data_updated,
+					isOnCloseNeeded: false,
+				});
 
+				let planning_entry_updated_promises = [
+					...planning_entry_updated.map(async (item) => {
+						await updateData.mutateAsync({
+							url: `/zipper/planning-entry/${item.uuid}`,
+							updatedData: item,
+							isOnCloseNeeded: false,
+						});
+					}),
+				];
+
+				await Promise.all(planning_entry_updated_promises)
+					.then(() => reset(Object.assign({}, DYEING_PLANNING_HEADOFFICE_NULL)))
+					.then(
+						navigate(
+							`/dyeing-and-iron/planning-head-office/details/${week_id}`
+						)
+					)
+					.catch((err) => console.log(err));
+			}
 			return;
 		}
 
@@ -155,7 +130,6 @@ export default function Index() {
 			created_by: user.uuid,
 		};
 
-		// console.log('planning_data:', planning_data);
 
 		const planning_entry = [...data?.planning_entry]
 			.filter((item) => item.is_checked)
@@ -163,11 +137,10 @@ export default function Index() {
 				...item,
 				uuid: nanoid(),
 				planning_week: weeks,
-				remarks: item.plan_entry_remarks,
+				factory_remarks: item.factory_remarks,
 				created_at,
 			}));
 
-		console.log('planning_entry_data:', planning_entry);
 
 		if (planning_entry.length === 0) {
 			alert('Select at least one item to proceed.');
@@ -189,11 +162,16 @@ export default function Index() {
 				),
 			];
 
-			// await Promise.all(promises)
-			// 	.then(() => reset(Object.assign({}, PI_NULL)))
-			// 	.then(() => navigate(`/commercial/pi`))
-			// 	.catch((err) => console.log(err));
+			await Promise.all(promises)
+				.then(() => reset(Object.assign({}, DYEING_PLANNING_HEADOFFICE_NULL)))
+				.then(
+					navigate(
+						`/dyeing-and-iron/planning-head-office/details/${weeks}`
+					)
+				)
+				.catch((err) => console.log(err));
 		}
+		return;
 	};
 
 	// Check if order_number is valid
@@ -214,6 +192,7 @@ export default function Index() {
 		}
 	}, [isAllChecked]);
 
+	// TODO: Please Check this Logic
 	const handleRowChecked = (e, index) => {
 		const isChecked = e.target.checked;
 		setValue(`planning_entry[${index}].is_checked`, isChecked);
@@ -306,32 +285,43 @@ export default function Index() {
 				header: 'Order QTY',
 				enableColumnFilter: true,
 				enableSorting: true,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'balance_factory_quantity',
+				header: 'Balanced Factory',
+				enableColumnFilter: true,
+				enableSorting: true,
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'factory_quantity',
 				header: 'Factory QTY',
 				enableColumnFilter: false,
 				enableSorting: false,
-				cell: (info) => (
-					<Input
-						label={`planning_entry[${info.row.index}].factory_quantity`}
-						is_title_needed='false'
-						height='h-8'
-						dynamicerror={
-							errors?.planning_entry?.[info.row.index]?.factory_quantity
-						}
-						{...{ register, errors }}
-					/>
-				),
+				cell: (info) => {
+					const idx = info.row.index;
+					const dynamicerror =
+						errors?.planning_entry?.[idx]?.factory_quantity;
+					return (
+						<Input
+							label={`planning_entry[${idx}].factory_quantity`}
+							is_title_needed='false'
+							height='h-8'
+							dynamicerror={dynamicerror}
+							{...{ register, errors }}
+						/>
+					);
+				},
 			},
 			{
-				accessorKey: 'remarks',
+				accessorKey: 'factory_remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
 				enableSorting: false,
 				cell: (info) => (
 					<Textarea
-						label={`planning_entry[${info.row.index}].plan_entry_remarks`}
+						label={`planning_entry[${info.row.index}].factory_remarks`}
 						is_title_needed='false'
 						height='h-8'
 						{...{ register, errors }}
@@ -339,10 +329,9 @@ export default function Index() {
 				),
 			},
 		],
-		[isAllChecked]
+		[isAllChecked, isSomeChecked, PlanningEntryField, register, errors]
 	);
 
-	// console.log(PlanningEntryField);
 
 	return (
 		<div className='container mx-auto mt-4 px-2 pb-2 md:px-4'>

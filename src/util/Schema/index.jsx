@@ -1334,7 +1334,7 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 };
 
 // * Dyeing Planning SNO schema*//
-export const DYEING_PLANNING_SCHEMA = {
+export const DYEING_PLANNING_SNO_SCHEMA = {
 	remarks: STRING.nullable(),
 	planning_entry: yup.array().of(
 		yup.object().shape({
@@ -1342,25 +1342,79 @@ export const DYEING_PLANNING_SCHEMA = {
 				.transform((value, originalValue) =>
 					String(originalValue).trim() === '' ? null : value
 				) // Transforms empty strings to null
-				.max(yup.ref('order_quantity'), 'Beyond Max Quantity'),
-			factory_quantity: NUMBER.nullable() // Allows the field to be null
-				.transform((value, originalValue) =>
-					String(originalValue).trim() === '' ? null : value
-				) // Transforms empty strings to null
-				.max(yup.ref('order_quantity'), 'Beyond Max Quantity'),
-			plan_entry_remarks: STRING.nullable(),
+				.max(yup.ref('max_sno_quantity'), ({ max }) => {
+					return `Beyond Max Quantity of ${Math.floor(max)}`;
+				}),
+
+			sno_remarks: STRING.nullable(),
 		})
 	),
 };
 
-export const DYEING_PLANNING_NULL = {
+export const DYEING_PLANNING_SNO_NULL = {
 	week: '',
 	remarks: '',
 	planning_entry: yup.array().of(
 		yup.object().shape({
 			sno_quantity: null,
 			factory_quantity: null,
-			plan_entry_remarks: '',
+			sno_remarks: '',
+			factory_remarks: '',
+		})
+	),
+};
+
+// * Dyeing Planning Head Office schema*//
+export const DYEING_PLANNING_HEADOFFICE_SCHEMA = {
+	remarks: STRING.nullable(),
+	planning_entry: yup.array().of(
+		yup.object().shape({
+			factory_quantity: NUMBER.nullable() // Allows the field to be null
+				.transform((value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+				) // Transforms empty strings to null
+				.max(yup.ref('max_factory_quantity'), ({ max }) => {
+					return `Beyond Max Quantity of ${Math.floor(max)}`;
+				}),
+
+			factory_remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const DYEING_PLANNING_HEADOFFICE_NULL = {
+	week: '',
+	remarks: '',
+	planning_entry: yup.array().of(
+		yup.object().shape({
+			factory_quantity: null,
+			factory_remarks: '',
+		})
+	),
+};
+
+// * Dyeing Planning Batch schema*//
+
+export const DYEING_BATCH_SCHEMA = {
+	remarks: STRING.nullable(),
+	batch_entry: yup.array().of(
+		yup.object().shape({
+			quantity: NUMBER.nullable() // Allows the field to be null
+				.transform((value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+				) // Transforms empty strings to null
+				.max(yup.ref('order_quantity'), 'Beyond Max Quantity'),
+			batch_remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const DYEING_BATCH_NULL = {
+	remarks: '',
+	batch_entry: yup.array().of(
+		yup.object().shape({
+			quantity: null,
+			batch_remarks: '',
 		})
 	),
 };

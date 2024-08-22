@@ -6,16 +6,16 @@ import Information from './Information';
 import Table from './Table';
 
 export default function Index() {
-	const { week_id } = useParams();
+	const { batch_uuid } = useParams();
 	const haveAccess = useAccess('store__receive_by_uuid');
 
-	const { value: planningSNO, loading } = useFetch(
-		`/zipper/planning-details/by/${week_id}`,
-		[week_id]
+	const { value: batch, loading } = useFetch(
+		`/zipper/batch-details/${batch_uuid}`,
+		[batch_uuid]
 	);
 
 	useEffect(() => {
-		document.title = 'Planning Head Office Details';
+		document.title = 'Planning SNO Details';
 	}, []);
 
 	// if (!planningSNO) return <Navigate to='/not-found' />;
@@ -24,8 +24,8 @@ export default function Index() {
 
 	return (
 		<div className='container mx-auto my-2 w-full space-y-2 px-2 md:px-4'>
-			<Information planningSNO={planningSNO} />
-			<Table {...planningSNO} />
+			<Information batch={batch} />
+			<Table {...batch} />
 		</div>
 	);
 }

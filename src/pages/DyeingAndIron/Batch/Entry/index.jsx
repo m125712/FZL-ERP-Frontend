@@ -1,4 +1,4 @@
-import { DeleteModal } from '@/components/Modal';
+import { DeleteModal, ProceedModal } from '@/components/Modal';
 import {
 	useFetchForRhfResetForOrder,
 	usePostFunc,
@@ -17,25 +17,27 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { DYEING_PLANNING_SNO_SCHEMA, DYEING_PLANNING_SNO_NULL } from '@util/Schema';
+import { DYEING_BATCH_SCHEMA, DYEING_BATCH_NULL } from '@util/Schema';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useDyeingPlanning } from '@/state/Dyeing';
+import { useDyeingBatch } from '@/state/Dyeing';
 import nanoid from '@/lib/nanoid';
-
 import Header from './Header';
 
 // UPDATE IS WORKING
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
-		useDyeingPlanning();
-	const { weeks, week_id } = useParams();
+		useDyeingBatch();
+	const { batch_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
-	const isUpdate = week_id !== undefined;
+	const isUpdate = batch_uuid !== undefined;
 	const [orderInfoIds, setOrderInfoIds] = useState({});
+	const [proceed, setProceed] = useState(false);
+	const [batchData, setBatchData] = useState(null);
+	const [batchEntry, setBatchEntry] = useState(null);
 
 	const {
 		register,
@@ -48,12 +50,12 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
-	} = useRHF(DYEING_PLANNING_SNO_SCHEMA, DYEING_PLANNING_SNO_NULL);
+	} = useRHF(DYEING_BATCH_SCHEMA, DYEING_BATCH_NULL);
 
-	// planning_entry
-	const { fields: PlanningEntryField } = useFieldArray({
+	// batch_entry
+	const { fields: BatchEntryField } = useFieldArray({
 		control,
-		name: 'planning_entry',
+		name: 'batch_entry',
 	});
 
 	const [deleteItem, setDeleteItem] = useState({
@@ -61,18 +63,18 @@ export default function Index() {
 		itemName: null,
 	});
 
-	const onClose = () => reset(DYEING_PLANNING_SNO_NULL);
+	const onClose = () => reset(DYEING_BATCH_NULL);
 
 	// * Fetch initial data
 	isUpdate
 		? useFetchForRhfResetForOrder(
-				`/zipper/planning-details/by/${week_id}`,
-				week_id,
+				`/zipper/batch-details/${batch_uuid}`,
+				batch_uuid,
 				reset
 			)
-		: useFetchForRhfResetForPlanning(`/zipper/order-planning`, reset);
+		: useFetchForRhfResetForPlanning(`/zipper/order-batch`, reset);
 
-
+	// const { value } = useFetch('/zipper/order-batch');
 
 	// TODO: Not sure if this is needed. need further checking
 	let order_info_ids;
@@ -85,67 +87,47 @@ export default function Index() {
 	// 	}
 	// }, [getValues('order_info_ids')]);
 
-	const week = {
-		'24-32': {
-			label: '24-32',
-			value: '24-32',
-		},
-		'24-33': {
-			label: '24-33',
-			value: '24-33',
-		},
-		'24-34': {
-			label: '24-34',
-			value: '24-34',
-		},
-		'24-35': {
-			label: '24-35',
-			value: '24-35',
-		},
-	};
-
+	// TODO: Submit
 	const onSubmit = async (data) => {
 		// * Update
 		if (isUpdate) {
-			const planning_data_updated = {
+			const batch_data_updated = {
 				...data,
 				updated_at: GetDateTime(),
 			};
 
-			const planning_entry_updated = [...data?.planning_entry]
+			const batch_entry_updated = [...data?.batch_entry]
 				.filter((item) => item.is_checked)
 				.map((item) => ({
 					...item,
-					sno_remarks: item.sno_remarks,
-					uuid: item.planning_entry_uuid,
+					uuid: item.batch_entry_uuid,
+					remarks: item.batch_remarks,
 					updated_at: GetDateTime(),
 				}));
 
-			if (planning_entry_updated.length === 0) {
+			if (batch_entry_updated.length === 0) {
 				alert('Select at least one item to proceed.');
 			} else {
 				await updateData.mutateAsync({
-					url: `/zipper/planning/${data?.week}`,
-					updatedData: planning_data_updated,
+					url: `/zipper/batch/${batch_data_updated?.uuid}`,
+					updatedData: batch_data_updated,
 					isOnCloseNeeded: false,
 				});
 
-				let planning_entry_updated_promises = [
-					...planning_entry_updated.map(async (item) => {
+				let batch_entry_updated_promises = [
+					...batch_entry_updated.map(async (item) => {
 						await updateData.mutateAsync({
-							url: `/zipper/planning-entry/${item.uuid}`,
+							url: `/zipper/batch-entry/${item.uuid}`,
 							updatedData: item,
 							isOnCloseNeeded: false,
 						});
 					}),
 				];
 
-				await Promise.all(planning_entry_updated_promises)
-					.then(() => reset(Object.assign({}, DYEING_PLANNING_SNO_NULL)))
+				await Promise.all(batch_entry_updated_promises)
+					.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
 					.then(
-						navigate(
-							`/dyeing-and-iron/planning-sno/details/${week_id}`
-						)
+						navigate(`/dyeing-and-iron/batch/details/${batch_uuid}`)
 					)
 					.catch((err) => console.log(err));
 			}
@@ -157,41 +139,83 @@ export default function Index() {
 
 		// * ADD data
 		const created_at = GetDateTime();
-		const planning_data = {
+		const batch_data = {
 			...data,
-			week: weeks,
+			uuid: nanoid(),
 			created_at,
 			created_by: user.uuid,
 		};
 
-	
-
-		const planning_entry = [...data?.planning_entry]
+		const batch_entry = [...data?.batch_entry]
 			.filter((item) => item.is_checked)
 			.map((item) => ({
 				...item,
 				uuid: nanoid(),
-				planning_week: weeks,
-				sno_remarks: item.sno_remarks,
+
+				batch_uuid: batch_data.uuid,
+				remarks: item.batch_remarks,
 				created_at,
 			}));
 
-	
+		setBatchData(batch_data); // * use for modal
+		setBatchEntry(batch_entry); // * use for modal
 
-		if (planning_entry.length === 0) {
+		if (batch_entry.length === 0) {
 			alert('Select at least one item to proceed.');
 		} else {
+			if ( // * check if all colors are same
+				!batch_entry.every(
+					(item) => item.color === batch_entry[0].color
+				)
+			) {
+				window['proceed_modal'].showModal(); // * if not then show modal
+			} else {
+				await postData.mutateAsync({
+					url,
+					newData: batch_data,
+					isOnCloseNeeded: false,
+				});
+
+				let promises = [
+					...batch_entry.map(
+						async (item) =>
+							await postData.mutateAsync({
+								url: '/zipper/batch-entry',
+								newData: item,
+								isOnCloseNeeded: false,
+							})
+					),
+				];
+
+				await Promise.all(promises)
+					.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
+					.then(
+						navigate(
+							`/dyeing-and-iron/batch/details/${batch_data.uuid}`
+						)
+					)
+					.catch((err) => console.log(err));
+
+				return;
+			}
+		}
+		return;
+	};
+
+	// * useEffect for modal procees submit
+	useEffect(() => {
+		const proceedSubmit = async () => {
 			await postData.mutateAsync({
 				url,
-				newData: planning_data,
+				newData: batchData,
 				isOnCloseNeeded: false,
 			});
 
 			let promises = [
-				...planning_entry.map(
+				...batchEntry.map(
 					async (item) =>
 						await postData.mutateAsync({
-							url: '/zipper/planning-entry',
+							url: '/zipper/batch-entry',
 							newData: item,
 							isOnCloseNeeded: false,
 						})
@@ -199,14 +223,17 @@ export default function Index() {
 			];
 
 			await Promise.all(promises)
-				.then(() => reset(Object.assign({}, DYEING_PLANNING_SNO_NULL)))
+				.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
 				.then(
-					navigate(`/dyeing-and-iron/planning-sno/details/${weeks}`)
+					navigate(`/dyeing-and-iron/batch/details/${batchData.uuid}`)
 				)
 				.catch((err) => console.log(err));
-		}
-		return;
-	};
+
+			return;
+		};
+
+		if (proceed) proceedSubmit();
+	}, [proceed]);
 
 	// Check if order_number is valid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
@@ -215,25 +242,26 @@ export default function Index() {
 
 	useEffect(() => {
 		if (isAllChecked || isSomeChecked) {
-			return PlanningEntryField.forEach((item, index) => {
-				setValue(`planning_entry[${index}].is_checked`, true);
+			return BatchEntryField.forEach((item, index) => {
+				setValue(`batch_entry[${index}].is_checked`, true);
 			});
 		}
 		if (!isAllChecked) {
-			return PlanningEntryField.forEach((item, index) => {
-				setValue(`planning_entry[${index}].is_checked`, false);
+			return BatchEntryField.forEach((item, index) => {
+				setValue(`batch_entry[${index}].is_checked`, false);
 			});
 		}
 	}, [isAllChecked]);
 
+	// Todo: fix this
 	const handleRowChecked = (e, index) => {
 		const isChecked = e.target.checked;
-		setValue(`planning_entry[${index}].is_checked`, isChecked);
+		setValue(`batch_entry[${index}].is_checked`, isChecked);
 
 		let isEveryChecked = true,
 			isSomeChecked = false;
 
-		for (let item of watch('planning_entry')) {
+		for (let item of watch('batch_entry')) {
 			if (item.is_checked) {
 				isSomeChecked = true;
 			} else {
@@ -249,7 +277,6 @@ export default function Index() {
 		setIsSomeChecked(isSomeChecked);
 	};
 
-	// Todo: react-table-column
 	const columns = useMemo(
 		() => [
 			{
@@ -270,14 +297,14 @@ export default function Index() {
 				enableSorting: false,
 				cell: (info) => (
 					<CheckBoxWithoutLabel
-						label={`planning_entry[${info.row.index}].is_checked`}
+						label={`batch_entry[${info.row.index}].is_checked`}
 						checked={watch(
-							`planning_entry[${info.row.index}].is_checked`
+							`batch_entry[${info.row.index}].is_checked`
 						)}
 						onChange={(e) => handleRowChecked(e, info.row.index)}
 						disabled={
 							getValues(
-								`planning_entry[${info.row.index}].pi_quantity`
+								`batch_entry[${info.row.index}].pi_quantity`
 							) == 0
 						}
 						{...{ register, errors }}
@@ -322,24 +349,23 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'balance_sno_quantity',
-				header: 'Balanced SNO',
+				accessorKey: 'balance_quantity',
+				header: 'Balanced Batch',
 				enableColumnFilter: true,
 				enableSorting: true,
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'sno_qty',
-				header: 'SNO QTY',
+				accessorKey: 'batch_qty',
+				header: 'Batch QTY',
 				enableColumnFilter: false,
 				enableSorting: false,
 				cell: (info) => {
 					const idx = info.row.index;
-					const dynamicerror =
-						errors?.planning_entry?.[idx]?.sno_quantity;
+					const dynamicerror = errors?.batch_entry?.[idx]?.quantity;
 					return (
 						<Input
-							label={`planning_entry[${info.row.index}].sno_quantity`}
+							label={`batch_entry[${info.row.index}].quantity`}
 							is_title_needed='false'
 							height='h-8'
 							dynamicerror={dynamicerror}
@@ -349,13 +375,14 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'sno_remarks',
+				accessorKey: 'batch_remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
 				enableSorting: false,
+				width: 'w-44',
 				cell: (info) => (
 					<Textarea
-						label={`planning_entry[${info.row.index}].sno_remarks`}
+						label={`batch_entry[${info.row.index}].batch_remarks`}
 						is_title_needed='false'
 						height='h-8'
 						{...{ register, errors }}
@@ -363,7 +390,7 @@ export default function Index() {
 				),
 			},
 		],
-		[isAllChecked, isSomeChecked, PlanningEntryField, register, errors]
+		[isAllChecked, isSomeChecked, BatchEntryField, register, errors]
 	);
 
 	return (
@@ -386,7 +413,7 @@ export default function Index() {
 				{/* todo: react-table  */}
 
 				<ReactTable
-					data={PlanningEntryField}
+					data={BatchEntryField}
 					columns={columns}
 					extraClass='py-2'
 				/>
@@ -401,13 +428,9 @@ export default function Index() {
 			</form>
 
 			<Suspense>
-				<DeleteModal
-					modalId={'planning_entry_delete'}
-					title={'Order Entry'}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					setItems={PlanningEntryField}
-					uri={`/order/entry`}
+				<ProceedModal
+					modalId={'proceed_modal'}
+					setProceed={setProceed}
 				/>
 			</Suspense>
 			<DevTool control={control} placement='top-left' />

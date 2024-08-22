@@ -3,7 +3,7 @@ import ReactTable from '@/components/Table';
 import { DateTime } from '@/ui';
 import { useMemo } from 'react';
 
-export default function Index({ planning_entry }) {
+export default function Index({ batch_entry }) {
 
 	const columns = useMemo(
 		() => [
@@ -42,22 +42,22 @@ export default function Index({ planning_entry }) {
 				accessorKey: 'order_quantity',
 				header: 'Order Quantity',
 				enableColumnFilter: false,
-				cell: info => Number(info.getValue())
+				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'balance_factory_quantity',
-				header: 'Balanced Factory',
+				accessorKey: 'balance_batch_quantity',
+				header: 'Balanced Batch',
 				enableColumnFilter: false,
-				cell: info => Number(info.getValue())
+				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'factory_quantity',
-				header: 'Factory Quantity',
+				accessorKey: 'quantity',
+				header: 'Batch Quantity',
 				enableColumnFilter: false,
-				cell: info => Number(info.getValue())
+				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'factory_remarks',
+				accessorKey: 'batch_remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
 			},
@@ -81,13 +81,13 @@ export default function Index({ planning_entry }) {
 				},
 			},
 		],
-		[planning_entry]
+		[batch_entry]
 	);
 
 	return (
 		<ReactTable
 			title='Details'
-			data={planning_entry}
+			data={batch_entry}
 			columns={columns}
 			extraClass='py-2'
 			showTitleOnly

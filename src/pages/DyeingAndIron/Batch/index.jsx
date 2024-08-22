@@ -1,6 +1,6 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useDyeingPlanning } from '@/state/Dyeing';
+import { useDyeingBatch } from '@/state/Dyeing';
 import { useAccess, useFetch } from '@/hooks';
 import { EditDelete, LinkWithCopy, DateTime } from '@/ui';
 import PageInfo from '@/util/PageInfo';
@@ -9,49 +9,27 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
-		useDyeingPlanning();
-	const info = new PageInfo('Planning SNO', url, 'dyeing__planning_sno');
-	const haveAccess = useAccess('dyeing__planning_sno');
+		useDyeingBatch();
+	const info = new PageInfo('Batch', url, 'dyeing__batch');
+	const haveAccess = useAccess('dyeing__batch');
 	const navigate = useNavigate();
-
 
 	const columns = useMemo(
 		() => [
-			// * week
+			// * batch_id
 			{
-				accessorKey: 'week',
-				header: 'Week',
+				accessorKey: 'batch_id',
+				header: 'Batch ID',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<LinkWithCopy
 						title={info.getValue()}
-						id={info.getValue()}
-						uri='/dyeing-and-iron/planning-sno/details'
+						id={info.row.original.uuid}
+						uri='/dyeing-and-iron/batch/details'
 					/>
 				),
 			},
-			{
-				accessorKey: 'add_actions',
-				header: '',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('create'),
-				width: 'w-24',
-				cell: (info) => {
-					const { week } = info.row.original;
-					return (
-						<button
-							className='btn btn-primary btn-xs'
-							onClick={() =>
-								navigate(
-									`/dyeing-and-iron/planning-sno/entry/${week}`
-								)
-							}>
-							Add
-						</button>
-					);
-				},
-			},
+
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
@@ -107,13 +85,13 @@ export default function Index() {
 	);
 
 	// Add
-	const handelAdd = () => navigate('/dyeing-and-iron/planning-sno/entry');
+	const handelAdd = () => navigate('/dyeing-and-iron/batch/entry');
 
 	// Update
 	const handelUpdate = (idx) => {
-		const { week } = data[idx];
+		const { uuid } = data[idx];
 
-		navigate(`/dyeing-and-iron/planning-sno/update/${week}`);
+		navigate(`/dyeing-and-iron/batch/update/${uuid}`);
 	};
 
 	// get tabname
@@ -128,9 +106,11 @@ export default function Index() {
 	return (
 		<div className='container mx-auto px-2 md:px-4'>
 			<ReactTable
+				handelAdd={handelAdd}
 				title={info.getTitle()}
 				data={data}
 				columns={columns}
+				accessor={haveAccess.includes('create')}
 				extraClass='py-2'
 			/>
 			{/* <Suspense>

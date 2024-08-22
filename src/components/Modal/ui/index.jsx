@@ -35,4 +35,19 @@ const DeleteFooter = ({ handelCancelClick }) => (
 	</div>
 );
 
-export { DeleteFooter, Footer, Header };
+const ProceedFooter = ({ handelCancelClick }) => (
+	<div className='modal-action'>
+		<button
+			type='button'
+			onClick={handelCancelClick}
+			className='btn btn-outline border-primary text-primary hover:bg-primary'>
+			Cancel
+		</button>
+
+		<button type='submit' className='btn bg-success text-white'>
+			Proceed
+		</button>
+	</div>
+);
+
+export { DeleteFooter, ProceedFooter, Footer, Header };

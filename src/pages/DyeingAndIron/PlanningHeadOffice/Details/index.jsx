@@ -14,7 +14,6 @@ export default function Index() {
 		[week_id]
 	);
 
-	console.log(planningSNO);
 	useEffect(() => {
 		document.title = 'Planning Head Office Details';
 	}, []);

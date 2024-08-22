@@ -72,10 +72,7 @@ export default function Index() {
 			)
 		: useFetchForRhfResetForPlanning(`/zipper/order-planning`, reset);
 
-	// const { value: data } = useFetch('/zipper/order-planning');
 
-	// console.log('Form array fields:', PlanningEntryField);
-	// console.log('Form data:', getValues());
 
 	// TODO: Not sure if this is needed. need further checking
 	let order_info_ids;
@@ -107,8 +104,6 @@ export default function Index() {
 		},
 	};
 
-	// console.log(PlanningEntryField);
-	// TODO: Submit
 	const onSubmit = async (data) => {
 		// * Update
 		if (isUpdate) {
@@ -169,7 +164,7 @@ export default function Index() {
 			created_by: user.uuid,
 		};
 
-		// console.log('planning_data:', planning_data);
+	
 
 		const planning_entry = [...data?.planning_entry]
 			.filter((item) => item.is_checked)
@@ -181,7 +176,7 @@ export default function Index() {
 				created_at,
 			}));
 
-		// console.log('planning_entry_data:', planning_entry);
+	
 
 		if (planning_entry.length === 0) {
 			alert('Select at least one item to proceed.');

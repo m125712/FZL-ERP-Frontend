@@ -14,7 +14,6 @@ export default function Index() {
 	const haveAccess = useAccess('dyeing__planning_sno');
 	const navigate = useNavigate();
 
-	console.log(data);
 
 	const columns = useMemo(
 		() => [

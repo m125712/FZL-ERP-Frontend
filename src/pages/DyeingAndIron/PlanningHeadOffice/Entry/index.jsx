@@ -72,10 +72,6 @@ export default function Index() {
 			)
 		: useFetchForRhfResetForPlanning(`/zipper/order-planning`, reset);
 
-	// const { value: data } = useFetch('/zipper/order-planning');
-
-	// console.log('Form array fields:', PlanningEntryField);
-	console.log('Form data:', PlanningEntryField);
 
 	const onSubmit = async (data) => {
 		// * Update
@@ -134,7 +130,6 @@ export default function Index() {
 			created_by: user.uuid,
 		};
 
-		// console.log('planning_data:', planning_data);
 
 		const planning_entry = [...data?.planning_entry]
 			.filter((item) => item.is_checked)
@@ -146,7 +141,6 @@ export default function Index() {
 				created_at,
 			}));
 
-		// console.log('planning_entry_data:', planning_entry);
 
 		if (planning_entry.length === 0) {
 			alert('Select at least one item to proceed.');
@@ -338,7 +332,6 @@ export default function Index() {
 		[isAllChecked, isSomeChecked, PlanningEntryField, register, errors]
 	);
 
-	// console.log(PlanningEntryField);
 
 	return (
 		<div className='container mx-auto mt-4 px-2 pb-2 md:px-4'>

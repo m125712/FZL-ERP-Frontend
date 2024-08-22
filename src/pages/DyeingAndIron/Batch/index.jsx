@@ -14,8 +14,6 @@ export default function Index() {
 	const haveAccess = useAccess('dyeing__batch');
 	const navigate = useNavigate();
 
-	console.log(data);
-
 	const columns = useMemo(
 		() => [
 			// * batch_id

@@ -4,7 +4,6 @@ import { DateTime } from '@/ui';
 import { useMemo } from 'react';
 
 export default function Index({ planning_entry }) {
-	console.log(planning_entry);
 
 	const columns = useMemo(
 		() => [

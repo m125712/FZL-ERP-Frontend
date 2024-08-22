@@ -4,7 +4,6 @@ import { DateTime } from '@/ui';
 import { useMemo } from 'react';
 
 export default function Index({ batch_entry }) {
-	console.log(batch_entry);
 
 	const columns = useMemo(
 		() => [

@@ -473,6 +473,20 @@ export const sliderQK = {
 		uuid,
 	],
 
+	//* Die Casting --> (STOCK)
+	sliderDieCastingStock: () => [...sliderQK.all(), 'dc-stock'],
+	sliderDieCastingStockByUUID: (uuid) => [
+		...sliderQK.sliderDieCastingStock(),
+		uuid,
+	],
+
+	//* Die Casting --> (PRODUCTION)
+	sliderDieCastingProduction: () => [...sliderQK.all(), 'dc-production'],
+	sliderDieCastingProductionByUUID: (uuid) => [
+		...sliderQK.sliderDieCastingProduction(),
+		uuid,
+	],
+
 	// * Order Against sliderAssembly RM Log * //
 	orderAgainstSliderAssemblyRMLog: () => [
 		...sliderQK.all(),
@@ -549,4 +563,48 @@ export const deliveryQk = {
 		...deliveryQk.orderAgainstDeliveryRMLog(),
 		uuid,
 	],
+};
+
+//* OTHER QUERY KEYS
+
+export const otherQK = {
+	all: () => ['other'],
+	party: () => [...otherQK.all(), 'party'],
+	buyer: () => [...otherQK.all(), 'buyer'],
+	marketing: () => [...otherQK.all(), 'marketing'],
+	order: () => [...otherQK.all(), 'order'],
+	orderEntry: () => [...otherQK.all(), 'order-entry'],
+	vendor: () => [...otherQK.all(), 'vendor'],
+	bank: () => [...otherQK.all(), 'bank'],
+	material: () => [...otherQK.all(), 'material'],
+	materialSection: () => [...otherQK.all(), 'material-section'],
+	materialType: () => [...otherQK.all(), 'material-type'],
+	department: () => [...otherQK.all(), 'department'],
+	labDip: () => [...otherQK.all(), 'lab-dip'],
+	sliderItem: () => [...otherQK.all(), 'slider-item'],
+	lcByPartyUUID: (uuid) => [...otherQK.all(), 'lc-by-party', uuid],
+	pi: () => [...otherQK.all(), 'pi'],
+	orderDescriptionByOrderNumber: (orderNumber) => [
+		...otherQK.all(),
+		'order-description-by-order-number',
+		orderNumber,
+	],
+	orderPropertiesByTypeName: (typeName) => [
+		...otherQK.all(),
+		'properties-by-type-name',
+		typeName,
+	],
+	orderNumberByMarketingAndPartyUUID: (marketingUUID, partyUUID) => [
+		...otherQK.all(),
+		'number-by-marketing-and-party',
+		marketingUUID,
+		partyUUID,
+	],
+	marketingUser: () => [...otherQK.all(), 'marketing-user'],
+	merchandiserByPartyUUID: (uuid) => [
+		...otherQK.all(),
+		'merchandiser-by-party',
+		uuid,
+	],
+	factoryByPartyUUID: (uuid) => [...otherQK.all(), 'factory-by-party', uuid],
 };

@@ -26,6 +26,28 @@ export const useSliderAssemblyRMLogByUUID = (uuid) =>
 		queryKey: sliderQK.sliderAssemblyRMLogByUUID(uuid),
 		url: `/material/used/by/slider_assembly${uuid}`,
 	});
+
+// * Die Casting --> (STOCK)
+export const useSliderDieCastingStock = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDieCastingStock(),
+		url: '/slider/die-casting',
+	});
+
+// * Die Casting --> (PRODUCTION)
+export const useSliderDieCastingProduction = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDieCastingProduction(),
+		url: '/slider/die-casting-production',
+	});
+
+export const useSliderDieCastingProductionByUUID = (uuid, { enabled = true }) =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDieCastingProductionByUUID(uuid),
+		url: `/slider/die-casting-production/${uuid}`,
+		enabled,
+	});
+
 // * Order Against RM Log
 export const useOrderAgainstSliderAssemblyRMLog = () =>
 	createGlobalState({
@@ -38,7 +60,6 @@ export const useOrderAgainstSliderAssemblyRMLogByUUID = (uuid) =>
 		url: `/zipper/material-trx-against-order/by/slider_assembly${uuid}`,
 	});
 // * Die Casting
-
 // * RM
 export const useSliderDieCastingRM = () =>
 	createGlobalState({

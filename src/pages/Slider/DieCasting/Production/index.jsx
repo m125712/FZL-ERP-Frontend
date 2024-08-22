@@ -54,12 +54,12 @@ export default function Index() {
 				header: 'Item Name',
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'item_type',
-				header: 'Type',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'item_type',
+			// 	header: 'Type',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorKey: 'cavity_goods',
 				header: 'Cavity Goods',
@@ -91,7 +91,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'order_info_uuid',
+				accessorKey: 'order_number',
 				header: 'O/N',
 				cell: (info) => info.getValue(),
 			},
@@ -109,7 +109,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'production_weight',
+				accessorKey: 'pcs_per_kg',
 				header: (
 					<>
 						Unit Qty

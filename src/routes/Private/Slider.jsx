@@ -1,5 +1,9 @@
 import { lazy } from 'react';
 
+// * Dashboard
+// * Info
+const SliderDashboardInfo = lazy(() => import('@/pages/Slider/Dashboard/Info'));
+
 // Coloring
 // const ColoringRMStock = lazy(
 // 	() => import('@/pages/Slider/Coloring/RMStock/RMStock')
@@ -61,6 +65,15 @@ const DieCastingItemLibrary = lazy(
 // );
 
 export const SliderRoutes = [
+	{
+		id: 21,
+		name: 'Info',
+		path: '/slider/dashboard/info',
+		element: SliderDashboardInfo,
+		type: ['slider', 'dashboard'],
+		page_name: 'slider__dashboard_info',
+		actions: ['read', 'create', 'update', 'delete'],
+	},
 	{
 		id: 21,
 		name: 'Stock',

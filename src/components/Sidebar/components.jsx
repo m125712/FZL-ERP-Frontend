@@ -141,6 +141,7 @@ const Sidebar = () => {
 		delivery: filterRoutes('delivery'),
 		store: filterRoutes('store'),
 		common: filterRoutes('common'),
+		dashboard: filterRoutes('dashboard'),
 		dyeing: filterRoutes('dyeing'),
 		nylon: filterRoutes('nylon'),
 		vislon: filterRoutes('vislon'),

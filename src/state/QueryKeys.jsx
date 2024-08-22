@@ -287,7 +287,7 @@ export const dyeingQK = {
 	// *  batch
 	batch: () => [...dyeingQK.all(), 'batch'],
 	batchByUUID: (uuid) => [...dyeingQK.batch(), uuid],
-  
+
 	// * Order Against dyeing RM Log * //
 	orderAgainstDyeingRMLog: () => [
 		...dyeingQK.all(),
@@ -463,6 +463,13 @@ export const sliderQK = {
 	sliderAssemblyRMLog: () => [...sliderQK.all(), 'assembly-rm-log'],
 	sliderAssemblyRMLogByUUID: (uuid) => [
 		...sliderQK.sliderAssemblyRMLog(),
+		uuid,
+	],
+
+	//* Slider/Dashboard--> (INFO)
+	sliderDashboardInfo: () => [...sliderQK.all(), 'dashboard-info'],
+	sliderDashboardInfoByUUID: (uuid) => [
+		...sliderQK.sliderDashboardInfo(),
 		uuid,
 	],
 

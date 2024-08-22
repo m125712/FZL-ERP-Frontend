@@ -24,6 +24,17 @@ export const useMetalTMRMLogByUUID = (uuid) =>
 		queryKey: metalQK.metalTMRMLogByUUID(uuid),
 		url: `/material/used/by/m_teeth_molding${uuid}`,
 	});
+//* order against RM Log
+export const useOrderAgainstMetalTMRMLog = () =>
+	createGlobalState({
+		queryKey: metalQK.orderAgainstMetalTMRMLog(),
+		url: '/zipper/material-trx-against-order/by/m_teeth_molding',
+	});
+export const useOrderAgainstMetalTMRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: metalQK.orderAgainstMetalTMRMLogByUUID(uuid),
+		url: `/zipper/material-trx-against-order/by/m_teeth_molding${uuid}`,
+	});
 //* Teeth Coloring
 // * RM
 export const useMetalTCRM = () =>
@@ -47,6 +58,17 @@ export const useMetalTCRMLogByUUID = (uuid) =>
 		queryKey: metalQK.metalTCRMLogByUUID(uuid),
 		url: `/material/used/multi-section/by/teeth_assembling_and_polishing,plating_and_iron${uuid}`,
 	});
+//* order against RM Log
+export const useOrderAgainstMetalTCRMLog = () =>
+	createGlobalState({
+		queryKey: metalQK.orderAgainstMetalTCRMLog(),
+		url: '/zipper/material-trx-against-order/multiple/by/teeth_assembling_and_polishing,plating_and_iron',
+	});
+export const useOrderAgainstMetalTCRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: metalQK.orderAgainstMetalTCRMLogByUUID(uuid),
+		url: `/zipper/material-trx-against-order/multiple/by/teeth_assembling_and_polishing,plating_and_iron${uuid}`,
+	});
 //* Finishing
 // * RM
 export const useMetalFinishingRM = () =>
@@ -69,4 +91,15 @@ export const useMetalFinishingRMLogByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: metalQK.metalFinishingRMLogByUUID(uuid),
 		url: `/material/used/multi-section/by/m_gapping,m_teeth_cleaning,m_sealing,m_stopper/${uuid}`,
+	});
+//* order against RM Log
+export const useOrderAgainstMetalFinishingRMLog = () =>
+	createGlobalState({
+		queryKey: metalQK.orderAgainstMetalFinishingRMLog(),
+		url: '/zipper/material-trx-against-order/multiple/by/m_gapping,m_teeth_cleaning,m_sealing,m_stopper',
+	});
+export const useOrderAgainstMetalFinishingRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: metalQK.orderAgainstMetalFinishingRMLogByUUID(uuid),
+		url: `/zipper/material-trx-against-order/multiple/by/m_gapping,m_teeth_cleaning,m_sealing,m_stopper${uuid}`,
 	});

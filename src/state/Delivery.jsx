@@ -24,3 +24,14 @@ export const useDeliveryRMLogByUUID = (uuid) =>
 		queryKey: deliveryQk.deliveryRMLogByUUID(uuid),
 		url: '/material/used/multi-section/by/m_qc_and_packing,n_qc_and_packing,v_qc_and_packing,s_qc_and_packing',
 	});
+// *  Order Against Delivery RM Log * //
+export const useOrderAgainstDeliveryRMLog = () =>
+	createGlobalState({
+		queryKey: deliveryQk.orderAgainstDeliveryRMLog(),
+		url: '/zipper/material-trx-against-order/multiple/by/m_qc_and_packing,n_qc_and_packing,v_qc_and_packing,s_qc_and_packing',
+	});
+export const useOrderAgainstDeliveryRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: deliveryQk.orderAgainstDeliveryRMLogByUUID(uuid),
+		url: '/zipper/material-trx-against-order/multiple/by/m_qc_and_packing,n_qc_and_packing,v_qc_and_packing,s_qc_and_packing',
+	});

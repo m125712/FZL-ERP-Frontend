@@ -77,6 +77,8 @@ export const DyeingAndIronRoutes = [
 			'click_delete_rm',
 			'click_update_production',
 			'click_delete_production',
+			'click_update_rm_order',
+			'click_delete_rm_order',
 		],
 	},
 	{

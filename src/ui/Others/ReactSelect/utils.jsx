@@ -7,7 +7,7 @@ const controlStyles = {
 	disabled:
 		'bg-primary/5 border-2 border-error/40 text-error/80 cursor-not-allowed',
 };
-const placeholderStyles = 'text-white text-[0.1rem]';
+const placeholderStyles = 'text-primary/50 text-sm ';
 
 // Single Value
 const selectInputStyles = 'grow';

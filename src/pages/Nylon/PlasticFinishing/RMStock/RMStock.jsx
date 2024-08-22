@@ -18,7 +18,7 @@ export default function Index() {
 	);
 	const haveAccess = useAccess(info.getTab());
 
-	console.log(data);
+	
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);

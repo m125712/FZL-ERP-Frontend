@@ -1,71 +1,85 @@
-import { Suspense } from "@/components/Feedback";
-import { DeleteModal } from "@/components/Modal";
-import ReactTable from "@/components/Table";
-import { useAuth } from "@/context/auth";
-import { useAccess, useFetchFunc } from "@/hooks";
+import { Suspense } from '@/components/Feedback';
+import { DeleteModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
+import { useAccess } from '@/hooks';
+import { useSliderDieCastingProduction } from '@/state/Slider';
 
-import { DateTime, EditDelete } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { DateTime, EditDelete } from '@/ui';
+import PageContainer from '@/ui/Others/PageContainer';
+import PageInfo from '@/util/PageInfo';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Index() {
+	const { data, isLoading, url, deleteData } =
+		useSliderDieCastingProduction();
 	const navigate = useNavigate();
 	const info = new PageInfo(
-		"Production",
-		"slider/die-casting",
-		"slider__die_casting_details"
-	); // details changed to production
+		'Production',
+		url,
+		'slider__die_casting_production'
+	);
 
-	const [slider, setSlider] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+	const breadcrumbs = [
+		{
+			label: 'Slider',
+			isDisabled: true,
+		},
+		{
+			label: 'Die Casting',
+			isDisabled: true,
+		},
+		{
+			label: 'Production',
+			href: '/slider/die-casting/production',
+		},
+	];
 
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
 
-	const haveAccess = useAccess("slider__die_casting_details");
+	const haveAccess = useAccess('slider__die_casting_production');
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "mc_no",
-				header: "M/C",
+				accessorKey: 'mc_no',
+				header: 'M/C',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "item_name_label",
-				header: "Item Name",
+				accessorKey: 'die_casting_name',
+				header: 'Item Name',
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "item_type",
-				header: "Type",
+				accessorKey: 'item_type',
+				header: 'Type',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "cavity_goods",
-				header: "Cavity Goods",
+				accessorKey: 'cavity_goods',
+				header: 'Cavity Goods',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "cavity_reject",
-				header: "Cavity Reject",
+				accessorKey: 'cavity_defect',
+				header: 'Cavity Defect',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "push_value",
-				header: "Push",
+				accessorKey: 'push',
+				header: 'Push',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "production_quantity",
+				accessorKey: 'production_quantity',
 				header: (
 					<>
 						Production QTY
@@ -77,13 +91,13 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "order_number",
-				header: "O/N",
+				accessorKey: 'order_info_uuid',
+				header: 'O/N',
 				cell: (info) => info.getValue(),
 			},
 
 			{
-				accessorKey: "weight",
+				accessorKey: 'weight',
 				header: (
 					<>
 						Weight
@@ -95,7 +109,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "production_weight",
+				accessorKey: 'production_weight',
 				header: (
 					<>
 						Unit Qty
@@ -123,11 +137,11 @@ export default function Index() {
 			// ),
 			// },
 			{
-				accessorKey: "created_at",
-				header: "Created At",
-				filterFn: "isWithinRange",
+				accessorKey: 'created_at',
+				header: 'Created At',
+				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
-				width: "w-24",
+				width: 'w-24',
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
@@ -142,36 +156,31 @@ export default function Index() {
 			// 	},
 			// },
 			{
-				accessorKey: "action",
-				header: "Action",
+				accessorKey: 'action',
+				header: 'Action',
 				enableColumnFilter: false,
-				hidden: !haveAccess.includes("update"),
+				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
-					const uuid = info.row.original.slider_die_casting_uuid;
+					const uuid = info.row.original?.uuid;
 					return (
 						<EditDelete
 							handelUpdate={() => handelUpdate(uuid)}
 							handelDelete={() => handelDelete(info.row.id)}
-							showDelete={haveAccess.includes("delete")}
+							showDelete={haveAccess.includes('delete')}
 						/>
 					);
 				},
 			},
 		],
-		[slider]
+		[data]
 	);
 
-	// Fetching data from server
-	useEffect(() => {
-		useFetchFunc(info.getFetchUrl(), setSlider, setLoading, setError);
-	}, []);
-
 	// Add
-	const handelAdd = () => navigate("/slider/die-casting/entry");
+	const handelAdd = () => navigate('/slider/die-casting/production/entry');
 
 	// Update
 	const handelUpdate = (uuid) => {
-		navigate(`/slider/die-casting/update/${uuid}`);
+		navigate(`/slider/die-casting/production/update/${uuid}`);
 	};
 
 	const [deleteItem, setDeleteItem] = useState({
@@ -182,36 +191,38 @@ export default function Index() {
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: slider[idx].id,
-			itemName: slider[idx].item_name_label.replace(/ /g, "_"),
+			itemId: data[idx].uuid,
+			itemName: data[idx].die_casting_name.replace(/ /g, '_'),
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
 
-	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<PageContainer title='Production Lists' breadcrumbs={breadcrumbs}>
 			<ReactTable
 				title={info.getTitle()}
-				accessor={haveAccess.includes("create")}
-				data={slider}
+				accessor={haveAccess.includes('create')}
+				data={data}
 				columns={columns}
 				handelAdd={handelAdd}
-				extraClass={"py-0.5"}
+				extraClass={'py-0.5'}
 			/>
 			<Suspense>
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					setItems={setSlider}
-					uri={info.getDeleteUrl()}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url,
+						deleteData,
+					}}
 				/>
 			</Suspense>
-		</div>
+		</PageContainer>
 	);
 }

@@ -14,7 +14,7 @@ export default function Index() {
 	const info = new PageInfo('Finishing RM Stock', url, 'metal__finishing_rm');
 	const haveAccess = useAccess(info.getTab());
 
-	console.log(data);
+	
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);

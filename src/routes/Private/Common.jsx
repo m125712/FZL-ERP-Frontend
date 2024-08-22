@@ -53,6 +53,8 @@ export const CommonRoutes = [
 			'click_delete_tape_production',
 			'click_update_rm',
 			'click_delete_rm',
+			'click_update_rm_order',
+			'click_delete_rm_order',
 		],
 	},
 	{
@@ -88,6 +90,8 @@ export const CommonRoutes = [
 			'click_delete_rm',
 			'click_update_coil_production',
 			'click_delete_coil_production',
+			'click_update_rm_order',
+			'click_delete_rm_order',
 		],
 	},
 ];

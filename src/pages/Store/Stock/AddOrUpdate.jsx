@@ -3,6 +3,7 @@ import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
+import getTransactionArea from '@/util/TransactionArea';
 import { DevTool } from '@hookform/devtools';
 import { MATERIAL_STOCK_NULL, MATERIAL_STOCK_SCHEMA } from '@util/Schema';
 
@@ -20,7 +21,7 @@ export default function Index({
 
 	const schema = {
 		...MATERIAL_STOCK_SCHEMA,
-		quantity: MATERIAL_STOCK_SCHEMA.quantity
+		trx_quantity: MATERIAL_STOCK_SCHEMA.trx_quantity
 			.moreThan(0)
 			.max(updateMaterialStock?.stock),
 	};
@@ -72,34 +73,7 @@ export default function Index({
 		}
 	};
 
-	const transactionArea = [
-		{ label: 'Tape Making', value: 'tape_making' },
-		{ label: 'Coil Forming', value: 'coil_forming' },
-		{ label: 'Dying and Iron', value: 'dying_and_iron' },
-		{ label: 'Metal Gapping', value: 'm_gapping' },
-		{ label: 'Vislon Gapping', value: 'v_gapping' },
-		{ label: 'Vislon Teeth Molding', value: 'v_teeth_molding' },
-		{ label: 'Metal Teeth Molding', value: 'm_teeth_molding' },
-		{
-			label: 'Teeth Assembling and Polishing',
-			value: 'teeth_assembling_and_polishing',
-		},
-		{ label: 'Metal Teeth Cleaning', value: 'm_teeth_cleaning' },
-		{ label: 'Vislon Teeth Cleaning', value: 'v_teeth_cleaning' },
-		{ label: 'Plating and Iron', value: 'plating_and_iron' },
-		{ label: 'Metal Sealing', value: 'm_sealing' },
-		{ label: 'Vislon Sealing', value: 'v_sealing' },
-		{ label: 'Nylon T Cutting', value: 'n_t_cutting' },
-		{ label: 'Vislon T Cutting', value: 'v_t_cutting' },
-		{ label: 'Metal Stopper', value: 'm_stopper' },
-		{ label: 'Vislon Stopper', value: 'v_stopper' },
-		{ label: 'Nylon Stopper', value: 'n_stopper' },
-		{ label: 'Cutting', value: 'cutting' },
-		{ label: 'QC and Packing', value: 'qc_and_packing' },
-		{ label: 'Die Casting', value: 'die_casting' },
-		{ label: 'Slider Assembly', value: 'slider_assembly' },
-		{ label: 'Coloring', value: 'coloring' },
-	];
+	const transactionArea = getTransactionArea();
 
 	return (
 		<AddModal

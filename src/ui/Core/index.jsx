@@ -15,7 +15,7 @@ export const Input = ({ register, ...props }) => (
 	<FormField {...props}>
 		<input
 			className={cn(
-				'input input-primary w-full rounded border-primary/30 bg-primary/5 px-2 text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-primary/20',
+				'input input-primary w-full rounded border-primary/30 bg-primary/5 px-2 text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-primary/50',
 				props?.width,
 				props?.height,
 				props?.className
@@ -94,21 +94,25 @@ export const CheckBox = ({
 	register,
 	type = 'checkbox-success',
 	text = 'text-primary',
+	className,
 	...props
 }) => (
-	<div className='form-control'>
+	<div className={cn('form-control', className)}>
 		<label
 			className={cn(
-				'label cursor-pointer',
+				'label flex cursor-pointer justify-start gap-2',
 				props.height ? props.height : 'h-8'
 			)}>
 			<input
 				type='checkbox'
-				className={cn(`checkbox checkbox-sm rounded-full border`, type)}
+				className={cn(
+					`checkbox-primary checkbox checkbox-sm rounded-full border`,
+					type
+				)}
 				{...register(props.label)}
 				{...props}
 			/>
-			<span className={cn('ml-2 font-semibold capitalize', text)}>
+			<span className={cn('text-sm font-semibold capitalize', text)}>
 				{props.title
 					? capitalize(props.title)
 					: capitalize(props.label)}
@@ -136,6 +140,14 @@ export const CheckBoxWithoutLabel = ({
 			/>
 		</label>
 	</div>
+);
+
+export const CheckboxWithoutForm = ({ className, ...props }) => (
+	<input
+		type='checkbox'
+		className={cn(`checkbox-secondary checkbox checkbox-sm`, className)}
+		{...props}
+	/>
 );
 
 export const Switch = ({ register, ...props }) => (

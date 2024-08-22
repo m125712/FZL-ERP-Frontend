@@ -1,8 +1,21 @@
 import { AddModal } from '@/components/Modal';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
-import { useMaterialTrx } from '@/state/Store';
+import { useCommonCoilRM, useCommonTapeRM } from '@/state/Common';
+import { useDeliveryRM } from '@/state/Delivery';
+import { useDyeingRM } from '@/state/Dyeing';
+import { useLabDipRM } from '@/state/LabDip';
+import { useMetalFinishingRM, useMetalTCRM, useMetalTMRM } from '@/state/Metal';
+import { useNylonMetallicFinishingRM } from '@/state/Nylon';
+import {
+	useSliderAssemblyRM,
+	useSliderColoringRM,
+	useSliderDieCastingRM,
+} from '@/state/Slider';
+import { useMaterialInfo, useMaterialTrx } from '@/state/Store';
+import { useVislonFinishingRM, useVislonTMRM } from '@/state/Vislon';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
+import getTransactionArea from '@/util/TransactionArea';
 import { MATERIAL_STOCK_NULL, MATERIAL_STOCK_SCHEMA } from '@util/Schema';
 
 export default function Index({
@@ -15,6 +28,26 @@ export default function Index({
 	setUpdateMaterialTrx,
 }) {
 	const { url, updateData } = useMaterialTrx();
+	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
+	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
+	const { invalidateQuery: invalidateLabDipRM } = useLabDipRM();
+	const { invalidateQuery: invalidateDyeingRM } = useDyeingRM();
+	const { invalidateQuery: invalidateFinishingRM } = useMetalFinishingRM();
+	const { invalidateQuery: invalidateMetalTCRM } = useMetalTCRM();
+	const { invalidateQuery: invalidateMetalTMRM } = useMetalTMRM();
+	const { invalidateQuery: invalidateNylonMetallicFinishingRM } =
+		useNylonMetallicFinishingRM();
+	const { invalidateQuery: invalidateVislonFinishingRM } =
+		useVislonFinishingRM();
+	const { invalidateQuery: invalidateVislonTMRM } = useVislonTMRM();
+	const { invalidateQuery: invalidateSliderAssemblyRM } =
+		useSliderAssemblyRM();
+	const { invalidateQuery: invalidateSliderColoringRM } =
+		useSliderColoringRM();
+	const { invalidateQuery: invalidateDieCastingRM } = useSliderDieCastingRM();
+	const { invalidateQuery: invalidateDeliveryRM } = useDeliveryRM();
+
 	const MAX_QUANTITY = updateMaterialTrx?.stock;
 	const schema = {
 		...MATERIAL_STOCK_SCHEMA,
@@ -61,38 +94,27 @@ export default function Index({
 				onClose,
 			});
 
+			invalidateMaterialInfo();
+			invalidateCommonTapeRM();
+			invalidateCommonCoilRM();
+			invalidateLabDipRM();
+			invalidateDyeingRM();
+			invalidateFinishingRM();
+			invalidateMetalTCRM();
+			invalidateMetalTMRM();
+			invalidateNylonMetallicFinishingRM();
+			invalidateVislonFinishingRM();
+			invalidateVislonTMRM();
+			invalidateSliderAssemblyRM();
+			invalidateSliderColoringRM();
+			invalidateDieCastingRM();
+			invalidateDeliveryRM();
+
 			return;
 		}
 	};
 
-	const transactionArea = [
-		{ label: 'Tape Making', value: 'tape_making' },
-		{ label: 'Coil Forming', value: 'coil_forming' },
-		{ label: 'Dying and Iron', value: 'dying_and_iron' },
-		{ label: 'Metal Gapping', value: 'm_gapping' },
-		{ label: 'Vislon Gapping', value: 'v_gapping' },
-		{ label: 'Vislon Teeth Molding', value: 'v_teeth_molding' },
-		{ label: 'Metal Teeth Molding', value: 'm_teeth_molding' },
-		{
-			label: 'Teeth Assembling and Polishing',
-			value: 'teeth_assembling_and_polishing',
-		},
-		{ label: 'Metal Teeth Cleaning', value: 'm_teeth_cleaning' },
-		{ label: 'Vislon Teeth Cleaning', value: 'v_teeth_cleaning' },
-		{ label: 'Plating and Iron', value: 'plating_and_iron' },
-		{ label: 'Metal Sealing', value: 'm_sealing' },
-		{ label: 'Vislon Sealing', value: 'v_sealing' },
-		{ label: 'Nylon T Cutting', value: 'n_t_cutting' },
-		{ label: 'Vislon T Cutting', value: 'v_t_cutting' },
-		{ label: 'Metal Stopper', value: 'm_stopper' },
-		{ label: 'Vislon Stopper', value: 'v_stopper' },
-		{ label: 'Nylon Stopper', value: 'n_stopper' },
-		{ label: 'Cutting', value: 'cutting' },
-		{ label: 'QC and Packing', value: 'qc_and_packing' },
-		{ label: 'Die Casting', value: 'die_casting' },
-		{ label: 'Slider Assembly', value: 'slider_assembly' },
-		{ label: 'Coloring', value: 'coloring' },
-	];
+	const transactionArea = getTransactionArea();
 
 	return (
 		<AddModal

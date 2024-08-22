@@ -27,8 +27,39 @@ export const useSliderAssemblyRMLogByUUID = (uuid) =>
 		url: `/material/used/by/slider_assembly${uuid}`,
 	});
 
-// * Die Casting
+// * Die Casting --> (STOCK)
+export const useSliderDieCastingStock = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDieCastingStock(),
+		url: '/slider/die-casting',
+	});
 
+// * Die Casting --> (PRODUCTION)
+export const useSliderDieCastingProduction = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDieCastingProduction(),
+		url: '/slider/die-casting-production',
+	});
+
+export const useSliderDieCastingProductionByUUID = (uuid, { enabled = true }) =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDieCastingProductionByUUID(uuid),
+		url: `/slider/die-casting-production/${uuid}`,
+		enabled,
+	});
+
+// * Order Against RM Log
+export const useOrderAgainstSliderAssemblyRMLog = () =>
+	createGlobalState({
+		queryKey: sliderQK.orderAgainstSliderAssemblyRMLog(),
+		url: '/zipper/material-trx-against-order/by/slider_assembly',
+	});
+export const useOrderAgainstSliderAssemblyRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: sliderQK.orderAgainstSliderAssemblyRMLogByUUID(uuid),
+		url: `/zipper/material-trx-against-order/by/slider_assembly${uuid}`,
+	});
+// * Die Casting
 // * RM
 export const useSliderDieCastingRM = () =>
 	createGlobalState({
@@ -51,7 +82,17 @@ export const useSliderDieCastingRMLogByUUID = (uuid) =>
 		queryKey: sliderQK.sliderDieCastingRMLogByUUID(uuid),
 		url: `/material/used/by/die_casting${uuid}`,
 	});
-
+// * Order Against RM Log
+export const useOrderAgainstDieCastingRMLog = () =>
+	createGlobalState({
+		queryKey: sliderQK.orderAgainstDieCastingRMLog(),
+		url: '/zipper/material-trx-against-order/by/die_casting',
+	});
+export const useOrderAgainstDieCastingRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: sliderQK.orderAgainstDieCastingRMLogByUUID(uuid),
+		url: `/zipper/material-trx-against-order/by/die_casting${uuid}`,
+	});
 // * Coloring
 
 // * RM
@@ -75,4 +116,15 @@ export const useSliderColoringRMLogByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: sliderQK.sliderColoringRMLogByUUID(uuid),
 		url: `/material/used/by/coloring${uuid}`,
+	});
+// * Order Against RM Log
+export const useOrderAgainstSliderColorRMLog = () =>
+	createGlobalState({
+		queryKey: sliderQK.orderAgainstSliderColorRMLog(),
+		url: '/zipper/material-trx-against-order/by/coloring',
+	});
+export const useOrderAgainstSliderColorRMLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: sliderQK.orderAgainstSliderColorRMLogByUUID(uuid),
+		url: `/zipper/material-trx-against-order/by/coloring${uuid}`,
 	});

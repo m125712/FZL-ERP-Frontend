@@ -1,6 +1,6 @@
 import { useAuth } from '@/context/auth';
 import Issue from '@/pages/Issue/History';
-import Purchase from '@/pages/Store/Receive/Details';
+// import Purchase from '@/pages/Store/Receive/Details';
 import Maintenance from '@pages/Issue/Maintenance';
 import SpareParts from '@pages/Issue/SpareParts';
 import Wastage from '@pages/Issue/Wastage';

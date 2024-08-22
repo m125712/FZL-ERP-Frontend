@@ -1,6 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
+import { useLabDipShadeRecipeDescription } from '@/state/LabDip';
 import { useMaterialInfo, usePurchaseDescription } from '@/state/Store';
 import { DateTime, EditDelete, LinkOnly } from '@/ui';
 import PageContainer from '@/ui/Others/PageContainer';
@@ -11,11 +12,13 @@ import { useNavigate } from 'react-router-dom';
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = usePurchaseDescription();
-	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { data, isLoading, url, deleteData } =
+		useLabDipShadeRecipeDescription();
+
 	const navigate = useNavigate();
-	const info = new PageInfo('Details', url, 'store__receive');
-	const haveAccess = useAccess('store__receive');
+	const info = new PageInfo('Details', url, 'lab_dip__shade_recipe');
+	const haveAccess = useAccess('lab_dip__shade_recipe');
+	console.log(data);
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -24,14 +27,14 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'purchase_id',
+				accessorKey: 'shade_recipe_id',
 				header: 'ID',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
 						<LinkOnly
-							uri='/store/receive'
+							uri='/lab-dip/shade_recipe/details'
 							id={uuid}
 							title={info.getValue()}
 						/>
@@ -39,22 +42,35 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'vendor_name',
-				header: 'Vendor',
+				accessorKey: 'name',
+				header: 'Name',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'is_local',
-				header: 'Local/LC',
+				accessorKey: 'sub_streat',
+				header: 'Sub Streat',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
+			{
+				accessorKey: 'lab_status',
+				header: 'Lab Status',
 				enableColumnFilter: false,
 				cell: (info) => {
-					return info.getValue() == 1 ? 'Local' : 'LC';
+					return info.getValue() == 'true' ? 'Done' : 'Pending';
 				},
 			},
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -100,10 +116,11 @@ export default function Index() {
 	);
 
 	// Add
-	const handelAdd = () => navigate('/store/receive/entry');
+	const handelAdd = () => navigate('/lab-dip/shade_recipe/entry');
 
 	const handelUpdate = (idx) => {
-		navigate(`/store/receive/update/${data[idx].uuid}`);
+		const { uuid } = data[idx];
+		navigate(`/lab-dip/shade_recipe/update/${uuid}`);
 	};
 
 	// Delete
@@ -120,25 +137,24 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateMaterialInfo();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	const breadcrumbs = [
 		{
-			label: 'Store',
-			href: '/store',
+			label: 'Lab Dip',
+			href: '/lab_dip',
 			isDisabled: true,
 		},
 		{
-			label: 'Receive',
-			href: '/store/receive',
+			label: 'Shade Recipe',
+			href: '/lab-dip/shade_recipe',
 		},
 	];
 
 	return (
-		<PageContainer title='Purchase Lists' breadcrumbs={breadcrumbs}>
+		<PageContainer title='Shade Recipe Lists' breadcrumbs={breadcrumbs}>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}

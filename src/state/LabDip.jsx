@@ -76,11 +76,11 @@ export const useLabDipShadeRecipeDescriptionByUUID = (uuid) =>
 export const useLabDipShadeRecipeEntry = () =>
 	createGlobalState({
 		queryKey: labDipQK.shadeRecipeEntry(),
-		url: '/lab-dip/shade-recipe/entry',
+		url: '/lab-dip/shade-recipe-entry',
 	});
 
 export const useLabDipShadeRecipeEntryByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: labDipQK.shadeRecipeEntryByUUID(uuid),
-		url: `/lab-dip/shade-recipe/entry/${uuid}`,
+		url: `/lab-dip/shade-recipe-entry${uuid}`,
 	});

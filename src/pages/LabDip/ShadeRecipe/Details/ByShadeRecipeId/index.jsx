@@ -1,20 +1,21 @@
 import { useFetch } from '@/hooks';
+import PageContainer from '@/ui/Others/PageContainer';
 import { useEffect } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import Information from './Information';
 import Table from './Table';
-import PageContainer from '@/ui/Others/PageContainer';
 
 export default function Index() {
-	const { purchase_description_uuid } = useParams();
+	const { shade_recipe_uuid } = useParams();
 
 	const { value: data, loading } = useFetch(
-		`/purchase/purchase-details/by/${purchase_description_uuid}`,
-		[purchase_description_uuid]
+		`/lab-dip/shade-recipe-details/by/${shade_recipe_uuid}`,
+		[shade_recipe_uuid]
 	);
+	console.log(data);
 
 	useEffect(() => {
-		document.title = 'Purchase Details';
+		document.title = 'Shade Recipe Details';
 	}, []);
 
 	if (loading)
@@ -24,27 +25,27 @@ export default function Index() {
 
 	const breadcrumbs = [
 		{
-			label: 'Store',
-			href: '/store',
+			label: 'Lab Dip',
+			href: '/lab_dip',
 			isDisabled: true,
 		},
 		{
-			label: 'Receive',
-			href: '/store/receive',
+			label: 'Shade Recipe',
+			href: '/lab-dip/shade_recipe',
 		},
 
 		{
 			label: 'Details',
-			href: `/store/receive/${purchase_description_uuid}`,
+			href: `/lab-dip/shade_recipe/details/${shade_recipe_uuid}`,
 		},
 	];
 
 	return (
 		<PageContainer
-			title='Purchase Details'
+			title='Shade Recipe Details'
 			breadcrumbs={breadcrumbs}
 			className={'space-y-8'}>
-			<Information purchase={data} />
+			<Information data={data} />
 			<Table {...data} />
 		</PageContainer>
 	);

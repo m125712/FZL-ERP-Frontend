@@ -2,32 +2,32 @@ import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
 
 export default function Information({
-	purchase = {
-		uuid: null,
-		vendor_name: null,
-		lc_number: null,
-		is_local: null,
+	data = {
+		shade_recipe_id: null,
+		name: null,
+		sub_streat: null,
+		lab_status: null,
 	},
 }) {
-	const { uuid, vendor_name, lc_number, is_local } = purchase;
+	const { shade_recipe_id, name, sub_streat, lab_status } = data;
 	const renderItems = () => {
 		const items = [
 			{
 				label: 'Invoice Number',
-				value: uuid,
+				value: shade_recipe_id,
 			},
 
 			{
-				label: 'Vendor',
-				value: vendor_name,
+				label: 'Name',
+				value: name,
 			},
 			{
-				label: 'LC Number',
-				value: lc_number,
+				label: 'Sub Streat',
+				value: sub_streat,
 			},
 			{
-				label: 'LC/Local',
-				value: is_local == 1 ? 'Local' : 'LC',
+				label: 'Lab Status',
+				value: lab_status == '1' ? 'Done' : 'Pending',
 			},
 		];
 		return items;

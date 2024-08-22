@@ -273,6 +273,9 @@ export const labDipQK = {
 		...labDipQK.shadeRecipeDescription(),
 		uuid,
 	],
+	// * Shade Recipe Entry
+	shadeRecipeEntry: () => [...labDipQK.all(), 'shade-recipe/entry'],
+	shadeRecipeEntryByUUID: (uuid) => [...labDipQK.shadeRecipeEntry(), uuid],
 };
 
 // * Dyeing

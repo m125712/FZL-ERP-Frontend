@@ -148,7 +148,7 @@ export const LabDipRoutes = [
 	{
 		id: 173,
 		name: 'Shade Recipe Details',
-		path: '/lab-dip/shade_recipe/details',
+		path: '/lab-dip/shade_recipe/details/:shade_recipe_uuid',
 		element: ShadeRecipeDetails,
 		type: 'lab_dip',
 		hidden: true,
@@ -164,4 +164,14 @@ export const LabDipRoutes = [
 		type: 'lab_dip',
 		actions: ['create', 'read', 'update', 'delete'],
 	},
+	{
+		id:176
+		,name: 'Shade Recipe Update'
+		,path: '/lab-dip/shade_recipe/update/:shade_recipe_uuid'
+		,element: ShadeRecipeEntry
+		,page_name: 'lab_dip__shade_recipe_entry_update'
+		,hidden: true
+		,actions: ['create', 'read', 'update', 'delete']
+		,isDynamic: true
+	}
 ];

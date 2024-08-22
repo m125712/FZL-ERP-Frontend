@@ -2,10 +2,10 @@ import { DeleteModal } from '@/components/Modal';
 import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import {
-	useMaterialInfo,
-	usePurchaseDescription,
-	usePurchaseEntry,
-} from '@/state/Store';
+	useLabDipShadeRecipeDescription,
+	useLabDipShadeRecipeEntry,
+} from '@/state/LabDip';
+
 import {
 	DynamicField,
 	FormField,
@@ -25,9 +25,11 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
 
 export default function Index() {
-	const { url: purchaseDescriptionUrl } = usePurchaseDescription();
-	const { url: purchaseEntryUrl } = usePurchaseEntry();
-	const { updateData, postData, deleteData } = usePurchaseDescription();
+	const { url: shadeRecipeDescriptionUrl } =
+		useLabDipShadeRecipeDescription();
+	const { url: shadeRecipeEntryUrl } = useLabDipShadeRecipeEntry();
+	const { updateData, postData, deleteData } =
+		useLabDipShadeRecipeDescription();
 	//const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 
 	const { shade_recipe_uuid } = useParams();
@@ -54,27 +56,27 @@ export default function Index() {
 		watch,
 	} = useRHF(SHADE_RECIPE_SCHEMA, SHADE_RECIPE_NULL);
 
-	// const isUpdate = shade_recipe_uuid !== undefined;
+	const isUpdate = shade_recipe_uuid !== undefined;
 
-	// isUpdate &&
-	// 	useFetchForRhfResetForOrder(
-	// 		`/purchase/purchase-details/by/${shade_recipe_uuid}`,
-	// 		shade_recipe_uuid,
-	// 		reset
-	// 	);
+	isUpdate &&
+		useFetchForRhfResetForOrder(
+			`/lab-dip/shade-recipe-details/by/${shade_recipe_uuid}`,
+			shade_recipe_uuid,
+			reset
+		);
 
 	const { value: material } = useFetch(
 		'/other/material/value/label/unit/quantity'
 	);
 
-	// purchase
+	// shade_recipe
 	const {
-		fields: purchaseField,
-		append: purchaseAppend,
-		remove: purchaseRemove,
+		fields: shadeRecipeField,
+		append: shadeRecipeAppend,
+		remove: shadeRecipeRemove,
 	} = useFieldArray({
 		control,
-		name: 'purchase',
+		name: 'shade_recipe_entry',
 	});
 
 	const [deleteItem, setDeleteItem] = useState({
@@ -84,39 +86,41 @@ export default function Index() {
 
 	const breadcrumbs = [
 		{
-			label: 'Store',
-			href: '/store',
+			label: 'Lab Dip',
+			href: '/lab_dip',
 			isDisabled: true,
 		},
 		{
-			label: 'Receive',
-			href: '/store/receive',
+			label: 'Shade Recipe',
+			href: '/lab-dip/shade_recipe',
 		},
 		{
 			label: isUpdate ? 'Update' : 'Create',
 			href: isUpdate
-				? `/store/receive/update/${getValues('uuid')}`
+				? `/lab-dip/shade_recipe/update/${getValues('uuid')}`
 				: '/store/receive/entry',
 		},
 	];
 
-	const handlePurchaseRemove = (index) => {
-		if (getValues(`purchase[${index}].uuid`) !== undefined) {
+	const handleShadeRecipeRemove = (index) => {
+		if (getValues(`shade_recipe[${index}].uuid`) !== undefined) {
 			setDeleteItem({
-				itemId: getValues(`purchase[${index}].uuid`),
-				itemName: getValues(`purchase[${index}].material_name`),
+				itemId: getValues(`shade_recipe_entry[${index}].uuid`),
+				itemName: getValues(
+					`shade_recipe_entry[${index}].material_name`
+				),
 			});
-			window['purchase_delete'].showModal();
+			window['shade_recipe_delete'].showModal();
 		}
 
-		purchaseRemove(index);
+		shadeRecipeRemove(index);
 	};
 
-	const handelPurchaseAppend = () => {
-		purchaseAppend({
+	const handleShadeRecipeAppend = () => {
+		shadeRecipeAppend({
+			shade_recipe_uuid: '',
 			material_uuid: '',
 			quantity: '',
-			price: '',
 			remarks: '',
 		});
 	};
@@ -124,52 +128,55 @@ export default function Index() {
 	// Submit
 	const onSubmit = async (data) => {
 		// Update item
+		console.log(data);
 		if (isUpdate) {
-			const purchase_description_data = {
+			const shade_recipe_description_data = {
 				...data,
 				updated_at: GetDateTime(),
 			};
 
-			const purchase_description_promise = await updateData.mutateAsync({
-				url: `${purchaseDescriptionUrl}/${data?.uuid}`,
-				updatedData: purchase_description_data,
-				uuid: data.uuid,
-				isOnCloseNeeded: false,
-			});
+			const shade_recipe_description_promise =
+				await updateData.mutateAsync({
+					url: `${shadeRecipeDescriptionUrl}/${data?.uuid}`,
+					updatedData: shade_recipe_description_data,
+					uuid: data.uuid,
+					isOnCloseNeeded: false,
+				});
 
-			const purchase_entries_promise = data.purchase.map(async (item) => {
-				if (item.uuid === undefined) {
-					item.shade_recipe_uuid = shade_recipe_uuid;
-					item.created_at = GetDateTime();
-					item.uuid = nanoid();
-					return await postData.mutateAsync({
-						url: purchaseEntryUrl,
-						newData: item,
-						isOnCloseNeeded: false,
-					});
-				} else {
-					item.updated_at = GetDateTime();
-					const updatedData = {
-						...item,
-					};
-					return await updateData.mutateAsync({
-						url: `${purchaseEntryUrl}/${item.uuid}`,
-						uuid: item.uuid,
-						updatedData,
-						isOnCloseNeeded: false,
-					});
+			const shade_recipe_entries_promise = data.shade_recipe_entry.map(
+				async (item) => {
+					if (item.uuid === undefined) {
+						item.shade_recipe_uuid = shade_recipe_uuid;
+						item.created_at = GetDateTime();
+						item.uuid = nanoid();
+						return await postData.mutateAsync({
+							url: shadeRecipeEntryUrl,
+							newData: item,
+							isOnCloseNeeded: false,
+						});
+					} else {
+						item.updated_at = GetDateTime();
+						const updatedData = {
+							...item,
+						};
+						return await updateData.mutateAsync({
+							url: `${shadeRecipeEntryUrl}/${item.uuid}`,
+							uuid: item.uuid,
+							updatedData,
+							isOnCloseNeeded: false,
+						});
+					}
 				}
-			});
+			);
 
 			try {
 				await Promise.all([
-					purchase_description_promise,
-					...purchase_entries_promise,
+					shade_recipe_description_promise,
+					...shade_recipe_entries_promise,
 				])
-					.then(() => reset(PURCHASE_ENTRY_NULL))
+					.then(() => reset(SHADE_RECIPE_NULL))
 					.then(() => {
-						invalidateMaterialInfo();
-						navigate(`/store/receive/${shade_recipe_uuid}`);
+						navigate(`/lab-dip/shade_recipe/${shade_recipe_uuid}`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -183,37 +190,39 @@ export default function Index() {
 		const created_at = GetDateTime();
 		const created_by = user.uuid;
 
-		// Create purchase description
-		const purchase_description_data = {
+		// Create Shade Recipe description
+		const shade_recipe_description_data = {
 			...data,
 			uuid: new_shade_recipe_uuid,
 			created_at,
 			created_by,
 		};
 
-		// delete purchase field from data to be sent
-		delete purchase_description_data['purchase'];
+		// delete shade_recipe field from data to be sent
+		delete shade_recipe_description_data['shade_recipe_entry'];
 
-		const purchase_description_promise = await postData.mutateAsync({
-			url: purchaseDescriptionUrl,
-			newData: purchase_description_data,
+		const shade_recipe_description_promise = await postData.mutateAsync({
+			url: shadeRecipeDescriptionUrl,
+			newData: shade_recipe_description_data,
 			isOnCloseNeeded: false,
 		});
 
-		// Create purchase entries
-		const purchase_entries = [...data.purchase].map((item) => ({
-			...item,
-			shade_recipe_uuid: new_shade_recipe_uuid,
-			uuid: nanoid(),
-			created_at,
-			created_by,
-		}));
+		// Create Shade Recipe entries
+		const shade_recipe_entries = [...data.shade_recipe_entry].map(
+			(item) => ({
+				...item,
+				shade_recipe_uuid: new_shade_recipe_uuid,
+				uuid: nanoid(),
+				created_at,
+				created_by,
+			})
+		);
 
-		const purchase_entries_promise = [
-			...purchase_entries.map(
+		const shade_recipe_entries_promise = [
+			...shade_recipe_entries.map(
 				async (item) =>
 					await postData.mutateAsync({
-						url: purchaseEntryUrl,
+						url: shadeRecipeEntryUrl,
 						newData: item,
 						isOnCloseNeeded: false,
 					})
@@ -222,13 +231,13 @@ export default function Index() {
 
 		try {
 			await Promise.all([
-				purchase_description_promise,
-				...purchase_entries_promise,
+				shade_recipe_description_promise,
+				...shade_recipe_entries_promise,
 			])
-				.then(() => reset(PURCHASE_ENTRY_NULL))
+				.then(() => reset(SHADE_RECIPE_NULL))
 				.then(() => {
 					invalidateMaterialInfo();
-					navigate(`/store/receive/${new_shade_recipe_uuid}`);
+					navigate(`/lab-dip/shade_recipe/${new_shade_recipe_uuid}`);
 				});
 		} catch (err) {
 			console.error(`Error with Promise.all: ${err}`);
@@ -244,7 +253,7 @@ export default function Index() {
 	};
 
 	const handlers = {
-		NEW_ROW: handelPurchaseAppend,
+		NEW_ROW: handleShadeRecipeAppend,
 	};
 
 	configure({
@@ -255,18 +264,18 @@ export default function Index() {
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide  p-3';
 
-	const getTotalPrice = useCallback(
-		(purchase) =>
-			purchase.reduce((acc, item) => {
-				return acc + Number(item.price);
-			}, 0),
-		[watch()]
-	);
+	// const getTotalPrice = useCallback(
+	// 	(shade_recipe) =>
+	// 		shade_recipe.reduce((acc, item) => {
+	// 			return acc + Number(item.price);
+	// 		}, 0),
+	// 	[watch()]
+	// );
 
 	return (
 		<PageContainer
 			breadcrumbs={breadcrumbs}
-			title={isUpdate ? 'Update Purchase' : 'Create Purchase'}>
+			title={isUpdate ? 'Update Shade Recipe' : 'Create Shade Recipe'}>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
@@ -286,11 +295,10 @@ export default function Index() {
 
 						<DynamicField
 							title='Details'
-							handelAppend={handelPurchaseAppend}
+							handelAppend={handleShadeRecipeAppend}
 							tableHead={[
 								'Material',
 								'Quantity',
-								'Total Price',
 								'Remarks',
 								'Action',
 							].map((item) => (
@@ -301,16 +309,16 @@ export default function Index() {
 									{item}
 								</th>
 							))}>
-							{purchaseField.map((item, index) => (
+							{shadeRecipeField.map((item, index) => (
 								<tr key={item.id} className=''>
 									<td className={`${rowClass}`}>
 										<FormField
-											label={`purchase[${index}].material_uuid`}
+											label={`shade_recipe_entry[${index}].material_uuid`}
 											title='Material'
 											is_title_needed='false'
 											errors={errors}>
 											<Controller
-												name={`purchase[${index}].material_uuid`}
+												name={`shade_recipe_entry[${index}].material_uuid`}
 												control={control}
 												render={({
 													field: { onChange },
@@ -323,7 +331,7 @@ export default function Index() {
 																(inItem) =>
 																	inItem.value ==
 																	getValues(
-																		`purchase[${index}].material_uuid`
+																		`shade_recipe_entry[${index}].material_uuid`
 																	)
 															)}
 															onChange={(e) => {
@@ -349,21 +357,23 @@ export default function Index() {
 											/>
 										</FormField>
 									</td>
+
 									<td className={`w-48 ${rowClass}`}>
 										<JoinInput
 											title='quantity'
-											label={`purchase[${index}].quantity`}
+											label={`shade_recipe_entry[${index}].quantity`}
 											is_title_needed='false'
 											dynamicerror={
-												errors?.purchase?.[index]
-													?.quantity
+												errors?.shade_recipe_entry?.[
+													index
+												]?.quantity
 											}
 											unit={
 												material?.find(
 													(inItem) =>
 														inItem.value ==
 														getValues(
-															`purchase[${index}].material_uuid`
+															`shade_recipe_entry[${index}].material_uuid`
 														)
 												)?.unit
 											}
@@ -372,22 +382,11 @@ export default function Index() {
 									</td>
 									<td className={`w-48 ${rowClass}`}>
 										<Input
-											title='price'
-											label={`purchase[${index}].price`}
-											is_title_needed='false'
-											dynamicerror={
-												errors?.purchase?.[index]?.price
-											}
-											register={register}
-										/>
-									</td>
-									<td className={`w-48 ${rowClass}`}>
-										<Input
 											title='remarks'
-											label={`purchase[${index}].remarks`}
+											label={`shade_recipe_entry[${index}].remarks`}
 											is_title_needed='false'
 											dynamicerror={
-												errors?.purchase?.[index]
+												errors?.shade_recipe?.[index]
 													?.remarks
 											}
 											register={register}
@@ -397,25 +396,25 @@ export default function Index() {
 										<RemoveButton
 											className={'justify-center'}
 											onClick={() =>
-												handlePurchaseRemove(index)
+												handleShadeRecipeRemove(index)
 											}
 											showButton={
-												purchaseField.length > 1
+												shadeRecipeField.length > 1
 											}
 										/>
 									</td>
 								</tr>
 							))}
-							<tr className='border-t border-primary/30'>
+							{/* <tr className='border-t border-primary/30'>
 								<td
 									className='py-4 text-right font-bold'
 									colSpan='2'>
 									Total Price:
 								</td>
 								<td className='py-4 font-bold'>
-									{getTotalPrice(watch('purchase'))}
+									{getTotalPrice(watch('shade_recipe'))}
 								</td>
-							</tr>
+							</tr> */}
 						</DynamicField>
 					</div>
 
@@ -430,12 +429,12 @@ export default function Index() {
 			</HotKeys>
 			<Suspense>
 				<DeleteModal
-					modalId={'purchase_delete'}
-					title={'Purchase Entry'}
+					modalId={'shade_recipe_delete'}
+					title={'Shade Recipe Entry'}
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
-					setItems={purchaseField}
-					url={purchaseEntryUrl}
+					setItems={shadeRecipeField}
+					url={shadeRecipeEntryUrl}
 					deleteData={deleteData}
 				/>
 			</Suspense>

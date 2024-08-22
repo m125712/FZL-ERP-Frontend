@@ -32,6 +32,17 @@ const DyeingPlanningHeadOfficeDetails = lazy(
 	() => import('@/pages/DyeingAndIron/PlanningHeadOffice/Details')
 );
 
+// * Batch
+const DyeingBatch = lazy(
+	() => import('@/pages/DyeingAndIron/Batch')
+);
+const DyeingBatchEntry = lazy(
+	() => import('@/pages/DyeingAndIron/Batch/Entry')
+);
+const DyeingBatchDetails = lazy(
+	() => import('@/pages/DyeingAndIron/Batch/Details')
+);
+
 export const DyeingAndIronRoutes = [
 	{
 		id: 28,
@@ -125,6 +136,8 @@ export const DyeingAndIronRoutes = [
 		page_name: 'dyeing__planning_sno_entry_details',
 		actions: ['read'],
 	},
+
+	// * Planning Head Office
 	{
 		id: 285,
 		name: 'Planning Head Office',
@@ -164,4 +177,45 @@ export const DyeingAndIronRoutes = [
 		page_name: 'dyeing__planning_head_office_details',
 		actions: ['read'],
 	},
+
+	// * Batch
+	{
+		id: 288,
+		name: 'Batch',
+		path: '/dyeing-and-iron/batch',
+		element: DyeingBatch,
+		type: 'dyeing',
+		page_name: 'dyeing__batch',
+		actions: ['create', 'read', 'update'],
+	},
+	{
+		id: 289,
+		name: 'Batch Entry',
+		path: '/dyeing-and-iron/batch/entry',
+		element: DyeingBatchEntry,
+		type: 'dyeing',
+		hidden: true,
+		page_name: 'dyeing__batch_entry',
+		actions: ['create', 'read', 'update'],
+	},
+	{
+		id: 290,
+		name: 'Batch Update',
+		path: '/dyeing-and-iron/batch/update/:batch_uuid',
+		element: DyeingBatchEntry,
+		type: 'dyeing',
+		hidden: true,
+		page_name: 'dyeing__batch_entry_update',
+		actions: ['create', 'read', 'update'],
+	},
+	{
+		id: 291,
+		name: 'Batch Details',
+		path: '/dyeing-and-iron/batch/details/:batch_uuid',
+		element: DyeingBatchDetails,
+		type: 'dyeing',
+		hidden: true,
+		page_name: 'dyeing__batch_details',
+		actions: ['read'],
+	}
 ];

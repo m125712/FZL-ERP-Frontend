@@ -240,6 +240,10 @@ export const dyeingQK = {
 	// * planning
 	planning: () => [...dyeingQK.all(), 'planning'],
 	planningByUUID: (uuid) => [...dyeingQK.planning(), uuid],
+
+	// *  batch
+	batch: () => [...dyeingQK.all(), 'batch'],
+	batchByUUID: (uuid) => [...dyeingQK.batch(), uuid],
 };
 
 // * Nylon

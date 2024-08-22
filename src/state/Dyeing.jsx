@@ -50,3 +50,16 @@ export const useDyeingPlanningByUUID = (uuid) =>
 		queryKey: dyeingQK.planningByUUID(uuid),
 		url: `/zipper/planning/${uuid}`,
 	});
+
+// * Batch
+export const useDyeingBatch = () =>
+	createGlobalState({
+		queryKey: dyeingQK.batch(),
+		url: '/zipper/batch',
+	});
+
+export const useDyeingBatchByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: dyeingQK.batchByUUID(uuid),
+		url: `/zipper/batch/${uuid}`,
+	});

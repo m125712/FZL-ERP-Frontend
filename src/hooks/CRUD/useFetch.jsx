@@ -82,7 +82,6 @@ const useFetchForRhfResetForOrder = async (uri, returnId, reset) => {
 const useFetchForRhfResetForPlanning = async (uri, reset) => {
 	useEffect(() => {
 		api.get(uri).then((res) => {
-			// console.log(res?.data?.data);
 			return reset(res?.data?.data);
 		});
 	}, []);

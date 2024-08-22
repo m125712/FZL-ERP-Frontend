@@ -17,7 +17,7 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { DYEING_PLANNING_SCHEMA, DYEING_PLANNING_NULL } from '@util/Schema';
+import { DYEING_PLANNING_HEADOFFICE_SCHEMA, DYEING_PLANNING_HEADOFFICE_NULL } from '@util/Schema';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useDyeingPlanning } from '@/state/Dyeing';
@@ -48,7 +48,7 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
-	} = useRHF(DYEING_PLANNING_SCHEMA, DYEING_PLANNING_NULL);
+	} = useRHF(DYEING_PLANNING_HEADOFFICE_SCHEMA, DYEING_PLANNING_HEADOFFICE_NULL);
 
 	// planning_entry
 	const { fields: PlanningEntryField } = useFieldArray({
@@ -61,7 +61,7 @@ export default function Index() {
 		itemName: null,
 	});
 
-	const onClose = () => reset(DYEING_PLANNING_NULL);
+	const onClose = () => reset(DYEING_PLANNING_HEADOFFICE_NULL);
 
 	// * Fetch initial data
 	isUpdate
@@ -114,7 +114,7 @@ export default function Index() {
 				];
 
 				await Promise.all(planning_entry_updated_promises)
-					.then(() => reset(Object.assign({}, DYEING_PLANNING_NULL)))
+					.then(() => reset(Object.assign({}, DYEING_PLANNING_HEADOFFICE_NULL)))
 					.then(
 						navigate(
 							`/dyeing-and-iron/planning-head-office/details/${week_id}`
@@ -169,7 +169,7 @@ export default function Index() {
 			];
 
 			await Promise.all(promises)
-				.then(() => reset(Object.assign({}, DYEING_PLANNING_NULL)))
+				.then(() => reset(Object.assign({}, DYEING_PLANNING_HEADOFFICE_NULL)))
 				.then(
 					navigate(
 						`/dyeing-and-iron/planning-head-office/details/${weeks}`

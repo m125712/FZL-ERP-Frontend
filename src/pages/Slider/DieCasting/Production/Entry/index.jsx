@@ -180,6 +180,8 @@ export default function Index() {
 			});
 	};
 
+	const tdClass = 'px-1 pt-1 pb-2';
+
 	const breadcrumbs = [
 		{
 			label: 'Slider',
@@ -200,8 +202,6 @@ export default function Index() {
 				: '/slider/die-casting/production/entry',
 		},
 	];
-
-	const tdClass = 'px-1 pt-1 pb-2';
 
 	return (
 		<PageContainer

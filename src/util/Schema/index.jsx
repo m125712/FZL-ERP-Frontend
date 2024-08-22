@@ -1542,3 +1542,61 @@ export const SLIDER_DASHBOARD_INFO_NULL = {
 	two_way_pin_quantity: null,
 	remarks: '',
 };
+
+// * Slider/Die Casting --> (TRANSFER)*//
+export const SLIDER_DIE_CASTING_TRANSFER_SCHEMA = {
+	order_info_uuid: STRING_REQUIRED,
+	is_body: BOOLEAN_REQUIRED,
+	is_cap: BOOLEAN_REQUIRED,
+	is_puller: BOOLEAN_REQUIRED,
+	is_link: BOOLEAN_REQUIRED,
+
+	stocks: yup.array().of(
+		yup.object().shape({
+			order_number: STRING,
+			item_name: STRING,
+			zipper_number: STRING,
+			end_type: STRING,
+			puller_type: STRING,
+			logo: STRING,
+			color: STRING,
+			order_quantity: NUMBER,
+			balance_quantity: NUMBER,
+			provided_quantity: NUMBER_REQUIRED,
+			is_checked: BOOLEAN_REQUIRED,
+		})
+	),
+};
+
+export const SLIDER_DIE_CASTING_TRANSFER_NULL = {
+	uuid: null,
+	order_info_uuid: '',
+	is_body: false,
+	is_cap: false,
+	is_puller: false,
+	is_link: false,
+	stocks: [],
+};
+
+export const SLIDER_DIE_CASTING_TRANSFER_TEST = {
+	order_info_uuid: 'DLEHZ3Kl7IO2cPT',
+	is_body: true,
+	is_cap: false,
+	is_puller: true,
+	is_link: false,
+	stocks: [
+		{
+			order_number: 'DLEHZ3Kl7IO2cPT',
+			item_name: 'Item 1',
+			zipper_number: 'Zipper 1',
+			end_type: 'End 1',
+			puller_type: 'Puller 1',
+			logo: 'Logo 1',
+			color: 'Color 1',
+			order_quantity: 10,
+			balance_quantity: 10,
+			provided_quantity: 5,
+			is_checked: false,
+		},
+	],
+};

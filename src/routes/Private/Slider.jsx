@@ -15,6 +15,14 @@ const SliderDashboardInfo = lazy(() => import('@/pages/Slider/Dashboard/Info'));
 
 const DieCastingStock = lazy(() => import('@/pages/Slider/DieCasting/Stock'));
 
+const DieCastingTransfer = lazy(
+	() => import('@/pages/Slider/DieCasting/Transfer')
+);
+
+const DieCastingTransferEntry = lazy(
+	() => import('@/pages/Slider/DieCasting/Transfer/Entry')
+);
+
 const DieCastingRMStock = lazy(
 	() => import('@/pages/Slider/DieCasting/RMStock/RMStock')
 );
@@ -81,6 +89,35 @@ export const SliderRoutes = [
 		element: DieCastingStock,
 		type: ['slider', 'die-casting'],
 		page_name: 'slider__die_casting_stock',
+		actions: ['read', 'create', 'update', 'delete'],
+	},
+	{
+		id: 21,
+		name: 'Transfer',
+		path: '/slider/die-casting/transfer',
+		element: DieCastingTransfer,
+		type: ['slider', 'die-casting'],
+		page_name: 'slider__die_casting_transfer',
+		actions: ['read', 'create', 'update', 'delete'],
+	},
+	{
+		id: 21,
+		name: 'Entry',
+		path: '/slider/die-casting/transfer/entry',
+		element: DieCastingTransferEntry,
+		hidden: true,
+		type: ['slider', 'die-casting'],
+		page_name: 'slider__die_casting_transfer_entry',
+		actions: ['read', 'create', 'update', 'delete'],
+	},
+	{
+		id: 21,
+		name: 'Update',
+		path: '/slider/die-casting/transfer/update/:uuid',
+		element: DieCastingTransfer,
+		hidden: true,
+		type: ['slider', 'die-casting'],
+		page_name: 'slider__die_casting_transfer_update',
 		actions: ['read', 'create', 'update', 'delete'],
 	},
 	{

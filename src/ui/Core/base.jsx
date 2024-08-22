@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { capitalize } from './utils';
+import cn from '@/lib/cn';
 
 const renderSubLabel = (sub_label) =>
 	sub_label && <span className='label-text-alt ml-2'>{sub_label}</span>;
@@ -26,10 +27,10 @@ export const FormField = ({
 	errors = {},
 	dynamicerror = {},
 	children,
+	className,
 }) => {
-	
 	return (
-		<div className='form-control w-full'>
+		<div className={cn('form-control w-full', className)}>
 			{is_title_needed === 'true' ? (
 				<label name={label} className='label pb-1 pt-0'>
 					<span className='label-text font-semibold capitalize text-secondary-content'>

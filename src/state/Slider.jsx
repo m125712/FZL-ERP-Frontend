@@ -62,6 +62,13 @@ export const useSliderDieCastingProductionByUUID = (uuid, { enabled = true }) =>
 		enabled,
 	});
 
+// * Die Casting --> (TRANSFER)
+export const useSliderDieCastingTransfer = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDieCastingTransfer(),
+		url: '/slider/die-casting-transfer',
+	});
+
 // * Order Against RM Log
 export const useOrderAgainstSliderAssemblyRMLog = () =>
 	createGlobalState({

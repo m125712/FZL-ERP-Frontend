@@ -48,6 +48,17 @@ export const useSliderDieCastingStock = () =>
 		url: '/slider/die-casting',
 	});
 
+// * Die Casting --> (STOCK BY ORDER NUMBERS)
+export const useSliderDieCastingStockByOrderNumbers = (
+	orderNumbers = [],
+	{ enabled = true }
+) =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDieCastingStockByOrderNumbers(...orderNumbers),
+		url: `/slider/die-casting/for/slider-stock-multi/${orderNumbers.join(',')}`,
+		enabled,
+	});
+
 // * Die Casting --> (PRODUCTION)
 export const useSliderDieCastingProduction = () =>
 	createGlobalState({

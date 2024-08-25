@@ -1620,9 +1620,8 @@ export const SLIDER_DASHBOARD_INFO_NULL = {
 	remarks: '',
 };
 
-// * Slider/Die Casting --> (TRANSFER)*//
-export const SLIDER_DIE_CASTING_TRANSFER_SCHEMA = {
-	order_info_uuid: STRING_REQUIRED,
+// * Slider/Die Casting --> (TRANSFER AGAINST STOCK)*//
+export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
 	is_body: BOOLEAN_REQUIRED,
 	is_cap: BOOLEAN_REQUIRED,
 	is_puller: BOOLEAN_REQUIRED,
@@ -1630,24 +1629,31 @@ export const SLIDER_DIE_CASTING_TRANSFER_SCHEMA = {
 
 	stocks: yup.array().of(
 		yup.object().shape({
-			order_number: STRING,
-			item_name: STRING,
-			zipper_number: STRING,
-			end_type: STRING,
-			puller_type: STRING,
-			logo: STRING,
-			color: STRING,
-			order_quantity: NUMBER,
-			balance_quantity: NUMBER,
-			provided_quantity: NUMBER_REQUIRED,
 			is_checked: BOOLEAN_REQUIRED,
+			name: STRING,
+			item_name: STRING,
+			zipper_number_name: STRING,
+			end_type_name: STRING,
+			puller_type_name: STRING,
+			logo_type_name: STRING,
+			slider_body_shape_name: STRING,
+			puller_link_name: STRING,
+			stopper_type_name: STRING,
+			is_body: BOOLEAN,
+			is_cap: BOOLEAN,
+			is_puller: BOOLEAN,
+			is_link: BOOLEAN,
+			is_h_bottom: BOOLEAN,
+			is_u_top: BOOLEAN,
+			is_box_pin: BOOLEAN,
+			is_two_way_pin: BOOLEAN,
+			assigned_quantity: NUMBER.required(),
 		})
 	),
 };
 
-export const SLIDER_DIE_CASTING_TRANSFER_NULL = {
+export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_NULL = {
 	uuid: null,
-	order_info_uuid: '',
 	is_body: false,
 	is_cap: false,
 	is_puller: false,
@@ -1655,25 +1661,46 @@ export const SLIDER_DIE_CASTING_TRANSFER_NULL = {
 	stocks: [],
 };
 
-export const SLIDER_DIE_CASTING_TRANSFER_TEST = {
-	order_info_uuid: 'DLEHZ3Kl7IO2cPT',
-	is_body: true,
+// * Slider/Die Casting --> (TRANSFER AGAINST ORDER)*//
+export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_SCHEMA = {
+	order_info_uuids: yup.array().of(STRING_REQUIRED),
+	is_body: BOOLEAN_REQUIRED,
+	is_cap: BOOLEAN_REQUIRED,
+	is_puller: BOOLEAN_REQUIRED,
+	is_link: BOOLEAN_REQUIRED,
+
+	stocks: yup.array().of(
+		yup.object().shape({
+			is_checked: BOOLEAN_REQUIRED,
+			order_number: STRING_REQUIRED,
+			name: STRING,
+			item_name: STRING,
+			zipper_number_name: STRING,
+			end_type_name: STRING,
+			puller_type_name: STRING,
+			logo_type_name: STRING,
+			slider_body_shape_name: STRING,
+			puller_link_name: STRING,
+			stopper_type_name: STRING,
+			is_body: BOOLEAN,
+			is_cap: BOOLEAN,
+			is_puller: BOOLEAN,
+			is_link: BOOLEAN,
+			is_h_bottom: BOOLEAN,
+			is_u_top: BOOLEAN,
+			is_box_pin: BOOLEAN,
+			is_two_way_pin: BOOLEAN,
+			assigned_quantity: NUMBER.required(),
+		})
+	),
+};
+
+export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_NULL = {
+	uuid: null,
+	order_info_uuids: [],
+	is_body: false,
 	is_cap: false,
-	is_puller: true,
+	is_puller: false,
 	is_link: false,
-	stocks: [
-		{
-			order_number: 'DLEHZ3Kl7IO2cPT',
-			item_name: 'Item 1',
-			zipper_number: 'Zipper 1',
-			end_type: 'End 1',
-			puller_type: 'Puller 1',
-			logo: 'Logo 1',
-			color: 'Color 1',
-			order_quantity: 10,
-			balance_quantity: 10,
-			provided_quantity: 5,
-			is_checked: false,
-		},
-	],
+	stocks: [],
 };

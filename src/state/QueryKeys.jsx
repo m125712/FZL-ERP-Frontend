@@ -567,6 +567,15 @@ export const deliveryQk = {
 		uuid,
 	],
 };
+//Thread
+
+export const threadQK = {
+	all: () => ['thread'],
+
+	//Count-length
+	countLength: () => [...threadQK.all(), 'count-length'],
+	countLengthByUUID: (uuid) => [...threadQK.countLength(), uuid],
+};
 
 //* OTHER QUERY KEYS
 

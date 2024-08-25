@@ -345,6 +345,37 @@ export const PURCHASE_ENTRY_NULL = {
 	],
 };
 
+// Shade Recipe
+export const SHADE_RECIPE_SCHEMA = {
+	name: STRING_REQUIRED,
+	sub_streat: STRING_REQUIRED,
+	remarks: STRING.nullable(),
+	lab_status: BOOLEAN.default(false),
+	shade_recipe_entry: yup.array().of(
+		yup.object().shape({
+			quantity: NUMBER_DOUBLE_REQUIRED,
+			remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const SHADE_RECIPE_NULL = {
+	uuid: null,
+	name: '',
+	sub_streat: '',
+	remarks: '',
+	shade_recipe_entry: [
+		{
+			uuid: null,
+			shade_recipe_uuid: null,
+			material_uuid: null,
+			quantity: '',
+			remarks: '',
+			lab_status: 0,
+		},
+	],
+};
+
 // Received
 export const RECEIVED_SCHEMA = {
 	received_quantity: NUMBER_DOUBLE_REQUIRED,

@@ -268,6 +268,21 @@ export const labDipQK = {
 		...labDipQK.orderAgainstLabDipRMLog(),
 		uuid,
 	],
+	// * Shade Recipe
+	shadeRecipe: () => [...labDipQK.all(), 'shade-recipe'],
+	shadeRecipeByUUID: (uuid) => [...labDipQK.shadeRecipe(), uuid],
+	// * Shade Recipe Description
+	shadeRecipeDescription: () => [
+		...labDipQK.all(),
+		'shade-recipe/description',
+	],
+	shadeRecipeDescriptionByUUID: (uuid) => [
+		...labDipQK.shadeRecipeDescription(),
+		uuid,
+	],
+	// * Shade Recipe Entry
+	shadeRecipeEntry: () => [...labDipQK.all(), 'shade-recipe/entry'],
+	shadeRecipeEntryByUUID: (uuid) => [...labDipQK.shadeRecipeEntry(), uuid],
 };
 
 // * Dyeing

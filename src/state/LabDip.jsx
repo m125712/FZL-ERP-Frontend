@@ -58,3 +58,29 @@ export const useOrderAgainstLabDipRMLogByUUID = (uuid) =>
 		queryKey: labDipQK.orderAgainstLabDipRMLogByUUID(uuid),
 		url: `/zipper/material-trx-against-order/by/lab_dip${uuid}`,
 	});
+
+// * Shade Recipe
+export const useLabDipShadeRecipeDescription = () =>
+	createGlobalState({
+		queryKey: labDipQK.shadeRecipeDescription(),
+		url: '/lab-dip/shade-recipe',
+	});
+
+export const useLabDipShadeRecipeDescriptionByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: labDipQK.shadeRecipeDescriptionByUUID(uuid),
+		url: `/lab-dip/shade-recipe/${uuid}`,
+	});
+
+// * Shade Recipe Entry
+export const useLabDipShadeRecipeEntry = () =>
+	createGlobalState({
+		queryKey: labDipQK.shadeRecipeEntry(),
+		url: '/lab-dip/shade-recipe-entry',
+	});
+
+export const useLabDipShadeRecipeEntryByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: labDipQK.shadeRecipeEntryByUUID(uuid),
+		url: `/lab-dip/shade-recipe-entry${uuid}`,
+	});

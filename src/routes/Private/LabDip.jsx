@@ -9,6 +9,11 @@ const Log = lazy(() => import('@/pages/LabDip/Log'));
 const Recipe = lazy(() => import('@pages/LabDip/Recipe'));
 const RecipeEntry = lazy(() => import('@pages/LabDip/Recipe/Entry'));
 const RecipeDetails = lazy(() => import('@pages/LabDip/Recipe/ByRecipeId'));
+const ShadeRecipeEntry = lazy(() => import('@pages/LabDip/ShadeRecipe/Entry'));
+const ShadeRecipeDetails = lazy(
+	() => import('@pages/LabDip/ShadeRecipe/Details/ByShadeRecipeId')
+);
+const ShadeRecipe = lazy(() => import('@pages/LabDip/ShadeRecipe'));
 
 export const LabDipRoutes = [
 	{
@@ -129,4 +134,44 @@ export const LabDipRoutes = [
 		],
 		isDynamic: true,
 	},
+
+	{
+		id: 174,
+		name: 'Shade Recipe Entry',
+		path: '/lab-dip/shade_recipe/entry',
+		element: ShadeRecipeEntry,
+		type: 'lab_dip',
+		hidden: true,
+		page_name: 'lab_dip__shade_recipe_entry',
+		actions: ['create', 'read', 'update', 'delete'],
+	},
+	{
+		id: 173,
+		name: 'Shade Recipe Details',
+		path: '/lab-dip/shade_recipe/details/:shade_recipe_uuid',
+		element: ShadeRecipeDetails,
+		type: 'lab_dip',
+		hidden: true,
+		page_name: 'lab_dip__shade_recipe_details',
+		actions: ['create', 'read', 'update', 'delete'],
+	},
+	{
+		id: 175,
+		name: 'Shade Recipe',
+		path: '/lab-dip/shade_recipe',
+		element: ShadeRecipe,
+		page_name: 'lab_dip__shade_recipe',
+		type: 'lab_dip',
+		actions: ['create', 'read', 'update', 'delete'],
+	},
+	{
+		id:176
+		,name: 'Shade Recipe Update'
+		,path: '/lab-dip/shade_recipe/update/:shade_recipe_uuid'
+		,element: ShadeRecipeEntry
+		,page_name: 'lab_dip__shade_recipe_entry_update'
+		,hidden: true
+		,actions: ['create', 'read', 'update', 'delete']
+		,isDynamic: true
+	}
 ];

@@ -58,7 +58,7 @@ export default function Index() {
 				header: 'Lab Status',
 				enableColumnFilter: false,
 				cell: (info) => {
-					return info.getValue() == 'true' ? 'Done' : 'Pending';
+					return info.getValue() == 1 ? 'Done' : 'Pending';
 				},
 			},
 			{

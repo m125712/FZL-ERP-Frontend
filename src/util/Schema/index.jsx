@@ -357,7 +357,7 @@ export const SHADE_RECIPE_SCHEMA = {
 	name: STRING_REQUIRED,
 	sub_streat: STRING_REQUIRED,
 	remarks: STRING.nullable(),
-	lab_status: STRING.default('0'),
+	lab_status: BOOLEAN.default(false),
 	shade_recipe_entry: yup.array().of(
 		yup.object().shape({
 			quantity: NUMBER_DOUBLE_REQUIRED,
@@ -378,7 +378,7 @@ export const SHADE_RECIPE_NULL = {
 			material_uuid: null,
 			quantity: '',
 			remarks: '',
-			lab_status: '0',
+			lab_status: 0,
 		},
 	],
 };

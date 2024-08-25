@@ -27,7 +27,7 @@ export default function Information({
 			},
 			{
 				label: 'Lab Status',
-				value: lab_status == '1' ? 'Done' : 'Pending',
+				value: lab_status === 1 ? 'Done' : 'Pending',
 			},
 		];
 		return items;

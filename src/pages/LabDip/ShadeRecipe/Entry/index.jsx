@@ -132,6 +132,7 @@ export default function Index() {
 		if (isUpdate) {
 			const shade_recipe_description_data = {
 				...data,
+				lab_status: data.lab_status ? 1 : 0,
 				updated_at: GetDateTime(),
 			};
 
@@ -195,7 +196,9 @@ export default function Index() {
 		// Create Shade Recipe description
 		const shade_recipe_description_data = {
 			...data,
+
 			uuid: new_shade_recipe_uuid,
+			lab_status: data.lab_status ? 1 : 0,
 			created_at,
 			created_by,
 		};

@@ -861,6 +861,30 @@ export const COIL_STOCK_NULL = {
 	trx_quantity: '',
 };
 
+// * common coil to dyeing
+
+export const COMMON_COIL_TO_DYEING_SCHEMA = {
+	coil_to_dyeing_entry: yup.array().of(
+		yup.object().shape({
+			order_id: UUID_FK,
+			trx_quantity: NUMBER.nullable().transform((value, originalValue) =>
+				String(originalValue).trim() === '' ? null : value
+			), // Transforms empty strings to null
+			remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const COMMON_COIL_TO_DYEING_NULL = {
+	coil_to_dyeing_entry: [
+		{
+			order_id: null,
+			trx_quantity: 0,
+			remarks: '',
+		},
+	],
+};
+
 // RM Material Used
 // material_stock_id	section	quantity	wastage	issued_by
 
@@ -1411,12 +1435,12 @@ export const DYEING_BATCH_SCHEMA = {
 
 export const DYEING_BATCH_NULL = {
 	remarks: '',
-	batch_entry: yup.array().of(
-		yup.object().shape({
+	batch_entry: [
+		{
 			quantity: null,
 			batch_remarks: '',
-		})
-	),
+		},
+	],
 };
 
 // *Slider/Die Casting --> (STOCK)*//

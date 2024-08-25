@@ -231,7 +231,14 @@ export const commonQK = {
 	// * MATERIAL TRX *//
 	materialTrx: () => [...commonQK.all(), 'material/trx'],
 	materialTrxByUUID: (uuid) => [...commonQK.materialTrx(), uuid],
+
+
+	// * Coil to Dyeing
+	coilToDyeing: () => [...commonQK.all(), 'coil/to-dyeing'],
+	coilToDyeingByUUID: (uuid) => [...commonQK.coilToDyeing(), uuid],
 };
+
+
 
 // * LabDip * //
 export const labDipQK = {
@@ -615,3 +622,5 @@ export const otherQK = {
 	],
 	factoryByPartyUUID: (uuid) => [...otherQK.all(), 'factory-by-party', uuid],
 };
+
+

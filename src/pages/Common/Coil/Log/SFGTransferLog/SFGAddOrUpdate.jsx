@@ -1,21 +1,29 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
+import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
 import {
+	useFetch,
 	useFetchForRhfReset,
 	useFetchFunc,
 	useRHF,
 	useUpdateFunc,
-} from "@/hooks";
-import { FormField, Input, ReactSelect } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { Need } from "@/util/Need";
-import { SFG_TRANSFER_LOG_NULL, SFG_TRANSFER_LOG_SCHEMA } from "@util/Schema";
-import { set } from "date-fns";
-import { useEffect, useState } from "react";
+} from '@/hooks';
+import { FormField, Input, ReactSelect } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { Need } from '@/util/Need';
+import {
+	COMMON_COIL_TO_DYEING_NULL,
+	COMMON_COIL_TO_DYEING_SCHEMA,
+} from '@util/Schema';
+import { set } from 'date-fns';
+import { useEffect, useState } from 'react';
+import { useCommonCoilToDyeing } from '@/state/Common';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setCoil,
+	order_id,
+	entryUUID,
+	setEntryUUID,
 	updateCoilLog = {
 		id: null,
 		trx_from: null,
@@ -32,15 +40,17 @@ export default function Index({
 	},
 	setUpdateCoilLog,
 }) {
+	const { data, url, updateData, postData, deleteData, isLoading, isError } =
+		useCommonCoilToDyeing();
 	const [orderInfo, setOrderInfo] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const MAX_QUANTITY =
-		updateCoilLog?.coil_stock + updateCoilLog?.dying_and_iron_stock;
-	const schema = {
-		...SFG_TRANSFER_LOG_SCHEMA,
-		trx_quantity: SFG_TRANSFER_LOG_SCHEMA.trx_quantity.max(MAX_QUANTITY),
-	};
+	// const MAX_QUANTITY =
+	// 	updateCoilLog?.coil_stock + updateCoilLog?.dying_and_iron_stock;
+	// const schema = {
+	// 	...COMMON_COIL_TO_DYEING_SCHEMA,
+	// 	trx_quantity: COMMON_COIL_TO_DYEING_SCHEMA.trx_quantity.max(MAX_QUANTITY),
+	// };
 
 	const { user } = useAuth();
 	const {
@@ -51,11 +61,11 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-	} = useRHF(schema, SFG_TRANSFER_LOG_NULL);
+	} = useRHF(COMMON_COIL_TO_DYEING_SCHEMA, COMMON_COIL_TO_DYEING_NULL);
 
 	useFetchForRhfReset(
-		`/sfg/trx/by/id/${updateCoilLog?.id}`,
-		updateCoilLog?.id,
+		`/zipper/tape-coil-to-dyeing/${entryUUID?.uuid}`,
+		entryUUID?.uuid,
 		reset
 	);
 
@@ -83,54 +93,32 @@ export default function Index({
 	};
 
 	const onClose = () => {
-		setUpdateCoilLog((prev) => ({
-			...prev,
-			id: null,
-			trx_from: null,
-			trx_to: null,
-			item_name: null,
-			trx_quantity: null,
-			order_description: null,
-			order_quantity: null,
-			coil_stock: null,
-			dying_and_iron_stock: null,
-			order_entry_id: null,
-			zipper_number_name: null,
+		setEntryUUID(() => ({
+			uuid: null,
 		}));
-		reset(SFG_TRANSFER_LOG_NULL);
+		reset(COMMON_COIL_TO_DYEING_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateCoilLog?.id !== null) {
+		if (entryUUID?.uuid !== null) {
 			const updatedData = {
 				...data,
 				order_entry_id: updateCoilLog?.order_entry_id,
 				updated_at: GetDateTime(),
 			};
 
-			await useUpdateFunc({
-				uri: `/sfg/trx/${updateCoilLog?.id}/${updateCoilLog?.order_description.replace(/[#&/]/g, "")}`,
-				itemId: updateCoilLog?.id,
-				data: data,
+			await updateData.mutateAsync({
+				url: `/zipper/tape-coil-to-dyeing/${updatedData?.uuid}`,
 				updatedData: updatedData,
-				setItems: setCoil,
-				onClose: onClose,
+				isOnCloseNeeded: false,
 			});
+			// console.log('Form data', updatedData);
 
 			return;
 		}
 	};
-
-	const transactionArea = [
-		{ label: "Dying and Iron", value: "dying_and_iron_stock" },
-		{ label: "Teeth Molding", value: "teeth_molding_stock" },
-		{ label: "Teeth Cleaning", value: "teeth_cleaning_stock" },
-		{ label: "Finishing", value: "finishing_stock" },
-		{ label: "Slider Assembly", value: "slider_assembly_stock" },
-		{ label: "Coloring", value: "coloring_stock" },
-	];
 
 	return (
 		<AddModal
@@ -138,33 +126,37 @@ export default function Index({
 			title={`Coil SFG Transfer Log`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
-			<FormField label="trx_to" title="Trx to" errors={errors}>
+			isSmall={true}>
+			<FormField
+				label='Order Entry ID'
+				title='Order Entry ID'
+				errors={errors}>
 				<Controller
-					name={"trx_to"}
+					name={'order_description_uuid'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder="Select Transaction Area"
-								options={transactionArea}
-								value={transactionArea?.find(
-									(item) => item.value == getValues("trx_to")
+								placeholder='Select Transaction Area'
+								options={order_id}
+								value={order_id?.find(
+									(item) =>
+										item.value ==
+										getValues('order_description_uuid')
 								)}
 								onChange={(e) => onChange(e.value)}
-								isDisabled={updateCoilLog?.id !== null}
+								isDisabled={true}
 							/>
 						);
 					}}
 				/>
 			</FormField>
 			<Input
-				label="trx_quantity"
-				sub_label={`Max: ${MAX_QUANTITY}, Max For This Order: ${getMaxQuantity()}`}
+				label='trx_quantity'
+				// sub_label={`Max: ${MAX_QUANTITY}, Max For This Order: ${getMaxQuantity()}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

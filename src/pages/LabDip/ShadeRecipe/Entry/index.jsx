@@ -128,7 +128,7 @@ export default function Index() {
 	// Submit
 	const onSubmit = async (data) => {
 		// Update item
-		console.log(data);
+
 		if (isUpdate) {
 			const shade_recipe_description_data = {
 				...data,

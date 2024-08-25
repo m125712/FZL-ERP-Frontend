@@ -18,7 +18,6 @@ export default function Index() {
 	const navigate = useNavigate();
 	const info = new PageInfo('Details', url, 'lab_dip__shade_recipe');
 	const haveAccess = useAccess('lab_dip__shade_recipe');
-	console.log(data);
 
 	useEffect(() => {
 		document.title = info.getTabName();

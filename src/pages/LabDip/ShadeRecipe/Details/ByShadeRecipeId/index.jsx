@@ -12,7 +12,6 @@ export default function Index() {
 		`/lab-dip/shade-recipe-details/by/${shade_recipe_uuid}`,
 		[shade_recipe_uuid]
 	);
-	console.log(data);
 
 	useEffect(() => {
 		document.title = 'Shade Recipe Details';

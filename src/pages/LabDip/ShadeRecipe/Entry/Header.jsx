@@ -10,14 +10,7 @@ import {
 } from '@/ui';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-//   "uuid": "igD0v9DIJQhJeet",
-//   "name": "Share Recipe 1",
-//   "sub_streat": "Sub Streat 1",
-//   "lab_status": "Pending",
-//   "created_by": "igD0v9DIJQhJeet",
-//   "created_at": "2024-01-01 00:00:00",
-//   "updated_at": "2024-01-01 00:00:00",
-//   "remarks": "Remarks"
+
 
 export default function Header({
 	register,
@@ -28,12 +21,7 @@ export default function Header({
 	is_Status,
 }) {
 	const { shade_recipe_description_uuid } = useParams();
-	// const { value: vendor } = useFetch('/other/vendor/value/label');
 
-	// const purchaseOptions = [
-	// 	{ label: 'Import', value: 0 },
-	// 	{ label: 'Local', value: 1 },
-	// ];
 	const [isStatus, setIsStatus] = useState(
 		typeof is_Status !== 'boolean' && is_Status === 1 ? true : false
 	);

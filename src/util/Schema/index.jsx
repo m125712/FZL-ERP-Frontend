@@ -344,14 +344,7 @@ export const PURCHASE_ENTRY_NULL = {
 		},
 	],
 };
-//   "uuid": "igD0v9DIJQhJeet",
-//   "name": "Share Recipe 1",
-//   "sub_streat": "Sub Streat 1",
-//   "lab_status": "Pending",
-//   "created_by": "igD0v9DIJQhJeet",
-//   "created_at": "2024-01-01 00:00:00",
-//   "updated_at": "2024-01-01 00:00:00",
-//   "remarks": "Remarks"
+
 // Shade Recipe
 export const SHADE_RECIPE_SCHEMA = {
 	name: STRING_REQUIRED,

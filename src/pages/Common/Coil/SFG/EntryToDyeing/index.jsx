@@ -19,13 +19,19 @@ import {
 } from '@util/Schema';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import {
+	Navigate,
+	useNavigate,
+	useParams,
+	useLocation,
+} from 'react-router-dom';
 
 export default function Index({ sfg }) {
 	const { url, updateData, postData, deleteData } = useOrderDescription();
 	const { invalidateQuery: OrderDetailsInvalidate } = useOrderDetails();
 	const { order_number, order_description_uuid, coil_uuid } = useParams();
-
+	const urlPath = useLocation();
+	console.log(urlPath);
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const isUpdate =
@@ -70,8 +76,6 @@ export default function Index({ sfg }) {
 		itemId: null,
 		itemName: null,
 	});
-
-
 
 	const handleEntryRemove = (index) => {
 		if (
@@ -190,8 +194,8 @@ export default function Index({ sfg }) {
 		await Promise.all(entryData_promises)
 			.then(() => reset(Object.assign({}, COMMON_COIL_TO_DYEING_NULL)))
 			.then(async () => {
-				// await OrderDetailsInvalidate();
-				navigate(`/common/coil/log`);
+				// await OrderDetailsInvalidate(); common/tape/log
+				navigate(isMatch?'/common/coil/log':`/common/tape/log`);
 			})
 			.catch((err) => console.log(err));
 	};
@@ -220,8 +224,7 @@ export default function Index({ sfg }) {
 
 	const handlers = {
 		NEW_ROW: handelEntryAppend,
-		COPY_LAST_ROW: () =>
-			handelDuplicateDynamicField(EntryField.length - 1),
+		COPY_LAST_ROW: () => handelDuplicateDynamicField(EntryField.length - 1),
 		ENTER: (event) => handleEnter(event),
 	};
 
@@ -233,8 +236,14 @@ export default function Index({ sfg }) {
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
+	
+	const basePath = '/common/coil/sfg/entry-to-dyeing/';
+	const isMatch = location.pathname.startsWith(basePath); // * checking if the current path matches the base path
+
 	const { value: order_id } = useFetch(
-		'/other/order/description/value/label'
+		isMatch
+			? `/other/order/description/value/label?item=nylon`
+			: `/other/order/description/value/label?item=without-nylon`
 	);
 
 	return (
@@ -328,9 +337,7 @@ export default function Index({ sfg }) {
 										removeClick={() =>
 											handleEntryRemove(index)
 										}
-										showRemoveButton={
-											EntryField.length > 1
-										}
+										showRemoveButton={EntryField.length > 1}
 									/>
 								</td>
 							</tr>

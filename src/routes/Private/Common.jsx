@@ -15,6 +15,8 @@ const CoilLog = lazy(() => import('@/pages/Common/Coil/Log'));
 
 // * Coil Entry to dyeing
 const CoilEntryToDyeing = lazy(() => import('@/pages/Common/Coil/SFG/EntryToDyeing'));
+// * Tape Entry to dyeing
+const TapeEntryToDyeing = lazy(() => import('@/pages/Common/Coil/SFG/EntryToDyeing')); // * sending to the same page since the logic is the same
 export const CommonRoutes = [
 	{
 		id: 21,
@@ -59,6 +61,16 @@ export const CommonRoutes = [
 			'click_update_rm_order',
 			'click_delete_rm_order',
 		],
+	},
+	{
+		id: 25,
+		name: 'SFG',
+		path: '/common/tape/sfg/entry-to-dyeing/:coil_uuid',
+		element: TapeEntryToDyeing,
+		type: ['common', 'coil'],
+		hidden: true,
+		page_name: 'common__coil_sfg_entry_to_dyeing',
+		actions: ['read', 'click_production', 'click_to_dyeing', 'create', 'update'],
 	},
 	{
 		id: 24,

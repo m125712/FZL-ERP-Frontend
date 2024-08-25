@@ -6,6 +6,7 @@ import { useCommonTapeSFG } from '@/state/Common';
 import { Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const TrxToCoil = lazy(() => import('./TrxToCoil'));
 const TrxToDying = lazy(() => import('./TrxToDying'));
@@ -13,9 +14,10 @@ const Production = lazy(() => import('./Production'));
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const { data, isLoading, url } = useCommonTapeSFG();
+	const { data, isLoading, url } = useCommonTapeSFG(); // Todo: need to change fetch url
 	const info = new PageInfo('Common/Tape/SFG', url, 'common__tape_sfg');
 	const haveAccess = useAccess(info.getTab());
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -89,12 +91,11 @@ export default function Index() {
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_to_dyeing'),
 				width: 'w-24',
-				cell: (info) =>
-					info.row.original.type.toLowerCase() !== 'nylon' && (
-						<Transfer
-							onClick={() => handleTrxToDying(info.row.index)}
-						/>
-					),
+				cell: (info) => (
+					<Transfer
+						onClick={() => handleTrxToDying(info.row.index)}
+					/>
+				),
 			},
 		],
 		[data]
@@ -144,16 +145,18 @@ export default function Index() {
 		window['trx_to_coil_modal'].showModal();
 	};
 	const handleTrxToDying = (idx) => {
-		const selectedProd = data[idx];
-		setUpdateTapeProd((prev) => ({
-			...prev,
-			...selectedProd,
-			item_name: selectedProd.type,
-			tape_or_coil_stock_id: selectedProd.uuid,
-			type_of_zipper:
-				selectedProd.type + ' ' + selectedProd.zipper_number,
-		}));
-		window['trx_to_dying_modal'].showModal();
+		// const selectedProd = data[idx];
+		// setUpdateTapeProd((prev) => ({
+		// 	...prev,
+		// 	...selectedProd,
+		// 	item_name: selectedProd.type,
+		// 	tape_or_coil_stock_id: selectedProd.uuid,
+		// 	type_of_zipper:
+		// 		selectedProd.type + ' ' + selectedProd.zipper_number,
+		// }));
+		// window['trx_to_dying_modal'].showModal();
+		
+		navigate(`/common/tape/sfg/entry-to-dyeing/${data[idx].uuid}`);
 	};
 
 	if (isLoading)

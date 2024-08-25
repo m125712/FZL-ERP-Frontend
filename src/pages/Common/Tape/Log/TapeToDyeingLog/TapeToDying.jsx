@@ -1,43 +1,45 @@
-import { Suspense } from "@/components/Feedback";
-import { DeleteModal } from "@/components/Modal";
-import ReactTable from "@/components/Table";
-import { useAccess, useFetchFunc } from "@/hooks";
-import { EditDelete } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import React, { useEffect, useMemo, useState } from "react";
-import TapeToDyeingAddOrUpdate from "./TapeToDyeingAddOrUpdate";
+import { Suspense } from '@/components/Feedback';
+import { DeleteModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
+import { useAccess, useFetchFunc, useFetch } from '@/hooks';
+import { EditDelete } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useCommonTapeToDyeing, useCommonCoilToDyeing } from '@/state/Common';
+import TapeToDyeingAddOrUpdate from './TapeToDyeingAddOrUpdate';
+export default function Index() {
+	const { data, url, updateData, postData, deleteData, isLoading, isError } =
+		useCommonCoilToDyeing();
+	const info = new PageInfo('SFG Tape Log', '/zipper/tape-coil-to-dyeing');
+	const [coilLog, setCoilLog] = useState([]);
 
-export default function TapeToDying() {
-	const info = new PageInfo("Tape to Dying Log", "sfg/trx/by/tape_making");
-	const [tapeLog, setTapeLog] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-	const haveAccess = useAccess("common__tape_log");
+
+	const haveAccess = useAccess('common__coil_log');
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "item_description",
-				header: "Item Description",
+				accessorKey: 'order_number',
+				header: 'O/N',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className="capitalize">{info.getValue()}</span>
+					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: "order_description",
-				header: "Style / Color / Size",
+				accessorKey: 'item_description',
+				header: 'Item Description',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className="capitalize">{info.getValue()}</span>
+					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 
 			{
-				accessorKey: "trx_quantity",
+				accessorKey: 'trx_quantity',
 				header: (
 					<span>
-						Quantity
+						Stock
 						<br />
 						(KG)
 					</span>
@@ -46,50 +48,63 @@ export default function TapeToDying() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "issued_by_name",
-				header: "Issued By",
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'created_at',
+				header: 'Created',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "actions",
-				header: "Actions",
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'actions',
+				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_update_tape_to_dying"),
-				width: "w-24",
+				hidden: !haveAccess.includes('click_update_sfg'),
+				width: 'w-24',
 				cell: (info) => {
 					return (
 						<EditDelete
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes(
-								"click_delete_tape_to_dying"
-							)}
+							showDelete={haveAccess.includes('click_delete_sfg')}
 						/>
 					);
 				},
 			},
 		],
-		[tapeLog]
+		[data]
 	);
 
-	// if (error) return <h1>Error:{error}</h1>;
-
 	// Fetching data from server
-	useEffect(() => {
-		useFetchFunc(info.getFetchUrl(), setTapeLog, setLoading, setError);
-	}, []);
+	// useEffect(() => {
+	// 	useFetchFunc(info.getFetchUrl(), setCoilLog, setLoading, setError);
+	// }, []);
+
+	const { value: order_id } = useFetch(
+		'/other/order/description/value/label'
+	);
 
 	// Update
-	const [updateTapeLog, setUpdateTapeLog] = useState({
+	const [updateCoilLog, setUpdateCoilLog] = useState({
 		id: null,
 		trx_from: null,
 		trx_to: null,
@@ -97,19 +112,23 @@ export default function TapeToDying() {
 		trx_quantity: null,
 		order_description: null,
 		order_quantity: null,
-		tape_stock: null,
+		coil_stock: null,
 		dying_and_iron_stock: null,
 		finishing_stock: null,
 		order_entry_id: null,
 		zipper_number_name: null,
 	});
 
+	const [entryUUID, setEntryUUID] = useState({
+		uuid: null,
+	});
+
 	const handelUpdate = (idx) => {
-		const selected = tapeLog[idx];
-		setUpdateTapeLog((prev) => ({
+		setEntryUUID((prev) => ({
 			...prev,
-			...selected,
+			uuid: data[idx].uuid,
 		}));
+
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
 
@@ -121,31 +140,37 @@ export default function TapeToDying() {
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: tapeLog[idx].id,
-			itemName: tapeLog[idx].order_description.replace(/[#&/]/g, ""),
+			itemId: data[idx].uuid,
+			itemName:
+				data[idx].order_number + ' - ' + data[idx].item_description,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
 
-	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
+	// if (error) return <h1>Error:{error}</h1>;
 
+	
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className='container mx-auto px-2 md:px-4'>
 			<ReactTable
 				title={info.getTitle()}
-				data={tapeLog}
+				data={data}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 			<Suspense>
 				<TapeToDyeingAddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						setTapeLog,
-						updateTapeLog,
-						setUpdateTapeLog,
+						order_id,
+						entryUUID,
+						setEntryUUID,
+						setCoilLog,
+						updateCoilLog,
+						setUpdateCoilLog,
 					}}
 				/>
 			</Suspense>
@@ -155,8 +180,9 @@ export default function TapeToDying() {
 					title={info.getTitle()}
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
-					setItems={setTapeLog}
-					uri={`/sfg/trx`}
+					setItems={setCoilLog}
+					deleteData={deleteData}
+					url={`/zipper/tape-coil-to-dyeing`}
 				/>
 			</Suspense>
 		</div>

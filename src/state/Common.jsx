@@ -101,6 +101,13 @@ export const useCommonCoilToDyeingByUUID = (uuid) =>
 		url: `/zipper/tape-coil-to-dyeing${uuid}`,
 	});
 
+// * Tape to Dyeing
+export const useCommonTapeToDyeing = () =>
+	createGlobalState({
+		queryKey: commonQK.coilToDyeing(),
+		url: `/zipper/tape-coil-to-dyeing/by/type/tape`,
+	});
+
 // * PRODUCTION * //
 export const useCommonCoilProduction = () =>
 	createGlobalState({

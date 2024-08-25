@@ -103,7 +103,7 @@ export default function Index() {
 	];
 
 	const handleShadeRecipeRemove = (index) => {
-		if (getValues(`shade_recipe[${index}].uuid`) !== undefined) {
+		if (getValues(`shade_recipe_entry[${index}].uuid`) !== undefined) {
 			setDeleteItem({
 				itemId: getValues(`shade_recipe_entry[${index}].uuid`),
 				itemName: getValues(
@@ -176,7 +176,9 @@ export default function Index() {
 				])
 					.then(() => reset(SHADE_RECIPE_NULL))
 					.then(() => {
-						navigate(`/lab-dip/shade_recipe/${shade_recipe_uuid}`);
+						navigate(
+							`/lab-dip/shade_recipe/details/${shade_recipe_uuid}`
+						);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -236,8 +238,9 @@ export default function Index() {
 			])
 				.then(() => reset(SHADE_RECIPE_NULL))
 				.then(() => {
-					invalidateMaterialInfo();
-					navigate(`/lab-dip/shade_recipe/${new_shade_recipe_uuid}`);
+					navigate(
+						`/lab-dip/shade_recipe/details/${new_shade_recipe_uuid}`
+					);
 				});
 		} catch (err) {
 			console.error(`Error with Promise.all: ${err}`);

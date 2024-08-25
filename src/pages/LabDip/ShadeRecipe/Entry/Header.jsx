@@ -35,7 +35,7 @@ export default function Header({
 	// 	{ label: 'Local', value: 1 },
 	// ];
 	const [isStatus, setIsStatus] = useState(
-		typeof is_Status !== 'boolean' && is_Status === '1' ? true : false
+		typeof is_Status !== 'boolean' && is_Status === 1 ? true : false
 	);
 
 	return (

@@ -7,54 +7,48 @@ import { useThreadMachine } from '@/state/Thread';
 import { Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
-import {
-	THREAD_COUNT_LENGTH_NULL,
-	THREAD_COUNT_LENGTH_SCHEMA,
-} from '@util/Schema';
+import { THREAD_MACHINE_NULL, THREAD_MACHINE_SCHEMA } from '@util/Schema';
 
 export default function Index({
 	modalId = '',
-	updateCountLength = {
+	updateMachine = {
 		uuid: null,
 	},
-	setUpdateCountLength,
+	setUpdateMachine,
 }) {
 	const { url, updateData, postData } = useThreadMachine();
 	const { user } = useAuth();
 	const { register, handleSubmit, errors, reset, control } = useRHF(
-		THREAD_COUNT_LENGTH_SCHEMA,
-		THREAD_COUNT_LENGTH_NULL
+		THREAD_MACHINE_SCHEMA,
+		THREAD_MACHINE_NULL
 	);
 
 	useFetchForRhfReset(
-		`${url}/${updateCountLength?.uuid}`,
-		updateCountLength?.uuid,
+		`${url}/${updateMachine?.uuid}`,
+		updateMachine?.uuid,
 		reset
 	);
 
 	const onClose = () => {
-		setUpdateCountLength((prev) => ({
+		setUpdateMachine((prev) => ({
 			...prev,
 			uuid: null,
 		}));
-		reset(THREAD_COUNT_LENGTH_NULL);
+		reset(THREAD_MACHINE_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (
-			updateCountLength?.uuid !== null &&
-			updateCountLength?.uuid !== undefined
-		) {
+		if (updateMachine?.uuid !== null && updateMachine?.uuid !== undefined) {
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateCountLength?.uuid}`,
-				uuid: updateCountLength?.uuid,
+				url: `${url}/${updateMachine?.uuid}`,
+				uuid: updateMachine?.uuid,
 				updatedData,
 				onClose,
 			});
@@ -67,6 +61,7 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			created_by: user?.uuid,
+			created_by_name: user?.name,
 			created_at: GetDateTime(),
 		};
 
@@ -76,21 +71,17 @@ export default function Index({
 			onClose,
 		});
 	};
+
 	return (
 		<AddModal
 			id={modalId}
-			title={
-				updateCountLength?.uuid !== null
-					? 'Update Count Length'
-					: 'Count Length'
-			}
+			title={updateMachine?.uuid !== null ? 'Update Machine' : 'Machine'}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<Input label='count' {...{ register, errors }} />
-			<Input label='length' {...{ register, errors }} />
-			<Input label='weight' {...{ register, errors }} />
-			<Input label='sst' {...{ register, errors }} />
+			<Input label='name' {...{ register, errors }} />
+			<Input label='capacity' {...{ register, errors }} />
+
 			<Input label='remarks' {...{ register, errors }} />
 
 			<DevTool control={control} placement='top-left' />

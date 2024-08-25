@@ -67,6 +67,7 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			created_by: user?.uuid,
+			created_by_name: user?.name,
 			created_at: GetDateTime(),
 		};
 

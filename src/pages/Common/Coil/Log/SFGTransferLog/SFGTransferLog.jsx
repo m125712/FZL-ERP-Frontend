@@ -10,10 +10,10 @@ import { useCommonCoilToDyeing } from '@/state/Common';
 
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading, isError } =
-		useCommonCoilToDyeing();
+	useCommonCoilToDyeing();
 	const info = new PageInfo('SFG Coil Log', '/zipper/tape-coil-to-dyeing');
 	const [coilLog, setCoilLog] = useState([]);
-
+console.log(data);
 	const haveAccess = useAccess('common__coil_log');
 
 	const columns = useMemo(

@@ -235,6 +235,10 @@ export const commonQK = {
 	// * Coil to Dyeing
 	coilToDyeing: () => [...commonQK.all(), 'coil/to-dyeing'],
 	coilToDyeingByUUID: (uuid) => [...commonQK.coilToDyeing(), uuid],
+
+	// * Tape to Dyeing
+	tapeToDyeing: () => [...commonQK.all(), 'tape/to-dyeing'],
+	tapeToDyeingByUUID: (uuid) => [...commonQK.tapeToDyeing(), uuid],
 };
 
 // * LabDip * //

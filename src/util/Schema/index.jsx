@@ -900,7 +900,7 @@ export const COMMON_COIL_TO_DYEING_SCHEMA = {
 			order_id: UUID_FK,
 			trx_quantity: NUMBER.nullable().transform((value, originalValue) =>
 				String(originalValue).trim() === '' ? null : value
-			), // Transforms empty strings to null
+			).max(yup.ref('max_trf_qty'), "Cant be greater than stock"), // Transforms empty strings to null
 			remarks: STRING.nullable(),
 		})
 	),

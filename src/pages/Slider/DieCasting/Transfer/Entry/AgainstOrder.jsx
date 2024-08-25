@@ -206,7 +206,7 @@ const AgainstOrder = () => {
 								{/* Zipper Name */}
 								<td className={cn('w-24', rowClass)}>
 									{getValues(
-										`stocks[${index}].zipper_number_name  `
+										`stocks[${index}].zipper_number_name`
 									)}
 								</td>
 

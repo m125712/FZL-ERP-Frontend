@@ -1276,17 +1276,7 @@ export const LC_NULL = {
 		},
 	],
 };
-// {
-//   "uuid": "igD0v9DIJQhJeet",
-//   "count": 10,
-//   "length": 10,
-//   "weight": 10,
-//   "sst": "SST",
-//   "created_by": "igD0v9DIJQhJeet",
-//   "created_at": "2024-01-01 00:00:00",
-//   "updated_at": "2024-01-01 00:00:00",
-//   "remarks": "Remarks"
-// }
+
 // Thread
 // Count Length
 export const THREAD_COUNT_LENGTH_SCHEMA = {
@@ -1303,6 +1293,26 @@ export const THREAD_COUNT_LENGTH_NULL = {
 	length: null,
 	weight: null,
 	sst: '',
+	remarks: '',
+};
+
+//   "uuid": "igD0v9DIJQhJeet",
+//   "name": "Machine Name",
+//   "capacity": 10,
+//   "created_by": "igD0v9DIJQhJeet",
+//   "created_at": "2024-01-01 00:00:00",
+//   "updated_at": "2024-01-01 00:00:00",
+//   "remarks": "Remarks"
+export const THREAD_MACHINE_SCHEMA = {
+	name: NAME_REQUIRED,
+	capacity: NUMBER_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const THREAD_MACHINE_NULL = {
+	uuid: null,
+	name: '',
+	capacity: null,
 	remarks: '',
 };
 

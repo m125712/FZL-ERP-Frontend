@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc } from '@/hooks';
-import { useThreadCountLength } from '@/state/Thread';
+import { useThreadMachine } from '@/state/Thread';
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -10,35 +10,30 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useThreadCountLength();
+	// 	    "uuid": "igD0v9DIJQhJeet",
+	//     "name": "Machine Name",
+	//     "capacity": 10,
+	//     "created_by": "igD0v9DIJQhJeet",
+	//     "created_at": "2024-01-01 00:00:00",
+	//     "updated_at": "2024-01-01 00:00:00",
+	//     "remarks": "Remarks"
+	//   }
+	const { data, isLoading, url, deleteData } = useThreadMachine();
 
-	const info = new PageInfo('Count Length', url, 'thread__count_length');
-	const haveAccess = useAccess('thread__count_length');
-	
+	const info = new PageInfo('Machine', url, 'thread__machine');
+	const haveAccess = useAccess('thread__machine');
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'count',
-				header: 'Count',
+				accessorKey: 'name',
+				header: 'Name',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'length',
-				header: 'Count',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'weight',
-				header: 'Weight',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'sst',
-				header: 'SST',
+				accessorKey: 'capacity',
+				header: 'Capacity',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -99,12 +94,12 @@ export default function Index() {
 	};
 
 	// Update
-	const [updateCountLength, setUpdateCountLength] = useState({
+	const [updateMachine, setUpdateMachine] = useState({
 		uuid: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateCountLength((prev) => ({
+		setUpdateMachine((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
 		}));
@@ -144,8 +139,8 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateCountLength,
-						setUpdateCountLength,
+						updateMachine,
+						setUpdateMachine,
 					}}
 				/>
 			</Suspense>

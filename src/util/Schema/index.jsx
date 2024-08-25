@@ -1280,17 +1280,39 @@ export const LC_NULL = {
 // Thread
 // Count Length
 export const THREAD_COUNT_LENGTH_SCHEMA = {
-	count_length: STRING_REQUIRED,
+	count: NUMBER_REQUIRED,
+	length: NUMBER_REQUIRED,
 	weight: NUMBER_DOUBLE_REQUIRED,
 	sst: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
 export const THREAD_COUNT_LENGTH_NULL = {
-	id: null,
-	count_length: '',
+	uuid: null,
+	count: null,
+	length: null,
 	weight: null,
 	sst: '',
+	remarks: '',
+};
+
+//   "uuid": "igD0v9DIJQhJeet",
+//   "name": "Machine Name",
+//   "capacity": 10,
+//   "created_by": "igD0v9DIJQhJeet",
+//   "created_at": "2024-01-01 00:00:00",
+//   "updated_at": "2024-01-01 00:00:00",
+//   "remarks": "Remarks"
+export const THREAD_MACHINE_SCHEMA = {
+	name: NAME_REQUIRED,
+	capacity: NUMBER_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const THREAD_MACHINE_NULL = {
+	uuid: null,
+	name: '',
+	capacity: null,
 	remarks: '',
 };
 

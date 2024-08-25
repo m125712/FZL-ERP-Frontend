@@ -232,13 +232,10 @@ export const commonQK = {
 	materialTrx: () => [...commonQK.all(), 'material/trx'],
 	materialTrxByUUID: (uuid) => [...commonQK.materialTrx(), uuid],
 
-
 	// * Coil to Dyeing
 	coilToDyeing: () => [...commonQK.all(), 'coil/to-dyeing'],
 	coilToDyeingByUUID: (uuid) => [...commonQK.coilToDyeing(), uuid],
 };
-
-
 
 // * LabDip * //
 export const labDipQK = {
@@ -593,6 +590,19 @@ export const deliveryQk = {
 		uuid,
 	],
 };
+//Thread
+
+export const threadQK = {
+	all: () => ['thread'],
+
+	//Count-length
+	countLength: () => [...threadQK.all(), 'count-length'],
+	countLengthByUUID: (uuid) => [...threadQK.countLength(), uuid],
+
+	//Machine
+	machine: () => [...threadQK.all(), 'machine'],
+	machineByUUID: (uuid) => [...threadQK.machine(), uuid],
+};
 
 //* OTHER QUERY KEYS
 
@@ -637,5 +647,3 @@ export const otherQK = {
 	],
 	factoryByPartyUUID: (uuid) => [...otherQK.all(), 'factory-by-party', uuid],
 };
-
-

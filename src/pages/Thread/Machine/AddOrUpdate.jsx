@@ -2,7 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useThreadCountLength } from '@/state/Thread';
+import { useThreadMachine } from '@/state/Thread';
 
 import { Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
@@ -19,7 +19,7 @@ export default function Index({
 	},
 	setUpdateCountLength,
 }) {
-	const { url, updateData, postData } = useThreadCountLength();
+	const { url, updateData, postData } = useThreadMachine();
 	const { user } = useAuth();
 	const { register, handleSubmit, errors, reset, control } = useRHF(
 		THREAD_COUNT_LENGTH_SCHEMA,

@@ -31,7 +31,7 @@ export default function Index({ sfg }) {
 	const { invalidateQuery: OrderDetailsInvalidate } = useOrderDetails();
 	const { order_number, order_description_uuid, coil_uuid } = useParams();
 	const urlPath = useLocation();
-	console.log(urlPath);
+	
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const isUpdate =

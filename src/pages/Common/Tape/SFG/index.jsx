@@ -14,7 +14,7 @@ const Production = lazy(() => import('./Production'));
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const { data, isLoading, url } = useCommonTapeSFG();
+	const { data, isLoading, url } = useCommonTapeSFG(); // Todo: need to change fetch url
 	const info = new PageInfo('Common/Tape/SFG', url, 'common__tape_sfg');
 	const haveAccess = useAccess(info.getTab());
 	const navigate = useNavigate();
@@ -155,7 +155,7 @@ export default function Index() {
 		// 		selectedProd.type + ' ' + selectedProd.zipper_number,
 		// }));
 		// window['trx_to_dying_modal'].showModal();
-		console.log(data[idx].uuid);
+		
 		navigate(`/common/tape/sfg/entry-to-dyeing/${data[idx].uuid}`);
 	};
 

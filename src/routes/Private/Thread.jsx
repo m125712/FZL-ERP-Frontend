@@ -43,7 +43,7 @@ export const ThreadRoutes = [
 	{
 		id: 32,
 		name: 'Update',
-		path: '/thread/order-info/update/:id/:thread_order_info_uuid',
+		path: '/thread/order-info/update/:order_info_uuid',
 		element: OrderInfoEntry,
 		type: 'thread',
 		page_name: 'thread__order_info_update',
@@ -53,7 +53,7 @@ export const ThreadRoutes = [
 	{
 		id: 33,
 		name: 'Details of Order Info',
-		path: '/thread/order-info/details/:id/:thread_order_info_uuid',
+		path: '/thread/order-info/details/:order_info_uuid',
 		element: IndOrderInfo,
 		type: 'thread',
 		page_name: 'thread__order_info_in_details',

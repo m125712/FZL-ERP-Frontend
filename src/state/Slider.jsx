@@ -27,6 +27,20 @@ export const useSliderAssemblyRMLogByUUID = (uuid) =>
 		url: `/material/used/by/slider_assembly${uuid}`,
 	});
 
+// * Slider/Dashboard --> (Info)
+export const useSliderDashboardInfo = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDashboardInfo(),
+		url: '/slider/stock',
+	});
+
+export const useSliderDashboardInfoByUUID = (uuid, { enabled = true }) =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDashboardInfoByUUID(uuid),
+		url: `/slider/stock/${uuid}`,
+		enabled,
+	});
+
 // * Die Casting --> (STOCK)
 export const useSliderDieCastingStock = () =>
 	createGlobalState({
@@ -46,6 +60,13 @@ export const useSliderDieCastingProductionByUUID = (uuid, { enabled = true }) =>
 		queryKey: sliderQK.sliderDieCastingProductionByUUID(uuid),
 		url: `/slider/die-casting-production/${uuid}`,
 		enabled,
+	});
+
+// * Die Casting --> (TRANSFER)
+export const useSliderDieCastingTransfer = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDieCastingTransfer(),
+		url: '/slider/die-casting-transfer',
 	});
 
 // * Order Against RM Log

@@ -1419,7 +1419,7 @@ export const DYEING_BATCH_NULL = {
 	),
 };
 
-// * Slide Die Casting Stock*//
+// *Slider/Die Casting --> (STOCK)*//
 export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 	name: STRING_REQUIRED, //
 	item: STRING_REQUIRED, //
@@ -1469,4 +1469,134 @@ export const SLIDER_DIE_CASTING_STOCK_NULL = {
 	is_u_top: false,
 	is_box_pin: false,
 	is_two_way_pin: false,
+};
+
+// "uuid": "igD0v9DIJQhJeet",
+// "order_info_uuid": "igD0v9DIJQhJeet",
+// "item": "igD0v9DIJQhJeet",
+// "zipper_number": "igD0v9DIJQhJeet",
+// "end_type": "igD0v9DIJQhJeet",
+// "puller_type": "igD0v9DIJQhJeet",
+// "color": "red",
+// "order_quantity": 0,
+// "body_quantity": 0,
+// "cap_quantity": 0,
+// "puller_quantity": 0,
+// "link_quantity": 0,
+// "sa_prod": 0,
+// "coloring_stock": 0,
+// "coloring_prod": 0,
+// "trx_to_finishing": 0,
+// "u_top_quantity": 0,
+// "h_bottom_quantity": 0,
+// "box_pin_quantity": 0,
+// "two_way_pin_quantity": 0,
+// "created_at": "2024-01-01 00:00:00",
+// "updated_at": "2024-01-01 00:00:00",
+// "remarks": "remarks"
+
+// * Slider/Dashboard --> (INFO)*//
+export const SLIDER_DASHBOARD_INFO_SCHEMA = {
+	order_info_uuid: STRING_REQUIRED,
+	item: STRING_REQUIRED,
+	zipper_number: STRING_REQUIRED,
+	end_type: STRING_REQUIRED,
+	puller_type: STRING_REQUIRED,
+	color: STRING_REQUIRED,
+	order_quantity: NUMBER_REQUIRED,
+	body_quantity: NUMBER_REQUIRED,
+	cap_quantity: NUMBER_REQUIRED,
+	puller_quantity: NUMBER_REQUIRED,
+	link_quantity: NUMBER_REQUIRED,
+	sa_prod: NUMBER_REQUIRED,
+	coloring_stock: NUMBER_REQUIRED,
+	coloring_prod: NUMBER_REQUIRED,
+	trx_to_finishing: NUMBER_REQUIRED,
+	u_top_quantity: NUMBER_REQUIRED,
+	h_bottom_quantity: NUMBER_REQUIRED,
+	box_pin_quantity: NUMBER_REQUIRED,
+	two_way_pin_quantity: NUMBER_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const SLIDER_DASHBOARD_INFO_NULL = {
+	uuid: null,
+	order_info_uuid: '',
+	item: '',
+	zipper_number: '',
+	end_type: '',
+	puller_type: '',
+	color: '',
+	order_quantity: null,
+	body_quantity: null,
+	cap_quantity: null,
+	puller_quantity: null,
+	link_quantity: null,
+	sa_prod: null,
+	coloring_stock: null,
+	coloring_prod: null,
+	trx_to_finishing: null,
+	u_top_quantity: null,
+	h_bottom_quantity: null,
+	box_pin_quantity: null,
+	two_way_pin_quantity: null,
+	remarks: '',
+};
+
+// * Slider/Die Casting --> (TRANSFER)*//
+export const SLIDER_DIE_CASTING_TRANSFER_SCHEMA = {
+	order_info_uuid: STRING_REQUIRED,
+	is_body: BOOLEAN_REQUIRED,
+	is_cap: BOOLEAN_REQUIRED,
+	is_puller: BOOLEAN_REQUIRED,
+	is_link: BOOLEAN_REQUIRED,
+
+	stocks: yup.array().of(
+		yup.object().shape({
+			order_number: STRING,
+			item_name: STRING,
+			zipper_number: STRING,
+			end_type: STRING,
+			puller_type: STRING,
+			logo: STRING,
+			color: STRING,
+			order_quantity: NUMBER,
+			balance_quantity: NUMBER,
+			provided_quantity: NUMBER_REQUIRED,
+			is_checked: BOOLEAN_REQUIRED,
+		})
+	),
+};
+
+export const SLIDER_DIE_CASTING_TRANSFER_NULL = {
+	uuid: null,
+	order_info_uuid: '',
+	is_body: false,
+	is_cap: false,
+	is_puller: false,
+	is_link: false,
+	stocks: [],
+};
+
+export const SLIDER_DIE_CASTING_TRANSFER_TEST = {
+	order_info_uuid: 'DLEHZ3Kl7IO2cPT',
+	is_body: true,
+	is_cap: false,
+	is_puller: true,
+	is_link: false,
+	stocks: [
+		{
+			order_number: 'DLEHZ3Kl7IO2cPT',
+			item_name: 'Item 1',
+			zipper_number: 'Zipper 1',
+			end_type: 'End 1',
+			puller_type: 'Puller 1',
+			logo: 'Logo 1',
+			color: 'Color 1',
+			order_quantity: 10,
+			balance_quantity: 10,
+			provided_quantity: 5,
+			is_checked: false,
+		},
+	],
 };

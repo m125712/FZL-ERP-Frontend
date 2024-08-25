@@ -287,7 +287,7 @@ export const dyeingQK = {
 	// *  batch
 	batch: () => [...dyeingQK.all(), 'batch'],
 	batchByUUID: (uuid) => [...dyeingQK.batch(), uuid],
-  
+
 	// * Order Against dyeing RM Log * //
 	orderAgainstDyeingRMLog: () => [
 		...dyeingQK.all(),
@@ -466,9 +466,23 @@ export const sliderQK = {
 		uuid,
 	],
 
+	//* Slider/Dashboard--> (INFO)
+	sliderDashboardInfo: () => [...sliderQK.all(), 'dashboard-info'],
+	sliderDashboardInfoByUUID: (uuid) => [
+		...sliderQK.sliderDashboardInfo(),
+		uuid,
+	],
+
 	//* Die Casting --> (STOCK)
 	sliderDieCastingStock: () => [...sliderQK.all(), 'dc-stock'],
 	sliderDieCastingStockByUUID: (uuid) => [
+		...sliderQK.sliderDieCastingStock(),
+		uuid,
+	],
+
+	//* Die Casting --> (TRANSFER)
+	sliderDieCastingTransfer: () => [...sliderQK.all(), 'dc-transfer'],
+	sliderDieCastingTransferByUUID: (uuid) => [
 		...sliderQK.sliderDieCastingStock(),
 		uuid,
 	],

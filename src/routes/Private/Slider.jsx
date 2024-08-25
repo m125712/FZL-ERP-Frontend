@@ -1,5 +1,9 @@
 import { lazy } from 'react';
 
+// * Dashboard
+// * Info
+const SliderDashboardInfo = lazy(() => import('@/pages/Slider/Dashboard/Info'));
+
 // Coloring
 // const ColoringRMStock = lazy(
 // 	() => import('@/pages/Slider/Coloring/RMStock/RMStock')
@@ -10,6 +14,14 @@ import { lazy } from 'react';
 // Die Casting
 
 const DieCastingStock = lazy(() => import('@/pages/Slider/DieCasting/Stock'));
+
+const DieCastingTransfer = lazy(
+	() => import('@/pages/Slider/DieCasting/Transfer')
+);
+
+const DieCastingTransferEntry = lazy(
+	() => import('@/pages/Slider/DieCasting/Transfer/Entry')
+);
 
 const DieCastingRMStock = lazy(
 	() => import('@/pages/Slider/DieCasting/RMStock/RMStock')
@@ -63,11 +75,49 @@ const DieCastingItemLibrary = lazy(
 export const SliderRoutes = [
 	{
 		id: 21,
+		name: 'Info',
+		path: '/slider/dashboard/info',
+		element: SliderDashboardInfo,
+		type: ['slider', 'dashboard'],
+		page_name: 'slider__dashboard_info',
+		actions: ['read', 'create', 'update', 'delete'],
+	},
+	{
+		id: 21,
 		name: 'Stock',
 		path: '/slider/die-casting/stock',
 		element: DieCastingStock,
 		type: ['slider', 'die-casting'],
 		page_name: 'slider__die_casting_stock',
+		actions: ['read', 'create', 'update', 'delete'],
+	},
+	{
+		id: 21,
+		name: 'Transfer',
+		path: '/slider/die-casting/transfer',
+		element: DieCastingTransfer,
+		type: ['slider', 'die-casting'],
+		page_name: 'slider__die_casting_transfer',
+		actions: ['read', 'create', 'update', 'delete'],
+	},
+	{
+		id: 21,
+		name: 'Entry',
+		path: '/slider/die-casting/transfer/entry',
+		element: DieCastingTransferEntry,
+		hidden: true,
+		type: ['slider', 'die-casting'],
+		page_name: 'slider__die_casting_transfer_entry',
+		actions: ['read', 'create', 'update', 'delete'],
+	},
+	{
+		id: 21,
+		name: 'Update',
+		path: '/slider/die-casting/transfer/update/:uuid',
+		element: DieCastingTransfer,
+		hidden: true,
+		type: ['slider', 'die-casting'],
+		page_name: 'slider__die_casting_transfer_update',
 		actions: ['read', 'create', 'update', 'delete'],
 	},
 	{
@@ -122,19 +172,16 @@ export const SliderRoutes = [
 	// 	page_name: 'slider__die_casting_details_by_uuid',
 	// 	actions: ['read', 'update', 'delete'],
 	// },
-	// {
-	// 	id: 241,
-	// 	name: 'Entry',
-	// 	path: '/slider/die-casting/production/entry',
-	// 	element: DieCastingEntry,
-	// 	type: ['slider', 'die-casting'],
-	// 	hidden: true,
-	// 	page_name: 'slider__die_casting_production_entry',
-	// 	element: DieCastingDetails,
-	// 	type: ['slider', 'die-casting'],
-	// 	page_name: 'slider__die_casting_details',
-	// 	actions: ['read', 'create', 'update', 'delete'],
-	// },
+	{
+		id: 241,
+		name: 'Entry',
+		path: '/slider/die-casting/production/entry',
+		element: DieCastingEntry,
+		type: ['slider', 'die-casting'],
+		hidden: true,
+		page_name: 'slider__die_casting_production_entry',
+		actions: ['read', 'create', 'update', 'delete'],
+	},
 	// {
 	// 	id: 243,
 	// 	name: 'In Details',
@@ -145,16 +192,16 @@ export const SliderRoutes = [
 	// 	page_name: 'slider__die_casting_details_by_uuid',
 	// 	actions: ['read', 'update', 'delete'],
 	// },
-	{
-		id: 241,
-		name: 'Entry',
-		path: '/slider/die-casting/entry',
-		element: DieCastingEntry,
-		type: ['slider', 'die-casting'],
-		hidden: true,
-		page_name: 'slider__die_casting_entry',
-		actions: ['read', 'create'],
-	},
+	// {
+	// 	id: 241,
+	// 	name: 'Entry',
+	// 	path: '/slider/die-casting/entry',
+	// 	element: DieCastingEntry,
+	// 	type: ['slider', 'die-casting'],
+	// 	hidden: true,
+	// 	page_name: 'slider__die_casting_entry',
+	// 	actions: ['read', 'create'],
+	// },
 	{
 		id: 242,
 		name: 'Update',
@@ -163,11 +210,6 @@ export const SliderRoutes = [
 		type: ['slider', 'die-casting'],
 		hidden: true,
 		page_name: 'slider__die_casting_production_update',
-		path: '/slider/die-casting/update/:slider_die_casting_uuid',
-		element: DieCastingEntry,
-		type: ['slider', 'die-casting'],
-		hidden: true,
-		page_name: 'slider__die_casting_update',
 		actions: ['read', 'update'],
 	},
 	// Slider Assembly

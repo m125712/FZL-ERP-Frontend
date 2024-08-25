@@ -62,6 +62,8 @@ export const useDyeingBatchByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: dyeingQK.batchByUUID(uuid),
 		url: `/zipper/batch/${uuid}`,
+	});
+	
 //* Order Against RM Log
 export const useOrderAgainstDyeingRMLog = () =>
 	createGlobalState({

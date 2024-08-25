@@ -6,6 +6,7 @@ import { useCommonCoilSFG } from '@/state/Common';
 import { Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const TrxToDying = lazy(() => import('./TrxToDyeing'));
 const Production = lazy(() => import('./Production'));
@@ -14,10 +15,11 @@ export default function Index() {
 	const { data, isLoading, url } = useCommonCoilSFG();
 	const info = new PageInfo('Common/Coil/SFG', url, 'common__coil_sfg');
 	const haveAccess = useAccess(info.getTab());
-	
+	const navigate = useNavigate();
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
+
 
 	const columns = useMemo(
 		() => [
@@ -128,17 +130,19 @@ export default function Index() {
 	};
 
 	const handleTrxToDying = (idx) => {
-		const selectedProd = data[idx];
-		setUpdateCoilProd((prev) => ({
-			...prev,
-			...selectedProd,
-			item_name: selectedProd.type,
-			tape_or_coil_stock_id: selectedProd.uuid,
-			type_of_zipper:
-				selectedProd.type + ' ' + selectedProd.zipper_number,
-		}));
-		window['trx_to_dying_modal'].showModal();
+		// const selectedProd = data[idx];
+		// setUpdateCoilProd((prev) => ({
+		// 	...prev,
+		// 	...selectedProd,
+		// 	item_name: selectedProd.type,
+		// 	tape_or_coil_stock_id: selectedProd.uuid,
+		// 	type_of_zipper:
+		// 		selectedProd.type + ' ' + selectedProd.zipper_number,
+		// }));
+		// window['trx_to_dying_modal'].showModal();
+		navigate(`/common/coil/sfg/entry-to-dyeing/${data[idx].uuid}`);
 	};
+	console.log(data);
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

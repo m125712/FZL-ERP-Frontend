@@ -1,3 +1,4 @@
+import { Update } from '@/assets/icons';
 import { lazy } from 'react';
 
 // ? Common
@@ -12,6 +13,8 @@ const CoilStock = lazy(() => import('@/pages/Common/Coil/RM'));
 const CoilProd = lazy(() => import('@/pages/Common/Coil/SFG'));
 const CoilLog = lazy(() => import('@/pages/Common/Coil/Log'));
 
+// * Coil Entry to dyeing
+const CoilEntryToDyeing = lazy(() => import('@/pages/Common/Coil/SFG/EntryToDyeing'));
 export const CommonRoutes = [
 	{
 		id: 21,
@@ -74,6 +77,16 @@ export const CommonRoutes = [
 		type: ['common', 'coil'],
 		page_name: 'common__coil_sfg',
 		actions: ['read', 'click_production', 'click_to_dyeing'],
+	},
+	{
+		id: 25,
+		name: 'SFG',
+		path: '/common/coil/sfg/entry-to-dyeing/:coil_uuid',
+		element: CoilEntryToDyeing,
+		type: ['common', 'coil'],
+		hidden: true,
+		page_name: 'common__coil_sfg_entry_to_dyeing',
+		actions: ['read', 'click_production', 'click_to_dyeing', 'create', 'update'],
 	},
 	{
 		id: 26,

@@ -12,11 +12,11 @@ export default function Index() {
 		<div className='container mx-auto'>
 			<SFGTransferLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
-			<RMTransferLog />
+			{/* <RMTransferLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<ProductionLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
-			<RMOrderAgainstLog />
+			<RMOrderAgainstLog /> */}
 		</div>
 	);
 }

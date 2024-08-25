@@ -89,6 +89,18 @@ export const useCommonCoilSFGByUUID = (uuid) =>
 		url: `/zipper/tape-coil/by/nylon${uuid}`,
 	});
 
+// * Coil to Dyeing
+export const useCommonCoilToDyeing = () =>
+	createGlobalState({
+		queryKey: commonQK.coilToDyeing(),
+		url: `/zipper/tape-coil-to-dyeing`,
+	});
+export const useCommonCoilToDyeingByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.coilToDyeing(uuid),
+		url: `/zipper/tape-coil-to-dyeing${uuid}`,
+	});
+
 // * PRODUCTION * //
 export const useCommonCoilProduction = () =>
 	createGlobalState({

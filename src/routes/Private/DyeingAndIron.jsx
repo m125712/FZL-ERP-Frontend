@@ -43,6 +43,11 @@ const DyeingBatchDetails = lazy(
 	() => import('@/pages/DyeingAndIron/Batch/Details')
 );
 
+// * Batch Production
+const DyeingBatchProduction = lazy(
+	() => import('@/pages/DyeingAndIron/Batch/Production')
+)
+
 export const DyeingAndIronRoutes = [
 	{
 		id: 28,
@@ -219,5 +224,16 @@ export const DyeingAndIronRoutes = [
 		hidden: true,
 		page_name: 'dyeing__batch_details',
 		actions: ['read'],
-	}
+	},
+
+	// * Batch Production
+	{
+		id: 292,
+		name: 'Batch Production',
+		path: '/dyeing-and-iron/batch/batch-production/:batch_prod_uuid',
+		element: DyeingBatchProduction,
+		type: 'dyeing',
+		page_name: 'dyeing__batch_production',
+		hidden: true,
+		actions: ['create', 'read', 'update'],}
 ];

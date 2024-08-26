@@ -898,9 +898,11 @@ export const COMMON_COIL_TO_DYEING_SCHEMA = {
 	coil_to_dyeing_entry: yup.array().of(
 		yup.object().shape({
 			order_id: UUID_FK,
-			trx_quantity: NUMBER.nullable().transform((value, originalValue) =>
-				String(originalValue).trim() === '' ? null : value
-			).max(yup.ref('max_trf_qty'), "Cant be greater than stock"), // Transforms empty strings to null
+			trx_quantity: NUMBER.nullable()
+				.transform((value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+				)
+				.max(yup.ref('max_trf_qty'), 'Cant be greater than stock'), // Transforms empty strings to null
 			remarks: STRING.nullable(),
 		})
 	),
@@ -1492,6 +1494,35 @@ export const DYEING_BATCH_NULL = {
 		{
 			quantity: null,
 			batch_remarks: '',
+		},
+	],
+};
+
+// * Dyeing Planning Batch production schema*//
+
+export const DYEING_BATCH_PRODUCTION_SCHEMA = {
+	batch_entry: yup.array().of(
+		yup.object().shape({
+			production_quantity: NUMBER.nullable() // Allows the field to be null
+				.transform((value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+				).max(yup.ref('quantity'), 'Beyond Batch Quantity'), // Transforms empty strings to null
+			// 
+			production_quantity_in_kg: NUMBER.nullable().transform(
+				(value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+			),
+			batch_production_remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const DYEING_BATCH_PRODUCTION_NULL = {
+	batch_entry: [
+		{
+			production_quantity:  null,
+			production_quantity_in_kg: null,
+			batch_production_remarks: '',
 		},
 	],
 };

@@ -1298,16 +1298,10 @@ export const THREAD_COUNT_LENGTH_NULL = {
 	remarks: '',
 };
 
-//   "uuid": "igD0v9DIJQhJeet",
-//   "name": "Machine Name",
-//   "capacity": 10,
-//   "created_by": "igD0v9DIJQhJeet",
-//   "created_at": "2024-01-01 00:00:00",
-//   "updated_at": "2024-01-01 00:00:00",
-//   "remarks": "Remarks"
 export const THREAD_MACHINE_SCHEMA = {
 	name: NAME_REQUIRED,
 	capacity: NUMBER_REQUIRED,
+	water_capacity: NUMBER_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
@@ -1315,6 +1309,7 @@ export const THREAD_MACHINE_NULL = {
 	uuid: null,
 	name: '',
 	capacity: null,
+	water_capacity: null,
 	remarks: '',
 };
 
@@ -1398,13 +1393,14 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 	order_info_entry: yup.array().of(
 		yup.object().shape({
 			color: STRING_REQUIRED,
-			shade_recipe_uuid: STRING_REQUIRED,
+			shade_recipe_uuid: STRING.nullable(),
 			po: STRING_REQUIRED,
 			style: STRING_REQUIRED,
 			count_length_uuid: STRING_REQUIRED,
 			quantity: NUMBER_REQUIRED,
 			company_price: NUMBER_DOUBLE_REQUIRED,
 			party_price: NUMBER_DOUBLE_REQUIRED,
+			swatch_approval_date: yup.date().nullable(),
 			remarks: STRING.nullable(),
 		})
 	),
@@ -1427,7 +1423,7 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 			uuid: null,
 			order_info_uuid: null,
 			po: '',
-			shape_recipe_uuid: null,
+			shade_recipe_uuid: null,
 			style: '',
 			color: '',
 			count_length_uuid: null,
@@ -1435,6 +1431,7 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 			company_price: 0,
 			party_price: 0,
 			remarks: '',
+			swatch_approval_date: null,
 		},
 	],
 };

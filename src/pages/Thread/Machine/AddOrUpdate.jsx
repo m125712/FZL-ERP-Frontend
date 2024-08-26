@@ -81,7 +81,7 @@ export default function Index({
 			isSmall={true}>
 			<Input label='name' {...{ register, errors }} />
 			<Input label='capacity' {...{ register, errors }} />
-
+			<Input label='water_capacity' {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />
 
 			<DevTool control={control} placement='top-left' />

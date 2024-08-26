@@ -8,12 +8,6 @@ export default function Index({ order_info_entry }) {
 
 	const columns = useMemo(
 		() => [
-			// {
-			// 	accessorKey: 'lab_ref',
-			// 	header: 'Lab Ref',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'po',
 				header: 'PO',
@@ -21,7 +15,7 @@ export default function Index({ order_info_entry }) {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'shade_recipe_uuid',
+				accessorKey: 'shade_recipe_name',
 				header: 'Shade',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -39,7 +33,7 @@ export default function Index({ order_info_entry }) {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'count_length_uuid',
+				accessorKey: 'count_length_name',
 				header: 'Count Length',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -62,18 +56,6 @@ export default function Index({ order_info_entry }) {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'swatch_status',
-			// 	header: 'Swatch Status',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'swatch_approval_date',
-			// 	header: 'Swatch Approval Date',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => <DateTime date={info.getValue()} />,
-			// },
 			{
 				accessorKey: 'created_at',
 				header: 'Created',
@@ -87,6 +69,15 @@ export default function Index({ order_info_entry }) {
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'swatch_approval_date',
+				header: 'Swatch Approval Date',
 				enableColumnFilter: false,
 				width: 'w-24',
 				cell: (info) => {

@@ -8,7 +8,6 @@ export default function Index({ order_info_entry }) {
 
 	const columns = useMemo(
 		() => [
-
 			{
 				accessorKey: 'po',
 				header: 'PO',
@@ -70,6 +69,15 @@ export default function Index({ order_info_entry }) {
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'swatch_approval_date',
+				header: 'Swatch Approval Date',
 				enableColumnFilter: false,
 				width: 'w-24',
 				cell: (info) => {

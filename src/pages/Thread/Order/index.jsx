@@ -1,114 +1,111 @@
-import ReactTable from "@/components/Table";
-import { useAuth } from "@/context/auth";
-import { useAccess, useFetchFunc } from "@/hooks";
-import { DateTime, EditDelete, LinkWithCopy } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useAuth } from '@/context/auth';
+import { useAccess, useFetchFunc } from '@/hooks';
+import { useThreadOrderInfo } from '@/state/Thread';
+import { DateTime, EditDelete, LinkOnly, LinkWithCopy } from '@/ui';
+import PageContainer from '@/ui/Others/PageContainer';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
+	const { data, isLoading, url, deleteData } = useThreadOrderInfo();
 	const navigate = useNavigate();
 	const { user } = useAuth();
-	const haveAccess = useAccess("thread__order_info_details");
-	const info = new PageInfo(
-		"Order Info",
-		"thread/order-info",
-		"thread__order_info_details"
-	);
-
-	const [shadeRecipe, setShadeRecipe] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+	const haveAccess = useAccess('thread__order_info_details');
+	const info = new PageInfo('Order Info', url, 'thread__order_info_details');
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "id",
-				header: "ID",
-				width: "w-12",
+				accessorKey: 'id',
+				header: 'ID',
+				width: 'w-12',
 				cell: (info) => {
-					const { id, thread_order_info_uuid } = info.row.original;
+					const { uuid } = info.row.original;
 					return (
-						<LinkWithCopy
+						<LinkOnly
+							uri='/thread/order-info/details'
+							id={uuid}
 							title={info.getValue()}
-							id={thread_order_info_uuid}
-							uri={`/thread/order-info/details/${id}`}
 						/>
 					);
 				},
 			},
 			{
-				accessorKey: "party_name",
-				header: "Party",
+				accessorKey: 'party_name',
+				header: 'Party',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "factory_name",
-				header: "Factory",
+				accessorKey: 'factory_name',
+				header: 'Factory',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "merchandiser_name",
-				header: "Merchandiser",
+				accessorKey: 'merchandiser_name',
+				header: 'Merchandiser',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "buyer_name",
-				header: "Buyer",
+				accessorKey: 'buyer_name',
+				header: 'Buyer',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "is_sample",
-				header: "Sample",
+				accessorKey: 'is_sample',
+				header: 'Sample',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (info.getValue() === 1 ? 'Yes' : 'No'),
 			},
 			{
-				accessorKey: "is_bill",
-				header: "Bill",
+				accessorKey: 'is_bill',
+				header: 'Bill',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (info.getValue() == 1 ? 'Yes' : 'No'),
 			},
 			{
-				accessorKey: "delivery_date",
-				header: "Delivery Date",
+				accessorKey: 'delivery_date',
+				header: 'Delivery Date',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
-				accessorKey: "issued_by_name",
-				header: "Issued By",
+				accessorKey: 'created_by_name',
+				header: 'Issued By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "created_at",
-				header: "Created",
-				width: "w-20",
+				accessorKey: 'created_at',
+				header: 'Created',
+				width: 'w-20',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
-				accessorKey: "updated_at",
-				header: "Updated",
+				accessorKey: 'updated_at',
+				header: 'Updated',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "action",
-				header: "Action",
+				accessorKey: 'action',
+				header: 'Action',
 				enableColumnFilter: false,
-				hidden: !haveAccess.includes("update"),
+				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
 					return (
 						<EditDelete
@@ -120,39 +117,70 @@ export default function Index() {
 				},
 			},
 		],
-		[shadeRecipe]
+		[data]
 	);
 
-	// console.log(shadeRecipe);
-
-	// Fetching data from server
-	useEffect(() => {
-		document.title = info.getTabName();
-		useFetchFunc(info.getFetchUrl(), setShadeRecipe, setLoading, setError);
-	}, []);
-
 	// Add
-	const handelAdd = () => navigate("/thread/order-info/entry");
+	const handelAdd = () => navigate('/thread/order-info/entry');
 
-	// Update
 	const handelUpdate = (idx) => {
-		const { thread_order_info_uuid, id } = shadeRecipe[idx];
-		navigate(`/thread/order-info/update/${id}/${thread_order_info_uuid}`);
+		const { uuid } = data[idx];
+		navigate(`/thread/order-info/update/${uuid}`);
 	};
 
-	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+	// Delete
+	const [deleteItem, setDeleteItem] = useState({
+		itemId: null,
+		itemName: null,
+	});
+	const handelDelete = (idx) => {
+		setDeleteItem((prev) => ({
+			...prev,
+			itemId: data[idx].uuid,
+			itemName: data[idx].uuid,
+		}));
+
+		window[info.getDeleteModalId()].showModal();
+	};
+
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
+
+	const breadcrumbs = [
+		{
+			label: 'Thread',
+			href: '/thread',
+			isDisabled: true,
+		},
+		{
+			label: 'Order Info',
+			href: '/thread/order-info',
+		},
+	];
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<PageContainer title='Order Info Lists' breadcrumbs={breadcrumbs}>
 			<ReactTable
 				title={info.getTitle()}
-				accessor={haveAccess.includes("create")}
-				data={shadeRecipe}
-				columns={columns}
 				handelAdd={handelAdd}
-				extraClass="py-2"
+				accessor={haveAccess.includes('create')}
+				data={data}
+				columns={columns}
+				extraClass='py-2'
 			/>
-		</div>
+
+			<Suspense>
+				<DeleteModal
+					modalId={info.getDeleteModalId()}
+					title={info.getTitle()}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url,
+						deleteData,
+					}}
+				/>
+			</Suspense>
+		</PageContainer>
 	);
 }

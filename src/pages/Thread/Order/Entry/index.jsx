@@ -1,39 +1,40 @@
-import { DeleteModal } from "@/components/Modal";
+import { DeleteModal } from '@/components/Modal';
 import {
 	useFetch,
 	useFetchForRhfResetForOrder,
 	usePostFunc,
 	useRHF,
 	useUpdateFunc,
-} from "@/hooks";
+} from '@/hooks';
+import nanoid from '@/lib/nanoid';
+import { useThreadOrderInfo, useThreadOrderInfoEntry } from '@/state/Thread';
 import {
 	ActionButtons,
 	DynamicField,
 	FormField,
 	Input,
 	ReactSelect,
-} from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { useAuth } from "@context/auth";
+} from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { useAuth } from '@context/auth';
+import { DevTool } from '@hookform/devtools';
 import {
 	THREAD_ORDER_INFO_ENTRY_NULL,
 	THREAD_ORDER_INFO_ENTRY_SCHEMA,
-} from "@util/Schema";
-import { customAlphabet } from "nanoid";
-import { Suspense, useCallback, useEffect, useState } from "react";
-import { HotKeys, configure } from "react-hotkeys";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
-import Header from "./Header";
-
-const alphabet =
-	"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-const nanoid = customAlphabet(alphabet, 10);
+} from '@util/Schema';
+import { Suspense, useCallback, useEffect, useState } from 'react';
+import { HotKeys, configure } from 'react-hotkeys';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import Header from './Header';
 
 export default function Index() {
-	const { id, thread_order_info_uuid } = useParams();
+	const { url: threadOrderInfoUrl } = useThreadOrderInfo();
+	const { url: threadOrderEntryUrl } = useThreadOrderInfoEntry();
+	const { updateData, postData, deleteData } = useThreadOrderInfo();
+	const { uuid, order_info_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
-	const isUpdate = thread_order_info_uuid !== undefined || id !== undefined;
+	const isUpdate = order_info_uuid !== undefined || uuid !== undefined;
 	const {
 		register,
 		handleSubmit,
@@ -47,29 +48,33 @@ export default function Index() {
 	} = useRHF(THREAD_ORDER_INFO_ENTRY_SCHEMA, THREAD_ORDER_INFO_ENTRY_NULL);
 
 	useEffect(() => {
-		id !== undefined
-			? (document.title = `Thread Shade Recipe: Update ${id}`)
-			: (document.title = "Thread Shade Recipe: Entry");
+		uuid !== undefined
+			? (document.title = `Thread Shade Recipe: Update ${uuid}`)
+			: (document.title = 'Thread Shade Recipe: Entry');
 	}, []);
 
-	const { value: countLength } = useFetch(`/thread/count-length/value/label`);
-	const { value: shadeRecipe } = useFetch(`/thread/shade-recipe/value/label`);
+	const { value: countLength } = useFetch(
+		`/other/thread/count-length/value/label`
+	);
+	const { value: shadeRecipe } = useFetch(
+		`/other/lab-dip/shade-recipe/value/label`
+	);
 
 	if (isUpdate)
 		useFetchForRhfResetForOrder(
-			`/thread/order-info-entry/by/thread_order_info_uuid/${thread_order_info_uuid}`,
-			thread_order_info_uuid,
+			`/thread/order-info-details/by/${order_info_uuid}`,
+			order_info_uuid,
 			reset
 		);
 
-	// thread_order_info_entry
+	// order_info_entry
 	const {
 		fields: threadOrderInfoEntryField,
 		append: threadOrderInfoEntryAppend,
 		remove: threadOrderInfoEntryRemove,
 	} = useFieldArray({
 		control,
-		name: "thread_order_info_entry",
+		name: 'order_info_entry',
 	});
 
 	const [deleteItem, setDeleteItem] = useState({
@@ -78,32 +83,32 @@ export default function Index() {
 	});
 
 	const handleThreadOrderInfoEntryRemove = (index) => {
-		if (getValues(`thread_order_info_entry[${index}].id`) !== undefined) {
+		if (getValues(`order_info_entry[${index}].uuid`) !== undefined) {
 			setDeleteItem({
-				itemId: getValues(`thread_order_info_entry[${index}].id`),
-				itemName: getValues(`thread_order_info_entry[${index}].id`),
+				itemId: getValues(`order_info_entry[${index}].uuid`),
+				itemName: getValues(`order_info_entry[${index}].uuid`),
 			});
-			window["thread_order_info_entry_delete"].showModal();
+			window['order_info_entry_delete'].showModal();
 		}
 		threadOrderInfoEntryRemove(index);
 	};
 
 	const handleThreadOrderInfoEntryAppend = () => {
 		threadOrderInfoEntryAppend({
-			thread_order_info_uuid: null,
-			lab_ref: "",
-			po: "",
-			shade_id: null,
-			style: "",
-			color: "",
-			count_length_id: null,
-			type: "",
+			order_info_uuid: null,
+			lab_ref: '',
+			po: '',
+			shade_uuid: null,
+			style: '',
+			color: '',
+			count_length_uuid: null,
+			type: '',
 			quantity: null,
 			company_price: 0,
 			party_price: 0,
-			swatch_status: "",
-			swatch_approval_date: "",
-			remarks: "",
+			swatch_status: '',
+			swatch_approval_date: '',
+			remarks: '',
 		});
 	};
 	const onClose = () => reset(THREAD_ORDER_INFO_ENTRY_NULL);
@@ -112,59 +117,57 @@ export default function Index() {
 	const onSubmit = async (data) => {
 		// Update
 		if (isUpdate) {
-			// order description
-			const thread_order_info_data = {
+			const order_info_data = {
 				...data,
-				is_sample: isSample ? 1 : 0,
-				is_bill: isBill ? 1 : 0,
+				is_sample: data.is_sample ? 1 : 0,
+				is_bill: data.is_bill ? 1 : 0,
 				updated_at: GetDateTime(),
 			};
 
-			let thread_order_info_promise = await useUpdateFunc({
-				uri: `/thread/order-info/${data?.id}/${thread_order_info_uuid}`,
-				itemId: data.id,
-				data: data,
-				updatedData: thread_order_info_data,
-				onClose: onClose,
-			}).catch((err) => console.error(`Error updating data: ${err}`));
+			const order_info_promise = await updateData.mutateAsync({
+				url: `${threadOrderInfoUrl}/${data?.uuid}`,
+				updatedData: order_info_data,
+				uuid: data.uuid,
+				isOnCloseNeeded: false,
+			});
 
-			// order entry
-			let thread_order_info_entry_promises =
-				data.thread_order_info_entry.map(async (item) => {
-					if (item.id === undefined) {
-						item.thread_order_info_uuid = thread_order_info_uuid;
+			const order_info_entries_promise = data.order_info_entry.map(
+				async (item) => {
+					if (item.uuid === undefined) {
+						item.order_info_uuid = order_info_uuid;
 						item.created_at = GetDateTime();
-						return await usePostFunc({
-							uri: "/thread/order-entry",
-							data: item,
-						}).catch((err) => console.error(`Error: ${err}`));
+						item.uuid = nanoid();
+						return await postData.mutateAsync({
+							url: threadOrderEntryUrl,
+							newData: item,
+							isOnCloseNeeded: false,
+						});
+					} else {
+						item.updated_at = GetDateTime();
+						const updatedData = {
+							...item,
+						};
+						return await updateData.mutateAsync({
+							url: `${threadOrderEntryUrl}/${item.uuid}`,
+							uuid: item.uuid,
+							updatedData,
+							isOnCloseNeeded: false,
+						});
 					}
-					const updatedData = {
-						...item,
-						updated_at: GetDateTime(),
-					};
-
-					return await useUpdateFunc({
-						// replace style brackets, /, #, & with space
-						uri: `/thread/order-entry/${item?.id}/${item?.shade_id}`,
-						itemId: item.id,
-						data: item,
-						updatedData: updatedData,
-						onClose: onClose,
-					}).catch((err) =>
-						console.error(`Error updating data: ${err}`)
-					);
-				});
+				}
+			);
 
 			try {
 				await Promise.all([
-					thread_order_info_promise,
-					...thread_order_info_entry_promises,
+					order_info_promise,
+					...order_info_entries_promise,
 				])
-					.then(() =>
-						reset(Object.assign({}, THREAD_ORDER_INFO_ENTRY_NULL))
-					)
-					.then(() => navigate(`/thread/order-info/details/${id}`));
+					.then(() => reset(THREAD_ORDER_INFO_ENTRY_NULL))
+					.then(() => {
+						navigate(
+							`/thread/order-info/details/${order_info_uuid}`
+						);
+					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
 			}
@@ -172,55 +175,73 @@ export default function Index() {
 			return;
 		}
 
-		// Add
-		const new_thread_order_info_uuid = nanoid();
+		// Add new item
+		const new_order_info_uuid = nanoid();
 		const created_at = GetDateTime();
+		const created_by = user.uuid;
 
-		const order_info = {
+		// Create Shade Recipe description
+		const order_info_data = {
 			...data,
-			is_sample: isSample ? 1 : 0,
-			is_bill: isBill ? 1 : 0,
-			thread_order_info_uuid: new_thread_order_info_uuid,
+			is_sample: data.is_sample ? 1 : 0,
+			is_bill: data.is_bill ? 1 : 0,
+			uuid: new_order_info_uuid,
 			created_at,
-			issued_by: user.id,
+			created_by,
 		};
-		const thread_order_info_promise = await usePostFunc({
-			uri: "/thread/order-info",
-			data: order_info,
+
+		// delete shade_recipe field from data to be sent
+		delete order_info_data['order_info_entry'];
+
+		const order_info_promise = await postData.mutateAsync({
+			url: threadOrderInfoUrl,
+			newData: order_info_data,
+			isOnCloseNeeded: false,
 		});
 
-		const thread_order_info_entry = [...data.thread_order_info_entry].map(
-			(item) => ({
-				...item,
-				thread_order_info_uuid: new_thread_order_info_uuid,
-				created_at,
-			})
-		);
-		let thread_order_info_entry_promises = [
-			...thread_order_info_entry.map((item) =>
-				usePostFunc({
-					uri: "/thread/order-entry",
-					data: item,
-				})
+		// Create Shade Recipe entries
+		const order_info_entries = [...data.order_info_entry].map((item) => ({
+			...item,
+			order_info_uuid: new_order_info_uuid,
+			uuid: nanoid(),
+			created_at,
+			created_by,
+		}));
+
+		const order_info_entries_promise = [
+			...order_info_entries.map(
+				async (item) =>
+					await postData.mutateAsync({
+						url: threadOrderEntryUrl,
+						newData: item,
+						isOnCloseNeeded: false,
+					})
 			),
 		];
 
-		await Promise.all([
-			thread_order_info_promise,
-			...thread_order_info_entry_promises,
-		])
-			.then(() => reset(Object.assign({}, THREAD_ORDER_INFO_ENTRY_NULL)))
-			.then(() => navigate(`/thread/order-info`))
-			.catch((err) => console.log(err));
+		try {
+			await Promise.all([
+				order_info_promise,
+				...order_info_entries_promise,
+			])
+				.then(() => reset(THREAD_ORDER_INFO_ENTRY_NULL))
+				.then(() => {
+					navigate(
+						`/thread/order-info/details/${new_order_info_uuid}`
+					);
+				});
+		} catch (err) {
+			console.error(`Error with Promise.all: ${err}`);
+		}
 	};
 
-	// Check if id is valid
-	if (getValues("quantity") === null) return <Navigate to="/not-found" />;
+	// Check if uuid is valuuid
+	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 
 	const handelDuplicateDynamicField = useCallback(
 		(index) => {
-			const item = getValues(`thread_order_info_entry[${index}]`);
-			threadOrderInfoEntryAppend({ ...item, id: undefined });
+			const item = getValues(`order_info_entry[${index}]`);
+			threadOrderInfoEntryAppend({ ...item, uuid: undefined });
 		},
 		[getValues, threadOrderInfoEntryAppend]
 	);
@@ -231,9 +252,9 @@ export default function Index() {
 	};
 
 	const keyMap = {
-		NEW_ROW: "alt+n",
-		COPY_LAST_ROW: "alt+c",
-		ENTER: "enter",
+		NEW_ROW: 'alt+n',
+		COPY_LAST_ROW: 'alt+c',
+		ENTER: 'enter',
 	};
 
 	const handlers = {
@@ -244,21 +265,20 @@ export default function Index() {
 	};
 
 	configure({
-		ignoreTags: ["input", "select", "textarea"],
+		ignoreTags: ['input', 'select', 'textarea'],
 		ignoreEventsCondition: function () {},
 	});
 
 	const rowClass =
-		"group whitespace-nowrap text-left text-sm font-normal tracking-wide";
+		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	return (
-		<div className="container mx-auto mt-2 px-2 pb-2 md:px-4">
+		<div className='container mx-auto mt-2 px-2 pb-2 md:px-4'>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
-					className="flex flex-col gap-4"
-				>
+					className='flex flex-col gap-4'>
 					<Header
 						{...{
 							register,
@@ -270,92 +290,68 @@ export default function Index() {
 						}}
 					/>
 					<DynamicField
-						title="Details"
+						title='Details'
 						handelAppend={handleThreadOrderInfoEntryAppend}
 						tableHead={[
-							"Lab Ref",
-							"PO",
-							"Shade",
-							"Style",
-							"Color",
-							"Count Length",
-							"Type",
-							"Quantity",
-							"Price (USD) (Com/Party)",
-							"Swatch Status",
-							// "Remarks",
-							"Action",
+							'Color',
+							'Shade',
+							'PO',
+							'Style',
+							'Count Length',
+							'Quantity',
+							'Price (USD) (Com/Party)',
+							'Remarks',
+							'Action',
 						].map((item) => (
 							<th
 								key={item}
-								scope="col"
-								className="group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2"
-							>
+								scope='col'
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
 								{item}
 							</th>
-						))}
-					>
+						))}>
 						{threadOrderInfoEntryField.map((item, index) => (
-							<tr key={item.id}>
+							<tr key={item.uuid}>
 								<td className={`pl-1 ${rowClass}`}>
 									<Input
-										title="lab_ref"
-										label={`thread_order_info_entry[${index}].lab_ref`}
-										is_title_needed="false"
+										title='Color'
+										label={`order_info_entry[${index}].color`}
+										is_title_needed='false'
 										dynamicerror={
-											errors?.thread_order_info_entry?.[
-												index
-											]?.lab_ref
-										}
-										register={register}
-									/>
-								</td>
-								<td className={rowClass}>
-									<Input
-										title="po"
-										label={`thread_order_info_entry[${index}].po`}
-										is_title_needed="false"
-										dynamicerror={
-											errors?.thread_order_info_entry?.[
-												index
-											]?.po
+											errors?.order_info_entry?.[index]
+												?.lab_ref
 										}
 										register={register}
 									/>
 								</td>
 								<td className={rowClass}>
 									<FormField
-										label={`thread_order_info_entry[${index}].shade_id`}
-										title="Shade"
+										label={`order_info_entry[${index}].shade_recipe_uuid`}
+										title='Shade'
 										errors={errors}
-										is_title_needed="false"
-									>
+										is_title_needed='false'>
 										<Controller
-											name={`thread_order_info_entry[${index}].shade_id`}
+											name={`order_info_entry[${index}].shade_recipe_uuid`}
 											control={control}
 											render={({
 												field: { onChange },
 											}) => {
 												return (
 													<ReactSelect
-														placeholder="Select Shade"
+														placeholder='Select Shade'
 														options={shadeRecipe}
 														value={shadeRecipe?.find(
 															(item) =>
 																item.value ==
 																getValues(
-																	`thread_order_info_entry[${index}].shade_id`
+																	`order_info_entry[${index}].shade_recipe_uuid`
 																)
 														)}
 														onChange={(e) => {
-															onChange(
-																parseInt(
-																	e.value
-																)
-															);
+															onChange(e.value);
 														}}
 														isDisabled={
-															thread_order_info_uuid !==
+															order_info_uuid !==
 															undefined
 														}
 														menuPortalTarget={
@@ -369,63 +365,57 @@ export default function Index() {
 								</td>
 								<td className={rowClass}>
 									<Input
-										title="style"
-										label={`thread_order_info_entry[${index}].style`}
-										is_title_needed="false"
+										title='po'
+										label={`order_info_entry[${index}].po`}
+										is_title_needed='false'
 										dynamicerror={
-											errors?.thread_order_info_entry?.[
-												index
-											]?.style
+											errors?.order_info_entry?.[index]
+												?.po
 										}
 										register={register}
 									/>
 								</td>
+
 								<td className={rowClass}>
 									<Input
-										title="color"
-										label={`thread_order_info_entry[${index}].color`}
-										is_title_needed="false"
+										title='style'
+										label={`order_info_entry[${index}].style`}
+										is_title_needed='false'
 										dynamicerror={
-											errors?.thread_order_info_entry?.[
-												index
-											]?.color
+											errors?.order_info_entry?.[index]
+												?.style
 										}
 										register={register}
 									/>
 								</td>
 								<td className={rowClass}>
 									<FormField
-										label={`thread_order_info_entry[${index}].count_length_id`}
-										title="Count Length"
+										label={`order_info_entry[${index}].count_length_uuid`}
+										title='Count Length'
 										errors={errors}
-										is_title_needed="false"
-									>
+										is_title_needed='false'>
 										<Controller
-											name={`thread_order_info_entry[${index}].count_length_id`}
+											name={`order_info_entry[${index}].count_length_uuid`}
 											control={control}
 											render={({
 												field: { onChange },
 											}) => {
 												return (
 													<ReactSelect
-														placeholder="Select Count Length"
+														placeholder='Select Count Length'
 														options={countLength}
 														value={countLength?.find(
 															(item) =>
 																item.value ==
 																getValues(
-																	`thread_order_info_entry[${index}].count_length_id`
+																	`order_info_entry[${index}].count_length_uuid`
 																)
 														)}
 														onChange={(e) => {
-															onChange(
-																parseInt(
-																	e.value
-																)
-															);
+															onChange(e.value);
 														}}
 														isDisabled={
-															thread_order_info_uuid !==
+															order_info_uuid !==
 															undefined
 														}
 														menuPortalTarget={
@@ -439,49 +429,33 @@ export default function Index() {
 								</td>
 								<td className={rowClass}>
 									<Input
-										title="type"
-										label={`thread_order_info_entry[${index}].type`}
-										is_title_needed="false"
+										title='quantity'
+										label={`order_info_entry[${index}].quantity`}
+										is_title_needed='false'
 										dynamicerror={
-											errors?.thread_order_info_entry?.[
-												index
-											]?.type
+											errors?.order_info_entry?.[index]
+												?.quantity
 										}
 										register={register}
 									/>
 								</td>
 								<td className={rowClass}>
-									<Input
-										title="quantity"
-										label={`thread_order_info_entry[${index}].quantity`}
-										is_title_needed="false"
-										dynamicerror={
-											errors?.thread_order_info_entry?.[
-												index
-											]?.quantity
-										}
-										register={register}
-									/>
-								</td>
-								<td className={rowClass}>
-									<div className="flex">
+									<div className='flex'>
 										<Input
-											label={`thread_order_info_entry[${index}].company_price`}
-											is_title_needed="false"
+											label={`order_info_entry[${index}].company_price`}
+											is_title_needed='false'
 											dynamicerror={
-												errors
-													?.thread_order_info_entry?.[
+												errors?.order_info_entry?.[
 													index
 												]?.company_price
 											}
 											register={register}
 										/>
 										<Input
-											label={`thread_order_info_entry[${index}].party_price`}
-											is_title_needed="false"
+											label={`order_info_entry[${index}].party_price`}
+											is_title_needed='false'
 											dynamicerror={
-												errors
-													?.thread_order_info_entry?.[
+												errors?.order_info_entry?.[
 													index
 												]?.party_price
 											}
@@ -491,33 +465,18 @@ export default function Index() {
 								</td>
 								<td className={rowClass}>
 									<Input
-										title="swatch_status"
-										label={`thread_order_info_entry[${index}].swatch_status`}
-										is_title_needed="false"
+										label={`order_info_entry[${index}].remarks`}
+										is_title_needed='false'
 										dynamicerror={
-											errors?.thread_order_info_entry?.[
-												index
-											]?.swatch_status
+											errors?.order_info_entry?.[index]
+												?.remarks
 										}
 										register={register}
 									/>
 								</td>
-								{/* <td className={`w-40 ${rowClass}`}>
-									<Input
-										title="remarks"
-										label={`thread_order_info_entry[${index}].remarks`}
-										is_title_needed="false"
-										dynamicerror={
-											errors?.thread_order_info_entry?.[
-												index
-											]?.remarks
-										}
-										register={register}
-									/>
-								</td> */}
+
 								<td
-									className={`w-16 ${rowClass} border-l-4 border-l-primary`}
-								>
+									className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
 									<ActionButtons
 										duplicateClick={() =>
 											handelDuplicateDynamicField(index)
@@ -535,11 +494,10 @@ export default function Index() {
 							</tr>
 						))}
 					</DynamicField>
-					<div className="modal-action">
+					<div className='modal-action'>
 						<button
-							type="submit"
-							className="text-md btn btn-primary btn-block"
-						>
+							type='submit'
+							className='text-md btn btn-primary btn-block'>
 							Save
 						</button>
 					</div>
@@ -547,14 +505,16 @@ export default function Index() {
 			</HotKeys>
 			<Suspense>
 				<DeleteModal
-					modalId={"thread_order_info_entry_delete"}
-					title={"Thread Shade Recipe Entry"}
+					modalId={'order_info_entry_delete'}
+					title={'Order info Entry'}
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
 					setItems={threadOrderInfoEntryField}
-					uri={`/thread/order-info`}
+					url={threadOrderEntryUrl}
+					deleteData={deleteData}
 				/>
 			</Suspense>
+			<DevTool control={control} placement='top-left' />
 		</div>
 	);
 }

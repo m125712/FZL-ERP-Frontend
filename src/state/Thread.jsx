@@ -25,3 +25,26 @@ export const useThreadMachineByUUID = (uuid) =>
 		queryKey: threadQK.machineByUUID(uuid),
 		url: `/thread/machine/${uuid}`,
 	});
+
+//Order-info
+export const useThreadOrderInfo = () =>
+	createGlobalState({
+		queryKey: threadQK.orderInfo(),
+		url: '/thread/order-info',
+	});
+export const useThreadOrderInfoByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: threadQK.orderInfoByUUID(uuid),
+		url: `/thread/order-info/${uuid}`,
+	});
+//Order-info-entry
+export const useThreadOrderInfoEntry = () =>
+	createGlobalState({
+		queryKey: threadQK.orderInfoEntry(),
+		url: '/thread/order-entry',
+	});
+export const useThreadOrderInfoEntryByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: threadQK.orderInfoEntryByUUID(uuid),
+		url: `/thread/order-entry/${uuid}`,
+	});

@@ -14,7 +14,6 @@ export default function Index() {
 
 	const info = new PageInfo('Count Length', url, 'thread__count_length');
 	const haveAccess = useAccess('thread__count_length');
-	
 
 	const columns = useMemo(
 		() => [
@@ -26,7 +25,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'length',
-				header: 'Count',
+				header: 'Length',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -43,7 +42,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'created_by',
+				accessorKey: 'created_by_name',
 				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),

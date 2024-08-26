@@ -602,6 +602,14 @@ export const threadQK = {
 	//Machine
 	machine: () => [...threadQK.all(), 'machine'],
 	machineByUUID: (uuid) => [...threadQK.machine(), uuid],
+
+	//Order-info
+	orderInfo: () => [...threadQK.all(), 'order-info'],
+	orderInfoByUUID: (uuid) => [...threadQK.orderInfo(), uuid],
+
+	//Order-info-entry
+	orderInfoEntry: () => [...threadQK.all(), 'order-info-entry'],
+	orderInfoEntryByUUID: (uuid) => [...threadQK.orderInfoEntry(), uuid],
 };
 
 //* OTHER QUERY KEYS

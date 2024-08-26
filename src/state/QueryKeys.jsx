@@ -498,6 +498,10 @@ export const sliderQK = {
 		...sliderQK.sliderDieCastingStock(),
 		uuid,
 	],
+	sliderDieCastingStockByOrderNumbers: (...uuid) => [
+		...sliderQK.sliderDieCastingStock(),
+		...uuid,
+	],
 
 	//* Die Casting --> (TRANSFER)
 	sliderDieCastingTransfer: () => [...sliderQK.all(), 'dc-transfer'],

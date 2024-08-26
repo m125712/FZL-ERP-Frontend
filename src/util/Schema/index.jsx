@@ -1533,8 +1533,9 @@ export const DYEING_BATCH_PRODUCTION_SCHEMA = {
 			production_quantity: NUMBER.nullable() // Allows the field to be null
 				.transform((value, originalValue) =>
 					String(originalValue).trim() === '' ? null : value
-				).max(yup.ref('quantity'), 'Beyond Batch Quantity'), // Transforms empty strings to null
-			// 
+				)
+				.max(yup.ref('quantity'), 'Beyond Batch Quantity'), // Transforms empty strings to null
+			//
 			production_quantity_in_kg: NUMBER.nullable().transform(
 				(value, originalValue) =>
 					String(originalValue).trim() === '' ? null : value
@@ -1547,9 +1548,40 @@ export const DYEING_BATCH_PRODUCTION_SCHEMA = {
 export const DYEING_BATCH_PRODUCTION_NULL = {
 	batch_entry: [
 		{
-			production_quantity:  null,
+			production_quantity: null,
 			production_quantity_in_kg: null,
 			batch_production_remarks: '',
+		},
+	],
+};
+
+// * Dyeing Transfer
+
+export const DYEING_TRANSFER_SCHEMA = {
+	dyeing_transfer_entry: yup.array().of(
+		yup.object().shape({
+			order_description_uuid: UUID_FK,
+			colors: yup.array().of(yup.string()).nullable(),
+			section: STRING_REQUIRED,
+			trx_quantity: NUMBER.nullable()
+				.transform((value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+				)
+				, // Transforms empty strings to null 
+
+			remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const DYEING_TRANSFER_NULL = {
+	dyeing_transfer_entry: [
+		{
+			order_description_uuid: null,
+			colors: [],
+			section: '',
+			trx_quantity: 0,
+			remarks: '',
 		},
 	],
 };

@@ -33,3 +33,11 @@ const getTransactionArea = () => {
 	];
 };
 export default getTransactionArea;
+
+export const getTransferArea =  [
+	{ label: 'Nylon Plastic Finishing', value: 'nylon_plastic_finishing' },
+	{ label: 'Nylon Metalic Finishing', value: 'nylon_metalic_finishing' },
+	{ label: 'Vislon Teeth Molding', value: 'vislon_teeth_molding' },
+	{ label: 'Metal Teeth Molding', value: 'metal_teeth_molding' },
+];
+

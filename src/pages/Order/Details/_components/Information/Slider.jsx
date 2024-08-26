@@ -25,6 +25,7 @@ export default function SliderDescription({ order_description }) {
 			slider_starting_section,
 			bottom_stopper_name,
 			top_stopper_name,
+			tape_received,
 		} = order_description;
 
 		const items = [
@@ -47,6 +48,10 @@ export default function SliderDescription({ order_description }) {
 			{
 				label: 'Bottom Stopper Name',
 				value: bottom_stopper_name,
+			},
+			{
+				label: 'Tape Received',
+				value: tape_received,
 			},
 		];
 		return items;

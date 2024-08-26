@@ -97,7 +97,7 @@ export default function Index() {
 							key={shade_recipe_uuid}
 							placeholder='Select order info uuid'
 							options={shade_recipe ?? []}
-							value={shade_recipe?.find(
+							value={shade_recipe?.filter(
 								(item) => item.value == shade_recipe_uuid
 							)}
 							filterOption={null}

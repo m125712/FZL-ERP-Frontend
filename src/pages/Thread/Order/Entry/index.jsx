@@ -98,7 +98,7 @@ export default function Index() {
 			order_info_uuid: null,
 			lab_ref: '',
 			po: '',
-			shade_uuid: null,
+			shade_recipe_uuid: null,
 			style: '',
 			color: '',
 			count_length_uuid: null,
@@ -134,6 +134,10 @@ export default function Index() {
 			const order_info_entries_promise = data.order_info_entry.map(
 				async (item) => {
 					if (item.uuid === undefined) {
+						item.swatch_approval_date =
+							item.shade_recipe_uuid === null
+								? null
+								: GetDateTime();
 						item.order_info_uuid = order_info_uuid;
 						item.created_at = GetDateTime();
 						item.uuid = nanoid();
@@ -146,6 +150,12 @@ export default function Index() {
 						item.updated_at = GetDateTime();
 						const updatedData = {
 							...item,
+							swatch_approval_date:
+								item.shade_recipe_uuid === null
+									? null
+									: swatch_approval_date === null
+										? GetDateTime()
+										: swatch_approval_date,
 						};
 						return await updateData.mutateAsync({
 							url: `${threadOrderEntryUrl}/${item.uuid}`,
@@ -174,7 +184,7 @@ export default function Index() {
 
 			return;
 		}
-		//console.log(data);
+
 		// Add new item
 		const new_order_info_uuid = nanoid();
 		const created_at = GetDateTime();
@@ -206,7 +216,8 @@ export default function Index() {
 			uuid: nanoid(),
 			created_at,
 			created_by,
-			updated_at: null,
+			swatch_approval_date:
+				item.shade_recipe_uuid === null ? null : GetDateTime(),
 		}));
 		console.log(order_info_entries);
 		const order_info_entries_promise = [
@@ -320,7 +331,7 @@ export default function Index() {
 										is_title_needed='false'
 										dynamicerror={
 											errors?.order_info_entry?.[index]
-												?.lab_ref
+												?.color
 										}
 										register={register}
 									/>
@@ -351,10 +362,10 @@ export default function Index() {
 														onChange={(e) => {
 															onChange(e.value);
 														}}
-														isDisabled={
-															order_info_uuid !==
-															undefined
-														}
+														// isDisabled={
+														// 	order_info_uuid !==
+														// 	undefined
+														// }
 														menuPortalTarget={
 															document.body
 														}
@@ -393,7 +404,10 @@ export default function Index() {
 									<FormField
 										label={`order_info_entry[${index}].count_length_uuid`}
 										title='Count Length'
-										errors={errors}
+										dynamicerror={
+											errors?.order_info_entry?.[index]
+												?.count_length_uuid
+										}
 										is_title_needed='false'>
 										<Controller
 											name={`order_info_entry[${index}].count_length_uuid`}
@@ -415,10 +429,10 @@ export default function Index() {
 														onChange={(e) => {
 															onChange(e.value);
 														}}
-														isDisabled={
-															order_info_uuid !==
-															undefined
-														}
+														// isDisabled={
+														// 	order_info_uuid !==
+														// 	undefined
+														// }
 														menuPortalTarget={
 															document.body
 														}

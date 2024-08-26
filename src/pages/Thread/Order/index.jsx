@@ -20,7 +20,7 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'id',
+				accessorKey: 'order_number',
 				header: 'ID',
 				width: 'w-12',
 				cell: (info) => {

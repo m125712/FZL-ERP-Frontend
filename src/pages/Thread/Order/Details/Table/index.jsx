@@ -15,7 +15,7 @@ export default function Index({ order_info_entry }) {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'shade_recipe_uuid',
+				accessorKey: 'shade_recipe_name',
 				header: 'Shade',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -33,7 +33,7 @@ export default function Index({ order_info_entry }) {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'count_length_uuid',
+				accessorKey: 'count_length_name',
 				header: 'Count Length',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),

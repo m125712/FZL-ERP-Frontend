@@ -87,7 +87,7 @@ export default function Index() {
 	}
 	// const { value } = useFetch('/zipper/order-batch');
 
-	console.log(getValues());
+	
 	// TODO: Not sure if this is needed. need further checking
 	let order_info_ids;
 	// useEffect(() => {
@@ -165,7 +165,7 @@ export default function Index() {
 				remarks: item.batch_production_remarks,
 			}));
 
-		console.log(batch_entry);
+		
 
 		// * update the batch status
 		await updateData.mutateAsync({

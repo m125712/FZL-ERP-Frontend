@@ -5,11 +5,11 @@ import { useAccess, useFetchFunc, useFetch } from '@/hooks';
 import { EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
-import { useCommonTapeToDyeing, useCommonCoilToDyeing } from '@/state/Common';
+import { useCommonTapeToDyeing } from '@/state/Common';
 import TapeToDyeingAddOrUpdate from './TapeToDyeingAddOrUpdate';
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading, isError } =
-		useCommonCoilToDyeing();
+	useCommonTapeToDyeing();
 	const info = new PageInfo('SFG Tape Log', '/zipper/tape-coil-to-dyeing');
 	const [coilLog, setCoilLog] = useState([]);
 

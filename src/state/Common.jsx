@@ -93,7 +93,7 @@ export const useCommonCoilSFGByUUID = (uuid) =>
 export const useCommonCoilToDyeing = () =>
 	createGlobalState({
 		queryKey: commonQK.coilToDyeing(),
-		url: `/zipper/tape-coil-to-dyeing`,
+		url: `/zipper/tape-coil-to-dyeing/by/type/nylon`,
 	});
 export const useCommonCoilToDyeingByUUID = (uuid) =>
 	createGlobalState({
@@ -104,7 +104,7 @@ export const useCommonCoilToDyeingByUUID = (uuid) =>
 // * Tape to Dyeing
 export const useCommonTapeToDyeing = () =>
 	createGlobalState({
-		queryKey: commonQK.coilToDyeing(),
+		queryKey: commonQK.tapeToDyeing(),
 		url: `/zipper/tape-coil-to-dyeing/by/type/tape`,
 	});
 

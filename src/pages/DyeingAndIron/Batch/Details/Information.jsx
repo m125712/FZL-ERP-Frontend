@@ -6,7 +6,7 @@ export default function Information({ batch }) {
 	return (
 		<div className='my-2 flex flex-col rounded-md px-2 shadow-md'>
 			<span className='flex items-center gap-2 text-2xl font-semibold capitalize leading-tight text-primary md:text-3xl'>
-				Planning SNO
+				Planning Batch 
 			</span>
 			<hr className='border-1 my-2 border-secondary-content' />
 			<div className='mx-2 flex flex-col items-stretch justify-between md:flex-row'>
@@ -28,6 +28,7 @@ export default function Information({ batch }) {
 								: 'Approved'
 						}
 					/> */}
+					<TitleValue title='Status' value={batch?.batch_status} />
 					<TitleValue title='Remarks' value={batch?.remarks} />
 				</div>
 			</div>

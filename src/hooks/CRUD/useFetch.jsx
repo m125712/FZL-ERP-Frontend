@@ -79,6 +79,28 @@ const useFetchForRhfResetForOrder = async (uri, returnId, reset) => {
 	}, [returnId]);
 };
 
+const useFetchForRhfResetForBatchProduct = async (uri, returnId, reset) => {
+	useEffect(() => {
+		if (returnId === null || returnId === undefined) return;
+
+		api.get(uri).then((res) => {
+			const data = res?.data?.data;
+
+			data?.batch_entry.map((item) => {
+				item.production_quantity = Number(
+					item.given_production_quantity
+				);
+				item.production_quantity_in_kg = Number(
+					item.given_production_quantity_in_kg
+				);
+				item.batch_production_remarks = item.batch_remarks;
+			});
+
+			return reset(data);
+		});
+	}, [returnId]);
+};
+
 const useFetchForRhfResetForPlanning = async (uri, reset) => {
 	useEffect(() => {
 		api.get(uri).then((res) => {
@@ -135,4 +157,5 @@ export {
 	useFetchForRhfResetForUserAccess,
 	useFetchFunc,
 	useFetchFuncForReport,
+	useFetchForRhfResetForBatchProduct,
 };

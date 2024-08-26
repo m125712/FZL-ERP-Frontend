@@ -11,7 +11,7 @@ export default function Index() {
 	}, []);
 	return (
 		<div className='container mx-auto'>
-			{/* <TapeToCoil /> */}
+			<TapeToCoil />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<TapeToDying />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />

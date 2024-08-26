@@ -69,6 +69,7 @@ export default function Index({
 		reset
 	);
 
+	console.log(getValues());
 	useEffect(() => {
 		useFetchFunc(
 			`/order/description/from/${updateCoilLog?.order_entry_id}`,
@@ -112,7 +113,7 @@ export default function Index({
 			await updateData.mutateAsync({
 				url: `/zipper/tape-coil-to-dyeing/${updatedData?.uuid}`,
 				updatedData: updatedData,
-				isOnCloseNeeded: false,
+				onClose
 			});
 			// console.log('Form data', updatedData);
 
@@ -153,7 +154,7 @@ export default function Index({
 			</FormField>
 			<Input
 				label='trx_quantity'
-				// sub_label={`Max: ${MAX_QUANTITY}, Max For This Order: ${getMaxQuantity()}`}
+				sub_label={`Max: ${Number(getValues('max_trf_qty'))}`} //  Max For This Order: ${getMaxQuantity()}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

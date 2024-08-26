@@ -14,8 +14,10 @@ export default function Index() {
 		[batch_uuid]
 	);
 
+	console.log(batch);
+
 	useEffect(() => {
-		document.title = 'Planning SNO Details';
+		document.title = 'Planning Batch Details';
 	}, []);
 
 	// if (!planningSNO) return <Navigate to='/not-found' />;

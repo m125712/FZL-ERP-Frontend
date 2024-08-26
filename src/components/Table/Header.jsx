@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { DebouncedInput, ExportCSV } from "./components";
-import { DateRange } from "./components/DateRange";
-import { FilterColumn, FullFilter } from "./components/Filter";
-import { PdfButton, Title } from "./ui";
+import { useState } from 'react';
+import { DebouncedInput, ExportCSV } from './components';
+import DateRange from './components/DateRange';
+import { FilterColumn, FullFilter } from './components/Filter';
+import { PdfButton, Title } from './ui';
 
 export default function Index(props) {
 	const [open, setOpen] = useState((prev) => ({
@@ -11,13 +11,12 @@ export default function Index(props) {
 
 	const showDateRange = props
 		.getAllLeafColumns()
-		.some((column) => column.id === "created_at");
+		.some((column) => column.id === 'created_at');
 
 	return (
 		<div
 			key={props.title}
-			className="my-2 flex flex-col items-start justify-between"
-		>
+			className='my-2 flex flex-col items-start justify-between'>
 			<Title
 				{...{
 					title: props.title,
@@ -27,9 +26,9 @@ export default function Index(props) {
 					indicatorValue: props.indicatorValue,
 				}}
 			/>
-			<div className="flex flex-col items-start justify-between gap-2 md:w-full md:flex-row md:items-center">
-				<div className="flex basis-2/3 flex-col items-baseline space-x-2 space-y-2 md:space-y-0">
-					<span className="flex flex-wrap items-center justify-start space-x-2 space-y-2">
+			<div className='flex flex-col items-start justify-between gap-2 md:w-full md:flex-row md:items-center'>
+				<div className='flex basis-2/3 flex-col items-baseline space-x-2 space-y-2 md:space-y-0'>
+					<span className='flex flex-wrap items-center justify-start space-x-2 space-y-2'>
 						<FullFilter
 							{...{
 								getHeaderGroups: props.getHeaderGroups,
@@ -65,10 +64,10 @@ export default function Index(props) {
 					</span>
 				</div>
 				{props.showSearchBox && (
-					<div className="flex w-60 basis-1/3">
+					<div className='flex w-60 basis-1/3'>
 						<DebouncedInput
-							placeholder="Search..."
-							value={props.globalFilter ?? ""}
+							placeholder='Search...'
+							value={props.globalFilter ?? ''}
 							onChange={(value) =>
 								props.setGlobalFilter(String(value))
 							}

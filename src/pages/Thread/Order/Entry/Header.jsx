@@ -219,6 +219,9 @@ export default function Header({
 							render={({ field: { onChange } }) => {
 								return (
 									<DatePicker
+										className='h-12 w-full rounded-md border bg-primary/5 px-2 text-primary'
+										placeholderText='Select Delivery Date'
+										dateFormat='dd/MM/yyyy'
 										selected={getValues('delivery_date')}
 										onChange={(date) => onChange(date)}
 									/>

@@ -1560,12 +1560,9 @@ export const DYEING_TRANSFER_SCHEMA = {
 			order_description_uuid: UUID_FK,
 			colors: yup.array().of(yup.string()).nullable(),
 			section: STRING_REQUIRED,
-			trx_quantity: NUMBER.nullable()
-				.transform((value, originalValue) =>
-					String(originalValue).trim() === '' ? null : value
-				)
-				, // Transforms empty strings to null 
-
+			trx_quantity: NUMBER.nullable().transform((value, originalValue) =>
+				String(originalValue).trim() === '' ? null : value
+			), // Transforms empty strings to null
 			remarks: STRING.nullable(),
 		})
 	),
@@ -1581,6 +1578,24 @@ export const DYEING_TRANSFER_NULL = {
 			remarks: '',
 		},
 	],
+};
+
+export const UPDATE_DYEING_TRANSFER_SCHEMA = {
+	order_description_uuid: UUID_FK,
+	colors: yup.array().of(yup.string()).nullable(),
+	section: STRING_REQUIRED,
+	trx_quantity: NUMBER_REQUIRED.transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? null : value
+	), // Transforms empty strings to null
+	remarks: STRING.nullable(),
+};
+
+export const UPDATE_DYEING_TRANSFER_NULL = {
+	order_description_uuid: null,
+	colors: [],
+	section: '',
+	trx_quantity: 0,
+	remarks: '',
 };
 
 // *Slider/Die Casting --> (STOCK)*//

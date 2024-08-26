@@ -63,7 +63,7 @@ export const useDyeingBatchByUUID = (uuid) =>
 		queryKey: dyeingQK.batchByUUID(uuid),
 		url: `/zipper/batch/${uuid}`,
 	});
-	
+
 //* Order Against RM Log
 export const useOrderAgainstDyeingRMLog = () =>
 	createGlobalState({
@@ -74,4 +74,16 @@ export const useOrderAgainstDyeingRMLogByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: dyeingQK.orderAgainstDyeingRMLogByUUID(uuid),
 		url: `/zipper/material-trx-against-order/by/dying_and_iron${uuid}`,
+	});
+
+//Dyeing Transfer
+export const useDyeingTransfer = () =>
+	createGlobalState({
+		queryKey: dyeingQK.dyeingTransfer(),
+		url: '/zipper/dyed-tape-transaction',
+	});
+export const useDyeingTransferByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: dyeingQK.dyeingTransferByUUID(uuid),
+		url: `/zipper/dyed-tape-transaction${uuid}`,
 	});

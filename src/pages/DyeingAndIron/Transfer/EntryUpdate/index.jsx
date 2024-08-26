@@ -1,15 +1,16 @@
 import { DeleteModal } from '@/components/Modal';
-import { useFetchForRhfResetForOrder, useRHF, useFetch } from '@/hooks';
+import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
+import { useDyeingTransfer } from '@/state/Dyeing';
 import { useOrderDescription, useOrderDetails } from '@/state/Order';
 import {
 	ActionButtons,
 	DynamicField,
+	FormField,
 	Input,
 	JoinInput,
-	Textarea,
 	ReactSelect,
-	FormField,
+	Textarea,
 } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
@@ -19,15 +20,15 @@ import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
 import {
 	Navigate,
+	useLocation,
 	useNavigate,
 	useParams,
-	useLocation,
 } from 'react-router-dom';
 
 export default function Index({ sfg }) {
-	const { url, updateData, postData, deleteData } = useOrderDescription();
-	const { invalidateQuery: OrderDetailsInvalidate } = useOrderDetails();
-	const { order_number, order_description_uuid, coil_uuid } = useParams();
+	const { url, updateData, postData, deleteData } = useDyeingTransfer();
+	const { uuid, order_number, order_description_uuid, coil_uuid } =
+		useParams();
 	const urlPath = useLocation();
 
 	const { user } = useAuth();
@@ -56,7 +57,7 @@ export default function Index({ sfg }) {
 
 	if (isUpdate)
 		useFetchForRhfResetForOrder(
-			`/zipper/order/details/single-order/by/${order_description_uuid}/UUID`,
+			`/zipper/dyed-tape-transaction${uuid}/UUID`,
 			order_description_uuid,
 			reset
 		);
@@ -175,8 +176,6 @@ export default function Index({ sfg }) {
 			created_at,
 		}));
 
-
-
 		//* Post new entry */ //
 		let entryData_promises = [
 			...entryData.map(
@@ -239,11 +238,12 @@ export default function Index({ sfg }) {
 
 	const [colors, setColors] = useState([]);
 	const [colorsSelect, setColorsSelect] = useState([]);
-	const { value: order_id } = useFetch( 
+	const { value: order_id } = useFetch(
 		`/other/order/description/value/label?tape_received=true`
 	); // * get order id and set them as value & lables for select options
 
-	const getTransferArea = [ // * get transfer area and set them as value & lables for transfer select options
+	const getTransferArea = [
+		// * get transfer area and set them as value & lables for transfer select options
 		{ label: 'Nylon Plastic Finishing', value: 'nylon_plastic_finishing' },
 		{
 			label: 'Nylon Metallic Finishing',
@@ -253,7 +253,8 @@ export default function Index({ sfg }) {
 		{ label: 'Metal Teeth Molding', value: 'metal_teeth_molding' },
 	];
 
-	const getColors = (colors) => { // * get colors and set them as value & lables for select options
+	const getColors = (colors) => {
+		// * get colors and set them as value & lables for select options
 		setColors([]);
 		colors.map((item) => {
 			setColors((prev) => [...prev, { label: item, value: item }]);

@@ -14,9 +14,13 @@ const CoilProd = lazy(() => import('@/pages/Common/Coil/SFG'));
 const CoilLog = lazy(() => import('@/pages/Common/Coil/Log'));
 
 // * Coil Entry to dyeing
-const CoilEntryToDyeing = lazy(() => import('@/pages/Common/Coil/SFG/EntryToDyeing'));
+const CoilEntryToDyeing = lazy(
+	() => import('@/pages/Common/Coil/SFG/EntryToDyeing')
+);
 // * Tape Entry to dyeing
-const TapeEntryToDyeing = lazy(() => import('@/pages/Common/Coil/SFG/EntryToDyeing')); // * sending to the same page since the logic is the same
+const TapeEntryToDyeing = lazy(
+	() => import('@/pages/Common/Coil/SFG/EntryToDyeing')
+); // * sending to the same page since the logic is the same
 export const CommonRoutes = [
 	{
 		id: 21,
@@ -69,8 +73,14 @@ export const CommonRoutes = [
 		element: TapeEntryToDyeing,
 		type: ['common', 'coil'],
 		hidden: true,
-		page_name: 'common__coil_sfg_entry_to_dyeing',
-		actions: ['read', 'click_production', 'click_to_dyeing', 'create', 'update'],
+		page_name: 'common__tape_sfg_entry_to_dyeing',
+		actions: [
+			'read',
+			'click_production',
+			'click_to_dyeing',
+			'create',
+			'update',
+		],
 	},
 	{
 		id: 24,
@@ -98,7 +108,13 @@ export const CommonRoutes = [
 		type: ['common', 'coil'],
 		hidden: true,
 		page_name: 'common__coil_sfg_entry_to_dyeing',
-		actions: ['read', 'click_production', 'click_to_dyeing', 'create', 'update'],
+		actions: [
+			'read',
+			'click_production',
+			'click_to_dyeing',
+			'create',
+			'update',
+		],
 	},
 	{
 		id: 26,

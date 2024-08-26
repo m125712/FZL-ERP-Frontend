@@ -33,9 +33,7 @@ const DyeingPlanningHeadOfficeDetails = lazy(
 );
 
 // * Batch
-const DyeingBatch = lazy(
-	() => import('@/pages/DyeingAndIron/Batch')
-);
+const DyeingBatch = lazy(() => import('@/pages/DyeingAndIron/Batch'));
 const DyeingBatchEntry = lazy(
 	() => import('@/pages/DyeingAndIron/Batch/Entry')
 );
@@ -46,7 +44,15 @@ const DyeingBatchDetails = lazy(
 // * Batch Production
 const DyeingBatchProduction = lazy(
 	() => import('@/pages/DyeingAndIron/Batch/Production')
-)
+);
+
+// * Batch Transfer
+const DyeingTransfer = lazy(() => import('@/pages/DyeingAndIron/Transfer'));
+
+// * Batch Transfer Entry
+const DyeingTransferEntry = lazy(
+	() => import('@/pages/DyeingAndIron/Transfer/EntryUpdate')
+);
 
 export const DyeingAndIronRoutes = [
 	{
@@ -235,5 +241,29 @@ export const DyeingAndIronRoutes = [
 		type: 'dyeing',
 		page_name: 'dyeing__batch_production',
 		hidden: true,
-		actions: ['create', 'read', 'update'],}
+		actions: ['create', 'read', 'update'],
+	},
+
+	// * Batch Transfer
+	{
+		id: 293,
+		name: 'Dyeing Transfer',
+		path: '/dyeing-and-iron/transfer',
+		element: DyeingTransfer,
+		type: 'dyeing',
+		page_name: 'dyeing__transfer',
+		actions: ['create', 'read', 'update'],
+	},
+
+	// * Batch Transfer Entry
+	{
+		id: 294,
+		name: 'Dyeing Transfer Entry',
+		path: '/dyeing-and-iron/transfer/entry',
+		element: DyeingTransferEntry,
+		type: 'dyeing',
+		hidden: true,
+		page_name: 'dyeing__transfer_entry',
+		actions: ['create', 'read', 'update'],
+	},
 ];

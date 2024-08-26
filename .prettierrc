@@ -20,5 +20,6 @@
 	"embeddedLanguageFormatting": "auto",
 	"vueIndentScriptAndStyle": true,
 	"plugins": ["prettier-plugin-tailwindcss"],
-	"tailwindAttributes": ["clsx", "className", "cx", "tw", "twc", "cn"]
+	"tailwindAttributes": ["clsx", "className", "cx", "tw", "twc", "cn"],
+	"tailwindFunctions": ["clsx", "className", "cx", "tw", "twc", "cn"]
 }

@@ -107,7 +107,7 @@ export default function Index() {
 			company_price: 0,
 			party_price: 0,
 			swatch_status: '',
-			swatch_approval_date: '',
+			swatch_approval_date: null,
 			remarks: '',
 		});
 	};
@@ -174,7 +174,7 @@ export default function Index() {
 
 			return;
 		}
-
+		//console.log(data);
 		// Add new item
 		const new_order_info_uuid = nanoid();
 		const created_at = GetDateTime();
@@ -206,8 +206,9 @@ export default function Index() {
 			uuid: nanoid(),
 			created_at,
 			created_by,
+			updated_at: null,
 		}));
-
+		console.log(order_info_entries);
 		const order_info_entries_promise = [
 			...order_info_entries.map(
 				async (item) =>

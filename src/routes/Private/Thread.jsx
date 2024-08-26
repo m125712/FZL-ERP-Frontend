@@ -9,6 +9,7 @@ const OrderInfo = lazy(() => import('@pages/Thread/Order'));
 const IndOrderInfo = lazy(() => import('@pages/Thread/Order/Details'));
 const OrderInfoEntry = lazy(() => import('@pages/Thread/Order/Entry'));
 const Machine = lazy(() => import('@pages/Thread/Machine'));
+const Swatch = lazy(() => import('@pages/Thread/Swatch'));
 
 export const ThreadRoutes = [
 	{
@@ -68,5 +69,14 @@ export const ThreadRoutes = [
 		type: 'thread',
 		page_name: 'thread__machine',
 		actions: ['create', 'read', 'update', 'delete'],
+	},
+	{
+		id: 283,
+		name: 'Swatch',
+		path: '/thread/swatch',
+		element: Swatch,
+		type: 'thread',
+		page_name: 'thread__swatch',
+		actions: ['read', 'update'],
 	},
 ];

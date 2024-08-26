@@ -614,6 +614,10 @@ export const threadQK = {
 	//Order-info-entry
 	orderInfoEntry: () => [...threadQK.all(), 'order-info-entry'],
 	orderInfoEntryByUUID: (uuid) => [...threadQK.orderInfoEntry(), uuid],
+
+	//Swatch
+	swatch: () => [...threadQK.all(), 'swatch'],
+	swatchByUUID: (uuid) => [...threadQK.swatch(), uuid],
 };
 
 //* OTHER QUERY KEYS

@@ -1425,7 +1425,7 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 			uuid: null,
 			order_info_uuid: null,
 			po: '',
-			shape_recipe_uuid: null,
+			shade_recipe_uuid: null,
 			style: '',
 			color: '',
 			count_length_uuid: null,

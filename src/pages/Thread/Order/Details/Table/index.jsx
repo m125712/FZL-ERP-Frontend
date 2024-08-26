@@ -8,12 +8,7 @@ export default function Index({ order_info_entry }) {
 
 	const columns = useMemo(
 		() => [
-			// {
-			// 	accessorKey: 'lab_ref',
-			// 	header: 'Lab Ref',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
+
 			{
 				accessorKey: 'po',
 				header: 'PO',
@@ -62,18 +57,6 @@ export default function Index({ order_info_entry }) {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'swatch_status',
-			// 	header: 'Swatch Status',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'swatch_approval_date',
-			// 	header: 'Swatch Approval Date',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => <DateTime date={info.getValue()} />,
-			// },
 			{
 				accessorKey: 'created_at',
 				header: 'Created',

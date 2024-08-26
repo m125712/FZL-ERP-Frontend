@@ -153,9 +153,9 @@ export default function Index() {
 							swatch_approval_date:
 								item.shade_recipe_uuid === null
 									? null
-									: swatch_approval_date === null
+									: item.swatch_approval_date === null
 										? GetDateTime()
-										: swatch_approval_date,
+										: item.swatch_approval_date,
 						};
 						return await updateData.mutateAsync({
 							url: `${threadOrderEntryUrl}/${item.uuid}`,

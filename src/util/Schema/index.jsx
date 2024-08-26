@@ -1398,6 +1398,7 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 			quantity: NUMBER_REQUIRED,
 			company_price: NUMBER_DOUBLE_REQUIRED,
 			party_price: NUMBER_DOUBLE_REQUIRED,
+			swatch_approval_date: yup.date().nullable(),
 			remarks: STRING.nullable(),
 		})
 	),

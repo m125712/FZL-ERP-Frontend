@@ -2,7 +2,7 @@ import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetch } from '@/hooks';
 import { useDyeingThreadBatch } from '@/state/Dyeing';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
 		useDyeingThreadBatch();
 	const info = new PageInfo('Thread Batch', url, 'dyeing__batch');
+	const { value: machine } = useFetch('/other/machine/value/label');
 	const haveAccess = useAccess('dyeing__batch');
 	const navigate = useNavigate();
 
@@ -49,6 +50,28 @@ export default function Index() {
 							}>
 							Add Production
 						</button>
+					);
+				},
+			},
+			{
+				accessorKey: 'machine_name',
+				header: 'Machine',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { machine_uuid } = info.row.original;
+
+					return (
+						<ReactSelect
+							key={machine_uuid}
+							placeholder='Select machine uuid'
+							options={machine ?? []}
+							value={machine?.find(
+								(item) => item.value == machine_uuid
+							)}
+							filterOption={null}
+							onChange={(e) => handleMachine(e, info.row.index)}
+							menuPortalTarget={document.body}
+						/>
 					);
 				},
 			},
@@ -126,6 +149,14 @@ export default function Index() {
 		],
 		[data]
 	);
+
+	const handleMachine = async (e, idx) => {
+		await updateData.mutateAsync({
+			url: `${url}/${data[idx]?.uuid}`,
+			updatedData: { machine_uuid: e.value },
+			isOnCloseNeeded: false,
+		});
+	};
 	//Yarn
 
 	const [yarn, setYarn] = useState({

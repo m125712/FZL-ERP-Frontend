@@ -1,6 +1,7 @@
 import { DeleteModal, ProceedModal } from '@/components/Modal';
 import {
 	useFetchForRhfResetForOrder,
+	useFetchForRhfResetForBatchProduct,
 	usePostFunc,
 	useRHF,
 	useFetch,
@@ -17,7 +18,10 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { DYEING_BATCH_SCHEMA, DYEING_BATCH_NULL } from '@util/Schema';
+import {
+	DYEING_BATCH_PRODUCTION_SCHEMA,
+	DYEING_BATCH_PRODUCTION_NULL,
+} from '@util/Schema';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useDyeingBatch } from '@/state/Dyeing';
@@ -28,7 +32,7 @@ import Header from './Header';
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
 		useDyeingBatch();
-	const { batch_uuid } = useParams();
+	const { batch_uuid, batch_prod_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const [isAllChecked, setIsAllChecked] = useState(false);
@@ -36,8 +40,6 @@ export default function Index() {
 	const isUpdate = batch_uuid !== undefined;
 	const [orderInfoIds, setOrderInfoIds] = useState({});
 	const [proceed, setProceed] = useState(false);
-	const [batchData, setBatchData] = useState(null);
-	const [batchEntry, setBatchEntry] = useState(null);
 
 	const {
 		register,
@@ -50,7 +52,7 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
-	} = useRHF(DYEING_BATCH_SCHEMA, DYEING_BATCH_NULL);
+	} = useRHF(DYEING_BATCH_PRODUCTION_SCHEMA, DYEING_BATCH_PRODUCTION_NULL);
 
 	// batch_entry
 	const { fields: BatchEntryField } = useFieldArray({
@@ -63,7 +65,7 @@ export default function Index() {
 		itemName: null,
 	});
 
-	const onClose = () => reset(DYEING_BATCH_NULL);
+	const onClose = () => reset(DYEING_BATCH_PRODUCTION_NULL);
 
 	// * Fetch initial data
 	isUpdate
@@ -74,8 +76,18 @@ export default function Index() {
 			)
 		: useFetchForRhfResetForPlanning(`/zipper/order-batch`, reset);
 
+	// * Fetch initial data of batch for batch production entry
+	if (batch_prod_uuid) {
+		useFetchForRhfResetForBatchProduct(
+			// todo: fix the data to get given_production_qty for form
+			`/zipper/batch-details/${batch_prod_uuid}`,
+			batch_prod_uuid,
+			reset
+		);
+	}
 	// const { value } = useFetch('/zipper/order-batch');
 
+	
 	// TODO: Not sure if this is needed. need further checking
 	let order_info_ids;
 	// useEffect(() => {
@@ -90,151 +102,126 @@ export default function Index() {
 	// TODO: Submit
 	const onSubmit = async (data) => {
 		// * Update
-		if (isUpdate) {
-			const batch_data_updated = {
-				...data,
-				updated_at: GetDateTime(),
-			};
+		// if (isUpdate) {
+		// 	const batch_data_updated = {
+		// 		...data,
+		// 		updated_at: GetDateTime(),
+		// 	};
 
-			const batch_entry_updated = [...data?.batch_entry]
-				.filter((item) => item.is_checked)
-				.map((item) => ({
-					...item,
-					uuid: item.batch_entry_uuid,
-					remarks: item.batch_remarks,
-					updated_at: GetDateTime(),
-				}));
+		// 	const batch_entry_updated = [...data?.batch_entry]
+		// 		.filter((item) => item.is_checked)
+		// 		.map((item) => ({
+		// 			...item,
+		// 			uuid: item.batch_entry_uuid,
+		// 			remarks: item.batch_remarks,
+		// 			updated_at: GetDateTime(),
+		// 		}));
 
-			if (batch_entry_updated.length === 0) {
-				alert('Select at least one item to proceed.');
-			} else {
-				await updateData.mutateAsync({
-					url: `/zipper/batch/${batch_data_updated?.uuid}`,
-					updatedData: batch_data_updated,
-					isOnCloseNeeded: false,
-				});
+		// 	if (batch_entry_updated.length === 0) {
+		// 		alert('Select at least one item to proceed.');
+		// 	} else {
+		// 		await updateData.mutateAsync({
+		// 			url: `/zipper/batch/${batch_data_updated?.uuid}`,
+		// 			updatedData: batch_data_updated,
+		// 			isOnCloseNeeded: false,
+		// 		});
 
-				let batch_entry_updated_promises = [
-					...batch_entry_updated.map(async (item) => {
-						await updateData.mutateAsync({
-							url: `/zipper/batch-entry/${item.uuid}`,
-							updatedData: item,
-							isOnCloseNeeded: false,
-						});
-					}),
-				];
+		// 		let batch_entry_updated_promises = [
+		// 			...batch_entry_updated.map(async (item) => {
+		// 				await updateData.mutateAsync({
+		// 					url: `/zipper/batch-entry/${item.uuid}`,
+		// 					updatedData: item,
+		// 					isOnCloseNeeded: false,
+		// 				});
+		// 			}),
+		// 		];
 
-				await Promise.all(batch_entry_updated_promises)
-					.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
-					.then(
-						navigate(`/dyeing-and-iron/batch/details/${batch_uuid}`)
-					)
-					.catch((err) => console.log(err));
-			}
+		// 		await Promise.all(batch_entry_updated_promises)
+		// 			.then(() => reset(Object.assign({}, DYEING_BATCH_PRODUCTION_NULL)))
+		// 			.then(
+		// 				navigate(`/dyeing-and-iron/batch/details/${batch_uuid}`)
+		// 			)
+		// 			.catch((err) => console.log(err));
+		// 	}
 
-			// navigate(`/dyeing-and-iron/planning-sno/details/${weeks}`);
+		// 	// navigate(`/dyeing-and-iron/planning-sno/details/${weeks}`);
 
-			return;
-		}
+		// 	return;
+		// }
 
 		// * ADD data
 		const created_at = GetDateTime();
-		const batch_data = {
-			...data,
-			uuid: nanoid(),
-			created_at,
-			created_by: user.uuid,
-		};
 
 		const batch_entry = [...data?.batch_entry]
 			.filter((item) => item.is_checked)
 			.map((item) => ({
-				...item,
 				uuid: nanoid(),
-
-				batch_uuid: batch_data.uuid,
-				remarks: item.batch_remarks,
+				batch_production_uuid: item.batch_production_uuid,
+				batch_entry_uuid: item.batch_entry_uuid,
+				production_quantity: item.production_quantity,
+				production_quantity_in_kg: item.production_quantity_in_kg,
+				created_by: user.uuid,
 				created_at,
+				remarks: item.batch_production_remarks,
 			}));
 
-		setBatchData(batch_data); // * use for modal
-		setBatchEntry(batch_entry); // * use for modal
+		
+
+		// * update the batch status
+		await updateData.mutateAsync({
+			url: `/zipper/batch/${batch_prod_uuid}`,
+			updatedData: {
+				batch_status: data.batch_status,
+				updated_at: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
 
 		if (batch_entry.length === 0) {
 			alert('Select at least one item to proceed.');
 		} else {
-			if (
-				// * check if all colors are same
-				!batch_entry.every(
-					(item) => item.color === batch_entry[0].color
-				)
-			) {
-				window['proceed_modal'].showModal(); // * if not then show modal
-			} else {
-				await postData.mutateAsync({
-					url,
-					newData: batch_data,
-					isOnCloseNeeded: false,
-				});
-
-				let promises = [
-					...batch_entry.map(
-						async (item) =>
-							await postData.mutateAsync({
-								url: '/zipper/batch-entry',
-								newData: item,
-								isOnCloseNeeded: false,
-							})
-					),
-				];
-
-				await Promise.all(promises)
-					.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
-					.then(
-						navigate(
-							`/dyeing-and-iron/batch/details/${batch_data.uuid}`
-						)
-					)
-					.catch((err) => console.log(err));
-
-				return;
-			}
-		}
-		return;
-	};
-
-	// * useEffect for modal procees submit
-	useEffect(() => {
-		const proceedSubmit = async () => {
-			await postData.mutateAsync({
-				url,
-				newData: batchData,
-				isOnCloseNeeded: false,
-			});
-
 			let promises = [
-				...batchEntry.map(
-					async (item) =>
+				...batch_entry.map(async (item) => {
+					if (item.batch_production_uuid) {
+						await updateData.mutateAsync({
+							url: `/zipper/batch-production/${item.batch_production_uuid}`,
+							updatedData: {
+								batch_production_uuid:
+									item.batch_production_uuid,
+								batch_entry_uuid: item.batch_entry_uuid,
+								production_quantity: item.production_quantity,
+								production_quantity_in_kg:
+									item.production_quantity_in_kg,
+								remarks: item.batch_production_remarks,
+								updated_at: GetDateTime(),
+							},
+							isOnCloseNeeded: false,
+						});
+					} else {
 						await postData.mutateAsync({
-							url: '/zipper/batch-entry',
+							url: '/zipper/batch-production',
 							newData: item,
 							isOnCloseNeeded: false,
-						})
-				),
+						});
+					}
+				}),
 			];
 
 			await Promise.all(promises)
-				.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
+				.then(() =>
+					reset(Object.assign({}, DYEING_BATCH_PRODUCTION_NULL))
+				)
 				.then(
-					navigate(`/dyeing-and-iron/batch/details/${batchData.uuid}`)
+					navigate(
+						`/dyeing-and-iron/batch/details/${batch_prod_uuid}`
+					)
 				)
 				.catch((err) => console.log(err));
 
 			return;
-		};
-
-		if (proceed) proceedSubmit();
-	}, [proceed]);
+		}
+		return;
+	};
 
 	// Check if order_number is valid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
@@ -298,6 +285,11 @@ export default function Index() {
 				enableSorting: false,
 				cell: (info) => (
 					<CheckBoxWithoutLabel
+						className={
+							info.row.original.batch_production_uuid
+								? 'bg-gray-400'
+								: 'bg-white'
+						}
 						label={`batch_entry[${info.row.index}].is_checked`}
 						checked={watch(
 							`batch_entry[${info.row.index}].is_checked`
@@ -349,24 +341,52 @@ export default function Index() {
 				enableSorting: true,
 				cell: (info) => Number(info.getValue()),
 			},
+			// {
+			// 	accessorKey: 'balance_quantity',
+			// 	header: 'Balanced Batch',
+			// 	enableColumnFilter: true,
+			// 	enableSorting: true,
+			// 	cell: (info) => Number(info.getValue()),
+			// },
 			{
-				accessorKey: 'balance_quantity',
-				header: 'Balanced Batch',
+				accessorKey: 'quantity',
+				header: 'Batch QTY',
 				enableColumnFilter: true,
 				enableSorting: true,
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'batch_qty',
-				header: 'Batch QTY',
+				accessorKey: 'production_quantity',
+				header: 'Production QTY',
 				enableColumnFilter: false,
 				enableSorting: false,
 				cell: (info) => {
 					const idx = info.row.index;
-					const dynamicerror = errors?.batch_entry?.[idx]?.quantity;
+					const dynamicerror =
+						errors?.batch_entry?.[idx]?.production_quantity;
 					return (
 						<Input
-							label={`batch_entry[${info.row.index}].quantity`}
+							label={`batch_entry[${info.row.index}].production_quantity`}
+							is_title_needed='false'
+							height='h-8'
+							dynamicerror={dynamicerror}
+							{...{ register, errors }}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'production_quantity_in_kg',
+				header: 'Production QTY (KG)',
+				enableColumnFilter: false,
+				enableSorting: false,
+				cell: (info) => {
+					const idx = info.row.index;
+					const dynamicerror =
+						errors?.batch_entry?.[idx]?.production_quantity_in_kg;
+					return (
+						<Input
+							label={`batch_entry[${info.row.index}].production_quantity_in_kg`}
 							is_title_needed='false'
 							height='h-8'
 							dynamicerror={dynamicerror}
@@ -430,7 +450,6 @@ export default function Index() {
 
 			<Suspense>
 				<ProceedModal
-					text='Color'
 					modalId={'proceed_modal'}
 					setProceed={setProceed}
 				/>

@@ -54,6 +54,21 @@ const DyeingTransferEntry = lazy(
 	() => import('@/pages/DyeingAndIron/Transfer/EntryUpdate')
 );
 
+// * Batch Thread
+const DyeingThreadBatch = lazy(
+	() => import('@/pages/DyeingAndIron/ThreadBatch')
+);
+
+// * Batch Thread Entry
+const DyeingThreadBatchEntry = lazy(
+	() => import('@/pages/DyeingAndIron/ThreadBatch/Entry')
+);
+
+// * Batch Thread Details
+const DyeingThreadBatchDetails = lazy(
+	() => import('@/pages/DyeingAndIron/ThreadBatch/Details')
+);
+
 export const DyeingAndIronRoutes = [
 	{
 		id: 28,
@@ -264,6 +279,53 @@ export const DyeingAndIronRoutes = [
 		type: 'dyeing',
 		hidden: true,
 		page_name: 'dyeing__transfer_entry',
+		actions: ['create', 'read', 'update'],
+	},
+
+	// * Batch Thread
+	{
+		id: 295,
+		name: 'Thread Batch',
+		path: '/dyeing-and-iron/thread-batch',
+		element: DyeingThreadBatch,
+		type: 'dyeing',
+		page_name: 'dyeing__thread_batch',
+		actions: ['create', 'read', 'update'],
+	},
+
+	// * Batch Thread Entry
+	{
+		id: 296,	
+		name: 'Thread Batch Entry',
+		path: '/dyeing-and-iron/thread-batch/entry',
+		element: DyeingThreadBatchEntry,
+		type: 'dyeing',
+		hidden: true,
+		page_name: 'dyeing__thread_batch_entry',
+		actions: ['create', 'read', 'update'],
+	},
+
+	// * Batch Thread Details
+	{
+		id: 297,
+		name: 'Thread Batch Details',
+		path: '/dyeing-and-iron/thread-batch/details/:batch_uuid',
+		element: DyeingThreadBatchDetails,
+		type: 'dyeing',
+		hidden: true,
+		page_name: 'dyeing__thread_batch_details',
+		actions: ['read'],
+	},
+
+	// * Batch Thread Update
+	{
+		id: 298,
+		name: 'Thread Batch Update',
+		path: '/dyeing-and-iron/thread-batch/update/:batch_uuid',
+		element: DyeingThreadBatchEntry,
+		type: 'dyeing',
+		hidden: true,
+		page_name: 'dyeing__thread_batch_entry_update',
 		actions: ['create', 'read', 'update'],
 	},
 	{

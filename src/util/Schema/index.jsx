@@ -1506,13 +1506,38 @@ export const DYEING_BATCH_SCHEMA = {
 				.transform((value, originalValue) =>
 					String(originalValue).trim() === '' ? null : value
 				) // Transforms empty strings to null
-				.max(yup.ref('order_quantity'), 'Beyond Max Quantity'),
+				.max(yup.ref('balance_quantity'), 'Beyond Max Quantity'),
 			batch_remarks: STRING.nullable(),
 		})
 	),
 };
 
 export const DYEING_BATCH_NULL = {
+	remarks: '',
+	batch_entry: [
+		{
+			quantity: null,
+			batch_remarks: '',
+		},
+	],
+};
+
+// * Dyeing Thread Batch schema*//
+
+export const DYEING_THREAD_BATCH_SCHEMA = {
+	remarks: STRING.nullable(),
+	batch_entry: yup.array().of(
+		yup.object().shape({
+			quantity: NUMBER.nullable() // Allows the field to be null
+				.transform((value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+				),
+			batch_remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const DYEING_THREAD_BATCH_NULL = {
 	remarks: '',
 	batch_entry: [
 		{

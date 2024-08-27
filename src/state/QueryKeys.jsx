@@ -311,6 +311,10 @@ export const dyeingQK = {
 	batch: () => [...dyeingQK.all(), 'batch'],
 	batchByUUID: (uuid) => [...dyeingQK.batch(), uuid],
 
+	// * Thread Batch
+	threadBatch: () => [...dyeingQK.all(), 'thread-batch'],
+	threadBatchByUUID: (uuid) => [...dyeingQK.threadBatch(), uuid],
+
 	// * Order Against dyeing RM Log * //
 	orderAgainstDyeingRMLog: () => [
 		...dyeingQK.all(),

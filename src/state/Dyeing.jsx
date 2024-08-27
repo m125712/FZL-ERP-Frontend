@@ -63,7 +63,20 @@ export const useDyeingBatchByUUID = (uuid) =>
 		queryKey: dyeingQK.batchByUUID(uuid),
 		url: `/zipper/batch/${uuid}`,
 	});
-	
+
+// * Thread Batch
+export const useDyeingThreadBatch = () =>
+	createGlobalState({
+		queryKey: dyeingQK.threadBatch(),
+		url: '/thread/batch',
+	});
+
+export const useDyeingThreadBatchByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: dyeingQK.threadBatchByUUID(uuid),
+		url: `/thread/batch/${uuid}`,
+	});
+
 //* Order Against RM Log
 export const useOrderAgainstDyeingRMLog = () =>
 	createGlobalState({

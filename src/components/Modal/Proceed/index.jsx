@@ -1,19 +1,17 @@
 import { ProceedFooter } from '../ui';
 
-const Body = ({ item }) => (
+const Body = ({ text }) => (
 	<p className='text-xl font-light text-black'>
-		Not all items have the <span className='font-semibold'> same color</span>. Do you want to proceed?
+		Not all items have the{' '}
+		<span className='font-semibold'> same {text ? text : 'color'}</span>. Do
+		you want to proceed?
 	</p>
 );
 
-export default function Index({
-	modalId = '',
-	setProceed,
-}) {
+export default function Index({ modalId = '', setProceed, text = '' }) {
 	const handelClose = () => {
 		window[modalId].close();
 	};
-
 
 	const handelCancelClick = () => {
 		handelClose();
@@ -30,7 +28,7 @@ export default function Index({
 				noValidate
 				method='dialog'
 				className='modal-box bg-gray-50 text-error'>
-				<Body />
+				<Body text={text} />
 				<ProceedFooter {...{ handelCancelClick }} />
 			</form>
 		</dialog>

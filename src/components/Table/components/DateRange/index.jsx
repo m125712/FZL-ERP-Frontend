@@ -85,7 +85,7 @@ export default function DateRange({ getHeaderGroups }) {
 
 	return (
 		<DatePicker
-			className='input input-xs input-bordered input-primary flex w-auto items-center justify-between rounded-full font-semibold text-primary transition-all duration-100 ease-in-out'
+			className='input input-sm input-filter flex w-auto items-center justify-between rounded bg-transparent font-semibold transition-all duration-100 ease-in-out'
 			selected={endDate}
 			minDate={oldStartDate}
 			maxDate={oldEndDate}

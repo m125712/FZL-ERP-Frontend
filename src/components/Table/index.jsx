@@ -146,7 +146,7 @@ function Table({
 			<Suspense>
 				<div
 					className={cn(
-						'overflow-x-auto rounded-md border border-gray-200 shadow-md',
+						'overflow-x-auto rounded-md border-[1px] border-secondary/20',
 						showTitleOnly && 'mb-6',
 						containerClassName
 					)}>
@@ -155,7 +155,7 @@ function Table({
 							{...{ getHeaderGroups, getPreFilteredRowModel }}
 						/>
 
-						<tbody className='divide-y-2 divide-secondary'>
+						<tbody className='divide-y-[1px] divide-secondary/20'>
 							{renderRow(hasAnyRow)}
 							{children}
 						</tbody>

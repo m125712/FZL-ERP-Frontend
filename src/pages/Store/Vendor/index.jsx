@@ -4,7 +4,6 @@ import { useAccess } from '@/hooks';
 import { usePurchaseVendor } from '@/state/Store';
 
 import { EditDelete } from '@/ui';
-import PageContainer from '@/ui/Others/PageContainer';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 
@@ -15,18 +14,6 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } = usePurchaseVendor();
 	const info = new PageInfo('Vendor', url, 'store__vendor');
 	const haveAccess = useAccess('store__vendor');
-
-	const breadcrumbs = [
-		{
-			label: 'Store',
-			href: '/store',
-			isDisabled: true,
-		},
-		{
-			label: 'Vendor',
-			href: '/store/vendor',
-		},
-	];
 
 	const columns = useMemo(
 		() => [
@@ -130,7 +117,7 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<PageContainer title='Vendor Lists' breadcrumbs={breadcrumbs}>
+		<>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}
@@ -161,6 +148,6 @@ export default function Index() {
 					}}
 				/>
 			</Suspense>
-		</PageContainer>
+		</>
 	);
 }

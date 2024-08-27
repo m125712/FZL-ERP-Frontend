@@ -1,21 +1,21 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useFetchFunc } from "@/hooks";
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useFetchFunc } from '@/hooks';
 
-import { DateTime, EditDelete, LinkOnly, UserName } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+import { DateTime, EditDelete, LinkOnly, UserName } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-const AddOrUpdate = lazy(() => import("./AddOrUpdate"));
-const DeleteModal = lazy(() => import("@/components/Modal/Delete"));
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
+const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index({ material_id = null }) {
 	const { SPARE_PARTS_EDIT_ACCESS, SPARE_PARTS_ADD_ACCESS } = useHaveAccess();
 	const info = new PageInfo(
-		"Spare Parts",
+		'Spare Parts',
 		material_id === null
-			? "spare-parts"
-			: "spare-parts/by/material-id/" + material_id
+			? 'spare-parts'
+			: 'spare-parts/by/material-id/' + material_id
 	);
 	const [spareParts, setSpareParts] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -24,39 +24,39 @@ export default function Index({ material_id = null }) {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "material_name",
-				header: "Material",
+				accessorKey: 'material_name',
+				header: 'Material',
 				enableColumnFilter: false,
 				hidden: material_id !== null,
 				cell: (info) => (
 					<LinkOnly
 						title={info.getValue()}
 						id={info.row.original.material_id}
-						uri="/material"
+						uri='/material'
 					/>
 				),
 			},
 			{
-				accessorKey: "quantity",
-				header: "Quantity",
+				accessorKey: 'quantity',
+				header: 'Quantity',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "unit",
-				header: "Unit",
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "user_name",
-				header: "Created By",
+				accessorKey: 'user_name',
+				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { user_name, user_department } = info.row.original;
@@ -69,35 +69,35 @@ export default function Index({ material_id = null }) {
 				},
 			},
 			{
-				accessorKey: "description",
-				header: "Description",
+				accessorKey: 'description',
+				header: 'Description',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "created_at",
-				header: "Created",
-				filterFn: "isWithinRange",
+				accessorKey: 'created_at',
+				header: 'Created',
+				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
 			{
-				accessorKey: "updated_at",
-				header: "Updated",
+				accessorKey: 'updated_at',
+				header: 'Updated',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
 			{
-				accessorKey: "actions",
-				header: "Actions",
+				accessorKey: 'actions',
+				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !SPARE_PARTS_EDIT_ACCESS,
-				width: "w-24",
+				width: 'w-24',
 				cell: (info) => {
 					return (
 						<EditDelete
@@ -147,26 +147,26 @@ export default function Index({ material_id = null }) {
 			...prev,
 			itemId: spareParts[idx].id,
 			itemName: spareParts[idx].material_name
-				.replace(/#/g, "")
-				.replace(/\//g, "-"),
+				.replace(/#/g, '')
+				.replace(/\//g, '-'),
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
 
 	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className=''>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}
 				accessor={SPARE_PARTS_EDIT_ACCESS || SPARE_PARTS_ADD_ACCESS}
 				data={spareParts}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 
 			<Suspense>

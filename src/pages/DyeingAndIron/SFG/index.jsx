@@ -1,20 +1,20 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useAccess, useFetchFunc } from "@/hooks";
-import { LinkWithCopy, Transfer } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useAccess, useFetchFunc } from '@/hooks';
+import { LinkWithCopy, Transfer } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-const Production = lazy(() => import("./Production"));
-const Transaction = lazy(() => import("./Transaction"));
+const Production = lazy(() => import('./Production'));
+const Transaction = lazy(() => import('./Transaction'));
 
 export default function Index() {
 	const info = new PageInfo(
-		"Dyeing SFG Stock",
-		"sfg/by/dying_and_iron_prod",
-		"dyeing__dyeing_and_iron_sfg"
+		'Dyeing SFG Stock',
+		'sfg/by/dying_and_iron_prod',
+		'dyeing__dyeing_and_iron_sfg'
 	);
-	const haveAccess = useAccess("dyeing__dyeing_and_iron_sfg");
+	const haveAccess = useAccess('dyeing__dyeing_and_iron_sfg');
 
 	const [dyeingAndIronProd, setDyeingAndIronProd] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -33,22 +33,22 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "order_number",
-				header: "O/N",
+				accessorKey: 'order_number',
+				header: 'O/N',
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					return (
 						<LinkWithCopy
 							title={info.getValue()}
 							id={order_number}
-							uri="/order/details"
+							uri='/order/details'
 						/>
 					);
 				},
 			},
 			{
-				accessorKey: "item_description",
-				header: "Item Description",
+				accessorKey: 'item_description',
+				header: 'Item Description',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { order_description_uuid, order_number } =
@@ -63,31 +63,31 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: "order_description",
-				header: "Style / Color / Size",
+				accessorKey: 'order_description',
+				header: 'Style / Color / Size',
 				enableColumnFilter: false,
-				width: "w-48",
+				width: 'w-48',
 				cell: (info) => (
-					<span className="capitalize">{info.getValue()}</span>
+					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: "stopper_type_name",
-				header: "Stopper",
+				accessorKey: 'stopper_type_name',
+				header: 'Stopper',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { item_name, stopper_type_name } = info.row.original;
-					if (item_name === "nylon")
+					if (item_name === 'nylon')
 						return (
-							<span className="capitalize">
+							<span className='capitalize'>
 								{stopper_type_name}
 							</span>
 						);
-					return "-";
+					return '-';
 				},
 			},
 			{
-				accessorKey: "dying_and_iron_stock",
+				accessorKey: 'dying_and_iron_stock',
 				header: (
 					<span>
 						Stock <br /> (KG)
@@ -97,12 +97,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "action_production",
-				header: "",
+				accessorKey: 'action_production',
+				header: '',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_production"),
-				width: "w-24",
+				hidden: !haveAccess.includes('click_production'),
+				width: 'w-24',
 				cell: (info) => {
 					const { dying_and_iron_stock } = info.row.original;
 					return (
@@ -115,7 +115,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: "dying_and_iron_prod",
+				accessorKey: 'dying_and_iron_prod',
 				header: (
 					<span>
 						Production <br /> (KG)
@@ -125,12 +125,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "action_transaction",
-				header: "",
+				accessorKey: 'action_transaction',
+				header: '',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_transaction"),
-				width: "w-24",
+				hidden: !haveAccess.includes('click_transaction'),
+				width: 'w-24',
 				cell: (info) => {
 					const { dying_and_iron_prod } = info.row.original;
 					return (
@@ -145,7 +145,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: "total_trx_quantity",
+				accessorKey: 'total_trx_quantity',
 				header: (
 					<span>
 						Total Transaction
@@ -157,8 +157,8 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -173,9 +173,9 @@ export default function Index() {
 		order_entry_id: null,
 		total_trx_quantity: null,
 		order_number: null,
-		order_description: "",
-		item_description: "",
-		item_name: "",
+		order_description: '',
+		item_description: '',
+		item_name: '',
 	});
 
 	const handelProduction = (idx) => {
@@ -184,7 +184,7 @@ export default function Index() {
 			...prev,
 			...selectedProd,
 		}));
-		window["DyeingAndIronProdModal"].showModal();
+		window['DyeingAndIronProdModal'].showModal();
 	};
 
 	const handelTransaction = (idx) => {
@@ -193,24 +193,24 @@ export default function Index() {
 			...prev,
 			...selectedTrx,
 		}));
-		window["DyeingAndIronTrxModal"].showModal();
+		window['DyeingAndIronTrxModal'].showModal();
 	};
 
 	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className=''>
 			<ReactTable
 				title={info.getTitle()}
 				data={dyeingAndIronProd}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 			<Suspense>
 				<Production
-					modalId="DyeingAndIronProdModal"
+					modalId='DyeingAndIronProdModal'
 					{...{
 						setDyeingAndIronProd,
 						updateDyeingAndIronProd,
@@ -220,7 +220,7 @@ export default function Index() {
 			</Suspense>
 			<Suspense>
 				<Transaction
-					modalId="DyeingAndIronTrxModal"
+					modalId='DyeingAndIronTrxModal'
 					{...{
 						setDyeingAndIronProd,
 						updateDyeingAndIronProd,

@@ -14,7 +14,6 @@ import {
 	ReactSelect,
 	RemoveButton,
 } from '@/ui';
-import PageContainer from '@/ui/Others/PageContainer';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -81,24 +80,6 @@ export default function Index() {
 		itemId: null,
 		itemName: null,
 	});
-
-	const breadcrumbs = [
-		{
-			label: 'Store',
-			href: '/store',
-			isDisabled: true,
-		},
-		{
-			label: 'Receive',
-			href: '/store/receive',
-		},
-		{
-			label: isUpdate ? 'Update' : 'Create',
-			href: isUpdate
-				? `/store/receive/update/${getValues('uuid')}`
-				: '/store/receive/entry',
-		},
-	];
 
 	const handlePurchaseRemove = (index) => {
 		if (getValues(`purchase[${index}].uuid`) !== undefined) {
@@ -264,9 +245,7 @@ export default function Index() {
 	);
 
 	return (
-		<PageContainer
-			breadcrumbs={breadcrumbs}
-			title={isUpdate ? 'Update Purchase' : 'Create Purchase'}>
+		<>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
@@ -297,7 +276,7 @@ export default function Index() {
 								<th
 									key={item}
 									scope='col'
-									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-4 py-2 text-left font-semibold tracking-wide text-primary transition duration-300'>
+									className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary px-4 py-2 text-left font-semibold tracking-wide transition duration-300'>
 									{item}
 								</th>
 							))}>
@@ -440,6 +419,6 @@ export default function Index() {
 				/>
 			</Suspense>
 			<DevTool control={control} placement='top-left' />
-		</PageContainer>
+		</>
 	);
 }

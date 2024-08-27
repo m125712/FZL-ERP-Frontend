@@ -1,10 +1,10 @@
-import { Excel } from "@/assets/icons";
-import { format } from "date-fns";
-import { CSVLink } from "react-csv";
-import { GetFlatHeader } from "../utils";
+import { Excel } from '@/assets/icons';
+import { format } from 'date-fns';
+import { CSVLink } from 'react-csv';
+import { GetFlatHeader } from '../utils';
 
 export default function ExportCSV({ getAllLeafColumns, filteredRows, title }) {
-	const showingColumns = ["action", "actions", "resetPass"];
+	const showingColumns = ['action', 'actions', 'resetPass'];
 	const filteredCsvColumn = getAllLeafColumns().filter(
 		({ id, getIsVisible }) => !showingColumns.includes(id) && getIsVisible()
 	);
@@ -25,17 +25,17 @@ export default function ExportCSV({ getAllLeafColumns, filteredRows, title }) {
 		),
 	];
 
-	const dateTime = format(new Date(), "dd-MM-yyyy");
+	const dateTime = format(new Date(), 'dd-MM-yyyy');
 	const filename = `${title} - ${dateTime}.csv`;
 
 	return (
 		<CSVLink
-			type="button"
-			className="btn btn-xs rounded-full bg-secondary text-secondary-content"
+			type='button'
+			className='btn-filter-outline'
 			data={csvData}
-			filename={filename}
-		>
-			Excel <Excel className="w-4 text-secondary-content" />
+			filename={filename}>
+			<Excel className='size-4' />
+			<span>Export</span>
 		</CSVLink>
 	);
 }

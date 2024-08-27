@@ -23,7 +23,7 @@ export default function Index() {
 
 	// return <>Hello</>;
 	return (
-		<div className='container mx-auto my-2 w-full space-y-2 px-2 md:px-4'>
+		<div className='space-y-2'>
 			<Information pi={data} />
 			<Table pi={data?.pi_entry} />
 		</div>

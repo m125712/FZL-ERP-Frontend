@@ -5,7 +5,6 @@ import { useAccess } from '@/hooks';
 import { useSliderDashboardInfo } from '@/state/Slider';
 
 import { DateTime, EditDelete } from '@/ui';
-import PageContainer from '@/ui/Others/PageContainer';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 
@@ -15,21 +14,6 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } = useSliderDashboardInfo();
 	const info = new PageInfo('Info', url, 'slider__dashboard_info');
 	const haveAccess = useAccess('slider__dashboard_info');
-
-	const breadcrumbs = [
-		{
-			label: 'Slider',
-			isDisabled: true,
-		},
-		{
-			label: 'Dashboard',
-			isDisabled: true,
-		},
-		{
-			label: 'Info',
-			href: '/slider/dashboard/info',
-		},
-	];
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -311,7 +295,7 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<PageContainer title='Info Lists' breadcrumbs={breadcrumbs}>
+		<>
 			<ReactTable
 				title={info.getTitle()}
 				accessor={false}
@@ -342,6 +326,6 @@ export default function Index() {
 					}}
 				/>
 			</Suspense>
-		</PageContainer>
+		</>
 	);
 }

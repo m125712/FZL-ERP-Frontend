@@ -1,21 +1,21 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useFetchFunc } from "@/hooks";
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useFetchFunc } from '@/hooks';
 
-import { DateTime, EditDelete, LinkOnly, LinkWithCopy } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+import { DateTime, EditDelete, LinkOnly, LinkWithCopy } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-const AddOrUpdate = lazy(() => import("./AddOrUpdate"));
-const DeleteModal = lazy(() => import("@/components/Modal/Delete"));
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
+const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index({ material_id = null }) {
 	const { WASTAGE_EDIT_ACCESS } = useHaveAccess();
 	const info = new PageInfo(
-		"Wastage",
+		'Wastage',
 		material_id === null
-			? "wastage"
-			: "wastage/by/material-id/" + material_id
+			? 'wastage'
+			: 'wastage/by/material-id/' + material_id
 	);
 	const [wastage, setWastage] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -24,68 +24,68 @@ export default function Index({ material_id = null }) {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "order_number",
-				header: "O/N",
+				accessorKey: 'order_number',
+				header: 'O/N',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<LinkWithCopy id={info.getValue()} uri="/order/details" />
+					<LinkWithCopy id={info.getValue()} uri='/order/details' />
 				),
 			},
 			{
-				accessorKey: "material_name",
-				header: "Material",
+				accessorKey: 'material_name',
+				header: 'Material',
 				enableColumnFilter: false,
 				hidden: material_id !== null,
 				cell: (info) => (
 					<LinkOnly
 						title={info.getValue()}
 						id={info.row.original.material_id}
-						uri="/material"
+						uri='/material'
 					/>
 				),
 			},
 			{
-				accessorKey: "assigned_quantity",
-				header: "Quantity",
+				accessorKey: 'assigned_quantity',
+				header: 'Quantity',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "material_unit",
-				header: "Unit",
+				accessorKey: 'material_unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "created_at",
-				header: "Created",
-				filterFn: "isWithinRange",
+				accessorKey: 'created_at',
+				header: 'Created',
+				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
 			{
-				accessorKey: "updated_at",
-				header: "Updated",
+				accessorKey: 'updated_at',
+				header: 'Updated',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
 			{
-				accessorKey: "actions",
-				header: "Actions",
+				accessorKey: 'actions',
+				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !WASTAGE_EDIT_ACCESS,
-				width: "w-24",
+				width: 'w-24',
 				cell: (info) => {
 					return (
 						<EditDelete
@@ -137,26 +137,26 @@ export default function Index({ material_id = null }) {
 			...prev,
 			itemId: wastage[idx].id,
 			itemName: wastage[idx].material_name
-				.replace(/#/g, "")
-				.replace(/\//g, "-"),
+				.replace(/#/g, '')
+				.replace(/\//g, '-'),
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
 
 	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className=''>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}
 				accessor={WASTAGE_EDIT_ACCESS}
 				data={wastage}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 
 			<Suspense>

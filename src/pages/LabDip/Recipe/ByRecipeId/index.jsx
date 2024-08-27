@@ -23,7 +23,7 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className='container mx-auto my-2 w-full space-y-2 px-2 md:px-4'>
+		<div className='space-y-2'>
 			<Information recipe={recipe} />
 			<Table {...recipe} />
 		</div>

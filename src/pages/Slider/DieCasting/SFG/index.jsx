@@ -1,19 +1,19 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useFetchFunc } from "@/hooks";
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useFetchFunc } from '@/hooks';
 
-import { LinkWithCopy, Transfer } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+import { LinkWithCopy, Transfer } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-const Production = lazy(() => import("./Production"));
-const Transaction = lazy(() => import("./Transaction"));
+const Production = lazy(() => import('./Production'));
+const Transaction = lazy(() => import('./Transaction'));
 
 export default function Index() {
 	const info = new PageInfo(
-		"Die Casting SFG Stock",
-		"sfg/by/die_casting_prod",
-		"slider__die_casting_sfg"
+		'Die Casting SFG Stock',
+		'sfg/by/die_casting_prod',
+		'slider__die_casting_sfg'
 	);
 	const [dieCastingProd, setDieCastingProd] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -23,7 +23,7 @@ export default function Index() {
 		document.title = info.getTabName();
 	}, []);
 
-	const haveAccess = useAccess("slider__die_casting_sfg");
+	const haveAccess = useAccess('slider__die_casting_sfg');
 
 	useEffect(() => {
 		useFetchFunc(
@@ -39,22 +39,22 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "order_number",
-				header: "O/N",
+				accessorKey: 'order_number',
+				header: 'O/N',
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					return (
 						<LinkWithCopy
 							title={info.getValue()}
 							id={order_number}
-							uri="/order/details"
+							uri='/order/details'
 						/>
 					);
 				},
 			},
 			{
-				accessorKey: "item_description",
-				header: "Item Description",
+				accessorKey: 'item_description',
+				header: 'Item Description',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { order_description_uuid, order_number } =
@@ -69,20 +69,20 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: "order_description",
-				header: "Style / Color / Size",
+				accessorKey: 'order_description',
+				header: 'Style / Color / Size',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className="capitalize">{info.getValue()}</span>
+					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: "action",
-				header: "",
+				accessorKey: 'action',
+				header: '',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.include("update"),
-				width: "w-24",
+				hidden: !haveAccess.include('update'),
+				width: 'w-24',
 				cell: (info) => {
 					return (
 						<Transfer
@@ -92,18 +92,18 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: "die_casting_prod",
-				header: "Production",
+				accessorKey: 'die_casting_prod',
+				header: 'Production',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "actions",
-				header: "Trx To Slider Assembly",
+				accessorKey: 'actions',
+				header: 'Trx To Slider Assembly',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.include("update"),
-				width: "w-24",
+				hidden: !haveAccess.include('update'),
+				width: 'w-24',
 				cell: (info) => {
 					return (
 						<Transfer
@@ -113,14 +113,14 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: "total_trx_quantity",
-				header: "Transaction",
+				accessorKey: 'total_trx_quantity',
+				header: 'Transaction',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -136,8 +136,8 @@ export default function Index() {
 		total_trx_quantity: null,
 		quantity: null,
 		order_number: null,
-		item_description: "",
-		order_description: "",
+		item_description: '',
+		order_description: '',
 	});
 
 	const handelProduction = (idx) => {
@@ -154,7 +154,7 @@ export default function Index() {
 			item_description: dieCastingProd[idx].item_description,
 			order_description: dieCastingProd[idx].order_description,
 		}));
-		window["DieCastingProdModal"].showModal();
+		window['DieCastingProdModal'].showModal();
 	};
 
 	const handelTransaction = (idx) => {
@@ -171,24 +171,24 @@ export default function Index() {
 			item_description: dieCastingProd[idx].item_description,
 			order_description: dieCastingProd[idx].order_description,
 		}));
-		window["DieCastingTrxModal"].showModal();
+		window['DieCastingTrxModal'].showModal();
 	};
 
 	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className=''>
 			<ReactTable
 				title={info.getTitle()}
 				data={dieCastingProd}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 			<Suspense>
 				<Production
-					modalId="DieCastingProdModal"
+					modalId='DieCastingProdModal'
 					{...{
 						setDieCastingProd,
 						updateDieCastingProd,
@@ -198,7 +198,7 @@ export default function Index() {
 			</Suspense>
 			<Suspense>
 				<Transaction
-					modalId="DieCastingTrxModal"
+					modalId='DieCastingTrxModal'
 					{...{
 						setDieCastingProd,
 						updateDieCastingProd,

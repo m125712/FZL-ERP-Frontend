@@ -1,23 +1,23 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useAccess, useFetchFunc } from "@/hooks";
-import { LinkWithCopy, Transfer } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useAccess, useFetchFunc } from '@/hooks';
+import { LinkWithCopy, Transfer } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-const Production = lazy(() => import("./Production"));
-const Transaction = lazy(() => import("./Transaction"));
+const Production = lazy(() => import('./Production'));
+const Transaction = lazy(() => import('./Transaction'));
 
 export default function Index() {
 	const info = new PageInfo(
-		"Teeth Coloring SFG Stock",
-		"sfg/by/teeth_coloring_prod/by/metal",
-		"metal__teeth_coloring_sfg"
+		'Teeth Coloring SFG Stock',
+		'sfg/by/teeth_coloring_prod/by/metal',
+		'metal__teeth_coloring_sfg'
 	);
 	const [teethColoringProd, setTeethColoringProd] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const haveAccess = useAccess("metal__teeth_coloring_sfg");
+	const haveAccess = useAccess('metal__teeth_coloring_sfg');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -34,22 +34,22 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "order_number",
-				header: "O/N",
+				accessorKey: 'order_number',
+				header: 'O/N',
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					return (
 						<LinkWithCopy
 							title={info.getValue()}
 							id={order_number}
-							uri="/order/details"
+							uri='/order/details'
 						/>
 					);
 				},
 			},
 			{
-				accessorKey: "item_description",
-				header: "Item Description",
+				accessorKey: 'item_description',
+				header: 'Item Description',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { order_description_uuid, order_number } =
@@ -64,15 +64,15 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: "order_description",
-				header: "Style / Color / Size",
+				accessorKey: 'order_description',
+				header: 'Style / Color / Size',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className="capitalize">{info.getValue()}</span>
+					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: "teeth_coloring_stock",
+				accessorKey: 'teeth_coloring_stock',
 				header: (
 					<span>
 						Stock
@@ -84,12 +84,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "action",
-				header: "",
+				accessorKey: 'action',
+				header: '',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_production"),
-				width: "w-24",
+				hidden: !haveAccess.includes('click_production'),
+				width: 'w-24',
 				cell: (info) => (
 					<Transfer
 						onClick={() => handelProduction(info.row.index)}
@@ -97,7 +97,7 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: "teeth_coloring_prod",
+				accessorKey: 'teeth_coloring_prod',
 				header: (
 					<span>
 						Production
@@ -109,12 +109,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "actions",
-				header: "",
+				accessorKey: 'actions',
+				header: '',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_to_finishing"),
-				width: "w-24",
+				hidden: !haveAccess.includes('click_to_finishing'),
+				width: 'w-24',
 				cell: (info) => {
 					return (
 						<Transfer
@@ -124,7 +124,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: "total_trx_quantity",
+				accessorKey: 'total_trx_quantity',
 				header: (
 					<span>
 						Total Transaction
@@ -136,8 +136,8 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -152,8 +152,8 @@ export default function Index() {
 		order_entry_id: null,
 		item_description: null,
 		total_trx_quantity: null,
-		order_number: "",
-		order_description: "",
+		order_number: '',
+		order_description: '',
 	});
 
 	const handelProduction = (idx) => {
@@ -169,7 +169,7 @@ export default function Index() {
 			order_number: teethColoringProd[idx].order_number,
 			order_description: teethColoringProd[idx].order_description,
 		}));
-		window["TeethColoringProdModal"].showModal();
+		window['TeethColoringProdModal'].showModal();
 	};
 
 	const handelTransaction = (idx) => {
@@ -185,24 +185,24 @@ export default function Index() {
 			order_number: teethColoringProd[idx].order_number,
 			order_description: teethColoringProd[idx].order_description,
 		}));
-		window["TeethColoringTrxModal"].showModal();
+		window['TeethColoringTrxModal'].showModal();
 	};
 
 	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className=''>
 			<ReactTable
 				title={info.getTitle()}
 				data={teethColoringProd}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 			<Suspense>
 				<Production
-					modalId="TeethColoringProdModal"
+					modalId='TeethColoringProdModal'
 					{...{
 						setTeethColoringProd,
 						updateTeethColoringProd,
@@ -212,7 +212,7 @@ export default function Index() {
 			</Suspense>
 			<Suspense>
 				<Transaction
-					modalId="TeethColoringTrxModal"
+					modalId='TeethColoringTrxModal'
 					{...{
 						setTeethColoringProd,
 						updateTeethColoringProd,

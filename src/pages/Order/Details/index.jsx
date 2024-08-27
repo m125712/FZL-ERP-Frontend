@@ -7,7 +7,6 @@ import { useEffect, useMemo, useState, lazy } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Suspense } from '@/components/Feedback';
 
-
 const Progress = ({ value }) => {
 	let cls = 'progress-error tooltip-error';
 	if (value >= 100) cls = 'progress-success tooltip-success';
@@ -29,11 +28,7 @@ const Progress = ({ value }) => {
 export default function Index() {
 	const { data, isLoading, isError, url } = useOrderDetails();
 	const navigate = useNavigate();
-	const info = new PageInfo(
-		'Order/Details',
-		url,
-		'order__details'
-	);
+	const info = new PageInfo('Order/Details', url, 'order__details');
 	const haveAccess = useAccess('order__details');
 
 	const columns = useMemo(
@@ -42,6 +37,7 @@ export default function Index() {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				width: 'w-12',
+				enableColumnFilter: false,
 				cell: (info) => {
 					return (
 						<LinkWithCopy
@@ -132,8 +128,7 @@ export default function Index() {
 				accessorKey: 'action',
 				header: 'Action',
 				enableColumnFilter: false,
-				hidden:
-					!haveAccess.includes('update') ,
+				hidden: !haveAccess.includes('update'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -150,8 +145,6 @@ export default function Index() {
 		[data]
 	);
 
-
-
 	// Fetching data from server
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -162,10 +155,9 @@ export default function Index() {
 
 	// Update
 	const handelUpdate = (idx) => {
-
 		const { order_description_uuid, order_number } = data[idx];
 		console.log(order_description_uuid, order_number);
-		
+
 		navigate(`/order/update/${order_number}/${order_description_uuid}`);
 	};
 
@@ -173,17 +165,13 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
-			<ReactTable
-				title={info.getTitle()}
-				accessor={haveAccess.includes('create')}
-				data={data}
-				columns={columns}
-				handelAdd={handelAdd}
-				extraClass='py-2'
-			/>
-
-			
-		</div>
+		<ReactTable
+			title={info.getTitle()}
+			accessor={haveAccess.includes('create')}
+			data={data}
+			columns={columns}
+			handelAdd={handelAdd}
+			extraClass='py-2'
+		/>
 	);
 }

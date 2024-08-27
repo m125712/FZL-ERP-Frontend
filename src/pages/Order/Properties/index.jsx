@@ -14,7 +14,6 @@ export default function Index() {
 	const info = new PageInfo('Order/Properties', url, 'order__properties');
 	const haveAccess = useAccess(info.getTab());
 
-
 	const columns = useMemo(
 		() => [
 			{
@@ -151,7 +150,7 @@ export default function Index() {
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
+		<div>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}

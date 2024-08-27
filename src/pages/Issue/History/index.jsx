@@ -1,20 +1,20 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useFetchFunc } from "@/hooks";
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useFetchFunc } from '@/hooks';
 
-import { DateTime, EditDelete, LinkOnly, LinkWithCopy, UserName } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+import { DateTime, EditDelete, LinkOnly, LinkWithCopy, UserName } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-const AddOrUpdate = lazy(() => import("./AddOrUpdate"));
-const DeleteModal = lazy(() => import("@/components/Modal/Delete"));
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
+const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index({ material_id = null }) {
 	const { ISSUE_EDIT_ACCESS } = useHaveAccess();
 
 	const info = new PageInfo(
-		"History",
-		material_id === null ? "issue" : "issue/by/material-id/" + material_id
+		'History',
+		material_id === null ? 'issue' : 'issue/by/material-id/' + material_id
 	);
 	const [order, setOrder] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -23,41 +23,41 @@ export default function Index({ material_id = null }) {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "order_number",
-				header: "O/N",
+				accessorKey: 'order_number',
+				header: 'O/N',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<LinkWithCopy id={info.getValue()} uri="/order/details" />
+					<LinkWithCopy id={info.getValue()} uri='/order/details' />
 				),
 			},
 			{
-				accessorKey: "material_name",
-				header: "Material",
+				accessorKey: 'material_name',
+				header: 'Material',
 				enableColumnFilter: false,
 				hidden: material_id !== null,
 				cell: (info) => (
 					<LinkOnly
 						title={info.getValue()}
 						id={info.row.original.material_id}
-						uri="/material"
+						uri='/material'
 					/>
 				),
 			},
 			{
-				accessorKey: "quantity",
-				header: "Quantity",
+				accessorKey: 'quantity',
+				header: 'Quantity',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "unit",
-				header: "Unit",
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "user_name",
-				header: "User",
+				accessorKey: 'user_name',
+				header: 'User',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { user_name, user_department } = info.row.original;
@@ -70,46 +70,45 @@ export default function Index({ material_id = null }) {
 				},
 			},
 			{
-				accessorKey: "isWastage",
-				header: "Wastage",
+				accessorKey: 'isWastage',
+				header: 'Wastage',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const color = info.getValue()
-						? "bg-green-200 text-green-600"
-						: "bg-red-200 text-red-600";
+						? 'bg-green-200 text-green-600'
+						: 'bg-red-200 text-red-600';
 					return (
 						<span
-							className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium uppercase ${color}`}
-						>
-							{info.getValue() ? "Yes" : "No"}
+							className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium uppercase ${color}`}>
+							{info.getValue() ? 'Yes' : 'No'}
 						</span>
 					);
 				},
 			},
 			{
-				accessorKey: "created_at",
-				header: "Created",
-				filterFn: "isWithinRange",
+				accessorKey: 'created_at',
+				header: 'Created',
+				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
 			{
-				accessorKey: "updated_at",
-				header: "Updated",
+				accessorKey: 'updated_at',
+				header: 'Updated',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
 			{
-				accessorKey: "actions",
-				header: "Actions",
+				accessorKey: 'actions',
+				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !ISSUE_EDIT_ACCESS,
-				width: "w-24",
+				width: 'w-24',
 				cell: (info) => {
 					return (
 						<EditDelete
@@ -158,24 +157,24 @@ export default function Index({ material_id = null }) {
 			...prev,
 			itemId: order[idx].id,
 			itemName: order[idx].material_name
-				.replace(/#/g, "")
-				.replace(/\//g, "-"),
+				.replace(/#/g, '')
+				.replace(/\//g, '-'),
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
 
 	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className=''>
 			<ReactTable
 				title={info.getTitle()}
 				data={order}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 
 			<Suspense>

@@ -26,7 +26,7 @@ export default function Header({
 
 	return (
 		<SectionEntryBody title='Information'>
-			<div className='flex flex-col gap-6 px-2 text-secondary-content md:flex-row'>
+			<div className='text-secondary-content flex flex-col gap-6 px-2 md:flex-row'>
 				<FormField label='vendor_uuid' title='Vendor' errors={errors}>
 					<Controller
 						name={'vendor_uuid'}

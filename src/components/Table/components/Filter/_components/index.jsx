@@ -1,4 +1,5 @@
-import { Close, FilterIcon } from "@/assets/icons";
+import { Close, FilterIcon } from '@/assets/icons';
+import { cn } from '@nextui-org/react';
 
 // export const Template = ({
 // 	columnName,
@@ -50,16 +51,15 @@ export const Template = ({
 	showResetButton = false,
 	children,
 }) => (
-	<div className="flex flex-col gap-1 p-2">
-		<span className="flex items-center gap-2 text-sm font-semibold">
+	<div className='flex flex-col gap-1 p-2'>
+		<span className='mb-0.5 flex items-center justify-between gap-2 text-sm font-semibold'>
 			{columnName}
 			{showResetButton && (
 				<button
-					type="button"
-					className="group/btn btn btn-circle btn-outline btn-error btn-xs"
-					onClick={onClick}
-				>
-					<Close className="h-4 w-4 text-error group-hover/btn:text-primary-content" />
+					type='button'
+					className='group/btn btn btn-circle btn-ghost btn-error btn-xs'
+					onClick={onClick}>
+					<Close className='text-error group-hover/btn:text-primary-content h-4 w-4' />
 				</button>
 			)}
 		</span>
@@ -68,42 +68,39 @@ export const Template = ({
 );
 
 export const DrawerBody = ({ htmlId, children }) => (
-	<div className="drawer drawer-end mt-1.5 w-auto">
-		<input id={htmlId} type="checkbox" className="drawer-toggle" />
-		<div className="drawer-content">
-			<label
-				htmlFor={htmlId}
-				className="btn btn-xs rounded-full bg-secondary text-secondary-content"
-			>
-				Filter
-				<FilterIcon className="h-4 w-4" />
+	<div className='drawer drawer-end z-50 mt-1.5 w-auto'>
+		<input id={htmlId} type='checkbox' className='drawer-toggle' />
+		<div className='drawer-content'>
+			<label htmlFor={htmlId} className='btn-filter-outline'>
+				<FilterIcon className='h-4 w-4' />
+				<span>Filter</span>
 			</label>
 		</div>
-		<div className="drawer-side overflow-x-hidden">
+		<div className='drawer-side overflow-x-hidden'>
 			<label
 				htmlFor={htmlId}
-				aria-label="filter all columns"
-				className="drawer-overlay"
+				aria-label='filter all columns'
+				className='drawer-overlay'
 			/>
-			<div className="min-h-full min-w-[16.5rem] bg-base-200">
-				<div className="flex items-center justify-between bg-primary p-2 text-2xl font-bold text-white">
+			<div className='bg-base-200 relative min-h-full min-w-[16.5rem]'>
+				<div className='text-primary-content flex items-center justify-between bg-primary px-4 py-2 text-xl font-bold'>
 					Filter
 					<FilterIcon />
 				</div>
-				{children}
+				<div className='p-2'>{children}</div>
 			</div>
 		</div>
 	</div>
 );
 
 export const notShowingColumns = [
-	"id",
-	"action",
-	"actions",
-	"created_at",
-	"updated_at",
-	"reset_password",
-	"page_assign",
+	'id',
+	'action',
+	'actions',
+	'created_at',
+	'updated_at',
+	'reset_password',
+	'page_assign',
 ];
 
 export const SlicedColumn = ({ columns }) => {
@@ -117,21 +114,18 @@ export const SlicedColumn = ({ columns }) => {
 					columnDef: { header },
 				}) => {
 					return (
-						<li key={id} className="m-1">
+						<li key={id} className=''>
 							<label
-								className={
-									getIsVisible()
-										? "border bg-primary/10"
-										: "border"
-								}
-							>
+								className={cn(
+									'text-sm font-medium text-secondary'
+								)}>
 								<input
-									type="checkbox"
-									className="checkbox-primary checkbox checkbox-xs rounded-full"
+									type='checkbox'
+									className='checkbox-accent checkbox checkbox-xs rounded-md'
 									checked={getIsVisible()}
 									onChange={getToggleVisibilityHandler()}
 								/>
-								{header}
+								<span> {header}</span>
 							</label>
 						</li>
 					);

@@ -20,7 +20,6 @@ export default function Index() {
 		document.title = info.getTabName();
 	}, []);
 
-
 	const columns = useMemo(
 		() => [
 			{
@@ -149,7 +148,7 @@ export default function Index() {
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
+		<div>
 			<ReactTable
 				title={info.getTitle()}
 				//accessor={haveAccess.includes('click_production')}

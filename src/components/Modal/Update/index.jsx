@@ -41,7 +41,7 @@ export default function Index({
 				onSubmit={onSubmit}
 				noValidate
 				method='dialog'
-				className='modal-box bg-warning text-secondary-content'>
+				className='modal-box text-secondary-content bg-warning'>
 				<Header title={`Update ${title}`} onClose={handelCancelClick} />
 				<Body item={updateItem?.itemName} />
 				<DeleteFooter {...{ handelCancelClick }} />

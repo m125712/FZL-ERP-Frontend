@@ -9,9 +9,9 @@ export default function Index() {
 		document.title = 'Coil Log';
 	}, []);
 	return (
-		<div className='container mx-auto'>
+		<div>
 			<SFGTransferLog />
-			<hr className='my-6 border-2 border-dashed border-secondary-content' />
+			<hr className='border-secondary-content my-6 border-2 border-dashed' />
 			{/* <RMTransferLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<ProductionLog />

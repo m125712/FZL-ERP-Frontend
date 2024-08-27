@@ -361,8 +361,9 @@ export default function Header({
 				title='Slider'
 				header={
 					<div className='flex w-full gap-1 text-sm md:w-fit'>
-						<div className='rounded-md bg-secondary/80 px-1'>
+						<div className='rounded-md bg-secondary px-1'>
 							<CheckBox
+								text='text-secondary-content'
 								label='is_slider_provided'
 								title='Provided By Party'
 								defaultChecked={isSliderProvided}
@@ -651,7 +652,7 @@ export default function Header({
 								/>
 							</FormField>
 							<div className='mt-6 flex items-center gap-1 text-sm'>
-								<div className='rounded-md border border-primary px-1'>
+								<div className='rounded-md border border-secondary/30 px-1'>
 									<CheckBox
 										label='is_logo_body'
 										title='Body'
@@ -663,7 +664,7 @@ export default function Header({
 										}
 									/>
 								</div>
-								<div className='rounded-md border border-primary px-1'>
+								<div className='rounded-md border border-secondary/30 px-1'>
 									<CheckBox
 										label='is_logo_puller'
 										title='Puller'

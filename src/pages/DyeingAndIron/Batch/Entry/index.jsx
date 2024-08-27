@@ -163,7 +163,8 @@ export default function Index() {
 		if (batch_entry.length === 0) {
 			alert('Select at least one item to proceed.');
 		} else {
-			if ( // * check if all colors are same
+			if (
+				// * check if all colors are same
 				!batch_entry.every(
 					(item) => item.color === batch_entry[0].color
 				)
@@ -394,7 +395,7 @@ export default function Index() {
 	);
 
 	return (
-		<div className='container mx-auto mt-4 px-2 pb-2 md:px-4'>
+		<div>
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}

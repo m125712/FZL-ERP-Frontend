@@ -17,7 +17,10 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { DYEING_PLANNING_SNO_SCHEMA, DYEING_PLANNING_SNO_NULL } from '@util/Schema';
+import {
+	DYEING_PLANNING_SNO_SCHEMA,
+	DYEING_PLANNING_SNO_NULL,
+} from '@util/Schema';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useDyeingPlanning } from '@/state/Dyeing';
@@ -71,8 +74,6 @@ export default function Index() {
 				reset
 			)
 		: useFetchForRhfResetForPlanning(`/zipper/order-planning`, reset);
-
-
 
 	// TODO: Not sure if this is needed. need further checking
 	let order_info_ids;
@@ -141,7 +142,9 @@ export default function Index() {
 				];
 
 				await Promise.all(planning_entry_updated_promises)
-					.then(() => reset(Object.assign({}, DYEING_PLANNING_SNO_NULL)))
+					.then(() =>
+						reset(Object.assign({}, DYEING_PLANNING_SNO_NULL))
+					)
 					.then(
 						navigate(
 							`/dyeing-and-iron/planning-sno/details/${week_id}`
@@ -164,8 +167,6 @@ export default function Index() {
 			created_by: user.uuid,
 		};
 
-	
-
 		const planning_entry = [...data?.planning_entry]
 			.filter((item) => item.is_checked)
 			.map((item) => ({
@@ -175,8 +176,6 @@ export default function Index() {
 				sno_remarks: item.sno_remarks,
 				created_at,
 			}));
-
-	
 
 		if (planning_entry.length === 0) {
 			alert('Select at least one item to proceed.');
@@ -367,7 +366,7 @@ export default function Index() {
 	);
 
 	return (
-		<div className='container mx-auto mt-4 px-2 pb-2 md:px-4'>
+		<div>
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}

@@ -65,7 +65,7 @@ export default function Header({
 				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					<Textarea label='remarks' {...{ register, errors }} />
 					<div className='mt-6 flex items-center gap-1 text-sm'>
-						<div className='w-32 rounded-md border border-primary px-1'>
+						<div className='w-32 rounded-md border border-secondary/30 px-1'>
 							<CheckBox
 								label='lab_status'
 								title='Status'

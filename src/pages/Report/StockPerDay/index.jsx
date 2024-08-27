@@ -1,6 +1,6 @@
-import ReactTable from "@/components/Table";
-import { useFetchFunc } from "@/hooks";
-import { useEffect, useMemo, useState } from "react";
+import ReactTable from '@/components/Table';
+import { useFetchFunc } from '@/hooks';
+import { useEffect, useMemo, useState } from 'react';
 
 export default function Index() {
 	const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
@@ -37,44 +37,44 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "material_name",
-				header: "Name",
+				accessorKey: 'material_name',
+				header: 'Name',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "avg_opening_purchase_price",
-				header: "Previous Avg Price",
+				accessorKey: 'avg_opening_purchase_price',
+				header: 'Previous Avg Price',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue().toFixed(2),
 			},
 			{
-				accessorKey: "opening",
-				header: "Opening",
+				accessorKey: 'opening',
+				header: 'Opening',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "closing_purchased_quantity",
-				header: "Purchased",
+				accessorKey: 'closing_purchased_quantity',
+				header: 'Purchased',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "closing_consumption_quantity",
-				header: "Consumption",
+				accessorKey: 'closing_consumption_quantity',
+				header: 'Consumption',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "closing",
-				header: "Closing",
+				accessorKey: 'closing',
+				header: 'Closing',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "avg_closing_purchase_price",
-				header: "Latest Avg Price",
+				accessorKey: 'avg_closing_purchase_price',
+				header: 'Latest Avg Price',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue().toFixed(2),
 			},
@@ -93,16 +93,16 @@ export default function Index() {
 	}, [date]);
 
 	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div>
 			<ReactTable
 				title={`Stock: ${date}`}
 				data={finalValue}
 				columns={columns}
-				extraClass={"py-3"}
+				extraClass={'py-3'}
 				date={date}
 				setDate={setDate}
 				showSingleDateRange={true}

@@ -84,7 +84,7 @@ export default function Index() {
 
 	return (
 		<div>
-			<div className='container mx-auto p-4'>
+			<div>
 				<div className='flex flex-col gap-4'>
 					<Title
 						title={info.getTitle()}

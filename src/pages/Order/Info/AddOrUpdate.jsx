@@ -160,7 +160,7 @@ export default function Index({
 			onClose={onClose}
 			// isSmall={true}
 		>
-			<div className='flex justify-end gap-2 p-2 text-sm'>
+			<div className='flex justify-end gap-2 text-sm'>
 				<div className='rounded-md bg-primary px-1'>
 					<CheckBox
 						label='is_sample'

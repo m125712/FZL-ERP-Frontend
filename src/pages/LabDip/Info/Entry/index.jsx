@@ -255,7 +255,7 @@ export default function Index() {
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	return (
-		<div className='container mx-auto mt-2 px-2 pb-2 md:px-4'>
+		<div>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}

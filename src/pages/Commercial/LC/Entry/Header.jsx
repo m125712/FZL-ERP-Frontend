@@ -36,8 +36,8 @@ export default function Header({
 	];
 
 	const Section = ({ title, children }) => (
-		<div className='flex flex-col gap-1 rounded-md bg-primary/20 p-2'>
-			<span className='ml-1 text-xl font-bold'>{title}</span>
+		<div className='bg-base-200 flex flex-col gap-1 rounded-md p-2'>
+			<span className='ml-1 text-xl font-bold text-primary'>{title}</span>
 			<div className='text-secondary-content flex flex-col gap-1 md:flex-row'>
 				{children}
 			</div>

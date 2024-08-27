@@ -15,7 +15,7 @@ export const Input = ({ register, ...props }) => (
 	<FormField {...props}>
 		<input
 			className={cn(
-				'input input-primary w-full rounded border-primary/30 bg-primary/5 px-2 text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-primary/50',
+				'input input-secondary bg-base-100 w-full rounded border-secondary/30 px-2 text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-secondary/50 focus:border-secondary/30 focus:outline-secondary/30',
 				props?.width,
 				props?.height,
 				props?.className
@@ -92,8 +92,8 @@ export const PasswordInput = ({ register, ...props }) => {
 
 export const CheckBox = ({
 	register,
-	type = 'checkbox-success',
-	text = 'text-primary',
+	type = 'checkbox-accent',
+	text = 'text-secondary',
 	className,
 	...props
 }) => (
@@ -112,7 +112,8 @@ export const CheckBox = ({
 				{...register(props.label)}
 				{...props}
 			/>
-			<span className={cn('text-sm font-semibold capitalize', text)}>
+			<span
+				className={cn('w-full text-sm font-semibold capitalize', text)}>
 				{props.title
 					? capitalize(props.title)
 					: capitalize(props.label)}
@@ -208,7 +209,7 @@ export const Radio = ({ register, checker = 0, value, rest, ...props }) => (
 export const Textarea = ({ register, ...props }) => (
 	<FormField {...props}>
 		<textarea
-			className='textarea textarea-bordered textarea-primary w-full border-primary/30 bg-primary/5'
+			className='textarea textarea-secondary bg-base-100 w-full border-secondary/30 text-primary focus:border-secondary/30 focus:outline-secondary/30'
 			rows={props.rows ? props.rows : 1}
 			{...register(props.label)}
 			{...props}

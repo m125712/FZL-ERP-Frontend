@@ -1,19 +1,19 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useAccess, useFetchFunc } from "@/hooks";
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useAccess, useFetchFunc } from '@/hooks';
 
-import { LinkWithCopy, Transfer } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+import { LinkWithCopy, Transfer } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-const Production = lazy(() => import("./Production"));
-const Transaction = lazy(() => import("./Transaction"));
+const Production = lazy(() => import('./Production'));
+const Transaction = lazy(() => import('./Transaction'));
 
 export default function Index() {
 	const info = new PageInfo(
-		"Coloring SFG Stock",
-		"sfg/by/coloring_prod",
-		"slider__coloring_sfg"
+		'Coloring SFG Stock',
+		'sfg/by/coloring_prod',
+		'slider__coloring_sfg'
 	);
 	const [coloringProd, setColoringProd] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -23,7 +23,7 @@ export default function Index() {
 		document.title = info.getTabName();
 	}, []);
 
-	const haveAccess = useAccess("slider__coloring_sfg");
+	const haveAccess = useAccess('slider__coloring_sfg');
 
 	useEffect(() => {
 		useFetchFunc(info.getFetchUrl(), setColoringProd, setLoading, setError);
@@ -34,22 +34,22 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "order_number",
-				header: "O/N",
+				accessorKey: 'order_number',
+				header: 'O/N',
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					return (
 						<LinkWithCopy
 							title={info.getValue()}
 							id={order_number}
-							uri="/order/details"
+							uri='/order/details'
 						/>
 					);
 				},
 			},
 			{
-				accessorKey: "item_description",
-				header: "Item Description",
+				accessorKey: 'item_description',
+				header: 'Item Description',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { order_description_uuid, order_number } =
@@ -64,15 +64,15 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: "order_description",
-				header: "Style / Color / Size",
+				accessorKey: 'order_description',
+				header: 'Style / Color / Size',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className="capitalize">{info.getValue()}</span>
+					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: "quantity",
+				accessorKey: 'quantity',
 				header: (
 					<span>
 						Ordered
@@ -84,7 +84,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "coloring_stock",
+				accessorKey: 'coloring_stock',
 				header: (
 					<span>
 						Stock
@@ -96,12 +96,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "action",
-				header: "",
+				accessorKey: 'action',
+				header: '',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_production"),
-				width: "w-24",
+				hidden: !haveAccess.includes('click_production'),
+				width: 'w-24',
 				cell: (info) => {
 					return (
 						<Transfer
@@ -111,7 +111,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: "coloring_prod",
+				accessorKey: 'coloring_prod',
 				header: (
 					<span>
 						Production
@@ -123,8 +123,8 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -163,8 +163,8 @@ export default function Index() {
 		order_entry_info: null,
 		total_trx_quantity: null,
 		order_number: null,
-		item_description: "",
-		order_description: "",
+		item_description: '',
+		order_description: '',
 		quantity: null,
 	});
 
@@ -182,7 +182,7 @@ export default function Index() {
 			order_description: coloringProd[idx].order_description,
 			quantity: coloringProd[idx].quantity,
 		}));
-		window["ColoringProdModal"].showModal();
+		window['ColoringProdModal'].showModal();
 	};
 
 	const handelTransaction = (idx) => {
@@ -198,24 +198,24 @@ export default function Index() {
 			item_description: coloringProd[idx].item_description,
 			order_description: coloringProd[idx].order_description,
 		}));
-		window["ColoringTrxModal"].showModal();
+		window['ColoringTrxModal'].showModal();
 	};
 
 	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className=''>
 			<ReactTable
 				title={info.getTitle()}
 				data={coloringProd}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 			<Suspense>
 				<Production
-					modalId="ColoringProdModal"
+					modalId='ColoringProdModal'
 					{...{
 						setColoringProd,
 						updateColoringProd,
@@ -225,7 +225,7 @@ export default function Index() {
 			</Suspense>
 			<Suspense>
 				<Transaction
-					modalId="ColoringTrxModal"
+					modalId='ColoringTrxModal'
 					{...{
 						setColoringProd,
 						updateColoringProd,

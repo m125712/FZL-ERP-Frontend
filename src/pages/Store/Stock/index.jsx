@@ -1,23 +1,23 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useAccess, useFetchFunc } from "@/hooks";
-import { LinkWithCopy, Transfer } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useAccess, useFetchFunc } from '@/hooks';
+import { LinkWithCopy, Transfer } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-const AddOrUpdate = lazy(() => import("./AddOrUpdate"));
-const AddOrUpdateAgainstOrder = lazy(() => import("./AgainstOrderTransfer"));
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
+const AddOrUpdateAgainstOrder = lazy(() => import('./AgainstOrderTransfer'));
 
 export default function Index() {
 	const info = new PageInfo(
-		"Stock Full",
-		"material/stock",
-		"store__stock_full"
+		'Stock Full',
+		'material/stock',
+		'store__stock_full'
 	);
 	const [materialStock, setMaterialStock] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const haveAccess = useAccess("store__stock_full");
+	const haveAccess = useAccess('store__stock_full');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -26,48 +26,48 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "name",
-				header: "Name",
+				accessorKey: 'name',
+				header: 'Name',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<LinkWithCopy
 						title={info.getValue()}
 						id={info.row.original.id}
-						uri="/material"
+						uri='/material'
 					/>
 				),
 			},
 			{
-				accessorKey: "stock",
-				header: "Stock",
+				accessorKey: 'stock',
+				header: 'Stock',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "unit",
-				header: "Unit",
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "action_trx",
-				header: "Action",
+				accessorKey: 'action_trx',
+				header: 'Action',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_action"),
-				width: "w-24",
+				hidden: !haveAccess.includes('click_action'),
+				width: 'w-24',
 				cell: (info) =>
 					info.row.original.stock > 0 && (
 						<Transfer onClick={() => handleTrx(info.row.index)} />
 					),
 			},
 			{
-				accessorKey: "action_trx_against_order",
-				header: "Trx Against Order",
+				accessorKey: 'action_trx_against_order',
+				header: 'Trx Against Order',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_trx_against_order"),
-				width: "w-24",
+				hidden: !haveAccess.includes('click_trx_against_order'),
+				width: 'w-24',
 				cell: (info) =>
 					info.row.original.stock > 0 && (
 						<Transfer
@@ -79,145 +79,145 @@ export default function Index() {
 			},
 
 			{
-				accessorKey: "tape_making",
-				header: "Tape Making",
+				accessorKey: 'tape_making',
+				header: 'Tape Making',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "coil_forming",
-				header: "Coil Forming",
+				accessorKey: 'coil_forming',
+				header: 'Coil Forming',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "dying_and_iron",
-				header: "Dying & Iron",
+				accessorKey: 'dying_and_iron',
+				header: 'Dying & Iron',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "m_gapping",
-				header: "Metal Gapping",
+				accessorKey: 'm_gapping',
+				header: 'Metal Gapping',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "v_gapping",
-				header: "Vislon Gapping",
+				accessorKey: 'v_gapping',
+				header: 'Vislon Gapping',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "v_teeth_molding",
-				header: "Vislon Teeth Molding",
+				accessorKey: 'v_teeth_molding',
+				header: 'Vislon Teeth Molding',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "m_teeth_molding",
-				header: "Metal Teeth Molding",
+				accessorKey: 'm_teeth_molding',
+				header: 'Metal Teeth Molding',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "teeth_assembling_and_polishing",
-				header: "Teeth Assembling & Polishing",
+				accessorKey: 'teeth_assembling_and_polishing',
+				header: 'Teeth Assembling & Polishing',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "m_teeth_cleaning",
-				header: "Metal Teeth Cleaning",
+				accessorKey: 'm_teeth_cleaning',
+				header: 'Metal Teeth Cleaning',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "v_teeth_cleaning",
-				header: "Vislon Teeth Cleaning",
+				accessorKey: 'v_teeth_cleaning',
+				header: 'Vislon Teeth Cleaning',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "plating_and_iron",
-				header: "Plating & Iron",
+				accessorKey: 'plating_and_iron',
+				header: 'Plating & Iron',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "m_sealing",
-				header: "Metal Sealing",
+				accessorKey: 'm_sealing',
+				header: 'Metal Sealing',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "v_sealing",
-				header: "Vislon Sealing",
+				accessorKey: 'v_sealing',
+				header: 'Vislon Sealing',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "n_t_cutting",
-				header: "Nylon T Cutting",
+				accessorKey: 'n_t_cutting',
+				header: 'Nylon T Cutting',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "v_t_cutting",
-				header: "Vislon T Cutting",
+				accessorKey: 'v_t_cutting',
+				header: 'Vislon T Cutting',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "m_stopper",
-				header: "Metal Stopper",
+				accessorKey: 'm_stopper',
+				header: 'Metal Stopper',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "v_stopper",
-				header: "Vislon Stopper",
+				accessorKey: 'v_stopper',
+				header: 'Vislon Stopper',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "n_stopper",
-				header: "Nylon Stopper",
+				accessorKey: 'n_stopper',
+				header: 'Nylon Stopper',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "cutting",
-				header: "Cutting",
+				accessorKey: 'cutting',
+				header: 'Cutting',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "qc_and_packing",
-				header: "QC & Packing",
+				accessorKey: 'qc_and_packing',
+				header: 'QC & Packing',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "die_casting",
-				header: "Die Casting",
+				accessorKey: 'die_casting',
+				header: 'Die Casting',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "slider_assembly",
-				header: "Slider Assembly",
+				accessorKey: 'slider_assembly',
+				header: 'Slider Assembly',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "coloring",
-				header: "Coloring",
+				accessorKey: 'coloring',
+				header: 'Coloring',
 				enableColumnFilter: false,
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -256,21 +256,21 @@ export default function Index() {
 			...prev,
 			...selectedItem,
 		}));
-		window["MaterialTrxAgainstOrder"].showModal();
+		window['MaterialTrxAgainstOrder'].showModal();
 	};
 
 	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className=''>
 			<ReactTable
 				title={info.getTitle()}
 				// handelAdd={handelAdd}
 				data={materialStock}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 
 			<Suspense>
@@ -285,7 +285,7 @@ export default function Index() {
 			</Suspense>
 			<Suspense>
 				<AddOrUpdateAgainstOrder
-					modalId={"MaterialTrxAgainstOrder"}
+					modalId={'MaterialTrxAgainstOrder'}
 					{...{
 						setMaterialStock,
 						updateMaterialStock,

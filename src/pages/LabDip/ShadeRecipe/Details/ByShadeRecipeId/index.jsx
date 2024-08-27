@@ -1,5 +1,4 @@
 import { useFetch } from '@/hooks';
-import PageContainer from '@/ui/Others/PageContainer';
 import { useEffect } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import Information from './Information';
@@ -22,30 +21,10 @@ export default function Index() {
 
 	if (!data) return <Navigate to='/not-found' />;
 
-	const breadcrumbs = [
-		{
-			label: 'Lab Dip',
-			href: '/lab_dip',
-			isDisabled: true,
-		},
-		{
-			label: 'Shade Recipe',
-			href: '/lab-dip/shade_recipe',
-		},
-
-		{
-			label: 'Details',
-			href: `/lab-dip/shade_recipe/details/${shade_recipe_uuid}`,
-		},
-	];
-
 	return (
-		<PageContainer
-			title='Shade Recipe Details'
-			breadcrumbs={breadcrumbs}
-			className={'space-y-8'}>
+		<div className={'space-y-8'}>
 			<Information data={data} />
 			<Table {...data} />
-		</PageContainer>
+		</div>
 	);
 }

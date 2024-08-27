@@ -2,12 +2,12 @@ import { Close } from '@/assets/icons';
 
 const Header = ({ title, onClose }) => (
 	<div className='modal-header mb-2 flex items-center justify-between'>
-		<p className='text-2xl font-semibold'>{title}</p>
+		<p className='text-2xl font-semibold text-primary'>{title}</p>
 		<button
 			type='button'
 			onClick={onClose}
-			className='group btn btn-circle btn-outline btn-error btn-sm'>
-			<Close className='h-5 w-5 text-error group-hover:text-primary-content' />
+			className='btn btn-circle btn-outline btn-error btn-sm group'>
+			<Close className='text-error group-hover:text-primary-content h-5 w-5' />
 		</button>
 	</div>
 );

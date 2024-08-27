@@ -1,24 +1,24 @@
-import { Suspense } from "@/components/Feedback";
-import ReactTable from "@/components/Table";
-import { useAccess, useFetchFunc } from "@/hooks";
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { useAccess, useFetchFunc } from '@/hooks';
 
-import { LinkWithCopy, Transfer } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { lazy, useEffect, useMemo, useState } from "react";
+import { LinkWithCopy, Transfer } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
-const Production = lazy(() => import("./Production"));
-const Transaction = lazy(() => import("./Transaction"));
+const Production = lazy(() => import('./Production'));
+const Transaction = lazy(() => import('./Transaction'));
 
 export default function Index() {
 	const info = new PageInfo(
-		"Finishing SFG Stock",
-		"sfg/by/finishing_prod/by/vislon",
-		"vislon__finishing_sfg"
+		'Finishing SFG Stock',
+		'sfg/by/finishing_prod/by/vislon',
+		'vislon__finishing_sfg'
 	);
 	const [finishingProd, setFinishingProd] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const haveAccess = useAccess("vislon__finishing_sfg");
+	const haveAccess = useAccess('vislon__finishing_sfg');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -34,22 +34,22 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "order_number",
-				header: "O/N",
+				accessorKey: 'order_number',
+				header: 'O/N',
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					return (
 						<LinkWithCopy
 							title={info.getValue()}
 							id={order_number}
-							uri="/order/details"
+							uri='/order/details'
 						/>
 					);
 				},
 			},
 			{
-				accessorKey: "item_description",
-				header: "Item Description",
+				accessorKey: 'item_description',
+				header: 'Item Description',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { order_description_uuid, order_number } =
@@ -64,15 +64,15 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: "order_description",
-				header: "Style / Color / Size",
+				accessorKey: 'order_description',
+				header: 'Style / Color / Size',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className="capitalize">{info.getValue()}</span>
+					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: "quantity",
+				accessorKey: 'quantity',
 				header: (
 					<span>
 						Ordered
@@ -84,7 +84,7 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: "coloring_prod",
+				accessorKey: 'coloring_prod',
 				header: (
 					<span>
 						Slider
@@ -96,7 +96,7 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: "finishing_stock",
+				accessorKey: 'finishing_stock',
 				header: (
 					<span>
 						Finished Tape
@@ -108,12 +108,12 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: "action",
-				header: "",
+				accessorKey: 'action',
+				header: '',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes("click_production"),
-				width: "w-24",
+				hidden: !haveAccess.includes('click_production'),
+				width: 'w-24',
 				cell: (info) => {
 					return (
 						<Transfer
@@ -123,7 +123,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: "finishing_prod",
+				accessorKey: 'finishing_prod',
 				header: (
 					<span>
 						Zipper
@@ -135,7 +135,7 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: "actions",
+				accessorKey: 'actions',
 				header: (
 					<span>
 						Trx to
@@ -145,7 +145,7 @@ export default function Index() {
 				),
 				enableColumnFilter: false,
 				enableSorting: false,
-				width: "w-24",
+				width: 'w-24',
 				cell: (info) => {
 					return (
 						<Transfer
@@ -155,14 +155,14 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: "total_trx_quantity",
-				header: "Transaction",
+				accessorKey: 'total_trx_quantity',
+				header: 'Transaction',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -178,9 +178,9 @@ export default function Index() {
 		order_entry_id: null,
 		item_description: null,
 		total_trx_quantity: null,
-		end_type_name: "",
-		order_number: "",
-		order_description: "",
+		end_type_name: '',
+		order_number: '',
+		order_description: '',
 	});
 
 	const handelProduction = (idx) => {
@@ -189,7 +189,7 @@ export default function Index() {
 			...prev,
 			...selectedProd,
 		}));
-		window["FinishingProdModal"].showModal();
+		window['FinishingProdModal'].showModal();
 	};
 
 	const handelTransaction = (idx) => {
@@ -198,26 +198,26 @@ export default function Index() {
 			...prev,
 			...selectedProd,
 		}));
-		window["FinishingTrxModal"].showModal();
+		window['FinishingTrxModal'].showModal();
 	};
 
 	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className=''>
 			<ReactTable
 				title={info.getTitle()}
 				// handelAdd={handelAdd}
-				accessor={haveAccess.includes("click_production")}
+				accessor={haveAccess.includes('click_production')}
 				data={finishingProd}
 				columns={columns}
-				extraClass="py-2"
+				extraClass='py-2'
 			/>
 			<Suspense>
 				<Production
-					modalId="FinishingProdModal"
+					modalId='FinishingProdModal'
 					{...{
 						setFinishingProd,
 						updateFinishingProd,
@@ -227,7 +227,7 @@ export default function Index() {
 			</Suspense>
 			<Suspense>
 				<Transaction
-					modalId="FinishingTrxModal"
+					modalId='FinishingTrxModal'
 					{...{
 						setFinishingProd,
 						updateFinishingProd,

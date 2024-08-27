@@ -2,18 +2,22 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc } from '@/hooks';
+import { useDyeingTransfer } from '@/state/Dyeing';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+const Update = lazy(() => import('./EntryUpdate/Update'));
+
 
 export default function Index() {
-	const info = new PageInfo('Dyeing Transfer', 'dying_and_iron_transfer');
-	const [dyeingAndIronLog, setDyeingAndIronLog] = useState([]);
-	const [loading, setLoading] = useState(true);
+	const { data, isLoading, url, deleteData } = useDyeingTransfer();
+	const info = new PageInfo('Dyeing Transfer', url, 'dyeing__transfer');
+	const [transfer, setTransfer] = useState([]);
 	const [error, setError] = useState(null);
 	const haveAccess = useAccess('dyeing__transfer');
 	const navigate = useNavigate();
+
 	const columns = useMemo(
 		() => [
 			{
@@ -46,14 +50,14 @@ export default function Index() {
 					);
 				},
 			},
-			{
-				accessorKey: 'order_description',
-				header: 'Style / Color / Size',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<span className='capitalize'>{info.getValue()}</span>
-				),
-			},
+			// {
+			// 	accessorKey: 'order_description',
+			// 	header: 'Style / Color / Size',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<span className='capitalize'>{info.getValue()}</span>
+			// 	),
+			// },
 			// {
 			// 	accessorKey: "trx_from",
 			// 	header: "Transferred From",
@@ -63,8 +67,20 @@ export default function Index() {
 			// ),
 			// },
 			{
-				accessorKey: 'trx_to',
-				header: 'Transferred To',
+				accessorKey: 'colors',
+				header: 'Colors',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<span className='capitalize'>
+							{info.getValue().replace(/_|stock/g, ' ')}
+						</span>
+					);
+				},
+			},
+			{
+				accessorKey: 'section',
+				header: 'Section',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return (
@@ -87,7 +103,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'issued_by_name',
+				accessorKey: 'created_by_name',
 				header: 'Issued By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -122,7 +138,7 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_sfg'),
+				hidden: !haveAccess.includes('update'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -130,48 +146,29 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('click_delete_sfg')}
+							showDelete={!haveAccess.includes('delete')}
 						/>
 					);
 				},
 			},
 		],
-		[dyeingAndIronLog]
+		[data]
 	);
 
 	// Fetching data from server
-	useEffect(() => {
-		useFetchFunc(
-			info.getFetchUrl(),
-			setDyeingAndIronLog,
-			setLoading,
-			setError
-		);
-	}, []);
 
 	// Update
-	const [updateDyeingAndIronLog, setUpdateDyeingAndIronLog] = useState({
-		id: null,
-		trx_from: null,
-		trx_to: null,
-		item_name: null,
-		trx_quantity: null,
-		order_description: null,
-		order_quantity: null,
-		dying_and_iron_prod: null,
-		teeth_molding_stock: null,
-		finishing_stock: null,
-		order_entry_id: null,
+	const [updateTransfer, setUpdateTransfer] = useState({
+		uuid: null,
 	});
 
 	// Add
 	const handelAdd = () => navigate('/dyeing-and-iron/transfer/entry');
 
 	const handelUpdate = (idx) => {
-		const selected = dyeingAndIronLog[idx];
-		setUpdateDyeingAndIronLog((prev) => ({
+		setUpdateTransfer((prev) => ({
 			...prev,
-			...selected,
+			uuid: data[idx].uuid,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -184,14 +181,14 @@ export default function Index() {
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: dyeingAndIronLog[idx].id,
-			itemName: dyeingAndIronLog[idx].order_description,
+			itemId: data[idx].uuid,
+			itemName: data[idx].item_description,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
 
-	if (loading)
+	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
@@ -201,28 +198,31 @@ export default function Index() {
 				handelAdd={handelAdd}
 				accessor={haveAccess.includes('create')}
 				title={info.getTitle()}
-				data={dyeingAndIronLog}
+				data={data}
 				columns={columns}
 				extraClass='py-2'
 			/>
 			<Suspense>
-				{/* <SFGAddOrUpdate
-					modalId={info.getAddOrUpdateModalId()}
-					{...{
-						setDyeingAndIronLog,
-						updateDyeingAndIronLog,
-						setUpdateDyeingAndIronLog,
-					}}
-				/> */}
+				<Suspense>
+					<Update
+						modalId={info.getAddOrUpdateModalId()}
+						{...{
+							updateTransfer,
+							setUpdateTransfer,
+						}}
+					/>
+				</Suspense>
 			</Suspense>
 			<Suspense>
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					setItems={setDyeingAndIronLog}
-					uri={`/sfg/trx`}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url,
+						deleteData,
+					}}
 				/>
 			</Suspense>
 		</div>

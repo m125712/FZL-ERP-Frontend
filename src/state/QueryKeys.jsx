@@ -324,6 +324,9 @@ export const dyeingQK = {
 		...dyeingQK.orderAgainstDyeingRMLog(),
 		uuid,
 	],
+	//* Dyeing Transfer
+	dyeingTransfer: () => [...dyeingQK.all(), 'dyeing-transfer'],
+	dyeingTransferByUUID: (uuid) => [...dyeingQK.dyeingTransfer(), uuid],
 };
 
 // * Nylon

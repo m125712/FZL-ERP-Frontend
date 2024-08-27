@@ -30,14 +30,15 @@ const getTransactionArea = () => {
 		{ label: 'Slider Assembly', value: 'slider_assembly' },
 		{ label: 'Coloring', value: 'coloring' },
 		{ label: 'Lab Dip', value: 'lab_dip' },
+		{ label: 'Faulty Product', value: 'faulty_product' },
+		{ label: 'Loan Return', value: 'loan_return' },
 	];
 };
 export default getTransactionArea;
 
-export const getTransferArea =  [
+export const getTransferArea = [
 	{ label: 'Nylon Plastic Finishing', value: 'nylon_plastic_finishing' },
 	{ label: 'Nylon Metalic Finishing', value: 'nylon_metalic_finishing' },
 	{ label: 'Vislon Teeth Molding', value: 'vislon_teeth_molding' },
 	{ label: 'Metal Teeth Molding', value: 'metal_teeth_molding' },
 ];
-

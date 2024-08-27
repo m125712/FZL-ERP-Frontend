@@ -328,4 +328,14 @@ export const DyeingAndIronRoutes = [
 		page_name: 'dyeing__thread_batch_entry_update',
 		actions: ['create', 'read', 'update'],
 	},
+	{
+		id: 294,
+		name: 'Dyeing Transfer Update',
+		path: '/dyeing-and-iron/transfer/update/:transfer_uuid',
+		element: DyeingTransferEntry,
+		type: 'dyeing',
+		hidden: true,
+		page_name: 'dyeing__transfer_update',
+		actions: ['create', 'read', 'update'],
+	},
 ];

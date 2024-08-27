@@ -26,7 +26,7 @@ import {
 } from 'react-router-dom';
 
 export default function Index({ sfg }) {
-	const { url, updateData, postData, deleteData } = useDyeingTransfer();
+	const { postData, deleteData } = useDyeingTransfer();
 	const { uuid, order_number, order_description_uuid, coil_uuid } =
 		useParams();
 	const urlPath = useLocation();
@@ -57,7 +57,7 @@ export default function Index({ sfg }) {
 
 	if (isUpdate)
 		useFetchForRhfResetForOrder(
-			`/zipper/dyed-tape-transaction${uuid}/UUID`,
+			`/zipper/dyed-tape-transaction/${uuid}/UUID`,
 			order_description_uuid,
 			reset
 		);
@@ -192,7 +192,7 @@ export default function Index({ sfg }) {
 			.then(() => reset(Object.assign({}, DYEING_TRANSFER_NULL)))
 			.then(async () => {
 				// await OrderDetailsInvalidate(); common/tape/log
-				// navigate(isMatch ? '/common/coil/log' : `/common/tape/log`);
+				navigate('/dyeing-and-iron/transfer');
 			})
 			.catch((err) => console.log(err));
 	};

@@ -1,11 +1,12 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useDyeingThreadBatch } from '@/state/Dyeing';
 import { useAccess, useFetch } from '@/hooks';
-import { EditDelete, LinkWithCopy, DateTime } from '@/ui';
+import { useDyeingThreadBatch } from '@/state/Dyeing';
+import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { useMemo, useEffect } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+const Yarn = lazy(() => import('../ThreadBatch/Yarn'));
 
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
@@ -13,7 +14,6 @@ export default function Index() {
 	const info = new PageInfo('Thread Batch', url, 'dyeing__batch');
 	const haveAccess = useAccess('dyeing__batch');
 	const navigate = useNavigate();
-
 
 	const columns = useMemo(
 		() => [
@@ -51,6 +51,21 @@ export default function Index() {
 						</button>
 					);
 				},
+			},
+			{
+				accessorKey: 'actions',
+				header: 'Yarn',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('update'),
+				width: 'w-24',
+				cell: (info) => (
+					<button
+						className='btn btn-primary btn-xs'
+						onClick={() => handelYarn(info.row.index)}>
+						Yarn Issue
+					</button>
+				),
 			},
 			{
 				accessorKey: 'batch_status',
@@ -111,6 +126,22 @@ export default function Index() {
 		],
 		[data]
 	);
+	//Yarn
+
+	const [yarn, setYarn] = useState({
+		uuid: null,
+		yarn_quantity: null,
+	});
+	const handelYarn = (idx) => {
+		console.log(data[idx], 'yarn');
+		setYarn((prev) => ({
+			...prev,
+			uuid: data[idx].uuid,
+			yarn_quantity: data[idx].yarn_quantity,
+		}));
+		window['YarnModal'].showModal();
+	};
+	console.log(data);
 
 	// Add
 	const handelAdd = () => navigate('/dyeing-and-iron/thread-batch/entry');
@@ -151,6 +182,15 @@ export default function Index() {
 					}}
 				/>
 			</Suspense> */}
+			<Suspense>
+				<Yarn
+					modalId={'YarnModal'}
+					{...{
+						yarn,
+						setYarn,
+					}}
+				/>
+			</Suspense>
 		</div>
 	);
 }

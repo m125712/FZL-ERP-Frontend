@@ -1577,6 +1577,14 @@ export const DYEING_BATCH_PRODUCTION_NULL = {
 	],
 };
 
+// * Dyeing Thread Batch Yarn schema*//
+export const DYEING_THREAD_BATCH_YARN_SCHEMA = {
+	yarn_quantity: NUMBER.moreThan(0),
+};
+export const DYEING_THREAD_BATCH_YARN_NULL = {
+	uuid: null,
+	yarn_quantity:null,
+};
 // * Dyeing Transfer
 
 export const DYEING_TRANSFER_SCHEMA = {

@@ -1,3 +1,32 @@
+// import { nextui } from '@nextui-org/react';
+
+// /** @type {import('tailwindcss').Config} */
+// export default {
+// 	content: [
+// 		'./index.html',
+// 		'./src/**/*.{js,ts,jsx,tsx}',
+// 		'./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+// 	],
+// 	theme: {
+// 		extend: {
+// 			fontFamily: {
+// 				poppins: ['Poppins', 'sans-serif'],
+// 			},
+// 		},
+// 	},
+// 	darkMode: 'class',
+// 	plugins: [
+// 		nextui({
+// 			defaultTheme: 'light',
+// 			themes: {
+// 				light: {
+// 					extend: 'light',
+// 				},
+// 			},
+// 		}),
+// 	],
+// };
+
 import daisyui from 'daisyui';
 
 const LIGHT_THEME = require('daisyui/src/theming/themes')['light'];

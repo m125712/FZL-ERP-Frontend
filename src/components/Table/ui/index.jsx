@@ -1,19 +1,19 @@
-import { ArrowUpDown, PDF, Up } from "@/assets/icons";
-import DropdownMenu from "../DropdownMenu";
-import FilterButton from "./FilterButton";
-import NoDataFound from "./NoDataFound";
-import Title, { AddButton, TitleOnly } from "./Title";
+import { ArrowUpDown, PDF, Up } from '@/assets/icons';
+import DropdownMenu from '../DropdownMenu';
+import FilterButton from './FilterButton';
+import NoDataFound from './NoDataFound';
+import Title, { AddButton, TitleOnly } from './Title';
 
 const SortingIndicator = ({ type, canSort }) => {
 	if (!canSort) return null;
 
 	const cls =
-		"h-4 w-4 text-secondary group-hover:opacity-100 transition-transform transform duration-500";
+		'h-4 w-4 text-secondary group-hover:opacity-100 transition-transform transform duration-500';
 
 	switch (type) {
-		case "asc":
+		case 'asc':
 			return <Up className={`${cls} rotate-180 opacity-100`} />;
-		case "desc":
+		case 'desc':
 			return <Up className={`${cls} opacity-100`} />;
 		default:
 			return <ArrowUpDown className={`${cls} opacity-0`} />;
@@ -23,11 +23,10 @@ const SortingIndicator = ({ type, canSort }) => {
 const PaginationButton = ({ onClick, disabled, icon }) => {
 	return (
 		<button
-			type="button"
-			className="btn btn-circle btn-primary btn-sm rounded-full"
+			type='button'
+			className='btn btn-circle btn-accent btn-sm disabled:bg-base-200 rounded-full'
 			onClick={onClick}
-			disabled={disabled}
-		>
+			disabled={disabled}>
 			{icon}
 		</button>
 	);
@@ -35,13 +34,9 @@ const PaginationButton = ({ onClick, disabled, icon }) => {
 
 const PdfButton = (props) => {
 	return (
-		<button
-			type="button"
-			className="btn btn-xs rounded-full bg-secondary text-secondary-content"
-			{...props}
-		>
+		<button type='button' className='btn-filter-outline' {...props}>
 			PDF
-			<PDF className="h-4 w-4" />
+			<PDF className='h-4 w-4' />
 		</button>
 	);
 };

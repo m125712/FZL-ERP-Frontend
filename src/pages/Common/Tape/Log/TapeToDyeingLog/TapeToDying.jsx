@@ -9,10 +9,9 @@ import { useCommonTapeToDyeing } from '@/state/Common';
 import TapeToDyeingAddOrUpdate from './TapeToDyeingAddOrUpdate';
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading, isError } =
-	useCommonTapeToDyeing();
+		useCommonTapeToDyeing();
 	const info = new PageInfo('SFG Tape Log', '/zipper/tape-coil-to-dyeing');
 	const [coilLog, setCoilLog] = useState([]);
-
 
 	const haveAccess = useAccess('common__coil_log');
 
@@ -152,9 +151,8 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
-	
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
+		<div>
 			<ReactTable
 				title={info.getTitle()}
 				data={data}

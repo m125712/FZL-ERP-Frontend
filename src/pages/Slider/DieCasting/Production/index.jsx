@@ -5,7 +5,6 @@ import { useAccess } from '@/hooks';
 import { useSliderDieCastingProduction } from '@/state/Slider';
 
 import { DateTime, EditDelete } from '@/ui';
-import PageContainer from '@/ui/Others/PageContainer';
 import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -19,21 +18,6 @@ export default function Index() {
 		url,
 		'slider__die_casting_production'
 	);
-
-	const breadcrumbs = [
-		{
-			label: 'Slider',
-			isDisabled: true,
-		},
-		{
-			label: 'Die Casting',
-			isDisabled: true,
-		},
-		{
-			label: 'Production',
-			href: '/slider/die-casting/production',
-		},
-	];
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -202,7 +186,7 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<PageContainer title='Production Lists' breadcrumbs={breadcrumbs}>
+		<>
 			<ReactTable
 				title={info.getTitle()}
 				accessor={haveAccess.includes('create')}
@@ -223,6 +207,6 @@ export default function Index() {
 					}}
 				/>
 			</Suspense>
-		</PageContainer>
+		</>
 	);
 }

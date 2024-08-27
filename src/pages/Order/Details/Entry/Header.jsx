@@ -119,7 +119,7 @@ export default function Header({
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody title='Item'>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					<FormField
 						label='order_info_uuid'
 						title='O/N'
@@ -259,7 +259,7 @@ export default function Header({
 						/>
 					</FormField>
 				</div>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					<div className='flex w-full flex-col gap-1 md:flex-row'>
 						<FormField
 							label='stopper_type'
@@ -351,7 +351,7 @@ export default function Header({
 						/>
 					</FormField>
 				</div>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					<Textarea label='description' {...{ register, errors }} />
 					<Textarea label='remarks' {...{ register, errors }} />
 				</div>
@@ -374,7 +374,7 @@ export default function Header({
 						</div>
 					</div>
 				}>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					<FormField
 						label='puller_type'
 						title='Puller'
@@ -470,7 +470,7 @@ export default function Header({
 					</FormField>
 				</div>
 
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					<FormField
 						label='puller_link'
 						title='Puller Link'
@@ -545,8 +545,8 @@ export default function Header({
 					</FormField>
 				</div>
 
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					<div className='flex basis-3/4 flex-col gap-1 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
+					<div className='text-secondary-content flex basis-3/4 flex-col gap-1 md:flex-row'>
 						<FormField
 							label='top_stopper'
 							title='Top Stopper'
@@ -697,7 +697,7 @@ export default function Header({
 			</SectionEntryBody>
 
 			<SectionEntryBody title='Garments'>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					<Input label={`garment`} {...{ register, errors }} />
 
 					<FormField

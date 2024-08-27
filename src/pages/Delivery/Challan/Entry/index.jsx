@@ -1,4 +1,4 @@
-import { DeleteModal } from "@/components/Modal";
+import { DeleteModal } from '@/components/Modal';
 import {
 	useDeleteFunc,
 	useFetch,
@@ -6,19 +6,19 @@ import {
 	usePostFunc,
 	useRHF,
 	useUpdateFunc,
-} from "@/hooks";
-import { DynamicDeliveryField, Input } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { useAuth } from "@context/auth";
-import { CHALLAN_NULL, CHALLAN_SCHEMA } from "@util/Schema";
-import { customAlphabet } from "nanoid";
-import { Suspense, useEffect, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+} from '@/hooks';
+import { DynamicDeliveryField, Input } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { useAuth } from '@context/auth';
+import { CHALLAN_NULL, CHALLAN_SCHEMA } from '@util/Schema';
+import { customAlphabet } from 'nanoid';
+import { Suspense, useEffect, useState } from 'react';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
-import Header from "./Header";
+import Header from './Header';
 
 const alphabet =
-	"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const nanoid = customAlphabet(alphabet, 10);
 
 // UPDATE IS NOT WORKING
@@ -26,7 +26,7 @@ export default function Index() {
 	const { challan_number, challan_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
-	const { value: order_info_id } = useFetch("/order/info/value/label");
+	const { value: order_info_id } = useFetch('/order/info/value/label');
 
 	const {
 		register,
@@ -43,7 +43,7 @@ export default function Index() {
 	// challan_entry
 	const { fields: challanEntryField } = useFieldArray({
 		control,
-		name: "challan_entry",
+		name: 'challan_entry',
 	});
 
 	const [deleteItem, setDeleteItem] = useState({
@@ -61,16 +61,16 @@ export default function Index() {
 				reset
 			)
 		: useFetchForRhfResetForOrder(
-				`/challan/details/by/order-info-id/${watch("order_info_id")}`,
-				watch("order_info_id"),
+				`/challan/details/by/order-info-id/${watch('order_info_id')}`,
+				watch('order_info_id'),
 				reset
 			);
 
 	useEffect(() => {
 		document.title = isUpdate
 			? `Delivery: Challan (U): ${challan_number}`
-			: "Delivery: Challan Entry";
-	}, [watch("order_info_id")]);
+			: 'Delivery: Challan Entry';
+	}, [watch('order_info_id')]);
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -103,7 +103,7 @@ export default function Index() {
 						};
 
 						return await usePostFunc({
-							uri: "/challan-entry",
+							uri: '/challan-entry',
 							data: updateData,
 						}).catch((err) => console.error(`Error: ${err}`));
 					}
@@ -172,17 +172,17 @@ export default function Index() {
 			}));
 
 		if (challan_entry.length === 0) {
-			alert("Must Not be 0");
+			alert('Must Not be 0');
 		} else {
 			await usePostFunc({
-				uri: "/challan",
+				uri: '/challan',
 				data: challan,
 			});
 
 			let promises = [
 				...challan_entry.map((item) =>
 					usePostFunc({
-						uri: "/challan-entry",
+						uri: '/challan-entry',
 						data: item,
 					})
 				),
@@ -195,29 +195,28 @@ export default function Index() {
 	};
 
 	// Check if order_info_id is valid
-	if (getValues("quantity") === null) return <Navigate to="/not-found" />;
+	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 	const rowClass =
-		"group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide";
+		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	const isDisabled = (index) => {
 		const getVal = (name) => getValues(`challan_entry[${index}].${name}`);
 
-		const hasReceived = getValues("receive_status") === 1;
-		const hasBalance = getVal("balance_quantity") > 0;
-		const hasStock = Number(getVal("warehouse")) > 0;
+		const hasReceived = getValues('receive_status') === 1;
+		const hasBalance = getVal('balance_quantity') > 0;
+		const hasStock = Number(getVal('warehouse')) > 0;
 
-		if (getVal("delivery_quantity") > 0) return false;
+		if (getVal('delivery_quantity') > 0) return false;
 
 		return hasReceived || !hasBalance || !hasStock;
 	};
 
 	return (
-		<div className="container mx-auto mt-4 px-2 pb-2 md:px-4">
+		<div className='container mx-auto mt-4 px-2 pb-2 md:px-4'>
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				noValidate
-				className="flex flex-col gap-4"
-			>
+				className='flex flex-col gap-4'>
 				<Header
 					{...{
 						order_info_id,
@@ -230,32 +229,29 @@ export default function Index() {
 					}}
 				/>
 				<DynamicDeliveryField
-					title="Details"
+					title='Details'
 					tableHead={[
-						"Item Description",
-						"Style",
-						"Color",
-						"Size (CM)",
-						"QTY (PCS)",
-						"Warehouse",
-						"Delivery QTY",
-						"Total Delivered",
-						"Balance QTY",
+						'Item Description',
+						'Style',
+						'Color',
+						'Size (CM)',
+						'QTY (PCS)',
+						'Warehouse',
+						'Delivery QTY',
+						'Total Delivered',
+						'Balance QTY',
 					].map((item) => (
 						<th
 							key={item}
-							scope="col"
-							className="group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300"
-						>
+							scope='col'
+							className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide transition duration-300'>
 							{item}
 						</th>
-					))}
-				>
+					))}>
 					{challanEntryField.map((item, index) => (
 						<tr
 							key={item.id}
-							className="cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30"
-						>
+							className='cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30'>
 							<td className={`w-32 ${rowClass}`}>
 								{getValues(
 									`challan_entry[${index}].item_description`
@@ -279,8 +275,8 @@ export default function Index() {
 							<td className={`w-32 ${rowClass}`}>
 								<Input
 									label={`challan_entry[${index}].delivery_quantity`}
-									is_title_needed="false"
-									height="h-8"
+									is_title_needed='false'
+									height='h-8'
 									dynamicerror={
 										errors?.challan_entry?.[index]
 											?.delivery_quantity
@@ -301,11 +297,10 @@ export default function Index() {
 						</tr>
 					))}
 				</DynamicDeliveryField>
-				<div className="modal-action">
+				<div className='modal-action'>
 					<button
-						type="submit"
-						className="text-md btn btn-primary btn-block"
-					>
+						type='submit'
+						className='text-md btn btn-primary btn-block'>
 						Save
 					</button>
 				</div>
@@ -313,8 +308,8 @@ export default function Index() {
 
 			<Suspense>
 				<DeleteModal
-					modalId="challan_entry_delete"
-					title="Challan Entry"
+					modalId='challan_entry_delete'
+					title='Challan Entry'
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
 					setItems={challanEntryField}

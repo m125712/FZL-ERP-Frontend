@@ -3,11 +3,10 @@ import cn from '@/lib/cn';
 
 const AddButton = ({ onClick }) => {
 	return (
-		<button
-			type='button'
-			onClick={onClick}
-			className='btn btn-primary btn-sm p-0 px-1.5'>
-			<Add className='h-6 w-6' /> NEW
+		<button type='button' onClick={onClick} className='btn-filter-accent'>
+			<Add className='size-5' />
+
+			<span>Add New</span>
 		</button>
 	);
 };
@@ -22,28 +21,17 @@ const Indicator = ({ value = -1, onClick }) => {
 	);
 };
 
-function Title({
-	title,
-	subtitle,
-	handelAdd = () => {},
-	accessor,
-	indicatorValue,
-}) {
+function Title({ title, subtitle }) {
 	return (
-		<div className='mb-4 flex items-start justify-between gap-2 md:justify-start'>
+		<div className='flex items-start justify-between gap-2 md:justify-start'>
 			<div className='flex flex-col'>
-				<h1 className='text-2xl font-semibold capitalize leading-tight text-primary md:text-3xl'>
+				<h1 className='text-xl font-semibold capitalize leading-tight text-primary md:text-2xl'>
 					{title}
 				</h1>
-				{subtitle && (
-					<p className='-mt-1 text-[0.8rem] capitalize text-secondary-content'>
-						{subtitle}
-					</p>
-				)}
+				<p className='mt-0.5 text-sm capitalize text-secondary'>
+					{subtitle || 'See all records in one place'}
+				</p>
 			</div>
-			{accessor && handelAdd && (
-				<Indicator value={indicatorValue} onClick={handelAdd} />
-			)}
 		</div>
 	);
 }
@@ -60,7 +48,7 @@ function TitleOnly({ title, subtitle, className = '' }) {
 					{title}
 				</h1>
 				{subtitle && (
-					<p className='-mt-1 text-[0.8rem] capitalize text-secondary-content'>
+					<p className='text-secondary-content -mt-1 text-[0.8rem] capitalize'>
 						{subtitle}
 					</p>
 				)}
@@ -70,4 +58,4 @@ function TitleOnly({ title, subtitle, className = '' }) {
 }
 
 export default Title;
-export { AddButton, TitleOnly };
+export { AddButton, TitleOnly, Indicator };

@@ -1,5 +1,5 @@
-import FilterButton from "../../ui/FilterButton";
-import { notShowingColumns, SlicedColumn } from "./_components";
+import FilterButton from '../../ui/FilterButton';
+import { notShowingColumns, SlicedColumn } from './_components';
 
 function FilterColumn({ columns }) {
 	const showItem = 6;
@@ -11,8 +11,8 @@ function FilterColumn({ columns }) {
 	);
 
 	return (
-		<FilterButton title="Columns">
-			<div className="flex">
+		<FilterButton title='Columns'>
+			<div className='flex flex-col'>
 				{Array.from(
 					{ length: Math.ceil(allColumn.length / showItem) },
 					(_, i) => (

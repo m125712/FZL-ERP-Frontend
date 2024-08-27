@@ -1,9 +1,17 @@
 :root {
-	--primary-color: #4f496f;
-	--secondary-color: #adb7d6;
-	--accent-color: #51517b;
+	--background-color: #f5f7fa;
+	--primary-color: #27374d;
+	--secondary-color: #526d82;
+	--accent-color: #00adb5;
+	--secondary-light-color: #9db2bf;
 	/* popins */
-	font-family: Poppins, sans-serif;
+	/* font-family: Poppins, sans-serif; */
+	font-family: Inter, sans-serif;
+}
+
+body {
+	background-color: var(--background-color);
+	color: var(--primary-color);
 }
 
 /* Firefox */
@@ -32,7 +40,7 @@
 }
 
 .react-datepicker__close-icon::after {
-	background-color: var(--primary-color) !important;
+	background-color: var(--secondary-color) !important;
 }
 
 .react-datepicker__triangle {
@@ -165,7 +173,33 @@
 }
 
 @layer components {
-	.btn {
+	/* .btn-primary {
+		background-color: var(--primary-color);
+	}
+	.btn-secondary {
+		background-color: var(--secondary-color);
+	}
+	.btn-accent {
+		background-color: var(--accent-color);
+	} */
+
+	.btn-filter-outline {
+		@apply btn btn-sm btn-secondary btn-outline rounded-md border-secondary/30 text-secondary hover:border-transparent hover:bg-secondary;
+	}
+
+	.btn-filter {
+		@apply btn btn-sm btn-secondary rounded-md;
+	}
+
+	.btn-filter-accent {
+		@apply btn btn-sm btn-accent rounded-md;
+	}
+
+	.input-filter {
+		@apply input-secondary border-secondary/30 text-secondary;
+	}
+
+	.btn-glass {
 		background: linear-gradient(
 				-45deg,
 				transparent calc(110% / 3),
@@ -177,17 +211,8 @@
 		/* border: none; */
 		background-color: inherit;
 	}
-	.btn:hover {
+	.btn-glass:hover {
 		background-position: bottom left !important;
-	}
-	.btn-primary {
-		background-color: var(--primary-color);
-	}
-	.btn-secondary {
-		background-color: var(--secondary-color);
-	}
-	.btn-accent {
-		background-color: var(--accent-color);
 	}
 
 	.dash-border-btn {

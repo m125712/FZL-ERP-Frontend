@@ -1,6 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Aside, MobileHeader } from './components';
+import Navbar from './navbar';
 
 const Drawer = () => {
 	const location = useLocation();
@@ -14,7 +15,10 @@ const Drawer = () => {
 				<main className='flex-1 overflow-x-hidden md:min-h-screen'>
 					{!isHidden && <MobileHeader {...{ id }} />}
 					<Suspense>
-						<Outlet />
+						<Navbar />
+						<div className='px-8 py-4'>
+							<Outlet />
+						</div>
 					</Suspense>
 				</main>
 			</div>

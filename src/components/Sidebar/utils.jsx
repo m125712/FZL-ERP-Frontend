@@ -30,14 +30,14 @@ const LogoutButton = memo(() => {
 		<li>
 			<NavLink
 				to='/login'
-				className='btn btn-error flex w-full justify-start bg-error text-left font-normal'
+				className='btn btn-accent flex w-full justify-start text-left font-normal'
 				onClick={handleLogout}>
 				<LogoutIcon className='h-6 w-6' />
 				<div className='flex flex-col justify-around'>
-					<span className='truncate capitalize text-error-content'>
+					<span className='text-error-content truncate capitalize'>
 						{truncateText(user?.name, 15)}
 					</span>
-					<span className='text-[.6rem] capitalize text-error-content'>
+					<span className='text-error-content text-[.6rem] capitalize'>
 						{user?.user_department}
 					</span>
 				</div>
@@ -61,8 +61,10 @@ const SectionButton = ({ isOpened, setIsOpened, type, className }) => {
 		<button
 			type='button'
 			className={cn(
-				'group flex w-full justify-between rounded-md border-secondary px-2 py-1 text-primary-content',
-				isOpened ? 'bg-secondary/10' : 'hover:bg-secondary/10',
+				'text-primary-content group flex w-full justify-between px-6 py-2',
+				isOpened
+					? 'rounded-r-md bg-secondary/10'
+					: 'rounded-md hover:bg-secondary/10',
 				className
 			)}
 			onClick={() => setIsOpened(!isOpened)}>
@@ -88,11 +90,11 @@ const Row = ({ item }) => {
 				to={item.path}
 				className={({ isActive }) =>
 					cn(
-						'block border-l-[3.5px] border-secondary px-2 py-[.35rem] duration-500',
+						'block rounded-r-md border-l-[2px] px-4 py-2 font-normal duration-500',
 						{
-							'thick-border-active rounded-r-md text-secondary-content':
+							'thick-border-active border-accent font-medium':
 								isActive,
-							'thick-border hover:text-secondary-content':
+							'thick-border text-primary-content/70 hover:text-primary-content border-secondary':
 								!isActive,
 						}
 					)
@@ -110,10 +112,10 @@ const MobileMenu = ({ isHidden = false }) => {
 			<header
 				id='mobile-menu-bar'
 				className={cn(
-					'flex items-center justify-between bg-primary px-2 text-primary-content md:hidden',
+					'text-primary-content flex items-center justify-between bg-primary px-2 md:hidden',
 					isHidden && 'hidden'
 				)}>
-				<BrandLink className='block truncate whitespace-nowrap text-2xl font-bold text-primary-content' />
+				<BrandLink className='text-primary-content block truncate whitespace-nowrap text-2xl font-bold' />
 				<div className='flex items-center'>
 					<label
 						htmlFor='menu-open'

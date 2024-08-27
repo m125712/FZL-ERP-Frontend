@@ -11,7 +11,6 @@ import {
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-
 export default function Header({
 	register,
 	errors,
@@ -28,7 +27,7 @@ export default function Header({
 
 	return (
 		<SectionEntryBody title='Information'>
-			<div className='flex flex-col gap-6 px-2 text-secondary-content md:flex-row'>
+			<div className='text-secondary-content flex flex-col gap-6 px-2 md:flex-row'>
 				<Input label='name' {...{ register, errors }} />
 				<Input label='sub_streat' {...{ register, errors }} />
 				<Textarea label='remarks' {...{ register, errors }} />

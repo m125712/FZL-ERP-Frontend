@@ -31,7 +31,7 @@ export default function Index({ sfg }) {
 	const { invalidateQuery: OrderDetailsInvalidate } = useOrderDetails();
 	const { order_number, order_description_uuid, coil_uuid } = useParams();
 	const urlPath = useLocation();
-	
+
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const isUpdate =
@@ -195,7 +195,7 @@ export default function Index({ sfg }) {
 			.then(() => reset(Object.assign({}, COMMON_COIL_TO_DYEING_NULL)))
 			.then(async () => {
 				// await OrderDetailsInvalidate(); common/tape/log
-				navigate(isMatch?'/common/coil/log':`/common/tape/log`);
+				navigate(isMatch ? '/common/coil/log' : `/common/tape/log`);
 			})
 			.catch((err) => console.log(err));
 	};
@@ -236,7 +236,6 @@ export default function Index({ sfg }) {
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
-	
 	const basePath = '/common/coil/sfg/entry-to-dyeing/';
 	const isMatch = location.pathname.startsWith(basePath); // * checking if the current path matches the base path
 
@@ -265,7 +264,7 @@ export default function Index({ sfg }) {
 							<th
 								key={item}
 								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+								className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide transition duration-300 first:pl-2'>
 								{item}
 							</th>
 						))}>

@@ -127,7 +127,7 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
+		<div>
 			<ReactTable
 				title={info.getTitle()}
 				data={data}

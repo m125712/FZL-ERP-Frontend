@@ -17,18 +17,21 @@ export default function Header({
 	Controller,
 	lab_status,
 }) {
-
 	// * state for lab status field *//
 	const [labStatus, setLabStatus] = useState(
-		typeof lab_status !== 'boolean' && Number(lab_status) === 1 ? true : false
+		typeof lab_status !== 'boolean' && Number(lab_status) === 1
+			? true
+			: false
 	);
-	
-	const { value: order_info_uuid } = useFetch(`/other/order/info/value/label`);
+
+	const { value: order_info_uuid } = useFetch(
+		`/other/order/info/value/label`
+	);
 
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody title='Recipe'>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					{/* Order info ID */}
 					<FormField
 						label='order_info_uuid'
@@ -48,7 +51,9 @@ export default function Header({
 												getValues('order_info_uuid')
 										)}
 										onChange={(e) => onChange(e.value)}
-										isDisabled={order_info_uuid == undefined}
+										isDisabled={
+											order_info_uuid == undefined
+										}
 									/>
 								);
 							}}
@@ -57,10 +62,10 @@ export default function Header({
 					<Input label={`name`} {...{ register, errors }} />
 				</div>
 
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					<Textarea label='remarks' {...{ register, errors }} />
 					<div className='mt-6 flex items-center gap-1 text-sm'>
-						<div className='rounded-md border border-primary px-1 w-32'>
+						<div className='w-32 rounded-md border border-primary px-1'>
 							<CheckBox
 								label='lab_status'
 								title='Status'
@@ -69,7 +74,6 @@ export default function Header({
 								onChange={(e) => setLabStatus(e.target.checked)}
 								{...{ register, errors }}
 							/>
-							
 						</div>
 					</div>
 				</div>

@@ -28,7 +28,7 @@ const Card = ({ title, subtitle, Icon, href, children }) => {
 				target='_blank'>
 				{title}
 			</NavLink>
-			<p className='relative z-10 text-slate-400 duration-300 group-hover:text-primary-content'>
+			<p className='group-hover:text-primary-content relative z-10 text-slate-400 duration-300'>
 				{subtitle}
 			</p>
 		</div>
@@ -83,7 +83,7 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
+		<div>
 			<div className='container mx-auto p-4'>
 				<div className='flex flex-col gap-4'>
 					<Title

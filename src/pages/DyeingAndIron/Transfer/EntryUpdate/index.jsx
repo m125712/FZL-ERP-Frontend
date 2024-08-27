@@ -175,8 +175,6 @@ export default function Index({ sfg }) {
 			created_at,
 		}));
 
-
-
 		//* Post new entry */ //
 		let entryData_promises = [
 			...entryData.map(
@@ -239,11 +237,12 @@ export default function Index({ sfg }) {
 
 	const [colors, setColors] = useState([]);
 	const [colorsSelect, setColorsSelect] = useState([]);
-	const { value: order_id } = useFetch( 
+	const { value: order_id } = useFetch(
 		`/other/order/description/value/label?tape_received=true`
 	); // * get order id and set them as value & lables for select options
 
-	const getTransferArea = [ // * get transfer area and set them as value & lables for transfer select options
+	const getTransferArea = [
+		// * get transfer area and set them as value & lables for transfer select options
 		{ label: 'Nylon Plastic Finishing', value: 'nylon_plastic_finishing' },
 		{
 			label: 'Nylon Metallic Finishing',
@@ -253,7 +252,8 @@ export default function Index({ sfg }) {
 		{ label: 'Metal Teeth Molding', value: 'metal_teeth_molding' },
 	];
 
-	const getColors = (colors) => { // * get colors and set them as value & lables for select options
+	const getColors = (colors) => {
+		// * get colors and set them as value & lables for select options
 		setColors([]);
 		colors.map((item) => {
 			setColors((prev) => [...prev, { label: item, value: item }]);
@@ -281,7 +281,7 @@ export default function Index({ sfg }) {
 							<th
 								key={item}
 								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+								className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide transition duration-300 first:pl-2'>
 								{item}
 							</th>
 						))}>

@@ -156,7 +156,7 @@ export default function Index() {
 		//* Post new order description */ //
 		await postData.mutateAsync({
 			url,
-			newData: recipe, 
+			newData: recipe,
 			isOnCloseNeeded: false,
 		});
 
@@ -253,7 +253,7 @@ export default function Index() {
 							<th
 								key={item}
 								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+								className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide transition duration-300 first:pl-2'>
 								{item}
 							</th>
 						))}>

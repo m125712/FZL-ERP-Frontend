@@ -10,7 +10,10 @@ import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo, useState } from 'react';
 
-import { useMaterialInfo, useMaterialTrxAgainstOrderDescription } from '@/state/Store';
+import {
+	useMaterialInfo,
+	useMaterialTrxAgainstOrderDescription,
+} from '@/state/Store';
 import { SFG_TRX_NULL } from '@/util/Schema';
 import RMAddOrUpdate from './AddOrUpdate';
 
@@ -186,7 +189,7 @@ export default function Index() {
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
+		<div>
 			<ReactTable
 				title={info.getTitle()}
 				data={data}

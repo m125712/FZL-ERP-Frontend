@@ -5,7 +5,7 @@ import { useAccess, useFetchFunc } from '@/hooks';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function Index() {
 	const info = new PageInfo('Dyeing Transfer', 'dying_and_iron_transfer');
@@ -196,7 +196,7 @@ export default function Index() {
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
+		<div>
 			<ReactTable
 				handelAdd={handelAdd}
 				accessor={haveAccess.includes('create')}

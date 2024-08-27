@@ -1,4 +1,3 @@
-
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
@@ -12,7 +11,7 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
 	const { data, isLoading, url } = useSliderDieCastingRM();
-	
+
 	const info = new PageInfo(
 		'Die Casting RM Stock',
 		url,
@@ -89,7 +88,7 @@ export default function Index() {
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
+		<div>
 			<ReactTable
 				title={info.getTitle()}
 				data={data}

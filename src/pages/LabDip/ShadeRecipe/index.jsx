@@ -2,9 +2,7 @@ import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useLabDipShadeRecipeDescription } from '@/state/LabDip';
-import { useMaterialInfo, usePurchaseDescription } from '@/state/Store';
 import { DateTime, EditDelete, LinkOnly } from '@/ui';
-import PageContainer from '@/ui/Others/PageContainer';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -140,20 +138,8 @@ export default function Index() {
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
-	const breadcrumbs = [
-		{
-			label: 'Lab Dip',
-			href: '/lab_dip',
-			isDisabled: true,
-		},
-		{
-			label: 'Shade Recipe',
-			href: '/lab-dip/shade_recipe',
-		},
-	];
-
 	return (
-		<PageContainer title='Shade Recipe Lists' breadcrumbs={breadcrumbs}>
+		<>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}
@@ -175,6 +161,6 @@ export default function Index() {
 					}}
 				/>
 			</Suspense>
-		</PageContainer>
+		</>
 	);
 }

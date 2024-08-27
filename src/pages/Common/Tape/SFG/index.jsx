@@ -155,7 +155,7 @@ export default function Index() {
 		// 		selectedProd.type + ' ' + selectedProd.zipper_number,
 		// }));
 		// window['trx_to_dying_modal'].showModal();
-		
+
 		navigate(`/common/tape/sfg/entry-to-dyeing/${data[idx].uuid}`);
 	};
 
@@ -164,7 +164,7 @@ export default function Index() {
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
+		<div>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}

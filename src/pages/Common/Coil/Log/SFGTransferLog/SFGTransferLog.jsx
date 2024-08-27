@@ -10,10 +10,10 @@ import { useCommonCoilToDyeing } from '@/state/Common';
 
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading, isError } =
-	useCommonCoilToDyeing();
+		useCommonCoilToDyeing();
 	const info = new PageInfo('SFG Coil Log', '/zipper/tape-coil-to-dyeing');
 	const [coilLog, setCoilLog] = useState([]);
-console.log(data);
+	console.log(data);
 	const haveAccess = useAccess('common__coil_log');
 
 	const columns = useMemo(
@@ -140,8 +140,9 @@ console.log(data);
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId:  data[idx].uuid,
-			itemName: data[idx].order_number+' - '+data[idx].item_description,
+			itemId: data[idx].uuid,
+			itemName:
+				data[idx].order_number + ' - ' + data[idx].item_description,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -153,7 +154,7 @@ console.log(data);
 
 	console.log(data);
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
+		<div>
 			<ReactTable
 				title={info.getTitle()}
 				data={data}

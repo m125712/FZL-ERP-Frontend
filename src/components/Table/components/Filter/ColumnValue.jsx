@@ -1,6 +1,6 @@
-import { Fragment, useCallback, useMemo } from "react";
-import DebouncedInput from "../DebouncedInput";
-import { Template } from "./_components";
+import { Fragment, useCallback, useMemo } from 'react';
+import DebouncedInput from '../DebouncedInput';
+import { Template } from './_components';
 
 function StatusInput({ columnName, column, isFullFilter }) {
 	const { setFilterValue } = column;
@@ -16,16 +16,18 @@ function StatusInput({ columnName, column, isFullFilter }) {
 		[column]
 	);
 
+	const selectClass =
+		'select select-secondary select-sm h-10 w-full border-[1px] border-gray-300 text-sm text-primary focus:border-gray-300 focus:outline-secondary/30';
+
 	if (!isFullFilter) {
 		return (
 			<select
-				className="select select-bordered select-primary select-sm w-full"
+				className={selectClass}
 				defaultValue={-1}
-				onChange={handleStatusChange}
-			>
-				<option value="-1">All</option>
-				<option value="0">Inactive</option>
-				<option value="1">Active</option>
+				onChange={handleStatusChange}>
+				<option value='-1'>All</option>
+				<option value='0'>Inactive</option>
+				<option value='1'>Active</option>
 			</select>
 		);
 	}
@@ -33,16 +35,14 @@ function StatusInput({ columnName, column, isFullFilter }) {
 	return (
 		<Template
 			columnName={columnName}
-			onClick={() => setFilterValue(undefined)}
-		>
+			onClick={() => setFilterValue(undefined)}>
 			<select
-				className="select select-bordered select-primary select-sm w-full"
+				className={selectClass}
 				defaultValue={-1}
-				onChange={handleStatusChange}
-			>
-				<option value="-1">All</option>
-				<option value="0">Inactive</option>
-				<option value="1">Active</option>
+				onChange={handleStatusChange}>
+				<option value='-1'>All</option>
+				<option value='0'>Inactive</option>
+				<option value='1'>Active</option>
 			</select>
 		</Template>
 	);
@@ -63,25 +63,25 @@ function NumberInput({ columnName, column, isFullFilter }) {
 
 	const [min, max] = getFacetedMinMaxValues() ?? [0, 0];
 	const DefaultInputProps = {
-		type: "text",
-		min: Number(min ?? ""),
-		max: Number(max ?? ""),
-		width: "md:w-28 placeholder-gray-400",
+		type: 'text',
+		min: Number(min ?? ''),
+		max: Number(max ?? ''),
+		width: 'md:w-28 placeholder-gray-400',
 	};
 
 	if (!isFullFilter) {
 		return (
-			<div className="flex flex-col gap-1 md:flex-row">
+			<div className='flex flex-col gap-1 md:flex-row'>
 				<DebouncedInput
 					// placeholder="Min"
-					value={getFilterValue()?.[0] ?? ""}
+					value={getFilterValue()?.[0] ?? ''}
 					onChange={handleMinValueChange}
 					{...DefaultInputProps}
 				/>
 
 				<DebouncedInput
 					// placeholder="Max"
-					value={getFilterValue()?.[1] ?? ""}
+					value={getFilterValue()?.[1] ?? ''}
 					onChange={handleMaxValueChange}
 					{...DefaultInputProps}
 				/>
@@ -93,19 +93,18 @@ function NumberInput({ columnName, column, isFullFilter }) {
 		<Template
 			columnName={columnName}
 			onClick={() => setFilterValue(undefined)}
-			showResetButton={getFilterValue()?.[0] || getFilterValue()?.[1]}
-		>
-			<div className="flex flex-col justify-between gap-1 md:flex-row">
+			showResetButton={getFilterValue()?.[0] || getFilterValue()?.[1]}>
+			<div className='flex flex-col justify-between gap-1 md:flex-row'>
 				<DebouncedInput
 					placeholder={`Min: ${min}`}
-					value={getFilterValue()?.[0] ?? ""}
+					value={getFilterValue()?.[0] ?? ''}
 					onChange={handleMinValueChange}
 					{...DefaultInputProps}
 				/>
 
 				<DebouncedInput
 					placeholder={`Max: ${max}`}
-					value={getFilterValue()?.[1] ?? ""}
+					value={getFilterValue()?.[1] ?? ''}
 					onChange={handleMaxValueChange}
 					{...DefaultInputProps}
 				/>
@@ -125,7 +124,7 @@ function StringInput({ columnName, column, firstValue, isFullFilter }) {
 
 	const handleTextValueChange = useCallback(
 		(e) => {
-			const val = typeof e === "string" ? e : e.target.value;
+			const val = typeof e === 'string' ? e : e.target.value;
 			setFilterValue(val);
 		},
 		[column]
@@ -134,15 +133,15 @@ function StringInput({ columnName, column, firstValue, isFullFilter }) {
 	if (!isFullFilter) {
 		return (
 			<Fragment key={id}>
-				<datalist id={id + "list"}>
+				<datalist id={id + 'list'}>
 					{sortedUniqueValues.slice(0, 10).map((value) => (
 						<option key={value} value={value} />
 					))}
 				</datalist>
 				<DebouncedInput
-					type="text"
-					list={id + "list"}
-					value={getFilterValue() ?? ""}
+					type='text'
+					list={id + 'list'}
+					value={getFilterValue() ?? ''}
 					onChange={handleTextValueChange}
 				/>
 			</Fragment>
@@ -153,15 +152,14 @@ function StringInput({ columnName, column, firstValue, isFullFilter }) {
 		<Template
 			columnName={columnName}
 			onClick={() => setFilterValue(undefined)}
-			showResetButton={getFilterValue()}
-		>
+			showResetButton={getFilterValue()}>
 			<DebouncedInput
-				type="text"
-				list={id + "list"}
-				value={getFilterValue() ?? ""}
+				type='text'
+				list={id + 'list'}
+				value={getFilterValue() ?? ''}
 				onChange={handleTextValueChange}
 			/>
-			<datalist id={id + "list"}>
+			<datalist id={id + 'list'}>
 				{sortedUniqueValues.slice(0, 10).map((value) => (
 					<option key={value} value={value} />
 				))}
@@ -176,14 +174,14 @@ function FilterColumnValue({
 	getPreFilteredRowModel,
 	isFullFilter = false,
 }) {
-	if (column.id.includes("status"))
+	if (column.id.includes('status'))
 		return <StatusInput {...{ columnName, column, isFullFilter }} />;
 
 	const firstValue = getPreFilteredRowModel().flatRows[0]?.getValue(
 		column.id
 	);
 
-	if (typeof firstValue === "number")
+	if (typeof firstValue === 'number')
 		return <NumberInput {...{ columnName, column, isFullFilter }} />;
 
 	return (

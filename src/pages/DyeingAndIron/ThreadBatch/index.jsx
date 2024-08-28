@@ -7,13 +7,14 @@ import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Yarn = lazy(() => import('../ThreadBatch/Yarn'));
+const Dyeing = lazy(() => import('../ThreadBatch/Dyeing'));
 
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
 		useDyeingThreadBatch();
 	const info = new PageInfo('Thread Batch', url, 'dyeing__batch');
 	const { value: machine } = useFetch('/other/machine/value/label');
-	console.log(machine, 'machine');
+
 	const haveAccess = useAccess('dyeing__batch');
 	const navigate = useNavigate();
 	const columns = useMemo(
@@ -76,7 +77,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'actions',
+				accessorKey: 'yarn_actions',
 				header: 'Yarn',
 				enableColumnFilter: false,
 				enableSorting: false,
@@ -87,6 +88,21 @@ export default function Index() {
 						className='btn btn-primary btn-xs'
 						onClick={() => handelYarn(info.row.index)}>
 						Yarn Issue
+					</button>
+				),
+			},
+			{
+				accessorKey: 'dyeing_actions',
+				header: 'Dyeing',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('update'),
+				width: 'w-24',
+				cell: (info) => (
+					<button
+						className='btn btn-primary btn-xs'
+						onClick={() => handelDyeing(info.row.index)}>
+						Dyeing
 					</button>
 				),
 			},
@@ -149,7 +165,7 @@ export default function Index() {
 		],
 		[data, machine]
 	);
-
+	// Machine
 	const handleMachine = async (e, idx) => {
 		await updateData.mutateAsync({
 			url: `${url}/${data[idx]?.uuid}`,
@@ -171,6 +187,21 @@ export default function Index() {
 			batch_id: data[idx].batch_id,
 		}));
 		window['YarnModal'].showModal();
+	};
+	const [dyeing, setDyeing] = useState({
+		uuid: null,
+		dyeing_operator: null,
+		batch_id: null,
+	});
+	const handelDyeing = (idx) => {
+		console.log(data[idx], 'data');
+		setDyeing((prev) => ({
+			...prev,
+			uuid: data[idx].uuid,
+			batch_id: data[idx].batch_id,
+			dyeing_operator: data[idx].dyeing_operator,
+		}));
+		window['DyeingModal'].showModal();
 	};
 
 	// Add
@@ -218,6 +249,15 @@ export default function Index() {
 					{...{
 						yarn,
 						setYarn,
+					}}
+				/>
+			</Suspense>
+			<Suspense>
+				<Dyeing
+					modalId={'DyeingModal'}
+					{...{
+						dyeing,
+						setDyeing,
 					}}
 				/>
 			</Suspense>

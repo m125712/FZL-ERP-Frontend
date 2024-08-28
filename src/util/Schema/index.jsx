@@ -1585,6 +1585,30 @@ export const DYEING_THREAD_BATCH_YARN_NULL = {
 	uuid: null,
 	yarn_quantity:null,
 };
+
+// * Dyeing Thread Batch Dyeing schema*//
+export const DYEING_THREAD_BATCH_DYEING_SCHEMA = {
+	dyeing_operator: STRING_REQUIRED,
+	reason: STRING_REQUIRED,
+	category: STRING_REQUIRED,
+	status: STRING_REQUIRED,
+	pass_by: STRING_REQUIRED,
+	shift: STRING_REQUIRED,
+	dyeing_supervisor: STRING_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const DYEING_THREAD_BATCH_DYEING_NULL = {
+	uuid: null,
+	dyeing_operator: '',
+	reason: '',
+	category: '',
+	status: '',
+	pass_by: '',
+	shift: '',
+	dyeing_supervisor: '',
+	remarks: '',
+};
 // * Dyeing Transfer
 
 export const DYEING_TRANSFER_SCHEMA = {

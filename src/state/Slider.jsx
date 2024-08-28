@@ -80,6 +80,13 @@ export const useSliderDieCastingTransfer = () =>
 		url: '/slider/die-casting-transfer',
 	});
 
+// * Die Casting --> (TRANSFER -> Against Stock)
+export const useSliderDieCastingTransferAgainstStock = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDieCastingTransfer(),
+		url: '/slider/trx-against-stock',
+	});
+
 // * Order Against RM Log
 export const useOrderAgainstSliderAssemblyRMLog = () =>
 	createGlobalState({

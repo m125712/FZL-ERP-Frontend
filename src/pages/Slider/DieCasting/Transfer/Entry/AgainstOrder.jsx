@@ -1,18 +1,23 @@
 import { NoDataFound } from '@/components/Table/ui';
 import { useRHF } from '@/hooks';
 import cn from '@/lib/cn';
-import { CheckBoxWithoutLabel, DynamicField, FormField, Input } from '@/ui';
+import { useOtherOrder } from '@/state/Other';
+import { useSliderDieCastingStockByOrderNumbers } from '@/state/Slider';
+import {
+	CheckBoxWithoutLabel,
+	DynamicField,
+	FormField,
+	Input,
+	ReactSelect,
+} from '@/ui';
 import {
 	SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_NULL,
 	SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_SCHEMA,
 } from '@/util/Schema';
-import { useEffect, useRef, useState } from 'react';
-import Header from './Header';
-import { useOtherOrder } from '@/state/Other';
-import { Controller } from 'react-hook-form';
-import ReactSelect from 'react-select';
 import { DevTool } from '@hookform/devtools';
-import { useSliderDieCastingStockByOrderNumbers } from '@/state/Slider';
+import { useEffect, useRef, useState } from 'react';
+import { Controller } from 'react-hook-form';
+import Header from './Header';
 
 const AgainstOrder = () => {
 	const r_saveBtn = useRef();
@@ -55,12 +60,11 @@ const AgainstOrder = () => {
 
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
-
 	useEffect(() => {
 		if (isAllChecked || isSomeChecked) {
-			return stockFields.forEach((item, index) => {
-				setValue(`stocks[${index}].is_checked`, true);
-			});
+			return stockFields.forEach((item, index) =>
+				setValue(`stocks[${index}].is_checked`, true)
+			);
 		}
 		if (!isAllChecked) {
 			return stockFields.forEach((item, index) => {
@@ -96,6 +100,8 @@ const AgainstOrder = () => {
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 	const thClass =
 		'group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300';
+
+	console.log(getValues());
 
 	return (
 		<form
@@ -279,7 +285,7 @@ const AgainstOrder = () => {
 				</button>
 			</div>
 
-			<DevTool control={control} />
+			<DevTool control={control} placement='top-left' />
 		</form>
 	);
 };

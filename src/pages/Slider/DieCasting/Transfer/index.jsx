@@ -1,8 +1,10 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useSliderDieCastingTransfer } from '@/state/Slider';
-
+import {
+	useSliderDieCastingStock,
+	useSliderDieCastingTransferAgainstStock,
+} from '@/state/Slider';
 import { DateTime, EditDelete } from '@/ui';
 import PageContainer from '@/ui/Others/PageContainer';
 import PageInfo from '@/util/PageInfo';
@@ -13,7 +15,9 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 const Index = () => {
 	const navigate = useNavigate();
-	const { data, isLoading, url, deleteData } = useSliderDieCastingTransfer();
+	const { data, isLoading, url, deleteData } =
+		useSliderDieCastingTransferAgainstStock();
+	const { invalidateQuery } = useSliderDieCastingStock();
 	const info = new PageInfo('Transfer', url, 'slider__die_casting_transfer');
 	const haveAccess = useAccess('slider__die_casting_transfer');
 
@@ -25,7 +29,41 @@ const Index = () => {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
+			{
+				accessorKey: 'die_casting_uuid',
+				header: 'die_casting_uuid',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'quantity',
+				header: 'quantity',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'created_by_name',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created At',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
 			{
 				accessorKey: 'action',
 				header: 'Action',
@@ -56,7 +94,7 @@ const Index = () => {
 
 	// Update
 	const handelUpdate = (uuid) => {
-		navigate(`/slider/die-casting/transfer/update/${uuid}`);
+		// navigate(`/slider/die-casting/transfer/update/${uuid}`);
 	};
 
 	// Delete
@@ -95,7 +133,7 @@ const Index = () => {
 	return (
 		<PageContainer title='Transfer Lists' breadcrumbs={breadcrumbs}>
 			<ReactTable
-				title={info.getTitle()}
+				title='Against Stock > Slider Assembly'
 				handelAdd={handelAdd}
 				accessor={haveAccess.includes('create')}
 				data={data}
@@ -112,6 +150,7 @@ const Index = () => {
 						setDeleteItem,
 						url,
 						deleteData,
+						invalidateQuery,
 					}}
 				/>
 			</Suspense>

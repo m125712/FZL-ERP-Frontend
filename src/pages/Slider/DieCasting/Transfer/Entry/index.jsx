@@ -5,39 +5,37 @@ import Tabs from '@/ui/Others/Tabs';
 
 import AgainstOrder from './AgainstOrder';
 import AgainstStock from './AgainstStock';
+const breadcrumbs = [
+	{
+		label: 'Slider',
+		isDisabled: true,
+	},
+	{
+		label: 'Die Casting',
+		isDisabled: true,
+	},
+	{
+		label: 'Transfer',
+		href: '/slider/die-casting/transfer',
+	},
+	{
+		label: 'Create',
+		href: '/slider/die-casting/transfer/entry',
+	},
+];
+const tabs = [
+	{
+		label: 'Against Stock',
+		content: <AgainstStock />,
+	},
+	{
+		label: 'Against Order',
+		content: <AgainstOrder />,
+	},
+];
 
 const Index = () => {
-	useAccess('slider__die_casting_transfer_entry');
-
-	const breadcrumbs = [
-		{
-			label: 'Slider',
-			isDisabled: true,
-		},
-		{
-			label: 'Die Casting',
-			isDisabled: true,
-		},
-		{
-			label: 'Transfer',
-			href: '/slider/die-casting/transfer',
-		},
-		{
-			label: 'Create',
-			href: '/slider/die-casting/transfer/entry',
-		},
-	];
-
-	const tabs = [
-		{
-			label: 'Against Order',
-			content: <AgainstOrder />,
-		},
-		{
-			label: 'Against Stock',
-			content: <AgainstStock />,
-		},
-	];
+	const haveAccess = useAccess('slider__die_casting_transfer_entry');
 
 	return (
 		<PageContainer title={'Create Transfer'} breadcrumbs={breadcrumbs}>

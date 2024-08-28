@@ -106,7 +106,7 @@ export default function Index() {
 					</>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'pcs_per_kg',
@@ -118,7 +118,7 @@ export default function Index() {
 					</>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
 			// {
 			// 	accessorKey: "remarks",

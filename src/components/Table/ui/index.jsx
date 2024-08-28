@@ -20,14 +20,14 @@ const SortingIndicator = ({ type, canSort }) => {
 	}
 };
 
-const PaginationButton = ({ onClick, disabled, icon }) => {
+const PaginationButton = ({ onClick, disabled, children }) => {
 	return (
 		<button
 			type='button'
-			className='btn btn-circle btn-accent btn-sm disabled:bg-base-200 rounded-full'
+			className='btn-filter-outline h-8 gap-0.5 px-2.5 py-1 text-xs disabled:bg-base-100'
 			onClick={onClick}
 			disabled={disabled}>
-			{icon}
+			{children}
 		</button>
 	);
 };

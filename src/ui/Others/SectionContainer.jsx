@@ -4,7 +4,7 @@ const SectionContainer = ({ title, children, className, buttons }) => {
 	return (
 		<div
 			className={cn(
-				'container mx-auto rounded border border-primary/10 shadow-sm',
+				'rounded border border-primary/10 shadow-sm',
 				className
 			)}>
 			<div className='flex items-center gap-2 bg-secondary-content/5 px-4 py-3 text-2xl font-semibold capitalize leading-tight text-primary md:text-3xl'>

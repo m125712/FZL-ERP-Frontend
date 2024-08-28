@@ -146,9 +146,10 @@ function Table({
 			<Suspense>
 				<div
 					className={cn(
-						'overflow-x-auto rounded-md border-[1px] border-secondary/20',
+						'overflow-x-auto rounded-t-md border-[1px] border-secondary/20',
 						showTitleOnly && 'mb-6',
-						containerClassName
+						containerClassName,
+						table.getPageCount() <= 1 && 'rounded-b-md'
 					)}>
 					<table className='w-full'>
 						<TableHead
@@ -162,7 +163,7 @@ function Table({
 					</table>
 				</div>
 			</Suspense>
-			{!showTitleOnly && showPagination && (
+			{!showTitleOnly && showPagination && table.getPageCount() > 1 && (
 				<Suspense>
 					<Pagination {...table} />
 				</Suspense>

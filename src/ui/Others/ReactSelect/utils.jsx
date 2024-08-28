@@ -5,7 +5,7 @@ const controlStyles = {
 	focus: '!border-secondary/50 outline outline-2 outline-offset-2 outline-secondary',
 	nonFocus: 'border-secondary/30',
 	disabled:
-		'!bg-error/10 border-2 border-error/50 !text-error cursor-not-allowed',
+		'!bg-error/5 border-[1px] border-error/50 !text-error cursor-not-allowed',
 };
 const placeholderStyles = 'text-secondary text-sm ';
 
@@ -16,7 +16,7 @@ const singleValueStyles = 'grow';
 // Multi Value
 const multiValueLabelStyles = 'rounded-md mr-1';
 const multiValueStyles =
-	'mr-2 border px-2 py-1 rounded-md border-secondary/30 bg-base-200 text-secondary';
+	'mr-2 border px-2 py-1 rounded-md border-secondary/30 bg-base-100 text-secondary';
 const multiValueRemoveStyles =
 	'size-5 text-error bg-error/10 text-sm rounded-md hover:bg-error/40 hover:text-error hover:cursor-pointer hover:shadow-2xl hover:active:bg-error/60 hover:active:text-error hover:active:shadow-none';
 

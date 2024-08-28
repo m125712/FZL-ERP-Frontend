@@ -13,13 +13,13 @@ function AddModal({
 	return (
 		<dialog
 			id={id}
-			className='modal modal-bottom sm:modal-middle max-h-screen overflow-hidden'>
+			className='modal modal-bottom max-h-screen overflow-hidden sm:modal-middle'>
 			<form
 				onSubmit={onSubmit}
 				noValidate
 				method='dialog'
 				className={cn(
-					'modal-box text-secondary-content flex w-full flex-col justify-between bg-gray-50 p-6',
+					'modal-box flex w-full flex-col justify-between bg-base-100 p-6 text-secondary-content',
 					!isSmall && 'sm:max-w-5xl',
 					formClassName
 				)}>

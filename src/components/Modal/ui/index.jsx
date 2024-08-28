@@ -6,8 +6,8 @@ const Header = ({ title, onClose }) => (
 		<button
 			type='button'
 			onClick={onClose}
-			className='btn btn-circle btn-outline btn-error btn-sm group'>
-			<Close className='text-error group-hover:text-primary-content h-5 w-5' />
+			className='group btn btn-circle btn-outline btn-error btn-sm'>
+			<Close className='h-5 w-5 text-error group-hover:text-primary-content' />
 		</button>
 	</div>
 );
@@ -25,7 +25,7 @@ const DeleteFooter = ({ handelCancelClick }) => (
 		<button
 			type='button'
 			onClick={handelCancelClick}
-			className='btn btn-outline border-primary text-primary hover:bg-primary'>
+			className='btn btn-outline btn-primary'>
 			Cancel
 		</button>
 

@@ -9,7 +9,7 @@ function PaginatedItems({ initialPage, totalPages, onChange, currentPage }) {
 		<ReactPaginate
 			forcePage={currentPage}
 			initialPage={currentPage}
-			activeLinkClassName='btn-accent bg-accent'
+			activeLinkClassName='btn-accent !bg-accent'
 			pageLinkClassName='btn btn-sm bg-base-200 rounded-md h-8'
 			previousClassName='hidden'
 			nextClassName='hidden'

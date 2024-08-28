@@ -5,7 +5,7 @@ import { SortingIndicator } from './ui';
 
 export default function TableHead({ getHeaderGroups, getPreFilteredRowModel }) {
 	return (
-		<thead className='bg-base-200 select-none text-sm text-primary'>
+		<thead className='select-none bg-base-200 text-sm text-primary'>
 			<tr>
 				{getHeaderGroups().map(({ headers }) =>
 					headers.map(

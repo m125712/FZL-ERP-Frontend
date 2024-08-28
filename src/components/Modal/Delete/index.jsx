@@ -32,7 +32,7 @@ export default function Index({
 		console.log({
 			url: `${url}/${deleteItem?.itemId}`,
 		});
-	
+
 		await deleteData.mutateAsync({
 			url: `${url}/${deleteItem?.itemId}`,
 			onClose: handelClose,
@@ -46,7 +46,7 @@ export default function Index({
 				onSubmit={onSubmit}
 				noValidate
 				method='dialog'
-				className='modal-box bg-gray-50 text-error'>
+				className='modal-box bg-base-100 text-error'>
 				<Header title={`Delete ${title}`} onClose={handelCancelClick} />
 				<Body item={deleteItem?.itemName} />
 				<DeleteFooter {...{ handelCancelClick }} />

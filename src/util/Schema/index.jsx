@@ -1546,6 +1546,31 @@ export const DYEING_THREAD_BATCH_NULL = {
 		},
 	],
 };
+//* Dyeing Thread Batch Conneing
+export const DYEING_THREAD_CONNEING_SCHEMA = {
+	coning_operator: STRING_REQUIRED,
+	coning_supervisor: STRING_REQUIRED,
+	coning_machines: STRING_REQUIRED,
+	batch_entry: yup.array().of(
+		yup.object().shape({
+			coning_production_quantity: NUMBER_REQUIRED,
+			coning_production_quantity_in_kg: NUMBER_REQUIRED,
+		})
+	),
+};
+
+export const DYEING_THREAD_CONNEING_NULL = {
+	uuid: null,
+	coning_operator: '',
+	coning_supervisor: '',
+	coning_machines: '',
+	batch_entry: [
+		{
+			coning_production_quantity: null,
+			coning_production_quantity_in_kg: null,
+		},
+	],
+};
 
 // * Dyeing Planning Batch production schema*//
 
@@ -1583,7 +1608,7 @@ export const DYEING_THREAD_BATCH_YARN_SCHEMA = {
 };
 export const DYEING_THREAD_BATCH_YARN_NULL = {
 	uuid: null,
-	yarn_quantity:null,
+	yarn_quantity: null,
 };
 
 // * Dyeing Thread Batch Dyeing schema*//

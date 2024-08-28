@@ -63,6 +63,28 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'coneing_actions',
+				header: '',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('create'),
+				width: 'w-24',
+				cell: (info) => {
+					const { week } = info.row.original;
+					return (
+						<button
+							className='btn btn-primary btn-xs'
+							onClick={() =>
+								navigate(
+									`/dyeing-and-iron/batch/batch-conneing/${info.row.original.uuid}`
+								)
+							}>
+							Add Conneing
+						</button>
+					);
+				},
+			},
+			{
 				accessorKey: 'machine_name',
 				header: 'Machine',
 				enableColumnFilter: false,

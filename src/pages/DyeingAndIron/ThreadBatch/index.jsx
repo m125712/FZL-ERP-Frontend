@@ -3,7 +3,13 @@ import ReactTable from '@/components/Table';
 import { useAuth } from '@/context/auth';
 import { useAccess, useFetch } from '@/hooks';
 import { useDyeingThreadBatch } from '@/state/Dyeing';
-import { DateTime, EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
+import {
+	DateTime,
+	EditDelete,
+	LinkWithCopy,
+	ReactSelect,
+	StatusButton,
+} from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -109,10 +115,16 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'batch_status',
-				header: 'Status',
+				accessorKey: 'is_drying_complete',
+				header: 'Drying Completed',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<StatusButton
+						size='btn-sm'
+						value={info.getValue() === 'true' ? 1 : 0}
+						onClick={() => handelDryingComplete(info.row.index)}
+					/>
+				),
 			},
 			{
 				accessorKey: 'created_by_name',
@@ -167,6 +179,30 @@ export default function Index() {
 		],
 		[data, machine]
 	);
+
+	//Drying Completed
+	const handelDryingComplete = async (idx) => {
+		if (data[idx]?.is_drying_complete === null) {
+			await updateData.mutateAsync({
+				url: `${url}/${data[idx]?.uuid}`,
+				updatedData: {
+					is_drying_complete: true,
+					drying_created_at: GetDateTime(),
+				},
+				isOnCloseNeeded: false,
+			});
+		} else {
+			await updateData.mutateAsync({
+				url: `${url}/${data[idx]?.uuid}`,
+				updatedData: {
+					is_drying_complete:
+						data[idx]?.is_drying_complete === 'true' ? false : true,
+					drying_updated_at: GetDateTime(),
+				},
+				isOnCloseNeeded: false,
+			});
+		}
+	};
 	// Machine
 	const handleMachine = async (e, idx) => {
 		if (data[idx]?.machine_uuid === null) {

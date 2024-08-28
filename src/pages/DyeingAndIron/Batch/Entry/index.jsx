@@ -1,33 +1,24 @@
-import { DeleteModal, ProceedModal } from '@/components/Modal';
-import {
-	useFetchForRhfResetForOrder,
-	usePostFunc,
-	useRHF,
-	useFetch,
-	useUpdateFunc,
-	useFetchForRhfResetForPlanning,
-} from '@/hooks';
+import { ProceedModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import {
-	CheckBoxWithoutLabel,
-	DynamicDeliveryField,
-	Input,
-	Textarea,
-} from '@/ui';
+	useFetchForRhfResetForOrder,
+	useFetchForRhfResetForPlanning,
+	useRHF,
+} from '@/hooks';
+import nanoid from '@/lib/nanoid';
+import { useDyeingBatch } from '@/state/Dyeing';
+import { CheckBoxWithoutLabel, Input, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { DYEING_BATCH_SCHEMA, DYEING_BATCH_NULL } from '@util/Schema';
+import { DYEING_BATCH_NULL, DYEING_BATCH_SCHEMA } from '@util/Schema';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useDyeingBatch } from '@/state/Dyeing';
-import nanoid from '@/lib/nanoid';
 import Header from './Header';
 
 // UPDATE IS WORKING
 export default function Index() {
-	const { data, url, updateData, postData, deleteData, isLoading } =
-		useDyeingBatch();
+	const { data, url, updateData, postData } = useDyeingBatch();
 	const { batch_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
@@ -73,19 +64,6 @@ export default function Index() {
 				reset
 			)
 		: useFetchForRhfResetForPlanning(`/zipper/order-batch`, reset);
-
-	// const { value } = useFetch('/zipper/order-batch');
-
-	// TODO: Not sure if this is needed. need further checking
-	let order_info_ids;
-	// useEffect(() => {
-	// 	if (pi_uuid !== undefined) {
-	// 		setOrderInfoIds((prev) => ({
-	// 			...prev,
-	// 			order_info_ids,
-	// 		}));
-	// 	}
-	// }, [getValues('order_info_ids')]);
 
 	// TODO: Submit
 	const onSubmit = async (data) => {

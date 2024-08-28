@@ -2,7 +2,6 @@ import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useSliderDieCastingStock } from '@/state/Slider';
-
 import { DateTime, EditDelete } from '@/ui';
 import PageContainer from '@/ui/Others/PageContainer';
 import PageInfo from '@/util/PageInfo';
@@ -267,21 +266,21 @@ export default function Index() {
 				accessorKey: 'quantity',
 				header: 'Quantity',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 
 			{
 				accessorKey: 'weight',
 				header: 'Weight',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
 
 			{
 				accessorKey: 'pcs_per_kg',
 				header: 'Pcs/Kg',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()).toFixed(0),
 			},
 
 			{

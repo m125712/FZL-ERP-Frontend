@@ -1,18 +1,70 @@
 import { NoDataFound } from '@/components/Table/ui';
+import { ShowLocalToast } from '@/components/Toast';
+import { useAuth } from '@/context/auth';
 import { useRHF } from '@/hooks';
 import cn from '@/lib/cn';
-import { useSliderDieCastingStock } from '@/state/Slider';
+import nanoid from '@/lib/nanoid';
+import {
+	useSliderDieCastingStock,
+	useSliderDieCastingTransferAgainstStock,
+} from '@/state/Slider';
 import { CheckBoxWithoutLabel, DynamicField, Input } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
 import {
 	SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_NULL,
 	SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA,
 } from '@/util/Schema';
+import { DevTool } from '@hookform/devtools';
 import { useEffect, useRef, useState } from 'react';
 import Header from './Header';
 
+const getBadges = (index, getValues) => {
+	const badges = [
+		{
+			label: 'Body',
+			isActive: Number(getValues(`stocks[${index}].is_body`)) === 1,
+		},
+		{
+			label: 'Puller',
+			isActive: Number(getValues(`stocks[${index}].is_puller`)) === 1,
+		},
+		{
+			label: 'Link',
+			isActive: Number(getValues(`stocks[${index}].is_link`)) === 1,
+		},
+		{
+			label: 'Cap',
+			isActive: Number(getValues(`stocks[${index}].is_cap`)) === 1,
+		},
+		{
+			label: 'H Bottom',
+			isActive: Number(getValues(`stocks[${index}].is_h_bottom`)) === 1,
+		},
+		{
+			label: 'U Top',
+			isActive: Number(getValues(`stocks[${index}].is_u_top`)) === 1,
+		},
+
+		{
+			label: 'Box Pin',
+			isActive: Number(getValues(`stocks[${index}].is_box_pin`)) === 1,
+		},
+
+		{
+			label: 'Two Way Pin',
+			isActive:
+				Number(getValues(`stocks[${index}].is_two_way_pin`)) === 1,
+		},
+	];
+
+	return badges;
+};
+
 const AgainstStock = () => {
 	const r_saveBtn = useRef();
-	const { data: stocks } = useSliderDieCastingStock();
+	const { user } = useAuth();
+	const { data: stocks, postData } = useSliderDieCastingStock();
+	const { invalidateQuery } = useSliderDieCastingTransferAgainstStock();
 	const {
 		register,
 		handleSubmit,
@@ -33,9 +85,54 @@ const AgainstStock = () => {
 	});
 
 	const onSubmit = async (data) => {
-		console.log({
-			data,
-		});
+		// * ADD data
+		const created_at = GetDateTime();
+
+		const batch_entry = [...data?.stocks]
+			.filter((item) => item.is_checked)
+			.map((item) => ({
+				uuid: nanoid(),
+				die_casting_uuid: item.uuid,
+				quantity: item.assigned_quantity,
+				created_by: user?.uuid,
+				created_at,
+			}));
+
+		if (batch_entry.length === 0) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Select at least one item to proceed.',
+			});
+		} else {
+			// console.log(batch_entry);
+
+			let promises = [
+				...batch_entry.map(
+					async (item) =>
+						await postData.mutateAsync({
+							url: '/slider/trx-against-stock',
+							newData: item,
+							isOnCloseNeeded: false,
+						})
+				),
+			];
+
+			await Promise.all(promises)
+				.then(() => {
+					reset(
+						Object.assign(
+							{},
+							SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_NULL
+						)
+					);
+					invalidateQuery();
+					navigate(`/slider/die-casting/transfer`);
+				})
+				.catch((err) => console.error(err));
+
+			return;
+		}
+		return;
 	};
 
 	useEffect(() => {
@@ -91,7 +188,7 @@ const AgainstStock = () => {
 			onSubmit={handleSubmit(onSubmit)}
 			noValidate
 			className='flex flex-col gap-6'>
-			<Header errors={errors} register={register} />
+			{/* <Header errors={errors} register={register} /> */}
 			<DynamicField
 				title={`Entry Details`}
 				tableHead={
@@ -123,7 +220,8 @@ const AgainstStock = () => {
 							'Slider Body',
 							'Puller Link',
 							'Stopper Type',
-							'Assigned QTY',
+							'Quantity',
+							'Assigned QTY (PCS)',
 						].map((item) => {
 							return (
 								<th key={item} scope='col' className={thClass}>
@@ -137,71 +235,6 @@ const AgainstStock = () => {
 
 				{stockFields.length > 0 &&
 					stockFields.map((item, index) => {
-						const badges = [
-							{
-								label: 'Body',
-								isActive:
-									Number(
-										getValues(`stocks[${index}].is_body`)
-									) === 1,
-							},
-							{
-								label: 'Puller',
-								isActive:
-									Number(
-										getValues(`stocks[${index}].is_puller`)
-									) === 1,
-							},
-							{
-								label: 'Link',
-								isActive:
-									Number(
-										getValues(`stocks[${index}].is_link`)
-									) === 1,
-							},
-							{
-								label: 'Cap',
-								isActive:
-									Number(
-										getValues(`stocks[${index}].is_cap`)
-									) === 1,
-							},
-							{
-								label: 'H Bottom',
-								isActive:
-									Number(
-										getValues(
-											`stocks[${index}].is_h_bottom`
-										)
-									) === 1,
-							},
-							{
-								label: 'U Top',
-								isActive:
-									Number(
-										getValues(`stocks[${index}].is_u_top`)
-									) === 1,
-							},
-
-							{
-								label: 'Box Pin',
-								isActive:
-									Number(
-										getValues(`stocks[${index}].is_box_pin`)
-									) === 1,
-							},
-
-							{
-								label: 'Two Way Pin',
-								isActive:
-									Number(
-										getValues(
-											`stocks[${index}].is_two_way_pin`
-										)
-									) === 1,
-							},
-						];
-
 						return (
 							<tr key={item.id}>
 								<td className={cn(`w-8 ${rowClass}`)}>
@@ -222,75 +255,63 @@ const AgainstStock = () => {
 
 								{/*  Name */}
 								<td className={cn('w-[200px]', rowClass)}>
-									<span>
-										{getValues(`stocks[${index}].name`)}
-									</span>
+									<span>{item.name}</span>
 
 									<div className='mt-1 flex max-w-[200px] flex-wrap gap-1 gap-y-2'>
-										{badges.map((badge) => {
-											return (
+										{getBadges(index, getValues)
+											?.filter((item) => item.isActive)
+											.map((badge) => (
 												<div
 													key={badge.label}
 													className='badge badge-secondary badge-sm'>
 													{badge.label}
 												</div>
-											);
-										})}
+											))}
 									</div>
 								</td>
 
 								{/* Item Name */}
 								<td className={cn('w-24', rowClass)}>
-									{getValues(`stocks[${index}].item_name`)}
+									{item.item_name}
 								</td>
 
 								{/* Zipper Name */}
 								<td className={cn('w-24', rowClass)}>
-									{getValues(
-										`stocks[${index}].zipper_number_name`
-									)}
+									{item.zipper_number_name}
 								</td>
 
 								{/* End Type */}
 								<td className={cn('w-24', rowClass)}>
-									{getValues(
-										`stocks[${index}].end_type_name`
-									)}
+									{item.end_type_name}
 								</td>
 
 								{/* Puller Type */}
 								<td className={cn('w-24', rowClass)}>
-									{getValues(
-										`stocks[${index}].puller_type_name`
-									)}
+									{item.puller_type_name}
 								</td>
 
 								{/* Logo */}
 								<td className={cn('w-24', rowClass)}>
-									{getValues(
-										`stocks[${index}].logo_type_name`
-									)}
+									{item.logo_type_name}
 								</td>
 
 								{/* Slider Body Shape Name */}
 								<td className={cn('w-24', rowClass)}>
-									{getValues(
-										`stocks[${index}].slider_body_shape_name`
-									)}
+									{item.slider_body_shape_name}
 								</td>
 
 								{/* Puller Link Name */}
 								<td className={cn('w-24', rowClass)}>
-									{getValues(
-										`stocks[${index}].puller_link_name`
-									)}
+									{item.puller_link_name}
 								</td>
 
 								{/* Stopper Type */}
 								<td className={cn('w-24', rowClass)}>
-									{getValues(
-										`stocks[${index}].stopper_type_name`
-									)}
+									{item.stopper_type_name}
+								</td>
+								{/* Quantity */}
+								<td className={cn('w-24', rowClass)}>
+									{Number(item.quantity)}
 								</td>
 
 								{/* PROVIDED QTY */}
@@ -319,6 +340,7 @@ const AgainstStock = () => {
 					Save
 				</button>
 			</div>
+			<DevTool control={control} placement='top-left' />
 		</form>
 	);
 };

@@ -16,6 +16,7 @@ import {
 } from '@/util/Schema';
 import { DevTool } from '@hookform/devtools';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 
 const getBadges = (index, getValues) => {
@@ -61,6 +62,7 @@ const getBadges = (index, getValues) => {
 };
 
 const AgainstStock = () => {
+	const navigate = useNavigate();
 	const r_saveBtn = useRef();
 	const { user } = useAuth();
 	const { data: stocks, postData } = useSliderDieCastingStock();
@@ -74,6 +76,7 @@ const AgainstStock = () => {
 		getValues,
 		setValue,
 		watch,
+		reset,
 	} = useRHF(
 		SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA,
 		SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_NULL
@@ -129,7 +132,6 @@ const AgainstStock = () => {
 					navigate(`/slider/die-casting/transfer`);
 				})
 				.catch((err) => console.error(err));
-
 			return;
 		}
 		return;

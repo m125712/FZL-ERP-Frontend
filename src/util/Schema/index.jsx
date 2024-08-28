@@ -1813,3 +1813,28 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_NULL = {
 	is_link: false,
 	stocks: [],
 };
+
+// * vislon production
+export const VISLON_PRODUCTION_SCHEMA = {
+	production_quantity_in_kg: NUMBER_REQUIRED,
+	wastage: NUMBER_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const VISLON_PRODUCTION_SCHEMA_NULL = {
+	production_quantity_in_kg: null,
+	wastage: null,
+	remarks: '',
+};
+
+// * vislon transaction
+
+export const VISLON_TRANSACTION_SCHEMA = {
+	trx_quantity_in_kg: NUMBER_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const VISLON_TRANSACTION_SCHEMA_NULL = {
+	trx_quantity_in_kg: null,
+	remarks: '',
+};	

@@ -29,6 +29,7 @@ import nanoid from '@/lib/nanoid';
 import Header from './Header';
 import * as yup from 'yup';
 
+
 // UPDATE IS WORKING
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =

@@ -1,8 +1,10 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
+import { useAuth } from '@/context/auth';
 import { useAccess, useFetch } from '@/hooks';
 import { useDyeingThreadBatch } from '@/state/Dyeing';
 import { DateTime, EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -14,7 +16,7 @@ export default function Index() {
 		useDyeingThreadBatch();
 	const info = new PageInfo('Thread Batch', url, 'dyeing__batch');
 	const { value: machine } = useFetch('/other/machine/value/label');
-
+	const { user } = useAuth();
 	const haveAccess = useAccess('dyeing__batch');
 	const navigate = useNavigate();
 	const columns = useMemo(
@@ -167,11 +169,26 @@ export default function Index() {
 	);
 	// Machine
 	const handleMachine = async (e, idx) => {
-		await updateData.mutateAsync({
-			url: `${url}/${data[idx]?.uuid}`,
-			updatedData: { machine_uuid: e.value },
-			isOnCloseNeeded: false,
-		});
+		if (data[idx]?.machine_uuid === null) {
+			await updateData.mutateAsync({
+				url: `${url}/${data[idx]?.uuid}`,
+				updatedData: {
+					machine_uuid: e.value,
+					lab_created_by: user?.uuid,
+					lab_created_at: GetDateTime(),
+				},
+				isOnCloseNeeded: false,
+			});
+		} else {
+			await updateData.mutateAsync({
+				url: `${url}/${data[idx]?.uuid}`,
+				updatedData: {
+					machine_uuid: e.value,
+					lab_updated_at: GetDateTime(),
+				},
+				isOnCloseNeeded: false,
+			});
+		}
 	};
 	//Yarn
 

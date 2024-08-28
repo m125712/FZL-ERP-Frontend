@@ -18,6 +18,7 @@ export default function Index({
 	yarn = {
 		uuid: null,
 		yarn_quantity: null,
+		batch_id: null,
 	},
 	setYarn,
 }) {
@@ -48,11 +49,11 @@ export default function Index({
 			...prev,
 			uuid: null,
 			yarn_quantity: null,
+			batch_id: null,
 		}));
 		reset(DYEING_THREAD_BATCH_YARN_NULL);
 		window[modalId].close();
 	};
-	console.log(getValues(), 'getvalues');
 
 	const onSubmit = async (data) => {
 		console.log(yarn, 'onsubmit');
@@ -63,7 +64,6 @@ export default function Index({
 				yarn_issue_updated_at: GetDateTime(),
 			};
 
-			console.log(updatedData);
 			await updateData.mutateAsync({
 				url: `${url}/${yarn?.uuid}`,
 				uuid: yarn?.uuid,
@@ -94,7 +94,11 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={yarn?.yarn_quantity !== null ? 'Update Yarn' : 'Yarn'}
+			title={
+				yarn?.yarn_quantity !== null
+					? `Update Yarn on ${yarn?.batch_id} `
+					: `Yarn Issue on ${yarn?.batch_id} `
+			}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

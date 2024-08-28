@@ -13,9 +13,9 @@ export default function Index() {
 		useDyeingThreadBatch();
 	const info = new PageInfo('Thread Batch', url, 'dyeing__batch');
 	const { value: machine } = useFetch('/other/machine/value/label');
+	console.log(machine, 'machine');
 	const haveAccess = useAccess('dyeing__batch');
 	const navigate = useNavigate();
-
 	const columns = useMemo(
 		() => [
 			// * batch_id
@@ -63,10 +63,10 @@ export default function Index() {
 					return (
 						<ReactSelect
 							key={machine_uuid}
-							placeholder='Select machine uuid'
+							placeholder='Select Machine'
 							options={machine ?? []}
-							value={machine?.find(
-								(item) => item.value == machine_uuid
+							value={machine?.filter(
+								(item) => item.value === machine_uuid
 							)}
 							filterOption={null}
 							onChange={(e) => handleMachine(e, info.row.index)}
@@ -147,7 +147,7 @@ export default function Index() {
 				),
 			},
 		],
-		[data]
+		[data, machine]
 	);
 
 	const handleMachine = async (e, idx) => {
@@ -164,15 +164,14 @@ export default function Index() {
 		yarn_quantity: null,
 	});
 	const handelYarn = (idx) => {
-		console.log(data[idx], 'yarn');
 		setYarn((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
 			yarn_quantity: data[idx].yarn_quantity,
+			batch_id: data[idx].batch_id,
 		}));
 		window['YarnModal'].showModal();
 	};
-	console.log(data);
 
 	// Add
 	const handelAdd = () => navigate('/dyeing-and-iron/thread-batch/entry');

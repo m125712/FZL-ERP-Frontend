@@ -47,7 +47,7 @@ export {
 	PHONE_NUMBER,
 	PHONE_NUMBER_REQUIRED,
 	STRING,
-	STRING_REQUIRED,
+	STRING_REQUIRED
 };
 
 // Library
@@ -1027,10 +1027,10 @@ export const SLIDER_DIE_CASTING_SCHEMA = {
 		yup.object().shape({
 			mc_no: NUMBER_REQUIRED,
 			die_casting_uuid: STRING_REQUIRED,
-			order_info_uuid: STRING_REQUIRED,
-			cavity_goods: NUMBER_DOUBLE_REQUIRED,
-			cavity_defect: NUMBER_DOUBLE_REQUIRED,
-			push: NUMBER_DOUBLE_REQUIRED,
+			order_info_uuid: STRING,
+			cavity_goods: NUMBER_REQUIRED,
+			cavity_defect: NUMBER_REQUIRED,
+			push: NUMBER_REQUIRED,
 			weight: NUMBER_DOUBLE_REQUIRED,
 			remarks: STRING.nullable(),
 		})
@@ -1631,23 +1631,23 @@ export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 	item: STRING_REQUIRED, //
 	zipper_number: STRING_REQUIRED, //
 	end_type: STRING_REQUIRED, //
-	puller_type: STRING_REQUIRED, //
-	logo_type: STRING_REQUIRED, //
-	slider_body_shape: STRING_REQUIRED, //
-	puller_link: STRING_REQUIRED, //
-	stopper_type: STRING_REQUIRED, //
+	puller_type: STRING, //
+	logo_type: STRING, //
+	slider_body_shape: STRING, //
+	puller_link: STRING, //
+	stopper_type: STRING, //
 	// quantity: NUMBER_REQUIRED, //
 	// weight: NUMBER_REQUIRED, //
 	// pcs_per_kg: NUMBER_REQUIRED, //
 	remarks: STRING.nullable(),
-	is_body: BOOLEAN_REQUIRED,
-	is_puller: BOOLEAN_REQUIRED,
-	is_cap: BOOLEAN_REQUIRED,
-	is_link: BOOLEAN_REQUIRED,
-	is_h_bottom: BOOLEAN_REQUIRED,
-	is_u_top: BOOLEAN_REQUIRED,
-	is_box_pin: BOOLEAN_REQUIRED,
-	is_two_way_pin: BOOLEAN_REQUIRED,
+	is_body: BOOLEAN,
+	is_puller: BOOLEAN,
+	is_cap: BOOLEAN,
+	is_link: BOOLEAN,
+	is_h_bottom: BOOLEAN,
+	is_u_top: BOOLEAN,
+	is_box_pin: BOOLEAN,
+	is_two_way_pin: BOOLEAN,
 };
 
 export const SLIDER_DIE_CASTING_STOCK_NULL = {
@@ -1751,32 +1751,14 @@ export const SLIDER_DASHBOARD_INFO_NULL = {
 
 // * Slider/Die Casting --> (TRANSFER AGAINST STOCK)*//
 export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
-	is_body: BOOLEAN_REQUIRED,
-	is_cap: BOOLEAN_REQUIRED,
-	is_puller: BOOLEAN_REQUIRED,
-	is_link: BOOLEAN_REQUIRED,
-
 	stocks: yup.array().of(
 		yup.object().shape({
 			is_checked: BOOLEAN_REQUIRED,
-			name: STRING,
-			item_name: STRING,
-			zipper_number_name: STRING,
-			end_type_name: STRING,
-			puller_type_name: STRING,
-			logo_type_name: STRING,
-			slider_body_shape_name: STRING,
-			puller_link_name: STRING,
-			stopper_type_name: STRING,
-			is_body: BOOLEAN,
-			is_cap: BOOLEAN,
-			is_puller: BOOLEAN,
-			is_link: BOOLEAN,
-			is_h_bottom: BOOLEAN,
-			is_u_top: BOOLEAN,
-			is_box_pin: BOOLEAN,
-			is_two_way_pin: BOOLEAN,
-			assigned_quantity: NUMBER.required(),
+			assigned_quantity: NUMBER.nullable()
+				.transform((value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+				)
+				.max(yup.ref('quantity'), 'Beyond Max Quantity'),
 		})
 	),
 };
@@ -1833,3 +1815,28 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_NULL = {
 	is_link: false,
 	stocks: [],
 };
+
+// * vislon production
+export const VISLON_PRODUCTION_SCHEMA = {
+	production_quantity_in_kg: NUMBER_REQUIRED,
+	wastage: NUMBER_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const VISLON_PRODUCTION_SCHEMA_NULL = {
+	production_quantity_in_kg: null,
+	wastage: null,
+	remarks: '',
+};
+
+// * vislon transaction
+
+export const VISLON_TRANSACTION_SCHEMA = {
+	trx_quantity_in_kg: NUMBER_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const VISLON_TRANSACTION_SCHEMA_NULL = {
+	trx_quantity_in_kg: null,
+	remarks: '',
+};	

@@ -70,3 +70,29 @@ export const useOrderAgainstVislonFinishingRMLogByUUID = (uuid) =>
 		queryKey: vislonQK.orderAgainstVislonFinishingRMLogByUUID(uuid),
 		url: `/zipper/material-trx-against-order/multiple/by/v_gapping,v_teeth_cleaning,v_sealing,v_t_cutting,v_stopper${uuid}`,
 	});
+
+// * Vislon Teeth Molding Production
+export const useVislonTMP = () =>
+	createGlobalState({
+		queryKey: vislonQK.vislonTMP(),
+		url: '/zipper/sfg-production',
+	});
+
+export const useVislonTMPByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: vislonQK.vislonTMPByUUID(uuid),
+		url: `/zipper/sfg-production/${uuid}`,
+	});
+
+// * Vislon Teeth Molding Transaction
+export const useVislonTMT = () =>
+	createGlobalState({
+		queryKey: vislonQK.vislonTMT(),
+		url: '/zipper/sfg-transaction',
+	});
+
+export const useVislonTMTByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: vislonQK.vislonTMTByUUID(uuid),
+		url: `/zipper/sfg-transaction/${uuid}`,
+	});

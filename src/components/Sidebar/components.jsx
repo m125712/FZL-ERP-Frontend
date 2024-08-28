@@ -39,7 +39,7 @@ function FirstChildMenu(items) {
 }
 
 const Menu = ({ items, type }) => {
-	const [isOpened, setIsOpened] = useState(true);
+	const [isOpened, setIsOpened] = useState(false);
 
 	let { obj, parentObj } = items.reduce(
 		(acc, item) => {

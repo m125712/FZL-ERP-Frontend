@@ -7,6 +7,7 @@ import { useOtherOrder, useOtherSliderItem } from '@/state/Other';
 import {
 	useSliderDieCastingProduction,
 	useSliderDieCastingProductionByUUID,
+	useSliderDieCastingStock,
 } from '@/state/Slider';
 import {
 	DynamicField,
@@ -17,7 +18,6 @@ import {
 	RemoveButton,
 } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
-
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import {
@@ -28,10 +28,11 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export default function Index() {
-	useAccess('slider__die_casting_production_entry');
+	const haveAccess = useAccess('slider__die_casting_production_entry');
 
 	const { url, postData, updateData, deleteData } =
 		useSliderDieCastingProduction();
+	const { invalidateQuery } = useSliderDieCastingStock();
 	const r_saveBtn = useRef();
 	const { uuid } = useParams();
 
@@ -146,6 +147,7 @@ export default function Index() {
 			try {
 				await Promise.all(updatedPromises).then(() => {
 					reset(SLIDER_DIE_CASTING_NULL);
+					invalidateQuery();
 					navigate(`/slider/die-casting/production`);
 				});
 			} catch (err) {
@@ -172,6 +174,7 @@ export default function Index() {
 		await Promise.all(newDataPromises)
 			.then(() => {
 				reset(SLIDER_DIE_CASTING_NULL);
+				invalidateQuery();
 				navigate(`/slider/die-casting/production`);
 			})
 			.catch((err) => {
@@ -218,7 +221,9 @@ export default function Index() {
 										defaultValue={item.mc_no}
 										is_title_needed='false'
 										register={register}
-										dynamicerror={errors?.array?.mc_no}
+										dynamicerror={
+											errors?.array?.[index].mc_no
+										}
 									/>
 								</td>
 
@@ -229,7 +234,8 @@ export default function Index() {
 										is_title_needed='false'
 										register={register}
 										dynamicerror={
-											errors?.array?.die_casting_uuid
+											errors?.array?.[index]
+												?.die_casting_uuid
 										}>
 										<Controller
 											name={`array[${index}].die_casting_uuid`}
@@ -270,7 +276,8 @@ export default function Index() {
 										is_title_needed='false'
 										register={register}
 										dynamicerror={
-											errors?.array?.order_info_uuid
+											errors?.array?.[index]
+												?.order_info_uuid
 										}>
 										<Controller
 											name={`array[${index}].order_info_uuid`}
@@ -310,7 +317,7 @@ export default function Index() {
 										is_title_needed='false'
 										register={register}
 										dynamicerror={
-											errors?.array?.cavity_goods
+											errors?.array?.[index]?.cavity_goods
 										}
 									/>
 								</td>
@@ -323,7 +330,8 @@ export default function Index() {
 										is_title_needed='false'
 										register={register}
 										dynamicerror={
-											errors?.array?.cavity_defect
+											errors?.array?.[index]
+												?.cavity_defect
 										}
 									/>
 								</td>
@@ -335,7 +343,9 @@ export default function Index() {
 										defaultValue={item.push}
 										is_title_needed='false'
 										register={register}
-										dynamicerror={errors?.array?.push}
+										dynamicerror={
+											errors?.array?.[index]?.push
+										}
 									/>
 								</td>
 
@@ -347,7 +357,9 @@ export default function Index() {
 										is_title_needed='false'
 										unit='KG'
 										register={register}
-										dynamicerror={errors?.array?.weight}
+										dynamicerror={
+											errors?.array?.[index]?.weight
+										}
 									/>
 								</td>
 
@@ -358,7 +370,9 @@ export default function Index() {
 										defaultValue={item.remarks}
 										is_title_needed='false'
 										register={register}
-										dynamicerror={errors?.array?.remarks}
+										dynamicerror={
+											errors?.array?.[index]?.remarks
+										}
 									/>
 								</td>
 

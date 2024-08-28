@@ -409,6 +409,14 @@ export const vislonQK = {
 		...vislonQK.orderAgainstVislonFinishingRMLog(),
 		uuid,
 	],
+
+	// * Vislon Teeth Molding Production
+	vislonTMP: () => [...vislonQK.all(), 'vislonTMP'],
+	vislonTMPByUUID: (uuid) => [...vislonQK.vislonTMP(), uuid],
+
+	// * Vislon Teeth Molding Transaction
+	vislonTMT: () => [...vislonQK.all(), 'vislonTMT'],
+	vislonTMTByUUID: (uuid) => [...vislonQK.vislonTMT(), uuid],
 };
 
 // * Metal

@@ -21,9 +21,9 @@ ChartJS.register(
 
 export default function BarChart({ title, data, children }) {
 	return (
-		<div className='flex flex-col rounded-md bg-secondary/70 p-2 shadow-md'>
+		<div className='flex flex-col rounded-md bg-base-200 p-2 shadow-md'>
 			<div className='flex items-center justify-between pl-1 pr-0.5'>
-				<span className='text-secondary-content text-xl font-semibold'>
+				<span className='text-xl font-semibold text-primary'>
 					{title}
 				</span>
 				{children}

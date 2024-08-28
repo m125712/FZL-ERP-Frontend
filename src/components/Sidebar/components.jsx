@@ -15,7 +15,7 @@ const ThirdChildMenu = ({ items, type }) => {
 		<li key={type} className={`${!isOpened && 'mb-2'}`}>
 			<SectionButton {...{ isOpened, setIsOpened, type }} />
 			{isOpened && (
-				<ul className='text-md text-primary-content pl-2 transition-all duration-500 ease-in-out md:pl-4'>
+				<ul className='text-md pl-2 text-primary-content transition-all duration-500 ease-in-out md:pl-4'>
 					{items.map((item) => (
 						<Row key={item.path} {...{ item }} />
 					))}
@@ -71,7 +71,7 @@ const Menu = ({ items, type }) => {
 			)}>
 			<SectionButton {...{ isOpened, setIsOpened, type }} />
 			{isOpened && (
-				<ul className='text-md text-primary-content pl-4 transition-all duration-500 ease-in-out md:pl-6'>
+				<ul className='text-md pl-4 text-primary-content transition-all duration-500 ease-in-out md:pl-6'>
 					{finalItems.map((item) => ({ ...FirstChildMenu(item) }))}
 				</ul>
 			)}
@@ -89,8 +89,8 @@ const SingleMenu = ({ items }) => {
 					to={item.path}
 					className={(nav) =>
 						nav.isActive
-							? `thick-border-active border-accent w-full rounded-r bg-opacity-10 text-white ${cls}`
-							: `hover:text-primary-content w-full rounded border-transparent hover:bg-secondary/10 ${cls}`
+							? `thick-border-active w-full rounded-r border-accent bg-opacity-10 text-white ${cls}`
+							: `w-full rounded border-transparent hover:bg-secondary/10 hover:text-primary-content ${cls}`
 					}>
 					{item.name}
 				</NavLink>
@@ -161,7 +161,7 @@ const Sidebar = () => {
 	return (
 		<div className='min-h-full bg-primary'>
 			<div className='border-b border-secondary px-4 py-6'>
-				<BrandLink className='text-primary-content flex items-center justify-center text-2xl font-bold md:text-4xl' />
+				<BrandLink className='flex items-center justify-center text-2xl font-bold text-primary-content md:text-4xl' />
 			</div>
 
 			<div className='flex flex-col justify-between gap-8 overflow-auto p-4'>
@@ -190,8 +190,8 @@ const Sidebar = () => {
 
 const MobileHeader = ({ id }) => {
 	return (
-		<header className='text-primary-content flex items-center justify-between bg-primary px-2 md:hidden'>
-			<BrandLink className='text-primary-content block truncate whitespace-nowrap text-2xl font-bold' />
+		<header className='flex items-center justify-between bg-primary px-2 text-primary-content md:hidden'>
+			<BrandLink className='block truncate whitespace-nowrap text-2xl font-bold text-primary-content' />
 			<div className='flex items-center'>
 				<MenuIcon id={id} />
 			</div>

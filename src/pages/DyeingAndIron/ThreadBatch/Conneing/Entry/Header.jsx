@@ -43,6 +43,7 @@ export default function Header({
 											const value = e.value;
 											onChange(value);
 										}}
+										isDisabled={true}
 									/>
 								);
 							}}

@@ -32,6 +32,8 @@ export default function Index() {
 	} = useDyeingThreadBatch();
 	const { user } = useAuth();
 	const navigate = useNavigate();
+	const { batch_con_uuid } = useParams();
+	//console.log(batch_con_uuid, 'uuid');
 
 	const [orderInfoIds, setOrderInfoIds] = useState('');
 
@@ -56,7 +58,7 @@ export default function Index() {
 	});
 
 	useFetchForRhfResetForOrder(
-		`/thread/batch-details/by/${orderInfoIds}`,
+		`/thread/batch-details/by/${batch_con_uuid}`,
 		orderInfoIds,
 		reset
 	);

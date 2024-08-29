@@ -76,7 +76,7 @@ export default function Index() {
 							className='btn btn-primary btn-xs'
 							onClick={() =>
 								navigate(
-									`/dyeing-and-iron/batch/batch-conneing/${info.row.original.uuid}`
+									`/dyeing-and-iron/thread-batch/conneing/${info.row.original.uuid}`
 								)
 							}>
 							Add Conneing

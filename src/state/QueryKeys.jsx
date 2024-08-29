@@ -643,6 +643,14 @@ export const threadQK = {
 	//Swatch
 	swatch: () => [...threadQK.all(), 'swatch'],
 	swatchByUUID: (uuid) => [...threadQK.swatch(), uuid],
+
+	//DyesCategory
+	dyesCategory: () => [...threadQK.all(), 'dyes-category'],
+	dyesCategoryByUUID: (uuid) => [...threadQK.dyesCategory(), uuid],
+
+	//Programs
+	programs: () => [...threadQK.all(), 'programs'],
+	programsByUUID: (uuid) => [...threadQK.programs(), uuid],
 };
 
 //* OTHER QUERY KEYS

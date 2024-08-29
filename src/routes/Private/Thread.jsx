@@ -10,6 +10,8 @@ const IndOrderInfo = lazy(() => import('@pages/Thread/Order/Details'));
 const OrderInfoEntry = lazy(() => import('@pages/Thread/Order/Entry'));
 const Machine = lazy(() => import('@pages/Thread/Machine'));
 const Swatch = lazy(() => import('@pages/Thread/Swatch'));
+const DyesCategory = lazy(() => import('@pages/Thread/DyesCategory'));
+const Programs = lazy(() => import('@pages/Thread/Programs'));
 
 export const ThreadRoutes = [
 	{
@@ -78,5 +80,23 @@ export const ThreadRoutes = [
 		type: 'thread',
 		page_name: 'thread__swatch',
 		actions: ['read', 'update'],
+	},
+	{
+		id: 7,
+		name: 'DyesCategory',
+		path: '/thread/dyes-category',
+		element: DyesCategory,
+		type: 'thread',
+		page_name: 'thread__dyes_category',
+		actions: ['create', 'read', 'update', 'delete'],
+	},
+	{
+		id: 8,
+		name: 'Programs',
+		path: '/thread/programs',
+		element: Programs,
+		type: 'thread',
+		page_name: 'thread__programs',
+		actions: ['create', 'read', 'update', 'delete'],
 	},
 ];

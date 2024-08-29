@@ -1275,7 +1275,7 @@ export const THREAD_COUNT_LENGTH_NULL = {
 	sst: '',
 	remarks: '',
 };
-
+// Thread Machine
 export const THREAD_MACHINE_SCHEMA = {
 	name: NAME_REQUIRED,
 	capacity: NUMBER_REQUIRED,
@@ -1288,6 +1288,49 @@ export const THREAD_MACHINE_NULL = {
 	name: '',
 	capacity: null,
 	water_capacity: null,
+	remarks: '',
+};
+
+// Thread DyesCategory
+export const THREAD_DYES_CATEGORY_SCHEMA = {
+	name: NAME_REQUIRED,
+	upto_percentage: NUMBER_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const THREAD_DYES_CATEGORY_NULL = {
+	uuid: null,
+	name: '',
+	upto_percentage: null,
+	remarks: '',
+};
+// 	{
+//   "uuid": "igD0v9DIJQhJeet",
+//   "dyes_category_uuid": "igD0v9DIJQhJeet",
+//   "dyes_category_name": "Dyes Category Name",
+//   "material_uuid": "igD0v9DIJQhJeet",
+//   "material_name": "Material Name",
+//   "quantity": 10,
+//   "created_by": "igD0v9DIJQhJeet",
+//   "created_by_name": "John Doe",
+//   "created_at": "2024-01-01 00:00:00",
+//   "updated_at": "2024-01-01 00:00:00",
+//   "remarks": "Remarks"
+// }
+
+// Thread Programs
+export const THREAD_PROGRAMS_SCHEMA = {
+	dyes_category_uuid: STRING_REQUIRED,
+	material_uuid: STRING_REQUIRED,
+	quantity: NUMBER_DOUBLE_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const THREAD_PROGRAMS_NULL = {
+	uuid: null,
+	dyes_category_uuid: null,
+	material_uuid: null,
+	quantity: null,
 	remarks: '',
 };
 

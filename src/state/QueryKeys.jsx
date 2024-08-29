@@ -4,9 +4,6 @@
  ** https://tkdodo.eu/blog/leveraging-the-query-function-context#query-key-factories
  **/
 
-import { all } from 'axios';
-import { useVislonFinishingRM } from './Vislon';
-
 export const orderQK = {
 	all: () => ['order'],
 
@@ -31,6 +28,7 @@ export const orderQK = {
 	// info
 	infos: () => [...orderQK.all(), 'info'],
 	info: (id) => [...orderQK.infos(), id],
+	infoByUUID: (uuid) => [...orderQK.info(), uuid],
 
 	// buyers
 	buyers: () => [...orderQK.all(), 'buyer'], // [order, buyer]
@@ -53,10 +51,6 @@ export const orderQK = {
 	//properties
 	properties: () => [...orderQK.all(), 'properties'],
 	propertiesByUUID: (uuid) => [...orderQK.party(), uuid],
-
-	// info
-	info: () => [...orderQK.all(), 'info'],
-	infoByUUID: (uuid) => [...orderQK.info(), uuid],
 };
 
 export const adminQK = {
@@ -474,6 +468,14 @@ export const metalQK = {
 	],
 
 	//* Teeth Coloring
+	// * PRODUCTION
+	metalTCProduction: () => [...metalQK.all(), 'tc-production'],
+
+	// * Transaction Log
+	metalTCTrxLog: () => [...metalQK.all(), 'tc-trx-log'],
+
+	// * PRODUCTION Log
+	metalTCProductionLog: () => [...metalQK.all(), 'tc-production-log'],
 
 	// * RM
 	metalTCRM: () => [...metalQK.all(), 'tc-rm'],

@@ -26,6 +26,10 @@ const MetalTeethColoringTrxLog = lazy(
 	() => import('@/pages/Metal/TeethColoring/Log')
 );
 
+const MetalTeethColoringProduction = lazy(
+	() => import('@/pages/Metal/TeethColoring/Production')
+);
+
 // Finishing
 const MetalFinishingRMStock = lazy(
 	() => import('@/pages/Metal/Finishing/RMStock/RMStock')
@@ -119,6 +123,22 @@ export const MetalRoutes = [
 			'click_delete_rm',
 			'click_update_rm_order',
 			'click_delete_rm_order',
+		],
+	},
+
+	{
+		id: 301,
+		name: 'Production',
+		path: '/metal/teeth-coloring/production',
+		element: MetalTeethColoringProduction,
+		type: ['metal', 'teeth-coloring'],
+		page_name: 'metal__teeth_coloring_production',
+		actions: [
+			'create',
+			'read',
+			'update',
+			'click_production',
+			'click_transaction',
 		],
 	},
 	{

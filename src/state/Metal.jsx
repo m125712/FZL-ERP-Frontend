@@ -45,6 +45,28 @@ export const useOrderAgainstMetalTMRMLogByUUID = (uuid) =>
 		url: `/zipper/material-trx-against-order/by/m_teeth_molding${uuid}`,
 	});
 //* Teeth Coloring
+
+// * PRODUCTION
+export const useMetalTCProduction = () =>
+	createGlobalState({
+		queryKey: metalQK.metalTCProduction(),
+		url: '/zipper/sfg/by/teeth_coloring_prod?item_name=metal',
+	});
+
+//* Trx Log
+export const useMetalTCTrxLog = () =>
+	createGlobalState({
+		queryKey: metalQK.metalTCTrxLog(),
+		url: '/zipper/sfg-transaction/by/teeth_coloring_prod?item_name=metal',
+	});
+
+//* Production Log
+export const useMetalTCProductionLog = () =>
+	createGlobalState({
+		queryKey: metalQK.metalTCProductionLog(),
+		url: '/zipper/sfg-production/by/teeth_coloring?item_name=metal',
+	});
+
 // * RM
 export const useMetalTCRM = () =>
 	createGlobalState({

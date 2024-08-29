@@ -429,6 +429,9 @@ export const metalQK = {
 
 	//* Teeth Molding
 
+	// * PRODUCTION
+	metalTMProduction: () => [...metalQK.all(), 'tm-production'],
+
 	// * RM
 	metalTMRM: () => [...metalQK.all(), 'tm-rm'],
 	metalTMRMByUUID: (uuid) => [...metalQK.metalTMRM(), uuid],

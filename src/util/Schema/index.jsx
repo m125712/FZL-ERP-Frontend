@@ -830,14 +830,14 @@ export const TAPE_TO_COIL_TRX_NULL = {
 };
 
 export const TAPE_STOCK_TRX_TO_DYING_SCHEMA = {
-	order_entry_id: NUMBER_REQUIRED,
+	order_description_uuid: NUMBER_REQUIRED,
 	trx_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0),
 	remarks: STRING.nullable(),
 };
 
 export const TAPE_STOCK_TRX_TO_DYING_NULL = {
 	id: null,
-	order_entry_id: '',
+	order_description_uuid: '',
 	trx_quantity: '',
 	trx_from: 'tape_making',
 	trx_to: 'dying_and_iron_stock',
@@ -897,12 +897,9 @@ export const COIL_STOCK_NULL = {
 export const COMMON_COIL_TO_DYEING_SCHEMA = {
 	coil_to_dyeing_entry: yup.array().of(
 		yup.object().shape({
-			order_id: UUID_FK,
-			trx_quantity: NUMBER.nullable()
-				.transform((value, originalValue) =>
-					String(originalValue).trim() === '' ? null : value
-				)
-				.max(yup.ref('max_trf_qty'), 'Cant be greater than stock'), // Transforms empty strings to null
+			order_id: UUID_REQUIRED,
+			trx_quantity: NUMBER_DOUBLE_REQUIRED,
+			// .max(yup.ref('max_trf_qty'), 'Beyond Stock'), // Transforms empty strings to null
 			remarks: STRING.nullable(),
 		})
 	),
@@ -912,7 +909,7 @@ export const COMMON_COIL_TO_DYEING_NULL = {
 	coil_to_dyeing_entry: [
 		{
 			order_id: null,
-			trx_quantity: 0,
+			trx_quantity: null,
 			remarks: '',
 		},
 	],
@@ -980,25 +977,6 @@ export const SWATCH_SCHEMA = {
 
 export const SWATCH_NULL = {
 	order_entry_id: null,
-	remarks: '',
-};
-
-// SFG Production
-
-export const SFG_PRODUCTION_SCHEMA = {
-	production_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0),
-	wastage: NUMBER_DOUBLE,
-	remarks: STRING.nullable(),
-};
-
-export const SFG_PRODUCTION_NULL = {
-	id: null,
-	order_entry_id: null,
-	section: '',
-	used_quantity: '',
-	production_quantity: '',
-	wastage: '',
-	issued_by: '',
 	remarks: '',
 };
 
@@ -1939,4 +1917,73 @@ export const VISLON_TRANSACTION_SCHEMA = {
 export const VISLON_TRANSACTION_SCHEMA_NULL = {
 	trx_quantity_in_kg: null,
 	remarks: '',
+};
+
+// * Metal Teeth Molding Production
+export const METAL_TEETH_MOLDING_PRODUCTION_SCHEMA = {
+	production_quantity: NUMBER_REQUIRED,
+	production_quantity_in_kg: NUMBER_REQUIRED,
+	wastage: NUMBER,
+	remarks: STRING.nullable(),
+};
+
+export const METAL_TEETH_MOLDING_PRODUCTION_SCHEMA_NULL = {
+	uuid: null,
+	production_quantity: null,
+	production_quantity_in_kg: null,
+	wastage: null,
+	remarks: null,
+};
+
+// * SFG PRODUCTION
+export const SFG_PRODUCTION_SCHEMA = {
+	production_quantity: NUMBER_REQUIRED,
+	production_quantity_in_kg: NUMBER_REQUIRED,
+	wastage: NUMBER.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? 0 : value
+	),
+	remarks: STRING.nullable(),
+};
+
+export const SFG_PRODUCTION_SCHEMA_NULL = {
+	uuid: null,
+	order_entry_uuid: null,
+	section: '',
+	production_quantity_in_kg: '',
+	production_quantity: '',
+	wastage: '',
+	remarks: '',
+};
+
+// * SFG transaction in kg
+export const SFG_TRANSACTION_SCHEMA_IN_KG = {
+	trx_quantity_in_kg: NUMBER_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const SFG_TRANSACTION_SCHEMA_IN_KG_NULL = {
+	trx_quantity_in_kg: null,
+	remarks: '',
+};
+
+// * SFG transaction in pcs
+export const SFG_TRANSACTION_SCHEMA_IN_PCS = {
+	trx_quantity: NUMBER_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const SFG_TRANSACTION_SCHEMA_IN_PCS_NULL = {
+	trx_quantity_in_kg: null,
+	remarks: '',
+};
+
+// * SFG transaction
+export const SFG_TRANSACTION_SCHEMA = {
+	...SFG_TRANSACTION_SCHEMA_IN_KG,
+	...SFG_TRANSACTION_SCHEMA_IN_PCS,
+};
+
+export const SFG_TRANSACTION_SCHEMA_NULL = {
+	...SFG_TRANSACTION_SCHEMA_IN_KG_NULL,
+	...SFG_TRANSACTION_SCHEMA_IN_PCS_NULL,
 };

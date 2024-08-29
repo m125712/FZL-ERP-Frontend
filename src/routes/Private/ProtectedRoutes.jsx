@@ -10,7 +10,7 @@ const haveRegularAccess = () => true;
 
 export default function ProtectedRoutes() {
 	const { signed, loading } = useAuth();
-
+	console.log('ProtectedRoutes / signed: ', signed);
 	if (loading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 

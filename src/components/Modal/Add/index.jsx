@@ -4,6 +4,7 @@ import { Footer, Header } from '../ui';
 function AddModal({
 	id,
 	title,
+	subTitle = '',
 	onSubmit,
 	onClose,
 	children,
@@ -23,7 +24,7 @@ function AddModal({
 					!isSmall && 'sm:max-w-5xl',
 					formClassName
 				)}>
-				<Header title={title} onClose={onClose} />
+				<Header title={title} subTitle={subTitle} onClose={onClose} />
 				<div className='flex flex-col justify-between gap-2 pt-2'>
 					{children}
 				</div>

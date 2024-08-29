@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import ProductionLog from './ProductionLog';
+import RMOrderAgainstLog from './RMOrderAgainstLog';
 import RMTransferLog from './RMTransferLog/RMTransferLog';
 import TapeToCoil from './TapeToCoilLog/TapeToCoil';
 import TapeToDying from './TapeToDyeingLog/TapeToDying';
-import RMOrderAgainstLog from './RMOrderAgainstLog';
 
 export default function Index() {
 	useEffect(() => {
@@ -11,15 +11,15 @@ export default function Index() {
 	}, []);
 	return (
 		<div>
-			<TapeToCoil />
-			<hr className='border-secondary-content my-6 border-2 border-dashed' />
-			<TapeToDying />
-			<hr className='border-secondary-content my-6 border-2 border-dashed' />
-			{/* <RMTransferLog />
+			<RMTransferLog />
+			<hr className='my-6 border-2 border-dashed border-secondary-content' />
+			<RMOrderAgainstLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<ProductionLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
-			<RMOrderAgainstLog /> */}
+			<TapeToCoil />
+			<hr className='my-6 border-2 border-dashed border-secondary-content' />
+			<TapeToDying />
 		</div>
 	);
 }

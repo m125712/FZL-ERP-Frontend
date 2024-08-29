@@ -40,28 +40,28 @@ export default function Index() {
 					/>
 				),
 			},
-			{
-				accessorKey: 'add_actions',
-				header: '',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('create'),
-				width: 'w-24',
-				cell: (info) => {
-					const { week } = info.row.original;
-					return (
-						<button
-							className='btn btn-primary btn-xs'
-							onClick={() =>
-								navigate(
-									`/dyeing-and-iron/batch/batch-production/${info.row.original.uuid}`
-								)
-							}>
-							Add Production
-						</button>
-					);
-				},
-			},
+			// {
+			// 	accessorKey: 'add_actions',
+			// 	header: '',
+			// 	enableColumnFilter: false,
+			// 	enableSorting: false,
+			// 	hidden: !haveAccess.includes('create'),
+			// 	width: 'w-24',
+			// 	cell: (info) => {
+			// 		const { week } = info.row.original;
+			// 		return (
+			// 			<button
+			// 				className='btn btn-primary btn-xs'
+			// 				onClick={() =>
+			// 					navigate(
+			// 						`/dyeing-and-iron/batch/batch-production/${info.row.original.uuid}`
+			// 					)
+			// 				}>
+			// 				Add Production
+			// 			</button>
+			// 		);
+			// 	},
+			// },
 			{
 				accessorKey: 'coneing_actions',
 				header: '',

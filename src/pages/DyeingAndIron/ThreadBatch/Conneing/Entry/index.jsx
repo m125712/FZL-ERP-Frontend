@@ -87,6 +87,7 @@ export default function Index() {
 		// Update item
 
 		const threadBatchData = {
+			...data,
 			coning_operator: data?.coning_operator,
 			coning_supervisor: data?.coning_supervisor,
 			coning_machines: data?.coning_machines,
@@ -103,6 +104,7 @@ export default function Index() {
 		// pi entry
 		let updatedThreadBatchPromises = data.batch_entry.map(async (item) => {
 			const updatedData = {
+				...item,
 				coning_production_quantity: item.coning_production_quantity,
 				coning_production_quantity_in_kg:
 					item?.coning_production_quantity_in_kg,

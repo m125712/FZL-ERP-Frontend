@@ -1,13 +1,15 @@
 import { DeleteModal, ProceedModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
 import {
+	useFetch,
 	useFetchForRhfResetForOrder,
+	useFetchForRhfResetForPlanning,
 	usePostFunc,
 	useRHF,
-	useFetch,
 	useUpdateFunc,
-	useFetchForRhfResetForPlanning,
 } from '@/hooks';
-import ReactTable from '@/components/Table';
+import nanoid from '@/lib/nanoid';
+import { useDyeingThreadBatch } from '@/state/Dyeing';
 import {
 	CheckBoxWithoutLabel,
 	DynamicDeliveryField,
@@ -18,21 +20,27 @@ import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import {
-	DYEING_THREAD_BATCH_SCHEMA,
 	DYEING_THREAD_BATCH_NULL,
-	NUMBER, STRING
+	DYEING_THREAD_BATCH_SCHEMA,
+	NUMBER,
+	STRING,
 } from '@util/Schema';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useDyeingThreadBatch } from '@/state/Dyeing';
-import nanoid from '@/lib/nanoid';
-import Header from './Header';
 import * as yup from 'yup';
+import Header from './Header';
 
 // UPDATE IS WORKING
 export default function Index() {
-	const { data, url, updateData, postData, deleteData, isLoading } =
-		useDyeingThreadBatch();
+	const {
+		data,
+		url,
+		updateData,
+		postData,
+		deleteData,
+		isLoading,
+		invalidateQuery: invalidateDyeingThreadBatch,
+	} = useDyeingThreadBatch();
 	const { batch_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
@@ -57,7 +65,9 @@ export default function Index() {
 						yup.ref(
 							isUpdate ? 'can_trx_quantity' : 'balance_quantity'
 						),
-						isUpdate ? 'Beyond Transaction Quantity' : 'Beyond Balance Quantity'
+						isUpdate
+							? 'Beyond Transaction Quantity'
+							: 'Beyond Balance Quantity'
 					),
 				batch_remarks: STRING.nullable(),
 			})
@@ -101,7 +111,6 @@ export default function Index() {
 
 	// const { value } = useFetch('/zipper/order-batch');
 
-	
 	// TODO: Not sure if this is needed. need further checking
 	let order_info_ids;
 	// useEffect(() => {
@@ -153,6 +162,7 @@ export default function Index() {
 					.then(() =>
 						reset(Object.assign({}, DYEING_THREAD_BATCH_NULL))
 					)
+					.then(() => invalidateDyeingThreadBatch())
 					.then(
 						navigate(
 							`/dyeing-and-iron/thread-batch/details/${batch_uuid}`
@@ -220,6 +230,7 @@ export default function Index() {
 					.then(() =>
 						reset(Object.assign({}, DYEING_THREAD_BATCH_NULL))
 					)
+					.then(() => invalidateDyeingThreadBatch())
 					.then(
 						navigate(
 							`/dyeing-and-iron/thread-batch/details/${batch_data.uuid}`
@@ -255,6 +266,7 @@ export default function Index() {
 
 			await Promise.all(promises)
 				.then(() => reset(Object.assign({}, DYEING_THREAD_BATCH_NULL)))
+				.then(() => invalidateDyeingThreadBatch())
 				.then(
 					navigate(
 						`/dyeing-and-iron/thread-batch/details/${batchData.uuid}`

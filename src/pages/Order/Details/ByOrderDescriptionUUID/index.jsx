@@ -17,8 +17,6 @@ export default function Index({ initial_order, idx }) {
 	const hasInitialOrder =
 		Object.keys(initial_order || []).length > 0 ? true : false;
 
-	console.log(hasInitialOrder);
-
 	useEffect(() => {
 		document.title = order_number;
 		if (order_description_uuid !== undefined) {
@@ -38,7 +36,7 @@ export default function Index({ initial_order, idx }) {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className='space-y-8'>
+		<div className='space-y-4'>
 			<Suspense fallback={<InformationSkeleton />}>
 				<SingleInformation
 					order={order}

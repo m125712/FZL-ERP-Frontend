@@ -20,7 +20,7 @@ const renderHr = (showHr = false) => {
 	if (!showHr) return null;
 
 	return (
-		<hr className='my-12 border-2 border-dashed border-secondary-content' />
+		<hr className='my-8 border-[1px] border-dashed border-secondary/30' />
 	);
 };
 
@@ -108,7 +108,7 @@ export default function Index() {
 		);
 
 	return (
-		<div className='flex flex-col py-8'>
+		<div className='flex flex-col py-4'>
 			{/* <iframe
 				id="iframeContainer"
 				src={data}

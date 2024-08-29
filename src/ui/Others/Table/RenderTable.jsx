@@ -1,8 +1,10 @@
-const RenderTable = ({ items, title }) => {
+import cn from '@/lib/cn';
+
+const RenderTable = ({ items, title, className }) => {
 	return (
-		<>
+		<div className={cn('h-full', className)}>
 			{title && (
-				<h4 className='bg-secondary-content px-3 py-2 text-lg font-medium capitalize leading-tight text-white'>
+				<h4 className='bg-base-200 px-3 py-2 text-lg font-medium capitalize leading-tight text-primary'>
 					{title}
 				</h4>
 			)}
@@ -12,7 +14,7 @@ const RenderTable = ({ items, title }) => {
 						{items?.map((item, index) => (
 							<tr
 								key={index}
-								className='odd:bg-secondary-content/5'>
+								className='cursor-pointer transition-colors duration-100 hover:bg-base-200/50'>
 								<th className='capitalize'>{item.label}</th>
 								<td>{item.value || '--'}</td>
 							</tr>
@@ -20,7 +22,7 @@ const RenderTable = ({ items, title }) => {
 					</tbody>
 				</table>
 			</div>
-		</>
+		</div>
 	);
 };
 

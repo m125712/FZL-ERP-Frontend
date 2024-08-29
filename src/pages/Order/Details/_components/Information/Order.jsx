@@ -103,20 +103,22 @@ export default function OrderDescription({ order }) {
 	};
 
 	return (
-		<div className='flex flex-col md:flex-row md:gap-8'>
-			<div className='w-full flex-1'>
-				<RenderTable
-					title={'Order Details'}
-					items={renderItems().order_details}
-				/>
-			</div>
+		<div className='grid grid-cols-1 md:grid-cols-2 md:gap-8'>
+			<RenderTable
+				className={
+					'border-b border-r-0 border-secondary/30 md:border-r'
+				}
+				title={'Order Details'}
+				items={renderItems().order_details}
+			/>
 
-			<div className='w-full flex-1'>
-				<RenderTable
-					title={'Buyer Details'}
-					items={renderItems().buyer_details}
-				/>
-			</div>
+			<RenderTable
+				className={
+					'border-b border-l-0 border-secondary/30 md:border-l'
+				}
+				title={'Buyer Details'}
+				items={renderItems().buyer_details}
+			/>
 		</div>
 	);
 }

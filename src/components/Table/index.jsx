@@ -41,6 +41,7 @@ function Table({
 	error = null,
 	indicatorValue,
 	headerClassName = '',
+	titleClassName = '',
 	containerClassName = '',
 	...props
 }) {
@@ -104,6 +105,7 @@ function Table({
 						title={title}
 						subtitle={subtitle}
 						className={headerClassName}
+						titleClassName={titleClassName}
 						handelAdd={handelAdd}
 					/>
 				</Suspense>

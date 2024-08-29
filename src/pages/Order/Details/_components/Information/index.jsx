@@ -22,29 +22,32 @@ export default function SingleInformation({ order, idx, hasInitialOrder }) {
 			title={`Information ${idx !== undefined && `#${idx + 1}`}`}
 			buttons={renderButtons()}>
 			{hasInitialOrder ? (
-				<div className='flex flex-col items-baseline gap-8 bg-secondary-content/5 text-sm md:flex-row'>
-					<div className='w-full flex-1'>
-						<ItemDescription order_description={order} />
-					</div>
-
-					<div className='w-full flex-1'>
-						<SliderDescription order_description={order} />
-					</div>
+				<div className='grid grid-cols-1 items-baseline bg-base-100 text-sm 2xl:grid-cols-2 2xl:gap-8'>
+					<ItemDescription
+						className={
+							'border-secondary/30 md:border-b 2xl:border-b-0'
+						}
+						order_description={order}
+					/>
+					<SliderDescription
+						className={'border-secondary/30 2xl:border-l'}
+						order_description={order}
+					/>
 				</div>
 			) : (
-				<div>
-					<div className=''>
-						<OrderDescription order={order} />
-					</div>
-
-					<div className='flex flex-col items-baseline gap-8 py-2 text-sm md:flex-row'>
-						<div className='w-full flex-1'>
-							<ItemDescription order_description={order} />
-						</div>
-
-						<div className='w-full flex-1'>
-							<SliderDescription order_description={order} />
-						</div>
+				<div className=''>
+					<OrderDescription order={order} />
+					<div className='grid grid-cols-1 items-baseline bg-base-100 text-sm 2xl:grid-cols-2 2xl:gap-8'>
+						<ItemDescription
+							className={
+								'border-secondary/30 md:border-b 2xl:border-b-0'
+							}
+							order_description={order}
+						/>
+						<SliderDescription
+							className={'border-secondary/30 2xl:border-l'}
+							order_description={order}
+						/>
 					</div>
 				</div>
 			)}
@@ -176,21 +179,24 @@ export function OrderInformation({ order, handelPdfDownload }) {
 	};
 
 	return (
-		<SectionContainer title='Order Information' buttons={renderButtons()}>
-			<div className='flex flex-col gap-4 bg-secondary-content/5 text-sm md:flex-row md:gap-8'>
-				<div className='w-full flex-1'>
-					<RenderTable
-						title='Order Details'
-						items={renderItems().order_details}
-					/>
-				</div>
+		<SectionContainer
+			title='Order Information'
+			buttons={renderButtons()}
+			className={'mb-8'}>
+			<div className='grid grid-cols-1 bg-base-100 md:grid-cols-2 md:gap-8'>
+				<RenderTable
+					className={
+						'border-b border-secondary/30 md:border-b-0 md:border-r'
+					}
+					title='Order Details'
+					items={renderItems().order_details}
+				/>
 
-				<div className='w-full flex-1'>
-					<RenderTable
-						title='Buyer Details'
-						items={renderItems().buyer_details}
-					/>
-				</div>
+				<RenderTable
+					className={'border-secondary/30 md:border-l'}
+					title='Buyer Details'
+					items={renderItems().buyer_details}
+				/>
 			</div>
 		</SectionContainer>
 	);

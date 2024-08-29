@@ -1,3 +1,4 @@
+import cn from '@/lib/cn';
 import { TitleValue } from '@/ui';
 import RenderTable from '@/ui/Others/Table/RenderTable';
 
@@ -17,7 +18,7 @@ const renderLogo = (logo_type_name, is_logo_body, is_logo_puller) => {
 	return <TitleValue title='Logo' value={logo_type_name} />;
 };
 
-export default function SliderDescription({ order_description }) {
+export default function SliderDescription({ order_description, className }) {
 	const renderItems = () => {
 		const {
 			slider_name,
@@ -81,7 +82,13 @@ export default function SliderDescription({ order_description }) {
 		];
 		return items;
 	};
-	return <RenderTable title={'Slider Details'} items={renderItems()} />;
+	return (
+		<RenderTable
+			className={cn(className)}
+			title={'Slider Details'}
+			items={renderItems()}
+		/>
+	);
 }
 
 // {

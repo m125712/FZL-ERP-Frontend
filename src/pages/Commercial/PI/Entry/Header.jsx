@@ -57,7 +57,7 @@ export default function Header({
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody title='PI Information'>
-				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField label='lc_id' title='LC' errors={errors}>
 						<Controller
 							name='lc_uuid'
@@ -146,54 +146,7 @@ export default function Header({
 									<ReactSelect
 										isMulti
 										placeholder='Select Order Numbers'
-										options={
-											!isUpdate
-												? order_number
-												: order_number?.filter(
-														(item) => {
-															const order_info_uuids =
-																getValues(
-																	'order_info_uuids'
-																);
-															if (
-																order_info_uuids ===
-																null
-															) {
-																return false;
-															} else {
-																if (
-																	isJSON(
-																		order_info_uuids
-																	)
-																) {
-																	return JSON.parse(
-																		order_info_uuids
-																	)
-																		.split(
-																			','
-																		)
-																		.includes(
-																			item.value
-																		);
-																} else {
-																	if (
-																		!Array.isArray(
-																			order_info_uuids
-																		)
-																	) {
-																		return (
-																			order_info_uuids ===
-																			item.value
-																		);
-																	}
-																	return order_info_uuids.includes(
-																		item.value
-																	);
-																}
-															}
-														}
-													)
-										}
+										options={order_number}
 										value={order_number?.filter((item) => {
 											const order_info_uuids =
 												getValues('order_info_uuids');
@@ -202,6 +155,7 @@ export default function Header({
 												return false;
 											} else {
 												if (isJSON(order_info_uuids)) {
+													console.log('--json--');
 													return JSON.parse(
 														order_info_uuids
 													)
@@ -213,11 +167,11 @@ export default function Header({
 															order_info_uuids
 														)
 													) {
-														return (
-															order_info_uuids ===
+														return order_info_uuids.includes(
 															item.value
 														);
 													}
+
 													return order_info_uuids.includes(
 														item.value
 													);
@@ -236,7 +190,7 @@ export default function Header({
 					</FormField>
 				</div>
 
-				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField
 						label='merchandiser_uuid'
 						title='Merchandiser'
@@ -321,3 +275,52 @@ export default function Header({
 		</div>
 	);
 }
+
+// options={
+// 	!isUpdate
+// 		? order_number
+// 		: order_number?.filter(
+// 				(item) => {
+// 					const order_info_uuids =
+// 						getValues(
+// 							'order_info_uuids'
+// 						);
+// 					if (
+// 						order_info_uuids ===
+// 						null
+// 					) {
+// 						return false;
+// 					} else {
+// 						if (
+// 							isJSON(
+// 								order_info_uuids
+// 							)
+// 						) {
+// 							return JSON.parse(
+// 								order_info_uuids
+// 							)
+// 								.split(
+// 									','
+// 								)
+// 								.includes(
+// 									item.value
+// 								);
+// 						} else {
+// 							if (
+// 								!Array.isArray(
+// 									order_info_uuids
+// 								)
+// 							) {
+// 								return (
+// 									order_info_uuids ===
+// 									item.value
+// 								);
+// 							}
+// 							return order_info_uuids.includes(
+// 								item.value
+// 							);
+// 						}
+// 					}
+// 				}
+// 			)
+// }

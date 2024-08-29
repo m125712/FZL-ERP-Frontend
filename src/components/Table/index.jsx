@@ -146,23 +146,24 @@ function Table({
 			<Suspense>
 				<div
 					className={cn(
-						'overflow-x-auto rounded-md border border-gray-200 shadow-md',
+						'overflow-x-auto rounded-t-md border-[1px] border-secondary/20',
 						showTitleOnly && 'mb-6',
-						containerClassName
+						containerClassName,
+						table.getPageCount() <= 1 && 'rounded-b-md'
 					)}>
 					<table className='w-full'>
 						<TableHead
 							{...{ getHeaderGroups, getPreFilteredRowModel }}
 						/>
 
-						<tbody className='divide-y-2 divide-secondary'>
+						<tbody className='divide-y-[1px] divide-secondary/20'>
 							{renderRow(hasAnyRow)}
 							{children}
 						</tbody>
 					</table>
 				</div>
 			</Suspense>
-			{!showTitleOnly && showPagination && (
+			{!showTitleOnly && showPagination && table.getPageCount() > 1 && (
 				<Suspense>
 					<Pagination {...table} />
 				</Suspense>

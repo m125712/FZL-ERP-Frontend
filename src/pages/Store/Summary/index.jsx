@@ -21,7 +21,7 @@ export default function Index() {
 	const showSpareParts = canAccess(['store', 'spare-parts']);
 
 	return (
-		<div className='container mx-auto my-2 w-full px-2'>
+		<div>
 			<Information material_id={material_id} />
 			{showPurchase && <Purchase material_id={material_id} />}
 			{showIssue && <Issue material_id={material_id} />}

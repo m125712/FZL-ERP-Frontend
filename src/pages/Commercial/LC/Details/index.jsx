@@ -17,7 +17,7 @@ export default function Index() {
 	if (!isError && !data) return <Navigate to='/not-found' />;
 
 	return (
-		<div className='container mx-auto my-2 w-full space-y-2 px-2 md:px-4'>
+		<div>
 			<Information lc={data} />
 		</div>
 	);

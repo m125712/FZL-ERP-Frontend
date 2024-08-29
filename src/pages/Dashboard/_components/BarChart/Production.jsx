@@ -1,8 +1,8 @@
-import { BarChart } from "@/components/Chart";
-import { useFetch } from "@/hooks";
-import { addDays, format } from "date-fns";
-import { useState } from "react";
-import { primaryColor } from "../../_utils";
+import { BarChart } from '@/components/Chart';
+import { useFetch } from '@/hooks';
+import { addDays, format } from 'date-fns';
+import { useState } from 'react';
+import { primaryColor } from '../../_utils';
 
 const daysMap = {
 	yesterday: 1,
@@ -12,10 +12,10 @@ const daysMap = {
 };
 
 export default function StatusBarChart() {
-	const [time, setTime] = useState("yesterday");
+	const [time, setTime] = useState('yesterday');
 
-	let to = format(addDays(new Date(), -1), "yyyy-MM-dd");
-	let from = format(addDays(new Date(), -daysMap[time] || 1), "yyyy-MM-dd");
+	let to = format(addDays(new Date(), -1), 'yyyy-MM-dd');
+	let from = format(addDays(new Date(), -daysMap[time] || 1), 'yyyy-MM-dd');
 
 	const { value: production } = useFetch(
 		`/dashboard/production/${from}/${to}`,
@@ -28,16 +28,16 @@ export default function StatusBarChart() {
 		return acc;
 	}, {});
 
-	const nylon_metallic = totals?.["nylon_metallic"] ?? 0;
-	const nylon_plastic = totals?.["nylon_plastic"] ?? 0;
-	const vislon_ = totals?.["vislon_"] ?? 0;
-	const metal_ = totals?.["metal_"] ?? 0;
+	const nylon_metallic = totals?.['nylon_metallic'] ?? 0;
+	const nylon_plastic = totals?.['nylon_plastic'] ?? 0;
+	const vislon_ = totals?.['vislon_'] ?? 0;
+	const metal_ = totals?.['metal_'] ?? 0;
 
 	const data = {
-		labels: ["Nylon Metallic", "Nylon Plastic", "Vislon", "Metal"],
+		labels: ['Nylon Metallic', 'Nylon Plastic', 'Vislon', 'Metal'],
 		datasets: [
 			{
-				label: "# of Products Produced",
+				label: '# of Products Produced',
 				data: [nylon_metallic, nylon_plastic, vislon_, metal_],
 				backgroundColor: [
 					primaryColor,
@@ -49,17 +49,16 @@ export default function StatusBarChart() {
 		],
 	};
 	return (
-		<BarChart title="Production" data={data}>
+		<BarChart title='Production' data={data}>
 			<select
-				name="time"
-				className="select select-secondary h-8 min-h-0 bg-secondary/80 transition-all duration-100 ease-in-out"
+				name='time'
+				className='select select-secondary h-8 min-h-0 border-secondary/30 bg-base-200 transition-all duration-100 ease-in-out'
 				value={time}
-				onChange={(e) => setTime(e.target.value)}
-			>
-				<option value="yesterday">Yesterday</option>
-				<option value="last_seven_days">7 Days</option>
-				<option value="last_fifteen_days">15 Days</option>
-				<option value="last_thirty_days">30 Days</option>
+				onChange={(e) => setTime(e.target.value)}>
+				<option value='yesterday'>Yesterday</option>
+				<option value='last_seven_days'>7 Days</option>
+				<option value='last_fifteen_days'>15 Days</option>
+				<option value='last_thirty_days'>30 Days</option>
 			</select>
 		</BarChart>
 	);

@@ -843,21 +843,18 @@ const Excel = ({ ...props }) => {
 	return (
 		<svg
 			xmlns='http://www.w3.org/2000/svg'
-			width={24}
-			height={24}
+			width='24'
+			height='24'
 			viewBox='0 0 24 24'
-			strokeWidth={1.25}
-			stroke='currentColor'
 			fill='none'
+			stroke='currentColor'
+			strokeWidth='2'
 			strokeLinecap='round'
 			strokeLinejoin='round'
 			{...props}>
-			<path stroke='none' d='M0 0h24v24H0z' fill='none'></path>
-			<path d='M14 3v4a1 1 0 0 0 1 1h4'></path>
-			<path d='M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z'></path>
-			<path d='M8 11h8v7h-8z'></path>
-			<path d='M8 15h8'></path>
-			<path d='M11 11v7'></path>
+			<ellipse cx='12' cy='5' rx='9' ry='3' />
+			<path d='M3 5V19A9 3 0 0 0 21 19V5' />
+			<path d='M3 12A9 3 0 0 0 21 12' />
 		</svg>
 	);
 };
@@ -881,6 +878,25 @@ const Store = ({ ...props }) => {
 			<path d='M5 21l0 -10.15'></path>
 			<path d='M19 21l0 -10.15'></path>
 			<path d='M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4'></path>
+		</svg>
+	);
+};
+
+const Column = ({ ...props }) => {
+	return (
+		<svg
+			xmlns='http://www.w3.org/2000/svg'
+			width='24'
+			height='24'
+			viewBox='0 0 24 24'
+			fill='none'
+			stroke='currentColor'
+			strokeWidth='2'
+			strokeLinecap='round'
+			strokeLinejoin='round'
+			{...props}>
+			<rect width='18' height='18' x='3' y='3' rx='2' />
+			<path d='M12 3v18' />
 		</svg>
 	);
 };
@@ -1032,17 +1048,18 @@ const FilterIcon = ({ ...props }) => {
 	return (
 		<svg
 			xmlns='http://www.w3.org/2000/svg'
-			width={24}
-			height={24}
+			width='24'
+			height='24'
 			viewBox='0 0 24 24'
-			strokeWidth={2}
-			stroke='currentColor'
 			fill='none'
+			stroke='currentColor'
+			strokeWidth='2'
 			strokeLinecap='round'
 			strokeLinejoin='round'
 			{...props}>
-			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
-			<path d='M4 4h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v7l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227z' />
+			<path d='M3 6h18' />
+			<path d='M7 12h10' />
+			<path d='M10 18h4' />
 		</svg>
 	);
 };
@@ -1167,4 +1184,5 @@ export {
 	UserShield,
 	Viewer,
 	Voucher,
+	Column,
 };

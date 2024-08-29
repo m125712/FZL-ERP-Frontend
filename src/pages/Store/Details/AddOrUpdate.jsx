@@ -97,7 +97,7 @@ export default function Index({
 			}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}>
-			<div className='mb-4 flex flex-col gap-2 rounded bg-primary/5 p-2 md:flex-row'>
+			<div className='bg-base-200 mb-4 flex flex-col gap-2 rounded p-2 md:flex-row'>
 				<FormField label='section_id' title='Section' errors={errors}>
 					<Controller
 						name={'section_uuid'}
@@ -145,7 +145,7 @@ export default function Index({
 					/>
 				</FormField>
 			</div>
-			<div className='mb-4 flex flex-col gap-2 rounded bg-primary/5 p-2 md:flex-row'>
+			<div className='bg-base-200 mb-4 flex flex-col gap-2 rounded p-2 md:flex-row'>
 				<Input label='name' {...{ register, errors }} />
 				<Input label='short_name' {...{ register, errors }} />
 				<JoinInputSelect
@@ -156,7 +156,7 @@ export default function Index({
 					{...{ register, errors }}
 				/>
 			</div>
-			<div className='mb-4 flex flex-col gap-2 rounded bg-primary/5 p-2 md:flex-row'>
+			<div className='bg-base-200 mb-4 flex flex-col gap-2 rounded p-2 md:flex-row'>
 				<Input label='remarks' {...{ register, errors }} />
 				<Textarea label='description' {...{ register, errors }} />
 			</div>

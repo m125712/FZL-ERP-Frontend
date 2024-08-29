@@ -10,7 +10,7 @@ const renderError = (error) => {
 		error?.message && (
 			<label className='label px-2 pb-0 pt-[0.02rem]'>
 				<span className='label-text-alt' />
-				<span className='label-text-alt text-xs font-medium capitalize text-error/80'>
+				<span className='label-text-alt text-error/80 text-xs font-medium capitalize'>
 					{error?.message}
 				</span>
 			</label>
@@ -33,7 +33,7 @@ export const FormField = ({
 		<div className={cn('form-control w-full', className)}>
 			{is_title_needed === 'true' ? (
 				<label name={label} className='label pb-1 pt-0'>
-					<span className='label-text font-semibold capitalize text-secondary-content'>
+					<span className='label-text font-semibold capitalize text-secondary'>
 						{title ? capitalize(title) : capitalize(label)}
 					</span>
 					{renderSubLabel(sub_label)}

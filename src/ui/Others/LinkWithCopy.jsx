@@ -24,7 +24,7 @@ const CopyButton = ({ id }) => {
 
 const BaseBody = ({ value, to, showCopyButton = true }) => {
 	return (
-		<button className='flex items-center gap-2 text-left font-semibold underline underline-offset-2 transition-colors duration-300 hover:text-info hover:decoration-info'>
+		<button className='hover:text-info hover:decoration-info flex items-center gap-2 text-left font-semibold underline underline-offset-2 transition-colors duration-300'>
 			{showCopyButton && <CopyButton id={value} />}
 
 			<Link to={to} target='_blank'>

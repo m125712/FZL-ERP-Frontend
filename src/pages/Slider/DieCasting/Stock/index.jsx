@@ -3,7 +3,6 @@ import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useSliderDieCastingStock } from '@/state/Slider';
 import { DateTime, EditDelete } from '@/ui';
-import PageContainer from '@/ui/Others/PageContainer';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 
@@ -14,21 +13,6 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } = useSliderDieCastingStock();
 	const info = new PageInfo('Stock', url, 'slider__die_casting_stock');
 	const haveAccess = useAccess('slider__die_casting_stock');
-
-	const breadcrumbs = [
-		{
-			label: 'Slider',
-			isDisabled: true,
-		},
-		{
-			label: 'Die Casting',
-			isDisabled: true,
-		},
-		{
-			label: 'Stock',
-			href: '/slider/die-casting/stock',
-		},
-	];
 
 	const columns = useMemo(
 		() => [
@@ -435,7 +419,7 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<PageContainer title='Stock Lists' breadcrumbs={breadcrumbs}>
+		<>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}
@@ -466,6 +450,6 @@ export default function Index() {
 					}}
 				/>
 			</Suspense>
-		</PageContainer>
+		</>
 	);
 }

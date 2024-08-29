@@ -11,6 +11,7 @@
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.9.0",
+		"@nextui-org/react": "^2.4.6",
 		"@tanstack/match-sorter-utils": "^8.19.4",
 		"@tanstack/react-query": "^5.52.1",
 		"@tanstack/react-query-devtools": "^5.52.1",
@@ -19,6 +20,7 @@
 		"chart.js": "^4.4.4",
 		"clsx": "^2.1.1",
 		"date-fns": "^3.6.0",
+		"framer-motion": "^11.3.30",
 		"js-cookie": "^3.0.5",
 		"nanoid": "^5.0.7",
 		"numeral": "^2.0.6",
@@ -30,11 +32,13 @@
 		"react-dom": "^18.3.1",
 		"react-hook-form": "^7.53.0",
 		"react-hotkeys": "^2.0.0",
+		"react-paginate": "^8.2.0",
 		"react-router-dom": "^6.26.1",
 		"react-select": "^5.8.0",
 		"react-toastify": "^10.0.5",
 		"tailwind-merge": "^2.5.2",
 		"to-words": "^4.1.0",
+		"use-react-router-breadcrumbs": "^4.0.1",
 		"yup": "^1.4.0"
 	},
 	"devDependencies": {

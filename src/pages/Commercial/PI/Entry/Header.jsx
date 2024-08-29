@@ -57,7 +57,7 @@ export default function Header({
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody title='PI Information'>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					<FormField label='lc_id' title='LC' errors={errors}>
 						<Controller
 							name='lc_uuid'
@@ -236,7 +236,7 @@ export default function Header({
 					</FormField>
 				</div>
 
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					<FormField
 						label='merchandiser_uuid'
 						title='Merchandiser'

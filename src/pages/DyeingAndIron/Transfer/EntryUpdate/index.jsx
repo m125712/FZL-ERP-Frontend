@@ -262,7 +262,7 @@ export default function Index({ sfg }) {
 	};
 
 	return (
-		<div className='container mx-auto mt-2 px-2 pb-2 md:px-4'>
+		<div>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
@@ -282,7 +282,7 @@ export default function Index({ sfg }) {
 							<th
 								key={item}
 								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+								className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide transition duration-300 first:pl-2'>
 								{item}
 							</th>
 						))}>

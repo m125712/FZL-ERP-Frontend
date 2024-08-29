@@ -3,7 +3,6 @@ import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useMaterialSection } from '@/state/Store';
 import { EditDelete } from '@/ui';
-import PageContainer from '@/ui/Others/PageContainer';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 
@@ -14,18 +13,6 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } = useMaterialSection();
 	const info = new PageInfo('Material/Section', url, 'store__section');
 	const haveAccess = useAccess('store__section');
-
-	const breadcrumbs = [
-		{
-			label: 'Store',
-			href: '/store',
-			isDisabled: true,
-		},
-		{
-			label: 'Section',
-			href: '/store/section',
-		},
-	];
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -110,7 +97,7 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<PageContainer title='Section Lists' breadcrumbs={breadcrumbs}>
+		<>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}
@@ -141,6 +128,6 @@ export default function Index() {
 					}}
 				/>
 			</Suspense>
-		</PageContainer>
+		</>
 	);
 }

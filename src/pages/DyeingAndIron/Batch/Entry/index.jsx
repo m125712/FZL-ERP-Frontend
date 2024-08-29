@@ -373,7 +373,7 @@ export default function Index() {
 	);
 
 	return (
-		<div className='container mx-auto mt-4 px-2 pb-2 md:px-4'>
+		<div>
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}

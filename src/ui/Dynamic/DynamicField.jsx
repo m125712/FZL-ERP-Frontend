@@ -9,25 +9,25 @@ export default function DynamicField({
 	children,
 }) {
 	return (
-		<div className='rounded bg-primary text-primary-content'>
+		<div className='text-primary-content rounded bg-primary'>
 			<div className='flex items-center justify-between px-4 py-3'>
-				<span className='flex items-center gap-4 text-lg font-semibold capitalize text-primary-content'>
+				<span className='text-primary-content flex items-center gap-4 text-lg font-semibold capitalize'>
 					{title}
 				</span>
 				{handelAppend && (
 					<button
 						type='button'
-						className='btn btn-secondary btn-xs rounded bg-secondary'
+						className='btn btn-accent btn-xs rounded'
 						onClick={handelAppend}>
-						<Add className='w-4 text-primary' /> NEW
+						<Add className='w-5' /> NEW
 					</button>
 				)}
 			</div>
-			<div className='overflow-x-auto rounded-b border border-primary/30 bg-white text-left text-sm text-primary'>
+			<div className='overflow-x-auto rounded-b border border-t-0 border-primary/30 bg-white text-left text-sm text-primary'>
 				<table className='w-full'>
 					<thead
 						className={cn(
-							'select-none text-sm text-primary-content',
+							'text-primary-content select-none text-sm',
 							tableHeadClass
 						)}>
 						<tr className='rounded-md capitalize text-primary'>
@@ -48,9 +48,9 @@ export function DynamicDeliveryField({
 	children,
 }) {
 	return (
-		<div className='rounded-md bg-primary text-primary-content'>
+		<div className='text-primary-content rounded-md bg-primary'>
 			<div className='my-2 mr-2 flex items-center justify-between'>
-				<span className='flex items-center gap-4 px-2 text-lg font-semibold capitalize text-primary-content'>
+				<span className='text-primary-content flex items-center gap-4 px-2 text-lg font-semibold capitalize'>
 					{title}
 				</span>
 				{handelAppend && (
@@ -65,7 +65,7 @@ export function DynamicDeliveryField({
 
 			<div className='overflow-x-auto rounded-md border border-primary bg-white text-left text-sm text-primary shadow-md'>
 				<table className='w-full'>
-					<thead className='select-none text-sm text-primary-content'>
+					<thead className='text-primary-content select-none text-sm'>
 						<tr className='rounded-md capitalize text-primary'>
 							{tableHead}
 						</tr>

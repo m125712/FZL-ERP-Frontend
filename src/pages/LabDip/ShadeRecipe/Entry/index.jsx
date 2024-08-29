@@ -14,7 +14,6 @@ import {
 	ReactSelect,
 	RemoveButton,
 } from '@/ui';
-import PageContainer from '@/ui/Others/PageContainer';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -83,24 +82,6 @@ export default function Index() {
 		itemId: null,
 		itemName: null,
 	});
-
-	const breadcrumbs = [
-		{
-			label: 'Lab Dip',
-			href: '/lab_dip',
-			isDisabled: true,
-		},
-		{
-			label: 'Shade Recipe',
-			href: '/lab-dip/shade_recipe',
-		},
-		{
-			label: isUpdate ? 'Update' : 'Create',
-			href: isUpdate
-				? `/lab-dip/shade_recipe/update/${getValues('uuid')}`
-				: '/store/receive/entry',
-		},
-	];
 
 	const handleShadeRecipeRemove = (index) => {
 		if (getValues(`shade_recipe_entry[${index}].uuid`) !== undefined) {
@@ -279,9 +260,7 @@ export default function Index() {
 	// );
 
 	return (
-		<PageContainer
-			breadcrumbs={breadcrumbs}
-			title={isUpdate ? 'Update Shade Recipe' : 'Create Shade Recipe'}>
+		<>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
@@ -311,7 +290,7 @@ export default function Index() {
 								<th
 									key={item}
 									scope='col'
-									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-4 py-2 text-left font-semibold tracking-wide text-primary transition duration-300'>
+									className='text-primary-content group cursor-pointer select-none whitespace-nowrap bg-secondary px-4 py-2 text-left font-semibold tracking-wide transition duration-300'>
 									{item}
 								</th>
 							))}>
@@ -445,6 +424,6 @@ export default function Index() {
 				/>
 			</Suspense>
 			<DevTool control={control} placement='top-left' />
-		</PageContainer>
+		</>
 	);
 }

@@ -119,7 +119,7 @@ export default function Header({
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody title='Item'>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					<FormField
 						label='order_info_uuid'
 						title='O/N'
@@ -259,7 +259,7 @@ export default function Header({
 						/>
 					</FormField>
 				</div>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					<div className='flex w-full flex-col gap-1 md:flex-row'>
 						<FormField
 							label='stopper_type'
@@ -351,7 +351,7 @@ export default function Header({
 						/>
 					</FormField>
 				</div>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					<Textarea label='description' {...{ register, errors }} />
 					<Textarea label='remarks' {...{ register, errors }} />
 				</div>
@@ -361,8 +361,9 @@ export default function Header({
 				title='Slider'
 				header={
 					<div className='flex w-full gap-1 text-sm md:w-fit'>
-						<div className='rounded-md bg-secondary/80 px-1'>
+						<div className='rounded-md bg-secondary px-1'>
 							<CheckBox
+								text='text-secondary-content'
 								label='is_slider_provided'
 								title='Provided By Party'
 								defaultChecked={isSliderProvided}
@@ -374,7 +375,7 @@ export default function Header({
 						</div>
 					</div>
 				}>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					<FormField
 						label='puller_type'
 						title='Puller'
@@ -470,7 +471,7 @@ export default function Header({
 					</FormField>
 				</div>
 
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					<FormField
 						label='puller_link'
 						title='Puller Link'
@@ -545,8 +546,8 @@ export default function Header({
 					</FormField>
 				</div>
 
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					<div className='flex basis-3/4 flex-col gap-1 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
+					<div className='text-secondary-content flex basis-3/4 flex-col gap-1 md:flex-row'>
 						<FormField
 							label='top_stopper'
 							title='Top Stopper'
@@ -651,7 +652,7 @@ export default function Header({
 								/>
 							</FormField>
 							<div className='mt-6 flex items-center gap-1 text-sm'>
-								<div className='rounded-md border border-primary px-1'>
+								<div className='rounded-md border border-secondary/30 px-1'>
 									<CheckBox
 										label='is_logo_body'
 										title='Body'
@@ -663,7 +664,7 @@ export default function Header({
 										}
 									/>
 								</div>
-								<div className='rounded-md border border-primary px-1'>
+								<div className='rounded-md border border-secondary/30 px-1'>
 									<CheckBox
 										label='is_logo_puller'
 										title='Puller'
@@ -697,7 +698,7 @@ export default function Header({
 			</SectionEntryBody>
 
 			<SectionEntryBody title='Garments'>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
 					<Input label={`garment`} {...{ register, errors }} />
 
 					<FormField

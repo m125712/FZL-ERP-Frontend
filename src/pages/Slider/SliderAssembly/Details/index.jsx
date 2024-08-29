@@ -1,21 +1,21 @@
-import { Suspense } from "@/components/Feedback";
-import { DeleteModal } from "@/components/Modal";
-import ReactTable from "@/components/Table";
-import { useAuth } from "@/context/auth";
-import { useAccess, useFetchFunc } from "@/hooks";
+import { Suspense } from '@/components/Feedback';
+import { DeleteModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
+import { useAuth } from '@/context/auth';
+import { useAccess, useFetchFunc } from '@/hooks';
 
-import { DateTime, EditDelete } from "@/ui";
-import PageInfo from "@/util/PageInfo";
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { DateTime, EditDelete } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Index() {
 	const navigate = useNavigate();
 	const { user } = useAuth();
 	const info = new PageInfo(
-		"Production",
-		"slider/slider-assembly",
-		"slider__assembly_details"
+		'Production',
+		'slider/slider-assembly',
+		'slider__assembly_details'
 	);
 
 	useEffect(() => {
@@ -26,13 +26,13 @@ export default function Index() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
-	const haveAccess = useAccess("slider__assembly_details");
+	const haveAccess = useAccess('slider__assembly_details');
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "order_number",
-				header: "O/N",
+				accessorKey: 'order_number',
+				header: 'O/N',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -45,13 +45,13 @@ export default function Index() {
 			// ),
 			// },
 			{
-				accessorKey: "item_name_label",
-				header: "Item Name",
+				accessorKey: 'item_name_label',
+				header: 'Item Name',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "production_quantity",
+				accessorKey: 'production_quantity',
 				header: (
 					<>
 						Production QTY <br />
@@ -62,7 +62,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "production_weight",
+				accessorKey: 'production_weight',
 				header: (
 					<>
 						Production Weight <br />
@@ -73,7 +73,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "weight",
+				accessorKey: 'weight',
 				header: (
 					<>
 						Weight <br />
@@ -100,11 +100,11 @@ export default function Index() {
 			// ),
 			// },
 			{
-				accessorKey: "created_at",
-				header: "Created",
-				filterFn: "isWithinRange",
+				accessorKey: 'created_at',
+				header: 'Created',
+				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
-				width: "w-24",
+				width: 'w-24',
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
@@ -119,17 +119,17 @@ export default function Index() {
 			// 	},
 			// },
 			{
-				accessorKey: "action",
-				header: "Action",
+				accessorKey: 'action',
+				header: 'Action',
 				enableColumnFilter: false,
-				hidden: !haveAccess.includes("update"),
+				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
 					const uuid = info.row.original.slider_slider_assembly_uuid;
 					return (
 						<EditDelete
 							handelUpdate={() => handelUpdate(uuid)}
 							handelDelete={() => handelDelete(info.row.id)}
-							showDelete={haveAccess.includes("delete")}
+							showDelete={haveAccess.includes('delete')}
 						/>
 					);
 				},
@@ -146,7 +146,7 @@ export default function Index() {
 	}, []);
 
 	// Add
-	const handelAdd = () => navigate("/slider/slider-assembly/entry");
+	const handelAdd = () => navigate('/slider/slider-assembly/entry');
 
 	// Update
 	const handelUpdate = (uuid) => {
@@ -162,24 +162,24 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: slider[idx].id,
-			itemName: slider[idx].item_name_label.replace(/ /g, "_"),
+			itemName: slider[idx].item_name_label.replace(/ /g, '_'),
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
 
 	if (loading)
-		return <span className="loading loading-dots loading-lg z-50" />;
+		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className="container mx-auto px-2 md:px-4">
+		<div className=''>
 			<ReactTable
 				title={info.getTitle()}
-				accessor={haveAccess.includes("create")}
+				accessor={haveAccess.includes('create')}
 				data={slider}
 				columns={columns}
 				handelAdd={handelAdd}
-				extraClass={"py-0.5"}
+				extraClass={'py-0.5'}
 			/>
 			<Suspense>
 				<DeleteModal

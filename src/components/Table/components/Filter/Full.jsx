@@ -1,14 +1,14 @@
-import { useMemo } from "react";
-import { GetFlatHeader } from "../../utils";
-import FilterColumnValue from "./ColumnValue";
-import { DrawerBody, notShowingColumns } from "./_components";
+import { useMemo } from 'react';
+import { GetFlatHeader } from '../../utils';
+import FilterColumnValue from './ColumnValue';
+import { DrawerBody, notShowingColumns } from './_components';
 
 export default function FilterFull({
 	getHeaderGroups,
 	getPreFilteredRowModel,
 	title,
 }) {
-	const htmlId = title.replace(/\s/g, "-").toLowerCase();
+	const htmlId = title.replace(/\s/g, '-').toLowerCase();
 
 	const headers = useMemo(
 		() =>
@@ -31,9 +31,9 @@ export default function FilterFull({
 	return (
 		<DrawerBody htmlId={htmlId}>
 			{headers
-				.filter(({ column }) => column.columnDef.header !== "")
+				.filter(({ column }) => column.columnDef.header !== '')
 				.map(({ id, column }) => (
-					<div key={id} className="flex flex-col py-1 text-xs">
+					<div key={id} className='flex flex-col text-xs'>
 						<FilterColumnValue
 							key={id}
 							columnName={GetFlatHeader(column.columnDef.header)}

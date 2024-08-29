@@ -56,18 +56,20 @@ export default function DateRange({ getHeaderGroups }) {
 		nextMonthButtonDisabled,
 	}) {
 		return (
-			<div className='flex w-full flex-row items-center justify-around gap-4 rounded-t-md bg-secondary px-4 py-3.5 shadow-md transition-all duration-100 ease-in-out'>
+			<div className='flex w-full flex-row items-center justify-around gap-4 rounded-t-md bg-base-200 px-4 py-3.5 shadow-md transition-all duration-100 ease-in-out'>
 				<Button
 					onClick={decreaseMonth}
 					disabled={prevMonthButtonDisabled}>
 					{'<'}
 				</Button>
 				<Select
+					className='select select-bordered select-secondary'
 					value={format(date, 'yyyy')}
 					onChange={({ target: { value } }) => changeYear(value)}
 					options={years}
 				/>
 				<Select
+					className='select select-bordered select-secondary'
 					value={months[format(date, 'M') - 1]}
 					onChange={({ target: { value } }) =>
 						changeMonth(months.indexOf(value))
@@ -85,7 +87,7 @@ export default function DateRange({ getHeaderGroups }) {
 
 	return (
 		<DatePicker
-			className='input input-xs input-bordered input-primary flex w-auto items-center justify-between rounded-full font-semibold text-primary transition-all duration-100 ease-in-out'
+			className='input-filter input input-sm flex w-auto items-center justify-between rounded bg-transparent font-semibold transition-all duration-100 ease-in-out'
 			selected={endDate}
 			minDate={oldStartDate}
 			maxDate={oldEndDate}

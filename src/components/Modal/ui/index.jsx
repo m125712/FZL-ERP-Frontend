@@ -2,7 +2,7 @@ import { Close } from '@/assets/icons';
 
 const Header = ({ title, onClose }) => (
 	<div className='modal-header mb-2 flex items-center justify-between'>
-		<p className='text-2xl font-semibold'>{title}</p>
+		<p className='text-2xl font-semibold text-primary'>{title}</p>
 		<button
 			type='button'
 			onClick={onClose}
@@ -25,7 +25,7 @@ const DeleteFooter = ({ handelCancelClick }) => (
 		<button
 			type='button'
 			onClick={handelCancelClick}
-			className='btn btn-outline border-primary text-primary hover:bg-primary'>
+			className='btn btn-outline btn-primary'>
 			Cancel
 		</button>
 

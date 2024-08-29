@@ -5,6 +5,8 @@ import { NavLink } from 'react-router-dom';
 import FilesystemItem from './filesystem-item';
 import './index.css';
 import { BrandLink, LogoutButton, MenuIcon, Row, SectionButton } from './utils';
+import cn from '@/lib/cn';
+import { Button } from '@nextui-org/react';
 
 const ThirdChildMenu = ({ items, type }) => {
 	const [isOpened, setIsOpened] = useState(true);
@@ -63,14 +65,13 @@ const Menu = ({ items, type }) => {
 
 	return (
 		<li
-			className={
-				!isOpened
-					? 'mb-2'
-					: 'rounded-md border-b-2 border-l-2 border-secondary'
-			}>
+			className={cn(
+				'border-l-[2px]',
+				isOpened ? 'border-secondary' : 'border-transparent'
+			)}>
 			<SectionButton {...{ isOpened, setIsOpened, type }} />
 			{isOpened && (
-				<ul className='text-md pl-2 text-primary-content transition-all duration-500 ease-in-out md:pl-4'>
+				<ul className='text-md pl-4 text-primary-content transition-all duration-500 ease-in-out md:pl-6'>
 					{finalItems.map((item) => ({ ...FirstChildMenu(item) }))}
 				</ul>
 			)}
@@ -79,17 +80,17 @@ const Menu = ({ items, type }) => {
 };
 
 const SingleMenu = ({ items }) => {
-	const cls = `block border-l-[3.5px] border-secondary px-2 py-[5px] duration-500`;
+	const cls = `block border-l-[2px]  px-6 py-2 duration-500 `;
 	return (
-		<ul className='text-md pl-2 text-primary-content transition-all duration-500 ease-in-out md:pl-4'>
+		<ul className='text-md text-primary-content transition-all duration-500 ease-in-out'>
 			{items.map((item) => (
 				<NavLink
-					to={item.path}
 					key={item.path}
+					to={item.path}
 					className={(nav) =>
 						nav.isActive
-							? `thick-border-active rounded-r-md text-secondary-content ${cls}`
-							: `thick-border hover:text-secondary-content ${cls}`
+							? `thick-border-active w-full rounded-r border-accent bg-opacity-10 text-white ${cls}`
+							: `w-full rounded border-transparent hover:bg-secondary/10 hover:text-primary-content ${cls}`
 					}>
 					{item.name}
 				</NavLink>
@@ -158,11 +159,13 @@ const Sidebar = () => {
 	};
 
 	return (
-		<div className='min-h-full bg-primary p-4'>
-			<BrandLink className='flex items-center justify-center py-1 text-2xl font-bold text-primary-content md:text-4xl' />
-			<hr className='my-2 border-primary-content border-opacity-90' />
-			<div className='flex flex-col overflow-auto px-4'>
-				<ul className='my-2 flex-1 space-y-6 text-sm font-medium'>
+		<div className='min-h-full bg-primary'>
+			<div className='border-b border-secondary px-4 py-6'>
+				<BrandLink className='flex items-center justify-center text-2xl font-bold text-primary-content md:text-4xl' />
+			</div>
+
+			<div className='flex flex-col justify-between gap-8 overflow-auto p-4'>
+				<ul className='flex-1 space-y-1 text-sm font-normal'>
 					{Object.entries(individualPages).map(
 						([type, items]) =>
 							items.length > 0 && (
@@ -175,8 +178,11 @@ const Sidebar = () => {
 								<Menu key={type} {...{ items, type }} />
 							)
 					)}
-					<LogoutButton />
 				</ul>
+
+				<div className='py-4'>
+					<LogoutButton />
+				</div>
 			</div>
 		</div>
 	);
@@ -252,7 +258,7 @@ let node = [
 
 const Aside = ({ id }) => {
 	return (
-		<aside className='drawer-side min-w-[14rem]'>
+		<aside className='drawer-side min-w-[17rem]'>
 			<label
 				htmlFor={id}
 				aria-label='close sidebar'

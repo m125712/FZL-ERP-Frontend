@@ -19,12 +19,12 @@ function AddModal({
 				noValidate
 				method='dialog'
 				className={cn(
-					'modal-box flex w-full flex-col justify-between bg-gray-50 p-6 text-secondary-content',
+					'modal-box flex w-full flex-col justify-between bg-base-100 p-6 text-secondary-content',
 					!isSmall && 'sm:max-w-5xl',
 					formClassName
 				)}>
 				<Header title={title} onClose={onClose} />
-				<div className='flex flex-col justify-between gap-2'>
+				<div className='flex flex-col justify-between gap-2 pt-2'>
 					{children}
 				</div>
 				<Footer />

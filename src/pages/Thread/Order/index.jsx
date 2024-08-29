@@ -4,7 +4,6 @@ import { useAuth } from '@/context/auth';
 import { useAccess, useFetchFunc } from '@/hooks';
 import { useThreadOrderInfo } from '@/state/Thread';
 import { DateTime, EditDelete, LinkOnly, LinkWithCopy } from '@/ui';
-import PageContainer from '@/ui/Others/PageContainer';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -146,20 +145,8 @@ export default function Index() {
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
-	const breadcrumbs = [
-		{
-			label: 'Thread',
-			href: '/thread',
-			isDisabled: true,
-		},
-		{
-			label: 'Order Info',
-			href: '/thread/order-info',
-		},
-	];
-
 	return (
-		<PageContainer title='Order Info Lists' breadcrumbs={breadcrumbs}>
+		<>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}
@@ -181,6 +168,6 @@ export default function Index() {
 					}}
 				/>
 			</Suspense>
-		</PageContainer>
+		</>
 	);
 }

@@ -3,6 +3,7 @@ import { DebouncedInput, ExportCSV } from './components';
 import DateRange from './components/DateRange';
 import { FilterColumn, FullFilter } from './components/Filter';
 import { PdfButton, Title } from './ui';
+import { Indicator } from './ui/Title';
 
 export default function Index(props) {
 	const [open, setOpen] = useState((prev) => ({
@@ -14,65 +15,71 @@ export default function Index(props) {
 		.some((column) => column.id === 'created_at');
 
 	return (
-		<div
-			key={props.title}
-			className='my-2 flex flex-col items-start justify-between'>
-			<Title
-				{...{
-					title: props.title,
-					subtitle: props.subtitle,
-					handelAdd: props.handelAdd,
-					accessor: props.accessor,
-					indicatorValue: props.indicatorValue,
-				}}
-			/>
-			<div className='flex flex-col items-start justify-between gap-2 md:w-full md:flex-row md:items-center'>
-				<div className='flex basis-2/3 flex-col items-baseline space-x-2 space-y-2 md:space-y-0'>
-					<span className='flex flex-wrap items-center justify-start space-x-2 space-y-2'>
-						<FullFilter
-							{...{
-								getHeaderGroups: props.getHeaderGroups,
-								getPreFilteredRowModel:
-									props.getPreFilteredRowModel,
-								title: props.title,
-							}}
-						/>
-						{props.showColumns && (
-							<FilterColumn
-								columns={props.getAllLeafColumns()}
-								open={open.columns}
-								setOpen={setOpen}
-							/>
-						)}
-						{showDateRange && (
-							<DateRange
-								getHeaderGroups={props.getHeaderGroups}
-							/>
-						)}
-						{props.select}
-						{props.extraButton}
-						<ExportCSV
-							{...{
-								getAllLeafColumns: props.getAllLeafColumns,
-								filteredRows: props.filteredRows,
-								title: props.title,
-							}}
-						/>
-						{props.onClickPdfDownload && (
-							<PdfButton onClick={props.onClickPdfDownload} />
-						)}
-					</span>
-				</div>
+		<div key={props.title} className='mb-4 flex flex-col'>
+			<div className='mb-4 flex w-full flex-col justify-between gap-2 border-b pb-4 lg:flex-row lg:items-end'>
+				<Title
+					{...{
+						title: props.title,
+						subtitle: props.subtitle,
+					}}
+				/>
+
 				{props.showSearchBox && (
-					<div className='flex w-60 basis-1/3'>
-						<DebouncedInput
-							placeholder='Search...'
-							value={props.globalFilter ?? ''}
-							onChange={(value) =>
-								props.setGlobalFilter(String(value))
-							}
+					<DebouncedInput
+						className='lg:max-w-[400px]'
+						placeholder='Search...'
+						value={props.globalFilter ?? ''}
+						onChange={(value) =>
+							props.setGlobalFilter(String(value))
+						}
+					/>
+				)}
+			</div>
+
+			<div className='flex w-full items-end justify-between'>
+				<div className='flex w-fit items-end gap-2'>
+					<FullFilter
+						{...{
+							getHeaderGroups: props.getHeaderGroups,
+							getPreFilteredRowModel:
+								props.getPreFilteredRowModel,
+							title: props.title,
+						}}
+					/>
+
+					{props.showColumns && (
+						<FilterColumn
+							columns={props.getAllLeafColumns()}
+							open={open.columns}
+							setOpen={setOpen}
 						/>
-					</div>
+					)}
+
+					{showDateRange && (
+						<DateRange getHeaderGroups={props.getHeaderGroups} />
+					)}
+
+					{props.select}
+					{props.extraButton}
+
+					{props.onClickPdfDownload && (
+						<PdfButton onClick={props.onClickPdfDownload} />
+					)}
+
+					<ExportCSV
+						{...{
+							getAllLeafColumns: props.getAllLeafColumns,
+							filteredRows: props.filteredRows,
+							title: props.title,
+						}}
+					/>
+				</div>
+
+				{props.accessor && props.handelAdd && (
+					<Indicator
+						value={props.indicatorValue}
+						onClick={props.handelAdd}
+					/>
 				)}
 			</div>
 		</div>

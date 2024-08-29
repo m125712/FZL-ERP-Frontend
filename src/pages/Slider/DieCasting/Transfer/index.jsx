@@ -6,7 +6,6 @@ import {
 	useSliderDieCastingTransferAgainstStock,
 } from '@/state/Slider';
 import { DateTime, EditDelete } from '@/ui';
-import PageContainer from '@/ui/Others/PageContainer';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -115,23 +114,8 @@ const Index = () => {
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
-	const breadcrumbs = [
-		{
-			label: 'Slider',
-			isDisabled: true,
-		},
-		{
-			label: 'Die Casting',
-			isDisabled: true,
-		},
-		{
-			label: 'Transfer',
-			href: '/slider/die-casting/transfer',
-		},
-	];
-
 	return (
-		<PageContainer title='Transfer Lists' breadcrumbs={breadcrumbs}>
+		<>
 			<ReactTable
 				title='Against Stock > Slider Assembly'
 				handelAdd={handelAdd}
@@ -154,7 +138,7 @@ const Index = () => {
 					}}
 				/>
 			</Suspense>
-		</PageContainer>
+		</>
 	);
 };
 

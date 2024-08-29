@@ -1,9 +1,9 @@
-import { useFetch } from "@/hooks";
-export const primaryColor = "#4F496F";
-export const errorColor = "#dc2626";
+import { useFetch } from '@/hooks';
+export const primaryColor = '#27374D';
+export const errorColor = '#f31260';
 
 export function getApproval() {
-	const { value: status } = useFetch("/dashboard/order-status");
+	const { value: status } = useFetch('/dashboard/order-status');
 
 	const totals = status?.reduce((acc, item) => {
 		const key = `${item.item_name}_${item.stopper_type}_${item.order_status}`;
@@ -12,18 +12,18 @@ export function getApproval() {
 	}, {});
 
 	const nylon_metallic_not_approved =
-		totals?.["nylon_metallic_not_approved"] ?? 0;
-	const nylon_metallic_approved = totals?.["nylon_metallic_approved"] ?? 0;
+		totals?.['nylon_metallic_not_approved'] ?? 0;
+	const nylon_metallic_approved = totals?.['nylon_metallic_approved'] ?? 0;
 
 	const nylon_plastic_not_approved =
-		totals?.["nylon_plastic_not_approved"] ?? 0;
-	const nylon_plastic_approved = totals?.["nylon_plastic_approved"] ?? 0;
+		totals?.['nylon_plastic_not_approved'] ?? 0;
+	const nylon_plastic_approved = totals?.['nylon_plastic_approved'] ?? 0;
 
-	const vislon__not_approved = totals?.["vislon__not_approved"] ?? 0;
-	const vislon__approved = totals?.["vislon__approved"] ?? 0;
+	const vislon__not_approved = totals?.['vislon__not_approved'] ?? 0;
+	const vislon__approved = totals?.['vislon__approved'] ?? 0;
 
-	const metal__not_approved = totals?.["metal__not_approved"] ?? 0;
-	const metal__approved = totals?.["metal__approved"] ?? 0;
+	const metal__not_approved = totals?.['metal__not_approved'] ?? 0;
+	const metal__approved = totals?.['metal__approved'] ?? 0;
 
 	return {
 		nylon_metallic_not_approved,

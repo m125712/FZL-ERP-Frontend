@@ -26,16 +26,11 @@
 }
 
 .thick-border {
-	background: linear-gradient(var(--secondary-color) 0 0) left / var(--d, 0%)
-		100% no-repeat;
-	transition: 1s;
-	border-radius: 0 6px 6px 0;
+	@apply bg-transparent transition-colors duration-200;
 }
 
 .thick-border-active {
-	background: linear-gradient(var(--secondary-color) 0 0) left /
-		var(--d, 100%) 100% no-repeat;
-	transition: 1s;
+	@apply bg-accent/20 text-white transition-colors duration-200;
 }
 
 .thick-border:hover {

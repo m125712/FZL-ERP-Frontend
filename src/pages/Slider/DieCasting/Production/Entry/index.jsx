@@ -17,7 +17,6 @@ import {
 	ReactSelect,
 	RemoveButton,
 } from '@/ui';
-import PageContainer from '@/ui/Others/PageContainer';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -185,31 +184,8 @@ export default function Index() {
 
 	const tdClass = 'px-1 pt-1 pb-2';
 
-	const breadcrumbs = [
-		{
-			label: 'Slider',
-			isDisabled: true,
-		},
-		{
-			label: 'Die Casting',
-			isDisabled: true,
-		},
-		{
-			label: 'Production',
-			href: '/slider/die-casting/production',
-		},
-		{
-			label: isUpdate ? 'Update' : 'Create',
-			href: isUpdate
-				? `/slider/die-casting/production/update/${uuid}`
-				: '/slider/die-casting/production/entry',
-		},
-	];
-
 	return (
-		<PageContainer
-			title={isUpdate ? 'Update Production' : 'Create Production'}
-			breadcrumbs={breadcrumbs}>
+		<>
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				noValidate
@@ -436,6 +412,6 @@ export default function Index() {
 			</Suspense>
 
 			<DevTool control={control} />
-		</PageContainer>
+		</>
 	);
 }

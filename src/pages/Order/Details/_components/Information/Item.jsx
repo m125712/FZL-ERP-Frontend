@@ -1,4 +1,5 @@
 import { useFetch } from '@/hooks';
+import cn from '@/lib/cn';
 import RenderTable from '@/ui/Others/Table/RenderTable';
 
 const getSpecialRequirement = (special_requirement) =>
@@ -12,7 +13,7 @@ const getSpecialRequirement = (special_requirement) =>
 		)
 		.join(', ') + ', M/F';
 
-export default function ItemDescription({ order_description }) {
+export default function ItemDescription({ order_description, className }) {
 	const renderItems = () => {
 		const {
 			item_name,
@@ -90,20 +91,26 @@ export default function ItemDescription({ order_description }) {
 		return items;
 	};
 	return (
-		<div className='flex flex-col md:flex-row md:gap-8'>
-			<div className='w-full flex-1'>
-				<RenderTable
-					title={'Zipper Type'}
-					items={renderItems().slice(0, 6)}
-				/>
-			</div>
+		<div
+			className={cn(
+				'grid h-full grid-cols-1 md:grid-cols-2 md:gap-8',
+				className
+			)}>
+			<RenderTable
+				className={
+					'border-b border-secondary/30 md:border-b-0 md:border-r'
+				}
+				title={'Zipper Type'}
+				items={renderItems().slice(0, 6)}
+			/>
 
-			<div className='w-full flex-1'>
-				<RenderTable
-					title={'Others'}
-					items={renderItems().slice(6, renderItems().length)}
-				/>
-			</div>
+			<RenderTable
+				className={
+					'border-b border-secondary/30 md:border-b-0 md:border-l 2xl:border-x'
+				}
+				title={'Others'}
+				items={renderItems().slice(6, renderItems().length)}
+			/>
 		</div>
 	);
 }

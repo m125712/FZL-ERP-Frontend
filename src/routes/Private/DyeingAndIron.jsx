@@ -346,7 +346,7 @@ export const DyeingAndIronRoutes = [
 	{
 		id: 292,
 		name: 'Batch Conneing',
-		path: '/dyeing-and-iron/batch/batch-conneing/:batch_con_uuid',
+		path: '/dyeing-and-iron/thread-batch/conneing/:batch_con_uuid',
 		element: DyeingThreadBatchConneing,
 		type: 'dyeing',
 		page_name: 'dyeing__batch_conneing',

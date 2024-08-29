@@ -11,10 +11,10 @@ import { THREAD_PROGRAMS_NULL, THREAD_PROGRAMS_SCHEMA } from '@util/Schema';
 
 export default function Index({
 	modalId = '',
-	updateMachine = {
+	update = {
 		uuid: null,
 	},
-	setUpdateMachine,
+	setUpdate,
 }) {
 	const { url, updateData, postData } = useThreadPrograms();
 	const { user } = useAuth();
@@ -31,14 +31,10 @@ export default function Index({
 		'/other/material/value/label/unit/quantity'
 	);
 	const { value: dyes } = useFetch('/other/thread/dyes-category/value/label');
-	useFetchForRhfReset(
-		`${url}/${updateMachine?.uuid}`,
-		updateMachine?.uuid,
-		reset
-	);
+	useFetchForRhfReset(`${url}/${update?.uuid}`, update?.uuid, reset);
 
 	const onClose = () => {
-		setUpdateMachine((prev) => ({
+		setUpdate((prev) => ({
 			...prev,
 			uuid: null,
 		}));
@@ -48,15 +44,15 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateMachine?.uuid !== null && updateMachine?.uuid !== undefined) {
+		if (update?.uuid !== null && update?.uuid !== undefined) {
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateMachine?.uuid}`,
-				uuid: updateMachine?.uuid,
+				url: `${url}/${update?.uuid}`,
+				uuid: update?.uuid,
 				updatedData,
 				onClose,
 			});
@@ -83,9 +79,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={
-				updateMachine?.uuid !== null ? 'Update Programs' : 'Programs'
-			}
+			title={update?.uuid !== null ? 'Update Programs' : 'Programs'}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

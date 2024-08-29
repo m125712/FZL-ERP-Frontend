@@ -19,13 +19,13 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'uuid',
+				accessorKey: 'id',
 				header: 'PI ID',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<LinkWithCopy
 						title={info.getValue()}
-						id={info.getValue()}
+						id={info.row.original.uuid}
 						uri={`details`}
 					/>
 				),

@@ -70,8 +70,8 @@ export default function Index({ pi }) {
 		[pi]
 	);
 
-	const totalQty = pi.reduce((a, b) => a + b.pi_quantity, 0);
-	const totalValue = pi.reduce((a, b) => a + b.value, 0);
+	const totalQty = pi.reduce((a, b) => Number(a + b.pi_quantity), 0);
+	const totalValue = pi.reduce((a, b) => Number(a + b.value), 0);
 
 	return (
 		<ReactTable

@@ -320,7 +320,7 @@ export default function Index() {
 								<th
 									key='is_all_checked'
 									scope='col'
-									className='text-secondary-content group w-20 cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide transition duration-300'>
+									className='group w-20 cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
 									<CheckBoxWithoutLabel
 										label='is_all_checked'
 										checked={isAllChecked}
@@ -346,7 +346,7 @@ export default function Index() {
 								<th
 									key={item}
 									scope='col'
-									className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide transition duration-300'>
+									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
 									{item}
 								</th>
 							))}
@@ -355,7 +355,7 @@ export default function Index() {
 								<th
 									key='action'
 									scope='col'
-									className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide transition duration-300'>
+									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
 									Delete
 								</th>
 							)}
@@ -368,7 +368,7 @@ export default function Index() {
 								'relative cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30',
 								isUpdate &&
 									watch(`pi_entry[${index}].isDeletable`) &&
-									'bg-red-400 text-white even:bg-red-400 hover:bg-red-300'
+									'bg-error/10 text-error hover:bg-error/20 hover:text-error'
 							)}>
 							{!isUpdate && (
 								<td className={cn(`w-8 ${rowClass}`)}>
@@ -451,7 +451,13 @@ export default function Index() {
 							{isUpdate && (
 								<td className={`${rowClass}`}>
 									<CheckBoxWithoutLabel
-										className='checkbox-error'
+										className={cn(
+											watch(
+												`pi_entry[${index}].isDeletable`
+											)
+												? 'checkbox-error'
+												: 'checkbox-error'
+										)}
 										label={`pi_entry[${index}].isDeletable`}
 										{...{ register, errors }}
 									/>

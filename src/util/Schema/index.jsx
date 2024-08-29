@@ -1783,7 +1783,8 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_SCHEMA = {
 	stocks: yup.array().of(
 		yup.object().shape({
 			is_checked: BOOLEAN_REQUIRED,
-			order_number: STRING_REQUIRED,
+			order_number: STRING,
+			order_info_uuids: yup.array().of(yup.string()).nullable(),
 			name: STRING,
 			item_name: STRING,
 			zipper_number_name: STRING,

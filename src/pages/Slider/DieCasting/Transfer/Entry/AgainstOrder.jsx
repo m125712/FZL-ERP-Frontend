@@ -18,10 +18,14 @@ import { DevTool } from '@hookform/devtools';
 import { useEffect, useRef, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import Header from './Header';
+import nanoid from '@/lib/nanoid';
+import GetDateTime from '@/util/GetDateTime';
+import { useAuth } from '@/context/auth';
 
 const AgainstOrder = () => {
+	const { user } = useAuth();
 	const r_saveBtn = useRef();
-	const { data: orders } = useOtherOrder();
+	const { data: orders, postData } = useOtherOrder();
 	const {
 		register,
 		handleSubmit,
@@ -53,9 +57,33 @@ const AgainstOrder = () => {
 	}, [stocks]);
 
 	const onSubmit = async (data) => {
-		console.log({
-			data,
+		const processData = [
+			data.stocks.map((item) => {
+				return {
+					...item,
+					uuid: nanoid(),
+					is_body: data.is_body,
+					is_body_uuid: data.is_body? nanoid(): null,
+					is_cap: data.is_cap,
+					is_cap_uuid: data.is_cap? nanoid(): null,
+					is_puller: data.is_puller,
+					is_puller_uuid: data.is_puller? nanoid(): null,
+					is_link: data.is_link,
+					is_link_uuid: data.is_link? nanoid(): null,
+					created_by: user?.uuid,
+					created_at: GetDateTime(),
+				};
+			}),
+		];
+
+		const processDataPromises = processData[0].map((item) => {
+			return postData.mutateAsync({
+				url: `/slider/die-casting-insert/by/order`,
+				newData: item,
+			});
 		});
+		
+		console.log('processData: ', processData);
 	};
 
 	const [isAllChecked, setIsAllChecked] = useState(false);

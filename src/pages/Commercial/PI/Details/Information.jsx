@@ -89,10 +89,10 @@ export default function Information({ pi }) {
 
 	return (
 		<div className='my-2 flex flex-col rounded-md px-2 shadow-md'>
-			<iframe
+			{/* <iframe
 				src={data}
 				className='h-[40rem] w-full rounded-md border-none'
-			/>
+			/> */}
 			<span className='flex items-center gap-2 text-2xl font-semibold capitalize leading-tight text-primary md:text-3xl'>
 				Information
 				<button

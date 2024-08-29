@@ -69,6 +69,10 @@ const DyeingThreadBatchDetails = lazy(
 	() => import('@/pages/DyeingAndIron/ThreadBatch/Details')
 );
 
+//* Batch Thread Conneing
+const DyeingThreadBatchConneing = lazy(
+	() => import('@/pages/DyeingAndIron/ThreadBatch/Conneing/Entry')
+);
 export const DyeingAndIronRoutes = [
 	{
 		id: 28,
@@ -295,7 +299,7 @@ export const DyeingAndIronRoutes = [
 
 	// * Batch Thread Entry
 	{
-		id: 296,	
+		id: 296,
 		name: 'Thread Batch Entry',
 		path: '/dyeing-and-iron/thread-batch/entry',
 		element: DyeingThreadBatchEntry,
@@ -336,6 +340,17 @@ export const DyeingAndIronRoutes = [
 		type: 'dyeing',
 		hidden: true,
 		page_name: 'dyeing__transfer_update',
+		actions: ['create', 'read', 'update'],
+	},
+	// *Dyeing ThreadBatch Conening
+	{
+		id: 292,
+		name: 'Batch Conneing',
+		path: '/dyeing-and-iron/batch/batch-conneing/:batch_con_uuid',
+		element: DyeingThreadBatchConneing,
+		type: 'dyeing',
+		page_name: 'dyeing__batch_conneing',
+		hidden: true,
 		actions: ['create', 'read', 'update'],
 	},
 ];

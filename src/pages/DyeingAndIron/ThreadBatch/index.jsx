@@ -1,20 +1,30 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useDyeingThreadBatch } from '@/state/Dyeing';
+import { useAuth } from '@/context/auth';
 import { useAccess, useFetch } from '@/hooks';
-import { EditDelete, LinkWithCopy, DateTime } from '@/ui';
+import { useDyeingThreadBatch } from '@/state/Dyeing';
+import {
+	DateTime,
+	EditDelete,
+	LinkWithCopy,
+	ReactSelect,
+	StatusButton,
+} from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
-import { useMemo, useEffect } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+const Yarn = lazy(() => import('../ThreadBatch/Yarn'));
+const Dyeing = lazy(() => import('../ThreadBatch/Dyeing'));
 
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
 		useDyeingThreadBatch();
 	const info = new PageInfo('Thread Batch', url, 'dyeing__batch');
+	const { value: machine } = useFetch('/other/machine/value/label');
+	const { user } = useAuth();
 	const haveAccess = useAccess('dyeing__batch');
 	const navigate = useNavigate();
-
-
 	const columns = useMemo(
 		() => [
 			// * batch_id
@@ -30,8 +40,30 @@ export default function Index() {
 					/>
 				),
 			},
+			// {
+			// 	accessorKey: 'add_actions',
+			// 	header: '',
+			// 	enableColumnFilter: false,
+			// 	enableSorting: false,
+			// 	hidden: !haveAccess.includes('create'),
+			// 	width: 'w-24',
+			// 	cell: (info) => {
+			// 		const { week } = info.row.original;
+			// 		return (
+			// 			<button
+			// 				className='btn btn-primary btn-xs'
+			// 				onClick={() =>
+			// 					navigate(
+			// 						`/dyeing-and-iron/batch/batch-production/${info.row.original.uuid}`
+			// 					)
+			// 				}>
+			// 				Add Production
+			// 			</button>
+			// 		);
+			// 	},
+			// },
 			{
-				accessorKey: 'add_actions',
+				accessorKey: 'coneing_actions',
 				header: '',
 				enableColumnFilter: false,
 				enableSorting: false,
@@ -44,19 +76,77 @@ export default function Index() {
 							className='btn btn-primary btn-xs'
 							onClick={() =>
 								navigate(
-									`/dyeing-and-iron/batch/batch-production/${info.row.original.uuid}`
+									`/dyeing-and-iron/batch/batch-conneing/${info.row.original.uuid}`
 								)
 							}>
-							Add Production
+							Add Conneing
 						</button>
 					);
 				},
 			},
 			{
-				accessorKey: 'batch_status',
-				header: 'Status',
+				accessorKey: 'machine_name',
+				header: 'Machine',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { machine_uuid } = info.row.original;
+
+					return (
+						<ReactSelect
+							key={machine_uuid}
+							placeholder='Select Machine'
+							options={machine ?? []}
+							value={machine?.filter(
+								(item) => item.value === machine_uuid
+							)}
+							filterOption={null}
+							onChange={(e) => handleMachine(e, info.row.index)}
+							menuPortalTarget={document.body}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'yarn_actions',
+				header: 'Yarn',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('update'),
+				width: 'w-24',
+				cell: (info) => (
+					<button
+						className='btn btn-primary btn-xs'
+						onClick={() => handelYarn(info.row.index)}>
+						Yarn Issue
+					</button>
+				),
+			},
+			{
+				accessorKey: 'dyeing_actions',
+				header: 'Dyeing',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('update'),
+				width: 'w-24',
+				cell: (info) => (
+					<button
+						className='btn btn-primary btn-xs'
+						onClick={() => handelDyeing(info.row.index)}>
+						Dyeing
+					</button>
+				),
+			},
+			{
+				accessorKey: 'is_drying_complete',
+				header: 'Drying Completed',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton
+						size='btn-sm'
+						value={info.getValue() === 'true' ? 1 : 0}
+						onClick={() => handelDryingComplete(info.row.index)}
+					/>
+				),
 			},
 			{
 				accessorKey: 'created_by_name',
@@ -109,8 +199,85 @@ export default function Index() {
 				),
 			},
 		],
-		[data]
+		[data, machine]
 	);
+
+	//Drying Completed
+	const handelDryingComplete = async (idx) => {
+		if (data[idx]?.is_drying_complete === null) {
+			await updateData.mutateAsync({
+				url: `${url}/${data[idx]?.uuid}`,
+				updatedData: {
+					is_drying_complete: true,
+					drying_created_at: GetDateTime(),
+				},
+				isOnCloseNeeded: false,
+			});
+		} else {
+			await updateData.mutateAsync({
+				url: `${url}/${data[idx]?.uuid}`,
+				updatedData: {
+					is_drying_complete:
+						data[idx]?.is_drying_complete === 'true' ? false : true,
+					drying_updated_at: GetDateTime(),
+				},
+				isOnCloseNeeded: false,
+			});
+		}
+	};
+	// Machine
+	const handleMachine = async (e, idx) => {
+		if (data[idx]?.machine_uuid === null) {
+			await updateData.mutateAsync({
+				url: `${url}/${data[idx]?.uuid}`,
+				updatedData: {
+					machine_uuid: e.value,
+					lab_created_by: user?.uuid,
+					lab_created_at: GetDateTime(),
+				},
+				isOnCloseNeeded: false,
+			});
+		} else {
+			await updateData.mutateAsync({
+				url: `${url}/${data[idx]?.uuid}`,
+				updatedData: {
+					machine_uuid: e.value,
+					lab_updated_at: GetDateTime(),
+				},
+				isOnCloseNeeded: false,
+			});
+		}
+	};
+	//Yarn
+
+	const [yarn, setYarn] = useState({
+		uuid: null,
+		yarn_quantity: null,
+	});
+	const handelYarn = (idx) => {
+		setYarn((prev) => ({
+			...prev,
+			uuid: data[idx].uuid,
+			yarn_quantity: data[idx].yarn_quantity,
+			batch_id: data[idx].batch_id,
+		}));
+		window['YarnModal'].showModal();
+	};
+	const [dyeing, setDyeing] = useState({
+		uuid: null,
+		dyeing_operator: null,
+		batch_id: null,
+	});
+	const handelDyeing = (idx) => {
+		console.log(data[idx], 'data');
+		setDyeing((prev) => ({
+			...prev,
+			uuid: data[idx].uuid,
+			batch_id: data[idx].batch_id,
+			dyeing_operator: data[idx].dyeing_operator,
+		}));
+		window['DyeingModal'].showModal();
+	};
 
 	// Add
 	const handelAdd = () => navigate('/dyeing-and-iron/thread-batch/entry');
@@ -151,6 +318,24 @@ export default function Index() {
 					}}
 				/>
 			</Suspense> */}
+			<Suspense>
+				<Yarn
+					modalId={'YarnModal'}
+					{...{
+						yarn,
+						setYarn,
+					}}
+				/>
+			</Suspense>
+			<Suspense>
+				<Dyeing
+					modalId={'DyeingModal'}
+					{...{
+						dyeing,
+						setDyeing,
+					}}
+				/>
+			</Suspense>
 		</div>
 	);
 }

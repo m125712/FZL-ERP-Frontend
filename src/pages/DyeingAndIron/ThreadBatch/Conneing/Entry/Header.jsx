@@ -53,10 +53,59 @@ export default function Header({
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody title='Yarn Issue'>
-				<Input label='yarn_quantity' {...{ register, errors }} />
-			</SectionEntryBody>
-			<SectionEntryBody title='Machine'>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+					<FormField label='uuid' title='Batch No' errors={errors}>
+						<Controller
+							name='uuid'
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select Batch'
+										options={batch_number}
+										value={batch_number?.find(
+											(item) =>
+												item.value == getValues('uuid')
+										)}
+										onChange={(e) => {
+											const value = e.value;
+											onChange(value);
+										}}
+										isDisabled={true}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+					<Input label='yarn_quantity' {...{ register, errors }} />
+				</div>
+			</SectionEntryBody>
+			<SectionEntryBody title='Dyeing'>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+					<FormField label='uuid' title='Batch No' errors={errors}>
+						<Controller
+							name='uuid'
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select Batch'
+										options={batch_number}
+										value={batch_number?.find(
+											(item) =>
+												item.value == getValues('uuid')
+										)}
+										onChange={(e) => {
+											const value = e.value;
+											onChange(value);
+										}}
+										isDisabled={true}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+
 					<FormField
 						label='machine_uuid'
 						title='Machine'
@@ -83,10 +132,6 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-				</div>
-			</SectionEntryBody>
-			<SectionEntryBody title='Dyeing'>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField
 						label='dyeing_operator'
 						title='Operator'
@@ -159,6 +204,9 @@ export default function Header({
 							}}
 						/>
 					</FormField>
+				</div>
+
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField label='status' title='Status' errors={errors}>
 						<Controller
 							name={'status'}

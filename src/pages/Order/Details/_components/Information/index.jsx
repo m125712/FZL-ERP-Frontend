@@ -11,6 +11,7 @@ export default function SingleInformation({ order, idx, hasInitialOrder }) {
 	const renderButtons = () => {
 		return [
 			<StatusButton
+				className={'border-0'}
 				key={'swatch_approval_status'}
 				size='btn-xs md:btn-sm'
 				value={order?.swatch_approval_status}
@@ -171,7 +172,7 @@ export function OrderInformation({ order, handelPdfDownload }) {
 			<button
 				key='pdf'
 				type='button'
-				className='btn btn-primary btn-sm rounded-badge'
+				className='btn btn-accent btn-sm rounded-badge'
 				onClick={handelPdfDownload}>
 				<PDF className='w-4' /> PDF
 			</button>,

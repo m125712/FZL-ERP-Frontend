@@ -317,7 +317,6 @@ export const dyeingQK = {
 	//* Thread Batch Entry
 	threadBatchEntry: () => [...dyeingQK.all(), 'thread-batch-entry'],
 	threadBatchEntryByUUID: (uuid) => [...dyeingQK.threadBatchEntry(), uuid],
-	
 
 	// * Order Against dyeing RM Log * //
 	orderAgainstDyeingRMLog: () => [
@@ -429,6 +428,9 @@ export const metalQK = {
 	all: () => ['metal'],
 
 	//* Teeth Molding
+
+	// * PRODUCTION
+	metalTMProduction: () => [...metalQK.all(), 'tm-production'],
 
 	// * RM
 	metalTMRM: () => [...metalQK.all(), 'tm-rm'],

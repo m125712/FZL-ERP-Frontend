@@ -47,7 +47,7 @@ export {
 	PHONE_NUMBER,
 	PHONE_NUMBER_REQUIRED,
 	STRING,
-	STRING_REQUIRED
+	STRING_REQUIRED,
 };
 
 // Library
@@ -1896,4 +1896,20 @@ export const VISLON_TRANSACTION_SCHEMA = {
 export const VISLON_TRANSACTION_SCHEMA_NULL = {
 	trx_quantity_in_kg: null,
 	remarks: '',
-};	
+};
+
+// * Metal Teeth Molding Production
+export const METAL_TEETH_MOLDING_PRODUCTION_SCHEMA = {
+	production_quantity: NUMBER_REQUIRED,
+	production_quantity_in_kg: NUMBER_REQUIRED,
+	wastage: NUMBER,
+	remarks: STRING.nullable(),
+};
+
+export const METAL_TEETH_MOLDING_PRODUCTION_SCHEMA_NULL = {
+	uuid: null,
+	production_quantity: null,
+	production_quantity_in_kg: null,
+	wastage: null,
+	remarks: null,
+};

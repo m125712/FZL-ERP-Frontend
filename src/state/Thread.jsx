@@ -59,3 +59,25 @@ export const useThreadSwatchByUUID = (uuid) =>
 		queryKey: threadQK.swatchByUUID(uuid),
 		url: `/thread/order-swatch/${uuid}`,
 	});
+//*DyesCategory
+export const useThreadDyesCategory = () =>
+	createGlobalState({
+		queryKey: threadQK.dyesCategory(),
+		url: '/thread/dyes-category',
+	});
+export const useThreadDyesCategoryByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: threadQK.dyesCategoryByUUID(uuid),
+		url: `/thread/dyes-category/${uuid}`,
+	});
+//*Programs
+export const useThreadPrograms = () =>
+	createGlobalState({
+		queryKey: threadQK.programs(),
+		url: '/thread/programs',
+	});
+export const useThreadProgramsByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: threadQK.programsByUUID(uuid),
+		url: `/thread/programs${uuid}`,
+	});

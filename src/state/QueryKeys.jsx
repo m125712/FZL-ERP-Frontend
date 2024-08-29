@@ -317,7 +317,6 @@ export const dyeingQK = {
 	//* Thread Batch Entry
 	threadBatchEntry: () => [...dyeingQK.all(), 'thread-batch-entry'],
 	threadBatchEntryByUUID: (uuid) => [...dyeingQK.threadBatchEntry(), uuid],
-	
 
 	// * Order Against dyeing RM Log * //
 	orderAgainstDyeingRMLog: () => [
@@ -641,6 +640,14 @@ export const threadQK = {
 	//Swatch
 	swatch: () => [...threadQK.all(), 'swatch'],
 	swatchByUUID: (uuid) => [...threadQK.swatch(), uuid],
+
+	//DyesCategory
+	dyesCategory: () => [...threadQK.all(), 'dyes-category'],
+	dyesCategoryByUUID: (uuid) => [...threadQK.dyesCategory(), uuid],
+
+	//Programs
+	programs: () => [...threadQK.all(), 'programs'],
+	programsByUUID: (uuid) => [...threadQK.programs(), uuid],
 };
 
 //* OTHER QUERY KEYS

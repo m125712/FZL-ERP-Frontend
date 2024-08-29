@@ -1,8 +1,14 @@
 import { Close } from '@/assets/icons';
 
-const Header = ({ title, onClose }) => (
+const Header = ({ title, subTitle, onClose }) => (
 	<div className='modal-header mb-2 flex items-center justify-between'>
-		<p className='text-2xl font-semibold text-primary'>{title}</p>
+		<div className='flex flex-col'>
+			<p className='text-2xl font-semibold text-primary'>{title}</p>
+			{subTitle && (
+				<p className='font-semibold text-gray-400'>{subTitle}</p>
+			)}
+		</div>
+
 		<button
 			type='button'
 			onClick={onClose}
@@ -50,4 +56,4 @@ const ProceedFooter = ({ handelCancelClick }) => (
 	</div>
 );
 
-export { DeleteFooter, ProceedFooter, Footer, Header };
+export { DeleteFooter, Footer, Header, ProceedFooter };

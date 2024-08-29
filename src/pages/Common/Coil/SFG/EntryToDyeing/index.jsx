@@ -1,14 +1,14 @@
 import { DeleteModal } from '@/components/Modal';
-import { useFetchForRhfResetForOrder, useRHF, useFetch } from '@/hooks';
+import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useOrderDescription, useOrderDetails } from '@/state/Order';
+import { useOrderDescription } from '@/state/Order';
 import {
 	ActionButtons,
 	DynamicField,
-	Input,
+	FormField,
 	JoinInput,
-	Textarea,
 	ReactSelect,
+	Textarea,
 } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
@@ -19,19 +19,11 @@ import {
 } from '@util/Schema';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
-import {
-	Navigate,
-	useNavigate,
-	useParams,
-	useLocation,
-} from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
-export default function Index({ sfg }) {
-	const { url, updateData, postData, deleteData } = useOrderDescription();
-	const { invalidateQuery: OrderDetailsInvalidate } = useOrderDetails();
+export default function Index() {
+	const { postData, deleteData } = useOrderDescription();
 	const { order_number, order_description_uuid, coil_uuid } = useParams();
-	const urlPath = useLocation();
-
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const isUpdate =
@@ -98,73 +90,13 @@ export default function Index({ sfg }) {
 	const handelEntryAppend = () => {
 		EntryAppend({
 			order_id: null,
-			trx_quantity: 0,
+			trx_quantity: null,
 			remarks: '',
 		});
 	};
-	const onClose = () => reset(COMMON_COIL_TO_DYEING_NULL);
 
 	// TODO Submit
 	const onSubmit = async (data) => {
-		const DEFAULT_SWATCH_APPROVAL_DATE = null;
-		// * Update data * //
-		// if (isUpdate) {
-		// 	// * updated order description * //
-		// 	const order_description_updated = {
-		// 		...data,
-		// 		is_slider_provided: data?.is_slider_provided ? 1 : 0,
-		// 		is_logo_body: data?.is_logo_body ? 1 : 0,
-		// 		is_logo_puller: data?.is_logo_puller ? 1 : 0,
-		// 		hand: data?.hand,
-		// 		updated_at: GetDateTime(),
-		// 	};
-		// 	await updateData.mutateAsync({
-		// 		url: `/zipper/order-description/${data?.order_description_uuid}`,
-		// 		updatedData: order_description_updated,
-		// 		isOnCloseNeeded: false,
-		// 	});
-		// 	// * updated order entry * //
-		// 	const order_entry_updated = [...data.order_entry].map((item) => ({
-		// 		...item,
-		// 		status: item.order_entry_status ? 1 : 0,
-		// 		swatch_status: 'pending',
-		// 		swatch_approval_date: DEFAULT_SWATCH_APPROVAL_DATE,
-		// 		updated_at: GetDateTime(),
-		// 	}));
-		// 	//* Post new entry */ //
-		// 	let order_entry_updated_promises = [
-		// 		...order_entry_updated.map(async (item) => {
-		// 			if (item.order_entry_uuid) {
-		// 				await updateData.mutateAsync({
-		// 					url: `/zipper/order-entry/${item.order_entry_uuid}`,
-		// 					updatedData: item,
-		// 					isOnCloseNeeded: false,
-		// 				});
-		// 			} else {
-		// 				await postData.mutateAsync({
-		// 					url: '/zipper/order-entry',
-		// 					newData: {
-		// 						...item,
-		// 						uuid: nanoid(),
-		// 						status: item.order_entry_status ? 1 : 0,
-		// 						swatch_status: 'pending',
-		// 						swatch_approval_date:
-		// 							DEFAULT_SWATCH_APPROVAL_DATE,
-		// 						order_description_uuid:
-		// 							data?.order_description_uuid,
-		// 						created_at: GetDateTime(),
-		// 					},
-		// 					isOnCloseNeeded: false,
-		// 				});
-		// 			}
-		// 		}),
-		// 	];
-		// 	navigate(
-		// 		`/order/details/${order_number}/${order_description_uuid}`
-		// 	);
-		// 	return;
-		// }
-
 		// * Add new data*//
 		const created_at = GetDateTime();
 
@@ -177,9 +109,6 @@ export default function Index({ sfg }) {
 			created_at,
 		}));
 
-		console.log(entryData);
-
-		// // //* Post new entry */ //
 		let entryData_promises = [
 			...entryData.map(
 				async (item) =>
@@ -244,7 +173,7 @@ export default function Index({ sfg }) {
 			? `/other/order/description/value/label?item=nylon`
 			: `/other/order/description/value/label?item=without-nylon`
 	);
-
+	console.log('index / getValues(): ', getValues());
 	return (
 		<div>
 			<HotKeys {...{ keyMap, handlers }}>
@@ -264,64 +193,74 @@ export default function Index({ sfg }) {
 							<th
 								key={item}
 								scope='col'
-								className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide transition duration-300 first:pl-2'>
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
 								{item}
 							</th>
 						))}>
 						{EntryField.map((item, index) => (
 							<tr key={item.id}>
 								<td className={`w-96 ${rowClass}`}>
-									<Controller
-										name={`coil_to_dyeing_entry[${index}].order_id`}
-										control={control}
-										render={({ field: { onChange } }) => {
-											return (
-												<ReactSelect
-													menuPortalTarget={
-														document.body
-													}
-													placeholder='Select Order Entry ID'
-													options={order_id}
-													value={order_id?.find(
-														(item) =>
-															item.value ==
-															getValues(
-																'order_id'
-															)
-													)}
-													onChange={(e) =>
-														onChange(e.value)
-													}
-													// isDisabled={updateCoilProd?.id !== null}
-												/>
-											);
-										}}
-									/>
+									<FormField
+										label={`coil_to_dyeing_entry[${index}].order_id`}
+										title='Material'
+										is_title_needed='false'
+										dynamicerror={
+											errors?.coil_to_dyeing_entry?.[
+												index
+											]?.order_id
+										}>
+										<Controller
+											name={`coil_to_dyeing_entry[${index}].order_id`}
+											control={control}
+											render={({
+												field: { onChange },
+											}) => {
+												return (
+													<ReactSelect
+														menuPortalTarget={
+															document.body
+														}
+														placeholder='Select Order Entry ID'
+														options={order_id}
+														value={order_id?.find(
+															(item) =>
+																item.value ==
+																getValues(
+																	'order_id'
+																)
+														)}
+														onChange={(e) =>
+															onChange(e.value)
+														}
+														// isDisabled={updateCoilProd?.id !== null}
+													/>
+												);
+											}}
+										/>
+									</FormField>
 								</td>
 								<td className={`w-56 ${rowClass}`}>
 									<JoinInput
 										label={`coil_to_dyeing_entry[${index}].trx_quantity`}
 										is_title_needed='false'
-										// sub_label={`Maximum For this Order: ${getMaxQuantity()}`}
 										unit='KG'
-										// placeholder={`Max: ${
-										// 	getMaxQuantity() <
-										// 	updateCoilProd?.quantity_in_coil
-										// 		? getMaxQuantity()
-										// 		: updateCoilProd?.quantity_in_coil
-										// }`}
+										dynamicerror={
+											errors?.coil_to_dyeing_entry?.[
+												index
+											]?.trx_quantity
+										}
 										{...{ register, errors }}
 									/>
 								</td>
 								<td className={` ${rowClass}`}>
 									<Textarea
-										title='color'
+										title='remarks'
 										label={`coil_to_dyeing_entry[${index}].remarks`}
 										is_title_needed='false'
 										dynamicerror={
 											errors?.coil_to_dyeing_entry?.[
 												index
-											]?.color
+											]?.remarks
 										}
 										register={register}
 									/>

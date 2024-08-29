@@ -1,55 +1,49 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF, useUpdateFunc } from '@/hooks';
-import { Input, JoinInput, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { SFG_PRODUCTION_SCHEMA } from '@util/Schema';
-import { DevTool } from '@hookform/devtools';
-import {
-	METAL_TEETH_MOLDING_PRODUCTION_SCHEMA,
-	METAL_TEETH_MOLDING_PRODUCTION_SCHEMA_NULL,
-} from '@util/Schema';
+import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useMetalTMProduction } from '@/state/Metal';
+import { JoinInput, Textarea } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { DevTool } from '@hookform/devtools';
+import {
+	SFG_PRODUCTION_SCHEMA,
+	SFG_PRODUCTION_SCHEMA_NULL,
+} from '@util/Schema';
 
 export default function Index({
 	modalId = '',
-	setTeethMoldingProd,
 	updateTeethMoldingProd = {
-		id: null,
-		name: '',
-		teeth_molding_stock: null,
-		teeth_molding_prod: null,
-		order_entry_id: null,
+		sfg_uuid: null,
+		order_number: null,
 		item_description: null,
+		style_color_size: null,
+		order_quantity: null,
+		balance_quantity: null,
+		teeth_molding_prod: null,
+		teeth_molding_stock: null,
 		total_trx_quantity: null,
-		order_number: '',
-		order_description: '',
-		quantity: null,
+		metal_teeth_molding: null,
 	},
 	setUpdateTeethMoldingProd,
 }) {
-	const { data, url, updateData, postData, deleteData, isLoading } =
-		useMetalTMProduction();
+	const { postData } = useMetalTMProduction();
 	const { user } = useAuth();
-	const MAX_SLIDER_PRODUCTION_QUANTITY =
-		updateTeethMoldingProd?.quantity -
-		(updateTeethMoldingProd?.total_trx_quantity +
-			updateTeethMoldingProd?.teeth_molding_prod);
 
-	const MAX_USED_QUANTITY = updateTeethMoldingProd?.teeth_molding_stock;
-	const schema = {
-		...SFG_PRODUCTION_SCHEMA,
-		production_quantity: SFG_PRODUCTION_SCHEMA.production_quantity.max(
-			MAX_SLIDER_PRODUCTION_QUANTITY
-		),
-		used_quantity:
-			SFG_PRODUCTION_SCHEMA.production_quantity.max(MAX_USED_QUANTITY),
-	};
+	const MAX_PROD_PCS = Number(
+		updateTeethMoldingProd.balance_quantity
+	).toFixed(0);
+	const MAX_PROD_KG = Number(
+		updateTeethMoldingProd.metal_teeth_molding
+	).toFixed(3);
+
 	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
-		METAL_TEETH_MOLDING_PRODUCTION_SCHEMA,
-		METAL_TEETH_MOLDING_PRODUCTION_SCHEMA_NULL
+		SFG_PRODUCTION_SCHEMA,
+		SFG_PRODUCTION_SCHEMA_NULL
 	);
+	const MAX_WASTAGE_KG = Number(
+		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
+	).toFixed(3);
 
 	const onClose = () => {
 		setUpdateTeethMoldingProd((prev) => ({
@@ -64,7 +58,7 @@ export default function Index({
 			order_number: '',
 			order_description: '',
 		}));
-		reset(METAL_TEETH_MOLDING_PRODUCTION_SCHEMA_NULL);
+		reset(SFG_PRODUCTION_SCHEMA_NULL);
 		window[modalId].close();
 	};
 
@@ -72,14 +66,14 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			sfg_uuid: modalData?.sfg_uuid,
+			sfg_uuid: updateTeethMoldingProd?.sfg_uuid,
 			section: 'teeth_molding',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
 
 		await postData.mutateAsync({
-			url,
+			url: '/zipper/sfg-production',
 			newData: updatedData,
 			onClose,
 		});
@@ -88,24 +82,34 @@ export default function Index({
 	return (
 		<AddModal
 			id='TeethMoldingProdModal'
-			title={'Teeth Molding Production'}
+			title={'Metal/Teeth Molding/Production'}
+			subTitle={`
+				${updateTeethMoldingProd.order_number} -> 
+				${updateTeethMoldingProd.item_description} -> 
+				${updateTeethMoldingProd.style_color_size} 
+				`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
 			<JoinInput
 				title='Production Quantity'
+				label='production_quantity'
+				sub_label={`MAX: ${MAX_PROD_PCS} pcs`}
+				unit='PCS'
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				title='Production Quantity (KG)'
 				label='production_quantity_in_kg'
+				sub_label={`MAX: ${MAX_PROD_KG} kg`}
 				unit='KG'
-				placeholder={`Max: ${MAX_SLIDER_PRODUCTION_QUANTITY}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
 				title='wastage'
 				label='wastage'
+				sub_label={`MAX: ${MAX_WASTAGE_KG} kg`}
 				unit='KG'
-				placeholder={`Max: ${(
-					MAX_USED_QUANTITY - watch('used_quantity')
-				).toFixed(2)}`}
 				{...{ register, errors }}
 				{...{ register, errors }}
 			/>

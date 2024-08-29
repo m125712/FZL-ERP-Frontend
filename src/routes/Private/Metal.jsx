@@ -77,7 +77,13 @@ export const MetalRoutes = [
 		element: MetalTeethMoldingProduction,
 		type: ['metal', 'teeth-molding'],
 		page_name: 'metal__teeth_molding_production',
-		actions: ['create', 'read', 'update', 'click_production'],
+		actions: [
+			'create',
+			'read',
+			'update',
+			'click_production',
+			'click_transaction',
+		],
 	},
 
 	{

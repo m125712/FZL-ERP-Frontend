@@ -2,6 +2,14 @@ import createGlobalState from '.';
 import { metalQK } from './QueryKeys';
 
 //*Teeth Molding
+
+// * PRODUCTION
+export const useMetalTMProduction = () =>
+	createGlobalState({
+		queryKey: metalQK.metalTMProduction(),
+		url: '/zipper/sfg/by/teeth_molding_prod?item_name=metal',
+	});
+
 // * RM
 export const useMetalTMRM = () =>
 	createGlobalState({
@@ -13,6 +21,7 @@ export const useMetalTMRMByUUID = (uuid) =>
 		queryKey: metalQK.metalTMRMByUUID(uuid),
 		url: `/material/stock/by/single-field/m_teeth_molding${uuid}`,
 	});
+
 //* RM Log
 export const useMetalTMRMLog = () =>
 	createGlobalState({

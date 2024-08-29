@@ -1,33 +1,37 @@
-import { lazy } from "react";
+import { lazy } from 'react';
 
 // Teeth Molding
 const MetalTeethMolding = lazy(
-	() => import("@/pages/Metal/TeethMolding/RMStock/RMStock")
+	() => import('@/pages/Metal/TeethMolding/RMStock/RMStock')
 );
 const MetalTeethMoldingSFG = lazy(
-	() => import("@/pages/Metal/TeethMolding/SFG")
+	() => import('@/pages/Metal/TeethMolding/SFG')
 );
 const MetalTeethMoldingTrxLog = lazy(
-	() => import("@/pages/Metal/TeethMolding/Log")
+	() => import('@/pages/Metal/TeethMolding/Log')
+);
+
+const MetalTeethMoldingProduction = lazy(
+	() => import('@/pages/Metal/TeethMolding/Production')
 );
 
 // TeethColoring
 const MetalTeethColoringRMStock = lazy(
-	() => import("@/pages/Metal/TeethColoring/RMStock/RMStock")
+	() => import('@/pages/Metal/TeethColoring/RMStock/RMStock')
 );
 const MetalTeethColoringSFG = lazy(
-	() => import("@/pages/Metal/TeethColoring/SFG")
+	() => import('@/pages/Metal/TeethColoring/SFG')
 );
 const MetalTeethColoringTrxLog = lazy(
-	() => import("@/pages/Metal/TeethColoring/Log")
+	() => import('@/pages/Metal/TeethColoring/Log')
 );
 
 // Finishing
 const MetalFinishingRMStock = lazy(
-	() => import("@/pages/Metal/Finishing/RMStock/RMStock")
+	() => import('@/pages/Metal/Finishing/RMStock/RMStock')
 );
-const MetalFinishingSFG = lazy(() => import("@/pages/Metal/Finishing/SFG"));
-const MetalFinishingTrxLog = lazy(() => import("@/pages/Metal/Finishing/Log"));
+const MetalFinishingSFG = lazy(() => import('@/pages/Metal/Finishing/SFG'));
+const MetalFinishingTrxLog = lazy(() => import('@/pages/Metal/Finishing/Log'));
 
 export const MetalRoutes = [
 	{
@@ -65,6 +69,17 @@ export const MetalRoutes = [
 			'click_delete_rm_order',
 		],
 	},
+
+	{
+		id: 301,
+		name: 'Production',
+		path: '/metal/teeth-molding/production',
+		element: MetalTeethMoldingProduction,
+		type: ['metal', 'teeth-molding'],
+		page_name: 'metal__teeth_molding_production',
+		actions: ['create', 'read', 'update', 'click_production'],
+	},
+
 	{
 		id: 31,
 		name: 'RM',

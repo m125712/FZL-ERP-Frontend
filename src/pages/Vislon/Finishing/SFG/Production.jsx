@@ -1,25 +1,25 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
-import { useRHF, useUpdateFunc } from "@/hooks";
-import { Input, JoinInput } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { SFG_PRODUCTION_NULL, SFG_PRODUCTION_SCHEMA } from "@util/Schema";
+import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
+import { useRHF, useUpdateFunc } from '@/hooks';
+import { Input, JoinInput } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { SFG_PRODUCTION_NULL, SFG_PRODUCTION_SCHEMA } from '@util/Schema';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setFinishingProd,
 	updateFinishingProd = {
 		id: null,
-		name: "",
+		name: '',
 		finishing_stock: null,
 		finishing_prod: null,
 		coloring_prod: null,
 		order_entry_id: null,
 		item_description: null,
 		total_trx_quantity: null,
-		end_type_name: "",
-		order_number: "",
-		order_description: "",
+		end_type_name: '',
+		order_number: '',
+		order_description: '',
 		quantity: null,
 	},
 	setUpdateFinishingProd,
@@ -45,16 +45,16 @@ export default function Index({
 		setUpdateFinishingProd((prev) => ({
 			...prev,
 			id: null,
-			name: "",
+			name: '',
 			finishing_stock: null,
 			finishing_prod: null,
 			coloring_prod: null,
 			order_entry_id: null,
 			item_description: null,
 			total_trx_quantity: null,
-			end_type_name: "",
-			order_number: "",
-			order_description: "",
+			end_type_name: '',
+			order_number: '',
+			order_description: '',
 		}));
 		reset(SFG_PRODUCTION_NULL);
 		window[modalId].close();
@@ -78,7 +78,7 @@ export default function Index({
 			total_trx_quantity: updateFinishingProd?.total_trx_quantity,
 			used_quantity: 0,
 			quantity: updateFinishingProd?.quantity,
-			section: "finishing",
+			section: 'finishing',
 			issued_by: user?.id,
 			created_at: GetDateTime(),
 		};
@@ -95,26 +95,25 @@ export default function Index({
 
 	return (
 		<AddModal
-			id="FinishingProdModal"
-			title={"Finishing Production"}
+			id='FinishingProdModal'
+			title={'Finishing Production'}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
+			isSmall={true}>
 			<JoinInput
-				label="production_quantity"
-				unit="PCS"
+				label='production_quantity'
+				unit='PCS'
 				placeholder={`Max: ${MAX_SLIDER_PRODUCTION_QUANTITY}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				title="Wastage (Tape)"
-				label="wastage"
-				unit="PCS"
-				placeholder={`Max: ${MAX_SLIDER_PRODUCTION_QUANTITY - watch("production_quantity")}`}
+				title='Wastage (Tape)'
+				label='wastage'
+				unit='PCS'
+				placeholder={`Max: ${MAX_SLIDER_PRODUCTION_QUANTITY - watch('production_quantity')}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

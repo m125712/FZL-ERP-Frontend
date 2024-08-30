@@ -1,11 +1,11 @@
 import { PDF } from '@/assets/icons';
 import { LinkWithCopy, StatusButton, TitleValue } from '@/ui';
+import SectionContainer from '@/ui/Others/SectionContainer';
+import RenderTable from '@/ui/Others/Table/RenderTable';
 import { format } from 'date-fns';
 import ItemDescription from './Item';
 import OrderDescription from './Order';
 import SliderDescription from './Slider';
-import RenderTable from '@/ui/Others/Table/RenderTable';
-import SectionContainer from '@/ui/Others/SectionContainer';
 
 export default function SingleInformation({ order, idx, hasInitialOrder }) {
 	const renderButtons = () => {
@@ -76,7 +76,7 @@ export function OrderInformation({ order, handelPdfDownload }) {
 		reference_order,
 		marketing_priority,
 		factory_priority,
-		user_name,
+		created_by_name,
 		created_at,
 		marketing_name,
 		buyer_name,
@@ -101,7 +101,6 @@ export function OrderInformation({ order, handelPdfDownload }) {
 					/>
 				),
 			},
-
 			{
 				label: 'Cash / LC',
 				value: renderCashOrLC(
@@ -111,7 +110,6 @@ export function OrderInformation({ order, handelPdfDownload }) {
 					true
 				),
 			},
-
 			{
 				label: 'Priority (Mark / Fact)',
 				value:
@@ -119,12 +117,10 @@ export function OrderInformation({ order, handelPdfDownload }) {
 					' / ' +
 					(factory_priority || '-'),
 			},
-
 			{
 				label: 'Created By',
-				value: user_name,
+				value: created_by_name,
 			},
-
 			{
 				label: 'Created At',
 				value: created_at && format(new Date(created_at), 'dd/MM/yyyy'),

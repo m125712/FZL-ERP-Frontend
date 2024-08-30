@@ -6,10 +6,7 @@ import { useMetalTMProduction } from '@/state/Metal';
 import { JoinInput, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
-import {
-	SFG_PRODUCTION_SCHEMA,
-	SFG_PRODUCTION_SCHEMA_NULL,
-} from '@util/Schema';
+import { SFG_PRODUCTION_NULL, SFG_PRODUCTION_SCHEMA } from '@util/Schema';
 
 export default function Index({
 	modalId = '',
@@ -39,7 +36,7 @@ export default function Index({
 
 	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
 		SFG_PRODUCTION_SCHEMA,
-		SFG_PRODUCTION_SCHEMA_NULL
+		SFG_PRODUCTION_NULL
 	);
 	const MAX_WASTAGE_KG = Number(
 		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
@@ -58,7 +55,7 @@ export default function Index({
 			order_number: '',
 			order_description: '',
 		}));
-		reset(SFG_PRODUCTION_SCHEMA_NULL);
+		reset(SFG_PRODUCTION_NULL);
 		window[modalId].close();
 	};
 

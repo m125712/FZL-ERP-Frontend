@@ -25,7 +25,7 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className='space-y-2'>
+		<div className='space-y-8 py-4'>
 			<Information orderInfo={orderInfo} />
 			<Table {...orderInfo} />
 		</div>

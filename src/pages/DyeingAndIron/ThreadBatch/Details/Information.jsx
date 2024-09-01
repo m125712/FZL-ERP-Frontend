@@ -1,37 +1,179 @@
-import { useFetch } from '@/hooks';
-import { StatusButton, TitleValue } from '@/ui';
+import SectionContainer from '@/ui/Others/SectionContainer';
+import RenderTable from '@/ui/Others/Table/RenderTable';
 
 export default function Information({ batch }) {
+	console.log({
+		batch,
+	});
+	const {
+		batch_id,
+		category,
+		coning_created_at,
+		coning_created_by,
+		coning_updated_at,
+		coning_supervisor,
+		coning_operator,
+		coning_machines,
+		coning_created_by_name,
+		created_at,
+		created_by_name,
+		drying_created_at,
+		drying_updated_at,
+		dyeing_created_at,
+		dyeing_updated_at,
+		dyeing_supervisor_name,
+		dyeing_supervisor,
+		dyeing_operator_name,
+		dyeing_operator,
+		is_drying_complete,
+		lab_created_at,
+		lab_created_by,
+		lab_created_by_name,
+		lab_updated_at,
+		machine_name,
+		machine_uuid,
+		pass_by,
+		reason,
+		status,
+		shift,
+		remarks,
+		updated_at,
+		uuid,
+		yarn_issue_created_at,
+		yarn_issue_created_by_name,
+		yarn_issue_updated_at,
+		yarn_quantity,
+	} = batch;
+
+	const renderItems = () => {
+		const yarn_issues = [
+			{
+				label: 'Batch No',
+				value: batch_id,
+			},
+			{
+				label: 'Quantity',
+				value: yarn_quantity,
+			},
+
+			{
+				label: 'Created By',
+				value: yarn_issue_created_by_name,
+			},
+			{
+				label: 'Created At',
+				value: yarn_issue_created_at,
+			},
+			{
+				label: 'Updated At',
+				value: yarn_issue_updated_at,
+			},
+		];
+
+		const conneing = [
+			{
+				label: 'Machine',
+				value: coning_machines,
+			},
+			{
+				label: 'Operator',
+				value: coning_operator,
+			},
+			{
+				label: 'Supervisor',
+				value: coning_supervisor,
+			},
+			{
+				label: 'Created By',
+				value: coning_created_by_name,
+			},
+
+			{
+				label: 'Created At',
+				value: coning_created_at,
+			},
+
+			{
+				label: 'Updated At',
+				value: coning_updated_at,
+			},
+		];
+
+		const dying = [
+			{
+				label: 'Status',
+				value: status,
+			},
+			{
+				label: 'Category',
+				value: category,
+			},
+			{
+				label: 'Machine',
+				value: machine_name,
+			},
+			{
+				label: 'Operator',
+				value: dyeing_operator_name,
+			},
+			{
+				label: 'Supervisor',
+				value: dyeing_supervisor_name,
+			},
+
+			{
+				label: 'Pass By',
+				value: pass_by,
+			},
+			{
+				label: 'Shift',
+				value: shift,
+			},
+
+			{
+				label: 'Reason',
+				value: reason,
+			},
+
+			{
+				label: 'Created By',
+				value: dyeing_created_at,
+			},
+			{
+				label: 'Updated At',
+				value: dyeing_updated_at,
+			},
+		];
+
+		return {
+			yarn_issues,
+			conneing,
+			dying,
+		};
+	};
 
 	return (
-		<div className='my-2 flex flex-col rounded-md px-2 shadow-md'>
-			<span className='flex items-center gap-2 text-2xl font-semibold capitalize leading-tight text-primary md:text-3xl'>
-				Thread Batch 
-			</span>
-			<hr className='border-1 my-2 border-secondary-content' />
-			<div className='mx-2 flex flex-col items-stretch justify-between md:flex-row'>
-				<div className='flex flex-col gap-0.5 divide-y-2 divide-primary/20 md:divide-y-0'>
-					<TitleValue title='ID' value={batch?.batch_id} />
-					<TitleValue
-						title='Created By'
-						value={batch?.created_by_name}
+		<SectionContainer title={'Information'}>
+			<div>
+				<div className='grid grid-cols-1 border-secondary/30 lg:grid-cols-2 lg:gap-8 lg:border-b'>
+					<RenderTable
+						className={'border-secondary/30 lg:border-r'}
+						title={'Conneing'}
+						items={renderItems().conneing}
 					/>
-					{/* <TitleValue
-						title='Status'
-						value={Number(batch?.status) === 0 ? 'No' : 'Yes'}
+					<RenderTable
+						className={'border-secondary/30 lg:border-l'}
+						title={'Yarn Issues'}
+						items={renderItems().yarn_issues}
 					/>
-					<TitleValue
-						title='Approved'
-						value={
-							Number(batch?.approved) === 0
-								? 'Pending'
-								: 'Approved'
-						}
-					/> */}
-					<TitleValue title='Status' value={batch?.batch_status} />
-					<TitleValue title='Remarks' value={batch?.remarks} />
 				</div>
+
+				<RenderTable
+					// className={'border-secondary/30 lg:border-t'}
+					title={'Dying'}
+					items={renderItems().dying}
+				/>
 			</div>
-		</div>
+		</SectionContainer>
 	);
 }

@@ -16,6 +16,25 @@ const Copy = ({ ...props }) => {
 	);
 };
 
+const Plus = ({ ...props }) => {
+	return (
+		<svg
+			xmlns='http://www.w3.org/2000/svg'
+			width='24'
+			height='24'
+			viewBox='0 0 24 24'
+			fill='none'
+			stroke='currentColor'
+			strokeWidth='2'
+			strokeLinecap='round'
+			strokeLinejoin='round'
+			className='lucide lucide-plus'
+			{...props}>
+			<path d='M5 12h14' />
+			<path d='M12 5v14' />
+		</svg>
+	);
+};
 const Send = ({ ...props }) => {
 	return (
 		<svg
@@ -578,19 +597,17 @@ const Download = ({ ...props }) => {
 	return (
 		<svg
 			xmlns='http://www.w3.org/2000/svg'
-			width={24}
-			height={24}
-			viewBox='0 0 24 24'
-			strokeWidth={1.25}
-			stroke='currentColor'
 			fill='none'
-			strokeLinecap='round'
-			strokeLinejoin='round'
+			viewBox='0 0 24 24'
+			strokeWidth='1.5'
+			stroke='currentColor'
+			className='size-6'
 			{...props}>
-			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
-			<path d='M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2' />
-			<path d='M7 11l5 5l5 -5' />
-			<path d='M12 4l0 12' />
+			<path
+				strokeLinecap='round'
+				strokeLinejoin='round'
+				d='M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3'
+			/>
 		</svg>
 	);
 };
@@ -886,17 +903,17 @@ const Column = ({ ...props }) => {
 	return (
 		<svg
 			xmlns='http://www.w3.org/2000/svg'
-			width='24'
-			height='24'
-			viewBox='0 0 24 24'
 			fill='none'
+			viewBox='0 0 24 24'
+			strokeWidth='1.5'
 			stroke='currentColor'
-			strokeWidth='2'
-			strokeLinecap='round'
-			strokeLinejoin='round'
+			className='size-6'
 			{...props}>
-			<rect width='18' height='18' x='3' y='3' rx='2' />
-			<path d='M12 3v18' />
+			<path
+				strokeLinecap='round'
+				strokeLinejoin='round'
+				d='M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125Z'
+			/>
 		</svg>
 	);
 };
@@ -1048,18 +1065,17 @@ const FilterIcon = ({ ...props }) => {
 	return (
 		<svg
 			xmlns='http://www.w3.org/2000/svg'
-			width='24'
-			height='24'
-			viewBox='0 0 24 24'
 			fill='none'
+			viewBox='0 0 24 24'
+			strokeWidth='1.5'
 			stroke='currentColor'
-			strokeWidth='2'
-			strokeLinecap='round'
-			strokeLinejoin='round'
+			className='size-6'
 			{...props}>
-			<path d='M3 6h18' />
-			<path d='M7 12h10' />
-			<path d='M10 18h4' />
+			<path
+				strokeLinecap='round'
+				strokeLinejoin='round'
+				d='M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75'
+			/>
 		</svg>
 	);
 };
@@ -1185,4 +1201,5 @@ export {
 	Viewer,
 	Voucher,
 	Column,
+	Plus,
 };

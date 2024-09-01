@@ -88,12 +88,14 @@ export default function Index() {
 			{
 				accessorKey: 'shade_recipe_name',
 				header: 'Swatch Status',
+				width: 'w-60',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { shade_recipe_uuid } = info.row.original;
 
 					return (
 						<ReactSelect
+							className={'input-xs'}
 							key={shade_recipe_uuid}
 							placeholder='Select order info uuid'
 							options={shade_recipe ?? []}

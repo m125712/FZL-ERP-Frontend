@@ -17,7 +17,7 @@ const ResetPassword = ({ onClick }) => {
 function Pdf({ props }) {
 	return (
 		<button
-			className='btn btn-xs text-secondary-content rounded-full bg-secondary'
+			className='btn btn-xs rounded-full bg-secondary text-secondary-content'
 			{...props}>
 			PDF
 			<PDF className='h-4 w-4' />
@@ -29,7 +29,7 @@ const Transfer = ({ onClick }) => {
 	return (
 		<button
 			type='button'
-			className='btn btn-circle btn-sm btn-secondary font-semibold shadow-md'
+			className='btn btn-circle btn-accent btn-sm font-semibold text-white shadow-md'
 			onClick={onClick}>
 			<TransferIn className='w-4' />
 		</button>

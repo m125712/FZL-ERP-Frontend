@@ -1,7 +1,9 @@
+import { Edit, Plus } from '@/assets/icons';
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAuth } from '@/context/auth';
 import { useAccess, useFetch } from '@/hooks';
+import cn from '@/lib/cn';
 import { useDyeingThreadBatch } from '@/state/Dyeing';
 import {
 	DateTime,
@@ -18,8 +20,7 @@ const Yarn = lazy(() => import('../ThreadBatch/Yarn'));
 const Dyeing = lazy(() => import('../ThreadBatch/Dyeing'));
 
 export default function Index() {
-	const { data, url, updateData, postData, deleteData, isLoading } =
-		useDyeingThreadBatch();
+	const { data, url, updateData, isLoading } = useDyeingThreadBatch();
 	const info = new PageInfo('Thread Batch', url, 'dyeing__batch');
 	const { value: machine } = useFetch('/other/machine/value/label');
 	const { user } = useAuth();
@@ -72,15 +73,18 @@ export default function Index() {
 				cell: (info) => {
 					const { week } = info.row.original;
 					return (
-						<button
-							className='btn btn-primary btn-xs'
-							onClick={() =>
-								navigate(
-									`/dyeing-and-iron/thread-batch/conneing/${info.row.original.uuid}`
-								)
-							}>
-							Add Conneing
-						</button>
+						<div>
+							<button
+								className='btn btn-accent btn-xs flex w-fit gap-0.5'
+								onClick={() =>
+									navigate(
+										`/dyeing-and-iron/thread-batch/conneing/${info.row.original.uuid}`
+									)
+								}>
+								<Plus className='size-4' />
+								<span>Conneing</span>
+							</button>
+						</div>
 					);
 				},
 			},
@@ -88,11 +92,13 @@ export default function Index() {
 				accessorKey: 'machine_name',
 				header: 'Machine',
 				enableColumnFilter: false,
+				width: 'w-60',
 				cell: (info) => {
 					const { machine_uuid } = info.row.original;
 
 					return (
 						<ReactSelect
+							className={'input-xs'}
 							key={machine_uuid}
 							placeholder='Select Machine'
 							options={machine ?? []}
@@ -112,12 +118,12 @@ export default function Index() {
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !haveAccess.includes('update'),
-				width: 'w-24',
+				width: 'w-12',
 				cell: (info) => (
 					<button
-						className='btn btn-primary btn-xs'
+						className='btn btn-ghost btn-sm size-9 rounded-full p-1'
 						onClick={() => handelYarn(info.row.index)}>
-						Yarn Issue
+						<Edit className='size-6' />
 					</button>
 				),
 			},
@@ -127,12 +133,12 @@ export default function Index() {
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !haveAccess.includes('update'),
-				width: 'w-24',
+				width: 'w-12',
 				cell: (info) => (
 					<button
-						className='btn btn-primary btn-xs'
+						className='btn btn-ghost btn-sm size-9 rounded-full p-1'
 						onClick={() => handelDyeing(info.row.index)}>
-						Dyeing
+						<Edit className='size-6' />
 					</button>
 				),
 			},
@@ -140,13 +146,29 @@ export default function Index() {
 				accessorKey: 'is_drying_complete',
 				header: 'Drying Completed',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton
-						size='btn-sm'
-						value={info.getValue() === 'true' ? 1 : 0}
-						onClick={() => handelDryingComplete(info.row.index)}
-					/>
-				),
+				cell: (info) => {
+					console.log({
+						is_drying_complete: info.getValue(),
+					});
+					return (
+						<input
+							onChange={() =>
+								handelDryingComplete(info.row.index)
+							}
+							checked={info.getValue() === 'true'}
+							type='checkbox'
+							className={cn(
+								'toggle toggle-md checked:toggle-accent'
+							)}
+							defaultChecked
+						/>
+						// <StatusButton
+						// 	size='btn-sm'
+						// 	value={info.getValue() === 'true' ? 1 : 0}
+						// 	onClick={() => handelDryingComplete(info.row.index)}
+						// />
+					);
+				},
 			},
 			{
 				accessorKey: 'created_by_name',
@@ -154,7 +176,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			,
+
 			// * created_at
 			{
 				accessorKey: 'created_at',
@@ -299,7 +321,7 @@ export default function Index() {
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
+		<div>
 			<ReactTable
 				handelAdd={handelAdd}
 				title={info.getTitle()}

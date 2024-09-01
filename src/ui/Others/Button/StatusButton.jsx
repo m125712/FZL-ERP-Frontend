@@ -14,13 +14,13 @@ export default function StatusButton({
 		<button
 			type='button'
 			className={cn(
-				`btn btn-circle bg-error font-semibold text-white`,
-				numberValue === 1 && 'bg-primary',
+				`btn btn-circle border-none bg-error font-semibold text-white`,
+				numberValue === 1 && 'bg-accent',
 				props.size,
 				className
 			)}
 			{...props}>
-			{showIdx ? props.idx : <Icon className='w-4' />}
+			{showIdx ? props.idx : <Icon className='size-5' />}
 		</button>
 	);
 }

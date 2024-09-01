@@ -1,10 +1,11 @@
 import ReactTable from '@/components/Table';
+import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
 
 import { DateTime } from '@/ui';
 import { useMemo } from 'react';
 
 export default function Index({ order_info_entry }) {
-	// console.log(thread_order_info_entry);
+	console.log(order_info_entry);
 
 	const columns = useMemo(
 		() => [
@@ -87,7 +88,7 @@ export default function Index({ order_info_entry }) {
 				accessorKey: 'swatch_approval_date',
 				header: 'Swatch Approval Date',
 				enableColumnFilter: false,
-				width: 'w-24',
+
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
@@ -97,12 +98,10 @@ export default function Index({ order_info_entry }) {
 	);
 
 	return (
-		<ReactTable
+		<ReactTableWithTitle
 			title='Details'
 			data={order_info_entry}
 			columns={columns}
-			extraClass='py-2'
-			showTitleOnly
 		/>
 	);
 }

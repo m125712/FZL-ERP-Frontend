@@ -1,4 +1,4 @@
-import { Excel } from '@/assets/icons';
+import { Download, Excel } from '@/assets/icons';
 import { format } from 'date-fns';
 import { CSVLink } from 'react-csv';
 import { GetFlatHeader } from '../utils';
@@ -31,10 +31,10 @@ export default function ExportCSV({ getAllLeafColumns, filteredRows, title }) {
 	return (
 		<CSVLink
 			type='button'
-			className='btn-filter-outline'
+			className='btn-filter'
 			data={csvData}
 			filename={filename}>
-			<Excel className='size-4' />
+			<Download className='size-5' />
 			<span>Export</span>
 		</CSVLink>
 	);

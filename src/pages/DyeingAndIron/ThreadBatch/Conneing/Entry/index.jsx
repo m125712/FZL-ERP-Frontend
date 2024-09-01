@@ -73,22 +73,21 @@ export default function Index() {
 			}
 		}
 	}, [watch('uuid')]);
-	
 
 	// Transfer
 	const [transfer, Transfer] = useState({
 		uuid: null,
 		transfer_quantity: null,
 	});
-		// const handelTransfer = (idx) => {
-		// 	setYarn((prev) => ({
-		// 		...prev,
-		// 		uuid: data[idx].uuid,
-		// 		transfer_quantity: data[idx].yarn_quantity,
-		// 		batch_id: data[idx].batch_id,
-		// 	}));
-		// 	window['YarnModal'].showModal();
-		// };
+	// const handelTransfer = (idx) => {
+	// 	setYarn((prev) => ({
+	// 		...prev,
+	// 		uuid: data[idx].uuid,
+	// 		transfer_quantity: data[idx].yarn_quantity,
+	// 		batch_id: data[idx].batch_id,
+	// 	}));
+	// 	window['YarnModal'].showModal();
+	// };
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -146,7 +145,7 @@ export default function Index() {
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	return (
-		<div className='container mx-auto mt-4 px-2 pb-2 md:px-4'>
+		<div>
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}

@@ -59,7 +59,7 @@ export const Template = ({
 					type='button'
 					className='group/btn btn btn-circle btn-ghost btn-error btn-xs'
 					onClick={onClick}>
-					<Close className='text-error group-hover/btn:text-primary-content h-4 w-4' />
+					<Close className='h-4 w-4 text-error group-hover/btn:text-primary-content' />
 				</button>
 			)}
 		</span>
@@ -72,7 +72,7 @@ export const DrawerBody = ({ htmlId, children }) => (
 		<input id={htmlId} type='checkbox' className='drawer-toggle' />
 		<div className='drawer-content'>
 			<label htmlFor={htmlId} className='btn-filter-outline'>
-				<FilterIcon className='h-4 w-4' />
+				<FilterIcon className='size-5' />
 				<span>Filter</span>
 			</label>
 		</div>
@@ -82,8 +82,8 @@ export const DrawerBody = ({ htmlId, children }) => (
 				aria-label='filter all columns'
 				className='drawer-overlay'
 			/>
-			<div className='bg-base-200 relative min-h-full min-w-[16.5rem]'>
-				<div className='text-primary-content flex items-center justify-between bg-primary px-4 py-2 text-xl font-bold'>
+			<div className='relative min-h-full min-w-[16.5rem] bg-base-200'>
+				<div className='flex items-center justify-between bg-primary px-4 py-2 text-xl font-bold text-primary-content'>
 					Filter
 					<FilterIcon />
 				</div>

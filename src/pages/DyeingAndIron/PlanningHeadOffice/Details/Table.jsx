@@ -1,10 +1,9 @@
-import ReactTable from '@/components/Table';
+import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
 
 import { DateTime } from '@/ui';
 import { useMemo } from 'react';
 
 export default function Index({ planning_entry }) {
-
 	const columns = useMemo(
 		() => [
 			// {
@@ -42,19 +41,19 @@ export default function Index({ planning_entry }) {
 				accessorKey: 'order_quantity',
 				header: 'Order Quantity',
 				enableColumnFilter: false,
-				cell: info => Number(info.getValue())
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'balance_factory_quantity',
 				header: 'Balanced Factory',
 				enableColumnFilter: false,
-				cell: info => Number(info.getValue())
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'factory_quantity',
 				header: 'Factory Quantity',
 				enableColumnFilter: false,
-				cell: info => Number(info.getValue())
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'factory_remarks',
@@ -85,12 +84,10 @@ export default function Index({ planning_entry }) {
 	);
 
 	return (
-		<ReactTable
+		<ReactTableWithTitle
 			title='Details'
 			data={planning_entry}
 			columns={columns}
-			extraClass='py-2'
-			showTitleOnly
 		/>
 	);
 }

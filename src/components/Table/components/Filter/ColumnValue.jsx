@@ -139,6 +139,7 @@ function StringInput({ columnName, column, firstValue, isFullFilter }) {
 					))}
 				</datalist>
 				<DebouncedInput
+					className={'h-9'}
 					type='text'
 					list={id + 'list'}
 					value={getFilterValue() ?? ''}

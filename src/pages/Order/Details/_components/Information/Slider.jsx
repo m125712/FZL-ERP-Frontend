@@ -1,10 +1,12 @@
 import cn from '@/lib/cn';
-import { TitleValue } from '@/ui';
 import RenderTable from '@/ui/Others/Table/RenderTable';
 
 const renderLogo = (logo_type_name, is_logo_body, is_logo_puller) => {
 	if (logo_type_name === '---')
-		return <TitleValue title='Logo' value={logo_type_name} />;
+		return {
+			label: 'Logo Type',
+			value: logo_type_name,
+		};
 
 	let logoLocations = [];
 
@@ -15,7 +17,10 @@ const renderLogo = (logo_type_name, is_logo_body, is_logo_puller) => {
 		logo_type_name += ` (${logoLocations.join(', ')})`;
 	}
 
-	return <TitleValue title='Logo' value={logo_type_name} />;
+	return {
+		label: 'Logo Type',
+		value: logo_type_name,
+	};
 };
 
 export default function SliderDescription({ order_description, className }) {
@@ -26,12 +31,16 @@ export default function SliderDescription({ order_description, className }) {
 			slider_starting_section,
 			bottom_stopper_name,
 			top_stopper_name,
-			tape_received,
-			tape_transferred,
-			nylon_plastic_finishing,
-			vislon_teeth_molding,
-			metal_teeth_molding,
-			nylon_metallic_finishing,
+			logo_type_name,
+			is_logo_body,
+			is_logo_puller,
+			slider_body_shape_name,
+			slider_link_name,
+			end_user_name,
+			light_preference,
+			garments_wash_name,
+			puller_link_name,
+			garments_remarks,
 		} = order_description;
 
 		const items = [
@@ -55,29 +64,34 @@ export default function SliderDescription({ order_description, className }) {
 				label: 'Bottom Stopper Name',
 				value: bottom_stopper_name,
 			},
+			renderLogo(logo_type_name, is_logo_body, is_logo_puller),
 			{
-				label: 'Tape Received',
-				value: tape_received,
+				label: 'Slider Body Shape',
+				value: slider_body_shape_name,
 			},
 			{
-				label: 'Tape Transferred',
-				value: tape_transferred,
+				label: 'Slider Link',
+				value: slider_link_name,
 			},
 			{
-				label: 'Nylon Plastic Finishing',
-				value: nylon_plastic_finishing,
+				label: 'End User',
+				value: end_user_name,
 			},
 			{
-				label: 'Vislon Teeth Molding',
-				value: vislon_teeth_molding,
+				label: 'Light Preference',
+				value: light_preference,
 			},
 			{
-				label: 'Metal Teeth Molding',
-				value: metal_teeth_molding,
+				label: 'Garments Wash',
+				value: garments_wash_name,
 			},
 			{
-				label: 'Nylon Metallic Finishing',
-				value: nylon_metallic_finishing,
+				label: 'Puller Link',
+				value: puller_link_name,
+			},
+			{
+				label: 'Garments Remarks',
+				value: garments_remarks,
 			},
 		];
 		return items;

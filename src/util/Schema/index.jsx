@@ -1952,7 +1952,7 @@ export const SFG_PRODUCTION_SCHEMA = {
 	remarks: STRING.nullable(),
 };
 
-export const SFG_PRODUCTION_SCHEMA_NULL = {
+export const SFG_PRODUCTION_NULL = {
 	uuid: null,
 	order_entry_uuid: null,
 	section: '',

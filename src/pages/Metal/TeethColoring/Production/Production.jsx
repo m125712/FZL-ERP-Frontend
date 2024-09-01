@@ -30,11 +30,15 @@ export default function Index({
 	const { postData } = useMetalTCProduction();
 	const { user } = useAuth();
 
+	console.log({
+		updateTeethColoringProd,
+	});
+
 	const MAX_PROD_PCS = Number(
 		updateTeethColoringProd.balance_quantity
 	).toFixed(0);
 	const MAX_PROD_KG = Number(
-		updateTeethColoringProd.metal_teeth_coloring
+		updateTeethColoringProd.teeth_coloring_stock
 	).toFixed(3);
 
 	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
@@ -42,13 +46,17 @@ export default function Index({
 		SFG_PRODUCTION_SCHEMA_IN_PCS_NULL
 	);
 	const MAX_WASTAGE_KG = Number(
-		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
+		MAX_PROD_PCS - (watch('production_quantity') || 0)
 	).toFixed(3);
+
+	console.log({
+		MAX_WASTAGE_KG,
+	});
 
 	const onClose = () => {
 		setUpdateTeethColoringProd((prev) => ({
 			...prev,
-			id: null,
+			uuid: null,
 			name: '',
 			teeth_coloring_stock: null,
 			teeth_coloring_prod: null,

@@ -71,6 +71,12 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
+			{
+				accessorKey: 'teeth_molding_stock',
+				header: 'Stock (KG)',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
 
 			{
 				accessorKey: 'actions_add_production',

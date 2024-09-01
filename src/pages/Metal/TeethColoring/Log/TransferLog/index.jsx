@@ -5,18 +5,13 @@ import { useAccess } from '@/hooks';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useMemo, useState } from 'react';
-import SFGAddOrUpdate from './TransferAddOrUpdate';
+import SFGAddOrUpdate from './AddOrUpdate';
 import { useMetalTCTrxLog } from '@/state/Metal';
 
 export default function Index() {
-	const { data, isLoading } = useMetalTCTrxLog();
-	const info = new PageInfo(
-		'Transfer Log',
-		'sfg/trx/by/teeth_coloring_prod/by/metal'
-	);
+	const { data, isLoading, deleteData, url } = useMetalTCTrxLog();
+	const info = new PageInfo('Transfer Log', url);
 	const haveAccess = useAccess('metal__teeth_coloring_log');
-
-	// section	tape_or_coil_stock_id	quantity	wastage	issued_by
 
 	const columns = useMemo(
 		() => [
@@ -51,21 +46,13 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'order_description',
+				accessorKey: 'style_color_size',
 				header: 'Style / Color / Size',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
-			// {
-			// 	accessorKey: "trx_from",
-			// 	header: "Transferred From",
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 	info.getValue()
-			// ),
-			// },
 			{
 				accessorKey: 'trx_to',
 				header: 'Transferred To',
@@ -94,8 +81,8 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'issued_by_name',
-				header: 'Issued By',
+				accessorKey: 'created_by_name',
+				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -148,7 +135,7 @@ export default function Index() {
 
 	// Update
 	const [updateTeethColoringLog, setUpdateTeethColoringLog] = useState({
-		id: null,
+		uuid: null,
 		trx_from: null,
 		trx_to: null,
 		trx_quantity: null,
@@ -156,7 +143,7 @@ export default function Index() {
 		order_quantity: null,
 		teeth_coloring_prod: null,
 		finishing_stock: null,
-		order_entry_id: null,
+		order_entry_uuid: null,
 	});
 
 	const handelUpdate = (idx) => {
@@ -177,7 +164,7 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].order_description,
+			itemName: data[idx].item_description,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -188,7 +175,7 @@ export default function Index() {
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className='sb-red'>
+		<div>
 			<ReactTable
 				title={info.getTitle()}
 				data={data}
@@ -208,10 +195,12 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					// setItems={setTeethColoringLog}
-					uri={`/sfg/trx`}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url: '/zipper/sfg-transaction',
+						deleteData,
+					}}
 				/>
 			</Suspense>
 		</div>

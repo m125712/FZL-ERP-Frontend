@@ -73,6 +73,12 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
+			{
+				accessorKey: 'teeth_coloring_stock',
+				header: 'Teeth Coloring Stock',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
 
 			{
 				accessorKey: 'actions_add_production',

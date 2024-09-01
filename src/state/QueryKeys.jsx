@@ -423,6 +423,18 @@ export const metalQK = {
 
 	//* Teeth Molding
 
+	// * Transaction Log
+	metalTMTrxLog: () => [...metalQK.all(), 'tm-trx-log'],
+	metalTMTrxLogByUUID: (uuid) => [...metalQK.all(), 'tm-trx-log', uuid],
+
+	// * PRODUCTION Log
+	metalTMProductionLog: () => [...metalQK.all(), 'tm-production-log'],
+	metalTMProductionLogByUUID: (uuid) => [
+		...metalQK.all(),
+		'tm-production-log',
+		uuid,
+	],
+
 	// * PRODUCTION
 	metalTMProduction: () => [...metalQK.all(), 'tm-production'],
 
@@ -473,9 +485,15 @@ export const metalQK = {
 
 	// * Transaction Log
 	metalTCTrxLog: () => [...metalQK.all(), 'tc-trx-log'],
+	metalTCTrxLogByUUID: (uuid) => [...metalQK.all(), 'tc-trx-log', uuid],
 
 	// * PRODUCTION Log
 	metalTCProductionLog: () => [...metalQK.all(), 'tc-production-log'],
+	metalTCProductionLogByUUID: (uuid) => [
+		...metalQK.all(),
+		'tc-production-log',
+		uuid,
+	],
 
 	// * RM
 	metalTCRM: () => [...metalQK.all(), 'tc-rm'],

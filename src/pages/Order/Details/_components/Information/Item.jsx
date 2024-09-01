@@ -29,6 +29,12 @@ export default function ItemDescription({ order_description, className }) {
 			coloring_type_name,
 			description,
 			remarks,
+			tape_received,
+			tape_transferred,
+			nylon_plastic_finishing,
+			vislon_teeth_molding,
+			metal_teeth_molding,
+			nylon_metallic_finishing,
 		} = order_description;
 
 		const items = [
@@ -86,6 +92,30 @@ export default function ItemDescription({ order_description, className }) {
 			{
 				label: 'remarks',
 				value: remarks,
+			},
+			{
+				label: 'Tape Received',
+				value: tape_received,
+			},
+			{
+				label: 'Tape Transferred',
+				value: tape_transferred,
+			},
+			{
+				label: 'Nylon Plastic Finishing',
+				value: nylon_plastic_finishing,
+			},
+			{
+				label: 'Vislon Teeth Molding',
+				value: vislon_teeth_molding,
+			},
+			{
+				label: 'Metal Teeth Molding',
+				value: metal_teeth_molding,
+			},
+			{
+				label: 'Nylon Metallic Finishing',
+				value: nylon_metallic_finishing,
 			},
 		];
 		return items;

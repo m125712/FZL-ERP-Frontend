@@ -4,7 +4,7 @@ import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useThreadDyesCategory, useThreadMachine } from '@/state/Thread';
 
-import { Input } from '@/ui';
+import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import {
@@ -14,26 +14,30 @@ import {
 
 export default function Index({
 	modalId = '',
-	updateMachine = {
+	update = {
 		uuid: null,
 	},
-	setUpdateMachine,
+	setUpdate,
 }) {
 	const { url, updateData, postData } = useThreadDyesCategory();
 	const { user } = useAuth();
-	const { register, handleSubmit, errors, reset, control } = useRHF(
-		THREAD_DYES_CATEGORY_SCHEMA,
-		THREAD_DYES_CATEGORY_NULL
-	);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		control,
+		Controller,
+		getValues,
+	} = useRHF(THREAD_DYES_CATEGORY_SCHEMA, THREAD_DYES_CATEGORY_NULL);
 
-	useFetchForRhfReset(
-		`${url}/${updateMachine?.uuid}`,
-		updateMachine?.uuid,
-		reset
-	);
-
+	useFetchForRhfReset(`${url}/${update?.uuid}`, update?.uuid, reset);
+	const bleaching = [
+		{ label: 'Bleach', value: 'bleach' },
+		{ label: 'Non-Bleach', value: 'non-bleach' },
+	];
 	const onClose = () => {
-		setUpdateMachine((prev) => ({
+		setUpdate((prev) => ({
 			...prev,
 			uuid: null,
 		}));
@@ -43,15 +47,15 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateMachine?.uuid !== null && updateMachine?.uuid !== undefined) {
+		if (update?.uuid !== null && update?.uuid !== undefined) {
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateMachine?.uuid}`,
-				uuid: updateMachine?.uuid,
+				url: `${url}/${update?.uuid}`,
+				uuid: update?.uuid,
 				updatedData,
 				onClose,
 			});
@@ -78,12 +82,38 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={updateMachine?.uuid !== null ? 'Update Dyes Category' : 'Dyes Category'}
+			title={
+				update?.uuid !== null ? 'Update Dyes Category' : 'Dyes Category'
+			}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
 			<Input label='name' {...{ register, errors }} />
+			<Input label='id' {...{ register, errors }} />
+
+			<FormField label='bleaching' title='Bleaching' errors={errors}>
+				<Controller
+					name={'bleaching'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<ReactSelect
+								placeholder='Select Bleaching'
+								options={bleaching}
+								value={bleaching?.filter(
+									(item) =>
+										item.value === getValues('bleaching')
+								)}
+								onChange={(e) => {
+									onChange(e.value);
+								}}
+							/>
+						);
+					}}
+				/>
+			</FormField>
 			<Input label='upto_percentage' {...{ register, errors }} />
+
 			<Input label='remarks' {...{ register, errors }} />
 
 			<DevTool control={control} placement='top-left' />

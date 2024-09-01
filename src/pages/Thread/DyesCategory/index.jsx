@@ -24,12 +24,24 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'id',
+				header: 'ID',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
+			{
+				accessorKey: 'bleaching',
+				header: 'Bleaching',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'upto_percentage',
 				header: 'Upto Percentage',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
@@ -87,12 +99,12 @@ export default function Index() {
 	};
 
 	// Update
-	const [updateMachine, setUpdateMachine] = useState({
+	const [update, setUpdate] = useState({
 		uuid: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateMachine((prev) => ({
+		setUpdate((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
 		}));
@@ -132,8 +144,8 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateMachine,
-						setUpdateMachine,
+						update,
+						setUpdate,
 					}}
 				/>
 			</Suspense>

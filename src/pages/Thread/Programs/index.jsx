@@ -92,12 +92,12 @@ export default function Index() {
 	};
 
 	// Update
-	const [updateMachine, setUpdateMachine] = useState({
+	const [update, setUpdate] = useState({
 		uuid: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateMachine((prev) => ({
+		setUpdate((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
 		}));
@@ -137,8 +137,8 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateMachine,
-						setUpdateMachine,
+						update,
+						setUpdate,
 					}}
 				/>
 			</Suspense>

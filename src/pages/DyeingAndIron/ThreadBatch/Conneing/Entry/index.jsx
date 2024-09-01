@@ -1,6 +1,6 @@
-import { DeleteModal } from '@/components/Modal';
+
 import { useFetchForRhfResetForOrder, useRHF } from '@/hooks';
-import { CheckBoxWithoutLabel, DynamicDeliveryField, Input } from '@/ui';
+import {  DynamicDeliveryField, Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -8,15 +8,13 @@ import {
 	DYEING_THREAD_CONNEING_NULL,
 	DYEING_THREAD_CONNEING_SCHEMA,
 } from '@util/Schema';
-import { Suspense, useEffect, useState } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import cn from '@/lib/cn';
-import nanoid from '@/lib/nanoid';
-import { useCommercialPI, useCommercialPIEntry } from '@/state/Commercial';
+
 import {
 	useDyeingThreadBatch,
-	useDyeingThreadBatchByUUID,
 	useDyeingThreadBatchEntry,
 } from '@/state/Dyeing';
 import isJSON from '@/util/isJson';
@@ -26,9 +24,7 @@ export default function Index() {
 	const { url: threadBatchEntryUrl } = useDyeingThreadBatchEntry();
 	const {
 		url: threadBatchUrl,
-		postData,
 		updateData,
-		deleteData,
 	} = useDyeingThreadBatch();
 	const { user } = useAuth();
 	const navigate = useNavigate();

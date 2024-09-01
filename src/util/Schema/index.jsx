@@ -240,8 +240,8 @@ export const SFG_TRANSFER_LOG_SCHEMA = {
 };
 
 export const SFG_TRANSFER_LOG_NULL = {
-	id: null,
-	order_entry_id: null,
+	uuid: null,
+	order_entry_uuid: null,
 	trx_from: '',
 	trx_to: '',
 	trx_quantity: '',
@@ -251,12 +251,13 @@ export const SFG_TRANSFER_LOG_NULL = {
 
 export const SFG_PRODUCTION_LOG_SCHEMA = {
 	production_quantity: NUMBER_DOUBLE,
+	production_quantity_in_kg: NUMBER_DOUBLE,
 	remarks: STRING.nullable(),
 };
 
 export const SFG_PRODUCTION_LOG_NULL = {
-	id: null,
-	order_entry_id: null,
+	uuid: null,
+	order_entry_uuid: null,
 	section: '',
 	used_quantity: null,
 	production_quantity: null,
@@ -1988,6 +1989,16 @@ export const SFG_PRODUCTION_SCHEMA = {
 export const SFG_PRODUCTION_NULL = {
     ...SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
     ...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
+};
+
+export const SFG_PRODUCTION_SCHEMA = {
+	...SFG_PRODUCTION_SCHEMA_IN_KG,
+	...SFG_PRODUCTION_SCHEMA_IN_PCS,
+};
+
+export const SFG_PRODUCTION_SCHEMA_NULL = {
+	...SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
+	...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
 };
 
 // * SFG transaction in kg

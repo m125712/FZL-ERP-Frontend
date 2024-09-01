@@ -1,25 +1,17 @@
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
-
+import { useAccess } from '@/hooks';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
-import SFGAddOrUpdate from './SFGAddOrUpdate';
+import { useMemo, useState } from 'react';
+import SFGAddOrUpdate from './AddOrUpdate';
+import { useMetalTMProductionLog } from '@/state/Metal';
 
 export default function Index() {
-	const info = new PageInfo(
-		'SFG Transfer Log',
-		'sfg/trx/by/teeth_molding_prod/by/metal'
-	);
-	const [teethMoldingLog, setTeethMoldingLog] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-
+	const { data, isLoading, url, deleteData } = useMetalTMProductionLog();
+	const info = new PageInfo('Production Log', url);
 	const haveAccess = useAccess('metal__teeth_molding_log');
-
-	// section	tape_or_coil_stock_id	quantity	wastage	issued_by
 
 	const columns = useMemo(
 		() => [
@@ -54,24 +46,12 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'order_description',
+				accessorKey: 'style_color_size',
 				header: 'Style / Color / Size',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
-			},
-			{
-				accessorKey: 'order_quantity',
-				header: (
-					<span>
-						Ordered Quantity
-						<br />
-						(PCS)
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 			// {
 			// 	accessorKey: "trx_from",
@@ -81,36 +61,23 @@ export default function Index() {
 			// 	info.getValue()
 			// ),
 			// },
+
 			{
-				accessorKey: 'trx_to',
-				header: 'Transferred To',
-				enableColumnFilter: false,
-				cell: (info) => {
-					// remove underscore and capitalize
-					const str = info.getValue();
-					if (str) {
-						const newStr = str.split('_').join(' ');
-						return newStr.charAt(0).toUpperCase() + newStr.slice(1);
-					} else {
-						return str;
-					}
-				},
-			},
-			{
-				accessorKey: 'trx_quantity',
-				header: (
-					<span>
-						Transferred Quantity
-						<br />
-						(PCS)
-					</span>
-				),
+				accessorKey: 'production_quantity',
+				header: 'Production Quantity',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'issued_by_name',
-				header: 'Issued By',
+				accessorKey: 'wastage',
+				header: 'Wastage',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -144,7 +111,7 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_rm'),
+				hidden: !haveAccess.includes('click_update_sfg'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -152,40 +119,30 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('click_delete_rm')}
+							showDelete={haveAccess.includes('click_delete_sfg')}
 						/>
 					);
 				},
 			},
 		],
-		[teethMoldingLog]
+		[data]
 	);
-
-	// Fetching data from server
-	useEffect(() => {
-		useFetchFunc(
-			info.getFetchUrl(),
-			setTeethMoldingLog,
-			setLoading,
-			setError
-		);
-	}, []);
 
 	// Update
 	const [updateTeethMoldingLog, setUpdateTeethMoldingLog] = useState({
-		id: null,
+		uuid: null,
 		trx_from: null,
 		trx_to: null,
 		trx_quantity: null,
 		order_description: null,
 		order_quantity: null,
 		teeth_molding_prod: null,
-		teeth_coloring_stock: null,
-		order_entry_id: null,
+		finishing_stock: null,
+		order_entry_uuid: null,
 	});
 
 	const handelUpdate = (idx) => {
-		const selected = teethMoldingLog[idx];
+		const selected = data[idx];
 		setUpdateTeethMoldingLog((prev) => ({
 			...prev,
 			...selected,
@@ -201,23 +158,21 @@ export default function Index() {
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: teethMoldingLog[idx].id,
-			itemName: teethMoldingLog[idx].order_description,
+			itemId: data[idx].uuid,
+			itemName: data[idx].item_description,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
 
-	if (loading)
+	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
-	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className=''>
+		<div>
 			<ReactTable
 				title={info.getTitle()}
-				// handelAdd={handelAdd}
-				data={teethMoldingLog}
+				data={data}
 				columns={columns}
 				extraClass='py-2'
 			/>
@@ -225,7 +180,6 @@ export default function Index() {
 				<SFGAddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						setTeethMoldingLog,
 						updateTeethMoldingLog,
 						setUpdateTeethMoldingLog,
 					}}
@@ -235,10 +189,12 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					setItems={setTeethMoldingLog}
-					uri={`/sfg/trx`}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						deleteData,
+						url: '/zipper/sfg-production',
+					}}
 				/>
 			</Suspense>
 		</div>

@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useMetalTMProduction } from '@/state/Metal';
+import { useMetalTCProduction } from '@/state/Metal';
 import { LinkWithCopy, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useMemo, useState } from 'react';
@@ -10,15 +10,17 @@ const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
 
 export default function Index() {
-	const { data, isLoading } = useMetalTMProduction();
+	const { data, isLoading } = useMetalTCProduction();
 	const info = new PageInfo(
-		'Teeth Molding Production',
-		'sfg/by/teeth_molding_prod/by/metal',
-		'metal__teeth_molding_production'
+		'Teeth Coloring Production',
+		'sfg/by/teeth_coloring_prod/by/metal',
+		'metal__teeth_coloring_production'
 	);
-	const haveAccess = useAccess('metal__teeth_molding_production');
-	console.log(data);
+	const haveAccess = useAccess('metal__teeth_coloring_production');
 
+	console.log({
+		data,
+	});
 	const columns = useMemo(
 		() => [
 			{
@@ -72,8 +74,8 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'teeth_molding_stock',
-				header: 'Stock (KG)',
+				accessorKey: 'teeth_coloring_stock',
+				header: 'Teeth Coloring Stock',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
@@ -91,7 +93,7 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'teeth_molding_prod',
+				accessorKey: 'teeth_coloring_prod',
 				header: (
 					<span>
 						Total Production
@@ -148,29 +150,29 @@ export default function Index() {
 		[data]
 	);
 
-	const [updateTeethMoldingProd, setUpdateTeethMoldingProd] = useState({
+	const [updateTeethColoringProd, setUpdateTeethColoringProd] = useState({
 		sfg_uuid: null,
 		order_number: null,
 		item_description: null,
 		style_color_size: null,
 		order_quantity: null,
 		balance_quantity: null,
-		teeth_molding_prod: null,
-		teeth_molding_stock: null,
+		teeth_coloring_prod: null,
+		teeth_coloring_stock: null,
 		total_trx_quantity: null,
-		metal_teeth_molding: null,
+		metal_teeth_coloring: null,
 	});
 	const handelProduction = (idx) => {
 		const val = data[idx];
-		setUpdateTeethMoldingProd((prev) => ({
+		setUpdateTeethColoringProd((prev) => ({
 			...prev,
 			...val,
 		}));
 
-		window['TeethMoldingProdModal'].showModal();
+		window['TeethColoringProdModal'].showModal();
 	};
 
-	const [updateTeethMoldingTRX, setUpdateTeethMoldingTRX] = useState({
+	const [updateTeethColoringTRX, setUpdateTeethColoringTRX] = useState({
 		uuid: null,
 		sfg_uuid: null,
 		trx_quantity_in_kg: null,
@@ -181,12 +183,12 @@ export default function Index() {
 	});
 	const handelTransaction = (idx) => {
 		const val = data[idx];
-		setUpdateTeethMoldingTRX((prev) => ({
+		setUpdateTeethColoringTRX((prev) => ({
 			...prev,
 			...val,
 		}));
 
-		window['TeethMoldingTrxModal'].showModal();
+		window['TeethColoringTrxModal'].showModal();
 	};
 
 	if (isLoading)
@@ -203,19 +205,19 @@ export default function Index() {
 			/>
 			<Suspense>
 				<Production
-					modalId='TeethMoldingProdModal'
+					modalId='TeethColoringProdModal'
 					{...{
-						updateTeethMoldingProd,
-						setUpdateTeethMoldingProd,
+						updateTeethColoringProd,
+						setUpdateTeethColoringProd,
 					}}
 				/>
 			</Suspense>
 			<Suspense>
 				<Transaction
-					modalId='TeethMoldingTrxModal'
+					modalId='TeethColoringTrxModal'
 					{...{
-						updateTeethMoldingTRX,
-						setUpdateTeethMoldingTRX,
+						updateTeethColoringTRX,
+						setUpdateTeethColoringTRX,
 					}}
 				/>
 			</Suspense>

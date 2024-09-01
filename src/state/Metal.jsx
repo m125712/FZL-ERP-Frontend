@@ -10,6 +10,33 @@ export const useMetalTMProduction = () =>
 		url: '/zipper/sfg/by/teeth_molding_prod?item_name=metal',
 	});
 
+//* Trx Log
+export const useMetalTMTrxLog = () =>
+	createGlobalState({
+		queryKey: metalQK.metalTMTrxLog(),
+		url: '/zipper/sfg-transaction/by/teeth_molding_prod?item_name=metal',
+	});
+
+export const useMetalTMTrxLogByUUID = (uuid, { enabled = true }) =>
+	createGlobalState({
+		queryKey: metalQK.metalTMTrxLogByUUID(uuid),
+		url: `/zipper/sfg-transaction/${uuid}`,
+		enabled: enabled,
+	});
+
+//* Production Log
+export const useMetalTMProductionLog = () =>
+	createGlobalState({
+		queryKey: metalQK.metalTMProductionLog(),
+		url: '/zipper/sfg-production/by/teeth_molding?item_name=metal',
+	});
+export const useMetalTMProductionLogByUUID = (uuid, { enabled = true }) =>
+	createGlobalState({
+		queryKey: metalQK.metalTMProductionLogByUUID(uuid),
+		url: `/zipper/sfg-production/${uuid}`,
+		enabled: enabled,
+	});
+
 // * RM
 export const useMetalTMRM = () =>
 	createGlobalState({
@@ -45,6 +72,41 @@ export const useOrderAgainstMetalTMRMLogByUUID = (uuid) =>
 		url: `/zipper/material-trx-against-order/by/m_teeth_molding${uuid}`,
 	});
 //* Teeth Coloring
+
+// * PRODUCTION
+export const useMetalTCProduction = () =>
+	createGlobalState({
+		queryKey: metalQK.metalTCProduction(),
+		url: '/zipper/sfg/by/teeth_coloring_prod?item_name=metal',
+	});
+
+//* Trx Log
+export const useMetalTCTrxLog = () =>
+	createGlobalState({
+		queryKey: metalQK.metalTCTrxLog(),
+		url: '/zipper/sfg-transaction/by/teeth_coloring_prod?item_name=metal',
+	});
+
+export const useMetalTCTrxLogByUUID = (uuid, { enabled = true }) =>
+	createGlobalState({
+		queryKey: metalQK.metalTCTrxLogByUUID(uuid),
+		url: `/zipper/sfg-transaction/${uuid}`,
+		enabled: enabled,
+	});
+
+//* Production Log
+export const useMetalTCProductionLog = () =>
+	createGlobalState({
+		queryKey: metalQK.metalTCProductionLog(),
+		url: '/zipper/sfg-production/by/teeth_coloring?item_name=metal',
+	});
+export const useMetalTCProductionLogByUUID = (uuid, { enabled = true }) =>
+	createGlobalState({
+		queryKey: metalQK.metalTCProductionLogByUUID(uuid),
+		url: `/zipper/sfg-production/${uuid}`,
+		enabled: enabled,
+	});
+
 // * RM
 export const useMetalTCRM = () =>
 	createGlobalState({

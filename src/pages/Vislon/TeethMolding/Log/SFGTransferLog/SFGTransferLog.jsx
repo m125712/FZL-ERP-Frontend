@@ -7,18 +7,17 @@ import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import SFGAddOrUpdate from './SFGAddOrUpdate';
+import { useVislonTMTLog } from '@/state/Vislon';
 
 export default function Index() {
+	const { data, isLoading, deleteData } = useVislonTMTLog();
 	const info = new PageInfo(
 		'SFG Teeth Molding Transfer Log',
 		'sfg/trx/by/teeth_molding_prod/by/vislon'
 	);
-	const [teethMoldingLog, setTeethMoldingLog] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+
 	const haveAccess = useAccess('vislon__teeth_molding_log');
 
-	// section	tape_or_coil_stock_id	quantity	wastage	issued_by
 
 	const columns = useMemo(
 		() => [
@@ -53,7 +52,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'order_description',
+				accessorKey: 'style_color_size',
 				header: 'Style / Color / Size',
 				enableColumnFilter: false,
 				cell: (info) => (
@@ -84,20 +83,20 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'trx_quantity',
+				accessorKey: 'trx_quantity_in_kg',
 				header: (
 					<span>
 						Transferred
 						<br />
-						QTY (PCS)
+						QTY (KG)
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'issued_by_name',
-				header: 'Issued By',
+				accessorKey: 'created_by_name',
+				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -145,34 +144,21 @@ export default function Index() {
 				},
 			},
 		],
-		[teethMoldingLog]
+		[data]
 	);
-
-	// Fetching data from server
-	useEffect(() => {
-		useFetchFunc(
-			info.getFetchUrl(),
-			setTeethMoldingLog,
-			setLoading,
-			setError
-		);
-	}, []);
 
 	// Update
 	const [updateTeethMoldingLog, setUpdateTeethMoldingLog] = useState({
-		id: null,
+		uuid: null,
+		sfg_uuid: null,
+		trx_quantity_in_kg: null,
 		trx_from: null,
 		trx_to: null,
-		trx_quantity: null,
-		order_description: null,
-		order_quantity: null,
-		teeth_molding_prod: null,
-		teeth_coloring_stock: null,
-		order_entry_id: null,
+		remarks: null,
 	});
 
 	const handelUpdate = (idx) => {
-		const selected = teethMoldingLog[idx];
+		const selected = data[idx];
 		setUpdateTeethMoldingLog((prev) => ({
 			...prev,
 			...selected,
@@ -185,17 +171,18 @@ export default function Index() {
 		itemId: null,
 		itemName: null,
 	});
+
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: teethMoldingLog[idx].id,
-			itemName: teethMoldingLog[idx].order_description,
+			itemId: data[idx].uuid,
+			itemName: data[idx].style_color_size,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
 
-	if (loading)
+	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
@@ -204,8 +191,8 @@ export default function Index() {
 			<ReactTable
 				title={info.getTitle()}
 				// handelAdd={handelAdd}
-				accessor={haveAccess.includes('click_update_sfg')}
-				data={teethMoldingLog}
+				// accessor={haveAccess.includes('click_update_sfg')}
+				data={data}
 				columns={columns}
 				extraClass='py-2'
 			/>
@@ -213,7 +200,6 @@ export default function Index() {
 				<SFGAddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						setTeethMoldingLog,
 						updateTeethMoldingLog,
 						setUpdateTeethMoldingLog,
 					}}
@@ -225,8 +211,8 @@ export default function Index() {
 					title={info.getTitle()}
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
-					setItems={setTeethMoldingLog}
-					uri={`/sfg/trx`}
+					deleteData={deleteData}
+					url={`/zipper/sfg-transaction`}
 				/>
 			</Suspense>
 		</div>

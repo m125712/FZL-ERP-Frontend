@@ -167,3 +167,25 @@ export const useOrderAgainstSliderColorRMLogByUUID = (uuid) =>
 		queryKey: sliderQK.orderAgainstSliderColorRMLogByUUID(uuid),
 		url: `/zipper/material-trx-against-order/by/coloring${uuid}`,
 	});
+
+// * Slider Assembly Production (Stock)
+export const useSliderAssemblyProduction = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderAssemblyProduction(),
+		url: '/slider/stock',
+	});
+
+// * Slider Assembly Production entry
+
+export const useSliderAssemblyProductionEntry = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderAssemblyProductionEntry(),
+		url: `/slider/production`,
+	});
+
+// * Slider Assembly Transfer Entry
+export const useSliderAssemblyTransferEntry = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderAssemblyTransferEntry(),
+		url: `/slider/transaction`,
+	});

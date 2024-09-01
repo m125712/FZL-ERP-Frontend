@@ -1060,6 +1060,33 @@ export const SLIDER_SLIDER_ASSEMBLY_NULL = {
 	],
 };
 
+// * Slider Assembly Production entry
+
+export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA = {
+	production_quantity: NUMBER_REQUIRED,
+	wastage: NUMBER.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? 0 : value
+	),
+	remarks: STRING.nullable(),
+};
+
+export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL = {
+	production_quantity: null,
+	wastage: null,
+	remarks: '',
+};
+
+// * Slider Assembly Transaction entry
+export const SLIDER_ASSEMBLY_TRANSACTION_SCHEMA = {
+	trx_quantity: NUMBER_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const SLIDER_ASSEMBLY_TRANSACTION_NULL = {
+	trx_quantity: null,
+	remarks: '',
+};
+
 // Item Library (Die Casting, Slider Assembly)
 
 export const ITEM_LIBRARY_SCHEMA = {
@@ -1941,50 +1968,48 @@ export const METAL_TEETH_MOLDING_PRODUCTION_SCHEMA_NULL = {
 // * SFG PRODUCTION
 
 export const SFG_PRODUCTION_SCHEMA_IN_KG = {
-    production_quantity_in_kg: NUMBER_REQUIRED,
-    wastage: NUMBER.nullable().transform((value, originalValue) =>
-        String(originalValue).trim() === '' ? 0 : value
-    ),
-    remarks: STRING.nullable(),
+	production_quantity_in_kg: NUMBER_REQUIRED,
+	wastage: NUMBER.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? 0 : value
+	),
+	remarks: STRING.nullable(),
 };
 
 export const SFG_PRODUCTION_SCHEMA_IN_KG_NULL = {
-    uuid: null,
-    order_entry_uuid: null,
-    section: '',
-    production_quantity_in_kg: '',
-    wastage: '',
-    remarks: '',
+	uuid: null,
+	order_entry_uuid: null,
+	section: '',
+	production_quantity_in_kg: '',
+	wastage: '',
+	remarks: '',
 };
 
 export const SFG_PRODUCTION_SCHEMA_IN_PCS = {
-    production_quantity: NUMBER_REQUIRED,
-    wastage: NUMBER.nullable().transform((value, originalValue) =>
-        String(originalValue).trim() === '' ? 0 : value
-    ),
-    remarks: STRING.nullable(),
+	production_quantity: NUMBER_REQUIRED,
+	wastage: NUMBER.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? 0 : value
+	),
+	remarks: STRING.nullable(),
 };
 
 export const SFG_PRODUCTION_SCHEMA_IN_PCS_NULL = {
-    uuid: null,
-    order_entry_uuid: null,
-    section: '',
-    production_quantity: '',
-    wastage: '',
-    remarks: '',
+	uuid: null,
+	order_entry_uuid: null,
+	section: '',
+	production_quantity: '',
+	wastage: '',
+	remarks: '',
 };
 
 export const SFG_PRODUCTION_SCHEMA = {
-    ...SFG_PRODUCTION_SCHEMA_IN_KG,
-    ...SFG_PRODUCTION_SCHEMA_IN_PCS,
+	...SFG_PRODUCTION_SCHEMA_IN_KG,
+	...SFG_PRODUCTION_SCHEMA_IN_PCS,
 };
 
 export const SFG_PRODUCTION_SCHEMA_NULL = {
-    ...SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
-    ...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
+	...SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
+	...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
 };
-
-
 
 // * SFG transaction in kg
 export const SFG_TRANSACTION_SCHEMA_IN_KG = {

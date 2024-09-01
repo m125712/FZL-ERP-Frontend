@@ -24,12 +24,34 @@ export default function Header({
 	const [isStatus, setIsStatus] = useState(
 		typeof is_Status !== 'boolean' && is_Status === 1 ? true : false
 	);
-
+	const bleaching = [
+		{ label: 'Bleach', value: 'bleach' },
+		{ label: 'Non-Bleach', value: 'non-bleach' },
+	];
 	return (
 		<SectionEntryBody title='Information'>
-			<div className='text-secondary-content flex flex-col items-end gap-6 px-2 md:flex-row'>
+			<div className='flex flex-col items-end gap-6 px-2 text-secondary-content md:flex-row'>
 				<Input label='name' {...{ register, errors }} />
 				<Input label='sub_streat' {...{ register, errors }} />
+				<FormField label='bleaching' title='Bleaching' errors={errors}>
+					<Controller
+						name={'bleaching'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Bleaching'
+									options={bleaching}
+									value={bleaching?.find(
+										(item) =>
+											item.value == getValues('bleaching')
+									)}
+									onChange={(e) => onChange(e.value)}
+								/>
+							);
+						}}
+					/>
+				</FormField>
 				<Textarea label='remarks' {...{ register, errors }} />
 				<div className='h-full rounded-md border border-secondary/30 px-2 py-1'>
 					<CheckBox

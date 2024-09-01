@@ -7,9 +7,10 @@ export default function Information({
 		name: null,
 		sub_streat: null,
 		lab_status: null,
+		bleaching: null,
 	},
 }) {
-	const { shade_recipe_id, name, sub_streat, lab_status } = data;
+	const { shade_recipe_id, name, sub_streat, lab_status, bleaching } = data;
 	const renderItems = () => {
 		const items = [
 			{
@@ -24,6 +25,10 @@ export default function Information({
 			{
 				label: 'Sub Streat',
 				value: sub_streat,
+			},
+			{
+				label: 'Bleaching',
+				value: bleaching,
 			},
 			{
 				label: 'Lab Status',

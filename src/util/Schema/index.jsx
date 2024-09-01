@@ -352,6 +352,7 @@ export const SHADE_RECIPE_SCHEMA = {
 	sub_streat: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 	lab_status: BOOLEAN.default(false),
+	bleaching: STRING_REQUIRED.default('non-bleach'),
 	shade_recipe_entry: yup.array().of(
 		yup.object().shape({
 			quantity: NUMBER_DOUBLE_REQUIRED,
@@ -364,6 +365,7 @@ export const SHADE_RECIPE_NULL = {
 	uuid: null,
 	name: '',
 	sub_streat: '',
+	bleaching: 'non-bleach',
 	remarks: '',
 	shade_recipe_entry: [
 		{
@@ -1423,6 +1425,7 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 			po: STRING_REQUIRED,
 			style: STRING_REQUIRED,
 			count_length_uuid: STRING_REQUIRED,
+			bleaching: STRING_REQUIRED,
 			quantity: NUMBER_REQUIRED,
 			company_price: NUMBER_DOUBLE_REQUIRED,
 			party_price: NUMBER_DOUBLE_REQUIRED,
@@ -1453,6 +1456,7 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 			style: '',
 			color: '',
 			count_length_uuid: null,
+			bleaching: 'non-bleach',
 			quantity: null,
 			company_price: 0,
 			party_price: 0,
@@ -1642,7 +1646,10 @@ export const DYEING_THREAD_CONNEING_SCHEMA = {
 	coning_machines: STRING_REQUIRED,
 	batch_entry: yup.array().of(
 		yup.object().shape({
-			coning_production_quantity: NUMBER_REQUIRED,
+			coning_production_quantity: NUMBER_REQUIRED.max(
+				yup.ref('quantity'),
+				'Beyond Max Quantity'
+			),
 			coning_production_quantity_in_kg: NUMBER_REQUIRED,
 		})
 	),

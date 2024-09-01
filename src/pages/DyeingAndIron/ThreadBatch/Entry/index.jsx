@@ -30,7 +30,6 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import Header from './Header';
 
-
 // UPDATE IS WORKING
 export default function Index() {
 	const {
@@ -111,7 +110,7 @@ export default function Index() {
 		: useFetchForRhfResetForPlanning(`/thread/order-batch`, reset);
 
 	// const { value } = useFetch('/zipper/order-batch');
-
+		
 	// TODO: Not sure if this is needed. need further checking
 	let order_info_ids;
 	// useEffect(() => {
@@ -122,7 +121,7 @@ export default function Index() {
 	// 		}));
 	// 	}
 	// }, [getValues('order_info_ids')]);
-
+	console.log(getValues());
 	const onSubmit = async (data) => {
 		// * Update
 		if (isUpdate) {
@@ -209,6 +208,12 @@ export default function Index() {
 				)
 			) {
 				window['proceed_modal'].showModal(); // * if not then show modal
+			} else if (
+				!batch_entry.every(
+					(item) => item.bleaching === batch_entry[0].bleaching
+				)
+			) {
+				window['proceed_modal_2'].showModal();
 			} else {
 				await postData.mutateAsync({
 					url,
@@ -388,6 +393,12 @@ export default function Index() {
 				enableSorting: true,
 			},
 			{
+				accessorKey: 'bleaching',
+				header: 'Bleaching',
+				enableColumnFilter: true,
+				enableSorting: true,
+			},
+			{
 				accessorKey: 'po',
 				header: 'PO',
 				enableColumnFilter: true,
@@ -472,8 +483,8 @@ export default function Index() {
 
 				<div className='modal-action'>
 					<button
-						type='submit'
-						className='text-md btn btn-primary btn-block'>
+						className='text-md btn btn-primary btn-block' onClick={() => setProceed(true)}>
+						
 						Save
 					</button>
 				</div>
@@ -483,6 +494,13 @@ export default function Index() {
 				<ProceedModal
 					text='Shade'
 					modalId={'proceed_modal'}
+					setProceed={setProceed}
+				/>
+			</Suspense>
+			<Suspense>
+				<ProceedModal
+					text='bleach'
+					modalId={'proceed_modal_2'}
 					setProceed={setProceed}
 				/>
 			</Suspense>

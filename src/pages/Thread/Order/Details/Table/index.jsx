@@ -39,6 +39,14 @@ export default function Index({ order_info_entry }) {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'bleaching',
+				header: 'Bleaching',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
 				accessorKey: 'quantity',
 				header: 'Quantity',
 				enableColumnFilter: false,

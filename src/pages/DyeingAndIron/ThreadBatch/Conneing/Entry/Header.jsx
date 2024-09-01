@@ -49,6 +49,11 @@ export default function Header({
 		{ label: 'A', value: 'a' },
 		{ label: 'B', value: 'b' },
 	];
+	const machine_speed = [
+		{ label: 'Low', value: 'low' },
+		{ label: 'Medium', value: 'medium' },
+		{ label: 'High', value: 'high' },
+	];
 
 	return (
 		<div className='flex flex-col gap-4'>
@@ -380,7 +385,7 @@ export default function Header({
 					</FormField>
 					<FormField
 						label='coning_machines'
-						title='Machine'
+						title='Machine Speed'
 						errors={errors}>
 						<Controller
 							name='coning_machines'
@@ -388,9 +393,9 @@ export default function Header({
 							render={({ field: { onChange } }) => {
 								return (
 									<ReactSelect
-										placeholder='Select Machine'
-										options={machine}
-										value={machine?.find(
+										placeholder='Select Machine Speed'
+										options={machine_speed}
+										value={machine_speed?.find(
 											(item) =>
 												item.value ==
 												getValues('coning_machines')

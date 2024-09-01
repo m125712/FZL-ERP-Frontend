@@ -59,6 +59,10 @@ export default function Index() {
 	const { value: shadeRecipe } = useFetch(
 		`/other/lab-dip/shade-recipe/value/label`
 	);
+	const bleaching = [
+		{ label: 'Bleach', value: 'bleach' },
+		{ label: 'Non-Bleach', value: 'non-bleach' },
+	];
 
 	if (isUpdate)
 		useFetchForRhfResetForOrder(
@@ -104,6 +108,7 @@ export default function Index() {
 			count_length_uuid: null,
 			type: '',
 			quantity: null,
+			bleaching: 'non-bleach',
 			company_price: 0,
 			party_price: 0,
 			swatch_status: '',
@@ -310,6 +315,7 @@ export default function Index() {
 							'PO',
 							'Style',
 							'Count Length',
+							'Bleaching',
 							'Quantity',
 							'Price (USD) (Com/Party)',
 							'Remarks',
@@ -318,7 +324,7 @@ export default function Index() {
 							<th
 								key={item}
 								scope='col'
-								className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide transition duration-300 first:pl-2'>
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
 								{item}
 							</th>
 						))}>
@@ -443,6 +449,48 @@ export default function Index() {
 									</FormField>
 								</td>
 								<td className={rowClass}>
+									<FormField
+										label={`order_info_entry[${index}].bleaching`}
+										title='Count Length'
+										dynamicerror={
+											errors?.order_info_entry?.[index]
+												?.bleaching
+										}
+										is_title_needed='false'>
+										<Controller
+											name={`order_info_entry[${index}].bleaching`}
+											control={control}
+											render={({
+												field: { onChange },
+											}) => {
+												return (
+													<ReactSelect
+														placeholder='Select Bleaching'
+														options={bleaching}
+														value={bleaching?.find(
+															(item) =>
+																item.value ==
+																getValues(
+																	`order_info_entry[${index}].bleaching`
+																)
+														)}
+														onChange={(e) => {
+															onChange(e.value);
+														}}
+														// isDisabled={
+														// 	order_info_uuid !==
+														// 	undefined
+														// }
+														menuPortalTarget={
+															document.body
+														}
+													/>
+												);
+											}}
+										/>
+									</FormField>
+								</td>
+								<td className={rowClass}>
 									<Input
 										title='quantity'
 										label={`order_info_entry[${index}].quantity`}
@@ -454,6 +502,7 @@ export default function Index() {
 										register={register}
 									/>
 								</td>
+
 								<td className={rowClass}>
 									<div className='flex'>
 										<Input

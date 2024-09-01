@@ -1616,6 +1616,15 @@ export const DYEING_THREAD_BATCH_YARN_NULL = {
 	yarn_quantity: null,
 };
 
+// * Dyeing Thread Batch Entry Transfer Schema*//
+export const DYEING_THREAD_BATCH_ENTRY_TRANSFER_SCHEMA = {
+	transfer_quantity: NUMBER.moreThan(0),
+};
+export const DYEING_THREAD_BATCH_ENTRY_TRANSFER_NULL = {
+	uuid: null,
+	transfer_quantity: null,
+};
+
 // * Dyeing Thread Batch Dyeing schema*//
 export const DYEING_THREAD_BATCH_DYEING_SCHEMA = {
 	dyeing_operator: STRING_REQUIRED,
@@ -1651,6 +1660,10 @@ export const DYEING_THREAD_CONNEING_SCHEMA = {
 				'Beyond Max Quantity'
 			),
 			coning_production_quantity_in_kg: NUMBER_REQUIRED,
+			transfer_quantity: NUMBER_REQUIRED.max(
+				yup.ref('quantity'),
+				'Beyond Max Quantity'
+			),
 		})
 	),
 };
@@ -1666,6 +1679,7 @@ export const DYEING_THREAD_CONNEING_NULL = {
 		{
 			coning_production_quantity: null,
 			coning_production_quantity_in_kg: null,
+			transfer_quantity: null,
 		},
 	],
 };
@@ -1955,47 +1969,47 @@ export const METAL_TEETH_MOLDING_PRODUCTION_SCHEMA_NULL = {
 // * SFG PRODUCTION
 
 export const SFG_PRODUCTION_SCHEMA_IN_KG = {
-    production_quantity_in_kg: NUMBER_REQUIRED,
-    wastage: NUMBER.nullable().transform((value, originalValue) =>
-        String(originalValue).trim() === '' ? 0 : value
-    ),
-    remarks: STRING.nullable(),
+	production_quantity_in_kg: NUMBER_REQUIRED,
+	wastage: NUMBER.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? 0 : value
+	),
+	remarks: STRING.nullable(),
 };
 
 export const SFG_PRODUCTION_SCHEMA_IN_KG_NULL = {
-    uuid: null,
-    order_entry_uuid: null,
-    section: '',
-    production_quantity_in_kg: '',
-    wastage: '',
-    remarks: '',
+	uuid: null,
+	order_entry_uuid: null,
+	section: '',
+	production_quantity_in_kg: '',
+	wastage: '',
+	remarks: '',
 };
 
 export const SFG_PRODUCTION_SCHEMA_IN_PCS = {
-    production_quantity: NUMBER_REQUIRED,
-    wastage: NUMBER.nullable().transform((value, originalValue) =>
-        String(originalValue).trim() === '' ? 0 : value
-    ),
-    remarks: STRING.nullable(),
+	production_quantity: NUMBER_REQUIRED,
+	wastage: NUMBER.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? 0 : value
+	),
+	remarks: STRING.nullable(),
 };
 
 export const SFG_PRODUCTION_SCHEMA_IN_PCS_NULL = {
-    uuid: null,
-    order_entry_uuid: null,
-    section: '',
-    production_quantity: '',
-    wastage: '',
-    remarks: '',
+	uuid: null,
+	order_entry_uuid: null,
+	section: '',
+	production_quantity: '',
+	wastage: '',
+	remarks: '',
 };
 
 export const SFG_PRODUCTION_SCHEMA = {
-    ...SFG_PRODUCTION_SCHEMA_IN_KG,
-    ...SFG_PRODUCTION_SCHEMA_IN_PCS,
+	...SFG_PRODUCTION_SCHEMA_IN_KG,
+	...SFG_PRODUCTION_SCHEMA_IN_PCS,
 };
 
 export const SFG_PRODUCTION_NULL = {
-    ...SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
-    ...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
+	...SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
+	...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
 };
 
 export const SFG_PRODUCTION_SCHEMA_NULL = {

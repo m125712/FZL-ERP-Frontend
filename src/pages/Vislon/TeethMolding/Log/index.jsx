@@ -1,17 +1,21 @@
 import { useEffect } from 'react';
 import RMOrderAgainstLog from './RMOrderAgainstLog';
 import RMTransferLog from './RMTransferLog';
-import SFGTransferLog from './SFGTransferLog';
+import SFGTransferLog from './SFGTransferLog/SFGTransferLog';
+import SFGProductionLog from './SFGProductionLog/SFGProductionLog';
+
 export default function Index() {
 	useEffect(() => {
 		document.title = 'Teeth Molding Log';
 	}, []);
 	return (
 		<div>
+			<SFGProductionLog />
+			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<SFGTransferLog />
-			<hr className='border-secondary-content my-6 border-2 border-dashed' />
+			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<RMTransferLog />
-			<hr className='border-secondary-content my-6 border-2 border-dashed' />
+			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<RMOrderAgainstLog />
 		</div>
 	);

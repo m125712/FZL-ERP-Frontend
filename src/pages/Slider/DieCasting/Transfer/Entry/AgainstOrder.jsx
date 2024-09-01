@@ -1,6 +1,8 @@
 import { NoDataFound } from '@/components/Table/ui';
+import { useAuth } from '@/context/auth';
 import { useRHF } from '@/hooks';
 import cn from '@/lib/cn';
+import nanoid from '@/lib/nanoid';
 import { useOtherOrder } from '@/state/Other';
 import { useSliderDieCastingStockByOrderNumbers } from '@/state/Slider';
 import {
@@ -10,6 +12,7 @@ import {
 	Input,
 	ReactSelect,
 } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
 import {
 	SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_NULL,
 	SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_SCHEMA,
@@ -18,9 +21,6 @@ import { DevTool } from '@hookform/devtools';
 import { useEffect, useRef, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import Header from './Header';
-import nanoid from '@/lib/nanoid';
-import GetDateTime from '@/util/GetDateTime';
-import { useAuth } from '@/context/auth';
 
 const AgainstOrder = () => {
 	const { user } = useAuth();
@@ -63,15 +63,16 @@ const AgainstOrder = () => {
 					...item,
 					uuid: nanoid(),
 					is_body: data.is_body,
-					is_body_uuid: data.is_body? nanoid(): null,
+					is_body_uuid: data.is_body ? nanoid() : null,
 					is_cap: data.is_cap,
-					is_cap_uuid: data.is_cap? nanoid(): null,
+					is_cap_uuid: data.is_cap ? nanoid() : null,
 					is_puller: data.is_puller,
-					is_puller_uuid: data.is_puller? nanoid(): null,
+					is_puller_uuid: data.is_puller ? nanoid() : null,
 					is_link: data.is_link,
-					is_link_uuid: data.is_link? nanoid(): null,
+					is_link_uuid: data.is_link ? nanoid() : null,
 					created_by: user?.uuid,
 					created_at: GetDateTime(),
+					trx_quantity: item.assigned_quantity,
 				};
 			}),
 		];

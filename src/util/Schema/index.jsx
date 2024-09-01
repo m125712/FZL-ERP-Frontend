@@ -1905,7 +1905,9 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_NULL = {
 // * vislon production
 export const VISLON_PRODUCTION_SCHEMA = {
 	production_quantity_in_kg: NUMBER_REQUIRED,
-	wastage: NUMBER_REQUIRED,
+	wastage: NUMBER.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? 0 : value
+	),
 	remarks: STRING.nullable(),
 };
 
@@ -1946,37 +1948,47 @@ export const METAL_TEETH_MOLDING_PRODUCTION_SCHEMA_NULL = {
 // * SFG PRODUCTION
 
 export const SFG_PRODUCTION_SCHEMA_IN_KG = {
-	production_quantity_in_kg: NUMBER_REQUIRED,
-	wastage: NUMBER.nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? 0 : value
-	),
-	remarks: STRING.nullable(),
+    production_quantity_in_kg: NUMBER_REQUIRED,
+    wastage: NUMBER.nullable().transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? 0 : value
+    ),
+    remarks: STRING.nullable(),
 };
 
 export const SFG_PRODUCTION_SCHEMA_IN_KG_NULL = {
-	uuid: null,
-	order_entry_uuid: null,
-	section: '',
-	production_quantity_in_kg: '',
-	wastage: '',
-	remarks: '',
+    uuid: null,
+    order_entry_uuid: null,
+    section: '',
+    production_quantity_in_kg: '',
+    wastage: '',
+    remarks: '',
 };
 
 export const SFG_PRODUCTION_SCHEMA_IN_PCS = {
-	production_quantity: NUMBER_REQUIRED,
-	wastage: NUMBER.nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? 0 : value
-	),
-	remarks: STRING.nullable(),
+    production_quantity: NUMBER_REQUIRED,
+    wastage: NUMBER.nullable().transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? 0 : value
+    ),
+    remarks: STRING.nullable(),
 };
 
 export const SFG_PRODUCTION_SCHEMA_IN_PCS_NULL = {
-	uuid: null,
-	order_entry_uuid: null,
-	section: '',
-	production_quantity: '',
-	wastage: '',
-	remarks: '',
+    uuid: null,
+    order_entry_uuid: null,
+    section: '',
+    production_quantity: '',
+    wastage: '',
+    remarks: '',
+};
+
+export const SFG_PRODUCTION_SCHEMA = {
+    ...SFG_PRODUCTION_SCHEMA_IN_KG,
+    ...SFG_PRODUCTION_SCHEMA_IN_PCS,
+};
+
+export const SFG_PRODUCTION_NULL = {
+    ...SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
+    ...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
 };
 
 export const SFG_PRODUCTION_SCHEMA = {

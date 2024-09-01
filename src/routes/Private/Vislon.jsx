@@ -105,6 +105,12 @@ export const VislonRoutes = [
 		element: VislonProduction,
 		type: ['vislon', 'teeth-molding'],
 		page_name: 'vislon__teeth_molding_production',
-		actions: ['create', 'read', 'update', 'click_production'],
+		actions: [
+			'create',
+			'read',
+			'update',
+			'click_production',
+			'click_transaction',
+		],
 	},
 ];

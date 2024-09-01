@@ -1,45 +1,27 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc, useFetch } from '@/hooks';
-
+import { useAccess, useFetch } from '@/hooks';
 import { LinkWithCopy, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
+import { lazy, useMemo, useState } from 'react';
+import { useVislonTMP } from '@/state/Vislon';
 
 const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
 
 export default function Index() {
+	const { data, isLoading } = useVislonTMP();
 	const info = new PageInfo(
 		'Teeth Molding Production',
 		'sfg/by/teeth_molding_prod/by/vislon',
 		'vislon__teeth_molding_production'
 	);
 
-	// * fetching the data
-	const {
-		value: data,
-		loading,
-		error,
-	} = useFetch('/zipper/sfg/by/teeth_molding_prod?item_name=vislon');
-
-	const [teethMoldingProd, setTeethMoldingProd] = useState([]);
-	// const [loading, setLoading] = useState(true);
-	// const [error, setError] = useState(null);
 	const haveAccess = useAccess('vislon__teeth_molding_production');
 
-	// useEffect(() => {
-	// 	document.title = info.getTabName();
-	// 	useFetchFunc(
-	// 		info.getFetchUrl(),
-	// 		setTeethMoldingProd,
-	// 		setLoading,
-	// 		setError
-	// 	);
-	// }, []);
+	const [teethMoldingProd, setTeethMoldingProd] = useState([]);
 
-	// o/n	style	color	size	pcs	  production	production_modal_button	trx	trx_modal_button
-
+	// * columns
 	const columns = useMemo(
 		() => [
 			{
@@ -90,30 +72,20 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
+
 			{
-				accessorKey: 'balance_quantity',
-				header: (
-					<span>
-						Balance
-						<br />
-						(KG)
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'action',
-				header: 'Add Production',
+				accessorKey: 'action_add_production',
+				header: '',
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_production'),
+				width: 'w-8',
 				cell: (info) => {
 					return (
 						<Transfer
-							onClick={() => handelProduction(info.row.original)}
+							onClick={() => handelProduction(info.row.index)}
 						/>
 					);
 				},
@@ -128,19 +100,19 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'actions',
-				header: 'Add Transaction',
+				accessorKey: 'action_add_transaction',
+				header: '',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_production'),
-
+				hidden: !haveAccess.includes('click_transaction'),
+				width: 'w-8',
 				cell: (info) => {
 					return (
 						<Transfer
-							onClick={() => handelTransaction(info.row.original)}
+							onClick={() => handelTransaction(info.row.index)}
 						/>
 					);
 				},
@@ -155,7 +127,19 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'balance_quantity',
+				header: (
+					<span>
+						Balance
+						<br />
+						(KG)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'remarks',
@@ -167,53 +151,28 @@ export default function Index() {
 		[data]
 	);
 
-	
 	const [updateTeethMoldingProd, setUpdateTeethMoldingProd] = useState({
-		id: null,
-		teeth_molding_stock: null,
-		teeth_molding_prod: null,
-		order_entry_id: null,
-		item_description: null,
-		total_trx_quantity: null,
-		order_number: '',
-		order_description: '',
-		quantity: null,
-	});
-
-	const [modalData, setModalData] = useState({
 		uuid: null,
 		sfg_uuid: null,
-		section: '',
+		section: null,
 		production_quantity_in_kg: null,
 		production_quantity: null,
 		wastage: null,
 		remarks: '',
 	});
-	const handelProduction = (idx) => {
-		// setUpdateTeethMoldingProd((prev) => ({
-		// 	...prev,
-		// 	id: teethMoldingProd[idx].id,
-		// 	name: teethMoldingProd[idx].item_description,
-		// 	teeth_molding_stock: teethMoldingProd[idx].teeth_molding_stock,
-		// 	teeth_molding_prod: teethMoldingProd[idx].teeth_molding_prod,
-		// 	order_entry_id: teethMoldingProd[idx].order_entry_id,
-		// 	item_description: teethMoldingProd[idx].item_description,
-		// 	total_trx_quantity: teethMoldingProd[idx].total_trx_quantity,
-		// 	order_number: teethMoldingProd[idx].order_number,
-		// 	order_description: teethMoldingProd[idx].order_description,
-		// 	quantity: teethMoldingProd[idx].quantity,
-		// }));
 
-		setModalData((prev) => ({
+	const handelProduction = (idx) => {
+		const val = data[idx];
+
+		setUpdateTeethMoldingProd((prev) => ({
 			...prev,
-			sfg_uuid: idx.sfg_uuid,
+			...val,
 		}));
-	
 
 		window['TeethMoldingProdModal'].showModal();
 	};
 
-	const [transactionData, setTransactionData] = useState({
+	const [updateTeethMoldingTRX, setUpdateTeethMoldingTRX] = useState({
 		uuid: null,
 		sfg_uuid: null,
 		trx_quantity_in_kg: null,
@@ -222,30 +181,17 @@ export default function Index() {
 		remarks: '',
 	});
 	const handelTransaction = (idx) => {
-		// setUpdateTeethMoldingProd((prev) => ({
-		// 	...prev,
-		// 	id: teethMoldingProd[idx].id,
-		// 	name: teethMoldingProd[idx].item_description,
-		// 	teeth_molding_stock: teethMoldingProd[idx].teeth_molding_stock,
-		// 	teeth_molding_prod: teethMoldingProd[idx].teeth_molding_prod,
-		// 	order_entry_id: teethMoldingProd[idx].order_entry_id,
-		// 	item_description: teethMoldingProd[idx].item_description,
-		// 	total_trx_quantity: teethMoldingProd[idx].total_trx_quantity,
-		// 	order_number: teethMoldingProd[idx].order_number,
-		// 	order_description: teethMoldingProd[idx].order_description,
-		// 	quantity: teethMoldingProd[idx].quantity,
-		// }));
+		const val = data[idx];
 
-		setTransactionData((prev) => ({
+		setUpdateTeethMoldingTRX((prev) => ({
 			...prev,
-			sfg_uuid: idx.sfg_uuid,
+			...val,
 		}));
-		
 
 		window['TeethMoldingTrxModal'].showModal();
 	};
 
-	if (loading)
+	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
@@ -261,12 +207,8 @@ export default function Index() {
 				<Production
 					modalId='TeethMoldingProdModal'
 					{...{
-						setTeethMoldingProd,
 						updateTeethMoldingProd,
 						setUpdateTeethMoldingProd,
-
-						modalData,
-						setModalData,
 					}}
 				/>
 			</Suspense>
@@ -274,12 +216,8 @@ export default function Index() {
 				<Transaction
 					modalId='TeethMoldingTrxModal'
 					{...{
-						setTeethMoldingProd,
-						updateTeethMoldingProd,
-						setUpdateTeethMoldingProd,
-
-						transactionData,
-						setTransactionData,
+						updateTeethMoldingTRX,
+						setUpdateTeethMoldingTRX,
 					}}
 				/>
 			</Suspense>

@@ -50,7 +50,12 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
+			{
+				accessorKey: 'bleaching',
+				header: 'Bleaching',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'lab_status',
 				header: 'Lab Status',

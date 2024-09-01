@@ -1,6 +1,5 @@
-
 import { useFetchForRhfResetForOrder, useRHF } from '@/hooks';
-import {  DynamicDeliveryField, Input } from '@/ui';
+import { ActionButtons, DynamicDeliveryField, Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -22,10 +21,7 @@ import Header from './Header';
 
 export default function Index() {
 	const { url: threadBatchEntryUrl } = useDyeingThreadBatchEntry();
-	const {
-		url: threadBatchUrl,
-		updateData,
-	} = useDyeingThreadBatch();
+	const { url: threadBatchUrl, updateData } = useDyeingThreadBatch();
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const { batch_con_uuid } = useParams();
@@ -77,6 +73,22 @@ export default function Index() {
 			}
 		}
 	}, [watch('uuid')]);
+	
+
+	// Transfer
+	const [transfer, Transfer] = useState({
+		uuid: null,
+		transfer_quantity: null,
+	});
+		// const handelTransfer = (idx) => {
+		// 	setYarn((prev) => ({
+		// 		...prev,
+		// 		uuid: data[idx].uuid,
+		// 		transfer_quantity: data[idx].yarn_quantity,
+		// 		batch_id: data[idx].batch_id,
+		// 	}));
+		// 	window['YarnModal'].showModal();
+		// };
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -163,6 +175,7 @@ export default function Index() {
 								'quantity',
 								'coning production quantity',
 								'coning production quantity in kg',
+								'Transfer',
 								'total quantity',
 								'balance quantity',
 								'remarks',
@@ -236,6 +249,13 @@ export default function Index() {
 									}
 									register={register}
 								/>
+							</td>
+							<td className={`${rowClass}`}>
+								<div
+									className='flex w-10 gap-2'
+									onClick={() => handelTransfer(index)}>
+									<button className='btn'>Transfer</button>
+								</div>
 							</td>
 
 							<td className={`${rowClass}`}>

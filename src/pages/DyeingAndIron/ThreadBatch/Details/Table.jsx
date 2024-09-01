@@ -4,7 +4,6 @@ import { DateTime } from '@/ui';
 import { useMemo } from 'react';
 
 export default function Index({ batch_entry }) {
-
 	const columns = useMemo(
 		() => [
 			// {
@@ -39,6 +38,11 @@ export default function Index({ batch_entry }) {
 				enableColumnFilter: false,
 			},
 			{
+				accessorKey: 'bleaching',
+				header: 'Bleaching     ',
+				enableColumnFilter: false,
+			},
+			{
 				accessorKey: 'po',
 				header: 'PO',
 				enableColumnFilter: false,
@@ -61,7 +65,7 @@ export default function Index({ batch_entry }) {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-			
+
 			{
 				accessorKey: 'batch_remarks',
 				header: 'Remarks',

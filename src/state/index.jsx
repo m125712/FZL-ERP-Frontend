@@ -101,9 +101,7 @@ export default function createGlobalState({ queryKey, url, enabled = true }) {
 
 	return {
 		url,
-		data: data?.data.sort(
-			(a, b) => new Date(b.created_at) - new Date(a.created_at)
-		),
+		data: data?.data,
 		toast: data?.toast,
 		invalidateQuery: () => queryClient.invalidateQueries({ queryKey }),
 		isLoading,

@@ -107,3 +107,14 @@ export const useVislonTMTLog = () =>
 		queryKey: vislonQK.vislonTMTLog(),
 		url: '/zipper/sfg-transaction/by/teeth_molding_prod?item_name=vislon',
 	});
+//* Vislon Teeth Molding Tape Log
+export const useVislonTMTapeLog = () =>
+	createGlobalState({
+		queryKey: vislonQK.vislonTMTapeLog(),
+		url: '/zipper/dyed-tape-transaction/by/vislon_teeth_molding',
+	});
+export const useVislonTMTapeLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: vislonQK.vislonTMTapeLogByUUID(uuid),
+		url: `/zipper/dyed-tape-transaction/by/vislon_teeth_molding/${uuid}`,
+	});

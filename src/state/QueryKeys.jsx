@@ -355,6 +355,14 @@ export const nylonQK = {
 		...nylonQK.orderAgainstNylonFinishingRMLog(),
 		uuid,
 	],
+	//*Tape Log
+	nylonMetallicTapeLog: () => [...nylonQK.all(), 'metallic-tape-log'],
+	nylonMetallicTapeLogByUUID: (uuid) => [...nylonQK.nylonTapeLog(), uuid],
+	//*Plastic Finishing
+	nylonPlasticFinishingTapeLog: () => [...nylonQK.all(), 'plastic-tape-log'],
+	nylonPlasticFinishingTapeLogByUUID: (uuid) => [
+		...nylonQK.nylonPlasticFinishingTapeLog(),
+	],
 };
 // *Vislon
 export const vislonQK = {
@@ -430,6 +438,9 @@ export const vislonQK = {
 	// * Vislon Teeth Molding Transaction Log
 	vislonTMTLog: () => [...vislonQK.all(), 'vislonTMTLog'],
 	vislonTMTLogByUUID: (uuid) => [...vislonQK.vislonTMTLog(), uuid],
+	//* Vislon Teeth Molding Tape Log
+	vislonTMTapeLog: () => [...vislonQK.all(), 'vislonTMTapeLog'],
+	vislonTMTapeLogByUUID: (uuid) => [...vislonQK.vislonTMTapeLog(), uuid],
 };
 
 // * Metal
@@ -450,6 +461,10 @@ export const metalQK = {
 		'tm-production-log',
 		uuid,
 	],
+	// * Tape Log
+
+	metalTMTapeLog: () => [...metalQK.all(), 'tm-tape-log'],
+	metalTMTapeLogByUUID: (uuid) => [...metalQK.all(), 'tm-tape-log', uuid],
 
 	// * PRODUCTION
 	metalTMProduction: () => [...metalQK.all(), 'tm-production'],
@@ -692,8 +707,8 @@ export const sliderQK = {
 		'coloring-log-transaction',
 	],
 };
-//* Delivery
 
+//* Delivery
 export const deliveryQk = {
 	all: () => ['delivery'],
 	// *RM

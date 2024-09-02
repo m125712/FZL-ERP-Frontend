@@ -3,55 +3,72 @@ import { useAuth } from '@/context/auth';
 import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useMetalTMProduction } from '@/state/Metal';
+import { useNylonPlasticFinishingProduction } from '@/state/Nylon';
 import { JoinInput, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
-import { SFG_PRODUCTION_NULL, SFG_PRODUCTION_SCHEMA } from '@util/Schema';
+import {
+	NUMBER_REQUIRED,
+	SFG_PRODUCTION_SCHEMA_IN_KG,
+	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
+} from '@util/Schema';
 
 export default function Index({
 	modalId = '',
 	updatePFProd = {
+		uuid: null,
 		sfg_uuid: null,
-		order_number: null,
-		item_description: null,
-		style_color_size: null,
-		order_quantity: null,
-		balance_quantity: null,
-		teeth_molding_prod: null,
-		teeth_molding_stock: null,
-		total_trx_quantity: null,
-		metal_teeth_molding: null,
+		section: null,
+		production_quantity_in_kg: null,
+		production_quantity: null,
+		coloring_prod: null,
+		nylon_plastic_finishing: null,
+		wastage: null,
+		remarks: null,
 	},
 	setUpdatePFProd,
 }) {
-	const { postData } = useMetalTMProduction();
+	const { postData } = useNylonPlasticFinishingProduction();
 	const { user } = useAuth();
-
-	const MAX_PROD_PCS = Number(updatePFProd.balance_quantity).toFixed(0);
-	const MAX_PROD_KG = Number(updatePFProd.metal_teeth_molding).toFixed(3);
+	const MAX_PROD = Math.min(
+		Number(updatePFProd.balance_quantity),
+		Number(updatePFProd.coloring_prod)
+	).toFixed(3);
+	const MAX_PROD_KG = Number(updatePFProd?.nylon_plastic_finishing).toFixed(
+		3
+	);
 
 	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
-		SFG_PRODUCTION_SCHEMA,
-		SFG_PRODUCTION_NULL
+		{
+			...SFG_PRODUCTION_SCHEMA_IN_KG,
+			production_quantity: NUMBER_REQUIRED.max(
+				MAX_PROD,
+				'Beyond Max Quantity'
+			),
+			production_quantity_in_kg: NUMBER_REQUIRED.max(
+				MAX_PROD_KG,
+				'Beyond Max Quantity'
+			),
+		},
+		SFG_PRODUCTION_SCHEMA_IN_KG_NULL
 	);
+
 	const MAX_WASTAGE_KG = Number(
 		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
 	).toFixed(3);
-
 	const onClose = () => {
 		setUpdatePFProd((prev) => ({
 			...prev,
-			id: null,
-			name: '',
-			teeth_molding_stock: null,
-			teeth_molding_prod: null,
-			order_entry_id: null,
-			item_description: null,
-			total_trx_quantity: null,
-			order_number: '',
-			order_description: '',
+			uuid: null,
+			sfg_uuid: null,
+			section: null,
+			production_quantity_in_kg: null,
+			production_quantity: null,
+			wastage: null,
+			remarks: null,
 		}));
-		reset(SFG_PRODUCTION_NULL);
+
+		reset(SFG_PRODUCTION_SCHEMA_IN_KG_NULL);
 		window[modalId].close();
 	};
 
@@ -60,7 +77,7 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			sfg_uuid: updatePFProd?.sfg_uuid,
-			section: 'teeth_molding',
+			section: 'finishing',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
@@ -87,7 +104,7 @@ export default function Index({
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'
-				sub_label={`MAX: ${MAX_PROD_PCS} pcs`}
+				sub_label={`MAX: ${MAX_PROD} pcs`}
 				unit='PCS'
 				{...{ register, errors }}
 			/>

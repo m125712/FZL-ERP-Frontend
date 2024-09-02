@@ -359,10 +359,30 @@ export const nylonQK = {
 	nylonMetallicTapeLog: () => [...nylonQK.all(), 'metallic-tape-log'],
 	nylonMetallicTapeLogByUUID: (uuid) => [...nylonQK.nylonTapeLog(), uuid],
 	//*Plastic Finishing
+	//*Tape Log
 	nylonPlasticFinishingTapeLog: () => [...nylonQK.all(), 'plastic-tape-log'],
 	nylonPlasticFinishingTapeLogByUUID: (uuid) => [
 		...nylonQK.nylonPlasticFinishingTapeLog(),
 	],
+	//* Production Log
+	nylonPlasticFinishingProductionLog: () => [
+		...metalQK.all(),
+		'tm-production-log',
+	],
+	nylonPlasticFinishingProductionLogByUUID: (uuid) => [
+		...metalQK.all(),
+		'tm-production-log',
+		uuid,
+	],
+	//* Trx Log
+	nylonPlasticFinishingTrxLog: () => [...nylonQK.all(), 'tm-trx-log'],
+	nylonPlasticFinishingTrxLogByUUID: (uuid) => [
+		...nylonQK.nylonPlasticFinishingTrxLog(),
+		uuid,
+	],
+
+	// * PRODUCTION
+	nylonPlasticProduction: () => [...metalQK.all(), 'tm-production'],
 };
 // *Vislon
 export const vislonQK = {

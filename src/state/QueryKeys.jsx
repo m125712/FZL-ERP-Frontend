@@ -631,8 +631,46 @@ export const sliderQK = {
 	],
 
 	// * Slider Assembly Transfer Entry
-	sliderAssemblyTransferEntry: () => [...sliderQK.all(), 'assembly-transfer-entry'],	
-	sliderAssemblyTransferEntryByUUID: (uuid) => [...sliderQK.sliderAssemblyTransferEntry(), uuid],
+	sliderAssemblyTransferEntry: () => [
+		...sliderQK.all(),
+		'assembly-transfer-entry',
+	],
+	sliderAssemblyTransferEntryByUUID: (uuid) => [
+		...sliderQK.sliderAssemblyTransferEntry(),
+		uuid,
+	],
+
+	// * Slider Assembly Log Production
+	sliderAssemblyLogProduction: () => [
+		...sliderQK.all(),
+		'assembly-log-production',
+	],
+	sliderAssemblyLogProductionByUUID: (uuid) => [
+		...sliderQK.sliderAssemblyLogProduction(),
+		uuid,
+	],
+	// * Slider Assembly Log Transaction
+	sliderAssemblyLogTransaction: () => [
+		...sliderQK.all(),
+		'assembly-log-transaction',
+	],
+	sliderAssemblyLogTransactionByUUID: (uuid) => [
+		...sliderQK.sliderAssemblyLogTransaction(),
+		uuid,
+	],
+
+	// * slider coloring log production
+
+	sliderColoringLogProduction: () => [
+		...sliderQK.all(),
+		'coloring-log-production',
+	],
+
+	// * slider coloring log transaction
+	sliderColoringLogTransaction: () => [
+		...sliderQK.all(),
+		'coloring-log-transaction',
+	],
 };
 //* Delivery
 

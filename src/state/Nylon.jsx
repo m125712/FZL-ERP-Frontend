@@ -2,6 +2,42 @@ import createGlobalState from '.';
 import { nylonQK } from './QueryKeys';
 
 //* Metallic Finishing
+// * Production
+export const useNylonMFProduction = (enabled = true) =>
+	createGlobalState({
+		queryKey: nylonQK.nylonMFProduction(),
+		url: '/zipper/sfg/by/finishing?item_name=nylon&stopper_type=metallic stopper',
+		enabled: enabled,
+	});
+
+//* Production Log
+export const useNylonMFProductionLog = () =>
+	createGlobalState({
+		queryKey: nylonQK.nylonMFProductionLog(),
+		url: '/zipper/sfg-production/by/finishing?item_name=nylon&stopper_type=metallic stopper',
+	});
+
+export const useNylonMFProductionLogByUUID = (uuid, { enabled = true }) =>
+	createGlobalState({
+		queryKey: nylonQK.nylonMFProductionLog(uuid),
+		url: `/zipper/sfg-production/${uuid}`,
+		enabled: enabled,
+	});
+
+//* Trx Log
+export const useNylonMFTrxLog = () =>
+	createGlobalState({
+		queryKey: nylonQK.nylonMFTrxLog(),
+		url: '/zipper/sfg-transaction/by/finishing_prod?item_name=nylon&stopper_type=metallic stopper',
+	});
+
+export const useNylonMFTrxLogByUUID = (uuid, { enabled = true }) =>
+	createGlobalState({
+		queryKey: nylonQK.nylonMFTrxLogByUUID(uuid),
+		url: `/zipper/sfg-transaction/${uuid}`,
+		enabled: enabled,
+	});
+
 // * RM
 export const useNylonMetallicFinishingRM = () =>
 	createGlobalState({

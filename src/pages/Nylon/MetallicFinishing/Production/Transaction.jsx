@@ -2,7 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useMetalTMProduction } from '@/state/Metal';
+import { useNylonMFProduction } from '@/state/Nylon';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
@@ -20,7 +20,7 @@ export default function Index({
 		style_color_size: null,
 		order_quantity: null,
 		balance_quantity: null,
-		teeth_molding_prod: null,
+		finishing_prod: null,
 		teeth_molding_stock: null,
 		total_trx_quantity: null,
 		metal_teeth_molding: null,
@@ -34,11 +34,16 @@ export default function Index({
 	},
 	setUpdateMFTRX,
 }) {
-	const { postData } = useMetalTMProduction();
+	const { postData } = useNylonMFProduction();
 	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, reset, control } = useRHF(
-		SFG_TRANSACTION_SCHEMA_IN_PCS,
+		{
+			...SFG_TRANSACTION_SCHEMA_IN_PCS,
+			trx_quantity: SFG_TRANSACTION_SCHEMA_IN_PCS.trx_quantity.max(
+				updateMFTRX?.finishing_prod
+			),
+		},
 		SFG_TRANSACTION_SCHEMA_IN_PCS_NULL
 	);
 
@@ -72,8 +77,8 @@ export default function Index({
 			uuid: nanoid(),
 			sfg_uuid: updateMFTRX?.sfg_uuid,
 			trx_quantity_in_kg: 0,
-			trx_from: 'teeth_molding_prod',
-			trx_to: 'teeth_coloring_stock',
+			trx_from: 'finishing_prod',
+			trx_to: 'warehouse',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
@@ -88,7 +93,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title='Teeth Molding ⇾ Teeth Coloring'
+			title='Finishing Production ⇾ Warehouse'
 			subTitle={`
 				${updateMFTRX.order_number} -> 
 				${updateMFTRX.item_description} -> 
@@ -100,7 +105,7 @@ export default function Index({
 			<JoinInput
 				title='Transaction Quantity'
 				label='trx_quantity'
-				sub_label={`MAX: ${Number(updateMFTRX?.teeth_molding_prod)} pcs`}
+				sub_label={`MAX: ${Number(updateMFTRX?.finishing_prod)} pcs`}
 				unit='PCS'
 				{...{ register, errors }}
 			/>

@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useMetalTMProduction } from '@/state/Metal';
+import { useNylonMFProduction } from '@/state/Nylon';
 import { LinkWithCopy, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useMemo, useState } from 'react';
@@ -10,7 +10,7 @@ const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
 
 export default function Index() {
-	const { data, url, isLoading } = useMetalTMProduction();
+	const { data, url, isLoading } = useNylonMFProduction();
 	const info = new PageInfo(
 		'Metallic Finishing Production',
 		url,
@@ -71,8 +71,15 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'teeth_molding_stock',
+				accessorKey: 'nylon_metallic_finishing',
 				header: 'Stock (KG)',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+
+			{
+				accessorKey: 'coloring_prod',
+				header: 'Slider Stock',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
@@ -90,14 +97,8 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'teeth_molding_prod',
-				header: (
-					<span>
-						Total Production
-						<br />
-						(PCS)
-					</span>
-				),
+				accessorKey: 'finishing_prod',
+				header: 'Production',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
@@ -114,14 +115,8 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'total_trx_quantity',
-				header: (
-					<span>
-						Total Transaction
-						<br />
-						(PCS)
-					</span>
-				),
+				accessorKey: 'warehouse',
+				header: 'Warehouse',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
@@ -149,15 +144,14 @@ export default function Index() {
 
 	const [updateMFProd, setUpdateMFProd] = useState({
 		sfg_uuid: null,
-		order_number: null,
-		item_description: null,
-		style_color_size: null,
-		order_quantity: null,
+		section: null,
+		coloring_prod: null,
 		balance_quantity: null,
-		teeth_molding_prod: null,
-		teeth_molding_stock: null,
-		total_trx_quantity: null,
-		metal_teeth_molding: null,
+		nylon_metallic_finishing: null,
+		production_quantity_in_kg: null,
+		production_quantity: null,
+		wastage: null,
+		remarks: null,
 	});
 	const handelProduction = (idx) => {
 		const val = data[idx];
@@ -177,6 +171,7 @@ export default function Index() {
 		trx_from: null,
 		trx_to: null,
 		remarks: '',
+		finishing_prod: null,
 	});
 	const handelTransaction = (idx) => {
 		const val = data[idx];

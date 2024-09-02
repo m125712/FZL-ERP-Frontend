@@ -36,6 +36,9 @@ const MetalFinishingRMStock = lazy(
 );
 const MetalFinishingSFG = lazy(() => import('@/pages/Metal/Finishing/SFG'));
 const MetalFinishingTrxLog = lazy(() => import('@/pages/Metal/Finishing/Log'));
+const MetalFinishingProduction = lazy(
+	() => import('@/pages/Metal/Finishing/Production')
+);
 
 export const MetalRoutes = [
 	{
@@ -176,6 +179,22 @@ export const MetalRoutes = [
 			'click_delete_rm',
 			'click_update_rm_order',
 			'click_delete_rm_order',
+		],
+	},
+
+	{
+		id: 301,
+		name: 'Production',
+		path: '/metal/finishing/production',
+		element: MetalFinishingProduction,
+		type: ['metal', 'finishing'],
+		page_name: 'metal__finishing_production',
+		actions: [
+			'create',
+			'read',
+			'update',
+			'click_production',
+			'click_transaction',
 		],
 	},
 ];

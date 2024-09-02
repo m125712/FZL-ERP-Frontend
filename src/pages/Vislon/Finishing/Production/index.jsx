@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useVislonTMP } from '@/state/Vislon';
+import { useVislonFinishingProd } from '@/state/Vislon';
 import { LinkWithCopy, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useMemo, useState } from 'react';
@@ -10,15 +10,13 @@ const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
 
 export default function Index() {
-	const { data, isLoading } = useVislonTMP();
+	const { data, isLoading } = useVislonFinishingProd();
 	const info = new PageInfo(
 		'Finishing Production',
 		'/vislon/finishing/production',
 		'vislon__finishing_production'
 	);
 	const haveAccess = useAccess('vislon__finishing_production');
-
-	console.log(data);
 
 	// * columns
 	const columns = useMemo(
@@ -90,9 +88,9 @@ export default function Index() {
 				accessorKey: 'finishing_prod',
 				header: (
 					<span>
-						Total Production
+						Production
 						<br />
-						(KG)
+						(PCS)
 					</span>
 				),
 				enableColumnFilter: false,
@@ -112,12 +110,12 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'total_trx_quantity',
+				accessorKey: 'warehouse',
 				header: (
 					<span>
-						Total Transaction
+						Warehouse
 						<br />
-						(KG)
+						(PCS)
 					</span>
 				),
 				enableColumnFilter: false,
@@ -145,12 +143,13 @@ export default function Index() {
 		[data]
 	);
 
-	const [updateTeethMoldingProd, setUpdateTeethMoldingProd] = useState({
+	const [updateFinishingProd, setUpdateFinishingProd] = useState({
 		uuid: null,
 		sfg_uuid: null,
 		section: null,
 		production_quantity_in_kg: null,
 		production_quantity: null,
+		coloring_prod: null,
 		wastage: null,
 		remarks: '',
 	});
@@ -158,7 +157,7 @@ export default function Index() {
 	const handelProduction = (idx) => {
 		const val = data[idx];
 
-		setUpdateTeethMoldingProd((prev) => ({
+		setUpdateFinishingProd((prev) => ({
 			...prev,
 			...val,
 		}));
@@ -166,10 +165,11 @@ export default function Index() {
 		window['TeethMoldingProdModal'].showModal();
 	};
 
-	const [updateTeethMoldingTRX, setUpdateTeethMoldingTRX] = useState({
+	const [updateFinishingTRX, setUpdateFinishingTRX] = useState({
 		uuid: null,
 		sfg_uuid: null,
 		trx_quantity_in_kg: null,
+		trx_quantity: null,
 		trx_from: null,
 		trx_to: null,
 		remarks: '',
@@ -177,7 +177,7 @@ export default function Index() {
 	const handelTransaction = (idx) => {
 		const val = data[idx];
 
-		setUpdateTeethMoldingTRX((prev) => ({
+		setUpdateFinishingTRX((prev) => ({
 			...prev,
 			...val,
 		}));
@@ -201,8 +201,8 @@ export default function Index() {
 				<Production
 					modalId='TeethMoldingProdModal'
 					{...{
-						updateTeethMoldingProd,
-						setUpdateTeethMoldingProd,
+						updateFinishingProd,
+						setUpdateFinishingProd,
 					}}
 				/>
 			</Suspense>
@@ -210,8 +210,8 @@ export default function Index() {
 				<Transaction
 					modalId='TeethMoldingTrxModal'
 					{...{
-						updateTeethMoldingTRX,
-						setUpdateTeethMoldingTRX,
+						updateFinishingTRX,
+						setUpdateFinishingTRX,
 					}}
 				/>
 			</Suspense>

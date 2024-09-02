@@ -71,12 +71,23 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'teeth_coloring_stock',
-				header: 'Teeth Coloring Stock',
+				accessorKey: 'finishing_stock',
+				header: 'Finishing Stock',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-
+			{
+				accessorKey: 'coloring_prod',
+				header: (
+					<span>
+						Coloring Prod
+						<br />
+						(PCS)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
 			{
 				accessorKey: 'actions_add_production',
 				header: 'Add Production',
@@ -90,10 +101,10 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'teeth_coloring_prod',
+				accessorKey: 'finishing_prod',
 				header: (
 					<span>
-						Total Production
+						Production
 						<br />
 						(PCS)
 					</span>
@@ -114,10 +125,10 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'total_trx_quantity',
+				accessorKey: 'warehouse',
 				header: (
 					<span>
-						Total Transaction
+						Warehouse
 						<br />
 						(PCS)
 					</span>

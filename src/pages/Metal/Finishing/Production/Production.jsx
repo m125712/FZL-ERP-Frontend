@@ -33,6 +33,7 @@ export default function Index({
 	const MAX_PROD_PCS = Number(updateFinishingProd.balance_quantity).toFixed(
 		0
 	);
+
 	const MAX_PROD_KG = Number(
 		updateFinishingProd.teeth_coloring_stock
 	).toFixed(3);
@@ -44,10 +45,6 @@ export default function Index({
 	const MAX_WASTAGE_KG = Number(
 		MAX_PROD_PCS - (watch('production_quantity') || 0)
 	).toFixed(3);
-
-	console.log({
-		MAX_WASTAGE_KG,
-	});
 
 	const onClose = () => {
 		setUpdateFinishingProd((prev) => ({
@@ -71,7 +68,7 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			sfg_uuid: updateFinishingProd?.sfg_uuid,
-			section: 'teeth_coloring',
+			section: 'finishing',
 			production_quantity_in_kg: 0,
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
@@ -87,7 +84,7 @@ export default function Index({
 	return (
 		<AddModal
 			id='FinishingProdModal'
-			title={'Metal/Finishing/Production'}
+			title={'Finishing Production'}
 			subTitle={`
 				${updateFinishingProd.order_number} -> 
 				${updateFinishingProd.item_description} -> 

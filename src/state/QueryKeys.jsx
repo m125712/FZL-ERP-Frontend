@@ -367,8 +367,8 @@ export const nylonQK = {
 // *Vislon
 export const vislonQK = {
 	all: () => ['vislon'],
-	//* Teeth Molding
 
+	//* Teeth Molding
 	// * RM
 	VislonTMRM: () => [...vislonQK.all(), 'tm-rm'],
 	VislonTMRMByUUID: (uuid) => [...vislonQK.VislonTMRM(), uuid],
@@ -384,34 +384,6 @@ export const vislonQK = {
 	],
 	orderAgainstVislonTMRMLogByUUID: (uuid) => [
 		...vislonQK.orderAgainstVislonTMRMLog(),
-		uuid,
-	],
-
-	// * Finishing
-
-	//*RM
-	VislonFinishingRM: () => [...vislonQK.all(), 'fin-rm'],
-	VislonFinishingRMByUUID: (uuid) => [
-		...vislonQK.VislonFinishingRM(),
-		'rm',
-		uuid,
-	],
-
-	//*RM Log
-	VislonFinishingRMLog: () => [...vislonQK.all(), 'fin-rm-log'],
-	VislonFinishingRMLogByUUID: (uuid) => [
-		...vislonQK.VislonFinishingRMLog(),
-		'rm-log',
-		uuid,
-	],
-
-	// * Order Against vislonFinishing RM Log * //
-	orderAgainstVislonFinishingRMLog: () => [
-		...vislonQK.all(),
-		'vislonFinishing/order-against-rm-log',
-	],
-	orderAgainstVislonFinishingRMLogByUUID: (uuid) => [
-		...vislonQK.orderAgainstVislonFinishingRMLog(),
 		uuid,
 	],
 
@@ -441,6 +413,46 @@ export const vislonQK = {
 	//* Vislon Teeth Molding Tape Log
 	vislonTMTapeLog: () => [...vislonQK.all(), 'vislonTMTapeLog'],
 	vislonTMTapeLogByUUID: (uuid) => [...vislonQK.vislonTMTapeLog(), uuid],
+
+	// * Finishing
+	//*RM
+	VislonFinishingRM: () => [...vislonQK.all(), 'fin-rm'],
+	VislonFinishingRMByUUID: (uuid) => [
+		...vislonQK.VislonFinishingRM(),
+		'rm',
+		uuid,
+	],
+
+	//*RM Log
+	VislonFinishingRMLog: () => [...vislonQK.all(), 'fin-rm-log'],
+	VislonFinishingRMLogByUUID: (uuid) => [
+		...vislonQK.VislonFinishingRMLog(),
+		'rm-log',
+		uuid,
+	],
+
+	// * Order Against vislonFinishing RM Log * //
+	orderAgainstVislonFinishingRMLog: () => [
+		...vislonQK.all(),
+		'vislonFinishing/order-against-rm-log',
+	],
+	orderAgainstVislonFinishingRMLogByUUID: (uuid) => [
+		...vislonQK.orderAgainstVislonFinishingRMLog(),
+		uuid,
+	],
+
+	// * finishing  Production & Transaction combined data
+	vislonFinishingProd: () => [...vislonQK.all(), 'vislonFinishingProd'],
+	vislonFinishingProdByUUID: (uuid) => [
+		...vislonQK.vislonFinishingProd(),
+		uuid,
+	],
+
+	// * Finishing Production Log
+	vislonFinishingProdLog: () => [...vislonQK.all(), 'vislonFinishingProdLog'],
+
+	// * Finishing Transaction Log
+	vislonFinishingTrxLog: () => [...vislonQK.all(), 'vislonFinishingTrxLog'],
 };
 
 // * Metal
@@ -509,6 +521,12 @@ export const metalQK = {
 		...metalQK.orderAgainstmetalFinishingRMLog(),
 		uuid,
 	],
+
+	// * Finishing  Production log
+	metalFinishingProdLog: () => [...metalQK.all(), 'finishingProdLog'],
+
+	// * Finishing Transaction Log
+	metalFinishingTrxLog: () => [...metalQK.all(), 'finishingTrxLog'],
 
 	//* Teeth Coloring
 	// * PRODUCTION

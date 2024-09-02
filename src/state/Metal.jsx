@@ -187,3 +187,18 @@ export const useOrderAgainstMetalFinishingRMLogByUUID = (uuid) =>
 		queryKey: metalQK.orderAgainstMetalFinishingRMLogByUUID(uuid),
 		url: `/zipper/material-trx-against-order/multiple/by/m_gapping,m_teeth_cleaning,m_sealing,m_stopper${uuid}`,
 	});
+
+// * Finishing production log
+export const useMetalFinishingProdLog = () =>
+	createGlobalState({
+		queryKey: metalQK.metalFinishingProdLog(),
+		url: '/zipper/sfg-production/by/finishing?item_name=metal',
+	});
+
+// * Finishing transaction log
+export const useMetalFinishingTrxLog = () =>
+	createGlobalState({
+		queryKey: metalQK.metalFinishingTrxLog(),
+		url: '/zipper/sfg-transaction/by/finishing_prod?item_name=metal',
+	});
+

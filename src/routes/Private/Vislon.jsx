@@ -30,8 +30,9 @@ const VislonFinishingProduction = lazy(
 	() => import('@/pages/Vislon/Finishing/Production')
 );
 
-
 export const VislonRoutes = [
+
+	// * Teeth Molding
 	{
 		id: 41,
 		name: 'RM',
@@ -69,41 +70,6 @@ export const VislonRoutes = [
 			'click_delete_tape',
 		],
 	},
-	{
-		id: 42,
-		name: 'RM',
-		path: '/vislon/finishing/rm',
-		element: VislonFinishing,
-		type: ['vislon', 'finishing'],
-		page_name: 'vislon__finishing_rm',
-		actions: ['read', 'click_name', 'click_used'],
-	},
-	{
-		id: 421,
-		name: 'SFG',
-		path: '/vislon/finishing/sfg',
-		element: VislonFinishingSFG,
-		type: ['vislon', 'finishing'],
-		page_name: 'vislon__finishing_sfg',
-		actions: ['read', 'click_production'],
-	},
-	{
-		id: 422,
-		name: 'Log',
-		path: '/vislon/finishing/log',
-		element: VislonFinishingTrxLog,
-		type: ['vislon', 'finishing'],
-		page_name: 'vislon__finishing_log',
-		actions: [
-			'read',
-			'click_update_sfg',
-			'click_delete_sfg',
-			'click_update_rm',
-			'click_delete_rm',
-			'click_update_rm_order',
-			'click_delete_rm_order',
-		],
-	},
 
 	// * Teeth molding Production
 	{
@@ -122,6 +88,43 @@ export const VislonRoutes = [
 		],
 	},
 
+	// * Finishing 
+	{
+		id: 42,
+		name: 'RM',
+		path: '/vislon/finishing/rm',
+		element: VislonFinishing,
+		type: ['vislon', 'finishing'],
+		page_name: 'vislon__finishing_rm',
+		actions: ['read', 'click_name', 'click_used'],
+	},
+	{
+		id: 421,
+		name: 'SFG',
+		path: '/vislon/finishing/sfg',
+		element: VislonFinishingSFG,
+		type: ['vislon', 'finishing'],
+		page_name: 'vislon__finishing_sfg',
+		actions: ['read', 'click_production'],
+	},
+	// * Finishing log
+	{
+		id: 422,
+		name: 'Log',
+		path: '/vislon/finishing/log',
+		element: VislonFinishingTrxLog,
+		type: ['vislon', 'finishing'],
+		page_name: 'vislon__finishing_log',
+		actions: [
+			'read',
+			'click_update_sfg',
+			'click_delete_sfg',
+			'click_update_rm',
+			'click_delete_rm',
+			'click_update_rm_order',
+			'click_delete_rm_order',
+		],
+	},
 	// * Finishing Production
 	{
 		id: 44,

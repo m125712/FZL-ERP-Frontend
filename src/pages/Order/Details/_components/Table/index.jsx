@@ -1,7 +1,7 @@
-import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useMemo } from 'react';
 import getColumn from './Column';
+import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
 
 export default function Index({
 	item_name,
@@ -25,15 +25,10 @@ export default function Index({
 	);
 
 	return (
-		<ReactTable
+		<ReactTableWithTitle
 			title='Details'
-			titleClassName='text-primary-content'
-			headerClassName='px-4 py-3 bg-primary border border-secondary/30 border-b-0 mb-0 rounded-t-md'
-			containerClassName='mb-0 rounded-t-none'
 			data={order_entry}
 			columns={columns}
-			extraClass='py-2'
-			showTitleOnly
 		/>
 	);
 }

@@ -1,4 +1,4 @@
-import ReactTable from '@/components/Table';
+import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
 import { DateTime, LinkWithCopy } from '@/ui';
 import { useMemo } from 'react';
 
@@ -46,12 +46,6 @@ export default function Index({ recipe }) {
 	);
 
 	return (
-		<ReactTable
-			title='Details'
-			data={recipe}
-			columns={columns}
-			extraClass='py-2'
-			showTitleOnly
-		/>
+		<ReactTableWithTitle title='Details' data={recipe} columns={columns} />
 	);
 }

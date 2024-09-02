@@ -20,7 +20,7 @@ const Header = ({ title, subTitle, onClose }) => (
 
 const Footer = () => (
 	<div className='modal-action'>
-		<button type='submit' className='text-md btn btn-primary btn-block'>
+		<button type='submit' className='text-md btn btn-accent btn-block'>
 			Save
 		</button>
 	</div>

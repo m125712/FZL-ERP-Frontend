@@ -74,8 +74,6 @@ export default function Index() {
 			}
 		}
 	}, [watch('uuid')]);
-	const data = getValues('batch_entry');
-	console.log(getValues(), 'data');
 
 	// Transfer
 	const [transfer, setTransfer] = useState({
@@ -153,7 +151,7 @@ export default function Index() {
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	return (
-		<div className='container mx-auto mt-4 px-2 pb-2 md:px-4'>
+		<div>
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}

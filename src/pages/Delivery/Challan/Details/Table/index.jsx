@@ -1,61 +1,61 @@
-import ReactTable from "@/components/Table";
-import { DateTime } from "@/ui";
-import { useMemo } from "react";
+import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
+import { DateTime } from '@/ui';
+import { useMemo } from 'react';
 
 export default function Index({ challan }) {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: "item_description",
-				header: "Item Description",
+				accessorKey: 'item_description',
+				header: 'Item Description',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "style",
-				header: "Style",
+				accessorKey: 'style',
+				header: 'Style',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "color",
-				header: "Color",
+				accessorKey: 'color',
+				header: 'Color',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "size",
-				header: "Size",
+				accessorKey: 'size',
+				header: 'Size',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "delivery_quantity",
-				header: "Delivery QTY",
+				accessorKey: 'delivery_quantity',
+				header: 'Delivery QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "remarks",
-				header: "Remarks",
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: "created_at",
-				header: "Created",
-				filterFn: "isWithinRange",
+				accessorKey: 'created_at',
+				header: 'Created',
+				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
-				width: "w-24",
+				width: 'w-24',
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
 			{
-				accessorKey: "updated_at",
-				header: "Updated",
+				accessorKey: 'updated_at',
+				header: 'Updated',
 				enableColumnFilter: false,
-				width: "w-24",
+				width: 'w-24',
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
@@ -65,12 +65,6 @@ export default function Index({ challan }) {
 	);
 
 	return (
-		<ReactTable
-			title="Details"
-			data={challan}
-			columns={columns}
-			extraClass="py-2"
-			showTitleOnly
-		/>
+		<ReactTableWithTitle title='Details' data={challan} columns={columns} />
 	);
 }

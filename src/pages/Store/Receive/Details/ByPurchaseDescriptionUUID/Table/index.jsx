@@ -1,4 +1,5 @@
 import ReactTable from '@/components/Table';
+import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
 
 import { DateTime } from '@/ui';
 import { useMemo } from 'react';
@@ -62,13 +63,10 @@ export default function Index({ purchase }) {
 	);
 
 	return (
-		<ReactTable
-			headerClassName='px-4 py-3 bg-secondary-content/5 mb-0 rounded-t'
+		<ReactTableWithTitle
 			title='Details'
 			data={purchase}
 			columns={columns}
-			extraClass='py-2'
-			showTitleOnly
 		/>
 	);
 }

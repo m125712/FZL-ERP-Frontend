@@ -110,7 +110,7 @@ export default function Index() {
 		: useFetchForRhfResetForPlanning(`/thread/order-batch`, reset);
 
 	// const { value } = useFetch('/zipper/order-batch');
-		
+
 	// TODO: Not sure if this is needed. need further checking
 	let order_info_ids;
 	// useEffect(() => {
@@ -457,7 +457,7 @@ export default function Index() {
 	);
 
 	return (
-		<div className='container mx-auto mt-4 px-2 pb-2 md:px-4'>
+		<div>
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}
@@ -483,8 +483,8 @@ export default function Index() {
 
 				<div className='modal-action'>
 					<button
-						className='text-md btn btn-primary btn-block' onClick={() => setProceed(true)}>
-						
+						className='text-md btn btn-primary btn-block'
+						onClick={() => setProceed(true)}>
 						Save
 					</button>
 				</div>

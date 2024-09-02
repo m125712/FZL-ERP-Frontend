@@ -15,8 +15,12 @@ const RenderTable = ({ items, title, className }) => {
 							<tr
 								key={index}
 								className='cursor-pointer transition-colors duration-100 hover:bg-base-200/50'>
-								<th className='capitalize'>{item.label}</th>
-								<td>{item.value || '--'}</td>
+								<th className='w-1/2 capitalize text-primary'>
+									{item.label}
+								</th>
+								<td className='w-1/2 text-primary'>
+									{item.value || '--'}
+								</td>
 							</tr>
 						))}
 					</tbody>

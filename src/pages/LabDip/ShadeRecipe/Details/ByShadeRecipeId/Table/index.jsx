@@ -1,4 +1,4 @@
-import ReactTable from '@/components/Table';
+import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
 
 import { DateTime } from '@/ui';
 import { useMemo } from 'react';
@@ -54,13 +54,10 @@ export default function Index({ shade_recipe_entry }) {
 	);
 
 	return (
-		<ReactTable
-			headerClassName='px-4 py-3 bg-secondary-content/5 mb-0 rounded-t'
+		<ReactTableWithTitle
 			title='Details'
 			data={shade_recipe_entry}
 			columns={columns}
-			extraClass='py-2'
-			showTitleOnly
 		/>
 	);
 }

@@ -20,7 +20,7 @@ export default function TableHead({ getHeaderGroups, getPreFilteredRowModel }) {
 								key={id}
 								colSpan={colSpan}
 								className={clsx(
-									'group whitespace-nowrap px-3 py-2 text-left font-semibold tracking-wide text-primary first:pl-6',
+									'group space-y-1 whitespace-nowrap px-3 py-2 text-left font-semibold tracking-wide text-primary first:pl-6',
 									column.getCanSort()
 										? 'cursor-pointer select-none transition duration-300 hover:bg-secondary/10'
 										: null

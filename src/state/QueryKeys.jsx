@@ -466,11 +466,6 @@ export const metalQK = {
 	metalTMTapeLog: () => [...metalQK.all(), 'tm-tape-log'],
 	metalTMTapeLogByUUID: (uuid) => [...metalQK.all(), 'tm-tape-log', uuid],
 
-	//* Tape Log
-
-	metalTMTapeLog: () => [...metalQK.all(), 'tm-tape-log'],
-	metalTMTapeLogByUUID: (uuid) => [...metalQK.all(), 'tm-tape-log', uuid],
-
 	// * PRODUCTION
 	metalTMProduction: () => [...metalQK.all(), 'tm-production'],
 

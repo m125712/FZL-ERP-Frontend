@@ -108,63 +108,6 @@ export default function Index({ sfg }) {
 	// TODO Submit
 	const onSubmit = async (data) => {
 		const DEFAULT_SWATCH_APPROVAL_DATE = null;
-		// * Update data * //
-		// if (isUpdate) {
-		// 	// * updated order description * //
-		// 	const order_description_updated = {
-		// 		...data,
-		// 		is_slider_provided: data?.is_slider_provided ? 1 : 0,
-		// 		is_logo_body: data?.is_logo_body ? 1 : 0,
-		// 		is_logo_puller: data?.is_logo_puller ? 1 : 0,
-		// 		hand: data?.hand,
-		// 		updated_at: GetDateTime(),
-		// 	};
-		// 	await updateData.mutateAsync({
-		// 		url: `/zipper/order-description/${data?.order_description_uuid}`,
-		// 		updatedData: order_description_updated,
-		// 		isOnCloseNeeded: false,
-		// 	});
-		// 	// * updated order entry * //
-		// 	const order_entry_updated = [...data.order_entry].map((item) => ({
-		// 		...item,
-		// 		status: item.order_entry_status ? 1 : 0,
-		// 		swatch_status: 'pending',
-		// 		swatch_approval_date: DEFAULT_SWATCH_APPROVAL_DATE,
-		// 		updated_at: GetDateTime(),
-		// 	}));
-		// 	//* Post new entry */ //
-		// 	let order_entry_updated_promises = [
-		// 		...order_entry_updated.map(async (item) => {
-		// 			if (item.order_description_uuid) {
-		// 				await updateData.mutateAsync({
-		// 					url: `/zipper/order-entry/${item.order_description_uuid}`,
-		// 					updatedData: item,
-		// 					isOnCloseNeeded: false,
-		// 				});
-		// 			} else {
-		// 				await postData.mutateAsync({
-		// 					url: '/zipper/order-entry',
-		// 					newData: {
-		// 						...item,
-		// 						uuid: nanoid(),
-		// 						status: item.order_entry_status ? 1 : 0,
-		// 						swatch_status: 'pending',
-		// 						swatch_approval_date:
-		// 							DEFAULT_SWATCH_APPROVAL_DATE,
-		// 						order_description_uuid:
-		// 							data?.order_description_uuid,
-		// 						created_at: GetDateTime(),
-		// 					},
-		// 					isOnCloseNeeded: false,
-		// 				});
-		// 			}
-		// 		}),
-		// 	];
-		// 	navigate(
-		// 		`/order/details/${order_number}/${order_description_uuid}`
-		// 	);
-		// 	return;
-		// }
 
 		// * Add new data entry
 		const created_at = GetDateTime();
@@ -183,7 +126,7 @@ export default function Index({ sfg }) {
 					await postData.mutateAsync({
 						url: '/zipper/dyed-tape-transaction',
 						newData: item,
-						isOnCloseNeeded: false,
+						onClose,
 					})
 			),
 		];
@@ -203,7 +146,11 @@ export default function Index({ sfg }) {
 	const handelDuplicateDynamicField = useCallback(
 		(index) => {
 			const item = getValues(`dyeing_transfer_entry[${index}]`);
-			EntryAppend({ ...item, order_description_uuid: undefined });
+			EntryAppend({
+				...item,
+				order_description_uuid: undefined,
+				// section: watch(`dyeing_transfer_entry[${index}].section`),
+			});
 		},
 		[getValues, EntryAppend]
 	);
@@ -282,7 +229,7 @@ export default function Index({ sfg }) {
 							<th
 								key={item}
 								scope='col'
-								className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide transition duration-300 first:pl-2'>
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
 								{item}
 							</th>
 						))}>

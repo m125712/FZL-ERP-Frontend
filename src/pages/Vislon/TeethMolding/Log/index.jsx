@@ -10,10 +10,10 @@ export default function Index() {
 	}, []);
 	return (
 		<div>
-			{/* <SFGProductionLog />
+			<SFGProductionLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<SFGTransferLog />
-			<hr className='my-6 border-2 border-dashed border-secondary-content' /> */}
+			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<RMTransferLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<RMOrderAgainstLog />

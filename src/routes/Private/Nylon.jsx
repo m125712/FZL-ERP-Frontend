@@ -1,25 +1,31 @@
-import { lazy } from "react";
+import { lazy } from 'react';
 
 //MetallicFinishing
 const NylonMetallicFinishing = lazy(
-	() => import("@/pages/Nylon/MetallicFinishing/RMStock/RMStock")
+	() => import('@/pages/Nylon/MetallicFinishing/RMStock/RMStock')
 );
 const NylonMetallicFinishingSFG = lazy(
-	() => import("@/pages/Nylon/MetallicFinishing/SFG")
+	() => import('@/pages/Nylon/MetallicFinishing/SFG')
 );
 const NylonMetallicFinishingTrxLog = lazy(
-	() => import("@/pages/Nylon/MetallicFinishing/Log")
+	() => import('@/pages/Nylon/MetallicFinishing/Log')
+);
+const NylonMetallicFinishingProduction = lazy(
+	() => import('@/pages/Nylon/MetallicFinishing/Production')
 );
 
 // Hole Punch
 const NylonPlasticFinishing = lazy(
-	() => import("@/pages/Nylon/PlasticFinishing/RMStock/RMStock")
+	() => import('@/pages/Nylon/PlasticFinishing/RMStock/RMStock')
 );
 const NylonPlasticFinishingSFG = lazy(
-	() => import("@/pages/Nylon/PlasticFinishing/SFG")
+	() => import('@/pages/Nylon/PlasticFinishing/SFG')
 );
 const NylonPlasticFinishingTrxLog = lazy(
-	() => import("@/pages/Nylon/PlasticFinishing/Log")
+	() => import('@/pages/Nylon/PlasticFinishing/Log')
+);
+const NylonPlasticFinishingProduction = lazy(
+	() => import('@/pages/Nylon/PlasticFinishing/Production')
 );
 
 export const NylonRoutes = [
@@ -58,6 +64,22 @@ export const NylonRoutes = [
 			'click_delete_rm_order',
 		],
 	},
+
+	{
+		id: 301,
+		name: 'Production',
+		path: '/nylon/metallic-finishing/production',
+		element: NylonMetallicFinishingProduction,
+		type: ['nylon', 'metallic-finishing'],
+		page_name: 'nylon__metallic_finishing_production',
+		actions: [
+			'create',
+			'read',
+			'update',
+			'click_production',
+			'click_transaction',
+		],
+	},
 	{
 		id: 38,
 		name: 'RM',
@@ -91,6 +113,22 @@ export const NylonRoutes = [
 			'click_delete_rm',
 			'click_update_rm_order',
 			'click_delete_rm_order',
+		],
+	},
+
+	{
+		id: 301,
+		name: 'Production',
+		path: '/nylon/plastic-finishing/production',
+		element: NylonPlasticFinishingProduction,
+		type: ['nylon', 'plastic-finishing'],
+		page_name: 'nylon__plastic_finishing_production',
+		actions: [
+			'create',
+			'read',
+			'update',
+			'click_production',
+			'click_transaction',
 		],
 	},
 ];

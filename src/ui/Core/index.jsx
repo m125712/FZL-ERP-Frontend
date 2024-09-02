@@ -15,7 +15,7 @@ export const Input = ({ register, ...props }) => (
 	<FormField {...props}>
 		<input
 			className={cn(
-				'input input-secondary bg-base-100 w-full rounded border-secondary/30 px-2 text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-secondary/50 focus:border-secondary/30 focus:outline-secondary/30',
+				'input input-secondary w-full rounded border-secondary/30 bg-base-100 px-2 text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-secondary/50 focus:border-secondary/30 focus:outline-secondary/30',
 				props?.width,
 				props?.height,
 				props?.className
@@ -65,7 +65,7 @@ export const PasswordInput = ({ register, ...props }) => {
 	const [show, setShow] = useState(false);
 	return (
 		<FormField {...props}>
-			<label className='input input-bordered input-primary flex items-center gap-2 rounded px-2 text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-primary/20'>
+			<label className='input input-secondary flex items-center gap-2 rounded border-secondary/30 px-2 text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-primary/20'>
 				<input
 					type={show ? 'text' : 'password'}
 					className={cn(props?.width ? props.width : 'w-full')}
@@ -209,7 +209,7 @@ export const Radio = ({ register, checker = 0, value, rest, ...props }) => (
 export const Textarea = ({ register, ...props }) => (
 	<FormField {...props}>
 		<textarea
-			className='textarea textarea-secondary bg-base-100 w-full border-secondary/30 text-primary focus:border-secondary/30 focus:outline-secondary/30'
+			className='textarea textarea-secondary w-full border-secondary/30 bg-base-100 text-primary focus:border-secondary/30 focus:outline-secondary/30'
 			rows={props.rows ? props.rows : 1}
 			{...register(props.label)}
 			{...props}
@@ -221,7 +221,7 @@ export const FileInput = ({ register, ...props }) => (
 	<FormField {...props}>
 		<input
 			type='file'
-			className='file-input file-input-bordered file-input-primary file-input-sm w-full'
+			className='file-input file-input-bordered file-input-primary file-input-sm w-full bg-base-100'
 			{...register(props.label)}
 			{...props}
 		/>
@@ -233,13 +233,13 @@ export const JoinInput = ({ register, ...props }) => (
 		<div className='join w-full'>
 			<input
 				className={cn(
-					'input join-item input-primary rounded border-primary/30 bg-primary/5 px-2 text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-primary/20',
+					'input join-item input-secondary rounded border-secondary/30 bg-base-100 px-2 text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-primary/20 focus:border-secondary/30 focus:outline-secondary/30',
 					props?.width ? props.width : 'w-full'
 				)}
 				{...register(props.label)}
 				{...props}
 			/>
-			<span className='btn-bordered btn btn-primary join-item'>
+			<span className='btn-bordered btn btn-accent join-item'>
 				{props.unit}
 			</span>
 		</div>
@@ -250,16 +250,19 @@ export const JoinInputSelect = ({ register, ...props }) => (
 	<FormField {...props}>
 		<div className='join'>
 			<input
-				className='input join-item input-primary w-full border-primary/30 bg-primary/5 text-primary transition-all duration-100 ease-in-out'
+				className='input join-item input-secondary w-full border-secondary/30 bg-base-100 text-primary transition-all duration-100 ease-in-out focus:border-secondary/30 focus:outline-secondary/30'
 				id={props.label}
 				{...register(props?.label)}
 			/>
 
 			<select
-				className='join-item select select-primary border-primary/30 bg-primary text-white'
+				className='join-item select select-accent border-0 bg-accent text-white'
 				{...register(props.join)}>
 				{props.option?.map((item, index) => (
-					<option key={index} value={item.value}>
+					<option
+						className='bg-base-100 text-primary focus:bg-secondary'
+						key={index}
+						value={item.value}>
 						{item.label}
 					</option>
 				))}

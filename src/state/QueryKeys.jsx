@@ -415,7 +415,6 @@ export const vislonQK = {
 	vislonTMT: () => [...vislonQK.all(), 'vislonTMT'],
 	vislonTMTByUUID: (uuid) => [...vislonQK.vislonTMT(), uuid],
 
-
 	// * Vislon Teeth Molding Production Entry
 	vislonTMPEntry: () => [...vislonQK.all(), 'vislonTMPEntry'],
 	vislonTMPEntryByUUID: (uuid) => [...vislonQK.vislonTMPEntry(), uuid],
@@ -423,11 +422,11 @@ export const vislonQK = {
 	// * Vislon Teeth Molding Transaction Entry
 	vislonTMTEntry: () => [...vislonQK.all(), 'vislonTMTEntry'],
 	vislonTMTEntryByUUID: (uuid) => [...vislonQK.vislonTMTEntry(), uuid],
-	
+
 	// * Vislon Teeth Molding Production Log
 	vislonTMPLog: () => [...vislonQK.all(), 'vislonTMPLog'],
 	vislonTMPLogByUUID: (uuid) => [...vislonQK.vislonTMPLog(), uuid],
-	
+
 	// * Vislon Teeth Molding Transaction Log
 	vislonTMTLog: () => [...vislonQK.all(), 'vislonTMTLog'],
 	vislonTMTLogByUUID: (uuid) => [...vislonQK.vislonTMTLog(), uuid],
@@ -633,6 +632,27 @@ export const sliderQK = {
 		...sliderQK.orderAgainstSliderColorRMLog(),
 		uuid,
 	],
+
+	// * Slider Assembly Production
+	sliderAssemblyProduction: () => [...sliderQK.all(), 'assembly-production'],
+	sliderAssemblyProductionByUUID: (uuid) => [
+		...sliderQK.sliderAssemblyProduction(),
+		uuid,
+	],
+
+	// * Slider Assembly Production Entry
+	sliderAssemblyProductionEntry: () => [
+		...sliderQK.all(),
+		'assembly-production-entry',
+	],
+	sliderAssemblyProductionEntryByUUID: (uuid) => [
+		...sliderQK.sliderAssemblyProductionEntry(),
+		uuid,
+	],
+
+	// * Slider Assembly Transfer Entry
+	sliderAssemblyTransferEntry: () => [...sliderQK.all(), 'assembly-transfer-entry'],	
+	sliderAssemblyTransferEntryByUUID: (uuid) => [...sliderQK.sliderAssemblyTransferEntry(), uuid],
 };
 //* Delivery
 

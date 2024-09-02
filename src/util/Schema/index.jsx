@@ -1063,6 +1063,33 @@ export const SLIDER_SLIDER_ASSEMBLY_NULL = {
 	],
 };
 
+// * Slider Assembly Production entry
+
+export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA = {
+	production_quantity: NUMBER_REQUIRED,
+	wastage: NUMBER.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? 0 : value
+	),
+	remarks: STRING.nullable(),
+};
+
+export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL = {
+	production_quantity: null,
+	wastage: null,
+	remarks: '',
+};
+
+// * Slider Assembly Transaction entry
+export const SLIDER_ASSEMBLY_TRANSACTION_SCHEMA = {
+	trx_quantity: NUMBER_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const SLIDER_ASSEMBLY_TRANSACTION_NULL = {
+	trx_quantity: null,
+	remarks: '',
+};
+
 // Item Library (Die Casting, Slider Assembly)
 
 export const ITEM_LIBRARY_SCHEMA = {

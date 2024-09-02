@@ -4,7 +4,11 @@ import { lazy } from 'react';
 // * Info
 const SliderDashboardInfo = lazy(() => import('@/pages/Slider/Dashboard/Info'));
 
-// Coloring
+// * Coloring
+
+const SliderColoringProduction = lazy(
+	() => import('@/pages/Slider/Coloring/Production')
+)
 // const ColoringRMStock = lazy(
 // 	() => import('@/pages/Slider/Coloring/RMStock/RMStock')
 // );
@@ -29,7 +33,7 @@ const DieCastingRMStock = lazy(
 const DieCastingLog = lazy(() => import('@/pages/Slider/DieCasting/Log'));
 const DieCastingSFG = lazy(() => import('@/pages/Slider/DieCasting/SFG'));
 
-// Slider Assembly
+// * Slider Assembly
 // const SliderAssemblyRMStock = lazy(
 // 	() => import('@/pages/Slider/SliderAssembly/RMStock/RMStock')
 // );
@@ -39,6 +43,10 @@ const DieCastingSFG = lazy(() => import('@/pages/Slider/DieCasting/SFG'));
 // const SliderAssemblySFG = lazy(
 // 	() => import('@/pages/Slider/SliderAssembly/SFG')
 // );
+
+const SliderAssemblyProduction = lazy(
+	() => import('@/pages/Slider/SliderAssembly/Production')
+)
 
 // Die Casting Entry
 const DieCastingEntry = lazy(
@@ -212,7 +220,30 @@ export const SliderRoutes = [
 		page_name: 'slider__die_casting_production_update',
 		actions: ['read', 'update'],
 	},
-	// Slider Assembly
+
+	// * Slider Assembly production
+	{
+		id: 23,
+		name: 'Production',
+		path: '/slider/slider-assembly/production',
+		element: SliderAssemblyProduction,
+		type: ['slider', 'slider-assembly'],
+		page_name: 'slider__assembly_production',
+		actions: ['read', 'create', 'update', 'delete', 'click_production', 'click_transaction'],
+	},
+
+	// * Slider Coloring production
+	{
+		id: 23,
+		name: 'Production',
+		path: '/slider/slider-coloring/production',
+		element: SliderColoringProduction,
+		type: ['slider', 'slider-coloring'],
+		page_name: 'slider__coloring_production',
+		actions: ['read', 'create', 'update', 'delete', 'click_production', 'click_transaction'],
+	},
+
+	// * Slider Assembly
 	// {
 	// 	id: 22,
 	// 	name: 'RM',

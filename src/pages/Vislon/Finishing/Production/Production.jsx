@@ -5,9 +5,9 @@ import { JoinInput, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import {
+	NUMBER_REQUIRED,
 	SFG_PRODUCTION_SCHEMA_IN_KG,
 	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
-	NUMBER_REQUIRED,
 } from '@util/Schema';
 
 import nanoid from '@/lib/nanoid';
@@ -73,7 +73,7 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			sfg_uuid: updateTeethMoldingProd?.sfg_uuid,
-			section: 'teeth_molding',
+			section: 'finishing',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
@@ -97,7 +97,7 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-				<JoinInput
+			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'
 				unit='PCS'
@@ -105,7 +105,7 @@ export default function Index({
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				title='Production Quantity'
+				title='Production Quantity (KG)'
 				label='production_quantity_in_kg'
 				unit='KG'
 				sub_label={`MAX: ${MAX_PROD_KG} kg`}

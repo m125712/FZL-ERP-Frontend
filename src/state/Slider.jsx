@@ -172,7 +172,7 @@ export const useOrderAgainstSliderColorRMLogByUUID = (uuid) =>
 export const useSliderAssemblyProduction = () =>
 	createGlobalState({
 		queryKey: sliderQK.sliderAssemblyProduction(),
-		url: '/slider/stock',
+		url: '/slider/stock/by/sa_prod',
 	});
 
 // * Slider Assembly Production entry
@@ -183,9 +183,50 @@ export const useSliderAssemblyProductionEntry = () =>
 		url: `/slider/production`,
 	});
 
+export const useSliderAssemblyProductionEntryByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: sliderQK.sliderAssemblyProductionEntryByUUID(uuid),
+		url: `/slider/production/${uuid}`,
+	});
+
 // * Slider Assembly Transfer Entry
 export const useSliderAssemblyTransferEntry = () =>
 	createGlobalState({
 		queryKey: sliderQK.sliderAssemblyTransferEntry(),
 		url: `/slider/transaction`,
+	});
+
+export const useSliderAssemblyTransferEntryByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: sliderQK.sliderAssemblyTransferEntryByUUID(uuid),
+		url: `/slider/transaction/${uuid}`,
+	});
+
+// * Slider Assembly Log Prduction
+export const useSliderAssemblyLogProduction = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderAssemblyLogProduction(),
+		url: '/slider/production/by/sa_prod',
+	});
+
+// * slider assembly Log Transaction
+export const useSliderAssemblyLogTransaction = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderAssemblyLogTransaction(),
+		url: `/slider/transaction/by/sa_prod`,
+	});
+
+// * Slider Coloring log //
+// * Slider Coloring Log Prduction
+export const useSliderColoringLogProduction = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderColoringLogProduction(),
+		url: '/slider/production/by/coloring',
+	});
+
+// * slider coloring Log Transaction
+export const useSliderColoringLogTransaction = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderColoringLogTransaction(),
+		url: `/zipper/sfg-transaction/by/coloring_prod`,
 	});

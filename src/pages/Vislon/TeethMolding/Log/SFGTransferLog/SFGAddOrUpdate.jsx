@@ -1,6 +1,5 @@
 import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useRHF, useUpdateFunc } from '@/hooks';
+import { useRHF } from '@/hooks';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {

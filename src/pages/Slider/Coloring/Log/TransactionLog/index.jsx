@@ -1,25 +1,23 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { LinkWithCopy, Transfer } from '@/ui';
+
+import { DeleteModal } from '@/components/Modal';
+import { EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useMemo, useState } from 'react';
-import { useSliderAssemblyProduction } from '@/state/Slider';
-const Production = lazy(() => import('./Production'));
-const Transaction = lazy(() => import('./Transaction'));
+import { useMemo, useState } from 'react';
+import AddOrUpdate from './AddOrUpdate';
+import { useSliderColoringLogTransaction } from '@/state/Slider';
 
 export default function Index() {
-	const { data, isLoading } = useSliderAssemblyProduction();
+	const { data, isLoading, deleteData } = useSliderColoringLogTransaction();
 	const info = new PageInfo(
-		'Slider Coloring Production',
-		'/slider/slider-coloring/production',
-		'slider__coloring_production'
+		'Transaction Log',
+		'/slider/slider-assembly/log/transaction'
 	);
 
-	const haveAccess = useAccess('slider__coloring_production');
+	const haveAccess = useAccess('slider__assembly_log');
 
-
-	// * columns
 	const columns = useMemo(
 		() => [
 			{
@@ -81,14 +79,6 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'stopper_type_name',
-				header: 'Stopper Type',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<span className='capitalize'>{info.getValue()}</span>
-				),
-			},
-			{
 				accessorKey: 'order_quantity',
 				header: (
 					<span>
@@ -100,54 +90,11 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-
 			{
-				accessorKey: 'action_add_production',
-				header: '',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('click_production'),
-				width: 'w-8',
-				cell: (info) => {
-					return (
-						<Transfer
-							onClick={() => handelProduction(info.row.index)}
-						/>
-					);
-				},
-			},
-			{
-				accessorKey: 'sa_prod',
+				accessorKey: 'trx_quantity',
 				header: (
 					<span>
-						Total Production
-						<br />
-						(KG)
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
-			},
-			// {
-			// 	accessorKey: 'action_add_transaction',
-			// 	header: '',
-			// 	enableColumnFilter: false,
-			// 	enableSorting: false,
-			// 	hidden: !haveAccess.includes('click_transaction'),
-			// 	width: 'w-8',
-			// 	cell: (info) => {
-			// 		return (
-			// 			<Transfer
-			// 				onClick={() => handelTransaction(info.row.index)}
-			// 			/>
-			// 		);
-			// 	},
-			// },
-			{
-				accessorKey: 'total_trx_quantity',
-				header: (
-					<span>
-						Total Transaction
+						Transaction QTY
 						<br />
 						(KG)
 					</span>
@@ -161,32 +108,29 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+			{
+				accessorKey: 'actions',
+				header: 'Actions',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('update'),
+				width: 'w-24',
+				cell: (info) => {
+					return (
+						<EditDelete
+							idx={info.row.index}
+							handelUpdate={handelUpdate}
+							handelDelete={handelDelete}
+							showDelete={haveAccess.includes('delete')}
+						/>
+					);
+				},
+			},
 		],
 		[data]
 	);
 
-	const [updateSliderProd, setUpdateSliderProd] = useState({
-		uuid: null,
-		stock_uuid: null,
-		coloring_stock: null,
-		coloring_prod : null,
-		production_quantity: null,
-		section: null,
-		wastage: null,
-		remarks: '',
-	});
-
-	const handelProduction = (idx) => {
-		const val = data[idx];
-
-		setUpdateSliderProd((prev) => ({
-			...prev,
-			...val,
-		}));
-
-		window['TeethMoldingProdModal'].showModal();
-	};
-
+	// Update
 	const [updateSliderTrx, setUpdateSliderTrx] = useState({
 		uuid: null,
 		stock_uuid: null,
@@ -196,15 +140,30 @@ export default function Index() {
 		trx_quantity: null,
 		remarks: '',
 	});
-	const handelTransaction = (idx) => {
-		const val = data[idx];
 
+	const handelUpdate = (idx) => {
+		const selected = data[idx];
 		setUpdateSliderTrx((prev) => ({
 			...prev,
-			...val,
+			...selected,
 		}));
 
-		window['TeethMoldingTrxModal'].showModal();
+		window[info.getAddOrUpdateModalId()].showModal();
+	};
+
+	// Delete
+	const [deleteItem, setDeleteItem] = useState({
+		itemId: null,
+		itemName: null,
+	});
+	const handelDelete = (idx) => {
+		setDeleteItem((prev) => ({
+			...prev,
+			itemId: data[idx].uuid,
+			itemName: data[idx].order_number,
+		}));
+
+		window[info.getDeleteModalId()].showModal();
 	};
 
 	if (isLoading)
@@ -212,7 +171,7 @@ export default function Index() {
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
+		<div className=''>
 			<ReactTable
 				title={info.getTitle()}
 				data={data}
@@ -220,21 +179,22 @@ export default function Index() {
 				extraClass='py-2'
 			/>
 			<Suspense>
-				<Production
-					modalId='TeethMoldingProdModal'
-					{...{
-						updateSliderProd,
-						setUpdateSliderProd,
-					}}
-				/>
-			</Suspense>
-			<Suspense>
-				<Transaction
-					modalId='TeethMoldingTrxModal'
+				<AddOrUpdate
+					modalId={info.getAddOrUpdateModalId()}
 					{...{
 						updateSliderTrx,
 						setUpdateSliderTrx,
 					}}
+				/>
+			</Suspense>
+			<Suspense>
+				<DeleteModal
+					modalId={info.getDeleteModalId()}
+					title={info.getTitle()}
+					deleteItem={deleteItem}
+					setDeleteItem={setDeleteItem}
+					deleteData={deleteData}
+					url={`/slider/transaction`}
 				/>
 			</Suspense>
 		</div>

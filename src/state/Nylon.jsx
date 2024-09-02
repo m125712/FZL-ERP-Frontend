@@ -19,7 +19,7 @@ export const useNylonMFProductionLog = () =>
 
 export const useNylonMFProductionLogByUUID = (uuid, { enabled = true }) =>
 	createGlobalState({
-		queryKey: nylonQK.nylonMFProductionLog(uuid),
+		queryKey: nylonQK.nylonMFProductionLogByUUID(uuid),
 		url: `/zipper/sfg-production/${uuid}`,
 		enabled: enabled,
 	});

@@ -108,7 +108,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Teeth Coloring Production Log`}
+			title={`Production Log`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

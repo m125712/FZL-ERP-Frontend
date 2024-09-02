@@ -1,22 +1,23 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
+import { useAccess, useFetch } from '@/hooks';
 import { LinkWithCopy, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useMemo, useState } from 'react';
-import { useSliderAssemblyProduction } from '@/state/Slider';
+import { useVislonTMP } from '@/state/Vislon';
+
 const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
 
 export default function Index() {
-	const { data, isLoading } = useSliderAssemblyProduction();
+	const { data, isLoading } = useVislonTMP();
 	const info = new PageInfo(
-		'Slider Coloring Production',
-		'/slider/slider-coloring/production',
-		'slider__coloring_production'
+		'Finishing Production',
+		'/vislon/finishing/production',
+		'vislon__finishing_production'
 	);
 
-	const haveAccess = useAccess('slider__coloring_production');
+	const haveAccess = useAccess('vislon__finishing_production');
 
 
 	// * columns
@@ -37,52 +38,24 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'item_name',
-				header: 'Item name',
+				accessorKey: 'item_description',
+				header: 'Item Description',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { order_description_uuid, order_number } =
+						info.row.original;
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={order_description_uuid}
+							uri={`/order/details/${order_number}`}
+						/>
+					);
+				},
 			},
 			{
-				accessorKey: 'zipper_number_name',
-				header: 'Item Zipper number',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'end_type_name',
-				header: 'End Type',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'puller_type_name',
-				header: 'Puller',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'logo_type_name',
-				header: 'Logo',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'slider_body_shape_name',
-				header: 'Slider Body',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'puller_link_name',
-				header: 'Puller Link',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<span className='capitalize'>{info.getValue()}</span>
-				),
-			},
-			{
-				accessorKey: 'stopper_type_name',
-				header: 'Stopper Type',
+				accessorKey: 'style_color_size',
+				header: 'Style / Color / Size',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
@@ -117,7 +90,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'sa_prod',
+				accessorKey: 'teeth_molding_prod',
 				header: (
 					<span>
 						Total Production
@@ -128,26 +101,38 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-			// {
-			// 	accessorKey: 'action_add_transaction',
-			// 	header: '',
-			// 	enableColumnFilter: false,
-			// 	enableSorting: false,
-			// 	hidden: !haveAccess.includes('click_transaction'),
-			// 	width: 'w-8',
-			// 	cell: (info) => {
-			// 		return (
-			// 			<Transfer
-			// 				onClick={() => handelTransaction(info.row.index)}
-			// 			/>
-			// 		);
-			// 	},
-			// },
+			{
+				accessorKey: 'action_add_transaction',
+				header: '',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_transaction'),
+				width: 'w-8',
+				cell: (info) => {
+					return (
+						<Transfer
+							onClick={() => handelTransaction(info.row.index)}
+						/>
+					);
+				},
+			},
 			{
 				accessorKey: 'total_trx_quantity',
 				header: (
 					<span>
 						Total Transaction
+						<br />
+						(KG)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'balance_quantity',
+				header: (
+					<span>
+						Balance
 						<br />
 						(KG)
 					</span>
@@ -165,13 +150,12 @@ export default function Index() {
 		[data]
 	);
 
-	const [updateSliderProd, setUpdateSliderProd] = useState({
+	const [updateTeethMoldingProd, setUpdateTeethMoldingProd] = useState({
 		uuid: null,
-		stock_uuid: null,
-		coloring_stock: null,
-		coloring_prod : null,
-		production_quantity: null,
+		sfg_uuid: null,
 		section: null,
+		production_quantity_in_kg: null,
+		production_quantity: null,
 		wastage: null,
 		remarks: '',
 	});
@@ -179,7 +163,7 @@ export default function Index() {
 	const handelProduction = (idx) => {
 		const val = data[idx];
 
-		setUpdateSliderProd((prev) => ({
+		setUpdateTeethMoldingProd((prev) => ({
 			...prev,
 			...val,
 		}));
@@ -187,19 +171,18 @@ export default function Index() {
 		window['TeethMoldingProdModal'].showModal();
 	};
 
-	const [updateSliderTrx, setUpdateSliderTrx] = useState({
+	const [updateTeethMoldingTRX, setUpdateTeethMoldingTRX] = useState({
 		uuid: null,
-		stock_uuid: null,
-		slider_item_uuid: null,
+		sfg_uuid: null,
+		trx_quantity_in_kg: null,
 		trx_from: null,
 		trx_to: null,
-		trx_quantity: null,
 		remarks: '',
 	});
 	const handelTransaction = (idx) => {
 		const val = data[idx];
 
-		setUpdateSliderTrx((prev) => ({
+		setUpdateTeethMoldingTRX((prev) => ({
 			...prev,
 			...val,
 		}));
@@ -223,8 +206,8 @@ export default function Index() {
 				<Production
 					modalId='TeethMoldingProdModal'
 					{...{
-						updateSliderProd,
-						setUpdateSliderProd,
+						updateTeethMoldingProd,
+						setUpdateTeethMoldingProd,
 					}}
 				/>
 			</Suspense>
@@ -232,8 +215,8 @@ export default function Index() {
 				<Transaction
 					modalId='TeethMoldingTrxModal'
 					{...{
-						updateSliderTrx,
-						setUpdateSliderTrx,
+						updateTeethMoldingTRX,
+						setUpdateTeethMoldingTRX,
 					}}
 				/>
 			</Suspense>

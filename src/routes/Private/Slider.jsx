@@ -8,14 +8,14 @@ const SliderDashboardInfo = lazy(() => import('@/pages/Slider/Dashboard/Info'));
 
 const SliderColoringProduction = lazy(
 	() => import('@/pages/Slider/Coloring/Production')
-)
+);
 // const ColoringRMStock = lazy(
 // 	() => import('@/pages/Slider/Coloring/RMStock/RMStock')
 // );
-// const ColoringLog = lazy(() => import('@/pages/Slider/Coloring/Log'));
+const ColoringLog = lazy(() => import('@/pages/Slider/Coloring/Log'));
 // const ColoringSFG = lazy(() => import('@/pages/Slider/Coloring/SFG'));
 
-// Die Casting
+// * Die Casting
 
 const DieCastingStock = lazy(() => import('@/pages/Slider/DieCasting/Stock'));
 
@@ -37,16 +37,16 @@ const DieCastingSFG = lazy(() => import('@/pages/Slider/DieCasting/SFG'));
 // const SliderAssemblyRMStock = lazy(
 // 	() => import('@/pages/Slider/SliderAssembly/RMStock/RMStock')
 // );
-// const SliderAssemblyLog = lazy(
-// 	() => import('@/pages/Slider/SliderAssembly/Log')
-// );
+const SliderAssemblyLog = lazy(
+	() => import('@/pages/Slider/SliderAssembly/Log')
+);
 // const SliderAssemblySFG = lazy(
 // 	() => import('@/pages/Slider/SliderAssembly/SFG')
 // );
 
 const SliderAssemblyProduction = lazy(
 	() => import('@/pages/Slider/SliderAssembly/Production')
-)
+);
 
 // Die Casting Entry
 const DieCastingEntry = lazy(
@@ -229,7 +229,14 @@ export const SliderRoutes = [
 		element: SliderAssemblyProduction,
 		type: ['slider', 'slider-assembly'],
 		page_name: 'slider__assembly_production',
-		actions: ['read', 'create', 'update', 'delete', 'click_production', 'click_transaction'],
+		actions: [
+			'read',
+			'create',
+			'update',
+			'delete',
+			'click_production',
+			'click_transaction',
+		],
 	},
 
 	// * Slider Coloring production
@@ -240,7 +247,24 @@ export const SliderRoutes = [
 		element: SliderColoringProduction,
 		type: ['slider', 'slider-coloring'],
 		page_name: 'slider__coloring_production',
-		actions: ['read', 'create', 'update', 'delete', 'click_production', 'click_transaction'],
+		actions: [
+			'read',
+			'create',
+			'update',
+			'delete',
+			'click_production',
+			'click_transaction',
+		],
+	},
+
+	{
+		id: 23,
+		name: 'Log',
+		path: '/slider/slider-coloring/log',
+		element: ColoringLog,
+		type: ['slider', 'slider-coloring'],
+		page_name: 'slider__coloring_log',
+		actions: ['read', 'create', 'update', 'delete'],
 	},
 
 	// * Slider Assembly
@@ -262,23 +286,17 @@ export const SliderRoutes = [
 	// 	page_name: 'slider__assembly_sfg',
 	// 	actions: ['read', 'click_production', 'click_to_coloring'],
 	// },
-	// {
-	// 	id: 222,
-	// 	name: 'Log',
-	// 	path: '/slider/slider-assembly/log',
-	// 	element: SliderAssemblyLog,
-	// 	type: ['slider', 'slider-assembly'],
-	// 	page_name: 'slider__assembly_log',
-	// 	actions: [
-	// 		'read',
-	// 		'click_update_sfg',
-	// 		'click_delete_sfg',
-	// 		'click_update_rm',
-	// 		'click_delete_rm',
-	// 		'click_update_rm_order',
-	// 		'click_delete_rm_order',
-	// 	],
-	// },
+	// * Slider Assembly log
+	{
+		id: 222,
+		name: 'Log',
+		path: '/slider/slider-assembly/log',
+		element: SliderAssemblyLog,
+		type: ['slider', 'slider-assembly'],
+		page_name: 'slider__assembly_log',
+		actions: ['read', 'create', 'update', 'delete'],
+	},
+	
 
 	// {
 	// 	id: 25,
@@ -346,22 +364,5 @@ export const SliderRoutes = [
 	// 	type: ['slider', 'coloring'],
 	// 	page_name: 'slider__coloring_sfg',
 	// 	actions: ['read', 'click_production', 'click_to_coloring'],
-	// },
-	// {
-	// 	id: 232,
-	// 	name: 'Log',
-	// 	path: '/slider/coloring/log',
-	// 	element: ColoringLog,
-	// 	type: ['slider', 'coloring'],
-	// 	page_name: 'slider__coloring_log',
-	// 	actions: [
-	// 		'read',
-	// 		'click_update_sfg',
-	// 		'click_delete_sfg',
-	// 		'click_update_rm',
-	// 		'click_delete_rm',
-	// 		'click_update_rm_order',
-	// 		'click_delete_rm_order',
-	// 	],
 	// },
 ];

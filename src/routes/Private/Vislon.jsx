@@ -11,6 +11,11 @@ const VislonTeethMoldingTrxLog = lazy(
 	() => import('@/pages/Vislon/TeethMolding/Log')
 );
 
+// Teeth molding Production
+const VislonProduction = lazy(
+	() => import('@/pages/Vislon/TeethMolding/Production')
+);
+
 // Finishing
 const VislonFinishing = lazy(
 	() => import('@/pages/Vislon/Finishing/RMStock/RMStock')
@@ -20,10 +25,11 @@ const VislonFinishingTrxLog = lazy(
 	() => import('@/pages/Vislon/Finishing/Log')
 );
 
-// Production
-const VislonProduction = lazy(
-	() => import('@/pages/Vislon/TeethMolding/Production')
+// Finishing Production
+const VislonFinishingProduction = lazy(
+	() => import('@/pages/Vislon/Finishing/Production')
 );
+
 
 export const VislonRoutes = [
 	{
@@ -105,6 +111,23 @@ export const VislonRoutes = [
 		element: VislonProduction,
 		type: ['vislon', 'teeth-molding'],
 		page_name: 'vislon__teeth_molding_production',
+		actions: [
+			'create',
+			'read',
+			'update',
+			'click_production',
+			'click_transaction',
+		],
+	},
+
+	// * Finishing Production
+	{
+		id: 44,
+		name: 'Production',
+		path: '/vislon/finishing/production',
+		element: VislonFinishingProduction,
+		type: ['vislon', 'finishing'],
+		page_name: 'vislon__finishing_production',
 		actions: [
 			'create',
 			'read',

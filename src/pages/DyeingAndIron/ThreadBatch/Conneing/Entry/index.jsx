@@ -1,4 +1,6 @@
+import { Suspense } from '@/components/Feedback';
 import { useFetchForRhfResetForOrder, useRHF } from '@/hooks';
+import cn from '@/lib/cn';
 import { ActionButtons, DynamicDeliveryField, Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
@@ -7,10 +9,8 @@ import {
 	DYEING_THREAD_CONNEING_NULL,
 	DYEING_THREAD_CONNEING_SCHEMA,
 } from '@util/Schema';
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-
-import cn from '@/lib/cn';
 
 import {
 	useDyeingThreadBatch,
@@ -18,6 +18,7 @@ import {
 } from '@/state/Dyeing';
 import isJSON from '@/util/isJson';
 import Header from './Header';
+const Transfer = lazy(() => import('./TransferQuantity'));
 
 export default function Index() {
 	const { url: threadBatchEntryUrl } = useDyeingThreadBatchEntry();
@@ -75,19 +76,20 @@ export default function Index() {
 	}, [watch('uuid')]);
 
 	// Transfer
-	const [transfer, Transfer] = useState({
-		uuid: null,
+	const [transfer, setTransfer] = useState({
+		batch_entry_uuid: null,
 		transfer_quantity: null,
 	});
-	// const handelTransfer = (idx) => {
-	// 	setYarn((prev) => ({
-	// 		...prev,
-	// 		uuid: data[idx].uuid,
-	// 		transfer_quantity: data[idx].yarn_quantity,
-	// 		batch_id: data[idx].batch_id,
-	// 	}));
-	// 	window['YarnModal'].showModal();
-	// };
+
+	const handelTransfer = (idx, e) => {
+		setTransfer((prev) => ({
+			...prev,
+			batch_entry_uuid: data[idx].batch_entry_uuid,
+			transfer_quantity: data[idx].transfer_quantity,
+			//batch_id: data[idx].batch_id,
+		}));
+		window['Transfer'].showModal();
+	};
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -134,7 +136,11 @@ export default function Index() {
 				.then(() =>
 					reset(Object.assign({}, DYEING_THREAD_CONNEING_NULL))
 				)
-				.then(() => navigate(`/dyeing-and-iron/thread-batch`));
+				.then(() =>
+					navigate(
+						`/dyeing-and-iron/thread-batch/details/${batch_con_uuid}`
+					)
+				);
 		} catch (err) {
 			console.error(`Error with Promise.all: ${err}`);
 		}
@@ -174,7 +180,7 @@ export default function Index() {
 								'quantity',
 								'coning production quantity',
 								'coning production quantity in kg',
-								'Transfer',
+								'Transfer Quantity',
 								'total quantity',
 								'balance quantity',
 								'remarks',
@@ -250,11 +256,15 @@ export default function Index() {
 								/>
 							</td>
 							<td className={`${rowClass}`}>
-								<div
-									className='flex w-10 gap-2'
-									onClick={() => handelTransfer(index)}>
-									<button className='btn'>Transfer</button>
-								</div>
+								<Input
+									label={`batch_entry[${index}].transfer_quantity`}
+									is_title_needed='false'
+									dynamicerror={
+										errors?.batch_entry?.[index]
+											?.transfer_quantity
+									}
+									register={register}
+								/>
 							</td>
 
 							<td className={`${rowClass}`}>
@@ -283,6 +293,15 @@ export default function Index() {
 					</button>
 				</div>
 			</form>
+			<Suspense>
+				<Transfer
+					modalId={'Transfer'}
+					{...{
+						transfer,
+						setTransfer,
+					}}
+				/>
+			</Suspense>
 			<DevTool control={control} placement='top-left' />
 		</div>
 	);

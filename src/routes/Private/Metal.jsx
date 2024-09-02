@@ -74,6 +74,8 @@ export const MetalRoutes = [
 			'click_delete_rm',
 			'click_update_rm_order',
 			'click_delete_rm_order',
+			'click_update_tape',
+			'click_delete_tape',
 		],
 	},
 

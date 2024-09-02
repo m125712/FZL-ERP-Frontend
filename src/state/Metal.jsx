@@ -36,6 +36,19 @@ export const useMetalTMProductionLogByUUID = (uuid, { enabled = true }) =>
 		url: `/zipper/sfg-production/${uuid}`,
 		enabled: enabled,
 	});
+//* Tape Log
+
+export const useMetalTMTapeLog = () =>
+	createGlobalState({
+		queryKey: metalQK.metalTMTapeLog(),
+		url: '/zipper/dyed-tape-transaction/by/metal_teeth_molding',
+	});
+
+export const useMetalTMTapeLogByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: metalQK.metalTMTapeLogByUUID(uuid),
+		url: `/zipper/dyed-tape-transaction/by/metal_teeth_molding${uuid}`,
+	});
 
 // * RM
 export const useMetalTMRM = () =>

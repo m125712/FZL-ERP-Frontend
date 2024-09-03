@@ -121,7 +121,7 @@ export default function Index() {
 	// 		}));
 	// 	}
 	// }, [getValues('order_info_ids')]);
-	console.log(getValues());
+	//console.log(getValues());
 	const onSubmit = async (data) => {
 		// * Update
 		if (isUpdate) {
@@ -189,10 +189,10 @@ export default function Index() {
 				...item,
 				uuid: nanoid(),
 				batch_uuid: batch_data.uuid,
+				transfer_quantity: 0,
 				remarks: item.batch_remarks,
 				created_at,
 			}));
-
 		setBatchData(batch_data); // * use for modal
 		setBatchEntry(batch_entry); // * use for modal
 

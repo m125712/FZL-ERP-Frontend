@@ -1,9 +1,8 @@
 import { Suspense } from '@/components/Feedback';
 import { useFetchForRhfResetForOrder, useRHF } from '@/hooks';
 import cn from '@/lib/cn';
-import { ActionButtons, DynamicDeliveryField, Input } from '@/ui';
+import { DynamicDeliveryField, Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
-import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import {
 	DYEING_THREAD_CONNEING_NULL,
@@ -23,11 +22,8 @@ const Transfer = lazy(() => import('./TransferQuantity'));
 export default function Index() {
 	const { url: threadBatchEntryUrl } = useDyeingThreadBatchEntry();
 	const { url: threadBatchUrl, updateData } = useDyeingThreadBatch();
-	const { user } = useAuth();
 	const navigate = useNavigate();
 	const { batch_con_uuid } = useParams();
-	//console.log(batch_con_uuid, 'uuid');
-
 	const [orderInfoIds, setOrderInfoIds] = useState('');
 
 	const {

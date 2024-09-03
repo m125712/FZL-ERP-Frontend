@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
-import { useThreadMachine, useThreadPrograms } from '@/state/Thread';
+import { useAccess } from '@/hooks';
+import { useThreadPrograms } from '@/state/Thread';
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';

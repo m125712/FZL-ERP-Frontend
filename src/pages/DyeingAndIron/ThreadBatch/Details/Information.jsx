@@ -2,17 +2,14 @@ import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
 
 export default function Information({ batch }) {
-	console.log({
-		batch,
-	});
 	const {
 		batch_id,
 		category,
 		coning_created_at,
 		coning_created_by,
 		coning_updated_at,
-		coning_supervisor,
-		coning_operator,
+		coning_supervisor_name,
+		coning_operator_name,
 		coning_machines,
 		coning_created_by_name,
 		created_at,
@@ -32,7 +29,7 @@ export default function Information({ batch }) {
 		lab_updated_at,
 		machine_name,
 		machine_uuid,
-		pass_by,
+		pass_by_name,
 		reason,
 		status,
 		shift,
@@ -77,11 +74,11 @@ export default function Information({ batch }) {
 			},
 			{
 				label: 'Operator',
-				value: coning_operator,
+				value: coning_operator_name,
 			},
 			{
 				label: 'Supervisor',
-				value: coning_supervisor,
+				value: coning_supervisor_name,
 			},
 			{
 				label: 'Created By',
@@ -123,7 +120,7 @@ export default function Information({ batch }) {
 
 			{
 				label: 'Pass By',
-				value: pass_by,
+				value: pass_by_name,
 			},
 			{
 				label: 'Shift',

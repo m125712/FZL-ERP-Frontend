@@ -54,7 +54,11 @@ export default function Index() {
 				accessorKey: 'bleaching',
 				header: 'Bleaching',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					return (
+						<span className='capitalize'>{info.getValue()}</span>
+					);
+				},
 			},
 			{
 				accessorKey: 'lab_status',
@@ -100,7 +104,9 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -108,7 +114,8 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							// showDelete={false}
+							showDelete={haveAccess.includes('delete')}
+							showUpdate={haveAccess.includes('update')}
 						/>
 					);
 				},

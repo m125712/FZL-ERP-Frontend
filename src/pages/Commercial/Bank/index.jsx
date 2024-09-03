@@ -83,8 +83,14 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'created_at',
-				header: 'Created At',
+				header: 'Created',
 				enableColumnFilter: false,
 				filterFn: 'isWithinRange',
 				cell: (info) => <DateTime date={info.getValue()} />,
@@ -94,6 +100,12 @@ export default function Index() {
 				header: 'Updated',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'actions',

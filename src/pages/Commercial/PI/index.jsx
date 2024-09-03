@@ -25,7 +25,7 @@ export default function Index() {
 				cell: (info) => (
 					<LinkWithCopy
 						title={info.getValue()}
-						id={info.row.original.uuid}
+						id={info.getValue()}
 						uri={`details`}
 					/>
 				),
@@ -34,16 +34,23 @@ export default function Index() {
 				accessorKey: 'lc_number',
 				header: 'LC Number',
 				enableColumnFilter: false,
-				cell: (info) =>
-					info.getValue() === '-' ? (
-						info.getValue()
-					) : (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={info.getValue()}
-							uri={`/commercial/lc/details`}
-						/>
-					),
+				cell: (info) => {
+					if (!info.getValue()) {
+						return '-/-';
+					}
+
+					if (info.getValue() === '-') {
+						return info.getValue();
+					} else {
+						return (
+							<LinkWithCopy
+								title={info.getValue()}
+								id={info.getValue()}
+								uri={`/commercial/lc/details`}
+							/>
+						);
+					}
+				},
 			},
 			{
 				accessorKey: 'marketing_name',
@@ -76,6 +83,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'created_at',
 				header: 'Created At',
 				enableColumnFilter: false,
@@ -85,7 +98,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'updated_at',
-				header: 'Updated',
+				header: 'Updated At',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;

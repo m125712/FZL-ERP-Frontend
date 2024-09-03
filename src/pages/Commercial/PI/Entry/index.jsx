@@ -13,6 +13,7 @@ import nanoid from '@/lib/nanoid';
 import { useCommercialPI, useCommercialPIEntry } from '@/state/Commercial';
 import isJSON from '@/util/isJson';
 import cn from '@/lib/cn';
+import SubmitButton from '@/ui/Others/Button/SubmitButton';
 
 export default function Index() {
 	const { url: commercialPiEntryUrl } = useCommercialPIEntry();
@@ -41,7 +42,6 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
-		getFieldState,
 	} = useRHF(PI_SCHEMA, PI_NULL);
 
 	// pi_entry
@@ -129,6 +129,8 @@ export default function Index() {
 				isOnCloseNeeded: false,
 			});
 
+			const updatedId = commercialPiPromise?.data?.[0].updatedId;
+
 			// pi entry
 			let updatedableCommercialPiEntryPromises = data.pi_entry
 				.filter((item) => item.pi_quantity > 0 && !item.isDeletable)
@@ -182,7 +184,9 @@ export default function Index() {
 					deleteableCommercialPiEntryPromises,
 				])
 					.then(() => reset(Object.assign({}, PI_NULL)))
-					.then(() => navigate(`/commercial/pi/details/${pi_uuid}`));
+					.then(() => {
+						navigate(`/commercial/pi/details/${updatedId}`);
+					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
 			}
@@ -240,7 +244,9 @@ export default function Index() {
 			try {
 				await Promise.all([...commercial_pi_entry_promises])
 					.then(() => reset(Object.assign({}, PI_NULL)))
-					.then(() => navigate(`/commercial/pi`));
+					.then(() => {
+						navigate(`/commercial/pi`);
+					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
 			}
@@ -320,7 +326,7 @@ export default function Index() {
 								<th
 									key='is_all_checked'
 									scope='col'
-									className='group w-20 cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
+									className='group w-20 cursor-pointer px-3 py-2'>
 									<CheckBoxWithoutLabel
 										label='is_all_checked'
 										checked={isAllChecked}
@@ -346,7 +352,7 @@ export default function Index() {
 								<th
 									key={item}
 									scope='col'
-									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
+									className='group cursor-pointer px-3 py-2 transition duration-300'>
 									{item}
 								</th>
 							))}
@@ -355,7 +361,7 @@ export default function Index() {
 								<th
 									key='action'
 									scope='col'
-									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
+									className='group cursor-pointer px-3 py-2 transition duration-300'>
 									Delete
 								</th>
 							)}
@@ -365,7 +371,7 @@ export default function Index() {
 						<tr
 							key={item.id}
 							className={cn(
-								'relative cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30',
+								'relative cursor-pointer bg-base-100 text-primary transition-colors duration-200 ease-in',
 								isUpdate &&
 									watch(`pi_entry[${index}].isDeletable`) &&
 									'bg-error/10 text-error hover:bg-error/20 hover:text-error'
@@ -461,22 +467,13 @@ export default function Index() {
 										label={`pi_entry[${index}].isDeletable`}
 										{...{ register, errors }}
 									/>
-									{/* <button
-										className='btn btn-circle btn-ghost btn-sm transition-all duration-300'
-										type='button'>
-										<Trash className='w-6 bg-transparent text-error' />
-									</button> */}
 								</td>
 							)}
 						</tr>
 					))}
 				</DynamicDeliveryField>
 				<div className='modal-action'>
-					<button
-						type='submit'
-						className='text-md btn btn-primary btn-block'>
-						Save
-					</button>
+					<SubmitButton />
 				</div>
 			</form>
 

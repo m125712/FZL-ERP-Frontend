@@ -2,7 +2,7 @@ import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useOrderParty } from '@/state/Order';
-import { EditDelete } from '@/ui';
+import { EditDelete, DateTime } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 
@@ -29,6 +29,28 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created At',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
@@ -41,7 +63,7 @@ export default function Index() {
 				enableSorting: false,
 				hidden:
 					!haveAccess.includes('update') &&
-					haveAccess.includes('delete'),
+					!haveAccess.includes('delete'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -61,6 +83,7 @@ export default function Index() {
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
+
 	// Add
 	const handelAdd = () => {
 		window[info.getAddOrUpdateModalId()].showModal();
@@ -77,6 +100,7 @@ export default function Index() {
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
+
 	// Delete
 	const [deleteItem, setDeleteItem] = useState({
 		itemId: null,
@@ -94,7 +118,6 @@ export default function Index() {
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
-	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
 		<div>

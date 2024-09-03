@@ -3,13 +3,11 @@ import { useAuth } from '@/context/auth';
 import {
 	useFetch,
 	useFetchForRhfReset,
-	usePostFunc,
 	useRHF,
-	useUpdateFunc,
 } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useOrderInfo } from '@/state/Order';
-import { CheckBox, FormField, ReactSelect } from '@/ui';
+import { CheckBox, FormField, ReactSelect, Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import { ORDER_INFO_NULL, ORDER_INFO_SCHEMA } from '@util/Schema';
@@ -140,8 +138,6 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
-
-		// window.location.reload(true);
 	};
 
 	useEffect(() => {
@@ -158,7 +154,6 @@ export default function Index({
 			}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			// isSmall={true}
 		>
 			<div className='flex justify-end gap-2 text-sm'>
 				<div className='rounded-md bg-primary px-1'>
@@ -346,7 +341,7 @@ export default function Index({
 											getValues('is_cash')
 									)}
 									onChange={(e) => onChange(e.value)}
-									// isDisabled={updateOrderInfo?.id !== null}
+									
 								/>
 							);
 						}}
@@ -370,9 +365,7 @@ export default function Index({
 											getValues('marketing_priority')
 									)}
 									onChange={(e) => onChange(e.value)}
-									// isDisabled={
-									// 	updateOrderInfo?.id !== null
-									// }
+									
 								/>
 							);
 						}}
@@ -397,15 +390,14 @@ export default function Index({
 											getValues('factory_priority')
 									)}
 									onChange={(e) => onChange(e.value)}
-									// isDisabled={
-									// 	updateOrderInfo?.id !== null
-									// }
+									
 								/>
 							);
 						}}
 					/>
 				</FormField>
 			</div>
+			<Input label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);

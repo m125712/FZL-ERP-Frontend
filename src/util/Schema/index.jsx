@@ -133,8 +133,11 @@ export const MERCHANDISER_SCHEMA = {
 	party_uuid: STRING_REQUIRED,
 	name: STRING_REQUIRED,
 	email: EMAIL.nullable(),
-	phone: PHONE_NUMBER.nullable(),
+	phone: PHONE_NUMBER.nullable().transform((value, originalValue) =>
+		originalValue === '' ? null : value
+	),
 	address: STRING.nullable(),
+	remarks: STRING.nullable(),
 };
 
 export const MERCHANDISER_NULL = {
@@ -144,6 +147,7 @@ export const MERCHANDISER_NULL = {
 	email: '',
 	phone: '',
 	address: '',
+	remarks: '',
 };
 
 // Factory
@@ -151,8 +155,11 @@ export const MERCHANDISER_NULL = {
 export const FACTORY_SCHEMA = {
 	party_uuid: STRING_REQUIRED,
 	name: STRING_REQUIRED,
-	phone: STRING.nullable(),
+	phone: PHONE_NUMBER.nullable().transform((value, originalValue) =>
+		originalValue === '' ? null : value
+	),
 	address: STRING_REQUIRED,
+	remarks: STRING.nullable(),
 };
 
 export const FACTORY_NULL = {
@@ -161,6 +168,7 @@ export const FACTORY_NULL = {
 	name: '',
 	phone: '',
 	address: '',
+	remarks: '',
 };
 
 // Marketing
@@ -428,11 +436,11 @@ export const ORDER_INFO_SCHEMA = {
 	is_bill: BOOLEAN.default(false),
 	is_cash: BOOLEAN_REQUIRED,
 	status: BOOLEAN_REQUIRED.default(false),
-	marketing_uuid: STRING_REQUIRED,
-	merchandiser_uuid: STRING, // No Merchandiser
-	factory_uuid: STRING, // No Factory
-	party_uuid: STRING_REQUIRED,
-	buyer_uuid: STRING_REQUIRED,
+	marketing_uuid: UUID_FK.required('Required'),
+	merchandiser_uuid: UUID_FK.required('Required'),
+	factory_uuid: UUID_FK.required('Required'),
+	party_uuid: UUID_FK.required('Required'),
+	buyer_uuid: UUID_FK.required('Required'),
 	marketing_priority: STRING,
 	factory_priority: STRING,
 	remarks: STRING.nullable(),
@@ -499,7 +507,7 @@ export const ORDER_SCHEMA = {
 
 	order_entry: yup.array().of(
 		yup.object().shape({
-			style: STRING.nullable(),
+			style: STRING_REQUIRED,
 			color: STRING_REQUIRED,
 			size: NUMBER_DOUBLE_REQUIRED,
 			quantity: NUMBER_REQUIRED,

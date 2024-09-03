@@ -6,6 +6,7 @@ import { Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import { PARTY_NULL, PARTY_SCHEMA } from '@util/Schema';
+import { useAuth } from '@/context/auth';
 
 export default function Index({
 	modalId = '',
@@ -19,6 +20,8 @@ export default function Index({
 		PARTY_SCHEMA,
 		PARTY_NULL
 	);
+	
+	const { user } = useAuth();
 
 	useFetchForRhfReset(
 		`${url}/${updateParty?.uuid}`,
@@ -57,6 +60,7 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
+			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
 

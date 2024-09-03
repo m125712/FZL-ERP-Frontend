@@ -86,7 +86,6 @@ export default function Index() {
 			remarks: '',
 		});
 	};
-	const onClose = () => reset(ORDER_NULL);
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -173,7 +172,6 @@ export default function Index() {
 			uuid: new_order_description_uuid,
 			created_at,
 			created_by: user?.uuid,
-			// issued_by: user.uuid,
 		};
 
 		//* Post new order description */ //
@@ -392,22 +390,6 @@ export default function Index() {
 										/>
 									</div>
 								</td>
-								{/* <td className={`w-16 ${rowClass}`}>
-									<Switch
-										title="status"
-										label={`order_entry[${index}].order_entry_status`}
-										is_title_needed="false"
-										dynamicerror={
-											errors?.order_entry?.[index]
-												?.order_entry_status
-										}
-										register={register}
-										defaultChecked={
-											item.order_entry_status === 1
-										}
-										disabled={isSwatchButtonDisabled(index)}
-									/>
-								</td> */}
 								<td
 									className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
 									<ActionButtons

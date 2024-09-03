@@ -15,29 +15,32 @@ import { useVislonTMP } from '@/state/Vislon';
 
 export default function Index({
 	modalId = '',
-	updateTeethMoldingProd = {
+	updateFinishingProd = {
 		uuid: null,
 		sfg_uuid: null,
 		section: null,
 		production_quantity_in_kg: null,
 		production_quantity: null,
+		coloring_prod: null,
 		wastage: null,
 		remarks: null,
 	},
-	setUpdateTeethMoldingProd,
+	setUpdateFinishingProd,
 }) {
 	const { postData } = useVislonTMP();
 	const { user } = useAuth();
 
-	const MAX_PROD_KG = Number(updateTeethMoldingProd.balance_quantity).toFixed(
-		3
-	);
+	const MAX_PROD = Math.min(
+		Number(updateFinishingProd.balance_quantity),
+		Number(updateFinishingProd.coloring_prod)
+	).toFixed(3);
+	const MAX_PROD_KG = Number(MAX_PROD).toFixed(3);
 
 	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
 		{
 			...SFG_PRODUCTION_SCHEMA_IN_KG,
 			production_quantity: NUMBER_REQUIRED.max(
-				MAX_PROD_KG,
+				MAX_PROD,
 				'Beyond Max Quantity'
 			),
 			production_quantity_in_kg: NUMBER_REQUIRED.max(
@@ -53,13 +56,14 @@ export default function Index({
 	).toFixed(3);
 
 	const onClose = () => {
-		setUpdateTeethMoldingProd((prev) => ({
+		setUpdateFinishingProd((prev) => ({
 			...prev,
 			uuid: null,
 			sfg_uuid: null,
 			section: null,
 			production_quantity_in_kg: null,
 			production_quantity: null,
+			coloring_prod: null,
 			wastage: null,
 			remarks: null,
 		}));
@@ -72,7 +76,8 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			sfg_uuid: updateTeethMoldingProd?.sfg_uuid,
+			sfg_uuid: updateFinishingProd?.sfg_uuid,
+			coloring_prod: updateFinishingProd?.coloring_prod,
 			section: 'finishing',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
@@ -88,11 +93,11 @@ export default function Index({
 	return (
 		<AddModal
 			id='TeethMoldingProdModal'
-			title={'Teeth Molding Production'}
+			title={'Finishing Production'}
 			subTitle={`
-				${updateTeethMoldingProd.order_number} -> 
-				${updateTeethMoldingProd.item_description} -> 
-				${updateTeethMoldingProd.style_color_size} 
+				${updateFinishingProd.order_number} -> 
+				${updateFinishingProd.item_description} -> 
+				${updateFinishingProd.style_color_size} 
 				`}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}

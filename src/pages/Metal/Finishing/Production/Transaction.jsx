@@ -13,7 +13,7 @@ import {
 
 export default function Index({
 	modalId = '',
-	updateProductionTRX = {
+	updateFinishingTRX = {
 		sfg_uuid: null,
 		order_number: null,
 		item_description: null,
@@ -32,7 +32,7 @@ export default function Index({
 		trx_to: null,
 		remarks: '',
 	},
-	setUpdateProductionTRX,
+	setUpdateFinishingTRX,
 }) {
 	const { postData } = useMetalTCProduction();
 	const { user } = useAuth();
@@ -43,7 +43,7 @@ export default function Index({
 	);
 
 	const onClose = () => {
-		setUpdateProductionTRX((prev) => ({
+		setUpdateFinishingTRX((prev) => ({
 			...prev,
 			sfg_uuid: null,
 			order_number: null,
@@ -70,10 +70,10 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			sfg_uuid: updateProductionTRX?.sfg_uuid,
+			sfg_uuid: updateFinishingTRX?.sfg_uuid,
 			trx_quantity_in_kg: 0,
-			trx_from: 'teeth_coloring_prod',
-			trx_to: 'finishing_stock',
+			trx_from: 'finishing_prod',
+			trx_to: 'warehouse',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
@@ -88,19 +88,15 @@ export default function Index({
 	return (
 		<AddModal
 			id='FinishingTrxModal'
-			title='Teeth Coloring ⇾ Finishing'
-			subTitle={`
-				${updateProductionTRX.order_number} -> 
-				${updateProductionTRX.item_description} -> 
-				${updateProductionTRX.style_color_size} 
-				`}
+			title='Finishing Transaction'
+			subTitle='Teeth Coloring ⇾ Finishing'
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
 			<JoinInput
 				title='Transaction Quantity'
 				label='trx_quantity'
-				sub_label={`MAX: ${Number(updateProductionTRX?.teeth_coloring_prod)} pcs`}
+				sub_label={`MAX: ${Number(updateFinishingTRX?.teeth_coloring_prod)} pcs`}
 				unit='PCS'
 				{...{ register, errors }}
 			/>

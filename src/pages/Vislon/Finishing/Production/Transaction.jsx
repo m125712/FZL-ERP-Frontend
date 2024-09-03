@@ -5,6 +5,7 @@ import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
 	NUMBER_REQUIRED,
+	NUMBER,
 	VISLON_TRANSACTION_SCHEMA,
 	VISLON_TRANSACTION_SCHEMA_NULL,
 } from '@util/Schema';
@@ -15,15 +16,16 @@ import { DevTool } from '@hookform/devtools';
 
 export default function Index({
 	modalId = '',
-	updateTeethMoldingTRX = {
+	updateFinishingTRX = {
 		uuid: null,
 		sfg_uuid: null,
 		trx_quantity_in_kg: null,
+		trx_quantity: null,
 		trx_from: null,
 		trx_to: null,
 		remarks: '',
 	},
-	setUpdateTeethMoldingTRX,
+	setUpdateFinishingTRX,
 }) {
 	const { postData } = useVislonTMP();
 	const { user } = useAuth();
@@ -31,20 +33,26 @@ export default function Index({
 	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
 		{
 			...VISLON_TRANSACTION_SCHEMA,
-			trx_quantity_in_kg: NUMBER_REQUIRED.max(
-				Number(updateTeethMoldingTRX?.teeth_molding_prod),
+			trx_quantity_in_kg: NUMBER,
+			trx_quantity: NUMBER_REQUIRED.max(
+				Number(updateFinishingTRX?.teeth_molding_prod),
 				'Beyond Max Quantity'
 			),
 		},
-		VISLON_TRANSACTION_SCHEMA_NULL
+		{
+			...VISLON_TRANSACTION_SCHEMA_NULL,
+			trx_quantity_in_kg: 0,
+			trx_quantity: 0,
+		}
 	);
 
 	const onClose = () => {
-		setUpdateTeethMoldingTRX((prev) => ({
+		setUpdateFinishingTRX((prev) => ({
 			...prev,
 			uuid: null,
 			sfg_uuid: null,
 			trx_quantity_in_kg: null,
+			trx_quantity: null,
 			trx_from: null,
 			trx_to: null,
 			remarks: '',
@@ -58,7 +66,7 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			sfg_uuid: updateTeethMoldingTRX?.sfg_uuid,
+			sfg_uuid: updateFinishingTRX?.sfg_uuid,
 			trx_from: 'finishing_prod',
 			trx_to: 'warehouse',
 			created_by: user?.uuid,
@@ -75,20 +83,16 @@ export default function Index({
 	return (
 		<AddModal
 			id='TeethMoldingTrxModal'
-			title='Finishing ⇾ Warehouse'
-			subTitle={`
-				${updateTeethMoldingTRX.order_number} -> 
-				${updateTeethMoldingTRX.item_description} -> 
-				${updateTeethMoldingTRX.style_color_size} 
-				`}
+			title='Transaction'
+			subTitle='Finishing -> Warehouse'
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
 			<JoinInput
 				title='Transaction Quantity'
-				label='trx_quantity_in_kg'
-				sub_label={`MAX: ${Number(updateTeethMoldingTRX?.teeth_molding_prod)} KG`}
-				unit='KG'
+				label='trx_quantity'
+				sub_label={`MAX: ${Number(updateFinishingTRX?.teeth_molding_prod)} PCS`}
+				unit='PCS'
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

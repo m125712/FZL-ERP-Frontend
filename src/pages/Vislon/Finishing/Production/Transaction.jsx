@@ -4,14 +4,14 @@ import { useRHF } from '@/hooks';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
-	VISLON_TRANSACTION_SCHEMA_NULL,
-	VISLON_TRANSACTION_SCHEMA,
 	NUMBER_REQUIRED,
+	VISLON_TRANSACTION_SCHEMA,
+	VISLON_TRANSACTION_SCHEMA_NULL,
 } from '@util/Schema';
 
-import { DevTool } from '@hookform/devtools';
 import nanoid from '@/lib/nanoid';
 import { useVislonTMP } from '@/state/Vislon';
+import { DevTool } from '@hookform/devtools';
 
 export default function Index({
 	modalId = '',
@@ -59,8 +59,8 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			sfg_uuid: updateTeethMoldingTRX?.sfg_uuid,
-			trx_from: 'teeth_molding_prod',
-			trx_to: 'finishing_stock',
+			trx_from: 'finishing_prod',
+			trx_to: 'warehouse',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
@@ -75,7 +75,7 @@ export default function Index({
 	return (
 		<AddModal
 			id='TeethMoldingTrxModal'
-			title='Teeth Molding ⇾ Finishing'
+			title='Finishing ⇾ Warehouse'
 			subTitle={`
 				${updateTeethMoldingTRX.order_number} -> 
 				${updateTeethMoldingTRX.item_description} -> 

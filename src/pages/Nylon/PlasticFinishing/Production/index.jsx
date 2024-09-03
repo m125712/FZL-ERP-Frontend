@@ -2,6 +2,7 @@ import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useMetalTMProduction } from '@/state/Metal';
+import { useNylonPlasticFinishingProduction } from '@/state/Nylon';
 import { LinkWithCopy, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useMemo, useState } from 'react';
@@ -10,13 +11,14 @@ const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
 
 export default function Index() {
-	const { data, url, isLoading } = useMetalTMProduction();
+	const { data, url, isLoading } = useNylonPlasticFinishingProduction();
 	const info = new PageInfo(
 		'Plastic Finishing Production',
 		url,
 		'nylon__plastic_finishing_production'
 	);
 	const haveAccess = useAccess('nylon__plastic_finishing_production');
+	console.log(data);
 
 	const columns = useMemo(
 		() => [
@@ -71,8 +73,14 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'teeth_molding_stock',
+				accessorKey: 'nylon_plastic_finishing',
 				header: 'Stock (KG)',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'coloring_prod',
+				header: 'Slider Stock',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
@@ -90,10 +98,10 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'teeth_molding_prod',
+				accessorKey: 'finishing_prod',
 				header: (
 					<span>
-						Total Production
+						Production
 						<br />
 						(PCS)
 					</span>
@@ -114,10 +122,10 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'total_trx_quantity',
+				accessorKey: 'warehouse',
 				header: (
 					<span>
-						Total Transaction
+						Warehouse
 						<br />
 						(PCS)
 					</span>

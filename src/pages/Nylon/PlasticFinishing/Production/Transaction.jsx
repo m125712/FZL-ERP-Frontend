@@ -3,10 +3,12 @@ import { useAuth } from '@/context/auth';
 import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useMetalTMProduction } from '@/state/Metal';
+import { useNylonPlasticFinishingProduction } from '@/state/Nylon';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import {
+	NUMBER_REQUIRED,
 	SFG_TRANSACTION_SCHEMA_IN_PCS,
 	SFG_TRANSACTION_SCHEMA_IN_PCS_NULL,
 } from '@util/Schema';
@@ -14,53 +16,46 @@ import {
 export default function Index({
 	modalId = '',
 	updatePFTRX = {
-		sfg_uuid: null,
-		order_number: null,
-		item_description: null,
-		style_color_size: null,
-		order_quantity: null,
-		balance_quantity: null,
-		teeth_molding_prod: null,
-		teeth_molding_stock: null,
-		total_trx_quantity: null,
-		metal_teeth_molding: null,
 		uuid: null,
 		sfg_uuid: null,
-		trx_quantity_in_kg: null,
-		trx_quantity_in: null,
-		trx_from: null,
-		trx_to: null,
-		remarks: '',
+		section: null,
+		production_quantity_in_kg: null,
+		production_quantity: null,
+		coloring_prod: null,
+		nylon_plastic_finishing: null,
+		finishing_prod: null,
+		wastage: null,
+		remarks: null,
 	},
 	setUpdatePFTRX,
 }) {
-	const { postData } = useMetalTMProduction();
+	const { postData } = useNylonPlasticFinishingProduction();
 	const { user } = useAuth();
+	const MAX_QUANTITY = Number(updatePFTRX?.finishing_prod).toFixed(3);
 
 	const { register, handleSubmit, errors, reset, control } = useRHF(
-		SFG_TRANSACTION_SCHEMA_IN_PCS,
+		{
+			...SFG_TRANSACTION_SCHEMA_IN_PCS,
+			trx_quantity: NUMBER_REQUIRED.max(
+				MAX_QUANTITY,
+				'Beyond Max Quantity'
+			),
+		},
 		SFG_TRANSACTION_SCHEMA_IN_PCS_NULL
 	);
 
 	const onClose = () => {
 		setUpdatePFTRX((prev) => ({
 			...prev,
-			sfg_uuid: null,
-			order_number: null,
-			item_description: null,
-			style_color_size: null,
-			order_quantity: null,
-			balance_quantity: null,
-			teeth_molding_prod: null,
-			teeth_molding_stock: null,
-			total_trx_quantity: null,
-			metal_teeth_molding: null,
 			uuid: null,
-			trx_quantity_in_kg: null,
-			trx_quantity_in: null,
-			trx_from: null,
-			trx_to: null,
-			remarks: '',
+			sfg_uuid: null,
+			section: null,
+			production_quantity_in_kg: null,
+			production_quantity: null,
+			coloring_prod: null,
+			nylon_plastic_finishing: null,
+			wastage: null,
+			remarks: null,
 		}));
 		reset(SFG_TRANSACTION_SCHEMA_IN_PCS_NULL);
 		window[modalId].close();
@@ -72,8 +67,8 @@ export default function Index({
 			uuid: nanoid(),
 			sfg_uuid: updatePFTRX?.sfg_uuid,
 			trx_quantity_in_kg: 0,
-			trx_from: 'teeth_molding_prod',
-			trx_to: 'teeth_coloring_stock',
+			trx_from: 'finishing_prod',
+			trx_to: 'warehouse',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
@@ -88,7 +83,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title='Teeth Molding ⇾ Teeth Coloring'
+			title='Finishing ⇾ Warehouse'
 			subTitle={`
 				${updatePFTRX.order_number} -> 
 				${updatePFTRX.item_description} -> 
@@ -100,7 +95,7 @@ export default function Index({
 			<JoinInput
 				title='Transaction Quantity'
 				label='trx_quantity'
-				sub_label={`MAX: ${Number(updatePFTRX?.teeth_molding_prod)} pcs`}
+				sub_label={`MAX: ${Number(updatePFTRX?.finishing_prod)} pcs`}
 				unit='PCS'
 				{...{ register, errors }}
 			/>

@@ -96,3 +96,43 @@ export const useNylonPlasticFinishingTapeLogByUUID = (uuid) =>
 		queryKey: nylonQK.nylonPlasticFinishingTapeLogByUUID(uuid),
 		url: `/zipper/dyed-tape-transaction/by/nylon_plastic_finishing${uuid}`,
 	});
+
+//* Production Log
+export const useNylonPlasticFinishingProductionLog = () =>
+	createGlobalState({
+		queryKey: nylonQK.nylonPlasticFinishingProductionLog(),
+		url: '/zipper/sfg-production/by/finishing?item_name=nylon&stopper_type=plastic stopper',
+	});
+export const useNylonPlasticFinishingProductionLogByUUID = (
+	uuid,
+	{ enabled = true }
+) =>
+	createGlobalState({
+		queryKey: nylonQK.nylonPlasticFinishingProductionLogByUUID(uuid),
+		url: `/zipper/sfg-production/${uuid}`,
+		enabled: enabled,
+	});
+
+//* Trx Log
+export const useNylonPlasticFinishingTrxLog = () =>
+	createGlobalState({
+		queryKey: nylonQK.nylonPlasticFinishingTrxLog(),
+		url: '/zipper/sfg-transaction/by/finishing_prod?item_name=nylon&stopper_type=plastic stopper',
+	});
+
+export const useNylonPlasticFinishingTrxLogByUUID = (
+	uuid,
+	{ enabled = true }
+) =>
+	createGlobalState({
+		queryKey: nylonQK.nylonPlasticFinishingTrxLogByUUID(uuid),
+		url: `/zipper/sfg-transaction/${uuid}`,
+		enabled: enabled,
+	});
+
+// * PRODUCTION
+export const useNylonPlasticFinishingProduction = () =>
+	createGlobalState({
+		queryKey: nylonQK.nylonPlasticProduction(),
+		url: '/zipper/sfg/by/finishing?item_name=nylon&stopper_type=plastic stopper',
+	});

@@ -329,10 +329,22 @@ export const dyeingQK = {
 // * Nylon
 export const nylonQK = {
 	all: () => ['nylon'],
+	metallicFinish: () => [...nylonQK.all(), 'metallic-finish'],
 
 	// * Metallic Finishing
-	// * RM
+	// * Production
+	nylonMFProduction: () => [...nylonQK.metallicFinish(), 'production'],
+	// * Production Log
+	nylonMFProductionLog: () => [...nylonQK.metallicFinish(), 'production-log'],
+	nylonMFProductionLogByUUID: (uuid) => [
+		...nylonQK.nylonMFProductionLog(),
+		uuid,
+	],
+	// * Trx Log
+	nylonMFTrxLog: () => [...nylonQK.metallicFinish(), 'trx-log'],
+	nylonMFTrxLogByUUID: (uuid) => [...nylonQK.nylonMFTrxLog(), uuid],
 
+	// * RM
 	nylonMetallicFinishingRM: () => [...nylonQK.all(), 'rm'],
 	nylonMetallicFinishingRMByUUID: (uuid) => [
 		...nylonQK.nylonMetallicFinishingRM(),

@@ -65,7 +65,12 @@ const useFetchForRhfReset = async (uri, returnId, reset) => {
 	useEffect(() => {
 		if (returnId === null || returnId === undefined) return;
 
-		api.get(uri).then((res) => reset(res?.data?.data[0]));
+		api.get(uri).then((res) => {
+			console.log({
+				data: res?.data?.data[0],
+			});
+			reset(res?.data?.data[0]);
+		});
 	}, [returnId]);
 };
 

@@ -756,24 +756,27 @@ export const USER_NULL = {
 // * User -> Department
 export const USER_DEPARTMENT_SCHEMA = {
 	department: STRING_REQUIRED,
+	remarks: STRING.nullable(),
 };
 
 export const USER_DEPARTMENT_NULL = {
 	uuid: null,
 	department: '',
+	remarks: null,
 };
 
 // * User -> Designation
 export const USER_DESIGNATION_SCHEMA = {
 	department_uuid: UUID_PK,
 	designation: STRING_REQUIRED,
+	remarks: STRING.nullable(),
 };
 
 export const USER_DESIGNATION_NULL = {
 	uuid: null,
 	department_uuid: null,
-	department: '',
 	designation: '',
+	remarks: null,
 };
 
 // Reset Password

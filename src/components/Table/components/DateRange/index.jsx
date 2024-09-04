@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { useCallback, useState } from 'react';
+import { forwardRef, useCallback, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import {
@@ -11,6 +11,19 @@ import {
 	Select,
 	utilFunc,
 } from './utils';
+
+import { CalenderIcon } from '@assets/icons';
+
+const ExampleCustomInput = forwardRef(({ value, onClick, className }, ref) => {
+	return (
+		<button className={className} onClick={onClick} ref={ref}>
+			<CalenderIcon className='size-4' />
+			<span className='hidden text-xs sm:block lg:text-sm'>{value}</span>
+		</button>
+	);
+});
+
+ExampleCustomInput.displayName = 'ExampleCustomInput';
 
 export default function DateRange({ getHeaderGroups }) {
 	const column = getHeaderGroups()
@@ -87,24 +100,17 @@ export default function DateRange({ getHeaderGroups }) {
 
 	return (
 		<DatePicker
-			className='input-filter input input-sm flex w-auto items-center justify-between rounded bg-transparent font-semibold transition-all duration-100 ease-in-out'
 			selected={endDate}
 			minDate={oldStartDate}
 			maxDate={oldEndDate}
 			endDate={endDate}
 			startDate={startDate}
 			onChange={handleOnChange}
-			selectsRange
 			withPortal
-			// shouldCloseOnSelect={false}
-			// onChangeRaw={handleChangeRaw}
-			// customInput={
-			// 	<>
-			// 		<input type="date" />
-			// 		<input type="date" />
-			// 	</>
-			// }
 			renderCustomHeader={CustomHeader}
+			customInput={
+				<ExampleCustomInput className='btn-filter-outline h-full pr-7' />
+			}
 			{...DefaultConfig}
 		/>
 	);

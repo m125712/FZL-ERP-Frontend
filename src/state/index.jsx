@@ -104,7 +104,7 @@ export default function createGlobalState({ queryKey, url, enabled = true }) {
 		data: data?.data,
 		toast: data?.toast,
 		invalidateQuery: () => queryClient.invalidateQueries({ queryKey }),
-		isLoading,
+		isLoading: isLoading,
 		isError,
 		isPending,
 		updateData,

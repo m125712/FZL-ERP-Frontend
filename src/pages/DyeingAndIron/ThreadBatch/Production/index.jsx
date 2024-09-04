@@ -430,11 +430,7 @@ export default function Index() {
 
 				{/* todo: react-table  */}
 
-				<ReactTable
-					data={BatchEntryField}
-					columns={columns}
-					extraClass='py-2'
-				/>
+				<ReactTable data={BatchEntryField} columns={columns} />
 
 				<div className='modal-action'>
 					<button

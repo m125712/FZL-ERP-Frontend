@@ -191,7 +191,6 @@ export default function Index() {
 				title={info.getTitle()}
 				data={finishingLog}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<SFGAddOrUpdate

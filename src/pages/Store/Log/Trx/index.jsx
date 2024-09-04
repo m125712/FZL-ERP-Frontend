@@ -129,16 +129,18 @@ export default function Index() {
 	};
 
 	if (isLoading)
-		return <span className='loading loading-dots loading-lg z-50' />;
-
-	return (
-		<div>
+		return (
 			<ReactTable
 				title={info.getTitle()}
 				data={data}
 				columns={columns}
-				extraClass='py-2'
+				isLoading={isLoading}
 			/>
+		);
+
+	return (
+		<div>
+			<ReactTable title={info.getTitle()} data={data} columns={columns} />
 
 			<Suspense>
 				<AddOrUpdate

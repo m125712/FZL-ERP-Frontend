@@ -208,7 +208,6 @@ export default function Index() {
 				// handelAdd={handelAdd}
 				data={finishingProd}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<Production

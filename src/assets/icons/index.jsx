@@ -137,6 +137,29 @@ const Add = ({ ...props }) => {
 		</svg>
 	);
 };
+const ListPlus = ({ ...props }) => {
+	return (
+		<svg
+			xmlns='http://www.w3.org/2000/svg'
+			width='24'
+			height='24'
+			viewBox='0 0 24 24'
+			fill='none'
+			stroke='currentColor'
+			strokeWidth='2'
+			strokeLinecap='round'
+			strokeLinejoin='round'
+			className='lucide lucide-list-plus'
+			{...props}>
+			<path d='M11 12H3' />
+			<path d='M16 6H3' />
+			<path d='M16 18H3' />
+			<path d='M18 9v6' />
+			<path d='M21 12h-6' />
+		</svg>
+	);
+};
+
 const Close = ({ ...props }) => {
 	return (
 		<svg
@@ -576,7 +599,7 @@ const Reload = ({ ...props }) => {
 			xmlns='http://www.w3.org/2000/svg'
 			fill='none'
 			viewBox='0 0 24 24'
-			strokeWidth='2'
+			strokeWidth={2}
 			stroke='currentColor'
 			className='size-6'
 			{...props}>
@@ -615,17 +638,19 @@ const Download = ({ ...props }) => {
 	return (
 		<svg
 			xmlns='http://www.w3.org/2000/svg'
-			fill='none'
+			width='24'
+			height='24'
 			viewBox='0 0 24 24'
-			strokeWidth='1.5'
+			fill='none'
 			stroke='currentColor'
-			className='size-6'
+			strokeWidth='2'
+			strokeLinecap='round'
+			strokeLinejoin='round'
+			className='lucide lucide-download'
 			{...props}>
-			<path
-				strokeLinecap='round'
-				strokeLinejoin='round'
-				d='M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3'
-			/>
+			<path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4' />
+			<polyline points='7 10 12 15 17 10' />
+			<line x1='12' x2='12' y1='15' y2='3' />
 		</svg>
 	);
 };
@@ -923,7 +948,7 @@ const Column = ({ ...props }) => {
 			xmlns='http://www.w3.org/2000/svg'
 			fill='none'
 			viewBox='0 0 24 24'
-			strokeWidth='1.5'
+			strokeWidth={2}
 			stroke='currentColor'
 			className='size-6'
 			{...props}>
@@ -1143,27 +1168,20 @@ const CalenderIcon = ({ ...props }) => {
 	return (
 		<svg
 			xmlns='http://www.w3.org/2000/svg'
-			width={24}
-			height={24}
+			width='24'
+			height='24'
 			viewBox='0 0 24 24'
 			fill='none'
 			stroke='currentColor'
-			strokeWidth={2}
+			strokeWidth='2'
 			strokeLinecap='round'
 			strokeLinejoin='round'
+			className='lucide lucide-calendar'
 			{...props}>
-			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
-			<path d='M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z' />
-			<path d='M16 3v4' />
-			<path d='M8 3v4' />
-			<path d='M4 11h16' />
-			<path d='M7 14h.013' />
-			<path d='M10.01 14h.005' />
-			<path d='M13.01 14h.005' />
-			<path d='M16.015 14h.005' />
-			<path d='M13.015 17h.005' />
-			<path d='M7.01 17h.005' />
-			<path d='M10.01 17h.005' />
+			<path d='M8 2v4' />
+			<path d='M16 2v4' />
+			<rect width='18' height='18' x='3' y='4' rx='2' />
+			<path d='M3 10h18' />
 		</svg>
 	);
 };
@@ -1221,4 +1239,5 @@ export {
 	Column,
 	Plus,
 	Reload,
+	ListPlus,
 };

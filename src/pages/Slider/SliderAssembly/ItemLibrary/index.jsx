@@ -165,7 +165,6 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				data={itemLibrary}
 				columns={columns}
-				extraClass='py-2'
 			/>
 
 			<Suspense>

@@ -213,7 +213,6 @@ export default function Index() {
 				accessor={haveAccess.includes('click_production')}
 				data={finishingProd}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<Production

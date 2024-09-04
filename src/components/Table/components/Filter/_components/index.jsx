@@ -73,7 +73,7 @@ export const DrawerBody = ({ htmlId, children }) => (
 		<div className='drawer-content'>
 			<label htmlFor={htmlId} className='btn-filter-outline'>
 				<FilterIcon className='size-5' />
-				<span>Filter</span>
+				<span className='hidden lg:block'>Filter</span>
 			</label>
 		</div>
 		<div className='drawer-side overflow-x-hidden'>

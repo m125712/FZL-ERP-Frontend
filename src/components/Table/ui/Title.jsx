@@ -1,12 +1,15 @@
-import { Add } from '@/assets/icons';
+import { Plus } from '@/assets/icons';
 import cn from '@/lib/cn';
 
 const AddButton = ({ onClick }) => {
 	return (
-		<button type='button' onClick={onClick} className='btn-filter-accent'>
-			<Add className='size-5' />
+		<button
+			type='button'
+			onClick={onClick}
+			className='btn-filter-accent gap-1'>
+			<Plus className='size-5' />
 
-			<span>Add New</span>
+			<span className='hidden lg:block'> Add New</span>
 		</button>
 	);
 };

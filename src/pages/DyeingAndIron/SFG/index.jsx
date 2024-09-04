@@ -206,7 +206,6 @@ export default function Index() {
 				title={info.getTitle()}
 				data={dyeingAndIronProd}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<Production

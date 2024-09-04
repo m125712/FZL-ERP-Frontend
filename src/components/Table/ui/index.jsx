@@ -43,8 +43,8 @@ const PdfButton = (props) => {
 
 const ReloadButton = (props) => {
 	return (
-		<button type='button' className='btn-filter' {...props}>
-			<Reload className='size-4 font-semibold' />
+		<button type='button' className='btn-filter-outline' {...props}>
+			<Reload className='size-4' />
 		</button>
 	);
 };

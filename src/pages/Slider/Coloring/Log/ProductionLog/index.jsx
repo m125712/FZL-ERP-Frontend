@@ -16,7 +16,6 @@ export default function Index() {
 		'/slider/slider-coloring/log/production'
 	);
 
-
 	const haveAccess = useAccess('slider__coloring_log');
 
 	const columns = useMemo(
@@ -136,7 +135,7 @@ export default function Index() {
 		uuid: null,
 		stock_uuid: null,
 		coloring_stock: null,
-		coloring_prod : null,
+		coloring_prod: null,
 		production_quantity: null,
 		section: null,
 		wastage: null,
@@ -174,12 +173,7 @@ export default function Index() {
 
 	return (
 		<div className=''>
-			<ReactTable
-				title={info.getTitle()}
-				data={data}
-				columns={columns}
-				extraClass='py-2'
-			/>
+			<ReactTable title={info.getTitle()} data={data} columns={columns} />
 			<Suspense>
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}

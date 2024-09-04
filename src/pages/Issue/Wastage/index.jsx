@@ -156,7 +156,6 @@ export default function Index({ material_id = null }) {
 				accessor={WASTAGE_EDIT_ACCESS}
 				data={wastage}
 				columns={columns}
-				extraClass='py-2'
 			/>
 
 			<Suspense>

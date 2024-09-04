@@ -9,19 +9,18 @@ const GlobalBreadcrumbs = () => {
 	return (
 		<div className='flex items-center gap-1'>
 			{breadcrumbs.map(({ match, breadcrumb }, index) => (
-				<>
+				<div key={match.pathname} className='flex items-center'>
 					<NavLink
 						className={cn(
 							'text-md text-secondary',
 							breadcrumbs.length - 1 === index &&
 								'font-medium text-primary'
 						)}
-						key={match.pathname}
 						to={match.pathname}>
 						{breadcrumb}
 					</NavLink>
 					{index !== breadcrumbs.length - 1 && <RightArrow />}
-				</>
+				</div>
 			))}
 		</div>
 	);

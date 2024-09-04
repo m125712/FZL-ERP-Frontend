@@ -35,7 +35,7 @@ export default function createGlobalState({ queryKey, url, enabled = true }) {
 				data?.filter((val) => val.id !== context.newData.uuid)
 			);
 
-			console.log(error);
+			console.error(error);
 
 			ShowToast(error?.response?.data?.toast);
 		},

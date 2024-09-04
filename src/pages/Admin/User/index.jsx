@@ -1,6 +1,6 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess, useUpdateFunc } from '@/hooks';
+import { useAccess } from '@/hooks';
 import { useAdminUsers } from '@/state/Admin';
 import { DateTime, EditDelete, ResetPassword, StatusButton } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
@@ -13,7 +13,7 @@ const ResetPass = lazy(() => import('./ResetPass'));
 const PageAssign = lazy(() => import('./PageAssign'));
 
 export default function Order() {
-	const { data, url, isLoading, deleteData } = useAdminUsers();
+	const { data, url, isLoading, deleteData, updateData } = useAdminUsers();
 	const info = new PageInfo('Admin/User', url, 'admin__user');
 	const haveAccess = useAccess(info.getTab());
 
@@ -196,13 +196,16 @@ export default function Order() {
 		const user = data[idx];
 		const status = user?.status == 1 ? 0 : 1;
 		const updated_at = GetDateTime();
+		console.log({
+			status,
+			updated_at,
+		});
 
-		await useUpdateFunc({
-			uri: `/hr/user/status/${user?.uuid}/${status}/${updated_at}/${user?.name}`,
-			data: user,
-			itemId: user?.uuid,
+		await updateData.mutateAsync({
+			url: `/hr/user/status/${user?.uuid}`,
+			uuid: user?.uuid,
 			updatedData: { status, updated_at },
-			setItems: setUsers,
+			isOnCloseNeeded: false,
 		});
 	};
 

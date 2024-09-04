@@ -1,49 +1,4 @@
 import { Close, FilterIcon } from '@/assets/icons';
-import { cn } from '@nextui-org/react';
-
-// export const Template = ({
-// 	columnName,
-// 	onClick,
-// 	showResetButton = false,
-// 	children,
-// }) => (
-// 	<details className="group overflow-hidden rounded border border-primary [&_summary::-webkit-details-marker]:hidden">
-// 		<summary className="flex cursor-pointer select-none items-center justify-between gap-2 bg-white p-2 text-gray-900 transition">
-// 			<span className="flex items-center gap-2 text-sm font-medium">
-// 				{columnName}
-// 				{showResetButton && (
-// 					<button
-// 						type="button"
-// 						onClick={onClick}
-// 						className="group/btn btn btn-circle btn-outline btn-error btn-xs"
-// 					>
-// 						<Close className="h-4 w-4 text-error group-hover/btn:text-primary-content" />
-// 					</button>
-// 				)}
-// 			</span>
-
-// 			<span className="transition group-open:-rotate-180">
-// 				<svg
-// 					xmlns="http://www.w3.org/2000/svg"
-// 					fill="none"
-// 					viewBox="0 0 24 24"
-// 					strokeWidth="1.5"
-// 					stroke="currentColor"
-// 					className="h-4 w-4"
-// 				>
-// 					<path
-// 						strokeLinecap="round"
-// 						strokeLinejoin="round"
-// 						d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-// 					/>
-// 				</svg>
-// 			</span>
-// 		</summary>
-// 		<div className="flex w-full flex-col gap-1 border-t border-secondary p-2">
-// 			{children}
-// 		</div>
-// 	</details>
-// );
 
 export const Template = ({
 	columnName,
@@ -101,6 +56,8 @@ export const notShowingColumns = [
 	'updated_at',
 	'reset_password',
 	'page_assign',
+	'reset_pass_actions',
+	'page_assign_actions',
 ];
 
 export const SlicedColumn = ({ columns }) => {
@@ -114,11 +71,8 @@ export const SlicedColumn = ({ columns }) => {
 					columnDef: { header },
 				}) => {
 					return (
-						<li key={id} className=''>
-							<label
-								className={cn(
-									'text-sm font-medium text-secondary'
-								)}>
+						<li key={id}>
+							<label className='text-sm font-medium text-secondary'>
 								<input
 									type='checkbox'
 									className='checkbox-accent checkbox checkbox-xs rounded-md'

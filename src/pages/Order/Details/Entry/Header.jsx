@@ -119,7 +119,7 @@ export default function Header({
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody title='Item'>
-				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField
 						label='order_info_uuid'
 						title='O/N'
@@ -158,7 +158,6 @@ export default function Header({
 												item.value === getValues('item')
 										)}
 										onChange={(e) => onChange(e.value)}
-										// isDisabled={order_info_id !== undefined}
 									/>
 								);
 							}}
@@ -182,7 +181,6 @@ export default function Header({
 												getValues('zipper_number')
 										)}
 										onChange={(e) => onChange(e.value)}
-										// isDisabled={order_info_id !== undefined}
 									/>
 								);
 							}}
@@ -206,7 +204,6 @@ export default function Header({
 											onChange(e.value);
 											setEndType(e.label);
 										}}
-										// isDisabled={order_info_id !== undefined}
 									/>
 								);
 							}}
@@ -230,7 +227,6 @@ export default function Header({
 													getValues('hand')
 											)}
 											onChange={(e) => onChange(e.value)}
-											// isDisabled={order_info_id !== undefined}
 										/>
 									);
 								}}
@@ -252,14 +248,13 @@ export default function Header({
 												getValues('lock_type')
 										)}
 										onChange={(e) => onChange(e.value)}
-										// isDisabled={order_info_id !== undefined}
 									/>
 								);
 							}}
 						/>
 					</FormField>
 				</div>
-				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<div className='flex w-full flex-col gap-1 md:flex-row'>
 						<FormField
 							label='stopper_type'
@@ -279,7 +274,6 @@ export default function Header({
 													getValues('stopper_type')
 											)}
 											onChange={(e) => onChange(e.value)}
-											// isDisabled={order_info_id !== undefined}
 										/>
 									);
 								}}
@@ -303,7 +297,6 @@ export default function Header({
 													getValues('teeth_color')
 											)}
 											onChange={(e) => onChange(e.value)}
-											// isDisabled={order_info_id !== undefined}
 										/>
 									);
 								}}
@@ -351,7 +344,7 @@ export default function Header({
 						/>
 					</FormField>
 				</div>
-				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<Textarea label='description' {...{ register, errors }} />
 					<Textarea label='remarks' {...{ register, errors }} />
 				</div>
@@ -375,7 +368,7 @@ export default function Header({
 						</div>
 					</div>
 				}>
-				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField
 						label='puller_type'
 						title='Puller'
@@ -394,7 +387,6 @@ export default function Header({
 												getValues('puller_type')
 										)}
 										onChange={(e) => onChange(e.value)}
-										// isDisabled={order_info_id !== undefined}
 									/>
 								);
 							}}
@@ -418,7 +410,6 @@ export default function Header({
 												getValues('puller_color')
 										)}
 										onChange={(e) => onChange(e.value)}
-										// isDisabled={order_info_id !== undefined}
 									/>
 								);
 							}}
@@ -442,7 +433,6 @@ export default function Header({
 												getValues('coloring_type')
 										)}
 										onChange={(e) => onChange(e.value)}
-										// isDisabled={order_info_id !== undefined}
 									/>
 								);
 							}}
@@ -463,7 +453,6 @@ export default function Header({
 												getValues('slider')
 										)}
 										onChange={(e) => onChange(e.value)}
-										// isDisabled={order_info_id !== undefined}
 									/>
 								);
 							}}
@@ -471,7 +460,7 @@ export default function Header({
 					</FormField>
 				</div>
 
-				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField
 						label='puller_link'
 						title='Puller Link'
@@ -490,7 +479,6 @@ export default function Header({
 												getValues('puller_link')
 										)}
 										onChange={(e) => onChange(e.value)}
-										// isDisabled={order_info_id !== undefined}
 									/>
 								);
 							}}
@@ -514,7 +502,6 @@ export default function Header({
 												getValues('slider_body_shape')
 										)}
 										onChange={(e) => onChange(e.value)}
-										// isDisabled={order_info_id !== undefined}
 									/>
 								);
 							}}
@@ -538,7 +525,6 @@ export default function Header({
 												getValues('slider_link')
 										)}
 										onChange={(e) => onChange(e.value)}
-										// isDisabled={order_info_id !== undefined}
 									/>
 								);
 							}}
@@ -546,8 +532,8 @@ export default function Header({
 					</FormField>
 				</div>
 
-				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
-					<div className='text-secondary-content flex basis-3/4 flex-col gap-1 md:flex-row'>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+					<div className='flex basis-3/4 flex-col gap-1 text-secondary-content md:flex-row'>
 						<FormField
 							label='top_stopper'
 							title='Top Stopper'
@@ -566,7 +552,6 @@ export default function Header({
 													getValues('top_stopper')
 											)}
 											onChange={(e) => onChange(e.value)}
-											// isDisabled={order_info_id !== undefined}
 										/>
 									);
 								}}
@@ -590,7 +575,6 @@ export default function Header({
 													getValues('bottom_stopper')
 											)}
 											onChange={(e) => onChange(e.value)}
-											// isDisabled={order_info_id !== undefined}
 										/>
 									);
 								}}
@@ -616,7 +600,6 @@ export default function Header({
 													)
 											)}
 											onChange={(e) => onChange(e.value)}
-											// isDisabled={order_info_id !== undefined}
 										/>
 									);
 								}}
@@ -645,7 +628,6 @@ export default function Header({
 												onChange={(e) =>
 													onChange(e.value)
 												}
-												// isDisabled={order_info_id !== undefined}
 											/>
 										);
 									}}
@@ -679,26 +661,11 @@ export default function Header({
 							</div>
 						</div>
 					</div>
-
-					{/* <CheckBox
-						label="is_logo_body"
-						title="Logo Body"
-						defaultChecked={isLogoBody}
-						{...{ register, errors }}
-						onChange={(e) => setIsLogoBody(e.target.checked)}
-					/>
-					<CheckBox
-						label="is_logo_puller"
-						title="Logo Puller"
-						defaultChecked={isLogoPuller}
-						{...{ register, errors }}
-						onChange={(e) => setIsLogoPuller(e.target.checked)}
-					/> */}
 				</div>
 			</SectionEntryBody>
 
 			<SectionEntryBody title='Garments'>
-				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<Input label={`garment`} {...{ register, errors }} />
 
 					<FormField
@@ -767,7 +734,6 @@ export default function Header({
 												getValues('end_user')
 										)}
 										onChange={(e) => onChange(e.value)}
-										// isDisabled={order_info_id !== undefined}
 									/>
 								);
 							}}

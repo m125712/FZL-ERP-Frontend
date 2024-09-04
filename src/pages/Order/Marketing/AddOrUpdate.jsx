@@ -5,10 +5,10 @@ import GetDateTime from '@/util/GetDateTime';
 import { MARKETING_NULL, MARKETING_SCHEMA } from '@util/Schema';
 import nanoid from '@/lib/nanoid';
 import { useOrderMarketing } from '@/state/Order';
+import { useAuth } from '@/context/auth';
 
 export default function Index({
 	modalId = '',
-	setMarketing,
 	updateMarketing = {
 		user_uuid: null,
 		uuid: null,
@@ -33,6 +33,8 @@ export default function Index({
 	);
 
 	const { value: user } = useFetch('/other/marketing-user/value/label');
+
+	const { user: userAth } = useAuth();
 
 	const onClose = () => {
 		setUpdateMarketing((prev) => ({
@@ -68,6 +70,7 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
+			created_by: userAth?.uuid,
 			created_at: GetDateTime(),
 		};
 

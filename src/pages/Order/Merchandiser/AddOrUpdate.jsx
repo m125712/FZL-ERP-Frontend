@@ -11,6 +11,7 @@ import { useOrderMerchandiser } from '@/state/Order';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { MERCHANDISER_NULL, MERCHANDISER_SCHEMA } from '@util/Schema';
+import { useAuth } from '@/context/auth';
 
 export default function Index({
 	modalId = '',
@@ -32,6 +33,7 @@ export default function Index({
 	} = useRHF(MERCHANDISER_SCHEMA, MERCHANDISER_NULL);
 
 	const { value: party } = useFetch('/other/party/value/label');
+	const { user } = useAuth();
 
 	useFetchForRhfReset(
 		`${url}/${updateMerchandiser?.uuid}`,
@@ -76,10 +78,11 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			party_name: party_name,
+			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
 
-		console.log(updatedData);
+	
 		await postData.mutateAsync({
 			url,
 			newData: updatedData,
@@ -121,6 +124,7 @@ export default function Index({
 			<Input label='email' {...{ register, errors }} />
 			<Input label='phone' {...{ register, errors }} />
 			<Textarea label='address' {...{ register, errors }} />
+			<Textarea label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

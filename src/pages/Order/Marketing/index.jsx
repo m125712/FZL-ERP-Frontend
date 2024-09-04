@@ -2,7 +2,7 @@ import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useOrderMarketing } from '@/state/Order';
-import { EditDelete } from '@/ui';
+import { EditDelete, DateTime } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 
@@ -13,6 +13,7 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } = useOrderMarketing();
 	const info = new PageInfo('Order/Marketing', url, 'order__marketing');
 	const haveAccess = useAccess('order__marketing');
+
 	const columns = useMemo(
 		() => [
 			{
@@ -34,6 +35,28 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created At',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
@@ -44,13 +67,16 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
 				width: 'w-24',
 				cell: (info) => (
 					<EditDelete
 						idx={info.row.index}
 						handelUpdate={handelUpdate}
 						handelDelete={handelDelete}
+						showEdit={haveAccess.includes('update')}
 						showDelete={haveAccess.includes('delete')}
 					/>
 				),
@@ -62,7 +88,6 @@ export default function Index() {
 	// Fetching data from server
 	useEffect(() => {
 		document.title = info.getTabName();
-		// useFetchFunc(info.getFetchUrl(), setMarketing, setLoading, setError);
 	}, []);
 
 	// Add

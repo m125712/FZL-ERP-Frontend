@@ -23,12 +23,13 @@ export default function Index() {
 				cell: (info) => {
 					const { is_sample, is_bill, is_cash } = info.row.original;
 					return (
-						<div className='flex space-x-1'>
+						// TODO: need to fix bill vs cash
+						<div className='flex space-x-1'> 
 							<StatusButton size='btn-xs' value={is_sample} />
 							<StatusButton size='btn-xs' value={is_bill} />
 							<StatusButton
 								size='btn-xs'
-								value={is_cash === 1 ? 0 : 1}
+								value={is_cash}
 							/>
 						</div>
 					);
@@ -95,8 +96,8 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'issued_by_name',
-				header: 'Issued By',
+				accessorKey: 'created_by_name',
+				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -171,7 +172,6 @@ export default function Index() {
 	});
 
 	const handelUpdate = (idx) => {
-		// const prevData = orderInfo[idx];
 		setUpdateOrderInfo((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
@@ -196,7 +196,6 @@ export default function Index() {
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
-	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
 		<div>

@@ -6,6 +6,7 @@ import { Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import { BUYER_NULL, BUYER_SCHEMA } from '@util/Schema';
+import { useAuth } from '@/context/auth';
 
 export default function Index({
 	modalId = '',
@@ -25,6 +26,8 @@ export default function Index({
 		updateBuyer?.uuid,
 		reset
 	);
+
+	const { user } = useAuth();
 
 	const onClose = () => {
 		setUpdateBuyer((prev) => ({
@@ -57,6 +60,7 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
+			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
 

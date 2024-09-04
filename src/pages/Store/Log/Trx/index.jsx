@@ -23,7 +23,7 @@ import { DateTime, EditDelete, SectionName } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useMemo, useState } from 'react';
 
-const TrxLogAddOrUpdate = lazy(() => import('./TrxLogAddOrUpdate'));
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
@@ -48,7 +48,7 @@ export default function Index() {
 	const { invalidateQuery: invalidateDieCastingRM } = useSliderDieCastingRM();
 	const { invalidateQuery: invalidateDeliveryRM } = useDeliveryRM();
 
-	const info = new PageInfo('Material/Log', url);
+	const info = new PageInfo('Log Trx', url);
 	const haveAccess = useAccess('store__log');
 
 	const columns = useMemo(
@@ -83,12 +83,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+
 			{
 				accessorKey: 'created_at',
 				header: 'Created At',
@@ -105,6 +100,12 @@ export default function Index() {
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'actions',
@@ -192,7 +193,7 @@ export default function Index() {
 			/>
 
 			<Suspense>
-				<TrxLogAddOrUpdate
+				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
 						updateMaterialTrx,

@@ -3,7 +3,7 @@ import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useMaterialType } from '@/state/Store';
 
-import { EditDelete } from '@/ui';
+import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 
@@ -12,7 +12,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useMaterialType();
-	const info = new PageInfo('Material/Type', url, 'store__type');
+	const info = new PageInfo('Type', url, 'store__type');
 	const haveAccess = useAccess('store__type');
 
 	useEffect(() => {
@@ -32,6 +32,24 @@ export default function Index() {
 				header: 'Short Name',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created At',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated At',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'remarks',

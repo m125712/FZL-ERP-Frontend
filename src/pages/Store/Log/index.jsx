@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import OrderTrxLog from './OrderTrxLog';
-import TrxLog from './TrxLog';
+import AgainstOrder from './AgainstOrder';
+import Trx from './Trx';
 
 export default function Index() {
 	useEffect(() => {
@@ -9,9 +9,9 @@ export default function Index() {
 
 	return (
 		<>
-			<TrxLog key='TrxLog' />
-			<hr className='border-secondary-content my-6 border-2 border-dashed' />
-			<OrderTrxLog key='OrderTrxLog' />
+			<Trx key='TrxLog' />
+			<hr className='my-6 border-2 border-dashed border-secondary/30' />
+			<AgainstOrder key='OrderTrxLog' />
 		</>
 	);
 }

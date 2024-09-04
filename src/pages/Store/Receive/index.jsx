@@ -13,7 +13,7 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } = usePurchaseDescription();
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const navigate = useNavigate();
-	const info = new PageInfo('Details', url, 'store__receive');
+	const info = new PageInfo('Receive', url, 'store__receive');
 	const haveAccess = useAccess('store__receive');
 
 	useEffect(() => {
@@ -52,29 +52,28 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
+				accessorKey: 'created_by_name',
+				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_at',
-				header: 'Created',
-				filterFn: 'isWithinRange',
+				header: 'Created At',
 				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'updated_at',
-				header: 'Updated',
+				header: 'Updated At',
 				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'actions',

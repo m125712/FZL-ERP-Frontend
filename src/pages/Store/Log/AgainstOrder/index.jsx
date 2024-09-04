@@ -21,7 +21,6 @@ import {
 } from '@/state/Slider';
 import {
 	useMaterialInfo,
-	useMaterialStockToSFG,
 	useMaterialTrxAgainstOrderDescription,
 } from '@/state/Store';
 import {
@@ -32,7 +31,7 @@ import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useMemo, useState } from 'react';
 
-const OrderTrxLogAddOrUpdate = lazy(() => import('./OrderTrxLogAddOrUpdate'));
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
@@ -126,12 +125,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+
 			{
 				accessorKey: 'created_at',
 				header: 'Created At',
@@ -149,6 +143,13 @@ export default function Index() {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
 			{
 				accessorKey: 'actions',
 				header: 'Actions',
@@ -240,7 +241,7 @@ export default function Index() {
 			/>
 
 			<Suspense>
-				<OrderTrxLogAddOrUpdate
+				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
 						updateMaterialTrxToOrder,

@@ -22,9 +22,7 @@ export default function Index({
 		BANK_NULL
 	);
 
-	const { data: bank } = useCommercialBankByUUID(updateBank?.uuid, {
-		enabled: !!updateBank?.uuid,
-	});
+	const { data: bank } = useCommercialBankByUUID(updateBank?.uuid);
 
 	useEffect(() => {
 		if (bank) {

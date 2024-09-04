@@ -4,28 +4,29 @@ import { commercialQK } from './QueryKeys';
 // * Bank * //
 export const useCommercialBank = () =>
 	createGlobalState({
-		queryKey: commercialQK.banks(),
+		queryKey: commercialQK.bank(),
 		url: '/commercial/bank',
 	});
 
-export const useCommercialBankByUUID = (uuid, { enabled = true }) =>
+export const useCommercialBankByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: commercialQK.bankByUUID(uuid),
 		url: `/commercial/bank/${uuid}`,
-		enabled,
+		enabled: !!uuid,
 	});
 
 // * PI * //
 export const useCommercialPI = () =>
 	createGlobalState({
-		queryKey: commercialQK.pis(),
+		queryKey: commercialQK.pi(),
 		url: '/commercial/pi',
 	});
 
 export const useCommercialPIByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: commercialQK.pi(uuid),
+		queryKey: commercialQK.piByUUID(uuid),
 		url: `/commercial/pi/${uuid}`,
+		enabled: !!uuid,
 	});
 
 export const useCommercialPIDetailsByUUID = (uuid, { enabled = true }) =>
@@ -35,24 +36,25 @@ export const useCommercialPIDetailsByUUID = (uuid, { enabled = true }) =>
 		enabled,
 	});
 
-export const useCommercialPIDetailsByPiId = (pi_id, { enabled = true }) =>
+export const useCommercialPIDetailsByPiId = (pi_id) =>
 	createGlobalState({
 		queryKey: commercialQK.piDetailsByPiID(pi_id),
 		url: `/commercial/pi/details/by/pi-id/${pi_id}`,
-		enabled,
+		enabled: !!pi_id,
 	});
 
 // * PI Entry * //
 export const useCommercialPIEntry = () =>
 	createGlobalState({
-		queryKey: commercialQK.piEntries(),
+		queryKey: commercialQK.piEntry(),
 		url: '/commercial/pi-entry',
 	});
 
 export const useCommercialPIEntryByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: commercialQK.piEntry(uuid),
+		queryKey: commercialQK.piEntryByUUID(uuid),
 		url: `/commercial/pi-entry/${uuid}`,
+		enabled: !!uuid,
 	});
 
 // * PI by orderInfoIds * //
@@ -75,24 +77,27 @@ export const useCommercialPIByOrderInfo = (
 // * LC * //
 export const useCommercialLC = () =>
 	createGlobalState({
-		queryKey: commercialQK.lcs(),
+		queryKey: commercialQK.lc(),
 		url: '/commercial/lc',
 	});
 
 export const useCommercialLCByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: commercialQK.lc(uuid),
+		queryKey: commercialQK.lcByUUID(uuid),
 		url: `/commercial/lc/${uuid}`,
+		enabled: !!uuid,
 	});
 
 export const useCommercialLCPIByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: commercialQK.lcPi(uuid),
+		queryKey: commercialQK.lcByPi(uuid),
 		url: `/commercial/lc-pi/by/${uuid}`,
+		enabled: !!uuid,
 	});
 
-export const useCommercialLCByNumber = (uuid) =>
+export const useCommercialLCByNumber = (number) =>
 	createGlobalState({
-		queryKey: commercialQK.lcNumber(uuid),
-		url: `/commercial/lc/by/lc-number/${uuid}`,
+		queryKey: commercialQK.lcByNumber(number),
+		url: `/commercial/lc/by/lc-number/${number}`,
+		enabled: !!number,
 	});

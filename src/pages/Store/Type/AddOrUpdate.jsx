@@ -1,10 +1,12 @@
 import { AddModal } from '@/components/Modal';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useAuth } from '@/context/auth';
+import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useMaterialType } from '@/state/Store';
+import { useMaterialType, useMaterialTypeByUUID } from '@/state/Store';
 import { Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { SECTION_NULL, SECTION_SCHEMA } from '@util/Schema';
+import { useEffect } from 'react';
 
 export default function Index({
 	modalId = '',
@@ -13,17 +15,20 @@ export default function Index({
 	},
 	setUpdateMaterialType,
 }) {
+	const { user } = useAuth();
 	const { url, updateData, postData } = useMaterialType();
+	const { data } = useMaterialTypeByUUID(updateMaterialType?.uuid);
+
 	const { register, handleSubmit, errors, reset } = useRHF(
 		SECTION_SCHEMA,
 		SECTION_NULL
 	);
 
-	useFetchForRhfReset(
-		`/material/type/${updateMaterialType?.uuid}`,
-		updateMaterialType?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateMaterialType((prev) => ({
@@ -57,6 +62,7 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			created_at: GetDateTime(),
+			created_by: user?.uuid,
 		};
 
 		await postData.mutateAsync({

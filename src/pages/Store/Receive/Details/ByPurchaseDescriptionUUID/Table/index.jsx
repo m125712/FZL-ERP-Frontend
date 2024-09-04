@@ -1,12 +1,9 @@
-import ReactTable from '@/components/Table';
 import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
 
 import { DateTime } from '@/ui';
 import { useMemo } from 'react';
 
 export default function Index({ purchase }) {
-	// console.log(purchase);
-
 	const columns = useMemo(
 		() => [
 			{
@@ -40,23 +37,28 @@ export default function Index({ purchase }) {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'created_at',
-				header: 'Created',
-				filterFn: 'isWithinRange',
+				accessorKey: 'created_by_name',
+				header: 'Created By',
 				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created At',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'updated_at',
-				header: 'Updated',
+				header: 'Updated At',
 				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 		],
 		[purchase]

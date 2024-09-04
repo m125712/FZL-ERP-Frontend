@@ -117,11 +117,13 @@ export default function Index() {
 			};
 
 			// Update LC data
-			await updateData.mutateAsync({
+			const res = await updateData.mutateAsync({
 				url: `${commercialLcUrl}/${data?.uuid}`,
 				updatedData: lc_updated_data,
 				isOnCloseNeeded: false,
 			});
+
+			const lc_number = res?.data?.[0].updatedId;
 
 			// Update Deletable Pi
 			if (deletablePi.length > 0) {
@@ -158,10 +160,10 @@ export default function Index() {
 			];
 
 			await Promise.all(pi_numbers_promise)
-				.then(() => reset(LC_NULL))
 				.then(() => {
+					reset(LC_NULL);
 					invalidateQuery();
-					navigate(`/commercial/lc/details/${lc_uuid}`);
+					navigate(`/commercial/lc/details/${lc_number}`);
 				})
 				.catch((err) => console.log(err));
 			return;
@@ -201,6 +203,8 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 
+		// const new_lc_number = res?.data?.[0].insertedId;
+
 		// Update Pi Numbers
 		const pi_numbers = [...data.pi].map((item) => ({
 			uuid: item.uuid,
@@ -220,7 +224,7 @@ export default function Index() {
 		await Promise.all(pi_numbers_promise)
 			.then(() => reset(LC_NULL))
 			.then(() => {
-				navigate(`/commercial/lc/details/${new_lc_uuid}`);
+				navigate(`/commercial/lc`);
 			})
 			.catch((err) => console.log(err));
 	};
@@ -262,7 +266,7 @@ export default function Index() {
 							<th
 								key={item}
 								scope='col'
-								className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide transition duration-300 first:pl-2'>
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
 								{item}
 							</th>
 						))}>

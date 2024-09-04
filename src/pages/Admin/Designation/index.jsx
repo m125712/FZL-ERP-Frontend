@@ -2,7 +2,7 @@ import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useAdminDesignations } from '@/state/Admin';
-import { EditDelete } from '@/ui';
+import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 
@@ -28,6 +28,27 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
 			{
 				accessorKey: 'actions',
 				header: 'Actions',

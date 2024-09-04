@@ -1,29 +1,28 @@
-import { useFetch } from '@/hooks';
 import { useEffect } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Information from './Information';
 import Table from './Table';
+import { useCommercialPIDetailsByPiId } from '@/state/Commercial';
 
 export default function Index() {
-	const { pi_uuid } = useParams();
-
-	const { value: data, loading } = useFetch(
-		`/commercial/pi/details/${pi_uuid}`,
-		[pi_uuid]
+	const { pi_id } = useParams();
+	const { data, isLoading, invalidateQuery } = useCommercialPIDetailsByPiId(
+		pi_id,
+		{
+			enabled: !!pi_id,
+		}
 	);
 
 	useEffect(() => {
-		document.title = `PI: ${pi_uuid}`;
-	}, [pi_uuid]);
+		invalidateQuery();
+		document.title = `PI: ${pi_id}`;
+	}, [pi_id]);
 
-	if (loading)
+	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
-	if (!data) return <Navigate to='/not-found' />;
-
-	// return <>Hello</>;
 	return (
-		<div className='space-y-2'>
+		<div className='space-y-8 py-4'>
 			<Information pi={data} />
 			<Table pi={data?.pi_entry} />
 		</div>

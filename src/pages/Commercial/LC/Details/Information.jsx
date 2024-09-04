@@ -1,4 +1,7 @@
 import { DateTime, LinkWithCopy, TitleValue } from '@/ui';
+import SectionContainer from '@/ui/Others/SectionContainer';
+import RenderTable from '@/ui/Others/Table/RenderTable';
+import { format } from 'date-fns';
 
 const LCInfo = (lc) => {
 	return (
@@ -76,20 +79,223 @@ function BankInfo(lc) {
 }
 
 export default function Information({ lc }) {
-	return (
-		<div className='my-2 flex flex-col rounded-md px-2 shadow-md'>
-			<span className='flex items-center gap-2 text-2xl font-semibold capitalize leading-tight text-primary md:text-3xl'>
-				Information
-			</span>
-			<hr className='border-1 my-2 border-secondary-content' />
+	const {
+		uuid,
+		party_uuid,
+		pi_ids,
+		party_name,
+		total_value,
+		file_no,
+		lc_number,
+		lc_date,
+		payment_value,
+		payment_date,
+		ldbc_fdbc,
+		acceptance_date,
+		maturity_date,
+		commercial_executive,
+		party_bank,
+		production_complete,
+		lc_cancel,
+		handover_date,
+		shipment_date,
+		expiry_date,
+		ud_no,
+		ud_received,
+		at_sight,
+		amd_date,
+		amd_count,
+		problematical,
+		epz,
+		created_by,
+		created_by_name,
+		created_at,
+		updated_at,
+		remarks,
+	} = lc;
 
-			<div className='flex flex-col items-baseline justify-start text-sm md:flex-row'>
-				<LCInfo {...lc} />
-				<hr className='divider divider-primary divider-vertical md:divider-horizontal' />
-				<OthersInfo {...lc} />
-				<hr className='divider divider-primary divider-vertical md:divider-horizontal' />
-				<BankInfo {...lc} />
+	const renderItems = () => {
+		const basicInfo = [
+			{
+				label: 'PI IDs',
+				value: (
+					<div className='flex flex-wrap gap-2'>
+						{pi_ids.map((piId) => (
+							<LinkWithCopy
+								key={piId}
+								title={piId}
+								id={piId}
+								uri='/commercial/pi/details'
+							/>
+						))}
+					</div>
+				),
+			},
+
+			{
+				label: 'Total Value',
+				value: Number(total_value).toFixed(2),
+			},
+			{
+				label: 'LC Cancelled',
+				value: lc_cancel ? 'Yes' : 'No',
+			},
+			{
+				label: 'Production Complete',
+				value: production_complete ? 'Yes' : 'No',
+			},
+			{
+				label: 'Problematic',
+				value: problematical ? 'Yes' : 'No',
+			},
+			{
+				label: 'EPZ',
+				value: epz ? 'Yes' : 'No',
+			},
+			{
+				label: 'Created By',
+				value: created_by_name,
+			},
+			{
+				label: 'Created At',
+				value: format(new Date(created_at), 'dd/MM/yyyy'),
+			},
+			{
+				label: 'Updated At',
+				value: format(new Date(updated_at), 'dd/MM/yyyy'),
+			},
+			{
+				label: 'Remarks',
+				value: remarks,
+			},
+		];
+		const fileDetails = [
+			{
+				label: 'Party',
+				value: party_name,
+			},
+			{
+				label: 'File No.',
+				value: file_no,
+			},
+			{
+				label: 'LC No.',
+				value: lc_number,
+			},
+			{
+				label: 'LC Date',
+				value: format(new Date(lc_date), 'dd/MM/yyyy'),
+			},
+		];
+
+		const commercialDetails = [
+			{
+				label: 'Executive',
+				value: commercial_executive,
+			},
+			{
+				label: 'Party Bank',
+				value: party_bank,
+			},
+			{
+				label: 'Shipment Date',
+				value: format(new Date(shipment_date), 'dd/MM/yyyy'),
+			},
+			{
+				label: 'Expiry Date',
+				value: format(new Date(expiry_date), 'dd/MM/yyyy'),
+			},
+		];
+		const progressionDetails = [
+			{
+				label: 'LDBC/FDBC',
+				value: ldbc_fdbc,
+			},
+			{
+				label: 'Handover Date',
+				value: format(new Date(handover_date), 'dd/MM/yyyy'),
+			},
+			{
+				label: 'Acceptance Date',
+				value: format(new Date(acceptance_date), 'dd/MM/yyyy'),
+			},
+			{
+				label: 'Maturity Date',
+				value: format(new Date(maturity_date), 'dd/MM/yyyy'),
+			},
+			{
+				label: 'Payment Date',
+				value: format(new Date(payment_date), 'dd/MM/yyyy'),
+			},
+			{
+				label: 'Payment Value',
+				value: Number(payment_value).toFixed(2),
+			},
+		];
+
+		const others = [
+			{
+				label: 'UD No.',
+				value: ud_no,
+			},
+			{
+				label: 'UD Received',
+				value: ud_received,
+			},
+			{
+				label: 'At Sight',
+				value: at_sight,
+			},
+			{
+				label: 'AMD Date',
+				value: format(new Date(amd_date), 'dd/MM/yyyy'),
+			},
+			{
+				label: 'AMD Count',
+				value: amd_count,
+			},
+		];
+
+		return {
+			basicInfo,
+			fileDetails,
+			commercialDetails,
+			progressionDetails,
+			others,
+		};
+	};
+
+	return (
+		<SectionContainer title={'Information'} contentClassName={'space-y-0 '}>
+			<RenderTable
+				className={'border-secondary/30 lg:border-b'}
+				title={'Basic Info'}
+				items={renderItems().basicInfo}
+			/>
+			<div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-8'>
+				<RenderTable
+					className={'border-secondary/30 lg:border-r'}
+					title={'File Details'}
+					items={renderItems().fileDetails}
+				/>
+				<RenderTable
+					className={'border-secondary/30 lg:border-l'}
+					title={'Commercial Details'}
+					items={renderItems().commercialDetails}
+				/>
 			</div>
-		</div>
+			<div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-8'>
+				<RenderTable
+					className={'border-secondary/30 lg:border-r'}
+					title={'Progression'}
+					items={renderItems().progressionDetails}
+				/>
+				<RenderTable
+					className={'border-secondary/30 lg:border-l'}
+					title={'Others'}
+					items={renderItems().others}
+				/>
+			</div>
+		</SectionContainer>
 	);
 }

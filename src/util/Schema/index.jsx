@@ -756,24 +756,27 @@ export const USER_NULL = {
 // * User -> Department
 export const USER_DEPARTMENT_SCHEMA = {
 	department: STRING_REQUIRED,
+	remarks: STRING.nullable(),
 };
 
 export const USER_DEPARTMENT_NULL = {
 	uuid: null,
 	department: '',
+	remarks: null,
 };
 
 // * User -> Designation
 export const USER_DESIGNATION_SCHEMA = {
 	department_uuid: UUID_PK,
 	designation: STRING_REQUIRED,
+	remarks: STRING.nullable(),
 };
 
 export const USER_DESIGNATION_NULL = {
 	uuid: null,
 	department_uuid: null,
-	department: '',
 	designation: '',
+	remarks: null,
 };
 
 // Reset Password
@@ -1213,6 +1216,7 @@ export const BANK_SCHEMA = {
 	swift_code: STRING_REQUIRED,
 	address: STRING_REQUIRED,
 	policy: STRING_REQUIRED,
+	remarks: STRING.nullable(),
 };
 
 export const BANK_NULL = {
@@ -1221,8 +1225,7 @@ export const BANK_NULL = {
 	swift_code: '',
 	address: '',
 	policy: '',
-	created_at: '',
-	updated_at: '',
+	remarks: null,
 };
 
 // LC
@@ -1234,20 +1237,20 @@ export const LC_SCHEMA = {
 	payment_value: NUMBER_DOUBLE_REQUIRED,
 	payment_date: STRING,
 	ldbc_fdbc: STRING_REQUIRED,
-	acceptance_date: STRING_REQUIRED,
-	maturity_date: STRING_REQUIRED,
+	acceptance_date: STRING.nullable(),
+	maturity_date: STRING.nullable(),
 	commercial_executive: STRING_REQUIRED,
 	party_bank: STRING_REQUIRED,
 	production_complete: BOOLEAN_REQUIRED,
 	lc_cancel: BOOLEAN_REQUIRED,
-	handover_date: STRING,
-	shipment_date: STRING,
-	expiry_date: STRING,
-	ud_no: STRING,
-	ud_received: STRING,
+	handover_date: STRING.nullable(),
+	shipment_date: STRING.nullable(),
+	expiry_date: STRING.nullable(),
+	ud_no: STRING.nullable(),
+	ud_received: STRING.nullable(),
 	at_sight: STRING,
-	amd_date: STRING_REQUIRED,
-	amd_count: NUMBER_REQUIRED,
+	amd_date: STRING.nullable(),
+	amd_count: NUMBER,
 	problematical: BOOLEAN_REQUIRED,
 	epz: BOOLEAN_REQUIRED,
 	remarks: STRING.nullable(),
@@ -1263,20 +1266,20 @@ export const LC_NULL = {
 	payment_value: '',
 	payment_date: '',
 	ldbc_fdbc: '',
-	acceptance_date: '',
-	maturity_date: '',
+	acceptance_date: null,
+	maturity_date: null,
 	commercial_executive: '',
 	party_bank: '',
 	production_complete: false,
 	lc_cancel: false,
-	handover_date: '',
-	shipment_date: '',
-	expiry_date: '',
-	ud_no: '',
-	ud_received: false,
+	handover_date: null,
+	shipment_date: null,
+	expiry_date: null,
+	ud_no: null,
+	ud_received: null,
 	at_sight: false,
-	amd_date: '',
-	amd_count: '',
+	amd_date: null,
+	amd_count: 0,
 	problematical: false,
 	epz: false,
 	remarks: '',

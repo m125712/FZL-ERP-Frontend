@@ -198,6 +198,12 @@ export default function Index() {
 				cell: (info) => (info.getValue() ? 'Yes' : 'No'),
 			},
 			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'created_at',
 				header: 'Created At',
 				enableColumnFilter: false,
@@ -205,7 +211,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'updated_at',
-				header: 'Updated',
+				header: 'Updated At',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},

@@ -9,9 +9,9 @@ export default function DynamicField({
 	children,
 }) {
 	return (
-		<div className='text-primary-content rounded bg-primary'>
+		<div className='rounded bg-primary text-primary-content'>
 			<div className='flex items-center justify-between px-4 py-3'>
-				<span className='text-primary-content flex items-center gap-4 text-lg font-semibold capitalize'>
+				<span className='flex items-center gap-4 text-lg font-semibold capitalize text-primary-content'>
 					{title}
 				</span>
 				{handelAppend && (
@@ -27,7 +27,7 @@ export default function DynamicField({
 				<table className='w-full'>
 					<thead
 						className={cn(
-							'text-primary-content select-none text-sm',
+							'select-none text-sm text-primary-content',
 							tableHeadClass
 						)}>
 						<tr className='rounded-md capitalize text-primary'>
@@ -48,11 +48,11 @@ export function DynamicDeliveryField({
 	children,
 }) {
 	return (
-		<div className='text-primary-content rounded-md bg-primary'>
-			<div className='my-2 mr-2 flex items-center justify-between'>
-				<span className='text-primary-content flex items-center gap-4 px-2 text-lg font-semibold capitalize'>
+		<div>
+			<div className='flex items-center justify-between rounded-md rounded-b-none bg-primary px-4 py-3'>
+				<h4 className='text-lg font-semibold capitalize text-primary-content'>
 					{title}
-				</span>
+				</h4>
 				{handelAppend && (
 					<button
 						type='button'
@@ -63,14 +63,14 @@ export function DynamicDeliveryField({
 				)}
 			</div>
 
-			<div className='overflow-x-auto rounded-md border border-primary bg-white text-left text-sm text-primary shadow-md'>
+			<div className='overflow-x-auto rounded-b-md border border-t-0 border-secondary/30'>
 				<table className='w-full'>
-					<thead className='text-primary-content select-none text-sm'>
-						<tr className='rounded-md capitalize text-primary'>
+					<thead>
+						<tr className='select-none whitespace-nowrap bg-secondary text-left text-sm font-semibold tracking-wide text-secondary-content'>
 							{tableHead}
 						</tr>
 					</thead>
-					<tbody className='divide-y-2 divide-primary'>
+					<tbody className='divide-y divide-secondary/30'>
 						{children}
 					</tbody>
 				</table>

@@ -8,10 +8,11 @@ export const useCommercialBank = () =>
 		url: '/commercial/bank',
 	});
 
-export const useCommercialBankByUUID = (uuid) =>
+export const useCommercialBankByUUID = (uuid, { enabled = true }) =>
 	createGlobalState({
-		queryKey: commercialQK.bank(uuid),
+		queryKey: commercialQK.bankByUUID(uuid),
 		url: `/commercial/bank/${uuid}`,
+		enabled,
 	});
 
 // * PI * //
@@ -25,6 +26,20 @@ export const useCommercialPIByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: commercialQK.pi(uuid),
 		url: `/commercial/pi/${uuid}`,
+	});
+
+export const useCommercialPIDetailsByUUID = (uuid, { enabled = true }) =>
+	createGlobalState({
+		queryKey: commercialQK.piDetailsByUUID(uuid),
+		url: `/commercial/pi/details/${uuid}`,
+		enabled,
+	});
+
+export const useCommercialPIDetailsByPiId = (pi_id, { enabled = true }) =>
+	createGlobalState({
+		queryKey: commercialQK.piDetailsByPiID(pi_id),
+		url: `/commercial/pi/details/by/pi-id/${pi_id}`,
+		enabled,
 	});
 
 // * PI Entry * //
@@ -78,6 +93,6 @@ export const useCommercialLCPIByUUID = (uuid) =>
 
 export const useCommercialLCByNumber = (uuid) =>
 	createGlobalState({
-		queryKey: commercialQK.lcPi(uuid),
+		queryKey: commercialQK.lcNumber(uuid),
 		url: `/commercial/lc/by/lc-number/${uuid}`,
 	});

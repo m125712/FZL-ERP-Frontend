@@ -1,6 +1,6 @@
 import ReactTable from '@/components/Table';
 
-const ReactTableWithTitle = ({ title, data, columns }) => {
+const ReactTableWithTitle = ({ title, data, columns, children }) => {
 	return (
 		<ReactTable
 			title={title}
@@ -9,8 +9,9 @@ const ReactTableWithTitle = ({ title, data, columns }) => {
 			containerClassName='mb-0 rounded-t-none'
 			data={data}
 			columns={columns}
-			showTitleOnly
-		/>
+			showTitleOnly>
+			{children}
+		</ReactTable>
 	);
 };
 

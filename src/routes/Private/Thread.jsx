@@ -12,6 +12,9 @@ const Machine = lazy(() => import('@pages/Thread/Machine'));
 const Swatch = lazy(() => import('@pages/Thread/Swatch'));
 const DyesCategory = lazy(() => import('@pages/Thread/DyesCategory'));
 const Programs = lazy(() => import('@pages/Thread/Programs'));
+const Coning = lazy(() => import('@pages/Thread/Conneing'));
+const ConingEntry = lazy(() => import('@pages/Thread/Conneing/Entry'));
+const ConingDetails = lazy(() => import('@pages/Thread/Conneing/Details'));
 
 export const ThreadRoutes = [
 	{
@@ -97,6 +100,35 @@ export const ThreadRoutes = [
 		element: Programs,
 		type: 'thread',
 		page_name: 'thread__programs',
+		actions: ['create', 'read', 'update', 'delete'],
+	},
+	{
+		id: 232,
+		name: 'Coning Entry',
+		path: '/thread/coning/update/:batch_uuid',
+		element: ConingEntry,
+		type: 'thread',
+		page_name: 'thread__coning_update',
+		actions: ['create', 'read', 'update', 'delete'],
+		hidden: true,
+	},
+	{
+		id: 233,
+		name: 'Details of Coning',
+		path: '/thread/coning/details/:batch_uuid',
+		element: ConingDetails,
+		type: 'thread',
+		page_name: 'thread__coning_in_details',
+		actions: ['create', 'read', 'update', 'delete'],
+		hidden: true,
+	},
+	{
+		id: 123,
+		name: 'Conning',
+		path: '/thread/coning/details',
+		element: Coning,
+		type: 'thread',
+		page_name: 'thread__coning_details',
 		actions: ['create', 'read', 'update', 'delete'],
 	},
 ];

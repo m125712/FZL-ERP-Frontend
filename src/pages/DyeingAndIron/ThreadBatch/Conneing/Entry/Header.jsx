@@ -57,7 +57,7 @@ export default function Header({
 
 	return (
 		<div className='flex flex-col gap-4'>
-			<SectionEntryBody title='Yarn Issue'>
+			{/* <SectionEntryBody title='Yarn Issue'>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField label='uuid' title='Batch No' errors={errors}>
 						<Controller
@@ -82,9 +82,8 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<Input label='yarn_quantity' {...{ register, errors }} />
 				</div>
-			</SectionEntryBody>
+			</SectionEntryBody> */}
 			<SectionEntryBody title='Dyeing'>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField label='uuid' title='Batch No' errors={errors}>
@@ -162,6 +161,7 @@ export default function Header({
 							}}
 						/>
 					</FormField>
+					<Input label='yarn_quantity' {...{ register, errors }} />
 					<FormField label='reason' title='Reason' errors={errors}>
 						<Controller
 							name={'reason'}

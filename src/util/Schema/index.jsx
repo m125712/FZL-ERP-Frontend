@@ -1354,7 +1354,6 @@ export const THREAD_DYES_CATEGORY_NULL = {
 	remarks: '',
 };
 
-
 // Thread Programs
 export const THREAD_PROGRAMS_SCHEMA = {
 	dyes_category_uuid: STRING_REQUIRED,
@@ -1496,6 +1495,39 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 		},
 	],
 };
+//* Thread Coning Schema*//
+export const THREAD_CONING_SCHEMA = {
+	coning_operator: STRING_REQUIRED,
+	coning_supervisor: STRING_REQUIRED,
+	coning_machines: STRING_REQUIRED,
+	batch_entry: yup.array().of(
+		yup.object().shape({
+			coning_production_quantity: NUMBER_REQUIRED.max(
+				yup.ref('quantity'),
+				'Beyond Max Quantity'
+			),
+			coning_production_quantity_in_kg: NUMBER_REQUIRED,
+			transfer_quantity: NUMBER_REQUIRED.max(
+				yup.ref('quantity'),
+				'Beyond Max Quantity'
+			),
+		})
+	),
+};
+
+export const THREAD_CONING_NULL = {
+	uuid: null,
+	coning_operator: '',
+	coning_supervisor: '',
+	coning_machines: '',
+	batch_entry: [
+		{
+			coning_production_quantity: null,
+			coning_production_quantity_in_kg: null,
+			transfer_quantity: null,
+		},
+	],
+};
 
 // * Dyeing Planning SNO schema*//
 export const DYEING_PLANNING_SNO_SCHEMA = {
@@ -1589,6 +1621,7 @@ export const DYEING_THREAD_BATCH_SCHEMA = {
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
 		yup.object().shape({
+			is_checked: BOOLEAN,
 			quantity: NUMBER.nullable() // Allows the field to be null
 				.transform((value, originalValue) =>
 					String(originalValue).trim() === '' ? null : value

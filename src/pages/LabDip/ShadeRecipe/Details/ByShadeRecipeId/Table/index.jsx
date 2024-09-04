@@ -16,7 +16,7 @@ export default function Index({ shade_recipe_entry }) {
 				accessorKey: 'quantity',
 				header: 'Quantity',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
 			{
 				accessorKey: 'unit',

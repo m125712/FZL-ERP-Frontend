@@ -2,7 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useThreadMachine, useThreadPrograms } from '@/state/Thread';
+import { useThreadPrograms } from '@/state/Thread';
 
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';

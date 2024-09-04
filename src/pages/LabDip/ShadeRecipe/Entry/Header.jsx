@@ -5,7 +5,6 @@ import {
 	Input,
 	ReactSelect,
 	SectionEntryBody,
-	Select,
 	Textarea,
 } from '@/ui';
 import { useState } from 'react';
@@ -19,8 +18,6 @@ export default function Header({
 	Controller,
 	is_Status,
 }) {
-	const { shade_recipe_description_uuid } = useParams();
-
 	const [isStatus, setIsStatus] = useState(
 		typeof is_Status !== 'boolean' && is_Status === 1 ? true : false
 	);
@@ -28,11 +25,38 @@ export default function Header({
 		{ label: 'Bleach', value: 'bleach' },
 		{ label: 'Non-Bleach', value: 'non-bleach' },
 	];
+	const subStreatOption = [
+		{ label: 'TXP', value: 'txp' },
+		{ label: 'SSP', value: 'ssp' },
+		{ label: 'Others', value: 'others' },
+	];
 	return (
 		<SectionEntryBody title='Information'>
 			<div className='flex flex-col items-end gap-6 px-2 text-secondary-content md:flex-row'>
 				<Input label='name' {...{ register, errors }} />
-				<Input label='sub_streat' {...{ register, errors }} />
+				<FormField
+					label='sub_streat'
+					title='Sub Streat'
+					errors={errors}>
+					<Controller
+						name={'sub_streat'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Sub Streat'
+									options={subStreatOption}
+									value={subStreatOption?.find(
+										(item) =>
+											item.value ==
+											getValues('sub_streat')
+									)}
+									onChange={(e) => onChange(e.value)}
+								/>
+							);
+						}}
+					/>
+				</FormField>
 				<FormField label='bleaching' title='Bleaching' errors={errors}>
 					<Controller
 						name={'bleaching'}

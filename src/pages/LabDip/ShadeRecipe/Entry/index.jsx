@@ -18,7 +18,7 @@ import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { SHADE_RECIPE_NULL, SHADE_RECIPE_SCHEMA } from '@util/Schema';
-import { Suspense, useCallback, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
@@ -251,14 +251,6 @@ export default function Index() {
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide  p-3';
 
-	// const getTotalPrice = useCallback(
-	// 	(shade_recipe) =>
-	// 		shade_recipe.reduce((acc, item) => {
-	// 			return acc + Number(item.price);
-	// 		}, 0),
-	// 	[watch()]
-	// );
-
 	return (
 		<>
 			<HotKeys {...{ keyMap, handlers }}>
@@ -290,7 +282,7 @@ export default function Index() {
 								<th
 									key={item}
 									scope='col'
-									className='text-primary-content group cursor-pointer select-none whitespace-nowrap bg-secondary px-4 py-2 text-left font-semibold tracking-wide transition duration-300'>
+									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-4 py-2 text-left font-semibold tracking-wide text-primary-content transition duration-300'>
 									{item}
 								</th>
 							))}>
@@ -301,7 +293,11 @@ export default function Index() {
 											label={`shade_recipe_entry[${index}].material_uuid`}
 											title='Material'
 											is_title_needed='false'
-											errors={errors}>
+											dynamicerror={
+												errors?.shade_recipe_entry?.[
+													index
+												]?.material_uuid
+											}>
 											<Controller
 												name={`shade_recipe_entry[${index}].material_uuid`}
 												control={control}
@@ -332,10 +328,6 @@ export default function Index() {
 															menuPortalTarget={
 																document.body
 															}
-															// isDisabled={
-															// 	shade_recipe_uuid !==
-															// 	undefined
-															// }
 														/>
 													);
 												}}
@@ -390,16 +382,6 @@ export default function Index() {
 									</td>
 								</tr>
 							))}
-							{/* <tr className='border-t border-primary/30'>
-								<td
-									className='py-4 text-right font-bold'
-									colSpan='2'>
-									Total Price:
-								</td>
-								<td className='py-4 font-bold'>
-									{getTotalPrice(watch('shade_recipe'))}
-								</td>
-							</tr> */}
 						</DynamicField>
 					</div>
 

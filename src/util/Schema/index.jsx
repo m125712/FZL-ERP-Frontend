@@ -363,7 +363,11 @@ export const SHADE_RECIPE_SCHEMA = {
 	bleaching: STRING_REQUIRED.default('non-bleach'),
 	shade_recipe_entry: yup.array().of(
 		yup.object().shape({
-			quantity: NUMBER_DOUBLE_REQUIRED,
+			material_uuid: STRING_REQUIRED,
+			quantity: NUMBER_DOUBLE_REQUIRED.moreThan(
+				0,
+				'Quantity must be more than 0'
+			).default(0),
 			remarks: STRING.nullable(),
 		})
 	),
@@ -380,7 +384,7 @@ export const SHADE_RECIPE_NULL = {
 			uuid: null,
 			shade_recipe_uuid: null,
 			material_uuid: null,
-			quantity: '',
+			quantity: 0,
 			remarks: '',
 			lab_status: 0,
 		},
@@ -1302,7 +1306,7 @@ export const LC_NULL = {
 // Count Length
 export const THREAD_COUNT_LENGTH_SCHEMA = {
 	count: NUMBER_REQUIRED,
-	length: NUMBER_REQUIRED,
+	length: STRING_REQUIRED,
 	weight: NUMBER_DOUBLE_REQUIRED,
 	sst: STRING_REQUIRED,
 	remarks: STRING.nullable(),
@@ -1349,19 +1353,7 @@ export const THREAD_DYES_CATEGORY_NULL = {
 	upto_percentage: null,
 	remarks: '',
 };
-// 	{
-//   "uuid": "igD0v9DIJQhJeet",
-//   "dyes_category_uuid": "igD0v9DIJQhJeet",
-//   "dyes_category_name": "Dyes Category Name",
-//   "material_uuid": "igD0v9DIJQhJeet",
-//   "material_name": "Material Name",
-//   "quantity": 10,
-//   "created_by": "igD0v9DIJQhJeet",
-//   "created_by_name": "John Doe",
-//   "created_at": "2024-01-01 00:00:00",
-//   "updated_at": "2024-01-01 00:00:00",
-//   "remarks": "Remarks"
-// }
+
 
 // Thread Programs
 export const THREAD_PROGRAMS_SCHEMA = {
@@ -1464,10 +1456,12 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 			style: STRING_REQUIRED,
 			count_length_uuid: STRING_REQUIRED,
 			bleaching: STRING_REQUIRED,
-			quantity: NUMBER_REQUIRED,
+			quantity: NUMBER_REQUIRED.moreThan(
+				0,
+				'Quantity must be more than 0'
+			),
 			company_price: NUMBER_DOUBLE_REQUIRED,
 			party_price: NUMBER_DOUBLE_REQUIRED,
-			swatch_approval_date: yup.date().nullable(),
 			remarks: STRING.nullable(),
 		})
 	),
@@ -1495,11 +1489,10 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 			color: '',
 			count_length_uuid: null,
 			bleaching: 'non-bleach',
-			quantity: null,
+			quantity: 0,
 			company_price: 0,
 			party_price: 0,
 			remarks: '',
-			swatch_approval_date: null,
 		},
 	],
 };

@@ -1,17 +1,15 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetch, useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import nanoid from '@/lib/nanoid';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { useDyeingThreadBatch } from '@/state/Dyeing';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+import { FormField, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import {
 	DYEING_THREAD_BATCH_DYEING_NULL,
 	DYEING_THREAD_BATCH_DYEING_SCHEMA,
 } from '@util/Schema';
-import * as yup from 'yup';
 
 export default function Index({
 	modalId = '',
@@ -58,7 +56,6 @@ export default function Index({
 	);
 
 	useFetchForRhfReset(`${url}/${dyeing?.uuid}`, dyeing?.uuid, reset);
-
 
 	const { value: dyeing_operator_option } = useFetch(
 		'/other/hr/user/value/label'

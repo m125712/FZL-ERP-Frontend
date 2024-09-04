@@ -10,7 +10,6 @@ import {
 	EditDelete,
 	LinkWithCopy,
 	ReactSelect,
-	StatusButton,
 } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
@@ -41,28 +40,6 @@ export default function Index() {
 					/>
 				),
 			},
-			// {
-			// 	accessorKey: 'add_actions',
-			// 	header: '',
-			// 	enableColumnFilter: false,
-			// 	enableSorting: false,
-			// 	hidden: !haveAccess.includes('create'),
-			// 	width: 'w-24',
-			// 	cell: (info) => {
-			// 		const { week } = info.row.original;
-			// 		return (
-			// 			<button
-			// 				className='btn btn-primary btn-xs'
-			// 				onClick={() =>
-			// 					navigate(
-			// 						`/dyeing-and-iron/batch/batch-production/${info.row.original.uuid}`
-			// 					)
-			// 				}>
-			// 				Add Production
-			// 			</button>
-			// 		);
-			// 	},
-			// },
 			{
 				accessorKey: 'coneing_actions',
 				header: '',
@@ -162,11 +139,6 @@ export default function Index() {
 							)}
 							defaultChecked
 						/>
-						// <StatusButton
-						// 	size='btn-sm'
-						// 	value={info.getValue() === 'true' ? 1 : 0}
-						// 	onClick={() => handelDryingComplete(info.row.index)}
-						// />
 					);
 				},
 			},
@@ -330,16 +302,7 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				extraClass='py-2'
 			/>
-			{/* <Suspense>
-				<AddOrUpdate
-					modalId={info.getAddOrUpdateModalId()}
-					{...{
-						setSwatch,
-						updateSwatch,
-						setUpdateSwatch,
-					}}
-				/>
-			</Suspense> */}
+
 			<Suspense>
 				<Yarn
 					modalId={'YarnModal'}

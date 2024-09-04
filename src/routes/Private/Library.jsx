@@ -22,6 +22,6 @@ export const LibraryRoutes = [
 		element: Policy,
 		type: 'library',
 		page_name: 'library__policy',
-		actions: ['create', 'read', 'update', 'delete'],
+		actions: ['create', 'read', 'update', 'delete','click_status'],
 	},
 ];

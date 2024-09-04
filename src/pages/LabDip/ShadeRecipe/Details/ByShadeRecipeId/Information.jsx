@@ -8,9 +8,21 @@ export default function Information({
 		sub_streat: null,
 		lab_status: null,
 		bleaching: null,
+		remarks: null,
 	},
 }) {
-	const { shade_recipe_id, name, sub_streat, lab_status, bleaching } = data;
+	const {
+		shade_recipe_id,
+		name,
+		sub_streat,
+		lab_status,
+		bleaching,
+		remarks,
+	} = data;
+	const bleaching_uppercase =
+		bleaching.charAt(0).toUpperCase() + bleaching.slice(1);
+	const sub_streat_uppercase = sub_streat.toUpperCase();
+
 	const renderItems = () => {
 		const items = [
 			{
@@ -24,15 +36,19 @@ export default function Information({
 			},
 			{
 				label: 'Sub Streat',
-				value: sub_streat,
+				value: sub_streat_uppercase,
 			},
 			{
 				label: 'Bleaching',
-				value: bleaching,
+				value: bleaching_uppercase,
 			},
 			{
 				label: 'Lab Status',
 				value: lab_status === 1 ? 'Done' : 'Pending',
+			},
+			{
+				label: 'Remarks',
+				value: remarks,
 			},
 		];
 		return items;

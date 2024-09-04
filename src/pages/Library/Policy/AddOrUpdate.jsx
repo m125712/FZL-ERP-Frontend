@@ -1,8 +1,9 @@
 import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useLibraryPolicy } from '@/state/Library';
-import { Input, Select, Textarea } from '@/ui';
+import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import { POLICY_NULL, POLICY_SCHEMA } from '@util/Schema';
@@ -14,9 +15,30 @@ export default function Index({
 	},
 	setUpdatePolicy,
 }) {
-	const { url, updateData, postData } = useLibraryPolicy();
-	const { register, handleSubmit, errors, reset, control, getValues } =
-		useRHF(POLICY_SCHEMA, POLICY_NULL);
+	const {
+		url,
+		updateData,
+		postData,
+		invalidateQuery: invalidateLibraryPolicy,
+	} = useLibraryPolicy();
+	const { user } = useAuth();
+	const typeOption = [
+		{ label: 'Policy', value: 'policy' },
+		{ label: 'Notice', value: 'notice' },
+	];
+	const statusOption = [
+		{ label: 'Active', value: 1 },
+		{ label: 'Inactive', value: 0 },
+	];
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		control,
+		getValues,
+		Controller,
+	} = useRHF(POLICY_SCHEMA, POLICY_NULL);
 
 	useFetchForRhfReset(
 		`${url}/${updatePolicy?.uuid}`,
@@ -40,7 +62,6 @@ export default function Index({
 				...data,
 				updated_at: GetDateTime(),
 			};
-			
 
 			await updateData.mutateAsync({
 				url: `${url}/${updatePolicy?.uuid}`,
@@ -55,15 +76,15 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			created_at: GetDateTime(),
+			created_by: user?.uuid,
 		};
-
-		
 
 		await postData.mutateAsync({
 			url,
 			newData: updatedData,
 			onClose,
 		});
+		invalidateLibraryPolicy();
 	};
 
 	return (
@@ -73,26 +94,50 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<Select
-				label='type'
-				option={[
-					{ value: 'policy', label: 'Policy' },
-					{ value: 'notice', label: 'Notice' },
-				]}
-				{...{ register, errors }}
-			/>
-			<Textarea label='title' {...{ register, errors }} />
-			<Textarea label='sub_title' {...{ register, errors }} />
-			<Textarea label='url' {...{ register, errors }} />
-			<Select
-				label='status'
-				option={[
-					{ value: 1, label: 'Active' },
-					{ value: 0, label: 'Inactive' },
-				]}
-				{...{ register, errors }}
-			/>
-			<Textarea label='remarks' {...{ register, errors }} />
+			<FormField label='type' title='Type' errors={errors}>
+				<Controller
+					name={'type'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<ReactSelect
+								placeholder='Select type'
+								options={typeOption}
+								value={typeOption?.filter(
+									(item) => item.value === getValues('type')
+								)}
+								onChange={(e) => {
+									onChange(e.value);
+								}}
+							/>
+						);
+					}}
+				/>
+			</FormField>
+			<Input label='title' {...{ register, errors }} />
+			<Input label='sub_title' {...{ register, errors }} />
+			<FormField label='status' title='Status' errors={errors}>
+				<Controller
+					name={'status'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<ReactSelect
+								placeholder='Select type'
+								options={statusOption}
+								value={statusOption?.filter(
+									(item) => item.value === getValues('status')
+								)}
+								onChange={(e) => {
+									onChange(e.value);
+								}}
+							/>
+						);
+					}}
+				/>
+			</FormField>
+			<Input label='url' {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);

@@ -1,17 +1,15 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useCommonTapeRM, useCommonTapeRMLog } from '@/state/Common';
-import { useDyeingBatch, useDyeingThreadBatch } from '@/state/Dyeing';
-import { Input, JoinInput } from '@/ui';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { useDyeingThreadBatch } from '@/state/Dyeing';
+import { Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import {
 	DYEING_THREAD_BATCH_YARN_NULL,
 	DYEING_THREAD_BATCH_YARN_SCHEMA,
 } from '@util/Schema';
-import * as yup from 'yup';
 
 export default function Index({
 	modalId = '',
@@ -36,12 +34,11 @@ export default function Index({
 	// 	),
 	// };
 
-	const { register, handleSubmit, errors, reset, watch, control, getValues } =
-		useRHF(
-			//schema,
-			DYEING_THREAD_BATCH_YARN_SCHEMA,
-			DYEING_THREAD_BATCH_YARN_NULL
-		);
+	const { register, handleSubmit, errors, reset, control } = useRHF(
+		//schema,
+		DYEING_THREAD_BATCH_YARN_SCHEMA,
+		DYEING_THREAD_BATCH_YARN_NULL
+	);
 	useFetchForRhfReset(`${url}/${yarn?.uuid}`, yarn?.uuid, reset);
 
 	const onClose = () => {
@@ -95,7 +92,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={
-				yarn?.yarn_quantity !== null
+				Number(yarn?.yarn_quantity) !== 0
 					? `Update Yarn on ${yarn?.batch_id} `
 					: `Yarn Issue on ${yarn?.batch_id} `
 			}

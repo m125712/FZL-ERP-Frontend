@@ -1,18 +1,16 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAuth } from '@/context/auth';
-import { useAccess, useFetchFunc } from '@/hooks';
+import { useAccess } from '@/hooks';
 import { useThreadOrderInfo } from '@/state/Thread';
-import { DateTime, EditDelete, LinkOnly, LinkWithCopy } from '@/ui';
+import { DateTime, EditDelete, LinkOnly, StatusButton } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
+import { lazy, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useThreadOrderInfo();
 	const navigate = useNavigate();
-	const { user } = useAuth();
 	const haveAccess = useAccess('thread__order_info_details');
 	const info = new PageInfo('Order Info', url, 'thread__order_info_details');
 
@@ -61,13 +59,31 @@ export default function Index() {
 				accessorKey: 'is_sample',
 				header: 'Sample',
 				enableColumnFilter: false,
-				cell: (info) => (info.getValue() === 1 ? 'Yes' : 'No'),
+				cell: (info) => {
+					return (
+						<div className='flex space-x-1'>
+							<StatusButton
+								size='btn-xs'
+								value={info.getValue()}
+							/>
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'is_bill',
 				header: 'Bill',
 				enableColumnFilter: false,
-				cell: (info) => (info.getValue() == 1 ? 'Yes' : 'No'),
+				cell: (info) => {
+					return (
+						<div className='flex space-x-1'>
+							<StatusButton
+								size='btn-xs'
+								value={info.getValue()}
+							/>
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'delivery_date',
@@ -104,13 +120,16 @@ export default function Index() {
 				accessorKey: 'action',
 				header: 'Action',
 				enableColumnFilter: false,
-				hidden: !haveAccess.includes('update'),
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
 				cell: (info) => {
 					return (
 						<EditDelete
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
-							showDelete={false}
+							showDelete={haveAccess.includes('delete')}
+							showUpdate={haveAccess.includes('update')}
 						/>
 					);
 				},

@@ -1,6 +1,6 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
+import { useAccess } from '@/hooks';
 import { useThreadMachine } from '@/state/Thread';
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
@@ -10,19 +10,10 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	// 	    "uuid": "igD0v9DIJQhJeet",
-	//     "name": "Machine Name",
-	//     "capacity": 10,
-	//     "created_by": "igD0v9DIJQhJeet",
-	//     "created_at": "2024-01-01 00:00:00",
-	//     "updated_at": "2024-01-01 00:00:00",
-	//     "remarks": "Remarks"
-	//   }
 	const { data, isLoading, url, deleteData } = useThreadMachine();
 
 	const info = new PageInfo('Machine', url, 'thread__machine');
 	const haveAccess = useAccess('thread__machine');
-
 	const columns = useMemo(
 		() => [
 			{
@@ -35,13 +26,13 @@ export default function Index() {
 				accessorKey: 'capacity',
 				header: 'Capacity',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
 			{
 				accessorKey: 'water_capacity',
 				header: 'Water Capacity',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
 			{
 				accessorKey: 'created_by_name',
@@ -72,7 +63,9 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -81,6 +74,7 @@ export default function Index() {
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
 							showDelete={haveAccess.includes('delete')}
+							showUpdate={haveAccess.includes('update')}
 						/>
 					);
 				},

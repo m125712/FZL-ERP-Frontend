@@ -22,13 +22,10 @@ export default function Index({
 	transfer = {
 		batch_entry_uuid: null,
 		transfer_quantity: null,
-		// batch_id: null,
 	},
 	setTransfer,
 }) {
 	const { url, updateData } = useDyeingThreadBatchEntry();
-
-	const { user } = useAuth();
 
 	//const MAX_QUANTITY = transfer?.tape_making;
 
@@ -40,12 +37,11 @@ export default function Index({
 	// 	),
 	// };
 
-	const { register, handleSubmit, errors, reset, watch, control, getValues } =
-		useRHF(
-			//schema,
-			DYEING_THREAD_BATCH_ENTRY_TRANSFER_SCHEMA,
-			DYEING_THREAD_BATCH_ENTRY_TRANSFER_NULL
-		);
+	const { register, handleSubmit, errors, reset, control } = useRHF(
+		//schema,
+		DYEING_THREAD_BATCH_ENTRY_TRANSFER_SCHEMA,
+		DYEING_THREAD_BATCH_ENTRY_TRANSFER_NULL
+	);
 	useFetchForRhfReset(
 		`${url}/${transfer?.batch_entry_uuid}`,
 		transfer?.batch_entry_uuid,

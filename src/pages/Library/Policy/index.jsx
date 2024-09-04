@@ -1,50 +1,173 @@
-import { IconKey } from '@/assets/icons';
 import { Suspense } from '@/components/Feedback';
-import { Title } from '@/components/Table/ui';
-import { useAuth } from '@/context/auth';
-import { useAccess, useFetchFunc } from '@/hooks';
+import ReactTable from '@/components/Table';
+import { useAccess } from '@/hooks';
+import cn from '@/lib/cn';
 import { useLibraryPolicy } from '@/state/Library';
-import { EditDelete } from '@/ui';
+import { DateTime, EditDelete } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
-const Card = ({ title, subtitle, Icon, href, children }) => {
-	return (
-		<div className='group relative w-full overflow-hidden rounded-md border border-primary p-4'>
-			<div className='absolute inset-0 translate-y-[100%] bg-gradient-to-r from-primary to-secondary transition-transform duration-300 group-hover:translate-y-[0%]' />
-			<div className='flex items-center justify-between'>
-				<IconKey className='absolute -right-12 -top-12 z-10 text-9xl text-primary transition-transform duration-300 group-hover:rotate-12 group-hover:text-primary' />
-				<IconKey className='relative z-10 mb-2 text-2xl text-primary transition-colors duration-300 group-hover:text-white' />
-				<div className='relative z-50'>{children}</div>
-			</div>
-
-			<NavLink
-				to={href}
-				className='relative z-10 text-lg font-medium capitalize text-slate-950 duration-300 group-hover:text-white'
-				target='_blank'>
-				{title}
-			</NavLink>
-			<p className='group-hover:text-primary-content relative z-10 text-slate-400 duration-300'>
-				{subtitle}
-			</p>
-		</div>
-	);
-};
-
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useLibraryPolicy();
+	const {
+		data,
+		isLoading,
+		url,
+		deleteData,
+		updateData,
+		invalidateQuery: invalidateLibraryPolicy,
+	} = useLibraryPolicy();
 	const info = new PageInfo('Library/Policy', url, 'library__policy');
 	const haveAccess = useAccess(info.getTab());
-	const { user } = useAuth();
 
 	// Fetching data from server
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
+
+	const columns = useMemo(
+		() => [
+			{
+				accessorKey: 'type',
+				header: 'Type',
+				enableColumnFilter: false,
+
+				cell: (info) => {
+					return (
+						<span className='capitalize'>{info.getValue()}</span>
+					);
+				},
+			},
+			{
+				accessorKey: 'title',
+				header: 'Title',
+				enableColumnFilter: false,
+
+				cell: (info) => {
+					return (
+						<span className='capitalize'>{info.getValue()}</span>
+					);
+				},
+			},
+			{
+				accessorKey: 'sub_title',
+				header: 'Sub Title',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<span className='capitalize'>{info.getValue()}</span>
+					);
+				},
+			},
+			{
+				accessorKey: 'url',
+				header: 'URL',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<span
+							className='btn-link'
+							onClick={() => window.open(info.getValue())}>
+							{info.getValue()}
+						</span>
+					);
+				},
+			},
+			{
+				accessorKey: 'status',
+				header: 'Status',
+				// hidden: !haveAccess.includes('click_status'),
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<input
+							onChange={() => handelStatusCheck(info.row.index)}
+							checked={info.getValue() === 1}
+							type='checkbox'
+							className={cn(
+								'toggle toggle-md checked:toggle-accent'
+							)}
+							defaultChecked
+							disabled={!haveAccess.includes('click_status')}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+
+				cell: (info) => {
+					return (
+						<span className='capitalize'>{info.getValue()}</span>
+					);
+				},
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated At',
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'actions',
+				header: 'Actions',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
+				width: 'w-24',
+				cell: (info) => (
+					<EditDelete
+						idx={info.row.index}
+						handelUpdate={handelUpdate}
+						handelDelete={handelDelete}
+						showEdit={haveAccess.includes('update')}
+						showDelete={haveAccess.includes('delete')}
+					/>
+				),
+			},
+		],
+		[data]
+	);
+
+	// Status
+	const handelStatusCheck = async (idx) => {
+		await updateData.mutateAsync({
+			url: `${url}/${data[idx]?.uuid}`,
+			updatedData: {
+				status: data[idx]?.status === 1 ? 0 : 1,
+				updated_at: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
+	};
+	invalidateLibraryPolicy();
 
 	// Add
 	const handelAdd = () => {
@@ -59,7 +182,7 @@ export default function Index() {
 	const handelUpdate = (idx) => {
 		setUpdatePolicy((prev) => ({
 			...prev,
-			uuid: idx.uuid,
+			uuid: data[idx].uuid,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -72,8 +195,8 @@ export default function Index() {
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: idx.uuid,
-			itemName: idx.title,
+			itemId: data[idx].uuid,
+			itemName: data[idx].title,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -84,74 +207,13 @@ export default function Index() {
 
 	return (
 		<div>
-			<div>
-				<div className='flex flex-col gap-4'>
-					<Title
-						title={info.getTitle()}
-						accessor={haveAccess.includes('create')}
-						handelAdd={handelAdd}
-					/>
-					<div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
-						{data
-							?.filter(
-								(item) =>
-									item.type === 'policy' &&
-									(Number(item.status) === 1 ||
-										user?.department === 'Admin')
-							)
-							?.map((item) => (
-								<Card
-									key={item.uuid}
-									title={item.title}
-									subtitle={item.sub_title}
-									href={item.url}
-									Icon={IconKey}>
-									<EditDelete
-										idx={item}
-										handelUpdate={handelUpdate}
-										handelDelete={handelDelete}
-										showEdit={haveAccess.includes('update')}
-										showDelete={haveAccess.includes(
-											'delete'
-										)}
-									/>
-								</Card>
-							))}
-					</div>
-					<Title
-						title='Notice'
-						accessor={haveAccess.includes('create')}
-						handelAdd={handelAdd}
-					/>
-					<div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
-						{data
-							?.filter(
-								(item) =>
-									item.type === 'notice' &&
-									(Number(item.status) === 1 ||
-										user?.department === 'Admin')
-							)
-							?.map((item) => (
-								<Card
-									key={item.uuid}
-									title={item.title}
-									subtitle={item.sub_title}
-									href={item.url}
-									Icon={IconKey}>
-									<EditDelete
-										idx={item}
-										handelUpdate={handelUpdate}
-										handelDelete={handelDelete}
-										showEdit={haveAccess.includes('update')}
-										showDelete={haveAccess.includes(
-											'delete'
-										)}
-									/>
-								</Card>
-							))}
-					</div>
-				</div>
-			</div>
+			<ReactTable
+				title={info.getTitle()}
+				handelAdd={handelAdd}
+				accessor={haveAccess.includes('create')}
+				data={data}
+				columns={columns}
+			/>
 
 			<Suspense>
 				<AddOrUpdate

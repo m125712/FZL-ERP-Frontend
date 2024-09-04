@@ -121,7 +121,7 @@ export default function Index() {
 	// 		}));
 	// 	}
 	// }, [getValues('order_info_ids')]);
-	//console.log(getValues());
+
 	const onSubmit = async (data) => {
 		// * Update
 		if (isUpdate) {

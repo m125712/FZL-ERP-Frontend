@@ -1,11 +1,10 @@
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useOrderDetails } from '@/state/Order';
-import { EditDelete, LinkWithCopy, StatusButton, UserName } from '@/ui';
+import { EditDelete, LinkWithCopy, StatusButton, DateTime } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState, lazy } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Suspense } from '@/components/Feedback';
 
 const Progress = ({ value }) => {
 	let cls = 'progress-error tooltip-error';
@@ -94,19 +93,20 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'created_by_name',
-				header: 'Created By',
+				accessorKey: 'created_at',
+				header: 'Created At',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-				// cell: (info) => {
-				// 	const { user_name, user_department } = info.row.original;
-				// 	return (
-				// 		<UserName
-				// 			name={user_name}
-				// 			department={user_department}
-				// 		/>
-				// 	);
-				// },
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
 			},
 			{
 				accessorKey: 'remarks',
@@ -128,7 +128,9 @@ export default function Index() {
 				accessorKey: 'action',
 				header: 'Action',
 				enableColumnFilter: false,
-				hidden: !haveAccess.includes('update'),
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -136,7 +138,7 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							showEdit={haveAccess.includes('update')}
-							showDelete={false}
+							showDelete={haveAccess.includes('delete')} // TODO: need to add delete logic
 						/>
 					);
 				},
@@ -156,7 +158,6 @@ export default function Index() {
 	// Update
 	const handelUpdate = (idx) => {
 		const { order_description_uuid, order_number } = data[idx];
-		console.log(order_description_uuid, order_number);
 
 		navigate(`/order/update/${order_number}/${order_description_uuid}`);
 	};

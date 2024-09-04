@@ -55,7 +55,7 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'created_by',
+				accessorKey: 'created_by_name',
 				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -147,7 +147,6 @@ export default function Index() {
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
-	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
 		<div>

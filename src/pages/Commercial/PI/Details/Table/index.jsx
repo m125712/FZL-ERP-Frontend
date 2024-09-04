@@ -1,5 +1,5 @@
-import ReactTable from '@/components/Table';
-import { DateTime } from '@/ui';
+import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
+import { DateTime, LinkWithCopy } from '@/ui';
 import { useMemo } from 'react';
 
 export default function Index({ pi }) {
@@ -9,13 +9,29 @@ export default function Index({ pi }) {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<LinkWithCopy
+						title={info.getValue()}
+						id={info.getValue()}
+						uri='/order/details'
+					/>
+				),
 			},
 			{
 				accessorKey: 'item_description',
 				header: 'Item Description',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { order_description_uuid, order_number } =
+						info.row.original;
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={order_description_uuid}
+							uri={`/order/details/${order_number}`}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'size',
@@ -74,12 +90,7 @@ export default function Index({ pi }) {
 	const totalValue = pi.reduce((a, b) => Number(a + b.value), 0);
 
 	return (
-		<ReactTable
-			title='Details'
-			data={pi}
-			columns={columns}
-			extraClass='py-2'
-			showTitleOnly>
+		<ReactTableWithTitle title='Details' data={pi} columns={columns}>
 			<tr className='text-sm'>
 				<td colSpan='3' className='py-2 text-right'>
 					Total QTY:
@@ -89,6 +100,6 @@ export default function Index({ pi }) {
 				<td className='text-right'>Total Value:</td>
 				<td className='pl-3 text-left'>{totalValue}</td>
 			</tr>
-		</ReactTable>
+		</ReactTableWithTitle>
 	);
 }

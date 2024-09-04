@@ -5,10 +5,9 @@ import { FormField, Input, ReactSelect, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { FACTORY_NULL, FACTORY_SCHEMA } from '@util/Schema';
 import nanoid from '@/lib/nanoid';
-
+import { useAuth } from '@/context/auth';
 export default function Index({
 	modalId = '',
-	setFactory,
 	updateFactory = {
 		uuid: null,
 	},
@@ -27,6 +26,7 @@ export default function Index({
 
 	const { value: party } = useFetch('/other/party/value/label');
 
+	const { user } = useAuth();
 	useFetchForRhfReset(
 		`/public/factory/${updateFactory?.uuid}`,
 		updateFactory?.uuid,
@@ -69,6 +69,7 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			party_name: party_name,
+			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
 
@@ -110,6 +111,7 @@ export default function Index({
 			<Input label='name' {...{ register, errors }} />
 			<Input label='phone' {...{ register, errors }} />
 			<Textarea label='address' {...{ register, errors }} />
+			<Textarea label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

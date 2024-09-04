@@ -1,8 +1,9 @@
 import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useAdminDepartments } from '@/state/Admin';
-import { Input } from '@/ui';
+import { Input, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import { USER_DEPARTMENT_NULL, USER_DEPARTMENT_SCHEMA } from '@util/Schema';
@@ -14,6 +15,7 @@ export default function Index({
 	},
 	setUpdateDepartment,
 }) {
+	const { user } = useAuth();
 	const { url, updateData, postData } = useAdminDepartments();
 	const { register, handleSubmit, errors, reset, control } = useRHF(
 		USER_DEPARTMENT_SCHEMA,
@@ -61,6 +63,7 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			created_at: GetDateTime(),
+			created_by: user?.uuid,
 		};
 
 		await postData.mutateAsync({
@@ -82,6 +85,7 @@ export default function Index({
 			onClose={onClose}
 			isSmall={true}>
 			<Input label='department' {...{ register, errors }} />
+			<Textarea label='remarks' {...{ register, errors }} />
 
 			<DevTool control={control} placement='top-left' />
 		</AddModal>

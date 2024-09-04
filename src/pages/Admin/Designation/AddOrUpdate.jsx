@@ -1,8 +1,10 @@
 import { AddModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useAuth } from '@/context/auth';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useAdminDesignations } from '@/state/Admin';
-import { FormField, Input, ReactSelect } from '@/ui';
+import { useOtherDepartment } from '@/state/Other';
+import { FormField, Input, ReactSelect, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import { USER_DESIGNATION_NULL, USER_DESIGNATION_SCHEMA } from '@util/Schema';
@@ -14,7 +16,9 @@ export default function Index({
 	},
 	setUpdateDesignation,
 }) {
+	const { user } = useAuth();
 	const { url, updateData, postData } = useAdminDesignations();
+	const { data: userDepartment } = useOtherDepartment();
 	const {
 		register,
 		handleSubmit,
@@ -66,6 +70,7 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			created_at: GetDateTime(),
+			created_by: user?.uuid,
 		};
 
 		await postData.mutateAsync({
@@ -74,8 +79,6 @@ export default function Index({
 			onClose,
 		});
 	};
-
-	const { value: userDepartment } = useFetch('/other/department/value/label');
 
 	return (
 		<AddModal
@@ -112,7 +115,7 @@ export default function Index({
 				/>
 			</FormField>
 			<Input label='designation' {...{ register, errors }} />
-
+			<Textarea label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);

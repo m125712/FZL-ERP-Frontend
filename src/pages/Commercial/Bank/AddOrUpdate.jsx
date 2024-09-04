@@ -1,34 +1,36 @@
 import { AddModal } from '@/components/Modal';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useAuth } from '@/context/auth';
+import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useCommercialBank } from '@/state/Commercial';
+import { useCommercialBank, useCommercialBankByUUID } from '@/state/Commercial';
 import { Input, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { BANK_NULL, BANK_SCHEMA } from '@util/Schema';
+import { useEffect } from 'react';
 
 export default function Index({
 	modalId = '',
-	setBank,
 	updateBank = {
 		uuid: null,
 	},
 	setUpdateBank,
 }) {
-	console.log({
-		updateBank,
-	});
-
+	const { user } = useAuth();
 	const { url, updateData, postData } = useCommercialBank();
 	const { register, handleSubmit, errors, reset } = useRHF(
 		BANK_SCHEMA,
 		BANK_NULL
 	);
 
-	useFetchForRhfReset(
-		`/commercial/bank/${updateBank.uuid}`,
-		updateBank?.uuid,
-		reset
-	);
+	const { data: bank } = useCommercialBankByUUID(updateBank?.uuid, {
+		enabled: !!updateBank?.uuid,
+	});
+
+	useEffect(() => {
+		if (bank) {
+			reset(bank);
+		}
+	}, [bank]);
 
 	const onClose = () => {
 		setUpdateBank((prev) => ({
@@ -62,7 +64,7 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			created_at: GetDateTime(),
-			updated_at: null,
+			created_by: user?.uuid,
 		};
 
 		await postData.mutateAsync({
@@ -83,6 +85,7 @@ export default function Index({
 			<Input label='swift_code' {...{ register, errors }} />
 			<Textarea label='address' rows='2' {...{ register, errors }} />
 			<Textarea label='policy' rows='3' {...{ register, errors }} />
+			<Textarea label='remarks' rows='3' {...{ register, errors }} />
 		</AddModal>
 	);
 }

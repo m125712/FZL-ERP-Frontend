@@ -19,7 +19,7 @@ export default function Index({
 	const { url, updateData, postData } = usePurchaseVendor();
 	const { data } = usePurchaseVendorByUUID(updateVendor?.uuid);
 
-	const { register, handleSubmit, errors, reset } = useRHF(
+	const { register, handleSubmit, errors, reset, context } = useRHF(
 		VENDOR_SCHEMA,
 		VENDOR_NULL
 	);
@@ -78,6 +78,7 @@ export default function Index({
 			title={
 				updateVendor?.uuid !== null ? 'Update Vendor' : 'Create Vendor'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

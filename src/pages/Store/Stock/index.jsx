@@ -12,7 +12,7 @@ const AgainstOrderTransfer = lazy(() => import('./AgainstOrderTransfer'));
 const MaterialTrx = lazy(() => import('./MaterialTrx'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useMaterialInfo();
+	const { data, isLoading, url, deleteData, refetch } = useMaterialInfo();
 	const info = new PageInfo('Stock', url, 'store__stock');
 	const haveAccess = useAccess('store__stock');
 
@@ -235,6 +235,7 @@ export default function Index() {
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}
+				handleReload={refetch}
 				accessor={haveAccess.includes('create')}
 				data={data}
 				columns={columns}

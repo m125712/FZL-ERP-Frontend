@@ -103,6 +103,10 @@ export const commercialQK = {
 export const materialQK = {
 	all: () => ['material'],
 
+	// stock
+	stock: () => [...materialQK.all(), 'stock'],
+	stockByUUID: (uuid) => [...materialQK.stock(), uuid],
+
 	// section
 	section: () => [...materialQK.all(), 'section'],
 	sectionByUUID: (uuid) => [...materialQK.section(), uuid],
@@ -818,21 +822,11 @@ export const threadQK = {
 //* OTHER QUERY KEYS
 export const otherQK = {
 	all: () => ['other'],
-	party: () => [...otherQK.all(), 'party'],
-	buyer: () => [...otherQK.all(), 'buyer'],
-	marketing: () => [...otherQK.all(), 'marketing'],
+
+	//Order
 	order: () => [...otherQK.all(), 'order'],
+	orderDescription: () => [...otherQK.all(), 'order-description'],
 	orderEntry: () => [...otherQK.all(), 'order-entry'],
-	vendor: () => [...otherQK.all(), 'vendor'],
-	bank: () => [...otherQK.all(), 'bank'],
-	material: () => [...otherQK.all(), 'material'],
-	materialSection: () => [...otherQK.all(), 'material-section'],
-	materialType: () => [...otherQK.all(), 'material-type'],
-	department: () => [...otherQK.all(), 'department'],
-	labDip: () => [...otherQK.all(), 'lab-dip'],
-	sliderItem: () => [...otherQK.all(), 'slider-item'],
-	lcByPartyUUID: (uuid) => [...otherQK.all(), 'lc-by-party', uuid],
-	pi: () => [...otherQK.all(), 'pi'],
 	orderDescriptionByOrderNumber: (orderNumber) => [
 		...otherQK.all(),
 		'order-description-by-order-number',
@@ -849,11 +843,50 @@ export const otherQK = {
 		marketingUUID,
 		partyUUID,
 	],
+
+	//Vendor
+	vendor: () => [...otherQK.all(), 'vendor'],
+
+	//Bank
+	bank: () => [...otherQK.all(), 'bank'],
+
+	//Material
+	material: () => [...otherQK.all(), 'material'],
+	materialSection: () => [...otherQK.all(), 'material-section'],
+	materialType: () => [...otherQK.all(), 'material-type'],
+
+	//Lab Dip
+	labDip: () => [...otherQK.all(), 'lab-dip'],
+
+	//Slider Item
+	sliderItem: () => [...otherQK.all(), 'slider-item'],
+
+	//LC
+	lcByPartyUUID: (uuid) => [...otherQK.all(), 'lc-by-party', uuid],
+
+	//PI
+	pi: () => [...otherQK.all(), 'pi'],
+
+	//Department
+	department: () => [...otherQK.all(), 'department'],
+
+	// Party
+	party: () => [...otherQK.all(), 'party'],
+
+	//Buyer
+	buyer: () => [...otherQK.all(), 'buyer'],
+
+	//Marketing
+	marketing: () => [...otherQK.all(), 'marketing'],
 	marketingUser: () => [...otherQK.all(), 'marketing-user'],
+
+	//Merchandiser
 	merchandiserByPartyUUID: (uuid) => [
 		...otherQK.all(),
 		'merchandiser-by-party',
 		uuid,
 	],
+
+	//Factory
 	factoryByPartyUUID: (uuid) => [...otherQK.all(), 'factory-by-party', uuid],
 };

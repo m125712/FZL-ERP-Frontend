@@ -95,6 +95,7 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
+		context,
 	} = useRHF(schema, MATERIAL_TRX_AGAINST_ORDER_NULL);
 
 	useEffect(() => {
@@ -154,6 +155,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Against Order Log of ${updateMaterialTrxToOrder?.material_name}`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

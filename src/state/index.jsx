@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 export default function createGlobalState({ queryKey, url, enabled = true }) {
 	const queryClient = useQueryClient();
 
-	const { data, isError, isLoading, isPending } = useQuery({
+	const { data, isError, isLoading, isPending, refetch } = useQuery({
 		queryKey: queryKey,
 		queryFn: () => defaultFetch(url),
 		refetchInterval: false,
@@ -110,5 +110,6 @@ export default function createGlobalState({ queryKey, url, enabled = true }) {
 		updateData,
 		postData,
 		deleteData,
+		refetch,
 	};
 }

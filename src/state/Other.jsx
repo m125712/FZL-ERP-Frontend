@@ -52,6 +52,12 @@ export const useOtherOrder = () =>
 		url: '/other/order/info/value/label',
 	});
 
+export const useOtherOrderDescription = () =>
+	createGlobalState({
+		queryKey: otherQK.orderDescription(),
+		url: '/other/order/description/value/label',
+	});
+
 // GET OTHER ORDER PROPERTIES BY TYPE NAME
 export const useOtherOrderPropertiesByTypeName = (name) =>
 	createGlobalState({

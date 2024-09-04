@@ -1,6 +1,6 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetch, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useOtherMaterialSection, useOtherMaterialType } from '@/state/Other';
 import { useMaterialInfo, useMaterialInfoByUUID } from '@/state/Store';

@@ -1,6 +1,6 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import {
 	useCommonOrderAgainstCoilRMLog,
@@ -15,16 +15,13 @@ import {
 	useOrderAgainstMetalTMRMLog,
 } from '@/state/Metal';
 import { useOrderAgainstNylonMetallicFinishingRMLog } from '@/state/Nylon';
+import { useOtherOrderDescription } from '@/state/Other';
 import {
 	useOrderAgainstDieCastingRMLog,
 	useOrderAgainstSliderAssemblyRMLog,
 	useOrderAgainstSliderColorRMLog,
 } from '@/state/Slider';
-import {
-	useMaterialInfo,
-	useMaterialStockToSFG,
-	useMaterialTrxAgainstOrderDescription,
-} from '@/state/Store';
+import { useMaterialInfo, useMaterialStockToSFG } from '@/state/Store';
 import {
 	useOrderAgainstVislonFinishingRMLog,
 	useOrderAgainstVislonTMRMLog,
@@ -37,6 +34,7 @@ import {
 	MATERIAL_TRX_AGAINST_ORDER_NULL,
 	MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
 } from '@util/Schema';
+
 export default function Index({
 	modalId = '',
 	updateMaterialDetails = {
@@ -49,7 +47,6 @@ export default function Index({
 	const { postData } = useMaterialInfo();
 	const { invalidateQuery: invalidateMaterialStockToSFG } =
 		useMaterialStockToSFG();
-	const { url, updateData } = useMaterialTrxAgainstOrderDescription();
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { invalidateQuery: invalidateOrderAgainstDeliveryRMLog } =
 		useOrderAgainstDeliveryRMLog();
@@ -88,7 +85,7 @@ export default function Index({
 			.moreThan(0)
 			.max(Number(updateMaterialDetails?.stock).toFixed(3)),
 	};
-	const { value: order } = useFetch(`/other/order/description/value/label`);
+	const { data: order } = useOtherOrderDescription();
 
 	const {
 		register,
@@ -100,12 +97,6 @@ export default function Index({
 		getValues,
 		context,
 	} = useRHF(schema, MATERIAL_TRX_AGAINST_ORDER_NULL);
-
-	useFetchForRhfReset(
-		`/material/stock/${updateMaterialDetails?.material_stock_uuid}`,
-		updateMaterialDetails?.material_stock_uuid,
-		reset
-	);
 
 	const onClose = () => {
 		setUpdateMaterialDetails((prev) => ({

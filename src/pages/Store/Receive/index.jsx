@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useMaterialInfo, usePurchaseDescription } from '@/state/Store';
+import { usePurchaseDescription } from '@/state/Store';
 import { DateTime, EditDelete, LinkOnly } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -10,11 +10,12 @@ import { useNavigate } from 'react-router-dom';
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = usePurchaseDescription();
-	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const navigate = useNavigate();
-	const info = new PageInfo('Receive', url, 'store__receive');
 	const haveAccess = useAccess('store__receive');
+
+	const { data, isLoading, url, deleteData } = usePurchaseDescription();
+
+	const info = new PageInfo('Receive', url, 'store__receive');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -118,7 +119,6 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateMaterialInfo();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

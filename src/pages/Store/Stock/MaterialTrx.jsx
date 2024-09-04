@@ -56,8 +56,15 @@ export default function Index({
 			.max(updateMaterialDetails?.stock, 'Quantity Exceeds Stock'),
 	};
 
-	const { register, handleSubmit, errors, control, Controller, reset } =
-		useRHF(schema, MATERIAL_STOCK_NULL);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		control,
+		Controller,
+		reset,
+		context,
+	} = useRHF(schema, MATERIAL_STOCK_NULL);
 
 	const onClose = () => {
 		setUpdateMaterialDetails((prev) => ({
@@ -109,8 +116,9 @@ export default function Index({
 
 	return (
 		<AddModal
-			id={`MaterialTrx`}
+			id={modalId}
 			title={'Material Trx of ' + updateMaterialDetails?.name}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

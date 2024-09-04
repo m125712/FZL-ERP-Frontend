@@ -25,6 +25,7 @@ function Table({
 	title = '',
 	subtitle = '',
 	handelAdd = () => {},
+	handleReload = () => {},
 	accessor,
 	data = [],
 	columns,
@@ -117,6 +118,7 @@ function Table({
 					title={title}
 					subtitle={subtitle}
 					handelAdd={handelAdd}
+					handleReload={handleReload}
 					accessor={accessor}
 					indicatorValue={indicatorValue}
 					getHeaderGroups={getHeaderGroups}

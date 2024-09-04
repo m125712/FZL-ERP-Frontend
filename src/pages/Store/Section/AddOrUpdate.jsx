@@ -19,7 +19,7 @@ export default function Index({
 	const { url, updateData, postData } = useMaterialSection();
 	const { data } = useMaterialSectionByUUID(updateSection?.uuid);
 
-	const { register, handleSubmit, errors, reset } = useRHF(
+	const { register, handleSubmit, errors, reset, context } = useRHF(
 		SECTION_SCHEMA,
 		SECTION_NULL
 	);
@@ -80,6 +80,7 @@ export default function Index({
 					? 'Update Section'
 					: 'Create Section'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

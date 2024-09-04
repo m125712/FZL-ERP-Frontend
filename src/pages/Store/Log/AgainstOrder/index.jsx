@@ -1,32 +1,8 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import {
-	useCommonOrderAgainstCoilRMLog,
-	useCommonOrderAgainstTapeRMLog,
-} from '@/state/Common';
-import { useOrderAgainstDeliveryRMLog } from '@/state/Delivery';
-import { useOrderAgainstDyeingRMLog } from '@/state/Dyeing';
-import { useOrderAgainstLabDipRMLog } from '@/state/LabDip';
-import {
-	useOrderAgainstMetalFinishingRMLog,
-	useOrderAgainstMetalTCRMLog,
-	useOrderAgainstMetalTMRMLog,
-} from '@/state/Metal';
-import { useOrderAgainstNylonMetallicFinishingRMLog } from '@/state/Nylon';
-import {
-	useOrderAgainstDieCastingRMLog,
-	useOrderAgainstSliderAssemblyRMLog,
-	useOrderAgainstSliderColorRMLog,
-} from '@/state/Slider';
-import {
-	useMaterialInfo,
-	useMaterialTrxAgainstOrderDescription,
-} from '@/state/Store';
-import {
-	useOrderAgainstVislonFinishingRMLog,
-	useOrderAgainstVislonTMRMLog,
-} from '@/state/Vislon';
+import { useMaterialTrxAgainstOrderDescription } from '@/state/Store';
+
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useMemo, useState } from 'react';
@@ -37,39 +13,10 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const { data, isLoading, url, deleteData } =
 		useMaterialTrxAgainstOrderDescription();
-	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-	const { invalidateQuery: invalidateOrderAgainstDeliveryRMLog } =
-		useOrderAgainstDeliveryRMLog();
-	const { invalidateQuery: invalidateOrderAgainstDieCastingRMLog } =
-		useOrderAgainstDieCastingRMLog();
-	const { invalidateQuery: invalidateOrderAgainstLabDipRMLog } =
-		useOrderAgainstLabDipRMLog();
-	const { invalidateQuery: invalidateOrderAgainstMetaFinishingRMLog } =
-		useOrderAgainstMetalFinishingRMLog();
-	const { invalidateQuery: invalidateOrderAgainstMetalTCRMLog } =
-		useOrderAgainstMetalTCRMLog();
-	const { invalidateQuery: invalidateOrderAgainstMetalTMRMLog } =
-		useOrderAgainstMetalTMRMLog();
-	const { invalidateQuery: invalidateOrderAgainstDyeingRMLog } =
-		useOrderAgainstDyeingRMLog();
-	const { invalidateQuery: invalidateOrderAgainstCoilRMLog } =
-		useCommonOrderAgainstCoilRMLog();
-	const { invalidateQuery: invalidateOrderAgainstTapeRMLog } =
-		useCommonOrderAgainstTapeRMLog();
-	const { invalidateQuery: invalidateOrderAgainstMetallicFinishingRMLog } =
-		useOrderAgainstNylonMetallicFinishingRMLog();
-	const { invalidateQuery: invalidateOrderAgainstVislonFinishingRMLog } =
-		useOrderAgainstVislonFinishingRMLog();
-	const { invalidateQuery: invalidateOrderAgainstTMRMLog } =
-		useOrderAgainstVislonTMRMLog();
-	const { invalidateQuery: invalidateOrderAgainstSliderAssemblyRMLog } =
-		useOrderAgainstSliderAssemblyRMLog();
-	const { invalidateQuery: invalidateOrderAgainstSliderColorRMLog } =
-		useOrderAgainstSliderColorRMLog();
 
 	const info = new PageInfo('Log Against Order', url);
 	const haveAccess = useAccess('store__log');
-	console.log(data);
+
 	const columns = useMemo(
 		() => [
 			{
@@ -212,21 +159,6 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateMaterialInfo();
-	invalidateOrderAgainstDeliveryRMLog();
-	invalidateOrderAgainstDieCastingRMLog();
-	invalidateOrderAgainstLabDipRMLog();
-	invalidateOrderAgainstMetaFinishingRMLog();
-	invalidateOrderAgainstMetalTCRMLog();
-	invalidateOrderAgainstMetalTMRMLog();
-	invalidateOrderAgainstDyeingRMLog();
-	invalidateOrderAgainstCoilRMLog();
-	invalidateOrderAgainstTapeRMLog();
-	invalidateOrderAgainstMetallicFinishingRMLog();
-	invalidateOrderAgainstVislonFinishingRMLog();
-	invalidateOrderAgainstTMRMLog();
-	invalidateOrderAgainstSliderAssemblyRMLog();
-	invalidateOrderAgainstSliderColorRMLog();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

@@ -1621,11 +1621,6 @@ export const DYEING_THREAD_BATCH_SCHEMA = {
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
 		yup.object().shape({
-			is_checked: BOOLEAN,
-			quantity: NUMBER.nullable() // Allows the field to be null
-				.transform((value, originalValue) =>
-					String(originalValue).trim() === '' ? null : value
-				),
 			batch_remarks: STRING.nullable(),
 		})
 	),

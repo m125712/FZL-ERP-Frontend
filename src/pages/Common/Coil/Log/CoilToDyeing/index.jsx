@@ -135,7 +135,6 @@ export default function Index() {
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
-	console.log(data);
 	return (
 		<div>
 			<ReactTable title={info.getTitle()} data={data} columns={columns} />

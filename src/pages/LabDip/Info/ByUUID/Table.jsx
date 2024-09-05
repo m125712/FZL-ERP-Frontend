@@ -23,7 +23,7 @@ export default function Index({ recipe }) {
 				},
 			},
 			{
-				accessorKey: 'created_at',
+				accessorKey: 'recipe_created_at',
 				header: 'Created',
 				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
@@ -33,7 +33,7 @@ export default function Index({ recipe }) {
 				},
 			},
 			{
-				accessorKey: 'updated_at',
+				accessorKey: 'recipe_updated_at',
 				header: 'Updated',
 				enableColumnFilter: false,
 				width: 'w-24',

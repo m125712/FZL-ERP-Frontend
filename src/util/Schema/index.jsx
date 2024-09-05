@@ -47,7 +47,7 @@ export {
 	PHONE_NUMBER,
 	PHONE_NUMBER_REQUIRED,
 	STRING,
-	STRING_REQUIRED,
+	STRING_REQUIRED
 };
 
 // Library
@@ -437,7 +437,7 @@ export const handelNumberDefaultValue = (value) =>
 export const ORDER_INFO_SCHEMA = {
 	reference_order_info_uuid: STRING.nullable(),
 	is_sample: BOOLEAN_REQUIRED.default(false),
-	is_bill: BOOLEAN.default(false),
+	is_bill: BOOLEAN.default(true),
 	is_cash: BOOLEAN_REQUIRED,
 	status: BOOLEAN_REQUIRED.default(false),
 	marketing_uuid: UUID_FK.required('Required'),
@@ -454,7 +454,7 @@ export const ORDER_INFO_NULL = {
 	uuid: null,
 	reference_order_info_uuid: '',
 	is_sample: false,
-	is_bill: false,
+	is_bill: true,
 	is_cash: false,
 	status: false,
 	marketing_uuid: null,
@@ -478,7 +478,7 @@ export const ORDER_SCHEMA = {
 	remarks: STRING.nullable(),
 
 	// slider
-	slider_starting_section: STRING_REQUIRED,
+	slider_starting_section: STRING_REQUIRED.default('---'),
 	end_type: UUID_REQUIRED,
 	hand: UUID_FK,
 	lock_type: UUID_REQUIRED,
@@ -506,7 +506,7 @@ export const ORDER_SCHEMA = {
 	end_user: UUID_FK,
 	garment: STRING.nullable(),
 	light_preference: UUID_FK,
-	garments_wash: UUID_FK,
+	garments_wash: JSON_STRING_REQUIRED,
 	garments_remarks: STRING.nullable(),
 
 	order_entry: yup.array().of(
@@ -540,7 +540,8 @@ export const ORDER_NULL = {
 	special_requirement: '',
 	description: '',
 	remarks: '',
-	slider_starting_section: null,
+	slider_starting_section: '---',
+	garments_wash: '',
 	order_entry: [
 		{
 			order_description_uuid: null,
@@ -589,13 +590,13 @@ export const LAB_RECIPE_NULL = {
 
 // * Lab info schema*//
 export const LAB_INFO_SCHEMA = {
-	order_info_uuid: UUID_FK,
+	order_info_uuid: STRING_REQUIRED,
 	name: STRING_REQUIRED,
 	lab_status: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	remarks: STRING.nullable(),
 	recipe: yup.array().of(
 		yup.object().shape({
-			recipe_uuid: UUID_FK,
+			recipe_uuid: STRING_REQUIRED,
 		})
 	),
 };
@@ -1445,7 +1446,7 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 	buyer_uuid: STRING_REQUIRED,
 	is_sample: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	is_bill: BOOLEAN.transform(handelNumberDefaultValue).default(false),
-	delivery_date: yup.date().required('Delivery Date is required'),
+	delivery_date: yup.date().nullable(),
 	remarks: STRING.nullable(),
 	order_info_entry: yup.array().of(
 		yup.object().shape({
@@ -1492,6 +1493,39 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 			company_price: 0,
 			party_price: 0,
 			remarks: '',
+		},
+	],
+};
+//* Thread Coning Schema*//
+export const THREAD_CONING_SCHEMA = {
+	coning_operator: STRING_REQUIRED,
+	coning_supervisor: STRING_REQUIRED,
+	coning_machines: STRING_REQUIRED,
+	batch_entry: yup.array().of(
+		yup.object().shape({
+			coning_production_quantity: NUMBER_REQUIRED.max(
+				yup.ref('quantity'),
+				'Beyond Max Quantity'
+			),
+			coning_production_quantity_in_kg: NUMBER_REQUIRED,
+			transfer_quantity: NUMBER_REQUIRED.max(
+				yup.ref('quantity'),
+				'Beyond Max Quantity'
+			),
+		})
+	),
+};
+
+export const THREAD_CONING_NULL = {
+	uuid: null,
+	coning_operator: '',
+	coning_supervisor: '',
+	coning_machines: '',
+	batch_entry: [
+		{
+			coning_production_quantity: null,
+			coning_production_quantity_in_kg: null,
+			transfer_quantity: null,
 		},
 	],
 };
@@ -1588,10 +1622,6 @@ export const DYEING_THREAD_BATCH_SCHEMA = {
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
 		yup.object().shape({
-			quantity: NUMBER.nullable() // Allows the field to be null
-				.transform((value, originalValue) =>
-					String(originalValue).trim() === '' ? null : value
-				),
 			batch_remarks: STRING.nullable(),
 		})
 	),
@@ -1657,6 +1687,7 @@ export const DYEING_THREAD_BATCH_ENTRY_TRANSFER_NULL = {
 
 // * Dyeing Thread Batch Dyeing schema*//
 export const DYEING_THREAD_BATCH_DYEING_SCHEMA = {
+	yarn_quantity: NUMBER.moreThan(0),
 	dyeing_operator: STRING_REQUIRED,
 	reason: STRING_REQUIRED,
 	category: STRING_REQUIRED,

@@ -8,12 +8,7 @@ export default function Index({ recipe_entry }) {
 
 	const columns = useMemo(
 		() => [
-			// {
-			// 	accessorKey: 'recipe_name',
-			// 	header: 'Recipe Name',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
+		
 			{
 				accessorKey: 'color',
 				header: 'Color',

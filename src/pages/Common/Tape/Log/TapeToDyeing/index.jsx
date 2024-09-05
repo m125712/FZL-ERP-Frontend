@@ -1,64 +1,62 @@
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
-import { useCommonTapeRM, useCommonTapeRMLog } from '@/state/Common';
-import { DateTime, EditDelete } from '@/ui';
+import { useAccess, useFetch } from '@/hooks';
+import { EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState } from 'react';
-import RMAddOrUpdate from './RMAddOrUpdate';
-
+import { useMemo, useState } from 'react';
+import { useCommonTapeToDyeing } from '@/state/Common';
+import AddOrUpdate from './AddOrUpdate';
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useCommonTapeRMLog();
-	const info = new PageInfo('RM Tape Log', url, 'common__tape_log');
-	const haveAccess = useAccess(info.getTab());
-	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
+	const { data, deleteData, isLoading } = useCommonTapeToDyeing();
+	const info = new PageInfo('Tape -> Dyeing', '/zipper/tape-coil-to-dyeing');
 
+	const haveAccess = useAccess('common__coil_log');
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'material_name',
-				header: 'Material Name',
+				accessorKey: 'order_number',
+				header: 'O/N',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: 'section',
-				header: 'Section',
-				enableColumnFilter: false,
-				cell: (info) => {
-					return (
-						<span className='capitalize'>
-							{info.getValue()?.replace(/_|n_/g, ' ')}
-						</span>
-					);
-				},
-			},
-			{
-				accessorKey: 'used_quantity',
-				header: 'Used QTY',
+				accessorKey: 'item_description',
+				header: 'Item Description',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: 'wastage',
-				header: 'Wastage',
+				accessorKey: 'trx_quantity',
+				header: (
+					<span>
+						Stock
+						<br />
+						(KG)
+					</span>
+				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'unit',
-				header: 'Unit',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'created_by_name',
-				header: 'Issued By',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -69,30 +67,11 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'created_at',
-				header: 'Created',
-				filterFn: 'isWithinRange',
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
-				accessorKey: 'updated_at',
-				header: 'Updated',
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
 				accessorKey: 'actions',
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_rm'),
+				hidden: !haveAccess.includes('click_update_sfg'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -100,7 +79,7 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('click_delete_rm')}
+							showDelete={haveAccess.includes('click_delete_sfg')}
 						/>
 					);
 				},
@@ -109,20 +88,21 @@ export default function Index() {
 		[data]
 	);
 
+	const { value: order_id } = useFetch(
+		'/other/order/description/value/label'
+	);
+
 	// Update
-	const [updateTapeLog, setUpdateTapeLog] = useState({
+	const [entry, setEntry] = useState({
 		uuid: null,
-		section: null,
-		material_name: null,
-		tape_making: null,
-		used_quantity: null,
+		trx_quantity: null,
+		remarks: null,
 	});
 
 	const handelUpdate = (idx) => {
-		const selected = data[idx];
-		setUpdateTapeLog((prev) => ({
+		setEntry((prev) => ({
 			...prev,
-			...selected,
+			uuid: data[idx].uuid,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -136,14 +116,12 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].material_name
-				.replace(/#/g, '')
-				.replace(/\//g, '-'),
+			itemName:
+				data[idx].order_number + ' - ' + data[idx].item_description,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateCommonTapeRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -158,11 +136,12 @@ export default function Index() {
 				extraClass='py-2'
 			/>
 			<Suspense>
-				<RMAddOrUpdate
+				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateTapeLog,
-						setUpdateTapeLog,
+						order_id,
+						entry,
+						setEntry,
 					}}
 				/>
 			</Suspense>
@@ -170,12 +149,10 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					{...{
-						deleteItem,
-						setDeleteItem,
-						url: `/material/used`,
-						deleteData,
-					}}
+					deleteItem={deleteItem}
+					setDeleteItem={setDeleteItem}
+					deleteData={deleteData}
+					url={`/zipper/tape-coil-to-dyeing`}
 				/>
 			</Suspense>
 		</div>

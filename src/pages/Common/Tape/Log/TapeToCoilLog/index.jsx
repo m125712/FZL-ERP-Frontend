@@ -2,48 +2,33 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useCommonTapeProduction, useCommonTapeSFG } from '@/state/Common';
+import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
 import { EditDelete, DateTime } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import React, { useMemo, useState } from 'react';
 import AddOrUpdate from './AddOrUpdate';
 
-export default function ProductionLog() {
-	const info = new PageInfo(
-		'Tape Productions',
-		'tape-or-coil-prod-section/tape'
-	);
-	const { data, isLoading, deleteData } = useCommonTapeProduction();
+export default function TapeToCoil() {
+	const { data, isLoading, url, deleteData } = useCommonTapeToCoil();
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
+	const info = new PageInfo('Tape -> Coil', 'tape-to-coil-trx');
 	const haveAccess = useAccess('common__tape_log');
 
 	const columns = useMemo(
 		() => [
 			{
 				accessorKey: 'type_of_zipper',
-				header: 'Type of Zipper',
+				header: 'Type of zipper',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: 'production_quantity',
+				accessorKey: 'trx_quantity',
 				header: (
 					<span>
 						Quantity
-						<br />
-						(KG)
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
-			},
-			{
-				accessorKey: 'wastage',
-				header: (
-					<span>
-						Wastage
 						<br />
 						(KG)
 					</span>
@@ -87,7 +72,7 @@ export default function ProductionLog() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_tape_production'),
+				hidden: !haveAccess.includes('click_update_tape_to_coil'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -96,7 +81,7 @@ export default function ProductionLog() {
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
 							showDelete={haveAccess.includes(
-								'click_delete_tape_production'
+								'click_delete_tape_to_coil'
 							)}
 						/>
 					);
@@ -105,18 +90,17 @@ export default function ProductionLog() {
 		],
 		[data]
 	);
-	//const deleteUrl = '/zipper/tape-coil-production';
 
+	
 	// Update
 	const [updateTapeLog, setUpdateTapeLog] = useState({
 		uuid: null,
-		tape_type: null,
+		type_of_zipper: null,
 		tape_or_coil_stock_id: null,
-		production_quantity: null,
+		quantity: null,
 		tape_prod: null,
 		coil_stock: null,
-		wastage: null,
-		issued_by_name: null,
+		trx_quantity: null,
 	});
 
 	const handelUpdate = (idx) => {
@@ -133,6 +117,7 @@ export default function ProductionLog() {
 		itemId: null,
 		itemName: null,
 	});
+
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
@@ -143,10 +128,6 @@ export default function ProductionLog() {
 		window[info.getDeleteModalId()].showModal();
 	};
 	invalidateCommonTapeSFG();
-
-	// if (error) return <h1>Error:{error}</h1>;
-
-	// Fetching data from server
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -159,6 +140,7 @@ export default function ProductionLog() {
 				columns={columns}
 				extraClass='py-2'
 			/>
+
 			<Suspense>
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
@@ -168,6 +150,7 @@ export default function ProductionLog() {
 					}}
 				/>
 			</Suspense>
+
 			<Suspense>
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
@@ -175,7 +158,7 @@ export default function ProductionLog() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url: `/zipper/tape-coil-production`,
+						url,
 						deleteData,
 					}}
 				/>

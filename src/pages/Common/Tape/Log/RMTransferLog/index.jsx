@@ -1,38 +1,60 @@
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
-import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
-import { EditDelete } from '@/ui';
+import { useAccess } from '@/hooks';
+import { useCommonTapeRM, useCommonTapeRMLog } from '@/state/Common';
+import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import React, { useEffect, useMemo, useState } from 'react';
-import TapeToCoilAddOrUpdate from './TapeToCoilAddOrUpdate';
+import { useMemo, useState } from 'react';
+import AddOrUpdate from './AddOrUpdate';
 
-export default function TapeToCoil() {
-	const { data, isLoading, url, deleteData } = useCommonTapeToCoil();
-	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
-	const info = new PageInfo('Tape to Coil Log', 'tape-to-coil-trx');
-	const haveAccess = useAccess('common__tape_log');
+export default function Index() {
+	const { data, isLoading, url, deleteData } = useCommonTapeRMLog();
+	const info = new PageInfo('Material Used', url, 'common__tape_log');
+	const haveAccess = useAccess(info.getTab());
+	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'type_of_zipper',
-				header: 'Type of zipper',
+				accessorKey: 'material_name',
+				header: 'Material Name',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: 'trx_quantity',
-				header: (
-					<span>
-						Quantity
-						<br />
-						(KG)
+				accessorKey: 'section',
+				header: 'Section',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<span className='capitalize'>
+							{info.getValue()?.replace(/_|n_/g, ' ')}
+						</span>
+					);
+				},
+			},
+			{
+				accessorKey: 'used_quantity',
+				header: 'Used QTY',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>
+						{Number(info.getValue())}
 					</span>
 				),
+			},
+			{
+				accessorKey: 'wastage',
+				header: 'Wastage',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -41,6 +63,25 @@ export default function TapeToCoil() {
 				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
 			},
 			{
 				accessorKey: 'remarks',
@@ -53,7 +94,7 @@ export default function TapeToCoil() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_tape_to_coil'),
+				hidden: !haveAccess.includes('click_update_rm'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -61,9 +102,7 @@ export default function TapeToCoil() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes(
-								'click_delete_tape_to_coil'
-							)}
+							showDelete={haveAccess.includes('click_delete_rm')}
 						/>
 					);
 				},
@@ -75,12 +114,10 @@ export default function TapeToCoil() {
 	// Update
 	const [updateTapeLog, setUpdateTapeLog] = useState({
 		uuid: null,
-		type_of_zipper: null,
-		tape_or_coil_stock_id: null,
-		quantity: null,
-		tape_prod: null,
-		coil_stock: null,
-		trx_quantity: null,
+		section: null,
+		material_name: null,
+		tape_making: null,
+		used_quantity: null,
 	});
 
 	const handelUpdate = (idx) => {
@@ -101,19 +138,18 @@ export default function TapeToCoil() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].type_of_zipper,
+			itemName: data[idx].material_name
+				.replace(/#/g, '')
+				.replace(/\//g, '-'),
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateCommonTapeSFG();
-
-	// if (error) return <h1>Error:{error}</h1>;
-
-	// Fetching data from server
+	invalidateCommonTapeRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
+	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
 		<div>
@@ -124,7 +160,7 @@ export default function TapeToCoil() {
 				extraClass='py-2'
 			/>
 			<Suspense>
-				<TapeToCoilAddOrUpdate
+				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
 						updateTapeLog,
@@ -139,7 +175,7 @@ export default function TapeToCoil() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: `/material/used`,
 						deleteData,
 					}}
 				/>

@@ -3,7 +3,7 @@ import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc } from '@/hooks';
 import { useCommonTapeSFG } from '@/state/Common';
 
-import { Transfer } from '@/ui';
+import { Transfer, DateTime } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -63,6 +63,28 @@ export default function Index() {
 				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created At',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
 			},
 			{
 				accessorKey: 'remarks',

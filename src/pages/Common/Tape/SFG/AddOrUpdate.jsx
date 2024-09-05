@@ -1,10 +1,5 @@
 import { AddModal } from '@/components/Modal';
-import {
-	useFetchForRhfReset,
-	usePostFunc,
-	useRHF,
-	useUpdateFunc,
-} from '@/hooks';
+import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useCommonTapeSFG } from '@/state/Common';
 import { Input } from '@/ui';

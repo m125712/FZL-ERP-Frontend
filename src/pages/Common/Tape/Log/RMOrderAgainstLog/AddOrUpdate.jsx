@@ -1,8 +1,10 @@
 import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import { useCommonMaterialTrx } from '@/state/Common';
-import { useMaterialInfo, useMaterialTrxAgainstOrderDescription } from '@/state/Store';
+import { useRHF } from '@/hooks';
+import { useCommonMaterialTrxByUUID } from '@/state/Common';
+import {
+	useMaterialInfo,
+	useMaterialTrxAgainstOrderDescription,
+} from '@/state/Store';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -10,6 +12,7 @@ import {
 	RM_MATERIAL_ORDER_AGAINST_EDIT_SCHEMA,
 } from '@util/Schema';
 import getTransactionArea from '@/util/TransactionArea';
+import { useEffect } from 'react';
 export default function Index({
 	modalId = '',
 	updateLog = {
@@ -20,11 +23,12 @@ export default function Index({
 	},
 	setUpdateLog,
 }) {
-	const { url, updateData } = useCommonMaterialTrx();
+	const { data, url, updateData } = useCommonMaterialTrxByUUID(
+		updateLog?.uuid
+	);
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { invalidateQuery: invalidateMaterialTrx } =
-			useMaterialTrxAgainstOrderDescription();
-
+		useMaterialTrxAgainstOrderDescription();
 
 	const MAX_QUANTITY =
 		Number(updateLog?.stock) + Number(updateLog?.trx_quantity);
@@ -46,7 +50,11 @@ export default function Index({
 		getValues,
 	} = useRHF(schema, RM_MATERIAL_ORDER_AGAINST_EDIT_NULL);
 
-	useFetchForRhfReset(`${url}/${updateLog?.uuid}`, updateLog?.uuid, reset);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateLog((prev) => ({
@@ -70,8 +78,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateLog?.uuid}`,
-				uuid: updateLog?.uuid,
+				url,
 				updatedData,
 				onClose,
 			});

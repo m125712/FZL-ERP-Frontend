@@ -1,10 +1,10 @@
 import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+import {  useRHF } from '@/hooks';
+import { useCommonTapeSFG, useCommonTapeToCoilByUUID } from '@/state/Common';
+import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { TAPE_TO_COIL_TRX_NULL, TAPE_TO_COIL_TRX_SCHEMA } from '@util/Schema';
+import { useEffect } from 'react';
 
 export default function Index({
 	modalId = '',
@@ -19,7 +19,9 @@ export default function Index({
 	},
 	setUpdateTapeLog,
 }) {
-	const { url, updateData } = useCommonTapeToCoil();
+	const { data, url, updateData } = useCommonTapeToCoilByUUID(
+		updateTapeLog?.uuid
+	);
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 
 	const MAX_QUANTITY =
@@ -35,11 +37,11 @@ export default function Index({
 		TAPE_TO_COIL_TRX_NULL
 	);
 
-	useFetchForRhfReset(
-		`${url}/${updateTapeLog?.uuid}`,
-		updateTapeLog?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data[0]);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateTapeLog((prev) => ({
@@ -56,13 +58,11 @@ export default function Index({
 		if (updateTapeLog?.uuid !== null && updateTapeLog?.uuid !== undefined) {
 			const updatedData = {
 				...data,
-				//type_of_zipper: updateTapeLog?.type_of_zipper,
 				updated_at: GetDateTime(),
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateTapeLog?.uuid}`,
-				uuid: updateTapeLog?.uuid,
+				url,
 				updatedData,
 				onClose,
 			});

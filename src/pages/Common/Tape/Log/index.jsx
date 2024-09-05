@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import ProductionLog from './ProductionLog';
 import RMOrderAgainstLog from './RMOrderAgainstLog';
-import RMTransferLog from './RMTransferLog/RMTransferLog';
-import TapeToCoil from './TapeToCoilLog/TapeToCoil';
-import TapeToDying from './TapeToDyeingLog/TapeToDying';
+import RMTransferLog from './RMTransferLog';
+import TapeToCoil from './TapeToCoilLog';
+import TapeToDying from './TapeToDyeing';
 
 export default function Index() {
 	useEffect(() => {

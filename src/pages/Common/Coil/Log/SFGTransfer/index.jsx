@@ -5,14 +5,15 @@ import { useAccess, useFetchFunc, useFetch } from '@/hooks';
 import { EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
-import { useCommonTapeToDyeing } from '@/state/Common';
-import TapeToDyeingAddOrUpdate from './TapeToDyeingAddOrUpdate';
+import AddOrUpdate from './AddOrUpdate';
+import { useCommonCoilToDyeing } from '@/state/Common';
+
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading, isError } =
-		useCommonTapeToDyeing();
-	const info = new PageInfo('SFG Tape Log', '/zipper/tape-coil-to-dyeing');
+		useCommonCoilToDyeing();
+	const info = new PageInfo('SFG Coil Log', '/zipper/tape-coil-to-dyeing');
 	const [coilLog, setCoilLog] = useState([]);
-
+	console.log(data);
 	const haveAccess = useAccess('common__coil_log');
 
 	const columns = useMemo(
@@ -151,6 +152,7 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
+	console.log(data);
 	return (
 		<div>
 			<ReactTable
@@ -160,7 +162,7 @@ export default function Index() {
 				extraClass='py-2'
 			/>
 			<Suspense>
-				<TapeToDyeingAddOrUpdate
+				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
 						order_id,

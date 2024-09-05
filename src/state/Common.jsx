@@ -22,8 +22,8 @@ export const useCommonTapeProduction = () =>
 	});
 export const useCommonTapeProductionByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: commonQK.tapeProduction(uuid),
-		url: `/zipper/tape-coil-production/by/tape${uuid}`,
+		queryKey: commonQK.tapeProductionByUUID(uuid),
+		url: `/zipper/tape-coil-production/${uuid}`,
 	});
 
 // * TAPE TO COIL * //
@@ -32,10 +32,11 @@ export const useCommonTapeToCoil = () =>
 		queryKey: commonQK.tapeToCoil(),
 		url: `/zipper/tape-to-coil`,
 	});
+
 export const useCommonTapeToCoilByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: commonQK.tapeToCoil(uuid),
-		url: `/zipper/tape-to-coil${uuid}`,
+		queryKey: commonQK.tapeToCoilByUUID(uuid),
+		url: `/zipper/tape-to-coil/${uuid}`,
 	});
 
 // * RM * //
@@ -74,7 +75,6 @@ export const useCommonOrderAgainstTapeRMLogByUUID = (uuid) =>
 		url: `/zipper/material-trx-against-order/by/tape_making${uuid}`,
 	});
 
-
 // * COIL * //
 // * SFG * //
 export const useCommonCoilSFG = () =>
@@ -97,8 +97,8 @@ export const useCommonCoilToDyeing = () =>
 	});
 export const useCommonCoilToDyeingByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: commonQK.coilToDyeing(uuid),
-		url: `/zipper/tape-coil-to-dyeing${uuid}`,
+		queryKey: commonQK.coilToDyeingByUUID(uuid),
+		url: `/zipper/tape-coil-to-dyeing/${uuid}`,
 	});
 
 // * Tape to Dyeing
@@ -149,8 +149,8 @@ export const useCommonMaterialUsed = () =>
 	});
 export const useCommonMaterialUsedByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: commonQK.materialUsed(uuid),
-		url: `/material/used${uuid}`,
+		queryKey: commonQK.materialUsedByUUID(uuid),
+		url: `/material/used/${uuid}`,
 	});
 // * Order Against RM Log * //
 
@@ -174,6 +174,6 @@ export const useCommonMaterialTrx = () =>
 	});
 export const useCommonMaterialTrxByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: commonQK.materialTrx(uuid),
-		url: `/zipper/material-trx-against-order${uuid}`,
+		queryKey: commonQK.materialTrxByUUID(uuid),
+		url: `/zipper/material-trx-against-order/${uuid}`,
 	});

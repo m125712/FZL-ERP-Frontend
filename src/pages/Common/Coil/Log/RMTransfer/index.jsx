@@ -6,7 +6,7 @@ import { useCommonCoilRM, useCommonCoilRMLog } from '@/state/Common';
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo, useState } from 'react';
-import RMAddOrUpdate from './RMAddOrUpdate';
+import AddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useCommonCoilRMLog();
@@ -159,7 +159,7 @@ export default function Index() {
 				extraClass='py-2'
 			/>
 			<Suspense>
-				<RMAddOrUpdate
+				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
 						updateCoilLog,

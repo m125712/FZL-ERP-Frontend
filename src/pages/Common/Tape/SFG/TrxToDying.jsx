@@ -111,9 +111,9 @@ export default function Index({
 			quantity: updateTapeProd?.quantity - data?.trx_quantity,
 			zipper_number: updateTapeProd?.zipper_number,
 			type_of_zipper: updateTapeProd?.type_of_zipper,
-			issued_by: user?.id,
 			name: updateTapeProd?.name,
 			issued_by_name: user?.name,
+			created_by: user?.uuid,
 			quantity,
 			created_at: GetDateTime(),
 		};

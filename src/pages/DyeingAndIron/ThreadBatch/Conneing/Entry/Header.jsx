@@ -57,7 +57,7 @@ export default function Header({
 
 	return (
 		<div className='flex flex-col gap-4'>
-			{/* <SectionEntryBody title='Yarn Issue'>
+			<SectionEntryBody title='Dyeing'>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField label='uuid' title='Batch No' errors={errors}>
 						<Controller
@@ -82,28 +82,24 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-				</div>
-			</SectionEntryBody> */}
-			<SectionEntryBody title='Dyeing'>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					<FormField label='uuid' title='Batch No' errors={errors}>
+					<Input label='yarn_quantity' {...{ register, errors }} />
+					<FormField label='reason' title='Reason' errors={errors}>
 						<Controller
-							name='uuid'
+							name={'reason'}
 							control={control}
 							render={({ field: { onChange } }) => {
 								return (
 									<ReactSelect
-										placeholder='Select Batch'
-										options={batch_number}
-										value={batch_number?.find(
+										placeholder='Reason'
+										options={reasonOption}
+										value={reasonOption?.find(
 											(item) =>
-												item.value == getValues('uuid')
+												item.value ===
+												getValues('reason')
 										)}
 										onChange={(e) => {
-											const value = e.value;
-											onChange(value);
+											onChange(e.value);
 										}}
-										isDisabled={true}
 									/>
 								);
 							}}
@@ -161,20 +157,19 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<Input label='yarn_quantity' {...{ register, errors }} />
-					<FormField label='reason' title='Reason' errors={errors}>
+					<FormField label='status' title='Status' errors={errors}>
 						<Controller
-							name={'reason'}
+							name={'status'}
 							control={control}
 							render={({ field: { onChange } }) => {
 								return (
 									<ReactSelect
-										placeholder='Reason'
-										options={reasonOption}
-										value={reasonOption?.find(
+										placeholder='Select Status'
+										options={statusOption}
+										value={statusOption?.find(
 											(item) =>
 												item.value ===
-												getValues('reason')
+												getValues('status')
 										)}
 										onChange={(e) => {
 											onChange(e.value);
@@ -184,6 +179,9 @@ export default function Header({
 							}}
 						/>
 					</FormField>
+				</div>
+
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField
 						label='category'
 						title='Category'
@@ -200,31 +198,6 @@ export default function Header({
 											(item) =>
 												item.value ===
 												getValues('category')
-										)}
-										onChange={(e) => {
-											onChange(e.value);
-										}}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-				</div>
-
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					<FormField label='status' title='Status' errors={errors}>
-						<Controller
-							name={'status'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Status'
-										options={statusOption}
-										value={statusOption?.find(
-											(item) =>
-												item.value ===
-												getValues('status')
 										)}
 										onChange={(e) => {
 											onChange(e.value);
@@ -297,112 +270,6 @@ export default function Header({
 										)}
 										onChange={(e) => {
 											onChange(e.value);
-										}}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-				</div>
-			</SectionEntryBody>
-			<SectionEntryBody title='Conneing'>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					<FormField label='uuid' title='Batch No' errors={errors}>
-						<Controller
-							name='uuid'
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Batch'
-										options={batch_number}
-										value={batch_number?.find(
-											(item) =>
-												item.value == getValues('uuid')
-										)}
-										onChange={(e) => {
-											const value = e.value;
-											onChange(value);
-										}}
-										isDisabled={true}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					<FormField
-						label='coning_operator'
-						title='Operator'
-						errors={errors}>
-						<Controller
-							name='coning_operator'
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Operator'
-										options={user}
-										value={user?.find(
-											(item) =>
-												item.value ==
-												getValues('coning_operator')
-										)}
-										onChange={(e) => {
-											const value = e.value;
-											onChange(value);
-										}}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-
-					<FormField
-						label='coning_supervisor'
-						title='Supervisor'
-						errors={errors}>
-						<Controller
-							name='coning_supervisor'
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Supervisor'
-										options={user}
-										value={user?.find(
-											(item) =>
-												item.value ==
-												getValues('coning_supervisor')
-										)}
-										onChange={(e) => {
-											const value = e.value;
-											onChange(value);
-										}}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					<FormField
-						label='coning_machines'
-						title='Machine Speed'
-						errors={errors}>
-						<Controller
-							name='coning_machines'
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Machine Speed'
-										options={machine_speed}
-										value={machine_speed?.find(
-											(item) =>
-												item.value ==
-												getValues('coning_machines')
-										)}
-										onChange={(e) => {
-											const value = e.value;
-											onChange(value);
 										}}
 									/>
 								);

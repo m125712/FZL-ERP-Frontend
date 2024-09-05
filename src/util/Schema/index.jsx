@@ -47,7 +47,7 @@ export {
 	PHONE_NUMBER,
 	PHONE_NUMBER_REQUIRED,
 	STRING,
-	STRING_REQUIRED,
+	STRING_REQUIRED
 };
 
 // Library
@@ -589,13 +589,13 @@ export const LAB_RECIPE_NULL = {
 
 // * Lab info schema*//
 export const LAB_INFO_SCHEMA = {
-	order_info_uuid: UUID_FK,
+	order_info_uuid: STRING_REQUIRED,
 	name: STRING_REQUIRED,
 	lab_status: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	remarks: STRING.nullable(),
 	recipe: yup.array().of(
 		yup.object().shape({
-			recipe_uuid: UUID_FK,
+			recipe_uuid: STRING_REQUIRED,
 		})
 	),
 };
@@ -1445,7 +1445,7 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 	buyer_uuid: STRING_REQUIRED,
 	is_sample: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	is_bill: BOOLEAN.transform(handelNumberDefaultValue).default(false),
-	delivery_date: yup.date().required('Delivery Date is required'),
+	delivery_date: yup.date().nullable(),
 	remarks: STRING.nullable(),
 	order_info_entry: yup.array().of(
 		yup.object().shape({
@@ -1686,6 +1686,7 @@ export const DYEING_THREAD_BATCH_ENTRY_TRANSFER_NULL = {
 
 // * Dyeing Thread Batch Dyeing schema*//
 export const DYEING_THREAD_BATCH_DYEING_SCHEMA = {
+	yarn_quantity: NUMBER.moreThan(0),
 	dyeing_operator: STRING_REQUIRED,
 	reason: STRING_REQUIRED,
 	category: STRING_REQUIRED,

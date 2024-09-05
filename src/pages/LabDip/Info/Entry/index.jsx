@@ -5,16 +5,16 @@ import { useLabDipInfo } from '@/state/LabDip';
 import {
 	ActionButtons,
 	DynamicField,
+	FormField,
 	Input,
 	JoinInput,
-	Textarea,
 	ReactSelect,
-	FormField,
+	Textarea,
 } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { LAB_INFO_SCHEMA, LAB_INFO_NULL } from '@util/Schema';
+import { LAB_INFO_NULL, LAB_INFO_SCHEMA } from '@util/Schema';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -55,7 +55,6 @@ export default function Index() {
 			reset
 		);
 
-	console.log(getValues());
 	// recipe
 	const {
 		fields: recipeField,
@@ -279,7 +278,7 @@ export default function Index() {
 							<th
 								key={item}
 								scope='col'
-								className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide transition duration-300 first:pl-2'>
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
 								{item}
 							</th>
 						))}>
@@ -290,7 +289,10 @@ export default function Index() {
 									<FormField
 										label={`recipe[${index}].recipe_uuid`}
 										title='Recipe uuid'
-										errors={errors}>
+										dynamicerror={
+											errors?.recipe?.[index]?.recipe_uuid
+										}
+										is_title_needed='false'>
 										<Controller
 											name={`recipe[${index}].recipe_uuid`}
 											control={control}

@@ -61,17 +61,11 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'factory_name',
-			// 	header: 'Factory',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'lab_status',
 				header: 'Status',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (info.getValue() === 1 ? 'Done' : 'Pending'),
 			},
 			{
 				accessorKey: 'created_by_name',

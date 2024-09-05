@@ -9,7 +9,7 @@ const AddButton = ({ onClick }) => {
 			className='btn-filter-accent gap-1'>
 			<Plus className='size-5' />
 
-			<span className='hidden lg:block'> Add New</span>
+			<span className='hidden lg:block'>New</span>
 		</button>
 	);
 };
@@ -65,4 +65,4 @@ function TitleOnly({ title, subtitle, className = '', titleClassName = '' }) {
 }
 
 export default Title;
-export { AddButton, TitleOnly, Indicator };
+export { AddButton, Indicator, TitleOnly };

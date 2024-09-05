@@ -199,7 +199,6 @@ export default function Index() {
 				title={info.getTitle()}
 				data={data}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<Suspense>

@@ -12,7 +12,7 @@ function FilterColumn({ columns }) {
 
 	return (
 		<FilterButton title='Columns'>
-			<div className='flex flex-col'>
+			<div className='flex h-full flex-col overflow-y-auto'>
 				{Array.from(
 					{ length: Math.ceil(allColumn.length / showItem) },
 					(_, i) => (

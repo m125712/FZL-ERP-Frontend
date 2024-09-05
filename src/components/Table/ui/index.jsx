@@ -1,4 +1,4 @@
-import { ArrowUpDown, PDF, Up } from '@/assets/icons';
+import { ArrowUpDown, PDF, Reload, Up } from '@/assets/icons';
 import DropdownMenu from '../DropdownMenu';
 import FilterButton from './FilterButton';
 import NoDataFound from './NoDataFound';
@@ -41,6 +41,14 @@ const PdfButton = (props) => {
 	);
 };
 
+const ReloadButton = (props) => {
+	return (
+		<button type='button' className='btn-filter-outline' {...props}>
+			<Reload className='size-4' />
+		</button>
+	);
+};
+
 export {
 	AddButton,
 	DropdownMenu,
@@ -51,4 +59,5 @@ export {
 	SortingIndicator,
 	Title,
 	TitleOnly,
+	ReloadButton,
 };

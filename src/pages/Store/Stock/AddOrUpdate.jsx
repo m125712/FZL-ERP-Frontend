@@ -1,110 +1,171 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import { FormField, Input, ReactSelect } from '@/ui';
+import { useRHF } from '@/hooks';
+import nanoid from '@/lib/nanoid';
+import { useOtherMaterialSection, useOtherMaterialType } from '@/state/Other';
+import { useMaterialInfo, useMaterialInfoByUUID } from '@/state/Store';
+import { FormField, Input, JoinInputSelect, ReactSelect, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
-import getTransactionArea from '@/util/TransactionArea';
-import { DevTool } from '@hookform/devtools';
-import { MATERIAL_STOCK_NULL, MATERIAL_STOCK_SCHEMA } from '@util/Schema';
+import { MATERIAL_NULL, MATERIAL_SCHEMA } from '@util/Schema';
+import { useEffect } from 'react';
 
 export default function Index({
 	modalId = '',
-	setMaterialStock,
-	updateMaterialStock = {
-		id: null,
-		name: null,
-		stock: null,
+	updateMaterialDetails = {
+		uuid: null,
+		section_uuid: null,
+		type_uuid: null,
 	},
-	setUpdateMaterialStock,
+	setUpdateMaterialDetails,
 }) {
 	const { user } = useAuth();
+	const { url, updateData, postData } = useMaterialInfo();
+	const { data } = useMaterialInfoByUUID(updateMaterialDetails?.uuid);
+	const { data: section } = useOtherMaterialSection();
+	const { data: materialType } = useOtherMaterialType();
 
-	const schema = {
-		...MATERIAL_STOCK_SCHEMA,
-		trx_quantity: MATERIAL_STOCK_SCHEMA.trx_quantity
-			.moreThan(0)
-			.max(updateMaterialStock?.stock),
-	};
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		Controller,
+		control,
+		getValues,
+		context,
+	} = useRHF(MATERIAL_SCHEMA, MATERIAL_NULL);
 
-	const { register, handleSubmit, errors, control, Controller, reset } =
-		useRHF(schema, MATERIAL_STOCK_NULL);
-
-	useFetchForRhfReset(
-		`/material/stock/${updateMaterialStock?.id}`,
-		updateMaterialStock?.id,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
-		setUpdateMaterialStock((prev) => ({
+		setUpdateMaterialDetails((prev) => ({
 			...prev,
-			id: null,
-			name: null,
-			stock: null,
+			uuid: null,
+			section_uuid: null,
+			type_uuid: null,
 		}));
-		reset(MATERIAL_STOCK_NULL);
+		reset(MATERIAL_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateMaterialStock?.id !== null) {
+		if (updateMaterialDetails?.uuid !== null) {
 			const updatedData = {
 				...data,
-				material_stock_id: updateMaterialStock.id,
-				name: updateMaterialStock?.name.replace(/[#&/]/g, ''),
-				stock: updateMaterialStock.stock - data?.quantity,
-				[`${data.trx_to}`]:
-					updateMaterialStock[`${data.trx_to}`] + data?.quantity,
-				issued_by: user?.id,
-				created_at: GetDateTime(),
+				updated_at: GetDateTime(),
 			};
 
-			await useUpdateFunc({
-				uri: `/material/trx`,
-				itemId: updateMaterialStock?.id,
-				data: data,
-				updatedData: updatedData,
-				setItems: setMaterialStock,
-				onClose: onClose,
+			await updateData.mutateAsync({
+				url: `${url}/${updateMaterialDetails?.uuid}`,
+				uuid: updateMaterialDetails?.uuid,
+				updatedData,
+				onClose,
 			});
 
 			return;
 		}
+
+		// Add Item
+		const updatedData = {
+			...data,
+			uuid: nanoid(),
+			created_at: GetDateTime(),
+			created_by: user?.uuid,
+		};
+
+		await postData.mutateAsync({
+			url,
+			newData: updatedData,
+			onClose,
+		});
 	};
 
-	const transactionArea = getTransactionArea();
+	const selectUnit = [
+		{ label: 'kg', value: 'kg' },
+		{ label: 'Litre', value: 'ltr' },
+		{ label: 'Meter', value: 'mtr' },
+		{ label: 'Piece', value: 'pcs' },
+	];
 
 	return (
 		<AddModal
 			id={modalId}
-			title={'Material Trx of ' + updateMaterialStock?.name}
+			title={
+				updateMaterialDetails?.uuid !== null
+					? 'Update Material'
+					: 'Material'
+			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
-			onClose={onClose}
-			isSmall={true}>
-			<FormField label='trx_to' title='Transfer To' errors={errors}>
-				<Controller
-					name={'trx_to'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select Transaction Area'
-								options={transactionArea}
-								onChange={(e) => onChange(e.value)}
-							/>
-						);
-					}}
+			onClose={onClose}>
+			<div className='mb-4 flex flex-col gap-2 rounded bg-base-200 p-2 md:flex-row'>
+				<FormField label='section_id' title='Section' errors={errors}>
+					<Controller
+						name={'section_uuid'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Section'
+									options={section}
+									value={section?.filter(
+										(item) =>
+											item.value ===
+											getValues('section_uuid')
+									)}
+									onChange={(e) => onChange(e.value)}
+									isDisabled={
+										updateMaterialDetails?.uuid !== null
+									}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+				<FormField label='type_uuid' title='Type' errors={errors}>
+					<Controller
+						name={'type_uuid'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Material Type'
+									options={materialType}
+									value={materialType?.filter(
+										(item) =>
+											item.value ===
+											getValues('type_uuid')
+									)}
+									onChange={(e) => onChange(e.value)}
+									isDisabled={
+										updateMaterialDetails?.uuid !== null
+									}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+			</div>
+			<div className='mb-4 flex flex-col gap-2 rounded bg-base-200 p-2 md:flex-row'>
+				<Input label='name' {...{ register, errors }} />
+				<Input label='short_name' {...{ register, errors }} />
+				<JoinInputSelect
+					//defaultUnitValue='kg'
+					label='threshold'
+					join='unit'
+					option={selectUnit}
+					{...{ register, errors }}
 				/>
-			</FormField>
-
-			<Input
-				label='quantity'
-				sub_label={`Max: ${updateMaterialStock?.stock}`}
-				placeholder={`Max: ${updateMaterialStock?.stock}`}
-				{...{ register, errors }}
-			/>
-			<Input label='remarks' {...{ register, errors }} />
+			</div>
+			<div className='mb-4 flex flex-col gap-2 rounded bg-base-200 p-2 md:flex-row'>
+				<Input label='remarks' {...{ register, errors }} />
+				<Textarea label='description' {...{ register, errors }} />
+			</div>
 		</AddModal>
 	);
 }

@@ -1,8 +1,8 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc, useFetchFuncForReport } from '@/hooks';
+import { useAccess } from '@/hooks';
 import { useCommonCoilRM } from '@/state/Common';
-import { EditDelete, Transfer } from '@/ui';
+import { DateTime, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 
@@ -31,13 +31,35 @@ export default function Index() {
 				accessorKey: 'coil_forming',
 				header: 'Stock',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'unit',
 				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created At',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
 			},
 			{
 				accessorKey: 'remarks',
@@ -82,12 +104,7 @@ export default function Index() {
 
 	return (
 		<div>
-			<ReactTable
-				title={info.getTitle()}
-				data={data}
-				columns={columns}
-				extraClass='py-2'
-			/>
+			<ReactTable title={info.getTitle()} data={data} columns={columns} />
 			<Suspense>
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}

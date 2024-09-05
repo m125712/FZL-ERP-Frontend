@@ -6,12 +6,8 @@ import { useCommercialPIDetailsByPiId } from '@/state/Commercial';
 
 export default function Index() {
 	const { pi_id } = useParams();
-	const { data, isLoading, invalidateQuery } = useCommercialPIDetailsByPiId(
-		pi_id,
-		{
-			enabled: !!pi_id,
-		}
-	);
+	const { data, isLoading, invalidateQuery } =
+		useCommercialPIDetailsByPiId(pi_id);
 
 	useEffect(() => {
 		invalidateQuery();

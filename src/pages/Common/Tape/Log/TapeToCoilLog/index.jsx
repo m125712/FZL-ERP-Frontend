@@ -1,17 +1,17 @@
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
+import { useAccess } from '@/hooks';
 import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
-import { EditDelete } from '@/ui';
+import { EditDelete, DateTime } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import React, { useEffect, useMemo, useState } from 'react';
-import TapeToCoilAddOrUpdate from './TapeToCoilAddOrUpdate';
+import React, { useMemo, useState } from 'react';
+import AddOrUpdate from './AddOrUpdate';
 
 export default function TapeToCoil() {
 	const { data, isLoading, url, deleteData } = useCommonTapeToCoil();
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
-	const info = new PageInfo('Tape to Coil Log', 'tape-to-coil-trx');
+	const info = new PageInfo('Tape -> Coil', 'tape-to-coil-trx');
 	const haveAccess = useAccess('common__tape_log');
 
 	const columns = useMemo(
@@ -34,13 +34,32 @@ export default function TapeToCoil() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
 			},
 			{
 				accessorKey: 'remarks',
@@ -72,6 +91,7 @@ export default function TapeToCoil() {
 		[data]
 	);
 
+	
 	// Update
 	const [updateTapeLog, setUpdateTapeLog] = useState({
 		uuid: null,
@@ -97,6 +117,7 @@ export default function TapeToCoil() {
 		itemId: null,
 		itemName: null,
 	});
+
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
@@ -107,10 +128,6 @@ export default function TapeToCoil() {
 		window[info.getDeleteModalId()].showModal();
 	};
 	invalidateCommonTapeSFG();
-
-	// if (error) return <h1>Error:{error}</h1>;
-
-	// Fetching data from server
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -123,8 +140,9 @@ export default function TapeToCoil() {
 				columns={columns}
 				extraClass='py-2'
 			/>
+
 			<Suspense>
-				<TapeToCoilAddOrUpdate
+				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
 						updateTapeLog,
@@ -132,6 +150,7 @@ export default function TapeToCoil() {
 					}}
 				/>
 			</Suspense>
+
 			<Suspense>
 				<DeleteModal
 					modalId={info.getDeleteModalId()}

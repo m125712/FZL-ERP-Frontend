@@ -251,15 +251,12 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div>
-			<ReactTable
-				title={info.getTitle()}
-				data={data}
-				columns={columns}
-				accessor={haveAccess.includes('create')}
-				handelAdd={handelAdd}
-				extraClass='py-2'
-			/>
-		</div>
+		<ReactTable
+			title={info.getTitle()}
+			data={data}
+			columns={columns}
+			accessor={haveAccess.includes('create')}
+			handelAdd={handelAdd}
+		/>
 	);
 }

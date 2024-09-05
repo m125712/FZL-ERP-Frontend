@@ -35,7 +35,7 @@ export default function ExportCSV({ getAllLeafColumns, filteredRows, title }) {
 			data={csvData}
 			filename={filename}>
 			<Download className='size-5' />
-			<span>Export</span>
+			<span className='hidden lg:block'>Export</span>
 		</CSVLink>
 	);
 }

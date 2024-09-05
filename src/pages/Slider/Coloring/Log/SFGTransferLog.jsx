@@ -198,7 +198,6 @@ export default function Index() {
 				title={info.getTitle()}
 				data={coloring}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<SFGAddOrUpdate

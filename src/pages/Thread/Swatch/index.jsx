@@ -132,12 +132,7 @@ export default function Index() {
 
 	return (
 		<div>
-			<ReactTable
-				title={info.getTitle()}
-				data={data}
-				columns={columns}
-				extraClass='py-2'
-			/>
+			<ReactTable title={info.getTitle()} data={data} columns={columns} />
 		</div>
 	);
 }

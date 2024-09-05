@@ -1,9 +1,9 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
+import { useAccess } from '@/hooks';
 import { useCommonCoilSFG } from '@/state/Common';
 
-import { Transfer } from '@/ui';
+import { Transfer, DateTime } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -46,7 +46,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'actions1',
@@ -72,13 +72,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 
 			{
@@ -93,6 +87,34 @@ export default function Index() {
 						onClick={() => handleTrxToDying(info.row.index)}
 					/>
 				),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created At',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 		],
 		[data]
@@ -154,7 +176,6 @@ export default function Index() {
 				//accessor={haveAccess.includes('click_production')}
 				data={data}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<Production

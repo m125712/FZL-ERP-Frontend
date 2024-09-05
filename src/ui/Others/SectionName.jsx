@@ -1,9 +1,9 @@
 export default function SectionName({ section }) {
-	const { type, area } = res[section];
+	const { type, area } = res?.[section];
 	return (
-		<div className='flex flex-col gap-0.5'>
-			<div className='badge badge-primary badge-sm'>{type}</div>
-			<div className='badge badge-primary badge-sm'>{area}</div>
+		<div className='flex flex-col gap-1'>
+			<div className='badge badge-accent badge-sm'>{type}</div>
+			<div className='badge badge-accent badge-sm'>{area}</div>
 		</div>
 	);
 }
@@ -123,9 +123,27 @@ const res = {
 		type: 'All',
 		area: 'Cutting',
 	},
-	qc_and_packing: {
-		name: 'QC and Packing',
-		short_name: 'QC and Packing',
+	m_qc_and_packing: {
+		name: 'Metal QC and Packing',
+		short_name: 'M QC and Packing',
+		type: 'All',
+		area: 'QC and Packing',
+	},
+	n_qc_and_packing: {
+		name: 'Nylon QC and Packing',
+		short_name: 'N QC and Packing',
+		type: 'All',
+		area: 'QC and Packing',
+	},
+	v_qc_and_packing: {
+		name: 'Vislon QC and Packing',
+		short_name: 'V QC and Packing',
+		type: 'All',
+		area: 'QC and Packing',
+	},
+	s_qc_and_packing: {
+		name: 'Slider QC and Packing',
+		short_name: 'S QC and Packing',
 		type: 'All',
 		area: 'QC and Packing',
 	},
@@ -146,5 +164,23 @@ const res = {
 		short_name: 'Coloring',
 		type: 'All',
 		area: 'Coloring',
+	},
+	lab_dip: {
+		name: 'Lab Dip',
+		short_name: 'Lab Dip',
+		type: 'All',
+		area: 'Dyeing',
+	},
+	faulty_product: {
+		name: 'Faulty Product',
+		short_name: 'Faulty Product',
+		type: 'All',
+		area: 'Others',
+	},
+	loan_return: {
+		name: 'Loan Return',
+		short_name: 'Loan Return',
+		type: 'All',
+		area: 'Others',
 	},
 };

@@ -216,7 +216,6 @@ export default function Index() {
 				// handelAdd={handelAdd}
 				data={teethMoldingProd}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<Production

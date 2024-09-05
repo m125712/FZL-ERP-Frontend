@@ -107,7 +107,6 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				data={department}
 				columns={columns}
-				extraClass='py-2'
 			/>
 
 			<Suspense>

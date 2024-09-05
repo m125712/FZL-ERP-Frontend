@@ -15,6 +15,7 @@ import { Suspense } from '../Feedback';
 import cn from '@/lib/cn';
 import { NoDataFound, TitleOnly } from './ui';
 import { FuzzyFilter, isWithinRange } from './utils';
+import RowSkeletons from './RowSkeletons';
 
 const Header = lazy(() => import('./Header'));
 const TableHead = lazy(() => import('./TableHead'));
@@ -25,6 +26,8 @@ function Table({
 	title = '',
 	subtitle = '',
 	handelAdd = () => {},
+	handleReload = null,
+	isLoading = false,
 	accessor,
 	data = [],
 	columns,
@@ -117,6 +120,7 @@ function Table({
 					title={title}
 					subtitle={subtitle}
 					handelAdd={handelAdd}
+					handleReload={handleReload}
 					accessor={accessor}
 					indicatorValue={indicatorValue}
 					getHeaderGroups={getHeaderGroups}
@@ -159,7 +163,8 @@ function Table({
 						/>
 
 						<tbody className='divide-y-[1px] divide-secondary/20'>
-							{renderRow(hasAnyRow)}
+							{!isLoading && renderRow(hasAnyRow)}
+							{isLoading && <RowSkeletons columns={columns} />}
 							{children}
 						</tbody>
 					</table>

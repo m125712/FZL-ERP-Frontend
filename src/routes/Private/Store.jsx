@@ -3,7 +3,6 @@ import { lazy } from 'react';
 // Pages
 // Material
 const Stock = lazy(() => import('@/pages/Store/Stock'));
-const Details = lazy(() => import('@/pages/Store/Details'));
 const Section = lazy(() => import('@/pages/Store/Section'));
 const MaterialType = lazy(() => import('@/pages/Store/Type'));
 const Summary = lazy(() => import('@/pages/Store/Summary'));
@@ -21,8 +20,8 @@ export const StoreRoutes = [
 	{
 		id: 4,
 		name: 'Stock',
-		path: '/store/details',
-		element: Details,
+		path: '/store/stock',
+		element: Stock,
 		type: 'store',
 		page_name: 'store__stock',
 		actions: [
@@ -34,20 +33,20 @@ export const StoreRoutes = [
 			'click_action',
 		],
 	},
-	{
-		id: 30,
-		name: 'Stock Full',
-		path: '/store/stock',
-		element: Stock,
-		type: 'store',
-		page_name: 'store__stock_full',
-		actions: [
-			'read',
-			'click_name',
-			'click_action',
-			'click_trx_against_order',
-		],
-	},
+	// {
+	// 	id: 30,
+	// 	name: 'Stock Full',
+	// 	path: '/store/stock',
+	// 	element: Stock,
+	// 	type: 'store',
+	// 	page_name: 'store__stock_full',
+	// 	actions: [
+	// 		'read',
+	// 		'click_name',
+	// 		'click_action',
+	// 		'click_trx_against_order',
+	// 	],
+	// },
 	{
 		id: 301,
 		name: 'Log',

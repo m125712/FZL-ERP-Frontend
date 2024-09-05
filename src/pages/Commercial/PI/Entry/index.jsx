@@ -16,6 +16,10 @@ import cn from '@/lib/cn';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
 
 export default function Index() {
+	const { pi_uuid } = useParams();
+	const { user } = useAuth();
+	const navigate = useNavigate();
+
 	const { url: commercialPiEntryUrl } = useCommercialPIEntry();
 	const {
 		url: commercialPiUrl,
@@ -23,9 +27,7 @@ export default function Index() {
 		updateData,
 		deleteData,
 	} = useCommercialPI();
-	const { pi_uuid } = useParams();
-	const { user } = useAuth();
-	const navigate = useNavigate();
+
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
 	const isUpdate = pi_uuid !== undefined;

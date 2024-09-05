@@ -11,12 +11,12 @@ const Drawer = () => {
 	return (
 		<div className='drawer md:drawer-open'>
 			<input id={id} type='checkbox' className='drawer-toggle' />
-			<div className='drawer-content flex flex-col overflow-x-hidden'>
-				<main className='h-screen flex-1 overflow-x-hidden'>
+			<div className='drawer-content flex h-screen flex-col overflow-x-hidden'>
+				<main className='h-screen overflow-y-auto overflow-x-hidden'>
 					{!isHidden && <MobileHeader {...{ id }} />}
 					<Suspense>
 						<Navbar />
-						<div className='px-8 py-4'>
+						<div className='px-4 py-4 lg:px-8'>
 							<Outlet />
 						</div>
 					</Suspense>

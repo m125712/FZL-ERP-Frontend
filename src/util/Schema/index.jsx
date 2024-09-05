@@ -741,7 +741,7 @@ export const LOGIN_NULL = {
 export const USER_SCHEMA = {
 	name: STRING_REQUIRED,
 	email: FORTUNE_ZIP_EMAIL_PATTERN,
-	department_designation: NUMBER_REQUIRED,
+	designation_uuid: STRING_REQUIRED,
 	// pass: PASSWORD,
 	// repeatPass: yup
 	// 	.string()

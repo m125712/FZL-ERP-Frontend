@@ -12,6 +12,7 @@ export default function useRHF(schema = {}, defaultValues = {}) {
 		resolver: yupResolver(object(schema)),
 		defaultValues,
 	});
+
 	const {
 		register,
 		handleSubmit,
@@ -41,5 +42,6 @@ export default function useRHF(schema = {}, defaultValues = {}) {
 		useController,
 		useFieldArray,
 		getFieldState,
+		context: form,
 	};
 }

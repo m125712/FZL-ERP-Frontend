@@ -126,7 +126,6 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				handelAdd={handelAdd}
-				extraClass='py-2'
 			/>
 		</div>
 	);

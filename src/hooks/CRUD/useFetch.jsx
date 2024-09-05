@@ -66,10 +66,7 @@ const useFetchForRhfReset = async (uri, returnId, reset) => {
 		if (returnId === null || returnId === undefined) return;
 
 		api.get(uri).then((res) => {
-			console.log({
-				data: res?.data?.data[0],
-			});
-			reset(res?.data?.data[0]);
+			reset(res?.data?.data);
 		});
 	}, [returnId]);
 };
@@ -157,10 +154,10 @@ export {
 	defaultFetch,
 	useFetch,
 	useFetchForRhfReset,
+	useFetchForRhfResetForBatchProduct,
 	useFetchForRhfResetForOrder,
 	useFetchForRhfResetForPlanning,
 	useFetchForRhfResetForUserAccess,
 	useFetchFunc,
 	useFetchFuncForReport,
-	useFetchForRhfResetForBatchProduct,
 };

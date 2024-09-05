@@ -187,7 +187,6 @@ export default function Index() {
 				// handelAdd={handelAdd}
 				data={finishingLog}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<SFGAddOrUpdate

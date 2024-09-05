@@ -1,6 +1,6 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF, useUpdateFunc } from '@/hooks';
+import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useCommonCoilProduction, useCommonCoilSFG } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
@@ -87,8 +87,8 @@ export default function Index({
 			isSmall={true}>
 			<JoinInput
 				label='production_quantity'
-				sub_label={`Max: ${MAX_PRODUCTION_QTY}`}
-				placeholder={`Max: ${MAX_PRODUCTION_QTY}`}
+				sub_label={`Max: ${Number(MAX_PRODUCTION_QTY)}`}
+				placeholder={`Max: ${Number(MAX_PRODUCTION_QTY)}`}
 				unit='KG'
 				{...{ register, errors }}
 			/>

@@ -18,8 +18,6 @@ export default function Index() {
 
 	const haveAccess = useAccess('vislon__teeth_molding_log');
 
-
-
 	const columns = useMemo(
 		() => [
 			{
@@ -208,7 +206,6 @@ export default function Index() {
 				// accessor={haveAccess.includes('click_update_sfg')}
 				data={data}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<SFGAddOrUpdate

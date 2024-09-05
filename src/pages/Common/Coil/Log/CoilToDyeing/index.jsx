@@ -1,19 +1,17 @@
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc, useFetch } from '@/hooks';
-import { EditDelete } from '@/ui';
+import { useAccess, useFetch } from '@/hooks';
+import { EditDelete, DateTime } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
-import SFGAddOrUpdate from './SFGAddOrUpdate';
+import { useMemo, useState } from 'react';
+import AddOrUpdate from './AddOrUpdate';
 import { useCommonCoilToDyeing } from '@/state/Common';
 
 export default function Index() {
-	const { data, url, updateData, postData, deleteData, isLoading, isError } =
-		useCommonCoilToDyeing();
-	const info = new PageInfo('SFG Coil Log', '/zipper/tape-coil-to-dyeing');
-	const [coilLog, setCoilLog] = useState([]);
-	console.log(data);
+	const { data, deleteData, isLoading } = useCommonCoilToDyeing();
+	const info = new PageInfo('Coil -> Dyeing', '/zipper/tape-coil-to-dyeing');
+
 	const haveAccess = useAccess('common__coil_log');
 
 	const columns = useMemo(
@@ -45,7 +43,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'created_by_name',
@@ -55,20 +53,27 @@ export default function Index() {
 			},
 
 			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'created_at',
 				header: 'Created',
+				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
 			},
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -94,30 +99,9 @@ export default function Index() {
 		[data]
 	);
 
-	// Fetching data from server
-	// useEffect(() => {
-	// 	useFetchFunc(info.getFetchUrl(), setCoilLog, setLoading, setError);
-	// }, []);
-
 	const { value: order_id } = useFetch(
 		'/other/order/description/value/label'
 	);
-
-	// Update
-	const [updateCoilLog, setUpdateCoilLog] = useState({
-		id: null,
-		trx_from: null,
-		trx_to: null,
-		item_name: null,
-		trx_quantity: null,
-		order_description: null,
-		order_quantity: null,
-		coil_stock: null,
-		dying_and_iron_stock: null,
-		finishing_stock: null,
-		order_entry_id: null,
-		zipper_number_name: null,
-	});
 
 	const [entryUUID, setEntryUUID] = useState({
 		uuid: null,
@@ -150,27 +134,18 @@ export default function Index() {
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
-	// if (error) return <h1>Error:{error}</h1>;
 
 	console.log(data);
 	return (
 		<div>
-			<ReactTable
-				title={info.getTitle()}
-				data={data}
-				columns={columns}
-				extraClass='py-2'
-			/>
+			<ReactTable title={info.getTitle()} data={data} columns={columns} />
 			<Suspense>
-				<SFGAddOrUpdate
+				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
 						order_id,
 						entryUUID,
 						setEntryUUID,
-						setCoilLog,
-						updateCoilLog,
-						setUpdateCoilLog,
 					}}
 				/>
 			</Suspense>
@@ -180,7 +155,6 @@ export default function Index() {
 					title={info.getTitle()}
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
-					setItems={setCoilLog}
 					deleteData={deleteData}
 					url={`/zipper/tape-coil-to-dyeing`}
 				/>

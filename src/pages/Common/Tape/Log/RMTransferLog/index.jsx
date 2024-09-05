@@ -1,18 +1,18 @@
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
-import { useCommonCoilRM, useCommonCoilRMLog } from '@/state/Common';
+import { useAccess } from '@/hooks';
+import { useCommonTapeRM, useCommonTapeRMLog } from '@/state/Common';
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState } from 'react';
-import RMAddOrUpdate from './RMAddOrUpdate';
+import { useMemo, useState } from 'react';
+import AddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useCommonCoilRMLog();
-	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
-	const info = new PageInfo('RM Coil Log', url, 'common__coil_log');
+	const { data, isLoading, url, deleteData } = useCommonTapeRMLog();
+	const info = new PageInfo('Material Used', url, 'common__tape_log');
 	const haveAccess = useAccess(info.getTab());
+	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
 
 	const columns = useMemo(
 		() => [
@@ -41,14 +41,16 @@ export default function Index() {
 				header: 'Used QTY',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className='capitalize'>{info.getValue()}</span>
+					<span className='capitalize'>
+						{Number(info.getValue())}
+					</span>
 				),
 			},
 			{
 				accessorKey: 'wastage',
 				header: 'Wastage',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'unit',
@@ -58,13 +60,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'created_by_name',
-				header: 'Issued By',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
+				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -86,6 +82,12 @@ export default function Index() {
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'actions',
@@ -110,18 +112,17 @@ export default function Index() {
 	);
 
 	// Update
-	const [updateCoilLog, setUpdateCoilLog] = useState({
+	const [updateTapeLog, setUpdateTapeLog] = useState({
 		uuid: null,
 		section: null,
 		material_name: null,
-		teeth_assembling_and_polishing: null,
-		plating_and_iron: null,
+		tape_making: null,
 		used_quantity: null,
 	});
 
 	const handelUpdate = (idx) => {
 		const selected = data[idx];
-		setUpdateCoilLog((prev) => ({
+		setUpdateTapeLog((prev) => ({
 			...prev,
 			...selected,
 		}));
@@ -144,7 +145,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateCommonCoilRM();
+	invalidateCommonTapeRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -152,18 +153,13 @@ export default function Index() {
 
 	return (
 		<div>
-			<ReactTable
-				title={info.getTitle()}
-				data={data}
-				columns={columns}
-				extraClass='py-2'
-			/>
+			<ReactTable title={info.getTitle()} data={data} columns={columns} />
 			<Suspense>
-				<RMAddOrUpdate
+				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateCoilLog,
-						setUpdateCoilLog,
+						updateTapeLog,
+						setUpdateTapeLog,
 					}}
 				/>
 			</Suspense>

@@ -7,11 +7,11 @@ import { useLabDipRM, useLabDipRMLog } from '@/state/LabDip';
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo, useState } from 'react';
-import RMAddOrUpdate from './RMAddOrUpdate';
+import RMAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useLabDipRMLog();
-	const info = new PageInfo('RM LabDip Log', url, 'lab_dip__log');
+	const info = new PageInfo('RM LabDip', url, 'lab_dip__log');
 	const haveAccess = useAccess(info.getTab());
 	const { invalidateQuery: invalidateLabDipRM } = useLabDipRM();
 	const columns = useMemo(

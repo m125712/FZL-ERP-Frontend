@@ -3,7 +3,7 @@ import { useAuth } from '@/context/auth';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { useDyeingThreadBatch } from '@/state/Dyeing';
-import { FormField, ReactSelect } from '@/ui';
+import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import {
@@ -23,6 +23,7 @@ export default function Index({
 		pass_by: null,
 		shift: null,
 		dyeing_supervisor: null,
+		yarn_quantity: null,
 	},
 	setDyeing,
 }) {
@@ -95,6 +96,7 @@ export default function Index({
 			pass_by: null,
 			shift: null,
 			dyeing_supervisor: null,
+			yarn_quantity: null,
 		}));
 		reset(DYEING_THREAD_BATCH_DYEING_NULL);
 		window[modalId].close();
@@ -145,6 +147,7 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
+			<Input label='yarn_quantity' {...{ register, errors }} />
 			<FormField
 				label='dyeing_operator'
 				title='Dyeing Operator'

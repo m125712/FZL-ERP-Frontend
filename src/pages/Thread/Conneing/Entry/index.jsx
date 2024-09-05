@@ -4,13 +4,11 @@ import cn from '@/lib/cn';
 import { DynamicDeliveryField, Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
-import {
-	DYEING_THREAD_CONNEING_NULL,
-	DYEING_THREAD_CONNEING_SCHEMA,
-} from '@util/Schema';
+import { THREAD_CONING_NULL, THREAD_CONING_SCHEMA } from '@util/Schema';
 import { lazy, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { useAuth } from '@/context/auth';
 import {
 	useDyeingThreadBatch,
 	useDyeingThreadBatchEntry,
@@ -23,8 +21,9 @@ export default function Index() {
 	const { url: threadBatchEntryUrl } = useDyeingThreadBatchEntry();
 	const { url: threadBatchUrl, updateData } = useDyeingThreadBatch();
 	const navigate = useNavigate();
-	const { batch_con_uuid } = useParams();
+	const { batch_uuid } = useParams();
 	const [orderInfoIds, setOrderInfoIds] = useState('');
+	const { user } = useAuth();
 
 	const {
 		register,
@@ -38,7 +37,7 @@ export default function Index() {
 		watch,
 		setValue,
 		getFieldState,
-	} = useRHF(DYEING_THREAD_CONNEING_SCHEMA, DYEING_THREAD_CONNEING_NULL);
+	} = useRHF(THREAD_CONING_SCHEMA, THREAD_CONING_NULL);
 
 	// batch_entry
 	const { fields: orderEntryField } = useFieldArray({
@@ -47,7 +46,7 @@ export default function Index() {
 	});
 
 	useFetchForRhfResetForOrder(
-		`/thread/batch-details/by/${batch_con_uuid}`,
+		`/thread/batch-details/by/${batch_uuid}`,
 		orderInfoIds,
 		reset
 	);
@@ -91,10 +90,14 @@ export default function Index() {
 	const onSubmit = async (data) => {
 		// Update item
 
-		if (getValues('dyeing_created_at') === null) {
+		if (getValues('coning_created_at') !== null) {
 			const threadBatchData = {
 				...data,
-				dyeing_created_at: GetDateTime(),
+				coning_operator: data?.coning_operator,
+				coning_supervisor: data?.coning_supervisor,
+				coning_machines: data?.coning_machines,
+				coning_updated_at: GetDateTime(),
+				updated_at: GetDateTime(),
 			};
 			// update /commercial/pi/{uuid}
 			const threadBatchPromise = await updateData.mutateAsync({
@@ -109,6 +112,11 @@ export default function Index() {
 				async (item) => {
 					const updatedData = {
 						...item,
+						coning_production_quantity:
+							item.coning_production_quantity,
+						coning_production_quantity_in_kg:
+							item?.coning_production_quantity_in_kg,
+						updated_at: GetDateTime(),
 					};
 
 					return await updateData.mutateAsync({
@@ -119,19 +127,14 @@ export default function Index() {
 					});
 				}
 			);
-
 			try {
 				await Promise.all([
 					threadBatchPromise,
 					...updatedThreadBatchPromises,
 				])
+					.then(() => reset(Object.assign({}, THREAD_CONING_NULL)))
 					.then(() =>
-						reset(Object.assign({}, DYEING_THREAD_CONNEING_NULL))
-					)
-					.then(() =>
-						navigate(
-							`/dyeing-and-iron/thread-batch/details/${batch_con_uuid}`
-						)
+						navigate(`/thread/coning/details/${batch_uuid}`)
 					);
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -140,7 +143,12 @@ export default function Index() {
 		} else {
 			const threadBatchData = {
 				...data,
-				dyeing_updated_at: GetDateTime(),
+				coning_operator: data?.coning_operator,
+				coning_supervisor: data?.coning_supervisor,
+				coning_machines: data?.coning_machines,
+				coning_created_at: GetDateTime(),
+				coning_created_by: user?.uuid,
+				updated_at: GetDateTime(),
 			};
 			// update /commercial/pi/{uuid}
 			const threadBatchPromise = await updateData.mutateAsync({
@@ -155,6 +163,11 @@ export default function Index() {
 				async (item) => {
 					const updatedData = {
 						...item,
+						coning_production_quantity:
+							item.coning_production_quantity,
+						coning_production_quantity_in_kg:
+							item?.coning_production_quantity_in_kg,
+						updated_at: GetDateTime(),
 					};
 
 					return await updateData.mutateAsync({
@@ -165,19 +178,14 @@ export default function Index() {
 					});
 				}
 			);
-
 			try {
 				await Promise.all([
 					threadBatchPromise,
 					...updatedThreadBatchPromises,
 				])
+					.then(() => reset(Object.assign({}, THREAD_CONING_NULL)))
 					.then(() =>
-						reset(Object.assign({}, DYEING_THREAD_CONNEING_NULL))
-					)
-					.then(() =>
-						navigate(
-							`/dyeing-and-iron/thread-batch/details/${batch_con_uuid}`
-						)
+						navigate(`/thread/coning/details/${batch_uuid}`)
 					);
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -217,6 +225,9 @@ export default function Index() {
 								'shade Recipe',
 								'order quantity',
 								'quantity',
+								'coning production quantity',
+								'coning production quantity in kg',
+								'Transfer Quantity',
 								'total quantity',
 								'balance quantity',
 								'remarks',
@@ -267,6 +278,40 @@ export default function Index() {
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(`batch_entry[${index}].quantity`)}
+							</td>
+
+							<td className={rowClass}>
+								<Input
+									label={`batch_entry[${index}].coning_production_quantity`}
+									is_title_needed='false'
+									dynamicerror={
+										errors?.batch_entry?.[index]
+											?.coning_production_quantity
+									}
+									register={register}
+								/>
+							</td>
+							<td className={rowClass}>
+								<Input
+									label={`batch_entry[${index}].coning_production_quantity_in_kg`}
+									is_title_needed='false'
+									dynamicerror={
+										errors?.batch_entry?.[index]
+											?.coning_production_quantity_in_kg
+									}
+									register={register}
+								/>
+							</td>
+							<td className={`${rowClass}`}>
+								<Input
+									label={`batch_entry[${index}].transfer_quantity`}
+									is_title_needed='false'
+									dynamicerror={
+										errors?.batch_entry?.[index]
+											?.transfer_quantity
+									}
+									register={register}
+								/>
 							</td>
 
 							<td className={`${rowClass}`}>

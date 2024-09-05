@@ -32,13 +32,13 @@ export default function Header({
 
 	// Todo : Fetch lab_dip_info_uuid //
 	const { value: lab_dip_info_id } = useFetch(
-		`/other/order-properties/by/item`
+		`/other/lab-dip/info/value/label`
 	);
 
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody title='Recipe'>
-				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					{/* Lab dip info ID */}
 					<FormField
 						label='lab_dip_info_uuid'
@@ -67,7 +67,7 @@ export default function Header({
 					<Input label={`name`} {...{ register, errors }} />
 				</div>
 
-				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<Textarea label='remarks' {...{ register, errors }} />
 					<div className='mt-6 flex items-center gap-1 text-sm'>
 						<div className='rounded-md border border-secondary/30 px-1'>

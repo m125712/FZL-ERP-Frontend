@@ -123,7 +123,7 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].name,
+			itemName: data[idx].count + '-' + data[idx].length,
 		}));
 
 		window[info.getDeleteModalId()].showModal();

@@ -6,7 +6,6 @@ import FilesystemItem from './filesystem-item';
 import './index.css';
 import { BrandLink, LogoutButton, MenuIcon, Row, SectionButton } from './utils';
 import cn from '@/lib/cn';
-import { Button } from '@nextui-org/react';
 
 const ThirdChildMenu = ({ items, type }) => {
 	const [isOpened, setIsOpened] = useState(true);

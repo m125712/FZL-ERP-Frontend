@@ -1,5 +1,6 @@
 import { AddModal } from '@/components/Modal';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import nanoid from '@/lib/nanoid';
 import { useAdminUsers } from '@/state/Admin';
 import { FormField, Input, PasswordInput, ReactSelect, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
@@ -8,7 +9,7 @@ import * as yup from 'yup';
 
 export default function Index({
 	modalId = '',
-	updateUser = { uuid: null, department_designation: null },
+	updateUser = { uuid: null, department: null },
 	setUpdateUser,
 }) {
 	const { url, updateData, postData } = useAdminUsers();
@@ -44,7 +45,7 @@ export default function Index({
 		setUpdateUser((prev) => ({
 			...prev,
 			uuid: null,
-			department_designation: null,
+			department: null,
 		}));
 		reset(USER_NULL);
 		window[modalId].close();
@@ -71,7 +72,7 @@ export default function Index({
 		// * New item
 		const updatedData = {
 			...data,
-			status: 1,
+			uuid: nanoid(),
 			created_at: GetDateTime(),
 		};
 
@@ -82,33 +83,33 @@ export default function Index({
 		});
 	};
 
-	const { value: userDepartment } = useFetch(
-		'/user-department-designation/value/label'
+	const { value: userDesignation } = useFetch(
+		'/other/department-designation/value/label'
 	);
 
 	return (
 		<AddModal
-			uuid={modalId}
+			id={modalId}
 			title={updateUser?.uuid !== null ? 'Update User' : 'New User'}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}>
 			<div className='flex flex-col gap-2 md:flex-row'>
 				<FormField
-					label='department_designation'
+					label='designation_uuid'
 					title='Department'
 					errors={errors}>
 					<Controller
-						name={'department_designation'}
+						name={'designation_uuid'}
 						control={control}
 						render={({ field: { onChange } }) => {
 							return (
 								<ReactSelect
 									placeholder='Select Department'
-									options={userDepartment}
-									value={userDepartment?.find(
+									options={userDesignation}
+									value={userDesignation?.find(
 										(item) =>
 											item.value ==
-											getValues('department_designation')
+											getValues('designation_uuid')
 									)}
 									onChange={(e) => onChange(e.value)}
 								/>

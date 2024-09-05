@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { DebouncedInput, ExportCSV } from './components';
 import DateRange from './components/DateRange';
 import { FilterColumn, FullFilter } from './components/Filter';
-import { PdfButton, Title } from './ui';
+import { PdfButton, ReloadButton, Title } from './ui';
 import { Indicator } from './ui/Title';
 
 export default function Index(props) {
@@ -75,12 +75,18 @@ export default function Index(props) {
 					/>
 				</div>
 
-				{props.accessor && props.handelAdd && (
-					<Indicator
-						value={props.indicatorValue}
-						onClick={props.handelAdd}
-					/>
-				)}
+				<div className='flex w-fit items-end gap-2'>
+					{props.handleReload && (
+						<ReloadButton onClick={props.handleReload} />
+					)}
+
+					{props.accessor && props.handelAdd && (
+						<Indicator
+							value={props.indicatorValue}
+							onClick={props.handelAdd}
+						/>
+					)}
+				</div>
 			</div>
 		</div>
 	);

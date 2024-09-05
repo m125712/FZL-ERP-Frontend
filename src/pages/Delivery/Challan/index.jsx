@@ -218,7 +218,6 @@ export default function Index() {
 				columns={columns}
 				accessor={haveAccess.includes('create')}
 				handelAdd={handelAdd}
-				extraClass='py-2'
 			/>
 		</div>
 	);

@@ -360,11 +360,7 @@ export default function Index() {
 
 				{/* todo: react-table  */}
 
-				<ReactTable
-					data={PlanningEntryField}
-					columns={columns}
-					extraClass='py-2'
-				/>
+				<ReactTable data={PlanningEntryField} columns={columns} />
 
 				<div className='modal-action'>
 					<button

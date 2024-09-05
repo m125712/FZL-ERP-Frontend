@@ -23,7 +23,7 @@ export default function DynamicField({
 					</button>
 				)}
 			</div>
-			<div className='overflow-x-auto rounded-b border border-t-0 border-primary/30 bg-white text-left text-sm text-primary'>
+			<div className='overflow-x-auto rounded-b border border-t-0 border-primary/30 bg-base-100 text-left text-sm text-primary'>
 				<table className='w-full'>
 					<thead
 						className={cn(

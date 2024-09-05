@@ -115,7 +115,6 @@ export default function Index() {
 				title={title}
 				data={sampleReport}
 				columns={columns}
-				extraClass='py-2'
 				onClickPdfDownload={() => GeneratePdf(PDFinfo)}
 			/>
 		</div>

@@ -27,6 +27,7 @@ export const useOtherMerchandiserByPartyUUID = (uuid) =>
 	createGlobalState({
 		queryKey: otherQK.merchandiserByPartyUUID(uuid),
 		url: `/other/merchandiser/value/label/${uuid}`,
+		enabled: !!uuid,
 	});
 
 // GET OTHER FACTORY BY PARTY UUID
@@ -34,6 +35,7 @@ export const useOtherFactoryByPartyUUID = (uuid) =>
 	createGlobalState({
 		queryKey: otherQK.factoryByPartyUUID(uuid),
 		url: `/other/factory/value/label/${uuid}`,
+		enabled: !!uuid,
 	});
 
 // GET OTHER MARKETING
@@ -50,11 +52,18 @@ export const useOtherOrder = () =>
 		url: '/other/order/info/value/label',
 	});
 
+export const useOtherOrderDescription = () =>
+	createGlobalState({
+		queryKey: otherQK.orderDescription(),
+		url: '/other/order/description/value/label',
+	});
+
 // GET OTHER ORDER PROPERTIES BY TYPE NAME
 export const useOtherOrderPropertiesByTypeName = (name) =>
 	createGlobalState({
 		queryKey: otherQK.orderPropertiesByTypeName(name),
 		url: `/other/order-properties/by/${name}`,
+		enabled: !!name,
 	});
 
 // GET OTHER ORDER ENTRY
@@ -104,6 +113,7 @@ export const useOtherLcByPartyUUID = (uuid) =>
 	createGlobalState({
 		queryKey: otherQK.lcByPartyUUID(uuid),
 		url: `/other/lc/value/label/${uuid}`,
+		enabled: !!uuid,
 	});
 
 // GET OTHER PI
@@ -118,6 +128,7 @@ export const useOtherOrderDescriptionByOrderNumber = (orderNumber) =>
 	createGlobalState({
 		queryKey: otherQK.orderDescriptionByOrderNumber(orderNumber),
 		url: `/other/order/order_description_uuid/by/${orderNumber}`,
+		enabled: !!orderNumber,
 	});
 
 // GET OTHER ORDER NUMBER BY MARKETING AND PARTY UUID
@@ -131,6 +142,7 @@ export const useOtherOrderNumberByMarketingAndPartyUUID = (
 			partyUUID
 		),
 		url: `/other/order-number-for-pi/value/label/${marketingUUID}/${partyUUID}`,
+		enabled: !!marketingUUID && !!partyUUID,
 	});
 
 // GET OTHER DEPARTMENT

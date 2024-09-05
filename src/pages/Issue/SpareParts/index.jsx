@@ -166,7 +166,6 @@ export default function Index({ material_id = null }) {
 				accessor={SPARE_PARTS_EDIT_ACCESS || SPARE_PARTS_ADD_ACCESS}
 				data={spareParts}
 				columns={columns}
-				extraClass='py-2'
 			/>
 
 			<Suspense>

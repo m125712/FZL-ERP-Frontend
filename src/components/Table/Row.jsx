@@ -2,7 +2,7 @@ import { flexRender } from '@tanstack/react-table';
 import clsx from 'clsx';
 
 const Body = ({ getVisibleCells, extraClass = '' }) => (
-	<tr className='hover:bg-base-200/40 focus:bg-base-200/40 cursor-pointer text-base transition-colors duration-300 ease-in'>
+	<tr className='cursor-pointer text-base transition-colors duration-300 ease-in hover:bg-base-200/40 focus:bg-base-200/40'>
 		{getVisibleCells().map(({ id, getContext, column: { columnDef } }) => {
 			return (
 				<td

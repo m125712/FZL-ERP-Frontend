@@ -1,4 +1,4 @@
-import { useFetch, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 import { DynamicField, FormField, ReactSelect, RemoveButton } from '@/ui';
 import { useAuth } from '@context/auth';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -13,14 +13,16 @@ import GetDateTime from '@/util/GetDateTime';
 import nanoid from '@/lib/nanoid';
 import { Suspense, useEffect, useState } from 'react';
 import { UpdateModal } from '@/components/Modal';
+import { useOtherPI } from '@/state/Other';
 
 export default function Index() {
-	const { lc_uuid } = useParams();
-	const { url: commercialLcUrl, postData, updateData } = useCommercialLC();
-	const { data, invalidateQuery } = useCommercialLCPIByUUID(lc_uuid);
-
 	const { user } = useAuth();
 	const navigate = useNavigate();
+	const { lc_uuid } = useParams();
+
+	const { url: commercialLcUrl, postData, updateData } = useCommercialLC();
+	const { data, invalidateQuery } = useCommercialLCPIByUUID(lc_uuid);
+	const { data: pi } = useOtherPI();
 
 	const [deletablePi, setDeletablePi] = useState([]);
 	const [updateItem, setUpdateItem] = useState({
@@ -29,8 +31,6 @@ export default function Index() {
 	});
 
 	const isUpdate = lc_uuid !== undefined;
-
-	const { value: pi } = useFetch('/other/pi/value/label');
 
 	const {
 		register,

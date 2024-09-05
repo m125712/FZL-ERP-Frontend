@@ -76,13 +76,16 @@ export default function Information({ pi }) {
 				label: 'O/N',
 				value: (
 					<div className='flex flex-wrap gap-2'>
-						{orderNumbers.split(',').map((e) => (
-							<span
-								key={e}
-								className='badge badge-secondary badge-sm h-5'>
-								{e}
-							</span>
-						))}
+						{orderNumbers
+							.split(',')
+							.filter(Boolean)
+							.map((e) => (
+								<span
+									key={e}
+									className='badge badge-secondary badge-sm h-5'>
+									{e}
+								</span>
+							))}
 					</div>
 				),
 			},
@@ -90,13 +93,16 @@ export default function Information({ pi }) {
 				label: 'Styles',
 				value: (
 					<div className='flex flex-wrap gap-2'>
-						{styles.split(',').map((e) => (
-							<span
-								key={e}
-								className='badge badge-secondary badge-sm h-5'>
-								{e}
-							</span>
-						))}
+						{styles
+							.split(',')
+							.filter(Boolean)
+							.map((e) => (
+								<span
+									key={e}
+									className='badge badge-secondary badge-sm h-5'>
+									{e}
+								</span>
+							))}
 					</div>
 				),
 			},

@@ -166,7 +166,6 @@ export default function Index({ material_id = null }) {
 				accessor={MAINTENANCE_EDIT_ACCESS}
 				data={maintenance}
 				columns={columns}
-				extraClass='py-2'
 			/>
 
 			<Suspense>

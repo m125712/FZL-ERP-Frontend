@@ -1,10 +1,9 @@
-import { useFetch } from '@/hooks';
+import { useOtherVendor } from '@/state/Other';
 import {
 	FormField,
 	Input,
 	ReactSelect,
 	SectionEntryBody,
-	Select,
 	Textarea,
 } from '@/ui';
 import { useParams } from 'react-router-dom';
@@ -17,7 +16,7 @@ export default function Header({
 	Controller,
 }) {
 	const { purchase_description_uuid } = useParams();
-	const { value: vendor } = useFetch('/other/vendor/value/label');
+	const { data: vendor } = useOtherVendor();
 
 	const purchaseOptions = [
 		{ label: 'Import', value: 0 },
@@ -26,7 +25,7 @@ export default function Header({
 
 	return (
 		<SectionEntryBody title='Information'>
-			<div className='text-secondary-content flex flex-col gap-6 px-2 md:flex-row'>
+			<div className='flex flex-col gap-6 px-2 text-secondary-content md:flex-row'>
 				<FormField label='vendor_uuid' title='Vendor' errors={errors}>
 					<Controller
 						name={'vendor_uuid'}
@@ -51,13 +50,28 @@ export default function Header({
 					/>
 				</FormField>
 
-				<Select
+				<FormField
 					label='is_local'
 					title='Import / Local'
-					type='select'
-					option={purchaseOptions}
-					{...{ register, errors }}
-				/>
+					errors={errors}>
+					<Controller
+						name={'is_local'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select'
+									options={purchaseOptions}
+									value={purchaseOptions?.find(
+										(item) =>
+											item.value == getValues('is_local')
+									)}
+									onChange={(e) => onChange(e.value)}
+								/>
+							);
+						}}
+					/>
+				</FormField>
 				<Input label='lc_number' {...{ register, errors }} />
 				<Textarea label='remarks' {...{ register, errors }} />
 			</div>

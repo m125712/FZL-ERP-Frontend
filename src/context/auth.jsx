@@ -43,11 +43,16 @@ const AuthProvider = ({ children }) => {
 			setUser(userData);
 			setCanAccess(can_access);
 
-			ShowToast(res);
+			console.log(res);
+
+			// ShowToast(res);
 
 			if (token && userData) return (window.location.href = '/dashboard');
 
-			ShowToast({ type: 'error', message: 'Invalid login credentials' });
+			ShowToast({
+				type: res?.data?.type,
+				message: res?.data?.message,
+			});
 		} catch (error) {
 			ShowToast(error.response);
 		}

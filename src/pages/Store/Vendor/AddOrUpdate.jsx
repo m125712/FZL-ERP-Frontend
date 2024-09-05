@@ -1,10 +1,12 @@
 import { AddModal } from '@/components/Modal';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useAuth } from '@/context/auth';
+import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { usePurchaseVendor } from '@/state/Store';
+import { usePurchaseVendor, usePurchaseVendorByUUID } from '@/state/Store';
 import { Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { VENDOR_NULL, VENDOR_SCHEMA } from '@util/Schema';
+import { useEffect } from 'react';
 
 export default function Index({
 	modalId = '',
@@ -13,17 +15,20 @@ export default function Index({
 	},
 	setUpdateVendor,
 }) {
+	const { user } = useAuth();
 	const { url, updateData, postData } = usePurchaseVendor();
-	const { register, handleSubmit, errors, reset } = useRHF(
+	const { data } = usePurchaseVendorByUUID(updateVendor?.uuid);
+
+	const { register, handleSubmit, errors, reset, context } = useRHF(
 		VENDOR_SCHEMA,
 		VENDOR_NULL
 	);
 
-	useFetchForRhfReset(
-		`/purchase/vendor/${updateVendor?.uuid}`,
-		updateVendor?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateVendor((prev) => ({
@@ -56,6 +61,7 @@ export default function Index({
 		const updatedData = {
 			...data,
 			created_at: GetDateTime(),
+			created_by: user?.uuid,
 			uuid: nanoid(),
 		};
 
@@ -72,6 +78,7 @@ export default function Index({
 			title={
 				updateVendor?.uuid !== null ? 'Update Vendor' : 'Create Vendor'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

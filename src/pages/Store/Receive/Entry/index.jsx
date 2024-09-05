@@ -4,6 +4,7 @@ import nanoid from '@/lib/nanoid';
 import {
 	useMaterialInfo,
 	usePurchaseDescription,
+	usePurchaseDetailsByUUID,
 	usePurchaseEntry,
 } from '@/state/Store';
 import {
@@ -22,16 +23,23 @@ import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
+import { useOtherMaterial } from '@/state/Other';
 
 export default function Index() {
-	const { url: purchaseDescriptionUrl } = usePurchaseDescription();
-	const { url: purchaseEntryUrl } = usePurchaseEntry();
-	const { updateData, postData, deleteData } = usePurchaseDescription();
-	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-
-	const { purchase_description_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
+	const { purchase_description_uuid } = useParams();
+
+	const { url: purchaseEntryUrl } = usePurchaseEntry();
+	const {
+		url: purchaseDescriptionUrl,
+		updateData,
+		postData,
+		deleteData,
+	} = usePurchaseDescription();
+	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { data: material } = useOtherMaterial();
+	const { data } = usePurchaseDetailsByUUID(purchase_description_uuid);
 
 	const [unit, setUnit] = useState({});
 
@@ -55,16 +63,11 @@ export default function Index() {
 
 	const isUpdate = purchase_description_uuid !== undefined;
 
-	isUpdate &&
-		useFetchForRhfResetForOrder(
-			`/purchase/purchase-details/by/${purchase_description_uuid}`,
-			purchase_description_uuid,
-			reset
-		);
-
-	const { value: material } = useFetch(
-		'/other/material/value/label/unit/quantity'
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	// purchase
 	const {
@@ -122,6 +125,7 @@ export default function Index() {
 				if (item.uuid === undefined) {
 					item.purchase_description_uuid = purchase_description_uuid;
 					item.created_at = GetDateTime();
+					item.created_by = user?.uuid;
 					item.uuid = nanoid();
 					return await postData.mutateAsync({
 						url: purchaseEntryUrl,
@@ -276,7 +280,7 @@ export default function Index() {
 								<th
 									key={item}
 									scope='col'
-									className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary px-4 py-2 text-left font-semibold tracking-wide transition duration-300'>
+									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-4 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
 									{item}
 								</th>
 							))}>

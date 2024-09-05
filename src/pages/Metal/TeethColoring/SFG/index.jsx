@@ -198,7 +198,6 @@ export default function Index() {
 				title={info.getTitle()}
 				data={teethColoringProd}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<Production

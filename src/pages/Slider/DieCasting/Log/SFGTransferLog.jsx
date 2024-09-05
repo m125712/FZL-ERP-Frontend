@@ -158,7 +158,6 @@ export default function Index() {
 				title={info.getTitle()}
 				data={dieCastingLog}
 				columns={columns}
-				extraClass='py-2'
 			/>
 		</div>
 	);

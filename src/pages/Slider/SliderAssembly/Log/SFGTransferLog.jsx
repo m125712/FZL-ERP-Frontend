@@ -191,7 +191,6 @@ export default function Index() {
 				title={info.getTitle()}
 				data={sliderAssembly}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<SFGAddOrUpdate

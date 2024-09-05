@@ -252,7 +252,6 @@ export default function Index() {
 				data={order}
 				columns={columns}
 				// handelAdd={handelAdd}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<AddOrUpdate

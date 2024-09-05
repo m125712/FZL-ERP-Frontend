@@ -213,7 +213,6 @@ export default function Index() {
 				title={info.getTitle()}
 				data={sliderAssemblyProd}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<Production

@@ -73,63 +73,67 @@ export const commercialQK = {
 	all: () => ['commercial'],
 
 	// bank
-	banks: () => [...commercialQK.all(), 'bank'],
-	bankByUUID: (uuid) => [...commercialQK.banks(), uuid],
+	bank: () => [...commercialQK.all(), 'bank'],
+	bankByUUID: (uuid) => [...commercialQK.bank(), uuid],
 
 	// pi
-	pis: () => [...commercialQK.all(), 'pi'],
-	pi: (uuid) => [...commercialQK.pis(), uuid],
-	piDetailsByUUID: (uuid) => [...commercialQK.pis(), 'details', uuid],
-	piDetailsByPiID: (uuid) => [...commercialQK.pis(), 'details-by-id', uuid],
+	pi: () => [...commercialQK.all(), 'pi'],
+	piByUUID: (uuid) => [...commercialQK.pi(), uuid],
+	piDetailsByUUID: (uuid) => [...commercialQK.pi(), 'details', uuid],
+	piDetailsByPiID: (uuid) => [...commercialQK.pi(), 'details-by-id', uuid],
 	piByOrderInfo: (orderId, partyId, marketingId) => [
-		...commercialQK.pis(),
+		...commercialQK.pi(),
 		orderId,
 		partyId,
 		marketingId,
 	],
 
 	// pi-entry
-	piEntries: () => [...commercialQK.all(), 'pi-entry'],
-	piEntry: (uuid) => [...commercialQK.piEntries(), uuid],
+	piEntry: () => [...commercialQK.all(), 'pi-entry'],
+	piEntryByUUID: (uuid) => [...commercialQK.piEntry(), uuid],
 
 	// lc
-	lcs: () => [...commercialQK.all(), 'lc'],
-	lc: (uuid) => [...commercialQK.lcs(), uuid],
-	lcPi: (uuid) => [...commercialQK.all(), 'lc-pi', uuid],
-	lcNumber: (uuid) => [...commercialQK.all(), 'lc-number', uuid],
+	lc: () => [...commercialQK.all(), 'lc'],
+	lcByUUID: (uuid) => [...commercialQK.lc(), uuid],
+	lcByPi: (uuid) => [...commercialQK.all(), 'lc-by-pi', uuid],
+	lcByNumber: (number) => [...commercialQK.all(), 'lc-by-number', number],
 };
 
 // Material Query Keys
 export const materialQK = {
 	all: () => ['material'],
 
+	// stock
+	stock: () => [...materialQK.all(), 'stock'],
+	stockByUUID: (uuid) => [...materialQK.stock(), uuid],
+
 	// section
-	sections: () => [...materialQK.all(), 'section'],
-	section: (uuid) => [...materialQK.sections(), uuid],
+	section: () => [...materialQK.all(), 'section'],
+	sectionByUUID: (uuid) => [...materialQK.section(), uuid],
 
 	// types
-	types: () => [...materialQK.all(), 'type'],
-	type: (uuid) => [...materialQK.types(), uuid],
+	type: () => [...materialQK.all(), 'type'],
+	typeByUUID: (uuid) => [...materialQK.type(), uuid],
 
 	// infos
-	infos: () => [...materialQK.all(), 'info'],
-	info: (uuid) => [...materialQK.infos(), uuid],
+	info: () => [...materialQK.all(), 'info'],
+	infoByUUID: (uuid) => [...materialQK.info(), uuid],
 
 	// trx
-	trxs: () => [...materialQK.all(), 'trx'],
-	trx: (uuid) => [...materialQK.trxs(), uuid],
+	trx: () => [...materialQK.all(), 'trx'],
+	trxByUUID: (uuid) => [...materialQK.trx(), uuid],
 
 	// stock to sfg
-	stockToSGFs: () => [...materialQK.all(), 'stock-to-sfg'],
-	stockToSFG: (uuid) => [...materialQK.stockToSGFs(), uuid],
+	stockToSGF: () => [...materialQK.all(), 'stock-to-sfg'],
+	stockToSFGByUUID: (uuid) => [...materialQK.stockToSGF(), uuid],
 
 	// *TrxAgainstOrderDescription//
-	trxAgainstOrderDescriptions: () => [
+	trxAgainstOrderDescription: () => [
 		...materialQK.all(),
 		'trx-against-order-description',
 	],
-	trxAgainstOrderDescription: (uuid) => [
-		...materialQK.trxAgainstOrderDescriptions(),
+	trxAgainstOrderDescriptionByUUID: (uuid) => [
+		...materialQK.trxAgainstOrderDescription(),
 		uuid,
 	],
 };
@@ -139,20 +143,20 @@ export const purchaseQK = {
 	all: () => ['purchase'],
 
 	// vendor
-	vendors: () => [...purchaseQK.all(), 'vendors'],
-	vendor: (uuid) => [...purchaseQK.vendors(), uuid],
+	vendor: () => [...purchaseQK.all(), 'vendor'],
+	vendorByUUID: (uuid) => [...purchaseQK.vendor(), uuid],
 
 	// description
-	descriptions: () => [...purchaseQK.all(), 'description'],
-	description: (uuid) => [...purchaseQK.descriptions(), uuid],
+	description: () => [...purchaseQK.all(), 'description'],
+	descriptionByUUID: (uuid) => [...purchaseQK.description(), uuid],
 
 	// entry
-	entries: () => [...purchaseQK.all(), 'entries'],
-	entry: (uuid) => [...purchaseQK.entries(), uuid],
+	entry: () => [...purchaseQK.all(), 'entries'],
+	entryByUUID: (uuid) => [...purchaseQK.entry(), uuid],
 
 	// details
 	details: () => [...purchaseQK.all(), 'details'],
-	detail: (uuid) => [...purchaseQK.details(), uuid],
+	detailsByUUID: (uuid) => [...purchaseQK.details(), uuid],
 };
 
 //Library
@@ -781,8 +785,8 @@ export const deliveryQk = {
 		uuid,
 	],
 };
-//Thread
 
+//Thread
 export const threadQK = {
 	all: () => ['thread'],
 
@@ -816,24 +820,13 @@ export const threadQK = {
 };
 
 //* OTHER QUERY KEYS
-
 export const otherQK = {
 	all: () => ['other'],
-	party: () => [...otherQK.all(), 'party'],
-	buyer: () => [...otherQK.all(), 'buyer'],
-	marketing: () => [...otherQK.all(), 'marketing'],
+
+	//Order
 	order: () => [...otherQK.all(), 'order'],
+	orderDescription: () => [...otherQK.all(), 'order-description'],
 	orderEntry: () => [...otherQK.all(), 'order-entry'],
-	vendor: () => [...otherQK.all(), 'vendor'],
-	bank: () => [...otherQK.all(), 'bank'],
-	material: () => [...otherQK.all(), 'material'],
-	materialSection: () => [...otherQK.all(), 'material-section'],
-	materialType: () => [...otherQK.all(), 'material-type'],
-	department: () => [...otherQK.all(), 'department'],
-	labDip: () => [...otherQK.all(), 'lab-dip'],
-	sliderItem: () => [...otherQK.all(), 'slider-item'],
-	lcByPartyUUID: (uuid) => [...otherQK.all(), 'lc-by-party', uuid],
-	pi: () => [...otherQK.all(), 'pi'],
 	orderDescriptionByOrderNumber: (orderNumber) => [
 		...otherQK.all(),
 		'order-description-by-order-number',
@@ -850,11 +843,50 @@ export const otherQK = {
 		marketingUUID,
 		partyUUID,
 	],
+
+	//Vendor
+	vendor: () => [...otherQK.all(), 'vendor'],
+
+	//Bank
+	bank: () => [...otherQK.all(), 'bank'],
+
+	//Material
+	material: () => [...otherQK.all(), 'material'],
+	materialSection: () => [...otherQK.all(), 'material-section'],
+	materialType: () => [...otherQK.all(), 'material-type'],
+
+	//Lab Dip
+	labDip: () => [...otherQK.all(), 'lab-dip'],
+
+	//Slider Item
+	sliderItem: () => [...otherQK.all(), 'slider-item'],
+
+	//LC
+	lcByPartyUUID: (uuid) => [...otherQK.all(), 'lc-by-party', uuid],
+
+	//PI
+	pi: () => [...otherQK.all(), 'pi'],
+
+	//Department
+	department: () => [...otherQK.all(), 'department'],
+
+	// Party
+	party: () => [...otherQK.all(), 'party'],
+
+	//Buyer
+	buyer: () => [...otherQK.all(), 'buyer'],
+
+	//Marketing
+	marketing: () => [...otherQK.all(), 'marketing'],
 	marketingUser: () => [...otherQK.all(), 'marketing-user'],
+
+	//Merchandiser
 	merchandiserByPartyUUID: (uuid) => [
 		...otherQK.all(),
 		'merchandiser-by-party',
 		uuid,
 	],
+
+	//Factory
 	factoryByPartyUUID: (uuid) => [...otherQK.all(), 'factory-by-party', uuid],
 };

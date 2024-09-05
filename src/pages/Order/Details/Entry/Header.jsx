@@ -101,6 +101,7 @@ export default function Header({
 	];
 
 	const [sp_req, setSpReq] = useState({});
+	const [garmentsWash, setGramentsWash] = useState({});
 	const [endType, setEndType] = useState();
 
 	useEffect(() => {
@@ -109,6 +110,12 @@ export default function Header({
 				...prev,
 				special_req: getValues('special_requirement')
 					? getValues('special_requirement')
+					: '',
+			}));
+			setGramentsWash((prev) => ({
+				...prev,
+				wash: getValues('garments_wash')
+					? getValues('garments_wash')
 					: '',
 			}));
 		}
@@ -667,7 +674,6 @@ export default function Header({
 			<SectionEntryBody title='Garments'>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<Input label={`garment`} {...{ register, errors }} />
-
 					<FormField
 						label='garments_wash'
 						title='Garments Wash'
@@ -678,14 +684,29 @@ export default function Header({
 							render={({ field: { onChange } }) => {
 								return (
 									<ReactSelect
-										placeholder='Select garments wash'
+										placeholder='Select Multi Requirement'
 										options={garments_wash}
-										value={garments_wash?.find(
-											(item) =>
-												item.value ==
-												getValues('garments_wash')
+										value={garments_wash?.filter((item) =>
+											garmentsWash?.wash?.includes(
+												item.value
+											)
 										)}
-										onChange={(e) => onChange(e.value)}
+										onChange={(e) => {
+											setGramentsWash((prev) => ({
+												...prev,
+												wash: e.map(
+													(item) => item.value
+												),
+											}));
+											onChange(
+												JSON.stringify({
+													values: e.map(
+														(item) => item.value
+													),
+												})
+											);
+										}}
+										isMulti={true}
 									/>
 								);
 							}}

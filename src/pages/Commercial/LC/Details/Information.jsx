@@ -85,7 +85,7 @@ export default function Information({ lc }) {
 		pi_ids,
 		party_name,
 		total_value,
-		file_no,
+		file_number,
 		lc_number,
 		lc_date,
 		payment_value,
@@ -176,7 +176,7 @@ export default function Information({ lc }) {
 			},
 			{
 				label: 'File No.',
-				value: file_no,
+				value: file_number,
 			},
 			{
 				label: 'LC No.',

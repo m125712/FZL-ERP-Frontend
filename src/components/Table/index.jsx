@@ -8,19 +8,19 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from '@tanstack/react-table';
-import clsx from 'clsx';
 import { lazy, useState } from 'react';
 import { Suspense } from '../Feedback';
 
 import cn from '@/lib/cn';
-import { NoDataFound, TitleOnly } from './ui';
 import { FuzzyFilter, isWithinRange } from './utils';
-import RowSkeletons from './RowSkeletons';
 
-const Header = lazy(() => import('./Header'));
-const TableHead = lazy(() => import('./TableHead'));
-const Row = lazy(() => import('./Row'));
-const Pagination = lazy(() => import('./Pagination'));
+const TableHeader = lazy(() => import('./_components/TableHeader'));
+const TableHead = lazy(() => import('./_components/TableHead'));
+const TableBody = lazy(() => import('./_components/TableBody'));
+const TablePagination = lazy(() => import('./_components/table-pagination'));
+import TableSkeletons from './_components/TableSkeletons';
+import TableTitleOnly from './_components/TableTitleOnly';
+import TableNoData from './_components/TableNoData';
 
 function Table({
 	title = '',
@@ -43,8 +43,6 @@ function Table({
 	select,
 	error = null,
 	indicatorValue,
-	headerClassName = '',
-	titleClassName = '',
 	containerClassName = '',
 	...props
 }) {
@@ -104,11 +102,9 @@ function Table({
 		if (showTitleOnly)
 			return (
 				<Suspense>
-					<TitleOnly
+					<TableTitleOnly
 						title={title}
 						subtitle={subtitle}
-						className={headerClassName}
-						titleClassName={titleClassName}
 						handelAdd={handelAdd}
 					/>
 				</Suspense>
@@ -116,7 +112,7 @@ function Table({
 
 		return (
 			<Suspense>
-				<Header
+				<TableHeader
 					title={title}
 					subtitle={subtitle}
 					handelAdd={handelAdd}
@@ -140,12 +136,11 @@ function Table({
 	};
 
 	const renderRow = (hasAnyRow) => {
-		if (!hasAnyRow) return <NoDataFound colSpan={columns.length} />;
+		if (!hasAnyRow) return <TableNoData colSpan={columns.length} />;
 
-		return <Row rows={rows} extraClass={extraClass} />;
+		return <TableBody rows={rows} extraClass={extraClass} />;
 	};
 
-	// Render table components
 	return (
 		<div className='flex flex-col'>
 			{renderHeader(showTitleOnly)}
@@ -164,7 +159,7 @@ function Table({
 
 						<tbody className='divide-y-[1px] divide-secondary/20'>
 							{!isLoading && renderRow(hasAnyRow)}
-							{isLoading && <RowSkeletons columns={columns} />}
+							{isLoading && <TableSkeletons columns={columns} />}
 							{children}
 						</tbody>
 					</table>
@@ -172,7 +167,7 @@ function Table({
 			</Suspense>
 			{!showTitleOnly && showPagination && table.getPageCount() > 1 && (
 				<Suspense>
-					<Pagination {...table} />
+					<TablePagination {...table} />
 				</Suspense>
 			)}
 		</div>

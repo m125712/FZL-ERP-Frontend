@@ -14,6 +14,7 @@ import nanoid from '@/lib/nanoid';
 import { Suspense, useEffect, useState } from 'react';
 import { UpdateModal } from '@/components/Modal';
 import { useOtherPI } from '@/state/Other';
+import cn from '@/lib/cn';
 
 export default function Index() {
 	const { user } = useAuth();
@@ -23,6 +24,10 @@ export default function Index() {
 	const { url: commercialLcUrl, postData, updateData } = useCommercialLC();
 	const { data, invalidateQuery } = useCommercialLCPIByUUID(lc_uuid);
 	const { data: pi } = useOtherPI();
+
+	console.log({
+		pi,
+	});
 
 	const [deletablePi, setDeletablePi] = useState([]);
 	const [updateItem, setUpdateItem] = useState({
@@ -262,7 +267,14 @@ export default function Index() {
 					<DynamicField
 						title='Details'
 						handelAppend={handelPiAppend}
-						tableHead={['PI', 'Action'].map((item) => (
+						tableHead={[
+							'PI',
+							'Bank',
+							'Value',
+							'Marketing',
+							'O/N',
+							'Action',
+						].map((item) => (
 							<th
 								key={item}
 								scope='col'
@@ -272,7 +284,7 @@ export default function Index() {
 						))}>
 						{piFields.map((item, index) => (
 							<tr key={item.id} className='w-full'>
-								<td className={`pl-1 ${rowClass}`}>
+								<td className={cn(`pl-1 ${rowClass}`)}>
 									<FormField
 										label={`pi[${index}].uuid`}
 										title='Material'
@@ -311,6 +323,52 @@ export default function Index() {
 											}}
 										/>
 									</FormField>
+								</td>
+
+								<td className={cn(`pl-1 ${rowClass}`)}>
+									{
+										pi?.find(
+											(e) =>
+												e.value ===
+												watch(`pi[${index}].uuid`)
+										)?.pi_bank
+									}
+								</td>
+								<td className={cn(`pl-1 ${rowClass}`)}>
+									{
+										pi?.find(
+											(e) =>
+												e.value ===
+												watch(`pi[${index}].uuid`)
+										)?.pi_value
+									}
+								</td>
+								<td className={cn(`pl-1 ${rowClass}`)}>
+									{
+										pi?.find(
+											(e) =>
+												e.value ===
+												watch(`pi[${index}].uuid`)
+										)?.marketing_name
+									}
+								</td>
+								<td className={cn(`pl-1 ${rowClass} `)}>
+									<div className='flex flex-wrap items-center gap-2'>
+										{pi
+											?.find(
+												(e) =>
+													e.value ===
+													watch(`pi[${index}].uuid`)
+											)
+											?.order_numbers?.filter((e) => !!e)
+											?.map((e) => (
+												<span
+													key={e}
+													className='badge badge-accent badge-sm'>
+													{e}
+												</span>
+											))}
+									</div>
 								</td>
 
 								<td

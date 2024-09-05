@@ -1,4 +1,4 @@
-import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, LinkWithCopy } from '@/ui';
 import { useMemo } from 'react';
 
@@ -46,6 +46,6 @@ export default function Index({ recipe }) {
 	);
 
 	return (
-		<ReactTableWithTitle title='Details' data={recipe} columns={columns} />
+		<ReactTableTitleOnly title='Details' data={recipe} columns={columns} />
 	);
 }

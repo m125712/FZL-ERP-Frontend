@@ -1,4 +1,4 @@
-import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 
 import { DateTime } from '@/ui';
 import { useMemo } from 'react';
@@ -54,7 +54,7 @@ export default function Index({ shade_recipe_entry }) {
 	);
 
 	return (
-		<ReactTableWithTitle
+		<ReactTableTitleOnly
 			title='Details'
 			data={shade_recipe_entry}
 			columns={columns}

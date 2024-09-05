@@ -1,4 +1,4 @@
-import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime } from '@/ui';
 import { useMemo } from 'react';
 
@@ -65,5 +65,5 @@ export default function Index({ pi }) {
 		[pi]
 	);
 
-	return <ReactTableWithTitle title='Details' data={pi} columns={columns} />;
+	return <ReactTableTitleOnly title='Details' data={pi} columns={columns} />;
 }

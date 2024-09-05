@@ -1,4 +1,4 @@
-import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, LinkWithCopy } from '@/ui';
 import { useMemo } from 'react';
 
@@ -90,7 +90,7 @@ export default function Index({ pi }) {
 	const totalValue = pi.reduce((a, b) => a + Number(b.value), 0);
 
 	return (
-		<ReactTableWithTitle title='Details' data={pi} columns={columns}>
+		<ReactTableTitleOnly title='Details' data={pi} columns={columns}>
 			<tr className='text-sm'>
 				<td colSpan='3' className='py-2 text-right'>
 					Total QTY
@@ -102,6 +102,6 @@ export default function Index({ pi }) {
 					${Number(totalValue).toLocaleString()}
 				</td>
 			</tr>
-		</ReactTableWithTitle>
+		</ReactTableTitleOnly>
 	);
 }

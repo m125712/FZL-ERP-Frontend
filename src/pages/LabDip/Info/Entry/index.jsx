@@ -129,33 +129,6 @@ export default function Index() {
 			];
 
 			// * old code* //
-			// let order_entry_updated_promises = [
-			// 	...recipe_updated.map(async (item) => {
-			// 		if (item.uuid) {
-			// 			await updateData.mutateAsync({
-			// 				url: `/lab-dip/recipe-entry/${item.uuid}`,
-			// 				updatedData: item,
-			// 				isOnCloseNeeded: false,
-			// 			});
-			// 		} else {
-			// 			await postData.mutateAsync({
-			// 				url: '/lab-dip/recipe-entry',
-			// 				newData: {
-			// 					...item,
-			// 					uuid: nanoid(),
-			// 					recipe_uuid:
-			// 						data?.uuid,
-			// 					created_at: GetDateTime(),
-			// 				},
-			// 				isOnCloseNeeded: false,
-			// 			});
-			// 		}
-			// 	}),
-			// ];
-
-			// navigate(
-			// 	`/order/details/${recipe_id}/${recipe_uuid}`
-			// );
 
 			return;
 		}
@@ -197,16 +170,7 @@ export default function Index() {
 		];
 
 		//* Post new entry *//
-		// let recipe_entry_promises = [
-		// 	...recipe_entry.map(
-		// 		async (item) =>
-		// 			await postData.mutateAsync({
-		// 				url: '/lab-dip/recipe-entry',
-		// 				newData: item,
-		// 				isOnCloseNeeded: false,
-		// 			})
-		// 	),
-		// ];
+	
 
 		await Promise.all(recipe_promises)
 			.then(() => reset(Object.assign({}, ORDER_NULL)))

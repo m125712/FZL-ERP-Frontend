@@ -7,7 +7,7 @@ import {
 } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useOrderInfo } from '@/state/Order';
-import { CheckBox, FormField, ReactSelect, Input } from '@/ui';
+import { CheckBox, FormField, ReactSelect, Input, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import { ORDER_INFO_NULL, ORDER_INFO_SCHEMA } from '@util/Schema';
@@ -397,7 +397,7 @@ export default function Index({
 					/>
 				</FormField>
 			</div>
-			<Input label='remarks' {...{ register, errors }} />
+			<Textarea label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);

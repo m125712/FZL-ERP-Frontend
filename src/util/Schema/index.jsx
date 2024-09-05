@@ -437,7 +437,7 @@ export const handelNumberDefaultValue = (value) =>
 export const ORDER_INFO_SCHEMA = {
 	reference_order_info_uuid: STRING.nullable(),
 	is_sample: BOOLEAN_REQUIRED.default(false),
-	is_bill: BOOLEAN.default(false),
+	is_bill: BOOLEAN.default(true),
 	is_cash: BOOLEAN_REQUIRED,
 	status: BOOLEAN_REQUIRED.default(false),
 	marketing_uuid: UUID_FK.required('Required'),
@@ -454,7 +454,7 @@ export const ORDER_INFO_NULL = {
 	uuid: null,
 	reference_order_info_uuid: '',
 	is_sample: false,
-	is_bill: false,
+	is_bill: true,
 	is_cash: false,
 	status: false,
 	marketing_uuid: null,
@@ -478,7 +478,7 @@ export const ORDER_SCHEMA = {
 	remarks: STRING.nullable(),
 
 	// slider
-	slider_starting_section: STRING_REQUIRED,
+	slider_starting_section: STRING_REQUIRED.default('---'),
 	end_type: UUID_REQUIRED,
 	hand: UUID_FK,
 	lock_type: UUID_REQUIRED,
@@ -506,7 +506,7 @@ export const ORDER_SCHEMA = {
 	end_user: UUID_FK,
 	garment: STRING.nullable(),
 	light_preference: UUID_FK,
-	garments_wash: UUID_FK,
+	garments_wash: JSON_STRING_REQUIRED,
 	garments_remarks: STRING.nullable(),
 
 	order_entry: yup.array().of(
@@ -540,7 +540,8 @@ export const ORDER_NULL = {
 	special_requirement: '',
 	description: '',
 	remarks: '',
-	slider_starting_section: null,
+	slider_starting_section: '---',
+	garments_wash: '',
 	order_entry: [
 		{
 			order_description_uuid: null,

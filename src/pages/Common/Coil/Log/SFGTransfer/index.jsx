@@ -5,7 +5,7 @@ import { useAccess, useFetchFunc, useFetch } from '@/hooks';
 import { EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
-import SFGAddOrUpdate from './SFGAddOrUpdate';
+import AddOrUpdate from './AddOrUpdate';
 import { useCommonCoilToDyeing } from '@/state/Common';
 
 export default function Index() {
@@ -157,7 +157,7 @@ export default function Index() {
 		<div>
 			<ReactTable title={info.getTitle()} data={data} columns={columns} />
 			<Suspense>
-				<SFGAddOrUpdate
+				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
 						order_id,

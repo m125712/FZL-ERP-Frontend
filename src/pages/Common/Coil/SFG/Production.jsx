@@ -1,6 +1,6 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF, useUpdateFunc } from '@/hooks';
+import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useCommonCoilProduction, useCommonCoilSFG } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';

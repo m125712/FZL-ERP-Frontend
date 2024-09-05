@@ -3,7 +3,7 @@ import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { usePurchaseVendor } from '@/state/Store';
 
-import { EditDelete } from '@/ui';
+import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 
@@ -46,6 +46,24 @@ export default function Index() {
 				header: 'Address',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created At',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated At',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'remarks',
@@ -124,7 +142,6 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				data={data}
 				columns={columns}
-				extraClass='py-2'
 			/>
 
 			<Suspense>

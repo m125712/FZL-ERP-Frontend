@@ -1,4 +1,13 @@
-import { useFetch } from '@/hooks';
+import {
+	useOtherBank,
+	useOtherFactoryByPartyUUID,
+	useOtherLcByPartyUUID,
+	useOtherMarketing,
+	useOtherMerchandiserByPartyUUID,
+	useOtherOrderNumberByMarketingAndPartyUUID,
+	useOtherParty,
+} from '@/state/Other';
+
 import {
 	FormField,
 	JoinInput,
@@ -26,26 +35,16 @@ export default function Header({
 		pi_uuid != undefined ? getValues('party_uuid') : null
 	); // 47 is the default value
 
-	const { value: marketing } = useFetch('/other/marketing/value/label');
-	const { value: party } = useFetch('/other/party/value/label');
-	const { value: order_number } = useFetch(
-		`/other/order-number-for-pi/value/label/${marketingId}/${partyId}`,
-		[marketingId, partyId]
+	const { data: marketing } = useOtherMarketing();
+	const { data: party } = useOtherParty();
+	const { data: order_number } = useOtherOrderNumberByMarketingAndPartyUUID(
+		marketingId,
+		partyId
 	);
-
-	const { value: merchandiser } = useFetch(
-		`/other/merchandiser/value/label/${partyId}`,
-		[partyId]
-	);
-	const { value: factory } = useFetch(
-		`/other/factory/value/label/${partyId}`,
-		[partyId]
-	);
-	const { value: bank } = useFetch('/other/bank/value/label');
-
-	const { value: lc } = useFetch(`/other/lc/value/label/${partyId}`, [
-		partyId,
-	]);
+	const { data: merchandiser } = useOtherMerchandiserByPartyUUID(partyId);
+	const { data: factory } = useOtherFactoryByPartyUUID(partyId);
+	const { data: bank } = useOtherBank();
+	const { data: lc } = useOtherLcByPartyUUID(partyId);
 
 	useEffect(() => {
 		if (isUpdate) {

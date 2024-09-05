@@ -33,7 +33,7 @@ export const DateInput = ({ register, selected, ...props }) => {
 	const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
 		<button
 			type='button'
-			className='input input-primary flex w-full items-center justify-between rounded px-2 text-left text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-white'
+			className='input input-secondary flex w-full items-center justify-between rounded border-secondary/30 bg-base-100 px-2 text-left text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-secondary/50'
 			onClick={onClick}
 			ref={ref}>
 			{value || 'Select Date'}

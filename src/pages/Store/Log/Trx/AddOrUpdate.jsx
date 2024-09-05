@@ -1,7 +1,5 @@
 import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
+import { useRHF } from '@/hooks';
 import { useCommonCoilRM, useCommonTapeRM } from '@/state/Common';
 import { useDeliveryRM } from '@/state/Delivery';
 import { useDyeingRM } from '@/state/Dyeing';
@@ -15,24 +13,28 @@ import {
 } from '@/state/Slider';
 import {
 	useMaterialInfo,
-	useMaterialStockToSFG,
 	useMaterialTrx,
+	useMaterialTrxByUUID,
 } from '@/state/Store';
 import { useVislonFinishingRM, useVislonTMRM } from '@/state/Vislon';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
-import { MATERIAL_STOCK_NULL, MATERIAL_STOCK_SCHEMA } from '@util/Schema';
 import getTransactionArea from '@/util/TransactionArea';
+import { MATERIAL_STOCK_NULL, MATERIAL_STOCK_SCHEMA } from '@util/Schema';
+import { useEffect } from 'react';
+
 export default function Index({
 	modalId = '',
-	updateMaterialDetails = {
+	updateMaterialTrx = {
 		uuid: null,
-		stock: 0,
+		material_name: null,
+		stock: null,
 	},
-	setUpdateMaterialDetails,
+	setUpdateMaterialTrx,
 }) {
-	const { postData } = useMaterialInfo();
-	const { user } = useAuth();
+	const { url, updateData } = useMaterialTrx();
+	const { data } = useMaterialTrxByUUID(updateMaterialTrx?.uuid);
+	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
 	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
 	const { invalidateQuery: invalidateLabDipRM } = useLabDipRM();
@@ -51,51 +53,55 @@ export default function Index({
 		useSliderColoringRM();
 	const { invalidateQuery: invalidateDieCastingRM } = useSliderDieCastingRM();
 	const { invalidateQuery: invalidateDeliveryRM } = useDeliveryRM();
-	const { invalidateQuery: invalidateMaterialTrx } = useMaterialTrx();
 
+	const MAX_QUANTITY = updateMaterialTrx?.stock;
 	const schema = {
 		...MATERIAL_STOCK_SCHEMA,
-		trx_quantity: MATERIAL_STOCK_SCHEMA.trx_quantity
-			.moreThan(0, "Quantity can't be zero.")
-			.max(updateMaterialDetails?.stock, 'Quantity Exceeds Stock'),
+		trx_quantity: MATERIAL_STOCK_SCHEMA.trx_quantity.max(MAX_QUANTITY),
 	};
+	const {
+		register,
+		handleSubmit,
+		errors,
+		control,
+		Controller,
+		reset,
+		getValues,
+		context,
+	} = useRHF(schema, MATERIAL_STOCK_NULL);
 
-	const { register, handleSubmit, errors, control, Controller, reset } =
-		useRHF(schema, MATERIAL_STOCK_NULL);
-
-	// useFetchForRhfReset(
-	// 	`/material/stock/${updateMaterialDetails?.material_stock_uuid}`,
-	// 	updateMaterialDetails?.material_stock_uuid,
-	// 	reset
-	// );
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
-		setUpdateMaterialDetails((prev) => ({
+		setUpdateMaterialTrx((prev) => ({
 			...prev,
 			uuid: null,
-			stock: 0,
 		}));
 		reset(MATERIAL_STOCK_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
-		console.log(data);
-		// Create Item
-		if (updateMaterialDetails?.uuid !== null) {
+		// Update item
+		if (updateMaterialTrx?.uuid !== null) {
 			const updatedData = {
 				...data,
-				material_uuid: updateMaterialDetails.uuid,
-				created_by: user?.uuid,
-				uuid: nanoid(),
-				created_at: GetDateTime(),
+				material_name: updateMaterialTrx?.material_name,
+				updated_at: GetDateTime(),
 			};
 
-			await postData.mutateAsync({
-				url: '/material/trx',
-				newData: updatedData,
+			await updateData.mutateAsync({
+				url: `${url}/${updateMaterialTrx?.uuid}`,
+				uuid: updateMaterialTrx?.uuid,
+				updatedData,
 				onClose,
 			});
+
+			invalidateMaterialInfo();
 			invalidateCommonTapeRM();
 			invalidateCommonCoilRM();
 			invalidateLabDipRM();
@@ -110,7 +116,6 @@ export default function Index({
 			invalidateSliderColoringRM();
 			invalidateDieCastingRM();
 			invalidateDeliveryRM();
-			invalidateMaterialTrx();
 
 			return;
 		}
@@ -120,12 +125,13 @@ export default function Index({
 
 	return (
 		<AddModal
-			id={`MaterialTrx`}
-			title={'Material Trx of ' + updateMaterialDetails?.name}
+			id={modalId}
+			title={`Log of ${updateMaterialTrx?.material_name}`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<FormField label='trx_to' title='Transfer To' errors={errors}>
+			<FormField label='trx_to' title='Trx to' errors={errors}>
 				<Controller
 					name={'trx_to'}
 					control={control}
@@ -134,9 +140,11 @@ export default function Index({
 							<ReactSelect
 								placeholder='Select Transaction Area'
 								options={transactionArea}
-								onChange={(e) => {
-									onChange(e.value);
-								}}
+								value={transactionArea?.find(
+									(item) => item.value == getValues('trx_to')
+								)}
+								onChange={(e) => onChange(e.value)}
+								isDisabled={updateMaterialTrx?.uuid !== null}
 							/>
 						);
 					}}
@@ -145,10 +153,11 @@ export default function Index({
 
 			<Input
 				label='trx_quantity'
-				sub_label={`Max: ${updateMaterialDetails?.stock}`}
-				placeholder={`Max: ${updateMaterialDetails?.stock}`}
+				sub_label={`Max: ${MAX_QUANTITY}`}
+				placeholder={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>
+
 			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);

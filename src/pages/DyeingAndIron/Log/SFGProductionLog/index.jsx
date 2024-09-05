@@ -207,7 +207,6 @@ export default function Index() {
 				title={info.getTitle()}
 				data={dyeingAndIronLog}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<SFGAddOrUpdate

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import {
@@ -10,7 +9,7 @@ import {
 	Textarea,
 } from '@/ui';
 import { DateInput } from '@/ui/Core';
-import { useFetch } from '@/hooks';
+import { useOtherParty } from '@/state/Other';
 
 export default function Header({
 	register,
@@ -21,8 +20,7 @@ export default function Header({
 	watch,
 }) {
 	const { lc_uuid } = useParams();
-
-	const { value: party } = useFetch('/other/party/value/label');
+	const { data: party } = useOtherParty();
 
 	const atSight = [
 		{ value: null, label: '---' },

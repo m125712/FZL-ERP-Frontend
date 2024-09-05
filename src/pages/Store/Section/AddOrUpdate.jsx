@@ -1,10 +1,12 @@
 import { AddModal } from '@/components/Modal';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useAuth } from '@/context/auth';
+import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useMaterialSection } from '@/state/Store';
+import { useMaterialSection, useMaterialSectionByUUID } from '@/state/Store';
 import { Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { SECTION_NULL, SECTION_SCHEMA } from '@util/Schema';
+import { useEffect } from 'react';
 
 export default function Index({
 	modalId = '',
@@ -13,17 +15,20 @@ export default function Index({
 	},
 	setUpdateSection,
 }) {
+	const { user } = useAuth();
 	const { url, updateData, postData } = useMaterialSection();
-	const { register, handleSubmit, errors, reset } = useRHF(
+	const { data } = useMaterialSectionByUUID(updateSection?.uuid);
+
+	const { register, handleSubmit, errors, reset, context } = useRHF(
 		SECTION_SCHEMA,
 		SECTION_NULL
 	);
 
-	useFetchForRhfReset(
-		`/material/section/${updateSection?.uuid}`,
-		updateSection?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateSection((prev) => ({
@@ -57,6 +62,7 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			created_at: GetDateTime(),
+			created_by: user?.uuid,
 		};
 
 		await postData.mutateAsync({
@@ -74,6 +80,7 @@ export default function Index({
 					? 'Update Section'
 					: 'Create Section'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

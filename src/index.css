@@ -197,15 +197,15 @@ body {
 	} */
 
 	.btn-filter-outline {
-		@apply btn btn-outline btn-secondary btn-sm rounded-md border-secondary/30 text-secondary hover:border-transparent hover:bg-secondary;
+		@apply btn btn-outline btn-secondary btn-sm rounded-md border-secondary/30 px-1.5 text-secondary hover:border-transparent hover:bg-secondary lg:px-2;
 	}
 
 	.btn-filter {
-		@apply btn btn-secondary btn-sm rounded-md;
+		@apply btn btn-secondary btn-sm rounded-md px-1.5 lg:px-2;
 	}
 
 	.btn-filter-accent {
-		@apply btn btn-accent btn-sm rounded-md;
+		@apply btn btn-accent btn-sm rounded-md px-1.5 lg:px-2;
 	}
 
 	.input-filter {

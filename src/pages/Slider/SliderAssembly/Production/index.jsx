@@ -18,7 +18,6 @@ export default function Index() {
 
 	const haveAccess = useAccess('slider__assembly_production');
 
-	
 	// * columns
 	const columns = useMemo(
 		() => [
@@ -210,12 +209,7 @@ export default function Index() {
 
 	return (
 		<div className='container mx-auto px-2 md:px-4'>
-			<ReactTable
-				title={info.getTitle()}
-				data={data}
-				columns={columns}
-				extraClass='py-2'
-			/>
+			<ReactTable title={info.getTitle()} data={data} columns={columns} />
 			<Suspense>
 				<Production
 					modalId='TeethMoldingProdModal'

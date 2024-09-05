@@ -174,7 +174,6 @@ export default function Index({ material_id = null }) {
 				title={info.getTitle()}
 				data={order}
 				columns={columns}
-				extraClass='py-2'
 			/>
 
 			<Suspense>

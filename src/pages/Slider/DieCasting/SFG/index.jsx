@@ -184,7 +184,6 @@ export default function Index() {
 				title={info.getTitle()}
 				data={dieCastingProd}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<Production

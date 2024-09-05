@@ -5,12 +5,7 @@ import { useAuth } from '@/context/auth';
 import { useAccess, useFetch } from '@/hooks';
 import cn from '@/lib/cn';
 import { useDyeingThreadBatch } from '@/state/Dyeing';
-import {
-	DateTime,
-	EditDelete,
-	LinkWithCopy,
-	ReactSelect,
-} from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -300,7 +295,6 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				accessor={haveAccess.includes('create')}
-				extraClass='py-2'
 			/>
 
 			<Suspense>

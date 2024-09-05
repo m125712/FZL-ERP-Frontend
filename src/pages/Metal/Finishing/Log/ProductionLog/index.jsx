@@ -5,22 +5,16 @@ import { useAccess } from '@/hooks';
 
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import {  useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import SFGAddOrUpdate from './SFGAddOrUpdate';
 import { useMetalFinishingProdLog } from '@/state/Metal';
 
 export default function Index() {
 	const { data, isLoading, deleteData } = useMetalFinishingProdLog();
-	const info = new PageInfo(
-		'Production Log',
-		'/metal/finishing/log'
-	);
+	const info = new PageInfo('Production Log', '/metal/finishing/log');
 
 	const haveAccess = useAccess('metal__finishing_log');
 
-
-
-	
 	const columns = useMemo(
 		() => [
 			{
@@ -210,7 +204,6 @@ export default function Index() {
 				// accessor={haveAccess.includes('click_update_sfg')}
 				data={data}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<SFGAddOrUpdate

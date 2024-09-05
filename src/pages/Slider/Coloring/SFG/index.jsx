@@ -211,7 +211,6 @@ export default function Index() {
 				title={info.getTitle()}
 				data={coloringProd}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<Production

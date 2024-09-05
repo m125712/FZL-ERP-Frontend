@@ -181,7 +181,6 @@ export default function Index() {
 				columns={columns}
 				rowSelection={rowSelection}
 				setRowSelection={setRowSelection}
-				extraClass='py-2'
 			/>
 
 			<Suspense>

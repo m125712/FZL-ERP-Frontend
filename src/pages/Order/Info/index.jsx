@@ -24,13 +24,10 @@ export default function Index() {
 					const { is_sample, is_bill, is_cash } = info.row.original;
 					return (
 						// TODO: need to fix bill vs cash
-						<div className='flex space-x-1'> 
+						<div className='flex space-x-1'>
 							<StatusButton size='btn-xs' value={is_sample} />
 							<StatusButton size='btn-xs' value={is_bill} />
-							<StatusButton
-								size='btn-xs'
-								value={is_cash}
-							/>
+							<StatusButton size='btn-xs' value={is_cash} />
 						</div>
 					);
 				},
@@ -205,7 +202,6 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				data={data}
 				columns={columns}
-				extraClass='py-2'
 			/>
 
 			<Suspense>

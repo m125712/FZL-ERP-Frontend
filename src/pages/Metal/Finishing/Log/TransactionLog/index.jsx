@@ -191,7 +191,6 @@ export default function Index() {
 				// accessor={haveAccess.includes('click_update_sfg')}
 				data={data}
 				columns={columns}
-				extraClass='py-2'
 			/>
 			<Suspense>
 				<SFGAddOrUpdate

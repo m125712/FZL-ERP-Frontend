@@ -1,5 +1,5 @@
 import { AddModal } from '@/components/Modal';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 import {
 	useCommonOrderAgainstCoilRMLog,
 	useCommonOrderAgainstTapeRMLog,
@@ -20,8 +20,8 @@ import {
 } from '@/state/Slider';
 import {
 	useMaterialInfo,
-	useMaterialStockToSFG,
 	useMaterialTrxAgainstOrderDescription,
+	useMaterialTrxAgainstOrderDescriptionByUUID,
 } from '@/state/Store';
 import {
 	useOrderAgainstVislonFinishingRMLog,
@@ -35,6 +35,7 @@ import {
 } from '@util/Schema';
 
 import getTransactionArea from '@/util/TransactionArea';
+import { useEffect } from 'react';
 
 export default function Index({
 	modalId = '',
@@ -47,6 +48,9 @@ export default function Index({
 	setUpdateMaterialTrxToOrder,
 }) {
 	const { url, updateData } = useMaterialTrxAgainstOrderDescription();
+	const { data } = useMaterialTrxAgainstOrderDescriptionByUUID(
+		updateMaterialTrxToOrder?.uuid
+	);
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { invalidateQuery: invalidateOrderAgainstDeliveryRMLog } =
 		useOrderAgainstDeliveryRMLog();
@@ -91,13 +95,14 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
+		context,
 	} = useRHF(schema, MATERIAL_TRX_AGAINST_ORDER_NULL);
 
-	useFetchForRhfReset(
-		`${url}/${updateMaterialTrxToOrder?.uuid}`,
-		updateMaterialTrxToOrder?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateMaterialTrxToOrder((prev) => ({
@@ -150,6 +155,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Against Order Log of ${updateMaterialTrxToOrder?.material_name}`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

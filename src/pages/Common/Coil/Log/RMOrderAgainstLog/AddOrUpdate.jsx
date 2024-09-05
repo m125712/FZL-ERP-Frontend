@@ -1,7 +1,6 @@
 import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import { useCommonMaterialTrx } from '@/state/Common';
+import { useRHF } from '@/hooks';
+import { useCommonMaterialTrxByUUID } from '@/state/Common';
 import {
 	useMaterialInfo,
 	useMaterialTrxAgainstOrderDescription,
@@ -13,6 +12,7 @@ import {
 	RM_MATERIAL_ORDER_AGAINST_EDIT_NULL,
 	RM_MATERIAL_ORDER_AGAINST_EDIT_SCHEMA,
 } from '@util/Schema';
+import { useEffect } from 'react';
 
 export default function Index({
 	modalId = '',
@@ -24,7 +24,9 @@ export default function Index({
 	},
 	setUpdateLog,
 }) {
-	const { url, updateData } = useCommonMaterialTrx();
+	const { data, url, updateData } = useCommonMaterialTrxByUUID(
+		updateLog?.uuid
+	);
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { invalidateQuery: invalidateMaterialTrx } =
 		useMaterialTrxAgainstOrderDescription();
@@ -49,7 +51,11 @@ export default function Index({
 		getValues,
 	} = useRHF(schema, RM_MATERIAL_ORDER_AGAINST_EDIT_NULL);
 
-	useFetchForRhfReset(`${url}/${updateLog?.uuid}`, updateLog?.uuid, reset);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateLog((prev) => ({
@@ -73,8 +79,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateLog?.uuid}`,
-				uuid: updateLog?.uuid,
+				url,
 				updatedData,
 				onClose,
 			});

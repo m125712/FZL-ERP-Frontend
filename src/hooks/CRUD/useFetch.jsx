@@ -66,7 +66,7 @@ const useFetchForRhfReset = async (uri, returnId, reset) => {
 		if (returnId === null || returnId === undefined) return;
 
 		api.get(uri).then((res) => {
-			reset(res?.data?.data[0]);
+			reset(res?.data?.data);
 		});
 	}, [returnId]);
 };

@@ -1,49 +1,60 @@
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc, useFetch } from '@/hooks';
-import { EditDelete } from '@/ui';
+import { useAccess } from '@/hooks';
+import { useCommonCoilRM, useCommonCoilRMLog } from '@/state/Common';
+import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import AddOrUpdate from './AddOrUpdate';
-import { useCommonCoilToDyeing } from '@/state/Common';
 
 export default function Index() {
-	const { data, url, updateData, postData, deleteData, isLoading, isError } =
-		useCommonCoilToDyeing();
-	const info = new PageInfo('SFG Coil Log', '/zipper/tape-coil-to-dyeing');
-	const [coilLog, setCoilLog] = useState([]);
-	console.log(data);
-	const haveAccess = useAccess('common__coil_log');
+	const { data, isLoading, url, deleteData } = useCommonCoilRMLog();
+	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
+	const info = new PageInfo('Material Used', url, 'common__coil_log');
+	const haveAccess = useAccess(info.getTab());
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'order_number',
-				header: 'O/N',
+				accessorKey: 'material_name',
+				header: 'Material Name',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: 'item_description',
-				header: 'Item Description',
+				accessorKey: 'section',
+				header: 'Section',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<span className='capitalize'>
+							{info.getValue()?.replace(/_|n_/g, ' ')}
+						</span>
+					);
+				},
+			},
+			{
+				accessorKey: 'used_quantity',
+				header: 'Used QTY',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className='capitalize'>{info.getValue()}</span>
-				),
-			},
-
-			{
-				accessorKey: 'trx_quantity',
-				header: (
-					<span>
-						Stock
-						<br />
-						(KG)
+					<span className='capitalize'>
+						{Number(info.getValue())}
 					</span>
 				),
+			},
+			{
+				accessorKey: 'wastage',
+				header: 'Wastage',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -55,20 +66,27 @@ export default function Index() {
 			},
 
 			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'created_at',
 				header: 'Created',
+				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
 			},
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -77,7 +95,7 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_sfg'),
+				hidden: !haveAccess.includes('click_update_rm'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -85,7 +103,7 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('click_delete_sfg')}
+							showDelete={haveAccess.includes('click_delete_rm')}
 						/>
 					);
 				},
@@ -94,41 +112,22 @@ export default function Index() {
 		[data]
 	);
 
-	// Fetching data from server
-	// useEffect(() => {
-	// 	useFetchFunc(info.getFetchUrl(), setCoilLog, setLoading, setError);
-	// }, []);
-
-	const { value: order_id } = useFetch(
-		'/other/order/description/value/label'
-	);
-
 	// Update
 	const [updateCoilLog, setUpdateCoilLog] = useState({
-		id: null,
-		trx_from: null,
-		trx_to: null,
-		item_name: null,
-		trx_quantity: null,
-		order_description: null,
-		order_quantity: null,
-		coil_stock: null,
-		dying_and_iron_stock: null,
-		finishing_stock: null,
-		order_entry_id: null,
-		zipper_number_name: null,
-	});
-
-	const [entryUUID, setEntryUUID] = useState({
 		uuid: null,
+		section: null,
+		material_name: null,
+		teeth_assembling_and_polishing: null,
+		plating_and_iron: null,
+		used_quantity: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setEntryUUID((prev) => ({
+		const selected = data[idx];
+		setUpdateCoilLog((prev) => ({
 			...prev,
-			uuid: data[idx].uuid,
+			...selected,
 		}));
-
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
 
@@ -141,18 +140,19 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName:
-				data[idx].order_number + ' - ' + data[idx].item_description,
+			itemName: data[idx].material_name
+				.replace(/#/g, '')
+				.replace(/\//g, '-'),
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
+	invalidateCommonCoilRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
 
-	console.log(data);
 	return (
 		<div>
 			<ReactTable title={info.getTitle()} data={data} columns={columns} />
@@ -160,10 +160,6 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						order_id,
-						entryUUID,
-						setEntryUUID,
-						setCoilLog,
 						updateCoilLog,
 						setUpdateCoilLog,
 					}}
@@ -173,11 +169,12 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					setItems={setCoilLog}
-					deleteData={deleteData}
-					url={`/zipper/tape-coil-to-dyeing`}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url: `/material/used`,
+						deleteData,
+					}}
 				/>
 			</Suspense>
 		</div>

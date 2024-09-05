@@ -1,21 +1,17 @@
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
-import {
-	useCommonCoilRMLog,
-	useCommonOrderAgainstCoilRMLog,
-} from '@/state/Common';
+import { useAccess } from '@/hooks';
+import { useCommonOrderAgainstCoilRMLog } from '@/state/Common';
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
 	useMaterialInfo,
 	useMaterialTrxAgainstOrderDescription,
 } from '@/state/Store';
-import { SFG_TRX_NULL } from '@/util/Schema';
-import RMAddOrUpdate from './AddOrUpdate';
+import AddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } =
@@ -25,11 +21,7 @@ export default function Index() {
 	const { invalidateQuery: invalidateMaterialTrx } =
 		useMaterialTrxAgainstOrderDescription();
 
-	const info = new PageInfo(
-		'RM Order Against Coil Log',
-		url,
-		'common__coil_log'
-	);
+	const info = new PageInfo('Store/Stock -> Coil', url, 'common__coil_log');
 	const haveAccess = useAccess(info.getTab());
 
 	const columns = useMemo(
@@ -83,7 +75,9 @@ export default function Index() {
 				header: 'Used QTY',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className='capitalize'>{info.getValue()}</span>
+					<span className='capitalize'>
+						{Number(info.getValue())}
+					</span>
 				),
 			},
 			{
@@ -94,16 +88,11 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'created_by_name',
-				header: 'Issued By',
+				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+
 			{
 				accessorKey: 'created_at',
 				header: 'Created',
@@ -122,6 +111,12 @@ export default function Index() {
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'actions',
@@ -192,7 +187,7 @@ export default function Index() {
 		<div>
 			<ReactTable title={info.getTitle()} data={data} columns={columns} />
 			<Suspense>
-				<RMAddOrUpdate
+				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
 						updateLog,

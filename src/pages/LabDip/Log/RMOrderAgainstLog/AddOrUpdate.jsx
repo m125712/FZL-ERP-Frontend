@@ -1,6 +1,6 @@
 import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 import { useCommonMaterialTrx } from '@/state/Common';
 import {
 	useMaterialInfo,

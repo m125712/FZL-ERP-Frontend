@@ -1,9 +1,9 @@
 import { flexRender } from '@tanstack/react-table';
+import { FilterColumnValue } from '../components/Filter';
+import { SortingIndicator } from '../ui';
 import clsx from 'clsx';
-import { FilterColumnValue } from './components/Filter';
-import { SortingIndicator } from './ui';
 
-export default function TableHead({ getHeaderGroups, getPreFilteredRowModel }) {
+const TableHead = ({ getHeaderGroups, getPreFilteredRowModel }) => {
 	return (
 		<thead className='select-none bg-base-200 text-sm text-primary'>
 			<tr>
@@ -59,4 +59,6 @@ export default function TableHead({ getHeaderGroups, getPreFilteredRowModel }) {
 			</tr>
 		</thead>
 	);
-}
+};
+
+export default TableHead;

@@ -56,7 +56,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'file_no',
+				accessorKey: 'file_number',
 				header: 'File No',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),

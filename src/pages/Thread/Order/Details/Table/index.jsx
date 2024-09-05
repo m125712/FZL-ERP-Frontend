@@ -1,5 +1,5 @@
 import ReactTable from '@/components/Table';
-import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 
 import { DateTime } from '@/ui';
 import { useMemo } from 'react';
@@ -98,7 +98,7 @@ export default function Index({ order_info_entry }) {
 	);
 
 	return (
-		<ReactTableWithTitle
+		<ReactTableTitleOnly
 			title='Details'
 			data={order_info_entry}
 			columns={columns}

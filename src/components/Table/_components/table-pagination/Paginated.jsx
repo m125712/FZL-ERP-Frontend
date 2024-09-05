@@ -1,6 +1,6 @@
 import ReactPaginate from 'react-paginate';
 
-function PaginatedItems({ initialPage, totalPages, onChange, currentPage }) {
+function Paginated({ initialPage, totalPages, onChange, currentPage }) {
 	const handlePageClick = (event) => {
 		onChange(event.selected);
 	};
@@ -23,4 +23,4 @@ function PaginatedItems({ initialPage, totalPages, onChange, currentPage }) {
 	);
 }
 
-export default PaginatedItems;
+export default Paginated;

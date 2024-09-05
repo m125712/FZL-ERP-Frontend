@@ -100,7 +100,7 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<Input label='file_no' {...{ register, errors }} />
+
 					<Input
 						label='lc_number'
 						disabled={lc_uuid != null}
@@ -143,6 +143,12 @@ export default function Header({
 						Controller={Controller}
 						control={control}
 						selected={watch('handover_date')}
+					/>
+					<DateInput
+						label='document_receive_date'
+						Controller={Controller}
+						control={control}
+						selected={watch('document_receive_date')}
 					/>
 					<DateInput
 						label='acceptance_date'

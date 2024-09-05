@@ -1,4 +1,4 @@
-import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 
 import { DateTime } from '@/ui';
 import { useMemo } from 'react';
@@ -95,7 +95,7 @@ export default function Index({ batch_entry }) {
 	);
 
 	return (
-		<ReactTableWithTitle
+		<ReactTableTitleOnly
 			title='Details'
 			data={batch_entry}
 			columns={columns}

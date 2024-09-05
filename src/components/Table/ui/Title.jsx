@@ -39,18 +39,16 @@ function Title({ title, subtitle }) {
 	);
 }
 
-function TitleOnly({ title, subtitle, className = '', titleClassName = '' }) {
+function TitleOnly({ title, subtitle }) {
 	return (
 		<div
 			className={cn(
-				'mb-1 flex items-center justify-between gap-2 md:justify-start',
-				className
+				'mb-0 flex items-center justify-between gap-2 rounded-t-md border border-b-0 border-secondary/30 bg-primary px-4 py-3 md:justify-start'
 			)}>
 			<div className='flex flex-col'>
 				<h1
 					className={cn(
-						'text-2xl font-semibold capitalize leading-tight text-primary md:text-3xl',
-						titleClassName
+						'text-2xl font-semibold capitalize leading-tight text-primary text-primary-content md:text-3xl'
 					)}>
 					{title}
 				</h1>

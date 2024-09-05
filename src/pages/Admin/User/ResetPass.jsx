@@ -1,5 +1,6 @@
 import { AddModal } from '@/components/Modal';
 import { useRHF, useUpdateFunc } from '@/hooks';
+import { useAdminUsers } from '@/state/Admin';
 import { PasswordInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { RESET_PASSWORD_NULL, RESET_PASSWORD_SCHEMA } from '@/util/Schema';
@@ -9,6 +10,8 @@ export default function Index({
 	resPass = { id: null, name: null },
 	setResPass,
 }) {
+	const { updateData } = useAdminUsers();
+
 	const { register, handleSubmit, errors } = useRHF(
 		RESET_PASSWORD_SCHEMA,
 		RESET_PASSWORD_NULL
@@ -31,12 +34,11 @@ export default function Index({
 				updated_at: GetDateTime(),
 			};
 
-			await useUpdateFunc({
-				uri: `/hr/user/password/${resPass?.uuid}`,
-				itemId: resPass.uuid,
-				data: data,
-				updatedData: updatedData,
-				onClose: onClose,
+			await updateData.mutateAsync({
+				url: `/hr/user/password/${resPass.uuid}`,
+				uuid: resPass.uuid,
+				updatedData,
+				onClose,
 			});
 
 			return;

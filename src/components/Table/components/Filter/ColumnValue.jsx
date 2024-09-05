@@ -134,8 +134,15 @@ function StringInput({ columnName, column, firstValue, isFullFilter }) {
 		return (
 			<Fragment key={id}>
 				<datalist id={id + 'list'}>
-					{sortedUniqueValues.slice(0, 10).map((value) => (
-						<option key={value} value={value} />
+					{sortedUniqueValues.slice(0, 10).map((value, index) => (
+						<option
+							key={
+								value !== null && value !== undefined
+									? value
+									: `option-${index}`
+							}
+							value={value}
+						/>
 					))}
 				</datalist>
 				<DebouncedInput
@@ -151,6 +158,7 @@ function StringInput({ columnName, column, firstValue, isFullFilter }) {
 
 	return (
 		<Template
+			key={id}
 			columnName={columnName}
 			onClick={() => setFilterValue(undefined)}
 			showResetButton={getFilterValue()}>
@@ -161,8 +169,15 @@ function StringInput({ columnName, column, firstValue, isFullFilter }) {
 				onChange={handleTextValueChange}
 			/>
 			<datalist id={id + 'list'}>
-				{sortedUniqueValues.slice(0, 10).map((value) => (
-					<option key={value} value={value} />
+				{sortedUniqueValues.slice(0, 10).map((value, index) => (
+					<option
+						key={
+							value !== null && value !== undefined
+								? value
+								: `option-${index}`
+						}
+						value={value}
+					/>
 				))}
 			</datalist>
 		</Template>
@@ -188,7 +203,7 @@ function FilterColumnValue({
 	return (
 		<StringInput
 			key={column.id}
-			{...{ columnName, column, firstValue, isFullFilter }}
+			{...{ columnName, column, isFullFilter, firstValue }}
 		/>
 	);
 }

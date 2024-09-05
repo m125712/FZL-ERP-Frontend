@@ -26,15 +26,7 @@ export const AdminRoutes = [
 			'click_page_assign',
 		],
 	},
-	{
-		id: 11,
-		name: 'Department',
-		path: '/hr/department',
-		element: Department,
-		type: 'hr',
-		page_name: 'admin__user_department',
-		actions: ['create', 'read', 'update', 'delete'],
-	},
+
 	{
 		id: 11,
 		name: 'Designation',
@@ -42,6 +34,15 @@ export const AdminRoutes = [
 		element: Designation,
 		type: 'hr',
 		page_name: 'admin__user_designation',
+		actions: ['create', 'read', 'update', 'delete'],
+	},
+	{
+		id: 11,
+		name: 'Department',
+		path: '/hr/department',
+		element: Department,
+		type: 'hr',
+		page_name: 'admin__user_department',
 		actions: ['create', 'read', 'update', 'delete'],
 	},
 	{

@@ -16,7 +16,6 @@ const GlobalBreadcrumbs = () => {
 							breadcrumbs.length - 1 === index &&
 								'font-medium text-primary'
 						)}
-						key={match.pathname}
 						to={match.pathname}>
 						{breadcrumb}
 					</NavLink>

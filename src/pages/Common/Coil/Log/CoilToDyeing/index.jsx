@@ -1,73 +1,57 @@
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
-import { useCommonCoilRM, useCommonCoilRMLog } from '@/state/Common';
-import { DateTime, EditDelete } from '@/ui';
+import { useAccess, useFetch } from '@/hooks';
+import { EditDelete, DateTime } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import AddOrUpdate from './AddOrUpdate';
+import { useCommonCoilToDyeing } from '@/state/Common';
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useCommonCoilRMLog();
-	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
-	const info = new PageInfo('RM Coil Log', url, 'common__coil_log');
-	const haveAccess = useAccess(info.getTab());
+	const { data, deleteData, isLoading } = useCommonCoilToDyeing();
+	const info = new PageInfo('Coil -> Dyeing', '/zipper/tape-coil-to-dyeing');
+
+	const haveAccess = useAccess('common__coil_log');
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'material_name',
-				header: 'Material Name',
+				accessorKey: 'order_number',
+				header: 'O/N',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: 'section',
-				header: 'Section',
-				enableColumnFilter: false,
-				cell: (info) => {
-					return (
-						<span className='capitalize'>
-							{info.getValue()?.replace(/_|n_/g, ' ')}
-						</span>
-					);
-				},
-			},
-			{
-				accessorKey: 'used_quantity',
-				header: 'Used QTY',
+				accessorKey: 'item_description',
+				header: 'Item Description',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
+
 			{
-				accessorKey: 'wastage',
-				header: 'Wastage',
+				accessorKey: 'trx_quantity',
+				header: (
+					<span>
+						Stock
+						<br />
+						(KG)
+					</span>
+				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'unit',
-				header: 'Unit',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'created_by_name',
-				header: 'Issued By',
+				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+
 			{
 				accessorKey: 'created_at',
 				header: 'Created',
@@ -88,11 +72,17 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'actions',
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_rm'),
+				hidden: !haveAccess.includes('click_update_sfg'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -100,7 +90,7 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('click_delete_rm')}
+							showDelete={haveAccess.includes('click_delete_sfg')}
 						/>
 					);
 				},
@@ -109,22 +99,20 @@ export default function Index() {
 		[data]
 	);
 
-	// Update
-	const [updateCoilLog, setUpdateCoilLog] = useState({
+	const { value: order_id } = useFetch(
+		'/other/order/description/value/label'
+	);
+
+	const [entryUUID, setEntryUUID] = useState({
 		uuid: null,
-		section: null,
-		material_name: null,
-		teeth_assembling_and_polishing: null,
-		plating_and_iron: null,
-		used_quantity: null,
 	});
 
 	const handelUpdate = (idx) => {
-		const selected = data[idx];
-		setUpdateCoilLog((prev) => ({
+		setEntryUUID((prev) => ({
 			...prev,
-			...selected,
+			uuid: data[idx].uuid,
 		}));
+
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
 
@@ -137,19 +125,17 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].material_name
-				.replace(/#/g, '')
-				.replace(/\//g, '-'),
+			itemName:
+				data[idx].order_number + ' - ' + data[idx].item_description,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateCommonCoilRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
-	// if (error) return <h1>Error:{error}</h1>;
 
+	console.log(data);
 	return (
 		<div>
 			<ReactTable title={info.getTitle()} data={data} columns={columns} />
@@ -157,8 +143,9 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateCoilLog,
-						setUpdateCoilLog,
+						order_id,
+						entryUUID,
+						setEntryUUID,
 					}}
 				/>
 			</Suspense>
@@ -166,12 +153,10 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					{...{
-						deleteItem,
-						setDeleteItem,
-						url: `/material/used`,
-						deleteData,
-					}}
+					deleteItem={deleteItem}
+					setDeleteItem={setDeleteItem}
+					deleteData={deleteData}
+					url={`/zipper/tape-coil-to-dyeing`}
 				/>
 			</Suspense>
 		</div>

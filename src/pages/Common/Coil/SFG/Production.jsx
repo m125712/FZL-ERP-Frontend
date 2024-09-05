@@ -87,8 +87,8 @@ export default function Index({
 			isSmall={true}>
 			<JoinInput
 				label='production_quantity'
-				sub_label={`Max: ${MAX_PRODUCTION_QTY}`}
-				placeholder={`Max: ${MAX_PRODUCTION_QTY}`}
+				sub_label={`Max: ${Number(MAX_PRODUCTION_QTY)}`}
+				placeholder={`Max: ${Number(MAX_PRODUCTION_QTY)}`}
 				unit='KG'
 				{...{ register, errors }}
 			/>

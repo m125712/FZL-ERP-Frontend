@@ -1,11 +1,6 @@
 import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import {
-	useCommonCoilRM,
-	useCommonCoilSFG,
-	useCommonMaterialUsed,
-} from '@/state/Common';
+import { useRHF } from '@/hooks';
+import { useCommonCoilRM, useCommonMaterialUsedByUUID } from '@/state/Common';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -13,6 +8,7 @@ import {
 	RM_MATERIAL_USED_EDIT_SCHEMA,
 } from '@util/Schema';
 import getTransactionArea from '@/util/TransactionArea';
+import { useEffect } from 'react';
 export default function Index({
 	modalId = '',
 	updateCoilLog = {
@@ -22,7 +18,9 @@ export default function Index({
 	},
 	setUpdateCoilLog,
 }) {
-	const { url, updateData } = useCommonMaterialUsed();
+	const { data, url, updateData } = useCommonMaterialUsedByUUID(
+		updateCoilLog?.uuid
+	);
 	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
 	const MAX_QUANTITY =
 		Number(updateCoilLog?.coil_forming) +
@@ -43,11 +41,11 @@ export default function Index({
 		getValues,
 	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
-	useFetchForRhfReset(
-		`${url}/${updateCoilLog?.uuid}`,
-		updateCoilLog?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateCoilLog((prev) => ({
@@ -70,8 +68,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateCoilLog?.uuid}`,
-				uuid: updateCoilLog?.uuid,
+				url,
 				updatedData,
 				onClose,
 			});
@@ -80,7 +77,7 @@ export default function Index({
 		}
 	};
 
-const transactionArea = getTransactionArea();
+	const transactionArea = getTransactionArea();
 
 	return (
 		<AddModal

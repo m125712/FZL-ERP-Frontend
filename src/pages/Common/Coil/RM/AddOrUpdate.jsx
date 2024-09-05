@@ -1,12 +1,11 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useCommonCoilRM, useCommonCoilRMLog } from '@/state/Common';
+import { useCommonMaterialUsed, useCommonCoilRMLog } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
-import * as yup from 'yup';
 
 export default function Index({
 	modalId = '',
@@ -17,7 +16,7 @@ export default function Index({
 	},
 	setUpdateCoilStock,
 }) {
-	const { url, postData } = useCommonCoilRM();
+	const { postData, url } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateCoilRMLog } = useCommonCoilRMLog();
 	const MAX_QUANTITY = updateCoilStock?.coil_forming;
 	const { user } = useAuth();
@@ -57,7 +56,7 @@ export default function Index({
 		};
 
 		await postData.mutateAsync({
-			url: '/material/used',
+			url,
 			newData: updatedData,
 			onClose,
 		});
@@ -73,7 +72,7 @@ export default function Index({
 			isSmall={true}>
 			<JoinInput
 				label='used_quantity'
-				sub_label={`Max: ${updateCoilStock?.coil_forming}`}
+				sub_label={`Max: ${Number(updateCoilStock?.coil_forming)}`}
 				unit={updateCoilStock?.unit}
 				max={updateCoilStock?.coil_forming}
 				placeholder={`Max: ${updateCoilStock?.coil_forming}`}
@@ -81,12 +80,11 @@ export default function Index({
 			/>
 			<JoinInput
 				label='wastage'
-				sub_label={`Max: ${(updateCoilStock?.coil_forming -
-					watch('used_quantity') <
-				0
-					? 0
-					: updateCoilStock?.coil_forming - watch('used_quantity')
-				).toFixed(2)}`}
+				sub_label={`Max: ${Number(
+					updateCoilStock?.coil_forming - watch('used_quantity') < 0
+						? 0
+						: updateCoilStock?.coil_forming - watch('used_quantity')
+				)}`}
 				unit={updateCoilStock?.unit}
 				placeholder={`Max: ${(updateCoilStock?.coil_forming -
 					watch('used_quantity') <

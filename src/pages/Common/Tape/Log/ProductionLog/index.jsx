@@ -1,19 +1,19 @@
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
+import { useAccess } from '@/hooks';
 import { useCommonTapeProduction, useCommonTapeSFG } from '@/state/Common';
-import { EditDelete } from '@/ui';
+import { EditDelete, DateTime } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import AddOrUpdate from './AddOrUpdate';
 
 export default function ProductionLog() {
 	const info = new PageInfo(
-		'Tape Production Log',
+		'Tape Productions',
 		'tape-or-coil-prod-section/tape'
 	);
-	const { data, isLoading, url, deleteData } = useCommonTapeProduction();
+	const { data, isLoading, deleteData } = useCommonTapeProduction();
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 	const haveAccess = useAccess('common__tape_log');
 
@@ -49,13 +49,32 @@ export default function ProductionLog() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
 			},
 			{
 				accessorKey: 'remarks',

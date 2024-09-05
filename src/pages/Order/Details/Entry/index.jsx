@@ -213,9 +213,12 @@ export default function Index() {
 			.catch((err) => console.log(err));
 
 		// * Slider
-		const slider_quantity = [...data.order_entry].reduce(
-			(prev, curr) => prev.quantity + curr.quantity
-		);
+		const slider_quantity =
+			data.order_entry.length === 1
+				? data.order_entry[0].quantity
+				: data.order_entry.reduce(
+						(prev, curr) => prev.quantity + curr.quantity
+					);
 
 		const slider_info = {
 			uuid: nanoid(),
@@ -315,7 +318,7 @@ export default function Index() {
 							<th
 								key={item}
 								scope='col'
-								className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide transition duration-300 first:pl-2'>
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
 								{item}
 							</th>
 						))}>

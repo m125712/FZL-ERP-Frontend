@@ -1,12 +1,16 @@
 import { AddModal } from '@/components/Modal';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import { useCommonTapeProduction, useCommonTapeSFG } from '@/state/Common';
+import { useRHF } from '@/hooks';
+import {
+	useCommonTapeProductionByUUID,
+	useCommonTapeSFG,
+} from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
 	TAPE_OR_COIL_PRODUCTION_LOG_NULL,
 	TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
 } from '@util/Schema';
+import { useEffect } from 'react';
 
 export default function Index({
 	modalId = '',
@@ -22,7 +26,9 @@ export default function Index({
 	},
 	setUpdateTapeLog,
 }) {
-	const { url, updateData } = useCommonTapeProduction();
+	const { data, url, updateData } = useCommonTapeProductionByUUID(
+		updateTapeLog?.uuid
+	);
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 
 	const { register, handleSubmit, errors, reset } = useRHF(
@@ -30,11 +36,11 @@ export default function Index({
 		TAPE_OR_COIL_PRODUCTION_LOG_NULL
 	);
 
-	useFetchForRhfReset(
-		`${'/zipper/tape-coil-production'}/${updateTapeLog?.uuid}`,
-		updateTapeLog?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data[0]);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateTapeLog((prev) => ({
@@ -62,8 +68,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${'/zipper/tape-coil-production'}/${updateTapeLog?.uuid}`,
-				uuid: updateTapeLog?.uuid,
+				url,
 				updatedData,
 				onClose,
 			});

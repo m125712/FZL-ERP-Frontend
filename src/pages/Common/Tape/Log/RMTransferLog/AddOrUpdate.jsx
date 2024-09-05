@@ -1,7 +1,6 @@
 import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
+import { useRHF } from '@/hooks';
+import { useCommonMaterialUsedByUUID, useCommonTapeRM } from '@/state/Common';
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
@@ -9,6 +8,7 @@ import {
 	RM_MATERIAL_USED_EDIT_NULL,
 	RM_MATERIAL_USED_EDIT_SCHEMA,
 } from '@util/Schema';
+import { useEffect } from 'react';
 
 export default function Index({
 	modalId = '',
@@ -20,7 +20,10 @@ export default function Index({
 	},
 	setUpdateTapeLog,
 }) {
-	const { url, updateData } = useCommonMaterialUsed();
+	const { data, url, updateData } = useCommonMaterialUsedByUUID(
+		updateTapeLog?.uuid
+	);
+
 	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
 	const MAX_QUANTITY =
 		Number(updateTapeLog?.tape_making) +
@@ -39,14 +42,13 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		wa,
 	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
-	useFetchForRhfReset(
-		`${url}/${updateTapeLog?.uuid}`,
-		updateTapeLog?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data[0]);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateTapeLog((prev) => ({
@@ -70,8 +72,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateTapeLog?.uuid}`,
-				uuid: updateTapeLog?.uuid,
+				url,
 				updatedData,
 				onClose,
 			});

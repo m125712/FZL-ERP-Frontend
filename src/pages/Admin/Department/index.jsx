@@ -99,8 +99,9 @@ export default function Index() {
 			itemId: data[idx].uuid,
 			itemName: data[idx].department,
 		}));
-
 		window[info.getDeleteModalId()].showModal();
+		invalidateUsers();
+		invalidateDesignations();
 	};
 
 	if (isLoading)

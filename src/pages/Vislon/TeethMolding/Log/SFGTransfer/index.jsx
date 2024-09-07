@@ -6,13 +6,13 @@ import { useAccess, useFetchFunc } from '@/hooks';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
-import SFGAddOrUpdate from './SFGAddOrUpdate';
-import { useVislonTMPLog } from '@/state/Vislon';
+import SFGAddOrUpdate from './AddOrUpdate';
+import { useVislonTMTLog } from '@/state/Vislon';
 
 export default function Index() {
-	const { data, isLoading, deleteData } = useVislonTMPLog();
+	const { data, isLoading, deleteData } = useVislonTMTLog();
 	const info = new PageInfo(
-		'SFG Teeth Molding Production Log',
+		'SFG Teeth Molding Transfer Log',
 		'sfg/trx/by/teeth_molding_prod/by/vislon'
 	);
 
@@ -66,38 +66,26 @@ export default function Index() {
 			// 	info.getValue()
 			// ),
 			// },
-			// {
-			// 	accessorKey: 'trx_to',
-			// 	header: 'Transferred To',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => {
-			// 		// remove underscore and capitalize
-			// 		const str = info.getValue();
-			// 		if (str) {
-			// 			const newStr = str.split('_').join(' ');
-			// 			return newStr.charAt(0).toUpperCase() + newStr.slice(1);
-			// 		} else {
-			// 			return str;
-			// 		}
-			// 	},
-			// },
 			{
-				accessorKey: 'production_quantity_in_kg',
-				header: (
-					<span>
-						Production
-						<br />
-						QTY (KG)
-					</span>
-				),
+				accessorKey: 'trx_to',
+				header: 'Transferred To',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => {
+					// remove underscore and capitalize
+					const str = info.getValue();
+					if (str) {
+						const newStr = str.split('_').join(' ');
+						return newStr.charAt(0).toUpperCase() + newStr.slice(1);
+					} else {
+						return str;
+					}
+				},
 			},
 			{
-				accessorKey: 'wastage',
+				accessorKey: 'trx_quantity_in_kg',
 				header: (
 					<span>
-						wastage
+						Transferred
 						<br />
 						QTY (KG)
 					</span>
@@ -162,11 +150,10 @@ export default function Index() {
 	const [updateTeethMoldingLog, setUpdateTeethMoldingLog] = useState({
 		uuid: null,
 		sfg_uuid: null,
-		section: null,
-		production_quantity_in_kg: null,
-		production_quantity: null,
-		wastage: null,
-		remarks: '',
+		trx_quantity_in_kg: null,
+		trx_from: null,
+		trx_to: null,
+		remarks: null,
 	});
 
 	const handelUpdate = (idx) => {
@@ -223,7 +210,7 @@ export default function Index() {
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
 					deleteData={deleteData}
-					url={`/zipper/sfg-production`}
+					url={`/zipper/sfg-transaction`}
 				/>
 			</Suspense>
 		</div>

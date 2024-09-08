@@ -1,10 +1,6 @@
 import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import {
-	useFetch,
-	useFetchForRhfReset,
-	useRHF,
-} from '@/hooks';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useOrderInfo } from '@/state/Order';
 import { CheckBox, FormField, ReactSelect, Input, Textarea } from '@/ui';
@@ -39,6 +35,7 @@ export default function Index({
 		Controller,
 		control,
 		getValues,
+		context,
 	} = useRHF(ORDER_INFO_SCHEMA, ORDER_INFO_NULL);
 
 	const [partyId, setPartyId] = useState(getValues('party_uuid'));
@@ -154,7 +151,7 @@ export default function Index({
 			}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-		>
+			formContext={context}>
 			<div className='flex justify-end gap-2 text-sm'>
 				<div className='rounded-md bg-primary px-1'>
 					<CheckBox
@@ -341,7 +338,6 @@ export default function Index({
 											getValues('is_cash')
 									)}
 									onChange={(e) => onChange(e.value)}
-									
 								/>
 							);
 						}}
@@ -365,7 +361,6 @@ export default function Index({
 											getValues('marketing_priority')
 									)}
 									onChange={(e) => onChange(e.value)}
-									
 								/>
 							);
 						}}
@@ -390,7 +385,6 @@ export default function Index({
 											getValues('factory_priority')
 									)}
 									onChange={(e) => onChange(e.value)}
-									
 								/>
 							);
 						}}

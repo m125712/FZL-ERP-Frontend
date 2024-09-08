@@ -24,6 +24,7 @@ export default function Index({
 		control,
 		Controller,
 		getValues,
+		context
 	} = useRHF(PROPERTIES_SCHEMA, PROPERTIES_NULL);
 
 	useFetchForRhfReset(
@@ -113,6 +114,7 @@ export default function Index({
 			}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
+			formContext={context}
 			isSmall={true}>
 			<FormField label='type' title='Type' errors={errors}>
 				<Controller

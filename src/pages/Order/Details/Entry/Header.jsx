@@ -262,55 +262,29 @@ export default function Header({
 					</FormField>
 				</div>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					<div className='flex w-full flex-col gap-1 md:flex-row'>
-						<FormField
-							label='stopper_type'
-							title='Stopper'
-							errors={errors}>
-							<Controller
-								name={'stopper_type'}
-								control={control}
-								render={({ field: { onChange } }) => {
-									return (
-										<ReactSelect
-											placeholder='Select Hand'
-											options={stopper_type}
-											value={stopper_type?.find(
-												(stopper_type) =>
-													stopper_type.value ==
-													getValues('stopper_type')
-											)}
-											onChange={(e) => onChange(e.value)}
-										/>
-									);
-								}}
-							/>
-						</FormField>
-						<FormField
-							label='teeth_color'
-							title='Teeth Color'
-							errors={errors}>
-							<Controller
-								name={'teeth_color'}
-								control={control}
-								render={({ field: { onChange } }) => {
-									return (
-										<ReactSelect
-											placeholder='Select Teeth Color'
-											options={color}
-											value={color?.find(
-												(color) =>
-													color.value ==
-													getValues('teeth_color')
-											)}
-											onChange={(e) => onChange(e.value)}
-										/>
-									);
-								}}
-							/>
-						</FormField>
-					</div>
-
+					<FormField
+						label='teeth_color'
+						title='Teeth Color'
+						errors={errors}>
+						<Controller
+							name={'teeth_color'}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select Teeth Color'
+										options={color}
+										value={color?.find(
+											(color) =>
+												color.value ==
+												getValues('teeth_color')
+										)}
+										onChange={(e) => onChange(e.value)}
+									/>
+								);
+							}}
+						/>
+					</FormField>
 					<FormField
 						label='special_requirement'
 						title='Special Req'

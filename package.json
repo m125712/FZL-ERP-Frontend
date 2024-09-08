@@ -22,6 +22,7 @@
 		"date-fns": "^3.6.0",
 		"framer-motion": "^11.3.30",
 		"js-cookie": "^3.0.5",
+		"lucide-react": "^0.439.0",
 		"nanoid": "^5.0.7",
 		"numeral": "^2.0.6",
 		"pdfmake": "^0.2.12",

@@ -1,4 +1,3 @@
-import { NoDataFound } from '@/components/Table/ui';
 import { ShowLocalToast } from '@/components/Toast';
 import { useAuth } from '@/context/auth';
 import { useRHF } from '@/hooks';
@@ -17,7 +16,7 @@ import {
 import { DevTool } from '@hookform/devtools';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from './Header';
+import TableNoData from '@/components/Table/_components/TableNoData';
 
 const getBadges = (index, getValues) => {
 	const badges = [
@@ -233,7 +232,7 @@ const AgainstStock = () => {
 						})}{' '}
 					</>
 				}>
-				{stockFields.length === 0 && <NoDataFound colSpan={11} />}
+				{stockFields.length === 0 && <TableNoData colSpan={11} />}
 
 				{stockFields.length > 0 &&
 					stockFields.map((item, index) => {

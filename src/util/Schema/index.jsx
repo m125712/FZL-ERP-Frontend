@@ -47,7 +47,7 @@ export {
 	PHONE_NUMBER,
 	PHONE_NUMBER_REQUIRED,
 	STRING,
-	STRING_REQUIRED
+	STRING_REQUIRED,
 };
 
 // Library
@@ -274,6 +274,20 @@ export const SFG_PRODUCTION_LOG_NULL = {
 };
 
 // Purchase
+export const PURCHASE_ENTRY_SCHEMA = {
+	material_uuid: STRING_REQUIRED,
+	quantity: NUMBER_DOUBLE_REQUIRED,
+	price: NUMBER_DOUBLE_REQUIRED,
+	unit: STRING.nullable(),
+	remarks: STRING.nullable(),
+};
+export const PURCHASE_ENTRY_NULL = {
+	material_uuid: null,
+	quantity: null,
+	price: null,
+	unit: null,
+	remarks: null,
+};
 
 // vendor page
 export const VENDOR_SCHEMA = {
@@ -322,10 +336,11 @@ export const PURCHASE_NULL = {
 };
 
 // purchase entry page
-export const PURCHASE_ENTRY_SCHEMA = {
+export const PURCHASE_RECEIVE_SCHEMA = {
 	vendor_uuid: STRING_REQUIRED,
 	is_local: NUMBER_REQUIRED.default(0),
 	lc_number: STRING.nullable(),
+	challan_number: STRING.nullable(),
 	remarks: STRING.nullable(),
 	purchase: yup.array().of(
 		yup.object().shape({
@@ -337,11 +352,12 @@ export const PURCHASE_ENTRY_SCHEMA = {
 	),
 };
 
-export const PURCHASE_ENTRY_NULL = {
+export const PURCHASE_RECEIVE_NULL = {
 	uuid: null,
 	vendor_uuid: null,
 	is_local: null,
 	lc_number: '',
+	challan_number: null,
 	remarks: '',
 	purchase: [
 		{
@@ -1248,7 +1264,7 @@ export const LC_SCHEMA = {
 	lc_date: STRING_REQUIRED,
 	payment_value: NUMBER_DOUBLE_REQUIRED,
 	payment_date: STRING.nullable(),
-	ldbc_fdbc: STRING_REQUIRED,
+	ldbc_fdbc: STRING_REQUIRED.nullable(),
 	acceptance_date: STRING.nullable(),
 	maturity_date: STRING.nullable(),
 	commercial_executive: STRING_REQUIRED,

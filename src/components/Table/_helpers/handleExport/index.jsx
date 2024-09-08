@@ -1,7 +1,7 @@
-import { Download } from '@/assets/icons';
 import { format } from 'date-fns';
 import { CSVLink } from 'react-csv';
 import { GetFlatHeader } from '../../utils';
+import { FileSpreadsheet } from 'lucide-react';
 
 const HandleExport = ({ getAllLeafColumns, filteredRows, title }) => {
 	const showingColumns = ['action', 'actions', 'resetPass'];
@@ -34,8 +34,8 @@ const HandleExport = ({ getAllLeafColumns, filteredRows, title }) => {
 			className='btn-filter'
 			data={csvData}
 			filename={filename}>
-			<Download className='size-5' />
-			<span className='hidden lg:block'>Export</span>
+			<FileSpreadsheet className='size-4' />
+			<span className='hidden lg:block'>Excel</span>
 		</CSVLink>
 	);
 };

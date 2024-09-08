@@ -1,25 +1,18 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { usePurchaseDescription } from '@/state/Store';
+import { usePurchaseLog } from '@/state/Store';
 import { DateTime, EditDelete, LinkOnly } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { lazy, useMemo, useState } from 'react';
 
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const navigate = useNavigate();
-	const haveAccess = useAccess('store__receive');
-
-	const { data, isLoading, url, deleteData } = usePurchaseDescription();
-
-	const info = new PageInfo('Receive', url, 'store__receive');
-
-	useEffect(() => {
-		document.title = info.getTabName();
-	}, []);
+	const { data, isLoading, url, deleteData } = usePurchaseLog();
+	const info = new PageInfo('Log Purchase', url);
+	const haveAccess = useAccess('store__log');
 
 	const columns = useMemo(
 		() => [
@@ -37,6 +30,24 @@ export default function Index() {
 						/>
 					);
 				},
+			},
+			{
+				accessorKey: 'material_name',
+				header: 'Material',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'price',
+				header: 'Price',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()).toFixed(2),
+			},
+			{
+				accessorKey: 'unit',
+				header: 'Unit',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'vendor_name',
@@ -87,7 +98,7 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
+				hidden: !haveAccess.includes('update_log'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -104,11 +115,19 @@ export default function Index() {
 		[data]
 	);
 
-	// Add
-	const handelAdd = () => navigate('/store/receive/entry');
+	// Update
+	const [updatePurchaseLog, setUpdatePurchaseLog] = useState({
+		entry_uuid: null,
+		material_name: null,
+	});
 
 	const handelUpdate = (idx) => {
-		navigate(`/store/receive/update/${data[idx].uuid}`);
+		setUpdatePurchaseLog((prev) => ({
+			...prev,
+			entry_uuid: data[idx]?.purchase_entry_uuid,
+			material_name: data[idx]?.material_name,
+		}));
+		window[info.getAddOrUpdateModalId()].showModal();
 	};
 
 	// Delete
@@ -119,26 +138,38 @@ export default function Index() {
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: data[idx].uuid,
-			itemName: data[idx].uuid,
+			itemId: data[idx].purchase_entry_uuid,
+			itemName: data[idx].material_name
+				.replace(/#/g, '')
+				.replace(/\//g, '-'),
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
 
 	if (isLoading)
-		return <span className='loading loading-dots loading-lg z-50' />;
-
-	return (
-		<>
+		return (
 			<ReactTable
 				title={info.getTitle()}
-				handelAdd={handelAdd}
-				accessor={haveAccess.includes('create')}
 				data={data}
 				columns={columns}
+				isLoading={isLoading}
 			/>
+		);
 
+	return (
+		<div>
+			<ReactTable title={info.getTitle()} data={data} columns={columns} />
+
+			<Suspense>
+				<AddOrUpdate
+					modalId={info.getAddOrUpdateModalId()}
+					{...{
+						updatePurchaseLog,
+						setUpdatePurchaseLog,
+					}}
+				/>
+			</Suspense>
 			<Suspense>
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
@@ -146,11 +177,11 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: '/purchase/entry',
 						deleteData,
 					}}
 				/>
 			</Suspense>
-		</>
+		</div>
 	);
 }

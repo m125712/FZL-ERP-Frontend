@@ -73,6 +73,7 @@ export default function Header({
 					/>
 				</FormField>
 				<Input label='lc_number' {...{ register, errors }} />
+				<Input label='challan_number' {...{ register, errors }} />
 				<Textarea label='remarks' {...{ register, errors }} />
 			</div>
 		</SectionEntryBody>

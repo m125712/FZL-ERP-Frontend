@@ -45,6 +45,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'challan_number',
+				header: 'Challan No',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'is_local',
 				header: 'Local/LC',
 				enableColumnFilter: false,

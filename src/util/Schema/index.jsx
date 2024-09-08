@@ -47,7 +47,7 @@ export {
 	PHONE_NUMBER,
 	PHONE_NUMBER_REQUIRED,
 	STRING,
-	STRING_REQUIRED
+	STRING_REQUIRED,
 };
 
 // Library
@@ -326,6 +326,7 @@ export const PURCHASE_ENTRY_SCHEMA = {
 	vendor_uuid: STRING_REQUIRED,
 	is_local: NUMBER_REQUIRED.default(0),
 	lc_number: STRING.nullable(),
+	challan_number: STRING.nullable(),
 	remarks: STRING.nullable(),
 	purchase: yup.array().of(
 		yup.object().shape({
@@ -342,6 +343,7 @@ export const PURCHASE_ENTRY_NULL = {
 	vendor_uuid: null,
 	is_local: null,
 	lc_number: '',
+	challan_number: null,
 	remarks: '',
 	purchase: [
 		{
@@ -1248,7 +1250,7 @@ export const LC_SCHEMA = {
 	lc_date: STRING_REQUIRED,
 	payment_value: NUMBER_DOUBLE_REQUIRED,
 	payment_date: STRING.nullable(),
-	ldbc_fdbc: STRING_REQUIRED,
+	ldbc_fdbc: STRING_REQUIRED.nullable(),
 	acceptance_date: STRING.nullable(),
 	maturity_date: STRING.nullable(),
 	commercial_executive: STRING_REQUIRED,

@@ -274,6 +274,20 @@ export const SFG_PRODUCTION_LOG_NULL = {
 };
 
 // Purchase
+export const PURCHASE_ENTRY_SCHEMA = {
+	material_uuid: STRING_REQUIRED,
+	quantity: NUMBER_DOUBLE_REQUIRED,
+	price: NUMBER_DOUBLE_REQUIRED,
+	unit: STRING.nullable(),
+	remarks: STRING.nullable(),
+};
+export const PURCHASE_ENTRY_NULL = {
+	material_uuid: null,
+	quantity: null,
+	price: null,
+	unit: null,
+	remarks: null,
+};
 
 // vendor page
 export const VENDOR_SCHEMA = {
@@ -322,7 +336,7 @@ export const PURCHASE_NULL = {
 };
 
 // purchase entry page
-export const PURCHASE_ENTRY_SCHEMA = {
+export const PURCHASE_RECEIVE_SCHEMA = {
 	vendor_uuid: STRING_REQUIRED,
 	is_local: NUMBER_REQUIRED.default(0),
 	lc_number: STRING.nullable(),
@@ -338,7 +352,7 @@ export const PURCHASE_ENTRY_SCHEMA = {
 	),
 };
 
-export const PURCHASE_ENTRY_NULL = {
+export const PURCHASE_RECEIVE_NULL = {
 	uuid: null,
 	vendor_uuid: null,
 	is_local: null,

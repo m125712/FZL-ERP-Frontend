@@ -121,6 +121,13 @@ export const usePurchaseDetailsByUUID = (uuid) =>
 		enabled: !!uuid,
 	});
 
+// * Purchase Log * //
+export const usePurchaseLog = () =>
+	createGlobalState({
+		queryKey: purchaseQK.log(),
+		url: `/purchase/purchase-log`,
+	});
+
 // * Material_trx_against_order_description *//
 export const useMaterialTrxAgainstOrderDescription = () =>
 	createGlobalState({

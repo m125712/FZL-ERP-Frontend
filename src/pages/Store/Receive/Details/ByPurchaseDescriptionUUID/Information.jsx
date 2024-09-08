@@ -8,6 +8,7 @@ export default function Information({
 		purchase_id: null,
 		vendor_uuid: null,
 		vendor_name: null,
+		challan_number: null,
 		is_local: null,
 		lc_number: null,
 		created_by: null,
@@ -20,6 +21,7 @@ export default function Information({
 	const {
 		vendor_name,
 		lc_number,
+		challan_number,
 		is_local,
 		created_at,
 		created_by_name,
@@ -42,6 +44,10 @@ export default function Information({
 			{
 				label: 'LC Number',
 				value: lc_number,
+			},
+			{
+				label: 'Challan Number',
+				value: challan_number,
 			},
 			{
 				label: 'LC/Local',

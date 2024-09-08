@@ -5,9 +5,9 @@ import { JoinInput, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import {
+	NUMBER_REQUIRED,
 	SFG_PRODUCTION_SCHEMA_IN_KG,
 	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
-	NUMBER_REQUIRED,
 } from '@util/Schema';
 
 import nanoid from '@/lib/nanoid';
@@ -21,6 +21,7 @@ export default function Index({
 		section: null,
 		production_quantity_in_kg: null,
 		production_quantity: null,
+		vislon_teeth_molding: null,
 		wastage: null,
 		remarks: null,
 	},
@@ -29,9 +30,10 @@ export default function Index({
 	const { postData } = useVislonTMP();
 	const { user } = useAuth();
 
-	const MAX_PROD_KG = Number(updateTeethMoldingProd.balance_quantity).toFixed(
-		3
-	);
+	const MAX_PROD_KG = Math.min(
+		Number(updateTeethMoldingProd.balance_quantity),
+		Number(updateTeethMoldingProd.vislon_teeth_molding)
+	).toFixed(3);
 
 	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
 		{
@@ -56,6 +58,7 @@ export default function Index({
 			section: null,
 			production_quantity_in_kg: null,
 			production_quantity: null,
+			vislon_teeth_molding: null,
 			wastage: null,
 			remarks: null,
 		}));

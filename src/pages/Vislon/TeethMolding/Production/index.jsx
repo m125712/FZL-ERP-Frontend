@@ -1,10 +1,10 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetch } from '@/hooks';
+import { useVislonTMP } from '@/state/Vislon';
 import { LinkWithCopy, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useMemo, useState } from 'react';
-import { useVislonTMP } from '@/state/Vislon';
 
 const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
@@ -71,6 +71,12 @@ export default function Index() {
 						QTY (PCS)
 					</span>
 				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'vislon_teeth_molding',
+				header: 'Stock (KG)',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
@@ -157,6 +163,7 @@ export default function Index() {
 		section: null,
 		production_quantity_in_kg: null,
 		production_quantity: null,
+		vislon_teeth_molding: null,
 		wastage: null,
 		remarks: '',
 	});

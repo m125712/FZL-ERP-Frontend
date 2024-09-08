@@ -1,4 +1,4 @@
-import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 
 import { DateTime } from '@/ui';
 import { useMemo } from 'react';
@@ -8,13 +8,13 @@ export default function Index({ shade_recipe_entry }) {
 		() => [
 			{
 				accessorKey: 'material_name',
-				header: 'Material',
+				header: 'Dyes',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'Quantity',
+				header: 'Quantity (Solution %)',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
@@ -54,7 +54,7 @@ export default function Index({ shade_recipe_entry }) {
 	);
 
 	return (
-		<ReactTableWithTitle
+		<ReactTableTitleOnly
 			title='Details'
 			data={shade_recipe_entry}
 			columns={columns}

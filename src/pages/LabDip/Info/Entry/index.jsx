@@ -5,16 +5,13 @@ import { useLabDipInfo } from '@/state/LabDip';
 import {
 	ActionButtons,
 	DynamicField,
-	Input,
-	JoinInput,
-	Textarea,
-	ReactSelect,
 	FormField,
+	ReactSelect,
 } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { LAB_INFO_SCHEMA, LAB_INFO_NULL } from '@util/Schema';
+import { LAB_INFO_NULL, LAB_INFO_SCHEMA } from '@util/Schema';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -55,7 +52,6 @@ export default function Index() {
 			reset
 		);
 
-	console.log(getValues());
 	// recipe
 	const {
 		fields: recipeField,
@@ -130,33 +126,6 @@ export default function Index() {
 			];
 
 			// * old code* //
-			// let order_entry_updated_promises = [
-			// 	...recipe_updated.map(async (item) => {
-			// 		if (item.uuid) {
-			// 			await updateData.mutateAsync({
-			// 				url: `/lab-dip/recipe-entry/${item.uuid}`,
-			// 				updatedData: item,
-			// 				isOnCloseNeeded: false,
-			// 			});
-			// 		} else {
-			// 			await postData.mutateAsync({
-			// 				url: '/lab-dip/recipe-entry',
-			// 				newData: {
-			// 					...item,
-			// 					uuid: nanoid(),
-			// 					recipe_uuid:
-			// 						data?.uuid,
-			// 					created_at: GetDateTime(),
-			// 				},
-			// 				isOnCloseNeeded: false,
-			// 			});
-			// 		}
-			// 	}),
-			// ];
-
-			// navigate(
-			// 	`/order/details/${recipe_id}/${recipe_uuid}`
-			// );
 
 			return;
 		}
@@ -198,16 +167,7 @@ export default function Index() {
 		];
 
 		//* Post new entry *//
-		// let recipe_entry_promises = [
-		// 	...recipe_entry.map(
-		// 		async (item) =>
-		// 			await postData.mutateAsync({
-		// 				url: '/lab-dip/recipe-entry',
-		// 				newData: item,
-		// 				isOnCloseNeeded: false,
-		// 			})
-		// 	),
-		// ];
+	
 
 		await Promise.all(recipe_promises)
 			.then(() => reset(Object.assign({}, ORDER_NULL)))
@@ -279,7 +239,7 @@ export default function Index() {
 							<th
 								key={item}
 								scope='col'
-								className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide transition duration-300 first:pl-2'>
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
 								{item}
 							</th>
 						))}>
@@ -290,7 +250,10 @@ export default function Index() {
 									<FormField
 										label={`recipe[${index}].recipe_uuid`}
 										title='Recipe uuid'
-										errors={errors}>
+										dynamicerror={
+											errors?.recipe?.[index]?.recipe_uuid
+										}
+										is_title_needed='false'>
 										<Controller
 											name={`recipe[${index}].recipe_uuid`}
 											control={control}

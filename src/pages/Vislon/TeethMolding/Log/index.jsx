@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import RMOrderAgainstLog from './RMOrderAgainstLog';
-import RMTransferLog from './RMTransferLog';
-import SFGProductionLog from './SFGProductionLog/SFGProductionLog';
-import SFGTransferLog from './SFGTransferLog/SFGTransferLog';
-import TapeLog from './Transfer';
+import RMOrderAgainstLog from './RMOrderAgainst';
+import RMTransferLog from './RMTransfer';
+import SFGProductionLog from './SFGProduction';
+import SFGTransferLog from './SFGTransfer';
+import TapeLog from './TapeTransfer';
 export default function Index() {
 	useEffect(() => {
 		document.title = 'Teeth Molding Log';

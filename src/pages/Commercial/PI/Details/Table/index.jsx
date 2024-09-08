@@ -1,4 +1,4 @@
-import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, LinkWithCopy } from '@/ui';
 import { useMemo } from 'react';
 
@@ -43,19 +43,19 @@ export default function Index({ pi }) {
 				accessorKey: 'pi_quantity',
 				header: 'QTY (PCS)',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'unit_price',
 				header: 'Unit Price ($)',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
 			{
 				accessorKey: 'value',
 				header: 'Value ($)',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
 			{
 				accessorKey: 'remarks',
@@ -86,20 +86,22 @@ export default function Index({ pi }) {
 		[pi]
 	);
 
-	const totalQty = pi.reduce((a, b) => Number(a + b.pi_quantity), 0);
-	const totalValue = pi.reduce((a, b) => Number(a + b.value), 0);
+	const totalQty = pi.reduce((a, b) => a + Number(b.pi_quantity), 0);
+	const totalValue = pi.reduce((a, b) => a + Number(b.value), 0);
 
 	return (
-		<ReactTableWithTitle title='Details' data={pi} columns={columns}>
+		<ReactTableTitleOnly title='Details' data={pi} columns={columns}>
 			<tr className='text-sm'>
 				<td colSpan='3' className='py-2 text-right'>
-					Total QTY:
+					Total QTY
 				</td>
-				<td className='pl-3 text-left'>{totalQty}</td>
+				<td className='pl-3 text-left font-semibold'>{totalQty}</td>
 
-				<td className='text-right'>Total Value:</td>
-				<td className='pl-3 text-left'>{totalValue}</td>
+				<td className='text-right'>Total Value</td>
+				<td className='pl-3 text-left font-semibold'>
+					${Number(totalValue).toLocaleString()}
+				</td>
 			</tr>
-		</ReactTableWithTitle>
+		</ReactTableTitleOnly>
 	);
 }

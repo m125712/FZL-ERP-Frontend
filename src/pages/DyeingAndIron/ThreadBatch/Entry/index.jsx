@@ -20,9 +20,11 @@ import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import {
+	BOOLEAN,
 	DYEING_THREAD_BATCH_NULL,
 	DYEING_THREAD_BATCH_SCHEMA,
 	NUMBER,
+	NUMBER_REQUIRED,
 	STRING,
 } from '@util/Schema';
 import { Suspense, useEffect, useMemo, useState } from 'react';
@@ -57,7 +59,12 @@ export default function Index() {
 		...DYEING_THREAD_BATCH_SCHEMA,
 		batch_entry: yup.array().of(
 			yup.object().shape({
-				quantity: NUMBER.nullable() // Allows the field to be null
+				is_checked: BOOLEAN,
+				quantity: NUMBER.when('is_checked', {
+					is: true,
+					then: (schema) => schema.required('Required'),
+					otherwise: (schema) => schema.nullable(),
+				})
 					.transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? null : value
 					)
@@ -69,7 +76,7 @@ export default function Index() {
 							? 'Beyond Transaction Quantity'
 							: 'Beyond Balance Quantity'
 					),
-				batch_remarks: STRING.nullable(),
+				// batch_remarks: STRING.nullable(),
 			})
 		),
 	};
@@ -330,7 +337,6 @@ export default function Index() {
 		setIsAllChecked(isEveryChecked);
 		setIsSomeChecked(isSomeChecked);
 	};
-
 	const columns = useMemo(
 		() => [
 			{

@@ -7,7 +7,7 @@ const GlobalBreadcrumbs = () => {
 	const breadcrumbs = useBreadcrumbs();
 
 	return (
-		<div className='flex items-center gap-1'>
+		<div className='flex items-center gap-1 text-xs md:text-sm'>
 			{breadcrumbs.map(({ match, breadcrumb }, index) => (
 				<div key={match.pathname} className='flex items-center gap-1'>
 					<NavLink

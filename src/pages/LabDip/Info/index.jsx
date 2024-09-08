@@ -31,6 +31,24 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'order_number',
+				header: 'Order ID',
+				width: 'w-8',
+				cell: (info) => {
+					const { order_number } = info.row.original;
+					const { order_info_uuid } = info.row.original;
+					if (order_info_uuid) {
+						return (
+							<LinkWithCopy
+								title={info.getValue()}
+								id={order_number}
+								uri='/order/details'
+							/>
+						);
+					}
+				},
+			},
+			{
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
@@ -61,17 +79,11 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'factory_name',
-			// 	header: 'Factory',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'lab_status',
 				header: 'Status',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (info.getValue() === 1 ? 'Done' : 'Pending'),
 			},
 			{
 				accessorKey: 'created_by_name',

@@ -1,5 +1,5 @@
 import { DeleteModal } from '@/components/Modal';
-import { NoDataFound } from '@/components/Table/ui';
+import TableNoData from '@/components/Table/_components/TableNoData';
 import { useAccess, useRHF } from '@/hooks';
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
@@ -208,7 +208,7 @@ export default function Index() {
 						</th>
 					))}>
 					{isUpdate && fields.length === 0 && (
-						<NoDataFound colSpan={8} />
+						<TableNoData colSpan={8} />
 					)}
 
 					{fields.length > 0 &&

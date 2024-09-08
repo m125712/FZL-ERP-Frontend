@@ -1,11 +1,18 @@
 import { useState } from 'react';
-import { DebouncedInput, ExportCSV } from './components';
-import DateRange from './components/DateRange';
-import { FilterColumn, FullFilter } from './components/Filter';
-import { PdfButton, ReloadButton, Title } from './ui';
-import { Indicator } from './ui/Title';
 
-export default function Index(props) {
+import {
+	ColumnVisibility,
+	GlobalFilter,
+	HandleEntry,
+	HandleExport,
+	HandlePDF,
+	HandleReload,
+	SearchBox,
+} from '../_helpers';
+import DateRange from '../components/DateRange';
+import TableTitle from './TableTitle';
+
+const TableHeader = (props) => {
 	const [open, setOpen] = useState((prev) => ({
 		...prev,
 	}));
@@ -17,28 +24,19 @@ export default function Index(props) {
 	return (
 		<div key={props.title} className='mb-4 flex flex-col'>
 			<div className='mb-4 flex w-full flex-col justify-between gap-2 border-b pb-4 lg:flex-row lg:items-end'>
-				<Title
+				<TableTitle
 					{...{
 						title: props.title,
 						subtitle: props.subtitle,
 					}}
 				/>
 
-				{props.showSearchBox && (
-					<DebouncedInput
-						className='lg:max-w-[400px]'
-						placeholder='Search...'
-						value={props.globalFilter ?? ''}
-						onChange={(value) =>
-							props.setGlobalFilter(String(value))
-						}
-					/>
-				)}
+				{props.showSearchBox && <SearchBox {...props} />}
 			</div>
 
 			<div className='flex w-full items-end justify-between'>
 				<div className='flex w-fit items-end gap-2'>
-					<FullFilter
+					<GlobalFilter
 						{...{
 							getHeaderGroups: props.getHeaderGroups,
 							getPreFilteredRowModel:
@@ -48,7 +46,7 @@ export default function Index(props) {
 					/>
 
 					{props.showColumns && (
-						<FilterColumn
+						<ColumnVisibility
 							columns={props.getAllLeafColumns()}
 							open={open.columns}
 							setOpen={setOpen}
@@ -63,10 +61,10 @@ export default function Index(props) {
 					{props.extraButton}
 
 					{props.onClickPdfDownload && (
-						<PdfButton onClick={props.onClickPdfDownload} />
+						<HandlePDF onClick={props.onClickPdfDownload} />
 					)}
 
-					<ExportCSV
+					<HandleExport
 						{...{
 							getAllLeafColumns: props.getAllLeafColumns,
 							filteredRows: props.filteredRows,
@@ -77,17 +75,16 @@ export default function Index(props) {
 
 				<div className='flex w-fit items-end gap-2'>
 					{props.handleReload && (
-						<ReloadButton onClick={props.handleReload} />
+						<HandleReload onClick={props.handleReload} />
 					)}
 
 					{props.accessor && props.handelAdd && (
-						<Indicator
-							value={props.indicatorValue}
-							onClick={props.handelAdd}
-						/>
+						<HandleEntry onClick={props.handelAdd} />
 					)}
 				</div>
 			</div>
 		</div>
 	);
-}
+};
+
+export default TableHeader;

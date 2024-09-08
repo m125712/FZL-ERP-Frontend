@@ -1,4 +1,3 @@
-import { NoDataFound } from '@/components/Table/ui';
 import { useAuth } from '@/context/auth';
 import { useRHF } from '@/hooks';
 import cn from '@/lib/cn';
@@ -21,6 +20,7 @@ import { DevTool } from '@hookform/devtools';
 import { useEffect, useRef, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import Header from './Header';
+import TableNoData from '@/components/Table/_components/TableNoData';
 
 const AgainstOrder = () => {
 	const { user } = useAuth();
@@ -208,7 +208,7 @@ const AgainstOrder = () => {
 						})}{' '}
 					</>
 				}>
-				{stockFields.length === 0 && <NoDataFound colSpan={11} />}
+				{stockFields.length === 0 && <TableNoData colSpan={11} />}
 
 				{stockFields.length > 0 &&
 					stockFields.map((item, index) => {

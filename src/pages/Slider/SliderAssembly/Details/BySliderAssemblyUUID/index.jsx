@@ -1,5 +1,5 @@
 import ReactTable from '@/components/Table';
-import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { useFetchFunc } from '@/hooks';
 
 import { DateTime } from '@/ui';
@@ -102,6 +102,6 @@ export default function Index() {
 	);
 
 	return (
-		<ReactTableWithTitle title='Details' data={slider} columns={columns} />
+		<ReactTableTitleOnly title='Details' data={slider} columns={columns} />
 	);
 }

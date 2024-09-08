@@ -2,23 +2,35 @@ import { Close } from '@/assets/icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFormContext } from 'react-hook-form';
 
-const Header = ({ title, subTitle, onClose }) => (
-	<div className='modal-header mb-2 flex items-center justify-between'>
-		<div className='flex flex-col'>
-			<p className='text-2xl font-semibold text-primary'>{title}</p>
-			{subTitle && (
-				<p className='font-semibold text-gray-400'>{subTitle}</p>
-			)}
-		</div>
+const Header = ({ title, subTitle, onClose }) => {
+	const form = useFormContext();
+	const queryClient = useQueryClient();
 
-		<button
-			type='button'
-			onClick={onClose}
-			className='group btn btn-circle btn-outline btn-error btn-sm'>
-			<Close className='h-5 w-5 text-error group-hover:text-primary-content' />
-		</button>
-	</div>
-);
+	const isMutating =
+		queryClient.isMutating({
+			status: 'pending',
+		}) < 0;
+	const isSubmitting = form?.formState?.isSubmitting;
+
+	return (
+		<div className='modal-header mb-2 flex items-center justify-between'>
+			<div className='flex flex-col'>
+				<p className='text-2xl font-semibold text-primary'>{title}</p>
+				{subTitle && (
+					<p className='font-semibold text-gray-400'>{subTitle}</p>
+				)}
+			</div>
+
+			<button
+				disabled={isSubmitting || isMutating}
+				type='button'
+				onClick={onClose}
+				className='group btn btn-circle btn-outline btn-error btn-sm'>
+				<Close className='h-5 w-5 text-error group-hover:text-primary-content' />
+			</button>
+		</div>
+	);
+};
 
 const Footer = () => {
 	const form = useFormContext();

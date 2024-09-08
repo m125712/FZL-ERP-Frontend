@@ -1,4 +1,4 @@
-import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, LinkWithCopy } from '@/ui';
 import { useMemo } from 'react';
 
@@ -23,7 +23,7 @@ export default function Index({ recipe }) {
 				},
 			},
 			{
-				accessorKey: 'created_at',
+				accessorKey: 'recipe_created_at',
 				header: 'Created',
 				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
@@ -33,7 +33,7 @@ export default function Index({ recipe }) {
 				},
 			},
 			{
-				accessorKey: 'updated_at',
+				accessorKey: 'recipe_updated_at',
 				header: 'Updated',
 				enableColumnFilter: false,
 				width: 'w-24',
@@ -46,6 +46,6 @@ export default function Index({ recipe }) {
 	);
 
 	return (
-		<ReactTableWithTitle title='Details' data={recipe} columns={columns} />
+		<ReactTableTitleOnly title='Details' data={recipe} columns={columns} />
 	);
 }

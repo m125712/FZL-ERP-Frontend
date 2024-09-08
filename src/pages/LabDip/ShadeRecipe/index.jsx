@@ -1,8 +1,10 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
+import cn from '@/lib/cn';
 import { useLabDipShadeRecipeDescription } from '@/state/LabDip';
 import { DateTime, EditDelete, LinkOnly } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } =
+	const { data, isLoading, url, deleteData, updateData } =
 		useLabDipShadeRecipeDescription();
 
 	const navigate = useNavigate();
@@ -65,7 +67,17 @@ export default function Index() {
 				header: 'Lab Status',
 				enableColumnFilter: false,
 				cell: (info) => {
-					return info.getValue() == 1 ? 'Done' : 'Pending';
+					return (
+						<input
+							onChange={() => handelStatusChange(info.row.index)}
+							checked={info.getValue() === 1}
+							type='checkbox'
+							className={cn(
+								'toggle toggle-md checked:toggle-accent'
+							)}
+							defaultChecked
+						/>
+					);
 				},
 			},
 			{
@@ -126,12 +138,21 @@ export default function Index() {
 
 	// Add
 	const handelAdd = () => navigate('/lab-dip/shade_recipe/entry');
-
+	// Update
 	const handelUpdate = (idx) => {
 		const { uuid } = data[idx];
 		navigate(`/lab-dip/shade_recipe/update/${uuid}`);
 	};
-
+	const handelStatusChange = async (idx) => {
+		await updateData.mutateAsync({
+			url: `${url}/${data[idx]?.uuid}`,
+			updatedData: {
+				lab_status: data[idx]?.lab_status === 1 ? 0 : 1,
+				updated_at: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
+	};
 	// Delete
 	const [deleteItem, setDeleteItem] = useState({
 		itemId: null,

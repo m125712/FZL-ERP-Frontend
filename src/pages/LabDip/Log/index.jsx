@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import RMTransferLog from './RMTransferLog/RMTransferLog';
+import RMTransferLog from './RMTransferLog';
 import RMOrderAgainstLog from './RMOrderAgainstLog';
 
 export default function Index() {

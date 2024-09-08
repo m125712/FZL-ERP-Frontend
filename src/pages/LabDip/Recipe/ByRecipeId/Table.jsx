@@ -1,4 +1,4 @@
-import ReactTableWithTitle from '@/components/Table/ReactTableWithTitle';
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 
 import { DateTime } from '@/ui';
 import { useMemo } from 'react';
@@ -8,21 +8,15 @@ export default function Index({ recipe_entry }) {
 
 	const columns = useMemo(
 		() => [
-			// {
-			// 	accessorKey: 'recipe_name',
-			// 	header: 'Recipe Name',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
-				accessorKey: 'color',
-				header: 'Color',
+				accessorKey: 'material_name',
+				header: 'Dyes',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'Quantity (Liter)',
+				header: 'Quantity (Solution %)',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
@@ -56,7 +50,7 @@ export default function Index({ recipe_entry }) {
 	);
 
 	return (
-		<ReactTableWithTitle
+		<ReactTableTitleOnly
 			title='Details'
 			data={recipe_entry}
 			columns={columns}

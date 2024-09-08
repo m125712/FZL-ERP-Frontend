@@ -157,6 +157,9 @@ export const purchaseQK = {
 	// details
 	details: () => [...purchaseQK.all(), 'details'],
 	detailsByUUID: (uuid) => [...purchaseQK.details(), uuid],
+
+	// log
+	log: () => [...purchaseQK.all(), 'log'],
 };
 
 //Library

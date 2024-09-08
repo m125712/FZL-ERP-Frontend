@@ -18,7 +18,7 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { PURCHASE_ENTRY_NULL, PURCHASE_ENTRY_SCHEMA } from '@util/Schema';
+import { PURCHASE_RECEIVE_NULL, PURCHASE_RECEIVE_SCHEMA } from '@util/Schema';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -59,7 +59,7 @@ export default function Index() {
 		useFieldArray,
 		getValues,
 		watch,
-	} = useRHF(PURCHASE_ENTRY_SCHEMA, PURCHASE_ENTRY_NULL);
+	} = useRHF(PURCHASE_RECEIVE_SCHEMA, PURCHASE_RECEIVE_NULL);
 
 	const isUpdate = purchase_description_uuid !== undefined;
 
@@ -151,7 +151,7 @@ export default function Index() {
 					purchase_description_promise,
 					...purchase_entries_promise,
 				])
-					.then(() => reset(PURCHASE_ENTRY_NULL))
+					.then(() => reset(PURCHASE_RECEIVE_NULL))
 					.then(() => {
 						invalidateMaterialInfo();
 						navigate(`/store/receive/${purchase_description_uuid}`);
@@ -210,7 +210,7 @@ export default function Index() {
 				purchase_description_promise,
 				...purchase_entries_promise,
 			])
-				.then(() => reset(PURCHASE_ENTRY_NULL))
+				.then(() => reset(PURCHASE_RECEIVE_NULL))
 				.then(() => {
 					invalidateMaterialInfo();
 					navigate(`/store/receive/${new_purchase_description_uuid}`);

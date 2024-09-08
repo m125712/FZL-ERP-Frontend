@@ -91,56 +91,99 @@ export default function Index() {
 	const onSubmit = async (data) => {
 		// Update item
 
-		const threadBatchData = {
-			...data,
-			coning_operator: data?.coning_operator,
-			coning_supervisor: data?.coning_supervisor,
-			coning_machines: data?.coning_machines,
-			updated_at: GetDateTime(),
-		};
-		// update /commercial/pi/{uuid}
-		const threadBatchPromise = await updateData.mutateAsync({
-			url: `${threadBatchUrl}/${data?.uuid}`,
-			updatedData: threadBatchData,
-			uuid: orderInfoIds,
-			isOnCloseNeeded: false,
-		});
-
-		// pi entry
-		let updatedThreadBatchPromises = data.batch_entry.map(async (item) => {
-			const updatedData = {
-				...item,
-				coning_production_quantity: item.coning_production_quantity,
-				coning_production_quantity_in_kg:
-					item?.coning_production_quantity_in_kg,
-				updated_at: GetDateTime(),
+		if (getValues('dyeing_created_at') === null) {
+			const threadBatchData = {
+				...data,
+				dyeing_created_at: GetDateTime(),
 			};
-
-			return await updateData.mutateAsync({
-				url: `${threadBatchEntryUrl}/${item?.batch_entry_uuid}`,
-				updatedData: updatedData,
-				uuid: item.batch_entry_uuid,
+			// update /commercial/pi/{uuid}
+			const threadBatchPromise = await updateData.mutateAsync({
+				url: `${threadBatchUrl}/${data?.uuid}`,
+				updatedData: threadBatchData,
+				uuid: orderInfoIds,
 				isOnCloseNeeded: false,
 			});
-		});
 
-		try {
-			await Promise.all([
-				threadBatchPromise,
-				...updatedThreadBatchPromises,
-			])
-				.then(() =>
-					reset(Object.assign({}, DYEING_THREAD_CONNEING_NULL))
-				)
-				.then(() =>
-					navigate(
-						`/dyeing-and-iron/thread-batch/details/${batch_con_uuid}`
+			// pi entry
+			let updatedThreadBatchPromises = data.batch_entry.map(
+				async (item) => {
+					const updatedData = {
+						...item,
+					};
+
+					return await updateData.mutateAsync({
+						url: `${threadBatchEntryUrl}/${item?.batch_entry_uuid}`,
+						updatedData: updatedData,
+						uuid: item.batch_entry_uuid,
+						isOnCloseNeeded: false,
+					});
+				}
+			);
+
+			try {
+				await Promise.all([
+					threadBatchPromise,
+					...updatedThreadBatchPromises,
+				])
+					.then(() =>
+						reset(Object.assign({}, DYEING_THREAD_CONNEING_NULL))
 					)
-				);
-		} catch (err) {
-			console.error(`Error with Promise.all: ${err}`);
+					.then(() =>
+						navigate(
+							`/dyeing-and-iron/thread-batch/details/${batch_con_uuid}`
+						)
+					);
+			} catch (err) {
+				console.error(`Error with Promise.all: ${err}`);
+			}
+			return;
+		} else {
+			const threadBatchData = {
+				...data,
+				dyeing_updated_at: GetDateTime(),
+			};
+			// update /commercial/pi/{uuid}
+			const threadBatchPromise = await updateData.mutateAsync({
+				url: `${threadBatchUrl}/${data?.uuid}`,
+				updatedData: threadBatchData,
+				uuid: orderInfoIds,
+				isOnCloseNeeded: false,
+			});
+
+			// pi entry
+			let updatedThreadBatchPromises = data.batch_entry.map(
+				async (item) => {
+					const updatedData = {
+						...item,
+					};
+
+					return await updateData.mutateAsync({
+						url: `${threadBatchEntryUrl}/${item?.batch_entry_uuid}`,
+						updatedData: updatedData,
+						uuid: item.batch_entry_uuid,
+						isOnCloseNeeded: false,
+					});
+				}
+			);
+
+			try {
+				await Promise.all([
+					threadBatchPromise,
+					...updatedThreadBatchPromises,
+				])
+					.then(() =>
+						reset(Object.assign({}, DYEING_THREAD_CONNEING_NULL))
+					)
+					.then(() =>
+						navigate(
+							`/dyeing-and-iron/thread-batch/details/${batch_con_uuid}`
+						)
+					);
+			} catch (err) {
+				console.error(`Error with Promise.all: ${err}`);
+			}
+			return;
 		}
-		return;
 	};
 
 	const rowClass =
@@ -174,9 +217,6 @@ export default function Index() {
 								'shade Recipe',
 								'order quantity',
 								'quantity',
-								'coning production quantity',
-								'coning production quantity in kg',
-								'Transfer Quantity',
 								'total quantity',
 								'balance quantity',
 								'remarks',
@@ -227,40 +267,6 @@ export default function Index() {
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(`batch_entry[${index}].quantity`)}
-							</td>
-
-							<td className={rowClass}>
-								<Input
-									label={`batch_entry[${index}].coning_production_quantity`}
-									is_title_needed='false'
-									dynamicerror={
-										errors?.batch_entry?.[index]
-											?.coning_production_quantity
-									}
-									register={register}
-								/>
-							</td>
-							<td className={rowClass}>
-								<Input
-									label={`batch_entry[${index}].coning_production_quantity_in_kg`}
-									is_title_needed='false'
-									dynamicerror={
-										errors?.batch_entry?.[index]
-											?.coning_production_quantity_in_kg
-									}
-									register={register}
-								/>
-							</td>
-							<td className={`${rowClass}`}>
-								<Input
-									label={`batch_entry[${index}].transfer_quantity`}
-									is_title_needed='false'
-									dynamicerror={
-										errors?.batch_entry?.[index]
-											?.transfer_quantity
-									}
-									register={register}
-								/>
 							</td>
 
 							<td className={`${rowClass}`}>

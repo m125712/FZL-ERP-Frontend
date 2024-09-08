@@ -7,6 +7,7 @@ import {
 } from '@/state/LabDip';
 
 import {
+	ActionButtons,
 	DynamicField,
 	FormField,
 	Input,
@@ -18,7 +19,7 @@ import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { SHADE_RECIPE_NULL, SHADE_RECIPE_SCHEMA } from '@util/Schema';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
@@ -53,6 +54,7 @@ export default function Index() {
 		useFieldArray,
 		getValues,
 		watch,
+		context,
 	} = useRHF(SHADE_RECIPE_SCHEMA, SHADE_RECIPE_NULL);
 
 	const isUpdate = shade_recipe_uuid !== undefined;
@@ -234,6 +236,19 @@ export default function Index() {
 	// Check if id is valid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 
+	const handelDuplicateDynamicField = useCallback(
+		(index) => {
+			console.log(getValues(`shade_recipe_entry[${index}]`));
+			const item = getValues(`shade_recipe_entry[${index}]`);
+			shadeRecipeAppend({ ...item, uuid: undefined });
+		},
+		[getValues, shadeRecipeAppend]
+	);
+	const handleEnter = (event) => {
+		event.preventDefault();
+		if (Object.keys(errors).length > 0) return;
+	};
+
 	const keyMap = {
 		NEW_ROW: 'alt+n',
 		COPY_LAST_ROW: 'alt+c',
@@ -274,8 +289,8 @@ export default function Index() {
 							title='Details'
 							handelAppend={handleShadeRecipeAppend}
 							tableHead={[
-								'Material',
-								'Quantity',
+								'Dyes',
+								'Quantity(Solution %)',
 								'Remarks',
 								'Action',
 							].map((item) => (
@@ -291,7 +306,7 @@ export default function Index() {
 									<td className={`${rowClass}`}>
 										<FormField
 											label={`shade_recipe_entry[${index}].material_uuid`}
-											title='Material'
+											title='Dyes'
 											is_title_needed='false'
 											dynamicerror={
 												errors?.shade_recipe_entry?.[
@@ -306,7 +321,7 @@ export default function Index() {
 												}) => {
 													return (
 														<ReactSelect
-															placeholder='Select Material'
+															placeholder='Select Dyes'
 															options={material}
 															value={material?.find(
 																(inItem) =>
@@ -336,7 +351,7 @@ export default function Index() {
 									</td>
 
 									<td className={`w-48 ${rowClass}`}>
-										<JoinInput
+										<Input
 											title='quantity'
 											label={`shade_recipe_entry[${index}].quantity`}
 											is_title_needed='false'
@@ -344,15 +359,6 @@ export default function Index() {
 												errors?.shade_recipe_entry?.[
 													index
 												]?.quantity
-											}
-											unit={
-												material?.find(
-													(inItem) =>
-														inItem.value ==
-														getValues(
-															`shade_recipe_entry[${index}].material_uuid`
-														)
-												)?.unit
 											}
 											register={register}
 										/>
@@ -363,19 +369,25 @@ export default function Index() {
 											label={`shade_recipe_entry[${index}].remarks`}
 											is_title_needed='false'
 											dynamicerror={
-												errors?.shade_recipe?.[index]
-													?.remarks
+												errors?.shade_recipe_entry?.[
+													index
+												]?.remarks
 											}
 											register={register}
 										/>
 									</td>
-									<td className={`w-12 ${rowClass} pl-0`}>
-										<RemoveButton
-											className={'justify-center'}
-											onClick={() =>
+									<td
+										className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
+										<ActionButtons
+											duplicateClick={() =>
+												handelDuplicateDynamicField(
+													index
+												)
+											}
+											removeClick={() =>
 												handleShadeRecipeRemove(index)
 											}
-											showButton={
+											showRemoveButton={
 												shadeRecipeField.length > 1
 											}
 										/>

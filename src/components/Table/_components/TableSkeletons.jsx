@@ -1,4 +1,4 @@
-const RowSkeletons = ({ columns }) => {
+const TableSkeletons = ({ columns }) => {
 	return Array.from({ length: 10 }).map((_, index) => (
 		<tr
 			key={index}
@@ -12,4 +12,4 @@ const RowSkeletons = ({ columns }) => {
 	));
 };
 
-export default RowSkeletons;
+export default TableSkeletons;

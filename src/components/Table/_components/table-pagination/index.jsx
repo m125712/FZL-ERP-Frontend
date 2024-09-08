@@ -1,8 +1,9 @@
+import { PaginationButton } from '../../ui';
 import { LeftArrow, RightArrow } from '@/assets/icons';
-import { PaginationButton } from './ui';
-import PaginatedItems from '@/ui/Others/PaginationItems';
+import Paginated from './Paginated';
+import PaginatedButton from './PaginatedButton';
 
-export default function Pagination({
+const TablePagination = ({
 	getState,
 	setPageSize,
 	setPageIndex,
@@ -11,7 +12,7 @@ export default function Pagination({
 	getCanNextPage,
 	nextPage,
 	previousPage,
-}) {
+}) => {
 	const { pageIndex, pageSize } = getState().pagination;
 
 	return (
@@ -37,7 +38,7 @@ export default function Pagination({
 					</div>
 				</div>
 
-				<PaginatedItems
+				<Paginated
 					onChange={(index) => {
 						setPageIndex(index);
 					}}
@@ -47,12 +48,12 @@ export default function Pagination({
 				/>
 
 				<div className='flex gap-4'>
-					<PaginationButton
+					<PaginatedButton
 						onClick={() => previousPage()}
 						disabled={!getCanPreviousPage()}>
 						<LeftArrow className='h-4 w-4 text-primary-content' />
 						<span>Previous</span>
-					</PaginationButton>
+					</PaginatedButton>
 
 					<PaginationButton
 						onClick={() => nextPage()}
@@ -64,4 +65,6 @@ export default function Pagination({
 			</div>
 		</div>
 	);
-}
+};
+
+export default TablePagination;

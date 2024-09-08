@@ -274,6 +274,20 @@ export const SFG_PRODUCTION_LOG_NULL = {
 };
 
 // Purchase
+export const PURCHASE_ENTRY_SCHEMA = {
+	material_uuid: STRING_REQUIRED,
+	quantity: NUMBER_DOUBLE_REQUIRED,
+	price: NUMBER_DOUBLE_REQUIRED,
+	unit: STRING.nullable(),
+	remarks: STRING.nullable(),
+};
+export const PURCHASE_ENTRY_NULL = {
+	material_uuid: null,
+	quantity: null,
+	price: null,
+	unit: null,
+	remarks: null,
+};
 
 // vendor page
 export const VENDOR_SCHEMA = {
@@ -322,10 +336,11 @@ export const PURCHASE_NULL = {
 };
 
 // purchase entry page
-export const PURCHASE_ENTRY_SCHEMA = {
+export const PURCHASE_RECEIVE_SCHEMA = {
 	vendor_uuid: STRING_REQUIRED,
 	is_local: NUMBER_REQUIRED.default(0),
 	lc_number: STRING.nullable(),
+	challan_number: STRING.nullable(),
 	remarks: STRING.nullable(),
 	purchase: yup.array().of(
 		yup.object().shape({
@@ -337,11 +352,12 @@ export const PURCHASE_ENTRY_SCHEMA = {
 	),
 };
 
-export const PURCHASE_ENTRY_NULL = {
+export const PURCHASE_RECEIVE_NULL = {
 	uuid: null,
 	vendor_uuid: null,
 	is_local: null,
 	lc_number: '',
+	challan_number: null,
 	remarks: '',
 	purchase: [
 		{
@@ -384,7 +400,7 @@ export const SHADE_RECIPE_NULL = {
 			uuid: null,
 			shade_recipe_uuid: null,
 			material_uuid: null,
-			quantity: 0,
+			quantity: '',
 			remarks: '',
 			lab_status: 0,
 		},
@@ -575,8 +591,8 @@ export const LAB_RECIPE_SCHEMA = {
 	remarks: STRING.nullable(),
 	recipe_entry: yup.array().of(
 		yup.object().shape({
-			color: STRING_REQUIRED,
-			quantity: NUMBER_REQUIRED,
+			material_uuid: STRING_REQUIRED,
+			quantity: NUMBER_DOUBLE_REQUIRED,
 			remarks: STRING.nullable(),
 		})
 	),
@@ -599,13 +615,13 @@ export const LAB_RECIPE_NULL = {
 
 // * Lab info schema*//
 export const LAB_INFO_SCHEMA = {
-	order_info_uuid: UUID_FK,
+	order_info_uuid: STRING.nullable(),
 	name: STRING_REQUIRED,
 	lab_status: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	remarks: STRING.nullable(),
 	recipe: yup.array().of(
 		yup.object().shape({
-			recipe_uuid: UUID_FK,
+			recipe_uuid: STRING_REQUIRED,
 		})
 	),
 };
@@ -1253,18 +1269,18 @@ export const BANK_NULL = {
 // LC
 export const LC_SCHEMA = {
 	party_uuid: STRING_REQUIRED,
-	file_no: STRING_REQUIRED,
 	lc_number: STRING_REQUIRED,
 	lc_date: STRING_REQUIRED,
 	payment_value: NUMBER_DOUBLE_REQUIRED,
-	payment_date: STRING,
-	ldbc_fdbc: STRING_REQUIRED,
+	payment_date: STRING.nullable(),
+	ldbc_fdbc: STRING_REQUIRED.nullable(),
 	acceptance_date: STRING.nullable(),
 	maturity_date: STRING.nullable(),
 	commercial_executive: STRING_REQUIRED,
 	party_bank: STRING_REQUIRED,
 	production_complete: BOOLEAN_REQUIRED,
 	lc_cancel: BOOLEAN_REQUIRED,
+	document_receive_date: STRING.nullable(), // dev
 	handover_date: STRING.nullable(),
 	shipment_date: STRING.nullable(),
 	expiry_date: STRING.nullable(),
@@ -1282,19 +1298,19 @@ export const LC_SCHEMA = {
 export const LC_NULL = {
 	uuid: null,
 	party_uuid: null,
-	file_no: '',
-	lc_number: '',
-	lc_date: '',
-	payment_value: '',
-	payment_date: '',
-	ldbc_fdbc: '',
+	lc_number: null,
+	lc_date: null,
+	payment_value: 0,
+	payment_date: null,
+	ldbc_fdbc: null,
 	acceptance_date: null,
 	maturity_date: null,
-	commercial_executive: '',
-	party_bank: '',
+	commercial_executive: null,
+	party_bank: null,
 	production_complete: false,
 	lc_cancel: false,
 	handover_date: null,
+	document_receive_date: null,
 	shipment_date: null,
 	expiry_date: null,
 	ud_no: null,
@@ -1304,7 +1320,7 @@ export const LC_NULL = {
 	amd_count: 0,
 	problematical: false,
 	epz: false,
-	remarks: '',
+	remarks: null,
 	pi: [
 		{
 			uuid: null,
@@ -1455,7 +1471,7 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 	buyer_uuid: STRING_REQUIRED,
 	is_sample: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	is_bill: BOOLEAN.transform(handelNumberDefaultValue).default(false),
-	delivery_date: yup.date().required('Delivery Date is required'),
+	delivery_date: yup.date().nullable(),
 	remarks: STRING.nullable(),
 	order_info_entry: yup.array().of(
 		yup.object().shape({
@@ -1502,6 +1518,39 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 			company_price: 0,
 			party_price: 0,
 			remarks: '',
+		},
+	],
+};
+//* Thread Coning Schema*//
+export const THREAD_CONING_SCHEMA = {
+	coning_operator: STRING_REQUIRED,
+	coning_supervisor: STRING_REQUIRED,
+	coning_machines: STRING_REQUIRED,
+	batch_entry: yup.array().of(
+		yup.object().shape({
+			coning_production_quantity: NUMBER_REQUIRED.max(
+				yup.ref('quantity'),
+				'Beyond Max Quantity'
+			),
+			coning_production_quantity_in_kg: NUMBER_REQUIRED,
+			transfer_quantity: NUMBER_REQUIRED.max(
+				yup.ref('quantity'),
+				'Beyond Max Quantity'
+			),
+		})
+	),
+};
+
+export const THREAD_CONING_NULL = {
+	uuid: null,
+	coning_operator: '',
+	coning_supervisor: '',
+	coning_machines: '',
+	batch_entry: [
+		{
+			coning_production_quantity: null,
+			coning_production_quantity_in_kg: null,
+			transfer_quantity: null,
 		},
 	],
 };
@@ -1609,10 +1658,6 @@ export const DYEING_THREAD_BATCH_SCHEMA = {
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
 		yup.object().shape({
-			quantity: NUMBER.nullable() // Allows the field to be null
-				.transform((value, originalValue) =>
-					String(originalValue).trim() === '' ? null : value
-				),
 			batch_remarks: STRING.nullable(),
 		})
 	),
@@ -1679,6 +1724,7 @@ export const DYEING_THREAD_BATCH_ENTRY_TRANSFER_NULL = {
 
 // * Dyeing Thread Batch Dyeing schema*//
 export const DYEING_THREAD_BATCH_DYEING_SCHEMA = {
+	yarn_quantity: NUMBER.moreThan(0),
 	dyeing_operator: STRING_REQUIRED,
 	reason: STRING_REQUIRED,
 	category: STRING_REQUIRED,

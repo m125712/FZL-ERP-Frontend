@@ -54,7 +54,7 @@ export default function Index() {
 									)
 								}>
 								<Plus className='size-4' />
-								<span>Conneing</span>
+								<span>Dyeing</span>
 							</button>
 						</div>
 					);
@@ -85,21 +85,6 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'yarn_actions',
-				header: 'Yarn',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
-				width: 'w-12',
-				cell: (info) => (
-					<button
-						className='btn btn-ghost btn-sm size-9 rounded-full p-1'
-						onClick={() => handelYarn(info.row.index)}>
-						<Edit className='size-6' />
-					</button>
-				),
-			},
-			{
 				accessorKey: 'dyeing_actions',
 				header: 'Dyeing',
 				enableColumnFilter: false,
@@ -119,9 +104,6 @@ export default function Index() {
 				header: 'Drying Completed',
 				enableColumnFilter: false,
 				cell: (info) => {
-					console.log({
-						is_drying_complete: info.getValue(),
-					});
 					return (
 						<input
 							onChange={() =>

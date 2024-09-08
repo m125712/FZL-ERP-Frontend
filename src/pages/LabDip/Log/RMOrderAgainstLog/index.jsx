@@ -23,7 +23,7 @@ export default function Index() {
 		useMaterialTrxAgainstOrderDescription();
 
 	const info = new PageInfo(
-		'RM Order Against LabDip Log',
+		'RM Order Against LabDip',
 		url,
 		'lab_dip__log'
 	);

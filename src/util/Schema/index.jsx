@@ -429,7 +429,7 @@ export const PROPERTIES_SCHEMA = {
 	item_for: STRING_REQUIRED,
 	type: STRING_REQUIRED,
 	name: STRING_REQUIRED,
-	short_name: STRING.nullable(),
+	short_name: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
@@ -457,7 +457,11 @@ export const ORDER_INFO_SCHEMA = {
 	is_cash: BOOLEAN_REQUIRED,
 	status: BOOLEAN_REQUIRED.default(false),
 	marketing_uuid: UUID_FK.required('Required'),
-	merchandiser_uuid: UUID_FK.required('Required'),
+	merchandiser_uuid: UUID_FK.when('is_sample', {
+		is: true,
+		then: (Schema) => Schema.nullable(),
+		otherwise: (Schema) => Schema.required('Required'),
+	}),
 	factory_uuid: UUID_FK.required('Required'),
 	party_uuid: UUID_FK.required('Required'),
 	buyer_uuid: UUID_FK.required('Required'),
@@ -484,39 +488,44 @@ export const ORDER_INFO_NULL = {
 };
 
 export const ORDER_SCHEMA = {
+	// * item section
 	order_info_uuid: UUID_REQUIRED,
 	item: UUID_REQUIRED,
 	zipper_number: UUID_REQUIRED,
+	end_type: UUID_REQUIRED,
+	lock_type: UUID_REQUIRED,
 	teeth_color: UUID_REQUIRED,
-	coloring_type: UUID_REQUIRED,
 	special_requirement: JSON_STRING_REQUIRED,
 	description: STRING.nullable(),
 	remarks: STRING.nullable(),
 
-	// slider
-	slider_starting_section: STRING_REQUIRED.default('---'),
-	end_type: UUID_REQUIRED,
-	hand: UUID_FK,
-	lock_type: UUID_REQUIRED,
-	slider: UUID_REQUIRED,
-	slider_body_shape: UUID_FK,
-	slider_link: UUID_FK,
-
+	// * slider section
 	// puller
 	puller_type: UUID_REQUIRED,
 	puller_color: UUID_REQUIRED,
 	puller_link: UUID_FK,
 
+	coloring_type: UUID.nullable(),
+
+	// slider
+	slider: UUID.nullable(),
+	slider_body_shape: UUID_FK,
+	slider_link: UUID_FK,
+
+	slider_starting_section: STRING_REQUIRED.default('---'),
+
+	// stopper
+	top_stopper: UUID_FK,
+	bottom_stopper: UUID_FK,
+
+	hand: UUID_FK,
+
 	// logo
 	logo_type: UUID_FK,
 	is_logo_body: BOOLEAN_DEFAULT_VALUE(false),
 	is_logo_puller: BOOLEAN_DEFAULT_VALUE(false),
-	is_slider_provided: BOOLEAN_DEFAULT_VALUE(false),
 
-	// stopper
-	stopper_type: UUID_REQUIRED,
-	top_stopper: UUID_FK,
-	bottom_stopper: UUID_FK,
+	is_slider_provided: BOOLEAN_DEFAULT_VALUE(false),
 
 	// garments
 	end_user: UUID_FK,
@@ -1612,11 +1621,21 @@ export const DYEING_BATCH_SCHEMA = {
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
 		yup.object().shape({
-			quantity: NUMBER.nullable() // Allows the field to be null
-				.transform((value, originalValue) =>
-					String(originalValue).trim() === '' ? null : value
-				) // Transforms empty strings to null
-				.max(yup.ref('balance_quantity'), 'Beyond Max Quantity'),
+			is_checked: yup.boolean().default(false),
+			quantity: yup.number().when('is_checked', {
+				is: true,
+				then: (Schema) =>
+					Schema.typeError('Must be a number')
+						.required('Quantity is required')
+						.max(
+							yup.ref('order_quantity'),
+							'Beyond Order Quantity'
+						),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
 			batch_remarks: STRING.nullable(),
 		})
 	),
@@ -1626,6 +1645,7 @@ export const DYEING_BATCH_NULL = {
 	remarks: '',
 	batch_entry: [
 		{
+			is_checked: false,
 			quantity: null,
 			batch_remarks: '',
 		},
@@ -1664,10 +1684,11 @@ export const DYEING_BATCH_PRODUCTION_SCHEMA = {
 				)
 				.max(yup.ref('quantity'), 'Beyond Batch Quantity'), // Transforms empty strings to null
 			//
-			production_quantity_in_kg: NUMBER.nullable().transform(
-				(value, originalValue) =>
+			production_quantity_in_kg: NUMBER.nullable()
+				.transform((value, originalValue) =>
 					String(originalValue).trim() === '' ? null : value
-			),
+				)
+				.max(yup.ref('quantity'), 'Beyond Batch Quantity'),
 			batch_production_remarks: STRING.nullable(),
 		})
 	),
@@ -1813,7 +1834,7 @@ export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 	name: STRING_REQUIRED, //
 	item: STRING_REQUIRED, //
 	zipper_number: STRING_REQUIRED, //
-	end_type: STRING_REQUIRED, //
+	end_type: STRING, //
 	puller_type: STRING, //
 	logo_type: STRING, //
 	slider_body_shape: STRING, //
@@ -1831,6 +1852,8 @@ export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 	is_u_top: BOOLEAN,
 	is_box_pin: BOOLEAN,
 	is_two_way_pin: BOOLEAN,
+	is_logo_body: BOOLEAN_DEFAULT_VALUE(false),
+	is_logo_puller: BOOLEAN_DEFAULT_VALUE(false),
 };
 
 export const SLIDER_DIE_CASTING_STOCK_NULL = {
@@ -1858,6 +1881,8 @@ export const SLIDER_DIE_CASTING_STOCK_NULL = {
 	is_u_top: false,
 	is_box_pin: false,
 	is_two_way_pin: false,
+	is_logo_body: false,
+	is_logo_puller: false,
 };
 
 // "uuid": "igD0v9DIJQhJeet",

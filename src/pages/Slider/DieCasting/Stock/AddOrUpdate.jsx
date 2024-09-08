@@ -3,12 +3,13 @@ import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useOtherOrderPropertiesByTypeName } from '@/state/Other';
 import { useSliderDieCastingStock } from '@/state/Slider';
-import { CheckBox, FormField, Input, ReactSelect, Textarea } from '@/ui';
+import { CheckBox, FormField, Input, ReactSelect, Textarea, Radio } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
 	SLIDER_DIE_CASTING_STOCK_SCHEMA,
 	SLIDER_DIE_CASTING_STOCK_NULL,
 } from '@util/Schema';
+import { DevTool } from '@hookform/devtools';
 
 export default function Index({
 	modalId = '',
@@ -71,6 +72,8 @@ export default function Index({
 				is_u_top: data.is_u_top === true ? 1 : 0,
 				is_box_pin: data.is_box_pin === true ? 1 : 0,
 				is_two_way_pin: data.is_two_way_pin === true ? 1 : 0,
+				is_logo_body: data.is_logo_body === true ? 1 : 0,
+				is_logo_puller: data.is_logo_puller === true ? 1 : 0,
 				updated_at: GetDateTime(),
 			};
 
@@ -94,6 +97,8 @@ export default function Index({
 			is_u_top: data.is_u_top === true ? 1 : 0,
 			is_box_pin: data.is_box_pin === true ? 1 : 0,
 			is_two_way_pin: data.is_two_way_pin === true ? 1 : 0,
+			is_logo_body: data.is_logo_body === true ? 1 : 0,
+			is_logo_puller: data.is_logo_puller === true ? 1 : 0,
 			created_at: GetDateTime(),
 			uuid: nanoid(),
 		};
@@ -106,6 +111,8 @@ export default function Index({
 			onClose,
 		});
 	};
+
+	console.log(getValues());
 
 	return (
 		<AddModal
@@ -129,9 +136,9 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Item'
 									options={item}
-									value={item?.find(
+									value={item?.filter(
 										(item) =>
-											item.value === getValues('item')
+											item.value == getValues('item')
 									)}
 									onChange={(e) => onChange(e.value)}
 									// isDisabled={order_info_id !== undefined}
@@ -153,9 +160,9 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Zipper Number'
 									options={zipper_number}
-									value={zipper_number?.find(
-										(zipper_number) =>
-											zipper_number.value ==
+									value={zipper_number?.filter(
+										(item) =>
+											item.value ==
 											getValues('zipper_number')
 									)}
 									onChange={(e) => onChange(e.value)}
@@ -178,7 +185,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select End Type'
 									options={end_type}
-									value={end_type?.find(
+									value={end_type?.filter(
 										(end_type) =>
 											end_type.value ==
 											getValues('end_type')
@@ -202,7 +209,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Puller Type'
 									options={puller_type}
-									value={puller_type?.find(
+									value={puller_type?.filter(
 										(puller_type) =>
 											puller_type.value ==
 											getValues('puller_type')
@@ -224,7 +231,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Logo Type'
 									options={logo_type}
-									value={logo_type?.find(
+									value={logo_type?.filter(
 										(logo_type) =>
 											logo_type.value ==
 											getValues('logo_type')
@@ -252,7 +259,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select body shape'
 									options={slider_body_shape}
-									value={slider_body_shape?.find(
+									value={slider_body_shape?.filter(
 										(item) =>
 											item.value ==
 											getValues('slider_body_shape')
@@ -277,7 +284,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Puller Link'
 									options={puller_link}
-									value={puller_link?.find(
+									value={puller_link?.filter(
 										(item) =>
 											item.value ==
 											getValues('puller_link')
@@ -290,36 +297,30 @@ export default function Index({
 					/>
 				</FormField>
 
-				<FormField label='stopper_type' title='Stopper' errors={errors}>
-					<Controller
-						name={'stopper_type'}
-						control={control}
-						render={({ field: { onChange } }) => {
-							return (
-								<ReactSelect
-									placeholder='Select Hand'
-									options={stopper_type}
-									value={stopper_type?.find(
-										(stopper_type) =>
-											stopper_type.value ==
-											getValues('stopper_type')
-									)}
-									onChange={(e) => onChange(e.value)}
-									// isDisabled={order_info_id !== undefined}
-								/>
-							);
-						}}
+				<div className='mt-6 flex items-center gap-1 text-sm'>
+					<CheckBox
+						label='is_logo_body'
+						title='Body'
+						height='h-[2.9rem]'
+						defaultChecked={getValues('is_logo_body')}
+						className={
+							'w-full rounded border border-primary/30 bg-primary/5 px-2'
+						}
+						{...{ register, errors }}
 					/>
-				</FormField>
-			</div>
 
-			{/* REMARKS */}
-			<Textarea
-				label='remarks'
-				placeholder='Enter remarks'
-				rows={3}
-				{...{ register, errors }}
-			/>
+					<CheckBox
+						label='is_logo_puller'
+						title='Puller'
+						height='h-[2.9rem]'
+						defaultChecked={getValues('is_logo_puller')}
+						className={
+							'w-full rounded border border-primary/30 bg-primary/5 px-2'
+						}
+						{...{ register, errors }}
+					/>
+				</div>
+			</div>
 
 			{/* IS BODY, IS PULLER, IS CAP, IS LINK */}
 			<div className='mt-2 grid grid-cols-2 gap-4 md:grid-cols-4'>
@@ -406,8 +407,14 @@ export default function Index({
 					{...{ register, errors }}
 				/>
 			</div>
-
-			{/* <DevTool control={control} /> */}
+			{/* REMARKS */}
+			<Textarea
+				label='remarks'
+				placeholder='Enter remarks'
+				rows={3}
+				{...{ register, errors }}
+			/>
+			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);
 }

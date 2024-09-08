@@ -22,6 +22,18 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'order_number',
+				header: 'O/N',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'item_description',
+				header: 'Item Description',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'item_name',
 				header: 'Item',
 				enableColumnFilter: false,
@@ -71,6 +83,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
 			{
 				accessorKey: 'end_type_name',
 				header: 'End Type',

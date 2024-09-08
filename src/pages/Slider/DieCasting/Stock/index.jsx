@@ -120,7 +120,7 @@ export default function Index() {
 			// 	cell: (info) => info.getValue(),
 			// },
 			{
-				accessorKey: 'zipper_name',
+				accessorKey: 'zipper_number_name',
 				header: 'Zipper',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),

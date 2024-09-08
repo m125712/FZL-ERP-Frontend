@@ -1,20 +1,12 @@
-import { DeleteModal, ProceedModal } from '@/components/Modal';
+import { ProceedModal } from '@/components/Modal';
 import {
 	useFetchForRhfResetForOrder,
 	useFetchForRhfResetForBatchProduct,
-	usePostFunc,
 	useRHF,
-	useFetch,
-	useUpdateFunc,
 	useFetchForRhfResetForPlanning,
 } from '@/hooks';
 import ReactTable from '@/components/Table';
-import {
-	CheckBoxWithoutLabel,
-	DynamicDeliveryField,
-	Input,
-	Textarea,
-} from '@/ui';
+import { CheckBoxWithoutLabel, Input, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -27,19 +19,17 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useDyeingBatch } from '@/state/Dyeing';
 import nanoid from '@/lib/nanoid';
 import Header from './Header';
+import { ShowLocalToast } from '@/components/Toast';
 
 // UPDATE IS WORKING
 export default function Index() {
-	const { data, url, updateData, postData, deleteData, isLoading } =
-		useDyeingBatch();
+	const { updateData, postData } = useDyeingBatch();
 	const { batch_uuid, batch_prod_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
 	const isUpdate = batch_uuid !== undefined;
-	const [orderInfoIds, setOrderInfoIds] = useState({});
-	const [proceed, setProceed] = useState(false);
 
 	const {
 		register,
@@ -59,13 +49,6 @@ export default function Index() {
 		control,
 		name: 'batch_entry',
 	});
-
-	const [deleteItem, setDeleteItem] = useState({
-		itemId: null,
-		itemName: null,
-	});
-
-	const onClose = () => reset(DYEING_BATCH_PRODUCTION_NULL);
 
 	// * Fetch initial data
 	isUpdate
@@ -175,7 +158,10 @@ export default function Index() {
 		});
 
 		if (batch_entry.length === 0) {
-			alert('Select at least one item to proceed.');
+			ShowLocalToast({
+				type: 'warning',
+				message: 'Select at least one item to proceed.',
+			});
 		} else {
 			let promises = [
 				...batch_entry.map(async (item) => {
@@ -222,17 +208,18 @@ export default function Index() {
 
 	// Check if order_number is valid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
-	const rowClass =
-		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	useEffect(() => {
 		if (isAllChecked || isSomeChecked) {
 			return BatchEntryField.forEach((item, index) => {
-				setValue(`batch_entry[${index}].is_checked`, true);
+				if (isAllChecked) {
+					setValue(`batch_entry[${index}].is_checked`, true);
+				}
 			});
 		}
 		if (!isAllChecked) {
 			return BatchEntryField.forEach((item, index) => {
+				setValue('is_all_checked', false);
 				setValue(`batch_entry[${index}].is_checked`, false);
 			});
 		}
@@ -251,6 +238,7 @@ export default function Index() {
 				isSomeChecked = true;
 			} else {
 				isEveryChecked = false;
+				setValue('is_all_checked', false);
 			}
 
 			if (isSomeChecked && !isEveryChecked) {
@@ -411,6 +399,7 @@ export default function Index() {
 		[isAllChecked, isSomeChecked, BatchEntryField, register, errors]
 	);
 
+	console.log(getValues());
 	return (
 		<div>
 			<form
@@ -442,10 +431,7 @@ export default function Index() {
 			</form>
 
 			<Suspense>
-				<ProceedModal
-					modalId={'proceed_modal'}
-					setProceed={setProceed}
-				/>
+				<ProceedModal modalId={'proceed_modal'} />
 			</Suspense>
 			<DevTool control={control} placement='top-left' />
 		</div>

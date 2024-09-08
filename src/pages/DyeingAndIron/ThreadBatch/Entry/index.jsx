@@ -301,17 +301,19 @@ export default function Index() {
 	useEffect(() => {
 		if (isAllChecked || isSomeChecked) {
 			return BatchEntryField.forEach((item, index) => {
-				setValue(`batch_entry[${index}].is_checked`, true);
+				if (isAllChecked) {
+					setValue(`batch_entry[${index}].is_checked`, true);
+				}
 			});
 		}
 		if (!isAllChecked) {
 			return BatchEntryField.forEach((item, index) => {
+				setValue('is_all_checked', false);
 				setValue(`batch_entry[${index}].is_checked`, false);
 			});
 		}
 	}, [isAllChecked]);
 
-	// Todo: fix this
 	const handleRowChecked = (e, index) => {
 		const isChecked = e.target.checked;
 		setValue(`batch_entry[${index}].is_checked`, isChecked);
@@ -324,6 +326,7 @@ export default function Index() {
 				isSomeChecked = true;
 			} else {
 				isEveryChecked = false;
+				setValue('is_all_checked', false);
 			}
 
 			if (isSomeChecked && !isEveryChecked) {

@@ -1,24 +1,10 @@
-import { useFetch } from '@/hooks';
-import {
-	CheckBox,
-	FormField,
-	Input,
-	ReactSelect,
-	SectionEntryBody,
-	Textarea,
-} from '@/ui';
+import { SectionEntryBody, Textarea } from '@/ui';
 
-export default function Header({
-	register,
-	errors,
-	control,
-	getValues,
-	Controller,
-}) {
+export default function Header({ register, errors }) {
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody title='Batch'>
-				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<Textarea label='remarks' {...{ register, errors }} />
 				</div>
 			</SectionEntryBody>

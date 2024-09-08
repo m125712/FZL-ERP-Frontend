@@ -15,17 +15,17 @@ import { DYEING_BATCH_NULL, DYEING_BATCH_SCHEMA } from '@util/Schema';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
+import { ShowLocalToast } from '@/components/Toast';
 
 // UPDATE IS WORKING
 export default function Index() {
-	const { data, url, updateData, postData } = useDyeingBatch();
+	const { url, updateData, postData } = useDyeingBatch();
 	const { batch_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
 	const isUpdate = batch_uuid !== undefined;
-	const [orderInfoIds, setOrderInfoIds] = useState({});
 	const [proceed, setProceed] = useState(false);
 	const [batchData, setBatchData] = useState(null);
 	const [batchEntry, setBatchEntry] = useState(null);
@@ -48,13 +48,6 @@ export default function Index() {
 		control,
 		name: 'batch_entry',
 	});
-
-	const [deleteItem, setDeleteItem] = useState({
-		itemId: null,
-		itemName: null,
-	});
-
-	const onClose = () => reset(DYEING_BATCH_NULL);
 
 	// * Fetch initial data
 	isUpdate
@@ -84,7 +77,10 @@ export default function Index() {
 				}));
 
 			if (batch_entry_updated.length === 0) {
-				alert('Select at least one item to proceed.');
+				ShowLocalToast({
+					type: 'warning',
+					message: 'Select at least one item to proceed.',
+				});
 			} else {
 				await updateData.mutateAsync({
 					url: `/zipper/batch/${batch_data_updated?.uuid}`,
@@ -109,8 +105,6 @@ export default function Index() {
 					)
 					.catch((err) => console.log(err));
 			}
-
-			// navigate(`/dyeing-and-iron/planning-sno/details/${weeks}`);
 
 			return;
 		}
@@ -139,7 +133,10 @@ export default function Index() {
 		setBatchEntry(batch_entry); // * use for modal
 
 		if (batch_entry.length === 0) {
-			alert('Select at least one item to proceed.');
+			ShowLocalToast({
+				type: 'warning',
+				message: 'Select at least one item to proceed.',
+			});
 		} else {
 			if (
 				// * check if all colors are same
@@ -181,7 +178,7 @@ export default function Index() {
 		return;
 	};
 
-	// * useEffect for modal procees submit
+	// * useEffect for modal process submit
 	useEffect(() => {
 		const proceedSubmit = async () => {
 			await postData.mutateAsync({
@@ -216,23 +213,25 @@ export default function Index() {
 
 	// Check if order_number is valid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
-	const rowClass =
-		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
+	// * check box logic
 	useEffect(() => {
 		if (isAllChecked || isSomeChecked) {
 			return BatchEntryField.forEach((item, index) => {
-				setValue(`batch_entry[${index}].is_checked`, true);
+				if (isAllChecked) {
+					setValue(`batch_entry[${index}].is_checked`, true);
+				}
 			});
 		}
 		if (!isAllChecked) {
 			return BatchEntryField.forEach((item, index) => {
+				setValue('is_all_checked', false);
 				setValue(`batch_entry[${index}].is_checked`, false);
 			});
 		}
 	}, [isAllChecked]);
 
-	// Todo: fix this
+
 	const handleRowChecked = (e, index) => {
 		const isChecked = e.target.checked;
 		setValue(`batch_entry[${index}].is_checked`, isChecked);
@@ -245,6 +244,7 @@ export default function Index() {
 				isSomeChecked = true;
 			} else {
 				isEveryChecked = false;
+				setValue('is_all_checked', false);
 			}
 
 			if (isSomeChecked && !isEveryChecked) {
@@ -371,6 +371,9 @@ export default function Index() {
 		],
 		[isAllChecked, isSomeChecked, BatchEntryField, register, errors]
 	);
+
+	console.log(isAllChecked);
+	console.log(getValues());
 
 	return (
 		<div>

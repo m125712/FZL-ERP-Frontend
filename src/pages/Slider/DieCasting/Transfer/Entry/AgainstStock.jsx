@@ -16,7 +16,7 @@ import {
 import { DevTool } from '@hookform/devtools';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TableNoData from '@/components/Table/_components/TableNoData';
+import TableNoData from '@/components/Table/_components/TableNoDataStock';
 
 const getBadges = (index, getValues) => {
 	const badges = [
@@ -74,6 +74,7 @@ const AgainstStock = () => {
 		useFieldArray,
 		getValues,
 		setValue,
+		Controller,
 		watch,
 		reset,
 	} = useRHF(
@@ -100,6 +101,7 @@ const AgainstStock = () => {
 				created_at,
 			}));
 
+		console.log(batch_entry);
 		if (batch_entry.length === 0) {
 			ShowLocalToast({
 				type: 'error',
@@ -107,7 +109,38 @@ const AgainstStock = () => {
 			});
 		} else {
 			// console.log(batch_entry);
+			if (data.order_description_uuid) {
+				let promises = [
+					...batch_entry.map(
+						async (item) =>
+							await postData.mutateAsync({
+								url: '/slider/die-casting-transaction',
+								newData: {
+									...item,
+									stock_uuid: data.order_description_uuid,
+									trx_quantity: item.quantity,
+									type: 'body',
+								},
+								isOnCloseNeeded: false,
+							})
+					),
+				];
 
+				await Promise.all(promises)
+					.then(() => {
+						reset(
+							Object.assign(
+								{},
+								SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_NULL
+							)
+						);
+						invalidateQuery();
+						navigate(`/slider/die-casting/transfer`);
+					})
+					.catch((err) => console.error(err));
+
+				return;
+			}
 			let promises = [
 				...batch_entry.map(
 					async (item) =>
@@ -131,6 +164,7 @@ const AgainstStock = () => {
 					navigate(`/slider/die-casting/transfer`);
 				})
 				.catch((err) => console.error(err));
+
 			return;
 		}
 		return;
@@ -146,11 +180,14 @@ const AgainstStock = () => {
 	useEffect(() => {
 		if (isAllChecked || isSomeChecked) {
 			return stockFields.forEach((item, index) => {
-				setValue(`stocks[${index}].is_checked`, true);
+				if (isAllChecked) {
+					setValue(`stocks[${index}].is_checked`, true);
+				}
 			});
 		}
 		if (!isAllChecked) {
 			return stockFields.forEach((item, index) => {
+				setValue('is_all_checked', false);
 				setValue(`stocks[${index}].is_checked`, false);
 			});
 		}
@@ -168,6 +205,7 @@ const AgainstStock = () => {
 				isSomeChecked = true;
 			} else {
 				isEveryChecked = false;
+				setValue('is_all_checked', false);
 			}
 
 			if (isSomeChecked && !isEveryChecked) {
@@ -189,7 +227,15 @@ const AgainstStock = () => {
 			onSubmit={handleSubmit(onSubmit)}
 			noValidate
 			className='flex flex-col gap-6'>
-			{/* <Header errors={errors} register={register} /> */}
+			<Header
+				{...{
+					register,
+					errors,
+					control,
+					getValues,
+					Controller,
+				}}
+			/>
 			<DynamicField
 				title={`Entry Details`}
 				tableHead={

@@ -1,14 +1,16 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
+import cn from '@/lib/cn';
 import { useLabDipRecipe } from '@/state/LabDip';
 import { EditDelete, LinkWithCopy, StatusButton, UserName } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Index() {
-	const { data, isLoading, isError, url } = useLabDipRecipe();
+	const { data, isLoading, isError, url, updateData } = useLabDipRecipe();
 	const navigate = useNavigate();
 	const info = new PageInfo('Lab Dip/Recipe', url, 'lab_dip__recipe');
 	const haveAccess = useAccess('lab_dip__recipe');
@@ -28,6 +30,23 @@ export default function Index() {
 							uri='/lab-dip/recipe/details'
 						/>
 					);
+				},
+			},
+			{
+				accessorKey: 'info_id',
+				header: 'Info ID',
+				width: 'w-12',
+				cell: (info) => {
+					const { lab_dip_info_uuid } = info.row.original;
+					if (lab_dip_info_uuid) {
+						return (
+							<LinkWithCopy
+								title={info.getValue()}
+								id={lab_dip_info_uuid}
+								uri='/lab-dip/info/details'
+							/>
+						);
+					}
 				},
 			},
 			{
@@ -53,17 +72,40 @@ export default function Index() {
 				accessorKey: 'approved',
 				header: 'Approved',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-sm' value={info.getValue()} />
-				),
+				cell: (info) => {
+					return (
+						<input
+							onChange={() =>
+								handelApprovedStatusChange(info.row.index)
+							}
+							checked={info.getValue() === 1}
+							type='checkbox'
+							className={cn(
+								'toggle toggle-md checked:toggle-accent'
+							)}
+							defaultChecked
+						/>
+					);
+				},
 			},
+
 			{
 				accessorKey: 'status',
 				header: 'Status',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-sm' value={info.getValue()} />
-				),
+				cell: (info) => {
+					return (
+						<input
+							onChange={() => handelStatusChange(info.row.index)}
+							checked={info.getValue() === 1}
+							type='checkbox'
+							className={cn(
+								'toggle toggle-md checked:toggle-accent'
+							)}
+							defaultChecked
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'action',
@@ -99,6 +141,26 @@ export default function Index() {
 		const { recipe_id, uuid } = data[idx];
 
 		navigate(`/lab-dip/recipe/update/${recipe_id}/${uuid}`);
+	};
+	const handelApprovedStatusChange = async (idx) => {
+		await updateData.mutateAsync({
+			url: `${url}/${data[idx]?.uuid}`,
+			updatedData: {
+				approved: data[idx]?.approved === 1 ? 0 : 1,
+				updated_at: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
+	};
+	const handelStatusChange = async (idx) => {
+		await updateData.mutateAsync({
+			url: `${url}/${data[idx]?.uuid}`,
+			updatedData: {
+				status: data[idx]?.status === 1 ? 0 : 1,
+				updated_at: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
 	};
 
 	if (isLoading)

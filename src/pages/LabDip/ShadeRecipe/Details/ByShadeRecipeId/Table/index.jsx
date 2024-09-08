@@ -8,13 +8,13 @@ export default function Index({ shade_recipe_entry }) {
 		() => [
 			{
 				accessorKey: 'material_name',
-				header: 'Material',
+				header: 'Dyes',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'Quantity',
+				header: 'Quantity (Solution %)',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()).toFixed(3),
 			},

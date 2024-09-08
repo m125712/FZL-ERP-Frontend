@@ -31,6 +31,24 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'order_number',
+				header: 'Order ID',
+				width: 'w-8',
+				cell: (info) => {
+					const { order_number } = info.row.original;
+					const { order_info_uuid } = info.row.original;
+					if (order_info_uuid) {
+						return (
+							<LinkWithCopy
+								title={info.getValue()}
+								id={order_number}
+								uri='/order/details'
+							/>
+						);
+					}
+				},
+			},
+			{
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,

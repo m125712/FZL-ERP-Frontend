@@ -47,7 +47,7 @@ export {
 	PHONE_NUMBER,
 	PHONE_NUMBER_REQUIRED,
 	STRING,
-	STRING_REQUIRED
+	STRING_REQUIRED,
 };
 
 // Library
@@ -384,7 +384,7 @@ export const SHADE_RECIPE_NULL = {
 			uuid: null,
 			shade_recipe_uuid: null,
 			material_uuid: null,
-			quantity: 0,
+			quantity: '',
 			remarks: '',
 			lab_status: 0,
 		},
@@ -565,8 +565,8 @@ export const LAB_RECIPE_SCHEMA = {
 	remarks: STRING.nullable(),
 	recipe_entry: yup.array().of(
 		yup.object().shape({
-			color: STRING_REQUIRED,
-			quantity: NUMBER_REQUIRED,
+			material_uuid: STRING_REQUIRED,
+			quantity: NUMBER_DOUBLE_REQUIRED,
 			remarks: STRING.nullable(),
 		})
 	),
@@ -589,7 +589,7 @@ export const LAB_RECIPE_NULL = {
 
 // * Lab info schema*//
 export const LAB_INFO_SCHEMA = {
-	order_info_uuid: STRING_REQUIRED,
+	order_info_uuid: STRING.nullable(),
 	name: STRING_REQUIRED,
 	lab_status: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	remarks: STRING.nullable(),

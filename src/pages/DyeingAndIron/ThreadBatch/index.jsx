@@ -104,9 +104,6 @@ export default function Index() {
 				header: 'Drying Completed',
 				enableColumnFilter: false,
 				cell: (info) => {
-					console.log({
-						is_drying_complete: info.getValue(),
-					});
 					return (
 						<input
 							onChange={() =>

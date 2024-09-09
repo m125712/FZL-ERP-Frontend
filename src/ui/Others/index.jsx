@@ -10,6 +10,7 @@ import { DateTime } from './DateTime';
 import { DepartmentShow, UserName } from './DepartmentShow';
 import { ItemName } from './ItemName';
 import { LinkCopyOnly, LinkOnly, LinkWithCopy } from './LinkWithCopy';
+import { Progress } from './Progress';
 import ReactSelect from './ReactSelect';
 import SectionEntryBody from './SectionEntryBody';
 import SectionName from './SectionName';
@@ -25,6 +26,7 @@ export {
 	LinkOnly,
 	LinkWithCopy,
 	Pdf,
+	Progress,
 	ReactSelect,
 	ResetPassword,
 	SectionEntryBody,

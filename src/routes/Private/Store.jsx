@@ -33,20 +33,6 @@ export const StoreRoutes = [
 			'click_action',
 		],
 	},
-	// {
-	// 	id: 30,
-	// 	name: 'Stock Full',
-	// 	path: '/store/stock',
-	// 	element: Stock,
-	// 	type: 'store',
-	// 	page_name: 'store__stock_full',
-	// 	actions: [
-	// 		'read',
-	// 		'click_name',
-	// 		'click_action',
-	// 		'click_trx_against_order',
-	// 	],
-	// },
 	{
 		id: 301,
 		name: 'Log',

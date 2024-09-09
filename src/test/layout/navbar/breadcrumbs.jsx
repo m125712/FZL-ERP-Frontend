@@ -1,6 +1,23 @@
 import { Link, useResolvedPath } from 'react-router-dom';
 import { flatRoutes } from '../../routes/routes';
 import matchUrl from '@/util/matchUrl';
+import { motion } from 'framer-motion';
+
+const variants = {
+	animate: {
+		x: 0,
+		opacity: 1,
+		transition: {
+			duration: 0.3,
+			ease: 'easeOut',
+		},
+	},
+
+	initial: {
+		x: -50,
+		opacity: 0,
+	},
+};
 
 const Breadcrumbs = () => {
 	const pathName = useResolvedPath().pathname;
@@ -29,7 +46,7 @@ const Breadcrumbs = () => {
 
 	const matchedRoutes = generateRoutes(paths)?.map((route) => {
 		const matchedRoute = flatRoutes.find((item) =>
-			matchUrl(item.path, route)
+			matchUrl(item?.path, route)
 		);
 
 		return {
@@ -49,13 +66,24 @@ const Breadcrumbs = () => {
 					matchedRoutes
 						.slice(0, matchedRoutes.length - 1)
 						.map((route, index) => (
-							<li key={index}>
+							<motion.li
+								key={index}
+								variants={variants}
+								initial='initial'
+								animate='animate'>
 								<Link to={route?.path}>{route?.name}</Link>
-							</li>
+							</motion.li>
 						))}
 
 				{matchedRoutes?.length > 0 && (
-					<li>{matchedRoutes[matchedRoutes.length - 1].name}</li>
+					<motion.li
+						key={matchedRoutes.length - 1}
+						variants={variants}
+						initial='initial'
+						animate='animate'
+						className='font-medium'>
+						{matchedRoutes[matchedRoutes.length - 1].name}
+					</motion.li>
 				)}
 			</ul>
 		</div>

@@ -1,20 +1,25 @@
-import { About, Contact, Home } from '@/test/pages';
+import { lazy } from 'react';
+
+const Login = lazy(() => import('@pages/Public/Login'));
+const NotFound = lazy(() => import('@pages/Public/NoEntry/notFound'));
+const NoAccess = lazy(() => import('@pages/Public/NoEntry/noAccess'));
 
 const publicRoutes = [
 	{
-		path: '/',
-		name: 'Home',
-		element: Home,
+		path: '/login',
+		element: <Login />,
 	},
 	{
-		path: '/about',
-		name: 'About',
-		element: About,
+		path: '/no-access',
+		element: <NoAccess />,
 	},
 	{
-		path: '/contact',
-		name: 'Contact',
-		element: Contact,
+		path: '/not-found',
+		element: <NotFound />,
+	},
+	{
+		path: '*',
+		element: <NotFound />,
 	},
 ];
 

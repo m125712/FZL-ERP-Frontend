@@ -2,7 +2,7 @@ import Breadcrumbs from './breadcrumbs';
 
 const Navbar = () => {
 	return (
-		<div className='w-full border-b bg-gray-200 p-4'>
+		<div className='bg-background h-16 w-full border-b px-4 py-4 lg:px-8'>
 			<Breadcrumbs />
 		</div>
 	);

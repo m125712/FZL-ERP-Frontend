@@ -1,9 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { flatRoutes } from './routes';
 import Layout from '../layout';
-import { NotFound } from '../pages';
+import publicRoutes from './public';
 
 export const router = createBrowserRouter([
+	...publicRoutes,
 	{
 		element: <Layout />,
 		children: flatRoutes.map((route) => {
@@ -12,10 +13,5 @@ export const router = createBrowserRouter([
 				element: <route.element />,
 			};
 		}),
-	},
-
-	{
-		path: '*',
-		element: <NotFound />,
 	},
 ]);

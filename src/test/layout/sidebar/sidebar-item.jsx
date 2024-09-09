@@ -1,49 +1,20 @@
-import NestedSidebarItem from './nested-sidebar-item';
-import SingleSidebarItem from './single-sidebar-item';
+import SidebarFolder from './sidebar-folder';
+import SidebarFile from './sidebar-file';
 
-const SidebarItem = ({ path, name, children }) => {
+const SidebarItem = ({ path, name, children, exclude, disableCollapse }) => {
 	if (children) {
 		return (
-			<NestedSidebarItem path={path} name={name}>
-				{children?.map((item) => {
-					if (item?.children) {
-						return (
-							<NestedSidebarItem key={item.path} {...item}>
-								{item.children?.map((item) => {
-									if (item?.children) {
-										return (
-											<NestedSidebarItem
-												key={item.path}
-												{...item}>
-												{item.children?.map((item) => {
-													return (
-														<SingleSidebarItem
-															key={item.path}
-															{...item}
-														/>
-													);
-												})}
-											</NestedSidebarItem>
-										);
-									} else {
-										return (
-											<SingleSidebarItem
-												key={item.path}
-												{...item}
-											/>
-										);
-									}
-								})}
-							</NestedSidebarItem>
-						);
-					} else {
-						return <SingleSidebarItem key={item.path} {...item} />;
-					}
-				})}
-			</NestedSidebarItem>
+			<SidebarFolder
+				path={path}
+				name={name}
+				exclude={exclude}
+				disableCollapse={disableCollapse}>
+				{children}
+			</SidebarFolder>
 		);
 	}
-	return <SingleSidebarItem path={path} name={name} />;
+
+	return <SidebarFile path={path} name={name} exclude={exclude} />;
 };
 
 export default SidebarItem;

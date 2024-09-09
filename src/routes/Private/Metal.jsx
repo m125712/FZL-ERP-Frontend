@@ -17,7 +17,7 @@ const MetalTeethMoldingProduction = lazy(
 
 // TeethColoring
 const MetalTeethColoringRMStock = lazy(
-	() => import('@/pages/Metal/TeethColoring/RMStock/RMStock')
+	() => import('@/pages/Metal/TeethColoring/RMStock')
 );
 const MetalTeethColoringSFG = lazy(
 	() => import('@/pages/Metal/TeethColoring/SFG')

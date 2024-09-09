@@ -8,7 +8,7 @@ export const DashboardRoutes = [
 		id: 1,
 		path: '/dashboard',
 		name: 'Dashboard',
-		element: Dashboard,
+		element: <Dashboard />,
 		type: 'dashboard',
 		view: 'individual',
 		page_name: 'dashboard',

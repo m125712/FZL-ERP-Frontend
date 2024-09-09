@@ -132,8 +132,7 @@ export default function Index() {
 						setUpdateSection,
 					}}
 				/>
-			</Suspense>
-			<Suspense>
+				
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}

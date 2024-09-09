@@ -150,8 +150,6 @@ export default function Index() {
 						setUpdateMaterialTrx,
 					}}
 				/>
-			</Suspense>
-			<Suspense>
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}

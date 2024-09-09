@@ -175,8 +175,7 @@ export default function Index() {
 						setUpdateMaterialTrxToOrder,
 					}}
 				/>
-			</Suspense>
-			<Suspense>
+
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}

@@ -247,22 +247,16 @@ export default function Index() {
 						setUpdateMaterialDetails,
 					}}
 				/>
-			</Suspense>
-			<Suspense>
 				<AgainstOrderTransfer
 					modalId={'MaterialTrxAgainstOrder'}
 					updateMaterialDetails={updateMaterialDetails}
 					setUpdateMaterialDetails={setUpdateMaterialDetails}
 				/>
-			</Suspense>
-			<Suspense>
 				<MaterialTrx
 					modalId={'MaterialTrx'}
 					updateMaterialDetails={updateMaterialDetails}
 					setUpdateMaterialDetails={setUpdateMaterialDetails}
 				/>
-			</Suspense>
-			<Suspense>
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}

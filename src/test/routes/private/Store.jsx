@@ -1,21 +1,32 @@
 import { lazy } from 'react';
 
-// Pages
-// Material
-import Stock from '@/pages/Store/Stock';
+// * Material
 // const Stock = lazy(() => import('@/pages/Store/Stock'));
-const Section = lazy(() => import('@/pages/Store/Section'));
-const MaterialType = lazy(() => import('@/pages/Store/Type'));
-const Summary = lazy(() => import('@/pages/Store/Summary'));
-const MaterialLog = lazy(() => import('@/pages/Store/Log'));
+// const Section = lazy(() => import('@/pages/Store/Section'));
+// const MaterialType = lazy(() => import('@/pages/Store/Type'));
+// const Summary = lazy(() => import('@/pages/Store/Summary'));
+// const MaterialLog = lazy(() => import('@/pages/Store/Log'));
 
-// Purchase
+// * Purchase
 const Vendor = lazy(() => import('@/pages/Store/Vendor'));
 const Purchase = lazy(() => import('@/pages/Store/Receive'));
 const PurchaseEntry = lazy(() => import('@/pages/Store/Receive/Entry'));
 const PurchaseInd = lazy(
 	() => import('@/pages/Store/Receive/Details/ByPurchaseDescriptionUUID')
 );
+
+// * New
+// * Store
+import MaterialLog from '@/pages/Store/Log';
+import Section from '@/pages/Store/Section';
+import Stock from '@/pages/Store/Stock';
+import MaterialType from '@/pages/Store/Type';
+
+// * Purchase
+// import Vendor from '@/pages/Store/Vendor';
+// import Purchase from '@/pages/Store/Receive';
+// import PurchaseEntry from '@/pages/Store/Receive/Entry';
+// import PurchaseInd from '@/pages/Store/Receive/Details/ByPurchaseDescriptionUUID';
 
 export const StoreRoutes = [
 	{
@@ -26,7 +37,7 @@ export const StoreRoutes = [
 			{
 				name: 'Stock',
 				path: '/store/stock',
-				element: Stock,
+				element: <Stock />,
 				type: 'store',
 				page_name: 'store__stock',
 				actions: [
@@ -38,11 +49,10 @@ export const StoreRoutes = [
 					'click_action',
 				],
 			},
-
 			{
 				name: 'Log',
 				path: '/store/log',
-				element: MaterialLog,
+				element: <MaterialLog />,
 				type: 'store',
 				page_name: 'store__log',
 				actions: [
@@ -53,38 +63,34 @@ export const StoreRoutes = [
 					'delete_log_against_order',
 				],
 			},
-
 			{
 				name: 'Section',
 				path: '/store/section',
-				element: Section,
+				element: <Section />,
 				type: 'store',
 				page_name: 'store__section',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
-
 			{
 				name: 'Type',
 				path: '/store/type',
-				element: MaterialType,
+				element: <MaterialType />,
 				type: 'store',
 				page_name: 'store__type',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
-
 			{
 				name: 'Vendor',
 				path: '/store/vendor',
-				element: Vendor,
+				element: <Vendor />,
 				type: 'store',
 				page_name: 'store__vendor',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
-
 			{
 				name: 'Receive',
 				path: '/store/receive',
-				element: Purchase,
+				element: <Purchase />,
 				type: 'store',
 				page_name: 'store__receive',
 				actions: ['create', 'read', 'update'],
@@ -93,17 +99,16 @@ export const StoreRoutes = [
 					{
 						name: 'Details',
 						path: '/store/receive/:purchase_description_uuid',
-						element: PurchaseInd,
+						element: <PurchaseInd />,
 						type: 'store',
 						hidden: true,
 						page_name: 'store__receive_by_uuid',
 						actions: ['create', 'read', 'update'],
 					},
-
 					{
 						name: 'Entry',
 						path: '/store/receive/entry',
-						element: PurchaseEntry,
+						element: <PurchaseEntry />,
 						type: 'store',
 						hidden: true,
 						page_name: 'store__receive_entry',
@@ -112,7 +117,7 @@ export const StoreRoutes = [
 					{
 						name: 'Entry',
 						path: '/store/receive/update/:purchase_description_uuid',
-						element: PurchaseEntry,
+						element: <PurchaseEntry />,
 						type: 'store',
 						hidden: true,
 						page_name: 'store__receive_update',

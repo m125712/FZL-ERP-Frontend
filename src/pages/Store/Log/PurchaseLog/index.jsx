@@ -169,8 +169,7 @@ export default function Index() {
 						setUpdatePurchaseLog,
 					}}
 				/>
-			</Suspense>
-			<Suspense>
+
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}

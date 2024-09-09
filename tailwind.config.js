@@ -70,9 +70,9 @@ export default {
 					'error-content': WHITE,
 
 					'--rounded-btn': '0.3rem',
-					'--animation-btn': '.15s',
+					'--animation-btn': '0s',
 					'--btn-text-case': 'uppercase',
-					'--btn-focus-scale': '1.1',
+					'--btn-focus-scale': '1.05',
 					'--border-btn': '0.1rem',
 				},
 			},

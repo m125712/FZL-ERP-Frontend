@@ -36,7 +36,9 @@
 		"react-paginate": "^8.2.0",
 		"react-router-dom": "^6.26.1",
 		"react-select": "^5.8.0",
+		"react-spreadsheet": "^0.9.5",
 		"react-toastify": "^10.0.5",
+		"scheduler": "^0.23.2",
 		"tailwind-merge": "^2.5.2",
 		"to-words": "^4.1.0",
 		"use-react-router-breadcrumbs": "^4.0.1",
@@ -62,3 +64,5 @@
 		"vite-plugin-eslint": "^1.8.1"
 	}
 }
+
+

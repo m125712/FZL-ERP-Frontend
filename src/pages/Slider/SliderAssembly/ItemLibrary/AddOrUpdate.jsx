@@ -17,7 +17,7 @@ export default function Index({
 	},
 	setUpdateItemLibrary,
 }) {
-	const { register, handleSubmit, errors, reset } = useRHF(
+	const { register, handleSubmit, errors, reset, context } = useRHF(
 		ITEM_LIBRARY_SCHEMA,
 		ITEM_LIBRARY_NULL
 	);
@@ -77,6 +77,7 @@ export default function Index({
 					? "Update Item Library"
 					: "Item Library"
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}

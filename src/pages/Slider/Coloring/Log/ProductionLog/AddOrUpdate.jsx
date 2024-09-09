@@ -39,6 +39,7 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
+		context
 	} = useRHF(
 		SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
 		SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL
@@ -98,6 +99,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Slider Assembly Production Log`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			subTitle={`
 				${updateSliderProd.order_number} -> 

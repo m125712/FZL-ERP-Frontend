@@ -55,6 +55,7 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
+		context,
 	} = useRHF(schema, SFG_TRANSFER_LOG_NULL);
 	console.log(getValues());
 
@@ -119,6 +120,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Nylon Plastic Finshing Transfer Log`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

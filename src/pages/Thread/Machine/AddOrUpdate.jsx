@@ -18,7 +18,7 @@ export default function Index({
 }) {
 	const { url, updateData, postData } = useThreadMachine();
 	const { user } = useAuth();
-	const { register, handleSubmit, errors, reset, control } = useRHF(
+	const { register, handleSubmit, errors, reset, control, context } = useRHF(
 		THREAD_MACHINE_SCHEMA,
 		THREAD_MACHINE_NULL
 	);
@@ -76,6 +76,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={updateMachine?.uuid !== null ? 'Update Machine' : 'Machine'}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

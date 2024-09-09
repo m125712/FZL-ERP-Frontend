@@ -33,7 +33,7 @@ export default function Index({
 		),
 	};
 
-	const { register, handleSubmit, errors, reset, watch } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
 		schema,
 		RM_MATERIAL_USED_NULL
 	);
@@ -72,6 +72,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={updateVislonTMStock?.uuid !== null && 'Material Usage Entry'}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

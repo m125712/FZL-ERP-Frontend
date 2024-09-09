@@ -20,7 +20,7 @@ export default function Index({
 	setUpdateTapeProd,
 }) {
 	const { url, updateData, postData } = useCommonTapeSFG();
-	const { register, handleSubmit, errors, reset, control } = useRHF(
+	const { register, handleSubmit, errors, reset, control, context } = useRHF(
 		TAPE_STOCK_ADD_SCHEMA,
 		TAPE_STOCK_ADD_NULL
 	);
@@ -84,6 +84,7 @@ export default function Index({
 			title={
 				updateTapeProd?.id !== undefined ? 'Tape Add' : 'Tape Update'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

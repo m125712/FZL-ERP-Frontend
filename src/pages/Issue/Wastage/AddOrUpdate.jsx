@@ -1,17 +1,17 @@
-import { AddModal } from "@/components/Modal";
+import { AddModal } from '@/components/Modal';
 import {
 	useFetch,
 	useFetchForRhfReset,
 	usePostFunc,
 	useRHF,
 	useUpdateFunc,
-} from "@/hooks";
-import { FormField, Input, ReactSelect, Textarea } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { WASTAGE_NULL, WASTAGE_SCHEMA } from "@util/Schema";
+} from '@/hooks';
+import { FormField, Input, ReactSelect, Textarea } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { WASTAGE_NULL, WASTAGE_SCHEMA } from '@util/Schema';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setWastage,
 	updateWastage = {
 		id: null,
@@ -20,8 +20,15 @@ export default function Index({
 	},
 	setUpdateWastage,
 }) {
-	const { register, handleSubmit, errors, reset, Controller, control } =
-		useRHF(WASTAGE_SCHEMA, WASTAGE_NULL);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		Controller,
+		control,
+		context,
+	} = useRHF(WASTAGE_SCHEMA, WASTAGE_NULL);
 
 	useFetchForRhfReset(
 		`/wastage/${updateWastage?.id}`,
@@ -29,8 +36,8 @@ export default function Index({
 		reset
 	);
 
-	const { value: order_uuid } = useFetch("/order/description/value/label");
-	const { value: material } = useFetch("/material/value/label/unit");
+	const { value: order_uuid } = useFetch('/order/description/value/label');
+	const { value: material } = useFetch('/material/value/label/unit');
 
 	const onClose = () => {
 		setUpdateWastage((prev) => ({
@@ -82,7 +89,7 @@ export default function Index({
 		};
 
 		await usePostFunc({
-			uri: "/wastage",
+			uri: '/wastage',
 			data: updatedData,
 			setItems: setWastage,
 			onClose: onClose,
@@ -92,19 +99,19 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={updateWastage?.id !== null ? "Update Wastage" : "Wastage"}
+			title={updateWastage?.id !== null ? 'Update Wastage' : 'Wastage'}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
-			<FormField label="order_uuid" title="Order Number" errors={errors}>
+			isSmall={true}>
+			<FormField label='order_uuid' title='Order Number' errors={errors}>
 				<Controller
-					name={"order_uuid"}
+					name={'order_uuid'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder="Select Order Number"
+								placeholder='Select Order Number'
 								options={order_uuid}
 								value={order_uuid?.find(
 									(item) =>
@@ -117,14 +124,14 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<FormField label="material_id" title="Material" errors={errors}>
+			<FormField label='material_id' title='Material' errors={errors}>
 				<Controller
-					name={"material_id"}
+					name={'material_id'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder="Select Material"
+								placeholder='Select Material'
 								options={material}
 								value={material?.find(
 									(item) =>
@@ -138,11 +145,11 @@ export default function Index({
 				/>
 			</FormField>
 			<Input
-				title="Quantity"
-				label="assigned_quantity"
+				title='Quantity'
+				label='assigned_quantity'
 				{...{ register, errors }}
 			/>
-			<Textarea label="remarks" {...{ register, errors }} />
+			<Textarea label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

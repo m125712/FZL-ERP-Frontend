@@ -26,7 +26,7 @@ export default function Index({
 			updateColoringProd?.coloring_prod
 		),
 	};
-	const { register, handleSubmit, errors, reset, watch } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
 		schema,
 		SFG_TRX_NULL
 	);
@@ -91,6 +91,7 @@ export default function Index({
 		<AddModal
 			id="ColoringTrxModal"
 			title={`Coloring ⇾ Stopper`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}

@@ -1,16 +1,15 @@
 import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useRHF, useUpdateFunc } from '@/hooks';
+import { useRHF } from '@/hooks';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
 	NUMBER_REQUIRED,
+	NUMBER,
 	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
 	SFG_PRODUCTION_SCHEMA_IN_KG,
 } from '@util/Schema';
 import { useVislonTMPEntryByUUID } from '@/state/Vislon';
 import { useEffect } from 'react';
-import { number } from 'yup';
 
 export default function Index({
 	modalId = '',
@@ -34,7 +33,7 @@ export default function Index({
 		Number(updateFinishingLog.production_quantity),
 		Number(updateFinishingLog.coloring_prod)
 	).toFixed(3);
-	
+
 	const MAX_PROD_KG = Number(MAX_PROD).toFixed(3);
 
 	const {
@@ -46,6 +45,7 @@ export default function Index({
 		reset,
 		getValues,
 		watch,
+		context,
 	} = useRHF(
 		{
 			...SFG_PRODUCTION_SCHEMA_IN_KG,
@@ -53,12 +53,13 @@ export default function Index({
 				MAX_PROD,
 				'Beyond Max Quantity'
 			),
-			production_quantity_in_kg: NUMBER_REQUIRED.max(
-				MAX_PROD_KG,
-				'Beyond Max Quantity'
-			),
+			production_quantity_in_kg: NUMBER,
 		},
-		SFG_PRODUCTION_SCHEMA_IN_KG_NULL
+		{
+			...SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
+			production_quantity: 0,
+			production_quantity_in_kg: 0,
+		}
 	);
 
 	const MAX_WASTAGE_KG = Number(
@@ -119,42 +120,16 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Teeth Molding SFG Production Log`}
+			title={`Finishing Production`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			{/* <FormField label='trx_to' title='Trx to' errors={errors}>
-				<Controller
-					name={'trx_to'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select Transaction Area'
-								options={transactionArea}
-								value={transactionArea?.find(
-									(item) => item.value == getValues('trx_to')
-								)}
-								onChange={(e) => onChange(e.value)}
-								isDisabled={
-									updateFinishingLog?.uuid !== null
-								}
-							/>
-						);
-					}}
-				/>
-			</FormField> */}
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'
 				unit='PCS'
 				sub_label={`MAX: ${MAX_PROD} PCS`}
-				{...{ register, errors }}
-			/>
-			<JoinInput
-				label='production_quantity_in_kg'
-				unit='KG'
-				sub_label={`Max: ${MAX_PROD_KG}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput

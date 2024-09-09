@@ -29,6 +29,7 @@ export default function Index({
 		control,
 		Controller,
 		getValues,
+		context
 	} = useRHF(THREAD_DYES_CATEGORY_SCHEMA, THREAD_DYES_CATEGORY_NULL);
 
 	useFetchForRhfReset(`${url}/${update?.uuid}`, update?.uuid, reset);
@@ -85,6 +86,7 @@ export default function Index({
 			title={
 				update?.uuid !== null ? 'Update Dyes Category' : 'Dyes Category'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

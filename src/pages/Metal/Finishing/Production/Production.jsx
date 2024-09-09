@@ -38,7 +38,7 @@ export default function Index({
 		updateFinishingProd.teeth_coloring_stock
 	).toFixed(3);
 
-	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, control ,context} = useRHF(
 		SFG_PRODUCTION_SCHEMA_IN_PCS,
 		SFG_PRODUCTION_SCHEMA_IN_PCS_NULL
 	);
@@ -90,6 +90,7 @@ export default function Index({
 				${updateFinishingProd.item_description} -> 
 				${updateFinishingProd.style_color_size} 
 				`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

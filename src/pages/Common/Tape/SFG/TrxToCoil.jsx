@@ -34,7 +34,7 @@ export default function Index({
 		),
 	};
 
-	const { register, handleSubmit, errors, reset } = useRHF(
+	const { register, handleSubmit, errors, reset, context } = useRHF(
 		schema,
 		TAPE_TO_COIL_TRX_NULL
 	);
@@ -71,6 +71,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={updateTapeProd?.uuid !== null && 'Tape to Coil'}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

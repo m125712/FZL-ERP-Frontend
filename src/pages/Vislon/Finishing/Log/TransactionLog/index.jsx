@@ -6,7 +6,7 @@ import { useAccess, useFetchFunc } from '@/hooks';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
-import SFGAddOrUpdate from './SFGAddOrUpdate';
+import SFGAddOrUpdate from './AddOrUpdate';
 import { useVislonFinishingTrxLog } from '@/state/Vislon';
 
 export default function Index() {

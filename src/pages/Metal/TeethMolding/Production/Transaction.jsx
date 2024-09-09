@@ -37,10 +37,11 @@ export default function Index({
 	const { postData } = useMetalTMProduction();
 	const { user } = useAuth();
 
-	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
-		SFG_TRANSACTION_SCHEMA_IN_PCS,
-		SFG_TRANSACTION_SCHEMA_IN_PCS_NULL
-	);
+	const { register, handleSubmit, errors, reset, watch, control, context } =
+		useRHF(
+			SFG_TRANSACTION_SCHEMA_IN_PCS,
+			SFG_TRANSACTION_SCHEMA_IN_PCS_NULL
+		);
 
 	const onClose = () => {
 		setUpdateTeethMoldingTRX((prev) => ({
@@ -95,6 +96,7 @@ export default function Index({
 				${updateTeethMoldingTRX.item_description} -> 
 				${updateTeethMoldingTRX.style_color_size} 
 				`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

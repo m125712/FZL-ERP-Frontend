@@ -26,7 +26,7 @@ export default function Index({
 			updateDieCastingProd?.die_casting_prod
 		),
 	};
-	const { register, handleSubmit, errors, reset, watch } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
 		schema,
 		SFG_TRX_NULL
 	);
@@ -91,6 +91,7 @@ export default function Index({
 		<AddModal
 			id="DieCastingTrxModal"
 			title={`DieCasting ⇾ Slider Assembly`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}

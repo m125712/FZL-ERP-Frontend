@@ -1,11 +1,10 @@
+import cn from '@/lib/cn';
 import { PRIVATE_ROUTES } from '@/routes';
 import { useAuth } from '@context/auth';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import FilesystemItem from './filesystem-item';
 import './index.css';
 import { BrandLink, LogoutButton, MenuIcon, Row, SectionButton } from './utils';
-import cn from '@/lib/cn';
 
 const ThirdChildMenu = ({ items, type }) => {
 	const [isOpened, setIsOpened] = useState(true);

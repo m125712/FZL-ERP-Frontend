@@ -44,6 +44,7 @@ export default function Index() {
 				accessorKey: 'created_at',
 				header: 'Created At',
 				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},

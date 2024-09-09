@@ -1,7 +1,7 @@
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useOrderDetails } from '@/state/Order';
-import { EditDelete, LinkWithCopy, StatusButton, DateTime } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy, StatusButton } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -95,6 +95,7 @@ export default function Index() {
 			{
 				accessorKey: 'created_at',
 				header: 'Created At',
+				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;

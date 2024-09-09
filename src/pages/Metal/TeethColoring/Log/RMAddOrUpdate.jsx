@@ -6,11 +6,11 @@ import { useMetalTCRM } from '@/state/Metal';
 
 import { FormField, Input, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
+import getTransactionArea from '@/util/TransactionArea';
 import {
 	RM_MATERIAL_USED_EDIT_NULL,
 	RM_MATERIAL_USED_EDIT_SCHEMA,
 } from '@util/Schema';
-import getTransactionArea from '@/util/TransactionArea';
 export default function Index({
 	modalId = '',
 	updateMetalTCRMLog = {
@@ -26,7 +26,6 @@ export default function Index({
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateMetalTCRM } = useMetalTCRM();
 
-	
 	const MAX_QUANTITY =
 		Number(
 			updateMetalTCRMLog?.section === 'teeth_assembling_and_polishing'
@@ -47,7 +46,7 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		wa,
+		context,
 	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
@@ -96,6 +95,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Teeth Coloring RM Log of ${updateMetalTCRMLog?.material_name}`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

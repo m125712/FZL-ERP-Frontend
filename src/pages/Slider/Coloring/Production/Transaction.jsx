@@ -29,7 +29,7 @@ export default function Index({
 	const { postData, url } = useSliderAssemblyTransferEntry();
 	const { user } = useAuth();
 
-	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, control, context } = useRHF(
 		SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
 		SLIDER_ASSEMBLY_TRANSACTION_NULL
 	);
@@ -80,6 +80,7 @@ export default function Index({
 				${updateSliderTrx.item_description} -> 
 				${updateSliderTrx.style_color_size} 
 				`}
+				formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

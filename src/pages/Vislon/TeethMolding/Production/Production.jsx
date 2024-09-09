@@ -35,7 +35,7 @@ export default function Index({
 		Number(updateTeethMoldingProd.vislon_teeth_molding)
 	).toFixed(3);
 
-	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, control, context } = useRHF(
 		{
 			...SFG_PRODUCTION_SCHEMA_IN_KG,
 			production_quantity_in_kg: NUMBER_REQUIRED.max(
@@ -93,6 +93,7 @@ export default function Index({
 				${updateTeethMoldingProd.item_description} -> 
 				${updateTeethMoldingProd.style_color_size} 
 				`}
+				formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

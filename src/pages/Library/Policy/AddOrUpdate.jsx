@@ -38,6 +38,7 @@ export default function Index({
 		control,
 		getValues,
 		Controller,
+		context,
 	} = useRHF(POLICY_SCHEMA, POLICY_NULL);
 
 	useFetchForRhfReset(
@@ -91,6 +92,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={updatePolicy?.uuid !== null ? 'Update Policy' : 'Policy'}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

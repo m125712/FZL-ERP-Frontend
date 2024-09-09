@@ -27,7 +27,7 @@ export default function Index({
 			updateTeethMoldingProd?.teeth_molding_prod
 		),
 	};
-	const { register, handleSubmit, errors, reset, watch } = useRHF(
+	const { register, handleSubmit, errors, reset, watch,context } = useRHF(
 		schema,
 		SFG_TRX_NULL
 	);
@@ -92,6 +92,7 @@ export default function Index({
 		<AddModal
 			id="TeethMoldingTrxModal"
 			title={"Teeth Molding ⇾ Teeth Coloring"}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}

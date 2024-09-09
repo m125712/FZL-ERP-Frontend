@@ -31,7 +31,7 @@ export default function Index({
 	);
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 
-	const { register, handleSubmit, errors, reset } = useRHF(
+	const { register, handleSubmit, errors, reset, context } = useRHF(
 		TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
 		TAPE_OR_COIL_PRODUCTION_LOG_NULL
 	);
@@ -81,6 +81,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Update Production Log of ${updateTapeLog?.type_of_zipper}`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

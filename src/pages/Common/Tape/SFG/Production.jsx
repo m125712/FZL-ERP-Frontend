@@ -24,7 +24,7 @@ export default function Index({
 	const { invalidateQuery: invalidateCommonTapeSFG } =
 		useCommonTapeProduction();
 
-	const { register, handleSubmit, errors, reset } = useRHF(
+	const { register, handleSubmit, errors, reset, context } = useRHF(
 		TAPE_PROD_SCHEMA,
 		TAPE_PROD_NULL
 	);
@@ -71,6 +71,7 @@ export default function Index({
 					? updateTapeProd?.type_of_zipper.toUpperCase()
 					: ''
 			} `}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

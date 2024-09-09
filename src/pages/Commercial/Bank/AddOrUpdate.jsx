@@ -17,7 +17,7 @@ export default function Index({
 }) {
 	const { user } = useAuth();
 	const { url, updateData, postData } = useCommercialBank();
-	const { register, handleSubmit, errors, reset } = useRHF(
+	const { register, handleSubmit, errors, reset, context } = useRHF(
 		BANK_SCHEMA,
 		BANK_NULL
 	);
@@ -76,6 +76,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={updateBank?.uuid !== null ? 'Update Bank' : 'Bank'}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

@@ -23,7 +23,7 @@ export default function Index({
 	setUpdateOrder,
 }) {
 	const { user } = useAuth();
-	const { register, handleSubmit, errors, reset, Controller, control } =
+	const { register, handleSubmit, errors, reset, Controller, control ,context} =
 		useRHF(ORDER_ISSUE_SCHEMA, ORDER_ISSUE_NULL);
 
 	useFetchForRhfReset(`/issue/${updateOrder?.id}`, updateOrder?.id, reset);
@@ -88,6 +88,7 @@ export default function Index({
 			title={
 				updateOrder?.id !== null ? "Update Issue Order" : "Issue Order"
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}

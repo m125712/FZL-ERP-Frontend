@@ -36,7 +36,7 @@ export default function Index({
 		wastage: NUMBER_DOUBLE_REQUIRED.max(MAX_PRODUCTION_QTY),
 	};
 
-	const { register, handleSubmit, errors, reset, watch } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
 		schema,
 		COIL_PROD_NULL
 	);
@@ -81,7 +81,8 @@ export default function Index({
 				updateCoilProd?.type_of_zipper
 					? updateCoilProd?.type_of_zipper.toUpperCase()
 					: ''
-			} `}
+			}`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

@@ -37,6 +37,7 @@ export default function Index({
 		reset,
 		getValues,
 		watch,
+		context
 	} = useRHF(SFG_PRODUCTION_SCHEMA_IN_KG, SFG_PRODUCTION_SCHEMA_IN_KG_NULL);
 
 	const MAX_PROD_KG =  // Todo: Fix this
@@ -101,6 +102,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Teeth Molding SFG Production Log`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

@@ -28,7 +28,7 @@ export default function Index({
 			.moreThan(0)
 			.max(updateDyeingAndIronProd?.dying_and_iron_stock),
 	};
-	const { register, handleSubmit, errors, reset, watch } = useRHF(
+	const { register, handleSubmit, errors, reset, watch,context } = useRHF(
 		schema,
 		SFG_PRODUCTION_NULL
 	);
@@ -88,6 +88,7 @@ export default function Index({
 				updateDyeingAndIronProd?.id !== null &&
 				"Dyeing and Iron Production"
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}

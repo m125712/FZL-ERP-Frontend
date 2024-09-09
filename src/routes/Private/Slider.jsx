@@ -28,7 +28,7 @@ const DieCastingTransferEntry = lazy(
 );
 
 const DieCastingRMStock = lazy(
-	() => import('@/pages/Slider/DieCasting/RMStock/RMStock')
+	() => import('@/pages/Slider/DieCasting/RMStock')
 );
 const DieCastingLog = lazy(() => import('@/pages/Slider/DieCasting/Log'));
 const DieCastingSFG = lazy(() => import('@/pages/Slider/DieCasting/SFG'));
@@ -296,7 +296,6 @@ export const SliderRoutes = [
 		page_name: 'slider__assembly_log',
 		actions: ['read', 'create', 'update', 'delete'],
 	},
-	
 
 	// {
 	// 	id: 25,

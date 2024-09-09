@@ -68,7 +68,7 @@ export default function Index({
 		// ),
 	};
 
-	const { register, handleSubmit, control, Controller, errors, reset } =
+	const { register, handleSubmit, control, Controller, errors, reset, context } =
 		useRHF(schema, TAPE_STOCK_TRX_TO_DYING_NULL);
 
 	useFetchForRhfReset(
@@ -132,6 +132,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={updateTapeProd?.id !== null && 'Tape to Dying'}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

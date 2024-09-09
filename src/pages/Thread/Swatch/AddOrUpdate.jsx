@@ -17,7 +17,7 @@ export default function Index({
 	setUpdateSwatch,
 }) {
 	const { user } = useAuth();
-	const { register, handleSubmit, errors, reset } = useRHF(
+	const { register, handleSubmit, errors, reset, context } = useRHF(
 		SWATCH_SCHEMA,
 		SWATCH_NULL
 	);
@@ -69,6 +69,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Update Swatch Remarks`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}

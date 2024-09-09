@@ -49,7 +49,7 @@ export default function Index({
 		PAGE_ACTIONS_NULL[key] = value.null;
 	});
 
-	const { register, handleSubmit, errors, reset, getValues } =
+	const { register, handleSubmit, errors, reset, getValues,context } =
 		useRHF(PAGE_ACTIONS_SCHEMA);
 
 	useFetchForRhfResetForUserAccess(
@@ -107,6 +107,7 @@ export default function Index({
 					? 'Page Assign: ' + pageAssign?.name
 					: 'Page Assign'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}>
 			<DebouncedInput

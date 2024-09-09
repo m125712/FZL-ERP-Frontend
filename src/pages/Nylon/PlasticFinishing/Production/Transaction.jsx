@@ -33,7 +33,7 @@ export default function Index({
 	const { user } = useAuth();
 	const MAX_QUANTITY = Number(updatePFTRX?.finishing_prod).toFixed(3);
 
-	const { register, handleSubmit, errors, reset, control } = useRHF(
+	const { register, handleSubmit, errors, reset, control, context } = useRHF(
 		{
 			...SFG_TRANSACTION_SCHEMA_IN_PCS,
 			trx_quantity: NUMBER_REQUIRED.max(
@@ -89,6 +89,7 @@ export default function Index({
 				${updatePFTRX.item_description} -> 
 				${updatePFTRX.style_color_size} 
 				`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

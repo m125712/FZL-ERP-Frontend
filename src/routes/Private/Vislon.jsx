@@ -17,9 +17,7 @@ const VislonProduction = lazy(
 );
 
 // Finishing
-const VislonFinishing = lazy(
-	() => import('@/pages/Vislon/Finishing/RMStock/RMStock')
-);
+const VislonFinishing = lazy(() => import('@/pages/Vislon/Finishing/RMStock'));
 const VislonFinishingSFG = lazy(() => import('@/pages/Vislon/Finishing/SFG'));
 const VislonFinishingTrxLog = lazy(
 	() => import('@/pages/Vislon/Finishing/Log')

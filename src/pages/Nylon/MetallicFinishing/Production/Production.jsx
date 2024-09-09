@@ -41,7 +41,7 @@ export default function Index({
 		3
 	);
 
-	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, control , context} = useRHF(
 		{
 			...SFG_PRODUCTION_SCHEMA_IN_KG,
 			production_quantity: NUMBER_REQUIRED.max(
@@ -105,6 +105,7 @@ export default function Index({
 				${updateMFProd.item_description} -> 
 				${updateMFProd.style_color_size} 
 				`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

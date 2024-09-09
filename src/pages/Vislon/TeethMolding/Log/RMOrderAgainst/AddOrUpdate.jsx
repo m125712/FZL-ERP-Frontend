@@ -45,6 +45,7 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
+		context
 	} = useRHF(schema, RM_MATERIAL_ORDER_AGAINST_EDIT_NULL);
 
 	useFetchForRhfReset(`${url}/${updateLog?.uuid}`, updateLog?.uuid, reset);
@@ -88,6 +89,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Vislon Teeth Molding RM Log of ${updateLog?.material_name}`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

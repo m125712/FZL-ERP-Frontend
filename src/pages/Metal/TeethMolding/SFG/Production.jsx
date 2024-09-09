@@ -36,7 +36,7 @@ export default function Index({
 			updateTeethMoldingProd?.teeth_molding_stock
 		),
 	};
-	const { register, handleSubmit, errors, reset, watch } = useRHF(
+	const { register, handleSubmit, errors, reset, watch ,context} = useRHF(
 		schema,
 		SFG_PRODUCTION_NULL
 	);
@@ -93,6 +93,7 @@ export default function Index({
 		<AddModal
 			id="TeethMoldingProdModal"
 			title="Teeth Molding Production"
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}

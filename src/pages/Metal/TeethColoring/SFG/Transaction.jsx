@@ -1,22 +1,22 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
-import { useRHF, useUpdateFunc } from "@/hooks";
-import { Input, JoinInput } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { SFG_TRX_NULL, SFG_TRX_SCHEMA } from "@util/Schema";
+import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
+import { useRHF, useUpdateFunc } from '@/hooks';
+import { Input, JoinInput } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { SFG_TRX_NULL, SFG_TRX_SCHEMA } from '@util/Schema';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setTeethColoringProd,
 	updateTeethColoringProd = {
 		id: null,
-		name: "",
+		name: '',
 		teeth_coloring_stock: null,
 		teeth_coloring_prod: null,
 		order_entry_id: null,
 		item_description: null,
-		order_number: "",
-		order_description: "",
+		order_number: '',
+		order_description: '',
 	},
 	setUpdateTeethColoringProd,
 }) {
@@ -26,7 +26,7 @@ export default function Index({
 			updateTeethColoringProd?.teeth_coloring_prod
 		),
 	};
-	const { register, handleSubmit, errors, reset, watch } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
 		schema,
 		SFG_TRX_NULL
 	);
@@ -35,14 +35,14 @@ export default function Index({
 		setUpdateTeethColoringProd((prev) => ({
 			...prev,
 			id: null,
-			name: "",
+			name: '',
 			teeth_coloring_stock: null,
 			teeth_coloring_prod: null,
 			order_entry_id: null,
 			item_description: null,
 			total_trx_quantity: null,
-			order_number: "",
-			order_description: "",
+			order_number: '',
+			order_description: '',
 		}));
 		reset(SFG_TRX_NULL);
 		window[modalId].close();
@@ -62,8 +62,8 @@ export default function Index({
 				data.trx_quantity,
 			total_trx_quantity:
 				updateTeethColoringProd?.total_trx_quantity + data.trx_quantity,
-			trx_from: "teeth_coloring_prod",
-			trx_to: "finishing_stock",
+			trx_from: 'teeth_coloring_prod',
+			trx_to: 'finishing_stock',
 			name: updateTeethColoringProd?.name,
 			issued_by: user?.id,
 			issued_by_name: user?.name,
@@ -79,27 +79,27 @@ export default function Index({
 				onClose: onClose,
 			});
 		} else {
-			alert("Remaining trx_quantity should be greater than 0");
+			alert('Remaining trx_quantity should be greater than 0');
 			return;
 		}
 	};
 
 	return (
 		<AddModal
-			id="TeethColoringTrxModal"
-			title={"Teeth Coloring ⇾ Finishing"}
+			id='TeethColoringTrxModal'
+			title={'Teeth Coloring ⇾ Finishing'}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
+			isSmall={true}>
 			<JoinInput
-				label="trx_quantity"
-				unit="PCS"
+				label='trx_quantity'
+				unit='PCS'
 				max={updateTeethColoringProd?.teeth_coloring_prod}
 				placeholder={`Max: ${updateTeethColoringProd?.teeth_coloring_prod}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

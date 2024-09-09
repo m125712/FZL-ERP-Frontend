@@ -57,8 +57,15 @@ export default function Index({
 				.max(MAX_QUANTITY_IN_KG),
 	};
 	const { user } = useAuth();
-	const { register, handleSubmit, errors, control, Controller, reset } =
-		useRHF(schema, SFG_PRODUCTION_LOG_NULL);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		control,
+		Controller,
+		reset,
+		context,
+	} = useRHF(schema, SFG_PRODUCTION_LOG_NULL);
 
 	useEffect(() => {
 		if (dataByUUID) {
@@ -118,6 +125,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Teeth Molding Production Log`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

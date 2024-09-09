@@ -52,7 +52,7 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		wa,
+		context,
 	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
@@ -103,6 +103,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Material Finishing RM Log of ${updateFinishingRMLog?.material_name}`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

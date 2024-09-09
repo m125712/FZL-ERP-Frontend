@@ -16,7 +16,7 @@ export default function Index({
 	setUpdateBuyer,
 }) {
 	const { url, updateData, postData } = useOrderBuyer();
-	const { register, handleSubmit, errors, reset, control } = useRHF(
+	const { register, handleSubmit, errors, reset, control, context } = useRHF(
 		BUYER_SCHEMA,
 		BUYER_NULL
 	);
@@ -75,6 +75,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={updateBuyer?.uuid !== null ? 'Update Buyer' : 'Buyer'}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

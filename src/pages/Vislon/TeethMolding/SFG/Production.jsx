@@ -37,7 +37,7 @@ export default function Index({
 		used_quantity:
 			SFG_PRODUCTION_SCHEMA.production_quantity.max(MAX_USED_QUANTITY),
 	};
-	const { register, handleSubmit, errors, reset, watch } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
 		schema,
 		SFG_PRODUCTION_NULL
 	);
@@ -99,6 +99,7 @@ export default function Index({
 		<AddModal
 			id="TeethMoldingProdModal"
 			title={"Teeth Molding Production"}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}

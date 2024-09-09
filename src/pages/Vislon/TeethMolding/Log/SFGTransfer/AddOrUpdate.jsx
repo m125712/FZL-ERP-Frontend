@@ -39,6 +39,7 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
+		context
 	} = useRHF(
 		{
 			...VISLON_TRANSACTION_SCHEMA,
@@ -104,6 +105,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Teeth Molding SFG Transfer Log`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

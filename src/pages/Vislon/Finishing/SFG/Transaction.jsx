@@ -28,7 +28,7 @@ export default function Index({
 			updateFinishingProd?.finishing_prod
 		),
 	};
-	const { register, handleSubmit, errors, reset, watch } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
 		schema,
 		SFG_TRX_NULL
 	);
@@ -93,6 +93,7 @@ export default function Index({
 		<AddModal
 			id="FinishingTrxModal"
 			title={"Finishing"}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}

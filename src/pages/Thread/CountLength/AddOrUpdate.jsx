@@ -21,7 +21,7 @@ export default function Index({
 }) {
 	const { url, updateData, postData } = useThreadCountLength();
 	const { user } = useAuth();
-	const { register, handleSubmit, errors, reset, control } = useRHF(
+	const { register, handleSubmit, errors, reset, control, context } = useRHF(
 		THREAD_COUNT_LENGTH_SCHEMA,
 		THREAD_COUNT_LENGTH_NULL
 	);
@@ -85,6 +85,7 @@ export default function Index({
 					? 'Update Count Length'
 					: 'Count Length'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

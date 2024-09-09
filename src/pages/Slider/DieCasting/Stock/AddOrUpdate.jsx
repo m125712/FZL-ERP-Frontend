@@ -27,6 +27,7 @@ export default function Index({
 		errors,
 		getValues,
 		reset,
+		context
 	} = useRHF(SLIDER_DIE_CASTING_STOCK_SCHEMA, SLIDER_DIE_CASTING_STOCK_NULL);
 
 	// Other Order Properties
@@ -118,6 +119,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={updateStock?.uuid !== null ? 'Update Stock' : 'Create Stock'}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}>
 			{/* NAME , ITEM , ZIPPER NUMBER */}

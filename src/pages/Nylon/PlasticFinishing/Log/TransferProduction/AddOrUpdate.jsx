@@ -56,6 +56,7 @@ export default function Index({
 		watch,
 		control,
 		Controller,
+		context,
 	} = useRHF(
 		{
 			...SFG_PRODUCTION_LOG_SCHEMA,
@@ -134,6 +135,7 @@ export default function Index({
 			id={modalId}
 			title={`Nylon Plastic Finshing Transfer Log`}
 			onSubmit={handleSubmit(onSubmit)}
+			formContext={context}
 			onClose={onClose}
 			isSmall={true}>
 			<FormField label='section' title='Section' errors={errors}>

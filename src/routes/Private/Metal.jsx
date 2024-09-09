@@ -2,7 +2,7 @@ import { lazy } from 'react';
 
 // Teeth Molding
 const MetalTeethMolding = lazy(
-	() => import('@/pages/Metal/TeethMolding/RMStock/RMStock')
+	() => import('@/pages/Metal/TeethMolding/RMStock')
 );
 const MetalTeethMoldingSFG = lazy(
 	() => import('@/pages/Metal/TeethMolding/SFG')
@@ -32,7 +32,7 @@ const MetalTeethColoringProduction = lazy(
 
 // Finishing
 const MetalFinishingRMStock = lazy(
-	() => import('@/pages/Metal/Finishing/RMStock/RMStock')
+	() => import('@/pages/Metal/Finishing/RMStock')
 );
 const MetalFinishingSFG = lazy(() => import('@/pages/Metal/Finishing/SFG'));
 const MetalFinishingTrxLog = lazy(() => import('@/pages/Metal/Finishing/Log'));

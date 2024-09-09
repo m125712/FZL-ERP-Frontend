@@ -38,7 +38,7 @@ export default function Index({
 			.max(MAX_QUANTITY),
 	};
 
-	const { register, handleSubmit, errors, reset, Controller, control } =
+	const { register, handleSubmit, errors, reset, Controller, control, context } =
 		useRHF(schema, SLIDER_ITEM_TRANSACTION_NULL);
 
 	const { value: order } = useFetch(`/order/entry/value/label`);
@@ -87,6 +87,7 @@ export default function Index({
 		<AddModal
 			id={"SliderAssemblyTransfer"}
 			title={`Slider Assembly ⇾ Coloring`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}

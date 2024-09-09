@@ -34,7 +34,7 @@ export default function Index({
 			.max(MAX_QUANTITY),
 	};
 	const { user } = useAuth();
-	const { register, handleSubmit, errors, control, Controller, reset } =
+	const { register, handleSubmit, errors, control, Controller, reset,context } =
 		useRHF(schema, SFG_PRODUCTION_LOG_NULL);
 
 	const onClose = () => {
@@ -96,6 +96,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Teeth Molding Production Log`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}

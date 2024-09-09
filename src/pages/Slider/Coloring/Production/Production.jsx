@@ -5,9 +5,9 @@ import { JoinInput, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import {
-	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
-	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,
 	NUMBER_REQUIRED,
+	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,
+	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
 } from '@util/Schema';
 
 import nanoid from '@/lib/nanoid';
@@ -32,10 +32,11 @@ export default function Index({
 
 	const MAX_PROD_KG = Number(updateSliderProd.balance_quantity).toFixed(3);
 
-	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
-		SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
-		SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL
-	);
+	const { register, handleSubmit, errors, reset, watch, control, context } =
+		useRHF(
+			SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
+			SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL
+		);
 
 	const MAX_WASTAGE_KG = Number(
 		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
@@ -70,7 +71,6 @@ export default function Index({
 			created_at: GetDateTime(),
 		};
 
-	
 		await postData.mutateAsync({
 			url,
 			newData: updatedData,
@@ -86,6 +86,7 @@ export default function Index({
 				${updateSliderProd.order_info_uuid} -> 
 				${updateSliderProd.item_name} 
 				`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

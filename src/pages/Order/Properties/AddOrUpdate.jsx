@@ -112,9 +112,9 @@ export default function Index({
 					? 'Update Order Properties'
 					: 'Order Properties'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			formContext={context}
 			isSmall={true}>
 			<FormField label='type' title='Type' errors={errors}>
 				<Controller

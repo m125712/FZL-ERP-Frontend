@@ -32,7 +32,7 @@ export default function Index({
 		trx_quantity: TAPE_TO_COIL_TRX_SCHEMA.trx_quantity.max(MAX_QUANTITY),
 	};
 
-	const { register, handleSubmit, errors, reset } = useRHF(
+	const { register, handleSubmit, errors, reset, context } = useRHF(
 		schema,
 		TAPE_TO_COIL_TRX_NULL
 	);
@@ -75,6 +75,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Tape Log of ${updateTapeLog?.type_of_zipper}`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

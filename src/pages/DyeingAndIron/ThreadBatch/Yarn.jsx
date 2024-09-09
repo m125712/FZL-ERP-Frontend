@@ -34,7 +34,7 @@ export default function Index({
 	// 	),
 	// };
 
-	const { register, handleSubmit, errors, reset, control } = useRHF(
+	const { register, handleSubmit, errors, reset, control ,context} = useRHF(
 		//schema,
 		DYEING_THREAD_BATCH_YARN_SCHEMA,
 		DYEING_THREAD_BATCH_YARN_NULL
@@ -53,7 +53,7 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
-		console.log(yarn, 'onsubmit');
+	
 		if (Number(yarn?.yarn_quantity) !== 0) {
 			const updatedData = {
 				uuid: yarn?.uuid,
@@ -96,6 +96,7 @@ export default function Index({
 					? `Update Yarn on ${yarn?.batch_id} `
 					: `Yarn Issue on ${yarn?.batch_id} `
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

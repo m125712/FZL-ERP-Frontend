@@ -3,13 +3,13 @@ import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useOtherOrderPropertiesByTypeName } from '@/state/Other';
 import { useSliderDieCastingStock } from '@/state/Slider';
-import { CheckBox, FormField, Input, ReactSelect, Textarea, Radio } from '@/ui';
+import { CheckBox, FormField, Input, Radio, ReactSelect, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
-import {
-	SLIDER_DIE_CASTING_STOCK_SCHEMA,
-	SLIDER_DIE_CASTING_STOCK_NULL,
-} from '@util/Schema';
 import { DevTool } from '@hookform/devtools';
+import {
+	SLIDER_DIE_CASTING_STOCK_NULL,
+	SLIDER_DIE_CASTING_STOCK_SCHEMA,
+} from '@util/Schema';
 
 export default function Index({
 	modalId = '',
@@ -27,7 +27,7 @@ export default function Index({
 		errors,
 		getValues,
 		reset,
-		context
+		context,
 	} = useRHF(SLIDER_DIE_CASTING_STOCK_SCHEMA, SLIDER_DIE_CASTING_STOCK_NULL);
 
 	// Other Order Properties
@@ -223,20 +223,22 @@ export default function Index({
 						}}
 					/>
 				</FormField>
-
-				<FormField label='logo_type' title='Logo' errors={errors}>
+				<FormField
+					label='puller_link'
+					title='Puller Link'
+					errors={errors}>
 					<Controller
-						name={'logo_type'}
+						name={'puller_link'}
 						control={control}
 						render={({ field: { onChange } }) => {
 							return (
 								<ReactSelect
-									placeholder='Select Logo Type'
-									options={logo_type}
-									value={logo_type?.filter(
-										(logo_type) =>
-											logo_type.value ==
-											getValues('logo_type')
+									placeholder='Select Puller Link'
+									options={puller_link}
+									value={puller_link?.filter(
+										(item) =>
+											item.value ==
+											getValues('puller_link')
 									)}
 									onChange={(e) => onChange(e.value)}
 									// isDisabled={order_info_id !== undefined}
@@ -246,7 +248,6 @@ export default function Index({
 					/>
 				</FormField>
 			</div>
-
 			{/* SLIDER BODY SHAPE, PULLER LINK, STOPPER TYPE */}
 			<div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
 				<FormField
@@ -274,22 +275,20 @@ export default function Index({
 					/>
 				</FormField>
 
-				<FormField
-					label='puller_link'
-					title='Puller Link'
-					errors={errors}>
+				{/* //* TODO: if logo_type selected, then at least one of the input should be selected */}
+				<FormField label='logo_type' title='Logo' errors={errors}>
 					<Controller
-						name={'puller_link'}
+						name={'logo_type'}
 						control={control}
 						render={({ field: { onChange } }) => {
 							return (
 								<ReactSelect
-									placeholder='Select Puller Link'
-									options={puller_link}
-									value={puller_link?.filter(
-										(item) =>
-											item.value ==
-											getValues('puller_link')
+									placeholder='Select Logo Type'
+									options={logo_type}
+									value={logo_type?.filter(
+										(logo_type) =>
+											logo_type.value ==
+											getValues('logo_type')
 									)}
 									onChange={(e) => onChange(e.value)}
 									// isDisabled={order_info_id !== undefined}
@@ -298,71 +297,58 @@ export default function Index({
 						}}
 					/>
 				</FormField>
-
 				<div className='mt-6 flex items-center gap-1 text-sm'>
 					<CheckBox
 						label='is_logo_body'
-						title='Body'
+						title='Logo in Body'
 						height='h-[2.9rem]'
 						defaultChecked={getValues('is_logo_body')}
-						className={
-							'w-full rounded border border-primary/30 bg-primary/5 px-2'
-						}
+						className='w-full rounded border border-primary/30 bg-primary/5 px-2'
 						{...{ register, errors }}
 					/>
 
 					<CheckBox
 						label='is_logo_puller'
-						title='Puller'
+						title='Logo in Puller'
 						height='h-[2.9rem]'
 						defaultChecked={getValues('is_logo_puller')}
-						className={
-							'w-full rounded border border-primary/30 bg-primary/5 px-2'
-						}
+						className='w-full rounded border border-primary/30 bg-primary/5 px-2'
 						{...{ register, errors }}
 					/>
 				</div>
 			</div>
 
+			<div className='mt-4 text-lg font-bold text-primary'>
+				Which Item?
+			</div>
 			{/* IS BODY, IS PULLER, IS CAP, IS LINK */}
 			<div className='mt-2 grid grid-cols-2 gap-4 md:grid-cols-4'>
 				<CheckBox
 					label='is_body'
 					title='Body'
-					height='h-[2.9rem] '
-					className={
-						'rounded border border-primary/30 bg-primary/5 px-2'
-					}
+					height='h-[2.9rem]'
+					className='rounded border border-primary/30 bg-primary/5 px-2'
 					{...{ register, errors }}
 				/>
-
 				<CheckBox
 					label='is_puller'
 					title='Puller'
-					height='h-[2.9rem] '
-					className={
-						'rounded border border-primary/30 bg-primary/5 px-2'
-					}
+					height='h-[2.9rem]'
+					className='rounded border border-primary/30 bg-primary/5 px-2'
 					{...{ register, errors }}
 				/>
-
 				<CheckBox
 					label='is_cap'
 					title='Cap'
-					height='h-[2.9rem] '
-					className={
-						'rounded border border-primary/30 bg-primary/5 px-2'
-					}
+					height='h-[2.9rem]'
+					className='rounded border border-primary/30 bg-primary/5 px-2'
 					{...{ register, errors }}
 				/>
-
 				<CheckBox
 					label='is_link'
 					title='Link'
-					height='h-[2.9rem] '
-					className={
-						'rounded border border-primary/30 bg-primary/5 px-2'
-					}
+					height='h-[2.9rem]'
+					className='rounded border border-primary/30 bg-primary/5 px-2'
 					{...{ register, errors }}
 				/>
 			</div>
@@ -372,40 +358,29 @@ export default function Index({
 				<CheckBox
 					label='is_h_bottom'
 					title='H Bottom'
-					height='h-[2.9rem] '
-					className={
-						'rounded border border-primary/30 bg-primary/5 px-2'
-					}
+					height='h-[2.9rem]'
+					className='rounded border border-primary/30 bg-primary/5 px-2'
 					{...{ register, errors }}
 				/>
-
 				<CheckBox
 					label='is_u_top'
 					title='U Top'
-					height='h-[2.9rem] '
-					className={
-						'rounded border border-primary/30 bg-primary/5 px-2'
-					}
+					height='h-[2.9rem]'
+					className='rounded border border-primary/30 bg-primary/5 px-2'
 					{...{ register, errors }}
 				/>
-
 				<CheckBox
 					label='is_box_pin'
 					title='Box Pin'
-					height='h-[2.9rem] '
-					className={
-						'rounded border border-primary/30 bg-primary/5 px-2'
-					}
+					height='h-[2.9rem]'
+					className='rounded border border-primary/30 bg-primary/5 px-2'
 					{...{ register, errors }}
 				/>
-
 				<CheckBox
 					label='is_two_way_pin'
 					title='Two Way Pin'
-					height='h-[2.9rem] '
-					className={
-						'rounded border border-primary/30 bg-primary/5 px-2'
-					}
+					height='h-[2.9rem]'
+					className='rounded border border-primary/30 bg-primary/5 px-2'
 					{...{ register, errors }}
 				/>
 			</div>

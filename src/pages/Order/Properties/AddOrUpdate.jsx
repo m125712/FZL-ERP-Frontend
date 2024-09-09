@@ -24,6 +24,7 @@ export default function Index({
 		control,
 		Controller,
 		getValues,
+		context
 	} = useRHF(PROPERTIES_SCHEMA, PROPERTIES_NULL);
 
 	useFetchForRhfReset(
@@ -111,6 +112,7 @@ export default function Index({
 					? 'Update Order Properties'
 					: 'Order Properties'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

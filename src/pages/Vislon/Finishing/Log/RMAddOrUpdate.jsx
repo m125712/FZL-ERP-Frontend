@@ -55,7 +55,8 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		wa,
+		context,
+		watch
 	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
@@ -106,6 +107,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Vislon RM Finishing Log of ${updateFinishingRMLog?.material_name}`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

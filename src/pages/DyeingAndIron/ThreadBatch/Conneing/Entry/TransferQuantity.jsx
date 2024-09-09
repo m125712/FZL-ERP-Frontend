@@ -37,7 +37,7 @@ export default function Index({
 	// 	),
 	// };
 
-	const { register, handleSubmit, errors, reset, control } = useRHF(
+	const { register, handleSubmit, errors, reset, control, context } = useRHF(
 		//schema,
 		DYEING_THREAD_BATCH_ENTRY_TRANSFER_SCHEMA,
 		DYEING_THREAD_BATCH_ENTRY_TRANSFER_NULL
@@ -82,6 +82,7 @@ export default function Index({
 					? `Update Transfer Quantity  `
 					: `Transfer Quantity  `
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

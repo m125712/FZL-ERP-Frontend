@@ -37,7 +37,7 @@ export default function Index({
 	const { postData } = useNylonMFProduction();
 	const { user } = useAuth();
 
-	const { register, handleSubmit, errors, reset, control } = useRHF(
+	const { register, handleSubmit, errors, reset, control ,context} = useRHF(
 		{
 			...SFG_TRANSACTION_SCHEMA_IN_PCS,
 			trx_quantity: SFG_TRANSACTION_SCHEMA_IN_PCS.trx_quantity.max(
@@ -99,6 +99,7 @@ export default function Index({
 				${updateMFTRX.item_description} -> 
 				${updateMFTRX.style_color_size} 
 				`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

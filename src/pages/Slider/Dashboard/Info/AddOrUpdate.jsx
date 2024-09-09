@@ -37,6 +37,7 @@ export default function Index({
 		errors,
 		getValues,
 		reset,
+		context
 	} = useRHF(SLIDER_DASHBOARD_INFO_SCHEMA, SLIDER_DASHBOARD_INFO_NULL);
 
 	const { data: orders } = useOtherOrder();
@@ -116,6 +117,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={updateInfo?.uuid !== null ? 'Update Info' : 'Create Info'}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			formClassName={'mt-4'}>

@@ -26,6 +26,7 @@ export default function Index({
 		control,
 		Controller,
 		getValues,
+		context
 	} = useRHF(THREAD_PROGRAMS_SCHEMA, THREAD_PROGRAMS_NULL);
 	const { value: material } = useFetch(
 		'/other/material/value/label/unit/quantity'
@@ -80,6 +81,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={update?.uuid !== null ? 'Update Programs' : 'Programs'}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

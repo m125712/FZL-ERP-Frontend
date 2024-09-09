@@ -263,11 +263,14 @@ export default function Index() {
 	useEffect(() => {
 		if (isAllChecked || isSomeChecked) {
 			return orderEntryField.forEach((item, index) => {
-				setValue(`pi_entry[${index}].is_checked`, true);
+				if (isAllChecked) {
+					setValue(`pi_entry[${index}].is_checked`, true);
+				}
 			});
 		}
 		if (!isAllChecked) {
 			return orderEntryField.forEach((item, index) => {
+				setValue('is_all_checked', false);
 				setValue(`pi_entry[${index}].is_checked`, false);
 			});
 		}
@@ -285,6 +288,7 @@ export default function Index() {
 				isSomeChecked = true;
 			} else {
 				isEveryChecked = false;
+				setValue('is_all_checked', false);
 			}
 
 			if (isSomeChecked && !isEveryChecked) {

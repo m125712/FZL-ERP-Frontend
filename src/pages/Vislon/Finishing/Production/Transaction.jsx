@@ -30,7 +30,7 @@ export default function Index({
 	const { postData } = useVislonTMP();
 	const { user } = useAuth();
 
-	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, control, context } = useRHF(
 		{
 			...VISLON_TRANSACTION_SCHEMA,
 			trx_quantity_in_kg: NUMBER,
@@ -85,6 +85,7 @@ export default function Index({
 			id='TeethMoldingTrxModal'
 			title='Transaction'
 			subTitle='Finishing -> Warehouse'
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

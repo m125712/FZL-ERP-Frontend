@@ -2,7 +2,7 @@ import { lazy } from 'react';
 
 // Teeth Molding
 const VislonTeethMolding = lazy(
-	() => import('@/pages/Vislon/TeethMolding/RMStock/RMStock')
+	() => import('@/pages/Vislon/TeethMolding/RMStock')
 );
 const VislonTeethMoldingSFG = lazy(
 	() => import('@/pages/Vislon/TeethMolding/SFG')
@@ -17,9 +17,7 @@ const VislonProduction = lazy(
 );
 
 // Finishing
-const VislonFinishing = lazy(
-	() => import('@/pages/Vislon/Finishing/RMStock/RMStock')
-);
+const VislonFinishing = lazy(() => import('@/pages/Vislon/Finishing/RMStock'));
 const VislonFinishingSFG = lazy(() => import('@/pages/Vislon/Finishing/SFG'));
 const VislonFinishingTrxLog = lazy(
 	() => import('@/pages/Vislon/Finishing/Log')
@@ -31,7 +29,6 @@ const VislonFinishingProduction = lazy(
 );
 
 export const VislonRoutes = [
-
 	// * Teeth Molding
 	{
 		id: 41,
@@ -88,7 +85,7 @@ export const VislonRoutes = [
 		],
 	},
 
-	// * Finishing 
+	// * Finishing
 	{
 		id: 42,
 		name: 'RM',

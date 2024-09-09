@@ -1,8 +1,16 @@
 import { DeleteModal } from '@/components/Modal';
-import { useFetchForRhfResetForOrder, useRHF } from '@/hooks';
+import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useLabDipRecipe } from '@/state/LabDip';
-import { ActionButtons, DynamicField, Input, JoinInput, Textarea } from '@/ui';
+import {
+	ActionButtons,
+	DynamicField,
+	FormField,
+	Input,
+	JoinInput,
+	ReactSelect,
+	Textarea,
+} from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -46,6 +54,9 @@ export default function Index() {
 			recipe_uuid,
 			reset
 		);
+	const { value: material } = useFetch(
+		'/other/material/value/label/unit/quantity'
+	);
 
 	// recipe_entry
 	const {
@@ -245,40 +256,68 @@ export default function Index() {
 						title='Recipe Entry'
 						handelAppend={handelRecipeEntryAppend}
 						tableHead={[
-							'color',
-							'quantity',
+							'Dyes',
+							'quantity(Solution %)',
 							'remarks',
 							'Action',
 						].map((item) => (
 							<th
 								key={item}
 								scope='col'
-								className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide transition duration-300 first:pl-2'>
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
 								{item}
 							</th>
 						))}>
 						{recipeEntryField.map((item, index) => (
 							<tr key={item.id}>
-								{/* Color */}
-								<td className={rowClass}>
-									<Textarea
-										title='color'
-										label={`recipe_entry[${index}].color`}
+								<td className={`${rowClass}`}>
+									<FormField
+										label={`recipe_entry[${index}].material_uuid`}
+										title='Dyes'
 										is_title_needed='false'
 										dynamicerror={
-											errors?.recipe_entry?.[index]?.color
-										}
-										register={register}
-									/>
+											errors?.recipe_entry?.[index]
+												?.material_uuid
+										}>
+										<Controller
+											name={`recipe_entry[${index}].material_uuid`}
+											control={control}
+											render={({
+												field: { onChange },
+											}) => {
+												return (
+													<ReactSelect
+														placeholder='Select Dyes'
+														options={material}
+														value={material?.find(
+															(inItem) =>
+																inItem.value ==
+																getValues(
+																	`recipe_entry[${index}].material_uuid`
+																)
+														)}
+														onChange={(e) => {
+															onChange(e.value);
+															setUnit({
+																...unit,
+																[index]: e.unit,
+															});
+														}}
+														menuPortalTarget={
+															document.body
+														}
+													/>
+												);
+											}}
+										/>
+									</FormField>
 								</td>
 
 								{/* Quantity */}
-								<td className={`w-40 ${rowClass}`}>
-									<JoinInput
-										title='quantity'
+								<td className={` ${rowClass}`}>
+									<Input
 										label={`recipe_entry[${index}].quantity`}
 										is_title_needed='false'
-										unit='Liter'
 										dynamicerror={
 											errors?.recipe_entry?.[index]
 												?.quantity
@@ -290,7 +329,6 @@ export default function Index() {
 								{/* Remarks */}
 								<td className={` ${rowClass}`}>
 									<Textarea
-										title='remarks'
 										label={`recipe_entry[${index}].remarks`}
 										is_title_needed='false'
 										dynamicerror={
@@ -300,22 +338,6 @@ export default function Index() {
 										register={register}
 									/>
 								</td>
-								{/* <td className={`w-16 ${rowClass}`}>
-									<Switch
-										title="status"
-										label={`order_entry[${index}].order_entry_status`}
-										is_title_needed="false"
-										dynamicerror={
-											errors?.order_entry?.[index]
-												?.order_entry_status
-										}
-										register={register}
-										defaultChecked={
-											item.order_entry_status === 1
-										}
-										disabled={isSwatchButtonDisabled(index)}
-									/>
-								</td> */}
 								<td
 									className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
 									<ActionButtons

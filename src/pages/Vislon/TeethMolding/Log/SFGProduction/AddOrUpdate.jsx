@@ -1,40 +1,32 @@
 import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
+import { useAuth } from '@/context/auth';
+import { useRHF, useUpdateFunc } from '@/hooks';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
-	NUMBER_REQUIRED,
-	NUMBER,
 	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
 	SFG_PRODUCTION_SCHEMA_IN_KG,
 } from '@util/Schema';
 import { useVislonTMPEntryByUUID } from '@/state/Vislon';
 import { useEffect } from 'react';
+import { number } from 'yup';
 
 export default function Index({
 	modalId = '',
-	updateFinishingLog = {
+	updateTeethMoldingLog = {
 		uuid: null,
 		sfg_uuid: null,
 		section: null,
 		production_quantity_in_kg: null,
 		production_quantity: null,
-		coloring_prod: null,
 		wastage: null,
 		remarks: '',
 	},
-	setUpdateFinishingLog,
+	setUpdateTeethMoldingLog,
 }) {
 	const { data, updateData, url } = useVislonTMPEntryByUUID(
-		updateFinishingLog?.uuid
+		updateTeethMoldingLog?.uuid
 	);
-
-	const MAX_PROD = Math.max(
-		Number(updateFinishingLog.production_quantity),
-		Number(updateFinishingLog.coloring_prod)
-	).toFixed(3);
-
-	const MAX_PROD_KG = Number(MAX_PROD).toFixed(3);
 
 	const {
 		register,
@@ -45,24 +37,14 @@ export default function Index({
 		reset,
 		getValues,
 		watch,
-	} = useRHF(
-		{
-			...SFG_PRODUCTION_SCHEMA_IN_KG,
-			production_quantity: NUMBER_REQUIRED.max(
-				MAX_PROD,
-				'Beyond Max Quantity'
-			),
-			production_quantity_in_kg: NUMBER,
-		},
-		{
-			...SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
-			production_quantity: 0,
-			production_quantity_in_kg: 0,
-		}
-	);
+		context
+	} = useRHF(SFG_PRODUCTION_SCHEMA_IN_KG, SFG_PRODUCTION_SCHEMA_IN_KG_NULL);
 
-	const MAX_WASTAGE_KG = Number(
-		// Todo: Fix this
+	const MAX_PROD_KG =  // Todo: Fix this
+		Number(updateTeethMoldingLog.production_quantity_in_kg).toFixed(3) +
+		Number(updateTeethMoldingLog.teeth_coloring_stock);
+
+	const MAX_WASTAGE_KG = Number(  // Todo: Fix this
 		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
 	).toFixed(3);
 
@@ -73,15 +55,15 @@ export default function Index({
 		}
 	}, [data, reset]);
 
+
 	const onClose = () => {
-		setUpdateFinishingLog((prev) => ({
+		setUpdateTeethMoldingLog((prev) => ({
 			...prev,
 			uuid: null,
 			sfg_uuid: null,
 			section: null,
 			production_quantity_in_kg: null,
 			production_quantity: null,
-			coloring_prod: null,
 			wastage: null,
 			remarks: '',
 		}));
@@ -91,7 +73,7 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateFinishingLog?.uuid !== null) {
+		if (updateTeethMoldingLog?.uuid !== null) {
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
@@ -119,7 +101,8 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Finishing Production`}
+			title={`Teeth Molding SFG Production Log`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
@@ -137,23 +120,23 @@ export default function Index({
 								)}
 								onChange={(e) => onChange(e.value)}
 								isDisabled={
-									updateFinishingLog?.uuid !== null
+									updateTeethMoldingLog?.uuid !== null
 								}
 							/>
 						);
 					}}
 				/>
 			</FormField> */}
+
 			<JoinInput
-				title='Production Quantity'
-				label='production_quantity'
+				label='production_quantity_in_kg'
 				unit='PCS'
-				sub_label={`MAX: ${MAX_PROD} PCS`}
+				sub_label={`Max: ${MAX_PROD_KG}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
 				label='wastage'
-				unit='KG'
+				unit='PCS'
 				sub_label={`Max: ${MAX_WASTAGE_KG}`}
 				{...{ register, errors }}
 			/>

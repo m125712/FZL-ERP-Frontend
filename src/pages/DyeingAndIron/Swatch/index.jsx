@@ -1,16 +1,12 @@
-import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetch, useFetchFunc, useUpdateFunc } from '@/hooks';
+import { useAccess, useFetch } from '@/hooks';
 import { useDyeingSwatch } from '@/state/Dyeing';
-import { EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { LinkWithCopy, ReactSelect } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState } from 'react';
-import AddOrUpdate from './AddOrUpdate';
+import { useMemo } from 'react';
 
 export default function Index() {
-	const { data, url, updateData, postData, deleteData, isLoading } =
-		useDyeingSwatch();
+	const { data, updateData, isLoading } = useDyeingSwatch();
 	const info = new PageInfo(
 		'Dyeing/Swatch',
 		'order/swatch',
@@ -92,6 +88,7 @@ export default function Index() {
 				accessorKey: 'recipe_name',
 				header: 'Swatch Status',
 				enableColumnFilter: false,
+				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
 					const { recipe_uuid } = info.row.original;
 
@@ -117,76 +114,20 @@ export default function Index() {
 		[data, recipe]
 	);
 
-	// Fetching data from server
-	// useEffect(() => {
-	// 	document.title = info.getTabName();
-	// 	useFetchFunc(info.getFetchUrl(), setSwatch, setLoading, setError);
-	// }, []);
-
 	const handleSwatchStatus = async (e, idx) => {
 		await updateData.mutateAsync({
 			url: `/zipper/sfg-swatch/${data[idx]?.uuid}`,
 			updatedData: { recipe_uuid: e.value },
 			isOnCloseNeeded: false,
 		});
-
-		// const updatedData = {
-		// 	id: swatch[idx].order_entry_id,
-		// 	swatch_status: e.currentTarget.value,
-		// 	updated_at: GetDateTime(),
-		// };
-
-		// await useUpdateFunc({
-		// 	// replace space, #, other special characters in style
-		// 	uri: `/order/swatch/${updatedData?.id}/${swatch[idx]?.style.replace(/[#&/]/g, '')}`,
-		// 	itemId: updatedData?.id,
-		// 	data: swatch[idx],
-		// 	updatedData: updatedData,
-		// 	setItems: setSwatch((prev) => {
-		// 		prev[idx] = {
-		// 			...prev[idx],
-		// 			...updatedData,
-		// 		};
-		// 		return [...prev];
-		// 	}),
-		// });
 	};
-
-	// Update
-	const [updateSwatch, setUpdateSwatch] = useState({
-		id: null,
-		order_entry_id: null,
-		style: '',
-		status: '',
-		remarks: '',
-	});
-
-	// const handelUpdate = (idx) => {
-	// 	const selected = swatch[idx];
-	// 	setUpdateSwatch((prev) => ({
-	// 		...prev,
-	// 		...selected,
-	// 	}));
-	// 	window[info.getAddOrUpdateModalId()].showModal();
-	// };
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
-	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
 		<div>
 			<ReactTable title={info.getTitle()} data={data} columns={columns} />
-			{/* <Suspense>
-				<AddOrUpdate
-					modalId={info.getAddOrUpdateModalId()}
-					{...{
-						setSwatch,
-						updateSwatch,
-						setUpdateSwatch,
-					}}
-				/>
-			</Suspense> */}
 		</div>
 	);
 }

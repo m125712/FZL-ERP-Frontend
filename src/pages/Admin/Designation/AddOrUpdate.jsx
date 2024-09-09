@@ -2,7 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useAdminDesignations } from '@/state/Admin';
+import { useAdminDesignations, useAdminUsers } from '@/state/Admin';
 import { useOtherDepartment } from '@/state/Other';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
@@ -19,6 +19,7 @@ export default function Index({
 	const { user } = useAuth();
 	const { url, updateData, postData } = useAdminDesignations();
 	const { data: userDepartment } = useOtherDepartment();
+	const { invalidateQuery: invalidateUsers } = useAdminUsers();
 	const {
 		register,
 		handleSubmit,
@@ -27,6 +28,7 @@ export default function Index({
 		control,
 		Controller,
 		getValues,
+		context
 	} = useRHF(USER_DESIGNATION_SCHEMA, USER_DESIGNATION_NULL);
 
 	useFetchForRhfReset(
@@ -61,6 +63,7 @@ export default function Index({
 				updatedData,
 				onClose,
 			});
+			invalidateUsers();
 
 			return;
 		}
@@ -78,6 +81,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateUsers();
 	};
 
 	return (
@@ -88,6 +92,7 @@ export default function Index({
 					? 'Update Designation'
 					: 'Designation'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

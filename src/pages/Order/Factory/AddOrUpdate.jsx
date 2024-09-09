@@ -22,6 +22,7 @@ export default function Index({
 		Controller,
 		control,
 		getValues,
+		context
 	} = useRHF(FACTORY_SCHEMA, FACTORY_NULL);
 
 	const { value: party } = useFetch('/other/party/value/label');
@@ -84,6 +85,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={updateFactory?.uuid !== null ? 'Update Factory' : 'Factory'}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

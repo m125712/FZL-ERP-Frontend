@@ -1,35 +1,41 @@
 import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
+import { useAuth } from '@/context/auth';
+import { useRHF, useUpdateFunc } from '@/hooks';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
-	VISLON_TRANSACTION_SCHEMA_NULL,
-	VISLON_TRANSACTION_SCHEMA,
 	NUMBER_REQUIRED,
+	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
+	SFG_PRODUCTION_SCHEMA_IN_KG,
 } from '@util/Schema';
-import { useVislonTMTEntryByUUID } from '@/state/Vislon';
+import { useVislonTMPEntryByUUID } from '@/state/Vislon';
 import { useEffect } from 'react';
+import { number } from 'yup';
 
 export default function Index({
 	modalId = '',
-	setTeethMoldingLog,
-	updateTeethMoldingLog = {
+	updateFinishingLog = {
 		uuid: null,
 		sfg_uuid: null,
-		trx_quantity_in_kg: null,
-		trx_from: null,
-		trx_to: null,
-		remarks: null,
+		section: null,
+		production_quantity_in_kg: null,
+		production_quantity: null,
+		coloring_prod: null,
+		wastage: null,
+		remarks: '',
 	},
-	setUpdateTeethMoldingLog,
+	setUpdateFinishingLog,
 }) {
-	const MAX_QUANTITY =
-		Number(updateTeethMoldingLog?.teeth_molding_prod) +
-		Number(updateTeethMoldingLog?.trx_quantity_in_kg);
-
-	const { data, updateData, url } = useVislonTMTEntryByUUID(
-		updateTeethMoldingLog?.uuid
+	const { data, updateData, url } = useVislonTMPEntryByUUID(
+		updateFinishingLog?.uuid
 	);
+
+	const MAX_PROD = Math.max(
+		Number(updateFinishingLog.production_quantity),
+		Number(updateFinishingLog.coloring_prod)
+	).toFixed(3);
+	
+	const MAX_PROD_KG = Number(MAX_PROD).toFixed(3);
 
 	const {
 		register,
@@ -39,17 +45,27 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
+		watch,
+		context,
 	} = useRHF(
 		{
-			...VISLON_TRANSACTION_SCHEMA,
-			trx_quantity_in_kg: NUMBER_REQUIRED.max(
-				Number(updateTeethMoldingLog?.teeth_molding_prod) +
-					Number(updateTeethMoldingLog?.trx_quantity_in_kg),
+			...SFG_PRODUCTION_SCHEMA_IN_KG,
+			production_quantity: NUMBER_REQUIRED.max(
+				MAX_PROD,
+				'Beyond Max Quantity'
+			),
+			production_quantity_in_kg: NUMBER_REQUIRED.max(
+				MAX_PROD_KG,
 				'Beyond Max Quantity'
 			),
 		},
-		VISLON_TRANSACTION_SCHEMA_NULL
+		SFG_PRODUCTION_SCHEMA_IN_KG_NULL
 	);
+
+	const MAX_WASTAGE_KG = Number(
+		// Todo: Fix this
+		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
+	).toFixed(3);
 
 	// * To reset the form with the fetched data
 	useEffect(() => {
@@ -58,24 +74,25 @@ export default function Index({
 		}
 	}, [data, reset]);
 
-	
 	const onClose = () => {
-		setUpdateTeethMoldingLog((prev) => ({
+		setUpdateFinishingLog((prev) => ({
 			...prev,
 			uuid: null,
 			sfg_uuid: null,
-			trx_quantity_in_kg: null,
-			trx_from: null,
-			trx_to: null,
-			remarks: null,
+			section: null,
+			production_quantity_in_kg: null,
+			production_quantity: null,
+			coloring_prod: null,
+			wastage: null,
+			remarks: '',
 		}));
-		reset(VISLON_TRANSACTION_SCHEMA_NULL);
+		reset(SFG_PRODUCTION_SCHEMA_IN_KG_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateTeethMoldingLog?.uuid !== null) {
+		if (updateFinishingLog?.uuid !== null) {
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
@@ -103,11 +120,12 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Teeth Molding SFG Transfer Log`}
+			title={`Teeth Molding SFG Production Log`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<FormField label='trx_to' title='Trx to' errors={errors}>
+			{/* <FormField label='trx_to' title='Trx to' errors={errors}>
 				<Controller
 					name={'trx_to'}
 					control={control}
@@ -121,17 +139,30 @@ export default function Index({
 								)}
 								onChange={(e) => onChange(e.value)}
 								isDisabled={
-									updateTeethMoldingLog?.uuid !== null
+									updateFinishingLog?.uuid !== null
 								}
 							/>
 						);
 					}}
 				/>
-			</FormField>
+			</FormField> */}
 			<JoinInput
-				label='trx_quantity_in_kg'
+				title='Production Quantity'
+				label='production_quantity'
+				unit='PCS'
+				sub_label={`MAX: ${MAX_PROD} PCS`}
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				label='production_quantity_in_kg'
 				unit='KG'
-				sub_label={`Max: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${MAX_PROD_KG}`}
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				label='wastage'
+				unit='KG'
+				sub_label={`Max: ${MAX_WASTAGE_KG}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

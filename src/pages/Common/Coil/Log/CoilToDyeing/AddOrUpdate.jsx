@@ -28,6 +28,7 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
+		context
 	} = useRHF(COMMON_COIL_TO_DYEING_SCHEMA, COMMON_COIL_TO_DYEING_NULL);
 
 	useEffect(() => {
@@ -66,6 +67,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Coil SFG Transfer Log`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

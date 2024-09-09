@@ -33,7 +33,7 @@ export default function Index({
 		),
 	};
 
-	const { register, handleSubmit, errors, reset, watch } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
 		schema,
 		RM_MATERIAL_USED_NULL
 	);
@@ -73,6 +73,7 @@ export default function Index({
 			id={modalId}
 			title={updateLabDipStock?.uuid !== null && 'Material Usage Entry'}
 			onSubmit={handleSubmit(onSubmit)}
+			formContext={context}
 			onClose={onClose}
 			isSmall={true}>
 			<JoinInput

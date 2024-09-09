@@ -91,12 +91,13 @@ const AgainstOrder = () => {
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
 	useEffect(() => {
 		if (isAllChecked || isSomeChecked) {
-			return stockFields.forEach((item, index) =>
-				setValue(`stocks[${index}].is_checked`, true)
-			);
+			return stockFields.forEach((item, index) => {
+				if (isAllChecked) setValue(`stocks[${index}].is_checked`, true);
+			});
 		}
 		if (!isAllChecked) {
 			return stockFields.forEach((item, index) => {
+				setValue('is_all_checked', false);
 				setValue(`stocks[${index}].is_checked`, false);
 			});
 		}
@@ -114,6 +115,7 @@ const AgainstOrder = () => {
 				isSomeChecked = true;
 			} else {
 				isEveryChecked = false;
+				setValue('is_all_checked', false);
 			}
 
 			if (isSomeChecked && !isEveryChecked) {

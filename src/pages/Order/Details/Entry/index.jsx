@@ -203,40 +203,18 @@ export default function Index() {
 			),
 		];
 
-		// * All promises
-		await Promise.all(order_entry_promises)
-			.then(() => reset(Object.assign({}, ORDER_NULL)))
-			.then(async () => {
-				await OrderDetailsInvalidate();
-				navigate(`/order/details`);
-			})
-			.catch((err) => console.log(err));
-
 		// * Slider
 		const slider_quantity =
 			data.order_entry.length === 1
 				? data.order_entry[0].quantity
 				: data.order_entry.reduce(
-						(prev, curr) => prev.quantity + curr.quantity
+						(prev, curr) => prev + curr.quantity,
+						0
 					);
 
 		const slider_info = {
 			uuid: nanoid(),
-			order_info_uuid: data.order_info_uuid,
-			item: data.item,
-			zipper_number: data.zipper_number,
-			end_type: data.end_type,
-			lock_type: data.lock_type,
-			puller_type: data.puller_type,
-			puller_color: data.puller_color,
-			coloring_type: data.coloring_type,
-			puller_link: data.puller_link,
-			slider: data?.slider,
-			slider_body_shape: data?.slider_body_shape,
-			slider_link: data?.slider_link,
-			logo_type: data.logo_type,
-			is_logo_body: data?.is_logo_body ? 1 : 0,
-			is_logo_puller: data?.is_logo_puller ? 1 : 0,
+			order_description_uuid: new_order_description_uuid,
 			order_quantity: slider_quantity,
 			created_at: GetDateTime(),
 		};
@@ -246,6 +224,15 @@ export default function Index() {
 			newData: slider_info,
 			isOnCloseNeeded: false,
 		});
+
+		// * All promises
+		await Promise.all(order_entry_promises)
+			.then(() => reset(Object.assign({}, ORDER_NULL)))
+			.then(async () => {
+				await OrderDetailsInvalidate();
+				navigate(`/order/details`);
+			})
+			.catch((err) => console.log(err));
 	};
 
 	// Check if order_number is valid

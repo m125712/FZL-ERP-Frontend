@@ -39,6 +39,7 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
+		context
 	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
 	useEffect(() => {
@@ -83,6 +84,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Coil Forming RM Log of ${updateCoilLog?.material_name}`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

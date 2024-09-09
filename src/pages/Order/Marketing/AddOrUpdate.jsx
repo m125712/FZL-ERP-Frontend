@@ -24,6 +24,7 @@ export default function Index({
 		Controller,
 		control,
 		getValues,
+		context
 	} = useRHF(MARKETING_SCHEMA, MARKETING_NULL);
 
 	useFetchForRhfReset(
@@ -89,6 +90,7 @@ export default function Index({
 					? 'Update Marketing'
 					: 'Marketing'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

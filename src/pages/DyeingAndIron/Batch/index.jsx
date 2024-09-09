@@ -1,20 +1,19 @@
-import { Suspense } from '@/components/Feedback';
+
 import ReactTable from '@/components/Table';
 import { useDyeingBatch } from '@/state/Dyeing';
-import { useAccess, useFetch } from '@/hooks';
+import { useAccess } from '@/hooks';
 import { EditDelete, LinkWithCopy, DateTime } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Index() {
-	const { data, url, updateData, postData, deleteData, isLoading } =
+	const { data, url, isLoading } =
 		useDyeingBatch();
 	const info = new PageInfo('Batch', url, 'dyeing__batch');
 	const haveAccess = useAccess('dyeing__batch');
 	const navigate = useNavigate();
 
-	console.log(data);
 	const columns = useMemo(
 		() => [
 			// * batch_id
@@ -69,7 +68,7 @@ export default function Index() {
 			{
 				accessorKey: 'created_at',
 				header: 'Created at',
-				width: 'w-40',
+				width: 'w-24',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
@@ -129,7 +128,7 @@ export default function Index() {
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
-	// if (error) return <h1>Error:{error}</h1>;
+
 
 	return (
 		<div>
@@ -140,16 +139,6 @@ export default function Index() {
 				columns={columns}
 				accessor={haveAccess.includes('create')}
 			/>
-			{/* <Suspense>
-				<AddOrUpdate
-					modalId={info.getAddOrUpdateModalId()}
-					{...{
-						setSwatch,
-						updateSwatch,
-						setUpdateSwatch,
-					}}
-				/>
-			</Suspense> */}
 		</div>
 	);
 }

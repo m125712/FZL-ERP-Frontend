@@ -6,30 +6,29 @@ import {
 	VISLON_TRANSACTION_SCHEMA_NULL,
 	VISLON_TRANSACTION_SCHEMA,
 	NUMBER_REQUIRED,
-	NUMBER,
 } from '@util/Schema';
 import { useVislonTMTEntryByUUID } from '@/state/Vislon';
 import { useEffect } from 'react';
 
 export default function Index({
 	modalId = '',
-	updateFinishingLog = {
+	setTeethMoldingLog,
+	updateTeethMoldingLog = {
 		uuid: null,
 		sfg_uuid: null,
 		trx_quantity_in_kg: null,
-		trx_quantity: null,
 		trx_from: null,
 		trx_to: null,
 		remarks: null,
 	},
-	setUpdateFinishingLog,
+	setUpdateTeethMoldingLog,
 }) {
 	const MAX_QUANTITY =
-		Number(updateFinishingLog?.coloring_prod) +
-		Number(updateFinishingLog?.trx_quantity);
+		Number(updateTeethMoldingLog?.teeth_molding_prod) +
+		Number(updateTeethMoldingLog?.trx_quantity_in_kg);
 
 	const { data, updateData, url } = useVislonTMTEntryByUUID(
-		updateFinishingLog?.uuid
+		updateTeethMoldingLog?.uuid
 	);
 
 	const {
@@ -40,21 +39,17 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
+		context
 	} = useRHF(
 		{
 			...VISLON_TRANSACTION_SCHEMA,
-			trx_quantity_in_kg: NUMBER,
-			trx_quantity: NUMBER_REQUIRED.max(
-				Number(updateFinishingLog?.teeth_molding_prod) +
-					Number(updateFinishingLog?.trx_quantity_in_kg),
+			trx_quantity_in_kg: NUMBER_REQUIRED.max(
+				Number(updateTeethMoldingLog?.teeth_molding_prod) +
+					Number(updateTeethMoldingLog?.trx_quantity_in_kg),
 				'Beyond Max Quantity'
 			),
 		},
-		{
-			...VISLON_TRANSACTION_SCHEMA_NULL,
-			trx_quantity_in_kg: 0,
-			trx_quantity: 0,
-		}
+		VISLON_TRANSACTION_SCHEMA_NULL
 	);
 
 	// * To reset the form with the fetched data
@@ -64,13 +59,13 @@ export default function Index({
 		}
 	}, [data, reset]);
 
+	
 	const onClose = () => {
-		setUpdateFinishingLog((prev) => ({
+		setUpdateTeethMoldingLog((prev) => ({
 			...prev,
 			uuid: null,
 			sfg_uuid: null,
 			trx_quantity_in_kg: null,
-			trx_quantity: null,
 			trx_from: null,
 			trx_to: null,
 			remarks: null,
@@ -81,7 +76,7 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateFinishingLog?.uuid !== null) {
+		if (updateTeethMoldingLog?.uuid !== null) {
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
@@ -109,12 +104,12 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Transaction Log`}
+			title={`Teeth Molding SFG Transfer Log`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			subTitle='Finishing -> Warehouse'
 			isSmall={true}>
-			{/* <FormField label='trx_to' title='Trx to' errors={errors}>
+			<FormField label='trx_to' title='Trx to' errors={errors}>
 				<Controller
 					name={'trx_to'}
 					control={control}
@@ -128,16 +123,16 @@ export default function Index({
 								)}
 								onChange={(e) => onChange(e.value)}
 								isDisabled={
-									updateFinishingLog?.uuid !== null
+									updateTeethMoldingLog?.uuid !== null
 								}
 							/>
 						);
 					}}
 				/>
-			</FormField> */}
+			</FormField>
 			<JoinInput
-				label='trx_quantity'
-				unit='PCS'
+				label='trx_quantity_in_kg'
+				unit='KG'
 				sub_label={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>

@@ -30,6 +30,7 @@ export default function Index({
 		Controller,
 		control,
 		getValues,
+		context
 	} = useRHF(MERCHANDISER_SCHEMA, MERCHANDISER_NULL);
 
 	const { value: party } = useFetch('/other/party/value/label');
@@ -98,6 +99,7 @@ export default function Index({
 					? 'Update Merchandiser'
 					: 'Merchandiser'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

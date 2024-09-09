@@ -1,14 +1,14 @@
 import { AddModal } from '@/components/Modal';
 import { useRHF } from '@/hooks';
+import { useVislonTMTEntryByUUID } from '@/state/Vislon';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
-	VISLON_TRANSACTION_SCHEMA_NULL,
-	VISLON_TRANSACTION_SCHEMA,
-	NUMBER_REQUIRED,
 	NUMBER,
+	NUMBER_REQUIRED,
+	VISLON_TRANSACTION_SCHEMA,
+	VISLON_TRANSACTION_SCHEMA_NULL,
 } from '@util/Schema';
-import { useVislonTMTEntryByUUID } from '@/state/Vislon';
 import { useEffect } from 'react';
 
 export default function Index({
@@ -40,6 +40,7 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
+		context,
 	} = useRHF(
 		{
 			...VISLON_TRANSACTION_SCHEMA,
@@ -106,31 +107,11 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Transaction Log`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			subTitle='Finishing -> Warehouse'
 			isSmall={true}>
-			{/* <FormField label='trx_to' title='Trx to' errors={errors}>
-				<Controller
-					name={'trx_to'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select Transaction Area'
-								options={transactionArea}
-								value={transactionArea?.find(
-									(item) => item.value == getValues('trx_to')
-								)}
-								onChange={(e) => onChange(e.value)}
-								isDisabled={
-									updateFinishingLog?.uuid !== null
-								}
-							/>
-						);
-					}}
-				/>
-			</FormField> */}
 			<JoinInput
 				label='trx_quantity'
 				unit='PCS'

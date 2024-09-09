@@ -2,9 +2,7 @@ import { elements } from 'chart.js';
 import { lazy } from 'react';
 
 // Dyeing And Iron
-const DyeingRMStock = lazy(
-	() => import('@/pages/DyeingAndIron/RMStock/RMStock')
-);
+const DyeingRMStock = lazy(() => import('@/pages/DyeingAndIron/RMStock'));
 const DyeingSFG = lazy(() => import('@/pages/DyeingAndIron/SFG'));
 const DyeingLog = lazy(() => import('@/pages/DyeingAndIron/Log'));
 const DyeingSwatch = lazy(() => import('@/pages/DyeingAndIron/Swatch'));

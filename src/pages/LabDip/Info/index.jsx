@@ -1,14 +1,16 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
+import cn from '@/lib/cn';
 import { useLabDipInfo } from '@/state/LabDip';
 import { EditDelete, LinkWithCopy, StatusButton } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Index() {
-	const { data, isLoading, isError, url } = useLabDipInfo();
+	const { data, isLoading, isError, url, updateData } = useLabDipInfo();
 	const navigate = useNavigate();
 	const info = new PageInfo('Lab Dip/Info', url, 'lab_dip__info');
 	const haveAccess = useAccess('lab_dip__info');
@@ -83,7 +85,20 @@ export default function Index() {
 				accessorKey: 'lab_status',
 				header: 'Status',
 				enableColumnFilter: false,
-				cell: (info) => (info.getValue() === 1 ? 'Done' : 'Pending'),
+				hidden: !haveAccess.includes('update'),
+				cell: (info) => {
+					return (
+						<input
+							onChange={() => handelStatusChange(info.row.index)}
+							checked={info.getValue() === 1}
+							type='checkbox'
+							className={cn(
+								'toggle toggle-md checked:toggle-accent'
+							)}
+							defaultChecked
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'created_by_name',
@@ -132,7 +147,16 @@ export default function Index() {
 
 		navigate(`/lab-dip/info/update/${info_id}/${uuid}`);
 	};
-
+	const handelStatusChange = async (idx) => {
+		await updateData.mutateAsync({
+			url: `${url}/${data[idx]?.uuid}`,
+			updatedData: {
+				lab_status: data[idx]?.lab_status === 1 ? 0 : 1,
+				updated_at: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
+	};
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 

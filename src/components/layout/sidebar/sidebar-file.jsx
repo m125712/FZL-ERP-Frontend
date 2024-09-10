@@ -2,6 +2,7 @@ import { NavLink, useResolvedPath } from 'react-router-dom';
 import cn from '@/lib/cn';
 import matchUrl from '@/util/matchUrl';
 import { motion } from 'framer-motion';
+import { useLayout } from '../layout-provider';
 
 const variants = {
 	animate: {
@@ -21,11 +22,13 @@ const variants = {
 };
 
 const SidebarFile = ({ path, name }) => {
+	const { setSidebarOpen } = useLayout();
 	const { pathname } = useResolvedPath();
 
 	return (
 		<motion.li variants={variants} initial='initial' animate='animate'>
 			<NavLink
+				onClick={() => setSidebarOpen(false)}
 				to={path}
 				className={({ isActive }) =>
 					cn(

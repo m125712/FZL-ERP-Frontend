@@ -1,15 +1,23 @@
 import { useSidebar } from './sidebar-provider';
-import { CopyMinus } from 'lucide-react';
+import { CopyMinus, X } from 'lucide-react';
 import { motion } from 'framer-motion';
-import SidebarLogo from './sidebar-logo';
+import BrandLogo from '../brand-logo';
+import { useLayout } from '../layout-provider';
 
 const SidebarHeader = () => {
+	const { setSidebarOpen } = useLayout();
 	const { setIsCloseAll } = useSidebar();
 
 	return (
 		<div>
-			<div className='border-b border-secondary px-4 py-6'>
-				<SidebarLogo className='flex items-center justify-center text-2xl font-bold text-primary-content md:text-4xl' />
+			<div className='relative border-b border-secondary px-4 py-6'>
+				<BrandLogo />
+
+				<button
+					className='btn btn-square btn-ghost btn-sm absolute right-4 top-4 text-white md:hidden'
+					onClick={() => setSidebarOpen(false)}>
+					<X />
+				</button>
 			</div>
 
 			<div className='flex justify-end px-2 py-2'>

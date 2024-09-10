@@ -1,14 +1,14 @@
 import { Outlet, useResolvedPath } from 'react-router-dom';
-import Sidebar from './sidebar';
 import Navbar from './navbar';
 import LayoutProvider from './layout-provider';
 import GlobalBreadcrumbs from '@/ui/Others/GlobalBreadcrumbs';
+import Sidebar from './sidebar';
 
 const Layout = () => {
 	const { pathname } = useResolvedPath();
 	return (
 		<LayoutProvider>
-			<div className='flex h-screen w-screen overflow-hidden'>
+			<div className='relative flex h-screen w-screen overflow-hidden'>
 				<Sidebar />
 				<main className='flex size-full flex-1 flex-col overflow-auto'>
 					<Navbar />

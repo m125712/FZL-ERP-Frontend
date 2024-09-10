@@ -1,23 +1,26 @@
 import { motion } from 'framer-motion';
-import { ChevronLeft } from 'lucide-react';
-import cn from '@/lib/cn';
+import { PanelLeftOpenIcon, PanelRightOpenIcon } from 'lucide-react';
+
 import { useLayout } from '../layout-provider';
 
 const SidebarCollapse = () => {
 	const { isCollapsed, setIsCollapsed } = useLayout();
 	return (
-		<div className='absolute right-0 h-full w-[3px] bg-gradient-to-b from-accent/50 to-accent'>
-			<div className='absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2'>
+		<div className='hidden md:block'>
+			<div
+				className='tooltip tooltip-right tooltip-secondary'
+				data-tip='Collapse Sidebar'>
 				<motion.button
 					whileTap={{ scale: 0.9 }}
-					onClick={() => setIsCollapsed((prev) => !prev)}
-					className={cn('btn btn-circle btn-accent btn-sm')}>
-					<ChevronLeft
-						className={cn(
-							'size-5 transition-transform duration-200',
-							isCollapsed ? 'rotate-180' : 'rotate-0'
-						)}
-					/>
+					className='size-fit text-secondary'
+					onClick={() => {
+						setIsCollapsed((prev) => !prev);
+					}}>
+					{isCollapsed ? (
+						<PanelLeftOpenIcon className='size-6' />
+					) : (
+						<PanelRightOpenIcon className='size-6' />
+					)}
 				</motion.button>
 			</div>
 		</div>

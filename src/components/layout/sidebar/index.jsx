@@ -1,10 +1,12 @@
 import SidebarProvider from './sidebar-provider';
-import SidebarContent from './sidebar-content';
+import SidebarDesktop from './sidebar-desktop';
+import SidebarMobile from './sidebar-mobile';
 
 const Sidebar = () => {
 	return (
 		<SidebarProvider>
-			<SidebarContent />
+			<SidebarDesktop />
+			<SidebarMobile />
 		</SidebarProvider>
 	);
 };

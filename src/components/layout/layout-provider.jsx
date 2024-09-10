@@ -5,6 +5,8 @@ import { Navigate } from 'react-router-dom';
 export const LayoutContext = createContext({
 	isCollapsed: false,
 	setIsCollapsed: () => {},
+	sidebarOpen: false,
+	setSidebarOpen: () => {},
 });
 
 export const useLayout = () => {
@@ -12,6 +14,7 @@ export const useLayout = () => {
 };
 
 const LayoutProvider = ({ children }) => {
+	const [sidebarOpen, setSidebarOpen] = useState(false);
 	const [isCollapsed, setIsCollapsed] = useState(false);
 
 	// Get the authentication state from the context
@@ -28,7 +31,13 @@ const LayoutProvider = ({ children }) => {
 	}
 
 	return (
-		<LayoutContext.Provider value={{ isCollapsed, setIsCollapsed }}>
+		<LayoutContext.Provider
+			value={{
+				isCollapsed,
+				setIsCollapsed,
+				sidebarOpen,
+				setSidebarOpen,
+			}}>
 			{children}
 		</LayoutContext.Provider>
 	);

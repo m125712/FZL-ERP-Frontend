@@ -36,6 +36,7 @@ export default function Index({
 			reset(data);
 		}
 	}, [data]);
+	
 
 	const onClose = () => {
 		setEntryUUID(() => ({

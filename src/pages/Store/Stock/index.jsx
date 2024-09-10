@@ -102,18 +102,21 @@ export default function Index() {
 				accessorKey: 'section_name',
 				header: 'Section',
 				enableColumnFilter: false,
+				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'type_name',
 				header: 'Type',
 				enableColumnFilter: false,
+				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'description',
 				header: 'Description',
 				enableColumnFilter: false,
+				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -139,6 +142,7 @@ export default function Index() {
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
+				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{

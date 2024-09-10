@@ -165,6 +165,7 @@ export default function Index({
 			<JoinInput
 				title='trx_quantity'
 				label={`trx_quantity`}
+				sub_label={`Max: ${MAX_QUANTITY}`}
 				unit={
 					material?.find(
 						(inItem) => inItem.value == getValues(`material_uuid`)

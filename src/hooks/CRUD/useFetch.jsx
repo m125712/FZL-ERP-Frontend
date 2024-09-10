@@ -108,7 +108,6 @@ const useFetchForRhfResetForUserAccess = async (url, returnId, reset) => {
 
 			Object.entries(data)?.forEach(([key, value]) => {
 				const val = JSON.parse(value);
-				console.log(val);
 
 				Object.entries(val).forEach(([k, v]) => {
 					v.forEach((item) => {
@@ -133,8 +132,6 @@ const useFetchForRhfResetForUserAccess = async (url, returnId, reset) => {
 				},
 				{}
 			);
-
-			console.log(PAGE_ACTIONS);
 
 			reset(PAGE_ACTIONS);
 		});

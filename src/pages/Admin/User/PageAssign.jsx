@@ -50,7 +50,7 @@ export default function Index({
 	});
 
 	const { register, handleSubmit, errors, reset, getValues, context } =
-		useRHF(PAGE_ACTIONS_SCHEMA, PAGE_ACTIONS_DEFAULT);
+		useRHF(PAGE_ACTIONS_SCHEMA);
 
 	useFetchForRhfResetForUserAccess(
 		`${url}/can-access/${pageAssign?.uuid}`,

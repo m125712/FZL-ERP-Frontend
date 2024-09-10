@@ -7,6 +7,7 @@ import {
 	usePurchaseDescription,
 	usePurchaseDetailsByUUID,
 	usePurchaseEntry,
+	usePurchaseLog,
 } from '@/state/Store';
 import {
 	DynamicField,
@@ -39,6 +40,7 @@ export default function Index() {
 	} = usePurchaseDescription();
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { data: material } = useOtherMaterial();
+	const { invalidateQuery: invalidatePurchaseLog } = usePurchaseLog();
 	const { data } = usePurchaseDetailsByUUID(purchase_description_uuid);
 
 	const [unit, setUnit] = useState({});
@@ -154,6 +156,7 @@ export default function Index() {
 					.then(() => reset(PURCHASE_RECEIVE_NULL))
 					.then(() => {
 						invalidateMaterialInfo();
+						invalidatePurchaseLog();
 						navigate(`/store/receive/${purchase_description_uuid}`);
 					});
 			} catch (err) {

@@ -6,6 +6,7 @@ import { useDyeingRM } from '@/state/Dyeing';
 import { useLabDipRM } from '@/state/LabDip';
 import { useMetalFinishingRM, useMetalTCRM, useMetalTMRM } from '@/state/Metal';
 import { useNylonMetallicFinishingRM } from '@/state/Nylon';
+import { useOtherMaterial } from '@/state/Other';
 import {
 	useSliderAssemblyRM,
 	useSliderColoringRM,
@@ -17,7 +18,7 @@ import {
 	useMaterialTrxByUUID,
 } from '@/state/Store';
 import { useVislonFinishingRM, useVislonTMRM } from '@/state/Vislon';
-import { FormField, Input, ReactSelect } from '@/ui';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
 import { MATERIAL_STOCK_NULL, MATERIAL_STOCK_SCHEMA } from '@util/Schema';
@@ -54,8 +55,11 @@ export default function Index({
 		useSliderColoringRM();
 	const { invalidateQuery: invalidateDieCastingRM } = useSliderDieCastingRM();
 	const { invalidateQuery: invalidateDeliveryRM } = useDeliveryRM();
+	const { data: material } = useOtherMaterial();
 
-	const MAX_QUANTITY = Number(updateMaterialTrx?.stock) + Number(updateMaterialTrx?.trx_quantity);
+	const MAX_QUANTITY =
+		Number(updateMaterialTrx?.stock) +
+		Number(updateMaterialTrx?.trx_quantity);
 	const schema = {
 		...MATERIAL_STOCK_SCHEMA,
 		trx_quantity: MATERIAL_STOCK_SCHEMA.trx_quantity.max(MAX_QUANTITY),
@@ -76,6 +80,12 @@ export default function Index({
 			reset(data);
 		}
 	}, [data]);
+	const selectUnit = [
+		{ label: 'kg', value: 'kg' },
+		{ label: 'Litre', value: 'ltr' },
+		{ label: 'Meter', value: 'mtr' },
+		{ label: 'Piece', value: 'pcs' },
+	];
 
 	const onClose = () => {
 		setUpdateMaterialTrx((prev) => ({
@@ -152,12 +162,23 @@ export default function Index({
 				/>
 			</FormField>
 
-			<Input
+			<JoinInput
+				title='trx_quantity'
+				label={`trx_quantity`}
+				sub_label={`Max: ${MAX_QUANTITY}`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
+				register={register}
+			/>
+			{/* <Input
 				label='trx_quantity'
 				sub_label={`Max: ${MAX_QUANTITY}`}
 				placeholder={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
-			/>
+			/> */}
 
 			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>

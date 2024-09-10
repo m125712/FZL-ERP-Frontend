@@ -3,11 +3,12 @@ import { useRHF } from '@/hooks';
 
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
-import { PURCHASE_ENTRY_SCHEMA, PURCHASE_ENTRY_NULL } from '@util/Schema';
+import { PURCHASE_ENTRY_NULL, PURCHASE_ENTRY_SCHEMA } from '@util/Schema';
 
-import { useEffect } from 'react';
-import { usePurchaseEntryByUUID, usePurchaseLog } from '@/state/Store';
 import { useOtherMaterial } from '@/state/Other';
+import { usePurchaseEntryByUUID, usePurchaseLog } from '@/state/Store';
+import { DevTool } from '@hookform/devtools';
+import { useEffect } from 'react';
 
 export default function Index({
 	modalId = '',
@@ -37,6 +38,12 @@ export default function Index({
 			reset(data);
 		}
 	}, [data]);
+	const selectUnit = [
+		{ label: 'kg', value: 'kg' },
+		{ label: 'Litre', value: 'ltr' },
+		{ label: 'Meter', value: 'mtr' },
+		{ label: 'Piece', value: 'pcs' },
+	];
 
 	const onClose = () => {
 		setUpdatePurchaseLog((prev) => ({
@@ -96,11 +103,13 @@ export default function Index({
 									onChange(e.value);
 									setValue('unit', e.unit);
 								}}
+								
 							/>
 						);
 					}}
 				/>
 			</FormField>
+
 
 			<JoinInput
 				title='quantity'
@@ -115,6 +124,7 @@ export default function Index({
 
 			<Input title='price' label={`price`} {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />
+			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);
 }

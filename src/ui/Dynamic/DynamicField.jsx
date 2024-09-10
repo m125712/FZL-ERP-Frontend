@@ -1,5 +1,5 @@
-import { Add } from '@/assets/icons';
 import cn from '@/lib/cn';
+import { Plus } from 'lucide-react';
 
 export default function DynamicField({
 	title = '',
@@ -19,7 +19,7 @@ export default function DynamicField({
 						type='button'
 						className='btn btn-accent btn-xs rounded'
 						onClick={handelAppend}>
-						<Add className='w-5' /> NEW
+						<Plus className='w-5' /> NEW
 					</button>
 				)}
 			</div>
@@ -58,7 +58,7 @@ export function DynamicDeliveryField({
 						type='button'
 						className='btn btn-secondary btn-xs border border-white bg-secondary'
 						onClick={handelAppend}>
-						<Add className='w-4 text-primary' /> NEW
+						<Plus className='w-4 text-primary' /> NEW
 					</button>
 				)}
 			</div>

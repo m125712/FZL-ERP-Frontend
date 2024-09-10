@@ -1,21 +1,20 @@
 import SidebarHeader from './sidebar-header';
 import SidebarLogout from './sidebar-logout';
-import { useSidebar } from './sidebar-provider';
 import { motion } from 'framer-motion';
 import cn from '@/lib/cn';
-import SidebarCollapse from './sidebar-collapse';
 import SidebarMenu from './sidebar-menu';
+import { useLayout } from '../layout-provider';
 
 const SidebarContent = () => {
-	const { isCollapsed } = useSidebar();
+	const { isCollapsed } = useLayout();
 
 	return (
 		<aside className={cn('relative h-full bg-primary')}>
-			<SidebarCollapse />
+			{/* <SidebarCollapse /> */}
 			<motion.div
 				variants={{
 					open: { opacity: 1, width: '18rem' },
-					closed: { opacity: 0, width: '1.5rem' },
+					closed: { opacity: 1, width: 0, overflow: 'hidden' },
 				}}
 				animate={isCollapsed ? 'closed' : 'open'}
 				className={cn('flex h-full flex-col')}>

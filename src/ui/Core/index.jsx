@@ -1,4 +1,4 @@
-import { CalenderIcon, IconKey, IconKeyOff } from '@/assets/icons';
+import { CalenderIcon } from '@/assets/icons';
 import cn from '@lib/cn';
 import { format } from 'date-fns';
 import { forwardRef, useState } from 'react';
@@ -10,6 +10,7 @@ import {
 	FormField,
 } from './base';
 import { capitalize } from './utils';
+import { Eye, EyeOff } from 'lucide-react';
 
 export const Input = ({ register, ...props }) => (
 	<FormField {...props}>
@@ -80,9 +81,9 @@ export const PasswordInput = ({ register, ...props }) => {
 					className='btn btn-ghost btn-xs'
 					onClick={() => setShow(!show)}>
 					{show ? (
-						<IconKeyOff className='w-4' />
+						<Eye className='size-4' />
 					) : (
-						<IconKey className='w-4' />
+						<EyeOff className='size-4' />
 					)}
 				</button>
 			</label>
@@ -162,10 +163,10 @@ export const Switch = ({ register, ...props }) => (
 	</FormField>
 );
 
-export const SwitchOnly = ({ register, ...props }) => (
+export const SwitchOnly = ({ register, className, ...props }) => (
 	<input
 		type='checkbox'
-		className='toggle toggle-primary'
+		className={cn('toggle toggle-primary', className)}
 		{...register(props.label)}
 		{...props}
 	/>

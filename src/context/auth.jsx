@@ -47,7 +47,7 @@ const AuthProvider = ({ children }) => {
 
 			// ShowToast(res);
 
-			if (token && userData) return (window.location.href = '/dashboard');
+			if (token && userData) return (window.location.href = '/');
 
 			ShowToast({
 				type: res?.data?.type,

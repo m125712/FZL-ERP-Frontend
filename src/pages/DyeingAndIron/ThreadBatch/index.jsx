@@ -6,6 +6,7 @@ import { useAccess, useFetch } from '@/hooks';
 import cn from '@/lib/cn';
 import { useDyeingThreadBatch } from '@/state/Dyeing';
 import { DateTime, EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -105,16 +106,11 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => {
 					return (
-						<input
+						<SwitchToggle
 							onChange={() =>
 								handelDryingComplete(info.row.index)
 							}
 							checked={info.getValue() === 'true'}
-							type='checkbox'
-							className={cn(
-								'toggle toggle-md checked:toggle-accent'
-							)}
-							defaultChecked
 						/>
 					);
 				},

@@ -47,7 +47,7 @@ export const CommercialRoutes = [
 	{
 		id: 3,
 		name: 'PI Update',
-		path: '/commercial/lc/update/:lc_uuid',
+		path: '/commercial/lc/:lc_uuid/update',
 		element: LCEntry,
 		type: 'commercial',
 		page_name: 'commercial__lc_update',

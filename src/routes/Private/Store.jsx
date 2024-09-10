@@ -102,7 +102,7 @@ export const StoreRoutes = [
 	{
 		id: 10,
 		name: 'Entry',
-		path: '/store/receive/update/:purchase_description_uuid',
+		path: '/store/receive/:purchase_description_uuid/update',
 		element: PurchaseEntry,
 		type: 'store',
 		hidden: true,

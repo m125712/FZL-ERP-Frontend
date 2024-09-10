@@ -1,3 +1,4 @@
+import TableNoData from '@/components/Table/_components/TableNoData';
 import { ShowLocalToast } from '@/components/Toast';
 import { useAuth } from '@/context/auth';
 import { useRHF } from '@/hooks';
@@ -16,7 +17,6 @@ import {
 import { DevTool } from '@hookform/devtools';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TableNoData from '@/components/Table/_components/TableNoDataStock';
 
 const getBadges = (index, getValues) => {
 	const badges = [

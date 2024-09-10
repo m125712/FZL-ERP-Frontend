@@ -9,8 +9,6 @@ const SidebarContext = createContext({
 	},
 	isCloseAll: false,
 	setIsCloseAll: () => {},
-	isCollapsed: false,
-	setIsCollapsed: () => {},
 });
 
 export const useSidebar = () => {
@@ -18,7 +16,6 @@ export const useSidebar = () => {
 };
 
 const SidebarProvider = ({ children }) => {
-	const [isCollapsed, setIsCollapsed] = useState(false);
 	const [isCloseAll, setIsCloseAll] = useState(false);
 	const path = useResolvedPath();
 	return (
@@ -27,8 +24,6 @@ const SidebarProvider = ({ children }) => {
 				path,
 				isCloseAll,
 				setIsCloseAll,
-				isCollapsed,
-				setIsCollapsed,
 			}}>
 			{children}
 		</SidebarContext.Provider>

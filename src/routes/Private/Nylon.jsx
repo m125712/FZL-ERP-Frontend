@@ -16,7 +16,7 @@ const NylonMetallicFinishingProduction = lazy(
 
 // Hole Punch
 const NylonPlasticFinishing = lazy(
-	() => import('@/pages/Nylon/PlasticFinishing/RMStock/RMStock')
+	() => import('@/pages/Nylon/PlasticFinishing/RMStock')
 );
 const NylonPlasticFinishingSFG = lazy(
 	() => import('@/pages/Nylon/PlasticFinishing/SFG')

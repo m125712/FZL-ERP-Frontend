@@ -1,23 +1,23 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
-import { useRHF, useUpdateFunc } from "@/hooks";
-import { Input, JoinInput } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { SFG_TRX_NULL, SFG_TRX_SCHEMA } from "@util/Schema";
+import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
+import { useRHF, useUpdateFunc } from '@/hooks';
+import { Input, JoinInput } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { SFG_TRX_NULL, SFG_TRX_SCHEMA } from '@util/Schema';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setDyeingAndIronProd,
 	updateDyeingAndIronProd = {
 		id: null,
-		name: "",
+		name: '',
 		dying_and_iron_stock: null,
 		dying_and_iron_prod: null,
 		order_entry_id: null,
 		order_number: null,
-		item_description: "",
-		order_description: "",
-		stopper_type_name: "",
+		item_description: '',
+		order_description: '',
+		stopper_type_name: '',
 	},
 	setUpdateDyeingAndIronProd,
 }) {
@@ -27,7 +27,7 @@ export default function Index({
 			.moreThan(0)
 			.max(updateDyeingAndIronProd?.dying_and_iron_prod),
 	};
-	const { register, handleSubmit, errors, reset } = useRHF(
+	const { register, handleSubmit, errors, reset, context } = useRHF(
 		schema,
 		SFG_TRX_NULL
 	);
@@ -36,16 +36,16 @@ export default function Index({
 		setUpdateDyeingAndIronProd((prev) => ({
 			...prev,
 			id: null,
-			name: "",
+			name: '',
 			dying_and_iron_stock: null,
 			dying_and_iron_prod: null,
 			order_entry_id: null,
 			item_description: null,
 			total_trx_quantity: null,
 			order_number: null,
-			item_description: "",
-			order_description: "",
-			stopper_type_name: "",
+			item_description: '',
+			order_description: '',
+			stopper_type_name: '',
 		}));
 		reset(SFG_TRX_NULL);
 		window[modalId].close();
@@ -65,11 +65,11 @@ export default function Index({
 				data.trx_quantity,
 			total_trx_quantity:
 				updateDyeingAndIronProd?.total_trx_quantity + data.trx_quantity,
-			trx_from: "dying_and_iron_prod",
+			trx_from: 'dying_and_iron_prod',
 			trx_to:
-				updateDyeingAndIronProd?.item_name == "nylon"
-					? "finishing_stock"
-					: "teeth_molding_stock",
+				updateDyeingAndIronProd?.item_name == 'nylon'
+					? 'finishing_stock'
+					: 'teeth_molding_stock',
 			issued_by: user?.id,
 			issued_by_name: user?.name,
 			created_at: GetDateTime(),
@@ -85,34 +85,34 @@ export default function Index({
 		});
 	};
 
-	let title = "Teeth Molding";
-	if (updateDyeingAndIronProd?.item_name == "nylon") {
-		if (updateDyeingAndIronProd?.stopper_type_name == "plastic") {
-			title = "Plastic Finishing";
+	let title = 'Teeth Molding';
+	if (updateDyeingAndIronProd?.item_name == 'nylon') {
+		if (updateDyeingAndIronProd?.stopper_type_name == 'plastic') {
+			title = 'Plastic Finishing';
 		} else {
-			title = "Metallic Finishing";
+			title = 'Metallic Finishing';
 		}
 	}
 
 	return (
 		<AddModal
-			id="DyeingAndIronTrxModal"
+			id='DyeingAndIronTrxModal'
 			title={
 				updateDyeingAndIronProd?.id !== null &&
 				`Dyeing And Iron ⇾ ${title}`
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
+			isSmall={true}>
 			<JoinInput
-				label="trx_quantity"
-				unit="KG"
+				label='trx_quantity'
+				unit='KG'
 				max={updateDyeingAndIronProd?.dying_and_iron_prod}
 				placeholder={`Max: ${updateDyeingAndIronProd?.dying_and_iron_prod}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

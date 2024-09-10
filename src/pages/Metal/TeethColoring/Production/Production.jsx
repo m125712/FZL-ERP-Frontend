@@ -30,9 +30,7 @@ export default function Index({
 	const { postData } = useMetalTCProduction();
 	const { user } = useAuth();
 
-	console.log({
-		updateTeethColoringProd,
-	});
+
 
 	const MAX_PROD_PCS = Number(
 		updateTeethColoringProd.balance_quantity
@@ -41,7 +39,7 @@ export default function Index({
 		updateTeethColoringProd.teeth_coloring_stock
 	).toFixed(3);
 
-	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, control, context } = useRHF(
 		SFG_PRODUCTION_SCHEMA_IN_PCS,
 		SFG_PRODUCTION_SCHEMA_IN_PCS_NULL
 	);
@@ -49,9 +47,7 @@ export default function Index({
 		MAX_PROD_PCS - (watch('production_quantity') || 0)
 	).toFixed(3);
 
-	console.log({
-		MAX_WASTAGE_KG,
-	});
+	
 
 	const onClose = () => {
 		setUpdateTeethColoringProd((prev) => ({
@@ -97,6 +93,7 @@ export default function Index({
 				${updateTeethColoringProd.item_description} -> 
 				${updateTeethColoringProd.style_color_size} 
 				`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

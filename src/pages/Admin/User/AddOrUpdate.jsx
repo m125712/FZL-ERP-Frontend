@@ -33,6 +33,7 @@ export default function Index({
 		Controller,
 		control,
 		getValues,
+		context
 	} = useRHF(schema, USER_NULL);
 
 	useFetchForRhfReset(
@@ -91,6 +92,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={updateUser?.uuid !== null ? 'Update User' : 'New User'}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}>
 			<div className='flex flex-col gap-2 md:flex-row'>

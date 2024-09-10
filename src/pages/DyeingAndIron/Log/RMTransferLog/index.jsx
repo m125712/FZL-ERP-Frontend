@@ -6,7 +6,7 @@ import { useDyeingRM, useDyeingRMLog } from '@/state/Dyeing';
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo, useState } from 'react';
-import RMAddOrUpdate from './RMAddOrUpdate';
+import RMAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useDyeingRMLog();

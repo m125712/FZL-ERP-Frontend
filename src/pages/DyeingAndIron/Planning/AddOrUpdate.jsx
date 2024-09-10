@@ -32,6 +32,7 @@ export default function Index({
 		Controller,
 		control,
 		getValues,
+		context
 	} = useRHF(schema, schema_null);
 
 	useFetchForRhfReset(
@@ -76,6 +77,7 @@ export default function Index({
 		<AddModal
 			id="FactoryPriorityModal"
 			title={updateOrder?.id !== null ? "Update Order " : "Order "}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}

@@ -37,7 +37,7 @@ export default function Index({
 			updateSliderAssemblyProd?.slider_assembly_stock
 		),
 	};
-	const { register, handleSubmit, errors, reset, watch } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
 		schema,
 		SFG_PRODUCTION_NULL
 	);
@@ -99,6 +99,7 @@ export default function Index({
 		<AddModal
 			id="SliderAssemblyProdModal"
 			title={"Assembly Production"}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}

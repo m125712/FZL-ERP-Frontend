@@ -28,6 +28,7 @@ export default function Index({
 		control,
 		Controller,
 		getValues,
+		context
 	} = useRHF(USER_DESIGNATION_SCHEMA, USER_DESIGNATION_NULL);
 
 	useFetchForRhfReset(
@@ -91,6 +92,7 @@ export default function Index({
 					? 'Update Designation'
 					: 'Designation'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

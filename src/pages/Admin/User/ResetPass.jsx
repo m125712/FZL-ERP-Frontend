@@ -12,7 +12,7 @@ export default function Index({
 }) {
 	const { updateData } = useAdminUsers();
 
-	const { register, handleSubmit, errors } = useRHF(
+	const { register, handleSubmit, errors,context } = useRHF(
 		RESET_PASSWORD_SCHEMA,
 		RESET_PASSWORD_NULL
 	);
@@ -53,6 +53,7 @@ export default function Index({
 					? 'Reset Password: ' + resPass?.name
 					: 'Reset Password'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

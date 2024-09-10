@@ -42,7 +42,8 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		wa,
+		watch,
+		context
 	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
@@ -90,6 +91,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={`Coloring RM Log of ${updateSliderColoringRMLog?.material_name}`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

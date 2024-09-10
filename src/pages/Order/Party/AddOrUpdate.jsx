@@ -16,7 +16,7 @@ export default function Index({
 	setUpdateParty,
 }) {
 	const { url, updateData, postData } = useOrderParty();
-	const { register, handleSubmit, errors, reset, control } = useRHF(
+	const { register, handleSubmit, errors, reset, control, context } = useRHF(
 		PARTY_SCHEMA,
 		PARTY_NULL
 	);
@@ -75,6 +75,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={updateParty?.uuid !== null ? 'Update Party' : 'Party'}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

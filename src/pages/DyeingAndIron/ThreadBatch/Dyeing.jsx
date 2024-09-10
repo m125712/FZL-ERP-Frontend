@@ -50,6 +50,7 @@ export default function Index({
 		control,
 		getValues,
 		Controller,
+		context,
 	} = useRHF(
 		//schema,
 		DYEING_THREAD_BATCH_DYEING_SCHEMA,
@@ -144,6 +145,7 @@ export default function Index({
 					? `Update Dyeing on ${dyeing?.batch_id} `
 					: `Dyeing Issue on ${dyeing?.batch_id} `
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

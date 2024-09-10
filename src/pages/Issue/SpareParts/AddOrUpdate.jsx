@@ -1,20 +1,20 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
+import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
 import {
 	useFetch,
 	useFetchForRhfReset,
 	usePostFunc,
 	useRHF,
 	useUpdateFunc,
-} from "@/hooks";
-import { FormField, Input, JoinInput, ReactSelect, Textarea } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { SPARE_PARTS_NULL } from "@util/Schema";
-import { useState } from "react";
-import * as yup from "yup";
+} from '@/hooks';
+import { FormField, Input, JoinInput, ReactSelect, Textarea } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { SPARE_PARTS_NULL } from '@util/Schema';
+import { useState } from 'react';
+import * as yup from 'yup';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setSpareParts,
 	updateSpareParts = {
 		id: null,
@@ -28,24 +28,31 @@ export default function Index({
 	const SCHEMA = {
 		quantity: yup
 			.number()
-			.required("Quantity is required")
-			.positive("Quantity must be positive")
-			.min(0, "Quantity must be greater than or equal to 0")
+			.required('Quantity is required')
+			.positive('Quantity must be positive')
+			.min(0, 'Quantity must be greater than or equal to 0')
 			.max(
 				stockQuantity,
-				"Quantity must be less than or equal to remaining quantity"
+				'Quantity must be less than or equal to remaining quantity'
 			)
-			.typeError("Quantity must be a number")
-			.required("Quantity is required"),
+			.typeError('Quantity must be a number')
+			.required('Quantity is required'),
 		material_id: yup
 			.number()
-			.required("Material is required")
-			.typeError("Material must be a number")
-			.required("Required"),
-		description: yup.string().required("Description is required").trim(),
+			.required('Material is required')
+			.typeError('Material must be a number')
+			.required('Required'),
+		description: yup.string().required('Description is required').trim(),
 	};
-	const { register, handleSubmit, errors, reset, Controller, control } =
-		useRHF(SCHEMA, SPARE_PARTS_NULL);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		Controller,
+		control,
+		context,
+	} = useRHF(SCHEMA, SPARE_PARTS_NULL);
 
 	useFetchForRhfReset(
 		`/spare-parts/${updateSpareParts?.id}`,
@@ -53,7 +60,7 @@ export default function Index({
 		reset
 	);
 
-	const { value: material } = useFetch("/material/value/label/unit/quantity");
+	const { value: material } = useFetch('/material/value/label/unit/quantity');
 
 	const onClose = () => {
 		setUpdateSpareParts((prev) => ({
@@ -84,8 +91,8 @@ export default function Index({
 			};
 			useUpdateFunc({
 				uri: `/spare-parts/${updateSpareParts?.id}/${material_name
-					.replace(/#/g, "")
-					.replace(/\//g, "-")}`,
+					.replace(/#/g, '')
+					.replace(/\//g, '-')}`,
 				itemId: updateSpareParts.id,
 				data: data,
 				updatedData: updatedData,
@@ -105,7 +112,7 @@ export default function Index({
 		};
 
 		usePostFunc({
-			uri: "/spare-parts",
+			uri: '/spare-parts',
 			data: updatedData,
 			setItems: setSpareParts,
 			onClose: onClose,
@@ -117,21 +124,21 @@ export default function Index({
 			id={modalId}
 			title={
 				updateSpareParts?.id !== null
-					? "Update Spare Parts"
-					: "Spare Parts"
+					? 'Update Spare Parts'
+					: 'Spare Parts'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
-			<FormField label="material_id" title="Material" errors={errors}>
+			isSmall={true}>
+			<FormField label='material_id' title='Material' errors={errors}>
 				<Controller
-					name={"material_id"}
+					name={'material_id'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder="Select Material"
+								placeholder='Select Material'
 								options={material}
 								value={material?.find(
 									(item) =>
@@ -150,14 +157,14 @@ export default function Index({
 				/>
 			</FormField>
 			<JoinInput
-				label="quantity"
-				sub_label={`Stock: ${stockQuantity} ${unit ?? "kg"}`}
-				unit={unit ?? "kg"}
-				placeholder={`Max: ${stockQuantity} ${unit ?? "kg"}`}
+				label='quantity'
+				sub_label={`Stock: ${stockQuantity} ${unit ?? 'kg'}`}
+				unit={unit ?? 'kg'}
+				placeholder={`Max: ${stockQuantity} ${unit ?? 'kg'}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
-			<Textarea label="description" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
+			<Textarea label='description' {...{ register, errors }} />
 		</AddModal>
 	);
 }

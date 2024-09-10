@@ -38,20 +38,21 @@ export default function Index({
 		3
 	);
 
-	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
-		{
-			...SFG_PRODUCTION_SCHEMA_IN_KG,
-			production_quantity: NUMBER_REQUIRED.max(
-				MAX_PROD,
-				'Beyond Max Quantity'
-			),
-			production_quantity_in_kg: NUMBER_REQUIRED.max(
-				MAX_PROD_KG,
-				'Beyond Max Quantity'
-			),
-		},
-		SFG_PRODUCTION_SCHEMA_IN_KG_NULL
-	);
+	const { register, handleSubmit, errors, reset, watch, control, context } =
+		useRHF(
+			{
+				...SFG_PRODUCTION_SCHEMA_IN_KG,
+				production_quantity: NUMBER_REQUIRED.max(
+					MAX_PROD,
+					'Beyond Max Quantity'
+				),
+				production_quantity_in_kg: NUMBER_REQUIRED.max(
+					MAX_PROD_KG,
+					'Beyond Max Quantity'
+				),
+			},
+			SFG_PRODUCTION_SCHEMA_IN_KG_NULL
+		);
 
 	const MAX_WASTAGE_KG = Number(
 		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
@@ -98,6 +99,7 @@ export default function Index({
 				${updatePFProd.item_description} -> 
 				${updatePFProd.style_color_size} 
 				`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

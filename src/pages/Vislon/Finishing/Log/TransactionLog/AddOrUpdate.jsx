@@ -3,12 +3,12 @@ import { useRHF } from '@/hooks';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
+	VISLON_TRANSACTION_SCHEMA_NULL,
+	VISLON_TRANSACTION_SCHEMA,
 	NUMBER_REQUIRED,
 	NUMBER,
-	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
-	SFG_PRODUCTION_SCHEMA_IN_KG,
 } from '@util/Schema';
-import { useVislonTMPEntryByUUID } from '@/state/Vislon';
+import { useVislonTMTEntryByUUID } from '@/state/Vislon';
 import { useEffect } from 'react';
 
 export default function Index({
@@ -16,25 +16,21 @@ export default function Index({
 	updateFinishingLog = {
 		uuid: null,
 		sfg_uuid: null,
-		section: null,
-		production_quantity_in_kg: null,
-		production_quantity: null,
-		coloring_prod: null,
-		wastage: null,
-		remarks: '',
+		trx_quantity_in_kg: null,
+		trx_quantity: null,
+		trx_from: null,
+		trx_to: null,
+		remarks: null,
 	},
 	setUpdateFinishingLog,
 }) {
-	const { data, updateData, url } = useVislonTMPEntryByUUID(
+	const MAX_QUANTITY =
+		Number(updateFinishingLog?.coloring_prod) +
+		Number(updateFinishingLog?.trx_quantity);
+
+	const { data, updateData, url } = useVislonTMTEntryByUUID(
 		updateFinishingLog?.uuid
 	);
-
-	const MAX_PROD = Math.max(
-		Number(updateFinishingLog.production_quantity),
-		Number(updateFinishingLog.coloring_prod)
-	).toFixed(3);
-
-	const MAX_PROD_KG = Number(MAX_PROD).toFixed(3);
 
 	const {
 		register,
@@ -44,27 +40,23 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		watch,
+		context
 	} = useRHF(
 		{
-			...SFG_PRODUCTION_SCHEMA_IN_KG,
-			production_quantity: NUMBER_REQUIRED.max(
-				MAX_PROD,
+			...VISLON_TRANSACTION_SCHEMA,
+			trx_quantity_in_kg: NUMBER,
+			trx_quantity: NUMBER_REQUIRED.max(
+				Number(updateFinishingLog?.teeth_molding_prod) +
+					Number(updateFinishingLog?.trx_quantity_in_kg),
 				'Beyond Max Quantity'
 			),
-			production_quantity_in_kg: NUMBER,
 		},
 		{
-			...SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
-			production_quantity: 0,
-			production_quantity_in_kg: 0,
+			...VISLON_TRANSACTION_SCHEMA_NULL,
+			trx_quantity_in_kg: 0,
+			trx_quantity: 0,
 		}
 	);
-
-	const MAX_WASTAGE_KG = Number(
-		// Todo: Fix this
-		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
-	).toFixed(3);
 
 	// * To reset the form with the fetched data
 	useEffect(() => {
@@ -78,14 +70,13 @@ export default function Index({
 			...prev,
 			uuid: null,
 			sfg_uuid: null,
-			section: null,
-			production_quantity_in_kg: null,
-			production_quantity: null,
-			coloring_prod: null,
-			wastage: null,
-			remarks: '',
+			trx_quantity_in_kg: null,
+			trx_quantity: null,
+			trx_from: null,
+			trx_to: null,
+			remarks: null,
 		}));
-		reset(SFG_PRODUCTION_SCHEMA_IN_KG_NULL);
+		reset(VISLON_TRANSACTION_SCHEMA_NULL);
 		window[modalId].close();
 	};
 
@@ -119,9 +110,11 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Finishing Production`}
+			title={`Transaction Log`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
+			subTitle='Finishing -> Warehouse'
 			isSmall={true}>
 			{/* <FormField label='trx_to' title='Trx to' errors={errors}>
 				<Controller
@@ -145,16 +138,9 @@ export default function Index({
 				/>
 			</FormField> */}
 			<JoinInput
-				title='Production Quantity'
-				label='production_quantity'
+				label='trx_quantity'
 				unit='PCS'
-				sub_label={`MAX: ${MAX_PROD} PCS`}
-				{...{ register, errors }}
-			/>
-			<JoinInput
-				label='wastage'
-				unit='KG'
-				sub_label={`Max: ${MAX_WASTAGE_KG}`}
+				sub_label={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

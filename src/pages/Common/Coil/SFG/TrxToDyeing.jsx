@@ -65,6 +65,7 @@ export default function Index({
 		errors,
 		reset,
 		watch,
+		context
 	} = useRHF(COIL_STOCK_SCHEMA, COIL_STOCK_NULL);
 
 	useFetchForRhfReset(
@@ -125,6 +126,7 @@ export default function Index({
 		<AddModal
 			id={modalId}
 			title={updateCoilProd?.id !== null && "Transfer Coil"}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}

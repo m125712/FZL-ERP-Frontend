@@ -36,7 +36,7 @@ export default function Index({
 	).toFixed(3);
 	const MAX_PROD_KG = Number(MAX_PROD).toFixed(3);
 
-	const { register, handleSubmit, errors, reset, watch, control } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, control, context } = useRHF(
 		{
 			...SFG_PRODUCTION_SCHEMA_IN_KG,
 			production_quantity: NUMBER_REQUIRED.max(
@@ -99,6 +99,7 @@ export default function Index({
 				${updateFinishingProd.item_description} -> 
 				${updateFinishingProd.style_color_size} 
 				`}
+				formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

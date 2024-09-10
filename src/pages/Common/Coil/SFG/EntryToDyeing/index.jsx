@@ -39,6 +39,7 @@ export default function Index() {
 		useFieldArray,
 		getValues,
 		watch,
+		context
 	} = useRHF(COMMON_COIL_TO_DYEING_SCHEMA, COMMON_COIL_TO_DYEING_NULL);
 
 	useEffect(() => {
@@ -173,7 +174,7 @@ export default function Index() {
 			? `/other/order/description/value/label?item=nylon`
 			: `/other/order/description/value/label?item=without-nylon`
 	);
-	console.log('index / getValues(): ', getValues());
+
 	return (
 		<div>
 			<HotKeys {...{ keyMap, handlers }}>

@@ -53,7 +53,7 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		wa,
+		context,
 	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
@@ -104,6 +104,7 @@ const transactionArea = getTransactionArea();
 		<AddModal
 			id={modalId}
 			title={`Delivery RM Log of ${updateRMLog?.material_name}`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

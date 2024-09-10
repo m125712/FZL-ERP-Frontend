@@ -37,7 +37,7 @@ export default function Index({
 	const { postData } = useMetalTCProduction();
 	const { user } = useAuth();
 
-	const { register, handleSubmit, errors, reset, control } = useRHF(
+	const { register, handleSubmit, errors, reset, control, context } = useRHF(
 		SFG_TRANSACTION_SCHEMA_IN_PCS,
 		SFG_TRANSACTION_SCHEMA_IN_PCS_NULL
 	);
@@ -94,6 +94,7 @@ export default function Index({
 				${updateTeethColoringTRX.item_description} -> 
 				${updateTeethColoringTRX.style_color_size} 
 				`}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

@@ -1,24 +1,24 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from "@/hooks";
-import { Input } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { SFG_TRX_NULL, SFG_TRX_SCHEMA } from "@util/Schema";
+import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { Input } from '@/ui';
+import GetDateTime from '@/util/GetDateTime';
+import { SFG_TRX_NULL, SFG_TRX_SCHEMA } from '@util/Schema';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setFinishingProd,
 	updateFinishingProd = {
 		id: null,
-		name: "",
+		name: '',
 		finishing_stock: null,
 		finishing_prod: null,
 		order_entry_id: null,
 		item_description: null,
 		total_trx_quantity: null,
-		end_type_name: "",
-		order_number: "",
-		order_description: "",
+		end_type_name: '',
+		order_number: '',
+		order_description: '',
 	},
 	setUpdateFinishingProd,
 }) {
@@ -28,7 +28,7 @@ export default function Index({
 			updateFinishingProd?.finishing_prod
 		),
 	};
-	const { register, handleSubmit, errors, reset, watch } = useRHF(
+	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
 		schema,
 		SFG_TRX_NULL
 	);
@@ -37,15 +37,15 @@ export default function Index({
 		setUpdateFinishingProd((prev) => ({
 			...prev,
 			id: null,
-			name: "",
+			name: '',
 			finishing_stock: null,
 			finishing_prod: null,
 			order_entry_id: null,
 			item_description: null,
 			total_trx_quantity: null,
-			end_type_name: "",
-			order_number: "",
-			order_description: "",
+			end_type_name: '',
+			order_number: '',
+			order_description: '',
 		}));
 		reset(SFG_TRX_NULL);
 		window[modalId].close();
@@ -65,8 +65,8 @@ export default function Index({
 			total_trx_quantity:
 				updateFinishingProd?.total_trx_quantity + data.trx_quantity,
 			end_type_name: updateFinishingProd?.end_type_name,
-			trx_from: "finishing_prod",
-			trx_to: "warehouse",
+			trx_from: 'finishing_prod',
+			trx_to: 'warehouse',
 			name: updateFinishingProd?.name,
 			issued_by: user?.id,
 			issued_by_name: user?.name,
@@ -83,7 +83,7 @@ export default function Index({
 			});
 		} else {
 			alert(
-				"Remaining trx_quantity should be less than stock trx_quantity"
+				'Remaining trx_quantity should be less than stock trx_quantity'
 			);
 			return;
 		}
@@ -91,19 +91,19 @@ export default function Index({
 
 	return (
 		<AddModal
-			id="FinishingTrxModal"
-			title={"Finishing"}
+			id='FinishingTrxModal'
+			title={'Finishing'}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
+			isSmall={true}>
 			<Input
-				label="trx_quantity"
+				label='trx_quantity'
 				max={updateFinishingProd?.finishing_prod}
 				placeholder={`Max: ${updateFinishingProd?.finishing_prod}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

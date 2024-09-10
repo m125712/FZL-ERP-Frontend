@@ -149,9 +149,10 @@ export default function Index({
 					? 'Order Info: ' + updateOrderInfo?.order_number
 					: 'Order Info'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			formContext={context}>
+			>
 			<div className='flex justify-end gap-2 text-sm'>
 				<div className='rounded-md bg-primary px-1'>
 					<CheckBox

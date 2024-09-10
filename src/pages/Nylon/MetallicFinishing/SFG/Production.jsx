@@ -38,7 +38,7 @@ export default function Index({
 			MAX_SLIDER_PRODUCTION_QUANTITY
 		),
 	};
-	const { register, handleSubmit, errors, reset, watch } = useRHF(
+	const { register, handleSubmit, errors, reset, watch ,context} = useRHF(
 		schema,
 		SFG_PRODUCTION_NULL
 	);
@@ -102,6 +102,7 @@ export default function Index({
 		<AddModal
 			id="FinishingProdModal"
 			title={"Finishing Production"}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}

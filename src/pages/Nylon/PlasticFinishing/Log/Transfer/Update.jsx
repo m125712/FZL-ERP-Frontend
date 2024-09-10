@@ -22,7 +22,7 @@ export default function Index({
 	setUpdateTransfer,
 }) {
 	const { url, updateData } = useDyeingTransfer();
-	const { register, handleSubmit, errors, reset, control, getValues } =
+	const { register, handleSubmit, errors, reset, control, getValues,context } =
 		useRHF(UPDATE_DYEING_TRANSFER_SCHEMA, UPDATE_DYEING_TRANSFER_NULL);
 
 	useFetchForRhfReset(
@@ -99,6 +99,7 @@ export default function Index({
 			title={
 				updateTransfer?.uuid !== null ? 'Update Transfer' : 'Transfer'
 			}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import RMTransferLog from './RMTransferLog/RMTransferLog';
+import RMTransferLog from './RMTransferLog';
 import SFGProductionLog from './SFGProductionLog';
-import SFGTransferLog from './SFGTransferLog/SFGTransferLog';
+import SFGTransferLog from './SFGTransferLog';
 import RMOrderAgainstLog from './RMOrderAgainstLog';
 
 export default function Index() {

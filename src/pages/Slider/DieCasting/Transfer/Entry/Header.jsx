@@ -1,41 +1,56 @@
-import { CheckBox } from '@/ui';
+import { SectionEntryBody, FormField, ReactSelect } from '@/ui';
+import { useFetch } from '@/hooks';
 
-const Header = ({ register, errors }) => {
-	const node = [
+export default function Header({
+	register,
+	errors,
+	control,
+	getValues,
+	Controller,
+}) {
+	const {value: order} = useFetch('/other/slider/stock-with-order-description/value/label');
+	const states = [
 		{
-			label: 'is_body',
-			title: 'Body',
+			label: 'Open',
+			value: 'Open',
 		},
 		{
-			label: 'is_cap',
-			title: 'Cap',
-		},
-		{
-			label: 'is_puller',
-			title: 'Puller',
-		},
-		{
-			label: 'is_link',
-			title: 'Link',
+			label: 'Closed',
+			value: 'Closed',
 		},
 	];
-
 	return (
-		<div className='flex gap-4'>
-			{node.map((item) => {
-				return (
-					<CheckBox
-						key={item.label}
-						label={item.label}
-						title={item.title}
-						height='h-[2.9rem] '
-						className='h-fit w-fit rounded border border-primary/30 bg-primary/5 px-2'
-						{...{ register, errors }}
-					/>
-				);
-			})}
+		<div className='flex flex-col gap-4'>
+			<SectionEntryBody title='Order Description'>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+					<FormField
+						label='order_description_uuid'
+						title='Select'
+						errors={errors}>
+						<Controller
+							name={'order_description_uuid'}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										label='Status'
+										className='w-full'
+										placeholder='Select Order Id'
+										options={order}
+										value={order?.find(
+											(item) =>
+												item.value ==
+												getValues('order_description_uuid')
+										)}
+										onChange={(e) => onChange(e.value)}
+										isDisabled={false}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+				</div>
+			</SectionEntryBody>
 		</div>
 	);
-};
-
-export default Header;
+}

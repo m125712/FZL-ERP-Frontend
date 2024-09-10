@@ -11,7 +11,11 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useMaterialSection();
-	const info = new PageInfo('Section', url, 'store__section');
+	const info = new PageInfo(
+		'Store / Material Section',
+		url,
+		'store__section'
+	);
 	const haveAccess = useAccess('store__section');
 
 	useEffect(() => {
@@ -133,7 +137,7 @@ export default function Index() {
 						setUpdateSection,
 					}}
 				/>
-				
+
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}

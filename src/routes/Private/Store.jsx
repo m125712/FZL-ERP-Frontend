@@ -33,21 +33,7 @@ export const StoreRoutes = [
 			'click_action',
 		],
 	},
-	{
-		id: 301,
-		name: 'Log',
-		path: '/store/log',
-		element: MaterialLog,
-		type: 'store',
-		page_name: 'store__log',
-		actions: [
-			'read',
-			'update_log',
-			'delete_log',
-			'update_log_against_order',
-			'delete_log_against_order',
-		],
-	},
+
 	{
 		id: 401,
 		name: 'Summary',
@@ -122,5 +108,20 @@ export const StoreRoutes = [
 		hidden: true,
 		page_name: 'store__receive_update',
 		actions: ['create', 'read', 'update'],
+	},
+	{
+		id: 301,
+		name: 'Log',
+		path: '/store/log',
+		element: MaterialLog,
+		type: 'store',
+		page_name: 'store__log',
+		actions: [
+			'read',
+			'update_log',
+			'delete_log',
+			'update_log_against_order',
+			'delete_log_against_order',
+		],
 	},
 ];

@@ -12,10 +12,12 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const navigate = useNavigate();
 	const haveAccess = useAccess('store__receive');
-
 	const { data, isLoading, url, deleteData } = usePurchaseDescription();
-
-	const info = new PageInfo('Receive', url, 'store__receive');
+	const info = new PageInfo(
+		'Store / Material Receive',
+		url,
+		'store__receive'
+	);
 
 	useEffect(() => {
 		document.title = info.getTabName();

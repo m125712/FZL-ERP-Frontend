@@ -1,20 +1,20 @@
 import { useEffect } from 'react';
 import AgainstOrder from './AgainstOrder';
-import Trx from './Trx';
 import PurchaseLog from './PurchaseLog';
+import Trx from './Trx';
 
 export default function Index() {
 	useEffect(() => {
-		document.title = 'Material Log';
+		document.title = 'Store: Log';
 	}, []);
 
 	return (
-		<>
+		<div className='flex flex-col gap-6'>
 			<Trx key='TrxLog' />
-			<hr className='my-6 border-2 border-dashed border-secondary/30' />
+			{/* <hr className='my-6 border-2 border-dashed border-secondary/30' /> */}
 			<AgainstOrder key='OrderTrxLog' />
-			<hr className='my-6 border-2 border-dashed border-secondary/30' />
+			{/* <hr className='my-6 border-2 border-dashed border-secondary/30' /> */}
 			<PurchaseLog key='PurchaseLog' />
-		</>
+		</div>
 	);
 }

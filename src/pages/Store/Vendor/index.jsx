@@ -12,7 +12,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = usePurchaseVendor();
-	const info = new PageInfo('Vendor', url, 'store__vendor');
+	const info = new PageInfo('Store / Vendor', url, 'store__vendor');
 	const haveAccess = useAccess('store__vendor');
 
 	const columns = useMemo(

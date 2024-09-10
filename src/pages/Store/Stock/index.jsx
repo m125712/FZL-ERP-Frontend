@@ -13,7 +13,7 @@ const MaterialTrx = lazy(() => import('./MaterialTrx'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData, refetch } = useMaterialInfo();
-	const info = new PageInfo('Stock', url, 'store__stock');
+	const info = new PageInfo('Store / Stock', url, 'store__stock');
 	const haveAccess = useAccess('store__stock');
 
 	const columns = useMemo(

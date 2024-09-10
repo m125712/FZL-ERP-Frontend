@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
-import { useSidebar } from './sidebar-provider';
 import { ChevronLeft } from 'lucide-react';
 import cn from '@/lib/cn';
+import { useLayout } from '../layout-provider';
 
 const SidebarCollapse = () => {
-	const { isCollapsed, setIsCollapsed } = useSidebar();
+	const { isCollapsed, setIsCollapsed } = useLayout();
 	return (
 		<div className='absolute right-0 h-full w-[3px] bg-gradient-to-b from-accent/50 to-accent'>
 			<div className='absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2'>

@@ -1,15 +1,13 @@
-import { lazy } from 'react';
-
 // Pages
-const Dashboard = lazy(() => import('@pages/Dashboard'));
+// const Dashboard = lazy(() => import('@pages/Dashboard'));
+import Dashboard from '@pages/Dashboard';
 
 export const DashboardRoutes = [
 	{
 		id: 1,
-		path: '/dashboard',
+		path: '/',
 		name: 'Dashboard',
 		element: <Dashboard />,
-		type: 'dashboard',
 		view: 'individual',
 		page_name: 'dashboard',
 		actions: ['read'],

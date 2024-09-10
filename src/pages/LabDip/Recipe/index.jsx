@@ -4,6 +4,7 @@ import { useAccess } from '@/hooks';
 import cn from '@/lib/cn';
 import { useLabDipRecipe } from '@/state/LabDip';
 import { EditDelete, LinkWithCopy, StatusButton, UserName } from '@/ui';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -75,16 +76,11 @@ export default function Index() {
 				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
 					return (
-						<input
+						<SwitchToggle
 							onChange={() =>
 								handelApprovedStatusChange(info.row.index)
 							}
 							checked={info.getValue() === 1}
-							type='checkbox'
-							className={cn(
-								'toggle toggle-md checked:toggle-accent'
-							)}
-							defaultChecked
 						/>
 					);
 				},
@@ -97,14 +93,9 @@ export default function Index() {
 				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
 					return (
-						<input
+						<SwitchToggle
 							onChange={() => handelStatusChange(info.row.index)}
 							checked={info.getValue() === 1}
-							type='checkbox'
-							className={cn(
-								'toggle toggle-md checked:toggle-accent'
-							)}
-							defaultChecked
 						/>
 					);
 				},

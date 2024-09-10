@@ -1,5 +1,5 @@
-import { Plus } from '@/assets/icons';
 import cn from '@/lib/cn';
+import { Plus } from 'lucide-react';
 
 const AddButton = ({ onClick }) => {
 	return (

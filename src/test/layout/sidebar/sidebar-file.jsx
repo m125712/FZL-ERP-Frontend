@@ -20,10 +20,8 @@ const variants = {
 	},
 };
 
-const SidebarFile = ({ path, name, exclude }) => {
+const SidebarFile = ({ path, name }) => {
 	const { pathname } = useResolvedPath();
-
-	if (exclude) return null;
 
 	return (
 		<motion.li variants={variants} initial='initial' animate='animate'>

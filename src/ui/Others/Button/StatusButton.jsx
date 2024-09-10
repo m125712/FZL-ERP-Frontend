@@ -1,5 +1,5 @@
-import { Check, Close } from '@/assets/icons';
 import cn from '@lib/cn';
+import { Check, X } from 'lucide-react';
 
 export default function StatusButton({
 	value = 0,
@@ -8,7 +8,7 @@ export default function StatusButton({
 	...props
 }) {
 	const numberValue = Number(value);
-	const Icon = numberValue === 1 ? Check : Close;
+	const Icon = numberValue === 1 ? Check : X;
 
 	return (
 		<button

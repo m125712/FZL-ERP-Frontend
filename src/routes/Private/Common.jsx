@@ -1,4 +1,3 @@
-import { Update } from '@/assets/icons';
 import { lazy } from 'react';
 
 // ? Common

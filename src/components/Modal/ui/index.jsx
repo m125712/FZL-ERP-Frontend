@@ -1,5 +1,5 @@
-import { Close } from '@/assets/icons';
 import { useQueryClient } from '@tanstack/react-query';
+import { X } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 
 const useSubmitDisabled = () => {
@@ -37,7 +37,7 @@ const Header = ({ title, subTitle, onClose }) => {
 				type='button'
 				onClick={onClose}
 				className='group btn btn-circle btn-outline btn-error btn-sm'>
-				<Close className='h-5 w-5 text-error group-hover:text-primary-content' />
+				<X className='size-5 text-error group-hover:text-primary-content' />
 			</button>
 		</div>
 	);

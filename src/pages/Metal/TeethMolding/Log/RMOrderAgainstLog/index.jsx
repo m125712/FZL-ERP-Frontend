@@ -21,7 +21,7 @@ export default function Index() {
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { invalidateQuery: invalidateMaterialTrx } =
 		useMaterialTrxAgainstOrderDescription();
-	console.log(data);
+
 	const info = new PageInfo(
 		'RM Order Against Metal TM Log',
 		url,
@@ -125,7 +125,9 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_rm_order'),
+				hidden:
+					!haveAccess.includes('click_update_rm_order') &&
+					!haveAccess.includes('click_delete_rm_order'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -133,8 +135,11 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
+							showUpdate={haveAccess.includes(
+								'click_update_rm_order'
+							)}
 							showDelete={haveAccess.includes(
-								'click_delete_rm_order'
+								'click_update_rm_order'
 							)}
 						/>
 					);

@@ -66,6 +66,7 @@ export default function Index() {
 				accessorKey: 'lab_status',
 				header: 'Lab Status',
 				enableColumnFilter: false,
+				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
 					return (
 						<input

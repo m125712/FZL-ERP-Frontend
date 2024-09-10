@@ -252,7 +252,12 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-
+			{
+				accessorKey: 'quantity_in_sa',
+				header: 'Assembly Stock',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
 			{
 				accessorKey: 'weight',
 				header: 'Weight',

@@ -1962,11 +1962,18 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
 	stocks: yup.array().of(
 		yup.object().shape({
 			is_checked: BOOLEAN_REQUIRED,
-			assigned_quantity: NUMBER.nullable()
-				.transform((value, originalValue) =>
-					String(originalValue).trim() === '' ? null : value
-				)
-				.max(yup.ref('quantity'), 'Beyond Max Quantity'),
+			assigned_quantity: yup.number().when('is_checked', {
+				is: true,
+				then: (Schema) =>
+					Schema.typeError('Must be a number')
+						.required('Quantity is required')
+						.max(yup.ref('quantity'), 'Beyond Max Quantity'),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
+			remarks: STRING.nullable(),
 		})
 	),
 };
@@ -1978,6 +1985,32 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_NULL = {
 	is_puller: false,
 	is_link: false,
 	stocks: [],
+};
+
+export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_UPDATE = {
+	quantity: NUMBER_REQUIRED.max(
+		yup.ref('max_quantity'),
+		'Beyond Max Quantity'
+	),
+	remarks: STRING.nullable(),
+};
+
+export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_UPDATE_NULL = {
+	quantity: null,
+	remarks: '',
+};
+
+export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_UPDATE = {
+	trx_quantity: NUMBER_REQUIRED.max(
+		yup.ref('max_quantity'),
+		'Beyond Max Quantity'
+	),
+	remarks: STRING.nullable(),
+};
+
+export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_UPDATE_NULL = {
+	trx_quantity: null,
+	remarks: '',
 };
 
 // * Slider/Die Casting --> (TRANSFER AGAINST ORDER)*//

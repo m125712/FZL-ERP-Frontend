@@ -7,7 +7,7 @@ const Sidebar = () => {
 	const isSmallDevice = useMediaQuery('only screen and (max-width : 768px)');
 	return (
 		<SidebarProvider>
-			<SidebarDesktop />
+			{!isSmallDevice && <SidebarDesktop />}
 			{isSmallDevice && <SidebarMobile />}
 		</SidebarProvider>
 	);

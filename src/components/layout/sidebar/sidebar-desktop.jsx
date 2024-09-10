@@ -10,8 +10,7 @@ const SidebarDesktop = () => {
 				open: { opacity: 1, width: '18rem' },
 				closed: { opacity: 1, width: 0, overflow: 'hidden' },
 			}}
-			animate={isCollapsed ? 'closed' : 'open'}
-			className='hidden md:block'>
+			animate={isCollapsed ? 'closed' : 'open'}>
 			<SidebarContent />
 		</motion.div>
 	);

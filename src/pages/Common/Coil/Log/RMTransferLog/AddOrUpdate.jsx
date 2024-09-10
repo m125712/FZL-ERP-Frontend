@@ -1,30 +1,30 @@
 import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
-import { useCommonCoilRM, useCommonMaterialUsedByUUID } from '@/state/Common';
-import { FormField, Input, ReactSelect } from '@/ui';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useCommonCoilRM } from '@/state/Common';
+import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
+import getTransactionArea from '@/util/TransactionArea';
 import {
 	RM_MATERIAL_USED_EDIT_NULL,
 	RM_MATERIAL_USED_EDIT_SCHEMA,
 } from '@util/Schema';
-import getTransactionArea from '@/util/TransactionArea';
-import { useEffect } from 'react';
+
 export default function Index({
 	modalId = '',
 	updateCoilLog = {
 		uuid: null,
 		section: null,
 		used_quantity: null,
+		coil_forming: null,
+		unit: null,
 	},
 	setUpdateCoilLog,
 }) {
-	const { data, url, updateData } = useCommonMaterialUsedByUUID(
-		updateCoilLog?.uuid
-	);
-	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
+	const { updateData } = useCommonCoilRM();
 	const MAX_QUANTITY =
 		Number(updateCoilLog?.coil_forming) +
 		Number(updateCoilLog?.used_quantity);
+
 	const schema = {
 		...RM_MATERIAL_USED_EDIT_SCHEMA,
 		used_quantity:
@@ -39,14 +39,17 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		context
+		context,
+		watch,
 	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
-	useEffect(() => {
-		if (data) {
-			reset(data);
-		}
-	}, [data]);
+	useFetchForRhfReset(
+		`/material/used/${updateCoilLog?.uuid}`,
+		updateCoilLog?.uuid,
+		reset
+	);
+
+	const MAX_WASTAGE = MAX_QUANTITY - watch('used_quantity');
 
 	const onClose = () => {
 		setUpdateCoilLog((prev) => ({
@@ -54,6 +57,8 @@ export default function Index({
 			uuid: null,
 			section: null,
 			used_quantity: null,
+			coil_forming: null,
+			unit: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
@@ -64,16 +69,15 @@ export default function Index({
 		if (updateCoilLog?.uuid !== null) {
 			const updatedData = {
 				...data,
-				material_name: updateCoilLog?.material_name,
 				updated_at: GetDateTime(),
 			};
 
 			await updateData.mutateAsync({
-				url,
+				url: `/material/used/${updateCoilLog?.uuid}`,
 				updatedData,
 				onClose,
 			});
-			invalidateCommonCoilRM();
+
 			return;
 		}
 	};
@@ -83,7 +87,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Coil Forming RM Log of ${updateCoilLog?.material_name}`}
+			title={`Tape Making: ${updateCoilLog?.material_name}`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
@@ -101,25 +105,25 @@ export default function Index({
 									(item) => item.value == getValues('section')
 								)}
 								onChange={(e) => onChange(e.value)}
-								isDisabled='1'
+								isDisabled
 							/>
 						);
 					}}
 				/>
 			</FormField>
-			<Input
+			<JoinInput
 				label='used_quantity'
 				sub_label={`Max: ${MAX_QUANTITY}`}
-				placeholder={`Max: ${MAX_QUANTITY}`}
+				unit={updateCoilLog?.unit}
 				{...{ register, errors }}
 			/>
-			<Input
+			<JoinInput
 				label='wastage'
-				sub_label={`Max: ${MAX_QUANTITY}`}
-				placeholder={`Max: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${MAX_WASTAGE}`}
+				unit={updateCoilLog?.unit}
 				{...{ register, errors }}
 			/>
-			<Input label='remarks' {...{ register, errors }} />
+			<Textarea label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

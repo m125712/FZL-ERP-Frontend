@@ -11,7 +11,7 @@ import AddOrUpdate from './AddOrUpdate';
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useCommonCoilRMLog();
 	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
-	const info = new PageInfo('Material Used', url, 'common__coil_log');
+	const info = new PageInfo('Raw Material Used', url, 'common__coil_log');
 	const haveAccess = useAccess(info.getTab());
 
 	const columns = useMemo(

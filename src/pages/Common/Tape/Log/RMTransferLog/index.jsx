@@ -10,7 +10,7 @@ import AddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useCommonTapeRMLog();
-	const info = new PageInfo('Material Used', url, 'common__tape_log');
+	const info = new PageInfo('Raw Material Used', url, 'common__tape_log');
 	const haveAccess = useAccess(info.getTab());
 	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
 
@@ -111,6 +111,8 @@ export default function Index() {
 		[data]
 	);
 
+	console.log(data);
+
 	// Update
 	const [updateTapeLog, setUpdateTapeLog] = useState({
 		uuid: null,
@@ -144,8 +146,8 @@ export default function Index() {
 		}));
 
 		window[info.getDeleteModalId()].showModal();
+		invalidateCommonTapeRM();
 	};
-	invalidateCommonTapeRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

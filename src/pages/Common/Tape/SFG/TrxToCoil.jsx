@@ -70,7 +70,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={updateTapeProd?.uuid !== null && 'Tape to Coil'}
+			title={updateTapeProd?.uuid !== null && 'Tape -> Coil'}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}

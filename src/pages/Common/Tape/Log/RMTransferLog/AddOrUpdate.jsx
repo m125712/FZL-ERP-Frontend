@@ -1,14 +1,13 @@
 import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 import { useCommonMaterialUsedByUUID, useCommonTapeRM } from '@/state/Common';
-import { FormField, Input, ReactSelect } from '@/ui';
+import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
 import {
 	RM_MATERIAL_USED_EDIT_NULL,
 	RM_MATERIAL_USED_EDIT_SCHEMA,
 } from '@util/Schema';
-import { useEffect } from 'react';
 
 export default function Index({
 	modalId = '',
@@ -17,17 +16,15 @@ export default function Index({
 		section: null,
 		used_quantity: null,
 		tape_making: null,
+		unit: null,
 	},
 	setUpdateTapeLog,
 }) {
-	const { data, url, updateData } = useCommonMaterialUsedByUUID(
-		updateTapeLog?.uuid
-	);
-
-	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
+	const { updateData } = useCommonTapeRM();
 	const MAX_QUANTITY =
 		Number(updateTapeLog?.tape_making) +
 		Number(updateTapeLog?.used_quantity);
+
 	const schema = {
 		...RM_MATERIAL_USED_EDIT_SCHEMA,
 		used_quantity:
@@ -42,14 +39,17 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		context
+		context,
+		watch,
 	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
-	useEffect(() => {
-		if (data) {
-			reset(data[0]);
-		}
-	}, [data]);
+	useFetchForRhfReset(
+		`/material/used/${updateTapeLog?.uuid}`,
+		updateTapeLog?.uuid,
+		reset
+	);
+
+	const MAX_WASTAGE = MAX_QUANTITY - watch('used_quantity');
 
 	const onClose = () => {
 		setUpdateTapeLog((prev) => ({
@@ -58,6 +58,7 @@ export default function Index({
 			section: null,
 			used_quantity: null,
 			tape_making: null,
+			unit: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
@@ -68,16 +69,14 @@ export default function Index({
 		if (updateTapeLog?.uuid !== null) {
 			const updatedData = {
 				...data,
-				material_name: updateTapeLog?.material_name,
 				updated_at: GetDateTime(),
 			};
 
 			await updateData.mutateAsync({
-				url,
+				url: `/material/used/${updateTapeLog?.uuid}`,
 				updatedData,
 				onClose,
 			});
-			invalidateCommonTapeRM();
 
 			return;
 		}
@@ -88,7 +87,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Tape Making RM Log of ${updateTapeLog?.material_name}`}
+			title={`Tape Making: ${updateTapeLog?.material_name}`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
@@ -106,25 +105,25 @@ export default function Index({
 									(item) => item.value == getValues('section')
 								)}
 								onChange={(e) => onChange(e.value)}
-								isDisabled='1'
+								isDisabled
 							/>
 						);
 					}}
 				/>
 			</FormField>
-			<Input
+			<JoinInput
 				label='used_quantity'
-				sub_label={`Max: ${Number(updateTapeLog?.tape_making) + Number(updateTapeLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateTapeLog?.tape_making) + Number(updateTapeLog?.used_quantity)}`}
+				sub_label={`Max: ${MAX_QUANTITY}`}
+				unit={updateTapeLog?.unit}
 				{...{ register, errors }}
 			/>
-			<Input
+			<JoinInput
 				label='wastage'
-				sub_label={`Max: ${Number(updateTapeLog?.tape_making) + Number(updateTapeLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateTapeLog?.tape_making) + Number(updateTapeLog?.used_quantity)}`}
+				sub_label={`Max: ${MAX_WASTAGE}`}
+				unit={updateTapeLog?.unit}
 				{...{ register, errors }}
 			/>
-			<Input label='remarks' {...{ register, errors }} />
+			<Textarea label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

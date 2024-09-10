@@ -1,3 +1,4 @@
+import cn from '@/lib/cn';
 import {
 	getCoreRowModel,
 	getFacetedMinMaxValues,
@@ -10,17 +11,16 @@ import {
 } from '@tanstack/react-table';
 import { lazy, useState } from 'react';
 import { Suspense } from '../Feedback';
-
-import cn from '@/lib/cn';
 import { FuzzyFilter, isWithinRange } from './utils';
 
 const TableHeader = lazy(() => import('./_components/TableHeader'));
 const TableHead = lazy(() => import('./_components/TableHead'));
 const TableBody = lazy(() => import('./_components/TableBody'));
 const TablePagination = lazy(() => import('./_components/table-pagination'));
+
+import TableNoData from './_components/TableNoData';
 import TableSkeletons from './_components/TableSkeletons';
 import TableTitleOnly from './_components/TableTitleOnly';
-import TableNoData from './_components/TableNoData';
 
 function Table({
 	title = '',
@@ -46,7 +46,7 @@ function Table({
 	containerClassName = '',
 	...props
 }) {
-	// Define state variables
+	//* Define state variables
 	const [columnFilters, setColumnFilters] = useState([]);
 	const [globalFilter, setGlobalFilter] = useState(searchData);
 	const [columnVisibility, setColumnVisibility] = useState(
@@ -56,7 +56,7 @@ function Table({
 		}, {})
 	);
 
-	// Initialize React Table
+	//* Initialize React Table
 	const table = useReactTable({
 		data,
 		columns,
@@ -84,7 +84,7 @@ function Table({
 		onRowSelectionChange: props.setRowSelection,
 	});
 
-	// Extract React Table functions
+	//* Extract React Table functions
 	const {
 		getAllLeafColumns,
 		getRowModel,
@@ -92,12 +92,12 @@ function Table({
 		getPreFilteredRowModel,
 	} = table;
 
-	// Extract rows from React Table
+	//* Extract rows from React Table
 	const { rows } = getRowModel();
 	const hasAnyRow = rows?.length > 0 && !error;
 	const filteredRows = table._getFilteredRowModel()?.rows || [];
 
-	// Render functions
+	//* Render functions
 	const renderHeader = (showTitleOnly) => {
 		if (showTitleOnly)
 			return (

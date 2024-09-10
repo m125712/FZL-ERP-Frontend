@@ -1,3 +1,4 @@
+import { CalenderIcon } from '@assets/icons';
 import { format } from 'date-fns';
 import { forwardRef, useCallback, useState } from 'react';
 import DatePicker from 'react-datepicker';
@@ -11,8 +12,6 @@ import {
 	Select,
 	utilFunc,
 } from './utils';
-
-import { CalenderIcon } from '@assets/icons';
 
 const ExampleCustomInput = forwardRef(({ value, onClick, className }, ref) => {
 	return (
@@ -109,7 +108,7 @@ export default function DateRange({ getHeaderGroups }) {
 			withPortal
 			renderCustomHeader={CustomHeader}
 			customInput={
-				<ExampleCustomInput className='btn-filter-outline h-full pr-7' />
+				<ExampleCustomInput className='btn-filter-outline h-full pe-7' />
 			}
 			{...DefaultConfig}
 		/>

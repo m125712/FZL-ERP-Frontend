@@ -1,15 +1,16 @@
+import { CalenderIcon } from '@/assets/icons';
+import { format } from 'date-fns';
 import { forwardRef, Fragment, useCallback, useMemo, useState } from 'react';
-
-import { format, getYear } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import {
 	Button,
 	DefaultConfig,
 	getMinMaxDate,
+	getYear,
 	months,
+	Select,
+	utilFunc,
 } from '../../components/DateRange/utils';
-import { Select } from '@/ui';
-import { CalenderIcon } from '@/assets/icons';
 import { Template } from '../../components/Filter/_components';
 
 const ExampleCustomInput = forwardRef(({ value, onClick, className }, ref) => {
@@ -22,18 +23,13 @@ const ExampleCustomInput = forwardRef(({ value, onClick, className }, ref) => {
 });
 
 ExampleCustomInput.displayName = 'ExampleCustomInput';
-
-const FilterDate = ({ columnName, column, firstValue, isFullFilter }) => {
+// columnName,
+// 	column,
+// 	getPreFilteredRowModel,
+const FilterDate = ({ columnName, column, isFullFilter }) => {
 	if (!column) return null;
 
-	const { id, getFacetedUniqueValues, getFilterValue, setFilterValue } =
-		column;
-
-	const sortedUniqueValues = useMemo(
-		() => Array.from(getFacetedUniqueValues().keys()).sort(),
-		[getFacetedUniqueValues(), firstValue]
-	);
-
+	const { id, setFilterValue, getFacetedUniqueValues } = column;
 	const minMaxDate = getMinMaxDate(getFacetedUniqueValues);
 
 	const oldStartDate = new Date(minMaxDate.min || Date.now());
@@ -47,15 +43,15 @@ const FilterDate = ({ columnName, column, firstValue, isFullFilter }) => {
 		(dates) => {
 			const [start, end] = dates;
 
-			// if (start === null && end === null)
-			// 	utilFunc(
-			// 		oldStartDate,
-			// 		oldEndDate,
-			// 		setFilterValue,
-			// 		setStartDate,
-			// 		setEndDate
-			// 	);
-			// else utilFunc(start, end, setFilterValue, setStartDate, setEndDate);
+			if (start === null && end === null)
+				utilFunc(
+					oldStartDate,
+					oldEndDate,
+					setFilterValue,
+					setStartDate,
+					setEndDate
+				);
+			else utilFunc(start, end, setFilterValue, setStartDate, setEndDate);
 		},
 		[column]
 	);
@@ -125,7 +121,8 @@ const FilterDate = ({ columnName, column, firstValue, isFullFilter }) => {
 			key={id}
 			columnName={columnName}
 			onClick={() => setFilterValue(undefined)}
-			showResetButton={getFilterValue()}>
+			// showResetButton={getFilterValue()}
+		>
 			<DatePicker
 				selected={endDate}
 				minDate={oldStartDate}
@@ -133,7 +130,7 @@ const FilterDate = ({ columnName, column, firstValue, isFullFilter }) => {
 				endDate={endDate}
 				startDate={startDate}
 				onChange={handleOnChange}
-				withPortal
+				// withPortal
 				renderCustomHeader={CustomHeader}
 				customInput={
 					<ExampleCustomInput className='btn-filter-outline h-full pr-7' />

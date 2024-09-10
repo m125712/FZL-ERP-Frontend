@@ -174,7 +174,7 @@ export const SwitchOnly = ({ register, ...props }) => (
 export const Select = ({ register, ...props }) => (
 	<FormField {...props}>
 		<select
-			className='select select-bordered select-primary w-full border-primary/30 bg-primary/5'
+			className='select select-bordered select-primary w-full bg-primary/5'
 			{...register(props.label)}>
 			{props.option?.map((item, index) => (
 				<option key={index} value={item.value}>

@@ -27,13 +27,14 @@ import {
 	useOrderAgainstVislonFinishingRMLog,
 	useOrderAgainstVislonTMRMLog,
 } from '@/state/Vislon';
-import { FormField, Input, ReactSelect } from '@/ui';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
 	MATERIAL_TRX_AGAINST_ORDER_NULL,
 	MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
 } from '@util/Schema';
 
+import { useOtherMaterial } from '@/state/Other';
 import getTransactionArea from '@/util/TransactionArea';
 import { useEffect } from 'react';
 
@@ -80,7 +81,10 @@ export default function Index({
 		useOrderAgainstSliderAssemblyRMLog();
 	const { invalidateQuery: invalidateOrderAgainstSliderColorRMLog } =
 		useOrderAgainstSliderColorRMLog();
-	const MAX_QUANTITY = Number(updateMaterialTrxToOrder?.stock);
+	const { data: material } = useOtherMaterial();
+	const MAX_QUANTITY =
+		Number(updateMaterialTrxToOrder?.stock) +
+		Number(updateMaterialTrxToOrder?.trx_quantity);
 
 	const schema = {
 		...MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
@@ -103,6 +107,12 @@ export default function Index({
 			reset(data);
 		}
 	}, [data]);
+	const selectUnit = [
+		{ label: 'kg', value: 'kg' },
+		{ label: 'Litre', value: 'ltr' },
+		{ label: 'Meter', value: 'mtr' },
+		{ label: 'Piece', value: 'pcs' },
+	];
 
 	const onClose = () => {
 		setUpdateMaterialTrxToOrder((prev) => ({
@@ -180,11 +190,21 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<Input
+			<JoinInput
+				title='trx_quantity'
+				label={`trx_quantity`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
+				register={register}
+			/>
+			{/* <Input
 				label='trx_quantity'
 				sub_label={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
-			/>
+			/> */}
 			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);

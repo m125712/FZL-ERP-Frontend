@@ -1,7 +1,10 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useMaterialTrxAgainstOrderDescription } from '@/state/Store';
+import {
+	useMaterialInfo,
+	useMaterialTrxAgainstOrderDescription,
+} from '@/state/Store';
 
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
@@ -13,6 +16,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const { data, isLoading, url, deleteData } =
 		useMaterialTrxAgainstOrderDescription();
+	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 
 	const info = new PageInfo('Store / Transfer Against Order', url);
 	const haveAccess = useAccess('store__log');
@@ -154,6 +158,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
+	invalidateMaterialInfo();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

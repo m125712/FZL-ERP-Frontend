@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useMaterialTrx } from '@/state/Store';
+import { useMaterialInfo, useMaterialTrx } from '@/state/Store';
 import { DateTime, EditDelete, SectionName } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useMemo, useState } from 'react';
@@ -11,6 +11,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useMaterialTrx();
+	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const info = new PageInfo('Store / Transfer', url);
 	const haveAccess = useAccess('store__log');
 
@@ -91,6 +92,7 @@ export default function Index() {
 		],
 		[data]
 	);
+	
 
 	// Update
 	const [updateMaterialTrx, setUpdateMaterialTrx] = useState({
@@ -108,6 +110,7 @@ export default function Index() {
 				.replace(/#/g, '')
 				.replace(/\//g, '-'),
 			stock: data[idx]?.stock,
+			trx_quantity: data[idx]?.trx_quantity,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -128,6 +131,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
+	invalidateMaterialInfo();
 
 	if (isLoading)
 		return (

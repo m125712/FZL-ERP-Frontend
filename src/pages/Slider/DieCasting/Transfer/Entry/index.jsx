@@ -91,7 +91,7 @@ const Index = () => {
 		control,
 		name: 'stocks',
 	});
-	
+
 	const onSubmit = async (data) => {
 		// * ADD data
 		const created_at = GetDateTime();
@@ -123,7 +123,6 @@ const Index = () => {
 									...item,
 									stock_uuid: data.order_description_uuid,
 									trx_quantity: item.quantity,
-									type: 'body',
 								},
 								isOnCloseNeeded: false,
 							})
@@ -226,6 +225,7 @@ const Index = () => {
 	const thClass =
 		'group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300';
 
+	
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}
@@ -265,6 +265,7 @@ const Index = () => {
 							'Name',
 							'Item Name',
 							'Zipper No',
+							'Type',
 							'End Type',
 							'Puller',
 							'Logo',
@@ -330,6 +331,18 @@ const Index = () => {
 								{/* Zipper Name */}
 								<td className={cn('w-24', rowClass)}>
 									{item.zipper_number_name}
+								</td>
+
+								{/* Tyoe Name */}
+								<td className={cn('w-24', rowClass)}>
+									{item.type
+										.split('_') // Split the string by underscores
+										.map(
+											(word) =>
+												word.charAt(0).toUpperCase() +
+												word.slice(1)
+										) // Capitalize the first letter of each word
+										.join(' ')}
 								</td>
 
 								{/* End Type */}

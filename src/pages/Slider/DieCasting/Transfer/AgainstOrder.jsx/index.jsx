@@ -61,7 +61,15 @@ const Index = () => {
 				accessorKey: 'type',
 				header: 'Type',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) =>
+					info
+						.getValue()
+						.split('_') // Split the string by underscores
+						.map(
+							(word) =>
+								word.charAt(0).toUpperCase() + word.slice(1)
+						) // Capitalize the first letter of each word
+						.join(' '),
 			},
 			{
 				accessorKey: 'puller_link_name',
@@ -177,7 +185,7 @@ const Index = () => {
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
-
+	
 	return (
 		<>
 			<ReactTable

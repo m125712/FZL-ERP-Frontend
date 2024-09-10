@@ -29,10 +29,23 @@ export default function Index({
 	const { user } = useAuth();
 
 	const MAX_PROD_KG = Number(updateSliderProd.balance_quantity).toFixed(3);
-
+	const MAX_PROD = Number(
+		Math.min(
+			updateSliderProd?.body_quantity,
+			updateSliderProd?.cap_quantity,
+			updateSliderProd?.link_quantity,
+			updateSliderProd?.puller_quantity
+		)
+	);
 	const { register, handleSubmit, errors, reset, watch, control, context } =
 		useRHF(
-			SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
+			{
+				...SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
+				production_quantity: NUMBER_REQUIRED.max(
+					MAX_PROD,
+					'Beyond Max'
+				),
+			},
 			SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL
 		);
 
@@ -87,8 +100,8 @@ export default function Index({
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'
-				unit='KG'
-				sub_label={`MAX: ${MAX_PROD_KG} kg`}
+				unit='PCS'
+				sub_label={`MAX: ${MAX_PROD} PCS`}
 				{...{ register, errors }}
 			/>
 			<JoinInput

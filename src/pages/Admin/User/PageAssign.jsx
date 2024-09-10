@@ -1,7 +1,7 @@
 import { AddModal } from '@/components/Modal';
 import { DebouncedInput } from '@/components/Table/components';
 import { useFetchForRhfResetForUserAccess, useRHF } from '@/hooks';
-import { PRIVATE_ROUTES } from '@/routes';
+import { allPrivateRoutes } from '@/routes';
 import { useAdminUsers } from '@/state/Admin';
 import { CheckBox } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
@@ -15,7 +15,7 @@ export default function Index({
 	setPageAssign,
 }) {
 	const { url, updateData } = useAdminUsers();
-	const ALL_PAGE_ACTIONS = PRIVATE_ROUTES.filter(
+	const ALL_PAGE_ACTIONS = allPrivateRoutes.filter(
 		(item) => item.actions !== undefined
 	);
 

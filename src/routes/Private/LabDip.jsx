@@ -1,177 +1,151 @@
-import { lazy } from 'react';
-
 // Pages
-const Info = lazy(() => import('@pages/LabDip/Info'));
-const InfoEntry = lazy(() => import('@pages/LabDip/Info/Entry'));
-const InfoDetails = lazy(() => import('@pages/LabDip/Info/ByUUID'));
-const RM = lazy(() => import('@/pages/LabDip/RM'));
-const Log = lazy(() => import('@/pages/LabDip/Log'));
-const Recipe = lazy(() => import('@pages/LabDip/Recipe'));
-const RecipeEntry = lazy(() => import('@pages/LabDip/Recipe/Entry'));
-const RecipeDetails = lazy(() => import('@pages/LabDip/Recipe/ByRecipeId'));
-const ShadeRecipeEntry = lazy(() => import('@pages/LabDip/ShadeRecipe/Entry'));
-const ShadeRecipeDetails = lazy(
-	() => import('@pages/LabDip/ShadeRecipe/Details/ByShadeRecipeId')
-);
-const ShadeRecipe = lazy(() => import('@pages/LabDip/ShadeRecipe'));
+import Info from '@pages/LabDip/Info';
+import InfoEntry from '@pages/LabDip/Info/Entry';
+import InfoDetails from '@pages/LabDip/Info/ByUUID';
+import RM from '@/pages/LabDip/RM';
+import Log from '@/pages/LabDip/Log';
+import Recipe from '@pages/LabDip/Recipe';
+import RecipeEntry from '@pages/LabDip/Recipe/Entry';
+import RecipeDetails from '@pages/LabDip/Recipe/ByRecipeId';
+import ShadeRecipeEntry from '@pages/LabDip/ShadeRecipe/Entry';
+import ShadeRecipeDetails from '@pages/LabDip/ShadeRecipe/Details/ByShadeRecipeId';
+import ShadeRecipe from '@pages/LabDip/ShadeRecipe';
 
 export const LabDipRoutes = [
 	{
-		id: 1,
-		name: 'Info',
-		path: '/lab-dip/info',
-		element: Info,
-		type: 'lab_dip',
-		page_name: 'lab_dip__info',
-		actions: ['create', 'read', 'update', 'delete'],
-	},
-	{
-		id: 15,
-		name: 'Info Entry',
-		path: '/lab-dip/info/entry',
-		element: InfoEntry,
-		type: 'lab_dip',
-		hidden: true,
-		page_name: 'lab_dip__info_entry',
-		actions: ['create', 'read', 'update', 'delete'],
-	},
-	{
-		id: 151,
-		name: 'Info Update',
-		path: '/lab-dip/info/update/:info_number/:info_uuid',
-		element: InfoEntry,
-		page_name: 'lab_dip__info_entry_update',
-		hidden: true,
-		actions: ['create', 'read', 'update', 'delete'],
-		isDynamic: true,
-	},
-	{
-		id: 142,
-		name: 'Info Details',
-		path: '/lab-dip/info/details/:info_uuid',
-		element: InfoDetails,
-		type: 'lab_dip',
-		hidden: true,
-		page_name: 'lab_dip__info_details',
-		actions: ['read', 'update'],
-		isDynamic: true,
-	},
-	{
-		id: 1,
-		name: 'Recipe',
-		path: '/lab-dip/recipe',
-		element: Recipe,
-		type: 'lab_dip',
-		page_name: 'lab_dip__recipe',
-		actions: ['create', 'read', 'update', 'delete'],
-	},
-	{
-		id: 15,
-		name: 'Recipe Entry',
-		path: '/lab-dip/recipe/entry',
-		element: RecipeEntry,
-		type: 'lab_dip',
-		hidden: true,
-		page_name: 'lab_dip__recipe_entry',
-		actions: ['create', 'read', 'update', 'delete'],
-	},
-	{
-		id: 151,
-		name: 'Recipe Update',
-		path: '/lab-dip/recipe/update/:recipe_id/:recipe_uuid',
-		element: RecipeEntry,
-		page_name: 'lab_dip__recipe_entry_update',
-		hidden: true,
-		actions: ['create', 'read', 'update', 'delete'],
-		isDynamic: true,
-	},
-	{
-		id: 142,
-		name: 'Recipe Details',
-		path: '/lab-dip/recipe/details/:recipe_uuid',
-		element: RecipeDetails,
-		type: 'lab_dip',
-		hidden: true,
-		page_name: 'lab_dip__recipe_details',
-		actions: ['create', 'read', 'update', 'delete'],
-		isDynamic: true,
-	},
-	{
-		id: 170,
-		name: 'RM',
-		path: '/lab-dip/rm',
-		element: RM,
-		type: 'lab_dip',
+		name: 'Lab Dip',
+		children: [
+			{
+				name: 'Info',
+				path: '/lab-dip/info',
+				element: <Info />,
+				page_name: 'lab_dip__info',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Info Entry',
+				path: '/lab-dip/info/entry',
+				element: <InfoEntry />,
+				hidden: true,
+				page_name: 'lab_dip__info_entry',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Info Update',
+				path: '/lab-dip/info/update/:info_number/:info_uuid',
+				element: <InfoEntry />,
+				page_name: 'lab_dip__info_entry_update',
+				hidden: true,
+				actions: ['create', 'read', 'update', 'delete'],
+				isDynamic: true,
+			},
+			{
+				name: 'Info Details',
+				path: '/lab-dip/info/details/:info_uuid',
+				element: <InfoDetails />,
+				hidden: true,
+				page_name: 'lab_dip__info_details',
+				actions: ['read', 'update'],
+				isDynamic: true,
+			},
+			{
+				name: 'Recipe',
+				path: '/lab-dip/recipe',
+				element: <Recipe />,
+				page_name: 'lab_dip__recipe',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Recipe Entry',
+				path: '/lab-dip/recipe/entry',
+				element: <RecipeEntry />,
+				hidden: true,
+				page_name: 'lab_dip__recipe_entry',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Recipe Update',
+				path: '/lab-dip/recipe/update/:recipe_id/:recipe_uuid',
+				element: <RecipeEntry />,
+				page_name: 'lab_dip__recipe_entry_update',
+				hidden: true,
+				actions: ['create', 'read', 'update', 'delete'],
+				isDynamic: true,
+			},
+			{
+				name: 'Recipe Details',
+				path: '/lab-dip/recipe/details/:recipe_uuid',
+				element: <RecipeDetails />,
+				hidden: true,
+				page_name: 'lab_dip__recipe_details',
+				actions: ['create', 'read', 'update', 'delete'],
+				isDynamic: true,
+			},
+			{
+				name: 'RM',
+				path: '/lab-dip/rm',
+				element: <RM />,
+				page_name: 'lab_dip__rm',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_name',
+					'click_used',
+				],
+				isDynamic: true,
+			},
+			{
+				name: 'Log',
+				path: '/lab-dip/log',
+				element: <Log />,
+				page_name: 'lab_dip__log',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_name',
+					'click_used',
+					'click_update_rm_order',
+					'click_delete_rm_order',
+				],
+				isDynamic: true,
+			},
 
-		page_name: 'lab_dip__rm',
-		actions: [
-			'create',
-			'read',
-			'update',
-			'delete',
-			'click_name',
-			'click_used',
+			{
+				name: 'Shade Recipe Entry',
+				path: '/lab-dip/shade_recipe/entry',
+				element: <ShadeRecipeEntry />,
+				hidden: true,
+				page_name: 'lab_dip__shade_recipe_entry',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Shade Recipe Details',
+				path: '/lab-dip/shade_recipe/details/:shade_recipe_uuid',
+				element: <ShadeRecipeDetails />,
+				hidden: true,
+				page_name: 'lab_dip__shade_recipe_details',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Shade Recipe',
+				path: '/lab-dip/shade_recipe',
+				element: <ShadeRecipe />,
+				page_name: 'lab_dip__shade_recipe',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Shade Recipe Update',
+				path: '/lab-dip/shade_recipe/update/:shade_recipe_uuid',
+				element: <ShadeRecipeEntry />,
+				page_name: 'lab_dip__shade_recipe_entry_update',
+				hidden: true,
+				actions: ['create', 'read', 'update', 'delete'],
+				isDynamic: true,
+			},
 		],
-		isDynamic: true,
 	},
-	{
-		id: 172,
-		name: 'Log',
-		path: '/lab-dip/log',
-		element: Log,
-		type: 'lab_dip',
-
-		page_name: 'lab_dip__log',
-		actions: [
-			'create',
-			'read',
-			'update',
-			'delete',
-			'click_name',
-			'click_used',
-			'click_update_rm_order',
-			'click_delete_rm_order',
-		],
-		isDynamic: true,
-	},
-
-	{
-		id: 174,
-		name: 'Shade Recipe Entry',
-		path: '/lab-dip/shade_recipe/entry',
-		element: ShadeRecipeEntry,
-		type: 'lab_dip',
-		hidden: true,
-		page_name: 'lab_dip__shade_recipe_entry',
-		actions: ['create', 'read', 'update', 'delete'],
-	},
-	{
-		id: 173,
-		name: 'Shade Recipe Details',
-		path: '/lab-dip/shade_recipe/details/:shade_recipe_uuid',
-		element: ShadeRecipeDetails,
-		type: 'lab_dip',
-		hidden: true,
-		page_name: 'lab_dip__shade_recipe_details',
-		actions: ['create', 'read', 'update', 'delete'],
-	},
-	{
-		id: 175,
-		name: 'Shade Recipe',
-		path: '/lab-dip/shade_recipe',
-		element: ShadeRecipe,
-		page_name: 'lab_dip__shade_recipe',
-		type: 'lab_dip',
-		actions: ['create', 'read', 'update', 'delete'],
-	},
-	{
-		id:176
-		,name: 'Shade Recipe Update'
-		,path: '/lab-dip/shade_recipe/update/:shade_recipe_uuid'
-		,element: ShadeRecipeEntry
-		,page_name: 'lab_dip__shade_recipe_entry_update'
-		,hidden: true
-		,actions: ['create', 'read', 'update', 'delete']
-		,isDynamic: true
-	}
 ];

@@ -1,7 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Layout from '../layout';
+
 import publicRoutes from './public';
 import { flatRoutes } from '.';
+import Layout from '@/components/layout';
 
 export const router = createBrowserRouter([
 	...publicRoutes,

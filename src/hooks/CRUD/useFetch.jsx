@@ -1,9 +1,9 @@
-import { PRIVATE_ROUTES } from '@/routes';
 import { api } from '@lib/api';
 import { BASE_API } from '@lib/secret';
 import Cookies from 'js-cookie';
 import { useEffect } from 'react';
 import useAsync from './useAsync';
+import { allPrivateRoutes } from '@/routes';
 
 const DEFAULT_OPTIONS = {
 	headers: {
@@ -117,7 +117,7 @@ const useFetchForRhfResetForUserAccess = async (url, returnId, reset) => {
 				});
 			});
 
-			const filterRoutes = PRIVATE_ROUTES?.filter(
+			const filterRoutes = allPrivateRoutes?.filter(
 				(item) => item.actions !== undefined
 			);
 

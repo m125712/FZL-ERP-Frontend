@@ -3,11 +3,11 @@ import privateRoutes from './private';
 import filterRoutes from '@/util/filterRoutes';
 import filterSidebarRoutes from '@/util/filterSidebarRoutes';
 
-// all routes including private
-export const routes = [...privateRoutes];
+// all private routes
+export const allPrivateRoutes = [...privateRoutes];
 
 // filtered routes which has read access
-export const filteredRoutes = filterRoutes(routes);
+export const filteredRoutes = filterRoutes(privateRoutes);
 
 // flatten routes which has read access
 export const flatRoutes = flattenRoutes(filteredRoutes);

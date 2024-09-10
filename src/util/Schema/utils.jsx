@@ -45,9 +45,16 @@ export const NUMBER_REQUIRED = NUMBER.required('Required');
 export const NUMBER_DOUBLE = yup.number().typeError('Invalid Number');
 export const NUMBER_DOUBLE_REQUIRED = NUMBER_DOUBLE.required('Required');
 
-export const PHONE_NUMBER = STRING.length(11, 'Must be exactly 11 digits')
+export const PHONE_NUMBER = yup
+	.string()
+	.matches(
+		/^$|^\+?\d{4,15}$/,
+		'Must be a valid phone number with optional "+" sign and up to 4-15 digits'
+	)
 	.typeError('Invalid Number')
-	.matches(/^[0-9]+$/, 'Invalid Phone Number');
+	.nullable() // Allows null values
+	.default(''); // Sets default to empty string if no value is provided
+
 export const PHONE_NUMBER_REQUIRED = PHONE_NUMBER.required('Required');
 
 export const PASSWORD = STRING_REQUIRED.min(

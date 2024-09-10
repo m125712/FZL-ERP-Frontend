@@ -340,7 +340,12 @@ export const PURCHASE_RECEIVE_SCHEMA = {
 	vendor_uuid: STRING_REQUIRED,
 	is_local: NUMBER_REQUIRED.default(0),
 	lc_number: STRING.nullable(),
-	challan_number: STRING.nullable(),
+	challan_number: STRING.nullable().when('lc_number', {
+		is: (value) => value !== '',
+		then: (Schema) =>
+			Schema.matches(/^$/, 'Enter Challan Number or L/C Number'),
+		otherwise: (Schema) => Schema,
+	}),
 	remarks: STRING.nullable(),
 	purchase: yup.array().of(
 		yup.object().shape({

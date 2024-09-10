@@ -80,12 +80,12 @@ export default function Index({
 		useOrderAgainstSliderAssemblyRMLog();
 	const { invalidateQuery: invalidateOrderAgainstSliderColorRMLog } =
 		useOrderAgainstSliderColorRMLog();
+	const MAX_QUANTITY = Number(updateMaterialTrxToOrder?.stock);
 
 	const schema = {
 		...MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
-		// trx_quantity: MATERIAL_TRX_AGAINST_ORDER_SCHEMA.trx_quantity.max(
-		// 	updateMaterialTrxToOrder?.stock
-		// ),
+		trx_quantity:
+			MATERIAL_TRX_AGAINST_ORDER_SCHEMA.trx_quantity.max(MAX_QUANTITY),
 	};
 	const {
 		register,
@@ -182,7 +182,7 @@ export default function Index({
 			</FormField>
 			<Input
 				label='trx_quantity'
-				// sub_label={`Max: ${updateMaterialTrxToOrder?.stock}`}
+				sub_label={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

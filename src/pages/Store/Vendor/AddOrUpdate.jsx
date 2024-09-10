@@ -5,6 +5,7 @@ import nanoid from '@/lib/nanoid';
 import { usePurchaseVendor, usePurchaseVendorByUUID } from '@/state/Store';
 import { Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
+import { DevTool } from '@hookform/devtools';
 import { VENDOR_NULL, VENDOR_SCHEMA } from '@util/Schema';
 import { useEffect } from 'react';
 
@@ -19,7 +20,7 @@ export default function Index({
 	const { url, updateData, postData } = usePurchaseVendor();
 	const { data } = usePurchaseVendorByUUID(updateVendor?.uuid);
 
-	const { register, handleSubmit, errors, reset, context } = useRHF(
+	const { register, handleSubmit, errors, reset, context, control } = useRHF(
 		VENDOR_SCHEMA,
 		VENDOR_NULL
 	);
@@ -96,6 +97,7 @@ export default function Index({
 			<Input label='email' {...{ register, errors }} />
 			<Input label='office_address' {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />
+			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);
 }

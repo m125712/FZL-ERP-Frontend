@@ -28,7 +28,7 @@ export default function Index({
 		),
 		wastage: RM_MATERIAL_USED_SCHEMA.remaining.max(
 			MAX_QUANTITY,
-			'Must be less than or equal ${MAX_QUANTITY}'
+			`Must be less than or equal ${MAX_QUANTITY}`
 		),
 	};
 

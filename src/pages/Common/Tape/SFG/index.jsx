@@ -3,7 +3,7 @@ import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc } from '@/hooks';
 import { useCommonTapeSFG } from '@/state/Common';
 
-import { Transfer, DateTime } from '@/ui';
+import { DateTime, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -14,7 +14,7 @@ const Production = lazy(() => import('./Production'));
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const { data, isLoading, url } = useCommonTapeSFG(); // Todo: need to change fetch url
+	const { data, isLoading, url } = useCommonTapeSFG();
 	const info = new PageInfo('Common/Tape/SFG', url, 'common__tape_sfg');
 	const haveAccess = useAccess(info.getTab());
 	const navigate = useNavigate();
@@ -65,29 +65,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'created_by_name',
-				header: 'Created By',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'created_at',
-				header: 'Created At',
-				enableColumnFilter: false,
-				filterFn: 'isWithinRange',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
-				accessorKey: 'updated_at',
-				header: 'Updated',
-				enableColumnFilter: false,
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
@@ -114,17 +91,16 @@ export default function Index() {
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_to_dyeing'),
 				width: 'w-24',
-				cell: (info) => (
-					<Transfer
-						onClick={() => handleTrxToDying(info.row.index)}
-					/>
-				),
+				cell: (info) =>
+					info.row.original.type.toLowerCase() === 'nylon' ? null : (
+						<Transfer
+							onClick={() => handleTrxToDying(info.row.index)}
+						/>
+					),
 			},
 		],
 		[data]
 	);
-
-	// Fetching data from server
 
 	// Update
 	const [updateTapeProd, setUpdateTapeProd] = useState({
@@ -195,6 +171,7 @@ export default function Index() {
 				data={data}
 				columns={columns}
 			/>
+			{/* //* Modals  */}
 			<Suspense>
 				<Production
 					modalId={'TapeProdModal'}
@@ -203,8 +180,7 @@ export default function Index() {
 						setUpdateTapeProd,
 					}}
 				/>
-			</Suspense>
-			<Suspense>
+
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
@@ -212,8 +188,7 @@ export default function Index() {
 						setUpdateTapeProd,
 					}}
 				/>
-			</Suspense>
-			<Suspense>
+
 				<TrxToCoil
 					modalId={'trx_to_coil_modal'}
 					{...{
@@ -221,8 +196,7 @@ export default function Index() {
 						setUpdateTapeProd,
 					}}
 				/>
-			</Suspense>
-			<Suspense>
+			
 				<TrxToDying
 					modalId={'trx_to_dying_modal'}
 					{...{

@@ -25,18 +25,21 @@ export default function Index() {
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
+				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'short_name',
 				header: 'Short Name',
 				enableColumnFilter: false,
+				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
 				enableColumnFilter: false,
+				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -44,18 +47,21 @@ export default function Index() {
 				header: 'Created At',
 				enableColumnFilter: false,
 				filterFn: 'isWithinRange',
+				width: 'w-40',
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated At',
 				enableColumnFilter: false,
+				width: 'w-40',
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
+				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{

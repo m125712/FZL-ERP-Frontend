@@ -97,6 +97,7 @@ export default function Index() {
 		uuid: null,
 		material_name: null,
 		stock: null,
+		trx_quantity: null,
 	});
 
 	const handelUpdate = (idx) => {

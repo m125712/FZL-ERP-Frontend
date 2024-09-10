@@ -37,12 +37,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'style_color_size',
-			// 	header: 'Style / Size / Color',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
+
 			{
 				accessorKey: 'trx_to',
 				header: 'Section',

@@ -29,6 +29,7 @@ export default function Index({
 		uuid: null,
 		material_name: null,
 		stock: null,
+		trx_quantity: null,
 	},
 	setUpdateMaterialTrx,
 }) {
@@ -54,7 +55,7 @@ export default function Index({
 	const { invalidateQuery: invalidateDieCastingRM } = useSliderDieCastingRM();
 	const { invalidateQuery: invalidateDeliveryRM } = useDeliveryRM();
 
-	const MAX_QUANTITY = updateMaterialTrx?.stock;
+	const MAX_QUANTITY = Number(updateMaterialTrx?.stock) + Number(updateMaterialTrx?.trx_quantity);
 	const schema = {
 		...MATERIAL_STOCK_SCHEMA,
 		trx_quantity: MATERIAL_STOCK_SCHEMA.trx_quantity.max(MAX_QUANTITY),

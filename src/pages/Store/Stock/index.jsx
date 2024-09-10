@@ -13,7 +13,7 @@ const MaterialTrx = lazy(() => import('./MaterialTrx'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData, refetch } = useMaterialInfo();
-	const info = new PageInfo('Stock', url, 'store__stock');
+	const info = new PageInfo('Store / Stock', url, 'store__stock');
 	const haveAccess = useAccess('store__stock');
 
 	const columns = useMemo(
@@ -126,6 +126,7 @@ export default function Index() {
 				accessorKey: 'created_at',
 				header: 'Created At',
 				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
@@ -247,22 +248,16 @@ export default function Index() {
 						setUpdateMaterialDetails,
 					}}
 				/>
-			</Suspense>
-			<Suspense>
 				<AgainstOrderTransfer
 					modalId={'MaterialTrxAgainstOrder'}
 					updateMaterialDetails={updateMaterialDetails}
 					setUpdateMaterialDetails={setUpdateMaterialDetails}
 				/>
-			</Suspense>
-			<Suspense>
 				<MaterialTrx
 					modalId={'MaterialTrx'}
 					updateMaterialDetails={updateMaterialDetails}
 					setUpdateMaterialDetails={setUpdateMaterialDetails}
 				/>
-			</Suspense>
-			<Suspense>
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}

@@ -14,7 +14,7 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } =
 		useMaterialTrxAgainstOrderDescription();
 
-	const info = new PageInfo('Log Against Order', url);
+	const info = new PageInfo('Store / Transfer Against Order', url);
 	const haveAccess = useAccess('store__log');
 
 	const columns = useMemo(
@@ -175,8 +175,7 @@ export default function Index() {
 						setUpdateMaterialTrxToOrder,
 					}}
 				/>
-			</Suspense>
-			<Suspense>
+
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}

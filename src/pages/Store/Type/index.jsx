@@ -12,7 +12,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useMaterialType();
-	const info = new PageInfo('Type', url, 'store__type');
+	const info = new PageInfo('Store / Material Type', url, 'store__type');
 	const haveAccess = useAccess('store__type');
 
 	useEffect(() => {
@@ -43,6 +43,7 @@ export default function Index() {
 				accessorKey: 'created_at',
 				header: 'Created At',
 				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{

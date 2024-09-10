@@ -70,6 +70,7 @@ export default function Index() {
 				header: 'Created at',
 				width: 'w-24',
 				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},

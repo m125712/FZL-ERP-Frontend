@@ -11,14 +11,18 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = usePurchaseLog();
-	const info = new PageInfo('Log Purchase', url);
+	const info = new PageInfo('Store / Purchase', url);
 	const haveAccess = useAccess('store__log');
+
+	console.log({
+		data,
+	});
 
 	const columns = useMemo(
 		() => [
 			{
 				accessorKey: 'purchase_id',
-				header: 'ID',
+				header: 'Receive ID',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { uuid } = info.row.original;
@@ -32,10 +36,42 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'vendor_name',
+				header: 'Vendor',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_local',
+				header: 'Local/LC',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return info.getValue() == 1 ? 'Local' : 'LC';
+				},
+			},
+			{
+				accessorKey: 'lc_number',
+				header: 'LC No',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'challan_number',
+				header: 'Challan No',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'material_name',
 				header: 'Material',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'quantity',
+				header: 'Quantity',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
 			{
 				accessorKey: 'price',
@@ -50,24 +86,10 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'vendor_name',
-				header: 'Vendor',
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'challan_number',
-				header: 'Challan No',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'is_local',
-				header: 'Local/LC',
-				enableColumnFilter: false,
-				cell: (info) => {
-					return info.getValue() == 1 ? 'Local' : 'LC';
-				},
 			},
 			{
 				accessorKey: 'created_by_name',
@@ -79,6 +101,7 @@ export default function Index() {
 				accessorKey: 'created_at',
 				header: 'Created At',
 				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
@@ -87,12 +110,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+
 			{
 				accessorKey: 'actions',
 				header: 'Actions',
@@ -169,8 +187,7 @@ export default function Index() {
 						setUpdatePurchaseLog,
 					}}
 				/>
-			</Suspense>
-			<Suspense>
+
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}

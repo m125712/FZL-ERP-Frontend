@@ -2,10 +2,9 @@ import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useOrderFactory } from '@/state/Order';
-
-import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
+import { FactoryColumns } from '../columns';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
@@ -19,86 +18,6 @@ export default function Index() {
 		document.title = info.getTabName();
 	}, []);
 
-	const columns = useMemo(
-		() => [
-			{
-				accessorKey: 'name',
-				header: 'Name',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'party_name',
-				header: 'Party Name',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'phone',
-				header: 'Phone',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'address',
-				header: 'Address',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'created_by_name',
-				header: 'Created By',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'created_at',
-				header: 'Created At',
-				enableColumnFilter: false,
-				filterFn: 'isWithinRange',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
-				accessorKey: 'updated_at',
-				header: 'Updated',
-				enableColumnFilter: false,
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'actions',
-				header: 'Actions',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden:
-					!haveAccess.includes('update') &&
-					!haveAccess.includes('delete'),
-				width: 'w-24',
-				cell: (info) => {
-					return (
-						<EditDelete
-							idx={info.row.index}
-							handelUpdate={handelUpdate}
-							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('delete')}
-							showEdit={haveAccess.includes('update')}
-						/>
-					);
-				},
-			},
-		],
-		[data]
-	);
-
 	// Add
 	const handelAdd = () => {
 		window[info.getAddOrUpdateModalId()].showModal();
@@ -108,7 +27,6 @@ export default function Index() {
 	const [updateFactory, setUpdateFactory] = useState({
 		uuid: null,
 	});
-
 	const handelUpdate = (idx) => {
 		setUpdateFactory((prev) => ({
 			...prev,
@@ -131,6 +49,13 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
+
+	const columns = FactoryColumns({
+		handelUpdate,
+		handelDelete,
+		haveAccess,
+		data,
+	});
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

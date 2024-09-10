@@ -12,19 +12,19 @@ const res = {
 	tape_making: {
 		name: 'Tape Making',
 		short_name: 'Tape Making',
-		type: 'All',
+		type: 'Common',
 		area: 'Tape Making',
 	},
 	coil_forming: {
 		name: 'Coil Forming',
 		short_name: 'Coil Forming',
-		type: 'All',
+		type: 'Common',
 		area: 'Coil Forming',
 	},
 	dying_and_iron: {
 		name: 'Dying and Iron',
 		short_name: 'Dying and Iron',
-		type: 'All',
+		type: 'Common',
 		area: 'Dying and Iron',
 	},
 	m_gapping: {

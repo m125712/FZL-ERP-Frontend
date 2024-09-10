@@ -1,41 +1,6 @@
-// import { nextui } from '@nextui-org/react';
-
-// /** @type {import('tailwindcss').Config} */
-// export default {
-// 	content: [
-// 		'./index.html',
-// 		'./src/**/*.{js,ts,jsx,tsx}',
-// 		'./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
-// 	],
-// 	theme: {
-// 		extend: {
-// 			fontFamily: {
-// 				poppins: ['Poppins', 'sans-serif'],
-// 			},
-// 		},
-// 	},
-// 	darkMode: 'class',
-// 	plugins: [
-// 		nextui({
-// 			defaultTheme: 'light',
-// 			themes: {
-// 				light: {
-// 					extend: 'light',
-// 				},
-// 			},
-// 		}),
-// 	],
-// };
-
-import { nextui } from '@nextui-org/react';
 import daisyui from 'daisyui';
 
 const LIGHT_THEME = require('daisyui/src/theming/themes')['light'];
-
-// const WHITE = '#FFFFFF';
-// const BLACK = '#000000';
-// const PRIMARY = '#4F496F';
-// const SECONDARY = '#ADB7D6';
 
 const WHITE = '#FFFFFF';
 const PRIMARY = '#27374D';
@@ -44,14 +9,6 @@ const SECONDARY = '#526D82';
 const SECONDARY_LIGHT = '#9DB2BF';
 const BACKGROUND = '#f5f7fa';
 const ACCENT = '#00ADB5';
-
-// const WHITE = '#FFFFFF';
-// const PRIMARY = '#222831';
-// const PRIMARY_FOREGROUND = '#EEEEEE';
-// const SECONDARY = '#393E46';
-// const SECONDARY_LIGHT = '#9DB2BF';
-// const BACKGROUND = '#EEEEEE';
-// const ACCENT = '#FFD369';
 
 export default {
 	content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -113,9 +70,9 @@ export default {
 					'error-content': WHITE,
 
 					'--rounded-btn': '0.3rem',
-					'--animation-btn': '.15s',
+					'--animation-btn': '0s',
 					'--btn-text-case': 'uppercase',
-					'--btn-focus-scale': '1.1',
+					'--btn-focus-scale': '1.05',
 					'--border-btn': '0.1rem',
 				},
 			},

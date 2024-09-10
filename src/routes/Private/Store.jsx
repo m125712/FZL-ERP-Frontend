@@ -33,35 +33,7 @@ export const StoreRoutes = [
 			'click_action',
 		],
 	},
-	// {
-	// 	id: 30,
-	// 	name: 'Stock Full',
-	// 	path: '/store/stock',
-	// 	element: Stock,
-	// 	type: 'store',
-	// 	page_name: 'store__stock_full',
-	// 	actions: [
-	// 		'read',
-	// 		'click_name',
-	// 		'click_action',
-	// 		'click_trx_against_order',
-	// 	],
-	// },
-	{
-		id: 301,
-		name: 'Log',
-		path: '/store/log',
-		element: MaterialLog,
-		type: 'store',
-		page_name: 'store__log',
-		actions: [
-			'read',
-			'update_log',
-			'delete_log',
-			'update_log_against_order',
-			'delete_log_against_order',
-		],
-	},
+
 	{
 		id: 401,
 		name: 'Summary',
@@ -136,5 +108,20 @@ export const StoreRoutes = [
 		hidden: true,
 		page_name: 'store__receive_update',
 		actions: ['create', 'read', 'update'],
+	},
+	{
+		id: 301,
+		name: 'Log',
+		path: '/store/log',
+		element: MaterialLog,
+		type: 'store',
+		page_name: 'store__log',
+		actions: [
+			'read',
+			'update_log',
+			'delete_log',
+			'update_log_against_order',
+			'delete_log_against_order',
+		],
 	},
 ];

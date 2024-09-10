@@ -1,11 +1,10 @@
+import cn from '@/lib/cn';
 import { PRIVATE_ROUTES } from '@/routes';
 import { useAuth } from '@context/auth';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import FilesystemItem from './filesystem-item';
 import './index.css';
 import { BrandLink, LogoutButton, MenuIcon, Row, SectionButton } from './utils';
-import cn from '@/lib/cn';
 
 const ThirdChildMenu = ({ items, type }) => {
 	const [isOpened, setIsOpened] = useState(true);
@@ -197,63 +196,6 @@ const MobileHeader = ({ id }) => {
 		</header>
 	);
 };
-
-let node = [
-	{
-		name: 'Home',
-		nodes: [
-			{
-				name: 'Movies',
-				nodes: [
-					{
-						name: 'Action',
-						nodes: [
-							{
-								name: '2000s',
-								nodes: [
-									{ name: 'Gladiator.mp4' },
-									{ name: 'The-Dark-Knight.mp4' },
-								],
-							},
-							{ name: '2010s', nodes: [] },
-						],
-					},
-					{
-						name: 'Comedy',
-						nodes: [
-							{
-								name: '2000s',
-								nodes: [{ name: 'Superbad.mp4' }],
-							},
-						],
-					},
-					{
-						name: 'Drama',
-						nodes: [
-							{
-								name: '2000s',
-								nodes: [{ name: 'American-Beauty.mp4' }],
-							},
-						],
-					},
-				],
-			},
-			{
-				name: 'Music',
-				nodes: [
-					{ name: 'Rock', nodes: [] },
-					{ name: 'Classical', nodes: [] },
-				],
-			},
-			{ name: 'Pictures', nodes: [] },
-			{
-				name: 'Documents',
-				nodes: [],
-			},
-			{ name: 'passwords.txt' },
-		],
-	},
-];
 
 const Aside = ({ id }) => {
 	return (

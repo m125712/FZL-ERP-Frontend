@@ -102,6 +102,7 @@ export default function Index() {
 				header: 'Created',
 				width: 'w-20',
 				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{

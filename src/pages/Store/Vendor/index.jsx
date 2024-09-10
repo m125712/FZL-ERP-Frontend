@@ -12,7 +12,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = usePurchaseVendor();
-	const info = new PageInfo('Vendor', url, 'store__vendor');
+	const info = new PageInfo('Store / Vendor', url, 'store__vendor');
 	const haveAccess = useAccess('store__vendor');
 
 	const columns = useMemo(
@@ -57,6 +57,7 @@ export default function Index() {
 				accessorKey: 'created_at',
 				header: 'Created At',
 				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{

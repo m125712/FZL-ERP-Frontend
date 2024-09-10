@@ -147,6 +147,27 @@ export default function Index() {
 				}),
 			];
 
+			// * Slider
+			const slider_quantity =
+				data.order_entry.length === 1
+					? data.order_entry[0].quantity
+					: data.order_entry.reduce(
+							(prev, curr) => prev + curr.quantity,
+							0
+						);
+
+
+			const slider_info = {
+				order_quantity: slider_quantity,
+				updated_at: GetDateTime(),
+			};
+
+			await updateData.mutateAsync({
+				url: `/slider/stock/${data?.stock_uuid}`,
+				updatedData: slider_info,
+				isOnCloseNeeded: false,
+			});
+
 			navigate(
 				`/order/details/${order_number}/${order_description_uuid}`
 			);

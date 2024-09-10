@@ -83,8 +83,27 @@ export const useSliderDieCastingTransfer = () =>
 // * Die Casting --> (TRANSFER -> Against Stock)
 export const useSliderDieCastingTransferAgainstStock = () =>
 	createGlobalState({
-		queryKey: sliderQK.sliderDieCastingTransfer(),
+		queryKey: sliderQK.sliderDieCastingByStock(),
 		url: '/slider/trx-against-stock',
+	});
+
+export const useSliderDieCastingTransferAgainstStockByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDieCastingByStockByUUID(uuid),
+		url: `/slider/trx-against-stock/${uuid}`,
+	});
+
+// * Die Casting --> (TRANSFER -> Against Order)
+export const useSliderDieCastingTransferAgainstOrder = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDieCastingByOrder(),
+		url: '/slider/die-casting-transaction',
+	});
+
+export const useSliderDieCastingTransferAgainstOrderByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: sliderQK.sliderDieCastingByOrderByUUID(uuid),
+		url: `/slider/die-casting-transaction/${uuid}`,
 	});
 
 // * Order Against RM Log

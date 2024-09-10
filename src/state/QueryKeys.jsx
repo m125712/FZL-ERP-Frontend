@@ -645,6 +645,20 @@ export const sliderQK = {
 		uuid,
 	],
 
+	// * Die Casting --> (BY STOCK)
+	sliderDieCastingByStock: () => [...sliderQK.all(), 'dc-by-stock'],
+	sliderDieCastingByStockByUUID: (uuid) => [
+		...sliderQK.sliderDieCastingByStock(),
+		uuid,
+	],
+
+	// * Die Casting --> (BY ORDER)
+	sliderDieCastingByOrder: () => [...sliderQK.all(), 'dc-by-order'],
+	sliderDieCastingByOrderByUUID: (uuid) => [
+		...sliderQK.sliderDieCastingByOrder(),
+		uuid,
+	],
+
 	//* Die Casting --> (PRODUCTION)
 	sliderDieCastingProduction: () => [...sliderQK.all(), 'dc-production'],
 	sliderDieCastingProductionByUUID: (uuid) => [

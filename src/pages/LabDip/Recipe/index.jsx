@@ -72,6 +72,7 @@ export default function Index() {
 				accessorKey: 'approved',
 				header: 'Approved',
 				enableColumnFilter: false,
+				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
 					return (
 						<input
@@ -93,6 +94,7 @@ export default function Index() {
 				accessorKey: 'status',
 				header: 'Status',
 				enableColumnFilter: false,
+				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
 					return (
 						<input

@@ -2,11 +2,11 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
+import { useMetalTMProductionLog } from '@/state/Metal';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useMemo, useState } from 'react';
 import SFGAddOrUpdate from './AddOrUpdate';
-import { useMetalTMProductionLog } from '@/state/Metal';
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useMetalTMProductionLog();
@@ -53,14 +53,6 @@ export default function Index() {
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
-			// {
-			// 	accessorKey: "trx_from",
-			// 	header: "Transferred From",
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 	info.getValue()
-			// ),
-			// },
 
 			{
 				accessorKey: 'production_quantity',
@@ -111,7 +103,9 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_sfg'),
+				hidden:
+					!haveAccess.includes('click_update_sfg') &&
+					!haveAccess.includes('click_delete_sfg'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -119,6 +113,7 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
+							showUpdate={haveAccess.includes('click_update_sfg')}
 							showDelete={haveAccess.includes('click_delete_sfg')}
 						/>
 					);

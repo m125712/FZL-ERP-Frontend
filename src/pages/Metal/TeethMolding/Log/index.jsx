@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import RMOrderAgainstLog from './RMOrderAgainstLog';
-import RMTransferLog from './RMTransferLog';
+import RMTransferLog from './RM';
 import TapeLog from './Transfer';
 import SFGTransferLog from './TransferLog';
 import SFGTransferProd from './TransferProduction';

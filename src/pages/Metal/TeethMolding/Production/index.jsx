@@ -72,7 +72,7 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'teeth_molding_stock',
+				accessorKey: 'metal_teeth_molding',
 				header: 'Stock (KG)',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),

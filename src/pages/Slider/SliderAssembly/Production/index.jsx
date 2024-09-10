@@ -36,6 +36,11 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'item_description',
+				header: 'Item Dec',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'item_name',
 				header: 'Item name',
 				enableColumnFilter: false,

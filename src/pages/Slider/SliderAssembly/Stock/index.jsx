@@ -11,8 +11,8 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useSliderDieCastingStock();
-	const info = new PageInfo('Stock', url, 'slider__die_casting_stock');
-	const haveAccess = useAccess('slider__die_casting_stock');
+	const info = new PageInfo('Stock', url, 'slider__assembly_stock');
+	const haveAccess = useAccess('slider__assembly_stock');
 
 	const columns = useMemo(
 		() => [
@@ -22,13 +22,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'item',
-			// 	header: 'Item',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-
 			{
 				accessorKey: 'type',
 				header: 'Type',
@@ -49,156 +42,51 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
-			// {
-			// 	accessorKey: 'item_short_name',
-			// 	header: 'Item Short Name',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-
-			// {
-			// 	accessorKey: 'zipper_number',
-			// 	header: 'Zipper Number',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'zipper_number_name',
 				header: 'Zipper',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'zipper_short_name',
-			// 	header: 'Zipper Short Name',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-
-			// {
-			// 	accessorKey: 'end_type',
-			// 	header: 'End-Type',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'end_type_name',
 				header: 'End-Type',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'end_type_short_name',
-			// 	header: 'End-Type Short Name',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-
-			// {
-			// 	accessorKey: 'puller_type',
-			// 	header: 'Puller-Type',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'puller_type_name',
 				header: 'Puller-Type',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'puller_type_short_name',
-			// 	header: 'Puller-Type Short Name',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-
-			// {
-			// 	accessorKey: 'logo_type',
-			// 	header: 'Logo-Type',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'logo_type_name',
 				header: 'Logo-Type',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'logo_type_short_name',
-			// 	header: 'Logo-Type Short Name',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-
-			// {
-			// 	accessorKey: 'slider_body_shape',
-			// 	header: 'Body Shape',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'slider_body_shape_name',
 				header: 'Body Shape',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'slider_body_shape_short_name',
-			// 	header: 'Body Shape Short Name',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-
-			// {
-			// 	accessorKey: 'puller_link',
-			// 	header: 'Puller Link',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'puller_link_name',
 				header: 'Puller Link',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'puller_link_short_name',
-			// 	header: 'Puller Link Short Name',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-
-			// {
-			// 	accessorKey: 'stopper_type',
-			// 	header: 'Stopper Type',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'stopper_type_name',
 				header: 'Stopper Type',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'stopper_type_short_name',
-			// 	header: 'Stopper Type Short Name',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-
-			{
-				accessorKey: 'quantity',
-				header: 'Quantity',
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
-			},
 			{
 				accessorKey: 'quantity_in_sa',
-				header: 'Assembly Stock',
+				header: 'Quantity',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
@@ -215,7 +103,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()).toFixed(0),
 			},
-
 			{
 				accessorKey: 'created_at',
 				header: 'Created At',
@@ -223,94 +110,24 @@ export default function Index() {
 				filterFn: 'isWithinRange',
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
-
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated At',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
-
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
-			// {
-			// 	accessorKey: 'is_body',
-			// 	header: 'Body?',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<CheckboxWithoutForm checked={info.getValue()} />
-			// 	),
-			// },
-
-			// {
-			// 	accessorKey: 'is_puller',
-			// 	header: 'Puller?',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<CheckboxWithoutForm checked={info.getValue()} />
-			// 	),
-			// },
-
-			// {
-			// 	accessorKey: 'is_cap',
-			// 	header: 'Cap?',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<CheckboxWithoutForm checked={info.getValue()} />
-			// 	),
-			// },
-			// {
-			// 	accessorKey: 'is_link',
-			// 	header: 'Link?',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<CheckboxWithoutForm checked={info.getValue()} />
-			// 	),
-			// },
-			// {
-			// 	accessorKey: 'is_h_bottom',
-			// 	header: 'H Bottom?',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<CheckboxWithoutForm checked={info.getValue()} />
-			// 	),
-			// },
-			// {
-			// 	accessorKey: 'is_u_top',
-			// 	header: 'U Top?',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<CheckboxWithoutForm checked={info.getValue()} />
-			// 	),
-			// },
-			// {
-			// 	accessorKey: 'is_box_pin',
-			// 	header: 'Box Pin?',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<CheckboxWithoutForm checked={info.getValue()} />
-			// 	),
-			// },
-			// {
-			// 	accessorKey: 'is_two_way_pin',
-			// 	header: 'Two Way Pin?',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<CheckboxWithoutForm checked={info.getValue()} />
-			// 	),
-			// },
-
 			{
 				accessorKey: 'actions',
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
+				hidden: haveAccess.includes('update'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -372,8 +189,8 @@ export default function Index() {
 		<>
 			<ReactTable
 				title={info.getTitle()}
-				handelAdd={handelAdd}
-				accessor={haveAccess.includes('create')}
+				// handelAdd={handelAdd}
+				// accessor={haveAccess.includes('create')}
 				data={data}
 				columns={columns}
 			/>

@@ -44,6 +44,10 @@ const SliderAssemblyLog = lazy(
 // 	() => import('@/pages/Slider/SliderAssembly/SFG')
 // );
 
+const SliderAssemblyStock = lazy(
+	() => import('@/pages/Slider/SliderAssembly/Stock')
+);
+
 const SliderAssemblyProduction = lazy(
 	() => import('@/pages/Slider/SliderAssembly/Production')
 );
@@ -237,6 +241,16 @@ export const SliderRoutes = [
 			'click_production',
 			'click_transaction',
 		],
+	},
+
+	{
+		id: 23,
+		name: 'Stock',
+		path: '/slider/slider-assembly/stock',
+		element: SliderAssemblyStock,
+		type: ['slider', 'slider-assembly'],
+		page_name: 'slider__assembly_stock',
+		actions: ['read', 'create', 'update', 'delete'],
 	},
 
 	// * Slider Coloring production

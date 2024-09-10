@@ -1079,6 +1079,23 @@ export const SLIDER_DIE_CASTING_NULL = {
 	],
 };
 
+export const SLIDER_DIE_CASTING_PRODUCT_EDIT_SCHEMA = {
+	mc_no: NUMBER_REQUIRED,
+	cavity_goods: NUMBER_REQUIRED,
+	cavity_defect: NUMBER_REQUIRED,
+	push: NUMBER_REQUIRED,
+	weight: NUMBER_DOUBLE_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const SLIDER_DIE_CASTING_PRODUCT_EDIT_NULL = {
+	mc_no: '',
+	cavity_goods: '',
+	cavity_defect: '',
+	push: '',
+	weight: '',
+	remarks: '',
+};
 // Slider Assembly
 
 export const SLIDER_SLIDER_ASSEMBLY_SCHEMA = {

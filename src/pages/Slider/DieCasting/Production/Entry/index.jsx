@@ -43,6 +43,7 @@ export default function Index() {
 		enabled: isUpdate,
 	});
 
+	
 	useEffect(() => {
 		uuid !== undefined
 			? (document.title = 'Update Die Casting Entry')
@@ -62,9 +63,7 @@ export default function Index() {
 
 	useEffect(() => {
 		if (isUpdate && data) {
-			reset({
-				array: data,
-			});
+			reset(data);
 		}
 	}, [data, isUpdate]);
 

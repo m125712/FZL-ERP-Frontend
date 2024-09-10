@@ -5,10 +5,8 @@ import { NextUIProvider } from '@nextui-org/react';
 function MainLayout({ children }) {
 	return (
 		<AuthProvider>
-			<NextUIProvider>
-				{children}
-				<Toast />
-			</NextUIProvider>
+			{children}
+			<Toast />
 		</AuthProvider>
 	);
 }

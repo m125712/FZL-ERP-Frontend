@@ -8,12 +8,12 @@ import { lazy } from 'react';
 // const MaterialLog = lazy(() => import('@/pages/Store/Log'));
 
 // * Purchase
-const Vendor = lazy(() => import('@/pages/Store/Vendor'));
-const Purchase = lazy(() => import('@/pages/Store/Receive'));
-const PurchaseEntry = lazy(() => import('@/pages/Store/Receive/Entry'));
-const PurchaseInd = lazy(
-	() => import('@/pages/Store/Receive/Details/ByPurchaseDescriptionUUID')
-);
+// const Vendor = lazy(() => import('@/pages/Store/Vendor'));
+// const Purchase = lazy(() => import('@/pages/Store/Receive'));
+// const PurchaseEntry = lazy(() => import('@/pages/Store/Receive/Entry'));
+// const PurchaseInd = lazy(
+// 	() => import('@/pages/Store/Receive/Details/ByPurchaseDescriptionUUID')
+// );
 
 // * New
 // * Store
@@ -23,16 +23,16 @@ import Stock from '@/pages/Store/Stock';
 import MaterialType from '@/pages/Store/Type';
 
 // * Purchase
-// import Vendor from '@/pages/Store/Vendor';
-// import Purchase from '@/pages/Store/Receive';
-// import PurchaseEntry from '@/pages/Store/Receive/Entry';
-// import PurchaseInd from '@/pages/Store/Receive/Details/ByPurchaseDescriptionUUID';
+import Vendor from '@/pages/Store/Vendor';
+import Purchase from '@/pages/Store/Receive';
+import PurchaseEntry from '@/pages/Store/Receive/Entry';
+import PurchaseInd from '@/pages/Store/Receive/Details/ByPurchaseDescriptionUUID';
 
 export const StoreRoutes = [
 	{
 		name: 'Store',
 		path: '/store',
-		element: Stock,
+		element: <Stock />,
 		children: [
 			{
 				name: 'Stock',

@@ -2,7 +2,7 @@ import { DeleteModal, ProceedModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import {
 	useFetch,
-	useFetchForRhfResetForOrder,
+	useFetchForRhfReset,
 	useFetchForRhfResetForPlanning,
 	usePostFunc,
 	useRHF,
@@ -109,7 +109,7 @@ export default function Index() {
 
 	// * Fetch initial data
 	isUpdate
-		? useFetchForRhfResetForOrder(
+		? useFetchForRhfReset(
 				`/thread/batch-details/by/${batch_uuid}`,
 				batch_uuid,
 				reset

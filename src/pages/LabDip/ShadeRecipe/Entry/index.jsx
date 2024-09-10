@@ -1,5 +1,5 @@
 import { DeleteModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import {
 	useLabDipShadeRecipeDescription,
@@ -60,7 +60,7 @@ export default function Index() {
 	const isUpdate = shade_recipe_uuid !== undefined;
 
 	isUpdate &&
-		useFetchForRhfResetForOrder(
+		useFetchForRhfReset(
 			`/lab-dip/shade-recipe-details/by/${shade_recipe_uuid}`,
 			shade_recipe_uuid,
 			reset

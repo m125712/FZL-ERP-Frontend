@@ -1,25 +1,25 @@
 import { ProceedModal } from '@/components/Modal';
-import {
-	useFetchForRhfResetForOrder,
-	useFetchForRhfResetForBatchProduct,
-	useRHF,
-	useFetchForRhfResetForPlanning,
-} from '@/hooks';
 import ReactTable from '@/components/Table';
+import { ShowLocalToast } from '@/components/Toast';
+import {
+	useFetchForRhfReset,
+	useFetchForRhfResetForBatchProduct,
+	useFetchForRhfResetForPlanning,
+	useRHF,
+} from '@/hooks';
+import nanoid from '@/lib/nanoid';
+import { useDyeingBatch } from '@/state/Dyeing';
 import { CheckBoxWithoutLabel, Input, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import {
-	DYEING_BATCH_PRODUCTION_SCHEMA,
 	DYEING_BATCH_PRODUCTION_NULL,
+	DYEING_BATCH_PRODUCTION_SCHEMA,
 } from '@util/Schema';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useDyeingBatch } from '@/state/Dyeing';
-import nanoid from '@/lib/nanoid';
 import Header from './Header';
-import { ShowLocalToast } from '@/components/Toast';
 
 // UPDATE IS WORKING
 export default function Index() {
@@ -52,7 +52,7 @@ export default function Index() {
 
 	// * Fetch initial data
 	isUpdate
-		? useFetchForRhfResetForOrder(
+		? useFetchForRhfReset(
 				`/zipper/batch-details/${batch_uuid}`,
 				batch_uuid,
 				reset

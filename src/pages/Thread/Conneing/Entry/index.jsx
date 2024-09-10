@@ -1,5 +1,5 @@
 import { Suspense } from '@/components/Feedback';
-import { useFetchForRhfResetForOrder, useRHF } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 import cn from '@/lib/cn';
 import { DynamicDeliveryField, Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
@@ -45,7 +45,7 @@ export default function Index() {
 		name: 'batch_entry',
 	});
 
-	useFetchForRhfResetForOrder(
+	useFetchForRhfReset(
 		`/thread/batch-details/by/${batch_uuid}`,
 		orderInfoIds,
 		reset

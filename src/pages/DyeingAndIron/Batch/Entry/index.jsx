@@ -1,7 +1,8 @@
 import { ProceedModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
+import { ShowLocalToast } from '@/components/Toast';
 import {
-	useFetchForRhfResetForOrder,
+	useFetchForRhfReset,
 	useFetchForRhfResetForPlanning,
 	useRHF,
 } from '@/hooks';
@@ -15,7 +16,6 @@ import { DYEING_BATCH_NULL, DYEING_BATCH_SCHEMA } from '@util/Schema';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
-import { ShowLocalToast } from '@/components/Toast';
 
 // UPDATE IS WORKING
 export default function Index() {
@@ -51,7 +51,7 @@ export default function Index() {
 
 	// * Fetch initial data
 	isUpdate
-		? useFetchForRhfResetForOrder(
+		? useFetchForRhfReset(
 				`/zipper/batch-details/${batch_uuid}`,
 				batch_uuid,
 				reset
@@ -230,7 +230,6 @@ export default function Index() {
 			});
 		}
 	}, [isAllChecked]);
-
 
 	const handleRowChecked = (e, index) => {
 		const isChecked = e.target.checked;

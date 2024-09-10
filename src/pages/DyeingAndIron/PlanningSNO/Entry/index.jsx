@@ -1,13 +1,15 @@
 import { DeleteModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
 import {
-	useFetchForRhfResetForOrder,
+	useFetch,
+	useFetchForRhfReset,
+	useFetchForRhfResetForPlanning,
 	usePostFunc,
 	useRHF,
-	useFetch,
 	useUpdateFunc,
-	useFetchForRhfResetForPlanning,
 } from '@/hooks';
-import ReactTable from '@/components/Table';
+import nanoid from '@/lib/nanoid';
+import { useDyeingPlanning } from '@/state/Dyeing';
 import {
 	CheckBoxWithoutLabel,
 	DynamicDeliveryField,
@@ -18,13 +20,11 @@ import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import {
-	DYEING_PLANNING_SNO_SCHEMA,
 	DYEING_PLANNING_SNO_NULL,
+	DYEING_PLANNING_SNO_SCHEMA,
 } from '@util/Schema';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useDyeingPlanning } from '@/state/Dyeing';
-import nanoid from '@/lib/nanoid';
 
 import Header from './Header';
 
@@ -68,7 +68,7 @@ export default function Index() {
 
 	// * Fetch initial data
 	isUpdate
-		? useFetchForRhfResetForOrder(
+		? useFetchForRhfReset(
 				`/zipper/planning-details/by/${week_id}`,
 				week_id,
 				reset

@@ -1,7 +1,7 @@
 import { DeleteModal } from '@/components/Modal';
 import {
 	useFetch,
-	useFetchForRhfResetForOrder,
+	useFetchForRhfReset,
 	usePostFunc,
 	useRHF,
 	useUpdateFunc,
@@ -65,7 +65,7 @@ export default function Index() {
 	];
 
 	if (isUpdate)
-		useFetchForRhfResetForOrder(
+		useFetchForRhfReset(
 			`/thread/order-info-details/by/${order_info_uuid}`,
 			order_info_uuid,
 			reset

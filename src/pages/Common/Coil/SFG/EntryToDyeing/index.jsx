@@ -1,5 +1,5 @@
 import { DeleteModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useOrderDescription } from '@/state/Order';
 import {
@@ -39,7 +39,7 @@ export default function Index() {
 		useFieldArray,
 		getValues,
 		watch,
-		context
+		context,
 	} = useRHF(COMMON_COIL_TO_DYEING_SCHEMA, COMMON_COIL_TO_DYEING_NULL);
 
 	useEffect(() => {
@@ -49,7 +49,7 @@ export default function Index() {
 	}, []);
 
 	if (isUpdate)
-		useFetchForRhfResetForOrder(
+		useFetchForRhfReset(
 			`/zipper/order/details/single-order/by/${order_description_uuid}/UUID`,
 			order_description_uuid,
 			reset

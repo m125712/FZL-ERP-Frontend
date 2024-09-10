@@ -1,13 +1,8 @@
 import { UpdateModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useLabDipInfo } from '@/state/LabDip';
-import {
-	ActionButtons,
-	DynamicField,
-	FormField,
-	ReactSelect,
-} from '@/ui';
+import { ActionButtons, DynamicField, FormField, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -46,7 +41,7 @@ export default function Index() {
 	}, []);
 
 	if (isUpdate)
-		useFetchForRhfResetForOrder(
+		useFetchForRhfReset(
 			`/lab-dip/info/details/${info_uuid}`,
 			info_uuid,
 			reset
@@ -167,7 +162,6 @@ export default function Index() {
 		];
 
 		//* Post new entry *//
-	
 
 		await Promise.all(recipe_promises)
 			.then(() => reset(Object.assign({}, ORDER_NULL)))

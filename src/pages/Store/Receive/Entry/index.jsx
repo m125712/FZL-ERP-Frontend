@@ -1,6 +1,7 @@
 import { DeleteModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
+import { useOtherMaterial } from '@/state/Other';
 import {
 	useMaterialInfo,
 	usePurchaseDescription,
@@ -23,7 +24,6 @@ import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
-import { useOtherMaterial } from '@/state/Other';
 
 export default function Index() {
 	const { user } = useAuth();

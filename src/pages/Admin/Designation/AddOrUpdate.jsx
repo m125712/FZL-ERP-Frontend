@@ -18,7 +18,7 @@ export default function Index({
 }) {
 	const { user } = useAuth();
 	const { url, updateData, postData } = useAdminDesignations();
-	const { data: userDepartment } = useOtherDepartment();
+	const { data: userDepartment, isLoading } = useOtherDepartment();
 	const { invalidateQuery: invalidateUsers } = useAdminUsers();
 	const {
 		register,
@@ -28,7 +28,7 @@ export default function Index({
 		control,
 		Controller,
 		getValues,
-		context
+		context,
 	} = useRHF(USER_DESIGNATION_SCHEMA, USER_DESIGNATION_NULL);
 
 	useFetchForRhfReset(

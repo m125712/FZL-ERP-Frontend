@@ -1,13 +1,12 @@
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
-
+import { useAccess } from '@/hooks';
+import { useVislonFinishingTrxLog } from '@/state/Vislon';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import SFGAddOrUpdate from './AddOrUpdate';
-import { useVislonFinishingTrxLog } from '@/state/Vislon';
 
 export default function Index() {
 	const { data, isLoading, deleteData } = useVislonFinishingTrxLog();

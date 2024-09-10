@@ -2,7 +2,7 @@ import { DeleteModal } from '@/components/Modal';
 import {
 	useDeleteFunc,
 	useFetch,
-	useFetchForRhfResetForOrder,
+	useFetchForRhfReset,
 	usePostFunc,
 	useRHF,
 	useUpdateFunc,
@@ -55,12 +55,12 @@ export default function Index() {
 	const isUpdate = challan_uuid !== undefined;
 
 	isUpdate
-		? useFetchForRhfResetForOrder(
+		? useFetchForRhfReset(
 				`/challan/details/update/by/${challan_uuid}`,
 				challan_uuid,
 				reset
 			)
-		: useFetchForRhfResetForOrder(
+		: useFetchForRhfReset(
 				`/challan/details/by/order-info-id/${watch('order_info_id')}`,
 				watch('order_info_id'),
 				reset
@@ -244,7 +244,7 @@ export default function Index() {
 						<th
 							key={item}
 							scope='col'
-							className='text-secondary-content group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide transition duration-300'>
+							className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
 							{item}
 						</th>
 					))}>

@@ -1,5 +1,5 @@
 import { DeleteModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useDyeingTransfer } from '@/state/Dyeing';
 import { useOrderDescription, useOrderDetails } from '@/state/Order';
@@ -56,7 +56,7 @@ export default function Index({ sfg }) {
 	}, []);
 
 	if (isUpdate)
-		useFetchForRhfResetForOrder(
+		useFetchForRhfReset(
 			`/zipper/dyed-tape-transaction/${uuid}/UUID`,
 			order_description_uuid,
 			reset

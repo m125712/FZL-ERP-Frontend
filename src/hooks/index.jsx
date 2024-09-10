@@ -4,12 +4,11 @@ import {
 	defaultFetch,
 	useFetch,
 	useFetchForRhfReset,
-	useFetchForRhfResetForOrder,
+	useFetchForRhfResetForBatchProduct,
 	useFetchForRhfResetForPlanning,
 	useFetchForRhfResetForUserAccess,
 	useFetchFunc,
 	useFetchFuncForReport,
-	useFetchForRhfResetForBatchProduct,
 } from './CRUD/useFetch';
 import { usePostFunc } from './CRUD/usePost';
 import { usePostImage } from './CRUD/usePostImage';
@@ -29,7 +28,7 @@ export {
 	useDeleteFunc,
 	useFetch,
 	useFetchForRhfReset,
-	useFetchForRhfResetForOrder,
+	useFetchForRhfResetForBatchProduct,
 	useFetchForRhfResetForPlanning,
 	useFetchForRhfResetForUserAccess,
 	useFetchFunc,
@@ -42,5 +41,4 @@ export {
 	useSessionStorage,
 	useToken,
 	useUpdateFunc,
-	useFetchForRhfResetForBatchProduct,
 };

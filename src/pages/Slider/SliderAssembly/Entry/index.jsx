@@ -2,11 +2,12 @@ import { DeleteModal } from '@/components/Modal';
 import {
 	useAccess,
 	useFetch,
-	useFetchForRhfResetForOrder,
+	useFetchForRhfReset,
 	usePostFunc,
 	useRHF,
 	useUpdateFunc,
 } from '@/hooks';
+import nanoid from '@/lib/nanoid';
 import { NotFound } from '@/pages/Public/NoEntry';
 import {
 	DynamicField,
@@ -17,7 +18,6 @@ import {
 	RemoveButton,
 } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
-import nanoid from '@/lib/nanoid';
 import { useAuth } from '@context/auth';
 import {
 	SLIDER_SLIDER_ASSEMBLY_NULL,
@@ -61,7 +61,7 @@ export default function Index() {
 		watch,
 	} = useRHF(SLIDER_SLIDER_ASSEMBLY_SCHEMA, SLIDER_SLIDER_ASSEMBLY_NULL);
 
-	useFetchForRhfResetForOrder(
+	useFetchForRhfReset(
 		`/slider/slider-assembly/details/by/${slider_slider_assembly_uuid}/array`,
 		slider_slider_assembly_uuid,
 		reset

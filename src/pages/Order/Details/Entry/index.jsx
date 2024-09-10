@@ -1,5 +1,5 @@
 import { DeleteModal } from '@/components/Modal';
-import { useFetchForRhfResetForOrder, useRHF } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useOrderDescription, useOrderDetails } from '@/state/Order';
 import { ActionButtons, DynamicField, Input, JoinInput, Textarea } from '@/ui';
@@ -42,7 +42,7 @@ export default function Index() {
 	}, []);
 
 	if (isUpdate)
-		useFetchForRhfResetForOrder(
+		useFetchForRhfReset(
 			`/zipper/order/details/single-order/by/${order_description_uuid}/UUID`,
 			order_description_uuid,
 			reset

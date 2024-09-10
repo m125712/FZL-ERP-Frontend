@@ -23,7 +23,7 @@ export default function Index({
 	const { url, updateData, postData } = useAdminDepartments();
 	const { invalidateQuery: invalidateUsers } = useAdminUsers();
 	const { invalidateQuery: invalidateDesignations } = useAdminDesignations();
-	const { register, handleSubmit, errors, reset, control,context } = useRHF(
+	const { register, handleSubmit, errors, reset, control, context } = useRHF(
 		USER_DEPARTMENT_SCHEMA,
 		USER_DEPARTMENT_NULL
 	);

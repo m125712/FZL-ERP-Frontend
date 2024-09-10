@@ -29,12 +29,6 @@ function useFetch(url, dependencies = []) {
 	}, dependencies);
 }
 
-// async function useFetch(url, dependencies = []) {
-// 	const val = await api.get(url).then((res) => res?.data?.data);
-
-// 	return val;
-// }
-
 async function defaultFetchFunc(
 	url,
 	setData,
@@ -65,19 +59,12 @@ const useFetchForRhfReset = async (uri, returnId, reset) => {
 	useEffect(() => {
 		if (returnId === null || returnId === undefined) return;
 
-		api.get(uri).then((res) => {
-			reset(res?.data?.data);
-		});
-	}, [returnId]);
-};
-
-const useFetchForRhfResetForOrder = async (uri, returnId, reset) => {
-	useEffect(() => {
-		if (returnId === null || returnId === undefined) return;
-
-		api.get(uri).then((res) => {
+		async function fetchData() {
+			const res = await api.get(uri);
 			return reset(res?.data?.data);
-		});
+		}
+
+		fetchData();
 	}, [returnId]);
 };
 
@@ -121,6 +108,8 @@ const useFetchForRhfResetForUserAccess = async (url, returnId, reset) => {
 
 			Object.entries(data)?.forEach(([key, value]) => {
 				const val = JSON.parse(value);
+				console.log(val);
+
 				Object.entries(val).forEach(([k, v]) => {
 					v.forEach((item) => {
 						const obj_key = k + '___' + item;
@@ -145,6 +134,8 @@ const useFetchForRhfResetForUserAccess = async (url, returnId, reset) => {
 				{}
 			);
 
+			console.log(PAGE_ACTIONS);
+
 			reset(PAGE_ACTIONS);
 		});
 	}, [returnId, reset]);
@@ -155,7 +146,6 @@ export {
 	useFetch,
 	useFetchForRhfReset,
 	useFetchForRhfResetForBatchProduct,
-	useFetchForRhfResetForOrder,
 	useFetchForRhfResetForPlanning,
 	useFetchForRhfResetForUserAccess,
 	useFetchFunc,

@@ -1,5 +1,5 @@
 import { DeleteModal } from '@/components/Modal';
-import { useFetchForRhfResetForOrder, useRHF } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 import { CheckBoxWithoutLabel, DynamicDeliveryField, Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
@@ -8,12 +8,12 @@ import { PI_NULL, PI_SCHEMA } from '@util/Schema';
 import { Suspense, useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
-import Header from './Header';
+import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
 import { useCommercialPI, useCommercialPIEntry } from '@/state/Commercial';
-import isJSON from '@/util/isJson';
-import cn from '@/lib/cn';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
+import isJSON from '@/util/isJson';
+import Header from './Header';
 
 export default function Index() {
 	const { pi_uuid } = useParams();
@@ -58,12 +58,12 @@ export default function Index() {
 	});
 
 	isUpdate
-		? useFetchForRhfResetForOrder(
+		? useFetchForRhfReset(
 				`/commercial/pi/details/${pi_uuid}`,
 				pi_uuid,
 				reset
 			)
-		: useFetchForRhfResetForOrder(
+		: useFetchForRhfReset(
 				`/commercial/pi/details/by/order-info-ids/${orderInfoIds}/${watch('party_uuid')}/${watch('marketing_uuid')}`,
 				orderInfoIds,
 				reset

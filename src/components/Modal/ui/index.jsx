@@ -2,7 +2,7 @@ import { Close } from '@/assets/icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFormContext } from 'react-hook-form';
 
-const Header = ({ title, subTitle, onClose }) => {
+const useSubmitDisabled = () => {
 	const form = useFormContext();
 	const queryClient = useQueryClient();
 
@@ -11,6 +11,17 @@ const Header = ({ title, subTitle, onClose }) => {
 			status: 'pending',
 		}) < 0;
 	const isSubmitting = form?.formState?.isSubmitting;
+	const isDirty = form?.formState?.isDirty === false;
+
+	return {
+		isMutating,
+		isSubmitting,
+		isDirty,
+	};
+};
+
+const Header = ({ title, subTitle, onClose }) => {
+	const { isMutating, isSubmitting } = useSubmitDisabled();
 
 	return (
 		<div className='modal-header mb-2 flex items-center justify-between'>
@@ -33,15 +44,7 @@ const Header = ({ title, subTitle, onClose }) => {
 };
 
 const Footer = () => {
-	const form = useFormContext();
-	const queryClient = useQueryClient();
-
-	const isMutating =
-		queryClient.isMutating({
-			status: 'pending',
-		}) < 0;
-	const isDirty = form?.formState?.isDirty === false;
-	const isSubmitting = form?.formState?.isSubmitting;
+	const { isMutating, isSubmitting, isDirty } = useSubmitDisabled();
 
 	return (
 		<div className='modal-action'>

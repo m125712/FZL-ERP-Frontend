@@ -1,14 +1,16 @@
 import { DeleteModal, ProceedModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
 import {
-	useFetchForRhfResetForOrder,
+	useFetch,
+	useFetchForRhfReset,
 	useFetchForRhfResetForBatchProduct,
+	useFetchForRhfResetForPlanning,
 	usePostFunc,
 	useRHF,
-	useFetch,
 	useUpdateFunc,
-	useFetchForRhfResetForPlanning,
 } from '@/hooks';
-import ReactTable from '@/components/Table';
+import nanoid from '@/lib/nanoid';
+import { useDyeingBatch } from '@/state/Dyeing';
 import {
 	CheckBoxWithoutLabel,
 	DynamicDeliveryField,
@@ -19,13 +21,11 @@ import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import {
-	DYEING_BATCH_PRODUCTION_SCHEMA,
 	DYEING_BATCH_PRODUCTION_NULL,
+	DYEING_BATCH_PRODUCTION_SCHEMA,
 } from '@util/Schema';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useDyeingBatch } from '@/state/Dyeing';
-import nanoid from '@/lib/nanoid';
 import Header from './Header';
 
 // UPDATE IS WORKING
@@ -69,7 +69,7 @@ export default function Index() {
 
 	// * Fetch initial data
 	isUpdate
-		? useFetchForRhfResetForOrder(
+		? useFetchForRhfReset(
 				`/zipper/batch-details/${batch_uuid}`,
 				batch_uuid,
 				reset

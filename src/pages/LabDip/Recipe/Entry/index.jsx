@@ -1,5 +1,5 @@
 import { DeleteModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfResetForOrder, useRHF } from '@/hooks';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useLabDipRecipe } from '@/state/LabDip';
 import {
@@ -49,7 +49,7 @@ export default function Index() {
 	}, []);
 
 	if (isUpdate)
-		useFetchForRhfResetForOrder(
+		useFetchForRhfReset(
 			`/lab-dip/recipe/details/${recipe_uuid}`,
 			recipe_uuid,
 			reset

@@ -147,11 +147,11 @@ const SidebarFolder = (props) => {
 				variants={childVariants}
 				animate={isOpen ? 'open' : 'closed'}
 				className='space-y-1 border-l-[1px] border-secondary/40 pl-3 pt-1'>
-				{children?.map((child) => {
+				{children?.map((child, index) => {
 					if (child?.children) {
-						return <SidebarFolder key={child.path} {...child} />;
+						return <SidebarFolder key={index} {...child} />;
 					} else {
-						return <SidebarFile key={child.path} {...child} />;
+						return <SidebarFile key={index} {...child} />;
 					}
 				})}
 			</motion.ul>

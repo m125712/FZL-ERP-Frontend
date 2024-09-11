@@ -2,7 +2,6 @@ import { useAuth } from '@/context/auth';
 import { motion } from 'framer-motion';
 import { LogOut } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import User from '@/ui/Others/User';
 
 const SidebarLogout = () => {

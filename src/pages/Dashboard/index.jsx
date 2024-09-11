@@ -3,6 +3,7 @@ import ProductionChart from './_components/BarChart/Production';
 import StatusBarChart from './_components/BarChart/Status';
 import InfoCard from './_components/Card/InfoCard';
 import { getApproval } from './_utils';
+import DashboardHeader from './_components/dashboard-header';
 
 export default function Dashboard() {
 	useEffect(() => {
@@ -10,6 +11,7 @@ export default function Dashboard() {
 	}, []);
 	return (
 		<div className='space-y-4'>
+			<DashboardHeader />
 			<div className='grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
 				<InfoCard
 					title='Nylon Metallic'

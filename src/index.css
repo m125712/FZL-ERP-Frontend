@@ -250,6 +250,10 @@ body {
 	}
 }
 
+.pulse-online {
+	animation: pulse-animation 2.5s infinite;
+}
+
 @layer utilities {
 	@keyframes scroll {
 		100% {
@@ -260,6 +264,15 @@ body {
 	@keyframes flash {
 		100% {
 			opacity: 0;
+		}
+	}
+
+	@keyframes pulse-animation {
+		0% {
+			box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+		}
+		100% {
+			box-shadow: 0 0 0 20px rgba(0, 0, 0, 0);
 		}
 	}
 

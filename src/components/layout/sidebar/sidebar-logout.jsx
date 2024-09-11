@@ -2,10 +2,12 @@ import { useAuth } from '@/context/auth';
 import { motion } from 'framer-motion';
 import { LogOut } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import User from '@/ui/Others/User';
 
 const SidebarLogout = () => {
 	const history = useLocation();
-	const { Logout, user } = useAuth();
+	const { Logout } = useAuth();
 
 	const handleLogout = () => {
 		Logout();
@@ -15,16 +17,10 @@ const SidebarLogout = () => {
 	return (
 		<motion.button
 			whileTap={{ scale: 0.95 }}
-			className='flex w-full items-center gap-4 rounded-md bg-gradient-to-r from-accent/20 to-accent/40 px-5 py-2 text-left text-sm font-normal text-primary-content'
+			className='flex w-full items-center gap-3 rounded-md bg-gradient-to-r from-accent/10 to-accent/30 px-5 py-2 text-left text-sm font-normal text-primary-content'
 			onClick={handleLogout}>
 			<LogOut className='size-6 text-primary-content' />
-
-			<div className='flex flex-col'>
-				<span className='truncate capitalize'>{user?.name}</span>
-				<span className='text-[.6rem] capitalize text-primary-content/70'>
-					{user?.department}
-				</span>
-			</div>
+			<User />
 		</motion.button>
 	);
 };

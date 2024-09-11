@@ -1,11 +1,7 @@
 import { RouterProvider } from 'react-router-dom';
 import MainLayout from './layouts/Main';
 
-// * Old
-import { router } from './routes';
-
-// * New
-// import { router } from '@/test/routes/router';
+import { router } from '@/routes/router';
 
 function App() {
 	return (

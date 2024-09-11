@@ -1,5 +1,5 @@
-import { Copy } from '@/assets/icons';
 import { ShowLocalToast } from '@/components/Toast';
+import { Clipboard } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 
 const CopyButton = ({ id }) => {
@@ -17,14 +17,14 @@ const CopyButton = ({ id }) => {
 			type='button'
 			onClick={() => handleOnClick()}
 			aria-label='Copy ID to clipboard'>
-			<Copy className='h-4 w-4 transition-transform duration-200 hover:scale-110' />
+			<Clipboard className='h-4 w-4 transition-transform duration-200 hover:scale-110' />
 		</div>
 	);
 };
 
 const BaseBody = ({ value, to, showCopyButton = true }) => {
 	return (
-		<button className='hover:text-info hover:decoration-info flex items-center gap-2 text-left font-semibold underline underline-offset-2 transition-colors duration-300'>
+		<button className='flex items-center gap-2 text-left font-semibold underline underline-offset-2 transition-colors duration-300 hover:text-info hover:decoration-info'>
 			{showCopyButton && <CopyButton id={value} />}
 
 			<Link to={to} target='_blank'>

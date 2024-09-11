@@ -1,4 +1,4 @@
-import { Edit, Trash } from '@/assets/icons';
+import { SquarePen, Trash2 } from 'lucide-react';
 
 const ActionButton = ({ children, className = '', ...rest }) => {
 	return (
@@ -24,12 +24,12 @@ function EditDelete({
 		<div className='flex w-16 items-center justify-evenly gap-2'>
 			{showUpdate && (
 				<ActionButton onClick={() => handelUpdate(idx)}>
-					<Edit className='w-6 bg-transparent text-primary' />
+					<SquarePen className='size-5 bg-transparent text-primary' />
 				</ActionButton>
 			)}
 			{showDelete && (
 				<ActionButton onClick={() => handelDelete(idx)}>
-					<Trash className='w-6 bg-transparent text-error' />
+					<Trash2 className='size-5 bg-transparent text-error' />
 				</ActionButton>
 			)}
 		</div>

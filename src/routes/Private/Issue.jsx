@@ -1,38 +1,33 @@
-import { lazy } from "react";
-
 // Issue
-const Wastage = lazy(() => import("@/pages/Issue/Wastage"));
-const OrderIssue = lazy(() => import("@/pages/Issue/History"));
-const Maintenance = lazy(() => import("@/pages/Issue/Maintenance"));
-const SpareParts = lazy(() => import("@/pages/Issue/SpareParts"));
+import Wastage from '@/pages/Issue/Wastage';
+import OrderIssue from '@/pages/Issue/History';
+import Maintenance from '@/pages/Issue/Maintenance';
+import SpareParts from '@/pages/Issue/SpareParts';
 
 export const IssueRoutes = [
 	{
-		id: 10,
-		name: "History",
-		path: "/issue/history",
-		element: OrderIssue,
-		type: "issue",
-	},
-	{
-		id: 11,
-		name: "Maintenance",
-		path: "/issue/maintenance",
-		element: Maintenance,
-		type: "issue",
-	},
-	{
-		id: 12,
-		name: "Spare Parts",
-		path: "/issue/spare-parts",
-		element: SpareParts,
-		type: "issue",
-	},
-	{
-		id: 13,
-		name: "Wastage",
-		path: "/issue/wastage",
-		element: Wastage,
-		type: "issue",
+		name: 'Issue',
+		children: [
+			{
+				name: 'History',
+				path: '/issue/history',
+				element: <OrderIssue />,
+			},
+			{
+				name: 'Maintenance',
+				path: '/issue/maintenance',
+				element: <Maintenance />,
+			},
+			{
+				name: 'Spare Parts',
+				path: '/issue/spare-parts',
+				element: <SpareParts />,
+			},
+			{
+				name: 'Wastage',
+				path: '/issue/wastage',
+				element: <Wastage />,
+			},
+		],
 	},
 ];

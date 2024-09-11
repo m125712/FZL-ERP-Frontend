@@ -2,7 +2,8 @@ import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useAdminUsers } from '@/state/Admin';
-import { DateTime, EditDelete, ResetPassword, StatusButton } from '@/ui';
+import { DateTime, EditDelete, ResetPassword } from '@/ui';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -27,10 +28,9 @@ export default function Order() {
 				hidden: !haveAccess.includes('click_status'),
 				cell: (info) => {
 					return (
-						<StatusButton
-							size='btn-xs'
-							value={info.getValue()}
-							onClick={() => handelStatus(info.row.index)}
+						<SwitchToggle
+							onChange={() => handelStatus(info.row.index)}
+							checked={Number(info.getValue()) === 1}
 						/>
 					);
 				},

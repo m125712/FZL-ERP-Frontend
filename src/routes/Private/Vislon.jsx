@@ -1,141 +1,127 @@
-import { lazy } from 'react';
-
 // Teeth Molding
-const VislonTeethMolding = lazy(
-	() => import('@/pages/Vislon/TeethMolding/RMStock')
-);
-const VislonTeethMoldingSFG = lazy(
-	() => import('@/pages/Vislon/TeethMolding/SFG')
-);
-const VislonTeethMoldingTrxLog = lazy(
-	() => import('@/pages/Vislon/TeethMolding/Log')
-);
+import VislonTeethMolding from '@/pages/Vislon/TeethMolding/RMStock';
+import VislonTeethMoldingSFG from '@/pages/Vislon/TeethMolding/SFG';
+import VislonTeethMoldingTrxLog from '@/pages/Vislon/TeethMolding/Log';
 
 // Teeth molding Production
-const VislonProduction = lazy(
-	() => import('@/pages/Vislon/TeethMolding/Production')
-);
+import VislonProduction from '@/pages/Vislon/TeethMolding/Production';
 
 // Finishing
-const VislonFinishing = lazy(() => import('@/pages/Vislon/Finishing/RMStock'));
-const VislonFinishingSFG = lazy(() => import('@/pages/Vislon/Finishing/SFG'));
-const VislonFinishingTrxLog = lazy(
-	() => import('@/pages/Vislon/Finishing/Log')
-);
+import VislonFinishing from '@/pages/Vislon/Finishing/RMStock';
+import VislonFinishingSFG from '@/pages/Vislon/Finishing/SFG';
+import VislonFinishingTrxLog from '@/pages/Vislon/Finishing/Log';
 
 // Finishing Production
-const VislonFinishingProduction = lazy(
-	() => import('@/pages/Vislon/Finishing/Production')
-);
+import VislonFinishingProduction from '@/pages/Vislon/Finishing/Production';
 
 export const VislonRoutes = [
-	// * Teeth Molding
 	{
-		id: 41,
-		name: 'RM',
-		path: '/vislon/teeth-molding/rm',
-		element: VislonTeethMolding,
-		type: ['vislon', 'teeth-molding'],
-		page_name: 'vislon__teeth_molding_rm',
-		actions: ['read', 'click_name', 'click_used'],
-	},
-	{
-		id: 411,
-		name: 'SFG',
-		path: '/vislon/teeth-molding/sfg',
-		element: VislonTeethMoldingSFG,
-		type: ['vislon', 'teeth-molding'],
-		page_name: 'vislon__teeth_molding_sfg',
-		actions: ['read', 'click_production', 'click_to_finishing'],
-	},
-	{
-		id: 412,
-		name: 'Log',
-		path: '/vislon/teeth-molding/log',
-		element: VislonTeethMoldingTrxLog,
-		type: ['vislon', 'teeth-molding'],
-		page_name: 'vislon__teeth_molding_log',
-		actions: [
-			'read',
-			'click_update_sfg',
-			'click_delete_sfg',
-			'click_update_rm',
-			'click_delete_rm',
-			'click_update_rm_order',
-			'click_delete_rm_order',
-			'click_update_tape',
-			'click_delete_tape',
-		],
-	},
+		name: 'Vislon',
+		children: [
+			{
+				name: 'Teeth Molding',
+				children: [
+					{
+						name: 'RM',
+						path: '/vislon/teeth-molding/rm',
+						element: <VislonTeethMolding />,
+						page_name: 'vislon__teeth_molding_rm',
+						actions: ['read', 'click_name', 'click_used'],
+					},
+					{
+						name: 'SFG',
+						path: '/vislon/teeth-molding/sfg',
+						element: <VislonTeethMoldingSFG />,
+						page_name: 'vislon__teeth_molding_sfg',
+						actions: [
+							'read',
+							'click_production',
+							'click_to_finishing',
+						],
+					},
+					{
+						name: 'Log',
+						path: '/vislon/teeth-molding/log',
+						element: <VislonTeethMoldingTrxLog />,
+						page_name: 'vislon__teeth_molding_log',
+						actions: [
+							'read',
+							'click_update_sfg',
+							'click_delete_sfg',
+							'click_update_rm',
+							'click_delete_rm',
+							'click_update_rm_order',
+							'click_delete_rm_order',
+							'click_update_tape',
+							'click_delete_tape',
+						],
+					},
 
-	// * Teeth molding Production
-	{
-		id: 43,
-		name: 'Production',
-		path: '/vislon/teeth-molding/production',
-		element: VislonProduction,
-		type: ['vislon', 'teeth-molding'],
-		page_name: 'vislon__teeth_molding_production',
-		actions: [
-			'create',
-			'read',
-			'update',
-			'click_production',
-			'click_transaction',
-		],
-	},
+					{
+						name: 'Production',
+						path: '/vislon/teeth-molding/production',
+						element: <VislonProduction />,
+						page_name: 'vislon__teeth_molding_production',
+						actions: [
+							'create',
+							'read',
+							'update',
+							'click_production',
+							'click_transaction',
+						],
+					},
+				],
+			},
 
-	// * Finishing
-	{
-		id: 42,
-		name: 'RM',
-		path: '/vislon/finishing/rm',
-		element: VislonFinishing,
-		type: ['vislon', 'finishing'],
-		page_name: 'vislon__finishing_rm',
-		actions: ['read', 'click_name', 'click_used'],
-	},
-	{
-		id: 421,
-		name: 'SFG',
-		path: '/vislon/finishing/sfg',
-		element: VislonFinishingSFG,
-		type: ['vislon', 'finishing'],
-		page_name: 'vislon__finishing_sfg',
-		actions: ['read', 'click_production'],
-	},
-	// * Finishing log
-	{
-		id: 422,
-		name: 'Log',
-		path: '/vislon/finishing/log',
-		element: VislonFinishingTrxLog,
-		type: ['vislon', 'finishing'],
-		page_name: 'vislon__finishing_log',
-		actions: [
-			'read',
-			'click_update_sfg',
-			'click_delete_sfg',
-			'click_update_rm',
-			'click_delete_rm',
-			'click_update_rm_order',
-			'click_delete_rm_order',
-		],
-	},
-	// * Finishing Production
-	{
-		id: 44,
-		name: 'Production',
-		path: '/vislon/finishing/production',
-		element: VislonFinishingProduction,
-		type: ['vislon', 'finishing'],
-		page_name: 'vislon__finishing_production',
-		actions: [
-			'create',
-			'read',
-			'update',
-			'click_production',
-			'click_transaction',
+			{
+				name: 'Finishing',
+				children: [
+					{
+						name: 'RM',
+						path: '/vislon/finishing/rm',
+						element: <VislonFinishing />,
+						page_name: 'vislon__finishing_rm',
+						actions: ['read', 'click_name', 'click_used'],
+					},
+					{
+						name: 'SFG',
+						path: '/vislon/finishing/sfg',
+						element: <VislonFinishingSFG />,
+						page_name: 'vislon__finishing_sfg',
+						actions: ['read', 'click_production'],
+					},
+					// * Finishing log
+					{
+						name: 'Log',
+						path: '/vislon/finishing/log',
+						element: <VislonFinishingTrxLog />,
+						page_name: 'vislon__finishing_log',
+						actions: [
+							'read',
+							'click_update_sfg',
+							'click_delete_sfg',
+							'click_update_rm',
+							'click_delete_rm',
+							'click_update_rm_order',
+							'click_delete_rm_order',
+						],
+					},
+					// * Finishing Production
+					{
+						name: 'Production',
+						path: '/vislon/finishing/production',
+						element: <VislonFinishingProduction />,
+						page_name: 'vislon__finishing_production',
+						actions: [
+							'create',
+							'read',
+							'update',
+							'click_production',
+							'click_transaction',
+						],
+					},
+				],
+			},
 		],
 	},
 ];

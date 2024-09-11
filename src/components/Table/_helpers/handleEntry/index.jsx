@@ -1,4 +1,4 @@
-import { Plus } from '@/assets/icons';
+import { Plus } from 'lucide-react';
 
 const HandleEntry = (props) => {
 	return (

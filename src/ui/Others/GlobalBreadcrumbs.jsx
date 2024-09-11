@@ -1,27 +1,88 @@
-import { RightArrow } from '@/assets/icons';
 import cn from '@/lib/cn';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import useBreadcrumbs from 'use-react-router-breadcrumbs';
+import { motion } from 'framer-motion';
+import { House } from 'lucide-react';
+
+const variants = {
+	animate: {
+		x: 0,
+		opacity: 1,
+		transition: {
+			duration: 0.3,
+			ease: 'easeOut',
+		},
+	},
+
+	initial: {
+		x: -50,
+		opacity: 0,
+	},
+};
 
 const GlobalBreadcrumbs = () => {
 	const breadcrumbs = useBreadcrumbs();
 
+	const items = breadcrumbs.map((e) => {
+		// const existedRoute = flatRoutes.find(
+		// 	(route) => route.path === e.match?.pathname
+		// );
+
+		// if (existedRoute)
+		// 	return {
+		// 		label: existedRoute.name,
+		// 		href: e.match?.pathname,
+		// 	};
+
+		if (e.match?.pathname === '/') {
+			console.log('hello');
+			return {
+				label: <House className='size-5' />,
+				href: '/',
+			};
+		}
+
+		return {
+			label: e.breadcrumb,
+			href: e.match?.pathname,
+		};
+	});
+
 	return (
-		<div className='flex items-center gap-1 text-xs md:text-sm'>
-			{breadcrumbs.map(({ match, breadcrumb }, index) => (
-				<div key={match.pathname} className='flex items-center gap-1'>
-					<NavLink
-						className={cn(
-							'text-md text-secondary',
-							breadcrumbs.length - 1 === index &&
-								'font-medium text-primary'
-						)}
-						to={match.pathname}>
-						{breadcrumb}
-					</NavLink>
-					{index !== breadcrumbs.length - 1 && <RightArrow />}
-				</div>
-			))}
+		<div className='breadcrumbs text-sm'>
+			<ul>
+				{items?.length > 0 &&
+					items.slice(0, -1).map((item, index) => (
+						<motion.li
+							key={index}
+							variants={variants}
+							initial='initial'
+							animate='animate'>
+							{item.href ? (
+								<Link
+									to={item.href}
+									className={cn('text-secondary')}>
+									{item.label}
+								</Link>
+							) : (
+								<span className={cn('text-secondary')}>
+									{item.label}
+								</span>
+							)}
+						</motion.li>
+					))}
+
+				{items?.length > 0 && (
+					<motion.li
+						key={items.length - 1}
+						variants={variants}
+						initial='initial'
+						animate='animate'
+						className='font-medium text-primary'>
+						{items[items.length - 1].label}
+					</motion.li>
+				)}
+			</ul>
 		</div>
 	);
 };

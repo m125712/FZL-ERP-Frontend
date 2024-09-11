@@ -138,7 +138,7 @@ export default function Index() {
 	// Update
 	const handelUpdate = (idx) => {
 		const { uuid } = data[idx];
-		navigate(`/lab-dip/shade_recipe/update/${uuid}`);
+		navigate(`/lab-dip/shade_recipe/${uuid}/update`);
 	};
 	const handelStatusChange = async (idx) => {
 		await updateData.mutateAsync({

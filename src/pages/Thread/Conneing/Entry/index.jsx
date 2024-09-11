@@ -133,9 +133,7 @@ export default function Index() {
 					...updatedThreadBatchPromises,
 				])
 					.then(() => reset(Object.assign({}, THREAD_CONING_NULL)))
-					.then(() =>
-						navigate(`/thread/coning/details/${batch_uuid}`)
-					);
+					.then(() => navigate(`/thread/coning/${batch_uuid}`));
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
 			}
@@ -184,9 +182,7 @@ export default function Index() {
 					...updatedThreadBatchPromises,
 				])
 					.then(() => reset(Object.assign({}, THREAD_CONING_NULL)))
-					.then(() =>
-						navigate(`/thread/coning/details/${batch_uuid}`)
-					);
+					.then(() => navigate(`/thread/coning/${batch_uuid}`));
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
 			}

@@ -145,11 +145,7 @@ export default function Index() {
 					.then(() =>
 						reset(Object.assign({}, DYEING_PLANNING_SNO_NULL))
 					)
-					.then(
-						navigate(
-							`/dyeing-and-iron/planning-sno/details/${week_id}`
-						)
-					)
+					.then(navigate(`/dyeing-and-iron/planning-sno/${week_id}`))
 					.catch((err) => console.log(err));
 			}
 
@@ -199,9 +195,7 @@ export default function Index() {
 
 			await Promise.all(promises)
 				.then(() => reset(Object.assign({}, DYEING_PLANNING_SNO_NULL)))
-				.then(
-					navigate(`/dyeing-and-iron/planning-sno/details/${weeks}`)
-				)
+				.then(navigate(`/dyeing-and-iron/planning-sno/${weeks}`))
 				.catch((err) => console.log(err));
 		}
 		return;

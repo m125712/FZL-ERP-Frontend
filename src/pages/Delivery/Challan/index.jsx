@@ -165,7 +165,7 @@ export default function Index() {
 
 	const handelUpdate = (idx) =>
 		navigate(
-			`/delivery/challan/update/${challan[idx].challan_number}/${challan[idx].challan_uuid}`
+			`/delivery/challan/${challan[idx].challan_number}/${challan[idx].challan_uuid}/update`
 		);
 
 	const handleAssign = async (e, idx) => {

@@ -60,7 +60,7 @@ export const OrderRoutes = [
 			},
 			{
 				name: 'Entry',
-				path: '/order/update/:order_number/:order_description_uuid',
+				path: '/order/:order_number/:order_description_uuid/update',
 				element: <OrderEntry />,
 				page_name: 'order__entry_update',
 				hidden: true,

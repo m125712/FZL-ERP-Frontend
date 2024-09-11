@@ -91,7 +91,7 @@ export const CommercialRoutes = [
 					},
 					{
 						name: 'PI Update',
-						path: '/commercial/pi/update/:pi_uuid',
+						path: '/commercial/pi/:pi_uuid/update',
 						element: <PiEntry />,
 						page_name: 'commercial__pi_update',
 						actions: ['create', 'read', 'update', 'delete'],

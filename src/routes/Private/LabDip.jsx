@@ -32,7 +32,7 @@ export const LabDipRoutes = [
 			},
 			{
 				name: 'Info Update',
-				path: '/lab-dip/info/update/:info_number/:info_uuid',
+				path: '/lab-dip/info/:info_number/:info_uuid/update',
 				element: <InfoEntry />,
 				page_name: 'lab_dip__info_entry_update',
 				hidden: true,
@@ -65,7 +65,7 @@ export const LabDipRoutes = [
 			},
 			{
 				name: 'Recipe Update',
-				path: '/lab-dip/recipe/update/:recipe_id/:recipe_uuid',
+				path: '/lab-dip/recipe/:recipe_id/:recipe_uuid/update',
 				element: <RecipeEntry />,
 				page_name: 'lab_dip__recipe_entry_update',
 				hidden: true,
@@ -124,7 +124,7 @@ export const LabDipRoutes = [
 			},
 			{
 				name: 'Shade Recipe Details',
-				path: '/lab-dip/shade_recipe/details/:shade_recipe_uuid',
+				path: '/lab-dip/shade_recipe/:shade_recipe_uuid',
 				element: <ShadeRecipeDetails />,
 				hidden: true,
 				page_name: 'lab_dip__shade_recipe_details',
@@ -139,7 +139,7 @@ export const LabDipRoutes = [
 			},
 			{
 				name: 'Shade Recipe Update',
-				path: '/lab-dip/shade_recipe/update/:shade_recipe_uuid',
+				path: '/lab-dip/shade_recipe/:shade_recipe_uuid/update',
 				element: <ShadeRecipeEntry />,
 				page_name: 'lab_dip__shade_recipe_entry_update',
 				hidden: true,

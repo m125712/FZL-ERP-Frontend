@@ -111,7 +111,7 @@ export default function Index() {
 	const handelUpdate = (idx) => {
 		const { uuid } = data[idx];
 
-		navigate(`/thread/coning/update/${uuid}`);
+		navigate(`/thread/coning/${uuid}/update`);
 	};
 
 	// get tabname

@@ -24,7 +24,7 @@ export default function Index() {
 	const handelUpdate = (idx) => {
 		const { order_description_uuid, order_number } = data[idx];
 
-		navigate(`/order/update/${order_number}/${order_description_uuid}`);
+		navigate(`/order/${order_number}/${order_description_uuid}/update`);
 	};
 
 	const columns = DetailsColumns({

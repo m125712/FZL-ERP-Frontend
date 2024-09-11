@@ -144,7 +144,7 @@ export default function Index() {
 
 	const handelUpdate = (idx) => {
 		const { uuid } = data[idx];
-		navigate(`/thread/order-info/update/${uuid}`);
+		navigate(`/thread/order-info/${uuid}/update`);
 	};
 
 	// Delete

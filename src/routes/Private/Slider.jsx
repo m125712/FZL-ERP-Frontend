@@ -68,7 +68,7 @@ export const SliderRoutes = [
 					},
 					{
 						name: 'Update',
-						path: '/slider/die-casting/transfer/update/:uuid',
+						path: '/slider/die-casting/transfer/:uuid/update',
 						element: <DieCastingTransfer />,
 						hidden: true,
 						page_name: 'slider__die_casting_transfer_update',
@@ -120,7 +120,7 @@ export const SliderRoutes = [
 
 					{
 						name: 'Update',
-						path: '/slider/die-casting/production/update/:uuid',
+						path: '/slider/die-casting/production/:uuid/update',
 						element: <DieCastingEntry />,
 						hidden: true,
 						page_name: 'slider__die_casting_production_update',

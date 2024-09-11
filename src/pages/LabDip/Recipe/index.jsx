@@ -133,7 +133,7 @@ export default function Index() {
 	const handelUpdate = (idx) => {
 		const { recipe_id, uuid } = data[idx];
 
-		navigate(`/lab-dip/recipe/update/${recipe_id}/${uuid}`);
+		navigate(`/lab-dip/recipe/${recipe_id}/${uuid}/update`);
 	};
 	const handelApprovedStatusChange = async (idx) => {
 		await updateData.mutateAsync({

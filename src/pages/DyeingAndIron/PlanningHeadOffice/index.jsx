@@ -118,7 +118,7 @@ export default function Index() {
 	const handelUpdate = (idx) => {
 		const { week } = data[idx];
 
-		navigate(`/dyeing-and-iron/planning-head-office/update/${week}`);
+		navigate(`/dyeing-and-iron/planning-head-office/${week}/update`);
 	};
 
 	// get tabname

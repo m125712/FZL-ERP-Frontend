@@ -208,6 +208,7 @@ export default function Index({ sfg }) {
 		});
 	};
 
+	console.log(order_id);
 	return (
 		<div>
 			<HotKeys {...{ keyMap, handlers }}>

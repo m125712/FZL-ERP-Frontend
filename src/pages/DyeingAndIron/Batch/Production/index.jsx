@@ -399,7 +399,6 @@ export default function Index() {
 		[isAllChecked, isSomeChecked, BatchEntryField, register, errors]
 	);
 
-	console.log(getValues());
 	return (
 		<div>
 			<form

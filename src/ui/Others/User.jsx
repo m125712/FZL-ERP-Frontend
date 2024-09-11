@@ -7,7 +7,14 @@ const User = ({ avatar = false }) => {
 	const isOnline = useNetworkState().online;
 
 	return (
-		<div className='flex flex-1 flex-shrink-0 items-center gap-2'>
+		<div className='relative flex flex-1 flex-shrink-0 items-center gap-2'>
+			{/* <span
+				className={cn(
+					'absolute right-0 top-0 text-xs',
+					isOnline ? 'text-success' : 'text-error'
+				)}>
+				{isOnline ? 'Online' : 'Offline'}
+			</span> */}
 			{avatar && (
 				<div className={cn('avatar', isOnline ? 'online' : 'offline')}>
 					<div className='size-10 rounded-full'>

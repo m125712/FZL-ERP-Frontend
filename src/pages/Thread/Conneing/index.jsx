@@ -30,7 +30,7 @@ export default function Index() {
 					<LinkWithCopy
 						title={info.getValue()}
 						id={info.row.original.uuid}
-						uri='/thread/coning/details'
+						uri='/thread/coning'
 					/>
 				),
 			},

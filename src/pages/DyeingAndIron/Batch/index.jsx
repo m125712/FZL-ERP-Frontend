@@ -23,7 +23,7 @@ export default function Index() {
 					<LinkWithCopy
 						title={info.getValue()}
 						id={info.row.original.uuid}
-						uri='/dyeing-and-iron/batch/details'
+						uri='/dyeing-and-iron/batch'
 					/>
 				),
 			},

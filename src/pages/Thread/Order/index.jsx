@@ -24,7 +24,7 @@ export default function Index() {
 					const { uuid } = info.row.original;
 					return (
 						<LinkOnly
-							uri='/thread/order-info/details'
+							uri='/thread/order-info'
 							id={uuid}
 							title={info.getValue()}
 						/>

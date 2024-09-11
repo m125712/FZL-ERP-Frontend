@@ -29,7 +29,7 @@ export default function Index() {
 					<LinkWithCopy
 						title={info.getValue()}
 						id={info.getValue()}
-						uri='/dyeing-and-iron/planning-head-office/details'
+						uri='/dyeing-and-iron/planning-head-office'
 					/>
 				),
 			},

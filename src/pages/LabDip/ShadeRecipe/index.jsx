@@ -34,7 +34,7 @@ export default function Index() {
 					const { uuid } = info.row.original;
 					return (
 						<LinkOnly
-							uri='/lab-dip/shade_recipe/details'
+							uri='/lab-dip/shade_recipe'
 							id={uuid}
 							title={info.getValue()}
 						/>

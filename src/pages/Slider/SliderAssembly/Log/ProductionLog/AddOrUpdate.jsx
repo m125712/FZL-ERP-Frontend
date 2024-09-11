@@ -1,14 +1,16 @@
 import { AddModal } from '@/components/Modal';
-import { useRHF, useUpdateFunc } from '@/hooks';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+import { useRHF } from '@/hooks';
+import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,
+	NUMBER_REQUIRED,
 } from '@util/Schema';
 import { useSliderAssemblyProductionEntryByUUID } from '@/state/Slider';
 import { useEffect } from 'react';
 import { DevTool } from '@hookform/devtools';
+import * as yup from 'yup';
 
 export default function Index({
 	modalId = '',
@@ -37,19 +39,25 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		context
+		context,
 	} = useRHF(
-		SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
+		{
+			...SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
+			production_quantity: NUMBER_REQUIRED.max(
+				yup.ref('max_sa_quantity'),
+				'Beyond Max Quantuty'
+			),
+		},
 		SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL
 	);
 
 	// * To reset the form with the fetched data
 	useEffect(() => {
 		if (data) {
-			reset(data[0]); // Reset the form with the fetched data
+			reset(data); // Reset the form with the fetched data
 		}
 	}, [data, reset]);
-
+	console.log(getValues());
 	const onClose = () => {
 		setUpdateSliderProd((prev) => ({
 			...prev,
@@ -106,7 +114,7 @@ export default function Index({
 			<JoinInput
 				label='production_quantity'
 				unit='PCS'
-				sub_label={`Max: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${Number(getValues('max_sa_quantity'))}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

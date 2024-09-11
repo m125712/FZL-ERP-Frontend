@@ -1,7 +1,7 @@
 import { AddModal } from '@/components/Modal';
 import { DebouncedInput } from '@/components/Table/components';
 import { useFetchForRhfResetForUserAccess, useRHF } from '@/hooks';
-import { allPrivateRoutes } from '@/routes';
+import { allFlatRoutes, allPrivateRoutes, flatRoutes } from '@/routes';
 import { useAdminUsers } from '@/state/Admin';
 import { CheckBox } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
@@ -15,9 +15,10 @@ export default function Index({
 	setPageAssign,
 }) {
 	const { url, updateData } = useAdminUsers();
-	const ALL_PAGE_ACTIONS = allPrivateRoutes.filter(
+	const ALL_PAGE_ACTIONS = allFlatRoutes.filter(
 		(item) => item.actions !== undefined
 	);
+	// console.log(ALL_PAGE_ACTIONS);
 
 	const [searchPageName, setSearchPageName] = useState('');
 	const filteredPageActions = ALL_PAGE_ACTIONS.filter(({ page_name }) =>
@@ -39,6 +40,9 @@ export default function Index({
 		{}
 	);
 
+	// console.log(PAGE_ACTIONS);
+	
+
 	const PAGE_ACTIONS_SCHEMA = {};
 	const PAGE_ACTIONS_DEFAULT = {};
 	const PAGE_ACTIONS_NULL = {};
@@ -57,6 +61,9 @@ export default function Index({
 		pageAssign?.uuid,
 		reset
 	);
+
+	// console.log(getValues());
+	
 
 	const onClose = () => {
 		setPageAssign((prev) => ({
@@ -91,7 +98,6 @@ export default function Index({
 
 		await updateData.mutateAsync({
 			url: `${url}/can-access/${pageAssign?.uuid}`,
-			uuid: pageAssign.uuid,
 			updatedData,
 			onClose,
 		});

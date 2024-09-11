@@ -1,6 +1,6 @@
 import { CalenderIcon } from '@/assets/icons';
 import { format } from 'date-fns';
-import { forwardRef, Fragment, useCallback, useMemo, useState } from 'react';
+import { forwardRef, Fragment, useCallback, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import {
 	Button,

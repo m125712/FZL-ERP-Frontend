@@ -1,8 +1,8 @@
 import cn from '@/lib/cn';
-import { Link } from 'react-router-dom';
-import useBreadcrumbs from 'use-react-router-breadcrumbs';
 import { motion } from 'framer-motion';
 import { House } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import useBreadcrumbs from 'use-react-router-breadcrumbs';
 
 const variants = {
 	animate: {
@@ -35,7 +35,6 @@ const GlobalBreadcrumbs = () => {
 		// 	};
 
 		if (e.match?.pathname === '/') {
-			console.log('hello');
 			return {
 				label: <House className='size-5' />,
 				href: '/',

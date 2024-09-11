@@ -6,11 +6,7 @@ function flattenRoutes(array) {
 			return;
 		}
 
-		flattenedArray.push({
-			path: object.path,
-			element: object.element,
-			name: object.name,
-		});
+		flattenedArray.push(object);
 
 		if (object.children) {
 			object.children.forEach((child) => flattenRecursive(child));

@@ -23,17 +23,17 @@ const ExampleCustomInput = forwardRef(({ value, onClick, className }, ref) => {
 });
 
 ExampleCustomInput.displayName = 'ExampleCustomInput';
-// columnName,
-// 	column,
-// 	getPreFilteredRowModel,
+
 const FilterDate = ({ columnName, column, isFullFilter }) => {
 	if (!column) return null;
 
 	const { id, setFilterValue, getFacetedUniqueValues } = column;
 	const minMaxDate = getMinMaxDate(getFacetedUniqueValues);
 
-	const oldStartDate = new Date(minMaxDate.min || Date.now());
-	const oldEndDate = new Date(minMaxDate.max || Date.now());
+	const oldStartDate = new Date(minMaxDate?.min) || Date.now();
+	const oldEndDate = new Date(minMaxDate?.max) || Date.now();
+	// console.log({ oldStartDate, oldEndDate });
+
 	const years = getYear({ oldStartDate, oldEndDate });
 
 	const [startDate, setStartDate] = useState(oldStartDate);
@@ -95,27 +95,6 @@ const FilterDate = ({ columnName, column, isFullFilter }) => {
 		);
 	}
 
-	if (!isFullFilter) {
-		return (
-			<Fragment key={id}>
-				<DatePicker
-					selected={endDate}
-					minDate={oldStartDate}
-					maxDate={oldEndDate}
-					endDate={endDate}
-					startDate={startDate}
-					onChange={handleOnChange}
-					withPortal
-					renderCustomHeader={CustomHeader}
-					customInput={
-						<ExampleCustomInput className='btn-filter-outline h-full pr-7' />
-					}
-					{...DefaultConfig}
-				/>
-			</Fragment>
-		);
-	}
-
 	return (
 		<Template
 			key={id}
@@ -124,12 +103,12 @@ const FilterDate = ({ columnName, column, isFullFilter }) => {
 			// showResetButton={getFilterValue()}
 		>
 			<DatePicker
-				selected={endDate}
-				minDate={oldStartDate}
-				maxDate={oldEndDate}
-				endDate={endDate}
-				startDate={startDate}
-				onChange={handleOnChange}
+				// selected={endDate}
+				// minDate={oldStartDate}
+				// maxDate={oldEndDate}
+				// endDate={endDate}
+				// startDate={startDate}
+				// onChange={handleOnChange}
 				// withPortal
 				renderCustomHeader={CustomHeader}
 				customInput={

@@ -22,14 +22,14 @@ const FilterColumn = ({
 	if (typeof firstValue === 'number')
 		return <FilterNumber {...{ columnName, column, isFullFilter }} />;
 
-	// if (isValid(new Date(firstValue))) {
-	// 	return (
-	// 		<FilterDate
-	// 			key={column.id}
-	// 			{...{ columnName, column, isFullFilter }}
-	// 		/>
-	// 	);
-	// }
+	if (isValid(new Date(firstValue))) {
+		return (
+			<FilterDate
+				key={column.id}
+				{...{ columnName, column, isFullFilter }}
+			/>
+		);
+	}
 
 	return (
 		<FilterString

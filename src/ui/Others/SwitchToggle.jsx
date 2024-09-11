@@ -5,7 +5,6 @@ const SwitchToggle = ({ className, ...props }) => {
 		<input
 			type='checkbox'
 			className={cn('toggle toggle-md checked:toggle-accent', className)}
-			defaultChecked
 			{...props}
 		/>
 	);

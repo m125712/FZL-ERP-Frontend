@@ -1,14 +1,16 @@
 import { AddModal } from '@/components/Modal';
-import { useRHF, useUpdateFunc } from '@/hooks';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+import { useRHF } from '@/hooks';
+import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
 	SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
 	SLIDER_ASSEMBLY_TRANSACTION_NULL,
+	NUMBER_REQUIRED,
 } from '@util/Schema';
 import { useSliderAssemblyTransferEntryByUUID } from '@/state/Slider';
 import { useEffect } from 'react';
 import { DevTool } from '@hookform/devtools';
+import * as yup from 'yup';
 
 export default function Index({
 	modalId = '',
@@ -26,9 +28,6 @@ export default function Index({
 		updateSliderTrx?.uuid
 	);
 
-	const MAX_QUANTITY =
-		updateSliderTrx?.slider_assembly_prod + updateSliderTrx?.trx_quantity;
-
 	const {
 		register,
 		handleSubmit,
@@ -37,19 +36,26 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		context
+		context,
 	} = useRHF(
-		SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
+		{
+			...SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
+			trx_quantity: NUMBER_REQUIRED.max(
+				yup.ref('max_sa_quantity'),
+				'Beyond Max Quantity'
+			),
+		},
 		SLIDER_ASSEMBLY_TRANSACTION_NULL
 	);
 
 	// * To reset the form with the fetched data
 	useEffect(() => {
 		if (data) {
-			reset(data[0]); // Reset the form with the fetched data
+			reset(data); // Reset the form with the fetched data
 		}
 	}, [data, reset]);
 
+	console.log(getValues());
 	const onClose = () => {
 		setUpdateSliderTrx((prev) => ({
 			...prev,
@@ -71,7 +77,6 @@ export default function Index({
 				...data,
 				updated_at: GetDateTime(),
 			};
-
 
 			await updateData.mutateAsync({
 				url,
@@ -107,7 +112,7 @@ export default function Index({
 			<JoinInput
 				label='trx_quantity'
 				unit='PCS'
-				sub_label={`Max: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${Number(getValues('max_sa_quantity'))} PCS`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

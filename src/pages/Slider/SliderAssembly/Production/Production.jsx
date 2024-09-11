@@ -29,14 +29,30 @@ export default function Index({
 	const { user } = useAuth();
 
 	const MAX_PROD_KG = Number(updateSliderProd.balance_quantity).toFixed(3);
-	const MAX_PROD = Number(
-		Math.min(
-			updateSliderProd?.body_quantity,
-			updateSliderProd?.cap_quantity,
-			updateSliderProd?.link_quantity,
-			updateSliderProd?.puller_quantity
-		)
-	);
+	const MAX_PROD =
+		updateSliderProd?.end_type_name == 'Open End'
+			? Number(
+					Math.min(
+						updateSliderProd?.body_quantity,
+						updateSliderProd?.cap_quantity,
+						updateSliderProd?.link_quantity,
+						updateSliderProd?.puller_quantity,
+						updateSliderProd?.u_top_quantity,
+						updateSliderProd?.box_pin_quantity
+					)
+				)
+			: Number(
+					Math.min(
+						updateSliderProd?.body_quantity,
+						updateSliderProd?.cap_quantity,
+						updateSliderProd?.link_quantity,
+						updateSliderProd?.puller_quantity,
+						updateSliderProd?.u_top_quantity,
+						updateSliderProd?.h_bottom_quantity
+					)
+				);
+
+	console.log(updateSliderProd);
 	const { register, handleSubmit, errors, reset, watch, control, context } =
 		useRHF(
 			{
@@ -90,7 +106,8 @@ export default function Index({
 			id='TeethMoldingProdModal'
 			title={'Slider Assembly ⇾ Production'}
 			subTitle={`
-				${updateSliderProd.order_info_uuid} -> 
+				${updateSliderProd.order_number} -> 
+				${updateSliderProd.item_description} -> 
 				${updateSliderProd.item_name} 
 				`}
 			formContext={context}
@@ -107,8 +124,8 @@ export default function Index({
 			<JoinInput
 				title='wastage'
 				label='wastage'
-				unit='KG'
-				sub_label={`MAX: ${MAX_WASTAGE_KG} kg`}
+				unit='PCS'
+				sub_label={`MAX: ${MAX_WASTAGE_KG} PCS`}
 				{...{ register, errors }}
 			/>
 			<Textarea label='remarks' {...{ register, errors }} />

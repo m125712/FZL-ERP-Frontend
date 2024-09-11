@@ -36,7 +36,7 @@ export default function Index() {
 						<LinkWithCopy
 							title={info.getValue()}
 							id={uuid}
-							uri='/thread/order-info/details'
+							uri='/thread/order-info'
 						/>
 					);
 				},
@@ -126,7 +126,6 @@ export default function Index() {
 		});
 	};
 
-	
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 

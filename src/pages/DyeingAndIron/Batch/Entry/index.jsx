@@ -100,9 +100,7 @@ export default function Index() {
 
 				await Promise.all(batch_entry_updated_promises)
 					.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
-					.then(
-						navigate(`/dyeing-and-iron/batch/details/${batch_uuid}`)
-					)
+					.then(navigate(`/dyeing-and-iron/batch/${batch_uuid}`))
 					.catch((err) => console.log(err));
 			}
 
@@ -165,11 +163,7 @@ export default function Index() {
 
 				await Promise.all(promises)
 					.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
-					.then(
-						navigate(
-							`/dyeing-and-iron/batch/details/${batch_data.uuid}`
-						)
-					)
+					.then(navigate(`/dyeing-and-iron/batch/${batch_data.uuid}`))
 					.catch((err) => console.log(err));
 
 				return;
@@ -200,9 +194,7 @@ export default function Index() {
 
 			await Promise.all(promises)
 				.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
-				.then(
-					navigate(`/dyeing-and-iron/batch/details/${batchData.uuid}`)
-				)
+				.then(navigate(`/dyeing-and-iron/batch/${batchData.uuid}`))
 				.catch((err) => console.log(err));
 
 			return;

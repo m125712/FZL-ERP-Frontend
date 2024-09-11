@@ -3,6 +3,7 @@ import BrandLogo from '../brand-logo';
 import SidebarCollapse from '../sidebar/sidebar-collapse';
 import SidebarMobileToggle from '../sidebar/sidebar-mobile-toggle';
 import { useResolvedPath } from 'react-router-dom';
+import cn from '@/lib/cn';
 
 const Navbar = () => {
 	const { pathname } = useResolvedPath();
@@ -14,8 +15,12 @@ const Navbar = () => {
 					<SidebarMobileToggle />
 				</div>
 
-				<div className='flex items-center gap-6 bg-base-200 px-4 py-2 md:px-0 md:py-0'>
-					<div className='hidden h-full items-center border-r border-secondary/10 p-4 md:flex'>
+				<div
+					className={cn(
+						'flex items-center gap-6 bg-base-200 px-4 py-2 md:px-0 md:py-0',
+						pathname === '/' && 'hidden md:block'
+					)}>
+					<div className='hidden h-full w-fit items-center border-r border-secondary/10 p-4 md:flex'>
 						<SidebarCollapse />
 					</div>
 					{pathname !== '/' && <GlobalBreadcrumbs />}

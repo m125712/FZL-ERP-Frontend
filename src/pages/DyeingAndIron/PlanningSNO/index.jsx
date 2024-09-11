@@ -25,7 +25,7 @@ export default function Index() {
 					<LinkWithCopy
 						title={info.getValue()}
 						id={info.getValue()}
-						uri='/dyeing-and-iron/planning-sno/details'
+						uri='/dyeing-and-iron/planning-sno'
 					/>
 				),
 			},
@@ -113,7 +113,7 @@ export default function Index() {
 	const handelUpdate = (idx) => {
 		const { week } = data[idx];
 
-		navigate(`/dyeing-and-iron/planning-sno/update/${week}`);
+		navigate(`/dyeing-and-iron/planning-sno/${week}/update`);
 	};
 
 	// get tabname

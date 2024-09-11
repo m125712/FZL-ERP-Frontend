@@ -22,7 +22,7 @@ const SidebarHeader = () => {
 
 			<div className='flex justify-end px-2 py-2'>
 				<div
-					className='tooltip tooltip-bottom tooltip-secondary'
+					className='tooltip tooltip-left tooltip-secondary md:tooltip-bottom'
 					data-tip='Collapse Folders'>
 					<motion.button
 						whileTap={{ scale: 0.9 }}

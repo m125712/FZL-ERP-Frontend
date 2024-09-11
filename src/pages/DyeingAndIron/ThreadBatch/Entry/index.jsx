@@ -171,9 +171,7 @@ export default function Index() {
 					)
 					.then(() => invalidateDyeingThreadBatch())
 					.then(
-						navigate(
-							`/dyeing-and-iron/thread-batch/details/${batch_uuid}`
-						)
+						navigate(`/dyeing-and-iron/thread-batch/${batch_uuid}`)
 					)
 					.catch((err) => console.log(err));
 			}
@@ -246,7 +244,7 @@ export default function Index() {
 					.then(() => invalidateDyeingThreadBatch())
 					.then(
 						navigate(
-							`/dyeing-and-iron/thread-batch/details/${batch_data.uuid}`
+							`/dyeing-and-iron/thread-batch/${batch_data.uuid}`
 						)
 					)
 					.catch((err) => console.log(err));
@@ -281,9 +279,7 @@ export default function Index() {
 				.then(() => reset(Object.assign({}, DYEING_THREAD_BATCH_NULL)))
 				.then(() => invalidateDyeingThreadBatch())
 				.then(
-					navigate(
-						`/dyeing-and-iron/thread-batch/details/${batchData.uuid}`
-					)
+					navigate(`/dyeing-and-iron/thread-batch/${batchData.uuid}`)
 				)
 				.catch((err) => console.log(err));
 

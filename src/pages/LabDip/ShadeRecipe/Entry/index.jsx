@@ -160,9 +160,7 @@ export default function Index() {
 				])
 					.then(() => reset(SHADE_RECIPE_NULL))
 					.then(() => {
-						navigate(
-							`/lab-dip/shade_recipe/details/${shade_recipe_uuid}`
-						);
+						navigate(`/lab-dip/shade_recipe/${shade_recipe_uuid}`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -224,9 +222,7 @@ export default function Index() {
 			])
 				.then(() => reset(SHADE_RECIPE_NULL))
 				.then(() => {
-					navigate(
-						`/lab-dip/shade_recipe/details/${new_shade_recipe_uuid}`
-					);
+					navigate(`/lab-dip/shade_recipe/${new_shade_recipe_uuid}`);
 				});
 		} catch (err) {
 			console.error(`Error with Promise.all: ${err}`);

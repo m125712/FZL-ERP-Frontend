@@ -107,7 +107,7 @@ export const DyeingAndIronRoutes = [
 			},
 			{
 				name: 'Planning SNO Update',
-				path: '/dyeing-and-iron/planning-sno/update/:week_id',
+				path: '/dyeing-and-iron/planning-sno/:week_id/update',
 				element: <DyeingPlanningSNOEntry />,
 				hidden: true,
 				page_name: 'dyeing__planning_sno_entry_update',
@@ -115,7 +115,7 @@ export const DyeingAndIronRoutes = [
 			},
 			{
 				name: 'Planning SNO Details',
-				path: '/dyeing-and-iron/planning-sno/details/:week_id',
+				path: '/dyeing-and-iron/planning-sno/:week_id',
 				element: <DyeingPlanningSNODetails />,
 				hidden: true,
 				page_name: 'dyeing__planning_sno_entry_details',
@@ -140,7 +140,7 @@ export const DyeingAndIronRoutes = [
 			},
 			{
 				name: 'Planning Head Office Update',
-				path: '/dyeing-and-iron/planning-head-office/update/:week_id',
+				path: '/dyeing-and-iron/planning-head-office/:week_id/update',
 				element: <DyeingPlanningHeadOfficeEntry />,
 				hidden: true,
 				page_name: 'dyeing__planning_head_office_entry_update',
@@ -148,7 +148,7 @@ export const DyeingAndIronRoutes = [
 			},
 			{
 				name: 'Planning Head Office Details',
-				path: '/dyeing-and-iron/planning-head-office/details/:week_id',
+				path: '/dyeing-and-iron/planning-head-office/:week_id',
 				element: <DyeingPlanningHeadOfficeDetails />,
 				hidden: true,
 				page_name: 'dyeing__planning_head_office_details',
@@ -173,7 +173,7 @@ export const DyeingAndIronRoutes = [
 			},
 			{
 				name: 'Batch Update',
-				path: '/dyeing-and-iron/batch/update/:batch_uuid',
+				path: '/dyeing-and-iron/batch/:batch_uuid/update',
 				element: <DyeingBatchEntry />,
 				hidden: true,
 				page_name: 'dyeing__batch_entry_update',
@@ -181,7 +181,7 @@ export const DyeingAndIronRoutes = [
 			},
 			{
 				name: 'Batch Details',
-				path: '/dyeing-and-iron/batch/details/:batch_uuid',
+				path: '/dyeing-and-iron/batch/:batch_uuid',
 				element: <DyeingBatchDetails />,
 				hidden: true,
 				page_name: 'dyeing__batch_details',
@@ -239,7 +239,7 @@ export const DyeingAndIronRoutes = [
 			// * Batch Thread Details
 			{
 				name: 'Thread Batch Details',
-				path: '/dyeing-and-iron/thread-batch/details/:batch_uuid',
+				path: '/dyeing-and-iron/thread-batch/:batch_uuid',
 				element: <DyeingThreadBatchDetails />,
 				hidden: true,
 				page_name: 'dyeing__thread_batch_details',
@@ -249,7 +249,7 @@ export const DyeingAndIronRoutes = [
 			// * Batch Thread Update
 			{
 				name: 'Thread Batch Update',
-				path: '/dyeing-and-iron/thread-batch/update/:batch_uuid',
+				path: '/dyeing-and-iron/thread-batch/:batch_uuid/update',
 				element: <DyeingThreadBatchEntry />,
 				hidden: true,
 				page_name: 'dyeing__thread_batch_entry_update',
@@ -257,7 +257,7 @@ export const DyeingAndIronRoutes = [
 			},
 			{
 				name: 'Dyeing Transfer Update',
-				path: '/dyeing-and-iron/transfer/update/:transfer_uuid',
+				path: '/dyeing-and-iron/transfer/:transfer_uui/update',
 				element: <DyeingTransferEntry />,
 				hidden: true,
 				page_name: 'dyeing__transfer_update',

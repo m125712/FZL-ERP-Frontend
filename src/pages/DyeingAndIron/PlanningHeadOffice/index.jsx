@@ -29,7 +29,7 @@ export default function Index() {
 					<LinkWithCopy
 						title={info.getValue()}
 						id={info.getValue()}
-						uri='/dyeing-and-iron/planning-head-office/details'
+						uri='/dyeing-and-iron/planning-head-office'
 					/>
 				),
 			},
@@ -118,7 +118,7 @@ export default function Index() {
 	const handelUpdate = (idx) => {
 		const { week } = data[idx];
 
-		navigate(`/dyeing-and-iron/planning-head-office/update/${week}`);
+		navigate(`/dyeing-and-iron/planning-head-office/${week}/update`);
 	};
 
 	// get tabname

@@ -32,7 +32,7 @@ export default function Index() {
 					<LinkWithCopy
 						title={info.getValue()}
 						id={info.row.original.uuid}
-						uri='/dyeing-and-iron/thread-batch/details'
+						uri='/dyeing-and-iron/thread-batch'
 					/>
 				),
 			},
@@ -254,7 +254,7 @@ export default function Index() {
 	const handelUpdate = (idx) => {
 		const { uuid } = data[idx];
 
-		navigate(`/dyeing-and-iron/thread-batch/update/${uuid}`);
+		navigate(`/dyeing-and-iron/thread-batch/${uuid}/update`);
 	};
 
 	// get tabname

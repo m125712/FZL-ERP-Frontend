@@ -42,7 +42,7 @@ export const ThreadRoutes = [
 			},
 			{
 				name: 'Update',
-				path: '/thread/order-info/update/:order_info_uuid',
+				path: '/thread/order-info/:order_info_uuid/update',
 				element: <OrderInfoEntry />,
 				page_name: 'thread__order_info_update',
 				actions: ['create', 'read', 'update', 'delete'],
@@ -50,7 +50,7 @@ export const ThreadRoutes = [
 			},
 			{
 				name: 'Details of Order Info',
-				path: '/thread/order-info/details/:order_info_uuid',
+				path: '/thread/order-info/:order_info_uuid',
 				element: <IndOrderInfo />,
 				page_name: 'thread__order_info_in_details',
 				actions: ['create', 'read', 'update', 'delete'],
@@ -86,7 +86,7 @@ export const ThreadRoutes = [
 			},
 			{
 				name: 'Coning Entry',
-				path: '/thread/coning/update/:batch_uuid',
+				path: '/thread/coning/:batch_uuid/update',
 				element: <ConingEntry />,
 				page_name: 'thread__coning_update',
 				actions: ['create', 'read', 'update', 'delete'],
@@ -94,7 +94,7 @@ export const ThreadRoutes = [
 			},
 			{
 				name: 'Details of Coning',
-				path: '/thread/coning/details/:batch_uuid',
+				path: '/thread/coning/:batch_uuid',
 				element: <ConingDetails />,
 				page_name: 'thread__coning_in_details',
 				actions: ['create', 'read', 'update', 'delete'],
@@ -102,7 +102,7 @@ export const ThreadRoutes = [
 			},
 			{
 				name: 'Conning',
-				path: '/thread/coning/details',
+				path: '/thread/coning',
 				element: <Coning />,
 				page_name: 'thread__coning_details',
 				actions: ['create', 'read', 'update', 'delete'],

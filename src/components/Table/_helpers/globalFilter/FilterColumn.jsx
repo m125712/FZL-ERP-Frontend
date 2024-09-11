@@ -14,9 +14,10 @@ const FilterColumn = ({
 	// 	return <FilterStatus {...{ columnName, column, isFullFilter }} />;
 
 	// * finds the first not-null value
-	const firstValue = getPreFilteredRowModel()
-		.flatRows.find((row) => row.getValue(column.id) !== null)
-		.getValue(column.id);
+	const firstValue =
+		getPreFilteredRowModel()
+			.flatRows.find((row) => row.getValue(column.id) !== null)
+			?.getValue(column.id) || null;
 
 	if (!firstValue) return null;
 

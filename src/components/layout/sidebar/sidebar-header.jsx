@@ -1,8 +1,8 @@
-import { useSidebar } from './sidebar-provider';
-import { CopyMinus, X } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { CopyMinus, X } from 'lucide-react';
 import BrandLogo from '../brand-logo';
 import { useLayout } from '../layout-provider';
+import { useSidebar } from './sidebar-provider';
 
 const SidebarHeader = () => {
 	const { setSidebarOpen } = useLayout();

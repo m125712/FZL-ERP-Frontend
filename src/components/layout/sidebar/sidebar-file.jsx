@@ -1,7 +1,7 @@
-import { NavLink, useResolvedPath } from 'react-router-dom';
 import cn from '@/lib/cn';
 import matchUrl from '@/util/matchUrl';
 import { motion } from 'framer-motion';
+import { NavLink, useResolvedPath } from 'react-router-dom';
 import { useLayout } from '../layout-provider';
 
 const variants = {

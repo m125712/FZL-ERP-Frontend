@@ -13,16 +13,17 @@ const FilterColumn = ({
 	// if (column.id.includes('status'))
 	// 	return <FilterStatus {...{ columnName, column, isFullFilter }} />;
 
-	const firstValue = getPreFilteredRowModel().flatRows[0]?.getValue(
-		column.id
-	);
+	// * finds the first not-null value
+	const firstValue = getPreFilteredRowModel()
+		.flatRows.find((row) => row.getValue(column.id) !== null)
+		.getValue(column.id);
 
-	// if (!firstValue) return null;
+	if (!firstValue) return null;
 
 	if (typeof firstValue === 'number')
 		return <FilterNumber {...{ columnName, column, isFullFilter }} />;
 
-	if (isValid(new Date(firstValue))) {
+	if (isValid(new Date(firstValue || undefined))) {
 		return (
 			<FilterDate
 				key={column.id}

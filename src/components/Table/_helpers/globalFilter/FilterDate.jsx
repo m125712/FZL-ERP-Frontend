@@ -1,6 +1,6 @@
 import { CalenderIcon } from '@/assets/icons';
 import { format } from 'date-fns';
-import { forwardRef, Fragment, useCallback, useState } from 'react';
+import { forwardRef, useCallback, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import {
 	Button,
@@ -23,17 +23,17 @@ const ExampleCustomInput = forwardRef(({ value, onClick, className }, ref) => {
 });
 
 ExampleCustomInput.displayName = 'ExampleCustomInput';
-
+// columnName,
+// 	column,
+// 	getPreFilteredRowModel,
 const FilterDate = ({ columnName, column, isFullFilter }) => {
 	if (!column) return null;
 
 	const { id, setFilterValue, getFacetedUniqueValues } = column;
 	const minMaxDate = getMinMaxDate(getFacetedUniqueValues);
 
-	const oldStartDate = new Date(minMaxDate?.min) || Date.now();
-	const oldEndDate = new Date(minMaxDate?.max) || Date.now();
-	// console.log({ oldStartDate, oldEndDate });
-
+	const oldStartDate = new Date(minMaxDate.min || Date.now());
+	const oldEndDate = new Date(minMaxDate.max || Date.now());
 	const years = getYear({ oldStartDate, oldEndDate });
 
 	const [startDate, setStartDate] = useState(oldStartDate);
@@ -103,12 +103,12 @@ const FilterDate = ({ columnName, column, isFullFilter }) => {
 			// showResetButton={getFilterValue()}
 		>
 			<DatePicker
-				// selected={endDate}
-				// minDate={oldStartDate}
-				// maxDate={oldEndDate}
-				// endDate={endDate}
-				// startDate={startDate}
-				// onChange={handleOnChange}
+				selected={endDate}
+				minDate={oldStartDate}
+				maxDate={oldEndDate}
+				endDate={endDate}
+				startDate={startDate}
+				onChange={handleOnChange}
 				// withPortal
 				renderCustomHeader={CustomHeader}
 				customInput={

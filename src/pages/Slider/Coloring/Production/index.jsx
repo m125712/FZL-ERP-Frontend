@@ -4,12 +4,12 @@ import { useAccess } from '@/hooks';
 import { LinkWithCopy, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useMemo, useState } from 'react';
-import { useSliderAssemblyProduction } from '@/state/Slider';
+import { useSliderColoringProduction } from '@/state/Slider';
 const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
 
 export default function Index() {
-	const { data, isLoading } = useSliderAssemblyProduction();
+	const { data, isLoading } = useSliderColoringProduction();
 	const info = new PageInfo(
 		'Slider Coloring Production',
 		'/slider/slider-coloring/production',
@@ -18,6 +18,7 @@ export default function Index() {
 
 	const haveAccess = useAccess('slider__coloring_production');
 
+	console.log(data);
 	// * columns
 	const columns = useMemo(
 		() => [
@@ -99,6 +100,18 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
+			{
+				accessorKey: 'coloring_stock',
+				header: (
+					<span>
+						Stock
+						<br />
+						QTY (PCS)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
 
 			{
 				accessorKey: 'action_add_production',
@@ -116,39 +129,39 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'sa_prod',
+				accessorKey: 'coloring_prod',
 				header: (
 					<span>
 						Total Production
 						<br />
-						(KG)
+						(PCS)
 					</span>
 				),
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-			// {
-			// 	accessorKey: 'action_add_transaction',
-			// 	header: '',
-			// 	enableColumnFilter: false,
-			// 	enableSorting: false,
-			// 	hidden: !haveAccess.includes('click_transaction'),
-			// 	width: 'w-8',
-			// 	cell: (info) => {
-			// 		return (
-			// 			<Transfer
-			// 				onClick={() => handelTransaction(info.row.index)}
-			// 			/>
-			// 		);
-			// 	},
-			// },
+			{
+				accessorKey: 'action_add_transaction',
+				header: '',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_transaction'),
+				width: 'w-8',
+				cell: (info) => {
+					return (
+						<Transfer
+							onClick={() => handelTransaction(info.row.index)}
+						/>
+					);
+				},
+			},
 			{
 				accessorKey: 'total_trx_quantity',
 				header: (
 					<span>
 						Total Transaction
 						<br />
-						(KG)
+						(PCS)
 					</span>
 				),
 				enableColumnFilter: false,

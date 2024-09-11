@@ -1,5 +1,3 @@
-import { useAuth } from '@/context/auth';
-import { useAccess } from '@/hooks';
 import createGlobalState from '.';
 import { orderQK } from './QueryKeys';
 

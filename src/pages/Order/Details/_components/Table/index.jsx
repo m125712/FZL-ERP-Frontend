@@ -1,7 +1,7 @@
+import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useMemo } from 'react';
 import getColumn from './Column';
-import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 
 export default function Index({
 	item_name,
@@ -24,11 +24,5 @@ export default function Index({
 		[order_entry]
 	);
 
-	return (
-		<ReactTableTitleOnly
-			title='Details'
-			data={order_entry}
-			columns={columns}
-		/>
-	);
+	return <ReactTable title='Details' data={order_entry} columns={columns} />;
 }

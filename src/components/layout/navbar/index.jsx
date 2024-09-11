@@ -1,9 +1,9 @@
+import cn from '@/lib/cn';
 import GlobalBreadcrumbs from '@/ui/Others/GlobalBreadcrumbs';
+import { useResolvedPath } from 'react-router-dom';
 import BrandLogo from '../brand-logo';
 import SidebarCollapse from '../sidebar/sidebar-collapse';
 import SidebarMobileToggle from '../sidebar/sidebar-mobile-toggle';
-import { useResolvedPath } from 'react-router-dom';
-import cn from '@/lib/cn';
 
 const Navbar = () => {
 	const { pathname } = useResolvedPath();
@@ -17,10 +17,10 @@ const Navbar = () => {
 
 				<div
 					className={cn(
-						'flex items-center gap-6 bg-base-200 px-4 py-2 md:px-0 md:py-0',
+						'flex items-center gap-6 bg-base-200 px-2 py-0.5 md:px-0 md:py-0',
 						pathname === '/' && 'hidden md:block'
 					)}>
-					<div className='hidden h-full w-fit items-center border-r border-secondary/10 p-4 md:flex'>
+					<div className='hidden h-full w-fit items-center border-r border-secondary/10 md:flex md:p-2'>
 						<SidebarCollapse />
 					</div>
 					{pathname !== '/' && <GlobalBreadcrumbs />}

@@ -6,16 +6,16 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 export default function createGlobalState({ queryKey, url, enabled = true }) {
 	const queryClient = useQueryClient();
 
-	const { data, isError, isLoading, isPending, refetch } = useQuery({
-		queryKey: queryKey,
-		queryFn: () => defaultFetch(url),
-		refetchInterval: false,
-		refetchOnMount: false,
-		refetchOnWindowFocus: false,
-		refetchOnReconnect: false,
-		refetchIntervalInBackground: false,
-		enabled,
-	});
+	const { data, isError, isLoading, isPending, refetch, isFetching, status } =
+		useQuery({
+			queryKey,
+			queryFn: () => defaultFetch(url),
+			refetchOnMount: true,
+			refetchOnWindowFocus: true,
+			refetchOnReconnect: true,
+			refetchIntervalInBackground: false,
+			enabled,
+		});
 
 	const postData = useMutation({
 		mutationFn: async ({ url, newData }) => {
@@ -101,15 +101,21 @@ export default function createGlobalState({ queryKey, url, enabled = true }) {
 
 	return {
 		url,
+		// * Data
 		data: data?.data,
 		toast: data?.toast,
-		invalidateQuery: () => queryClient.invalidateQueries({ queryKey }),
+		// * States
 		isLoading,
 		isError,
 		isPending,
+		isFetching,
+		status,
+		// * Mutations
 		updateData,
 		postData,
 		deleteData,
+		// * Refetch
 		refetch,
+		invalidateQuery: () => queryClient.invalidateQueries({ queryKey }),
 	};
 }

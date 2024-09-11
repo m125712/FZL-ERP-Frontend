@@ -20,6 +20,8 @@ const FilterColumn = ({
 			?.getValue(column.id) || null;
 
 	if (!firstValue) return null;
+	
+	console.log(typeof firstValue, column.id, firstValue);
 
 	if (typeof firstValue === 'number')
 		return <FilterNumber {...{ columnName, column, isFullFilter }} />;

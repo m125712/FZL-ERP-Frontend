@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 const DashboardHeader = () => {
 	const { user } = useAuth();
 	return (
-		<div>
+		<div className='flex flex-col'>
 			<h2 className='text-2xl font-medium text-primary'>
 				Welcome Back, {user?.name}!
 			</h2>

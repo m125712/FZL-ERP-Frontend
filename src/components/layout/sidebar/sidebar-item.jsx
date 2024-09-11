@@ -1,5 +1,5 @@
-import SidebarFolder from './sidebar-folder';
 import SidebarFile from './sidebar-file';
+import SidebarFolder from './sidebar-folder';
 
 const SidebarItem = ({ path, name, children, disableCollapse }) => {
 	return children ? (

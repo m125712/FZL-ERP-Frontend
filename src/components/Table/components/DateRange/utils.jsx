@@ -89,7 +89,7 @@ export const getMinMaxDate = (getFacetedUniqueValues) => {
 	);
 
 	// console.log({
-	// 	minMaxDate,
+	// 	// minMaxDate,
 	// 	min: new Date(minMaxDate?.min),
 	// 	max: new Date(minMaxDate?.max),
 	// });

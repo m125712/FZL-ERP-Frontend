@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { useLayout } from '../layout-provider';
 import { Menu } from 'lucide-react';
+import { useLayout } from '../layout-provider';
 
 const SidebarMobileToggle = () => {
 	const { setSidebarOpen } = useLayout();

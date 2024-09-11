@@ -1,7 +1,7 @@
-import { Outlet, useResolvedPath } from 'react-router-dom';
-import Navbar from './navbar';
-import LayoutProvider from './layout-provider';
 import GlobalBreadcrumbs from '@/ui/Others/GlobalBreadcrumbs';
+import { Outlet, useResolvedPath } from 'react-router-dom';
+import LayoutProvider from './layout-provider';
+import Navbar from './navbar';
 import Sidebar from './sidebar';
 
 const Layout = () => {

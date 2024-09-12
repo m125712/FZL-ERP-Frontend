@@ -17,15 +17,15 @@ const LayoutProvider = ({ children }) => {
 	const [sidebarOpen, setSidebarOpen] = useState(true);
 	const [isCollapsed, setIsCollapsed] = useState(false);
 
-	// Get the authentication state from the context
+	//* Get the authentication state from the context
 	const { signed, loading } = useAuth();
 
-	// Render a loading indicator while authentication is in progress
+	//* Render a loading indicator while authentication is in progress
 	if (loading) {
 		return <span className='loading loading-dots loading-lg z-50' />;
 	}
 
-	// If the user is not signed in, redirect to the login page
+	//* If the user is not signed in, redirect to the login page
 	if (!signed) {
 		return <Navigate to='/login' replace={true} />;
 	}

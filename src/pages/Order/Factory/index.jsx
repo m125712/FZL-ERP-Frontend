@@ -1,9 +1,11 @@
-import { Suspense } from '@/components/Feedback';
-import ReactTable from '@/components/Table';
+import { lazy, useEffect, useState } from 'react';
 import { useAccess } from '@/hooks';
 import { useOrderFactory } from '@/state/Order';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useState } from 'react';
+
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+
 import { FactoryColumns } from '../columns';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));

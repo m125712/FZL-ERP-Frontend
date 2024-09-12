@@ -20,8 +20,7 @@ function filterSidebarRoutes(routes) {
 		});
 	}
 
-	const cloneRoutes = routes.map((e) => ({ ...e }));
-	return filterRecursive(cloneRoutes);
+	return filterRecursive(routes);
 }
 
 export default filterSidebarRoutes;

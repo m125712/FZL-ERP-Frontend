@@ -1,7 +1,8 @@
-import { ShowToast } from '@/components/Toast';
-import { useCookie, useLocalStorage } from '@/hooks';
-import { api } from '@lib/api';
 import { createContext, useContext, useEffect, useState } from 'react';
+import { useCookie, useLocalStorage } from '@/hooks';
+
+import { api } from '@/lib/api';
+import { ShowToast } from '@/components/Toast';
 
 const AuthContext = createContext({});
 
@@ -42,10 +43,6 @@ const AuthProvider = ({ children }) => {
 
 			setUser(userData);
 			setCanAccess(can_access);
-
-			console.log(res);
-
-			// ShowToast(res);
 
 			if (token && userData) return (window.location.href = '/');
 

@@ -1,7 +1,8 @@
-import { ShowToast } from '@/components/Toast';
 import { defaultFetch } from '@/hooks';
-import { api } from '@/lib/api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { api } from '@/lib/api';
+import { ShowToast } from '@/components/Toast';
 
 export default function createGlobalState({ queryKey, url, enabled = true }) {
 	const queryClient = useQueryClient();
@@ -10,9 +11,10 @@ export default function createGlobalState({ queryKey, url, enabled = true }) {
 		useQuery({
 			queryKey,
 			queryFn: () => defaultFetch(url),
-			refetchOnMount: true,
+			refetchInterval: false,
+			refetchOnMount: false,
 			refetchOnWindowFocus: true,
-			refetchOnReconnect: true,
+			refetchOnReconnect: false,
 			refetchIntervalInBackground: false,
 			enabled,
 		});

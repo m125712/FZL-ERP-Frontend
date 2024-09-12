@@ -1,3 +1,9 @@
+import React, { useMemo, useState } from 'react';
+import { useAccess } from '@/hooks';
+import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
+import { DateTime, EditDelete } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
@@ -10,7 +16,6 @@ import AddOrUpdate from './AddOrUpdate';
 
 export default function TapeToCoil() {
 	const { data, isLoading, url, deleteData } = useCommonTapeToCoil();
-	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 	const info = new PageInfo('Tape -> Coil', 'tape-to-coil-trx');
 	const haveAccess = useAccess('common__tape_log');
 
@@ -131,7 +136,6 @@ export default function TapeToCoil() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateCommonTapeSFG();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

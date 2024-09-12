@@ -1,17 +1,34 @@
-import { DeleteModal } from '@/components/Modal';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useOrderDescription, useOrderDetails } from '@/state/Order';
 import { ActionButtons, DynamicField, Input, JoinInput, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { ORDER_NULL, ORDER_SCHEMA } from '@util/Schema';
-import { Suspense, useCallback, useEffect, useState } from 'react';
-import { HotKeys, configure } from 'react-hotkeys';
+import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import Spreadsheet, { createEmptyMatrix } from 'react-spreadsheet';
 
+import nanoid from '@/lib/nanoid';
+import { DeleteModal } from '@/components/Modal';
+
+import { SelectEdit, SelectView } from './CC';
 import Header from './Header';
+
+export function getRowsCount(matrix) {
+	return matrix.length;
+}
+export function getColumnsCount(matrix) {
+	const firstRow = matrix[0];
+	return firstRow ? firstRow.length : 0;
+}
+export function getSize(matrix) {
+	return {
+		columns: getColumnsCount(matrix),
+		rows: getRowsCount(matrix),
+	};
+}
 
 export default function Index() {
 	const { url, updateData, postData, deleteData } = useOrderDescription();
@@ -156,7 +173,6 @@ export default function Index() {
 							0
 						);
 
-
 			const slider_info = {
 				order_quantity: slider_quantity,
 				updated_at: GetDateTime(),
@@ -293,6 +309,85 @@ export default function Index() {
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
+	// * Spreadsheet */
+	// const columnLabels = [
+	// 	'Style',
+	// 	'Color',
+	// 	'Size',
+	// 	'Quantity',
+	// 	'Price (USD) (Com)',
+	// 	'Price (USD) (Party)',
+	// 	'Action',
+	// ];
+
+	// const arr = [
+	// 	...orderEntryField.map((item, index) => {
+	// 		return [
+	// 			{
+	// 				value: item.style,
+	// 			},
+	// 			{
+	// 				value: item.color,
+	// 			},
+	// 			{
+	// 				value: item.size,
+	// 			},
+	// 			{
+	// 				value: item.quantity,
+	// 			},
+	// 			{
+	// 				value: item.company_price,
+	// 			},
+	// 			{
+	// 				value: item.party_price,
+	// 			},
+	// 			{
+	// 				value: undefined,
+	// 				DataViewer: ({ cell }) => {
+	// 					return (
+	// 						<ActionButtons
+	// 							duplicateClick={() =>
+	// 								handelDuplicateDynamicField(index)
+	// 							}
+	// 							removeClick={() =>
+	// 								handleOrderEntryRemove(index)
+	// 							}
+	// 							showRemoveButton={orderEntryField.length > 1}
+	// 						/>
+	// 					);
+	// 				},
+	// 				DataEditor: ({ cell, onChange, exitEditMode }) => {
+	// 					return (
+	// 						<ActionButtons
+	// 							duplicateClick={() =>
+	// 								handelDuplicateDynamicField(index)
+	// 							}
+	// 							removeClick={() =>
+	// 								handleOrderEntryRemove(index)
+	// 							}
+	// 							showRemoveButton={orderEntryField.length > 1}
+	// 						/>
+	// 					);
+	// 				},
+	// 				className: 'bg-red-100 flex flex-col items-center',
+	// 			},
+	// 		];
+	// 	}),
+	// ];
+
+	// const addRow = () => {
+	// 	orderEntryAppend({
+	// 		style: '',
+	// 		color: '',
+	// 		size: '',
+	// 		quantity: '',
+	// 		company_price: 0,
+	// 		party_price: 0,
+	// 		status: 1,
+	// 		remarks: '',
+	// 	});
+	// };
+
 	return (
 		<div>
 			<HotKeys {...{ keyMap, handlers }}>
@@ -300,6 +395,17 @@ export default function Index() {
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
 					className='flex flex-col gap-4'>
+					{/* <div>
+						<button type='button' onClick={addRow}>
+							Add row
+						</button>
+					</div>
+					<Spreadsheet
+						className='flex w-full'
+						columnLabels={columnLabels}
+						data={arr}
+					/> */}
+
 					<Header
 						{...{
 							register,

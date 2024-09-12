@@ -16,10 +16,11 @@ export default function Index() {
 			{/* <RMOrderAgainstLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' /> */}
 			<ProductionLog />
+			
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<TapeToCoil />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
-			<TapeToDying />
+			<TapeToDying /> 
 		</div>
 	);
 }

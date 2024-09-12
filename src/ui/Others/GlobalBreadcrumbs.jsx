@@ -1,8 +1,9 @@
-import cn from '@/lib/cn';
 import { motion } from 'framer-motion';
 import { House } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useBreadcrumbs from 'use-react-router-breadcrumbs';
+
+import cn from '@/lib/cn';
 
 const variants = {
 	animate: {
@@ -24,16 +25,6 @@ const GlobalBreadcrumbs = () => {
 	const breadcrumbs = useBreadcrumbs();
 
 	const items = breadcrumbs.map((e) => {
-		// const existedRoute = flatRoutes.find(
-		// 	(route) => route.path === e.match?.pathname
-		// );
-
-		// if (existedRoute)
-		// 	return {
-		// 		label: existedRoute.name,
-		// 		href: e.match?.pathname,
-		// 	};
-
 		if (e.match?.pathname === '/') {
 			return {
 				label: <House className='size-5' />,

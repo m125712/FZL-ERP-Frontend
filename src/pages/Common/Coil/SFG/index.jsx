@@ -74,6 +74,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
+			
 
 			{
 				accessorKey: 'action',
@@ -141,7 +142,7 @@ export default function Index() {
 		// window['trx_to_dying_modal'].showModal();
 		navigate(`/common/coil/sfg/entry-to-dyeing/${data[idx].uuid}`);
 	};
-	console.log(data);
+
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

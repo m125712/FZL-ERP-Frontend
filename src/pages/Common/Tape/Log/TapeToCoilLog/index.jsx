@@ -7,7 +7,11 @@ import PageInfo from '@/util/PageInfo';
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-
+import { useAccess } from '@/hooks';
+import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
+import { DateTime, EditDelete } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+import React, { useMemo, useState } from 'react';
 import AddOrUpdate from './AddOrUpdate';
 
 export default function TapeToCoil() {
@@ -73,7 +77,9 @@ export default function TapeToCoil() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_tape_to_coil'),
+				hidden:
+					!haveAccess.includes('click_update_tape_to_coil') &&
+					!haveAccess.includes('click_delete_tape_to_coil'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -83,6 +89,9 @@ export default function TapeToCoil() {
 							handelDelete={handelDelete}
 							showDelete={haveAccess.includes(
 								'click_delete_tape_to_coil'
+							)}
+							showUpdate={haveAccess.includes(
+								'click_update_tape_to_coil'
 							)}
 						/>
 					);

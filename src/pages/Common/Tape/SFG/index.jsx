@@ -1,9 +1,10 @@
 import { Suspense } from '@/components/Feedback';
+import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetchFunc } from '@/hooks';
 import { useCommonTapeSFG } from '@/state/Common';
 
-import { DateTime, Transfer } from '@/ui';
+import { DateTime, EditDelete, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -14,10 +15,11 @@ const Production = lazy(() => import('./Production'));
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const { data, isLoading, url } = useCommonTapeSFG();
+	const { data, isLoading, url, deleteData } = useCommonTapeSFG();
 	const info = new PageInfo('Common/Tape/SFG', url, 'common__tape_sfg');
 	const haveAccess = useAccess(info.getTab());
 	const navigate = useNavigate();
+	console.log(data);
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -26,8 +28,8 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'type',
-				header: 'Type',
+				accessorKey: 'item_name',
+				header: 'Item',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
@@ -40,12 +42,60 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'is_import',
+				header: 'Is Imported',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_reverse',
+				header: 'Is Reverse',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'top',
+				header: 'Top',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'bottom',
+				header: 'Bottom',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'raw_mtr_per_kg',
+				header: 'Raw Tape (Meter/Kg)',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'dyed_mtr_per_kg',
+				header: 'Dyed Tape (Meter/Kg)',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'trx_quantity_in_coil',
+				header: 'Trx Quantity In Coil',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'quantity_in_coil',
+				header: 'Quantity In Coil',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'actions1',
 				header: 'Production Action',
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_production'),
-				width: 'w-24',
+				width: 'w-34',
 				cell: (info) => (
 					<Transfer
 						onClick={() => handelProduction(info.row.index)}
@@ -64,6 +114,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
@@ -78,7 +129,7 @@ export default function Index() {
 				hidden: !haveAccess.includes('click_to_coil'),
 				width: 'w-24',
 				cell: (info) =>
-					info.row.original.type.toLowerCase() === 'nylon' && (
+					info.row.original?.item_name?.toLowerCase() === 'nylon' && (
 						<Transfer
 							onClick={() => handleTrxToCoil(info.row.index)}
 						/>
@@ -92,11 +143,52 @@ export default function Index() {
 				hidden: !haveAccess.includes('click_to_dyeing'),
 				width: 'w-24',
 				cell: (info) =>
-					info.row.original.type.toLowerCase() === 'nylon' ? null : (
+					info.row.original?.item_name?.toLowerCase() ===
+					'nylon' ? null : (
 						<Transfer
 							onClick={() => handleTrxToDying(info.row.index)}
 						/>
 					),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'actions',
+				header: 'Actions',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
+				width: 'w-24',
+				cell: (info) => {
+					return (
+						<EditDelete
+							idx={info.row.index}
+							handelUpdate={handelUpdate}
+							handelDelete={handelDelete}
+							showDelete={haveAccess.includes('delete')}
+							showUpdate={haveAccess.includes('update')}
+						/>
+					);
+				},
 			},
 		],
 		[data]
@@ -158,6 +250,31 @@ export default function Index() {
 		navigate(`/common/tape/sfg/entry-to-dyeing/${data[idx].uuid}`);
 	};
 
+	const handelUpdate = (idx) => {
+		const selectedProd = data[idx];
+		setUpdateTapeProd((prev) => ({
+			...prev,
+			...selectedProd,
+			uuid: data[idx]?.uuid,
+		}));
+		window[info.getAddOrUpdateModalId()].showModal();
+	};
+	// Delete
+	const [deleteItem, setDeleteItem] = useState({
+		itemId: null,
+		itemName: null,
+	});
+	const handelDelete = (idx) => {
+		setDeleteItem((prev) => ({
+			...prev,
+			itemId: data[idx].uuid,
+			itemName:
+				data[idx].order_number + ' - ' + data[idx].item_description,
+		}));
+
+		window[info.getDeleteModalId()].showModal();
+	};
+
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
@@ -196,12 +313,24 @@ export default function Index() {
 						setUpdateTapeProd,
 					}}
 				/>
-			
+
 				<TrxToDying
 					modalId={'trx_to_dying_modal'}
 					{...{
 						updateTapeProd,
 						setUpdateTapeProd,
+					}}
+				/>
+			</Suspense>
+			<Suspense>
+				<DeleteModal
+					modalId={info.getDeleteModalId()}
+					title={info.getTitle()}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url,
+						deleteData,
 					}}
 				/>
 			</Suspense>

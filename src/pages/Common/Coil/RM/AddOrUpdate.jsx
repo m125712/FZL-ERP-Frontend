@@ -1,11 +1,13 @@
 import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
 import { useAuth } from '@/context/auth';
 import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useCommonMaterialUsed, useCommonCoilRMLog } from '@/state/Common';
+import { useCommonCoilRMLog, useCommonMaterialUsed } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
+import { useCallback } from 'react';
 
 export default function Index({
 	modalId = '',
@@ -24,13 +26,19 @@ export default function Index({
 		used_quantity: RM_MATERIAL_USED_SCHEMA.remaining.max(
 			updateCoilStock?.coil_forming
 		),
-		wastage: RM_MATERIAL_USED_SCHEMA.remaining.max(MAX_QUANTITY),
+		wastage: RM_MATERIAL_USED_SCHEMA.remaining,
 	};
 
 	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
 		schema,
 		RM_MATERIAL_USED_NULL
 	);
+	const getTotalQty = useCallback(
+		(used_quantity) => Number(used_quantity),
+		[watch()]
+	);
+
+	const MAX_WASTAGE = MAX_QUANTITY - watch('used_quantity');
 
 	const onClose = () => {
 		setUpdateCoilStock((prev) => ({
@@ -44,6 +52,13 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
+		if (MAX_WASTAGE < watch('wastage')) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		const updatedData = {
 			...data,
 

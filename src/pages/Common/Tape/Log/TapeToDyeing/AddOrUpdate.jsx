@@ -1,23 +1,32 @@
 import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
-import { FormField, Input, ReactSelect } from '@/ui';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 
+import { useCommonCoilToDyeingByUUID, useCommonTapeSFG } from '@/state/Common';
+import { useOtherMaterial } from '@/state/Other';
 import {
-	COMMON_COIL_TO_DYEING_NULL,
-	COMMON_COIL_TO_DYEING_SCHEMA,
+	COMMON_COIL_TO_DYEING_LOG_NULL,
+	COMMON_COIL_TO_DYEING_LOG_SCHEMA,
 } from '@util/Schema';
 import { useEffect } from 'react';
-import { useCommonCoilToDyeingByUUID } from '@/state/Common';
+import { Schema } from 'yup';
 
 export default function Index({
 	modalId = '',
 	order_id,
-	entry = { uuid: null, trx_quantity: null, remarks: null },
+	entry = { uuid: null, trx_quantity: null, tape_prod: null, remarks: null },
 	setEntry,
 }) {
 	const { data, url, updateData } = useCommonCoilToDyeingByUUID(entry?.uuid);
-
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
+	const { data: material } = useOtherMaterial();
+	const MAX_QTY = Number(entry?.trx_quantity) + Number(entry?.tape_prod);
+	const schema = {
+		...COMMON_COIL_TO_DYEING_LOG_SCHEMA,
+		trx_quantity:
+			COMMON_COIL_TO_DYEING_LOG_SCHEMA.trx_quantity.max(MAX_QTY),
+	};
 	const {
 		register,
 		handleSubmit,
@@ -26,14 +35,14 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		context
-	} = useRHF(COMMON_COIL_TO_DYEING_SCHEMA, COMMON_COIL_TO_DYEING_NULL);
+		context,
+	} = useRHF(schema, COMMON_COIL_TO_DYEING_LOG_NULL);
 
-	useEffect(() => {
-		if (data) {
-			reset(data[0]);
-		}
-	}, [data]);
+	useFetchForRhfReset(
+		`/zipper/tape-coil-to-dyeing/${entry?.uuid}`,
+		entry?.uuid,
+		reset
+	);
 
 	const onClose = () => {
 		setEntry(() => ({
@@ -42,10 +51,9 @@ export default function Index({
 			remarks: null,
 		}));
 
-		reset(COMMON_COIL_TO_DYEING_NULL);
+		reset(COMMON_COIL_TO_DYEING_LOG_NULL);
 		window[modalId].close();
 	};
-
 
 	const onSubmit = async (data) => {
 		// Update item
@@ -55,12 +63,12 @@ export default function Index({
 				updated_at: GetDateTime(),
 			};
 
-			console.log('updatedData', updatedData);
 			await updateData.mutateAsync({
 				url,
 				updatedData: updatedData,
 				onClose,
 			});
+			invalidateCommonTapeSFG();
 
 			return;
 		}
@@ -100,7 +108,13 @@ export default function Index({
 			</FormField>
 			<Input
 				label='trx_quantity'
-				sub_label={`Max: ${Number(getValues('max_trf_qty'))}`} //  Max For This Order: ${getMaxQuantity()}
+				sub_label={`Max: ${MAX_QTY}`}
+				//sub_label={`Max: ${Number(getValues('max_trf_qty'))}`} //  Max For This Order: ${getMaxQuantity()}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

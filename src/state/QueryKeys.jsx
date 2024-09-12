@@ -180,6 +180,7 @@ export const commonQK = {
 	// * tapeSFG
 	tapeSFG: () => [...commonQK.all(), 'tape/SFG'],
 	tapeSFGByUUID: (uuid) => [...commonQK.tapeSFG(), uuid],
+
 	// * tapeProduction
 	tapeProduction: () => [...commonQK.all(), 'tape/production'],
 	tapeProductionByUUID: (uuid) => [...commonQK.tapeProduction(), uuid],
@@ -187,6 +188,7 @@ export const commonQK = {
 	// * tapeToCoil
 	tapeToCoil: () => [...commonQK.all(), 'tape/to-coil'],
 	tapeToCoilByUUID: (uuid) => [...commonQK.tapeToCoil(), uuid],
+
 	// * tapeRM
 	tapeRM: () => [...commonQK.all(), 'tape/rm'],
 	tapeRMByUUID: (uuid) => [...commonQK.tapeRM(), uuid],
@@ -204,6 +206,7 @@ export const commonQK = {
 		...commonQK.orderAgainstTapeRMLog(),
 		uuid,
 	],
+
 	// * coilSFG
 	coilSFG: () => [...commonQK.all(), 'coil/SFG'],
 	coilSFGByUUID: (uuid) => [...commonQK.coilSFG(), uuid],
@@ -215,9 +218,11 @@ export const commonQK = {
 	// * coilRM
 	coilRM: () => [...commonQK.all(), 'coil/rm'],
 	coilRMByUUID: (uuid) => [...commonQK.coilRM(), uuid],
+
 	// * coilRMLog
 	coilRMLog: () => [...commonQK.all(), 'coil/rm-log'],
 	coilRMLogByUUID: (uuid) => [...commonQK.coilRMLog(), uuid],
+
 	// * materialUsed
 	materialUsed: () => [...commonQK.all(), 'material/used'],
 	materialUsedByUUID: (uuid) => [...commonQK.materialUsed(), uuid],
@@ -231,6 +236,7 @@ export const commonQK = {
 		...commonQK.orderAgainstCoilRMLog(),
 		uuid,
 	],
+	
 	// * MATERIAL TRX *//
 	materialTrx: () => [...commonQK.all(), 'material/trx'],
 	materialTrxByUUID: (uuid) => [...commonQK.materialTrx(), uuid],

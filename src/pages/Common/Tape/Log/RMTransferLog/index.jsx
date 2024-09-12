@@ -94,7 +94,9 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_rm'),
+				hidden:
+					!haveAccess.includes('click_update_rm') &&
+					!haveAccess.includes('click_delete_rm'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -103,6 +105,7 @@ export default function Index() {
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
 							showDelete={haveAccess.includes('click_delete_rm')}
+							showUpdate={haveAccess.includes('click_update_rm')}
 						/>
 					);
 				},
@@ -110,8 +113,6 @@ export default function Index() {
 		],
 		[data]
 	);
-
-	console.log(data);
 
 	// Update
 	const [updateTapeLog, setUpdateTapeLog] = useState({
@@ -146,8 +147,8 @@ export default function Index() {
 		}));
 
 		window[info.getDeleteModalId()].showModal();
-		invalidateCommonTapeRM();
 	};
+	invalidateCommonTapeRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

@@ -1,9 +1,10 @@
 import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 import {
 	useCommonTapeProductionByUUID,
 	useCommonTapeSFG,
 } from '@/state/Common';
+import { useOtherMaterial } from '@/state/Other';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -30,18 +31,20 @@ export default function Index({
 		updateTapeLog?.uuid
 	);
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
+	const { data: material } = useOtherMaterial();
 
-	const { register, handleSubmit, errors, reset, context } = useRHF(
-		TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
-		TAPE_OR_COIL_PRODUCTION_LOG_NULL
+	const { register, handleSubmit, errors, reset, context, getValues } =
+		useRHF(
+			TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
+			TAPE_OR_COIL_PRODUCTION_LOG_NULL
+		);
+
+	useFetchForRhfReset(
+		`/zipper/tape-coil-production/${updateTapeLog?.uuid}`,
+		updateTapeLog?.uuid,
+		reset
 	);
-
-	useEffect(() => {
-		if (data) {
-			reset(data[0]);
-		}
-	}, [data]);
-
+	
 	const onClose = () => {
 		setUpdateTapeLog((prev) => ({
 			...prev,
@@ -59,6 +62,7 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
+		
 		// Update item
 		if (updateTapeLog?.uuid !== null && updateTapeLog?.uuid !== undefined) {
 			const updatedData = {
@@ -85,19 +89,17 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<JoinInput
+			<Input
 				title='Production Quantity'
 				label='production_quantity'
 				//sub_label={`Min: ${//MIN_QUANTITY}`}
-				unit='KG'
 				//placeholder={`Min: ${//MIN_QUANTITY}`}
 				{...{ register, errors }}
 			/>
-			<JoinInput
+			<Input
 				title='Wastage'
 				label='wastage'
 				//sub_label={`Min: ${//MIN_QUANTITY}`}
-				unit='KG'
 				//placeholder={`Min: ${//MIN_QUANTITY}`}
 				{...{ register, errors }}
 			/>

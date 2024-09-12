@@ -1,6 +1,8 @@
 import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 import { useCommonMaterialUsedByUUID, useCommonTapeRM } from '@/state/Common';
+import { useOtherMaterial } from '@/state/Other';
 import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
@@ -21,6 +23,8 @@ export default function Index({
 	setUpdateTapeLog,
 }) {
 	const { updateData } = useCommonTapeRM();
+	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
+	const { data: material } = useOtherMaterial();
 	const MAX_QUANTITY =
 		Number(updateTapeLog?.tape_making) +
 		Number(updateTapeLog?.used_quantity);
@@ -65,6 +69,13 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
+		if (MAX_WASTAGE < watch('wastage')) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		// Update item
 		if (updateTapeLog?.uuid !== null) {
 			const updatedData = {
@@ -77,7 +88,7 @@ export default function Index({
 				updatedData,
 				onClose,
 			});
-
+			invalidateCommonTapeRM();
 			return;
 		}
 	};
@@ -114,13 +125,21 @@ export default function Index({
 			<JoinInput
 				label='used_quantity'
 				sub_label={`Max: ${MAX_QUANTITY}`}
-				unit={updateTapeLog?.unit}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
 			<JoinInput
 				label='wastage'
 				sub_label={`Max: ${MAX_WASTAGE}`}
-				unit={updateTapeLog?.unit}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
 			<Textarea label='remarks' {...{ register, errors }} />

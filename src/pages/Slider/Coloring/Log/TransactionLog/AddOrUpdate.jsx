@@ -1,14 +1,16 @@
-import { AddModal } from '@/components/Modal';
+import { useEffect } from 'react';
 import { useRHF, useUpdateFunc } from '@/hooks';
+import { useSliderAssemblyTransferEntryByUUID } from '@/state/Slider';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
-import {
-	SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
-	SLIDER_ASSEMBLY_TRANSACTION_NULL,
-} from '@util/Schema';
-import { useSliderAssemblyTransferEntryByUUID } from '@/state/Slider';
-import { useEffect } from 'react';
 import { DevTool } from '@hookform/devtools';
+import {
+	NUMBER_REQUIRED,
+	SLIDER_ASSEMBLY_TRANSACTION_NULL,
+	SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
+} from '@util/Schema';
+
+import { AddModal } from '@/components/Modal';
 
 export default function Index({
 	modalId = '',
@@ -18,6 +20,7 @@ export default function Index({
 		slider_item_uuid: null,
 		trx_from: null,
 		trx_to: null,
+		max_trx_to_finishing_quantity: null,
 		trx_quantity: null,
 		remarks: '',
 	},
@@ -27,9 +30,6 @@ export default function Index({
 		updateSliderTrx?.uuid
 	);
 
-	const MAX_QUANTITY =
-		updateSliderTrx?.slider_assembly_prod + updateSliderTrx?.trx_quantity;
-
 	const {
 		register,
 		handleSubmit,
@@ -38,16 +38,22 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		context
+		context,
 	} = useRHF(
-		SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
+		{
+			...SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
+			trx_quantity: NUMBER_REQUIRED.max(
+				updateSliderTrx?.max_trx_to_finishing_quantity,
+				'Beyond Max Quantity'
+			),
+		},
 		SLIDER_ASSEMBLY_TRANSACTION_NULL
 	);
 
 	// * To reset the form with the fetched data
 	useEffect(() => {
 		if (data) {
-			reset(data[0]); // Reset the form with the fetched data
+			reset(data); // Reset the form with the fetched data
 		}
 	}, [data, reset]);
 
@@ -59,6 +65,7 @@ export default function Index({
 			slider_item_uuid: null,
 			trx_from: null,
 			trx_to: null,
+			max_trx_to_finishing_quantity: null,
 			trx_quantity: null,
 			remarks: '',
 		}));
@@ -108,7 +115,7 @@ export default function Index({
 			<JoinInput
 				label='trx_quantity'
 				unit='PCS'
-				sub_label={`Max: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${updateSliderTrx?.max_trx_to_finishing_quantity} PCS`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

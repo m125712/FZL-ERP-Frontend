@@ -139,6 +139,7 @@ export default function Index() {
 		trx_from: null,
 		trx_to: null,
 		trx_quantity: null,
+		max_trx_to_finishing_quantity: null,
 		remarks: '',
 	});
 

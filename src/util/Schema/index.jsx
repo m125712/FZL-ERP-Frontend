@@ -980,12 +980,12 @@ export const COMMON_COIL_TO_DYEING_NULL = {
 	],
 };
 export const COMMON_COIL_TO_DYEING_LOG_SCHEMA = {
-	order_id: UUID_REQUIRED,
+	order_description_uuid: STRING_REQUIRED,
 	trx_quantity: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
 };
 export const COMMON_COIL_TO_DYEING_LOG_NULL = {
-	order_id: null,
+	order_description_uuid: null,
 	trx_quantity: null,
 	remarks: null,
 };

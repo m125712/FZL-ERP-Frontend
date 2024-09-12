@@ -19,6 +19,7 @@ export default function Index({
 		stock_uuid: null,
 		from_section: null,
 		to_section: null,
+		max_trx_to_finishing_quantity: null,
 		trx_quantity: null,
 		remarks: '',
 	},
@@ -41,7 +42,7 @@ export default function Index({
 		{
 			...SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
 			trx_quantity: NUMBER_REQUIRED.max(
-				yup.ref('max_sa_quantity'),
+				updateSliderTrx?.max_trx_to_finishing_quantity,
 				'Beyond Max Quantity'
 			),
 		},
@@ -55,7 +56,6 @@ export default function Index({
 		}
 	}, [data, reset]);
 
-	console.log(getValues());
 	const onClose = () => {
 		setUpdateSliderTrx((prev) => ({
 			...prev,
@@ -63,6 +63,7 @@ export default function Index({
 			stock_uuid: null,
 			from_section: null,
 			to_section: null,
+			max_trx_to_finishing_quantity: null,
 			trx_quantity: null,
 			remarks: '',
 		}));
@@ -112,7 +113,7 @@ export default function Index({
 			<JoinInput
 				label='trx_quantity'
 				unit='PCS'
-				sub_label={`Max: ${Number(getValues('max_sa_quantity'))} PCS`}
+				sub_label={`Max: ${Number(updateSliderTrx?.max_trx_to_finishing_quantity)} PCS`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

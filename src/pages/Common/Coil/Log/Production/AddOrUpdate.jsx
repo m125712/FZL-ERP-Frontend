@@ -22,7 +22,7 @@ export default function Index({
 		tape_coil_uuid: null,
 		production_quantity: null,
 		quantity: null,
-		coil_stock: null,
+		trx_quantity_in_coil: null,
 		wastage: null,
 		created_by_name: null,
 	},
@@ -34,19 +34,23 @@ export default function Index({
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
 	const { data: material } = useOtherMaterial();
 
-	const MAX_QUANTITY =
-		Number(updateCoilLog.trx_quantity_in_coil) +
-		Number(updateCoilLog.production_quantity);
-	const schema = {
-		...TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
-		production_quantity:
-			TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA.production_quantity.max(
-				MAX_QUANTITY
-			),
-	};
+	// const MAX_QUANTITY =
+	// 	Number(updateCoilLog?.trx_quantity_in_coil) +
+	// 	Number(updateCoilLog?.production_quantity)+Number(updateCoilLog?.wastage);
+	// const schema = {
+	// 	...TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
+	// 	production_quantity:
+	// 		TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA.production_quantity.max(
+	// 			MAX_PROD
+	// 		),
+	// 	wastage: TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA.wastage.max(MAX_WASTAGE),
+	// };
 
 	const { register, handleSubmit, errors, reset, context, getValues, watch } =
-		useRHF(schema, TAPE_OR_COIL_PRODUCTION_LOG_NULL);
+		useRHF(
+			TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
+			TAPE_OR_COIL_PRODUCTION_LOG_NULL
+		);
 
 	useFetchForRhfReset(
 		`/zipper/tape-coil-production/${updateCoilLog?.uuid}`,
@@ -69,11 +73,21 @@ export default function Index({
 		reset(TAPE_OR_COIL_PRODUCTION_LOG_NULL);
 		window[modalId].close();
 	};
-
-	const MAX_WASTAGE = MAX_QUANTITY - watch('production_quantity');
+	let MAX_PROD =
+		Number(updateCoilLog?.trx_quantity_in_coil) +
+		Number(updateCoilLog?.production_quantity) +
+		(Number(updateCoilLog?.wastage) - watch('wastage'));
+	let MAX_WASTAGE =
+		Number(updateCoilLog?.trx_quantity_in_coil) +
+		Number(updateCoilLog?.wastage) +
+		(Number(updateCoilLog?.production_quantity) -
+			watch('production_quantity'));
 
 	const onSubmit = async (data) => {
-		if (MAX_WASTAGE <= watch('wastage')) {
+		if (
+			MAX_WASTAGE < watch('wastage') ||
+			MAX_PROD < watch('production_quantity')
+		) {
 			ShowLocalToast({
 				type: 'error',
 				message: 'Beyond Stock',
@@ -109,8 +123,8 @@ export default function Index({
 			<Input
 				title='Production Quantity'
 				label='production_quantity'
-				sub_label={`Max: ${MAX_QUANTITY}`}
-				placeholder={`Max: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${MAX_PROD}`}
+				placeholder={`Max: ${MAX_PROD}`}
 				{...{ register, errors }}
 			/>
 			<Input

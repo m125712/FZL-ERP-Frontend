@@ -63,11 +63,9 @@ export default function Index() {
 				accessorKey: 'is_reverse',
 				header: 'Is Reverse',
 				enableColumnFilter: false,
-				cell: (info) => {
-					return Number(info.getValue()) === 1
-						? ' Reverse'
-						: 'Forward';
-				},
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
 			},
 			{
 				accessorKey: 'top',
@@ -132,7 +130,7 @@ export default function Index() {
 			},
 
 			{
-				accessorKey: 'actions',
+				accessorKey: 'coil_action',
 				header: 'To Coil',
 				enableColumnFilter: false,
 				enableSorting: false,
@@ -143,8 +141,8 @@ export default function Index() {
 						info.row.original?.item_name?.toLowerCase();
 
 					if (
-						itemName === 'nylon plastic' ||
-						itemName === 'nylon metallic'
+						itemName == 'nylon plastic' ||
+						itemName == 'nylon metallic'
 					) {
 						return (
 							<Transfer
@@ -231,7 +229,6 @@ export default function Index() {
 	const [updateTapeProd, setUpdateTapeProd] = useState({
 		uuid: null,
 		name: null,
-		type: null,
 		quantity: null,
 		item_name: null,
 		zipper_number: null,
@@ -243,10 +240,10 @@ export default function Index() {
 		setUpdateTapeProd((prev) => ({
 			...prev,
 			...selectedProd,
-			item_name: selectedProd.type,
+			item_name: selectedProd.item_name,
 			tape_or_coil_stock_id: selectedProd?.uuid,
 			type_of_zipper:
-				selectedProd.type + ' ' + selectedProd.zipper_number,
+				selectedProd.item_name + ' ' + selectedProd.zipper_number_name,
 		}));
 		window['TapeProdModal'].showModal();
 	};
@@ -263,7 +260,7 @@ export default function Index() {
 			item_name: selectedProd.type,
 			tape_or_coil_stock_id: selectedProd?.uuid,
 			type_of_zipper:
-				selectedProd.type + ' ' + selectedProd.zipper_number,
+				selectedProd.item_name + ' ' + selectedProd.zipper_number_name,
 			quantity: selectedProd.quantity,
 		}));
 		window['trx_to_coil_modal'].showModal();

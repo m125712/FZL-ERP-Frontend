@@ -136,6 +136,7 @@ export default function Index() {
 		stock_uuid: null,
 		from_section: null,
 		to_section: null,
+		max_trx_to_finishing_quantity: null,
 		trx_quantity: null,
 		remarks: '',
 	});

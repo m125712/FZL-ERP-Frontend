@@ -11,7 +11,7 @@ import {
 } from '@util/Schema';
 
 import nanoid from '@/lib/nanoid';
-import { useSliderAssemblyProductionEntry } from '@/state/Slider';
+import { useSliderAssemblyProductionEntry, useSliderColoringProduction } from '@/state/Slider';
 
 export default function Index({
 	modalId = '',
@@ -28,6 +28,7 @@ export default function Index({
 	setUpdateSliderProd,
 }) {
 	const { postData, url } = useSliderAssemblyProductionEntry();
+	const { invalidateQuery} = useSliderColoringProduction();
 	const { user } = useAuth();
 
 	const MAX_PROD_KG = Number(updateSliderProd.balance_quantity).toFixed(3);
@@ -82,6 +83,8 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateQuery();
 	};
 
 	return (

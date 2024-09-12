@@ -11,7 +11,7 @@ import {
 
 import { DevTool } from '@hookform/devtools';
 import nanoid from '@/lib/nanoid';
-import { useSliderAssemblyTransferEntry } from '@/state/Slider';
+import { useSliderAssemblyTransferEntry, useSliderColoringProduction } from '@/state/Slider';
 
 export default function Index({
 	modalId = '',
@@ -27,6 +27,7 @@ export default function Index({
 	setUpdateSliderTrx,
 }) {
 	const { postData, url } = useSliderAssemblyTransferEntry();
+	const { invalidateQuery} = useSliderColoringProduction();
 	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
@@ -61,19 +62,20 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			slider_item_uuid: updateSliderTrx?.uuid,
 			stock_uuid: updateSliderTrx?.uuid,
-			trx_from: 'coloring_prod',
-			trx_to: 'coloring_prod',
+			from_section: 'coloring_prod',
+			to_section: 'trx_to_finishing',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
 
 		await postData.mutateAsync({
-			url: '/zipper/sfg-transaction',
+			url: '/slider/transaction',
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateQuery();
 	};
 
 	return (

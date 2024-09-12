@@ -247,7 +247,7 @@ export const useSliderColoringLogProduction = () =>
 export const useSliderColoringLogTransaction = () =>
 	createGlobalState({
 		queryKey: sliderQK.sliderColoringLogTransaction(),
-		url: `/zipper/sfg-transaction/by/coloring_prod`,
+		url: `/slider/transaction/by/coloring_prod`,
 	});
 
 // * Slider coloring Production (Stock)

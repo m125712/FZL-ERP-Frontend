@@ -19,20 +19,21 @@ export default function Index({
 		used_quantity: null,
 		coil_forming: null,
 		unit: null,
+		wastage: null,
 	},
 	setUpdateCoilLog,
 }) {
 	const { updateData } = useCommonCoilRM();
 	const { data: material } = useOtherMaterial();
-	const MAX_QUANTITY =
-		Number(updateCoilLog?.coil_forming) +
-		Number(updateCoilLog?.used_quantity);
+	// const MAX_QUANTITY =
+	// 	Number(updateCoilLog?.coil_forming) +
+	// 	Number(updateCoilLog?.used_quantity);
 
-	const schema = {
-		...RM_MATERIAL_USED_EDIT_SCHEMA,
-		used_quantity:
-			RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
-	};
+	// const schema = {
+	// 	...RM_MATERIAL_USED_EDIT_SCHEMA,
+	// 	used_quantity:
+	// 		RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
+	// };
 
 	const {
 		register,
@@ -44,7 +45,15 @@ export default function Index({
 		getValues,
 		context,
 		watch,
-	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
+	} = useRHF(RM_MATERIAL_USED_EDIT_SCHEMA, RM_MATERIAL_USED_EDIT_NULL);
+	let MAX_PROD =
+		Number(updateCoilLog?.coil_forming) +
+		Number(updateCoilLog?.used_quantity) +
+		(Number(updateCoilLog?.wastage) - watch('wastage'));
+	let MAX_WASTAGE =
+		Number(updateCoilLog?.coil_forming) +
+		Number(updateCoilLog?.wastage) +
+		(Number(updateCoilLog?.used_quantity) - watch('used_quantity'));
 
 	useFetchForRhfReset(
 		`/material/used/${updateCoilLog?.uuid}`,
@@ -52,7 +61,7 @@ export default function Index({
 		reset
 	);
 
-	const MAX_WASTAGE = MAX_QUANTITY - watch('used_quantity');
+	// const MAX_WASTAGE = MAX_QUANTITY - watch('used_quantity');
 
 	const onClose = () => {
 		setUpdateCoilLog((prev) => ({
@@ -62,13 +71,17 @@ export default function Index({
 			used_quantity: null,
 			coil_forming: null,
 			unit: null,
+			wastage: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
-		if (MAX_WASTAGE <= watch('wastage')) {
+		if (
+			MAX_WASTAGE < watch('wastage') &&
+			MAX_PROD < watch('used_quantity')
+		) {
 			ShowLocalToast({
 				type: 'error',
 				message: 'Beyond Stock',
@@ -123,7 +136,7 @@ export default function Index({
 			</FormField>
 			<JoinInput
 				label='used_quantity'
-				sub_label={`Max: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${MAX_PROD}`}
 				unit={
 					material?.find(
 						(inItem) => inItem.value == getValues(`material_uuid`)

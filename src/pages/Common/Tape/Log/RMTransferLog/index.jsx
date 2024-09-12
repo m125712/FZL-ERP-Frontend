@@ -1,8 +1,8 @@
-import { useMemo, useState } from 'react';
 import { useAccess } from '@/hooks';
 import { useCommonTapeRM, useCommonTapeRMLog } from '@/state/Common';
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
+import { useMemo, useState } from 'react';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
@@ -122,6 +122,7 @@ export default function Index() {
 		material_name: null,
 		tape_making: null,
 		used_quantity: null,
+		wastage: null,
 	});
 
 	const handelUpdate = (idx) => {

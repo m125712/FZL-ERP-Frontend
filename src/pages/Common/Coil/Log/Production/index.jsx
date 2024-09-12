@@ -119,7 +119,7 @@ export default function ProductionLog() {
 		tape_or_coil_stock_id: null,
 		production_quantity: null,
 		tape_prod: null,
-		coil_stock: null,
+		trx_quantity_in_coil: null,
 		wastage: null,
 		issued_by_name: null,
 	});

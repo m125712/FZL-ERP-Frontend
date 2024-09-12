@@ -58,7 +58,6 @@ export default function Index() {
 			)
 		: useFetchForRhfResetForPlanning(`/zipper/order-batch`, reset);
 
-	// TODO: Submit
 	const onSubmit = async (data) => {
 		// * Update
 		if (isUpdate) {
@@ -363,8 +362,6 @@ export default function Index() {
 		[isAllChecked, isSomeChecked, BatchEntryField, register, errors]
 	);
 
-	console.log(isAllChecked);
-	console.log(getValues());
 
 	return (
 		<div>

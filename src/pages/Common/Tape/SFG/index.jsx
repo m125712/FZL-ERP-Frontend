@@ -63,11 +63,9 @@ export default function Index() {
 				accessorKey: 'is_reverse',
 				header: 'Is Reverse',
 				enableColumnFilter: false,
-				cell: (info) => {
-					return Number(info.getValue()) === 1
-						? ' Reverse'
-						: 'Forward';
-				},
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
 			},
 			{
 				accessorKey: 'top',
@@ -132,7 +130,7 @@ export default function Index() {
 			},
 
 			{
-				accessorKey: 'actions',
+				accessorKey: 'coil_action',
 				header: 'To Coil',
 				enableColumnFilter: false,
 				enableSorting: false,
@@ -143,8 +141,8 @@ export default function Index() {
 						info.row.original?.item_name?.toLowerCase();
 
 					if (
-						itemName === 'nylon plastic' ||
-						itemName === 'nylon metallic'
+						itemName == 'nylon plastic' ||
+						itemName == 'nylon metallic'
 					) {
 						return (
 							<Transfer

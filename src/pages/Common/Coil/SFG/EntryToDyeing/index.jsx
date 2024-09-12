@@ -168,7 +168,7 @@ export default function Index() {
 		// * Add new data*//
 		const created_at = GetDateTime();
 
-		if (MAX_TAPE_TRX_QTY <= 0) {
+		if (MAX_TAPE_TRX_QTY < 0) {
 			ShowLocalToast({
 				type: 'error',
 				message: 'Beyond Stock',
@@ -200,7 +200,11 @@ export default function Index() {
 			.then(() => reset(Object.assign({}, COMMON_COIL_TO_DYEING_NULL)))
 			.then(async () => {
 				// await OrderDetailsInvalidate(); common/tape/log
-				navigate(isMatch ? '/common/coil/log' : `/common/tape/log`);
+				navigate(
+					secondElement === 'coil'
+						? '/common/coil/log'
+						: `/common/tape/log`
+				);
 			})
 			.catch((err) => console.log(err));
 	};

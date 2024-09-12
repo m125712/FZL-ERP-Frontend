@@ -12,7 +12,7 @@ export default function Index() {
 	const { data, deleteData, isLoading } = useCommonCoilToDyeing();
 	const info = new PageInfo('Coil -> Dyeing', '/zipper/tape-coil-to-dyeing');
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
-	console.log(data);
+
 
 	const haveAccess = useAccess('common__coil_log');
 

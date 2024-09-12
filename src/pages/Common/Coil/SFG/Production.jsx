@@ -16,7 +16,7 @@ export default function Index({
 	modalId = '',
 	updateCoilProd = {
 		uuid: null,
-		type: null,
+		item_name: null,
 		production_quantity: null,
 		zipper_number: null,
 		type_of_zipper: null,
@@ -48,7 +48,7 @@ export default function Index({
 		setUpdateCoilProd((prev) => ({
 			...prev,
 			uuid: null,
-			type: null,
+			item_name: null,
 			production_quantity: null,
 			zipper_number: null,
 			type_of_zipper: null,

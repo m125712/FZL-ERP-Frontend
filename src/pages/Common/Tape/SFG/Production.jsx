@@ -33,7 +33,7 @@ export default function Index({
 		setUpdateTapeProd((prev) => ({
 			...prev,
 			uuid: null,
-			type: null,
+			item_name: null,
 			quantity: null,
 			zipper_number: null,
 			type_of_zipper: null,

@@ -231,7 +231,6 @@ export default function Index() {
 	const [updateTapeProd, setUpdateTapeProd] = useState({
 		uuid: null,
 		name: null,
-		type: null,
 		quantity: null,
 		item_name: null,
 		zipper_number: null,
@@ -243,10 +242,10 @@ export default function Index() {
 		setUpdateTapeProd((prev) => ({
 			...prev,
 			...selectedProd,
-			item_name: selectedProd.type,
+			item_name: selectedProd.item_name,
 			tape_or_coil_stock_id: selectedProd?.uuid,
 			type_of_zipper:
-				selectedProd.type + ' ' + selectedProd.zipper_number,
+				selectedProd.item_name + ' ' + selectedProd.zipper_number_name,
 		}));
 		window['TapeProdModal'].showModal();
 	};
@@ -263,7 +262,7 @@ export default function Index() {
 			item_name: selectedProd.type,
 			tape_or_coil_stock_id: selectedProd?.uuid,
 			type_of_zipper:
-				selectedProd.type + ' ' + selectedProd.zipper_number,
+				selectedProd.item_name + ' ' + selectedProd.zipper_number_name,
 			quantity: selectedProd.quantity,
 		}));
 		window['trx_to_coil_modal'].showModal();

@@ -1,11 +1,11 @@
-import { useAuth } from '@/context/auth';
 import { createContext, useContext, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { Navigate } from 'react-router-dom';
 
 export const LayoutContext = createContext({
 	isCollapsed: false,
 	setIsCollapsed: () => {},
-	sidebarOpen: false,
+	sidebarOpen: true,
 	setSidebarOpen: () => {},
 });
 
@@ -14,7 +14,7 @@ export const useLayout = () => {
 };
 
 const LayoutProvider = ({ children }) => {
-	const [sidebarOpen, setSidebarOpen] = useState(false);
+	const [sidebarOpen, setSidebarOpen] = useState(true);
 	const [isCollapsed, setIsCollapsed] = useState(false);
 
 	// Get the authentication state from the context

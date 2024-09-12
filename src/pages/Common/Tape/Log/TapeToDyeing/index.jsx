@@ -1,17 +1,20 @@
+import { useMemo, useState } from 'react';
+import { useAccess, useFetch } from '@/hooks';
+import { useCommonTapeToDyeing } from '@/state/Common';
+import { EditDelete } from '@/ui';
+import PageInfo from '@/util/PageInfo';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetch } from '@/hooks';
-import { EditDelete } from '@/ui';
-import PageInfo from '@/util/PageInfo';
-import { useMemo, useState } from 'react';
-import { useCommonTapeToDyeing } from '@/state/Common';
+
 import AddOrUpdate from './AddOrUpdate';
+
 export default function Index() {
 	const { data, deleteData, isLoading } = useCommonTapeToDyeing();
 	const info = new PageInfo('Tape -> Dyeing', '/zipper/tape-coil-to-dyeing');
-
 	const haveAccess = useAccess('common__coil_log');
+
 	const columns = useMemo(
 		() => [
 			{

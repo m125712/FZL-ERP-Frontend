@@ -1,13 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import publicRoutes from './public';
-import { flatRoutes } from '.';
 import Layout from '@/components/layout';
+
+import { filteredRoutes } from '.';
+import publicRoutes from './public';
 
 export const router = createBrowserRouter([
 	...publicRoutes,
 	{
 		element: <Layout />,
-		children: flatRoutes,
+		children: filteredRoutes,
 	},
 ]);

@@ -1,13 +1,14 @@
-import { AddModal } from '@/components/Modal';
-import { DebouncedInput } from '@/components/Table/components';
+import { useState } from 'react';
 import { useFetchForRhfResetForUserAccess, useRHF } from '@/hooks';
-import { allFlatRoutes, allPrivateRoutes, flatRoutes } from '@/routes';
+import { allFlatRoutes } from '@/routes';
 import { useAdminUsers } from '@/state/Admin';
 import { CheckBox } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { BOOLEAN } from '@/util/Schema';
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
+
+import { AddModal } from '@/components/Modal';
+import { DebouncedInput } from '@/components/Table/components';
 
 export default function Index({
 	modalId = '',
@@ -41,7 +42,6 @@ export default function Index({
 	);
 
 	// console.log(PAGE_ACTIONS);
-	
 
 	const PAGE_ACTIONS_SCHEMA = {};
 	const PAGE_ACTIONS_DEFAULT = {};
@@ -63,7 +63,6 @@ export default function Index({
 	);
 
 	// console.log(getValues());
-	
 
 	const onClose = () => {
 		setPageAssign((prev) => ({

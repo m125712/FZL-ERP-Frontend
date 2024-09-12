@@ -1,6 +1,8 @@
-import { ShowToast } from '@/components/Toast';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+
+import { ShowToast } from '@/components/Toast';
+
 import { BASE_API } from './secret';
 
 export const createApi = ({ contentType }) => {

@@ -5,9 +5,11 @@ import GetDateTime from '@/util/GetDateTime';
 
 import { useCommonCoilToDyeingByUUID, useCommonTapeSFG } from '@/state/Common';
 import { useOtherMaterial } from '@/state/Other';
+import { DevTool } from '@hookform/devtools';
 import {
 	COMMON_COIL_TO_DYEING_LOG_NULL,
 	COMMON_COIL_TO_DYEING_LOG_SCHEMA,
+	NUMBER_REQUIRED,
 } from '@util/Schema';
 import { useEffect } from 'react';
 import { Schema } from 'yup';
@@ -118,6 +120,7 @@ export default function Index({
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />
+			<DevTool control={control} />
 		</AddModal>
 	);
 }

@@ -106,7 +106,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_production'),
-				width: 'w-24',
+				width: 'w-34',
 				cell: (info) => (
 					<Transfer
 						onClick={() => handelProduction(info.row.index)}

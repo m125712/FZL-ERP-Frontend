@@ -123,6 +123,7 @@ export default function Index() {
 		teeth_assembling_and_polishing: null,
 		plating_and_iron: null,
 		used_quantity: null,
+		wastage: null,
 	});
 
 	const handelUpdate = (idx) => {

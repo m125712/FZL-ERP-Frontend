@@ -1,12 +1,12 @@
 // * Tape
+import TapeLog from '@/pages/Common/Tape/Log';
 import TapeStock from '@/pages/Common/Tape/RM';
 import TapeProd from '@/pages/Common/Tape/SFG';
-import TapeLog from '@/pages/Common/Tape/Log';
 
 // * Coil
+import CoilLog from '@/pages/Common/Coil/Log';
 import CoilStock from '@/pages/Common/Coil/RM';
 import CoilProd from '@/pages/Common/Coil/SFG';
-import CoilLog from '@/pages/Common/Coil/Log';
 
 // * Coil Entry to dyeing
 import CoilEntryToDyeing from '@/pages/Common/Coil/SFG/EntryToDyeing';
@@ -38,6 +38,8 @@ export const CommonRoutes = [
 							'click_production',
 							'click_to_coil',
 							'click_to_dyeing',
+							'update',
+							'delete',
 						],
 					},
 					{

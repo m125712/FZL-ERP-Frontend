@@ -1,3 +1,6 @@
+import { firstRoute } from '@/routes';
+import { useNavigate } from 'react-router-dom';
+
 function V1() {
 	return (
 		<section className='flex items-center p-16'>
@@ -25,6 +28,7 @@ function V1() {
 }
 
 function V3() {
+	const navigate = useNavigate();
 	return (
 		<div className='flex h-screen flex-col items-center justify-center gap-12 py-8'>
 			<svg
@@ -54,10 +58,19 @@ function V3() {
 				<p className='text-center text-xl'>
 					You tried to access a page that does not exist.
 				</p>
-				<button
+				{/* <button
 					className='btn btn-primary w-64 rounded-full px-6 py-2 uppercase text-white transition-all duration-500 ease-in-out'
 					onClick={() => window.history.back()}>
 					Go Back
+				</button> */}
+				<button
+					className='btn btn-primary w-64 rounded-full px-6 py-2 uppercase text-white transition-all duration-500 ease-in-out'
+					onClick={() => {
+						console.log(firstRoute?.path);
+
+						navigate(firstRoute?.path);
+					}}>
+					Go Home
 				</button>
 			</div>
 		</div>

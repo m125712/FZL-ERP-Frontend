@@ -1,9 +1,12 @@
-import { Suspense } from '@/components/Feedback';
-import ReactTable from '@/components/Table';
+import { lazy, useEffect, useState } from 'react';
 import { useAccess } from '@/hooks';
 import { useOrderMarketing } from '@/state/Order';
+
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useState } from 'react';
+
 import { MarketingColumns } from '../columns';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));

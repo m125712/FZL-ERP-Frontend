@@ -1,11 +1,13 @@
-import { AddModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { MARKETING_NULL, MARKETING_SCHEMA } from '@util/Schema';
-import nanoid from '@/lib/nanoid';
-import { useOrderMarketing } from '@/state/Order';
 import { useAuth } from '@/context/auth';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useOrderMarketing } from '@/state/Order';
+import { FormField, Input, ReactSelect } from '@/ui';
+import { MARKETING_NULL, MARKETING_SCHEMA } from '@util/Schema';
+
+import { AddModal } from '@/components/Modal';
+
+import nanoid from '@/lib/nanoid';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -24,7 +26,7 @@ export default function Index({
 		Controller,
 		control,
 		getValues,
-		context
+		context,
 	} = useRHF(MARKETING_SCHEMA, MARKETING_NULL);
 
 	useFetchForRhfReset(

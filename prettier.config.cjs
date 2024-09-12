@@ -37,6 +37,7 @@ module.exports = {
 		'^@lib/(.*)$',
 		'^@/util/(.*)$',
 		'^@/hooks/(.*)$',
+		'^@/hooks(.*)$',
 		'^@/registry/(.*)$',
 		'^@/styles/(.*)$',
 		'^@/app/(.*)$',

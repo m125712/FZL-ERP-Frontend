@@ -1,19 +1,19 @@
-import { useRHF } from '@/hooks';
-import { Input, PasswordInput } from '@/ui';
-import { LOGIN_NULL, LOGIN_SCHEMA } from '@/util/Schema';
-import { useAuth } from '@context/auth';
 import { useEffect } from 'react';
+import { useRHF } from '@/hooks';
+import { firstRoute, flatRoutes } from '@/routes';
+import { Input, PasswordInput } from '@/ui';
+import { useAuth } from '@context/auth';
 import { useNavigate } from 'react-router-dom';
 
+import { LOGIN_NULL, LOGIN_SCHEMA } from '@/util/Schema';
+
 export default function Index() {
-	const { user, Login, signed } = useAuth();
+	const { Login, signed } = useAuth();
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		if (signed === true) {
-			navigate('/', { replace: true });
-		}
-	}, [signed, user, navigate]);
+	if (signed === true) {
+		return navigate(firstRoute?.path, { replace: true });
+	}
 
 	const { register, handleSubmit, errors } = useRHF(LOGIN_SCHEMA, LOGIN_NULL);
 

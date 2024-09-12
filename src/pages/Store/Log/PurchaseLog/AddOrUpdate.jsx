@@ -6,7 +6,11 @@ import GetDateTime from '@/util/GetDateTime';
 import { PURCHASE_ENTRY_NULL, PURCHASE_ENTRY_SCHEMA } from '@util/Schema';
 
 import { useOtherMaterial } from '@/state/Other';
-import { usePurchaseEntryByUUID, usePurchaseLog } from '@/state/Store';
+import {
+	useMaterialInfo,
+	usePurchaseEntryByUUID,
+	usePurchaseLog,
+} from '@/state/Store';
 import { DevTool } from '@hookform/devtools';
 import { useEffect } from 'react';
 
@@ -20,6 +24,7 @@ export default function Index({
 }) {
 	const { updateData } = usePurchaseLog();
 	const { data: material } = useOtherMaterial();
+	const { invalidateQuery: invalidateMaterial } = useMaterialInfo();
 	const { data } = usePurchaseEntryByUUID(updatePurchaseLog?.entry_uuid);
 	const {
 		register,
@@ -72,7 +77,7 @@ export default function Index({
 				updatedData,
 				onClose,
 			});
-
+			invalidateMaterial();
 			return;
 		}
 	};
@@ -103,13 +108,11 @@ export default function Index({
 									onChange(e.value);
 									setValue('unit', e.unit);
 								}}
-								
 							/>
 						);
 					}}
 				/>
 			</FormField>
-
 
 			<JoinInput
 				title='quantity'

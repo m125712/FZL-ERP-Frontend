@@ -11,7 +11,7 @@ export const useCommonTapeSFG = () =>
 export const useCommonTapeSFGByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: commonQK.tapeSFG(uuid),
-		url: `/zipper/tape-coil${uuid}`,
+		url: `/zipper/tape-coil/${uuid}`,
 	});
 
 // * PRODUCTION * //

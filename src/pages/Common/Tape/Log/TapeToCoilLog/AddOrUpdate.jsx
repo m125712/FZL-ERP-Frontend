@@ -1,6 +1,7 @@
 import { AddModal } from '@/components/Modal';
-import {  useRHF } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 import { useCommonTapeSFG, useCommonTapeToCoilByUUID } from '@/state/Common';
+import { useOtherMaterial } from '@/state/Other';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { TAPE_TO_COIL_TRX_NULL, TAPE_TO_COIL_TRX_SCHEMA } from '@util/Schema';
@@ -23,6 +24,7 @@ export default function Index({
 		updateTapeLog?.uuid
 	);
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
+	const { data: material } = useOtherMaterial();
 
 	const MAX_QUANTITY =
 		Number(updateTapeLog?.quantity) + Number(updateTapeLog?.trx_quantity);
@@ -32,16 +34,15 @@ export default function Index({
 		trx_quantity: TAPE_TO_COIL_TRX_SCHEMA.trx_quantity.max(MAX_QUANTITY),
 	};
 
-	const { register, handleSubmit, errors, reset, context } = useRHF(
+	const { register, handleSubmit, errors, reset, context ,getValues} = useRHF(
 		schema,
 		TAPE_TO_COIL_TRX_NULL
 	);
-
-	useEffect(() => {
-		if (data) {
-			reset(data[0]);
-		}
-	}, [data]);
+	useFetchForRhfReset(
+		`/zipper/tape-to-coil/${updateTapeLog?.uuid}`,
+		updateTapeLog?.uuid,
+		reset
+	);
 
 	const onClose = () => {
 		setUpdateTapeLog((prev) => ({
@@ -79,10 +80,10 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<JoinInput
+			<Input
 				label='trx_quantity'
 				sub_label={`Max: ${Number(updateTapeLog?.quantity) + Number(updateTapeLog?.trx_quantity)}`}
-				unit='KG'
+
 				placeholder={`Max: ${Number(updateTapeLog?.quantity) + Number(updateTapeLog?.trx_quantity)}`}
 				{...{ register, errors }}
 			/>

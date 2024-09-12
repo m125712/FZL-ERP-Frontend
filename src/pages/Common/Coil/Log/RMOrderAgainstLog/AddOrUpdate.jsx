@@ -1,11 +1,12 @@
 import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 import { useCommonMaterialTrxByUUID } from '@/state/Common';
+import { useOtherMaterial, useOtherOrderDescription } from '@/state/Other';
 import {
 	useMaterialInfo,
 	useMaterialTrxAgainstOrderDescription,
 } from '@/state/Store';
-import { FormField, Input, ReactSelect } from '@/ui';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
 import {
@@ -30,7 +31,8 @@ export default function Index({
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { invalidateQuery: invalidateMaterialTrx } =
 		useMaterialTrxAgainstOrderDescription();
-
+	const { data: material } = useOtherMaterial();
+	const { data: order } = useOtherOrderDescription();
 	const MAX_QUANTITY =
 		Number(updateLog?.stock) + Number(updateLog?.trx_quantity);
 	const schema = {
@@ -49,14 +51,14 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		context
+		context,
 	} = useRHF(schema, RM_MATERIAL_ORDER_AGAINST_EDIT_NULL);
 
-	useEffect(() => {
-		if (data) {
-			reset(data);
-		}
-	}, [data]);
+	useFetchForRhfReset(
+		`/zipper/material-trx-against-order/${updateLog?.uuid}`,
+		updateLog?.uuid,
+		reset
+	);
 
 	const onClose = () => {
 		setUpdateLog((prev) => ({
@@ -118,10 +120,15 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<Input
+			<JoinInput
 				label='trx_quantity'
 				sub_label={`Max: ${MAX_QUANTITY}`}
 				placeholder={`Max: ${MAX_QUANTITY}`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
 

@@ -1,4 +1,5 @@
 import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
 import { useAuth } from '@/context/auth';
 import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
@@ -41,6 +42,8 @@ export default function Index({
 		COIL_PROD_NULL
 	);
 
+	const MAX_WASTAGE = MAX_PRODUCTION_QTY - watch('production_quantity');
+
 	const onClose = () => {
 		setUpdateCoilProd((prev) => ({
 			...prev,
@@ -56,6 +59,13 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
+		if (MAX_WASTAGE < watch('wastage')) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		const section = 'coil';
 		// Update item
 		const updatedData = {

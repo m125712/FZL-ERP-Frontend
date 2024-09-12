@@ -3,7 +3,7 @@ import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useCommonCoilProduction, useCommonCoilSFG } from '@/state/Common';
-import { EditDelete, DateTime } from '@/ui';
+import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import React, { useMemo, useState } from 'react';
 import AddOrUpdate from './AddOrUpdate';
@@ -88,7 +88,9 @@ export default function ProductionLog() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_coil_production'),
+				hidden:
+					!haveAccess.includes('click_update_coil_production') &&
+					!haveAccess.includes('click_delete_coil_production'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -98,6 +100,9 @@ export default function ProductionLog() {
 							handelDelete={handelDelete}
 							showDelete={haveAccess.includes(
 								'click_delete_coil_production'
+							)}
+							showUpdate={haveAccess.includes(
+								'click_update_coil_production'
 							)}
 						/>
 					);

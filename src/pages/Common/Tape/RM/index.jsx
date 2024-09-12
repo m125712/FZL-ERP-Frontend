@@ -10,6 +10,7 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
 	const { data, isLoading, url } = useCommonTapeRM();
+	
 	const info = new PageInfo('Tape RM', url, 'common__tape_rm');
 	const haveAccess = useAccess(info.getTab());
 

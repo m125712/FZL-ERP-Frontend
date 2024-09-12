@@ -43,6 +43,8 @@ export const CommonRoutes = [
 			'click_production',
 			'click_to_coil',
 			'click_to_dyeing',
+			'update',
+			'delete'
 		],
 	},
 	{

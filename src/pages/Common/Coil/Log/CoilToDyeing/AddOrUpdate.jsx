@@ -1,25 +1,33 @@
 import { AddModal } from '@/components/Modal';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
-import { FormField, Input, ReactSelect } from '@/ui';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useCommonCoilSFG, useCommonCoilToDyeingByUUID } from '@/state/Common';
+import { useOtherMaterial } from '@/state/Other';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
-
 import {
-	COMMON_COIL_TO_DYEING_NULL,
-	COMMON_COIL_TO_DYEING_SCHEMA,
+	COMMON_COIL_TO_DYEING_LOG_NULL,
+	COMMON_COIL_TO_DYEING_LOG_SCHEMA,
 } from '@util/Schema';
 import { useEffect } from 'react';
-import { useCommonCoilToDyeingByUUID } from '@/state/Common';
 
 export default function Index({
 	modalId = '',
-	order_id,
-	entryUUID,
+	entryUUID = { uuid: null, max_trf_qty: null },
 	setEntryUUID,
 }) {
 	const { data, url, updateData } = useCommonCoilToDyeingByUUID(
 		entryUUID?.uuid
 	);
+	const { data: material } = useOtherMaterial();
+	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
+	const MAX_QTY = Number(entryUUID?.max_trf_qty);
+	console.log(MAX_QTY);
 
+	const schema = {
+		...COMMON_COIL_TO_DYEING_LOG_SCHEMA,
+		trx_quantity:
+			COMMON_COIL_TO_DYEING_LOG_SCHEMA.trx_quantity.max(MAX_QTY),
+	};
 	const {
 		register,
 		handleSubmit,
@@ -28,21 +36,23 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		context
-	} = useRHF(COMMON_COIL_TO_DYEING_SCHEMA, COMMON_COIL_TO_DYEING_NULL);
+		context,
+	} = useRHF(schema, COMMON_COIL_TO_DYEING_LOG_NULL);
 
-	useEffect(() => {
-		if (data) {
-			reset(data);
-		}
-	}, [data]);
-	
+	useFetchForRhfReset(
+		`/zipper/tape-coil-to-dyeing/${entryUUID?.uuid}`,
+		entryUUID?.uuid,
+		reset
+	);
+	const { value: order_id } = useFetch(
+		'/other/order/description/value/label'
+	);
 
 	const onClose = () => {
 		setEntryUUID(() => ({
 			uuid: null,
 		}));
-		reset(COMMON_COIL_TO_DYEING_NULL);
+		reset(COMMON_COIL_TO_DYEING_LOG_NULL);
 		window[modalId].close();
 	};
 
@@ -59,6 +69,7 @@ export default function Index({
 				updatedData: updatedData,
 				onClose,
 			});
+			invalidateCommonCoilSFG();
 
 			return;
 		}
@@ -98,7 +109,7 @@ export default function Index({
 			</FormField>
 			<Input
 				label='trx_quantity'
-				// sub_label={`Max: ${MAX_QUANTITY}, Max For This Order: ${getMaxQuantity()}`}
+				sub_label={`Max: ${MAX_QTY}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

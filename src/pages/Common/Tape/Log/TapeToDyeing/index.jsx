@@ -1,17 +1,13 @@
 import { useMemo, useState } from 'react';
 import { useAccess, useFetch } from '@/hooks';
-import { useCommonTapeToDyeing } from '@/state/Common';
-import { EditDelete } from '@/ui';
+import { useCommonTapeSFG, useCommonTapeToDyeing } from '@/state/Common';
+import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetch } from '@/hooks';
-import { useCommonTapeSFG, useCommonTapeToDyeing } from '@/state/Common';
-import { DateTime, EditDelete } from '@/ui';
-import PageInfo from '@/util/PageInfo';
-import { useMemo, useState } from 'react';
+
 import AddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
@@ -138,7 +134,6 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateCommonTapeSFG();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

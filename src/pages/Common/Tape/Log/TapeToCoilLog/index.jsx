@@ -7,11 +7,7 @@ import PageInfo from '@/util/PageInfo';
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
-import { DateTime, EditDelete } from '@/ui';
-import PageInfo from '@/util/PageInfo';
-import React, { useMemo, useState } from 'react';
+
 import AddOrUpdate from './AddOrUpdate';
 
 export default function TapeToCoil() {

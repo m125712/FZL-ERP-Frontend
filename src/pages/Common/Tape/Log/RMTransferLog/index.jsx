@@ -1,18 +1,19 @@
-import { Suspense } from '@/components/Feedback';
-import { DeleteModal } from '@/components/Modal';
-import ReactTable from '@/components/Table';
+import { useMemo, useState } from 'react';
 import { useAccess } from '@/hooks';
 import { useCommonTapeRM, useCommonTapeRMLog } from '@/state/Common';
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { useMemo, useState } from 'react';
+
+import { Suspense } from '@/components/Feedback';
+import { DeleteModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
+
 import AddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useCommonTapeRMLog();
 	const info = new PageInfo('Raw Material Used', url, 'common__tape_log');
 	const haveAccess = useAccess(info.getTab());
-	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
 
 	const columns = useMemo(
 		() => [
@@ -148,7 +149,6 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateCommonTapeRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

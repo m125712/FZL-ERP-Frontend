@@ -175,7 +175,6 @@ export default function Index() {
 	const [updateCoilProd, setUpdateCoilProd] = useState({
 		uuid: null,
 		name: null,
-		type: null,
 		quantity: null,
 		item_name: null,
 		zipper_number: null,
@@ -186,10 +185,10 @@ export default function Index() {
 		setUpdateCoilProd((prev) => ({
 			...prev,
 			...selectedProd,
-			item_name: selectedProd.type,
+			item_name: selectedProd.item_name,
 			tape_or_coil_stock_id: selectedProd?.uuid,
 			type_of_zipper:
-				selectedProd.type + ' ' + selectedProd.zipper_number,
+				selectedProd.item_name + ' ' + selectedProd.zipper_number_name,
 			quantity: selectedProd.trx_quantity_in_coil,
 		}));
 		window['CoilProdModal'].showModal();

@@ -3,7 +3,7 @@ import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
 import { useCommonCoilSFG } from '@/state/Common';
 
-import { Transfer, DateTime } from '@/ui';
+import { DateTime, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -23,16 +23,68 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'type',
-				header: 'Type',
+				accessorKey: 'name',
+				header: 'Name',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: 'zipper_number',
+				accessorKey: 'item_name',
+				header: 'Item',
+				enableColumnFilter: false,
+				width: 'w-30',
+
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
+				accessorKey: 'zipper_number_name',
 				header: 'Zipper Number',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_import',
+				header: 'Is Imported',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return Number(info.getValue()) === 1 ? ' Import' : 'Local';
+				},
+			},
+			{
+				accessorKey: 'is_reverse',
+				header: 'Is Reverse',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return Number(info.getValue()) === 1
+						? ' Reverse'
+						: 'Forward';
+				},
+			},
+			{
+				accessorKey: 'top',
+				header: 'Top',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'bottom',
+				header: 'Bottom',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'raw_per_kg_meter',
+				header: 'Raw Tape (Meter/Kg)',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'dyed_per_kg_meter',
+				header: 'Dyed Tape (Meter/Kg)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -74,7 +126,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-			
 
 			{
 				accessorKey: 'action',
@@ -88,6 +139,25 @@ export default function Index() {
 						onClick={() => handleTrxToDying(info.row.index)}
 					/>
 				),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'remarks',
@@ -142,7 +212,6 @@ export default function Index() {
 		// window['trx_to_dying_modal'].showModal();
 		navigate(`/common/coil/sfg/entry-to-dyeing/${data[idx].uuid}`);
 	};
-
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

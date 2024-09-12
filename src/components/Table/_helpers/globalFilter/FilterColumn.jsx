@@ -21,7 +21,7 @@ const FilterColumn = ({
 
 	if (!firstValue) return null;
 	
-	// console.log(typeof firstValue, column.id, firstValue);
+	//console.log(typeof firstValue, column.id, firstValue);
 
 	if (typeof firstValue === 'number')
 		return <FilterNumber {...{ columnName, column, isFullFilter }} />;

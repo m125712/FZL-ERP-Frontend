@@ -147,7 +147,7 @@ export default function ProductionLog() {
 		}));
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateCommonCoilSFG();
+	// invalidateCommonCoilSFG();
 
 	// if (error) return <h1>Error:{error}</h1>;
 

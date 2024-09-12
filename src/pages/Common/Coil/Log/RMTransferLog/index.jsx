@@ -150,7 +150,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateCommonCoilRM();
+	// invalidateCommonCoilRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

@@ -28,15 +28,25 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'item_name',
-				header: 'Item',
+				accessorKey: 'name',
+				header: 'Name',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
-				accessorKey: 'zipper_number',
+				accessorKey: 'item_name',
+				header: 'Item',
+				enableColumnFilter: false,
+				width: 'w-30',
+
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
+				accessorKey: 'zipper_number_name',
 				header: 'Zipper Number',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -45,13 +55,19 @@ export default function Index() {
 				accessorKey: 'is_import',
 				header: 'Is Imported',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					return Number(info.getValue()) === 1 ? ' Import' : 'Local';
+				},
 			},
 			{
 				accessorKey: 'is_reverse',
 				header: 'Is Reverse',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					return Number(info.getValue()) === 1
+						? ' Reverse'
+						: 'Forward';
+				},
 			},
 			{
 				accessorKey: 'top',
@@ -66,13 +82,13 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'raw_mtr_per_kg',
+				accessorKey: 'raw_per_kg_meter',
 				header: 'Raw Tape (Meter/Kg)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'dyed_mtr_per_kg',
+				accessorKey: 'dyed_per_kg_meter',
 				header: 'Dyed Tape (Meter/Kg)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -116,24 +132,27 @@ export default function Index() {
 			},
 
 			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'actions',
 				header: 'To Coil',
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_to_coil'),
 				width: 'w-24',
-				cell: (info) =>
-					info.row.original?.item_name?.toLowerCase() === 'nylon' && (
-						<Transfer
-							onClick={() => handleTrxToCoil(info.row.index)}
-						/>
-					),
+				cell: (info) => {
+					const itemName =
+						info.row.original?.item_name?.toLowerCase();
+
+					if (
+						itemName === 'nylon plastic' ||
+						itemName === 'nylon metallic'
+					) {
+						return (
+							<Transfer
+								onClick={() => handleTrxToCoil(info.row.index)}
+							/>
+						);
+					}
+				},
 			},
 			{
 				accessorKey: 'action',
@@ -142,13 +161,21 @@ export default function Index() {
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_to_dyeing'),
 				width: 'w-24',
-				cell: (info) =>
-					info.row.original?.item_name?.toLowerCase() ===
-					'nylon' ? null : (
-						<Transfer
-							onClick={() => handleTrxToDying(info.row.index)}
-						/>
-					),
+				cell: (info) => {
+					const itemName =
+						info.row.original?.item_name?.toLowerCase();
+
+					if (
+						itemName !== 'nylon plastic' &&
+						itemName !== 'nylon metallic'
+					) {
+						return (
+							<Transfer
+								onClick={() => handleTrxToDying(info.row.index)}
+							/>
+						);
+					}
+				},
 			},
 			{
 				accessorKey: 'created_by_name',
@@ -168,6 +195,12 @@ export default function Index() {
 				header: 'Updated',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'actions',

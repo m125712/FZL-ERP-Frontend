@@ -35,22 +35,24 @@ export default function Index({
 	);
 
 	const { value: item } = useFetch(`/other/order-properties/by/item`);
+	console.log(item);
 	const { value: zipper_number } = useFetch(
 		`/other/order-properties/by/zipper_number`
 	);
 	const isImportOption = [
 		{
 			label: 'Import ',
-			value: false,
+			value: 1,
 		},
 		{
 			label: 'Local ',
-			value: true,
+			value: 0,
 		},
 	];
 	const isReverseOption = [
-		{ label: 'Reverse', value: true },
-		{ label: 'Forward', value: false },
+		{ label: 'Reverse', value: 'reverse' },
+		{ label: 'Forward', value: 'forward' },
+		{ label: 'None', value: 'none' },
 	];
 	const onClose = () => {
 		setUpdateTapeProd((prev) => ({
@@ -156,7 +158,7 @@ export default function Index({
 				</FormField>
 				<FormField label='is_import' title='Is Import' errors={errors}>
 					<Controller
-						name={'is_imported'}
+						name={'is_import'}
 						control={control}
 						render={({ field: { onChange } }) => {
 							return (
@@ -165,8 +167,7 @@ export default function Index({
 									options={isImportOption}
 									value={isImportOption?.filter(
 										(item) =>
-											item.value ==
-											getValues('is_imported')
+											item.value == getValues('is_import')
 									)}
 									onChange={(e) => onChange(e.value)}
 								/>
@@ -207,12 +208,12 @@ export default function Index({
 					{...{ register, errors }}
 				/>
 				<Input
-					label='raw_mtr_per_kg'
+					label='raw_per_kg_meter'
 					title='Raw Tape (Meter/Kg)'
 					{...{ register, errors }}
 				/>
 				<Input
-					label='dyed_mtr_per_kg'
+					label='dyed_per_kg_meter'
 					title='Dyed Tape (Meter/Kg)'
 					{...{ register, errors }}
 				/>

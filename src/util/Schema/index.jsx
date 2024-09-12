@@ -839,12 +839,12 @@ export const TAPE_STOCK_ADD_SCHEMA = {
 	name: STRING_REQUIRED,
 	item_uuid: STRING_REQUIRED,
 	zipper_number_uuid: STRING_REQUIRED,
-	is_imported: BOOLEAN.transform(handelNumberDefaultValue).default(false),
-	is_reverse: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+	is_import: NUMBER.nullable(),
+	is_reverse: STRING.nullable(),
 	top: NUMBER_DOUBLE_REQUIRED,
 	bottom: NUMBER_DOUBLE_REQUIRED,
-	raw_mtr_per_kg: NUMBER_DOUBLE_REQUIRED,
-	dyed_mtr_per_kg: NUMBER_DOUBLE_REQUIRED,
+	raw_per_kg_meter: NUMBER_DOUBLE_REQUIRED,
+	dyed_per_kg_meter: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
 };
 

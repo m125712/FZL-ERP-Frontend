@@ -66,8 +66,6 @@ function V3() {
 				<button
 					className='btn btn-primary w-64 rounded-full px-6 py-2 uppercase text-white transition-all duration-500 ease-in-out'
 					onClick={() => {
-						console.log(firstRoute?.path);
-
 						navigate(firstRoute?.path);
 					}}>
 					Go Home

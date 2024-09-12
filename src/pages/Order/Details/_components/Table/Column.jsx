@@ -11,8 +11,8 @@ const createStockProdColumn = ({ accessorKey, header }) =>
 		header,
 		enableColumnFilter: false,
 		cell: (info) => {
-			const stock = info.row.original[`${accessorKey}_stock`];
-			const prod = info.row.original[`${accessorKey}_prod`];
+			const stock = Number(info.row.original[`${accessorKey}_stock`]);
+			const prod = Number(info.row.original[`${accessorKey}_prod`]);
 			return info.getValue() ? info.getValue() : `${stock} / ${prod}`;
 		},
 	});
@@ -26,7 +26,6 @@ const createStatusColumn = ({ accessorKey, header }) =>
 			const { company_price, party_price } = info.row.original;
 			return (
 				<div className='flex items-center justify-start gap-2'>
-					<span className='font-semibold'>{info.row.index + 1}</span>
 					<StatusButton
 						size='btn-xs'
 						value={company_price > 0 && party_price > 0 ? 1 : 0}
@@ -81,6 +80,12 @@ const getColumn = ({
 
 	// default columns
 	const DefaultStartColumn = [
+		createColumn({
+			accessorKey: 'id',
+			header: 'ID',
+			enableColumnFilter: false,
+			cell: (info) => info.row.index + 1,
+		}),
 		createStatusColumn({
 			accessorKey: 'swatch_status',
 			header: (
@@ -105,26 +110,21 @@ const getColumn = ({
 			accessorKey: 'size',
 			header: 'Size',
 			enableColumnFilter: true,
-			cell: (info) => info.getValue(),
+			cell: (info) => Number(info.getValue()).toFixed(2),
 		}),
 		createColumn({
 			accessorKey: 'quantity',
 			header: 'Quantity',
 			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
+			cell: (info) => Number(info.getValue()).toFixed(0),
 		}),
 		createTapRequiredColumn({ measurement }),
-		createStockProdColumn({
-			accessorKey: 'dying_and_iron',
-			header: (
-				<span>
-					Dying <br /> & Iron
-				</span>
-			),
-		}),
 	];
 	const DefaultEndColumn = [
-		createStockProdColumn({ accessorKey: 'coloring', header: 'Coloring' }),
+		createStockProdColumn({
+			accessorKey: 'coloring',
+			header: 'Coloring',
+		}),
 		createStockProdColumn({
 			accessorKey: 'finishing',
 			header: 'Finishing',
@@ -133,13 +133,17 @@ const getColumn = ({
 			accessorKey: 'company_price',
 			header: (
 				<span>
-					Price (USD) <br /> (Company/Party)
+					Price (USD)
+					<br />
+					(Company/Party)
 				</span>
 			),
 			enableColumnFilter: false,
 			hidden: !show_price,
 			cell: (info) =>
-				info.getValue() + ' / ' + info.row.original.party_price,
+				Number(info.getValue()) +
+				' / ' +
+				Number(info.row.original.party_price),
 		}),
 	];
 

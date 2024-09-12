@@ -1,7 +1,7 @@
+import { format, isValid } from 'date-fns';
 import { forwardRef, Fragment, useCallback, useMemo, useState } from 'react';
 import DebouncedInput from '../DebouncedInput';
 import { Template } from './_components';
-import { format, isValid } from 'date-fns';
 // import DatePicker from 'react-datepicker';
 // import {
 // 	Button,
@@ -313,16 +313,6 @@ function FilterColumnValue({
 
 	if (typeof firstValue === 'number')
 		return <NumberInput {...{ columnName, column, isFullFilter }} />;
-
-	if (isValid(new Date(firstValue))) {
-		return (
-			<>Hello</>
-			// <DateRangeInput
-			// 	key={column.id}
-			// 	{...{ columnName, column, isFullFilter, firstValue }}
-			// />
-		);
-	}
 
 	return (
 		<StringInput

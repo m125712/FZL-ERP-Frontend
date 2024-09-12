@@ -1,4 +1,4 @@
-import { PRIVATE_ROUTES } from '@/routes';
+import { allFlatRoutes } from '@/routes';
 import { api } from '@lib/api';
 import { BASE_API } from '@lib/secret';
 import Cookies from 'js-cookie';
@@ -98,7 +98,7 @@ const useFetchForRhfResetForPlanning = async (uri, reset) => {
 	}, []);
 };
 
-const useFetchForRhfResetForUserAccess = async (url, returnId, reset) => {
+const useFetchForRhfResetForUserAccess = (url, returnId, reset) => {
 	useEffect(() => {
 		if (returnId === null) return;
 
@@ -108,7 +108,6 @@ const useFetchForRhfResetForUserAccess = async (url, returnId, reset) => {
 
 			Object.entries(data)?.forEach(([key, value]) => {
 				const val = JSON.parse(value);
-				console.log(val);
 
 				Object.entries(val).forEach(([k, v]) => {
 					v.forEach((item) => {
@@ -118,7 +117,7 @@ const useFetchForRhfResetForUserAccess = async (url, returnId, reset) => {
 				});
 			});
 
-			const filterRoutes = PRIVATE_ROUTES?.filter(
+			const filterRoutes = allFlatRoutes?.filter(
 				(item) => item.actions !== undefined
 			);
 

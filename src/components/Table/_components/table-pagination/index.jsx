@@ -1,7 +1,7 @@
 import { PaginationButton } from '../../ui';
-import { LeftArrow, RightArrow } from '@/assets/icons';
 import Paginated from './Paginated';
 import PaginatedButton from './PaginatedButton';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const TablePagination = ({
 	getState,
@@ -51,7 +51,7 @@ const TablePagination = ({
 					<PaginatedButton
 						onClick={() => previousPage()}
 						disabled={!getCanPreviousPage()}>
-						<LeftArrow className='h-4 w-4 text-primary-content' />
+						<ChevronLeft className='size-4' />
 						<span>Previous</span>
 					</PaginatedButton>
 
@@ -59,7 +59,7 @@ const TablePagination = ({
 						onClick={() => nextPage()}
 						disabled={!getCanNextPage()}>
 						<span>Next</span>
-						<RightArrow className='h-4 w-4 text-primary-content' />
+						<ChevronRight className='size-4' />
 					</PaginationButton>
 				</div>
 			</div>

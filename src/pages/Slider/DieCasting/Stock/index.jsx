@@ -20,77 +20,7 @@ export default function Index() {
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
-				cell: (info) => {
-					const {
-						is_body,
-						is_puller,
-						is_cap,
-						is_link,
-						is_h_bottom,
-						is_u_top,
-						is_box_pin,
-						is_two_way_pin,
-					} = info?.row?.original;
-
-					const renderBadges = () => {
-						const badges = [
-							{
-								label: 'Body',
-								isActive: is_body === 1,
-							},
-							{
-								label: 'Puller',
-								isActive: is_puller === 1,
-							},
-							{
-								label: 'Cap',
-								isActive: is_cap === 1,
-							},
-							{
-								label: 'Link',
-								isActive: is_link === 1,
-							},
-							{
-								label: 'H Bottom',
-								isActive: is_h_bottom === 1,
-							},
-							{
-								label: 'U Top',
-								isActive: is_u_top === 1,
-							},
-							{
-								label: 'Box Pin',
-								isActive: is_box_pin === 1,
-							},
-							{
-								label: 'Two Way Pin',
-								isActive: is_two_way_pin === 1,
-							},
-						];
-
-						return badges;
-					};
-
-					return (
-						<div>
-							<span>{info.getValue()}</span>
-
-							{renderBadges().length > 0 && (
-								<div className='mt-1 flex w-max max-w-[200px] flex-wrap gap-2'>
-									{renderBadges()
-										.filter((b) => b.isActive)
-										.map((e) => (
-											<div
-												key={e.label}
-												className='badge badge-secondary badge-sm'>
-												{e.label}
-											</div>
-										))}
-								</div>
-							)}
-						</div>
-					);
-				},
+				cell: (info) => info.getValue(),
 			},
 			// {
 			// 	accessorKey: 'item',
@@ -99,6 +29,20 @@ export default function Index() {
 			// 	cell: (info) => info.getValue(),
 			// },
 
+			{
+				accessorKey: 'type',
+				header: 'Type',
+				enableColumnFilter: false,
+				cell: (info) =>
+					info
+						.getValue()
+						.split('_') // Split the string by underscores
+						.map(
+							(word) =>
+								word.charAt(0).toUpperCase() + word.slice(1)
+						) // Capitalize the first letter of each word
+						.join(' '),
+			},
 			{
 				accessorKey: 'item_name',
 				header: 'Item',

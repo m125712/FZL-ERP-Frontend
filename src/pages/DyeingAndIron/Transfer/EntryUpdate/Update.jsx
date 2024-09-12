@@ -11,7 +11,8 @@ import {
 	UPDATE_DYEING_TRANSFER_NULL,
 	UPDATE_DYEING_TRANSFER_SCHEMA,
 } from '@util/Schema';
-import { useState } from 'react';
+import { Watch } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 
 export default function Index({
@@ -22,7 +23,7 @@ export default function Index({
 	setUpdateTransfer,
 }) {
 	const { url, updateData } = useDyeingTransfer();
-	const { register, handleSubmit, errors, reset, control, getValues } =
+	const { register, handleSubmit, errors, reset, control, getValues, watch } =
 		useRHF(UPDATE_DYEING_TRANSFER_SCHEMA, UPDATE_DYEING_TRANSFER_NULL);
 
 	useFetchForRhfReset(
@@ -68,8 +69,8 @@ export default function Index({
 			created_at: GetDateTime(),
 		};
 	};
-	// const [colors, setColors] = useState([]);
-	// const [colorsSelect, setColorsSelect] = useState([]);
+	const [colors, setColors] = useState([]);
+	const [colorsSelect, setColorsSelect] = useState([]);
 	const { value: order_id } = useFetch(
 		`/other/order/description/value/label?tape_received=true`
 	); // * get order id and set them as value & lables for select options
@@ -85,13 +86,26 @@ export default function Index({
 		{ label: 'Metal Teeth Molding', value: 'metal_teeth_molding' },
 	];
 
-	// const getColors = (colors) => {
-	// 	// * get colors and set them as value & lables for select options
-	// 	setColors([]);
-	// 	colors.map((item) => {
-	// 		setColors((prev) => [...prev, { label: item, value: item }]);
-	// 	});
-	// };
+	const getColors = (uuid) => {
+		// * get colors and set them as value & lables for select options
+		setColors([]);
+
+		const item = order_id?.find((entry) => entry.value === uuid);
+
+		if (item) {
+			item.colors.map((color) =>
+				setColors((prev) => [...prev, { label: color, value: color }])
+			);
+		}
+	};
+
+	useEffect(() => {
+		if (watch('order_description_uuid')) {
+			getColors(getValues('order_description_uuid'));
+		}
+	}, [watch('order_description_uuid')]);
+
+	console.log(colors);
 
 	return (
 		<AddModal
@@ -121,14 +135,13 @@ export default function Index({
 								)}
 								onChange={(e) => {
 									onChange(e.value);
-									
 								}}
 							/>
 						);
 					}}
 				/>
 			</FormField>
-			{/* <FormField label='colors' title='Colors' errors={errors}>
+			<FormField label='colors' title='Colors' errors={errors}>
 				<Controller
 					name='colors'
 					control={control}
@@ -137,17 +150,25 @@ export default function Index({
 							<ReactSelect
 								placeholder='Select Colors'
 								options={colors}
-								value={colors?.filter((item) =>
+								value={colors?.find((item) =>
 									colorsSelect?.includes(item.value)
 								)}
-								onChange={(e) => {
-									onChange(e.value);
+								onChange={(selectedOptions) => {
+									const newSelections = selectedOptions
+										? selectedOptions.map(
+												(item) => item.value
+											)
+										: [];
+									setColorsSelect(newSelections); // Update the selected colors
+									onChange(newSelections); // Update the form value
 								}}
+						
+								menuPortalTarget={document.body}
 							/>
 						);
 					}}
 				/>
-			</FormField> */}
+			</FormField>
 			<FormField label='section"' title='Section' errors={errors}>
 				<Controller
 					name='section'

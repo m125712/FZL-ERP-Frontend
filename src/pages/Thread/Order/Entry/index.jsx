@@ -179,9 +179,7 @@ export default function Index() {
 				])
 					.then(() => reset(THREAD_ORDER_INFO_ENTRY_NULL))
 					.then(() => {
-						navigate(
-							`/thread/order-info/details/${order_info_uuid}`
-						);
+						navigate(`/thread/order-info/${order_info_uuid}`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -243,9 +241,7 @@ export default function Index() {
 			])
 				.then(() => reset(THREAD_ORDER_INFO_ENTRY_NULL))
 				.then(() => {
-					navigate(
-						`/thread/order-info/details/${new_order_info_uuid}`
-					);
+					navigate(`/thread/order-info/${new_order_info_uuid}`);
 				});
 		} catch (err) {
 			console.error(`Error with Promise.all: ${err}`);

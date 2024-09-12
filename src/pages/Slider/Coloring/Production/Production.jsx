@@ -34,7 +34,13 @@ export default function Index({
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
 		useRHF(
-			SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
+			{
+				...SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
+				production_quantity: NUMBER_REQUIRED.max(
+					updateSliderProd?.coloring_stock,
+					'Beyond Max'
+				),
+			},
 			SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL
 		);
 
@@ -93,15 +99,15 @@ export default function Index({
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'
-				unit='KG'
-				sub_label={`MAX: ${MAX_PROD_KG} kg`}
+				unit='PCS'
+				sub_label={`MAX: ${Number(updateSliderProd?.coloring_stock)} PCS`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
 				title='wastage'
 				label='wastage'
-				unit='KG'
-				sub_label={`MAX: ${MAX_WASTAGE_KG} kg`}
+				unit='PCS'
+				sub_label={`MAX: ${MAX_WASTAGE_KG} PCS`}
 				{...{ register, errors }}
 			/>
 			<Textarea label='remarks' {...{ register, errors }} />

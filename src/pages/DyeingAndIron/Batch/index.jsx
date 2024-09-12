@@ -1,4 +1,3 @@
-
 import ReactTable from '@/components/Table';
 import { useDyeingBatch } from '@/state/Dyeing';
 import { useAccess } from '@/hooks';
@@ -8,8 +7,7 @@ import { useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Index() {
-	const { data, url, isLoading } =
-		useDyeingBatch();
+	const { data, url, isLoading } = useDyeingBatch();
 	const info = new PageInfo('Batch', url, 'dyeing__batch');
 	const haveAccess = useAccess('dyeing__batch');
 	const navigate = useNavigate();
@@ -25,7 +23,7 @@ export default function Index() {
 					<LinkWithCopy
 						title={info.getValue()}
 						id={info.row.original.uuid}
-						uri='/dyeing-and-iron/batch/details'
+						uri='/dyeing-and-iron/batch'
 					/>
 				),
 			},
@@ -119,7 +117,7 @@ export default function Index() {
 	const handelUpdate = (idx) => {
 		const { uuid } = data[idx];
 
-		navigate(`/dyeing-and-iron/batch/update/${uuid}`);
+		navigate(`/dyeing-and-iron/batch/${uuid}/update`);
 	};
 
 	// get tabname
@@ -129,7 +127,6 @@ export default function Index() {
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
-
 
 	return (
 		<div>

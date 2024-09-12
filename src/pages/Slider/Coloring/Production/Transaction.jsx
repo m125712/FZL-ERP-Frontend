@@ -29,10 +29,17 @@ export default function Index({
 	const { postData, url } = useSliderAssemblyTransferEntry();
 	const { user } = useAuth();
 
-	const { register, handleSubmit, errors, reset, watch, control, context } = useRHF(
-		SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
-		SLIDER_ASSEMBLY_TRANSACTION_NULL
-	);
+	const { register, handleSubmit, errors, reset, watch, control, context } =
+		useRHF(
+			{
+				...SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
+				trx_quantity: NUMBER_REQUIRED.max(
+					updateSliderTrx?.coloring_prod,
+					'Beyond Max Quantity'
+				),
+			},
+			SLIDER_ASSEMBLY_TRANSACTION_NULL
+		);
 
 	const onClose = () => {
 		setUpdateSliderTrx((prev) => ({
@@ -62,8 +69,6 @@ export default function Index({
 			created_at: GetDateTime(),
 		};
 
-		
-
 		await postData.mutateAsync({
 			url: '/zipper/sfg-transaction',
 			newData: updatedData,
@@ -74,21 +79,21 @@ export default function Index({
 	return (
 		<AddModal
 			id='TeethMoldingTrxModal'
-			title='Slider Assembly ⇾ Coloring Stock'
+			title='Slider Coloring ⇾ SFG Coloring'
 			subTitle={`
 				${updateSliderTrx.order_number} -> 
 				${updateSliderTrx.item_description} -> 
 				${updateSliderTrx.style_color_size} 
 				`}
-				formContext={context}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
 			<JoinInput
 				title='Transaction Quantity'
 				label='trx_quantity'
-				sub_label={`MAX: ${Number(updateSliderTrx?.teeth_molding_prod)} KG`}
-				unit='KG'
+				sub_label={`MAX: ${Number(updateSliderTrx?.coloring_prod)} PCS`}
+				unit='PCS'
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

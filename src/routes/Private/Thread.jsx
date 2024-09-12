@@ -1,134 +1,112 @@
-import { hi } from 'date-fns/locale';
-import { lazy } from 'react';
-
 // CountLength
-const CountLength = lazy(() => import('@pages/Thread/CountLength'));
+import CountLength from '@pages/Thread/CountLength';
 
 //Order
-const OrderInfo = lazy(() => import('@pages/Thread/Order'));
-const IndOrderInfo = lazy(() => import('@pages/Thread/Order/Details'));
-const OrderInfoEntry = lazy(() => import('@pages/Thread/Order/Entry'));
-const Machine = lazy(() => import('@pages/Thread/Machine'));
-const Swatch = lazy(() => import('@pages/Thread/Swatch'));
-const DyesCategory = lazy(() => import('@pages/Thread/DyesCategory'));
-const Programs = lazy(() => import('@pages/Thread/Programs'));
-const Coning = lazy(() => import('@pages/Thread/Conneing'));
-const ConingEntry = lazy(() => import('@pages/Thread/Conneing/Entry'));
-const ConingDetails = lazy(() => import('@pages/Thread/Conneing/Details'));
+import OrderInfo from '@pages/Thread/Order';
+import IndOrderInfo from '@pages/Thread/Order/Details';
+import OrderInfoEntry from '@pages/Thread/Order/Entry';
+import Machine from '@pages/Thread/Machine';
+import Swatch from '@pages/Thread/Swatch';
+import DyesCategory from '@pages/Thread/DyesCategory';
+import Programs from '@pages/Thread/Programs';
+import Coning from '@pages/Thread/Conneing';
+import ConingEntry from '@pages/Thread/Conneing/Entry';
+import ConingDetails from '@pages/Thread/Conneing/Details';
 
 export const ThreadRoutes = [
 	{
-		id: 1,
-		name: 'Count Length',
-		path: '/thread/count-length',
-		element: CountLength,
-		type: 'thread',
-		page_name: 'thread__count_length',
-		actions: ['create', 'read', 'update', 'delete'],
-	},
+		name: 'Thread',
+		children: [
+			{
+				name: 'Count Length',
+				path: '/thread/count-length',
+				element: <CountLength />,
+				page_name: 'thread__count_length',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
 
-	{
-		id: 3,
-		name: 'Order Info',
-		path: '/thread/order-info/details',
-		element: OrderInfo,
-		type: 'thread',
-		page_name: 'thread__order_info_details',
-		actions: ['create', 'read', 'update', 'delete'],
-	},
-	{
-		id: 31,
-		name: 'Entry',
-		path: '/thread/order-info/entry',
-		element: OrderInfoEntry,
-		type: 'thread',
-		page_name: 'thread__order_info_entry',
-		actions: ['create', 'read', 'update', 'delete'],
-		hidden: true,
-	},
-	{
-		id: 32,
-		name: 'Update',
-		path: '/thread/order-info/update/:order_info_uuid',
-		element: OrderInfoEntry,
-		type: 'thread',
-		page_name: 'thread__order_info_update',
-		actions: ['create', 'read', 'update', 'delete'],
-		hidden: true,
-	},
-	{
-		id: 33,
-		name: 'Details of Order Info',
-		path: '/thread/order-info/details/:order_info_uuid',
-		element: IndOrderInfo,
-		type: 'thread',
-		page_name: 'thread__order_info_in_details',
-		actions: ['create', 'read', 'update', 'delete'],
-		hidden: true,
-	},
-	{
-		id: 4,
-		name: 'Machine',
-		path: '/thread/machine',
-		element: Machine,
-		type: 'thread',
-		page_name: 'thread__machine',
-		actions: ['create', 'read', 'update', 'delete'],
-	},
-	{
-		id: 283,
-		name: 'Swatch',
-		path: '/thread/swatch',
-		element: Swatch,
-		type: 'thread',
-		page_name: 'thread__swatch',
-		actions: ['read', 'update'],
-	},
-	{
-		id: 7,
-		name: 'DyesCategory',
-		path: '/thread/dyes-category',
-		element: DyesCategory,
-		type: 'thread',
-		page_name: 'thread__dyes_category',
-		actions: ['create', 'read', 'update', 'delete'],
-	},
-	{
-		id: 8,
-		name: 'Programs',
-		path: '/thread/programs',
-		element: Programs,
-		type: 'thread',
-		page_name: 'thread__programs',
-		actions: ['create', 'read', 'update', 'delete'],
-	},
-	{
-		id: 232,
-		name: 'Coning Entry',
-		path: '/thread/coning/update/:batch_uuid',
-		element: ConingEntry,
-		type: 'thread',
-		page_name: 'thread__coning_update',
-		actions: ['create', 'read', 'update', 'delete'],
-		hidden: true,
-	},
-	{
-		id: 233,
-		name: 'Details of Coning',
-		path: '/thread/coning/details/:batch_uuid',
-		element: ConingDetails,
-		type: 'thread',
-		page_name: 'thread__coning_in_details',
-		actions: ['create', 'read', 'update', 'delete'],
-		hidden: true,
-	},
-	{
-		id: 123,
-		name: 'Conning',
-		path: '/thread/coning/details',
-		element: Coning,
-		type: 'thread',
-		page_name: 'thread__coning_details',
-		actions: ['create', 'read', 'update', 'delete'],
+			{
+				name: 'Order Info',
+				path: '/thread/order-info/details',
+				element: <OrderInfo />,
+				page_name: 'thread__order_info_details',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Entry',
+				path: '/thread/order-info/entry',
+				element: <OrderInfoEntry />,
+				page_name: 'thread__order_info_entry',
+				actions: ['create', 'read', 'update', 'delete'],
+				hidden: true,
+			},
+			{
+				name: 'Update',
+				path: '/thread/order-info/:order_info_uuid/update',
+				element: <OrderInfoEntry />,
+				page_name: 'thread__order_info_update',
+				actions: ['create', 'read', 'update', 'delete'],
+				hidden: true,
+			},
+			{
+				name: 'Details of Order Info',
+				path: '/thread/order-info/:order_info_uuid',
+				element: <IndOrderInfo />,
+				page_name: 'thread__order_info_in_details',
+				actions: ['create', 'read', 'update', 'delete'],
+				hidden: true,
+			},
+			{
+				name: 'Machine',
+				path: '/thread/machine',
+				element: <Machine />,
+				page_name: 'thread__machine',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Swatch',
+				path: '/thread/swatch',
+				element: <Swatch />,
+				page_name: 'thread__swatch',
+				actions: ['read', 'update'],
+			},
+			{
+				name: 'DyesCategory',
+				path: '/thread/dyes-category',
+				element: <DyesCategory />,
+				page_name: 'thread__dyes_category',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Programs',
+				path: '/thread/programs',
+				element: <Programs />,
+				page_name: 'thread__programs',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Coning Entry',
+				path: '/thread/coning/:batch_uuid/update',
+				element: <ConingEntry />,
+				page_name: 'thread__coning_update',
+				actions: ['create', 'read', 'update', 'delete'],
+				hidden: true,
+			},
+			{
+				name: 'Details of Coning',
+				path: '/thread/coning/:batch_uuid',
+				element: <ConingDetails />,
+				page_name: 'thread__coning_in_details',
+				actions: ['create', 'read', 'update', 'delete'],
+				hidden: true,
+			},
+			{
+				name: 'Conning',
+				path: '/thread/coning',
+				element: <Coning />,
+				page_name: 'thread__coning_details',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+		],
 	},
 ];

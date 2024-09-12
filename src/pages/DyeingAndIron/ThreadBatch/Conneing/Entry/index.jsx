@@ -130,7 +130,7 @@ export default function Index() {
 					)
 					.then(() =>
 						navigate(
-							`/dyeing-and-iron/thread-batch/details/${batch_con_uuid}`
+							`/dyeing-and-iron/thread-batch/${batch_con_uuid}`
 						)
 					);
 			} catch (err) {
@@ -176,7 +176,7 @@ export default function Index() {
 					)
 					.then(() =>
 						navigate(
-							`/dyeing-and-iron/thread-batch/details/${batch_con_uuid}`
+							`/dyeing-and-iron/thread-batch/${batch_con_uuid}`
 						)
 					);
 			} catch (err) {

@@ -7,8 +7,8 @@ function Paginated({ initialPage, totalPages, onChange, currentPage }) {
 
 	return (
 		<ReactPaginate
-			// forcePage={currentPage}
-			initialPage={initialPage}
+			forcePage={currentPage}
+			// initialPage={initialPage}
 			activeLinkClassName='btn-accent !bg-accent'
 			pageLinkClassName='btn btn-sm bg-base-200 rounded-md h-8'
 			previousClassName='hidden'

@@ -18,6 +18,7 @@ export default function Index() {
 
 	const haveAccess = useAccess('slider__assembly_production');
 
+	console.log(data);
 	// * columns
 	const columns = useMemo(
 		() => [
@@ -34,6 +35,11 @@ export default function Index() {
 						/>
 					);
 				},
+			},
+			{
+				accessorKey: 'item_description',
+				header: 'Item Dec',
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'item_name',
@@ -99,7 +105,13 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-
+			{
+				accessorKey: 'Types',
+				header: 'Body/Cap/Puller/Link/HB/UT/BP',
+				enableColumnFilter: false,
+				cell: (info) =>
+					`${info.row.original.body_quantity}/${info.row.original.cap_quantity}/${info.row.original.puller_quantity}/${info.row.original.link_quantity}/${info.row.original.h_bottom_quantity}/${info.row.original.u_top_quantity}/${info.row.original.box_pin_quantity}`,
+			},
 			{
 				accessorKey: 'action_add_production',
 				header: '',
@@ -121,7 +133,7 @@ export default function Index() {
 					<span>
 						Total Production
 						<br />
-						(KG)
+						(PCS)
 					</span>
 				),
 				enableColumnFilter: false,
@@ -148,7 +160,7 @@ export default function Index() {
 					<span>
 						Total Transaction
 						<br />
-						(KG)
+						(PCS)
 					</span>
 				),
 				enableColumnFilter: false,

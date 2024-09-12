@@ -1,9 +1,9 @@
-import { Reload as ReloadIcon } from '@/assets/icons';
+import { RefreshCw } from 'lucide-react';
 
 const HandleReload = (props) => {
 	return (
 		<button type='button' className='btn-filter-outline' {...props}>
-			<ReloadIcon className='size-4' />
+			<RefreshCw className='size-4' />
 		</button>
 	);
 };

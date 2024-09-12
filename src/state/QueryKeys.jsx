@@ -785,6 +785,13 @@ export const sliderQK = {
 		...sliderQK.all(),
 		'coloring-log-transaction',
 	],
+
+	// * Slider coloring Production
+	sliderColoringProduction: () => [...sliderQK.all(), 'coloring-production'],
+	sliderColoringProductionByUUID: (uuid) => [
+		...sliderQK.sliderColoringProduction(),
+		uuid,
+	],
 };
 
 //* Delivery

@@ -111,7 +111,7 @@ export default function Index() {
 	const handelAdd = () => navigate('/store/receive/entry');
 
 	const handelUpdate = (idx) => {
-		navigate(`/store/receive/update/${data[idx].uuid}`);
+		navigate(`/store/receive/${data[idx].uuid}/update`);
 	};
 
 	// Delete

@@ -122,7 +122,7 @@ export default function Index() {
 					)
 					.then(
 						navigate(
-							`/dyeing-and-iron/planning-head-office/details/${week_id}`
+							`/dyeing-and-iron/planning-head-office/${week_id}`
 						)
 					)
 					.catch((err) => console.log(err));
@@ -174,9 +174,7 @@ export default function Index() {
 					reset(Object.assign({}, DYEING_PLANNING_HEADOFFICE_NULL))
 				)
 				.then(
-					navigate(
-						`/dyeing-and-iron/planning-head-office/details/${weeks}`
-					)
+					navigate(`/dyeing-and-iron/planning-head-office/${weeks}`)
 				)
 				.catch((err) => console.log(err));
 		}

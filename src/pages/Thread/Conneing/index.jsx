@@ -30,7 +30,7 @@ export default function Index() {
 					<LinkWithCopy
 						title={info.getValue()}
 						id={info.row.original.uuid}
-						uri='/thread/coning/details'
+						uri='/thread/coning'
 					/>
 				),
 			},
@@ -111,7 +111,7 @@ export default function Index() {
 	const handelUpdate = (idx) => {
 		const { uuid } = data[idx];
 
-		navigate(`/thread/coning/update/${uuid}`);
+		navigate(`/thread/coning/${uuid}/update`);
 	};
 
 	// get tabname

@@ -4,6 +4,7 @@ import { useAccess } from '@/hooks';
 import cn from '@/lib/cn';
 import { useLabDipShadeRecipeDescription } from '@/state/LabDip';
 import { DateTime, EditDelete, LinkOnly } from '@/ui';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -33,7 +34,7 @@ export default function Index() {
 					const { uuid } = info.row.original;
 					return (
 						<LinkOnly
-							uri='/lab-dip/shade_recipe/details'
+							uri='/lab-dip/shade_recipe'
 							id={uuid}
 							title={info.getValue()}
 						/>
@@ -69,14 +70,9 @@ export default function Index() {
 				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
 					return (
-						<input
+						<SwitchToggle
 							onChange={() => handelStatusChange(info.row.index)}
 							checked={info.getValue() === 1}
-							type='checkbox'
-							className={cn(
-								'toggle toggle-md checked:toggle-accent'
-							)}
-							defaultChecked
 						/>
 					);
 				},
@@ -142,7 +138,7 @@ export default function Index() {
 	// Update
 	const handelUpdate = (idx) => {
 		const { uuid } = data[idx];
-		navigate(`/lab-dip/shade_recipe/update/${uuid}`);
+		navigate(`/lab-dip/shade_recipe/${uuid}/update`);
 	};
 	const handelStatusChange = async (idx) => {
 		await updateData.mutateAsync({

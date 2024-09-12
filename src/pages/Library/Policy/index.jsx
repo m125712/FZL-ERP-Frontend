@@ -4,6 +4,7 @@ import { useAccess } from '@/hooks';
 import cn from '@/lib/cn';
 import { useLibraryPolicy } from '@/state/Library';
 import { DateTime, EditDelete } from '@/ui';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
@@ -83,15 +84,9 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => {
 					return (
-						<input
+						<SwitchToggle
 							onChange={() => handelStatusCheck(info.row.index)}
 							checked={info.getValue() === 1}
-							type='checkbox'
-							className={cn(
-								'toggle toggle-md checked:toggle-accent'
-							)}
-							defaultChecked
-							disabled={!haveAccess.includes('click_status')}
 						/>
 					);
 				},

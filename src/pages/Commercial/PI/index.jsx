@@ -134,7 +134,7 @@ export default function Index() {
 
 	const handelUpdate = (idx) => {
 		const uuid = data[idx]?.uuid;
-		navigate(`/commercial/pi/update/${uuid}`);
+		navigate(`/commercial/pi/${uuid}/update`);
 	};
 
 	if (isLoading)

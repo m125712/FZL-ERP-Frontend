@@ -6,8 +6,10 @@ import { useSliderDieCastingProduction } from '@/state/Slider';
 
 import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } =
@@ -38,12 +40,6 @@ export default function Index() {
 				header: 'Item Name',
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'item_type',
-			// 	header: 'Type',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'cavity_goods',
 				header: 'Cavity Goods',
@@ -79,7 +75,6 @@ export default function Index() {
 				header: 'O/N',
 				cell: (info) => info.getValue(),
 			},
-
 			{
 				accessorKey: 'weight',
 				header: (
@@ -104,22 +99,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
-			// {
-			// 	accessorKey: "remarks",
-			// 	header: "Remarks",
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 	info.getValue()
-			// ),
-			// },
-			// {
-			// 	accessorKey: "issued_by_name",
-			// 	header: "Issued By",
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 	info.getValue()
-			// ),
-			// },
 			{
 				accessorKey: 'created_at',
 				header: 'Created At',
@@ -130,15 +109,12 @@ export default function Index() {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
-			// {
-			// 	accessorKey: "updated_at",
-			// 	header: "Updated",
-			// 	enableColumnFilter: false,
-			// 	width: "w-24",
-			// 	cell: (info) => {
-			// 		return <DateTime date={info.getValue()} />;
-			// 	},
-			// },
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'action',
 				header: 'Action',
@@ -148,9 +124,11 @@ export default function Index() {
 					const uuid = info.row.original?.uuid;
 					return (
 						<EditDelete
-							handelUpdate={() => handelUpdate(uuid)}
+							idx={info.row.index}
+							handelUpdate={handelUpdate}
 							handelDelete={() => handelDelete(info.row.id)}
 							showDelete={haveAccess.includes('delete')}
+							showUpdate={haveAccess.includes('update')}
 						/>
 					);
 				},
@@ -163,8 +141,17 @@ export default function Index() {
 	const handelAdd = () => navigate('/slider/die-casting/production/entry');
 
 	// Update
-	const handelUpdate = (uuid) => {
-		navigate(`/slider/die-casting/production/update/${uuid}`);
+	const [update, setUpdate] = useState({
+		uuid: null,
+	});
+
+	const handelUpdate = (idx) => {
+		setUpdate((prev) => ({
+			...prev,
+			uuid: data[idx]?.uuid,
+		}));
+
+		window[info.getAddOrUpdateModalId()].showModal();
 	};
 
 	const [deleteItem, setDeleteItem] = useState({
@@ -195,6 +182,16 @@ export default function Index() {
 				handelAdd={handelAdd}
 				extraClass={'py-0.5'}
 			/>
+
+			<Suspense>
+				<AddOrUpdate
+					modalId={info.getAddOrUpdateModalId()}
+					{...{
+						update,
+						setUpdate,
+					}}
+				/>
+			</Suspense>
 			<Suspense>
 				<DeleteModal
 					modalId={info.getDeleteModalId()}

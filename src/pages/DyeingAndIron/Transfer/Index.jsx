@@ -1,21 +1,21 @@
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
+import { useAccess } from '@/hooks';
 import { useDyeingTransfer } from '@/state/Dyeing';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
+import { lazy,  useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Update = lazy(() => import('./EntryUpdate/Update'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useDyeingTransfer();
 	const info = new PageInfo('Dyeing Transfer', url, 'dyeing__transfer');
-	const [transfer, setTransfer] = useState([]);
-	const [error, setError] = useState(null);
 	const haveAccess = useAccess('dyeing__transfer');
 	const navigate = useNavigate();
+
+	console.log(data);
 
 	const columns = useMemo(
 		() => [
@@ -99,7 +99,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'created_by_name',

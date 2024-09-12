@@ -1,6 +1,6 @@
 import { CalenderIcon } from '@/assets/icons';
 import { format } from 'date-fns';
-import { forwardRef, Fragment, useCallback, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import {
 	Button,
@@ -92,27 +92,6 @@ const FilterDate = ({ columnName, column, isFullFilter }) => {
 					{'>'}
 				</Button>
 			</div>
-		);
-	}
-
-	if (!isFullFilter) {
-		return (
-			<Fragment key={id}>
-				<DatePicker
-					selected={endDate}
-					minDate={oldStartDate}
-					maxDate={oldEndDate}
-					endDate={endDate}
-					startDate={startDate}
-					onChange={handleOnChange}
-					withPortal
-					renderCustomHeader={CustomHeader}
-					customInput={
-						<ExampleCustomInput className='btn-filter-outline h-full pr-7' />
-					}
-					{...DefaultConfig}
-				/>
-			</Fragment>
 		);
 	}
 

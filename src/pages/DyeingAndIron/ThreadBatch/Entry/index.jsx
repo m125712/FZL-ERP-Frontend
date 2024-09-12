@@ -1,21 +1,13 @@
-import { DeleteModal, ProceedModal } from '@/components/Modal';
+import { ProceedModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import {
-	useFetch,
 	useFetchForRhfReset,
 	useFetchForRhfResetForPlanning,
-	usePostFunc,
 	useRHF,
-	useUpdateFunc,
 } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useDyeingThreadBatch } from '@/state/Dyeing';
-import {
-	CheckBoxWithoutLabel,
-	DynamicDeliveryField,
-	Input,
-	Textarea,
-} from '@/ui';
+import { CheckBoxWithoutLabel, Input, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -31,6 +23,7 @@ import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import Header from './Header';
+import { ShowLocalToast } from '@/components/Toast';
 
 // UPDATE IS WORKING
 export default function Index() {
@@ -49,7 +42,6 @@ export default function Index() {
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
 	const isUpdate = batch_uuid !== undefined;
-	const [orderInfoIds, setOrderInfoIds] = useState({});
 	const [proceed, setProceed] = useState(false);
 	const [batchData, setBatchData] = useState(null);
 	const [batchEntry, setBatchEntry] = useState(null);
@@ -147,7 +139,10 @@ export default function Index() {
 				}));
 
 			if (batch_entry_updated.length === 0) {
-				alert('Select at least one item to proceed.');
+				ShowLocalToast({
+					type: 'warning',
+					message: 'Select at least one item to proceed.',
+				});
 			} else {
 				await updateData.mutateAsync({
 					url: `/thread/batch/${batch_data_updated?.uuid}`,
@@ -171,9 +166,7 @@ export default function Index() {
 					)
 					.then(() => invalidateDyeingThreadBatch())
 					.then(
-						navigate(
-							`/dyeing-and-iron/thread-batch/details/${batch_uuid}`
-						)
+						navigate(`/dyeing-and-iron/thread-batch/${batch_uuid}`)
 					)
 					.catch((err) => console.log(err));
 			}
@@ -204,7 +197,10 @@ export default function Index() {
 		setBatchEntry(batch_entry); // * use for modal
 
 		if (batch_entry.length === 0) {
-			alert('Select at least one item to proceed.');
+			ShowLocalToast({
+				type: 'warning',
+				message: 'Select at least one item to proceed.',
+			});
 		} else {
 			if (
 				// * check if all colors are same
@@ -246,7 +242,7 @@ export default function Index() {
 					.then(() => invalidateDyeingThreadBatch())
 					.then(
 						navigate(
-							`/dyeing-and-iron/thread-batch/details/${batch_data.uuid}`
+							`/dyeing-and-iron/thread-batch/${batch_data.uuid}`
 						)
 					)
 					.catch((err) => console.log(err));
@@ -281,9 +277,7 @@ export default function Index() {
 				.then(() => reset(Object.assign({}, DYEING_THREAD_BATCH_NULL)))
 				.then(() => invalidateDyeingThreadBatch())
 				.then(
-					navigate(
-						`/dyeing-and-iron/thread-batch/details/${batchData.uuid}`
-					)
+					navigate(`/dyeing-and-iron/thread-batch/${batchData.uuid}`)
 				)
 				.catch((err) => console.log(err));
 

@@ -95,7 +95,9 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_rm'),
+				hidden:
+					!haveAccess.includes('click_update_rm') &&
+					!haveAccess.includes('click_delete_rm'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -104,6 +106,7 @@ export default function Index() {
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
 							showDelete={haveAccess.includes('click_delete_rm')}
+							showUpdate={haveAccess.includes('click_update_rm')}
 						/>
 					);
 				},

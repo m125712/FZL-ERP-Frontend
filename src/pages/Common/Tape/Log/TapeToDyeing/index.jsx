@@ -2,14 +2,15 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetch } from '@/hooks';
-import { EditDelete } from '@/ui';
+import { useCommonTapeSFG, useCommonTapeToDyeing } from '@/state/Common';
+import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useMemo, useState } from 'react';
-import { useCommonTapeToDyeing } from '@/state/Common';
 import AddOrUpdate from './AddOrUpdate';
 export default function Index() {
 	const { data, deleteData, isLoading } = useCommonTapeToDyeing();
 	const info = new PageInfo('Tape -> Dyeing', '/zipper/tape-coil-to-dyeing');
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 
 	const haveAccess = useAccess('common__coil_log');
 	const columns = useMemo(
@@ -53,13 +54,13 @@ export default function Index() {
 				header: 'Created',
 				enableColumnFilter: false,
 				filterFn: 'isWithinRange',
-				cell: (info) => info.getValue(),
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'remarks',
@@ -72,7 +73,9 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_sfg'),
+				hidden:
+					!haveAccess.includes('click_update_sfg') &&
+					!haveAccess.includes('click_delete_sfg'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -81,6 +84,7 @@ export default function Index() {
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
 							showDelete={haveAccess.includes('click_delete_sfg')}
+							showUpdate={haveAccess.includes('click_update_sfg')}
 						/>
 					);
 				},
@@ -97,6 +101,7 @@ export default function Index() {
 	const [entry, setEntry] = useState({
 		uuid: null,
 		trx_quantity: null,
+		tape_prod: null,
 		remarks: null,
 	});
 
@@ -104,6 +109,8 @@ export default function Index() {
 		setEntry((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
+			trx_quantity: data[idx].trx_quantity,
+			tape_prod: data[idx].tape_prod,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -123,6 +130,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
+	invalidateCommonTapeSFG();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

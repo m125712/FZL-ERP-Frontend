@@ -1,4 +1,5 @@
 import { DeleteModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
 import { useOrderDescription } from '@/state/Order';
@@ -6,6 +7,7 @@ import {
 	ActionButtons,
 	DynamicField,
 	FormField,
+	Input,
 	JoinInput,
 	ReactSelect,
 	Textarea,
@@ -19,11 +21,66 @@ import {
 } from '@util/Schema';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { HotKeys, configure } from 'react-hotkeys';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import {
+	Navigate,
+	useLocation,
+	useNavigate,
+	useParams,
+} from 'react-router-dom';
 
 export default function Index() {
-	const { postData, deleteData } = useOrderDescription();
 	const { order_number, order_description_uuid, coil_uuid } = useParams();
+	const location = useLocation();
+
+	const { postData, deleteData } = useOrderDescription();
+	const { value: data } = useFetch(`/zipper/tape-coil/${coil_uuid}`, [
+		coil_uuid,
+	]);
+
+	const segments = location.pathname.split('/').filter((segment) => segment);
+
+	const secondElement = segments[1];
+	let MAX_QTY = 0;
+	secondElement === 'coil'
+		? (MAX_QTY = data?.quantity_in_coil)
+		: (MAX_QTY = data?.quantity);
+	console.log(coil_uuid);
+	const { value: order_id } = useFetch(
+		`/other/order/order-description/value/label/by/${coil_uuid}`,
+		[coil_uuid]
+	);
+	console.log(order_id);
+	// let schema = {};
+	// if (secondElement === 'coil') {
+	// 	schema = {
+	// 		coil_to_dyeing_entry: yup.array().of(
+	// 			yup.object().shape({
+	// 				order_id: UUID_REQUIRED,
+	// 				trx_quantity: NUMBER_DOUBLE_REQUIRED.max(
+	// 					data?.quantity_in_coil,
+	// 					'Beyond Stock'
+	// 				),
+	// 				// .max(yup.ref('max_trf_qty'), 'Beyond Stock'), // Transforms empty strings to null
+	// 				remarks: STRING.nullable(),
+	// 			})
+	// 		),
+	// 	};
+	// } else {
+	// 	schema = {
+	// 		coil_to_dyeing_entry: yup.array().of(
+	// 			yup.object().shape({
+	// 				order_id: UUID_REQUIRED,
+	// 				trx_quantity: NUMBER_DOUBLE_REQUIRED.max(
+	// 					data?.quantity,
+	// 					'Beyond Stock'
+	// 				),
+	// 				// .max(yup.ref('max_trf_qty'), 'Beyond Stock'), // Transforms empty strings to null
+	// 				remarks: STRING.nullable(),
+	// 			})
+	// 		),
+	// 	};
+	// }
+
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const isUpdate =
@@ -41,6 +98,16 @@ export default function Index() {
 		watch,
 		context,
 	} = useRHF(COMMON_COIL_TO_DYEING_SCHEMA, COMMON_COIL_TO_DYEING_NULL);
+
+	const getTotalQty = useCallback(
+		(coil_to_dyeing_entry) =>
+			coil_to_dyeing_entry.reduce((acc, item) => {
+				return acc + Number(item.trx_quantity);
+			}, 0),
+		[watch()]
+	);
+	const MAX_TAPE_TRX_QTY =
+		MAX_QTY - getTotalQty(watch('coil_to_dyeing_entry'));
 
 	useEffect(() => {
 		order_number !== undefined
@@ -101,6 +168,14 @@ export default function Index() {
 		// * Add new data*//
 		const created_at = GetDateTime();
 
+		if (MAX_TAPE_TRX_QTY <= 0) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
+
 		const entryData = [...data.coil_to_dyeing_entry].map((item) => ({
 			...item,
 			uuid: nanoid(),
@@ -131,7 +206,7 @@ export default function Index() {
 	};
 
 	// Check if order_number is valid
-	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
+	// if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 
 	const handelDuplicateDynamicField = useCallback(
 		(index) => {
@@ -167,13 +242,7 @@ export default function Index() {
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	const basePath = '/common/coil/sfg/entry-to-dyeing/';
-	const isMatch = location.pathname.startsWith(basePath); // * checking if the current path matches the base path
-
-	const { value: order_id } = useFetch(
-		isMatch
-			? `/other/order/description/value/label?item=nylon`
-			: `/other/order/description/value/label?item=without-nylon`
-	);
+	//const isMatch = location.pathname.startsWith(basePath); // * checking if the current path matches the base path
 
 	return (
 		<div>
@@ -183,7 +252,7 @@ export default function Index() {
 					noValidate
 					className='flex flex-col gap-4'>
 					<DynamicField
-						title='Details'
+						title={`Remaining: ${MAX_TAPE_TRX_QTY} KG`}
 						handelAppend={handelEntryAppend}
 						tableHead={[
 							'Order Entry ID',
@@ -281,7 +350,18 @@ export default function Index() {
 								</td>
 							</tr>
 						))}
+						<tr className='border-t border-primary/30'>
+							<td
+								className='py-4 text-right font-bold'
+								colSpan='2'>
+								Total Quantity:
+							</td>
+							<td className='py-4 font-bold'>
+								{getTotalQty(watch('coil_to_dyeing_entry'))}
+							</td>
+						</tr>
 					</DynamicField>
+
 					<div className='modal-action'>
 						<button
 							type='submit'

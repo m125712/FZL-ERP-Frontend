@@ -1,9 +1,11 @@
 import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
+import { ShowLocalToast } from '@/components/Toast';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 import {
-	useCommonTapeProductionByUUID,
 	useCommonCoilSFG,
+	useCommonTapeProductionByUUID,
 } from '@/state/Common';
+import { useOtherMaterial } from '@/state/Other';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -30,6 +32,7 @@ export default function Index({
 		updateCoilLog?.uuid
 	);
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
+	const { data: material } = useOtherMaterial();
 
 	const MAX_QUANTITY =
 		Number(updateCoilLog.trx_quantity_in_coil) +
@@ -42,16 +45,14 @@ export default function Index({
 			),
 	};
 
-	const { register, handleSubmit, errors, reset, context } = useRHF(
-		schema,
-		TAPE_OR_COIL_PRODUCTION_LOG_NULL
-	);
+	const { register, handleSubmit, errors, reset, context, getValues, watch } =
+		useRHF(schema, TAPE_OR_COIL_PRODUCTION_LOG_NULL);
 
-	useEffect(() => {
-		if (data) {
-			reset(data);
-		}
-	}, [data]);
+	useFetchForRhfReset(
+		`/zipper/tape-coil-production/${updateCoilLog?.uuid}`,
+		updateCoilLog?.uuid,
+		reset
+	);
 
 	const onClose = () => {
 		setUpdateCoilLog((prev) => ({
@@ -69,7 +70,16 @@ export default function Index({
 		window[modalId].close();
 	};
 
+	const MAX_WASTAGE = MAX_QUANTITY - watch('production_quantity');
+
 	const onSubmit = async (data) => {
+		if (MAX_WASTAGE <= watch('wastage')) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		// Update item
 		if (updateCoilLog?.uuid !== null && updateCoilLog?.uuid !== undefined) {
 			const updatedData = {
@@ -96,20 +106,18 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<JoinInput
+			<Input
 				title='Production Quantity'
 				label='production_quantity'
-				sub_label={`Min: ${MAX_QUANTITY}`}
-				unit='KG'
-				placeholder={`Min: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${MAX_QUANTITY}`}
+				placeholder={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>
-			<JoinInput
+			<Input
 				title='Wastage'
 				label='wastage'
-				sub_label={`Min: ${MAX_QUANTITY}`}
-				unit='KG'
-				placeholder={`Min: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${MAX_WASTAGE}`}
+				placeholder={`Max: ${MAX_WASTAGE}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

@@ -1,4 +1,5 @@
 import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
 import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import nanoid from '@/lib/nanoid';
@@ -26,10 +27,7 @@ export default function Index({
 		used_quantity: RM_MATERIAL_USED_SCHEMA.remaining.max(
 			updateTapeStock?.tape_making
 		),
-		wastage: RM_MATERIAL_USED_SCHEMA.remaining.max(
-			MAX_QUANTITY,
-			`Must be less than or equal ${MAX_QUANTITY}`
-		),
+		wastage: RM_MATERIAL_USED_SCHEMA.remaining,
 	};
 
 	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
@@ -37,6 +35,8 @@ export default function Index({
 		RM_MATERIAL_USED_NULL
 	);
 
+	const MAX_WASTAGE = MAX_QUANTITY - watch('used_quantity');
+	// 	MAX_QUANTITY - getTotalQty(watch('coil_to_dyeing_entry'));
 	const onClose = () => {
 		setUpdateTapeStock((prev) => ({
 			...prev,
@@ -49,6 +49,13 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
+		if (MAX_WASTAGE <= watch('wastage')) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		const updatedData = {
 			...data,
 
@@ -64,7 +71,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
-		invalidateCommonTapeRMLog(); 
+		invalidateCommonTapeRMLog();
 	};
 
 	return (

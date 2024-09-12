@@ -1,7 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { usePurchaseLog } from '@/state/Store';
+import { useMaterialInfo, usePurchaseLog } from '@/state/Store';
 import { DateTime, EditDelete, LinkOnly } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { lazy, useMemo, useState } from 'react';
@@ -11,6 +11,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = usePurchaseLog();
+	const { invalidateQuery: invalidateMaterial } = useMaterialInfo();
 	const info = new PageInfo('Store / Purchase', url);
 	const haveAccess = useAccess('store__log');
 
@@ -164,6 +165,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
+	invalidateMaterial();
 
 	if (isLoading)
 		return (

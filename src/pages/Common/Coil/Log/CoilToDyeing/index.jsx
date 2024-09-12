@@ -2,15 +2,17 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess, useFetch } from '@/hooks';
-import { EditDelete, DateTime } from '@/ui';
+import { useCommonCoilSFG, useCommonCoilToDyeing } from '@/state/Common';
+import { DateTime, EditDelete } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useMemo, useState } from 'react';
 import AddOrUpdate from './AddOrUpdate';
-import { useCommonCoilToDyeing } from '@/state/Common';
 
 export default function Index() {
 	const { data, deleteData, isLoading } = useCommonCoilToDyeing();
 	const info = new PageInfo('Coil -> Dyeing', '/zipper/tape-coil-to-dyeing');
+	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
+	console.log(data);
 
 	const haveAccess = useAccess('common__coil_log');
 
@@ -82,7 +84,9 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_sfg'),
+				hidden:
+					!haveAccess.includes('click_update_sfg') &&
+					!haveAccess.includes('click_delete_sfg'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -91,6 +95,7 @@ export default function Index() {
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
 							showDelete={haveAccess.includes('click_delete_sfg')}
+							showUpdate={haveAccess.includes('click_update_sfg')}
 						/>
 					);
 				},
@@ -98,19 +103,20 @@ export default function Index() {
 		],
 		[data]
 	);
-
-	const { value: order_id } = useFetch(
-		'/other/order/description/value/label'
-	);
+	console.log({
+		data,
+	});
 
 	const [entryUUID, setEntryUUID] = useState({
 		uuid: null,
+		max_trf_qty: null,
 	});
 
 	const handelUpdate = (idx) => {
 		setEntryUUID((prev) => ({
 			...prev,
-			uuid: data[idx].uuid,
+			uuid: data[idx]?.uuid,
+			max_trf_qty: data[idx]?.max_trf_qty,
 		}));
 
 		window[info.getAddOrUpdateModalId()].showModal();
@@ -131,6 +137,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
+	invalidateCommonCoilSFG();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -142,7 +149,6 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						order_id,
 						entryUUID,
 						setEntryUUID,
 					}}

@@ -18,6 +18,7 @@ export default function SingleInformation({ order, idx, hasInitialOrder }) {
 			/>,
 		];
 	};
+
 	return (
 		<SectionContainer
 			title={`Information ${idx !== undefined && `#${idx + 1}`}`}

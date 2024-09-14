@@ -1,6 +1,8 @@
-import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
 import { useMemo } from 'react';
+import { useAccess } from '@/hooks';
+
+import ReactTable from '@/components/Table';
+
 import getColumn from './Column';
 
 export default function Index({
@@ -9,6 +11,7 @@ export default function Index({
 	stopper_type_name,
 	zipper_number_name,
 	order_entry,
+	sliderQuantity,
 }) {
 	const haveAccess = useAccess('order__details_by_uuid');
 
@@ -24,5 +27,14 @@ export default function Index({
 		[order_entry]
 	);
 
-	return <ReactTable title='Details' data={order_entry} columns={columns} />;
+	return (
+		<ReactTable title='Details' data={order_entry} columns={columns}>
+			<tr className='text-sm'>
+				<td colSpan={5} className=' text-center'>
+					Total Quantity:
+				</td>
+				<td className='px-3 py-1'>{sliderQuantity}</td>
+			</tr>
+		</ReactTable>
+	);
 }

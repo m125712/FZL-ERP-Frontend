@@ -1,11 +1,9 @@
-import { ProceedModal } from '@/components/Modal';
-import ReactTable from '@/components/Table';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import {
 	useFetchForRhfReset,
 	useFetchForRhfResetForPlanning,
 	useRHF,
 } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useDyeingThreadBatch } from '@/state/Dyeing';
 import { CheckBoxWithoutLabel, Input, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
@@ -19,11 +17,15 @@ import {
 	NUMBER_REQUIRED,
 	STRING,
 } from '@util/Schema';
-import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
-import Header from './Header';
+
+import nanoid from '@/lib/nanoid';
+import { ProceedModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
+
+import Header from './Header';
 
 // UPDATE IS WORKING
 export default function Index() {
@@ -208,15 +210,13 @@ export default function Index() {
 					(item) =>
 						item.shade_recipe_uuid ===
 						batch_entry[0].shade_recipe_uuid
-				)
-			) {
-				window['proceed_modal'].showModal(); // * if not then show modal
-			} else if (
+				) ||
 				!batch_entry.every(
+					// * check if all bleaching are same
 					(item) => item.bleaching === batch_entry[0].bleaching
 				)
 			) {
-				window['proceed_modal_2'].showModal();
+				window['proceed_modal'].showModal(); // * if not then show modal
 			} else {
 				await postData.mutateAsync({
 					url,
@@ -481,9 +481,7 @@ export default function Index() {
 				<ReactTable data={BatchEntryField} columns={columns} />
 
 				<div className='modal-action'>
-					<button
-						className='text-md btn btn-primary btn-block'
-						onClick={() => setProceed(true)}>
+					<button className='text-md btn btn-primary btn-block'>
 						Save
 					</button>
 				</div>
@@ -491,18 +489,12 @@ export default function Index() {
 
 			<Suspense>
 				<ProceedModal
-					text='Shade'
+					text='Shade or Bleach'
 					modalId={'proceed_modal'}
 					setProceed={setProceed}
 				/>
 			</Suspense>
-			<Suspense>
-				<ProceedModal
-					text='bleach'
-					modalId={'proceed_modal_2'}
-					setProceed={setProceed}
-				/>
-			</Suspense>
+
 			<DevTool control={control} placement='top-left' />
 		</div>
 	);

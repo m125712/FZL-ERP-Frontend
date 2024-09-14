@@ -1770,7 +1770,7 @@ export const DYEING_THREAD_BATCH_ENTRY_TRANSFER_NULL = {
 
 // * Dyeing Thread Batch Dyeing schema*//
 export const DYEING_THREAD_BATCH_DYEING_SCHEMA = {
-	yarn_quantity: NUMBER.moreThan(0),
+	yarn_quantity: NUMBER_REQUIRED,
 	dyeing_operator: STRING_REQUIRED,
 	reason: STRING_REQUIRED,
 	category: STRING_REQUIRED,
@@ -1782,7 +1782,6 @@ export const DYEING_THREAD_BATCH_DYEING_SCHEMA = {
 };
 
 export const DYEING_THREAD_BATCH_DYEING_NULL = {
-	uuid: null,
 	dyeing_operator: '',
 	reason: '',
 	category: '',
@@ -1856,6 +1855,8 @@ export const DYEING_TRANSFER_NULL = {
 		},
 	],
 };
+
+
 
 export const UPDATE_DYEING_TRANSFER_SCHEMA = {
 	order_description_uuid: UUID_FK,

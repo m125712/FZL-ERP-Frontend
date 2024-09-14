@@ -35,7 +35,7 @@ export default function Index() {
 	const [data, setData] = useState('');
 	const [getPdfData, setGetPdfData] = useState(null);
 
-	const path = getPath(haveAccess, order_number, user.id);
+	const path = getPath(haveAccess, order_number, user?.uuid);
 
 	useEffect(() => {
 		document.title = order_number;

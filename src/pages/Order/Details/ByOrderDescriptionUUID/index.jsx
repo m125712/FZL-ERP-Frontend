@@ -1,7 +1,9 @@
-import { Suspense } from '@/components/Feedback';
-import { useFetchFunc } from '@/hooks';
 import { lazy, useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
+import { useFetchFunc } from '@/hooks';
+
+import { Suspense } from '@/components/Feedback';
+
 import InformationSkeleton from '../_components/Information/skeleton';
 
 const SingleInformation = lazy(() => import('../_components/Information'));
@@ -12,6 +14,7 @@ export default function Index({ initial_order, idx }) {
 	const { order_number, order_description_uuid } = useParams();
 
 	const [order, setOrder] = useState(initial_order || []);
+	const [sliderQty, setSliderQty] = useState(0);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const hasInitialOrder =
@@ -35,6 +38,10 @@ export default function Index({ initial_order, idx }) {
 	if (loading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
+	const sliderQuantity = order?.order_entry.reduce((sum, item) => {
+		return sum + parseFloat(item.quantity);
+	}, 0);
+
 	return (
 		<div className='space-y-4'>
 			<Suspense fallback={<InformationSkeleton />}>
@@ -42,12 +49,13 @@ export default function Index({ initial_order, idx }) {
 					order={order}
 					idx={idx}
 					hasInitialOrder={hasInitialOrder}
+					sliderQuantity={sliderQuantity}
 				/>
 			</Suspense>
 
 			<Suspense>
 				<Timeline {...order} />
-				<Table {...order} />
+				<Table {...order} sliderQuantity={sliderQuantity} />
 			</Suspense>
 		</div>
 	);

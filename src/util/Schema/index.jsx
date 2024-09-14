@@ -524,8 +524,6 @@ export const ORDER_SCHEMA = {
 	top_stopper: UUID_FK,
 	bottom_stopper: UUID_FK,
 
-	hand: UUID_FK,
-
 	// logo
 	logo_type: UUID_FK,
 	is_logo_body: BOOLEAN_DEFAULT_VALUE(false),
@@ -567,7 +565,6 @@ export const ORDER_NULL = {
 	puller_type: null,
 	teeth_color: null,
 	puller_color: null,
-	hand: null,
 	special_requirement: '',
 	description: '',
 	remarks: '',

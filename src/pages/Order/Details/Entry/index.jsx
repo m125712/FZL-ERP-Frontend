@@ -1,17 +1,19 @@
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
 import { useOrderDescription, useOrderDetails } from '@/state/Order';
-import { ActionButtons, DynamicField, Input, JoinInput, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { ORDER_NULL, ORDER_SCHEMA } from '@util/Schema';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Spreadsheet, { createEmptyMatrix } from 'react-spreadsheet';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { DeleteModal } from '@/components/Modal';
+import { ActionButtons, DynamicField, Input, JoinInput, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
-import { DeleteModal } from '@/components/Modal';
+import { ORDER_NULL, ORDER_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
+import { UUID } from '@/util/Schema/utils';
 
 import { SelectEdit, SelectView } from './CC';
 import Header from './Header';
@@ -40,6 +42,8 @@ export default function Index() {
 	const isUpdate =
 		order_description_uuid !== undefined && order_number !== undefined;
 
+	const [endType, setEndType] = useState('');
+	const [itemType, setItemType] = useState('');
 	const {
 		register,
 		handleSubmit,
@@ -50,7 +54,22 @@ export default function Index() {
 		useFieldArray,
 		getValues,
 		watch,
-	} = useRHF(ORDER_SCHEMA, ORDER_NULL);
+	} = useRHF(
+		{
+			...ORDER_SCHEMA,
+			nylon_stopper: UUID.when({
+				is: () => itemType.toLowerCase() === 'nylon',
+				then: (schema) => schema.required('Required'),
+				otherwise: (schema) => schema,
+			}),
+			hand: UUID.when({
+				is: () => endType.toLowerCase() === 'open end',
+				then: (schema) => schema.required('Required'),
+				otherwise: (schema) => schema,
+			}),
+		},
+		ORDER_NULL
+	);
 
 	useEffect(() => {
 		order_number !== undefined
@@ -395,19 +414,12 @@ export default function Index() {
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
 					className='flex flex-col gap-4'>
-					{/* <div>
-						<button type='button' onClick={addRow}>
-							Add row
-						</button>
-					</div>
-					<Spreadsheet
-						className='flex w-full'
-						columnLabels={columnLabels}
-						data={arr}
-					/> */}
-
 					<Header
 						{...{
+							endType,
+							setEndType,
+							itemType,
+							setItemType,
 							register,
 							errors,
 							control,

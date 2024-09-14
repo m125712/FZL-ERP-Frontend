@@ -1,5 +1,6 @@
-import cn from '@/lib/cn';
 import RenderTable from '@/ui/Others/Table/RenderTable';
+
+import cn from '@/lib/cn';
 
 const renderLogo = (logo_type_name, is_logo_body, is_logo_puller) => {
 	if (logo_type_name === '---')
@@ -23,7 +24,15 @@ const renderLogo = (logo_type_name, is_logo_body, is_logo_puller) => {
 	};
 };
 
-export default function SliderDescription({ order_description, className }) {
+export default function SliderDescription({
+	order_description,
+	className,
+}) {
+
+	const sliderQuantity = order_description?.order_entry.reduce((sum, item) => {
+		return sum + parseFloat(item.quantity);
+	}, 0);
+
 	const renderItems = () => {
 		const {
 			slider_name,
@@ -93,9 +102,14 @@ export default function SliderDescription({ order_description, className }) {
 				label: 'Garments Remarks',
 				value: garments_remarks,
 			},
+			{
+				label: 'Sliders Required',
+				value: sliderQuantity,
+			},
 		];
 		return items;
 	};
+
 	return (
 		<RenderTable
 			className={cn(className)}

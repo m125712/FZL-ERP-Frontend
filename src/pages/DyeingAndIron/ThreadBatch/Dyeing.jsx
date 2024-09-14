@@ -103,6 +103,7 @@ export default function Index({
 		window[modalId].close();
 	};
 
+	console.log(errors);
 	const onSubmit = async (data) => {
 		if (dyeing?.dyeing_operator !== null) {
 			const updatedData = {
@@ -302,6 +303,7 @@ export default function Index({
 					}}
 				/>
 			</FormField>
+			<Input label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);

@@ -3,7 +3,6 @@ import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAuth } from '@/context/auth';
 import { useAccess, useFetch } from '@/hooks';
-import cn from '@/lib/cn';
 import { useDyeingThreadBatch } from '@/state/Dyeing';
 import { DateTime, EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
@@ -12,7 +11,7 @@ import PageInfo from '@/util/PageInfo';
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Yarn = lazy(() => import('../ThreadBatch/Yarn'));
-const Dyeing = lazy(() => import('../ThreadBatch/Dyeing'));
+const Dyeing = lazy(() => import('./Dyeing'));
 
 export default function Index() {
 	const { data, url, updateData, isLoading } = useDyeingThreadBatch();
@@ -222,6 +221,7 @@ export default function Index() {
 		uuid: null,
 		yarn_quantity: null,
 	});
+
 	const handelYarn = (idx) => {
 		setYarn((prev) => ({
 			...prev,
@@ -231,13 +231,14 @@ export default function Index() {
 		}));
 		window['YarnModal'].showModal();
 	};
+
 	const [dyeing, setDyeing] = useState({
 		uuid: null,
 		dyeing_operator: null,
 		batch_id: null,
 	});
+
 	const handelDyeing = (idx) => {
-		console.log(data[idx], 'data');
 		setDyeing((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,

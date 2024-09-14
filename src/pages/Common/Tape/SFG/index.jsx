@@ -1,13 +1,14 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useCommonTapeSFG } from '@/state/Common';
+import { DateTime, EditDelete, Transfer } from '@/ui';
+import { useNavigate } from 'react-router-dom';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
-import { useCommonTapeSFG } from '@/state/Common';
 
-import { DateTime, EditDelete, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useAccess } from '@/hooks';
 
 const TrxToCoil = lazy(() => import('./TrxToCoil'));
 const TrxToDying = lazy(() => import('./TrxToDying'));
@@ -19,7 +20,6 @@ export default function Index() {
 	const info = new PageInfo('Common/Tape/SFG', url, 'common__tape_sfg');
 	const haveAccess = useAccess(info.getTab());
 	const navigate = useNavigate();
-	console.log(data);
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -31,6 +31,7 @@ export default function Index() {
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
+				width: 'w-40',
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
@@ -39,21 +40,25 @@ export default function Index() {
 				accessorKey: 'item_name',
 				header: 'Item',
 				enableColumnFilter: false,
-				width: 'w-30',
-
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
 				accessorKey: 'zipper_number_name',
-				header: 'Zipper Number',
+				header: (
+					<div>
+						Zipper
+						<br />
+						Number
+					</div>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'is_import',
-				header: 'Is Imported',
+				header: 'Imported?',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return Number(info.getValue()) === 1 ? ' Import' : 'Local';
@@ -61,51 +66,22 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'is_reverse',
-				header: 'Is Reverse',
+				header: 'Reverse?',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
-			{
-				accessorKey: 'top',
-				header: 'Top',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'bottom',
-				header: 'Bottom',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'raw_per_kg_meter',
-				header: 'Raw Tape (Meter/Kg)',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'dyed_per_kg_meter',
-				header: 'Dyed Tape (Meter/Kg)',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'trx_quantity_in_coil',
-				header: 'Trx Quantity In Coil',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'quantity_in_coil',
-				header: 'Quantity In Coil',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+
+			// {
+			// 	accessorKey: 'quantity_in_coil',
+			// 	header: 'Quantity In Coil',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorKey: 'actions1',
-				header: 'Production Action',
+				header: '',
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_production'),
@@ -137,12 +113,8 @@ export default function Index() {
 				hidden: !haveAccess.includes('click_to_coil'),
 				width: 'w-24',
 				cell: (info) => {
-					const itemName =
-						info.row.original?.item_name?.toLowerCase();
-
 					if (
-						itemName == 'nylon plastic' ||
-						itemName == 'nylon metallic'
+						info.row.original?.item_name?.toLowerCase() == 'nylon'
 					) {
 						return (
 							<Transfer
@@ -153,6 +125,12 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'trx_quantity_in_coil',
+				header: <div>Trx Quantity</div>,
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'action',
 				header: 'To Dying',
 				enableColumnFilter: false,
@@ -160,12 +138,8 @@ export default function Index() {
 				hidden: !haveAccess.includes('click_to_dyeing'),
 				width: 'w-24',
 				cell: (info) => {
-					const itemName =
-						info.row.original?.item_name?.toLowerCase();
-
 					if (
-						itemName !== 'nylon plastic' &&
-						itemName !== 'nylon metallic'
+						info.row.original?.item_name?.toLowerCase() != 'nylon'
 					) {
 						return (
 							<Transfer
@@ -174,6 +148,42 @@ export default function Index() {
 						);
 					}
 				},
+			},
+			{
+				accessorKey: 'top',
+				header: 'Top',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'bottom',
+				header: 'Bottom',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'raw_per_kg_meter',
+				header: (
+					<span>
+						Raw Tape
+						<br />
+						(Meter/Kg)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'dyed_per_kg_meter',
+				header: (
+					<span>
+						Dyed Tape
+						<br />
+						(Meter/Kg)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'created_by_name',

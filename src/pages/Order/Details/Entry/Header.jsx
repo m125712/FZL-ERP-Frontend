@@ -1,4 +1,4 @@
-import { useFetch } from '@/hooks';
+import { useEffect, useState } from 'react';
 import {
 	CheckBox,
 	FormField,
@@ -7,8 +7,9 @@ import {
 	SectionEntryBody,
 	Textarea,
 } from '@/ui';
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+
+import { useFetch } from '@/hooks';
 
 export default function Header({
 	register,
@@ -20,6 +21,7 @@ export default function Header({
 	is_logo_puller,
 }) {
 	const { order_number, order_description_uuid } = useParams();
+	console.log(getValues());
 
 	const { value: order } = useFetch(`/other/order/info/value/label`);
 	const { value: item } = useFetch(`/other/order-properties/by/item`);
@@ -240,6 +242,8 @@ export default function Header({
 							/>
 						</FormField>
 					)}
+				</div>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField label='lock_type' title='Lock' errors={errors}>
 						<Controller
 							name={'lock_type'}
@@ -260,8 +264,6 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-				</div>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField
 						label='teeth_color'
 						title='Teeth Color'

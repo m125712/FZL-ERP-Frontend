@@ -1,11 +1,13 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useOrderProperties } from '@/state/Order';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
+import nanoid from '@/lib/nanoid';
 import { PROPERTIES_NULL, PROPERTIES_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -24,7 +26,7 @@ export default function Index({
 		control,
 		Controller,
 		getValues,
-		context
+		context,
 	} = useRHF(PROPERTIES_SCHEMA, PROPERTIES_NULL);
 
 	useFetchForRhfReset(
@@ -77,26 +79,27 @@ export default function Index({
 	};
 
 	const typeOptions = [
-		{ value: 'end_type', label: 'End Type' },
-		{ value: 'lock_type', label: 'Lock Type' },
-		{ value: 'item', label: 'Item' },
-		{ value: 'zipper_number', label: 'Zipper Number' },
-		{ value: 'puller_type', label: 'Puller Type' },
-		{ value: 'puller_link', label: 'Puller Link' },
-		{ value: 'hand', label: 'Hand' },
-		{ value: 'special_requirement', label: 'Special Requirement' },
-		{ value: 'color', label: 'Color' },
-		{ value: 'stopper_type', label: 'Stopper Type' },
-		{ value: 'coloring_type', label: 'Coloring Type' },
-		{ value: 'slider', label: 'Slider' },
-		{ value: 'top_stopper', label: 'Top Stopper' },
 		{ value: 'bottom_stopper', label: 'Bottom Stopper' },
-		{ value: 'logo_type', label: 'Logo Type' },
-		{ value: 'light_preference', label: 'Light Preference' },
+		{ value: 'color', label: 'Color' },
+		{ value: 'coloring_type', label: 'Coloring Type' },
+		{ value: 'end_type', label: 'End Type' },
+		{ value: 'end_user', label: 'End User' },
 		{ value: 'garments_wash', label: 'Garments Wash' },
+		{ value: 'hand', label: 'Hand' },
+		{ value: 'item', label: 'Item' },
+		{ value: 'light_preference', label: 'Light Preference' },
+		{ value: 'lock_type', label: 'Lock Type' },
+		{ value: 'logo_type', label: 'Logo Type' },
+		{ value: 'nylon_stopper', label: 'Nylon Stopper' },
+		{ value: 'puller_link', label: 'Puller Link' },
+		{ value: 'puller_type', label: 'Puller Type' },
+		{ value: 'slider', label: 'Slider' },
 		{ value: 'slider_body_shape', label: 'Slider Body Shape' },
 		{ value: 'slider_link', label: 'Slider Link' },
-		{ value: 'end_user', label: 'End User' },
+		{ value: 'special_requirement', label: 'Special Requirement' },
+		{ value: 'stopper_type', label: 'Stopper Type' },
+		{ value: 'top_stopper', label: 'Top Stopper' },
+		{ value: 'zipper_number', label: 'Zipper Number' },
 	];
 
 	const itemForOptions = [

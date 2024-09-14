@@ -78,7 +78,7 @@ export default function ItemDescription({ order_description, className }) {
 			...(item_name.toLowerCase() === 'nylon'
 				? [
 						{
-							label: 'nylon_stopper',
+							label: 'Nylon Stopper',
 							value: nylon_stopper_name,
 						},
 					]
@@ -103,9 +103,13 @@ export default function ItemDescription({ order_description, className }) {
 				label: 'stopper',
 				value: stopper_type_name,
 			},
+
 			{
-				label: 'puller',
-				value: puller_type_name,
+				label: 'special requirement',
+				value:
+					special_requirement_name == null
+						? 'M/F'
+						: special_requirement_name + ', M/F',
 			},
 			{
 				label: 'description',
@@ -119,63 +123,70 @@ export default function ItemDescription({ order_description, className }) {
 
 		const sliderInfo = [
 			{
-				label: 'slider name',
+				label: 'slider',
 				value: slider_name,
 			},
 			{
-				label: 'is slider provided',
+				label: 'is slider provided?',
 				value: is_slider_provided ? 'Yes' : 'No',
 			},
 			{
-				label: 'slider starting section',
+				label: 'Starting section',
 				value: slider_starting_section,
 			},
 			{
-				label: 'top stopper name',
+				label: 'top stopper',
 				value: top_stopper_name,
 			},
 			{
-				label: 'bottom stopper name',
+				label: 'bottom stopper',
 				value: bottom_stopper_name,
 			},
 			{
-				label: 'logo type name',
+				label: 'logo type',
 				value: logo_type_name,
 			},
 			{
-				label: 'slider body shape name',
+				label: 'slider body shape',
 				value: slider_body_shape_name,
 			},
 			{
-				label: 'slider link name',
+				label: 'slider link',
 				value: slider_link_name,
-			},
-			{
-				label: 'puller link name',
-				value: puller_link_name,
-			},
-			{
-				label: 'puller color name',
-				value: puller_color_name,
-			},
-			{
-				label: 'coloring type name',
-				value: coloring_type_name,
 			},
 
 			{
+				label: 'coloring type',
+				value: coloring_type_name,
+			},
+			{
 				label: 'Sliders Required',
-				value: sliderQuantity,
+				value: `${sliderQuantity} pcs`,
+			},
+		];
+
+		const pullerInfo = [
+			{
+				label: 'puller',
+				value: puller_type_name,
+			},
+			{
+				label: 'puller link',
+				value: puller_link_name,
+			},
+			{
+				label: 'puller color',
+				value: puller_color_name,
 			},
 		];
 
 		const garmentsInfo = [
 			{
-				label: 'end user name',
+				label: 'end user',
 				value: end_user_name,
 			},
 			{
-				label: 'light preference name',
+				label: 'light preference',
 				value: light_preference_name,
 			},
 			{
@@ -183,7 +194,7 @@ export default function ItemDescription({ order_description, className }) {
 				value: garments_wash,
 			},
 			{
-				label: 'garments remarks',
+				label: 'remarks',
 				value: garments_remarks,
 			},
 		];
@@ -192,13 +203,6 @@ export default function ItemDescription({ order_description, className }) {
 			{
 				label: 'teeth color',
 				value: teeth_color_name,
-			},
-			{
-				label: 'special requirement',
-				value:
-					special_requirement_name == null
-						? 'M/F'
-						: special_requirement_name + ', M/F',
 			},
 			{
 				label: 'tape received',
@@ -225,19 +229,20 @@ export default function ItemDescription({ order_description, className }) {
 				value: nylon_metallic_finishing,
 			},
 			{
-				label: 'Tape Requried',
+				label: 'Tape Required',
 				value: 'Not added yet',
 			},
 		];
 
-		return { baseInfo, sliderInfo, garmentsInfo, tapeInfo };
+		return { baseInfo, sliderInfo, garmentsInfo, tapeInfo, pullerInfo };
 	};
 
-	const { baseInfo, sliderInfo, garmentsInfo, tapeInfo } = renderItems();
+	const { baseInfo, sliderInfo, garmentsInfo, tapeInfo, pullerInfo } =
+		renderItems();
 	return (
 		<div
 			className={cn(
-				'grid h-full grid-cols-1 md:grid-cols-2 md:gap-8',
+				'grid h-full grid-cols-1 md:grid-cols-2 lg:grid-cols-5',
 				className
 			)}>
 			<RenderTable
@@ -254,6 +259,13 @@ export default function ItemDescription({ order_description, className }) {
 				}
 				title={'Slider'}
 				items={sliderInfo}
+			/>
+			<RenderTable
+				className={
+					'border-b border-secondary/30 md:border-b-0 md:border-l 2xl:border-x'
+				}
+				title={'Puller'}
+				items={pullerInfo}
 			/>
 			<RenderTable
 				className={

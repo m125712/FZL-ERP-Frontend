@@ -1,8 +1,10 @@
 import { PDF } from '@/assets/icons';
-import { LinkWithCopy, StatusButton, TitleValue } from '@/ui';
+import { format } from 'date-fns';
+
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
-import { format } from 'date-fns';
+import { LinkWithCopy, StatusButton, TitleValue } from '@/ui';
+
 import ItemDescription from './Item';
 import OrderDescription from './Order';
 import SliderDescription from './Slider';
@@ -23,36 +25,11 @@ export default function SingleInformation({ order, idx, hasInitialOrder }) {
 		<SectionContainer
 			title={`Information ${idx !== undefined && `#${idx + 1}`}`}
 			buttons={renderButtons()}>
-			{hasInitialOrder ? (
-				<div className='grid grid-cols-1 items-baseline bg-base-100 text-sm 2xl:grid-cols-2 2xl:gap-8'>
-					<ItemDescription
-						className={
-							'border-secondary/30 md:border-b 2xl:border-b-0'
-						}
-						order_description={order}
-					/>
-					<SliderDescription
-						className={'border-secondary/30 2xl:border-l'}
-						order_description={order}
-					/>
-				</div>
-			) : (
-				<div className=''>
-					<OrderDescription order={order} />
-					<div className='grid grid-cols-1 items-baseline bg-base-100 text-sm 2xl:grid-cols-2 2xl:gap-8'>
-						<ItemDescription
-							className={
-								'border-secondary/30 md:border-b 2xl:border-b-0'
-							}
-							order_description={order}
-						/>
-						<SliderDescription
-							className={'border-secondary/30 2xl:border-l'}
-							order_description={order}
-						/>
-					</div>
-				</div>
-			)}
+			{!hasInitialOrder && <OrderDescription order={order} />}
+			<ItemDescription
+				className={'border-secondary/30 md:border-b 2xl:border-b-0'}
+				order_description={order}
+			/>
 		</SectionContainer>
 	);
 }

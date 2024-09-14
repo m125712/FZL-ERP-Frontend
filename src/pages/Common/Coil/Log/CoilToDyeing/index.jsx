@@ -1,11 +1,14 @@
+import { useMemo, useState } from 'react';
+import { useCommonCoilSFG, useCommonCoilToDyeing } from '@/state/Common';
+import { useAccess, useFetch } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetch } from '@/hooks';
-import { useCommonCoilSFG, useCommonCoilToDyeing } from '@/state/Common';
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useMemo, useState } from 'react';
+
 import AddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
@@ -13,11 +16,34 @@ export default function Index() {
 	const info = new PageInfo('Coil -> Dyeing', '/zipper/tape-coil-to-dyeing');
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
 
-
 	const haveAccess = useAccess('common__coil_log');
 
 	const columns = useMemo(
 		() => [
+			{
+				accessorKey: 'name',
+				header: 'Name',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
+				accessorKey: 'item_name',
+				header: 'Item',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
+				accessorKey: 'zipper_number_name',
+				header: 'Zipper',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',

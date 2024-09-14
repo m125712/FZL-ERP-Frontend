@@ -1,12 +1,13 @@
 import React, { useMemo, useState } from 'react';
-import { useAccess } from '@/hooks';
 import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
-import { DateTime, EditDelete } from '@/ui';
-import PageInfo from '@/util/PageInfo';
+import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
+import { DateTime, EditDelete } from '@/ui';
+
+import PageInfo from '@/util/PageInfo';
 
 import AddOrUpdate from './AddOrUpdate';
 
@@ -18,8 +19,24 @@ export default function TapeToCoil() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'type_of_zipper',
-				header: 'Type of zipper',
+				accessorKey: 'name',
+				header: 'Name',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
+				accessorKey: 'item_name',
+				header: 'Item',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
+				accessorKey: 'zipper_number_name',
+				header: 'Zipper',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>

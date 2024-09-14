@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useFetch } from '@/hooks';
+
 import {
 	CheckBox,
 	FormField,
@@ -7,11 +10,12 @@ import {
 	SectionEntryBody,
 	Textarea,
 } from '@/ui';
-import { useParams } from 'react-router-dom';
-
-import { useFetch } from '@/hooks';
 
 export default function Header({
+	endType = '',
+	setEndType,
+	itemType = '',
+	setItemType,
 	register,
 	errors,
 	control,
@@ -21,7 +25,6 @@ export default function Header({
 	is_logo_puller,
 }) {
 	const { order_number, order_description_uuid } = useParams();
-	console.log(getValues());
 
 	const { value: order } = useFetch(`/other/order/info/value/label`);
 	const { value: item } = useFetch(`/other/order-properties/by/item`);
@@ -60,6 +63,9 @@ export default function Header({
 	);
 	const { value: color } = useFetch(`/other/order-properties/by/color`);
 	const { value: hand } = useFetch(`/other/order-properties/by/hand`);
+	const { value: nylon_stop } = useFetch(
+		`/other/order-properties/by/nylon_stopper`
+	);
 	const { value: special_requirement } = useFetch(
 		`/other/order-properties/by/special_requirement`
 	);
@@ -104,7 +110,6 @@ export default function Header({
 
 	const [sp_req, setSpReq] = useState({});
 	const [garmentsWash, setGramentsWash] = useState({});
-	const [endType, setEndType] = useState();
 
 	useEffect(() => {
 		if (order_description_uuid !== undefined) {
@@ -166,12 +171,41 @@ export default function Header({
 											(item) =>
 												item.value === getValues('item')
 										)}
-										onChange={(e) => onChange(e.value)}
+										onChange={(e) => {
+											onChange(e.value);
+											setItemType(e.label);
+										}}
 									/>
 								);
 							}}
 						/>
 					</FormField>
+					{itemType.toLowerCase() == 'nylon' && (
+						<FormField
+							label='nylon_stopper'
+							title='nylon_stopper'
+							errors={errors}>
+							{' '}
+							<Controller
+								name={'nylon_stopper'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select nylon stopper'
+											options={nylon_stop}
+											value={nylon_stop?.find(
+												(item) =>
+													item.value ==
+													getValues('nylon_stopper')
+											)}
+											onChange={(e) => onChange(e.value)}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+					)}
 					<FormField
 						label='zipper_number'
 						title='Zipper Number'
@@ -218,10 +252,9 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					{endType == 'Open End' && (
+					{endType.toLowerCase() == 'open end' && (
 						<FormField label='hand' title='Hand' errors={errors}>
 							{' '}
-							{/* TODO: This condition needs to be fixed */}
 							<Controller
 								name={'hand'}
 								control={control}

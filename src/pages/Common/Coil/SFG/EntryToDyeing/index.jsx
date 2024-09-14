@@ -1,8 +1,19 @@
+import { Suspense, useCallback, useEffect, useState } from 'react';
+import { useCommonCoilToDyeing, useCommonTapeToDyeing } from '@/state/Common';
+import { useOrderDescription } from '@/state/Order';
+import { useAuth } from '@context/auth';
+import { DevTool } from '@hookform/devtools';
+import { configure, HotKeys } from 'react-hotkeys';
+import {
+	Navigate,
+	useLocation,
+	useNavigate,
+	useParams,
+} from 'react-router-dom';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+
 import { DeleteModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useOrderDescription } from '@/state/Order';
 import {
 	ActionButtons,
 	DynamicField,
@@ -12,24 +23,18 @@ import {
 	ReactSelect,
 	Textarea,
 } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
+
+import nanoid from '@/lib/nanoid';
 import {
 	COMMON_COIL_TO_DYEING_NULL,
 	COMMON_COIL_TO_DYEING_SCHEMA,
 } from '@util/Schema';
-import { Suspense, useCallback, useEffect, useState } from 'react';
-import { HotKeys, configure } from 'react-hotkeys';
-import {
-	Navigate,
-	useLocation,
-	useNavigate,
-	useParams,
-} from 'react-router-dom';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index() {
 	const { order_number, order_description_uuid, coil_uuid } = useParams();
+	const { invalidateQuery: invalidateTapeToDyeing } = useCommonTapeToDyeing();
+	const { invalidateQuery: invalidateCoilToDyeing } = useCommonCoilToDyeing();
 	const location = useLocation();
 
 	const { postData, deleteData } = useOrderDescription();
@@ -44,12 +49,12 @@ export default function Index() {
 	secondElement === 'coil'
 		? (MAX_QTY = data?.quantity_in_coil)
 		: (MAX_QTY = data?.quantity);
-	console.log(coil_uuid);
+
 	const { value: order_id } = useFetch(
 		`/other/order/order-description/value/label/by/${coil_uuid}`,
 		[coil_uuid]
 	);
-	console.log(order_id);
+
 	// let schema = {};
 	// if (secondElement === 'coil') {
 	// 	schema = {
@@ -200,6 +205,8 @@ export default function Index() {
 			.then(() => reset(Object.assign({}, COMMON_COIL_TO_DYEING_NULL)))
 			.then(async () => {
 				// await OrderDetailsInvalidate(); common/tape/log
+				invalidateTapeToDyeing();
+				invalidateCoilToDyeing();
 				navigate(
 					secondElement === 'coil'
 						? '/common/coil/log'

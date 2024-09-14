@@ -1,14 +1,21 @@
-import { AddModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-import { useCommonCoilSFG, useCommonCoilToDyeingByUUID } from '@/state/Common';
-import { useOtherMaterial } from '@/state/Other';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import {
-	COMMON_COIL_TO_DYEING_LOG_NULL,
-	COMMON_COIL_TO_DYEING_LOG_SCHEMA,
-} from '@util/Schema';
 import { useEffect } from 'react';
+import { useCommonCoilSFG, useCommonCoilToDyeingByUUID, useCommonTapeToDyeing } from '@/state/Common';
+import { useOtherMaterial } from '@/state/Other';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+
+
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
+
+
+import { COMMON_COIL_TO_DYEING_LOG_NULL, COMMON_COIL_TO_DYEING_LOG_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
+
+
+
+
 
 export default function Index({
 	modalId = '',

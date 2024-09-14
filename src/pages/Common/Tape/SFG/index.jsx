@@ -1,14 +1,14 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useCommonTapeSFG } from '@/state/Common';
-import { DateTime, EditDelete, Transfer } from '@/ui';
 import { useNavigate } from 'react-router-dom';
+import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
+import { DateTime, EditDelete, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
-import { useAccess } from '@/hooks';
 
 const TrxToCoil = lazy(() => import('./TrxToCoil'));
 const TrxToDying = lazy(() => import('./TrxToDying'));
@@ -308,8 +308,7 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName:
-				data[idx].order_number + ' - ' + data[idx].item_description,
+			itemName: data[idx].name,
 		}));
 
 		window[info.getDeleteModalId()].showModal();

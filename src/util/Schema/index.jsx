@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+
 import {
 	BOOLEAN, // default
 	BOOLEAN_DEFAULT_VALUE, // default
@@ -857,8 +858,8 @@ export const TAPE_STOCK_ADD_NULL = {
 	is_reverse: 0,
 	top: '',
 	bottom: '',
-	raw_mtr_per_kg: '',
-	dyed_mtr_per_kg: '',
+	raw_per_kg_meter: '',
+	dyed_per_kg_meter: '',
 	remarks: '',
 };
 // Tape Production
@@ -1855,8 +1856,6 @@ export const DYEING_TRANSFER_NULL = {
 		},
 	],
 };
-
-
 
 export const UPDATE_DYEING_TRANSFER_SCHEMA = {
 	order_description_uuid: UUID_FK,

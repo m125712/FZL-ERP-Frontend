@@ -124,6 +124,7 @@ export default function Index({
 		{ label: 'Two-Way Pin', value: 'two_way_pin' },
 	];
 
+	
 	return (
 		<AddModal
 			id={modalId}
@@ -311,7 +312,7 @@ export default function Index({
 						label='is_logo_body'
 						title='Logo in Body'
 						height='h-[2.9rem]'
-						defaultChecked={getValues('is_logo_body')}
+						value={getValues('is_logo_body')? true : false}
 						className='w-full rounded border border-primary/30 bg-primary/5 px-2'
 						{...{ register, errors }}
 					/>
@@ -320,7 +321,7 @@ export default function Index({
 						label='is_logo_puller'
 						title='Logo in Puller'
 						height='h-[2.9rem]'
-						defaultChecked={getValues('is_logo_puller')}
+						value={getValues('is_logo_puller')? true : false}
 						className='w-full rounded border border-primary/30 bg-primary/5 px-2'
 						{...{ register, errors }}
 					/>
@@ -358,6 +359,7 @@ export default function Index({
 				{...{ register, errors }}
 			/>
 			<DevTool control={control} placement='top-left' />
+		
 		</AddModal>
 	);
 }

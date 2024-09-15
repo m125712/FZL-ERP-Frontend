@@ -922,6 +922,32 @@ export const TAPE_OR_COIL_PRODUCTION_LOG_NULL = {
 	remarks: null,
 };
 
+// * Tape Required
+export const TAPE_REQUIRED_SCHEMA = {
+	end_type_uuid: UUID_REQUIRED,
+	item_uuid: UUID_REQUIRED,
+	nylon_stopper_uuid: UUID,
+	zipper_number_uuid: UUID_REQUIRED,
+	top: NUMBER_DOUBLE_REQUIRED,
+	bottom: NUMBER_DOUBLE_REQUIRED,
+	raw_mtr_per_kg: NUMBER_DOUBLE_REQUIRED,
+	dyed_mtr_per_kg: NUMBER_DOUBLE_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const TAPE_REQUIRED_NULL = {
+	uuid: null,
+	end_type_uuid: null,
+	item_uuid: null,
+	nylon_stopper_uuid: null,
+	zipper_number_uuid: null,
+	top: '',
+	bottom: '',
+	raw_mtr_per_kg: '',
+	dyed_mtr_per_kg: '',
+	remarks: '',
+};
+
 // Coil Production
 export const COIL_PROD_SCHEMA = {
 	production_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0),

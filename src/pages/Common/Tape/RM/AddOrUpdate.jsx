@@ -1,13 +1,14 @@
+import { useAuth } from '@/context/auth';
+import { useCommonTapeRM, useCommonTapeRMLog } from '@/state/Common';
+import { useRHF } from '@/hooks';
+
 import { AddModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast';
-import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useCommonTapeRM, useCommonTapeRMLog } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
+import nanoid from '@/lib/nanoid';
 import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
-import * as yup from 'yup';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',

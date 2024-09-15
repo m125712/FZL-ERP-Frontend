@@ -51,6 +51,18 @@ export const useCommonTapeRMByUUID = (uuid) =>
 		url: `/material/stock/by/single-field/tape_making/${uuid}`,
 	});
 
+// * RM * //
+export const useCommonTapeRequired = () =>
+	createGlobalState({
+		queryKey: commonQK.tapeRequired(),
+		url: `/zipper/tape-coil-required`,
+	});
+export const useCommonTapeRequiredByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.tapeRequired(uuid),
+		url: `/zipper/tape-coil-required/${uuid}`,
+	});
+
 //* RM LOG *//
 export const useCommonTapeRMLog = () =>
 	createGlobalState({

@@ -56,6 +56,7 @@ export default function ItemDescription({ order_description, className }) {
 			garments_remarks,
 
 			// tape
+			tape_name,
 			tape_received,
 			tape_transferred,
 			teeth_color_name,
@@ -190,7 +191,7 @@ export default function ItemDescription({ order_description, className }) {
 				value: light_preference_name,
 			},
 			{
-				label: 'garments wash',
+				label: 'wash',
 				value: garments_wash,
 			},
 			{
@@ -203,6 +204,10 @@ export default function ItemDescription({ order_description, className }) {
 			{
 				label: 'teeth color',
 				value: teeth_color_name,
+			},
+			{
+				label: 'tape name',
+				value: tape_name,
 			},
 			{
 				label: 'tape received',

@@ -1,20 +1,23 @@
-import { useRHF } from '@/hooks';
-import { DynamicField, FormField, ReactSelect, RemoveButton } from '@/ui';
-import { useAuth } from '@context/auth';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Suspense, useEffect, useState } from 'react';
 import { useCommercialLC, useCommercialLCPIByUUID } from '@/state/Commercial';
-import Header from './Header';
-import { LC_NULL, LC_SCHEMA } from '@util/Schema';
-import { useFieldArray } from 'react-hook-form';
-import { configure, HotKeys } from 'react-hotkeys';
+import { useOtherPI } from '@/state/Other';
+import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { format } from 'date-fns';
-import GetDateTime from '@/util/GetDateTime';
-import nanoid from '@/lib/nanoid';
-import { Suspense, useEffect, useState } from 'react';
+import { useFieldArray } from 'react-hook-form';
+import { configure, HotKeys } from 'react-hotkeys';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useRHF } from '@/hooks';
+
 import { UpdateModal } from '@/components/Modal';
-import { useOtherPI } from '@/state/Other';
+import { DynamicField, FormField, ReactSelect, RemoveButton } from '@/ui';
+
 import cn from '@/lib/cn';
+import nanoid from '@/lib/nanoid';
+import { LC_NULL, LC_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
+
+import Header from './Header';
 
 export default function Index() {
 	const { user } = useAuth();
@@ -282,106 +285,90 @@ export default function Index() {
 								{item}
 							</th>
 						))}>
-						{piFields.map((item, index) => (
-							<tr key={item.id} className='w-full'>
-								<td className={cn(`pl-1 ${rowClass}`)}>
-									<FormField
-										label={`pi[${index}].uuid`}
-										title='Material'
-										is_title_needed='false'
-										errors={errors}>
-										<Controller
-											name={`pi[${index}].uuid`}
-											control={control}
-											render={({
-												field: { onChange },
-											}) => {
-												return (
-													<ReactSelect
-														placeholder='Select Material'
-														options={pi}
-														value={pi?.find(
-															(inItem) =>
-																inItem.value ===
-																getValues(
-																	`pi[${index}].uuid`
-																)
-														)}
-														onChange={(e) => {
-															handleDeletePi(
-																getValues(
-																	`pi[${index}].uuid`
-																)
-															);
-															onChange(e.value);
-														}}
-														menuPortalTarget={
-															document.body
-														}
-													/>
-												);
+						{piFields.map((item, index) => {
+							const piIdxValue = pi?.find(
+								(e) => e.value === watch(`pi[${index}].uuid`)
+							);
+							return (
+								<tr key={item.id} className='w-full'>
+									<td className={cn(`pl-1 ${rowClass}`)}>
+										<FormField
+											label={`pi[${index}].uuid`}
+											title='Material'
+											is_title_needed='false'
+											errors={errors}>
+											<Controller
+												name={`pi[${index}].uuid`}
+												control={control}
+												render={({
+													field: { onChange },
+												}) => {
+													return (
+														<ReactSelect
+															placeholder='Select Material'
+															options={pi}
+															value={pi?.find(
+																(inItem) =>
+																	inItem.value ===
+																	getValues(
+																		`pi[${index}].uuid`
+																	)
+															)}
+															onChange={(e) => {
+																handleDeletePi(
+																	getValues(
+																		`pi[${index}].uuid`
+																	)
+																);
+																onChange(
+																	e.value
+																);
+															}}
+															menuPortalTarget={
+																document.body
+															}
+														/>
+													);
+												}}
+											/>
+										</FormField>
+									</td>
+
+									<td className={cn(`pl-1 ${rowClass}`)}>
+										{piIdxValue?.pi_bank}
+									</td>
+									<td className={cn(`pl-1 ${rowClass}`)}>
+										{piIdxValue?.pi_value}
+									</td>
+									<td className={cn(`pl-1 ${rowClass}`)}>
+										{piIdxValue?.marketing_name}
+									</td>
+									<td className={cn(`pl-1 ${rowClass} `)}>
+										<div className='flex flex-wrap items-center gap-2'>
+											{piIdxValue?.order_numbers
+												?.filter((e) => !!e)
+												?.map((e) => (
+													<span
+														key={e}
+														className='badge badge-accent badge-sm'>
+														{e}
+													</span>
+												))}
+										</div>
+									</td>
+
+									<td
+										className={`w-16 border-l-4 border-l-primary ${rowClass}`}>
+										<RemoveButton
+											onClick={() => {
+												handlePIRemove(index);
 											}}
+											showButton={piFields.length > 1}
 										/>
-									</FormField>
-								</td>
-
-								<td className={cn(`pl-1 ${rowClass}`)}>
-									{
-										pi?.find(
-											(e) =>
-												e.value ===
-												watch(`pi[${index}].uuid`)
-										)?.pi_bank
-									}
-								</td>
-								<td className={cn(`pl-1 ${rowClass}`)}>
-									{
-										pi?.find(
-											(e) =>
-												e.value ===
-												watch(`pi[${index}].uuid`)
-										)?.pi_value
-									}
-								</td>
-								<td className={cn(`pl-1 ${rowClass}`)}>
-									{
-										pi?.find(
-											(e) =>
-												e.value ===
-												watch(`pi[${index}].uuid`)
-										)?.marketing_name
-									}
-								</td>
-								<td className={cn(`pl-1 ${rowClass} `)}>
-									<div className='flex flex-wrap items-center gap-2'>
-										{pi
-											?.find(
-												(e) =>
-													e.value ===
-													watch(`pi[${index}].uuid`)
-											)
-											?.order_numbers?.filter((e) => !!e)
-											?.map((e) => (
-												<span
-													key={e}
-													className='badge badge-accent badge-sm'>
-													{e}
-												</span>
-											))}
-									</div>
-								</td>
-
-								<td
-									className={`w-16 border-l-4 border-l-primary ${rowClass}`}>
-									<RemoveButton
-										onClick={() => {
-											handlePIRemove(index);
-										}}
-										showButton={piFields.length > 1}
-									/>
-								</td>
-							</tr>
-						))}
+									</td>
+								</tr>
+							);
+						})}
 					</DynamicField>
 
 					<div className='modal-action'>

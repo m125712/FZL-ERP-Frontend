@@ -2,14 +2,9 @@ import { useFetch } from '@/hooks';
 import {
 	FormField,
 	Input,
-	JoinInput,
 	ReactSelect,
 	SectionEntryBody,
-	Textarea,
 } from '@/ui';
-import isJSON from '@/util/isJson';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 export default function Header({
 	register,
@@ -17,11 +12,9 @@ export default function Header({
 	control,
 	getValues,
 	Controller,
-	isUpdate,
 }) {
 	const { value: batch_number } = useFetch(`/other/thread/batch/value/label`);
 	const { value: machine } = useFetch('/other/machine/value/label');
-	const { value: user } = useFetch('/other/hr/user/value/label');
 	const { value: dyeing_operator_option } = useFetch(
 		'/other/hr/user/value/label'
 	);
@@ -54,6 +47,8 @@ export default function Header({
 		{ label: 'Medium', value: 'medium' },
 		{ label: 'High', value: 'high' },
 	];
+
+	
 
 	return (
 		<div className='flex flex-col gap-4'>

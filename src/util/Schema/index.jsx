@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+
 import {
 	BOOLEAN, // default
 	BOOLEAN_DEFAULT_VALUE, // default
@@ -1790,31 +1791,22 @@ export const DYEING_THREAD_BATCH_DYEING_NULL = {
 };
 //* Dyeing Thread Batch Conneing
 export const DYEING_THREAD_CONNEING_SCHEMA = {
-	coning_operator: STRING_REQUIRED,
-	coning_supervisor: STRING_REQUIRED,
-	coning_machines: STRING_REQUIRED,
+	...DYEING_THREAD_BATCH_DYEING_SCHEMA,
+	uuid: STRING_REQUIRED,
+	machine_uuid: STRING_REQUIRED,
 	batch_entry: yup.array().of(
 		yup.object().shape({
-			coning_production_quantity: NUMBER_REQUIRED.max(
-				yup.ref('quantity'),
-				'Beyond Max Quantity'
-			),
-			coning_production_quantity_in_kg: NUMBER_REQUIRED,
-			transfer_quantity: NUMBER_REQUIRED.max(
-				yup.ref('quantity'),
-				'Beyond Max Quantity'
-			),
+			coning_production_quantity: NUMBER,
+			coning_production_quantity_in_kg: NUMBER,
+			transfer_quantity: NUMBER,
 		})
 	),
 };
 
 export const DYEING_THREAD_CONNEING_NULL = {
-	...DYEING_THREAD_BATCH_YARN_NULL,
 	...DYEING_THREAD_BATCH_DYEING_NULL,
-	uuid: null,
-	coning_operator: '',
-	coning_supervisor: '',
-	coning_machines: '',
+	uuid: '',
+	machine_uuid: '',
 	batch_entry: [
 		{
 			coning_production_quantity: null,
@@ -1852,8 +1844,6 @@ export const DYEING_TRANSFER_NULL = {
 		},
 	],
 };
-
-
 
 export const UPDATE_DYEING_TRANSFER_SCHEMA = {
 	order_description_uuid: UUID_FK,

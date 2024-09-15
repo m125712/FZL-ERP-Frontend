@@ -1,6 +1,4 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
+import { useEffect } from 'react';
 import {
 	useOtherOrder,
 	useOtherOrderPropertiesByTypeName,
@@ -9,13 +7,17 @@ import {
 	useSliderDashboardInfo,
 	useSliderDashboardInfoByUUID,
 } from '@/state/Slider';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
+import nanoid from '@/lib/nanoid';
 import {
-	SLIDER_DASHBOARD_INFO_SCHEMA,
 	SLIDER_DASHBOARD_INFO_NULL,
+	SLIDER_DASHBOARD_INFO_SCHEMA,
 } from '@util/Schema';
-import { useEffect } from 'react';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -37,15 +39,12 @@ export default function Index({
 		errors,
 		getValues,
 		reset,
-		context
+		context,
 	} = useRHF(SLIDER_DASHBOARD_INFO_SCHEMA, SLIDER_DASHBOARD_INFO_NULL);
 
 	const { data: orders } = useOtherOrder();
 
-	console.log({
-		orders,
-	});
-
+	
 	// Other Order Properties
 	const { data: item } = useOtherOrderPropertiesByTypeName('item');
 	const { data: zipper_number } =
@@ -53,21 +52,11 @@ export default function Index({
 	const { data: end_type } = useOtherOrderPropertiesByTypeName('end_type');
 	const { data: puller_type } =
 		useOtherOrderPropertiesByTypeName('puller_type');
-	// const { data: logo_type } = useOtherOrderPropertiesByTypeName('logo_type');
-	// const { data: slider_body_shape } =
-	// 	useOtherOrderPropertiesByTypeName('slider_body_shape');
-	// const { data: puller_link } =
-	// 	useOtherOrderPropertiesByTypeName('puller_link');
-	// const { data: stopper_type } =
-	// 	useOtherOrderPropertiesByTypeName('stopper_type');
 
 	// Reset form data on update
 	useEffect(() => {
 		if (updateInfo?.uuid !== null && data) {
-			console.log({
-				data: data?.[0],
-			});
-			reset(data?.[0]);
+			reset(data);
 		}
 	}, [updateInfo, data, reset]);
 
@@ -112,6 +101,8 @@ export default function Index({
 			onClose,
 		});
 	};
+
+
 
 	return (
 		<AddModal
@@ -350,19 +341,7 @@ export default function Index({
 				rows={3}
 				{...{ register, errors }}
 			/>
-			{/* <DevTool control={control} /> */}
 		</AddModal>
 	);
 }
 
-{
-	/* <CheckBox
-label='is_body'
-title='Body'
-height='h-[2.9rem] '
-className={
-	'rounded border border-primary/30 bg-primary/5 px-2'
-}
-{...{ register, errors }}
-/> */
-}

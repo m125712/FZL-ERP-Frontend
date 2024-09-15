@@ -2,23 +2,12 @@ import { SectionEntryBody, FormField, ReactSelect } from '@/ui';
 import { useFetch } from '@/hooks';
 
 export default function Header({
-	register,
 	errors,
 	control,
 	getValues,
 	Controller,
 }) {
 	const {value: order} = useFetch('/other/slider/stock-with-order-description/value/label');
-	const states = [
-		{
-			label: 'Open',
-			value: 'Open',
-		},
-		{
-			label: 'Closed',
-			value: 'Closed',
-		},
-	];
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody title='Order Description'>

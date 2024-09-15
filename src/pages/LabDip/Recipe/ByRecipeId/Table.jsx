@@ -26,25 +26,6 @@ export default function Index({ recipe_entry }) {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'created_at',
-				header: 'Created',
-				filterFn: 'isWithinRange',
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
-				accessorKey: 'updated_at',
-				header: 'Updated',
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
 		],
 		[recipe_entry]
 	);

@@ -1,7 +1,12 @@
-import { DeleteModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useLabDipRecipe } from '@/state/LabDip';
+import { useAuth } from '@context/auth';
+import { DevTool } from '@hookform/devtools';
+import { configure, HotKeys } from 'react-hotkeys';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { DeleteModal } from '@/components/Modal';
 import {
 	ActionButtons,
 	DynamicField,
@@ -11,17 +16,21 @@ import {
 	ReactSelect,
 	Textarea,
 } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
+
+import nanoid from '@/lib/nanoid';
 import { LAB_RECIPE_NULL, LAB_RECIPE_SCHEMA } from '@util/Schema';
-import { Suspense, useCallback, useEffect, useState } from 'react';
-import { HotKeys, configure } from 'react-hotkeys';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import GetDateTime from '@/util/GetDateTime';
+
 import Header from './Header';
 
 export default function Index() {
-	const { url, updateData, postData, deleteData } = useLabDipRecipe();
+	const {
+		url,
+		updateData,
+		postData,
+		deleteData,
+		invalidateQuery: invalidateQueryRecipe,
+	} = useLabDipRecipe();
 	const { recipe_id, recipe_uuid } = useParams();
 
 	const { user } = useAuth();
@@ -143,9 +152,16 @@ export default function Index() {
 					}
 				}),
 			];
+			await Promise.all(order_entry_updated_promises)
+				.then(() => reset(LAB_RECIPE_NULL))
+				.then(() => {
+					invalidateQueryRecipe();
+					navigate(`/lab-dip/recipe/details/${data?.uuid}`);
+				})
+				.catch((err) => console.log(err));
 
 			// TODO: ReferenceError: Cannot access 'recipe_uuid' before initialization
-			navigate(`/lab-dip/recipe/details/${recipe_uuid}`);
+			//navigate(`/lab-dip/recipe/details/${recipe_uuid}`);
 
 			return;
 		}
@@ -191,8 +207,11 @@ export default function Index() {
 		];
 
 		await Promise.all(recipe_entry_promises)
-			.then(() => reset(Object.assign({}, ORDER_NULL)))
-			.then(navigate(`/lab-dip/recipe`))
+			.then(() => reset(LAB_RECIPE_NULL))
+			.then(() => {
+				invalidateQueryRecipe();
+				navigate(`/lab-dip/recipe/details/${recipe_uuid}`);
+			})
 			.catch((err) => console.log(err));
 	};
 
@@ -250,6 +269,7 @@ export default function Index() {
 							watch,
 							is_Approved: getValues('approved'),
 							is_Status: getValues('status'),
+							isUpdate,
 						}}
 					/>
 					<DynamicField

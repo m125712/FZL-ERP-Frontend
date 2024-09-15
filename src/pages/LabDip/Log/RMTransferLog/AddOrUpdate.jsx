@@ -1,16 +1,19 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
 import { useLabDipRM } from '@/state/LabDip';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 
+import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
 import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import getTransactionArea from '@/util/TransactionArea';
+
 import {
 	RM_MATERIAL_USED_EDIT_NULL,
 	RM_MATERIAL_USED_EDIT_SCHEMA,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
+import getTransactionArea from '@/util/TransactionArea';
+
 export default function Index({
 	modalId = '',
 	updateLabDipRMLog = {
@@ -18,20 +21,21 @@ export default function Index({
 		section: null,
 		used_quantity: null,
 		lab_dip: null,
+		wastage: null,
 	},
 	setUpdateLabDipRMLog,
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateLabDipRM } = useLabDipRM();
 
-	const MAX_QUANTITY =
-		Number(updateLabDipRMLog?.lab_dip) +
-		Number(updateLabDipRMLog?.used_quantity);
-	const schema = {
-		...RM_MATERIAL_USED_EDIT_SCHEMA,
-		used_quantity:
-			RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
-	};
+	// const MAX_QUANTITY =
+	// 	Number(updateLabDipRMLog?.lab_dip) +
+	// 	Number(updateLabDipRMLog?.used_quantity);
+	// const schema = {
+	// 	...RM_MATERIAL_USED_EDIT_SCHEMA,
+	// 	used_quantity:
+	// 		RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
+	// };
 
 	const {
 		register,
@@ -41,14 +45,23 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
+		watch,
 		context,
-	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
+	} = useRHF(RM_MATERIAL_USED_EDIT_SCHEMA, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
 		`${url}/${updateLabDipRMLog?.uuid}`,
 		updateLabDipRMLog?.uuid,
 		reset
 	);
+	let MAX_PROD =
+		Number(updateLabDipRMLog?.lab_dip) +
+		Number(updateLabDipRMLog?.used_quantity) +
+		(Number(updateLabDipRMLog?.wastage) - watch('wastage'));
+	let MAX_WASTAGE =
+		Number(updateLabDipRMLog?.lab_dip) +
+		Number(updateLabDipRMLog?.wastage) +
+		(Number(updateLabDipRMLog?.used_quantity) - watch('used_quantity'));
 
 	const onClose = () => {
 		setUpdateLabDipRMLog((prev) => ({
@@ -57,6 +70,7 @@ export default function Index({
 			section: null,
 			used_quantity: null,
 			lab_dip: null,
+			wastage: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
@@ -64,6 +78,13 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
+		if (MAX_WASTAGE < watch('wastage')) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		if (updateLabDipRMLog?.uuid !== null) {
 			const updatedData = {
 				...data,
@@ -114,14 +135,14 @@ export default function Index({
 			</FormField>
 			<Input
 				label='used_quantity'
-				sub_label={`Max: ${Number(updateLabDipRMLog?.lab_dip) + Number(updateLabDipRMLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateLabDipRMLog?.lab_dip) + Number(updateLabDipRMLog?.used_quantity)}`}
+				sub_label={`Max: ${MAX_PROD}`}
+				placeholder={`Max: ${MAX_PROD}`}
 				{...{ register, errors }}
 			/>
 			<Input
 				label='wastage'
-				sub_label={`Max: ${Number(updateLabDipRMLog?.lab_dip) + Number(updateLabDipRMLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateLabDipRMLog?.lab_dip) + Number(updateLabDipRMLog?.used_quantity)}`}
+				sub_label={`Max: ${MAX_WASTAGE}`}
+				placeholder={`Max: ${MAX_WASTAGE}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

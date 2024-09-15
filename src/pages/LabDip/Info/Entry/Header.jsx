@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { useFetch } from '@/hooks';
+
 import {
 	CheckBox,
 	FormField,
@@ -7,7 +9,6 @@ import {
 	SectionEntryBody,
 	Textarea,
 } from '@/ui';
-import { useState } from 'react';
 
 export default function Header({
 	register,
@@ -16,6 +17,7 @@ export default function Header({
 	getValues,
 	Controller,
 	lab_status,
+	isUpdate,
 }) {
 	// * state for lab status field *//
 	const [labStatus, setLabStatus] = useState(
@@ -30,8 +32,24 @@ export default function Header({
 
 	return (
 		<div className='flex flex-col gap-4'>
-			<SectionEntryBody title='Info'>
-				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
+			<SectionEntryBody
+				title={`${isUpdate ? `Info: ${getValues('info_id')}` : 'Info'}`}
+				header={
+					<div className='m-2 flex items-center gap-1 text-sm'>
+						<div className='w-24 rounded-md border border-secondary/30 bg-secondary'>
+							<CheckBox
+								text='text-secondary-content'
+								label='lab_status'
+								title='Status'
+								height='h-[2.9rem]'
+								defaultChecked={labStatus}
+								onChange={(e) => setLabStatus(e.target.checked)}
+								{...{ register, errors }}
+							/>
+						</div>
+					</div>
+				}>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					{/* Order info ID */}
 					<FormField
 						label='order_info_uuid'
@@ -62,20 +80,8 @@ export default function Header({
 					<Input label={`name`} {...{ register, errors }} />
 				</div>
 
-				<div className='text-secondary-content flex flex-col gap-1 px-2 md:flex-row'>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<Textarea label='remarks' {...{ register, errors }} />
-					<div className='mt-6 flex items-center gap-1 text-sm'>
-						<div className='w-32 rounded-md border border-secondary/30 px-1'>
-							<CheckBox
-								label='lab_status'
-								title='Status'
-								height='h-[2.9rem]'
-								defaultChecked={labStatus}
-								onChange={(e) => setLabStatus(e.target.checked)}
-								{...{ register, errors }}
-							/>
-						</div>
-					</div>
 				</div>
 			</SectionEntryBody>
 		</div>

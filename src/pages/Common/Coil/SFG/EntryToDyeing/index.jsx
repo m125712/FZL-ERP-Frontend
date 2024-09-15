@@ -4,12 +4,7 @@ import { useOrderDescription } from '@/state/Order';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
-import {
-	Navigate,
-	useLocation,
-	useNavigate,
-	useParams,
-} from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
@@ -261,14 +256,6 @@ export default function Index() {
 									)
 							);
 
-							console.log(selectedValue);
-
-							// bottom: '0.0000';
-							// label: 'Z24-0005 ⇾ M-3-OE-RP ⇾ 50.0000';
-							// top: '3.3000';
-							// total_quantity: '232.0000';
-							// total_size: '5336.0000';
-							// value: 'H6b9hVrWR8FL98K';
 							const tape_req =
 								Number(selectedValue?.total_size) +
 								Number(selectedValue?.total_quantity) *

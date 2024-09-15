@@ -23,6 +23,13 @@ export default function ItemDescription({ order_description, className }) {
 		0
 	);
 
+	// const total_size_in_cm = order_description?.order_entry.reduce(
+	// 	(sum, item) => {
+	// 		return sum + parseFloat(item.size);
+	// 	},
+	// 	0
+	// );
+
 	const renderItems = () => {
 		const {
 			item_name,

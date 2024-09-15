@@ -102,7 +102,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
 
 			{
@@ -128,7 +128,7 @@ export default function Index() {
 				accessorKey: 'trx_quantity_in_coil',
 				header: <div>Trx Quantity</div>,
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
 			{
 				accessorKey: 'action',
@@ -148,18 +148,6 @@ export default function Index() {
 						);
 					}
 				},
-			},
-			{
-				accessorKey: 'top',
-				header: 'Top',
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
-			},
-			{
-				accessorKey: 'bottom',
-				header: 'Bottom',
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'raw_per_kg_meter',

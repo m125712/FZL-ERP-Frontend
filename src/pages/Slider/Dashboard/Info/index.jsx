@@ -1,12 +1,13 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useSliderDashboardInfo } from '@/state/Slider';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useSliderDashboardInfo } from '@/state/Slider';
-
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
@@ -83,31 +84,18 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
 			{
 				accessorKey: 'end_type_name',
 				header: 'End Type',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'end_type_short_name',
-			// 	header: 'End Type Short',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'lock_type_name',
 				header: 'Lock Type',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'lock_type_short_name',
-			// 	header: 'Lock Type Short',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'puller_type_name',
 				header: 'Puller Type',
@@ -235,7 +223,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()).toFixed(0),
 			},
-
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
@@ -255,7 +242,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
-
 			{
 				accessorKey: 'action',
 				header: 'Action',

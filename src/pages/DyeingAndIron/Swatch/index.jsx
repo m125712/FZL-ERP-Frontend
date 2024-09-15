@@ -13,7 +13,6 @@ export default function Index() {
 		'dyeing__dyeing_and_iron_swatch'
 	);
 	const haveAccess = useAccess('dyeing__dyeing_and_iron_swatch');
-	console.log(data);
 
 	// * fetching the data
 	const { value: recipe } = useFetch('/other/lab-dip/recipe/value/label');
@@ -82,7 +81,7 @@ export default function Index() {
 				),
 				width: 'w-24',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'recipe_name',

@@ -1900,6 +1900,7 @@ export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 	slider_body_shape: STRING, //
 	puller_link: STRING, //
 	stopper_type: STRING, //
+	type: STRING_REQUIRED,
 	// quantity: NUMBER_REQUIRED, //
 	// weight: NUMBER_REQUIRED, //
 	// pcs_per_kg: NUMBER_REQUIRED, //
@@ -1912,8 +1913,32 @@ export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 	is_u_top: BOOLEAN,
 	is_box_pin: BOOLEAN,
 	is_two_way_pin: BOOLEAN,
-	is_logo_body: BOOLEAN_DEFAULT_VALUE(false),
-	is_logo_puller: BOOLEAN_DEFAULT_VALUE(false),
+	is_logo_body: BOOLEAN.default(false).when('logo_type', {
+		is: (value) => value != null && value !== '', // Check if logo_type has a value
+		then: (schema) =>
+			schema.test(
+				'is_logo_body_test',
+				'Either logo body or logo puller is required',
+				function (value) {
+					// Pass if either is_logo_body is true or is_logo_puller is true
+					return value || this.parent.is_logo_puller;
+				}
+			),
+		otherwise: (schema) => schema, // No special validation if logo_type is null or empty
+	}),
+	is_logo_puller: BOOLEAN.default(false).when('logo_type', {
+		is: (value) => value != null && value !== '', // Check if logo_type has a value
+		then: (schema) =>
+			schema.test(
+				'is_logo_puller_test',
+				'Either logo body or logo puller is required',
+				function (value) {
+					// Pass if either is_logo_puller is true or is_logo_body is true
+					return value || this.parent.is_logo_body;
+				}
+			),
+		otherwise: (schema) => schema, // No special validation if logo_type is null or empty
+	}),
 };
 
 export const SLIDER_DIE_CASTING_STOCK_NULL = {

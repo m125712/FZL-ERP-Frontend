@@ -1,14 +1,17 @@
-import { DeleteModal } from '@/components/Modal';
-import TableNoData from '@/components/Table/_components/TableNoData';
-import { useAccess, useRHF } from '@/hooks';
-import cn from '@/lib/cn';
-import nanoid from '@/lib/nanoid';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useOtherOrder, useOtherSliderItem } from '@/state/Other';
 import {
 	useSliderDieCastingProduction,
 	useSliderDieCastingProductionByUUID,
 	useSliderDieCastingStock,
 } from '@/state/Slider';
+import { useAuth } from '@context/auth';
+import { DevTool } from '@hookform/devtools';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useRHF } from '@/hooks';
+
+import { DeleteModal } from '@/components/Modal';
+import TableNoData from '@/components/Table/_components/TableNoData';
 import {
 	DynamicField,
 	FormField,
@@ -17,19 +20,16 @@ import {
 	ReactSelect,
 	RemoveButton,
 } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
+
+import cn from '@/lib/cn';
+import nanoid from '@/lib/nanoid';
 import {
 	SLIDER_DIE_CASTING_NULL,
 	SLIDER_DIE_CASTING_SCHEMA,
 } from '@util/Schema';
-import { Suspense, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index() {
-	const haveAccess = useAccess('slider__die_casting_production_entry');
-
 	const { url, postData, updateData, deleteData } =
 		useSliderDieCastingProduction();
 	const { invalidateQuery } = useSliderDieCastingStock();
@@ -43,7 +43,6 @@ export default function Index() {
 		enabled: isUpdate,
 	});
 
-	
 	useEffect(() => {
 		uuid !== undefined
 			? (document.title = 'Update Die Casting Entry')

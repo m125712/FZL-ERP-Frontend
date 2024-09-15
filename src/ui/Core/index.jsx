@@ -91,8 +91,22 @@ export const PasswordInput = ({ register, ...props }) => {
 	);
 };
 
+const renderError = (error) => {
+	return (
+		error?.message && (
+			<label className='label px-2 pb-0 pt-[0.02rem]'>
+				<span className='label-text-alt' />
+				<span className='label-text-alt text-error/80 text-xs font-medium capitalize'>
+					{error?.message}
+				</span>
+			</label>
+		)
+	);
+};
+
 export const CheckBox = ({
 	register,
+	errors,
 	type = 'checkbox-accent',
 	text = 'text-secondary',
 	className,
@@ -120,6 +134,7 @@ export const CheckBox = ({
 					: capitalize(props.label)}
 			</span>
 		</label>
+		{renderError(errors?.[props.label])}
 	</div>
 );
 

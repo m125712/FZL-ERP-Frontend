@@ -1,19 +1,30 @@
-import { UpdateModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
+import { Suspense, useCallback, useEffect, useState } from 'react';
+import { useCommonCoilRMLogByUUID } from '@/state/Common';
 import { useLabDipInfo } from '@/state/LabDip';
-import { ActionButtons, DynamicField, FormField, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { LAB_INFO_NULL, LAB_INFO_SCHEMA } from '@util/Schema';
-import { Suspense, useCallback, useEffect, useState } from 'react';
-import { HotKeys, configure } from 'react-hotkeys';
+import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { UpdateModal } from '@/components/Modal';
+import { ActionButtons, DynamicField, FormField, ReactSelect } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
+import { LAB_INFO_NULL, LAB_INFO_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
+
 import Header from './Header';
 
 export default function Index() {
-	const { url, updateData, postData, deleteData } = useLabDipInfo();
+	const {
+		url,
+		updateData,
+		postData,
+		deleteData,
+		invalidateQuery: invalidateQueryLabDipInfo,
+		
+	} = useLabDipInfo();
 	const { info_number, info_uuid } = useParams();
 
 	const { user } = useAuth();
@@ -119,6 +130,13 @@ export default function Index() {
 						})
 				),
 			];
+			await Promise.all(recipe_updated_promises)
+				.then(() => reset(LAB_INFO_NULL))
+				.then(() => {
+					invalidateQueryLabDipInfo();
+					navigate(`/lab-dip/info/details/${data?.uuid}`);
+				})
+				.catch((err) => console.log(err));
 
 			// * old code* //
 
@@ -128,7 +146,7 @@ export default function Index() {
 		// * Add new data*//
 		const lab_dip_info_uuid = nanoid();
 		const created_at = GetDateTime();
-
+		console.log(lab_dip_info_uuid);
 		const lab_info = {
 			...data,
 			uuid: lab_dip_info_uuid,
@@ -137,7 +155,6 @@ export default function Index() {
 			created_by: user?.uuid,
 		};
 
-		console.log('lab_info:', lab_info);
 		//* Post new order description */ //
 		await postData.mutateAsync({
 			url,
@@ -164,8 +181,12 @@ export default function Index() {
 		//* Post new entry *//
 
 		await Promise.all(recipe_promises)
-			.then(() => reset(Object.assign({}, ORDER_NULL)))
-			.then(navigate(`/lab-dip/info`))
+			.then(() => reset(LAB_INFO_NULL))
+			.then(() => {
+				invalidateQueryLabDipInfo();
+				navigate(`/lab-dip/info/details/${lab_dip_info_uuid}`);
+			})
+
 			.catch((err) => console.log(err));
 	};
 
@@ -224,6 +245,7 @@ export default function Index() {
 							Controller,
 							watch,
 							lab_status: getValues('lab_status'),
+							isUpdate
 						}}
 					/>
 					<DynamicField

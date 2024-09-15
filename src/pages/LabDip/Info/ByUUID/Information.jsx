@@ -1,5 +1,6 @@
 import { useFetch } from '@/hooks';
-import { StatusButton, TitleValue } from '@/ui';
+
+import { LinkWithCopy, StatusButton, TitleValue } from '@/ui';
 
 export default function Information({ info }) {
 	return (
@@ -10,16 +11,17 @@ export default function Information({ info }) {
 			<hr className='border-1 my-2 border-secondary-content' />
 			<div className='mx-2 flex flex-col items-stretch justify-between md:flex-row'>
 				<div className='flex flex-col gap-0.5 divide-y-2 divide-primary/20 md:divide-y-0'>
-					<TitleValue title='info_id' value={info?.info_id} />
+					<TitleValue title='info ID' value={info?.info_id} />
+					<TitleValue title='Order ID' value={info?.order_number} />
 					<TitleValue title='name' value={info?.name} />
-					<TitleValue title='buyer_name' value={info?.buyer_name} />
-					<TitleValue title='party_name' value={info?.party_name} />
+					<TitleValue title='buyer name' value={info?.buyer_name} />
+					<TitleValue title='party name' value={info?.party_name} />
 					<TitleValue
-						title='marketing_name'
+						title='marketing name'
 						value={info?.marketing_name}
 					/>
 					<TitleValue
-						title='merchandiser_name'
+						title='merchandiser name'
 						value={info?.merchandiser_name}
 					/>
 					<TitleValue
@@ -27,7 +29,7 @@ export default function Information({ info }) {
 						value={info?.factory_name}
 					/>
 					<TitleValue
-						title='lab_status'
+						title='lab status'
 						value={
 							Number(info?.lab_status) === 0
 								? 'Pending'

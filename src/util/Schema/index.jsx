@@ -625,6 +625,10 @@ export const LAB_INFO_SCHEMA = {
 	remarks: STRING.nullable(),
 	recipe: yup.array().of(
 		yup.object().shape({
+			status: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+			approved: BOOLEAN.transform(handelNumberDefaultValue).default(
+				false
+			),
 			recipe_uuid: STRING_REQUIRED,
 		})
 	),
@@ -637,6 +641,8 @@ export const LAB_INFO_NULL = {
 	remarks: '',
 	recipe: [
 		{
+			status: false,
+			approved: false,
 			recipe_uuid: null,
 		},
 	],

@@ -1103,7 +1103,7 @@ export const SLIDER_DIE_CASTING_SCHEMA = {
 		yup.object().shape({
 			mc_no: NUMBER_REQUIRED,
 			die_casting_uuid: STRING_REQUIRED,
-			order_info_uuid: STRING,
+			order_info_uuid: STRING.nullable(),
 			cavity_goods: NUMBER_REQUIRED,
 			cavity_defect: NUMBER_REQUIRED,
 			push: NUMBER_REQUIRED,
@@ -1118,7 +1118,7 @@ export const SLIDER_DIE_CASTING_NULL = {
 		{
 			mc_no: '',
 			die_casting_uuid: '',
-			order_info_uuid: '',
+			order_info_uuid: null,
 			cavity_goods: '',
 			cavity_defect: '',
 			push: '',
@@ -1895,12 +1895,12 @@ export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 	name: STRING_REQUIRED, //
 	item: STRING_REQUIRED, //
 	zipper_number: STRING_REQUIRED, //
-	end_type: STRING, //
-	puller_type: STRING, //
-	logo_type: STRING, //
-	slider_body_shape: STRING, //
-	puller_link: STRING, //
-	stopper_type: STRING, //
+	end_type: STRING.nullable(), //
+	puller_type: STRING.nullable(), //
+	logo_type: STRING.nullable(), //
+	slider_body_shape: STRING.nullable(), //
+	puller_link: STRING.nullable(), //
+	stopper_type: STRING.nullable(), //
 	type: STRING_REQUIRED,
 	// quantity: NUMBER_REQUIRED, //
 	// weight: NUMBER_REQUIRED, //
@@ -1947,12 +1947,12 @@ export const SLIDER_DIE_CASTING_STOCK_NULL = {
 	name: '',
 	item: '',
 	zipper_number: '',
-	end_type: '',
-	puller_type: '',
-	logo_type: '',
-	slider_body_shape: '',
-	puller_link: '',
-	stopper_type: '',
+	end_type: null,
+	puller_type: null,
+	logo_type: null,
+	slider_body_shape: null,
+	puller_link: null,
+	stopper_type: null,
 	// quantity: null,
 	// weight: null,
 	// pcs_per_kg: null,

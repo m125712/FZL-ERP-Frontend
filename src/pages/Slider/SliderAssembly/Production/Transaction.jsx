@@ -1,17 +1,21 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
 import {
-	SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
-	SLIDER_ASSEMBLY_TRANSACTION_NULL,
-	NUMBER_REQUIRED,
-} from '@util/Schema';
-
+	useSliderAssemblyProduction,
+	useSliderAssemblyTransferEntry,
+} from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, JoinInput } from '@/ui';
+
 import nanoid from '@/lib/nanoid';
-import { useSliderAssemblyTransferEntry } from '@/state/Slider';
+import {
+	NUMBER_REQUIRED,
+	SLIDER_ASSEMBLY_TRANSACTION_NULL,
+	SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
+} from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -26,6 +30,7 @@ export default function Index({
 	setUpdateSliderTrx,
 }) {
 	const { postData, url } = useSliderAssemblyTransferEntry();
+	const { invalidateQuery } = useSliderAssemblyProduction();
 	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
@@ -71,6 +76,8 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateQuery();
 	};
 
 	return (

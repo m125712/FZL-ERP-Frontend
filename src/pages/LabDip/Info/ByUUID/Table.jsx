@@ -1,10 +1,16 @@
-import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-import { DateTime, LinkWithCopy } from '@/ui';
 import { useMemo } from 'react';
+import { UseLabDipInfoByDetails, useLabDipRecipe } from '@/state/LabDip';
+
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
+import { DateTime, LinkWithCopy } from '@/ui';
+
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({ recipe }) {
-	// console.log(recipe);
-
+	const { updateData, url } = useLabDipRecipe();
+	const { invalidateQuery: invalidateQueryLabDipInfo } =
+		UseLabDipInfoByDetails(recipe?.uuid);
 	const columns = useMemo(
 		() => [
 			{
@@ -18,6 +24,35 @@ export default function Index({ recipe }) {
 							title={info.getValue()}
 							id={recipe_uuid}
 							uri='/lab-dip/recipe/details'
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'approved',
+				header: 'Approved',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<SwitchToggle
+							onChange={() =>
+								handelApprovedStatusChange(info.row.index)
+							}
+							checked={info.getValue() === 1}
+						/>
+					);
+				},
+			},
+
+			{
+				accessorKey: 'status',
+				header: 'Status',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<SwitchToggle
+							onChange={() => handelStatusChange(info.row.index)}
+							checked={info.getValue() === 1}
 						/>
 					);
 				},
@@ -44,7 +79,28 @@ export default function Index({ recipe }) {
 		],
 		[recipe]
 	);
-
+	const handelApprovedStatusChange = async (idx) => {
+		await updateData.mutateAsync({
+			url: `${url}/${recipe[idx]?.recipe_uuid}`,
+			updatedData: {
+				approved: recipe[idx]?.approved === 1 ? 0 : 1,
+				updated_at: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
+		invalidateQueryLabDipInfo();
+	};
+	const handelStatusChange = async (idx) => {
+		await updateData.mutateAsync({
+			url: `${url}/${recipe[idx]?.recipe_uuid}`,
+			updatedData: {
+				status: recipe[idx]?.status === 1 ? 0 : 1,
+				updated_at: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
+		invalidateQueryLabDipInfo();
+	};
 	return (
 		<ReactTableTitleOnly title='Details' data={recipe} columns={columns} />
 	);

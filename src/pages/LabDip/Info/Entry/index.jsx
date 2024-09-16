@@ -8,7 +8,13 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { UpdateModal } from '@/components/Modal';
-import { ActionButtons, DynamicField, FormField, ReactSelect } from '@/ui';
+import {
+	ActionButtons,
+	CheckBox,
+	DynamicField,
+	FormField,
+	ReactSelect,
+} from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { LAB_INFO_NULL, LAB_INFO_SCHEMA } from '@util/Schema';
@@ -23,7 +29,6 @@ export default function Index() {
 		postData,
 		deleteData,
 		invalidateQuery: invalidateQueryLabDipInfo,
-		
 	} = useLabDipInfo();
 	const { info_number, info_uuid } = useParams();
 
@@ -42,6 +47,7 @@ export default function Index() {
 		Controller,
 		useFieldArray,
 		getValues,
+		setValue,
 		watch,
 	} = useRHF(LAB_INFO_SCHEMA, LAB_INFO_NULL);
 
@@ -97,6 +103,7 @@ export default function Index() {
 
 	// Submit
 	const onSubmit = async (data) => {
+		console.log(data);
 		// * Update data * //
 		if (isUpdate) {
 			// * updated order description * //
@@ -146,7 +153,7 @@ export default function Index() {
 		// * Add new data*//
 		const lab_dip_info_uuid = nanoid();
 		const created_at = GetDateTime();
-		console.log(lab_dip_info_uuid);
+
 		const lab_info = {
 			...data,
 			uuid: lab_dip_info_uuid,
@@ -164,8 +171,10 @@ export default function Index() {
 
 		const recipe = [...data.recipe].map((item) => ({
 			lab_dip_info_uuid,
+			status: item.status,
+			approved: item.approved,
 		}));
-
+		console.log(recipe);
 		// * insert the recipe data using update function
 		let recipe_promises = [
 			...lab_info.recipe.map(
@@ -229,6 +238,24 @@ export default function Index() {
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
+	// const [status, setStatus] = useState({});
+	// const [approved, setApproved] = useState({});
+
+	// * status
+	const getStatus = (status, index) => {
+		//setStatus((prevStatus) => ({ ...prevStatus, [index]: status }));
+		setValue(`recipe[${index}].status`, status);
+		console.log(getValues(`recipe[${index}].status`), 'status');
+		console.log(getValues(`recipe[${index}].approved`), 'approved');
+	};
+	const getApproved = (approved, index) => {
+		//setApproved((prevApproved) => ({ ...prevApproved, [index]: approved }));
+		setValue(`recipe[${index}].approved`, approved);
+		console.log(getValues(`recipe[${index}].status`), 'status');
+
+		console.log(getValues(`recipe[${index}].approved`), 'approved');
+	};
+
 	return (
 		<div>
 			<HotKeys {...{ keyMap, handlers }}>
@@ -245,13 +272,18 @@ export default function Index() {
 							Controller,
 							watch,
 							lab_status: getValues('lab_status'),
-							isUpdate
+							isUpdate,
 						}}
 					/>
 					<DynamicField
 						title='Recipe'
 						handelAppend={handelRecipeAppend}
-						tableHead={['Recipe', 'Action'].map((item) => (
+						tableHead={[
+							'Recipe',
+							'Status',
+							'Approved',
+							'Action',
+						].map((item) => (
 							<th
 								key={item}
 								scope='col'
@@ -287,9 +319,27 @@ export default function Index() {
 																	`recipe[${index}].recipe_uuid`
 																)
 														)}
-														onChange={(e) =>
-															onChange(e.value)
-														}
+														onChange={(e) => {
+															onChange(e.value);
+															setValue(
+																`recipe[${index}].recipe_uuid`,
+																e.value
+															);
+															getStatus(
+																e.status
+																	? 1
+																	: 0,
+
+																index
+															);
+															getApproved(
+																e.approved
+																	? 1
+																	: 0,
+
+																index
+															);
+														}}
 														isDisabled={
 															rec_uuid ==
 															undefined
@@ -300,6 +350,96 @@ export default function Index() {
 													/>
 												);
 											}}
+										/>
+									</FormField>
+								</td>
+								<td className={rowClass}>
+									<FormField
+										label={`recipe[${index}].status`}
+										dynamicerror={
+											errors?.recipe?.[index]?.status
+										}
+										is_title_needed='false'>
+										<Controller
+											name={`recipe[${index}].status`}
+											control={control}
+											render={({
+												field: { onChange },
+											}) => (
+												<div className='rounded-md border border-secondary/30 bg-secondary px-1'>
+													<CheckBox
+														text='text-secondary-content'
+														label={`recipe[${index}].status`}
+														title='Status'
+														height='h-[2.9rem]'
+														defaultChecked={
+															getValues(
+																`recipe[${index}].status`
+															) === 1
+														}
+														onChange={(e) => {
+															let newStatus = e
+																.target.checked
+																? 1
+																: 0;
+															onChange(newStatus);
+															getStatus(
+																newStatus,
+																index
+															);
+														}}
+														{...{
+															register,
+														}}
+													/>
+												</div>
+											)}
+										/>
+									</FormField>
+								</td>
+								<td className={rowClass}>
+									<FormField
+										label={`recipe[${index}].approved`}
+										dynamicerror={
+											errors?.recipe?.[index]?.approved
+										}
+										is_title_needed='false'>
+										<Controller
+											name={`recipe[${index}].approved`}
+											control={control}
+											render={({
+												field: { onChange },
+											}) => (
+												<div className='rounded-md border border-secondary/30 bg-secondary px-1'>
+													<CheckBox
+														text='text-secondary-content'
+														label={`recipe[${index}].approved`}
+														title='approved'
+														height='h-[2.9rem]'
+														defaultChecked={
+															getValues(
+																`recipe[${index}].approved`
+															) === 1
+														} // Ensure this reflects the correct boolean state
+														onChange={(e) => {
+															let newApproved = e
+																.target.checked
+																? 1
+																: 0;
+															onChange(
+																newApproved
+															);
+															getApproved(
+																newApproved,
+																index
+															);
+														}}
+														{...{
+															register,
+														}}
+													/>
+												</div>
+											)}
 										/>
 									</FormField>
 								</td>

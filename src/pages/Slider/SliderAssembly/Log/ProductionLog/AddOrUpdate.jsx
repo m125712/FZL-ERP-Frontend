@@ -1,16 +1,18 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
-import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import {
-	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
-	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,
-	NUMBER_REQUIRED,
-} from '@util/Schema';
-import { useSliderAssemblyProductionEntryByUUID } from '@/state/Slider';
 import { useEffect } from 'react';
+import { useSliderAssemblyProductionEntryByUUID } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
 import * as yup from 'yup';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, JoinInput } from '@/ui';
+
+import {
+	NUMBER_REQUIRED,
+	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,
+	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
+} from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -29,7 +31,9 @@ export default function Index({
 	);
 
 	const MAX_QUANTITY =
-		updateSliderProd?.slider_assembly_prod + updateSliderProd?.trx_quantity;
+		updateSliderProd?.end_type_name === 'Open End'
+			? Math.floor(Number(updateSliderProd?.open_end_max_sa_quantity))
+			: Math.floor(Number(updateSliderProd?.close_end_max_sa_quantity));
 
 	const {
 		register,
@@ -44,7 +48,7 @@ export default function Index({
 		{
 			...SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
 			production_quantity: NUMBER_REQUIRED.max(
-				yup.ref('max_sa_quantity'),
+				MAX_QUANTITY,
 				'Beyond Max Quantuty'
 			),
 		},
@@ -90,15 +94,6 @@ export default function Index({
 		}
 	};
 
-	const transactionArea = [
-		{ label: 'Dying and Iron', value: 'dying_and_iron_stock' },
-		{ label: 'Teeth Molding', value: 'slider_assembly_stock' },
-		{ label: 'Teeth Coloring', value: 'teeth_coloring_stock' },
-		{ label: 'Finishing', value: 'finishing_stock' },
-		{ label: 'Slider Assembly', value: 'slider_assembly_stock' },
-		{ label: 'Coloring', value: 'coloring_stock' },
-	];
-
 	return (
 		<AddModal
 			id={modalId}
@@ -114,7 +109,7 @@ export default function Index({
 			<JoinInput
 				label='production_quantity'
 				unit='PCS'
-				sub_label={`Max: ${Number(getValues('max_sa_quantity'))}`}
+				sub_label={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

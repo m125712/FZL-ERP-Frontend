@@ -42,7 +42,7 @@ export default function Index({
 		{
 			...SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
 			trx_quantity: NUMBER_REQUIRED.max(
-				updateSliderTrx?.max_trx_to_finishing_quantity,
+				updateSliderTrx?.max_sa_quantity,
 				'Beyond Max Quantity'
 			),
 		},
@@ -113,7 +113,7 @@ export default function Index({
 			<JoinInput
 				label='trx_quantity'
 				unit='PCS'
-				sub_label={`Max: ${Number(updateSliderTrx?.max_trx_to_finishing_quantity)} PCS`}
+				sub_label={`Max: ${Number(updateSliderTrx?.max_sa_quantity)} PCS`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

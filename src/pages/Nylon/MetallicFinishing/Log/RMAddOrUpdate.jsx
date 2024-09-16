@@ -1,17 +1,20 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
-
 import { useNylonMetallicFinishingRM } from '@/state/Nylon';
+import { useOtherMaterial } from '@/state/Other';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 
-import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import getTransactionArea from '@/util/TransactionArea';
+import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
 import {
 	RM_MATERIAL_USED_EDIT_NULL,
 	RM_MATERIAL_USED_EDIT_SCHEMA,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
+import getTransactionArea from '@/util/TransactionArea';
+
 export default function Index({
 	modalId = '',
 	updateFinishingRMLog = {
@@ -20,24 +23,24 @@ export default function Index({
 		used_quantity: null,
 		n_t_cutting: null,
 		n_stopper: null,
+		wastage: null,
 	},
 	setUpdateFinishingRMLog,
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateFinishingRM } =
 		useNylonMetallicFinishingRM();
+	const { data: material } = useOtherMaterial();
 
 	const MAX_QUANTITY =
 		updateFinishingRMLog?.section === 'n_t_cutting'
-			? Number(updateFinishingRMLog?.n_t_cutting) +
-				Number(updateFinishingRMLog?.used_quantity)
-			: Number(updateFinishingRMLog?.n_stopper) +
-				Number(updateFinishingRMLog?.used_quantity);
-	const schema = {
-		...RM_MATERIAL_USED_EDIT_SCHEMA,
-		used_quantity:
-			RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
-	};
+			? Number(updateFinishingRMLog?.n_t_cutting)
+			: Number(updateFinishingRMLog?.n_stopper);
+	// const schema = {
+	// 	...RM_MATERIAL_USED_EDIT_SCHEMA,
+	// 	used_quantity:
+	// 		RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
+	// };
 
 	const {
 		register,
@@ -47,15 +50,23 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
+		watch,
 		context,
-	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
+	} = useRHF(RM_MATERIAL_USED_EDIT_SCHEMA, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
 		`${url}/${updateFinishingRMLog?.uuid}`,
 		updateFinishingRMLog?.uuid,
 		reset
 	);
-
+	let MAX_PROD =
+		MAX_QUANTITY +
+		Number(updateFinishingRMLog?.used_quantity) +
+		(Number(updateFinishingRMLog?.wastage) - watch('wastage'));
+	let MAX_WASTAGE =
+		MAX_QUANTITY +
+		Number(updateFinishingRMLog?.wastage) +
+		(Number(updateFinishingRMLog?.used_quantity) - watch('used_quantity'));
 	const onClose = () => {
 		setUpdateFinishingRMLog((prev) => ({
 			...prev,
@@ -64,12 +75,20 @@ export default function Index({
 			used_quantity: null,
 			n_t_cutting: null,
 			n_stopper: null,
+			wastage: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
+		if (MAX_WASTAGE < watch('wastage')) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		// Update item
 		if (updateFinishingRMLog?.uuid !== null) {
 			const updatedData = {
@@ -119,16 +138,24 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<Input
+			<JoinInput
 				label='used_quantity'
-				sub_label={`Max: ${MAX_QUANTITY}`}
-				placeholder={`Max: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${MAX_PROD}`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
-			<Input
+			<JoinInput
 				label='wastage'
-				sub_label={`Max: ${MAX_QUANTITY}`}
-				placeholder={`Max: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${MAX_WASTAGE}`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

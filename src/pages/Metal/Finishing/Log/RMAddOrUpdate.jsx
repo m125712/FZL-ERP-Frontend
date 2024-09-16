@@ -1,17 +1,25 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
-
 import { useMetalFinishingRM } from '@/state/Metal';
+import { useOtherMaterial } from '@/state/Other';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 
-import { FormField, Input, ReactSelect } from '@/ui';
+
+
+import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
+
+
+import { RM_MATERIAL_USED_EDIT_NULL, RM_MATERIAL_USED_EDIT_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
-import {
-	RM_MATERIAL_USED_EDIT_NULL,
-	RM_MATERIAL_USED_EDIT_SCHEMA,
-} from '@util/Schema';
+
+
+
+
+
 export default function Index({
 	modalId = '',
 	updateFinishingRMLog = {
@@ -22,27 +30,28 @@ export default function Index({
 		m_gapping: null,
 		m_sealing: null,
 		m_stopper: null,
+		wastage: null,
 	},
 	setUpdateFinishingRMLog,
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateFinishingRM } = useMetalFinishingRM();
+	const { data: material } = useOtherMaterial();
 
-	const MAX_QUANTITY =
-		Number(
-			updateFinishingRMLog?.section === 'm_gapping'
-				? updateFinishingRMLog?.m_gapping
-				: updateFinishingRMLog?.section === 'm_teeth_cleaning'
-					? updateFinishingRMLog?.m_teeth_cleaning
-					: updateFinishingRMLog?.section === 'm_sealing'
-						? updateFinishingRMLog?.m_sealing
-						: updateFinishingRMLog?.m_stopper
-		) + Number(updateFinishingRMLog?.used_quantity);
-	const schema = {
-		...RM_MATERIAL_USED_EDIT_SCHEMA,
-		used_quantity:
-			RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
-	};
+	const MAX_QUANTITY = Number(
+		updateFinishingRMLog?.section === 'm_gapping'
+			? updateFinishingRMLog?.m_gapping
+			: updateFinishingRMLog?.section === 'm_teeth_cleaning'
+				? updateFinishingRMLog?.m_teeth_cleaning
+				: updateFinishingRMLog?.section === 'm_sealing'
+					? updateFinishingRMLog?.m_sealing
+					: updateFinishingRMLog?.m_stopper
+	);
+	// const schema = {
+	// 	...RM_MATERIAL_USED_EDIT_SCHEMA,
+	// 	used_quantity:
+	// 		RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
+	// };
 
 	const {
 		register,
@@ -52,8 +61,17 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
+		watch,
 		context,
-	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
+	} = useRHF(RM_MATERIAL_USED_EDIT_SCHEMA, RM_MATERIAL_USED_EDIT_NULL);
+	let MAX_PROD =
+		MAX_QUANTITY +
+		Number(updateFinishingRMLog?.used_quantity) +
+		(Number(updateFinishingRMLog?.wastage) - watch('wastage'));
+	let MAX_WASTAGE =
+		MAX_QUANTITY +
+		Number(updateFinishingRMLog?.wastage) +
+		(Number(updateFinishingRMLog?.used_quantity) - watch('used_quantity'));
 
 	useFetchForRhfReset(
 		`${url}/${updateFinishingRMLog?.uuid}`,
@@ -71,12 +89,20 @@ export default function Index({
 			m_gapping: null,
 			m_sealing: null,
 			m_stopper: null,
+			wastage: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
+		if (MAX_WASTAGE < watch('wastage')) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		// Update item
 		if (updateFinishingRMLog?.uuid !== null) {
 			const updatedData = {
@@ -126,16 +152,24 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<Input
+			<JoinInput
 				label='used_quantity'
-				sub_label={`Max: ${MAX_QUANTITY}`}
-				placeholder={`Max: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${MAX_PROD}`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
-			<Input
+			<JoinInput
 				label='wastage'
-				sub_label={`Max: ${MAX_QUANTITY}`}
-				placeholder={`Max: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${MAX_WASTAGE}`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

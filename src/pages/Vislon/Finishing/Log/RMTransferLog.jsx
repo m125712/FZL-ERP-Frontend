@@ -1,12 +1,14 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useVislonFinishingRM, useVislonFinishingRMLog } from '@/state/Vislon';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-
-import { useVislonFinishingRM, useVislonFinishingRMLog } from '@/state/Vislon';
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState } from 'react';
+
 import RMAddOrUpdate from './RMAddOrUpdate';
 
 export default function Index() {
@@ -129,6 +131,7 @@ export default function Index() {
 		v_t_cutting: null,
 		v_stopper: null,
 		used_quantity: null,
+		wastage: null,
 	});
 
 	const handelUpdate = (idx) => {
@@ -156,7 +159,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateFinishingRM();
+	//invalidateFinishingRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

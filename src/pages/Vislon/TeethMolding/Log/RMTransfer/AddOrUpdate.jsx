@@ -1,16 +1,20 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
+import { useOtherMaterial } from '@/state/Other';
 import { useVislonTMRM } from '@/state/Vislon';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 
-import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import getTransactionArea from '@/util/TransactionArea';
+import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast/ReactToastify';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
 import {
 	RM_MATERIAL_USED_EDIT_NULL,
 	RM_MATERIAL_USED_EDIT_SCHEMA,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
+import getTransactionArea from '@/util/TransactionArea';
+
 export default function Index({
 	modalId = '',
 	updateVislonTMRMLog = {
@@ -24,14 +28,14 @@ export default function Index({
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateVislonTMRM } = useVislonTMRM();
 
-	const MAX_QUANTITY =
-		Number(updateVislonTMRMLog?.v_teeth_molding) +
-		Number(updateVislonTMRMLog?.used_quantity);
-	const schema = {
-		...RM_MATERIAL_USED_EDIT_SCHEMA,
-		used_quantity:
-			RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
-	};
+	const { data: material } = useOtherMaterial();
+	const MAX_QUANTITY = Number(updateVislonTMRMLog?.v_teeth_molding);
+
+	// const schema = {
+	// 	...RM_MATERIAL_USED_EDIT_SCHEMA,
+	// 	used_quantity:
+	// 		RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
+	// };
 
 	const {
 		register,
@@ -42,15 +46,22 @@ export default function Index({
 		reset,
 		getValues,
 		watch,
-		context
-	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
+		context,
+	} = useRHF(RM_MATERIAL_USED_EDIT_SCHEMA, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
 		`${url}/${updateVislonTMRMLog?.uuid}`,
 		updateVislonTMRMLog?.uuid,
 		reset
 	);
-
+	let MAX_PROD =
+		MAX_QUANTITY +
+		Number(updateVislonTMRMLog?.used_quantity) +
+		(Number(updateVislonTMRMLog?.wastage) - watch('wastage'));
+	let MAX_WASTAGE =
+		MAX_QUANTITY +
+		Number(updateVislonTMRMLog?.wastage) +
+		(Number(updateVislonTMRMLog?.used_quantity) - watch('used_quantity'));
 	const onClose = () => {
 		setUpdateVislonTMRMLog((prev) => ({
 			...prev,
@@ -64,6 +75,13 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
+		if (MAX_WASTAGE < watch('wastage')) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		// Update item
 		if (updateVislonTMRMLog?.uuid !== null) {
 			const updatedData = {
@@ -113,16 +131,24 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<Input
+			<JoinInput
 				label='used_quantity'
-				sub_label={`Max: ${Number(updateVislonTMRMLog?.v_teeth_molding) + Number(updateVislonTMRMLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateVislonTMRMLog?.v_teeth_molding) + Number(updateVislonTMRMLog?.used_quantity)}`}
+				sub_label={`Max: ${MAX_PROD}`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
-			<Input
+			<JoinInput
 				label='wastage'
-				sub_label={`Max: ${Number(updateVislonTMRMLog?.v_teeth_molding) + Number(updateVislonTMRMLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateVislonTMRMLog?.v_teeth_molding) + Number(updateVislonTMRMLog?.used_quantity)}`}
+				sub_label={`Max: ${MAX_WASTAGE}`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

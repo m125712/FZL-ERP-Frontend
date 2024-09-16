@@ -1,12 +1,14 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useMetalTCRM, useMetalTCRMLog } from '@/state/Metal';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-
-import { useMetalTCRM, useMetalTCRMLog } from '@/state/Metal';
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState } from 'react';
+
 import RMAddOrUpdate from './RMAddOrUpdate';
 
 export default function Index() {
@@ -122,6 +124,7 @@ export default function Index() {
 		teeth_assembling_and_polishing: null,
 		plating_and_iron: null,
 		used_quantity: null,
+		wastage: null,
 	});
 
 	const handelUpdate = (idx) => {
@@ -149,7 +152,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateMetalTCRM();
+	//invalidateMetalTCRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

@@ -1,16 +1,20 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
 import { useMetalTMRM } from '@/state/Metal';
+import { useOtherMaterial } from '@/state/Other';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 
-import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast/ReactToastify';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
 import {
 	RM_MATERIAL_USED_EDIT_NULL,
 	RM_MATERIAL_USED_EDIT_SCHEMA,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
+
 export default function Index({
 	modalId = '',
 	updateMetalTMRMLog = {
@@ -18,20 +22,20 @@ export default function Index({
 		section: null,
 		used_quantity: null,
 		m_teeth_molding: null,
+		wastage: null,
 	},
 	setUpdateMetalTMRMLog,
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateMetalTMRM } = useMetalTMRM();
+	const { data: material } = useOtherMaterial();
 
-	const MAX_QUANTITY =
-		Number(updateMetalTMRMLog?.m_teeth_molding) +
-		Number(updateMetalTMRMLog?.used_quantity);
-	const schema = {
-		...RM_MATERIAL_USED_EDIT_SCHEMA,
-		used_quantity:
-			RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
-	};
+	const MAX_QUANTITY = Number(updateMetalTMRMLog?.m_teeth_molding);
+	// const schema = {
+	// 	...RM_MATERIAL_USED_EDIT_SCHEMA,
+	// 	used_quantity:
+	// 		RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
+	// };
 
 	const {
 		register,
@@ -42,8 +46,16 @@ export default function Index({
 		reset,
 		getValues,
 		context,
-	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
-
+		watch,
+	} = useRHF(RM_MATERIAL_USED_EDIT_SCHEMA, RM_MATERIAL_USED_EDIT_NULL);
+	let MAX_PROD =
+		MAX_QUANTITY +
+		Number(updateMetalTMRMLog?.used_quantity) +
+		(Number(updateMetalTMRMLog?.wastage) - watch('wastage'));
+	let MAX_WASTAGE =
+		MAX_QUANTITY +
+		Number(updateMetalTMRMLog?.wastage) +
+		(Number(updateMetalTMRMLog?.used_quantity) - watch('used_quantity'));
 	useFetchForRhfReset(
 		`${url}/${updateMetalTMRMLog?.uuid}`,
 		updateMetalTMRMLog?.uuid,
@@ -57,12 +69,20 @@ export default function Index({
 			section: null,
 			used_quantity: null,
 			m_teeth_molding: null,
+			wastage: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
+		if (MAX_WASTAGE < watch('wastage')) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		// Update item
 		if (updateMetalTMRMLog?.uuid !== null) {
 			const updatedData = {
@@ -112,16 +132,24 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<Input
+			<JoinInput
 				label='used_quantity'
-				sub_label={`Max: ${Number(updateMetalTMRMLog?.m_teeth_molding) + Number(updateMetalTMRMLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateMetalTMRMLog?.m_teeth_molding) + Number(updateMetalTMRMLog?.used_quantity)}`}
+				sub_label={`Max: ${MAX_PROD}`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
-			<Input
+			<JoinInput
 				label='wastage'
-				sub_label={`Max: ${Number(updateMetalTMRMLog?.m_teeth_molding) + Number(updateMetalTMRMLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateMetalTMRMLog?.m_teeth_molding) + Number(updateMetalTMRMLog?.used_quantity)}`}
+				sub_label={`Max: ${MAX_WASTAGE}`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

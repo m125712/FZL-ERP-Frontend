@@ -1,15 +1,17 @@
-import { Suspense } from '@/components/Feedback';
-import { DeleteModal } from '@/components/Modal';
-import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-
+import { useEffect, useMemo, useState } from 'react';
 import {
 	useNylonMetallicFinishingRM,
 	useNylonMetallicFinishingRMLog,
 } from '@/state/Nylon';
+import { useAccess } from '@/hooks';
+
+import { Suspense } from '@/components/Feedback';
+import { DeleteModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState } from 'react';
+
 import RMAddOrUpdate from './RMAddOrUpdate';
 
 export default function Index() {
@@ -18,7 +20,7 @@ export default function Index() {
 	const info = new PageInfo(
 		'Finishing RM Used Log',
 		url,
-		'nylon__plastic_finishing_log'
+		'nylon__metallic_finishing_log'
 	);
 	const haveAccess = useAccess(info.getTab());
 	const { invalidateQuery: invalidateFinishingRM } =
@@ -127,6 +129,7 @@ export default function Index() {
 		n_t_cutting: null,
 		n_stopper: null,
 		used_quantity: null,
+		wastage: null,
 	});
 
 	const handelUpdate = (idx) => {
@@ -154,7 +157,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateFinishingRM();
+	//invalidateFinishingRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

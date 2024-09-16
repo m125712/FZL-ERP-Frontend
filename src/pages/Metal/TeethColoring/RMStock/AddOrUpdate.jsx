@@ -1,14 +1,25 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-
-//import { useLabDipRM, useLabDipRMLog } from '@/state/LabDip';
 import { useMetalTCRM, useMetalTCRMLog } from '@/state/Metal';
-import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
+import { useOtherMaterial } from '@/state/Other';
 import * as yup from 'yup';
+//import { useLabDipRM, useLabDipRMLog } from '@/state/LabDip';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+
+
+
+import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
+import { Input, JoinInput } from '@/ui';
+
+
+
+import nanoid from '@/lib/nanoid';
+import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
+
+
+
+
 
 export default function Index({
 	modalId = '',
@@ -23,15 +34,12 @@ export default function Index({
 	const { user } = useAuth();
 	const { url, postData } = useMetalTCRM();
 	const { invalidateQuery: invalidateTCRMLog } = useMetalTCRMLog();
+	
 	const MAX_QUANTITY = updateTCStock?.stock;
 
 	const schema = {
 		used_quantity: RM_MATERIAL_USED_SCHEMA.remaining.max(
 			updateTCStock?.stock
-		),
-		wastage: RM_MATERIAL_USED_SCHEMA.remaining.max(
-			MAX_QUANTITY,
-			'Must be less than or equal ${MAX_QUANTITY}'
 		),
 	};
 
@@ -39,6 +47,7 @@ export default function Index({
 		schema,
 		RM_MATERIAL_USED_NULL
 	);
+	const MAX_WASTAGE = MAX_QUANTITY - watch('used_quantity');
 
 	const onClose = () => {
 		setUpdateTCStock((prev) => ({
@@ -53,6 +62,13 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
+		if (MAX_WASTAGE < watch('wastage')) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		const updatedData = {
 			...data,
 
@@ -90,18 +106,8 @@ export default function Index({
 			<JoinInput
 				label='wastage'
 				unit={updateTCStock?.unit}
-				sub_label={`Max: ${(updateTCStock?.stock -
-					watch('used_quantity') <
-				0
-					? 0
-					: updateTCStock?.stock - watch('used_quantity')
-				).toFixed(2)}`}
-				placeholder={`Max: ${(updateTCStock?.stock -
-					watch('used_quantity') <
-				0
-					? 0
-					: updateTCStock?.stock - watch('used_quantity')
-				).toFixed(2)}`}
+				sub_label={`Max:${MAX_WASTAGE}`}
+				placeholder={`Max:${MAX_WASTAGE}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

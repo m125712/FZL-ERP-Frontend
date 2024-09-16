@@ -15,8 +15,8 @@ export default function Index() {
 			<SFGProductionLog />
 			<hr className='border-secondary-content my-6 border-2 border-dashed' />
 			<RMTransferLog />
-			<hr className='border-secondary-content my-6 border-2 border-dashed' />
-			<RMOrderAgainstLog />
+			{/* <hr className='border-secondary-content my-6 border-2 border-dashed' />
+			<RMOrderAgainstLog /> */}
 		</div>
 	);
 }

@@ -1,16 +1,20 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
+import { useOtherMaterial } from '@/state/Other';
 import { useSliderDieCastingRM } from '@/state/Slider';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 
-import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
 import {
 	RM_MATERIAL_USED_EDIT_NULL,
 	RM_MATERIAL_USED_EDIT_SCHEMA,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
+
 export default function Index({
 	modalId = '',
 	updateSliderDieCastingRMLog = {
@@ -18,21 +22,22 @@ export default function Index({
 		section: null,
 		used_quantity: null,
 		die_casting: null,
+
+		wastage: null,
 	},
 	setUpdateSliderDieCastingRMLog,
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateSliderDieCastingRM } =
 		useSliderDieCastingRM();
+	const { data: material } = useOtherMaterial();
 
-	const MAX_QUANTITY =
-		Number(updateSliderDieCastingRMLog?.die_casting) +
-		Number(updateSliderDieCastingRMLog?.used_quantity);
-	const schema = {
-		...RM_MATERIAL_USED_EDIT_SCHEMA,
-		used_quantity:
-			RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
-	};
+	const MAX_QUANTITY = Number(updateSliderDieCastingRMLog?.die_casting);
+	// const schema = {
+	// 	...RM_MATERIAL_USED_EDIT_SCHEMA,
+	// 	used_quantity:
+	// 		RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
+	// };
 
 	const {
 		register,
@@ -43,14 +48,23 @@ export default function Index({
 		reset,
 		getValues,
 		watch,
-		context
-	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
+		context,
+	} = useRHF(RM_MATERIAL_USED_EDIT_SCHEMA, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
 		`${url}/${updateSliderDieCastingRMLog?.uuid}`,
 		updateSliderDieCastingRMLog?.uuid,
 		reset
 	);
+	let MAX_PROD =
+		MAX_QUANTITY +
+		Number(updateSliderDieCastingRMLog?.used_quantity) +
+		(Number(updateSliderDieCastingRMLog?.wastage) - watch('wastage'));
+	let MAX_WASTAGE =
+		MAX_QUANTITY +
+		Number(updateSliderDieCastingRMLog?.wastage) +
+		(Number(updateSliderDieCastingRMLog?.used_quantity) -
+			watch('used_quantity'));
 
 	const onClose = () => {
 		setUpdateSliderDieCastingRMLog((prev) => ({
@@ -59,12 +73,23 @@ export default function Index({
 			section: null,
 			used_quantity: null,
 			die_casting: null,
+			wastage: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
+		if (
+			MAX_WASTAGE < watch('wastage') &&
+			MAX_PROD < watch('used_quantity')
+		) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		// Update item
 		if (updateSliderDieCastingRMLog?.uuid !== null) {
 			const updatedData = {
@@ -113,16 +138,24 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<Input
+			<JoinInput
 				label='used_quantity'
-				sub_label={`Max: ${Number(updateSliderDieCastingRMLog?.die_casting) + Number(updateSliderDieCastingRMLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateSliderDieCastingRMLog?.die_casting) + Number(updateSliderDieCastingRMLog?.used_quantity)}`}
+				sub_label={`Max: ${MAX_PROD}`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
-			<Input
+			<JoinInput
 				label='wastage'
-				sub_label={`Max: ${Number(updateSliderDieCastingRMLog?.die_casting) + Number(updateSliderDieCastingRMLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateSliderDieCastingRMLog?.die_casting) + Number(updateSliderDieCastingRMLog?.used_quantity)}`}
+				sub_label={`Max: ${MAX_WASTAGE}`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

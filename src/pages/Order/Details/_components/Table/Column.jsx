@@ -1,4 +1,5 @@
 import { StatusButton } from '@/ui';
+
 import { getMeasurement, getTapeRequired } from '@/util/Need';
 
 const createColumn = (props) => ({
@@ -118,12 +119,24 @@ const getColumn = ({
 			enableColumnFilter: false,
 			cell: (info) => Number(info.getValue()).toFixed(0),
 		}),
+		createColumn({
+			accessorKey: 'dying_and_iron_prod',
+			header: (
+				<span>
+					Tape <br /> Production
+				</span>
+			),
+			enableColumnFilter: false,
+			cell: (info) => Number(info.getValue()).toFixed(3),
+		}),
 		// createTapRequiredColumn({ measurement }),
 	];
 	const DefaultEndColumn = [
-		createStockProdColumn({
-			accessorKey: 'coloring',
-			header: 'Coloring',
+		createColumn({
+			accessorKey: 'coloring_prod',
+			header: 'Slider',
+			enableColumnFilter: false,
+			cell: (info) => Number(info.getValue()).toFixed(0),
 		}),
 		createStockProdColumn({
 			accessorKey: 'finishing',

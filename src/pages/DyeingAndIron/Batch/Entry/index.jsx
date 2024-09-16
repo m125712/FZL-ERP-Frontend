@@ -382,13 +382,36 @@ export default function Index() {
 					const dynamicerror = errors?.batch_entry?.[idx]?.quantity;
 					return (
 						<Input
-							label={`batch_entry[${info.row.index}].quantity`}
+							label={`batch_entry[${idx}].quantity`}
 							is_title_needed='false'
 							height='h-8'
 							dynamicerror={dynamicerror}
 							{...{ register, errors }}
 						/>
 					);
+				},
+			},
+			{
+				accessorKey: 'top',
+				header: 'Cal Tape (Kg)',
+				enableColumnFilter: false,
+				enableSorting: true,
+				cell: ({ row }) => {
+					const { top, bottom, raw_mtr_per_kg, size } = row.original;
+					const idx = row.index;
+
+					const total_size_in_mtr =
+						((parseFloat(top) +
+							parseFloat(bottom) +
+							parseFloat(size)) *
+							parseFloat(
+								watch(`batch_entry[${idx}].quantity`) || 0
+							)) /
+						100;
+
+					return Number(
+						total_size_in_mtr / parseFloat(raw_mtr_per_kg)
+					).toFixed(3);
 				},
 			},
 			{

@@ -1755,7 +1755,7 @@ export const DYEING_BATCH_PRODUCTION_SCHEMA = {
 				)
 				.max(yup.ref('quantity'), 'Beyond Batch Quantity'), // Transforms empty strings to null
 			//
-			production_quantity_in_kg: NUMBER.nullable()
+			production_quantity_in_kg: NUMBER_DOUBLE.nullable()
 				.transform((value, originalValue) =>
 					String(originalValue).trim() === '' ? null : value
 				)
@@ -1850,7 +1850,7 @@ export const DYEING_TRANSFER_SCHEMA = {
 			order_description_uuid: STRING_REQUIRED,
 			colors: yup.array().of(yup.string()).nullable(),
 			section: STRING_REQUIRED,
-			trx_quantity: NUMBER.required("Required")
+			trx_quantity: NUMBER.required('Required')
 				.transform((value, originalValue) =>
 					String(originalValue).trim() === '' ? null : value
 				)

@@ -15,6 +15,9 @@ export default function Index({
 }) {
 	const haveAccess = useAccess('order__details_by_uuid');
 
+	console.log(order_entry);
+	
+
 	const columns = useMemo(
 		() =>
 			getColumn({

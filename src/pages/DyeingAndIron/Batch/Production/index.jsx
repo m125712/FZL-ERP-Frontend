@@ -1,24 +1,27 @@
-import { ProceedModal } from '@/components/Modal';
-import ReactTable from '@/components/Table';
-import { ShowLocalToast } from '@/components/Toast';
+import { Suspense, useEffect, useMemo, useState } from 'react';
+import { useDyeingBatch } from '@/state/Dyeing';
+import { useAuth } from '@context/auth';
+import { DevTool } from '@hookform/devtools';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import {
 	useFetchForRhfReset,
 	useFetchForRhfResetForBatchProduct,
 	useFetchForRhfResetForPlanning,
 	useRHF,
 } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useDyeingBatch } from '@/state/Dyeing';
+
+import { ProceedModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
+import { ShowLocalToast } from '@/components/Toast';
 import { CheckBoxWithoutLabel, Input, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
+
+import nanoid from '@/lib/nanoid';
 import {
 	DYEING_BATCH_PRODUCTION_NULL,
 	DYEING_BATCH_PRODUCTION_SCHEMA,
 } from '@util/Schema';
-import { Suspense, useEffect, useMemo, useState } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import GetDateTime from '@/util/GetDateTime';
+
 import Header from './Header';
 
 // UPDATE IS WORKING
@@ -68,70 +71,9 @@ export default function Index() {
 			reset
 		);
 	}
-	// const { value } = useFetch('/zipper/order-batch');
-
-	// TODO: Not sure if this is needed. need further checking
-	let order_info_ids;
-	// useEffect(() => {
-	// 	if (pi_uuid !== undefined) {
-	// 		setOrderInfoIds((prev) => ({
-	// 			...prev,
-	// 			order_info_ids,
-	// 		}));
-	// 	}
-	// }, [getValues('order_info_ids')]);
 
 	// TODO: Submit
 	const onSubmit = async (data) => {
-		// * Update
-		// if (isUpdate) {
-		// 	const batch_data_updated = {
-		// 		...data,
-		// 		updated_at: GetDateTime(),
-		// 	};
-
-		// 	const batch_entry_updated = [...data?.batch_entry]
-		// 		.filter((item) => item.is_checked)
-		// 		.map((item) => ({
-		// 			...item,
-		// 			uuid: item.batch_entry_uuid,
-		// 			remarks: item.batch_remarks,
-		// 			updated_at: GetDateTime(),
-		// 		}));
-
-		// 	if (batch_entry_updated.length === 0) {
-		// 		alert('Select at least one item to proceed.');
-		// 	} else {
-		// 		await updateData.mutateAsync({
-		// 			url: `/zipper/batch/${batch_data_updated?.uuid}`,
-		// 			updatedData: batch_data_updated,
-		// 			isOnCloseNeeded: false,
-		// 		});
-
-		// 		let batch_entry_updated_promises = [
-		// 			...batch_entry_updated.map(async (item) => {
-		// 				await updateData.mutateAsync({
-		// 					url: `/zipper/batch-entry/${item.uuid}`,
-		// 					updatedData: item,
-		// 					isOnCloseNeeded: false,
-		// 				});
-		// 			}),
-		// 		];
-
-		// 		await Promise.all(batch_entry_updated_promises)
-		// 			.then(() => reset(Object.assign({}, DYEING_BATCH_PRODUCTION_NULL)))
-		// 			.then(
-		// 				navigate(`/dyeing-and-iron/batch/details/${batch_uuid}`)
-		// 			)
-		// 			.catch((err) => console.log(err));
-		// 	}
-
-		// 	// navigate(`/dyeing-and-iron/planning-sno/details/${weeks}`);
-
-		// 	return;
-		// }
-
-		// * ADD data
 		const created_at = GetDateTime();
 
 		const batch_entry = [...data?.batch_entry]
@@ -196,7 +138,7 @@ export default function Index() {
 				)
 				.then(
 					navigate(
-						`/dyeing-and-iron/batch/details/${batch_prod_uuid}`
+						`/dyeing-and-iron/batch/${batch_prod_uuid}`
 					)
 				)
 				.catch((err) => console.log(err));
@@ -358,6 +300,30 @@ export default function Index() {
 							{...{ register, errors }}
 						/>
 					);
+				},
+			},
+			{
+				accessorKey: 'top',
+				header: 'Expected Tape (Kg)',
+				enableColumnFilter: false,
+				enableSorting: true,
+				cell: ({ row }) => {
+					const { top, bottom, dyed_mtr_per_kg, size, quantity } =
+						row.original;
+					const idx = row.index;
+
+					console.log(row.original);
+
+					const total_size_in_mtr =
+						((parseFloat(top) +
+							parseFloat(bottom) +
+							parseFloat(size)) *
+							parseFloat(quantity)) /
+						100;
+
+					return Number(
+						total_size_in_mtr / parseFloat(dyed_mtr_per_kg)
+					).toFixed(3);
 				},
 			},
 			{

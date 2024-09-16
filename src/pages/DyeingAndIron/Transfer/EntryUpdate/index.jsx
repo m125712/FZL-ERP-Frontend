@@ -247,8 +247,6 @@ export default function Index({ sfg }) {
 									)
 							);
 
-							console.log(selectedValue);
-
 							const top_bottom =
 								Number(selectedValue?.total_quantity || 0) *
 								Number(
@@ -266,6 +264,8 @@ export default function Index({ sfg }) {
 								tape_req /
 									Number(selectedValue?.dyed_per_kg_meter)
 							).toFixed(3);
+
+							console.log(selectedValue);
 
 							return (
 								<tr key={item.id}>

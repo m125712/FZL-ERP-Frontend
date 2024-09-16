@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useFetch } from '@/hooks';
 
 import RenderTable from '@/ui/Others/Table/RenderTable';
@@ -27,15 +26,18 @@ const getGarmentInfo = (order_description) => {
 };
 
 export default function ItemDescription({ order_description, className }) {
-	const [sliderQuantity, total_size] = order_description?.order_entry.reduce(
-		([sliderQuantity, total_size], item) => {
-			return [
-				sliderQuantity + parseFloat(item.quantity),
-				total_size + parseFloat(item.size) * parseFloat(item.quantity),
-			];
-		},
-		[0, 0]
-	);
+	const [sliderQuantity, total_size, tape_production] =
+		order_description?.order_entry.reduce(
+			([sliderQuantity, total_size, tape_production], item) => {
+				return [
+					sliderQuantity + parseFloat(item.quantity),
+					total_size +
+						parseFloat(item.size) * parseFloat(item.quantity),
+					tape_production + parseFloat(item.dying_and_iron_prod),
+				];
+			},
+			[0, 0, 0]
+		);
 
 	const total_top_bottom =
 		sliderQuantity *
@@ -270,8 +272,8 @@ export default function ItemDescription({ order_description, className }) {
 				).toFixed(3)} kg`,
 			},
 			{
-				label: 'tape transferred',
-				value: `${tape_transferred} kg`,
+				label: 'tape production',
+				value: `${tape_production} kg`,
 			},
 			{
 				label: 'nylon plastic finishing',
@@ -310,7 +312,7 @@ export default function ItemDescription({ order_description, className }) {
 				className={
 					'border-b border-secondary/30 md:border-b-0 md:border-r'
 				}
-				title={'Zipper Type'}
+				title={'Zipper'}
 				items={baseInfo}
 			/>
 

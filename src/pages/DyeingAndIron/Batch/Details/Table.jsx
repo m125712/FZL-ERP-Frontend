@@ -1,7 +1,7 @@
-import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-
-import { DateTime } from '@/ui';
 import { useMemo } from 'react';
+
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
+import { DateTime } from '@/ui';
 
 export default function Index({ batch_entry }) {
 	const columns = useMemo(
@@ -56,8 +56,14 @@ export default function Index({ batch_entry }) {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'balance_quantity',
-				header: 'Balance QTY (Prod)',
+				accessorKey: 'given_production_quantity',
+				header: 'Production QTY',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'given_production_quantity_in_kg',
+				header: 'Production QTY (Kg)',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},

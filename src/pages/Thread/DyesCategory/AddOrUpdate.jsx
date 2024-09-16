@@ -1,16 +1,17 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useThreadDyesCategory, useThreadMachine } from '@/state/Thread';
-
-import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import {
 	THREAD_DYES_CATEGORY_NULL,
 	THREAD_DYES_CATEGORY_SCHEMA,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -29,7 +30,7 @@ export default function Index({
 		control,
 		Controller,
 		getValues,
-		context
+		context,
 	} = useRHF(THREAD_DYES_CATEGORY_SCHEMA, THREAD_DYES_CATEGORY_NULL);
 
 	useFetchForRhfReset(`${url}/${update?.uuid}`, update?.uuid, reset);
@@ -90,31 +91,40 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<Input label='name' {...{ register, errors }} />
-			<Input label='id' {...{ register, errors }} />
+			<Input label='name' title='Category' {...{ register, errors }} />
+			<div className='flex flex-col gap-2 md:flex-row'>
+				<Input label='id' title='Program' {...{ register, errors }} />
 
-			<FormField label='bleaching' title='Bleaching' errors={errors}>
-				<Controller
-					name={'bleaching'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select Bleaching'
-								options={bleaching}
-								value={bleaching?.filter(
-									(item) =>
-										item.value === getValues('bleaching')
-								)}
-								onChange={(e) => {
-									onChange(e.value);
-								}}
-							/>
-						);
-					}}
-				/>
-			</FormField>
-			<Input label='upto_percentage' {...{ register, errors }} />
+				<FormField label='bleaching' title='Bleaching' errors={errors}>
+					<Controller
+						name={'bleaching'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Bleaching'
+									options={bleaching}
+									value={bleaching?.filter(
+										(item) =>
+											item.value ===
+											getValues('bleaching')
+									)}
+									onChange={(e) => {
+										onChange(e.value);
+									}}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+			</div>
+
+			<JoinInput
+				label='upto_percentage'
+				title='Dyes %'
+				unit='%'
+				{...{ register, errors }}
+			/>
 
 			<Input label='remarks' {...{ register, errors }} />
 

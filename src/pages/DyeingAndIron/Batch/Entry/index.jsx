@@ -1,20 +1,23 @@
-import { ProceedModal } from '@/components/Modal';
-import ReactTable from '@/components/Table';
-import { ShowLocalToast } from '@/components/Toast';
+import { Suspense, useEffect, useMemo, useState } from 'react';
+import { useDyeingBatch } from '@/state/Dyeing';
+import { useAuth } from '@context/auth';
+import { DevTool } from '@hookform/devtools';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import {
 	useFetchForRhfReset,
 	useFetchForRhfResetForPlanning,
 	useRHF,
 } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useDyeingBatch } from '@/state/Dyeing';
+
+import { ProceedModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
+import { ShowLocalToast } from '@/components/Toast';
 import { CheckBoxWithoutLabel, Input, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
+
+import nanoid from '@/lib/nanoid';
 import { DYEING_BATCH_NULL, DYEING_BATCH_SCHEMA } from '@util/Schema';
-import { Suspense, useEffect, useMemo, useState } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import GetDateTime from '@/util/GetDateTime';
+
 import Header from './Header';
 
 // UPDATE IS WORKING
@@ -57,6 +60,8 @@ export default function Index() {
 				reset
 			)
 		: useFetchForRhfResetForPlanning(`/zipper/order-batch`, reset);
+
+	console.log(getValues());
 
 	const onSubmit = async (data) => {
 		// * Update
@@ -246,6 +251,24 @@ export default function Index() {
 		setIsSomeChecked(isSomeChecked);
 	};
 
+	// balance_quantity: '0';
+	// bottom: '0.0000';
+	// color: 'JET STREAM 11-0605';
+	// dyed_mtr_per_kg: '0.0000';
+	// given_production_quantity: null;
+	// given_production_quantity_in_kg: null;
+	// given_quantity: null;
+	// item_description: 'N-5-OE-N';
+	// order_number: 'Z24-0004';
+	// order_quantity: '2101.0000';
+	// raw_mtr_per_kg: '52.0000';
+	// recipe_id: 'LDR24-0006';
+	// recipe_uuid: 'e0jbRvgvYCBdVbJ';
+	// sfg_uuid: '9DD6m5HiMLhMj2F';
+	// size: '40.005';
+	// style: '6038RO';
+	// top: '2.5000';
+
 	const columns = useMemo(
 		() => [
 			{
@@ -318,6 +341,31 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
+				accessorKey: 'top',
+				header: 'Tape QTY (Kg)',
+				enableColumnFilter: true,
+				enableSorting: true,
+				cell: ({ row }) => {
+					const {
+						top,
+						bottom,
+						raw_mtr_per_kg,
+						size,
+						order_quantity,
+					} = row.original;
+
+					const total_size_in_mtr =
+						(parseFloat(top) +
+							parseFloat(bottom) +
+							parseFloat(size) * parseFloat(order_quantity)) /
+						100;
+
+					return Number(
+						total_size_in_mtr / parseFloat(raw_mtr_per_kg)
+					).toFixed(3);
+				},
+			},
+			{
 				accessorKey: 'balance_quantity',
 				header: 'Balanced Batch',
 				enableColumnFilter: true,
@@ -361,7 +409,6 @@ export default function Index() {
 		],
 		[isAllChecked, isSomeChecked, BatchEntryField, register, errors]
 	);
-
 
 	return (
 		<div>

@@ -1,16 +1,28 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useThreadPrograms } from '@/state/Thread';
+import { useAccess } from '@/hooks';
+
+
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useThreadPrograms } from '@/state/Thread';
 import { DateTime, EditDelete } from '@/ui';
+
+
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
+
+
+
+
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useThreadPrograms();
+
+	console.log(data);
 
 	const info = new PageInfo('Programs', url, 'thread__programs');
 	const haveAccess = useAccess('thread__programs');
@@ -20,6 +32,18 @@ export default function Index() {
 			{
 				accessorKey: 'dyes_category_name',
 				header: 'Dyes Category',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'dyes_category_id',
+				header: 'Dyes Program',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'bleaching',
+				header: 'Dyes Bleaching',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -65,7 +89,9 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -73,6 +99,7 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
+							showUpdate={haveAccess.includes('update')}
 							showDelete={haveAccess.includes('delete')}
 						/>
 					);

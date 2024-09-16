@@ -1435,9 +1435,9 @@ export const THREAD_MACHINE_NULL = {
 // Thread DyesCategory
 export const THREAD_DYES_CATEGORY_SCHEMA = {
 	name: NAME_REQUIRED,
-	upto_percentage: NUMBER_REQUIRED,
-	bleaching: STRING_REQUIRED,
 	id: NUMBER_REQUIRED,
+	bleaching: STRING_REQUIRED,
+	upto_percentage: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
 };
 

@@ -1,27 +1,33 @@
-import { useFetch } from '@/hooks';
-
 import RenderTable from '@/ui/Others/Table/RenderTable';
 
 import cn from '@/lib/cn';
 
-const getSpecialRequirement = (special_requirement) =>
-	special_requirement
-		?.replace(/[^\d,]/g, '')
-		.split(',')
-		.map((item) =>
-			useFetch(
-				`/order/details/special-requirement/${parseInt(item)}`
-			).value?.map((item) => item.name)
-		)
-		.join(', ') + ', M/F';
-
 export default function ItemDescription({ order_description, className }) {
-	const sliderQuantity = order_description?.order_entry.reduce(
-		(sum, item) => {
-			return sum + parseFloat(item.quantity);
+	const [sliderQuantity, total_size] = order_description?.order_entry.reduce(
+		([sliderQuantity, total_size], item) => {
+			return [
+				sliderQuantity + parseFloat(item.quantity),
+				total_size + parseFloat(item.size) * parseFloat(item.quantity),
+			];
 		},
-		0
+		[0, 0]
 	);
+
+	const total_top_bottom =
+		sliderQuantity *
+		(Number(order_description?.top || 0) +
+			Number(order_description?.bottom || 0));
+
+	console.log('sliderQuantity', sliderQuantity);
+	console.log('order_description?.top', order_description?.top);
+	console.log('order_description?.bottom', order_description?.bottom);
+	console.log('total_top_bottom', total_top_bottom);
+
+	const total_tape_in_mtr = Number(
+		(total_size + total_top_bottom) / 100
+	).toFixed(3);
+
+	console.log('total_tape_in_mtr', total_tape_in_mtr);
 
 	const renderItems = () => {
 		const {
@@ -56,6 +62,7 @@ export default function ItemDescription({ order_description, className }) {
 			garments_remarks,
 
 			// tape
+			tape_name,
 			tape_received,
 			tape_transferred,
 			teeth_color_name,
@@ -190,7 +197,7 @@ export default function ItemDescription({ order_description, className }) {
 				value: light_preference_name,
 			},
 			{
-				label: 'garments wash',
+				label: 'wash',
 				value: garments_wash,
 			},
 			{
@@ -205,12 +212,34 @@ export default function ItemDescription({ order_description, className }) {
 				value: teeth_color_name,
 			},
 			{
+				label: 'tape name',
+				value: tape_name,
+			},
+			{
+				label: 'tape Required',
+				value: `${total_tape_in_mtr} mtr`,
+			},
+			{
+				label: 'Raw (mtr/kg)',
+				value: `${Number(
+					total_tape_in_mtr /
+						Number(order_description?.raw_per_kg_meter)
+				).toFixed(3)} kg`,
+			},
+			{
 				label: 'tape received',
-				value: tape_received,
+				value: `${tape_received} kg`,
+			},
+			{
+				label: 'Dyed (mtr/kg)',
+				value: `${Number(
+					total_tape_in_mtr /
+						Number(order_description?.dyed_per_kg_meter)
+				).toFixed(3)} kg`,
 			},
 			{
 				label: 'tape transferred',
-				value: tape_transferred,
+				value: `${tape_transferred} kg`,
 			},
 			{
 				label: 'nylon plastic finishing',

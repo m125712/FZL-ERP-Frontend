@@ -193,6 +193,10 @@ export const commonQK = {
 	tapeRM: () => [...commonQK.all(), 'tape/rm'],
 	tapeRMByUUID: (uuid) => [...commonQK.tapeRM(), uuid],
 
+	// * tapeRequired
+	tapeRequired: () => [...commonQK.all(), 'tape/required'],
+	tapeRequiredByUUID: (uuid) => [...commonQK.tapeRequired(), uuid],
+
 	// * tapeRMLog
 	tapeRMLog: () => [...commonQK.all(), 'tape/rm-log'],
 	tapeRMLogByUUID: (uuid) => [...commonQK.tapeRMLog(), uuid],
@@ -236,7 +240,7 @@ export const commonQK = {
 		...commonQK.orderAgainstCoilRMLog(),
 		uuid,
 	],
-	
+
 	// * MATERIAL TRX *//
 	materialTrx: () => [...commonQK.all(), 'material/trx'],
 	materialTrxByUUID: (uuid) => [...commonQK.materialTrx(), uuid],

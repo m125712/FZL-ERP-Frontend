@@ -1,4 +1,7 @@
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useFetch } from '@/hooks';
+
 import {
 	CheckBox,
 	FormField,
@@ -7,8 +10,6 @@ import {
 	SectionEntryBody,
 	Textarea,
 } from '@/ui';
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 export default function Header({
 	register,
@@ -17,6 +18,7 @@ export default function Header({
 	getValues,
 	Controller,
 	is_Status,
+	isUpdate,
 }) {
 	const [isStatus, setIsStatus] = useState(
 		typeof is_Status !== 'boolean' && is_Status === 1 ? true : false
@@ -31,7 +33,22 @@ export default function Header({
 		{ label: 'Others', value: 'others' },
 	];
 	return (
-		<SectionEntryBody title='Information'>
+		<SectionEntryBody
+			title={`${isUpdate ? `Shade Recipe: ${getValues('shade_recipe_id')}` : 'Shade Recipe'}`}
+			header={
+				<div className='m-2 h-full rounded-md border border-secondary/30 bg-secondary px-2 py-1'>
+					<CheckBox
+						text='text-secondary-content'
+						height='h-[2.5rem] '
+						label='lab_status'
+						title='Lab Status'
+						className={'w-max'}
+						defaultChecked={isStatus}
+						{...{ register, errors }}
+						onChange={(e) => setIsStatus(e.target.checked)}
+					/>
+				</div>
+			}>
 			<div className='flex flex-col items-end gap-6 px-2 text-secondary-content md:flex-row'>
 				<Input label='name' {...{ register, errors }} />
 				<FormField
@@ -77,17 +94,6 @@ export default function Header({
 					/>
 				</FormField>
 				<Textarea label='remarks' {...{ register, errors }} />
-				<div className='h-full rounded-md border border-secondary/30 px-2 py-1'>
-					<CheckBox
-						height='h-[2.5rem] '
-						label='lab_status'
-						title='Lab Status'
-						className={'w-max'}
-						defaultChecked={isStatus}
-						{...{ register, errors }}
-						onChange={(e) => setIsStatus(e.target.checked)}
-					/>
-				</div>
 			</div>
 		</SectionEntryBody>
 	);

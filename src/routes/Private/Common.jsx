@@ -1,18 +1,17 @@
 // * Tape
-import TapeLog from '@/pages/Common/Tape/Log';
-import TapeStock from '@/pages/Common/Tape/RM';
-import TapeProd from '@/pages/Common/Tape/SFG';
 
 // * Coil
 import CoilLog from '@/pages/Common/Coil/Log';
 import CoilStock from '@/pages/Common/Coil/RM';
 import CoilProd from '@/pages/Common/Coil/SFG';
-
 // * Coil Entry to dyeing
 import CoilEntryToDyeing from '@/pages/Common/Coil/SFG/EntryToDyeing';
-
 // * Tape Entry to dyeing
 import TapeEntryToDyeing from '@/pages/Common/Coil/SFG/EntryToDyeing';
+import TapeLog from '@/pages/Common/Tape/Log';
+import TapeRequired from '@/pages/Common/Tape/Required';
+import TapeStock from '@/pages/Common/Tape/RM';
+import TapeProd from '@/pages/Common/Tape/SFG';
 
 export const CommonRoutes = [
 	{
@@ -61,6 +60,13 @@ export const CommonRoutes = [
 							'click_delete_rm_order',
 						],
 					},
+					{
+						name: 'Required',
+						path: '/common/tape/required',
+						element: <TapeRequired />,
+						page_name: 'common__tape_required',
+						actions: ['read', 'create', 'update', 'delete'],
+					},
 				],
 			},
 
@@ -75,10 +81,10 @@ export const CommonRoutes = [
 						page_name: 'common__tape_sfg_entry_to_dyeing',
 						actions: [
 							'read',
-							'click_production',
-							'click_to_dyeing',
 							'create',
 							'update',
+							'click_production',
+							'click_to_dyeing',
 						],
 					},
 					{

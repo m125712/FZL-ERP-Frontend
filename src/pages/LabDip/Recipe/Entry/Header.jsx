@@ -1,5 +1,8 @@
-import { ShowToast } from '@/components/Toast';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useFetch } from '@/hooks';
+
+import { ShowToast } from '@/components/Toast';
 import {
 	CheckBox,
 	FormField,
@@ -8,8 +11,6 @@ import {
 	SectionEntryBody,
 	Textarea,
 } from '@/ui';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 export default function Header({
 	register,
@@ -19,6 +20,7 @@ export default function Header({
 	Controller,
 	is_Approved,
 	is_Status,
+	isUpdate,
 }) {
 	const { order_number, order_description_uuid } = useParams(); // * Not sure if this is required * //
 
@@ -37,7 +39,36 @@ export default function Header({
 
 	return (
 		<div className='flex flex-col gap-4'>
-			<SectionEntryBody title='Recipe'>
+			<SectionEntryBody
+				title={`${isUpdate ? `Recipe: ${getValues('recipe_id')}` : 'Recipe'}`}
+				header={
+					<div className='m-2 flex items-center gap-1 text-sm'>
+						<div className='rounded-md border border-secondary/30 bg-secondary px-1'>
+							<CheckBox
+								text='text-secondary-content'
+								label='approved'
+								title='Approved'
+								height='h-[2.9rem]'
+								defaultChecked={isApproved}
+								{...{ register, errors }}
+								onChange={(e) =>
+									setIsApproved(e.target.checked)
+								}
+							/>
+						</div>
+						<div className='rounded-md border border-secondary/30 bg-secondary px-1'>
+							<CheckBox
+								text='text-secondary-content'
+								label='status'
+								title='Status'
+								height='h-[2.9rem]'
+								defaultChecked={isStatus}
+								{...{ register, errors }}
+								onChange={(e) => setIsStatus(e.target.checked)}
+							/>
+						</div>
+					</div>
+				}>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					{/* Lab dip info ID */}
 					<FormField
@@ -69,30 +100,6 @@ export default function Header({
 
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<Textarea label='remarks' {...{ register, errors }} />
-					<div className='mt-6 flex items-center gap-1 text-sm'>
-						<div className='rounded-md border border-secondary/30 px-1'>
-							<CheckBox
-								label='approved'
-								title='Approved'
-								height='h-[2.9rem]'
-								defaultChecked={isApproved}
-								{...{ register, errors }}
-								onChange={(e) =>
-									setIsApproved(e.target.checked)
-								}
-							/>
-						</div>
-						<div className='rounded-md border border-secondary/30 px-1'>
-							<CheckBox
-								label='status'
-								title='Status'
-								height='h-[2.9rem]'
-								defaultChecked={isStatus}
-								{...{ register, errors }}
-								onChange={(e) => setIsStatus(e.target.checked)}
-							/>
-						</div>
-					</div>
 				</div>
 			</SectionEntryBody>
 		</div>

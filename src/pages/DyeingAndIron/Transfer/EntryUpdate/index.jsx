@@ -1,8 +1,18 @@
-import { DeleteModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useDyeingTransfer } from '@/state/Dyeing';
 import { useOrderDescription, useOrderDetails } from '@/state/Order';
+import { useAuth } from '@context/auth';
+import { DevTool } from '@hookform/devtools';
+import { configure, HotKeys } from 'react-hotkeys';
+import {
+	Navigate,
+	useLocation,
+	useNavigate,
+	useParams,
+} from 'react-router-dom';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { DeleteModal } from '@/components/Modal';
 import {
 	ActionButtons,
 	DynamicField,
@@ -12,18 +22,10 @@ import {
 	ReactSelect,
 	Textarea,
 } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
+
+import nanoid from '@/lib/nanoid';
 import { DYEING_TRANSFER_NULL, DYEING_TRANSFER_SCHEMA } from '@util/Schema';
-import { Suspense, useCallback, useEffect, useState } from 'react';
-import { HotKeys, configure } from 'react-hotkeys';
-import {
-	Navigate,
-	useLocation,
-	useNavigate,
-	useParams,
-} from 'react-router-dom';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({ sfg }) {
 	const { postData, deleteData } = useDyeingTransfer();
@@ -186,7 +188,7 @@ export default function Index({ sfg }) {
 	const [colors, setColors] = useState([]);
 	const [colorsSelect, setColorsSelect] = useState([]);
 	const { value: order_id } = useFetch(
-		`/other/order/description/value/label?tape_received=true`
+		`/other/order/description/value/label`
 	); // * get order id and set them as value & lables for select options
 
 	const getTransferArea = [
@@ -208,7 +210,6 @@ export default function Index({ sfg }) {
 		});
 	};
 
-	console.log(order_id);
 	return (
 		<div>
 			<HotKeys {...{ keyMap, handlers }}>
@@ -238,37 +239,49 @@ export default function Index({ sfg }) {
 							<tr key={item.id}>
 								{/* order entry id */}
 								<td className={`w-80 ${rowClass}`}>
-									<Controller
-										name={`dyeing_transfer_entry[${index}].order_description_uuid`}
-										control={control}
-										render={({ field: { onChange } }) => {
-											return (
-												<ReactSelect
-													menuPortalTarget={
-														document.body
-													}
-													placeholder='Select Order Entry ID'
-													options={order_id}
-													value={order_id?.find(
-														(item) =>
-															item.value ==
-															getValues(
-																'order_description_uuid'
-															)
-													)}
-													onChange={(e) => {
-														onChange(e.value);
-														setValue(
-															`dyeing_transfer_entry[${index}].tape_received`,
-															e.tape_received
-														);
-														getColors(e.colors);
-													}}
-													// isDisabled={updateCoilProd?.id !== null}
-												/>
-											);
-										}}
-									/>
+									<FormField
+										label='order_description_uuid'
+										is_title_needed='false'
+										title='order_description_uuid'
+										dynamicerror={
+											errors?.dyeing_transfer_entry?.[
+												index
+											].order_description_uuid
+										}>
+										<Controller
+											name={`dyeing_transfer_entry[${index}].order_description_uuid`}
+											control={control}
+											render={({
+												field: { onChange },
+											}) => {
+												return (
+													<ReactSelect
+														menuPortalTarget={
+															document.body
+														}
+														placeholder='Select Order Entry ID'
+														options={order_id}
+														value={order_id?.find(
+															(item) =>
+																item.value ==
+																getValues(
+																	'order_description_uuid'
+																)
+														)}
+														onChange={(e) => {
+															onChange(e.value);
+															setValue(
+																`dyeing_transfer_entry[${index}].tape_received`,
+																e.tape_received
+															);
+															// getColors(e.colors); // TODO: Fix this
+														}}
+														// isDisabled={updateCoilProd?.id !== null}
+													/>
+												);
+											}}
+										/>
+									</FormField>
 								</td>
 
 								{/* color*/}
@@ -324,39 +337,55 @@ export default function Index({ sfg }) {
 								</td>
 
 								{/* Transfer*/}
-								<td className={`w-80 ${rowClass}`}>
-									<Controller
-										name={`dyeing_transfer_entry[${index}].section`}
-										control={control}
-										render={({ field: { onChange } }) => {
-											return (
-												<ReactSelect
-													menuPortalTarget={
-														document.body
-													}
-													placeholder='Select Transfer'
-													options={getTransferArea}
-													value={getTransferArea.find(
-														(item) =>
-															item.value ==
-															getValues('section')
-													)}
-													onChange={(e) =>
-														onChange(e.value)
-													}
-													// isDisabled={updateCoilProd?.id !== null}
-												/>
-											);
-										}}
-									/>
+								<td className={`w-24 ${rowClass}`}>
+									<FormField
+										label='order_description_uuid'
+										is_title_needed='false'
+										title='order_description_uuid'
+										dynamicerror={
+											errors?.dyeing_transfer_entry?.[
+												index
+											].section
+										}>
+										<Controller
+											name={`dyeing_transfer_entry[${index}].section`}
+											control={control}
+											render={({
+												field: { onChange },
+											}) => {
+												return (
+													<ReactSelect
+														menuPortalTarget={
+															document.body
+														}
+														placeholder='Select Transfer'
+														options={
+															getTransferArea
+														}
+														value={getTransferArea.find(
+															(item) =>
+																item.value ==
+																getValues(
+																	'section'
+																)
+														)}
+														onChange={(e) =>
+															onChange(e.value)
+														}
+														// isDisabled={updateCoilProd?.id !== null}
+													/>
+												);
+											}}
+										/>
+									</FormField>
 								</td>
 
 								{/* Trx quantity*/}
-								<td className={`w-32 ${rowClass}`}>
+								<td className={`w-52 ${rowClass}`}>
 									<JoinInput
 										label={`dyeing_transfer_entry[${index}].trx_quantity`}
 										is_title_needed='false'
-										// sub_label={`Maximum For this Order: ${getMaxQuantity()}`}
+										// placeholder={`Max: ${}`}  // TODO: fix this with schema
 										unit='KG'
 										// placeholder={`Max: ${
 										// 	getMaxQuantity() <
@@ -374,7 +403,7 @@ export default function Index({ sfg }) {
 								</td>
 
 								{/* Remarks*/}
-								<td className={` ${rowClass}`}>
+								<td className={` w-56 ${rowClass}`}>
 									<Textarea
 										title='color'
 										label={`dyeing_transfer_entry[${index}].remarks`}

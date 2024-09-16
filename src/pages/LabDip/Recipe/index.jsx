@@ -1,14 +1,22 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useLabDipRecipe } from '@/state/LabDip';
+import { useNavigate } from 'react-router-dom';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import cn from '@/lib/cn';
-import { useLabDipRecipe } from '@/state/LabDip';
-import { EditDelete, LinkWithCopy, StatusButton, UserName } from '@/ui';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
+import {
+	DateTime,
+	EditDelete,
+	LinkWithCopy,
+	StatusButton,
+	UserName,
+} from '@/ui';
+
+import cn from '@/lib/cn';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export default function Index() {
 	const { data, isLoading, isError, url, updateData } = useLabDipRecipe();
@@ -58,18 +66,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'created_by_name',
-				header: 'Created By',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'approved',
 				header: 'Approved',
 				enableColumnFilter: false,
@@ -100,6 +96,32 @@ export default function Index() {
 					);
 				},
 			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
 			{
 				accessorKey: 'action',
 				header: 'Action',

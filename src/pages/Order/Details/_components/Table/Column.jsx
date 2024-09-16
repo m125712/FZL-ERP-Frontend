@@ -118,7 +118,7 @@ const getColumn = ({
 			enableColumnFilter: false,
 			cell: (info) => Number(info.getValue()).toFixed(0),
 		}),
-		createTapRequiredColumn({ measurement }),
+		// createTapRequiredColumn({ measurement }),
 	];
 	const DefaultEndColumn = [
 		createStockProdColumn({

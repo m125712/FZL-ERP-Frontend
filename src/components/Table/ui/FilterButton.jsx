@@ -3,7 +3,7 @@ import { Column } from '@/assets/icons';
 const FilterButton = ({ title, children }) => {
 	return (
 		<div className='dropdown'>
-			<button className='btn-filter-outline'>
+			<button type='button' className='btn-filter-outline'>
 				<Column className='size-5' />
 				<span className='hidden lg:block'> {title}</span>
 			</button>

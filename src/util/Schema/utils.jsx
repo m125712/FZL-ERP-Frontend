@@ -7,7 +7,10 @@ export const handelNumberDefaultValue = (value) =>
 export const STRING = yup.string().trim();
 export const STRING_REQUIRED = STRING.required('Required');
 
-export const UUID = STRING.length(15, 'Invalid Primary Key UUID Length');
+export const UUID = STRING.length(
+	15,
+	'Invalid Primary Key UUID Length'
+).nullable();
 export const UUID_REQUIRED = UUID.required('Required');
 export const UUID_FK = UUID.nullable();
 export const UUID_PK = UUID_REQUIRED;

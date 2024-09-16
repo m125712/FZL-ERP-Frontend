@@ -1,12 +1,13 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useCommonCoilSFG } from '@/state/Common';
+import { useNavigate } from 'react-router-dom';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useCommonCoilSFG } from '@/state/Common';
-
 import { DateTime, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const TrxToDying = lazy(() => import('./TrxToDyeing'));
 const Production = lazy(() => import('./Production'));
@@ -42,7 +43,13 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'zipper_number_name',
-				header: 'Zipper Number',
+				header: (
+					<div>
+						Zipper
+						<br />
+						Number
+					</div>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -64,30 +71,7 @@ export default function Index() {
 						: 'Forward';
 				},
 			},
-			{
-				accessorKey: 'top',
-				header: 'Top',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'bottom',
-				header: 'Bottom',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'raw_per_kg_meter',
-				header: 'Raw Tape (Meter/Kg)',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'dyed_per_kg_meter',
-				header: 'Dyed Tape (Meter/Kg)',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+
 			{
 				accessorKey: 'trx_quantity_in_coil',
 				header: (
@@ -139,6 +123,30 @@ export default function Index() {
 						onClick={() => handleTrxToDying(info.row.index)}
 					/>
 				),
+			},
+			{
+				accessorKey: 'raw_per_kg_meter',
+				header: (
+					<span>
+						Raw Tape
+						<br />
+						(Meter/Kg)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'dyed_per_kg_meter',
+				header: (
+					<span>
+						Dyed Tape
+						<br />
+						(Meter/Kg)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'created_by_name',

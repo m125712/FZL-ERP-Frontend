@@ -8,6 +8,9 @@ export default function Information({
 		sub_streat: null,
 		lab_status: null,
 		bleaching: null,
+		created_by_name: null,
+		created_at: null,
+		updated_at: null,
 		remarks: null,
 	},
 }) {
@@ -17,11 +20,11 @@ export default function Information({
 		sub_streat,
 		lab_status,
 		bleaching,
+		created_by_name,
+		created_at,
+		updated_at,
 		remarks,
 	} = data;
-	const bleaching_uppercase =
-		bleaching.charAt(0).toUpperCase() + bleaching.slice(1);
-	const sub_streat_uppercase = sub_streat.toUpperCase();
 
 	const renderItems = () => {
 		const items = [
@@ -36,15 +39,32 @@ export default function Information({
 			},
 			{
 				label: 'Sub Streat',
-				value: sub_streat_uppercase,
+				value:
+					sub_streat === 'txp'
+						? 'TXP'
+						: sub_streat === 'ssp'
+							? 'SSP'
+							: 'Others',
 			},
 			{
 				label: 'Bleaching',
-				value: bleaching_uppercase,
+				value: bleaching === 'bleach' ? 'Bleach' : 'Non-Bleach',
 			},
 			{
 				label: 'Lab Status',
 				value: lab_status === 1 ? 'Done' : 'Pending',
+			},
+			{
+				label: 'Created By',
+				value: created_by_name,
+			},
+			{
+				label: 'Created At',
+				value: created_at,
+			},
+			{
+				label: 'Updated At',
+				value: updated_at,
 			},
 			{
 				label: 'Remarks',

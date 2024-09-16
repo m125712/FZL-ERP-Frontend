@@ -1846,10 +1846,10 @@ export const DYEING_THREAD_CONNEING_NULL = {
 export const DYEING_TRANSFER_SCHEMA = {
 	dyeing_transfer_entry: yup.array().of(
 		yup.object().shape({
-			order_description_uuid: UUID_FK,
+			order_description_uuid: STRING_REQUIRED,
 			colors: yup.array().of(yup.string()).nullable(),
 			section: STRING_REQUIRED,
-			trx_quantity: NUMBER.nullable()
+			trx_quantity: NUMBER.required("Required")
 				.transform((value, originalValue) =>
 					String(originalValue).trim() === '' ? null : value
 				)
@@ -1865,7 +1865,7 @@ export const DYEING_TRANSFER_NULL = {
 			order_description_uuid: null,
 			colors: [],
 			section: '',
-			trx_quantity: 0,
+			trx_quantity: null,
 			remarks: '',
 		},
 	],

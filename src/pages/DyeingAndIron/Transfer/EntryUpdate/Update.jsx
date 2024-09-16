@@ -32,7 +32,7 @@ export default function Index({
 		updateTransfer?.uuid,
 		reset
 	);
-	console.log(updateTransfer);
+	
 	const onClose = () => {
 		setUpdateTransfer((prev) => ({
 			...prev,
@@ -73,7 +73,7 @@ export default function Index({
 	const [colors, setColors] = useState([]);
 	const [colorsSelect, setColorsSelect] = useState([]);
 	const { value: order_id } = useFetch(
-		`/other/order/description/value/label?tape_received=true`
+		`/other/order/description/value/label`
 	); // * get order id and set them as value & lables for select options
 
 	const getTransferArea = [
@@ -100,9 +100,10 @@ export default function Index({
 		}
 	};
 
+	// TODO: Fix this
 	useEffect(() => {
 		if (watch('order_description_uuid')) {
-			getColors(getValues('order_description_uuid'));
+			// getColors(getValues('order_description_uuid'));
 		}
 	}, [watch('order_description_uuid')]);
 

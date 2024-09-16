@@ -18,7 +18,6 @@ export default function Index() {
 
 	const haveAccess = useAccess('slider__assembly_production');
 
-	console.log(data);
 	// * columns
 	const columns = useMemo(
 		() => [

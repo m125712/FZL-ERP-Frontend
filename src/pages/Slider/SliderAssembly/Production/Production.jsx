@@ -1,17 +1,21 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import { JoinInput, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import {
+	useSliderAssemblyProduction,
+	useSliderAssemblyProductionEntry,
+} from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { JoinInput, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import {
 	NUMBER_REQUIRED,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
 } from '@util/Schema';
-
-import nanoid from '@/lib/nanoid';
-import { useSliderAssemblyProductionEntry } from '@/state/Slider';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -26,33 +30,15 @@ export default function Index({
 	setUpdateSliderProd,
 }) {
 	const { postData, url } = useSliderAssemblyProductionEntry();
+	const { invalidateQuery} = useSliderAssemblyProduction();
 	const { user } = useAuth();
 
 	const MAX_PROD_KG = Number(updateSliderProd.balance_quantity).toFixed(3);
 	const MAX_PROD =
 		updateSliderProd?.end_type_name == 'Open End'
-			? Number(
-					Math.min(
-						updateSliderProd?.body_quantity,
-						updateSliderProd?.cap_quantity,
-						updateSliderProd?.link_quantity,
-						updateSliderProd?.puller_quantity,
-						updateSliderProd?.u_top_quantity,
-						updateSliderProd?.box_pin_quantity
-					)
-				)
-			: Number(
-					Math.min(
-						updateSliderProd?.body_quantity,
-						updateSliderProd?.cap_quantity,
-						updateSliderProd?.link_quantity,
-						updateSliderProd?.puller_quantity,
-						updateSliderProd?.u_top_quantity,
-						updateSliderProd?.h_bottom_quantity
-					)
-				);
+			? Math.floor(Number(updateSliderProd.open_end_min_quantity))
+			: Math.floor(Number(updateSliderProd.close_end_min_quantity));
 
-	console.log(updateSliderProd);
 	const { register, handleSubmit, errors, reset, watch, control, context } =
 		useRHF(
 			{
@@ -65,6 +51,7 @@ export default function Index({
 			SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL
 		);
 
+	// TODO: Wastage
 	const MAX_WASTAGE_KG = Number(
 		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
 	).toFixed(3);
@@ -99,6 +86,8 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateQuery();
 	};
 
 	return (

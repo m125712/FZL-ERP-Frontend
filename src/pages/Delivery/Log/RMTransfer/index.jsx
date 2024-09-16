@@ -1,13 +1,15 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useDeliveryRM, useDeliveryRMLog } from '@/state/Delivery';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-
-import { useDeliveryRM, useDeliveryRMLog } from '@/state/Delivery';
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState } from 'react';
-import RMAddOrUpdate from './RMAddOrUpdate';
+
+import RMAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useDeliveryRMLog();
@@ -158,7 +160,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateRM();
+	//invalidateRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

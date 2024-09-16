@@ -1,9 +1,9 @@
 // Challan
+import ChallanEntry from '@/pages/Delivery/Challan/Entry';
 import Challan from '@pages/Delivery/Challan';
 import ChallanDetails from '@pages/Delivery/Challan/Details';
-import ChallanEntry from '@/pages/Delivery/Challan/Entry';
-import RM from '@pages/Delivery/RM/RMStock';
 import Log from '@pages/Delivery/Log';
+import RM from '@pages/Delivery/RM';
 
 export const DeliveryRoutes = [
 	{

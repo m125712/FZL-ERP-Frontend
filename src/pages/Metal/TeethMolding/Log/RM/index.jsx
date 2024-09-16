@@ -120,6 +120,7 @@ export default function Index() {
 		material_name: null,
 		m_teeth_molding: null,
 		used_quantity: null,
+		wastage: null,
 	});
 
 	const handelUpdate = (idx) => {
@@ -147,7 +148,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateMetalTMRM();
+	//invalidateMetalTMRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

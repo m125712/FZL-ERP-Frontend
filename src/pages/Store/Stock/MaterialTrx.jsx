@@ -1,7 +1,4 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useCommonCoilRM, useCommonTapeRM } from '@/state/Common';
 import { useDeliveryRM } from '@/state/Delivery';
 import { useDyeingRM } from '@/state/Dyeing';
@@ -15,10 +12,16 @@ import {
 } from '@/state/Slider';
 import { useMaterialInfo, useMaterialTrx } from '@/state/Store';
 import { useVislonFinishingRM, useVislonTMRM } from '@/state/Vislon';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
+import nanoid from '@/lib/nanoid';
 import { MATERIAL_STOCK_NULL, MATERIAL_STOCK_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
+
 export default function Index({
 	modalId = '',
 	updateMaterialDetails = {
@@ -62,6 +65,7 @@ export default function Index({
 		errors,
 		control,
 		Controller,
+		getValues,
 		reset,
 		context,
 	} = useRHF(schema, MATERIAL_STOCK_NULL);
@@ -131,6 +135,9 @@ export default function Index({
 							<ReactSelect
 								placeholder='Select Transaction Area'
 								options={transactionArea}
+								value={transactionArea?.filter(
+									(item) => item.value === getValues('trx_to')
+								)}
 								onChange={(e) => {
 									onChange(e.value);
 								}}

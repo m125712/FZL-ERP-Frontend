@@ -1,15 +1,20 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
 import { useDyeingRM } from '@/state/Dyeing';
-import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { useOtherMaterial } from '@/state/Other';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
 import {
 	RM_MATERIAL_USED_EDIT_NULL,
 	RM_MATERIAL_USED_EDIT_SCHEMA,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
+
 export default function Index({
 	modalId = '',
 	updateDyeingLog = {
@@ -22,14 +27,13 @@ export default function Index({
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateDyeingRM } = useDyeingRM();
-	const MAX_QUANTITY =
-		Number(updateDyeingLog?.dying_and_iron) +
-		Number(updateDyeingLog?.used_quantity);
-	const schema = {
-		...RM_MATERIAL_USED_EDIT_SCHEMA,
-		used_quantity:
-			RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
-	};
+	const { data: material } = useOtherMaterial();
+	const MAX_QUANTITY = Number(updateDyeingLog?.dying_and_iron);
+	// const schema = {
+	// 	...RM_MATERIAL_USED_EDIT_SCHEMA,
+	// 	used_quantity:
+	// 		RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
+	// };
 
 	const {
 		register,
@@ -40,13 +44,22 @@ export default function Index({
 		reset,
 		getValues,
 		context,
-	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
+		watch,
+	} = useRHF(RM_MATERIAL_USED_EDIT_SCHEMA, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
 		`${url}/${updateDyeingLog?.uuid}`,
 		updateDyeingLog?.uuid,
 		reset
 	);
+	let MAX_PROD =
+		MAX_QUANTITY +
+		Number(updateDyeingLog?.used_quantity) +
+		(Number(updateDyeingLog?.wastage) - watch('wastage'));
+	let MAX_WASTAGE =
+		MAX_QUANTITY +
+		Number(updateDyeingLog?.wastage) +
+		(Number(updateDyeingLog?.used_quantity) - watch('used_quantity'));
 
 	const onClose = () => {
 		setUpdateDyeingLog((prev) => ({
@@ -55,12 +68,20 @@ export default function Index({
 			section: null,
 			used_quantity: null,
 			dying_and_iron: null,
+			wastage: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
+		if (MAX_WASTAGE < watch('wastage')) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		// Update item
 		if (updateDyeingLog?.uuid !== null) {
 			const updatedData = {
@@ -81,7 +102,7 @@ export default function Index({
 		}
 	};
 
-const transactionArea = getTransactionArea();
+	const transactionArea = getTransactionArea();
 
 	return (
 		<AddModal
@@ -110,16 +131,24 @@ const transactionArea = getTransactionArea();
 					}}
 				/>
 			</FormField>
-			<Input
+			<JoinInput
 				label='used_quantity'
-				sub_label={`Max: ${Number(updateDyeingLog?.dying_and_iron) + Number(updateDyeingLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateDyeingLog?.dying_and_iron) + Number(updateDyeingLog?.used_quantity)}`}
+				sub_label={`Max: ${MAX_PROD}`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
-			<Input
+			<JoinInput
 				label='wastage'
-				sub_label={`Max: ${Number(updateDyeingLog?.dying_and_iron) + Number(updateDyeingLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateDyeingLog?.dying_and_iron) + Number(updateDyeingLog?.used_quantity)}`}
+				sub_label={`Max: ${MAX_WASTAGE}`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

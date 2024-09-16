@@ -1,16 +1,18 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
-
 import { useDeliveryRM } from '@/state/Delivery';
+import { useOtherMaterial } from '@/state/Other';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 
-import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast/ReactToastify';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
 import {
 	RM_MATERIAL_USED_EDIT_NULL,
 	RM_MATERIAL_USED_EDIT_SCHEMA,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
 
 export default function Index({
@@ -28,22 +30,22 @@ export default function Index({
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateRM } = useDeliveryRM();
+	const { data: material } = useOtherMaterial();
 
-	const MAX_QUANTITY =
-		Number(
-			updateRMLog?.section === 'n_qc_and_packing'
-				? updateRMLog?.n_qc_and_packing
-				: updateRMLog?.section === 'm_qc_and_packing'
-					? updateRMLog?.m_qc_and_packing
-					: updateRMLog?.section === 'v_qc_and_packing'
-						? updateRMLog?.v_qc_and_packing
-						: updateRMLog?.s_qc_and_packing
-		) + Number(updateRMLog?.used_quantity);
-	const schema = {
-		...RM_MATERIAL_USED_EDIT_SCHEMA,
-		used_quantity:
-			RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
-	};
+	const MAX_QUANTITY = Number(
+		updateRMLog?.section === 'n_qc_and_packing'
+			? updateRMLog?.n_qc_and_packing
+			: updateRMLog?.section === 'm_qc_and_packing'
+				? updateRMLog?.m_qc_and_packing
+				: updateRMLog?.section === 'v_qc_and_packing'
+					? updateRMLog?.v_qc_and_packing
+					: updateRMLog?.s_qc_and_packing
+	);
+	// const schema = {
+	// 	...RM_MATERIAL_USED_EDIT_SCHEMA,
+	// 	used_quantity:
+	// 		RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
+	// };
 
 	const {
 		register,
@@ -54,14 +56,23 @@ export default function Index({
 		reset,
 		getValues,
 		context,
-	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
+
+		watch,
+	} = useRHF(RM_MATERIAL_USED_EDIT_SCHEMA, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
 		`${url}/${updateRMLog?.uuid}`,
 		updateRMLog?.uuid,
 		reset
 	);
-
+	let MAX_PROD =
+		MAX_QUANTITY +
+		Number(updateRMLog?.used_quantity) +
+		(Number(updateRMLog?.wastage) - watch('wastage'));
+	let MAX_WASTAGE =
+		MAX_QUANTITY +
+		Number(updateRMLog?.wastage) +
+		(Number(updateRMLog?.used_quantity) - watch('used_quantity'));
 	const onClose = () => {
 		setUpdateRMLog((prev) => ({
 			...prev,
@@ -78,6 +89,16 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
+		if (
+			MAX_WASTAGE < watch('wastage') &&
+			MAX_PROD < watch('used_quantity')
+		) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		// Update item
 		if (updateRMLog?.uuid !== null) {
 			const updatedData = {
@@ -98,7 +119,7 @@ export default function Index({
 		}
 	};
 
-const transactionArea = getTransactionArea();
+	const transactionArea = getTransactionArea();
 
 	return (
 		<AddModal
@@ -127,16 +148,24 @@ const transactionArea = getTransactionArea();
 					}}
 				/>
 			</FormField>
-			<Input
+			<JoinInput
 				label='used_quantity'
-				sub_label={`Max: ${MAX_QUANTITY}`}
-				placeholder={`Max: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${MAX_PROD}`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
-			<Input
+			<JoinInput
 				label='wastage'
-				sub_label={`Max: ${MAX_QUANTITY}`}
-				placeholder={`Max: ${MAX_QUANTITY}`}
+				sub_label={`Max: ${MAX_WASTAGE}`}
+				unit={
+					material?.find(
+						(inItem) => inItem.value == getValues(`material_uuid`)
+					)?.unit
+				}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

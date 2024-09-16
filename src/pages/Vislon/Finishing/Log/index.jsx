@@ -1,23 +1,24 @@
 import { useEffect } from 'react';
+
+import ProductionLog from './ProductionLog';
+import RMOrderAgainstLog from './RMOrderAgainstLog';
 import RMTransferLog from './RMTransferLog';
 import SFGTransferLog from './SFGTransferLog';
-import RMOrderAgainstLog from './RMOrderAgainstLog';
-import ProductionLog from './ProductionLog'
-import TransactionLog from './TransactionLog'
+import TransactionLog from './TransactionLog';
+
 export default function Index() {
 	useEffect(() => {
 		document.title = 'Finishing Log';
 	}, []);
 	return (
 		<div>
-		
 			<ProductionLog />
-			<hr className='border-secondary-content my-6 border-2 border-dashed' />
+			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<TransactionLog />
-			<hr className='border-secondary-content my-6 border-2 border-dashed' />
+			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<RMTransferLog />
-			<hr className='border-secondary-content my-6 border-2 border-dashed' />
-			<RMOrderAgainstLog />
+			<hr className='my-6 border-2 border-dashed border-secondary-content' />
+			{/* <RMOrderAgainstLog /> */}
 		</div>
 	);
 }

@@ -14,8 +14,8 @@ export default function Index() {
 			<SFGTransferProd />
 			<hr className='my-6 border-2 border-dashed border-secondary/30' />
 			<RMTransferLog />
-			<hr className='my-6 border-2 border-dashed border-secondary/30' />
-			<RMOrderAgainstLog />
+			{/* <hr className='my-6 border-2 border-dashed border-secondary/30' />
+			<RMOrderAgainstLog /> */}
 		</div>
 	);
 }

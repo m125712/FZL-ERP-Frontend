@@ -16,8 +16,8 @@ export default function Index() {
 			<TransactionLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<RMTransferLog />
-			<hr className='my-6 border-2 border-dashed border-secondary-content' />
-			<RMOrderAgainstLog />
+			{/* <hr className='my-6 border-2 border-dashed border-secondary-content' />
+			<RMOrderAgainstLog /> */}
 		</div>
 	);
 }

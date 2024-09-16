@@ -1,12 +1,15 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useDeliveryRM, useDeliveryRMLog } from '@/state/Delivery';
-import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
 import * as yup from 'yup';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
+import { Input, JoinInput } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
+import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -15,6 +18,7 @@ export default function Index({
 		unit: null,
 		stock: null,
 		section: null,
+		wastage: null,
 	},
 	setUpdateStock,
 }) {
@@ -27,16 +31,13 @@ export default function Index({
 		used_quantity: RM_MATERIAL_USED_SCHEMA.remaining.max(
 			updateStock?.stock
 		),
-		wastage: RM_MATERIAL_USED_SCHEMA.remaining.max(
-			MAX_QUANTITY,
-			'Must be less than or equal ${MAX_QUANTITY}'
-		),
 	};
 
-	const { register, handleSubmit, errors, reset, watch ,context} = useRHF(
+	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
 		schema,
 		RM_MATERIAL_USED_NULL
 	);
+	const MAX_WASTAGE = MAX_QUANTITY - watch('used_quantity');
 
 	const onClose = () => {
 		setUpdateStock((prev) => ({
@@ -45,12 +46,20 @@ export default function Index({
 			unit: null,
 			stock: null,
 			section: null,
+			wastage: null,
 		}));
 		reset(RM_MATERIAL_USED_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
+		if (MAX_WASTAGE < watch('wastage')) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		const updatedData = {
 			...data,
 
@@ -88,18 +97,8 @@ export default function Index({
 			<JoinInput
 				label='wastage'
 				unit={updateStock?.unit}
-				sub_label={`Max: ${(updateStock?.stock -
-					watch('used_quantity') <
-				0
-					? 0
-					: updateStock?.stock - watch('used_quantity')
-				).toFixed(2)}`}
-				placeholder={`Max: ${(updateStock?.stock -
-					watch('used_quantity') <
-				0
-					? 0
-					: updateStock?.stock - watch('used_quantity')
-				).toFixed(2)}`}
+				sub_label={`Max:${MAX_WASTAGE}`}
+				placeholder={`Max:${MAX_WASTAGE}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

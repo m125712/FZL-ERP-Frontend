@@ -1,12 +1,14 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useMetalFinishingRM, useMetalFinishingRMLog } from '@/state/Metal';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-
-import { useMetalFinishingRM, useMetalFinishingRMLog } from '@/state/Metal';
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState } from 'react';
+
 import RMAddOrUpdate from './RMAddOrUpdate';
 
 export default function Index() {
@@ -124,6 +126,7 @@ export default function Index() {
 		m_sealing: null,
 		m_stopper: null,
 		used_quantity: null,
+		wastage: null,
 	});
 
 	const handelUpdate = (idx) => {
@@ -151,7 +154,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateFinishingRM();
+	//invalidateFinishingRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

@@ -1,10 +1,12 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useDeliveryRM } from '@/state/Delivery';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useDeliveryRM } from '@/state/Delivery';
 import { EditDelete, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
@@ -84,6 +86,7 @@ export default function Index() {
 		uuid: null,
 		unit: null,
 		stock: null,
+		wastage: null,
 	});
 
 	const handelUpdate = (idx) => {
@@ -105,6 +108,7 @@ export default function Index() {
 					: data[idx].v_qc_and_packing
 						? 'v_qc_and_packing'
 						: 's_qc_and_packing',
+			wastage: data[idx].wastage,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};

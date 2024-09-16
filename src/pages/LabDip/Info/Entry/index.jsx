@@ -8,6 +8,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { UpdateModal } from '@/components/Modal';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import {
 	ActionButtons,
 	CheckBox,
@@ -123,16 +124,20 @@ export default function Index() {
 			const recipe_updated = [...data.recipe].map((item) => ({
 				...item,
 				lab_dip_info_uuid: data.uuid,
+				status: item.status ? 1 : 0,
+				approved: item.approved ? 1 : 0,
 				updated_at: GetDateTime(),
 			}));
 
+			console.log('Updated_data: ', lab_info_updated);
+			console.log('Updated_recipe: ', recipe_updated);
 			// * insert the recipe data using update function * //
 			let recipe_updated_promises = [
-				...lab_info_updated.recipe.map(
+				...recipe_updated.map(
 					async (item) =>
 						await updateData.mutateAsync({
 							url: `/lab-dip/update-recipe/by/${item.recipe_uuid}`,
-							updatedData: recipe_updated,
+							updatedData: item,
 							isOnCloseNeeded: false,
 						})
 				),
@@ -140,8 +145,8 @@ export default function Index() {
 			await Promise.all(recipe_updated_promises)
 				.then(() => reset(LAB_INFO_NULL))
 				.then(() => {
-					invalidateQueryLabDipInfo();
-					navigate(`/lab-dip/info/details/${data?.uuid}`);
+					// invalidateQueryLabDipInfo();
+					// navigate(`/lab-dip/info/details/${data?.uuid}`);
 				})
 				.catch((err) => console.log(err));
 
@@ -171,10 +176,12 @@ export default function Index() {
 
 		const recipe = [...data.recipe].map((item) => ({
 			lab_dip_info_uuid,
-			status: item.status,
-			approved: item.approved,
+			status: item.status ? 1 : 0,
+			approved: item.approved ? 1 : 0,
 		}));
-		console.log(recipe);
+
+		console.log('new recipe:', recipe);
+
 		// * insert the recipe data using update function
 		let recipe_promises = [
 			...lab_info.recipe.map(
@@ -189,14 +196,14 @@ export default function Index() {
 
 		//* Post new entry *//
 
-		await Promise.all(recipe_promises)
-			.then(() => reset(LAB_INFO_NULL))
-			.then(() => {
-				invalidateQueryLabDipInfo();
-				navigate(`/lab-dip/info/details/${lab_dip_info_uuid}`);
-			})
+		// await Promise.all(recipe_promises)
+		// 	.then(() => reset(LAB_INFO_NULL))
+		// 	.then(() => {
+		// 		invalidateQueryLabDipInfo();
+		// 		navigate(`/lab-dip/info/details/${lab_dip_info_uuid}`);
+		// 	})
 
-			.catch((err) => console.log(err));
+		// 	.catch((err) => console.log(err));
 	};
 
 	// Check if recipe_id is valid
@@ -244,17 +251,25 @@ export default function Index() {
 	// * status
 	const getStatus = (status, index) => {
 		//setStatus((prevStatus) => ({ ...prevStatus, [index]: status }));
-		setValue(`recipe[${index}].status`, status);
+		setValue(`recipe[${index}].status`, status.status);
 		console.log(getValues(`recipe[${index}].status`), 'status');
-		console.log(getValues(`recipe[${index}].approved`), 'approved');
 	};
+
 	const getApproved = (approved, index) => {
 		//setApproved((prevApproved) => ({ ...prevApproved, [index]: approved }));
-		setValue(`recipe[${index}].approved`, approved);
-		console.log(getValues(`recipe[${index}].status`), 'status');
-
+		setValue(`recipe[${index}].approved`, approved.approved);
 		console.log(getValues(`recipe[${index}].approved`), 'approved');
 	};
+
+	const status = [
+		{ label: 'Pending', value: 0 },
+		{ label: 'Approved', value: 1 },
+	];
+
+	const approved = [
+		{ label: 'Pending', value: 0 },
+		{ label: 'Approved', value: 1 },
+	];
 
 	return (
 		<div>
@@ -325,18 +340,12 @@ export default function Index() {
 																`recipe[${index}].recipe_uuid`,
 																e.value
 															);
-															getStatus(
-																e.status
-																	? 1
-																	: 0,
-
-																index
+															console.log(
+																getValues()
 															);
+															getStatus(e, index);
 															getApproved(
-																e.approved
-																	? 1
-																	: 0,
-
+																e,
 																index
 															);
 														}}
@@ -353,9 +362,11 @@ export default function Index() {
 										/>
 									</FormField>
 								</td>
+								{/* status */}
 								<td className={rowClass}>
 									<FormField
 										label={`recipe[${index}].status`}
+										title='Status'
 										dynamicerror={
 											errors?.recipe?.[index]?.status
 										}
@@ -365,46 +376,104 @@ export default function Index() {
 											control={control}
 											render={({
 												field: { onChange },
-											}) => (
-												<div className='rounded-md border border-secondary/30 bg-secondary px-1'>
-													<CheckBox
-														text='text-secondary-content'
-														label={`recipe[${index}].status`}
-														title='Status'
-														height='h-[2.9rem]'
-														defaultChecked={
-															getValues(
-																`recipe[${index}].status`
-															) === 1
-														}
+											}) => {
+												return (
+													<ReactSelect
+														placeholder='Select status'
+														options={status}
+														value={status?.find(
+															(item) =>
+																item.value ==
+																getValues(
+																	`recipe[${index}].status`
+																)
+														)}
 														onChange={(e) => {
-															let newStatus = e
-																.target.checked
-																? 1
-																: 0;
-															onChange(newStatus);
-															getStatus(
-																newStatus,
-																index
+															onChange(e.value);
+															setValue(
+																`recipe[${index}].status`,
+																e.value
 															);
 														}}
-														{...{
-															register,
-														}}
+														isDisabled={
+															rec_uuid ==
+															undefined
+														}
+														menuPortalTarget={
+															document.body
+														}
 													/>
-												</div>
-											)}
+												);
+											}}
 										/>
 									</FormField>
+									{/* <div className='rounded-md border border-secondary/30 bg-secondary px-1'>
+										<CheckBox
+											text='text-secondary-content'
+											label={`recipe[${index}].status`}
+											title='Status'
+											height='h-[2.9rem]'
+											value={
+												getValues(
+													`recipe[${index}].status`
+												)
+													? true
+													: false
+											}
+											{...{
+												register,
+												errors,
+											}}
+										/>
+									</div> */}
 								</td>
+								{/* approved */}
 								<td className={rowClass}>
 									<FormField
 										label={`recipe[${index}].approved`}
+										title='Approved'
 										dynamicerror={
 											errors?.recipe?.[index]?.approved
 										}
 										is_title_needed='false'>
 										<Controller
+											name={`recipe[${index}].approved`}
+											control={control}
+											render={({
+												field: { onChange },
+											}) => {
+												return (
+													<ReactSelect
+														placeholder='Select approved'
+														options={approved}
+														value={approved?.find(
+															(item) =>
+																item.value ==
+																getValues(
+																	`recipe[${index}].approved`
+																)
+														)}
+														onChange={(e) => {
+															onChange(e.value);
+															setValue(
+																`recipe[${index}].approved`,
+																e.value
+															);
+														}}
+														isDisabled={
+															rec_uuid ==
+															undefined
+														}
+														menuPortalTarget={
+															document.body
+														}
+													/>
+												);
+											}}
+										/>
+									</FormField>
+								</td>
+								{/* <Controller
 											name={`recipe[${index}].approved`}
 											control={control}
 											render={({
@@ -440,10 +509,7 @@ export default function Index() {
 													/>
 												</div>
 											)}
-										/>
-									</FormField>
-								</td>
-
+										/> */}
 								<td
 									className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
 									<ActionButtons

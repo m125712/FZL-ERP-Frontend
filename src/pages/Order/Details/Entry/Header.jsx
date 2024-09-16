@@ -69,9 +69,9 @@ export default function Header({
 	const { value: special_requirement } = useFetch(
 		`/other/order-properties/by/special_requirement`
 	);
-	const { value: stopper_type } = useFetch(
-		`/other/order-properties/by/stopper_type`
-	);
+	// const { value: stopper_type } = useFetch(
+	// 	`/other/order-properties/by/stopper_type`
+	// );
 	const { value: coloring_type } = useFetch(
 		`/other/order-properties/by/coloring_type`
 	);
@@ -290,6 +290,29 @@ export default function Header({
 											(lock_type) =>
 												lock_type.value ==
 												getValues('lock_type')
+										)}
+										onChange={(e) => onChange(e.value)}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+					<FormField
+						label='tape_color'
+						title='Tape Color'
+						errors={errors}>
+						<Controller
+							name={'tape_color'}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select Tape Color'
+										options={color}
+										value={color?.find(
+											(color) =>
+												color.value ==
+												getValues('tape_color')
 										)}
 										onChange={(e) => onChange(e.value)}
 									/>

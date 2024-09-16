@@ -1,6 +1,30 @@
+import { useState } from 'react';
+import { useFetch } from '@/hooks';
+
 import RenderTable from '@/ui/Others/Table/RenderTable';
 
 import cn from '@/lib/cn';
+
+// * function to get similar garment_wash
+const getGarmentInfo = (order_description) => {
+	const { value: garments } = useFetch(
+		`/other/order-properties/by/garments_wash`
+	);
+
+	if (order_description?.garments_wash) {
+		const parsedObject =
+			typeof order_description?.garments_wash === 'string'
+				? JSON.parse(order_description?.garments_wash)
+				: order_description?.garments_wash;
+
+		const matchingLabels = garments
+			?.filter((item) => parsedObject.values.includes(item.value)) // Filter by matching value
+			.map((item) => item.label);
+		return matchingLabels;
+	} else {
+		return [];
+	}
+};
 
 export default function ItemDescription({ order_description, className }) {
 	const [sliderQuantity, total_size] = order_description?.order_entry.reduce(
@@ -18,16 +42,12 @@ export default function ItemDescription({ order_description, className }) {
 		(Number(order_description?.top || 0) +
 			Number(order_description?.bottom || 0));
 
-	console.log('sliderQuantity', sliderQuantity);
-	console.log('order_description?.top', order_description?.top);
-	console.log('order_description?.bottom', order_description?.bottom);
-	console.log('total_top_bottom', total_top_bottom);
-
 	const total_tape_in_mtr = Number(
 		(total_size + total_top_bottom) / 100
 	).toFixed(3);
 
-	console.log('total_tape_in_mtr', total_tape_in_mtr);
+	// * garments info
+	const ginfo = getGarmentInfo(order_description);
 
 	const renderItems = () => {
 		const {
@@ -63,6 +83,7 @@ export default function ItemDescription({ order_description, className }) {
 
 			// tape
 			tape_name,
+			tape_color_name,
 			tape_received,
 			tape_transferred,
 			teeth_color_name,
@@ -198,7 +219,7 @@ export default function ItemDescription({ order_description, className }) {
 			},
 			{
 				label: 'wash',
-				value: garments_wash,
+				value: ginfo?.join(', '),
 			},
 			{
 				label: 'remarks',
@@ -214,6 +235,17 @@ export default function ItemDescription({ order_description, className }) {
 			{
 				label: 'tape name',
 				value: tape_name,
+			},
+			{
+				label: 'tape color',
+				value: tape_color_name
+					?.split(' ') // Split the string by spaces into an array of words
+					.map(
+						(word) =>
+							word.charAt(0).toUpperCase() +
+							word.slice(1).toLowerCase() // Capitalize first letter of each word
+					)
+					.join(' '),
 			},
 			{
 				label: 'tape Required',

@@ -222,6 +222,10 @@ export default function Index({ sfg }) {
 						handelAppend={handelEntryAppend}
 						tableHead={[
 							'Order Entry ID',
+							'Tape Required (MTR)',
+							'Tape Required (Kg)',
+							'Provided (Kg)',
+							'Balance (Kg)',
 							'Transfer',
 							'Trx Quantity',
 							'Remarks',
@@ -234,144 +238,193 @@ export default function Index({ sfg }) {
 								{item}
 							</th>
 						))}>
-						{EntryField.map((item, index) => (
-							<tr key={item.id}>
-								{/* order entry id */}
-								<td className={`w-80 ${rowClass}`}>
-									<FormField
-										label='order_description_uuid'
-										is_title_needed='false'
-										title='order_description_uuid'
-										dynamicerror={
-											errors?.dyeing_transfer_entry?.[
-												index
-											].order_description_uuid
-										}>
-										<Controller
-											name={`dyeing_transfer_entry[${index}].order_description_uuid`}
-											control={control}
-											render={({
-												field: { onChange },
-											}) => {
-												return (
-													<ReactSelect
-														menuPortalTarget={
-															document.body
-														}
-														placeholder='Select Order Entry ID'
-														options={order_id}
-														value={order_id?.find(
-															(item) =>
-																item.value ==
-																getValues(
-																	'order_description_uuid'
+						{EntryField.map((item, index) => {
+							const selectedValue = order_id?.find(
+								(item) =>
+									item.value ==
+									watch(
+										`dyeing_transfer_entry[${index}].order_description_uuid`
+									)
+							);
+
+							console.log(selectedValue);
+
+							const top_bottom =
+								Number(selectedValue?.total_quantity || 0) *
+								Number(
+									Number(selectedValue?.top || 0) +
+										Number(selectedValue?.bottom || 0)
+								).toFixed(3);
+
+							const tape_req = Number(
+								(Number(selectedValue?.total_size) +
+									top_bottom) /
+									100
+							).toFixed(3);
+
+							const tape_req_kg = Number(
+								tape_req /
+									Number(selectedValue?.dyed_per_kg_meter)
+							).toFixed(3);
+
+							return (
+								<tr key={item.id}>
+									{/* order entry id */}
+									<td className={`w-80 ${rowClass}`}>
+										<FormField
+											label={`dyeing_transfer_entry[${index}].order_description_uuid`}
+											title='order_description_uuid'
+											is_title_needed='false'
+											dynamicerror={
+												errors?.dyeing_transfer_entry?.[
+													index
+												].order_description_uuid
+											}>
+											<Controller
+												name={`dyeing_transfer_entry[${index}].order_description_uuid`}
+												control={control}
+												render={({
+													field: { onChange },
+												}) => {
+													return (
+														<ReactSelect
+															menuPortalTarget={
+																document.body
+															}
+															placeholder='Select Order Entry ID'
+															options={order_id}
+															value={
+																selectedValue
+															}
+															onChange={(e) => {
+																onChange(
+																	e.value
+																);
+																setValue(
+																	`dyeing_transfer_entry[${index}].tape_received`,
+																	e.tape_received
+																);
+																// getColors(e.colors);
+															}}
+															// isDisabled={updateCoilProd?.id !== null}
+														/>
+													);
+												}}
+											/>
+										</FormField>
+									</td>
+									<td>{tape_req || 0}</td>
+									<td>{tape_req_kg || 0}</td>
+									<td>
+										{Number(
+											selectedValue?.tape_transferred
+										).toFixed(3)}
+									</td>
+									<td>
+										{Number(
+											tape_req_kg -
+												parseFloat(
+													selectedValue?.tape_transferred
+												)
+										).toFixed(3)}
+									</td>
+									{/* Transfer*/}
+									<td className={`w-24 ${rowClass}`}>
+										<FormField
+											label='section'
+											is_title_needed='false'
+											title='section'
+											dynamicerror={
+												errors?.dyeing_transfer_entry?.[
+													index
+												].section
+											}>
+											<Controller
+												name={`dyeing_transfer_entry[${index}].section`}
+												control={control}
+												render={({
+													field: { onChange },
+												}) => {
+													return (
+														<ReactSelect
+															menuPortalTarget={
+																document.body
+															}
+															placeholder='Select Transfer'
+															options={
+																getTransferArea
+															}
+															value={getTransferArea.find(
+																(item) =>
+																	item.value ==
+																	getValues(
+																		'section'
+																	)
+															)}
+															onChange={(e) =>
+																onChange(
+																	e.value
 																)
-														)}
-														onChange={(e) => {
-															onChange(e.value);
-															setValue(
-																`dyeing_transfer_entry[${index}].tape_received`,
-																e.tape_received
-															);
-															// getColors(e.colors);
-														}}
-														// isDisabled={updateCoilProd?.id !== null}
-													/>
-												);
-											}}
+															}
+															// isDisabled={updateCoilProd?.id !== null}
+														/>
+													);
+												}}
+											/>
+										</FormField>
+									</td>
+
+									{/* Trx quantity*/}
+									<td className={`w-52 ${rowClass}`}>
+										<JoinInput
+											label={`dyeing_transfer_entry[${index}].trx_quantity`}
+											is_title_needed='false'
+											// placeholder={`Max: ${}`}  // TODO: fix this with schema
+											unit='KG'
+											dynamicerror={
+												errors?.dyeing_transfer_entry?.[
+													index
+												].trx_quantity
+											}
+											{...{ register, errors }}
 										/>
-									</FormField>
-								</td>
-								{/* Transfer*/}
-								<td className={`w-24 ${rowClass}`}>
-									<FormField
-										label='section'
-										is_title_needed='false'
-										title='section'
-										dynamicerror={
-											errors?.dyeing_transfer_entry?.[
-												index
-											].section
-										}>
-										<Controller
-											name={`dyeing_transfer_entry[${index}].section`}
-											control={control}
-											render={({
-												field: { onChange },
-											}) => {
-												return (
-													<ReactSelect
-														menuPortalTarget={
-															document.body
-														}
-														placeholder='Select Transfer'
-														options={
-															getTransferArea
-														}
-														value={getTransferArea.find(
-															(item) =>
-																item.value ==
-																getValues(
-																	'section'
-																)
-														)}
-														onChange={(e) =>
-															onChange(e.value)
-														}
-														// isDisabled={updateCoilProd?.id !== null}
-													/>
-												);
-											}}
+									</td>
+
+									{/* Remarks*/}
+									<td className={`w-56 ${rowClass}`}>
+										<Textarea
+											title='color'
+											label={`dyeing_transfer_entry[${index}].remarks`}
+											is_title_needed='false'
+											dynamicerror={
+												errors?.dyeing_transfer_entry?.[
+													index
+												]?.color
+											}
+											register={register}
 										/>
-									</FormField>
-								</td>
+									</td>
 
-								{/* Trx quantity*/}
-								<td className={`w-52 ${rowClass}`}>
-									<JoinInput
-										label={`dyeing_transfer_entry[${index}].trx_quantity`}
-										is_title_needed='false'
-										// placeholder={`Max: ${}`}  // TODO: fix this with schema
-										unit='KG'
-										dynamicerror={
-											errors?.dyeing_transfer_entry?.[
-												index
-											].trx_quantity
-										}
-										{...{ register, errors }}
-									/>
-								</td>
-
-								{/* Remarks*/}
-								<td className={`w-56 ${rowClass}`}>
-									<Textarea
-										title='color'
-										label={`dyeing_transfer_entry[${index}].remarks`}
-										is_title_needed='false'
-										dynamicerror={
-											errors?.dyeing_transfer_entry?.[
-												index
-											]?.color
-										}
-										register={register}
-									/>
-								</td>
-
-								{/* Action*/}
-								<td
-									className={`w-20 ${rowClass} border-l-4 border-l-primary`}>
-									<ActionButtons
-										duplicateClick={() =>
-											handelDuplicateDynamicField(index)
-										}
-										removeClick={() =>
-											handleEntryRemove(index)
-										}
-										showRemoveButton={EntryField.length > 1}
-									/>
-								</td>
-							</tr>
-						))}
+									{/* Action*/}
+									<td
+										className={`w-20 ${rowClass} border-l-4 border-l-primary`}>
+										<ActionButtons
+											duplicateClick={() =>
+												handelDuplicateDynamicField(
+													index
+												)
+											}
+											removeClick={() =>
+												handleEntryRemove(index)
+											}
+											showRemoveButton={
+												EntryField.length > 1
+											}
+										/>
+									</td>
+								</tr>
+							);
+						})}
 					</DynamicField>
 					<div className='modal-action'>
 						<button

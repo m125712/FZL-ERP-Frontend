@@ -263,27 +263,11 @@ export default function Index() {
 										Number(selectedValue?.bottom || 0)
 								).toFixed(3);
 
-							console.log(
-								'selectedValue?.total_quantity',
-								selectedValue?.total_quantity
-							);
-							console.log(
-								'selectedValue?.top',
-								selectedValue?.top
-							);
-							console.log(
-								'selectedValue?.bottom',
-								selectedValue?.bottom
-							);
-							console.log('top_bottom', top_bottom);
-
 							const tape_req = Number(
 								(Number(selectedValue?.total_size) +
 									top_bottom) /
 									100
 							).toFixed(3);
-
-							console.log('tape_req', tape_req);
 
 							const tape_req_kg = Number(
 								tape_req / Number(data?.raw_per_kg_meter)

@@ -32,7 +32,7 @@ export default function Index({
 		updateTransfer?.uuid,
 		reset
 	);
-	
+
 	const onClose = () => {
 		setUpdateTransfer((prev) => ({
 			...prev,
@@ -87,25 +87,24 @@ export default function Index({
 		{ label: 'Metal Teeth Molding', value: 'metal_teeth_molding' },
 	];
 
-	const getColors = (uuid) => {
-		// * get colors and set them as value & lables for select options
-		setColors([]);
+	// const getColors = (uuid) => {
+	// 	// * get colors and set them as value & lables for select options
+	// 	setColors([]);
 
-		const item = order_id?.find((entry) => entry.value === uuid);
+	// 	const item = order_id?.find((entry) => entry.value === uuid);
 
-		if (item) {
-			item.colors.map((color) =>
-				setColors((prev) => [...prev, { label: color, value: color }])
-			);
-		}
-	};
+	// 	if (item) {
+	// 		item.colors.map((color) =>
+	// 			setColors((prev) => [...prev, { label: color, value: color }])
+	// 		);
+	// 	}
+	// };
 
-	// TODO: Fix this
-	useEffect(() => {
-		if (watch('order_description_uuid')) {
-			// getColors(getValues('order_description_uuid'));
-		}
-	}, [watch('order_description_uuid')]);
+	// useEffect(() => {
+	// 	if (watch('order_description_uuid')) {
+	// 		// getColors(getValues('order_description_uuid'));
+	// 	}
+	// }, [watch('order_description_uuid')]);
 
 	return (
 		<AddModal
@@ -141,33 +140,7 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<FormField label='colors' title='Colors' errors={errors}>
-				<Controller
-					name='colors'
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select Colors'
-								options={colors}
-								value={colors?.find((item) =>
-									colorsSelect?.includes(item.value)
-								)}
-								onChange={(selectedOptions) => {
-									const newSelections = selectedOptions
-										? selectedOptions.map(
-												(item) => item.value
-											)
-										: [];
-									setColorsSelect(newSelections); // Update the selected colors
-									onChange(newSelections); // Update the form value
-								}}
-								menuPortalTarget={document.body}
-							/>
-						);
-					}}
-				/>
-			</FormField>
+		
 			<FormField label='section"' title='Section' errors={errors}>
 				<Controller
 					name='section'

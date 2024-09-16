@@ -65,18 +65,18 @@ export default function Index() {
 			// 	info.getValue()
 			// ),
 			// },
-			{
-				accessorKey: 'colors',
-				header: 'Colors',
-				enableColumnFilter: false,
-				cell: (info) => {
-					return (
-						<span className='capitalize'>
-							{info.getValue().replace(/_|stock/g, ' ')}
-						</span>
-					);
-				},
-			},
+			// {
+			// 	accessorKey: 'colors',
+			// 	header: 'Colors',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => {
+			// 		return (
+			// 			<span className='capitalize'>
+			// 				{info.getValue().replace(/_|stock/g, ' ')}
+			// 			</span>
+			// 		);
+			// 	},
+			// },
 			{
 				accessorKey: 'section',
 				header: 'Section',

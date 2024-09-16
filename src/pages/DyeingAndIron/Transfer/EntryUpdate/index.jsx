@@ -1,19 +1,6 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
-import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useDyeingTransfer } from '@/state/Dyeing';
 import { useOrderDescription, useOrderDetails } from '@/state/Order';
-import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
-import { configure, HotKeys } from 'react-hotkeys';
-import {
-	Navigate,
-	useLocation,
-	useNavigate,
-	useParams,
-} from 'react-router-dom';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-
-import { DeleteModal } from '@/components/Modal';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
@@ -37,10 +24,7 @@ import {
 } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
-
-import nanoid from '@/lib/nanoid';
 import { DYEING_TRANSFER_NULL, DYEING_TRANSFER_SCHEMA } from '@util/Schema';
-import GetDateTime from '@/util/GetDateTime';
 import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({ sfg }) {
@@ -218,13 +202,13 @@ export default function Index({ sfg }) {
 		{ label: 'Metal Teeth Molding', value: 'metal_teeth_molding' },
 	];
 
-	const getColors = (colors) => {
-		// * get colors and set them as value & lables for select options
-		setColors([]);
-		colors.map((item) => {
-			setColors((prev) => [...prev, { label: item, value: item }]);
-		});
-	};
+	// const getColors = (colors) => {
+	// 	// * get colors and set them as value & lables for select options
+	// 	setColors([]);
+	// 	colors.map((item) => {
+	// 		setColors((prev) => [...prev, { label: item, value: item }]);
+	// 	});
+	// };
 
 	return (
 		<div>
@@ -238,11 +222,6 @@ export default function Index({ sfg }) {
 						handelAppend={handelEntryAppend}
 						tableHead={[
 							'Order Entry ID',
-							'Colors',
-							'Tape Required (MTR)',
-							'Tape Required (Kg)',
-							'Provided (Kg)',
-							'Balance (Kg)',
 							'Transfer',
 							'Trx Quantity',
 							'Remarks',
@@ -294,7 +273,7 @@ export default function Index({ sfg }) {
 																`dyeing_transfer_entry[${index}].tape_received`,
 																e.tape_received
 															);
-															// getColors(e.colors); // TODO: Fix this
+															// getColors(e.colors);
 														}}
 														// isDisabled={updateCoilProd?.id !== null}
 													/>
@@ -303,80 +282,12 @@ export default function Index({ sfg }) {
 										/>
 									</FormField>
 								</td>
-
-									{/* color*/}
-									<td className={`w-96 ${rowClass}`}>
-										<FormField
-											label='colors'
-											is_title_needed='false'
-											title='colors'
-											errors={errors}>
-											<Controller
-												name={`dyeing_transfer_entry[${index}].colors`}
-												control={control}
-												render={({
-													field: { onChange },
-												}) => {
-													return (
-														<ReactSelect
-															placeholder='Select Multi Requirement'
-															options={colors}
-															value={colors?.filter(
-																(item) =>
-																	colorsSelect?.includes(
-																		item.value
-																	)
-															)}
-															onChange={(e) => {
-																const newSelections =
-																	e
-																		? e.map(
-																				(
-																					item
-																				) =>
-																					item.value
-																			)
-																		: [];
-																setColorsSelect(
-																	newSelections
-																);
-
-																onChange(
-																	newSelections
-																);
-															}}
-															isMulti={true}
-															menuPortalTarget={
-																document.body
-															}
-														/>
-													);
-												}}
-											/>
-										</FormField>
-									</td>
-									<td>{tape_req || 0}</td>
-									<td>{tape_req_kg || 0}</td>
-									<td>
-										{Number(
-											selectedValue?.tape_transferred
-										).toFixed(3)}
-									</td>
-									<td>
-										{Number(
-											tape_req_kg -
-												Number(
-													selectedValue?.tape_transferred
-												)
-										).toFixed(3)}
-									</td>
-
 								{/* Transfer*/}
 								<td className={`w-24 ${rowClass}`}>
 									<FormField
-										label='order_description_uuid'
+										label='section'
 										is_title_needed='false'
-										title='order_description_uuid'
+										title='section'
 										dynamicerror={
 											errors?.dyeing_transfer_entry?.[
 												index
@@ -422,12 +333,6 @@ export default function Index({ sfg }) {
 										is_title_needed='false'
 										// placeholder={`Max: ${}`}  // TODO: fix this with schema
 										unit='KG'
-										// placeholder={`Max: ${
-										// 	getMaxQuantity() <
-										// 	updateCoilProd?.quantity_in_coil
-										// 		? getMaxQuantity()
-										// 		: updateCoilProd?.quantity_in_coil
-										// }`}
 										dynamicerror={
 											errors?.dyeing_transfer_entry?.[
 												index
@@ -438,7 +343,7 @@ export default function Index({ sfg }) {
 								</td>
 
 								{/* Remarks*/}
-								<td className={` w-56 ${rowClass}`}>
+								<td className={`w-56 ${rowClass}`}>
 									<Textarea
 										title='color'
 										label={`dyeing_transfer_entry[${index}].remarks`}
@@ -452,26 +357,21 @@ export default function Index({ sfg }) {
 									/>
 								</td>
 
-									{/* Action*/}
-									<td
-										className={`w-20 ${rowClass} border-l-4 border-l-primary`}>
-										<ActionButtons
-											duplicateClick={() =>
-												handelDuplicateDynamicField(
-													index
-												)
-											}
-											removeClick={() =>
-												handleEntryRemove(index)
-											}
-											showRemoveButton={
-												EntryField.length > 1
-											}
-										/>
-									</td>
-								</tr>
-							);
-						})}
+								{/* Action*/}
+								<td
+									className={`w-20 ${rowClass} border-l-4 border-l-primary`}>
+									<ActionButtons
+										duplicateClick={() =>
+											handelDuplicateDynamicField(index)
+										}
+										removeClick={() =>
+											handleEntryRemove(index)
+										}
+										showRemoveButton={EntryField.length > 1}
+									/>
+								</td>
+							</tr>
+						))}
 					</DynamicField>
 					<div className='modal-action'>
 						<button

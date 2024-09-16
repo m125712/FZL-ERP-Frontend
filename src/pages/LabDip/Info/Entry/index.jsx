@@ -87,7 +87,7 @@ export default function Index() {
 				itemId: getValues(`recipe[${index}].recipe_uuid`),
 				itemName: getValues(`recipe[${index}].recipe_uuid`),
 			}));
-			console.log('into close modal');
+
 
 			window['recipe_update'].showModal();
 		}
@@ -104,7 +104,7 @@ export default function Index() {
 
 	// Submit
 	const onSubmit = async (data) => {
-		console.log(data);
+
 		// * Update data * //
 		if (isUpdate) {
 			// * updated order description * //
@@ -129,8 +129,7 @@ export default function Index() {
 				updated_at: GetDateTime(),
 			}));
 
-			console.log('Updated_data: ', lab_info_updated);
-			console.log('Updated_recipe: ', recipe_updated);
+		
 			// * insert the recipe data using update function * //
 			let recipe_updated_promises = [
 				...recipe_updated.map(
@@ -180,7 +179,7 @@ export default function Index() {
 			approved: item.approved ? 1 : 0,
 		}));
 
-		console.log('new recipe:', recipe);
+	
 
 		// * insert the recipe data using update function
 		let recipe_promises = [
@@ -252,13 +251,13 @@ export default function Index() {
 	const getStatus = (status, index) => {
 		//setStatus((prevStatus) => ({ ...prevStatus, [index]: status }));
 		setValue(`recipe[${index}].status`, status.status);
-		console.log(getValues(`recipe[${index}].status`), 'status');
+		
 	};
 
 	const getApproved = (approved, index) => {
 		//setApproved((prevApproved) => ({ ...prevApproved, [index]: approved }));
 		setValue(`recipe[${index}].approved`, approved.approved);
-		console.log(getValues(`recipe[${index}].approved`), 'approved');
+		
 	};
 
 	const status = [
@@ -340,8 +339,7 @@ export default function Index() {
 																`recipe[${index}].recipe_uuid`,
 																e.value
 															);
-															console.log(
-																getValues()
+														
 															);
 															getStatus(e, index);
 															getApproved(

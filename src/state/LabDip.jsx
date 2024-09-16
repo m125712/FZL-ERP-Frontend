@@ -25,6 +25,11 @@ export const useLabDipInfoByUUID = (uuid) =>
 		queryKey: labDipQK.infoByUUID(uuid),
 		url: `/lab-dip/info/${uuid}`,
 	});
+export const UseLabDipInfoByDetails = (uuid) =>
+	createGlobalState({
+		queryKey: labDipQK.infoByDetails(uuid),
+		url: `/lab-dip/info/details/${uuid}`,
+	});
 // * RM
 export const useLabDipRM = () =>
 	createGlobalState({

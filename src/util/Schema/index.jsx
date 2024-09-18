@@ -461,6 +461,7 @@ export const ORDER_INFO_SCHEMA = {
 	is_sample: BOOLEAN_REQUIRED.default(false),
 	is_bill: BOOLEAN.default(true),
 	is_cash: BOOLEAN_REQUIRED,
+	conversion_rate: NUMBER_DOUBLE.nullable().default(80),
 	status: BOOLEAN_REQUIRED.default(false),
 	marketing_uuid: UUID_FK.required('Required'),
 	merchandiser_uuid: UUID_FK.when('is_sample', {
@@ -482,6 +483,7 @@ export const ORDER_INFO_NULL = {
 	is_sample: false,
 	is_bill: true,
 	is_cash: false,
+	conversion_rate: 80,
 	status: false,
 	marketing_uuid: null,
 	merchandiser_uuid: null,
@@ -512,7 +514,7 @@ export const ORDER_SCHEMA = {
 	puller_color: UUID_REQUIRED,
 	puller_link: UUID_FK,
 
-	coloring_type: UUID.nullable(),
+	coloring_type: UUID_REQUIRED,
 
 	// slider
 	slider: UUID.nullable(),

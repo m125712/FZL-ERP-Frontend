@@ -1,13 +1,15 @@
-import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useOrderInfo } from '@/state/Order';
-import { CheckBox, FormField, ReactSelect, Input, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { DevTool } from '@hookform/devtools';
-import { ORDER_INFO_NULL, ORDER_INFO_SCHEMA } from '@util/Schema';
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/context/auth';
+import { useOrderInfo } from '@/state/Order';
+import { DevTool } from '@hookform/devtools';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { CheckBox, FormField, Input, ReactSelect, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
+import { ORDER_INFO_NULL, ORDER_INFO_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -36,6 +38,7 @@ export default function Index({
 		control,
 		getValues,
 		context,
+		watch,
 	} = useRHF(ORDER_INFO_SCHEMA, ORDER_INFO_NULL);
 
 	const [partyId, setPartyId] = useState(getValues('party_uuid'));
@@ -151,8 +154,7 @@ export default function Index({
 			}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
-			onClose={onClose}
-			>
+			onClose={onClose}>
 			<div className='flex justify-end gap-2 text-sm'>
 				<div className='rounded-md bg-primary px-1'>
 					<CheckBox
@@ -344,6 +346,13 @@ export default function Index({
 						}}
 					/>
 				</FormField>
+				{watch('is_cash') === 1 && (
+					<Input
+						label='conversion_rate'
+						title='Conversion Rate'
+						{...{ register, errors }}
+					/>
+				)}
 				<FormField
 					label='marketing_priority'
 					title='S&M Priority'

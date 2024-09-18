@@ -1,12 +1,14 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useCommonTapeSFG } from '@/state/Common';
-import { FormField, Input, ReactSelect, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, ReactSelect, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import { TAPE_STOCK_ADD_NULL, TAPE_STOCK_ADD_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -201,12 +203,6 @@ export default function Index({
 			</div>
 
 			<div className='flex flex-col gap-2 md:flex-row'>
-				<Input label='top' title='Top' {...{ register, errors }} />
-				<Input
-					label='bottom'
-					title='Bottom'
-					{...{ register, errors }}
-				/>
 				<Input
 					label='raw_per_kg_meter'
 					title='Raw Tape (Meter/Kg)'

@@ -165,7 +165,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateMaterial();
+	//invalidateMaterial();
 
 	if (isLoading)
 		return (

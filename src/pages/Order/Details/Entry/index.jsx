@@ -438,7 +438,7 @@ export default function Index() {
 							'Color',
 							'Size',
 							'Quantity',
-							'Price (USD) (Com/Party)',
+							'Price (USD/DZN) (Com/Party)',
 							'Action',
 						].map((item) => (
 							<th

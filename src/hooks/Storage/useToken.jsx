@@ -1,5 +1,5 @@
-import Cookies from 'js-cookie';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 
 const useToken = () => {
 	const getToken = (id) => Cookies?.get(id);
@@ -11,25 +11,6 @@ const useToken = () => {
 		department: getToken('department') || null,
 	});
 
-	// useEffect(() => {
-	// 	const getToken = (id) => Cookies.get(id);
-
-	// 	const auth = getToken("auth");
-	// 	const id = getToken("id");
-	// 	const name = getToken("name");
-	// 	const department = getToken("department");
-
-	// 	if (auth || id || name || department) {
-	// 		setToken((prev) => ({
-	// 			...prev,
-	// 			auth,
-	// 			id,
-	// 			name,
-	// 			department,
-	// 		}));
-	// 	}
-	// }, [token]);
-
 	const saveToken = (id, token) => {
 		Cookies.set(id, token);
 		setToken((prev) => ({
@@ -37,21 +18,6 @@ const useToken = () => {
 			[id]: token,
 		}));
 	};
-
-	// const removeToken = () => {
-	// 	const removeCookie = (id) => Cookies.remove(id);
-	// 	removeCookie("auth");
-	// 	removeCookie("id");
-	// 	removeCookie("name");
-	// 	removeCookie("department");
-	// 	setToken((prev) => ({
-	// 		...prev,
-	// 		auth: null,
-	// 		id: null,
-	// 		name: null,
-	// 		department: null,
-	// 	}));
-	// };
 
 	return {
 		setToken: saveToken,

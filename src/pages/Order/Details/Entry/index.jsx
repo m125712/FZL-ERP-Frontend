@@ -329,83 +329,83 @@ export default function Index() {
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	// * Spreadsheet */
-	// const columnLabels = [
-	// 	'Style',
-	// 	'Color',
-	// 	'Size',
-	// 	'Quantity',
-	// 	'Price (USD) (Com)',
-	// 	'Price (USD) (Party)',
-	// 	'Action',
-	// ];
+	const columnLabels = [
+		'Style',
+		'Color',
+		'Size',
+		'Quantity',
+		'Price (USD) (Com)',
+		'Price (USD) (Party)',
+		'Action',
+	];
 
-	// const arr = [
-	// 	...orderEntryField.map((item, index) => {
-	// 		return [
-	// 			{
-	// 				value: item.style,
-	// 			},
-	// 			{
-	// 				value: item.color,
-	// 			},
-	// 			{
-	// 				value: item.size,
-	// 			},
-	// 			{
-	// 				value: item.quantity,
-	// 			},
-	// 			{
-	// 				value: item.company_price,
-	// 			},
-	// 			{
-	// 				value: item.party_price,
-	// 			},
-	// 			{
-	// 				value: undefined,
-	// 				DataViewer: ({ cell }) => {
-	// 					return (
-	// 						<ActionButtons
-	// 							duplicateClick={() =>
-	// 								handelDuplicateDynamicField(index)
-	// 							}
-	// 							removeClick={() =>
-	// 								handleOrderEntryRemove(index)
-	// 							}
-	// 							showRemoveButton={orderEntryField.length > 1}
-	// 						/>
-	// 					);
-	// 				},
-	// 				DataEditor: ({ cell, onChange, exitEditMode }) => {
-	// 					return (
-	// 						<ActionButtons
-	// 							duplicateClick={() =>
-	// 								handelDuplicateDynamicField(index)
-	// 							}
-	// 							removeClick={() =>
-	// 								handleOrderEntryRemove(index)
-	// 							}
-	// 							showRemoveButton={orderEntryField.length > 1}
-	// 						/>
-	// 					);
-	// 				},
-	// 				className: 'bg-red-100 flex flex-col items-center',
-	// 			},
-	// 		];
-	// 	}),
-	// ];
+	const arr = [
+		...orderEntryField.map((item, index) => {
+			return [
+				{
+					value: item.style,
+				},
+				{
+					value: item.color,
+				},
+				{
+					value: item.size,
+				},
+				{
+					value: item.quantity,
+				},
+				{
+					value: item.company_price,
+				},
+				{
+					value: item.party_price,
+				},
+				{
+					value: undefined,
+					DataViewer: ({ cell }) => {
+						return (
+							<ActionButtons
+								duplicateClick={() =>
+									handelDuplicateDynamicField(index)
+								}
+								removeClick={() =>
+									handleOrderEntryRemove(index)
+								}
+								showRemoveButton={orderEntryField.length > 1}
+							/>
+						);
+					},
+					DataEditor: ({ cell, onChange, exitEditMode }) => {
+						return (
+							<ActionButtons
+								duplicateClick={() =>
+									handelDuplicateDynamicField(index)
+								}
+								removeClick={() =>
+									handleOrderEntryRemove(index)
+								}
+								showRemoveButton={orderEntryField.length > 1}
+							/>
+						);
+					},
+					className: 'bg-red-100 flex flex-col items-center',
+				},
+			];
+		}),
+	];
 
-	// const addRow = () => {
-	// 	orderEntryAppend({
-	// 		style: '',
-	// 		color: '',
-	// 		size: '',
-	// 		quantity: '',
-	// 		company_price: 0,
-	// 		party_price: 0,
-	// 		status: 1,
-	// 		remarks: '',
-	// 	});
-	// };
+	const addRow = () => {
+		orderEntryAppend({
+			style: '',
+			color: '',
+			size: '',
+			quantity: '',
+			company_price: 0,
+			party_price: 0,
+			status: 1,
+			remarks: '',
+		});
+	};
 
 	return (
 		<div>
@@ -414,6 +414,16 @@ export default function Index() {
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
 					className='flex flex-col gap-4'>
+					<div>
+						<button type='button' onClick={addRow}>
+							Add row
+						</button>
+					</div>
+					<Spreadsheet
+						className='flex w-full'
+						columnLabels={columnLabels}
+						data={arr}
+					/>
 					<Header
 						{...{
 							endType,
@@ -430,6 +440,7 @@ export default function Index() {
 							is_logo_puller: getValues('is_logo_puller'),
 						}}
 					/>
+
 					<DynamicField
 						title='Details'
 						handelAppend={handelOrderEntryAppend}

@@ -1,6 +1,12 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { useCookie, useLocalStorage } from '@/hooks';
+import {
+	createContext,
+	useContext,
+	useEffect,
+	useReducer,
+	useState,
+} from 'react';
 import { firstRoute } from '@/routes';
+import { useCookie, useLocalStorage } from '@/hooks';
 
 import { ShowToast } from '@/components/Toast';
 
@@ -20,15 +26,33 @@ const AuthProvider = ({ children }) => {
 
 	useEffect(() => {
 		async function loadCookieData() {
-			if (authCookie && userCookie) {
-				setUser(JSON.parse(userCookie));
-				setCanAccess(JSON.parse(userCanAccess));
+			if (
+				authCookie !== null &&
+				userCookie !== null &&
+				userCanAccess !== null
+			) {
+				console.log(
+					authCookie !== null &&
+						userCookie !== null &&
+						userCanAccess !== null
+				);
+
+				setUser(() => JSON.parse(userCookie || user));
+				setCanAccess(() => JSON.parse(userCanAccess || canAccess));
+
+				console.log({
+					authCookie,
+					canAccess,
+					user,
+					userCanAccess,
+					userCookie,
+				});
 			}
 			setLoading(false);
 		}
 
 		loadCookieData();
-	}, []);
+	}, [authCookie, userCookie, userCanAccess]);
 
 	const Login = async (data) => {
 		try {
@@ -40,11 +64,11 @@ const AuthProvider = ({ children }) => {
 			const userData = JSON.stringify(loginUser);
 			const can_access = hasAccess;
 
-			updateUserCanAccess(can_access || '');
-			updateUserCookie(userData || '');
+			setUser(() => userData);
+			setCanAccess(() => can_access);
 
-			setUser(userData);
-			setCanAccess(can_access);
+			updateUserCookie(userData || '');
+			updateUserCanAccess(can_access || '');
 
 			if (token && userData)
 				return (window.location.href = firstRoute?.path);

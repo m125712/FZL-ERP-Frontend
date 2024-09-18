@@ -10,11 +10,13 @@ function useStorage(key, defaultValue, storageObject) {
 	});
 
 	useEffect(() => {
-		if (value === undefined) return storageObject.removeItem(key);
+		if (value === '') {
+			return storageObject.setItem(key, JSON.stringify(''));
+		}
 		storageObject.setItem(key, JSON.stringify(value));
 	}, [key, value, storageObject]);
 
-	const remove = useCallback(() => setValue(undefined), []);
+	const remove = useCallback(() => setValue(''), []);
 
 	return [value, setValue, remove];
 }

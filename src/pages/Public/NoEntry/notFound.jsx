@@ -66,9 +66,13 @@ function V3() {
 				<button
 					className='btn btn-primary w-64 rounded-full px-6 py-2 uppercase text-white transition-all duration-500 ease-in-out'
 					onClick={() => {
-						navigate(firstRoute?.path);
+						if (firstRoute?.path) {
+							navigate(firstRoute?.path);
+						} else {
+							navigate('/login');
+						}
 					}}>
-					Go Home
+					Go Home {firstRoute?.path ? '' : ': Login'}
 				</button>
 			</div>
 		</div>

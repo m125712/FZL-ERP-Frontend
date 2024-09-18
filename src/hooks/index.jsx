@@ -15,7 +15,6 @@ import { usePostImage } from './CRUD/usePostImage';
 import { useUpdateFunc } from './CRUD/useUpdate';
 import useAccess from './Storage/useAccess';
 import useCookie from './Storage/useCookie';
-import { useHaveAccess } from './Storage/useHaveAccess';
 import { useLocalStorage, useSessionStorage } from './Storage/useStorage';
 import { useToken } from './Storage/useToken';
 import useRHF from './useRHF';
@@ -33,7 +32,6 @@ export {
 	useFetchForRhfResetForUserAccess,
 	useFetchFunc,
 	useFetchFuncForReport,
-	useHaveAccess,
 	useLocalStorage,
 	usePostFunc,
 	usePostImage,

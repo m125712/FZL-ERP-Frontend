@@ -1,13 +1,18 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
-import { useSliderDieCastingTransferAgainstStockByUUID } from '@/state/Slider';
-import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import {
-	SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_UPDATE_NULL,
-	SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_UPDATE,
-} from '@util/Schema';
 import { useEffect } from 'react';
+import {
+	useSliderDieCastingStock,
+	useSliderDieCastingTransferAgainstStockByUUID,
+} from '@/state/Slider';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, JoinInput } from '@/ui';
+
+import {
+	SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_UPDATE,
+	SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_UPDATE_NULL,
+} from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -18,6 +23,7 @@ export default function Index({
 }) {
 	const { data, url, updateData } =
 		useSliderDieCastingTransferAgainstStockByUUID(update?.uuid);
+	const { invalidateQuery } = useSliderDieCastingStock();
 
 	const { register, handleSubmit, errors, reset, getValues, context } =
 		useRHF(
@@ -53,6 +59,7 @@ export default function Index({
 				onClose,
 			});
 
+			invalidateQuery()
 			return;
 		}
 	};

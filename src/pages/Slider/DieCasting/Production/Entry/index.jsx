@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
-import { useOtherOrder, useOtherSliderItem } from '@/state/Other';
+import { useOtherOrderDescription, useOtherSliderItem } from '@/state/Other';
 import {
 	useSliderDieCastingProduction,
 	useSliderDieCastingProductionByUUID,
@@ -67,7 +67,7 @@ export default function Index() {
 	}, [data, isUpdate]);
 
 	const { data: slider_item_name } = useOtherSliderItem();
-	const { data: orders } = useOtherOrder();
+	const { data: orders } = useOtherOrderDescription();
 
 	const {
 		fields,
@@ -194,7 +194,7 @@ export default function Index() {
 					tableHead={[
 						'MC NO',
 						'Item Name',
-						'Order No',
+						'Order Dsc',
 						'Cavity Goods',
 						'Cavity Defect',
 						'Push',
@@ -270,15 +270,15 @@ export default function Index() {
 								{/* ORDER NO */}
 								<td className={cn('w-44', tdClass)}>
 									<FormField
-										label={`array[${index}].order_info_uuid`}
+										label={`array[${index}].order_description_uuid`}
 										is_title_needed='false'
 										register={register}
 										dynamicerror={
 											errors?.array?.[index]
-												?.order_info_uuid
+												?.order_description_uuid
 										}>
 										<Controller
-											name={`array[${index}].order_info_uuid`}
+											name={`array[${index}].order_description_uuid`}
 											control={control}
 											render={({
 												field: { onChange },
@@ -291,7 +291,7 @@ export default function Index() {
 															(inItem) =>
 																inItem.value ==
 																getValues(
-																	`array[${index}].order_info_uuid`
+																	`array[${index}].order_description_uuid`
 																)
 														)}
 														onChange={(e) => {

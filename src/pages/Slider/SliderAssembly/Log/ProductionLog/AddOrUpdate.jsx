@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 import { useSliderAssemblyProductionEntryByUUID } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
-import * as yup from 'yup';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { Input, JoinInput } from '@/ui';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
 import {
 	NUMBER_REQUIRED,
@@ -30,11 +29,7 @@ export default function Index({
 		updateSliderProd?.uuid
 	);
 
-	const MAX_QUANTITY =
-		updateSliderProd?.end_type_name === 'Open End'
-			? Math.floor(Number(updateSliderProd?.open_end_max_sa_quantity))
-			: Math.floor(Number(updateSliderProd?.close_end_max_sa_quantity));
-
+	const MAX_QUANTITY = Math.floor(Number(updateSliderProd?.max_sa_quantity));
 	const {
 		register,
 		handleSubmit,
@@ -61,7 +56,6 @@ export default function Index({
 			reset(data); // Reset the form with the fetched data
 		}
 	}, [data, reset]);
-	console.log(getValues());
 	const onClose = () => {
 		setUpdateSliderProd((prev) => ({
 			...prev,
@@ -81,6 +75,7 @@ export default function Index({
 		if (updateSliderProd?.uuid !== null) {
 			const updatedData = {
 				...data,
+				with_link: data.with_link ? 1 : 0,
 				updated_at: GetDateTime(),
 			};
 
@@ -93,7 +88,10 @@ export default function Index({
 			return;
 		}
 	};
-
+	const with_link = [
+		{ label: 'Yes', value: 1 },
+		{ label: 'No', value: 0 },
+	];
 	return (
 		<AddModal
 			id={modalId}
@@ -106,6 +104,27 @@ export default function Index({
 				`}
 			onClose={onClose}
 			isSmall={true}>
+			<FormField label='with_link' title='Link' errors={errors}>
+				<Controller
+					name={'with_link'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<ReactSelect
+								placeholder='Select Logo Type'
+								options={with_link}
+								value={with_link?.filter(
+									(with_link) =>
+										with_link.value ==
+										getValues('with_link')
+								)}
+								onChange={(e) => onChange(e.value)}
+								// isDisabled={order_info_id !== undefined}
+							/>
+						);
+					}}
+				/>
+			</FormField>
 			<JoinInput
 				label='production_quantity'
 				unit='PCS'

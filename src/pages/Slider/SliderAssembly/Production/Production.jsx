@@ -2,16 +2,17 @@ import { useAuth } from '@/context/auth';
 import {
 	useSliderAssemblyProduction,
 	useSliderAssemblyProductionEntry,
+	useSliderAssemblyLogProduction,
 } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { JoinInput, Textarea } from '@/ui';
+import { ShowLocalToast } from '@/components/Toast';
+import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import {
-	NUMBER_REQUIRED,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
 } from '@util/Schema';
@@ -30,31 +31,35 @@ export default function Index({
 	setUpdateSliderProd,
 }) {
 	const { postData, url } = useSliderAssemblyProductionEntry();
-	const { invalidateQuery} = useSliderAssemblyProduction();
+	const { invalidateQuery } = useSliderAssemblyProduction();
+	const { invalidateQuery: invalidateLog } = useSliderAssemblyLogProduction();
 	const { user } = useAuth();
 
 	const MAX_PROD_KG = Number(updateSliderProd.balance_quantity).toFixed(3);
-	const MAX_PROD =
-		updateSliderProd?.end_type_name == 'Open End'
-			? Math.floor(Number(updateSliderProd.open_end_min_quantity))
-			: Math.floor(Number(updateSliderProd.close_end_min_quantity));
 
-	const { register, handleSubmit, errors, reset, watch, control, context } =
-		useRHF(
-			{
-				...SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
-				production_quantity: NUMBER_REQUIRED.max(
-					MAX_PROD,
-					'Beyond Max'
-				),
-			},
-			SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL
-		);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		watch,
+		control,
+		context,
+		getValues,
+		Controller,
+	} = useRHF(
+		SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
+		SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL
+	);
 
 	// TODO: Wastage
 	const MAX_WASTAGE_KG = Number(
 		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
 	).toFixed(3);
+
+	const MAX_PROD = watch('with_link')
+		? Math.floor(Number(updateSliderProd.max_sa_quantity_with_link))
+		: Math.floor(Number(updateSliderProd.max_sa_quantity_without_link));
 
 	const onClose = () => {
 		setUpdateSliderProd((prev) => ({
@@ -76,20 +81,62 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			stock_uuid: updateSliderProd?.uuid,
+			with_link: data.with_link ? 1 : 0,
 			section: 'sa_prod',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
 
-		await postData.mutateAsync({
-			url,
-			newData: updatedData,
-			onClose,
-		});
+		if (updatedData.with_link) {
+			if (
+				updatedData.production_quantity >
+				updateSliderProd?.max_sa_quantity_with_link
+			) {
+				ShowLocalToast({
+					type: 'error',
+					message: `Beyond max quantity > ${updateSliderProd.max_sa_quantity_with_link}`,
+				});
 
-		invalidateQuery();
+				onClose();
+				return;
+			}
+			await postData.mutateAsync({
+				url,
+				newData: updatedData,
+				onClose,
+			});
+
+			invalidateQuery();
+			invalidateLog();
+			return;
+		} else {
+			if (
+				updatedData.production_quantity >
+				updateSliderProd?.max_sa_quantity_without_link
+			) {
+				ShowLocalToast({
+					type: 'error',
+					message: `Beyond max quantity > ${updateSliderProd.max_sa_quantity_without_link}`,
+				});
+				onClose();
+				return;
+			}
+			await postData.mutateAsync({
+				url,
+				newData: updatedData,
+				onClose,
+			});
+
+			invalidateQuery();
+			invalidateLog();
+			return;
+		}
 	};
 
+	const with_link = [
+		{ label: 'Yes', value: 1 },
+		{ label: 'No', value: 0 },
+	];
 	return (
 		<AddModal
 			id='TeethMoldingProdModal'
@@ -103,6 +150,28 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
+			<FormField label='with_link' title='Link' errors={errors}>
+				<Controller
+					name={'with_link'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<ReactSelect
+								placeholder='Select Logo Type'
+								options={with_link}
+								value={with_link?.filter(
+									(with_link) =>
+										with_link.value ==
+										getValues('with_link')
+								)}
+								onChange={(e) => onChange(e.value)}
+								// isDisabled={order_info_id !== undefined}
+							/>
+						);
+					}}
+				/>
+			</FormField>
+
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'

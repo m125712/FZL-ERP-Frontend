@@ -187,6 +187,15 @@ export const useOrderAgainstSliderColorRMLogByUUID = (uuid) =>
 		url: `/zipper/material-trx-against-order/by/coloring${uuid}`,
 	});
 
+// * Slider Assembly
+// * Slider Assembly Stock
+export const useSliderAssemblyStock = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderAssemblyStock(),
+		url: '/slider/assembly-stock',
+	});
+
+	
 // * Slider Assembly Production (Stock)
 export const useSliderAssemblyProduction = () =>
 	createGlobalState({

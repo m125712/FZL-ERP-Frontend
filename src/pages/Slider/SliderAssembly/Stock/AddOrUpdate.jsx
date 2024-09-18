@@ -1,15 +1,17 @@
-import { AddModal } from '@/components/Modal';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useOtherOrderPropertiesByTypeName } from '@/state/Other';
-import { useSliderDieCastingStock } from '@/state/Slider';
-import { CheckBox, FormField, Input, Radio, ReactSelect, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { useAuth } from '@/context/auth';
+import { useSliderAssemblyStock } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, ReactSelect, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import {
-	SLIDER_DIE_CASTING_STOCK_NULL,
-	SLIDER_DIE_CASTING_STOCK_SCHEMA,
+	SLIDER_ASSEMBLY_STOCK_NULL,
+	SLIDER_ASSEMBLY_STOCK_SCHEMA,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -18,7 +20,7 @@ export default function Index({
 	},
 	setUpdateStock,
 }) {
-	const { url, updateData, postData } = useSliderDieCastingStock();
+	const { url, updateData, postData } = useSliderAssemblyStock();
 	const {
 		register,
 		handleSubmit,
@@ -28,25 +30,19 @@ export default function Index({
 		getValues,
 		reset,
 		context,
-	} = useRHF(SLIDER_DIE_CASTING_STOCK_SCHEMA, SLIDER_DIE_CASTING_STOCK_NULL);
+	} = useRHF(SLIDER_ASSEMBLY_STOCK_SCHEMA, SLIDER_ASSEMBLY_STOCK_NULL);
 
-	// Other Order Properties
-	const { data: item } = useOtherOrderPropertiesByTypeName('item');
-	const { data: zipper_number } =
-		useOtherOrderPropertiesByTypeName('zipper_number');
-	const { data: end_type } = useOtherOrderPropertiesByTypeName('end_type');
-	const { data: puller_type } =
-		useOtherOrderPropertiesByTypeName('puller_type');
-	const { data: logo_type } = useOtherOrderPropertiesByTypeName('logo_type');
-	const { data: slider_body_shape } =
-		useOtherOrderPropertiesByTypeName('slider_body_shape');
-	const { data: puller_link } =
-		useOtherOrderPropertiesByTypeName('puller_link');
-	const { data: stopper_type } =
-		useOtherOrderPropertiesByTypeName('stopper_type');
+	const { value: body } = useFetch('/other/slider/die-casting/by-type/body');
+	const { value: puller } = useFetch(
+		'/other/slider/die-casting/by-type/puller'
+	);
+	const { value: cap } = useFetch('/other/slider/die-casting/by-type/cap');
+	const { value: link } = useFetch('/other/slider/die-casting/by-type/link');
+
+	const { user } = useAuth();
 
 	useFetchForRhfReset(
-		`/slider/die-casting/${updateStock?.uuid}`,
+		`/slider/assembly-stock/${updateStock?.uuid}`,
 		updateStock?.uuid,
 		reset
 	);
@@ -56,7 +52,7 @@ export default function Index({
 			...prev,
 			uuid: null,
 		}));
-		reset(SLIDER_DIE_CASTING_STOCK_NULL);
+		reset(SLIDER_ASSEMBLY_STOCK_NULL);
 		window[modalId].close();
 	};
 
@@ -65,16 +61,6 @@ export default function Index({
 		if (updateStock?.uuid !== null) {
 			const updatedData = {
 				...data,
-				is_body: data.is_body === true ? 1 : 0,
-				is_puller: data.is_puller === true ? 1 : 0,
-				is_cap: data.is_cap === true ? 1 : 0,
-				is_link: data.is_link === true ? 1 : 0,
-				is_h_bottom: data.is_h_bottom === true ? 1 : 0,
-				is_u_top: data.is_u_top === true ? 1 : 0,
-				is_box_pin: data.is_box_pin === true ? 1 : 0,
-				is_two_way_pin: data.is_two_way_pin === true ? 1 : 0,
-				is_logo_body: data.is_logo_body === true ? 1 : 0,
-				is_logo_puller: data.is_logo_puller === true ? 1 : 0,
 				updated_at: GetDateTime(),
 			};
 
@@ -90,16 +76,8 @@ export default function Index({
 		// Add new item
 		const newData = {
 			...data,
-			is_body: data.is_body === true ? 1 : 0,
-			is_puller: data.is_puller === true ? 1 : 0,
-			is_cap: data.is_cap === true ? 1 : 0,
-			is_link: data.is_link === true ? 1 : 0,
-			is_h_bottom: data.is_h_bottom === true ? 1 : 0,
-			is_u_top: data.is_u_top === true ? 1 : 0,
-			is_box_pin: data.is_box_pin === true ? 1 : 0,
-			is_two_way_pin: data.is_two_way_pin === true ? 1 : 0,
-			is_logo_body: data.is_logo_body === true ? 1 : 0,
-			is_logo_puller: data.is_logo_puller === true ? 1 : 0,
+			quantity: 0,
+			created_by: user?.uuid,
 			created_at: GetDateTime(),
 			uuid: nanoid(),
 		};
@@ -113,17 +91,6 @@ export default function Index({
 		});
 	};
 
-	const type = [
-		{ label: 'Body', value: 'body' },
-		{ label: 'Puller', value: 'puller' },
-		{ label: 'Cap', value: 'cap' },
-		{ label: 'Link', value: 'link' },
-		{ label: 'H Bottom', value: 'h_bottom' },
-		{ label: 'U Top', value: 'u_top' },
-		{ label: 'Box Pin', value: 'box_pin' },
-		{ label: 'Two-Way Pin', value: 'two_way_pin' },
-	];
-
 	return (
 		<AddModal
 			id={modalId}
@@ -132,49 +99,29 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}>
 			{/* NAME , ITEM , ZIPPER NUMBER */}
-			<div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
-				<Input
-					label='name'
-					placeholder='Enter Name'
-					{...{ register, errors }}
-				/>
-				<FormField label='item' title='Item' errors={errors}>
-					<Controller
-						name={'item'}
-						control={control}
-						render={({ field: { onChange } }) => {
-							return (
-								<ReactSelect
-									placeholder='Select Item'
-									options={item}
-									value={item?.filter(
-										(item) =>
-											item.value == getValues('item')
-									)}
-									onChange={(e) => onChange(e.value)}
-									// isDisabled={order_info_id !== undefined}
-								/>
-							);
-						}}
-					/>
-				</FormField>
-
+			<Input
+				label='name'
+				placeholder='Enter Name'
+				{...{ register, errors }}
+			/>
+			<div className='grid grid-cols-1 gap-4 md:grid-cols-4'>
+				{/* Body */}
 				<FormField
-					label='zipper_number'
-					title='Zipper Number'
+					label='die_casting_body_uuid'
+					title='Body'
 					errors={errors}>
 					<Controller
-						name={'zipper_number'}
+						name={'die_casting_body_uuid'}
 						control={control}
 						render={({ field: { onChange } }) => {
 							return (
 								<ReactSelect
-									placeholder='Select Zipper Number'
-									options={zipper_number}
-									value={zipper_number?.filter(
+									placeholder='Select body'
+									options={body}
+									value={body?.filter(
 										(item) =>
 											item.value ==
-											getValues('zipper_number')
+											getValues('die_casting_body_uuid')
 									)}
 									onChange={(e) => onChange(e.value)}
 									// isDisabled={order_info_id !== undefined}
@@ -183,23 +130,51 @@ export default function Index({
 						}}
 					/>
 				</FormField>
-			</div>
 
-			{/* END TYPE , PULLER TYPE , LOGO TYPE  */}
-			<div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
-				<FormField label='end_type' title='End' errors={errors}>
+				{/* Puller */}
+				<FormField
+					label='die_casting_puller_uuid'
+					title='Puller'
+					errors={errors}>
 					<Controller
-						name={'end_type'}
+						name={'die_casting_puller_uuid'}
 						control={control}
 						render={({ field: { onChange } }) => {
 							return (
 								<ReactSelect
-									placeholder='Select End Type'
-									options={end_type}
-									value={end_type?.filter(
+									placeholder='Select puller'
+									options={puller}
+									value={puller?.filter(
+										(item) =>
+											item.value ==
+											getValues('die_casting_puller_uuid')
+									)}
+									onChange={(e) => onChange(e.value)}
+									// isDisabled={order_info_id !== undefined}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+
+				{/* Cap */}
+
+				<FormField
+					label='die_casting_cap_uuid'
+					title='Cap'
+					errors={errors}>
+					<Controller
+						name={'die_casting_cap_uuid'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select cap'
+									options={cap}
+									value={cap?.filter(
 										(end_type) =>
 											end_type.value ==
-											getValues('end_type')
+											getValues('die_casting_cap_uuid')
 									)}
 									onChange={(e) => {
 										onChange(e.value);
@@ -211,43 +186,23 @@ export default function Index({
 					/>
 				</FormField>
 
-				<FormField label='puller_type' title='Puller' errors={errors}>
+				{/* Link */}
+				<FormField
+					label='die_casting_link_uuid'
+					title='Link'
+					errors={errors}>
 					<Controller
-						name={'puller_type'}
+						name={'die_casting_link_uuid'}
 						control={control}
 						render={({ field: { onChange } }) => {
 							return (
 								<ReactSelect
-									placeholder='Select Puller Type'
-									options={puller_type}
-									value={puller_type?.filter(
+									placeholder='Select link'
+									options={link}
+									value={link?.filter(
 										(puller_type) =>
 											puller_type.value ==
-											getValues('puller_type')
-									)}
-									onChange={(e) => onChange(e.value)}
-									// isDisabled={order_info_id !== undefined}
-								/>
-							);
-						}}
-					/>
-				</FormField>
-				<FormField
-					label='puller_link'
-					title='Puller Link'
-					errors={errors}>
-					<Controller
-						name={'puller_link'}
-						control={control}
-						render={({ field: { onChange } }) => {
-							return (
-								<ReactSelect
-									placeholder='Select Puller Link'
-									options={puller_link}
-									value={puller_link?.filter(
-										(item) =>
-											item.value ==
-											getValues('puller_link')
+											getValues('die_casting_link_uuid')
 									)}
 									onChange={(e) => onChange(e.value)}
 									// isDisabled={order_info_id !== undefined}
@@ -257,99 +212,7 @@ export default function Index({
 					/>
 				</FormField>
 			</div>
-			{/* SLIDER BODY SHAPE, PULLER LINK, STOPPER TYPE */}
-			<div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
-				<FormField
-					label='slider_body_shape'
-					title='Body Shape'
-					errors={errors}>
-					<Controller
-						name={'slider_body_shape'}
-						control={control}
-						render={({ field: { onChange } }) => {
-							return (
-								<ReactSelect
-									placeholder='Select body shape'
-									options={slider_body_shape}
-									value={slider_body_shape?.filter(
-										(item) =>
-											item.value ==
-											getValues('slider_body_shape')
-									)}
-									onChange={(e) => onChange(e.value)}
-									// isDisabled={order_info_id !== undefined}
-								/>
-							);
-						}}
-					/>
-				</FormField>
 
-				{/* //* TODO: if logo_type selected, then at least one of the input should be selected */}
-				<FormField label='logo_type' title='Logo' errors={errors}>
-					<Controller
-						name={'logo_type'}
-						control={control}
-						render={({ field: { onChange } }) => {
-							return (
-								<ReactSelect
-									placeholder='Select Logo Type'
-									options={logo_type}
-									value={logo_type?.filter(
-										(logo_type) =>
-											logo_type.value ==
-											getValues('logo_type')
-									)}
-									onChange={(e) => onChange(e.value)}
-									// isDisabled={order_info_id !== undefined}
-								/>
-							);
-						}}
-					/>
-				</FormField>
-				<div className='mt-6 flex items-center gap-1 text-sm'>
-					<CheckBox
-						label='is_logo_body'
-						title='Logo in Body'
-						height='h-[2.9rem]'
-						defaultChecked={getValues('is_logo_body')}
-						className='w-full rounded border border-primary/30 bg-primary/5 px-2'
-						{...{ register, errors }}
-					/>
-
-					<CheckBox
-						label='is_logo_puller'
-						title='Logo in Puller'
-						height='h-[2.9rem]'
-						defaultChecked={getValues('is_logo_puller')}
-						className='w-full rounded border border-primary/30 bg-primary/5 px-2'
-						{...{ register, errors }}
-					/>
-				</div>
-			</div>
-
-			<div className='mt-4 text-lg font-bold text-primary'>
-				Which Item?
-			</div>
-			{/* IS BODY, IS PULLER, IS CAP, IS LINK */}
-			<FormField label='type' title='Type' errors={errors}>
-				<Controller
-					name={'type'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select Item'
-								options={type}
-								value={type?.filter(
-									(item) => item.value == getValues('type')
-								)}
-								onChange={(e) => onChange(e.value)}
-								// isDisabled={order_info_id !== undefined}
-							/>
-						);
-					}}
-				/>
-			</FormField>
 			{/* REMARKS */}
 			<Textarea
 				label='remarks'

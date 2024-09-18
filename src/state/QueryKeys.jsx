@@ -733,6 +733,13 @@ export const sliderQK = {
 		uuid,
 	],
 
+	// * Slider Assembly Stock
+	sliderAssemblyStock: () => [...sliderQK.all(), 'assembly-stock'],
+	sliderAssemblyStockByUUID: (uuid) => [
+		...sliderQK.sliderAssemblyStock(),
+		uuid,
+	],
+
 	// * Slider Assembly Production
 	sliderAssemblyProduction: () => [...sliderQK.all(), 'assembly-production'],
 	sliderAssemblyProductionByUUID: (uuid) => [

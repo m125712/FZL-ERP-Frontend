@@ -1185,6 +1185,7 @@ export const SLIDER_SLIDER_ASSEMBLY_NULL = {
 
 export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA = {
 	production_quantity: NUMBER_REQUIRED,
+	with_link: BOOLEAN.default(true),
 	wastage: NUMBER.nullable().transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? 0 : value
 	),
@@ -1193,7 +1194,8 @@ export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA = {
 
 export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL = {
 	production_quantity: null,
-	wastage: null,
+	with_link: true,
+	wastage: 0,
 	remarks: '',
 };
 
@@ -1977,29 +1979,25 @@ export const SLIDER_DIE_CASTING_STOCK_NULL = {
 	is_logo_puller: false,
 };
 
-// "uuid": "igD0v9DIJQhJeet",
-// "order_info_uuid": "igD0v9DIJQhJeet",
-// "item": "igD0v9DIJQhJeet",
-// "zipper_number": "igD0v9DIJQhJeet",
-// "end_type": "igD0v9DIJQhJeet",
-// "puller_type": "igD0v9DIJQhJeet",
-// "color": "red",
-// "order_quantity": 0,
-// "body_quantity": 0,
-// "cap_quantity": 0,
-// "puller_quantity": 0,
-// "link_quantity": 0,
-// "sa_prod": 0,
-// "coloring_stock": 0,
-// "coloring_prod": 0,
-// "trx_to_finishing": 0,
-// "u_top_quantity": 0,
-// "h_bottom_quantity": 0,
-// "box_pin_quantity": 0,
-// "two_way_pin_quantity": 0,
-// "created_at": "2024-01-01 00:00:00",
-// "updated_at": "2024-01-01 00:00:00",
-// "remarks": "remarks"
+// * Slider Assembly --> (STOCK)*//
+export const SLIDER_ASSEMBLY_STOCK_SCHEMA = {
+	name: STRING_REQUIRED, //
+	die_casting_body_uuid: STRING_REQUIRED, //
+	die_casting_puller_uuid: STRING_REQUIRED, //
+	die_casting_cap_uuid: STRING_REQUIRED, //
+	die_casting_link_uuid: STRING, //
+	remarks: STRING.nullable(),
+};
+
+export const SLIDER_ASSEMBLY_STOCK_NULL = {
+	name: '',
+	die_casting_body_uuid: '',
+	die_casting_puller_uuid: '',
+	die_casting_cap_uuid: '',
+	die_casting_link_uuid: '',
+
+	remarks: '',
+};
 
 // * Slider/Dashboard --> (INFO)*//
 export const SLIDER_DASHBOARD_INFO_SCHEMA = {
@@ -2051,6 +2049,7 @@ export const SLIDER_DASHBOARD_INFO_NULL = {
 
 // * Slider/Die Casting --> (TRANSFER AGAINST STOCK)*//
 export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
+	section: STRING_REQUIRED,
 	stocks: yup.array().of(
 		yup.object().shape({
 			is_checked: BOOLEAN_REQUIRED,
@@ -2072,6 +2071,7 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
 
 export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_NULL = {
 	uuid: null,
+	section: '',
 	is_body: false,
 	is_cap: false,
 	is_puller: false,

@@ -1,18 +1,20 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
+import { useEffect } from 'react';
+import { useOtherOrderDescription, useOtherSliderItem } from '@/state/Other';
 import {
 	useSliderDieCastingProduction,
 	useSliderDieCastingProductionByUUID,
+	useSliderDieCastingStock,
 } from '@/state/Slider';
-import { useOtherOrder, useOtherSliderItem } from '@/state/Other';
-import { Input, JoinInput, FormField, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
 import {
 	SLIDER_DIE_CASTING_PRODUCT_EDIT_NULL,
 	SLIDER_DIE_CASTING_PRODUCT_EDIT_SCHEMA,
 } from '@util/Schema';
-import { useEffect } from 'react';
-import { Watch } from 'lucide-react';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -25,10 +27,10 @@ export default function Index({
 	const { data } = useSliderDieCastingProductionByUUID(update?.uuid, {
 		enabled: true,
 	});
-
+	const { invalidateQuery } = useSliderDieCastingStock();
 
 	const { data: slider_item_name } = useOtherSliderItem();
-	const { data: orders } = useOtherOrder();
+	const { data: orders } = useOtherOrderDescription();
 	const {
 		register,
 		handleSubmit,
@@ -38,7 +40,7 @@ export default function Index({
 		context,
 		Controller,
 		control,
-		watch
+		watch,
 	} = useRHF(
 		SLIDER_DIE_CASTING_PRODUCT_EDIT_SCHEMA,
 		SLIDER_DIE_CASTING_PRODUCT_EDIT_NULL
@@ -72,6 +74,7 @@ export default function Index({
 				onClose,
 			});
 
+			invalidateQuery()
 			return;
 		}
 	};
@@ -113,12 +116,12 @@ export default function Index({
 				/>
 			</FormField>
 			<FormField
-			title='Order Info'
-				label={`order_info_uuid`}
+				title='Order Description'
+				label={`order_description_uuid`}
 				register={register}
-				dynamicerror={errors?.order_info_uuid}>
+				dynamicerror={errors?.order_description_uuid}>
 				<Controller
-					name={`order_info_uuid`}
+					name={`order_description_uuid`}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
@@ -128,7 +131,7 @@ export default function Index({
 								value={orders?.filter(
 									(inItem) =>
 										inItem.value ==
-										getValues(`order_info_uuid`)
+										getValues(`order_description_uuid`)
 								)}
 								onChange={(e) => {
 									onChange(e.value);

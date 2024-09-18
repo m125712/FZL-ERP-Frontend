@@ -1,13 +1,18 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF, useFetch } from '@/hooks';
-import { useSliderDieCastingTransferAgainstOrderByUUID } from '@/state/Slider';
-import { FormField, Input, ReactSelect, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import {
-	SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_UPDATE_NULL,
-	SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_UPDATE,
-} from '@util/Schema';
 import { useEffect } from 'react';
+import {
+	useSliderDashboardInfo,
+	useSliderDieCastingTransferAgainstOrderByUUID,
+} from '@/state/Slider';
+import { useFetch, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
+import {
+	SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_UPDATE,
+	SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_UPDATE_NULL,
+} from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -18,7 +23,7 @@ export default function Index({
 }) {
 	const { data, url, updateData } =
 		useSliderDieCastingTransferAgainstOrderByUUID(update?.uuid);
-
+	const { invalidateQuery } = useSliderDashboardInfo();
 	const {
 		register,
 		handleSubmit,
@@ -65,6 +70,7 @@ export default function Index({
 				onClose,
 			});
 
+			invalidateQuery();
 			return;
 		}
 	};

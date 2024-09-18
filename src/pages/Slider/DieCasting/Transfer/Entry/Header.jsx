@@ -1,13 +1,16 @@
-import { SectionEntryBody, FormField, ReactSelect } from '@/ui';
 import { useFetch } from '@/hooks';
 
-export default function Header({
-	errors,
-	control,
-	getValues,
-	Controller,
-}) {
-	const {value: order} = useFetch('/other/slider/stock-with-order-description/value/label');
+import { FormField, ReactSelect, SectionEntryBody } from '@/ui';
+
+export default function Header({ errors, control, getValues, Controller }) {
+	const { value: order } = useFetch(
+		'/other/slider/stock-with-order-description/value/label'
+	);
+
+	const section = [
+		{ value: 'assembly', label: 'Assembly' },
+		{ value: 'coloring', label: 'Coloring' },
+	];
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody title='Order Description'>
@@ -29,7 +32,33 @@ export default function Header({
 										value={order?.find(
 											(item) =>
 												item.value ==
-												getValues('order_description_uuid')
+												getValues(
+													'order_description_uuid'
+												)
+										)}
+										onChange={(e) => onChange(e.value)}
+										isDisabled={false}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+
+					<FormField label='section' title='Section' errors={errors}>
+						<Controller
+							name={'section'}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										label='Section'
+										className='w-full'
+										placeholder='Select section'
+										options={section}
+										value={section?.find(
+											(item) =>
+												item.value ==
+												getValues('section')
 										)}
 										onChange={(e) => onChange(e.value)}
 										isDisabled={false}

@@ -1,23 +1,27 @@
-import { ShowLocalToast } from '@/components/Toast';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/context/auth';
+import {
+	useSliderDashboardInfo,
+	useSliderDieCastingStock,
+	useSliderDieCastingTransferAgainstOrder,
+	useSliderDieCastingTransferAgainstStock,
+} from '@/state/Slider';
+import { DevTool } from '@hookform/devtools';
+import { useNavigate } from 'react-router-dom';
 import { useRHF } from '@/hooks';
+
+import TableNoData from '@/components/Table/_components/TableNoData';
+import { ShowLocalToast } from '@/components/Toast';
+import { CheckBoxWithoutLabel, DynamicField, Input } from '@/ui';
+
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
-import {
-	useSliderDieCastingStock,
-	useSliderDieCastingTransferAgainstStock,
-	useSliderDieCastingTransferAgainstOrder,
-} from '@/state/Slider';
-import { CheckBoxWithoutLabel, DynamicField, Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
 	SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_NULL,
 	SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA,
 } from '@/util/Schema';
-import { DevTool } from '@hookform/devtools';
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import TableNoData from '@/components/Table/_components/TableNoData';
+
 import Header from './Header';
 
 const getBadges = (index, getValues) => {
@@ -66,11 +70,16 @@ const Index = () => {
 	const navigate = useNavigate();
 	const r_saveBtn = useRef();
 	const { user } = useAuth();
-	const { data: stocks, postData } = useSliderDieCastingStock();
+	const {
+		data: stocks,
+		postData,
+		invalidateQuery: invalidateQueryStocks,
+	} = useSliderDieCastingStock();
 	const { invalidateQuery: invalidateQueryStock } =
 		useSliderDieCastingTransferAgainstStock();
 	const { invalidateQuery: invalidateQueryOrder } =
 		useSliderDieCastingTransferAgainstOrder();
+	const { invalidateQuery: invalidateQueryInfo } = useSliderDashboardInfo();
 	const {
 		register,
 		handleSubmit,
@@ -138,6 +147,7 @@ const Index = () => {
 							)
 						);
 						invalidateQueryOrder();
+						invalidateQueryInfo();
 						navigate(`/slider/die-casting/transfer`);
 					})
 					.catch((err) => console.error(err));
@@ -164,6 +174,7 @@ const Index = () => {
 						)
 					);
 					invalidateQueryStock();
+					invalidateQueryStocks();
 					navigate(`/slider/die-casting/transfer`);
 				})
 				.catch((err) => console.error(err));
@@ -225,7 +236,6 @@ const Index = () => {
 	const thClass =
 		'group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300';
 
-	
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}

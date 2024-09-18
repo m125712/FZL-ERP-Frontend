@@ -1,16 +1,20 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useSliderAssemblyStock } from '@/state/Slider';
+import { Plus } from 'lucide-react';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useSliderDieCastingStock } from '@/state/Slider';
-import { DateTime, EditDelete } from '@/ui';
+import { DateTime, EditDelete, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
+const Production = lazy(() => import('./Production'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useSliderDieCastingStock();
+	const { data, isLoading, url, deleteData } = useSliderAssemblyStock();
 	const info = new PageInfo('Stock', url, 'slider__assembly_stock');
 	const haveAccess = useAccess('slider__assembly_stock');
 
@@ -22,86 +26,54 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
 			{
-				accessorKey: 'type',
-				header: 'Type',
-				enableColumnFilter: false,
-				cell: (info) =>
-					info
-						.getValue()
-						.split('_') // Split the string by underscores
-						.map(
-							(word) =>
-								word.charAt(0).toUpperCase() + word.slice(1)
-						) // Capitalize the first letter of each word
-						.join(' '),
-			},
-			{
-				accessorKey: 'item_name',
-				header: 'Item',
+				accessorKey: 'die_casting_body_name',
+				header: 'Body',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'zipper_number_name',
-				header: 'Zipper',
+				accessorKey: 'die_casting_cap_name',
+				header: 'Cap',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'end_type_name',
-				header: 'End-Type',
+				accessorKey: 'die_casting_link_name',
+				header: 'Link',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'puller_type_name',
-				header: 'Puller-Type',
+				accessorKey: 'die_casting_puller_name',
+				header: 'Puller',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'logo_type_name',
-				header: 'Logo-Type',
+				accessorKey: 'quantity',
+				header: '',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					return (
+						<Transfer
+							onClick={() => handelProduction(info.row.index)}
+						/>
+					);
+				},
 			},
 			{
-				accessorKey: 'slider_body_shape_name',
-				header: 'Body Shape',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'puller_link_name',
-				header: 'Puller Link',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'stopper_type_name',
-				header: 'Stopper Type',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'quantity_in_sa',
+				accessorKey: 'quantity',
 				header: 'Quantity',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'weight',
-				header: 'Weight',
+				accessorKey: 'created_by_name',
+				header: 'Created By',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(3),
-			},
-
-			{
-				accessorKey: 'pcs_per_kg',
-				header: 'Pcs/Kg',
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(0),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_at',
@@ -127,7 +99,7 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: haveAccess.includes('update'),
+				hidden: !haveAccess.includes('update'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -182,15 +154,27 @@ export default function Index() {
 		window[info.getDeleteModalId()].showModal();
 	};
 
+	const handelProduction = (idx) => {
+		const val = data[idx];
+
+		setUpdateSliderProd((prev) => ({
+			...prev,
+			...val,
+		}));
+
+		window['AssemblyStockProduction'].showModal();
+	};
+
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
+	<button>go</button>;
 	return (
 		<>
 			<ReactTable
 				title={info.getTitle()}
-				// handelAdd={handelAdd}
-				// accessor={haveAccess.includes('create')}
+				handelAdd={handelAdd}
+				accessor={haveAccess.includes('create')}
 				data={data}
 				columns={columns}
 			/>
@@ -213,6 +197,16 @@ export default function Index() {
 						setDeleteItem,
 						url,
 						deleteData,
+					}}
+				/>
+			</Suspense>
+
+			<Suspense>
+				<Production
+					modalId='AssemblyStockProduction'
+					{...{
+						updateStock,
+						setUpdateStock,
 					}}
 				/>
 			</Suspense>

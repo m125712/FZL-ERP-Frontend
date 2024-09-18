@@ -1,13 +1,14 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useSliderDieCastingProduction } from '@/state/Slider';
+import { useNavigate } from 'react-router-dom';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useSliderDieCastingProduction } from '@/state/Slider';
-
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
@@ -29,6 +30,16 @@ export default function Index() {
 
 	const columns = useMemo(
 		() => [
+			{
+				accessorKey: 'order_number',
+				header: 'O/N',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'item_description',
+				header: 'Item Dsc',
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'mc_no',
 				header: 'M/C',
@@ -70,11 +81,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'order_number',
-				header: 'O/N',
-				cell: (info) => info.getValue(),
-			},
+
 			{
 				accessorKey: 'weight',
 				header: (

@@ -1,10 +1,13 @@
-import { Suspense } from '@/components/Feedback';
-import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { LinkWithCopy, Transfer } from '@/ui';
-import PageInfo from '@/util/PageInfo';
 import { lazy, useMemo, useState } from 'react';
 import { useSliderAssemblyProduction } from '@/state/Slider';
+import { useAccess } from '@/hooks';
+
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { LinkWithCopy, Transfer } from '@/ui';
+
+import PageInfo from '@/util/PageInfo';
+
 const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
 
@@ -104,12 +107,30 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
+
 			{
-				accessorKey: 'Types',
-				header: 'Body/Cap/Puller/Link/HB/UT/BP',
+				accessorKey: 'body_quantity',
+				header: 'Body',
 				enableColumnFilter: false,
-				cell: (info) =>
-					`${info.row.original.body_quantity}/${info.row.original.cap_quantity}/${info.row.original.puller_quantity}/${info.row.original.link_quantity}/${info.row.original.h_bottom_quantity}/${info.row.original.u_top_quantity}/${info.row.original.box_pin_quantity}`,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'cap_quantity',
+				header: 'Cap',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'puller_quantity',
+				header: 'Puller',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'link_quantity',
+				header: 'Link',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'action_add_production',

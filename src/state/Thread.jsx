@@ -17,13 +17,13 @@ export const useThreadCountLengthByUUID = (uuid) =>
 export const useThreadMachine = () =>
 	createGlobalState({
 		queryKey: threadQK.machine(),
-		url: '/thread/machine',
+		url: '/public/machine',
 	});
 
 export const useThreadMachineByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: threadQK.machineByUUID(uuid),
-		url: `/thread/machine/${uuid}`,
+		url: `/public/machine/${uuid}`,
 	});
 
 //Order-info

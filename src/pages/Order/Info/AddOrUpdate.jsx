@@ -190,7 +190,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Order'
 									options={ref_order}
-									value={ref_order?.find(
+									value={ref_order?.filter(
 										(item) =>
 											item.value ==
 											getValues(
@@ -216,7 +216,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Marketing'
 									options={marketing}
-									value={marketing?.find(
+									value={marketing?.filter(
 										(item) =>
 											item.value ==
 											getValues('marketing_uuid')
@@ -237,7 +237,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Buyer'
 									options={buyer}
-									value={buyer?.find(
+									value={buyer?.filter(
 										(item) =>
 											item.value ==
 											getValues('buyer_uuid')
@@ -260,7 +260,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Party'
 									options={party}
-									value={party?.find(
+									value={party?.filter(
 										(item) =>
 											item.value ==
 											getValues('party_uuid')
@@ -287,7 +287,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Merchandiser'
 									options={merchandiser}
-									value={merchandiser?.find(
+									value={merchandiser?.filter(
 										(item) =>
 											item.value ==
 											getValues('merchandiser_uuid')
@@ -310,7 +310,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Factory'
 									options={factory}
-									value={factory?.find(
+									value={factory?.filter(
 										(item) =>
 											item.value ==
 											getValues('factory_uuid')
@@ -335,7 +335,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Cash Or LC'
 									options={CashOptions}
-									value={CashOptions?.find(
+									value={CashOptions?.filter(
 										(CashOptions) =>
 											CashOptions.value ==
 											getValues('is_cash')
@@ -365,7 +365,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Priority'
 									options={PriorityOptions}
-									value={PriorityOptions?.find(
+									value={PriorityOptions?.filter(
 										(item) =>
 											item.value ==
 											getValues('marketing_priority')
@@ -389,7 +389,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Priority'
 									options={PriorityOptions}
-									value={PriorityOptions?.find(
+									value={PriorityOptions?.filter(
 										(item) =>
 											item.value ==
 											getValues('factory_priority')

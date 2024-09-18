@@ -101,20 +101,6 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 
-			{
-				accessorKey: 'raw_mtr_per_kg',
-				header: 'Raw Mtr Per Kg',
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
-			},
-
-			{
-				accessorKey: 'dyed_mtr_per_kg',
-				header: 'Dyed Mtr Per Kg',
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
-			},
-
 			...DEFAULT_COLUMNS({ handelUpdate, handelDelete, haveAccess }),
 		],
 		[data]

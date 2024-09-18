@@ -202,16 +202,6 @@ export default function Index({
 			<div className='flex gap-1'>
 				<Input label='top' {...{ register, errors }} />
 				<Input label='bottom' {...{ register, errors }} />
-				<Input
-					label='raw_mtr_per_kg'
-					title='Raw (mtr/kg)'
-					{...{ register, errors }}
-				/>
-				<Input
-					label='dyed_mtr_per_kg'
-					title='Dyed (mtr/kg)'
-					{...{ register, errors }}
-				/>
 			</div>
 
 			<Textarea label='remarks' {...{ register, errors }} />

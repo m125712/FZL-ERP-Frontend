@@ -14,6 +14,7 @@ const TrxToCoil = lazy(() => import('./TrxToCoil'));
 const TrxToDying = lazy(() => import('./TrxToDying'));
 const Production = lazy(() => import('./Production'));
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
+const DyeingAgainstStock = lazy(() => import('./DyeingAgainstStock'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useCommonTapeSFG();
@@ -150,6 +151,39 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'dyeing_against_stock_action',
+				header: 'Dyeing Against Stock',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_to_dyeing'),
+				width: 'w-30',
+				cell: (info) => {
+					if (
+						info.row.original?.item_name?.toLowerCase() != 'nylon'
+					) {
+						return (
+							<Transfer
+								onClick={() =>
+									handleDyeingAgainstStock(info.row.index)
+								}
+							/>
+						);
+					}
+				},
+			},
+			{
+				accessorKey: 'trx_quantity_in_dying',
+				header: (
+					<span>
+						Trx Quantity in Dyeing
+						<br />
+						(KG)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()).toFixed(3),
+			},
+			{
 				accessorKey: 'raw_per_kg_meter',
 				header: (
 					<span>
@@ -263,6 +297,16 @@ export default function Index() {
 		}));
 		window['trx_to_coil_modal'].showModal();
 	};
+	const handleDyeingAgainstStock = (idx) => {
+		const selectedProd = data[idx];
+		setUpdateTapeProd((prev) => ({
+			...prev,
+			...selectedProd,
+			item_name: selectedProd.type,
+			quantity: selectedProd.quantity,
+		}));
+		window['dyeing_against_stock_modal'].showModal();
+	};
 	const handleTrxToDying = (idx) => {
 		// const selectedProd = data[idx];
 		// setUpdateTapeProd((prev) => ({
@@ -343,6 +387,13 @@ export default function Index() {
 
 				<TrxToDying
 					modalId={'trx_to_dying_modal'}
+					{...{
+						updateTapeProd,
+						setUpdateTapeProd,
+					}}
+				/>
+				<DyeingAgainstStock
+					modalId={'dyeing_against_stock_modal'}
 					{...{
 						updateTapeProd,
 						setUpdateTapeProd,

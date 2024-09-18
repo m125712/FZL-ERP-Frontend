@@ -1,16 +1,20 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useThreadMachine } from '@/state/Thread';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useThreadMachine } from '@/state/Thread';
-import { DateTime, EditDelete } from '@/ui';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
+import { DateTime, EditDelete, StatusButton } from '@/ui';
+
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useThreadMachine();
+	const { data, isLoading, url, deleteData, updateData } = useThreadMachine();
 
 	const info = new PageInfo('Machine', url, 'thread__machine');
 	const haveAccess = useAccess('thread__machine');
@@ -23,10 +27,70 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'capacity',
-				header: 'Capacity',
+				accessorKey: 'max_capacity',
+				header: 'Max Capacity',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()).toFixed(3),
+			},
+			{
+				accessorKey: 'min_capacity',
+				header: 'Min Capacity',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()).toFixed(3),
+			},
+			{
+				accessorKey: 'is_nylon',
+				header: 'Nylon',
+				enableColumnFilter: false,
+				hidden: !haveAccess.includes('update'),
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
+			},
+			{
+				accessorKey: 'is_metal',
+				header: 'Metal',
+				enableColumnFilter: false,
+				hidden: !haveAccess.includes('update'),
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
+			},
+			{
+				accessorKey: 'is_vislon',
+				header: 'Vislon',
+				enableColumnFilter: false,
+				hidden: !haveAccess.includes('update'),
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
+			},
+			{
+				accessorKey: 'is_sewing_thread',
+				header: 'Sewing Thread',
+				enableColumnFilter: false,
+				hidden: !haveAccess.includes('update'),
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
+			},
+			{
+				accessorKey: 'is_bulk',
+				header: 'Bulk',
+				enableColumnFilter: false,
+				hidden: !haveAccess.includes('update'),
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
+			},
+			{
+				accessorKey: 'is_sample',
+				header: 'Sample',
+				enableColumnFilter: false,
+				hidden: !haveAccess.includes('update'),
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
 			},
 			{
 				accessorKey: 'water_capacity',
@@ -106,6 +170,68 @@ export default function Index() {
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
+	// const handelNylonStatusChange = async (idx) => {
+	// 	await updateData.mutateAsync({
+	// 		url: `${url}/${data[idx]?.uuid}`,
+	// 		updatedData: {
+	// 			is_nylon: data[idx]?.is_nylon === 1 ? 0 : 1,
+	// 			updated_at: GetDateTime(),
+	// 		},
+	// 		isOnCloseNeeded: false,
+	// 	});
+	// };
+	// const handelMetalStatusChange = async (idx) => {
+	// 	await updateData.mutateAsync({
+	// 		url: `${url}/${data[idx]?.uuid}`,
+	// 		updatedData: {
+	// 			is_metal: data[idx]?.is_metal === 1 ? 0 : 1,
+	// 			updated_at: GetDateTime(),
+	// 		},
+	// 		isOnCloseNeeded: false,
+	// 	});
+	// };
+
+	// const handelVislonStatusChange = async (idx) => {
+	// 	await updateData.mutateAsync({
+	// 		url: `${url}/${data[idx]?.uuid}`,
+	// 		updatedData: {
+	// 			is_vislon: data[idx]?.is_vislon === 1 ? 0 : 1,
+	// 			updated_at: GetDateTime(),
+	// 		},
+	// 		isOnCloseNeeded: false,
+	// 	});
+	// };
+
+	// const handelSewingThreadStatusChange = async (idx) => {
+	// 	await updateData.mutateAsync({
+	// 		url: `${url}/${data[idx]?.uuid}`,
+	// 		updatedData: {
+	// 			is_sewing_thread: data[idx]?.is_sewing_thread === 1 ? 0 : 1,
+	// 			updated_at: GetDateTime(),
+	// 		},
+	// 	});
+	// };
+	// const handelBulkStatusChange = async (idx) => {
+	// 	await updateData.mutateAsync({
+	// 		url: `${url}/${data[idx]?.uuid}`,
+	// 		updatedData: {
+	// 			is_bulk: data[idx]?.is_bulk === 1 ? 0 : 1,
+	// 			updated_at: GetDateTime(),
+	// 		},
+	// 		isOnCloseNeeded: false,
+	// 	});
+	// };
+
+	// const handelSampleStatusChange = async (idx) => {
+	// 	await updateData.mutateAsync({
+	// 		url: `${url}/${data[idx]?.uuid}`,
+	// 		updatedData: {
+	// 			is_sample: data[idx]?.is_sample === 1 ? 0 : 1,
+	// 			updated_at: GetDateTime(),
+	// 		},
+	// 		isOnCloseNeeded: false,
+	// 	});
+	// };
 
 	// Delete
 	const [deleteItem, setDeleteItem] = useState({

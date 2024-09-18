@@ -1,13 +1,15 @@
-import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useOrderInfo } from '@/state/Order';
-import { CheckBox, FormField, ReactSelect, Input, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { DevTool } from '@hookform/devtools';
-import { ORDER_INFO_NULL, ORDER_INFO_SCHEMA } from '@util/Schema';
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/context/auth';
+import { useOrderInfo } from '@/state/Order';
+import { DevTool } from '@hookform/devtools';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { CheckBox, FormField, Input, ReactSelect, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
+import { ORDER_INFO_NULL, ORDER_INFO_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -36,6 +38,7 @@ export default function Index({
 		control,
 		getValues,
 		context,
+		watch,
 	} = useRHF(ORDER_INFO_SCHEMA, ORDER_INFO_NULL);
 
 	const [partyId, setPartyId] = useState(getValues('party_uuid'));
@@ -151,8 +154,7 @@ export default function Index({
 			}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
-			onClose={onClose}
-			>
+			onClose={onClose}>
 			<div className='flex justify-end gap-2 text-sm'>
 				<div className='rounded-md bg-primary px-1'>
 					<CheckBox
@@ -188,7 +190,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Order'
 									options={ref_order}
-									value={ref_order?.find(
+									value={ref_order?.filter(
 										(item) =>
 											item.value ==
 											getValues(
@@ -214,7 +216,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Marketing'
 									options={marketing}
-									value={marketing?.find(
+									value={marketing?.filter(
 										(item) =>
 											item.value ==
 											getValues('marketing_uuid')
@@ -235,7 +237,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Buyer'
 									options={buyer}
-									value={buyer?.find(
+									value={buyer?.filter(
 										(item) =>
 											item.value ==
 											getValues('buyer_uuid')
@@ -258,7 +260,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Party'
 									options={party}
-									value={party?.find(
+									value={party?.filter(
 										(item) =>
 											item.value ==
 											getValues('party_uuid')
@@ -285,7 +287,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Merchandiser'
 									options={merchandiser}
-									value={merchandiser?.find(
+									value={merchandiser?.filter(
 										(item) =>
 											item.value ==
 											getValues('merchandiser_uuid')
@@ -308,7 +310,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Factory'
 									options={factory}
-									value={factory?.find(
+									value={factory?.filter(
 										(item) =>
 											item.value ==
 											getValues('factory_uuid')
@@ -333,7 +335,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Cash Or LC'
 									options={CashOptions}
-									value={CashOptions?.find(
+									value={CashOptions?.filter(
 										(CashOptions) =>
 											CashOptions.value ==
 											getValues('is_cash')
@@ -344,6 +346,13 @@ export default function Index({
 						}}
 					/>
 				</FormField>
+				{watch('is_cash') === 1 && (
+					<Input
+						label='conversion_rate'
+						title='Conversion Rate'
+						{...{ register, errors }}
+					/>
+				)}
 				<FormField
 					label='marketing_priority'
 					title='S&M Priority'
@@ -356,7 +365,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Priority'
 									options={PriorityOptions}
-									value={PriorityOptions?.find(
+									value={PriorityOptions?.filter(
 										(item) =>
 											item.value ==
 											getValues('marketing_priority')
@@ -380,7 +389,7 @@ export default function Index({
 								<ReactSelect
 									placeholder='Select Priority'
 									options={PriorityOptions}
-									value={PriorityOptions?.find(
+									value={PriorityOptions?.filter(
 										(item) =>
 											item.value ==
 											getValues('factory_priority')

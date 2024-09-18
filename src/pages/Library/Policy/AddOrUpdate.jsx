@@ -1,12 +1,14 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useLibraryPolicy } from '@/state/Library';
-import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, ReactSelect } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import { POLICY_NULL, POLICY_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -55,7 +57,7 @@ export default function Index({
 		reset(POLICY_NULL);
 		window[modalId].close();
 	};
-
+	console.log(getValues());
 	const onSubmit = async (data) => {
 		// Update item
 		if (updatePolicy?.uuid !== null && updatePolicy?.uuid !== undefined) {

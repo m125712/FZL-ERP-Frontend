@@ -162,7 +162,7 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 	};
-	invalidateLibraryPolicy();
+	//invalidateLibraryPolicy();
 
 	// Add
 	const handelAdd = () => {

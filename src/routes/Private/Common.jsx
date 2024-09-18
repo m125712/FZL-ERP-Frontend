@@ -15,7 +15,7 @@ import TapeProd from '@/pages/Common/Tape/SFG';
 
 export const CommonRoutes = [
 	{
-		name: 'Common',
+		name: 'Tape Preparation',
 		children: [
 			{
 				name: 'Tape',

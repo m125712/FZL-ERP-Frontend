@@ -19,7 +19,7 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'ID',
-				width: 'w-12',
+				width: 'w-40',
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
@@ -116,6 +116,7 @@ export default function Index() {
 				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+				width: 'max-w-40',
 			},
 			{
 				accessorKey: 'action',

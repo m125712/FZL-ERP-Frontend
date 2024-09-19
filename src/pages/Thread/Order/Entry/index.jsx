@@ -1,4 +1,9 @@
-import { DeleteModal } from '@/components/Modal';
+import { Suspense, useCallback, useEffect, useState } from 'react';
+import { useThreadOrderInfo, useThreadOrderInfoEntry } from '@/state/Thread';
+import { useAuth } from '@context/auth';
+import { DevTool } from '@hookform/devtools';
+import { configure, HotKeys } from 'react-hotkeys';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import {
 	useFetch,
 	useFetchForRhfReset,
@@ -6,25 +11,26 @@ import {
 	useRHF,
 	useUpdateFunc,
 } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useThreadOrderInfo, useThreadOrderInfoEntry } from '@/state/Thread';
+
+import { DeleteModal } from '@/components/Modal';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import {
 	ActionButtons,
 	DynamicField,
 	FormField,
 	Input,
 	ReactSelect,
+	Textarea,
 } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
+
+import cn from '@/lib/cn';
+import nanoid from '@/lib/nanoid';
 import {
 	THREAD_ORDER_INFO_ENTRY_NULL,
 	THREAD_ORDER_INFO_ENTRY_SCHEMA,
 } from '@util/Schema';
-import { Suspense, useCallback, useEffect, useState } from 'react';
-import { HotKeys, configure } from 'react-hotkeys';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import GetDateTime from '@/util/GetDateTime';
+
 import Header from './Header';
 
 export default function Index() {
@@ -35,6 +41,7 @@ export default function Index() {
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const isUpdate = order_info_uuid !== undefined || uuid !== undefined;
+
 	const {
 		register,
 		handleSubmit,
@@ -45,6 +52,8 @@ export default function Index() {
 		useFieldArray,
 		getValues,
 		watch,
+		setValue,
+		trigger,
 	} = useRHF(THREAD_ORDER_INFO_ENTRY_SCHEMA, THREAD_ORDER_INFO_ENTRY_NULL);
 
 	useEffect(() => {
@@ -81,6 +90,32 @@ export default function Index() {
 		name: 'order_info_entry',
 	});
 
+	const [bleachAll, setBleachAll] = useState();
+
+	useEffect(() => {
+		if (bleachAll) {
+			threadOrderInfoEntryField.map((item, index) => {
+				setValue(`order_info_entry[${index}].bleaching`, 'bleach');
+			});
+		}
+	}, [bleachAll]);
+
+	useEffect(() => {
+		const subscription = watch((value, { name, type }) => {
+			const { order_info_entry } = value;
+			if (order_info_entry?.length > 0) {
+				setBleachAll(
+					order_info_entry.find(
+						(item) => item.bleaching === 'non-bleach'
+					)
+						? false
+						: true
+				);
+			}
+		});
+		return () => subscription.unsubscribe();
+	}, [watch]);
+
 	const [deleteItem, setDeleteItem] = useState({
 		itemId: null,
 		itemName: null,
@@ -108,7 +143,7 @@ export default function Index() {
 			count_length_uuid: null,
 			type: '',
 			quantity: null,
-			bleaching: 'non-bleach',
+			bleaching: bleachAll ? 'bleach' : 'non-bleach',
 			company_price: 0,
 			party_price: 0,
 			swatch_status: '',
@@ -285,6 +320,16 @@ export default function Index() {
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
+	const headerButtons = [
+		<div className='flex items-center gap-2'>
+			<label className='text-sm'>Bleach All</label>
+			<SwitchToggle
+				checked={bleachAll}
+				onChange={() => setBleachAll(!bleachAll)}
+			/>
+		</div>,
+	];
+
 	return (
 		<div>
 			<HotKeys {...{ keyMap, handlers }}>
@@ -303,6 +348,7 @@ export default function Index() {
 						}}
 					/>
 					<DynamicField
+						headerButtons={headerButtons}
 						title='Details'
 						handelAppend={handleThreadOrderInfoEntryAppend}
 						tableHead={[
@@ -320,14 +366,18 @@ export default function Index() {
 							<th
 								key={item}
 								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-2 py-2 text-left text-sm font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
 								{item}
 							</th>
 						))}>
 						{threadOrderInfoEntryField.map((item, index) => (
 							<tr key={item.uuid}>
-								<td className={`pl-1 ${rowClass}`}>
-									<Input
+								<td
+									className={cn(
+										`pl-1 ${rowClass}`,
+										'min-w-[140px]'
+									)}>
+									<Textarea
 										title='Color'
 										label={`order_info_entry[${index}].color`}
 										is_title_needed='false'
@@ -338,7 +388,7 @@ export default function Index() {
 										register={register}
 									/>
 								</td>
-								<td className={rowClass}>
+								<td className={cn(rowClass, 'min-w-[140px]')}>
 									<FormField
 										label={`order_info_entry[${index}].shade_recipe_uuid`}
 										title='Shade'
@@ -377,8 +427,8 @@ export default function Index() {
 										/>
 									</FormField>
 								</td>
-								<td className={rowClass}>
-									<Input
+								<td className={cn(rowClass, 'min-w-[140px]')}>
+									<Textarea
 										title='po'
 										label={`order_info_entry[${index}].po`}
 										is_title_needed='false'
@@ -390,7 +440,7 @@ export default function Index() {
 									/>
 								</td>
 
-								<td className={rowClass}>
+								<td className={cn(rowClass, 'min-w-[140px]')}>
 									<Input
 										title='style'
 										label={`order_info_entry[${index}].style`}
@@ -402,7 +452,7 @@ export default function Index() {
 										register={register}
 									/>
 								</td>
-								<td className={rowClass}>
+								<td className={cn(rowClass, 'min-w-[180px]')}>
 									<FormField
 										label={`order_info_entry[${index}].count_length_uuid`}
 										title='Count Length'
@@ -444,7 +494,7 @@ export default function Index() {
 										/>
 									</FormField>
 								</td>
-								<td className={rowClass}>
+								<td className={cn(rowClass, 'min-w-[140px]')}>
 									<FormField
 										label={`order_info_entry[${index}].bleaching`}
 										title='Count Length'
@@ -495,6 +545,11 @@ export default function Index() {
 											errors?.order_info_entry?.[index]
 												?.quantity
 										}
+										value={Number(
+											getValues(
+												`order_info_entry[${index}].quantity`
+											)
+										).toFixed(0)}
 										register={register}
 									/>
 								</td>
@@ -509,6 +564,11 @@ export default function Index() {
 													index
 												]?.company_price
 											}
+											value={Number(
+												getValues(
+													`order_info_entry[${index}].company_price`
+												)
+											).toFixed(2)}
 											register={register}
 										/>
 										<Input
@@ -519,11 +579,16 @@ export default function Index() {
 													index
 												]?.party_price
 											}
+											value={Number(
+												getValues(
+													`order_info_entry[${index}].party_price`
+												)
+											).toFixed(2)}
 											register={register}
 										/>
 									</div>
 								</td>
-								<td className={rowClass}>
+								<td className={cn(rowClass, 'min-w-[140px]')}>
 									<Input
 										label={`order_info_entry[${index}].remarks`}
 										is_title_needed='false'
@@ -536,7 +601,10 @@ export default function Index() {
 								</td>
 
 								<td
-									className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
+									className={cn(
+										rowClass,
+										'min-w-20 border-l-2 border-base-200'
+									)}>
 									<ActionButtons
 										duplicateClick={() =>
 											handelDuplicateDynamicField(index)

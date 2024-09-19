@@ -52,7 +52,7 @@ export default function Header({
 				title='Order'
 				header={
 					<div className='flex justify-end gap-2 p-2 text-sm'>
-						<div className='rounded-md bg-primary px-1'>
+						<div className='rounded-md bg-primary px-1 border border-accent/50'>
 							<CheckBox
 								label='is_sample'
 								title='Sample'
@@ -62,7 +62,7 @@ export default function Header({
 								onChange={(e) => setIsSample(e.target.checked)}
 							/>
 						</div>
-						<div className='rounded-md bg-primary px-1'>
+						<div className='rounded-md bg-primary px-1 border border-accent/50'>
 							<CheckBox
 								title='Bill'
 								label='is_bill'

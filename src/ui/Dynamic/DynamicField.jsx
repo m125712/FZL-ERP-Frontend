@@ -5,6 +5,7 @@ export default function DynamicField({
 	title = '',
 	tableHead,
 	tableHeadClass = '',
+	headerButtons = [],
 	handelAppend,
 	children,
 }) {
@@ -14,6 +15,10 @@ export default function DynamicField({
 				<span className='flex items-center gap-4 text-lg font-semibold capitalize text-primary-content'>
 					{title}
 				</span>
+
+				<div className='flex gap-4 items-center'>
+					{headerButtons.length > 0 && headerButtons.map((e) => e)}	
+
 				{handelAppend && (
 					<button
 						type='button'
@@ -22,7 +27,11 @@ export default function DynamicField({
 						<Plus className='w-5' /> NEW
 					</button>
 				)}
+				</div>
 			</div>
+
+
+			
 			<div className='overflow-x-auto rounded-b border border-t-0 border-primary/30 bg-base-100 text-left text-sm text-primary'>
 				<table className='w-full'>
 					<thead

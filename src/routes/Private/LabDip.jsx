@@ -1,15 +1,18 @@
 // Pages
-import Info from '@pages/LabDip/Info';
-import InfoEntry from '@pages/LabDip/Info/Entry';
-import InfoDetails from '@pages/LabDip/Info/ByUUID';
-import RM from '@/pages/LabDip/RM';
 import Log from '@/pages/LabDip/Log';
+import RM from '@/pages/LabDip/RM';
+import Info from '@pages/LabDip/Info';
+import InfoDetails from '@pages/LabDip/Info/ByUUID';
+import InfoEntry from '@pages/LabDip/Info/Entry';
 import Recipe from '@pages/LabDip/Recipe';
-import RecipeEntry from '@pages/LabDip/Recipe/Entry';
 import RecipeDetails from '@pages/LabDip/Recipe/ByRecipeId';
-import ShadeRecipeEntry from '@pages/LabDip/ShadeRecipe/Entry';
-import ShadeRecipeDetails from '@pages/LabDip/ShadeRecipe/Details/ByShadeRecipeId';
+import RecipeEntry from '@pages/LabDip/Recipe/Entry';
 import ShadeRecipe from '@pages/LabDip/ShadeRecipe';
+import ShadeRecipeDetails from '@pages/LabDip/ShadeRecipe/Details/ByShadeRecipeId';
+import ShadeRecipeEntry from '@pages/LabDip/ShadeRecipe/Entry';
+import ThreadSwatch from '@pages/LabDip/ThreadSwatch';
+import ZipperSwatch from '@pages/LabDip/ZipperSwatch';
+
 
 export const LabDipRoutes = [
 	{
@@ -145,6 +148,21 @@ export const LabDipRoutes = [
 				hidden: true,
 				actions: ['create', 'read', 'update', 'delete'],
 				isDynamic: true,
+			},
+
+			{
+				name: 'Thread Swatch',
+				path: '/lab-dip/thread-swatch',
+				element: <ThreadSwatch />,
+				page_name: 'lab_dip__thread_swatch',
+				actions: ['read', 'update'],
+			},
+			{
+				name: 'Zipper Swatch',
+				path: '/lab-dip/zipper-swatch',
+				element: <ZipperSwatch />,
+				page_name: 'lab_dip__zipper_swatch',
+				actions: ['read', 'update'],
 			},
 		],
 	},

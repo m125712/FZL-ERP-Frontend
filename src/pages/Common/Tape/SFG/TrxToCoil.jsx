@@ -1,16 +1,21 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
+import { useRHF } from '@/hooks';
+
+
+
+import { AddModal } from '@/components/Modal';
 import { Input, JoinInput } from '@/ui';
+
+
+
+import nanoid from '@/lib/nanoid';
+import { COIL_STOCK_NULL, NUMBER_REQUIRED, TAPE_TO_COIL_TRX_NULL, TAPE_TO_COIL_TRX_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-import {
-	COIL_STOCK_NULL,
-	NUMBER_REQUIRED,
-	TAPE_TO_COIL_TRX_NULL,
-	TAPE_TO_COIL_TRX_SCHEMA,
-} from '@util/Schema';
+
+
+
+
 
 export default function Index({
 	modalId = '',
@@ -61,7 +66,7 @@ export default function Index({
 		};
 
 		await postData.mutateAsync({
-			url: `/zipper/tape-to-coil`,
+			url: `/zipper/tape-trx`,
 			newData: updatedData,
 			onClose,
 		});

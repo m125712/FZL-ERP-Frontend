@@ -1,24 +1,27 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
 import { Edit, Plus } from '@/assets/icons';
+import { useAuth } from '@/context/auth';
+import { useDyeingThreadBatch } from '@/state/Dyeing';
+import { useNavigate } from 'react-router-dom';
+import { useAccess, useFetch } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAuth } from '@/context/auth';
-import { useAccess, useFetch } from '@/hooks';
-import { useDyeingThreadBatch } from '@/state/Dyeing';
-import { DateTime, EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
+import { DateTime, EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
+
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 const Yarn = lazy(() => import('../ThreadBatch/Yarn'));
 const Dyeing = lazy(() => import('./Dyeing'));
 
 export default function Index() {
 	const { data, url, updateData, isLoading } = useDyeingThreadBatch();
-	const info = new PageInfo('Thread Batch', url, 'dyeing__batch');
+	const info = new PageInfo('Thread Batch', url, 'dyeing__thread_batch');
 	const { value: machine } = useFetch('/other/machine/value/label');
 	const { user } = useAuth();
-	const haveAccess = useAccess('dyeing__batch');
+	const haveAccess = useAccess('dyeing__thread_batch');
 	const navigate = useNavigate();
 	const columns = useMemo(
 		() => [

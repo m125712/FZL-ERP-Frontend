@@ -1,15 +1,17 @@
-import ReactTable from '@/components/Table';
+import { useEffect, useMemo } from 'react';
 import { useDyeingBatch } from '@/state/Dyeing';
-import { useAccess } from '@/hooks';
-import { EditDelete, LinkWithCopy, DateTime } from '@/ui';
-import PageInfo from '@/util/PageInfo';
-import { useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAccess } from '@/hooks';
+
+import ReactTable from '@/components/Table';
+import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
+import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
 	const { data, url, isLoading } = useDyeingBatch();
-	const info = new PageInfo('Batch', url, 'dyeing__batch');
-	const haveAccess = useAccess('dyeing__batch');
+	const info = new PageInfo('Batch', url, 'dyeing__zipper_batch');
+	const haveAccess = useAccess('dyeing__zipper_batch');
 	const navigate = useNavigate();
 
 	const columns = useMemo(
@@ -41,7 +43,7 @@ export default function Index() {
 							className='btn btn-primary btn-xs'
 							onClick={() =>
 								navigate(
-									`/dyeing-and-iron/batch/batch-production/${info.row.original.uuid}`
+									`/dyeing-and-iron/zipper-batch/batch-production/${info.row.original.uuid}`
 								)
 							}>
 							Add Production
@@ -111,13 +113,13 @@ export default function Index() {
 	);
 
 	// Add
-	const handelAdd = () => navigate('/dyeing-and-iron/batch/entry');
+	const handelAdd = () => navigate('/dyeing-and-iron/zipper-batch/entry');
 
 	// Update
 	const handelUpdate = (idx) => {
 		const { uuid } = data[idx];
 
-		navigate(`/dyeing-and-iron/batch/${uuid}/update`);
+		navigate(`/dyeing-and-iron/zipper-batch/${uuid}/update`);
 	};
 
 	// get tabname

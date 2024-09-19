@@ -1,12 +1,15 @@
-import { Suspense } from '@/components/Feedback';
-import ReactTable from '@/components/Table';
-import { useAccess, useFetch, useFetchFunc, useUpdateFunc } from '@/hooks';
+import { useEffect, useMemo, useState } from 'react';
 import { useDyeingSwatch } from '@/state/Dyeing';
 import { useThreadSwatch } from '@/state/Thread';
+import { useAccess, useFetch, useFetchFunc, useUpdateFunc } from '@/hooks';
+
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
 import { EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
+
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState } from 'react';
+
 import AddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
@@ -15,10 +18,9 @@ export default function Index() {
 	const info = new PageInfo(
 		'Dyeing/Swatch',
 		'order/swatch',
-		'thread__swatch'
+		'lab_dip__thread_swatch'
 	);
-	const haveAccess = useAccess('thread__swatch');
-	console.log(data);
+	const haveAccess = useAccess('lab_dip__thread_swatch');
 
 	// * fetching the data
 	const { value: shade_recipe } = useFetch(

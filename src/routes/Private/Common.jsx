@@ -12,6 +12,9 @@ import TapeLog from '@/pages/Common/Tape/Log';
 import TapeRequired from '@/pages/Common/Tape/Required';
 import TapeStock from '@/pages/Common/Tape/RM';
 import TapeProd from '@/pages/Common/Tape/SFG';
+//* Dyeing Transfer
+import DyeingTransfer from '@/pages/Common/Transfer';
+import DyeingTransferEntry from '@/pages/Common/Transfer/EntryUpdate';
 
 export const CommonRoutes = [
 	{
@@ -137,6 +140,23 @@ export const CommonRoutes = [
 						],
 					},
 				],
+			},
+
+			{
+				name: 'Transfer',
+				path: '/common/dyeing-transfer',
+				element: <DyeingTransfer />,
+				page_name: 'common__dyeing_transfer',
+				actions: ['read', 'create', 'update', 'delete'],
+			},
+
+			{
+				name: 'Transfer Entry',
+				path: '/common/dyeing-transfer/entry',
+				element: <DyeingTransferEntry />,
+				hidden: true,
+				page_name: 'common__dyeing_transfer_entry',
+				actions: ['read', 'create', 'update', 'delete'],
 			},
 		],
 	},

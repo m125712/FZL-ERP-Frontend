@@ -11,7 +11,7 @@ import PageInfo from '@/util/PageInfo';
 
 const TrxToDying = lazy(() => import('./TrxToDyeing'));
 const Production = lazy(() => import('./Production'));
-
+const DyeingAgainstStock = lazy(() => import('./DyeingAgainstStock'));
 export default function Index() {
 	const { data, isLoading, url } = useCommonCoilSFG();
 	const info = new PageInfo('Common/Coil/SFG', url, 'common__coil_sfg');
@@ -125,6 +125,31 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'dyeing_against_stock_action',
+				header: 'Dyeing Against Stock',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_to_dyeing'),
+				width: 'w-30',
+				cell: (info) => (
+					<Transfer
+						onClick={() => handleDyeingAgainstStock(info.row.index)}
+					/>
+				),
+			},
+			{
+				accessorKey: 'trx_quantity_in_dying',
+				header: (
+					<span>
+						Trx Quantity in Dyeing
+						<br />
+						(KG)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()).toFixed(3),
+			},
+			{
 				accessorKey: 'raw_per_kg_meter',
 				header: (
 					<span>
@@ -207,17 +232,17 @@ export default function Index() {
 	};
 
 	const handleTrxToDying = (idx) => {
-		// const selectedProd = data[idx];
-		// setUpdateCoilProd((prev) => ({
-		// 	...prev,
-		// 	...selectedProd,
-		// 	item_name: selectedProd.type,
-		// 	tape_or_coil_stock_id: selectedProd.uuid,
-		// 	type_of_zipper:
-		// 		selectedProd.type + ' ' + selectedProd.zipper_number,
-		// }));
-		// window['trx_to_dying_modal'].showModal();
 		navigate(`/common/coil/sfg/entry-to-dyeing/${data[idx].uuid}`);
+	};
+	const handleDyeingAgainstStock = (idx) => {
+		const selectedProd = data[idx];
+		setUpdateCoilProd((prev) => ({
+			...prev,
+			...selectedProd,
+			item_name: selectedProd.type,
+			quantity: selectedProd.quantity,
+		}));
+		window['dyeing_against_stock_modal'].showModal();
 	};
 
 	if (isLoading)
@@ -245,6 +270,15 @@ export default function Index() {
 			<Suspense>
 				<TrxToDying
 					modalId={'trx_to_dying_modal'}
+					{...{
+						updateCoilProd,
+						setUpdateCoilProd,
+					}}
+				/>
+			</Suspense>
+			<Suspense>
+				<DyeingAgainstStock
+					modalId={'dyeing_against_stock_modal'}
 					{...{
 						updateCoilProd,
 						setUpdateCoilProd,

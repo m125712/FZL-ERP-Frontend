@@ -15,12 +15,12 @@ import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
-	updateTapeProd = {
+	updateCoilProd = {
 		uuid: null,
 		dyeing_stock: null,
 		quantity: null,
 	},
-	setUpdateTapeProd,
+	setUpdateCoilProd,
 }) {
 	const { user } = useAuth();
 	const { postData } = useCommonTapeSFG();
@@ -29,7 +29,7 @@ export default function Index({
 	const schema = {
 		...DYEING_AGAINST_STOCK_SCHEMA,
 		trx_quantity: NUMBER_REQUIRED.max(
-			updateTapeProd?.quantity,
+			updateCoilProd?.quantity,
 			'More Than Max'
 		),
 	};
@@ -40,7 +40,7 @@ export default function Index({
 	);
 
 	const onClose = () => {
-		setUpdateTapeProd((prev) => ({
+		setUpdateCoilProd((prev) => ({
 			...prev,
 			uuid: null,
 			dyeing_stock: null,
@@ -54,7 +54,7 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			tape_coil_uuid: updateTapeProd?.uuid,
+			tape_coil_uuid: updateCoilProd?.uuid,
 			to_section: 'dyeing',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
@@ -71,7 +71,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={updateTapeProd?.uuid !== null && 'Dyeing Against Stock'}
+			title={updateCoilProd?.uuid !== null && 'Dyeing Against Stock'}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
@@ -79,9 +79,9 @@ export default function Index({
 			<JoinInput
 				label='trx_quantity'
 				title='Transfer Quantity'
-				sub_label={`Max: ${updateTapeProd?.quantity}`}
+				sub_label={`Max: ${updateCoilProd?.quantity}`}
 				unit='KG'
-				placeholder={`Max: ${updateTapeProd?.quantity}`}
+				placeholder={`Max: ${updateCoilProd?.quantity}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

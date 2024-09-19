@@ -461,16 +461,17 @@ export const ORDER_INFO_SCHEMA = {
 	is_sample: BOOLEAN_REQUIRED.default(false),
 	is_bill: BOOLEAN.default(true),
 	is_cash: BOOLEAN_REQUIRED,
+	conversion_rate: NUMBER_DOUBLE.nullable().default(80),
 	status: BOOLEAN_REQUIRED.default(false),
-	marketing_uuid: UUID_FK.required('Required'),
-	merchandiser_uuid: UUID_FK.when('is_sample', {
+	marketing_uuid: STRING_REQUIRED,
+	merchandiser_uuid: STRING.when('is_sample', {
 		is: true,
 		then: (Schema) => Schema.nullable(),
 		otherwise: (Schema) => Schema.required('Required'),
 	}),
-	factory_uuid: UUID_FK.required('Required'),
-	party_uuid: UUID_FK.required('Required'),
-	buyer_uuid: UUID_FK.required('Required'),
+	factory_uuid: STRING_REQUIRED,
+	party_uuid: STRING_REQUIRED,
+	buyer_uuid: STRING_REQUIRED,
 	marketing_priority: STRING,
 	factory_priority: STRING,
 	remarks: STRING.nullable(),
@@ -482,6 +483,7 @@ export const ORDER_INFO_NULL = {
 	is_sample: false,
 	is_bill: true,
 	is_cash: false,
+	conversion_rate: 80,
 	status: false,
 	marketing_uuid: null,
 	merchandiser_uuid: null,
@@ -512,7 +514,7 @@ export const ORDER_SCHEMA = {
 	puller_color: UUID_REQUIRED,
 	puller_link: UUID_FK,
 
-	coloring_type: UUID.nullable(),
+	coloring_type: UUID_REQUIRED,
 
 	// slider
 	slider: UUID.nullable(),
@@ -895,6 +897,17 @@ export const TAPE_TO_COIL_TRX_NULL = {
 	trx_quantity: '',
 	quantity: '',
 	wastage: 0,
+	remarks: '',
+};
+// Dyeing Against Stock
+export const DYEING_AGAINST_STOCK_SCHEMA = {
+	trx_quantity: NUMBER_REQUIRED.moreThan(0),
+	remarks: STRING.nullable(),
+};
+
+export const DYEING_AGAINST_STOCK_NULL = {
+	uuid: null,
+	trx_quantity: '',
 	remarks: '',
 };
 
@@ -1410,25 +1423,50 @@ export const LC_NULL = {
 // Thread
 // Count Length
 export const THREAD_COUNT_LENGTH_SCHEMA = {
-	count: NUMBER_REQUIRED,
-	length: STRING_REQUIRED,
-	weight: NUMBER_DOUBLE_REQUIRED,
+	count: STRING_REQUIRED,
+	length: NUMBER_REQUIRED,
+	min_weight: NUMBER_DOUBLE_REQUIRED.max(
+		yup.ref('max_weight'),
+		'Beyond Max Weight'
+	),
+	max_weight: NUMBER_DOUBLE_REQUIRED.min(
+		yup.ref('min_weight'),
+		'Less than Min Weight'
+	),
+	price: NUMBER_DOUBLE_REQUIRED,
 	sst: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
 export const THREAD_COUNT_LENGTH_NULL = {
 	uuid: null,
-	count: null,
-	length: null,
-	weight: null,
+	count: '',
+	length: '',
+	min_weight: null,
+	max_weight: null,
+	price: null,
 	sst: '',
 	remarks: '',
 };
 // Thread Machine
 export const THREAD_MACHINE_SCHEMA = {
 	name: NAME_REQUIRED,
-	capacity: NUMBER_REQUIRED,
+	max_capacity: NUMBER_REQUIRED.min(
+		yup.ref('min_capacity'),
+		'Less than Min Capacity'
+	),
+	min_capacity: NUMBER_REQUIRED.max(
+		yup.ref('max_capacity'),
+		'Beyond Max Capacity'
+	),
+	is_nylon: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+	is_metal: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+	is_vislon: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+	is_sewing_thread: BOOLEAN.transform(handelNumberDefaultValue).default(
+		false
+	),
+	is_bulk: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+	is_sample: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	water_capacity: NUMBER_REQUIRED,
 	remarks: STRING.nullable(),
 };
@@ -1436,7 +1474,14 @@ export const THREAD_MACHINE_SCHEMA = {
 export const THREAD_MACHINE_NULL = {
 	uuid: null,
 	name: '',
-	capacity: null,
+	min_capacity: null,
+	max_capacity: null,
+	is_nylon: false,
+	is_metal: false,
+	is_vislon: false,
+	is_sewing_thread: false,
+	is_bulk: false,
+	is_sample: false,
 	water_capacity: null,
 	remarks: '',
 };

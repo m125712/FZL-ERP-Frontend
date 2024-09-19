@@ -1,16 +1,18 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useThreadCountLength } from '@/state/Thread';
-
-import { Input } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
+import { Input } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import {
 	THREAD_COUNT_LENGTH_NULL,
 	THREAD_COUNT_LENGTH_SCHEMA,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -91,7 +93,9 @@ export default function Index({
 			isSmall={true}>
 			<Input label='count' {...{ register, errors }} />
 			<Input label='length' {...{ register, errors }} />
-			<Input label='weight' {...{ register, errors }} />
+			<Input label='max_weight' {...{ register, errors }} />
+			<Input label='min_weight' {...{ register, errors }} />
+			<Input label='price' {...{ register, errors }} />
 			<Input label='sst' {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />
 

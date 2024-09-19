@@ -1,10 +1,12 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useThreadCountLength } from '@/state/Thread';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useThreadCountLength } from '@/state/Thread';
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
@@ -30,8 +32,20 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'weight',
-				header: 'Weight',
+				accessorKey: 'min_weight',
+				header: 'Min Weight',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()).toFixed(3),
+			},
+			{
+				accessorKey: 'max_weight',
+				header: 'Max Weight',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()).toFixed(3),
+			},
+			{
+				accessorKey: 'price',
+				header: 'Price',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()).toFixed(3),
 			},

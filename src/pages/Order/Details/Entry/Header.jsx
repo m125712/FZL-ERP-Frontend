@@ -85,6 +85,9 @@ export default function Header({
 	const { value: logo_type } = useFetch(
 		`/other/order-properties/by/logo_type`
 	);
+	const { value: teeth_type } = useFetch(
+		`/other/order-properties/by/teeth_type`
+	);
 
 	const [isSliderProvided, setIsSliderProvided] = useState(
 		typeof getValues('is_slider_provided') !== 'boolean' &&
@@ -321,6 +324,29 @@ export default function Header({
 						/>
 					</FormField>
 					<FormField
+						label='teeth_type'
+						title='Teeth Type'
+						errors={errors}>
+						<Controller
+							name={'teeth_type'}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select Teeth Type'
+										options={teeth_type}
+										value={teeth_type?.find(
+											(teeth_type) =>
+												teeth_type.value ==
+												getValues('teeth_type')
+										)}
+										onChange={(e) => onChange(e.value)}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+					<FormField
 						label='teeth_color'
 						title='Teeth Color'
 						errors={errors}>
@@ -433,7 +459,7 @@ export default function Header({
 					</FormField>
 					<FormField
 						label='puller_color'
-						title='Puller Color'
+						title='Slider Color'
 						errors={errors}>
 						<Controller
 							name={'puller_color'}

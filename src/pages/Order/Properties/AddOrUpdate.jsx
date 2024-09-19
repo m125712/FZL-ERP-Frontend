@@ -98,6 +98,7 @@ export default function Index({
 		{ value: 'slider_link', label: 'Slider Link' },
 		{ value: 'special_requirement', label: 'Special Requirement' },
 		{ value: 'stopper_type', label: 'Stopper Type' },
+		{ value: 'teeth_type', label: 'Teeth Type' },
 		{ value: 'top_stopper', label: 'Top Stopper' },
 		{ value: 'zipper_number', label: 'Zipper Number' },
 	];

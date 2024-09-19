@@ -1,10 +1,12 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useMaterialInfo } from '@/state/Store';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useMaterialInfo } from '@/state/Store';
 import { DateTime, EditDelete, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
@@ -15,6 +17,7 @@ export default function Index() {
 	const { data, isLoading, url, deleteData, refetch } = useMaterialInfo();
 	const info = new PageInfo('Store / Stock', url, 'store__stock');
 	const haveAccess = useAccess('store__stock');
+	console.log(haveAccess);
 
 	const columns = useMemo(
 		() => [
@@ -164,7 +167,7 @@ export default function Index() {
 				},
 			},
 		],
-		[data]
+		[data, haveAccess]
 	);
 
 	// Fetching data from server

@@ -131,7 +131,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateMaterialInfo();
+	//invalidateMaterialInfo();
 
 	if (isLoading)
 		return (

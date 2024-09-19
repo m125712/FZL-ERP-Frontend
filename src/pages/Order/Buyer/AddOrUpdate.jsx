@@ -1,12 +1,22 @@
-import { AddModal } from '@/components/Modal';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useOrderBuyer } from '@/state/Order';
-import { Input } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { DevTool } from '@hookform/devtools';
-import { BUYER_NULL, BUYER_SCHEMA } from '@util/Schema';
 import { useAuth } from '@/context/auth';
+import { useOrderBuyer } from '@/state/Order';
+import { DevTool } from '@hookform/devtools';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+
+
+
+import { AddModal } from '@/components/Modal';
+import { Input } from '@/ui';
+
+
+
+import nanoid from '@/lib/nanoid';
+import { BUYER_NULL, BUYER_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
+
+
+
+
 
 export default function Index({
 	modalId = '',
@@ -16,7 +26,7 @@ export default function Index({
 	setUpdateBuyer,
 }) {
 	const { url, updateData, postData } = useOrderBuyer();
-	const { register, handleSubmit, errors, reset, control, context } = useRHF(
+	const { register, handleSubmit, errors, reset, control, context, getValues } = useRHF(
 		BUYER_SCHEMA,
 		BUYER_NULL
 	);
@@ -37,7 +47,7 @@ export default function Index({
 		reset(BUYER_NULL);
 		window[modalId].close();
 	};
-
+	console.log(getValues());
 	const onSubmit = async (data) => {
 		// Update item
 		if (updateBuyer?.uuid !== null && updateBuyer?.uuid !== undefined) {

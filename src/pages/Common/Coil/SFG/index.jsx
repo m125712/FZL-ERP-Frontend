@@ -240,7 +240,7 @@ export default function Index() {
 			...prev,
 			...selectedProd,
 			item_name: selectedProd.type,
-			quantity: selectedProd.quantity,
+			quantity: selectedProd.quantity_in_coil,
 		}));
 		window['dyeing_against_stock_modal'].showModal();
 	};

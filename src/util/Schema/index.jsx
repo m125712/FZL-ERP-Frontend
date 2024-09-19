@@ -1197,8 +1197,8 @@ export const SLIDER_SLIDER_ASSEMBLY_NULL = {
 // * Slider Assembly Production entry
 
 export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA = {
-	production_quantity: NUMBER_REQUIRED,
 	with_link: BOOLEAN.default(true),
+	production_quantity: NUMBER_REQUIRED,
 	wastage: NUMBER.nullable().transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? 0 : value
 	),
@@ -1206,8 +1206,8 @@ export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA = {
 };
 
 export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL = {
-	production_quantity: null,
 	with_link: true,
+	production_quantity: null,
 	wastage: 0,
 	remarks: '',
 };
@@ -1903,7 +1903,7 @@ export const DYEING_TRANSFER_SCHEMA = {
 			order_description_uuid: STRING_REQUIRED,
 			colors: yup.array().of(yup.string()).nullable(),
 			section: STRING_REQUIRED,
-			trx_quantity: NUMBER.required('Required')
+			trx_quantity: NUMBER_DOUBLE.required('Required')
 				.transform((value, originalValue) =>
 					String(originalValue).trim() === '' ? null : value
 				)
@@ -2241,7 +2241,7 @@ export const METAL_TEETH_MOLDING_PRODUCTION_SCHEMA_NULL = {
 // * SFG PRODUCTION
 
 export const SFG_PRODUCTION_SCHEMA_IN_KG = {
-	production_quantity_in_kg: NUMBER_REQUIRED,
+	production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED,
 	wastage: NUMBER.nullable().transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? 0 : value
 	),

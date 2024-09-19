@@ -1,8 +1,8 @@
 import { useAuth } from '@/context/auth';
 import {
+	useSliderAssemblyLogProduction,
 	useSliderAssemblyProduction,
 	useSliderAssemblyProductionEntry,
-	useSliderAssemblyLogProduction,
 } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
@@ -13,6 +13,7 @@ import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import {
+	NUMBER_REQUIRED,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
 } from '@util/Schema';
@@ -48,7 +49,22 @@ export default function Index({
 		getValues,
 		Controller,
 	} = useRHF(
-		SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
+		{
+			...SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
+			production_quantity: NUMBER_REQUIRED.when('with_link', {
+				is: true,
+				then: (schema) =>
+					schema.max(
+						updateSliderProd.max_sa_quantity_with_link,
+						'Beyond Max Quantity'
+					),
+				otherwise: (schema) =>
+					schema.max(
+						updateSliderProd.max_sa_quantity_without_link,
+						'Beyond Max Quantity'
+					),
+			}),
+		},
 		SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL
 	);
 
@@ -87,50 +103,15 @@ export default function Index({
 			created_at: GetDateTime(),
 		};
 
-		if (updatedData.with_link) {
-			if (
-				updatedData.production_quantity >
-				updateSliderProd?.max_sa_quantity_with_link
-			) {
-				ShowLocalToast({
-					type: 'error',
-					message: `Beyond max quantity > ${updateSliderProd.max_sa_quantity_with_link}`,
-				});
+		await postData.mutateAsync({
+			url,
+			newData: updatedData,
+			onClose,
+		});
 
-				onClose();
-				return;
-			}
-			await postData.mutateAsync({
-				url,
-				newData: updatedData,
-				onClose,
-			});
-
-			invalidateQuery();
-			invalidateLog();
-			return;
-		} else {
-			if (
-				updatedData.production_quantity >
-				updateSliderProd?.max_sa_quantity_without_link
-			) {
-				ShowLocalToast({
-					type: 'error',
-					message: `Beyond max quantity > ${updateSliderProd.max_sa_quantity_without_link}`,
-				});
-				onClose();
-				return;
-			}
-			await postData.mutateAsync({
-				url,
-				newData: updatedData,
-				onClose,
-			});
-
-			invalidateQuery();
-			invalidateLog();
-			return;
-		}
+		invalidateQuery();
+		invalidateLog();
+		return;
 	};
 
 	const with_link = [

@@ -73,6 +73,7 @@ export default function Index({
 			stock_uuid: updateSliderProd?.uuid,
 			coloring_stock: updateSliderProd?.coloring_stock,
 			coloring_prod: updateSliderProd?.coloring_prod,
+			with_link: data.with_link ? 1 : 0,
 			section: 'coloring',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),

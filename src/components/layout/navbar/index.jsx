@@ -1,5 +1,6 @@
-import GlobalBreadcrumbs from '@/ui/Others/GlobalBreadcrumbs';
 import { useResolvedPath } from 'react-router-dom';
+
+import GlobalBreadcrumbs from '@/ui/Others/GlobalBreadcrumbs';
 
 import cn from '@/lib/cn';
 

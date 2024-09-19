@@ -1,6 +1,7 @@
-import cn from '@/lib/cn';
 import { sidebarRoutes } from '@/routes';
 import { NavLink } from 'react-router-dom';
+
+import cn from '@/lib/cn';
 
 const BrandLogo = ({ className, ...props }) => {
 	const route = sidebarRoutes[0];

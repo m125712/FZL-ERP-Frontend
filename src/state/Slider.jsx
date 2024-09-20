@@ -195,7 +195,6 @@ export const useSliderAssemblyStock = () =>
 		url: '/slider/assembly-stock',
 	});
 
-	
 // * Slider Assembly Production (Stock)
 export const useSliderAssemblyProduction = () =>
 	createGlobalState({
@@ -237,11 +236,37 @@ export const useSliderAssemblyLogProduction = () =>
 		url: '/slider/production/by/sa_prod',
 	});
 
+// * slider assembly stock production
+export const useSliderAssemblyStockProduction = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderAssemblyStockProduction(),
+		url: '/slider/die-casting-to-assembly-stock',
+	});
+
+export const useSliderAssemblyStockProductionByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: sliderQK.sliderAssemblyStockProductionByUUID(uuid),
+		url: `/slider/die-casting-to-assembly-stock/${uuid}`,
+	});
+
 // * slider assembly Log Transaction
 export const useSliderAssemblyLogTransaction = () =>
 	createGlobalState({
 		queryKey: sliderQK.sliderAssemblyLogTransaction(),
 		url: `/slider/transaction/by/sa_prod`,
+	});
+
+// * slider assembly stock Transaction
+export const useSliderAssemblyStockTransaction = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderAssemblyStockTransaction(),
+		url: '/slider/transaction/by/assembly_stock',
+	});
+
+export const useSliderAssemblyStockTransactionByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: sliderQK.sliderAssemblyStockTransactionByUUID(uuid),
+		url: `/slider/transaction/${uuid}`,
 	});
 
 // * Slider Coloring log //

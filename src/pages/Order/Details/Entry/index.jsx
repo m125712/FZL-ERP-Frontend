@@ -334,8 +334,8 @@ export default function Index() {
 		'Color',
 		'Size',
 		'Quantity',
-		'Price (USD) (Com)',
-		'Price (USD) (Party)',
+		'Company (USD/DZN)',
+		'Party (USD/DZN)',
 		'Action',
 	];
 
@@ -365,12 +365,6 @@ export default function Index() {
 					DataViewer: ({ cell }) => {
 						return (
 							<ActionButtons
-								duplicateClick={() =>
-									handelDuplicateDynamicField(index)
-								}
-								removeClick={() =>
-									handleOrderEntryRemove(index)
-								}
 								showRemoveButton={orderEntryField.length > 1}
 							/>
 						);
@@ -414,16 +408,6 @@ export default function Index() {
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
 					className='flex flex-col gap-4'>
-					<div>
-						<button type='button' onClick={addRow}>
-							Add row
-						</button>
-					</div>
-					<Spreadsheet
-						className='flex w-full'
-						columnLabels={columnLabels}
-						data={arr}
-					/>
 					<Header
 						{...{
 							endType,
@@ -440,6 +424,14 @@ export default function Index() {
 							is_logo_puller: getValues('is_logo_puller'),
 						}}
 					/>
+
+					{/* <DynamicField title='Details' handelAppend={addRow}>
+						<Spreadsheet
+							className='flex w-full'
+							columnLabels={columnLabels}
+							data={arr}
+						/>
+					</DynamicField> */}
 
 					<DynamicField
 						title='Details'

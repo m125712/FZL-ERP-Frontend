@@ -168,6 +168,32 @@ body {
 	box-shadow: 0 0 1px 0;
 }
 
+.Spreadsheet__header {
+	background-color: var(--secondary-color) !important;
+	color: var(--primary-content-color) !important;
+}
+
+.Spreadsheet__table {
+	border-collapse: collapse;
+	table-layout: fixed;
+	min-width: 100%;
+}
+
+.Spreadsheet__cell,
+.Spreadsheet__header {
+	min-width: 2em;
+	min-height: 1.9em;
+	height: 1.9em;
+	max-height: 1.9em;
+	border: 1px solid var(--border-color);
+	overflow: hidden;
+	word-break: keep-all;
+	white-space: nowrap;
+	text-align: left;
+	box-sizing: border-box;
+	user-select: none;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

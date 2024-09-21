@@ -12,6 +12,8 @@ import PageInfo from '@/util/PageInfo';
 const TrxToDying = lazy(() => import('./TrxToDyeing'));
 const Production = lazy(() => import('./Production'));
 const DyeingAgainstStock = lazy(() => import('./DyeingAgainstStock'));
+const TrxToStock = lazy(() => import('./ToStock'));
+
 export default function Index() {
 	const { data, isLoading, url } = useCommonCoilSFG();
 	const info = new PageInfo('Common/Coil/SFG', url, 'common__coil_sfg');
@@ -129,7 +131,7 @@ export default function Index() {
 				header: 'Dyeing Against Stock',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_to_dyeing'),
+				hidden: !haveAccess.includes('click_to_dyeing_against_stock'),
 				width: 'w-30',
 				cell: (info) => (
 					<Transfer
@@ -149,6 +151,32 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
+			{
+				accessorKey: 'to_stock_action',
+				header: 'To Stock',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_to_stock'),
+				width: 'w-30',
+				cell: (info) => (
+					<Transfer
+						onClick={() => handleTrxToStock(info.row.index)}
+					/>
+				),
+			},
+			{
+				accessorKey: 'stock_quantity',
+				header: (
+					<span>
+						Stock Quantity
+						<br />
+						(KG)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()).toFixed(3),
+			},
+
 			{
 				accessorKey: 'raw_per_kg_meter',
 				header: (
@@ -244,7 +272,16 @@ export default function Index() {
 		}));
 		window['dyeing_against_stock_modal'].showModal();
 	};
-
+	const handleTrxToStock = (idx) => {
+		const selectedProd = data[idx];
+		setUpdateCoilProd((prev) => ({
+			...prev,
+			...selectedProd,
+			item_name: selectedProd.type,
+			quantity: selectedProd.trx_quantity_in_dying,
+		}));
+		window['trx_to_stock_modal'].showModal();
+	};
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 	// if (error) return <h1>Error:{error}</h1>;
@@ -279,6 +316,15 @@ export default function Index() {
 			<Suspense>
 				<DyeingAgainstStock
 					modalId={'dyeing_against_stock_modal'}
+					{...{
+						updateCoilProd,
+						setUpdateCoilProd,
+					}}
+				/>
+			</Suspense>
+			<Suspense>
+				<TrxToStock
+					modalId={'trx_to_stock_modal'}
 					{...{
 						updateCoilProd,
 						setUpdateCoilProd,

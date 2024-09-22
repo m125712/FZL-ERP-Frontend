@@ -103,6 +103,7 @@ export default function Index({
 			isSmall={true}>
 			<Input label='name' {...{ register, errors }} />
 			<div className='m-2 flex items-center gap-1 text-sm'>
+				<label className='text-sm text-primary'>Used For</label>
 				<div className='w-1/4 rounded-md border border-secondary/30 bg-secondary px-1'>
 					<CheckBox
 						text='text-secondary-content'
@@ -177,6 +178,7 @@ export default function Index({
 				</div>
 			</div>
 			<div className='m-2 flex items-center gap-1 text-sm'>
+				<label className='text-primary'>Purpose</label>
 				<div className='w-1/2 rounded-md border border-secondary/30 bg-secondary px-1'>
 					<CheckBox
 						text='text-secondary-content'

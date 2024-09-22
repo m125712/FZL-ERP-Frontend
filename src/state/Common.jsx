@@ -30,13 +30,13 @@ export const useCommonTapeProductionByUUID = (uuid) =>
 export const useCommonTapeToCoil = () =>
 	createGlobalState({
 		queryKey: commonQK.tapeToCoil(),
-		url: `/zipper/tape-to-coil`,
+		url: `/zipper/tape-trx`,
 	});
 
 export const useCommonTapeToCoilByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: commonQK.tapeToCoilByUUID(uuid),
-		url: `/zipper/tape-to-coil/${uuid}`,
+		url: `/zipper/tape-trx/${uuid}`,
 	});
 
 // * RM * //

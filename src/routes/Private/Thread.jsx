@@ -5,13 +5,12 @@ import CountLength from '@pages/Thread/CountLength';
 import OrderInfo from '@pages/Thread/Order';
 import IndOrderInfo from '@pages/Thread/Order/Details';
 import OrderInfoEntry from '@pages/Thread/Order/Entry';
-import Machine from '@pages/Thread/Machine';
-import Swatch from '@pages/Thread/Swatch';
 import DyesCategory from '@pages/Thread/DyesCategory';
 import Programs from '@pages/Thread/Programs';
 import Coning from '@pages/Thread/Conneing';
 import ConingEntry from '@pages/Thread/Conneing/Entry';
 import ConingDetails from '@pages/Thread/Conneing/Details';
+
 
 export const ThreadRoutes = [
 	{
@@ -56,20 +55,7 @@ export const ThreadRoutes = [
 				actions: ['create', 'read', 'update', 'delete'],
 				hidden: true,
 			},
-			{
-				name: 'Machine',
-				path: '/thread/machine',
-				element: <Machine />,
-				page_name: 'thread__machine',
-				actions: ['create', 'read', 'update', 'delete'],
-			},
-			{
-				name: 'Swatch',
-				path: '/thread/swatch',
-				element: <Swatch />,
-				page_name: 'thread__swatch',
-				actions: ['read', 'update'],
-			},
+
 			{
 				name: 'DyesCategory',
 				path: '/thread/dyes-category',

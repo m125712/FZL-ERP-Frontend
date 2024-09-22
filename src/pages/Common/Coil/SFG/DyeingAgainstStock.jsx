@@ -2,56 +2,52 @@ import { useAuth } from '@/context/auth';
 import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
 import { useRHF } from '@/hooks';
 
-
-
 import { AddModal } from '@/components/Modal';
 import { Input, JoinInput } from '@/ui';
 
-
-
 import nanoid from '@/lib/nanoid';
-import { COIL_STOCK_NULL, NUMBER_REQUIRED, TAPE_TO_COIL_TRX_NULL, TAPE_TO_COIL_TRX_SCHEMA } from '@util/Schema';
+import {
+	DYEING_AGAINST_STOCK_NULL,
+	DYEING_AGAINST_STOCK_SCHEMA,
+	NUMBER_REQUIRED,
+} from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-
-
-
-
 
 export default function Index({
 	modalId = '',
-	updateTapeProd = {
+	updateCoilProd = {
 		uuid: null,
-		trx_quantity: null,
+		dyeing_stock: null,
 		quantity: null,
 	},
-	setUpdateTapeProd,
+	setUpdateCoilProd,
 }) {
 	const { user } = useAuth();
-	const { postData } = useCommonTapeSFG();
+	const { postData, invalidateQuery: invalidateCommonTapeSFG } =
+		useCommonTapeSFG();
 	const { invalidateQuery: invalidateCommonTapeToCoil } =
 		useCommonTapeToCoil();
 	const schema = {
-		...TAPE_TO_COIL_TRX_SCHEMA,
-
+		...DYEING_AGAINST_STOCK_SCHEMA,
 		trx_quantity: NUMBER_REQUIRED.max(
-			updateTapeProd?.quantity,
+			updateCoilProd?.quantity,
 			'More Than Max'
 		),
 	};
 
 	const { register, handleSubmit, errors, reset, context } = useRHF(
 		schema,
-		TAPE_TO_COIL_TRX_NULL
+		DYEING_AGAINST_STOCK_NULL
 	);
 
 	const onClose = () => {
-		setUpdateTapeProd((prev) => ({
+		setUpdateCoilProd((prev) => ({
 			...prev,
 			uuid: null,
-			trx_quantity: null,
+			dyeing_stock: null,
 			quantity: null,
 		}));
-		reset(COIL_STOCK_NULL);
+		reset(DYEING_AGAINST_STOCK_NULL);
 		window[modalId].close();
 	};
 
@@ -59,8 +55,8 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			tape_coil_uuid: updateTapeProd?.uuid,
-			to_section: 'coil',
+			tape_coil_uuid: updateCoilProd?.uuid,
+			to_section: 'coil_dyeing',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
@@ -71,21 +67,23 @@ export default function Index({
 			onClose,
 		});
 		invalidateCommonTapeToCoil();
+		invalidateCommonTapeSFG();
 	};
 
 	return (
 		<AddModal
 			id={modalId}
-			title={updateTapeProd?.uuid !== null && 'Tape -> Coil'}
+			title={updateCoilProd?.uuid !== null && 'Dyeing Against Stock'}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
 			<JoinInput
 				label='trx_quantity'
-				sub_label={`Max: ${updateTapeProd?.quantity}`}
+				title='Transfer Quantity'
+				sub_label={`Max: ${updateCoilProd?.quantity}`}
 				unit='KG'
-				placeholder={`Max: ${updateTapeProd?.quantity}`}
+				placeholder={`Max: ${updateCoilProd?.quantity}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

@@ -23,9 +23,10 @@ export default function Index({
 	setUpdateCoilProd,
 }) {
 	const { user } = useAuth();
-	const { postData } = useCommonTapeSFG();
-	// const { invalidateQuery: invalidateCommonTapeToCoil } =
-	// 	useCommonTapeToCoil();
+	const { postData, invalidateQuery: invalidateCommonTapeSFG } =
+		useCommonTapeSFG();
+	const { invalidateQuery: invalidateCommonTapeToCoil } =
+		useCommonTapeToCoil();
 	const schema = {
 		...DYEING_AGAINST_STOCK_SCHEMA,
 		trx_quantity: NUMBER_REQUIRED.max(
@@ -55,7 +56,7 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			tape_coil_uuid: updateCoilProd?.uuid,
-			to_section: 'dyeing',
+			to_section: 'coil_dyeing',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
@@ -65,7 +66,8 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
-		// invalidateCommonTapeToCoil();
+		invalidateCommonTapeToCoil();
+		invalidateCommonTapeSFG();
 	};
 
 	return (

@@ -127,7 +127,7 @@ export default function Index() {
 
 			// update /commercial/pi/{uuid}
 			const commercialPiPromise = await updateData.mutateAsync({
-				url: `${commercialPiUrl}/${data?.uuid}`,
+				url: `/commercial/pi-cash/${data?.uuid}`,
 				updatedData: commercialPiData,
 				uuid: data.uuid,
 				isOnCloseNeeded: false,

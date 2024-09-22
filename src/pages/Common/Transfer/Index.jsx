@@ -1,18 +1,25 @@
+import { lazy, useMemo, useState } from 'react';
+import { useDyeingTransfer } from '@/state/Dyeing';
+import { useNavigate } from 'react-router-dom';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useDyeingTransfer } from '@/state/Dyeing';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy,  useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 const Update = lazy(() => import('./EntryUpdate/Update'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useDyeingTransfer();
-	const info = new PageInfo('Dyeing Transfer', url, 'dyeing__transfer');
-	const haveAccess = useAccess('dyeing__transfer');
+	const info = new PageInfo(
+		'Dyeing Transfer',
+		url,
+		'common__dyeing_transfer'
+	);
+	const haveAccess = useAccess('common__dyeing_transfer');
 	const navigate = useNavigate();
 
 	console.log(data);
@@ -162,7 +169,7 @@ export default function Index() {
 	});
 
 	// Add
-	const handelAdd = () => navigate('/dyeing-and-iron/transfer/entry');
+	const handelAdd = () => navigate('/common/dyeing-transfer/entry');
 
 	const handelUpdate = (idx) => {
 		setUpdateTransfer((prev) => ({

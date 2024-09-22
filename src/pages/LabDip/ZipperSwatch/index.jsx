@@ -1,18 +1,20 @@
-import ReactTable from '@/components/Table';
-import { useAccess, useFetch } from '@/hooks';
-import { useDyeingSwatch } from '@/state/Dyeing';
-import { LinkWithCopy, ReactSelect } from '@/ui';
-import PageInfo from '@/util/PageInfo';
 import { useMemo } from 'react';
+import { useDyeingSwatch } from '@/state/Dyeing';
+import { useAccess, useFetch } from '@/hooks';
+
+import ReactTable from '@/components/Table';
+import { LinkWithCopy, ReactSelect } from '@/ui';
+
+import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
 	const { data, updateData, isLoading } = useDyeingSwatch();
 	const info = new PageInfo(
 		'Dyeing/Swatch',
 		'order/swatch',
-		'dyeing__dyeing_and_iron_swatch'
+		'lab_dip__zipper_swatch'
 	);
-	const haveAccess = useAccess('dyeing__dyeing_and_iron_swatch');
+	const haveAccess = useAccess('lab_dip__zipper_swatch');
 
 	// * fetching the data
 	const { value: recipe } = useFetch('/other/lab-dip/recipe/value/label');

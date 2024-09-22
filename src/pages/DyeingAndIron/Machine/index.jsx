@@ -17,7 +17,7 @@ export default function Index() {
 	const { data, isLoading, url, deleteData, updateData } = useThreadMachine();
 
 	const info = new PageInfo('Machine', url, 'thread__machine');
-	const haveAccess = useAccess('thread__machine');
+	const haveAccess = useAccess('dyeing__machine');
 	const columns = useMemo(
 		() => [
 			{

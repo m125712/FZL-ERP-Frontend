@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+
 import { useLayout } from '../layout-provider';
 import SidebarContent from './sidebar-content';
 

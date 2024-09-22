@@ -1,13 +1,15 @@
-import cn from '@/lib/cn';
-import confirmRouteMatch from '@/util/confirmRouteMatch';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
+import cn from '@/lib/cn';
+import confirmRouteMatch from '@/util/confirmRouteMatch';
+
 import SidebarFile from './sidebar-file';
 import { useSidebar } from './sidebar-provider';
 
-// Animation definitions for the sidebar folder
+//* Animation definitions for the sidebar folder
 const variants = {
 	animate: {
 		y: 0,
@@ -25,7 +27,7 @@ const variants = {
 	},
 };
 
-// Animation definitions for the folder's children
+//* Animation definitions for the folder's children
 const childVariants = {
 	open: {
 		y: 0,
@@ -47,10 +49,10 @@ const childVariants = {
 };
 
 const SidebarFolder = (props) => {
-	// Destructure props
+	//* Destructure props
 	const { path, name, children, disableCollapse } = props;
 
-	// Use navigation and sidebar context
+	//* Use navigation and sidebar context
 	const navigate = useNavigate();
 	const {
 		path: { pathname },
@@ -58,16 +60,16 @@ const SidebarFolder = (props) => {
 		setIsCloseAll,
 	} = useSidebar();
 
-	// State for folder openness
+	//* State for folder openness
 	const [isOpen, setIsOpen] = useState(false);
 
-	// Check if the current route matches the folder's path
+	//* Check if the current route matches the folder's path
 	const routeMatch = useMemo(
 		() => confirmRouteMatch(props, pathname),
 		[props, pathname]
 	);
 
-	// Update folder state based on route match and close-all state
+	//* Update folder state based on route match and close-all state
 	useEffect(() => {
 		if (routeMatch === true && !isCloseAll) {
 			setIsOpen(true);
@@ -78,12 +80,12 @@ const SidebarFolder = (props) => {
 		}
 	}, [path, isCloseAll, routeMatch]);
 
-	// If the folder is disabled from collapsing, render the file component
+	//* If the folder is disabled from collapsing, render the file component
 	if (disableCollapse) {
 		return <SidebarFile path={path} name={name} />;
 	}
 
-	// Determine the folder's class based on its state
+	//* Determine the folder's class based on its state
 	const folderClassName = cn(
 		'group relative z-10 flex w-full items-center justify-between gap-2 rounded-none rounded-r-md border-l-[3px] px-4 py-2 text-sm text-primary-content',
 		isOpen && !isCloseAll
@@ -91,7 +93,7 @@ const SidebarFolder = (props) => {
 			: 'border-transparent text-primary-content/70 hover:bg-secondary/20 hover:text-primary-content'
 	);
 
-	// Handle folder click
+	//* Handle folder click
 	const handleClick = () => {
 		setIsOpen((prev) => !prev);
 		setIsCloseAll(false);

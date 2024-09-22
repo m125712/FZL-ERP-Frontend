@@ -1,6 +1,5 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useSliderAssemblyStock } from '@/state/Slider';
-import { Plus } from 'lucide-react';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -12,6 +11,7 @@ import PageInfo from '@/util/PageInfo';
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 const Production = lazy(() => import('./Production'));
+const Transaction = lazy(() => import('./Transaction'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useSliderAssemblyStock();
@@ -26,12 +26,17 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
 			{
 				accessorKey: 'die_casting_body_name',
 				header: 'Body',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'die_casting_body_quantity',
+				header: 'Body QTY',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'die_casting_cap_name',
@@ -40,10 +45,22 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'die_casting_cap_quantity',
+				header: 'Cap QTY',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
 				accessorKey: 'die_casting_link_name',
 				header: 'Link',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'die_casting_link_quantity',
+				header: 'Link QTY',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'die_casting_puller_name',
@@ -52,9 +69,18 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'quantity',
+				accessorKey: 'die_casting_puller_quantity',
+				header: 'Puller QTY',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'action_add_production',
 				header: '',
 				enableColumnFilter: false,
+				enableSorting: false,
+				// hidden: !haveAccess.includes('click_production'),
+				width: 'w-8',
 				cell: (info) => {
 					return (
 						<Transfer
@@ -65,7 +91,28 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'Quantity',
+				header: 'Total Prod',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'action_add_transaction',
+				header: '',
+				enableColumnFilter: false,
+				enableSorting: false,
+				// hidden: !haveAccess.includes('click_transaction'),
+				width: 'w-8',
+				cell: (info) => {
+					return (
+						<Transfer
+							onClick={() => handelTransaction(info.row.index)}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'total_transaction_quantity',
+				header: 'Total Trx',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
@@ -126,6 +173,48 @@ export default function Index() {
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
 
+	// production
+	const [updateSliderProd, setUpdateSliderProd] = useState({
+		uuid: null,
+		stock_uuid: null,
+		production_quantity: null,
+		section: null,
+		wastage: null,
+		remarks: '',
+	});
+
+	const handelProduction = (idx) => {
+		const val = data[idx];
+
+		setUpdateSliderProd((prev) => ({
+			...prev,
+			...val,
+		}));
+
+		window['AssemblyProdModal'].showModal();
+	};
+
+	// transaction
+	const [updateSliderTrx, setUpdateSliderTrx] = useState({
+		uuid: null,
+		stock_uuid: null,
+		from_section: null,
+		to_section: null,
+		trx_quantity: null,
+		remarks: '',
+	});
+
+	const handelTransaction = (idx) => {
+		const val = data[idx];
+
+		setUpdateSliderTrx((prev) => ({
+			...prev,
+			...val,
+		}));
+
+		window['AssemblyTrxModal'].showModal();
+	};
+
 	// Update
 	const [updateStock, setUpdateStock] = useState({
 		uuid: null,
@@ -154,17 +243,6 @@ export default function Index() {
 		window[info.getDeleteModalId()].showModal();
 	};
 
-	const handelProduction = (idx) => {
-		const val = data[idx];
-
-		setUpdateSliderProd((prev) => ({
-			...prev,
-			...val,
-		}));
-
-		window['AssemblyStockProduction'].showModal();
-	};
-
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
@@ -189,6 +267,24 @@ export default function Index() {
 				/>
 			</Suspense>
 			<Suspense>
+				<Production
+					modalId='AssemblyProdModal'
+					{...{
+						updateSliderProd,
+						setUpdateSliderProd,
+					}}
+				/>
+			</Suspense>
+			<Suspense>
+				<Transaction
+					modalId='AssemblyTrxModal'
+					{...{
+						updateSliderTrx,
+						setUpdateSliderTrx,
+					}}
+				/>
+			</Suspense>
+			<Suspense>
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
@@ -197,16 +293,6 @@ export default function Index() {
 						setDeleteItem,
 						url,
 						deleteData,
-					}}
-				/>
-			</Suspense>
-
-			<Suspense>
-				<Production
-					modalId='AssemblyStockProduction'
-					{...{
-						updateStock,
-						setUpdateStock,
 					}}
 				/>
 			</Suspense>

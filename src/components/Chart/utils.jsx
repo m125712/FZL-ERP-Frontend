@@ -9,12 +9,12 @@ const groupScale = {
 };
 
 const legend = {
-	position: "top",
+	position: 'top',
 	// align: "start",
 	labels: {
 		boxHeight: 10,
 		usePointStyle: true,
-		font: { weight: "bolder" },
+		font: { weight: 'bolder' },
 	},
 };
 

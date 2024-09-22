@@ -3,18 +3,27 @@ import { useCommonTapeSFG } from '@/state/Common';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
+
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete, Transfer } from '@/ui';
 
+
+
 import PageInfo from '@/util/PageInfo';
+
+
+
+
 
 const TrxToCoil = lazy(() => import('./TrxToCoil'));
 const TrxToDying = lazy(() => import('./TrxToDying'));
 const Production = lazy(() => import('./Production'));
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DyeingAgainstStock = lazy(() => import('./DyeingAgainstStock'));
+const TrxToStock = lazy(() => import('./ToStock'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useCommonTapeSFG();
@@ -155,7 +164,7 @@ export default function Index() {
 				header: 'Dyeing Against Stock',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_to_dyeing'),
+				hidden: !haveAccess.includes('click_to_dyeing_against_stock'),
 				width: 'w-30',
 				cell: (info) => {
 					if (
@@ -176,6 +185,37 @@ export default function Index() {
 				header: (
 					<span>
 						Trx Quantity in Dyeing
+						<br />
+						(KG)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()).toFixed(3),
+			},
+			{
+				accessorKey: 'to_stock_action',
+				header: 'To Stock',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_to_stock'),
+				width: 'w-30',
+				cell: (info) => {
+					if (
+						info.row.original?.item_name?.toLowerCase() != 'nylon'
+					) {
+						return (
+							<Transfer
+								onClick={() => handleTrxToStock(info.row.index)}
+							/>
+						);
+					}
+				},
+			},
+			{
+				accessorKey: 'stock_quantity',
+				header: (
+					<span>
+						Stock Quantity
 						<br />
 						(KG)
 					</span>
@@ -307,6 +347,16 @@ export default function Index() {
 		}));
 		window['dyeing_against_stock_modal'].showModal();
 	};
+	const handleTrxToStock = (idx) => {
+		const selectedProd = data[idx];
+		setUpdateTapeProd((prev) => ({
+			...prev,
+			...selectedProd,
+			item_name: selectedProd.type,
+			quantity: selectedProd.trx_quantity_in_dying,
+		}));
+		window['trx_to_stock_modal'].showModal();
+	};
 	const handleTrxToDying = (idx) => {
 		// const selectedProd = data[idx];
 		// setUpdateTapeProd((prev) => ({
@@ -394,6 +444,13 @@ export default function Index() {
 				/>
 				<DyeingAgainstStock
 					modalId={'dyeing_against_stock_modal'}
+					{...{
+						updateTapeProd,
+						setUpdateTapeProd,
+					}}
+				/>
+				<TrxToStock
+					modalId={'trx_to_stock_modal'}
 					{...{
 						updateTapeProd,
 						setUpdateTapeProd,

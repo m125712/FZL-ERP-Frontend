@@ -23,9 +23,9 @@ export default function Index({
 	setUpdateTapeProd,
 }) {
 	const { user } = useAuth();
-	const { postData } = useCommonTapeSFG();
-	// const { invalidateQuery: invalidateCommonTapeToCoil } =
-	// 	useCommonTapeToCoil();
+	const { postData, invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
+	const { invalidateQuery: invalidateCommonTapeToCoil } =
+		useCommonTapeToCoil();
 	const schema = {
 		...DYEING_AGAINST_STOCK_SCHEMA,
 		trx_quantity: NUMBER_REQUIRED.max(
@@ -55,19 +55,18 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			tape_coil_uuid: updateTapeProd?.uuid,
-			to_section:'dyeing',
+			to_section: 'dyeing',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
 
-	
-
-		// await postData.mutateAsync({
-		// 	url: `/zipper/tape-to-coil`,
-		// 	newData: updatedData,
-		// 	onClose,
-		// });
-		// invalidateCommonTapeToCoil();
+		await postData.mutateAsync({
+			url: `/zipper/tape-trx`,
+			newData: updatedData,
+			onClose,
+		});
+		 invalidateCommonTapeToCoil();
+		invalidateCommonTapeSFG();
 	};
 
 	return (

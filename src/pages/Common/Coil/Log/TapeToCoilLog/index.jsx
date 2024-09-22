@@ -13,7 +13,7 @@ import AddOrUpdate from './AddOrUpdate';
 
 export default function TapeToCoil() {
 	const { data, isLoading, url, deleteData } = useCommonTapeToCoil();
-	const info = new PageInfo('Tape -> Stock/Coil', 'tape-to-coil-trx');
+	const info = new PageInfo('Tape -> Stock', 'tape-to-coil-trx');
 	const haveAccess = useAccess('common__tape_log');
 
 	const columns = useMemo(

@@ -8,6 +8,7 @@ import {
 	Tooltip,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+
 import { bar_chart_options } from './utils';
 
 ChartJS.register(

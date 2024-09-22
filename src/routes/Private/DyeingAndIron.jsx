@@ -1,45 +1,34 @@
 // Dyeing And Iron
-import DyeingRMStock from '@/pages/DyeingAndIron/RMStock';
-import DyeingSFG from '@/pages/DyeingAndIron/SFG';
-import DyeingLog from '@/pages/DyeingAndIron/Log';
-import DyeingSwatch from '@/pages/DyeingAndIron/Swatch';
-import DyeingPlanning from '@/pages/DyeingAndIron/Planning';
-
-// * SNO
-import DyeingPlanningSNO from '@/pages/DyeingAndIron/PlanningSNO';
-import DyeingPlanningSNOEntry from '@/pages/DyeingAndIron/PlanningSNO/Entry';
-import DyeingPlanningSNODetails from '@/pages/DyeingAndIron/PlanningSNO/Details';
-
-// * Head office
-import DyeingPlanningHeadOffice from '@/pages/DyeingAndIron/PlanningHeadOffice';
-import DyeingPlanningHeadOfficeEntry from '@/pages/DyeingAndIron/PlanningHeadOffice/Entry';
-import DyeingPlanningHeadOfficeDetails from '@/pages/DyeingAndIron/PlanningHeadOffice/Details';
 
 // * Batch
-import DyeingBatch from '@/pages/DyeingAndIron/Batch';
-import DyeingBatchEntry from '@/pages/DyeingAndIron/Batch/Entry';
-import DyeingBatchDetails from '@/pages/DyeingAndIron/Batch/Details';
 
 // * Batch Production
-import DyeingBatchProduction from '@/pages/DyeingAndIron/Batch/Production';
-
-// * Batch Transfer
-import DyeingTransfer from '@/pages/DyeingAndIron/Transfer';
-
-// * Batch Transfer Entry
-import DyeingTransferEntry from '@/pages/DyeingAndIron/Transfer/EntryUpdate';
-
+import DyeingLog from '@/pages/DyeingAndIron/Log';
+//* Machine
+import Machine from '@/pages/DyeingAndIron/Machine';
+import DyeingPlanning from '@/pages/DyeingAndIron/Planning';
+// * Head office
+import DyeingPlanningHeadOffice from '@/pages/DyeingAndIron/PlanningHeadOffice';
+import DyeingPlanningHeadOfficeDetails from '@/pages/DyeingAndIron/PlanningHeadOffice/Details';
+import DyeingPlanningHeadOfficeEntry from '@/pages/DyeingAndIron/PlanningHeadOffice/Entry';
+// * SNO
+import DyeingPlanningSNO from '@/pages/DyeingAndIron/PlanningSNO';
+import DyeingPlanningSNODetails from '@/pages/DyeingAndIron/PlanningSNO/Details';
+import DyeingPlanningSNOEntry from '@/pages/DyeingAndIron/PlanningSNO/Entry';
+import DyeingRMStock from '@/pages/DyeingAndIron/RMStock';
+import DyeingSFG from '@/pages/DyeingAndIron/SFG';
 // * Batch Thread
 import DyeingThreadBatch from '@/pages/DyeingAndIron/ThreadBatch';
-
-// * Batch Thread Entry
-import DyeingThreadBatchEntry from '@/pages/DyeingAndIron/ThreadBatch/Entry';
-
-// * Batch Thread Details
-import DyeingThreadBatchDetails from '@/pages/DyeingAndIron/ThreadBatch/Details';
-
 //* Batch Thread Conneing
 import DyeingThreadBatchConneing from '@/pages/DyeingAndIron/ThreadBatch/Conneing/Entry';
+// * Batch Thread Details
+import DyeingThreadBatchDetails from '@/pages/DyeingAndIron/ThreadBatch/Details';
+// * Batch Thread Entry
+import DyeingThreadBatchEntry from '@/pages/DyeingAndIron/ThreadBatch/Entry';
+import DyeingZipperBatch from '@/pages/DyeingAndIron/ZipperBatch';
+import DyeingZipperBatchDetails from '@/pages/DyeingAndIron/ZipperBatch/Details';
+import DyeingZipperBatchEntry from '@/pages/DyeingAndIron/ZipperBatch/Entry';
+import DyeingZipperBatchProduction from '@/pages/DyeingAndIron/ZipperBatch/Production';
 
 export const DyeingAndIronRoutes = [
 	{
@@ -76,13 +65,7 @@ export const DyeingAndIronRoutes = [
 					'click_delete_rm_order',
 				],
 			},
-			{
-				name: 'Swatch',
-				path: '/dyeing-and-iron/swatch',
-				element: <DyeingSwatch />,
-				page_name: 'dyeing__dyeing_and_iron_swatch',
-				actions: ['read', 'update'],
-			},
+
 			{
 				name: 'Planning',
 				path: '/dyeing-and-iron/planning',
@@ -157,63 +140,44 @@ export const DyeingAndIronRoutes = [
 
 			// * Batch
 			{
-				name: 'Batch',
-				path: '/dyeing-and-iron/batch',
-				element: <DyeingBatch />,
-				page_name: 'dyeing__batch',
+				name: 'Zipper Batch',
+				path: '/dyeing-and-iron/zipper-batch',
+				element: <DyeingZipperBatch />,
+				page_name: 'dyeing__zipper_batch',
 				actions: ['create', 'read', 'update'],
 			},
 			{
-				name: 'Batch Entry',
-				path: '/dyeing-and-iron/batch/entry',
-				element: <DyeingBatchEntry />,
+				name: 'Zipper Batch Entry',
+				path: '/dyeing-and-iron/zipper-batch/entry',
+				element: <DyeingZipperBatchEntry />,
 				hidden: true,
-				page_name: 'dyeing__batch_entry',
+				page_name: 'dyeing__zipper_batch_entry',
 				actions: ['create', 'read', 'update'],
 			},
 			{
-				name: 'Batch Update',
-				path: '/dyeing-and-iron/batch/:batch_uuid/update',
-				element: <DyeingBatchEntry />,
+				name: 'Zipper Batch Update',
+				path: '/dyeing-and-iron/zipper-batch/:batch_uuid/update',
+				element: <DyeingZipperBatchEntry />,
 				hidden: true,
-				page_name: 'dyeing__batch_entry_update',
+				page_name: 'dyeing__zipper_batch_entry_update',
 				actions: ['create', 'read', 'update'],
 			},
 			{
-				name: 'Batch Details',
-				path: '/dyeing-and-iron/batch/:batch_uuid',
-				element: <DyeingBatchDetails />,
+				name: ' Zipper Batch Details',
+				path: '/dyeing-and-iron/zipper-batch/:batch_uuid',
+				element: <DyeingZipperBatchDetails />,
 				hidden: true,
-				page_name: 'dyeing__batch_details',
+				page_name: 'dyeing__zipper_batch_details',
 				actions: ['read'],
 			},
 
 			// * Batch Production
 			{
 				name: 'Batch Production',
-				path: '/dyeing-and-iron/batch/batch-production/:batch_prod_uuid',
-				element: <DyeingBatchProduction />,
-				page_name: 'dyeing__batch_production',
+				path: '/dyeing-and-iron/zipper-batch/batch-production/:batch_prod_uuid',
+				element: <DyeingZipperBatchProduction />,
+				page_name: 'dyeing__zipper_batch_production',
 				hidden: true,
-				actions: ['create', 'read', 'update'],
-			},
-
-			// * Batch Transfer
-			{
-				name: 'Dyeing Transfer',
-				path: '/dyeing-and-iron/transfer',
-				element: <DyeingTransfer />,
-				page_name: 'dyeing__transfer',
-				actions: ['create', 'read', 'update'],
-			},
-
-			// * Batch Transfer Entry
-			{
-				name: 'Dyeing Transfer Entry',
-				path: '/dyeing-and-iron/transfer/entry',
-				element: <DyeingTransferEntry />,
-				hidden: true,
-				page_name: 'dyeing__transfer_entry',
 				actions: ['create', 'read', 'update'],
 			},
 
@@ -255,22 +219,23 @@ export const DyeingAndIronRoutes = [
 				page_name: 'dyeing__thread_batch_entry_update',
 				actions: ['create', 'read', 'update'],
 			},
-			{
-				name: 'Dyeing Transfer Update',
-				path: '/dyeing-and-iron/transfer/:transfer_uui/update',
-				element: <DyeingTransferEntry />,
-				hidden: true,
-				page_name: 'dyeing__transfer_update',
-				actions: ['create', 'read', 'update'],
-			},
 			// *Dyeing ThreadBatch Conening
 			{
 				name: 'Batch Conneing',
 				path: '/dyeing-and-iron/thread-batch/conneing/:batch_con_uuid',
 				element: <DyeingThreadBatchConneing />,
-				page_name: 'dyeing__batch_conneing',
+				page_name: 'dyeing__thread_batch_conneing',
 				hidden: true,
 				actions: ['create', 'read', 'update'],
+			},
+
+			// * Machine
+			{
+				name: 'Machine',
+				path: '/dyeing-and-iron/machine',
+				element: <Machine />,
+				page_name: 'dyeing__machine',
+				actions: ['create', 'read', 'update', 'delete'],
 			},
 		],
 	},

@@ -5,6 +5,7 @@ import { JoinInput, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import {
+	NUMBER_DOUBLE_REQUIRED,
 	NUMBER_REQUIRED,
 	SFG_PRODUCTION_SCHEMA_IN_KG,
 	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
@@ -38,7 +39,7 @@ export default function Index({
 	const { register, handleSubmit, errors, reset, watch, control, context } = useRHF(
 		{
 			...SFG_PRODUCTION_SCHEMA_IN_KG,
-			production_quantity_in_kg: NUMBER_REQUIRED.max(
+			production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.max(
 				MAX_PROD_KG,
 				'Beyond Max Quantity'
 			),

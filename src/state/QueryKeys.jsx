@@ -787,8 +787,27 @@ export const sliderQK = {
 		uuid,
 	],
 
-	// * slider coloring log production
+	// * Slider Assembly Stock Transaction
+	sliderAssemblyStockTransaction: () => [
+		...sliderQK.all(),
+		'assembly-stock-transaction',
+	],
+	sliderAssemblyStockTransactionByUUID: (uuid) => [
+		...sliderQK.sliderAssemblyStockTransaction(),
+		uuid,
+	],
 
+	// * slider assembly stock production
+	sliderAssemblyStockProduction: () => [
+		...sliderQK.all(),
+		'assembly-stock-production',
+	],
+	sliderAssemblyStockProductionByUUID: (uuid) => [
+		...sliderQK.sliderAssemblyStockProduction(),
+		uuid,
+	],
+	
+	// * slider coloring log production
 	sliderColoringLogProduction: () => [
 		...sliderQK.all(),
 		'coloring-log-production',

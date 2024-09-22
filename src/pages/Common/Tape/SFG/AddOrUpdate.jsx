@@ -37,7 +37,7 @@ export default function Index({
 	);
 
 	const { value: item } = useFetch(`/other/order-properties/by/item`);
-	console.log(item);
+
 	const { value: zipper_number } = useFetch(
 		`/other/order-properties/by/zipper_number`
 	);

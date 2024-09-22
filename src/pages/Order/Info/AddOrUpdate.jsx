@@ -39,6 +39,7 @@ export default function Index({
 		getValues,
 		context,
 		watch,
+		setValue,
 	} = useRHF(ORDER_INFO_SCHEMA, ORDER_INFO_NULL);
 
 	const [partyId, setPartyId] = useState(getValues('party_uuid'));
@@ -55,18 +56,14 @@ export default function Index({
 		[partyId]
 	);
 
-	const getResult = (key) =>
-		typeof getValues(key) !== 'boolean' && getValues(key) === 1
-			? true
-			: false;
+	// const getResult = (key) =>
+	// 	typeof getValues(key) !== 'boolean' && getValues(key) === 1
+	// 		? true
+	// 		: false;
 
-	const [isSample, setIsSample] = useState(getResult('is_sample'));
-	const [isBill, setIsBill] = useState(getResult('is_bill'));
-
-	const CashOptions = [
-		{ value: 1, label: 'Cash' },
-		{ value: 0, label: 'LC' },
-	];
+	// const [isSample, setIsSample] = useState(getResult('is_sample'));
+	// const [isBill, setIsBill] = useState(getResult('is_bill'));
+	// const [isCash, setIsCash] = useState(getResult('is_cash'));
 
 	const PriorityOptions = [
 		{ value: 'FIFO', label: 'FIFO' },
@@ -105,9 +102,9 @@ export default function Index({
 		) {
 			const updatedData = {
 				...data,
-				is_sample: isSample ? 1 : 0,
-				is_bill: isBill ? 1 : 0,
-				is_cash: data.is_cash ? 1 : 0,
+				is_sample: data?.is_sample ? 1 : 0,
+				is_bill: data?.is_bill ? 1 : 0,
+				is_cash: data?.is_cash ? 1 : 0,
 				status: data.status ? 1 : 0,
 				updated_at: GetDateTime(),
 			};
@@ -125,9 +122,9 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			is_sample: isSample ? 1 : 0,
-			is_bill: isBill ? 1 : 0,
-			is_cash: data.is_cash ? 1 : 0,
+			is_sample: data?.is_sample ? 1 : 0,
+			is_bill: data?.is_bill ? 1 : 0,
+			is_cash: data?.is_cash ? 1 : 0,
 			status: 0,
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
@@ -161,8 +158,15 @@ export default function Index({
 						label='is_sample'
 						title='Sample'
 						text='text-primary-content'
-						defaultChecked={isSample}
-						onChange={(e) => setIsSample(e.target.checked)}
+						defaultChecked={
+							getValues('is_sample') === 1 ||
+							getValues('is_sample') === true
+								? setValue('is_sample', true)
+								: setValue('is_sample', false)
+						}
+						onChange={(e) =>
+							setValue('is_sample', e.target.checked)
+						}
 						{...{ register, errors }}
 					/>
 				</div>
@@ -171,8 +175,28 @@ export default function Index({
 						title='Bill'
 						label='is_bill'
 						text='text-primary-content'
-						defaultChecked={isBill}
-						onChange={(e) => setIsBill(e.target.checked)}
+						defaultChecked={
+							getValues('is_bill') === 1 ||
+							getValues('is_bill') === true
+								? setValue('is_bill', true)
+								: setValue('is_bill', false)
+						}
+						onChange={(e) => setValue('is_bill', e.target.checked)}
+						{...{ register, errors }}
+					/>
+				</div>
+				<div className='rounded-md bg-primary px-1'>
+					<CheckBox
+						title='Cash'
+						label='is_cash'
+						text='text-primary-content'
+						defaultChecked={
+							getValues('is_cash') === 1 ||
+							getValues('is_cash') === true
+								? setValue('is_cash', true)
+								: setValue('is_cash', false)
+						}
+						onChange={(e) => setValue('is_cash', e.target.checked)}
 						{...{ register, errors }}
 					/>
 				</div>
@@ -326,7 +350,7 @@ export default function Index({
 				</FormField>
 			</div>
 			<div className='flex flex-col gap-1 md:flex-row'>
-				<FormField label='is_cash' title='Cash / LC' errors={errors}>
+				{/* <FormField label='is_cash' title='Cash / LC' errors={errors}>
 					<Controller
 						name={'is_cash'}
 						control={control}
@@ -345,14 +369,7 @@ export default function Index({
 							);
 						}}
 					/>
-				</FormField>
-				{watch('is_cash') === 1 && (
-					<Input
-						label='conversion_rate'
-						title='Conversion Rate'
-						{...{ register, errors }}
-					/>
-				)}
+				</FormField> */}
 				<FormField
 					label='marketing_priority'
 					title='S&M Priority'

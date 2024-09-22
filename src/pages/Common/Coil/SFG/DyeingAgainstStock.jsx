@@ -1,5 +1,9 @@
 import { useAuth } from '@/context/auth';
-import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
+import {
+	useCommonCoilSFG,
+	useCommonTapeSFG,
+	useCommonTapeToCoil,
+} from '@/state/Common';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -23,8 +27,8 @@ export default function Index({
 	setUpdateCoilProd,
 }) {
 	const { user } = useAuth();
-	const { postData, invalidateQuery: invalidateCommonTapeSFG } =
-		useCommonTapeSFG();
+	const { postData, invalidateQuery: invalidateCommonCoilSFG } =
+		useCommonCoilSFG();
 	const { invalidateQuery: invalidateCommonTapeToCoil } =
 		useCommonTapeToCoil();
 	const schema = {
@@ -67,7 +71,7 @@ export default function Index({
 			onClose,
 		});
 		invalidateCommonTapeToCoil();
-		invalidateCommonTapeSFG();
+		invalidateCommonCoilSFG();
 	};
 
 	return (

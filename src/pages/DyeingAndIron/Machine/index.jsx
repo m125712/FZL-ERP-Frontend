@@ -27,17 +27,18 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'max_capacity',
-				header: 'Max Capacity',
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(3),
-			},
-			{
 				accessorKey: 'min_capacity',
 				header: 'Min Capacity',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
+			{
+				accessorKey: 'max_capacity',
+				header: 'Max Capacity',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()).toFixed(3),
+			},
+
 			{
 				accessorKey: 'is_nylon',
 				header: 'Nylon',

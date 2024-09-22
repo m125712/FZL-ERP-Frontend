@@ -1742,6 +1742,8 @@ export const DYEING_PLANNING_HEADOFFICE_NULL = {
 // * Dyeing Planning Batch schema*//
 
 export const DYEING_BATCH_SCHEMA = {
+	machine_uuid: STRING_REQUIRED,
+	slot: NUMBER.nullable(),
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
 		yup.object().shape({
@@ -1766,6 +1768,8 @@ export const DYEING_BATCH_SCHEMA = {
 };
 
 export const DYEING_BATCH_NULL = {
+	machine_uuid: null,
+	slot: null,
 	remarks: '',
 	batch_entry: [
 		{
@@ -1779,6 +1783,8 @@ export const DYEING_BATCH_NULL = {
 // * Dyeing Thread Batch schema*//
 
 export const DYEING_THREAD_BATCH_SCHEMA = {
+	machine_uuid: STRING_REQUIRED,
+	slot: NUMBER.nullable(),
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
 		yup.object().shape({
@@ -1788,6 +1794,8 @@ export const DYEING_THREAD_BATCH_SCHEMA = {
 };
 
 export const DYEING_THREAD_BATCH_NULL = {
+	machine_uuid: null,
+	slot: null,
 	remarks: '',
 	batch_entry: [
 		{

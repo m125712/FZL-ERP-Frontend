@@ -38,45 +38,7 @@ export default function Index() {
 				accessorKey: 'item_name',
 				header: 'Item',
 				enableColumnFilter: false,
-				cell: (info) => {
-					const { is_logo_puller, is_logo_body } =
-						info?.row?.original;
-
-					const renderBadges = () => {
-						const badges = [
-							{
-								label: 'Logo Body',
-								isActive: is_logo_body === 1,
-							},
-							{
-								label: 'Logo Puller',
-								isActive: is_logo_puller === 1,
-							},
-						];
-
-						return badges;
-					};
-
-					return (
-						<div>
-							<span>{info.getValue()}</span>
-
-							{renderBadges().length > 0 && (
-								<div className='mt-1 flex w-max max-w-[200px] flex-wrap gap-2'>
-									{renderBadges()
-										.filter((b) => b.isActive)
-										.map((e) => (
-											<div
-												key={e.label}
-												className='badge badge-secondary badge-sm'>
-												{e.label}
-											</div>
-										))}
-								</div>
-							)}
-						</div>
-					);
-				},
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'zipper_number_name',

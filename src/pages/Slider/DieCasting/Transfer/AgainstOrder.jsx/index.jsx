@@ -1,14 +1,17 @@
-import { Suspense } from '@/components/Feedback';
-import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
+import { lazy, useEffect, useMemo, useState } from 'react';
 import {
 	useSliderDieCastingStock,
 	useSliderDieCastingTransferAgainstOrder,
 } from '@/state/Slider';
-import { DateTime, EditDelete } from '@/ui';
-import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAccess } from '@/hooks';
+
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
+import { DateTime, EditDelete } from '@/ui';
+
+import PageInfo from '@/util/PageInfo';
+
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
@@ -41,7 +44,13 @@ const Index = () => {
 			},
 			{
 				accessorKey: 'trx_quantity',
-				header: 'quantity',
+				header: 'Quantity (PCS)',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'weight',
+				header: 'Weight (KG)',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
@@ -185,7 +194,7 @@ const Index = () => {
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
-	
+
 	return (
 		<>
 			<ReactTable

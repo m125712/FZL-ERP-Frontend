@@ -8,7 +8,6 @@ import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { ShowLocalToast } from '@/components/Toast';
 import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
@@ -158,6 +157,13 @@ export default function Index({
 				label='production_quantity'
 				unit='PCS'
 				sub_label={`MAX: ${MAX_PROD} PCS`}
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				title='Production Weight'
+				label='weight'
+				unit='KG'
+				sub_label={`MAX: ${MAX_PROD} KG`}
 				{...{ register, errors }}
 			/>
 			<JoinInput

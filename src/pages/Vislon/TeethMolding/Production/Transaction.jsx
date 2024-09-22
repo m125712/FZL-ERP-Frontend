@@ -4,7 +4,7 @@ import { useRHF } from '@/hooks';
 import { Input, JoinInput } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import {
-	NUMBER_REQUIRED,
+	NUMBER_DOUBLE_REQUIRED,
 	VISLON_TRANSACTION_SCHEMA,
 	VISLON_TRANSACTION_SCHEMA_NULL,
 } from '@util/Schema';
@@ -28,11 +28,11 @@ export default function Index({
 	const { postData } = useVislonTMP();
 	const { user } = useAuth();
 
-	const { register, handleSubmit, errors, reset, watch, control, context } =
+	const { register, handleSubmit, errors, reset, control, context } =
 		useRHF(
 			{
 				...VISLON_TRANSACTION_SCHEMA,
-				trx_quantity_in_kg: NUMBER_REQUIRED.max(
+				trx_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.max(
 					Number(updateTeethMoldingTRX?.teeth_molding_prod),
 					'Beyond Max Quantity'
 				),

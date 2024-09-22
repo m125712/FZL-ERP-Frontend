@@ -1,16 +1,18 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
-import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import {
-	SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
-	SLIDER_ASSEMBLY_TRANSACTION_NULL,
-	NUMBER_REQUIRED,
-} from '@util/Schema';
-import { useSliderAssemblyTransferEntryByUUID } from '@/state/Slider';
 import { useEffect } from 'react';
+import { useSliderAssemblyTransferEntryByUUID } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
-import * as yup from 'yup';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, JoinInput } from '@/ui';
+
+import {
+	NUMBER_DOUBLE_REQUIRED,
+	NUMBER_REQUIRED,
+	SLIDER_ASSEMBLY_TRANSACTION_NULL,
+	SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
+} from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -45,6 +47,7 @@ export default function Index({
 				updateSliderTrx?.max_sa_quantity,
 				'Beyond Max Quantity'
 			),
+			weight: NUMBER_DOUBLE_REQUIRED,
 		},
 		SLIDER_ASSEMBLY_TRANSACTION_NULL
 	);
@@ -114,6 +117,12 @@ export default function Index({
 				label='trx_quantity'
 				unit='PCS'
 				sub_label={`Max: ${Number(updateSliderTrx?.max_sa_quantity)} PCS`}
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				label='weight'
+				unit='KG'
+				sub_label={`Max: ${Number(updateSliderTrx?.max_sa_quantity)} KG`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

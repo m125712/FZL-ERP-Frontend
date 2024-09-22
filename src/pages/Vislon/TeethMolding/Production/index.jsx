@@ -1,10 +1,12 @@
+import { lazy, useMemo, useState } from 'react';
+import { useVislonTMP } from '@/state/Vislon';
+import { useAccess, useFetch } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetch } from '@/hooks';
-import { useVislonTMP } from '@/state/Vislon';
 import { LinkWithCopy, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useMemo, useState } from 'react';
 
 const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
@@ -18,8 +20,6 @@ export default function Index() {
 	);
 
 	const haveAccess = useAccess('vislon__teeth_molding_production');
-
-	const [teethMoldingProd, setTeethMoldingProd] = useState([]);
 
 	// * columns
 	const columns = useMemo(
@@ -80,7 +80,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-
 			{
 				accessorKey: 'action_add_production',
 				header: '',

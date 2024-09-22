@@ -111,6 +111,7 @@ const Index = () => {
 				uuid: nanoid(),
 				die_casting_uuid: item.uuid,
 				quantity: item.assigned_quantity,
+				weight: item.assigned_weight,
 				remarks: item.remarks,
 				created_by: user?.uuid,
 				created_at,
@@ -185,8 +186,16 @@ const Index = () => {
 	};
 
 	useEffect(() => {
-		setValue('stocks', stocks);
-	}, [stocks]);
+		setValue(
+			'stocks',
+			stocks?.filter(
+				(field) =>
+					watch('section') === 'coloring'
+						? !allowedTypes.includes(field.type) // Include if 'coloring'
+						: allowedTypes.includes(field.type) // Exclude if not 'coloring'
+			)
+		);
+	}, [stocks, watch('section')]);
 
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
@@ -236,6 +245,8 @@ const Index = () => {
 	const thClass =
 		'group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300';
 
+	const allowedTypes = ['body', 'cap', 'puller', 'link'];
+
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}
@@ -283,7 +294,9 @@ const Index = () => {
 							'Puller Link',
 							'Stopper Type',
 							'Quantity',
+							'Weight (KG)',
 							'Assigned QTY (PCS)',
+							'Assigned Weight (KG)',
 							'Remarks',
 						].map((item) => {
 							return (
@@ -295,9 +308,10 @@ const Index = () => {
 					</>
 				}>
 				{stockFields.length === 0 && <TableNoData colSpan={11} />}
+				{/* (watch('section') === 'coloring' || watch('section') === 'assembly' && stockFields.length > 0) */}
 
 				{stockFields.length > 0 &&
-					stockFields.map((item, index) => {
+					stockFields?.map((item, index) => {
 						return (
 							<tr key={item.id}>
 								<td className={cn(`w-8 ${rowClass}`)}>
@@ -388,7 +402,10 @@ const Index = () => {
 								<td className={cn('w-24', rowClass)}>
 									{Number(item.quantity)}
 								</td>
-
+								{/* Weight */}
+								<td className={cn('w-24', rowClass)}>
+									{Number(item.weight)}
+								</td>
 								{/* PROVIDED QTY */}
 								<td className={cn('w-24', rowClass)}>
 									<Input
@@ -398,6 +415,18 @@ const Index = () => {
 										dynamicerror={
 											errors?.[`stocks`]?.[index]
 												?.assigned_quantity
+										}
+									/>
+								</td>
+								{/* PROVIDED QTY */}
+								<td className={cn('w-24', rowClass)}>
+									<Input
+										label={`stocks[${index}].assigned_weight`}
+										is_title_needed='false'
+										register={register}
+										dynamicerror={
+											errors?.[`stocks`]?.[index]
+												?.assigned_weight
 										}
 									/>
 								</td>

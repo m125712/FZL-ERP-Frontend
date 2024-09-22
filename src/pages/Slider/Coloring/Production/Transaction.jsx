@@ -1,17 +1,22 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
 import {
-	SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
-	SLIDER_ASSEMBLY_TRANSACTION_NULL,
-	NUMBER_REQUIRED,
-} from '@util/Schema';
-
+	useSliderAssemblyTransferEntry,
+	useSliderColoringProduction,
+} from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, JoinInput } from '@/ui';
+
 import nanoid from '@/lib/nanoid';
-import { useSliderAssemblyTransferEntry, useSliderColoringProduction } from '@/state/Slider';
+import {
+	NUMBER_REQUIRED,
+	NUMBER_DOUBLE_REQUIRED,
+	SLIDER_ASSEMBLY_TRANSACTION_NULL,
+	SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
+} from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -27,7 +32,7 @@ export default function Index({
 	setUpdateSliderTrx,
 }) {
 	const { postData, url } = useSliderAssemblyTransferEntry();
-	const { invalidateQuery} = useSliderColoringProduction();
+	const { invalidateQuery } = useSliderColoringProduction();
 	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
@@ -38,6 +43,7 @@ export default function Index({
 					updateSliderTrx?.coloring_prod,
 					'Beyond Max Quantity'
 				),
+				weight: NUMBER_DOUBLE_REQUIRED,
 			},
 			SLIDER_ASSEMBLY_TRANSACTION_NULL
 		);
@@ -96,6 +102,13 @@ export default function Index({
 				label='trx_quantity'
 				sub_label={`MAX: ${Number(updateSliderTrx?.coloring_prod)} PCS`}
 				unit='PCS'
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				title='Transaction Weight'
+				label='weight'
+				unit='KG'
+				sub_label={`MAX: ${Number(updateSliderTrx?.coloring_prod)} KG`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

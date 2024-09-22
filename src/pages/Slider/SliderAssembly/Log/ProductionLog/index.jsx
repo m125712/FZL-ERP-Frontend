@@ -1,13 +1,15 @@
-import { Suspense } from '@/components/Feedback';
-import ReactTable from '@/components/Table';
+import { useMemo, useState } from 'react';
+import { useSliderAssemblyLogProduction } from '@/state/Slider';
 import { useAccess } from '@/hooks';
 
+import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
 import { EditDelete, LinkWithCopy } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useMemo, useState } from 'react';
+
 import AddOrUpdate from './AddOrUpdate';
-import { useSliderAssemblyLogProduction } from '@/state/Slider';
 
 export default function Index() {
 	const { data, isLoading, deleteData } = useSliderAssemblyLogProduction();
@@ -34,15 +36,21 @@ export default function Index() {
 					);
 				},
 			},
+			,
+			{
+				accessorKey: 'item_description',
+				header: 'Item Dsc',
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'item_name',
-				header: 'Item name',
+				header: 'Item',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'zipper_number_name',
-				header: 'Item Zipper number',
+				header: 'Zipper Number',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -53,20 +61,20 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'lock_type_name',
+				header: 'Lock Type',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'puller_type_name',
-				header: 'Puller',
+				header: 'Puller Type',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'logo_type_name',
-				header: 'Logo',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'slider_body_shape_name',
-				header: 'Slider Body',
+				accessorKey: 'puller_color_name',
+				header: 'Puller Color',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -74,10 +82,53 @@ export default function Index() {
 				accessorKey: 'puller_link_name',
 				header: 'Puller Link',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<span className='capitalize'>{info.getValue()}</span>
-				),
+				cell: (info) => info.getValue(),
 			},
+			{
+				accessorKey: 'slider_name',
+				header: 'Slider',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'slider_body_shape_name',
+				header: 'Slider Body Shape',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'slider_link_name',
+				header: 'Slider Link',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'coloring_type_name',
+				header: 'Coloring Type',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'logo_type_name',
+				header: 'Logo Type',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'logo_is_body',
+				header: 'Logo Body',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'logo_is_puller',
+				header: 'Logo Puller',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
+			///////
+
 			{
 				accessorKey: 'order_quantity',
 				header: (
@@ -97,6 +148,18 @@ export default function Index() {
 						Production
 						<br />
 						(PCS)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'weight',
+				header: (
+					<span>
+						Weight
+						<br />
+						(KG)
 					</span>
 				),
 				enableColumnFilter: false,

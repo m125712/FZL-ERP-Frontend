@@ -1347,6 +1347,7 @@ export const PI_CASH_SCHEMA = {
 	merchandiser_uuid: STRING_REQUIRED,
 	factory_uuid: STRING_REQUIRED,
 	conversion_rate: NUMBER_DOUBLE_REQUIRED,
+	receive_amount: NUMBER_DOUBLE,
 	remarks: STRING.nullable(),
 	pi_cash_entry: yup.array().of(
 		yup.object().shape({
@@ -1354,10 +1355,21 @@ export const PI_CASH_SCHEMA = {
 			sfg_uuid: STRING_REQUIRED,
 			pi_uuid: STRING,
 			max_quantity: NUMBER,
-			pi_cash_quantity: NUMBER_REQUIRED.max(
-				yup.ref('quantity'),
-				'Beyond Max Quantity'
-			),
+			// pi_cash_quantity: NUMBER_REQUIRED.max(
+			// 	yup.ref('quantity'),
+			// 	'Beyond Max Quantity'
+			// ),
+			pi_cash_quantity: yup.number().when('is_checked', {
+				is: true,
+				then: (Schema) =>
+					Schema.typeError('Must be a number')
+						.required('Weight is required')
+						.max(yup.ref('max_quantity'), 'Beyond Max Quantity'),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
 			remarks: STRING.nullable(),
 			isDeletable: BOOLEAN,
 		})
@@ -1373,6 +1385,7 @@ export const PI_CASH_NULL = {
 	factory_uuid: '',
 	remarks: '',
 	conversion_rate: '',
+	receive_amount: '',
 	pi_cash_entry: [
 		{
 			is_checked: false,

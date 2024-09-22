@@ -397,11 +397,11 @@ export default function Index() {
 										onChange={(e) =>
 											handleRowChecked(e, index)
 										}
-										disabled={
-											getValues(
-												`pi_cash_entry[${index}].pi_cash_quantity`
-											) == 0
-										}
+										// disabled={
+										// 	getValues(
+										// 		`pi_cash_entry[${index}].pi_cash_quantity`
+										// 	) == 0
+										// }
 										{...{ register, errors }}
 									/>
 								</td>

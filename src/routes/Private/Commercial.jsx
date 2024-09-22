@@ -102,7 +102,7 @@ export const CommercialRoutes = [
 			},
 
 			{
-				name: 'Cash',
+				name: 'Cash Invoice',
 				path: '/commercial/pi-cash',
 				element: <PiCash />,
 				page_name: 'commercial__pi-cash',

@@ -11,7 +11,7 @@ import PageInfo from '@/util/PageInfo';
 export default function Index() {
 	const navigate = useNavigate();
 	const { data, isLoading, url } = useCommercialPICash();
-	const info = new PageInfo('PI Cash', url, 'commercial__pi-cash');
+	const info = new PageInfo('Cash Invoice', url, 'commercial__pi-cash');
 	const haveAccess = useAccess('commercial__pi-cash');
 
 	useEffect(() => {
@@ -79,10 +79,10 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'bank_name',
-				header: 'Bank',
+				accessorKey: 'receive_amount',
+				header: 'Receive Amount',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()).toFixed(2),
 			},
 			{
 				accessorKey: 'created_by_name',

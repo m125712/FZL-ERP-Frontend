@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
+import { useCommercialPIDetailsByPiId } from '@/state/Commercial';
 import { useParams } from 'react-router-dom';
+
 import Information from './Information';
 import Table from './Table';
-import { useCommercialPIDetailsByPiId } from '@/state/Commercial';
 
 export default function Index() {
 	const { pi_id } = useParams();
@@ -20,7 +21,7 @@ export default function Index() {
 	return (
 		<div className='space-y-8 py-4'>
 			<Information pi={data} />
-			<Table pi={data?.pi_entry} />
+			<Table pi={data?.pi_cash_entry} />
 		</div>
 	);
 }

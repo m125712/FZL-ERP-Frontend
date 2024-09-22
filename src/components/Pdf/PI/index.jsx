@@ -1,21 +1,22 @@
-import pdfMake from "@/components/Pdf/pdfMake";
+import pdfMake from '@/components/Pdf/pdfMake';
 import {
 	DEFAULT_FONT_SIZE,
 	defaultStyle,
 	styles,
 	xMargin,
-} from "@/components/Pdf/ui";
+} from '@/components/Pdf/ui';
+
 import {
-	TableFooter,
-	TableHeader,
 	getPageFooter,
 	getPageHeader,
-} from "./utils";
+	TableFooter,
+	TableHeader,
+} from './utils';
 
 export default function PiPdf(pi_info) {
 	// const { pi_info } = props;
 	const {
-		pi_entry,
+		pi_cash_entry,
 		order_numbers,
 		total_quantity,
 		total_value,
@@ -28,8 +29,8 @@ export default function PiPdf(pi_info) {
 	let footerHeight = 150;
 
 	const pdfDocGenerator = pdfMake.createPdf({
-		pageSize: "A4",
-		pageOrientation: "portrait",
+		pageSize: 'A4',
+		pageOrientation: 'portrait',
 		pageMargins: [xMargin, headerHeight, xMargin, footerHeight],
 		defaultStyle,
 		styles,
@@ -37,10 +38,10 @@ export default function PiPdf(pi_info) {
 		// Page Header
 		header: {
 			table: {
-				widths: [38, "*", 35, "*"],
+				widths: [38, '*', 35, '*'],
 				body: getPageHeader(pi_info),
 			},
-			layout: "noBorders",
+			layout: 'noBorders',
 			margin: [xMargin, 15, xMargin, 0],
 		},
 		// Page Footer
@@ -52,7 +53,7 @@ export default function PiPdf(pi_info) {
 					payment,
 					bank_name,
 				}),
-				layout: "noBorders",
+				layout: 'noBorders',
 				margin: [xMargin, 2],
 				fontSize: DEFAULT_FONT_SIZE - 2,
 			};
@@ -63,7 +64,7 @@ export default function PiPdf(pi_info) {
 			{
 				table: {
 					headerRows: 2,
-					widths: ["*", "*", 25, 40, 40, 40],
+					widths: ['*', '*', 25, 40, 40, 40],
 					// dontBreakRows: true,
 					body: [
 						// Header
@@ -73,50 +74,50 @@ export default function PiPdf(pi_info) {
 						}),
 
 						// Body
-						...pi_entry.map((item) => [
+						...pi_cash_entry.map((item) => [
 							{
-								rowSpan: pi_entry.filter(
+								rowSpan: pi_cash_entry.filter(
 									(i) =>
 										i.item_description ===
 										item.item_description
 								).length,
 								text: item.item_description,
-								style: "tableCell",
+								style: 'tableCell',
 							},
 							{
-								rowSpan: pi_entry.filter(
+								rowSpan: pi_cash_entry.filter(
 									(i) =>
 										i.item_description ===
 										item.item_description
 								).length,
 								text: item.item_description,
-								style: "tableCell",
+								style: 'tableCell',
 							},
 							{
-								rowSpan: pi_entry.filter(
+								rowSpan: pi_cash_entry.filter(
 									(i) =>
 										i.item_description ===
 											item.item_description &&
 										i.size === item.size
 								).length,
 								text: item.size,
-								style: "tableCell",
-								alignment: "right",
+								style: 'tableCell',
+								alignment: 'right',
 							},
 							{
 								text: item.pi_quantity,
-								style: "tableCell",
-								alignment: "right",
+								style: 'tableCell',
+								alignment: 'right',
 							},
 							{
 								text: item.unit_price,
-								style: "tableCell",
-								alignment: "right",
+								style: 'tableCell',
+								alignment: 'right',
 							},
 							{
 								text: item.value,
-								style: "tableCell",
-								alignment: "right",
+								style: 'tableCell',
+								alignment: 'right',
 							},
 						]),
 
@@ -130,7 +131,7 @@ export default function PiPdf(pi_info) {
 			},
 			{
 				text: `Total Value in Words: ${total_value_in_words}`,
-				style: "tableFooter",
+				style: 'tableFooter',
 				margin: [0, 5],
 			},
 		],

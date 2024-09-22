@@ -134,14 +134,16 @@ export const useOtherOrderDescriptionByOrderNumber = (orderNumber) =>
 // GET OTHER ORDER NUMBER BY MARKETING AND PARTY UUID
 export const useOtherOrderNumberByMarketingAndPartyUUID = (
 	marketingUUID,
-	partyUUID
+	partyUUID,
+	isCash
 ) =>
 	createGlobalState({
 		queryKey: otherQK.orderNumberByMarketingAndPartyUUID(
 			marketingUUID,
-			partyUUID
+			partyUUID,
+			isCash
 		),
-		url: `/other/order-number-for-pi/value/label/${marketingUUID}/${partyUUID}`,
+		url: `/other/order-number-for-pi/value/label/${marketingUUID}/${partyUUID}?is_cash=${isCash}`,
 		enabled: !!marketingUUID && !!partyUUID,
 	});
 

@@ -19,41 +19,47 @@ export const useCommercialBankByUUID = (uuid) =>
 export const useCommercialPI = () =>
 	createGlobalState({
 		queryKey: commercialQK.pi(),
-		url: '/commercial/pi',
+		url: '/commercial/pi-cash',
+	});
+
+export const useCommercialPICash = () =>
+	createGlobalState({
+		queryKey: commercialQK.piCash(),
+		url: '/commercial/pi-cash?is_cash=true',
 	});
 
 export const useCommercialPIByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: commercialQK.piByUUID(uuid),
-		url: `/commercial/pi/${uuid}`,
+		url: `/commercial/pi-cash/${uuid}`,
 		enabled: !!uuid,
 	});
 
 export const useCommercialPIDetailsByUUID = (uuid, { enabled = true }) =>
 	createGlobalState({
 		queryKey: commercialQK.piDetailsByUUID(uuid),
-		url: `/commercial/pi/details/${uuid}`,
+		url: `/commercial/pi-cash/details/${uuid}`,
 		enabled,
 	});
 
-export const useCommercialPIDetailsByPiId = (pi_id) =>
+export const useCommercialPIDetailsByPiId = (pi_cash_id) =>
 	createGlobalState({
-		queryKey: commercialQK.piDetailsByPiID(pi_id),
-		url: `/commercial/pi/details/by/pi-id/${pi_id}`,
-		enabled: !!pi_id,
+		queryKey: commercialQK.piDetailsByPiID(pi_cash_id),
+		url: `/commercial/pi-cash/details/by/pi-cash-id/${pi_cash_id}`,
+		enabled: !!pi_cash_id,
 	});
 
 // * PI Entry * //
 export const useCommercialPIEntry = () =>
 	createGlobalState({
 		queryKey: commercialQK.piEntry(),
-		url: '/commercial/pi-entry',
+		url: '/commercial/pi-cash-entry',
 	});
 
 export const useCommercialPIEntryByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: commercialQK.piEntryByUUID(uuid),
-		url: `/commercial/pi-entry/${uuid}`,
+		url: `/commercial/pi-cash-entry/${uuid}`,
 		enabled: !!uuid,
 	});
 
@@ -70,7 +76,8 @@ export const useCommercialPIByOrderInfo = (
 			partyId,
 			marketingId
 		),
-		url: `/commercial/pi/details/by/order-info-ids/${orderInfoIds}/${partyId}/${marketingId}`,
+
+		url: `/commercial/pi-cash/details/by/order-info-ids/${orderInfoIds}/${partyId}/${marketingId}`,
 		enabled,
 	});
 

@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom';
 
 import {
 	FormField,
+	Input,
 	JoinInput,
 	ReactSelect,
 	SectionEntryBody,
@@ -41,7 +42,7 @@ export default function Header({
 	const { data: order_number } = useOtherOrderNumberByMarketingAndPartyUUID(
 		marketingId,
 		partyId,
-		false
+		true
 	);
 	const { data: merchandiser } = useOtherMerchandiserByPartyUUID(partyId);
 	const { data: factory } = useOtherFactoryByPartyUUID(partyId);
@@ -57,29 +58,7 @@ export default function Header({
 
 	return (
 		<SectionEntryBody title='PI Information'>
-			<div className='grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4'>
-				<FormField label='lc_id' title='LC' errors={errors}>
-					<Controller
-						name='lc_uuid'
-						control={control}
-						render={({ field: { onChange } }) => {
-							return (
-								<ReactSelect
-									placeholder='Select LC'
-									options={lc}
-									value={lc?.find(
-										(item) =>
-											item.value == getValues('lc_uuid')
-									)}
-									onChange={(e) => {
-										onChange(e.value);
-									}}
-									isDisabled={true}
-								/>
-							);
-						}}
-					/>
-				</FormField>
+			<div className='grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4 lg:grid-cols-5'>
 				<FormField
 					label='marketing_uuid'
 					title='Marketing'
@@ -133,7 +112,6 @@ export default function Header({
 						}}
 					/>
 				</FormField>
-
 				<FormField
 					label='order_info_uuids'
 					title='Order Numbers'
@@ -187,6 +165,17 @@ export default function Header({
 						}}
 					/>
 				</FormField>
+
+				<Input
+					label='conversion_rate'
+					type='number'
+					{...{ register, errors }}
+				/>
+				<Input
+					label='receive_amount'
+					type='number'
+					{...{ register, errors }}
+				/>
 			</div>
 
 			<div className='grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4 xl:grid-cols-6'>
@@ -235,35 +224,7 @@ export default function Header({
 						}}
 					/>
 				</FormField>
-				<FormField label='bank_uuid' title='Bank' errors={errors}>
-					<Controller
-						name='bank_uuid'
-						control={control}
-						render={({ field: { onChange } }) => {
-							return (
-								<ReactSelect
-									placeholder='Select Bank'
-									options={bank}
-									value={bank?.find(
-										(item) =>
-											item.value == getValues('bank_uuid')
-									)}
-									onChange={(e) => onChange(e.value)}
-								/>
-							);
-						}}
-					/>
-				</FormField>
-				<JoinInput
-					label='validity'
-					unit='DAYS'
-					{...{ register, errors }}
-				/>
-				<JoinInput
-					label='payment'
-					unit='DAYS'
-					{...{ register, errors }}
-				/>
+
 				<Textarea label='remarks' {...{ register, errors }} />
 			</div>
 		</SectionEntryBody>

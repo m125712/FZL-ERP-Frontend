@@ -13,6 +13,21 @@ export const useDeliveryRMByUUID = (uuid) =>
 		queryKey: deliveryQk.deliveryRMByUUID(uuid),
 		url: '/material/stock/by/multi-field/m_qc_and_packing,n_qc_and_packing,v_qc_and_packing,s_qc_and_packing',
 	});
+
+
+	
+// * RM
+export const useDeliveryRM = () =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryRM(),
+		url: '/material/stock/by/multi-field/m_qc_and_packing,n_qc_and_packing,v_qc_and_packing,s_qc_and_packing',
+	});
+
+export const useDeliveryRMByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryRMByUUID(uuid),
+		url: '/material/stock/by/multi-field/m_qc_and_packing,n_qc_and_packing,v_qc_and_packing,s_qc_and_packing',
+	});
 // * RM Log
 export const useDeliveryRMLog = () =>
 	createGlobalState({

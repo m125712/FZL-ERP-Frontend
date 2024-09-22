@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useState } from 'react';
-import { useCommercialPI, useCommercialPIEntry } from '@/state/Commercial';
+import { useCommercialPICash, useCommercialPIEntry } from '@/state/Commercial';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -11,7 +11,7 @@ import { CheckBoxWithoutLabel, DynamicDeliveryField, Input } from '@/ui';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
-import { PI_NULL, PI_SCHEMA } from '@util/Schema';
+import { PI_CASH_NULL, PI_CASH_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 import isJSON from '@/util/isJson';
 
@@ -28,7 +28,7 @@ export default function Index() {
 		postData,
 		updateData,
 		deleteData,
-	} = useCommercialPI();
+	} = useCommercialPICash();
 
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
@@ -46,7 +46,7 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
-	} = useRHF(PI_SCHEMA, PI_NULL);
+	} = useRHF(PI_CASH_SCHEMA, PI_CASH_NULL);
 
 	// pi_cash_entry
 	const { fields: orderEntryField } = useFieldArray({
@@ -187,7 +187,7 @@ export default function Index() {
 					...updatedableCommercialPiEntryPromises,
 					deleteableCommercialPiEntryPromises,
 				])
-					.then(() => reset(Object.assign({}, PI_NULL)))
+					.then(() => reset(Object.assign({}, PI_CASH_NULL)))
 					.then(() => {
 						navigate(`/commercial/pi/details/${updatedId}`);
 					});
@@ -208,7 +208,7 @@ export default function Index() {
 			order_info_uuids: JSON.stringify(orderInfoIds),
 			created_at,
 			created_by: user.uuid,
-			is_pi: 1,
+			is_pi: 0,
 		};
 
 		delete commercialPiData['is_all_checked'];
@@ -248,9 +248,9 @@ export default function Index() {
 
 			try {
 				await Promise.all([...commercial_pi_cash_entry_promises])
-					.then(() => reset(Object.assign({}, PI_NULL)))
+					.then(() => reset(Object.assign({}, PI_CASH_NULL)))
 					.then(() => {
-						navigate(`/commercial/pi`);
+						navigate(`/commercial/pi-cash`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);

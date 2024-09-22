@@ -1,15 +1,16 @@
 // PI
-import PI from '@pages/Commercial/PI';
-import PiDetails from '@pages/Commercial/PI/Details';
-import PiEntry from '@pages/Commercial/PI/Entry';
 
 // Bank
 import Bank from '@pages/Commercial/Bank';
-
+import PiCash from '@pages/Commercial/Cash';
+import PiCashEntry from '@pages/Commercial/Cash/Entry';
 // LC
 import LC from '@pages/Commercial/LC';
 import LCDetails from '@pages/Commercial/LC/Details';
 import LCEntry from '@pages/Commercial/LC/Entry';
+import PI from '@pages/Commercial/PI';
+import PiDetails from '@pages/Commercial/PI/Details';
+import PiEntry from '@pages/Commercial/PI/Entry';
 
 export const CommercialRoutes = [
 	{
@@ -94,6 +95,39 @@ export const CommercialRoutes = [
 						path: '/commercial/pi/:pi_uuid/update',
 						element: <PiEntry />,
 						page_name: 'commercial__pi_update',
+						actions: ['create', 'read', 'update', 'delete'],
+						hidden: true,
+					},
+				],
+			},
+
+			{
+				name: 'Cash',
+				path: '/commercial/pi-cash',
+				element: <PiCash />,
+				page_name: 'commercial__pi-cash',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_receive_status',
+				],
+				disableCollapse: true,
+				children: [
+					{
+						name: 'Cash Entry',
+						path: '/commercial/pi-cash/entry',
+						element: <PiCashEntry />,
+						page_name: 'commercial__pi_cash_entry',
+						actions: ['create', 'read', 'update', 'delete'],
+						hidden: true,
+					},
+					{
+						name: 'Cash Update',
+						path: '/commercial/pi-cash/:pi_uuid/update',
+						element: <PiCashEntry />,
+						page_name: 'commercial__pi_cash_update',
 						actions: ['create', 'read', 'update', 'delete'],
 						hidden: true,
 					},

@@ -1,6 +1,7 @@
+import { useMemo } from 'react';
+
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, LinkWithCopy } from '@/ui';
-import { useMemo } from 'react';
 
 export default function Index({ pi }) {
 	const columns = useMemo(
@@ -40,7 +41,7 @@ export default function Index({ pi }) {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'pi_quantity',
+				accessorKey: 'pi_cash_quantity',
 				header: 'QTY (PCS)',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
@@ -86,7 +87,7 @@ export default function Index({ pi }) {
 		[pi]
 	);
 
-	const totalQty = pi.reduce((a, b) => a + Number(b.pi_quantity), 0);
+	const totalQty = pi.reduce((a, b) => a + Number(b.pi_cash_quantity), 0);
 	const totalValue = pi.reduce((a, b) => a + Number(b.value), 0);
 
 	return (

@@ -1,10 +1,12 @@
+import { useEffect, useState } from 'react';
 import { PDF } from '@/assets/icons';
+import { format } from 'date-fns';
+
 import PiPdf from '@/components/Pdf/PI';
-import { DollarToWord } from '@/lib/NumToWord';
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
-import { format } from 'date-fns';
-import { useEffect, useState } from 'react';
+
+import { DollarToWord } from '@/lib/NumToWord';
 
 export default function Information({ pi }) {
 	const {
@@ -33,11 +35,13 @@ export default function Information({ pi }) {
 		created_at,
 		updated_at,
 		remarks,
-		pi_entry,
+		pi_cash_entry,
 	} = pi;
 
 	const getUniqueValues = (field) =>
-		Array.from(new Set(pi_entry?.map((item) => item[field]))).join(', ');
+		Array.from(new Set(pi_cash_entry?.map((item) => item[field]))).join(
+			', '
+		);
 	const buyers = getUniqueValues('buyer_name');
 	const orderNumbers = getUniqueValues('order_number');
 	const styles = getUniqueValues('style');
@@ -48,10 +52,10 @@ export default function Information({ pi }) {
 		...pi,
 		pi_number: id,
 		date: format(new Date(created_at), 'dd/MM/yy'),
-		total_quantity: pi_entry.reduce((a, b) => a + b.pi_quantity, 0),
-		total_value: pi_entry.reduce((a, b) => a + Number(b.value), 0),
+		total_quantity: pi_cash_entry.reduce((a, b) => a + b.pi_quantity, 0),
+		total_value: pi_cash_entry.reduce((a, b) => a + Number(b.value), 0),
 		total_value_in_words: DollarToWord(
-			pi_entry.reduce((a, b) => Number(a) + Number(b.value), 0)
+			pi_cash_entry.reduce((a, b) => Number(a) + Number(b.value), 0)
 		),
 		buyer_names: buyers,
 		order_numbers: orderNumbers,
@@ -108,7 +112,7 @@ export default function Information({ pi }) {
 			},
 			{
 				label: 'Value ($)',
-				value: pi_entry.reduce(
+				value: pi_cash_entry.reduce(
 					(a, b) => Number(a) + Number(b.value),
 					0
 				),

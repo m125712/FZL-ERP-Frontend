@@ -1301,13 +1301,13 @@ export const PI_SCHEMA = {
 	validity: NUMBER_REQUIRED,
 	payment: NUMBER_REQUIRED,
 	remarks: STRING.nullable(),
-	pi_entry: yup.array().of(
+	pi_cash_entry: yup.array().of(
 		yup.object().shape({
 			is_checked: BOOLEAN,
 			sfg_uuid: STRING_REQUIRED,
 			pi_uuid: STRING,
 			max_quantity: NUMBER,
-			pi_quantity: NUMBER_REQUIRED.max(
+			pi_cash_quantity: NUMBER_REQUIRED.max(
 				yup.ref('quantity'),
 				'Beyond Max Quantity'
 			),
@@ -1328,13 +1328,58 @@ export const PI_NULL = {
 	validity: '',
 	payment: '',
 	remarks: '',
-	pi_entry: [
+	pi_cash_entry: [
 		{
 			is_checked: false,
 			sfg_uuid: '',
 			pi_uuid: '',
 			max_quantity: null,
-			pi_quantity: null,
+			pi_cash_quantity: null,
+			remarks: '',
+			isDeletable: false,
+		},
+	],
+};
+export const PI_CASH_SCHEMA = {
+	marketing_uuid: STRING_REQUIRED,
+	party_uuid: STRING_REQUIRED,
+	order_info_uuids: JSON_STRING_REQUIRED,
+	merchandiser_uuid: STRING_REQUIRED,
+	factory_uuid: STRING_REQUIRED,
+	conversion_rate: NUMBER_DOUBLE_REQUIRED,
+	remarks: STRING.nullable(),
+	pi_cash_entry: yup.array().of(
+		yup.object().shape({
+			is_checked: BOOLEAN,
+			sfg_uuid: STRING_REQUIRED,
+			pi_uuid: STRING,
+			max_quantity: NUMBER,
+			pi_cash_quantity: NUMBER_REQUIRED.max(
+				yup.ref('quantity'),
+				'Beyond Max Quantity'
+			),
+			remarks: STRING.nullable(),
+			isDeletable: BOOLEAN,
+		})
+	),
+};
+
+export const PI_CASH_NULL = {
+	uuid: null,
+	marketing_uuid: '',
+	party_uuid: '',
+	order_info_uuids: null,
+	merchandiser_uuid: '',
+	factory_uuid: '',
+	remarks: '',
+	conversion_rate: '',
+	pi_cash_entry: [
+		{
+			is_checked: false,
+			sfg_uuid: '',
+			pi_uuid: '',
+			max_quantity: null,
+			pi_cash_quantity: null,
 			remarks: '',
 			isDeletable: false,
 		},

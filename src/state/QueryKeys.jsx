@@ -78,6 +78,7 @@ export const commercialQK = {
 
 	// pi
 	pi: () => [...commercialQK.all(), 'pi'],
+	piCash: () => [...commercialQK.all(), 'pi-cash'],
 	piByUUID: (uuid) => [...commercialQK.pi(), uuid],
 	piDetailsByUUID: (uuid) => [...commercialQK.pi(), 'details', uuid],
 	piDetailsByPiID: (uuid) => [...commercialQK.pi(), 'details-by-id', uuid],
@@ -880,11 +881,12 @@ export const otherQK = {
 		'properties-by-type-name',
 		typeName,
 	],
-	orderNumberByMarketingAndPartyUUID: (marketingUUID, partyUUID) => [
+	orderNumberByMarketingAndPartyUUID: (marketingUUID, partyUUID, isCash) => [
 		...otherQK.all(),
 		'number-by-marketing-and-party',
 		marketingUUID,
 		partyUUID,
+		isCash,
 	],
 
 	//Vendor

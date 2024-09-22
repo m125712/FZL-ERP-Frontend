@@ -282,26 +282,26 @@ export default function Index() {
 				enableSorting: true,
 				cell: (info) => Number(info.getValue()),
 			},
-			{
-				accessorKey: 'production_quantity',
-				header: 'Production QTY',
-				enableColumnFilter: false,
-				enableSorting: false,
-				cell: (info) => {
-					const idx = info.row.index;
-					const dynamicerror =
-						errors?.batch_entry?.[idx]?.production_quantity;
-					return (
-						<Input
-							label={`batch_entry[${info.row.index}].production_quantity`}
-							is_title_needed='false'
-							height='h-8'
-							dynamicerror={dynamicerror}
-							{...{ register, errors }}
-						/>
-					);
-				},
-			},
+			// {
+			// 	accessorKey: 'production_quantity',
+			// 	header: 'Production QTY',
+			// 	enableColumnFilter: false,
+			// 	enableSorting: false,
+			// 	cell: (info) => {
+			// 		const idx = info.row.index;
+			// 		const dynamicerror =
+			// 			errors?.batch_entry?.[idx]?.production_quantity;
+			// 		return (
+			// 			<Input
+			// 				label={`batch_entry[${info.row.index}].production_quantity`}
+			// 				is_title_needed='false'
+			// 				height='h-8'
+			// 				dynamicerror={dynamicerror}
+			// 				{...{ register, errors }}
+			// 			/>
+			// 		);
+			// 	},
+			// },
 			{
 				accessorKey: 'top',
 				header: 'Expected Tape (Kg)',

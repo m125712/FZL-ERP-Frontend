@@ -67,41 +67,60 @@ export default function Index() {
 				accessorKey: 'machine_name',
 				header: 'Machine',
 				enableColumnFilter: false,
-				width: 'w-60',
-				cell: (info) => {
-					const { machine_uuid } = info.row.original;
+				cell: (info) => info.getValue(),
+			},
+			// {
+			// 	accessorKey: 'machine_name',
+			// 	header: 'Machine',
+			// 	enableColumnFilter: false,
+			// 	width: 'w-60',
+			// 	cell: (info) => {
+			// 		const { machine_uuid } = info.row.original;
 
-					return (
-						<ReactSelect
-							className={'input-xs'}
-							key={machine_uuid}
-							placeholder='Select Machine'
-							options={machine ?? []}
-							value={machine?.filter(
-								(item) => item.value === machine_uuid
-							)}
-							filterOption={null}
-							onChange={(e) => handleMachine(e, info.row.index)}
-							menuPortalTarget={document.body}
-						/>
-					);
+			// 		return (
+			// 			<ReactSelect
+			// 				className={'input-xs'}
+			// 				key={machine_uuid}
+			// 				placeholder='Select Machine'
+			// 				options={machine ?? []}
+			// 				value={machine?.filter(
+			// 					(item) => item.value === machine_uuid
+			// 				)}
+			// 				filterOption={null}
+			// 				onChange={(e) => handleMachine(e, info.row.index)}
+			// 				menuPortalTarget={document.body}
+			// 			/>
+			// 		);
+			// 	},
+			// },
+			{
+				accessorKey: 'slot',
+				header: 'Slot',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const value = info.getValue();
+					if (value === 0) {
+						return '-';
+					} else {
+						return 'Slot ' + value;
+					}
 				},
 			},
-			{
-				accessorKey: 'dyeing_actions',
-				header: 'Dyeing',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
-				width: 'w-12',
-				cell: (info) => (
-					<button
-						className='btn btn-ghost btn-sm size-9 rounded-full p-1'
-						onClick={() => handelDyeing(info.row.index)}>
-						<Edit className='size-6' />
-					</button>
-				),
-			},
+			// {
+			// 	accessorKey: 'dyeing_actions',
+			// 	header: 'Dyeing',
+			// 	enableColumnFilter: false,
+			// 	enableSorting: false,
+			// 	hidden: !haveAccess.includes('update'),
+			// 	width: 'w-12',
+			// 	cell: (info) => (
+			// 		<button
+			// 			className='btn btn-ghost btn-sm size-9 rounded-full p-1'
+			// 			onClick={() => handelDyeing(info.row.index)}>
+			// 			<Edit className='size-6' />
+			// 		</button>
+			// 	),
+			// },
 			{
 				accessorKey: 'is_drying_complete',
 				header: 'Drying Completed',
@@ -169,7 +188,7 @@ export default function Index() {
 				),
 			},
 		],
-		[data, machine]
+		[data]
 	);
 
 	//Drying Completed

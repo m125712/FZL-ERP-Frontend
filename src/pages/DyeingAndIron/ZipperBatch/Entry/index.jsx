@@ -1,9 +1,11 @@
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDyeingBatch } from '@/state/Dyeing';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
+import { set } from 'date-fns';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import {
+	useFetch,
 	useFetchForRhfReset,
 	useFetchForRhfResetForPlanning,
 	useRHF,
@@ -51,6 +53,24 @@ export default function Index() {
 		control,
 		name: 'batch_entry',
 	});
+	const [minCapacity, setMinCapacity] = useState(0);
+	const [maxCapacity, setMaxCapacity] = useState(0);
+	const { value: machine } = useFetch('/other/machine/value/label');
+
+	useEffect(() => {
+		const machine_uuid = getValues('machine_uuid');
+
+		if (machine_uuid !== undefined || machine_uuid !== null) {
+			setMaxCapacity(
+				machine?.find((item) => item.value === machine_uuid)
+					?.max_capacity
+			);
+			setMinCapacity(
+				machine?.find((item) => item.value === machine_uuid)
+					?.min_capacity
+			);
+		}
+	}, [watch('machine_uuid')]);
 
 	// * Fetch initial data
 	isUpdate
@@ -61,9 +81,41 @@ export default function Index() {
 			)
 		: useFetchForRhfResetForPlanning(`/zipper/order-batch`, reset);
 
-	console.log(getValues());
+	const getTotalQty = useCallback(
+		(batch_entry) =>
+			batch_entry.reduce((acc, item) => {
+				return item.is_checked ? acc + Number(item.quantity) : acc;
+			}, 0),
+		[watch()]
+	);
+	const getTotalCalTape = useCallback(
+		(batch_entry) =>
+			batch_entry.reduce((acc, item) => {
+				if (!item.is_checked) return acc;
 
+				const top = parseFloat(item.top) || 0;
+				const bottom = parseFloat(item.bottom) || 0;
+				const size = parseFloat(item.size) || 0;
+				const quantity = parseFloat(item.quantity) || 0;
+				const rawMtrPerKg = parseFloat(item.raw_mtr_per_kg) || 1;
+
+				const itemTotal =
+					((top + bottom + size) * quantity) / 100 / rawMtrPerKg;
+				return acc + itemTotal;
+			}, 0),
+		[watch()]
+	);
 	const onSubmit = async (data) => {
+		if (
+			getTotalCalTape(watch('batch_entry')) > maxCapacity ||
+			getTotalCalTape(watch('batch_entry')) < minCapacity
+		) {
+			ShowLocalToast({
+				type: 'error',
+				message: `Machine Capacity between between ${minCapacity} and ${maxCapacity}`,
+			});
+			return;
+		}
 		// * Update
 		if (isUpdate) {
 			const batch_data_updated = {
@@ -104,7 +156,9 @@ export default function Index() {
 
 				await Promise.all(batch_entry_updated_promises)
 					.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
-					.then(navigate(`/dyeing-and-iron/zipper-batch/${batch_uuid}`))
+					.then(
+						navigate(`/dyeing-and-iron/zipper-batch/${batch_uuid}`)
+					)
 					.catch((err) => console.log(err));
 			}
 
@@ -167,7 +221,11 @@ export default function Index() {
 
 				await Promise.all(promises)
 					.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
-					.then(navigate(`/dyeing-and-iron/zipper-batch/${batch_data.uuid}`))
+					.then(
+						navigate(
+							`/dyeing-and-iron/zipper-batch/${batch_data.uuid}`
+						)
+					)
 					.catch((err) => console.log(err));
 
 				return;
@@ -454,6 +512,25 @@ export default function Index() {
 
 				<ReactTable data={BatchEntryField} columns={columns} />
 
+				<tr className='border-t border-primary/30'>
+					<td className='py-4 text-right font-bold' colSpan='2'>
+						Total Quantity:
+					</td>
+					<td className='py-4 font-bold'>
+						{getTotalQty(watch('batch_entry'))}
+					</td>
+				</tr>
+
+				<tr className='border-t border-primary/30'>
+					<td className='py-4 text-right font-bold' colSpan='2'>
+						Total Col Tape:
+					</td>
+					<td className='py-4 font-bold'>
+						{Number(getTotalCalTape(watch('batch_entry'))).toFixed(
+							3
+						)}
+					</td>
+				</tr>
 				<div className='modal-action'>
 					<button
 						type='submit'

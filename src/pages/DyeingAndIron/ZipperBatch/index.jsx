@@ -1,16 +1,18 @@
 import { useEffect, useMemo } from 'react';
 import { useDyeingBatch } from '@/state/Dyeing';
 import { useNavigate } from 'react-router-dom';
-import { useAccess } from '@/hooks';
+import { useAccess, useFetch } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
 
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const { data, url, isLoading } = useDyeingBatch();
+	const { data, url, isLoading, updateData } = useDyeingBatch();
 	const info = new PageInfo('Batch', url, 'dyeing__zipper_batch');
+	const { value: machine } = useFetch('/other/machine/value/label');
 	const haveAccess = useAccess('dyeing__zipper_batch');
 	const navigate = useNavigate();
 
@@ -25,7 +27,7 @@ export default function Index() {
 					<LinkWithCopy
 						title={info.getValue()}
 						id={info.row.original.uuid}
-						uri='/dyeing-and-iron/batch'
+						uri='/dyeing-and-iron/zipper-batch'
 					/>
 				),
 			},
@@ -56,6 +58,49 @@ export default function Index() {
 				header: 'Status',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'machine_name',
+				header: 'Machine',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			// {
+			// 	accessorKey: 'machine_name',
+			// 	header: 'Machine',
+			// 	enableColumnFilter: false,
+			// 	width: 'w-60',
+			// 	cell: (info) => {
+			// 		const { machine_uuid } = info.row.original;
+
+			// 		return (
+			// 			<ReactSelect
+			// 				className={'input-xs'}
+			// 				key={machine_uuid}
+			// 				placeholder='Select Machine'
+			// 				options={machine ?? []}
+			// 				value={machine?.filter(
+			// 					(item) => item.value === machine_uuid
+			// 				)}
+			// 				filterOption={null}
+			// 				onChange={(e) => handleMachine(e, info.row.index)}
+			// 				menuPortalTarget={document.body}
+			// 			/>
+			// 		);
+			// 	},
+			// },
+			{
+				accessorKey: 'slot',
+				header: 'Slot',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const value = info.getValue();
+					if (value === 0) {
+						return '-';
+					} else {
+						return 'Slot ' + value;
+					}
+				},
 			},
 			{
 				accessorKey: 'created_by_name',
@@ -121,6 +166,16 @@ export default function Index() {
 
 		navigate(`/dyeing-and-iron/zipper-batch/${uuid}/update`);
 	};
+	// const handleMachine = async (e, idx) => {
+	// 	await updateData.mutateAsync({
+	// 		url: `${url}/${data[idx]?.uuid}`,
+	// 		updatedData: {
+	// 			machine_uuid: e.value,
+	// 			updated_at: GetDateTime(),
+	// 		},
+	// 		isOnCloseNeeded: false,
+	// 	});
+	// };
 
 	// get tabname
 	useEffect(() => {

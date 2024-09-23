@@ -31,12 +31,11 @@ export default function Index({
 	const { postData } = useNylonPlasticFinishingProduction();
 	const { user } = useAuth();
 	const MAX_PROD = Math.min(
-		Number(updatePFProd.balance_quantity),
-		Number(updatePFProd.coloring_prod)
-	).toFixed(3);
-	const MAX_PROD_KG = Number(updatePFProd?.nylon_plastic_finishing).toFixed(
-		3
+		Number(updatePFProd?.balance_quantity),
+		Number(updatePFProd?.slider_finishing_stock)
 	);
+
+	const MAX_PROD_KG = Number(updatePFProd?.nylon_plastic_finishing)
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
 		useRHF(

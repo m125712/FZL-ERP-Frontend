@@ -1,11 +1,13 @@
-import { Suspense } from '@/components/Feedback';
-import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
+import { lazy, useMemo, useState } from 'react';
 import { useMetalTMProduction } from '@/state/Metal';
 import { useNylonPlasticFinishingProduction } from '@/state/Nylon';
+import { useAccess } from '@/hooks';
+
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
 import { LinkWithCopy, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useMemo, useState } from 'react';
 
 const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
@@ -18,7 +20,6 @@ export default function Index() {
 		'nylon__plastic_finishing_production'
 	);
 	const haveAccess = useAccess('nylon__plastic_finishing_production');
-	console.log(data);
 
 	const columns = useMemo(
 		() => [
@@ -74,17 +75,28 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'nylon_plastic_finishing',
-				header: 'Stock (KG)',
+				header: 'Tape Stock (KG)',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'coloring_prod',
-				header: 'Slider Stock',
+				accessorKey: 'slider_finishing_stock',
+				header: 'Slider Stock (PCS)',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-
+			{
+				accessorKey: 'balance_quantity',
+				header: (
+					<span>
+						Balance
+						<br />
+						(PCS)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
 			{
 				accessorKey: 'actions_add_production',
 				header: 'Add Production',
@@ -133,18 +145,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-			{
-				accessorKey: 'balance_quantity',
-				header: (
-					<span>
-						Balance
-						<br />
-						(PCS)
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
-			},
+
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',

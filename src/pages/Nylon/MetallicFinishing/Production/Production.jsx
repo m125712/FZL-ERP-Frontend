@@ -35,7 +35,7 @@ export default function Index({
 
 	const MAX_PROD = Math.min(
 		Number(updateMFProd?.balance_quantity),
-		Number(updateMFProd?.coloring_prod)
+		Number(updateMFProd?.slider_finishing_stock)
 	);
 
 	const MAX_PROD_KG = Number(updateMFProd.nylon_metallic_finishing);

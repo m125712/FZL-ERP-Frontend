@@ -45,9 +45,15 @@ export default function Index({
 	);
 
 	const MAX_QUANTITY =
-		Number(updateProductionLog?.teeth_coloring_stock) +
-		Number(updateProductionLog?.teeth_molding_prod) +
-		Number(updateProductionLog?.production_quantity);
+		Math.min(
+			Number(updateProductionLog?.balance_quantity),
+			Number(updateProductionLog?.slider_finishing_stock)
+		) + Number(dataByUUID?.production_quantity);
+
+
+
+	const MAX_PROD_KG = Number(updateProductionLog?.nylon_metallic_finishing)+ Number(dataByUUID?.production_quantity_in_kg);
+
 	const schema = {
 		...SFG_PRODUCTION_LOG_SCHEMA,
 		production_quantity: NUMBER_REQUIRED.moreThan(0).max(MAX_QUANTITY),
@@ -158,7 +164,7 @@ export default function Index({
 			<JoinInput
 				title='Production Quantity (KG)'
 				label='production_quantity_in_kg'
-				sub_label={`MAX: ${'MAX_PROD_KG'} kg`}
+				sub_label={`MAX: ${MAX_PROD_KG} kg`}
 				unit='KG'
 				{...{ register, errors }}
 			/>

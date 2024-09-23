@@ -259,7 +259,7 @@ export const SFG_TRANSFER_LOG_NULL = {
 };
 
 export const SFG_PRODUCTION_LOG_SCHEMA = {
-	production_quantity: NUMBER_DOUBLE,
+	production_quantity: NUMBER,
 	production_quantity_in_kg: NUMBER_DOUBLE,
 	remarks: STRING.nullable(),
 };
@@ -2373,7 +2373,7 @@ export const VISLON_PRODUCTION_SCHEMA_NULL = {
 // * vislon transaction
 
 export const VISLON_TRANSACTION_SCHEMA = {
-	trx_quantity_in_kg: NUMBER_REQUIRED,
+	trx_quantity_in_kg: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
@@ -2385,7 +2385,7 @@ export const VISLON_TRANSACTION_SCHEMA_NULL = {
 // * Metal Teeth Molding Production
 export const METAL_TEETH_MOLDING_PRODUCTION_SCHEMA = {
 	production_quantity: NUMBER_REQUIRED,
-	production_quantity_in_kg: NUMBER_REQUIRED,
+	production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED,
 	wastage: NUMBER,
 	remarks: STRING.nullable(),
 };
@@ -2401,8 +2401,8 @@ export const METAL_TEETH_MOLDING_PRODUCTION_SCHEMA_NULL = {
 // * SFG PRODUCTION
 
 export const SFG_PRODUCTION_SCHEMA_IN_KG = {
-	production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED,
-	wastage: NUMBER.nullable().transform((value, originalValue) =>
+	production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More Than 0'),
+	wastage: NUMBER_DOUBLE.min(0, 'Minimum of 0').nullable().transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? 0 : value
 	),
 	remarks: STRING.nullable(),

@@ -1,18 +1,19 @@
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
+import { useAccess } from '@/hooks';
 
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import SFGAddOrUpdate from './AddOrUpdate';
-import { useVislonTMTLog } from '@/state/Vislon';
+import { useVislonTMTLog, useVislonTMP } from '@/state/Vislon';
 
 export default function Index() {
 	const { data, isLoading, deleteData } = useVislonTMTLog();
+	const { invalidateQuery } = useVislonTMP();
 	const info = new PageInfo(
-		'SFG Teeth Molding Transfer Log',
+		'Transfer Log',
 		'sfg/trx/by/teeth_molding_prod/by/vislon'
 	);
 
@@ -210,6 +211,7 @@ export default function Index() {
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
 					deleteData={deleteData}
+					invalidateQuery={invalidateQuery}
 					url={`/zipper/sfg-transaction`}
 				/>
 			</Suspense>

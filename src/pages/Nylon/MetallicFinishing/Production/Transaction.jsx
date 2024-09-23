@@ -40,7 +40,7 @@ export default function Index({
 	const { register, handleSubmit, errors, reset, control ,context} = useRHF(
 		{
 			...SFG_TRANSACTION_SCHEMA_IN_PCS,
-			trx_quantity: SFG_TRANSACTION_SCHEMA_IN_PCS.trx_quantity.max(
+			trx_quantity: SFG_TRANSACTION_SCHEMA_IN_PCS.trx_quantity.moreThan(0, 'More than 0').max(
 				updateMFTRX?.finishing_prod
 			),
 		},

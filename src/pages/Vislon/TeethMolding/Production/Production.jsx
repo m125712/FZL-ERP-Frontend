@@ -6,7 +6,6 @@ import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import {
 	NUMBER_DOUBLE_REQUIRED,
-	NUMBER_REQUIRED,
 	SFG_PRODUCTION_SCHEMA_IN_KG,
 	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
 } from '@util/Schema';
@@ -39,7 +38,7 @@ export default function Index({
 	const { register, handleSubmit, errors, reset, watch, control, context } = useRHF(
 		{
 			...SFG_PRODUCTION_SCHEMA_IN_KG,
-			production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.max(
+			production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0').max(
 				MAX_PROD_KG,
 				'Beyond Max Quantity'
 			),

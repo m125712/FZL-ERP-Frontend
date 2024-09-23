@@ -6,7 +6,7 @@ import { nylonQK } from './QueryKeys';
 export const useNylonMFProduction = (enabled = true) =>
 	createGlobalState({
 		queryKey: nylonQK.nylonMFProduction(),
-		url: '/zipper/sfg/by/finishing?item_name=nylon&stopper_type=metallic stopper',
+		url: '/zipper/sfg/by/finishing?item_name=nylon&nylon_stopper=metallic',
 		enabled: enabled,
 	});
 

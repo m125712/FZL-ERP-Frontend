@@ -2,7 +2,6 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useMetalTMProductionLog } from '@/state/Metal';
 import { useNylonPlasticFinishingProductionLog } from '@/state/Nylon';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
@@ -14,7 +13,7 @@ export default function Index() {
 		useNylonPlasticFinishingProductionLog();
 	const info = new PageInfo('Production Log', url);
 	const haveAccess = useAccess('nylon__plastic_finishing_log');
-	console.log(data);
+
 	const columns = useMemo(
 		() => [
 			{

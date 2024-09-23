@@ -6,6 +6,7 @@ import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import {
 	NUMBER_REQUIRED,
+	NUMBER_DOUBLE_REQUIRED,
 	SFG_PRODUCTION_SCHEMA_IN_KG,
 	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
 } from '@util/Schema';
@@ -35,20 +36,18 @@ export default function Index({
 	const MAX_PROD = Math.min(
 		Number(updateMFProd?.balance_quantity),
 		Number(updateMFProd?.coloring_prod)
-	).toFixed(3);
-
-	const MAX_PROD_KG = Number(updateMFProd.nylon_metallic_finishing).toFixed(
-		3
 	);
+
+	const MAX_PROD_KG = Number(updateMFProd.nylon_metallic_finishing);
 
 	const { register, handleSubmit, errors, reset, watch, control , context} = useRHF(
 		{
 			...SFG_PRODUCTION_SCHEMA_IN_KG,
-			production_quantity: NUMBER_REQUIRED.max(
+			production_quantity: NUMBER_REQUIRED.moreThan(0, 'More Than 0').max(
 				MAX_PROD,
 				'Beyond Max Quantity'
 			),
-			production_quantity_in_kg: NUMBER_REQUIRED.max(
+			production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More Than 0').max(
 				MAX_PROD_KG,
 				'Beyond Max Quantity'
 			),

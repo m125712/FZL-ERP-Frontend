@@ -3,6 +3,7 @@
 // Challan
 import ChallanEntry from '@/pages/Delivery/Challan/Entry';
 import PackingLists from '@/pages/Delivery/PackingList';
+import PackingListsDetails from '@/pages/Delivery/PackingList/Details';
 import PackingListsEntry from '@/pages/Delivery/PackingList/Entry';
 import Challan from '@pages/Delivery/Challan';
 import ChallanDetails from '@pages/Delivery/Challan/Details';
@@ -31,6 +32,21 @@ export const DeliveryRoutes = [
 				path: '/delivery/packing-list/entry',
 				element: <PackingListsEntry />,
 				page_name: 'delivery__packing_list_entry',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_receive_status',
+				],
+				hidden: true,
+			},
+
+			{
+				name: 'Packing List Details',
+				path: '/delivery/packing-list/:uuid',
+				element: <PackingListsDetails />,
+				page_name: 'delivery__packing_list_details',
 				actions: [
 					'create',
 					'read',

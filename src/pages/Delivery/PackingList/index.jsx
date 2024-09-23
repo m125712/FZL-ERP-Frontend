@@ -31,21 +31,21 @@ export default function Index() {
 						<LinkWithCopy
 							title={packing_number}
 							id={info.getValue()}
-							uri='/delivery/packing-list/details'
+							uri='/delivery/packing-list'
 						/>
 					);
 				},
 			},
 
 			{
-				accessorKey: 'order_number',
+				accessorKey: 'order_info_uuid',
 				header: 'O/N',
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					return (
 						<LinkWithCopy
-							title={info.getValue()}
-							id={order_number}
+							title={order_number}
+							id={info.getValue()}
 							uri='/order/details'
 						/>
 					);

@@ -34,7 +34,6 @@ export default function Index({
 		// 	url: `${url}/${deleteItem?.itemId}`,
 		// });
 
-		
 		await deleteData.mutateAsync({
 			url: `${url}/${deleteItem?.itemId}`,
 			onClose: handelClose,

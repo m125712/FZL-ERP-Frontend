@@ -394,8 +394,7 @@ export default function Index() {
 							</td>
 							<td className={`w-32 ${rowClass}`}>
 								{getValues(
-									`packing_list_entry[${index}].style_color_size,
-`
+									`packing_list_entry[${index}].style_color_size`
 								)}
 							</td>
 							<td className={`${rowClass}`}>

@@ -1,15 +1,15 @@
-import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useRHF, useUpdateFunc } from '@/hooks';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import {
-	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
-	SFG_PRODUCTION_SCHEMA_IN_KG,
-} from '@util/Schema';
-import { useVislonTMPEntryByUUID } from '@/state/Vislon';
 import { useEffect } from 'react';
-import { number } from 'yup';
+import { useVislonTMP, useVislonTMPEntryByUUID } from '@/state/Vislon';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, JoinInput } from '@/ui';
+
+import {
+	SFG_PRODUCTION_SCHEMA_IN_KG,
+	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
+} from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -28,25 +28,20 @@ export default function Index({
 		updateTeethMoldingLog?.uuid
 	);
 
-	const {
-		register,
-		handleSubmit,
-		errors,
-		control,
-		Controller,
-		reset,
-		getValues,
-		watch,
-		context
-	} = useRHF(SFG_PRODUCTION_SCHEMA_IN_KG, SFG_PRODUCTION_SCHEMA_IN_KG_NULL);
+	const { invalidateQuery } = useVislonTMP();
+	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
+		SFG_PRODUCTION_SCHEMA_IN_KG,
+		SFG_PRODUCTION_SCHEMA_IN_KG_NULL
+	);
 
-	const MAX_PROD_KG =  // Todo: Fix this
-		Number(updateTeethMoldingLog.production_quantity_in_kg).toFixed(3) +
-		Number(updateTeethMoldingLog.teeth_coloring_stock);
+	const MAX_PROD_KG =
+		Number(updateTeethMoldingLog.production_quantity_in_kg) +
+		Number(updateTeethMoldingLog.vislon_teeth_molding);
 
-	const MAX_WASTAGE_KG = Number(  // Todo: Fix this
+	const MAX_WASTAGE_KG = Number(
+		// Todo: Fix this
 		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
-	).toFixed(3);
+	);
 
 	// * To reset the form with the fetched data
 	useEffect(() => {
@@ -54,7 +49,6 @@ export default function Index({
 			reset(data); // Reset the form with the fetched data
 		}
 	}, [data, reset]);
-
 
 	const onClose = () => {
 		setUpdateTeethMoldingLog((prev) => ({
@@ -85,6 +79,8 @@ export default function Index({
 				onClose,
 			});
 
+			invalidateQuery();
+
 			return;
 		}
 	};
@@ -101,7 +97,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Teeth Molding SFG Production Log`}
+			title={`Production Log`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
@@ -130,13 +126,13 @@ export default function Index({
 
 			<JoinInput
 				label='production_quantity_in_kg'
-				unit='PCS'
+				unit='KG'
 				sub_label={`Max: ${MAX_PROD_KG}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
 				label='wastage'
-				unit='PCS'
+				unit='KG'
 				sub_label={`Max: ${MAX_WASTAGE_KG}`}
 				{...{ register, errors }}
 			/>

@@ -1,16 +1,20 @@
-import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useRHF, useUpdateFunc } from '@/hooks';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import {
-	NUMBER_REQUIRED,
-	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
-	SFG_PRODUCTION_SCHEMA_IN_KG,
-} from '@util/Schema';
-import { useVislonTMPEntryByUUID } from '@/state/Vislon';
 import { useEffect } from 'react';
-import { number } from 'yup';
+import {
+	useVislonFinishingProd,
+	useVislonTMPEntryByUUID,
+} from '@/state/Vislon';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, JoinInput } from '@/ui';
+
+import {
+	NUMBER_DOUBLE_REQUIRED,
+	NUMBER_REQUIRED,
+	SFG_PRODUCTION_SCHEMA_IN_KG,
+	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
+} from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -29,35 +33,26 @@ export default function Index({
 	const { data, updateData, url } = useVislonTMPEntryByUUID(
 		updateFinishingLog?.uuid
 	);
-
-	const MAX_PROD = Math.max(
-		Number(updateFinishingLog.production_quantity),
-		Number(updateFinishingLog.coloring_prod)
-	).toFixed(3);
+	const { invalidateQuery } = useVislonFinishingProd();
+	const MAX_PROD =
+		Number(updateFinishingLog.balance_quantity) +
+		Number(data?.production_quantity);
 	
-	const MAX_PROD_KG = Number(MAX_PROD).toFixed(3);
+		console.log(updateFinishingLog);
+	const MAX_PROD_KG = Number(updateFinishingLog.finishing_stock) +
+	Number(data?.production_quantity_in_kg);
 
-	const {
-		register,
-		handleSubmit,
-		errors,
-		control,
-		Controller,
-		reset,
-		getValues,
-		watch,
-		context,
-	} = useRHF(
+	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
 		{
 			...SFG_PRODUCTION_SCHEMA_IN_KG,
-			production_quantity: NUMBER_REQUIRED.max(
+			production_quantity: NUMBER_REQUIRED.moreThan(0, 'More Than 0').max(
 				MAX_PROD,
 				'Beyond Max Quantity'
 			),
-			production_quantity_in_kg: NUMBER_REQUIRED.max(
-				MAX_PROD_KG,
-				'Beyond Max Quantity'
-			),
+			production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+				0,
+				'More Than 0'
+			).max(MAX_PROD_KG, 'Beyond Max Quantity'),
 		},
 		SFG_PRODUCTION_SCHEMA_IN_KG_NULL
 	);
@@ -104,6 +99,7 @@ export default function Index({
 				onClose,
 			});
 
+			invalidateQuery();
 			return;
 		}
 	};

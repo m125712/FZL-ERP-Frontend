@@ -1,18 +1,19 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import {
-	VISLON_TRANSACTION_SCHEMA_NULL,
-	VISLON_TRANSACTION_SCHEMA,
-	NUMBER_REQUIRED,
-} from '@util/Schema';
-import { useVislonTMTEntryByUUID } from '@/state/Vislon';
 import { useEffect } from 'react';
+import { useVislonTMP, useVislonTMTEntryByUUID } from '@/state/Vislon';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
+import {
+	NUMBER_DOUBLE_REQUIRED,
+	VISLON_TRANSACTION_SCHEMA,
+	VISLON_TRANSACTION_SCHEMA_NULL,
+} from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
-	setTeethMoldingLog,
 	updateTeethMoldingLog = {
 		uuid: null,
 		sfg_uuid: null,
@@ -30,6 +31,7 @@ export default function Index({
 	const { data, updateData, url } = useVislonTMTEntryByUUID(
 		updateTeethMoldingLog?.uuid
 	);
+	const { invalidateQuery } = useVislonTMP();
 
 	const {
 		register,
@@ -39,11 +41,14 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		context
+		context,
 	} = useRHF(
 		{
 			...VISLON_TRANSACTION_SCHEMA,
-			trx_quantity_in_kg: NUMBER_REQUIRED.max(
+			trx_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+				0,
+				'More than 0'
+			).max(
 				Number(updateTeethMoldingLog?.teeth_molding_prod) +
 					Number(updateTeethMoldingLog?.trx_quantity_in_kg),
 				'Beyond Max Quantity'
@@ -59,7 +64,6 @@ export default function Index({
 		}
 	}, [data, reset]);
 
-	
 	const onClose = () => {
 		setUpdateTeethMoldingLog((prev) => ({
 			...prev,
@@ -87,7 +91,7 @@ export default function Index({
 				updatedData: updatedData,
 				onClose,
 			});
-
+			invalidateQuery();
 			return;
 		}
 	};
@@ -104,7 +108,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Teeth Molding SFG Transfer Log`}
+			title={`Transfer Log`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}

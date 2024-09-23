@@ -1,20 +1,16 @@
-import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import {
-	useMetalTMProduction,
-	useMetalTMTrxLog,
-	useMetalTMTrxLogByUUID,
-} from '@/state/Metal';
+import { useEffect } from 'react';
 import {
 	useNylonPlasticFinishingProduction,
 	useNylonPlasticFinishingTrxLog,
 	useNylonPlasticFinishingTrxLogByUUID,
 } from '@/state/Nylon';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
 import { SFG_TRANSFER_LOG_NULL, SFG_TRANSFER_LOG_SCHEMA } from '@util/Schema';
-import { useEffect } from 'react';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -44,9 +40,10 @@ export default function Index({
 		Number(updateTeethMoldingLog?.trx_quantity);
 	const schema = {
 		...SFG_TRANSFER_LOG_SCHEMA,
-		trx_quantity: SFG_TRANSFER_LOG_SCHEMA.trx_quantity.max(MAX_QUANTITY),
+		trx_quantity: SFG_TRANSFER_LOG_SCHEMA.trx_quantity
+			.moreThan(0, 'More than 0')
+			.max(MAX_QUANTITY),
 	};
-	const { user } = useAuth();
 	const {
 		register,
 		handleSubmit,
@@ -57,13 +54,9 @@ export default function Index({
 		getValues,
 		context,
 	} = useRHF(schema, SFG_TRANSFER_LOG_NULL);
-	console.log(getValues());
 
 	useEffect(() => {
 		if (dataByUUID) {
-			console.log({
-				dataByUUID,
-			});
 			reset(dataByUUID);
 		}
 	}, [dataByUUID]);

@@ -81,6 +81,18 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
+				accessorKey: 'balance_quantity',
+				header: (
+					<span>
+						Balance
+						<br />
+						(KG)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
 				accessorKey: 'action_add_production',
 				header: '',
 				enableColumnFilter: false,
@@ -127,18 +139,6 @@ export default function Index() {
 				header: (
 					<span>
 						Total Transaction
-						<br />
-						(KG)
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
-			},
-			{
-				accessorKey: 'balance_quantity',
-				header: (
-					<span>
-						Balance
 						<br />
 						(KG)
 					</span>

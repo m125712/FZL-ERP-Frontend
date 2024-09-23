@@ -2,13 +2,13 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
-import { useMetalTMProduction } from '@/state/Metal';
 import { useNylonPlasticFinishingProduction } from '@/state/Nylon';
 import { JoinInput, Textarea } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import {
 	NUMBER_REQUIRED,
+	NUMBER_DOUBLE_REQUIRED,
 	SFG_PRODUCTION_SCHEMA_IN_KG,
 	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
 } from '@util/Schema';
@@ -42,11 +42,11 @@ export default function Index({
 		useRHF(
 			{
 				...SFG_PRODUCTION_SCHEMA_IN_KG,
-				production_quantity: NUMBER_REQUIRED.max(
+				production_quantity: NUMBER_REQUIRED.moreThan(0, 'More Than 0').max(
 					MAX_PROD,
 					'Beyond Max Quantity'
 				),
-				production_quantity_in_kg: NUMBER_REQUIRED.max(
+				production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More Than 0').max(
 					MAX_PROD_KG,
 					'Beyond Max Quantity'
 				),

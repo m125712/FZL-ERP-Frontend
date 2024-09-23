@@ -1,16 +1,22 @@
+import { useMemo, useState } from 'react';
+import {
+	useVislonFinishingProd,
+	useVislonFinishingProdLog,
+} from '@/state/Vislon';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useMemo, useState } from 'react';
+
 import SFGAddOrUpdate from './AddOrUpdate';
-import { useVislonFinishingProdLog } from '@/state/Vislon';
 
 export default function Index() {
 	const { data, isLoading, deleteData } = useVislonFinishingProdLog();
+	const { invalidateQuery } = useVislonFinishingProd();
 	const info = new PageInfo('Production Log', '/vislon/finishing/log');
 
 	const haveAccess = useAccess('vislon__finishing_log');
@@ -221,6 +227,7 @@ export default function Index() {
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
 					deleteData={deleteData}
+					invalidateQuery={invalidateQuery}
 					url={`/zipper/sfg-production`}
 				/>
 			</Suspense>

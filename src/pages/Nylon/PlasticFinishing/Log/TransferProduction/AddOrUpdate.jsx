@@ -1,19 +1,21 @@
-import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
+import { useEffect } from 'react';
 import {
 	useNylonPlasticFinishingProduction,
 	useNylonPlasticFinishingProductionLog,
 	useNylonPlasticFinishingProductionLogByUUID,
 } from '@/state/Nylon';
-import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, JoinInput, ReactSelect, Textarea } from '@/ui';
+
 import {
+	NUMBER_DOUBLE_REQUIRED,
 	NUMBER_REQUIRED,
-	SFG_PRODUCTION_LOG_NULL,
-	SFG_PRODUCTION_LOG_SCHEMA,
+	SFG_PRODUCTION_SCHEMA_IN_KG,
+	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
 } from '@util/Schema';
-import { useEffect } from 'react';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -59,17 +61,18 @@ export default function Index({
 		context,
 	} = useRHF(
 		{
-			...SFG_PRODUCTION_LOG_SCHEMA,
-			production_quantity: NUMBER_REQUIRED.max(
+			...SFG_PRODUCTION_SCHEMA_IN_KG,
+
+			production_quantity: NUMBER_REQUIRED.moreThan(0, 'More Than 0').max(
 				MAX_PROD,
 				'Beyond Max Quantity'
 			),
-			production_quantity_in_kg: NUMBER_REQUIRED.max(
-				MAX_PROD_KG,
-				'Beyond Max Quantity'
-			),
+			production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+				0,
+				'More Than 0'
+			).max(MAX_PROD_KG, 'Beyond Max Quantity'),
 		},
-		SFG_PRODUCTION_LOG_NULL
+		SFG_PRODUCTION_SCHEMA_IN_KG_NULL
 	);
 
 	const MAX_WASTAGE_KG = Number(
@@ -99,7 +102,7 @@ export default function Index({
 			wastage: null,
 			remarks: null,
 		}));
-		reset(SFG_PRODUCTION_LOG_NULL);
+		reset(SFG_PRODUCTION_SCHEMA_IN_KG_NULL);
 		window[modalId].close();
 	};
 
@@ -158,17 +161,30 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<Input
+
+			<JoinInput
+				title='Production Quantity'
 				label='production_quantity'
-				sub_label={`Max: ${MAX_PROD}`}
+				sub_label={`MAX: ${MAX_PROD} pcs`}
+				unit='PCS'
 				{...{ register, errors }}
 			/>
-			<Input
+			<JoinInput
+				title='Production Quantity (KG)'
 				label='production_quantity_in_kg'
-				sub_label={`Max: ${MAX_PROD_KG}`}
+				sub_label={`MAX: ${MAX_PROD_KG} kg`}
+				unit='KG'
 				{...{ register, errors }}
 			/>
-			<Input label='remarks' {...{ register, errors }} />
+			<JoinInput
+				title='wastage'
+				label='wastage'
+				sub_label={`MAX: ${MAX_WASTAGE_KG} kg`}
+				unit='KG'
+				{...{ register, errors }}
+				{...{ register, errors }}
+			/>
+			<Textarea label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

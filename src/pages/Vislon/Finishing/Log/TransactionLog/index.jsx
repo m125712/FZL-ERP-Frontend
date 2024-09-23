@@ -2,7 +2,7 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useVislonFinishingTrxLog } from '@/state/Vislon';
+import { useVislonFinishingTrxLog, useVislonFinishingProd } from '@/state/Vislon';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useMemo, useState } from 'react';
@@ -10,6 +10,7 @@ import SFGAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, deleteData } = useVislonFinishingTrxLog();
+	const { invalidateQuery } = useVislonFinishingProd();
 	const info = new PageInfo('Transaction Log', '/vislon/finishing/log');
 
 	const haveAccess = useAccess('vislon__finishing_log');
@@ -207,6 +208,7 @@ export default function Index() {
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
 					deleteData={deleteData}
+					invalidateQuery={invalidateQuery}
 					url={`/zipper/sfg-transaction`}
 				/>
 			</Suspense>

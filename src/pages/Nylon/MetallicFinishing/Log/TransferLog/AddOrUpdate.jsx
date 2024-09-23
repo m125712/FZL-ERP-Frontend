@@ -1,16 +1,16 @@
-import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-
+import { useEffect } from 'react';
 import {
 	useNylonMFProduction,
 	useNylonMFTrxLog,
 	useNylonMFTrxLogByUUID,
 } from '@/state/Nylon';
-import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
 import { SFG_TRANSFER_LOG_NULL, SFG_TRANSFER_LOG_SCHEMA } from '@util/Schema';
-import { useEffect } from 'react';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -37,9 +37,10 @@ export default function Index({
 		Number(updateLog?.trx_quantity);
 	const schema = {
 		...SFG_TRANSFER_LOG_SCHEMA,
-		trx_quantity: SFG_TRANSFER_LOG_SCHEMA.trx_quantity.max(MAX_QUANTITY),
+		trx_quantity: SFG_TRANSFER_LOG_SCHEMA.trx_quantity
+			.moreThan(0, 'More than 0')
+			.max(MAX_QUANTITY),
 	};
-	const { user } = useAuth();
 	const {
 		register,
 		handleSubmit,
@@ -132,9 +133,11 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<Input
+			<JoinInput
+				title='Trx Quantity (KG)'
 				label='trx_quantity'
 				sub_label={`Max: ${MAX_QUANTITY}`}
+				unit='KG'
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

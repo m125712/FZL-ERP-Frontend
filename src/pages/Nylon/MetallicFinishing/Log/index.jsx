@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
+
+import RMOrderAgainstLog from './RMOrderAgainstLog';
 import RMTransferLog from './RMTransferLog';
+import TapeLog from './Transfer';
 import SFGTransferLog from './TransferLog';
 import SFGTransferProduction from './TransferProduction';
-import RMOrderAgainstLog from './RMOrderAgainstLog';
-import TapeLog from './Transfer';
 
 export default function Index() {
 	useEffect(() => {
@@ -11,9 +12,9 @@ export default function Index() {
 	}, []);
 	return (
 		<div>
-			<SFGTransferLog />
-			<hr className='my-6 border-2 border-dashed border-secondary/30' />
 			<SFGTransferProduction />
+			<hr className='my-6 border-2 border-dashed border-secondary/30' />
+			<SFGTransferLog />
 			<hr className='my-6 border-2 border-dashed border-secondary/30' />
 			<RMTransferLog />
 			<hr className='my-6 border-2 border-dashed border-secondary/30' />

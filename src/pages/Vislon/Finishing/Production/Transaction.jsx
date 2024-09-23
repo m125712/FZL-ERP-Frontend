@@ -11,7 +11,7 @@ import {
 } from '@util/Schema';
 
 import nanoid from '@/lib/nanoid';
-import { useVislonTMP } from '@/state/Vislon';
+import { useVislonTMP, useVislonFinishingProd } from '@/state/Vislon';
 import { DevTool } from '@hookform/devtools';
 
 export default function Index({
@@ -28,14 +28,15 @@ export default function Index({
 	setUpdateFinishingTRX,
 }) {
 	const { postData } = useVislonTMP();
+	const { invalidateQuery} = useVislonFinishingProd();
 	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, reset, watch, control, context } = useRHF(
 		{
 			...VISLON_TRANSACTION_SCHEMA,
 			trx_quantity_in_kg: NUMBER,
-			trx_quantity: NUMBER_REQUIRED.max(
-				Number(updateFinishingTRX?.teeth_molding_prod),
+			trx_quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0').max(
+				Number(updateFinishingTRX?.finishing_prod),
 				'Beyond Max Quantity'
 			),
 		},
@@ -78,6 +79,8 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateQuery();
 	};
 
 	return (
@@ -92,7 +95,7 @@ export default function Index({
 			<JoinInput
 				title='Transaction Quantity'
 				label='trx_quantity'
-				sub_label={`MAX: ${Number(updateFinishingTRX?.teeth_molding_prod)} PCS`}
+				sub_label={`MAX: ${Number(updateFinishingTRX?.finishing_prod)} PCS`}
 				unit='PCS'
 				{...{ register, errors }}
 			/>

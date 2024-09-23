@@ -12,6 +12,8 @@ import TapeLog from '@/pages/Common/Tape/Log';
 import TapeRequired from '@/pages/Common/Tape/Required';
 import TapeStock from '@/pages/Common/Tape/RM';
 import TapeProd from '@/pages/Common/Tape/SFG';
+//*SFG Tape Transfer
+import SFGEntryToTransfer from '@/pages/Common/Tape/SFG/Transfer';
 //* Dyeing Transfer
 import DyeingTransfer from '@/pages/Common/Transfer';
 import DyeingTransferEntry from '@/pages/Common/Transfer/EntryUpdate';
@@ -42,6 +44,7 @@ export const CommonRoutes = [
 							'click_to_dyeing',
 							'click_to_dyeing_against_stock',
 							'click_to_stock',
+							'click_to_transfer',
 							'update',
 							'delete',
 						],
@@ -71,6 +74,20 @@ export const CommonRoutes = [
 						element: <TapeRequired />,
 						page_name: 'common__tape_required',
 						actions: ['read', 'create', 'update', 'delete'],
+					},
+					{
+						name: 'SFG To Transfer',
+						path: '/common/tape/sfg/entry-to-transfer/:tape_uuid',
+						element: <SFGEntryToTransfer />,
+						hidden: true,
+						page_name: 'common__tape_sfg_entry_to_transfer',
+						actions: [
+							'read',
+							'create',
+							'update',
+							'click_production',
+							'click_to_dyeing',
+						],
 					},
 				],
 			},
@@ -110,6 +127,7 @@ export const CommonRoutes = [
 							'click_to_dyeing',
 							'click_to_dyeing_against_stock',
 							'click_to_stock',
+							'click_to_transfer',
 						],
 					},
 					{
@@ -124,6 +142,20 @@ export const CommonRoutes = [
 							'click_to_dyeing',
 							'create',
 							'update',
+						],
+					},
+					{
+						name: 'SFG To Transfer',
+						path: '/common/coil/sfg/entry-to-transfer/:coil_uuid',
+						element: <SFGEntryToTransfer />,
+						hidden: true,
+						page_name: 'common__common_sfg_entry_to_transfer',
+						actions: [
+							'read',
+							'create',
+							'update',
+							'click_production',
+							'click_to_dyeing',
 						],
 					},
 					{

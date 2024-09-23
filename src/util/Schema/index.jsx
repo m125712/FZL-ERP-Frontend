@@ -592,6 +592,8 @@ export const ORDER_NULL = {
 export const LAB_RECIPE_SCHEMA = {
 	lab_dip_info_uuid: null,
 	name: STRING_REQUIRED,
+	bleaching: STRING_REQUIRED,
+	sub_streat: STRING_REQUIRED,
 	approved: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	status: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	remarks: STRING.nullable(),
@@ -607,6 +609,8 @@ export const LAB_RECIPE_SCHEMA = {
 export const LAB_RECIPE_NULL = {
 	lab_dip_info_uuid: null,
 	name: '',
+	bleaching: 'bleach',
+	sub_streat: '',
 	approved: 0,
 	status: 0,
 	remarks: '',
@@ -2176,8 +2180,10 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
 			assigned_quantity: NUMBER.when('is_checked', {
 				is: true,
 				then: (Schema) =>
-					Schema.required('Quantity is required')
-						.max(yup.ref('quantity'), 'Beyond Max Quantity'),
+					Schema.required('Quantity is required').max(
+						yup.ref('quantity'),
+						'Beyond Max Quantity'
+					),
 				otherwise: (Schema) =>
 					Schema.nullable().transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? null : value
@@ -2186,8 +2192,10 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
 			assigned_weight: NUMBER_DOUBLE.when('is_checked', {
 				is: true,
 				then: (Schema) =>
-					Schema.required('Weight is required')
-						.max(yup.ref('weight'), 'Beyond Max Weight'),
+					Schema.required('Weight is required').max(
+						yup.ref('weight'),
+						'Beyond Max Weight'
+					),
 				otherwise: (Schema) =>
 					Schema.nullable().transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? null : value

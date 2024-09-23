@@ -66,6 +66,27 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'sub_streat',
+				header: 'Sub Streat',
+				enableColumnFilter: false,
+				cell: (info) =>
+					info.getValue() === 'txp'
+						? 'TXP'
+						: info.getValue() === 'ssp'
+							? 'SSP'
+							: 'Others',
+			},
+			{
+				accessorKey: 'bleaching',
+				header: 'Bleaching',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<span className='capitalize'>{info.getValue()}</span>
+					);
+				},
+			},
+			{
 				accessorKey: 'approved',
 				header: 'Approved',
 				enableColumnFilter: false,

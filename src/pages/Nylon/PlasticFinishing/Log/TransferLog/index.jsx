@@ -2,7 +2,6 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useMetalTMTrxLog } from '@/state/Metal';
 import { useNylonPlasticFinishingTrxLog } from '@/state/Nylon';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';

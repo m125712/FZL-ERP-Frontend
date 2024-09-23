@@ -1,17 +1,19 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import { JoinInput, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { useVislonFinishingProd, useVislonTMP } from '@/state/Vislon';
 import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { JoinInput, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import {
+	NUMBER_DOUBLE_REQUIRED,
 	NUMBER_REQUIRED,
 	SFG_PRODUCTION_SCHEMA_IN_KG,
 	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
 } from '@util/Schema';
-
-import nanoid from '@/lib/nanoid';
-import { useVislonTMP } from '@/state/Vislon';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -28,28 +30,31 @@ export default function Index({
 	setUpdateFinishingProd,
 }) {
 	const { postData } = useVislonTMP();
+	const { invalidateQuery } = useVislonFinishingProd();
 	const { user } = useAuth();
 
 	const MAX_PROD = Math.min(
 		Number(updateFinishingProd.balance_quantity),
-		Number(updateFinishingProd.coloring_prod)
-	).toFixed(3);
-	const MAX_PROD_KG = Number(MAX_PROD).toFixed(3);
-
-	const { register, handleSubmit, errors, reset, watch, control, context } = useRHF(
-		{
-			...SFG_PRODUCTION_SCHEMA_IN_KG,
-			production_quantity: NUMBER_REQUIRED.max(
-				MAX_PROD,
-				'Beyond Max Quantity'
-			),
-			production_quantity_in_kg: NUMBER_REQUIRED.max(
-				MAX_PROD_KG,
-				'Beyond Max Quantity'
-			),
-		},
-		SFG_PRODUCTION_SCHEMA_IN_KG_NULL
+		Number(updateFinishingProd.order_quantity)
 	);
+
+	const MAX_PROD_KG = Number(updateFinishingProd.finishing_stock);
+
+	const { register, handleSubmit, errors, reset, watch, control, context } =
+		useRHF(
+			{
+				...SFG_PRODUCTION_SCHEMA_IN_KG,
+				production_quantity: NUMBER_REQUIRED.moreThan(
+					0,
+					'More Than 0'
+				).max(MAX_PROD, 'Beyond Max Quantity'),
+				production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+					0,
+					'More Than 0'
+				).max(MAX_PROD_KG, 'Beyond Max Quantity'),
+			},
+			SFG_PRODUCTION_SCHEMA_IN_KG_NULL
+		);
 
 	const MAX_WASTAGE_KG = Number(
 		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
@@ -88,6 +93,8 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateQuery();
 	};
 
 	return (
@@ -99,7 +106,7 @@ export default function Index({
 				${updateFinishingProd.item_description} -> 
 				${updateFinishingProd.style_color_size} 
 				`}
-				formContext={context}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
@@ -107,7 +114,7 @@ export default function Index({
 				title='Production Quantity'
 				label='production_quantity'
 				unit='PCS'
-				sub_label={`MAX: ${MAX_PROD_KG} PCS`}
+				sub_label={`MAX: ${MAX_PROD} PCS`}
 				{...{ register, errors }}
 			/>
 			<JoinInput

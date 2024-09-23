@@ -36,7 +36,7 @@ export default function Index({
 	const { register, handleSubmit, errors, reset, control, context } = useRHF(
 		{
 			...SFG_TRANSACTION_SCHEMA_IN_PCS,
-			trx_quantity: NUMBER_REQUIRED.max(
+			trx_quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0').max(
 				MAX_QUANTITY,
 				'Beyond Max Quantity'
 			),

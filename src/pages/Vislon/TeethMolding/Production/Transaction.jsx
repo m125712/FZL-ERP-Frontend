@@ -32,7 +32,7 @@ export default function Index({
 		useRHF(
 			{
 				...VISLON_TRANSACTION_SCHEMA,
-				trx_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.max(
+				trx_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0').max(
 					Number(updateTeethMoldingTRX?.teeth_molding_prod),
 					'Beyond Max Quantity'
 				),

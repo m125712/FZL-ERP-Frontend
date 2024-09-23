@@ -1,15 +1,20 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import {
-	VISLON_TRANSACTION_SCHEMA_NULL,
-	VISLON_TRANSACTION_SCHEMA,
-	NUMBER_REQUIRED,
-	NUMBER,
-} from '@util/Schema';
-import { useVislonTMTEntryByUUID } from '@/state/Vislon';
 import { useEffect } from 'react';
+import {
+	useVislonFinishingProd,
+	useVislonTMTEntryByUUID,
+} from '@/state/Vislon';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, JoinInput } from '@/ui';
+
+import {
+	NUMBER,
+	NUMBER_REQUIRED,
+	VISLON_TRANSACTION_SCHEMA,
+	VISLON_TRANSACTION_SCHEMA_NULL,
+} from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -25,29 +30,19 @@ export default function Index({
 	setUpdateFinishingLog,
 }) {
 	const MAX_QUANTITY =
-		Number(updateFinishingLog?.coloring_prod) +
+		Number(updateFinishingLog?.finishing_prod) +
 		Number(updateFinishingLog?.trx_quantity);
 
 	const { data, updateData, url } = useVislonTMTEntryByUUID(
 		updateFinishingLog?.uuid
 	);
-
-	const {
-		register,
-		handleSubmit,
-		errors,
-		control,
-		Controller,
-		reset,
-		getValues,
-		context
-	} = useRHF(
+	const { invalidateQuery } = useVislonFinishingProd();
+	const { register, handleSubmit, errors, reset, context } = useRHF(
 		{
 			...VISLON_TRANSACTION_SCHEMA,
 			trx_quantity_in_kg: NUMBER,
-			trx_quantity: NUMBER_REQUIRED.max(
-				Number(updateFinishingLog?.teeth_molding_prod) +
-					Number(updateFinishingLog?.trx_quantity_in_kg),
+			trx_quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0').max(
+				MAX_QUANTITY,
 				'Beyond Max Quantity'
 			),
 		},
@@ -93,6 +88,8 @@ export default function Index({
 				updatedData: updatedData,
 				onClose,
 			});
+
+			invalidateQuery();
 
 			return;
 		}

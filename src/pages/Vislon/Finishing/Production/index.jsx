@@ -81,7 +81,19 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'slider_finishing_stock',
-				header: 'Slider Finishing Stock (KG)',
+				header: 'Slider Finishing Stock (PCS)',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'balance_quantity',
+				header: (
+					<span>
+						Balance
+						<br />
+						(PCS)
+					</span>
+				),
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
@@ -135,18 +147,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-			{
-				accessorKey: 'balance_quantity',
-				header: (
-					<span>
-						Balance
-						<br />
-						(KG)
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
-			},
+
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',

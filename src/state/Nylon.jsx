@@ -14,7 +14,7 @@ export const useNylonMFProduction = (enabled = true) =>
 export const useNylonMFProductionLog = () =>
 	createGlobalState({
 		queryKey: nylonQK.nylonMFProductionLog(),
-		url: '/zipper/sfg-production/by/finishing?item_name=nylon&stopper_type=metallic stopper',
+		url: '/zipper/sfg-production/by/finishing?item_name=nylon&nylon_stopper=metallic',
 	});
 
 export const useNylonMFProductionLogByUUID = (uuid, { enabled = true }) =>
@@ -28,7 +28,7 @@ export const useNylonMFProductionLogByUUID = (uuid, { enabled = true }) =>
 export const useNylonMFTrxLog = () =>
 	createGlobalState({
 		queryKey: nylonQK.nylonMFTrxLog(),
-		url: '/zipper/sfg-transaction/by/finishing_prod?item_name=nylon&stopper_type=metallic stopper',
+		url: '/zipper/sfg-transaction/by/finishing_prod?item_name=nylon&nylon_stopper=metallic',
 	});
 
 export const useNylonMFTrxLogByUUID = (uuid, { enabled = true }) =>
@@ -134,5 +134,5 @@ export const useNylonPlasticFinishingTrxLogByUUID = (
 export const useNylonPlasticFinishingProduction = () =>
 	createGlobalState({
 		queryKey: nylonQK.nylonPlasticProduction(),
-		url: '/zipper/sfg/by/finishing?item_name=nylon&stopper_type=plastic stopper',
+		url: '/zipper/sfg/by/finishing?item_name=nylon&nylon_stopper=plastic',
 	});

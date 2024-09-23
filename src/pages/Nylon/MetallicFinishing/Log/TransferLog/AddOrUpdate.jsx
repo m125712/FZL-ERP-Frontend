@@ -33,8 +33,9 @@ export default function Index({
 		enabled: updateLog.uuid !== null,
 	});
 	const MAX_QUANTITY =
-		Number(updateLog?.teeth_coloring_prod) +
+		Number(updateLog?.finishing_prod) +
 		Number(updateLog?.trx_quantity);
+
 	const schema = {
 		...SFG_TRANSFER_LOG_SCHEMA,
 		trx_quantity: SFG_TRANSFER_LOG_SCHEMA.trx_quantity

@@ -2,7 +2,7 @@ import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
-import { useNylonPlasticFinishingProductionLog } from '@/state/Nylon';
+import { useNylonPlasticFinishingProductionLog, useNylonPlasticFinishingProduction } from '@/state/Nylon';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 import { useMemo, useState } from 'react';
@@ -11,6 +11,7 @@ import SFGAddOrUpdate from './AddOrUpdate';
 export default function Index() {
 	const { data, isLoading, url, deleteData } =
 		useNylonPlasticFinishingProductionLog();
+		const { invalidateQuery} =useNylonPlasticFinishingProduction();
 	const info = new PageInfo('Production Log', url);
 	const haveAccess = useAccess('nylon__plastic_finishing_log');
 
@@ -186,6 +187,7 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateQuery}
 					{...{
 						deleteItem,
 						setDeleteItem,

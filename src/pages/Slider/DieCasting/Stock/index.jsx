@@ -13,7 +13,7 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } = useSliderDieCastingStock();
 	const info = new PageInfo('Stock', url, 'slider__die_casting_stock');
 	const haveAccess = useAccess('slider__die_casting_stock');
-
+	
 	const columns = useMemo(
 		() => [
 			{

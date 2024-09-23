@@ -1,16 +1,19 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF, useUpdateFunc } from '@/hooks';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import {
-	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
-	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,
-	NUMBER_REQUIRED,
-} from '@util/Schema';
-import { useSliderAssemblyProductionEntryByUUID } from '@/state/Slider';
 import { useEffect } from 'react';
+import { useSliderAssemblyProductionEntryByUUID } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
 import * as yup from 'yup';
+import { useRHF, useUpdateFunc } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
+import {
+	NUMBER_REQUIRED,
+	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,
+	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
+} from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
+
 export default function Index({
 	modalId = '',
 	updateSliderProd = {
@@ -80,6 +83,7 @@ export default function Index({
 		if (updateSliderProd?.uuid !== null) {
 			const updatedData = {
 				...data,
+				with_link: data.with_link ? 1 : 0,
 				updated_at: GetDateTime(),
 			};
 
@@ -117,6 +121,12 @@ export default function Index({
 			<JoinInput
 				label='production_quantity'
 				unit='PCS'
+				sub_label={`Max: ${Number(getValues('max_coloring_quantity'))}`}
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				label='weight'
+				unit='kg'
 				sub_label={`Max: ${Number(getValues('max_coloring_quantity'))}`}
 				{...{ register, errors }}
 			/>

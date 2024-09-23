@@ -6,6 +6,7 @@ import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
 import {
 	NUMBER_REQUIRED,
+	NUMBER_DOUBLE_REQUIRED,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
 } from '@util/Schema';
@@ -41,6 +42,7 @@ export default function Index({
 					updateSliderProd?.coloring_stock,
 					'Beyond Max'
 				),
+				weight: NUMBER_DOUBLE_REQUIRED,
 			},
 			SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL
 		);
@@ -105,6 +107,13 @@ export default function Index({
 				label='production_quantity'
 				unit='PCS'
 				sub_label={`MAX: ${Number(updateSliderProd?.coloring_stock)} PCS`}
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				title='Production Weight'
+				label='weight'
+				unit='KG'
+				sub_label={`MAX: ${Number(updateSliderProd?.coloring_stock)} KG`}
 				{...{ register, errors }}
 			/>
 			<JoinInput

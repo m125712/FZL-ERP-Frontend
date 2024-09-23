@@ -93,8 +93,9 @@ export default function Index({
 			isSmall={true}>
 			<Input label='count' {...{ register, errors }} />
 			<Input label='length' {...{ register, errors }} />
-			<Input label='max_weight' {...{ register, errors }} />
 			<Input label='min_weight' {...{ register, errors }} />
+			<Input label='max_weight' {...{ register, errors }} />
+
 			<Input label='price' {...{ register, errors }} />
 			<Input label='sst' {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />

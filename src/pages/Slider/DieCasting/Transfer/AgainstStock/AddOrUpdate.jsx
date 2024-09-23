@@ -59,7 +59,7 @@ export default function Index({
 				onClose,
 			});
 
-			invalidateQuery()
+			invalidateQuery();
 			return;
 		}
 	};
@@ -81,6 +81,13 @@ export default function Index({
 				label='quantity'
 				unit='PCS'
 				sub_label={`MAX: ${Number(getValues('max_quantity'))} PCS`}
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				title='Production weight'
+				label='weight'
+				unit='KH'
+				sub_label={`MAX: ${Number(getValues('max_weight'))} KH`}
 				{...{ register, errors }}
 			/>
 

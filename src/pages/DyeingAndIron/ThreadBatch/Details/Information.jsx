@@ -28,6 +28,7 @@ export default function Information({ batch }) {
 		lab_created_by_name,
 		lab_updated_at,
 		machine_name,
+		slot,
 		machine_uuid,
 		pass_by_name,
 		reason,
@@ -72,6 +73,7 @@ export default function Information({ batch }) {
 				label: 'Machine',
 				value: coning_machines,
 			},
+
 			{
 				label: 'Operator',
 				value: coning_operator_name,
@@ -108,6 +110,10 @@ export default function Information({ batch }) {
 			{
 				label: 'Machine',
 				value: machine_name,
+			},
+			{
+				label: 'Slot',
+				value: slot === 0 ? '-' : 'Slot ' + slot,
 			},
 			{
 				label: 'Operator',
@@ -167,7 +173,7 @@ export default function Information({ batch }) {
 
 				<RenderTable
 					// className={'border-secondary/30 lg:border-t'}
-					title={'Dying'}
+					title={'Dyeing'}
 					items={renderItems().dying}
 				/>
 			</div>

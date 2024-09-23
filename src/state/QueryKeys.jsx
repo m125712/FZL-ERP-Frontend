@@ -228,6 +228,10 @@ export const commonQK = {
 	coilRMLog: () => [...commonQK.all(), 'coil/rm-log'],
 	coilRMLogByUUID: (uuid) => [...commonQK.coilRMLog(), uuid],
 
+	// * coilToStockLog
+	coilToStock: () => [...commonQK.all(), 'coil/to-stock'],
+	coilToStockByUUID: (uuid) => [...commonQK.coilToStock(), uuid],
+
 	// * materialUsed
 	materialUsed: () => [...commonQK.all(), 'material/used'],
 	materialUsedByUUID: (uuid) => [...commonQK.materialUsed(), uuid],

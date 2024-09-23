@@ -41,7 +41,13 @@ const Index = () => {
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'quantity',
+				header: 'Quantity (PCS)',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'weight',
+				header: 'Weight (KG)',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},

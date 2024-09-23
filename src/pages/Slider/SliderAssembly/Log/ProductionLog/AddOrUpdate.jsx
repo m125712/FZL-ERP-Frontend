@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 import { useSliderAssemblyProductionEntryByUUID } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
+import { Weight } from 'lucide-react';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
 import {
+	NUMBER_DOUBLE_REQUIRED,
 	NUMBER_REQUIRED,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
@@ -46,6 +48,7 @@ export default function Index({
 				MAX_QUANTITY,
 				'Beyond Max Quantuty'
 			),
+			weight: NUMBER_DOUBLE_REQUIRED,
 		},
 		SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL
 	);
@@ -128,6 +131,12 @@ export default function Index({
 			<JoinInput
 				label='production_quantity'
 				unit='PCS'
+				sub_label={`Max: ${MAX_QUANTITY}`}
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				label='weight'
+				unit='KG'
 				sub_label={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>

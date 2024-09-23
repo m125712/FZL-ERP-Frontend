@@ -216,8 +216,8 @@ export default function Index({
 					/>
 				</div>
 			</div>
-			<Input label='max_capacity' {...{ register, errors }} />
 			<Input label='min_capacity' {...{ register, errors }} />
+			<Input label='max_capacity' {...{ register, errors }} />
 			<Input label='water_capacity' {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />
 

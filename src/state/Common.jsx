@@ -30,7 +30,7 @@ export const useCommonTapeProductionByUUID = (uuid) =>
 export const useCommonTapeToCoil = () =>
 	createGlobalState({
 		queryKey: commonQK.tapeToCoil(),
-		url: `/zipper/tape-trx`,
+		url: `/zipper/tape-trx/by/tape`,
 	});
 
 export const useCommonTapeToCoilByUUID = (uuid) =>
@@ -111,6 +111,12 @@ export const useCommonCoilToDyeingByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: commonQK.coilToDyeingByUUID(uuid),
 		url: `/zipper/tape-coil-to-dyeing/${uuid}`,
+	});
+// * Coil To Stock Log * //
+export const useCommonCoilToStockLog = () =>
+	createGlobalState({
+		queryKey: commonQK.coilToStock(),
+		url: `/zipper/tape-trx/by/coil`,
 	});
 
 // * Tape to Dyeing

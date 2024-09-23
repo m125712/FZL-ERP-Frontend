@@ -1,10 +1,12 @@
+import { lazy, useMemo, useState } from 'react';
+import { useVislonFinishingProd } from '@/state/Vislon';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useVislonFinishingProd } from '@/state/Vislon';
 import { LinkWithCopy, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useMemo, useState } from 'react';
 
 const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
@@ -68,6 +70,18 @@ export default function Index() {
 						QTY (PCS)
 					</span>
 				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'finishing_stock',
+				header: 'Finishing Stock (KG)',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'slider_finishing_stock',
+				header: 'Slider Finishing Stock (KG)',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},

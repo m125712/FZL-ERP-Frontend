@@ -1199,6 +1199,7 @@ export const SLIDER_SLIDER_ASSEMBLY_NULL = {
 export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA = {
 	with_link: BOOLEAN.default(true),
 	production_quantity: NUMBER_REQUIRED,
+	weight: NUMBER_DOUBLE_REQUIRED,
 	wastage: NUMBER.nullable().transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? 0 : value
 	),
@@ -1208,6 +1209,7 @@ export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA = {
 export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL = {
 	with_link: true,
 	production_quantity: null,
+	weight: null,
 	wastage: 0,
 	remarks: '',
 };
@@ -1215,11 +1217,13 @@ export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL = {
 // * Slider Assembly Transaction entry
 export const SLIDER_ASSEMBLY_TRANSACTION_SCHEMA = {
 	trx_quantity: NUMBER_REQUIRED,
+	weight: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
 export const SLIDER_ASSEMBLY_TRANSACTION_NULL = {
 	trx_quantity: null,
+	weight: null,
 	remarks: '',
 };
 
@@ -1861,6 +1865,8 @@ export const DYEING_PLANNING_HEADOFFICE_NULL = {
 // * Dyeing Planning Batch schema*//
 
 export const DYEING_BATCH_SCHEMA = {
+	machine_uuid: STRING_REQUIRED,
+	slot: NUMBER.nullable(),
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
 		yup.object().shape({
@@ -1885,6 +1891,8 @@ export const DYEING_BATCH_SCHEMA = {
 };
 
 export const DYEING_BATCH_NULL = {
+	machine_uuid: null,
+	slot: null,
 	remarks: '',
 	batch_entry: [
 		{
@@ -1898,6 +1906,8 @@ export const DYEING_BATCH_NULL = {
 // * Dyeing Thread Batch schema*//
 
 export const DYEING_THREAD_BATCH_SCHEMA = {
+	machine_uuid: STRING_REQUIRED,
+	slot: NUMBER.nullable(),
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
 		yup.object().shape({
@@ -1907,6 +1917,8 @@ export const DYEING_THREAD_BATCH_SCHEMA = {
 };
 
 export const DYEING_THREAD_BATCH_NULL = {
+	machine_uuid: null,
+	slot: null,
 	remarks: '',
 	batch_entry: [
 		{
@@ -2214,15 +2226,29 @@ export const SLIDER_DASHBOARD_INFO_NULL = {
 // * Slider/Die Casting --> (TRANSFER AGAINST STOCK)*//
 export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
 	section: STRING_REQUIRED,
+	order_description_uuid: STRING.when('section', {
+		is: (value) => value == 'coloring',
+		then: (schema) => schema.required('order is required'),
+		otherwise: (schema) => schema.nullable(),
+	}),
 	stocks: yup.array().of(
 		yup.object().shape({
 			is_checked: BOOLEAN_REQUIRED,
-			assigned_quantity: yup.number().when('is_checked', {
+			assigned_quantity: NUMBER.when('is_checked', {
 				is: true,
 				then: (Schema) =>
-					Schema.typeError('Must be a number')
-						.required('Quantity is required')
+					Schema.required('Quantity is required')
 						.max(yup.ref('quantity'), 'Beyond Max Quantity'),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
+			assigned_weight: NUMBER_DOUBLE.when('is_checked', {
+				is: true,
+				then: (Schema) =>
+					Schema.required('Weight is required')
+						.max(yup.ref('weight'), 'Beyond Max Weight'),
 				otherwise: (Schema) =>
 					Schema.nullable().transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? null : value
@@ -2235,6 +2261,7 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
 
 export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_NULL = {
 	uuid: null,
+	order_description_uuid: null,
 	section: '',
 	is_body: false,
 	is_cap: false,
@@ -2248,11 +2275,16 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_UPDATE = {
 		yup.ref('max_quantity'),
 		'Beyond Max Quantity'
 	),
+	weight: NUMBER_DOUBLE_REQUIRED.max(
+		yup.ref('max_weight'),
+		'Beyond Max Quantity'
+	),
 	remarks: STRING.nullable(),
 };
 
 export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_UPDATE_NULL = {
 	quantity: null,
+	weight: null,
 	remarks: '',
 };
 
@@ -2261,11 +2293,16 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_UPDATE = {
 		yup.ref('max_quantity'),
 		'Beyond Max Quantity'
 	),
+	weight: NUMBER_DOUBLE_REQUIRED.max(
+		yup.ref('max_weight'),
+		'Beyond Max Quantity'
+	),
 	remarks: STRING.nullable(),
 };
 
 export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_UPDATE_NULL = {
 	trx_quantity: null,
+	weight: null,
 	remarks: '',
 };
 

@@ -118,6 +118,12 @@ export default function Index({
 				sub_label={`Max: ${Number(updateSliderTrx?.max_coloring_quantity)} PCS`}
 				{...{ register, errors }}
 			/>
+			<JoinInput
+				label='weight'
+				unit='KG'
+				sub_label={`Max: ${Number(updateSliderTrx?.max_coloring_quantity)} KG`}
+				{...{ register, errors }}
+			/>
 			<Input label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>

@@ -117,6 +117,13 @@ export default function Index({
 				sub_label={`MAX: ${Number(getValues('max_quantity'))} PCS`}
 				{...{ register, errors }}
 			/>
+			<JoinInput
+				title='Production Weight'
+				label='weight'
+				unit='KG'
+				sub_label={`MAX: ${Number(getValues('max_weight'))} KG`}
+				{...{ register, errors }}
+			/>
 			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);

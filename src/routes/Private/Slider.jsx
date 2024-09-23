@@ -103,6 +103,8 @@ export const SliderRoutes = [
 							'delete',
 							'click_update_rm_order',
 							'click_delete_rm_order',
+							'click_update_rm',
+							'click_delete_rm',
 						],
 					},
 
@@ -152,7 +154,7 @@ export const SliderRoutes = [
 						page_name: 'slider__assembly_log',
 						actions: ['read', 'create', 'update', 'delete'],
 					},
-					
+
 					{
 						name: 'Stock',
 						path: '/slider/slider-assembly/stock',

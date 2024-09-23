@@ -25,7 +25,7 @@ export default function Index({
 	const { url, postData } = useDyeingRM();
 	const { data: material } = useOtherMaterial();
 
-	//const { invalidateQuery: invalidateDyeingRMLog } = useDyeingRMLog();
+	const { invalidateQuery: invalidateDyeingRMLog } = useDyeingRM();
 	const MAX_QUANTITY = updateDyeingStock?.dying_and_iron;
 
 	const schema = {
@@ -74,7 +74,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
-		//invalidateDyeingRMLog();
+		invalidateDyeingRMLog();
 	};
 
 	return (

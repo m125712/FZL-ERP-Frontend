@@ -609,7 +609,7 @@ export const LAB_RECIPE_SCHEMA = {
 export const LAB_RECIPE_NULL = {
 	lab_dip_info_uuid: null,
 	name: '',
-	bleaching: 'bleach',
+	bleaching: 'non-bleach',
 	sub_streat: '',
 	approved: 0,
 	status: 0,

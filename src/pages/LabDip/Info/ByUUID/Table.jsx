@@ -8,6 +8,7 @@ import { DateTime, LinkWithCopy } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({ recipe }) {
+	console.log(recipe);
 	const { updateData, url } = useLabDipRecipe();
 	const { invalidateQuery: invalidateQueryLabDipInfo } =
 		UseLabDipInfoByDetails(recipe?.uuid);

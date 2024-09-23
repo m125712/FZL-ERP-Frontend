@@ -3,11 +3,8 @@ import { UseLabDipInfoByDetails } from '@/state/LabDip';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAccess, useFetch, useFetchFunc } from '@/hooks';
 
-
-
 import Information from './Information';
 import Table from './Table';
-
 
 export default function Index() {
 	const { info_uuid } = useParams();
@@ -18,6 +15,7 @@ export default function Index() {
 	// 	loading,
 	// } = useFetch(`/lab-dip/info/details/${info_uuid}`, [info_uuid]);
 	const { data, isLoading } = UseLabDipInfoByDetails(info_uuid);
+	console.log(data);
 
 	useEffect(() => {
 		document.title = 'Info Details';

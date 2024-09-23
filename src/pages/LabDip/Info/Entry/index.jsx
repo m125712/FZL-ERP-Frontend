@@ -142,7 +142,7 @@ export default function Index() {
 				.then(() => reset(LAB_INFO_NULL))
 				.then(() => {
 					// invalidateQueryLabDipInfo();
-					// navigate(`/lab-dip/info/details/${data?.uuid}`);
+					navigate(`/lab-dip/info/details/${data?.uuid}`);
 				})
 				.catch((err) => console.log(err));
 
@@ -171,6 +171,7 @@ export default function Index() {
 		});
 
 		const recipe = [...data.recipe].map((item) => ({
+			...item,
 			lab_dip_info_uuid,
 			status: item.status ? 1 : 0,
 			approved: item.approved ? 1 : 0,
@@ -178,11 +179,11 @@ export default function Index() {
 
 		// * insert the recipe data using update function
 		let recipe_promises = [
-			...lab_info.recipe.map(
+			...recipe.map(
 				async (item) =>
 					await updateData.mutateAsync({
 						url: `/lab-dip/update-recipe/by/${item.recipe_uuid}`,
-						updatedData: recipe,
+						updatedData: item,
 						isOnCloseNeeded: false,
 					})
 			),
@@ -190,14 +191,14 @@ export default function Index() {
 
 		//* Post new entry *//
 
-		// await Promise.all(recipe_promises)
-		// 	.then(() => reset(LAB_INFO_NULL))
-		// 	.then(() => {
-		// 		invalidateQueryLabDipInfo();
-		// 		navigate(`/lab-dip/info/details/${lab_dip_info_uuid}`);
-		// 	})
+		await Promise.all(recipe_promises)
+			.then(() => reset(LAB_INFO_NULL))
+			.then(() => {
+				invalidateQueryLabDipInfo();
+				navigate(`/lab-dip/info/details/${lab_dip_info_uuid}`);
+			})
 
-		// 	.catch((err) => console.log(err));
+			.catch((err) => console.log(err));
 	};
 
 	// Check if recipe_id is valid

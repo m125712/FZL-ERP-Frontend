@@ -120,10 +120,7 @@ export default function Index() {
 
 	const handelUpdate = (idx) => {
 		const uuid = data[idx]?.uuid;
-		const order_info_uuid = data[idx]?.order_info_uuid;
-		navigate(
-			`/delivery/packing-list/${uuid}/update?order_info_uuid=${order_info_uuid}`
-		);
+		navigate(`/delivery/packing-list/${uuid}/update`);
 	};
 
 	// Delete

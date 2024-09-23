@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { useCommercialPI } from '@/state/Commercial';
+import { useDeliveryPackingList } from '@/state/Delivery';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -10,9 +10,9 @@ import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
 	const navigate = useNavigate();
-	const { data, isLoading, url } = useCommercialPI();
-	const info = new PageInfo('Packing Lists', url, 'delivery__packing_lists');
-	const haveAccess = useAccess('delivery__packing_lists');
+	const { data, isLoading, url } = useDeliveryPackingList();
+	const info = new PageInfo('Packing List', url, 'delivery__packing_list');
+	const haveAccess = useAccess('delivery__packing_list');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -31,6 +31,18 @@ export default function Index() {
 						uri={`details`}
 					/>
 				),
+			},
+			{
+				accessorKey: 'carton_size',
+				header: 'Carton Size',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'carton_weight',
+				header: 'Carton Weight',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 
 			{
@@ -81,11 +93,14 @@ export default function Index() {
 		[data]
 	);
 
-	const handelAdd = () => navigate('/delivery/packing-lists/entry');
+	const handelAdd = () => navigate('/delivery/packing-list/entry');
 
 	const handelUpdate = (idx) => {
 		const uuid = data[idx]?.uuid;
-		navigate(`/delivery/packing-lists/${uuid}/update`);
+		const order_info_uuid = data[idx]?.order_info_uuid;
+		navigate(
+			`/delivery/packing-list/${uuid}/update?order_info_uuid=${order_info_uuid}`
+		);
 	};
 
 	if (isLoading)

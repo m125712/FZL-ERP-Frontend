@@ -1,9 +1,14 @@
 import { Suspense, useEffect, useState } from 'react';
-import { useCommercialPI, useCommercialPIEntry } from '@/state/Commercial';
+import {
+	useDeliveryPackingList,
+	useDeliveryPackingListByOrderInfoUUID,
+	useDeliveryPackingListDetailsByUUID,
+	useDeliveryPackingListEntry,
+} from '@/state/Delivery';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
@@ -11,29 +16,30 @@ import { CheckBoxWithoutLabel, DynamicDeliveryField, Input } from '@/ui';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
-import { PI_NULL, PI_SCHEMA } from '@util/Schema';
+import { PACKING_LIST_NULL, PACKING_LIST_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-import isJSON from '@/util/isJson';
 
 import Header from './Header';
 
 export default function Index() {
-	const { pi_uuid } = useParams();
+	const { uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
 
-	const { url: commercialPiEntryUrl } = useCommercialPIEntry();
+	const { url: deliveryPackingListEntryUrl } = useDeliveryPackingListEntry();
 	const {
-		url: commercialPiUrl,
+		url: deliveryPackingListUrl,
 		postData,
 		updateData,
 		deleteData,
-	} = useCommercialPI();
+	} = useDeliveryPackingList();
 
+	const { data: details } = useDeliveryPackingListDetailsByUUID(uuid, {
+		params: `is_update=true&order_info_uuid=4jTKeuPjNptib7V`,
+	});
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
-	const isUpdate = pi_uuid !== undefined;
-	const [orderInfoIds, setOrderInfoIds] = useState('');
+	const isUpdate = uuid !== undefined;
 
 	const {
 		register,
@@ -46,12 +52,31 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
-	} = useRHF(PI_SCHEMA, PI_NULL);
+	} = useRHF(PACKING_LIST_SCHEMA, PACKING_LIST_NULL);
 
-	// pi_cash_entry
+	const { data: packingListEntries } = useDeliveryPackingListByOrderInfoUUID(
+		watch('order_info_uuid')
+	);
+
+	useEffect(() => {
+		if (!isUpdate && packingListEntries?.packing_list_entry) {
+			setValue(
+				'packing_list_entry',
+				packingListEntries?.packing_list_entry
+			);
+		}
+	}, [packingListEntries, isUpdate, reset]);
+
+	useEffect(() => {
+		console.log({
+			details,
+		});
+	}, [details]);
+
+	// packing_list_entry
 	const { fields: orderEntryField } = useFieldArray({
 		control,
-		name: 'pi_cash_entry',
+		name: 'packing_list_entry',
 	});
 
 	const [deleteItem, setDeleteItem] = useState({
@@ -59,111 +84,53 @@ export default function Index() {
 		itemName: null,
 	});
 
-	isUpdate
-		? useFetchForRhfReset(
-				`/commercial/pi-cash/details/${pi_uuid}`,
-				pi_uuid,
-				reset
-			)
-		: useFetchForRhfReset(
-				`/commercial/pi-cash/details/by/order-info-ids/${orderInfoIds}/${watch('party_uuid')}/${watch('marketing_uuid')}`,
-				orderInfoIds,
-				reset
-			);
-
-	useEffect(() => {
-		if (!isUpdate) return;
-		if (orderInfoIds === null) return;
-
-		const updatedPiEntries = getValues('pi_cash_entry').map((item) => {
-			if (!orderInfoIds.includes(item.order_info_uuid)) {
-				return {
-					...item,
-					isDeletable: true,
-				};
-			}
-
-			return item;
-		});
-
-		setValue('pi_cash_entry', updatedPiEntries);
-	}, [isUpdate, orderInfoIds]);
-
-	useEffect(() => {
-		const order_info_uuids = getValues('order_info_uuids');
-
-		if (order_info_uuids === null || order_info_uuids === '') {
-			setOrderInfoIds(null);
-		} else {
-			if (isJSON(order_info_uuids)) {
-				setOrderInfoIds(() =>
-					JSON.parse(order_info_uuids).split(',').join(',')
-				);
-			} else {
-				const order_info_uuids = getValues('order_info_uuids');
-				if (!Array.isArray(order_info_uuids)) {
-					setOrderInfoIds(() => order_info_uuids);
-				} else {
-					setOrderInfoIds(() => order_info_uuids.join(','));
-				}
-			}
-		}
-	}, [watch('order_info_uuids')]);
-
 	// Submit
 	const onSubmit = async (data) => {
 		// Update item
 		if (isUpdate) {
-			const commercialPiData = {
-				order_info_uuids: orderInfoIds
-					? JSON.stringify(orderInfoIds)
-					: '',
-				bank_uuid: data?.bank_uuid,
-				validity: data?.validity,
-				payment: data?.payment,
-				remarks: data?.remarks,
+			const packingListData = {
+				...data,
 				updated_at: GetDateTime(),
 			};
 
-			// update /commercial/pi/{uuid}
-			const commercialPiPromise = await updateData.mutateAsync({
-				url: `${commercialPiUrl}/${data?.uuid}`,
-				updatedData: commercialPiData,
+			// update /packing/list/uuid
+			const packingListPromise = await updateData.mutateAsync({
+				url: `${deliveryPackingListUrl}/${data?.uuid}`,
+				updatedData: packingListData,
 				uuid: data.uuid,
 				isOnCloseNeeded: false,
 			});
 
-			const updatedId = commercialPiPromise?.data?.[0].updatedId;
+			const updatedId = packingListPromise?.data?.[0].updatedId;
 
-			// pi entry
-			let updatedableCommercialPiEntryPromises = data.pi_cash_entry
-				.filter((item) => item.pi_quantity > 0 && !item.isDeletable)
+			// update /packing/list/uuid/entry
+			let updatablePackingListEntryPromises = data.packing_list_entry
+				.filter((item) => item.quantity > 0 && !item.isDeletable)
 				.map(async (item) => {
-					if (item.uuid === null && item.pi_quantity > 0) {
+					if (item.uuid === null && item.quantity > 0) {
 						return await postData.mutateAsync({
-							url: commercialPiEntryUrl,
+							url: deliveryPackingListEntryUrl,
 							newData: {
 								uuid: nanoid(),
 								is_checked: item.is_checked,
-								sfg_uuid: item?.sfg_uuid,
-								pi_cash_quantity: item?.pi_cash_quantity,
-								pi_cash_uuid: pi_uuid,
+								quantity: item?.quantity,
+								packing_list_uuid: uuid,
 								created_at: GetDateTime(),
-								remarks: item?.remarks || null,
 							},
 							isOnCloseNeeded: false,
 						});
 					}
 
-					if (item.uuid && item.pi_quantity >= 0) {
+					if (item.uuid && item.quantity >= 0) {
 						const updatedData = {
-							pi_quantity: item.pi_quantity,
+							quantity: item.quantity,
 							is_checked: item.is_checked,
+							remarks: item.remarks,
 							updated_at: GetDateTime(),
 						};
 
 						return await updateData.mutateAsync({
-							url: `${commercialPiEntryUrl}/${item?.uuid}`,
+							url: `${deliveryPackingListEntryUrl}/${item?.uuid}`,
 							updatedData: updatedData,
 							uuid: item.uuid,
 							isOnCloseNeeded: false,
@@ -172,24 +139,24 @@ export default function Index() {
 					return null;
 				});
 
-			let deleteableCommercialPiEntryPromises = data.pi_cash_entry
+			let deletablePackingListEntryPromises = data.packing_list_entry
 				.filter((item) => item.isDeletable)
 				.map(async (item) => {
 					return await deleteData.mutateAsync({
-						url: `${commercialPiEntryUrl}/${item?.uuid}`,
+						url: `${deliveryPackingListEntryUrl}/${item?.uuid}`,
 						isOnCloseNeeded: false,
 					});
 				});
 
 			try {
 				await Promise.all([
-					commercialPiPromise,
-					...updatedableCommercialPiEntryPromises,
-					deleteableCommercialPiEntryPromises,
+					packingListPromise,
+					...updatablePackingListEntryPromises,
+					deletablePackingListEntryPromises,
 				])
 					.then(() => reset(Object.assign({}, PI_NULL)))
 					.then(() => {
-						navigate(`/commercial/pi/details/${updatedId}`);
+						navigate(`/delivery/packing-list/details/${updatedId}`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -199,58 +166,56 @@ export default function Index() {
 		}
 
 		// Add new item
-		var new_pi_uuid = nanoid();
+		var new_uuid = nanoid();
 		const created_at = GetDateTime();
 
-		const commercialPiData = {
+		const packingListData = {
 			...data,
-			uuid: new_pi_uuid,
-			order_info_uuids: JSON.stringify(orderInfoIds),
+			uuid: new_uuid,
 			created_at,
 			created_by: user.uuid,
-			is_pi: 1,
 		};
 
-		delete commercialPiData['is_all_checked'];
-		delete commercialPiData['pi_cash_entry'];
+		delete packingListData['is_all_checked'];
+		delete packingListData['packing_list_entry'];
 
-		const commercialPiEntryData = [...data.pi_cash_entry]
-			.filter((item) => item.is_checked && item.pi_quantity > 0)
+		const packingListEntryData = [...data.packing_list_entry]
+			.filter((item) => item.is_checked && item.quantity > 0)
 			.map((item) => ({
+				...item,
 				uuid: nanoid(),
 				is_checked: true,
-				sfg_uuid: item?.sfg_uuid,
-				pi_cash_quantity: item?.pi_cash_quantity,
-				pi_cash_uuid: new_pi_uuid,
+				packing_list_uuid: new_uuid,
+				quantity: item?.quantity,
 				created_at,
 				remarks: item?.remarks || null,
 			}));
 
-		if (commercialPiEntryData.length === 0) {
+		if (packingListEntryData.length === 0) {
 			alert('Select at least one item to proceed.');
 		} else {
-			// create new /commercial/pi
+			// create new /packing/list
 			await postData.mutateAsync({
-				url: commercialPiUrl,
-				newData: commercialPiData,
+				url: deliveryPackingListUrl,
+				newData: packingListData,
 				isOnCloseNeeded: false,
 			});
 
-			// create new /commercial/pi-entry
-			const commercial_pi_cash_entry_promises = commercialPiEntryData.map(
-				(item) =>
+			// create new /packing/list/entry
+			const commercial_packing_list_entry_promises =
+				packingListEntryData.map((item) =>
 					postData.mutateAsync({
-						url: commercialPiEntryUrl,
+						url: deliveryPackingListEntryUrl,
 						newData: item,
 						isOnCloseNeeded: false,
 					})
-			);
+				);
 
 			try {
-				await Promise.all([...commercial_pi_cash_entry_promises])
-					.then(() => reset(Object.assign({}, PI_NULL)))
+				await Promise.all([...commercial_packing_list_entry_promises])
+					.then(() => reset(Object.assign({}, PACKING_LIST_NULL)))
 					.then(() => {
-						navigate(`/commercial/pi`);
+						navigate(`/delivery/packing-list`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -267,26 +232,26 @@ export default function Index() {
 		if (isAllChecked || isSomeChecked) {
 			return orderEntryField.forEach((item, index) => {
 				if (isAllChecked) {
-					setValue(`pi_cash_entry[${index}].is_checked`, true);
+					setValue(`packing_list_entry[${index}].is_checked`, true);
 				}
 			});
 		}
 		if (!isAllChecked) {
 			return orderEntryField.forEach((item, index) => {
 				setValue('is_all_checked', false);
-				setValue(`pi_cash_entry[${index}].is_checked`, false);
+				setValue(`packing_list_entry[${index}].is_checked`, false);
 			});
 		}
 	}, [isAllChecked]);
 
 	const handleRowChecked = (e, index) => {
 		const isChecked = e.target.checked;
-		setValue(`pi_cash_entry[${index}].is_checked`, isChecked);
+		setValue(`packing_list_entry[${index}].is_checked`, isChecked);
 
 		let isEveryChecked = true,
 			isSomeChecked = false;
 
-		for (let item of watch('pi_cash_entry')) {
+		for (let item of watch('packing_list_entry')) {
 			if (item.is_checked) {
 				isSomeChecked = true;
 			} else {
@@ -320,15 +285,7 @@ export default function Index() {
 					}}
 				/>
 				<DynamicDeliveryField
-					title={
-						`Details: `
-						// +
-						// watch("pi_cash_entry").filter((item) => item.is_checked)
-						// 	.length +
-						// "/" +
-						// orderEntryField.length
-					}
-					// handelAppend={handelOrderEntryAppend}
+					title={`Details: `}
 					tableHead={
 						<>
 							{!isUpdate && (
@@ -350,13 +307,13 @@ export default function Index() {
 							{[
 								'O/N',
 								'Item Description',
-								'Style',
-								'Color',
-								'Size (CM)',
-								'QTY (PCS)',
-								'Given',
-								'PI QTY',
+								'Style/Color/Size',
+								'Order QTY',
+								'Warehouse',
+								'Delivered',
+								'Quantity',
 								'Balance QTY',
+								,
 							].map((item) => (
 								<th
 									key={item}
@@ -383,91 +340,81 @@ export default function Index() {
 								'relative cursor-pointer bg-base-100 text-primary transition-colors duration-200 ease-in',
 								isUpdate &&
 									watch(
-										`pi_cash_entry[${index}].isDeletable`
+										`packing_list_entry[${index}].isDeletable`
 									) &&
 									'bg-error/10 text-error hover:bg-error/20 hover:text-error'
 							)}>
 							{!isUpdate && (
 								<td className={cn(`w-8 ${rowClass}`)}>
 									<CheckBoxWithoutLabel
-										label={`pi_cash_entry[${index}].is_checked`}
+										label={`packing_list_entry[${index}].is_checked`}
 										checked={watch(
-											`pi_cash_entry[${index}].is_checked`
+											`packing_list_entry[${index}].is_checked`
 										)}
 										onChange={(e) =>
 											handleRowChecked(e, index)
 										}
 										disabled={
 											getValues(
-												`pi_cash_entry[${index}].pi_cash_quantity`
+												`packing_list_entry[${index}].pi_cash_quantity`
 											) == 0
 										}
 										{...{ register, errors }}
 									/>
 								</td>
 							)}
-							{/* {isUpdate &&
-								getValues(`pi_cash_entry[${index}].isDeletable`) && (
-									<div className='absolute left-0 top-0 z-50 block h-full w-0 bg-red-500'>
-										<span className=''></span>
-									</div>
-								)} */}
 
 							<td className={`w-32 ${rowClass}`}>
 								{getValues(
-									`pi_cash_entry[${index}].order_number`
+									`packing_list_entry[${index}].order_number`
 								)}
 							</td>
 							<td className={`w-32 ${rowClass}`}>
 								{getValues(
-									`pi_cash_entry[${index}].item_description`
+									`packing_list_entry[${index}].item_description`
 								)}
 							</td>
 							<td className={`w-32 ${rowClass}`}>
-								{getValues(`pi_cash_entry[${index}].style`)}
-							</td>
-							<td className={`w-32 ${rowClass}`}>
-								{getValues(`pi_cash_entry[${index}].color`)}
-							</td>
-							<td className={`${rowClass}`}>
-								{getValues(`pi_cash_entry[${index}].size`)}
-							</td>
-							<td className={`${rowClass}`}>
 								{getValues(
-									`pi_cash_entry[${index}].pi_cash_quantity`
+									`packing_list_entry[${index}].style_color_size,
+`
 								)}
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(
-									`pi_cash_entry[${index}].given_pi_quantity`
+									`packing_list_entry[${index}].order_quantity`
+								)}
+							</td>
+							<td className={`${rowClass}`}>
+								{getValues(
+									`packing_list_entry[${index}].warehouse`
+								)}
+							</td>
+							<td className={`${rowClass}`}>
+								{getValues(
+									`packing_list_entry[${index}].delivered`
 								)}
 							</td>
 							<td className={`w-32 ${rowClass}`}>
 								<Input
-									label={`pi_cash_entry[${index}].pi_cash_quantity`}
+									label={`packing_list_entry[${index}].quantity`}
 									is_title_needed='false'
 									height='h-8'
 									dynamicerror={
-										errors?.pi_cash_entry?.[index]
-											?.pi_cash_quantity
+										errors?.packing_list_entry?.[index]
+											?.quantity
 									}
 									disabled={
 										getValues(
-											`pi_cash_entry[${index}].pi_cash_quantity`
+											`packing_list_entry[${index}].quantity`
 										) === 0
 									}
 									{...{ register, errors }}
 								/>
-								<Input
-									label={`pi_cash_entry[${index}].sfg_uuid`}
-									is_title_needed='false'
-									className='hidden'
-									{...{ register, errors }}
-								/>
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(
-									`pi_cash_entry[${index}].balance_quantity`
+									`packing_list_entry[${index}].balance_quantity`
 								)}
 							</td>
 							{isUpdate && (
@@ -475,12 +422,12 @@ export default function Index() {
 									<CheckBoxWithoutLabel
 										className={cn(
 											watch(
-												`pi_cash_entry[${index}].isDeletable`
+												`packing_list_entry[${index}].isDeletable`
 											)
 												? 'checkbox-error'
 												: 'checkbox-error'
 										)}
-										label={`pi_cash_entry[${index}].isDeletable`}
+										label={`packing_list_entry[${index}].isDeletable`}
 										{...{ register, errors }}
 									/>
 								</td>
@@ -495,7 +442,7 @@ export default function Index() {
 
 			<Suspense>
 				<DeleteModal
-					modalId={'pi_cash_entry_delete'}
+					modalId={'packing_list_entry_delete'}
 					title={'Order Entry'}
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}

@@ -2,8 +2,8 @@
 
 // Challan
 import ChallanEntry from '@/pages/Delivery/Challan/Entry';
-import PackingLists from '@/pages/Delivery/PackingLists';
-import PackingListsEntry from '@/pages/Delivery/PackingLists/Entry';
+import PackingLists from '@/pages/Delivery/PackingList';
+import PackingListsEntry from '@/pages/Delivery/PackingList/Entry';
 import Challan from '@pages/Delivery/Challan';
 import ChallanDetails from '@pages/Delivery/Challan/Details';
 import Log from '@pages/Delivery/Log';
@@ -14,10 +14,10 @@ export const DeliveryRoutes = [
 		name: 'Delivery',
 		children: [
 			{
-				name: 'Packing Lists',
-				path: '/delivery/packing-lists',
+				name: 'Packing List',
+				path: '/delivery/packing-list',
 				element: <PackingLists />,
-				page_name: 'delivery__packing_lists',
+				page_name: 'delivery__packing_list',
 				actions: [
 					'create',
 					'read',
@@ -27,10 +27,10 @@ export const DeliveryRoutes = [
 				],
 			},
 			{
-				name: 'Packing Lists Entry',
-				path: '/delivery/packing-lists/entry',
+				name: 'Packing List Entry',
+				path: '/delivery/packing-list/entry',
 				element: <PackingListsEntry />,
-				page_name: 'delivery__packing_lists_entry',
+				page_name: 'delivery__packing_list_entry',
 				actions: [
 					'create',
 					'read',
@@ -41,10 +41,10 @@ export const DeliveryRoutes = [
 				hidden: true,
 			},
 			{
-				name: 'Packing Lists Update',
-				path: '/delivery/packing-lists/:uuid/update',
+				name: 'Packing List Update',
+				path: '/delivery/packing-list/:uuid/update',
 				element: <PackingListsEntry />,
-				page_name: 'delivery__packing_lists_update',
+				page_name: 'delivery__packing_list_update',
 				actions: [
 					'create',
 					'read',

@@ -12,7 +12,12 @@ import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
-import { CheckBoxWithoutLabel, DynamicDeliveryField, Input } from '@/ui';
+import {
+	CheckBoxWithoutLabel,
+	DynamicDeliveryField,
+	Input,
+	RemoveButton,
+} from '@/ui';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
@@ -25,18 +30,17 @@ export default function Index() {
 	const { uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
-
-	const { url: deliveryPackingListEntryUrl } = useDeliveryPackingListEntry();
 	const {
 		url: deliveryPackingListUrl,
 		postData,
 		updateData,
 		deleteData,
 	} = useDeliveryPackingList();
+	const {
+		url: deliveryPackingListEntryUrl,
+		deleteData: deletePackingListEntry,
+	} = useDeliveryPackingListEntry();
 
-	const { data: details } = useDeliveryPackingListDetailsByUUID(uuid, {
-		params: `is_update=true&order_info_uuid=4jTKeuPjNptib7V`,
-	});
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
 	const isUpdate = uuid !== undefined;
@@ -54,6 +58,11 @@ export default function Index() {
 		setValue,
 	} = useRHF(PACKING_LIST_SCHEMA, PACKING_LIST_NULL);
 
+	const { data: details, invalidateQuery: invalidateDetails } =
+		useDeliveryPackingListDetailsByUUID(uuid, {
+			params: `is_update=true`,
+		});
+
 	const { data: packingListEntries } = useDeliveryPackingListByOrderInfoUUID(
 		watch('order_info_uuid')
 	);
@@ -65,16 +74,16 @@ export default function Index() {
 				packingListEntries?.packing_list_entry
 			);
 		}
-	}, [packingListEntries, isUpdate, reset]);
+	}, [packingListEntries, isUpdate]);
 
 	useEffect(() => {
-		console.log({
-			details,
-		});
-	}, [details]);
+		if (isUpdate && details) {
+			reset(details);
+		}
+	}, [details, isUpdate, reset]);
 
 	// packing_list_entry
-	const { fields: orderEntryField } = useFieldArray({
+	const { fields: packingListEntryField } = useFieldArray({
 		control,
 		name: 'packing_list_entry',
 	});
@@ -230,14 +239,14 @@ export default function Index() {
 
 	useEffect(() => {
 		if (isAllChecked || isSomeChecked) {
-			return orderEntryField.forEach((item, index) => {
+			return packingListEntryField.forEach((item, index) => {
 				if (isAllChecked) {
 					setValue(`packing_list_entry[${index}].is_checked`, true);
 				}
 			});
 		}
 		if (!isAllChecked) {
-			return orderEntryField.forEach((item, index) => {
+			return packingListEntryField.forEach((item, index) => {
 				setValue('is_all_checked', false);
 				setValue(`packing_list_entry[${index}].is_checked`, false);
 			});
@@ -268,6 +277,21 @@ export default function Index() {
 		setIsSomeChecked(isSomeChecked);
 	};
 
+	// Remove packing list entry
+	const handlePackingListEntryRemove = (index) => {
+		if (
+			getValues(`packing_list_entry[${index}].packing_list_uuid`) !==
+				null &&
+			getValues(`packing_list_entry[${index}].is_checked`) === true
+		) {
+			setDeleteItem({
+				itemId: getValues(`packing_list_entry[${index}].uuid`),
+				itemName: getValues(`packing_list_entry[${index}].uuid`),
+			});
+			window['packing_list_entry_delete'].showModal();
+		}
+	};
+
 	return (
 		<div>
 			<form
@@ -288,22 +312,20 @@ export default function Index() {
 					title={`Details: `}
 					tableHead={
 						<>
-							{!isUpdate && (
-								<th
-									key='is_all_checked'
-									scope='col'
-									className='group w-20 cursor-pointer px-3 py-2'>
-									<CheckBoxWithoutLabel
-										label='is_all_checked'
-										checked={isAllChecked}
-										onChange={(e) => {
-											setIsAllChecked(e.target.checked);
-											setIsSomeChecked(e.target.checked);
-										}}
-										{...{ register, errors }}
-									/>
-								</th>
-							)}
+							<th
+								key='is_all_checked'
+								scope='col'
+								className='group w-20 cursor-pointer px-3 py-2'>
+								<CheckBoxWithoutLabel
+									label='is_all_checked'
+									checked={isAllChecked}
+									onChange={(e) => {
+										setIsAllChecked(e.target.checked);
+										setIsSomeChecked(e.target.checked);
+									}}
+									{...{ register, errors }}
+								/>
+							</th>
 							{[
 								'O/N',
 								'Item Description',
@@ -333,7 +355,7 @@ export default function Index() {
 							)}
 						</>
 					}>
-					{orderEntryField.map((item, index) => (
+					{packingListEntryField.map((item, index) => (
 						<tr
 							key={item.id}
 							className={cn(
@@ -344,25 +366,21 @@ export default function Index() {
 									) &&
 									'bg-error/10 text-error hover:bg-error/20 hover:text-error'
 							)}>
-							{!isUpdate && (
-								<td className={cn(`w-8 ${rowClass}`)}>
-									<CheckBoxWithoutLabel
-										label={`packing_list_entry[${index}].is_checked`}
-										checked={watch(
-											`packing_list_entry[${index}].is_checked`
-										)}
-										onChange={(e) =>
-											handleRowChecked(e, index)
-										}
-										disabled={
-											getValues(
-												`packing_list_entry[${index}].pi_cash_quantity`
-											) == 0
-										}
-										{...{ register, errors }}
-									/>
-								</td>
-							)}
+							<td className={cn(`w-8 ${rowClass}`)}>
+								<CheckBoxWithoutLabel
+									label={`packing_list_entry[${index}].is_checked`}
+									checked={watch(
+										`packing_list_entry[${index}].is_checked`
+									)}
+									onChange={(e) => handleRowChecked(e, index)}
+									disabled={
+										getValues(
+											`packing_list_entry[${index}].pi_cash_quantity`
+										) == 0
+									}
+									{...{ register, errors }}
+								/>
+							</td>
 
 							<td className={`w-32 ${rowClass}`}>
 								{getValues(
@@ -418,17 +436,16 @@ export default function Index() {
 								)}
 							</td>
 							{isUpdate && (
-								<td className={`${rowClass}`}>
-									<CheckBoxWithoutLabel
-										className={cn(
-											watch(
-												`packing_list_entry[${index}].isDeletable`
-											)
-												? 'checkbox-error'
-												: 'checkbox-error'
-										)}
-										label={`packing_list_entry[${index}].isDeletable`}
-										{...{ register, errors }}
+								<td
+									className={cn(
+										rowClass,
+										'min-w-20 border-l-2 border-base-200'
+									)}>
+									<RemoveButton
+										showButton
+										onClick={() =>
+											handlePackingListEntryRemove(index)
+										}
 									/>
 								</td>
 							)}
@@ -443,11 +460,13 @@ export default function Index() {
 			<Suspense>
 				<DeleteModal
 					modalId={'packing_list_entry_delete'}
-					title={'Order Entry'}
+					title={'Packing List Entry'}
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
-					setItems={orderEntryField}
-					uri={`/order/entry`}
+					setItems={packingListEntryField}
+					url={deliveryPackingListEntryUrl}
+					deleteData={deletePackingListEntry}
+					onSuccess={invalidateDetails}
 				/>
 			</Suspense>
 			<DevTool control={control} placement='top-left' />

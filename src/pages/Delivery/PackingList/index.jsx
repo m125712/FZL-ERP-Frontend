@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useDeliveryPackingList } from '@/state/Delivery';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
@@ -8,9 +8,11 @@ import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
+
 export default function Index() {
 	const navigate = useNavigate();
-	const { data, isLoading, url } = useDeliveryPackingList();
+	const { data, isLoading, url, deleteData } = useDeliveryPackingList();
 	const info = new PageInfo('Packing List', url, 'delivery__packing_list');
 	const haveAccess = useAccess('delivery__packing_list');
 
@@ -21,16 +23,33 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'id',
-				header: 'PI ID',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<LinkWithCopy
-						title={info.getValue()}
-						id={info.getValue()}
-						uri={`details`}
-					/>
-				),
+				accessorKey: 'uuid',
+				header: 'ID',
+				cell: (info) => {
+					const { packing_number } = info.row.original;
+					return (
+						<LinkWithCopy
+							title={packing_number}
+							id={info.getValue()}
+							uri='/delivery/packing-list/details'
+						/>
+					);
+				},
+			},
+
+			{
+				accessorKey: 'order_number',
+				header: 'O/N',
+				cell: (info) => {
+					const { order_number } = info.row.original;
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={order_number}
+							uri='/order/details'
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'carton_size',
@@ -79,13 +98,17 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
 				width: 'w-24',
 				cell: (info) => (
 					<EditDelete
 						idx={info.row.index}
 						handelUpdate={handelUpdate}
-						showDelete={false}
+						handelDelete={handelDelete}
+						showDelete={haveAccess.includes('delete')}
+						showUpdate={haveAccess.includes('update')}
 					/>
 				),
 			},
@@ -103,6 +126,21 @@ export default function Index() {
 		);
 	};
 
+	// Delete
+	const [deleteItem, setDeleteItem] = useState({
+		itemId: null,
+		itemName: null,
+	});
+	const handelDelete = (idx) => {
+		setDeleteItem((prev) => ({
+			...prev,
+			itemId: data[idx].uuid,
+			itemName: data[idx].name,
+		}));
+
+		window[info.getDeleteModalId()].showModal();
+	};
+
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
@@ -115,6 +153,19 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				handelAdd={handelAdd}
 			/>
+
+			<Suspense>
+				<DeleteModal
+					modalId={info.getDeleteModalId()}
+					title={info.getTitle()}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url,
+						deleteData,
+					}}
+				/>
+			</Suspense>
 		</div>
 	);
 }

@@ -68,10 +68,7 @@ export default function Information({ packing_list }) {
 
 	return (
 		<SectionContainer buttons={renderButtons()} title={'Information'}>
-			<RenderTable
-				className={'border-secondary/30 lg:border-r'}
-				items={renderItems()}
-			/>
+			<RenderTable items={renderItems()} />
 		</SectionContainer>
 	);
 }

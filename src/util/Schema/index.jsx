@@ -1261,6 +1261,67 @@ export const SLIDER_ITEM_TRANSACTION_NULL = {
 };
 
 // Delivery
+export const PACKING_LIST_SCHEMA = {
+	order_info_uuid: STRING_REQUIRED,
+	carton_size: STRING_REQUIRED,
+	carton_weight: NUMBER_DOUBLE_REQUIRED,
+	remarks: STRING.nullable(),
+	packing_list_entry: yup.array().of(
+		yup.object().shape({
+			is_checked: BOOLEAN,
+			sfg_uuid: STRING_REQUIRED,
+			packing_list_uuid: STRING.nullable(),
+			order_number: STRING,
+			item_description: STRING,
+			style_color_size: STRING,
+			order_quantity: NUMBER_DOUBLE,
+			warehouse: NUMBER_DOUBLE,
+			delivered: NUMBER_DOUBLE,
+			balance_quantity: NUMBER_DOUBLE,
+			quantity: yup.number().when('is_checked', {
+				is: true,
+				then: (Schema) =>
+					Schema.typeError('Must be a number')
+						.required('Quantity is required')
+						.max(
+							yup.ref('balance_quantity'),
+							'Beyond Balance Quantity'
+						),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
+			remarks: STRING.nullable(),
+			isDeletable: BOOLEAN,
+		})
+	),
+};
+
+export const PACKING_LIST_NULL = {
+	order_info_uuid: '',
+	carton_size: '',
+	carton_weight: '',
+	remarks: '',
+	packing_list_entry: [
+		{
+			is_checked: false,
+			sfg_uuid: '',
+			packing_list_uuid: '',
+			order_number: '',
+			item_description: '',
+			style_color_size: '',
+			order_quantity: null,
+			warehouse: null,
+			delivered: null,
+			balance_quantity: null,
+			quantity: null,
+			remarks: '',
+			isDeletable: false,
+		},
+	],
+};
+
 // Challan
 export const CHALLAN_SCHEMA = {
 	order_info_id: NUMBER_REQUIRED,
@@ -2176,8 +2237,10 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
 			assigned_quantity: NUMBER.when('is_checked', {
 				is: true,
 				then: (Schema) =>
-					Schema.required('Quantity is required')
-						.max(yup.ref('quantity'), 'Beyond Max Quantity'),
+					Schema.required('Quantity is required').max(
+						yup.ref('quantity'),
+						'Beyond Max Quantity'
+					),
 				otherwise: (Schema) =>
 					Schema.nullable().transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? null : value
@@ -2186,8 +2249,10 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
 			assigned_weight: NUMBER_DOUBLE.when('is_checked', {
 				is: true,
 				then: (Schema) =>
-					Schema.required('Weight is required')
-						.max(yup.ref('weight'), 'Beyond Max Weight'),
+					Schema.required('Weight is required').max(
+						yup.ref('weight'),
+						'Beyond Max Weight'
+					),
 				otherwise: (Schema) =>
 					Schema.nullable().transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? null : value

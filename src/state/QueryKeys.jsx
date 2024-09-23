@@ -835,10 +835,39 @@ export const sliderQK = {
 export const deliveryQk = {
 	all: () => ['delivery'],
 
-	// *Packing Lists
+	// *Packing List
 	deliveryPackingList: () => [...deliveryQk.all(), 'packing-list'],
 	deliveryPackingListByUUID: (uuid) => [
 		...deliveryQk.deliveryPackingList(),
+		uuid,
+	],
+	deliveryPackingListDetailsByUUID: (uuid) => [
+		...deliveryQk.all(),
+		'packing-list',
+		'details',
+		uuid,
+	],
+
+	deliveryPackingListByOrderInfoUUID: (order_info_uuid) => [
+		...deliveryQk.all(),
+		'packing-list',
+		'order',
+		order_info_uuid,
+	],
+
+	deliveryPackingListOrderByUUID: (uuid) => [
+		...deliveryQk.deliveryPackingListOrder(),
+		uuid,
+	],
+
+	// *Packing List Entry
+	deliveryPackingListEntry: () => [
+		...deliveryQk.all(),
+		'packing-list',
+		'entry',
+	],
+	deliveryPackingListEntryByUUID: (uuid) => [
+		...deliveryQk.deliveryPackingListEntry(),
 		uuid,
 	],
 

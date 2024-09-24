@@ -1,18 +1,20 @@
-import { AddModal } from '@/components/Modal';
+import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
 import {
 	useMetalTMProduction,
 	useMetalTMProductionLog,
 	useMetalTMProductionLogByUUID,
 } from '@/state/Metal';
-import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
 import {
 	SFG_PRODUCTION_LOG_NULL,
 	SFG_PRODUCTION_LOG_SCHEMA,
 } from '@util/Schema';
-import { useEffect } from 'react';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -39,8 +41,8 @@ export default function Index({
 	);
 
 	const MAX_QUANTITY =
-		Number(updateTeethMoldingLog?.teeth_molding_prod) +
-		Number(updateTeethMoldingLog?.production_quantity);
+		Number(updateTeethMoldingLog?.balance_quantity) +
+		Number(dataByUUID?.production_quantity);
 
 	const MAX_QUANTITY_IN_KG =
 		Number(updateTeethMoldingLog?.teeth_molding_stock) +
@@ -49,11 +51,9 @@ export default function Index({
 	const schema = {
 		...SFG_PRODUCTION_LOG_SCHEMA,
 		production_quantity: SFG_PRODUCTION_LOG_SCHEMA.production_quantity
-			.moreThan(0)
 			.max(MAX_QUANTITY),
 		production_quantity_in_kg:
 			SFG_PRODUCTION_LOG_SCHEMA.production_quantity_in_kg
-				.moreThan(0)
 				.max(MAX_QUANTITY_IN_KG),
 	};
 	const { user } = useAuth();
@@ -69,9 +69,6 @@ export default function Index({
 
 	useEffect(() => {
 		if (dataByUUID) {
-			console.log({
-				dataByUUID,
-			});
 			reset(dataByUUID);
 		}
 	}, [dataByUUID]);
@@ -152,14 +149,25 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<Input
+			<JoinInput
+				title='Production Quantity'
 				label='production_quantity'
-				sub_label={`Max: ${MAX_QUANTITY}`}
+				sub_label={`MAX: ${MAX_QUANTITY} pcs`}
+				unit='PCS'
 				{...{ register, errors }}
 			/>
-			<Input
+			<JoinInput
+				title='Production Quantity In KG'
 				label='production_quantity_in_kg'
-				sub_label={`Max: ${MAX_QUANTITY_IN_KG}`}
+				sub_label={`MAX: ${MAX_QUANTITY_IN_KG} kg`}
+				unit='PCS'
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				title='Wastage'
+				label='wastage'
+				sub_label={`MAX: ${MAX_QUANTITY_IN_KG} kg`}
+				unit='PCS'
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

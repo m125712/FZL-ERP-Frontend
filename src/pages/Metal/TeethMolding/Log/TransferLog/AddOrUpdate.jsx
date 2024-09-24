@@ -1,15 +1,20 @@
-import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
+import { useEffect } from 'react';
 import {
 	useMetalTMProduction,
 	useMetalTMTrxLog,
 	useMetalTMTrxLogByUUID,
 } from '@/state/Metal';
-import { FormField, Input, ReactSelect } from '@/ui';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
+import {
+	NUMBER_REQUIRED,
+	SFG_TRANSFER_LOG_NULL,
+	SFG_TRANSFER_LOG_SCHEMA,
+} from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-import { SFG_TRANSFER_LOG_NULL, SFG_TRANSFER_LOG_SCHEMA } from '@util/Schema';
-import { useEffect } from 'react';
 
 export default function Index({
 	modalId = '',
@@ -39,9 +44,11 @@ export default function Index({
 		Number(updateTeethMoldingLog?.trx_quantity);
 	const schema = {
 		...SFG_TRANSFER_LOG_SCHEMA,
-		trx_quantity: SFG_TRANSFER_LOG_SCHEMA.trx_quantity.max(MAX_QUANTITY),
+		trx_quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0').max(
+			MAX_QUANTITY
+		),
 	};
-	const { user } = useAuth();
+
 	const {
 		register,
 		handleSubmit,
@@ -55,9 +62,6 @@ export default function Index({
 
 	useEffect(() => {
 		if (dataByUUID) {
-			console.log({
-				dataByUUID,
-			});
 			reset(dataByUUID);
 		}
 	}, [dataByUUID]);
@@ -138,9 +142,11 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<Input
+			<JoinInput
+				title='Transaction Quantity'
 				label='trx_quantity'
-				sub_label={`Max: ${MAX_QUANTITY}`}
+				sub_label={`MAX: ${MAX_QUANTITY} pcs`}
+				unit='PCS'
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

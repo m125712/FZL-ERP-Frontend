@@ -1,15 +1,17 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useMetalTCProduction } from '@/state/Metal';
-import { JoinInput, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { JoinInput, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import {
 	SFG_PRODUCTION_SCHEMA_IN_PCS,
 	SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -30,18 +32,14 @@ export default function Index({
 	const { postData } = useMetalTCProduction();
 	const { user } = useAuth();
 
-	const MAX_PROD_PCS = Number(updateFinishingProd.balance_quantity).toFixed(
-		0
+	const MAX_PROD_PCS = Math.min(
+		Number(updateFinishingProd.balance_quantity),
+		Number(updateFinishingProd.finishing_stock),
+		Number(updateFinishingProd.slider_finishing_stock)
 	);
 
-	const MAX_PROD_KG = Number(
-		updateFinishingProd.teeth_coloring_stock
-	).toFixed(3);
-
-	const { register, handleSubmit, errors, reset, watch, control ,context} = useRHF(
-		SFG_PRODUCTION_SCHEMA_IN_PCS,
-		SFG_PRODUCTION_SCHEMA_IN_PCS_NULL
-	);
+	const { register, handleSubmit, errors, reset, watch, control, context } =
+		useRHF(SFG_PRODUCTION_SCHEMA_IN_PCS, SFG_PRODUCTION_SCHEMA_IN_PCS_NULL);
 	const MAX_WASTAGE_KG = Number(
 		MAX_PROD_PCS - (watch('production_quantity') || 0)
 	).toFixed(3);
@@ -104,8 +102,8 @@ export default function Index({
 			<JoinInput
 				title='wastage'
 				label='wastage'
-				sub_label={`MAX: ${MAX_WASTAGE_KG} kg`}
-				unit='KG'
+				sub_label={`MAX: ${MAX_WASTAGE_KG} pcs`}
+				unit='PCS'
 				{...{ register, errors }}
 				{...{ register, errors }}
 			/>

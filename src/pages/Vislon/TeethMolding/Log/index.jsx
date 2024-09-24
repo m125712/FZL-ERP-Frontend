@@ -11,11 +11,11 @@ export default function Index() {
 	return (
 		<div>
 			<SFGProductionLog />
-			<hr className='my-6 border-2 border-dashed border-secondary-content' />
+			<hr className='my-6 border-2 border-dashed border-secondary/30' />
 			<SFGTransferLog />
-			<hr className='my-6 border-2 border-dashed border-secondary-content' />
+			<hr className='my-6 border-2 border-dashed border-secondary/30' />
 			<RMTransferLog />
-			<hr className='my-6 border-2 border-dashed border-secondary-content' />
+			<hr className='my-6 border-2 border-dashed border-secondary/30' />
 			{/* <RMOrderAgainstLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' /> */}
 			<TapeLog />

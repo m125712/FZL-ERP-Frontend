@@ -1,10 +1,12 @@
+import { lazy, useMemo, useState } from 'react';
+import { useMetalTMProduction } from '@/state/Metal';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useMetalTMProduction } from '@/state/Metal';
 import { LinkWithCopy, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useMemo, useState } from 'react';
 
 const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
@@ -17,7 +19,6 @@ export default function Index() {
 		'metal__teeth_molding_production'
 	);
 	const haveAccess = useAccess('metal__teeth_molding_production');
-	console.log(data);
 
 	const columns = useMemo(
 		() => [
@@ -77,7 +78,18 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-
+			{
+				accessorKey: 'balance_quantity',
+				header: (
+					<span>
+						Balance
+						<br />
+						(PCS)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
 			{
 				accessorKey: 'actions_add_production',
 				header: 'Add Production',
@@ -126,18 +138,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-			{
-				accessorKey: 'balance_quantity',
-				header: (
-					<span>
-						Balance
-						<br />
-						(PCS)
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
-			},
+
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',

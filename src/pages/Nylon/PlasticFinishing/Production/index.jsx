@@ -121,18 +121,18 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-			{
-				accessorKey: 'actions_add_transaction',
-				header: 'Trx Transaction',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('click_transaction'),
-				cell: (info) => (
-					<Transfer
-						onClick={() => handelTransaction(info.row.index)}
-					/>
-				),
-			},
+			// {
+			// 	accessorKey: 'actions_add_transaction',
+			// 	header: 'Trx Transaction',
+			// 	enableColumnFilter: false,
+			// 	enableSorting: false,
+			// 	hidden: !haveAccess.includes('click_transaction'),
+			// 	cell: (info) => (
+			// 		<Transfer
+			// 			onClick={() => handelTransaction(info.row.index)}
+			// 		/>
+			// 	),
+			// },
 			{
 				accessorKey: 'warehouse',
 				header: (

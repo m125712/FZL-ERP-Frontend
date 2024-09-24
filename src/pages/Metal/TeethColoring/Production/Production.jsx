@@ -1,15 +1,17 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useMetalTCProduction, useMetalTMProduction } from '@/state/Metal';
-import { JoinInput, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { JoinInput, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import {
 	SFG_PRODUCTION_SCHEMA_IN_PCS,
 	SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -30,24 +32,26 @@ export default function Index({
 	const { postData } = useMetalTCProduction();
 	const { user } = useAuth();
 
-
-
-	const MAX_PROD_PCS = Number(
-		updateTeethColoringProd.balance_quantity
-	).toFixed(0);
-	const MAX_PROD_KG = Number(
-		updateTeethColoringProd.teeth_coloring_stock
-	).toFixed(3);
-
-	const { register, handleSubmit, errors, reset, watch, control, context } = useRHF(
-		SFG_PRODUCTION_SCHEMA_IN_PCS,
-		SFG_PRODUCTION_SCHEMA_IN_PCS_NULL
+	const MAX_PROD_PCS = Math.min(
+		Number(updateTeethColoringProd.balance_quantity),
+		Number(updateTeethColoringProd.teeth_coloring_stock)
 	);
+
+	const { register, handleSubmit, errors, reset, watch, control, context } =
+		useRHF(
+			{
+				...SFG_PRODUCTION_SCHEMA_IN_PCS,
+				production_quantity:
+					SFG_PRODUCTION_SCHEMA_IN_PCS.production_quantity.max(
+						MAX_PROD_PCS,
+						'Beyond max quantity'
+					),
+			},
+			SFG_PRODUCTION_SCHEMA_IN_PCS_NULL
+		);
 	const MAX_WASTAGE_KG = Number(
 		MAX_PROD_PCS - (watch('production_quantity') || 0)
 	).toFixed(3);
-
-	
 
 	const onClose = () => {
 		setUpdateTeethColoringProd((prev) => ({

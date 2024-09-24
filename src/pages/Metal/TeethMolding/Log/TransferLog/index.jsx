@@ -1,15 +1,19 @@
+import { useMemo, useState } from 'react';
+import { useMetalTMProduction, useMetalTMTrxLog } from '@/state/Metal';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useMetalTMTrxLog } from '@/state/Metal';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useMemo, useState } from 'react';
+
 import SFGAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, deleteData, url } = useMetalTMTrxLog();
+	const { invalidateQuery } = useMetalTMProduction();
 	const info = new PageInfo('Transfer Log', url);
 	const haveAccess = useAccess('metal__teeth_molding_log');
 
@@ -193,6 +197,7 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateQuery}
 					{...{
 						deleteItem,
 						setDeleteItem,

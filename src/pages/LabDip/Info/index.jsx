@@ -1,5 +1,6 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useLabDipInfo } from '@/state/LabDip';
+import { Bath } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -42,12 +43,21 @@ export default function Index() {
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					const { order_info_uuid } = info.row.original;
+					const { thread_order_info_uuid } = info.row.original;
 					if (order_info_uuid) {
 						return (
 							<LinkWithCopy
 								title={info.getValue()}
 								id={order_number}
 								uri='/order/details'
+							/>
+						);
+					} else if (thread_order_info_uuid) {
+						return (
+							<LinkWithCopy
+								uri='/thread/order-info'
+								id={thread_order_info_uuid}
+								title={info.getValue()}
 							/>
 						);
 					}

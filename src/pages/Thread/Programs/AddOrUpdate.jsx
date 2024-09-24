@@ -1,13 +1,14 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useThreadPrograms } from '@/state/Thread';
-
-import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, ReactSelect } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import { THREAD_PROGRAMS_NULL, THREAD_PROGRAMS_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -26,13 +27,15 @@ export default function Index({
 		control,
 		Controller,
 		getValues,
-		context
+		context,
 	} = useRHF(THREAD_PROGRAMS_SCHEMA, THREAD_PROGRAMS_NULL);
 	const { value: material } = useFetch(
 		'/other/material/value/label/unit/quantity'
 	);
 	const { value: dyes } = useFetch('/other/thread/dyes-category/value/label');
+
 	useFetchForRhfReset(`${url}/${update?.uuid}`, update?.uuid, reset);
+	console.log(getValues(), 'update');
 
 	const onClose = () => {
 		setUpdate((prev) => ({

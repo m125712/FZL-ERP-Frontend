@@ -1,7 +1,7 @@
-import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-
-import { DateTime } from '@/ui';
 import { useMemo } from 'react';
+
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
+import { DateTime } from '@/ui';
 
 export default function Index({ batch_entry }) {
 	const columns = useMemo(
@@ -18,7 +18,7 @@ export default function Index({ batch_entry }) {
 				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'shade_recipe_name',
+				accessorKey: 'recipe_name',
 				header: 'Shade Recipe',
 				enableColumnFilter: false,
 			},

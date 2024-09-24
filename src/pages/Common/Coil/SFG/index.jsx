@@ -176,6 +176,30 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
+			{
+				accessorKey: 'to_transfer_action',
+				header: 'To Transfer',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_to_transfer'),
+				width: 'w-24',
+				cell: (info) => (
+					<Transfer onClick={() => handleTransfer(info.row.index)} />
+				),
+			},
+
+			{
+				accessorKey: 'stock_transfer_quantity',
+				header: (
+					<span>
+						Transfer Quantity
+						<br />
+						(KG)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()).toFixed(3),
+			},
 
 			{
 				accessorKey: 'raw_per_kg_meter',
@@ -261,6 +285,9 @@ export default function Index() {
 
 	const handleTrxToDying = (idx) => {
 		navigate(`/common/coil/sfg/entry-to-dyeing/${data[idx].uuid}`);
+	};
+	const handleTransfer = (idx) => {
+		navigate(`/common/coil/sfg/entry-to-transfer/${data[idx].uuid}`);
 	};
 	const handleDyeingAgainstStock = (idx) => {
 		const selectedProd = data[idx];

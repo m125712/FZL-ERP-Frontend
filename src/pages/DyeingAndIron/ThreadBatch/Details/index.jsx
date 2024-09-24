@@ -1,8 +1,9 @@
-import { useAccess, useFetch, useFetchFunc } from '@/hooks';
 import { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
+import { useAccess, useFetch, useFetchFunc } from '@/hooks';
 
 import Information from './Information';
+import SecondTable from './SecondTable';
 import Table from './Table';
 
 export default function Index() {
@@ -13,6 +14,11 @@ export default function Index() {
 		`/thread/batch-details/by/${batch_uuid}`,
 		[batch_uuid]
 	);
+	const machine_uuid = batch?.machine_uuid;
+
+	const { value: machine } = useFetch(`/public/machine/${machine_uuid}`, [
+		machine_uuid,
+	]);
 
 	useEffect(() => {
 		document.title = 'Planning Batch Details';
@@ -24,8 +30,16 @@ export default function Index() {
 
 	return (
 		<div className='space-y-8 py-6'>
-			<Information batch={batch} />
+			<Information
+				batch={batch}
+				water_capacity={machine?.water_capacity}
+			/>
 			<Table {...batch} />
+			<SecondTable
+				batch_entry={batch?.batch_entry}
+				water_capacity={machine?.water_capacity}
+				yarn_quantity={batch?.yarn_quantity}
+			/>
 		</div>
 	);
 }

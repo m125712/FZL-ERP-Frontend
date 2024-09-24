@@ -1,7 +1,7 @@
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
 
-export default function Information({ batch }) {
+export default function Information({ batch, water_capacity }) {
 	const {
 		batch_id,
 		category,
@@ -52,6 +52,12 @@ export default function Information({ batch }) {
 			{
 				label: 'Quantity',
 				value: yarn_quantity,
+			},
+			{
+				label: 'Volume',
+				value: Number(
+					parseFloat(yarn_quantity) * parseFloat(water_capacity)
+				).toFixed(3),
 			},
 
 			{
@@ -110,6 +116,10 @@ export default function Information({ batch }) {
 			{
 				label: 'Machine',
 				value: machine_name,
+			},
+			{
+				label: 'Water Capacity',
+				value: Number(water_capacity).toFixed(3),
 			},
 			{
 				label: 'Slot',

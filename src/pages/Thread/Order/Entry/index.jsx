@@ -137,7 +137,7 @@ export default function Index() {
 			order_info_uuid: null,
 			lab_ref: '',
 			po: '',
-			shade_recipe_uuid: null,
+			recipe_uuid: null,
 			style: '',
 			color: '',
 			count_length_uuid: null,
@@ -175,9 +175,7 @@ export default function Index() {
 				async (item) => {
 					if (item.uuid === undefined) {
 						item.swatch_approval_date =
-							item.shade_recipe_uuid === null
-								? null
-								: GetDateTime();
+							item.recipe_uuid === null ? null : GetDateTime();
 						item.order_info_uuid = order_info_uuid;
 						item.created_at = GetDateTime();
 						item.uuid = nanoid();
@@ -191,7 +189,7 @@ export default function Index() {
 						const updatedData = {
 							...item,
 							swatch_approval_date:
-								item.shade_recipe_uuid === null
+								item.recipe_uuid === null
 									? null
 									: item.swatch_approval_date === null
 										? GetDateTime()
@@ -255,7 +253,7 @@ export default function Index() {
 			created_at,
 			created_by,
 			swatch_approval_date:
-				item.shade_recipe_uuid === null ? null : GetDateTime(),
+				item.recipe_uuid === null ? null : GetDateTime(),
 		}));
 		console.log(order_info_entries);
 		const order_info_entries_promise = [
@@ -390,12 +388,12 @@ export default function Index() {
 								</td>
 								<td className={cn(rowClass, 'min-w-[140px]')}>
 									<FormField
-										label={`order_info_entry[${index}].shade_recipe_uuid`}
+										label={`order_info_entry[${index}].recipe_uuid`}
 										title='Shade'
 										errors={errors}
 										is_title_needed='false'>
 										<Controller
-											name={`order_info_entry[${index}].shade_recipe_uuid`}
+											name={`order_info_entry[${index}].recipe_uuid`}
 											control={control}
 											render={({
 												field: { onChange },
@@ -408,7 +406,7 @@ export default function Index() {
 															(item) =>
 																item.value ==
 																getValues(
-																	`order_info_entry[${index}].shade_recipe_uuid`
+																	`order_info_entry[${index}].recipe_uuid`
 																)
 														)}
 														onChange={(e) => {
@@ -545,11 +543,11 @@ export default function Index() {
 											errors?.order_info_entry?.[index]
 												?.quantity
 										}
-										value={Number(
-											getValues(
-												`order_info_entry[${index}].quantity`
-											)
-										).toFixed(0)}
+										// value={Number(
+										// 	getValues(
+										// 		`order_info_entry[${index}].quantity`
+										// 	)
+										// ).toFixed(0)}
 										register={register}
 									/>
 								</td>
@@ -564,11 +562,11 @@ export default function Index() {
 													index
 												]?.company_price
 											}
-											value={Number(
-												getValues(
-													`order_info_entry[${index}].company_price`
-												)
-											).toFixed(2)}
+											// value={Number(
+											// 	getValues(
+											// 		`order_info_entry[${index}].company_price`
+											// 	)
+											// ).toFixed(2)}
 											register={register}
 										/>
 										<Input
@@ -579,11 +577,11 @@ export default function Index() {
 													index
 												]?.party_price
 											}
-											value={Number(
-												getValues(
-													`order_info_entry[${index}].party_price`
-												)
-											).toFixed(2)}
+											// value={Number(
+											// 	getValues(
+											// 		`order_info_entry[${index}].party_price`
+											// 	)
+											// ).toFixed(2)}
 											register={register}
 										/>
 									</div>

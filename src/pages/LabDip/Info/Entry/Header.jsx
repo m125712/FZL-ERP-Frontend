@@ -27,7 +27,7 @@ export default function Header({
 	);
 
 	const { value: order_info_uuid } = useFetch(
-		`/other/order/info/value/label`
+		`/other/order/zipper-thread/value/label`
 	);
 
 	return (

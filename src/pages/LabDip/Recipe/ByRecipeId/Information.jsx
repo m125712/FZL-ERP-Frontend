@@ -25,6 +25,8 @@ export default function Information({ recipe }) {
 						}
 					/>
 					<TitleValue title='name' value={recipe?.name} />
+					<TitleValue title='Bleaching' value={recipe?.bleaching} />
+					<TitleValue title='sub streat' value={recipe?.sub_streat} />
 					<TitleValue
 						title='Created By'
 						value={recipe?.created_by_name}

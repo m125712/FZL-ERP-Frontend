@@ -11,7 +11,7 @@ export default function Index({ batch_entry }) {
 				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'shade_recipe_name',
+				accessorKey: 'recipe_name',
 				header: 'Shade Recipe',
 				enableColumnFilter: false,
 			},

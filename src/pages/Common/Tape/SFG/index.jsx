@@ -3,20 +3,12 @@ import { useCommonTapeSFG } from '@/state/Common';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
-
-
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete, Transfer } from '@/ui';
 
-
-
 import PageInfo from '@/util/PageInfo';
-
-
-
-
 
 const TrxToCoil = lazy(() => import('./TrxToCoil'));
 const TrxToDying = lazy(() => import('./TrxToDying'));
@@ -224,6 +216,37 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
 			{
+				accessorKey: 'to_transfer_action',
+				header: 'To Transfer',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_to_transfer'),
+				width: 'w-24',
+				cell: (info) => {
+					if (
+						info.row.original?.item_name?.toLowerCase() != 'nylon'
+					) {
+						return (
+							<Transfer
+								onClick={() => handleTransfer(info.row.index)}
+							/>
+						);
+					}
+				},
+			},
+			{
+				accessorKey: 'stock_transfer_quantity',
+				header: (
+					<span>
+						Transfer Quantity
+						<br />
+						(KG)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()).toFixed(3),
+			},
+			{
 				accessorKey: 'raw_per_kg_meter',
 				header: (
 					<span>
@@ -370,6 +393,9 @@ export default function Index() {
 		// window['trx_to_dying_modal'].showModal();
 
 		navigate(`/common/tape/sfg/entry-to-dyeing/${data[idx].uuid}`);
+	};
+	const handleTransfer = (idx) => {
+		navigate(`/common/tape/sfg/entry-to-transfer/${data[idx].uuid}`);
 	};
 
 	const handelUpdate = (idx) => {

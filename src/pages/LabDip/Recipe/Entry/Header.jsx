@@ -23,6 +23,15 @@ export default function Header({
 	isUpdate,
 }) {
 	const { order_number, order_description_uuid } = useParams(); // * Not sure if this is required * //
+	const bleaching = [
+		{ label: 'Bleach', value: 'bleach' },
+		{ label: 'Non-Bleach', value: 'non-bleach' },
+	];
+	const subStreatOption = [
+		{ label: 'TXP', value: 'txp' },
+		{ label: 'SSP', value: 'ssp' },
+		{ label: 'Others', value: 'others' },
+	];
 
 	// * state fro approved and status fields*//
 	const [isApproved, setIsApproved] = useState(
@@ -96,6 +105,52 @@ export default function Header({
 						/>
 					</FormField>
 					<Input label={`name`} {...{ register, errors }} />
+					<FormField
+						label='sub_streat'
+						title='Sub Streat'
+						errors={errors}>
+						<Controller
+							name={'sub_streat'}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select Sub Streat'
+										options={subStreatOption}
+										value={subStreatOption?.find(
+											(item) =>
+												item.value ==
+												getValues('sub_streat')
+										)}
+										onChange={(e) => onChange(e.value)}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+					<FormField
+						label='bleaching'
+						title='Bleaching'
+						errors={errors}>
+						<Controller
+							name={'bleaching'}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select Bleaching'
+										options={bleaching}
+										value={bleaching?.find(
+											(item) =>
+												item.value ==
+												getValues('bleaching')
+										)}
+										onChange={(e) => onChange(e.value)}
+									/>
+								);
+							}}
+						/>
+					</FormField>
 				</div>
 
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>

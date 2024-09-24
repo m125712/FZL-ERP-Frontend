@@ -26,7 +26,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'Program',
+				accessorKey: 'id',
 				header: 'ID',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),

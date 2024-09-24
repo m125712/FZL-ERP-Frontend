@@ -2,19 +2,11 @@ import { lazy, useEffect, useMemo, useState } from 'react';
 import { useThreadPrograms } from '@/state/Thread';
 import { useAccess } from '@/hooks';
 
-
-
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete } from '@/ui';
 
-
-
 import PageInfo from '@/util/PageInfo';
-
-
-
-
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
@@ -22,7 +14,6 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useThreadPrograms();
 
-	console.log(data);
 
 	const info = new PageInfo('Programs', url, 'thread__programs');
 	const haveAccess = useAccess('thread__programs');

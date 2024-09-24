@@ -318,10 +318,10 @@ export default function Index() {
 														)}
 														onChange={(e) => {
 															onChange(e.value);
-															setUnit({
-																...unit,
-																[index]: e.unit,
-															});
+															// setUnit({
+															// 	...unit,
+															// 	[index]: e.unit,
+															// });
 														}}
 														menuPortalTarget={
 															document.body

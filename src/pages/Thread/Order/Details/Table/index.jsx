@@ -1,8 +1,8 @@
+import { useMemo } from 'react';
+
 import ReactTable from '@/components/Table';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-
 import { DateTime } from '@/ui';
-import { useMemo } from 'react';
 
 export default function Index({ order_info_entry }) {
 	console.log(order_info_entry);
@@ -16,7 +16,7 @@ export default function Index({ order_info_entry }) {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'shade_recipe_name',
+				accessorKey: 'recipe_name',
 				header: 'Shade',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),

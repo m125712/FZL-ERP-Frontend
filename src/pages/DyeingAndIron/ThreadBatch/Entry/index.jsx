@@ -208,8 +208,8 @@ export default function Index() {
 				// * check if all colors are same
 				!batch_entry.every(
 					(item) =>
-						item.shade_recipe_uuid ===
-						batch_entry[0].shade_recipe_uuid
+						item.recipe_uuid ===
+						batch_entry[0].recipe_uuid
 				) ||
 				!batch_entry.every(
 					// * check if all bleaching are same
@@ -372,7 +372,7 @@ export default function Index() {
 				enableSorting: true,
 			},
 			{
-				accessorKey: 'shade_recipe_name',
+				accessorKey: 'recipe_name',
 				header: 'Shade Recipe',
 				enableColumnFilter: true,
 				enableSorting: true,

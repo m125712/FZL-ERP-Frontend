@@ -1,6 +1,5 @@
 import { StatusButton } from '@/ui';
 
-import { getMeasurement, getTapeRequired } from '@/util/Need';
 
 const createColumn = (props) => ({
 	...props,
@@ -29,7 +28,7 @@ const createStatusColumn = ({ accessorKey, header }) =>
 				<div className='flex items-center justify-start gap-2'>
 					<StatusButton
 						size='btn-xs'
-						value={company_price > 0 && party_price > 0 ? 1 : 0}
+						value={Number(company_price) > 0 && Number(party_price) > 0 ? 1 : 0}
 						idx={info.row.index + 1}
 						// showIdx={true}
 					/>
@@ -44,41 +43,12 @@ const createStatusColumn = ({ accessorKey, header }) =>
 		},
 	});
 
-const createTapRequiredColumn = ({ measurement }) =>
-	createColumn({
-		accessorKey: 'tape_need',
-		header: (
-			<span>
-				Tape Req (kg) <br /> [3% extra]
-			</span>
-		),
-		enableColumnFilter: false,
-		cell: (info) => {
-			const { size, quantity } = info.row.original;
-			return getTapeRequired({
-				top: measurement?.top,
-				bottom: measurement?.bottom || 0,
-				mtr: measurement?.mtr,
-				size: size,
-				pcs: quantity,
-			});
-		},
-	});
 
 const getColumn = ({
 	item_name,
-	end_type_name,
-	stopper_type_name,
-	zipper_number_name,
 	show_price,
 }) => {
-	const measurement = getMeasurement({
-		item: item_name,
-		stopper_type: stopper_type_name,
-		zipper_number: zipper_number_name,
-		end_type: end_type_name,
-	});
-
+	
 	// default columns
 	const DefaultStartColumn = [
 		createColumn({

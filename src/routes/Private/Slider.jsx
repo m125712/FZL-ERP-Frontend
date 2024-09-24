@@ -3,20 +3,20 @@ import ColoringLog from '@/pages/Slider/Coloring/Log';
 // * Coloring
 import SliderColoringProduction from '@/pages/Slider/Coloring/Production';
 import SliderDashboardInfo from '@/pages/Slider/Dashboard/Info';
-import DieCastingItemLibrary from '@/pages/Slider/DieCasting/ItemLibrary';
 import DieCastingLog from '@/pages/Slider/DieCasting/Log';
 import DieCastingProduction from '@/pages/Slider/DieCasting/Production';
-// * Die Casting Entry
+import ColoringRM from '@/pages/Slider/Coloring/RMStock'
+// * Die Casting 
 import DieCastingEntry from '@/pages/Slider/DieCasting/Production/Entry';
 import DieCastingRMStock from '@/pages/Slider/DieCasting/RMStock';
-// * Die Casting
 import DieCastingStock from '@/pages/Slider/DieCasting/Stock';
 import DieCastingTransfer from '@/pages/Slider/DieCasting/Transfer';
 import DieCastingTransferEntry from '@/pages/Slider/DieCasting/Transfer/Entry';
-// * Slider Assembly
+// * Assembly
 import SliderAssemblyLog from '@/pages/Slider/SliderAssembly/Log';
 import SliderAssemblyProduction from '@/pages/Slider/SliderAssembly/Production';
 import SliderAssemblyStock from '@/pages/Slider/SliderAssembly/Stock';
+import SliderAssemblyRM from '@/pages/Slider/SliderAssembly/RMStock';
 
 export const SliderRoutes = [
 	{
@@ -41,6 +41,13 @@ export const SliderRoutes = [
 			{
 				name: 'Die Casting',
 				children: [
+					{
+						name: 'RM',
+						path: '/slider/die-casting/rm',
+						element: <DieCastingRMStock />,
+						page_name: 'slider__die_casting_rm',
+						actions: ['read', 'click_name', 'click_used'],
+					},
 					{
 						name: 'Production',
 						path: '/slider/die-casting/production',
@@ -79,20 +86,6 @@ export const SliderRoutes = [
 						actions: ['read', 'create', 'update', 'delete'],
 					},
 					{
-						name: 'RM',
-						path: '/slider/die-casting/rm',
-						element: <DieCastingRMStock />,
-						page_name: 'slider__die_casting_rm',
-						actions: ['read', 'click_name', 'click_used'],
-					},
-					{
-						name: 'Library',
-						path: '/slider/die-casting/library',
-						element: <DieCastingItemLibrary />,
-						page_name: 'slider__die_casting_sfg',
-						actions: ['read', 'create', 'update', 'delete'],
-					},
-					{
 						name: 'Log',
 						path: '/slider/die-casting/log',
 						element: <DieCastingLog />,
@@ -128,10 +121,24 @@ export const SliderRoutes = [
 				],
 			},
 
-			// * Slider Assembly
+			// *  Assembly
 			{
-				name: 'Slider Assembly',
+				name: 'Assembly',
 				children: [
+					{
+						name: 'RM',
+						path: '/slider/slider-assembly/rm',
+						element: <SliderAssemblyRM />,
+						page_name: 'slider__assembly_rm',
+						actions: ['read', 'create', 'update', 'delete'],
+					},
+					{
+						name: 'Stock',
+						path: '/slider/slider-assembly/stock',
+						element: <SliderAssemblyStock />,
+						page_name: 'slider__assembly_stock',
+						actions: ['read', 'create', 'update', 'delete'],
+					},
 					{
 						name: 'Production',
 						path: '/slider/slider-assembly/production',
@@ -154,21 +161,20 @@ export const SliderRoutes = [
 						page_name: 'slider__assembly_log',
 						actions: ['read', 'create', 'update', 'delete'],
 					},
-
-					{
-						name: 'Stock',
-						path: '/slider/slider-assembly/stock',
-						element: <SliderAssemblyStock />,
-						page_name: 'slider__assembly_stock',
-						actions: ['read', 'create', 'update', 'delete'],
-					},
 				],
 			},
 
 			// * Slider Coloring
 			{
-				name: 'Slider Coloring',
+				name: 'Coloring',
 				children: [
+					{
+						name: 'RM',
+						path: '/slider/slider-coloring/rm',
+						element: <ColoringRM />,
+						page_name: 'slider__coloring_rm',
+						actions: ['read', 'create', 'update', 'delete'],
+					},
 					{
 						name: 'Production',
 						path: '/slider/slider-coloring/production',

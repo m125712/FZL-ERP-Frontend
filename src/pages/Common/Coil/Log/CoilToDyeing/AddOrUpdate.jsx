@@ -1,21 +1,20 @@
 import { useEffect } from 'react';
-import { useCommonCoilSFG, useCommonCoilToDyeingByUUID, useCommonTapeToDyeing } from '@/state/Common';
+import {
+	useCommonCoilSFG,
+	useCommonCoilToDyeingByUUID,
+	useCommonTapeToDyeing,
+} from '@/state/Common';
 import { useOtherMaterial } from '@/state/Other';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-
-
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
-
-
-import { COMMON_COIL_TO_DYEING_LOG_NULL, COMMON_COIL_TO_DYEING_LOG_SCHEMA } from '@util/Schema';
+import {
+	COMMON_COIL_TO_DYEING_LOG_NULL,
+	COMMON_COIL_TO_DYEING_LOG_SCHEMA,
+} from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-
-
-
-
 
 export default function Index({
 	modalId = '',
@@ -28,7 +27,6 @@ export default function Index({
 	const { data: material } = useOtherMaterial();
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
 	const MAX_QTY = Number(entryUUID?.max_trf_qty);
-	console.log(MAX_QTY);
 
 	const schema = {
 		...COMMON_COIL_TO_DYEING_LOG_SCHEMA,

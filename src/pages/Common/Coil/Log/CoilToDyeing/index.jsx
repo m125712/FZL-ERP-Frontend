@@ -2,14 +2,21 @@ import { useMemo, useState } from 'react';
 import { useCommonCoilSFG, useCommonCoilToDyeing } from '@/state/Common';
 import { useAccess, useFetch } from '@/hooks';
 
+
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete } from '@/ui';
 
+
+
 import PageInfo from '@/util/PageInfo';
 
+
+
 import AddOrUpdate from './AddOrUpdate';
+
 
 export default function Index() {
 	const { data, deleteData, isLoading } = useCommonCoilToDyeing();

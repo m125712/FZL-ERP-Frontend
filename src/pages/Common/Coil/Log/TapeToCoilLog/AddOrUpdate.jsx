@@ -18,7 +18,9 @@ export default function Index({
 		tape_prod: null,
 		coil_stock: null,
 		trx_quantity: null,
-		quantity: null,
+		quantity_in_coil: null,
+		trx_quantity_in_dying: null,
+		to_section: null,
 	},
 	setUpdateTapeLog,
 }) {
@@ -29,7 +31,11 @@ export default function Index({
 	const { data: material } = useOtherMaterial();
 
 	const MAX_QUANTITY =
-		Number(updateTapeLog?.quantity) + Number(updateTapeLog?.trx_quantity);
+		Number(
+			updateTapeLog?.to_section === 'stock'
+				? updateTapeLog?.trx_quantity_in_dying
+				: updateTapeLog?.quantity_in_coil
+		) + Number(updateTapeLog?.trx_quantity);
 
 	const schema = {
 		...TAPE_TO_COIL_TRX_SCHEMA,
@@ -82,8 +88,20 @@ export default function Index({
 			isSmall={true}>
 			<Input
 				label='trx_quantity'
-				sub_label={`Max: ${Number(updateTapeLog?.quantity) + Number(updateTapeLog?.trx_quantity)}`}
-				placeholder={`Max: ${Number(updateTapeLog?.quantity) + Number(updateTapeLog?.trx_quantity)}`}
+				sub_label={`Max: ${
+					Number(
+						updateTapeLog?.to_section === 'stock'
+							? updateTapeLog?.trx_quantity_in_dying
+							: updateTapeLog?.quantity_in_coil
+					) + Number(updateTapeLog?.trx_quantity)
+				}`}
+				placeholder={`Max: ${
+					Number(
+						updateTapeLog?.to_section === 'stock'
+							? updateTapeLog?.trx_quantity_in_dying
+							: updateTapeLog?.quantity_in_coil
+					) + Number(updateTapeLog?.trx_quantity)
+				}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

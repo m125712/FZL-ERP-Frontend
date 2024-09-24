@@ -1,13 +1,21 @@
 import { useEffect } from 'react';
-import { useCommonTapeSFG, useCommonTapeToCoilByUUID } from '@/state/Common';
+import { useCommonTapeSFG, useCommonTapeToCoilByUUID, useCommonTapeTransferByUUID } from '@/state/Common';
 import { useOtherMaterial } from '@/state/Other';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
+
+
 
 import { AddModal } from '@/components/Modal';
 import { Input, JoinInput } from '@/ui';
 
+
+
 import { TAPE_TO_COIL_TRX_NULL, TAPE_TO_COIL_TRX_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
+
+
+
+
 
 export default function Index({
 	modalId = '',
@@ -15,27 +23,20 @@ export default function Index({
 		uuid: null,
 		type_of_zipper: null,
 		tape_or_coil_stock_id: null,
-		tape_prod: null,
-		coil_stock: null,
 		trx_quantity: null,
-		quantity: null,
-		trx_quantity_in_dying: null,
-		to_section: null,
+		stock_quantity: null,
 	},
 	setUpdateTapeLog,
 }) {
-	const { data, url, updateData } = useCommonTapeToCoilByUUID(
+	const { data, url, updateData } = useCommonTapeTransferByUUID(
 		updateTapeLog?.uuid
 	);
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 	const { data: material } = useOtherMaterial();
 
 	const MAX_QUANTITY =
-		Number(
-			updateTapeLog?.to_section === 'stock'
-				? updateTapeLog?.trx_quantity_in_dying
-				: updateTapeLog?.quantity
-		) + Number(updateTapeLog?.trx_quantity);
+		Number(updateTapeLog?.stock_quantity) +
+		Number(updateTapeLog?.trx_quantity);
 
 	const schema = {
 		...TAPE_TO_COIL_TRX_SCHEMA,
@@ -45,7 +46,7 @@ export default function Index({
 	const { register, handleSubmit, errors, reset, context, getValues } =
 		useRHF(schema, TAPE_TO_COIL_TRX_NULL);
 	useFetchForRhfReset(
-		`/zipper/tape-trx/${updateTapeLog?.uuid}`,
+		`/zipper/dyed-tape-transaction-from-stock/${updateTapeLog?.uuid}`,
 		updateTapeLog?.uuid,
 		reset
 	);
@@ -88,20 +89,8 @@ export default function Index({
 			isSmall={true}>
 			<Input
 				label='trx_quantity'
-				sub_label={`Max: ${
-					Number(
-						updateTapeLog?.to_section === 'stock'
-							? updateTapeLog?.trx_quantity_in_dying
-							: updateTapeLog?.quantity
-					) + Number(updateTapeLog?.trx_quantity)
-				}`}
-				placeholder={`Max: ${
-					Number(
-						updateTapeLog?.to_section === 'stock'
-							? updateTapeLog?.trx_quantity_in_dying
-							: updateTapeLog?.quantity
-					) + Number(updateTapeLog?.trx_quantity)
-				}`}
+				sub_label={`Max: ${Number(updateTapeLog?.stock_quantity) + Number(updateTapeLog?.trx_quantity)}`}
+				placeholder={`Max: ${Number(updateTapeLog?.stock_quantity) + Number(updateTapeLog?.trx_quantity)}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

@@ -1,7 +1,9 @@
 import Select from 'react-select';
+
+import cn from '@/lib/cn';
+
 import { ButtonComponents } from './buttons';
 import { classNames, styles } from './utils';
-import cn from '@/lib/cn';
 
 const ReactSelect = ({ className, ...props }) => {
 	// console.log(props);

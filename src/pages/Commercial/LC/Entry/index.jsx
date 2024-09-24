@@ -28,10 +28,6 @@ export default function Index() {
 	const { data, invalidateQuery } = useCommercialLCPIByUUID(lc_uuid);
 	const { data: pi } = useOtherPI();
 
-	console.log({
-		pi,
-	});
-
 	const [deletablePi, setDeletablePi] = useState([]);
 	const [updateItem, setUpdateItem] = useState({
 		itemId: null,

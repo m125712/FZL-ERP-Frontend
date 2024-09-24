@@ -855,17 +855,16 @@ export const deliveryQk = {
 		order_info_uuid,
 	],
 
-	deliveryPackingListOrderByUUID: (uuid) => [
-		...deliveryQk.deliveryPackingListOrder(),
-		uuid,
-	],
-
 	deliveryPackingListEntryByPackingListUUID: (packing_list_uuids) => [
 		...deliveryQk.all(),
 		'packing-list',
 		'entry',
 		...packing_list_uuids,
 	],
+
+	deliveryChallanEntryForPackingListByPackingListUUID: (
+		packing_list_uuids
+	) => [...deliveryQk.all(), 'challan', 'entry', ...packing_list_uuids],
 
 	// *Packing List Entry
 	deliveryPackingListEntry: () => [

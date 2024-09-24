@@ -19,7 +19,7 @@ export const useCommercialBankByUUID = (uuid) =>
 export const useCommercialPI = () =>
 	createGlobalState({
 		queryKey: commercialQK.pi(),
-		url: '/commercial/pi-cash',
+		url: '/commercial/pi-cash?is_cash=false',
 	});
 
 export const useCommercialPICash = () =>

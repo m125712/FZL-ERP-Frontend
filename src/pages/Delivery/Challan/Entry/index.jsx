@@ -1,7 +1,6 @@
 import { Suspense, useEffect, useState } from 'react';
 import {
 	useDeliveryChallan,
-	useDeliveryChallanByUUID,
 	useDeliveryChallanDetailsByUUID,
 	useDeliveryChallanEntry,
 	useDeliveryPackingListEntryByPackingListUUID,
@@ -30,7 +29,6 @@ export default function Index() {
 		url: deliveryChallanUrl,
 		postData,
 		updateData,
-		deleteData,
 	} = useDeliveryChallan();
 	const { url: deliveryChallanEntryUrl, deleteData: deleteChallanEntry } =
 		useDeliveryChallanEntry();
@@ -54,29 +52,42 @@ export default function Index() {
 
 	useEffect(() => {
 		if (challan && isUpdate) {
-			reset(challan);
+			reset({
+				...challan,
+				new_packing_list_uuids: [],
+			});
 		}
 	}, [challan, isUpdate]);
 
 	const { data: packingListEntry } =
 		useDeliveryPackingListEntryByPackingListUUID(
-			watch('packing_list_uuids')
+			watch(isUpdate ? 'new_packing_list_uuids' : 'packing_list_uuids')
 		);
 
 	useEffect(() => {
-		if (packingListEntry?.packing_list_entry) {
+		if (!isUpdate && packingListEntry?.packing_list_entry) {
 			setValue('challan_entry', packingListEntry?.packing_list_entry);
-			setValue(
-				'carton_quantity',
-				packingListEntry?.packing_list_entry.length
-			);
 		}
-	}, [packingListEntry]);
+	}, [packingListEntry, isUpdate]);
+
+	useEffect(() => {
+		if (isUpdate && watch('new_packing_list_uuids')?.length === 0) {
+			setValue('new_challan_entry', []);
+		} else if (isUpdate && packingListEntry?.packing_list_entry) {
+			setValue('new_challan_entry', packingListEntry?.packing_list_entry);
+		}
+	}, [packingListEntry, isUpdate, watch('new_packing_list_uuids')]);
 
 	// challan_entry
 	const { fields: challanEntryField } = useFieldArray({
 		control,
 		name: 'challan_entry',
+	});
+
+	// new challan_entry
+	const { fields: newChallanEntryField } = useFieldArray({
+		control,
+		name: 'new_challan_entry',
 	});
 
 	const [deleteItem, setDeleteItem] = useState({
@@ -103,44 +114,41 @@ export default function Index() {
 				isOnCloseNeeded: false,
 			});
 
-			console.log({
-				challanPromise,
-			});
-
 			const updatedId = challanPromise?.data?.[0]?.updatedUuid;
 
 			// update challan_entry
-			let updatableChallanEntryPromises = data.challan_entry.map(
+			const updatableChallanEntryPromises = data.challan_entry.map(
 				async (item) => {
-					if (item.uuid === null) {
-						return await postData.mutateAsync({
-							url: deliveryChallanEntryUrl,
-							newData: {
-								...item,
-								uuid: nanoid(),
-								challan_uuid: new_uuid,
-								quantity: item?.quantity,
-								created_at,
-								remarks: item?.remarks,
-							},
-							isOnCloseNeeded: false,
-						});
-					}
+					const updatedData = {
+						...item,
+						updated_at: GetDateTime(),
+					};
 
-					if (item.uuid) {
-						const updatedData = {
-							...item,
-							updated_at: GetDateTime(),
-						};
+					return await updateData.mutateAsync({
+						url: `${deliveryChallanEntryUrl}/${item?.uuid}`,
+						updatedData: updatedData,
+						uuid: item.uuid,
+						isOnCloseNeeded: false,
+					});
+				}
+			);
 
-						return await updateData.mutateAsync({
-							url: `${deliveryChallanEntryUrl}/${item?.uuid}`,
-							updatedData: updatedData,
-							uuid: item.uuid,
-							isOnCloseNeeded: false,
-						});
-					}
-					return null;
+			//new challan_entry
+			const newChallanEntryPromises = data?.new_challan_entry.map(
+				async (item) => {
+					const data = {
+						...item,
+						uuid: nanoid(),
+						challan_uuid: uuid,
+						created_at: GetDateTime(),
+						remarks: item?.remarks,
+					};
+
+					return await postData.mutateAsync({
+						url: deliveryChallanEntryUrl,
+						newData: data,
+						isOnCloseNeeded: false,
+					});
 				}
 			);
 
@@ -148,10 +156,11 @@ export default function Index() {
 				await Promise.all([
 					challanPromise,
 					...updatableChallanEntryPromises,
+					...newChallanEntryPromises,
 				])
 					.then(() => reset(Object.assign({}, CHALLAN_NULL)))
 					.then(() => {
-						// navigate(`/delivery/challan/${updatedId}`);
+						navigate(`/delivery/challan/${updatedId}`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -175,16 +184,14 @@ export default function Index() {
 
 		delete challanData['challan_entry'];
 
-		const challanEntryData = [...data.challan_entry]
-			.filter((item) => item.is_checked && item.quantity > 0)
-			.map((item) => ({
-				...item,
-				uuid: nanoid(),
-				challan_uuid: new_uuid,
-				quantity: item?.quantity,
-				created_at,
-				remarks: item?.remarks,
-			}));
+		const challanEntryData = [...data.challan_entry].map((item) => ({
+			...item,
+			uuid: nanoid(),
+			challan_uuid: new_uuid,
+			quantity: item?.quantity,
+			created_at,
+			remarks: item?.remarks,
+		}));
 
 		if (challanEntryData.length === 0) {
 			alert('Select at least one item to proceed.');
@@ -241,7 +248,7 @@ export default function Index() {
 					}}
 				/>
 				<DynamicDeliveryField
-					title={`Details: `}
+					title={`Entry Details: `}
 					tableHead={
 						<>
 							{[
@@ -343,6 +350,98 @@ export default function Index() {
 						);
 					})}
 				</DynamicDeliveryField>
+
+				{isUpdate && (
+					<DynamicDeliveryField
+						title={`New Entry Details: `}
+						tableHead={
+							<>
+								{[
+									'PL No.',
+									'Item Description',
+									'Style/Color/Size',
+									'Delivered',
+									'Quantity',
+									'Short QTY',
+									'Reject QTY',
+									'Remarks',
+									,
+								].map((item) => (
+									<th
+										key={item}
+										scope='col'
+										className='group cursor-pointer px-3 py-2 transition duration-300'>
+										{item}
+									</th>
+								))}
+							</>
+						}>
+						{newChallanEntryField.map((item, index) => {
+							return (
+								<tr
+									key={item.id}
+									className={cn(
+										'relative cursor-pointer bg-base-100 text-primary transition-colors duration-200 ease-in',
+										isUpdate &&
+											watch(
+												`new_challan_entry[${index}].isDeletable`
+											) &&
+											'bg-error/10 text-error hover:bg-error/20 hover:text-error'
+									)}>
+									<td className={`w-32 ${rowClass}`}>
+										<LinkWithCopy
+											title={getValues(
+												`new_challan_entry[${index}].packing_number`
+											)}
+											id={getValues(
+												`new_challan_entry[${index}].packing_list_uuid`
+											)}
+											uri='/delivery/packing-list'
+										/>
+									</td>
+									<td className={`w-32 ${rowClass}`}>
+										{getValues(
+											`new_challan_entry[${index}].item_description`
+										)}
+									</td>
+									<td className={`w-32 ${rowClass}`}>
+										{getValues(
+											`new_challan_entry[${index}].style_color_size`
+										)}
+									</td>
+
+									<td className={`${rowClass}`}>
+										{getValues(
+											`new_challan_entry[${index}].delivered`
+										)}
+									</td>
+									<td className={`${rowClass}`}>
+										{getValues(
+											`new_challan_entry[${index}].quantity`
+										)}
+									</td>
+									<td className={`${rowClass}`}>
+										{getValues(
+											`new_challan_entry[${index}].short_quantity`
+										)}
+									</td>
+									<td className={`${rowClass}`}>
+										{getValues(
+											`new_challan_entry[${index}].reject_quantity`
+										)}
+									</td>
+
+									<td className={`${rowClass}`}>
+										{getValues(
+											`new_challan_entry[${index}].remarks`
+										)}
+									</td>
+								</tr>
+							);
+						})}
+					</DynamicDeliveryField>
+				)}
+
 				<div className='modal-action'>
 					<SubmitButton />
 				</div>

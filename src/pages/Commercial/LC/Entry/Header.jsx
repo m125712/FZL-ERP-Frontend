@@ -1,5 +1,7 @@
+import { useOtherParty } from '@/state/Other';
 import { useParams } from 'react-router-dom';
 
+import { DateInput } from '@/ui/Core';
 import {
 	CheckBox,
 	FormField,
@@ -8,8 +10,6 @@ import {
 	SectionEntryBody,
 	Textarea,
 } from '@/ui';
-import { DateInput } from '@/ui/Core';
-import { useOtherParty } from '@/state/Other';
 
 export default function Header({
 	register,
@@ -111,6 +111,7 @@ export default function Header({
 						Controller={Controller}
 						control={control}
 						selected={watch('lc_date')}
+						{...{ register, errors }}
 					/>
 				</Section>
 				<Section title='Commercial Details'>
@@ -124,12 +125,14 @@ export default function Header({
 						Controller={Controller}
 						control={control}
 						selected={watch('shipment_date')}
+						{...{ register, errors }}
 					/>{' '}
 					<DateInput
 						label='expiry_date'
 						Controller={Controller}
 						control={control}
 						selected={watch('expiry_date')}
+						{...{ register, errors }}
 					/>
 				</Section>
 				<Section title='Progression'>
@@ -143,30 +146,35 @@ export default function Header({
 						Controller={Controller}
 						control={control}
 						selected={watch('handover_date')}
+						{...{ register, errors }}
 					/>
 					<DateInput
 						label='document_receive_date'
 						Controller={Controller}
 						control={control}
 						selected={watch('document_receive_date')}
+						{...{ register, errors }}
 					/>
 					<DateInput
 						label='acceptance_date'
 						Controller={Controller}
 						control={control}
 						selected={watch('acceptance_date')}
+						{...{ register, errors }}
 					/>
 					<DateInput
 						label='maturity_date'
 						Controller={Controller}
 						control={control}
 						selected={watch('maturity_date')}
+						{...{ register, errors }}
 					/>
 					<DateInput
 						label='payment_date'
 						Controller={Controller}
 						control={control}
 						selected={watch('payment_date')}
+						{...{ register, errors }}
 					/>
 					<Input label='payment_value' {...{ register, errors }} />
 				</Section>
@@ -177,6 +185,7 @@ export default function Header({
 						Controller={Controller}
 						control={control}
 						selected={watch('ud_received')}
+						{...{ register, errors }}
 					/>
 					<FormField
 						label='at_sight'
@@ -209,6 +218,7 @@ export default function Header({
 						Controller={Controller}
 						control={control}
 						selected={watch('amd_date')}
+						{...{ register, errors }}
 					/>
 					<Input label='amd_count' {...{ register, errors }} />
 					<Textarea label='remarks' {...{ register, errors }} />

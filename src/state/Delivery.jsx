@@ -67,7 +67,20 @@ export const useDeliveryPackingListEntryByPackingListUUID = (
 			deliveryQk.deliveryPackingListEntryByPackingListUUID(
 				packing_list_uuids
 			),
+
 		url: `/delivery/packing-list-entry/by/multi-packing-list-uuid/${packing_list_uuids?.join(',')}`,
+		enabled: !!packing_list_uuids && packing_list_uuids?.length > 0,
+	});
+
+export const useDeliveryChallanEntryForPackingListByPackingListUUID = (
+	packing_list_uuids
+) =>
+	createGlobalState({
+		queryKey:
+			deliveryQk.deliveryChallanEntryForPackingListByPackingListUUID(
+				packing_list_uuids
+			),
+		url: `/delivery/challan-entry-for-packing-list-multi/by/${packing_list_uuids?.join(',')}`,
 		enabled: !!packing_list_uuids && packing_list_uuids?.length > 0,
 	});
 

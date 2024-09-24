@@ -1353,7 +1353,7 @@ export const CHALLAN_SCHEMA = {
 	assign_to: STRING_REQUIRED,
 	order_info_uuid: STRING_REQUIRED,
 	packing_list_uuids: JSON_STRING_REQUIRED,
-	carton_quantity: NUMBER_REQUIRED,
+	new_packing_list_uuids: JSON_STRING_REQUIRED,
 	receive_status: BOOLEAN_DEFAULT_VALUE(false),
 	gate_pass: BOOLEAN_DEFAULT_VALUE(false),
 	challan_entry: yup.array().of(
@@ -1362,13 +1362,23 @@ export const CHALLAN_SCHEMA = {
 			remarks: STRING.nullable(),
 		})
 	),
+
+	new_challan_entry: yup
+		.array()
+		.of(
+			yup.object().shape({
+				packing_list_uuid: STRING_REQUIRED,
+				remarks: STRING.nullable(),
+			})
+		)
+		.optional(),
 };
 
 export const CHALLAN_NULL = {
 	assign_to: '',
 	order_info_uuid: '',
 	packing_list_uuids: [],
-	carton_quantity: 0,
+	new_packing_list_uuids: [],
 	receive_status: false,
 	gate_pass: false,
 	challan_entry: [
@@ -1377,6 +1387,8 @@ export const CHALLAN_NULL = {
 			remarks: '',
 		},
 	],
+
+	new_challan_entry: [],
 };
 
 // Commercial
@@ -1537,7 +1549,6 @@ export const LC_SCHEMA = {
 };
 
 export const LC_NULL = {
-	uuid: null,
 	party_uuid: null,
 	lc_number: null,
 	lc_date: null,

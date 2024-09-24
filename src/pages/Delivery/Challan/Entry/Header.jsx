@@ -127,7 +127,15 @@ export default function Header({
 									<ReactSelect
 										isMulti
 										placeholder='Select Packing List Number'
-										options={packingList}
+										options={
+											isUpdate
+												? packingList?.filter((item) =>
+														getValues(
+															'packing_list_uuids'
+														).includes(item.value)
+													)
+												: packingList
+										}
 										value={packingList?.filter((item) => {
 											const packing_list_uuids =
 												getValues('packing_list_uuids');
@@ -170,6 +178,80 @@ export default function Header({
 							}}
 						/>
 					</FormField>
+
+					{isUpdate && (
+						<FormField
+							label='new_packing_list_uuids'
+							title='New Packing List Number'
+							errors={errors}>
+							<Controller
+								name='new_packing_list_uuids'
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											isMulti
+											placeholder='Select Packing List Number'
+											options={packingList?.filter(
+												(item) =>
+													!getValues(
+														'packing_list_uuids'
+													).includes(item.value)
+											)}
+											value={packingList?.filter(
+												(item) => {
+													const new_packing_list_uuids =
+														getValues(
+															'new_packing_list_uuids'
+														);
+
+													if (
+														new_packing_list_uuids ===
+														null
+													) {
+														return false;
+													} else {
+														if (
+															isJSON(
+																new_packing_list_uuids
+															)
+														) {
+															return JSON.parse(
+																new_packing_list_uuids
+															)
+																.split(',')
+																?.includes(
+																	item.value
+																);
+														} else {
+															if (
+																!Array.isArray(
+																	new_packing_list_uuids
+																)
+															) {
+																return new_packing_list_uuids?.includes(
+																	item.value
+																);
+															}
+
+															return new_packing_list_uuids?.includes(
+																item.value
+															);
+														}
+													}
+												}
+											)}
+											onChange={(e) => {
+												onChange(
+													e.map(({ value }) => value)
+												);
+											}}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+					)}
 
 					<Textarea label='remarks' {...{ register, errors }} />
 				</div>

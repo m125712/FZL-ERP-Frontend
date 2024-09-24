@@ -1,14 +1,11 @@
 //MetallicFinishing
-import NylonMetallicFinishing from '@/pages/Nylon/MetallicFinishing/RMStock/RMStock';
-import NylonMetallicFinishingSFG from '@/pages/Nylon/MetallicFinishing/SFG';
 import NylonMetallicFinishingTrxLog from '@/pages/Nylon/MetallicFinishing/Log';
 import NylonMetallicFinishingProduction from '@/pages/Nylon/MetallicFinishing/Production';
-
-//PlasticFinishing
-import NylonPlasticFinishing from '@/pages/Nylon/PlasticFinishing/RMStock';
-import NylonPlasticFinishingSFG from '@/pages/Nylon/PlasticFinishing/SFG';
+import NylonMetallicFinishing from '@/pages/Nylon/MetallicFinishing/RMStock/RMStock';
 import NylonPlasticFinishingTrxLog from '@/pages/Nylon/PlasticFinishing/Log';
 import NylonPlasticFinishingProduction from '@/pages/Nylon/PlasticFinishing/Production';
+//PlasticFinishing
+import NylonPlasticFinishing from '@/pages/Nylon/PlasticFinishing/RMStock';
 
 export const NylonRoutes = [
 	{
@@ -25,11 +22,17 @@ export const NylonRoutes = [
 						actions: ['read', 'click_name', 'click_used'],
 					},
 					{
-						name: 'SFG',
-						path: '/nylon/metallic-finishing/sfg',
-						element: <NylonMetallicFinishingSFG />,
-						page_name: 'nylon__metallic_finishing_sfg',
-						actions: ['read', 'click_production'],
+						name: 'Production',
+						path: '/nylon/metallic-finishing/production',
+						element: <NylonMetallicFinishingProduction />,
+						page_name: 'nylon__metallic_finishing_production',
+						actions: [
+							'create',
+							'read',
+							'update',
+							'click_production',
+							'click_transaction',
+						],
 					},
 					{
 						name: 'Log',
@@ -48,20 +51,6 @@ export const NylonRoutes = [
 							'click_delete_tape',
 						],
 					},
-
-					{
-						name: 'Production',
-						path: '/nylon/metallic-finishing/production',
-						element: <NylonMetallicFinishingProduction />,
-						page_name: 'nylon__metallic_finishing_production',
-						actions: [
-							'create',
-							'read',
-							'update',
-							'click_production',
-							'click_transaction',
-						],
-					},
 				],
 			},
 
@@ -76,11 +65,17 @@ export const NylonRoutes = [
 						actions: ['read', 'click_name', 'click_used'],
 					},
 					{
-						name: 'SFG',
-						path: '/nylon/plastic-finishing/sfg',
-						element: <NylonPlasticFinishingSFG />,
-						page_name: 'nylon__plastic_finishing_sfg',
-						actions: ['read', 'click_production'],
+						name: 'Production',
+						path: '/nylon/plastic-finishing/production',
+						element: <NylonPlasticFinishingProduction />,
+						page_name: 'nylon__plastic_finishing_production',
+						actions: [
+							'create',
+							'read',
+							'update',
+							'click_production',
+							'click_transaction',
+						],
 					},
 					{
 						name: 'Log',
@@ -97,20 +92,6 @@ export const NylonRoutes = [
 							'click_delete_rm_order',
 							'click_update_tape',
 							'click_delete_tape',
-						],
-					},
-
-					{
-						name: 'Production',
-						path: '/nylon/plastic-finishing/production',
-						element: <NylonPlasticFinishingProduction />,
-						page_name: 'nylon__plastic_finishing_production',
-						actions: [
-							'create',
-							'read',
-							'update',
-							'click_production',
-							'click_transaction',
 						],
 					},
 				],

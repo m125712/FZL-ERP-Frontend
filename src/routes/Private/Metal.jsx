@@ -1,20 +1,16 @@
 // Teeth Molding
-import MetalTeethMolding from '@/pages/Metal/TeethMolding/RMStock';
-import MetalTeethMoldingSFG from '@/pages/Metal/TeethMolding/SFG';
-import MetalTeethMoldingTrxLog from '@/pages/Metal/TeethMolding/Log';
-import MetalTeethMoldingProduction from '@/pages/Metal/TeethMolding/Production';
-
-// TeethColoring
-import MetalTeethColoringRMStock from '@/pages/Metal/TeethColoring/RMStock';
-import MetalTeethColoringSFG from '@/pages/Metal/TeethColoring/SFG';
-import MetalTeethColoringTrxLog from '@/pages/Metal/TeethColoring/Log';
-import MetalTeethColoringProduction from '@/pages/Metal/TeethColoring/Production';
-
-// Finishing
-import MetalFinishingRMStock from '@/pages/Metal/Finishing/RMStock';
-import MetalFinishingSFG from '@/pages/Metal/Finishing/SFG';
 import MetalFinishingTrxLog from '@/pages/Metal/Finishing/Log';
 import MetalFinishingProduction from '@/pages/Metal/Finishing/Production';
+// Finishing
+import MetalFinishingRMStock from '@/pages/Metal/Finishing/RMStock';
+import MetalTeethColoringTrxLog from '@/pages/Metal/TeethColoring/Log';
+import MetalTeethColoringProduction from '@/pages/Metal/TeethColoring/Production';
+// TeethColoring
+import MetalTeethColoringRMStock from '@/pages/Metal/TeethColoring/RMStock';
+import MetalTeethMoldingTrxLog from '@/pages/Metal/TeethMolding/Log';
+import MetalTeethMoldingProduction from '@/pages/Metal/TeethMolding/Production';
+import MetalTeethMolding from '@/pages/Metal/TeethMolding/RMStock';
+
 
 export const MetalRoutes = [
 	{
@@ -31,14 +27,16 @@ export const MetalRoutes = [
 						actions: ['read', 'click_name', 'click_used'],
 					},
 					{
-						name: 'SFG',
-						path: '/metal/teeth-molding/sfg',
-						element: <MetalTeethMoldingSFG />,
-						page_name: 'metal__teeth_molding_sfg',
+						name: 'Production',
+						path: '/metal/teeth-molding/production',
+						element: <MetalTeethMoldingProduction />,
+						page_name: 'metal__teeth_molding_production',
 						actions: [
+							'create',
 							'read',
+							'update',
 							'click_production',
-							'click_to_teeth_coloring',
+							'click_transaction',
 						],
 					},
 					{
@@ -58,20 +56,6 @@ export const MetalRoutes = [
 							'click_delete_tape',
 						],
 					},
-
-					{
-						name: 'Production',
-						path: '/metal/teeth-molding/production',
-						element: <MetalTeethMoldingProduction />,
-						page_name: 'metal__teeth_molding_production',
-						actions: [
-							'create',
-							'read',
-							'update',
-							'click_production',
-							'click_transaction',
-						],
-					},
 				],
 			},
 
@@ -86,14 +70,16 @@ export const MetalRoutes = [
 						actions: ['read', 'click_name', 'click_used'],
 					},
 					{
-						name: 'SFG',
-						path: '/metal/teeth-coloring/sfg',
-						element: <MetalTeethColoringSFG />,
-						page_name: 'metal__teeth_coloring_sfg',
+						name: 'Production',
+						path: '/metal/teeth-coloring/production',
+						element: <MetalTeethColoringProduction />,
+						page_name: 'metal__teeth_coloring_production',
 						actions: [
+							'create',
 							'read',
+							'update',
 							'click_production',
-							'click_to_finishing',
+							'click_transaction',
 						],
 					},
 					{
@@ -111,20 +97,6 @@ export const MetalRoutes = [
 							'click_delete_rm_order',
 						],
 					},
-
-					{
-						name: 'Production',
-						path: '/metal/teeth-coloring/production',
-						element: <MetalTeethColoringProduction />,
-						page_name: 'metal__teeth_coloring_production',
-						actions: [
-							'create',
-							'read',
-							'update',
-							'click_production',
-							'click_transaction',
-						],
-					},
 				],
 			},
 			{
@@ -138,11 +110,17 @@ export const MetalRoutes = [
 						actions: ['read', 'click_name', 'click_used'],
 					},
 					{
-						name: 'SFG',
-						path: '/metal/finishing/sfg',
-						element: <MetalFinishingSFG />,
-						page_name: 'metal__finishing_sfg',
-						actions: ['read', 'click_production'],
+						name: 'Production',
+						path: '/metal/finishing/production',
+						element: <MetalFinishingProduction />,
+						page_name: 'metal__finishing_production',
+						actions: [
+							'create',
+							'read',
+							'update',
+							'click_production',
+							'click_transaction',
+						],
 					},
 					{
 						name: 'Log',
@@ -157,20 +135,6 @@ export const MetalRoutes = [
 							'click_delete_rm',
 							'click_update_rm_order',
 							'click_delete_rm_order',
-						],
-					},
-
-					{
-						name: 'Production',
-						path: '/metal/finishing/production',
-						element: <MetalFinishingProduction />,
-						page_name: 'metal__finishing_production',
-						actions: [
-							'create',
-							'read',
-							'update',
-							'click_production',
-							'click_transaction',
 						],
 					},
 				],

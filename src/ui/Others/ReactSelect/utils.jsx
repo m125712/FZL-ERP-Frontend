@@ -1,7 +1,7 @@
 import cn from '@lib/cn';
 
 const controlStyles = {
-	base: 'bg-base-100 input input-primary w-full rounded-md px-2 text-sm transition-all duration-200 ease-in-out text-primary',
+	base: 'bg-base-100 input input-primary w-full  rounded-md px-2 text-sm transition-all duration-200 ease-in-out text-primary',
 	focus: '!border-secondary/50 outline outline-2 outline-offset-2 outline-secondary',
 	nonFocus: 'border-secondary/30',
 	disabled:

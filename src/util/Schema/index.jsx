@@ -1282,8 +1282,8 @@ export const PACKING_LIST_SCHEMA = {
 				is: true,
 				then: (Schema) =>
 					Schema.typeError('Must be a number').max(
-						yup.ref('balance_quantity'),
-						'Beyond Balance Quantity'
+						yup.ref('order_quantity'),
+						'Beyond Order Quantity'
 					),
 				otherwise: (Schema) =>
 					Schema.nullable().transform((value, originalValue) =>
@@ -1294,8 +1294,8 @@ export const PACKING_LIST_SCHEMA = {
 				is: true,
 				then: (Schema) =>
 					Schema.typeError('Must be a number').max(
-						yup.ref('balance_quantity'),
-						'Beyond Balance Quantity'
+						yup.ref('order_quantity'),
+						'Beyond Order Quantity'
 					),
 				otherwise: (Schema) =>
 					Schema.nullable().transform((value, originalValue) =>
@@ -1350,30 +1350,30 @@ export const PACKING_LIST_NULL = {
 
 // Challan
 export const CHALLAN_SCHEMA = {
-	order_info_id: NUMBER_REQUIRED,
+	assign_to: STRING_REQUIRED,
+	order_info_uuid: STRING_REQUIRED,
+	packing_list_uuids: JSON_STRING_REQUIRED,
 	carton_quantity: NUMBER_REQUIRED,
+	receive_status: BOOLEAN_DEFAULT_VALUE(false),
+	gate_pass: BOOLEAN_DEFAULT_VALUE(false),
 	challan_entry: yup.array().of(
 		yup.object().shape({
-			sfg_id: NUMBER,
-			max_assign: NUMBER,
-			delivery_quantity: NUMBER.max(
-				yup.ref('max_assign'),
-				'Beyond Max Quantity'
-			),
+			packing_list_uuid: STRING_REQUIRED,
 			remarks: STRING.nullable(),
 		})
 	),
 };
 
 export const CHALLAN_NULL = {
-	id: null,
-	order_info_id: '',
-	carton_quantity: '',
+	assign_to: '',
+	order_info_uuid: '',
+	packing_list_uuids: [],
+	carton_quantity: 0,
+	receive_status: false,
+	gate_pass: false,
 	challan_entry: [
 		{
-			sfg_id: null,
-			max_assign: null,
-			delivery_quantity: null,
+			packing_list_uuid: '',
 			remarks: '',
 		},
 	],

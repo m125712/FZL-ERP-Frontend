@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -22,6 +22,63 @@ export default function Index() {
 
 	const columns = useMemo(
 		() => [
+			{
+				accessorKey: 'uuid',
+				header: 'ID',
+				cell: (info) => {
+					const { challan_number } = info.row.original;
+					return (
+						<LinkWithCopy
+							title={challan_number}
+							id={info.getValue()}
+							uri='/delivery/challan'
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'carton_quantity',
+				header: 'Carton QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'assign_to_name',
+				header: 'Assign To',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'receive_status',
+				header: 'Receive Status',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
+			},
+			{
+				accessorKey: 'gate_pass',
+				header: 'Gate Pass',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created At',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated At',

@@ -860,6 +860,13 @@ export const deliveryQk = {
 		uuid,
 	],
 
+	deliveryPackingListEntryByPackingListUUID: (packing_list_uuids) => [
+		...deliveryQk.all(),
+		'packing-list',
+		'entry',
+		...packing_list_uuids,
+	],
+
 	// *Packing List Entry
 	deliveryPackingListEntry: () => [
 		...deliveryQk.all(),
@@ -926,6 +933,14 @@ export const threadQK = {
 //* OTHER QUERY KEYS
 export const otherQK = {
 	all: () => ['other'],
+
+	// HR User
+	hrUser: () => [...otherQK.all(), 'hr-user'],
+	hrUserByDesignation: (designation) => [
+		...otherQK.all(),
+		'hr-user-by-designation',
+		designation,
+	],
 
 	//Order
 	order: () => [...otherQK.all(), 'order'],
@@ -994,6 +1009,13 @@ export const otherQK = {
 
 	//Factory
 	factoryByPartyUUID: (uuid) => [...otherQK.all(), 'factory-by-party', uuid],
+
+	//Delivery
+	deliveryPackingListByOrderInfoUUID: (uuid) => [
+		...otherQK.all(),
+		'delivery-packing-list-by-order-info',
+		uuid,
+	],
 };
 
 //* Challan
@@ -1003,6 +1025,12 @@ export const challanQK = {
 	//Challan
 	deliveryChallan: () => [...challanQK.all(), 'delivery-challan'],
 	deliveryChallanByUUID: (uuid) => [...challanQK.deliveryChallan(), uuid],
+	deliveryChallanDetailsByUUID: (uuid) => [
+		...challanQK.all(),
+		'delivery-challan',
+		'details',
+		uuid,
+	],
 
 	// Challan Entry
 	deliveryChallanEntry: () => [...challanQK.all(), 'delivery-challan-entry'],

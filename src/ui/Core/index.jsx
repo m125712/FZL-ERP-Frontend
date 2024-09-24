@@ -15,7 +15,6 @@ import {
 	FormField,
 } from './base';
 import { capitalize } from './utils';
-import { Eye, EyeOff } from 'lucide-react';
 
 export const Input = ({ register, ...props }) => (
 	<FormField {...props}>

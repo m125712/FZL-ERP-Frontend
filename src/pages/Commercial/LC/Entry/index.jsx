@@ -28,9 +28,6 @@ export default function Index() {
 	const { data, invalidateQuery } = useCommercialLCPIByUUID(lc_uuid);
 	const { data: pi } = useOtherPI();
 
-	console.log({
-		pi,
-	});
 
 	const [deletablePi, setDeletablePi] = useState([]);
 	const [updateItem, setUpdateItem] = useState({
@@ -99,7 +96,7 @@ export default function Index() {
 	// Submit
 	const onSubmit = async (data) => {
 		const formatDate = (dateString) =>
-			dateString ? format(new Date(dateString), 'yyyy-MM-dd') : '';
+			dateString ? format(new Date(dateString), 'yyyy-MM-dd') : null;
 
 		const lc_uuid = data.uuid;
 
@@ -223,7 +220,7 @@ export default function Index() {
 			...pi_numbers.map(
 				async (item) =>
 					await updateData.mutateAsync({
-						url: `/commercial/pi-lc-uuid/${item.uuid}`,
+						url: `/commercial/pi-cash-lc-uuid/${item.uuid}`,
 						updatedData: item,
 						isOnCloseNeeded: false,
 					})
@@ -296,7 +293,9 @@ export default function Index() {
 											label={`pi[${index}].uuid`}
 											title='Material'
 											is_title_needed='false'
-											errors={errors}>
+											dynamicerror={
+												errors?.pi?.[index]?.uuid
+											}>
 											<Controller
 												name={`pi[${index}].uuid`}
 												control={control}
@@ -305,7 +304,7 @@ export default function Index() {
 												}) => {
 													return (
 														<ReactSelect
-															placeholder='Select Material'
+															placeholder='Select PI'
 															options={pi}
 															value={pi?.find(
 																(inItem) =>

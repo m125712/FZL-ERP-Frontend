@@ -11,7 +11,7 @@ import {
 } from './base';
 import { capitalize } from './utils';
 import { Eye, EyeOff } from 'lucide-react';
-
+import GetDateTime from '@/util/GetDateTime';
 export const Input = ({ register, ...props }) => (
 	<FormField {...props}>
 		<input
@@ -51,7 +51,7 @@ export const DateInput = ({ register, selected, ...props }) => {
 						customInput={<ExampleCustomInput />}
 						selected={selected}
 						onChange={(date) =>
-							onChange(format(date, 'yyyy-MM-dd'))
+							onChange(format(date, 'yyyy-MM-dd HH:mm:ss'))
 						}
 						renderCustomHeader={DatePickerCustomHeader}
 						{...DatePickerDefaultConfig}

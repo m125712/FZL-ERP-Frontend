@@ -48,7 +48,7 @@ export {
 	PHONE_NUMBER,
 	PHONE_NUMBER_REQUIRED,
 	STRING,
-	STRING_REQUIRED
+	STRING_REQUIRED,
 };
 
 // Library
@@ -260,7 +260,10 @@ export const SFG_TRANSFER_LOG_NULL = {
 
 export const SFG_PRODUCTION_LOG_SCHEMA = {
 	production_quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0'),
-	production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
+	production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+		0,
+		'More than 0'
+	),
 	wastage: NUMBER_DOUBLE.min(0, 'Minimum of 0')
 		.nullable()
 		.transform((value, originalValue) =>
@@ -1496,27 +1499,48 @@ export const LC_SCHEMA = {
 	lc_number: STRING_REQUIRED,
 	lc_date: STRING_REQUIRED,
 	payment_value: NUMBER_DOUBLE_REQUIRED,
-	payment_date: STRING.nullable(),
+	payment_date: STRING.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? null : value
+	),
 	ldbc_fdbc: STRING_REQUIRED.nullable(),
-	acceptance_date: STRING.nullable(),
-	maturity_date: STRING.nullable(),
+	acceptance_date: STRING.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? null : value
+	),
+	maturity_date: STRING.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? null : value
+	),
 	commercial_executive: STRING_REQUIRED,
 	party_bank: STRING_REQUIRED,
 	production_complete: BOOLEAN_REQUIRED,
 	lc_cancel: BOOLEAN_REQUIRED,
-	document_receive_date: STRING.nullable(), // dev
-	handover_date: STRING.nullable(),
-	shipment_date: STRING.nullable(),
-	expiry_date: STRING.nullable(),
+	document_receive_date: STRING.nullable().transform(
+		(value, originalValue) =>
+			String(originalValue).trim() === '' ? null : value
+	), // dev
+	handover_date: STRING.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? null : value
+	),
+	shipment_date: STRING.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? null : value
+	),
+	expiry_date: STRING.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? null : value
+	),
 	ud_no: STRING.nullable(),
 	ud_received: STRING.nullable(),
 	at_sight: STRING,
-	amd_date: STRING.nullable(),
+	amd_date: STRING.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? null : value
+	),
 	amd_count: NUMBER,
 	problematical: BOOLEAN_REQUIRED,
 	epz: BOOLEAN_REQUIRED,
 	remarks: STRING.nullable(),
-	pi: yup.array().of(yup.object().shape({})),
+	pi: yup.array().of(
+		yup.object().shape({
+			uuid: STRING_REQUIRED,
+		})
+	),
 };
 
 export const LC_NULL = {
@@ -2043,11 +2067,10 @@ export const DYEING_TRANSFER_SCHEMA = {
 			order_description_uuid: STRING_REQUIRED,
 			colors: yup.array().of(yup.string()).nullable(),
 			section: STRING_REQUIRED,
-			trx_quantity: NUMBER_DOUBLE.required('Required')
-				.transform((value, originalValue) =>
+			trx_quantity: NUMBER_DOUBLE.required('Required').transform(
+				(value, originalValue) =>
 					String(originalValue).trim() === '' ? null : value
-				)
-				, // Transforms empty strings to null
+			), // Transforms empty strings to null
 			remarks: STRING.nullable(),
 		})
 	),

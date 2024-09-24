@@ -82,7 +82,7 @@ export default function Information({ lc }) {
 	const {
 		uuid,
 		party_uuid,
-		pi_ids,
+		pi_cash_ids,
 		party_name,
 		total_value,
 		file_number,
@@ -120,7 +120,7 @@ export default function Information({ lc }) {
 				label: 'PI IDs',
 				value: (
 					<div className='flex flex-wrap gap-2'>
-						{pi_ids.map((piId) => (
+						{pi_cash_ids?.map((piId) => (
 							<LinkWithCopy
 								key={piId}
 								title={piId}

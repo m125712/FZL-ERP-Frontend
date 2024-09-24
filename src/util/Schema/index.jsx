@@ -48,7 +48,7 @@ export {
 	PHONE_NUMBER,
 	PHONE_NUMBER_REQUIRED,
 	STRING,
-	STRING_REQUIRED,
+	STRING_REQUIRED
 };
 
 // Library
@@ -1981,7 +1981,7 @@ export const DYEING_TRANSFER_SCHEMA = {
 				.transform((value, originalValue) =>
 					String(originalValue).trim() === '' ? null : value
 				)
-				.max(yup.ref('tape_received'), 'Beyond Max Quantity'), // Transforms empty strings to null
+				, // Transforms empty strings to null
 			remarks: STRING.nullable(),
 		})
 	),

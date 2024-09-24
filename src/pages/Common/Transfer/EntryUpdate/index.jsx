@@ -4,28 +4,23 @@ import { useOrderDescription, useOrderDetails } from '@/state/Order';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
-import {
-	Navigate,
-	useLocation,
-	useNavigate,
-	useParams,
-} from 'react-router-dom';
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
+
+
 import { DeleteModal } from '@/components/Modal';
-import {
-	ActionButtons,
-	DynamicField,
-	FormField,
-	Input,
-	JoinInput,
-	ReactSelect,
-	Textarea,
-} from '@/ui';
+import { ActionButtons, DynamicField, FormField, Input, JoinInput, ReactSelect, Textarea } from '@/ui';
+
+
 
 import nanoid from '@/lib/nanoid';
 import { DYEING_TRANSFER_NULL, DYEING_TRANSFER_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
+
+
+
+
 
 export default function Index({ sfg }) {
 	const { postData, deleteData } = useDyeingTransfer();
@@ -137,7 +132,7 @@ export default function Index({ sfg }) {
 			.then(() => reset(Object.assign({}, DYEING_TRANSFER_NULL)))
 			.then(async () => {
 				// await OrderDetailsInvalidate(); common/tape/log
-				navigate('/dyeing-and-iron/transfer');
+				navigate('/common/dyeing-transfer');
 			})
 			.catch((err) => console.log(err));
 	};

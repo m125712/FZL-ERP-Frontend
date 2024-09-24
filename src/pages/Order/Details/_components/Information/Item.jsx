@@ -76,11 +76,11 @@ export default function ItemDescription({ order_description, className }) {
 			puller_link_name,
 			puller_color_name,
 			coloring_type_name,
+			slider_finishing_stock,
 
 			// garments
 			end_user_name,
 			light_preference_name,
-			garments_wash,
 			garments_remarks,
 
 			// tape
@@ -90,10 +90,6 @@ export default function ItemDescription({ order_description, className }) {
 			tape_transferred,
 			teeth_color_name,
 			special_requirement_name,
-			nylon_plastic_finishing,
-			vislon_teeth_molding,
-			metal_teeth_molding,
-			nylon_metallic_finishing,
 		} = order_description;
 
 		const baseInfo = [
@@ -129,10 +125,6 @@ export default function ItemDescription({ order_description, className }) {
 				label: 'lock',
 				value: lock_type_name,
 			},
-			{
-				label: 'stopper',
-				value: stopper_type_name,
-			},
 
 			{
 				label: 'special requirement',
@@ -153,11 +145,11 @@ export default function ItemDescription({ order_description, className }) {
 
 		const sliderInfo = [
 			{
-				label: 'slider',
+				label: 'name',
 				value: slider_name,
 			},
 			{
-				label: 'is slider provided?',
+				label: 'provided by party?',
 				value: is_slider_provided ? 'Yes' : 'No',
 			},
 			{
@@ -177,35 +169,39 @@ export default function ItemDescription({ order_description, className }) {
 				value: logo_type_name,
 			},
 			{
-				label: 'slider body shape',
+				label: 'body shape',
 				value: slider_body_shape_name,
 			},
 			{
-				label: 'slider link',
+				label: 'link',
 				value: slider_link_name,
 			},
 
 			{
-				label: 'coloring type',
+				label: 'coloring',
 				value: coloring_type_name,
 			},
 			{
-				label: 'Sliders Required',
+				label: 'Required',
 				value: `${sliderQuantity} pcs`,
+			},
+			{
+				label: 'Stock',
+				value: `${parseInt(slider_finishing_stock)} pcs`,
 			},
 		];
 
 		const pullerInfo = [
 			{
-				label: 'puller',
+				label: 'name',
 				value: puller_type_name,
 			},
 			{
-				label: 'puller link',
+				label: 'link',
 				value: puller_link_name,
 			},
 			{
-				label: 'puller color',
+				label: 'color',
 				value: puller_color_name,
 			},
 		];
@@ -235,11 +231,11 @@ export default function ItemDescription({ order_description, className }) {
 				value: teeth_color_name,
 			},
 			{
-				label: 'tape name',
+				label: 'name',
 				value: tape_name,
 			},
 			{
-				label: 'tape color',
+				label: 'color',
 				value: tape_color_name
 					?.split(' ') // Split the string by spaces into an array of words
 					.map(
@@ -250,7 +246,7 @@ export default function ItemDescription({ order_description, className }) {
 					.join(' '),
 			},
 			{
-				label: 'tape Required',
+				label: 'Required',
 				value: `${total_tape_in_mtr} mtr`,
 			},
 			{
@@ -261,43 +257,24 @@ export default function ItemDescription({ order_description, className }) {
 				).toFixed(3)} kg`,
 			},
 			{
-				label: 'tape received',
-				value: `${tape_received} kg`,
+				label: 'received',
+				value: `${Number(tape_received).toFixed(3)} kg`,
 			},
-			{
-				label: 'tape transfer',
-				value: `${tape_transferred} kg`,
-			},
+
 			{
 				label: 'Dyed (mtr/kg)',
 				value: `${Number(
 					total_tape_in_mtr /
-						Number(order_description?.dyed_per_kg_meter)
+						parseFloat(order_description?.dyed_per_kg_meter)
 				).toFixed(3)} kg`,
 			},
 			{
-				label: 'tape production',
-				value: `${tape_production} kg`,
+				label: 'production',
+				value: `${Number(tape_production).toFixed(3)} kg`,
 			},
 			{
-				label: 'nylon plastic finishing',
-				value: nylon_plastic_finishing,
-			},
-			{
-				label: 'vislon teeth molding',
-				value: vislon_teeth_molding,
-			},
-			{
-				label: 'metal teeth molding',
-				value: metal_teeth_molding,
-			},
-			{
-				label: 'nylon metallic finishing',
-				value: nylon_metallic_finishing,
-			},
-			{
-				label: 'Tape Required',
-				value: 'Not added yet',
+				label: 'transfer',
+				value: `${Number(tape_transferred).toFixed(3)} kg`,
 			},
 		];
 
@@ -324,6 +301,14 @@ export default function ItemDescription({ order_description, className }) {
 				className={
 					'border-b border-secondary/30 md:border-b-0 md:border-l 2xl:border-x'
 				}
+				title={'Tape'}
+				items={tapeInfo}
+			/>
+
+			<RenderTable
+				className={
+					'border-b border-secondary/30 md:border-b-0 md:border-l 2xl:border-x'
+				}
 				title={'Slider'}
 				items={sliderInfo}
 			/>
@@ -340,14 +325,6 @@ export default function ItemDescription({ order_description, className }) {
 				}
 				title={'Garments'}
 				items={garmentsInfo}
-			/>
-
-			<RenderTable
-				className={
-					'border-b border-secondary/30 md:border-b-0 md:border-l 2xl:border-x'
-				}
-				title={'Tape'}
-				items={tapeInfo}
 			/>
 		</div>
 	);

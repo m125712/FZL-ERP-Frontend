@@ -1,6 +1,5 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useDyeingTransfer } from '@/state/Dyeing';
-import { useOrderDescription, useOrderDetails } from '@/state/Order';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
@@ -18,7 +17,6 @@ import {
 	ActionButtons,
 	DynamicField,
 	FormField,
-	Input,
 	JoinInput,
 	ReactSelect,
 	Textarea,
@@ -31,7 +29,7 @@ import {
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
-export default function Index({ sfg }) {
+export default function Index() {
 	const { postData, deleteData } = useDyeingTransfer();
 	const { uuid, order_number, order_description_uuid } = useParams();
 	const { value: data } = useFetch(`/zipper/tape-coil/${uuid}`, [uuid]);
@@ -217,17 +215,6 @@ export default function Index({ sfg }) {
 		`/other/order/order-description/value/label/by/${uuid}`,
 		[uuid]
 	);
-
-	const getTransferArea = [
-		// * get transfer area and set them as value & lables for transfer select options
-		{ label: 'Nylon Plastic Finishing', value: 'nylon_plastic_finishing' },
-		{
-			label: 'Nylon Metallic Finishing',
-			value: 'nylon_metallic_finishing',
-		},
-		{ label: 'Vislon Teeth Molding', value: 'vislon_teeth_molding' },
-		{ label: 'Metal Teeth Molding', value: 'metal_teeth_molding' },
-	];
 
 	return (
 		<div>

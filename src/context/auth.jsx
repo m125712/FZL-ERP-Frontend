@@ -1,10 +1,4 @@
-import {
-	createContext,
-	useContext,
-	useEffect,
-	useReducer,
-	useState,
-} from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { firstRoute } from '@/routes';
 import { useCookie, useLocalStorage } from '@/hooks';
 
@@ -31,22 +25,8 @@ const AuthProvider = ({ children }) => {
 				userCookie !== null &&
 				userCanAccess !== null
 			) {
-				console.log(
-					authCookie !== null &&
-						userCookie !== null &&
-						userCanAccess !== null
-				);
-
 				setUser(() => JSON.parse(userCookie || user));
 				setCanAccess(() => JSON.parse(userCanAccess || canAccess));
-
-				console.log({
-					authCookie,
-					canAccess,
-					user,
-					userCanAccess,
-					userCookie,
-				});
 			}
 			setLoading(false);
 		}

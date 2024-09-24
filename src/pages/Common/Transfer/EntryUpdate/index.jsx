@@ -1,15 +1,9 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useDyeingTransfer } from '@/state/Dyeing';
-import { useOrderDescription, useOrderDetails } from '@/state/Order';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
-import {
-	Navigate,
-	useLocation,
-	useNavigate,
-	useParams,
-} from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
@@ -17,7 +11,6 @@ import {
 	ActionButtons,
 	DynamicField,
 	FormField,
-	Input,
 	JoinInput,
 	ReactSelect,
 	Textarea,
@@ -27,11 +20,9 @@ import nanoid from '@/lib/nanoid';
 import { DYEING_TRANSFER_NULL, DYEING_TRANSFER_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
-export default function Index({ sfg }) {
+export default function Index() {
 	const { postData, deleteData } = useDyeingTransfer();
-	const { uuid, order_number, order_description_uuid, coil_uuid } =
-		useParams();
-	const urlPath = useLocation();
+	const { uuid, order_number, order_description_uuid } = useParams();
 
 	const { user } = useAuth();
 	const navigate = useNavigate();
@@ -109,8 +100,6 @@ export default function Index({ sfg }) {
 
 	// TODO Submit
 	const onSubmit = async (data) => {
-		const DEFAULT_SWATCH_APPROVAL_DATE = null;
-
 		// * Add new data entry
 		const created_at = GetDateTime();
 
@@ -182,33 +171,9 @@ export default function Index({ sfg }) {
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
-	const basePath = '/common/coil/sfg/entry-to-dyeing/';
-	const isMatch = location.pathname.startsWith(basePath); // * checking if the current path matches the base path
-
-	const [colors, setColors] = useState([]);
-	const [colorsSelect, setColorsSelect] = useState([]);
 	const { value: order_id } = useFetch(
 		`/other/order/description/value/label`
 	); // * get order id and set them as value & lables for select options
-
-	const getTransferArea = [
-		// * get transfer area and set them as value & lables for transfer select options
-		{ label: 'Nylon Plastic Finishing', value: 'nylon_plastic_finishing' },
-		{
-			label: 'Nylon Metallic Finishing',
-			value: 'nylon_metallic_finishing',
-		},
-		{ label: 'Vislon Teeth Molding', value: 'vislon_teeth_molding' },
-		{ label: 'Metal Teeth Molding', value: 'metal_teeth_molding' },
-	];
-
-	// const getColors = (colors) => {
-	// 	// * get colors and set them as value & lables for select options
-	// 	setColors([]);
-	// 	colors.map((item) => {
-	// 		setColors((prev) => [...prev, { label: item, value: item }]);
-	// 	});
-	// };
 
 	return (
 		<div>
@@ -226,7 +191,6 @@ export default function Index({ sfg }) {
 							'Tape Required (Kg)',
 							'Provided (Kg)',
 							'Balance (Kg)',
-							'Transfer',
 							'Trx Quantity',
 							'Remarks',
 							'Action',
@@ -324,51 +288,6 @@ export default function Index({ sfg }) {
 													selectedValue?.tape_transferred
 												)
 										).toFixed(3)}
-									</td>
-									{/* Transfer*/}
-									<td className={`w-24 ${rowClass}`}>
-										<FormField
-											label='section'
-											is_title_needed='false'
-											title='section'
-											dynamicerror={
-												errors?.dyeing_transfer_entry?.[
-													index
-												].section
-											}>
-											<Controller
-												name={`dyeing_transfer_entry[${index}].section`}
-												control={control}
-												render={({
-													field: { onChange },
-												}) => {
-													return (
-														<ReactSelect
-															menuPortalTarget={
-																document.body
-															}
-															placeholder='Select Transfer'
-															options={
-																getTransferArea
-															}
-															value={getTransferArea.find(
-																(item) =>
-																	item.value ==
-																	getValues(
-																		'section'
-																	)
-															)}
-															onChange={(e) =>
-																onChange(
-																	e.value
-																)
-															}
-															// isDisabled={updateCoilProd?.id !== null}
-														/>
-													);
-												}}
-											/>
-										</FormField>
 									</td>
 
 									{/* Trx quantity*/}

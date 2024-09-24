@@ -354,6 +354,20 @@ export default function Index() {
 			});
 		}
 	}, [isAllChecked]);
+	
+	useEffect(() => {
+		if (isUpdate) {
+			setIsAllChecked(true);
+			setValue('is_all_checked', true);
+		}
+	}, [isUpdate]);
+	useEffect(() => {
+		if (isAllChecked) {
+			BatchEntryField.forEach((item, index) => {
+				setValue(`batch_entry[${index}].is_checked`, true);
+			});
+		}
+	}, [isAllChecked, BatchEntryField]);
 
 	const handleRowChecked = (e, index) => {
 		const isChecked = e.target.checked;

@@ -1,4 +1,5 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import index from '@/pages/Dashboard/_components/Table';
 import { useDyeingBatch } from '@/state/Dyeing';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -28,9 +29,10 @@ export default function Index() {
 	const { batch_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
+
+	const isUpdate = batch_uuid !== undefined;
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
-	const isUpdate = batch_uuid !== undefined;
 	const [proceed, setProceed] = useState(false);
 	const [batchData, setBatchData] = useState(null);
 	const [batchEntry, setBatchEntry] = useState(null);
@@ -284,6 +286,21 @@ export default function Index() {
 			});
 		}
 	}, [isAllChecked]);
+
+	useEffect(() => {
+		if (isUpdate) {
+			setIsAllChecked(true);
+			setValue('is_all_checked', true);
+		}
+	}, [isUpdate]);
+
+	useEffect(() => {
+		if (isAllChecked) {
+			BatchEntryField.forEach((item, index) => {
+				setValue(`batch_entry[${index}].is_checked`, true);
+			});
+		}
+	}, [isAllChecked, BatchEntryField]);
 
 	const handleRowChecked = (e, index) => {
 		const isChecked = e.target.checked;

@@ -2,11 +2,11 @@
 import ColoringLog from '@/pages/Slider/Coloring/Log';
 // * Coloring
 import SliderColoringProduction from '@/pages/Slider/Coloring/Production';
+import ColoringRM from '@/pages/Slider/Coloring/RMStock';
 import SliderDashboardInfo from '@/pages/Slider/Dashboard/Info';
 import DieCastingLog from '@/pages/Slider/DieCasting/Log';
 import DieCastingProduction from '@/pages/Slider/DieCasting/Production';
-import ColoringRM from '@/pages/Slider/Coloring/RMStock'
-// * Die Casting 
+// * Die Casting
 import DieCastingEntry from '@/pages/Slider/DieCasting/Production/Entry';
 import DieCastingRMStock from '@/pages/Slider/DieCasting/RMStock';
 import DieCastingStock from '@/pages/Slider/DieCasting/Stock';
@@ -15,8 +15,8 @@ import DieCastingTransferEntry from '@/pages/Slider/DieCasting/Transfer/Entry';
 // * Assembly
 import SliderAssemblyLog from '@/pages/Slider/SliderAssembly/Log';
 import SliderAssemblyProduction from '@/pages/Slider/SliderAssembly/Production';
-import SliderAssemblyStock from '@/pages/Slider/SliderAssembly/Stock';
 import SliderAssemblyRM from '@/pages/Slider/SliderAssembly/RMStock';
+import SliderAssemblyStock from '@/pages/Slider/SliderAssembly/Stock';
 
 export const SliderRoutes = [
 	{
@@ -130,7 +130,13 @@ export const SliderRoutes = [
 						path: '/slider/slider-assembly/rm',
 						element: <SliderAssemblyRM />,
 						page_name: 'slider__assembly_rm',
-						actions: ['read', 'create', 'update', 'delete'],
+						actions: [
+							'read',
+							'create',
+							'update',
+							'delete',
+							'click_used',
+						],
 					},
 					{
 						name: 'Stock',
@@ -159,7 +165,14 @@ export const SliderRoutes = [
 						path: '/slider/slider-assembly/log',
 						element: <SliderAssemblyLog />,
 						page_name: 'slider__assembly_log',
-						actions: ['read', 'create', 'update', 'delete'],
+						actions: [
+							'read',
+							'create',
+							'update',
+							'delete',
+							'click_update_rm',
+							'click_delete_rm',
+						],
 					},
 				],
 			},
@@ -173,7 +186,13 @@ export const SliderRoutes = [
 						path: '/slider/slider-coloring/rm',
 						element: <ColoringRM />,
 						page_name: 'slider__coloring_rm',
-						actions: ['read', 'create', 'update', 'delete'],
+						actions: [
+							'read',
+							'create',
+							'update',
+							'delete',
+							'click_used',
+						],
 					},
 					{
 						name: 'Production',
@@ -195,7 +214,14 @@ export const SliderRoutes = [
 						path: '/slider/slider-coloring/log',
 						element: <ColoringLog />,
 						page_name: 'slider__coloring_log',
-						actions: ['read', 'create', 'update', 'delete'],
+						actions: [
+							'read',
+							'create',
+							'update',
+							'delete',
+							'click_update_rm',
+							'click_delete_rm',
+						],
 					},
 				],
 			},

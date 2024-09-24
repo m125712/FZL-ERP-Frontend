@@ -5,7 +5,7 @@ import RMOrderAgainstLog from './RMOrderAgainstLog';
 import RMTransferLog from './RMTransferLog';
 import SFGTransferLog from './SFGTransferLog';
 import StockProductionLog from './StockProductionLog';
-import StockTransactionLog from './StockTransactionLog'
+import StockTransactionLog from './StockTransactionLog';
 import TransactionLog from './TransactionLog';
 
 export default function Index() {
@@ -18,7 +18,7 @@ export default function Index() {
 			{/* <SFGTransferLog /> */}
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<TransactionLog />
-			{/* <RMTransferLog /> */}
+			<RMTransferLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			{/* <RMOrderAgainstLog /> */}
 			<StockProductionLog />

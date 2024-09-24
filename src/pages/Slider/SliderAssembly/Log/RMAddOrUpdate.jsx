@@ -1,16 +1,24 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
 import { useSliderAssemblyRM } from '@/state/Slider';
+import { warning } from 'framer-motion';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 
+
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect } from '@/ui';
+
+
+
+import { RM_MATERIAL_USED_EDIT_NULL, RM_MATERIAL_USED_EDIT_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-import {
-	RM_MATERIAL_USED_EDIT_NULL,
-	RM_MATERIAL_USED_EDIT_SCHEMA,
-} from '@util/Schema';
 import getTransactionArea from '@/util/TransactionArea';
+
+
+
+
+
 export default function Index({
 	modalId = '',
 	updateSliderAssemblyRMLog = {
@@ -18,6 +26,7 @@ export default function Index({
 		section: null,
 		used_quantity: null,
 		slider_assembly: null,
+		wastage: null,
 	},
 	setUpdateSliderAssemblyRMLog,
 }) {
@@ -43,7 +52,7 @@ export default function Index({
 		reset,
 		getValues,
 		watch,
-		context
+		context,
 	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
 
 	useFetchForRhfReset(
@@ -51,6 +60,15 @@ export default function Index({
 		updateSliderAssemblyRMLog?.uuid,
 		reset
 	);
+	let MAX_PROD =
+		Number(updateSliderAssemblyRMLog?.slider_assembly) +
+		Number(updateSliderAssemblyRMLog?.used_quantity) +
+		(Number(updateSliderAssemblyRMLog?.wastage) - watch('wastage'));
+	let MAX_WASTAGE =
+		Number(updateSliderAssemblyRMLog?.slider_assembly) +
+		Number(updateSliderAssemblyRMLog?.wastage) +
+		(Number(updateSliderAssemblyRMLog?.used_quantity) -
+			watch('used_quantity'));
 
 	const onClose = () => {
 		setUpdateSliderAssemblyRMLog((prev) => ({
@@ -65,6 +83,13 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
+		if (MAX_WASTAGE < watch('wastage')) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		// Update item
 		if (updateSliderAssemblyRMLog?.uuid !== null) {
 			const updatedData = {
@@ -86,7 +111,6 @@ export default function Index({
 	};
 
 	const transactionArea = getTransactionArea();
-
 
 	return (
 		<AddModal
@@ -117,14 +141,14 @@ export default function Index({
 			</FormField>
 			<Input
 				label='used_quantity'
-				sub_label={`Max: ${Number(updateSliderAssemblyRMLog?.slider_assembly) + Number(updateSliderAssemblyRMLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateSliderAssemblyRMLog?.slider_assembly) + Number(updateSliderAssemblyRMLog?.used_quantity)}`}
+				sub_label={`Max: ${MAX_PROD}`}
+				placeholder={`Max: ${MAX_PROD}`}
 				{...{ register, errors }}
 			/>
 			<Input
 				label='wastage'
-				sub_label={`Max: ${Number(updateSliderAssemblyRMLog?.slider_assembly) + Number(updateSliderAssemblyRMLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateSliderAssemblyRMLog?.slider_assembly) + Number(updateSliderAssemblyRMLog?.used_quantity)}`}
+				sub_label={`Max: ${MAX_WASTAGE}`}
+				placeholder={`Max: ${MAX_WASTAGE}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

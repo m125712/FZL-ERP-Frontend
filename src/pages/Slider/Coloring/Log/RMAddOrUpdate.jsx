@@ -1,16 +1,19 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
 import { useSliderColoringRM } from '@/state/Slider';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 
+import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast/ReactToastify';
 import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
 import {
 	RM_MATERIAL_USED_EDIT_NULL,
 	RM_MATERIAL_USED_EDIT_SCHEMA,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
+
 export default function Index({
 	modalId = '',
 	updateSliderColoringRMLog = {
@@ -18,21 +21,13 @@ export default function Index({
 		section: null,
 		used_quantity: null,
 		coloring: null,
+		wastage: null,
 	},
 	setUpdateSliderColoringRMLog,
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateSliderColoringRM } =
 		useSliderColoringRM();
-
-	const MAX_QUANTITY =
-		Number(updateSliderColoringRMLog?.coloring) +
-		Number(updateSliderColoringRMLog?.used_quantity);
-	const schema = {
-		...RM_MATERIAL_USED_EDIT_SCHEMA,
-		used_quantity:
-			RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
-	};
 
 	const {
 		register,
@@ -43,9 +38,18 @@ export default function Index({
 		reset,
 		getValues,
 		watch,
-		context
-	} = useRHF(schema, RM_MATERIAL_USED_EDIT_NULL);
+		context,
+	} = useRHF(RM_MATERIAL_USED_EDIT_SCHEMA, RM_MATERIAL_USED_EDIT_NULL);
 
+	let MAX_PROD =
+		Number(updateSliderColoringRMLog?.coloring) +
+		Number(updateSliderColoringRMLog?.used_quantity) +
+		(Number(updateSliderColoringRMLog?.wastage) - watch('wastage'));
+	let MAX_WASTAGE =
+		Number(updateSliderColoringRMLog?.coloring) +
+		Number(updateSliderColoringRMLog?.wastage) +
+		(Number(updateSliderColoringRMLog?.used_quantity) -
+			watch('used_quantity'));
 	useFetchForRhfReset(
 		`${url}/${updateSliderColoringRMLog?.uuid}`,
 		updateSliderColoringRMLog?.uuid,
@@ -59,12 +63,20 @@ export default function Index({
 			section: null,
 			used_quantity: null,
 			coloring: null,
+			wastage: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
+		if (MAX_WASTAGE < watch('wastage')) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		// Update item
 		if (updateSliderColoringRMLog?.uuid !== null) {
 			const updatedData = {
@@ -116,14 +128,14 @@ export default function Index({
 			</FormField>
 			<Input
 				label='used_quantity'
-				sub_label={`Max: ${Number(updateSliderColoringRMLog?.coloring) + Number(updateSliderColoringRMLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateSliderColoringRMLog?.coloring) + Number(updateSliderColoringRMLog?.used_quantity)}`}
+				sub_label={`Max: ${MAX_PROD}`}
+				placeholder={`Max: ${MAX_PROD}`}
 				{...{ register, errors }}
 			/>
 			<Input
 				label='wastage'
-				sub_label={`Max: ${Number(updateSliderColoringRMLog?.coloring) + Number(updateSliderColoringRMLog?.used_quantity)}`}
-				placeholder={`Max: ${Number(updateSliderColoringRMLog?.coloring) + Number(updateSliderColoringRMLog?.used_quantity)}`}
+				sub_label={`Max: ${MAX_WASTAGE}`}
+				placeholder={`Max: ${MAX_WASTAGE}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

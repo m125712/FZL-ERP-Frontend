@@ -1,10 +1,12 @@
+import { lazy, useMemo, useState } from 'react';
+import { useMetalTCProduction } from '@/state/Metal';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useMetalTCProduction } from '@/state/Metal';
 import { LinkWithCopy, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useMemo, useState } from 'react';
 
 const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
@@ -77,10 +79,22 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'coloring_prod',
+				accessorKey: 'slider_finishing_stock',
 				header: (
 					<span>
-						Coloring Prod
+						Slider Finishing Stock
+						<br />
+						(PCS)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'balance_quantity',
+				header: (
+					<span>
+						Balance
 						<br />
 						(PCS)
 					</span>
@@ -112,18 +126,18 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-			{
-				accessorKey: 'actions_add_transaction',
-				header: 'Trx Transaction',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('click_transaction'),
-				cell: (info) => (
-					<Transfer
-						onClick={() => handelTransaction(info.row.index)}
-					/>
-				),
-			},
+			// {
+			// 	accessorKey: 'actions_add_transaction',
+			// 	header: 'Trx Transaction',
+			// 	enableColumnFilter: false,
+			// 	enableSorting: false,
+			// 	hidden: !haveAccess.includes('click_transaction'),
+			// 	cell: (info) => (
+			// 		<Transfer
+			// 			onClick={() => handelTransaction(info.row.index)}
+			// 		/>
+			// 	),
+			// },
 			{
 				accessorKey: 'warehouse',
 				header: (
@@ -136,18 +150,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-			{
-				accessorKey: 'balance_quantity',
-				header: (
-					<span>
-						Balance
-						<br />
-						(PCS)
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
-			},
+
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',

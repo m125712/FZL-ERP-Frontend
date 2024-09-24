@@ -1,15 +1,17 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useMetalTCProduction } from '@/state/Metal';
-import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, JoinInput } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import {
 	SFG_TRANSACTION_SCHEMA_IN_PCS,
 	SFG_TRANSACTION_SCHEMA_IN_PCS_NULL,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -38,7 +40,13 @@ export default function Index({
 	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, reset, control, context } = useRHF(
-		SFG_TRANSACTION_SCHEMA_IN_PCS,
+		{
+			...SFG_TRANSACTION_SCHEMA_IN_PCS,
+			trx_quantity: SFG_TRANSACTION_SCHEMA_IN_PCS.trx_quantity.max(
+				updateTeethColoringTRX?.teeth_coloring_prod,
+				'Beyond Max Quantity'
+			),
+		},
 		SFG_TRANSACTION_SCHEMA_IN_PCS_NULL
 	);
 

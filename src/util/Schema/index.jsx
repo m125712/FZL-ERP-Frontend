@@ -259,8 +259,13 @@ export const SFG_TRANSFER_LOG_NULL = {
 };
 
 export const SFG_PRODUCTION_LOG_SCHEMA = {
-	production_quantity: NUMBER,
-	production_quantity_in_kg: NUMBER_DOUBLE,
+	production_quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0'),
+	production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
+	wastage: NUMBER_DOUBLE.min(0, 'Minimum of 0')
+		.nullable()
+		.transform((value, originalValue) =>
+			String(originalValue).trim() === '' ? 0 : value
+		),
 	remarks: STRING.nullable(),
 };
 
@@ -848,8 +853,8 @@ export const TAPE_STOCK_ADD_SCHEMA = {
 	zipper_number_uuid: STRING_REQUIRED,
 	is_import: NUMBER.nullable(),
 	is_reverse: STRING.nullable(),
-	top: NUMBER_DOUBLE_REQUIRED,
-	bottom: NUMBER_DOUBLE_REQUIRED,
+	// top: NUMBER_DOUBLE_REQUIRED,
+	// bottom: NUMBER_DOUBLE_REQUIRED,
 	raw_per_kg_meter: NUMBER_DOUBLE_REQUIRED,
 	dyed_per_kg_meter: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
@@ -862,8 +867,8 @@ export const TAPE_STOCK_ADD_NULL = {
 	zipper_number_uuid: '',
 	is_imported: 0,
 	is_reverse: 0,
-	top: '',
-	bottom: '',
+	// top: '',
+	// bottom: '',
 	raw_per_kg_meter: '',
 	dyed_per_kg_meter: '',
 	remarks: '',
@@ -2401,10 +2406,15 @@ export const METAL_TEETH_MOLDING_PRODUCTION_SCHEMA_NULL = {
 // * SFG PRODUCTION
 
 export const SFG_PRODUCTION_SCHEMA_IN_KG = {
-	production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More Than 0'),
-	wastage: NUMBER_DOUBLE.min(0, 'Minimum of 0').nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? 0 : value
+	production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+		0,
+		'More Than 0'
 	),
+	wastage: NUMBER_DOUBLE.min(0, 'Minimum of 0')
+		.nullable()
+		.transform((value, originalValue) =>
+			String(originalValue).trim() === '' ? 0 : value
+		),
 	remarks: STRING.nullable(),
 };
 
@@ -2418,10 +2428,12 @@ export const SFG_PRODUCTION_SCHEMA_IN_KG_NULL = {
 };
 
 export const SFG_PRODUCTION_SCHEMA_IN_PCS = {
-	production_quantity: NUMBER_REQUIRED,
-	wastage: NUMBER.nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? 0 : value
-	),
+	production_quantity: NUMBER_REQUIRED.moreThan(0, 'More Than 0'),
+	wastage: NUMBER_DOUBLE.min(0, 'Minimum of 0')
+		.nullable()
+		.transform((value, originalValue) =>
+			String(originalValue).trim() === '' ? 0 : value
+		),
 	remarks: STRING.nullable(),
 };
 
@@ -2462,7 +2474,7 @@ export const SFG_TRANSACTION_SCHEMA_IN_KG_NULL = {
 
 // * SFG transaction in pcs
 export const SFG_TRANSACTION_SCHEMA_IN_PCS = {
-	trx_quantity: NUMBER_REQUIRED,
+	trx_quantity: NUMBER_REQUIRED.moreThan(0, 'More Than 0'),
 	remarks: STRING.nullable(),
 };
 

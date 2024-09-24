@@ -12,9 +12,9 @@ export default function Index() {
 	return (
 		<div>
 			<ProductionLog />
-			<hr className='my-6 border-2 border-dashed border-secondary-content' />
-			<TransactionLog />
-			<hr className='my-6 border-2 border-dashed border-secondary-content' />
+			<hr className='my-6 border-2 border-dashed border-secondary/30' />
+			{/* <TransactionLog /> */}
+			<hr className='my-6 border-2 border-dashed border-secondary/30' />
 			<RMTransferLog />
 			{/* <hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<RMOrderAgainstLog /> */}

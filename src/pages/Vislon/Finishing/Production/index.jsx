@@ -122,19 +122,19 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-			{
-				accessorKey: 'action_add_transaction',
-				header: '',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('click_transaction'),
-				width: 'w-8',
-				cell: (info) => (
-					<Transfer
-						onClick={() => handelTransaction(info.row.index)}
-					/>
-				),
-			},
+			// {
+			// 	accessorKey: 'action_add_transaction',
+			// 	header: '',
+			// 	enableColumnFilter: false,
+			// 	enableSorting: false,
+			// 	hidden: !haveAccess.includes('click_transaction'),
+			// 	width: 'w-8',
+			// 	cell: (info) => (
+			// 		<Transfer
+			// 			onClick={() => handelTransaction(info.row.index)}
+			// 		/>
+			// 	),
+			// },
 			{
 				accessorKey: 'warehouse',
 				header: (

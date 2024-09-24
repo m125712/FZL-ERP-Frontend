@@ -39,7 +39,7 @@ export default function Index({
 		Number(updateTeethColoringLog?.trx_quantity);
 	const schema = {
 		...SFG_TRANSFER_LOG_SCHEMA,
-		trx_quantity: SFG_TRANSFER_LOG_SCHEMA.trx_quantity.max(MAX_QUANTITY),
+		trx_quantity: SFG_TRANSFER_LOG_SCHEMA.trx_quantity.moreThan(0, 'More than 0').max(MAX_QUANTITY),
 	};
 	const { user } = useAuth();
 	const {
@@ -55,9 +55,6 @@ export default function Index({
 
 	useEffect(() => {
 		if (dataByUUID) {
-			console.log({
-				dataByUUID,
-			});
 			reset(dataByUUID);
 		}
 	}, [dataByUUID]);

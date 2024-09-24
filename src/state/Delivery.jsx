@@ -1,5 +1,43 @@
 import createGlobalState from '.';
-import { deliveryQk } from './QueryKeys';
+import { challanQK, deliveryQk } from './QueryKeys';
+
+// * Challan
+export const useDeliveryChallan = () =>
+	createGlobalState({
+		queryKey: challanQK.deliveryChallan(),
+		url: '/delivery/challan',
+	});
+
+export const useDeliveryChallanByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: challanQK.deliveryChallanByUUID(uuid),
+		url: `/delivery/challan/${uuid}`,
+		enabled: !!uuid,
+	});
+export const useDeliveryChallanDetailsByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: challanQK.deliveryChallanDetailsByUUID(uuid),
+		url: `/delivery/challan/details/${uuid}`,
+		enabled: !!uuid,
+	});
+
+export const useDeliveryChallanEntry = () =>
+	createGlobalState({
+		queryKey: challanQK.deliveryChallanEntry(),
+		url: '/delivery/challan-entry',
+	});
+
+export const useDeliveryChallanEntryByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: challanQK.deliveryChallanEntryByUUID(uuid),
+		url: `/delivery/challan-entry/${uuid}`,
+	});
+
+export const useDeliveryChallanEntryByChallanUUID = (challanUUID) =>
+	createGlobalState({
+		queryKey: challanQK.deliveryChallanEntryByChallanUUID(challanUUID),
+		url: `/delivery/challan-entry/by/${challanUUID}`,
+	});
 
 // * Packing List
 export const useDeliveryPackingList = () =>
@@ -20,6 +58,30 @@ export const useDeliveryPackingListDetailsByUUID = (uuid, { params }) =>
 		queryKey: deliveryQk.deliveryPackingListDetailsByUUID(uuid),
 		url: `/delivery/packing-list/details/${uuid}?${params}`,
 		enabled: !!uuid,
+	});
+export const useDeliveryPackingListEntryByPackingListUUID = (
+	packing_list_uuids
+) =>
+	createGlobalState({
+		queryKey:
+			deliveryQk.deliveryPackingListEntryByPackingListUUID(
+				packing_list_uuids
+			),
+
+		url: `/delivery/packing-list-entry/by/multi-packing-list-uuid/${packing_list_uuids?.join(',')}`,
+		enabled: !!packing_list_uuids && packing_list_uuids?.length > 0,
+	});
+
+export const useDeliveryChallanEntryForPackingListByPackingListUUID = (
+	packing_list_uuids
+) =>
+	createGlobalState({
+		queryKey:
+			deliveryQk.deliveryChallanEntryForPackingListByPackingListUUID(
+				packing_list_uuids
+			),
+		url: `/delivery/challan-entry-for-packing-list-multi/by/${packing_list_uuids?.join(',')}`,
+		enabled: !!packing_list_uuids && packing_list_uuids?.length > 0,
 	});
 
 // /delivery/order-for-packing-list/{order_info_uuid}

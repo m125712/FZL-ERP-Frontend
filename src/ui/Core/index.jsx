@@ -1,16 +1,20 @@
-import { CalenderIcon } from '@/assets/icons';
-import cn from '@lib/cn';
-import { format } from 'date-fns';
 import { forwardRef, useState } from 'react';
+import { CalenderIcon } from '@/assets/icons';
+import { format } from 'date-fns';
 import DatePicker from 'react-datepicker';
+
+import cn from '@lib/cn';
+
 import 'react-datepicker/dist/react-datepicker.css';
+
+import { Eye, EyeOff } from 'lucide-react';
+
 import {
 	DatePickerCustomHeader,
 	DatePickerDefaultConfig,
 	FormField,
 } from './base';
 import { capitalize } from './utils';
-import { Eye, EyeOff } from 'lucide-react';
 
 export const Input = ({ register, ...props }) => (
 	<FormField {...props}>
@@ -96,7 +100,7 @@ const renderError = (error) => {
 		error?.message && (
 			<label className='label px-2 pb-0 pt-[0.02rem]'>
 				<span className='label-text-alt' />
-				<span className='label-text-alt text-error/80 text-xs font-medium capitalize'>
+				<span className='label-text-alt text-xs font-medium capitalize text-error/80'>
 					{error?.message}
 				</span>
 			</label>

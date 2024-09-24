@@ -1,6 +1,20 @@
 import createGlobalState from '.';
 import { otherQK } from './QueryKeys';
 
+// GET OTHER HR USERS
+export const useOtherHRUser = () =>
+	createGlobalState({
+		queryKey: otherQK.hrUser(),
+		url: `/other/hr/user/value/label?designation=driver`,
+	});
+
+export const useOtherHRUserByDesignation = (designation) =>
+	createGlobalState({
+		queryKey: otherQK.hrUserByDesignation(designation),
+		url: `/other/hr/user/value/label?designation=${designation}`,
+		enabled: !!designation,
+	});
+
 // GET OTHER PARTY
 export const useOtherParty = () =>
 	createGlobalState({
@@ -166,4 +180,12 @@ export const useOtherSliderItem = () =>
 	createGlobalState({
 		queryKey: otherQK.sliderItem(),
 		url: `/other/slider-item-name/value/label`,
+	});
+
+// GET OTHER Packing List
+export const useOtherPackingListByOrderInfoUUID = (uuid) =>
+	createGlobalState({
+		queryKey: otherQK.deliveryPackingListByOrderInfoUUID(uuid),
+		url: `/other/delivery/packing-list-by-order-info/value/label/${uuid}`,
+		enabled: !!uuid,
 	});

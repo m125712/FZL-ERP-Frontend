@@ -235,18 +235,6 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'stock_transfer_quantity',
-				header: (
-					<span>
-						Transfer Quantity
-						<br />
-						(KG)
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(3),
-			},
-			{
 				accessorKey: 'raw_per_kg_meter',
 				header: (
 					<span>

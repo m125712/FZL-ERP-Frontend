@@ -264,7 +264,7 @@ export default function Index() {
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(
-									`batch_entry[${index}].shade_recipe_name`
+									`batch_entry[${index}].recipe_name`
 								)}
 							</td>
 							<td className={`${rowClass}`}>

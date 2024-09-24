@@ -5,6 +5,7 @@ import Production from './Production';
 import RMOrderAgainstLog from './RMOrderAgainstLog';
 import RMTransferLog from './RMTransferLog';
 import TapeToStock from './TapeToCoilLog';
+import TransferLog from './TransferLog';
 
 export default function Index() {
 	useEffect(() => {
@@ -21,6 +22,7 @@ export default function Index() {
 			<TapeToStock />
 			{/* <hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<RMOrderAgainstLog /> */}
+			<TransferLog />
 		</div>
 	);
 }

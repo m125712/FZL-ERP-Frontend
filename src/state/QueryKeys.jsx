@@ -189,6 +189,9 @@ export const commonQK = {
 	// * tapeToCoil
 	tapeToCoil: () => [...commonQK.all(), 'tape/to-coil'],
 	tapeToCoilByUUID: (uuid) => [...commonQK.tapeToCoil(), uuid],
+	//* tapeTransferFromStock
+	tapeTransfer: () => [...commonQK.all(), 'tape/transfer'],
+	tapeTransferByUUID: (uuid) => [...commonQK.tapeTransfer(), uuid],
 
 	// * tapeRM
 	tapeRM: () => [...commonQK.all(), 'tape/rm'],
@@ -231,6 +234,9 @@ export const commonQK = {
 	// * coilToStockLog
 	coilToStock: () => [...commonQK.all(), 'coil/to-stock'],
 	coilToStockByUUID: (uuid) => [...commonQK.coilToStock(), uuid],
+	//* coilTransfer
+	coilTransfer: () => [...commonQK.all(), 'coil/transfer'],
+	coilTransferByUUID: (uuid) => [...commonQK.coilTransfer(), uuid],
 
 	// * materialUsed
 	materialUsed: () => [...commonQK.all(), 'material/used'],
@@ -855,10 +861,16 @@ export const deliveryQk = {
 		order_info_uuid,
 	],
 
-	deliveryPackingListOrderByUUID: (uuid) => [
-		...deliveryQk.deliveryPackingListOrder(),
-		uuid,
+	deliveryPackingListEntryByPackingListUUID: (packing_list_uuids) => [
+		...deliveryQk.all(),
+		'packing-list',
+		'entry',
+		...packing_list_uuids,
 	],
+
+	deliveryChallanEntryForPackingListByPackingListUUID: (
+		packing_list_uuids
+	) => [...deliveryQk.all(), 'challan', 'entry', ...packing_list_uuids],
 
 	// *Packing List Entry
 	deliveryPackingListEntry: () => [
@@ -927,6 +939,14 @@ export const threadQK = {
 export const otherQK = {
 	all: () => ['other'],
 
+	// HR User
+	hrUser: () => [...otherQK.all(), 'hr-user'],
+	hrUserByDesignation: (designation) => [
+		...otherQK.all(),
+		'hr-user-by-designation',
+		designation,
+	],
+
 	//Order
 	order: () => [...otherQK.all(), 'order'],
 	orderDescription: () => [...otherQK.all(), 'order-description'],
@@ -994,4 +1014,38 @@ export const otherQK = {
 
 	//Factory
 	factoryByPartyUUID: (uuid) => [...otherQK.all(), 'factory-by-party', uuid],
+
+	//Delivery
+	deliveryPackingListByOrderInfoUUID: (uuid) => [
+		...otherQK.all(),
+		'delivery-packing-list-by-order-info',
+		uuid,
+	],
+};
+
+//* Challan
+export const challanQK = {
+	all: () => ['challan'],
+
+	//Challan
+	deliveryChallan: () => [...challanQK.all(), 'delivery-challan'],
+	deliveryChallanByUUID: (uuid) => [...challanQK.deliveryChallan(), uuid],
+	deliveryChallanDetailsByUUID: (uuid) => [
+		...challanQK.all(),
+		'delivery-challan',
+		'details',
+		uuid,
+	],
+
+	// Challan Entry
+	deliveryChallanEntry: () => [...challanQK.all(), 'delivery-challan-entry'],
+	deliveryChallanEntryByUUID: (uuid) => [
+		...challanQK.deliveryChallanEntry(),
+		uuid,
+	],
+	deliveryChallanEntryByChallanUUID: (challanUUID) => [
+		...challanQK.all(),
+		'delivery-challan-entry',
+		challanUUID,
+	],
 };

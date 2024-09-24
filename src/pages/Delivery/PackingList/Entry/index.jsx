@@ -80,7 +80,7 @@ export default function Index() {
 		if (isUpdate && details) {
 			reset(details);
 		}
-	}, [details, isUpdate, reset]);
+	}, [details, isUpdate]);
 
 	// packing_list_entry
 	const { fields: packingListEntryField } = useFieldArray({
@@ -334,7 +334,10 @@ export default function Index() {
 								'Warehouse',
 								'Delivered',
 								'Quantity',
+								'Short QTY',
+								'Reject QTY',
 								'Balance QTY',
+								'Remarks',
 								,
 							].map((item) => (
 								<th
@@ -429,10 +432,46 @@ export default function Index() {
 									{...{ register, errors }}
 								/>
 							</td>
+							<td className={`w-32 ${rowClass}`}>
+								<Input
+									label={`packing_list_entry[${index}].short_quantity`}
+									is_title_needed='false'
+									height='h-8'
+									dynamicerror={
+										errors?.packing_list_entry?.[index]
+											?.short_quantity
+									}
+									{...{ register, errors }}
+								/>
+							</td>
+							<td className={`w-32 ${rowClass}`}>
+								<Input
+									label={`packing_list_entry[${index}].reject_quantity`}
+									is_title_needed='false'
+									height='h-8'
+									dynamicerror={
+										errors?.packing_list_entry?.[index]
+											?.reject_quantity
+									}
+									{...{ register, errors }}
+								/>
+							</td>
 							<td className={`${rowClass}`}>
 								{getValues(
 									`packing_list_entry[${index}].balance_quantity`
 								)}
+							</td>
+							<td className={cn(rowClass, 'w-60')}>
+								<Input
+									label={`packing_list_entry[${index}].remarks`}
+									is_title_needed='false'
+									height='h-8'
+									dynamicerror={
+										errors?.packing_list_entry?.[index]
+											?.remarks
+									}
+									{...{ register, errors }}
+								/>
 							</td>
 							{isUpdate && (
 								<td

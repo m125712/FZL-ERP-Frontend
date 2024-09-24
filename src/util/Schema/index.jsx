@@ -922,7 +922,7 @@ export const DYEING_AGAINST_STOCK_NULL = {
 	trx_quantity: '',
 	remarks: '',
 };
-
+//* Tape Stock Trx To Dying
 export const TAPE_STOCK_TRX_TO_DYING_SCHEMA = {
 	order_description_uuid: NUMBER_REQUIRED,
 	trx_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0),
@@ -937,6 +937,31 @@ export const TAPE_STOCK_TRX_TO_DYING_NULL = {
 	trx_to: 'dying_and_iron_stock',
 	issued_by: '',
 	remarks: '',
+};
+
+//*Dyeing Transfer From Stock
+export const DYEING_TRANSFER_FROM_STOCK_SCHEMA = {
+	dyeing_transfer_entry: yup.array().of(
+		yup.object().shape({
+			order_description_uuid: STRING_REQUIRED,
+			trx_quantity: NUMBER_DOUBLE.required('Required')
+				.transform((value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+				)
+				, // Transforms empty strings to null
+			remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const DYEING_TRANSFER_FROM_STOCK_NULL = {
+	dyeing_transfer_entry: [
+		{
+			order_description_uuid: null,
+			trx_quantity: null,
+			remarks: '',
+		},
+	],
 };
 
 export const TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA = {
@@ -1290,6 +1315,30 @@ export const PACKING_LIST_SCHEMA = {
 			warehouse: NUMBER_DOUBLE,
 			delivered: NUMBER_DOUBLE,
 			balance_quantity: NUMBER_DOUBLE,
+			short_quantity: yup.number().when('is_checked', {
+				is: true,
+				then: (Schema) =>
+					Schema.typeError('Must be a number').max(
+						yup.ref('order_quantity'),
+						'Beyond Order Quantity'
+					),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
+			reject_quantity: yup.number().when('is_checked', {
+				is: true,
+				then: (Schema) =>
+					Schema.typeError('Must be a number').max(
+						yup.ref('order_quantity'),
+						'Beyond Order Quantity'
+					),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
 			quantity: yup.number().when('is_checked', {
 				is: true,
 				then: (Schema) =>
@@ -1328,6 +1377,8 @@ export const PACKING_LIST_NULL = {
 			delivered: null,
 			balance_quantity: null,
 			quantity: null,
+			short_quantity: 0,
+			reject_quantity: 0,
 			remarks: '',
 			isDeletable: false,
 		},
@@ -1336,33 +1387,45 @@ export const PACKING_LIST_NULL = {
 
 // Challan
 export const CHALLAN_SCHEMA = {
-	order_info_id: NUMBER_REQUIRED,
-	carton_quantity: NUMBER_REQUIRED,
+	assign_to: STRING_REQUIRED,
+	order_info_uuid: STRING_REQUIRED,
+	packing_list_uuids: JSON_STRING_REQUIRED,
+	new_packing_list_uuids: JSON_STRING_REQUIRED,
+	receive_status: BOOLEAN_DEFAULT_VALUE(false),
+	gate_pass: BOOLEAN_DEFAULT_VALUE(false),
 	challan_entry: yup.array().of(
 		yup.object().shape({
-			sfg_id: NUMBER,
-			max_assign: NUMBER,
-			delivery_quantity: NUMBER.max(
-				yup.ref('max_assign'),
-				'Beyond Max Quantity'
-			),
+			packing_list_uuid: STRING_REQUIRED,
 			remarks: STRING.nullable(),
 		})
 	),
+
+	new_challan_entry: yup
+		.array()
+		.of(
+			yup.object().shape({
+				packing_list_uuid: STRING_REQUIRED,
+				remarks: STRING.nullable(),
+			})
+		)
+		.optional(),
 };
 
 export const CHALLAN_NULL = {
-	id: null,
-	order_info_id: '',
-	carton_quantity: '',
+	assign_to: '',
+	order_info_uuid: '',
+	packing_list_uuids: [],
+	new_packing_list_uuids: [],
+	receive_status: false,
+	gate_pass: false,
 	challan_entry: [
 		{
-			sfg_id: null,
-			max_assign: null,
-			delivery_quantity: null,
+			packing_list_uuid: '',
 			remarks: '',
 		},
 	],
+
+	new_challan_entry: [],
 };
 
 // Commercial
@@ -1544,7 +1607,6 @@ export const LC_SCHEMA = {
 };
 
 export const LC_NULL = {
-	uuid: null,
 	party_uuid: null,
 	lc_number: null,
 	lc_date: null,

@@ -2,14 +2,21 @@ import React, { useMemo, useState } from 'react';
 import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
 import { useAccess } from '@/hooks';
 
+
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete } from '@/ui';
 
+
+
 import PageInfo from '@/util/PageInfo';
 
+
+
 import AddOrUpdate from './AddOrUpdate';
+
 
 export default function TapeToCoil() {
 	const { data, isLoading, url, deleteData } = useCommonTapeToCoil();
@@ -132,6 +139,8 @@ export default function TapeToCoil() {
 		tape_prod: null,
 		coil_stock: null,
 		trx_quantity: null,
+		trx_quantity_in_dying: null,
+		to_section: null,
 	});
 
 	const handelUpdate = (idx) => {

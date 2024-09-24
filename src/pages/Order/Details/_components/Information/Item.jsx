@@ -265,6 +265,10 @@ export default function ItemDescription({ order_description, className }) {
 				value: `${tape_received} kg`,
 			},
 			{
+				label: 'tape transfer',
+				value: `${tape_transferred} kg`,
+			},
+			{
 				label: 'Dyed (mtr/kg)',
 				value: `${Number(
 					total_tape_in_mtr /

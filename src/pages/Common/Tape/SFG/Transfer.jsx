@@ -13,6 +13,7 @@ import {
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
 import {
 	ActionButtons,
 	DynamicField,
@@ -24,14 +25,21 @@ import {
 } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
-import { DYEING_TRANSFER_NULL, DYEING_TRANSFER_SCHEMA } from '@util/Schema';
+import {
+	DYEING_TRANSFER_FROM_STOCK_NULL,
+	DYEING_TRANSFER_FROM_STOCK_SCHEMA,
+} from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({ sfg }) {
 	const { postData, deleteData } = useDyeingTransfer();
-	const { uuid, order_number, order_description_uuid, coil_uuid } =
-		useParams();
-	const urlPath = useLocation();
+	const { uuid, order_number, order_description_uuid } = useParams();
+	const { value: data } = useFetch(`/zipper/tape-coil/${uuid}`, [uuid]);
+	const location = useLocation();
+
+	const segments = location.pathname.split('/').filter((segment) => segment);
+
+	const secondElement = segments[1];
 
 	const { user } = useAuth();
 	const navigate = useNavigate();
@@ -49,13 +57,27 @@ export default function Index({ sfg }) {
 		getValues,
 		setValue,
 		watch,
-	} = useRHF(DYEING_TRANSFER_SCHEMA, DYEING_TRANSFER_NULL);
+	} = useRHF(
+		DYEING_TRANSFER_FROM_STOCK_SCHEMA,
+		DYEING_TRANSFER_FROM_STOCK_NULL
+	);
 
 	useEffect(() => {
 		order_number !== undefined
 			? (document.title = `Order: Update ${order_number}`)
 			: (document.title = 'Order: Entry');
 	}, []);
+
+	const MAX_QTY = data?.stock_quantity;
+	const getTotalQty = useCallback(
+		(coil_to_dyeing_entry) =>
+			coil_to_dyeing_entry.reduce((acc, item) => {
+				return acc + Number(item.trx_quantity);
+			}, 0),
+		[watch()]
+	);
+	const MAX_TAPE_TRX_QTY =
+		MAX_QTY - getTotalQty(watch('dyeing_transfer_entry'));
 
 	if (isUpdate)
 		useFetchForRhfReset(
@@ -105,11 +127,17 @@ export default function Index({ sfg }) {
 			remarks: '',
 		});
 	};
-	const onClose = () => reset(DYEING_TRANSFER_NULL);
+	const onClose = () => reset(DYEING_TRANSFER_FROM_STOCK_NULL);
 
 	// TODO Submit
 	const onSubmit = async (data) => {
-		const DEFAULT_SWATCH_APPROVAL_DATE = null;
+		if (MAX_TAPE_TRX_QTY < 0) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 
 		// * Add new data entry
 		const created_at = GetDateTime();
@@ -117,6 +145,7 @@ export default function Index({ sfg }) {
 		const entryData = [...data.dyeing_transfer_entry].map((item) => ({
 			...item,
 			uuid: nanoid(),
+			tape_coil_uuid: uuid,
 			created_by: user?.uuid,
 			created_at,
 		}));
@@ -126,7 +155,7 @@ export default function Index({ sfg }) {
 			...entryData.map(
 				async (item) =>
 					await postData.mutateAsync({
-						url: '/zipper/dyed-tape-transaction',
+						url: '/zipper/dyed-tape-transaction-from-stock',
 						newData: item,
 						onClose,
 					})
@@ -134,10 +163,12 @@ export default function Index({ sfg }) {
 		];
 		// * All promises
 		await Promise.all(entryData_promises)
-			.then(() => reset(Object.assign({}, DYEING_TRANSFER_NULL)))
+			.then(() =>
+				reset(Object.assign({}, DYEING_TRANSFER_FROM_STOCK_NULL))
+			)
 			.then(async () => {
 				// await OrderDetailsInvalidate(); common/tape/log
-				navigate('/dyeing-and-iron/transfer');
+				navigate(`/common/${secondElement}/sfg`);
 			})
 			.catch((err) => console.log(err));
 	};
@@ -182,14 +213,10 @@ export default function Index({ sfg }) {
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
-	const basePath = '/common/coil/sfg/entry-to-dyeing/';
-	const isMatch = location.pathname.startsWith(basePath); // * checking if the current path matches the base path
-
-	const [colors, setColors] = useState([]);
-	const [colorsSelect, setColorsSelect] = useState([]);
 	const { value: order_id } = useFetch(
-		`/other/order/description/value/label`
-	); // * get order id and set them as value & lables for select options
+		`/other/order/order-description/value/label/by/${uuid}`,
+		[uuid]
+	);
 
 	const getTransferArea = [
 		// * get transfer area and set them as value & lables for transfer select options
@@ -202,14 +229,6 @@ export default function Index({ sfg }) {
 		{ label: 'Metal Teeth Molding', value: 'metal_teeth_molding' },
 	];
 
-	// const getColors = (colors) => {
-	// 	// * get colors and set them as value & lables for select options
-	// 	setColors([]);
-	// 	colors.map((item) => {
-	// 		setColors((prev) => [...prev, { label: item, value: item }]);
-	// 	});
-	// };
-
 	return (
 		<div>
 			<HotKeys {...{ keyMap, handlers }}>
@@ -218,7 +237,8 @@ export default function Index({ sfg }) {
 					noValidate
 					className='flex flex-col gap-4'>
 					<DynamicField
-						title='Transfer Details'
+						title={`${data?.name} (Mtr/Kg): ${Number(data?.dyed_per_kg_meter).toFixed(2)}, 
+								Remaining: ${MAX_TAPE_TRX_QTY} KG`}
 						handelAppend={handelEntryAppend}
 						tableHead={[
 							'Order Entry ID',
@@ -226,7 +246,6 @@ export default function Index({ sfg }) {
 							'Tape Required (Kg)',
 							'Provided (Kg)',
 							'Balance (Kg)',
-							'Transfer',
 							'Trx Quantity',
 							'Remarks',
 							'Action',
@@ -261,10 +280,8 @@ export default function Index({ sfg }) {
 							).toFixed(3);
 
 							const tape_req_kg = Number(
-								tape_req /
-									Number(selectedValue?.dyed_per_kg_meter)
+								tape_req / Number(data?.dyed_per_kg_meter)
 							).toFixed(3);
-
 							console.log(selectedValue);
 
 							return (
@@ -304,7 +321,6 @@ export default function Index({ sfg }) {
 																	`dyeing_transfer_entry[${index}].tape_received`,
 																	e.tape_received
 																);
-																// getColors(e.colors);
 															}}
 															// isDisabled={updateCoilProd?.id !== null}
 														/>
@@ -328,53 +344,8 @@ export default function Index({ sfg }) {
 												)
 										).toFixed(3)}
 									</td>
-									{/* Transfer*/}
-									<td className={`w-24 ${rowClass}`}>
-										<FormField
-											label='section'
-											is_title_needed='false'
-											title='section'
-											dynamicerror={
-												errors?.dyeing_transfer_entry?.[
-													index
-												].section
-											}>
-											<Controller
-												name={`dyeing_transfer_entry[${index}].section`}
-												control={control}
-												render={({
-													field: { onChange },
-												}) => {
-													return (
-														<ReactSelect
-															menuPortalTarget={
-																document.body
-															}
-															placeholder='Select Transfer'
-															options={
-																getTransferArea
-															}
-															value={getTransferArea.find(
-																(item) =>
-																	item.value ==
-																	getValues(
-																		'section'
-																	)
-															)}
-															onChange={(e) =>
-																onChange(
-																	e.value
-																)
-															}
-															// isDisabled={updateCoilProd?.id !== null}
-														/>
-													);
-												}}
-											/>
-										</FormField>
-									</td>
 
-									{/* Trx quantity*/}
+									{/* Trx quantity */}
 									<td className={`w-52 ${rowClass}`}>
 										<JoinInput
 											label={`dyeing_transfer_entry[${index}].trx_quantity`}
@@ -389,22 +360,19 @@ export default function Index({ sfg }) {
 											{...{ register, errors }}
 										/>
 									</td>
-
-									{/* Remarks*/}
 									<td className={`w-56 ${rowClass}`}>
 										<Textarea
-											title='color'
+											title='remarks'
 											label={`dyeing_transfer_entry[${index}].remarks`}
 											is_title_needed='false'
 											dynamicerror={
 												errors?.dyeing_transfer_entry?.[
 													index
-												]?.color
+												]?.remarks
 											}
 											register={register}
 										/>
 									</td>
-
 									{/* Action*/}
 									<td
 										className={`w-20 ${rowClass} border-l-4 border-l-primary`}>
@@ -425,6 +393,16 @@ export default function Index({ sfg }) {
 								</tr>
 							);
 						})}
+						<tr className='border-t border-primary/30'>
+							<td
+								className='py-4 text-right font-bold'
+								colSpan='2'>
+								Total Quantity:
+							</td>
+							<td className='py-4 font-bold'>
+								{getTotalQty(watch('dyeing_transfer_entry'))}
+							</td>
+						</tr>
 					</DynamicField>
 					<div className='modal-action'>
 						<button

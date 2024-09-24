@@ -1,32 +1,31 @@
 import React, { useMemo, useState } from 'react';
-import { useCommonCoilToStockLog, useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
+import {
+	useCommonCoilToStockLog,
+	useCommonCoilTransfer,
+	useCommonTapeSFG,
+	useCommonTapeToCoil,
+	useCommonTapeTransfer,
+} from '@/state/Common';
 import { useAccess } from '@/hooks';
-
-
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete } from '@/ui';
 
-
-
 import PageInfo from '@/util/PageInfo';
-
-
 
 import AddOrUpdate from './AddOrUpdate';
 
-
 export default function TapeToCoil() {
-	const { data, isLoading, url, deleteData } = useCommonCoilToStockLog();
-	const info = new PageInfo('Tape -> Stock', 'tape-to-coil-trx');
+	const { data, isLoading, url, deleteData } = useCommonCoilTransfer();
+	const info = new PageInfo('Tape ->Transfer', 'tape-to-coil-trx');
 	const haveAccess = useAccess('common__tape_log');
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'name',
+				accessorKey: 'tape_coil_name',
 				header: 'Name',
 				enableColumnFilter: false,
 				cell: (info) => (
@@ -50,23 +49,7 @@ export default function TapeToCoil() {
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
-			{
-				accessorKey: 'to_section',
-				header: 'Section',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<span className='capitalize'>
-						{info
-							.getValue()
-							.split('_')
-							.map(
-								(word) =>
-									word.charAt(0).toUpperCase() + word.slice(1)
-							)
-							.join(' ')}
-					</span>
-				),
-			},
+
 			{
 				accessorKey: 'trx_quantity',
 				header: (
@@ -116,8 +99,8 @@ export default function TapeToCoil() {
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden:
-					!haveAccess.includes('click_update_tape_to_coil') &&
-					!haveAccess.includes('click_delete_tape_to_coil'),
+					!haveAccess.includes('click_update_transfer') &&
+					!haveAccess.includes('click_delete_transfer'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -144,12 +127,8 @@ export default function TapeToCoil() {
 		uuid: null,
 		type_of_zipper: null,
 		tape_or_coil_stock_id: null,
-		quantity_in_coil: null,
-		tape_prod: null,
-		coil_stock: null,
 		trx_quantity: null,
-		trx_quantity_in_dying: null,
-		to_section: null,
+		stock_quantity: null,
 	});
 
 	const handelUpdate = (idx) => {
@@ -171,7 +150,7 @@ export default function TapeToCoil() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].type_of_zipper,
+			itemName: data[idx].tape_coil_name,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -203,7 +182,7 @@ export default function TapeToCoil() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					url='/zipper/tape-trx'
+					url='/zipper/dyed-tape-transaction-from-stock'
 					{...{
 						deleteItem,
 						setDeleteItem,

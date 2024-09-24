@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { PDF } from '@/assets/icons';
 import { format } from 'date-fns';
 
@@ -10,20 +11,41 @@ import OrderDescription from './Order';
 import SliderDescription from './Slider';
 
 export default function SingleInformation({ order, idx, hasInitialOrder }) {
+	const [check, setCheck] = useState(true);
+
+	useEffect(() => {
+		// todo: need to be fixed
+		order?.order_entry.map((item) => {
+			if (
+				Number(item?.company_price) <= 0 &&
+				Number(item?.party_price) <= 0
+			) {
+				setCheck(false);
+			}
+		});
+	}, [order]);
+
 	const renderButtons = () => {
 		return [
 			<StatusButton
 				className={'border-0'}
 				key={'swatch_approval_status'}
 				size='btn-xs md:btn-sm'
-				value={order?.swatch_approval_status}
+				value={check}
+			/>,
+			<StatusButton
+				className={'border-0'}
+				key={'swatch_approval_status'}
+				size='btn-xs md:btn-sm'
+				value={false}
 			/>,
 		];
 	};
 
+	console.log('order', order);
 	return (
 		<SectionContainer
-			title={`Information ${idx !== undefined && `#${idx + 1}`}`}
+			title={`${idx !== undefined && `${order?.item_description} #${idx + 1}`}`}
 			buttons={renderButtons()}>
 			{!hasInitialOrder && <OrderDescription order={order} />}
 			<ItemDescription

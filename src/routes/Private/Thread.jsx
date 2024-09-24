@@ -1,21 +1,26 @@
 // CountLength
+import Coning from '@pages/Thread/Conneing';
+import ConingDetails from '@pages/Thread/Conneing/Details';
+import ConingEntry from '@pages/Thread/Conneing/Entry';
 import CountLength from '@pages/Thread/CountLength';
-
+import DyesCategory from '@pages/Thread/DyesCategory';
 //Order
 import OrderInfo from '@pages/Thread/Order';
 import IndOrderInfo from '@pages/Thread/Order/Details';
 import OrderInfoEntry from '@pages/Thread/Order/Entry';
-import DyesCategory from '@pages/Thread/DyesCategory';
 import Programs from '@pages/Thread/Programs';
-import Coning from '@pages/Thread/Conneing';
-import ConingEntry from '@pages/Thread/Conneing/Entry';
-import ConingDetails from '@pages/Thread/Conneing/Details';
-
 
 export const ThreadRoutes = [
 	{
 		name: 'Thread',
 		children: [
+			{
+				name: 'Order',
+				path: '/thread/order-info/details',
+				element: <OrderInfo />,
+				page_name: 'thread__order_info_details',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
 			{
 				name: 'Count Length',
 				path: '/thread/count-length',
@@ -24,13 +29,6 @@ export const ThreadRoutes = [
 				actions: ['create', 'read', 'update', 'delete'],
 			},
 
-			{
-				name: 'Order Info',
-				path: '/thread/order-info/details',
-				element: <OrderInfo />,
-				page_name: 'thread__order_info_details',
-				actions: ['create', 'read', 'update', 'delete'],
-			},
 			{
 				name: 'Entry',
 				path: '/thread/order-info/entry',
@@ -55,14 +53,6 @@ export const ThreadRoutes = [
 				actions: ['create', 'read', 'update', 'delete'],
 				hidden: true,
 			},
-
-			{
-				name: 'DyesCategory',
-				path: '/thread/dyes-category',
-				element: <DyesCategory />,
-				page_name: 'thread__dyes_category',
-				actions: ['create', 'read', 'update', 'delete'],
-			},
 			{
 				name: 'Programs',
 				path: '/thread/programs',
@@ -70,6 +60,14 @@ export const ThreadRoutes = [
 				page_name: 'thread__programs',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
+			{
+				name: 'Dyes Category',
+				path: '/thread/dyes-category',
+				element: <DyesCategory />,
+				page_name: 'thread__dyes_category',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+
 			{
 				name: 'Coning Entry',
 				path: '/thread/coning/:batch_uuid/update',
@@ -87,7 +85,7 @@ export const ThreadRoutes = [
 				hidden: true,
 			},
 			{
-				name: 'Conning',
+				name: 'Coning',
 				path: '/thread/coning',
 				element: <Coning />,
 				page_name: 'thread__coning_details',

@@ -16,7 +16,6 @@ import DyeingPlanningSNO from '@/pages/DyeingAndIron/PlanningSNO';
 import DyeingPlanningSNODetails from '@/pages/DyeingAndIron/PlanningSNO/Details';
 import DyeingPlanningSNOEntry from '@/pages/DyeingAndIron/PlanningSNO/Entry';
 import DyeingRMStock from '@/pages/DyeingAndIron/RMStock';
-import DyeingSFG from '@/pages/DyeingAndIron/SFG';
 // * Batch Thread
 import DyeingThreadBatch from '@/pages/DyeingAndIron/ThreadBatch';
 //* Batch Thread Conneing
@@ -40,30 +39,6 @@ export const DyeingAndIronRoutes = [
 				element: <DyeingRMStock />,
 				page_name: 'dyeing__dyeing_and_iron_rm',
 				actions: ['read', 'click_name', 'click_used'],
-			},
-			{
-				name: 'SFG',
-				path: '/dyeing-and-iron/sfg',
-				element: <DyeingSFG />,
-				page_name: 'dyeing__dyeing_and_iron_sfg',
-				actions: ['read', 'click_production', 'click_transaction'],
-			},
-			{
-				name: 'Log',
-				path: '/dyeing-and-iron/log',
-				element: <DyeingLog />,
-				page_name: 'dyeing__dyeing_and_iron_log',
-				actions: [
-					'read',
-					'click_update_sfg',
-					'click_delete_sfg',
-					'click_update_rm',
-					'click_delete_rm',
-					'click_update_production',
-					'click_delete_production',
-					'click_update_rm_order',
-					'click_delete_rm_order',
-				],
 			},
 
 			{
@@ -236,6 +211,23 @@ export const DyeingAndIronRoutes = [
 				element: <Machine />,
 				page_name: 'dyeing__machine',
 				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Log',
+				path: '/dyeing-and-iron/log',
+				element: <DyeingLog />,
+				page_name: 'dyeing__dyeing_and_iron_log',
+				actions: [
+					'read',
+					'click_update_sfg',
+					'click_delete_sfg',
+					'click_update_rm',
+					'click_delete_rm',
+					'click_update_production',
+					'click_delete_production',
+					'click_update_rm_order',
+					'click_delete_rm_order',
+				],
 			},
 		],
 	},

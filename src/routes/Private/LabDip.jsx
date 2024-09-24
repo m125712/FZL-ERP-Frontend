@@ -13,11 +13,25 @@ import ShadeRecipeEntry from '@pages/LabDip/ShadeRecipe/Entry';
 import ThreadSwatch from '@pages/LabDip/ThreadSwatch';
 import ZipperSwatch from '@pages/LabDip/ZipperSwatch';
 
-
 export const LabDipRoutes = [
 	{
 		name: 'Lab Dip',
 		children: [
+			{
+				name: 'RM',
+				path: '/lab-dip/rm',
+				element: <RM />,
+				page_name: 'lab_dip__rm',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_name',
+					'click_used',
+				],
+				isDynamic: true,
+			},
 			{
 				name: 'Info',
 				path: '/lab-dip/info',
@@ -84,38 +98,6 @@ export const LabDipRoutes = [
 				actions: ['create', 'read', 'update', 'delete'],
 				isDynamic: true,
 			},
-			{
-				name: 'RM',
-				path: '/lab-dip/rm',
-				element: <RM />,
-				page_name: 'lab_dip__rm',
-				actions: [
-					'create',
-					'read',
-					'update',
-					'delete',
-					'click_name',
-					'click_used',
-				],
-				isDynamic: true,
-			},
-			{
-				name: 'Log',
-				path: '/lab-dip/log',
-				element: <Log />,
-				page_name: 'lab_dip__log',
-				actions: [
-					'create',
-					'read',
-					'update',
-					'delete',
-					'click_name',
-					'click_used',
-					'click_update_rm_order',
-					'click_delete_rm_order',
-				],
-				isDynamic: true,
-			},
 
 			// {
 			// 	name: 'Shade Recipe Entry',
@@ -149,7 +131,13 @@ export const LabDipRoutes = [
 			// 	actions: ['create', 'read', 'update', 'delete'],
 			// 	isDynamic: true,
 			// },
-
+			{
+				name: 'Zipper Swatch',
+				path: '/lab-dip/zipper-swatch',
+				element: <ZipperSwatch />,
+				page_name: 'lab_dip__zipper_swatch',
+				actions: ['read', 'update'],
+			},
 			{
 				name: 'Thread Swatch',
 				path: '/lab-dip/thread-swatch',
@@ -158,11 +146,21 @@ export const LabDipRoutes = [
 				actions: ['read', 'update'],
 			},
 			{
-				name: 'Zipper Swatch',
-				path: '/lab-dip/zipper-swatch',
-				element: <ZipperSwatch />,
-				page_name: 'lab_dip__zipper_swatch',
-				actions: ['read', 'update'],
+				name: 'Log',
+				path: '/lab-dip/log',
+				element: <Log />,
+				page_name: 'lab_dip__log',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_name',
+					'click_used',
+					'click_update_rm_order',
+					'click_delete_rm_order',
+				],
+				isDynamic: true,
 			},
 		],
 	},

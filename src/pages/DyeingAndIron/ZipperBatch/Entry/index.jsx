@@ -112,7 +112,7 @@ export default function Index() {
 		) {
 			ShowLocalToast({
 				type: 'error',
-				message: `Machine Capacity between between ${minCapacity} and ${maxCapacity}`,
+				message: `Machine Capacity  between ${minCapacity} and ${maxCapacity}`,
 			});
 			return;
 		}

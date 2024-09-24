@@ -1,14 +1,22 @@
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import { useDyeingThreadBatch } from '@/state/Dyeing';
+import { useAuth } from '@context/auth';
+import { DevTool } from '@hookform/devtools';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import * as yup from 'yup';
 import {
+	useFetch,
 	useFetchForRhfReset,
 	useFetchForRhfResetForPlanning,
 	useRHF,
 } from '@/hooks';
-import { useDyeingThreadBatch } from '@/state/Dyeing';
+
+import { ProceedModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
+import { ShowLocalToast } from '@/components/Toast';
 import { CheckBoxWithoutLabel, Input, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
+
+import nanoid from '@/lib/nanoid';
 import {
 	BOOLEAN,
 	DYEING_THREAD_BATCH_NULL,
@@ -17,13 +25,7 @@ import {
 	NUMBER_REQUIRED,
 	STRING,
 } from '@util/Schema';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import * as yup from 'yup';
-
-import nanoid from '@/lib/nanoid';
-import { ProceedModal } from '@/components/Modal';
-import ReactTable from '@/components/Table';
-import { ShowLocalToast } from '@/components/Toast';
+import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
 
@@ -109,6 +111,24 @@ export default function Index() {
 				reset
 			)
 		: useFetchForRhfResetForPlanning(`/thread/order-batch`, reset);
+	const [minCapacity, setMinCapacity] = useState(0);
+	const [maxCapacity, setMaxCapacity] = useState(0);
+	const { value: machine } = useFetch('/other/machine/value/label');
+
+	useEffect(() => {
+		const machine_uuid = getValues('machine_uuid');
+
+		if (machine_uuid !== undefined || machine_uuid !== null) {
+			setMaxCapacity(
+				machine?.find((item) => item.value === machine_uuid)
+					?.max_capacity
+			);
+			setMinCapacity(
+				machine?.find((item) => item.value === machine_uuid)
+					?.min_capacity
+			);
+		}
+	}, [watch('machine_uuid')]);
 
 	// const { value } = useFetch('/zipper/order-batch');
 
@@ -122,8 +142,37 @@ export default function Index() {
 	// 		}));
 	// 	}
 	// }, [getValues('order_info_ids')]);
+	const getTotalQty = useCallback(
+		(batch_entry) =>
+			batch_entry.reduce((acc, item) => {
+				return item.is_checked ? acc + Number(item.quantity) : acc;
+			}, 0),
+		[watch()]
+	);
+	const getTotalCalTape = useCallback(
+		(batch_entry) =>
+			batch_entry.reduce((acc, item) => {
+				if (!item.is_checked) return acc;
+				const expected_weight =
+					parseFloat(item.quantity || 0) *
+					parseFloat(item.min_weight);
+
+				return acc + expected_weight;
+			}, 0),
+		[watch()]
+	);
 
 	const onSubmit = async (data) => {
+		if (
+			getTotalCalTape(watch('batch_entry')) > maxCapacity ||
+			getTotalCalTape(watch('batch_entry')) < minCapacity
+		) {
+			ShowLocalToast({
+				type: 'error',
+				message: `Machine Capacity  between ${minCapacity} and ${maxCapacity}`,
+			});
+			return;
+		}
 		// * Update
 		if (isUpdate) {
 			const batch_data_updated = {
@@ -207,9 +256,7 @@ export default function Index() {
 			if (
 				// * check if all colors are same
 				!batch_entry.every(
-					(item) =>
-						item.recipe_uuid ===
-						batch_entry[0].recipe_uuid
+					(item) => item.recipe_uuid === batch_entry[0].recipe_uuid
 				) ||
 				!batch_entry.every(
 					// * check if all bleaching are same
@@ -441,6 +488,22 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'expected_weight',
+				header: 'Expected Weight',
+				enableColumnFilter: false,
+				enableSorting: false,
+				cell: (info) => {
+					const { min_weight } = info.row.original;
+					const expected_weight =
+						parseFloat(
+							watch(`batch_entry[${info.row.index}].quantity`) ||
+								0
+						) * parseFloat(min_weight);
+
+					return Number(expected_weight).toFixed(3);
+				},
+			},
+			{
 				accessorKey: 'batch_remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
@@ -479,6 +542,25 @@ export default function Index() {
 				{/* todo: react-table  */}
 
 				<ReactTable data={BatchEntryField} columns={columns} />
+				<tr className='border-t border-primary/30'>
+					<td className='py-4 text-right font-bold' colSpan='2'>
+						Total Quantity:
+					</td>
+					<td className='py-4 font-bold'>
+						{getTotalQty(watch('batch_entry'))}
+					</td>
+				</tr>
+
+				<tr className='border-t border-primary/30'>
+					<td className='py-4 text-right font-bold' colSpan='2'>
+						Total Expected Weight:
+					</td>
+					<td className='py-4 font-bold'>
+						{Number(getTotalCalTape(watch('batch_entry'))).toFixed(
+							3
+						)}
+					</td>
+				</tr>
 
 				<div className='modal-action'>
 					<button className='text-md btn btn-primary btn-block'>

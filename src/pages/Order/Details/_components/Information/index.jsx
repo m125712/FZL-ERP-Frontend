@@ -21,9 +21,10 @@ export default function SingleInformation({ order, idx, hasInitialOrder }) {
 		];
 	};
 
+	console.log('order_item_description',order.item_description);
 	return (
 		<SectionContainer
-			title={`Information ${idx !== undefined && `#${idx + 1}`}`}
+			title={`${idx !== undefined && `${order?.item_description} #${idx + 1}`}`}
 			buttons={renderButtons()}>
 			{!hasInitialOrder && <OrderDescription order={order} />}
 			<ItemDescription

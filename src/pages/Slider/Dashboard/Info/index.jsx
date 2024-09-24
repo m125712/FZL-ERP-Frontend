@@ -20,6 +20,7 @@ export default function Index() {
 		document.title = info.getTabName();
 	}, []);
 
+	console.log(data);
 	const columns = useMemo(
 		() => [
 			{

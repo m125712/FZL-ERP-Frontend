@@ -87,7 +87,7 @@ export const ThreadRoutes = [
 				hidden: true,
 			},
 			{
-				name: 'Conning',
+				name: 'Coning',
 				path: '/thread/coning',
 				element: <Coning />,
 				page_name: 'thread__coning_details',

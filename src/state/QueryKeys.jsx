@@ -189,6 +189,9 @@ export const commonQK = {
 	// * tapeToCoil
 	tapeToCoil: () => [...commonQK.all(), 'tape/to-coil'],
 	tapeToCoilByUUID: (uuid) => [...commonQK.tapeToCoil(), uuid],
+	//* tapeTransferFromStock
+	tapeTransfer: () => [...commonQK.all(), 'tape/transfer'],
+	tapeTransferByUUID: (uuid) => [...commonQK.tapeTransfer(), uuid],
 
 	// * tapeRM
 	tapeRM: () => [...commonQK.all(), 'tape/rm'],
@@ -231,6 +234,9 @@ export const commonQK = {
 	// * coilToStockLog
 	coilToStock: () => [...commonQK.all(), 'coil/to-stock'],
 	coilToStockByUUID: (uuid) => [...commonQK.coilToStock(), uuid],
+	//* coilTransfer
+	coilTransfer: () => [...commonQK.all(), 'coil/transfer'],
+	coilTransferByUUID: (uuid) => [...commonQK.coilTransfer(), uuid],
 
 	// * materialUsed
 	materialUsed: () => [...commonQK.all(), 'material/used'],

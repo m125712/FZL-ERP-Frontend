@@ -4,23 +4,28 @@ import { useOrderDescription, useOrderDetails } from '@/state/Order';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
-import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
+import {
+	Navigate,
+	useLocation,
+	useNavigate,
+	useParams,
+} from 'react-router-dom';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
-
-
 import { DeleteModal } from '@/components/Modal';
-import { ActionButtons, DynamicField, FormField, Input, JoinInput, ReactSelect, Textarea } from '@/ui';
-
-
+import {
+	ActionButtons,
+	DynamicField,
+	FormField,
+	Input,
+	JoinInput,
+	ReactSelect,
+	Textarea,
+} from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { DYEING_TRANSFER_NULL, DYEING_TRANSFER_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-
-
-
-
 
 export default function Index({ sfg }) {
 	const { postData, deleteData } = useDyeingTransfer();
@@ -259,9 +264,6 @@ export default function Index({ sfg }) {
 								tape_req /
 									Number(selectedValue?.dyed_per_kg_meter)
 							).toFixed(3);
-
-							console.log(selectedValue);
-
 							return (
 								<tr key={item.id}>
 									{/* order entry id */}
@@ -388,13 +390,13 @@ export default function Index({ sfg }) {
 									{/* Remarks*/}
 									<td className={`w-56 ${rowClass}`}>
 										<Textarea
-											title='color'
+											title='remarks'
 											label={`dyeing_transfer_entry[${index}].remarks`}
 											is_title_needed='false'
 											dynamicerror={
 												errors?.dyeing_transfer_entry?.[
 													index
-												]?.color
+												]?.remarks
 											}
 											register={register}
 										/>

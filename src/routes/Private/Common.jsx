@@ -66,6 +66,8 @@ export const CommonRoutes = [
 							'click_delete_rm',
 							'click_update_rm_order',
 							'click_delete_rm_order',
+							'click_delete_transfer',
+							'click_update_transfer',
 						],
 					},
 					{
@@ -77,7 +79,7 @@ export const CommonRoutes = [
 					},
 					{
 						name: 'SFG To Transfer',
-						path: '/common/tape/sfg/entry-to-transfer/:tape_uuid',
+						path: '/common/tape/sfg/entry-to-transfer/:uuid',
 						element: <SFGEntryToTransfer />,
 						hidden: true,
 						page_name: 'common__tape_sfg_entry_to_transfer',
@@ -146,7 +148,7 @@ export const CommonRoutes = [
 					},
 					{
 						name: 'SFG To Transfer',
-						path: '/common/coil/sfg/entry-to-transfer/:coil_uuid',
+						path: '/common/coil/sfg/entry-to-transfer/:uuid',
 						element: <SFGEntryToTransfer />,
 						hidden: true,
 						page_name: 'common__common_sfg_entry_to_transfer',
@@ -175,6 +177,8 @@ export const CommonRoutes = [
 							'click_delete_tape_to_coil',
 							'click_update_rm_order',
 							'click_delete_rm_order',
+							'click_delete_transfer',
+							'click_update_transfer',
 						],
 					},
 				],

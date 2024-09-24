@@ -919,7 +919,7 @@ export const DYEING_AGAINST_STOCK_NULL = {
 	trx_quantity: '',
 	remarks: '',
 };
-
+//* Tape Stock Trx To Dying
 export const TAPE_STOCK_TRX_TO_DYING_SCHEMA = {
 	order_description_uuid: NUMBER_REQUIRED,
 	trx_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0),
@@ -934,6 +934,31 @@ export const TAPE_STOCK_TRX_TO_DYING_NULL = {
 	trx_to: 'dying_and_iron_stock',
 	issued_by: '',
 	remarks: '',
+};
+
+//*Dyeing Transfer From Stock
+export const DYEING_TRANSFER_FROM_STOCK_SCHEMA = {
+	dyeing_transfer_entry: yup.array().of(
+		yup.object().shape({
+			order_description_uuid: STRING_REQUIRED,
+			trx_quantity: NUMBER_DOUBLE.required('Required')
+				.transform((value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+				)
+				, // Transforms empty strings to null
+			remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const DYEING_TRANSFER_FROM_STOCK_NULL = {
+	dyeing_transfer_entry: [
+		{
+			order_description_uuid: null,
+			trx_quantity: null,
+			remarks: '',
+		},
+	],
 };
 
 export const TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA = {

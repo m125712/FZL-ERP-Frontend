@@ -117,6 +117,7 @@ export default function Index() {
 		material_name: null,
 		slider_assembly: null,
 		used_quantity: null,
+		wastage: null,
 	});
 
 	const handelUpdate = (idx) => {

@@ -1,13 +1,15 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-
 import { useSliderAssemblyRM, useSliderAssemblyRMLog } from '@/state/Slider';
-import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
 import * as yup from 'yup';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast/ReactToastify';
+import { Input, JoinInput } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
+import { RM_MATERIAL_USED_NULL, RM_MATERIAL_USED_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -38,7 +40,7 @@ export default function Index({
 		schema,
 		RM_MATERIAL_USED_NULL
 	);
-
+	const MAX_WASTAGE = MAX_QUANTITY - watch('used_quantity');
 	const onClose = () => {
 		setUpdateSliderAssemblyStock((prev) => ({
 			...prev,
@@ -51,6 +53,13 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
+		if (MAX_WASTAGE < watch('wastage')) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		const updatedData = {
 			...data,
 

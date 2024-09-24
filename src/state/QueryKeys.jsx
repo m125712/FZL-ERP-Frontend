@@ -995,3 +995,24 @@ export const otherQK = {
 	//Factory
 	factoryByPartyUUID: (uuid) => [...otherQK.all(), 'factory-by-party', uuid],
 };
+
+//* Challan
+export const challanQK = {
+	all: () => ['challan'],
+
+	//Challan
+	deliveryChallan: () => [...challanQK.all(), 'delivery-challan'],
+	deliveryChallanByUUID: (uuid) => [...challanQK.deliveryChallan(), uuid],
+
+	// Challan Entry
+	deliveryChallanEntry: () => [...challanQK.all(), 'delivery-challan-entry'],
+	deliveryChallanEntryByUUID: (uuid) => [
+		...challanQK.deliveryChallanEntry(),
+		uuid,
+	],
+	deliveryChallanEntryByChallanUUID: (challanUUID) => [
+		...challanQK.all(),
+		'delivery-challan-entry',
+		challanUUID,
+	],
+};

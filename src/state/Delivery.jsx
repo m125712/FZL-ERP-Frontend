@@ -1,5 +1,36 @@
 import createGlobalState from '.';
-import { deliveryQk } from './QueryKeys';
+import { challanQK, deliveryQk } from './QueryKeys';
+
+// * Challan
+export const useDeliveryChallan = () =>
+	createGlobalState({
+		queryKey: challanQK.deliveryChallan(),
+		url: '/delivery/challan',
+	});
+
+export const useDeliveryChallanByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: challanQK.deliveryChallanByUUID(uuid),
+		url: `/delivery/challan${uuid}`,
+	});
+
+export const useDeliveryChallanEntry = () =>
+	createGlobalState({
+		queryKey: challanQK.deliveryChallanEntry(),
+		url: '/delivery/challan-entry',
+	});
+
+export const useDeliveryChallanEntryByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: challanQK.deliveryChallanEntryByUUID(uuid),
+		url: `/delivery/challan-entry/${uuid}`,
+	});
+
+export const useDeliveryChallanEntryByChallanUUID = (challanUUID) =>
+	createGlobalState({
+		queryKey: challanQK.deliveryChallanEntryByChallanUUID(challanUUID),
+		url: `/delivery/challan-entry/by/${challanUUID}`,
+	});
 
 // * Packing List
 export const useDeliveryPackingList = () =>

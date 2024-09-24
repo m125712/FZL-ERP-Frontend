@@ -1278,6 +1278,30 @@ export const PACKING_LIST_SCHEMA = {
 			warehouse: NUMBER_DOUBLE,
 			delivered: NUMBER_DOUBLE,
 			balance_quantity: NUMBER_DOUBLE,
+			short_quantity: yup.number().when('is_checked', {
+				is: true,
+				then: (Schema) =>
+					Schema.typeError('Must be a number').max(
+						yup.ref('balance_quantity'),
+						'Beyond Balance Quantity'
+					),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
+			reject_quantity: yup.number().when('is_checked', {
+				is: true,
+				then: (Schema) =>
+					Schema.typeError('Must be a number').max(
+						yup.ref('balance_quantity'),
+						'Beyond Balance Quantity'
+					),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
 			quantity: yup.number().when('is_checked', {
 				is: true,
 				then: (Schema) =>
@@ -1316,6 +1340,8 @@ export const PACKING_LIST_NULL = {
 			delivered: null,
 			balance_quantity: null,
 			quantity: null,
+			short_quantity: 0,
+			reject_quantity: 0,
 			remarks: '',
 			isDeletable: false,
 		},
@@ -2401,10 +2427,15 @@ export const METAL_TEETH_MOLDING_PRODUCTION_SCHEMA_NULL = {
 // * SFG PRODUCTION
 
 export const SFG_PRODUCTION_SCHEMA_IN_KG = {
-	production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More Than 0'),
-	wastage: NUMBER_DOUBLE.min(0, 'Minimum of 0').nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? 0 : value
+	production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+		0,
+		'More Than 0'
 	),
+	wastage: NUMBER_DOUBLE.min(0, 'Minimum of 0')
+		.nullable()
+		.transform((value, originalValue) =>
+			String(originalValue).trim() === '' ? 0 : value
+		),
 	remarks: STRING.nullable(),
 };
 

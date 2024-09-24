@@ -9,6 +9,8 @@ export default function Header({
 	errors,
 	control,
 	getValues,
+	minCapacity,
+	maxCapacity,
 }) {
 	const { value: machine } = useFetch('/other/machine/value/label');
 	const slot = [
@@ -17,13 +19,13 @@ export default function Header({
 		{ label: 'Slot 3', value: 3 },
 		{ label: 'Slot 4', value: 4 },
 	];
-	const [maxCapacity, setMaxCapacity] = useState(0);
-	const [minCapacity, setMinCapacity] = useState(0);
+	// const [maxCapacity, setMaxCapacity] = useState(0);
+	// const [minCapacity, setMinCapacity] = useState(0);
 
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody
-				title={`Batch Capacity: ${minCapacity} Kg to ${maxCapacity} Kg `}>
+				title={`Batch Capacity: ${Number(minCapacity||0).toFixed(2)} Kg to ${Number(maxCapacity||0).toFixed(2)} Kg `}>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField
 						label='machine_uuid'
@@ -45,8 +47,8 @@ export default function Header({
 										onChange={(e) => {
 											const value = e.value;
 											onChange(value);
-											setMinCapacity(e.min_capacity);
-											setMaxCapacity(e.max_capacity);
+											// setMinCapacity(e.min_capacity);
+											// setMaxCapacity(e.max_capacity);
 										}}
 									/>
 								);

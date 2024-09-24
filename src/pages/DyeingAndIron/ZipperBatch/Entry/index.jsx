@@ -58,7 +58,7 @@ export default function Index() {
 	const { value: machine } = useFetch('/other/machine/value/label');
 
 	useEffect(() => {
-		const machine_uuid = getValues('machine_uuid');
+		const machine_uuid = watch('machine_uuid');
 
 		if (machine_uuid !== undefined || machine_uuid !== null) {
 			setMaxCapacity(
@@ -505,6 +505,8 @@ export default function Index() {
 						getValues,
 						Controller,
 						isUpdate,
+						maxCapacity,
+						minCapacity,
 					}}
 				/>
 

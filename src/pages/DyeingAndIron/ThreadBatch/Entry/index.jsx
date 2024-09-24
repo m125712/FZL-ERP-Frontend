@@ -536,6 +536,8 @@ export default function Index() {
 						getValues,
 						Controller,
 						isUpdate,
+						minCapacity,
+						maxCapacity,
 					}}
 				/>
 

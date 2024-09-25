@@ -1,6 +1,5 @@
 import { StatusButton } from '@/ui';
 
-
 const createColumn = (props) => ({
 	...props,
 });
@@ -28,7 +27,11 @@ const createStatusColumn = ({ accessorKey, header }) =>
 				<div className='flex items-center justify-start gap-2'>
 					<StatusButton
 						size='btn-xs'
-						value={Number(company_price) > 0 && Number(party_price) > 0 ? 1 : 0}
+						value={
+							Number(company_price) > 0 && Number(party_price) > 0
+								? 1
+								: 0
+						}
 						idx={info.row.index + 1}
 						// showIdx={true}
 					/>
@@ -43,12 +46,7 @@ const createStatusColumn = ({ accessorKey, header }) =>
 		},
 	});
 
-
-const getColumn = ({
-	item_name,
-	show_price,
-}) => {
-	
+const getColumn = ({ item_name, show_price, bleaching }) => {
 	// default columns
 	const DefaultStartColumn = [
 		createColumn({
@@ -88,6 +86,12 @@ const getColumn = ({
 			header: 'Quantity',
 			enableColumnFilter: false,
 			cell: (info) => Number(info.getValue()).toFixed(0),
+		}),
+		createColumn({
+			accessorKey: 'bleaching',
+			header: 'Bleaching',
+			enableColumnFilter: false,
+			cell: (info) => info.getValue(),
 		}),
 		createColumn({
 			accessorKey: 'dying_and_iron_prod',

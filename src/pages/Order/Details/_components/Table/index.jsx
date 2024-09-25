@@ -12,6 +12,7 @@ export default function Index({
 	zipper_number_name,
 	order_entry,
 	sliderQuantity,
+	bleaching
 }) {
 	const haveAccess = useAccess('order__details_by_uuid');
 
@@ -25,6 +26,8 @@ export default function Index({
 				stopper_type_name,
 				zipper_number_name,
 				show_price: haveAccess?.includes('show_price'),
+				bleaching: bleaching
+				
 			}),
 		[order_entry]
 	);

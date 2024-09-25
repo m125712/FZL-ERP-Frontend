@@ -81,7 +81,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Tape Log of ${updateTapeLog?.type_of_zipper}`}
+			title={`Tape -> Stock/Coil ${updateTapeLog?.type_of_zipper}`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}

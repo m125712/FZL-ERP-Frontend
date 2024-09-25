@@ -42,7 +42,7 @@ export const useCommonTapeToCoilByUUID = (uuid) =>
 export const useCommonTapeTransfer = () =>
 	createGlobalState({
 		queryKey: commonQK.tapeTransfer(),
-		url: `/zipper/dyed-tape-transaction-from-stock?item!=Nylon`,
+		url: `/zipper/dyed-tape-transaction-from-stock`,
 	});
 
 export const useCommonTapeTransferByUUID = (uuid) =>

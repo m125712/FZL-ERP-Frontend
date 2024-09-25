@@ -49,6 +49,22 @@ export default function TapeToCoil() {
 				),
 			},
 			{
+				accessorKey: 'order_number',
+				header: 'O/N',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
+				accessorKey: 'item_description',
+				header: 'Item Description',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
 				accessorKey: 'trx_quantity',
 				header: (
 					<span>

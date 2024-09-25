@@ -1,10 +1,12 @@
-import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useCommercialPI } from '@/state/Commercial';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
-import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo } from 'react';
+import { useCommercialPI } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
+import { useAccess } from '@/hooks';
+
+import ReactTable from '@/components/Table';
+import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
+import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
 	const navigate = useNavigate();
@@ -26,7 +28,7 @@ export default function Index() {
 					<LinkWithCopy
 						title={info.getValue()}
 						id={info.getValue()}
-						uri={`details`}
+						uri={`/commercial/pi`}
 					/>
 				),
 			},

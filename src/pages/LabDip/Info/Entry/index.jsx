@@ -235,7 +235,9 @@ export default function Index() {
 		ignoreEventsCondition: function () {},
 	});
 
-	const { value: rec_uuid } = useFetch(`/other/lab-dip/recipe/value/label`);
+	const { value: rec_uuid } = useFetch(
+		`/other/lab-dip/recipe/value/label?info_uuid=false`
+	);
 
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';

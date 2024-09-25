@@ -93,24 +93,34 @@ export default function Index() {
 	const [bleachAll, setBleachAll] = useState();
 
 	useEffect(() => {
-		if (bleachAll) {
-			threadOrderInfoEntryField.map((item, index) => {
-				setValue(`order_info_entry[${index}].bleaching`, 'bleach');
+		if (bleachAll !== null) {
+			threadOrderInfoEntryField.forEach((item, index) => {
+				setValue(
+					`order_info_entry[${index}].bleaching`,
+					bleachAll ? 'bleach' : 'non-bleach'
+				);
 			});
 		}
-	}, [bleachAll]);
+	}, [bleachAll, threadOrderInfoEntryField]);
 
 	useEffect(() => {
 		const subscription = watch((value, { name, type }) => {
 			const { order_info_entry } = value;
 			if (order_info_entry?.length > 0) {
-				setBleachAll(
-					order_info_entry.find(
-						(item) => item.bleaching === 'non-bleach'
-					)
-						? false
-						: true
+				const allBleach = order_info_entry.every(
+					(item) => item.bleaching === 'bleach'
 				);
+				const allNonBleach = order_info_entry.every(
+					(item) => item.bleaching === 'non-bleach'
+				);
+
+				if (allBleach) {
+					setBleachAll(true);
+				} else if (allNonBleach) {
+					setBleachAll(false);
+				} else {
+					setBleachAll(null);
+				}
 			}
 		});
 		return () => subscription.unsubscribe();
@@ -143,7 +153,7 @@ export default function Index() {
 			count_length_uuid: null,
 			type: '',
 			quantity: null,
-			bleaching: bleachAll ? 'bleach' : 'non-bleach',
+			bleaching: 'non-bleach',
 			company_price: 0,
 			party_price: 0,
 			swatch_status: '',

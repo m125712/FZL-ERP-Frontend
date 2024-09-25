@@ -1,17 +1,22 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useNylonPlasticFinishingProduction } from '@/state/Nylon';
-import { JoinInput, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { DevTool } from '@hookform/devtools';
 import {
-	NUMBER_REQUIRED,
+	useNylonPlasticFinishingProduction,
+	useNylonPlasticFinishingProductionLog,
+} from '@/state/Nylon';
+import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { JoinInput, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
+import {
 	NUMBER_DOUBLE_REQUIRED,
+	NUMBER_REQUIRED,
 	SFG_PRODUCTION_SCHEMA_IN_KG,
 	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -29,26 +34,27 @@ export default function Index({
 	setUpdatePFProd,
 }) {
 	const { postData } = useNylonPlasticFinishingProduction();
+	const { invalidateQuery } = useNylonPlasticFinishingProductionLog();
 	const { user } = useAuth();
 	const MAX_PROD = Math.min(
 		Number(updatePFProd?.balance_quantity),
 		Number(updatePFProd?.slider_finishing_stock)
 	);
 
-	const MAX_PROD_KG = Number(updatePFProd?.nylon_plastic_finishing)
+	const MAX_PROD_KG = Number(updatePFProd?.tape_transferred);
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
 		useRHF(
 			{
 				...SFG_PRODUCTION_SCHEMA_IN_KG,
-				production_quantity: NUMBER_REQUIRED.moreThan(0, 'More Than 0').max(
-					MAX_PROD,
-					'Beyond Max Quantity'
-				),
-				production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More Than 0').max(
-					MAX_PROD_KG,
-					'Beyond Max Quantity'
-				),
+				production_quantity: NUMBER_REQUIRED.moreThan(
+					0,
+					'More Than 0'
+				).max(MAX_PROD, 'Beyond Max Quantity'),
+				production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+					0,
+					'More Than 0'
+				).max(MAX_PROD_KG, 'Beyond Max Quantity'),
 			},
 			SFG_PRODUCTION_SCHEMA_IN_KG_NULL
 		);
@@ -87,6 +93,9 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateQuery();
+		return;
 	};
 
 	return (

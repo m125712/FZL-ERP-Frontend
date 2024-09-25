@@ -69,18 +69,18 @@ export default function Index() {
 					);
 				},
 			},
-			{
-				accessorKey: 'section',
-				header: 'Section',
-				enableColumnFilter: false,
-				cell: (info) => {
-					return (
-						<span className='capitalize'>
-							{info.getValue().replace(/_|stock/g, ' ')}
-						</span>
-					);
-				},
-			},
+			// {
+			// 	accessorKey: 'section',
+			// 	header: 'Section',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => {
+			// 		return (
+			// 			<span className='capitalize'>
+			// 				{info.getValue().replace(/_|stock/g, ' ')}
+			// 			</span>
+			// 		);
+			// 	},
+			// },
 			{
 				accessorKey: 'trx_quantity',
 				header: (

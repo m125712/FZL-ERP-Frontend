@@ -1,18 +1,19 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import { JoinInput, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { useNylonMFProduction, useNylonMFProductionLog } from '@/state/Nylon';
 import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { JoinInput, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import {
-	NUMBER_REQUIRED,
 	NUMBER_DOUBLE_REQUIRED,
+	NUMBER_REQUIRED,
 	SFG_PRODUCTION_SCHEMA_IN_KG,
 	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
 } from '@util/Schema';
-
-import nanoid from '@/lib/nanoid';
-import { useNylonMFProduction } from '@/state/Nylon';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -32,28 +33,30 @@ export default function Index({
 }) {
 	const { user } = useAuth();
 	const { postData } = useNylonMFProduction();
+	const { invalidateQuery } = useNylonMFProductionLog();
 
 	const MAX_PROD = Math.min(
 		Number(updateMFProd?.balance_quantity),
 		Number(updateMFProd?.slider_finishing_stock)
 	);
 
-	const MAX_PROD_KG = Number(updateMFProd.nylon_metallic_finishing);
+	const MAX_PROD_KG = Number(updateMFProd.tape_transferred);
 
-	const { register, handleSubmit, errors, reset, watch, control , context} = useRHF(
-		{
-			...SFG_PRODUCTION_SCHEMA_IN_KG,
-			production_quantity: NUMBER_REQUIRED.moreThan(0, 'More Than 0').max(
-				MAX_PROD,
-				'Beyond Max Quantity'
-			),
-			production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More Than 0').max(
-				MAX_PROD_KG,
-				'Beyond Max Quantity'
-			),
-		},
-		SFG_PRODUCTION_SCHEMA_IN_KG_NULL
-	);
+	const { register, handleSubmit, errors, reset, watch, control, context } =
+		useRHF(
+			{
+				...SFG_PRODUCTION_SCHEMA_IN_KG,
+				production_quantity: NUMBER_REQUIRED.moreThan(
+					0,
+					'More Than 0'
+				).max(MAX_PROD, 'Beyond Max Quantity'),
+				production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+					0,
+					'More Than 0'
+				).max(MAX_PROD_KG, 'Beyond Max Quantity'),
+			},
+			SFG_PRODUCTION_SCHEMA_IN_KG_NULL
+		);
 
 	const MAX_WASTAGE_KG = Number(
 		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
@@ -93,6 +96,9 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateQuery();
+		return;
 	};
 
 	return (

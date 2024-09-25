@@ -1,19 +1,21 @@
+import { useMemo, useState } from 'react';
+import { useVislonTMP, useVislonTMPLog } from '@/state/Vislon';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useMemo, useState } from 'react';
+
 import SFGAddOrUpdate from './AddOrUpdate';
-import { useVislonTMTLog, useVislonTMP } from '@/state/Vislon';
 
 export default function Index() {
-	const { data, isLoading, deleteData } = useVislonTMTLog();
+	const { data, isLoading, deleteData } = useVislonTMPLog();
 	const { invalidateQuery } = useVislonTMP();
 	const info = new PageInfo(
-		'Transfer Log',
+		'Production Log',
 		'sfg/trx/by/teeth_molding_prod/by/vislon'
 	);
 
@@ -59,34 +61,23 @@ export default function Index() {
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
-			// {
-			// 	accessorKey: "trx_from",
-			// 	header: "Transferred From",
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 	info.getValue()
-			// ),
-			// },
 			{
-				accessorKey: 'trx_to',
-				header: 'Transferred To',
-				enableColumnFilter: false,
-				cell: (info) => {
-					// remove underscore and capitalize
-					const str = info.getValue();
-					if (str) {
-						const newStr = str.split('_').join(' ');
-						return newStr.charAt(0).toUpperCase() + newStr.slice(1);
-					} else {
-						return str;
-					}
-				},
-			},
-			{
-				accessorKey: 'trx_quantity_in_kg',
+				accessorKey: 'production_quantity_in_kg',
 				header: (
 					<span>
-						Transferred
+						Production
+						<br />
+						QTY (KG)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'wastage',
+				header: (
+					<span>
+						wastage
 						<br />
 						QTY (KG)
 					</span>
@@ -97,12 +88,6 @@ export default function Index() {
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -124,6 +109,12 @@ export default function Index() {
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'actions',
@@ -151,10 +142,11 @@ export default function Index() {
 	const [updateTeethMoldingLog, setUpdateTeethMoldingLog] = useState({
 		uuid: null,
 		sfg_uuid: null,
-		trx_quantity_in_kg: null,
-		trx_from: null,
-		trx_to: null,
-		remarks: null,
+		section: null,
+		production_quantity_in_kg: null,
+		production_quantity: null,
+		wastage: null,
+		remarks: '',
 	});
 
 	const handelUpdate = (idx) => {
@@ -212,7 +204,7 @@ export default function Index() {
 					setDeleteItem={setDeleteItem}
 					deleteData={deleteData}
 					invalidateQuery={invalidateQuery}
-					url={`/zipper/sfg-transaction`}
+					url={`/zipper/sfg-production`}
 				/>
 			</Suspense>
 		</div>

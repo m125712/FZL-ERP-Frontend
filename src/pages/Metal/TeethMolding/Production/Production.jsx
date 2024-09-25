@@ -1,12 +1,14 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useMetalTMProduction } from '@/state/Metal';
-import { JoinInput, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { useMetalTMProduction, useMetalTMProductionLog } from '@/state/Metal';
 import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { JoinInput, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import { SFG_PRODUCTION_NULL, SFG_PRODUCTION_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -20,24 +22,24 @@ export default function Index({
 		teeth_molding_prod: null,
 		teeth_molding_stock: null,
 		total_trx_quantity: null,
-		metal_teeth_molding: null,
+		tape_transferred: null,
 	},
 	setUpdateTeethMoldingProd,
 }) {
 	const { postData } = useMetalTMProduction();
+	const { invalidateQuery } = useMetalTMProductionLog();
 	const { user } = useAuth();
 
 	const MAX_PROD_PCS = Number(
 		updateTeethMoldingProd.balance_quantity
 	).toFixed(0);
-	const MAX_PROD_KG = Number(
-		updateTeethMoldingProd.metal_teeth_molding
-	).toFixed(3);
-
-	const { register, handleSubmit, errors, reset, watch, control, context } = useRHF(
-		SFG_PRODUCTION_SCHEMA,
-		SFG_PRODUCTION_NULL
+	const MAX_PROD_KG = Number(updateTeethMoldingProd.tape_transferred).toFixed(
+		3
 	);
+
+	console.log(updateTeethMoldingProd);
+	const { register, handleSubmit, errors, reset, watch, control, context } =
+		useRHF(SFG_PRODUCTION_SCHEMA, SFG_PRODUCTION_NULL);
 	const MAX_WASTAGE_KG = Number(
 		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
 	).toFixed(3);
@@ -74,6 +76,9 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateQuery();
+		return;
 	};
 
 	return (

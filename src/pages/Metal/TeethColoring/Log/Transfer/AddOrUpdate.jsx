@@ -1,5 +1,4 @@
 import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
 import { useRHF } from '@/hooks';
 import {
 	useMetalTCProduction,
@@ -41,7 +40,6 @@ export default function Index({
 		...SFG_TRANSFER_LOG_SCHEMA,
 		trx_quantity: SFG_TRANSFER_LOG_SCHEMA.trx_quantity.moreThan(0, 'More than 0').max(MAX_QUANTITY),
 	};
-	const { user } = useAuth();
 	const {
 		register,
 		handleSubmit,

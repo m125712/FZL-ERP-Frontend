@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useMetalTMProduction, useMetalTMTrxLog } from '@/state/Metal';
+import { useVislonTMP, useVislonTMTLog } from '@/state/Vislon';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -12,10 +12,14 @@ import PageInfo from '@/util/PageInfo';
 import SFGAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
-	const { data, isLoading, deleteData, url } = useMetalTMTrxLog();
-	const { invalidateQuery } = useMetalTMProduction();
-	const info = new PageInfo('Transfer Log', url);
-	const haveAccess = useAccess('metal__teeth_molding_log');
+	const { data, isLoading, deleteData } = useVislonTMTLog();
+	const { invalidateQuery } = useVislonTMP();
+	const info = new PageInfo(
+		'Transfer Log',
+		'sfg/trx/by/teeth_molding_prod/by/vislon'
+	);
+
+	const haveAccess = useAccess('vislon__teeth_molding_log');
 
 	const columns = useMemo(
 		() => [
@@ -73,26 +77,20 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'trx_quantity',
+				accessorKey: 'trx_quantity_in_kg',
 				header: (
 					<span>
 						Transferred
 						<br />
-						QTY (PCS)
+						QTY (KG)
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -116,13 +114,17 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'actions',
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden:
-					!haveAccess.includes('click_update_sfg') &&
-					!haveAccess.includes('click_delete_sfg'),
+				hidden: !haveAccess.includes('click_update_sfg'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -130,7 +132,6 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showUpdate={haveAccess.includes('click_update_sfg')}
 							showDelete={haveAccess.includes('click_delete_sfg')}
 						/>
 					);
@@ -143,14 +144,11 @@ export default function Index() {
 	// Update
 	const [updateTeethMoldingLog, setUpdateTeethMoldingLog] = useState({
 		uuid: null,
+		sfg_uuid: null,
+		trx_quantity_in_kg: null,
 		trx_from: null,
 		trx_to: null,
-		trx_quantity: null,
-		order_description: null,
-		order_quantity: null,
-		teeth_molding_prod: null,
-		finishing_stock: null,
-		order_entry_uuid: null,
+		remarks: null,
 	});
 
 	const handelUpdate = (idx) => {
@@ -167,11 +165,12 @@ export default function Index() {
 		itemId: null,
 		itemName: null,
 	});
+
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].item_description,
+			itemName: data[idx].style_color_size,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -182,8 +181,14 @@ export default function Index() {
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div>
-			<ReactTable title={info.getTitle()} data={data} columns={columns} />
+		<div className=''>
+			<ReactTable
+				title={info.getTitle()}
+				// handelAdd={handelAdd}
+				// accessor={haveAccess.includes('click_update_sfg')}
+				data={data}
+				columns={columns}
+			/>
 			<Suspense>
 				<SFGAddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
@@ -197,13 +202,11 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					deleteItem={deleteItem}
+					setDeleteItem={setDeleteItem}
+					deleteData={deleteData}
 					invalidateQuery={invalidateQuery}
-					{...{
-						deleteItem,
-						setDeleteItem,
-						url: '/zipper/sfg-transaction',
-						deleteData,
-					}}
+					url={`/zipper/sfg-transaction`}
 				/>
 			</Suspense>
 		</div>

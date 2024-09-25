@@ -1,22 +1,26 @@
-import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
+import { useEffect } from 'react';
+import {
+	useNylonMFProduction,
+	useNylonMFProductionLog,
+	useNylonMFProductionLogByUUID,
+} from '@/state/Nylon';
 import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
+
 import {
-	useMetalTCProduction,
-	useMetalTCProductionLog,
-	useMetalTCProductionLogByUUID,
-} from '@/state/Metal';
-import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import {
+	NUMBER,
+	NUMBER_DOUBLE_REQUIRED,
+	NUMBER_REQUIRED,
 	SFG_PRODUCTION_LOG_NULL,
 	SFG_PRODUCTION_LOG_SCHEMA,
 } from '@util/Schema';
-import { useEffect } from 'react';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
-	updateTeethColoringLog = {
+	updateProductionLog = {
 		uuid: null,
 		order_entry_uuid: null,
 		order_description: null,
@@ -27,28 +31,39 @@ export default function Index({
 		teeth_coloring_stock: null,
 		wastage: null,
 	},
-	setUpdateTeethColoringLog,
+	setUpdateProductionLog,
 }) {
-	const { invalidateQuery } = useMetalTCProduction();
-	const { updateData } = useMetalTCProductionLog();
-	const { data: dataByUUID } = useMetalTCProductionLogByUUID(
-		updateTeethColoringLog.uuid,
+	const { invalidateQuery } = useNylonMFProduction(
+		updateProductionLog.uuid !== null
+	);
+	const { updateData } = useNylonMFProductionLog();
+	const { data: dataByUUID } = useNylonMFProductionLogByUUID(
+		updateProductionLog.uuid,
 		{
-			enabled: updateTeethColoringLog.uuid !== null,
+			enabled: updateProductionLog.uuid !== null,
 		}
 	);
 
 	const MAX_QUANTITY =
-		Number(updateTeethColoringLog?.teeth_coloring_stock) +
-		Number(updateTeethColoringLog?.teeth_molding_prod) +
-		Number(updateTeethColoringLog?.production_quantity);
+		Math.min(
+			Number(updateProductionLog?.balance_quantity),
+			Number(updateProductionLog?.slider_finishing_stock)
+		) + Number(dataByUUID?.production_quantity);
+
+
+
+	const MAX_PROD_KG = Number(updateProductionLog?.tape_transferred)+ Number(dataByUUID?.production_quantity_in_kg);
+
 	const schema = {
 		...SFG_PRODUCTION_LOG_SCHEMA,
-		production_quantity: SFG_PRODUCTION_LOG_SCHEMA.production_quantity
-			.moreThan(0)
-			.max(MAX_QUANTITY),
+		production_quantity: NUMBER_REQUIRED.moreThan(0).max(MAX_QUANTITY),
+		production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+			0,
+			'More Than 0'
+		),
+		wastage: NUMBER.min(0, 'Minimum Of 0'),
 	};
-	const { user } = useAuth();
+
 	const {
 		register,
 		handleSubmit,
@@ -61,15 +76,12 @@ export default function Index({
 
 	useEffect(() => {
 		if (dataByUUID) {
-			console.log({
-				dataByUUID,
-			});
 			reset(dataByUUID);
 		}
 	}, [dataByUUID]);
 
 	const onClose = () => {
-		setUpdateTeethColoringLog((prev) => ({
+		setUpdateProductionLog((prev) => ({
 			...prev,
 			uuid: null,
 			order_entry_uuid: null,
@@ -87,7 +99,7 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateTeethColoringLog?.uuid !== null) {
+		if (updateProductionLog?.uuid !== null) {
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
@@ -116,7 +128,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Teeth Coloring Production Log`}
+			title={`Production Log`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
@@ -133,23 +145,38 @@ export default function Index({
 								value={sectionName?.find(
 									(item) =>
 										item.value ==
-										updateTeethColoringLog?.section
+										updateProductionLog?.section
 								)}
 								onChange={(e) => onChange(e.value)}
-								isDisabled={
-									updateTeethColoringLog?.uuid !== null
-								}
+								isDisabled={updateProductionLog?.uuid !== null}
 							/>
 						);
 					}}
 				/>
 			</FormField>
-			<Input
+			<JoinInput
+				title='Production Quantity'
 				label='production_quantity'
-				sub_label={`Max: ${MAX_QUANTITY}`}
+				sub_label={`MAX: ${MAX_QUANTITY} pcs`}
+				unit='PCS'
 				{...{ register, errors }}
 			/>
-			<Input label='remarks' {...{ register, errors }} />
+			<JoinInput
+				title='Production Quantity (KG)'
+				label='production_quantity_in_kg'
+				sub_label={`MAX: ${MAX_PROD_KG} kg`}
+				unit='KG'
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				title='wastage'
+				label='wastage'
+				sub_label={`MAX: ${'MAX_WASTAGE_KG'} kg`}
+				unit='KG'
+				{...{ register, errors }}
+				{...{ register, errors }}
+			/>
+			<Textarea label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

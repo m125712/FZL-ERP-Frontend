@@ -76,12 +76,12 @@ export const useOrderAgainstNylonMetallicFinishingRMLogByUUID = (uuid) =>
 export const useNylonMetallicFinishingTapeLog = () =>
 	createGlobalState({
 		queryKey: nylonQK.nylonMetallicTapeLog(),
-		url: '/zipper/dyed-tape-transaction/by/nylon_metallic_finishing',
+		url: '/zipper/dyed-tape-transaction/by/nylon?nylon_stopper=metallic',
 	});
 export const useNylonMetallicFinishingTapeLogByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: nylonQK.nylonMetallicTapeLogByUUID(uuid),
-		url: `/zipper/dyed-tape-transaction/by/nylon_metallic_finishing${uuid}`,
+		url: `/zipper/dyed-tape-transaction/by/nylon_metallic_finishing/${uuid}`,
 	});
 
 //*Plastic Finishing
@@ -89,12 +89,12 @@ export const useNylonMetallicFinishingTapeLogByUUID = (uuid) =>
 export const useNylonPlasticFinishingTapeLog = () =>
 	createGlobalState({
 		queryKey: nylonQK.nylonPlasticFinishingTapeLog(),
-		url: '/zipper/dyed-tape-transaction/by/nylon_plastic_finishing',
+		url: '/zipper/dyed-tape-transaction/by/nylon?nylon_stopper=plastic',
 	});
 export const useNylonPlasticFinishingTapeLogByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: nylonQK.nylonPlasticFinishingTapeLogByUUID(uuid),
-		url: `/zipper/dyed-tape-transaction/by/nylon_plastic_finishing${uuid}`,
+		url: `/zipper/dyed-tape-transaction/by/nylon_plastic_finishing/${uuid}`,
 	});
 
 //* Production Log

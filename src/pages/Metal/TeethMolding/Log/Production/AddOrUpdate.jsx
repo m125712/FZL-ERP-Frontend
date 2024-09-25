@@ -1,18 +1,16 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
-	useNylonMFProduction,
-	useNylonMFProductionLog,
-	useNylonMFProductionLogByUUID,
-} from '@/state/Nylon';
+	useMetalTMProduction,
+	useMetalTMProductionLog,
+	useMetalTMProductionLogByUUID,
+} from '@/state/Metal';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
 import {
-	NUMBER,
-	NUMBER_DOUBLE_REQUIRED,
-	NUMBER_REQUIRED,
 	SFG_PRODUCTION_LOG_NULL,
 	SFG_PRODUCTION_LOG_SCHEMA,
 } from '@util/Schema';
@@ -20,7 +18,7 @@ import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
-	updateProductionLog = {
+	updateTeethMoldingLog = {
 		uuid: null,
 		order_entry_uuid: null,
 		order_description: null,
@@ -28,42 +26,37 @@ export default function Index({
 		order_number: null,
 		section: null,
 		production_quantity: null,
-		teeth_coloring_stock: null,
+		teeth_molding_stock: null,
 		wastage: null,
 	},
-	setUpdateProductionLog,
+	setUpdateTeethMoldingLog,
 }) {
-	const { invalidateQuery } = useNylonMFProduction(
-		updateProductionLog.uuid !== null
-	);
-	const { updateData } = useNylonMFProductionLog();
-	const { data: dataByUUID } = useNylonMFProductionLogByUUID(
-		updateProductionLog.uuid,
+	const { invalidateQuery } = useMetalTMProduction();
+	const { updateData } = useMetalTMProductionLog();
+	const { data: dataByUUID } = useMetalTMProductionLogByUUID(
+		updateTeethMoldingLog.uuid,
 		{
-			enabled: updateProductionLog.uuid !== null,
+			enabled: updateTeethMoldingLog.uuid !== null,
 		}
 	);
 
 	const MAX_QUANTITY =
-		Math.min(
-			Number(updateProductionLog?.balance_quantity),
-			Number(updateProductionLog?.slider_finishing_stock)
-		) + Number(dataByUUID?.production_quantity);
+		Number(updateTeethMoldingLog?.balance_quantity) +
+		Number(dataByUUID?.production_quantity);
 
-
-
-	const MAX_PROD_KG = Number(updateProductionLog?.nylon_metallic_finishing)+ Number(dataByUUID?.production_quantity_in_kg);
+	const MAX_QUANTITY_IN_KG =
+		Number(updateTeethMoldingLog?.tape_transferred) +
+		Number(dataByUUID?.production_quantity_in_kg);
 
 	const schema = {
 		...SFG_PRODUCTION_LOG_SCHEMA,
-		production_quantity: NUMBER_REQUIRED.moreThan(0).max(MAX_QUANTITY),
-		production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
-			0,
-			'More Than 0'
-		),
-		wastage: NUMBER.min(0, 'Minimum Of 0'),
+		production_quantity: SFG_PRODUCTION_LOG_SCHEMA.production_quantity
+			.max(MAX_QUANTITY),
+		production_quantity_in_kg:
+			SFG_PRODUCTION_LOG_SCHEMA.production_quantity_in_kg
+				.max(MAX_QUANTITY_IN_KG),
 	};
-
+	const { user } = useAuth();
 	const {
 		register,
 		handleSubmit,
@@ -81,7 +74,7 @@ export default function Index({
 	}, [dataByUUID]);
 
 	const onClose = () => {
-		setUpdateProductionLog((prev) => ({
+		setUpdateTeethMoldingLog((prev) => ({
 			...prev,
 			uuid: null,
 			order_entry_uuid: null,
@@ -90,7 +83,7 @@ export default function Index({
 			order_number: null,
 			section: null,
 			production_quantity: null,
-			teeth_coloring_stock: null,
+			teeth_molding_stock: null,
 			wastage: null,
 		}));
 		reset(SFG_PRODUCTION_LOG_NULL);
@@ -99,7 +92,7 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateProductionLog?.uuid !== null) {
+		if (updateTeethMoldingLog?.uuid !== null) {
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
@@ -128,7 +121,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Production Log`}
+			title={`Teeth Molding Production Log`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
@@ -145,10 +138,12 @@ export default function Index({
 								value={sectionName?.find(
 									(item) =>
 										item.value ==
-										updateProductionLog?.section
+										updateTeethMoldingLog?.section
 								)}
 								onChange={(e) => onChange(e.value)}
-								isDisabled={updateProductionLog?.uuid !== null}
+								isDisabled={
+									updateTeethMoldingLog?.uuid !== null
+								}
 							/>
 						);
 					}}
@@ -162,21 +157,20 @@ export default function Index({
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				title='Production Quantity (KG)'
+				title='Production Quantity In KG'
 				label='production_quantity_in_kg'
-				sub_label={`MAX: ${MAX_PROD_KG} kg`}
-				unit='KG'
+				sub_label={`MAX: ${MAX_QUANTITY_IN_KG} kg`}
+				unit='PCS'
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				title='wastage'
+				title='Wastage'
 				label='wastage'
-				sub_label={`MAX: ${'MAX_WASTAGE_KG'} kg`}
-				unit='KG'
-				{...{ register, errors }}
+				sub_label={`MAX: ${MAX_QUANTITY_IN_KG} kg`}
+				unit='PCS'
 				{...{ register, errors }}
 			/>
-			<Textarea label='remarks' {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

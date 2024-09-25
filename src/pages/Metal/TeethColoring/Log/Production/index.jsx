@@ -1,6 +1,6 @@
-import { lazy, useEffect, useMemo, useState } from 'react';
-import { useVislonTMP, useVislonTMPLog } from '@/state/Vislon';
-import { useAccess, useFetchFunc } from '@/hooks';
+import { useMemo, useState } from 'react';
+import { useMetalTCProduction, useMetalTCProductionLog } from '@/state/Metal';
+import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
@@ -12,14 +12,10 @@ import PageInfo from '@/util/PageInfo';
 import SFGAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
-	const { data, isLoading, deleteData } = useVislonTMPLog();
-	const { invalidateQuery } = useVislonTMP();
-	const info = new PageInfo(
-		'Production Log',
-		'sfg/trx/by/teeth_molding_prod/by/vislon'
-	);
-
-	const haveAccess = useAccess('vislon__teeth_molding_log');
+	const { data, isLoading, url, deleteData } = useMetalTCProductionLog();
+	const { invalidateQuery } = useMetalTCProduction();
+	const info = new PageInfo('Production Log', url);
+	const haveAccess = useAccess('metal__teeth_coloring_log');
 
 	const columns = useMemo(
 		() => [
@@ -61,62 +57,21 @@ export default function Index() {
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
-			// {
-			// 	accessorKey: "trx_from",
-			// 	header: "Transferred From",
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 	info.getValue()
-			// ),
-			// },
-			// {
-			// 	accessorKey: 'trx_to',
-			// 	header: 'Transferred To',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => {
-			// 		// remove underscore and capitalize
-			// 		const str = info.getValue();
-			// 		if (str) {
-			// 			const newStr = str.split('_').join(' ');
-			// 			return newStr.charAt(0).toUpperCase() + newStr.slice(1);
-			// 		} else {
-			// 			return str;
-			// 		}
-			// 	},
-			// },
 			{
-				accessorKey: 'production_quantity_in_kg',
-				header: (
-					<span>
-						Production
-						<br />
-						QTY (KG)
-					</span>
-				),
+				accessorKey: 'production_quantity',
+				header: 'Production Quantity',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'wastage',
-				header: (
-					<span>
-						wastage
-						<br />
-						QTY (KG)
-					</span>
-				),
+				header: 'Wastage',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -138,6 +93,12 @@ export default function Index() {
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'actions',
@@ -162,19 +123,21 @@ export default function Index() {
 	);
 
 	// Update
-	const [updateTeethMoldingLog, setUpdateTeethMoldingLog] = useState({
+	const [updateTeethColoringLog, setUpdateTeethColoringLog] = useState({
 		uuid: null,
-		sfg_uuid: null,
-		section: null,
-		production_quantity_in_kg: null,
-		production_quantity: null,
-		wastage: null,
-		remarks: '',
+		trx_from: null,
+		trx_to: null,
+		trx_quantity: null,
+		order_description: null,
+		order_quantity: null,
+		teeth_coloring_prod: null,
+		finishing_stock: null,
+		order_entry_uuid: null,
 	});
 
 	const handelUpdate = (idx) => {
 		const selected = data[idx];
-		setUpdateTeethMoldingLog((prev) => ({
+		setUpdateTeethColoringLog((prev) => ({
 			...prev,
 			...selected,
 		}));
@@ -186,12 +149,11 @@ export default function Index() {
 		itemId: null,
 		itemName: null,
 	});
-
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].style_color_size,
+			itemName: data[idx].item_description,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -199,23 +161,16 @@ export default function Index() {
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
-	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className=''>
-			<ReactTable
-				title={info.getTitle()}
-				// handelAdd={handelAdd}
-				// accessor={haveAccess.includes('click_update_sfg')}
-				data={data}
-				columns={columns}
-			/>
+		<div>
+			<ReactTable title={info.getTitle()} data={data} columns={columns} />
 			<Suspense>
 				<SFGAddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateTeethMoldingLog,
-						setUpdateTeethMoldingLog,
+						updateTeethColoringLog,
+						setUpdateTeethColoringLog,
 					}}
 				/>
 			</Suspense>
@@ -223,11 +178,13 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					deleteData={deleteData}
 					invalidateQuery={invalidateQuery}
-					url={`/zipper/sfg-production`}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						deleteData,
+						url: '/zipper/sfg-production',
+					}}
 				/>
 			</Suspense>
 		</div>

@@ -1,5 +1,5 @@
 import { useAuth } from '@/context/auth';
-import { useMetalTCProduction, useMetalTMProduction } from '@/state/Metal';
+import { useMetalTCProduction, useMetalTCProductionLog } from '@/state/Metal';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
@@ -30,6 +30,7 @@ export default function Index({
 	setUpdateTeethColoringProd,
 }) {
 	const { postData } = useMetalTCProduction();
+	const { invalidateQuery } = useMetalTCProductionLog();
 	const { user } = useAuth();
 
 	const MAX_PROD_PCS = Math.min(
@@ -86,6 +87,9 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateQuery();
+		return;
 	};
 
 	return (

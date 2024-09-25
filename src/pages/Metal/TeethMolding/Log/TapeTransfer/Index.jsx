@@ -1,17 +1,24 @@
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
+import { useAccess, useFetchFunc } from '@/hooks';
+import { useDyeingTransfer } from '@/state/Dyeing';
+import { useMetalTMTapeLog } from '@/state/Metal';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import PageInfo from '@/util/PageInfo';
-import { useMemo, useState } from 'react';
-import SFGAddOrUpdate from './AddOrUpdate';
-import { useNylonMFProductionLog } from '@/state/Nylon';
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+const Update = lazy(() => import('./Update'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useNylonMFProductionLog();
-	const info = new PageInfo('Production Log', url);
-	const haveAccess = useAccess('nylon__metallic_finishing_log');
+	const { data, isLoading, url, deleteData } = useMetalTMTapeLog();
+	const info = new PageInfo(
+		'Tape Transfer Log',
+		url,
+		'metal__teeth_molding_log'
+	);
+
+	const haveAccess = useAccess('metal__teeth_molding_log');
 
 	const columns = useMemo(
 		() => [
@@ -46,38 +53,44 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'style_color_size',
-				header: 'Style / Color / Size',
+				accessorKey: 'colors',
+				header: 'Colors',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<span className='capitalize'>{info.getValue()}</span>
+				cell: (info) => {
+					return (
+						<span className='capitalize'>
+							{info.getValue().replace(/_|stock/g, ' ')}
+						</span>
+					);
+				},
+			},
+			{
+				accessorKey: 'section',
+				header: 'Section',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<span className='capitalize'>
+							{info.getValue().replace(/_|stock/g, ' ')}
+						</span>
+					);
+				},
+			},
+			{
+				accessorKey: 'trx_quantity',
+				header: (
+					<span>
+						Transferred
+						<br />
+						QTY (KG)
+					</span>
 				),
-			},
-			// {
-			// 	accessorKey: "trx_from",
-			// 	header: "Transferred From",
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 	info.getValue()
-			// ),
-			// },
-
-			{
-				accessorKey: 'production_quantity',
-				header: 'Production Quantity',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'wastage',
-				header: 'Wastage',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-
 			{
 				accessorKey: 'created_by_name',
-				header: 'Created By',
+				header: 'Issued By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -111,7 +124,9 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_sfg'),
+				hidden:
+					!haveAccess.includes('click_update_tape') &&
+					!haveAccess.includes('click_delete_tape'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -119,7 +134,12 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('click_delete_sfg')}
+							showDelete={haveAccess.includes(
+								'click_delete_tape'
+							)}
+							showUpdate={haveAccess.includes(
+								'click_update_tape'
+							)}
 						/>
 					);
 				},
@@ -128,24 +148,17 @@ export default function Index() {
 		[data]
 	);
 
+	// Fetching data from server
+
 	// Update
-	const [updateProductionLog, setUpdateProductionLog] = useState({
+	const [updateTransfer, setUpdateTransfer] = useState({
 		uuid: null,
-		trx_from: null,
-		trx_to: null,
-		trx_quantity: null,
-		order_description: null,
-		order_quantity: null,
-		teeth_coloring_prod: null,
-		finishing_stock: null,
-		order_entry_uuid: null,
 	});
 
 	const handelUpdate = (idx) => {
-		const selected = data[idx];
-		setUpdateProductionLog((prev) => ({
+		setUpdateTransfer((prev) => ({
 			...prev,
-			...selected,
+			uuid: data[idx].uuid,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -167,18 +180,21 @@ export default function Index() {
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
+	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
 		<div>
 			<ReactTable title={info.getTitle()} data={data} columns={columns} />
 			<Suspense>
-				<SFGAddOrUpdate
-					modalId={info.getAddOrUpdateModalId()}
-					{...{
-						updateProductionLog,
-						setUpdateProductionLog,
-					}}
-				/>
+				<Suspense>
+					<Update
+						modalId={info.getAddOrUpdateModalId()}
+						{...{
+							updateTransfer,
+							setUpdateTransfer,
+						}}
+					/>
+				</Suspense>
 			</Suspense>
 			<Suspense>
 				<DeleteModal
@@ -188,8 +204,8 @@ export default function Index() {
 						deleteItem,
 						setDeleteItem,
 						deleteData,
-						url: '/zipper/sfg-production',
 					}}
+					url='/zipper/dyed-tape-transaction'
 				/>
 			</Suspense>
 		</div>

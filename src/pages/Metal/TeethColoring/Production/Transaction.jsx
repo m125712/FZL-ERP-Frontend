@@ -1,5 +1,5 @@
 import { useAuth } from '@/context/auth';
-import { useMetalTCProduction } from '@/state/Metal';
+import { useMetalTCProduction, useMetalTCTrxLog } from '@/state/Metal';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
@@ -37,6 +37,7 @@ export default function Index({
 	setUpdateTeethColoringTRX,
 }) {
 	const { postData } = useMetalTCProduction();
+	const { invalidateQuery } = useMetalTCTrxLog();
 	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, reset, control, context } = useRHF(
@@ -91,6 +92,9 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateQuery();
+		return;
 	};
 
 	return (

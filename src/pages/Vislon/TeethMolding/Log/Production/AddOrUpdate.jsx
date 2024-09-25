@@ -36,7 +36,7 @@ export default function Index({
 
 	const MAX_PROD_KG =
 		Number(updateTeethMoldingLog.production_quantity_in_kg) +
-		Number(updateTeethMoldingLog.vislon_teeth_molding);
+		Number(updateTeethMoldingLog.tape_transferred);
 
 	const MAX_WASTAGE_KG = Number(
 		// Todo: Fix this
@@ -80,7 +80,6 @@ export default function Index({
 			});
 
 			invalidateQuery();
-
 			return;
 		}
 	};

@@ -2,14 +2,25 @@ import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { useOrderDescription, useOrderDetails } from '@/state/Order';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
+import { Equal } from 'lucide-react';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Spreadsheet, { createEmptyMatrix } from 'react-spreadsheet';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
-import { ActionButtons, DynamicField, Input, JoinInput, Textarea } from '@/ui';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
+import {
+	ActionButtons,
+	DynamicField,
+	FormField,
+	Input,
+	JoinInput,
+	ReactSelect,
+	Textarea,
+} from '@/ui';
 
+import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
 import { ORDER_NULL, ORDER_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
@@ -53,6 +64,7 @@ export default function Index() {
 		Controller,
 		useFieldArray,
 		getValues,
+		setValue,
 		watch,
 	} = useRHF(
 		{
@@ -98,6 +110,45 @@ export default function Index() {
 		itemId: null,
 		itemName: null,
 	});
+	const [bleachAll, setBleachAll] = useState();
+
+	useEffect(() => {
+		if (bleachAll) {
+			orderEntryField.map((item, index) => {
+				setValue(`order_entry[${index}].bleaching`, 'bleach');
+			});
+		} else {
+			orderEntryField.map((item, index) => {
+				setValue(`order_entry[${index}].bleaching`, 'non-bleach');
+			});
+		}
+	}, [bleachAll]);
+
+	useEffect(() => {
+		const subscription = watch((value, { name, type }) => {
+			const { order_info_entry } = value;
+			if (order_info_entry?.length > 0) {
+				setBleachAll(
+					order_info_entry.find(
+						(item) => item.bleaching === 'non-bleach'
+					)
+						? false
+						: true
+				);
+			}
+		});
+		return () => subscription.unsubscribe();
+	}, [watch]);
+
+	const headerButtons = [
+		<div className='flex items-center gap-2'>
+			<label className='text-sm'>Bleach All</label>
+			<SwitchToggle
+				checked={bleachAll}
+				onChange={() => setBleachAll(!bleachAll)}
+			/>
+		</div>,
+	];
 
 	const handleOrderEntryRemove = (index) => {
 		if (getValues(`order_entry[${index}].order_entry_uuid`) !== undefined) {
@@ -118,10 +169,15 @@ export default function Index() {
 			quantity: '',
 			company_price: 0,
 			party_price: 0,
+			bleaching: 'non-bleach',
 			status: 1,
 			remarks: '',
 		});
 	};
+	const bleachingOptions = [
+		{ label: 'Bleach', value: 'bleach' },
+		{ label: 'Non-Bleach', value: 'non-bleach' },
+	];
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -153,6 +209,7 @@ export default function Index() {
 				swatch_approval_date: DEFAULT_SWATCH_APPROVAL_DATE,
 				updated_at: GetDateTime(),
 			}));
+			
 
 			//* Post new entry */ //
 			let order_entry_updated_promises = [
@@ -434,6 +491,7 @@ export default function Index() {
 					</DynamicField> */}
 
 					<DynamicField
+						headerButtons={headerButtons}
 						title='Details'
 						handelAppend={handelOrderEntryAppend}
 						tableHead={[
@@ -442,6 +500,7 @@ export default function Index() {
 							'Size',
 							'Quantity',
 							'Price (USD/DZN) (Com/Party)',
+							'Bleaching',
 							'Action',
 						].map((item) => (
 							<th
@@ -521,6 +580,50 @@ export default function Index() {
 											{...{ register, errors }}
 										/>
 									</div>
+								</td>
+								<td className={`w-40 ${rowClass}`}>
+									<FormField
+										label={`order_entry[${index}].bleaching`}
+										title='Bleaching'
+										dynamicerror={
+											errors?.order_entry?.[index]
+												?.bleaching
+										}
+										is_title_needed='false'>
+										<Controller
+											name={`order_entry[${index}].bleaching`}
+											control={control}
+											render={({
+												field: { onChange },
+											}) => {
+												return (
+													<ReactSelect
+														placeholder='Select Bleaching'
+														options={
+															bleachingOptions
+														}
+														value={bleachingOptions?.find(
+															(item) =>
+																item.value ==
+																getValues(
+																	`order_entry[${index}].bleaching`
+																)
+														)}
+														onChange={(e) => {
+															onChange(e.value);
+														}}
+														// isDisabled={
+														// 	order_info_uuid !==
+														// 	undefined
+														// }
+														menuPortalTarget={
+															document.body
+														}
+													/>
+												);
+											}}
+										/>
+									</FormField>
 								</td>
 								<td
 									className={`w-16 ${rowClass} border-l-4 border-l-primary`}>

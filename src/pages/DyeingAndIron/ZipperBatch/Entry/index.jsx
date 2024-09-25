@@ -72,7 +72,7 @@ export default function Index() {
 					?.min_capacity
 			);
 		}
-	}, [watch('machine_uuid')]);
+	}, [watch()]);
 
 	// * Fetch initial data
 	isUpdate

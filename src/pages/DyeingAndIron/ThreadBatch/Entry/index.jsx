@@ -128,7 +128,7 @@ export default function Index() {
 					?.min_capacity
 			);
 		}
-	}, [watch('machine_uuid')]);
+	}, [watch()]);
 
 	// const { value } = useFetch('/zipper/order-batch');
 
@@ -354,7 +354,7 @@ export default function Index() {
 			});
 		}
 	}, [isAllChecked]);
-	
+
 	useEffect(() => {
 		if (isUpdate) {
 			setIsAllChecked(true);

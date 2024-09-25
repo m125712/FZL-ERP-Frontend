@@ -66,7 +66,13 @@ export default function Header({
 										value={order_info_uuid?.find(
 											(item) =>
 												item.value ==
-												getValues('order_info_uuid')
+													getValues(
+														'order_info_uuid'
+													) ||
+												item.value ==
+													getValues(
+														'thread_order_info_uuid'
+													)
 										)}
 										onChange={(e) => onChange(e.value)}
 										isDisabled={

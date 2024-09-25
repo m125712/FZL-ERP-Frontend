@@ -1,4 +1,5 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
+import { useCommonTapeSFG } from '@/state/Common';
 import { useDyeingTransfer } from '@/state/Dyeing';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -31,6 +32,7 @@ import GetDateTime from '@/util/GetDateTime';
 
 export default function Index() {
 	const { postData, deleteData } = useDyeingTransfer();
+	const { invalidateQuery } = useCommonTapeSFG();
 	const { uuid, order_number, order_description_uuid } = useParams();
 	const { value: data } = useFetch(`/zipper/tape-coil/${uuid}`, [uuid]);
 	const location = useLocation();
@@ -166,6 +168,7 @@ export default function Index() {
 			)
 			.then(async () => {
 				// await OrderDetailsInvalidate(); common/tape/log
+				invalidateQuery();
 				navigate(`/common/${secondElement}/sfg`);
 			})
 			.catch((err) => console.log(err));

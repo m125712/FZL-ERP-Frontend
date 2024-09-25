@@ -22,8 +22,6 @@ export default function Index() {
 	const haveAccess = useAccess('common__dyeing_transfer');
 	const navigate = useNavigate();
 
-	console.log(data);
-
 	const columns = useMemo(
 		() => [
 			{
@@ -84,18 +82,18 @@ export default function Index() {
 			// 		);
 			// 	},
 			// },
-			{
-				accessorKey: 'section',
-				header: 'Section',
-				enableColumnFilter: false,
-				cell: (info) => {
-					return (
-						<span className='capitalize'>
-							{info.getValue().replace(/_|stock/g, ' ')}
-						</span>
-					);
-				},
-			},
+			// {
+			// 	accessorKey: 'section',
+			// 	header: 'Section',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => {
+			// 		return (
+			// 			<span className='capitalize'>
+			// 				{info.getValue().replace(/_|stock/g, ' ')}
+			// 			</span>
+			// 		);
+			// 	},
+			// },
 			{
 				accessorKey: 'trx_quantity',
 				header: (
@@ -233,4 +231,3 @@ export default function Index() {
 		</div>
 	);
 }
-

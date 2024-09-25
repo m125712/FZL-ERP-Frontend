@@ -25,8 +25,8 @@ export default function Index({
 	const { user } = useAuth();
 	const { postData, invalidateQuery: invalidateCommonTapeSFG } =
 		useCommonTapeSFG();
-	 const { invalidateQuery: invalidateCommonTapeToCoil } =
-	 	useCommonTapeToCoil();
+	const { invalidateQuery: invalidateCommonTapeToCoil } =
+		useCommonTapeToCoil();
 	const schema = {
 		...DYEING_AGAINST_STOCK_SCHEMA,
 		trx_quantity: NUMBER_REQUIRED.max(

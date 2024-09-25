@@ -58,6 +58,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'bleaching',
+				header: 'Bleach',
+				enableColumnFilter: true,
+				enableSorting: true,
+			},
+			{
 				accessorKey: 'color',
 				header: 'Color',
 				width: 'w-40',
@@ -91,9 +97,9 @@ export default function Index() {
 				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
 					const { recipe_uuid } = info.row.original;
-					const { order_info_uuid } = info.row.original;
+					const { order_info_uuid, bleaching } = info.row.original;
 					const { value: recipe } = useFetch(
-						`/other/lab-dip/recipe/value/label?order_info_uuid=${order_info_uuid}`
+						`/other/lab-dip/recipe/value/label?order_info_uuid=${order_info_uuid}&bleaching=${bleaching}`
 					);
 
 					return (

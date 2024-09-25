@@ -269,7 +269,6 @@ export default function Index() {
 							const tape_req_kg = Number(
 								tape_req / Number(data?.dyed_per_kg_meter)
 							).toFixed(3);
-							console.log(selectedValue);
 
 							return (
 								<tr key={item.id}>

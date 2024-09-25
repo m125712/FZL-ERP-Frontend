@@ -110,7 +110,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Tape Making: ${updateTapeLog?.material_name}`}
+			title={`Update Tape Making: ${updateTapeLog?.material_name}`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}

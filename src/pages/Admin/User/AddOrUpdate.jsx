@@ -1,11 +1,13 @@
-import { AddModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useAdminUsers } from '@/state/Admin';
-import { FormField, Input, PasswordInput, ReactSelect, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { PASSWORD, USER_NULL, USER_SCHEMA } from '@util/Schema';
 import * as yup from 'yup';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, PasswordInput, ReactSelect, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
+import { PASSWORD, USER_NULL, USER_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -33,7 +35,7 @@ export default function Index({
 		Controller,
 		control,
 		getValues,
-		context
+		context,
 	} = useRHF(schema, USER_NULL);
 
 	useFetchForRhfReset(

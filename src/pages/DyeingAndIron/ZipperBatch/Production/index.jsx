@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDyeingBatch } from '@/state/Dyeing';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -136,11 +136,7 @@ export default function Index() {
 				.then(() =>
 					reset(Object.assign({}, DYEING_BATCH_PRODUCTION_NULL))
 				)
-				.then(
-					navigate(
-						`/dyeing-and-iron/batch/${batch_prod_uuid}`
-					)
-				)
+				.then(navigate(`/dyeing-and-iron/batch/${batch_prod_uuid}`))
 				.catch((err) => console.log(err));
 
 			return;
@@ -365,6 +361,36 @@ export default function Index() {
 		[isAllChecked, isSomeChecked, BatchEntryField, register, errors]
 	);
 
+	const getTotal = useCallback(
+		(batch_entry) => {
+			let totalQty = 0;
+			let totalCalTape = 0;
+			let totalProduction = 0;
+
+			batch_entry.forEach((item) => {
+				if (item.is_checked) {
+					totalQty += Number(item.quantity);
+
+					const top = parseFloat(item.top) || 0;
+					const bottom = parseFloat(item.bottom) || 0;
+					const size = parseFloat(item.size) || 0;
+					const quantity = parseFloat(item.quantity) || 0;
+					const production_quantity_in_kg =
+						parseFloat(item.production_quantity_in_kg) || 0;
+					const dyedMtrPerKg = parseFloat(item.dyed_mtr_per_kg) || 1;
+
+					const itemTotal =
+						((top + bottom + size) * quantity) / 100 / dyedMtrPerKg;
+					totalCalTape += itemTotal;
+					totalProduction += production_quantity_in_kg;
+				}
+			});
+
+			return { totalQty, totalCalTape, totalProduction };
+		},
+		[watch()]
+	);
+
 	return (
 		<div>
 			<form
@@ -379,6 +405,13 @@ export default function Index() {
 						getValues,
 						Controller,
 						isUpdate,
+						totalQuantity: getTotal(watch('batch_entry')).totalQty,
+						totalCalTape: Number(
+							getTotal(watch('batch_entry')).totalCalTape
+						).toFixed(3),
+						totalProduction: Number(
+							getTotal(watch('batch_entry')).totalProduction
+						).toFixed(3),
 					}}
 				/>
 

@@ -1,14 +1,10 @@
 import { useFetch } from '@/hooks';
 
-import {
-	CheckBox,
-	FormField,
-	Input,
-	ReactSelect,
-	SectionEntryBody,
-	Textarea,
-} from '@/ui';
-import { useEffect } from 'react';
+import { FormField, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
+
+import cn from '@/lib/cn';
+
+import { slot, states } from '../utils';
 
 export default function Header({
 	register,
@@ -16,22 +12,41 @@ export default function Header({
 	control,
 	getValues,
 	Controller,
+	totalQuantity,
+	totalCalTape,
+	totalProduction,
 }) {
-	const states = [
-		{ value: 'pending', label: 'Pending' },
-		{ value: 'completed', label: 'Completed' },
-		{ value: 'cancelled', label: 'Cancelled' },
-	];
 	const { value: machine } = useFetch('/other/machine/value/label');
-	const slot = [
-		{ label: 'Slot 1', value: 1 },
-		{ label: 'Slot 2', value: 2 },
-		{ label: 'Slot 3', value: 3 },
-		{ label: 'Slot 4', value: 4 },
-	];
+	const res = machine?.find(
+		(item) => item.value == getValues('machine_uuid')
+	);
+
 	return (
 		<div className='flex flex-col gap-4'>
-			<SectionEntryBody title='Batch'>
+			<SectionEntryBody
+				title={
+					<div>
+						<span>{`Machine Capacity (KG): ${Number(res?.min_capacity || 0).toFixed(2)} - 
+														${Number(res?.max_capacity || 0).toFixed(2)}`}</span>
+						<br />
+						<span
+							className={cn(
+								totalCalTape > parseFloat(res?.max_capacity) ||
+									totalCalTape < parseFloat(res?.min_capacity)
+									? 'text-error'
+									: ''
+							)}>{`Batch Quantity (KG): ${totalCalTape}`}</span>
+						<br />
+						<span
+							className={cn(
+								totalProduction > totalCalTape
+									? 'text-error'
+									: ''
+							)}>{`Production Quantity (KG): ${totalProduction}`}</span>
+						<br />
+						<span>{`Batch Quantity (PCS): ${totalQuantity}`}</span>
+					</div>
+				}>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField
 						label='machine_uuid'

@@ -55,24 +55,9 @@ export default function Index() {
 		control,
 		name: 'batch_entry',
 	});
-	const [minCapacity, setMinCapacity] = useState(0);
-	const [maxCapacity, setMaxCapacity] = useState(0);
-	const { value: machine } = useFetch('/other/machine/value/label');
 
-	useEffect(() => {
-		const machine_uuid = watch('machine_uuid');
 
-		if (machine_uuid !== undefined || machine_uuid !== null) {
-			setMaxCapacity(
-				machine?.find((item) => item.value === machine_uuid)
-					?.max_capacity
-			);
-			setMinCapacity(
-				machine?.find((item) => item.value === machine_uuid)
-					?.min_capacity
-			);
-		}
-	}, [watch()]);
+	
 
 	// * Fetch initial data
 	isUpdate
@@ -107,17 +92,18 @@ export default function Index() {
 			}, 0),
 		[watch()]
 	);
+
 	const onSubmit = async (data) => {
-		if (
-			getTotalCalTape(watch('batch_entry')) > maxCapacity ||
-			getTotalCalTape(watch('batch_entry')) < minCapacity
-		) {
-			ShowLocalToast({
-				type: 'error',
-				message: `Machine Capacity  between ${minCapacity} and ${maxCapacity}`,
-			});
-			return;
-		}
+		// if (
+		// 	getTotalCalTape(watch('batch_entry')) > maxCapacity ||
+		// 	getTotalCalTape(watch('batch_entry')) < minCapacity
+		// ) {
+		// 	ShowLocalToast({
+		// 		type: 'error',
+		// 		message: `Machine Capacity  between ${minCapacity} and ${maxCapacity}`,
+		// 	});
+		// 	return;
+		// }
 		// * Update
 		if (isUpdate) {
 			const batch_data_updated = {
@@ -326,24 +312,6 @@ export default function Index() {
 		setIsSomeChecked(isSomeChecked);
 	};
 
-	// balance_quantity: '0';
-	// bottom: '0.0000';
-	// color: 'JET STREAM 11-0605';
-	// dyed_mtr_per_kg: '0.0000';
-	// given_production_quantity: null;
-	// given_production_quantity_in_kg: null;
-	// given_quantity: null;
-	// item_description: 'N-5-OE-N';
-	// order_number: 'Z24-0004';
-	// order_quantity: '2101.0000';
-	// raw_mtr_per_kg: '52.0000';
-	// recipe_id: 'LDR24-0006';
-	// recipe_uuid: 'e0jbRvgvYCBdVbJ';
-	// sfg_uuid: '9DD6m5HiMLhMj2F';
-	// size: '40.005';
-	// style: '6038RO';
-	// top: '2.5000';
-
 	const columns = useMemo(
 		() => [
 			{
@@ -430,9 +398,10 @@ export default function Index() {
 					} = row.original;
 
 					const total_size_in_mtr =
-						(parseFloat(top) +
+						((parseFloat(top) +
 							parseFloat(bottom) +
-							parseFloat(size) * parseFloat(order_quantity)) /
+							parseFloat(size)) *
+							parseFloat(order_quantity)) /
 						100;
 
 					return Number(
@@ -508,6 +477,8 @@ export default function Index() {
 		[isAllChecked, isSomeChecked, BatchEntryField, register, errors]
 	);
 
+	console.log(BatchEntryField);
+
 	return (
 		<div>
 			<form
@@ -516,14 +487,15 @@ export default function Index() {
 				noValidate>
 				<Header
 					{...{
+						Controller,
 						register,
 						errors,
 						control,
 						getValues,
-						Controller,
-						isUpdate,
-						maxCapacity,
-						minCapacity,
+						totalQuantity: getTotalQty(watch('batch_entry')),
+						totalCalTape: Number(
+							getTotalCalTape(watch('batch_entry'))
+						).toFixed(3),
 					}}
 				/>
 
@@ -531,25 +503,6 @@ export default function Index() {
 
 				<ReactTable data={BatchEntryField} columns={columns} />
 
-				<tr className='border-t border-primary/30'>
-					<td className='py-4 text-right font-bold' colSpan='2'>
-						Total Quantity:
-					</td>
-					<td className='py-4 font-bold'>
-						{getTotalQty(watch('batch_entry'))}
-					</td>
-				</tr>
-
-				<tr className='border-t border-primary/30'>
-					<td className='py-4 text-right font-bold' colSpan='2'>
-						Total Col Tape:
-					</td>
-					<td className='py-4 font-bold'>
-						{Number(getTotalCalTape(watch('batch_entry'))).toFixed(
-							3
-						)}
-					</td>
-				</tr>
 				<div className='modal-action'>
 					<button
 						type='submit'

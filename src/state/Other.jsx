@@ -131,10 +131,15 @@ export const useOtherLcByPartyUUID = (uuid) =>
 	});
 
 // GET OTHER PI
+export const useOtherUpdatePI = () =>
+	createGlobalState({
+		queryKey: otherQK.pi(),
+		url: `/other/pi/value/label?is_update=true`,
+	});
 export const useOtherPI = () =>
 	createGlobalState({
 		queryKey: otherQK.pi(),
-		url: `/other/pi/value/label`,
+		url: `/other/pi/value/label?is_update=false`,
 	});
 
 // GET OTHER ORDER DESCRIPTION BY ORDER NUMBER

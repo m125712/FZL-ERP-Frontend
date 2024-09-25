@@ -24,7 +24,7 @@ export default function Index() {
 			{
 				accessorKey: 'info_id',
 				header: 'ID',
-				width: 'w-8',
+				
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
@@ -39,7 +39,7 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'Order ID',
-				width: 'w-8',
+				
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					const { order_info_uuid } = info.row.original;
@@ -67,7 +67,7 @@ export default function Index() {
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
-				width: 'w-12',
+				width: 'w-22',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -131,6 +131,7 @@ export default function Index() {
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
+				width: 'w-44',
 				cell: (info) => info.getValue(),
 			},
 			{

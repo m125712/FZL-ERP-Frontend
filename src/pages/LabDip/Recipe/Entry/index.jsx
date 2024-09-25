@@ -64,7 +64,7 @@ export default function Index() {
 			reset
 		);
 	const { value: material } = useFetch(
-		'/other/material/value/label/unit/quantity'
+		'/other/material/value/label/unit/quantity?type=dyes'
 	);
 
 	// recipe_entry

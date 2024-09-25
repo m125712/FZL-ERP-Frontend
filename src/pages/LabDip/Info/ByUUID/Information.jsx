@@ -43,16 +43,9 @@ export default function Information({ info }) {
 					/>
 					<TitleValue
 						title='Status'
-						value={Number(info?.status) === 0 ? 'No' : 'Yes'}
+						value={Number(info?.lab_status) === 0 ? 'No' : 'Yes'}
 					/>
-					<TitleValue
-						title='Approved'
-						value={
-							Number(info?.approved) === 0
-								? 'Pending'
-								: 'Approved'
-						}
-					/>
+
 					<TitleValue title='Remarks' value={info?.remarks} />
 				</div>
 			</div>

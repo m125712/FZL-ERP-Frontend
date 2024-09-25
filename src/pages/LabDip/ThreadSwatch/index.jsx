@@ -23,9 +23,6 @@ export default function Index() {
 	const haveAccess = useAccess('lab_dip__thread_swatch');
 
 	// * fetching the data
-	const { value: shade_recipe } = useFetch(
-		'/other/lab-dip/shade-recipe/value/label'
-	);
 
 	const columns = useMemo(
 		() => [
@@ -88,21 +85,25 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'shade_recipe_name',
+				accessorKey: 'recipe_name',
 				header: 'Swatch Status',
 				width: 'w-60',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const { shade_recipe_uuid } = info.row.original;
+					const { recipe_uuid } = info.row.original;
+					const { uuid } = info.row.original;
+					const { value: shade_recipe } = useFetch(
+						`/other/lab-dip/shade-recipe/value/label?thread_order_info_uuid=${uuid}`
+					);
 
 					return (
 						<ReactSelect
 							className={'input-xs'}
-							key={shade_recipe_uuid}
+							key={recipe_uuid}
 							placeholder='Select order info uuid'
 							options={shade_recipe ?? []}
 							value={shade_recipe?.filter(
-								(item) => item.value == shade_recipe_uuid
+								(item) => item.value == recipe_uuid
 							)}
 							filterOption={null}
 							onChange={(e) =>
@@ -114,14 +115,14 @@ export default function Index() {
 				},
 			},
 		],
-		[data, shade_recipe]
+		[data]
 	);
 
 	const handleSwatchStatus = async (e, idx) => {
 		await updateData.mutateAsync({
 			url: `/thread/order-entry/${data[idx]?.order_entry_uuid}`,
 			updatedData: {
-				shade_recipe_uuid: e.value,
+				recipe_uuid: e.value,
 				swatch_approval_date: GetDateTime(),
 			},
 			isOnCloseNeeded: false,

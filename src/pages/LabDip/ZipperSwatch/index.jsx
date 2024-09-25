@@ -17,7 +17,6 @@ export default function Index() {
 	const haveAccess = useAccess('lab_dip__zipper_swatch');
 
 	// * fetching the data
-	const { value: recipe } = useFetch('/other/lab-dip/recipe/value/label');
 
 	const columns = useMemo(
 		() => [
@@ -92,6 +91,10 @@ export default function Index() {
 				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
 					const { recipe_uuid } = info.row.original;
+					const { order_info_uuid } = info.row.original;
+					const { value: recipe } = useFetch(
+						`/other/lab-dip/recipe/value/label?order_info_uuid=${order_info_uuid}`
+					);
 
 					return (
 						<ReactSelect
@@ -112,7 +115,7 @@ export default function Index() {
 				},
 			},
 		],
-		[data, recipe]
+		[data]
 	);
 
 	const handleSwatchStatus = async (e, idx) => {

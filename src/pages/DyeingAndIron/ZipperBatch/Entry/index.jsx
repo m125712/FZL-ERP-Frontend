@@ -56,6 +56,9 @@ export default function Index() {
 		name: 'batch_entry',
 	});
 
+
+	
+
 	// * Fetch initial data
 	isUpdate
 		? useFetchForRhfReset(

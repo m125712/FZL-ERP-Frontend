@@ -1,64 +1,67 @@
-import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-import { DateTime } from '@/ui';
 import { useMemo } from 'react';
+
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
+import { LinkWithCopy } from '@/ui';
 
 export default function Index({ challan }) {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'packing_number',
+				header: 'Packing Number',
+				cell: (info) => {
+					const { packing_list_uuid } = info.row.original;
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={packing_list_uuid}
+							uri='/delivery/packing-list'
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'item_description',
 				header: 'Item Description',
-				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'style',
-				header: 'Style',
-				enableColumnFilter: false,
+				accessorKey: 'style_color_size',
+				header: 'Style/Color/Size',
 				cell: (info) => info.getValue(),
+				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'color',
-				header: 'Color',
-				enableColumnFilter: false,
+				accessorKey: 'delivered',
+				header: 'Delivered',
 				cell: (info) => info.getValue(),
+				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'size',
-				header: 'Size',
-				enableColumnFilter: false,
+				accessorKey: 'quantity',
+				header: 'Quantity',
 				cell: (info) => info.getValue(),
+				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'delivery_quantity',
-				header: 'Delivery QTY',
-				enableColumnFilter: false,
+				accessorKey: 'short_quantity',
+				header: 'Short QTY',
 				cell: (info) => info.getValue(),
+				enableColumnFilter: false,
 			},
+			{
+				accessorKey: 'reject_quantity',
+				header: 'Reject QTY',
+				cell: (info) => info.getValue(),
+				enableColumnFilter: false,
+			},
+
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'created_at',
-				header: 'Created',
-				filterFn: 'isWithinRange',
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
-				accessorKey: 'updated_at',
-				header: 'Updated',
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
 			},
 		],
 		[challan]

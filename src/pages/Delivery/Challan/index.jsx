@@ -4,15 +4,18 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy, StatusButton } from '@/ui';
 
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const navigate = useNavigate();
-	const { data, isLoading, url, deleteData } = useDeliveryChallan();
+	const { data, isLoading, url, deleteData, updateData } =
+		useDeliveryChallan();
 	const info = new PageInfo('Challan', url, 'delivery__challan');
 	const haveAccess = useAccess('delivery__challan');
 
@@ -53,7 +56,10 @@ export default function Index() {
 				header: 'Receive Status',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
+					<SwitchToggle
+						onChange={() => handelReceiveStatus(info.row.index)}
+						checked={Number(info.getValue()) === 1}
+					/>
 				),
 			},
 			{
@@ -61,7 +67,10 @@ export default function Index() {
 				header: 'Gate Pass',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
+					<SwitchToggle
+						onChange={() => handelGatePass(info.row.index)}
+						checked={Number(info.getValue()) === 1}
+					/>
 				),
 			},
 			{
@@ -115,6 +124,34 @@ export default function Index() {
 		],
 		[data]
 	);
+
+	// Receive Status
+	const handelReceiveStatus = async (idx) => {
+		const challan = data[idx];
+		const status = challan?.receive_status == 1 ? 0 : 1;
+		const updated_at = GetDateTime();
+
+		await updateData.mutateAsync({
+			url: `/delivery/challan/${challan?.uuid}`,
+			uuid: challan?.uuid,
+			updatedData: { receive_status: status, updated_at },
+			isOnCloseNeeded: false,
+		});
+	};
+
+	// Gate Pass
+	const handelGatePass = async (idx) => {
+		const challan = data[idx];
+		const status = challan?.gate_pass == 1 ? 0 : 1;
+		const updated_at = GetDateTime();
+
+		await updateData.mutateAsync({
+			url: `/delivery/challan/${challan?.uuid}`,
+			uuid: challan?.uuid,
+			updatedData: { gate_pass: status, updated_at },
+			isOnCloseNeeded: false,
+		});
+	};
 
 	const handelAdd = () => navigate('/delivery/challan/entry');
 

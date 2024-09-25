@@ -33,7 +33,8 @@ export default function Index() {
 	const { url: deliveryChallanEntryUrl, deleteData: deleteChallanEntry } =
 		useDeliveryChallanEntry();
 
-	const { data: challan } = useDeliveryChallanDetailsByUUID(uuid);
+	const { data: challan, invalidateQuery: invalidateDetails } =
+		useDeliveryChallanDetailsByUUID(uuid);
 
 	const isUpdate = uuid !== undefined;
 
@@ -103,6 +104,9 @@ export default function Index() {
 				...data,
 				updated_at: GetDateTime(),
 				receive_status: data.receive_status === true ? 1 : 0,
+				carton_quantity:
+					data?.challan_entry?.length +
+					data?.new_challan_entry?.length,
 				gate_pass: data.gate_pass === true ? 1 : 0,
 			};
 
@@ -179,6 +183,7 @@ export default function Index() {
 			created_at,
 			created_by: user.uuid,
 			receive_status: data.receive_status === true ? 1 : 0,
+			carton_quantity: data?.challan_entry?.length,
 			gate_pass: data.gate_pass === true ? 1 : 0,
 		};
 
@@ -245,6 +250,8 @@ export default function Index() {
 						isUpdate,
 						watch,
 						setValue,
+						setDeleteItem,
+						deleteItem,
 					}}
 				/>
 				<DynamicDeliveryField
@@ -449,15 +456,16 @@ export default function Index() {
 
 			<Suspense>
 				<DeleteModal
-					modalId={'challan_entry_delete'}
-					title={'Challan Entry'}
+					modalId={'packing_list_delete'}
+					title={'Packing List'}
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
-					setItems={challanEntryField}
-					url={deliveryChallanEntryUrl}
+					url={`/delivery/remove-challan-entry-by`}
 					deleteData={deleteChallanEntry}
+					onSuccess={invalidateDetails}
 				/>
 			</Suspense>
+
 			<DevTool control={control} placement='top-left' />
 		</div>
 	);

@@ -1,12 +1,14 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useAdminUsers } from '@/state/Admin';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useAdminUsers } from '@/state/Admin';
-import { DateTime, EditDelete, ResetPassword } from '@/ui';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
+import { DateTime, EditDelete, ResetPassword } from '@/ui';
+
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));

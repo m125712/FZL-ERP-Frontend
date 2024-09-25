@@ -1,9 +1,13 @@
+import { Suspense, useState } from 'react';
 import {
 	useOtherHRUserByDesignation,
 	useOtherOrder,
 	useOtherPackingListByOrderInfoUUID,
+	useOtherPackingListByOrderInfoUUIDAndChallanUUID,
 } from '@/state/Other';
+import { Trash2 } from 'lucide-react';
 
+import { DeleteModal } from '@/components/Modal';
 import {
 	CheckBox,
 	FormField,
@@ -23,12 +27,25 @@ export default function Header({
 	isUpdate,
 	watch,
 	setValue,
+	setDeleteItem,
+	deleteItem,
 }) {
 	const { data: users } = useOtherHRUserByDesignation('driver');
 	const { data: orders } = useOtherOrder();
-	const { data: packingList } = useOtherPackingListByOrderInfoUUID(
-		watch('order_info_uuid')
-	);
+	const { data: packingList } = isUpdate
+		? useOtherPackingListByOrderInfoUUIDAndChallanUUID(
+				watch('order_info_uuid'),
+				watch('uuid')
+			)
+		: useOtherPackingListByOrderInfoUUID(watch('order_info_uuid'));
+
+	const handlePackingListRemove = (packing_list_uuid, packing_list_name) => {
+		setDeleteItem({
+			itemId: packing_list_uuid,
+			itemName: packing_list_name,
+		});
+		window['packing_list_delete'].showModal();
+	};
 
 	return (
 		<div className='flex flex-col gap-4'>
@@ -115,69 +132,117 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<FormField
-						label='packing_list_uuids'
-						title='Packing List Number'
-						errors={errors}>
-						<Controller
-							name='packing_list_uuids'
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										isMulti
-										placeholder='Select Packing List Number'
-										options={
-											isUpdate
-												? packingList?.filter((item) =>
+					{!isUpdate && (
+						<FormField
+							label='packing_list_uuids'
+							title='Packing List Number'
+							errors={errors}>
+							<Controller
+								name='packing_list_uuids'
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											isDisabled={isUpdate}
+											isMulti
+											placeholder='Select Packing List Number'
+											options={
+												isUpdate
+													? packingList?.filter(
+															(item) =>
+																getValues(
+																	'packing_list_uuids'
+																).includes(
+																	item.value
+																)
+														)
+													: packingList
+											}
+											value={packingList?.filter(
+												(item) => {
+													const packing_list_uuids =
 														getValues(
 															'packing_list_uuids'
-														).includes(item.value)
-													)
-												: packingList
-										}
-										value={packingList?.filter((item) => {
-											const packing_list_uuids =
-												getValues('packing_list_uuids');
-
-											if (packing_list_uuids === null) {
-												return false;
-											} else {
-												if (
-													isJSON(packing_list_uuids)
-												) {
-													return JSON.parse(
-														packing_list_uuids
-													)
-														.split(',')
-														?.includes(item.value);
-												} else {
-													if (
-														!Array.isArray(
-															packing_list_uuids
-														)
-													) {
-														return packing_list_uuids?.includes(
-															item.value
 														);
-													}
 
-													return packing_list_uuids?.includes(
-														item.value
-													);
+													if (
+														packing_list_uuids ===
+														null
+													) {
+														return false;
+													} else {
+														if (
+															isJSON(
+																packing_list_uuids
+															)
+														) {
+															return JSON.parse(
+																packing_list_uuids
+															)
+																.split(',')
+																?.includes(
+																	item.value
+																);
+														} else {
+															if (
+																!Array.isArray(
+																	packing_list_uuids
+																)
+															) {
+																return packing_list_uuids?.includes(
+																	item.value
+																);
+															}
+
+															return packing_list_uuids?.includes(
+																item.value
+															);
+														}
+													}
 												}
+											)}
+											onChange={(e) => {
+												onChange(
+													e.map(({ value }) => value)
+												);
+											}}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+					)}
+
+					{isUpdate && (
+						<div className='flex flex-col gap-1'>
+							<p className='text-sm font-semibold text-secondary'>
+								Packing List Number
+							</p>
+							<div className='flex h-full flex-wrap items-center gap-2 rounded-md border border-secondary/30 p-2'>
+								{packingList
+									?.filter((item) =>
+										getValues(
+											'packing_list_uuids'
+										).includes(item.value)
+									)
+									.map((item) => (
+										<button
+											key={item.value}
+											onClick={() =>
+												handlePackingListRemove(
+													item.value,
+													item.label
+												)
 											}
-										})}
-										onChange={(e) => {
-											onChange(
-												e.map(({ value }) => value)
-											);
-										}}
-									/>
-								);
-							}}
-						/>
-					</FormField>
+											type={'button'}
+											className='btn btn-outline btn-error btn-sm'>
+											{item.label}
+											<Trash2 className='size-4' />
+										</button>
+									))}
+							</div>
+						</div>
+					)}
 
 					{isUpdate && (
 						<FormField

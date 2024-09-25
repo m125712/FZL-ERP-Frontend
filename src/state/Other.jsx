@@ -189,3 +189,16 @@ export const useOtherPackingListByOrderInfoUUID = (uuid) =>
 		url: `/other/delivery/packing-list-by-order-info/value/label/${uuid}`,
 		enabled: !!uuid,
 	});
+
+export const useOtherPackingListByOrderInfoUUIDAndChallanUUID = (
+	uuid,
+	challan_uuid
+) =>
+	createGlobalState({
+		queryKey: otherQK.deliveryPackingListByOrderInfoUUIDAndChallanUUID(
+			uuid,
+			challan_uuid
+		),
+		url: `/other/delivery/packing-list-by-order-info/value/label/${uuid}?challan_uuid=${challan_uuid}`,
+		enabled: !!uuid,
+	});

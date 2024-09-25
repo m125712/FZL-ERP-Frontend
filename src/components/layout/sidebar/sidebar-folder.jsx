@@ -128,9 +128,9 @@ const SidebarFolder = (props) => {
 					whileTap={{ scale: 0.95 }}
 					key={name}
 					onClick={() => {
-						if (!isOpen && children[0]?.path) {
-							navigate(children[0].path);
-						}
+						// if (!isOpen && children[0]?.path) {
+						// 	navigate(children[0].path);
+						// }
 						handleClick();
 					}}
 					className={folderClassName}>

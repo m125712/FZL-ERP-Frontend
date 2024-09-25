@@ -86,7 +86,7 @@ export const DeliveryRoutes = [
 			},
 			{
 				name: 'Challan',
-				path: '/delivery/challan/details/:challan_number',
+				path: '/delivery/challan/:uuid',
 				element: <ChallanDetails />,
 				page_name: 'delivery__challan_details',
 				actions: [

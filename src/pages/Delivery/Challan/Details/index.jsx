@@ -1,34 +1,30 @@
-import { useFetchFunc } from '@/hooks';
 import { useEffect, useState } from 'react';
+import { useDeliveryChallanDetailsByUUID } from '@/state/Delivery';
 import { Navigate, useParams } from 'react-router-dom';
+
 import Information from './Information';
 import Table from './Table';
 
 export default function Index() {
-	const { challan_number } = useParams();
+	const { uuid } = useParams();
 
-	const [challan, setChallan] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+	const { data, isLoading } = useDeliveryChallanDetailsByUUID(uuid);
 
 	useEffect(() => {
-		document.title = `Challan: ${challan_number}`;
-		useFetchFunc(
-			`/challan/details/by/${challan_number}`,
-			setChallan,
-			setLoading,
-			setError
-		);
-	}, [challan_number]);
+		document.title = `Challan: ${uuid}`;
+	}, [uuid]);
 
-	if (!challan) return <Navigate to='/not-found' />;
-	if (loading)
+	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
+
+	console.log({
+		data,
+	});
 
 	return (
 		<div className='space-y-2'>
-			<Information challan={challan} />
-			<Table challan={challan.challan_entry} />
+			<Information challan={data} />
+			<Table challan={data?.challan_entry} />
 		</div>
 	);
 }

@@ -1,17 +1,18 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import { JoinInput, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { useVislonTMP, useVislonTMPLog } from '@/state/Vislon';
 import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { JoinInput, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import {
 	NUMBER_DOUBLE_REQUIRED,
 	SFG_PRODUCTION_SCHEMA_IN_KG,
 	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
 } from '@util/Schema';
-
-import nanoid from '@/lib/nanoid';
-import { useVislonTMP } from '@/state/Vislon';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -28,27 +29,26 @@ export default function Index({
 	setUpdateTeethMoldingProd,
 }) {
 	const { postData } = useVislonTMP();
+	const { invalidateQuery } = useVislonTMPLog();
 	const { user } = useAuth();
 
-	const MAX_PROD_KG = Math.min(
-		Number(updateTeethMoldingProd.balance_quantity),
-		Number(updateTeethMoldingProd.vislon_teeth_molding)
-	).toFixed(3);
+	const MAX_PROD_KG = Number(updateTeethMoldingProd.tape_transferred);
 
-	const { register, handleSubmit, errors, reset, watch, control, context } = useRHF(
-		{
-			...SFG_PRODUCTION_SCHEMA_IN_KG,
-			production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0').max(
-				MAX_PROD_KG,
-				'Beyond Max Quantity'
-			),
-		},
-		SFG_PRODUCTION_SCHEMA_IN_KG_NULL
-	);
+	const { register, handleSubmit, errors, reset, watch, control, context } =
+		useRHF(
+			{
+				...SFG_PRODUCTION_SCHEMA_IN_KG,
+				production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+					0,
+					'More than 0'
+				).max(MAX_PROD_KG, 'Beyond Max Quantity'),
+			},
+			SFG_PRODUCTION_SCHEMA_IN_KG_NULL
+		);
 
 	const MAX_WASTAGE_KG = Number(
 		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
-	).toFixed(3);
+	);
 
 	const onClose = () => {
 		setUpdateTeethMoldingProd((prev) => ({
@@ -82,6 +82,9 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateQuery();
+		return;
 	};
 
 	return (
@@ -93,7 +96,7 @@ export default function Index({
 				${updateTeethMoldingProd.item_description} -> 
 				${updateTeethMoldingProd.style_color_size} 
 				`}
-				formContext={context}
+			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>

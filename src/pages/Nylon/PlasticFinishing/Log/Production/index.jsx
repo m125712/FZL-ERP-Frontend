@@ -1,17 +1,25 @@
+import { useMemo, useState } from 'react';
+import {
+	useNylonPlasticFinishingProduction,
+	useNylonPlasticFinishingProductionLog,
+} from '@/state/Nylon';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useMemo, useState } from 'react';
+
 import SFGAddOrUpdate from './AddOrUpdate';
-import { useMetalTCTrxLog } from '@/state/Metal';
 
 export default function Index() {
-	const { data, isLoading, deleteData, url } = useMetalTCTrxLog();
-	const info = new PageInfo('Transfer Log', url);
-	const haveAccess = useAccess('metal__teeth_coloring_log');
+	const { data, isLoading, url, deleteData } =
+		useNylonPlasticFinishingProductionLog();
+	const { invalidateQuery } = useNylonPlasticFinishingProduction();
+	const info = new PageInfo('Production Log', url);
+	const haveAccess = useAccess('nylon__plastic_finishing_log');
 
 	const columns = useMemo(
 		() => [
@@ -54,41 +62,26 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'trx_to',
-				header: 'Transferred To',
+				accessorKey: 'production_quantity',
+				header: 'Production Quantity (PCS)',
 				enableColumnFilter: false,
-				cell: (info) => {
-					// remove underscore and capitalize
-					const str = info.getValue();
-					if (str) {
-						const newStr = str.split('_').join(' ');
-						return newStr.charAt(0).toUpperCase() + newStr.slice(1);
-					} else {
-						return str;
-					}
-				},
+				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'trx_quantity',
-				header: (
-					<span>
-						Transferred
-						<br />
-						QTY (PCS)
-					</span>
-				),
+				accessorKey: 'production_quantity_in_kg',
+				header: 'Production Quantity In KG (KG)',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'wastage',
+				header: 'Wastage',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -110,6 +103,12 @@ export default function Index() {
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'actions',
@@ -134,21 +133,22 @@ export default function Index() {
 	);
 
 	// Update
-	const [updateTeethColoringLog, setUpdateTeethColoringLog] = useState({
+	const [updatePFProd, setUpdatePFProd] = useState({
 		uuid: null,
-		trx_from: null,
-		trx_to: null,
-		trx_quantity: null,
-		order_description: null,
-		order_quantity: null,
-		teeth_coloring_prod: null,
-		finishing_stock: null,
-		order_entry_uuid: null,
+		sfg_uuid: null,
+		section: null,
+		production_quantity_in_kg: null,
+		production_quantity: null,
+		coloring_prod: null,
+		nylon_plastic_finishing: null,
+		finishing_prod: null,
+		wastage: null,
+		remarks: null,
 	});
 
 	const handelUpdate = (idx) => {
 		const selected = data[idx];
-		setUpdateTeethColoringLog((prev) => ({
+		setUpdatePFProd((prev) => ({
 			...prev,
 			...selected,
 		}));
@@ -172,7 +172,6 @@ export default function Index() {
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
-	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
 		<div>
@@ -181,8 +180,8 @@ export default function Index() {
 				<SFGAddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateTeethColoringLog,
-						setUpdateTeethColoringLog,
+						updatePFProd,
+						setUpdatePFProd,
 					}}
 				/>
 			</Suspense>
@@ -190,11 +189,12 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateQuery}
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url: '/zipper/sfg-transaction',
 						deleteData,
+						url: '/zipper/sfg-production',
 					}}
 				/>
 			</Suspense>

@@ -1,23 +1,20 @@
+import { useMemo, useState } from 'react';
+import { useMetalTMProduction, useMetalTMTrxLog } from '@/state/Metal';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
-import { useDyeingTransfer } from '@/state/Dyeing';
-import { useMetalTMTapeLog } from '@/state/Metal';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-const Update = lazy(() => import('./Update'));
+
+import SFGAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useMetalTMTapeLog();
-	const info = new PageInfo(
-		'Tape Transfer Log',
-		url,
-		'metal__teeth_molding_log'
-	);
-
+	const { data, isLoading, deleteData, url } = useMetalTMTrxLog();
+	const { invalidateQuery } = useMetalTMProduction();
+	const info = new PageInfo('Transfer Log', url);
 	const haveAccess = useAccess('metal__teeth_molding_log');
 
 	const columns = useMemo(
@@ -53,27 +50,26 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'colors',
-				header: 'Colors',
+				accessorKey: 'style_color_size',
+				header: 'Style / Color / Size',
 				enableColumnFilter: false,
-				cell: (info) => {
-					return (
-						<span className='capitalize'>
-							{info.getValue().replace(/_|stock/g, ' ')}
-						</span>
-					);
-				},
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
 			},
 			{
-				accessorKey: 'section',
-				header: 'Section',
+				accessorKey: 'trx_to',
+				header: 'Transferred To',
 				enableColumnFilter: false,
 				cell: (info) => {
-					return (
-						<span className='capitalize'>
-							{info.getValue().replace(/_|stock/g, ' ')}
-						</span>
-					);
+					// remove underscore and capitalize
+					const str = info.getValue();
+					if (str) {
+						const newStr = str.split('_').join(' ');
+						return newStr.charAt(0).toUpperCase() + newStr.slice(1);
+					} else {
+						return str;
+					}
 				},
 			},
 			{
@@ -82,24 +78,19 @@ export default function Index() {
 					<span>
 						Transferred
 						<br />
-						QTY (KG)
+						QTY (PCS)
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'created_by_name',
-				header: 'Issued By',
+				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+
 			{
 				accessorKey: 'created_at',
 				header: 'Created',
@@ -120,13 +111,19 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'actions',
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden:
-					!haveAccess.includes('click_update_tape') &&
-					!haveAccess.includes('click_delete_tape'),
+					!haveAccess.includes('click_update_sfg') &&
+					!haveAccess.includes('click_delete_sfg'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -134,12 +131,8 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes(
-								'click_delete_tape'
-							)}
-							showUpdate={haveAccess.includes(
-								'click_update_tape'
-							)}
+							showUpdate={haveAccess.includes('click_update_sfg')}
+							showDelete={haveAccess.includes('click_delete_sfg')}
 						/>
 					);
 				},
@@ -148,17 +141,24 @@ export default function Index() {
 		[data]
 	);
 
-	// Fetching data from server
-
 	// Update
-	const [updateTransfer, setUpdateTransfer] = useState({
+	const [updateTeethMoldingLog, setUpdateTeethMoldingLog] = useState({
 		uuid: null,
+		trx_from: null,
+		trx_to: null,
+		trx_quantity: null,
+		order_description: null,
+		order_quantity: null,
+		teeth_molding_prod: null,
+		finishing_stock: null,
+		order_entry_uuid: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateTransfer((prev) => ({
+		const selected = data[idx];
+		setUpdateTeethMoldingLog((prev) => ({
 			...prev,
-			uuid: data[idx].uuid,
+			...selected,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -186,26 +186,25 @@ export default function Index() {
 		<div>
 			<ReactTable title={info.getTitle()} data={data} columns={columns} />
 			<Suspense>
-				<Suspense>
-					<Update
-						modalId={info.getAddOrUpdateModalId()}
-						{...{
-							updateTransfer,
-							setUpdateTransfer,
-						}}
-					/>
-				</Suspense>
+				<SFGAddOrUpdate
+					modalId={info.getAddOrUpdateModalId()}
+					{...{
+						updateTeethMoldingLog,
+						setUpdateTeethMoldingLog,
+					}}
+				/>
 			</Suspense>
 			<Suspense>
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateQuery}
 					{...{
 						deleteItem,
 						setDeleteItem,
+						url: '/zipper/sfg-transaction',
 						deleteData,
 					}}
-					url='/zipper/dyed-tape-transaction'
 				/>
 			</Suspense>
 		</div>

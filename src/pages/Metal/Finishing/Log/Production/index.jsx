@@ -1,8 +1,5 @@
 import { useMemo, useState } from 'react';
-import {
-	useVislonFinishingProd,
-	useVislonFinishingProdLog,
-} from '@/state/Vislon';
+import { useMetalFinishingProdLog, useMetalTCProduction } from '@/state/Metal';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -15,11 +12,11 @@ import PageInfo from '@/util/PageInfo';
 import SFGAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
-	const { data, isLoading, deleteData } = useVislonFinishingProdLog();
-	const { invalidateQuery } = useVislonFinishingProd();
-	const info = new PageInfo('Production Log', '/vislon/finishing/log');
+	const { data, isLoading, deleteData } = useMetalFinishingProdLog();
+	const { invalidateQuery } = useMetalTCProduction();
+	const info = new PageInfo('Production Log', '/metal/finishing/log');
 
-	const haveAccess = useAccess('vislon__finishing_log');
+	const haveAccess = useAccess('metal__finishing_log');
 
 	const columns = useMemo(
 		() => [
@@ -61,36 +58,13 @@ export default function Index() {
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
-			// {
-			// 	accessorKey: "trx_from",
-			// 	header: "Transferred From",
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 	info.getValue()
-			// ),
-			// },
-			// {
-			// 	accessorKey: 'trx_to',
-			// 	header: 'Transferred To',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => {
-			// 		// remove underscore and capitalize
-			// 		const str = info.getValue();
-			// 		if (str) {
-			// 			const newStr = str.split('_').join(' ');
-			// 			return newStr.charAt(0).toUpperCase() + newStr.slice(1);
-			// 		} else {
-			// 			return str;
-			// 		}
-			// 	},
-			// },
 			{
-				accessorKey: 'production_quantity_in_kg',
+				accessorKey: 'production_quantity',
 				header: (
 					<span>
 						Production
 						<br />
-						QTY (KG)
+						QTY (PCS)
 					</span>
 				),
 				enableColumnFilter: false,
@@ -115,12 +89,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'created_at',
 				header: 'Created',
 				filterFn: 'isWithinRange',
@@ -138,6 +106,12 @@ export default function Index() {
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'actions',
@@ -224,10 +198,10 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateQuery}
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
 					deleteData={deleteData}
-					invalidateQuery={invalidateQuery}
 					url={`/zipper/sfg-production`}
 				/>
 			</Suspense>

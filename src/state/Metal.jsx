@@ -41,13 +41,13 @@ export const useMetalTMProductionLogByUUID = (uuid, { enabled = true }) =>
 export const useMetalTMTapeLog = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTMTapeLog(),
-		url: '/zipper/dyed-tape-transaction/by/metal_teeth_molding',
+		url: '/zipper/dyed-tape-transaction/by/metal',
 	});
 
 export const useMetalTMTapeLogByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: metalQK.metalTMTapeLogByUUID(uuid),
-		url: `/zipper/dyed-tape-transaction/by/metal_teeth_molding${uuid}`,
+		url: `/zipper/dyed-tape-transaction/by/metal_teeth_molding/${uuid}`,
 	});
 
 // * RM

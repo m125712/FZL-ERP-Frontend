@@ -1,15 +1,20 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import {
-	NUMBER_REQUIRED,
-	NUMBER,
-	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
-	SFG_PRODUCTION_SCHEMA_IN_KG,
-} from '@util/Schema';
-import { useVislonTMPEntryByUUID } from '@/state/Vislon';
 import { useEffect } from 'react';
+import {
+	useVislonFinishingProd,
+	useVislonTMPEntryByUUID,
+} from '@/state/Vislon';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, JoinInput } from '@/ui';
+
+import {
+	NUMBER_DOUBLE_REQUIRED,
+	NUMBER_REQUIRED,
+	SFG_PRODUCTION_SCHEMA_IN_KG,
+	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
+} from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -28,38 +33,27 @@ export default function Index({
 	const { data, updateData, url } = useVislonTMPEntryByUUID(
 		updateFinishingLog?.uuid
 	);
+	const { invalidateQuery } = useVislonFinishingProd();
+	const MAX_PROD =
+		Number(updateFinishingLog.balance_quantity) +
+		Number(data?.production_quantity);
+	
+	const MAX_PROD_KG = Number(updateFinishingLog.finishing_stock) +
+	Number(data?.production_quantity_in_kg);
 
-	const MAX_PROD = Math.max(
-		Number(updateFinishingLog.production_quantity),
-		Number(updateFinishingLog.coloring_prod)
-	).toFixed(3);
-
-	const MAX_PROD_KG = Number(MAX_PROD).toFixed(3);
-
-	const {
-		register,
-		handleSubmit,
-		errors,
-		control,
-		Controller,
-		reset,
-		getValues,
-		watch,
-		context,
-	} = useRHF(
+	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
 		{
 			...SFG_PRODUCTION_SCHEMA_IN_KG,
-			production_quantity: NUMBER_REQUIRED.max(
+			production_quantity: NUMBER_REQUIRED.moreThan(0, 'More Than 0').max(
 				MAX_PROD,
 				'Beyond Max Quantity'
 			),
-			production_quantity_in_kg: NUMBER,
+			production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+				0,
+				'More Than 0'
+			).max(MAX_PROD_KG, 'Beyond Max Quantity'),
 		},
-		{
-			...SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
-			production_quantity: 0,
-			production_quantity_in_kg: 0,
-		}
+		SFG_PRODUCTION_SCHEMA_IN_KG_NULL
 	);
 
 	const MAX_WASTAGE_KG = Number(
@@ -104,6 +98,7 @@ export default function Index({
 				onClose,
 			});
 
+			invalidateQuery();
 			return;
 		}
 	};
@@ -120,16 +115,43 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Finishing Production`}
+			title={`Teeth Molding SFG Production Log`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
+			{/* <FormField label='trx_to' title='Trx to' errors={errors}>
+				<Controller
+					name={'trx_to'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<ReactSelect
+								placeholder='Select Transaction Area'
+								options={transactionArea}
+								value={transactionArea?.find(
+									(item) => item.value == getValues('trx_to')
+								)}
+								onChange={(e) => onChange(e.value)}
+								isDisabled={
+									updateFinishingLog?.uuid !== null
+								}
+							/>
+						);
+					}}
+				/>
+			</FormField> */}
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'
 				unit='PCS'
 				sub_label={`MAX: ${MAX_PROD} PCS`}
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				label='production_quantity_in_kg'
+				unit='KG'
+				sub_label={`Max: ${MAX_PROD_KG}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput

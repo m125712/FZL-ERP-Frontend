@@ -42,13 +42,15 @@ export default function Index({
 		}
 	);
 
-	const MAX_PROD = (
-		Number(updatePFProd?.coloring_prod) +
-		Number(updatePFProd?.production_quantity)
-	).toFixed(3);
-	const MAX_PROD_KG = Number(updatePFProd?.nylon_plastic_finishing).toFixed(
-		3
-	);
+	const MAX_PROD =
+		Math.min(
+			Number(updatePFProd?.balance_quantity),
+			Number(updatePFProd?.slider_finishing_stock)
+		) + Number(dataByUUID?.production_quantity);
+
+	const MAX_PROD_KG =
+		Number(updatePFProd?.tape_transferred) +
+		Number(dataByUUID?.production_quantity_in_kg);
 
 	const {
 		register,

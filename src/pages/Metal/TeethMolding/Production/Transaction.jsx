@@ -1,15 +1,17 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useMetalTMProduction } from '@/state/Metal';
-import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { useMetalTMProduction, useMetalTMTrxLog } from '@/state/Metal';
 import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, JoinInput } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import {
 	SFG_TRANSACTION_SCHEMA_IN_PCS,
 	SFG_TRANSACTION_SCHEMA_IN_PCS_NULL,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -35,6 +37,7 @@ export default function Index({
 	setUpdateTeethMoldingTRX,
 }) {
 	const { postData } = useMetalTMProduction();
+	const { invalidateQuery } = useMetalTMTrxLog();
 	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
@@ -85,6 +88,9 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateQuery();
+		return;
 	};
 
 	return (

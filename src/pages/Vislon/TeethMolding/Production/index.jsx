@@ -75,8 +75,8 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'vislon_teeth_molding',
-				header: 'Stock (KG)',
+				accessorKey: 'tape_transferred',
+				header: 'Tape Stock (KG)',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
@@ -86,7 +86,7 @@ export default function Index() {
 					<span>
 						Balance
 						<br />
-						(KG)
+						(PCS)
 					</span>
 				),
 				enableColumnFilter: false,

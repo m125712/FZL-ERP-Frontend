@@ -79,7 +79,7 @@ export const useVislonTMTLog = () =>
 export const useVislonTMTapeLog = () =>
 	createGlobalState({
 		queryKey: vislonQK.vislonTMTapeLog(),
-		url: '/zipper/dyed-tape-transaction/by/vislon_teeth_molding',
+		url: '/zipper/dyed-tape-transaction/by/vislon',
 	});
 export const useVislonTMTapeLogByUUID = (uuid) =>
 	createGlobalState({

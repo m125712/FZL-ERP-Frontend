@@ -1,19 +1,21 @@
+import { useMemo, useState } from 'react';
+import { useNylonMFProduction, useNylonMFProductionLog } from '@/state/Nylon';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useNylonPlasticFinishingProductionLog, useNylonPlasticFinishingProduction } from '@/state/Nylon';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useMemo, useState } from 'react';
+
 import SFGAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } =
-		useNylonPlasticFinishingProductionLog();
-		const { invalidateQuery} =useNylonPlasticFinishingProduction();
+	const { data, isLoading, url, deleteData } = useNylonMFProductionLog();
+	const { invalidateQuery } = useNylonMFProduction();
 	const info = new PageInfo('Production Log', url);
-	const haveAccess = useAccess('nylon__plastic_finishing_log');
+	const haveAccess = useAccess('nylon__metallic_finishing_log');
 
 	const columns = useMemo(
 		() => [
@@ -55,15 +57,6 @@ export default function Index() {
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
-			// {
-			// 	accessorKey: "trx_from",
-			// 	header: "Transferred From",
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 	info.getValue()
-			// ),
-			// },
-
 			{
 				accessorKey: 'production_quantity',
 				header: 'Production Quantity',
@@ -80,12 +73,6 @@ export default function Index() {
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -107,6 +94,12 @@ export default function Index() {
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'actions',
@@ -131,22 +124,21 @@ export default function Index() {
 	);
 
 	// Update
-	const [updatePFProd, setUpdatePFProd] = useState({
+	const [updateProductionLog, setUpdateProductionLog] = useState({
 		uuid: null,
-		sfg_uuid: null,
-		section: null,
-		production_quantity_in_kg: null,
-		production_quantity: null,
-		coloring_prod: null,
-		nylon_plastic_finishing: null,
-		finishing_prod: null,
-		wastage: null,
-		remarks: null,
+		trx_from: null,
+		trx_to: null,
+		trx_quantity: null,
+		order_description: null,
+		order_quantity: null,
+		teeth_coloring_prod: null,
+		finishing_stock: null,
+		order_entry_uuid: null,
 	});
 
 	const handelUpdate = (idx) => {
 		const selected = data[idx];
-		setUpdatePFProd((prev) => ({
+		setUpdateProductionLog((prev) => ({
 			...prev,
 			...selected,
 		}));
@@ -178,8 +170,8 @@ export default function Index() {
 				<SFGAddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updatePFProd,
-						setUpdatePFProd,
+						updateProductionLog,
+						setUpdateProductionLog,
 					}}
 				/>
 			</Suspense>

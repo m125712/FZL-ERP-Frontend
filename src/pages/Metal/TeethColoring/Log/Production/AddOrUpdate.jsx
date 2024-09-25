@@ -1,24 +1,24 @@
 import { useEffect } from 'react';
-import { useAuth } from '@/context/auth';
 import {
-	useMetalTMProduction,
-	useMetalTMProductionLog,
-	useMetalTMProductionLogByUUID,
+	useMetalTCProduction,
+	useMetalTCProductionLog,
+	useMetalTCProductionLogByUUID,
 } from '@/state/Metal';
+import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+import { FormField, Input, ReactSelect } from '@/ui';
 
 import {
-	SFG_PRODUCTION_LOG_NULL,
-	SFG_PRODUCTION_LOG_SCHEMA,
+	SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
+	SFG_PRODUCTION_SCHEMA_IN_PCS,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
-	updateTeethMoldingLog = {
+	updateTeethColoringLog = {
 		uuid: null,
 		order_entry_uuid: null,
 		order_description: null,
@@ -26,37 +26,25 @@ export default function Index({
 		order_number: null,
 		section: null,
 		production_quantity: null,
-		teeth_molding_stock: null,
+		teeth_coloring_stock: null,
 		wastage: null,
 	},
-	setUpdateTeethMoldingLog,
+	setUpdateTeethColoringLog,
 }) {
-	const { invalidateQuery } = useMetalTMProduction();
-	const { updateData } = useMetalTMProductionLog();
-	const { data: dataByUUID } = useMetalTMProductionLogByUUID(
-		updateTeethMoldingLog.uuid,
+	const { invalidateQuery } = useMetalTCProduction();
+	const { updateData } = useMetalTCProductionLog();
+	const { data: dataByUUID } = useMetalTCProductionLogByUUID(
+		updateTeethColoringLog.uuid,
 		{
-			enabled: updateTeethMoldingLog.uuid !== null,
+			enabled: updateTeethColoringLog.uuid !== null,
 		}
 	);
 
 	const MAX_QUANTITY =
-		Number(updateTeethMoldingLog?.balance_quantity) +
+		Number(updateTeethColoringLog?.teeth_coloring_stock) +
+		Number(updateTeethColoringLog?.teeth_molding_prod) +
 		Number(dataByUUID?.production_quantity);
 
-	const MAX_QUANTITY_IN_KG =
-		Number(updateTeethMoldingLog?.teeth_molding_stock) +
-		Number(updateTeethMoldingLog?.production_quantity_in_kg);
-
-	const schema = {
-		...SFG_PRODUCTION_LOG_SCHEMA,
-		production_quantity: SFG_PRODUCTION_LOG_SCHEMA.production_quantity
-			.max(MAX_QUANTITY),
-		production_quantity_in_kg:
-			SFG_PRODUCTION_LOG_SCHEMA.production_quantity_in_kg
-				.max(MAX_QUANTITY_IN_KG),
-	};
-	const { user } = useAuth();
 	const {
 		register,
 		handleSubmit,
@@ -65,16 +53,29 @@ export default function Index({
 		Controller,
 		reset,
 		context,
-	} = useRHF(schema, SFG_PRODUCTION_LOG_NULL);
+	} = useRHF(
+		{
+			...SFG_PRODUCTION_SCHEMA_IN_PCS,
+			production_quantity:
+				SFG_PRODUCTION_SCHEMA_IN_PCS.production_quantity.max(
+					MAX_QUANTITY,
+					'Beyond Max Quantity'
+				),
+		},
+		SFG_PRODUCTION_SCHEMA_IN_PCS_NULL
+	);
 
 	useEffect(() => {
 		if (dataByUUID) {
+			console.log({
+				dataByUUID,
+			});
 			reset(dataByUUID);
 		}
 	}, [dataByUUID]);
 
 	const onClose = () => {
-		setUpdateTeethMoldingLog((prev) => ({
+		setUpdateTeethColoringLog((prev) => ({
 			...prev,
 			uuid: null,
 			order_entry_uuid: null,
@@ -83,16 +84,16 @@ export default function Index({
 			order_number: null,
 			section: null,
 			production_quantity: null,
-			teeth_molding_stock: null,
+			teeth_coloring_stock: null,
 			wastage: null,
 		}));
-		reset(SFG_PRODUCTION_LOG_NULL);
+		reset(SFG_PRODUCTION_SCHEMA_IN_PCS_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateTeethMoldingLog?.uuid !== null) {
+		if (updateTeethColoringLog?.uuid !== null) {
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
@@ -121,7 +122,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Teeth Molding Production Log`}
+			title={`Teeth Coloring Production Log`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
@@ -138,39 +139,24 @@ export default function Index({
 								value={sectionName?.find(
 									(item) =>
 										item.value ==
-										updateTeethMoldingLog?.section
+										updateTeethColoringLog?.section
 								)}
 								onChange={(e) => onChange(e.value)}
 								isDisabled={
-									updateTeethMoldingLog?.uuid !== null
+									updateTeethColoringLog?.uuid !== null
 								}
 							/>
 						);
 					}}
 				/>
 			</FormField>
-			<JoinInput
-				title='Production Quantity'
+			<Input
 				label='production_quantity'
-				sub_label={`MAX: ${MAX_QUANTITY} pcs`}
-				unit='PCS'
-				{...{ register, errors }}
-			/>
-			<JoinInput
-				title='Production Quantity In KG'
-				label='production_quantity_in_kg'
-				sub_label={`MAX: ${MAX_QUANTITY_IN_KG} kg`}
-				unit='PCS'
-				{...{ register, errors }}
-			/>
-			<JoinInput
-				title='Wastage'
-				label='wastage'
-				sub_label={`MAX: ${MAX_QUANTITY_IN_KG} kg`}
-				unit='PCS'
+				sub_label={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />
+			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);
 }

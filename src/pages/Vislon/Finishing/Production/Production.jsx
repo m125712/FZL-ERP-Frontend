@@ -1,5 +1,9 @@
 import { useAuth } from '@/context/auth';
-import { useVislonFinishingProd, useVislonTMP } from '@/state/Vislon';
+import {
+	useVislonFinishingProd,
+	useVislonFinishingProdLog,
+	useVislonTMP,
+} from '@/state/Vislon';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
@@ -31,6 +35,8 @@ export default function Index({
 }) {
 	const { postData } = useVislonTMP();
 	const { invalidateQuery } = useVislonFinishingProd();
+	const { invalidateQuery: invalidateVislonFinishingProdLog } =
+		useVislonFinishingProdLog();
 	const { user } = useAuth();
 
 	const MAX_PROD = Math.min(
@@ -95,6 +101,9 @@ export default function Index({
 		});
 
 		invalidateQuery();
+		invalidateVislonFinishingProdLog();
+
+		return;
 	};
 
 	return (

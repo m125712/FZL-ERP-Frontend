@@ -1,17 +1,18 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
+import { useVislonTMP, useVislonTMTLog } from '@/state/Vislon';
+import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
+import nanoid from '@/lib/nanoid';
 import {
 	NUMBER_DOUBLE_REQUIRED,
 	VISLON_TRANSACTION_SCHEMA,
 	VISLON_TRANSACTION_SCHEMA_NULL,
 } from '@util/Schema';
-
-import nanoid from '@/lib/nanoid';
-import { useVislonTMP } from '@/state/Vislon';
-import { DevTool } from '@hookform/devtools';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -26,19 +27,22 @@ export default function Index({
 	setUpdateTeethMoldingTRX,
 }) {
 	const { postData } = useVislonTMP();
+	const { invalidateQuery } = useVislonTMTLog();
 	const { user } = useAuth();
 
-	const { register, handleSubmit, errors, reset, control, context } =
-		useRHF(
-			{
-				...VISLON_TRANSACTION_SCHEMA,
-				trx_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0').max(
-					Number(updateTeethMoldingTRX?.teeth_molding_prod),
-					'Beyond Max Quantity'
-				),
-			},
-			VISLON_TRANSACTION_SCHEMA_NULL
-		);
+	const { register, handleSubmit, errors, reset, control, context } = useRHF(
+		{
+			...VISLON_TRANSACTION_SCHEMA,
+			trx_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+				0,
+				'More than 0'
+			).max(
+				Number(updateTeethMoldingTRX?.teeth_molding_prod),
+				'Beyond Max Quantity'
+			),
+		},
+		VISLON_TRANSACTION_SCHEMA_NULL
+	);
 
 	const onClose = () => {
 		setUpdateTeethMoldingTRX((prev) => ({
@@ -71,6 +75,9 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateQuery();
+		return;
 	};
 
 	return (

@@ -137,9 +137,11 @@ export default function Index() {
 
 			// pi entry
 			let updatedableCommercialPiEntryPromises = data.pi_cash_entry
-				.filter((item) => item.pi_quantity > 0 && !item.isDeletable)
+				.filter(
+					(item) => item.pi_cash_quantity > 0 && !item.isDeletable
+				)
 				.map(async (item) => {
-					if (item.uuid === null && item.pi_quantity > 0) {
+					if (item.uuid === null && item.pi_cash_quantity > 0) {
 						return await postData.mutateAsync({
 							url: commercialPiEntryUrl,
 							newData: {
@@ -155,9 +157,9 @@ export default function Index() {
 						});
 					}
 
-					if (item.uuid && item.pi_quantity >= 0) {
+					if (item.uuid && item.pi_cash_quantity >= 0) {
 						const updatedData = {
-							pi_quantity: item.pi_quantity,
+							pi_cash_quantity: item.pi_cash_quantity,
 							is_checked: item.is_checked,
 							updated_at: GetDateTime(),
 						};
@@ -189,7 +191,7 @@ export default function Index() {
 				])
 					.then(() => reset(Object.assign({}, PI_CASH_NULL)))
 					.then(() => {
-						navigate(`/commercial/pi/details/${updatedId}`);
+						navigate(`/commercial/pi/${updatedId}`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -215,7 +217,7 @@ export default function Index() {
 		delete commercialPiData['pi_cash_entry'];
 
 		const commercialPiEntryData = [...data.pi_cash_entry]
-			.filter((item) => item.is_checked && item.pi_quantity > 0)
+			.filter((item) => item.is_checked && item.pi_cash_quantity > 0)
 			.map((item) => ({
 				uuid: nanoid(),
 				is_checked: true,
@@ -433,14 +435,18 @@ export default function Index() {
 								{getValues(`pi_cash_entry[${index}].size`)}
 							</td>
 							<td className={`${rowClass}`}>
-								{getValues(
-									`pi_cash_entry[${index}].pi_cash_quantity`
-								)}
+								{Number(
+									getValues(
+										`pi_cash_entry[${index}].pi_cash_quantity`
+									)
+								).toFixed(0)}
 							</td>
 							<td className={`${rowClass}`}>
-								{getValues(
-									`pi_cash_entry[${index}].given_pi_quantity`
-								)}
+								{Number(
+									getValues(
+										`pi_cash_entry[${index}].given_pi_cash_quantity`
+									)
+								).toFixed(2)}
 							</td>
 							<td className={`w-32 ${rowClass}`}>
 								<Input

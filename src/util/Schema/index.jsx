@@ -1449,7 +1449,7 @@ export const PI_SCHEMA = {
 			pi_uuid: STRING,
 			max_quantity: NUMBER,
 			pi_cash_quantity: NUMBER_REQUIRED.max(
-				yup.ref('quantity'),
+				yup.ref('max_quantity'),
 				'Beyond Max Quantity'
 			),
 			remarks: STRING.nullable(),
@@ -1496,10 +1496,6 @@ export const PI_CASH_SCHEMA = {
 			sfg_uuid: STRING_REQUIRED,
 			pi_uuid: STRING,
 			max_quantity: NUMBER,
-			// pi_cash_quantity: NUMBER_REQUIRED.max(
-			// 	yup.ref('quantity'),
-			// 	'Beyond Max Quantity'
-			// ),
 			pi_cash_quantity: yup.number().when('is_checked', {
 				is: true,
 				then: (Schema) =>

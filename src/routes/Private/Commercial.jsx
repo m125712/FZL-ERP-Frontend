@@ -70,7 +70,7 @@ export const CommercialRoutes = [
 				children: [
 					{
 						name: 'PI',
-						path: '/commercial/pi/details/:pi_id',
+						path: '/commercial/pi/:pi_id',
 						element: <PiDetails />,
 						page_name: 'commercial__pi_details',
 						actions: [

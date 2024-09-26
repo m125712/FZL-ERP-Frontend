@@ -113,28 +113,34 @@ export default function Index() {
 	const [bleachAll, setBleachAll] = useState();
 
 	useEffect(() => {
-		if (bleachAll) {
-			orderEntryField.map((item, index) => {
-				setValue(`order_entry[${index}].bleaching`, 'bleach');
-			});
-		} else {
-			orderEntryField.map((item, index) => {
-				setValue(`order_entry[${index}].bleaching`, 'non-bleach');
+		if (bleachAll !== null) {
+			orderEntryField.forEach((item, index) => {
+				setValue(
+					`order_entry[${index}].bleaching`,
+					bleachAll ? 'bleach' : 'non-bleach'
+				);
 			});
 		}
-	}, [bleachAll]);
+	}, [bleachAll, orderEntryField]);
 
 	useEffect(() => {
 		const subscription = watch((value, { name, type }) => {
-			const { order_info_entry } = value;
-			if (order_info_entry?.length > 0) {
-				setBleachAll(
-					order_info_entry.find(
-						(item) => item.bleaching === 'non-bleach'
-					)
-						? false
-						: true
+			const { order_entry } = value;
+			if (order_entry?.length > 0) {
+				const allBleach = order_entry.every(
+					(item) => item.bleaching === 'bleach'
 				);
+				const allNonBleach = order_entry.every(
+					(item) => item.bleaching === 'non-bleach'
+				);
+
+				if (allBleach) {
+					setBleachAll(true);
+				} else if (allNonBleach) {
+					setBleachAll(false);
+				} else {
+					setBleachAll(null);
+				}
 			}
 		});
 		return () => subscription.unsubscribe();
@@ -209,7 +215,6 @@ export default function Index() {
 				swatch_approval_date: DEFAULT_SWATCH_APPROVAL_DATE,
 				updated_at: GetDateTime(),
 			}));
-			
 
 			//* Post new entry */ //
 			let order_entry_updated_promises = [

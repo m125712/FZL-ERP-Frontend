@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useCommercialLC, useCommercialLCPIByUUID } from '@/state/Commercial';
-import { useOtherPI } from '@/state/Other';
+import { useOtherPI, useOtherUpdatePI } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { format } from 'date-fns';
@@ -26,7 +26,6 @@ export default function Index() {
 
 	const { url: commercialLcUrl, postData, updateData } = useCommercialLC();
 	const { data, invalidateQuery } = useCommercialLCPIByUUID(lc_uuid);
-	const { data: pi } = useOtherPI();
 
 	const [deletablePi, setDeletablePi] = useState([]);
 	const [updateItem, setUpdateItem] = useState({
@@ -35,7 +34,11 @@ export default function Index() {
 	});
 
 	const isUpdate = lc_uuid !== undefined;
-
+	if (isUpdate) {
+		var { data: pi } = useOtherUpdatePI();
+	} else {
+		var { data: pi } = useOtherPI();
+	}
 	const {
 		register,
 		handleSubmit,
@@ -128,12 +131,13 @@ export default function Index() {
 			});
 
 			const lc_number = res?.data?.[0].updatedId;
+			
 
 			// Update Deletable Pi
 			if (deletablePi.length > 0) {
 				const deletable_pi_promises = deletablePi.map(async (item) => {
 					await updateData.mutateAsync({
-						url: `/commercial/pi-lc-null/${item}`,
+						url: `/commercial/pi-cash-lc-null/${item}`,
 						isOnCloseNeeded: false,
 					});
 				});
@@ -156,7 +160,7 @@ export default function Index() {
 				...pi_numbers.map(
 					async (item) =>
 						await updateData.mutateAsync({
-							url: `/commercial/pi-lc-uuid/${item.uuid}`,
+							url: `/commercial/pi-cash-lc-uuid/${item.uuid}`,
 							updatedData: item,
 							isOnCloseNeeded: false,
 						})
@@ -217,7 +221,7 @@ export default function Index() {
 
 		const pi_numbers_promise = [
 			...pi_numbers.map(
-				async (item) =>
+				async (item, index) =>
 					await updateData.mutateAsync({
 						url: `/commercial/pi-cash-lc-uuid/${item.uuid}`,
 						updatedData: item,
@@ -305,7 +309,7 @@ export default function Index() {
 														<ReactSelect
 															placeholder='Select PI'
 															options={pi}
-															value={pi?.find(
+															value={pi?.filter(
 																(inItem) =>
 																	inItem.value ===
 																	getValues(
@@ -385,7 +389,7 @@ export default function Index() {
 					title={'PI'}
 					updateItem={updateItem}
 					setUpdateItem={setUpdateItem}
-					url={`/commercial/pi-lc-null`}
+					url={`/commercial/pi-cash-lc-null`}
 					updateData={updateData}
 				/>
 			</Suspense>

@@ -24,6 +24,7 @@ export default function Information({ orderInfo }) {
 		merchandiser_name,
 		is_sample,
 		is_bill,
+		is_cash,
 		delivery_date,
 		created_by_name,
 		remarks,
@@ -45,6 +46,11 @@ export default function Information({ orderInfo }) {
 			{
 				label: 'Is Bill',
 				value: is_bill === 1 ? 'Yes' : 'No',
+			},
+
+			{
+				label: 'Is Cash',
+				value: is_cash === 1 ? 'Yes' : 'No',
 			},
 
 			{

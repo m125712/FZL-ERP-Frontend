@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess, useFetch } from '@/hooks';
 
 import ReactTable from '@/components/Table';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
@@ -58,6 +59,19 @@ export default function Index() {
 				header: 'Status',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'received',
+				header: 'Received',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<SwitchToggle
+							onChange={() => handelReceived(info.row.index)}
+							checked={info.getValue() === 1}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'machine_name',
@@ -165,6 +179,16 @@ export default function Index() {
 		const { uuid } = data[idx];
 
 		navigate(`/dyeing-and-iron/zipper-batch/${uuid}/update`);
+	};
+	// Received
+	const handelReceived = async (idx) => {
+		await updateData.mutateAsync({
+			url: `${url}/${data[idx]?.uuid}`,
+			updatedData: {
+				received: data[idx]?.received === 1 ? 0 : 1,
+			},
+			isOnCloseNeeded: false,
+		});
 	};
 	// const handleMachine = async (e, idx) => {
 	// 	await updateData.mutateAsync({

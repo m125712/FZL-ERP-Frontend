@@ -7,18 +7,18 @@ import { DateTime } from '@/ui';
 export default function Index({ order_info_entry }) {
 	const columns = useMemo(
 		() => [
-			{
-				accessorKey: 'po',
-				header: 'PO',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'recipe_name',
-				header: 'Shade',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'po',
+			// 	header: 'PO',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
+			// {
+			// 	accessorKey: 'recipe_name',
+			// 	header: 'Shade',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorKey: 'style',
 				header: 'Style',

@@ -146,8 +146,8 @@ export default function Index() {
 		threadOrderInfoEntryAppend({
 			order_info_uuid: null,
 			lab_ref: '',
-			po: '',
-			recipe_uuid: null,
+			// po: '',
+			// recipe_uuid: null,
 			style: '',
 			color: '',
 			count_length_uuid: null,
@@ -171,6 +171,7 @@ export default function Index() {
 				...data,
 				is_sample: data.is_sample ? 1 : 0,
 				is_bill: data.is_bill ? 1 : 0,
+				is_cash: data.is_cash ? 1 : 0,
 				updated_at: GetDateTime(),
 			};
 
@@ -241,6 +242,7 @@ export default function Index() {
 			...data,
 			is_sample: data.is_sample ? 1 : 0,
 			is_bill: data.is_bill ? 1 : 0,
+			is_cash: data.is_cash ? 1 : 0,
 			uuid: new_order_info_uuid,
 			created_at,
 			created_by,
@@ -361,8 +363,8 @@ export default function Index() {
 						handelAppend={handleThreadOrderInfoEntryAppend}
 						tableHead={[
 							'Color',
-							'Shade',
-							'PO',
+							// 'Shade',
+							// 'PO',
 							'Style',
 							'Count Length',
 							'Bleaching',
@@ -396,7 +398,7 @@ export default function Index() {
 										register={register}
 									/>
 								</td>
-								<td className={cn(rowClass, 'min-w-[140px]')}>
+								{/* <td className={cn(rowClass, 'min-w-[140px]')}>
 									<FormField
 										label={`order_info_entry[${index}].recipe_uuid`}
 										title='Shade'
@@ -446,7 +448,7 @@ export default function Index() {
 										}
 										register={register}
 									/>
-								</td>
+								</td> */}
 
 								<td className={cn(rowClass, 'min-w-[140px]')}>
 									<Input

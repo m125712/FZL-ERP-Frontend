@@ -10,10 +10,6 @@ export default function Information({ orderInfo }) {
 		document.title = `Shade Recipe Details of ${orderInfo?.uuid}`;
 	}, []);
 
-	console.log({
-		orderInfo,
-	});
-
 	const {
 		uuid,
 		order_number,
@@ -21,6 +17,7 @@ export default function Information({ orderInfo }) {
 		buyer_name,
 		marketing_name,
 		factory_name,
+		factory_address,
 		merchandiser_name,
 		is_sample,
 		is_bill,
@@ -94,6 +91,10 @@ export default function Information({ orderInfo }) {
 			{
 				label: 'Factory',
 				value: factory_name,
+			},
+			{
+				label: 'Factory Address',
+				value: factory_address,
 			},
 			{
 				label: 'Marketing',

@@ -11,6 +11,7 @@ export const getPageHeader = (orderInfo) => {
 	const created_at = getDateFormate(orderInfo?.created_at);
 	const updated_at = getDateFormate(orderInfo?.updated_at);
 	const delivery_date = getDateFormate(orderInfo?.delivery_date);
+	const pi_number = orderInfo?.pi_number;
 
 	// const data = {
 	// 	: 'Test Buyer',
@@ -65,6 +66,7 @@ export const getPageHeader = (orderInfo) => {
 							bold: true,
 						},
 						`O/N: ${orderInfo?.order_number}\n`,
+						`PI Number: ${pi_number ? pi_number : '---'}\n`,
 						`Date: ${created_at}`,
 					],
 					alignment: 'right',
@@ -89,7 +91,7 @@ export const getPageHeader = (orderInfo) => {
 			],
 			[
 				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
-				orderInfo?.factory_name,
+				orderInfo?.factory_address,
 				{ text: 'Buyer', bold: true, color: PRIMARY_COLOR },
 				orderInfo?.buyer_name,
 			],

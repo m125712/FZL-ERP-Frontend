@@ -1,12 +1,14 @@
-import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useCommercialBank, useCommercialBankByUUID } from '@/state/Commercial';
-import { Input, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { BANK_NULL, BANK_SCHEMA } from '@util/Schema';
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
+import { useCommercialBank, useCommercialBankByUUID } from '@/state/Commercial';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
+import { BANK_NULL, BANK_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -82,6 +84,7 @@ export default function Index({
 			isSmall={true}>
 			<Input label='name' {...{ register, errors }} />
 			<Input label='swift_code' {...{ register, errors }} />
+			<Input label='routing_no' {...{ register, errors }} />
 			<Textarea label='address' rows='2' {...{ register, errors }} />
 			<Textarea label='policy' rows='3' {...{ register, errors }} />
 			<Textarea label='remarks' rows='3' {...{ register, errors }} />

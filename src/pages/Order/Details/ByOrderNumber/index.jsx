@@ -44,6 +44,7 @@ export default function Index() {
 	}, [order_number]);
 
 	useEffect(() => {
+		
 		if (orders.length > 0) {
 			const order_info = {
 				id: orders[0]?.id,
@@ -61,6 +62,7 @@ export default function Index() {
 				user_name: orders[0]?.user_name,
 				// date: format(new Date(orders[0]?.created_at), 'dd/MM/yyyy'),
 				updated_at: orders[0]?.updated_at,
+				created_at: orders[0]?.created_at,
 			};
 
 			const order_sheet = {
@@ -110,11 +112,11 @@ export default function Index() {
 
 	return (
 		<div className='flex flex-col py-4'>
-			{/* <iframe
+			<iframe
 				id="iframeContainer"
 				src={data}
 				className="h-[40rem] w-full rounded-md border-none"
-			/> */}
+			/>
 
 			<OrderInformation
 				order={order_info}

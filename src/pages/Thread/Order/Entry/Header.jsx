@@ -1,9 +1,10 @@
-import { useFetch } from '@/hooks';
-import { CheckBox, FormField, ReactSelect, SectionEntryBody } from '@/ui';
-import { DateInput, Textarea } from '@/ui/Core';
 import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useParams } from 'react-router-dom';
+import { useFetch } from '@/hooks';
+
+import { DateInput, Textarea } from '@/ui/Core';
+import { CheckBox, FormField, ReactSelect, SectionEntryBody } from '@/ui';
 
 export default function Header({
 	register,
@@ -25,6 +26,11 @@ export default function Header({
 			? true
 			: false
 	);
+	const [isCash, setIsCash] = useState(
+		typeof getValues('is_cash') !== 'boolean' && getValues('is_cash') === 1
+			? true
+			: false
+	);
 
 	const [partyId, setPartyId] = useState(getValues('party_uuid'));
 	const { value: party } = useFetch('/other/party/value/label');
@@ -40,7 +46,7 @@ export default function Header({
 
 	const { value: buyer } = useFetch('/other/buyer/value/label');
 	const { value: marketing } = useFetch('/other/marketing/value/label');
-	console.log(partyId);
+
 
 	useEffect(() => {
 		setPartyId(getValues('party_uuid'));
@@ -52,7 +58,7 @@ export default function Header({
 				title='Order'
 				header={
 					<div className='flex justify-end gap-2 p-2 text-sm'>
-						<div className='rounded-md bg-primary px-1 border border-accent/50'>
+						<div className='rounded-md border border-accent/50 bg-primary px-1'>
 							<CheckBox
 								label='is_sample'
 								title='Sample'
@@ -62,7 +68,7 @@ export default function Header({
 								onChange={(e) => setIsSample(e.target.checked)}
 							/>
 						</div>
-						<div className='rounded-md bg-primary px-1 border border-accent/50'>
+						<div className='rounded-md border border-accent/50 bg-primary px-1'>
 							<CheckBox
 								title='Bill'
 								label='is_bill'
@@ -70,6 +76,16 @@ export default function Header({
 								defaultChecked={isBill}
 								{...{ register, errors }}
 								onChange={(e) => setIsBill(e.target.checked)}
+							/>
+						</div>
+						<div className='rounded-md border border-accent/50 bg-primary px-1'>
+							<CheckBox
+								title='Cash'
+								label='is_cash'
+								text='text-primary-content'
+								defaultChecked={isCash}
+								{...{ register, errors }}
+								onChange={(e) => setIsCash(e.target.checked)}
 							/>
 						</div>
 					</div>

@@ -56,9 +56,6 @@ export default function Index() {
 		name: 'batch_entry',
 	});
 
-
-	
-
 	// * Fetch initial data
 	isUpdate
 		? useFetchForRhfReset(
@@ -183,9 +180,12 @@ export default function Index() {
 			});
 		} else {
 			if (
-				// * check if all colors are same
+				// * check if all colors and bleaching are same
 				!batch_entry.every(
 					(item) => item.color === batch_entry[0].color
+				) ||
+				!batch_entry.every(
+					(item) => item.bleaching === batch_entry[0].bleaching
 				)
 			) {
 				window['proceed_modal'].showModal(); // * if not then show modal
@@ -365,6 +365,12 @@ export default function Index() {
 				enableSorting: true,
 			},
 			{
+				accessorKey: 'bleaching',
+				header: 'Bleach',
+				enableColumnFilter: true,
+				enableSorting: true,
+			},
+			{
 				accessorKey: 'color',
 				header: 'Color',
 				enableColumnFilter: true,
@@ -514,7 +520,7 @@ export default function Index() {
 
 			<Suspense>
 				<ProceedModal
-					text='Color'
+					text='Color or Bleach'
 					modalId={'proceed_modal'}
 					setProceed={setProceed}
 				/>

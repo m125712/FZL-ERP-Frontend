@@ -166,16 +166,8 @@ export default function Header({
 					/>
 				</FormField>
 
-				<Input
-					label='conversion_rate'
-					type='number'
-					{...{ register, errors }}
-				/>
-				<Input
-					label='receive_amount'
-					type='number'
-					{...{ register, errors }}
-				/>
+				<Input label='conversion_rate' {...{ register, errors }} />
+				<Input label='receive_amount' {...{ register, errors }} />
 			</div>
 
 			<div className='grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4 xl:grid-cols-6'>

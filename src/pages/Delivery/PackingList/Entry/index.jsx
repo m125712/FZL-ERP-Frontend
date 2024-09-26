@@ -120,6 +120,7 @@ export default function Index() {
 						return await postData.mutateAsync({
 							url: deliveryPackingListEntryUrl,
 							newData: {
+								...item,
 								uuid: nanoid(),
 								is_checked: item.is_checked,
 								quantity: item?.quantity,
@@ -132,6 +133,7 @@ export default function Index() {
 
 					if (item.uuid && item.quantity >= 0) {
 						const updatedData = {
+							...item,
 							quantity: item.quantity,
 							is_checked: item.is_checked,
 							remarks: item.remarks,

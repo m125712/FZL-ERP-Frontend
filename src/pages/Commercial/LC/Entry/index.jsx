@@ -118,6 +118,7 @@ export default function Index() {
 				ud_no: data.ud_no ? 1 : 0,
 				problematical: data.problematical ? 1 : 0,
 				epz: data.epz ? 1 : 0,
+				is_rtgs: data.is_rtgs ? 1 : 0,
 				production_complete: data.production_complete ? 1 : 0,
 				lc_cancel: data.lc_cancel ? 1 : 0,
 				updated_at,
@@ -131,7 +132,6 @@ export default function Index() {
 			});
 
 			const lc_number = res?.data?.[0].updatedId;
-			
 
 			// Update Deletable Pi
 			if (deletablePi.length > 0) {
@@ -196,6 +196,7 @@ export default function Index() {
 			ud_no: data.ud_no ? 1 : 0,
 			problematical: data.problematical ? 1 : 0,
 			epz: data.epz ? 1 : 0,
+			is_rtgs: data.is_rtgs ? 1 : 0,
 			production_complete: data.production_complete ? 1 : 0,
 			lc_cancel: data.lc_cancel ? 1 : 0,
 			created_at,

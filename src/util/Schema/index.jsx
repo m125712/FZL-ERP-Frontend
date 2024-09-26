@@ -1,34 +1,34 @@
 import * as yup from 'yup';
 
-
-
-import { BOOLEAN // default
-, BOOLEAN_DEFAULT_VALUE // default
-, BOOLEAN_REQUIRED // default
-, EMAIL // default
-, EMAIL_REQUIRED // default
-, FORTUNE_ZIP_EMAIL_PATTERN // default
-, JSON_STRING // default
-, JSON_STRING_REQUIRED // default
-, NAME, NAME_REQUIRED // default
-, NUMBER // default
-, NUMBER_DOUBLE // default
-, NUMBER_DOUBLE_REQUIRED // default
-, NUMBER_REQUIRED // default
-, ORDER_NUMBER // default
-, ORDER_NUMBER_NOT_REQUIRED // default
-, PASSWORD // default
-, PHONE_NUMBER // default
-, PHONE_NUMBER_REQUIRED // default
-, STRING // default
-, STRING_REQUIRED // default
-, URL // default
-, URL_REQUIRED // default
-, UUID // default
-, UUID_FK // default
-, UUID_PK // default
-, UUID_REQUIRED } from './utils';
-
+import {
+	BOOLEAN, // default
+	BOOLEAN_DEFAULT_VALUE, // default
+	BOOLEAN_REQUIRED, // default
+	EMAIL, // default
+	EMAIL_REQUIRED, // default
+	FORTUNE_ZIP_EMAIL_PATTERN, // default
+	JSON_STRING, // default
+	JSON_STRING_REQUIRED, // default
+	NAME,
+	NAME_REQUIRED, // default
+	NUMBER, // default
+	NUMBER_DOUBLE, // default
+	NUMBER_DOUBLE_REQUIRED, // default
+	NUMBER_REQUIRED, // default
+	ORDER_NUMBER, // default
+	ORDER_NUMBER_NOT_REQUIRED, // default
+	PASSWORD, // default
+	PHONE_NUMBER, // default
+	PHONE_NUMBER_REQUIRED, // default
+	STRING, // default
+	STRING_REQUIRED, // default
+	URL, // default
+	URL_REQUIRED, // default
+	UUID, // default
+	UUID_FK, // default
+	UUID_PK, // default
+	UUID_REQUIRED,
+} from './utils';
 
 export {
 	BOOLEAN,
@@ -1958,7 +1958,7 @@ export const DYEING_PLANNING_HEADOFFICE_NULL = {
 
 export const DYEING_BATCH_SCHEMA = {
 	machine_uuid: STRING_REQUIRED,
-	slot: NUMBER.nullable(),
+	slot: NUMBER.default(0),
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
 		yup.object().shape({
@@ -1984,7 +1984,7 @@ export const DYEING_BATCH_SCHEMA = {
 
 export const DYEING_BATCH_NULL = {
 	machine_uuid: null,
-	slot: null,
+	slot: 0,
 	remarks: '',
 	batch_entry: [
 		{
@@ -1999,7 +1999,7 @@ export const DYEING_BATCH_NULL = {
 
 export const DYEING_THREAD_BATCH_SCHEMA = {
 	machine_uuid: STRING_REQUIRED,
-	slot: NUMBER.nullable(),
+	slot: NUMBER.default(0),
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
 		yup.object().shape({
@@ -2010,7 +2010,7 @@ export const DYEING_THREAD_BATCH_SCHEMA = {
 
 export const DYEING_THREAD_BATCH_NULL = {
 	machine_uuid: null,
-	slot: null,
+	slot: 0,
 	remarks: '',
 	batch_entry: [
 		{

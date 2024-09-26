@@ -16,7 +16,7 @@ export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
 		useThreadSwatch();
 	const info = new PageInfo(
-		'Dyeing/Swatch',
+		'LabDip/Thread Swatch',
 		'order/swatch',
 		'lab_dip__thread_swatch'
 	);

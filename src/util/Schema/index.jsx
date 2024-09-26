@@ -116,9 +116,11 @@ export const BUYER_NULL = {
 	short_name: '',
 	remarks: '',
 };
+
 export const PARTY_SCHEMA = {
 	name: STRING_REQUIRED,
 	short_name: STRING.nullable(),
+	address: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
@@ -126,6 +128,7 @@ export const PARTY_NULL = {
 	uuid: null,
 	name: '',
 	short_name: '',
+	address: '',
 	remarks: '',
 };
 
@@ -1575,6 +1578,9 @@ export const LC_SCHEMA = {
 	party_bank: STRING_REQUIRED,
 	production_complete: BOOLEAN_REQUIRED,
 	lc_cancel: BOOLEAN_REQUIRED,
+	problematical: BOOLEAN_REQUIRED,
+	epz: BOOLEAN_REQUIRED,
+	is_rtgs: BOOLEAN_REQUIRED,
 	document_receive_date: STRING.nullable().transform(
 		(value, originalValue) =>
 			String(originalValue).trim() === '' ? null : value
@@ -1595,8 +1601,6 @@ export const LC_SCHEMA = {
 		String(originalValue).trim() === '' ? null : value
 	),
 	amd_count: NUMBER,
-	problematical: BOOLEAN_REQUIRED,
-	epz: BOOLEAN_REQUIRED,
 	remarks: STRING.nullable(),
 	pi: yup.array().of(
 		yup.object().shape({
@@ -1629,6 +1633,7 @@ export const LC_NULL = {
 	amd_count: 0,
 	problematical: false,
 	epz: false,
+	is_rtgs: false,
 	remarks: null,
 	pi: [
 		{

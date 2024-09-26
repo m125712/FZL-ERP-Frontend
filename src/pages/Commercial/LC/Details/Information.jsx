@@ -96,6 +96,7 @@ export default function Information({ lc }) {
 		commercial_executive,
 		party_bank,
 		production_complete,
+		is_rtgs,
 		lc_cancel,
 		handover_date,
 		shipment_date,
@@ -131,10 +132,13 @@ export default function Information({ lc }) {
 					</div>
 				),
 			},
-
 			{
 				label: 'Total Value',
 				value: Number(total_value).toFixed(2),
+			},
+			{
+				label: 'RTGS',
+				value: is_rtgs ? 'Yes' : 'No',
 			},
 			{
 				label: 'LC Cancelled',

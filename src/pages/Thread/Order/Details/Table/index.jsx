@@ -5,8 +5,6 @@ import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime } from '@/ui';
 
 export default function Index({ order_info_entry }) {
-	console.log(order_info_entry);
-
 	const columns = useMemo(
 		() => [
 			{

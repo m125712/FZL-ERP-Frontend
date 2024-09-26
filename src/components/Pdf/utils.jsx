@@ -48,7 +48,7 @@ export const TableHeader = (node) => {
 };
 
 // * HELPER: GET EMPTY COLUMN
-const getEmptyColumn = (colSpan) => {
+export const getEmptyColumn = (colSpan) => {
 	const EMPTY_COLUMN = [];
 	for (let i = 0; i < colSpan - 1; i++) {
 		EMPTY_COLUMN.push('');

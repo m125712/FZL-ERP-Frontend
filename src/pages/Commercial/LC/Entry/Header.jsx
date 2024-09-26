@@ -48,6 +48,14 @@ export default function Header({
 				<div className='flex gap-1 overflow-auto text-sm md:justify-end'>
 					<div className='rounded-md bg-primary px-1'>
 						<CheckBox
+							title='RTGS'
+							label='is_rtgs'
+							text='text-primary-content'
+							{...{ register, errors }}
+						/>
+					</div>
+					<div className='rounded-md bg-primary px-1'>
+						<CheckBox
 							title='Problematic'
 							label='problematical'
 							text='text-primary-content'

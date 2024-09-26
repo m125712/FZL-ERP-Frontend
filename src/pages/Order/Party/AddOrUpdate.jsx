@@ -81,6 +81,7 @@ export default function Index({
 			isSmall={true}>
 			<Input label='name' {...{ register, errors }} />
 			<Input label='short_name' {...{ register, errors }} />
+			<Input label='address' {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>

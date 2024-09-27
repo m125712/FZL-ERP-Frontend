@@ -186,6 +186,7 @@ export default function Index() {
 		trx_to: null,
 		remarks: '',
 	});
+	
 	const handelTransaction = (idx) => {
 		const val = data[idx];
 

@@ -1,20 +1,22 @@
-import pdfMake from "@/components/Pdf/pdfMake";
+import pdfMake from '@/components/Pdf/pdfMake';
 import {
 	DEFAULT_FONT_SIZE,
 	defaultStyle,
 	styles,
 	xMargin,
-} from "@/components/Pdf/ui";
-import { TableHeader, getPageFooter, getPageHeader } from "./utils";
+} from '@/components/Pdf/ui';
+
+import { getPageFooter, getPageHeader, TableHeader } from './utils';
 
 export default function OrderSheetPdf(order_sheet) {
 	const headerHeight = 100;
 	let footerHeight = 30;
 	const { order_info, order_entry } = order_sheet;
 
+	console.log(order_entry);
 	const pdfDocGenerator = pdfMake.createPdf({
-		pageSize: "A4",
-		pageOrientation: "portrait",
+		pageSize: 'A4',
+		pageOrientation: 'portrait',
 		pageMargins: [xMargin, headerHeight, xMargin, footerHeight],
 		defaultStyle,
 		styles,
@@ -22,12 +24,13 @@ export default function OrderSheetPdf(order_sheet) {
 		// Page Header
 		header: {
 			table: {
-				widths: [35, "*", 42, "*"],
+				widths: [35, '*', 42, '*'],
 				body: getPageHeader(order_info),
 			},
-			layout: "noBorders",
+			layout: 'noBorders',
 			margin: [xMargin, 10, xMargin, 0],
 		},
+
 		// Page Footer
 		footer: function (currentPage, pageCount) {
 			return {
@@ -50,6 +53,15 @@ export default function OrderSheetPdf(order_sheet) {
 						order_entry.map((item) => Number(item.size)).sort()
 					),
 				];
+
+				const uniqueColor = () => {
+					const uniqueColors = new Set();
+					order_entry.forEach((item) => {
+						uniqueColors.add(item.color);
+					});
+
+					return uniqueColors.size;
+				};
 
 				const res = order_entry.reduce((acc, item) => {
 					const key = item.style;
@@ -89,11 +101,11 @@ export default function OrderSheetPdf(order_sheet) {
 					{
 						table: {
 							widths: [
-								30,
+								50,
 								67,
-								...uniqueSizes.map(() => "*"),
+								...uniqueSizes.map(() => '*'),
 								// ...uniqueSizes.map(() => 20),
-								"*",
+								'*',
 							],
 							body: [
 								// Table Header
@@ -114,16 +126,16 @@ export default function OrderSheetPdf(order_sheet) {
 												{
 													rowSpan: res[style].length,
 													text: style,
-													style: "tableCell",
+													style: 'tableCell',
 												},
 												{
 													text: colorName,
-													style: "tableCell",
+													style: 'tableCell',
 												},
 												...quantities.map((qty) => ({
 													text: qty,
-													style: "tableCell",
-													alignment: "right",
+													style: 'tableCell',
+													alignment: 'right',
 												})),
 												{
 													text: quantities.reduce(
@@ -132,8 +144,8 @@ export default function OrderSheetPdf(order_sheet) {
 															Number(qty),
 														0
 													),
-													style: "tableCell",
-													alignment: "right",
+													style: 'tableCell',
+													alignment: 'right',
 												},
 											];
 										})
@@ -144,12 +156,15 @@ export default function OrderSheetPdf(order_sheet) {
 
 								[
 									{
-										colSpan: 2,
-										text: "Total",
-										style: "tableFooter",
-										alignment: "right",
+										text: 'Total Color',
+										style: 'tableFooter',
+										alignment: 'Center',
 									},
-									"",
+									{
+										text: uniqueColor(),
+										style: 'tableFooter',
+										alignment: 'right',
+									},
 									...uniqueSizes.map((size) => {
 										return {
 											text: order_entry.reduce(
@@ -162,8 +177,8 @@ export default function OrderSheetPdf(order_sheet) {
 														: acc,
 												0
 											),
-											style: "tableFooter",
-											alignment: "right",
+											style: 'tableFooter',
+											alignment: 'right',
 										};
 									}),
 									{
@@ -173,8 +188,23 @@ export default function OrderSheetPdf(order_sheet) {
 												Number(item.quantity),
 											0
 										),
-										style: "tableFooter",
-										alignment: "right",
+										style: 'tableFooter',
+										alignment: 'right',
+									},
+								],
+
+								// * remarks
+								[
+									{
+										text: 'Remarks',
+										style: 'tableFooter',
+										alignment: 'Center',
+									},
+									{
+										colSpan: uniqueSizes.length + 2,
+										text: entry?.remarks,
+										style: 'tableFooter',
+										alignment: 'left',
 									},
 								],
 							],

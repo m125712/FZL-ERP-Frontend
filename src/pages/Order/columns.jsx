@@ -88,7 +88,31 @@ export const PartyColumns = ({
 	haveAccess,
 	data,
 }) => {
-	return BuyerColumns({ handelUpdate, handelDelete, haveAccess, data });
+	return useMemo(
+		() => [
+			{
+				accessorKey: 'name',
+				header: 'Name',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'short_name',
+				header: 'Short Name',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'address',
+				header: 'Address',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
+			...DEFAULT_COLUMNS({ handelUpdate, handelDelete, haveAccess }),
+		],
+		[data]
+	);
 };
 
 export const FactoryColumns = ({

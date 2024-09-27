@@ -352,6 +352,7 @@ export const dyeingQK = {
 	threadBatchEntry: () => [...dyeingQK.all(), 'thread-batch-entry'],
 	threadBatchEntryByUUID: (uuid) => [...dyeingQK.threadBatchEntry(), uuid],
 
+	
 	// * Order Against dyeing RM Log * //
 	orderAgainstDyeingRMLog: () => [
 		...dyeingQK.all(),
@@ -941,6 +942,21 @@ export const threadQK = {
 	//Programs
 	programs: () => [...threadQK.all(), 'programs'],
 	programsByUUID: (uuid) => [...threadQK.programs(), uuid],
+
+	// * Coning
+	coning: () => [...threadQK.all(), 'coning'],
+
+	// log
+	ConningProdlog: () => [...threadQK.all(), 'conning/prodlog'],
+	ConningTrxlog: () => [...threadQK.all(), 'conning/trxlog'],
+
+	// prod entry
+	ConningProd : () => [...threadQK.all(), 'conning/prod'],
+	ConningProdByUUID: (uuid) => [...threadQK.ConningProd(), uuid],
+
+	// trx entry
+	ConningTrx: () => [...threadQK.all(), 'conning/trx'],
+	ConningTrxByUUID: (uuid) => [...threadQK.ConningTrx(), uuid],
 };
 
 //* OTHER QUERY KEYS

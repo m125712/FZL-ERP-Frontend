@@ -121,7 +121,7 @@ export const useCommercialLCByUUID = (uuid) =>
 export const useCommercialLCPIByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: commercialQK.lcByPi(uuid),
-		url: `/commercial/lc-pi/by/${uuid}`,
+		url: `/commercial/lc-pi-cash/by/${uuid}`,
 		enabled: !!uuid,
 	});
 

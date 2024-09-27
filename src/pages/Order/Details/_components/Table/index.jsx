@@ -21,7 +21,7 @@ export default function Index({
 	const columns = useMemo(
 		() =>
 			getColumn({
-				item_name: item_name.toLowerCase(),
+				item_name: item_name?.toLowerCase(),
 				end_type_name,
 				stopper_type_name,
 				zipper_number_name,

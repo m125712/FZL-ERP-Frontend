@@ -116,9 +116,11 @@ export const BUYER_NULL = {
 	short_name: '',
 	remarks: '',
 };
+
 export const PARTY_SCHEMA = {
 	name: STRING_REQUIRED,
 	short_name: STRING.nullable(),
+	address: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
@@ -126,6 +128,7 @@ export const PARTY_NULL = {
 	uuid: null,
 	name: '',
 	short_name: '',
+	address: '',
 	remarks: '',
 };
 
@@ -603,7 +606,7 @@ export const LAB_RECIPE_SCHEMA = {
 	lab_dip_info_uuid: null,
 	name: STRING_REQUIRED,
 	bleaching: STRING_REQUIRED,
-	sub_streat: STRING_REQUIRED,
+	sub_streat: STRING.nullable(),
 	approved: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	status: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	remarks: STRING.nullable(),
@@ -1627,6 +1630,7 @@ export const PI_CASH_NULL = {
 export const BANK_SCHEMA = {
 	name: STRING_REQUIRED,
 	swift_code: STRING_REQUIRED,
+	routing_no: STRING.nullable(),
 	address: STRING_REQUIRED,
 	policy: STRING_REQUIRED,
 	remarks: STRING.nullable(),
@@ -1636,6 +1640,7 @@ export const BANK_NULL = {
 	uuid: null,
 	name: '',
 	swift_code: '',
+	routing_no: '',
 	address: '',
 	policy: '',
 	remarks: null,
@@ -1661,6 +1666,9 @@ export const LC_SCHEMA = {
 	party_bank: STRING_REQUIRED,
 	production_complete: BOOLEAN_REQUIRED,
 	lc_cancel: BOOLEAN_REQUIRED,
+	problematical: BOOLEAN_REQUIRED,
+	epz: BOOLEAN_REQUIRED,
+	is_rtgs: BOOLEAN_REQUIRED,
 	document_receive_date: STRING.nullable().transform(
 		(value, originalValue) =>
 			String(originalValue).trim() === '' ? null : value
@@ -1681,8 +1689,6 @@ export const LC_SCHEMA = {
 		String(originalValue).trim() === '' ? null : value
 	),
 	amd_count: NUMBER,
-	problematical: BOOLEAN_REQUIRED,
-	epz: BOOLEAN_REQUIRED,
 	remarks: STRING.nullable(),
 	pi: yup.array().of(
 		yup.object().shape({
@@ -1715,6 +1721,7 @@ export const LC_NULL = {
 	amd_count: 0,
 	problematical: false,
 	epz: false,
+	is_rtgs: false,
 	remarks: null,
 	pi: [
 		{
@@ -1898,13 +1905,14 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 	buyer_uuid: STRING_REQUIRED,
 	is_sample: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	is_bill: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+	is_cash: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	delivery_date: yup.date().nullable(),
 	remarks: STRING.nullable(),
 	order_info_entry: yup.array().of(
 		yup.object().shape({
 			color: STRING_REQUIRED,
-			shade_recipe_uuid: STRING.nullable(),
-			po: STRING_REQUIRED,
+			// shade_recipe_uuid: STRING.nullable(),
+			// po: STRING_REQUIRED,
 			style: STRING_REQUIRED,
 			count_length_uuid: STRING_REQUIRED,
 			bleaching: STRING_REQUIRED,
@@ -1928,6 +1936,7 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 	buyer_uuid: null,
 	is_sample: false,
 	is_bill: false,
+	is_cash: false,
 	issued_by: null,
 	remarks: '',
 	delivery_date: null,
@@ -1935,8 +1944,8 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 		{
 			uuid: null,
 			order_info_uuid: null,
-			po: '',
-			shade_recipe_uuid: null,
+			// po: '',
+			// shade_recipe_uuid: null,
 			style: '',
 			color: '',
 			count_length_uuid: null,
@@ -2046,7 +2055,7 @@ export const DYEING_PLANNING_HEADOFFICE_NULL = {
 
 export const DYEING_BATCH_SCHEMA = {
 	machine_uuid: STRING_REQUIRED,
-	slot: NUMBER.nullable(),
+	slot: NUMBER.default(0),
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
 		yup.object().shape({
@@ -2072,7 +2081,7 @@ export const DYEING_BATCH_SCHEMA = {
 
 export const DYEING_BATCH_NULL = {
 	machine_uuid: null,
-	slot: null,
+	slot: 0,
 	remarks: '',
 	batch_entry: [
 		{
@@ -2087,7 +2096,7 @@ export const DYEING_BATCH_NULL = {
 
 export const DYEING_THREAD_BATCH_SCHEMA = {
 	machine_uuid: STRING_REQUIRED,
-	slot: NUMBER.nullable(),
+	slot: NUMBER.default(0),
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
 		yup.object().shape({
@@ -2098,7 +2107,7 @@ export const DYEING_THREAD_BATCH_SCHEMA = {
 
 export const DYEING_THREAD_BATCH_NULL = {
 	machine_uuid: null,
-	slot: null,
+	slot: 0,
 	remarks: '',
 	batch_entry: [
 		{

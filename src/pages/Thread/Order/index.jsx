@@ -1,11 +1,14 @@
+import { lazy, useMemo, useState } from 'react';
+import { useThreadOrderInfo } from '@/state/Thread';
+import { useNavigate } from 'react-router-dom';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useThreadOrderInfo } from '@/state/Thread';
 import { DateTime, EditDelete, LinkOnly, StatusButton } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
@@ -73,6 +76,21 @@ export default function Index() {
 			{
 				accessorKey: 'is_bill',
 				header: 'Bill',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<div className='flex space-x-1'>
+							<StatusButton
+								size='btn-xs'
+								value={info.getValue()}
+							/>
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'is_cash',
+				header: 'Cash',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return (

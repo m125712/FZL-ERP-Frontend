@@ -74,7 +74,9 @@ export default function Index() {
 						? 'TXP'
 						: info.getValue() === 'ssp'
 							? 'SSP'
-							: 'Others',
+							: info.getValue() === 'others'
+								? 'Others'
+								: '',
 			},
 			{
 				accessorKey: 'bleaching',

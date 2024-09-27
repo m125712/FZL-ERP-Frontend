@@ -7,12 +7,8 @@ import { DateTime, TitleValue } from '@/ui';
 
 export default function Information({ orderInfo }) {
 	useEffect(() => {
-		document.title = `Shade Recipe Details of ${orderInfo?.uuid}`;
+		document.title = `Thread Order Details of ${orderInfo?.uuid}`;
 	}, []);
-
-	console.log({
-		orderInfo,
-	});
 
 	const {
 		uuid,
@@ -21,9 +17,11 @@ export default function Information({ orderInfo }) {
 		buyer_name,
 		marketing_name,
 		factory_name,
+		factory_address,
 		merchandiser_name,
 		is_sample,
 		is_bill,
+		is_cash,
 		delivery_date,
 		created_by_name,
 		remarks,
@@ -45,6 +43,11 @@ export default function Information({ orderInfo }) {
 			{
 				label: 'Is Bill',
 				value: is_bill === 1 ? 'Yes' : 'No',
+			},
+
+			{
+				label: 'Is Cash',
+				value: is_cash === 1 ? 'Yes' : 'No',
 			},
 
 			{
@@ -88,6 +91,10 @@ export default function Information({ orderInfo }) {
 			{
 				label: 'Factory',
 				value: factory_name,
+			},
+			{
+				label: 'Factory Address',
+				value: factory_address,
 			},
 			{
 				label: 'Marketing',

@@ -10,7 +10,7 @@ import PageInfo from '@/util/PageInfo';
 export default function Index() {
 	const { data, updateData, isLoading } = useDyeingSwatch();
 	const info = new PageInfo(
-		'Dyeing/Swatch',
+		'LabDip/ZipperSwatch',
 		'order/swatch',
 		'lab_dip__zipper_swatch'
 	);

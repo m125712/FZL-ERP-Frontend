@@ -26,8 +26,7 @@ const getGarmentInfo = (order_description) => {
 };
 
 export default function ItemDescription({ order_description, className }) {
-	console.log(order_description);
-	
+
 	const [sliderQuantity, total_size, tape_production] =
 		order_description?.order_entry.reduce(
 			([sliderQuantity, total_size, tape_production], item) => {
@@ -103,7 +102,7 @@ export default function ItemDescription({ order_description, className }) {
 				label: 'zipper no',
 				value: zipper_number_name,
 			},
-			...(item_name.toLowerCase() === 'nylon'
+			...(item_name?.toLowerCase() === 'nylon'
 				? [
 						{
 							label: 'Nylon Stopper',
@@ -115,7 +114,7 @@ export default function ItemDescription({ order_description, className }) {
 				label: 'end',
 				value: end_type_name,
 			},
-			...(end_type_name.toLowerCase() === 'open end'
+			...(end_type_name?.toLowerCase() === 'open end'
 				? [
 						{
 							label: 'Hand',

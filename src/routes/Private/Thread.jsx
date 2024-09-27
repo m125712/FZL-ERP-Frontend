@@ -3,12 +3,12 @@ import Coning from '@pages/Thread/Conneing';
 import ConingDetails from '@pages/Thread/Conneing/Details';
 import ConingEntry from '@pages/Thread/Conneing/Entry';
 import CountLength from '@pages/Thread/CountLength';
-import DyesCategory from '@pages/Thread/DyesCategory';
 //Order
 import OrderInfo from '@pages/Thread/Order';
 import IndOrderInfo from '@pages/Thread/Order/Details';
 import OrderInfoEntry from '@pages/Thread/Order/Entry';
-import Programs from '@pages/Thread/Programs';
+// Log
+import Log from '@pages/Thread/Log';
 
 export const ThreadRoutes = [
 	{
@@ -53,20 +53,6 @@ export const ThreadRoutes = [
 				actions: ['create', 'read', 'update', 'delete'],
 				hidden: true,
 			},
-			{
-				name: 'Programs',
-				path: '/thread/programs',
-				element: <Programs />,
-				page_name: 'thread__programs',
-				actions: ['create', 'read', 'update', 'delete'],
-			},
-			{
-				name: 'Dyes Category',
-				path: '/thread/dyes-category',
-				element: <DyesCategory />,
-				page_name: 'thread__dyes_category',
-				actions: ['create', 'read', 'update', 'delete'],
-			},
 
 			{
 				name: 'Coning Entry',
@@ -89,8 +75,16 @@ export const ThreadRoutes = [
 				path: '/thread/coning',
 				element: <Coning />,
 				page_name: 'thread__coning_details',
-				actions: ['create', 'read', 'update', 'delete'],
+				actions: ['create', 'read', 'update', 'delete', 'click_production', 'click_transaction'],
 			},
+
+			{
+				name: 'Log',
+				path: '/thread/log',
+				element: <Log />,
+				page_name: 'thread__log',
+				actions: ['create', 'read', 'update', 'delete'],
+			}
 		],
 	},
 ];

@@ -12,6 +12,7 @@ const node = [
 	getTable('color', 'Color'),
 	getTable('style', 'Style'),
 	getTable('count_length_name', 'Count Length'),
+	getTable('bleaching', 'Bleaching'),
 	getTable('quantity', 'Quantity', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
@@ -19,33 +20,30 @@ const node = [
 export default function Index(orderInfo) {
 	const headerHeight = 170;
 	let footerHeight = 50;
-	const { order_info_entry } = orderInfo;
+	let { order_info_entry } = orderInfo;
 
-	// bleaching: 'non-bleach';
-	// : 'Balck';
-	// company_price: '1.2000';
-	// count: '30/3';
-	// : '30/3 - 2500';
-	// count_length_uuid: 'KBLu6r1TcGxyCaO';
-	// created_at: '2024-09-26 16:39:48';
-	// created_by: 'RL1xtJnYkxGrTMz';
-	// created_by_name: 'Mirsad';
-	// lab_reference: null;
-	// length: '2500';
-	// order_entry_uuid: 'zGf8tmztEhrF1hl';
-	// order_info_uuid: 'eXwsNjbAI7bjRI0';
-	// party_price: '1.3000';
-	// po: null;
-	// production_quantity: '0.0000';
-	// : '130.0000';
-	// recipe_name: null;
-	// recipe_uuid: null;
-	// : '';
-	// : 'S-1-B';
-	// swatch_approval_date: '2024-09-26 16:39:49';
-	// transfer_quantity: '0.0000';
-	// updated_at: null;
-	// uuid: 'zGf8tmztEhrF1hl';
+	const calculateSummary = (order_info_entry) => {
+		let totalQuantity = 0;
+		const uniqueColors = new Set();
+
+		order_info_entry.forEach((item) => {
+			totalQuantity += parseFloat(item.quantity);
+			uniqueColors.add(item.color);
+		});
+
+		return {
+			totalQuantity: totalQuantity.toFixed(4),
+			uniqueColorsCount: uniqueColors.size,
+		};
+	};
+	order_info_entry = order_info_entry.map((item) => ({
+		...item,
+		bleaching: item.bleaching === 'bleach' ? 'Bleach' : 'Non-Bleach',
+		quantity: Number(item.quantity) || 0,
+	}));
+
+	const { totalQuantity, uniqueColorsCount } =
+		calculateSummary(order_info_entry);
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
@@ -75,7 +73,7 @@ export default function Index(orderInfo) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [70, 70, 70, 70, '*'],
+					widths: [40, 50, 70, 50, 50, '*'],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -88,6 +86,24 @@ export default function Index(orderInfo) {
 								alignment: nodeItem.alignment,
 							}))
 						),
+						[
+							{
+								text: `Total Color: ${Number(uniqueColorsCount)}`,
+								bold: true,
+								colSpan: 2,
+							},
+							{},
+							{},
+
+							{
+								text: `Total Quantity: ${Number(totalQuantity)}`,
+								alignment: 'right',
+								bold: true,
+								colSpan: 2,
+							},
+							{},
+							{},
+						],
 					],
 				},
 				// layout: 'lightHorizontalLines',

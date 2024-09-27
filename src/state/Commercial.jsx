@@ -35,11 +35,11 @@ export const useCommercialPIByUUID = (uuid) =>
 		enabled: !!uuid,
 	});
 
-export const useCommercialPIDetailsByUUID = (uuid, { enabled = true }) =>
+export const useCommercialPIDetailsByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: commercialQK.piDetailsByUUID(uuid),
 		url: `/commercial/pi-cash/details/${uuid}`,
-		enabled,
+		enabled: !!uuid,
 	});
 
 export const useCommercialPIDetailsByPiId = (pi_cash_id) =>
@@ -67,8 +67,7 @@ export const useCommercialPIEntryByUUID = (uuid) =>
 export const useCommercialPIByOrderInfo = (
 	orderInfoIds,
 	partyId,
-	marketingId,
-	{ enabled = true }
+	marketingId
 ) =>
 	createGlobalState({
 		queryKey: commercialQK.piByOrderInfo(
@@ -78,7 +77,31 @@ export const useCommercialPIByOrderInfo = (
 		),
 
 		url: `/commercial/pi-cash/details/by/order-info-ids/${orderInfoIds}/${partyId}/${marketingId}`,
-		enabled,
+		enabled:
+			!!orderInfoIds &&
+			orderInfoIds.length > 0 &&
+			!!partyId &&
+			!!marketingId,
+	});
+
+export const useCommercialPThreadByOrderInfo = (
+	orderInfoIds,
+	partyId,
+	marketingId
+) =>
+	createGlobalState({
+		queryKey: commercialQK.piThreadByOrderInfo(
+			orderInfoIds,
+			partyId,
+			marketingId
+		),
+
+		url: `/commercial/pi-cash/thread-details/by/order-info-ids/${orderInfoIds}/${partyId}/${marketingId}`,
+		enabled:
+			!!orderInfoIds &&
+			orderInfoIds.length > 0 &&
+			!!partyId &&
+			!!marketingId,
 	});
 
 // * LC * //

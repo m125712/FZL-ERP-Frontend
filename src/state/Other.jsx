@@ -150,19 +150,37 @@ export const useOtherOrderDescriptionByOrderNumber = (orderNumber) =>
 		enabled: !!orderNumber,
 	});
 
-// GET OTHER ORDER NUMBER BY MARKETING AND PARTY UUID
-export const useOtherOrderNumberByMarketingAndPartyUUID = (
+// GET OTHER ORDER NUMBER FOR ZIPPER BY MARKETING AND PARTY UUID
+export const useOtherOrderNumberForZipperByMarketingAndPartyUUID = (
 	marketingUUID,
 	partyUUID,
-	isCash
+	params
 ) =>
 	createGlobalState({
-		queryKey: otherQK.orderNumberByMarketingAndPartyUUID(
+		queryKey: otherQK.orderNumberForZipperByMarketingAndPartyUUID(
 			marketingUUID,
 			partyUUID,
-			isCash
+			params
 		),
-		url: `/other/order-number-for-pi/value/label/${marketingUUID}/${partyUUID}?is_cash=${isCash}`,
+
+		url: `/other/order-number-for-pi-zipper/value/label/${marketingUUID}/${partyUUID}?${params}`,
+		enabled: !!marketingUUID && !!partyUUID,
+	});
+
+// GET OTHER ORDER NUMBER FOR THREAD BY MARKETING AND PARTY UUID
+export const useOtherOrderNumberForThreadByMarketingAndPartyUUID = (
+	partyUUID,
+	marketingUUID,
+	params
+) =>
+	createGlobalState({
+		queryKey: otherQK.orderNumberForThreadByMarketingAndPartyUUID(
+			partyUUID,
+			marketingUUID,
+			params
+		),
+
+		url: `/other/order-number-for-pi-thread/value/label/${partyUUID}/${marketingUUID}?${params}`,
 		enabled: !!marketingUUID && !!partyUUID,
 	});
 

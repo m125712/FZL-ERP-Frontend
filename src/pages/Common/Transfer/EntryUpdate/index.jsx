@@ -18,6 +18,7 @@ import {
 
 import nanoid from '@/lib/nanoid';
 import { DYEING_TRANSFER_NULL, DYEING_TRANSFER_SCHEMA } from '@util/Schema';
+import { exclude } from '@/util/Exclude';
 import GetDateTime from '@/util/GetDateTime';
 
 export default function Index() {
@@ -174,6 +175,12 @@ export default function Index() {
 	const { value: order_id } = useFetch(
 		`/other/order/description/value/label`
 	); // * get order id and set them as value & lables for select options
+	let excludeItem = exclude(
+		watch,
+		order_id,
+		'dyeing_transfer_entry',
+		'order_description_uuid'
+	);
 
 	return (
 		<div>
@@ -190,6 +197,7 @@ export default function Index() {
 							'Tape Required (MTR)',
 							'Tape Required (Kg)',
 							'Provided (Kg)',
+							'Stock (Kg)',
 							'Balance (Kg)',
 							'Trx Quantity',
 							'Remarks',
@@ -253,7 +261,16 @@ export default function Index() {
 																document.body
 															}
 															placeholder='Select Order Entry ID'
-															options={order_id}
+															options={order_id?.filter(
+																(inItem) =>
+																	!excludeItem?.some(
+																		(
+																			excluded
+																		) =>
+																			excluded?.value ===
+																			inItem?.value
+																	)
+															)}
 															value={
 																selectedValue
 															}
@@ -280,6 +297,12 @@ export default function Index() {
 										{Number(
 											selectedValue?.tape_transferred
 										).toFixed(3)}
+									</td>
+									<td>
+										{Number(selectedValue?.stock || 0) -
+											Number(
+												selectedValue?.tape_transferred
+											).toFixed(3)}
 									</td>
 									<td>
 										{Number(

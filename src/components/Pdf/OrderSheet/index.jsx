@@ -13,7 +13,7 @@ export default function OrderSheetPdf(order_sheet) {
 	let footerHeight = 30;
 	const { order_info, order_entry } = order_sheet;
 
-	console.log(order_entry);
+	
 	const pdfDocGenerator = pdfMake.createPdf({
 		pageSize: 'A4',
 		pageOrientation: 'portrait',

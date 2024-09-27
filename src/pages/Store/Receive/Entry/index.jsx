@@ -26,6 +26,7 @@ import {
 
 import nanoid from '@/lib/nanoid';
 import { PURCHASE_RECEIVE_NULL, PURCHASE_RECEIVE_SCHEMA } from '@util/Schema';
+import { exclude } from '@/util/Exclude';
 import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
@@ -110,7 +111,8 @@ export default function Index() {
 			remarks: '',
 		});
 	};
-
+	
+	let excludeItem = exclude(watch, material, 'purchase', 'material_uuid');
 	// Submit
 	const onSubmit = async (data) => {
 		// Update item
@@ -254,22 +256,6 @@ export default function Index() {
 			}, 0),
 		[watch()]
 	);
-	const [excludeItem, setExcludeItem] = useState([]);
-	useEffect(() => {
-		const newExcludeItems = watch('purchase').map((item) => {
-			const materialUuid = item?.material_uuid;
-
-			const selectedMaterial = material?.find(
-				(m) => m.value === materialUuid
-			);
-			return {
-				label: selectedMaterial?.label,
-				value: selectedMaterial?.value,
-			};
-		});
-
-		setExcludeItem(newExcludeItems);
-	}, [watch(), material]);
 
 	return (
 		<>

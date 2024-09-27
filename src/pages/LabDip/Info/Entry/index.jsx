@@ -19,6 +19,7 @@ import {
 
 import nanoid from '@/lib/nanoid';
 import { LAB_INFO_NULL, LAB_INFO_SCHEMA } from '@util/Schema';
+import { exclude } from '@/util/Exclude';
 import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
@@ -265,6 +266,7 @@ export default function Index() {
 		{ label: 'Pending', value: 0 },
 		{ label: 'Approved', value: 1 },
 	];
+	let excludeItem = exclude(watch, rec_uuid, 'recipe', 'recipe_uuid');
 
 	return (
 		<div>
@@ -321,7 +323,16 @@ export default function Index() {
 												return (
 													<ReactSelect
 														placeholder='Select recipe uuid'
-														options={rec_uuid}
+														options={rec_uuid?.filter(
+															(inItem) =>
+																!excludeItem?.some(
+																	(
+																		excluded
+																	) =>
+																		excluded?.value ===
+																		inItem?.value
+																)
+														)}
 														value={rec_uuid?.find(
 															(item) =>
 																item.value ==

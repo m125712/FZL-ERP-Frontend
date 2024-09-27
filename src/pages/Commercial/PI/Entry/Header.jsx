@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
 import {
 	useOtherBank,
 	useOtherFactoryByPartyUUID,
 	useOtherLcByPartyUUID,
 	useOtherMarketing,
 	useOtherMerchandiserByPartyUUID,
-	useOtherOrderNumberByMarketingAndPartyUUID,
 	useOtherParty,
 } from '@/state/Other';
 import { useParams } from 'react-router-dom';
@@ -18,8 +16,6 @@ import {
 	Textarea,
 } from '@/ui';
 
-import isJSON from '@/util/isJson';
-
 export default function Header({
 	register,
 	errors,
@@ -27,37 +23,23 @@ export default function Header({
 	getValues,
 	Controller,
 	isUpdate,
+	watch,
 }) {
 	const { pi_uuid } = useParams();
-	const [marketingId, setMarketingId] = useState(
-		pi_uuid != undefined ? getValues('marketing_uuid') : null
-	); // 2 is the default value
-	const [partyId, setPartyId] = useState(
-		pi_uuid != undefined ? getValues('party_uuid') : null
-	); // 47 is the default value
 
-	const { data: marketing } = useOtherMarketing();
-	const { data: party } = useOtherParty();
-	const { data: order_number } = useOtherOrderNumberByMarketingAndPartyUUID(
-		marketingId,
-		partyId,
-		false
-	);
-	const { data: merchandiser } = useOtherMerchandiserByPartyUUID(partyId);
-	const { data: factory } = useOtherFactoryByPartyUUID(partyId);
 	const { data: bank } = useOtherBank();
-	const { data: lc } = useOtherLcByPartyUUID(partyId);
+	const { data: party } = useOtherParty();
+	const { data: marketing } = useOtherMarketing();
 
-	useEffect(() => {
-		if (isUpdate) {
-			setMarketingId(getValues('marketing_uuid'));
-			setPartyId(getValues('party_uuid'));
-		}
-	}, [isUpdate, getValues('marketing_uuid'), getValues('party_uuid')]);
+	const { data: merchandiser } = useOtherMerchandiserByPartyUUID(
+		watch('party_uuid')
+	);
+	const { data: factory } = useOtherFactoryByPartyUUID(watch('party_uuid'));
+	const { data: lc } = useOtherLcByPartyUUID(watch('party_uuid'));
 
 	return (
 		<SectionEntryBody title='PI Information'>
-			<div className='grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4'>
+			<div className='grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4'>
 				<FormField label='lc_id' title='LC' errors={errors}>
 					<Controller
 						name='lc_uuid'
@@ -98,9 +80,7 @@ export default function Header({
 											getValues('marketing_uuid')
 									)}
 									onChange={(e) => {
-										const value = e.value;
-										onChange(value);
-										setMarketingId(value);
+										onChange(e.value);
 									}}
 									isDisabled={pi_uuid != undefined}
 								/>
@@ -123,65 +103,9 @@ export default function Header({
 											getValues('party_uuid')
 									)}
 									onChange={(e) => {
-										const value = e.value;
-										onChange(value);
-										setPartyId(value);
+										onChange(e.value);
 									}}
 									isDisabled={pi_uuid != undefined}
-								/>
-							);
-						}}
-					/>
-				</FormField>
-
-				<FormField
-					label='order_info_uuids'
-					title='Order Numbers'
-					errors={errors}>
-					<Controller
-						name='order_info_uuids'
-						control={control}
-						render={({ field: { onChange } }) => {
-							return (
-								<ReactSelect
-									isDisabled={isUpdate}
-									isMulti
-									placeholder='Select Order Numbers'
-									options={order_number}
-									value={order_number?.filter((item) => {
-										const order_info_uuids =
-											getValues('order_info_uuids');
-
-										if (order_info_uuids === null) {
-											return false;
-										} else {
-											if (isJSON(order_info_uuids)) {
-												console.log('--json--');
-												return JSON.parse(
-													order_info_uuids
-												)
-													.split(',')
-													.includes(item.value);
-											} else {
-												if (
-													!Array.isArray(
-														order_info_uuids
-													)
-												) {
-													return order_info_uuids.includes(
-														item.value
-													);
-												}
-
-												return order_info_uuids.includes(
-													item.value
-												);
-											}
-										}
-									})}
-									onChange={(e) => {
-										onChange(e.map(({ value }) => value));
-									}}
 								/>
 							);
 						}}

@@ -3,40 +3,27 @@ import { useMemo } from 'react';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, LinkWithCopy } from '@/ui';
 
-export default function Index({ pi }) {
+export default function ThreadTable({ pi_cash_entry_thread }) {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'order_number',
+				accessorKey: 'order_info_uuid',
 				header: 'O/N',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<LinkWithCopy
-						title={info.getValue()}
-						id={info.getValue()}
-						uri='/order/details'
-					/>
-				),
-			},
-			{
-				accessorKey: 'item_description',
-				header: 'Item Description',
-				enableColumnFilter: false,
 				cell: (info) => {
-					const { order_description_uuid, order_number } =
-						info.row.original;
+					const { order_number } = info.row.original;
 					return (
 						<LinkWithCopy
-							title={info.getValue()}
-							id={order_description_uuid}
-							uri={`/order/details/${order_number}`}
+							title={order_number}
+							id={info.getValue()}
+							uri='/thread/order-info'
 						/>
 					);
 				},
 			},
 			{
-				accessorKey: 'size',
-				header: 'Size (CM)',
+				accessorKey: 'count_length_name',
+				header: 'Count Length',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -84,16 +71,25 @@ export default function Index({ pi }) {
 				},
 			},
 		],
-		[pi]
+		[pi_cash_entry_thread]
 	);
 
-	const totalQty = pi.reduce((a, b) => a + Number(b.pi_cash_quantity), 0);
-	const totalValue = pi.reduce((a, b) => a + Number(b.value), 0);
+	const totalQty = pi_cash_entry_thread.reduce(
+		(a, b) => a + Number(b.pi_cash_quantity),
+		0
+	);
+	const totalValue = pi_cash_entry_thread.reduce(
+		(a, b) => a + Number(b.value),
+		0
+	);
 
 	return (
-		<ReactTableTitleOnly title='Details' data={pi} columns={columns}>
+		<ReactTableTitleOnly
+			title='Thread Details'
+			data={pi_cash_entry_thread}
+			columns={columns}>
 			<tr className='text-sm'>
-				<td colSpan='3' className='py-2 text-right'>
+				<td colSpan='2' className='py-2 text-right'>
 					Total QTY
 				</td>
 				<td className='pl-3 text-left font-semibold'>{totalQty}</td>

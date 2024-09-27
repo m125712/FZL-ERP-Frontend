@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
 	useOtherBank,
 	useOtherFactoryByPartyUUID,
 	useOtherLcByPartyUUID,
 	useOtherMarketing,
 	useOtherMerchandiserByPartyUUID,
-	useOtherOrderNumberByMarketingAndPartyUUID,
 	useOtherParty,
 } from '@/state/Other';
 import { useParams } from 'react-router-dom';
@@ -30,24 +29,21 @@ export default function Header({
 	isUpdate,
 }) {
 	const { pi_uuid } = useParams();
-	const [marketingId, setMarketingId] = useState(
-		pi_uuid != undefined ? getValues('marketing_uuid') : null
-	); // 2 is the default value
-	const [partyId, setPartyId] = useState(
-		pi_uuid != undefined ? getValues('party_uuid') : null
-	); // 47 is the default value
-
 	const { data: marketing } = useOtherMarketing();
 	const { data: party } = useOtherParty();
-	const { data: order_number } = useOtherOrderNumberByMarketingAndPartyUUID(
-		marketingId,
-		partyId,
-		true
+	const { data: order_number_for_zippers } =
+		useOtherOrderNumberForZipperByMarketingAndPartyUUID(
+			watch('marketing_uuid'),
+			watch('party_uuid'),
+			`is_cash=true&pi_uuid=${pi_uuid}`
+		);
+
+	const { data: merchandiser } = useOtherMerchandiserByPartyUUID(
+		watch('party_uuid')
 	);
-	const { data: merchandiser } = useOtherMerchandiserByPartyUUID(partyId);
-	const { data: factory } = useOtherFactoryByPartyUUID(partyId);
+	const { data: factory } = useOtherFactoryByPartyUUID(watch('party_uuid'));
 	const { data: bank } = useOtherBank();
-	const { data: lc } = useOtherLcByPartyUUID(partyId);
+	const { data: lc } = useOtherLcByPartyUUID(watch('party_uuid'));
 
 	useEffect(() => {
 		if (isUpdate) {
@@ -79,7 +75,6 @@ export default function Header({
 									onChange={(e) => {
 										const value = e.value;
 										onChange(value);
-										setMarketingId(value);
 									}}
 									isDisabled={pi_uuid != undefined}
 								/>
@@ -104,7 +99,6 @@ export default function Header({
 									onChange={(e) => {
 										const value = e.value;
 										onChange(value);
-										setPartyId(value);
 									}}
 									isDisabled={pi_uuid != undefined}
 								/>
@@ -125,38 +119,40 @@ export default function Header({
 									isDisabled={isUpdate}
 									isMulti
 									placeholder='Select Order Numbers'
-									options={order_number}
-									value={order_number?.filter((item) => {
-										const order_info_uuids =
-											getValues('order_info_uuids');
+									options={order_number_for_zippers}
+									value={order_number_for_zippers?.filter(
+										(item) => {
+											const order_info_uuids =
+												getValues('order_info_uuids');
 
-										if (order_info_uuids === null) {
-											return false;
-										} else {
-											if (isJSON(order_info_uuids)) {
-												console.log('--json--');
-												return JSON.parse(
-													order_info_uuids
-												)
-													.split(',')
-													.includes(item.value);
+											if (order_info_uuids === null) {
+												return false;
 											} else {
-												if (
-													!Array.isArray(
+												if (isJSON(order_info_uuids)) {
+													console.log('--json--');
+													return JSON.parse(
 														order_info_uuids
 													)
-												) {
+														.split(',')
+														.includes(item.value);
+												} else {
+													if (
+														!Array.isArray(
+															order_info_uuids
+														)
+													) {
+														return order_info_uuids.includes(
+															item.value
+														);
+													}
+
 													return order_info_uuids.includes(
 														item.value
 													);
 												}
-
-												return order_info_uuids.includes(
-													item.value
-												);
 											}
 										}
-									})}
+									)}
 									onChange={(e) => {
 										onChange(e.map(({ value }) => value));
 									}}

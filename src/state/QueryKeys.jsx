@@ -84,6 +84,14 @@ export const commercialQK = {
 	piDetailsByPiID: (uuid) => [...commercialQK.pi(), 'details-by-id', uuid],
 	piByOrderInfo: (orderId, partyId, marketingId) => [
 		...commercialQK.pi(),
+		'zipper',
+		orderId,
+		partyId,
+		marketingId,
+	],
+	piThreadByOrderInfo: (orderId, partyId, marketingId) => [
+		...commercialQK.pi(),
+		'thread',
 		orderId,
 		partyId,
 		marketingId,
@@ -977,12 +985,31 @@ export const otherQK = {
 		'properties-by-type-name',
 		typeName,
 	],
-	orderNumberByMarketingAndPartyUUID: (marketingUUID, partyUUID, isCash) => [
-		...otherQK.all(),
-		'number-by-marketing-and-party',
+	orderNumberForZipperByMarketingAndPartyUUID: (
 		marketingUUID,
 		partyUUID,
-		isCash,
+		params
+	) => [
+		...otherQK.all(),
+		'order-number',
+		'for-zipper',
+		'by-marketing-and-party',
+		marketingUUID,
+		partyUUID,
+		params,
+	],
+	orderNumberForThreadByMarketingAndPartyUUID: (
+		marketingUUID,
+		partyUUID,
+		params
+	) => [
+		...otherQK.all(),
+		'order-number',
+		'for-thread',
+		'by-marketing-and-party',
+		marketingUUID,
+		partyUUID,
+		params,
 	],
 
 	//Vendor

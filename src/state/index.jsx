@@ -1,8 +1,9 @@
-import { defaultFetch } from '@/hooks';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { defaultFetch } from '@/hooks';
+
+import { ShowToast } from '@/components/Toast';
 
 import { api } from '@/lib/api';
-import { ShowToast } from '@/components/Toast';
 
 export default function createGlobalState({ queryKey, url, enabled = true }) {
 	const queryClient = useQueryClient();
@@ -97,7 +98,9 @@ export default function createGlobalState({ queryKey, url, enabled = true }) {
 		},
 		onSettled: (data, error, variables, context) => {
 			queryClient.invalidateQueries({ queryKey });
-			variables.onClose();
+			if (variables?.isOnCloseNeeded !== false) {
+				variables?.onClose();
+			}
 		},
 	});
 

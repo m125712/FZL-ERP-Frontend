@@ -3,7 +3,8 @@ import { useCommercialPIDetailsByPiId } from '@/state/Commercial';
 import { useParams } from 'react-router-dom';
 
 import Information from './Information';
-import Table from './Table';
+import ThreadTable from './Table/ThreadTable';
+import ZipperTable from './Table/ZipperTable';
 
 export default function Index() {
 	const { pi_id } = useParams();
@@ -21,7 +22,8 @@ export default function Index() {
 	return (
 		<div className='space-y-8 py-4'>
 			<Information pi={data} />
-			<Table pi={data?.pi_cash_entry} />
+			<ZipperTable pi={data?.pi_cash_entry} />
+			<ThreadTable pi_cash_entry_thread={data?.pi_cash_entry_thread} />
 		</div>
 	);
 }

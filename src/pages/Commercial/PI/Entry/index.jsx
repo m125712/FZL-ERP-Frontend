@@ -170,16 +170,6 @@ export default function Index() {
 				updated_at: GetDateTime(),
 			};
 
-			// update /commercial/pi/{uuid}
-			const commercialPiPromise = await updateData.mutateAsync({
-				url: `/commercial/pi-cash/${data?.uuid}`,
-				updatedData: commercialPiData,
-				uuid: data.uuid,
-				isOnCloseNeeded: false,
-			});
-
-			const updatedId = commercialPiPromise?.data?.[0].updatedId;
-
 			// pi entry update
 			let updatedableCommercialPiEntryPromises = data.pi_cash_entry
 				.filter(
@@ -193,7 +183,7 @@ export default function Index() {
 							updated_at: GetDateTime(),
 						};
 
-						return await updateData.mutateAsync({
+						return updateData.mutateAsync({
 							url: `${commercialPiEntryUrl}/${item?.uuid}`,
 							updatedData: updatedData,
 							uuid: item.uuid,
@@ -206,26 +196,31 @@ export default function Index() {
 			// pi entry delete
 			let deleteableCommercialPiEntryPromises = data.pi_cash_entry
 				.filter((item) => item.isDeletable)
-				.map(async (item) => {
-					return await deleteData.mutateAsync({
+				.map(async (item) =>
+					deleteData.mutateAsync({
 						url: `${commercialPiEntryUrl}/${item?.uuid}`,
 						isOnCloseNeeded: false,
-					});
-				});
+					})
+				);
 
 			// pi entry new
-			const newPiEntryData = [...data.new_pi_cash_entry]
-				.filter((item) => item.is_checked && item.quantity > 0)
-				.map((item) => ({
-					...item,
-					uuid: nanoid(),
-					is_checked: true,
-					sfg_uuid: item?.sfg_uuid,
-					pi_cash_quantity: item?.pi_cash_quantity,
-					pi_cash_uuid: data.uuid,
-					created_at: GetDateTime(),
-					remarks: item?.remarks || null,
-				}));
+			const newPiEntryData =
+				data?.new_pi_cash_entry?.length > 0
+					? [...data?.new_pi_cash_entry]
+							.filter(
+								(item) => item.is_checked && item.quantity > 0
+							)
+							.map((item) => ({
+								...item,
+								uuid: nanoid(),
+								is_checked: true,
+								sfg_uuid: item?.sfg_uuid,
+								pi_cash_quantity: item?.pi_cash_quantity,
+								pi_cash_uuid: data.uuid,
+								created_at: GetDateTime(),
+								remarks: item?.remarks || null,
+							}))
+					: [];
 
 			const newPiEntryPromises = newPiEntryData.map((item) =>
 				postData.mutateAsync({
@@ -249,7 +244,7 @@ export default function Index() {
 								updated_at: GetDateTime(),
 							};
 
-							return await updateData.mutateAsync({
+							return updateData.mutateAsync({
 								url: `${commercialPiEntryUrl}/${item?.uuid}`,
 								updatedData: updatedData,
 								uuid: item.uuid,
@@ -263,25 +258,30 @@ export default function Index() {
 			let deleteableCommercialPiEntryThreadPromises =
 				data.pi_cash_entry_thread
 					.filter((item) => item.isDeletable)
-					.map(async (item) => {
-						return await deleteData.mutateAsync({
+					.map(async (item) =>
+						deleteData.mutateAsync({
 							url: `${commercialPiEntryUrl}/${item?.uuid}`,
 							isOnCloseNeeded: false,
-						});
-					});
+						})
+					);
 
 			// pi thread entry new
-			const newPiEntryThreadData = [...data?.new_pi_cash_entry_thread]
-				?.filter((item) => item.is_checked && item.quantity > 0)
-				?.map((item) => ({
-					...item,
-					uuid: nanoid(),
-					is_checked: true,
-					pi_cash_quantity: item?.pi_cash_quantity,
-					pi_cash_uuid: data.uuid,
-					created_at: GetDateTime(),
-					remarks: item?.remarks || null,
-				}));
+			const newPiEntryThreadData =
+				data?.new_pi_cash_entry_thread?.length > 0
+					? [...data?.new_pi_cash_entry_thread]
+							.filter(
+								(item) => item.is_checked && item.quantity > 0
+							)
+							.map((item) => ({
+								...item,
+								uuid: nanoid(),
+								is_checked: true,
+								pi_cash_quantity: item?.pi_cash_quantity,
+								pi_cash_uuid: data.uuid,
+								created_at: GetDateTime(),
+								remarks: item?.remarks || null,
+							}))
+					: [];
 
 			const newPiEntryThreadPromises = newPiEntryThreadData.map((item) =>
 				postData.mutateAsync({
@@ -292,8 +292,16 @@ export default function Index() {
 			);
 
 			try {
+				const commercialPiPromise = await updateData.mutateAsync({
+					url: `/commercial/pi-cash/${data?.uuid}`,
+					updatedData: commercialPiData,
+					uuid: data.uuid,
+					isOnCloseNeeded: false,
+				});
+
+				const updatedId = commercialPiPromise?.data?.[0]?.updatedId;
+
 				await Promise.all([
-					commercialPiPromise,
 					...updatedableCommercialPiEntryPromises,
 					...newPiEntryPromises,
 					...deleteableCommercialPiEntryPromises,

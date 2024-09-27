@@ -42,11 +42,11 @@ export default function Index({ batch_entry }) {
 				header: 'Bleaching     ',
 				enableColumnFilter: false,
 			},
-			{
-				accessorKey: 'po',
-				header: 'PO',
-				enableColumnFilter: false,
-			},
+			// {
+			// 	accessorKey: 'po',
+			// 	header: 'PO',
+			// 	enableColumnFilter: false,
+			// },
 			{
 				accessorKey: 'order_quantity',
 				header: 'Order QTY',

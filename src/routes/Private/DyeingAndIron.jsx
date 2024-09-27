@@ -1,8 +1,7 @@
 // Dyeing And Iron
-
-// * Batch
-
-// * Batch Production
+//* Dyes Category
+import DyesCategory from '@/pages/DyeingAndIron/DyesCategory';
+//* Log
 import DyeingLog from '@/pages/DyeingAndIron/Log';
 //* Machine
 import Machine from '@/pages/DyeingAndIron/Machine';
@@ -15,15 +14,17 @@ import DyeingPlanningHeadOfficeEntry from '@/pages/DyeingAndIron/PlanningHeadOff
 import DyeingPlanningSNO from '@/pages/DyeingAndIron/PlanningSNO';
 import DyeingPlanningSNODetails from '@/pages/DyeingAndIron/PlanningSNO/Details';
 import DyeingPlanningSNOEntry from '@/pages/DyeingAndIron/PlanningSNO/Entry';
+//*Programs
+import Programs from '@/pages/DyeingAndIron/Programs';
+//
+//*RM
 import DyeingRMStock from '@/pages/DyeingAndIron/RMStock';
 // * Batch Thread
 import DyeingThreadBatch from '@/pages/DyeingAndIron/ThreadBatch';
-//* Batch Thread Conneing
 import DyeingThreadBatchConneing from '@/pages/DyeingAndIron/ThreadBatch/Conneing/Entry';
-// * Batch Thread Details
 import DyeingThreadBatchDetails from '@/pages/DyeingAndIron/ThreadBatch/Details';
-// * Batch Thread Entry
 import DyeingThreadBatchEntry from '@/pages/DyeingAndIron/ThreadBatch/Entry';
+// * Batch Zipper
 import DyeingZipperBatch from '@/pages/DyeingAndIron/ZipperBatch';
 import DyeingZipperBatchDetails from '@/pages/DyeingAndIron/ZipperBatch/Details';
 import DyeingZipperBatchEntry from '@/pages/DyeingAndIron/ZipperBatch/Entry';
@@ -212,6 +213,23 @@ export const DyeingAndIronRoutes = [
 				page_name: 'dyeing__machine',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
+			// * Dyes Category
+			{
+				name: 'Dyes Category',
+				path: '/dyeing-and-iron/dyes-category',
+				element: <DyesCategory />,
+				page_name: 'dyeing__dyes_category',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			// * Programs
+			{
+				name: 'Programs',
+				path: '/dyeing-and-iron/programs',
+				element: <Programs />,
+				page_name: 'dyeing__programs',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+
 			{
 				name: 'Log',
 				path: '/dyeing-and-iron/log',

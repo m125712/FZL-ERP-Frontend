@@ -14,9 +14,8 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useThreadPrograms();
 
-
-	const info = new PageInfo('Programs', url, 'thread__programs');
-	const haveAccess = useAccess('thread__programs');
+	const info = new PageInfo('Dyeing/Programs', url, 'dyeing__programs');
+	const haveAccess = useAccess('dyeing__programs');
 
 	const columns = useMemo(
 		() => [

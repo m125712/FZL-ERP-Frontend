@@ -7,7 +7,7 @@ import { DateTime, TitleValue } from '@/ui';
 
 export default function Information({ orderInfo }) {
 	useEffect(() => {
-		document.title = `Shade Recipe Details of ${orderInfo?.uuid}`;
+		document.title = `Thread Order Details of ${orderInfo?.uuid}`;
 	}, []);
 
 	const {

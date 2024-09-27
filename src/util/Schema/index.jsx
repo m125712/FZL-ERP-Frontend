@@ -606,7 +606,7 @@ export const LAB_RECIPE_SCHEMA = {
 	lab_dip_info_uuid: null,
 	name: STRING_REQUIRED,
 	bleaching: STRING_REQUIRED,
-	sub_streat: STRING_REQUIRED,
+	sub_streat: STRING.nullable(),
 	approved: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	status: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	remarks: STRING.nullable(),

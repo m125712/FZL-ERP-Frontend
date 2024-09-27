@@ -26,7 +26,6 @@ const getGarmentInfo = (order_description) => {
 };
 
 export default function ItemDescription({ order_description, className }) {
-	console.log(order_description);
 
 	const [sliderQuantity, total_size, tape_production] =
 		order_description?.order_entry.reduce(

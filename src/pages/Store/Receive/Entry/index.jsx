@@ -1,6 +1,4 @@
-import { DeleteModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useOtherMaterial } from '@/state/Other';
 import {
 	useMaterialInfo,
@@ -9,6 +7,14 @@ import {
 	usePurchaseEntry,
 	usePurchaseLog,
 } from '@/state/Store';
+import { useAuth } from '@context/auth';
+import { DevTool } from '@hookform/devtools';
+import { get } from 'react-hook-form';
+import { configure, HotKeys } from 'react-hotkeys';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { DeleteModal } from '@/components/Modal';
 import {
 	DynamicField,
 	FormField,
@@ -17,13 +23,11 @@ import {
 	ReactSelect,
 	RemoveButton,
 } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
+
+import nanoid from '@/lib/nanoid';
 import { PURCHASE_RECEIVE_NULL, PURCHASE_RECEIVE_SCHEMA } from '@util/Schema';
-import { Suspense, useCallback, useEffect, useState } from 'react';
-import { HotKeys, configure } from 'react-hotkeys';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import GetDateTime from '@/util/GetDateTime';
+
 import Header from './Header';
 
 export default function Index() {
@@ -250,6 +254,22 @@ export default function Index() {
 			}, 0),
 		[watch()]
 	);
+	const [excludeItem, setExcludeItem] = useState([]);
+	useEffect(() => {
+		const newExcludeItems = watch('purchase').map((item) => {
+			const materialUuid = item?.material_uuid;
+
+			const selectedMaterial = material?.find(
+				(m) => m.value === materialUuid
+			);
+			return {
+				label: selectedMaterial?.label,
+				value: selectedMaterial?.value,
+			};
+		});
+
+		setExcludeItem(newExcludeItems);
+	}, [watch(), material]);
 
 	return (
 		<>
@@ -304,7 +324,16 @@ export default function Index() {
 													return (
 														<ReactSelect
 															placeholder='Select Material'
-															options={material}
+															options={material?.filter(
+																(inItem) =>
+																	!excludeItem.some(
+																		(
+																			excluded
+																		) =>
+																			excluded?.value ===
+																			inItem?.value
+																	)
+															)}
 															value={material?.find(
 																(inItem) =>
 																	inItem.value ==

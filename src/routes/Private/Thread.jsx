@@ -3,12 +3,10 @@ import Coning from '@pages/Thread/Conneing';
 import ConingDetails from '@pages/Thread/Conneing/Details';
 import ConingEntry from '@pages/Thread/Conneing/Entry';
 import CountLength from '@pages/Thread/CountLength';
-import DyesCategory from '@pages/Thread/DyesCategory';
 //Order
 import OrderInfo from '@pages/Thread/Order';
 import IndOrderInfo from '@pages/Thread/Order/Details';
 import OrderInfoEntry from '@pages/Thread/Order/Entry';
-import Programs from '@pages/Thread/Programs';
 
 export const ThreadRoutes = [
 	{
@@ -52,20 +50,6 @@ export const ThreadRoutes = [
 				page_name: 'thread__order_info_in_details',
 				actions: ['create', 'read', 'update', 'delete'],
 				hidden: true,
-			},
-			{
-				name: 'Programs',
-				path: '/thread/programs',
-				element: <Programs />,
-				page_name: 'thread__programs',
-				actions: ['create', 'read', 'update', 'delete'],
-			},
-			{
-				name: 'Dyes Category',
-				path: '/thread/dyes-category',
-				element: <DyesCategory />,
-				page_name: 'thread__dyes_category',
-				actions: ['create', 'read', 'update', 'delete'],
 			},
 
 			{

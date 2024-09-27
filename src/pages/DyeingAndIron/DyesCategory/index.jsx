@@ -14,8 +14,8 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useThreadDyesCategory();
 
-	const info = new PageInfo('Dyes Category', url, 'thread__dyes_category');
-	const haveAccess = useAccess('thread__dyes_category');
+	const info = new PageInfo('Dyeing/Dyes Category', url, 'dyeing__dyes_category');
+	const haveAccess = useAccess('dyeing__dyes_category');
 
 	const columns = useMemo(
 		() => [

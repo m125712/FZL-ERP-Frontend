@@ -7,6 +7,8 @@ import CountLength from '@pages/Thread/CountLength';
 import OrderInfo from '@pages/Thread/Order';
 import IndOrderInfo from '@pages/Thread/Order/Details';
 import OrderInfoEntry from '@pages/Thread/Order/Entry';
+// Log
+import Log from '@pages/Thread/Log';
 
 export const ThreadRoutes = [
 	{
@@ -73,8 +75,16 @@ export const ThreadRoutes = [
 				path: '/thread/coning',
 				element: <Coning />,
 				page_name: 'thread__coning_details',
-				actions: ['create', 'read', 'update', 'delete'],
+				actions: ['create', 'read', 'update', 'delete', 'click_production', 'click_transaction'],
 			},
+
+			{
+				name: 'Log',
+				path: '/thread/log',
+				element: <Log />,
+				page_name: 'thread__log',
+				actions: ['create', 'read', 'update', 'delete'],
+			}
 		],
 	},
 ];

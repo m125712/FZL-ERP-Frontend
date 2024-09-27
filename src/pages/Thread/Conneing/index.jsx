@@ -1,64 +1,117 @@
-import { Edit, Plus } from '@/assets/icons';
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useDyeingCone } from '@/state/Thread';
+import { useAccess, useFetch } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAuth } from '@/context/auth';
-import { useAccess, useFetch } from '@/hooks';
-import cn from '@/lib/cn';
-import { useDyeingThreadBatch } from '@/state/Dyeing';
-import { DateTime, EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-//const Yarn = lazy(() => import('../ThreadBatch/Yarn'));
-//const Dyeing = lazy(() => import('../ThreadBatch/Dyeing'));
+
+const Production = lazy(() => import('./Production'));
+const Transaction = lazy(() => import('./Transaction'));
 
 export default function Index() {
-	const { data, url, updateData, isLoading } = useDyeingThreadBatch();
+	const { data, url, isLoading } = useDyeingCone();
 	const info = new PageInfo('Coning', url, 'thread__coning_details');
 	const { value: machine } = useFetch('/other/machine/value/label');
 	const haveAccess = useAccess('thread__coning_details');
-	const navigate = useNavigate();
+
 	const columns = useMemo(
 		() => [
-			// * batch_id
 			{
-				accessorKey: 'batch_id',
-				header: 'Batch ID',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<LinkWithCopy
-						title={info.getValue()}
-						id={info.row.original.uuid}
-						uri='/thread/coning'
-					/>
-				),
-			},
-			{
-				accessorKey: 'coning_operator_name',
-				header: 'Coning Operator',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'coning_supervisor_name',
-				header: 'Coning Supervisor',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'coning_machines',
-				header: 'Machine Speed',
+				accessorKey: 'batch_number',
+				header: 'Batch No.',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 
 			{
-				accessorKey: 'created_by_name',
-				header: 'Created By',
+				accessorKey: 'order_number',
+				header: 'Order No.',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+			{
+				accessorKey: 'color',
+				header: 'Color',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'style',
+				header: 'Style',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'count_length',
+				header: 'Count Length',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'batch_quantity',
+				header: 'Batch QTY',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'balance_quantity',
+				header: 'Balance QTY',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'action_add_production',
+				header: '',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_production'),
+				width: 'w-8',
+				cell: (info) => {
+					return (
+						<Transfer
+							onClick={() => handelProduction(info.row.index)}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'coning_production_quantity',
+				header: 'Production QTY',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'coning_production_quantity_in_kg',
+				header: 'Production QTY In Kg',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'action_add_transaction',
+				header: '',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_transaction'),
+				width: 'w-8',
+				cell: (info) => {
+					return (
+						<Transfer
+							onClick={() => handelTransaction(info.row.index)}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'transfer_quantity',
+				header: 'Warehouse',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+
+			////
 
 			// * created_at
 			{
@@ -80,38 +133,75 @@ export default function Index() {
 			},
 			// * remarks
 			{
-				accessorKey: 'remarks',
+				accessorKey: 'batch_remarks',
 				header: 'Remarks',
 				width: 'w-24',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			// * actions
-			{
-				accessorKey: 'actions',
-				header: 'Actions',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
-				width: 'w-24',
-				cell: (info) => (
-					<EditDelete
-						idx={info.row.index}
-						handelUpdate={handelUpdate}
-						showEdit={haveAccess.includes('update')}
-						showDelete={false}
-					/>
-				),
-			},
+			// {
+			// 	accessorKey: 'actions',
+			// 	header: 'Actions',
+			// 	enableColumnFilter: false,
+			// 	enableSorting: false,
+			// 	hidden: !haveAccess.includes('update'),
+			// 	width: 'w-24',
+			// 	cell: (info) => (
+			// 		<EditDelete
+			// 			idx={info.row.index}
+			// 			handelUpdate={handelUpdate}
+			// 			showEdit={haveAccess.includes('update')}
+			// 			showDelete={false}
+			// 		/>
+			// 	),
+			// },
 		],
 		[data, machine]
 	);
 
 	// Update
-	const handelUpdate = (idx) => {
-		const { uuid } = data[idx];
+	// const handelUpdate = (idx) => {
+	// 	const { uuid } = data[idx];
+	// 	navigate(`/thread/coning/${uuid}/update`);
+	// };
 
-		navigate(`/thread/coning/${uuid}/update`);
+	const [coningProd, setConingProd] = useState({
+		uuid: null,
+		batch_entry_uuid: null,
+		production_quantity_in_kg: null,
+		production_quantity: null,
+		wastage: null,
+		remarks: null,
+	});
+
+	const handelProduction = (idx) => {
+		const val = data[idx];
+
+		setConingProd((prev) => ({
+			...prev,
+			...val,
+		}));
+
+		window['ConingProdModal'].showModal();
+	};
+
+	const [coningTrx, setConingTrx] = useState({
+		uuid: null,
+		batch_entry_uuid: null,
+		trx_quantity: null,
+		remarks: null,
+	});
+
+	const handelTransaction = (idx) => {
+		const val = data[idx];
+
+		setConingTrx((prev) => ({
+			...prev,
+			...val,
+		}));
+
+		window['ConingTrxModal'].showModal();
 	};
 
 	// get tabname
@@ -133,6 +223,24 @@ export default function Index() {
 				// accessor={haveAccess.includes('create')}
 				extraClass='py-2'
 			/>
+			<Suspense>
+				<Production
+					modalId='ConingProdModal'
+					{...{
+						coningProd,
+						setConingProd,
+					}}
+				/>
+			</Suspense>
+			<Suspense>
+				<Transaction
+					modalId='ConingTrxModal'
+					{...{
+						coningTrx,
+						setConingTrx,
+					}}
+				/>
+			</Suspense>
 		</div>
 	);
 }

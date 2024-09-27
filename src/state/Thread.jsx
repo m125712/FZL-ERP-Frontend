@@ -81,3 +81,37 @@ export const useThreadProgramsByUUID = (uuid) =>
 		queryKey: threadQK.programsByUUID(uuid),
 		url: `/thread/programs${uuid}`,
 	});
+
+// * Coning
+export const useDyeingCone = () =>
+	createGlobalState({
+		queryKey: threadQK.coning(),
+		url: '/thread/batch-entry-details',
+	});
+
+//* coning production
+export const useConeProdByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: threadQK.ConningProdByUUID(uuid),
+		url: `/thread/batch-entry-production/${uuid}`,
+	});
+
+//* coning trx
+export const useConeTrxByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: threadQK.ConningTrxByUUID(uuid),
+		url: `/thread/batch-entry-trx/${uuid}`,
+	});
+
+//* log
+export const useConningProdLog = () =>
+	createGlobalState({
+		queryKey: threadQK.ConningProdlog(),
+		url: '/thread/batch-entry-production-details',
+	});
+
+export const useConningTrxLog = () =>
+	createGlobalState({
+		queryKey: threadQK.ConningTrxlog(),
+		url: '/thread/batch-entry-trx-details',
+	});

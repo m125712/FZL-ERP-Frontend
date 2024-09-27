@@ -19,6 +19,7 @@ import {
 
 import nanoid from '@/lib/nanoid';
 import { LAB_RECIPE_NULL, LAB_RECIPE_SCHEMA } from '@util/Schema';
+import { exclude } from '@/util/Exclude';
 import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
@@ -66,7 +67,7 @@ export default function Index() {
 	const { value: material } = useFetch(
 		'/other/material/value/label/unit/quantity?type=dyes'
 	);
-
+	let excludeItem = exclude(watch, material, 'recipe_entry', 'material_uuid');
 	// recipe_entry
 	const {
 		fields: recipeEntryField,
@@ -308,7 +309,16 @@ export default function Index() {
 												return (
 													<ReactSelect
 														placeholder='Select Dyes'
-														options={material}
+														options={material?.filter(
+															(inItem) =>
+																!excludeItem?.some(
+																	(
+																		excluded
+																	) =>
+																		excluded?.value ===
+																		inItem?.value
+																)
+														)}
 														value={material?.find(
 															(inItem) =>
 																inItem.value ==

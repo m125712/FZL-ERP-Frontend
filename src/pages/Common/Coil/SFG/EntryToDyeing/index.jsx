@@ -24,6 +24,7 @@ import {
 	COMMON_COIL_TO_DYEING_NULL,
 	COMMON_COIL_TO_DYEING_SCHEMA,
 } from '@util/Schema';
+import { exclude } from '@/util/Exclude';
 import GetDateTime from '@/util/GetDateTime';
 
 export default function Index() {
@@ -74,6 +75,12 @@ export default function Index() {
 				return acc + Number(item.trx_quantity);
 			}, 0),
 		[watch()]
+	);
+	let excludeItem = exclude(
+		watch,
+		order_id,
+		'coil_to_dyeing_entry',
+		'order_id'
 	);
 	const MAX_TAPE_TRX_QTY =
 		MAX_QTY - getTotalQty(watch('coil_to_dyeing_entry'));
@@ -297,7 +304,16 @@ export default function Index() {
 																document.body
 															}
 															placeholder='Select Order Entry ID'
-															options={order_id}
+															options={order_id?.filter(
+																(inItem) =>
+																	!excludeItem?.some(
+																		(
+																			excluded
+																		) =>
+																			excluded?.value ===
+																			inItem?.value
+																	)
+															)}
 															value={
 																selectedValue
 															}

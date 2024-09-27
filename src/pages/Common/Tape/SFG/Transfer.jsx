@@ -28,6 +28,7 @@ import {
 	DYEING_TRANSFER_FROM_STOCK_NULL,
 	DYEING_TRANSFER_FROM_STOCK_SCHEMA,
 } from '@util/Schema';
+import { exclude } from '@/util/Exclude';
 import GetDateTime from '@/util/GetDateTime';
 
 export default function Index() {
@@ -68,6 +69,17 @@ export default function Index() {
 			? (document.title = `Order: Update ${order_number}`)
 			: (document.title = 'Order: Entry');
 	}, []);
+	const { value: order_id } = useFetch(
+		`/other/order/order-description/value/label/by/${uuid}`,
+		[uuid]
+	);
+
+	let excludeItem = exclude(
+		watch,
+		order_id,
+		'dyeing_transfer_entry',
+		'order_description_uuid'
+	);
 
 	const MAX_QTY = data?.stock_quantity;
 	const getTotalQty = useCallback(
@@ -216,11 +228,6 @@ export default function Index() {
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
-	const { value: order_id } = useFetch(
-		`/other/order/order-description/value/label/by/${uuid}`,
-		[uuid]
-	);
-
 	return (
 		<div>
 			<HotKeys {...{ keyMap, handlers }}>
@@ -300,7 +307,16 @@ export default function Index() {
 																document.body
 															}
 															placeholder='Select Order Entry ID'
-															options={order_id}
+															options={order_id?.filter(
+																(inItem) =>
+																	!excludeItem?.some(
+																		(
+																			excluded
+																		) =>
+																			excluded?.value ===
+																			inItem?.value
+																	)
+															)}
 															value={
 																selectedValue
 															}

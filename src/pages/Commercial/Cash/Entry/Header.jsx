@@ -134,13 +134,13 @@ export default function Header({
 
 				<JoinInput
 					label='conversion_rate'
-					unit='Rate'
+					unit='BDT'
 					{...{ register, errors }}
 				/>
 
 				<JoinInput
 					label='receive_amount'
-					unit='Amount'
+					unit='BDT'
 					{...{ register, errors }}
 				/>
 

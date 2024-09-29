@@ -87,7 +87,8 @@ export default function Index() {
 			? `${watch('new_order_info_uuids')?.join(',')}`
 			: `${watch('order_info_uuids')?.join(',')}`,
 		watch('party_uuid'),
-		watch('marketing_uuid')
+		watch('marketing_uuid'),
+		isUpdate ? 'is_update=true' : ''
 	);
 
 	useEffect(() => {
@@ -119,7 +120,8 @@ export default function Index() {
 				? `${watch('new_order_info_thread_uuids')?.join(',')}`
 				: `${watch('thread_order_info_uuids')?.join(',')}`,
 			watch('party_uuid'),
-			watch('marketing_uuid')
+			watch('marketing_uuid'),
+			isUpdate ? 'is_update=true' : ''
 		);
 
 	useEffect(() => {
@@ -167,6 +169,7 @@ export default function Index() {
 				validity: data?.validity,
 				payment: data?.payment,
 				remarks: data?.remarks,
+				weight: data?.weight,
 				updated_at: GetDateTime(),
 			};
 
@@ -371,7 +374,10 @@ export default function Index() {
 				remarks: item?.remarks || null,
 			}));
 
-		if (commercialPiEntryData.length === 0) {
+		if (
+			commercialPiEntryData.length === 0 &&
+			commercialPiThreadEntryData.length === 0
+		) {
 			alert('Select at least one item to proceed.');
 		} else {
 			// create new /commercial/pi

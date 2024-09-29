@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { useCommercialPI, useCommercialPICash } from '@/state/Commercial';
+import { useCommercialPICash } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -28,31 +28,9 @@ export default function Index() {
 					<LinkWithCopy
 						title={info.getValue()}
 						id={info.getValue()}
-						uri={`details`}
+						uri={`/commercial/pi`}
 					/>
 				),
-			},
-			{
-				accessorKey: 'lc_number',
-				header: 'LC Number',
-				enableColumnFilter: false,
-				cell: (info) => {
-					if (!info.getValue()) {
-						return '-/-';
-					}
-
-					if (info.getValue() === '-') {
-						return info.getValue();
-					} else {
-						return (
-							<LinkWithCopy
-								title={info.getValue()}
-								id={info.getValue()}
-								uri={`/commercial/lc/details`}
-							/>
-						);
-					}
-				},
 			},
 			{
 				accessorKey: 'marketing_name',

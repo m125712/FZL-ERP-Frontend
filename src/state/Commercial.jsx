@@ -67,7 +67,8 @@ export const useCommercialPIEntryByUUID = (uuid) =>
 export const useCommercialPIByOrderInfo = (
 	orderInfoIds,
 	partyId,
-	marketingId
+	marketingId,
+	params
 ) =>
 	createGlobalState({
 		queryKey: commercialQK.piByOrderInfo(
@@ -76,7 +77,9 @@ export const useCommercialPIByOrderInfo = (
 			marketingId
 		),
 
-		url: `/commercial/pi-cash/details/by/order-info-ids/${orderInfoIds}/${partyId}/${marketingId}`,
+		url: params
+			? `/commercial/pi-cash/details/by/order-info-ids/${orderInfoIds}/${partyId}/${marketingId}?${params}`
+			: `/commercial/pi-cash/details/by/order-info-ids/${orderInfoIds}/${partyId}/${marketingId}`,
 		enabled:
 			!!orderInfoIds &&
 			orderInfoIds.length > 0 &&
@@ -87,7 +90,8 @@ export const useCommercialPIByOrderInfo = (
 export const useCommercialPThreadByOrderInfo = (
 	orderInfoIds,
 	partyId,
-	marketingId
+	marketingId,
+	params
 ) =>
 	createGlobalState({
 		queryKey: commercialQK.piThreadByOrderInfo(
@@ -96,7 +100,9 @@ export const useCommercialPThreadByOrderInfo = (
 			marketingId
 		),
 
-		url: `/commercial/pi-cash/thread-details/by/order-info-ids/${orderInfoIds}/${partyId}/${marketingId}`,
+		url: params
+			? `/commercial/pi-cash/thread-details/by/order-info-ids/${orderInfoIds}/${partyId}/${marketingId}?${params}`
+			: `/commercial/pi-cash/thread-details/by/order-info-ids/${orderInfoIds}/${partyId}/${marketingId}`,
 		enabled:
 			!!orderInfoIds &&
 			orderInfoIds.length > 0 &&

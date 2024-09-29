@@ -513,7 +513,6 @@ export const ORDER_SCHEMA = {
 	zipper_number: UUID_REQUIRED,
 	end_type: UUID_REQUIRED,
 	lock_type: UUID_REQUIRED,
-	tape_color: UUID_REQUIRED,
 	teeth_color: UUID_REQUIRED,
 	special_requirement: JSON_STRING_REQUIRED,
 	description: STRING.nullable(),
@@ -523,7 +522,6 @@ export const ORDER_SCHEMA = {
 	// puller
 	puller_type: UUID_REQUIRED,
 	puller_color: UUID_REQUIRED,
-	puller_link: UUID_FK,
 
 	coloring_type: UUID_REQUIRED,
 

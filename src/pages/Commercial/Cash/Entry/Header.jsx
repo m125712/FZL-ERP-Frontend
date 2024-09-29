@@ -132,6 +132,18 @@ export default function Header({
 					/>
 				</FormField>
 
+				<JoinInput
+					label='conversion_rate'
+					unit='Rate'
+					{...{ register, errors }}
+				/>
+
+				<JoinInput
+					label='receive_amount'
+					unit='Amount'
+					{...{ register, errors }}
+				/>
+
 				<Textarea label='remarks' {...{ register, errors }} />
 			</div>
 		</SectionEntryBody>

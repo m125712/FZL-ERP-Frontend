@@ -169,6 +169,7 @@ export default function Index() {
 				validity: data?.validity,
 				payment: data?.payment,
 				remarks: data?.remarks,
+				weight: data?.weight,
 				updated_at: GetDateTime(),
 			};
 
@@ -373,7 +374,10 @@ export default function Index() {
 				remarks: item?.remarks || null,
 			}));
 
-		if (commercialPiEntryData.length === 0) {
+		if (
+			commercialPiEntryData.length === 0 &&
+			commercialPiThreadEntryData.length === 0
+		) {
 			alert('Select at least one item to proceed.');
 		} else {
 			// create new /commercial/pi

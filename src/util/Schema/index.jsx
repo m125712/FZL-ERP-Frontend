@@ -1449,6 +1449,7 @@ export const PI_SCHEMA = {
 	validity: NUMBER_REQUIRED,
 	payment: NUMBER_REQUIRED,
 	remarks: STRING.nullable(),
+	weight: NUMBER_DOUBLE.optional(),
 	pi_cash_entry: yup.array().of(
 		yup.object().shape({
 			is_checked: BOOLEAN,
@@ -1558,6 +1559,7 @@ export const PI_NULL = {
 	validity: '',
 	payment: '',
 	remarks: '',
+	weight: 0,
 	pi_cash_entry: [
 		{
 			is_checked: false,
@@ -1582,6 +1584,8 @@ export const PI_CASH_SCHEMA = {
 	new_order_info_thread_uuids: JSON_STRING.optional(),
 	merchandiser_uuid: STRING_REQUIRED,
 	factory_uuid: STRING_REQUIRED,
+	conversion_rate: NUMBER_DOUBLE_REQUIRED,
+	receive_amount: NUMBER_DOUBLE,
 	remarks: STRING.nullable(),
 	pi_cash_entry: yup.array().of(
 		yup.object().shape({
@@ -1689,6 +1693,8 @@ export const PI_CASH_NULL = {
 	merchandiser_uuid: '',
 	factory_uuid: '',
 	remarks: '',
+	conversion_rate: 0,
+	receive_amount: 0,
 	pi_cash_entry: [
 		{
 			is_checked: false,

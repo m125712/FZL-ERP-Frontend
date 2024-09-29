@@ -188,8 +188,10 @@ export default function Header({
 					unit='DAYS'
 					{...{ register, errors }}
 				/>
-				<Textarea label='remarks' {...{ register, errors }} />
+				<JoinInput label='weight' unit='KG' {...{ register, errors }} />
 			</div>
+
+			<Textarea label='remarks' {...{ register, errors }} />
 		</SectionEntryBody>
 	);
 }

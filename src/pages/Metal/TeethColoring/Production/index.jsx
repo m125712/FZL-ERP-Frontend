@@ -103,7 +103,7 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'teeth_coloring_prod',
+				accessorKey: 'finishing_prod',
 				header: (
 					<span>
 						Total Production
@@ -114,30 +114,30 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
-			{
-				accessorKey: 'actions_add_transaction',
-				header: 'Trx Transaction',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('click_transaction'),
-				cell: (info) => (
-					<Transfer
-						onClick={() => handelTransaction(info.row.index)}
-					/>
-				),
-			},
-			{
-				accessorKey: 'total_trx_quantity',
-				header: (
-					<span>
-						Total Transaction
-						<br />
-						(PCS)
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
-			},
+			// {
+			// 	accessorKey: 'actions_add_transaction',
+			// 	header: 'Trx Transaction',
+			// 	enableColumnFilter: false,
+			// 	enableSorting: false,
+			// 	hidden: !haveAccess.includes('click_transaction'),
+			// 	cell: (info) => (
+			// 		<Transfer
+			// 			onClick={() => handelTransaction(info.row.index)}
+			// 		/>
+			// 	),
+			// },
+			// {
+			// 	accessorKey: 'total_trx_quantity',
+			// 	header: (
+			// 		<span>
+			// 			Total Transaction
+			// 			<br />
+			// 			(PCS)
+			// 		</span>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => Number(info.getValue()),
+			// },
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',

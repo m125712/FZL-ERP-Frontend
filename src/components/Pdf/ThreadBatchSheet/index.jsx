@@ -49,7 +49,7 @@ export default function Index(batch, shade_recipes_entries, programs) {
 		header: {
 			table: getPageHeader(batch),
 			layout: 'noBorders',
-			margin: [xMargin, 30, xMargin, 0],
+			margin: [xMargin, 40, xMargin, 0],
 		},
 		// * Page Footer
 		footer: (currentPage, pageCount) => ({
@@ -95,62 +95,82 @@ export default function Index(batch, shade_recipes_entries, programs) {
 				text: '\n',
 			},
 			{
-				text: 'Dyes',
-				Style: 'tableTitle',
-				alignment: 'left',
-				bold: true,
-				fontSize: DEFAULT_FONT_SIZE + 4,
-			},
-			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', '*', 30, 30, 30, '*'],
+					widths: ['*', '*', '*', '*', '*', '*', '*'],
 					body: [
-						TableHeader(node2),
-						...(Array.isArray(shade_recipes_entries)
-							? shade_recipes_entries.map((item) =>
-									node2.map((nodeItem) => ({
-										text: item[nodeItem.field] || '',
-										style: nodeItem.cellStyle,
-										alignment: nodeItem.alignment,
-									}))
-								)
-							: []),
+						[
+							'Dyeing MC',
+							'Pkg Loading Checked By',
+							'D & C Conformation By',
+							'R/C conformation',
+							{ text: 'Passed by', colSpan: 3 },
+							'',
+							'',
+						],
+						['', '', '', '', '','',''],
 					],
 				},
 				// layout: 'lightHorizontalLines',
 				//layout: tableLayoutStyle,
 			},
-			{
-				text: '\n',
-			},
-			{
-				text: 'Others',
-				Style: 'tableTitle',
-				alignment: 'left',
-				bold: true,
-				fontSize: DEFAULT_FONT_SIZE + 4,
-			},
-			{
-				table: {
-					headerRows: 1,
-					widths: ['*', '*', '*', 30, 30, 30, '*'],
-					body: [
-						TableHeader(node2),
-						...(Array.isArray(programs)
-							? programs.map((item) =>
-									node2.map((nodeItem) => ({
-										text: item[nodeItem.field] || '',
-										style: nodeItem.cellStyle,
-										alignment: nodeItem.alignment,
-									}))
-								)
-							: []),
-					],
-				},
-				// layout: 'lightHorizontalLines',
-				//layout: tableLayoutStyle,
-			},
+			// {
+			// 	text: 'Dyes',
+			// 	Style: 'tableTitle',
+			// 	alignment: 'left',
+			// 	bold: true,
+			// 	fontSize: DEFAULT_FONT_SIZE + 4,
+			// },
+			// {
+			// 	table: {
+			// 		headerRows: 1,
+			// 		widths: ['*', '*', '*', 30, 30, 30, '*'],
+			// 		body: [
+			// 			TableHeader(node2),
+			// 			...(Array.isArray(shade_recipes_entries)
+			// 				? shade_recipes_entries.map((item) =>
+			// 						node2.map((nodeItem) => ({
+			// 							text: item[nodeItem.field] || '',
+			// 							style: nodeItem.cellStyle,
+			// 							alignment: nodeItem.alignment,
+			// 						}))
+			// 					)
+			// 				: []),
+			// 		],
+			// 	},
+			// 	// layout: 'lightHorizontalLines',
+			// 	//layout: tableLayoutStyle,
+			// },
+			// {
+			// 	text: '\n',
+			// },
+			// {
+			// 	text: 'Others',
+			// 	Style: 'tableTitle',
+			// 	alignment: 'left',
+			// 	bold: true,
+			// 	fontSize: DEFAULT_FONT_SIZE + 4,
+			// },
+			// {
+			// 	table: {
+			// 		headerRows: 1,
+			// 		widths: ['*', '*', '*', 30, 30, 30, '*'],
+			// 		body: [
+			// 			TableHeader(node2),
+			// 			...(Array.isArray(programs)
+			// 				? programs.map((item) =>
+			// 						node2.map((nodeItem) => ({
+			// 							text: item[nodeItem.field] || '',
+			// 							style: nodeItem.cellStyle,
+			// 							alignment: nodeItem.alignment,
+			// 						}))
+			// 					)
+			// 				: []),
+			// 		],
+			// 	},
+			// 	// layout: 'lightHorizontalLines',
+			// 	//layout: tableLayoutStyle,
+			// },
 		],
 	});
 

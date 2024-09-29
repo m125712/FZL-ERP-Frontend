@@ -303,7 +303,7 @@ export const PURCHASE_ENTRY_NULL = {
 
 // vendor page
 export const VENDOR_SCHEMA = {
-	name: NAME_REQUIRED,
+	name: STRING_REQUIRED,
 	contact_name: STRING.nullable(),
 	contact_number: PHONE_NUMBER.nullable(),
 	email: EMAIL.nullable(),
@@ -1743,6 +1743,7 @@ export const THREAD_COUNT_LENGTH_SCHEMA = {
 		yup.ref('min_weight'),
 		'Less than Min Weight'
 	),
+	con_per_carton: NUMBER_REQUIRED.default(0),
 	price: NUMBER_DOUBLE_REQUIRED,
 	sst: STRING_REQUIRED,
 	remarks: STRING.nullable(),
@@ -1754,6 +1755,7 @@ export const THREAD_COUNT_LENGTH_NULL = {
 	length: '',
 	min_weight: null,
 	max_weight: null,
+	con_per_carton: 0,
 	price: null,
 	sst: '',
 	remarks: '',
@@ -1862,40 +1864,7 @@ export const THREAD_SHADE_RECIPE_NULL = {
 		},
 	],
 };
-//   "uuid": "igD0v9DIJQhJeet",
-//   "id": 0,
-//   "party_uuid": "igD0v9DIJQhJeet",
-//   "marketing_uuid": "igD0v9DIJQhJeet",
-//   "factory_uuid": "igD0v9DIJQhJeet",
-//   "merchandiser_uuid": "igD0v9DIJQhJeet",
-//   "buyer_uuid": "igD0v9DIJQhJeet",
-//   "is_sample": "Sample",
-//   "is_bill": "Bill",
-//   "delivery_date": "2024-01-01 00:00:00",
-//   "created_by": "igD0v9DIJQhJeet",
-//   "created_at": "2024-01-01 00:00:00",
-//   "updated_at": "2024-01-01 00:00:00",
-//   "remarks": "Remarks"
 
-{
-	/* "uuid": "igD0v9DIJQhJeet", 
-						"order_info_uuid":"igD0v9DIJQhJeet",
-						 "lab_reference": "Lab Reference",
-						"color": "Color", 
-						"shade_recipe_uuid":"igD0v9DIJQhJeet", 
-						"po": "PO", 
-						"style": "Style",
-						"count_length_uuid": "igD0v9DIJQhJeet", 
-						"quantity": 10,
-						"company_price": 10, 
-						"party_price": 10,
-						"swatch_approval_date": "2024-01-01 00:00:00",
-						"production_quantity": 10, 
-						"created_by":"igD0v9DIJQhJeet", 
-						"created_at": "2024-01-01 00:00:00",
-						"updated_at": "2024-01-01 00:00:00", 
-						"remarks":"Remarks" */
-}
 // Order Info Entry
 export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 	party_uuid: STRING_REQUIRED,

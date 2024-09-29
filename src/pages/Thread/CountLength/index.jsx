@@ -33,13 +33,19 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'min_weight',
-				header: 'Min Weight',
+				header: 'Min Weight(g)',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
 			{
 				accessorKey: 'max_weight',
-				header: 'Max Weight',
+				header: 'Max Weight(g)',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()).toFixed(3),
+			},
+			{
+				accessorKey: 'cone_per_carton',
+				header: 'Con Per Carton',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()).toFixed(3),
 			},

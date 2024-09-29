@@ -95,7 +95,7 @@ export default function Index({
 			<Input label='length' {...{ register, errors }} />
 			<Input label='min_weight' {...{ register, errors }} />
 			<Input label='max_weight' {...{ register, errors }} />
-
+			<Input label='cone_per_carton' {...{ register, errors }} />
 			<Input label='price' {...{ register, errors }} />
 			<Input label='sst' {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />

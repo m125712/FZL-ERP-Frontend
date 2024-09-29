@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useConningProdLog, useDyeingCone } from '@/state/Thread';
 import { DevTool } from '@hookform/devtools';
@@ -30,35 +31,33 @@ export default function Index({
 	const { postData, invalidateQuery } = useDyeingCone();
 	const { invalidateQuery: invalidateConningProdLog } = useConningProdLog();
 	const { user } = useAuth();
+	const [qty, setQty] = useState();
 
-	const MAX_PROD_KG = Number(coningProd.balance_quantity);
+	const MAX_PROD = Number(coningProd.balance_quantity);
+	const MAX_CARTON = Math.ceil(
+		Number(qty) / Number(coningProd.cone_per_carton)
+	);
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
 		useRHF(
 			{
-				production_quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0'),
-				production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+				production_quantity: NUMBER_REQUIRED.moreThan(
 					0,
 					'More than 0'
-				),
-				wastage: NUMBER_DOUBLE.min(0, 'Minimum of 0')
-					.nullable()
-					.transform((value, originalValue) =>
-						String(originalValue).trim() === '' ? 0 : value
-					),
+				).max(MAX_PROD, 'Beyond max value'),
+				coning_carton_quantity: NUMBER_REQUIRED.moreThan(
+					0,
+					'More than 0'
+				).max(MAX_CARTON, 'Beyond max value'),
 				remarks: STRING.nullable(),
 			},
 			{
 				production_quantity: '',
-				production_quantity_in_kg: '',
+				coning_carton_quantity: '',
 				wastage: '',
 				remarks: '',
 			}
 		);
-
-	const MAX_WASTAGE_KG = Number(
-		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
-	);
 
 	const onClose = () => {
 		setConingProd((prev) => ({
@@ -100,6 +99,10 @@ export default function Index({
 		return;
 	};
 
+	useEffect(() => {
+		setQty(watch('production_quantity'));
+	}, [watch('production_quantity')]);
+
 	return (
 		<AddModal
 			id='ConingProdModal'
@@ -113,21 +116,14 @@ export default function Index({
 				title='Production Quantity'
 				label='production_quantity'
 				unit='PCS'
-				sub_label={`MAX: ${MAX_PROD_KG} pcs`}
+				sub_label={`MAX: ${MAX_PROD} pcs`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				title='Production Quantity In KG'
-				label='production_quantity_in_kg'
-				unit='KG'
-				sub_label={`MAX: ${MAX_PROD_KG} kg`}
-				{...{ register, errors }}
-			/>
-			<JoinInput
-				title='wastage'
-				label='wastage'
-				unit='KG'
-				sub_label={`MAX: ${MAX_WASTAGE_KG} kg`}
+				title='Carton Quantity'
+				label='coning_carton_quantity'
+				unit='PCS'
+				sub_label={`MAX: ${MAX_CARTON} pcs`}
 				{...{ register, errors }}
 			/>
 			<Textarea label='remarks' {...{ register, errors }} />

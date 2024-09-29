@@ -9,11 +9,44 @@ import {
 import { getPageFooter, getPageHeader, TableHeader } from './utils';
 
 export default function OrderSheetPdf(order_sheet) {
+	// * function to get similar garment_wash
+	const getGarmentInfo = (order_description, garments) => {
+		if (order_description?.garments_wash) {
+			const parsedObject =
+				typeof order_description?.garments_wash === 'string'
+					? JSON.parse(order_description?.garments_wash)
+					: order_description?.garments_wash;
+
+			const matchingLabels = garments
+				?.filter((item) => parsedObject.values.includes(item.value)) // Filter by matching value
+				.map((item) => item.label);
+			return matchingLabels;
+		} else {
+			return [];
+		}
+	};
+
+	// * function to get similar garment_wash
+	const getSpecialReqInfo = (order_description, sr) => {
+		if (order_description?.special_requirement) {
+			const parsedObject =
+				typeof order_description?.special_requirement === 'string'
+					? JSON.parse(order_description?.special_requirement)
+					: order_description?.special_requirement;
+
+			const matchingLabels = sr
+				?.filter((item) => parsedObject.values.includes(item.value)) // Filter by matching value
+				.map((item) => item.label);
+			return matchingLabels;
+		} else {
+			return [];
+		}
+	};
+
 	const headerHeight = 100;
 	let footerHeight = 30;
-	const { order_info, order_entry } = order_sheet;
+	const { order_info, order_entry, garments, sr } = order_sheet;
 
-	
 	const pdfDocGenerator = pdfMake.createPdf({
 		pageSize: 'A4',
 		pageOrientation: 'portrait',
@@ -53,6 +86,13 @@ export default function OrderSheetPdf(order_sheet) {
 						order_entry.map((item) => Number(item.size)).sort()
 					),
 				];
+
+				// * garments info
+				const ginfo = getGarmentInfo(entry, garments);
+
+				// * special requirement info
+				const srinfo = getSpecialReqInfo(entry, sr);
+
 
 				const uniqueColor = () => {
 					const uniqueColors = new Set();
@@ -111,6 +151,7 @@ export default function OrderSheetPdf(order_sheet) {
 								// Table Header
 								...TableHeader({
 									entry,
+									srinfo,
 									uniqueSizes,
 								}),
 
@@ -152,8 +193,7 @@ export default function OrderSheetPdf(order_sheet) {
 									)
 									.flat(),
 
-								// Table Footer
-
+								//* Total Color
 								[
 									{
 										text: 'Total Color',
@@ -193,20 +233,52 @@ export default function OrderSheetPdf(order_sheet) {
 									},
 								],
 
-								// * remarks
+								// * Garments
 								[
 									{
-										text: 'Remarks',
-										style: 'tableFooter',
+										text: 'Garments',
+										style: 'tableHeader',
 										alignment: 'Center',
 									},
 									{
 										colSpan: uniqueSizes.length + 2,
-										text: entry?.remarks,
-										style: 'tableFooter',
+										text: [
+											ginfo && ginfo.length > 0
+												? `(${ginfo?.join(', ')})`
+												: 'N/A',
+											' / ',
+											entry?.light_preference_name
+												? entry?.light_preference_name
+												: 'N/A',
+											' / ',
+											entry?.end_user_short_name
+												? entry?.end_user_short_name
+												: 'N/A',
+										],
+										style: 'tableHeader',
 										alignment: 'left',
 									},
 								],
+
+								// * remarks
+								...(entry?.remarks?.length > 0
+									? [
+											[
+												{
+													text: 'Remarks',
+													style: 'tableFooter',
+													alignment: 'Center',
+												},
+												{
+													colSpan:
+														uniqueSizes.length + 2,
+													text: entry?.remarks,
+													style: 'tableFooter',
+													alignment: 'left',
+												},
+											],
+										]
+									: []),
 							],
 						},
 						margin: [0, 5],

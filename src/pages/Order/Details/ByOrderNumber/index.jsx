@@ -31,6 +31,8 @@ export default function Index() {
 	const haveAccess = useAccess('order__details');
 
 	const [orders, setOrders] = useState([]);
+	const [ garments, setGarments ] = useState([]);
+	const [ sr, setSr ] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [data, setData] = useState('');
@@ -38,13 +40,16 @@ export default function Index() {
 
 	const path = getPath(haveAccess, order_number, user?.uuid);
 
+
 	useEffect(() => {
 		document.title = order_number;
 		useFetchFunc(path, setOrders, setLoading, setError);
+		useFetchFunc(`/other/order-properties/by/garments_wash`, setGarments, setLoading, setError);
+		useFetchFunc(`/other/order-properties/by/special_requirement`, setSr, setLoading, setError);
+
 	}, [order_number]);
 
 	useEffect(() => {
-		
 		if (orders.length > 0) {
 			const order_info = {
 				id: orders[0]?.id,
@@ -68,6 +73,8 @@ export default function Index() {
 			const order_sheet = {
 				order_info,
 				order_entry: orders,
+				garments,
+				sr,
 			};
 
 			const res = OrderSheetPdf(order_sheet);
@@ -79,7 +86,7 @@ export default function Index() {
 			});
 			// getPdfData.download();
 		}
-	}, [orders]);
+	}, [orders, garments, sr]);
 
 	if (loading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -113,9 +120,9 @@ export default function Index() {
 	return (
 		<div className='flex flex-col py-4'>
 			<iframe
-				id="iframeContainer"
+				id='iframeContainer'
 				src={data}
-				className="h-[40rem] w-full rounded-md border-none"
+				className='h-[40rem] w-full rounded-md border-none'
 			/>
 
 			<OrderInformation

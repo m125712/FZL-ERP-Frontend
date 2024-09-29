@@ -37,14 +37,14 @@ const Thread = ({
 		useOtherOrderNumberForThreadByMarketingAndPartyUUID(
 			watch('party_uuid'),
 			watch('marketing_uuid'),
-			pi_uuid ? `is_cash=false&pi_uuid=${pi_uuid}` : 'is_cash=false'
+			pi_uuid ? `is_cash=true&pi_uuid=${pi_uuid}` : 'is_cash=true'
 		);
 
 	const { data: new_order_number_for_thread } =
 		useOtherOrderNumberForThreadByMarketingAndPartyUUID(
 			watch('party_uuid'),
 			watch('marketing_uuid'),
-			'is_cash=false'
+			'is_cash=true'
 		);
 
 	useEffect(() => {

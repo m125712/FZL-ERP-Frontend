@@ -1434,6 +1434,7 @@ export const CHALLAN_NULL = {
 
 // Commercial
 // PI
+
 export const PI_SCHEMA = {
 	lc_uuid: STRING.nullable(),
 	marketing_uuid: STRING_REQUIRED,
@@ -1576,22 +1577,22 @@ export const PI_CASH_SCHEMA = {
 	marketing_uuid: STRING_REQUIRED,
 	party_uuid: STRING_REQUIRED,
 	order_info_uuids: JSON_STRING_REQUIRED,
+	thread_order_info_uuids: JSON_STRING.optional(),
+	new_order_info_uuids: JSON_STRING.optional(),
+	new_order_info_thread_uuids: JSON_STRING.optional(),
 	merchandiser_uuid: STRING_REQUIRED,
 	factory_uuid: STRING_REQUIRED,
-	conversion_rate: NUMBER_DOUBLE_REQUIRED,
-	receive_amount: NUMBER_DOUBLE,
 	remarks: STRING.nullable(),
 	pi_cash_entry: yup.array().of(
 		yup.object().shape({
 			is_checked: BOOLEAN,
 			sfg_uuid: STRING_REQUIRED,
-			pi_uuid: STRING,
 			max_quantity: NUMBER,
 			pi_cash_quantity: yup.number().when('is_checked', {
 				is: true,
 				then: (Schema) =>
 					Schema.typeError('Must be a number')
-						.required('Weight is required')
+						.required('Quantity is required')
 						.max(yup.ref('max_quantity'), 'Beyond Max Quantity'),
 				otherwise: (Schema) =>
 					Schema.nullable().transform((value, originalValue) =>
@@ -1602,18 +1603,92 @@ export const PI_CASH_SCHEMA = {
 			isDeletable: BOOLEAN,
 		})
 	),
+
+	new_pi_cash_entry: yup
+		.array()
+		.of(
+			yup.object().shape({
+				is_checked: BOOLEAN,
+				sfg_uuid: STRING_REQUIRED,
+				max_quantity: NUMBER,
+				pi_cash_quantity: yup.number().when('is_checked', {
+					is: true,
+					then: (Schema) =>
+						Schema.typeError('Must be a number')
+							.required('Quantity is required')
+							.max(
+								yup.ref('max_quantity'),
+								'Beyond Max Quantity'
+							),
+					otherwise: (Schema) =>
+						Schema.nullable().transform((value, originalValue) =>
+							String(originalValue).trim() === '' ? null : value
+						),
+				}),
+				remarks: STRING.nullable(),
+				isDeletable: BOOLEAN,
+			})
+		)
+		.optional(),
+
+	pi_cash_entry_thread: yup.array().of(
+		yup.object().shape({
+			is_checked: BOOLEAN,
+			max_quantity: NUMBER,
+			pi_cash_quantity: yup.number().when('is_checked', {
+				is: true,
+				then: (Schema) =>
+					Schema.typeError('Must be a number')
+						.required('Quantity is required')
+						.max(yup.ref('max_quantity'), 'Beyond Max Quantity'),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
+			remarks: STRING.nullable(),
+			isDeletable: BOOLEAN.optional(),
+		})
+	),
+
+	new_pi_cash_entry_thread: yup
+		.array()
+		.of(
+			yup.object().shape({
+				is_checked: BOOLEAN,
+				max_quantity: NUMBER,
+				pi_cash_quantity: yup.number().when('is_checked', {
+					is: true,
+					then: (Schema) =>
+						Schema.typeError('Must be a number')
+							.required('Quantity is required')
+							.max(
+								yup.ref('max_quantity'),
+								'Beyond Max Quantity'
+							),
+					otherwise: (Schema) =>
+						Schema.nullable().transform((value, originalValue) =>
+							String(originalValue).trim() === '' ? null : value
+						),
+				}),
+				remarks: STRING.nullable(),
+				isDeletable: BOOLEAN.optional(),
+			})
+		)
+		.optional(),
 };
 
 export const PI_CASH_NULL = {
 	uuid: null,
 	marketing_uuid: '',
 	party_uuid: '',
-	order_info_uuids: null,
+	order_info_uuids: [],
+	thread_order_info_uuids: [],
+	new_order_info_uuids: [],
+	new_order_info_thread_uuids: [],
 	merchandiser_uuid: '',
 	factory_uuid: '',
 	remarks: '',
-	conversion_rate: '',
-	receive_amount: '',
 	pi_cash_entry: [
 		{
 			is_checked: false,
@@ -1625,6 +1700,9 @@ export const PI_CASH_NULL = {
 			isDeletable: false,
 		},
 	],
+	new_pi_cash_entry: [],
+	pi_cash_entry_thread: [],
+	new_pi_cash_entry_thread: [],
 };
 
 export const BANK_SCHEMA = {

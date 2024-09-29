@@ -87,7 +87,8 @@ export default function Index() {
 			? `${watch('new_order_info_uuids')?.join(',')}`
 			: `${watch('order_info_uuids')?.join(',')}`,
 		watch('party_uuid'),
-		watch('marketing_uuid')
+		watch('marketing_uuid'),
+		isUpdate ? 'is_update=true' : ''
 	);
 
 	useEffect(() => {
@@ -119,7 +120,8 @@ export default function Index() {
 				? `${watch('new_order_info_thread_uuids')?.join(',')}`
 				: `${watch('thread_order_info_uuids')?.join(',')}`,
 			watch('party_uuid'),
-			watch('marketing_uuid')
+			watch('marketing_uuid'),
+			isUpdate ? 'is_update=true' : ''
 		);
 
 	useEffect(() => {

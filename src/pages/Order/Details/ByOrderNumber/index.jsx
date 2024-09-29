@@ -107,6 +107,8 @@ export default function Index() {
 		user_name: orders[0]?.user_name,
 		created_at: orders[0]?.created_at,
 		updated_at: orders[0]?.updated_at,
+		order_info_uuid: orders[0]?.order_info_uuid,
+		print_in: orders[0]?.print_in,
 	};
 
 	if (!orders) return <Navigate to='/not-found' />;

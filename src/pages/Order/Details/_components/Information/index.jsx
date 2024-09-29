@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { PDF } from '@/assets/icons';
+import { useOrderDescription } from '@/state/Order';
 import { format } from 'date-fns';
 
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
-import { LinkWithCopy, StatusButton, TitleValue } from '@/ui';
+import { LinkWithCopy, ReactSelect, StatusButton, TitleValue } from '@/ui';
 
 import ItemDescription from './Item';
 import OrderDescription from './Order';
@@ -84,6 +85,9 @@ export function OrderInformation({ order, handelPdfDownload }) {
 		factory_name,
 		factory_address,
 	} = order;
+
+	const { updateData } = useOrderDescription();
+
 	const renderItems = () => {
 		const order_details = [
 			{
@@ -174,10 +178,54 @@ export function OrderInformation({ order, handelPdfDownload }) {
 		];
 	};
 
+	const onChangePrint = async (select) => {
+		await updateData.mutateAsync({
+			url: `/zipper/order-info/print-in/update/by/${order?.order_info_uuid}`,
+			updatedData: {
+				print_in: select,
+			},
+			isOnCloseNeeded: false,
+		});
+	};
+
+	const renderSelector = () => {
+		const [select, setSelect] = useState(
+			order?.print_in ? order?.print_in : ''
+		);
+
+		const selections = [
+			{
+				label: 'Portrait',
+				value: 'portrait',
+			},
+			{
+				label: 'Landscape',
+				value: 'landscape',
+			},
+			{
+				label: 'Break Down',
+				value: 'break_down',
+			},
+		];
+
+		return (
+			<ReactSelect
+				placeholder='Select Order'
+				options={selections}
+				value={selections?.find((item) => item.value === select)}
+				onChange={(e) => {
+					setSelect(e.value);
+					onChangePrint(e.value);
+				}}
+			/>
+		);
+	};
+
 	return (
 		<SectionContainer
 			title='Order Information'
 			buttons={renderButtons()}
+			selector={renderSelector()}
 			className={'mb-8'}>
 			<div className='grid grid-cols-1 bg-base-100 md:grid-cols-2 md:gap-8'>
 				<RenderTable

@@ -301,29 +301,6 @@ export default function Header({
 						/>
 					</FormField>
 					<FormField
-						label='tape_color'
-						title='Tape Color'
-						errors={errors}>
-						<Controller
-							name={'tape_color'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Tape Color'
-										options={color}
-										value={color?.find(
-											(color) =>
-												color.value ==
-												getValues('tape_color')
-										)}
-										onChange={(e) => onChange(e.value)}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					<FormField
 						label='teeth_type'
 						title='Teeth Type'
 						errors={errors}>
@@ -503,7 +480,7 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<FormField label='slider' title='Slider' errors={errors}>
+					<FormField label='slider' title='Slider Material' errors={errors}>
 						<Controller
 							name={'slider'}
 							control={control}
@@ -526,29 +503,6 @@ export default function Header({
 				</div>
 
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					<FormField
-						label='puller_link'
-						title='Puller Link'
-						errors={errors}>
-						<Controller
-							name={'puller_link'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Puller Link'
-										options={puller_link}
-										value={puller_link?.find(
-											(item) =>
-												item.value ==
-												getValues('puller_link')
-										)}
-										onChange={(e) => onChange(e.value)}
-									/>
-								);
-							}}
-						/>
-					</FormField>
 					<FormField
 						label='slider_body_shape'
 						title='Slider Body Shape'

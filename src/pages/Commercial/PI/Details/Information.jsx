@@ -27,6 +27,7 @@ export default function Information({ pi }) {
 		bank_name,
 		bank_swift_code,
 		bank_address,
+		bank_routing_no,
 		factory_address,
 		validity,
 		payment,
@@ -36,15 +37,25 @@ export default function Information({ pi }) {
 		updated_at,
 		remarks,
 		pi_cash_entry,
+		pi_cash_entry_thread,
 	} = pi;
 
-	const getUniqueValues = (field) =>
-		Array.from(new Set(pi_cash_entry?.map((item) => item[field]))).join(
-			', '
-		);
-	const buyers = getUniqueValues('buyer_name');
-	const orderNumbers = getUniqueValues('order_number');
-	const styles = getUniqueValues('style');
+	const getUniqueValues = (field, arr = []) =>
+		Array.from(new Set(arr?.map((item) => item[field]))).join(', ');
+
+	const buyers = getUniqueValues('buyer_name', pi_cash_entry);
+	const orderNumbersZipper = getUniqueValues('order_number', pi_cash_entry);
+	const orderNumbersThread = getUniqueValues(
+		'order_number',
+		pi_cash_entry_thread
+	);
+	const countLengthThreads = getUniqueValues(
+		'count_length_name',
+		pi_cash_entry_thread
+	);
+
+	const stylesZipper = getUniqueValues('style', pi_cash_entry);
+	const stylesThread = getUniqueValues('style', pi_cash_entry_thread);
 
 	const [data, setData] = useState('');
 
@@ -58,8 +69,8 @@ export default function Information({ pi }) {
 			pi_cash_entry.reduce((a, b) => Number(a) + Number(b.value), 0)
 		),
 		buyer_names: buyers,
-		order_numbers: orderNumbers,
-		styles: styles,
+		order_numbers: orderNumbersZipper,
+		styles: stylesZipper,
 	};
 
 	useEffect(() => {
@@ -80,7 +91,47 @@ export default function Information({ pi }) {
 				label: 'O/N',
 				value: (
 					<div className='flex flex-wrap gap-2'>
-						{orderNumbers
+						{orderNumbersZipper
+							.split(',')
+							.filter(Boolean)
+							.map((e) => (
+								<span
+									key={e}
+									className='badge badge-secondary badge-sm h-5'>
+									{e}
+								</span>
+							))}
+
+						{orderNumbersThread
+							.split(',')
+							.filter(Boolean)
+							.map((e) => (
+								<span
+									key={e}
+									className='badge badge-secondary badge-sm h-5'>
+									{e}
+								</span>
+							))}
+					</div>
+				),
+			},
+
+			{
+				label: 'Styles',
+				value: (
+					<div className='flex flex-wrap gap-2'>
+						{stylesZipper
+							.split(',')
+							.filter(Boolean)
+							.map((e) => (
+								<span
+									key={e}
+									className='badge badge-secondary badge-sm h-5'>
+									{e}
+								</span>
+							))}
+
+						{stylesThread
 							.split(',')
 							.filter(Boolean)
 							.map((e) => (
@@ -94,10 +145,10 @@ export default function Information({ pi }) {
 				),
 			},
 			{
-				label: 'Styles',
+				label: 'Count Length',
 				value: (
 					<div className='flex flex-wrap gap-2'>
-						{styles
+						{countLengthThreads
 							.split(',')
 							.filter(Boolean)
 							.map((e) => (
@@ -112,10 +163,15 @@ export default function Information({ pi }) {
 			},
 			{
 				label: 'Value ($)',
-				value: pi_cash_entry.reduce(
-					(a, b) => Number(a) + Number(b.value),
-					0
-				),
+				value:
+					pi_cash_entry.reduce(
+						(a, b) => Number(a) + Number(b.value),
+						0
+					) +
+					pi_cash_entry_thread.reduce(
+						(a, b) => Number(a) + Number(b.value),
+						0
+					),
 			},
 			{
 				label: 'Payment',
@@ -144,12 +200,15 @@ export default function Information({ pi }) {
 			},
 		];
 
-		const bankDetails = [];
-
-		const otherInfo = [
+		const bankDetails = [
 			{
 				label: 'Bank',
 				value: bank_name,
+			},
+
+			{
+				label: 'Bank Routing No',
+				value: bank_routing_no,
 			},
 			{
 				label: 'Bank Swift Code',
@@ -159,7 +218,9 @@ export default function Information({ pi }) {
 				label: 'Bank Address',
 				value: bank_address,
 			},
+		];
 
+		const otherInfo = [
 			{
 				label: 'Buyers',
 				value: buyers,
@@ -207,16 +268,21 @@ export default function Information({ pi }) {
 
 	return (
 		<SectionContainer buttons={renderButtons()} title={'Information'}>
-			<div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-8'>
+			<div className='grid grid-cols-1 lg:grid-cols-3 lg:gap-8'>
 				<RenderTable
 					className={'border-secondary/30 lg:border-r'}
 					title={'Basic Info'}
 					items={renderItems().basicInfo}
 				/>
 				<RenderTable
-					className={'border-secondary/30 lg:border-l'}
-					title={'Other Details'}
+					className={'border-secondary/30 lg:border-l lg:border-r'}
+					title={'Party Details'}
 					items={renderItems().otherInfo}
+				/>
+				<RenderTable
+					className={'border-secondary/30 lg:border-l'}
+					title={'Bank Details'}
+					items={renderItems().bankDetails}
 				/>
 			</div>
 		</SectionContainer>

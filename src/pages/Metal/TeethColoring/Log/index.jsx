@@ -12,8 +12,8 @@ export default function Index() {
 		<div>
 			<Production />
 			<hr className='my-6 border-2 border-dashed border-secondary/30' />
-			<Transfer />
-			<hr className='my-6 border-2 border-dashed border-secondary/30' />
+			{/* <Transfer />
+			<hr className='my-6 border-2 border-dashed border-secondary/30' /> */}
 			<RMTransferLog />
 		</div>
 	);

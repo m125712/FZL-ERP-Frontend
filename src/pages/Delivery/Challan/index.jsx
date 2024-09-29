@@ -51,17 +51,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'receive_status',
-				header: 'Receive Status',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<SwitchToggle
-						onChange={() => handelReceiveStatus(info.row.index)}
-						checked={Number(info.getValue()) === 1}
-					/>
-				),
-			},
+
 			{
 				accessorKey: 'gate_pass',
 				header: 'Gate Pass',
@@ -73,6 +63,18 @@ export default function Index() {
 					/>
 				),
 			},
+			{
+				accessorKey: 'receive_status',
+				header: 'Receive Status',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<SwitchToggle
+						onChange={() => handelReceiveStatus(info.row.index)}
+						checked={Number(info.getValue()) === 1}
+					/>
+				),
+			},
+
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',

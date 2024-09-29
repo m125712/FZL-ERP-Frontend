@@ -21,6 +21,20 @@ export default function ThreadTable({ pi_cash_entry_thread }) {
 					);
 				},
 			},
+
+			{
+				accessorKey: 'style',
+				header: 'Style',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'color',
+				header: 'Color',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
 			{
 				accessorKey: 'count_length_name',
 				header: 'Count Length',
@@ -89,7 +103,7 @@ export default function ThreadTable({ pi_cash_entry_thread }) {
 			data={pi_cash_entry_thread}
 			columns={columns}>
 			<tr className='text-sm'>
-				<td colSpan='2' className='py-2 text-right'>
+				<td colSpan='4' className='py-2 text-right'>
 					Total QTY
 				</td>
 				<td className='pl-3 text-left font-semibold'>{totalQty}</td>

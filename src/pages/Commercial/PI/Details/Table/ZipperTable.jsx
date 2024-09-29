@@ -35,6 +35,18 @@ export default function ZipperTable({ pi }) {
 				},
 			},
 			{
+				accessorKey: 'style',
+				header: 'Style',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'color',
+				header: 'Color',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'size',
 				header: 'Size (CM)',
 				enableColumnFilter: false,
@@ -93,7 +105,7 @@ export default function ZipperTable({ pi }) {
 	return (
 		<ReactTableTitleOnly title='Zipper Details' data={pi} columns={columns}>
 			<tr className='text-sm'>
-				<td colSpan='3' className='py-2 text-right'>
+				<td colSpan='5' className='py-2 text-right'>
 					Total QTY
 				</td>
 				<td className='pl-3 text-left font-semibold'>{totalQty}</td>

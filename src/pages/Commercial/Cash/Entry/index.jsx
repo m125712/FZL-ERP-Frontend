@@ -314,7 +314,7 @@ export default function Index() {
 				])
 					.then(() => reset(Object.assign({}, PI_CASH_NULL)))
 					.then(() => {
-						navigate(`/commercial/pi/${updatedId}`);
+						navigate(`/commercial/pi-cash/${updatedId}`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);

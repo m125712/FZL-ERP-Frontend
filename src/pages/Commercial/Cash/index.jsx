@@ -28,7 +28,7 @@ export default function Index() {
 					<LinkWithCopy
 						title={info.getValue()}
 						id={info.getValue()}
-						uri={`/commercial/pi`}
+						uri={`/commercial/pi-cash`}
 					/>
 				),
 			},

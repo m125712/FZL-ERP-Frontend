@@ -3,6 +3,7 @@
 // Bank
 import Bank from '@pages/Commercial/Bank';
 import PiCash from '@pages/Commercial/Cash';
+import PiCashDetails from '@pages/Commercial/Cash/Details';
 import PiCashEntry from '@pages/Commercial/Cash/Entry';
 // LC
 import LC from '@pages/Commercial/LC';
@@ -115,6 +116,20 @@ export const CommercialRoutes = [
 				],
 				disableCollapse: true,
 				children: [
+					{
+						name: 'PI',
+						path: '/commercial/pi-cash/:pi_id',
+						element: <PiCashDetails />,
+						page_name: 'commercial__pi_cash_details',
+						actions: [
+							'create',
+							'read',
+							'update',
+							'delete',
+							'click_receive_status',
+						],
+						hidden: true,
+					},
 					{
 						name: 'Cash Entry',
 						path: '/commercial/pi-cash/entry',

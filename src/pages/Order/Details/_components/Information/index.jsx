@@ -13,15 +13,18 @@ import SliderDescription from './Slider';
 
 export default function SingleInformation({ order, idx, hasInitialOrder }) {
 	const [check, setCheck] = useState(true);
+	const [checkSwatch, setCheckSwatch] = useState(true);
 
 	useEffect(() => {
-		// todo: need to be fixed
-		order?.order_entry.map((item) => {
+		order?.order_entry.map((item, i) => {
 			if (
 				Number(item?.company_price) <= 0 &&
 				Number(item?.party_price) <= 0
 			) {
 				setCheck(false);
+			}
+			if (!item?.swatch_approval_date) {
+				setCheckSwatch(false);
 			}
 		});
 	}, [order]);
@@ -38,7 +41,7 @@ export default function SingleInformation({ order, idx, hasInitialOrder }) {
 				className={'border-0'}
 				key={'swatch_approval_status'}
 				size='btn-xs md:btn-sm'
-				value={false}
+				value={checkSwatch}
 			/>,
 		];
 	};
@@ -70,7 +73,12 @@ const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
 	return <TitleValue title='Cash / LC' value={value} />;
 };
 
-export function OrderInformation({ order, handelPdfDownload, handleViewChange }) {
+export function OrderInformation({
+	order,
+	handelPdfDownload,
+	handleViewChange,
+	updateView,
+}) {
 	const {
 		order_number,
 		reference_order,
@@ -178,9 +186,9 @@ export function OrderInformation({ order, handelPdfDownload, handleViewChange })
 			<button
 				key='pdf'
 				type='button'
-				className='btn bg-yellow-400 border-none hover:bg-yellow-500 btn-sm rounded-badge'
+				className='btn btn-sm rounded-badge border-none bg-yellow-400 hover:bg-yellow-500'
 				onClick={handleViewChange}>
-				View by Style
+				{updateView ? 'View by Style' : 'Default View'}
 			</button>,
 		];
 	};

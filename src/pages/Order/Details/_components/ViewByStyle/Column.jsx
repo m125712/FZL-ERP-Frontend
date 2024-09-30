@@ -24,7 +24,7 @@ const createStatusColumn = ({ accessorKey, header }) =>
 		header,
 		enableColumnFilter: false,
 		cell: (info) => {
-			const { company_price, party_price } = info.row.original;
+			const { company_price, party_price, swatch_approval_date } = info.row.original;
 			return (
 				<div className='flex items-center justify-start gap-2'>
 					<StatusButton
@@ -39,7 +39,7 @@ const createStatusColumn = ({ accessorKey, header }) =>
 					/>
 					<StatusButton
 						size='btn-xs'
-						value={info.getValue() === 'approved' ? 1 : 0}
+						value={swatch_approval_date ? 1 : 0}
 						idx={info.row.index + 1}
 						// showIdx={true}
 					/>

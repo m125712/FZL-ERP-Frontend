@@ -20,6 +20,21 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'is_sample',
+				header: 'Sample/Bill/Cash',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { is_sample, is_bill, is_cash } = info.row.original;
+					return (
+						<div className='flex space-x-1'>
+							<StatusButton size='btn-xs' value={is_sample} />
+							<StatusButton size='btn-xs' value={is_bill} />
+							<StatusButton size='btn-xs' value={is_cash} />
+						</div>
+					);
+				},
+			},
+			{
 				accessorKey: 'order_number',
 				header: 'ID',
 				width: 'w-40',
@@ -59,38 +74,18 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'is_sample',
-				header: 'Sample',
+				accessorKey: 'swatch_status',
+				header: 'Swatch Approved',
 				enableColumnFilter: false,
 				cell: (info) => {
-					return (
-						<div className='flex space-x-1'>
-							<StatusButton
-								size='btn-xs'
-								value={info.getValue()}
-							/>
-						</div>
-					);
+					const { order_entry_count, swatch_approval_count } =
+						info.row.original;
+					return `${swatch_approval_count} / ${order_entry_count}`;
 				},
 			},
 			{
-				accessorKey: 'is_bill',
-				header: 'Bill',
-				enableColumnFilter: false,
-				cell: (info) => {
-					return (
-						<div className='flex space-x-1'>
-							<StatusButton
-								size='btn-xs'
-								value={info.getValue()}
-							/>
-						</div>
-					);
-				},
-			},
-			{
-				accessorKey: 'is_cash',
-				header: 'Cash',
+				accessorKey: 'is_swatches_approved',
+				header: 'Status',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return (

@@ -66,6 +66,13 @@ export const useOtherOrder = () =>
 		url: '/other/order/info/value/label',
 	});
 
+// GET THREAD ORDER
+export const useThreadOrder = () =>
+	createGlobalState({
+		queryKey: otherQK.threadOrders(),
+		url: '/other/thread/value/label',
+	});
+
 export const useOtherOrderDescription = () =>
 	createGlobalState({
 		queryKey: otherQK.orderDescription(),

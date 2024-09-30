@@ -1,3 +1,5 @@
+import { ToWords } from 'to-words';
+
 import {
 	DEFAULT_FONT_SIZE,
 	tableLayoutStyle,
@@ -5,7 +7,7 @@ import {
 } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
-import { DollarToWord } from '@/lib/NumToWord';
+import { DollarToWord, NumToWord } from '@/lib/NumToWord';
 import numToWords from '@/util/NumToWord';
 
 import pdfMake from '..';
@@ -15,16 +17,16 @@ const node = [
 	getTable('pi_item_description', 'Item'),
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
-	// getTable('h_s_code', 'H S,Code'),
-	getTable('quantity', 'Quantity(PCS)', 'right'),
-	getTable('quantity_pcs', 'Quantity(DZN)', 'right'),
-	getTable('unit_price', 'Unit Price(DZN)', 'right'),
-	getTable('unit_rate', 'Unit Rate', 'right'),
+	//getTable('h_s_code', 'H S,Code'),
+	getTable('quantity', 'Quantity', 'right'),
+	getTable('unit_price', 'Unit Price(BDT)', 'right'),
+	getTable('unit_price_dollar', 'Unit Price(US$)', 'right'),
 	getTable('value', 'Value(BDT)', 'right'),
+	getTable('value_dollar', 'Value(US$)', 'right'),
 ];
 
 export default function Index(data) {
-	const headerHeight = 140;
+	const headerHeight = 170;
 	let footerHeight = 50;
 	let { pi_cash_entry } = data;
 	let { pi_cash_entry_thread } = data;
@@ -35,7 +37,6 @@ export default function Index(data) {
 	if (!pi_cash_entry_thread) {
 		pi_cash_entry_thread = [];
 	}
-	//pi_cash_entry = [...pi_cash_entry, ...pi_cash_entry_thread];
 	const uniqueItemDescription = new Set();
 	const uniqueItemDescriptionThread = new Set();
 	const TotalUnitPrice = [];
@@ -52,27 +53,7 @@ export default function Index(data) {
 	let total_thread_unit_price = 0;
 	let total_thread_value = 0;
 	let total_thread_quantity = 0;
-	let grand_thread_total_value = 0;
 	let grand_thread_total_quantity = 0;
-
-	const bankPolicy = data?.bank_policy
-		.replace(/var_routing_no/g, `${data?.routing_no}`)
-		.replace(/var_pi_validity/g, `${data?.validity}`)
-		.replace(/var_bank_name/g, `${data?.bank_name}`)
-		.replace(/var_payment/g, `${data?.payment}`);
-	const lines = bankPolicy
-		.split(';')
-		.map((line) => line.trim())
-		.filter((line) => line.length > 0);
-
-	const headers = [];
-	const values = [];
-
-	lines.forEach((line) => {
-		const [header, value] = line.split(':', 2);
-		headers.push(header.trim());
-		values.push(value ? value.trim() : '');
-	});
 
 	pi_cash_entry.forEach((item) => {
 		uniqueItemDescription.add(item.pi_item_description);
@@ -117,11 +98,15 @@ export default function Index(data) {
 			specification: '',
 			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) cm`,
 			//h_s_code: '9607,11.00',
-			quantity: TotalQuantity[index] + 'pcs',
-			quantity_pcs: TotalQuantity[index],
-			unit_price: TotalUnitPrice[index] + '/dzn',
-			unit_rate: Number(TotalValue[index]),
-			value: Number(TotalValue[index]).toFixed(2),
+			quantity: TotalQuantity[index] + ' pcs',
+			unit_price:
+				Number(TotalUnitPrice[index]).toFixed(2) *
+					data?.conversion_rate +
+				'/pcs',
+			unit_price_dollar:
+				Number(TotalUnitPrice[index]).toFixed(2) + '/pcs',
+			value: Number(TotalValue[index] * data?.conversion_rate).toFixed(2),
+			value_dollar: Number(TotalValue[index]).toFixed(2),
 		};
 	});
 	[...uniqueItemDescriptionThread].forEach((item) => {
@@ -149,10 +134,16 @@ export default function Index(data) {
 				size: item.match(/\d+$/)[0] + ' mtr',
 				//h_s_code: '5402,62.00',
 				quantity: TotalThreadQuantity[index] + ' cone',
-				quantity_pcs: TotalThreadQuantity[index] + ' cone',
-				unit_price: TotalThreadUnitPrice[index] + '/cone',
-				unit_rate: Number(TotalThreadUnitPrice[index]).toFixed(2),
-				value: Number(TotalThreadValue[index]).toFixed(2),
+				unit_price:
+					Number(
+						TotalThreadUnitPrice[index] * data?.conversion_rate
+					).toFixed(2) + '/cone',
+				unit_price_dollar:
+					Number(TotalThreadUnitPrice[index]).toFixed(2) + '/mtr',
+				value: Number(
+					TotalThreadValue[index] * data?.conversion_rate
+				).toFixed(2),
+				value_dollar: Number(TotalThreadValue[index]).toFixed(2),
 			};
 		}
 	);
@@ -230,7 +221,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [90, 90, 60, 39, 39, 45, 41, '*'],
+					widths: [90, 90, 60, 40, 46, 46, 46, '*'],
 					body: [
 						// Header
 						TableHeader(node),
@@ -252,7 +243,18 @@ export default function Index(data) {
 						),
 						[
 							{
-								text: `Total Zipper: ${Number(grand_total_quantity || 0)} pcs, Total Thread: ${grand_thread_total_quantity} cone`,
+								text: [
+									Number(grand_total_quantity) > 0
+										? `Total Zipper: ${Number(grand_total_quantity)} pcs`
+										: '',
+									Number(grand_total_quantity) > 0 &&
+									Number(grand_thread_total_quantity) > 0
+										? ', '
+										: '',
+									Number(grand_thread_total_quantity) > 0
+										? `Total Thread: ${grand_thread_total_quantity} cone`
+										: '',
+								],
 								alignment: 'right',
 								bold: true,
 								colSpan: 5,
@@ -262,10 +264,10 @@ export default function Index(data) {
 							{},
 							{},
 							{
-								text: `U.S.$: ${Number(grand_total_value || 0).toFixed(2)}`,
+								text: `BDT: ${Number(grand_total_value * data?.conversion_rate || 0).toFixed(2)}`,
 								alignment: 'right',
 								bold: true,
-								colSpan: 2,
+								colSpan: 3,
 							},
 							{},
 							{},
@@ -279,7 +281,8 @@ export default function Index(data) {
 			{
 				text:
 					'Total Value(In Words) : ' +
-					DollarToWord(grand_total_value),
+					NumToWord(grand_total_value * data?.conversion_rate) +
+					' Taka Only',
 				bold: true,
 			},
 			{

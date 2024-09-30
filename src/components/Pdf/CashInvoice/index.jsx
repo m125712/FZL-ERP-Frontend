@@ -15,14 +15,16 @@ const node = [
 	getTable('pi_item_description', 'Item'),
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
-	getTable('h_s_code', 'H S,Code'),
-	getTable('quantity', 'Quantity', 'right'),
-	getTable('unit_price', 'Unit Price(US$)', 'right'),
-	getTable('value', 'Value(US$)', 'right'),
+	// getTable('h_s_code', 'H S,Code'),
+	getTable('quantity', 'Quantity(PCS)', 'right'),
+	getTable('quantity_pcs', 'Quantity(DZN)', 'right'),
+	getTable('unit_price', 'Unit Price(DZN)', 'right'),
+	getTable('unit_rate', 'Unit Rate', 'right'),
+	getTable('value', 'Value(BDT)', 'right'),
 ];
 
 export default function Index(data) {
-	const headerHeight = 170;
+	const headerHeight = 140;
 	let footerHeight = 50;
 	let { pi_cash_entry } = data;
 	let { pi_cash_entry_thread } = data;
@@ -114,9 +116,11 @@ export default function Index(data) {
 			pi_item_description: item,
 			specification: '',
 			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) cm`,
-			h_s_code: '9607,11.00',
-			quantity: TotalQuantity[index] + ' pcs',
-			unit_price: TotalUnitPrice[index] + '/pcs',
+			//h_s_code: '9607,11.00',
+			quantity: TotalQuantity[index] + 'pcs',
+			quantity_pcs: TotalQuantity[index],
+			unit_price: TotalUnitPrice[index] + '/dzn',
+			unit_rate: Number(TotalValue[index]),
 			value: Number(TotalValue[index]).toFixed(2),
 		};
 	});
@@ -143,9 +147,11 @@ export default function Index(data) {
 				pi_item_description: item,
 				specification: '100% SPUN POLYESTER SEWEING THREAD',
 				size: item.match(/\d+$/)[0] + ' mtr',
-				h_s_code: '5402,62.00',
+				//h_s_code: '5402,62.00',
 				quantity: TotalThreadQuantity[index] + ' cone',
+				quantity_pcs: TotalThreadQuantity[index] + ' cone',
 				unit_price: TotalThreadUnitPrice[index] + '/cone',
+				unit_rate: Number(TotalThreadUnitPrice[index]).toFixed(2),
 				value: Number(TotalThreadValue[index]).toFixed(2),
 			};
 		}
@@ -224,7 +230,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [100, 100, 70, 50, 50, 50, '*'],
+					widths: [90, 90, 60, 39, 39, 45, 41, '*'],
 					body: [
 						// Header
 						TableHeader(node),
@@ -262,6 +268,7 @@ export default function Index(data) {
 								colSpan: 2,
 							},
 							{},
+							{},
 						],
 					],
 				},
@@ -277,27 +284,6 @@ export default function Index(data) {
 			},
 			{
 				text: '\n',
-			},
-			{
-				text: 'Terms & Conditions',
-				underline: true,
-				decoration: 'underline',
-				bold: true,
-			},
-			{
-				text: '\n',
-			},
-			{
-				table: {
-					headerRows: 0,
-					heights: 10,
-					widths: [60, '*'],
-					body: headers.map((header, index) => [
-						{ text: header, bold: true },
-						{ text: values[index] },
-					]),
-				},
-				layout: 'noBorders',
 			},
 		],
 	});

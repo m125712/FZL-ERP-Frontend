@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import BatchSheetPdf from '@components/Pdf/ThreadBatchSheet';
+import BatchSheetPdf from '@components/Pdf/ThreadBulkRecipe';
+import TravelingCard from '@components/Pdf/ThreadTravelCard';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAccess, useFetch, useFetchFunc } from '@/hooks';
 
@@ -46,9 +47,18 @@ export default function Index() {
 	// ! FOR TESTING
 	const [data, setData] = useState('');
 
+	// useEffect(() => {
+	// 	if (batch && batch?.batch_entry) {
+	// 		BatchSheetPdf(batch, shade_recipes_entries, programs)?.getDataUrl(
+	// 			(dataUrl) => {
+	// 				setData(dataUrl);
+	// 			}
+	// 		);
+	// 	}
+	// }, [batch, programs, shade_recipes_entries]);
 	useEffect(() => {
 		if (batch && batch?.batch_entry) {
-			BatchSheetPdf(batch, shade_recipes_entries, programs)?.getDataUrl(
+			TravelingCard(batch, shade_recipes_entries, programs)?.getDataUrl(
 				(dataUrl) => {
 					setData(dataUrl);
 				}
@@ -71,6 +81,7 @@ export default function Index() {
 				src={data}
 				className='h-[40rem] w-full rounded-md border-none'
 			/>
+
 			<Information
 				batch={batch}
 				water_capacity={machine?.water_capacity}

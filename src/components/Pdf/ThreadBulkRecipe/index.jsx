@@ -15,9 +15,7 @@ import { getPageFooter, getPageHeader } from './utils';
 const node = [
 	getTable('recipe_name', 'Recipe Name'),
 	getTable('style', 'Style'),
-	getTable('color', 'Color'),
 	getTable('count_length', 'Count Length'),
-	getTable('bleaching', 'Bleaching'),
 	getTable('order_quantity', 'Order Quantity', 'right'),
 	getTable('balance_quantity', 'Balance Quantity', 'right'),
 	getTable('quantity', 'Quantity', 'right'),
@@ -34,7 +32,7 @@ const node2 = [
 ];
 
 export default function Index(batch, shade_recipes_entries, programs) {
-	const headerHeight = 170;
+	const headerHeight = 250;
 	let footerHeight = 50;
 	const { batch_entry } = batch;
 
@@ -49,7 +47,7 @@ export default function Index(batch, shade_recipes_entries, programs) {
 		header: {
 			table: getPageHeader(batch),
 			layout: 'noBorders',
-			margin: [xMargin, 40, xMargin, 0],
+			margin: [xMargin, 30, xMargin, 0],
 		},
 		// * Page Footer
 		footer: (currentPage, pageCount) => ({
@@ -95,82 +93,62 @@ export default function Index(batch, shade_recipes_entries, programs) {
 				text: '\n',
 			},
 			{
+				text: 'Dyes',
+				Style: 'tableTitle',
+				alignment: 'left',
+				bold: true,
+				fontSize: DEFAULT_FONT_SIZE + 4,
+			},
+			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', '*', '*', '*', '*', '*'],
+					widths: ['*', '*', '*', 30, 30, 30, '*'],
 					body: [
-						[
-							'Dyeing MC',
-							'Pkg Loading Checked By',
-							'D & C Conformation By',
-							'R/C conformation',
-							{ text: 'Passed by', colSpan: 3 },
-							'',
-							'',
-						],
-						['', '', '', '', '','',''],
+						TableHeader(node2),
+						...(Array.isArray(shade_recipes_entries)
+							? shade_recipes_entries.map((item) =>
+									node2.map((nodeItem) => ({
+										text: item[nodeItem.field] || '',
+										style: nodeItem.cellStyle,
+										alignment: nodeItem.alignment,
+									}))
+								)
+							: []),
 					],
 				},
 				// layout: 'lightHorizontalLines',
 				//layout: tableLayoutStyle,
 			},
-			// {
-			// 	text: 'Dyes',
-			// 	Style: 'tableTitle',
-			// 	alignment: 'left',
-			// 	bold: true,
-			// 	fontSize: DEFAULT_FONT_SIZE + 4,
-			// },
-			// {
-			// 	table: {
-			// 		headerRows: 1,
-			// 		widths: ['*', '*', '*', 30, 30, 30, '*'],
-			// 		body: [
-			// 			TableHeader(node2),
-			// 			...(Array.isArray(shade_recipes_entries)
-			// 				? shade_recipes_entries.map((item) =>
-			// 						node2.map((nodeItem) => ({
-			// 							text: item[nodeItem.field] || '',
-			// 							style: nodeItem.cellStyle,
-			// 							alignment: nodeItem.alignment,
-			// 						}))
-			// 					)
-			// 				: []),
-			// 		],
-			// 	},
-			// 	// layout: 'lightHorizontalLines',
-			// 	//layout: tableLayoutStyle,
-			// },
-			// {
-			// 	text: '\n',
-			// },
-			// {
-			// 	text: 'Others',
-			// 	Style: 'tableTitle',
-			// 	alignment: 'left',
-			// 	bold: true,
-			// 	fontSize: DEFAULT_FONT_SIZE + 4,
-			// },
-			// {
-			// 	table: {
-			// 		headerRows: 1,
-			// 		widths: ['*', '*', '*', 30, 30, 30, '*'],
-			// 		body: [
-			// 			TableHeader(node2),
-			// 			...(Array.isArray(programs)
-			// 				? programs.map((item) =>
-			// 						node2.map((nodeItem) => ({
-			// 							text: item[nodeItem.field] || '',
-			// 							style: nodeItem.cellStyle,
-			// 							alignment: nodeItem.alignment,
-			// 						}))
-			// 					)
-			// 				: []),
-			// 		],
-			// 	},
-			// 	// layout: 'lightHorizontalLines',
-			// 	//layout: tableLayoutStyle,
-			// },
+			{
+				text: '\n',
+			},
+			{
+				text: 'Others',
+				Style: 'tableTitle',
+				alignment: 'left',
+				bold: true,
+				fontSize: DEFAULT_FONT_SIZE + 4,
+			},
+			{
+				table: {
+					headerRows: 1,
+					widths: ['*', '*', '*', 30, 30, 30, '*'],
+					body: [
+						TableHeader(node2),
+						...(Array.isArray(programs)
+							? programs.map((item) =>
+									node2.map((nodeItem) => ({
+										text: item[nodeItem.field] || '',
+										style: nodeItem.cellStyle,
+										alignment: nodeItem.alignment,
+									}))
+								)
+							: []),
+					],
+				},
+				// layout: 'lightHorizontalLines',
+				//layout: tableLayoutStyle,
+			},
 		],
 	});
 

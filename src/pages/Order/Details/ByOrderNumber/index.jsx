@@ -9,6 +9,7 @@ import OrderSheetPdf from '@/components/Pdf/OrderSheet';
 import { OrderInformation } from '../_components/Information';
 
 const OrderDescriptionUUID = lazy(() => import('../ByOrderDescriptionUUID'));
+const ViewByStyle = lazy(() => import('../_components/ViewByStyle'));
 
 const getPath = (haveAccess, order_number, userId) => {
 	if (haveAccess.includes('show_own_orders'))
@@ -31,22 +32,31 @@ export default function Index() {
 	const haveAccess = useAccess('order__details');
 
 	const [orders, setOrders] = useState([]);
-	const [ garments, setGarments ] = useState([]);
-	const [ sr, setSr ] = useState([]);
+	const [garments, setGarments] = useState([]);
+	const [sr, setSr] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [data, setData] = useState('');
 	const [getPdfData, setGetPdfData] = useState(null);
+	const [updateView, setUpdateView] = useState(false);
 
 	const path = getPath(haveAccess, order_number, user?.uuid);
-
 
 	useEffect(() => {
 		document.title = order_number;
 		useFetchFunc(path, setOrders, setLoading, setError);
-		useFetchFunc(`/other/order-properties/by/garments_wash`, setGarments, setLoading, setError);
-		useFetchFunc(`/other/order-properties/by/special_requirement`, setSr, setLoading, setError);
-
+		useFetchFunc(
+			`/other/order-properties/by/garments_wash`,
+			setGarments,
+			setLoading,
+			setError
+		);
+		useFetchFunc(
+			`/other/order-properties/by/special_requirement`,
+			setSr,
+			setLoading,
+			setError
+		);
 	}, [order_number]);
 
 	useEffect(() => {
@@ -87,6 +97,7 @@ export default function Index() {
 			// getPdfData.download();
 		}
 	}, [orders, garments, sr]);
+
 
 	if (loading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -132,17 +143,32 @@ export default function Index() {
 				// handelPdfDownload={() =>
 				// 	getPdfData?.download(`Order Sheet ${order_number}.pdf`)
 				// }
+				handleViewChange={() =>
+					updateView ? setUpdateView(false) : setUpdateView(true)
+				}
 			/>
 
-			{orders?.map((order, idx) => (
-				<div key={idx}>
-					<Suspense>
-						<OrderDescriptionUUID initial_order={order} idx={idx} />
-					</Suspense>
+			{!updateView &&
+				orders?.map((order, idx) => (
+					<div key={idx}>
+						<Suspense>
+							<OrderDescriptionUUID
+								initial_order={order}
+								idx={idx}
+							/>
+						</Suspense>
 
-					{renderHr(idx !== orders.length - 1)}
+						{renderHr(idx !== orders.length - 1)}
+					</div>
+				))}
+
+			{updateView && (
+				<div>
+					<Suspense>
+						<ViewByStyle initial_orders={orders} />
+					</Suspense>
 				</div>
-			))}
+			)}
 		</div>
 	);
 }

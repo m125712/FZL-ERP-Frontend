@@ -145,7 +145,7 @@ export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
 	return [
 		[
 			{
-				text: 'Description full',
+				text: 'Description',
 				style: 'tableHeader',
 				alignment: 'Center',
 			},
@@ -186,51 +186,51 @@ export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
 			},
 			...Array.from({ length: uniqueSizes.length + 1 }, () => ''),
 		],
-		[
-			{
-				text: 'Description',
-				style: 'tableHeader',
-				alignment: 'Center',
-			},
-			{
-				colSpan: uniqueSizes.length + 2,
-				text: [
-					item_short_name ? item_short_name : 'N/A',
-					' / ',
-					zipper_number_short_name ? zipper_number_short_name : 'N/A',
-					' / ',
-					end_type_short_name ? end_type_short_name : 'N/A',
-					' / ',
-					lock_type_short_name ? lock_type_short_name : 'N/A',
-					' / ',
-					teeth_color_short_name ? teeth_color_short_name : 'N/A',
-					' / ',
-					puller_type_short_name ? puller_type_short_name : 'N/A',
-					' / ',
-					slider_color_short_name ? slider_color_short_name : 'N/A',
-					' / ',
-					logo_type_name
-						? logo_type_name +
-							`(${is_logo_body ? 'B' : ''})` +
-							`(${is_logo_puller ? 'P' : ''})`
-						: 'N/A',
-					' / ',
-					top_stopper_short_name ? top_stopper_short_name : 'N/A',
-					' / ',
-					bottom_stopper_short_name
-						? bottom_stopper_short_name
-						: 'N/A',
-					' / ',
-					srinfo && srinfo.length > 0
-						? `(${srinfo?.join(', ')})`
-						: 'N/A',
-					' / ',
-					description ? `(${description})` : 'N/A',
-				],
-				style: 'tableHeader',
-			},
-			...Array.from({ length: uniqueSizes.length + 1 }, () => ''),
-		],
+		// [
+		// 	{
+		// 		text: 'Description',
+		// 		style: 'tableHeader',
+		// 		alignment: 'Center',
+		// 	},
+		// 	{
+		// 		colSpan: uniqueSizes.length + 2,
+		// 		text: [
+		// 			item_short_name ? item_short_name : 'N/A',
+		// 			' / ',
+		// 			zipper_number_short_name ? zipper_number_short_name : 'N/A',
+		// 			' / ',
+		// 			end_type_short_name ? end_type_short_name : 'N/A',
+		// 			' / ',
+		// 			lock_type_short_name ? lock_type_short_name : 'N/A',
+		// 			' / ',
+		// 			teeth_color_short_name ? teeth_color_short_name : 'N/A',
+		// 			' / ',
+		// 			puller_type_short_name ? puller_type_short_name : 'N/A',
+		// 			' / ',
+		// 			slider_color_short_name ? slider_color_short_name : 'N/A',
+		// 			' / ',
+		// 			logo_type_name
+		// 				? logo_type_name +
+		// 					`(${is_logo_body ? 'B' : ''})` +
+		// 					`(${is_logo_puller ? 'P' : ''})`
+		// 				: 'N/A',
+		// 			' / ',
+		// 			top_stopper_short_name ? top_stopper_short_name : 'N/A',
+		// 			' / ',
+		// 			bottom_stopper_short_name
+		// 				? bottom_stopper_short_name
+		// 				: 'N/A',
+		// 			' / ',
+		// 			srinfo && srinfo.length > 0
+		// 				? `(${srinfo?.join(', ')})`
+		// 				: 'N/A',
+		// 			' / ',
+		// 			description ? `(${description})` : 'N/A',
+		// 		],
+		// 		style: 'tableHeader',
+		// 	},
+		// 	...Array.from({ length: uniqueSizes.length + 1 }, () => ''),
+		// ],
 		[
 			{
 				text: 'Style',

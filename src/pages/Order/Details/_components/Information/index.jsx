@@ -70,7 +70,7 @@ const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
 	return <TitleValue title='Cash / LC' value={value} />;
 };
 
-export function OrderInformation({ order, handelPdfDownload }) {
+export function OrderInformation({ order, handelPdfDownload, handleViewChange }) {
 	const {
 		order_number,
 		reference_order,
@@ -174,6 +174,13 @@ export function OrderInformation({ order, handelPdfDownload }) {
 				className='btn btn-accent btn-sm rounded-badge'
 				onClick={handelPdfDownload}>
 				<PDF className='w-4' /> PDF
+			</button>,
+			<button
+				key='pdf'
+				type='button'
+				className='btn bg-yellow-400 border-none hover:bg-yellow-500 btn-sm rounded-badge'
+				onClick={handleViewChange}>
+				View by Style
 			</button>,
 		];
 	};

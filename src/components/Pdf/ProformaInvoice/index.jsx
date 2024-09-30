@@ -246,7 +246,18 @@ export default function Index(data) {
 						),
 						[
 							{
-								text: `Total Zipper: ${Number(grand_total_quantity || 0)} pcs, Total Thread: ${grand_thread_total_quantity} cone`,
+								text: [
+									Number(grand_total_quantity) > 0
+										? `Total Zipper: ${Number(grand_total_quantity)} pcs`
+										: '',
+									Number(grand_total_quantity) > 0 &&
+									Number(grand_thread_total_quantity) > 0
+										? ', '
+										: '',
+									Number(grand_thread_total_quantity) > 0
+										? `Total Thread: ${grand_thread_total_quantity} cone`
+										: '',
+								],
 								alignment: 'right',
 								bold: true,
 								colSpan: 5,

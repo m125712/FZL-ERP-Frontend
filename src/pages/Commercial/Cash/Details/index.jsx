@@ -1,6 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useCommercialPIDetailsByPiId } from '@/state/Commercial';
 import { useParams } from 'react-router-dom';
+
+import PiPdfSheet from '@/components/Pdf/CashInvoice';
 
 import Information from './Information';
 import ThreadTable from './Table/ThreadTable';
@@ -15,12 +17,26 @@ export default function Index() {
 		invalidateQuery();
 		document.title = `PI: ${pi_id}`;
 	}, [pi_id]);
+	// ! FOR TESTING
+	const [data2, setData] = useState('');
 
+	useEffect(() => {
+		if (data && data?.pi_cash_entry) {
+			PiPdfSheet(data)?.getDataUrl((dataUrl) => {
+				setData(dataUrl);
+			});
+		}
+	}, [data]);
+	// ! FOR TESTING
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
 		<div className='space-y-8 py-4'>
+			<iframe
+				src={data2}
+				className='h-[40rem] w-full rounded-md border-none'
+			/>
 			<Information pi={data} />
 			<ZipperTable pi={data?.pi_cash_entry} />
 			<ThreadTable pi_cash_entry_thread={data?.pi_cash_entry_thread} />

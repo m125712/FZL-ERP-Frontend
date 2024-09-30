@@ -5,6 +5,7 @@ import { useAccess, useFetch } from '@/hooks';
 import ReactTable from '@/components/Table';
 import { LinkWithCopy, ReactSelect } from '@/ui';
 
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
@@ -127,7 +128,10 @@ export default function Index() {
 	const handleSwatchStatus = async (e, idx) => {
 		await updateData.mutateAsync({
 			url: `/zipper/sfg-swatch/${data[idx]?.uuid}`,
-			updatedData: { recipe_uuid: e.value },
+			updatedData: {
+				recipe_uuid: e.value,
+				swatch_approval_date: GetDateTime(),
+			},
 			isOnCloseNeeded: false,
 		});
 	};

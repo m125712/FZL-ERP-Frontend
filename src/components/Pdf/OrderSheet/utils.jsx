@@ -106,57 +106,131 @@ export const getPageFooter = ({ currentPage, pageCount }) => {
 	};
 };
 
-export const TableHeader = ({ entry, uniqueSizes }) => {
+export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
 	const {
+		item_name,
+		zipper_number_name,
+		end_type_name,
+		lock_type_name,
+		teeth_color_name,
+		puller_type_name,
+		puller_color_name: slider_color_name,
+		logo_type_name,
+		top_stopper_name,
+		bottom_stopper_name,
+
+		// short_name,
 		item_short_name,
 		zipper_number_short_name,
 		end_type_short_name,
 		lock_type_short_name,
-		stopper_type_short_name,
-		puller_type_short_name,
 		teeth_color_short_name,
-		puller_color_short_name,
+		puller_type_short_name,
+		puller_color_short_name: slider_color_short_name,
+		logo_type_short_name,
+		top_stopper_short_name,
+		bottom_stopper_short_name,
+
+		stopper_type_short_name,
 		hand_short_name,
 		coloring_type_short_name,
-		special_requirement,
-	} = entry;
 
-	const FIXED_COLUMN_LENGTH = 3;
+		// is logo
+		is_logo_body,
+		is_logo_puller,
+
+		description,
+	} = entry;
 
 	return [
 		[
 			{
-				colSpan: uniqueSizes.length + FIXED_COLUMN_LENGTH,
+				text: 'Description',
+				style: 'tableHeader',
+				alignment: 'Center',
+			},
+			{
+				colSpan: uniqueSizes.length + 2,
 				text: [
-					item_short_name,
-					'-',
-					zipper_number_short_name,
-					'-',
-					end_type_short_name,
-					'-',
-					lock_type_short_name,
-					'-',
-					stopper_type_short_name,
-					'-',
-					puller_type_short_name,
-					'-',
-					teeth_color_short_name,
-					'-',
-					puller_color_short_name,
-					'-',
-					hand_short_name,
-					'-',
-					coloring_type_short_name,
-					// "-",
-					// special_requirement,
+					item_name ? item_name : 'N/A',
+					' / ',
+					zipper_number_name ? zipper_number_name : 'N/A',
+					' / ',
+					end_type_name ? end_type_name : 'N/A',
+					' / ',
+					lock_type_name ? lock_type_name : 'N/A',
+					' / ',
+					teeth_color_name ? teeth_color_name : 'N/A',
+					' / ',
+					puller_type_name ? puller_type_name : 'N/A',
+					' / ',
+					slider_color_name ? slider_color_name : 'N/A',
+					' / ',
+					logo_type_name
+						? logo_type_name +
+							`(${is_logo_body ? 'Body' : ''})` +
+							`(${is_logo_puller ? 'Puller' : ''})`
+						: 'N/A',
+					' / ',
+					top_stopper_name ? top_stopper_name : 'N/A',
+					' / ',
+					bottom_stopper_name ? bottom_stopper_name : 'N/A',
+					' / ',
+					srinfo && srinfo.length > 0
+						? `(${srinfo?.join(', ')})`
+						: 'N/A',
+					' / ',
+					description ? `(${description})` : 'N/A',
 				],
 				style: 'tableHeader',
 			},
-			...Array.from(
-				{ length: uniqueSizes.length + FIXED_COLUMN_LENGTH - 1 },
-				() => ''
-			),
+			...Array.from({ length: uniqueSizes.length + 1 }, () => ''),
 		],
+		// [
+		// 	{
+		// 		text: 'Description',
+		// 		style: 'tableHeader',
+		// 		alignment: 'Center',
+		// 	},
+		// 	{
+		// 		colSpan: uniqueSizes.length + 2,
+		// 		text: [
+		// 			item_short_name ? item_short_name : 'N/A',
+		// 			' / ',
+		// 			zipper_number_short_name ? zipper_number_short_name : 'N/A',
+		// 			' / ',
+		// 			end_type_short_name ? end_type_short_name : 'N/A',
+		// 			' / ',
+		// 			lock_type_short_name ? lock_type_short_name : 'N/A',
+		// 			' / ',
+		// 			teeth_color_short_name ? teeth_color_short_name : 'N/A',
+		// 			' / ',
+		// 			puller_type_short_name ? puller_type_short_name : 'N/A',
+		// 			' / ',
+		// 			slider_color_short_name ? slider_color_short_name : 'N/A',
+		// 			' / ',
+		// 			logo_type_name
+		// 				? logo_type_name +
+		// 					`(${is_logo_body ? 'B' : ''})` +
+		// 					`(${is_logo_puller ? 'P' : ''})`
+		// 				: 'N/A',
+		// 			' / ',
+		// 			top_stopper_short_name ? top_stopper_short_name : 'N/A',
+		// 			' / ',
+		// 			bottom_stopper_short_name
+		// 				? bottom_stopper_short_name
+		// 				: 'N/A',
+		// 			' / ',
+		// 			srinfo && srinfo.length > 0
+		// 				? `(${srinfo?.join(', ')})`
+		// 				: 'N/A',
+		// 			' / ',
+		// 			description ? `(${description})` : 'N/A',
+		// 		],
+		// 		style: 'tableHeader',
+		// 	},
+		// 	...Array.from({ length: uniqueSizes.length + 1 }, () => ''),
+		// ],
 		[
 			{
 				text: 'Style',

@@ -9,6 +9,7 @@ import OrderSheetPdf from '@/components/Pdf/OrderSheet';
 import { OrderInformation } from '../_components/Information';
 
 const OrderDescriptionUUID = lazy(() => import('../ByOrderDescriptionUUID'));
+const ViewByStyle = lazy(() => import('../_components/ViewByStyle'));
 
 const getPath = (haveAccess, order_number, userId) => {
 	if (haveAccess.includes('show_own_orders'))
@@ -31,20 +32,34 @@ export default function Index() {
 	const haveAccess = useAccess('order__details');
 
 	const [orders, setOrders] = useState([]);
+	const [garments, setGarments] = useState([]);
+	const [sr, setSr] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [data, setData] = useState('');
 	const [getPdfData, setGetPdfData] = useState(null);
+	const [updateView, setUpdateView] = useState(false);
 
 	const path = getPath(haveAccess, order_number, user?.uuid);
 
 	useEffect(() => {
 		document.title = order_number;
 		useFetchFunc(path, setOrders, setLoading, setError);
+		useFetchFunc(
+			`/other/order-properties/by/garments_wash`,
+			setGarments,
+			setLoading,
+			setError
+		);
+		useFetchFunc(
+			`/other/order-properties/by/special_requirement`,
+			setSr,
+			setLoading,
+			setError
+		);
 	}, [order_number]);
 
 	useEffect(() => {
-		
 		if (orders.length > 0) {
 			const order_info = {
 				id: orders[0]?.id,
@@ -68,6 +83,8 @@ export default function Index() {
 			const order_sheet = {
 				order_info,
 				order_entry: orders,
+				garments,
+				sr,
 			};
 
 			const res = OrderSheetPdf(order_sheet);
@@ -79,7 +96,8 @@ export default function Index() {
 			});
 			// getPdfData.download();
 		}
-	}, [orders]);
+	}, [orders, garments, sr]);
+
 
 	if (loading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -100,6 +118,8 @@ export default function Index() {
 		user_name: orders[0]?.user_name,
 		created_at: orders[0]?.created_at,
 		updated_at: orders[0]?.updated_at,
+		order_info_uuid: orders[0]?.order_info_uuid,
+		print_in: orders[0]?.print_in,
 	};
 
 	if (!orders) return <Navigate to='/not-found' />;
@@ -113,9 +133,9 @@ export default function Index() {
 	return (
 		<div className='flex flex-col py-4'>
 			<iframe
-				id="iframeContainer"
+				id='iframeContainer'
 				src={data}
-				className="h-[40rem] w-full rounded-md border-none"
+				className='h-[40rem] w-full rounded-md border-none'
 			/>
 
 			<OrderInformation
@@ -123,17 +143,33 @@ export default function Index() {
 				// handelPdfDownload={() =>
 				// 	getPdfData?.download(`Order Sheet ${order_number}.pdf`)
 				// }
+				handleViewChange={() =>
+					updateView ? setUpdateView(false) : setUpdateView(true)
+				}
+				updateView
 			/>
 
-			{orders?.map((order, idx) => (
-				<div key={idx}>
-					<Suspense>
-						<OrderDescriptionUUID initial_order={order} idx={idx} />
-					</Suspense>
+			{!updateView &&
+				orders?.map((order, idx) => (
+					<div key={idx}>
+						<Suspense>
+							<OrderDescriptionUUID
+								initial_order={order}
+								idx={idx}
+							/>
+						</Suspense>
 
-					{renderHr(idx !== orders.length - 1)}
+						{renderHr(idx !== orders.length - 1)}
+					</div>
+				))}
+
+			{updateView && (
+				<div>
+					<Suspense>
+						<ViewByStyle initial_orders={orders} />
+					</Suspense>
 				</div>
-			))}
+			)}
 		</div>
 	);
 }

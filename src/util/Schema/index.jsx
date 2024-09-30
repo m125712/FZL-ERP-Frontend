@@ -538,9 +538,32 @@ export const ORDER_SCHEMA = {
 
 	// logo
 	logo_type: UUID_FK,
-	is_logo_body: BOOLEAN_DEFAULT_VALUE(false),
-	is_logo_puller: BOOLEAN_DEFAULT_VALUE(false),
-
+	is_logo_body: BOOLEAN.default(false).when('logo_type', {
+		is: (value) => value != null && value !== '', // Check if logo_type has a value
+		then: (schema) =>
+			schema.test(
+				'is_logo_body_test',
+				'Either logo body or logo puller is required',
+				function (value) {
+					// Pass if either is_logo_body is true or is_logo_puller is true
+					return value || this.parent.is_logo_puller;
+				}
+			),
+		otherwise: (schema) => schema, // No special validation if logo_type is null or empty
+	}),
+	is_logo_puller: BOOLEAN.default(false).when('logo_type', {
+		is: (value) => value != null && value !== '', // Check if logo_type has a value
+		then: (schema) =>
+			schema.test(
+				'is_logo_puller_test',
+				'Either logo body or logo puller is required',
+				function (value) {
+					// Pass if either is_logo_puller is true or is_logo_body is true
+					return value || this.parent.is_logo_body;
+				}
+			),
+		otherwise: (schema) => schema, // No special validation if logo_type is null or empty
+	}),
 	is_slider_provided: BOOLEAN_DEFAULT_VALUE(false),
 
 	// garments
@@ -578,6 +601,8 @@ export const ORDER_NULL = {
 	puller_type: null,
 	teeth_color: null,
 	puller_color: null,
+	is_logo_body: false,
+	is_logo_puller: false,
 	special_requirement: '',
 	description: '',
 	remarks: '',

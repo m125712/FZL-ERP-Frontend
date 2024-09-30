@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import ReactTable from '@/components/Table';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-import { DateTime } from '@/ui';
+import { DateTime, StatusButton } from '@/ui';
 
 export default function Index({ order_info_entry }) {
 	const columns = useMemo(
@@ -19,6 +19,46 @@ export default function Index({ order_info_entry }) {
 			// 	enableColumnFilter: false,
 			// 	cell: (info) => info.getValue(),
 			// },
+			{
+				accessorKey: 'id',
+				header: 'ID',
+				enableColumnFilter: false,
+				cell: (info) => info.row.index + 1,
+			},
+			{
+				accessorKey: 'status',
+				header: () => (
+					<span>
+						Status <br /> (Price/Swatch)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { company_price, party_price, swatch_approval_date } =
+						info.row.original;
+					return (
+						<div className='flex items-center justify-start gap-2'>
+							<StatusButton
+								size='btn-xs'
+								value={
+									Number(company_price) > 0 &&
+									Number(party_price) > 0
+										? 1
+										: 0
+								}
+								idx={info.row.index + 1}
+								// showIdx={true}
+							/>
+							<StatusButton
+								size='btn-xs'
+								value={swatch_approval_date ? 1 : 0}
+								idx={info.row.index + 1}
+								// showIdx={true}
+							/>
+						</div>
+					);
+				},
+			},
 			{
 				accessorKey: 'style',
 				header: 'Style',

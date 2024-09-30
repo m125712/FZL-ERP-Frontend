@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useConeTrxByUUID, useDyeingCone } from '@/state/Thread';
 import { useRHF } from '@/hooks';
 
@@ -14,18 +14,24 @@ export default function Index({
 		uuid: null,
 		batch_entry_uuid: null,
 		trx_quantity: null,
+		coning_carton_quantity: null,
 		remarks: null,
 	},
 	setUpdateConingTrx,
 }) {
 	const { data, updateData, url } = useConeTrxByUUID(updateConingTrx?.uuid);
 	const { invalidateQuery } = useDyeingCone();
+	const [qty, setQty] = useState();
 
 	const MAX_TRX =
 		Number(updateConingTrx?.quantity) +
 		Number(updateConingTrx?.coning_production_quantity);
 
-	const { register, handleSubmit, errors, reset, context } = useRHF(
+	const MAX_CARTON = Math.ceil(
+		Number(qty) / Number(updateConingTrx?.cone_per_carton)
+	);
+
+	const { register, handleSubmit, errors, reset, context, watch } = useRHF(
 		{
 			quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0').max(
 				MAX_TRX,
@@ -52,6 +58,7 @@ export default function Index({
 			uuid: null,
 			batch_entry_uuid: null,
 			trx_quantity: null,
+			coning_carton_quantity: null,
 			remarks: null,
 		}));
 		reset({
@@ -79,6 +86,10 @@ export default function Index({
 		}
 	};
 
+	useEffect(() => {
+		setQty(watch('quantity'));
+	}, [watch('quantity')]);
+
 	return (
 		<AddModal
 			id={modalId}
@@ -91,6 +102,13 @@ export default function Index({
 				label='quantity'
 				unit='KG'
 				sub_label={`Max: ${MAX_TRX}`}
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				title='Carton Quantity'
+				label='carton_quantity'
+				sub_label={`MAX: ${MAX_CARTON} pcs`}
+				unit='PCS'
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

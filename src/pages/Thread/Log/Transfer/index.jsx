@@ -72,6 +72,12 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
+				accessorKey: 'carton_quantity',
+				header: 'Carton',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
 				enableColumnFilter: false,
@@ -129,6 +135,7 @@ export default function Index() {
 		uuid: null,
 		batch_entry_uuid: null,
 		trx_quantity: null,
+		coning_carton_quantity: null,
 		remarks: null,
 	});
 

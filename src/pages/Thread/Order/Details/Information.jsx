@@ -1,14 +1,31 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
-import { DateTime, TitleValue } from '@/ui';
+import { DateTime, StatusButton, TitleValue } from '@/ui';
 
 export default function Information({ orderInfo }) {
+	const [check, setCheck] = useState(true);
+	const [checkSwatch, setCheckSwatch] = useState(true);
+
 	useEffect(() => {
 		document.title = `Thread Order Details of ${orderInfo?.uuid}`;
 	}, []);
+
+	useEffect(() => {
+		orderInfo?.order_info_entry.map((item, i) => {
+			if (
+				Number(item?.company_price) <= 0 &&
+				Number(item?.party_price) <= 0
+			) {
+				setCheck(false);
+			}
+			if (!item?.swatch_approval_date) {
+				setCheckSwatch(false);
+			}
+		});
+	}, [orderInfo]);
 
 	const {
 		uuid,
@@ -107,8 +124,25 @@ export default function Information({ orderInfo }) {
 		};
 	};
 
+	const renderButtons = () => {
+		return [
+			<StatusButton
+				className={'border-0'}
+				key={'swatch_approval_status'}
+				size='btn-xs md:btn-sm'
+				value={check}
+			/>,
+			<StatusButton
+				className={'border-0'}
+				key={'swatch_approval_status'}
+				size='btn-xs md:btn-sm'
+				value={checkSwatch}
+			/>,
+		];
+	};
+
 	return (
-		<SectionContainer title={'Information'}>
+		<SectionContainer title={'Information'} buttons={renderButtons()}>
 			<div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-8'>
 				<RenderTable
 					className={'border-secondary/30 lg:border-r'}

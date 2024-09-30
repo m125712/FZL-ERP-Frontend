@@ -45,7 +45,7 @@ export const getPageHeader = (data) => {
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
-						`O/N: ${data?.id}\n`,
+						`PI No: ${data?.id}\n`,
 						`Date: ${created_at}\n`,
 					],
 					alignment: 'right',
@@ -62,12 +62,11 @@ export const getPageHeader = (data) => {
 				data?.bank_name,
 			],
 			[
-				//{ text: '', bold: true, color: PRIMARY_COLOR },
-				{ text: data?.party_address, colSpan: 2 },
-				'',
+				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
+				{ text: data?.party_address },
 
-				{ text: data?.bank_address, colSpan: 2 },
-				'',
+				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
+				{ text: data?.bank_address },
 				//{ text: 'Merchandiser', bold: true, color: PRIMARY_COLOR },
 			],
 			[
@@ -84,10 +83,21 @@ export const getPageHeader = (data) => {
 			// 	data?.created_by_name,
 			// ],
 			[
-				'',
-				'',
 				{ text: 'Attention', bold: true, color: PRIMARY_COLOR },
 				data?.merchandiser_name,
+				{ text: 'Routing No', bold: true, color: PRIMARY_COLOR },
+				data?.routing_no,
+			],
+
+			[
+				{
+					text: Number(data?.weight) > 0 ? 'Weight' : '',
+					bold: true,
+					color: PRIMARY_COLOR,
+				},
+				{ text: Number(data?.weight) > 0 ? data?.weight : '' },
+				'',
+				'',
 			],
 
 			// [

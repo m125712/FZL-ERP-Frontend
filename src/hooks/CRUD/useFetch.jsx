@@ -1,8 +1,10 @@
+import { useEffect } from 'react';
 import { allFlatRoutes } from '@/routes';
+import Cookies from 'js-cookie';
+
 import { api } from '@lib/api';
 import { BASE_API } from '@lib/secret';
-import Cookies from 'js-cookie';
-import { useEffect } from 'react';
+
 import useAsync from './useAsync';
 
 const DEFAULT_OPTIONS = {
@@ -98,6 +100,14 @@ const useFetchForRhfResetForPlanning = async (uri, reset) => {
 	}, []);
 };
 
+const useFetchForRhfResetForThreadChallan = async (uri, reset) => {
+	useEffect(() => {
+		api.get(uri).then((res) => {
+			return reset(res?.data?.data);
+		});
+	}, [uri, reset]);
+};
+
 const useFetchForRhfResetForUserAccess = (url, returnId, reset) => {
 	useEffect(() => {
 		if (returnId === null) return;
@@ -146,6 +156,7 @@ export {
 	useFetchForRhfReset,
 	useFetchForRhfResetForBatchProduct,
 	useFetchForRhfResetForPlanning,
+	useFetchForRhfResetForThreadChallan,
 	useFetchForRhfResetForUserAccess,
 	useFetchFunc,
 	useFetchFuncForReport,

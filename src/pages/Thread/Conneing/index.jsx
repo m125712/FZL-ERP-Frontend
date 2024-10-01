@@ -84,8 +84,8 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'coning_production_quantity_in_kg',
-				header: 'Production QTY In Kg',
+				accessorKey: 'coning_carton_quantity',
+				header: 'Carton QTY',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
@@ -107,6 +107,12 @@ export default function Index() {
 			{
 				accessorKey: 'transfer_quantity',
 				header: 'Warehouse',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'transfer_carton_quantity',
+				header: 'Warehouse Carton',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},

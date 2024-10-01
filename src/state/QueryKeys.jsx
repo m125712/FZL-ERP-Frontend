@@ -971,6 +971,8 @@ export const otherQK = {
 		designation,
 	],
 
+	// Thread Orders
+	threadOrders: () => [...otherQK.all(), 'thread-orders'],
 	//Order
 	order: () => [...otherQK.all(), 'order'],
 	orderDescription: () => [...otherQK.all(), 'order-description'],

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useConningProdLog, useDyeingCone } from '@/state/Thread';
 import { DevTool } from '@hookform/devtools';
@@ -7,7 +8,7 @@ import { AddModal } from '@/components/Modal';
 import { Input, JoinInput } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
-import { NUMBER_DOUBLE_REQUIRED, STRING } from '@util/Schema';
+import { NUMBER_REQUIRED, STRING } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
@@ -23,22 +24,32 @@ export default function Index({
 	const { postData, invalidateQuery } = useDyeingCone();
 	const { invalidateQuery: invalidateConningProdLog } = useConningProdLog();
 	const { user } = useAuth();
+	const [qty, setQty] = useState();
 
 	const MAX_TRX = Number(coningTrx?.coning_production_quantity);
-
-	const { register, handleSubmit, errors, reset, control, context } = useRHF(
-		{
-			quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0').max(
-				MAX_TRX,
-				'Beyond Max Quantity'
-			),
-			remarks: STRING.nullable(),
-		},
-		{
-			quantity: '',
-			remarks: '',
-		}
+	const MAX_CARTON = Math.ceil(
+		Number(qty) / Number(coningTrx?.cone_per_carton)
 	);
+
+
+	const { register, handleSubmit, errors, reset, control, context, watch } =
+		useRHF(
+			{
+				quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0').max(
+					MAX_TRX,
+					'Beyond Max Quantity'
+				),
+				carton_quantity: NUMBER_REQUIRED.moreThan(
+					0,
+					'More than 0'
+				).max(MAX_CARTON, 'Beyond max value'),
+				remarks: STRING.nullable(),
+			},
+			{
+				quantity: '',
+				remarks: '',
+			}
+		);
 
 	const onClose = () => {
 		setConingTrx((prev) => ({
@@ -76,6 +87,10 @@ export default function Index({
 		return;
 	};
 
+	useEffect(() => {
+		setQty(watch('quantity'));
+	}, [watch('quantity')]);
+
 	return (
 		<AddModal
 			id='ConingTrxModal'
@@ -89,6 +104,13 @@ export default function Index({
 				title='Transaction Quantity'
 				label='quantity'
 				sub_label={`MAX: ${MAX_TRX} pcs`}
+				unit='PCS'
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				title='Carton Quantity'
+				label='carton_quantity'
+				sub_label={`MAX: ${MAX_CARTON} pcs`}
 				unit='PCS'
 				{...{ register, errors }}
 			/>

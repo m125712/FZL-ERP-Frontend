@@ -1,6 +1,8 @@
-import { LinkWithCopy, Progress, StatusButton } from '@/ui';
-import { DEFAULT_COLUMNS } from '@/util/Table/DefaultColumns';
 import { useMemo } from 'react';
+
+import { LinkWithCopy, Progress, StatusButton } from '@/ui';
+
+import { DEFAULT_COLUMNS } from '@/util/Table/DefaultColumns';
 
 export const BuyerColumns = ({
 	handelUpdate,
@@ -385,7 +387,18 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'price_approval_status',
+				accessorKey: 'swatch_count',
+				header: 'Swatch Count',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { order_entry_count, swatch_approval_count } =
+						info.row.original;
+
+					return `${swatch_approval_count}/${order_entry_count}`;
+				},
+			},
+			{
+				accessorKey: 'is_swatch_approved',
 				header: 'Status',
 				enableColumnFilter: false,
 				cell: (info) => {

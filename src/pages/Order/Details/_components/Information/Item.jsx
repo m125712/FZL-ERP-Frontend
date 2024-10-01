@@ -1,8 +1,7 @@
-import { useFetch } from '@/hooks';
-
 import RenderTable from '@/ui/Others/Table/RenderTable';
 
 import cn from '@/lib/cn';
+import { useFetch } from '@/hooks';
 
 // * function to get similar garment_wash
 const getGarmentInfo = (order_description) => {
@@ -74,7 +73,6 @@ export default function ItemDescription({ order_description, className }) {
 			logo_type_name,
 			slider_body_shape_name,
 			slider_link_name,
-			puller_link_name,
 			puller_color_name,
 			coloring_type_name,
 			slider_finishing_stock,
@@ -86,7 +84,6 @@ export default function ItemDescription({ order_description, className }) {
 
 			// tape
 			tape_name,
-			tape_color_name,
 			tape_received,
 			tape_transferred,
 			teeth_color_name,
@@ -146,7 +143,7 @@ export default function ItemDescription({ order_description, className }) {
 
 		const sliderInfo = [
 			{
-				label: 'name',
+				label: 'Material',
 				value: slider_name,
 			},
 			{
@@ -198,10 +195,6 @@ export default function ItemDescription({ order_description, className }) {
 				value: puller_type_name,
 			},
 			{
-				label: 'link',
-				value: puller_link_name,
-			},
-			{
 				label: 'color',
 				value: puller_color_name,
 			},
@@ -234,17 +227,6 @@ export default function ItemDescription({ order_description, className }) {
 			{
 				label: 'name',
 				value: tape_name,
-			},
-			{
-				label: 'color',
-				value: tape_color_name
-					?.split(' ') // Split the string by spaces into an array of words
-					.map(
-						(word) =>
-							word.charAt(0).toUpperCase() +
-							word.slice(1).toLowerCase() // Capitalize first letter of each word
-					)
-					.join(' '),
 			},
 			{
 				label: 'Required',

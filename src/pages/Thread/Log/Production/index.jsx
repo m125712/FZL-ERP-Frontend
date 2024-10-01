@@ -73,8 +73,8 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
-				accessorKey: 'production_quantity_in_kg',
-				header: 'Production QTY in kg (KG)',
+				accessorKey: 'coning_carton_quantity',
+				header: 'Carton',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},
@@ -135,7 +135,7 @@ export default function Index() {
 	const [updateConingProd, setUpdateConingProd] = useState({
 		uuid: null,
 		batch_entry_uuid: null,
-		production_quantity_in_kg: null,
+		coning_carton_quantity: null,
 		production_quantity: null,
 		wastage: null,
 		remarks: null,

@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { PDF } from '@/assets/icons';
+import { useOrderDescription } from '@/state/Order';
 import { format } from 'date-fns';
 
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
-import { LinkWithCopy, StatusButton, TitleValue } from '@/ui';
+import { LinkWithCopy, ReactSelect, StatusButton, TitleValue } from '@/ui';
 
 import ItemDescription from './Item';
 import OrderDescription from './Order';
@@ -12,15 +13,18 @@ import SliderDescription from './Slider';
 
 export default function SingleInformation({ order, idx, hasInitialOrder }) {
 	const [check, setCheck] = useState(true);
+	const [checkSwatch, setCheckSwatch] = useState(true);
 
 	useEffect(() => {
-		// todo: need to be fixed
-		order?.order_entry.map((item) => {
+		order?.order_entry.map((item, i) => {
 			if (
 				Number(item?.company_price) <= 0 &&
 				Number(item?.party_price) <= 0
 			) {
 				setCheck(false);
+			}
+			if (!item?.swatch_approval_date) {
+				setCheckSwatch(false);
 			}
 		});
 	}, [order]);
@@ -37,7 +41,7 @@ export default function SingleInformation({ order, idx, hasInitialOrder }) {
 				className={'border-0'}
 				key={'swatch_approval_status'}
 				size='btn-xs md:btn-sm'
-				value={false}
+				value={checkSwatch}
 			/>,
 		];
 	};
@@ -69,7 +73,12 @@ const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
 	return <TitleValue title='Cash / LC' value={value} />;
 };
 
-export function OrderInformation({ order, handelPdfDownload }) {
+export function OrderInformation({
+	order,
+	handelPdfDownload,
+	handleViewChange,
+	updateView,
+}) {
 	const {
 		order_number,
 		reference_order,
@@ -84,6 +93,9 @@ export function OrderInformation({ order, handelPdfDownload }) {
 		factory_name,
 		factory_address,
 	} = order;
+
+	const { updateData } = useOrderDescription();
+
 	const renderItems = () => {
 		const order_details = [
 			{
@@ -171,13 +183,64 @@ export function OrderInformation({ order, handelPdfDownload }) {
 				onClick={handelPdfDownload}>
 				<PDF className='w-4' /> PDF
 			</button>,
+			<button
+				key='pdf'
+				type='button'
+				className='btn btn-sm rounded-badge border-none bg-yellow-400 hover:bg-yellow-500'
+				onClick={handleViewChange}>
+				{updateView ? 'View by Style' : 'Default View'}
+			</button>,
 		];
+	};
+
+	const onChangePrint = async (select) => {
+		await updateData.mutateAsync({
+			url: `/zipper/order-info/print-in/update/by/${order?.order_info_uuid}`,
+			updatedData: {
+				print_in: select,
+			},
+			isOnCloseNeeded: false,
+		});
+	};
+
+	const renderSelector = () => {
+		const [select, setSelect] = useState(
+			order?.print_in ? order?.print_in : ''
+		);
+
+		const selections = [
+			{
+				label: 'Portrait',
+				value: 'portrait',
+			},
+			{
+				label: 'Landscape',
+				value: 'landscape',
+			},
+			{
+				label: 'Break Down',
+				value: 'break_down',
+			},
+		];
+
+		return (
+			<ReactSelect
+				placeholder='Select Order'
+				options={selections}
+				value={selections?.find((item) => item.value === select)}
+				onChange={(e) => {
+					setSelect(e.value);
+					onChangePrint(e.value);
+				}}
+			/>
+		);
 	};
 
 	return (
 		<SectionContainer
 			title='Order Information'
 			buttons={renderButtons()}
+			selector={renderSelector()}
 			className={'mb-8'}>
 			<div className='grid grid-cols-1 bg-base-100 md:grid-cols-2 md:gap-8'>
 				<RenderTable

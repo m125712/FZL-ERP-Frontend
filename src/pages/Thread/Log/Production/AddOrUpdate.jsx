@@ -1,6 +1,5 @@
-import { useEffect } from 'react';
-import { useConeProdByUUID, useDyeingCone} from '@/state/Thread';
-
+import { useEffect, useState } from 'react';
+import { useConeProdByUUID, useDyeingCone } from '@/state/Thread';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -19,7 +18,7 @@ export default function Index({
 	updateConingProd = {
 		uuid: null,
 		batch_entry_uuid: null,
-		production_quantity_in_kg: null,
+		coning_carton_quantity: null,
 		production_quantity: null,
 		wastage: null,
 		remarks: null,
@@ -28,11 +27,14 @@ export default function Index({
 }) {
 	const { data, updateData, url } = useConeProdByUUID(updateConingProd?.uuid);
 	const { invalidateQuery } = useDyeingCone();
+	const [qty, setQty] = useState();
 
 	const MAX_PROD =
 		Number(updateConingProd?.balance_quantity) +
 		Number(data?.production_quantity);
-	const MAX_PROD_KG = MAX_PROD;
+	const MAX_CARTON = Math.ceil(
+		Number(qty) / Number(updateConingProd.cone_per_carton)
+	);
 
 	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
 		{
@@ -40,20 +42,15 @@ export default function Index({
 				MAX_PROD,
 				'Beyond max value'
 			),
-			production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+			coning_carton_quantity: NUMBER_REQUIRED.moreThan(
 				0,
 				'More than 0'
-			).max(MAX_PROD, 'Beyond max value'),
-			wastage: NUMBER_DOUBLE.min(0, 'Minimum of 0')
-				.nullable()
-				.transform((value, originalValue) =>
-					String(originalValue).trim() === '' ? 0 : value
-				),
+			).max(MAX_CARTON, 'Beyond max value'),
 			remarks: STRING.nullable(),
 		},
 		{
 			production_quantity: '',
-			production_quantity_in_kg: '',
+			coning_carton_quantity: '',
 			wastage: '',
 			remarks: '',
 		}
@@ -71,14 +68,14 @@ export default function Index({
 			...prev,
 			uuid: null,
 			batch_entry_uuid: null,
-			production_quantity_in_kg: null,
+			coning_carton_quantity: null,
 			production_quantity: null,
 			wastage: null,
 			remarks: null,
 		}));
 		reset({
 			production_quantity: '',
-			production_quantity_in_kg: '',
+			coning_carton_quantity: '',
 			wastage: '',
 			remarks: '',
 		});
@@ -104,6 +101,10 @@ export default function Index({
 		}
 	};
 
+	useEffect(() => {
+		setQty(watch('production_quantity'));
+	}, [watch('production_quantity')]);
+
 	return (
 		<AddModal
 			id={modalId}
@@ -120,17 +121,10 @@ export default function Index({
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				title='Production Quantity In KG'
-				label='production_quantity_in_kg'
+				title='Carton Quantity'
+				label='coning_carton_quantity'
 				unit='KG'
-				sub_label={`MAX: ${MAX_PROD_KG} kg`}
-				{...{ register, errors }}
-			/>
-			<JoinInput
-				title='wastage'
-				label='wastage'
-				unit='KG'
-				sub_label={`MAX: ${MAX_PROD_KG} kg`}
+				sub_label={`MAX: ${MAX_CARTON} kg`}
 				{...{ register, errors }}
 			/>
 			<Textarea label='remarks' {...{ register, errors }} />

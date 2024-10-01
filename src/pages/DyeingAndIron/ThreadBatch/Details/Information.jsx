@@ -149,7 +149,7 @@ export default function Information({ batch, water_capacity }) {
 			},
 
 			{
-				label: 'Created By',
+				label: 'Created At',
 				value: dyeing_created_at,
 			},
 			{

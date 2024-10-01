@@ -538,9 +538,32 @@ export const ORDER_SCHEMA = {
 
 	// logo
 	logo_type: UUID_FK,
-	is_logo_body: BOOLEAN_DEFAULT_VALUE(false),
-	is_logo_puller: BOOLEAN_DEFAULT_VALUE(false),
-
+	is_logo_body: BOOLEAN.default(false).when('logo_type', {
+		is: (value) => value != null && value !== '', // Check if logo_type has a value
+		then: (schema) =>
+			schema.test(
+				'is_logo_body_test',
+				'Either logo body or logo puller is required',
+				function (value) {
+					// Pass if either is_logo_body is true or is_logo_puller is true
+					return value || this.parent.is_logo_puller;
+				}
+			),
+		otherwise: (schema) => schema, // No special validation if logo_type is null or empty
+	}),
+	is_logo_puller: BOOLEAN.default(false).when('logo_type', {
+		is: (value) => value != null && value !== '', // Check if logo_type has a value
+		then: (schema) =>
+			schema.test(
+				'is_logo_puller_test',
+				'Either logo body or logo puller is required',
+				function (value) {
+					// Pass if either is_logo_puller is true or is_logo_body is true
+					return value || this.parent.is_logo_body;
+				}
+			),
+		otherwise: (schema) => schema, // No special validation if logo_type is null or empty
+	}),
 	is_slider_provided: BOOLEAN_DEFAULT_VALUE(false),
 
 	// garments
@@ -578,6 +601,8 @@ export const ORDER_NULL = {
 	puller_type: null,
 	teeth_color: null,
 	puller_color: null,
+	is_logo_body: false,
+	is_logo_puller: false,
 	special_requirement: '',
 	description: '',
 	remarks: '',
@@ -1734,16 +1759,8 @@ export const LC_SCHEMA = {
 	lc_number: STRING_REQUIRED,
 	lc_date: STRING_REQUIRED,
 	payment_value: NUMBER_DOUBLE_REQUIRED,
-	payment_date: STRING.nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? null : value
-	),
 	ldbc_fdbc: STRING_REQUIRED.nullable(),
-	acceptance_date: STRING.nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? null : value
-	),
-	maturity_date: STRING.nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? null : value
-	),
+
 	commercial_executive: STRING_REQUIRED,
 	party_bank: STRING_REQUIRED,
 	production_complete: BOOLEAN_REQUIRED,
@@ -1751,13 +1768,25 @@ export const LC_SCHEMA = {
 	problematical: BOOLEAN_REQUIRED,
 	epz: BOOLEAN_REQUIRED,
 	is_rtgs: BOOLEAN_REQUIRED,
-	document_receive_date: STRING.nullable().transform(
-		(value, originalValue) =>
-			String(originalValue).trim() === '' ? null : value
-	), // dev
+
+	// * Progression
 	handover_date: STRING.nullable().transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? null : value
 	),
+	document_receive_date: STRING.nullable().transform(
+		(value, originalValue) =>
+			String(originalValue).trim() === '' ? null : value
+	),
+	acceptance_date: STRING.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? null : value
+	),
+	maturity_date: STRING.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? null : value
+	),
+	payment_date: STRING.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? null : value
+	),
+
 	shipment_date: STRING.nullable().transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? null : value
 	),
@@ -1896,6 +1925,33 @@ export const THREAD_DYES_CATEGORY_NULL = {
 	id: null,
 	upto_percentage: null,
 	remarks: '',
+};
+
+// Thread Challan
+export const THREAD_CHALLAN_SCHEMA = {
+	receive_status: BOOLEAN_DEFAULT_VALUE(false),
+	gate_pass: BOOLEAN_DEFAULT_VALUE(false),
+	assign_to: STRING_REQUIRED,
+	order_info_uuid: STRING_REQUIRED,
+	remarks: STRING.nullable(),
+	entries: yup.array().of(yup.object().shape({})),
+};
+
+export const THREAD_CHALLAN_NULL = {
+	uuid: null,
+	receive_status: false,
+	gate_pass: false,
+	assign_to: null,
+	order_info_uuid: null,
+	remarks: '',
+	entries: [
+		{
+			quantity: null,
+			short_quantity: null,
+			reject_quantity: null,
+			remarks: '',
+		},
+	],
 };
 
 // Thread Programs

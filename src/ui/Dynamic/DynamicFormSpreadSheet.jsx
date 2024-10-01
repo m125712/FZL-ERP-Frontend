@@ -1,56 +1,37 @@
 import React from 'react';
 import { Copy } from '@/assets/icons';
-import { DevTool } from '@hookform/devtools';
-import { ArrowRight, ChevronDown, ChevronRight, Trash2 } from 'lucide-react';
-import { useFieldArray } from 'react-hook-form';
+import { ChevronDown, Plus, Trash2 } from 'lucide-react';
 import Spreadsheet from 'react-spreadsheet';
-import * as yup from 'yup';
-import { useRHF } from '@/hooks';
-
-import { DynamicField, ReactSelect } from '@/ui';
 
 import cn from '@/lib/cn';
-import {
-	handelNumberDefaultValue,
-	NUMBER_DOUBLE_REQUIRED,
-	NUMBER_REQUIRED,
-	STRING_REQUIRED,
-} from '@/util/Schema';
 
-export const TEST_SCHEMA = {
-	test: yup.array().of(
-		yup.object().shape({
-			style: STRING_REQUIRED,
-			color: STRING_REQUIRED,
-			size: NUMBER_DOUBLE_REQUIRED,
-			quantity: NUMBER_REQUIRED,
-			company_price: NUMBER_DOUBLE_REQUIRED.transform(
-				handelNumberDefaultValue
-			).default(0),
-			party_price: NUMBER_DOUBLE_REQUIRED.transform(
-				handelNumberDefaultValue
-			).default(0),
-			bleaching: STRING_REQUIRED,
-		})
-	),
-};
+import { ReactSelect } from '..';
 
-export const TEST_NULL = {
-	test: [
-		{
-			style: '',
-			color: '',
-			size: 0,
-			quantity: 0,
-			company_price: 0,
-			party_price: 0,
-			bleaching: '',
+const DynamicFormSpreadSheet = (
+	{
+		title,
+		fieldArrayName,
+		columnsDefs,
+		headerButtons,
+		handelAppend,
+		handleRemove,
+		formContext: {
+			register,
+			watch,
+			setValue,
+			getValues,
+			clearErrors,
+			errors,
 		},
-	],
-};
-
-const Test = (
-	{ fieldArrayName, columnsDefs } = {
+		fields,
+		append,
+		update,
+		remove,
+	} = {
+		title: '',
+		headerButtons: [],
+		handelAppend: () => {},
+		handleRemove: (index) => {},
 		fieldArrayName: 'test',
 		columnsDefs: [
 			{
@@ -61,24 +42,22 @@ const Test = (
 				options: [{ label: '', value: '' }],
 			},
 		],
+
+		formContext: {
+			register: () => {},
+			watch: () => {},
+			setValue: () => {},
+			getValues: () => {},
+			clearErrors: () => {},
+			errors: {},
+		},
+
+		fields: [],
+		append: () => {},
+		update: () => {},
+		remove: () => {},
 	}
 ) => {
-	const {
-		register,
-		control,
-		handleSubmit,
-		errors,
-		watch,
-		setValue,
-		getValues,
-		clearErrors,
-	} = useRHF(TEST_SCHEMA, TEST_NULL);
-
-	const { fields, append, remove, update } = useFieldArray({
-		control,
-		name: fieldArrayName,
-	});
-
 	const columnLabels = columnsDefs.map((column) => {
 		return column.header || column.accessorKey;
 	});
@@ -116,7 +95,7 @@ const Test = (
 
 						DataViewer: ({ cell }) => {
 							return (
-								<div className='flex flex-col space-y-1 p-2'>
+								<div className='flex flex-col space-y-1 p-2 text-sm'>
 									{cell.value}
 									{errors?.[fieldArrayName]?.[fieldIndex]?.[
 										`${column.accessorKey}`
@@ -140,6 +119,33 @@ const Test = (
 						value: watch(
 							`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
 						),
+						// DataEditor: ({ cell, onChange }) => {
+						// 	return (
+						// 		<ReactSelect
+						// 			placeholder='Select Material'
+						// 			options={column.options}
+						// 			value={column.options?.find(
+						// 				(inItem) =>
+						// 					inItem.value ==
+						// 					getValues(
+						// 						`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
+						// 					)
+						// 			)}
+						// 			onChange={(e) => {
+						// 				onChange(e.target.value);
+						// 				update(fieldIndex, {
+						// 					...field,
+						// 					[column.accessorKey]:
+						// 						e.target.value,
+						// 				});
+						// 				clearErrors(
+						// 					`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
+						// 				);
+						// 			}}
+						// 			menuPortalTarget={document.body}
+						// 		/>
+						// 	);
+						// },
 						DataEditor: ({ cell, onChange }) => {
 							return (
 								<select
@@ -175,7 +181,17 @@ const Test = (
 							return (
 								<div className='flex flex-col space-y-1 p-2'>
 									<div className='jus flex items-center justify-between'>
-										<span>{cell.value}</span>
+										<span>
+											{
+												column.options.find(
+													(option) =>
+														option.value ===
+														watch(
+															`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
+														)
+												)?.label
+											}
+										</span>
 										<ChevronDown className='size-4' />
 									</div>
 
@@ -208,10 +224,30 @@ const Test = (
 										type='button'
 										className='btn btn-square btn-ghost btn-sm'
 										onClick={() => {
+											const columnsDefsKeys =
+												columnsDefs.map(
+													(column) =>
+														column.accessorKey
+												);
+
+											const newRow = getValues(
+												`${fieldArrayName}.${fieldIndex}`
+											);
+											const newRowKeys =
+												Object.keys(newRow);
+
+											newRowKeys.forEach((key) => {
+												if (
+													!columnsDefsKeys.includes(
+														key
+													)
+												) {
+													delete newRow[key];
+												}
+											});
+
 											append({
-												...getValues(
-													`${fieldArrayName}.${fieldIndex}`
-												),
+												...newRow,
 											});
 										}}>
 										<Copy className='size-5' />
@@ -220,7 +256,7 @@ const Test = (
 										type='button'
 										className='btn btn-square btn-sm border-none bg-transparent text-error'
 										onClick={() => {
-											remove(fieldIndex);
+											handleRemove(fieldIndex);
 										}}>
 										<Trash2 className='size-5' />
 									</button>
@@ -239,17 +275,6 @@ const Test = (
 
 		return data;
 	});
-	const addRow = () => {
-		append({
-			style: '',
-			color: '',
-			size: 0,
-			quantity: 0,
-			company_price: 0,
-			party_price: 0,
-			bleaching: '',
-		});
-	};
 
 	let data = [];
 
@@ -272,36 +297,50 @@ const Test = (
 	};
 
 	return (
-		<form onSubmit={handleSubmit((data) => console.log(data))}>
-			<DynamicField title='Details' handelAppend={addRow}>
-				<Spreadsheet
-					className='flex w-full'
-					columnLabels={columnLabels}
-					data={tableData}
-					hideRowIndicators
-					onBlur={() => {
-						handleTransformData();
-					}}
-					onChange={(e) => {
-						data = e;
-					}}
-					ColumnIndicator={(e) => {
-						return (
-							<th
-								className={cn(
-									'border-r bg-secondary p-2 text-left text-secondary-content last:border-none'
-								)}>
-								{e.label}
-							</th>
-						);
-					}}
-				/>
-			</DynamicField>
-			<input type='submit' />
+		<div className='rounded bg-primary text-primary-content'>
+			<div className='flex items-center justify-between px-4 py-3'>
+				<span className='flex items-center gap-4 text-lg font-semibold capitalize text-primary-content'>
+					{title}
+				</span>
 
-			<DevTool control={control} />
-		</form>
+				<div className='flex items-center gap-4'>
+					{headerButtons.length > 0 && headerButtons.map((e) => e)}
+
+					{handelAppend && (
+						<button
+							type='button'
+							className='btn btn-accent btn-xs rounded'
+							onClick={handelAppend}>
+							<Plus className='w-5' /> NEW
+						</button>
+					)}
+				</div>
+			</div>
+
+			<Spreadsheet
+				className='flex w-full'
+				columnLabels={columnLabels}
+				data={tableData}
+				hideRowIndicators
+				onBlur={() => {
+					handleTransformData();
+				}}
+				onChange={(e) => {
+					data = e;
+				}}
+				ColumnIndicator={(e) => {
+					return (
+						<th
+							className={cn(
+								'border-r bg-secondary p-2 text-left text-sm text-secondary-content last:border-none'
+							)}>
+							{e.label}
+						</th>
+					);
+				}}
+			/>
+		</div>
 	);
 };
 
-export default Test;
+export default DynamicFormSpreadSheet;

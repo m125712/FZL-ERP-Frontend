@@ -28,6 +28,8 @@ import { UUID } from '@/util/Schema/utils';
 
 import { SelectEdit, SelectView } from './CC';
 import Header from './Header';
+import Test from './Test';
+import Test2 from './Test2';
 
 export function getRowsCount(matrix) {
 	return matrix.length;
@@ -462,6 +464,61 @@ export default function Index() {
 			remarks: '',
 		});
 	};
+
+	return (
+		<Test
+			fieldArrayName='test'
+			columnsDefs={[
+				{
+					header: 'Style',
+					accessorKey: 'style',
+					type: 'text',
+					readOnly: false,
+				},
+				{
+					header: 'Color',
+					accessorKey: 'color',
+					type: 'text',
+					readOnly: false,
+				},
+				{
+					header: 'Size',
+					accessorKey: 'size',
+					type: 'text',
+					readOnly: false,
+				},
+				{
+					header: 'Quantity',
+					accessorKey: 'quantity',
+					type: 'text',
+					readOnly: false,
+				},
+				{
+					header: 'Company (USD/DZN)',
+					accessorKey: 'company_price',
+					type: 'text',
+					readOnly: false,
+				},
+				{
+					header: 'Party (USD/DZN)',
+					accessorKey: 'party_price',
+					type: 'text',
+					readOnly: false,
+				},
+				{
+					header: 'Bleach',
+					accessorKey: 'bleaching',
+					type: 'select',
+					options: bleachingOptions,
+					readOnly: false,
+				},
+				{
+					header: 'Actions',
+					type: 'action',
+				},
+			]}
+		/>
+	);
 
 	return (
 		<div>

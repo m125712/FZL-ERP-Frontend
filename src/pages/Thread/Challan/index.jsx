@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
-import { useDeliveryChallan, useDeliveryPackingList } from '@/state/Delivery';
+import { useThreadChallan } from '@/state/Thread';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -14,10 +14,9 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const navigate = useNavigate();
-	const { data, isLoading, url, deleteData, updateData } =
-		useDeliveryChallan();
-	const info = new PageInfo('Challan', url, 'delivery__challan');
-	const haveAccess = useAccess('delivery__challan');
+	const { data, isLoading, url, deleteData, updateData } = useThreadChallan();
+	const info = new PageInfo('Challan', url, 'thread__challan');
+	const haveAccess = useAccess('thread__challan');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -26,15 +25,15 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'uuid',
+				accessorKey: 'challan_id',
 				header: 'ID',
 				cell: (info) => {
-					const { challan_number } = info.row.original;
+					const { challan_id, uuid } = info.row.original;
 					return (
 						<LinkWithCopy
-							title={challan_number}
-							id={info.getValue()}
-							uri='/delivery/challan'
+							title={challan_id}
+							id={uuid}
+							uri='/thread/challan'
 						/>
 					);
 				},
@@ -52,7 +51,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'receive_status',
+				accessorKey: 'received',
 				header: 'Receive Status',
 				enableColumnFilter: false,
 				cell: (info) => (
@@ -128,13 +127,13 @@ export default function Index() {
 	// Receive Status
 	const handelReceiveStatus = async (idx) => {
 		const challan = data[idx];
-		const status = challan?.receive_status == 1 ? 0 : 1;
+		const status = challan?.received == 1 ? 0 : 1;
 		const updated_at = GetDateTime();
 
 		await updateData.mutateAsync({
-			url: `/delivery/challan/${challan?.uuid}`,
+			url: `/thread/challan/${challan?.uuid}`,
 			uuid: challan?.uuid,
-			updatedData: { receive_status: status, updated_at },
+			updatedData: { received: status, updated_at },
 			isOnCloseNeeded: false,
 		});
 	};
@@ -146,7 +145,7 @@ export default function Index() {
 		const updated_at = GetDateTime();
 
 		await updateData.mutateAsync({
-			url: `/delivery/challan/${challan?.uuid}`,
+			url: `/thread/challan/${challan?.uuid}`,
 			uuid: challan?.uuid,
 			updatedData: { gate_pass: status, updated_at },
 			isOnCloseNeeded: false,
@@ -157,7 +156,7 @@ export default function Index() {
 
 	const handelUpdate = (idx) => {
 		const uuid = data[idx]?.uuid;
-		navigate(`/delivery/challan/${uuid}/update`);
+		navigate(`/thread/challan/${uuid}/update`);
 	};
 
 	// Delete

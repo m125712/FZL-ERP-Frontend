@@ -1,60 +1,50 @@
-import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
-import { useDyeingThreadBatch } from '@/state/Dyeing';
+import { Suspense, useEffect, useMemo, useState } from 'react';
+import {
+	useThreadChallanDetailsByUUID,
+	useThreadOrderDetailsForChallanByUUID,
+} from '@/state/Thread';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
-import { useFetchForRhfResetForThreadChallan } from '@/hooks/CRUD/useFetch';
-import {
-	useFetch,
-	useFetchForRhfReset,
-	useFetchForRhfResetForPlanning,
-	useRHF,
-} from '@/hooks';
+import { useAccess, useRHF } from '@/hooks';
 
-import { ProceedModal } from '@/components/Modal';
+import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
-import { CheckBoxWithoutLabel, Input, Textarea } from '@/ui';
+import { CheckBoxWithoutLabel, EditDelete, Input, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import {
 	BOOLEAN,
 	NUMBER,
-	NUMBER_REQUIRED,
+	NUMBER_DOUBLE,
 	STRING,
 	THREAD_CHALLAN_NULL,
 	THREAD_CHALLAN_SCHEMA,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
+import { BOOLEAN_DEFAULT_VALUE } from '@/util/Schema/utils';
 
 import Header from './Header';
 
+const haveAccess = useAccess('delivery__challan');
+
 // UPDATE IS WORKING
 export default function Index() {
-	const {
-		url,
-		updateData,
-		postData,
-		invalidateQuery: invalidateDyeingThreadBatch,
-	} = useDyeingThreadBatch();
-
-	const { batch_uuid } = useParams();
+	const { challan_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
-	const isUpdate = batch_uuid !== undefined;
-	const [proceed, setProceed] = useState(false);
-	const [batchData, setBatchData] = useState(null);
-	const [batchEntry, setBatchEntry] = useState(null);
+	const isUpdate = challan_uuid !== undefined;
 
 	// * if can_trx_quty exist koray taholay etar
 	const SCHEMA = {
 		...THREAD_CHALLAN_SCHEMA,
-		entries: yup.array().of(
+		batch_entry: yup.array().of(
 			yup.object().shape({
-				is_checked: BOOLEAN,
+				is_checked: BOOLEAN.default(false),
 				quantity: NUMBER.when('is_checked', {
 					is: true,
 					then: (schema) => schema.required('Required'),
@@ -64,18 +54,35 @@ export default function Index() {
 						String(originalValue).trim() === '' ? null : value
 					)
 					.max(
-						yup.ref(
-							isUpdate ? 'can_trx_quantity' : 'balance_quantity'
-						),
-						isUpdate
-							? 'Beyond Transaction Quantity'
-							: 'Beyond Balance Quantity'
+						yup.ref('balance_quantity'),
+						'Beyond Balance Quantity'
 					),
-				// batch_remarks: STRING.nullable(),
+				short_quantity: NUMBER_DOUBLE.default(0).transform(
+					(value, originalValue) =>
+						String(originalValue).trim() === '' ? 0 : value
+				),
+				reject_quantity: NUMBER_DOUBLE.default(0).transform(
+					(value, originalValue) =>
+						String(originalValue).trim() === '' ? 0 : value
+				),
+				batch_remarks: STRING.nullable(),
 			})
 		),
 	};
 
+	const SCHEMA_NULL = {
+		...THREAD_CHALLAN_NULL,
+		batch_entry: [
+			{
+				is_checked: false,
+				quantity: null,
+				short_quantity: null,
+				reject_quantity: null,
+				remarks: '',
+			},
+		],
+	};
+	const haveAccess = useAccess('thread__challan_update');
 	const {
 		register,
 		handleSubmit,
@@ -87,33 +94,53 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
-	} = useRHF(SCHEMA, THREAD_CHALLAN_NULL); // TODO: need to fix the form validation for quantity
+	} = useRHF(SCHEMA, SCHEMA_NULL); // TODO: need to fix the form validation for quantity
 
-	// batch_entry
+	// entry
 	const { fields: BatchEntryField } = useFieldArray({
 		control,
-		name: 'entries',
+		name: 'batch_entry',
 	});
 
 	// * Fetch initial data
-	isUpdate
-		? useFetchForRhfReset(
-				`/thread/batch-details/by/${batch_uuid}`,
-				batch_uuid,
-				reset
-			)
-		: useFetchForRhfResetForThreadChallan(
-				`/thread/order-details-for-challan/by/${watch('order_info_uuid')}`,
-				reset,
-				watch
-			);
 
-	console.log('getValues:', getValues());
+	// * get data if isUpdate
+	const { data: udata, invalidateQuery: invalidateUpdate } =
+		useThreadChallanDetailsByUUID(
+			challan_uuid ? challan_uuid + '?is_update=true' : null
+		);
+
+	// * reset data if isUpdate
+	useEffect(() => {
+		if (udata && isUpdate) {
+			reset(udata);
+		}
+	}, [udata]);
+
+	// * get data if not isUpdate
+	const { data, postData, updateData, deleteData } =
+		useThreadOrderDetailsForChallanByUUID(
+			isUpdate
+				? null
+				: watch('order_info_uuid')
+					? watch('order_info_uuid')
+					: null
+		);
+
+	// * reset data if not isUpdate
+	useEffect(() => {
+		if (data && !isUpdate) {
+			setValue('batch_entry', data?.batch_entry);
+		}
+	}, [data]);
+
 	const onSubmit = async (data) => {
 		// * Update
 		if (isUpdate) {
 			const batch_data_updated = {
 				...data,
+				received: data.received ? 1 : 0,
+				gate_pass: data.gate_pass ? 1 : 0,
 				updated_at: GetDateTime(),
 			};
 
@@ -121,9 +148,8 @@ export default function Index() {
 				.filter((item) => item.is_checked)
 				.map((item) => ({
 					...item,
-					uuid: item.batch_entry_uuid,
+					uuid: item.uuid,
 					remarks: item.batch_remarks,
-					updated_at: GetDateTime(),
 				}));
 
 			if (batch_entry_updated.length === 0) {
@@ -132,28 +158,44 @@ export default function Index() {
 					message: 'Select at least one item to proceed.',
 				});
 			} else {
+
 				await updateData.mutateAsync({
-					url: `/thread/batch/${batch_data_updated?.uuid}`,
+					url: `/thread/challan/${batch_data_updated?.uuid}`,
 					updatedData: batch_data_updated,
 					isOnCloseNeeded: false,
 				});
 
 				let batch_entry_updated_promises = [
 					...batch_entry_updated.map(async (item) => {
-						await updateData.mutateAsync({
-							url: `/thread/batch-entry/${item.uuid}`,
-							updatedData: item,
-							isOnCloseNeeded: false,
-						});
+						if (item.uuid)
+							await updateData.mutateAsync({
+								url: `/thread/challan-entry/${item.uuid}`,
+								updatedData: {
+									...item,
+									updated_at: GetDateTime(),
+								},
+								isOnCloseNeeded: false,
+							});
+						else
+							await postData.mutateAsync({
+								url: `/thread/challan-entry`,
+								newData: {
+									...item,
+									uuid: nanoid(),
+									challan_uuid: batch_data_updated?.uuid,
+									created_at: GetDateTime(),
+								},
+								isOnCloseNeeded: false,
+							});
 					}),
 				];
 
 				await Promise.all(batch_entry_updated_promises)
 					.then(() => reset(Object.assign({}, THREAD_CHALLAN_NULL)))
-					.then(() => invalidateDyeingThreadBatch())
-					.then(
-						navigate(`/dyeing-and-iron/thread-batch/${batch_uuid}`)
-					)
+					// .then(() => invalidateDyeingThreadBatch())
+					// .then(
+					// 	navigate(`/dyeing-and-iron/thread-batch/${batch_uuid}`)
+					// )
 					.catch((err) => console.log(err));
 			}
 
@@ -162,8 +204,10 @@ export default function Index() {
 
 		// * ADD data
 		const created_at = GetDateTime();
-		const batch_data = {
+		const challan_data = {
 			...data,
+			received: data.received ? 1 : 0,
+			gate_pass: data.gate_pass ? 1 : 0,
 			uuid: nanoid(),
 			created_at,
 			created_by: user.uuid,
@@ -174,7 +218,7 @@ export default function Index() {
 			.map((item) => ({
 				...item,
 				uuid: nanoid(),
-				batch_uuid: batch_data.uuid,
+				challan_uuid: challan_data.uuid,
 				transfer_quantity: 0,
 				remarks: item.batch_remarks,
 				created_at,
@@ -187,8 +231,8 @@ export default function Index() {
 			});
 		} else {
 			await postData.mutateAsync({
-				url,
-				newData: batch_data,
+				url: '/thread/challan',
+				newData: challan_data,
 				isOnCloseNeeded: false,
 			});
 
@@ -196,7 +240,7 @@ export default function Index() {
 				...batch_entry.map(
 					async (item) =>
 						await postData.mutateAsync({
-							url: '/thread/batch-entry',
+							url: '/thread/challan-entry',
 							newData: item,
 							isOnCloseNeeded: false,
 						})
@@ -205,10 +249,7 @@ export default function Index() {
 
 			await Promise.all(promises)
 				.then(() => reset(Object.assign({}, THREAD_CHALLAN_NULL)))
-				.then(() => invalidateDyeingThreadBatch())
-				.then(
-					navigate(`/dyeing-and-iron/thread-batch/${batch_data.uuid}`)
-				)
+				.then(navigate(`/thread/challan/${challan_data.uuid}`))
 				.catch((err) => console.log(err));
 
 			return;
@@ -234,13 +275,6 @@ export default function Index() {
 			});
 		}
 	}, [isAllChecked]);
-
-	useEffect(() => {
-		if (isUpdate) {
-			setIsAllChecked(true);
-			setValue('is_all_checked', true);
-		}
-	}, [isUpdate]);
 
 	useEffect(() => {
 		if (isAllChecked) {
@@ -276,38 +310,33 @@ export default function Index() {
 
 	const columns = useMemo(
 		() => [
-			// {
-			// 	accessorKey: 'checkbox',
-			// 	header: () => (
-			// 		<CheckBoxWithoutLabel
-			// 			className='bg-white'
-			// 			label='is_all_checked'
-			// 			checked={isAllChecked}
-			// 			onChange={(e) => {
-			// 				setIsAllChecked(e.target.checked);
-			// 				setIsSomeChecked(e.target.checked);
-			// 			}}
-			// 			{...{ register, errors }}
-			// 		/>
-			// 	),
-			// 	enableColumnFilter: false,
-			// 	enableSorting: false,
-			// 	cell: (info) => (
-			// 		<CheckBoxWithoutLabel
-			// 			label={`batch_entry[${info.row.index}].is_checked`}
-			// 			checked={watch(
-			// 				`batch_entry[${info.row.index}].is_checked`
-			// 			)}
-			// 			onChange={(e) => handleRowChecked(e, info.row.index)}
-			// 			disabled={
-			// 				getValues(
-			// 					`batch_entry[${info.row.index}].pi_quantity`
-			// 				) == 0
-			// 			}
-			// 			{...{ register, errors }}
-			// 		/>
-			// 	),
-			// },
+			{
+				accessorKey: 'checkbox',
+				header: () => (
+					<CheckBoxWithoutLabel
+						className='bg-white'
+						label='is_all_checked'
+						checked={isAllChecked}
+						onChange={(e) => {
+							setIsAllChecked(e.target.checked);
+							setIsSomeChecked(e.target.checked);
+						}}
+						{...{ register, errors }}
+					/>
+				),
+				enableColumnFilter: false,
+				enableSorting: false,
+				cell: (info) => (
+					<CheckBoxWithoutLabel
+						label={`batch_entry[${info.row.index}].is_checked`}
+						checked={watch(
+							`batch_entry[${info.row.index}].is_checked`
+						)}
+						onChange={(e) => handleRowChecked(e, info.row.index)}
+						{...{ register, errors }}
+					/>
+				),
+			},
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
@@ -345,43 +374,121 @@ export default function Index() {
 				enableSorting: true,
 				cell: (info) => Number(info.getValue()),
 			},
-			// {
-			// 	accessorKey: 'quantity',
-			// 	header: 'QTY',
-			// 	enableColumnFilter: false,
-			// 	enableSorting: false,
-			// 	cell: (info) => {
-			// 		const idx = info.row.index;
-			// 		const dynamicerror = errors?.batch_entry?.[idx]?.quantity;
-			// 		return (
-			// 			<Input
-			// 				label={`batch_entry[${info.row.index}].quantity`}
-			// 				is_title_needed='false'
-			// 				height='h-8'
-			// 				dynamicerror={dynamicerror}
-			// 				{...{ register, errors }}
-			// 			/>
-			// 		);
-			// 	},
-			// },
-			// {
-			// 	accessorKey: 'batch_remarks',
-			// 	header: 'Remarks',
-			// 	enableColumnFilter: false,
-			// 	enableSorting: false,
-			// 	width: 'w-44',
-			// 	cell: (info) => (
-			// 		<Textarea
-			// 			label={`batch_entry[${info.row.index}].batch_remarks`}
-			// 			is_title_needed='false'
-			// 			height='h-8'
-			// 			{...{ register, errors }}
-			// 		/>
-			// 	),
-			// },
+			{
+				accessorKey: 'balance_quantity',
+				header: 'Balance QTY',
+				enableColumnFilter: true,
+				enableSorting: true,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'quantity',
+				header: 'QTY',
+				enableColumnFilter: false,
+				enableSorting: false,
+				cell: (info) => {
+					const idx = info.row.index;
+					const dynamicerror = errors?.batch_entry?.[idx]?.quantity;
+					return (
+						<Input
+							label={`batch_entry[${info.row.index}].quantity`}
+							is_title_needed='false'
+							height='h-8'
+							dynamicerror={dynamicerror}
+							{...{ register, errors }}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'short_quantity',
+				header: 'Short QTY',
+				enableColumnFilter: false,
+				enableSorting: false,
+				cell: (info) => {
+					const idx = info.row.index;
+					const dynamicerror =
+						errors?.batch_entry?.[idx]?.short_quantity;
+					return (
+						<Input
+							label={`batch_entry[${info.row.index}].short_quantity`}
+							is_title_needed='false'
+							height='h-8'
+							dynamicerror={dynamicerror}
+							{...{ register, errors }}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'reject_quantity',
+				header: 'Reject QTY',
+				enableColumnFilter: false,
+				enableSorting: false,
+				cell: (info) => {
+					const idx = info.row.index;
+					const dynamicerror =
+						errors?.batch_entry?.[idx]?.reject_quantity;
+					return (
+						<Input
+							label={`batch_entry[${info.row.index}].reject_quantity`}
+							is_title_needed='false'
+							height='h-8'
+							dynamicerror={dynamicerror}
+							{...{ register, errors }}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'batch_remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				enableSorting: false,
+				width: 'w-44',
+				cell: (info) => (
+					<Textarea
+						label={`batch_entry[${info.row.index}].batch_remarks`}
+						is_title_needed='false'
+						height='h-8'
+						{...{ register, errors }}
+					/>
+				),
+			},
+			{
+				accessorKey: 'actions',
+				header: 'Actions',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('delete'),
+				width: 'w-24',
+				cell: (info) => (
+					<EditDelete
+						idx={info.row.original}
+						handelDelete={handelDelete}
+						showDelete={haveAccess.includes('delete')}
+						showUpdate={false}
+					/>
+				),
+			},
 		],
 		[isAllChecked, isSomeChecked, BatchEntryField, register, errors]
 	);
+
+	// Delete
+	const [deleteItem, setDeleteItem] = useState({
+		itemId: null,
+		itemName: null,
+	});
+	const handelDelete = (idx) => {
+		setDeleteItem((prev) => ({
+			...prev,
+			itemId: idx.uuid,
+			itemName: idx.order_number,
+		}));
+
+		window['deleteModal Challan Entry'].showModal();
+	};
 
 	return (
 		<div>
@@ -397,6 +504,7 @@ export default function Index() {
 						getValues,
 						Controller,
 						isUpdate,
+						setValue,
 					}}
 				/>
 
@@ -409,15 +517,21 @@ export default function Index() {
 				</div>
 			</form>
 
+			<DevTool control={control} placement='top-left' />
+
 			<Suspense>
-				<ProceedModal
-					text='Shade or Bleach'
-					modalId={'proceed_modal'}
-					setProceed={setProceed}
+				<DeleteModal
+					modalId={'deleteModal Challan Entry'}
+					title={deleteItem?.itemName}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url: '/thread/challan-entry',
+						deleteData,
+					}}
+					invalidateQuery={invalidateUpdate}
 				/>
 			</Suspense>
-
-			<DevTool control={control} placement='top-left' />
 		</div>
 	);
 }

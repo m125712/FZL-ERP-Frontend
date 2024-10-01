@@ -100,13 +100,6 @@ const useFetchForRhfResetForPlanning = async (uri, reset) => {
 	}, []);
 };
 
-const useFetchForRhfResetForThreadChallan = async (uri, reset) => {
-	useEffect(() => {
-		api.get(uri).then((res) => {
-			return reset(res?.data?.data);
-		});
-	}, [uri, reset]);
-};
 
 const useFetchForRhfResetForUserAccess = (url, returnId, reset) => {
 	useEffect(() => {
@@ -156,7 +149,6 @@ export {
 	useFetchForRhfReset,
 	useFetchForRhfResetForBatchProduct,
 	useFetchForRhfResetForPlanning,
-	useFetchForRhfResetForThreadChallan,
 	useFetchForRhfResetForUserAccess,
 	useFetchFunc,
 	useFetchFuncForReport,

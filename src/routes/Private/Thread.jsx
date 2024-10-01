@@ -122,6 +122,14 @@ export const ThreadRoutes = [
 				actions: ['create', 'read', 'update', 'delete'],
 				hidden: true,
 			},
+			{
+				name: 'Challan Update',
+				path: '/thread/challan/:challan_uuid/update',
+				element: <ChallanEntry />,
+				page_name: 'thread__challan_update',
+				actions: ['create', 'read', 'update', 'delete'],
+				hidden: true,
+			}
 		],
 	},
 ];

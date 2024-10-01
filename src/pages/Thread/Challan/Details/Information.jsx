@@ -9,13 +9,13 @@ export default function Information({ challan }) {
 	const {
 		assign_to_name,
 		carton_quantity,
-		challan_number,
+		challan_id,
 		created_at,
 		created_by_name,
 		remarks,
 		gate_pass,
 		order_number,
-		receive_status,
+		received,
 		updated_at,
 	} = challan;
 
@@ -23,7 +23,7 @@ export default function Information({ challan }) {
 		return [
 			{
 				label: 'Challan Number',
-				value: challan_number,
+				value: challan_id,
 			},
 			{
 				label: 'Carton Quantity',
@@ -35,16 +35,11 @@ export default function Information({ challan }) {
 			},
 			{
 				label: 'Gate Pass',
-				value: <StatusButton className={'btn-xs'} status={gate_pass} />,
+				value: <StatusButton className={'btn-xs'} value={gate_pass} />,
 			},
 			{
 				label: 'Receive Status',
-				value: (
-					<StatusButton
-						className={'btn-xs'}
-						status={receive_status}
-					/>
-				),
+				value: <StatusButton className={'btn-xs'} value={received} />,
 			},
 			{
 				label: 'Assign To',
@@ -64,7 +59,9 @@ export default function Information({ challan }) {
 			},
 			{
 				label: 'Updated At',
-				value: format(new Date(updated_at), 'dd/MM/yy'),
+				value: updated_at
+					? format(new Date(updated_at), 'dd/MM/yy')
+					: null,
 			},
 		];
 	};

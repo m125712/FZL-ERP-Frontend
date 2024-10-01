@@ -1845,29 +1845,21 @@ export const THREAD_DYES_CATEGORY_NULL = {
 
 // Thread Challan
 export const THREAD_CHALLAN_SCHEMA = {
-	receive_status: BOOLEAN_DEFAULT_VALUE(false),
+	received: BOOLEAN_DEFAULT_VALUE(false),
 	gate_pass: BOOLEAN_DEFAULT_VALUE(false),
 	assign_to: STRING_REQUIRED,
 	order_info_uuid: STRING_REQUIRED,
+	carton_quantity: NUMBER_REQUIRED,
 	remarks: STRING.nullable(),
-	entries: yup.array().of(yup.object().shape({})),
 };
 
 export const THREAD_CHALLAN_NULL = {
 	uuid: null,
-	receive_status: false,
+	received: false,
 	gate_pass: false,
 	assign_to: null,
 	order_info_uuid: null,
 	remarks: '',
-	entries: [
-		{
-			quantity: null,
-			short_quantity: null,
-			reject_quantity: null,
-			remarks: '',
-		},
-	],
 };
 
 // Thread Programs

@@ -7,34 +7,23 @@ export default function Index({ challan }) {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'packing_number',
-				header: 'Packing Number',
+				accessorKey: 'style_color',
+				header: 'Style/Color',
 				cell: (info) => {
-					const { packing_list_uuid } = info.row.original;
-					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={packing_list_uuid}
-							uri='/delivery/packing-list'
-						/>
-					);
+					const { style, color } = info.row.original;
+					return `${style}/${color}`;
 				},
+				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'item_description',
-				header: 'Item Description',
+				accessorKey: 'count',
+				header: 'Count',
 				cell: (info) => info.getValue(),
 				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'style_color_size',
-				header: 'Style/Color/Size',
-				cell: (info) => info.getValue(),
-				enableColumnFilter: false,
-			},
-			{
-				accessorKey: 'delivered',
-				header: 'Delivered',
+				accessorKey: 'length',
+				header: 'Length',
 				cell: (info) => info.getValue(),
 				enableColumnFilter: false,
 			},
@@ -56,7 +45,6 @@ export default function Index({ challan }) {
 				cell: (info) => info.getValue(),
 				enableColumnFilter: false,
 			},
-
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',

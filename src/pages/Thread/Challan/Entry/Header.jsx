@@ -1,9 +1,9 @@
 import { useOtherHRUserByDesignation, useThreadOrder } from '@/state/Other';
-import { useFetch } from '@/hooks';
 
 import {
 	CheckBox,
 	FormField,
+	Input,
 	ReactSelect,
 	SectionEntryBody,
 	Textarea,
@@ -31,12 +31,12 @@ export default function Header({
 						<div className='rounded-md bg-secondary px-1'>
 							<CheckBox
 								text='text-secondary-content'
-								label='receive_status'
+								label='received'
 								title='Receive Status'
 								{...{ register, errors }}
 								// checked={Boolean(watch('receive_status'))}
 								onChange={(e) =>
-									setValue('receive_status', e.target.checked)
+									setValue('received', e.target.checked)
 								}
 							/>
 						</div>
@@ -107,8 +107,12 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<Textarea label='remarks' {...{ register, errors }} />
+					<Input
+						label={`carton_quantity`}
+						{...{ register, errors }}
+					/>
 				</div>
+				<Textarea label='remarks' {...{ register, errors }} />
 			</SectionEntryBody>
 		</div>
 	);

@@ -44,7 +44,7 @@ export const getPageHeader = (order_info) => {
 						bold: true,
 					},
 					`O/N: ${order_number}\n`,
-					`Date: ${format(new Date(order_info?.created_at), 'dd/MM/yyyy')}`,
+					`Date: ${order_info?.created_at ? format(new Date(order_info?.created_at), 'dd-MM-yyyy') : ''}\n`,
 				],
 				alignment: 'right',
 			},
@@ -152,35 +152,126 @@ export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
 			{
 				colSpan: uniqueSizes.length + 2,
 				text: [
-					item_name ? item_name : 'N/A',
-					' / ',
-					zipper_number_name ? zipper_number_name : 'N/A',
-					' / ',
-					end_type_name ? end_type_name : 'N/A',
-					' / ',
-					lock_type_name ? lock_type_name : 'N/A',
-					' / ',
-					teeth_color_name ? teeth_color_name : 'N/A',
-					' / ',
-					puller_type_name ? puller_type_name : 'N/A',
-					' / ',
-					slider_color_name ? slider_color_name : 'N/A',
-					' / ',
+					item_name ? item_name : '',
+					item_name &&
+					(zipper_number_name ||
+						end_type_name ||
+						lock_type_name ||
+						teeth_color_name ||
+						puller_type_name ||
+						slider_color_name ||
+						logo_type_name ||
+						top_stopper_name ||
+						bottom_stopper_name ||
+						srinfo?.length > 0 ||
+						description)
+						? ' / '
+						: '',
+
+					zipper_number_name ? zipper_number_name : '',
+					zipper_number_name &&
+					(end_type_name ||
+						lock_type_name ||
+						teeth_color_name ||
+						puller_type_name ||
+						slider_color_name ||
+						logo_type_name ||
+						top_stopper_name ||
+						bottom_stopper_name ||
+						srinfo?.length > 0 ||
+						description)
+						? ' / '
+						: '',
+
+					end_type_name ? end_type_name : '',
+					end_type_name &&
+					(lock_type_name ||
+						teeth_color_name ||
+						puller_type_name ||
+						slider_color_name ||
+						logo_type_name ||
+						top_stopper_name ||
+						bottom_stopper_name ||
+						srinfo?.length > 0 ||
+						description)
+						? ' / '
+						: '',
+
+					lock_type_name ? lock_type_name : '',
+					lock_type_name &&
+					(teeth_color_name ||
+						puller_type_name ||
+						slider_color_name ||
+						logo_type_name ||
+						top_stopper_name ||
+						bottom_stopper_name ||
+						srinfo?.length > 0 ||
+						description)
+						? ' / '
+						: '',
+
+					teeth_color_name ? teeth_color_name : '',
+					teeth_color_name &&
+					(puller_type_name ||
+						slider_color_name ||
+						logo_type_name ||
+						top_stopper_name ||
+						bottom_stopper_name ||
+						srinfo?.length > 0 ||
+						description)
+						? ' / '
+						: '',
+
+					puller_type_name ? puller_type_name : '',
+					puller_type_name &&
+					(slider_color_name ||
+						logo_type_name ||
+						top_stopper_name ||
+						bottom_stopper_name ||
+						srinfo?.length > 0 ||
+						description)
+						? ' / '
+						: '',
+
+					slider_color_name ? slider_color_name : '',
+					slider_color_name &&
+					(logo_type_name ||
+						top_stopper_name ||
+						bottom_stopper_name ||
+						srinfo?.length > 0 ||
+						description)
+						? ' / '
+						: '',
+
 					logo_type_name
 						? logo_type_name +
 							`(${is_logo_body ? 'Body' : ''})` +
+							`${is_logo_body && is_logo_puller ? ' ' : ''}` + // Space between Body and Puller if both exist
 							`(${is_logo_puller ? 'Puller' : ''})`
-						: 'N/A',
-					' / ',
-					top_stopper_name ? top_stopper_name : 'N/A',
-					' / ',
-					bottom_stopper_name ? bottom_stopper_name : 'N/A',
-					' / ',
-					srinfo && srinfo.length > 0
-						? `(${srinfo?.join(', ')})`
-						: 'N/A',
-					' / ',
-					description ? `(${description})` : 'N/A',
+						: '',
+					logo_type_name &&
+					(top_stopper_name ||
+						bottom_stopper_name ||
+						srinfo?.length > 0 ||
+						description)
+						? ' / '
+						: '',
+
+					top_stopper_name ? top_stopper_name : '',
+					top_stopper_name &&
+					(bottom_stopper_name || srinfo?.length > 0 || description)
+						? ' / '
+						: '',
+
+					bottom_stopper_name ? bottom_stopper_name : '',
+					bottom_stopper_name && (srinfo?.length > 0 || description)
+						? ' / '
+						: '',
+
+					srinfo?.length > 0 ? `(${srinfo?.join(', ')})` : '',
+					srinfo?.length > 0 && description ? ' / ' : '',
+
+					description ? `(${description})` : '',
 				],
 				style: 'tableHeader',
 			},
@@ -195,37 +286,37 @@ export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
 		// 	{
 		// 		colSpan: uniqueSizes.length + 2,
 		// 		text: [
-		// 			item_short_name ? item_short_name : 'N/A',
+		// 			item_short_name ? item_short_name : '',
 		// 			' / ',
-		// 			zipper_number_short_name ? zipper_number_short_name : 'N/A',
+		// 			zipper_number_short_name ? zipper_number_short_name : '',
 		// 			' / ',
-		// 			end_type_short_name ? end_type_short_name : 'N/A',
+		// 			end_type_short_name ? end_type_short_name : '',
 		// 			' / ',
-		// 			lock_type_short_name ? lock_type_short_name : 'N/A',
+		// 			lock_type_short_name ? lock_type_short_name : '',
 		// 			' / ',
-		// 			teeth_color_short_name ? teeth_color_short_name : 'N/A',
+		// 			teeth_color_short_name ? teeth_color_short_name : '',
 		// 			' / ',
-		// 			puller_type_short_name ? puller_type_short_name : 'N/A',
+		// 			puller_type_short_name ? puller_type_short_name : '',
 		// 			' / ',
-		// 			slider_color_short_name ? slider_color_short_name : 'N/A',
+		// 			slider_color_short_name ? slider_color_short_name : '',
 		// 			' / ',
 		// 			logo_type_name
 		// 				? logo_type_name +
 		// 					`(${is_logo_body ? 'B' : ''})` +
 		// 					`(${is_logo_puller ? 'P' : ''})`
-		// 				: 'N/A',
+		// 				: '',
 		// 			' / ',
-		// 			top_stopper_short_name ? top_stopper_short_name : 'N/A',
+		// 			top_stopper_short_name ? top_stopper_short_name : '',
 		// 			' / ',
 		// 			bottom_stopper_short_name
 		// 				? bottom_stopper_short_name
-		// 				: 'N/A',
+		// 				: '',
 		// 			' / ',
 		// 			srinfo && srinfo.length > 0
 		// 				? `(${srinfo?.join(', ')})`
-		// 				: 'N/A',
+		// 				: '',
 		// 			' / ',
-		// 			description ? `(${description})` : 'N/A',
+		// 			description ? `(${description})` : '',
 		// 		],
 		// 		style: 'tableHeader',
 		// 	},

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useFetch } from '@/hooks';
 
 import { FormField, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
+import cn from '@/lib/cn';
 
 export default function Header({
 	Controller,
@@ -9,23 +10,41 @@ export default function Header({
 	errors,
 	control,
 	getValues,
-	minCapacity,
-	maxCapacity,
+	totalQuantity,
+	totalWeight,
 }) {
 	const { value: machine } = useFetch('/other/machine/value/label');
+	const res = machine?.find(
+		(item) => item.value == getValues('machine_uuid')
+	);
+
 	const slot = [
 		{ label: 'Slot 1', value: 1 },
 		{ label: 'Slot 2', value: 2 },
 		{ label: 'Slot 3', value: 3 },
 		{ label: 'Slot 4', value: 4 },
 	];
-	// const [maxCapacity, setMaxCapacity] = useState(0);
-	// const [minCapacity, setMinCapacity] = useState(0);
 
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody
-				title={`Batch Capacity: ${Number(minCapacity||0).toFixed(2)} Kg to ${Number(maxCapacity||0).toFixed(2)} Kg `}>
+				title={
+					<div>
+						<span>{`Machine Capacity (KG): ${Number(res?.min_capacity || 0).toFixed(2)} - 
+														${Number(res?.max_capacity || 0).toFixed(2)}`}</span>
+						<br />
+						<span
+							className={cn(
+								totalWeight > parseFloat(res?.max_capacity) ||
+									totalWeight < parseFloat(res?.min_capacity)
+									? 'text-error'
+									: ''
+							)}>{`Batch Quantity (KG): ${totalWeight}`}</span>
+						<br />
+						<span>{`Batch Quantity (PCS): ${totalQuantity}`}</span>
+						<br />
+					</div>
+				}>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField
 						label='machine_uuid'

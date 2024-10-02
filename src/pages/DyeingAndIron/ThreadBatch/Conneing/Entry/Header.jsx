@@ -1,10 +1,8 @@
 import { useFetch } from '@/hooks';
-import {
-	FormField,
-	Input,
-	ReactSelect,
-	SectionEntryBody,
-} from '@/ui';
+
+import { FormField, Input, ReactSelect, SectionEntryBody } from '@/ui';
+
+import cn from '@/lib/cn';
 
 export default function Header({
 	register,
@@ -12,12 +10,18 @@ export default function Header({
 	control,
 	getValues,
 	Controller,
+	totalQuantity,
+	totalWeight,
 }) {
 	const { value: batch_number } = useFetch(`/other/thread/batch/value/label`);
 	const { value: machine } = useFetch('/other/machine/value/label');
 	const { value: dyeing_operator_option } = useFetch(
 		'/other/hr/user/value/label'
 	);
+	const res = machine?.find(
+		(item) => item.value == getValues('machine_uuid')
+	);
+
 	const { value: pass_by_option } = useFetch('/other/hr/user/value/label');
 	const { value: dyeing_supervisor_option } = useFetch(
 		'/other/hr/user/value/label'
@@ -48,11 +52,26 @@ export default function Header({
 		{ label: 'High', value: 'high' },
 	];
 
-	
-
 	return (
 		<div className='flex flex-col gap-4'>
-			<SectionEntryBody title='Dyeing'>
+			<SectionEntryBody
+				title={
+					<div>
+						<span>{`Machine Capacity (KG): ${Number(res?.min_capacity || 0).toFixed(2)} - 
+														${Number(res?.max_capacity || 0).toFixed(2)}`}</span>
+						<br />
+						<span
+							className={cn(
+								totalWeight > parseFloat(res?.max_capacity) ||
+									totalWeight < parseFloat(res?.min_capacity)
+									? 'text-error'
+									: ''
+							)}>{`Batch Quantity (KG): ${totalWeight}`}</span>
+						<br />
+						<span>{`Batch Quantity (Cone): ${totalQuantity}`}</span>
+						<br />
+					</div>
+				}>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField label='uuid' title='Batch No' errors={errors}>
 						<Controller

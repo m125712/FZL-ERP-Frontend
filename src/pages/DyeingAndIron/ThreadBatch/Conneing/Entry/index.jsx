@@ -1,4 +1,4 @@
-import { lazy, useEffect, useState } from 'react';
+import { lazy, useCallback, useEffect, useState } from 'react';
 import {
 	useDyeingThreadBatch,
 	useDyeingThreadBatchEntry,
@@ -89,6 +89,25 @@ export default function Index() {
 		}));
 		window['Transfer'].showModal();
 	};
+
+	const getTotalQty = useCallback(
+		(batch_entry) =>
+			batch_entry.reduce((acc, item) => {
+				return acc + Number(item.quantity);
+			}, 0),
+		[watch()]
+	);
+	const getTotalCalTape = useCallback(
+		(batch_entry) =>
+			batch_entry.reduce((acc, item) => {
+				const expected_weight =
+					parseFloat(item.quantity || 0) *
+					parseFloat(item.max_weight);
+
+				return acc + expected_weight;
+			}, 0),
+		[watch()]
+	);
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -205,6 +224,8 @@ export default function Index() {
 						control,
 						getValues,
 						Controller,
+						totalQuantity: getTotalQty(watch('batch_entry')),
+						totalWeight: getTotalCalTape(watch('batch_entry')),
 					}}
 				/>
 				<DynamicDeliveryField
@@ -212,17 +233,18 @@ export default function Index() {
 					tableHead={
 						<>
 							{[
-								'order number',
-								'color',
-								'po',
-								'style',
-								'count length',
-								'shade Recipe',
-								'order quantity',
-								'quantity',
-								'total quantity',
-								'balance quantity',
-								'remarks',
+								'O/N',
+								'Color',
+								'PO',
+								'Style',
+								'Count Length',
+								'Shade Recipe',
+								'Order QTY',
+								'QTY',
+								'Total QTY',
+								'Qalance QTY',
+								'Expected Weight (KG)',
+								'Remarks',
 							].map((item) => (
 								<th
 									key={item}
@@ -259,9 +281,7 @@ export default function Index() {
 								)}
 							</td>
 							<td className={`${rowClass}`}>
-								{getValues(
-									`batch_entry[${index}].recipe_name`
-								)}
+								{getValues(`batch_entry[${index}].recipe_name`)}
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(
@@ -283,12 +303,44 @@ export default function Index() {
 								)}
 							</td>
 							<td className={`${rowClass}`}>
+								{Number(
+									parseFloat(
+										watch(
+											`batch_entry[${index}].quantity`
+										) || 0
+									) *
+										parseFloat(
+											watch(
+												`batch_entry[${index}].max_weight`
+											)
+										)
+								).toFixed(3)}
+							</td>
+							<td className={`${rowClass}`}>
 								{getValues(
 									`batch_entry[${index}].batch_remarks`
 								)}
 							</td>
 						</tr>
 					))}
+
+					<tr
+						className={cn(
+							'relative cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30'
+						)}>
+						{/* Span all columns up to "Expected Weight" */}
+						<td className='text-right font-semibold' colSpan={10}>
+							Total Weight:
+						</td>
+
+						{/* Total weight placed under "Expected Weight" */}
+						<td className='text-left font-semibold px-3 py-2'>
+							{getTotalCalTape(watch('batch_entry'))}
+						</td>
+
+						{/* Empty <td> elements to maintain table structure */}
+						<td></td>
+					</tr>
 				</DynamicDeliveryField>
 				<div className='modal-action'>
 					<button

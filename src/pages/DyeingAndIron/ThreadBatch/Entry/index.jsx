@@ -155,7 +155,7 @@ export default function Index() {
 				if (!item.is_checked) return acc;
 				const expected_weight =
 					parseFloat(item.quantity || 0) *
-					parseFloat(item.min_weight);
+					parseFloat(item.max_weight);
 
 				return acc + expected_weight;
 			}, 0),
@@ -507,12 +507,12 @@ export default function Index() {
 				enableColumnFilter: false,
 				enableSorting: false,
 				cell: (info) => {
-					const { min_weight } = info.row.original;
+					const { max_weight } = info.row.original;
 					const expected_weight =
 						parseFloat(
 							watch(`batch_entry[${info.row.index}].quantity`) ||
 								0
-						) * parseFloat(min_weight);
+						) * parseFloat(max_weight);
 
 					return Number(expected_weight).toFixed(3);
 				},
@@ -552,31 +552,14 @@ export default function Index() {
 						isUpdate,
 						minCapacity,
 						maxCapacity,
+						totalQuantity: getTotalQty(watch('batch_entry')),
+						totalWeight: getTotalCalTape(watch('batch_entry')),
 					}}
 				/>
 
 				{/* todo: react-table  */}
 
 				<ReactTable data={BatchEntryField} columns={columns} />
-				<tr className='border-t border-primary/30'>
-					<td className='py-4 text-right font-bold' colSpan='2'>
-						Total Quantity:
-					</td>
-					<td className='py-4 font-bold'>
-						{getTotalQty(watch('batch_entry'))}
-					</td>
-				</tr>
-
-				<tr className='border-t border-primary/30'>
-					<td className='py-4 text-right font-bold' colSpan='2'>
-						Total Expected Weight:
-					</td>
-					<td className='py-4 font-bold'>
-						{Number(getTotalCalTape(watch('batch_entry'))).toFixed(
-							3
-						)}
-					</td>
-				</tr>
 
 				<div className='modal-action'>
 					<button className='text-md btn btn-primary btn-block'>

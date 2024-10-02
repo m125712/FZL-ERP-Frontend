@@ -93,7 +93,6 @@ export default function OrderSheetPdf(order_sheet) {
 				// * special requirement info
 				const srinfo = getSpecialReqInfo(entry, sr);
 
-
 				const uniqueColor = () => {
 					const uniqueColors = new Set();
 					order_entry.forEach((item) => {
@@ -234,31 +233,55 @@ export default function OrderSheetPdf(order_sheet) {
 								],
 
 								// * Garments
-								[
-									{
-										text: 'Garments',
-										style: 'tableHeader',
-										alignment: 'Center',
-									},
-									{
-										colSpan: uniqueSizes.length + 2,
-										text: [
-											ginfo && ginfo.length > 0
-												? `(${ginfo?.join(', ')})`
-												: 'N/A',
-											' / ',
-											entry?.light_preference_name
-												? entry?.light_preference_name
-												: 'N/A',
-											' / ',
-											entry?.end_user_short_name
-												? entry?.end_user_short_name
-												: 'N/A',
-										],
-										style: 'tableHeader',
-										alignment: 'left',
-									},
-								],
+								...(ginfo.length > 0 ||
+								entry?.garment ||
+								entry?.light_preference_name ||
+								entry?.end_user_short_name
+									? [
+											[
+												{
+													text: 'Garments',
+													style: 'tableHeader',
+													alignment: 'Center',
+												},
+												{
+													colSpan:
+														uniqueSizes.length + 2,
+													text: [
+														entry?.garment
+															? entry?.garment
+															: '', // Include garments if it exists
+														garments &&
+														(ginfo.length > 0 ||
+															entry?.light_preference_name ||
+															entry?.end_user_short_name)
+															? ' / '
+															: '', // Show separator if garments and at least one other value exists
+														ginfo.length > 0
+															? `(${ginfo?.join(', ')})`
+															: '',
+														ginfo.length > 0 &&
+														(entry?.light_preference_name ||
+															entry?.end_user_short_name)
+															? ' / '
+															: '', // Show separator if either light preference or end user exists after ginfo
+														entry?.light_preference_name
+															? entry?.light_preference_name
+															: '',
+														entry?.light_preference_name &&
+														entry?.end_user_short_name
+															? ' / '
+															: '', // Show separator if both light preference and end user exist
+														entry?.end_user_short_name
+															? entry?.end_user_short_name
+															: '',
+													],
+													style: 'tableHeader',
+													alignment: 'left',
+												},
+											],
+										]
+									: []),
 
 								// * remarks
 								...(entry?.remarks?.length > 0

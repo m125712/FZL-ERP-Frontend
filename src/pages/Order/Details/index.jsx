@@ -1,24 +1,61 @@
-import ReactTable from '@/components/Table';
-import { useAccess, useCookie } from '@/hooks';
-import { useOrderDetails } from '@/state/Order';
-import PageInfo from '@/util/PageInfo';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/context/auth';
+import { useOrderDetails, useOrderDetailsByQuery } from '@/state/Order';
 import { useNavigate } from 'react-router-dom';
+import { useAccess } from '@/hooks';
+
+import ReactTable from '@/components/Table';
+
+import PageInfo from '@/util/PageInfo';
+
 import { DetailsColumns } from '../columns';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_all_orders')) {
+		return `?all=true`;
+	}
+	if (
+		haveAccess.includes('show_approved_orders') &&
+		haveAccess.includes('show_own_orders') &&
+		userUUID
+	) {
+		return `/by/${userUUID}?approved=true`;
+	}
+
+	if (haveAccess.includes('show_approved_orders')) {
+		return '?all=false&approved=true';
+	}
+
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `/by/${userUUID}`;
+	}
+
+	return `?all=false`;
+};
+
 export default function Index() {
-	const { data, isLoading, url } = useOrderDetails();
+	const [path, setPath] = useState(null);
+	const haveAccess = useAccess('order__details');
+	const { user } = useAuth();
+
+	const { data, isLoading, url } = useOrderDetailsByQuery(path, {
+		enabled: user?.uuid && !!path,
+	});
+
 	const navigate = useNavigate();
 	const info = new PageInfo('Order/Details', url, 'order__details');
-	const haveAccess = useAccess('order__details');
-	const value = JSON.parse(useCookie('user')[0]).uuid;
+
 	// Fetching data from server
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
 
-	// console.log(haveAccess);
-	// console.log(value);
+	// get url path
+	useEffect(() => {
+		if (user?.uuid) {
+			setPath(getPath(haveAccess, user?.uuid));
+		}
+	}, [user, haveAccess]);
 
 	// Add
 	const handelAdd = () => navigate('/order/entry');

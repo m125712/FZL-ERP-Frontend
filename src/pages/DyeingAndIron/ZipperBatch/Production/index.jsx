@@ -15,6 +15,7 @@ import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
 import { CheckBoxWithoutLabel, Input, Textarea } from '@/ui';
 
+import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
 import {
 	DYEING_BATCH_PRODUCTION_NULL,
@@ -308,8 +309,6 @@ export default function Index() {
 						row.original;
 					const idx = row.index;
 
-					console.log(row.original);
-
 					const total_size_in_mtr =
 						((parseFloat(top) +
 							parseFloat(bottom) +
@@ -417,7 +416,27 @@ export default function Index() {
 
 				{/* todo: react-table  */}
 
-				<ReactTable data={BatchEntryField} columns={columns} />
+				<ReactTable data={BatchEntryField} columns={columns}>
+					<tr
+						className={cn(
+							'relative cursor-pointer even:bg-primary/10 focus:bg-primary/30'
+						)}>
+						{/* Span all columns up to "Expected Weight" */}
+						<td className='text-right font-semibold' colSpan={8}>
+							Total Weight:
+						</td>
+
+						{/* Total weight placed under "Expected Weight" */}
+						<td className='px-3 py-2 text-left font-semibold'>
+							{Number(
+								getTotal(watch('batch_entry')).totalCalTape
+							).toFixed(3)}
+						</td>
+
+						{/* Empty <td> elements to maintain table structure */}
+						<td></td>
+					</tr>
+				</ReactTable>
 
 				<div className='modal-action'>
 					<button

@@ -2,31 +2,19 @@ import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { useOrderDescription, useOrderDetails } from '@/state/Order';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { Equal } from 'lucide-react';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import Spreadsheet, { createEmptyMatrix } from 'react-spreadsheet';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import DynamicFormSpreadSheet from '@/ui/Dynamic/DynamicFormSpreadSheet';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import {
-	ActionButtons,
-	DynamicField,
-	FormField,
-	Input,
-	JoinInput,
-	ReactSelect,
-	Textarea,
-} from '@/ui';
 
-import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
 import { ORDER_NULL, ORDER_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 import { UUID } from '@/util/Schema/utils';
 
-import { SelectEdit, SelectView } from './CC';
 import Header from './Header';
 
 export function getRowsCount(matrix) {
@@ -66,6 +54,7 @@ export default function Index() {
 		getValues,
 		setValue,
 		watch,
+		clearErrors,
 	} = useRHF(
 		{
 			...ORDER_SCHEMA,
@@ -101,6 +90,7 @@ export default function Index() {
 		fields: orderEntryField,
 		append: orderEntryAppend,
 		remove: orderEntryRemove,
+		update: orderEntryUpdate,
 	} = useFieldArray({
 		control,
 		name: 'order_entry',
@@ -387,69 +377,6 @@ export default function Index() {
 		ignoreEventsCondition: function () {},
 	});
 
-	const rowClass =
-		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
-
-	// * Spreadsheet */
-	const columnLabels = [
-		'Style',
-		'Color',
-		'Size',
-		'Quantity',
-		'Company (USD/DZN)',
-		'Party (USD/DZN)',
-		'Action',
-	];
-
-	const arr = [
-		...orderEntryField.map((item, index) => {
-			return [
-				{
-					value: item.style,
-				},
-				{
-					value: item.color,
-				},
-				{
-					value: item.size,
-				},
-				{
-					value: item.quantity,
-				},
-				{
-					value: item.company_price,
-				},
-				{
-					value: item.party_price,
-				},
-				{
-					value: undefined,
-					DataViewer: ({ cell }) => {
-						return (
-							<ActionButtons
-								showRemoveButton={orderEntryField.length > 1}
-							/>
-						);
-					},
-					DataEditor: ({ cell, onChange, exitEditMode }) => {
-						return (
-							<ActionButtons
-								duplicateClick={() =>
-									handelDuplicateDynamicField(index)
-								}
-								removeClick={() =>
-									handleOrderEntryRemove(index)
-								}
-								showRemoveButton={orderEntryField.length > 1}
-							/>
-						);
-					},
-					className: 'bg-red-100 flex flex-col items-center',
-				},
-			];
-		}),
-	];
-
 	const addRow = () => {
 		orderEntryAppend({
 			style: '',
@@ -487,166 +414,78 @@ export default function Index() {
 						}}
 					/>
 
-					{/* <DynamicField title='Details' handelAppend={addRow}>
-						<Spreadsheet
-							className='flex w-full'
-							columnLabels={columnLabels}
-							data={arr}
-						/>
-					</DynamicField> */}
-
-					<DynamicField
-						headerButtons={headerButtons}
+					<DynamicFormSpreadSheet
 						title='Details'
-						handelAppend={handelOrderEntryAppend}
-						tableHead={[
-							'Style',
-							'Color',
-							'Size',
-							'Quantity',
-							'Price (USD/DZN) (Com/Party)',
-							'Bleaching',
-							'Action',
-						].map((item) => (
-							<th
-								key={item}
-								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
-								{item}
-							</th>
-						))}>
-						{orderEntryField.map((item, index) => (
-							<tr key={item.id}>
-								<td className={`pl-1 ${rowClass}`}>
-									<Textarea
-										title='style'
-										label={`order_entry[${index}].style`}
-										is_title_needed='false'
-										dynamicerror={
-											errors?.order_entry?.[index]?.style
-										}
-										register={register}
-									/>
-								</td>
-								<td className={rowClass}>
-									<Textarea
-										title='color'
-										label={`order_entry[${index}].color`}
-										is_title_needed='false'
-										dynamicerror={
-											errors?.order_entry?.[index]?.color
-										}
-										register={register}
-									/>
-								</td>
-								<td className={`w-40 ${rowClass}`}>
-									<JoinInput
-										title='size'
-										label={`order_entry[${index}].size`}
-										is_title_needed='false'
-										unit='cm'
-										dynamicerror={
-											errors?.order_entry?.[index]?.size
-										}
-										register={register}
-									/>
-								</td>
-								<td className={`w-40 ${rowClass}`}>
-									<JoinInput
-										title='quantity'
-										label={`order_entry[${index}].quantity`}
-										is_title_needed='false'
-										unit='pcs'
-										dynamicerror={
-											errors?.order_entry?.[index]
-												?.quantity
-										}
-										register={register}
-									/>
-								</td>
-								<td className={`w-24 ${rowClass}`}>
-									<div className='flex'>
-										<Input
-											label={`order_entry[${index}].company_price`}
-											is_title_needed='false'
-											dynamicerror={
-												errors?.order_entry?.[index]
-													?.company_price
-											}
-											{...{ register, errors }}
-										/>
-										<Input
-											label={`order_entry[${index}].party_price`}
-											is_title_needed='false'
-											dynamicerror={
-												errors?.order_entry?.[index]
-													?.party_price
-											}
-											{...{ register, errors }}
-										/>
-									</div>
-								</td>
-								<td className={`w-40 ${rowClass}`}>
-									<FormField
-										label={`order_entry[${index}].bleaching`}
-										title='Bleaching'
-										dynamicerror={
-											errors?.order_entry?.[index]
-												?.bleaching
-										}
-										is_title_needed='false'>
-										<Controller
-											name={`order_entry[${index}].bleaching`}
-											control={control}
-											render={({
-												field: { onChange },
-											}) => {
-												return (
-													<ReactSelect
-														placeholder='Select Bleaching'
-														options={
-															bleachingOptions
-														}
-														value={bleachingOptions?.find(
-															(item) =>
-																item.value ==
-																getValues(
-																	`order_entry[${index}].bleaching`
-																)
-														)}
-														onChange={(e) => {
-															onChange(e.value);
-														}}
-														// isDisabled={
-														// 	order_info_uuid !==
-														// 	undefined
-														// }
-														menuPortalTarget={
-															document.body
-														}
-													/>
-												);
-											}}
-										/>
-									</FormField>
-								</td>
-								<td
-									className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
-									<ActionButtons
-										duplicateClick={() =>
-											handelDuplicateDynamicField(index)
-										}
-										removeClick={() =>
-											handleOrderEntryRemove(index)
-										}
-										showRemoveButton={
-											orderEntryField.length > 1
-										}
-									/>
-								</td>
-							</tr>
-						))}
-					</DynamicField>
+						fieldArrayName='order_entry'
+						handelAppend={addRow}
+						handleRemove={handleOrderEntryRemove}
+						headerButtons={headerButtons}
+						columnsDefs={[
+							{
+								header: 'Style',
+								accessorKey: 'style',
+								type: 'text',
+								readOnly: false,
+							},
+							{
+								header: 'Color',
+								accessorKey: 'color',
+								type: 'text',
+								readOnly: false,
+							},
+							{
+								header: 'Bleach',
+								accessorKey: 'bleaching',
+								type: 'select',
+								options: bleachingOptions,
+								readOnly: false,
+							},
+							{
+								header: 'Size',
+								accessorKey: 'size',
+								type: 'text',
+								readOnly: false,
+							},
+							{
+								header: 'Quantity',
+								accessorKey: 'quantity',
+								type: 'text',
+								readOnly: false,
+							},
+							{
+								header: 'Company (USD/DZN)',
+								accessorKey: 'company_price',
+								type: 'text',
+								readOnly: false,
+							},
+							{
+								header: 'Party (USD/DZN)',
+								accessorKey: 'party_price',
+								type: 'text',
+								readOnly: false,
+							},
+
+							{
+								header: 'Actions',
+								type: 'action',
+							},
+						]}
+						{...{
+							formContext: {
+								register,
+								watch,
+								setValue,
+								getValues,
+								clearErrors,
+								errors,
+							},
+							fields: orderEntryField,
+							append: orderEntryAppend,
+							remove: orderEntryRemove,
+							update: orderEntryUpdate,
+						}}
+					/>
+
 					<div className='modal-action'>
 						<button
 							type='submit'

@@ -169,6 +169,9 @@ export default function Index() {
 				validity: data?.validity,
 				payment: data?.payment,
 				remarks: data?.remarks,
+				conversion_rate: data?.conversion_rate,
+				receive_amount: data?.receive_amount,
+				remarks: data?.remarks,
 				updated_at: GetDateTime(),
 				is_pi: 0,
 			};
@@ -296,7 +299,7 @@ export default function Index() {
 
 			try {
 				const commercialPiPromise = await updateData.mutateAsync({
-					url: `/commercial/pi-cash/${data?.uuid}?is_cash=true`,
+					url: `/commercial/pi-cash/${data?.uuid}`,
 					updatedData: commercialPiData,
 					uuid: data.uuid,
 					isOnCloseNeeded: false,

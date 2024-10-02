@@ -1,5 +1,5 @@
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
+import { useAccess, useCookie } from '@/hooks';
 import { useOrderDetails } from '@/state/Order';
 import PageInfo from '@/util/PageInfo';
 import { useEffect } from 'react';
@@ -11,11 +11,14 @@ export default function Index() {
 	const navigate = useNavigate();
 	const info = new PageInfo('Order/Details', url, 'order__details');
 	const haveAccess = useAccess('order__details');
-
+	const value = JSON.parse(useCookie('user')[0]).uuid;
 	// Fetching data from server
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
+
+	// console.log(haveAccess);
+	// console.log(value);
 
 	// Add
 	const handelAdd = () => navigate('/order/entry');

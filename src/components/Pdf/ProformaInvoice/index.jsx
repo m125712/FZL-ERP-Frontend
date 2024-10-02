@@ -6,7 +6,6 @@ import {
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
 import { DollarToWord } from '@/lib/NumToWord';
-import numToWords from '@/util/NumToWord';
 
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
@@ -15,7 +14,7 @@ const node = [
 	getTable('pi_item_description', 'Item'),
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
-	getTable('h_s_code', 'H S,Code'),
+	getTable('h_s_code', 'H S.Code'),
 	getTable('quantity', 'Quantity', 'right'),
 	getTable('unit_price', 'Unit Price(US$)', 'right'),
 	getTable('value', 'Value(US$)', 'right'),
@@ -33,7 +32,7 @@ export default function Index(data) {
 	if (!pi_cash_entry_thread) {
 		pi_cash_entry_thread = [];
 	}
-	//pi_cash_entry = [...pi_cash_entry, ...pi_cash_entry_thread];
+
 	const uniqueItemDescription = new Set();
 	const uniqueItemDescriptionThread = new Set();
 	const TotalUnitPrice = [];
@@ -109,12 +108,28 @@ export default function Index(data) {
 		};
 	});
 
+	const specifications = [...uniqueItemDescription].map((item) => {
+		return pi_cash_entry
+			.filter((entry) => entry.pi_item_description === item)
+			.flatMap((entry) => [
+				...new Set(
+					entry.short_names.filter(
+						(name) => name !== null && name !== ''
+					)
+				),
+			])
+			.join(', ');
+	});
+	specifications.forEach((spec, index) => {
+		specifications[index] = [...new Set(spec.split(', '))].join(', ');
+	});
+
 	const order_info_entry = [...uniqueItemDescription].map((item, index) => {
 		return {
 			pi_item_description: item,
-			specification: '',
+			specification: specifications[index],
 			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) cm`,
-			h_s_code: '9607,11.00',
+			h_s_code: '9607.11.00',
 			quantity: TotalQuantity[index] + ' pcs',
 			unit_price: TotalUnitPrice[index] + '/pcs',
 			value: Number(TotalValue[index]).toFixed(2),
@@ -143,7 +158,7 @@ export default function Index(data) {
 				pi_item_description: item,
 				specification: '100% SPUN POLYESTER SEWEING THREAD',
 				size: item.match(/\d+$/)[0] + ' mtr',
-				h_s_code: '5402,62.00',
+				h_s_code: '5402.62.00',
 				quantity: TotalThreadQuantity[index] + ' cone',
 				unit_price: TotalThreadUnitPrice[index] + '/cone',
 				value: Number(TotalThreadValue[index]).toFixed(2),
@@ -246,7 +261,18 @@ export default function Index(data) {
 						),
 						[
 							{
-								text: `Total Zipper: ${Number(grand_total_quantity || 0)} pcs, Total Thread: ${grand_thread_total_quantity} cone`,
+								text: [
+									Number(grand_total_quantity) > 0
+										? `Total Zipper: ${Number(grand_total_quantity)} pcs`
+										: '',
+									Number(grand_total_quantity) > 0 &&
+									Number(grand_thread_total_quantity) > 0
+										? ', '
+										: '',
+									Number(grand_thread_total_quantity) > 0
+										? `Total Thread: ${grand_thread_total_quantity} cone`
+										: '',
+								],
 								alignment: 'right',
 								bold: true,
 								colSpan: 5,

@@ -115,3 +115,22 @@ export const useConningTrxLog = () =>
 		queryKey: threadQK.ConningTrxlog(),
 		url: '/thread/batch-entry-trx-details',
 	});
+
+//* Challan
+export const useThreadChallan = () =>
+	createGlobalState({
+		queryKey: threadQK.challan(),
+		url: '/thread/challan',
+	});
+
+export const useThreadOrderDetailsForChallanByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: threadQK.challanByUUID(uuid),
+		url: `/thread/order-details-for-challan/by/${uuid}`,
+	});
+
+export const useThreadChallanDetailsByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: threadQK.challanDetailsByUUID(uuid),
+		url: `/thread/challan-details/by/${uuid}`,
+	});

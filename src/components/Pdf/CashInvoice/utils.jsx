@@ -76,6 +76,14 @@ export const getPageHeader = (data) => {
 				{ text: 'Attention', bold: true, color: PRIMARY_COLOR },
 				data?.merchandiser_name,
 			],
+			[
+				'',
+				'',
+				// { text: 'SWIFT:', bold: true, color: PRIMARY_COLOR },
+				// data?.bank_swift_code,
+				{ text: 'Conversion Rate', bold: true, color: PRIMARY_COLOR },
+				Number(data?.conversion_rate).toFixed(2),
+			],
 
 			// [
 			// 	{ text: '', bold: true, color: PRIMARY_COLOR },

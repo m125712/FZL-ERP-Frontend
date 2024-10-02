@@ -162,6 +162,7 @@ export default function Header({
 						control={control}
 						selected={watch('document_receive_date')}
 						{...{ register, errors }}
+						disabled={watch('handover_date') ? false : true}
 					/>
 					<DateInput
 						label='acceptance_date'
@@ -169,6 +170,7 @@ export default function Header({
 						control={control}
 						selected={watch('acceptance_date')}
 						{...{ register, errors }}
+						disabled={watch('document_receive_date') ? false : true}
 					/>
 					<DateInput
 						label='maturity_date'
@@ -176,6 +178,7 @@ export default function Header({
 						control={control}
 						selected={watch('maturity_date')}
 						{...{ register, errors }}
+						disabled={watch('acceptance_date') ? false : true}
 					/>
 					<DateInput
 						label='payment_date'
@@ -183,6 +186,7 @@ export default function Header({
 						control={control}
 						selected={watch('payment_date')}
 						{...{ register, errors }}
+						disabled={watch('maturity_date') ? false : true}
 					/>
 					<Input label='payment_value' {...{ register, errors }} />
 				</Section>

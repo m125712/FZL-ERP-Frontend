@@ -1759,16 +1759,8 @@ export const LC_SCHEMA = {
 	lc_number: STRING_REQUIRED,
 	lc_date: STRING_REQUIRED,
 	payment_value: NUMBER_DOUBLE_REQUIRED,
-	payment_date: STRING.nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? null : value
-	),
 	ldbc_fdbc: STRING_REQUIRED.nullable(),
-	acceptance_date: STRING.nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? null : value
-	),
-	maturity_date: STRING.nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? null : value
-	),
+
 	commercial_executive: STRING_REQUIRED,
 	party_bank: STRING_REQUIRED,
 	production_complete: BOOLEAN_REQUIRED,
@@ -1776,13 +1768,25 @@ export const LC_SCHEMA = {
 	problematical: BOOLEAN_REQUIRED,
 	epz: BOOLEAN_REQUIRED,
 	is_rtgs: BOOLEAN_REQUIRED,
-	document_receive_date: STRING.nullable().transform(
-		(value, originalValue) =>
-			String(originalValue).trim() === '' ? null : value
-	), // dev
+
+	// * Progression
 	handover_date: STRING.nullable().transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? null : value
 	),
+	document_receive_date: STRING.nullable().transform(
+		(value, originalValue) =>
+			String(originalValue).trim() === '' ? null : value
+	),
+	acceptance_date: STRING.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? null : value
+	),
+	maturity_date: STRING.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? null : value
+	),
+	payment_date: STRING.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? null : value
+	),
+
 	shipment_date: STRING.nullable().transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? null : value
 	),
@@ -1920,6 +1924,25 @@ export const THREAD_DYES_CATEGORY_NULL = {
 	bleaching: '',
 	id: null,
 	upto_percentage: null,
+	remarks: '',
+};
+
+// Thread Challan
+export const THREAD_CHALLAN_SCHEMA = {
+	received: BOOLEAN_DEFAULT_VALUE(false),
+	gate_pass: BOOLEAN_DEFAULT_VALUE(false),
+	assign_to: STRING_REQUIRED,
+	order_info_uuid: STRING_REQUIRED,
+	carton_quantity: NUMBER_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const THREAD_CHALLAN_NULL = {
+	uuid: null,
+	received: false,
+	gate_pass: false,
+	assign_to: null,
+	order_info_uuid: null,
 	remarks: '',
 };
 

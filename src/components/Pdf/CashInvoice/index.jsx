@@ -1,17 +1,20 @@
 import { ToWords } from 'to-words';
 
-import {
-	DEFAULT_FONT_SIZE,
-	tableLayoutStyle,
-	xMargin,
-} from '@/components/Pdf/ui';
+
+
+import { DEFAULT_FONT_SIZE, tableLayoutStyle, xMargin } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
+
+
 
 import { DollarToWord, NumToWord } from '@/lib/NumToWord';
 import numToWords from '@/util/NumToWord';
 
+
+
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
+
 
 const node = [
 	getTable('pi_item_description', 'Item'),
@@ -91,11 +94,23 @@ export default function Index(data) {
 			max_size: Math.max(...sizes),
 		};
 	});
+	const specifications = [...uniqueItemDescription].map((item) => {
+		const uniqueShortNames = new Set();
 
+		pi_cash_entry
+			.filter((entry) => entry.pi_item_description === item)
+			.forEach((entry) => {
+				entry.short_names.forEach((name) => {
+					if (name) uniqueShortNames.add(name);
+				});
+			});
+
+		return Array.from(uniqueShortNames).join(', ');
+	});
 	const order_info_entry = [...uniqueItemDescription].map((item, index) => {
 		return {
 			pi_item_description: item,
-			specification: '',
+			specification: specifications[index],
 			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) cm`,
 			//h_s_code: '9607,11.00',
 			quantity: TotalQuantity[index] + ' pcs',

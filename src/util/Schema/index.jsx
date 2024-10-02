@@ -819,6 +819,7 @@ export const LOGIN_NULL = {
 export const USER_SCHEMA = {
 	name: STRING_REQUIRED,
 	email: FORTUNE_ZIP_EMAIL_PATTERN,
+	department_uuid: STRING_REQUIRED,
 	designation_uuid: STRING_REQUIRED,
 	// pass: PASSWORD,
 	// repeatPass: yup
@@ -835,7 +836,8 @@ export const USER_NULL = {
 	uuid: null,
 	name: '',
 	email: '',
-	department_designation: null,
+	department_uuid: null,
+	designation_uuid: null,
 	pass: '',
 	repeatPass: '',
 	ext: '',
@@ -857,14 +859,12 @@ export const USER_DEPARTMENT_NULL = {
 
 // * User -> Designation
 export const USER_DESIGNATION_SCHEMA = {
-	department_uuid: UUID_PK,
 	designation: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
 export const USER_DESIGNATION_NULL = {
 	uuid: null,
-	department_uuid: null,
 	designation: '',
 	remarks: null,
 };

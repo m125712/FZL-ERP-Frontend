@@ -1,10 +1,12 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useAdminDesignations } from '@/state/Admin';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useAdminDesignations } from '@/state/Admin';
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
@@ -16,12 +18,6 @@ export default function Index() {
 
 	const columns = useMemo(
 		() => [
-			{
-				accessorKey: 'department',
-				header: 'Department',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
 			{
 				accessorKey: 'designation',
 				header: 'Designation',

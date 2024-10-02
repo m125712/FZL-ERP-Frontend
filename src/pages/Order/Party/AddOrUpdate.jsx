@@ -1,12 +1,14 @@
-import { AddModal } from '@/components/Modal';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useOrderParty } from '@/state/Order';
-import { Input } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { DevTool } from '@hookform/devtools';
-import { PARTY_NULL, PARTY_SCHEMA } from '@util/Schema';
 import { useAuth } from '@/context/auth';
+import { useOrderParty } from '@/state/Order';
+import { DevTool } from '@hookform/devtools';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
+import { PARTY_NULL, PARTY_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -20,7 +22,7 @@ export default function Index({
 		PARTY_SCHEMA,
 		PARTY_NULL
 	);
-	
+
 	const { user } = useAuth();
 
 	useFetchForRhfReset(
@@ -81,7 +83,7 @@ export default function Index({
 			isSmall={true}>
 			<Input label='name' {...{ register, errors }} />
 			<Input label='short_name' {...{ register, errors }} />
-			<Input label='address' {...{ register, errors }} />
+			<Input label='address' rows={2} {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>

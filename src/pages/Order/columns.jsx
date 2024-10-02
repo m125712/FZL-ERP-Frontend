@@ -108,6 +108,7 @@ export const PartyColumns = ({
 				accessorKey: 'address',
 				header: 'Address',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 
@@ -147,6 +148,7 @@ export const FactoryColumns = ({
 				accessorKey: 'address',
 				header: 'Address',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 
@@ -192,6 +194,7 @@ export const MerchandiserColumns = ({
 				accessorKey: 'address',
 				header: 'Address',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 

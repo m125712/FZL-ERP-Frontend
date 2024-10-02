@@ -1,13 +1,14 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useAdminDesignations, useAdminUsers } from '@/state/Admin';
-import { useOtherDepartment } from '@/state/Other';
-import { FormField, Input, ReactSelect, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import { USER_DESIGNATION_NULL, USER_DESIGNATION_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -18,18 +19,11 @@ export default function Index({
 }) {
 	const { user } = useAuth();
 	const { url, updateData, postData } = useAdminDesignations();
-	const { data: userDepartment, isLoading } = useOtherDepartment();
 	const { invalidateQuery: invalidateUsers } = useAdminUsers();
-	const {
-		register,
-		handleSubmit,
-		errors,
-		reset,
-		control,
-		Controller,
-		getValues,
-		context,
-	} = useRHF(USER_DESIGNATION_SCHEMA, USER_DESIGNATION_NULL);
+	const { register, handleSubmit, errors, reset, control, context } = useRHF(
+		USER_DESIGNATION_SCHEMA,
+		USER_DESIGNATION_NULL
+	);
 
 	useFetchForRhfReset(
 		`${url}/${updateDesignation?.uuid}`,
@@ -96,29 +90,6 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<FormField
-				label='department_uuid'
-				title='Department'
-				errors={errors}>
-				<Controller
-					name={'department_uuid'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select Department'
-								options={userDepartment}
-								value={userDepartment?.find(
-									(item) =>
-										item.value ==
-										getValues('department_uuid')
-								)}
-								onChange={(e) => onChange(e.value)}
-							/>
-						);
-					}}
-				/>
-			</FormField>
 			<Input label='designation' {...{ register, errors }} />
 			<Textarea label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />

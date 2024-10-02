@@ -1,12 +1,12 @@
 import { useAuth } from '@/context/auth';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 import { useOrderMarketing } from '@/state/Order';
-import { FormField, Input, ReactSelect } from '@/ui';
-import { MARKETING_NULL, MARKETING_SCHEMA } from '@util/Schema';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
+import { FormField, Input, ReactSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { MARKETING_NULL, MARKETING_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
@@ -105,7 +105,7 @@ export default function Index({
 							<ReactSelect
 								placeholder='Select User'
 								options={user}
-								value={user?.find(
+								value={user?.filter(
 									(item) =>
 										item.value === getValues('user_uuid')
 								)}

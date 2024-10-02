@@ -1,4 +1,5 @@
-import { AddModal } from '@/components/Modal';
+import { useAuth } from '@/context/auth';
+import { useOrderMerchandiser } from '@/state/Order';
 import {
 	useFetch,
 	useFetchForRhfReset,
@@ -6,12 +7,13 @@ import {
 	useRHF,
 	useUpdateFunc,
 } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useOrderMerchandiser } from '@/state/Order';
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
+import nanoid from '@/lib/nanoid';
 import { MERCHANDISER_NULL, MERCHANDISER_SCHEMA } from '@util/Schema';
-import { useAuth } from '@/context/auth';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -30,7 +32,7 @@ export default function Index({
 		Controller,
 		control,
 		getValues,
-		context
+		context,
 	} = useRHF(MERCHANDISER_SCHEMA, MERCHANDISER_NULL);
 
 	const { value: party } = useFetch('/other/party/value/label');
@@ -83,7 +85,6 @@ export default function Index({
 			created_at: GetDateTime(),
 		};
 
-	
 		await postData.mutateAsync({
 			url,
 			newData: updatedData,
@@ -112,7 +113,7 @@ export default function Index({
 							<ReactSelect
 								placeholder='Select Party'
 								options={party}
-								value={party?.find(
+								value={party?.filter(
 									(item) =>
 										item.value === getValues('party_uuid')
 								)}
@@ -125,7 +126,7 @@ export default function Index({
 			<Input label='name' {...{ register, errors }} />
 			<Input label='email' {...{ register, errors }} />
 			<Input label='phone' {...{ register, errors }} />
-			<Textarea label='address' {...{ register, errors }} />
+			<Textarea label='address' rows={2} {...{ register, errors }} />
 			<Textarea label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);

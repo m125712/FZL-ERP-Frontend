@@ -86,9 +86,8 @@ export default function Index({
 		});
 	};
 
-	const { value: userDesignation } = useFetch(
-		'/other/department-designation/value/label'
-	);
+	const { value: department } = useFetch('/other/department/value/label');
+	const { value: designation } = useFetch('/other/designation/value/label');
 
 	return (
 		<AddModal
@@ -99,37 +98,54 @@ export default function Index({
 			onClose={onClose}>
 			<div className='flex flex-col gap-2 md:flex-row'>
 				<FormField
-					label='designation_uuid'
+					label='department_uuid'
 					title='Department'
+					errors={errors}>
+					<Controller
+						name={'department_uuid'}
+						control={control}
+						render={({ field: { onChange } }) => (
+							<ReactSelect
+								placeholder='Select Department'
+								options={department}
+								value={department?.filter(
+									(item) =>
+										item.value ==
+										getValues('department_uuid')
+								)}
+								onChange={(e) => onChange(e.value)}
+							/>
+						)}
+					/>
+				</FormField>
+				<FormField
+					label='designation_uuid'
+					title='Designation'
 					errors={errors}>
 					<Controller
 						name={'designation_uuid'}
 						control={control}
-						render={({ field: { onChange } }) => {
-							return (
-								<ReactSelect
-									placeholder='Select Department'
-									options={userDesignation}
-									value={userDesignation?.find(
-										(item) =>
-											item.value ==
-											getValues('designation_uuid')
-									)}
-									onChange={(e) => onChange(e.value)}
-								/>
-							);
-						}}
+						render={({ field: { onChange } }) => (
+							<ReactSelect
+								placeholder='Select Designation'
+								options={designation}
+								value={designation?.filter(
+									(item) =>
+										item.value ==
+										getValues('designation_uuid')
+								)}
+								onChange={(e) => onChange(e.value)}
+							/>
+						)}
 					/>
 				</FormField>
-				<Input label='name' {...{ register, errors }} />
-				<Input label='email' {...{ register, errors }} />
 			</div>
 			<div className='mb-4 flex flex-col gap-2 md:flex-row'>
+				<Input label='name' {...{ register, errors }} />
+				<Input label='email' {...{ register, errors }} />
 				<Input label='ext' {...{ register, errors }} />
 				<Input label='phone' {...{ register, errors }} />
-				<Textarea label='remarks' {...{ register, errors }} />
 			</div>
-
 			{updateUser?.uuid === null && (
 				<div className='mb-4 flex flex-col gap-2 md:flex-row'>
 					<PasswordInput
@@ -144,6 +160,9 @@ export default function Index({
 					/>
 				</div>
 			)}
+			<div className='mb-4 flex flex-col gap-2 md:flex-row'>
+				<Textarea label='remarks' rows={3} {...{ register, errors }} />
+			</div>
 		</AddModal>
 	);
 }

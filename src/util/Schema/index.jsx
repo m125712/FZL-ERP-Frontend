@@ -452,7 +452,7 @@ export const PROPERTIES_SCHEMA = {
 
 export const PROPERTIES_NULL = {
 	uuid: null,
-	item_for: '',
+	item_for: 'zipper',
 	type: '',
 	name: '',
 	short_name: '',

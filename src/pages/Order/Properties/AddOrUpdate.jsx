@@ -91,13 +91,11 @@ export default function Index({
 		{ value: 'lock_type', label: 'Lock Type' },
 		{ value: 'logo_type', label: 'Logo Type' },
 		{ value: 'nylon_stopper', label: 'Nylon Stopper' },
-		{ value: 'puller_link', label: 'Puller Link' },
 		{ value: 'puller_type', label: 'Puller Type' },
-		{ value: 'slider', label: 'Slider' },
+		{ value: 'slider', label: 'Slider Material' },
 		{ value: 'slider_body_shape', label: 'Slider Body Shape' },
 		{ value: 'slider_link', label: 'Slider Link' },
 		{ value: 'special_requirement', label: 'Special Requirement' },
-		{ value: 'stopper_type', label: 'Stopper Type' },
 		{ value: 'teeth_type', label: 'Teeth Type' },
 		{ value: 'top_stopper', label: 'Top Stopper' },
 		{ value: 'zipper_number', label: 'Zipper Number' },
@@ -120,17 +118,17 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<FormField label='type' title='Type' errors={errors}>
+			<FormField label='item_for' title='Item For' errors={errors}>
 				<Controller
-					name={'type'}
+					name={'item_for'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder='Select Type'
-								options={typeOptions}
-								value={typeOptions?.filter(
-									(item) => item.value === getValues('type')
+								placeholder='Select Item For'
+								options={itemForOptions}
+								value={itemForOptions?.filter((item) =>
+									getValues('item_for').includes(item.value)
 								)}
 								onChange={(e) => {
 									onChange(e.value);
@@ -144,17 +142,17 @@ export default function Index({
 				/>
 			</FormField>
 
-			<FormField label='item_for' title='Item For' errors={errors}>
+			<FormField label='type' title='Type' errors={errors}>
 				<Controller
-					name={'item_for'}
+					name={'type'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder='Select Item For'
-								options={itemForOptions}
-								value={itemForOptions?.filter((item) =>
-									getValues('item_for').includes(item.value)
+								placeholder='Select Type'
+								options={typeOptions}
+								value={typeOptions?.filter(
+									(item) => item.value === getValues('type')
 								)}
 								onChange={(e) => {
 									onChange(e.value);

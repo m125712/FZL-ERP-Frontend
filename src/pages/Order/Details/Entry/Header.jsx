@@ -232,7 +232,7 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<FormField label='end_type' title='End' errors={errors}>
+					<FormField label='end_type' title='End Type' errors={errors}>
 						<Controller
 							name={'end_type'}
 							control={control}
@@ -280,7 +280,7 @@ export default function Header({
 					)}
 				</div>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					<FormField label='lock_type' title='Lock' errors={errors}>
+					<FormField label='lock_type' title='Lock Type' errors={errors}>
 						<Controller
 							name={'lock_type'}
 							control={control}
@@ -413,7 +413,7 @@ export default function Header({
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField
 						label='puller_type'
-						title='Puller'
+						title='Puller Type'
 						errors={errors}>
 						<Controller
 							name={'puller_type'}
@@ -459,7 +459,7 @@ export default function Header({
 					</FormField>
 					<FormField
 						label='coloring_type'
-						title='Coloring'
+						title='Coloring Type'
 						errors={errors}>
 						<Controller
 							name={'coloring_type'}
@@ -629,7 +629,7 @@ export default function Header({
 						<div className='flex gap-1'>
 							<FormField
 								label='logo_type'
-								title='Logo'
+								title='Logo Type'
 								errors={errors}>
 								<Controller
 									name={'logo_type'}

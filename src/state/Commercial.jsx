@@ -22,6 +22,13 @@ export const useCommercialPI = () =>
 		url: '/commercial/pi-cash?is_cash=false',
 	});
 
+export const useCommercialPIByQuerry = (params, { enabled = false }) =>
+	createGlobalState({
+		queryKey: commercialQK.piByQuery(params),
+		url: `/commercial/pi-cash${params}`,
+		enabled,
+	});
+
 export const useCommercialPICash = () =>
 	createGlobalState({
 		queryKey: commercialQK.piCash(),
@@ -115,6 +122,13 @@ export const useCommercialLC = () =>
 	createGlobalState({
 		queryKey: commercialQK.lc(),
 		url: '/commercial/lc',
+	});
+
+export const useCommercialLCByQuery = (params, { enabled = false }) =>
+	createGlobalState({
+		queryKey: commercialQK.lcByQuery(),
+		url: `/commercial/lc${params}`,
+		enabled,
 	});
 
 export const useCommercialLCByUUID = (uuid) =>

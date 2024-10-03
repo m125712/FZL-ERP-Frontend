@@ -1,14 +1,13 @@
-import OrderEntry from '@/pages/Order/Details/Entry';
+import Buyer from '@/pages/Order/Buyer';
 import OrderDetails from '@/pages/Order/Details';
 import OrderIndByUUID from '@/pages/Order/Details/ByOrderDescriptionUUID';
 import OrderFilterByOrderNumber from '@/pages/Order/Details/ByOrderNumber';
-import OrderInfo from '@/pages/Order/Info';
-
-import Buyer from '@/pages/Order/Buyer';
-import Party from '@/pages/Order/Party';
-import Merchandiser from '@/pages/Order/Merchandiser';
+import OrderEntry from '@/pages/Order/Details/Entry';
 import Factory from '@/pages/Order/Factory';
+import OrderInfo from '@/pages/Order/Info';
 import Marketing from '@/pages/Order/Marketing';
+import Merchandiser from '@/pages/Order/Merchandiser';
+import Party from '@/pages/Order/Party';
 import Properties from '@/pages/Order/Properties';
 
 export const OrderRoutes = [
@@ -38,7 +37,13 @@ export const OrderRoutes = [
 				element: <OrderFilterByOrderNumber />,
 				hidden: true,
 				page_name: 'order__details_by_order_number',
-				actions: ['read', 'update'],
+				actions: [
+					'read',
+					'update',
+					'show_all_orders',
+					'show_own_orders',
+					'show_approved_orders',
+				],
 				isDynamic: true,
 			},
 			{
@@ -47,7 +52,14 @@ export const OrderRoutes = [
 				element: <OrderIndByUUID />,
 				hidden: true,
 				page_name: 'order__details_by_uuid',
-				actions: ['read', 'update', 'show_price'],
+				actions: [
+					'read',
+					'update',
+					'show_price',
+					'show_all_orders',
+					'show_own_orders',
+					'show_approved_orders',
+				],
 				isDynamic: true,
 			},
 			{

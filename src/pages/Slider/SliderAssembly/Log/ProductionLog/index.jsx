@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useSliderAssemblyLogProduction } from '@/state/Slider';
+import { useSliderAssemblyLogProduction, useSliderAssemblyLogJoinedProduction } from '@/state/Slider';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';

@@ -79,6 +79,7 @@ export const commercialQK = {
 
 	// pi
 	pi: () => [...commercialQK.all(), 'pi'],
+	piByQuery: (params) => [...commercialQK.all(), 'piByQuery', params],
 	piCash: () => [...commercialQK.all(), 'pi-cash'],
 	piByUUID: (uuid) => [...commercialQK.pi(), uuid],
 	piDetailsByUUID: (uuid) => [...commercialQK.pi(), 'details', uuid],
@@ -104,6 +105,7 @@ export const commercialQK = {
 
 	// lc
 	lc: () => [...commercialQK.all(), 'lc'],
+	lcByQuery: (params) => [...commercialQK.all(), 'lcByQuery', params],
 	lcByUUID: (uuid) => [...commercialQK.lc(), uuid],
 	lcByPi: (uuid) => [...commercialQK.all(), 'lc-by-pi', uuid],
 	lcByNumber: (number) => [...commercialQK.all(), 'lc-by-number', number],
@@ -789,6 +791,12 @@ export const sliderQK = {
 		uuid,
 	],
 
+	// * Slider Assembly Log Joined Production
+	sliderAssemblyLogjoinedProduction: () => [
+		...sliderQK.all(),
+		'assembly-joined-log-production',
+	],
+
 	// * Slider Assembly Log Production
 	sliderAssemblyLogProduction: () => [
 		...sliderQK.all(),
@@ -1106,4 +1114,15 @@ export const challanQK = {
 		'delivery-challan-entry',
 		challanUUID,
 	],
+};
+
+// * Report
+export const reportQK = {
+	all: () => ['report'],
+
+	// Zipper Production
+	zipperProduction: () => [...reportQK.all(), 'zipper-production'],
+
+	// Daily Challan
+	dailyChallan: () => [...reportQK.all(), 'daily-challan'],
 };

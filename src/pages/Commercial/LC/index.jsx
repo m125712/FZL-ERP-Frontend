@@ -1,16 +1,35 @@
-import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useCommercialLC } from '@/state/Commercial';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
-import PageInfo from '@/util/PageInfo';
 import { useEffect, useMemo } from 'react';
+import { useCommercialLC, useCommercialLCByQuery } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
+import { useAccess } from '@/hooks';
+
+import ReactTable from '@/components/Table';
+import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
+import PageInfo from '@/util/PageInfo';
+import { useAuth } from '@/context/auth';
+
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `?own_uuid=${userUUID}`;
+	}
+
+	return ``;
+};
 
 export default function Index() {
 	const navigate = useNavigate();
-	const { data, isLoading, url } = useCommercialLC();
-	const info = new PageInfo('LC', url, 'commercial__lc');
 	const haveAccess = useAccess('commercial__lc');
+	const { user } = useAuth();
+
+	const { data, isLoading, url } = useCommercialLCByQuery(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
+
+	const info = new PageInfo('LC', url, 'commercial__lc');
 
 	useEffect(() => {
 		document.title = info.getTabName();

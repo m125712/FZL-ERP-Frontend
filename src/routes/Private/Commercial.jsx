@@ -22,7 +22,13 @@ export const CommercialRoutes = [
 				path: '/commercial/lc',
 				element: <LC />,
 				page_name: 'commercial__lc',
-				actions: ['create', 'read', 'update', 'delete'],
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'show_own_orders',
+				],
 				disableCollapse: true,
 
 				children: [
@@ -31,7 +37,13 @@ export const CommercialRoutes = [
 						path: '/commercial/lc/details/:lc_number',
 						element: <LCDetails />,
 						page_name: 'commercial__lc_details',
-						actions: ['create', 'read', 'update', 'delete'],
+						actions: [
+							'create',
+							'read',
+							'update',
+							'delete',
+							'show_own_orders',
+						],
 						hidden: true,
 					},
 
@@ -66,6 +78,7 @@ export const CommercialRoutes = [
 					'update',
 					'delete',
 					'click_receive_status',
+					'show_own_orders',
 				],
 				disableCollapse: true,
 				children: [
@@ -80,6 +93,7 @@ export const CommercialRoutes = [
 							'update',
 							'delete',
 							'click_receive_status',
+							'show_own_orders',
 						],
 						hidden: true,
 					},
@@ -113,6 +127,7 @@ export const CommercialRoutes = [
 					'update',
 					'delete',
 					'click_receive_status',
+					'show_own_orders',
 				],
 				disableCollapse: true,
 				children: [
@@ -127,6 +142,7 @@ export const CommercialRoutes = [
 							'update',
 							'delete',
 							'click_receive_status',
+							'show_own_orders',
 						],
 						hidden: true,
 					},

@@ -166,11 +166,11 @@ const DynamicFormSpreadSheet = (
 									{...register(
 										`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
 									)}>
-									{column.options?.map((option) => (
+									{column?.options?.map((option) => (
 										<option
-											key={option.value}
-											value={option.value}>
-											{option.label}
+											key={option?.value}
+											value={option?.value}>
+											{option?.label}
 										</option>
 									))}
 								</select>

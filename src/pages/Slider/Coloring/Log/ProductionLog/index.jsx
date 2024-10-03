@@ -1,13 +1,15 @@
-import { Suspense } from '@/components/Feedback';
-import ReactTable from '@/components/Table';
+import { useMemo, useState } from 'react';
+import { useSliderColoringLogProduction } from '@/state/Slider';
 import { useAccess } from '@/hooks';
 
+import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
-import { EditDelete, LinkWithCopy } from '@/ui';
+import ReactTable from '@/components/Table';
+import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useMemo, useState } from 'react';
+
 import AddOrUpdate from './AddOrUpdate';
-import { useSliderColoringLogProduction } from '@/state/Slider';
 
 export default function Index() {
 	const { data, isLoading, deleteData } = useSliderColoringLogProduction();
@@ -77,12 +79,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'puller_link_name',
-				header: 'Puller Link',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'slider_name',
 				header: 'Slider',
 				enableColumnFilter: false,
@@ -124,13 +120,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
-
-
-			///////////
-			
-			
-		
 			{
 				accessorKey: 'order_quantity',
 				header: (
@@ -166,6 +155,25 @@ export default function Index() {
 				),
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created At',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated At',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'remarks',

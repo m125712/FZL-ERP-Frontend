@@ -1,10 +1,12 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useSliderDieCastingStock } from '@/state/Slider';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useSliderDieCastingStock } from '@/state/Slider';
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
@@ -13,7 +15,7 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } = useSliderDieCastingStock();
 	const info = new PageInfo('Stock', url, 'slider__die_casting_stock');
 	const haveAccess = useAccess('slider__die_casting_stock');
-	
+
 	const columns = useMemo(
 		() => [
 			{
@@ -73,12 +75,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'puller_link_name',
-				header: 'Puller Link',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'stopper_type_name',
 				header: 'Stopper Type',
 				enableColumnFilter: false,
@@ -107,6 +103,12 @@ export default function Index() {
 				header: 'Pcs/Kg',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_at',

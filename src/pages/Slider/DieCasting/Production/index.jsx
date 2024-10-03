@@ -77,12 +77,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'puller_link_name',
-				header: 'Puller Link',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'slider_name',
 				header: 'Slider',
 				enableColumnFilter: false,
@@ -124,9 +118,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
-			///////////
-
 			{
 				accessorKey: 'mc_no',
 				header: 'M/C',
@@ -194,14 +185,23 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
 			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'created_at',
 				header: 'Created At',
-				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				filterFn: 'isWithinRange',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated At',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'remarks',

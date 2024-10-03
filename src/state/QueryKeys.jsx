@@ -677,6 +677,8 @@ export const sliderQK = {
 		uuid,
 	],
 
+	sliderDiecastingTrxLog: () => [...sliderQK.all(), 'dc-trx-log'],
+
 	// * Die Casting --> (BY STOCK)
 	sliderDieCastingByStock: () => [...sliderQK.all(), 'dc-by-stock'],
 	sliderDieCastingByStockByUUID: (uuid) => [

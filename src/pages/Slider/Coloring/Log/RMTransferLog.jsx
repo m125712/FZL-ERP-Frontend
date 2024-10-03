@@ -145,7 +145,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	invalidateSliderColoringRM();
+	// invalidateSliderColoringRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

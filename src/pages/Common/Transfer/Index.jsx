@@ -15,7 +15,7 @@ const Update = lazy(() => import('./EntryUpdate/Update'));
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useDyeingTransfer();
 	const info = new PageInfo(
-		'Dyeing Transfer',
+		'Dyeing Store',
 		url,
 		'common__dyeing_transfer'
 	);
@@ -170,7 +170,7 @@ export default function Index() {
 	});
 
 	// Add
-	const handelAdd = () => navigate('/common/dyeing-transfer/entry');
+	const handelAdd = () => navigate('/common/dyed-store/entry');
 
 	const handelUpdate = (idx) => {
 		setUpdateTransfer((prev) => ({

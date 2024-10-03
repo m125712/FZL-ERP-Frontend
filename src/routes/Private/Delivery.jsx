@@ -81,7 +81,10 @@ export const DeliveryRoutes = [
 					'read',
 					'update',
 					'delete',
+					'click_gate_pass',
 					'click_receive_status',
+					'click_gate_pass_override',
+					'click_receive_status_override',
 				],
 			},
 			{

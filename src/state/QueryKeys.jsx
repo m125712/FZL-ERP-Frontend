@@ -79,6 +79,7 @@ export const commercialQK = {
 
 	// pi
 	pi: () => [...commercialQK.all(), 'pi'],
+	piByQuery: (params) => [...commercialQK.all(), 'piByQuery', params],
 	piCash: () => [...commercialQK.all(), 'pi-cash'],
 	piByUUID: (uuid) => [...commercialQK.pi(), uuid],
 	piDetailsByUUID: (uuid) => [...commercialQK.pi(), 'details', uuid],
@@ -104,6 +105,7 @@ export const commercialQK = {
 
 	// lc
 	lc: () => [...commercialQK.all(), 'lc'],
+	lcByQuery: (params) => [...commercialQK.all(), 'lcByQuery', params],
 	lcByUUID: (uuid) => [...commercialQK.lc(), uuid],
 	lcByPi: (uuid) => [...commercialQK.all(), 'lc-by-pi', uuid],
 	lcByNumber: (number) => [...commercialQK.all(), 'lc-by-number', number],

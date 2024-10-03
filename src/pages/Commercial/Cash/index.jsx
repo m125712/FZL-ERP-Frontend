@@ -1,5 +1,9 @@
 import { useEffect, useMemo } from 'react';
-import { useCommercialPICash } from '@/state/Commercial';
+import { useAuth } from '@/context/auth';
+import {
+	useCommercialPIByQuerry,
+	useCommercialPICash,
+} from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -8,12 +12,31 @@ import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_all_orders')) {
+		return `?is_cash=true`;
+	}
+
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `?is_cash=true&own_uuid=${userUUID}`;
+	}
+
+	return `?is_cash=true`;
+};
+
 export default function Index() {
 	const navigate = useNavigate();
-	const { data, isLoading, url } = useCommercialPICash();
-	const info = new PageInfo('Cash Invoice', url, 'commercial__pi-cash');
 	const haveAccess = useAccess('commercial__pi-cash');
+	const { user } = useAuth();
 
+	const { data, isLoading, url } = useCommercialPIByQuerry(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
+
+	const info = new PageInfo('Cash Invoice', url, 'commercial__pi-cash');
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);

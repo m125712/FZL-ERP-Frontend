@@ -34,13 +34,16 @@ const getPath = (haveAccess, userUUID) => {
 };
 
 export default function Index() {
-	const [path, setPath] = useState(null);
+	// const [path, setPath] = useState(null);
 	const haveAccess = useAccess('order__details');
 	const { user } = useAuth();
 
-	const { data, isLoading, url } = useOrderDetailsByQuery(path, {
-		enabled: user?.uuid && !!path,
-	});
+	const { data, isLoading, url } = useOrderDetailsByQuery(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
 
 	const navigate = useNavigate();
 	const info = new PageInfo('Order/Details', url, 'order__details');
@@ -51,11 +54,11 @@ export default function Index() {
 	}, []);
 
 	// get url path
-	useEffect(() => {
-		if (user?.uuid) {
-			setPath(getPath(haveAccess, user?.uuid));
-		}
-	}, [user, haveAccess]);
+	// useEffect(() => {
+	// 	if (user?.uuid) {
+	// 		setPath(getPath(haveAccess, user?.uuid));
+	// 	}
+	// }, [user, haveAccess]);
 
 	// Add
 	const handelAdd = () => navigate('/order/entry');

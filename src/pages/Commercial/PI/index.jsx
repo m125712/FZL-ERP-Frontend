@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { useCommercialPI } from '@/state/Commercial';
+import { useCommercialPI, useCommercialPIByQuerry } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -7,12 +7,30 @@ import ReactTable from '@/components/Table';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
+import { useAuth } from '@/context/auth';
+
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_all_orders')) {
+		return `?is_cash=false`;
+	}
+
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `?is_cash=false&own_uuid=${userUUID}`;
+	}
+
+	return `?is_cash=false`;
+};
 
 export default function Index() {
 	const navigate = useNavigate();
-	const { data, isLoading, url } = useCommercialPI();
-	const info = new PageInfo('PI', url, 'commercial__pi');
 	const haveAccess = useAccess('commercial__pi');
+	const { user } = useAuth();
+
+	const { data, isLoading, url } = useCommercialPIByQuerry(getPath(haveAccess, user?.uuid), {
+		enabled: !!user?.uuid,
+	});
+
+	const info = new PageInfo('PI', url, 'commercial__pi');
 
 	useEffect(() => {
 		document.title = info.getTabName();

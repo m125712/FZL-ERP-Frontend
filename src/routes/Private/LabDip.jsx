@@ -77,7 +77,16 @@ export const LabDipRoutes = [
 				path: '/lab-dip/recipe',
 				element: <Recipe />,
 				page_name: 'lab_dip__recipe',
-				actions: ['create', 'read', 'update', 'delete'],
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_approve',
+					'click_approve_override',
+					'click_status',
+					'click_status_override',
+				],
 			},
 			{
 				name: 'Recipe Entry',

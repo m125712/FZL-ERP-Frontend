@@ -1,9 +1,5 @@
 // CountLength
 
-// Challan
-import Challan from '@pages/Thread/Challan';
-import ChallanDetails from '@pages/Thread/Challan/Details';
-import ChallanEntry from '@pages/Thread/Challan/Entry';
 import Coning from '@pages/Thread/Conneing';
 import ConingDetails from '@pages/Thread/Conneing/Details';
 import ConingEntry from '@pages/Thread/Conneing/Entry';
@@ -97,39 +93,7 @@ export const ThreadRoutes = [
 				page_name: 'thread__log',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
-
-			// Challan
-			{
-				name: 'Challan',
-				path: '/thread/challan',
-				element: <Challan />,
-				page_name: 'thread__challan',
-				actions: ['create', 'read', 'update', 'delete'],
-			},
-			{
-				name: 'Challan Details',
-				path: '/thread/challan/:uuid',
-				element: <ChallanDetails />,
-				page_name: 'thread__challan_details',
-				actions: ['create', 'read', 'update', 'delete'],
-				hidden: true,
-			},
-			{
-				name: 'Challan Entry',
-				path: '/thread/challan/entry',
-				element: <ChallanEntry />,
-				page_name: 'thread__challan_entry',
-				actions: ['create', 'read', 'update', 'delete'],
-				hidden: true,
-			},
-			{
-				name: 'Challan Update',
-				path: '/thread/challan/:challan_uuid/update',
-				element: <ChallanEntry />,
-				page_name: 'thread__challan_update',
-				actions: ['create', 'read', 'update', 'delete'],
-				hidden: true,
-			}
+			
 		],
 	},
 ];

@@ -80,12 +80,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'puller_link_name',
-				header: 'Puller Link',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'slider_name',
 				header: 'Slider',
 				enableColumnFilter: false,

@@ -5,7 +5,7 @@ import { useAccess } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { EditDelete, LinkWithCopy } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -79,12 +79,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'puller_link_name',
-				header: 'Puller Link',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'slider_name',
 				header: 'Slider',
 				enableColumnFilter: false,
@@ -126,12 +120,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
-
-			////// 
-			
-		
-	
 			{
 				accessorKey: 'order_quantity',
 				header: (
@@ -167,6 +155,24 @@ export default function Index() {
 				),
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created by',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'remarks',

@@ -31,7 +31,7 @@ export default function Index() {
 						<LinkWithCopy
 							title={packing_number}
 							id={info.getValue()}
-							uri='/delivery/packing-list'
+							uri='/delivery/zipper-packing-list'
 						/>
 					);
 				},
@@ -116,11 +116,11 @@ export default function Index() {
 		[data]
 	);
 
-	const handelAdd = () => navigate('/delivery/packing-list/entry');
+	const handelAdd = () => navigate('/delivery/zipper-packing-list/entry');
 
 	const handelUpdate = (idx) => {
 		const uuid = data[idx]?.uuid;
-		navigate(`/delivery/packing-list/${uuid}/update`);
+		navigate(`/delivery/zipper-packing-list/${uuid}/update`);
 	};
 
 	// Delete

@@ -1,5 +1,8 @@
 import { useMemo, useState } from 'react';
-import { useSliderAssemblyStockProduction, useSliderAssemblyStock } from '@/state/Slider';
+import {
+	useSliderAssemblyStock,
+	useSliderAssemblyStockProduction,
+} from '@/state/Slider';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -13,7 +16,7 @@ import AddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, deleteData } = useSliderAssemblyStockProduction();
-	const { invalidateQuery} = useSliderAssemblyStock();
+	const { invalidateQuery } = useSliderAssemblyStock();
 	const info = new PageInfo(
 		'Stock Production Log',
 		'/slider/slider-assembly/log/production'
@@ -21,6 +24,7 @@ export default function Index() {
 
 	const haveAccess = useAccess('slider__assembly_log');
 
+	console.log(data);
 	const columns = useMemo(
 		() => [
 			{
@@ -28,6 +32,30 @@ export default function Index() {
 				header: 'Name',
 				enableColumnFilter: false,
 				width: 'w-24',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'die_casting_body_name',
+				header: 'Body',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'die_casting_cap_name',
+				header: 'Cap',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'die_casting_puller_name',
+				header: 'Puller',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'die_casting_link_name',
+				header: 'Link',
+				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{

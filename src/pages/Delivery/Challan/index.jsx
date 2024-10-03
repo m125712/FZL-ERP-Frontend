@@ -34,7 +34,7 @@ export default function Index() {
 						<LinkWithCopy
 							title={challan_number}
 							id={info.getValue()}
-							uri='/delivery/challan'
+							uri='/delivery/zipper-challan'
 						/>
 					);
 				},
@@ -155,11 +155,11 @@ export default function Index() {
 		});
 	};
 
-	const handelAdd = () => navigate('/delivery/challan/entry');
+	const handelAdd = () => navigate('/delivery/zipper-challan/entry');
 
 	const handelUpdate = (idx) => {
 		const uuid = data[idx]?.uuid;
-		navigate(`/delivery/challan/${uuid}/update`);
+		navigate(`/delivery/zipper-challan/${uuid}/update`);
 	};
 
 	// Delete

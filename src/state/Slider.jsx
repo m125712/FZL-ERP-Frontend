@@ -236,6 +236,13 @@ export const useSliderAssemblyTransferEntryByUUID = (uuid) =>
 		url: `/slider/transaction/${uuid}`,
 	});
 
+// * Slider Assembly Log Joined Prduction
+export const useSliderAssemblyLogJoinedProduction = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderAssemblyLogjoinedProduction(),
+		url: '/slider/assembly-production-log',
+	});
+
 // * Slider Assembly Log Prduction
 export const useSliderAssemblyLogProduction = () =>
 	createGlobalState({

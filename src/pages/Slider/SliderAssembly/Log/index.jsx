@@ -15,14 +15,12 @@ export default function Index() {
 	return (
 		<div>
 			<ProductionLog />
-			{/* <SFGTransferLog /> */}
+			<hr className='my-6 border-2 border-dashed border-secondary-content' />
+			<StockProductionLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<TransactionLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<RMTransferLog />
-			<hr className='my-6 border-2 border-dashed border-secondary-content' />
-			{/* <RMOrderAgainstLog /> */}
-			<StockProductionLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<StockTransactionLog />
 		</div>

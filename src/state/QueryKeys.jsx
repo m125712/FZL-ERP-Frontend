@@ -791,6 +791,12 @@ export const sliderQK = {
 		uuid,
 	],
 
+	// * Slider Assembly Log Joined Production
+	sliderAssemblyLogjoinedProduction: () => [
+		...sliderQK.all(),
+		'assembly-joined-log-production',
+	],
+
 	// * Slider Assembly Log Production
 	sliderAssemblyLogProduction: () => [
 		...sliderQK.all(),
@@ -1108,4 +1114,15 @@ export const challanQK = {
 		'delivery-challan-entry',
 		challanUUID,
 	],
+};
+
+// * Report
+export const reportQK = {
+	all: () => ['report'],
+
+	// Zipper Production
+	zipperProduction: () => [...reportQK.all(), 'zipper-production'],
+
+	// Daily Challan
+	dailyChallan: () => [...reportQK.all(), 'daily-challan'],
 };

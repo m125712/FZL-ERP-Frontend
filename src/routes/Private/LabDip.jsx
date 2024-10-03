@@ -37,7 +37,14 @@ export const LabDipRoutes = [
 				path: '/lab-dip/info',
 				element: <Info />,
 				page_name: 'lab_dip__info',
-				actions: ['create', 'read', 'update', 'delete'],
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_status',
+					'click_status_override',
+				],
 			},
 			{
 				name: 'Info Entry',

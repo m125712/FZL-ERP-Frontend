@@ -32,10 +32,28 @@ export default function Index() {
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
-				accessorKey: 'order_numbers',
+				accessorKey: 'orders',
 				header: 'O/N',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				width: 'w-52',
+				cell: (info) => {
+					const { order_numbers, thread_order_numbers } =
+						info.row.original;
+					const orders = [...order_numbers, ...thread_order_numbers];
+
+					return (
+						<div className='flex flex-wrap'>
+				
+							{orders.map((order, index) => (
+							<span
+								key={index}
+								className='rounded-full border bg-slate-300 px-2 mr-2'>
+								{order}
+							</span>
+							))}
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'party_name',
@@ -52,6 +70,12 @@ export default function Index() {
 			{
 				accessorKey: 'total_pi_quantity',
 				header: 'PI QTY',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'total_pi_value',
+				header: 'PI Value',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},

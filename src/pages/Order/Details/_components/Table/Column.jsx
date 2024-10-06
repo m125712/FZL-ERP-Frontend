@@ -1,3 +1,5 @@
+import { useAccess } from '@/hooks';
+
 import { StatusButton } from '@/ui';
 
 const createColumn = (props) => ({
@@ -22,7 +24,8 @@ const createStatusColumn = ({ accessorKey, header }) =>
 		header,
 		enableColumnFilter: false,
 		cell: (info) => {
-			const { company_price, party_price, swatch_approval_date } = info.row.original;
+			const { company_price, party_price, swatch_approval_date } =
+				info.row.original;
 			return (
 				<div className='flex items-center justify-start gap-2'>
 					<StatusButton
@@ -88,6 +91,24 @@ const getColumn = ({ item_name, show_price, bleaching }) => {
 			cell: (info) => Number(info.getValue()).toFixed(0),
 		}),
 		createColumn({
+			accessorKey: 'total_pi_quantity',
+			header: 'Total PI QTY',
+			enableColumnFilter: false,
+			cell: (info) => Number(info.getValue()).toFixed(0),
+		}),
+		createColumn({
+			accessorKey: 'total_reject_quantity',
+			header: 'Total Reject QTY',
+			enableColumnFilter: false,
+			cell: (info) => Number(info.getValue()).toFixed(0),
+		}),
+		createColumn({
+			accessorKey: 'total_short_quantity',
+			header: 'Total Short QTY',
+			enableColumnFilter: false,
+			cell: (info) => Number(info.getValue()).toFixed(0),
+		}),
+		createColumn({
 			accessorKey: 'bleaching',
 			header: 'Bleaching',
 			enableColumnFilter: false,
@@ -117,21 +138,28 @@ const getColumn = ({ item_name, show_price, bleaching }) => {
 			header: 'Finishing',
 		}),
 		createColumn({
-			accessorKey: 'company_price',
-			header: (
-				<span>
-					Price (USD)
-					<br />
-					(Company/Party)
-				</span>
-			),
+			accessorKey: 'total_delivery_quantity',
+			header: 'Total Delivery QTY',
 			enableColumnFilter: false,
-			hidden: !show_price,
-			cell: (info) =>
-				Number(info.getValue()) +
-				' / ' +
-				Number(info.row.original.party_price),
+			cell: (info) => Number(info.getValue()).toFixed(0),
 		}),
+		useAccess('show_price') &&
+			createColumn({
+				accessorKey: 'company_price',
+				header: (
+					<span>
+						Price (USD)
+						<br />
+						(Company/Party)
+					</span>
+				),
+				enableColumnFilter: false,
+				hidden: !show_price,
+				cell: (info) =>
+					Number(info.getValue()) +
+					' / ' +
+					Number(info.row.original.party_price),
+			}),
 	];
 
 	// return columns based on item_name

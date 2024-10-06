@@ -104,6 +104,13 @@ export default function Index() {
 						`/other/lab-dip/shade-recipe/value/label?thread_order_info_uuid=${uuid}&bleaching=${bleaching}`
 					);
 
+					const swatchAccess = haveAccess.includes(
+						'click_swatch_status'
+					);
+					const swatchAccessOverride = haveAccess.includes(
+						'click_swatch_status_override'
+					);
+
 					return (
 						<ReactSelect
 							className={'input-xs'}
@@ -116,6 +123,13 @@ export default function Index() {
 							filterOption={null}
 							onChange={(e) =>
 								handleSwatchStatus(e, info.row.index)
+							}
+							isDisabled={
+								swatchAccessOverride
+									? false
+									: recipe_uuid === null && swatchAccess
+										? false
+										: true
 							}
 							menuPortalTarget={document.body}
 						/>

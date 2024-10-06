@@ -152,7 +152,12 @@ export const LabDipRoutes = [
 				path: '/lab-dip/zipper-swatch',
 				element: <ZipperSwatch />,
 				page_name: 'lab_dip__zipper_swatch',
-				actions: ['read', 'update'],
+				actions: [
+					'read',
+					'update',
+					'click_swatch_status',
+					'click_swatch_status_override',
+				],
 			},
 			{
 				name: 'Thread Swatch',

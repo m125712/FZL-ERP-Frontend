@@ -102,6 +102,12 @@ export default function Index() {
 					const { value: recipe } = useFetch(
 						`/other/lab-dip/recipe/value/label?order_info_uuid=${order_info_uuid}&bleaching=${bleaching}`
 					);
+					const swatchAccess = haveAccess.includes(
+						'click_swatch_status'
+					);
+					const swatchAccessOverride = haveAccess.includes(
+						'click_swatch_status_override'
+					);
 
 					return (
 						<ReactSelect
@@ -115,7 +121,13 @@ export default function Index() {
 							onChange={(e) =>
 								handleSwatchStatus(e, info.row.index)
 							}
-							// isDisabled={recipe !== undefined ? false : true}
+							isDisabled={
+								swatchAccessOverride
+									? false
+									: recipe_uuid === null && swatchAccess
+										? false
+										: true
+							}
 							menuPortalTarget={document.body}
 						/>
 					);

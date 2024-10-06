@@ -1263,7 +1263,7 @@ export const SLIDER_SLIDER_ASSEMBLY_NULL = {
 export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA = {
 	with_link: BOOLEAN.default(true),
 	production_quantity: NUMBER_REQUIRED,
-	weight: NUMBER_DOUBLE_REQUIRED,
+	weight: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
 	wastage: NUMBER.nullable().transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? 0 : value
 	),
@@ -1281,7 +1281,7 @@ export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL = {
 // * Slider Assembly Transaction entry
 export const SLIDER_ASSEMBLY_TRANSACTION_SCHEMA = {
 	trx_quantity: NUMBER_REQUIRED,
-	weight: NUMBER_DOUBLE_REQUIRED,
+	weight: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
 	remarks: STRING.nullable(),
 };
 

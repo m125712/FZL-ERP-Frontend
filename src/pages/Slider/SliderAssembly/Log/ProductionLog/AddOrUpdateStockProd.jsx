@@ -1,16 +1,14 @@
-import { useAuth } from '@/context/auth';
+import { useEffect } from 'react';
 import {
 	useSliderAssemblyStock,
-	useSliderAssemblyStockProduction,
-	useSliderDieCastingStock,
+	useSliderAssemblyStockProductionByUUID,
 } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
-import nanoid from '@/lib/nanoid';
 import {
 	NUMBER_REQUIRED,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,
@@ -22,34 +20,24 @@ export default function Index({
 	modalId = '',
 	updateSliderProd = {
 		uuid: null,
-		stock_uuid: null,
-		production_quantity: null,
-		section: null,
-		wastage: null,
-		remarks: '',
 	},
 	setUpdateSliderProd,
 }) {
-	const { postData, invalidateQuery: invalidateAssemblyStock } =
-		useSliderAssemblyStock();
-	const { invalidateQuery: invalidateDieCastingStock } =
-		useSliderDieCastingStock();
-	const { invalidateQuery: invalidateSliderAssemblyStockProduction } =
-		useSliderAssemblyStockProduction();
-	const { user } = useAuth();
-
-	const MAX_PROD_KG = Number(updateSliderProd.balance_quantity).toFixed(3);
+	const { data, updateData, url } = useSliderAssemblyStockProductionByUUID(
+		updateSliderProd?.uuid
+	);
+	const { invalidateQuery } = useSliderAssemblyStock();
 
 	const {
 		register,
 		handleSubmit,
 		errors,
-		reset,
-		watch,
 		control,
-		context,
-		getValues,
 		Controller,
+		reset,
+		getValues,
+		context,
+		watch,
 	} = useRHF(
 		{
 			...SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
@@ -57,12 +45,12 @@ export default function Index({
 				is: true,
 				then: (schema) =>
 					schema.max(
-						updateSliderProd.min_quantity_with_link,
+						updateSliderProd.max_production_quantity_with_link,
 						'Beyond Max Quantity'
 					),
 				otherwise: (schema) =>
 					schema.max(
-						updateSliderProd.min_quantity_no_link,
+						updateSliderProd.max_production_quantity_without_link,
 						'Beyond Max Quantity'
 					),
 			}).moreThan(0, 'More than 0'),
@@ -70,50 +58,46 @@ export default function Index({
 		SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL
 	);
 
-	// TODO: Wastage
-	const MAX_WASTAGE_KG = Number(
-		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
-	).toFixed(3);
+	const MAX_QUANTITY = watch('with_link')
+		? Math.floor(Number(updateSliderProd.max_production_quantity_with_link))
+		: Math.floor(
+				Number(updateSliderProd.max_production_quantity_without_link)
+			);
 
-	const MAX_PROD = watch('with_link')
-		? Math.floor(Number(updateSliderProd.min_quantity_with_link))
-		: Math.floor(Number(updateSliderProd.min_quantity_no_link));
+	// * To reset the form with the fetched data
+	useEffect(() => {
+		if (data) {
+			reset(data); // Reset the form with the fetched data
+		}
+	}, [data, reset]);
 
 	const onClose = () => {
 		setUpdateSliderProd((prev) => ({
 			...prev,
 			uuid: null,
-			stock_uuid: null,
-			production_quantity: null,
-			section: null,
-			wastage: null,
-			remarks: '',
 		}));
-
 		reset(SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
-		const updatedData = {
-			...data,
-			uuid: nanoid(),
-			assembly_stock_uuid: updateSliderProd?.uuid,
-			with_link: data.with_link ? 1 : 0,
-			created_by: user?.uuid,
-			created_at: GetDateTime(),
-		};
+		// Update item
+		if (updateSliderProd?.uuid !== null) {
+			const updatedData = {
+				...data,
+				with_link: data.with_link ? 1 : 0,
+				updated_at: GetDateTime(),
+			};
 
-		await postData.mutateAsync({
-			url: '/slider/die-casting-to-assembly-stock',
-			newData: updatedData,
-			onClose,
-		});
+			await updateData.mutateAsync({
+				url,
+				updatedData: updatedData,
+				onClose,
+			});
 
-		invalidateAssemblyStock();
-		invalidateDieCastingStock();
-		invalidateSliderAssemblyStockProduction();
-		return;
+			invalidateQuery();
+			return;
+		}
 	};
 
 	const with_link = [
@@ -124,14 +108,13 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={'Slider Stock Assembly ⇾ Production'}
-			subTitle={`
-				${updateSliderProd.order_number} -> 
-				${updateSliderProd.item_description} -> 
-				${updateSliderProd.item_name} 
-				`}
+			title={`Stock Production Log`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
+			subTitle={`
+				${updateSliderProd.order_number} -> 
+				${updateSliderProd.item_name} 
+				`}
 			onClose={onClose}
 			isSmall={true}>
 			<FormField label='with_link' title='Link' errors={errors}>
@@ -156,26 +139,17 @@ export default function Index({
 				/>
 			</FormField>
 			<JoinInput
-				title='Production Quantity'
 				label='production_quantity'
 				unit='PCS'
-				sub_label={`MAX: ${MAX_PROD} PCS`}
+				sub_label={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				title='weight'
 				label='weight'
 				unit='KG'
 				{...{ register, errors }}
 			/>
-			<JoinInput
-				title='wastage'
-				label='wastage'
-				unit='PCS'
-				sub_label={`MAX: ${MAX_WASTAGE_KG} PCS`}
-				{...{ register, errors }}
-			/>
-			<Textarea label='remarks' {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);

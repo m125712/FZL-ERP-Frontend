@@ -1125,4 +1125,7 @@ export const reportQK = {
 
 	// Daily Challan
 	dailyChallan: () => [...reportQK.all(), 'daily-challan'],
+
+	// PI Register
+	piRegister: () => [...reportQK.all(), 'pi-register'],
 };

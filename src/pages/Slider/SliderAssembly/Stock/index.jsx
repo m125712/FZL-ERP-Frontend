@@ -91,7 +91,13 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'Total Prod',
+				header: 'Total Prod (PCS)',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'weight',
+				header: 'Total Weight',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
 			},

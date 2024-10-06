@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import {
 	useSliderAssemblyStock,
 	useSliderAssemblyStockTransactionByUUID,
-	
 } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
@@ -41,7 +40,7 @@ export default function Index({
 			trx_quantity: NUMBER_REQUIRED.max(
 				updateSliderTrx?.max_assembly_stock_quantity,
 				'Beyond Max Quantity'
-			),
+			).moreThan(0, 'More than 0'),
 		},
 		SLIDER_ASSEMBLY_TRANSACTION_NULL
 	);
@@ -103,6 +102,11 @@ export default function Index({
 				label='trx_quantity'
 				unit='PCS'
 				sub_label={`Max: ${Number(updateSliderTrx?.max_assembly_stock_quantity)} PCS`}
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				label='weight'
+				unit='KG'
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

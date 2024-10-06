@@ -1,0 +1,100 @@
+import { useEffect, useMemo } from 'react';
+import { usePIRegister } from '@/state/Report';
+import { useAccess } from '@/hooks';
+
+import ReactTable from '@/components/Table';
+import { DateTime, StatusButton } from '@/ui';
+
+import PageInfo from '@/util/PageInfo';
+
+export default function Index() {
+	const { data, isLoading, url } = usePIRegister();
+	const info = new PageInfo('PI Register', url, 'report__pi_register');
+
+	const haveAccess = useAccess('report__pi_register');
+
+	useEffect(() => {
+		document.title = info.getTabName();
+	}, []);
+
+	const columns = useMemo(
+		() => [
+			{
+				accessorKey: 'pi_cash_number',
+				header: 'PI No.',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'pi_cash_created_date',
+				header: 'PI Date',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'order_numbers',
+				header: 'O/N',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'bank_name',
+				header: 'Bank',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_pi_quantity',
+				header: 'PI QTY',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'lc_number',
+				header: 'LC No.',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'lc_date',
+				header: 'LC Date',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'file_number',
+				header: 'File No.',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'lc_created_at',
+				header: 'File Date',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+		],
+		[data]
+	);
+
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
+
+	return (
+		<>
+			<ReactTable
+				title={info.getTitle()}
+				accessor={false}
+				data={data}
+				columns={columns}
+				extraClass={'py-0.5'}
+			/>
+		</>
+	);
+}

@@ -12,3 +12,9 @@ export const useDailyChallan = () =>
         queryKey: reportQK.dailyChallan(),
         url: '/report/daily-challan-report',
     })
+
+export const usePIRegister = () =>
+    createGlobalState({
+        queryKey: reportQK.piRegister(),
+        url: '/report/pi-register-report',
+    })

@@ -1,5 +1,8 @@
 import { useMemo, useState } from 'react';
-import { useSliderAssemblyLogProduction, useSliderAssemblyLogJoinedProduction } from '@/state/Slider';
+import {
+	useSliderAssemblyLogJoinedProduction,
+	useSliderAssemblyLogProduction,
+} from '@/state/Slider';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -9,10 +12,12 @@ import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
-import AddOrUpdate from './AddOrUpdate';
+import AddOrUpdateProd from './AddOrUpdateProd';
+import AddOrUpdateStockProd from './AddOrUpdateStockProd';
 
 export default function Index() {
-	const { data, isLoading, deleteData } = useSliderAssemblyLogProduction();
+	const { data, isLoading, deleteData } =
+		useSliderAssemblyLogJoinedProduction();
 	const info = new PageInfo(
 		'Production Log',
 		'/slider/slider-assembly/log/production'
@@ -67,8 +72,20 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'slider_body_shape_name',
+				header: 'Body',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'puller_type_name',
-				header: 'Puller Type',
+				header: 'Puller',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'slider_link_name',
+				header: 'Link',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -85,40 +102,23 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'slider_body_shape_name',
-				header: 'Slider Body Shape',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'slider_link_name',
-				header: 'Slider Link',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'coloring_type_name',
 				header: 'Coloring Type',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'logo_type_name',
+				accessorKey: 'logo',
 				header: 'Logo Type',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'logo_is_body',
-				header: 'Logo Body',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'logo_is_puller',
-				header: 'Logo Puller',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { logo_type_name, logo_is_body, logo_is_puller } =
+						info.row.original;
+
+					return logo_type_name
+						? `${logo_type_name} ${logo_is_body ? '(Body)' : ''} ${logo_is_puller ? '(Puller)' : ''}`
+						: '';
+				},
 			},
 			{
 				accessorKey: 'order_quantity',
@@ -205,11 +205,6 @@ export default function Index() {
 	// Update
 	const [updateSliderProd, setUpdateSliderProd] = useState({
 		uuid: null,
-		stock_uuid: null,
-		production_quantity: null,
-		section: null,
-		wastage: null,
-		remarks: '',
 	});
 
 	const handelUpdate = (idx) => {
@@ -219,7 +214,11 @@ export default function Index() {
 			...selected,
 		}));
 
-		window[info.getAddOrUpdateModalId()].showModal();
+		if (data[idx]?.order_number === 'Assembly Stock') {
+			window['StockProduction'].showModal();
+		} else {
+			window[info.getAddOrUpdateModalId()].showModal();
+		}
 	};
 
 	// Delete
@@ -227,6 +226,7 @@ export default function Index() {
 		itemId: null,
 		itemName: null,
 	});
+
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
@@ -245,8 +245,17 @@ export default function Index() {
 		<div className=''>
 			<ReactTable title={info.getTitle()} data={data} columns={columns} />
 			<Suspense>
-				<AddOrUpdate
+				<AddOrUpdateProd
 					modalId={info.getAddOrUpdateModalId()}
+					{...{
+						updateSliderProd,
+						setUpdateSliderProd,
+					}}
+				/>
+			</Suspense>
+			<Suspense>
+				<AddOrUpdateStockProd
+					modalId='StockProduction'
 					{...{
 						updateSliderProd,
 						setUpdateSliderProd,

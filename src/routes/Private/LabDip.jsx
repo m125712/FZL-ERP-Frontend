@@ -164,7 +164,12 @@ export const LabDipRoutes = [
 				path: '/lab-dip/thread-swatch',
 				element: <ThreadSwatch />,
 				page_name: 'lab_dip__thread_swatch',
-				actions: ['read', 'update'],
+				actions: [
+					'read',
+					'update',
+					'click_swatch_status',
+					'click_swatch_status_override',
+				],
 			},
 			{
 				name: 'Log',

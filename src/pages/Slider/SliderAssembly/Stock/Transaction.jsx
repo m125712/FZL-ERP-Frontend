@@ -56,6 +56,10 @@ export default function Index({
 			trx_quantity: NUMBER_REQUIRED.max(
 				updateSliderTrx?.quantity,
 				'Beyond Max Quantity'
+			).moreThan(0, 'More than 0'),
+			weight: SLIDER_ASSEMBLY_TRANSACTION_SCHEMA.weight.max(
+				updateSliderTrx?.weight,
+				'Beyond Max Quantity'
 			),
 		},
 		{ ...SLIDER_ASSEMBLY_TRANSACTION_NULL, stock_uuid: null }
@@ -135,6 +139,13 @@ export default function Index({
 				label='trx_quantity'
 				sub_label={`MAX: ${Number(updateSliderTrx?.quantity)} PCS`}
 				unit='PCS'
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				title='weight'
+				label='weight'
+				sub_label={`MAX: ${Number(updateSliderTrx?.weight)} KG`}
+				unit='KG'
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

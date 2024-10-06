@@ -106,6 +106,11 @@ export default function Index() {
 				),
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()),
+			},{
+				accessorKey: 'weight',
+				header: 'Weight',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
 			},
 			{
 				accessorKey: 'created_by_name',

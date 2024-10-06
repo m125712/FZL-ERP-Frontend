@@ -8,7 +8,6 @@ import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
 import {
-	NUMBER_DOUBLE_REQUIRED,
 	NUMBER_REQUIRED,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
@@ -19,11 +18,6 @@ export default function Index({
 	modalId = '',
 	updateSliderProd = {
 		uuid: null,
-		stock_uuid: null,
-		production_quantity: null,
-		section: null,
-		wastage: null,
-		remarks: '',
 	},
 	setUpdateSliderProd,
 }) {
@@ -47,8 +41,7 @@ export default function Index({
 			production_quantity: NUMBER_REQUIRED.max(
 				MAX_QUANTITY,
 				'Beyond Max Quantuty'
-			),
-			weight: NUMBER_DOUBLE_REQUIRED,
+			).moreThan(0, 'More than 0'),
 		},
 		SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL
 	);
@@ -59,15 +52,11 @@ export default function Index({
 			reset(data); // Reset the form with the fetched data
 		}
 	}, [data, reset]);
+
 	const onClose = () => {
 		setUpdateSliderProd((prev) => ({
 			...prev,
 			uuid: null,
-			stock_uuid: null,
-			production_quantity: null,
-			section: null,
-			wastage: null,
-			remarks: '',
 		}));
 		reset(SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL);
 		window[modalId].close();
@@ -98,7 +87,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Slider Assembly Production Log`}
+			title={`Production Log`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			subTitle={`
@@ -137,7 +126,6 @@ export default function Index({
 			<JoinInput
 				label='weight'
 				unit='KG'
-				sub_label={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

@@ -1,3 +1,5 @@
+import { useAccess } from '@/hooks';
+
 import { StatusButton } from '@/ui';
 
 const createColumn = (props) => ({
@@ -103,12 +105,6 @@ const getColumn = ({ show_price }) => {
 			cell: (info) => Number(info.getValue()).toFixed(0),
 		}),
 		createColumn({
-			accessorKey: 'total_delivery_quantity',
-			header: 'Total Delivery QTY',
-			enableColumnFilter: false,
-			cell: (info) => Number(info.getValue()).toFixed(0),
-		}),
-		createColumn({
 			accessorKey: 'total_reject_quantity',
 			header: 'Total Reject QTY',
 			enableColumnFilter: false,
@@ -166,21 +162,28 @@ const getColumn = ({ show_price }) => {
 			header: 'Finishing',
 		}),
 		createColumn({
-			accessorKey: 'company_price',
-			header: (
-				<span>
-					Price (USD)
-					<br />
-					(Company/Party)
-				</span>
-			),
+			accessorKey: 'total_delivery_quantity',
+			header: 'Total Delivery QTY',
 			enableColumnFilter: false,
-			hidden: !show_price,
-			cell: (info) =>
-				Number(info.getValue()) +
-				' / ' +
-				Number(info.row.original.party_price),
+			cell: (info) => Number(info.getValue()).toFixed(0),
 		}),
+		useAccess('show_price') &&
+			createColumn({
+				accessorKey: 'company_price',
+				header: (
+					<span>
+						Price (USD)
+						<br />
+						(Company/Party)
+					</span>
+				),
+				enableColumnFilter: false,
+				hidden: !show_price,
+				cell: (info) =>
+					Number(info.getValue()) +
+					' / ' +
+					Number(info.row.original.party_price),
+			}),
 	];
 
 	return [...DefaultStartColumn, ...DefaultEndColumn];

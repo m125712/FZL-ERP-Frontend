@@ -50,28 +50,59 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'received',
-				header: 'Receive Status',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<SwitchToggle
-						onChange={() => handelReceiveStatus(info.row.index)}
-						checked={Number(info.getValue()) === 1}
-					/>
-				),
-			},
+
 			{
 				accessorKey: 'gate_pass',
 				header: 'Gate Pass',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<SwitchToggle
-						onChange={() => handelGatePass(info.row.index)}
-						checked={Number(info.getValue()) === 1}
-					/>
-				),
+				cell: (info) => {
+					const { gate_pass, received } = info.row.original;
+					const access = haveAccess.includes('click_gate_pass');
+					const overrideAccess = haveAccess.includes(
+						'click_gate_pass_override'
+					);
+					return (
+						<SwitchToggle
+							disabled={
+								overrideAccess
+									? false
+									: access
+										? gate_pass === 1 || received === 1
+										: true
+							}
+							onChange={() => handelGatePass(info.row.index)}
+							checked={Number(info.getValue()) === 1}
+						/>
+					);
+				},
 			},
+			{
+				accessorKey: 'received',
+				header: 'Receive Status',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { gate_pass, received } = info.row.original;
+
+					const access = haveAccess.includes('click_receive_status');
+					const overrideAccess = haveAccess.includes(
+						'click_receive_status_override'
+					);
+					return (
+						<SwitchToggle
+							disabled={
+								overrideAccess
+									? false
+									: access
+										? gate_pass === 0 || received === 1
+										: true
+							}
+							onChange={() => handelReceiveStatus(info.row.index)}
+							checked={Number(info.getValue()) === 1}
+						/>
+					);
+				},
+			},
+
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',

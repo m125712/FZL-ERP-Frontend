@@ -1,4 +1,5 @@
 import DailyChallan from '@/pages/Report/DailyChallan';
+import PIRegister from '@/pages/Report/PIRegister';
 import ZipperProduction from '@/pages/Report/ZipperProductionStatus';
 
 export const ReportRoutes = [
@@ -17,6 +18,13 @@ export const ReportRoutes = [
 				path: '/report/daily-challan',
 				element: <DailyChallan />,
 				page_name: 'report__daily_challan',
+				actions: ['read'],
+			},
+			{
+				name: 'PI Register',
+				path: '/report/pi-register',
+				element: <PIRegister />,
+				page_name: 'report__pi_register',
 				actions: ['read'],
 			},
 		],

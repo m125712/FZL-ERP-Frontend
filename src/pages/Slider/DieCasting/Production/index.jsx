@@ -1,5 +1,6 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useSliderDieCastingProduction } from '@/state/Slider';
+import Pdf from '@components/Pdf/SliderDieCastingProduction';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -27,6 +28,18 @@ export default function Index() {
 	}, []);
 
 	const haveAccess = useAccess('slider__die_casting_production');
+	const headers = [
+		'mc_no',
+		'die_casting_name',
+		'cavity_goods',
+		'cavity_defect',
+		'push',
+		'order_number',
+		'item_description',
+		'production_quantity',
+		'weight',
+		'remarks',
+	];
 
 	const columns = useMemo(
 		() => [
@@ -275,6 +288,9 @@ export default function Index() {
 				columns={columns}
 				handelAdd={handelAdd}
 				extraClass={'py-0.5'}
+				showPdf={true}
+				pdf={Pdf}
+				filterTableHeader={headers}
 			/>
 
 			<Suspense>

@@ -1,4 +1,4 @@
-import cn from '@/lib/cn';
+import { lazy, useState } from 'react';
 import {
 	getCoreRowModel,
 	getFacetedMinMaxValues,
@@ -9,18 +9,19 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from '@tanstack/react-table';
-import { lazy, useState } from 'react';
+
+import cn from '@/lib/cn';
+
 import { Suspense } from '../Feedback';
+import TableNoData from './_components/TableNoData';
+import TableSkeletons from './_components/TableSkeletons';
+import TableTitleOnly from './_components/TableTitleOnly';
 import { FuzzyFilter, isWithinRange } from './utils';
 
 const TableHeader = lazy(() => import('./_components/TableHeader'));
 const TableHead = lazy(() => import('./_components/TableHead'));
 const TableBody = lazy(() => import('./_components/TableBody'));
 const TablePagination = lazy(() => import('./_components/table-pagination'));
-
-import TableNoData from './_components/TableNoData';
-import TableSkeletons from './_components/TableSkeletons';
-import TableTitleOnly from './_components/TableTitleOnly';
 
 function Table({
 	title = '',
@@ -37,7 +38,12 @@ function Table({
 	showPagination = true,
 	showColumns = true,
 	showTitleOnly = false,
+	showPdf = false,
+	pdfData = null,
+	//filterTableHeader = [],
+	//pdf = null,
 	onClickPdfDownload,
+	//extraData = [],
 	extraButton,
 	children,
 	select,
@@ -130,6 +136,11 @@ function Table({
 					showColumns={showColumns}
 					extraButton={extraButton}
 					select={select}
+					//filterTableHeader={filterTableHeader}
+					showPdf={showPdf}
+					pdfData={pdfData}
+					//pdf={pdf}
+					//extraData={extraData}
 				/>
 			</Suspense>
 		);

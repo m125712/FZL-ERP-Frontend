@@ -71,6 +71,18 @@ const TableHeader = (props) => {
 							title: props.title,
 						}}
 					/>
+					{props.showPdf && (
+						<HandlePDF
+							{...{
+								filteredRows: props.filteredRows,
+								title: props.title,
+								pdfData:props.pdfData,
+								//filterTableHeader: props.filterTableHeader,
+								//pdf: props.pdf,
+								//extraData: props.extraData,
+							}}
+						/>
+					)}
 				</div>
 
 				<div className='flex w-fit items-end gap-2'>

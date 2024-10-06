@@ -1,5 +1,6 @@
 import { lazy, useMemo, useState } from 'react';
 import { useSliderColoringProduction } from '@/state/Slider';
+import Pdf from '@components/Pdf/SliderColoringProduction';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -20,7 +21,29 @@ export default function Index() {
 	);
 
 	const haveAccess = useAccess('slider__coloring_production');
-
+	const headers = [
+		'order_number',
+		'item_description',
+		'puller_color_name',
+		'coloring_prod',
+		'remarks',
+	];
+	const extraData = useMemo(() => {
+		return data?.map((item) => {
+			const extra = {
+				party_name: item.party_name,
+			};
+			return extra;
+		});
+	}, [data]);
+	const pdfData = useMemo(() => {
+		return {
+			filterTableHeader: headers,
+			pdf: Pdf,
+			extraData: extraData,
+		};
+	}, [extraData, Pdf]);
+	
 	// * columns
 	const columns = useMemo(
 		() => [
@@ -124,9 +147,7 @@ export default function Index() {
 			},
 
 			/////
-			
-			
-		
+
 			{
 				accessorKey: 'stopper_type_name',
 				header: 'Stopper Type',
@@ -284,7 +305,13 @@ export default function Index() {
 
 	return (
 		<div className='container mx-auto px-2 md:px-4'>
-			<ReactTable title={info.getTitle()} data={data} columns={columns} />
+			<ReactTable
+				title={info.getTitle()}
+				data={data}
+				columns={columns}
+				showPdf={true}
+				pdfData={pdfData}
+			/>
 			<Suspense>
 				<Production
 					modalId='TeethMoldingProdModal'

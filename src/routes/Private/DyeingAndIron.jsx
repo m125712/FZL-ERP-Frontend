@@ -120,7 +120,13 @@ export const DyeingAndIronRoutes = [
 				path: '/dyeing-and-iron/zipper-batch',
 				element: <DyeingZipperBatch />,
 				page_name: 'dyeing__zipper_batch',
-				actions: ['create', 'read', 'update'],
+				actions: [
+					'create',
+					'read',
+					'update',
+					'click_receive_status',
+					'click_receive_status_override',
+				],
 			},
 			{
 				name: 'Zipper Batch Entry',

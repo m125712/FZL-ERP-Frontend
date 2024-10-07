@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useFetch } from '@/hooks';
 
 import { FormField, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
+
 import cn from '@/lib/cn';
 
 export default function Header({
@@ -39,9 +40,9 @@ export default function Header({
 									totalWeight < parseFloat(res?.min_capacity)
 									? 'text-error'
 									: ''
-							)}>{`Batch Quantity (KG): ${totalWeight}`}</span>
+							)}>{`Batch Quantity (KG): ${totalWeight.toFixed(2)}`}</span>
 						<br />
-						<span>{`Batch Quantity (PCS): ${totalQuantity}`}</span>
+						<span>{`Batch Quantity (Cone): ${totalQuantity}`}</span>
 						<br />
 					</div>
 				}>

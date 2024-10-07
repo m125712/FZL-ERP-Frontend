@@ -158,7 +158,6 @@ export default function Index() {
 					message: 'Select at least one item to proceed.',
 				});
 			} else {
-
 				await updateData.mutateAsync({
 					url: `/thread/challan/${batch_data_updated?.uuid}`,
 					updatedData: batch_data_updated,
@@ -370,6 +369,13 @@ export default function Index() {
 			{
 				accessorKey: 'order_quantity',
 				header: 'Order QTY',
+				enableColumnFilter: true,
+				enableSorting: true,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorKey: 'warehouse',
+				header: 'Warehouse',
 				enableColumnFilter: true,
 				enableSorting: true,
 				cell: (info) => Number(info.getValue()),

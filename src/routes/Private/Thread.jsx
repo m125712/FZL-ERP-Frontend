@@ -51,7 +51,7 @@ export const ThreadRoutes = [
 				path: '/thread/order-info/:order_info_uuid',
 				element: <IndOrderInfo />,
 				page_name: 'thread__order_info_in_details',
-				actions: ['create', 'read', 'update', 'delete'],
+				actions: ['create', 'read', 'update', 'delete', 'show_price'],
 				hidden: true,
 			},
 

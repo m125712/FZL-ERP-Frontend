@@ -2,6 +2,7 @@ import { lazy, useEffect, useMemo, useState } from 'react';
 import { Edit, Plus } from '@/assets/icons';
 import { useAuth } from '@/context/auth';
 import { useDyeingThreadBatch } from '@/state/Dyeing';
+import { useDyeingCone } from '@/state/Thread';
 import { useNavigate } from 'react-router-dom';
 import { useAccess, useFetch } from '@/hooks';
 
@@ -18,6 +19,7 @@ const Dyeing = lazy(() => import('./Dyeing'));
 
 export default function Index() {
 	const { data, url, updateData, isLoading } = useDyeingThreadBatch();
+	const { invalidateQuery } = useDyeingCone();
 	const info = new PageInfo('Thread Batch', url, 'dyeing__thread_batch');
 	const { value: machine } = useFetch('/other/machine/value/label');
 	const { user } = useAuth();
@@ -202,6 +204,8 @@ export default function Index() {
 				},
 				isOnCloseNeeded: false,
 			});
+
+			invalidateQuery();
 		} else {
 			await updateData.mutateAsync({
 				url: `${url}/${data[idx]?.uuid}`,
@@ -212,6 +216,7 @@ export default function Index() {
 				},
 				isOnCloseNeeded: false,
 			});
+			invalidateQuery();
 		}
 	};
 	// Machine

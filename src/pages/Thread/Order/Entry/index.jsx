@@ -264,10 +264,10 @@ export default function Index() {
 			uuid: nanoid(),
 			created_at,
 			created_by,
-			swatch_approval_date:
-				item.recipe_uuid === null ? null : GetDateTime(),
+			// swatch_approval_date:
+			// 	item.recipe_uuid === null ? null : GetDateTime(),
 		}));
-		console.log(order_info_entries);
+		
 		const order_info_entries_promise = [
 			...order_info_entries.map(
 				async (item) =>

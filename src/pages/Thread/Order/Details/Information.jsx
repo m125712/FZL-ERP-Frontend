@@ -87,7 +87,7 @@ export default function Information({ orderInfo }) {
 			},
 			{
 				label: 'Updated At',
-				value: format(new Date(updated_at), 'dd/MM/yyyy'),
+				value: updated_at? format(new Date(updated_at), 'dd/MM/yyyy'): '',
 			},
 		];
 

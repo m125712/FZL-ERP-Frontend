@@ -41,10 +41,6 @@ export const OrderRoutes = [
 				actions: [
 					'read',
 					'update',
-					'show_all_orders',
-					'show_own_orders',
-					'show_approved_orders',
-					'show_price',
 				],
 				isDynamic: true,
 			},
@@ -57,10 +53,6 @@ export const OrderRoutes = [
 				actions: [
 					'read',
 					'update',
-					'show_all_orders',
-					'show_own_orders',
-					'show_approved_orders',
-					'show_price',
 				],
 				isDynamic: true,
 			},

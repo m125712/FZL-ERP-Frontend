@@ -3,6 +3,7 @@ import { useFetch } from '@/hooks';
 
 import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../ui';
 import { company, getEmptyColumn } from '../utils';
+import { FZL_LOGO } from '@/assets/img/base64';
 
 const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 
@@ -24,19 +25,15 @@ export const getPageHeader = (data) => {
 		body: [
 			[
 				{
-					colSpan: 2,
-					text: [
-						{
-							text: `${company.name}\n`,
-							fontSize: DEFAULT_FONT_SIZE + 4,
-							bold: true,
-						},
-						`${company.address}\n`,
-						`${company.phone}\n`,
-					],
+					image: FZL_LOGO.src,
+					width: 70,
+					height: 40,
 					alignment: 'left',
 				},
-				'',
+				{
+					text: [`${company.address}\n`, `${company.phone}\n`],
+					alignment: 'left',
+				},
 				{
 					colSpan: 2,
 					text: [

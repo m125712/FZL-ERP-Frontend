@@ -2,6 +2,7 @@ import { format } from 'date-fns';
 
 import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../ui';
 import { company, getEmptyColumn } from '../utils';
+import { FZL_LOGO } from '@/assets/img/base64';
 
 const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 
@@ -13,50 +14,21 @@ export const getPageHeader = (orderInfo) => {
 	const delivery_date = getDateFormate(orderInfo?.delivery_date);
 	const pi_number = orderInfo?.pi_number;
 
-	// const data = {
-	// 	: 'Test Buyer',
-	// 	buyer_uuid: 'JioEjrQqCL6WtpP',
-	// 	created_at: '2024-09-26 17:09:15',
-	// 	created_by: 'RL1xtJnYkxGrTMz',
-	// 	created_by_name: 'Mirsad',
-	// 	: '2024-09-26 12:00:00',
-	// 	: 'Test Factory',
-	// 	factory_uuid: 'xDVVb0IvkKGRyCx',
-	// 	id: 8,
-	// 	is_bill: 0,
-	// 	is_cash: 1,
-	// 	is_sample: 0,
-	// 	: 'Test Marketing',
-	// 	marketing_uuid: 'YR8BG0L2E7WUe2Y',
-	// 	: 'Test Merchandiser',
-	// 	merchandiser_uuid: 'UYpEDgT4cC6FfHf',
-	// 	: 'TO24-0008',
-	// 	: 'Test Party',
-	// 	party_uuid: 'pT4j7Y23Qz8Qq4J',
-	// 	remarks: '',
-	// 	updated_at: '2024-09-26 17:09:28',
-	// 	uuid: 'f014KcGxesFrUZJ',
-	// };
-
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
 		widths: [70, '*', 70, '*'],
 		body: [
 			[
 				{
-					colSpan: 2,
-					text: [
-						{
-							text: `${company.name}\n`,
-							fontSize: DEFAULT_FONT_SIZE + 4,
-							bold: true,
-						},
-						`${company.address}\n`,
-						`${company.phone}\n`,
-					],
+					image: FZL_LOGO.src,
+					width: 70,
+					height: 40,
 					alignment: 'left',
 				},
-				'',
+				{
+					text: [`${company.address}\n`, `${company.phone}\n`],
+					alignment: 'left',
+				},
 				{
 					colSpan: 2,
 					text: [

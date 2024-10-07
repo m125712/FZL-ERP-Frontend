@@ -1,3 +1,4 @@
+import { FZL_LOGO } from '@/assets/img/base64';
 import { black } from 'daisyui/src/theming/themes';
 import { format } from 'date-fns';
 
@@ -36,19 +37,15 @@ export const getPageHeader = (batch) => {
 		body: [
 			[
 				{
-					colSpan: 3,
-					text: [
-						{
-							text: `${company.name}\n`,
-							fontSize: DEFAULT_FONT_SIZE + 4,
-							bold: true,
-						},
-						`${company.address}\n`,
-						`${company.phone}\n`,
-					],
+					image: FZL_LOGO.src,
+					width: 70,
+					height: 40,
 					alignment: 'left',
 				},
-				'',
+				{
+					text: [`${company.address}\n`, `${company.phone}\n`],
+					alignment: 'left',
+				},
 				'',
 				{
 					colSpan: 3,

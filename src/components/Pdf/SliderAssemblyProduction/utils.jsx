@@ -32,7 +32,7 @@ export const getPageHeader = (information) => {
 					colSpan: 2,
 					text: [
 						{
-							text: 'Coloring Production Report\n',
+							text: 'Slider Assembly Production Report\n',
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},

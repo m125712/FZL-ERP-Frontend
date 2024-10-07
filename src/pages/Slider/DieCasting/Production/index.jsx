@@ -40,6 +40,14 @@ export default function Index() {
 		'weight',
 		'remarks',
 	];
+	const extraData = [];
+	const pdfData = useMemo(() => {
+		return {
+			filterTableHeader: headers,
+			pdf: Pdf,
+			extraData: extraData,
+		};
+	}, [extraData, Pdf]);
 
 	const columns = useMemo(
 		() => [
@@ -289,8 +297,7 @@ export default function Index() {
 				handelAdd={handelAdd}
 				extraClass={'py-0.5'}
 				showPdf={true}
-				pdf={Pdf}
-				filterTableHeader={headers}
+				pdfData={pdfData}
 			/>
 
 			<Suspense>

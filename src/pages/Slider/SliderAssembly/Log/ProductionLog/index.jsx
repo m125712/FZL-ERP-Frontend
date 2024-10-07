@@ -3,6 +3,7 @@ import {
 	useSliderAssemblyLogJoinedProduction,
 	useSliderAssemblyLogProduction,
 } from '@/state/Slider';
+import Pdf from '@components/Pdf/SliderAssemblyProduction';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -22,6 +23,28 @@ export default function Index() {
 		'Production Log',
 		'/slider/slider-assembly/log/production'
 	);
+	const headers = [
+		'order_number',
+		'item_description',
+		'production_quantity',
+		'weight',
+		'remarks',
+	];
+	const extraData = useMemo(() => {
+		return data?.map((item) => {
+			const extra = {
+				party_name: item.party_name,
+			};
+			return extra;
+		});
+	}, [data]);
+	const pdfData = useMemo(() => {
+		return {
+			filterTableHeader: headers,
+			pdf: Pdf,
+			extraData: extraData,
+		};
+	}, [extraData, Pdf]);
 
 	const haveAccess = useAccess('slider__assembly_log');
 
@@ -166,6 +189,7 @@ export default function Index() {
 				accessorKey: 'created_at',
 				header: 'Created',
 				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
@@ -243,7 +267,13 @@ export default function Index() {
 
 	return (
 		<div className=''>
-			<ReactTable title={info.getTitle()} data={data} columns={columns} />
+			<ReactTable
+				title={info.getTitle()}
+				data={data}
+				columns={columns}
+				showPdf={true}
+				pdfData={pdfData}
+			/>
 			<Suspense>
 				<AddOrUpdateProd
 					modalId={info.getAddOrUpdateModalId()}

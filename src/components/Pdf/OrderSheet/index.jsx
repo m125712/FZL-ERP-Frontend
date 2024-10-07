@@ -43,7 +43,7 @@ export default function OrderSheetPdf(order_sheet) {
 		}
 	};
 
-	const headerHeight = 100;
+	const headerHeight = 120;
 	let footerHeight = 30;
 	const { order_info, order_entry, garments, sr } = order_sheet;
 

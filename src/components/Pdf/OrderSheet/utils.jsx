@@ -1,3 +1,4 @@
+import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
 
 import { DEFAULT_FONT_SIZE } from '../ui';
@@ -5,7 +6,7 @@ import { DEFAULT_FONT_SIZE } from '../ui';
 export const company = {
 	name: 'Fortune Zipper LTD.',
 	address: 'Aukpara, Ashulia, Savar, DHK-1340',
-	contact: 'Email: info@fortunezip.com, Phone: 01521533595',
+	contact: 'Email: info@fortunezip.com,\n Phone: 01521533595',
 	bin_tax_hscode: 'BIN: 000537296-0403, VAT: 17141000815',
 };
 
@@ -22,19 +23,16 @@ export const getPageHeader = (order_info) => {
 		// CompanyAndORDER
 		[
 			{
-				colSpan: 2,
-				text: [
-					{
-						text: `${company.name}\n`,
-						fontSize: DEFAULT_FONT_SIZE + 4,
-						bold: true,
-					},
-					`${company.address}\n`,
-					`${company.contact}\n`,
-				],
+				image: FZL_LOGO.src,
+				width: 70,
+				height: 40,
 				alignment: 'left',
 			},
-			'',
+			{
+				text: [`${company.address}\n`, `${company.contact}\n`],
+				alignment: 'left',
+				margin: [40, 0, 0, 0],
+			},
 			{
 				colSpan: 2,
 				text: [

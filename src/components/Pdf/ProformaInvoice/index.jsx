@@ -1,3 +1,5 @@
+import { PI_MD_SIGN } from '@/assets/img/base64';
+
 import {
 	DEFAULT_FONT_SIZE,
 	tableLayoutStyle,
@@ -21,7 +23,7 @@ const node = [
 ];
 
 export default function Index(data) {
-	const headerHeight = 170;
+	const headerHeight = 200;
 	let footerHeight = 50;
 	let { pi_cash_entry } = data;
 	let { pi_cash_entry_thread } = data;
@@ -324,6 +326,12 @@ export default function Index(data) {
 					]),
 				},
 				layout: 'noBorders',
+			},
+			{
+				image: PI_MD_SIGN.src,
+				width: 100,
+				height: 100,
+				alignment: 'right',
 			},
 		],
 	});

@@ -9,33 +9,26 @@ import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
-	getTable('mc_no', 'MC No'),
-	getTable('die_casting_name', 'Name'),
-	getTable('cavity_goods', 'Count Length'),
-	getTable('cavity_defect', 'Bleaching'),
-	getTable('push', 'Push', 'right'),
-	getTable('order_number', 'Order Number'),
+	getTable('packing_number', 'Packing Number'),
 	getTable('item_description', 'Item Description'),
-	getTable('production_quantity', 'Quantity(pcs)', 'right'),
-	getTable('weight', 'Weight', 'right'),
+	getTable('style', 'Style'),
+	getTable('color', 'Color'),
+	getTable('size', 'Size'),
+	getTable('delivered', 'Delivered', 'right'),
+	getTable('quantity', 'Quantity', 'right'),
+	getTable('short_quantity', 'Short QTY', 'right'),
+	getTable('reject_quantity', 'Reject QTY', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
 
-export default function Index(information) {
-	const headerHeight = 100;
+export default function Index(data) {
+	const headerHeight = 170;
 	let footerHeight = 50;
-	const { data } = information;
-
-	let date;
-	if (information.startDate === information.endDate) {
-		date = information.startDate;
-	} else {
-		date = information.startDate + ' to ' + information.endDate;
-	}
-	let total_production = data?.reduce(
-		(acc, item) => acc + item.production_quantity,
-		0
-	);
+	let { challan_entry } = data;
+	let totalQuantity = challan_entry?.reduce((acc, item) => {
+		const quantity = parseInt(item.quantity, 10) || 0;
+		return acc + quantity;
+	}, 0);
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
@@ -46,7 +39,7 @@ export default function Index(information) {
 
 		// * Page Header
 		header: {
-			table: getPageHeader(information),
+			table: getPageHeader(data),
 			layout: 'noBorders',
 			margin: [xMargin, 30, xMargin, 0],
 		},
@@ -63,22 +56,15 @@ export default function Index(information) {
 		// * Main Table
 		content: [
 			{
-				text: `Date: ${date}`,
-				style: 'tableHeader',
-				bold: true,
-				fontSize: DEFAULT_FONT_SIZE + 2,
-				border: [true, true, true, true],
-			},
-			{
 				table: {
 					headerRows: 1,
-					widths: [40, 60, 30, 40, 30, 50, 60, 60, 30, '*'],
+					widths: [45, 48, 45, 70, 30, 38, 35, 30, 30, '*'],
 					body: [
 						// * Header
 						TableHeader(node),
 
 						// * Body
-						...data?.map((item) =>
+						...challan_entry?.map((item) =>
 							node.map((nodeItem) => ({
 								text: item[nodeItem.field],
 								style: nodeItem.cellStyle,
@@ -87,19 +73,25 @@ export default function Index(information) {
 						),
 						[
 							{
-								text:
-									'Total Production Quantity :' +
-									total_production +
-									' pcs',
+								text: `Total Quantity: ${totalQuantity}`,
 								colSpan: 10,
-								alignment: 'center',
+								style: 'tableFooter',
+								alignment: 'right',
 							},
+							{},
+							{},
+							{},
+							{},
+							{},
+							{},
+							{},
+							{},
+							{},
 						],
 					],
 				},
-
 				// layout: 'lightHorizontalLines',
-				//layout: tableLayoutStyle,
+				layout: tableLayoutStyle,
 			},
 		],
 	});

@@ -14,7 +14,7 @@ const node = [
 	getTable('party_name', 'Party Name'),
 	getTable('item_description', 'Item Name'),
 	getTable('puller_color_name', 'Color'),
-	getTable('coloring_prod', 'Quantity', 'right'),
+	getTable('production_quantity(pcs)', 'Quantity', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
 
@@ -30,7 +30,7 @@ export default function Index(information) {
 		date = information.startDate + ' to ' + information.endDate;
 	}
 	let total_production = data?.reduce(
-		(acc, item) => acc + item.coloring_prod,
+		(acc, item) => acc + Number(item.production_quantity),
 		0
 	);
 
@@ -60,6 +60,13 @@ export default function Index(information) {
 		// * Main Table
 		content: [
 			{
+				text: `Date: ${date}`,
+				style: 'tableHeader',
+				bold: true,
+				fontSize: DEFAULT_FONT_SIZE + 2,
+				border: [true, true, true, true],
+			},
+			{
 				table: {
 					headerRows: 1,
 					widths: [20, 40, 140, 70, 70, 40, '*'],
@@ -79,7 +86,8 @@ export default function Index(information) {
 							{
 								text:
 									'Total Production Quantity :' +
-									total_production,
+									total_production +
+									' pcs',
 								colSpan: 7,
 								alignment: 'center',
 							},

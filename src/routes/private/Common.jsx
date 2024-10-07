@@ -185,8 +185,8 @@ export const CommonRoutes = [
 			},
 
 			{
-				name: 'Transfer',
-				path: '/common/dyeing-transfer',
+				name: 'Dyed Store',
+				path: '/common/dyed-store',
 				element: <DyeingTransfer />,
 				page_name: 'common__dyeing_transfer',
 				actions: ['read', 'create', 'update', 'delete'],
@@ -194,7 +194,7 @@ export const CommonRoutes = [
 
 			{
 				name: 'Transfer Entry',
-				path: '/common/dyeing-transfer/entry',
+				path: '/common/dyed-store/entry',
 				element: <DyeingTransferEntry />,
 				hidden: true,
 				page_name: 'common__dyeing_transfer_entry',

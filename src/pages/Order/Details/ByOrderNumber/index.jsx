@@ -63,6 +63,7 @@ export default function Index() {
 		if (orders.length > 0) {
 			const order_info = {
 				id: orders[0]?.id,
+				pi_numbers: orders[0]?.pi_numbers,
 				is_bill: orders[0]?.is_bill,
 				is_cash: orders[0]?.is_cash,
 				is_sample: orders[0]?.is_sample,
@@ -98,12 +99,12 @@ export default function Index() {
 		}
 	}, [orders, garments, sr]);
 
-
 	if (loading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	const order_info = {
 		id: orders[0]?.id,
+		pi_numbers: orders[0]?.pi_numbers,
 		is_bill: orders[0]?.is_bill,
 		is_cash: orders[0]?.is_cash,
 		is_sample: orders[0]?.is_sample,

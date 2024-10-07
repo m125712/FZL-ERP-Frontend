@@ -87,7 +87,7 @@ export default function Index() {
 				accessorKey: 'total_quantity',
 				header: 'Order QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'receive_status',
@@ -95,12 +95,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => <StatusButton size='btn-xs' value={info} />,
 			},
-			// {
-			// 	accessorKey: 'product',
-			// 	header: 'Item Type',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 		],
 		[data]
 	);

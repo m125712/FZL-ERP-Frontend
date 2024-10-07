@@ -20,6 +20,7 @@ export default function Header({
 	errors,
 	control,
 	getValues,
+	watch,
 	Controller,
 	is_logo_body,
 	is_logo_puller,
@@ -183,7 +184,9 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					{itemType.toLowerCase() == 'nylon' && (
+					{item
+						?.find((item) => item.value === getValues('item'))
+						?.label?.toLowerCase() === 'nylon' && (
 						<FormField
 							label='nylon_stopper'
 							title='nylon_stopper'
@@ -232,7 +235,10 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<FormField label='end_type' title='End Type' errors={errors}>
+					<FormField
+						label='end_type'
+						title='End Type'
+						errors={errors}>
 						<Controller
 							name={'end_type'}
 							control={control}
@@ -255,7 +261,12 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					{endType.toLowerCase() == 'open end' && (
+					{end_type
+						?.find(
+							(end_type) =>
+								end_type.value == getValues('end_type')
+						)
+						?.label?.toLowerCase() === 'open end' && (
 						<FormField label='hand' title='Hand' errors={errors}>
 							{' '}
 							<Controller
@@ -280,7 +291,10 @@ export default function Header({
 					)}
 				</div>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					<FormField label='lock_type' title='Lock Type' errors={errors}>
+					<FormField
+						label='lock_type'
+						title='Lock Type'
+						errors={errors}>
 						<Controller
 							name={'lock_type'}
 							control={control}
@@ -480,7 +494,10 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<FormField label='slider' title='Slider Material' errors={errors}>
+					<FormField
+						label='slider'
+						title='Slider Material'
+						errors={errors}>
 						<Controller
 							name={'slider'}
 							control={control}

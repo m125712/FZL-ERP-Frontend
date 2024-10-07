@@ -2290,9 +2290,18 @@ export const DYEING_THREAD_BATCH_DYEING_NULL = {
 };
 //* Dyeing Thread Batch Conneing
 export const DYEING_THREAD_CONNEING_SCHEMA = {
-	...DYEING_THREAD_BATCH_DYEING_SCHEMA,
 	uuid: STRING_REQUIRED,
+	yarn_quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0'),
 	machine_uuid: STRING_REQUIRED,
+	dyeing_operator: STRING.nullable(),
+	reason: STRING.nullable(),
+	category: STRING.nullable(),
+	status: STRING.nullable(),
+	pass_by: STRING.nullable(),
+	shift: STRING.nullable(),
+	dyeing_supervisor: STRING.nullable(),
+	remarks: STRING.nullable(),
+
 	batch_entry: yup.array().of(
 		yup.object().shape({
 			coning_production_quantity: NUMBER,

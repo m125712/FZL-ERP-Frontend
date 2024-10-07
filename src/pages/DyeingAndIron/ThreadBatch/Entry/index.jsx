@@ -22,8 +22,6 @@ import {
 	DYEING_THREAD_BATCH_NULL,
 	DYEING_THREAD_BATCH_SCHEMA,
 	NUMBER,
-	NUMBER_REQUIRED,
-	STRING,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 

@@ -167,23 +167,22 @@ const getColumn = ({ show_price }) => {
 			enableColumnFilter: false,
 			cell: (info) => Number(info.getValue()).toFixed(0),
 		}),
-		useAccess('show_price') &&
-			createColumn({
-				accessorKey: 'company_price',
-				header: (
-					<span>
-						Price (USD)
-						<br />
-						(Company/Party)
-					</span>
-				),
-				enableColumnFilter: false,
-				hidden: !show_price,
-				cell: (info) =>
-					Number(info.getValue()) +
-					' / ' +
-					Number(info.row.original.party_price),
-			}),
+		createColumn({
+			accessorKey: 'company_price',
+			header: (
+				<span>
+					Price (USD)
+					<br />
+					(Company/Party)
+				</span>
+			),
+			enableColumnFilter: false,
+			hidden: !show_price,
+			cell: (info) =>
+				Number(info.getValue()) +
+				' / ' +
+				Number(info.row.original.party_price),
+		}),
 	];
 
 	return [...DefaultStartColumn, ...DefaultEndColumn];

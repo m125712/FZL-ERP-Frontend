@@ -38,9 +38,25 @@ export default function Index({ initial_order, idx }) {
 	if (loading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
-	const sliderQuantity = order?.order_entry.reduce((sum, item) => {
-		return sum + parseFloat(item.quantity);
-	}, 0);
+	const sliderQuantity = order?.order_entry.reduce(
+		(totals, item) => {
+			totals.Quantity += parseFloat(item.quantity) || 0;
+			totals.piQuantity += parseFloat(item.total_pi_quantity) || 0;
+			totals.deliveryQuantity +=
+				parseFloat(item.total_delivery_quantity) || 0;
+			totals.rejectQuantity +=
+				parseFloat(item.total_reject_quantity) || 0;
+			totals.shortQuantity += parseFloat(item.total_short_quantity) || 0;
+			return totals;
+		},
+		{
+			Quantity: 0,
+			piQuantity: 0,
+			deliveryQuantity: 0,
+			rejectQuantity: 0,
+			shortQuantity: 0,
+		}
+	);
 
 	return (
 		<div className='space-y-4'>

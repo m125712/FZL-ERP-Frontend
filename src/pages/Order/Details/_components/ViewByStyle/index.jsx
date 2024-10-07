@@ -23,9 +23,25 @@ const Index = ({ initial_orders }) => {
 		setEntries(allEntries);
 	}, [initial_orders]); // include `initial_orders` as a dependency
 
-	const sliderQuantity = entrys?.reduce((sum, item) => {
-		return sum + parseFloat(item.quantity);
-	}, 0);
+	const sliderQuantity = entrys.reduce(
+		(totals, item) => {
+			totals.Quantity += parseFloat(item.quantity) || 0;
+			totals.piQuantity += parseFloat(item.total_pi_quantity) || 0;
+			totals.deliveryQuantity +=
+				parseFloat(item.total_delivery_quantity) || 0;
+			totals.rejectQuantity +=
+				parseFloat(item.total_reject_quantity) || 0;
+			totals.shortQuantity += parseFloat(item.total_short_quantity) || 0;
+			return totals;
+		},
+		{
+			Quantity: 0,
+			piQuantity: 0,
+			deliveryQuantity: 0,
+			rejectQuantity: 0,
+			shortQuantity: 0,
+		}
+	);
 
 	const hasInitialOrder =
 		Object.keys(initial_orders || []).length > 0 ? true : false;

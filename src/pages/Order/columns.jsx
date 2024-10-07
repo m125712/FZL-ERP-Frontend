@@ -345,6 +345,12 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				),
 			},
 			{
+				accessorKey: 'party_name',
+				header: 'party',
+				enableColumnFilter: true,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'order_number_wise_rank',
 				header: 'Count',
 				enableColumnFilter: false,

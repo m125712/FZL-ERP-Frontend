@@ -43,6 +43,7 @@ export const getPageHeader = (order_info) => {
 					},
 					`O/N: ${order_number}\n`,
 					`Date: ${order_info?.created_at ? format(new Date(order_info?.created_at), 'dd-MM-yyyy') : ''}\n`,
+					`PI No.: ${order_info?.pi_numbers ? order_info?.pi_numbers  : '---'}\n`,
 				],
 				alignment: 'right',
 			},
@@ -329,7 +330,7 @@ export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
 				text: 'Color / Size(CM)',
 				style: 'tableHeader',
 			},
-			...uniqueSizes.map((size) => ({
+			...uniqueSizes.sort((a, b) => a - b).map((size) => ({
 				text: size,
 				style: 'tableHeader',
 				alignment: 'right',

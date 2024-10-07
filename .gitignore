@@ -23,6 +23,6 @@ dist-ssr
 *.sw?
 
 .env.production
-.eve.development
+.env.development
 
 .vscode

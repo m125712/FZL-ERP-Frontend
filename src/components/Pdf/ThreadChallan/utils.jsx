@@ -31,7 +31,7 @@ export const getPageHeader = (data) => {
 					colSpan: 2,
 					text: [
 						{
-							text: 'Zipper Challan\n',
+							text: 'Thread Challan\n',
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},

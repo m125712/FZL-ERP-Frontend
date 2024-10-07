@@ -73,7 +73,7 @@ export default function Index(orderInfo) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [40, 50, 70, 50, 50, '*'],
+					widths: [40, '*', 70, 50, 50, '*'],
 					body: [
 						// * Header
 						TableHeader(node),

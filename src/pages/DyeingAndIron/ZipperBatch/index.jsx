@@ -65,8 +65,20 @@ export default function Index() {
 				header: 'Received',
 				enableColumnFilter: false,
 				cell: (info) => {
+					const { received } = info.row.original;
+					const access = haveAccess.includes('click_receive_status');
+					const overrideAccess = haveAccess.includes(
+						'click_receive_status_override'
+					);
 					return (
 						<SwitchToggle
+							disabled={
+								overrideAccess
+									? false
+									: access
+										? received === 1
+										: true
+							}
 							onChange={() => handelReceived(info.row.index)}
 							checked={info.getValue() === 1}
 						/>

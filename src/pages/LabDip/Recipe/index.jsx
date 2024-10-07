@@ -92,14 +92,24 @@ export default function Index() {
 				accessorKey: 'approved',
 				header: 'Approved',
 				enableColumnFilter: false,
-				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
+					const access = haveAccess.includes('click_approve');
+					const overrideAccess = haveAccess.includes(
+						'click_approve_override'
+					);
 					return (
 						<SwitchToggle
+							disabled={
+								overrideAccess
+									? false
+									: access
+										? Number(info.getValue()) === 1
+										: true
+							}
 							onChange={() =>
 								handelApprovedStatusChange(info.row.index)
 							}
-							checked={info.getValue() === 1}
+							checked={Number(info.getValue()) === 1}
 						/>
 					);
 				},
@@ -109,12 +119,23 @@ export default function Index() {
 				accessorKey: 'status',
 				header: 'Status',
 				enableColumnFilter: false,
-				hidden: !haveAccess.includes('update'),
+
 				cell: (info) => {
+					const access = haveAccess.includes('click_status');
+					const overrideAccess = haveAccess.includes(
+						'click_status_override'
+					);
 					return (
 						<SwitchToggle
+							disabled={
+								overrideAccess
+									? false
+									: access
+										? Number(info.getValue()) === 1
+										: true
+							}
 							onChange={() => handelStatusChange(info.row.index)}
-							checked={info.getValue() === 1}
+							checked={Number(info.getValue()) === 1}
 						/>
 					);
 				},

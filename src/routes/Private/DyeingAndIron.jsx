@@ -120,7 +120,13 @@ export const DyeingAndIronRoutes = [
 				path: '/dyeing-and-iron/zipper-batch',
 				element: <DyeingZipperBatch />,
 				page_name: 'dyeing__zipper_batch',
-				actions: ['create', 'read', 'update'],
+				actions: [
+					'create',
+					'read',
+					'update',
+					'click_receive_status',
+					'click_receive_status_override',
+				],
 			},
 			{
 				name: 'Zipper Batch Entry',
@@ -163,7 +169,13 @@ export const DyeingAndIronRoutes = [
 				path: '/dyeing-and-iron/thread-batch',
 				element: <DyeingThreadBatch />,
 				page_name: 'dyeing__thread_batch',
-				actions: ['create', 'read', 'update'],
+				actions: [
+					'create',
+					'read',
+					'update',
+					'click_drying_status',
+					'click_drying_status_override',
+				],
 			},
 
 			// * Batch Thread Entry

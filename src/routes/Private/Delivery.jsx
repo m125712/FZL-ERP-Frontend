@@ -1,22 +1,17 @@
 // Thread Clallan
-import ThreadChallan from '@pages/Thread/Challan';
-import ThreadChallanDetails from '@pages/Thread/Challan/Details';
-import ThreadChallanEntry from '@pages/Thread/Challan/Entry';
-
+import ChallanEntry from '@/pages/Delivery/Challan/Entry';
 // Zipper Packing List
 import PackingLists from '@/pages/Delivery/PackingList';
 import PackingListsDetails from '@/pages/Delivery/PackingList/Details';
 import PackingListsEntry from '@/pages/Delivery/PackingList/Entry';
-
 // Zipper -Challan
 import Challan from '@pages/Delivery/Challan';
 import ChallanDetails from '@pages/Delivery/Challan/Details';
-import ChallanEntry from '@/pages/Delivery/Challan/Entry';
-
 import Log from '@pages/Delivery/Log';
 import RM from '@pages/Delivery/RM';
-
-
+import ThreadChallan from '@pages/Thread/Challan';
+import ThreadChallanDetails from '@pages/Thread/Challan/Details';
+import ThreadChallanEntry from '@pages/Thread/Challan/Entry';
 
 export const DeliveryRoutes = [
 	{
@@ -37,7 +32,16 @@ export const DeliveryRoutes = [
 				path: '/thread/challan',
 				element: <ThreadChallan />,
 				page_name: 'thread__challan',
-				actions: ['create', 'read', 'update', 'delete'],
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_gate_pass',
+					'click_receive_status',
+					'click_gate_pass_override',
+					'click_receive_status_override',
+				],
 			},
 			{
 				name: 'Thread Challan Details',
@@ -133,7 +137,10 @@ export const DeliveryRoutes = [
 					'read',
 					'update',
 					'delete',
+					'click_gate_pass',
 					'click_receive_status',
+					'click_gate_pass_override',
+					'click_receive_status_override',
 				],
 			},
 			{

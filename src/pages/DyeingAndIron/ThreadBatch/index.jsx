@@ -128,8 +128,21 @@ export default function Index() {
 				header: 'Drying Completed',
 				enableColumnFilter: false,
 				cell: (info) => {
+					const { is_drying_complete } = info.row.original;
+
+					const access = haveAccess.includes('click_drying_status');
+					const overrideAccess = haveAccess.includes(
+						'click_drying_status_override'
+					);
 					return (
 						<SwitchToggle
+							disabled={
+								overrideAccess
+									? false
+									: access
+										? is_drying_complete === 'true'
+										: true
+							}
 							onChange={() =>
 								handelDryingComplete(info.row.index)
 							}

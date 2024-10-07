@@ -3,6 +3,7 @@ import { useFetch } from '@/hooks';
 
 import { FormField, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
 
+
 import cn from '@/lib/cn';
 
 export default function Header({
@@ -28,24 +29,22 @@ export default function Header({
 
 	return (
 		<div className='flex flex-col gap-4'>
-			<SectionEntryBody
-				title={
-					<div>
-						<span>{`Machine Capacity (KG): ${Number(res?.min_capacity || 0).toFixed(2)} - 
+			<div>
+				<span>{`Machine Capacity (KG): ${Number(res?.min_capacity || 0).toFixed(2)} - 
 														${Number(res?.max_capacity || 0).toFixed(2)}`}</span>
-						<br />
-						<span
-							className={cn(
-								totalWeight > parseFloat(res?.max_capacity) ||
-									totalWeight < parseFloat(res?.min_capacity)
-									? 'text-error'
-									: ''
-							)}>{`Batch Quantity (KG): ${totalWeight.toFixed(2)}`}</span>
-						<br />
-						<span>{`Batch Quantity (Cone): ${totalQuantity}`}</span>
-						<br />
-					</div>
-				}>
+				<br />
+				<span
+					className={cn(
+						totalWeight > parseFloat(res?.max_capacity) ||
+							totalWeight < parseFloat(res?.min_capacity)
+							? 'text-error'
+							: ''
+					)}>{`Batch Quantity (KG): ${totalWeight.toFixed(2)}`}</span>
+				<br />
+				<span>{`Batch Quantity (Cone): ${totalQuantity}`}</span>
+				<br />
+			</div>
+			<SectionEntryBody title='Thread Batch'>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField
 						label='machine_uuid'

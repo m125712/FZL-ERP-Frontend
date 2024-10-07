@@ -13,6 +13,7 @@ import {
 } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import DynamicFormSpreadSheet from '@/ui/Dynamic/DynamicFormSpreadSheet';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import {
 	ActionButtons,
@@ -54,6 +55,7 @@ export default function Index() {
 		watch,
 		setValue,
 		trigger,
+		clearErrors,
 	} = useRHF(THREAD_ORDER_INFO_ENTRY_SCHEMA, THREAD_ORDER_INFO_ENTRY_NULL);
 
 	useEffect(() => {
@@ -65,6 +67,7 @@ export default function Index() {
 	const { value: countLength } = useFetch(
 		`/other/thread/count-length/value/label`
 	);
+
 	const { value: shadeRecipe } = useFetch(
 		`/other/lab-dip/shade-recipe/value/label`
 	);
@@ -85,6 +88,7 @@ export default function Index() {
 		fields: threadOrderInfoEntryField,
 		append: threadOrderInfoEntryAppend,
 		remove: threadOrderInfoEntryRemove,
+		update: threadOrderInfoEntryUpdate,
 	} = useFieldArray({
 		control,
 		name: 'order_info_entry',
@@ -357,281 +361,86 @@ export default function Index() {
 							watch,
 						}}
 					/>
-					<DynamicField
-						headerButtons={headerButtons}
+
+					<DynamicFormSpreadSheet
 						title='Details'
+						fieldArrayName='order_info_entry'
 						handelAppend={handleThreadOrderInfoEntryAppend}
-						tableHead={[
-							'Color',
-							// 'Shade',
-							// 'PO',
-							'Style',
-							'Count Length',
-							'Bleaching',
-							'Quantity',
-							'Price (USD) (Com/Party)',
-							'Remarks',
-							'Action',
-						].map((item) => (
-							<th
-								key={item}
-								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-2 py-2 text-left text-sm font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
-								{item}
-							</th>
-						))}>
-						{threadOrderInfoEntryField.map((item, index) => (
-							<tr key={item.uuid}>
-								<td
-									className={cn(
-										`pl-1 ${rowClass}`,
-										'min-w-[140px]'
-									)}>
-									<Textarea
-										title='Color'
-										label={`order_info_entry[${index}].color`}
-										is_title_needed='false'
-										dynamicerror={
-											errors?.order_info_entry?.[index]
-												?.color
-										}
-										register={register}
-									/>
-								</td>
-								{/* <td className={cn(rowClass, 'min-w-[140px]')}>
-									<FormField
-										label={`order_info_entry[${index}].recipe_uuid`}
-										title='Shade'
-										errors={errors}
-										is_title_needed='false'>
-										<Controller
-											name={`order_info_entry[${index}].recipe_uuid`}
-											control={control}
-											render={({
-												field: { onChange },
-											}) => {
-												return (
-													<ReactSelect
-														placeholder='Select Shade'
-														options={shadeRecipe}
-														value={shadeRecipe?.find(
-															(item) =>
-																item.value ==
-																getValues(
-																	`order_info_entry[${index}].recipe_uuid`
-																)
-														)}
-														onChange={(e) => {
-															onChange(e.value);
-														}}
-														// isDisabled={
-														// 	order_info_uuid !==
-														// 	undefined
-														// }
-														menuPortalTarget={
-															document.body
-														}
-													/>
-												);
-											}}
-										/>
-									</FormField>
-								</td>
-								<td className={cn(rowClass, 'min-w-[140px]')}>
-									<Textarea
-										title='po'
-										label={`order_info_entry[${index}].po`}
-										is_title_needed='false'
-										dynamicerror={
-											errors?.order_info_entry?.[index]
-												?.po
-										}
-										register={register}
-									/>
-								</td> */}
+						handleRemove={handleThreadOrderInfoEntryRemove}
+						headerButtons={headerButtons}
+						columnsDefs={[
+							{
+								header: 'Color',
+								accessorKey: 'color',
+								type: 'text',
+								readOnly: false,
+							},
+							{
+								header: 'Style',
+								accessorKey: 'style',
+								type: 'text',
+								readOnly: false,
+							},
+							{
+								header: 'Count Length',
+								accessorKey: 'count_length_uuid',
+								type: 'select',
+								options: countLength || [],
+								readOnly: false,
+							},
+							{
+								header: 'Bleaching',
+								accessorKey: 'bleaching',
+								type: 'select',
+								options: bleaching,
+								readOnly: false,
+							},
+							{
+								header: 'Quantity',
+								accessorKey: 'quantity',
+								type: 'text',
+								readOnly: false,
+							},
+							{
+								header: 'Company (USD/DZN)',
+								accessorKey: 'company_price',
+								type: 'text',
+								readOnly: false,
+							},
+							{
+								header: 'Party (USD/DZN)',
+								accessorKey: 'party_price',
+								type: 'text',
+								readOnly: false,
+							},
+							{
+								header: 'Remarks',
+								accessorKey: 'remarks',
+								type: 'text',
+								readOnly: false,
+							},
 
-								<td className={cn(rowClass, 'min-w-[140px]')}>
-									<Input
-										title='style'
-										label={`order_info_entry[${index}].style`}
-										is_title_needed='false'
-										dynamicerror={
-											errors?.order_info_entry?.[index]
-												?.style
-										}
-										register={register}
-									/>
-								</td>
-								<td className={cn(rowClass, 'min-w-[180px]')}>
-									<FormField
-										label={`order_info_entry[${index}].count_length_uuid`}
-										title='Count Length'
-										dynamicerror={
-											errors?.order_info_entry?.[index]
-												?.count_length_uuid
-										}
-										is_title_needed='false'>
-										<Controller
-											name={`order_info_entry[${index}].count_length_uuid`}
-											control={control}
-											render={({
-												field: { onChange },
-											}) => {
-												return (
-													<ReactSelect
-														placeholder='Select Count Length'
-														options={countLength}
-														value={countLength?.find(
-															(item) =>
-																item.value ==
-																getValues(
-																	`order_info_entry[${index}].count_length_uuid`
-																)
-														)}
-														onChange={(e) => {
-															onChange(e.value);
-														}}
-														// isDisabled={
-														// 	order_info_uuid !==
-														// 	undefined
-														// }
-														menuPortalTarget={
-															document.body
-														}
-													/>
-												);
-											}}
-										/>
-									</FormField>
-								</td>
-								<td className={cn(rowClass, 'min-w-[140px]')}>
-									<FormField
-										label={`order_info_entry[${index}].bleaching`}
-										title='Count Length'
-										dynamicerror={
-											errors?.order_info_entry?.[index]
-												?.bleaching
-										}
-										is_title_needed='false'>
-										<Controller
-											name={`order_info_entry[${index}].bleaching`}
-											control={control}
-											render={({
-												field: { onChange },
-											}) => {
-												return (
-													<ReactSelect
-														placeholder='Select Bleaching'
-														options={bleaching}
-														value={bleaching?.find(
-															(item) =>
-																item.value ==
-																getValues(
-																	`order_info_entry[${index}].bleaching`
-																)
-														)}
-														onChange={(e) => {
-															onChange(e.value);
-														}}
-														// isDisabled={
-														// 	order_info_uuid !==
-														// 	undefined
-														// }
-														menuPortalTarget={
-															document.body
-														}
-													/>
-												);
-											}}
-										/>
-									</FormField>
-								</td>
-								<td className={rowClass}>
-									<Input
-										title='quantity'
-										label={`order_info_entry[${index}].quantity`}
-										is_title_needed='false'
-										dynamicerror={
-											errors?.order_info_entry?.[index]
-												?.quantity
-										}
-										// value={Number(
-										// 	getValues(
-										// 		`order_info_entry[${index}].quantity`
-										// 	)
-										// ).toFixed(0)}
-										register={register}
-									/>
-								</td>
+							{
+								header: 'Actions',
+								type: 'action',
+							},
+						]}
+						{...{
+							formContext: {
+								register,
+								watch,
+								setValue,
+								getValues,
+								clearErrors,
+								errors,
+							},
+							fields: threadOrderInfoEntryField,
+							append: threadOrderInfoEntryAppend,
+							remove: threadOrderInfoEntryRemove,
+							update: threadOrderInfoEntryUpdate,
+						}}
+					/>
 
-								<td className={rowClass}>
-									<div className='flex'>
-										<Input
-											label={`order_info_entry[${index}].company_price`}
-											is_title_needed='false'
-											dynamicerror={
-												errors?.order_info_entry?.[
-													index
-												]?.company_price
-											}
-											// value={Number(
-											// 	getValues(
-											// 		`order_info_entry[${index}].company_price`
-											// 	)
-											// ).toFixed(2)}
-											register={register}
-										/>
-										<Input
-											label={`order_info_entry[${index}].party_price`}
-											is_title_needed='false'
-											dynamicerror={
-												errors?.order_info_entry?.[
-													index
-												]?.party_price
-											}
-											// value={Number(
-											// 	getValues(
-											// 		`order_info_entry[${index}].party_price`
-											// 	)
-											// ).toFixed(2)}
-											register={register}
-										/>
-									</div>
-								</td>
-								<td className={cn(rowClass, 'min-w-[140px]')}>
-									<Input
-										label={`order_info_entry[${index}].remarks`}
-										is_title_needed='false'
-										dynamicerror={
-											errors?.order_info_entry?.[index]
-												?.remarks
-										}
-										register={register}
-									/>
-								</td>
-
-								<td
-									className={cn(
-										rowClass,
-										'min-w-20 border-l-2 border-base-200'
-									)}>
-									<ActionButtons
-										duplicateClick={() =>
-											handelDuplicateDynamicField(index)
-										}
-										removeClick={() =>
-											handleThreadOrderInfoEntryRemove(
-												index
-											)
-										}
-										showRemoveButton={
-											threadOrderInfoEntryField.length > 1
-										}
-									/>
-								</td>
-							</tr>
-						))}
-					</DynamicField>
 					<div className='modal-action'>
 						<button
 							type='submit'

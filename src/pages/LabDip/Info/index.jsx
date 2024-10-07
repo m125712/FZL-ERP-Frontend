@@ -24,7 +24,7 @@ export default function Index() {
 			{
 				accessorKey: 'info_id',
 				header: 'ID',
-				
+
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
@@ -39,7 +39,7 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'Order ID',
-				
+
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					const { order_info_uuid } = info.row.original;
@@ -98,12 +98,23 @@ export default function Index() {
 				accessorKey: 'lab_status',
 				header: 'Status',
 				enableColumnFilter: false,
-				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
+					const { lab_status } = info.row.original;
+					const access = haveAccess.includes('click_status');
+					const overrideAccess = haveAccess.includes(
+						'click_status_override'
+					);
 					return (
 						<SwitchToggle
+							disabled={
+								overrideAccess
+									? false
+									: access
+										? lab_status === 1
+										: true
+							}
 							onChange={() => handelStatusChange(info.row.index)}
-							checked={info.getValue() === 1}
+							checked={Number(info.getValue()) === 1}
 						/>
 					);
 				},

@@ -7,12 +7,15 @@ export default function Index({ challan }) {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'style_color',
-				header: 'Style/Color',
-				cell: (info) => {
-					const { style, color } = info.row.original;
-					return `${style}/${color}`;
-				},
+				accessorKey: 'style',
+				header: 'Style',
+				cell: (info) => info.getValue(),
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'color',
+				header: 'Color',
+				cell: (info) => info.getValue(),
 				enableColumnFilter: false,
 			},
 			{

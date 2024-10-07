@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useDeliveryChallanDetailsByUUID } from '@/state/Delivery';
 import { Navigate, useParams } from 'react-router-dom';
 
+import Pdf from '@/components/Pdf/ZipperChallan';
+
 import Information from './Information';
 import Table from './Table';
 
@@ -13,16 +15,26 @@ export default function Index() {
 	useEffect(() => {
 		document.title = `Challan: ${uuid}`;
 	}, [uuid]);
+	const [data2, setData] = useState('');
+
+	useEffect(() => {
+		if (data && data?.challan_entry) {
+			Pdf(data)?.getDataUrl((dataUrl) => {
+				setData(dataUrl);
+			});
+		}
+	}, [data]);
+	// ! FOR TESTING
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
-	console.log({
-		data,
-	});
-
 	return (
 		<div className='space-y-2'>
+			<iframe
+				src={data2}
+				className='h-[40rem] w-full rounded-md border-none'
+			/>
 			<Information challan={data} />
 			<Table challan={data?.challan_entry} />
 		</div>

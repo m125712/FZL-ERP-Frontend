@@ -26,7 +26,7 @@ export default function OrderSheetPdf(order_sheet) {
 		}
 	};
 
-	// * function to get similar garment_wash
+	// * function to get similar Special Requirement
 	const getSpecialReqInfo = (order_description, sr) => {
 		if (order_description?.special_requirement) {
 			const parsedObject =
@@ -41,6 +41,23 @@ export default function OrderSheetPdf(order_sheet) {
 		} else {
 			return [];
 		}
+	};
+
+	// * function to calculate grand total
+	const grandTotal = (total_entries) => {
+		console.log(total_entries);
+		let total = 0;
+		total_entries?.map((item) => {
+			total += item.order_entry.reduce((acc, item) => {
+				acc += item?.quantity;
+
+				return acc;
+			}, 0);
+		});
+
+		console.log(total);
+
+		return total;
 	};
 
 	const headerHeight = 100;
@@ -308,6 +325,26 @@ export default function OrderSheetPdf(order_sheet) {
 					},
 				];
 			}),
+			{
+				margin: [0, 5],
+				table: {
+					widths: ['*', 'auto'],
+					body: [
+						[
+							{
+								text: 'Grand Total',
+								style: 'tableFooter',
+								alignment: 'right',
+							},
+							{
+								text: grandTotal(order_entry),
+								style: 'tableFooter',
+								alignment: 'Center',
+							},
+						],
+					],
+				},
+			},
 		],
 	});
 

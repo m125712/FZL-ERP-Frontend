@@ -43,7 +43,7 @@ export const getPageHeader = (order_info) => {
 					},
 					`O/N: ${order_number}\n`,
 					`Date: ${order_info?.created_at ? format(new Date(order_info?.created_at), 'dd-MM-yyyy') : ''}\n`,
-					`PI No.: ${order_info?.pi_numbers ? order_info?.pi_numbers  : '---'}\n`,
+					`PI No.: ${order_info?.pi_numbers ? order_info?.pi_numbers.join(', ') : '---'}\n`,
 				],
 				alignment: 'right',
 			},
@@ -117,6 +117,8 @@ export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
 		logo_type_name,
 		top_stopper_name,
 		bottom_stopper_name,
+		nylon_stopper_name,
+		hand_name,
 
 		// short_name,
 		item_short_name,
@@ -153,37 +155,24 @@ export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
 				text: [
 					item_name ? item_name : '',
 					item_name &&
-					(zipper_number_name ||
-						end_type_name ||
-						lock_type_name ||
-						teeth_color_name ||
-						puller_type_name ||
-						slider_color_name ||
-						logo_type_name ||
-						top_stopper_name ||
-						bottom_stopper_name ||
-						srinfo?.length > 0 ||
-						description)
-						? ' / '
+					(nylon_stopper_name || end_type_name || hand_name)
+						? ' - '
 						: '',
 
-					zipper_number_name ? zipper_number_name : '',
-					zipper_number_name &&
-					(end_type_name ||
-						lock_type_name ||
-						teeth_color_name ||
-						puller_type_name ||
-						slider_color_name ||
-						logo_type_name ||
-						top_stopper_name ||
-						bottom_stopper_name ||
-						srinfo?.length > 0 ||
-						description)
+					nylon_stopper_name ? nylon_stopper_name : '',
+					nylon_stopper_name &&
+					(end_type_name || hand_name || zipper_number_name)
 						? ' / '
 						: '',
 
 					end_type_name ? end_type_name : '',
-					end_type_name &&
+					end_type_name && hand_name ? ' - ' : '',
+
+					hand_name ? hand_name + '/ ' : '',
+
+					// The rest of the structure remains unchanged with ' / ' between fields
+					zipper_number_name ? zipper_number_name : '',
+					zipper_number_name &&
 					(lock_type_name ||
 						teeth_color_name ||
 						puller_type_name ||
@@ -330,11 +319,13 @@ export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
 				text: 'Color / Size(CM)',
 				style: 'tableHeader',
 			},
-			...uniqueSizes.sort((a, b) => a - b).map((size) => ({
-				text: size,
-				style: 'tableHeader',
-				alignment: 'right',
-			})),
+			...uniqueSizes
+				.sort((a, b) => a - b)
+				.map((size) => ({
+					text: size,
+					style: 'tableHeader',
+					alignment: 'right',
+				})),
 			{
 				text: 'Total',
 				style: 'tableHeader',

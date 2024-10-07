@@ -10,14 +10,14 @@ export const ReportRoutes = [
 				name: 'Zipper Production',
 				path: '/report/zipper-production',
 				element: <ZipperProduction />,
-				page_name: 'reportzipper_production',
+				page_name: 'report__zipper_production',
 				actions: ['read'],
 			},
 			{
 				name: 'Daily Challan',
 				path: '/report/daily-challan',
 				element: <DailyChallan />,
-				page_name: 'reportdaily_challan',
+				page_name: 'report__daily_challan',
 				actions: ['read'],
 			},
 			{

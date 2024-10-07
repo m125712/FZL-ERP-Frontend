@@ -1,3 +1,4 @@
+import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
 import { useFetch } from '@/hooks';
 
@@ -24,19 +25,17 @@ export const getPageHeader = (data) => {
 		body: [
 			[
 				{
-					colSpan: 2,
-					text: [
-						{
-							text: `${company.name}\n`,
-							fontSize: DEFAULT_FONT_SIZE + 4,
-							bold: true,
-						},
-						`${company.address}\n`,
-						`${company.phone}\n`,
-					],
+					image: FZL_LOGO.src,
+					width: 70,
+					height: 40,
 					alignment: 'left',
 				},
-				'',
+				{
+					colspan: 2,
+					text: [`${company.address}\n`, `${company.phone}\n`],
+					alignment: 'left',
+				},
+
 				{
 					colSpan: 2,
 					text: [

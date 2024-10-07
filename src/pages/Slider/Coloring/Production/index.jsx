@@ -43,7 +43,7 @@ export default function Index() {
 			extraData: extraData,
 		};
 	}, [extraData, Pdf]);
-	
+
 	// * columns
 	const columns = useMemo(
 		() => [
@@ -309,8 +309,6 @@ export default function Index() {
 				title={info.getTitle()}
 				data={data}
 				columns={columns}
-				showPdf={true}
-				pdfData={pdfData}
 			/>
 			<Suspense>
 				<Production

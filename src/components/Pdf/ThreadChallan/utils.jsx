@@ -1,18 +1,16 @@
+import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
 
 import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../ui';
 import { company, getEmptyColumn } from '../utils';
-import { FZL_LOGO } from '@/assets/img/base64';
 
 const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 
 const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 
-export const getPageHeader = (orderInfo) => {
-	const created_at = getDateFormate(orderInfo?.created_at);
-	const updated_at = getDateFormate(orderInfo?.updated_at);
-	const delivery_date = getDateFormate(orderInfo?.delivery_date);
-	const pi_number = orderInfo?.pi_number;
+export const getPageHeader = (data) => {
+	const created_at = getDateFormate(data?.created_at);
+	const updated_at = getDateFormate(data?.updated_at);
 
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
@@ -33,13 +31,12 @@ export const getPageHeader = (orderInfo) => {
 					colSpan: 2,
 					text: [
 						{
-							text: 'Thread Order Sheet\n',
+							text: 'Thread Challan\n',
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
-						`O/N: ${orderInfo?.order_number}\n`,
+						`Challan Number: ${data?.order_number}\n`,
 						`Date: ${created_at}\n`,
-						`PI Number: ${pi_number ? pi_number : '---'}\n`,
 					],
 					alignment: 'right',
 				},
@@ -49,29 +46,29 @@ export const getPageHeader = (orderInfo) => {
 
 			// * Start of table
 			[
-				{ text: 'Party', bold: true, color: PRIMARY_COLOR },
-				orderInfo?.party_name,
-				{ text: 'Marketing', bold: true, color: PRIMARY_COLOR },
-				orderInfo?.marketing_name,
+				{ text: 'Carton Quantity', bold: true, color: PRIMARY_COLOR },
+				data?.carton_quantity,
+				{ text: 'Order Number', bold: true, color: PRIMARY_COLOR },
+				data?.order_number,
 			],
 			[
-				{ text: 'Factory', bold: true, color: PRIMARY_COLOR },
-				orderInfo?.factory_name,
+				{ text: 'Gate Pass', bold: true, color: PRIMARY_COLOR },
+				data?.gate_pass === 1 ? 'Yes' : 'No',
 
-				{ text: 'Merchandiser', bold: true, color: PRIMARY_COLOR },
-				orderInfo?.merchandiser_name,
+				{ text: 'Receive Status', bold: true, color: PRIMARY_COLOR },
+				data?.received === 1 ? 'Yes' : 'No',
 			],
 			[
-				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
-				orderInfo?.factory_address,
-				{ text: 'Buyer', bold: true, color: PRIMARY_COLOR },
-				orderInfo?.buyer_name,
+				{ text: 'Assign To', bold: true, color: PRIMARY_COLOR },
+				data?.assign_to_name,
+				{ text: 'Created By', bold: true, color: PRIMARY_COLOR },
+				data?.created_by_name,
 			],
 			[
 				{ text: 'Updated', bold: true, color: PRIMARY_COLOR },
 				updated_at,
-				{ text: 'Created By', bold: true, color: PRIMARY_COLOR },
-				orderInfo?.created_by_name,
+				'',
+				'',
 			],
 
 			[
@@ -84,7 +81,7 @@ export const getPageHeader = (orderInfo) => {
 					colSpan: 3,
 					text: [
 						{
-							text: orderInfo?.remarks,
+							text: data?.remarks,
 						},
 					],
 					alignment: 'left',

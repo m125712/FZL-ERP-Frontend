@@ -1,23 +1,19 @@
-import {
-	DEFAULT_FONT_SIZE,
-	tableLayoutStyle,
-	xMargin,
-} from '@/components/Pdf/ui';
+import { DEFAULT_FONT_SIZE, tableLayoutStyle, xMargin } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
+
+
 
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
+
 const node = [
-	getTable('mc_no', 'MC No'),
-	getTable('die_casting_name', 'Name'),
-	getTable('cavity_goods', 'Count Length'),
-	getTable('cavity_defect', 'Bleaching'),
-	getTable('push', 'Push', 'right'),
-	getTable('order_number', 'Order Number'),
-	getTable('item_description', 'Item Description'),
-	getTable('production_quantity', 'Quantity(pcs)', 'right'),
-	getTable('weight', 'Weight', 'right'),
+	getTable('serial_number', 'S/N'),
+	getTable('order_number', 'O/N'),
+	getTable('party_name', 'Party Name'),
+	getTable('item_description', 'Item Name'),
+	getTable('production_quantity(pcs)', 'Quantity', 'right'),
+	getTable('weight', 'Weight(kg)', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
 
@@ -33,7 +29,7 @@ export default function Index(information) {
 		date = information.startDate + ' to ' + information.endDate;
 	}
 	let total_production = data?.reduce(
-		(acc, item) => acc + item.production_quantity,
+		(acc, item) => acc + Number(item.production_quantity),
 		0
 	);
 
@@ -72,7 +68,7 @@ export default function Index(information) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [40, 60, 30, 40, 30, 50, 60, 60, 30, '*'],
+					widths: [20, 40, 140, 70, 70, 40, '*'],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -80,7 +76,11 @@ export default function Index(information) {
 						// * Body
 						...data?.map((item) =>
 							node.map((nodeItem) => ({
-								text: item[nodeItem.field],
+								text:
+									nodeItem.field === 'order_number' &&
+									item[nodeItem.field] === 'Assembly Stock'
+										? '-'
+										: item[nodeItem.field],
 								style: nodeItem.cellStyle,
 								alignment: nodeItem.alignment,
 							}))
@@ -91,7 +91,7 @@ export default function Index(information) {
 									'Total Production Quantity :' +
 									total_production +
 									' pcs',
-								colSpan: 10,
+								colSpan: 7,
 								alignment: 'center',
 							},
 						],

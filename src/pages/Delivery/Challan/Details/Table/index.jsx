@@ -27,8 +27,20 @@ export default function Index({ challan }) {
 				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'style_color_size',
-				header: 'Style/Color/Size',
+				accessorKey: 'style',
+				header: 'Style',
+				cell: (info) => info.getValue(),
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'color',
+				header: 'Color',
+				cell: (info) => info.getValue(),
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'size',
+				header: 'Size',
 				cell: (info) => info.getValue(),
 				enableColumnFilter: false,
 			},

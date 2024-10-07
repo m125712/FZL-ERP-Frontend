@@ -9,41 +9,24 @@ import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
-	getTable('color', 'Color'),
 	getTable('style', 'Style'),
-	getTable('count_length_name', 'Count Length'),
-	getTable('bleaching', 'Bleaching'),
+	getTable('color', 'Color'),
+	getTable('count', 'Count', 'right'),
+	getTable('length', 'Length', 'right'),
 	getTable('quantity', 'Quantity', 'right'),
+	getTable('short_quantity', 'Short QTY', 'right'),
+	getTable('reject_quantity', 'Reject QTY', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
 
-export default function Index(orderInfo) {
+export default function Index(data) {
 	const headerHeight = 170;
 	let footerHeight = 50;
-	let { order_info_entry } = orderInfo;
-
-	const calculateSummary = (order_info_entry) => {
-		let totalQuantity = 0;
-		const uniqueColors = new Set();
-
-		order_info_entry.forEach((item) => {
-			totalQuantity += parseFloat(item.quantity);
-			uniqueColors.add(item.color);
-		});
-
-		return {
-			totalQuantity: totalQuantity.toFixed(4),
-			uniqueColorsCount: uniqueColors.size,
-		};
-	};
-	order_info_entry = order_info_entry.map((item) => ({
-		...item,
-		bleaching: item.bleaching === 'bleach' ? 'Bleach' : 'Non-Bleach',
-		quantity: Number(item.quantity) || 0,
-	}));
-
-	const { totalQuantity, uniqueColorsCount } =
-		calculateSummary(order_info_entry);
+	let { challan_entry } = data;
+	let totalQuantity = challan_entry?.reduce((acc, item) => {
+		const quantity = parseInt(item.quantity, 10) || 0;
+		return acc + quantity;
+	}, 0);
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
@@ -54,7 +37,7 @@ export default function Index(orderInfo) {
 
 		// * Page Header
 		header: {
-			table: getPageHeader(orderInfo),
+			table: getPageHeader(data),
 			layout: 'noBorders',
 			margin: [xMargin, 30, xMargin, 0],
 		},
@@ -73,13 +56,13 @@ export default function Index(orderInfo) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [40, '*', 70, 50, 50, '*'],
+					widths: [50, 50, 50, 50, 35, 30, 30, '*'],
 					body: [
 						// * Header
 						TableHeader(node),
 
 						// * Body
-						...order_info_entry?.map((item) =>
+						...challan_entry?.map((item) =>
 							node.map((nodeItem) => ({
 								text: item[nodeItem.field],
 								style: nodeItem.cellStyle,
@@ -88,19 +71,16 @@ export default function Index(orderInfo) {
 						),
 						[
 							{
-								text: `Total Color: ${Number(uniqueColorsCount)}`,
-								bold: true,
-								colSpan: 2,
-							},
-							{},
-							{},
-
-							{
-								text: `Total Quantity: ${Number(totalQuantity)}`,
+								text: `Total Quantity: ${totalQuantity}`,
+								style: 'tableFooter',
 								alignment: 'right',
-								bold: true,
-								colSpan: 2,
+								colSpan: 8,
 							},
+							{},
+							{},
+							{},
+							{},
+							{},
 							{},
 							{},
 						],

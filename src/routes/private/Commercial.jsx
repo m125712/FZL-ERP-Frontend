@@ -3,6 +3,7 @@
 // Bank
 import Bank from '@pages/Commercial/Bank';
 import PiCash from '@pages/Commercial/Cash';
+import PiCashDetails from '@pages/Commercial/Cash/Details';
 import PiCashEntry from '@pages/Commercial/Cash/Entry';
 // LC
 import LC from '@pages/Commercial/LC';
@@ -21,7 +22,13 @@ export const CommercialRoutes = [
 				path: '/commercial/lc',
 				element: <LC />,
 				page_name: 'commercial__lc',
-				actions: ['create', 'read', 'update', 'delete'],
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'show_own_orders',
+				],
 				disableCollapse: true,
 
 				children: [
@@ -30,7 +37,13 @@ export const CommercialRoutes = [
 						path: '/commercial/lc/details/:lc_number',
 						element: <LCDetails />,
 						page_name: 'commercial__lc_details',
-						actions: ['create', 'read', 'update', 'delete'],
+						actions: [
+							'create',
+							'read',
+							'update',
+							'delete',
+							'show_own_orders',
+						],
 						hidden: true,
 					},
 
@@ -65,6 +78,7 @@ export const CommercialRoutes = [
 					'update',
 					'delete',
 					'click_receive_status',
+					'show_own_orders',
 				],
 				disableCollapse: true,
 				children: [
@@ -79,6 +93,7 @@ export const CommercialRoutes = [
 							'update',
 							'delete',
 							'click_receive_status',
+							'show_own_orders',
 						],
 						hidden: true,
 					},
@@ -112,9 +127,25 @@ export const CommercialRoutes = [
 					'update',
 					'delete',
 					'click_receive_status',
+					'show_own_orders',
 				],
 				disableCollapse: true,
 				children: [
+					{
+						name: 'PI',
+						path: '/commercial/pi-cash/:pi_id',
+						element: <PiCashDetails />,
+						page_name: 'commercial__pi_cash_details',
+						actions: [
+							'create',
+							'read',
+							'update',
+							'delete',
+							'click_receive_status',
+							'show_own_orders',
+						],
+						hidden: true,
+					},
 					{
 						name: 'Cash Entry',
 						path: '/commercial/pi-cash/entry',

@@ -1,6 +1,7 @@
 import DailyChallan from '@/pages/Report/DailyChallan';
 import PIRegister from '@/pages/Report/PIRegister';
 import ZipperProduction from '@/pages/Report/ZipperProductionStatus';
+import LCDue from '@/pages/Report/LC';
 
 export const ReportRoutes = [
 	{
@@ -27,6 +28,13 @@ export const ReportRoutes = [
 				page_name: 'report__pi_register',
 				actions: ['read'],
 			},
+			{
+				name: 'LC Due',
+				path: '/report/lc-due',
+				element: <LCDue />,
+				page_name: 'report__lc_due',
+				actions: ['read'],
+			}
 		],
 	},
 ];

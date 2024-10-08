@@ -1128,4 +1128,7 @@ export const reportQK = {
 
 	// PI Register
 	piRegister: () => [...reportQK.all(), 'pi-register'],
+
+	// Lc
+	lc: (url) => [...reportQK.all(), 'lc' + url],
 };

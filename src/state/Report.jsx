@@ -8,13 +8,20 @@ export const useZipperProduction = () =>
 	});
 
 export const useDailyChallan = () =>
-    createGlobalState({
-        queryKey: reportQK.dailyChallan(),
-        url: '/report/daily-challan-report',
-    })
+	createGlobalState({
+		queryKey: reportQK.dailyChallan(),
+		url: '/report/daily-challan-report',
+	});
 
 export const usePIRegister = () =>
-    createGlobalState({
-        queryKey: reportQK.piRegister(),
-        url: '/report/pi-register-report',
-    })
+	createGlobalState({
+		queryKey: reportQK.piRegister(),
+		url: '/report/pi-register-report',
+	});
+
+export const useLC = (url) => {
+	return createGlobalState({
+		queryKey: reportQK.lc(url),
+		url,
+	});
+};

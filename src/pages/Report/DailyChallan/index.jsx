@@ -39,7 +39,7 @@ export default function Index() {
 				accessorKey: 'gate_pass',
 				header: 'Gate Pass',
 				enableColumnFilter: false,
-				cell: (info) => <StatusButton size='btn-xs' value={info} />,
+				cell: (info) => <StatusButton size='btn-xs' value={info.getValue()} />,
 			},
 			{
 				accessorKey: 'created_by_name',
@@ -93,7 +93,7 @@ export default function Index() {
 				accessorKey: 'receive_status',
 				header: 'Challan Received',
 				enableColumnFilter: false,
-				cell: (info) => <StatusButton size='btn-xs' value={info} />,
+				cell: (info) => <StatusButton size='btn-xs' value={info.getValue()} />,
 			},
 		],
 		[data]

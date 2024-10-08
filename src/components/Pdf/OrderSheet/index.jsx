@@ -58,7 +58,7 @@ export default function OrderSheetPdf(order_sheet) {
 		return total;
 	};
 
-	const headerHeight = 120;
+	const headerHeight = 140;
 	let footerHeight = 30;
 	const { order_info, order_entry, garments, sr } = order_sheet;
 
@@ -72,7 +72,7 @@ export default function OrderSheetPdf(order_sheet) {
 		// Page Header
 		header: {
 			table: {
-				widths: [35, '*', 42, '*'],
+				widths: [35, '*', 50, '*'],
 				body: getPageHeader(order_info),
 			},
 			layout: 'noBorders',

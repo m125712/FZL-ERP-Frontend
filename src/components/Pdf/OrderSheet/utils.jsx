@@ -10,15 +10,37 @@ export const company = {
 	bin_tax_hscode: 'BIN: 000537296-0403, VAT: 17141000815',
 };
 
+const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
+	let value = is_cash == 1 ? 'Cash' : 'LC';
+	let sample_bill = [];
+
+	if (is_sample === 1) sample_bill.push('Sample');
+	if (is_bill === 1) sample_bill.push('Bill');
+
+	if (sample_bill.length > 0) value += ` (${sample_bill.join(', ')})`;
+
+	if (is_only_value) return value;
+
+	return value;
+};
+
 export const getPageHeader = (order_info) => {
 	const order_number =
 		order_info.is_sample === 1
 			? order_info.order_number + ' (S)'
 			: order_info.order_number;
-	const lc_or_cash =
-		order_info.is_cash === 1
-			? `Cash${order_info?.is_bill === 1 && ' (Bill)'}`
-			: 'LC';
+
+	// const lc_or_cash =
+	// 	order_info.is_cash === 1
+	// 		? `Cash${order_info?.is_bill === 1 && ' (Bill)'}`
+	// 		: 'LC';
+
+	const lc_or_cash = renderCashOrLC(
+		order_info.is_cash,
+		order_info.is_sample,
+		order_info.is_bill,
+		true
+	);
 	return [
 		// CompanyAndORDER
 		[
@@ -41,7 +63,7 @@ export const getPageHeader = (order_info) => {
 						fontSize: DEFAULT_FONT_SIZE + 4,
 						bold: true,
 					},
-					`O/N: ${order_number}\n`,
+					`O/N: ${order_number}${order_info?.is_sample ? '(S)' : ''}\n`,
 					`Date: ${order_info?.created_at ? format(new Date(order_info?.created_at), 'dd-MM-yyyy') : ''}\n`,
 					`PI No.: ${order_info?.pi_numbers ? order_info?.pi_numbers.join(', ') : '---'}\n`,
 				],
@@ -50,8 +72,9 @@ export const getPageHeader = (order_info) => {
 			'',
 		],
 		[
-			{ text: 'Client', bold: true },
-			order_info.party_name,
+			{ text: 'LC/Cash', bold: true },
+			lc_or_cash,
+
 			{ text: 'Buyer', bold: true },
 			order_info.buyer_name,
 		],
@@ -61,11 +84,20 @@ export const getPageHeader = (order_info) => {
 			{ text: 'Marketing', bold: true },
 			order_info.marketing_name,
 		],
+
+		[
+			{ text: 'Client', bold: true },
+			order_info.party_name,
+			{ text: 'Priority', bold: true },
+			(order_info.marketing_priority || '-') +
+				' / ' +
+				(order_info.factory_priority || '-'),
+		],
 		[
 			{ text: 'Address', bold: true },
-			order_info.factory_address,
-			{ text: 'LC/Cash', bold: true },
-			lc_or_cash,
+			{ colSpan: 3, text: order_info.factory_address },
+			'',
+			'',
 		],
 	];
 };
@@ -108,8 +140,10 @@ export const getPageFooter = ({ currentPage, pageCount }) => {
 export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
 	const {
 		item_name,
-		zipper_number_name,
+		nylon_stopper_name,
 		end_type_name,
+		hand_name,
+		zipper_number_name,
 		lock_type_name,
 		teeth_color_name,
 		puller_type_name,
@@ -117,8 +151,6 @@ export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
 		logo_type_name,
 		top_stopper_name,
 		bottom_stopper_name,
-		nylon_stopper_name,
-		hand_name,
 
 		// short_name,
 		item_short_name,
@@ -143,6 +175,27 @@ export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
 		description,
 	} = entry;
 
+	let info = [
+		item_name
+			? item_name === 'Nylon'
+				? item_name + ' - ' + nylon_stopper_name
+				: item_name
+			: '',
+		end_type_name
+			? end_type_name === 'Open End'
+				? end_type_name + ' - ' + hand_name
+				: end_type_name
+			: '',
+		zipper_number_name,
+		lock_type_name,
+		teeth_color_name,
+		puller_type_name,
+		slider_color_name,
+		logo_type_name,
+		top_stopper_name,
+		bottom_stopper_name,
+	];
+
 	return [
 		[
 			{
@@ -153,109 +206,110 @@ export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
 			{
 				colSpan: uniqueSizes.length + 2,
 				text: [
-					item_name ? item_name : '',
-					item_name &&
-					(nylon_stopper_name || end_type_name || hand_name)
-						? ' - '
-						: '',
+					// item_name ? item_name : '',
+					// item_name &&
+					// (nylon_stopper_name || end_type_name || hand_name)
+					// 	? ' - '
+					// 	: '',
 
-					nylon_stopper_name ? nylon_stopper_name : '',
-					nylon_stopper_name &&
-					(end_type_name || hand_name || zipper_number_name)
-						? ' / '
-						: '',
+					// nylon_stopper_name ? nylon_stopper_name : '',
+					// nylon_stopper_name &&
+					// (end_type_name || hand_name || zipper_number_name)
+					// 	? ' / '
+					// 	: '',
 
-					end_type_name ? end_type_name : '',
-					end_type_name && hand_name ? ' - ' : '',
+					// end_type_name ? end_type_name : '',
+					// end_type_name && hand_name ? ' - ' : '',
 
-					hand_name ? hand_name + '/ ' : '',
+					// hand_name ? hand_name + '/ ' : '',
 
-					// The rest of the structure remains unchanged with ' / ' between fields
-					zipper_number_name ? zipper_number_name : '',
-					zipper_number_name &&
-					(lock_type_name ||
-						teeth_color_name ||
-						puller_type_name ||
-						slider_color_name ||
-						logo_type_name ||
-						top_stopper_name ||
-						bottom_stopper_name ||
-						srinfo?.length > 0 ||
-						description)
-						? ' / '
-						: '',
+					// // The rest of the structure remains unchanged with ' / ' between fields
+					// zipper_number_name ? zipper_number_name : '',
+					// zipper_number_name &&
+					// (lock_type_name ||
+					// 	teeth_color_name ||
+					// 	puller_type_name ||
+					// 	slider_color_name ||
+					// 	logo_type_name ||
+					// 	top_stopper_name ||
+					// 	bottom_stopper_name ||
+					// 	srinfo?.length > 0 ||
+					// 	description)
+					// 	? ' / '
+					// 	: '',
 
-					lock_type_name ? lock_type_name : '',
-					lock_type_name &&
-					(teeth_color_name ||
-						puller_type_name ||
-						slider_color_name ||
-						logo_type_name ||
-						top_stopper_name ||
-						bottom_stopper_name ||
-						srinfo?.length > 0 ||
-						description)
-						? ' / '
-						: '',
+					// lock_type_name ? lock_type_name : '',
+					// lock_type_name &&
+					// (teeth_color_name ||
+					// 	puller_type_name ||
+					// 	slider_color_name ||
+					// 	logo_type_name ||
+					// 	top_stopper_name ||
+					// 	bottom_stopper_name ||
+					// 	srinfo?.length > 0 ||
+					// 	description)
+					// 	? ' / '
+					// 	: '',
 
-					teeth_color_name ? teeth_color_name : '',
-					teeth_color_name &&
-					(puller_type_name ||
-						slider_color_name ||
-						logo_type_name ||
-						top_stopper_name ||
-						bottom_stopper_name ||
-						srinfo?.length > 0 ||
-						description)
-						? ' / '
-						: '',
+					// teeth_color_name ? teeth_color_name : '',
+					// teeth_color_name &&
+					// (puller_type_name ||
+					// 	slider_color_name ||
+					// 	logo_type_name ||
+					// 	top_stopper_name ||
+					// 	bottom_stopper_name ||
+					// 	srinfo?.length > 0 ||
+					// 	description)
+					// 	? ' / '
+					// 	: '',
 
-					puller_type_name ? puller_type_name : '',
-					puller_type_name &&
-					(slider_color_name ||
-						logo_type_name ||
-						top_stopper_name ||
-						bottom_stopper_name ||
-						srinfo?.length > 0 ||
-						description)
-						? ' / '
-						: '',
+					// puller_type_name ? puller_type_name : '',
+					// puller_type_name &&
+					// (slider_color_name ||
+					// 	logo_type_name ||
+					// 	top_stopper_name ||
+					// 	bottom_stopper_name ||
+					// 	srinfo?.length > 0 ||
+					// 	description)
+					// 	? ' / '
+					// 	: '',
 
-					slider_color_name ? slider_color_name : '',
-					slider_color_name &&
-					(logo_type_name ||
-						top_stopper_name ||
-						bottom_stopper_name ||
-						srinfo?.length > 0 ||
-						description)
-						? ' / '
-						: '',
+					// slider_color_name ? slider_color_name : '',
+					// slider_color_name &&
+					// (logo_type_name ||
+					// 	top_stopper_name ||
+					// 	bottom_stopper_name ||
+					// 	srinfo?.length > 0 ||
+					// 	description)
+					// 	? ' / '
+					// 	: '',
 
-					logo_type_name
-						? logo_type_name +
-							`(${is_logo_body ? 'Body' : ''})` +
-							`${is_logo_body && is_logo_puller ? ' ' : ''}` + // Space between Body and Puller if both exist
-							`(${is_logo_puller ? 'Puller' : ''})`
-						: '',
-					logo_type_name &&
-					(top_stopper_name ||
-						bottom_stopper_name ||
-						srinfo?.length > 0 ||
-						description)
-						? ' / '
-						: '',
+					// logo_type_name
+					// 	? logo_type_name +
+					// 		`(${is_logo_body ? 'Body' : ''})` +
+					// 		`${is_logo_body && is_logo_puller ? ' ' : ''}` + // Space between Body and Puller if both exist
+					// 		`(${is_logo_puller ? 'Puller' : ''})`
+					// 	: '',
+					// logo_type_name &&
+					// (top_stopper_name ||
+					// 	bottom_stopper_name ||
+					// 	srinfo?.length > 0 ||
+					// 	description)
+					// 	? ' / '
+					// 	: '',
 
-					top_stopper_name ? top_stopper_name : '',
-					top_stopper_name &&
-					(bottom_stopper_name || srinfo?.length > 0 || description)
-						? ' / '
-						: '',
+					// top_stopper_name ? top_stopper_name : '',
+					// top_stopper_name &&
+					// (bottom_stopper_name || srinfo?.length > 0 || description)
+					// 	? ' / '
+					// 	: '',
 
-					bottom_stopper_name ? bottom_stopper_name : '',
-					bottom_stopper_name && (srinfo?.length > 0 || description)
-						? ' / '
-						: '',
+					// bottom_stopper_name ? bottom_stopper_name : '',
+					// bottom_stopper_name && (srinfo?.length > 0 || description)
+					// 	? ' / '
+					// 	: '',
 
+					info.filter(Boolean).join(' / '),
 					srinfo?.length > 0 ? `(${srinfo?.join(', ')})` : '',
 					srinfo?.length > 0 && description ? ' / ' : '',
 

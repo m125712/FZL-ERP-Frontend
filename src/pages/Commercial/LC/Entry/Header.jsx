@@ -48,6 +48,14 @@ export default function Header({
 				<div className='flex gap-1 overflow-auto text-sm md:justify-end'>
 					<div className='rounded-md bg-primary px-1'>
 						<CheckBox
+							title='Old PI'
+							label='is_old_pi'
+							text='text-primary-content'
+							{...{ register, errors }}
+						/>
+					</div>
+					<div className='rounded-md bg-primary px-1'>
+						<CheckBox
 							title='RTGS'
 							label='is_rtgs'
 							text='text-primary-content'
@@ -121,6 +129,19 @@ export default function Header({
 						selected={watch('lc_date')}
 						{...{ register, errors }}
 					/>
+
+					{watch('is_old_pi') && (
+						<>
+							<Input
+								label='lc_value'
+								{...{ register, errors }}
+							/>
+							<Textarea
+								label='pi_number'
+								{...{ register, errors }}
+							/>
+						</>
+					)}
 				</Section>
 				<Section title='Commercial Details'>
 					<Input

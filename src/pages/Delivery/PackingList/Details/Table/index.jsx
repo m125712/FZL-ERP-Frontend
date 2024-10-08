@@ -28,8 +28,20 @@ export default function Index({ packing_list_entry }) {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'style_color_size',
-				header: 'Style/Color/Size',
+				accessorKey: 'style',
+				header: 'Style',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'color',
+				header: 'Color',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'size',
+				header: 'Size',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

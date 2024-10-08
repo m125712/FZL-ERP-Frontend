@@ -31,11 +31,11 @@ export const getPageHeader = (data) => {
 					colSpan: 2,
 					text: [
 						{
-							text: 'Thread Challan\n',
+							text: 'Packing List\n',
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
-						`Challan Number: ${data?.order_number}\n`,
+						`Packing Number: ${data?.packing_number}\n`,
 						`Date: ${created_at}\n`,
 					],
 					alignment: 'right',
@@ -46,35 +46,16 @@ export const getPageHeader = (data) => {
 
 			// * Start of table
 			[
-				{ text: 'Party', bold: true, color: PRIMARY_COLOR },
-				data?.party_name,
-				{ text: 'Buyer', bold: true, color: PRIMARY_COLOR },
-				data?.buyer_name,
-			],
-			[
-				{ text: 'Merchandiser', bold: true, color: PRIMARY_COLOR },
-				data?.merchandiser_name,
-				{ text: 'Factory', bold: true, color: PRIMARY_COLOR },
-				data?.factory_name,
-			],
-			[
-				{ text: 'Assign To', bold: true, color: PRIMARY_COLOR },
-				data?.assign_to_name,
-				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
-				data?.factory_address,
-			],
-			[
-				{ text: 'Carton Quantity', bold: true, color: PRIMARY_COLOR },
-				data?.carton_quantity,
 				{ text: 'Order Number', bold: true, color: PRIMARY_COLOR },
 				data?.order_number,
+				{ text: 'Challan Number', bold: true, color: PRIMARY_COLOR },
+				data?.challan_number,
 			],
 			[
-				{ text: 'Gate Pass', bold: true, color: PRIMARY_COLOR },
-				data?.gate_pass === 1 ? 'Yes' : 'No',
-
-				{ text: 'Receive Status', bold: true, color: PRIMARY_COLOR },
-				data?.received === 1 ? 'Yes' : 'No',
+				{ text: 'Carton Size', bold: true, color: PRIMARY_COLOR },
+				data?.carton_size,
+				{ text: 'Carton Weight', bold: true, color: PRIMARY_COLOR },
+				data?.carton_weight,
 			],
 			[
 				{ text: 'Created By', bold: true, color: PRIMARY_COLOR },

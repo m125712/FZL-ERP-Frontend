@@ -10,7 +10,7 @@ const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 
 export const getPageHeader = (data) => {
 	const created_at = getDateFormate(data?.created_at);
-	const updated_at = getDateFormate(data?.updated_at);
+	const updated_at = data?.updated_at ? getDateFormate(data?.updated_at) : '';
 
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
@@ -46,6 +46,24 @@ export const getPageHeader = (data) => {
 
 			// * Start of table
 			[
+				{ text: 'Party', bold: true, color: PRIMARY_COLOR },
+				data?.party_name,
+				{ text: 'Buyer', bold: true, color: PRIMARY_COLOR },
+				data?.buyer_name,
+			],
+			[
+				{ text: 'Merchandiser', bold: true, color: PRIMARY_COLOR },
+				data?.merchandiser_name,
+				{ text: 'Factory', bold: true, color: PRIMARY_COLOR },
+				data?.factory_name,
+			],
+			[
+				{ text: 'Assign To', bold: true, color: PRIMARY_COLOR },
+				data?.assign_to_name,
+				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
+				data?.factory_address,
+			],
+			[
 				{ text: 'Carton Quantity', bold: true, color: PRIMARY_COLOR },
 				data?.carton_quantity,
 				{ text: 'Order Number', bold: true, color: PRIMARY_COLOR },
@@ -59,16 +77,10 @@ export const getPageHeader = (data) => {
 				data?.receive_status === 1 ? 'Yes' : 'No',
 			],
 			[
-				{ text: 'Assign To', bold: true, color: PRIMARY_COLOR },
-				data?.assign_to_name,
 				{ text: 'Created By', bold: true, color: PRIMARY_COLOR },
 				data?.created_by_name,
-			],
-			[
 				{ text: 'Updated', bold: true, color: PRIMARY_COLOR },
 				updated_at,
-				'',
-				'',
 			],
 
 			[

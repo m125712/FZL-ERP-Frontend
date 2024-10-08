@@ -9,19 +9,19 @@ import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
+	getTable('item_description', 'Item Description'),
 	getTable('style', 'Style'),
 	getTable('color', 'Color'),
-	getTable('count', 'Count', 'right'),
-	getTable('length', 'Length', 'right'),
-	getTable('quantity', 'Quantity',),
+	getTable('size', 'Size'),
+	getTable('quantity', 'Quantity'),
 	getTable('remarks', 'Remarks'),
 ];
 
 export default function Index(data) {
-	const headerHeight = 200;
+	const headerHeight = 170;
 	let footerHeight = 50;
-	let { challan_entry } = data;
-	let totalQuantity = challan_entry?.reduce((acc, item) => {
+	let { packing_list_entry } = data;
+	let totalQuantity = packing_list_entry?.reduce((acc, item) => {
 		const quantity = parseInt(item.quantity, 10) || 0;
 		return acc + quantity;
 	}, 0);
@@ -54,13 +54,13 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [50, 50, 50, 50, 35, '*'],
+					widths: ['*', '*', '*', '*', '*', '*'],
 					body: [
 						// * Header
 						TableHeader(node),
 
 						// * Body
-						...challan_entry?.map((item) =>
+						...packing_list_entry?.map((item) =>
 							node.map((nodeItem) => ({
 								text: item[nodeItem.field],
 								style: nodeItem.cellStyle,
@@ -69,16 +69,16 @@ export default function Index(data) {
 						),
 						[
 							{
-								text: 'Total Quantity',
-								bold: true,
-								colSpan: 4,
+								text: `Total Quantity:`,
 								alignment: 'right',
+								colSpan: 4,
+								bold: true,
 							},
 							{},
 							{},
 							{},
 							{
-								text: `${totalQuantity}`,
+								text: totalQuantity,
 								bold: true,
 								alignment: 'left',
 							},

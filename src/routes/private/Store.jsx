@@ -1,14 +1,14 @@
 // * Store
 import MaterialLog from '@/pages/Store/Log';
+import Purchase from '@/pages/Store/Receive';
+import PurchaseInd from '@/pages/Store/Receive/Details/ByPurchaseDescriptionUUID';
+import PurchaseEntry from '@/pages/Store/Receive/Entry';
 import Section from '@/pages/Store/Section';
 import Stock from '@/pages/Store/Stock';
+import Test from '@/pages/Store/Test';
 import MaterialType from '@/pages/Store/Type';
-
 // * Purchase
 import Vendor from '@/pages/Store/Vendor';
-import Purchase from '@/pages/Store/Receive';
-import PurchaseEntry from '@/pages/Store/Receive/Entry';
-import PurchaseInd from '@/pages/Store/Receive/Details/ByPurchaseDescriptionUUID';
 
 export const StoreRoutes = [
 	{
@@ -97,6 +97,13 @@ export const StoreRoutes = [
 					'update_log_against_order',
 					'delete_log_against_order',
 				],
+			},
+			{
+				name: 'Test',
+				path: '/store/test',
+				element: <Test />,
+				page_name: 'store__test',
+				actions: ['read'],
 			},
 		],
 	},

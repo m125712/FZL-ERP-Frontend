@@ -10,6 +10,7 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"@handsontable/react": "^14.6.0",
 		"@hookform/resolvers": "^3.9.0",
 		"@silevis/reactgrid": "^4.1.9",
 		"@tanstack/match-sorter-utils": "^8.19.4",
@@ -22,6 +23,7 @@
 		"clsx": "^2.1.1",
 		"date-fns": "^3.6.0",
 		"framer-motion": "^11.5.4",
+		"handsontable": "^14.6.0",
 		"js-cookie": "^3.0.5",
 		"lucide-react": "^0.439.0",
 		"nanoid": "^5.0.7",

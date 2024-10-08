@@ -95,6 +95,7 @@ export function OrderInformation({
 		pi_numbers,	
 	} = order;
 
+	console.log('order',order);
 	const { updateData } = useOrderDescription();
 
 	const renderItems = () => {

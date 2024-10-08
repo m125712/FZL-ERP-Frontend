@@ -40,6 +40,7 @@ export default function Information({ orderInfo }) {
 		is_bill,
 		is_cash,
 		delivery_date,
+		pi_numbers,
 		created_by_name,
 		remarks,
 		created_at,
@@ -56,27 +57,26 @@ export default function Information({ orderInfo }) {
 				label: 'Is Sample',
 				value: is_sample === 1 ? 'Yes' : 'No',
 			},
-
 			{
 				label: 'Is Bill',
 				value: is_bill === 1 ? 'Yes' : 'No',
 			},
-
 			{
 				label: 'Is Cash',
 				value: is_cash === 1 ? 'Yes' : 'No',
 			},
-
+			{
+				label: 'PI No.',
+				value: pi_numbers?.join(', '),
+			},
 			{
 				label: 'Delivery Date',
 				value: format(new Date(delivery_date), 'dd/MM/yyyy'),
 			},
-
 			{
 				label: 'Remarks',
 				value: remarks,
 			},
-
 			{
 				label: 'Created By',
 				value: created_by_name,
@@ -87,7 +87,9 @@ export default function Information({ orderInfo }) {
 			},
 			{
 				label: 'Updated At',
-				value: updated_at? format(new Date(updated_at), 'dd/MM/yyyy'): '',
+				value: updated_at
+					? format(new Date(updated_at), 'dd/MM/yyyy')
+					: '',
 			},
 		];
 

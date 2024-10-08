@@ -119,7 +119,7 @@ export default function Information({ lc }) {
 		const basicInfo = [
 			{
 				label: 'PI IDs',
-				value: (
+				value: pi_cash_ids && (
 					<div className='flex flex-wrap gap-2'>
 						{pi_cash_ids?.map((piId) => (
 							<LinkWithCopy

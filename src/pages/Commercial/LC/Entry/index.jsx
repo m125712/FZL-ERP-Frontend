@@ -119,6 +119,7 @@ export default function Index() {
 				problematical: data.problematical ? 1 : 0,
 				epz: data.epz ? 1 : 0,
 				is_rtgs: data.is_rtgs ? 1 : 0,
+				is_old_pi: data.is_old_pi ? 1 : 0,
 				production_complete: data.production_complete ? 1 : 0,
 				lc_cancel: data.lc_cancel ? 1 : 0,
 				updated_at,
@@ -151,6 +152,7 @@ export default function Index() {
 			}
 
 			// Update Pi Numbers
+
 			const pi_numbers = [...data.pi].map((item) => ({
 				...item,
 				lc_uuid,
@@ -197,6 +199,7 @@ export default function Index() {
 			problematical: data.problematical ? 1 : 0,
 			epz: data.epz ? 1 : 0,
 			is_rtgs: data.is_rtgs ? 1 : 0,
+			is_old_pi: data.is_old_pi ? 1 : 0,
 			production_complete: data.production_complete ? 1 : 0,
 			lc_cancel: data.lc_cancel ? 1 : 0,
 			created_at,
@@ -214,28 +217,35 @@ export default function Index() {
 
 		// const new_lc_number = res?.data?.[0].insertedId;
 
-		// Update Pi Numbers
-		const pi_numbers = [...data.pi].map((item) => ({
-			uuid: item.uuid,
-			lc_uuid: new_lc_uuid,
-		}));
+		// * check if is_old_pi is true
+		if (!lc_new_data.is_old_pi) {
+			// Update Pi Numbers
+			const pi_numbers = [...data.pi].map((item) => ({
+				uuid: item.uuid,
+				lc_uuid: new_lc_uuid,
+			}));
 
-		const pi_numbers_promise = [
-			...pi_numbers.map(
-				async (item, index) =>
-					await updateData.mutateAsync({
-						url: `/commercial/pi-cash-lc-uuid/${item.uuid}`,
-						updatedData: item,
-						isOnCloseNeeded: false,
-					})
-			),
-		];
-		await Promise.all(pi_numbers_promise)
-			.then(() => reset(LC_NULL))
-			.then(() => {
-				navigate(`/commercial/lc`);
-			})
-			.catch((err) => console.log(err));
+			const pi_numbers_promise = [
+				...pi_numbers.map(
+					async (item, index) =>
+						await updateData.mutateAsync({
+							url: `/commercial/pi-cash-lc-uuid/${item.uuid}`,
+							updatedData: item,
+							isOnCloseNeeded: false,
+						})
+				),
+			];
+
+			await Promise.all(pi_numbers_promise)
+				.then(() => reset(LC_NULL))
+				.then(() => {
+					navigate(`/commercial/lc`);
+				})
+				.catch((err) => console.log(err));
+		} else {
+			reset(LC_NULL);
+			navigate(`/commercial/lc`);
+		}
 	};
 
 	const handlePIRemove = (index) => {
@@ -268,111 +278,116 @@ export default function Index() {
 						}}
 					/>
 
-					<DynamicField
-						title='Details'
-						handelAppend={handelPiAppend}
-						tableHead={[
-							'PI',
-							'Bank',
-							'Value',
-							'Marketing',
-							'O/N',
-							'Action',
-						].map((item) => (
-							<th
-								key={item}
-								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
-								{item}
-							</th>
-						))}>
-						{piFields.map((item, index) => {
-							const piIdxValue = pi?.find(
-								(e) => e.value === watch(`pi[${index}].uuid`)
-							);
-							return (
-								<tr key={item.id} className='w-full'>
-									<td className={cn(`pl-1 ${rowClass}`)}>
-										<FormField
-											label={`pi[${index}].uuid`}
-											title='Material'
-											is_title_needed='false'
-											dynamicerror={
-												errors?.pi?.[index]?.uuid
-											}>
-											<Controller
-												name={`pi[${index}].uuid`}
-												control={control}
-												render={({
-													field: { onChange },
-												}) => {
-													return (
-														<ReactSelect
-															placeholder='Select PI'
-															options={pi}
-															value={pi?.filter(
-																(inItem) =>
-																	inItem.value ===
-																	getValues(
-																		`pi[${index}].uuid`
-																	)
-															)}
-															onChange={(e) => {
-																handleDeletePi(
-																	getValues(
-																		`pi[${index}].uuid`
-																	)
-																);
-																onChange(
-																	e.value
-																);
-															}}
-															menuPortalTarget={
-																document.body
-															}
-														/>
-													);
+					{!watch('is_old_pi') && (
+						<DynamicField
+							title='Details'
+							handelAppend={handelPiAppend}
+							tableHead={[
+								'PI',
+								'Bank',
+								'Value',
+								'Marketing',
+								'O/N',
+								'Action',
+							].map((item) => (
+								<th
+									key={item}
+									scope='col'
+									className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+									{item}
+								</th>
+							))}>
+							{piFields.map((item, index) => {
+								const piIdxValue = pi?.find(
+									(e) =>
+										e.value === watch(`pi[${index}].uuid`)
+								);
+								return (
+									<tr key={item.id} className='w-full'>
+										<td className={cn(`pl-1 ${rowClass}`)}>
+											<FormField
+												label={`pi[${index}].uuid`}
+												title='Material'
+												is_title_needed='false'
+												dynamicerror={
+													errors?.pi?.[index]?.uuid
+												}>
+												<Controller
+													name={`pi[${index}].uuid`}
+													control={control}
+													render={({
+														field: { onChange },
+													}) => {
+														return (
+															<ReactSelect
+																placeholder='Select PI'
+																options={pi}
+																value={pi?.filter(
+																	(inItem) =>
+																		inItem.value ===
+																		getValues(
+																			`pi[${index}].uuid`
+																		)
+																)}
+																onChange={(
+																	e
+																) => {
+																	handleDeletePi(
+																		getValues(
+																			`pi[${index}].uuid`
+																		)
+																	);
+																	onChange(
+																		e.value
+																	);
+																}}
+																menuPortalTarget={
+																	document.body
+																}
+															/>
+														);
+													}}
+												/>
+											</FormField>
+										</td>
+
+										<td className={cn(`pl-1 ${rowClass}`)}>
+											{piIdxValue?.pi_bank}
+										</td>
+										<td className={cn(`pl-1 ${rowClass}`)}>
+											{piIdxValue?.pi_value}
+										</td>
+										<td className={cn(`pl-1 ${rowClass}`)}>
+											{piIdxValue?.marketing_name}
+										</td>
+										<td className={cn(`pl-1 ${rowClass} `)}>
+											<div className='flex flex-wrap items-center gap-2'>
+												{piIdxValue?.order_numbers
+													?.filter((e) => !!e)
+													?.map((e) => (
+														<span
+															key={e}
+															className='badge badge-accent badge-sm'>
+															{e}
+														</span>
+													))}
+											</div>
+										</td>
+
+										<td
+											className={`w-16 border-l-4 border-l-primary ${rowClass}`}>
+											<RemoveButton
+												onClick={() => {
+													handlePIRemove(index);
 												}}
+												showButton={piFields.length > 1}
 											/>
-										</FormField>
-									</td>
-
-									<td className={cn(`pl-1 ${rowClass}`)}>
-										{piIdxValue?.pi_bank}
-									</td>
-									<td className={cn(`pl-1 ${rowClass}`)}>
-										{piIdxValue?.pi_value}
-									</td>
-									<td className={cn(`pl-1 ${rowClass}`)}>
-										{piIdxValue?.marketing_name}
-									</td>
-									<td className={cn(`pl-1 ${rowClass} `)}>
-										<div className='flex flex-wrap items-center gap-2'>
-											{piIdxValue?.order_numbers
-												?.filter((e) => !!e)
-												?.map((e) => (
-													<span
-														key={e}
-														className='badge badge-accent badge-sm'>
-														{e}
-													</span>
-												))}
-										</div>
-									</td>
-
-									<td
-										className={`w-16 border-l-4 border-l-primary ${rowClass}`}>
-										<RemoveButton
-											onClick={() => {
-												handlePIRemove(index);
-											}}
-											showButton={piFields.length > 1}
-										/>
-									</td>
-								</tr>
-							);
-						})}
-					</DynamicField>
+										</td>
+									</tr>
+								);
+							})}
+						</DynamicField>
+					)}
 
 					<div className='modal-action'>
 						<button

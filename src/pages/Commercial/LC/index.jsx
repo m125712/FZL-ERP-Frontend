@@ -1,13 +1,13 @@
 import { useEffect, useMemo } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommercialLC, useCommercialLCByQuery } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
-import { useAuth } from '@/context/auth';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
@@ -68,6 +68,7 @@ export default function Index() {
 					});
 				},
 			},
+			// todo: this is making the table not render
 			{
 				accessorKey: 'total_value',
 				header: 'Value ($)',
@@ -123,6 +124,26 @@ export default function Index() {
 				cell: (info) => (
 					<DateTime date={info.getValue()} isTime={false} />
 				),
+			},
+			{
+				accessorKey: 'is_old_pi',
+				header: 'Old LC',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
+			},
+			{
+				accessorKey: 'pi_number',
+				header: 'PI Number',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'lc_value',
+				header: 'LC Value',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'commercial_executive',

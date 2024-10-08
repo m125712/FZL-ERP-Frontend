@@ -23,8 +23,8 @@ const FilterColumn = ({
 	
 	//console.log(typeof firstValue, column.id, firstValue);
 
-	if (typeof firstValue === 'number')
-		return <FilterNumber {...{ columnName, column, isFullFilter }} />;
+	// if (typeof firstValue === 'number')
+	// 	return <FilterNumber {...{ columnName, column, isFullFilter }} />;
 
 	// if (isValid(new Date(firstValue || undefined))) {
 	// 	return (

@@ -1768,6 +1768,23 @@ export const LC_SCHEMA = {
 	problematical: BOOLEAN_REQUIRED,
 	epz: BOOLEAN_REQUIRED,
 	is_rtgs: BOOLEAN_REQUIRED,
+	is_old_pi: BOOLEAN_REQUIRED,
+
+	// if is_old_pi = true
+	pi_number: STRING.when('is_old_pi', {
+		is: true,
+		then: (Schema) => Schema.required('required'),
+		otherwise: (Schema) =>
+			Schema.nullable().transform((value, originalValue) =>
+				String(originalValue).trim() === '' ? null : value
+			),
+	}),
+	lc_value: NUMBER.when('is_old_pi', {
+		is: true,
+		then: (Schema) =>
+			Schema.required('required').moreThan(0, 'More than 0'),
+		otherwise: (Schema) => Schema.nullable(),
+	}),
 
 	// * Progression
 	handover_date: STRING.nullable().transform((value, originalValue) =>
@@ -1803,7 +1820,14 @@ export const LC_SCHEMA = {
 	remarks: STRING.nullable(),
 	pi: yup.array().of(
 		yup.object().shape({
-			uuid: STRING_REQUIRED,
+			uuid: STRING.when('is_old_pi', {
+				is: true,
+				then: (Schema) => Schema.required('required'),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
 		})
 	),
 };
@@ -1818,6 +1842,8 @@ export const LC_NULL = {
 	acceptance_date: null,
 	maturity_date: null,
 	commercial_executive: null,
+	pi_number: null,
+	lc_value: 0,
 	party_bank: null,
 	production_complete: false,
 	lc_cancel: false,
@@ -1833,6 +1859,7 @@ export const LC_NULL = {
 	problematical: false,
 	epz: false,
 	is_rtgs: false,
+	is_old_pi: false,
 	remarks: null,
 	pi: [
 		{

@@ -133,7 +133,7 @@ export default function Index(data) {
 			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) cm`,
 			h_s_code: '9607.11.00',
 			quantity: TotalQuantity[index] + ' pcs',
-			unit_price: TotalUnitPrice[index] + '/pcs',
+			unit_price: Number(TotalUnitPrice[index]).toFixed(2) + '/pcs',
 			value: Number(TotalValue[index]).toFixed(2),
 		};
 	});

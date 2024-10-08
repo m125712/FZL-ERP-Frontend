@@ -14,15 +14,12 @@ const node = [
 	getTable('style', 'Style'),
 	getTable('color', 'Color'),
 	getTable('size', 'Size'),
-	getTable('delivered', 'Delivered', 'right'),
-	getTable('quantity', 'Quantity', 'right'),
-	getTable('short_quantity', 'Short QTY', 'right'),
-	getTable('reject_quantity', 'Reject QTY', 'right'),
+	getTable('quantity', 'Quantity'),
 	getTable('remarks', 'Remarks'),
 ];
 
 export default function Index(data) {
-	const headerHeight = 170;
+	const headerHeight = 200;
 	let footerHeight = 50;
 	let { challan_entry } = data;
 	let totalQuantity = challan_entry?.reduce((acc, item) => {
@@ -58,7 +55,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [45, 48, 45, 70, 30, 38, 35, 30, 30, '*'],
+					widths: [45, 48, 45, 70, 30, 35, '*'],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -71,26 +68,27 @@ export default function Index(data) {
 								alignment: nodeItem.alignment,
 							}))
 						),
+
 						[
 							{
-								text: `Total Quantity: ${totalQuantity}`,
-								colSpan: 10,
-								style: 'tableFooter',
+								text: 'Total Quantity',
+								bold: true,
+								colSpan: 5,
 								alignment: 'right',
 							},
 							{},
 							{},
 							{},
 							{},
-							{},
-							{},
-							{},
-							{},
+							{
+								text: totalQuantity,
+								bold: true,
+								alignment: 'left',
+							},
 							{},
 						],
 					],
 				},
-				// layout: 'lightHorizontalLines',
 				layout: tableLayoutStyle,
 			},
 		],

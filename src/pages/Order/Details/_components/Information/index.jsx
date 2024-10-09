@@ -33,7 +33,7 @@ export default function SingleInformation({ order, idx, hasInitialOrder }) {
 		return [
 			<StatusButton
 				className={'border-0'}
-				key={'swatch_approval_status'}
+				key={'check'}
 				size='btn-xs md:btn-sm'
 				value={check}
 			/>,
@@ -95,7 +95,6 @@ export function OrderInformation({
 		pi_numbers,	
 	} = order;
 
-	console.log('order',order);
 	const { updateData } = useOrderDescription();
 
 	const renderItems = () => {
@@ -190,7 +189,7 @@ export function OrderInformation({
 				<PDF className='w-4' /> PDF
 			</button>,
 			<button
-				key='pdf'
+				key='pdf-1'
 				type='button'
 				className='btn btn-sm rounded-badge border-none bg-yellow-400 hover:bg-yellow-500'
 				onClick={handleViewChange}>

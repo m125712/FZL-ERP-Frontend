@@ -1,7 +1,8 @@
 import DailyChallan from '@/pages/Report/DailyChallan';
-import PIRegister from '@/pages/Report/PIRegister';
-import ZipperProduction from '@/pages/Report/ZipperProductionStatus';
 import LCDue from '@/pages/Report/LC';
+import PIRegister from '@/pages/Report/PIRegister';
+import PIToBeSubmit from '@/pages/Report/PIToBeSubmit';
+import ZipperProduction from '@/pages/Report/ZipperProductionStatus';
 
 export const ReportRoutes = [
 	{
@@ -29,12 +30,19 @@ export const ReportRoutes = [
 				actions: ['read'],
 			},
 			{
+				name: 'PI To Be Submitted',
+				path: '/report/pi-to-be-submitted',
+				element: <PIToBeSubmit />,
+				page_name: 'report__pi_to_be_submitted',
+				actions: ['read'],
+			},
+			{
 				name: 'LC Due',
 				path: '/report/lc-due',
 				element: <LCDue />,
 				page_name: 'report__lc_due',
 				actions: ['read'],
-			}
+			},
 		],
 	},
 ];

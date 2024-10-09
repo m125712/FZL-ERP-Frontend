@@ -137,7 +137,7 @@ export const getPageFooter = ({ currentPage, pageCount }) => {
 	};
 };
 
-export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
+export const TableHeader = ({ entry, uniqueSizes, column, srinfo }) => {
 	const {
 		item_name,
 		nylon_stopper_name,
@@ -196,6 +196,7 @@ export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
 		bottom_stopper_name,
 	];
 
+	console.log(column);
 	return [
 		[
 			{
@@ -206,109 +207,6 @@ export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
 			{
 				colSpan: uniqueSizes.length + 2,
 				text: [
-					// item_name ? item_name : '',
-					// item_name &&
-					// (nylon_stopper_name || end_type_name || hand_name)
-					// 	? ' - '
-					// 	: '',
-
-					// nylon_stopper_name ? nylon_stopper_name : '',
-					// nylon_stopper_name &&
-					// (end_type_name || hand_name || zipper_number_name)
-					// 	? ' / '
-					// 	: '',
-
-					// end_type_name ? end_type_name : '',
-					// end_type_name && hand_name ? ' - ' : '',
-
-					// hand_name ? hand_name + '/ ' : '',
-
-					// // The rest of the structure remains unchanged with ' / ' between fields
-					// zipper_number_name ? zipper_number_name : '',
-					// zipper_number_name &&
-					// (lock_type_name ||
-					// 	teeth_color_name ||
-					// 	puller_type_name ||
-					// 	slider_color_name ||
-					// 	logo_type_name ||
-					// 	top_stopper_name ||
-					// 	bottom_stopper_name ||
-					// 	srinfo?.length > 0 ||
-					// 	description)
-					// 	? ' / '
-					// 	: '',
-
-					// lock_type_name ? lock_type_name : '',
-					// lock_type_name &&
-					// (teeth_color_name ||
-					// 	puller_type_name ||
-					// 	slider_color_name ||
-					// 	logo_type_name ||
-					// 	top_stopper_name ||
-					// 	bottom_stopper_name ||
-					// 	srinfo?.length > 0 ||
-					// 	description)
-					// 	? ' / '
-					// 	: '',
-
-					// teeth_color_name ? teeth_color_name : '',
-					// teeth_color_name &&
-					// (puller_type_name ||
-					// 	slider_color_name ||
-					// 	logo_type_name ||
-					// 	top_stopper_name ||
-					// 	bottom_stopper_name ||
-					// 	srinfo?.length > 0 ||
-					// 	description)
-					// 	? ' / '
-					// 	: '',
-
-					// puller_type_name ? puller_type_name : '',
-					// puller_type_name &&
-					// (slider_color_name ||
-					// 	logo_type_name ||
-					// 	top_stopper_name ||
-					// 	bottom_stopper_name ||
-					// 	srinfo?.length > 0 ||
-					// 	description)
-					// 	? ' / '
-					// 	: '',
-
-					// slider_color_name ? slider_color_name : '',
-					// slider_color_name &&
-					// (logo_type_name ||
-					// 	top_stopper_name ||
-					// 	bottom_stopper_name ||
-					// 	srinfo?.length > 0 ||
-					// 	description)
-					// 	? ' / '
-					// 	: '',
-
-					// logo_type_name
-					// 	? logo_type_name +
-					// 		`(${is_logo_body ? 'Body' : ''})` +
-					// 		`${is_logo_body && is_logo_puller ? ' ' : ''}` + // Space between Body and Puller if both exist
-					// 		`(${is_logo_puller ? 'Puller' : ''})`
-					// 	: '',
-					// logo_type_name &&
-					// (top_stopper_name ||
-					// 	bottom_stopper_name ||
-					// 	srinfo?.length > 0 ||
-					// 	description)
-					// 	? ' / '
-					// 	: '',
-
-					// top_stopper_name ? top_stopper_name : '',
-					// top_stopper_name &&
-					// (bottom_stopper_name || srinfo?.length > 0 || description)
-					// 	? ' / '
-					// 	: '',
-
-					// bottom_stopper_name ? bottom_stopper_name : '',
-					// bottom_stopper_name && (srinfo?.length > 0 || description)
-					// 	? ' / '
-					// 	: '',
-
 					info.filter(Boolean).join(' / '),
 					srinfo?.length > 0 ? `(${srinfo?.join(', ')})` : '',
 					srinfo?.length > 0 && description ? ' / ' : '',
@@ -373,13 +271,11 @@ export const TableHeader = ({ entry, uniqueSizes, srinfo }) => {
 				text: 'Color / Size(CM)',
 				style: 'tableHeader',
 			},
-			...uniqueSizes
-				.sort((a, b) => a - b)
-				.map((size) => ({
-					text: size,
-					style: 'tableHeader',
-					alignment: 'right',
-				})),
+			...uniqueSizes.map((size) => ({
+				text: size ? size : '-',
+				style: 'tableHeader',
+				alignment: 'right',
+			})),
 			{
 				text: 'Total',
 				style: 'tableHeader',

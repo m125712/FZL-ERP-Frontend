@@ -1,4 +1,28 @@
 import { useEffect, useState } from 'react';
+import {
+	useOtherOrderInfoValueLabel,
+	useOtherOrderPropertiesByBottomStopper,
+	useOtherOrderPropertiesByColor,
+	useOtherOrderPropertiesByColoringType,
+	useOtherOrderPropertiesByEndType,
+	useOtherOrderPropertiesByEndUser,
+	useOtherOrderPropertiesByGarmentsWash,
+	useOtherOrderPropertiesByHand,
+	useOtherOrderPropertiesByItem,
+	useOtherOrderPropertiesByLightPreference,
+	useOtherOrderPropertiesByLockType,
+	useOtherOrderPropertiesByLogoType,
+	useOtherOrderPropertiesByNylonStopper,
+	useOtherOrderPropertiesByPullerLink,
+	useOtherOrderPropertiesByPullerType,
+	useOtherOrderPropertiesBySlider,
+	useOtherOrderPropertiesBySliderBodyShape,
+	useOtherOrderPropertiesBySliderLink,
+	useOtherOrderPropertiesBySpecialRequirement,
+	useOtherOrderPropertiesByTeethType,
+	useOtherOrderPropertiesByTopStopper,
+	useOtherOrderPropertiesByZipperNumber,
+} from '@/state/other';
 import { useParams } from 'react-router-dom';
 import { useFetch } from '@/hooks';
 
@@ -26,68 +50,38 @@ export default function Header({
 }) {
 	const { order_number, order_description_uuid } = useParams();
 
-	const { value: order } = useFetch(`/other/order/info/value/label`);
-	const { value: item } = useFetch(`/other/order-properties/by/item`);
-	const { value: zipper_number } = useFetch(
-		`/other/order-properties/by/zipper_number`
-	);
-	const { value: end_type } = useFetch(`/other/order-properties/by/end_type`);
+	const { data: order } = useOtherOrderInfoValueLabel();
+	const { data: item } = useOtherOrderPropertiesByItem();
+	const { data: zipper_number } = useOtherOrderPropertiesByZipperNumber();
+	const { data: end_type } = useOtherOrderPropertiesByEndType();
 
 	// * garments info*//
-	const { value: garments_wash } = useFetch(
-		`/other/order-properties/by/garments_wash`
-	);
-	const { value: light_preference } = useFetch(
-		`/other/order-properties/by/light_preference`
-	);
-	const { value: end_user } = useFetch(`/other/order-properties/by/end_user`);
+	const { data: garments_wash } = useOtherOrderPropertiesByGarmentsWash();
+	const { data: light_preference } =
+		useOtherOrderPropertiesByLightPreference();
+	const { data: end_user } = useOtherOrderPropertiesByEndUser();
 
 	//* slider info*//
-	const { value: slider_body_shape } = useFetch(
-		`/other/order-properties/by/slider_body_shape`
-	);
-	const { value: slider_link } = useFetch(
-		`/other/order-properties/by/slider_link`
-	);
+	const { data: slider_body_shape } =
+		useOtherOrderPropertiesBySliderBodyShape();
+	const { data: slider_link } = useOtherOrderPropertiesBySliderLink();
 
-	const { value: lock_type } = useFetch(
-		`/other/order-properties/by/lock_type`
-	);
+	const { data: lock_type } = useOtherOrderPropertiesByLockType();
 
 	//* puller info*//
-	const { value: puller_type } = useFetch(
-		`/other/order-properties/by/puller_type`
-	);
-	const { value: puller_link } = useFetch(
-		`/other/order-properties/by/puller_link`
-	);
-	const { value: color } = useFetch(`/other/order-properties/by/color`);
-	const { value: hand } = useFetch(`/other/order-properties/by/hand`);
-	const { value: nylon_stop } = useFetch(
-		`/other/order-properties/by/nylon_stopper`
-	);
-	const { value: special_requirement } = useFetch(
-		`/other/order-properties/by/special_requirement`
-	);
-	// const { value: stopper_type } = useFetch(
-	// 	`/other/order-properties/by/stopper_type`
-	// );
-	const { value: coloring_type } = useFetch(
-		`/other/order-properties/by/coloring_type`
-	);
-	const { value: slider } = useFetch(`/other/order-properties/by/slider`);
-	const { value: top_stopper } = useFetch(
-		`/other/order-properties/by/top_stopper`
-	);
-	const { value: bottom_stopper } = useFetch(
-		`/other/order-properties/by/bottom_stopper`
-	);
-	const { value: logo_type } = useFetch(
-		`/other/order-properties/by/logo_type`
-	);
-	const { value: teeth_type } = useFetch(
-		`/other/order-properties/by/teeth_type`
-	);
+	const { data: puller_type } = useOtherOrderPropertiesByPullerType();
+	const { data: puller_link } = useOtherOrderPropertiesByPullerLink();
+	const { data: color } = useOtherOrderPropertiesByColor();
+	const { data: hand } = useOtherOrderPropertiesByHand();
+	const { data: nylon_stop } = useOtherOrderPropertiesByNylonStopper();
+	const { data: special_requirement } =
+		useOtherOrderPropertiesBySpecialRequirement();
+	const { data: coloring_type } = useOtherOrderPropertiesByColoringType();
+	const { data: slider } = useOtherOrderPropertiesBySlider();
+	const { data: top_stopper } = useOtherOrderPropertiesByTopStopper();
+	const { data: bottom_stopper } = useOtherOrderPropertiesByBottomStopper();
+	const { data: logo_type } = useOtherOrderPropertiesByLogoType();
+	const { data: teeth_type } = useOtherOrderPropertiesByTeethType();
 
 	const [isSliderProvided, setIsSliderProvided] = useState(
 		typeof getValues('is_slider_provided') !== 'boolean' &&
@@ -232,7 +226,10 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<FormField label='end_type' title='End Type' errors={errors}>
+					<FormField
+						label='end_type'
+						title='End Type'
+						errors={errors}>
 						<Controller
 							name={'end_type'}
 							control={control}
@@ -280,7 +277,10 @@ export default function Header({
 					)}
 				</div>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					<FormField label='lock_type' title='Lock Type' errors={errors}>
+					<FormField
+						label='lock_type'
+						title='Lock Type'
+						errors={errors}>
 						<Controller
 							name={'lock_type'}
 							control={control}
@@ -480,7 +480,10 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<FormField label='slider' title='Slider Material' errors={errors}>
+					<FormField
+						label='slider'
+						title='Slider Material'
+						errors={errors}>
 						<Controller
 							name={'slider'}
 							control={control}

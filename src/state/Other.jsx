@@ -232,3 +232,157 @@ export const useOtherPackingListByOrderInfoUUIDAndChallanUUID = (
 		url: `/other/delivery/packing-list-by-order-info/value/label/${uuid}?challan_uuid=${challan_uuid}`,
 		enabled: !!uuid,
 	});
+
+//* GET ORDER INFO VALUE LABEL
+export const useOtherOrderInfoValueLabel = () =>
+	createGlobalState({
+		queryKey: otherQK.orderInfoValueLabel(),
+		url: '/other/order/info/value/label',
+	});
+
+//* GET ORDER PROPERTIES BY ITEM
+export const useOtherOrderPropertiesByItem = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByItem(),
+		url: '/other/order-properties/by/item',
+	});
+
+//* GET ORDER PROPERTIES BY ZIPPER NUMBER
+export const useOtherOrderPropertiesByZipperNumber = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByZipperNumber(),
+		url: '/other/order-properties/by/zipper_number',
+	});
+
+//* GET ORDER PROPERTIES BY END TYPE
+export const useOtherOrderPropertiesByEndType = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByEndType(),
+		url: '/other/order-properties/by/end_type',
+	});
+
+//* GET ORDER PROPERTIES BY GARMENTS WASH
+export const useOtherOrderPropertiesByGarmentsWash = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByGarmentsWash(),
+		url: '/other/order-properties/by/garments_wash',
+	});
+
+//* GET ORDER PROPERTIES BY LIGHT PREFERENCE
+export const useOtherOrderPropertiesByLightPreference = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByLightPreference(),
+		url: '/other/order-properties/by/light_preference',
+	});
+
+//* GET ORDER PROPERTIES BY END USER
+export const useOtherOrderPropertiesByEndUser = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByEndUser(),
+		url: '/other/order-properties/by/end_user',
+	});
+
+//* GET ORDER PROPERTIES BY SLIDER BODY SHAPE
+export const useOtherOrderPropertiesBySliderBodyShape = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesBySliderBodyShape(),
+		url: '/other/order-properties/by/slider_body_shape',
+	});
+
+//* GET ORDER PROPERTIES BY SLIDER LINK
+export const useOtherOrderPropertiesBySliderLink = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesBySliderLink(),
+		url: '/other/order-properties/by/slider_link',
+	});
+
+//* GET ORDER PROPERTIES BY LOCK TYPE
+export const useOtherOrderPropertiesByLockType = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByLockType(),
+		url: '/other/order-properties/by/lock_type',
+	});
+
+//* GET ORDER PROPERTIES BY PULLER TYPE
+export const useOtherOrderPropertiesByPullerType = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByPullerType(),
+		url: '/other/order-properties/by/puller_type',
+	});
+
+//* GET ORDER PROPERTIES BY PULLER LINK
+export const useOtherOrderPropertiesByPullerLink = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByPullerLink(),
+		url: '/other/order-properties/by/puller_link',
+	});
+
+//* GET ORDER PROPERTIES BY COLOR
+export const useOtherOrderPropertiesByColor = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByColor(),
+		url: '/other/order-properties/by/color',
+	});
+
+//* GET ORDER PROPERTIES BY HAND
+export const useOtherOrderPropertiesByHand = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByHand(),
+		url: '/other/order-properties/by/hand',
+	});
+
+//* GET ORDER PROPERTIES BY NYLON STOPPER
+export const useOtherOrderPropertiesByNylonStopper = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByNylonStopper(),
+		url: '/other/order-properties/by/nylon_stopper',
+	});
+
+//* GET ORDER PROPERTIES BY SPECIAL REQUIREMENT
+export const useOtherOrderPropertiesBySpecialRequirement = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesBySpecialRequirement(),
+		url: '/other/order-properties/by/special_requirement',
+	});
+
+//* GET ORDER PROPERTIES BY COLORING TYPE
+export const useOtherOrderPropertiesByColoringType = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByColoringType(),
+		url: '/other/order-properties/by/coloring_type',
+	});
+
+//* GET ORDER PROPERTIES BY SLIDER
+export const useOtherOrderPropertiesBySlider = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesBySlider(),
+		url: '/other/order-properties/by/slider',
+	});
+
+//* GET ORDER PROPERTIES BY TOP STOPPER
+export const useOtherOrderPropertiesByTopStopper = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByTopStopper(),
+		url: '/other/order-properties/by/top_stopper',
+	});
+
+//* GET ORDER PROPERTIES BY BOTTOM STOPPER
+export const useOtherOrderPropertiesByBottomStopper = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByBottomStopper(),
+		url: '/other/order-properties/by/bottom_stopper',
+	});
+
+//* GET ORDER PROPERTIES BY LOGO TYPE
+export const useOtherOrderPropertiesByLogoType = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByLogoType(),
+		url: '/other/order-properties/by/logo_type',
+	});
+
+//* GET ORDER PROPERTIES BY TEETH TYPE
+export const useOtherOrderPropertiesByTeethType = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPropertiesByTeethType(),
+		url: '/other/order-properties/by/teeth_type',
+	});

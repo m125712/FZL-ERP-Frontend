@@ -1087,6 +1087,129 @@ export const otherQK = {
 		uuid,
 		challan_uuid,
 	],
+
+	//* ORDER INFO VALUE LABEL
+	orderInfoValueLabel: () => [...otherQK.all(), 'order-info-value-label'],
+
+	//* ORDER PROPERTIES BY ITEM
+	orderPropertiesByItem: () => [...otherQK.all(), 'order-properties-by-item'],
+
+	//* ORDER PROPERTIES BY ZIPPER NUMBER
+	orderPropertiesByZipperNumber: () => [
+		...otherQK.all(),
+		'order-properties-by-zipper-number',
+	],
+
+	//* ORDER PROPERTIES BY END TYPE
+	orderPropertiesByEndType: () => [
+		...otherQK.all(),
+		'order-properties-by-end-type',
+	],
+
+	//* ORDER PROPERTIES BY GARMENTS WASH
+	orderPropertiesByGarmentsWash: () => [
+		...otherQK.all(),
+		'order-properties-by-garments-wash',
+	],
+
+	//* ORDER PROPERTIES BY LIGHT PREFERENCE
+	orderPropertiesByLightPreference: () => [
+		...otherQK.all(),
+		'order-properties-by-light-preference',
+	],
+
+	//* ORDER PROPERTIES BY END USER
+	orderPropertiesByEndUser: () => [
+		...otherQK.all(),
+		'order-properties-by-end-user',
+	],
+
+	//* ORDER PROPERTIES BY SLIDER BODY SHAPE
+	orderPropertiesBySliderBodyShape: () => [
+		...otherQK.all(),
+		'order-properties-by-slider-body-shape',
+	],
+
+	//* ORDER PROPERTIES BY SLIDER LINK
+	orderPropertiesBySliderLink: () => [
+		...otherQK.all(),
+		'order-properties-by-slider-link',
+	],
+
+	//* ORDER PROPERTIES BY LOCK TYPE
+	orderPropertiesByLockType: () => [
+		...otherQK.all(),
+		'order-properties-by-lock-type',
+	],
+
+	//* ORDER PROPERTIES BY PULLER TYPE
+	orderPropertiesByPullerType: () => [
+		...otherQK.all(),
+		'order-properties-by-puller-type',
+	],
+
+	//* ORDER PROPERTIES BY PULLER LINK
+	orderPropertiesByPullerLink: () => [
+		...otherQK.all(),
+		'order-properties-by-puller-link',
+	],
+
+	//* ORDER PROPERTIES BY COLOR
+	orderPropertiesByColor: () => [
+		...otherQK.all(),
+		'order-properties-by-color',
+	],
+
+	//* ORDER PROPERTIES BY HAND
+	orderPropertiesByHand: () => [...otherQK.all(), 'order-properties-by-hand'],
+
+	//* ORDER PROPERTIES BY NYLON STOPPER
+	orderPropertiesByNylonStopper: () => [
+		...otherQK.all(),
+		'order-properties-by-nylon-stopper',
+	],
+
+	//* ORDER PROPERTIES BY SPECIAL REQUIREMENT
+	orderPropertiesBySpecialRequirement: () => [
+		...otherQK.all(),
+		'order-properties-by-special-requirement',
+	],
+
+	//* ORDER PROPERTIES BY COLORING TYPE
+	orderPropertiesByColoringType: () => [
+		...otherQK.all(),
+		'order-properties-by-coloring-type',
+	],
+
+	//* ORDER PROPERTIES BY SLIDER
+	orderPropertiesBySlider: () => [
+		...otherQK.all(),
+		'order-properties-by-slider',
+	],
+
+	//* ORDER PROPERTIES BY TOP STOPPER
+	orderPropertiesByTopStopper: () => [
+		...otherQK.all(),
+		'order-properties-by-top-stopper',
+	],
+
+	//* ORDER PROPERTIES BY BOTTOM STOPPER
+	orderPropertiesByBottomStopper: () => [
+		...otherQK.all(),
+		'order-properties-by-bottom-stopper',
+	],
+
+	//* ORDER PROPERTIES BY LOGO TYPE
+	orderPropertiesByLogoType: () => [
+		...otherQK.all(),
+		'order-properties-by-logo-type',
+	],
+
+	//* ORDER PROPERTIES BY TEETH TYPE
+	orderPropertiesByTeethType: () => [
+		...otherQK.all(),
+		'order-properties-by-teeth-type',
+	],
 };
 
 //* Challan

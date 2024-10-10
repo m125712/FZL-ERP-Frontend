@@ -72,13 +72,13 @@ export default function Index() {
 				accessorKey: 'quantity',
 				header: 'Quantity',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(3),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'price',
 				header: 'Price',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(2),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'unit',

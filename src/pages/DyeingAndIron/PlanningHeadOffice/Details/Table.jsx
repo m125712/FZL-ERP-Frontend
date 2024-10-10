@@ -41,19 +41,19 @@ export default function Index({ planning_entry }) {
 				accessorKey: 'order_quantity',
 				header: 'Order Quantity',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'balance_factory_quantity',
 				header: 'Balanced Factory',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'factory_quantity',
 				header: 'Factory Quantity',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'factory_remarks',

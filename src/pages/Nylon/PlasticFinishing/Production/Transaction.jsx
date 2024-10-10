@@ -1,17 +1,19 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useMetalTMProduction } from '@/state/Metal';
 import { useNylonPlasticFinishingProduction } from '@/state/Nylon';
-import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, JoinInput } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import {
 	NUMBER_REQUIRED,
 	SFG_TRANSACTION_SCHEMA_IN_PCS,
 	SFG_TRANSACTION_SCHEMA_IN_PCS_NULL,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -31,7 +33,7 @@ export default function Index({
 }) {
 	const { postData } = useNylonPlasticFinishingProduction();
 	const { user } = useAuth();
-	const MAX_QUANTITY = Number(updatePFTRX?.finishing_prod).toFixed(3);
+	const MAX_QUANTITY = updatePFTRX?.finishing_prod;
 
 	const { register, handleSubmit, errors, reset, control, context } = useRHF(
 		{
@@ -96,7 +98,7 @@ export default function Index({
 			<JoinInput
 				title='Transaction Quantity'
 				label='trx_quantity'
-				sub_label={`MAX: ${Number(updatePFTRX?.finishing_prod)} pcs`}
+				sub_label={`MAX: ${updatePFTRX?.finishing_prod} pcs`}
 				unit='PCS'
 				{...{ register, errors }}
 			/>

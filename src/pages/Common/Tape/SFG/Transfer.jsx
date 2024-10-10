@@ -236,7 +236,7 @@ export default function Index() {
 					noValidate
 					className='flex flex-col gap-4'>
 					<DynamicField
-						title={`${data?.name} (Mtr/Kg): ${Number(data?.dyed_per_kg_meter).toFixed(2)}, 
+						title={`${data?.name} (Mtr/Kg): ${data?.dyed_per_kg_meter}, 
 								Remaining: ${MAX_TAPE_TRX_QTY} KG`}
 						handelAppend={handelEntryAppend}
 						tableHead={[
@@ -339,9 +339,9 @@ export default function Index() {
 									<td>{tape_req || 0}</td>
 									<td>{tape_req_kg || 0}</td>
 									<td>
-										{Number(
+										{
 											selectedValue?.tape_transferred
-										).toFixed(3)}
+										}
 									</td>
 									<td>
 										{Number(

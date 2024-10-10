@@ -170,15 +170,15 @@ export default function Information({ pi }) {
 			},
 			{
 				label: 'Receive Amount',
-				value: Number(receive_amount).toFixed(2) + ' BDT',
+				value: receive_amount + ' BDT',
 			},
 			{
 				label: 'Conversion Rate',
-				value: Number(conversion_rate).toFixed(2) + ' BDT',
+				value: conversion_rate + ' BDT',
 			},
 			{
 				label: 'Weight',
-				value: Number(weight).toFixed(2) + ' Kg',
+				value: weight + ' Kg',
 			},
 
 			{

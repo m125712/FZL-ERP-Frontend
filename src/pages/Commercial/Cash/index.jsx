@@ -83,7 +83,7 @@ export default function Index() {
 				accessorKey: 'receive_amount',
 				header: 'Receive Amount',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(2),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_by_name',

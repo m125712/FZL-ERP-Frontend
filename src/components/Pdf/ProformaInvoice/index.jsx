@@ -53,6 +53,7 @@ export default function Index(data) {
 	let total_thread_quantity = 0;
 	let grand_thread_total_value = 0;
 	let grand_thread_total_quantity = 0;
+	let count = 0;
 
 	const bankPolicy = data?.bank_policy
 		.replace(/var_routing_no/g, `${data?.routing_no}`)
@@ -87,9 +88,14 @@ export default function Index(data) {
 				total_unit_price += parseFloat(item2.unit_price);
 				total_value += parseFloat(item2.value);
 				total_quantity += parseFloat(item2.pi_cash_quantity);
+				// count++;
 			}
 		});
-		TotalUnitPrice.push(total_unit_price);
+
+		
+		//let avg_unit_price = count > 0 ? total_unit_price / count : 0;
+
+		TotalUnitPrice.push((total_value/total_quantity)*12);
 		TotalValue.push(total_value);
 		grand_total_value += total_value;
 		TotalQuantity.push(total_quantity);
@@ -97,6 +103,7 @@ export default function Index(data) {
 		total_unit_price = 0;
 		total_value = 0;
 		total_quantity = 0;
+		count = 0;
 	});
 
 	const sizeResults = [...uniqueItemDescription].map((item) => {
@@ -133,7 +140,7 @@ export default function Index(data) {
 			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) cm`,
 			h_s_code: '9607.11.00',
 			quantity: TotalQuantity[index] + ' pcs',
-			unit_price: Number(TotalUnitPrice[index]).toFixed(2) + '/pcs',
+			unit_price: Number(TotalUnitPrice[index]).toFixed(2) + '/dzn',
 			value: Number(TotalValue[index]).toFixed(2),
 		};
 	});

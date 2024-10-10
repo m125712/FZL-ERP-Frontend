@@ -1,10 +1,12 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useCommonCoilRM } from '@/state/Common';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useCommonCoilRM } from '@/state/Common';
 import { DateTime, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
@@ -31,7 +33,7 @@ export default function Index() {
 				accessorKey: 'coil_forming',
 				header: 'Stock',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'unit',

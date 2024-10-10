@@ -84,7 +84,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'actions1',
@@ -110,7 +110,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 
 			{
@@ -149,7 +149,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(3),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'to_stock_action',
@@ -174,7 +174,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(3),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'to_transfer_action',
@@ -198,7 +198,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'dyed_per_kg_meter',
@@ -210,7 +210,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_by_name',

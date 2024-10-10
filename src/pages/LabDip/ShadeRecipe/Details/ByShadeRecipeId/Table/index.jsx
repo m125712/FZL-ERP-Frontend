@@ -16,7 +16,7 @@ export default function Index({ shade_recipe_entry }) {
 				accessorKey: 'quantity',
 				header: 'Quantity (Solution %)',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(3),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'unit',

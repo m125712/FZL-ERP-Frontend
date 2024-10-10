@@ -300,18 +300,14 @@ const Thread = ({
 						</td>
 
 						<td className={`${rowClass}`}>
-							{Number(
-								getValues(
-									`pi_cash_entry_thread[${index}].quantity`
-								)
-							).toFixed(0)}
+							{getValues(
+								`pi_cash_entry_thread[${index}].quantity`
+							)}
 						</td>
 						<td className={`${rowClass}`}>
-							{Number(
-								getValues(
-									`pi_cash_entry_thread[${index}].given_pi_cash_quantity`
-								)
-							).toFixed(2)}
+							{getValues(
+								`pi_cash_entry_thread[${index}].given_pi_cash_quantity`
+							)}
 						</td>
 						<td className={`w-32 ${rowClass}`}>
 							<Input
@@ -331,11 +327,9 @@ const Thread = ({
 							/>
 						</td>
 						<td className={`${rowClass}`}>
-							{Number(
-								getValues(
-									`pi_cash_entry_thread[${index}].balance_quantity`
-								)
-							).toFixed(2)}
+							{getValues(
+								`pi_cash_entry_thread[${index}].balance_quantity`
+							)}
 						</td>
 						{isUpdate && (
 							<td className={`${rowClass}`}>
@@ -435,18 +429,14 @@ const Thread = ({
 							</td>
 
 							<td className={`${rowClass}`}>
-								{Number(
-									getValues(
-										`new_pi_cash_entry_thread[${index}].quantity`
-									)
-								).toFixed(0)}
+								{getValues(
+									`new_pi_cash_entry_thread[${index}].quantity`
+								)}
 							</td>
 							<td className={`${rowClass}`}>
-								{Number(
-									getValues(
-										`new_pi_cash_entry_thread[${index}].given_pi_cash_quantity`
-									)
-								).toFixed(2)}
+								{getValues(
+									`new_pi_cash_entry_thread[${index}].given_pi_cash_quantity`
+								)}
 							</td>
 							<td className={`w-32 ${rowClass}`}>
 								<Input
@@ -467,11 +457,9 @@ const Thread = ({
 								/>
 							</td>
 							<td className={`${rowClass}`}>
-								{Number(
-									getValues(
-										`new_pi_cash_entry_thread[${index}].balance_quantity`
-									)
-								).toFixed(2)}
+								{getValues(
+									`new_pi_cash_entry_thread[${index}].balance_quantity`
+								)}
 							</td>
 						</tr>
 					))}

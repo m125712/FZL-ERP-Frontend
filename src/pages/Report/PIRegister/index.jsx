@@ -71,13 +71,13 @@ export default function Index() {
 				accessorKey: 'total_pi_quantity',
 				header: 'PI QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_pi_value',
 				header: 'PI Value',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'lc_number',

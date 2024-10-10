@@ -6,7 +6,6 @@ import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, StatusButton } from '@/ui';
 
 export default function Index({ order_info_entry }) {
-
 	const columns = useMemo(
 		() => [
 			// {
@@ -91,43 +90,43 @@ export default function Index({ order_info_entry }) {
 				accessorKey: 'quantity',
 				header: 'Quantity',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'production_quantity',
 				header: 'Production QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'pi',
 				header: 'PI QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'delivered',
 				header: 'Delivered QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'short_quantity',
 				header: 'Short QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'reject_quantity',
 				header: 'Reject QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'warehouse',
 				header: 'Warehouse QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'company_price',
@@ -136,7 +135,7 @@ export default function Index({ order_info_entry }) {
 				hidden: !useAccess('thread__order_info_in_details').includes(
 					'show_price'
 				),
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'party_price',
@@ -145,7 +144,7 @@ export default function Index({ order_info_entry }) {
 				hidden: !useAccess('thread__order_info_in_details').includes(
 					'show_price'
 				),
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_at',

@@ -51,19 +51,19 @@ export default function Index({ batch_entry }) {
 				accessorKey: 'order_quantity',
 				header: 'Order QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'balance_quantity',
 				header: 'Balance',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'quantity',
 				header: 'QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 
 			{

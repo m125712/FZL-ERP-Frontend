@@ -42,7 +42,7 @@ export default function Index({ batch_entry, water_capacity, yarn_quantity }) {
 				accessorKey: 'bulk',
 				header: 'Bulk',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(3),
+				cell: (info) => info.getValue(),
 			},
 		],
 		[shade_recipes_entries]

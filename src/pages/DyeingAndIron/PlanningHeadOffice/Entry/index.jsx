@@ -292,14 +292,14 @@ export default function Index() {
 				header: 'Order QTY',
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'balance_factory_quantity',
 				header: 'Balanced Factory',
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'factory_quantity',

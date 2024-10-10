@@ -1,7 +1,8 @@
-import { DateTime, LinkWithCopy, TitleValue } from '@/ui';
+import { format } from 'date-fns';
+
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
-import { format } from 'date-fns';
+import { DateTime, LinkWithCopy, TitleValue } from '@/ui';
 
 const LCInfo = (lc) => {
 	return (
@@ -233,7 +234,7 @@ export default function Information({ lc }) {
 			},
 			{
 				label: 'Payment Value',
-				value: Number(payment_value).toFixed(2),
+				value: payment_value,
 			},
 		];
 

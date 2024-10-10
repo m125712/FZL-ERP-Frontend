@@ -334,7 +334,6 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				width: 'w-12',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<LinkWithCopy
@@ -391,7 +390,7 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 			{
 				accessorKey: 'buyer_name',
 				header: 'Buyer',
-				width: 'w-20',
+				width: 'w-32',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

@@ -32,7 +32,7 @@ const node2 = [
 ];
 
 export default function Index(batch, shade_recipes_entries, programs) {
-	const headerHeight = 250;
+	const headerHeight = 220;
 	let footerHeight = 50;
 	const { batch_entry } = batch;
 
@@ -71,7 +71,7 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [40, 40, 40, 50, 40, 40, 40, 40, '*'],
+					widths: ['*', 40, '*', 50, 40, 40, '*'],
 					body: [
 						// * Header
 						TableHeader(node),

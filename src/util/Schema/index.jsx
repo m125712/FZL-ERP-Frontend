@@ -573,6 +573,9 @@ export const ORDER_SCHEMA = {
 	garments_wash: JSON_STRING_REQUIRED,
 	garments_remarks: STRING.nullable(),
 
+	// size type
+	is_inch: BOOLEAN_DEFAULT_VALUE(false),
+
 	order_entry: yup.array().of(
 		yup.object().shape({
 			style: STRING_REQUIRED,
@@ -608,6 +611,7 @@ export const ORDER_NULL = {
 	remarks: '',
 	slider_starting_section: '---',
 	garments_wash: '',
+	is_inch: false,
 	order_entry: [
 		{
 			order_description_uuid: null,
@@ -1416,7 +1420,16 @@ export const PACKING_LIST_NULL = {
 export const CHALLAN_SCHEMA = {
 	assign_to: STRING_REQUIRED,
 	order_info_uuid: STRING_REQUIRED,
-	packing_list_uuids: JSON_STRING_REQUIRED,
+	packing_list_uuids: JSON_STRING_REQUIRED.test(
+		'required',
+		'Required',
+		(value) => {
+			if (value.length === 0) {
+				return false;
+			}
+			return true;
+		}
+	),
 	new_packing_list_uuids: JSON_STRING_REQUIRED,
 	receive_status: BOOLEAN_DEFAULT_VALUE(false),
 	gate_pass: BOOLEAN_DEFAULT_VALUE(false),

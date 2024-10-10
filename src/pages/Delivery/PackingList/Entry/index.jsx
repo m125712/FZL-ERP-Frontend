@@ -331,7 +331,9 @@ export default function Index() {
 							{[
 								'O/N',
 								'Item Description',
-								'Style/Color/Size',
+								'Style',
+								'Color',
+								'Size',
 								'Order QTY',
 								'Warehouse',
 								'Delivered',
@@ -399,8 +401,16 @@ export default function Index() {
 							</td>
 							<td className={`w-32 ${rowClass}`}>
 								{getValues(
-									`packing_list_entry[${index}].style_color_size`
+									`packing_list_entry[${index}].style`
 								)}
+							</td>
+							<td className={`w-32 ${rowClass}`}>
+								{getValues(
+									`packing_list_entry[${index}].color`
+								)}
+							</td>
+							<td className={`w-32 ${rowClass}`}>
+								{getValues(`packing_list_entry[${index}].size`)}
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(

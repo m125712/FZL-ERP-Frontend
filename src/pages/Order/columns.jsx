@@ -416,6 +416,16 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 					);
 				},
 			},
+			{
+				accessorKey: 'is_inch',
+				header: 'Inch',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<StatusButton size='btn-sm' value={info.getValue()} />
+					);
+				},
+			},
 
 			...DEFAULT_COLUMNS({ handelUpdate, haveAccess }),
 		],

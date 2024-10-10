@@ -312,14 +312,14 @@ export default function Index() {
 				header: 'Order QTY',
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) =>info.getValue(),
 			},
 			{
 				accessorKey: 'balance_sno_quantity',
 				header: 'Balanced SNO',
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'sno_qty',

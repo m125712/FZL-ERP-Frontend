@@ -57,7 +57,7 @@ export default function Index() {
 				accessorKey: 'trx_quantity',
 				header: 'Transferred QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'unit',

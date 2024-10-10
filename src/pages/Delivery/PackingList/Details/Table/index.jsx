@@ -50,19 +50,19 @@ export default function Index({ packing_list_entry }) {
 				accessorKey: 'order_quantity',
 				header: 'Order Qty',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(2),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'balance_quantity',
 				header: 'Balance Qty',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(2),
+				cell: (info) =>info.getValue(),
 			},
 			{
 				accessorKey: 'quantity',
 				header: 'Qty',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(2),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_at',

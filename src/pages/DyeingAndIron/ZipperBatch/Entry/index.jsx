@@ -392,7 +392,7 @@ export default function Index() {
 				header: 'Order QTY',
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'top',
@@ -425,7 +425,7 @@ export default function Index() {
 				header: 'Balanced Batch',
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'batch_qty',

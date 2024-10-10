@@ -30,12 +30,11 @@ export default function Index({
 	const { invalidateQuery } = useMetalTMProductionLog();
 	const { user } = useAuth();
 
-	const MAX_PROD_PCS = Number(
+	const MAX_PROD_PCS = 
 		updateTeethMoldingProd.balance_quantity
-	).toFixed(0);
-	const MAX_PROD_KG = Number(updateTeethMoldingProd.tape_transferred).toFixed(
-		3
-	);
+	;
+	const MAX_PROD_KG = updateTeethMoldingProd.tape_transferred
+	;
 
 	console.log(updateTeethMoldingProd);
 	const { register, handleSubmit, errors, reset, watch, control, context } =

@@ -29,8 +29,8 @@ export default function Header({
 	return (
 		<div className='flex flex-col gap-4'>
 			<div>
-				<span>{`Machine Capacity (KG): ${Number(res?.min_capacity || 0).toFixed(2)} - 
-														${Number(res?.max_capacity || 0).toFixed(2)}`}</span>
+				<span>{`Machine Capacity (KG): ${res?.min_capacity || 0} - 
+														${res?.max_capacity || 0}`}</span>
 				<br />
 				<span
 					className={cn(

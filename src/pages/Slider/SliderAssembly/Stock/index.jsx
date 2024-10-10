@@ -36,7 +36,7 @@ export default function Index() {
 				accessorKey: 'die_casting_body_quantity',
 				header: 'Body QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'die_casting_cap_name',
@@ -48,7 +48,7 @@ export default function Index() {
 				accessorKey: 'die_casting_cap_quantity',
 				header: 'Cap QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'die_casting_link_name',
@@ -60,7 +60,7 @@ export default function Index() {
 				accessorKey: 'die_casting_link_quantity',
 				header: 'Link QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'die_casting_puller_name',
@@ -72,7 +72,7 @@ export default function Index() {
 				accessorKey: 'die_casting_puller_quantity',
 				header: 'Puller QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'action_add_production',
@@ -93,13 +93,13 @@ export default function Index() {
 				accessorKey: 'quantity',
 				header: 'Total Prod (PCS)',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'weight',
 				header: 'Total Weight',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'action_add_transaction',
@@ -120,7 +120,7 @@ export default function Index() {
 				accessorKey: 'total_transaction_quantity',
 				header: 'Total Trx',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_by_name',

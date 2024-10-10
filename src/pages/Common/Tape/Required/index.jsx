@@ -92,13 +92,13 @@ export default function Index() {
 				accessorKey: 'top',
 				header: 'Top',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'bottom',
 				header: 'Bottom',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) =>info.getValue(),
 			},
 
 			...DEFAULT_COLUMNS({ handelUpdate, handelDelete, haveAccess }),

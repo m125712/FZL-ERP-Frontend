@@ -246,7 +246,7 @@ export default function ItemDescription({ order_description, className }) {
 			},
 			{
 				label: 'received',
-				value: `${Number(tape_received).toFixed(3)} kg`,
+				value: `${tape_received} kg`,
 			},
 
 			{
@@ -258,11 +258,11 @@ export default function ItemDescription({ order_description, className }) {
 			},
 			{
 				label: 'production',
-				value: `${Number(tape_production).toFixed(3)} kg`,
+				value: `${tape_production} kg`,
 			},
 			{
 				label: 'transfer',
-				value: `${Number(tape_transferred).toFixed(3)} kg`,
+				value: `${tape_transferred} kg`,
 			},
 		];
 

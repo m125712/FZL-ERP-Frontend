@@ -56,19 +56,19 @@ export default function ZipperTable({ pi }) {
 				accessorKey: 'pi_cash_quantity',
 				header: 'QTY (PCS)',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) =>info.getValue(),
 			},
 			{
 				accessorKey: 'unit_price',
 				header: 'Unit Price ($)',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(3),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'value',
 				header: 'Value ($)',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(3),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'remarks',

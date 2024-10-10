@@ -30,13 +30,13 @@ export default function Index() {
 				accessorKey: 'min_capacity',
 				header: 'Min Capacity',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(3),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'max_capacity',
 				header: 'Max Capacity',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(3),
+				cell: (info) => info.getValue(),
 			},
 
 			{
@@ -97,7 +97,7 @@ export default function Index() {
 				accessorKey: 'water_capacity',
 				header: 'Water Capacity',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(3),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_by_name',

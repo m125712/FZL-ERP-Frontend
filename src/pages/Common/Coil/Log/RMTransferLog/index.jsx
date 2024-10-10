@@ -42,7 +42,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>
-						{Number(info.getValue())}
+						{info.getValue()}
 					</span>
 				),
 			},
@@ -50,7 +50,7 @@ export default function Index() {
 				accessorKey: 'wastage',
 				header: 'Wastage',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'unit',

@@ -263,7 +263,7 @@ export default function Index() {
 				header: 'Order QTY',
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			// {
 			// 	accessorKey: 'balance_quantity',
@@ -277,7 +277,7 @@ export default function Index() {
 				header: 'Batch QTY',
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			// {
 			// 	accessorKey: 'production_quantity',

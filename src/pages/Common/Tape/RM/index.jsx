@@ -1,16 +1,18 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useCommonTapeRM } from '@/state/Common';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useCommonTapeRM } from '@/state/Common';
 import { DateTime, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
 	const { data, isLoading, url } = useCommonTapeRM();
-	
+
 	const info = new PageInfo('Tape RM', url, 'common__tape_rm');
 	const haveAccess = useAccess(info.getTab());
 
@@ -32,7 +34,7 @@ export default function Index() {
 				accessorKey: 'tape_making',
 				header: 'Stock',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'unit',

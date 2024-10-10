@@ -26,8 +26,8 @@ export default function Header({
 			<SectionEntryBody
 				title={
 					<div>
-						<span>{`Machine Capacity (KG): ${Number(res?.min_capacity || 0).toFixed(2)} - 
-														${Number(res?.max_capacity || 0).toFixed(2)}`}</span>
+						<span>{`Machine Capacity (KG): ${res?.min_capacity || 0} - 
+														${res?.max_capacity || 0}`}</span>
 						<br />
 						<span
 							className={cn(

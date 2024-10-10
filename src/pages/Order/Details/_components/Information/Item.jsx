@@ -62,6 +62,7 @@ export default function ItemDescription({ order_description, className }) {
 			puller_type_name,
 			hand_name,
 			description,
+			is_inch,
 			remarks,
 
 			// slider
@@ -130,6 +131,10 @@ export default function ItemDescription({ order_description, className }) {
 					special_requirement_name == null
 						? 'M/F'
 						: special_requirement_name + ', M/F',
+			},
+			{
+				label: 'Size Unit',
+				value: is_inch? 'Inch' : '--',
 			},
 			{
 				label: 'description',

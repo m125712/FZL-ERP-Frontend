@@ -9,6 +9,7 @@ import { useFetchForRhfReset, useRHF } from '@/hooks';
 import { DeleteModal } from '@/components/Modal';
 import DynamicFormSpreadSheet from '@/ui/Dynamic/DynamicFormSpreadSheet';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
+import { CheckBox } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { ORDER_NULL, ORDER_SCHEMA } from '@util/Schema';
@@ -138,6 +139,15 @@ export default function Index() {
 
 	const headerButtons = [
 		<div className='flex items-center gap-2'>
+			<div className='rounded-md bg-secondary px-1'>
+				<CheckBox
+					text='text-secondary-content'
+					label='is_inch'
+					title='Inch'
+					{...{ register, errors }}
+				/>
+			</div>
+
 			<label className='text-sm'>Bleach All</label>
 			<SwitchToggle
 				checked={bleachAll}
@@ -187,6 +197,7 @@ export default function Index() {
 				is_slider_provided: data?.is_slider_provided ? 1 : 0,
 				is_logo_body: data?.is_logo_body ? 1 : 0,
 				is_logo_puller: data?.is_logo_puller ? 1 : 0,
+				is_inch: data?.is_inch ? 1 : 0,
 				hand: data?.hand,
 				updated_at: GetDateTime(),
 			};
@@ -274,6 +285,7 @@ export default function Index() {
 			is_slider_provided: data?.is_slider_provided ? 1 : 0,
 			is_logo_body: data?.is_logo_body ? 1 : 0,
 			is_logo_puller: data?.is_logo_puller ? 1 : 0,
+			is_inch: data?.is_inch ? 1 : 0,
 			hand: data?.hand,
 			status: 0,
 			special_requirement,

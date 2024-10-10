@@ -234,6 +234,7 @@ export default function Index() {
 	const rowClass =
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
+		console.log(errors);
 	return (
 		<div>
 			<form
@@ -261,7 +262,9 @@ export default function Index() {
 							{[
 								'PL No.',
 								'Item Description',
-								'Style/Color/Size',
+								'Style',
+								'Color',
+								'Size',
 								'Delivered',
 								'Quantity',
 								'Short QTY',
@@ -307,11 +310,14 @@ export default function Index() {
 									)}
 								</td>
 								<td className={`w-32 ${rowClass}`}>
-									{getValues(
-										`challan_entry[${index}].style_color_size`
-									)}
+									{getValues(`challan_entry[${index}].style`)}
 								</td>
-
+								<td className={`w-32 ${rowClass}`}>
+									{getValues(`challan_entry[${index}].color`)}
+								</td>
+								<td className={`w-32 ${rowClass}`}>
+									{getValues(`challan_entry[${index}].size`)}
+								</td>
 								<td className={`${rowClass}`}>
 									{getValues(
 										`challan_entry[${index}].delivered`

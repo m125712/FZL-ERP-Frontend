@@ -22,7 +22,7 @@ import {
 	useOtherOrderPropertiesByTeethType,
 	useOtherOrderPropertiesByTopStopper,
 	useOtherOrderPropertiesByZipperNumber,
-} from '@/state/other';
+} from '@/state/Other';
 import { useParams } from 'react-router-dom';
 import { useFetch } from '@/hooks';
 

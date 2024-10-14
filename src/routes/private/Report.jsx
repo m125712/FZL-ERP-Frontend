@@ -3,6 +3,7 @@ import LCDue from '@/pages/Report/LC';
 import PIRegister from '@/pages/Report/PIRegister';
 import PIToBeSubmit from '@/pages/Report/PIToBeSubmit';
 import ZipperProduction from '@/pages/Report/ZipperProductionStatus';
+import ThreadProduction from '@/pages/Report/ThreadProductionStatus';
 
 export const ReportRoutes = [
 	{
@@ -13,6 +14,13 @@ export const ReportRoutes = [
 				path: '/report/zipper-production',
 				element: <ZipperProduction />,
 				page_name: 'report__zipper_production',
+				actions: ['read'],
+			},
+			{
+				name: 'Thread Production',
+				path: '/report/thread-production',
+				element: <ThreadProduction />,
+				page_name: 'report__thread_production',
 				actions: ['read'],
 			},
 			{

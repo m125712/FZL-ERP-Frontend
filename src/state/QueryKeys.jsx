@@ -1246,6 +1246,9 @@ export const reportQK = {
 	// Zipper Production
 	zipperProduction: () => [...reportQK.all(), 'zipper-production'],
 
+	// Thread Production
+	threadProduction: () => [...reportQK.all(), 'thread-production'],
+	
 	// Daily Challan
 	dailyChallan: () => [...reportQK.all(), 'daily-challan'],
 

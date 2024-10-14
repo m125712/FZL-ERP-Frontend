@@ -48,9 +48,11 @@ export default function ZipperTable({ pi }) {
 			},
 			{
 				accessorKey: 'size',
-				header: 'Size (CM)',
+				header: 'Size (CM/INCH)',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) =>
+					info.getValue() +
+					` ${info.row.original.size_inch ? 'in' : 'cm'}`,
 			},
 			{
 				accessorKey: 'pi_cash_quantity',

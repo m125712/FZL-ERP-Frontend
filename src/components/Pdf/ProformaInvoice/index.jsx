@@ -1,16 +1,19 @@
 import { PI_MD_SIGN } from '@/assets/img/base64';
 
-import {
-	DEFAULT_FONT_SIZE,
-	tableLayoutStyle,
-	xMargin,
-} from '@/components/Pdf/ui';
+
+
+import { DEFAULT_FONT_SIZE, tableLayoutStyle, xMargin } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
+
+
 
 import { DollarToWord } from '@/lib/NumToWord';
 
+
+
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
+
 
 const node = [
 	getTable('pi_item_description', 'Item'),
@@ -54,6 +57,7 @@ export default function Index(data) {
 	let grand_thread_total_value = 0;
 	let grand_thread_total_quantity = 0;
 	let count = 0;
+	let is_size_inch = 0;
 
 	const bankPolicy = data?.bank_policy
 		.replace(/var_routing_no/g, `${data?.routing_no}`)
@@ -88,14 +92,14 @@ export default function Index(data) {
 				total_unit_price += parseFloat(item2.unit_price);
 				total_value += parseFloat(item2.value);
 				total_quantity += parseFloat(item2.pi_cash_quantity);
+				is_size_inch = item2.is_size_inch;
 				// count++;
 			}
 		});
 
-		
 		//let avg_unit_price = count > 0 ? total_unit_price / count : 0;
 
-		TotalUnitPrice.push((total_value/total_quantity)*12);
+		TotalUnitPrice.push((total_value / total_quantity) * 12);
 		TotalValue.push(total_value);
 		grand_total_value += total_value;
 		TotalQuantity.push(total_quantity);
@@ -137,7 +141,7 @@ export default function Index(data) {
 		return {
 			pi_item_description: item,
 			specification: specifications[index],
-			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) cm`,
+			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) ${is_size_inch ? 'in' : 'cm'}`,
 			h_s_code: '9607.11.00',
 			quantity: TotalQuantity[index] + ' pcs',
 			unit_price: Number(TotalUnitPrice[index]).toFixed(2) + '/dzn',
@@ -152,7 +156,7 @@ export default function Index(data) {
 				total_thread_quantity += parseFloat(item2.pi_cash_quantity);
 			}
 		});
-		TotalThreadUnitPrice.push(total_thread_unit_price);
+		TotalThreadUnitPrice.push(total_thread_value / total_thread_quantity);
 		TotalThreadValue.push(total_thread_value);
 		grand_total_value += total_thread_value;
 		TotalThreadQuantity.push(total_thread_quantity);

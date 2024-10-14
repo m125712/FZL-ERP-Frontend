@@ -44,6 +44,12 @@ export default function Index() {
 				cell: (info) => Number(info.getValue()),
 			},
 			{
+				accessorKey: 'average_lead_time',
+				header: 'Avg Lead Time',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
 				accessorKey: 'stock',
 				header: 'Stock',
 				enableColumnFilter: false,

@@ -50,24 +50,8 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'style',
-				header: 'Style',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<span className='capitalize'>{info.getValue()}</span>
-				),
-			},
-			{
-				accessorKey: 'color',
-				header: 'Color',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<span className='capitalize'>{info.getValue()}</span>
-				),
-			},
-			{
-				accessorKey: 'size',
-				header: 'size',
+				accessorKey: 'style_color_size',
+				header: 'Style / Color / Size',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>

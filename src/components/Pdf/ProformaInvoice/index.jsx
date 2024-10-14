@@ -1,21 +1,20 @@
 import { PI_MD_SIGN } from '@/assets/img/base64';
 
-
-
-import { DEFAULT_FONT_SIZE, tableLayoutStyle, xMargin } from '@/components/Pdf/ui';
+import {
+	DEFAULT_FONT_SIZE,
+	tableLayoutStyle,
+	xMargin,
+} from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
-
-
 import { DollarToWord } from '@/lib/NumToWord';
-
-
 
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
-
 const node = [
+	getTable('order_number', 'Order ID'),
+	getTable('style', 'Style'),
 	getTable('pi_item_description', 'Item'),
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
@@ -26,7 +25,7 @@ const node = [
 ];
 
 export default function Index(data) {
-	const headerHeight = 200;
+	const headerHeight = 170;
 	let footerHeight = 50;
 	let { pi_cash_entry } = data;
 	let { pi_cash_entry_thread } = data;
@@ -40,6 +39,10 @@ export default function Index(data) {
 
 	const uniqueItemDescription = new Set();
 	const uniqueItemDescriptionThread = new Set();
+	let style = {};
+	let orderID = {};
+	let threadStyle = {};
+	let threadOrderID = {};
 	const TotalUnitPrice = [];
 	const TotalValue = [];
 	const TotalQuantity = [];
@@ -87,8 +90,13 @@ export default function Index(data) {
 	});
 
 	[...uniqueItemDescription].forEach((item) => {
+		style[item] = new Set();
+		orderID[item] = new Set();
 		pi_cash_entry.forEach((item2) => {
 			if (item2.pi_item_description === item) {
+				style[item].add(item2.style);
+
+				orderID[item].add(item2.order_number);
 				total_unit_price += parseFloat(item2.unit_price);
 				total_value += parseFloat(item2.value);
 				total_quantity += parseFloat(item2.pi_cash_quantity);
@@ -139,6 +147,8 @@ export default function Index(data) {
 
 	const order_info_entry = [...uniqueItemDescription].map((item, index) => {
 		return {
+			order_number: [...orderID[item]].join(', '),
+			style: [...style[item]].join(', '),
 			pi_item_description: item,
 			specification: specifications[index],
 			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) ${is_size_inch ? 'in' : 'cm'}`,
@@ -149,8 +159,12 @@ export default function Index(data) {
 		};
 	});
 	[...uniqueItemDescriptionThread].forEach((item) => {
+		threadStyle[item] = new Set();
+		threadOrderID[item] = new Set();
 		pi_cash_entry_thread.forEach((item2) => {
 			if (item2.count_length_name === item) {
+				threadStyle[item].add(item2.style);
+				threadOrderID[item].add(item2.order_number);
 				total_thread_unit_price += parseFloat(item2.unit_price);
 				total_thread_value += parseFloat(item2.value);
 				total_thread_quantity += parseFloat(item2.pi_cash_quantity);
@@ -168,6 +182,8 @@ export default function Index(data) {
 	const thread_order_info_entry = [...uniqueItemDescriptionThread].map(
 		(item, index) => {
 			return {
+				order_number: [...threadOrderID[item]].join(', '),
+				style: [...threadStyle[item]].join(', '),
 				pi_item_description: item,
 				specification: '100% SPUN POLYESTER SEWEING THREAD',
 				size: item.match(/\d+$/)[0] + ' mtr',
@@ -204,55 +220,55 @@ export default function Index(data) {
 
 		// * Main Table
 		content: [
-			{
-				table: {
-					widths: ['*'],
-					body: [
-						[
-							{
-								text:
-									'Order Ref No: ' +
-									[
-										...new Set(
-											pi_cash_entry
-												.concat(pi_cash_entry_thread)
-												.map(
-													(entry) =>
-														entry.order_number
-												)
-										),
-									].join(', '),
-								border: [true, true, true, true],
-							},
-						],
-					],
-				},
-			},
-			{
-				table: {
-					widths: ['*'],
-					body: [
-						[
-							{
-								text:
-									'Style: ' +
-									[
-										...new Set(
-											pi_cash_entry
-												.concat(pi_cash_entry_thread)
-												.map((entry) => entry.style)
-										),
-									].join(', '),
-								border: [true, true, true, true],
-							},
-						],
-					],
-				},
-			},
+			// {
+			// 	table: {
+			// 		widths: ['*'],
+			// 		body: [
+			// 			[
+			// 				{
+			// 					text:
+			// 						'Order Ref No: ' +
+			// 						[
+			// 							...new Set(
+			// 								pi_cash_entry
+			// 									.concat(pi_cash_entry_thread)
+			// 									.map(
+			// 										(entry) =>
+			// 											entry.order_number
+			// 									)
+			// 							),
+			// 						].join(', '),
+			// 					border: [true, true, true, true],
+			// 				},
+			// 			],
+			// 		],
+			// 	},
+			// },
+			// {
+			// 	table: {
+			// 		widths: ['*'],
+			// 		body: [
+			// 			[
+			// 				{
+			// 					text:
+			// 						'Style: ' +
+			// 						[
+			// 							...new Set(
+			// 								pi_cash_entry
+			// 									.concat(pi_cash_entry_thread)
+			// 									.map((entry) => entry.style)
+			// 							),
+			// 						].join(', '),
+			// 					border: [true, true, true, true],
+			// 				},
+			// 			],
+			// 		],
+			// 	},
+			// },
 			{
 				table: {
 					headerRows: 1,
-					widths: [100, 100, 70, 50, 50, 50, '*'],
+					widths: [50, 50, 50, 50, 70, 50, 50, 50, 33],
 					body: [
 						// Header
 						TableHeader(node),
@@ -288,8 +304,10 @@ export default function Index(data) {
 								],
 								alignment: 'right',
 								bold: true,
-								colSpan: 5,
+								colSpan: 7,
 							},
+							{},
+							{},
 							{},
 							{},
 							{},

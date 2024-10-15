@@ -21,7 +21,7 @@ export const getPageHeader = (data) => {
 	data?.pi_cash_entry_thread?.forEach((item) => {
 		buyer.add(item.buyer_name);
 	});
-	
+
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
 		widths: [70, '*', 70, '*'],
@@ -88,7 +88,7 @@ export const getPageHeader = (data) => {
 				{ text: 'Attention', bold: true, color: PRIMARY_COLOR },
 				data?.merchandiser_name,
 				{ text: 'Routing No', bold: true, color: PRIMARY_COLOR },
-				data?.routing_no,
+				data?.bank_routing_no,
 			],
 
 			[

@@ -23,8 +23,8 @@ const node = [
 	getTable('quantity', 'Quantity', 'right'),
 	getTable('unit_price', 'Unit Price\n(BDT)', 'right'),
 	getTable('unit_price_dollar', 'Unit Price\n(US$)', 'right'),
-	getTable('value', 'Value(BDT)', 'right'),
-	getTable('value_dollar', 'Value(US$)', 'right'),
+	getTable('value', 'Value\n(BDT)', 'right'),
+	getTable('value_dollar', 'Value\n(US$)', 'right'),
 ];
 
 export default function Index(data) {
@@ -254,7 +254,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [50, 50, 50, 60, 50, 40, 35, 35, 46, '*'],
+					widths: [50, 50, 50, 60, 50, 40, 40, 40, 40, 40],
 					body: [
 						// Header
 						TableHeader(node),

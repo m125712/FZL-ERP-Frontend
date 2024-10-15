@@ -18,7 +18,10 @@ export const getPageHeader = (data) => {
 	data?.pi_cash_entry?.forEach((item) => {
 		buyer.add(item.buyer_name);
 	});
-
+	data?.pi_cash_entry_thread?.forEach((item) => {
+		buyer.add(item.buyer_name);
+	});
+	
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
 		widths: [70, '*', 70, '*'],

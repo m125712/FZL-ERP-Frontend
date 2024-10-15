@@ -25,7 +25,7 @@ const node = [
 ];
 
 export default function Index(data) {
-	const headerHeight = 170;
+	const headerHeight = 200;
 	let footerHeight = 50;
 	let { pi_cash_entry } = data;
 	let { pi_cash_entry_thread } = data;

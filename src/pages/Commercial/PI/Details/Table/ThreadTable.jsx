@@ -49,25 +49,13 @@ export default function ThreadTable({ pi_cash_entry_thread }) {
 			},
 			{
 				accessorKey: 'pi_cash_quantity',
-				header: 'QTY (PCS)',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'pi_cash_quantity_dzn',
-				header: 'QTY (Dzn)',
+				header: 'QTY (Cone)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'unit_price_pcs',
-				header: 'Unit Price(PCS) ($)',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'unit_price',
-				header: 'Unit Price(Dzn) ($)',
+				header: 'Unit Price(Cone) ($)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

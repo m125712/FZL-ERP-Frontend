@@ -21,7 +21,7 @@ const node = [
 	getTable('h_s_code', 'H S.Code'),
 	getTable('quantity', 'Quantity', 'right'),
 	getTable('unit_price', 'Unit Price(US$)', 'right'),
-	getTable('value', 'Value(US$)', 'right'),
+	getTable('value', 'Value\n(US$)', 'right'),
 ];
 
 export default function Index(data) {
@@ -268,7 +268,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [50, 50, 50, 50, 70, 50, 50, 50, 33],
+					widths: [50, 50, 50, 55, 70, 50, 50, 50,40],
 					body: [
 						// Header
 						TableHeader(node),

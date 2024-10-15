@@ -20,7 +20,7 @@ const node = [
 	getTable('size', 'Size'),
 	getTable('h_s_code', 'H S.Code'),
 	getTable('quantity', 'Quantity', 'right'),
-	getTable('unit_price', 'Unit Price(US$)', 'right'),
+	getTable('unit_price', 'Unit Price\n(US$)', 'right'),
 	getTable('value', 'Value\n(US$)', 'right'),
 ];
 
@@ -184,9 +184,9 @@ export default function Index(data) {
 			return {
 				order_number: [...threadOrderID[item]].join(', '),
 				style: [...threadStyle[item]].join(', '),
-				pi_item_description: item,
-				specification: '100% SPUN POLYESTER SEWEING THREAD',
-				size: item.match(/\d+$/)[0] + ' mtr',
+				pi_item_description: '100% SPUN POLYESTER SEWEING THREAD',
+				specification: '',
+				size: item.split( ' ' )[0]+'\n ('+item.match(/\d+$/)[0] + ' mtr'+')',
 				h_s_code: '5402.62.00',
 				quantity: TotalThreadQuantity[index] + ' cone',
 				unit_price: TotalThreadUnitPrice[index] + '/cone',
@@ -268,7 +268,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [50, 50, 50, 55, 70, 50, 50, 50,40],
+					widths: [45, 65, 50, 65,65, 50, 40, 45, 40],
 					body: [
 						// Header
 						TableHeader(node),

@@ -24,7 +24,6 @@ import {
 	useOtherOrderPropertiesByZipperNumber,
 } from '@/state/Other';
 import { useParams } from 'react-router-dom';
-import { useFetch } from '@/hooks';
 
 import {
 	CheckBox,
@@ -48,6 +47,7 @@ export default function Header({
 	Controller,
 	is_logo_body,
 	is_logo_puller,
+	setType,
 }) {
 	const { order_number, order_description_uuid } = useParams();
 
@@ -106,6 +106,12 @@ export default function Header({
 		{ value: '---', label: '---' },
 	];
 
+	const types = [
+		{ value: 'full', label: 'Full Order' },
+		{ value: 'slider', label: 'Slider' },
+		{ value: 'tape', label: 'Tape' },
+	];
+
 	const [sp_req, setSpReq] = useState({});
 	const [garmentsWash, setGramentsWash] = useState({});
 
@@ -130,7 +136,39 @@ export default function Header({
 
 	return (
 		<div className='flex flex-col gap-4'>
-			<SectionEntryBody title='Item'>
+			<SectionEntryBody
+				title='Item'
+				header={
+					<div className='my-2 w-28'>
+						<FormField
+							label='order_type'
+							title='Order Type'
+							is_title_needed='false'
+							errors={errors}>
+							<Controller
+								name={'order_type'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select Puller Type'
+											options={types}
+											value={types?.find(
+												(item) =>
+													item.value ==
+													getValues('order_type')
+											)}
+											onChange={(e) => {
+												onChange(e.value);
+												setType(e.value);
+											}}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+					</div>
+				}>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<FormField
 						label='order_info_uuid'
@@ -229,52 +267,92 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<FormField
-						label='end_type'
-						title='End Type'
-						errors={errors}>
-						<Controller
-							name={'end_type'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select End Type'
-										options={end_type}
-										value={end_type?.find(
-											(end_type) =>
-												end_type.value ==
-												getValues('end_type')
-										)}
-										onChange={(e) => {
-											onChange(e.value);
-											setEndType(e.label);
+
+					{/* conditional rendering: checking if order type is full */}
+					{watch('order_type') === 'full' && (
+						<>
+							<FormField
+								label='end_type'
+								title='End Type'
+								errors={errors}>
+								<Controller
+									name={'end_type'}
+									control={control}
+									render={({ field: { onChange } }) => {
+										return (
+											<ReactSelect
+												placeholder='Select End Type'
+												options={end_type}
+												value={end_type?.find(
+													(end_type) =>
+														end_type.value ==
+														getValues('end_type')
+												)}
+												onChange={(e) => {
+													onChange(e.value);
+													setEndType(e.label);
+												}}
+											/>
+										);
+									}}
+								/>
+							</FormField>
+							{end_type
+								?.find(
+									(end_type) =>
+										end_type.value == getValues('end_type')
+								)
+								?.label?.toLowerCase() === 'open end' && (
+								<FormField
+									label='hand'
+									title='Hand'
+									errors={errors}>
+									{' '}
+									<Controller
+										name={'hand'}
+										control={control}
+										render={({ field: { onChange } }) => {
+											return (
+												<ReactSelect
+													placeholder='Select Hand'
+													options={hand}
+													value={hand?.find(
+														(hand) =>
+															hand.value ==
+															getValues('hand')
+													)}
+													onChange={(e) =>
+														onChange(e.value)
+													}
+												/>
+											);
 										}}
 									/>
-								);
-							}}
-						/>
-					</FormField>
-					{end_type
-						?.find(
-							(end_type) =>
-								end_type.value == getValues('end_type')
-						)
-						?.label?.toLowerCase() === 'open end' && (
-						<FormField label='hand' title='Hand' errors={errors}>
-							{' '}
+								</FormField>
+							)}
+						</>
+					)}
+				</div>
+
+				{/* conditional rendering: checking if order type is full */}
+				{watch('order_type') === 'full' && (
+					<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+						<FormField
+							label='lock_type'
+							title='Lock Type'
+							errors={errors}>
 							<Controller
-								name={'hand'}
+								name={'lock_type'}
 								control={control}
 								render={({ field: { onChange } }) => {
 									return (
 										<ReactSelect
-											placeholder='Select Hand'
-											options={hand}
-											value={hand?.find(
-												(hand) =>
-													hand.value ==
-													getValues('hand')
+											placeholder='Select Lock Type'
+											options={lock_type}
+											value={lock_type?.find(
+												(lock_type) =>
+													lock_type.value ==
+													getValues('lock_type')
 											)}
 											onChange={(e) => onChange(e.value)}
 										/>
@@ -282,118 +360,93 @@ export default function Header({
 								}}
 							/>
 						</FormField>
-					)}
-				</div>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					<FormField
-						label='lock_type'
-						title='Lock Type'
-						errors={errors}>
-						<Controller
-							name={'lock_type'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Lock Type'
-										options={lock_type}
-										value={lock_type?.find(
-											(lock_type) =>
-												lock_type.value ==
-												getValues('lock_type')
-										)}
-										onChange={(e) => onChange(e.value)}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					<FormField
-						label='teeth_type'
-						title='Teeth Type'
-						errors={errors}>
-						<Controller
-							name={'teeth_type'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Teeth Type'
-										options={teeth_type}
-										value={teeth_type?.find(
-											(teeth_type) =>
-												teeth_type.value ==
-												getValues('teeth_type')
-										)}
-										onChange={(e) => onChange(e.value)}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					<FormField
-						label='teeth_color'
-						title='Teeth Color'
-						errors={errors}>
-						<Controller
-							name={'teeth_color'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Teeth Color'
-										options={color}
-										value={color?.find(
-											(color) =>
-												color.value ==
-												getValues('teeth_color')
-										)}
-										onChange={(e) => onChange(e.value)}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					<FormField
-						label='special_requirement'
-						title='Special Req'
-						errors={errors}>
-						<Controller
-							name={'special_requirement'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Multi Requirement'
-										options={special_requirement}
-										value={special_requirement?.filter(
-											(item) =>
-												sp_req?.special_req?.includes(
-													item.value
-												)
-										)}
-										onChange={(e) => {
-											setSpReq((prev) => ({
-												...prev,
-												special_req: e.map(
-													(item) => item.value
-												),
-											}));
-											onChange(
-												JSON.stringify({
-													values: e.map(
+						<FormField
+							label='teeth_type'
+							title='Teeth Type'
+							errors={errors}>
+							<Controller
+								name={'teeth_type'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select Teeth Type'
+											options={teeth_type}
+											value={teeth_type?.find(
+												(teeth_type) =>
+													teeth_type.value ==
+													getValues('teeth_type')
+											)}
+											onChange={(e) => onChange(e.value)}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+						<FormField
+							label='teeth_color'
+							title='Teeth Color'
+							errors={errors}>
+							<Controller
+								name={'teeth_color'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select Teeth Color'
+											options={color}
+											value={color?.find(
+												(color) =>
+													color.value ==
+													getValues('teeth_color')
+											)}
+											onChange={(e) => onChange(e.value)}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+						<FormField
+							label='special_requirement'
+							title='Special Req'
+							errors={errors}>
+							<Controller
+								name={'special_requirement'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select Multi Requirement'
+											options={special_requirement}
+											value={special_requirement?.filter(
+												(item) =>
+													sp_req?.special_req?.includes(
+														item.value
+													)
+											)}
+											onChange={(e) => {
+												setSpReq((prev) => ({
+													...prev,
+													special_req: e.map(
 														(item) => item.value
 													),
-												})
-											);
-										}}
-										isMulti={true}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-				</div>
+												}));
+												onChange(
+													JSON.stringify({
+														values: e.map(
+															(item) => item.value
+														),
+													})
+												);
+											}}
+											isMulti={true}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+					</div>
+				)}
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<Textarea label='description' {...{ register, errors }} />
 					<Textarea label='remarks' {...{ register, errors }} />
@@ -694,103 +747,108 @@ export default function Header({
 				</div>
 			</SectionEntryBody>
 
-			<SectionEntryBody title='Garments'>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					<Input label={`garment`} {...{ register, errors }} />
-					<FormField
-						label='garments_wash'
-						title='Garments Wash'
-						errors={errors}>
-						<Controller
-							name={'garments_wash'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Multi Requirement'
-										options={garments_wash}
-										value={garments_wash?.filter((item) =>
-											garmentsWash?.wash?.includes(
-												item.value
-											)
-										)}
-										onChange={(e) => {
-											setGramentsWash((prev) => ({
-												...prev,
-												wash: e.map(
-													(item) => item.value
-												),
-											}));
-											onChange(
-												JSON.stringify({
-													values: e.map(
+			{watch('order_type') == 'full' && (
+				<SectionEntryBody title='Garments'>
+					<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+						<Input label={`garment`} {...{ register, errors }} />
+						<FormField
+							label='garments_wash'
+							title='Garments Wash'
+							errors={errors}>
+							<Controller
+								name={'garments_wash'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select Multi Requirement'
+											options={garments_wash}
+											value={garments_wash?.filter(
+												(item) =>
+													garmentsWash?.wash?.includes(
+														item.value
+													)
+											)}
+											onChange={(e) => {
+												setGramentsWash((prev) => ({
+													...prev,
+													wash: e.map(
 														(item) => item.value
 													),
-												})
-											);
-										}}
-										isMulti={true}
-									/>
-								);
-							}}
-						/>
-					</FormField>
+												}));
+												onChange(
+													JSON.stringify({
+														values: e.map(
+															(item) => item.value
+														),
+													})
+												);
+											}}
+											isMulti={true}
+										/>
+									);
+								}}
+							/>
+						</FormField>
 
-					<FormField
-						label='light_preference'
-						title='Light Preference'
-						errors={errors}>
-						<Controller
-							name={'light_preference'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select light preference'
-										options={light_preference}
-										value={light_preference?.find(
-											(item) =>
-												item.value ==
-												getValues('light_preference')
-										)}
-										onChange={(e) => onChange(e.value)}
-									/>
-								);
-							}}
-						/>
-					</FormField>
+						<FormField
+							label='light_preference'
+							title='Light Preference'
+							errors={errors}>
+							<Controller
+								name={'light_preference'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select light preference'
+											options={light_preference}
+											value={light_preference?.find(
+												(item) =>
+													item.value ==
+													getValues(
+														'light_preference'
+													)
+											)}
+											onChange={(e) => onChange(e.value)}
+										/>
+									);
+								}}
+							/>
+						</FormField>
 
-					<FormField
-						label='end_user'
-						title='End User'
-						errors={errors}>
-						<Controller
-							name={'end_user'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select End User'
-										options={end_user}
-										value={end_user?.find(
-											(item) =>
-												item.value ==
-												getValues('end_user')
-										)}
-										onChange={(e) => onChange(e.value)}
-									/>
-								);
-							}}
-						/>
-					</FormField>
+						<FormField
+							label='end_user'
+							title='End User'
+							errors={errors}>
+							<Controller
+								name={'end_user'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select End User'
+											options={end_user}
+											value={end_user?.find(
+												(item) =>
+													item.value ==
+													getValues('end_user')
+											)}
+											onChange={(e) => onChange(e.value)}
+										/>
+									);
+								}}
+							/>
+						</FormField>
 
-					<Textarea
-						label='garments_remarks'
-						title='Remarks'
-						{...{ register, errors }}
-					/>
-				</div>
-			</SectionEntryBody>
+						<Textarea
+							label='garments_remarks'
+							title='Remarks'
+							{...{ register, errors }}
+						/>
+					</div>
+				</SectionEntryBody>
+			)}
 		</div>
 	);
 }

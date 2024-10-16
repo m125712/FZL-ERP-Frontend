@@ -3,6 +3,7 @@ import { useDeleteFunc } from './CRUD/useDelete';
 import {
 	defaultFetch,
 	useFetch,
+	useFetchForOrderReset,
 	useFetchForRhfReset,
 	useFetchForRhfResetForBatchProduct,
 	useFetchForRhfResetForPlanning,
@@ -29,6 +30,7 @@ export {
 	useFetchForRhfReset,
 	useFetchForRhfResetForBatchProduct,
 	useFetchForRhfResetForPlanning,
+	useFetchForOrderReset,
 	useFetchForRhfResetForUserAccess,
 	useFetchFunc,
 	useFetchFuncForReport,

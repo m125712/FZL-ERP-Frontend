@@ -58,12 +58,12 @@ const DynamicFormSpreadSheet = (
 		remove: () => {},
 	}
 ) => {
-	const columnLabels = columnsDefs.map((column) => {
+	const columnLabels = columnsDefs.filter((column) => column.hidden === false).map((column) => {
 		return column.header || column.accessorKey;
 	});
 
 	const tableData = fields.map((field, fieldIndex) => {
-		const data = columnsDefs.map((column) => {
+		const data = columnsDefs.filter((column) => column.hidden === false).map((column) => {
 			switch (column.type) {
 				case 'text':
 					return {

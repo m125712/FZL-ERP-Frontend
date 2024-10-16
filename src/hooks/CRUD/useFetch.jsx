@@ -69,6 +69,19 @@ const useFetchForRhfReset = async (uri, returnId, reset) => {
 		fetchData();
 	}, [returnId]);
 };
+const useFetchForOrderReset = async (uri, returnId, reset, setType) => {
+	useEffect(() => {
+		if (returnId === null || returnId === undefined) return;
+
+		async function fetchData() {
+			const res = await api.get(uri);
+			setType(res?.data?.data.order_type)
+			return reset(res?.data?.data);
+		}
+		
+		fetchData();
+	}, [returnId]);
+};
 
 const useFetchForRhfResetForBatchProduct = async (uri, returnId, reset) => {
 	useEffect(() => {
@@ -147,6 +160,7 @@ export {
 	defaultFetch,
 	useFetch,
 	useFetchForRhfReset,
+	useFetchForOrderReset,
 	useFetchForRhfResetForBatchProduct,
 	useFetchForRhfResetForPlanning,
 	useFetchForRhfResetForUserAccess,

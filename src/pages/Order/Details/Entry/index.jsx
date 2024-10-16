@@ -4,7 +4,8 @@ import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import * as yup from 'yup';
+import { useFetchForOrderReset, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import DynamicFormSpreadSheet from '@/ui/Dynamic/DynamicFormSpreadSheet';
@@ -12,7 +13,16 @@ import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { CheckBox } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
-import { ORDER_NULL, ORDER_SCHEMA } from '@util/Schema';
+import {
+	handelNumberDefaultValue,
+	NUMBER,
+	NUMBER_DOUBLE_REQUIRED,
+	NUMBER_REQUIRED,
+	ORDER_NULL,
+	ORDER_SCHEMA,
+	STRING,
+	STRING_REQUIRED,
+} from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 import { UUID } from '@/util/Schema/utils';
 
@@ -44,6 +54,8 @@ export default function Index() {
 
 	const [endType, setEndType] = useState('');
 	const [itemType, setItemType] = useState('');
+	const [type, setType] = useState('full');
+	console.log(type);
 	const {
 		register,
 		handleSubmit,
@@ -69,6 +81,41 @@ export default function Index() {
 				then: (schema) => schema.required('Required'),
 				otherwise: (schema) => schema,
 			}),
+
+			order_entry: yup.array().of(
+				yup.object().shape({
+					style: STRING_REQUIRED,
+					color: STRING.when({
+						is: () => type.toLowerCase() === 'slider',
+						then: (schema) => schema,
+						otherwise: (schema) => schema.required('Required'),
+					}),
+					size: NUMBER.when({
+						is: () => type.toLowerCase() === 'slider',
+						then: (schema) =>
+							schema
+								.nullable()
+								.transform((value, originalValue) =>
+									String(originalValue).trim() === ''
+										? 0
+										: value
+								),
+						otherwise: (schema) => schema.required('Required'),
+					}),
+					quantity: NUMBER_REQUIRED,
+					company_price: NUMBER_DOUBLE_REQUIRED.transform(
+						handelNumberDefaultValue
+					).default(0),
+					party_price: NUMBER_DOUBLE_REQUIRED.transform(
+						handelNumberDefaultValue
+					).default(0),
+					bleaching: STRING.when({
+						is: () => type.toLowerCase() === 'slider',
+						then: (schema) => schema,
+						otherwise: (schema) => schema.required('Required'),
+					}),
+				})
+			),
 		},
 		ORDER_NULL
 	);
@@ -79,12 +126,16 @@ export default function Index() {
 			: (document.title = 'Order: Entry');
 	}, []);
 
-	if (isUpdate)
-		useFetchForRhfReset(
+	if (isUpdate) {
+		useFetchForOrderReset(
 			`/zipper/order/details/single-order/by/${order_description_uuid}/UUID`,
 			order_description_uuid,
-			reset
+			reset,
+			setType
 		);
+
+	
+	}
 
 	// order_entry
 	const {
@@ -424,6 +475,7 @@ export default function Index() {
 							is_logo_body: getValues('is_logo_body'),
 							is_logo_puller: getValues('is_logo_puller'),
 						}}
+						setType={setType}
 					/>
 
 					<DynamicFormSpreadSheet
@@ -431,18 +483,22 @@ export default function Index() {
 						fieldArrayName='order_entry'
 						handelAppend={addRow}
 						handleRemove={handleOrderEntryRemove}
-						headerButtons={headerButtons}
+						headerButtons={
+							watch('order_type') === 'full' && headerButtons
+						}
 						columnsDefs={[
 							{
 								header: 'Style',
 								accessorKey: 'style',
 								type: 'text',
+								hidden: false,
 								readOnly: false,
 							},
 							{
 								header: 'Color',
 								accessorKey: 'color',
 								type: 'text',
+								hidden: watch('order_type') === 'slider',
 								readOnly: false,
 							},
 							{
@@ -450,35 +506,41 @@ export default function Index() {
 								accessorKey: 'bleaching',
 								type: 'select',
 								options: bleachingOptions,
+								hidden: watch('order_type') === 'slider',
 								readOnly: false,
 							},
 							{
 								header: 'Size',
 								accessorKey: 'size',
 								type: 'text',
+								hidden: watch('order_type') === 'slider',
 								readOnly: false,
 							},
 							{
 								header: 'Quantity',
 								accessorKey: 'quantity',
 								type: 'text',
+								hidden: false,
 								readOnly: false,
 							},
 							{
 								header: 'Company (USD/DZN)',
 								accessorKey: 'company_price',
 								type: 'text',
+								hidden: false,
 								readOnly: false,
 							},
 							{
 								header: 'Party (USD/DZN)',
 								accessorKey: 'party_price',
 								type: 'text',
+								hidden: false,
 								readOnly: false,
 							},
 
 							{
 								header: 'Actions',
+								hidden: false,
 								type: 'action',
 							},
 						]}

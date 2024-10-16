@@ -509,13 +509,30 @@ export const ORDER_INFO_NULL = {
 };
 
 export const ORDER_SCHEMA = {
+	// * order type
+	order_type: STRING_REQUIRED.default('full'),
+
 	// * item section
 	order_info_uuid: UUID_REQUIRED,
 	item: UUID_REQUIRED,
 	zipper_number: UUID_REQUIRED,
-	end_type: UUID_REQUIRED,
-	lock_type: UUID_REQUIRED,
-	teeth_color: UUID_REQUIRED,
+
+	end_type: UUID.when('order_type', {
+		is: (value) => value === 'full',
+		then: (schema) => schema.required('Required'),
+		otherwise: (schema) => schema,
+	}),
+	lock_type: UUID.when('order_type', {
+		is: (value) => value === 'full',
+		then: (schema) => schema.required('Required'),
+		otherwise: (schema) => schema,
+	}),
+	teeth_type: UUID_FK,
+	teeth_color: UUID.when('order_type', {
+		is: (value) => value === 'full',
+		then: (schema) => schema.required('Required'),
+		otherwise: (schema) => schema,
+	}),
 	special_requirement: JSON_STRING_REQUIRED,
 	description: STRING.nullable(),
 	remarks: STRING.nullable(),
@@ -596,6 +613,7 @@ export const ORDER_SCHEMA = {
 };
 
 export const ORDER_NULL = {
+	order_type: 'full',
 	id: null,
 	order_info_uuid: null,
 	order_description_uuid: null,
@@ -604,6 +622,7 @@ export const ORDER_NULL = {
 	end_type: null,
 	lock_type: null,
 	puller_type: null,
+	teeth_type: null,
 	teeth_color: null,
 	puller_color: null,
 	is_logo_body: false,

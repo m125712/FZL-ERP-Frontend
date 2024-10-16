@@ -1260,4 +1260,7 @@ export const reportQK = {
 	
 	// Lc
 	lc: (url) => [...reportQK.all(), 'lc' + url],
+
+	// Production Report
+	productionReport: () => [...reportQK.all(), 'production-report'],
 };

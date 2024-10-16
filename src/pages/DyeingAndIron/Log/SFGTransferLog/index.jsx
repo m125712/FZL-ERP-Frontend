@@ -1,10 +1,13 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useAccess, useFetchFunc } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
+
 import SFGAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
@@ -50,8 +53,24 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'order_description',
-				header: 'Style / Color / Size',
+				accessorKey: 'style',
+				header: 'Style',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
+				accessorKey: 'color',
+				header: 'Color',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
+				accessorKey: 'size',
+				header: 'size',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>

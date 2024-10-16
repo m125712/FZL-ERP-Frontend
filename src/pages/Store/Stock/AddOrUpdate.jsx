@@ -10,6 +10,7 @@ import { FormField, Input, JoinInputSelect, ReactSelect, Textarea } from '@/ui';
 import nanoid from '@/lib/nanoid';
 import { MATERIAL_NULL, MATERIAL_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
+import { DevTool } from '@hookform/devtools';
 
 export default function Index({
 	modalId = '',
@@ -156,6 +157,7 @@ export default function Index({
 			<div className='mb-4 flex flex-col gap-2 rounded bg-base-200 p-2 md:flex-row'>
 				<Input label='name' {...{ register, errors }} />
 				<Input label='short_name' {...{ register, errors }} />
+				<Input label='average_lead_time' {...{ register, errors }} />
 				<JoinInputSelect
 					//defaultUnitValue='kg'
 					label='threshold'
@@ -168,6 +170,7 @@ export default function Index({
 				<Input label='remarks' {...{ register, errors }} />
 				<Textarea label='description' {...{ register, errors }} />
 			</div>
+			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);
 }

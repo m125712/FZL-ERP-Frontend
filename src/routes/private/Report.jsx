@@ -4,7 +4,7 @@ import PIRegister from '@/pages/Report/PIRegister';
 import PIToBeSubmit from '@/pages/Report/PIToBeSubmit';
 import ZipperProduction from '@/pages/Report/ZipperProductionStatus';
 import ThreadProduction from '@/pages/Report/ThreadProductionStatus';
-
+import ProductionReport from '@/pages/Report/ProductionReport';
 export const ReportRoutes = [
 	{
 		name: 'Report',
@@ -51,6 +51,13 @@ export const ReportRoutes = [
 				page_name: 'report__lc_due',
 				actions: ['read'],
 			},
+			{
+				name: 'Production Report',
+				path: '/report/production-report',
+				element: <ProductionReport />,
+				page_name: 'report__production_report',
+				actions: ['read'],
+			}
 		],
 	},
 ];

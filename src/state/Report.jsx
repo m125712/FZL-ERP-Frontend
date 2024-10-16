@@ -37,3 +37,9 @@ export const useLC = (url) => {
 		url,
 	});
 };
+
+export const useProductionReport = () =>
+	createGlobalState({
+		queryKey: reportQK.productionReport(),
+		url: '/report/production-report-director',
+	});

@@ -41,7 +41,7 @@ export default function Index() {
 				accessorKey: 'threshold',
 				header: 'Threshold',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'average_lead_time',

@@ -204,8 +204,8 @@ export default function Index({
 
 			<Input
 				label='trx_quantity'
-				sub_label={`Max: ${Number(updateMaterialDetails?.stock).toFixed(3)}`}
-				placeholder={`Max: ${Number(updateMaterialDetails?.stock).toFixed(3)}`}
+				sub_label={`Max: ${updateMaterialDetails?.stock}`}
+				placeholder={`Max: ${updateMaterialDetails?.stock}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

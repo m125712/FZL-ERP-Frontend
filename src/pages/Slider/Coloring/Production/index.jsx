@@ -166,7 +166,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'coloring_stock',
@@ -178,7 +178,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 
 			{
@@ -206,7 +206,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'action_add_transaction',
@@ -233,7 +233,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) =>info.getValue(),
 			},
 			{
 				accessorKey: 'trx_weight',
@@ -245,7 +245,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'remarks',

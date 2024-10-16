@@ -54,13 +54,13 @@ export default function Index() {
 				accessorKey: 'batch_quantity',
 				header: 'Batch QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'balance_quantity',
 				header: 'Balance QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'action_add_production',
@@ -81,13 +81,13 @@ export default function Index() {
 				accessorKey: 'coning_production_quantity',
 				header: 'Production QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'coning_carton_quantity',
 				header: 'Carton QTY',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'action_add_transaction',
@@ -108,13 +108,13 @@ export default function Index() {
 				accessorKey: 'transfer_quantity',
 				header: 'Warehouse',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'transfer_carton_quantity',
 				header: 'Warehouse Carton',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 
 			////

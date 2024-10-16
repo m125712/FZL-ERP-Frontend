@@ -191,7 +191,7 @@ export default function Index() {
 					</>
 				),
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'pcs_per_kg',
@@ -203,7 +203,7 @@ export default function Index() {
 					</>
 				),
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(3),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_by_name',

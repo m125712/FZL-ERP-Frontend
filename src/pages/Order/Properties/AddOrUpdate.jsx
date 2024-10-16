@@ -23,7 +23,7 @@ import {
 	useOtherOrderPropertiesByTeethType,
 	useOtherOrderPropertiesByTopStopper,
 	useOtherOrderPropertiesByZipperNumber,
-} from '@/state/other';
+} from '@/state/Other';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';

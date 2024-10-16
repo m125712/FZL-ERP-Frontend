@@ -471,14 +471,14 @@ export default function Index() {
 				header: 'Order QTY',
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'balance_quantity',
 				header: 'Balance',
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'quantity',

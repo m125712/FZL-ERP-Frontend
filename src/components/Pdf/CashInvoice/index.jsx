@@ -1,35 +1,34 @@
 import { ToWords } from 'to-words';
 
-
-
-import { DEFAULT_FONT_SIZE, tableLayoutStyle, xMargin } from '@/components/Pdf/ui';
+import {
+	DEFAULT_FONT_SIZE,
+	tableLayoutStyle,
+	xMargin,
+} from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
-
-
 
 import { DollarToWord, NumToWord } from '@/lib/NumToWord';
 import numToWords from '@/util/NumToWord';
 
-
-
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
-
 const node = [
+	getTable('order_number', 'Order ID'),
+	getTable('style', 'Style'),
 	getTable('pi_item_description', 'Item'),
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
 	//getTable('h_s_code', 'H S,Code'),
 	getTable('quantity', 'Quantity', 'right'),
-	getTable('unit_price', 'Unit Price(BDT)', 'right'),
-	getTable('unit_price_dollar', 'Unit Price(US$)', 'right'),
-	getTable('value', 'Value(BDT)', 'right'),
-	getTable('value_dollar', 'Value(US$)', 'right'),
+	getTable('unit_price', 'Unit Price\n(BDT)', 'right'),
+	getTable('unit_price_dollar', 'Unit Price\n(US$)', 'right'),
+	getTable('value', 'Value\n(BDT)', 'right'),
+	getTable('value_dollar', 'Value\n(US$)', 'right'),
 ];
 
 export default function Index(data) {
-	const headerHeight = 170;
+	const headerHeight = 200;
 	let footerHeight = 50;
 	let { pi_cash_entry } = data;
 	let { pi_cash_entry_thread } = data;
@@ -45,6 +44,10 @@ export default function Index(data) {
 	const TotalUnitPrice = [];
 	const TotalValue = [];
 	const TotalQuantity = [];
+	let style = {};
+	let orderID = {};
+	let threadStyle = {};
+	let threadOrderID = {};
 	let total_unit_price = 0;
 	let total_value = 0;
 	let total_quantity = 0;
@@ -57,6 +60,7 @@ export default function Index(data) {
 	let total_thread_value = 0;
 	let total_thread_quantity = 0;
 	let grand_thread_total_quantity = 0;
+	let is_size_inch = 0;
 
 	pi_cash_entry.forEach((item) => {
 		uniqueItemDescription.add(item.pi_item_description);
@@ -67,14 +71,20 @@ export default function Index(data) {
 	});
 
 	[...uniqueItemDescription].forEach((item) => {
+		style[item] = new Set();
+		orderID[item] = new Set();
 		pi_cash_entry.forEach((item2) => {
 			if (item2.pi_item_description === item) {
+				style[item].add(item2.style);
+				orderID[item].add(item2.order_number);
 				total_unit_price += parseFloat(item2.unit_price);
 				total_value += parseFloat(item2.value);
 				total_quantity += parseFloat(item2.pi_cash_quantity);
+				is_size_inch = item2.is_size_inch;
 			}
 		});
-		TotalUnitPrice.push(total_unit_price);
+
+		TotalUnitPrice.push((total_value / total_quantity) * 12);
 		TotalValue.push(total_value);
 		grand_total_value += total_value;
 		TotalQuantity.push(total_quantity);
@@ -109,9 +119,11 @@ export default function Index(data) {
 	});
 	const order_info_entry = [...uniqueItemDescription].map((item, index) => {
 		return {
+			order_number: [...orderID[item]].join(', '),
+			style: [...style[item]].join(', '),
 			pi_item_description: item,
 			specification: specifications[index],
-			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) cm`,
+			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) ${is_size_inch ? 'in' : 'cm'}`,
 			//h_s_code: '9607,11.00',
 			quantity: TotalQuantity[index] + ' pcs',
 			unit_price:
@@ -125,14 +137,18 @@ export default function Index(data) {
 		};
 	});
 	[...uniqueItemDescriptionThread].forEach((item) => {
+		threadStyle[item] = new Set();
+		threadOrderID[item] = new Set();
 		pi_cash_entry_thread.forEach((item2) => {
 			if (item2.count_length_name === item) {
+				threadStyle[item].add(item2.style);
+				threadOrderID[item].add(item2.order_number);
 				total_thread_unit_price += parseFloat(item2.unit_price);
 				total_thread_value += parseFloat(item2.value);
 				total_thread_quantity += parseFloat(item2.pi_cash_quantity);
 			}
 		});
-		TotalThreadUnitPrice.push(total_thread_unit_price);
+		TotalThreadUnitPrice.push(total_thread_value / total_thread_quantity);
 		TotalThreadValue.push(total_thread_value);
 		grand_total_value += total_thread_value;
 		TotalThreadQuantity.push(total_thread_quantity);
@@ -144,6 +160,8 @@ export default function Index(data) {
 	const thread_order_info_entry = [...uniqueItemDescriptionThread].map(
 		(item, index) => {
 			return {
+				order_number: [...threadOrderID[item]].join(', '),
+				style: [...threadStyle[item]].join(', '),
 				pi_item_description: item,
 				specification: '100% SPUN POLYESTER SEWEING THREAD',
 				size: item.match(/\d+$/)[0] + ' mtr',
@@ -154,7 +172,7 @@ export default function Index(data) {
 						TotalThreadUnitPrice[index] * data?.conversion_rate
 					).toFixed(2) + '/cone',
 				unit_price_dollar:
-					Number(TotalThreadUnitPrice[index]).toFixed(2) + '/mtr',
+					Number(TotalThreadUnitPrice[index]).toFixed(2) + '/cone',
 				value: Number(
 					TotalThreadValue[index] * data?.conversion_rate
 				).toFixed(2),
@@ -188,55 +206,55 @@ export default function Index(data) {
 
 		// * Main Table
 		content: [
-			{
-				table: {
-					widths: ['*'],
-					body: [
-						[
-							{
-								text:
-									'Order Ref No: ' +
-									[
-										...new Set(
-											pi_cash_entry
-												.concat(pi_cash_entry_thread)
-												.map(
-													(entry) =>
-														entry.order_number
-												)
-										),
-									].join(', '),
-								border: [true, true, true, true],
-							},
-						],
-					],
-				},
-			},
-			{
-				table: {
-					widths: ['*'],
-					body: [
-						[
-							{
-								text:
-									'Style: ' +
-									[
-										...new Set(
-											pi_cash_entry
-												.concat(pi_cash_entry_thread)
-												.map((entry) => entry.style)
-										),
-									].join(', '),
-								border: [true, true, true, true],
-							},
-						],
-					],
-				},
-			},
+			// {
+			// 	table: {
+			// 		widths: ['*'],
+			// 		body: [
+			// 			[
+			// 				{
+			// 					text:
+			// 						'Order Ref No: ' +
+			// 						[
+			// 							...new Set(
+			// 								pi_cash_entry
+			// 									.concat(pi_cash_entry_thread)
+			// 									.map(
+			// 										(entry) =>
+			// 											entry.order_number
+			// 									)
+			// 							),
+			// 						].join(', '),
+			// 					border: [true, true, true, true],
+			// 				},
+			// 			],
+			// 		],
+			// 	},
+			// },
+			// {
+			// 	table: {
+			// 		widths: ['*'],
+			// 		body: [
+			// 			[
+			// 				{
+			// 					text:
+			// 						'Style: ' +
+			// 						[
+			// 							...new Set(
+			// 								pi_cash_entry
+			// 									.concat(pi_cash_entry_thread)
+			// 									.map((entry) => entry.style)
+			// 							),
+			// 						].join(', '),
+			// 					border: [true, true, true, true],
+			// 				},
+			// 			],
+			// 		],
+			// 	},
+			// },
 			{
 				table: {
 					headerRows: 1,
-					widths: [90, 90, 60, 40, 46, 46, 46, '*'],
+					widths: [50, 50, 50, 60, 50, 40, 40, 40, 40, 40],
 					body: [
 						// Header
 						TableHeader(node),
@@ -272,8 +290,10 @@ export default function Index(data) {
 								],
 								alignment: 'right',
 								bold: true,
-								colSpan: 5,
+								colSpan: 7,
 							},
+							{},
+							{},
 							{},
 							{},
 							{},

@@ -13,13 +13,15 @@ import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
+	getTable('order_number', 'Order ID'),
+	getTable('style', 'Style'),
 	getTable('pi_item_description', 'Item'),
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
 	getTable('h_s_code', 'H S.Code'),
 	getTable('quantity', 'Quantity', 'right'),
-	getTable('unit_price', 'Unit Price(US$)', 'right'),
-	getTable('value', 'Value(US$)', 'right'),
+	getTable('unit_price', 'Unit Price\n(US$)', 'right'),
+	getTable('value', 'Value\n(US$)', 'right'),
 ];
 
 export default function Index(data) {
@@ -37,6 +39,10 @@ export default function Index(data) {
 
 	const uniqueItemDescription = new Set();
 	const uniqueItemDescriptionThread = new Set();
+	let style = {};
+	let orderID = {};
+	let threadStyle = {};
+	let threadOrderID = {};
 	const TotalUnitPrice = [];
 	const TotalValue = [];
 	const TotalQuantity = [];
@@ -53,6 +59,8 @@ export default function Index(data) {
 	let total_thread_quantity = 0;
 	let grand_thread_total_value = 0;
 	let grand_thread_total_quantity = 0;
+	let count = 0;
+	let is_size_inch = 0;
 
 	const bankPolicy = data?.bank_policy
 		.replace(/var_routing_no/g, `${data?.routing_no}`)
@@ -82,14 +90,24 @@ export default function Index(data) {
 	});
 
 	[...uniqueItemDescription].forEach((item) => {
+		style[item] = new Set();
+		orderID[item] = new Set();
 		pi_cash_entry.forEach((item2) => {
 			if (item2.pi_item_description === item) {
+				style[item].add(item2.style);
+
+				orderID[item].add(item2.order_number);
 				total_unit_price += parseFloat(item2.unit_price);
 				total_value += parseFloat(item2.value);
 				total_quantity += parseFloat(item2.pi_cash_quantity);
+				is_size_inch = item2.is_size_inch;
+				// count++;
 			}
 		});
-		TotalUnitPrice.push(total_unit_price);
+
+		//let avg_unit_price = count > 0 ? total_unit_price / count : 0;
+
+		TotalUnitPrice.push((total_value / total_quantity) * 12);
 		TotalValue.push(total_value);
 		grand_total_value += total_value;
 		TotalQuantity.push(total_quantity);
@@ -97,6 +115,7 @@ export default function Index(data) {
 		total_unit_price = 0;
 		total_value = 0;
 		total_quantity = 0;
+		count = 0;
 	});
 
 	const sizeResults = [...uniqueItemDescription].map((item) => {
@@ -128,24 +147,30 @@ export default function Index(data) {
 
 	const order_info_entry = [...uniqueItemDescription].map((item, index) => {
 		return {
+			order_number: [...orderID[item]].join(', '),
+			style: [...style[item]].join(', '),
 			pi_item_description: item,
 			specification: specifications[index],
-			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) cm`,
+			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) ${is_size_inch ? 'in' : 'cm'}`,
 			h_s_code: '9607.11.00',
 			quantity: TotalQuantity[index] + ' pcs',
-			unit_price: Number(TotalUnitPrice[index]).toFixed(2) + '/pcs',
+			unit_price: Number(TotalUnitPrice[index]).toFixed(2) + '/dzn',
 			value: Number(TotalValue[index]).toFixed(2),
 		};
 	});
 	[...uniqueItemDescriptionThread].forEach((item) => {
+		threadStyle[item] = new Set();
+		threadOrderID[item] = new Set();
 		pi_cash_entry_thread.forEach((item2) => {
 			if (item2.count_length_name === item) {
+				threadStyle[item].add(item2.style);
+				threadOrderID[item].add(item2.order_number);
 				total_thread_unit_price += parseFloat(item2.unit_price);
 				total_thread_value += parseFloat(item2.value);
 				total_thread_quantity += parseFloat(item2.pi_cash_quantity);
 			}
 		});
-		TotalThreadUnitPrice.push(total_thread_unit_price);
+		TotalThreadUnitPrice.push(total_thread_value / total_thread_quantity);
 		TotalThreadValue.push(total_thread_value);
 		grand_total_value += total_thread_value;
 		TotalThreadQuantity.push(total_thread_quantity);
@@ -157,9 +182,11 @@ export default function Index(data) {
 	const thread_order_info_entry = [...uniqueItemDescriptionThread].map(
 		(item, index) => {
 			return {
-				pi_item_description: item,
-				specification: '100% SPUN POLYESTER SEWEING THREAD',
-				size: item.match(/\d+$/)[0] + ' mtr',
+				order_number: [...threadOrderID[item]].join(', '),
+				style: [...threadStyle[item]].join(', '),
+				pi_item_description: '100% SPUN POLYESTER SEWEING THREAD',
+				specification: '',
+				size: item.split( ' ' )[0]+'\n ('+item.match(/\d+$/)[0] + ' mtr'+')',
 				h_s_code: '5402.62.00',
 				quantity: TotalThreadQuantity[index] + ' cone',
 				unit_price: TotalThreadUnitPrice[index] + '/cone',
@@ -193,55 +220,55 @@ export default function Index(data) {
 
 		// * Main Table
 		content: [
-			{
-				table: {
-					widths: ['*'],
-					body: [
-						[
-							{
-								text:
-									'Order Ref No: ' +
-									[
-										...new Set(
-											pi_cash_entry
-												.concat(pi_cash_entry_thread)
-												.map(
-													(entry) =>
-														entry.order_number
-												)
-										),
-									].join(', '),
-								border: [true, true, true, true],
-							},
-						],
-					],
-				},
-			},
-			{
-				table: {
-					widths: ['*'],
-					body: [
-						[
-							{
-								text:
-									'Style: ' +
-									[
-										...new Set(
-											pi_cash_entry
-												.concat(pi_cash_entry_thread)
-												.map((entry) => entry.style)
-										),
-									].join(', '),
-								border: [true, true, true, true],
-							},
-						],
-					],
-				},
-			},
+			// {
+			// 	table: {
+			// 		widths: ['*'],
+			// 		body: [
+			// 			[
+			// 				{
+			// 					text:
+			// 						'Order Ref No: ' +
+			// 						[
+			// 							...new Set(
+			// 								pi_cash_entry
+			// 									.concat(pi_cash_entry_thread)
+			// 									.map(
+			// 										(entry) =>
+			// 											entry.order_number
+			// 									)
+			// 							),
+			// 						].join(', '),
+			// 					border: [true, true, true, true],
+			// 				},
+			// 			],
+			// 		],
+			// 	},
+			// },
+			// {
+			// 	table: {
+			// 		widths: ['*'],
+			// 		body: [
+			// 			[
+			// 				{
+			// 					text:
+			// 						'Style: ' +
+			// 						[
+			// 							...new Set(
+			// 								pi_cash_entry
+			// 									.concat(pi_cash_entry_thread)
+			// 									.map((entry) => entry.style)
+			// 							),
+			// 						].join(', '),
+			// 					border: [true, true, true, true],
+			// 				},
+			// 			],
+			// 		],
+			// 	},
+			// },
 			{
 				table: {
 					headerRows: 1,
-					widths: [100, 100, 70, 50, 50, 50, '*'],
+					widths: [45, 65, 50, 65,65, 50, 40, 45, 40],
 					body: [
 						// Header
 						TableHeader(node),
@@ -277,8 +304,10 @@ export default function Index(data) {
 								],
 								alignment: 'right',
 								bold: true,
-								colSpan: 5,
+								colSpan: 7,
 							},
+							{},
+							{},
 							{},
 							{},
 							{},

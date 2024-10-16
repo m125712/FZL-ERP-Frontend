@@ -82,31 +82,31 @@ const getColumn = ({ item_name, show_price, bleaching }) => {
 			accessorKey: 'size',
 			header: 'Size',
 			enableColumnFilter: true,
-			cell: (info) => Number(info.getValue()).toFixed(2),
+			cell: (info) => info.getValue(),
 		}),
 		createColumn({
 			accessorKey: 'quantity',
 			header: 'Quantity',
 			enableColumnFilter: false,
-			cell: (info) => Number(info.getValue()).toFixed(0),
+			cell: (info) => info.getValue(),
 		}),
 		createColumn({
 			accessorKey: 'total_pi_quantity',
 			header: 'Total PI QTY',
 			enableColumnFilter: false,
-			cell: (info) => Number(info.getValue()).toFixed(0),
+			cell: (info) => info.getValue(),
 		}),
 		createColumn({
 			accessorKey: 'total_reject_quantity',
 			header: 'Total Reject QTY',
 			enableColumnFilter: false,
-			cell: (info) => Number(info.getValue()).toFixed(0),
+			cell: (info) => info.getValue(),
 		}),
 		createColumn({
 			accessorKey: 'total_short_quantity',
 			header: 'Total Short QTY',
 			enableColumnFilter: false,
-			cell: (info) => Number(info.getValue()).toFixed(0),
+			cell: (info) => info.getValue(),
 		}),
 		createColumn({
 			accessorKey: 'bleaching',
@@ -122,7 +122,7 @@ const getColumn = ({ item_name, show_price, bleaching }) => {
 				</span>
 			),
 			enableColumnFilter: false,
-			cell: (info) => Number(info.getValue()).toFixed(3),
+			cell: (info) => info.getValue(),
 		}),
 		// createTapRequiredColumn({ measurement }),
 	];
@@ -131,7 +131,7 @@ const getColumn = ({ item_name, show_price, bleaching }) => {
 			accessorKey: 'coloring_prod',
 			header: 'Slider',
 			enableColumnFilter: false,
-			cell: (info) => Number(info.getValue()).toFixed(0),
+			cell: (info) => info.getValue(),
 		}),
 		createStockProdColumn({
 			accessorKey: 'finishing',
@@ -141,7 +141,7 @@ const getColumn = ({ item_name, show_price, bleaching }) => {
 			accessorKey: 'total_delivery_quantity',
 			header: 'Total Delivery QTY',
 			enableColumnFilter: false,
-			cell: (info) => Number(info.getValue()).toFixed(0),
+			cell: (info) => info.getValue(),
 		}),
 		
 		createColumn({

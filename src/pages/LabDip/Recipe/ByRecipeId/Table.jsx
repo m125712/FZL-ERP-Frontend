@@ -18,7 +18,7 @@ export default function Index({ recipe_entry }) {
 				accessorKey: 'quantity',
 				header: 'Quantity (Solution %)',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'remarks',

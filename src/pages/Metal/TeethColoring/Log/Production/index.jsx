@@ -77,13 +77,13 @@ export default function Index() {
 				accessorKey: 'production_quantity',
 				header: 'Production Quantity',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'wastage',
 				header: 'Wastage',
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_by_name',

@@ -43,13 +43,13 @@ export default function ThreadTable({ pi_cash_entry_thread }) {
 			},
 			{
 				accessorKey: 'pi_cash_quantity',
-				header: 'QTY (PCS)',
+				header: 'QTY (Cone)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'unit_price',
-				header: 'Unit Price ($)',
+				accessorKey: 'unit_price_pcs',
+				header: 'Unit Price(Cone) ($)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

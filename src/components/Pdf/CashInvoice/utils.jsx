@@ -1,9 +1,12 @@
+import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
 import { useFetch } from '@/hooks';
 
+
+
 import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../ui';
 import { company, getEmptyColumn } from '../utils';
-import { FZL_LOGO } from '@/assets/img/base64';
+
 
 const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 
@@ -18,7 +21,9 @@ export const getPageHeader = (data) => {
 	data?.pi_cash_entry?.forEach((item) => {
 		buyer.add(item.buyer_name);
 	});
-
+	data?.pi_cash_entry_thread?.forEach((item) => {
+		buyer.add(item.buyer_name);
+	})
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
 		widths: [70, '*', 70, '*'],

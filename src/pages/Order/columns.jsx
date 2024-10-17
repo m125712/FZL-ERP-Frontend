@@ -345,7 +345,7 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 			},
 			{
 				accessorKey: 'party_name',
-				header: 'party',
+				header: 'Party',
 				enableColumnFilter: true,
 				cell: (info) => info.getValue(),
 			},
@@ -374,6 +374,12 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 						/>
 					);
 				},
+			},
+			{
+				accessorKey: 'order_type',
+				header: 'Type',
+				enableColumnFilter: true,
+				cell: (info) => info.getValue().charAt(0).toUpperCase() +  info.getValue().slice(1),
 			},
 			{
 				accessorKey: 'production_percentage',

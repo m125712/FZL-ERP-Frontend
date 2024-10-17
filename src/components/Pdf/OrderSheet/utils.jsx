@@ -172,6 +172,11 @@ export const TableHeader = ({ entry, uniqueSizes, column, srinfo }) => {
 		is_logo_body,
 		is_logo_puller,
 
+		// unite size
+		is_cm,
+		is_meter,
+		is_inch,
+
 		description,
 	} = entry;
 
@@ -196,7 +201,6 @@ export const TableHeader = ({ entry, uniqueSizes, column, srinfo }) => {
 		bottom_stopper_name,
 	];
 
-	console.log(column);
 	return [
 		[
 			{
@@ -217,51 +221,6 @@ export const TableHeader = ({ entry, uniqueSizes, column, srinfo }) => {
 			},
 			...Array.from({ length: uniqueSizes.length + 1 }, () => ''),
 		],
-		// [
-		// 	{
-		// 		text: 'Description',
-		// 		style: 'tableHeader',
-		// 		alignment: 'Center',
-		// 	},
-		// 	{
-		// 		colSpan: uniqueSizes.length + 2,
-		// 		text: [
-		// 			item_short_name ? item_short_name : '',
-		// 			' / ',
-		// 			zipper_number_short_name ? zipper_number_short_name : '',
-		// 			' / ',
-		// 			end_type_short_name ? end_type_short_name : '',
-		// 			' / ',
-		// 			lock_type_short_name ? lock_type_short_name : '',
-		// 			' / ',
-		// 			teeth_color_short_name ? teeth_color_short_name : '',
-		// 			' / ',
-		// 			puller_type_short_name ? puller_type_short_name : '',
-		// 			' / ',
-		// 			slider_color_short_name ? slider_color_short_name : '',
-		// 			' / ',
-		// 			logo_type_name
-		// 				? logo_type_name +
-		// 					`(${is_logo_body ? 'B' : ''})` +
-		// 					`(${is_logo_puller ? 'P' : ''})`
-		// 				: '',
-		// 			' / ',
-		// 			top_stopper_short_name ? top_stopper_short_name : '',
-		// 			' / ',
-		// 			bottom_stopper_short_name
-		// 				? bottom_stopper_short_name
-		// 				: '',
-		// 			' / ',
-		// 			srinfo && srinfo.length > 0
-		// 				? `(${srinfo?.join(', ')})`
-		// 				: '',
-		// 			' / ',
-		// 			description ? `(${description})` : '',
-		// 		],
-		// 		style: 'tableHeader',
-		// 	},
-		// 	...Array.from({ length: uniqueSizes.length + 1 }, () => ''),
-		// ],
 		[
 			{
 				text: 'Style',
@@ -272,7 +231,15 @@ export const TableHeader = ({ entry, uniqueSizes, column, srinfo }) => {
 				style: 'tableHeader',
 			},
 			...uniqueSizes.map((size) => ({
-				text: size ? size : '-',
+				text: size
+					? is_cm
+						? size.toFixed(2)
+						: is_inch
+							? Number(size * 2.54).toFixed(2)
+							: is_meter
+								? Number(size * 100).toFixed(2)
+								: '-'
+					: '-',
 				style: 'tableHeader',
 				alignment: 'right',
 			})),

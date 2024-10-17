@@ -121,7 +121,7 @@ export const CheckBox = ({
 	register,
 	errors,
 	type = 'checkbox-accent',
-	isTitleNeeded= 'true',
+	isTitleNeeded= true,
 	text = 'text-secondary',
 	className,
 	...props
@@ -143,7 +143,7 @@ export const CheckBox = ({
 			/>
 			<span
 				className={cn('w-full text-sm font-semibold capitalize', text)}>
-				{isTitleNeeded === 'true'? props.title
+				{isTitleNeeded === true? props.title
 					? capitalize(props.title)
 					: capitalize(props.label): ''}
 			</span>

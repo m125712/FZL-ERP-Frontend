@@ -15,6 +15,9 @@ const Index = ({ initial_orders }) => {
 					...entry,
 					item_description: order?.item_description,
 					item_name: order?.item_name,
+					is_cm: order?.is_cm,
+					is_inch: order?.is_inch,
+					is_meter: order?.is_meter,
 				});
 			});
 		});
@@ -55,6 +58,7 @@ const Index = ({ initial_orders }) => {
 			<Suspense>
 				{initial_orders?.map((order, idx) => (
 					<SingleInformation
+						key={idx}
 						order={order}
 						idx={idx}
 						hasInitialOrder={hasInitialOrder}

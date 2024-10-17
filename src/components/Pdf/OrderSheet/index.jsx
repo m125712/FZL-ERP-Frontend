@@ -295,7 +295,7 @@ export default function OrderSheetPdf(order_sheet) {
 											};
 										}),
 										{
-											text: chunkTotal,
+											text: chunkTotal.toFixed(2),
 											style: 'tableFooter',
 											alignment: 'right',
 										},
@@ -392,7 +392,7 @@ export default function OrderSheetPdf(order_sheet) {
 								alignment: 'right',
 							},
 							{
-								text: grandTotal(order_entry),
+								text: grandTotal(order_entry).toFixed(2),
 								style: 'tableFooter',
 								alignment: 'Center',
 							},

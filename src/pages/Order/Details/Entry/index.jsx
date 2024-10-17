@@ -194,12 +194,8 @@ export default function Index() {
 		return () => subscription.unsubscribe();
 	}, [watch]);
 
-	// * Holds the currently selected checkbox.
-	const [selectedUnit, setSelectedUnit] = useState(watch('is_cm') && 'is_cm');
-
 	// * Updates the selectedUnit state and ensures only one checkbox is active.
 	const handleCheckboxChange = (unit) => {
-		setSelectedUnit(unit);
 		setValue('is_cm', unit === 'is_cm');
 		setValue('is_inch', unit === 'is_inch');
 		setValue('is_meter', unit === 'is_meter');
@@ -212,9 +208,7 @@ export default function Index() {
 					text='text-secondary-content'
 					label='is_cm'
 					title='Cm'
-					isTitleNeeded='false'
-					hidden={true}
-					checked={selectedUnit === 'is_cm'}
+					checked={watch('is_cm')}
 					onChange={() => handleCheckboxChange('is_cm')}
 					{...{ register, errors }}
 				/>
@@ -222,18 +216,20 @@ export default function Index() {
 					text='text-secondary-content'
 					label='is_inch'
 					title='Inch'
-					// checked={selectedUnit === 'is_inch'}
-					// onChange={() => handleCheckboxChange('is_inch')}
+					checked={watch('is_inch')}
+					onChange={() => handleCheckboxChange('is_inch')}
 					{...{ register, errors }}
 				/>
-				{/* <CheckBox
+				<CheckBox
 					text='text-secondary-content'
 					label='is_meter'
 					title='Meter'
-					checked={selectedUnit === 'is_meter'}
+					isTitleNeeded= {watch('order_type') === 'tape' ? true : false}
+					hidden={watch('order_type') === 'tape' ? false : true}
+					checked={watch('is_meter')}
 					onChange={() => handleCheckboxChange('is_meter')}
 					{...{ register, errors }}
-				/> */}
+				/>
 			</div>
 
 			<label className='text-sm'>Bleach All</label>

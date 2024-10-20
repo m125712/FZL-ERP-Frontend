@@ -42,9 +42,9 @@ export default function Index() {
 
 				cell: (info) => {
 					const { order_number } = info.row.original;
+					const { is_thread_order } = info.row.original;
 					const { order_info_uuid } = info.row.original;
-					const { thread_order_info_uuid } = info.row.original;
-					if (order_info_uuid) {
+					if (!is_thread_order) {
 						return (
 							<LinkWithCopy
 								title={info.getValue()}
@@ -52,11 +52,11 @@ export default function Index() {
 								uri='/order/details'
 							/>
 						);
-					} else if (thread_order_info_uuid) {
+					} else {
 						return (
 							<LinkWithCopy
 								uri='/thread/order-info'
-								id={thread_order_info_uuid}
+								id={order_info_uuid}
 								title={info.getValue()}
 							/>
 						);

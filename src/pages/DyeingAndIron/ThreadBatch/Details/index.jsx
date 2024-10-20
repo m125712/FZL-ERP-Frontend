@@ -47,24 +47,24 @@ export default function Index() {
 	// ! FOR TESTING
 	const [data, setData] = useState('');
 
-	useEffect(() => {
-		if (batch && batch?.batch_entry) {
-			BatchSheetPdf(batch, shade_recipes_entries, programs)?.getDataUrl(
-				(dataUrl) => {
-					setData(dataUrl);
-				}
-			);
-		}
-	}, [batch, programs, shade_recipes_entries]);
 	// useEffect(() => {
 	// 	if (batch && batch?.batch_entry) {
-	// 		TravelingCard(batch, shade_recipes_entries, programs)?.getDataUrl(
+	// 		BatchSheetPdf(batch, shade_recipes_entries, programs)?.getDataUrl(
 	// 			(dataUrl) => {
 	// 				setData(dataUrl);
 	// 			}
 	// 		);
 	// 	}
 	// }, [batch, programs, shade_recipes_entries]);
+	useEffect(() => {
+		if (batch && batch?.batch_entry) {
+			TravelingCard(batch, shade_recipes_entries, programs)?.getDataUrl(
+				(dataUrl) => {
+					setData(dataUrl);
+				}
+			);
+		}
+	}, [batch, programs, shade_recipes_entries]);
 	// ! FOR TESTING
 
 	useEffect(() => {

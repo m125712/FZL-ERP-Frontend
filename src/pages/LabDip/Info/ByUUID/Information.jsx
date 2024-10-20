@@ -28,14 +28,14 @@ export default function Information({ info }) {
 						title='factory_name'
 						value={info?.factory_name}
 					/>
-					<TitleValue
+					{/* <TitleValue
 						title='lab status'
 						value={
 							Number(info?.lab_status) === 0
 								? 'Pending'
 								: 'Approved'
 						}
-					/>
+					/> */}
 
 					<TitleValue
 						title='Created By'

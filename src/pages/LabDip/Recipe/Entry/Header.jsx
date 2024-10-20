@@ -65,7 +65,7 @@ export default function Header({
 								}
 							/>
 						</div>
-						<div className='rounded-md border border-secondary/30 bg-secondary px-1'>
+						{/* <div className='rounded-md border border-secondary/30 bg-secondary px-1'>
 							<CheckBox
 								text='text-secondary-content'
 								label='status'
@@ -75,7 +75,7 @@ export default function Header({
 								{...{ register, errors }}
 								onChange={(e) => setIsStatus(e.target.checked)}
 							/>
-						</div>
+						</div> */}
 					</div>
 				}>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>

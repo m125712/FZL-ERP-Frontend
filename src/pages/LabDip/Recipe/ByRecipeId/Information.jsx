@@ -34,10 +34,10 @@ export default function Information({ recipe }) {
 					<TitleValue title='Created At' value={recipe?.created_at} />
 					<TitleValue title='Updated At' value={recipe?.updated_at} />
 
-					<TitleValue
+					{/* <TitleValue
 						title='Status'
 						value={Number(recipe?.status) === 0 ? 'No' : 'Yes'}
-					/>
+					/> */}
 					<TitleValue
 						title='Approved'
 						value={

@@ -31,6 +31,9 @@ export default function Index() {
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
+	console.log({
+		data,
+	});
 	return (
 		<div className='space-y-8 py-4'>
 			<iframe
@@ -38,8 +41,14 @@ export default function Index() {
 				className='h-[40rem] w-full rounded-md border-none'
 			/>
 			<Information pi={data} />
-			<ZipperTable pi={data?.pi_cash_entry} />
-			<ThreadTable pi_cash_entry_thread={data?.pi_cash_entry_thread} />
+			{data?.pi_cash_entry.length > 0 && (
+				<ZipperTable pi={data?.pi_cash_entry} />
+			)}
+			{data?.pi_cash_entry_thread.length > 0 && (
+				<ThreadTable
+					pi_cash_entry_thread={data?.pi_cash_entry_thread}
+				/>
+			)}
 		</div>
 	);
 }

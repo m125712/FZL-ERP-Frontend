@@ -48,7 +48,7 @@ export default function Index({
 				coning_carton_quantity: NUMBER_REQUIRED.moreThan(
 					0,
 					'More than 0'
-				).max(MAX_CARTON, 'Beyond max value'),
+				),
 				remarks: STRING.nullable(),
 			},
 			{

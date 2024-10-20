@@ -1,6 +1,7 @@
-import { ShowLocalToast } from '@/components/Toast';
 import { Clipboard } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
+
+import { ShowLocalToast } from '@/components/Toast';
 
 const CopyButton = ({ id }) => {
 	const handleOnClick = () => {
@@ -27,9 +28,7 @@ const BaseBody = ({ value, to, showCopyButton = true }) => {
 		<button className='flex items-center gap-2 text-left font-semibold underline underline-offset-2 transition-colors duration-300 hover:text-info hover:decoration-info'>
 			{showCopyButton && <CopyButton id={value} />}
 
-			<Link to={to} target='_blank'>
-				{value}
-			</Link>
+			<Link to={to}>{value}</Link>
 		</button>
 	);
 };

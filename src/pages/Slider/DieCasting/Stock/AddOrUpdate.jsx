@@ -1,6 +1,7 @@
 import { AddModal } from '@/components/Modal';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
+import { useAuth } from '@/context/auth';
 import { useOtherOrderPropertiesByTypeName } from '@/state/Other';
 import { useSliderDieCastingStock } from '@/state/Slider';
 import { CheckBox, FormField, Input, Radio, ReactSelect, Textarea } from '@/ui';
@@ -30,6 +31,7 @@ export default function Index({
 		context,
 	} = useRHF(SLIDER_DIE_CASTING_STOCK_SCHEMA, SLIDER_DIE_CASTING_STOCK_NULL);
 
+	const { user } = useAuth();
 	// Other Order Properties
 	const { data: item } = useOtherOrderPropertiesByTypeName('item');
 	const { data: zipper_number } =
@@ -40,8 +42,8 @@ export default function Index({
 	const { data: logo_type } = useOtherOrderPropertiesByTypeName('logo_type');
 	const { data: slider_body_shape } =
 		useOtherOrderPropertiesByTypeName('slider_body_shape');
-	const { data: puller_link } =
-		useOtherOrderPropertiesByTypeName('puller_link');
+	const { data: slider_link } =
+		useOtherOrderPropertiesByTypeName('slider_link');
 	const { data: stopper_type } =
 		useOtherOrderPropertiesByTypeName('stopper_type');
 
@@ -100,6 +102,7 @@ export default function Index({
 			is_two_way_pin: data.is_two_way_pin === true ? 1 : 0,
 			is_logo_body: data.is_logo_body === true ? 1 : 0,
 			is_logo_puller: data.is_logo_puller === true ? 1 : 0,
+			created_by: user?.uuid,
 			created_at: GetDateTime(),
 			uuid: nanoid(),
 		};
@@ -234,21 +237,21 @@ export default function Index({
 					/>
 				</FormField>
 				<FormField
-					label='puller_link'
-					title='Puller Link'
+					label='slider_link'
+					title='Slider Link'
 					errors={errors}>
 					<Controller
-						name={'puller_link'}
+						name={'slider_link'}
 						control={control}
 						render={({ field: { onChange } }) => {
 							return (
 								<ReactSelect
-									placeholder='Select Puller Link'
-									options={puller_link}
-									value={puller_link?.filter(
+									placeholder='Select Slider Link'
+									options={slider_link}
+									value={slider_link?.filter(
 										(item) =>
 											item.value ==
-											getValues('puller_link')
+											getValues('slider_link')
 									)}
 									onChange={(e) => onChange(e.value)}
 									// isDisabled={order_info_id !== undefined}

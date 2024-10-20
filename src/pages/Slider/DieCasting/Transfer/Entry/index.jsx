@@ -247,6 +247,7 @@ const Index = () => {
 
 	const allowedTypes = ['body', 'cap', 'puller', 'link'];
 
+	console.log(getValues());
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}
@@ -430,7 +431,7 @@ const Index = () => {
 								</td>
 								{/* PROVIDED QTY */}
 								<td className={cn('w-24', rowClass)}>
-									<Input
+									{/* <Input
 										label={`stocks[${index}].assigned_weight`}
 										is_title_needed='false'
 										register={register}
@@ -439,7 +440,8 @@ const Index = () => {
 												?.assigned_weight
 										}
 										disabled={true}
-									/>
+									/> */}
+									{watch(`stocks[${index}].assigned_weight`)}
 								</td>
 								{/* remarks */}
 								<td className={cn('w-24', rowClass)}>

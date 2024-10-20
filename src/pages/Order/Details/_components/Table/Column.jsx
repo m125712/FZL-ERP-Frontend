@@ -79,6 +79,15 @@ const getColumn = ({ item_name, show_price, bleaching, sizes }) => {
 			cell: (info) => info.getValue(),
 		}),
 		createColumn({
+			accessorKey: 'size',
+			header: `${sizes.is_inch ? 'Size (Inch)' : 'Size (Meter)'}`,
+			enableColumnFilter: true,
+			hidden: !(sizes.is_inch || sizes.is_meter),
+			cell: (info) => {
+				return info.getValue();
+			},
+		}),
+		createColumn({
 			accessorFn: (row) => {
 				return `${
 					sizes.is_inch
@@ -92,15 +101,7 @@ const getColumn = ({ item_name, show_price, bleaching, sizes }) => {
 			header: `Size (Cm)`,
 			enableColumnFilter: true,
 		}),
-		createColumn({
-			accessorKey: 'size',
-			header: `${sizes.is_inch ? 'Size (Inch)' : 'Size (Meter)'}`,
-			enableColumnFilter: true,
-			hidden: !(sizes.is_inch || sizes.is_meter),
-			cell: (info) => {
-				return info.getValue();
-			},
-		}),
+
 		createColumn({
 			accessorKey: 'quantity',
 			header: 'Quantity',

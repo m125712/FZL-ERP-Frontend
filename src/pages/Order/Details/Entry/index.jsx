@@ -16,6 +16,7 @@ import nanoid from '@/lib/nanoid';
 import {
 	handelNumberDefaultValue,
 	NUMBER,
+	NUMBER_DOUBLE,
 	NUMBER_DOUBLE_REQUIRED,
 	NUMBER_REQUIRED,
 	ORDER_NULL,
@@ -90,7 +91,7 @@ export default function Index() {
 						then: (schema) => schema,
 						otherwise: (schema) => schema.required('Required'),
 					}),
-					size: NUMBER.when({
+					size: NUMBER_DOUBLE.when({
 						is: () => type.toLowerCase() === 'slider',
 						then: (schema) =>
 							schema
@@ -102,7 +103,14 @@ export default function Index() {
 								),
 						otherwise: (schema) => schema.required('Required'),
 					}),
-					quantity: NUMBER_REQUIRED,
+					quantity: NUMBER.when({
+						is: () => type.toLowerCase() === 'tape',
+						then: (schema) =>
+							schema.transform((value, originalValue) =>
+								String(originalValue).trim() === '' ? 1 : value
+							),
+						otherwise: (schema) => schema.required('Required'),
+					}),
 					company_price: NUMBER_DOUBLE_REQUIRED.transform(
 						handelNumberDefaultValue
 					).default(0),
@@ -133,8 +141,6 @@ export default function Index() {
 			reset,
 			setType
 		);
-
-	
 	}
 
 	// order_entry
@@ -188,13 +194,40 @@ export default function Index() {
 		return () => subscription.unsubscribe();
 	}, [watch]);
 
+	// * Updates the selectedUnit state and ensures only one checkbox is active.
+	const handleCheckboxChange = (unit) => {
+		setValue('is_cm', unit === 'is_cm');
+		setValue('is_inch', unit === 'is_inch');
+		setValue('is_meter', unit === 'is_meter');
+	};
+
 	const headerButtons = [
 		<div className='flex items-center gap-2'>
-			<div className='rounded-md bg-secondary px-1'>
+			<div className='flex rounded-md bg-secondary px-1'>
+				<CheckBox
+					text='text-secondary-content'
+					label='is_cm'
+					title='Cm'
+					checked={watch('is_cm')}
+					onChange={() => handleCheckboxChange('is_cm')}
+					{...{ register, errors }}
+				/>
 				<CheckBox
 					text='text-secondary-content'
 					label='is_inch'
 					title='Inch'
+					checked={watch('is_inch')}
+					onChange={() => handleCheckboxChange('is_inch')}
+					{...{ register, errors }}
+				/>
+				<CheckBox
+					text='text-secondary-content'
+					label='is_meter'
+					title='Meter'
+					isTitleNeeded= {watch('order_type') === 'tape' ? true : false}
+					hidden={watch('order_type') === 'tape' ? false : true}
+					checked={watch('is_meter')}
+					onChange={() => handleCheckboxChange('is_meter')}
 					{...{ register, errors }}
 				/>
 			</div>
@@ -206,6 +239,17 @@ export default function Index() {
 			/>
 		</div>,
 	];
+
+	// * if all size is false then default is cm is true
+	// useEffect(() => {
+	// 	if (
+	// 		watch('is_cm') !== true &&
+	// 		watch('is_inch') !== true &&
+	// 		watch('is_meter') !== true
+	// 	) {
+	// 		setValue('is_cm', true);
+	// 	}
+	// }, [watch('is_cm'), watch('is_inch'), watch('is_meter')]);
 
 	const handleOrderEntryRemove = (index) => {
 		if (getValues(`order_entry[${index}].order_entry_uuid`) !== undefined) {
@@ -249,6 +293,8 @@ export default function Index() {
 				is_logo_body: data?.is_logo_body ? 1 : 0,
 				is_logo_puller: data?.is_logo_puller ? 1 : 0,
 				is_inch: data?.is_inch ? 1 : 0,
+				is_meter: data?.is_meter ? 1 : 0,
+				is_cm: data?.is_cm ? 1 : 0,
 				hand: data?.hand,
 				updated_at: GetDateTime(),
 			};
@@ -337,6 +383,8 @@ export default function Index() {
 			is_logo_body: data?.is_logo_body ? 1 : 0,
 			is_logo_puller: data?.is_logo_puller ? 1 : 0,
 			is_inch: data?.is_inch ? 1 : 0,
+			is_meter: data?.is_meter ? 1 : 0,
+			is_cm: data?.is_cm ? 1 : 0,
 			hand: data?.hand,
 			status: 0,
 			special_requirement,
@@ -484,7 +532,7 @@ export default function Index() {
 						handelAppend={addRow}
 						handleRemove={handleOrderEntryRemove}
 						headerButtons={
-							watch('order_type') === 'full' && headerButtons
+							!(watch('order_type') === 'slider') && headerButtons
 						}
 						columnsDefs={[
 							{
@@ -520,7 +568,7 @@ export default function Index() {
 								header: 'Quantity',
 								accessorKey: 'quantity',
 								type: 'text',
-								hidden: false,
+								hidden: watch('order_type') === 'tape',
 								readOnly: false,
 							},
 							{

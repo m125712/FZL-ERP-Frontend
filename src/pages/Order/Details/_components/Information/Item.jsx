@@ -63,6 +63,8 @@ export default function ItemDescription({ order_description, className }) {
 			hand_name,
 			description,
 			is_inch,
+			is_meter,
+			is_cm,
 			remarks,
 
 			// slider
@@ -134,7 +136,7 @@ export default function ItemDescription({ order_description, className }) {
 			},
 			{
 				label: 'Size Unit',
-				value: is_inch? 'Inch' : '--',
+				value: is_inch? 'Inch' : is_meter? 'Meter' : is_cm? 'Cm' : '--',
 			},
 			{
 				label: 'description',

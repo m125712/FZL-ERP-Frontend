@@ -49,7 +49,7 @@ const createStatusColumn = ({ accessorKey, header }) =>
 		},
 	});
 
-const getColumn = ({ item_name, show_price, bleaching }) => {
+const getColumn = ({ item_name, show_price, bleaching, sizes }) => {
 	// default columns
 	const DefaultStartColumn = [
 		createColumn({
@@ -82,7 +82,17 @@ const getColumn = ({ item_name, show_price, bleaching }) => {
 			accessorKey: 'size',
 			header: 'Size',
 			enableColumnFilter: true,
-			cell: (info) => info.getValue(),
+			cell: (info) => {
+				const { is_cm, is_inch, is_meter } = sizes;
+
+				return is_cm
+					? info.getValue()
+					: is_inch
+						? Number(info.getValue() * 2.54).toFixed(2)
+						: is_meter
+							? Number(info.getValue() * 100).toFixed(2)
+							: info.getValue();
+			},
 		}),
 		createColumn({
 			accessorKey: 'quantity',
@@ -143,7 +153,7 @@ const getColumn = ({ item_name, show_price, bleaching }) => {
 			enableColumnFilter: false,
 			cell: (info) => info.getValue(),
 		}),
-		
+
 		createColumn({
 			accessorKey: 'company_price',
 			header: (

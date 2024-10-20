@@ -344,8 +344,16 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				),
 			},
 			{
+				accessorKey: 'is_sample',
+				header: 'Sample',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-sm' value={info.getValue()} />
+				),
+			},
+			{
 				accessorKey: 'party_name',
-				header: 'party',
+				header: 'Party',
 				enableColumnFilter: true,
 				cell: (info) => info.getValue(),
 			},
@@ -374,6 +382,21 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 						/>
 					);
 				},
+			},
+			{
+				accessorKey: 'order_type',
+				header: 'Type',
+				enableColumnFilter: true,
+				cell: (info) =>
+					info.getValue().charAt(0).toUpperCase() +
+					info.getValue().slice(1),
+			},
+			{
+				accessorFn: (row) =>
+					`${row.is_cm ? 'Cm' : row.is_inch ? 'Inch' : row.is_meter ? 'Meter' : '--'}`,
+				id: 'kg',
+				header: 'Size Unit',
+				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'production_percentage',
@@ -408,16 +431,6 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 			{
 				accessorKey: 'is_swatch_approved',
 				header: 'Status',
-				enableColumnFilter: false,
-				cell: (info) => {
-					return (
-						<StatusButton size='btn-sm' value={info.getValue()} />
-					);
-				},
-			},
-			{
-				accessorKey: 'is_inch',
-				header: 'Inch',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return (

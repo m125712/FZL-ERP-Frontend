@@ -5,7 +5,7 @@ const TableBody = ({ rows, extraClass = '' }) => {
 	return rows?.map(({ id, getVisibleCells }) => (
 		<tr
 			key={id}
-			className='cursor-pointer text-base transition-colors duration-300 ease-in hover:bg-base-200/40 focus:bg-base-200/40'>
+			className='cursor-pointer text-black transition-colors duration-300 ease-in hover:bg-base-200/40 focus:bg-base-200/40'>
 			{getVisibleCells().map(
 				({ id, getContext, column: { columnDef } }) => {
 					return (

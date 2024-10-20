@@ -90,7 +90,16 @@ const getColumn = ({ show_price }) => {
 			accessorKey: 'size',
 			header: 'Size',
 			enableColumnFilter: true,
-			cell: (info) => info.getValue(),
+			cell: (info) => {
+				const { is_cm, is_inch, is_meter } = info.row.original;
+				return is_cm
+					? info.getValue()
+					: is_inch
+						? Number(info.getValue() * 2.54).toFixed(2)
+						: is_meter
+							? Number(info.getValue() * 100).toFixed(2)
+							: info.getValue();
+			},
 		}),
 		createColumn({
 			accessorKey: 'quantity',

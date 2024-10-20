@@ -11,6 +11,9 @@ export default function Index({
 	stopper_type_name,
 	zipper_number_name,
 	order_entry,
+	is_cm,
+	is_inch,
+	is_meter,
 	sliderQuantity,
 	bleaching,
 }) {
@@ -25,13 +28,14 @@ export default function Index({
 				zipper_number_name,
 				show_price: haveAccess?.includes('show_price'),
 				bleaching: bleaching,
+				sizes: { is_cm, is_inch, is_meter },
 			}),
 		[order_entry]
 	);
 
 	return (
 		<ReactTable title='Details' data={order_entry} columns={columns}>
-			<tr className='text-sm bg-slate-200'>
+			<tr className='bg-slate-200 text-sm'>
 				<td colSpan={5} className='text-right font-bold'>
 					Total Quantity:
 				</td>

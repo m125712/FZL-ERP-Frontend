@@ -539,10 +539,22 @@ export const ORDER_SCHEMA = {
 
 	// * slider section
 	// puller
-	puller_type: UUID_REQUIRED,
-	puller_color: UUID_REQUIRED,
+	puller_type: UUID.when('order_type', {
+		is: (value) => value === 'tape',
+		then: (schema) => schema,
+		otherwise: (schema) => schema.required('Required'),
+	}),
+	puller_color: UUID.when('order_type', {
+		is: (value) => value === 'tape',
+		then: (schema) => schema,
+		otherwise: (schema) => schema.required('Required'),
+	}),
 
-	coloring_type: UUID_REQUIRED,
+	coloring_type: UUID.when('order_type', {
+		is: (value) => value === 'tape',
+		then: (schema) => schema,
+		otherwise: (schema) => schema.required('Required'),
+	}),
 
 	// slider
 	slider: UUID.nullable(),
@@ -594,6 +606,8 @@ export const ORDER_SCHEMA = {
 
 	// size type
 	is_inch: BOOLEAN_DEFAULT_VALUE(false),
+	is_meter: BOOLEAN_DEFAULT_VALUE(false),
+	is_cm: BOOLEAN_DEFAULT_VALUE(true),
 
 	order_entry: yup.array().of(
 		yup.object().shape({
@@ -633,6 +647,8 @@ export const ORDER_NULL = {
 	slider_starting_section: '---',
 	garments_wash: '',
 	is_inch: false,
+	is_meter: false,
+	is_cm: true,
 	order_entry: [
 		{
 			order_description_uuid: null,

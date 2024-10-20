@@ -176,7 +176,7 @@ function Table({
 					</table>
 				</div>
 			</Suspense>
-			{!showTitleOnly && showPagination && table.getPageCount() > 1 && (
+			{showPagination && table.getPageCount() > 1 && (
 				<Suspense>
 					<TablePagination {...table} />
 				</Suspense>

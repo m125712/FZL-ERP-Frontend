@@ -60,7 +60,7 @@ export default function Index(data) {
 	let grand_thread_total_value = 0;
 	let grand_thread_total_quantity = 0;
 	let count = 0;
-	let is_size_inch = 0;
+	let is_inch = 0;
 
 	const bankPolicy = data?.bank_policy
 		.replace(/var_routing_no/g, `${data?.routing_no}`)
@@ -100,7 +100,7 @@ export default function Index(data) {
 				total_unit_price += parseFloat(item2.unit_price);
 				total_value += parseFloat(item2.value);
 				total_quantity += parseFloat(item2.pi_cash_quantity);
-				is_size_inch = item2.is_size_inch;
+				is_inch = item2.is_inch;
 				// count++;
 			}
 		});
@@ -151,7 +151,7 @@ export default function Index(data) {
 			style: [...style[item]].join(', '),
 			pi_item_description: item,
 			specification: specifications[index],
-			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) ${is_size_inch ? 'in' : 'cm'}`,
+			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) ${is_inch ? 'inch' : 'cm'}`,
 			h_s_code: '9607.11.00',
 			quantity: TotalQuantity[index] + ' pcs',
 			unit_price: Number(TotalUnitPrice[index]).toFixed(2) + '/dzn',
@@ -186,7 +186,12 @@ export default function Index(data) {
 				style: [...threadStyle[item]].join(', '),
 				pi_item_description: '100% SPUN POLYESTER SEWEING THREAD',
 				specification: '',
-				size: item.split( ' ' )[0]+'\n ('+item.match(/\d+$/)[0] + ' mtr'+')',
+				size:
+					item.split(' ')[0] +
+					'\n (' +
+					item.match(/\d+$/)[0] +
+					' mtr' +
+					')',
 				h_s_code: '5402.62.00',
 				quantity: TotalThreadQuantity[index] + ' cone',
 				unit_price: TotalThreadUnitPrice[index] + '/cone',
@@ -268,7 +273,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [45, 65, 50, 65,65, 50, 40, 45, 40],
+					widths: [45, 65, 50, 65, 65, 50, 40, 45, 40],
 					body: [
 						// Header
 						TableHeader(node),

@@ -60,7 +60,7 @@ export default function Index(data) {
 	let total_thread_value = 0;
 	let total_thread_quantity = 0;
 	let grand_thread_total_quantity = 0;
-	let is_size_inch = 0;
+	let is_inch = 0;
 
 	pi_cash_entry.forEach((item) => {
 		uniqueItemDescription.add(item.pi_item_description);
@@ -80,7 +80,7 @@ export default function Index(data) {
 				total_unit_price += parseFloat(item2.unit_price);
 				total_value += parseFloat(item2.value);
 				total_quantity += parseFloat(item2.pi_cash_quantity);
-				is_size_inch = item2.is_size_inch;
+				is_inch = item2.is_inch;
 			}
 		});
 
@@ -123,7 +123,7 @@ export default function Index(data) {
 			style: [...style[item]].join(', '),
 			pi_item_description: item,
 			specification: specifications[index],
-			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) ${is_size_inch ? 'in' : 'cm'}`,
+			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) ${is_inch ? 'inch' : 'cm'}`,
 			//h_s_code: '9607,11.00',
 			quantity: TotalQuantity[index] + ' pcs',
 			unit_price:

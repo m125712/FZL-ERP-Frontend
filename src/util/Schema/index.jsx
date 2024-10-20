@@ -1951,11 +1951,11 @@ export const THREAD_COUNT_LENGTH_NULL = {
 // Thread Machine
 export const THREAD_MACHINE_SCHEMA = {
 	name: NAME_REQUIRED,
-	max_capacity: NUMBER_REQUIRED.min(
+	max_capacity: NUMBER_DOUBLE_REQUIRED.min(
 		yup.ref('min_capacity'),
 		'Less than Min Capacity'
 	),
-	min_capacity: NUMBER_REQUIRED.max(
+	min_capacity: NUMBER_DOUBLE_REQUIRED.max(
 		yup.ref('max_capacity'),
 		'Beyond Max Capacity'
 	),

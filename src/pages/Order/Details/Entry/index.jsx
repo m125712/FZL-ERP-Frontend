@@ -204,23 +204,24 @@ export default function Index() {
 	const headerButtons = [
 		<div className='flex items-center gap-2'>
 			<div className='flex rounded-md bg-secondary px-1'>
-				<CheckBox
+				{/* TODO: need to fix this */}
+				{/* <CheckBox
 					text='text-secondary-content'
 					label='is_cm'
 					title='Cm'
 					checked={watch('is_cm')}
 					onChange={() => handleCheckboxChange('is_cm')}
 					{...{ register, errors }}
-				/>
+				/> */}
 				<CheckBox
 					text='text-secondary-content'
 					label='is_inch'
 					title='Inch'
-					checked={watch('is_inch')}
-					onChange={() => handleCheckboxChange('is_inch')}
+					// checked={watch('is_inch')}
+					// onChange={() => handleCheckboxChange('is_inch')}
 					{...{ register, errors }}
 				/>
-				<CheckBox
+				{/* <CheckBox
 					text='text-secondary-content'
 					label='is_meter'
 					title='Meter'
@@ -229,7 +230,7 @@ export default function Index() {
 					checked={watch('is_meter')}
 					onChange={() => handleCheckboxChange('is_meter')}
 					{...{ register, errors }}
-				/>
+				/> */}
 			</div>
 
 			<label className='text-sm'>Bleach All</label>

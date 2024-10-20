@@ -86,6 +86,37 @@ const getColumn = ({ show_price }) => {
 			enableColumnFilter: true,
 			cell: (info) => info.getValue(),
 		}),
+
+		createColumn({
+			accessorFn: (row) => {
+				return `${
+					row.is_inch
+						? Number(row.size * 2.54).toFixed(2)
+						: row.is_meter
+							? Number(row.size * 100).toFixed(2)
+							: Number(row.size).toFixed(2)
+				}`;
+			},
+			id: 'sizes',
+			header: `Size (Cm)`,
+			enableColumnFilter: true,
+		}),
+
+		createColumn({
+			accessorFn: (row) => {
+				return `${
+					row.is_inch
+						? Number(row.size).toFixed(2) + ' (Inch)'
+						: row.is_meter
+							? Number(row.size).toFixed(2) + ' (Meter)'
+							: '---'
+				}`;
+			},
+			id: 'sizess',
+			header: `Size (Inch/Meeter)`,
+			enableColumnFilter: true,
+		}),
+
 		createColumn({
 			accessorKey: 'size',
 			header: 'Size',
@@ -101,6 +132,7 @@ const getColumn = ({ show_price }) => {
 							: info.getValue();
 			},
 		}),
+
 		createColumn({
 			accessorKey: 'quantity',
 			header: 'Quantity',

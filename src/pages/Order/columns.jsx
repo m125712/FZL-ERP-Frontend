@@ -393,7 +393,7 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 			},
 			{
 				accessorFn: (row) =>
-					`${row.is_cm ? 'Cm' : row.is_inch ? 'Inch' : row.is_meter ? 'Meter' : '--'}`,
+					`${ row.is_inch ? 'Inch' : row.is_meter ? 'Meter' : 'Cm'}`,
 				id: 'kg',
 				header: 'Size Unit',
 				enableColumnFilter: false,

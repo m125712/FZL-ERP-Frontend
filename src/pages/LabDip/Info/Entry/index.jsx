@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useCommonCoilRMLogByUUID } from '@/state/Common';
 import { useLabDipInfo } from '@/state/LabDip';
 import { useAuth } from '@context/auth';
@@ -237,7 +237,10 @@ export default function Index() {
 	});
 
 	const { value: rec_uuid } = useFetch(
-		`/other/lab-dip/recipe/value/label?info_uuid=false`
+		isUpdate
+			? `/other/lab-dip/recipe/value/label?info_uuid=${info_uuid}`
+			: `/other/lab-dip/recipe/value/label?info_uuid=false`,
+		[info_uuid]
 	);
 
 	const rowClass =

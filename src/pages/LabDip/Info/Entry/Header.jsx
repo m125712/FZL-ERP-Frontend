@@ -51,38 +51,63 @@ export default function Header({
 				}>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					{/* Order info ID */}
-					<FormField
-						label='order_info_uuid'
-						title='order info'
-						errors={errors}>
-						<Controller
-							name={'order_info_uuid'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select order info uuid'
-										options={order_info_uuid}
-										value={order_info_uuid?.find(
-											(item) =>
-												item.value ==
-													getValues(
-														'order_info_uuid'
-													) ||
-												item.value ==
+					{isUpdate && getValues('thread_order_info_uuid') ? (
+						<FormField
+							label='thread_order_info_uuid'
+							title='order info'
+							errors={errors}>
+							<Controller
+								name={'thread_order_info_uuid'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select order info uuid'
+											options={order_info_uuid}
+											value={order_info_uuid?.find(
+												(item) =>
+													item.value ==
 													getValues(
 														'thread_order_info_uuid'
 													)
-										)}
-										onChange={(e) => onChange(e.value)}
-										isDisabled={
-											order_info_uuid == undefined
-										}
-									/>
-								);
-							}}
-						/>
-					</FormField>
+											)}
+											onChange={(e) => onChange(e.value)}
+											isDisabled={
+												order_info_uuid == undefined
+											}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+					) : (
+						<FormField
+							label='order_info_uuid'
+							title='order info'
+							errors={errors}>
+							<Controller
+								name={'order_info_uuid'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select order info uuid'
+											options={order_info_uuid}
+											value={order_info_uuid?.find(
+												(item) =>
+													item.value ==
+													getValues('order_info_uuid')
+											)}
+											onChange={(e) => onChange(e.value)}
+											isDisabled={
+												order_info_uuid == undefined
+											}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+					)}
 					<Input label={`name`} {...{ register, errors }} />
 				</div>
 

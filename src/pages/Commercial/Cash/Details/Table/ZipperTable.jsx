@@ -1,13 +1,7 @@
 import { useMemo } from 'react';
 
-
-
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, LinkWithCopy } from '@/ui';
-
-
-
-
 
 export default function ZipperTable({ pi }) {
 	const columns = useMemo(
@@ -54,11 +48,15 @@ export default function ZipperTable({ pi }) {
 			},
 			{
 				accessorKey: 'size',
-				header: 'Size (CM/INCH)',
+				header: 'Size',
 				enableColumnFilter: false,
-				cell: (info) =>
-					info.getValue() +
-					` ${info.row.original.size_inch ? 'in' : 'cm'}`,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_inch',
+				header: 'Unit',
+				enableColumnFilter: false,
+				cell: (info) => (info.getValue() === 1 ? 'INCH' : 'CM'),
 			},
 			{
 				accessorKey: 'pi_cash_quantity',

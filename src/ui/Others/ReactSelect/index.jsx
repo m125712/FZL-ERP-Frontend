@@ -25,6 +25,12 @@ const ReactSelect = ({ className, ...props }) => {
 			hideSelectedOptions
 			maxMenuHeight={150}
 			placeholder={props.placeholder}
+			options={[
+				{
+					options: 'Item-1',
+					label: 'Item-1',
+				},
+			]}
 			{...props}
 		/>
 	);

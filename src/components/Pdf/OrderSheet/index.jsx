@@ -63,7 +63,11 @@ export default function OrderSheetPdf(order_sheet) {
 		for (let i = 0; i < array.length; i += chunkSize) {
 			let chunk = array.slice(i, i + chunkSize);
 
-			if (i > 0 && chunk.length < chunkSize)
+			// * here we are checking if the length of the chunk is less than the chunk size
+			if (
+				// i > 0 && // * 1st chunk length might be less than the chunk size so this condition is not required
+				chunk.length < chunkSize
+			)
 				chunk = [...chunk, ...Array(chunkSize - chunk.length).fill(0)];
 
 			chunks.push(chunk);
@@ -204,11 +208,12 @@ export default function OrderSheetPdf(order_sheet) {
 															chunk.length
 													);
 
-												// * check if the chunk is not the 1st chunk and if the sliced quantities length is less than the chunk size
+												// * check if the chunk is not the 1st chunk (this might not be required because the 1st chunk length might be less than the chunk size)
+												// * and if the sliced quantities length is less than the chunk size
 												if (
-													index > 0 &&
+													// index > 0 &&   // * 1st chunk length might be less than the chunk size so this condition is not required
 													slicedQuantities.length <
-														chunkSize
+													chunkSize
 												) {
 													const missingItems =
 														chunkSize -
@@ -295,7 +300,7 @@ export default function OrderSheetPdf(order_sheet) {
 											};
 										}),
 										{
-											text: chunkTotal.toFixed(2),
+											text: chunkTotal,
 											style: 'tableFooter',
 											alignment: 'right',
 										},
@@ -392,7 +397,7 @@ export default function OrderSheetPdf(order_sheet) {
 								alignment: 'right',
 							},
 							{
-								text: grandTotal(order_entry).toFixed(2),
+								text: grandTotal(order_entry),
 								style: 'tableFooter',
 								alignment: 'Center',
 							},

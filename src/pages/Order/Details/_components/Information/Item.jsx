@@ -188,7 +188,7 @@ export default function ItemDescription({ order_description, className }) {
 			},
 			{
 				label: 'Required',
-				value: `${sliderQuantity.toFixed(2)} pcs`,
+				value: `${sliderQuantity} pcs`,
 			},
 			{
 				label: 'Stock',

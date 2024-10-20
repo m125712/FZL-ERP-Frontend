@@ -39,7 +39,7 @@ export default function Index({
 				<td colSpan={5} className='text-right font-bold'>
 					Total Quantity:
 				</td>
-				<td className='px-3 py-1'>{sliderQuantity.Quantity.toFixed(2)}</td>
+				<td className='px-3 py-1'>{sliderQuantity.Quantity}</td>
 				<td className='px-3 py-1'>{sliderQuantity.piQuantity}</td>
 				<td className='px-3 py-1'>{sliderQuantity.rejectQuantity}</td>
 				<td className='px-3 py-1'>{sliderQuantity.shortQuantity}</td>

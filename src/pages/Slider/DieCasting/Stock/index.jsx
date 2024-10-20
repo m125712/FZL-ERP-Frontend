@@ -90,7 +90,7 @@ export default function Index() {
 				accessorKey: 'weight',
 				header: 'Die casting Weight',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => info.getValue().toFixed(3),
 			},
 			{
 				accessorKey: 'quantity_in_sa',
@@ -102,15 +102,15 @@ export default function Index() {
 				accessorKey: 'quantity_in_sa_weight',
 				header: 'Assembly Stock Weight',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => info.getValue().toFixed(3),
 			},
 
-			{
-				accessorKey: 'pcs_per_kg',
-				header: 'Pcs/Kg',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'pcs_per_kg',
+			// 	header: 'Pcs/Kg',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue().toFixed(3),
+			// },
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',

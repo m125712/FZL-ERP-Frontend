@@ -2444,13 +2444,25 @@ export const UPDATE_DYEING_TRANSFER_NULL = {
 // *Slider/Die Casting --> (STOCK)*//
 export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 	name: STRING_REQUIRED, //
-	item: STRING_REQUIRED, //
+	item: STRING.when('type', {
+		is: 'body',
+		then: (schema) => schema.required('Required'),
+		otherwise: (schema) => schema.nullable(),
+	}),
 	zipper_number: STRING_REQUIRED, //
 	end_type: STRING.nullable(), //
-	puller_type: STRING.nullable(), //
+	puller_type: STRING.when('type', {
+		is: 'puller',
+		then: (schema) => schema.required('Required'),
+		otherwise: (schema) => schema.nullable(),
+	}), //
 	logo_type: STRING.nullable(), //
 	slider_body_shape: STRING.nullable(), //
-	puller_link: STRING.nullable(), //
+	slider_link: STRING.when('type',{
+		is: 'link',
+		then: (schema) => schema.required('Required'),
+		otherwise: (schema) => schema.nullable(),
+	}), 
 	stopper_type: STRING.nullable(), //
 	type: STRING_REQUIRED,
 	// quantity: NUMBER_REQUIRED, //
@@ -2502,7 +2514,7 @@ export const SLIDER_DIE_CASTING_STOCK_NULL = {
 	puller_type: null,
 	logo_type: null,
 	slider_body_shape: null,
-	puller_link: null,
+	slider_link: null,
 	stopper_type: null,
 	// quantity: null,
 	// weight: null,

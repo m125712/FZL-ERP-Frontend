@@ -99,7 +99,7 @@ export default function Index() {
 			{
 				accessorKey: 'coloring_type_name',
 				header: 'Coloring Type',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => info.getValue(),
 			},
 			{

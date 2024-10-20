@@ -416,6 +416,16 @@ const Index = () => {
 											errors?.[`stocks`]?.[index]
 												?.assigned_quantity
 										}
+										onChange={(e) => {
+											setValue(
+												`stocks[${index}].assigned_weight`,
+												(
+													(Number(item.weight) /
+														Number(item.quantity)) *
+													Number(e.target.value)
+												).toFixed(4)
+											);
+										}}
 									/>
 								</td>
 								{/* PROVIDED QTY */}
@@ -428,6 +438,7 @@ const Index = () => {
 											errors?.[`stocks`]?.[index]
 												?.assigned_weight
 										}
+										disabled={true}
 									/>
 								</td>
 								{/* remarks */}

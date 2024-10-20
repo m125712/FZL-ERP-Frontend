@@ -87,20 +87,34 @@ const getColumn = ({ show_price }) => {
 			cell: (info) => info.getValue(),
 		}),
 		createColumn({
-			accessorKey: 'size',
-			header: 'Size',
-			enableColumnFilter: true,
-			cell: (info) => {
-				const { is_cm, is_inch, is_meter } = info.row.original;
-				return is_cm
-					? info.getValue()
-					: is_inch
-						? Number(info.getValue() * 2.54).toFixed(2)
-						: is_meter
-							? Number(info.getValue() * 100).toFixed(2)
-							: info.getValue();
+			accessorFn: (row) => {
+				return `${
+					row.is_inch
+						? Number(row.size).toFixed(2)
+						: row.is_meter
+							? Number(row.size).toFixed(2)
+							: '---'
+				}`;
 			},
+			id: 'sizess',
+			header: `Size (Inch)`,
+			enableColumnFilter: true,
 		}),
+		createColumn({
+			accessorFn: (row) => {
+				return `${
+					row.is_inch
+						? Number(row.size * 2.54).toFixed(2)
+						: row.is_meter
+							? Number(row.size * 100).toFixed(2)
+							: Number(row.size).toFixed(2)
+				}`;
+			},
+			id: 'sizes',
+			header: `Size (Cm)`,
+			enableColumnFilter: true,
+		}),
+
 		createColumn({
 			accessorKey: 'quantity',
 			header: 'Quantity',

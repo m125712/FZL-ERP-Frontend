@@ -58,220 +58,226 @@ const DynamicFormSpreadSheet = (
 		remove: () => {},
 	}
 ) => {
-	const columnLabels = columnsDefs.filter((column) => column.hidden === false).map((column) => {
-		return column.header || column.accessorKey;
-	});
+	const columnLabels = columnsDefs
+		.filter((column) => column.hidden !== true)
+		.map((column) => {
+			return column.header || column.accessorKey;
+		});
 
 	const tableData = fields.map((field, fieldIndex) => {
-		const data = columnsDefs.filter((column) => column.hidden === false).map((column) => {
-			switch (column.type) {
-				case 'text':
-					return {
-						value: watch(
-							`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
-						),
-						DataEditor: ({ cell, onChange }) => {
-							return (
-								<input
-									autoFocus
-									className='w-full px-2 py-2 focus:outline-none'
-									onChange={(e) => {
-										onChange(e.target.value);
-										update(fieldIndex, {
-											...field,
-											[column.accessorKey]:
-												e.target.value,
-										});
-										clearErrors(
-											`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
-										);
-									}}
-									{...register(
-										`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
-									)}
-								/>
-							);
-						},
-
-						DataViewer: ({ cell }) => {
-							return (
-								<div className='flex flex-col space-y-1 p-2 text-sm'>
-									{cell.value}
-									{errors?.[fieldArrayName]?.[fieldIndex]?.[
-										`${column.accessorKey}`
-									]?.message && (
-										<span className='text-xs text-red-500'>
-											{
-												errors?.[fieldArrayName]?.[
-													fieldIndex
-												]?.[`${column.accessorKey}`]
-													?.message
-											}
-										</span>
-									)}
-								</div>
-							);
-						},
-					};
-
-				case 'select':
-					return {
-						value: watch(
-							`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
-						),
-						// DataEditor: ({ cell, onChange }) => {
-						// 	return (
-						// 		<ReactSelect
-						// 			placeholder='Select Material'
-						// 			options={column.options}
-						// 			value={column.options?.find(
-						// 				(inItem) =>
-						// 					inItem.value ==
-						// 					getValues(
-						// 						`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
-						// 					)
-						// 			)}
-						// 			onChange={(e) => {
-						// 				onChange(e.target.value);
-						// 				update(fieldIndex, {
-						// 					...field,
-						// 					[column.accessorKey]:
-						// 						e.target.value,
-						// 				});
-						// 				clearErrors(
-						// 					`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
-						// 				);
-						// 			}}
-						// 			menuPortalTarget={document.body}
-						// 		/>
-						// 	);
-						// },
-						DataEditor: ({ cell, onChange }) => {
-							return (
-								<select
-									autoFocus
-									aria-placeholder='Select'
-									className='w-full px-2 py-2 focus:outline-none'
-									onChange={(e) => {
-										onChange(e.target.value);
-										update(fieldIndex, {
-											...field,
-											[column.accessorKey]:
-												e.target.value,
-										});
-										clearErrors(
-											`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
-										);
-									}}
-									{...register(
-										`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
-									)}>
-									{column?.options?.map((option) => (
-										<option
-											key={option?.value}
-											value={option?.value}>
-											{option?.label}
-										</option>
-									))}
-								</select>
-							);
-						},
-
-						DataViewer: ({ cell }) => {
-							return (
-								<div className='flex flex-col space-y-1 p-2'>
-									<div className='jus flex items-center justify-between'>
-										<span>
-											{
-												column.options.find(
-													(option) =>
-														option.value ===
-														watch(
-															`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
-														)
-												)?.label
-											}
-										</span>
-										<ChevronDown className='size-4' />
-									</div>
-
-									{errors?.[fieldArrayName]?.[fieldIndex]?.[
-										`${column.accessorKey}`
-									]?.message && (
-										<span className='text-xs text-red-500'>
-											{
-												errors?.[fieldArrayName]?.[
-													fieldIndex
-												]?.[`${column.accessorKey}`]
-													?.message
-											}
-										</span>
-									)}
-								</div>
-							);
-						},
-					};
-
-				case 'action':
-					return {
-						value: null,
-						readOnly: true,
-						className: '!text-black',
-						DataViewer: ({ cell }) => {
-							return (
-								<div className='relative z-50 flex pl-1'>
-									<button
-										type='button'
-										className='btn btn-square btn-ghost btn-sm'
-										onClick={() => {
-											const columnsDefsKeys =
-												columnsDefs.map(
-													(column) =>
-														column.accessorKey
-												);
-
-											const newRow = getValues(
-												`${fieldArrayName}.${fieldIndex}`
+		const data = columnsDefs
+			.filter((column) => column.hidden !== true)
+			.map((column) => {
+				switch (column.type) {
+					case 'text':
+						return {
+							value: watch(
+								`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
+							),
+							DataEditor: ({ cell, onChange }) => {
+								return (
+									<input
+										autoFocus
+										className='w-full px-2 py-2 focus:outline-none'
+										onChange={(e) => {
+											onChange(e.target.value);
+											update(fieldIndex, {
+												...field,
+												[column.accessorKey]:
+													e.target.value,
+											});
+											clearErrors(
+												`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
 											);
-											const newRowKeys =
-												Object.keys(newRow);
+										}}
+										{...register(
+											`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
+										)}
+									/>
+								);
+							},
 
-											newRowKeys.forEach((key) => {
-												if (
-													!columnsDefsKeys.includes(
-														key
-													)
-												) {
-													delete newRow[key];
+							DataViewer: ({ cell }) => {
+								return (
+									<div className='flex flex-col space-y-1 p-2 text-sm'>
+										{cell.value}
+										{errors?.[fieldArrayName]?.[
+											fieldIndex
+										]?.[`${column.accessorKey}`]
+											?.message && (
+											<span className='text-xs text-red-500'>
+												{
+													errors?.[fieldArrayName]?.[
+														fieldIndex
+													]?.[`${column.accessorKey}`]
+														?.message
 												}
-											});
+											</span>
+										)}
+									</div>
+								);
+							},
+						};
 
-											append({
-												...newRow,
+					case 'select':
+						return {
+							value: watch(
+								`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
+							),
+							// DataEditor: ({ cell, onChange }) => {
+							// 	return (
+							// 		<ReactSelect
+							// 			placeholder='Select Material'
+							// 			options={column.options}
+							// 			value={column.options?.find(
+							// 				(inItem) =>
+							// 					inItem.value ==
+							// 					getValues(
+							// 						`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
+							// 					)
+							// 			)}
+							// 			onChange={(e) => {
+							// 				onChange(e.target.value);
+							// 				update(fieldIndex, {
+							// 					...field,
+							// 					[column.accessorKey]:
+							// 						e.target.value,
+							// 				});
+							// 				clearErrors(
+							// 					`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
+							// 				);
+							// 			}}
+							// 			menuPortalTarget={document.body}
+							// 		/>
+							// 	);
+							// },
+							DataEditor: ({ cell, onChange }) => {
+								return (
+									<select
+										autoFocus
+										aria-placeholder='Select'
+										className='w-full px-2 py-2 focus:outline-none'
+										onChange={(e) => {
+											onChange(e.target.value);
+											update(fieldIndex, {
+												...field,
+												[column.accessorKey]:
+													e.target.value,
 											});
-										}}>
-										<Copy className='size-5' />
-									</button>
-									<button
-										type='button'
-										className='btn btn-square btn-sm border-none bg-transparent text-error'
-										onClick={() => {
-											handleRemove(fieldIndex);
-										}}>
-										<Trash2 className='size-5' />
-									</button>
-								</div>
-							);
-						},
-					};
-				default:
-					return {
-						value: watch(
-							`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
-						),
-					};
-			}
-		});
+											clearErrors(
+												`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
+											);
+										}}
+										{...register(
+											`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
+										)}>
+										{column?.options?.map((option) => (
+											<option
+												key={option?.value}
+												value={option?.value}>
+												{option?.label}
+											</option>
+										))}
+									</select>
+								);
+							},
+
+							DataViewer: ({ cell }) => {
+								return (
+									<div className='flex flex-col space-y-1 p-2'>
+										<div className='jus flex items-center justify-between'>
+											<span>
+												{
+													column.options.find(
+														(option) =>
+															option.value ===
+															watch(
+																`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
+															)
+													)?.label
+												}
+											</span>
+											<ChevronDown className='size-4' />
+										</div>
+
+										{errors?.[fieldArrayName]?.[
+											fieldIndex
+										]?.[`${column.accessorKey}`]
+											?.message && (
+											<span className='text-xs text-red-500'>
+												{
+													errors?.[fieldArrayName]?.[
+														fieldIndex
+													]?.[`${column.accessorKey}`]
+														?.message
+												}
+											</span>
+										)}
+									</div>
+								);
+							},
+						};
+
+					case 'action':
+						return {
+							value: null,
+							readOnly: true,
+							className: '!text-black',
+							DataViewer: ({ cell }) => {
+								return (
+									<div className='relative z-50 flex pl-1'>
+										<button
+											type='button'
+											className='btn btn-square btn-ghost btn-sm'
+											onClick={() => {
+												const columnsDefsKeys =
+													columnsDefs.map(
+														(column) =>
+															column.accessorKey
+													);
+
+												const newRow = getValues(
+													`${fieldArrayName}.${fieldIndex}`
+												);
+												const newRowKeys =
+													Object.keys(newRow);
+
+												newRowKeys.forEach((key) => {
+													if (
+														!columnsDefsKeys.includes(
+															key
+														)
+													) {
+														delete newRow[key];
+													}
+												});
+
+												append({
+													...newRow,
+												});
+											}}>
+											<Copy className='size-5' />
+										</button>
+										<button
+											type='button'
+											className='btn btn-square btn-sm border-none bg-transparent text-error'
+											onClick={() => {
+												handleRemove(fieldIndex);
+											}}>
+											<Trash2 className='size-5' />
+										</button>
+									</div>
+								);
+							},
+						};
+					default:
+						return {
+							value: watch(
+								`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
+							),
+						};
+				}
+			});
 
 		return data;
 	});

@@ -106,9 +106,9 @@ const getColumn = ({ show_price }) => {
 			accessorFn: (row) => {
 				return `${
 					row.is_inch
-						? Number(row.size).toFixed(2) + ' (Inch)'
+						? Number(row.size).toFixed(2)
 						: row.is_meter
-							? Number(row.size).toFixed(2) + ' (Meter)'
+							? Number(row.size).toFixed(2)
 							: '---'
 				}`;
 			},

@@ -103,7 +103,7 @@ export default function Index() {
 								),
 						otherwise: (schema) => schema.required('Required'),
 					}),
-					quantity: NUMBER_DOUBLE.when({
+					quantity: NUMBER.when({
 						is: () => type.toLowerCase() === 'tape',
 						then: (schema) =>
 							schema.transform((value, originalValue) =>

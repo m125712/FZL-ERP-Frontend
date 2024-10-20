@@ -344,6 +344,14 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				),
 			},
 			{
+				accessorKey: 'is_sample',
+				header: 'Sample',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-sm' value={info.getValue()} />
+				),
+			},
+			{
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: true,

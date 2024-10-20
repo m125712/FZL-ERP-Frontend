@@ -63,7 +63,7 @@ export const getPageHeader = (order_info) => {
 						fontSize: DEFAULT_FONT_SIZE + 4,
 						bold: true,
 					},
-					`O/N: ${order_number}${order_info?.is_sample ? '(S)' : ''}\n`,
+					`O/N: ${order_number}\n`,
 					`Date: ${order_info?.created_at ? format(new Date(order_info?.created_at), 'dd-MM-yyyy') : ''}\n`,
 					`PI No.: ${order_info?.pi_numbers ? order_info?.pi_numbers.join(', ') : '---'}\n`,
 				],
@@ -232,13 +232,13 @@ export const TableHeader = ({ entry, uniqueSizes, column, srinfo }) => {
 			},
 			...uniqueSizes.map((size) => ({
 				text: size
-					? is_cm
-						? size.toFixed(2)
-						: is_inch
-							? Number(size * 2.54).toFixed(2)
-							: is_meter
-								? Number(size * 100).toFixed(2)
-								: '-'
+					? is_inch
+						? Number(size * 2.54).toFixed(2)
+						: is_meter
+							? Number(size * 100).toFixed(2)
+							: is_cm
+								? size.toFixed(2)
+								: size.toFixed(2)
 					: '-',
 				style: 'tableHeader',
 				alignment: 'right',

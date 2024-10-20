@@ -1,4 +1,5 @@
 import daisyui from 'daisyui';
+import tailwindAnimate from 'tailwindcss-animate';
 
 import { colors } from './src/config/tailwind';
 
@@ -99,7 +100,7 @@ export default {
 		},
 	},
 
-	plugins: [daisyui, require('tailwindcss-animate')],
+	plugins: [daisyui, tailwindAnimate],
 	daisyui: {
 		themes: [
 			{

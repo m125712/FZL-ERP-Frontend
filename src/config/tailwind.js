@@ -1,5 +1,5 @@
 const WHITE = '#FFFFFF';
-const BLACK = '0a0a0a';
+const BLACK = '#0a0a0a';
 const BACKGROUND = '#fbfcfd';
 const FOREGROUND = '#222831';
 

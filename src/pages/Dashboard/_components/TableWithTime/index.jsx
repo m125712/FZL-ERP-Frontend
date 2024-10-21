@@ -1,8 +1,7 @@
-import { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { addDays, format } from 'date-fns';
 import { useFetch } from '@/hooks';
 
-import Table from '@/components/Table';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 
 const daysMap = {
@@ -14,27 +13,48 @@ const daysMap = {
 
 export function TableWithTime(props) {
 	const [time, setTime] = useState('yesterday');
+	const [dateRange, setDateRange] = useState({ from: '', to: '' });
 
-	let to = format(addDays(new Date(), -1), 'yyyy-MM-dd');
-	let from = format(addDays(new Date(), -daysMap[time] || 1), 'yyyy-MM-dd');
+	useEffect(() => {
+		const to = format(addDays(new Date(), -1), 'yyyy-MM-dd');
+		const from = format(
+			addDays(new Date(), -(daysMap[time] || 1)),
+			'yyyy-MM-dd'
+		);
+		setDateRange({ from, to });
+	}, [time]);
 
-	const { value: data } = useFetch(
-		props.time
-			? `${props?.url}?start_date=${from}&end_date=${to}`
-			: `${props?.url}`,
-		[from, to]
-	);
-	const table_columns = useMemo(
-		() => [...props?.columns],
-		[data?.chart_data ? data?.chart_data : data]
-	);
+	const fetchUrl = useMemo(() => {
+		if (props?.time) {
+			return `${props?.url}?start_date=${dateRange.from}&end_date=${dateRange.to}`;
+		}
+		return props?.url;
+	}, [props?.url, props?.time, dateRange]);
+
+	const { value: data, error, isLoading } = useFetch(fetchUrl, [fetchUrl]);
+
+	const tableColumns = useMemo(() => [...props?.columns], [props?.columns]);
+	const tableData = useMemo(() => data?.chart_data || data || [], [data]);
+
+	const handleTimeChange = (e) => {
+		setTime(e.target.value);
+	};
+
+	if (error) {
+		return (
+			<div className='error-message'>
+				Error loading data: {error.message}
+			</div>
+		);
+	}
+
 	return (
 		<>
 			<div className='flex items-center justify-between'>
 				{props?.total && (
 					<div className='rounded-md border border-secondary/30 bg-base-200 px-3 py-1'>
 						<span className='text-sm font-semibold'>
-							{props?.total_title}: {data?.total_number}
+							{props?.total_title}: {data?.total_number || 0}
 						</span>
 					</div>
 				)}
@@ -43,7 +63,7 @@ export function TableWithTime(props) {
 						name='time'
 						className='select select-secondary h-8 min-h-0 border-secondary/30 bg-base-200 transition-all duration-100 ease-in-out'
 						value={time}
-						onChange={(e) => setTime(e.target.value)}>
+						onChange={handleTimeChange}>
 						<option value='yesterday'>Yesterday</option>
 						<option value='last_seven_days'>7 Days</option>
 						<option value='last_fifteen_days'>15 Days</option>
@@ -57,11 +77,15 @@ export function TableWithTime(props) {
 				)}
 			</div>
 			<br />
-			<ReactTableTitleOnly
-				columns={table_columns}
-				data={data?.chart_data ? data?.chart_data : data}
-				extraClass='table-with-time'
-			/>
+			{isLoading ? (
+				<div className='loading-indicator'>Loading...</div>
+			) : (
+				<ReactTableTitleOnly
+					columns={tableColumns}
+					data={tableData}
+					extraClass='table-with-time'
+				/>
+			)}
 		</>
 	);
 }

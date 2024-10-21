@@ -40,7 +40,7 @@ export default function Information({ batch, water_capacity }) {
 		yarn_issue_created_at,
 		yarn_issue_created_by_name,
 		yarn_issue_updated_at,
-		yarn_quantity,
+		total_yarn_quantity,
 	} = batch;
 
 	const renderItems = () => {
@@ -51,12 +51,12 @@ export default function Information({ batch, water_capacity }) {
 			},
 			{
 				label: 'Quantity',
-				value: yarn_quantity,
+				value: total_yarn_quantity,
 			},
 			{
 				label: 'Volume',
 				value: Number(
-					parseFloat(yarn_quantity) * parseFloat(water_capacity)
+					parseFloat(total_yarn_quantity) * parseFloat(water_capacity)
 				).toFixed(3),
 			},
 

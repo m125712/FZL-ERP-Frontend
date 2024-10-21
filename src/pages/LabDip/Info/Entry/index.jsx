@@ -1,6 +1,6 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useCommonCoilRMLogByUUID } from '@/state/Common';
-import { useLabDipInfo } from '@/state/LabDip';
+import { useLabDipInfo, UseLabDipInfoByDetails } from '@/state/LabDip';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
@@ -33,6 +33,8 @@ export default function Index() {
 		invalidateQuery: invalidateQueryLabDipInfo,
 	} = useLabDipInfo();
 	const { info_number, info_uuid } = useParams();
+	const { invalidateQuery: invalidateQueryLabDipInfoByDetails } =
+		UseLabDipInfoByDetails(info_uuid);
 
 	const { user } = useAuth();
 	const navigate = useNavigate();
@@ -57,7 +59,7 @@ export default function Index() {
 		info_number !== undefined
 			? (document.title = `Order: Update ${info_number}`)
 			: (document.title = 'Order: Entry');
-	}, []);
+	}, [info_number]);
 
 	if (isUpdate)
 		useFetchForRhfReset(
@@ -82,13 +84,12 @@ export default function Index() {
 	});
 
 	const handleRecipeRemove = (index) => {
-		if (getValues(`recipe[${index}].recipe_uuid`) !== undefined) {
-			setUpdateItem((prev) => ({
-				...prev,
-				itemId: getValues(`recipe[${index}].recipe_uuid`),
-				itemName: getValues(`recipe[${index}].recipe_uuid`),
-			}));
-
+		const recipeUuid = getValues(`recipe[${index}].recipe_uuid`);
+		if (recipeUuid !== undefined) {
+			setUpdateItem({
+				itemId: recipeUuid,
+				itemName: recipeUuid,
+			});
 			window['recipe_update'].showModal();
 		}
 		recipeRemove(index);
@@ -142,7 +143,8 @@ export default function Index() {
 			await Promise.all(recipe_updated_promises)
 				.then(() => reset(LAB_INFO_NULL))
 				.then(() => {
-					// invalidateQueryLabDipInfo();
+					//invalidateQueryLabDipInfo();
+					invalidateQueryLabDipInfoByDetails();
 					navigate(`/lab-dip/info/details/${data?.uuid}`);
 				})
 				.catch((err) => console.log(err));
@@ -195,7 +197,7 @@ export default function Index() {
 		await Promise.all(recipe_promises)
 			.then(() => reset(LAB_INFO_NULL))
 			.then(() => {
-				invalidateQueryLabDipInfo();
+				invalidateQueryLabDipInfoByDetails();
 				navigate(`/lab-dip/info/details/${lab_dip_info_uuid}`);
 			})
 
@@ -295,7 +297,7 @@ export default function Index() {
 						handelAppend={handelRecipeAppend}
 						tableHead={[
 							'Recipe',
-							'Status',
+							//'Status',
 							'Approved',
 							'Action',
 						].map((item) => (
@@ -357,8 +359,10 @@ export default function Index() {
 															);
 														}}
 														isDisabled={
-															rec_uuid ==
-															undefined
+															watch(
+																`recipe[${index}].recipe_uuid`
+															) !== '' &&
+															isUpdate
 														}
 														menuPortalTarget={
 															document.body
@@ -370,7 +374,7 @@ export default function Index() {
 									</FormField>
 								</td>
 								{/* status */}
-								<td className={rowClass}>
+								{/* <td className={rowClass}>
 									<FormField
 										label={`recipe[${index}].status`}
 										title='Status'
@@ -413,8 +417,8 @@ export default function Index() {
 												);
 											}}
 										/>
-									</FormField>
-									{/* <div className='rounded-md border border-secondary/30 bg-secondary px-1'>
+									</FormField> */}
+								{/* <div className='rounded-md border border-secondary/30 bg-secondary px-1'>
 										<CheckBox
 											text='text-secondary-content'
 											label={`recipe[${index}].status`}
@@ -433,7 +437,7 @@ export default function Index() {
 											}}
 										/>
 									</div> */}
-								</td>
+								{/* </td> */}
 								{/* approved */}
 								<td className={rowClass}>
 									<FormField
@@ -545,9 +549,9 @@ export default function Index() {
 				<UpdateModal
 					modalId={'recipe_update'}
 					title={'Recipe Entry'}
+					url={`/lab-dip/update-recipe/remove-lab-dip-info-uuid/by`}
 					updateItem={updateItem}
 					setUpdateItem={setUpdateItem}
-					url={`/lab-dip/update-recipe/remove-lab-dip-info-uuid/by`}
 					updateData={updateData}
 				/>
 			</Suspense>

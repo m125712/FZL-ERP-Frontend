@@ -77,7 +77,6 @@ export default function Index({ batch_entry }) {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
 			{
 				accessorKey: 'batch_remarks',
 				header: 'Remarks',

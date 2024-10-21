@@ -17,10 +17,13 @@ const node = [
 	getTable('count', 'Count'),
 	getTable('length', 'Length'),
 	getTable('style', 'Style'),
+	getTable('yarn_quantity', 'Yarn'),
 	getTable('total_quantity', 'Tube'),
 	getTable('total_quantity', 'Stiker'),
 	getTable('total_quantity', 'Poly'),
-	getTable('carton', 'Carton'),
+	getTable('total_carton', 'Carton'),
+	getTable('act_wit', 'Act.Wit'),
+	getTable('consum', 'Consum.'),
 ];
 
 export default function Index(batch, shade_recipes_entries, programs) {
@@ -72,7 +75,7 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', '*', '*', '*', '*', '*', '*'],
+					widths: [40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -172,7 +175,20 @@ export default function Index(batch, shade_recipes_entries, programs) {
 						],
 						['', '', '', '', '', '', '', '', '', '', '', ''],
 						['', '', '', '', '', '', '', '', '1 ', '2 ', '3 ', ''],
-						['', '', '', '', '', '', '', '', '', '', '', ''],
+						[
+							'',
+							'',
+							'',
+							{ text: '', rowSpan: 5 },
+							{ text: '', rowSpan: 5 },
+							'',
+							'',
+							'',
+							'',
+							'',
+							'',
+							'',
+						],
 						['', '', '', '', '', '', '', '', '', '', '', ''],
 						['', '', '', '', '', '', '', '', '', '', '', ''],
 						['', '', '', '', '', '', '', '', '', '', '', ''],

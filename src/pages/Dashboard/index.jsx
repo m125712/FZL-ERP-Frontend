@@ -11,107 +11,18 @@ import InfoCard from './_components/Card/InfoCard';
 import DashboardHeader from './_components/dashboard-header';
 import { TableWithTime } from './_components/TableWithTime';
 import { getApproval } from './_utils';
+import {
+	doc_rcv_columns,
+	order_entry_feed_columns,
+	pi_register_columns,
+	sample_lead_time_columns,
+	stock_status_columns,
+} from './columns';
 
 export default function Dashboard() {
 	useEffect(() => {
 		document.title = 'Dashboard';
 	}, []);
-	const sample_lead_time_columns = [
-		{
-			accessorKey: 'sample_order_no',
-			header: 'Sample O/N',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		},
-		{
-			accessorKey: 'issue_date',
-			header: 'Issue Date',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		},
-		{
-			accessorKey: 'delivery_last_date',
-			header: 'Last Delivery Date',
-			enableColumnFilter: false,
-			cell: (info) => (info.getValue() ? info.getValue() : 'N/A'),
-		},
-		{
-			accessorKey: 'status',
-			header: 'Status',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		},
-		{
-			accessorKey: 'delivery_order_quantity',
-			header: 'Delivery Qty',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		},
-	];
-	const order_entry_feed_columns = [
-		{
-			accessorKey: 'order_no',
-			header: 'O/N',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		},
-		{
-			accessorKey: 'party_name',
-			header: 'Party Name',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		},
-		{
-			accessorKey: 'marketing_name',
-			header: 'S & M',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		},
-		{
-			accessorKey: 'item',
-			header: 'Item',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		},
-		{
-			accessorKey: 'quantity',
-			header: 'Total Quantity',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		},
-	];
-	const pi_register_columns = [
-		{
-			accessorKey: 'pi_cash_number',
-			header: 'PI Number',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		},
-		{
-			accessorKey: 'party_name',
-			header: 'Party Name',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		},
-		{
-			accessorKey: 'bank_name',
-			header: 'Bank',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		},
-		{
-			accessorKey: 'total_pi_value',
-			header: 'PI Value(USD)',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		},
-		{
-			accessorKey: 'lc_number',
-			header: 'LC No',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		},
-	];
 	return (
 		<div className='flex gap-4'>
 			<div className='w-full space-y-4'>
@@ -190,6 +101,25 @@ export default function Dashboard() {
 						time={true}
 						total_title='PI Count'
 						columns={pi_register_columns}
+					/>
+				</div>
+				<div className='grid grid-cols-1 gap-2 md:grid-cols-2'>
+					<TableWithTime
+						url='/dashboard/document-rcv-log'
+						total={true}
+						time={true}
+						total_title='Doc. Count'
+						columns={doc_rcv_columns}
+					/>
+					<TableWithTime
+						url='/dashboard/lc-feed'
+						columns={doc_rcv_columns}
+					/>
+				</div>
+				<div className='grid grid-cols-1 gap-2 md:grid-cols-2'>
+					<TableWithTime
+						url='/dashboard/stock-status'
+						columns={stock_status_columns}
 					/>
 				</div>
 				<div className='flex gap-4'></div>

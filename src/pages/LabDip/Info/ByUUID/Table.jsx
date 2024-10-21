@@ -59,31 +59,31 @@ export default function Index({ recipe }) {
 				},
 			},
 
-			{
-				accessorKey: 'status',
-				header: 'Status',
-				enableColumnFilter: false,
+			// {
+			// 	accessorKey: 'status',
+			// 	header: 'Status',
+			// 	enableColumnFilter: false,
 
-				cell: (info) => {
-					const access = haveAccess.includes('click_status');
-					const overrideAccess = haveAccess.includes(
-						'click_status_override'
-					);
-					return (
-						<SwitchToggle
-							disabled={
-								overrideAccess
-									? false
-									: access
-										? Number(info.getValue()) === 1
-										: true
-							}
-							onChange={() => handelStatusChange(info.row.index)}
-							checked={Number(info.getValue()) === 1}
-						/>
-					);
-				},
-			},
+			// 	cell: (info) => {
+			// 		const access = haveAccess.includes('click_status');
+			// 		const overrideAccess = haveAccess.includes(
+			// 			'click_status_override'
+			// 		);
+			// 		return (
+			// 			<SwitchToggle
+			// 				disabled={
+			// 					overrideAccess
+			// 						? false
+			// 						: access
+			// 							? Number(info.getValue()) === 1
+			// 							: true
+			// 				}
+			// 				onChange={() => handelStatusChange(info.row.index)}
+			// 				checked={Number(info.getValue()) === 1}
+			// 			/>
+			// 		);
+			// 	},
+			// },
 			{
 				accessorKey: 'recipe_created_at',
 				header: 'Created',

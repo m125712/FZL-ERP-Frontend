@@ -4,6 +4,7 @@ import {
 	useDyeingThreadBatchEntry,
 } from '@/state/Dyeing';
 import { DevTool } from '@hookform/devtools';
+import { get } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
@@ -108,6 +109,13 @@ export default function Index() {
 			}, 0),
 		[watch()]
 	);
+	const getTotalYarnQuantity = useCallback(
+		(batch_entry) =>
+			batch_entry.reduce((acc, item) => {
+				return acc + parseFloat(item.yarn_quantity);
+			}, 0),
+		[watch()]
+	);
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -132,6 +140,7 @@ export default function Index() {
 					const updatedData = {
 						...item,
 					};
+					console.log(updatedData, 'updatedData');
 
 					return await updateData.mutateAsync({
 						url: `${threadBatchEntryUrl}/${item?.batch_entry_uuid}`,
@@ -178,6 +187,7 @@ export default function Index() {
 					const updatedData = {
 						...item,
 					};
+					console.log(item, 'updatedData');
 
 					return await updateData.mutateAsync({
 						url: `${threadBatchEntryUrl}/${item?.batch_entry_uuid}`,
@@ -242,7 +252,9 @@ export default function Index() {
 								'Order QTY',
 								'QTY',
 								'Total QTY',
-								'Qalance QTY',
+								'Balance QTY',
+								'Total Carton',
+								'Yarn Quantity',
 								'Expected Weight (KG)',
 								'Remarks',
 							].map((item) => (
@@ -303,6 +315,22 @@ export default function Index() {
 								)}
 							</td>
 							<td className={`${rowClass}`}>
+								{getValues(
+									`batch_entry[${index}].total_carton`
+								)}
+							</td>
+							<td className={` ${rowClass}`}>
+								<Input
+									label={`batch_entry[${index}].yarn_quantity`}
+									is_title_needed='false'
+									dynamicerror={
+										errors?.batch_entry?.[index]
+											?.yarn_quantity
+									}
+									register={register}
+								/>
+							</td>
+							<td className={`${rowClass}`}>
 								{Number(
 									parseFloat(
 										watch(
@@ -329,13 +357,23 @@ export default function Index() {
 							'relative cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30'
 						)}>
 						{/* Span all columns up to "Expected Weight" */}
-						<td className='text-right font-semibold' colSpan={10}>
+						<td className='text-right font-semibold' colSpan={11}>
 							Total Weight:
 						</td>
 
 						{/* Total weight placed under "Expected Weight" */}
-						<td className='text-left font-semibold px-3 py-2'>
+						<td className='px-3 py-2 text-left font-semibold'>
 							{getTotalCalTape(watch('batch_entry'))}
+						</td>
+						<td className='text-right font-semibold' colSpan={11}>
+							Total Yarn Quantity:
+						</td>
+						<td className='px-3 py-2 text-left font-semibold'>
+							{Number(
+								getTotalYarnQuantity(
+									watch('batch_entry')
+								).toFixed(2)
+							)}
 						</td>
 
 						{/* Empty <td> elements to maintain table structure */}

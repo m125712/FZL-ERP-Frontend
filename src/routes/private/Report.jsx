@@ -2,9 +2,11 @@ import DailyChallan from '@/pages/Report/DailyChallan';
 import LCDue from '@/pages/Report/LC';
 import PIRegister from '@/pages/Report/PIRegister';
 import PIToBeSubmit from '@/pages/Report/PIToBeSubmit';
-import ZipperProduction from '@/pages/Report/ZipperProductionStatus';
+import ProductionReportDirector from '@/pages/Report/ProductionReportDirector';
+import ProductionReportSM from '@/pages/Report/ProductionReportS&M';
 import ThreadProduction from '@/pages/Report/ThreadProductionStatus';
-import ProductionReport from '@/pages/Report/ProductionReport';
+import ZipperProduction from '@/pages/Report/ZipperProductionStatus';
+
 export const ReportRoutes = [
 	{
 		name: 'Report',
@@ -52,12 +54,19 @@ export const ReportRoutes = [
 				actions: ['read'],
 			},
 			{
-				name: 'Production Report',
-				path: '/report/production-report',
-				element: <ProductionReport />,
-				page_name: 'report__production_report',
+				name: 'Production Report (Director)',
+				path: '/report/production-report/director',
+				element: <ProductionReportDirector />,
+				page_name: 'report__production_report_director',
 				actions: ['read'],
-			}
+			},
+			{
+				name: 'Production Report (S&M)',
+				path: '/report/production-report/sm',
+				element: <ProductionReportSM />,
+				page_name: 'report__production_report_sm',
+				actions: ['read'],
+			},
 		],
 	},
 ];

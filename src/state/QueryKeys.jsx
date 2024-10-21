@@ -1248,7 +1248,7 @@ export const reportQK = {
 
 	// Thread Production
 	threadProduction: () => [...reportQK.all(), 'thread-production'],
-	
+
 	// Daily Challan
 	dailyChallan: () => [...reportQK.all(), 'daily-challan'],
 
@@ -1257,10 +1257,10 @@ export const reportQK = {
 
 	// PI To Be Submitted
 	piToBeSubmitted: () => [...reportQK.all(), 'pi-to-be-submitted'],
-	
+
 	// Lc
 	lc: (url) => [...reportQK.all(), 'lc' + url],
 
 	// Production Report
-	productionReport: () => [...reportQK.all(), 'production-report'],
+	productionReport: (url) => [...reportQK.all(), `production-report-${url}`],
 };

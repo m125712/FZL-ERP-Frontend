@@ -38,8 +38,8 @@ export const useLC = (url) => {
 	});
 };
 
-export const useProductionReport = () =>
+export const useProductionReport = (url) =>
 	createGlobalState({
-		queryKey: reportQK.productionReport(),
-		url: '/report/production-report-director',
+		queryKey: reportQK.productionReport(url),
+		url: `/report/production-report-${url}`,
 	});

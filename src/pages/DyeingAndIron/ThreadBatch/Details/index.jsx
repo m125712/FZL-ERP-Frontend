@@ -47,20 +47,21 @@ export default function Index() {
 	// ! FOR TESTING
 	const [data, setData] = useState('');
 
-	// useEffect(() => {
-	// 	if (batch && batch?.batch_entry) {
-	// 		BatchSheetPdf(batch, shade_recipes_entries, programs)?.getDataUrl(
-	// 			(dataUrl) => {
-	// 				setData(dataUrl);
-	// 			}
-	// 		);
-	// 	}
-	// }, [batch, programs, shade_recipes_entries]);
+	useEffect(() => {
+		if (batch && batch?.batch_entry) {
+			BatchSheetPdf(batch, shade_recipes_entries, programs)?.getDataUrl(
+				(dataUrl) => {
+					setData(dataUrl);
+				}
+			);
+		}
+	}, [batch, programs, shade_recipes_entries]);
+	const [data2, setData2] = useState('');
 	useEffect(() => {
 		if (batch && batch?.batch_entry) {
 			TravelingCard(batch, shade_recipes_entries, programs)?.getDataUrl(
 				(dataUrl) => {
-					setData(dataUrl);
+					setData2(dataUrl);
 				}
 			);
 		}
@@ -79,6 +80,10 @@ export default function Index() {
 		<div className='space-y-8 py-6'>
 			<iframe
 				src={data}
+				className='h-[40rem] w-full rounded-md border-none'
+			/>
+			<iframe
+				src={data2}
 				className='h-[40rem] w-full rounded-md border-none'
 			/>
 

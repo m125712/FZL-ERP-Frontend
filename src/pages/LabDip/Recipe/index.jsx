@@ -29,7 +29,6 @@ export default function Index() {
 			{
 				accessorKey: 'recipe_id',
 				header: 'ID',
-				width: 'w-12',
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
@@ -44,7 +43,6 @@ export default function Index() {
 			{
 				accessorKey: 'info_id',
 				header: 'Info ID',
-				width: 'w-12',
 				cell: (info) => {
 					const { lab_dip_info_uuid } = info.row.original;
 					if (lab_dip_info_uuid) {
@@ -115,31 +113,31 @@ export default function Index() {
 				},
 			},
 
-			{
-				accessorKey: 'status',
-				header: 'Status',
-				enableColumnFilter: false,
+			// {
+			// 	accessorKey: 'status',
+			// 	header: 'Status',
+			// 	enableColumnFilter: false,
 
-				cell: (info) => {
-					const access = haveAccess.includes('click_status');
-					const overrideAccess = haveAccess.includes(
-						'click_status_override'
-					);
-					return (
-						<SwitchToggle
-							disabled={
-								overrideAccess
-									? false
-									: access
-										? Number(info.getValue()) === 1
-										: true
-							}
-							onChange={() => handelStatusChange(info.row.index)}
-							checked={Number(info.getValue()) === 1}
-						/>
-					);
-				},
-			},
+			// 	cell: (info) => {
+			// 		const access = haveAccess.includes('click_status');
+			// 		const overrideAccess = haveAccess.includes(
+			// 			'click_status_override'
+			// 		);
+			// 		return (
+			// 			<SwitchToggle
+			// 				disabled={
+			// 					overrideAccess
+			// 						? false
+			// 						: access
+			// 							? Number(info.getValue()) === 1
+			// 							: true
+			// 				}
+			// 				onChange={() => handelStatusChange(info.row.index)}
+			// 				checked={Number(info.getValue()) === 1}
+			// 			/>
+			// 		);
+			// 	},
+			// },
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',

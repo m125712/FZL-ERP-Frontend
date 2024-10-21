@@ -65,6 +65,18 @@ export default function Index({ batch_entry }) {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+			{
+				accessorKey: 'total_carton',
+				header: 'Total Carton',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'yarn_quantity',
+				header: 'Yarn QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 
 			{
 				accessorKey: 'batch_remarks',

@@ -96,7 +96,7 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<Input label='yarn_quantity' {...{ register, errors }} />
+					<Input label='yarn_quantity' disabled={true} {...{ register, errors }}/>
 					<FormField label='reason' title='Reason' errors={errors}>
 						<Controller
 							name={'reason'}

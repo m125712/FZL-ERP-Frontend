@@ -2368,7 +2368,7 @@ export const DYEING_THREAD_BATCH_DYEING_NULL = {
 //* Dyeing Thread Batch Conneing
 export const DYEING_THREAD_CONNEING_SCHEMA = {
 	uuid: STRING_REQUIRED,
-	yarn_quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0'),
+	//yarn_quantity: NUMBER.nullable(),
 	machine_uuid: STRING_REQUIRED,
 	dyeing_operator: STRING.nullable(),
 	reason: STRING.nullable(),
@@ -2381,9 +2381,7 @@ export const DYEING_THREAD_CONNEING_SCHEMA = {
 
 	batch_entry: yup.array().of(
 		yup.object().shape({
-			coning_production_quantity: NUMBER,
-			coning_production_quantity_in_kg: NUMBER,
-			transfer_quantity: NUMBER,
+			yarn_quantity: NUMBER_DOUBLE.nullable(),
 		})
 	),
 };
@@ -2394,9 +2392,8 @@ export const DYEING_THREAD_CONNEING_NULL = {
 	machine_uuid: '',
 	batch_entry: [
 		{
-			coning_production_quantity: null,
-			coning_production_quantity_in_kg: null,
-			transfer_quantity: null,
+			uuid: '',
+			yarn_quantity: null,
 		},
 	],
 };

@@ -10,8 +10,12 @@ const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 
 export const getPageHeader = (batch) => {
-	const created_at = getDateFormate(batch?.created_at);
-	const updated_at = getDateFormate(batch?.updated_at);
+	const created_at = batch?.created_at
+		? getDateFormate(batch?.created_at)
+		: '';
+	const updated_at = batch?.updated_at
+		? getDateFormate(batch?.updated_at)
+		: '';
 	const conning_created_at = batch?.conning_created_at
 		? getDateFormate(batch?.conning_created_at)
 		: '';
@@ -66,9 +70,9 @@ export const getPageHeader = (batch) => {
 			// * Start of table
 			[
 				{ text: 'Quantity', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.yarn_quantity },
+				{ text: batch?.total_yarn_quantity },
 				{ text: 'Volume', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.water_capacity * batch?.yarn_quantity },
+				{ text: batch?.water_capacity * batch?.total_yarn_quantity },
 			],
 			[
 				{ text: 'Color', bold: true, color: PRIMARY_COLOR },

@@ -15,6 +15,7 @@ import { DynamicField, FormField, ReactSelect, RemoveButton } from '@/ui';
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
 import { LC_NULL, LC_SCHEMA } from '@util/Schema';
+import { exclude } from '@/util/Exclude';
 import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
@@ -39,6 +40,7 @@ export default function Index() {
 	} else {
 		var { data: pi } = useOtherPI();
 	}
+
 	const {
 		register,
 		handleSubmit,
@@ -50,6 +52,7 @@ export default function Index() {
 		watch,
 	} = useRHF(LC_SCHEMA, LC_NULL);
 
+	const excludeItem = exclude(watch, pi, 'pi', 'uuid');
 	// purchase
 	const {
 		fields: piFields,
@@ -321,7 +324,16 @@ export default function Index() {
 														return (
 															<ReactSelect
 																placeholder='Select PI'
-																options={pi}
+																options={pi?.filter(
+																	(inItem) =>
+																		!excludeItem?.some(
+																			(
+																				excluded
+																			) =>
+																				excluded?.value ===
+																				inItem?.value
+																		)
+																)}
 																value={pi?.filter(
 																	(inItem) =>
 																		inItem.value ===

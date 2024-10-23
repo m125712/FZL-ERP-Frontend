@@ -1,3 +1,5 @@
+import { DateTime } from '@/ui';
+
 export const sample_lead_time_columns = [
 	{
 		accessorKey: 'sample_order_no',
@@ -9,13 +11,14 @@ export const sample_lead_time_columns = [
 		accessorKey: 'issue_date',
 		header: 'Issue Date',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
+		cell: (info) => <DateTime date={info.getValue()} />,
 	},
 	{
 		accessorKey: 'delivery_last_date',
 		header: 'Last Delivery Date',
 		enableColumnFilter: false,
-		cell: (info) => (info.getValue() ? info.getValue() : 'N/A'),
+		cell: (info) =>
+			info.getValue() ? <DateTime date={info.getValue()} /> : 'N/A',
 	},
 	{
 		accessorKey: 'status',
@@ -126,7 +129,7 @@ export const doc_rcv_columns = [
 		accessorKey: 'lc_date',
 		header: 'LC Date',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
+		cell: (info) => <DateTime date={info.getValue()} />,
 	},
 ];
 export const stock_status_columns = [
@@ -158,11 +161,43 @@ export const stock_status_columns = [
 		accessorKey: 'last_purchase_date',
 		header: 'Last Purchase Date',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
+		cell: (info) => <DateTime date={info.getValue()} />,
 	},
 	{
 		accessorKey: 'lead_time',
 		header: 'Lead Time(days)',
+		enableColumnFilter: false,
+		cell: (info) => info.getValue(),
+	},
+];
+export const pi_to_be_submitted_columns = [
+	{
+		accessorKey: 'name',
+		header: 'Party Name',
+		enableColumnFilter: false,
+		cell: (info) => info.getValue(),
+	},
+	{
+		accessorKey: 'total_quantity',
+		header: 'Order Qty',
+		enableColumnFilter: false,
+		cell: (info) => info.getValue(),
+	},
+	{
+		accessorKey: 'total_delivered',
+		header: 'Delivered',
+		enableColumnFilter: false,
+		cell: (info) => info.getValue(),
+	},
+	{
+		accessorKey: 'total_undelivered_balance_quantity',
+		header: 'Undelivered',
+		enableColumnFilter: false,
+		cell: (info) => info.getValue(),
+	},
+	{
+		accessorKey: 'total_balance_pi_value',
+		header: 'PI Value(USD)',
 		enableColumnFilter: false,
 		cell: (info) => info.getValue(),
 	},

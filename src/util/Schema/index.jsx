@@ -1810,7 +1810,6 @@ export const LC_SCHEMA = {
 	lc_date: STRING_REQUIRED,
 	payment_value: NUMBER_DOUBLE_REQUIRED,
 	ldbc_fdbc: STRING_REQUIRED.nullable(),
-
 	commercial_executive: STRING_REQUIRED,
 	party_bank: STRING_REQUIRED,
 	production_complete: BOOLEAN_REQUIRED,
@@ -1829,7 +1828,7 @@ export const LC_SCHEMA = {
 				String(originalValue).trim() === '' ? null : value
 			),
 	}),
-	lc_value: NUMBER.when('is_old_pi', {
+	lc_value: NUMBER_DOUBLE.when('is_old_pi', {
 		is: true,
 		then: (Schema) =>
 			Schema.required('required').moreThan(0, 'More than 0'),
@@ -1862,7 +1861,7 @@ export const LC_SCHEMA = {
 	),
 	ud_no: STRING.nullable(),
 	ud_received: STRING.nullable(),
-	at_sight: STRING,
+	at_sight: STRING_REQUIRED,
 	amd_date: STRING.nullable().transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? null : value
 	),
@@ -1903,7 +1902,7 @@ export const LC_NULL = {
 	expiry_date: null,
 	ud_no: null,
 	ud_received: null,
-	at_sight: false,
+	at_sight: null,
 	amd_date: null,
 	amd_count: 0,
 	problematical: false,
@@ -2455,11 +2454,11 @@ export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 	}), //
 	logo_type: STRING.nullable(), //
 	slider_body_shape: STRING.nullable(), //
-	slider_link: STRING.when('type',{
+	slider_link: STRING.when('type', {
 		is: 'link',
 		then: (schema) => schema.required('Required'),
 		otherwise: (schema) => schema.nullable(),
-	}), 
+	}),
 	stopper_type: STRING.nullable(), //
 	type: STRING_REQUIRED,
 	// quantity: NUMBER_REQUIRED, //

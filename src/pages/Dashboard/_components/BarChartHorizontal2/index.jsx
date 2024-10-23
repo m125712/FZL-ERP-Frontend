@@ -27,23 +27,14 @@ import {
 	ChartTooltipContent,
 } from '@/components/ui/chart';
 
-const chartData = [
-	{ item_name: 'January', approved: 186, not_approved: 80 },
-	{ item_name: 'February', approved: 305, not_approved: 200 },
-	{ item_name: 'March', approved: 237, not_approved: 120 },
-	{ item_name: 'April', approved: 73, not_approved: 190 },
-	{ item_name: 'May', approved: 209, not_approved: 130 },
-	{ item_name: 'June', approved: 214, not_approved: 140 },
-];
-
 const chartConfig = {
 	not_approved: {
 		label: 'Not approved',
-		color: 'hsl(var(--chart-1))',
+		color: '#FF0000',
 	},
 	approved: {
 		label: 'Approved',
-		color: 'hsl(var(--chart-2))',
+		color: '#4185f4',
 	},
 	total: {
 		label: 'Total',
@@ -56,6 +47,10 @@ const chartConfig = {
 
 export function BarChartHorizontal2(props) {
 	const { value: data } = useFetch(`/dashboard/work-in-hand`);
+	const chartData = data?.map((item) => ({
+		...item,
+		total: item.approved + item.not_approved,
+	}));
 	return (
 		<Card>
 			<CardHeader>
@@ -69,10 +64,7 @@ export function BarChartHorizontal2(props) {
 					</span>
 					<BarChart
 						accessibilityLayer
-						data={data?.map((item) => ({
-							...item,
-							total: item.approved + item.not_approved,
-						}))}
+						data={chartData}
 						layout='vertical'
 						margin={{
 							top: 5,
@@ -99,9 +91,21 @@ export function BarChartHorizontal2(props) {
 							dataKey='approved'
 							stackId='a'
 							fill='var(--color-approved)'
-							radius={[0, 4, 4, 0]}>
+							radius={[0, 0, 0, 0]}>
 							<LabelList
 								dataKey='approved'
+								position='center'
+								className='fill-[--color-label]'
+								fontSize={12}
+							/>
+						</Bar>
+						<Bar
+							dataKey='not_approved'
+							stackId='a'
+							fill='var(--color-not_approved)'
+							radius={[0, 4, 4, 0]}>
+							<LabelList
+								dataKey='not_approved'
 								position='center'
 								className='fill-[--color-label]'
 								fontSize={12}
@@ -111,18 +115,6 @@ export function BarChartHorizontal2(props) {
 								position='right'
 								offset={8}
 								className='fill-[--color-total]'
-								fontSize={12}
-							/>
-						</Bar>
-						<Bar
-							dataKey='not_approved'
-							stackId='a'
-							fill='var(--color-not_approved)'
-							radius={[4, 0, 0, 4]}>
-							<LabelList
-								dataKey='not_approved'
-								position='center'
-								className='fill-[--color-label]'
 								fontSize={12}
 							/>
 						</Bar>

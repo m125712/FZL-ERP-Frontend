@@ -4,10 +4,18 @@ import { useCommercialLC, useCommercialLCByQuery } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
+
+
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete, LinkWithCopy, StatusButton } from '@/ui';
 
+
+
 import PageInfo from '@/util/PageInfo';
+
+
+
+
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
@@ -37,6 +45,21 @@ export default function Index() {
 
 	const columns = useMemo(
 		() => [
+			{
+				accessorKey: 'actions',
+				header: 'Actions',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('update'),
+				width: 'w-24',
+				cell: (info) => (
+					<EditDelete
+						idx={info.row.index}
+						handelUpdate={handelUpdate}
+						showDelete={false}
+					/>
+				),
+			},
 			{
 				accessorKey: 'lc_number',
 				header: 'LC Number',
@@ -261,21 +284,6 @@ export default function Index() {
 				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'actions',
-				header: 'Actions',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
-				width: 'w-24',
-				cell: (info) => (
-					<EditDelete
-						idx={info.row.index}
-						handelUpdate={handelUpdate}
-						showDelete={false}
-					/>
-				),
 			},
 		],
 		[data]

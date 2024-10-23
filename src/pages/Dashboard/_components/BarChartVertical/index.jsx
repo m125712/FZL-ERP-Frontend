@@ -24,8 +24,8 @@ import {
 
 const chartConfig = {
 	total_quantity: {
-		label: 'total_quantity',
-		color: 'hsl(var(--chart-1))',
+		label: 'Total Quantity',
+		color: '#4185f4',
 	},
 };
 const daysMap = {
@@ -45,7 +45,6 @@ export function BarChartVertical() {
 		`/dashboard/production-status?start_date=${from}&end_date=${to}`,
 		[from, to]
 	);
-	console.log(data);
 	return (
 		<Card>
 			<CardHeader>

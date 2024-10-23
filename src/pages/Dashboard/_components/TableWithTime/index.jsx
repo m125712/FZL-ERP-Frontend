@@ -31,7 +31,7 @@ export function TableWithTime(props) {
 		return props?.url;
 	}, [props?.url, props?.time, dateRange]);
 
-	const { value: data, error, isLoading } = useFetch(fetchUrl, [fetchUrl]);
+	const { value: data, isLoading } = useFetch(fetchUrl, [fetchUrl]);
 
 	const tableColumns = useMemo(() => [...props?.columns], [props?.columns]);
 	const tableData = useMemo(() => data?.chart_data || data || [], [data]);
@@ -40,50 +40,54 @@ export function TableWithTime(props) {
 		setTime(e.target.value);
 	};
 
-	if (error) {
-		return (
-			<div className='error-message'>
-				Error loading data: {error.message}
-			</div>
-		);
-	}
-
 	return (
 		<>
 			<div className='flex items-center justify-between'>
-				{props?.total && (
-					<div className='rounded-md border border-secondary/30 bg-base-200 px-3 py-1'>
-						<span className='text-sm font-semibold'>
-							{props?.total_title}: {data?.total_number || 0}
+				<div className='flex items-center gap-2'>
+					{props?.total && (
+						<div className='rounded-md border border-secondary/30 bg-base-200 px-3 py-1'>
+							<span className='text-sm font-semibold'>
+								{props?.total_title}: {data?.total_number || 0}
+							</span>
+						</div>
+					)}
+					{props?.total2 && (
+						<div className='rounded-md border border-secondary/30 bg-base-200 px-3 py-1'>
+							<span className='text-sm font-semibold'>
+								{props?.total2_title}: {data?.total_amount || 0}
+							</span>
+						</div>
+					)}
+				</div>
+				<div>
+					{props?.time ? (
+						<select
+							name='time'
+							className='select select-secondary h-8 min-h-0 border-secondary/30 bg-base-200 transition-all duration-100 ease-in-out'
+							value={time}
+							onChange={handleTimeChange}>
+							<option value='yesterday'>Yesterday</option>
+							<option value='last_seven_days'>7 Days</option>
+							<option value='last_fifteen_days'>15 Days</option>
+							<option value='last_thirty_days'>30 Days</option>
+						</select>
+					) : (
+						<span className='live-indicator'>
+							(<span className='live-dot'></span>
+							<span className='live-text'> Live</span>)
 						</span>
-					</div>
-				)}
-				{props?.time ? (
-					<select
-						name='time'
-						className='select select-secondary h-8 min-h-0 border-secondary/30 bg-base-200 transition-all duration-100 ease-in-out'
-						value={time}
-						onChange={handleTimeChange}>
-						<option value='yesterday'>Yesterday</option>
-						<option value='last_seven_days'>7 Days</option>
-						<option value='last_fifteen_days'>15 Days</option>
-						<option value='last_thirty_days'>30 Days</option>
-					</select>
-				) : (
-					<span className='live-indicator'>
-						(<span className='live-dot'></span>
-						<span className='live-text'> Live</span>)
-					</span>
-				)}
+					)}
+				</div>
 			</div>
 			<br />
 			{isLoading ? (
-				<div className='loading-indicator'>Loading...</div>
+				<span className='loading loading-dots loading-lg z-50' />
 			) : (
 				<ReactTableTitleOnly
+					title={props?.title}
 					columns={tableColumns}
 					data={tableData}
-					extraClass='table-with-time'
+					
 				/>
 			)}
 		</>

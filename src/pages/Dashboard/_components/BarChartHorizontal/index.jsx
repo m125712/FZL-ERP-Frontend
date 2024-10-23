@@ -16,8 +16,6 @@ import { useFetch } from '@/hooks';
 import {
 	Card,
 	CardContent,
-	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
@@ -36,19 +34,12 @@ const daysMap = {
 	last_thirty_days: 30,
 };
 
-const chartConfig = {
-	number_of_challan: {
-		label: 'Number of Challan',
-		color: 'hsl(var(--chart-1))',
-	},
-	amount: {
-		label: 'Amount',
-		color: 'hsl(var(--chart-2))',
-	},
-	label: {
-		color: 'hsl(var(--background))',
-	},
-};
+function capitalizeAndRemoveUnderscore(str) {
+	return str
+		.split('_')
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(' ');
+}
 
 export function BarChartHorizontal(props) {
 	const [time, setTime] = useState('yesterday');
@@ -56,12 +47,27 @@ export function BarChartHorizontal(props) {
 	let to = format(addDays(new Date(), -1), 'yyyy-MM-dd');
 	let from = format(addDays(new Date(), -daysMap[time] || 1), 'yyyy-MM-dd');
 
+	const chartConfig = {
+		[props.label2]: {
+			label: capitalizeAndRemoveUnderscore(props.label2),
+			color: '#4185f4',
+		},
+		[props.label1]: {
+			label: capitalizeAndRemoveUnderscore(props.label1),
+			color: '#FF0000',
+		},
+		label: {
+			color: 'hsl(var(--background))',
+		},
+	};
+
 	const { value: data } = useFetch(
 		props.time
 			? `${props?.url}?start_date=${from}&end_date=${to}`
 			: `${props?.url}`,
 		[from, to]
 	);
+
 	return (
 		<Card>
 			<CardHeader>
@@ -123,24 +129,24 @@ export function BarChartHorizontal(props) {
 							content={<ChartTooltipContent />}
 						/>
 						<Bar
-							dataKey='number_of_challan'
-							fill='var(--color-number_of_challan)'
+							dataKey={props.label2}
+							fill={chartConfig[props.label2].color}
 							radius={[4, 0, 0, 4]}>
 							<LabelList
-								dataKey='number_of_challan'
-								position=''
-								fill='var(--color-label)'
+								dataKey={props.label2}
+								position='right'
+								fill='black'
 								fontSize={12}
 							/>
 						</Bar>
 						<Bar
-							dataKey='amount'
-							fill='var(--color-amount)'
+							dataKey={props.label1}
+							fill={chartConfig[props.label1].color}
 							radius={[0, 4, 4, 0]}>
 							<LabelList
-								dataKey='amount'
-								position='insideRight'
-								fill='var(--color-label)'
+								dataKey={props.label1}
+								position='right'
+								fill='black'
 								fontSize={12}
 							/>
 						</Bar>

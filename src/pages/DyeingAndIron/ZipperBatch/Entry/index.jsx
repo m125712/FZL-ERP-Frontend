@@ -317,6 +317,12 @@ export default function Index() {
 		setIsSomeChecked(isSomeChecked);
 	};
 
+	const setAllBatch = () => {
+		BatchEntryField.map((item, idx) => {
+			setValue(`batch_entry[${idx}].quantity`, item.balance_quantity);
+		});
+	};
+
 	const columns = useMemo(
 		() => [
 			{
@@ -422,10 +428,36 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'balance_quantity',
-				header: 'Balanced Batch',
-				enableColumnFilter: true,
-				enableSorting: true,
-				cell: (info) => info.getValue(),
+				header: (
+					<div className='flex flex-col'>
+						Balanced Batch
+						<label
+							className='btn btn-primary btn-xs'
+							onClick={() => setAllBatch()}>
+							Copy All
+						</label>
+					</div>
+				),
+				enableColumnFilter: false,
+				enableSorting: false,
+				cell: (info) => {
+					const idx = info.row.index;
+					return (
+						<div className='flex gap-4'>
+							<label
+								className='btn btn-primary btn-xs'
+								onClick={() =>
+									setValue(
+										`batch_entry[${idx}].quantity`,
+										info.getValue()
+									)
+								}>
+								Copy
+							</label>
+							{info.getValue()}
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'batch_qty',

@@ -17,10 +17,6 @@ export default function Index() {
 
 	const haveAccess = useAccess('report__production_report_sm');
 
-	useEffect(() => {
-		document.title = info.getTabName();
-	}, []);
-
 	const columns = useMemo(
 		() => [
 			{

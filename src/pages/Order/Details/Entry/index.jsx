@@ -1,11 +1,15 @@
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
-import { useOrderDescription, useOrderDetails } from '@/state/Order';
+import {
+	useOrderDescription,
+	useOrderDetails,
+	useOrderDetailsByQuery,
+} from '@/state/Order';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
-import { useFetchForOrderReset, useRHF } from '@/hooks';
+import { useAccess, useFetchForOrderReset, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import DynamicFormSpreadSheet from '@/ui/Dynamic/DynamicFormSpreadSheet';
@@ -32,6 +36,7 @@ import Header from './Header';
 export function getRowsCount(matrix) {
 	return matrix.length;
 }
+
 export function getColumnsCount(matrix) {
 	const firstRow = matrix[0];
 	return firstRow ? firstRow.length : 0;
@@ -43,12 +48,44 @@ export function getSize(matrix) {
 	};
 }
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_all_orders')) {
+		return `?all=true`;
+	}
+	if (
+		haveAccess.includes('show_approved_orders') &&
+		haveAccess.includes('show_own_orders') &&
+		userUUID
+	) {
+		return `/by/${userUUID}?approved=true`;
+	}
+
+	if (haveAccess.includes('show_approved_orders')) {
+		return '?all=false&approved=true';
+	}
+
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `/by/${userUUID}`;
+	}
+
+	return `?all=false`;
+};
+
 export default function Index() {
 	const { url, updateData, postData, deleteData } = useOrderDescription();
-	const { invalidateQuery: OrderDetailsInvalidate } = useOrderDetails();
+	// const { invalidateQuery: OrderDetailsInvalidate } = useOrderDetails();
 	const { order_number, order_description_uuid } = useParams();
 
+	const haveAccess = useAccess('order__details');
 	const { user } = useAuth();
+
+	const { invalidateQuery: indexPageInvalidate } = useOrderDetailsByQuery(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
+
 	const navigate = useNavigate();
 	const isUpdate =
 		order_description_uuid !== undefined && order_number !== undefined;
@@ -195,42 +232,19 @@ export default function Index() {
 	}, [watch]);
 
 	// * Updates the selectedUnit state and ensures only one checkbox is active.
-	const handleCheckboxChange = (unit) => {
-		setValue('is_cm', unit === 'is_cm');
-		setValue('is_inch', unit === 'is_inch');
-		setValue('is_meter', unit === 'is_meter');
-	};
 
 	const headerButtons = [
 		<div className='flex items-center gap-2'>
 			<div className='flex rounded-md bg-secondary px-1'>
 				{/* TODO: need to fix this */}
-				{/* <CheckBox
-					text='text-secondary-content'
-					label='is_cm'
-					title='Cm'
-					checked={watch('is_cm')}
-					onChange={() => handleCheckboxChange('is_cm')}
-					{...{ register, errors }}
-				/> */}
+
 				<CheckBox
 					text='text-secondary-content'
 					label='is_inch'
 					title='Inch'
 					// checked={watch('is_inch')}
-					// onChange={() => handleCheckboxChange('is_inch')}
 					{...{ register, errors }}
 				/>
-				{/* <CheckBox
-					text='text-secondary-content'
-					label='is_meter'
-					title='Meter'
-					isTitleNeeded= {watch('order_type') === 'tape' ? true : false}
-					hidden={watch('order_type') === 'tape' ? false : true}
-					checked={watch('is_meter')}
-					onChange={() => handleCheckboxChange('is_meter')}
-					{...{ register, errors }}
-				/> */}
 			</div>
 
 			<label className='text-sm'>Bleach All</label>
@@ -296,6 +310,7 @@ export default function Index() {
 				is_inch: data?.is_inch ? 1 : 0,
 				is_meter: data?.is_meter ? 1 : 0,
 				is_cm: data?.is_cm ? 1 : 0,
+				is_multi_color: data?.is_multi_color ? 1 : 0,
 				hand: data?.hand,
 				updated_at: GetDateTime(),
 			};
@@ -358,11 +373,13 @@ export default function Index() {
 				updated_at: GetDateTime(),
 			};
 
-			await updateData.mutateAsync({
-				url: `/slider/stock/${data?.stock_uuid}`,
-				updatedData: slider_info,
-				isOnCloseNeeded: false,
-			});
+			if (watch('order_type') !== 'tape') {
+				await updateData.mutateAsync({
+					url: `/slider/stock/${data?.stock_uuid}`,
+					updatedData: slider_info,
+					isOnCloseNeeded: false,
+				});
+			}
 
 			navigate(
 				`/order/details/${order_number}/${order_description_uuid}`
@@ -386,6 +403,7 @@ export default function Index() {
 			is_inch: data?.is_inch ? 1 : 0,
 			is_meter: data?.is_meter ? 1 : 0,
 			is_cm: data?.is_cm ? 1 : 0,
+			is_multi_color: data?.is_multi_color ? 1 : 0,
 			hand: data?.hand,
 			status: 0,
 			special_requirement,
@@ -439,17 +457,19 @@ export default function Index() {
 			created_at: GetDateTime(),
 		};
 
-		await postData.mutateAsync({
-			url: '/slider/stock',
-			newData: slider_info,
-			isOnCloseNeeded: false,
-		});
+		if (watch('order_type') !== 'tape') {
+			await postData.mutateAsync({
+				url: '/slider/stock',
+				newData: slider_info,
+				isOnCloseNeeded: false,
+			});
+		}
 
 		// * All promises
 		await Promise.all(order_entry_promises)
 			.then(() => reset(Object.assign({}, ORDER_NULL)))
 			.then(async () => {
-				await OrderDetailsInvalidate();
+				await indexPageInvalidate();
 				navigate(`/order/details`);
 			})
 			.catch((err) => console.log(err));
@@ -533,7 +553,7 @@ export default function Index() {
 						handelAppend={addRow}
 						handleRemove={handleOrderEntryRemove}
 						headerButtons={
-							!(watch('order_type') === 'slider') && headerButtons
+							watch('order_type') === 'full' && headerButtons
 						}
 						columnsDefs={[
 							{

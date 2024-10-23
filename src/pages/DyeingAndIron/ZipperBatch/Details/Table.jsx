@@ -44,7 +44,7 @@ export default function Index({ batch_entry }) {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'balance_batch_quantity',
+				accessorKey: 'balance_quantity',
 				header: 'Balanced Batch',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),

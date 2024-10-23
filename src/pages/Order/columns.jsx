@@ -392,6 +392,13 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 					info.getValue().slice(1),
 			},
 			{
+				accessorKey: 'is_multi_color',
+				header: 'Multi-Color',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue() ? 'Yes' : 'No',
+				
+			},
+			{
 				accessorFn: (row) =>
 					`${ row.is_inch ? 'Inch' : row.is_meter ? 'Meter' : 'Cm'}`,
 				id: 'kg',

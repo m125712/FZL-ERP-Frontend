@@ -510,6 +510,7 @@ export const ORDER_INFO_NULL = {
 
 export const ORDER_SCHEMA = {
 	// * order type
+	is_multi_color: BOOLEAN.default(false),
 	order_type: STRING_REQUIRED.default('full'),
 
 	// * item section
@@ -627,6 +628,7 @@ export const ORDER_SCHEMA = {
 };
 
 export const ORDER_NULL = {
+	is_multi_color: false,
 	order_type: 'full',
 	id: null,
 	order_info_uuid: null,
@@ -1189,6 +1191,42 @@ export const RM_MATERIAL_ORDER_AGAINST_EDIT_NULL = {
 	section: '',
 	trx_quantity: '',
 	issued_by: '',
+	remarks: '',
+};
+
+// * Multi Color Dashboard
+export const MULTI_COLOR_DASHBOARD_SCHEMA = {
+	expected_tape_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
+	tape_coil_uuid: STRING_REQUIRED,
+	tape_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
+	coil_uuid: STRING_REQUIRED,
+	coil_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
+	thread_name: STRING_REQUIRED,
+	thread_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
+	remarks: STRING.nullable(),
+};
+
+export const MULTI_COLOR_DASHBOARD_NULL = {
+	uuid: null,
+	expected_tape_quantity: 0,
+	tape_coil_uuid: '',
+	tape_quantity: 0,
+	coil_uuid: '',
+	coil_quantity: 0,
+	thread_name: '',
+	thread_quantity: 0,
+	remarks: '',
+};
+
+// * Multi Color Tape Received
+export const MULTI_COLOR_TAPE_RECEIVED_SCHEMA = {
+	quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
+	remarks: STRING.nullable(),
+};
+
+export const MULTI_COLOR_TAPE_RECEIVED_NULL = {
+	uuid: null,
+	quantity: null,
 	remarks: '',
 };
 
@@ -2455,11 +2493,11 @@ export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 	}), //
 	logo_type: STRING.nullable(), //
 	slider_body_shape: STRING.nullable(), //
-	slider_link: STRING.when('type',{
+	slider_link: STRING.when('type', {
 		is: 'link',
 		then: (schema) => schema.required('Required'),
 		otherwise: (schema) => schema.nullable(),
-	}), 
+	}),
 	stopper_type: STRING.nullable(), //
 	type: STRING_REQUIRED,
 	// quantity: NUMBER_REQUIRED, //

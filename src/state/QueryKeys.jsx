@@ -274,6 +274,26 @@ export const commonQK = {
 	// * Tape to Dyeing
 	tapeToDyeing: () => [...commonQK.all(), 'tape/to-dyeing'],
 	tapeToDyeingByUUID: (uuid) => [...commonQK.tapeToDyeing(), uuid],
+
+	// * Multi Color Dashboard
+	multiColorDashboard: () => [...commonQK.all(), 'multi-color-dashboard'],
+	multiColorDashboardByUUID: (uuid) => [
+		...commonQK.multiColorDashboard(),
+		uuid,
+	],
+
+	// *  Multi Color Log
+	multiColorLog: () => [...commonQK.all(), 'multi-color-log'],
+
+	// *  Multi Color Log Tape Received
+	multiColorLogTapeReceived: () => [
+		...commonQK.all(),
+		'multi-color-log/tape-received',
+	],
+	multiColorLogTapeReceivedByUUID: (uuid) => [
+		...commonQK.multiColorLogTapeReceived(),
+		uuid,
+	]
 };
 
 // * LabDip * //

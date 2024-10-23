@@ -70,7 +70,7 @@ export function PieChartDashboard() {
 		amount: item.amount,
 		fill: `var(--color-${item.name})`,
 	}));
-	console.log('Loaded data:', nestedChartData);
+	
 
 	return (
 		<Card className='flex flex-col'>

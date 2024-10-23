@@ -87,7 +87,6 @@ export function TableWithTime(props) {
 					title={props?.title}
 					columns={tableColumns}
 					data={tableData}
-					
 				/>
 			)}
 		</>

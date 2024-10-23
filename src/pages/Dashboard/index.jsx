@@ -44,7 +44,35 @@ export default function Dashboard() {
 				<div className='col-span-1 md:col-span-2'>
 					<BarChartOverall url='/dashboard/order-entry' />
 				</div>
+				<div className='col-span-2 flex flex-col justify-center gap-4 sm:flex-row sm:flex-wrap'>
+					<TableWithRowHeader
+						title='Payment Due'
+						data={payment_due.value}
+						isLoading={payment_due.loading}
+					/>
 
+					<TableWithRowHeader
+						title='Maturity Due'
+						data={maturity_due.value}
+						isLoading={maturity_due.loading}
+					/>
+
+					<TableWithRowHeader
+						title='Acceptance Due'
+						data={acceptance_due.value}
+						isLoading={acceptance_due.loading}
+					/>
+
+					<TableWithRowHeader
+						title='Document Receive Due'
+						data={document_rcv_due.value}
+						isLoading={document_rcv_due.loading}
+					/>
+				</div>
+
+				<div className='col-span-1 md:col-span-2'>
+					<PieChartDashboard />
+				</div>
 				<div>
 					<BarChartHorizontal
 						title='Challan Register'
@@ -157,35 +185,6 @@ export default function Dashboard() {
 					/>
 				</div>
 
-				<div className='col-span-2 flex flex-col justify-center gap-4 sm:flex-row sm:flex-wrap'>
-					<TableWithRowHeader
-						title='Payment Due'
-						data={payment_due.value}
-						isLoading={payment_due.loading}
-					/>
-
-					<TableWithRowHeader
-						title='Maturity Due'
-						data={maturity_due.value}
-						isLoading={maturity_due.loading}
-					/>
-
-					<TableWithRowHeader
-						title='Acceptance Due'
-						data={acceptance_due.value}
-						isLoading={acceptance_due.loading}
-					/>
-
-					<TableWithRowHeader
-						title='Document Receive Due'
-						data={document_rcv_due.value}
-						isLoading={document_rcv_due.loading}
-					/>
-				</div>
-
-				<div className='col-span-1 md:col-span-2'>
-					<PieChartDashboard />
-				</div>
 				<div>
 					<TopTenSalesMan url='/dashboard/top-sales' />
 				</div>

@@ -16,7 +16,7 @@ export const exclude = (watch, material, entry, uuid) => {
 		});
 
 		setExcludeItem(newExcludeItems);
-	}, [watch(), material]);
+	}, [watch(`${entry}`), material]);
 	return excludeItem;
 };
 //recipe , shad_recipe

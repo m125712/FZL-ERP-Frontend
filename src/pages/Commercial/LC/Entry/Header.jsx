@@ -23,7 +23,6 @@ export default function Header({
 	const { data: party } = useOtherParty();
 
 	const atSight = [
-		{ value: null, label: '---' },
 		{ value: 0, label: 'At Sight / 0 Day' },
 		{ value: 30, label: '30' },
 		{ value: 60, label: '60' },
@@ -132,10 +131,7 @@ export default function Header({
 
 					{watch('is_old_pi') && (
 						<>
-							<Input
-								label='lc_value'
-								{...{ register, errors }}
-							/>
+							<Input label='lc_value' {...{ register, errors }} />
 							<Textarea
 								label='pi_number'
 								{...{ register, errors }}

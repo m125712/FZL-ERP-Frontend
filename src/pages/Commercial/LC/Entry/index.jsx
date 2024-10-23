@@ -52,7 +52,7 @@ export default function Index() {
 		watch,
 	} = useRHF(LC_SCHEMA, LC_NULL);
 
-	const excludeItem = exclude(watch, pi, 'pi', 'uuid');
+	// const excludeItem = exclude(watch, pi, 'pi', 'uuid');
 	// purchase
 	const {
 		fields: piFields,
@@ -324,16 +324,18 @@ export default function Index() {
 														return (
 															<ReactSelect
 																placeholder='Select PI'
-																options={pi?.filter(
-																	(inItem) =>
-																		!excludeItem?.some(
-																			(
-																				excluded
-																			) =>
-																				excluded?.value ===
-																				inItem?.value
-																		)
-																)}
+																options={pi
+																// 	?.filter(
+																// 	(inItem) =>
+																// 		!excludeItem?.some(
+																// 			(
+																// 				excluded
+																// 			) =>
+																// 				excluded?.value ===
+																// 				inItem?.value
+																// 		)
+																// )
+																}
 																value={pi?.filter(
 																	(inItem) =>
 																		inItem.value ===

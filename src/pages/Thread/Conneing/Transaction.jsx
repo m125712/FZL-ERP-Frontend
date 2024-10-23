@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import { useConningProdLog, useDyeingCone } from '@/state/Thread';
+import {
+	useConningProdLog,
+	useConningTrxLog,
+	useDyeingCone,
+} from '@/state/Thread';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
@@ -23,6 +27,7 @@ export default function Index({
 }) {
 	const { postData, invalidateQuery } = useDyeingCone();
 	const { invalidateQuery: invalidateConningProdLog } = useConningProdLog();
+	const { invalidateQuery: invalidateConningTrxLog } = useConningTrxLog();
 	const { user } = useAuth();
 	const [qty, setQty] = useState();
 
@@ -31,7 +36,6 @@ export default function Index({
 		Number(qty) / Number(coningTrx?.cone_per_carton)
 	);
 
-
 	const { register, handleSubmit, errors, reset, control, context, watch } =
 		useRHF(
 			{
@@ -39,10 +43,7 @@ export default function Index({
 					MAX_TRX,
 					'Beyond Max Quantity'
 				),
-				carton_quantity: NUMBER_REQUIRED.moreThan(
-					0,
-					'More than 0'
-				),
+				carton_quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0'),
 				remarks: STRING.nullable(),
 			},
 			{
@@ -84,6 +85,7 @@ export default function Index({
 
 		invalidateQuery();
 		invalidateConningProdLog();
+		invalidateConningTrxLog();
 		return;
 	};
 
@@ -110,7 +112,7 @@ export default function Index({
 			<JoinInput
 				title='Carton Quantity'
 				label='carton_quantity'
-				sub_label={`MAX: ${MAX_CARTON} pcs`}
+				sub_label={`Suggested: ${MAX_CARTON} pcs`}
 				unit='PCS'
 				{...{ register, errors }}
 			/>

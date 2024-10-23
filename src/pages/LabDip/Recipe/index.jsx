@@ -95,14 +95,13 @@ export default function Index() {
 					const overrideAccess = haveAccess.includes(
 						'click_approve_override'
 					);
+					const { lab_dip_info_uuid } = info.row.original;
 					return (
 						<SwitchToggle
 							disabled={
-								overrideAccess
-									? false
-									: access
-										? Number(info.getValue()) === 1
-										: true
+								!lab_dip_info_uuid || 
+								(!overrideAccess &&
+									(!access || Number(info.getValue()) !== 1))
 							}
 							onChange={() =>
 								handelApprovedStatusChange(info.row.index)

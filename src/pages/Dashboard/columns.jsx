@@ -93,10 +93,10 @@ export const pi_register_columns = [
 		cell: (info) => info.getValue(),
 	},
 	{
-		accessorKey: 'lc_number',
-		header: 'LC No',
+		accessorKey: 'lc_date',
+		header: 'LC Date',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
+		cell: (info) => <DateTime date={info.getValue()} />,
 	},
 ];
 

@@ -49,6 +49,7 @@ export default function Index() {
 	const { data } = usePurchaseDetailsByUUID(purchase_description_uuid);
 
 	const [unit, setUnit] = useState({});
+	const [status, setStatus] = useState(false);
 
 	useEffect(() => {
 		purchase_description_uuid !== undefined
@@ -111,8 +112,14 @@ export default function Index() {
 			remarks: '',
 		});
 	};
-	
-	let excludeItem = exclude(watch, material, 'purchase', 'material_uuid');
+
+	let excludeItem = exclude(
+		watch,
+		material,
+		'purchase',
+		'material_uuid',
+		status
+	);
 	// Submit
 	const onSubmit = async (data) => {
 		// Update item
@@ -336,6 +343,9 @@ export default function Index() {
 																	[index]:
 																		e.unit,
 																});
+																setStatus(
+																	!status
+																);
 															}}
 															menuPortalTarget={
 																document.body

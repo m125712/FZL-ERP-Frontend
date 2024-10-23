@@ -56,7 +56,6 @@ export default function Index() {
 	const [endType, setEndType] = useState('');
 	const [itemType, setItemType] = useState('');
 	const [type, setType] = useState('full');
-	console.log(type);
 	const {
 		register,
 		handleSubmit,

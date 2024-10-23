@@ -137,7 +137,9 @@ export default function Index() {
 				.then(() =>
 					reset(Object.assign({}, DYEING_BATCH_PRODUCTION_NULL))
 				)
-				.then(navigate(`/dyeing-and-iron/batch/${batch_prod_uuid}`))
+				.then(
+					navigate(`/dyeing-and-iron/zipper-batch/${batch_prod_uuid}`)
+				)
 				.catch((err) => console.log(err));
 
 			return;

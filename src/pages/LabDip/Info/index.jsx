@@ -67,7 +67,6 @@ export default function Index() {
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
-				width: 'w-22',
 				cell: (info) => info.getValue(),
 			},
 			{

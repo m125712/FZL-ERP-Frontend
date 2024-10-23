@@ -20,6 +20,7 @@ export default function Header({
 	Controller,
 	is_Approved,
 	is_Status,
+	watch,
 	isUpdate,
 }) {
 	const { order_number, order_description_uuid } = useParams(); // * Not sure if this is required * //
@@ -63,6 +64,7 @@ export default function Header({
 								onChange={(e) =>
 									setIsApproved(e.target.checked)
 								}
+								disabled={getValues('lab_dip_info_uuid') ? false : true}
 							/>
 						</div>
 						{/* <div className='rounded-md border border-secondary/30 bg-secondary px-1'>

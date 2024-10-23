@@ -8,7 +8,7 @@ import { DateTime, LinkWithCopy } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 
-export default function Index({ recipe }) {
+export default function Index({ recipe, order_info_uuid }) {
 	const { updateData, url } = useLabDipRecipe();
 	const { invalidateQuery: invalidateQueryLabDipInfo } =
 		UseLabDipInfoByDetails(recipe?.uuid);
@@ -44,11 +44,9 @@ export default function Index({ recipe }) {
 					return (
 						<SwitchToggle
 							disabled={
-								overrideAccess
-									? false
-									: access
-										? Number(info.getValue()) === 1
-										: true
+								!order_info_uuid ||
+								(!overrideAccess &&
+									(!access || Number(info.getValue()) !== 1))
 							}
 							onChange={() =>
 								handelApprovedStatusChange(info.row.index)

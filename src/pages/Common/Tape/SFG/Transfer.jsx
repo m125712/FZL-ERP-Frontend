@@ -38,6 +38,7 @@ export default function Index() {
 	const { uuid, order_number, order_description_uuid } = useParams();
 	const { value: data } = useFetch(`/zipper/tape-coil/${uuid}`, [uuid]);
 	const location = useLocation();
+	const [status, setStatus] = useState(false);
 
 	const segments = location.pathname.split('/').filter((segment) => segment);
 
@@ -78,7 +79,8 @@ export default function Index() {
 		watch,
 		order_id,
 		'dyeing_transfer_entry',
-		'order_description_uuid'
+		'order_description_uuid',
+		status
 	);
 
 	const MAX_QTY = data?.stock_quantity;
@@ -328,6 +330,9 @@ export default function Index() {
 																	`dyeing_transfer_entry[${index}].tape_received`,
 																	e.tape_received
 																);
+																setStatus(
+																	!status
+																);
 															}}
 															// isDisabled={updateCoilProd?.id !== null}
 														/>
@@ -338,11 +343,7 @@ export default function Index() {
 									</td>
 									<td>{tape_req || 0}</td>
 									<td>{tape_req_kg || 0}</td>
-									<td>
-										{
-											selectedValue?.tape_transferred
-										}
-									</td>
+									<td>{selectedValue?.tape_transferred}</td>
 									<td>
 										{Number(
 											tape_req_kg -

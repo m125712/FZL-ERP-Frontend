@@ -32,7 +32,7 @@ export default function Index() {
 	const { invalidateQuery: invalidateTapeToDyeing } = useCommonTapeToDyeing();
 	const { invalidateQuery: invalidateCoilToDyeing } = useCommonCoilToDyeing();
 	const location = useLocation();
-
+	const [status, setStatus] = useState(false);
 	const { postData, deleteData } = useOrderDescription();
 	const { value: data } = useFetch(`/zipper/tape-coil/${coil_uuid}`, [
 		coil_uuid,
@@ -80,7 +80,8 @@ export default function Index() {
 		watch,
 		order_id,
 		'coil_to_dyeing_entry',
-		'order_id'
+		'order_id',
+		status
 	);
 	const MAX_TAPE_TRX_QTY =
 		MAX_QTY - getTotalQty(watch('coil_to_dyeing_entry'));
@@ -317,11 +318,14 @@ export default function Index() {
 															value={
 																selectedValue
 															}
-															onChange={(e) =>
+															onChange={(e) => {
 																onChange(
 																	e.value
-																)
-															}
+																);
+																setStatus(
+																	!status
+																);
+															}}
 															// isDisabled={updateCoilProd?.id !== null}
 														/>
 													);
@@ -331,11 +335,7 @@ export default function Index() {
 									</td>
 									<td>{tape_req || 0}</td>
 									<td>{tape_req_kg || 0}</td>
-									<td>
-										{
-											selectedValue?.tape_received
-										}
-									</td>
+									<td>{selectedValue?.tape_received}</td>
 									<td>
 										{Number(
 											tape_req_kg -

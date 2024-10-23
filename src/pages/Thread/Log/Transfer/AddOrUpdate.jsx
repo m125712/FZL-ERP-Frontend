@@ -107,7 +107,7 @@ export default function Index({
 			<JoinInput
 				title='Carton Quantity'
 				label='carton_quantity'
-				sub_label={`MAX: ${MAX_CARTON} pcs`}
+				sub_label={`Suggested: ${MAX_CARTON} pcs`}
 				unit='PCS'
 				{...{ register, errors }}
 			/>

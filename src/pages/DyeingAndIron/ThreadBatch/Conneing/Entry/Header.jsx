@@ -57,6 +57,8 @@ export default function Header({
 			<SectionEntryBody
 				title={
 					<div>
+						<span>{`${getValues('batch_id') ? `Batch ID: ${getValues('batch_id')}` : 'Entry New Batch'}`}</span>
+						<br />
 						<span>{`Machine Capacity (KG): ${res?.min_capacity || 0} - 
 														${res?.max_capacity || 0}`}</span>
 						<br />
@@ -66,7 +68,7 @@ export default function Header({
 									totalWeight < parseFloat(res?.min_capacity)
 									? 'text-error'
 									: ''
-							)}>{`Batch Quantity (KG): ${totalWeight}`}</span>
+							)}>{`Batch Quantity (KG): ${Number(totalWeight).toFixed(3)}`}</span>
 						<br />
 						<span>{`Batch Quantity (Cone): ${totalQuantity}`}</span>
 						<br />
@@ -96,7 +98,11 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<Input label='yarn_quantity' disabled={true} {...{ register, errors }}/>
+					<Input
+						label='yarn_quantity'
+						disabled={true}
+						{...{ register, errors }}
+					/>
 					<FormField label='reason' title='Reason' errors={errors}>
 						<Controller
 							name={'reason'}

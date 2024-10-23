@@ -363,7 +363,7 @@ export default function Index() {
 
 						{/* Total weight placed under "Expected Weight" */}
 						<td className='px-3 py-2 text-left font-semibold'>
-							{getTotalCalTape(watch('batch_entry'))}
+							{Number(getTotalCalTape(watch('batch_entry')).toFixed(3))}
 						</td>
 						<td className='text-right font-semibold' colSpan={11}>
 							Total Yarn Quantity:
@@ -372,7 +372,7 @@ export default function Index() {
 							{Number(
 								getTotalYarnQuantity(
 									watch('batch_entry')
-								).toFixed(2)
+								).toFixed(3)
 							)}
 						</td>
 

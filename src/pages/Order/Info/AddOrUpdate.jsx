@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useOrderInfo } from '@/state/Order';
+import { useOtherOrderInfoValueLabel } from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
@@ -55,7 +56,8 @@ export default function Index({
 		`/other/factory/value/label/${partyId}`,
 		[partyId]
 	);
-
+	const { invalidateQuery: invalidateOrderInfoValueLabel } =
+		useOtherOrderInfoValueLabel();
 	// const getResult = (key) =>
 	// 	typeof getValues(key) !== 'boolean' && getValues(key) === 1
 	// 		? true
@@ -135,6 +137,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateOrderInfoValueLabel();
 	};
 
 	useEffect(() => {

@@ -11,6 +11,7 @@ export default function Index() {
 	const { data, isLoading, url } = useProductionReport(
 		'thread-sales-marketing'
 	);
+	
 	const info = new PageInfo(
 		'Production Report S&M (Thread)',
 		url,
@@ -19,9 +20,6 @@ export default function Index() {
 
 	const haveAccess = useAccess('report__production_report_sm');
 
-	useEffect(() => {
-		document.title = info.getTabName();
-	}, []);
 
 	const columns = useMemo(
 		() => [

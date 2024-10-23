@@ -390,6 +390,13 @@ export default function Index() {
 		setIsAllChecked(isEveryChecked);
 		setIsSomeChecked(isSomeChecked);
 	};
+
+	const setAllQty = () => {
+		BatchEntryField.map((item, idx) => {
+			setValue(`batch_entry[${idx}].quantity`, item.balance_quantity);
+		});
+	};
+
 	const columns = useMemo(
 		() => [
 			{
@@ -469,22 +476,49 @@ export default function Index() {
 			{
 				accessorKey: 'order_quantity',
 				header: 'Order QTY',
-				enableColumnFilter: true,
-				enableSorting: true,
+				enableColumnFilter: false,
+				enableSorting: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'balance_quantity',
-				header: 'Balance',
-				enableColumnFilter: true,
-				enableSorting: true,
-				cell: (info) => info.getValue(),
+				header: (
+					<div className='flex flex-col'>
+						Balance
+						<label
+							className='btn btn-primary btn-xs'
+							onClick={() => setAllQty()}>
+							Copy All
+						</label>
+					</div>
+				),
+				enableColumnFilter: false,
+				enableSorting: false,
+				cell: (info) => {
+					const idx = info.row.index;
+					return (
+						<div className='flex gap-4'>
+							<label
+								className='btn btn-primary btn-xs'
+								onClick={() =>
+									setValue(
+										`batch_entry[${idx}].quantity`,
+										info.getValue()
+									)
+								}>
+								Copy
+							</label>
+							{info.getValue()}
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'QTY',
+				header: 'Quantity',
 				enableColumnFilter: false,
 				enableSorting: false,
+
 				cell: (info) => {
 					const idx = info.row.index;
 					const dynamicerror = errors?.batch_entry?.[idx]?.quantity;
@@ -501,7 +535,11 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'expected_weight',
-				header: 'Expected Weight',
+				header: (
+					<div>
+						Expected <br /> Weight
+					</div>
+				),
 				enableColumnFilter: false,
 				enableSorting: false,
 				cell: (info) => {

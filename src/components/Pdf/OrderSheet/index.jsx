@@ -76,7 +76,7 @@ export default function OrderSheetPdf(order_sheet) {
 	};
 
 	const headerHeight = 140;
-	let footerHeight = 30;
+	let footerHeight = 40;
 	const { order_info, order_entry, garments, sr } = order_sheet;
 
 	const pdfDocGenerator = pdfMake.createPdf({
@@ -111,7 +111,7 @@ export default function OrderSheetPdf(order_sheet) {
 
 		// Page Layout
 		content: [
-			...order_entry.map((entry) => {
+			...order_entry.map((entry, i) => {
 				const { order_entry } = entry;
 				const uniqueSizes = [
 					...new Set(
@@ -170,7 +170,7 @@ export default function OrderSheetPdf(order_sheet) {
 
 				const chunkSize = 7;
 				const chunkedArray = chunkArray(uniqueSizes, chunkSize);
-
+				let TotalChunkQTY = 0;
 				return [
 					chunkedArray.map((chunk, index) => {
 						let chunkTotal = 0;
@@ -189,6 +189,7 @@ export default function OrderSheetPdf(order_sheet) {
 										entry,
 										srinfo,
 										uniqueSizes: chunk,
+										i,
 									}),
 
 									// Table Body
@@ -293,6 +294,8 @@ export default function OrderSheetPdf(order_sheet) {
 														);
 
 													chunkTotal += total;
+													TotalChunkQTY += total;
+
 													return total;
 												})(), // Immediately invoke the function,
 												style: 'tableFooter',
@@ -378,9 +381,32 @@ export default function OrderSheetPdf(order_sheet) {
 										: []),
 								],
 							},
+
 							margin: [0, 5],
 						};
 					}),
+
+					// * Chunk total
+					{
+						margin: [0, 5],
+						table: {
+							widths: ['*', 'auto'],
+							body: [
+								[
+									{
+										text: `#${i + 1} Total`,
+										style: 'tableFooter',
+										alignment: 'right',
+									},
+									{
+										text: TotalChunkQTY,
+										style: 'tableFooter',
+										alignment: 'Center',
+									},
+								],
+							],
+						},
+					},
 				];
 			}),
 

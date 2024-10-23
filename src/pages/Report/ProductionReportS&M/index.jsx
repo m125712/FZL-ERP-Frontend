@@ -5,7 +5,7 @@ import Zipper from './zipper';
 
 export default function Index() {
 	useEffect(() => {
-		document.title = 'Finishing Log';
+		document.title = 'Production Report S&M';
 	}, []);
 
 	return (

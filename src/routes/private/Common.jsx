@@ -8,6 +8,9 @@ import CoilProd from '@/pages/Common/Coil/SFG';
 import CoilEntryToDyeing from '@/pages/Common/Coil/SFG/EntryToDyeing';
 // * Tape Entry to dyeing
 import TapeEntryToDyeing from '@/pages/Common/Coil/SFG/EntryToDyeing';
+// * Multi-Color
+import MultiColorDashboard from '@/pages/Common/MultiColor/Dashboard';
+import MultiColorLog from '@/pages/Common/MultiColor/Log';
 import TapeLog from '@/pages/Common/Tape/Log';
 import TapeRequired from '@/pages/Common/Tape/Required';
 import TapeStock from '@/pages/Common/Tape/RM';
@@ -183,7 +186,26 @@ export const CommonRoutes = [
 					},
 				],
 			},
-
+			// * Multi-Color
+			{
+				name: 'Multi-Color',
+				children: [
+					{
+						name: 'Dashboard',
+						path: '/common/multi-color/dashboard',
+						element: <MultiColorDashboard />,
+						page_name: 'common__multi_color_dashboard',
+						actions: ['read', 'create', 'update'],
+					},
+					{
+						name: 'Log',
+						path: '/common/multi-color/log',
+						element: <MultiColorLog />,
+						page_name: 'common__multi_color_log',
+						actions: ['read', 'create', 'update', 'delete'],
+					},
+				],
+			},
 			{
 				name: 'Dyed Store',
 				path: '/common/dyed-store',

@@ -2,22 +2,14 @@ import React, { useEffect } from 'react';
 import { useProductionReport } from '@/state/Report';
 import { useAccess } from '@/hooks';
 
-import {  DynamicDeliveryField } from '@/ui';
+import { DynamicDeliveryField } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const { data, isLoading, url } = useProductionReport('director');
-	const info = new PageInfo(
-		'Production Report Director (Zipper)',
-		url,
-		'report__production_report_director'
-	);
+	const { data, isLoading } = useProductionReport('director');
 
 	const haveAccess = useAccess('report__production_report_director');
-
-	useEffect(() => {
-		document.title = info.getTabName();
-	}, []);
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -56,7 +48,7 @@ export default function Index() {
 	return (
 		<>
 			<DynamicDeliveryField
-				title={`Production Report `}
+				title={`Production Report Director (zipper) `}
 				tableHead={
 					<>
 						{[
@@ -84,7 +76,7 @@ export default function Index() {
 								{party.orders.map((order, k) => (
 									<React.Fragment key={k}>
 										{order.descriptions.map((desc, l) => (
-											<tr  key={l}>
+											<tr key={l}>
 												{/* Show Item Name only in the first row for each item */}
 												{j === 0 &&
 													k === 0 &&
@@ -159,4 +151,3 @@ export default function Index() {
 		</>
 	);
 }
-

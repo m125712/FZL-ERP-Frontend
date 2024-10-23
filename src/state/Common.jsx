@@ -219,3 +219,36 @@ export const useCommonMaterialTrxByUUID = (uuid) =>
 		queryKey: commonQK.materialTrxByUUID(uuid),
 		url: `/zipper/material-trx-against-order/${uuid}`,
 	});
+
+// * MULTI COLOR *//
+// * Dashboard
+export const useCommonMultiColorDashboard = () =>
+	createGlobalState({	
+		queryKey: commonQK.multiColorDashboard(),
+		url: `/zipper/multi-color-dashboard`,
+	});
+
+export const useCommonMultiColorDashboardByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.multiColorDashboardByUUID(uuid),
+		url: `/zipper/multi-color-dashboard/${uuid}`,
+	});
+
+// * log
+export const useCommonMultiColorLog = () =>
+	createGlobalState({
+		queryKey: commonQK.multiColorLog(),
+		url: `/zipper/tape-coil-to-dyeing?multi_color_tape=true`,
+	});
+
+export const useCommonMultiColorLogTapeReceived = () =>
+	createGlobalState({
+		queryKey: commonQK.multiColorLogTapeReceived(),
+		url: `/zipper/multi-color-tape-receive`,
+	});
+
+export const useCommonMultiColorLogTapeReceivedByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.multiColorLogTapeReceivedByUUID(uuid),
+		url: `/zipper/multi-color-tape-receive/${uuid}`,
+	});

@@ -139,34 +139,47 @@ export default function Header({
 			<SectionEntryBody
 				title='Item'
 				header={
-					<div className='my-2 w-28'>
-						<FormField
-							label='order_type'
-							title='Order Type'
-							is_title_needed='false'
-							errors={errors}>
-							<Controller
-								name={'order_type'}
-								control={control}
-								render={({ field: { onChange } }) => {
-									return (
-										<ReactSelect
-											placeholder='Select Puller Type'
-											options={types}
-											value={types?.find(
-												(item) =>
-													item.value ==
-													getValues('order_type')
-											)}
-											onChange={(e) => {
-												onChange(e.value);
-												setType(e.value);
-											}}
-										/>
-									);
-								}}
-							/>
-						</FormField>
+					<div className='flex items-center gap-4'>
+						{watch('order_type') !== 'slider' && (
+							<div className='my-2 h-8 rounded-md bg-secondary px-1'>
+								<CheckBox
+									text='text-secondary-content'
+									label='is_multi_color'
+									title='Multi-Color'
+									{...{ register, errors }}
+								/>
+							</div>
+						)}
+
+						<div className='my-2 w-28'>
+							<FormField
+								label='order_type'
+								title='Order Type'
+								is_title_needed='false'
+								errors={errors}>
+								<Controller
+									name={'order_type'}
+									control={control}
+									render={({ field: { onChange } }) => {
+										return (
+											<ReactSelect
+												placeholder='Select Puller Type'
+												options={types}
+												value={types?.find(
+													(item) =>
+														item.value ==
+														getValues('order_type')
+												)}
+												onChange={(e) => {
+													onChange(e.value);
+													setType(e.value);
+												}}
+											/>
+										);
+									}}
+								/>
+							</FormField>
+						</div>
 					</div>
 				}>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>

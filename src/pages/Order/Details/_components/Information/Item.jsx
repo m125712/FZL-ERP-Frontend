@@ -91,6 +91,9 @@ export default function ItemDescription({ order_description, className }) {
 			tape_transferred,
 			teeth_color_name,
 			special_requirement_name,
+
+			// multi color
+			is_multi_color,
 		} = order_description;
 
 		const baseInfo = [
@@ -141,6 +144,10 @@ export default function ItemDescription({ order_description, className }) {
 			{
 				label: 'description',
 				value: description,
+			},
+			{
+				label: 'Multi Color',
+				value: is_multi_color ? 'Yes' : 'No',
 			},
 			{
 				label: 'remarks',

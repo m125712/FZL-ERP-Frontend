@@ -137,7 +137,7 @@ export const getPageFooter = ({ currentPage, pageCount }) => {
 	};
 };
 
-export const TableHeader = ({ entry, uniqueSizes, column, srinfo }) => {
+export const TableHeader = ({ entry, uniqueSizes, column, srinfo, i }) => {
 	const {
 		item_name,
 		nylon_stopper_name,
@@ -206,7 +206,7 @@ export const TableHeader = ({ entry, uniqueSizes, column, srinfo }) => {
 	return [
 		[
 			{
-				text: 'Description',
+				text: 'Description\n' + `\t#${i + 1}`,
 				style: 'tableHeader',
 				alignment: 'Center',
 			},

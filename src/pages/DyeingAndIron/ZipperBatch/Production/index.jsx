@@ -191,6 +191,23 @@ export default function Index() {
 		setIsSomeChecked(isSomeChecked);
 	};
 
+	const setAllExpect_kg = () => {
+		BatchEntryField.map((item, idx) => {
+			const { top, bottom, dyed_mtr_per_kg, size, quantity } = item;
+
+			const total_size_in_mtr =
+				((parseFloat(top) + parseFloat(bottom) + parseFloat(size)) *
+					parseFloat(quantity)) /
+				100;
+
+			const expt_kg = Number(
+				total_size_in_mtr / parseFloat(dyed_mtr_per_kg)
+			).toFixed(3);
+
+			setValue(`batch_entry[${idx}].production_quantity_in_kg`, expt_kg);
+		});
+	};
+
 	const columns = useMemo(
 		() => [
 			{
@@ -303,9 +320,18 @@ export default function Index() {
 			// },
 			{
 				accessorKey: 'top',
-				header: 'Expected Tape (Kg)',
+				header: (
+					<div className='flex flex-col'>
+						Expected Tape (Kg)
+						<label
+							className='btn btn-primary btn-xs'
+							onClick={() => setAllExpect_kg()}>
+							Copy All
+						</label>
+					</div>
+				),
 				enableColumnFilter: false,
-				enableSorting: true,
+				enableSorting: false,
 				cell: ({ row }) => {
 					const { top, bottom, dyed_mtr_per_kg, size, quantity } =
 						row.original;
@@ -318,9 +344,25 @@ export default function Index() {
 							parseFloat(quantity)) /
 						100;
 
-					return Number(
+					const expt_kg = Number(
 						total_size_in_mtr / parseFloat(dyed_mtr_per_kg)
 					).toFixed(3);
+
+					return (
+						<div className='flex gap-4'>
+							<label
+								className='btn btn-primary btn-xs'
+								onClick={() =>
+									setValue(
+										`batch_entry[${idx}].production_quantity_in_kg`,
+										expt_kg
+									)
+								}>
+								Copy
+							</label>
+							{expt_kg}
+						</div>
+					);
 				},
 			},
 			{
@@ -434,7 +476,11 @@ export default function Index() {
 								getTotal(watch('batch_entry')).totalCalTape
 							).toFixed(3)}
 						</td>
-
+						<td className='px-3 py-2 text-left font-semibold'>
+							{Number(
+								getTotal(watch('batch_entry')).totalProduction
+							).toFixed(3)}
+						</td>
 						{/* Empty <td> elements to maintain table structure */}
 						<td></td>
 					</tr>

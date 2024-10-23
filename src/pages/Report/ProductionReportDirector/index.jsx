@@ -5,14 +5,14 @@ import Zipper from './zipper';
 
 export default function Index() {
 	useEffect(() => {
-		document.title = 'Finishing Log';
+		document.title = 'Production Report Director';
 	}, []);
 
 	return (
 		<div>
 			<Zipper />
 			<hr className='my-6 border-2 border-dashed border-secondary/30' />
-			{/* <Thread /> */}
+			<Thread />
 		</div>
 	);
 }

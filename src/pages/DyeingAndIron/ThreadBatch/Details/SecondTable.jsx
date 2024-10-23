@@ -4,7 +4,11 @@ import { useFetch } from '@/hooks';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime } from '@/ui';
 
-export default function Index({ batch_entry, water_capacity, yarn_quantity }) {
+export default function Index({
+	batch_entry,
+	water_capacity,
+	total_yarn_quantity,
+}) {
 	const shade_recipe_uuids = batch_entry.map((entry) => entry.recipe_uuid);
 
 	let shade_recipes_entries = shade_recipe_uuids.map((uuid) => {
@@ -19,7 +23,7 @@ export default function Index({ batch_entry, water_capacity, yarn_quantity }) {
 		(acc, curr) => acc.concat(curr),
 		[]
 	);
-	const volume = parseFloat(yarn_quantity) * parseFloat(water_capacity);
+	const volume = parseFloat(total_yarn_quantity) * parseFloat(water_capacity);
 
 	shade_recipes_entries = shade_recipes_entries.map((item) => ({
 		...item,
@@ -50,7 +54,7 @@ export default function Index({ batch_entry, water_capacity, yarn_quantity }) {
 
 	return (
 		<ReactTableTitleOnly
-			title={`Lab -> Yarn Weight:${Number(yarn_quantity).toFixed(3)} Water Capacity:(${Number(water_capacity).toFixed(2)} Volume: ${Number(volume).toFixed(3)})`}
+			title={`Lab -> Yarn Weight:${Number(total_yarn_quantity).toFixed(3)} Water Capacity:(${Number(water_capacity).toFixed(2)} Volume: ${Number(volume).toFixed(3)})`}
 			data={shade_recipes_entries}
 			columns={columns}
 		/>

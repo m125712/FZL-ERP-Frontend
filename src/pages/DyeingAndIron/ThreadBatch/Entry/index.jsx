@@ -161,16 +161,16 @@ export default function Index() {
 	);
 
 	const onSubmit = async (data) => {
-		if (
-			getTotalCalTape(watch('batch_entry')) > maxCapacity ||
-			getTotalCalTape(watch('batch_entry')) < minCapacity
-		) {
-			ShowLocalToast({
-				type: 'error',
-				message: `Machine Capacity  between ${minCapacity} and ${maxCapacity}`,
-			});
-			return;
-		}
+		// if (
+		// 	getTotalCalTape(watch('batch_entry')) > maxCapacity ||
+		// 	getTotalCalTape(watch('batch_entry')) < minCapacity
+		// ) {
+		// 	ShowLocalToast({
+		// 		type: 'error',
+		// 		message: `Machine Capacity  between ${minCapacity} and ${maxCapacity}`,
+		// 	});
+		// 	return;
+		// }
 		// * Update
 		if (isUpdate) {
 			const batch_data_updated = {

@@ -24,7 +24,7 @@ import GetDateTime from '@/util/GetDateTime';
 export default function Index() {
 	const { postData, deleteData } = useDyeingTransfer();
 	const { uuid, order_number, order_description_uuid } = useParams();
-
+	const [status, setStatus] = useState(false);
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const isUpdate =
@@ -127,7 +127,7 @@ export default function Index() {
 			.then(() => reset(Object.assign({}, DYEING_TRANSFER_NULL)))
 			.then(async () => {
 				// await OrderDetailsInvalidate(); common/tape/log
-				navigate('/common/dyeing-transfer');
+				navigate('/common/dyed-store');
 			})
 			.catch((err) => console.log(err));
 	};
@@ -179,7 +179,8 @@ export default function Index() {
 		watch,
 		order_id,
 		'dyeing_transfer_entry',
-		'order_description_uuid'
+		'order_description_uuid',
+		status
 	);
 
 	return (
@@ -282,6 +283,10 @@ export default function Index() {
 																	`dyeing_transfer_entry[${index}].tape_received`,
 																	e.tape_received
 																);
+																setStatus(
+																	!status
+																);
+
 																// getColors(e.colors);
 															}}
 															// isDisabled={updateCoilProd?.id !== null}
@@ -293,16 +298,10 @@ export default function Index() {
 									</td>
 									<td>{tape_req || 0}</td>
 									<td>{tape_req_kg || 0}</td>
-									<td>
-										{
-											selectedValue?.tape_transferred
-										}
-									</td>
+									<td>{selectedValue?.tape_transferred}</td>
 									<td>
 										{Number(selectedValue?.stock || 0) -
-											
-												selectedValue?.tape_transferred
-											}
+											selectedValue?.tape_transferred}
 									</td>
 									<td>
 										{Number(

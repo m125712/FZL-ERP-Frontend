@@ -36,7 +36,7 @@ export default function Index({
 	return (
 		<ReactTable title='Details' data={order_entry} columns={columns}>
 			<tr className='bg-slate-200 text-sm'>
-				<td colSpan={5} className='text-right font-bold'>
+				<td colSpan={6} className='text-right font-bold'>
 					Total Quantity:
 				</td>
 				<td className='px-3 py-1'>{sliderQuantity.Quantity}</td>

@@ -26,6 +26,8 @@ export default function Header({
 			<SectionEntryBody
 				title={
 					<div>
+						<span>{`${getValues('batch_id') ? `Batch ID: ${getValues('batch_id')}` : 'Entry New Batch'}`}</span>
+						<br />
 						<span>{`Machine Capacity (KG): ${res?.min_capacity || 0} - 
 														${res?.max_capacity || 0}`}</span>
 						<br />
@@ -35,7 +37,7 @@ export default function Header({
 									totalCalTape < parseFloat(res?.min_capacity)
 									? 'text-error'
 									: ''
-							)}>{`Batch Quantity (KG): ${totalCalTape}`}</span>
+							)}>{`Batch Quantity (KG): ${Number(totalCalTape).toFixed(3)}`}</span>
 						<br />
 						<span>{`Batch Quantity (PCS): ${totalQuantity}`}</span>
 					</div>

@@ -28,7 +28,8 @@ export default function Index() {
 		[shade_recipe_uuids, batch_uuid]
 	);
 	const volume =
-		parseFloat(batch?.yarn_quantity) * parseFloat(batch?.water_capacity);
+		parseFloat(batch?.total_yarn_quantity) *
+		parseFloat(batch?.water_capacity);
 
 	const shade_recipes_entries = useMemo(() => {
 		return shade_recipe?.recipe_entry?.map((item) => ({
@@ -95,7 +96,7 @@ export default function Index() {
 			<SecondTable
 				batch_entry={batch?.batch_entry}
 				water_capacity={machine?.water_capacity}
-				yarn_quantity={batch?.yarn_quantity}
+				total_yarn_quantity={batch?.total_yarn_quantity}
 			/>
 		</div>
 	);

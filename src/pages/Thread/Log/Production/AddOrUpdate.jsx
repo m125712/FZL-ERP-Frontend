@@ -124,7 +124,7 @@ export default function Index({
 				title='Carton Quantity'
 				label='coning_carton_quantity'
 				unit='KG'
-				sub_label={`MAX: ${MAX_CARTON} kg`}
+				sub_label={`Suggested: ${MAX_CARTON} kg`}
 				{...{ register, errors }}
 			/>
 			<Textarea label='remarks' {...{ register, errors }} />

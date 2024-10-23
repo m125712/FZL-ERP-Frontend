@@ -33,6 +33,7 @@ export default function Index() {
 		itemId: null,
 		itemName: null,
 	});
+	const [status, setStatus] = useState(false);
 
 	const isUpdate = lc_uuid !== undefined;
 	if (isUpdate) {
@@ -52,7 +53,7 @@ export default function Index() {
 		watch,
 	} = useRHF(LC_SCHEMA, LC_NULL);
 
-	const excludeItem = exclude(watch, pi, 'pi', 'uuid');
+	const excludeItem = exclude(watch, pi, 'pi', 'uuid', status);
 	// purchase
 	const {
 		fields: piFields,
@@ -351,6 +352,9 @@ export default function Index() {
 																	);
 																	onChange(
 																		e.value
+																	);
+																	setStatus(
+																		!status
 																	);
 																}}
 																menuPortalTarget={

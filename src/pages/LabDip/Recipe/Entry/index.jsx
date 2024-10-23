@@ -33,7 +33,7 @@ export default function Index() {
 		invalidateQuery: invalidateQueryRecipe,
 	} = useLabDipRecipe();
 	const { recipe_id, recipe_uuid } = useParams();
-
+	const [status, setStatus] = useState(false);
 	const { user } = useAuth();
 	const navigate = useNavigate();
 
@@ -67,7 +67,13 @@ export default function Index() {
 	const { value: material } = useFetch(
 		'/other/material/value/label/unit/quantity?type=dyes'
 	);
-	let excludeItem = exclude(watch, material, 'recipe_entry', 'material_uuid');
+	let excludeItem = exclude(
+		watch,
+		material,
+		'recipe_entry',
+		'material_uuid',
+		status
+	);
 	// recipe_entry
 	const {
 		fields: recipeEntryField,
@@ -271,6 +277,7 @@ export default function Index() {
 							is_Approved: getValues('approved'),
 							is_Status: getValues('status'),
 							isUpdate,
+							watch
 						}}
 					/>
 					<DynamicField
@@ -332,6 +339,7 @@ export default function Index() {
 															// 	...unit,
 															// 	[index]: e.unit,
 															// });
+															setStatus(!status);
 														}}
 														menuPortalTarget={
 															document.body

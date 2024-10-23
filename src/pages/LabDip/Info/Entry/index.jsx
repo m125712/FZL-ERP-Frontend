@@ -39,6 +39,7 @@ export default function Index() {
 	const { user } = useAuth();
 	const navigate = useNavigate();
 
+	const [Status, setStatus] = useState(false);
 	// * used for checking if it is for update*//
 	const isUpdate = info_uuid !== undefined && info_number !== undefined;
 
@@ -271,7 +272,7 @@ export default function Index() {
 		{ label: 'Pending', value: 0 },
 		{ label: 'Approved', value: 1 },
 	];
-	let excludeItem = exclude(watch, rec_uuid, 'recipe', 'recipe_uuid');
+	let excludeItem = exclude(watch, rec_uuid, 'recipe', 'recipe_uuid', Status);
 
 	return (
 		<div>
@@ -357,12 +358,12 @@ export default function Index() {
 																e,
 																index
 															);
+															setStatus(!Status);
 														}}
 														isDisabled={
 															watch(
 																`recipe[${index}].recipe_uuid`
-															) !== '' &&
-															isUpdate
+															) !== '' && isUpdate
 														}
 														menuPortalTarget={
 															document.body
@@ -473,7 +474,10 @@ export default function Index() {
 														}}
 														isDisabled={
 															rec_uuid ==
-															undefined
+																undefined ||
+															!watch(
+																`order_info_uuid`
+															)
 														}
 														menuPortalTarget={
 															document.body

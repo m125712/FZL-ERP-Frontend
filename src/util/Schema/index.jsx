@@ -1847,7 +1847,7 @@ export const LC_SCHEMA = {
 	lc_number: STRING_REQUIRED,
 	lc_date: STRING_REQUIRED,
 	payment_value: NUMBER_DOUBLE_REQUIRED,
-	ldbc_fdbc: STRING_REQUIRED.nullable(),
+	ldbc_fdbc: STRING.nullable(),
 	commercial_executive: STRING_REQUIRED,
 	party_bank: STRING_REQUIRED,
 	production_complete: BOOLEAN_REQUIRED,

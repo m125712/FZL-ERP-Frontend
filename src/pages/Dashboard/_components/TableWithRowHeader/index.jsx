@@ -8,7 +8,16 @@ import { useFetch } from '@/hooks';
 
 export function TableWithRowHeader(props) {
 	const data = props?.data;
-
+	if (!data || data.length === 0) {
+		return (
+			<div className='flex h-screen items-center justify-center text-4xl'>
+				Not Found
+			</div>
+		);
+	}
+	if (props.isLoading) {
+		return <span className='loading loading-dots loading-lg z-50' />;
+	}
 	const columns = [
 		{
 			accessorKey: 'label',
@@ -23,16 +32,7 @@ export function TableWithRowHeader(props) {
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 	});
-	if (!data || data.length === 0) {
-		return (
-			<div className='flex h-screen items-center justify-center text-4xl'>
-				Not Found
-			</div>
-		);
-	}
-	if (props.isLoading) {
-		return <span className='loading loading-dots loading-lg z-50' />;
-	}
+
 	return (
 		<div className='mx-auto max-w-full'>
 			<div className='overflow-x-auto'>

@@ -167,7 +167,9 @@ export default function Index() {
 				])
 					.then(() => reset(Object.assign({}, PI_NULL)))
 					.then(() => {
-						navigate(`/delivery/packing-list/details/${updatedId}`);
+						navigate(
+							`/delivery/zipper-packing-list/details/${updatedId}`
+						);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -226,7 +228,7 @@ export default function Index() {
 				await Promise.all([...commercial_packing_list_entry_promises])
 					.then(() => reset(Object.assign({}, PACKING_LIST_NULL)))
 					.then(() => {
-						navigate(`/delivery/packing-list`);
+						navigate(`/delivery/zipper-packing-list`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);

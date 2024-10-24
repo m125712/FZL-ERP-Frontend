@@ -94,6 +94,8 @@ export default function Index() {
 		await updateData.mutateAsync({
 			url: `/zipper/batch/${batch_prod_uuid}`,
 			updatedData: {
+				machine_uuid: data.machine_uuid,
+				slot: data.slot,
 				batch_status: data.batch_status,
 				updated_at: GetDateTime(),
 			},

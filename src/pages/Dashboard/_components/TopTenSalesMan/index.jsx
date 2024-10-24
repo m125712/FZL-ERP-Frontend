@@ -1,15 +1,24 @@
+import { useState } from 'react';
+import { RefreshCcw } from 'lucide-react';
 import { useFetch } from '@/hooks';
 
 export function TopTenSalesMan(props) {
-	const { value: data, loading } = useFetch(props?.url, [props?.url]);
+	const [status, setStatus] = useState(false);
+	const { value: data, loading } = useFetch(props?.url, [props?.url, status]);
 
 	if (loading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
 		<div className='flex w-64 flex-col rounded-md border bg-base-200 shadow'>
-			<div className='rounded-t-md bg-secondary py-2 text-center text-primary-content'>
-				Top 10 Salesman
+			<div className='flex items-center justify-between rounded-t-md bg-secondary px-3 py-2 text-primary-content'>
+				<span>Top 10 Salesman</span>
+				<button
+					type='button'
+					className='btn-filter-outline bg-white'
+					onClick={() => setStatus((prev) => !prev)}>
+					<RefreshCcw className='size-4' />
+				</button>
 			</div>
 			<div className='flex flex-col'>
 				{data.map((item, index) => (

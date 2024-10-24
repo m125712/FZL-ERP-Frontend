@@ -1,6 +1,7 @@
 'use client';
 
-import { TrendingUp } from 'lucide-react';
+import { useState } from 'react';
+import { RefreshCcw, TrendingUp } from 'lucide-react';
 import {
 	Bar,
 	BarChart,
@@ -14,7 +15,6 @@ import { useFetch } from '@/hooks';
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -46,24 +46,31 @@ const chartConfig = {
 };
 
 export function BarChartHorizontal2(props) {
-	const { value: data } = useFetch(`/dashboard/work-in-hand`);
+	const [status, setStatus] = useState(false); 
+	const { value: data } = useFetch(`/dashboard/work-in-hand`, [status]); 
+
 	const chartData = data?.map((item) => ({
 		...item,
 		total: item.approved + item.not_approved,
 	}));
+
 	return (
 		<Card>
-			<CardHeader>
+			<CardHeader className='flex items-center justify-between'>
 				<CardTitle>Work in Hand</CardTitle>
 			</CardHeader>
 			<CardContent>
 				<ChartContainer config={chartConfig}>
-					<span className='live-indicator float-right'>
-						(<span className='live-dot'></span>
-						<span className='live-text'> Live</span>)
-					</span>
+					<div className='float-right'>
+						<button
+							type='button'
+							className='btn-filter-outline'
+							onClick={() => setStatus((prev) => !prev)}>
+							<RefreshCcw className='size-4' />
+						</button>
+					</div>
+
 					<BarChart
-						accessibilityLayer
 						data={chartData}
 						layout='vertical'
 						margin={{

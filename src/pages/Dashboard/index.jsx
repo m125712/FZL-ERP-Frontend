@@ -27,14 +27,33 @@ import {
 } from './columns';
 
 export default function Dashboard() {
-	const payment_due = useFetch('/dashboard/payment-due');
-	const maturity_due = useFetch('/dashboard/maturity-due');
-	const acceptance_due = useFetch('/dashboard/acceptance-due');
-	const document_rcv_due = useFetch('/dashboard/document-rcv-due');
+	const [refreshStatus, setRefreshStatus] = useState({
+		payment_due: false,
+		maturity_due: false,
+		acceptance_due: false,
+		document_rcv_due: false,
+	});
+
+	const payment_due = useFetch('/dashboard/payment-due', [
+		refreshStatus.payment_due,
+	]);
+	const maturity_due = useFetch('/dashboard/maturity-due', [
+		refreshStatus.maturity_due,
+	]);
+	const acceptance_due = useFetch('/dashboard/acceptance-due', [
+		refreshStatus.acceptance_due,
+	]);
+	const document_rcv_due = useFetch('/dashboard/document-rcv-due', [
+		refreshStatus.document_rcv_due,
+	]);
 
 	useEffect(() => {
 		document.title = 'Dashboard';
 	}, []);
+
+	const handleRefresh = (key) => {
+		setRefreshStatus((prev) => ({ ...prev, [key]: !prev[key] }));
+	};
 
 	return (
 		<div className='container px-4 py-8'>
@@ -44,29 +63,34 @@ export default function Dashboard() {
 				<div className='col-span-1 md:col-span-2'>
 					<BarChartOverall url='/dashboard/order-entry' />
 				</div>
+
 				<div className='col-span-2 flex flex-col justify-center gap-4 sm:flex-row sm:flex-wrap'>
 					<TableWithRowHeader
 						title='Payment Due'
 						data={payment_due.value}
 						isLoading={payment_due.loading}
+						onRefresh={() => handleRefresh('payment_due')}
 					/>
 
 					<TableWithRowHeader
 						title='Maturity Due'
 						data={maturity_due.value}
 						isLoading={maturity_due.loading}
+						onRefresh={() => handleRefresh('maturity_due')}
 					/>
 
 					<TableWithRowHeader
 						title='Acceptance Due'
 						data={acceptance_due.value}
 						isLoading={acceptance_due.loading}
+						onRefresh={() => handleRefresh('acceptance_due')}
 					/>
 
 					<TableWithRowHeader
 						title='Document Receive Due'
 						data={document_rcv_due.value}
 						isLoading={document_rcv_due.loading}
+						onRefresh={() => handleRefresh('document_rcv_due')}
 					/>
 				</div>
 

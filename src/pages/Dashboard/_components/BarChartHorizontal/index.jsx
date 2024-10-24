@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { addDays, format } from 'date-fns';
-import { TrendingUp } from 'lucide-react';
+import { RefreshCcw, TrendingUp } from 'lucide-react';
 import {
 	Bar,
 	BarChart,
@@ -13,12 +13,7 @@ import {
 } from 'recharts';
 import { useFetch } from '@/hooks';
 
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
 	ChartContainer,
 	ChartLegend,
@@ -43,6 +38,7 @@ function capitalizeAndRemoveUnderscore(str) {
 
 export function BarChartHorizontal(props) {
 	const [time, setTime] = useState('yesterday');
+	const [status, setStatus] = useState(false); 
 
 	let to = format(addDays(new Date(), -1), 'yyyy-MM-dd');
 	let from = format(addDays(new Date(), -daysMap[time] || 1), 'yyyy-MM-dd');
@@ -65,12 +61,12 @@ export function BarChartHorizontal(props) {
 		props.time
 			? `${props?.url}?start_date=${from}&end_date=${to}`
 			: `${props?.url}`,
-		[from, to]
+		[from, to, status]
 	);
 
 	return (
 		<Card>
-			<CardHeader>
+			<CardHeader className='flex items-center justify-between'>
 				<CardTitle>{props.title}</CardTitle>
 			</CardHeader>
 			<CardContent>
@@ -99,10 +95,16 @@ export function BarChartHorizontal(props) {
 								</option>
 							</select>
 						) : (
-							<span className='live-indicator'>
-								(<span className='live-dot'></span>
-								<span className='live-text'> Live</span>)
-							</span>
+							<button
+								type='button'
+								className='btn-filter-outline'
+								onClick={() => setStatus((prev) => !prev)}>
+								<RefreshCcw className='size-4' />
+							</button>
+							// <span className='live-indicator'>
+							// 	(<span className='live-dot'></span>
+							// 	<span className='live-text'> Live</span>)
+							// </span>
 						)}
 					</div>
 					<br />

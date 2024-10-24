@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { addDays, format } from 'date-fns';
+import { RefreshCcw } from 'lucide-react';
 import { useFetch } from '@/hooks';
 
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
@@ -14,6 +15,7 @@ const daysMap = {
 export function TableWithTime(props) {
 	const [time, setTime] = useState('yesterday');
 	const [dateRange, setDateRange] = useState({ from: '', to: '' });
+	const [status, setStatus] = useState(false); 
 
 	useEffect(() => {
 		const to = format(addDays(new Date(), -1), 'yyyy-MM-dd');
@@ -31,8 +33,7 @@ export function TableWithTime(props) {
 		return props?.url;
 	}, [props?.url, props?.time, dateRange]);
 
-	const { value: data, isLoading } = useFetch(fetchUrl, [fetchUrl]);
-
+	const { value: data, isLoading } = useFetch(fetchUrl, [fetchUrl, status]); 
 	const tableColumns = useMemo(() => [...props?.columns], [props?.columns]);
 	const tableData = useMemo(() => data?.chart_data || data || [], [data]);
 
@@ -54,7 +55,7 @@ export function TableWithTime(props) {
 					{props?.total2 && (
 						<div className='rounded-md border border-secondary/30 bg-base-200 px-3 py-1'>
 							<span className='text-sm font-semibold'>
-								{props?.total2_title}: {data?.total_amount || 0}
+								{props?.total2_title}: {Number(data?.total_amount).toFixed(2) || 0}
 							</span>
 						</div>
 					)}
@@ -72,10 +73,20 @@ export function TableWithTime(props) {
 							<option value='last_thirty_days'>30 Days</option>
 						</select>
 					) : (
-						<span className='live-indicator'>
-							(<span className='live-dot'></span>
-							<span className='live-text'> Live</span>)
-						</span>
+						<div className='flex items-center gap-2'>
+							{/* <span className='live-indicator'>
+								(<span className='live-dot'></span>
+								<span className='live-text'> Live</span>)
+							</span> */}
+							<button
+								type='button'
+								className='btn-filter-outline'
+								onClick={() =>
+									setStatus((prevStatus) => !prevStatus)
+								}>
+								<RefreshCcw className='size-4' />
+							</button>
+						</div>
 					)}
 				</div>
 			</div>

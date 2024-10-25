@@ -25,7 +25,7 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -134,8 +134,8 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'coloring_production_quantity',
-				header: 'Tape Prep',
+				accessorKey: 'total_tape_coil_to_dyeing_quantity',
+				header: 'Tape Prep (kg)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

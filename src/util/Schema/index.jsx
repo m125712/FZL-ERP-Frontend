@@ -193,9 +193,12 @@ export const MARKETING_NULL = {
 
 // Material
 export const MATERIAL_SCHEMA = {
+	section_uuid: STRING_REQUIRED,
+	type_uuid: STRING_REQUIRED,
 	name: STRING_REQUIRED,
 	unit: STRING_REQUIRED,
 	short_name: STRING,
+	is_priority_material: BOOLEAN_DEFAULT_VALUE(false),
 	average_lead_time: NUMBER.nullable(),
 	threshold: NUMBER_DOUBLE,
 	description: STRING.nullable(),
@@ -207,6 +210,7 @@ export const MATERIAL_NULL = {
 	name: '',
 	short_name: '',
 	average_lead_time: 0,
+	is_priority_material: false,
 	unit: 'kg',
 	threshold: 0,
 	description: '',
@@ -449,6 +453,7 @@ export const PROPERTIES_SCHEMA = {
 	type: STRING_REQUIRED,
 	name: STRING_REQUIRED,
 	short_name: STRING_REQUIRED,
+	order_sheet_name: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
@@ -458,6 +463,7 @@ export const PROPERTIES_NULL = {
 	type: '',
 	name: '',
 	short_name: '',
+	order_sheet_name: '',
 	remarks: '',
 	created_by: '',
 	created_at: '',

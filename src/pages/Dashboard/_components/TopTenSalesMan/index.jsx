@@ -4,7 +4,7 @@ import { useFetch } from '@/hooks';
 
 export function TopTenSalesMan(props) {
 	const [status, setStatus] = useState(false);
-	const { value: data, loading } = useFetch(props?.url, [props?.url, status]);
+	const { value: data, loading } = useFetch(props?.url, [props?.url, props.status]);
 
 	if (loading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -13,12 +13,12 @@ export function TopTenSalesMan(props) {
 		<div className='flex w-64 flex-col rounded-md border bg-base-200 shadow'>
 			<div className='flex items-center justify-between rounded-t-md bg-secondary px-3 py-2 text-primary-content'>
 				<span>Top 10 Salesman</span>
-				<button
+				{/* <button
 					type='button'
 					className='btn-filter-outline bg-white'
 					onClick={() => setStatus((prev) => !prev)}>
 					<RefreshCcw className='size-4' />
-				</button>
+				</button> */}
 			</div>
 			<div className='flex flex-col'>
 				{data.map((item, index) => (

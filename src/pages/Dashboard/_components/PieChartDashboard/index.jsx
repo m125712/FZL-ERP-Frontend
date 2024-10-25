@@ -39,13 +39,13 @@ const chartConfig = {
 	},
 };
 
-export function PieChartDashboard() {
+export function PieChartDashboard(props) {
 	const [status, setStatus] = useState(false);
 	const { value: data, loading } = useFetch(`/dashboard/amount-percentage`, [
-		status,
+		props.status,
 	]);
 	const { value: data2, loading2 } = useFetch(`/dashboard/no-of-doc`, [
-		status,
+		props.status,
 	]);
 
 	if (loading || loading2) {
@@ -72,12 +72,12 @@ export function PieChartDashboard() {
 		<Card className='flex flex-col'>
 			<CardHeader className='flex items-center justify-between pb-0'>
 				<CardTitle>Amount (USD) and # of Docs</CardTitle>
-				<button
+				{/* <button
 					type='button'
 					className='btn-filter-outline'
 					onClick={() => setStatus((prev) => !prev)}>
 					<RefreshCcw className='size-4' />
-				</button>
+				</button> */}
 			</CardHeader>
 			<CardContent className='flex-1 pb-0'>
 				<div className='flex flex-col items-center justify-between gap-4 md:flex-row'>

@@ -33,7 +33,7 @@ export function TableWithTime(props) {
 		return props?.url;
 	}, [props?.url, props?.time, dateRange]);
 
-	const { value: data, isLoading } = useFetch(fetchUrl, [fetchUrl, status]); 
+	const { value: data, isLoading } = useFetch(fetchUrl, [fetchUrl, props.status]); 
 	const tableColumns = useMemo(() => [...props?.columns], [props?.columns]);
 	const tableData = useMemo(() => data?.chart_data || data || [], [data]);
 
@@ -78,14 +78,14 @@ export function TableWithTime(props) {
 								(<span className='live-dot'></span>
 								<span className='live-text'> Live</span>)
 							</span> */}
-							<button
+							{/* <button
 								type='button'
 								className='btn-filter-outline'
 								onClick={() =>
 									setStatus((prevStatus) => !prevStatus)
 								}>
 								<RefreshCcw className='size-4' />
-							</button>
+							</button> */}
 						</div>
 					)}
 				</div>

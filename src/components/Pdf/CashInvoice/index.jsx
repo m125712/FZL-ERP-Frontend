@@ -77,14 +77,14 @@ export default function Index(data) {
 			if (item2.pi_item_description === item) {
 				style[item].add(item2.style);
 				orderID[item].add(item2.order_number);
-				total_unit_price += parseFloat(item2.unit_price);
+				total_unit_price += parseFloat(item2.unit_price_pcs);
 				total_value += parseFloat(item2.value);
 				total_quantity += parseFloat(item2.pi_cash_quantity);
 				is_inch = item2.is_inch;
 			}
 		});
 
-		TotalUnitPrice.push((total_value / total_quantity) * 12);
+		TotalUnitPrice.push((total_value / total_quantity).toFixed(3));
 		TotalValue.push(total_value);
 		grand_total_value += total_value;
 		TotalQuantity.push(total_quantity);
@@ -127,11 +127,11 @@ export default function Index(data) {
 			//h_s_code: '9607,11.00',
 			quantity: TotalQuantity[index] + ' pcs',
 			unit_price:
-				Number(TotalUnitPrice[index]).toFixed(2) *
+				Number(TotalUnitPrice[index]).toFixed(3) *
 					data?.conversion_rate +
 				'/pcs',
 			unit_price_dollar:
-				Number(TotalUnitPrice[index]).toFixed(2) + '/pcs',
+				Number(TotalUnitPrice[index]).toFixed(3) + '/pcs',
 			value: Number(TotalValue[index] * data?.conversion_rate).toFixed(2),
 			value_dollar: Number(TotalValue[index]).toFixed(2),
 		};
@@ -143,7 +143,7 @@ export default function Index(data) {
 			if (item2.count_length_name === item) {
 				threadStyle[item].add(item2.style);
 				threadOrderID[item].add(item2.order_number);
-				total_thread_unit_price += parseFloat(item2.unit_price);
+				total_thread_unit_price += parseFloat(item2.unit_price_pcs);
 				total_thread_value += parseFloat(item2.value);
 				total_thread_quantity += parseFloat(item2.pi_cash_quantity);
 			}
@@ -162,21 +162,18 @@ export default function Index(data) {
 			return {
 				order_number: [...threadOrderID[item]].join(', '),
 				style: [...threadStyle[item]].join(', '),
-				pi_item_description: item,
-				specification: '100% SPUN POLYESTER SEWEING THREAD',
-				size: item.match(/\d+$/)[0] + ' mtr',
-				//h_s_code: '5402,62.00',
+				pi_item_description: '100% SPUN POLYESTER SEWEING THREAD',
+				specification: '',
+				size:
+					item.split(' ')[0] +
+					'\n (' +
+					item.match(/\d+$/)[0] +
+					' mtr' +
+					')',
+				h_s_code: '5402.62.00',
 				quantity: TotalThreadQuantity[index] + ' cone',
-				unit_price:
-					Number(
-						TotalThreadUnitPrice[index] * data?.conversion_rate
-					).toFixed(2) + '/cone',
-				unit_price_dollar:
-					Number(TotalThreadUnitPrice[index]).toFixed(2) + '/cone',
-				value: Number(
-					TotalThreadValue[index] * data?.conversion_rate
-				).toFixed(2),
-				value_dollar: Number(TotalThreadValue[index]).toFixed(2),
+				unit_price: TotalThreadUnitPrice[index] + '/cone',
+				value: Number(TotalThreadValue[index]).toFixed(2),
 			};
 		}
 	);

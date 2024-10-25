@@ -61,7 +61,7 @@ export function BarChartHorizontal(props) {
 		props.time
 			? `${props?.url}?start_date=${from}&end_date=${to}`
 			: `${props?.url}`,
-		[from, to, status]
+		[from, to, props.status]
 	);
 
 	return (
@@ -79,7 +79,7 @@ export function BarChartHorizontal(props) {
 								</span>
 							</div>
 						)}
-						{props?.time ? (
+						{props?.time && (
 							<select
 								name='time'
 								className='select select-secondary h-8 min-h-0 border-secondary/30 bg-base-200 transition-all duration-100 ease-in-out'
@@ -94,18 +94,20 @@ export function BarChartHorizontal(props) {
 									30 Days
 								</option>
 							</select>
-						) : (
-							<button
-								type='button'
-								className='btn-filter-outline'
-								onClick={() => setStatus((prev) => !prev)}>
-								<RefreshCcw className='size-4' />
-							</button>
+						) 
+						// : (
+						// 	<button
+						// 		type='button'
+						// 		className='btn-filter-outline'
+						// 		onClick={() => setStatus((prev) => !prev)}>
+						// 		<RefreshCcw className='size-4' />
+						// 	</button>
 							// <span className='live-indicator'>
 							// 	(<span className='live-dot'></span>
 							// 	<span className='live-text'> Live</span>)
 							// </span>
-						)}
+						// )
+						}
 					</div>
 					<br />
 					<BarChart

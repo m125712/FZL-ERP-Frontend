@@ -47,7 +47,7 @@ const chartConfig = {
 
 export function BarChartHorizontal2(props) {
 	const [status, setStatus] = useState(false); 
-	const { value: data } = useFetch(`/dashboard/work-in-hand`, [status]); 
+	const { value: data } = useFetch(`/dashboard/work-in-hand`, [props.status]); 
 
 	const chartData = data?.map((item) => ({
 		...item,
@@ -61,14 +61,14 @@ export function BarChartHorizontal2(props) {
 			</CardHeader>
 			<CardContent>
 				<ChartContainer config={chartConfig}>
-					<div className='float-right'>
+					{/* <div className='float-right'>
 						<button
 							type='button'
 							className='btn-filter-outline'
 							onClick={() => setStatus((prev) => !prev)}>
 							<RefreshCcw className='size-4' />
 						</button>
-					</div>
+					</div> */}
 
 					<BarChart
 						data={chartData}

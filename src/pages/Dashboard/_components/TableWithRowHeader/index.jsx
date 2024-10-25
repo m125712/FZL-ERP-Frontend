@@ -47,13 +47,13 @@ export function TableWithRowHeader(props) {
 								colSpan={2}>
 								<div className='flex items-center justify-between'>
 									<span>{props.title}</span>
-									<button
+									{/* <button
 										type='button'
 										className='btn-filter-outline bg-white'
 										onClick={props.onRefresh} 
 									>
 										<RefreshCcw className='size-4' />
-									</button>
+									</button> */}
 								</div>
 							</th>
 						</tr>

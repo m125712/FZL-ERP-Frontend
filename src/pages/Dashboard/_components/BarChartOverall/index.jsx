@@ -38,7 +38,7 @@ const chartConfig = {
 export function BarChartOverall(props) {
 	const [activeChart, setActiveChart] = useState('thread');
 	const [status, setStatus] = useState(false);
-	const { value: data } = useFetch(props?.url, [props?.url, status]); 
+	const { value: data } = useFetch(props?.url, [props?.url, props.status]); 
 	const total = useMemo(
 		() => ({
 			zipper: data?.reduce((acc, curr) => acc + curr.zipper, 0),
@@ -71,13 +71,13 @@ export function BarChartOverall(props) {
 							</button>
 						);
 					})}
-					<button
+					{/* <button
 						type='button'
 						className='btn-filter-outline'
 						onClick={() => setStatus((prevStatus) => !prevStatus)}
 						>
 						<RefreshCcw className='size-4' />
-					</button>
+					</button> */}
 
 				</div>
 			</CardHeader>

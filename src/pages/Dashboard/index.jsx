@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BarChartHorizontal } from '@/pages/Dashboard/_components/BarChartHorizontal';
+import { RefreshCcw } from 'lucide-react';
 import { Pie } from 'react-chartjs-2';
 import { defaultFetch, useFetch } from '@/hooks';
 
@@ -27,25 +28,18 @@ import {
 } from './columns';
 
 export default function Dashboard() {
-	const [refreshStatus, setRefreshStatus] = useState({
-		payment_due: false,
-		maturity_due: false,
-		acceptance_due: false,
-		document_rcv_due: false,
-	});
+	const [status, setStatus] = useState(false);
+	// const [refreshStatus, setRefreshStatus] = useState({
+	// 	payment_due: false,
+	// 	maturity_due: false,
+	// 	acceptance_due: false,
+	// 	document_rcv_due: false,
+	// });
 
-	const payment_due = useFetch('/dashboard/payment-due', [
-		refreshStatus.payment_due,
-	]);
-	const maturity_due = useFetch('/dashboard/maturity-due', [
-		refreshStatus.maturity_due,
-	]);
-	const acceptance_due = useFetch('/dashboard/acceptance-due', [
-		refreshStatus.acceptance_due,
-	]);
-	const document_rcv_due = useFetch('/dashboard/document-rcv-due', [
-		refreshStatus.document_rcv_due,
-	]);
+	const payment_due = useFetch('/dashboard/payment-due', [status]);
+	const maturity_due = useFetch('/dashboard/maturity-due', [status]);
+	const acceptance_due = useFetch('/dashboard/acceptance-due', [status]);
+	const document_rcv_due = useFetch('/dashboard/document-rcv-due', [status]);
 
 	useEffect(() => {
 		document.title = 'Dashboard';
@@ -58,10 +52,21 @@ export default function Dashboard() {
 	return (
 		<div className='container px-4 py-8'>
 			<DashboardHeader />
+			<div className='float-right'>
+				<button
+					type='button'
+					className='btn-filter-outline'
+					onClick={() => setStatus((prev) => !prev)}>
+					<RefreshCcw className='size-4' />
+				</button>
+			</div>
 
 			<div className='mt-8 grid grid-cols-1 gap-8 md:grid-cols-2'>
 				<div className='col-span-1 md:col-span-2'>
-					<BarChartOverall url='/dashboard/order-entry' />
+					<BarChartOverall
+						url='/dashboard/order-entry'
+						status={status}
+					/>
 				</div>
 
 				<div className='col-span-2 flex flex-col justify-center gap-4 sm:flex-row sm:flex-wrap'>
@@ -69,6 +74,7 @@ export default function Dashboard() {
 						title='Payment Due'
 						data={payment_due.value}
 						isLoading={payment_due.loading}
+						status={status}
 						onRefresh={() => handleRefresh('payment_due')}
 					/>
 
@@ -76,6 +82,7 @@ export default function Dashboard() {
 						title='Maturity Due'
 						data={maturity_due.value}
 						isLoading={maturity_due.loading}
+						status={status}
 						onRefresh={() => handleRefresh('maturity_due')}
 					/>
 
@@ -83,6 +90,7 @@ export default function Dashboard() {
 						title='Acceptance Due'
 						data={acceptance_due.value}
 						isLoading={acceptance_due.loading}
+						status={status}
 						onRefresh={() => handleRefresh('acceptance_due')}
 					/>
 
@@ -90,12 +98,13 @@ export default function Dashboard() {
 						title='Document Receive Due'
 						data={document_rcv_due.value}
 						isLoading={document_rcv_due.loading}
+						status={status}
 						onRefresh={() => handleRefresh('document_rcv_due')}
 					/>
 				</div>
 
 				<div className='col-span-1 md:col-span-2'>
-					<PieChartDashboard />
+					<PieChartDashboard status={status} />
 				</div>
 				<div>
 					<BarChartHorizontal
@@ -106,6 +115,7 @@ export default function Dashboard() {
 						total_title='Challan Count'
 						label1='amount'
 						label2='number_of_challan'
+						status={status}
 					/>
 				</div>
 
@@ -118,6 +128,7 @@ export default function Dashboard() {
 						total_title='Challan Count'
 						label1='amount'
 						label2='number_of_challan'
+						status={status}
 					/>
 				</div>
 
@@ -130,15 +141,16 @@ export default function Dashboard() {
 						total_title='Carton Count'
 						label1='amount'
 						label2='number_of_carton'
+						status={status}
 					/>
 				</div>
 
 				<div>
-					<BarChartVertical />
+					<BarChartVertical status={status} />
 				</div>
 
 				<div>
-					<BarChartHorizontal2 />
+					<BarChartHorizontal2 status={status} />
 				</div>
 
 				<div>
@@ -148,6 +160,7 @@ export default function Dashboard() {
 						total={true}
 						total_title='O/S Count'
 						columns={sample_lead_time_columns}
+						status={status}
 					/>
 				</div>
 
@@ -156,6 +169,7 @@ export default function Dashboard() {
 						title='Order Entry Feed'
 						url='/dashboard/order-entry-feed'
 						columns={order_entry_feed_columns}
+						status={status}
 					/>
 				</div>
 
@@ -167,6 +181,7 @@ export default function Dashboard() {
 						time={true}
 						total_title='PI Count'
 						columns={pi_register_columns}
+						status={status}
 					/>
 				</div>
 
@@ -178,6 +193,7 @@ export default function Dashboard() {
 						time={true}
 						total_title='Doc. Count'
 						columns={doc_rcv_columns}
+						status={status}
 					/>
 				</div>
 
@@ -194,6 +210,7 @@ export default function Dashboard() {
 						title='Stock Status'
 						url='/dashboard/stock-status'
 						columns={stock_status_columns}
+						status={status}
 					/>
 				</div>
 
@@ -206,11 +223,15 @@ export default function Dashboard() {
 						total_title='PI Count'
 						total2={true}
 						total2_title='Total Amount'
+						status={status}
 					/>
 				</div>
 
 				<div>
-					<TopTenSalesMan url='/dashboard/top-sales' />
+					<TopTenSalesMan
+						url='/dashboard/top-sales'
+						status={status}
+					/>
 				</div>
 			</div>
 		</div>

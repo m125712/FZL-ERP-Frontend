@@ -6,76 +6,18 @@ import {
 	xMargin,
 } from '@/components/Pdf/ui';
 
-import { getPageFooter, getPageHeader, TableHeader } from './utils';
+import {
+	chunkArray,
+	getGarmentInfo,
+	getPageFooter,
+	getPageHeader,
+	getSpecialReqInfo,
+	grandTotal,
+	TableHeader,
+} from './utils';
 
 export default function OrderSheetPdf(order_sheet) {
-	// * function to get similar garment_wash
-	const getGarmentInfo = (order_description, garments) => {
-		if (order_description?.garments_wash) {
-			const parsedObject =
-				typeof order_description?.garments_wash === 'string'
-					? JSON.parse(order_description?.garments_wash)
-					: order_description?.garments_wash;
-
-			const matchingLabels = garments
-				?.filter((item) => parsedObject.values.includes(item.value)) // Filter by matching value
-				.map((item) => item.label);
-			return matchingLabels;
-		} else {
-			return [];
-		}
-	};
-
-	// * function to get similar Special Requirement
-	const getSpecialReqInfo = (order_description, sr) => {
-		if (order_description?.special_requirement) {
-			const parsedObject =
-				typeof order_description?.special_requirement === 'string'
-					? JSON.parse(order_description?.special_requirement)
-					: order_description?.special_requirement;
-
-			const matchingLabels = sr
-				?.filter((item) => parsedObject.values.includes(item.value)) // Filter by matching value
-				.map((item) => item.label);
-			return matchingLabels;
-		} else {
-			return [];
-		}
-	};
-
-	// * function to calculate grand total
-	const grandTotal = (total_entries) => {
-		let total = 0;
-		total_entries?.map((item) => {
-			total += item.order_entry.reduce((acc, item) => {
-				acc += item?.quantity;
-
-				return acc;
-			}, 0);
-		});
-
-		return total;
-	};
-
-	// * function to chunk array
-	const chunkArray = (array, chunkSize) => {
-		let chunks = [];
-		for (let i = 0; i < array.length; i += chunkSize) {
-			let chunk = array.slice(i, i + chunkSize);
-
-			// * here we are checking if the length of the chunk is less than the chunk size
-			if (
-				// i > 0 && // * 1st chunk length might be less than the chunk size so this condition is not required
-				chunk.length < chunkSize
-			)
-				chunk = [...chunk, ...Array(chunkSize - chunk.length).fill(0)];
-
-			chunks.push(chunk);
-		}
-		return chunks;
-	};
-
-	const headerHeight = 140;
+	const headerHeight = 130;
 	let footerHeight = 40;
 	const { order_info, order_entry, garments, sr } = order_sheet;
 
@@ -120,10 +62,10 @@ export default function OrderSheetPdf(order_sheet) {
 				].sort((a, b) => a - b);
 
 				// * garments info
-				const ginfo = getGarmentInfo(entry, garments);
+				const garments_info = getGarmentInfo(entry, garments);
 
 				// * special requirement info
-				const srinfo = getSpecialReqInfo(entry, sr);
+				const special_req_info = getSpecialReqInfo(entry, sr);
 
 				const uniqueColor = () => {
 					const uniqueColors = new Set();
@@ -187,7 +129,7 @@ export default function OrderSheetPdf(order_sheet) {
 									// Table Header
 									...TableHeader({
 										entry,
-										srinfo,
+										special_req_info,
 										uniqueSizes: chunk,
 										i,
 									}),
@@ -310,7 +252,7 @@ export default function OrderSheetPdf(order_sheet) {
 									],
 
 									// * Garments
-									...(ginfo.length > 0 ||
+									...(garments_info.length > 0 ||
 									entry?.garment ||
 									entry?.light_preference_name ||
 									entry?.end_user_short_name
@@ -329,19 +271,22 @@ export default function OrderSheetPdf(order_sheet) {
 																? entry?.garment
 																: '', // Include garments if it exists
 															garments &&
-															(ginfo.length > 0 ||
+															(garments_info.length >
+																0 ||
 																entry?.light_preference_name ||
 																entry?.end_user_short_name)
 																? ' / '
 																: '', // Show separator if garments and at least one other value exists
-															ginfo.length > 0
-																? `(${ginfo?.join(', ')})`
+															garments_info.length >
+															0
+																? `(${garments_info?.join(', ')})`
 																: '',
-															ginfo.length > 0 &&
+															garments_info.length >
+																0 &&
 															(entry?.light_preference_name ||
 																entry?.end_user_short_name)
 																? ' / '
-																: '', // Show separator if either light preference or end user exists after ginfo
+																: '', // Show separator if either light preference or end user exists after garments_info
 															entry?.light_preference_name
 																? entry?.light_preference_name
 																: '',

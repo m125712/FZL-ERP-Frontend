@@ -49,7 +49,7 @@ export default function ItemDescription({ order_description, className }) {
 	).toFixed(3);
 
 	// * garments info
-	const ginfo = getGarmentInfo(order_description);
+	const garments_info = getGarmentInfo(order_description);
 
 	const renderItems = () => {
 		const {
@@ -232,7 +232,7 @@ export default function ItemDescription({ order_description, className }) {
 			},
 			{
 				label: 'wash',
-				value: ginfo?.join(', '),
+				value: garments_info?.join(', '),
 			},
 			{
 				label: 'remarks',

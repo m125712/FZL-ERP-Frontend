@@ -94,6 +94,9 @@ export default function ItemDescription({ order_description, className }) {
 
 			// multi color
 			is_multi_color,
+
+			// order type
+			order_type
 		} = order_description;
 
 		const baseInfo = [
@@ -148,6 +151,10 @@ export default function ItemDescription({ order_description, className }) {
 			{
 				label: 'Multi Color',
 				value: is_multi_color ? 'Yes' : 'No',
+			},
+			{
+				label: 'order type',
+				value: order_type,
 			},
 			{
 				label: 'remarks',

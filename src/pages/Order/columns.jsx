@@ -77,6 +77,14 @@ export const PropertiesColumns = ({
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
+			{
+				accessorKey: 'order_sheet_name',
+				header: 'Order Sheet Name',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
 
 			...DEFAULT_COLUMNS({ handelUpdate, handelDelete, haveAccess }),
 		],

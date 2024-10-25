@@ -32,6 +32,7 @@ import { FormField, Input, ReactSelect } from '@/ui';
 import nanoid from '@/lib/nanoid';
 import { PROPERTIES_NULL, PROPERTIES_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
+import { DevTool } from '@hookform/devtools';
 
 export default function Index({
 	modalId = '',
@@ -299,7 +300,9 @@ export default function Index({
 
 			<Input label='name' {...{ register, errors }} />
 			<Input label='short_name' {...{ register, errors }} />
+			<Input label='order_sheet_name' {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />
+			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);
 }

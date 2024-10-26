@@ -1,22 +1,15 @@
-import { Suspense, useState } from 'react';
-import {
-	useOtherHRUserByDesignation,
-	useOtherOrder,
-	useOtherPackingListByOrderInfoUUID,
-	useOtherPackingListByOrderInfoUUIDAndChallanUUID,
-} from '@/state/Other';
-import { Trash2 } from 'lucide-react';
+import { useEffect } from 'react';
+import { useOtherOrder, useOtherVehicle } from '@/state/Other';
+import { Controller } from 'react-hook-form';
 
-import { DeleteModal } from '@/components/Modal';
 import {
 	CheckBox,
 	FormField,
+	Input,
 	ReactSelect,
 	SectionEntryBody,
 	Textarea,
 } from '@/ui';
-
-import isJSON from '@/util/isJson';
 
 export default function Header({
 	register,
@@ -27,26 +20,19 @@ export default function Header({
 	isUpdate,
 	watch,
 	setValue,
-	setDeleteItem,
-	deleteItem,
 }) {
-	const { data: users } = useOtherHRUserByDesignation('driver');
+	const { data: vehicles } = useOtherVehicle();
 	const { data: orders } = useOtherOrder();
-	const { data: packingList } = isUpdate
-		? useOtherPackingListByOrderInfoUUIDAndChallanUUID(
-				watch('order_info_uuid'),
-				watch('uuid')
-			)
-		: useOtherPackingListByOrderInfoUUID(watch('order_info_uuid'));
+	const isHandDelivery = watch('is_hand_delivery');
 
-	const handlePackingListRemove = (packing_list_uuid, packing_list_name) => {
-		setDeleteItem({
-			itemId: packing_list_uuid,
-			itemName: packing_list_name,
-		});
-		window['packing_list_delete'].showModal();
-	};
-
+	useEffect(() => {
+		if (isHandDelivery) {
+			setValue('vehicle_uuid', null);
+		} else {
+			setValue('name', '');
+			setValue('delivery_cost', 0);
+		}
+	}, [isHandDelivery, setValue]);
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody
@@ -78,34 +64,63 @@ export default function Header({
 								}
 							/>
 						</div>
+
+						<div className='rounded-md bg-secondary px-1'>
+							<CheckBox
+								text='text-secondary-content'
+								label='is_hand_delivery'
+								title='Hand Delivery'
+								{...{ register, errors }}
+								checked={Boolean(watch('is_hand_delivery'))}
+								onChange={(e) =>
+									setValue(
+										'is_hand_delivery',
+										e.target.checked
+									)
+								}
+							/>
+						</div>
 					</div>
 				}>
 				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 md:grid-cols-3'>
-					<FormField
-						label='assign_to'
-						title='Assign To'
-						errors={errors}>
-						<Controller
-							name='assign_to'
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
+					{!watch('is_hand_delivery') && (
+						<FormField
+							label='vehicle_uuid'
+							title='Assign To'
+							errors={errors}>
+							<Controller
+								name='vehicle_uuid'
+								control={control}
+								render={({ field: { onChange } }) => (
 									<ReactSelect
-										placeholder='Select Assigned To'
-										options={users}
-										value={users?.find(
+										placeholder='Select Vehicle'
+										options={vehicles}
+										value={vehicles?.find(
 											(item) =>
 												item.value ===
-												getValues('assign_to')
+												getValues('vehicle_uuid')
 										)}
-										onChange={(e) =>
-											onChange(e.value.toString())
-										}
+										onChange={(e) => onChange(e.value)}
 									/>
-								);
-							}}
+								)}
+							/>
+						</FormField>
+					)}
+					{watch('is_hand_delivery') && (
+						<Input
+							label='name'
+							title='Name'
+							{...{ register, errors }}
 						/>
-					</FormField>
+					)}
+					{watch('is_hand_delivery') && (
+						<Input
+							label='delivery_cost'
+							title='Delivery Cost'
+							{...{ register, errors }}
+						/>
+					)}
+
 					<FormField
 						label='order_info_uuid'
 						title='Order Number'
@@ -113,211 +128,23 @@ export default function Header({
 						<Controller
 							name='order_info_uuid'
 							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Order Number'
-										options={orders}
-										value={orders?.find(
-											(item) =>
-												item.value ===
-												getValues('order_info_uuid')
-										)}
-										onChange={(e) =>
-											onChange(e.value.toString())
-										}
-										isDisabled={isUpdate}
-									/>
-								);
-							}}
+							render={({ field: { onChange } }) => (
+								<ReactSelect
+									placeholder='Select Order Number'
+									options={orders}
+									value={orders?.find(
+										(item) =>
+											item.value ===
+											getValues('order_info_uuid')
+									)}
+									onChange={(e) =>
+										onChange(e.value.toString())
+									}
+									isDisabled={isUpdate}
+								/>
+							)}
 						/>
 					</FormField>
-					{!isUpdate && (
-						<FormField
-							label='packing_list_uuids'
-							title='Packing List Number'
-							errors={errors}>
-							<Controller
-								name='packing_list_uuids'
-								control={control}
-								render={({ field: { onChange } }) => {
-									return (
-										<ReactSelect
-											isDisabled={isUpdate}
-											isMulti
-											placeholder='Select Packing List Number'
-											options={
-												isUpdate
-													? packingList?.filter(
-															(item) =>
-																getValues(
-																	'packing_list_uuids'
-																).includes(
-																	item.value
-																)
-														)
-													: packingList
-											}
-											value={packingList?.filter(
-												(item) => {
-													const packing_list_uuids =
-														getValues(
-															'packing_list_uuids'
-														);
-
-													if (
-														packing_list_uuids ===
-														null
-													) {
-														return false;
-													} else {
-														if (
-															isJSON(
-																packing_list_uuids
-															)
-														) {
-															return JSON.parse(
-																packing_list_uuids
-															)
-																.split(',')
-																?.includes(
-																	item.value
-																);
-														} else {
-															if (
-																!Array.isArray(
-																	packing_list_uuids
-																)
-															) {
-																return packing_list_uuids?.includes(
-																	item.value
-																);
-															}
-
-															return packing_list_uuids?.includes(
-																item.value
-															);
-														}
-													}
-												}
-											)}
-											onChange={(e) => {
-												onChange(
-													e.map(({ value }) => value)
-												);
-											}}
-										/>
-									);
-								}}
-							/>
-						</FormField>
-					)}
-
-					{isUpdate && (
-						<div className='flex flex-col gap-1'>
-							<p className='text-sm font-semibold text-secondary'>
-								Packing List Number
-							</p>
-							<div className='flex h-full flex-wrap items-center gap-2 rounded-md border border-secondary/30 p-2'>
-								{packingList
-									?.filter((item) =>
-										getValues(
-											'packing_list_uuids'
-										).includes(item.value)
-									)
-									.map((item) => (
-										<button
-											key={item.value}
-											onClick={() =>
-												handlePackingListRemove(
-													item.value,
-													item.label
-												)
-											}
-											type={'button'}
-											className='btn btn-outline btn-error btn-sm'>
-											{item.label}
-											<Trash2 className='size-4' />
-										</button>
-									))}
-							</div>
-						</div>
-					)}
-
-					{isUpdate && (
-						<FormField
-							label='new_packing_list_uuids'
-							title='New Packing List Number'
-							errors={errors}>
-							<Controller
-								name='new_packing_list_uuids'
-								control={control}
-								render={({ field: { onChange } }) => {
-									return (
-										<ReactSelect
-											isMulti
-											placeholder='Select Packing List Number'
-											options={packingList?.filter(
-												(item) =>
-													!getValues(
-														'packing_list_uuids'
-													).includes(item.value)
-											)}
-											value={packingList?.filter(
-												(item) => {
-													const new_packing_list_uuids =
-														getValues(
-															'new_packing_list_uuids'
-														);
-
-													if (
-														new_packing_list_uuids ===
-														null
-													) {
-														return false;
-													} else {
-														if (
-															isJSON(
-																new_packing_list_uuids
-															)
-														) {
-															return JSON.parse(
-																new_packing_list_uuids
-															)
-																.split(',')
-																?.includes(
-																	item.value
-																);
-														} else {
-															if (
-																!Array.isArray(
-																	new_packing_list_uuids
-																)
-															) {
-																return new_packing_list_uuids?.includes(
-																	item.value
-																);
-															}
-
-															return new_packing_list_uuids?.includes(
-																item.value
-															);
-														}
-													}
-												}
-											)}
-											onChange={(e) => {
-												onChange(
-													e.map(({ value }) => value)
-												);
-											}}
-										/>
-									);
-								}}
-							/>
-						</FormField>
-					)}
-
 					<Textarea label='remarks' {...{ register, errors }} />
 				</div>
 			</SectionEntryBody>

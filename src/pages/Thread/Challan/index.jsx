@@ -39,14 +39,41 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'order_number',
+				header: 'ID',
+				width: 'w-40',
+				cell: (info) => {
+					const { order_info_uuid } = info.row.original;
+					return (
+						<LinkWithCopy
+							uri='/thread/order-info'
+							id={order_info_uuid}
+							title={info.getValue()}
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'carton_quantity',
 				header: 'Carton QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'assign_to_name',
+				accessorKey: 'vehicle_name',
 				header: 'Assign To',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'name',
+				header: 'Name',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'delivery_cost',
+				header: 'Delivery Cost',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -97,6 +124,33 @@ export default function Index() {
 										: true
 							}
 							onChange={() => handelReceiveStatus(info.row.index)}
+							checked={Number(info.getValue()) === 1}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'is_hand_delivery',
+				header: 'Hand Delivery',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { gate_pass, is_hand_delivery } = info.row.original;
+
+					const access = haveAccess.includes('click_hand_delivery');
+					const overrideAccess = haveAccess.includes(
+						'click_hand_delivery_override'
+					);
+
+					return (
+						<SwitchToggle
+							disabled={
+								overrideAccess
+									? false
+									: access
+										? gate_pass === 0
+										: true
+							}
+							onChange={() => handelHandDelivery(info.row.index)}
 							checked={Number(info.getValue()) === 1}
 						/>
 					);
@@ -182,7 +236,19 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 	};
+	// Hand Delivery
+	const handelHandDelivery = async (idx) => {
+		const challan = data[idx];
+		const status = challan?.is_hand_delivery == 1 ? 0 : 1;
+		const updated_at = GetDateTime();
 
+		await updateData.mutateAsync({
+			url: `/delivery/challan/${challan?.uuid}`,
+			uuid: challan?.uuid,
+			updatedData: { is_hand_delivery: status, updated_at },
+			isOnCloseNeeded: false,
+		});
+	};
 	const handelAdd = () => navigate('/thread/challan/entry');
 
 	const handelUpdate = (idx) => {

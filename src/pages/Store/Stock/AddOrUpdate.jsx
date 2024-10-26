@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
 import { useOtherMaterialSection, useOtherMaterialType } from '@/state/Other';
 import { useMaterialInfo, useMaterialInfoByUUID } from '@/state/Store';
+import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -10,7 +11,6 @@ import { FormField, Input, JoinInputSelect, ReactSelect, Textarea } from '@/ui';
 import nanoid from '@/lib/nanoid';
 import { MATERIAL_NULL, MATERIAL_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-import { DevTool } from '@hookform/devtools';
 
 export default function Index({
 	modalId = '',
@@ -93,6 +93,10 @@ export default function Index({
 		{ label: 'Litre', value: 'ltr' },
 		{ label: 'Meter', value: 'mtr' },
 		{ label: 'Piece', value: 'pcs' },
+		{ label: 'Set', value: 'set' },
+		{ label: 'Roll', value: 'roll' },
+		{ label: 'Gallon', value: 'gallon' },
+		{ label: 'Lbs', value: 'lbs' },
 	];
 
 	return (

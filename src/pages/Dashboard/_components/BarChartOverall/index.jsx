@@ -48,8 +48,7 @@ export function BarChartOverall(props) {
 		<Card>
 			<CardHeader className='flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row'>
 				<div className='flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6'>
-					<CardTitle>Order Entry for last 30 days	</CardTitle>
-					
+					<CardTitle>Order Received</CardTitle>
 				</div>
 				<div className='flex'>
 					{['zipper', 'thread'].map((key) => {
@@ -58,7 +57,7 @@ export function BarChartOverall(props) {
 							<button
 								key={chart}
 								data-active={activeChart === chart}
-								className='relative zipper-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6'
+								className='zipper-30 relative flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6'
 								onClick={() => setActiveChart(chart)}>
 								<span className='text-xs text-muted-foreground'>
 									{chartConfig[chart].label}

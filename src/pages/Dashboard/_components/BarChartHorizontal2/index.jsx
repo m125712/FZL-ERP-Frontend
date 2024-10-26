@@ -54,7 +54,7 @@ export function BarChartHorizontal2(props) {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Work in Hand</CardTitle>
+				<CardTitle>Production: Demand</CardTitle>
 			</CardHeader>
 			<CardContent>
 				<ChartContainer config={chartConfig}>

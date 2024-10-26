@@ -46,27 +46,24 @@ export default function Dashboard() {
 				</div>
 				<div className='col-span-2 flex flex-col justify-center gap-4 sm:flex-row sm:flex-wrap'>
 					<TableWithRowHeader
-						title='Payment Due'
-						data={payment_due.value}
-						isLoading={payment_due.loading}
+						title='Document Receive Due'
+						data={document_rcv_due.value}
+						isLoading={document_rcv_due.loading}
 					/>
-
-					<TableWithRowHeader
-						title='Maturity Due'
-						data={maturity_due.value}
-						isLoading={maturity_due.loading}
-					/>
-
 					<TableWithRowHeader
 						title='Acceptance Due'
 						data={acceptance_due.value}
 						isLoading={acceptance_due.loading}
 					/>
-
 					<TableWithRowHeader
-						title='Document Receive Due'
-						data={document_rcv_due.value}
-						isLoading={document_rcv_due.loading}
+						title='Maturity Due'
+						data={maturity_due.value}
+						isLoading={maturity_due.loading}
+					/>
+					<TableWithRowHeader
+						title='Payment Due'
+						data={payment_due.value}
+						isLoading={payment_due.loading}
 					/>
 				</div>
 
@@ -75,7 +72,7 @@ export default function Dashboard() {
 				</div>
 				<div>
 					<BarChartHorizontal
-						title='Challan Register'
+						title='Challan: Issued'
 						url='/dashboard/challan-register'
 						total={true}
 						time={true}
@@ -87,7 +84,7 @@ export default function Dashboard() {
 
 				<div>
 					<BarChartHorizontal
-						title='Challans to be Collected'
+						title='Challan: Outstanding' // TODO: Rename
 						url='/dashboard/challan-register'
 						time={false}
 						total={true}
@@ -99,7 +96,7 @@ export default function Dashboard() {
 
 				<div>
 					<BarChartHorizontal
-						title='Goods In Warehouse'
+						title='Warehouse: Status'
 						url='/dashboard/goods-in-warehouse'
 						time={false}
 						total={true}
@@ -118,8 +115,9 @@ export default function Dashboard() {
 				</div>
 
 				<div>
+					{/* dfj  */}
 					<TableWithTime
-						title='Sample Lead Time'
+						title='Sample: Status'
 						url='/dashboard/sample-lead-time'
 						total={true}
 						total_title='O/S Count'
@@ -129,7 +127,7 @@ export default function Dashboard() {
 
 				<div>
 					<TableWithTime
-						title='Order Entry Feed'
+						title='Order Entry Feed with number of count'
 						url='/dashboard/order-entry-feed'
 						columns={order_entry_feed_columns}
 					/>
@@ -137,7 +135,7 @@ export default function Dashboard() {
 
 				<div>
 					<TableWithTime
-						title='PI Register'
+						title='PI: Issued'
 						url='/dashboard/pi-register'
 						total={true}
 						time={true}
@@ -159,7 +157,7 @@ export default function Dashboard() {
 
 				<div>
 					<TableWithTime
-						title='LC Feed'
+						title='LC Feed with number of count'
 						url='/dashboard/lc-feed'
 						columns={doc_rcv_columns}
 					/>
@@ -167,7 +165,7 @@ export default function Dashboard() {
 
 				<div>
 					<TableWithTime
-						title='Stock Status'
+						title='Stock: Status'
 						url='/dashboard/stock-status'
 						columns={stock_status_columns}
 					/>
@@ -175,7 +173,7 @@ export default function Dashboard() {
 
 				<div>
 					<TableWithTime
-						title='PI Due/Cash Aging/PI to be Submitted'
+						title='Credit Sales Status'
 						url='/dashboard/pi-to-be-submitted'
 						columns={pi_to_be_submitted_columns}
 						total={true}

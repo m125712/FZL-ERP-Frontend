@@ -4,7 +4,6 @@ import {
 	getCoreRowModel,
 	useReactTable,
 } from '@tanstack/react-table';
-import { useFetch } from '@/hooks';
 
 export function TableWithRowHeader(props) {
 	const data = props?.data;

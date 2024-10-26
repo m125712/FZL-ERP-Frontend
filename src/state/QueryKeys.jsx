@@ -294,6 +294,9 @@ export const commonQK = {
 		...commonQK.multiColorLogTapeReceived(),
 		uuid,
 	],
+	//* Tape Assign
+	tapeAssign: () => [...commonQK.all(), 'tape/assign'],
+	tapeAssignByUUID: (uuid) => [...commonQK.tapeAssign(), uuid],
 };
 
 // * LabDip * //

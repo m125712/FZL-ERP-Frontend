@@ -386,3 +386,17 @@ export const useOtherOrderPropertiesByTeethType = () =>
 		queryKey: otherQK.orderPropertiesByTeethType(),
 		url: '/other/order-properties/by/teeth_type',
 	});
+
+//*GET Vehicle Values
+export const useOtherVehicle = () =>
+	createGlobalState({
+		queryKey: otherQK.vehicle(),
+		url: '/other/delivery/vehicle/value/label',
+	});
+
+//*GET Carton Values
+export const useOtherCarton = () =>
+	createGlobalState({
+		queryKey: otherQK.carton(),
+		url: '/other/delivery/carton/value/label',
+	});

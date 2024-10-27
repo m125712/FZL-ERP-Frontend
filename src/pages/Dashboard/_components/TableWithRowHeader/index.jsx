@@ -4,10 +4,10 @@ import {
 	getCoreRowModel,
 	useReactTable,
 } from '@tanstack/react-table';
-import { useFetch } from '@/hooks';
 
 export function TableWithRowHeader(props) {
 	const data = props?.data;
+
 	if (!data || data.length === 0) {
 		return (
 			<div className='flex h-screen items-center justify-center text-4xl'>
@@ -15,9 +15,11 @@ export function TableWithRowHeader(props) {
 			</div>
 		);
 	}
+
 	if (props.isLoading) {
 		return <span className='loading loading-dots loading-lg z-50' />;
 	}
+
 	const columns = [
 		{
 			accessorKey: 'label',
@@ -42,7 +44,16 @@ export function TableWithRowHeader(props) {
 							<th
 								className='p-3 text-left text-lg font-bold'
 								colSpan={2}>
-								{props.title}
+								<div className='flex items-center justify-between'>
+									<span>{props.title}</span>
+									{/* <button
+										type='button'
+										className='btn-filter-outline bg-white'
+										onClick={props.onRefresh} 
+									>
+										<RefreshCcw className='size-4' />
+									</button> */}
+								</div>
 							</th>
 						</tr>
 					</thead>

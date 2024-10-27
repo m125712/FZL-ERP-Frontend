@@ -1,4 +1,9 @@
-import { useOtherHRUserByDesignation, useThreadOrder } from '@/state/Other';
+import { useEffect } from 'react';
+import {
+	useOtherHRUserByDesignation,
+	useOtherVehicle,
+	useThreadOrder,
+} from '@/state/Other';
 
 import {
 	CheckBox,
@@ -21,7 +26,18 @@ export default function Header({
 }) {
 	const { data: users } = useOtherHRUserByDesignation('driver');
 	const { data: orders } = useThreadOrder();
+	const { data: vehicles } = useOtherVehicle();
 
+	const isHandDelivery = watch('is_hand_delivery');
+
+	useEffect(() => {
+		if (isHandDelivery) {
+			setValue('vehicle_uuid', null);
+		} else {
+			setValue('name', '');
+			setValue('delivery_cost', 0);
+		}
+	}, [isHandDelivery, setValue]);
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody
@@ -53,34 +69,62 @@ export default function Header({
 								}
 							/>
 						</div>
+
+						<div className='rounded-md bg-secondary px-1'>
+							<CheckBox
+								text='text-secondary-content'
+								label='is_hand_delivery'
+								title='Hand Delivery'
+								{...{ register, errors }}
+								checked={Boolean(watch('is_hand_delivery'))}
+								onChange={(e) =>
+									setValue(
+										'is_hand_delivery',
+										e.target.checked
+									)
+								}
+							/>
+						</div>
 					</div>
 				}>
 				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 md:grid-cols-3'>
-					<FormField
-						label='assign_to'
-						title='Assign To'
-						errors={errors}>
-						<Controller
-							name='assign_to'
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
+					{!watch('is_hand_delivery') && (
+						<FormField
+							label='vehicle_uuid'
+							title='Assign To'
+							errors={errors}>
+							<Controller
+								name='vehicle_uuid'
+								control={control}
+								render={({ field: { onChange } }) => (
 									<ReactSelect
-										placeholder='Select Assigned To'
-										options={users}
-										value={users?.find(
+										placeholder='Select Vehicle'
+										options={vehicles}
+										value={vehicles?.find(
 											(item) =>
 												item.value ===
-												getValues('assign_to')
+												getValues('vehicle_uuid')
 										)}
-										onChange={(e) =>
-											onChange(e.value.toString())
-										}
+										onChange={(e) => onChange(e.value)}
 									/>
-								);
-							}}
+								)}
+							/>
+						</FormField>
+					)}
+					{watch('is_hand_delivery') && (
+						<Input
+							label='name'
+							title='Name'
+							{...{ register, errors }}
 						/>
-					</FormField>
+					)}
+					{watch('is_hand_delivery') && (
+						<Input
+							label='delivery_cost'
+							title='Delivery Cost'
+							{...{ register, errors }}
+						/>
+					)}
 					<FormField
 						label='order_info_uuid'
 						title='Order Number'

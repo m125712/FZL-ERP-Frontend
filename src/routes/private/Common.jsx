@@ -17,6 +17,8 @@ import TapeStock from '@/pages/Common/Tape/RM';
 import TapeProd from '@/pages/Common/Tape/SFG';
 //*SFG Tape Transfer
 import SFGEntryToTransfer from '@/pages/Common/Tape/SFG/Transfer';
+//* Tape Assign
+import TapeAssign from '@/pages/Common/TapeAssign';
 //* Dyeing Transfer
 import DyeingTransfer from '@/pages/Common/Transfer';
 import DyeingTransferEntry from '@/pages/Common/Transfer/EntryUpdate';
@@ -213,7 +215,20 @@ export const CommonRoutes = [
 				page_name: 'common__dyeing_transfer',
 				actions: ['read', 'create', 'update', 'delete'],
 			},
-
+			{
+				name: 'Tape Assign',
+				path: '/common/tape-assign',
+				element: <TapeAssign />,
+				page_name: 'common__tape_assign',
+				actions: [
+					'read',
+					'create',
+					'update',
+					'delete',
+					'click_tape_assign',
+					'click_tape_assign_override',
+				],
+			},
 			{
 				name: 'Transfer Entry',
 				path: '/common/dyed-store/entry',

@@ -165,7 +165,7 @@ export default function Index() {
 					...updatablePackingListEntryPromises,
 					deletablePackingListEntryPromises,
 				])
-					.then(() => reset(Object.assign({}, PI_NULL)))
+					.then(() => reset(Object.assign({}, PACKING_LIST_NULL)))
 					.then(() => {
 						navigate(
 							`/delivery/zipper-packing-list/details/${updatedId}`

@@ -48,7 +48,7 @@ export function BarChartVertical() {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Production Status</CardTitle>
+				<CardTitle>Production: Status</CardTitle>
 			</CardHeader>
 			<CardContent>
 				<ChartContainer config={chartConfig}>

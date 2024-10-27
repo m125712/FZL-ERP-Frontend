@@ -523,13 +523,9 @@ export const ORDER_SCHEMA = {
 	order_info_uuid: UUID_REQUIRED,
 	item: UUID_REQUIRED,
 	zipper_number: UUID_REQUIRED,
-
+	lock_type: UUID_REQUIRED,
+	
 	end_type: UUID.when('order_type', {
-		is: (value) => value === 'full',
-		then: (schema) => schema.required('Required'),
-		otherwise: (schema) => schema,
-	}),
-	lock_type: UUID.when('order_type', {
 		is: (value) => value === 'full',
 		then: (schema) => schema.required('Required'),
 		otherwise: (schema) => schema,

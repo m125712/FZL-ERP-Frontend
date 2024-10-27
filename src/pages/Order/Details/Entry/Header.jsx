@@ -356,118 +356,127 @@ export default function Header({
 				</div>
 
 				{/* conditional rendering: checking if order type is full */}
-				{watch('order_type') === 'full' && (
-					<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-						<FormField
-							label='lock_type'
-							title='Lock Type'
-							errors={errors}>
-							<Controller
-								name={'lock_type'}
-								control={control}
-								render={({ field: { onChange } }) => {
-									return (
-										<ReactSelect
-											placeholder='Select Lock Type'
-											options={lock_type}
-											value={lock_type?.find(
-												(lock_type) =>
-													lock_type.value ==
-													getValues('lock_type')
-											)}
-											onChange={(e) => onChange(e.value)}
-										/>
-									);
-								}}
-							/>
-						</FormField>
-						<FormField
-							label='teeth_type'
-							title='Teeth Type'
-							errors={errors}>
-							<Controller
-								name={'teeth_type'}
-								control={control}
-								render={({ field: { onChange } }) => {
-									return (
-										<ReactSelect
-											placeholder='Select Teeth Type'
-											options={teeth_type}
-											value={teeth_type?.find(
-												(teeth_type) =>
-													teeth_type.value ==
-													getValues('teeth_type')
-											)}
-											onChange={(e) => onChange(e.value)}
-										/>
-									);
-								}}
-							/>
-						</FormField>
-						<FormField
-							label='teeth_color'
-							title='Teeth Color'
-							errors={errors}>
-							<Controller
-								name={'teeth_color'}
-								control={control}
-								render={({ field: { onChange } }) => {
-									return (
-										<ReactSelect
-											placeholder='Select Teeth Color'
-											options={color}
-											value={color?.find(
-												(color) =>
-													color.value ==
-													getValues('teeth_color')
-											)}
-											onChange={(e) => onChange(e.value)}
-										/>
-									);
-								}}
-							/>
-						</FormField>
-						<FormField
-							label='special_requirement'
-							title='Special Req'
-							errors={errors}>
-							<Controller
-								name={'special_requirement'}
-								control={control}
-								render={({ field: { onChange } }) => {
-									return (
-										<ReactSelect
-											placeholder='Select Multi Requirement'
-											options={special_requirement}
-											value={special_requirement?.filter(
-												(item) =>
-													sp_req?.special_req?.includes(
-														item.value
-													)
-											)}
-											onChange={(e) => {
-												setSpReq((prev) => ({
-													...prev,
-													special_req: e.map(
-														(item) => item.value
-													),
-												}));
-												onChange(
-													JSON.stringify({
-														values: e.map(
+
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+					<FormField
+						label='lock_type'
+						title='Lock Type'
+						errors={errors}>
+						<Controller
+							name={'lock_type'}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select Lock Type'
+										options={lock_type}
+										value={lock_type?.find(
+											(lock_type) =>
+												lock_type.value ==
+												getValues('lock_type')
+										)}
+										onChange={(e) => onChange(e.value)}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+					{watch('order_type') === 'full' && (
+						<>
+							<FormField
+								label='teeth_type'
+								title='Teeth Type'
+								errors={errors}>
+								<Controller
+									name={'teeth_type'}
+									control={control}
+									render={({ field: { onChange } }) => {
+										return (
+											<ReactSelect
+												placeholder='Select Teeth Type'
+												options={teeth_type}
+												value={teeth_type?.find(
+													(teeth_type) =>
+														teeth_type.value ==
+														getValues('teeth_type')
+												)}
+												onChange={(e) =>
+													onChange(e.value)
+												}
+											/>
+										);
+									}}
+								/>
+							</FormField>
+							<FormField
+								label='teeth_color'
+								title='Teeth Color'
+								errors={errors}>
+								<Controller
+									name={'teeth_color'}
+									control={control}
+									render={({ field: { onChange } }) => {
+										return (
+											<ReactSelect
+												placeholder='Select Teeth Color'
+												options={color}
+												value={color?.find(
+													(color) =>
+														color.value ==
+														getValues('teeth_color')
+												)}
+												onChange={(e) =>
+													onChange(e.value)
+												}
+											/>
+										);
+									}}
+								/>
+							</FormField>
+							<FormField
+								label='special_requirement'
+								title='Special Req'
+								errors={errors}>
+								<Controller
+									name={'special_requirement'}
+									control={control}
+									render={({ field: { onChange } }) => {
+										return (
+											<ReactSelect
+												placeholder='Select Multi Requirement'
+												options={special_requirement}
+												value={special_requirement?.filter(
+													(item) =>
+														sp_req?.special_req?.includes(
+															item.value
+														)
+												)}
+												onChange={(e) => {
+													setSpReq((prev) => ({
+														...prev,
+														special_req: e.map(
 															(item) => item.value
 														),
-													})
-												);
-											}}
-											isMulti={true}
-										/>
-									);
-								}}
-							/>
-						</FormField>
-					</div>
-				)}
+													}));
+													onChange(
+														JSON.stringify({
+															values: e.map(
+																(item) =>
+																	item.value
+															),
+														})
+													);
+												}}
+												isMulti={true}
+											/>
+										);
+									}}
+								/>
+							</FormField>
+						</>
+					)}
+				</div>
+
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<Textarea label='description' {...{ register, errors }} />
 					<Textarea label='remarks' {...{ register, errors }} />

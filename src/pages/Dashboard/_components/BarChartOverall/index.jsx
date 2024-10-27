@@ -33,9 +33,13 @@ const chartConfig = {
 		color: 'hsl(var(--chart-2))',
 	},
 };
-export function BarChartOverall(props) {
+export function BarChartOverall(
+	{ data } = {
+		data: [],
+	}
+) {
 	const [activeChart, setActiveChart] = useState('thread');
-	const { value: data } = useFetch(props?.url, [props?.url]);
+
 	const total = useMemo(
 		() => ({
 			zipper: data?.reduce((acc, curr) => acc + curr.zipper, 0),
@@ -48,7 +52,7 @@ export function BarChartOverall(props) {
 		<Card>
 			<CardHeader className='flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row'>
 				<div className='flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6'>
-					<CardTitle>Order Received</CardTitle>
+					<CardTitle className='text-3xl'>Order Received</CardTitle>
 				</div>
 				<div className='flex'>
 					{['zipper', 'thread'].map((key) => {

@@ -2,16 +2,22 @@
 
 import { TrendingUp } from 'lucide-react';
 import { Pie, PieChart, ResponsiveContainer } from 'recharts';
-import { useFetch } from '@/hooks';
 
-
-
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-
-
-
-
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card';
+import {
+	ChartContainer,
+	ChartLegend,
+	ChartLegendContent,
+	ChartTooltip,
+	ChartTooltipContent,
+} from '@/components/ui/chart';
 
 // const chartData = [
 // 	{
@@ -49,28 +55,61 @@ const chartConfig = {
 	},
 };
 
-export function PieChartDashboard() {
-	const { value: data, loading } = useFetch(`/dashboard/amount-percentage`);
-	const { value: data2, loading2 } = useFetch(`/dashboard/no-of-doc`);
-
-	if (loading || loading2) {
-		return <span className='loading loading-dots loading-lg z-50' />;
+export function PieChartDashboard(
+	{ amount_percentage, no_of_doc } = {
+		amount_percentage: [],
+		no_of_doc: [],
 	}
+) {
+	// const { value: data, loading } = useFetch(`/dashboard/amount-percentage`);
+	// const { value: data2, loading2 } = useFetch(`/dashboard/no-of-doc`);
 
-	if (!data || data.length === 0 || !data2 || data2.length === 0) {
-		return <div>No data available</div>;
-	}
-	const mainChartData = data.map((item) => ({
+	// const data1 = [
+	// 	{
+	// 		name: 'total_acceptance_due',
+	// 		amount: 500,
+	// 	},
+	// 	{
+	// 		name: 'total_maturity_due',
+	// 		amount: 300,
+	// 	},
+	// 	{
+	// 		name: 'total_payment_due',
+	// 		amount: 200,
+	// 	},
+	// ];
+	// const data3 = [
+	// 	{
+	// 		name: 'total_acceptance_due',
+	// 		amount: 200,
+	// 	},
+	// 	{
+	// 		name: 'total_maturity_due',
+	// 		amount: 100,
+	// 	},
+	// 	{
+	// 		name: 'total_payment_due',
+	// 		amount: 60,
+	// 	},
+	// ];
+
+	// if (loading || loading2) {
+	// 	return <span className='loading loading-dots loading-lg z-50' />;
+	// }
+
+	// if (!data || data.length === 0 || !data2 || data2.length === 0) {
+	// 	return <div>No data available</div>;
+	// }
+	const mainChartData = amount_percentage.map((item) => ({
 		...item,
 		amount: parseFloat(item.amount),
 		fill: `var(--color-${item.name})`,
 	}));
-	const nestedChartData = data2.map((item) => ({
+	const nestedChartData = no_of_doc.map((item) => ({
 		...item,
 		amount: item.amount,
 		fill: `var(--color-${item.name})`,
 	}));
-	
 
 	return (
 		<Card className='flex flex-col'>

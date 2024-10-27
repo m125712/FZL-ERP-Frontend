@@ -1,35 +1,25 @@
 'use client';
 
-import { TrendingUp } from 'lucide-react';
+import { useState } from 'react';
+import { RefreshCcw, TrendingUp } from 'lucide-react';
 import { Pie, PieChart, ResponsiveContainer } from 'recharts';
 import { useFetch } from '@/hooks';
 
-
-
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-
-
-
-
-
-// const chartData = [
-// 	{
-// 		name: 'total_acceptance_due',
-// 		amount: 275,
-// 		fill: 'var(--color-total_acceptance_due)',
-// 	},
-// 	{
-// 		name: 'total_maturity_due',
-// 		amount: 200,
-// 		fill: 'var(--color-total_maturity_due)',
-// 	},
-// 	{
-// 		name: 'total_payment_due',
-// 		amount: 187,
-// 		fill: 'var(--color-total_payment_due)',
-// 	},
-// ];
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card';
+import {
+	ChartContainer,
+	ChartLegend,
+	ChartLegendContent,
+	ChartTooltip,
+	ChartTooltipContent,
+} from '@/components/ui/chart';
 
 const chartConfig = {
 	amount: {
@@ -49,9 +39,14 @@ const chartConfig = {
 	},
 };
 
-export function PieChartDashboard() {
-	const { value: data, loading } = useFetch(`/dashboard/amount-percentage`);
-	const { value: data2, loading2 } = useFetch(`/dashboard/no-of-doc`);
+export function PieChartDashboard(props) {
+	const [status, setStatus] = useState(false);
+	const { value: data, loading } = useFetch(`/dashboard/amount-percentage`, [
+		props.status,
+	]);
+	const { value: data2, loading2 } = useFetch(`/dashboard/no-of-doc`, [
+		props.status,
+	]);
 
 	if (loading || loading2) {
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -60,23 +55,29 @@ export function PieChartDashboard() {
 	if (!data || data.length === 0 || !data2 || data2.length === 0) {
 		return <div>No data available</div>;
 	}
+
 	const mainChartData = data.map((item) => ({
 		...item,
 		amount: parseFloat(item.amount),
 		fill: `var(--color-${item.name})`,
 	}));
+
 	const nestedChartData = data2.map((item) => ({
 		...item,
 		amount: item.amount,
 		fill: `var(--color-${item.name})`,
 	}));
-	
 
 	return (
 		<Card className='flex flex-col'>
-			<CardHeader className='items-center pb-0'>
+			<CardHeader className='flex items-center justify-between pb-0'>
 				<CardTitle>Amount (USD) and # of Docs</CardTitle>
-				<CardDescription></CardDescription>
+				{/* <button
+					type='button'
+					className='btn-filter-outline'
+					onClick={() => setStatus((prev) => !prev)}>
+					<RefreshCcw className='size-4' />
+				</button> */}
 			</CardHeader>
 			<CardContent className='flex-1 pb-0'>
 				<div className='flex flex-col items-center justify-between gap-4 md:flex-row'>
@@ -103,7 +104,6 @@ export function PieChartDashboard() {
 										innerRadius,
 										outerRadius,
 										value,
-										index,
 									}) => {
 										const RADIAN = Math.PI / 180;
 										const radius =
@@ -165,7 +165,6 @@ export function PieChartDashboard() {
 										innerRadius,
 										outerRadius,
 										value,
-										index,
 									}) => {
 										const RADIAN = Math.PI / 180;
 										const radius =

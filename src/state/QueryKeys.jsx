@@ -293,7 +293,10 @@ export const commonQK = {
 	multiColorLogTapeReceivedByUUID: (uuid) => [
 		...commonQK.multiColorLogTapeReceived(),
 		uuid,
-	]
+	],
+	//* Tape Assign
+	tapeAssign: () => [...commonQK.all(), 'tape/assign'],
+	tapeAssignByUUID: (uuid) => [...commonQK.tapeAssign(), uuid],
 };
 
 // * LabDip * //
@@ -921,6 +924,13 @@ export const deliveryQk = {
 		...deliveryQk.deliveryPackingListEntry(),
 		uuid,
 	],
+	// * Vehicle
+	deliveryVehicle: () => [...deliveryQk.all(), 'vehicle'],
+	deliveryVehicleByUUID: (uuid) => [...deliveryQk.deliveryVehicle(), uuid],
+
+	// * Carton
+	deliveryCarton: () => [...deliveryQk.all(), 'carton'],
+	deliveryCartonByUUID: (uuid) => [...deliveryQk.deliveryCarton(), uuid],
 
 	// *RM
 	deliveryRM: () => [...deliveryQk.all(), 'rm'],
@@ -1230,6 +1240,11 @@ export const otherQK = {
 		...otherQK.all(),
 		'order-properties-by-teeth-type',
 	],
+	// Vehicle
+	vehicle: () => [...otherQK.all(), 'delivery-vehicle'],
+
+	// Carton
+	carton: () => [...otherQK.all(), 'delivery-carton'],
 };
 
 //* Challan

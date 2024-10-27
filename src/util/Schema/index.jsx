@@ -1412,7 +1412,7 @@ export const SLIDER_ITEM_TRANSACTION_NULL = {
 // Delivery
 export const PACKING_LIST_SCHEMA = {
 	order_info_uuid: STRING_REQUIRED,
-	carton_size: STRING_REQUIRED,
+	carton_uuid: STRING_REQUIRED,
 	carton_weight: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
 	packing_list_entry: yup.array().of(
@@ -1473,7 +1473,7 @@ export const PACKING_LIST_SCHEMA = {
 
 export const PACKING_LIST_NULL = {
 	order_info_uuid: '',
-	carton_size: '',
+	carton_size_uuid: '',
 	carton_weight: '',
 	remarks: '',
 	packing_list_entry: [
@@ -1499,7 +1499,22 @@ export const PACKING_LIST_NULL = {
 
 // Challan
 export const CHALLAN_SCHEMA = {
-	assign_to: STRING_REQUIRED,
+	is_hand_delivery: BOOLEAN_DEFAULT_VALUE(false),
+	name: STRING.when('is_hand_delivery', {
+		is: true,
+		then: (Schema) => Schema.required('Required'),
+		otherwise: (Schema) => Schema.nullable(),
+	}),
+	delivery_cost: NUMBER.when('is_hand_delivery', {
+		is: true,
+		then: (Schema) => Schema.required('Required'),
+		otherwise: (Schema) => Schema.nullable(),
+	}),
+	vehicle_uuid: STRING.when('is_hand_delivery', {
+		is: true,
+		then: (Schema) => Schema.nullable(),
+		otherwise: (Schema) => Schema.required('Required'),
+	}),
 	order_info_uuid: STRING_REQUIRED,
 	packing_list_uuids: JSON_STRING_REQUIRED.test(
 		'required',
@@ -1533,7 +1548,10 @@ export const CHALLAN_SCHEMA = {
 };
 
 export const CHALLAN_NULL = {
-	assign_to: '',
+	is_hand_delivery: false,
+	vehicle_uuid: '',
+	name: '',
+	delivery_cost: 0,
 	order_info_uuid: '',
 	packing_list_uuids: [],
 	new_packing_list_uuids: [],
@@ -1547,6 +1565,51 @@ export const CHALLAN_NULL = {
 	],
 
 	new_challan_entry: [],
+};
+//* Vehicle
+export const DELIVERY_VEHICLE_SCHEMA = {
+	type: STRING_REQUIRED,
+	name: STRING_REQUIRED,
+	number: STRING_REQUIRED,
+	driver_name: STRING_REQUIRED,
+	active: BOOLEAN_REQUIRED.default(false),
+	remarks: STRING.nullable(),
+};
+
+export const DELIVERY_VEHICLE_NULL = {
+	uuid: null,
+	type: '',
+	name: '',
+	number: '',
+	driver_name: '',
+	active: false,
+	created_by: null,
+	created_by_name: '',
+	created_at: '',
+	updated_at: null,
+	remarks: '',
+};
+
+//* Carton
+export const DELIVERY_CARTON_SCHEMA = {
+	size: STRING_REQUIRED,
+	name: STRING_REQUIRED,
+	used_for: STRING_REQUIRED,
+	active: BOOLEAN_REQUIRED.default(false),
+	remarks: STRING.nullable(),
+};
+
+export const DELIVERY_CARTON_NULL = {
+	uuid: null,
+	size: '',
+	name: '',
+	used_for: '',
+	active: false,
+	created_by: null,
+	created_by_name: '',
+	created_at: '',
+	updated_at: null,
+	remarks: '',
 };
 
 // Commercial
@@ -2049,19 +2112,37 @@ export const THREAD_DYES_CATEGORY_NULL = {
 
 // Thread Challan
 export const THREAD_CHALLAN_SCHEMA = {
+	is_hand_delivery: BOOLEAN_DEFAULT_VALUE(false),
+	name: STRING.when('is_hand_delivery', {
+		is: true,
+		then: (Schema) => Schema.required('Required'),
+		otherwise: (Schema) => Schema.nullable(),
+	}),
+	delivery_cost: NUMBER.when('is_hand_delivery', {
+		is: true,
+		then: (Schema) => Schema.required('Required'),
+		otherwise: (Schema) => Schema.nullable(),
+	}),
+	vehicle_uuid: STRING.when('is_hand_delivery', {
+		is: true,
+		then: (Schema) => Schema.nullable(),
+		otherwise: (Schema) => Schema.required('Required'),
+	}),
 	received: BOOLEAN_DEFAULT_VALUE(false),
 	gate_pass: BOOLEAN_DEFAULT_VALUE(false),
-	assign_to: STRING_REQUIRED,
 	order_info_uuid: STRING_REQUIRED,
 	carton_quantity: NUMBER_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
 export const THREAD_CHALLAN_NULL = {
+	is_hand_delivery: false,
+	name: '',
+	delivery_cost: 0,
 	uuid: null,
 	received: false,
 	gate_pass: false,
-	assign_to: null,
+	vehicle_uuid: null,
 	order_info_uuid: null,
 	remarks: '',
 };

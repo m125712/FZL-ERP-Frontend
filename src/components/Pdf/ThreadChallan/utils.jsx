@@ -59,7 +59,7 @@ export const getPageHeader = (data) => {
 			],
 			[
 				{ text: 'Assign To', bold: true, color: PRIMARY_COLOR },
-				data?.assign_to_name,
+				data?.vehicle_name,
 				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
 				data?.factory_address,
 			],
@@ -70,11 +70,23 @@ export const getPageHeader = (data) => {
 				data?.order_number,
 			],
 			[
+				{ text: 'Name', bold: true, color: PRIMARY_COLOR },
+				data?.name,
+				{ text: 'Delivery Cost', bold: true, color: PRIMARY_COLOR },
+				data?.delivery_cost,
+			],
+			[
 				{ text: 'Gate Pass', bold: true, color: PRIMARY_COLOR },
 				data?.gate_pass === 1 ? 'Yes' : 'No',
 
 				{ text: 'Receive Status', bold: true, color: PRIMARY_COLOR },
 				data?.received === 1 ? 'Yes' : 'No',
+			],
+			[
+				{ text: 'Hand Delivery', bold: true, color: PRIMARY_COLOR },
+				data?.gate_pass ? 'Yes' : 'No',
+				'',
+				'',
 			],
 			[
 				{ text: 'Created By', bold: true, color: PRIMARY_COLOR },

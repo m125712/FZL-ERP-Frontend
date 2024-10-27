@@ -26,6 +26,20 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'is_hand_delivery',
+				header: (
+					<span>
+						Hand
+						<br />
+						Delivery
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-sm' value={info.getValue()} />
+				),
+			},
+			{
 				accessorKey: 'uuid',
 				header: 'ID',
 				cell: (info) => {
@@ -40,18 +54,43 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'order_number',
+				header: 'O/N',
+				cell: (info) => {
+					const { order_number } = info.row.original;
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={order_number}
+							uri='/order/details'
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'carton_quantity',
 				header: 'Carton QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'assign_to_name',
+				accessorKey: 'vehicle_name',
 				header: 'Assign To',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
+			{
+				accessorKey: 'name',
+				header: 'Name',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'delivery_cost',
+				header: 'Delivery Cost',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'gate_pass',
 				header: 'Gate Pass',

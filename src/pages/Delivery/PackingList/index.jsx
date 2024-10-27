@@ -4,15 +4,18 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const navigate = useNavigate();
-	const { data, isLoading, url, deleteData } = useDeliveryPackingList();
+	const { data, isLoading, url, deleteData, updateData } =
+		useDeliveryPackingList();
 	const info = new PageInfo('Packing List', url, 'delivery__packing_list');
 	const haveAccess = useAccess('delivery__packing_list');
 
@@ -36,7 +39,20 @@ export default function Index() {
 					);
 				},
 			},
-
+			{
+				accessorKey: 'challan_number',
+				header: 'C/N',
+				cell: (info) => {
+					const { challan_number, challan_uuid } = info.row.original;
+					return (
+						<LinkWithCopy
+							title={challan_number}
+							id={challan_uuid}
+							uri='/delivery/zipper-challan'
+						/>
+					);
+				},
+			},
 			{
 				accessorKey: 'order_info_uuid',
 				header: 'O/N',
@@ -47,6 +63,29 @@ export default function Index() {
 							title={order_number}
 							id={info.getValue()}
 							uri='/order/details'
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'is_warehouse_received',
+				header: 'Received',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const access = haveAccess.includes('click_received');
+					const overrideAccess = haveAccess.includes(
+						'click_received_override'
+					);
+					return (
+						<SwitchToggle
+							disabled={
+								!overrideAccess &&
+								(!access || info.getValue() !== true)
+							}
+							onChange={() =>
+								handelReceivedStatus(info.row.index)
+							}
+							checked={info.getValue() === true}
 						/>
 					);
 				},
@@ -121,6 +160,17 @@ export default function Index() {
 	const handelUpdate = (idx) => {
 		const uuid = data[idx]?.uuid;
 		navigate(`/delivery/zipper-packing-list/${uuid}/update`);
+	};
+	const handelReceivedStatus = async (idx) => {
+		await updateData.mutateAsync({
+			url: `${url}/${data[idx]?.uuid}`,
+			updatedData: {
+				is_warehouse_received:
+					data[idx]?.is_warehouse_received === true ? false : true,
+				updated_at: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
 	};
 
 	// Delete

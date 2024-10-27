@@ -105,6 +105,31 @@ export const useDeliveryPackingListEntryByUUID = (uuid) =>
 		url: `/delivery/packing-list-entry/${uuid}`,
 		enabled: !!uuid,
 	});
+//* For Delivery Vehicle
+export const useDeliveryVehicle = () =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryVehicle(),
+		url: '/delivery/vehicle',
+	});
+
+export const useDeliveryVehicleByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryVehicleByUUID(uuid),
+		url: `/delivery/vehicle/${uuid}`,
+	});
+
+//* For Delivery Carton
+export const useDeliveryCarton = () =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryCarton(),
+		url: '/delivery/carton',
+	});
+
+export const useDeliveryCartonByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryCartonByUUID(uuid),
+		url: `/delivery/carton/${uuid}`,
+	});
 
 // * RM
 export const useDeliveryRM = () =>

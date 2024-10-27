@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useMemo, useState } from 'react';
+import { RefreshCcw } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 import { useFetch } from '@/hooks';
 
@@ -22,7 +23,7 @@ export const description = 'An interactive bar chart';
 
 const chartConfig = {
 	views: {
-		label: 'Page Views',
+		label: 'Quantity',
 	},
 	zipper: {
 		label: 'Zipper',
@@ -33,9 +34,11 @@ const chartConfig = {
 		color: 'hsl(var(--chart-2))',
 	},
 };
+
 export function BarChartOverall(props) {
 	const [activeChart, setActiveChart] = useState('thread');
-	const { value: data } = useFetch(props?.url, [props?.url]);
+	const [status, setStatus] = useState(false);
+	const { value: data } = useFetch(props?.url, [props?.url, props.status]); 
 	const total = useMemo(
 		() => ({
 			zipper: data?.reduce((acc, curr) => acc + curr.zipper, 0),
@@ -68,6 +71,14 @@ export function BarChartOverall(props) {
 							</button>
 						);
 					})}
+					{/* <button
+						type='button'
+						className='btn-filter-outline'
+						onClick={() => setStatus((prevStatus) => !prevStatus)}
+						>
+						<RefreshCcw className='size-4' />
+					</button> */}
+
 				</div>
 			</CardHeader>
 			<CardContent className='px-2 sm:p-6'>
@@ -75,7 +86,6 @@ export function BarChartOverall(props) {
 					config={chartConfig}
 					className='aspect-auto h-[250px] w-full'>
 					<BarChart
-						accessibilityLayer
 						data={data}
 						margin={{
 							left: 12,

@@ -11,8 +11,8 @@ import { getPageFooter, getPageHeader } from './utils';
 const node = [
 	getTable('mc_no', 'MC No'),
 	getTable('die_casting_name', 'Name'),
-	getTable('cavity_goods', 'Count Length'),
-	getTable('cavity_defect', 'Bleaching'),
+	getTable('cavity_goods', 'Cavity Goods'),
+	getTable('cavity_defect', 'Cavity Defect'),
 	getTable('push', 'Push', 'right'),
 	getTable('order_number', 'Order Number'),
 	getTable('item_description', 'Item Description'),

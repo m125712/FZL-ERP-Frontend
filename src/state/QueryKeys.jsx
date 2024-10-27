@@ -4,6 +4,8 @@
  ** https://tkdodo.eu/blog/leveraging-the-query-function-context#query-key-factories
  **/
 
+import { useDeliveryThreadDashboard } from './Delivery';
+
 export const orderQK = {
 	all: () => ['order'],
 
@@ -887,11 +889,19 @@ export const sliderQK = {
 export const deliveryQk = {
 	all: () => ['delivery'],
 	// * Dashboard
-	deliveryDashboard: () => [...deliveryQk.all(), 'dashboard'],
-	deliveryDashboardByUUID: (uuid) => [
+	// * Zipper
+	deliveryZipperDashboard: () => [...deliveryQk.all(), 'dashboard-zipper'],
+	deliveryZipperDashboardByUUID: (uuid) => [
 		...deliveryQk.deliveryDashboard(),
 		uuid,
 	],
+	//* Thread
+	deliveryThreadDashboard: () => [...deliveryQk.all(), 'dashboard-thread'],
+	deliveryThreadDashboardByUUID: (uuid) => [
+		...deliveryQk.deliveryThreadDashboard(),
+		uuid,
+	],
+
 	// *Packing List
 	deliveryPackingList: () => [...deliveryQk.all(), 'packing-list'],
 	deliveryPackingListByUUID: (uuid) => [

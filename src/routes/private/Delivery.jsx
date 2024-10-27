@@ -9,7 +9,7 @@ import Carton from '@pages/Delivery/Carton';
 import Challan from '@pages/Delivery/Challan';
 import ChallanDetails from '@pages/Delivery/Challan/Details';
 // Dashboard
-import Dashboard from '@pages/Delivery/Dashboard';
+import Dashboard from '@/pages/Delivery/Dashboard';
 import Log from '@pages/Delivery/Log';
 import RM from '@pages/Delivery/RM';
 import Vehicle from '@pages/Delivery/Vehicle';

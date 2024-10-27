@@ -58,17 +58,12 @@ export default function DeliveryDashboard() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'packing_list',
-				header: 'Packing List',
+				accessorKey: 'packing_list_quantity',
+				header: 'Packing List Quantity',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'quantity',
-				header: 'Quantity',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+
 			{
 				accessorKey: 'status',
 				header: 'Status',

@@ -13,14 +13,13 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useSliderDashboardInfo();
-	const info = new PageInfo('Info', url, 'slider__dashboard_info');
-	const haveAccess = useAccess('slider__dashboard_info');
+	const info = new PageInfo('Info', url, 'slider__dashboard');
+	const haveAccess = useAccess('slider__dashboard');
 
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
 
-	console.log(data);
 	const columns = useMemo(
 		() => [
 			{
@@ -184,7 +183,7 @@ export default function Index() {
 				accessorKey: 'two_way_pin_quantity',
 				header: 'Two Way Pin Quantity',
 				enableColumnFilter: false,
-				cell: (info) =>info.getValue(),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'remarks',

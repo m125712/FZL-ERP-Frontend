@@ -43,8 +43,7 @@ export const DeliveryRoutes = [
 					'click_receive_status',
 					'click_gate_pass_override',
 					'click_receive_status_override',
-					'click_hand_delivery',
-					'click_hand_delivery_override',
+
 				],
 			},
 			{
@@ -147,8 +146,6 @@ export const DeliveryRoutes = [
 					'click_receive_status',
 					'click_gate_pass_override',
 					'click_receive_status_override',
-					'click_hand_delivery',
-					'click_hand_delivery_override',
 				],
 			},
 			{

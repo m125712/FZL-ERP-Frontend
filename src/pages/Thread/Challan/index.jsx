@@ -25,6 +25,20 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'is_hand_delivery',
+				header: (
+					<span>
+						Hand
+						<br />
+						Delivery
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-sm' value={info.getValue()} />
+				),
+			},
+			{
 				accessorKey: 'challan_id',
 				header: 'ID',
 				cell: (info) => {
@@ -40,7 +54,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'order_number',
-				header: 'ID',
+				header: 'O/N',
 				width: 'w-40',
 				cell: (info) => {
 					const { order_info_uuid } = info.row.original;
@@ -129,33 +143,6 @@ export default function Index() {
 					);
 				},
 			},
-			{
-				accessorKey: 'is_hand_delivery',
-				header: 'Hand Delivery',
-				enableColumnFilter: false,
-				cell: (info) => {
-					const { gate_pass, is_hand_delivery } = info.row.original;
-
-					const access = haveAccess.includes('click_hand_delivery');
-					const overrideAccess = haveAccess.includes(
-						'click_hand_delivery_override'
-					);
-
-					return (
-						<SwitchToggle
-							disabled={
-								overrideAccess
-									? false
-									: access
-										? gate_pass === 0
-										: true
-							}
-							onChange={() => handelHandDelivery(info.row.index)}
-							checked={Number(info.getValue()) === 1}
-						/>
-					);
-				},
-			},
 
 			{
 				accessorKey: 'created_by_name',
@@ -233,19 +220,6 @@ export default function Index() {
 			url: `/thread/challan/${challan?.uuid}`,
 			uuid: challan?.uuid,
 			updatedData: { gate_pass: status, updated_at },
-			isOnCloseNeeded: false,
-		});
-	};
-	// Hand Delivery
-	const handelHandDelivery = async (idx) => {
-		const challan = data[idx];
-		const status = challan?.is_hand_delivery == 1 ? 0 : 1;
-		const updated_at = GetDateTime();
-
-		await updateData.mutateAsync({
-			url: `/delivery/challan/${challan?.uuid}`,
-			uuid: challan?.uuid,
-			updatedData: { is_hand_delivery: status, updated_at },
 			isOnCloseNeeded: false,
 		});
 	};

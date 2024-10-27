@@ -2,19 +2,11 @@ import { useMemo } from 'react';
 import { useCommonTapeAssign } from '@/state/Common';
 import { useAccess, useFetch } from '@/hooks';
 
-
-
 import ReactTable from '@/components/Table';
-import { LinkWithCopy, ReactSelect } from '@/ui';
-
-
+import { LinkWithCopy, ReactSelect, StatusButton } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
-
-
-
-
 
 export default function Index() {
 	const { data, updateData, isLoading } = useCommonTapeAssign();
@@ -24,11 +16,19 @@ export default function Index() {
 		'common__tape_assign'
 	);
 	const haveAccess = useAccess('common__tape_assign');
-
+	const { value: tape } = useFetch(`/other/tape-coil/value/label`);
 	// * fetching the data
 
 	const columns = useMemo(
 		() => [
+			{
+				accessorKey: 'is_sample',
+				header: 'Sample',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-sm' value={info.getValue()} />
+				),
+			},
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
@@ -60,21 +60,25 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'party_name',
-				header: 'Party',
-				width: 'w-40',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'is_multi_color',
-				header: 'Multi Color',
-				enableColumnFilter: false,
-				cell: (info) => (info.getValue() === 1 ? 'Yes' : 'No'),
-			},
-			{
 				accessorKey: 'count',
 				header: 'Count',
+				width: 'w-40',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { order_number_wise_count } = info.row.original;
+					const { order_number_wise_rank } = info.row.original;
+
+					return (
+						<div className='flex space-x-1'>
+							<span>{order_number_wise_rank}/</span>
+							<span>{order_number_wise_count}</span>
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'party_name',
+				header: 'Party',
 				width: 'w-40',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -87,9 +91,7 @@ export default function Index() {
 				cell: (info) => {
 					const { tape_coil_uuid } = info.row.original;
 					const { item, zipper_number } = info.row.original;
-					const { value: tape } = useFetch(
-						`/other/tape-coil/value/label?item=${item}&zipper_number=${zipper_number}`
-					);
+
 					const swatchAccess =
 						haveAccess.includes('click_tape_assign');
 					const swatchAccessOverride = haveAccess.includes(
@@ -100,7 +102,11 @@ export default function Index() {
 						<ReactSelect
 							key={tape_coil_uuid}
 							placeholder='Select Tape'
-							options={tape ?? []}
+							options={tape?.filter(
+								(tapeItem) =>
+									tapeItem.item === item &&
+									tapeItem.zipper_number === zipper_number
+							)}
 							value={tape?.find(
 								(item) => item.value == tape_coil_uuid
 							)}
@@ -121,7 +127,7 @@ export default function Index() {
 				},
 			},
 		],
-		[data]
+		[data, tape]
 	);
 
 	const handleSwatchStatus = async (e, idx) => {

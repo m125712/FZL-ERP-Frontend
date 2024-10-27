@@ -393,7 +393,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'QTY',
+				header: 'Quantity',
 				enableColumnFilter: false,
 				enableSorting: false,
 				cell: (info) => {

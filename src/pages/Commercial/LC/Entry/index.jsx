@@ -64,6 +64,16 @@ export default function Index() {
 		name: 'pi',
 	});
 
+	// * progression dynamic field
+	const {
+		fields: progressionField,
+		append: progressionAppend,
+		remove: progressionRemove,
+	} = useFieldArray({
+		control,
+		name: 'lc_entry',
+	});
+
 	useEffect(() => {
 		if (data) {
 			reset(data);
@@ -173,6 +183,35 @@ export default function Index() {
 				),
 			];
 
+			// * Dynamic progresson/Lc_entry
+			const lc_entry_update_promise = [...data.lc_entry].map(
+				async (item) => {
+					if (item.amount > 0) {
+						if (item.uuid) {
+							await updateData.mutateAsync({
+								url: `/commercial/lc-entry/${item.uuid}`,
+								updatedData: {
+									...item,
+									updated_at: GetDateTime(),
+								},
+								isOnCloseNeeded: false,
+							});
+						} else {
+							await postData.mutateAsync({
+								url: `/commercial/lc-entry`,
+								newData: {
+									...item,
+									lc_uuid: data.uuid,
+									uuid: nanoid(),
+									created_at: GetDateTime(),
+								},
+								isOnCloseNeeded: false,
+							});
+						}
+					}
+				}
+			);
+
 			await Promise.all(pi_numbers_promise)
 				.then(() => {
 					reset(LC_NULL);
@@ -192,10 +231,13 @@ export default function Index() {
 			...data,
 			uuid: new_lc_uuid,
 			lc_date: formatDate(data?.lc_date),
-			payment_date: formatDate(data?.payment_date),
-			acceptance_date: formatDate(data?.acceptance_date),
-			maturity_date: formatDate(data?.maturity_date),
-			handover_date: formatDate(data?.handover_date),
+
+			// handover_date: formatDate(data?.handover_date),
+			// document_receive_date: formatDate(data?.document_receive_date),
+			// acceptance_date: formatDate(data?.acceptance_date),
+			// maturity_date: formatDate(data?.maturity_date),
+			// payment_date: formatDate(data?.payment_date),
+
 			shipment_date: formatDate(data?.shipment_date),
 			expiry_date: formatDate(data?.expiry_date),
 			ud_received: data.ud_received ? 1 : 0,
@@ -217,6 +259,22 @@ export default function Index() {
 			url: commercialLcUrl,
 			newData: lc_new_data,
 			isOnCloseNeeded: false,
+		});
+
+		// * Dynamic progresson/Lc_entry
+		const lc_entry_promise = [...data.lc_entry].map(async (item) => {
+			if (item.amount > 0) {
+				await postData.mutateAsync({
+					url: `/commercial/lc-entry`,
+					newData: {
+						...item,
+						lc_uuid: new_lc_uuid,
+						uuid: nanoid(),
+						created_at: GetDateTime(),
+					},
+					isOnCloseNeeded: false,
+				});
+			}
 		});
 
 		// const new_lc_number = res?.data?.[0].insertedId;
@@ -279,6 +337,9 @@ export default function Index() {
 							getValues,
 							Controller,
 							watch,
+							progressionField,
+							progressionAppend,
+							progressionRemove,
 						}}
 					/>
 

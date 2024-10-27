@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { useFetch } from '@/hooks';
 
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
@@ -79,50 +80,42 @@ function BankInfo(lc) {
 	);
 }
 
-export default function Information({ lc }) {
+export default function Information({ data }) {
 	const {
-		uuid,
-		party_uuid,
-		pi_cash_ids,
+		pi_uuids,
+		marketing_name,
 		party_name,
-		total_value,
-		file_number,
-		lc_number,
-		lc_date,
-		payment_value,
-		payment_date,
-		ldbc_fdbc,
-		acceptance_date,
-		maturity_date,
-		commercial_executive,
-		party_bank,
-		production_complete,
-		is_rtgs,
-		lc_cancel,
-		handover_date,
-		shipment_date,
-		expiry_date,
-		ud_no,
-		ud_received,
-		at_sight,
-		amd_date,
-		amd_count,
-		problematical,
-		epz,
-		created_by,
+		buyer_name,
+		merchandiser_name,
+		factory_name,
+		bank_name,
+		validity,
+		payment,
+		receive_amount,
+		weight,
+		date,
+		pi_number,
 		created_by_name,
 		created_at,
 		updated_at,
 		remarks,
-	} = lc;
+	} = data;
+
+	const { value: pi } = useFetch('/other/pi/value/label');
+
+	
 
 	const renderItems = () => {
 		const basicInfo = [
 			{
+				label: 'PI',
+				value: pi_number,
+			},
+			{
 				label: 'PI IDs',
-				value: pi_cash_ids && (
+				value: pi_uuids && (
 					<div className='flex flex-wrap gap-2'>
-						{pi_cash_ids?.map((piId) => (
+						{pi_uuids?.map((piId) => (
 							<LinkWithCopy
 								key={piId}
 								title={piId}
@@ -134,28 +127,48 @@ export default function Information({ lc }) {
 				),
 			},
 			{
-				label: 'Total Value',
-				value: Number(total_value).toFixed(2),
+				label: 'Marketing',
+				value: marketing_name,
 			},
 			{
-				label: 'RTGS',
-				value: is_rtgs ? 'Yes' : 'No',
+				label: 'Party',
+				value: party_name,
 			},
 			{
-				label: 'LC Cancelled',
-				value: lc_cancel ? 'Yes' : 'No',
+				label: 'Buyer',
+				value: buyer_name,
 			},
 			{
-				label: 'Production Complete',
-				value: production_complete ? 'Yes' : 'No',
+				label: 'Merchandiser',
+				value: merchandiser_name,
 			},
 			{
-				label: 'Problematic',
-				value: problematical ? 'Yes' : 'No',
+				label: 'Factory',
+				value: factory_name,
 			},
 			{
-				label: 'EPZ',
-				value: epz ? 'Yes' : 'No',
+				label: 'Bank',
+				value: bank_name,
+			},
+			{
+				label: 'Validity',
+				value: validity,
+			},
+			{
+				label: 'Payment',
+				value: payment,
+			},
+			{
+				label: 'Receive Amount',
+				value: receive_amount,
+			},
+			{
+				label: 'Weight',
+				value: weight,
+			},
+			{
+				label: 'Date',
+				value: format(new Date(date), 'dd/MM/yyyy'),
 			},
 			{
 				label: 'Created By',
@@ -174,74 +187,9 @@ export default function Information({ lc }) {
 				value: remarks,
 			},
 		];
-		const fileDetails = [
-			{
-				label: 'Party',
-				value: party_name,
-			},
-			{
-				label: 'File No.',
-				value: file_number,
-			},
-			{
-				label: 'LC No.',
-				value: lc_number,
-			},
-			{
-				label: 'LC Date',
-				value: lc_date ? format(new Date(lc_date), 'dd/MM/yyyy') : '',
-			},
-		];
-
-		const commercialDetails = [
-			{
-				label: 'Executive',
-				value: commercial_executive,
-			},
-			{
-				label: 'Party Bank',
-				value: party_bank,
-			},
-			{
-				label: 'Shipment Date',
-				value: shipment_date
-					? format(new Date(shipment_date), 'dd/MM/yyyy')
-					: '',
-			},
-			{
-				label: 'Expiry Date',
-				value: format(new Date(expiry_date), 'dd/MM/yyyy'),
-			},
-		];
-
-		const others = [
-			{
-				label: 'UD No.',
-				value: ud_no,
-			},
-			{
-				label: 'UD Received',
-				value: ud_received,
-			},
-			{
-				label: 'At Sight',
-				value: at_sight,
-			},
-			{
-				label: 'AMD Date',
-				value: format(new Date(amd_date), 'dd/MM/yyyy'),
-			},
-			{
-				label: 'AMD Count',
-				value: amd_count,
-			},
-		];
 
 		return {
 			basicInfo,
-			fileDetails,
-			commercialDetails,
-			others,
 		};
 	};
 
@@ -252,24 +200,6 @@ export default function Information({ lc }) {
 				title={'Basic Info'}
 				items={renderItems().basicInfo}
 			/>
-			<div className='grid grid-cols-1 lg:grid-cols-3 lg:gap-8'>
-				<RenderTable
-					className={'border-secondary/30 lg:border-r'}
-					title={'File Details'}
-					items={renderItems().fileDetails}
-				/>
-				<RenderTable
-					className={'border-secondary/30 lg:border-x'}
-					title={'Commercial Details'}
-					items={renderItems().commercialDetails}
-				/>
-				<RenderTable
-					className={'border-secondary/30 lg:border-l'}
-					title={'Others'}
-					items={renderItems().others}
-				/>
-			</div>
-			
 		</SectionContainer>
 	);
 }

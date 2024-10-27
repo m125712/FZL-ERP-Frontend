@@ -372,7 +372,9 @@ export default function Index() {
 				updated_at: GetDateTime(),
 			};
 
-			if (watch('order_type') !== 'tape') {
+			if (watch('order_type') === 'tape') {
+			} else if (watch('slider_provided') === 'completely_provided') {
+			} else {
 				await updateData.mutateAsync({
 					url: `/slider/stock/${data?.stock_uuid}`,
 					updatedData: slider_info,
@@ -456,7 +458,9 @@ export default function Index() {
 			created_at: GetDateTime(),
 		};
 
-		if (watch('order_type') !== 'tape') {
+		if (watch('order_type') === 'tape') {
+		} else if (watch('slider_provided') === 'completely_provided') {
+		} else {
 			await postData.mutateAsync({
 				url: '/slider/stock',
 				newData: slider_info,

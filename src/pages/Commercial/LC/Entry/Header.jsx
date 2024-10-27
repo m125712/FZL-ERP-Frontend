@@ -11,6 +11,8 @@ import {
 	Textarea,
 } from '@/ui';
 
+import DynamicProgression from './DynamicProgression';
+
 export default function Header({
 	register,
 	errors,
@@ -18,6 +20,9 @@ export default function Header({
 	getValues,
 	Controller,
 	watch,
+	progressionField,
+	progressionAppend,
+	progressionRemove,
 }) {
 	const { lc_uuid } = useParams();
 	const { data: party } = useOtherParty();
@@ -160,7 +165,7 @@ export default function Header({
 						{...{ register, errors }}
 					/>
 				</Section>
-				<Section title='Progression'>
+				{/* <Section title='Progression'>
 					<Input
 						label='ldbc_fdbc'
 						title='LDBC/FDBC'
@@ -206,7 +211,22 @@ export default function Header({
 						disabled={watch('maturity_date') ? false : true}
 					/>
 					<Input label='payment_value' {...{ register, errors }} />
-				</Section>
+				</Section> */}
+				<div className='my-2'>
+					<DynamicProgression
+						{...{
+							register,
+							errors,
+							control,
+							getValues,
+							Controller,
+							watch,
+							progressionField,
+							progressionAppend,
+							progressionRemove,
+						}}
+					/>
+				</div>
 				<Section title='Others'>
 					<Input label='ud_no' {...{ register, errors }} />
 					<DateInput

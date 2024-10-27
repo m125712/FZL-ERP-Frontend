@@ -3,7 +3,7 @@ import ColoringLog from '@/pages/Slider/Coloring/Log';
 // * Coloring
 import SliderColoringProduction from '@/pages/Slider/Coloring/Production';
 import ColoringRM from '@/pages/Slider/Coloring/RMStock';
-import SliderDashboardInfo from '@/pages/Slider/Dashboard/Info';
+import SliderDashboard from '@/pages/Slider/Dashboard';
 import DieCastingLog from '@/pages/Slider/DieCasting/Log';
 import DieCastingProduction from '@/pages/Slider/DieCasting/Production';
 // * Die Casting
@@ -26,15 +26,10 @@ export const SliderRoutes = [
 			// * Dashboard
 			{
 				name: 'Dashboard',
-				children: [
-					{
-						name: 'Info',
-						path: '/slider/dashboard/info',
-						element: <SliderDashboardInfo />,
-						page_name: 'slider__dashboard_info',
-						actions: ['read', 'create', 'update', 'delete'],
-					},
-				],
+				path: '/slider/dashboard',
+				element: <SliderDashboard />,
+				page_name: 'slider__dashboard',
+				actions: ['read', 'create', 'update', 'delete'],
 			},
 
 			// * Die Casting

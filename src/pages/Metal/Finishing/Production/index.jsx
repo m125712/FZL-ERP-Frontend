@@ -1,5 +1,5 @@
 import { lazy, useMemo, useState } from 'react';
-import { useMetalTCProduction } from '@/state/Metal';
+import { useMetalFProduction } from '@/state/Metal';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -12,7 +12,7 @@ const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
 
 export default function Index() {
-	const { data, url, isLoading } = useMetalTCProduction();
+	const { data, url, isLoading } = useMetalFProduction();
 	const info = new PageInfo(
 		'Finishing Production',
 		url,

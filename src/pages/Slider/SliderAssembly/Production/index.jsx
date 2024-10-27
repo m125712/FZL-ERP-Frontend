@@ -20,13 +20,14 @@ export default function Index() {
 	);
 
 	const haveAccess = useAccess('slider__assembly_production');
-	
+
 	// * columns
 	const columns = useMemo(
 		() => [
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
+				width: 'w-40',
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					return (
@@ -51,82 +52,81 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'zipper_number_name',
-				header: 'Zipper Number',
+				header: 'Zipper',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'end_type_name',
-				header: 'End Type',
+				header: 'End',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'lock_type_name',
-				header: 'Lock Type',
+				header: 'Lock',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'puller_type_name',
-				header: 'Puller Type',
+				header: 'Puller',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'puller_color_name',
-				header: 'Puller Color',
+				header: 'Color',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'slider_name',
-				header: 'Slider',
+				header: 'Material',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'slider_body_shape_name',
-				header: 'Slider Body Shape',
+				header: 'Body Shape',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'slider_link_name',
-				header: 'Slider Link',
+				header: 'Link',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'coloring_type_name',
-				header: 'Coloring Type',
+				header: 'Coloring',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'logo_type_name',
-				header: 'Logo Type',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'logo_is_body',
-				header: 'Logo Body',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'logo_is_puller',
-				header: 'Logo Puller',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+				accessorFn: (row) => {
+					let logo = row.logo_type_name;
 
-			///////////
+					if (row.logo_is_body === 1 && row.logo_is_puller === 1) {
+						logo += ' (Body, Puller)';
+					} else if (row.logo_is_body === 1) {
+						logo += ' (Body)';
+					} else if (row.logo_is_puller === 1) {
+						logo += ' (Puller)';
+					}
+
+					return logo;
+				},
+				id: 'logo_type_name',
+				header: 'Logo',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 
 			{
 				accessorKey: 'stopper_type_name',
-				header: 'Stopper Type',
+				header: 'Stopper',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
@@ -175,13 +175,11 @@ export default function Index() {
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_production'),
 				width: 'w-8',
-				cell: (info) => {
-					return (
-						<Transfer
-							onClick={() => handelProduction(info.row.index)}
-						/>
-					);
-				},
+				cell: (info) => (
+					<Transfer
+						onClick={() => handelProduction(info.row.index)}
+					/>
+				),
 			},
 			{
 				accessorKey: 'sa_prod',

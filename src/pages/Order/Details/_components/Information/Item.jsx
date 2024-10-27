@@ -1,7 +1,8 @@
+import { useFetch } from '@/hooks';
+
 import RenderTable from '@/ui/Others/Table/RenderTable';
 
 import cn from '@/lib/cn';
-import { useFetch } from '@/hooks';
 
 // * function to get similar garment_wash
 const getGarmentInfo = (order_description) => {
@@ -25,7 +26,6 @@ const getGarmentInfo = (order_description) => {
 };
 
 export default function ItemDescription({ order_description, className }) {
-
 	const [sliderQuantity, total_size, tape_production] =
 		order_description?.order_entry.reduce(
 			([sliderQuantity, total_size, tape_production], item) => {
@@ -96,7 +96,7 @@ export default function ItemDescription({ order_description, className }) {
 			is_multi_color,
 
 			// order type
-			order_type
+			order_type,
 		} = order_description;
 
 		const baseInfo = [
@@ -142,7 +142,13 @@ export default function ItemDescription({ order_description, className }) {
 			},
 			{
 				label: 'Size Unit',
-				value: is_inch? 'Inch' : is_meter? 'Meter' : is_cm? 'Cm' : '--',
+				value: is_inch
+					? 'Inch'
+					: is_meter
+						? 'Meter'
+						: is_cm
+							? 'Cm'
+							: '--',
 			},
 			{
 				label: 'description',
@@ -274,7 +280,7 @@ export default function ItemDescription({ order_description, className }) {
 			},
 			{
 				label: 'production',
-				value: `${tape_production} kg`,
+				value: `${Number(tape_production).toFixed(3)} kg`,
 			},
 			{
 				label: 'transfer',

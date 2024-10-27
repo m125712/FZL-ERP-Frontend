@@ -1,15 +1,20 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
-import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import {
-	NUMBER_REQUIRED,
-	NUMBER,
-	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
-	SFG_PRODUCTION_SCHEMA_IN_KG,
-} from '@util/Schema';
-import { useMetalTCProductionLogByUUID, useMetalTCProduction  } from '@/state/Metal';
 import { useEffect } from 'react';
+import {
+	useMetalFProduction,
+	useMetalTCProductionLogByUUID,
+} from '@/state/Metal';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, JoinInput } from '@/ui';
+
+import {
+	NUMBER,
+	NUMBER_REQUIRED,
+	SFG_PRODUCTION_SCHEMA_IN_KG,
+	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
+} from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -32,7 +37,7 @@ export default function Index({
 		}
 	);
 
-	const { invalidateQuery} = useMetalTCProduction();
+	const { invalidateQuery } = useMetalFProduction();
 
 	const MAX_PROD = Math.max(
 		Number(updateFinishingLog.production_quantity),

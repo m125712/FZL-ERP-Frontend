@@ -1,16 +1,16 @@
 import createGlobalState from '.';
 import { metalQK } from './QueryKeys';
 
-//*Teeth Molding
-
-// * PRODUCTION
+// ! Teeth Molding --------- START --- Production, Log, RM
+// ? Production
 export const useMetalTMProduction = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTMProduction(),
 		url: '/zipper/sfg/by/teeth_molding_prod?item_name=metal',
 	});
 
-//* Trx Log
+// ? Log
+// * Trx Log
 export const useMetalTMTrxLog = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTMTrxLog(),
@@ -24,7 +24,7 @@ export const useMetalTMTrxLogByUUID = (uuid, { enabled = true }) =>
 		enabled: enabled,
 	});
 
-//* Production Log
+// * Production Log
 export const useMetalTMProductionLog = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTMProductionLog(),
@@ -36,8 +36,8 @@ export const useMetalTMProductionLogByUUID = (uuid, { enabled = true }) =>
 		url: `/zipper/sfg-production/${uuid}`,
 		enabled: enabled,
 	});
-//* Tape Log
 
+// * Tape Log
 export const useMetalTMTapeLog = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTMTapeLog(),
@@ -50,7 +50,7 @@ export const useMetalTMTapeLogByUUID = (uuid) =>
 		url: `/zipper/dyed-tape-transaction/by/metal_teeth_molding/${uuid}`,
 	});
 
-// * RM
+// ? RM
 export const useMetalTMRM = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTMRM(),
@@ -62,7 +62,7 @@ export const useMetalTMRMByUUID = (uuid) =>
 		url: `/material/stock/by/single-field/m_teeth_molding${uuid}`,
 	});
 
-//* RM Log
+// * RM Log
 export const useMetalTMRMLog = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTMRMLog(),
@@ -73,7 +73,7 @@ export const useMetalTMRMLogByUUID = (uuid) =>
 		queryKey: metalQK.metalTMRMLogByUUID(uuid),
 		url: `/material/used/by/m_teeth_molding${uuid}`,
 	});
-//* order against RM Log
+// * order against RM Log
 export const useOrderAgainstMetalTMRMLog = () =>
 	createGlobalState({
 		queryKey: metalQK.orderAgainstMetalTMRMLog(),
@@ -84,16 +84,17 @@ export const useOrderAgainstMetalTMRMLogByUUID = (uuid) =>
 		queryKey: metalQK.orderAgainstMetalTMRMLogByUUID(uuid),
 		url: `/zipper/material-trx-against-order/by/m_teeth_molding${uuid}`,
 	});
-//* Teeth Coloring
+// ! Teeth Molding --------- END
 
-// * PRODUCTION
+// ! Teeth Coloring --------- START
+// * Production
 export const useMetalTCProduction = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTCProduction(),
 		url: '/zipper/sfg/by/teeth_coloring_prod?item_name=metal',
 	});
 
-//* Trx Log
+// * Trx Log
 export const useMetalTCTrxLog = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTCTrxLog(),
@@ -107,7 +108,7 @@ export const useMetalTCTrxLogByUUID = (uuid, { enabled = true }) =>
 		enabled: enabled,
 	});
 
-//* Production Log
+// * Production Log
 export const useMetalTCProductionLog = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTCProductionLog(),
@@ -131,7 +132,8 @@ export const useMetalTCRMByUUID = (uuid) =>
 		queryKey: metalQK.metalTCRMByUUID(uuid),
 		url: `/material/stock/by/multi-field/teeth_assembling_and_polishing,plating_and_iron${uuid}`,
 	});
-//* RM Log
+
+// * RM Log
 export const useMetalTCRMLog = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTCRMLog(),
@@ -142,7 +144,8 @@ export const useMetalTCRMLogByUUID = (uuid) =>
 		queryKey: metalQK.metalTCRMLogByUUID(uuid),
 		url: `/material/used/multi-section/by/teeth_assembling_and_polishing,plating_and_iron${uuid}`,
 	});
-//* order against RM Log
+
+// * order against RM Log
 export const useOrderAgainstMetalTCRMLog = () =>
 	createGlobalState({
 		queryKey: metalQK.orderAgainstMetalTCRMLog(),
@@ -153,7 +156,29 @@ export const useOrderAgainstMetalTCRMLogByUUID = (uuid) =>
 		queryKey: metalQK.orderAgainstMetalTCRMLogByUUID(uuid),
 		url: `/zipper/material-trx-against-order/multiple/by/teeth_assembling_and_polishing,plating_and_iron${uuid}`,
 	});
-//* Finishing
+// ! Teeth Coloring --------- END
+
+// ! Finishing --------- START
+// * Production
+export const useMetalFProduction = () =>
+	createGlobalState({
+		queryKey: metalQK.metalFProduction(),
+		url: '/zipper/sfg/by/finishing_prod?item_name=metal',
+	});
+// * trx log
+export const useMetalFinishingTrxLog = () =>
+	createGlobalState({
+		queryKey: metalQK.metalFinishingTrxLog(),
+		url: '/zipper/sfg-transaction/by/finishing_prod?item_name=metal',
+	});
+
+// * production log
+export const useMetalFinishingProdLog = () =>
+	createGlobalState({
+		queryKey: metalQK.metalFinishingProdLog(),
+		url: '/zipper/sfg-production/by/finishing?item_name=metal',
+	});
+
 // * RM
 export const useMetalFinishingRM = () =>
 	createGlobalState({
@@ -165,7 +190,8 @@ export const useMetalFinishingRMByUUID = (uuid) =>
 		queryKey: metalQK.metalFinishingRMByUUID(uuid),
 		url: `/material/stock/by/multi-field/m_gapping,m_teeth_cleaning,m_sealing,m_stopper/${uuid}`,
 	});
-//* RM Log
+
+// * RM Log
 export const useMetalFinishingRMLog = () =>
 	createGlobalState({
 		queryKey: metalQK.metalFinishingRMLog(),
@@ -176,7 +202,8 @@ export const useMetalFinishingRMLogByUUID = (uuid) =>
 		queryKey: metalQK.metalFinishingRMLogByUUID(uuid),
 		url: `/material/used/multi-section/by/m_gapping,m_teeth_cleaning,m_sealing,m_stopper/${uuid}`,
 	});
-//* order against RM Log
+
+// * order against RM Log
 export const useOrderAgainstMetalFinishingRMLog = () =>
 	createGlobalState({
 		queryKey: metalQK.orderAgainstMetalFinishingRMLog(),
@@ -187,18 +214,4 @@ export const useOrderAgainstMetalFinishingRMLogByUUID = (uuid) =>
 		queryKey: metalQK.orderAgainstMetalFinishingRMLogByUUID(uuid),
 		url: `/zipper/material-trx-against-order/multiple/by/m_gapping,m_teeth_cleaning,m_sealing,m_stopper${uuid}`,
 	});
-
-// * Finishing production log
-export const useMetalFinishingProdLog = () =>
-	createGlobalState({
-		queryKey: metalQK.metalFinishingProdLog(),
-		url: '/zipper/sfg-production/by/finishing?item_name=metal',
-	});
-
-// * Finishing transaction log
-export const useMetalFinishingTrxLog = () =>
-	createGlobalState({
-		queryKey: metalQK.metalFinishingTrxLog(),
-		url: '/zipper/sfg-transaction/by/finishing_prod?item_name=metal',
-	});
-
+// ! Finishing --------- END

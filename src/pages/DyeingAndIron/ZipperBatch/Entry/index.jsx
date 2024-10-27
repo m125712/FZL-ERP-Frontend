@@ -1,12 +1,9 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
-import index from '@/pages/Dashboard/_components/Table';
 import { useDyeingBatch } from '@/state/Dyeing';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { set } from 'date-fns';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import {
-	useFetch,
 	useFetchForRhfReset,
 	useFetchForRhfResetForPlanning,
 	useRHF,
@@ -23,7 +20,6 @@ import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
 
-// UPDATE IS WORKING
 export default function Index() {
 	const { url, updateData, postData, invalidateQuery } = useDyeingBatch();
 	const { batch_uuid } = useParams();
@@ -361,6 +357,7 @@ export default function Index() {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
+				width: 'w-32',
 				enableSorting: true,
 			},
 			{
@@ -378,6 +375,7 @@ export default function Index() {
 			{
 				accessorKey: 'bleaching',
 				header: 'Bleach',
+				width: 'w-36',
 				enableColumnFilter: true,
 				enableSorting: true,
 			},
@@ -398,6 +396,7 @@ export default function Index() {
 				header: 'Order QTY',
 				enableColumnFilter: true,
 				enableSorting: true,
+				width: 'w-20',
 				cell: (info) => info.getValue(),
 			},
 			{

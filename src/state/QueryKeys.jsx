@@ -1095,7 +1095,7 @@ export const otherQK = {
 	department: () => [...otherQK.all(), 'department'],
 
 	// Party
-	party: () => [...otherQK.all(), 'party'],
+	party: (params) => [...otherQK.all(), 'party', params],
 
 	//Buyer
 	buyer: () => [...otherQK.all(), 'buyer'],

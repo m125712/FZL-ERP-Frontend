@@ -50,6 +50,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'amount',
+				header: 'Amount',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'handover_date',
 				header: 'Handover Date',
 				enableColumnFilter: false,
@@ -72,6 +78,12 @@ export default function Index() {
 				header: 'Payment Date',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'payment_value',
+				header: 'Payment Value',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue().toFixed(2),
 			},
 			{
 				accessorKey: 'ldbc_fdbc',

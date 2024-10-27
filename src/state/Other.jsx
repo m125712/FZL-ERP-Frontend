@@ -16,10 +16,10 @@ export const useOtherHRUserByDesignation = (designation) =>
 	});
 
 // GET OTHER PARTY
-export const useOtherParty = () =>
+export const useOtherParty = (params) =>
 	createGlobalState({
-		queryKey: otherQK.party(),
-		url: '/other/party/value/label',
+		queryKey: otherQK.party(params),
+		url: `/other/party/value/label?marketing=${params}`,
 	});
 
 // GET OTHER MARKETING USER

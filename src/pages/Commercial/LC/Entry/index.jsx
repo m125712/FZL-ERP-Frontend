@@ -9,7 +9,7 @@ import { configure, HotKeys } from 'react-hotkeys';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
-import { UpdateModal } from '@/components/Modal';
+import { DeleteModal, UpdateModal } from '@/components/Modal';
 import { DynamicField, FormField, ReactSelect, RemoveButton } from '@/ui';
 
 import cn from '@/lib/cn';
@@ -25,7 +25,12 @@ export default function Index() {
 	const navigate = useNavigate();
 	const { lc_uuid } = useParams();
 
-	const { url: commercialLcUrl, postData, updateData } = useCommercialLC();
+	const {
+		url: commercialLcUrl,
+		postData,
+		updateData,
+		deleteData,
+	} = useCommercialLC();
 	const { data, invalidateQuery } = useCommercialLCPIByUUID(lc_uuid);
 
 	const [deletablePi, setDeletablePi] = useState([]);
@@ -322,6 +327,12 @@ export default function Index() {
 		PiRemove(index);
 	};
 
+	// delete lc_entry
+	const [deleteLCEntry, setDeleteLCEntry] = useState({
+		itemId: null,
+		itemName: null,
+	});
+
 	return (
 		<div>
 			<HotKeys {...{ keyMap, handlers }}>
@@ -340,6 +351,7 @@ export default function Index() {
 							progressionField,
 							progressionAppend,
 							progressionRemove,
+							setDeleteLCEntry,
 						}}
 					/>
 
@@ -484,6 +496,17 @@ export default function Index() {
 					setUpdateItem={setUpdateItem}
 					url={`/commercial/pi-cash-lc-null`}
 					updateData={updateData}
+				/>
+			</Suspense>
+			<Suspense>
+				<DeleteModal
+					modalId={'lc_entry_delete'}
+					title={'Lc Entry Delete'}
+					deleteItem={deleteLCEntry}
+					setDeleteItem={setDeleteLCEntry}
+					setItems={progressionField}
+					deleteData={deleteData}
+					url={`/commercial/lc-entry`}
 				/>
 			</Suspense>
 

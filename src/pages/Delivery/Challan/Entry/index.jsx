@@ -164,7 +164,7 @@ export default function Index() {
 				])
 					.then(() => reset(Object.assign({}, CHALLAN_NULL)))
 					.then(() => {
-						navigate(`/delivery/challan/${updatedId}`);
+						navigate(`/delivery/zipper-challan/${updatedId}`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -234,7 +234,6 @@ export default function Index() {
 	const rowClass =
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
-		console.log(errors);
 	return (
 		<div>
 			<form

@@ -1523,7 +1523,7 @@ export const CHALLAN_SCHEMA = {
 	gate_pass: BOOLEAN_DEFAULT_VALUE(false),
 	challan_entry: yup.array().of(
 		yup.object().shape({
-			packing_list_uuid: STRING_REQUIRED,
+			// packing_list_entry_uuid: STRING_REQUIRED,
 			remarks: STRING.nullable(),
 		})
 	),
@@ -1532,7 +1532,7 @@ export const CHALLAN_SCHEMA = {
 		.array()
 		.of(
 			yup.object().shape({
-				packing_list_uuid: STRING_REQUIRED,
+				// packing_list_entry_uuid: STRING_REQUIRED,
 				remarks: STRING.nullable(),
 			})
 		)

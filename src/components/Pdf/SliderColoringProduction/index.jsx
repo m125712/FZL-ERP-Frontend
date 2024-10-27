@@ -14,7 +14,7 @@ const node = [
 	getTable('party_name', 'Party Name'),
 	getTable('item_description', 'Item Name'),
 	getTable('puller_color_name', 'Color'),
-	getTable('production_quantity(pcs)', 'Quantity', 'right'),
+	getTable('production_quantity', 'Quantity(pcs)', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
 

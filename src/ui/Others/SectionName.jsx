@@ -183,4 +183,10 @@ const res = {
 		type: 'All',
 		area: 'Others',
 	},
+	head_office: {
+		name: 'Head Office',
+		short_name: 'Head Office',
+		type: 'All',
+		area: 'Others',
+	},
 };

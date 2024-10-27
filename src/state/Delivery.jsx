@@ -2,16 +2,30 @@ import createGlobalState from '.';
 import { challanQK, deliveryQk } from './QueryKeys';
 
 //*Dashboard
-export const useDeliveryDashboard = () =>
+//* Zipper
+export const useDeliveryZipperDashboard = () =>
 	createGlobalState({
-		queryKey: deliveryQk.deliveryDashboard(),
+		queryKey: deliveryQk.deliveryZipperDashboard(),
 		url: '/delivery/dashboard',
 	});
 
-export const useDeliveryDashboardByUUID = (uuid) =>
+export const useDeliveryZipperDashboardByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: deliveryQk.deliveryDashboardByUUID(uuid),
-		url: `/delivery/dashboard/${uuid}`,
+		queryKey: deliveryQk.deliveryZipperDashboardByUUID(uuid),
+		url: `/delivery/dashboard${uuid}`,
+		enabled: !!uuid,
+	});
+//* Thread
+export const useDeliveryThreadDashboard = () =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryThreadDashboard(),
+		url: '/delivery/dashboard-thread',
+	});
+
+export const useDeliveryThreadDashboardByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryThreadDashboardByUUID(uuid),
+		url: `/delivery/dashboard-thread/${uuid}`,
 		enabled: !!uuid,
 	});
 

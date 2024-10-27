@@ -188,7 +188,7 @@ export default function Dashboard() {
 				</div>
 
 				<div>
-					<TopTenSalesMan url='/dashboard/top-sales' />
+					{/* <TopTenSalesMan url='/dashboard/top-sales' /> */}
 				</div>
 			</div>
 		</div>

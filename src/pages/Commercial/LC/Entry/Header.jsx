@@ -23,6 +23,7 @@ export default function Header({
 	progressionField,
 	progressionAppend,
 	progressionRemove,
+	setDeleteLCEntry,
 }) {
 	const { lc_uuid } = useParams();
 	const { data: party } = useOtherParty();
@@ -224,6 +225,7 @@ export default function Header({
 							progressionField,
 							progressionAppend,
 							progressionRemove,
+							setDeleteLCEntry
 						}}
 					/>
 				</div>

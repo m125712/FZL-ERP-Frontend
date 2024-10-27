@@ -16,6 +16,7 @@ export default function Index({
 	onSuccess,
 	invalidateQuery = () => {},
 }) {
+	
 	const handelClose = () => {
 		setDeleteItem((prev) => ({
 			...prev,
@@ -33,7 +34,6 @@ export default function Index({
 		// console.log({
 		// 	url: `${url}/${deleteItem?.itemId}`,
 		// });
-
 		await deleteData.mutateAsync({
 			url: `${url}/${deleteItem?.itemId}`,
 			onClose: handelClose,

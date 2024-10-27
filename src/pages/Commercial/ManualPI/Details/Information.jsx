@@ -103,7 +103,7 @@ export default function Information({ data }) {
 
 	const { value: pi } = useFetch('/other/pi/value/label');
 
-	
+	console.log(pi?.filter((pi) => pi_uuids?.includes(pi?.value)));
 
 	const renderItems = () => {
 		const basicInfo = [
@@ -115,11 +115,11 @@ export default function Information({ data }) {
 				label: 'PI IDs',
 				value: pi_uuids && (
 					<div className='flex flex-wrap gap-2'>
-						{pi_uuids?.map((piId) => (
+						{pi?.filter((pi) => pi_uuids?.includes(pi?.value))?.map((piId) => (
 							<LinkWithCopy
-								key={piId}
-								title={piId}
-								id={piId}
+								key={piId.value}
+								title={piId.label}
+								id={piId.value}
 								uri='/commercial/pi/details'
 							/>
 						))}

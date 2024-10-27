@@ -25,6 +25,20 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'is_hand_delivery',
+				header: (
+					<span>
+						Hand
+						<br />
+						Delivery
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-sm' value={info.getValue()} />
+				),
+			},
+			{
 				accessorKey: 'challan_id',
 				header: 'ID',
 				cell: (info) => {
@@ -39,14 +53,41 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'order_number',
+				header: 'O/N',
+				width: 'w-40',
+				cell: (info) => {
+					const { order_info_uuid } = info.row.original;
+					return (
+						<LinkWithCopy
+							uri='/thread/order-info'
+							id={order_info_uuid}
+							title={info.getValue()}
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'carton_quantity',
 				header: 'Carton QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'assign_to_name',
+				accessorKey: 'vehicle_name',
 				header: 'Assign To',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'name',
+				header: 'Name',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'delivery_cost',
+				header: 'Delivery Cost',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -182,7 +223,6 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 	};
-
 	const handelAdd = () => navigate('/thread/challan/entry');
 
 	const handelUpdate = (idx) => {

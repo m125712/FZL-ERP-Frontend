@@ -7,7 +7,7 @@ import { StatusButton } from '@/ui';
 
 export default function Information({ challan }) {
 	const {
-		assign_to_name,
+		vehicle_name,
 		carton_quantity,
 		challan_number,
 		created_at,
@@ -16,6 +16,9 @@ export default function Information({ challan }) {
 		gate_pass,
 		order_number,
 		receive_status,
+		is_hand_delivery,
+		name,
+		delivery_cost,
 		updated_at,
 	} = challan;
 
@@ -34,6 +37,15 @@ export default function Information({ challan }) {
 				value: order_number,
 			},
 			{
+				label: 'Hand Delivery',
+				value: (
+					<StatusButton
+						className={'btn-xs'}
+						value={is_hand_delivery ? 1 : 0}
+					/>
+				),
+			},
+			{
 				label: 'Gate Pass',
 				value: <StatusButton className={'btn-xs'} status={gate_pass} />,
 			},
@@ -47,8 +59,16 @@ export default function Information({ challan }) {
 				),
 			},
 			{
+				label: 'Name',
+				value: name,
+			},
+			{
+				label: 'Delivery Cost',
+				value: delivery_cost,
+			},
+			{
 				label: 'Assign To',
-				value: assign_to_name,
+				value: vehicle_name,
 			},
 			{
 				label: 'Created By',

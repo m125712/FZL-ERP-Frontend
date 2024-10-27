@@ -49,7 +49,7 @@ export default function ItemDescription({ order_description, className }) {
 	).toFixed(3);
 
 	// * garments info
-	const ginfo = getGarmentInfo(order_description);
+	const garments_info = getGarmentInfo(order_description);
 
 	const renderItems = () => {
 		const {
@@ -94,6 +94,9 @@ export default function ItemDescription({ order_description, className }) {
 
 			// multi color
 			is_multi_color,
+
+			// order type
+			order_type
 		} = order_description;
 
 		const baseInfo = [
@@ -148,6 +151,10 @@ export default function ItemDescription({ order_description, className }) {
 			{
 				label: 'Multi Color',
 				value: is_multi_color ? 'Yes' : 'No',
+			},
+			{
+				label: 'order type',
+				value: order_type,
 			},
 			{
 				label: 'remarks',
@@ -225,7 +232,7 @@ export default function ItemDescription({ order_description, className }) {
 			},
 			{
 				label: 'wash',
-				value: ginfo?.join(', '),
+				value: garments_info?.join(', '),
 			},
 			{
 				label: 'remarks',

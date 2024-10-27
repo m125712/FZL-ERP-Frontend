@@ -56,8 +56,8 @@ export function BarChartHorizontal2(props) {
 
 	return (
 		<Card>
-			<CardHeader className='flex items-center justify-between'>
-				<CardTitle>Work in Hand</CardTitle>
+			<CardHeader>
+				<CardTitle>Production: Demand</CardTitle>
 			</CardHeader>
 			<CardContent>
 				<ChartContainer config={chartConfig}>

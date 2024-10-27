@@ -4,7 +4,6 @@ import {
 	getCoreRowModel,
 	useReactTable,
 } from '@tanstack/react-table';
-import { RefreshCcw } from 'lucide-react';
 
 export function TableWithRowHeader(props) {
 	const data = props?.data;

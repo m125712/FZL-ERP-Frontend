@@ -74,20 +74,19 @@ export const getPageHeader = (order_info) => {
 		[
 			{ text: 'LC/Cash', bold: true },
 			lc_or_cash,
-
 			{ text: 'Buyer', bold: true },
 			order_info.buyer_name,
 		],
 		[
-			{ text: 'Factory', bold: true },
-			order_info.factory_name,
+			{ text: 'Party', bold: true },
+			order_info.party_name,
 			{ text: 'Marketing', bold: true },
 			order_info.marketing_name,
 		],
 
 		[
-			{ text: 'Client', bold: true },
-			order_info.party_name,
+			{ text: 'Factory', bold: true },
+			order_info.factory_name,
 			{ text: 'Priority', bold: true },
 			(order_info.marketing_priority || '-') +
 				' / ' +
@@ -137,7 +136,42 @@ export const getPageFooter = ({ currentPage, pageCount }) => {
 	};
 };
 
-export const TableHeader = ({ entry, uniqueSizes, column, srinfo, i }) => {
+const getItem = ({
+	zipper_number_name,
+	item_name,
+	nylon_stopper_name,
+	is_multi_color = 0,
+}) => {
+	let name = '#' + zipper_number_name + ' ';
+
+	if (item_name === 'Nylon') {
+		name += item_name + ' - ' + nylon_stopper_name;
+	} else {
+		name += item_name;
+	}
+
+	if (is_multi_color === 1) {
+		name += ' (Multi Color)';
+	}
+
+	return name;
+};
+
+const getLogo = ({ logo_type_name, is_logo_body = 0, is_logo_puller = 0 }) => {
+	let logo = `Logo: ${logo_type_name}`;
+
+	if (is_logo_body === 1 && is_logo_puller === 1) {
+		logo += ' (Body, Puller)';
+	} else if (is_logo_body === 1) {
+		logo += ' (Body)';
+	} else if (is_logo_puller === 1) {
+		logo += ' (Puller)';
+	}
+
+	return logo;
+};
+
+export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 	const {
 		item_name,
 		nylon_stopper_name,
@@ -153,84 +187,122 @@ export const TableHeader = ({ entry, uniqueSizes, column, srinfo, i }) => {
 		top_stopper_name,
 		bottom_stopper_name,
 
-		// short_name,
-		item_short_name,
-		zipper_number_short_name,
-		end_type_short_name,
-		lock_type_short_name,
-		teeth_color_short_name,
-		puller_type_short_name,
-		puller_color_short_name: slider_color_short_name,
-		logo_type_short_name,
-		top_stopper_short_name,
-		bottom_stopper_short_name,
-
-		stopper_type_short_name,
-		hand_short_name,
-		coloring_type_short_name,
+		// new
+		coloring_type_name,
+		slider_name: slider_material,
+		slider_body_shape_name,
+		slider_link_name,
 
 		// is logo
 		is_logo_body,
 		is_logo_puller,
 
-		// unite size
+		// unit size
 		is_cm,
 		is_meter,
 		is_inch,
+		is_multi_color,
 
 		description,
 	} = entry;
 
-	let info = [
+	let tape = [
 		item_name
-			? item_name === 'Nylon'
-				? item_name + ' - ' + nylon_stopper_name
-				: item_name
+			? getItem({
+					zipper_number_name,
+					item_name,
+					nylon_stopper_name,
+					is_multi_color,
+				})
 			: '',
 		end_type_name
 			? end_type_name === 'Open End'
 				? end_type_name + ' - ' + hand_name
 				: end_type_name
 			: '',
-		zipper_number_name,
 		lock_type_name,
-		teeth_color_name,
-		teeth_type_name,
-		puller_type_name,
-		slider_color_name,
-		logo_type_name,
-		top_stopper_name,
-		bottom_stopper_name,
+		teeth_color_name
+			? `Teeth: ${teeth_type_name ? teeth_type_name + ' - ' : ''} ${teeth_color_name} Color`
+			: '',
+	];
+	let slider = [
+		puller_type_name ? `${puller_type_name} Puller` : '',
+		coloring_type_name,
+		slider_color_name ? `Slider: ${slider_color_name}` : '',
+		slider_material,
+		slider_body_shape_name,
+		slider_link_name,
+		logo_type_name
+			? getLogo({ logo_type_name, is_logo_body, is_logo_puller })
+			: '',
+		top_stopper_name ? `Top Stopper: ${top_stopper_name}` : '',
+		bottom_stopper_name ? `Bottom Stopper: ${bottom_stopper_name}` : '',
 	];
 
 	return [
 		[
 			{
-				text: 'Description\n' + `\t#${i + 1}`,
+				text: `Tape #${i + 1}`,
 				style: 'tableHeader',
 				alignment: 'Center',
 			},
 			{
 				colSpan: uniqueSizes.length + 2,
-				text: [
-					info.filter(Boolean).join(' / '),
-					srinfo?.length > 0 ? `(${srinfo?.join(', ')})` : '',
-					srinfo?.length > 0 && description ? ' / ' : '',
-
-					description ? `(${description})` : '',
-				],
+				text: [tape.filter(Boolean).join(' / ')],
 				style: 'tableHeader',
 			},
 			...Array.from({ length: uniqueSizes.length + 1 }, () => ''),
 		],
 		[
 			{
-				text: 'Style',
+				text: `Slider #${i + 1}`,
 				style: 'tableHeader',
+				alignment: 'Center',
+			},
+			{
+				colSpan: uniqueSizes.length + 2,
+				text: [slider.filter(Boolean).join(' / ')],
+				style: 'tableHeader',
+			},
+			...Array.from({ length: uniqueSizes.length + 1 }, () => ''),
+		],
+		...(special_req_info?.length > 0 || description
+			? [
+					[
+						{
+							text: `Others #${i + 1}`,
+							style: 'tableHeader',
+							alignment: 'Center',
+						},
+						{
+							colSpan: uniqueSizes.length + 2,
+							text: [
+								special_req_info?.length > 0
+									? `${special_req_info?.join(', ')}`
+									: '',
+								special_req_info?.length > 0 && description
+									? ' / '
+									: '',
+
+								description ? `(${description})` : '',
+							],
+							style: 'tableHeader',
+						},
+						...Array.from(
+							{ length: uniqueSizes.length + 1 },
+							() => ''
+						),
+					],
+				]
+			: []),
+		[
+			{
+				text: 'Style',
+				style: 'tableFooter',
 			},
 			{
 				text: 'Color / Size(CM)',
-				style: 'tableHeader',
+				style: 'tableFooter',
 			},
 			...uniqueSizes.map((size) => ({
 				text: size
@@ -242,12 +314,12 @@ export const TableHeader = ({ entry, uniqueSizes, column, srinfo, i }) => {
 								? size.toFixed(2)
 								: size.toFixed(2)
 					: '-',
-				style: 'tableHeader',
+				style: 'tableFooter',
 				alignment: 'right',
 			})),
 			{
 				text: 'Total',
-				style: 'tableHeader',
+				style: 'tableFooter',
 				alignment: 'right',
 			},
 		],
@@ -271,3 +343,69 @@ export const TableFooter = ({ total_quantity, total_value }) => [
 	},
 	'',
 ];
+
+// * function to get similar garment_wash
+export const getGarmentInfo = (order_description, garments) => {
+	if (order_description?.garments_wash) {
+		const parsedObject =
+			typeof order_description?.garments_wash === 'string'
+				? JSON.parse(order_description?.garments_wash)
+				: order_description?.garments_wash;
+
+		const matchingLabels = garments
+			?.filter((item) => parsedObject.values.includes(item.value)) // Filter by matching value
+			.map((item) => item.label);
+		return matchingLabels;
+	} else {
+		return [];
+	}
+};
+
+// * function to get similar Special Requirement
+export const getSpecialReqInfo = (order_description, sr) => {
+	if (order_description?.special_requirement) {
+		const parsedObject =
+			typeof order_description?.special_requirement === 'string'
+				? JSON.parse(order_description?.special_requirement)
+				: order_description?.special_requirement;
+
+		const matchingLabels = sr
+			?.filter((item) => parsedObject.values.includes(item.value)) // Filter by matching value
+			.map((item) => item.label);
+		return matchingLabels;
+	} else {
+		return [];
+	}
+};
+
+// * function to calculate grand total
+export const grandTotal = (total_entries) => {
+	let total = 0;
+	total_entries?.map((item) => {
+		total += item.order_entry.reduce((acc, item) => {
+			acc += item?.quantity;
+
+			return acc;
+		}, 0);
+	});
+
+	return total;
+};
+
+// * function to chunk array
+export const chunkArray = (array, chunkSize) => {
+	let chunks = [];
+	for (let i = 0; i < array.length; i += chunkSize) {
+		let chunk = array.slice(i, i + chunkSize);
+
+		// * here we are checking if the length of the chunk is less than the chunk size
+		if (
+			// i > 0 && // * 1st chunk length might be less than the chunk size so this condition is not required
+			chunk.length < chunkSize
+		)
+			chunk = [...chunk, ...Array(chunkSize - chunk.length).fill(0)];
+
+		chunks.push(chunk);
+	}
+	return chunks;
+};

@@ -6,7 +6,14 @@ import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { FormField, Input, JoinInputSelect, ReactSelect, Textarea } from '@/ui';
+import {
+	CheckBox,
+	FormField,
+	Input,
+	JoinInputSelect,
+	ReactSelect,
+	Textarea,
+} from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { MATERIAL_NULL, MATERIAL_SCHEMA } from '@util/Schema';
@@ -60,6 +67,7 @@ export default function Index({
 		if (updateMaterialDetails?.uuid !== null) {
 			const updatedData = {
 				...data,
+				is_priority_material: data.is_priority_material ? 1 : 0,
 				updated_at: GetDateTime(),
 			};
 
@@ -76,6 +84,7 @@ export default function Index({
 		// Add Item
 		const updatedData = {
 			...data,
+			is_priority_material: data.is_priority_material ? 1 : 0,
 			uuid: nanoid(),
 			created_at: GetDateTime(),
 			created_by: user?.uuid,
@@ -111,7 +120,7 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}>
 			<div className='mb-4 flex flex-col gap-2 rounded bg-base-200 p-2 md:flex-row'>
-				<FormField label='section_id' title='Section' errors={errors}>
+				<FormField label='section_uuid' title='Section' errors={errors}>
 					<Controller
 						name={'section_uuid'}
 						control={control}
@@ -126,9 +135,9 @@ export default function Index({
 											getValues('section_uuid')
 									)}
 									onChange={(e) => onChange(e.value)}
-									isDisabled={
-										updateMaterialDetails?.uuid !== null
-									}
+									// isDisabled={
+									// 	updateMaterialDetails?.uuid !== null
+									// }
 								/>
 							);
 						}}
@@ -149,14 +158,24 @@ export default function Index({
 											getValues('type_uuid')
 									)}
 									onChange={(e) => onChange(e.value)}
-									isDisabled={
-										updateMaterialDetails?.uuid !== null
-									}
+									// isDisabled={
+									// 	updateMaterialDetails?.uuid !== null
+									// }
 								/>
 							);
 						}}
 					/>
 				</FormField>
+				<div className='mt-6 flex items-center text-sm'>
+					<div className='rounded-md border w-40  border-secondary/30 px-1'>
+						<CheckBox
+							height='h-[2.9rem]'
+							label='is_priority_material'
+							title='Priority Material'
+							{...{ register, errors }}
+						/>
+					</div>
+				</div>
 			</div>
 			<div className='mb-4 flex flex-col gap-2 rounded bg-base-200 p-2 md:flex-row'>
 				<Input label='name' {...{ register, errors }} />

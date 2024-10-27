@@ -12,6 +12,8 @@ const daysMap = {
 	last_thirty_days: 30,
 };
 
+// TODO: issue date and last delivery date should be changed to date format for how many days they are
+
 export function TableWithTime(props) {
 	const [time, setTime] = useState('yesterday');
 	const [dateRange, setDateRange] = useState({ from: '', to: '' });

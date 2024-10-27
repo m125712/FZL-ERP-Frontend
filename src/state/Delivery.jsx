@@ -1,6 +1,20 @@
 import createGlobalState from '.';
 import { challanQK, deliveryQk } from './QueryKeys';
 
+//*Dashboard
+export const useDeliveryDashboard = () =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryDashboard(),
+		url: '/delivery/dashboard',
+	});
+
+export const useDeliveryDashboardByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryDashboardByUUID(uuid),
+		url: `/delivery/dashboard/${uuid}`,
+		enabled: !!uuid,
+	});
+
 // * Challan
 export const useDeliveryChallan = () =>
 	createGlobalState({

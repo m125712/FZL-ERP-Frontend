@@ -10,17 +10,10 @@ const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 
 export const getPageHeader = (data) => {
-	const created_at = getDateFormate(data?.created_at);
+	const created_at = getDateFormate(data?.date);
 	// const updated_at = getDateFormate(data?.updated_at);
 	// const delivery_date = getDateFormate(data?.delivery_date);
 	// const pi_number = data?.pi_number;
-	const buyer = new Set();
-	data?.manual_pi_entry?.forEach((item) => {
-		buyer.add(item.buyer_name);
-	});
-	data?.manual_pi_entry?.forEach((item) => {
-		buyer.add(item.buyer_name);
-	});
 
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
@@ -47,7 +40,7 @@ export const getPageHeader = (data) => {
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
-						`PI No: ${data?.id}\n`,
+						`PI No: ${data?.pi_number}\n`,
 						`Date: ${created_at}\n`,
 					],
 					alignment: 'right',
@@ -73,7 +66,7 @@ export const getPageHeader = (data) => {
 			],
 			[
 				{ text: 'Buyer:', bold: true, color: PRIMARY_COLOR },
-				{ text: [...buyer].join(', ') },
+				{ text: data?.buyer_name },
 				{ text: 'SWIFT:', bold: true, color: PRIMARY_COLOR },
 				data?.bank_swift_code,
 			],
@@ -82,7 +75,7 @@ export const getPageHeader = (data) => {
 				{ text: 'Attention', bold: true, color: PRIMARY_COLOR },
 				data?.merchandiser_name,
 				{ text: 'Routing No', bold: true, color: PRIMARY_COLOR },
-				data?.bank_routing_no,
+				data?.routing_no,
 			],
 
 			[

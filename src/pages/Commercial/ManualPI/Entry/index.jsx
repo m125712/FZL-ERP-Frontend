@@ -184,7 +184,7 @@ export default function Index() {
 				])
 					.then(() => reset(MANUAL_PI_NULL))
 					.then(() => {
-						// navigate(`/thread/order-info/${order_info_uuid}`);
+						navigate(`/commercial/manual-pi/${data?.uuid}`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -239,7 +239,7 @@ export default function Index() {
 			await Promise.all([manual_pi_promise, ...manual_pi_entries_promise])
 				.then(() => reset(MANUAL_PI_NULL))
 				.then(() => {
-					// navigate(`/thread/order-info/${new_order_info_uuid}`);
+					navigate(`/commercial/manual-pi/${new_manual_pi_uuid}`);
 				});
 		} catch (err) {
 			console.error(`Error with Promise.all: ${err}`);

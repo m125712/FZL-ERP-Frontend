@@ -10,11 +10,11 @@ import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
 	getTable('order_number', 'Order No'),
+	//getTable('po', 'PO'),
 	getTable('style', 'Style'),
-	getTable('pi_item_description', 'Item'),
+	getTable('item', 'Item'),
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
-	getTable('h_s_code', 'H S.Code'),
 	getTable('quantity', 'Quantity', 'right'),
 	getTable('unit_price', 'Unit Price\n(US$)', 'right'),
 	getTable('value', 'Value\n(US$)', 'right'),
@@ -34,6 +34,31 @@ export default function Index(data) {
 		.split(';')
 		.map((line) => line.trim())
 		.filter((line) => line.length > 0);
+
+	const headers = [];
+	const values = [];
+	lines.forEach((line) => {
+		const [header, value] = line.split(':', 2);
+		headers.push(header.trim());
+		values.push(value ? value.trim() : '');
+	});
+	const entry = manual_pi_entry.map((item) => ({
+		...item,
+		unit_price: item.unit_price+'/dzn',
+		quantity: item.is_zipper ? item.quantity + '/pcs' : item.quantity + '/cons' ,
+		value: item.quantity * (item.unit_price / 12),
+	}));
+	const totalQuantityZipper = manual_pi_entry
+		.filter((item) => item.is_zipper)
+		.reduce((total, item) => total + item.quantity, 0);
+	const totalQuantityThread = manual_pi_entry
+		.filter((item) => !item.is_zipper)
+		.reduce((total, item) => total + item.quantity, 0);
+
+	const grand_total_value = entry.reduce(
+		(total, item) => total + item.value,
+		0
+	);
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
@@ -63,41 +88,48 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [44, 40, 50, '*', 50, 46, 40, 45, 40],
+					widths: [47, 50, 50, '*', 65, 40, 45, 40],
 					body: [
 						// Header
 						TableHeader(node),
 
 						// Body
-						...manual_pi_entry.map((item) =>
+						...entry.map((item) =>
 							node.map((nodeItem) => ({
-								text: item[nodeItem.field],
-								style: nodeItem.cellStyle,
-								alignment: nodeItem.alignment,
-							}))
-						),
-						...manual_pi_entry.map((item) =>
-							node.map((nodeItem) => ({
-								text: item[nodeItem.field],
+								text:
+									nodeItem.field === 'value' &&
+									typeof item[nodeItem.field] === 'number'
+										? item[nodeItem.field].toFixed(2)
+										: item[nodeItem.field],
 								style: nodeItem.cellStyle,
 								alignment: nodeItem.alignment,
 							}))
 						),
 						[
 							{
-								text: [],
+								text: [
+									Number(totalQuantityZipper) > 0
+										? `Total Zipper: ${Number(totalQuantityZipper)} pcs`
+										: '',
+									Number(totalQuantityZipper) > 0 &&
+									Number(totalQuantityThread) > 0
+										? ', '
+										: '',
+									Number(totalQuantityThread) > 0
+										? `Total Thread: ${totalQuantityThread} cone`
+										: '',
+								],
 								alignment: 'right',
 								bold: true,
-								colSpan: 7,
+								colSpan: 6,
 							},
 							{},
 							{},
 							{},
 							{},
 							{},
-							{},
 							{
-								text: ``,
+								text: `U.S.$: ${Number(grand_total_value || 0).toFixed(2)}`,
 								alignment: 'right',
 								bold: true,
 								colSpan: 2,
@@ -111,7 +143,9 @@ export default function Index(data) {
 				text: '\n',
 			},
 			{
-				text: 'Total Value (In Words): ' + DollarToWord(10),
+				text:
+					'Total Value (In Words): ' +
+					DollarToWord(grand_total_value),
 				bold: true,
 			},
 			{

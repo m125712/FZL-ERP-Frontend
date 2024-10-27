@@ -8,6 +8,8 @@ import Carton from '@pages/Delivery/Carton';
 // Zipper -Challan
 import Challan from '@pages/Delivery/Challan';
 import ChallanDetails from '@pages/Delivery/Challan/Details';
+// Dashboard
+import Dashboard from '@pages/Delivery/Dashboard';
 import Log from '@pages/Delivery/Log';
 import RM from '@pages/Delivery/RM';
 import Vehicle from '@pages/Delivery/Vehicle';
@@ -19,6 +21,14 @@ export const DeliveryRoutes = [
 	{
 		name: 'Delivery',
 		children: [
+			// * Dashboard
+			{
+				name: 'Dashboard',
+				path: '/delivery/dashboard',
+				element: <Dashboard />,
+				page_name: 'delivery__dashboard',
+				actions: ['read'],
+			},
 			// * RM
 			{
 				name: 'RM',
@@ -43,7 +53,6 @@ export const DeliveryRoutes = [
 					'click_receive_status',
 					'click_gate_pass_override',
 					'click_receive_status_override',
-
 				],
 			},
 			{

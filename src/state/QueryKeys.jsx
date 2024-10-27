@@ -882,7 +882,12 @@ export const sliderQK = {
 //* Delivery
 export const deliveryQk = {
 	all: () => ['delivery'],
-
+	// * Dashboard
+	deliveryDashboard: () => [...deliveryQk.all(), 'dashboard'],
+	deliveryDashboardByUUID: (uuid) => [
+		...deliveryQk.deliveryDashboard(),
+		uuid,
+	],
 	// *Packing List
 	deliveryPackingList: () => [...deliveryQk.all(), 'packing-list'],
 	deliveryPackingListByUUID: (uuid) => [

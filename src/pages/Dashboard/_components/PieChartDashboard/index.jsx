@@ -1,6 +1,7 @@
 'use client';
 
-import { TrendingUp } from 'lucide-react';
+import { useState } from 'react';
+import { RefreshCcw, TrendingUp } from 'lucide-react';
 import { Pie, PieChart, ResponsiveContainer } from 'recharts';
 
 import {
@@ -113,9 +114,14 @@ export function PieChartDashboard(
 
 	return (
 		<Card className='flex flex-col'>
-			<CardHeader className='items-center pb-0'>
+			<CardHeader className='flex items-center justify-between pb-0'>
 				<CardTitle>Amount (USD) and # of Docs</CardTitle>
-				<CardDescription></CardDescription>
+				{/* <button
+					type='button'
+					className='btn-filter-outline'
+					onClick={() => setStatus((prev) => !prev)}>
+					<RefreshCcw className='size-4' />
+				</button> */}
 			</CardHeader>
 			<CardContent className='flex-1 pb-0'>
 				<div className='flex flex-col items-center justify-between gap-4 md:flex-row'>
@@ -142,7 +148,6 @@ export function PieChartDashboard(
 										innerRadius,
 										outerRadius,
 										value,
-										index,
 									}) => {
 										const RADIAN = Math.PI / 180;
 										const radius =
@@ -204,7 +209,6 @@ export function PieChartDashboard(
 										innerRadius,
 										outerRadius,
 										value,
-										index,
 									}) => {
 										const RADIAN = Math.PI / 180;
 										const radius =

@@ -1,5 +1,6 @@
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import {
+	useThreadChallan,
 	useThreadChallanDetailsByUUID,
 	useThreadOrderDetailsForChallanByUUID,
 } from '@/state/Thread';
@@ -38,6 +39,7 @@ export default function Index() {
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
 	const isUpdate = challan_uuid !== undefined;
+	const { invalidateQuery: invalidateThreadChallan } = useThreadChallan();
 
 	// * if can_trx_quty exist koray taholay etar
 	const SCHEMA = {
@@ -189,11 +191,13 @@ export default function Index() {
 					}),
 				];
 
-				await Promise.all(batch_entry_updated_promises)
-					.then(() => reset(Object.assign({}, THREAD_CHALLAN_NULL)))
-					// .then(() => invalidateDyeingThreadBatch())
-					// .then(
-					// 	navigate(`/dyeing-and-iron/thread-batch/${batch_uuid}`)
+				await Promise.all(batch_entry_updated_promises).then(() =>
+					reset(Object.assign({}, THREAD_CHALLAN_NULL))
+				);
+				// .then(() => invalidateDyeingThreadBatch())
+				// .then(
+				invalidateThreadChallan();
+				navigate(`/thread/challan/${batch_data_updated?.uuid}`)
 					// )
 					.catch((err) => console.log(err));
 			}
@@ -371,7 +375,7 @@ export default function Index() {
 				header: 'Order QTY',
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: (info) =>info.getValue(),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'warehouse',
@@ -389,7 +393,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'QTY',
+				header: 'Quantity',
 				enableColumnFilter: false,
 				enableSorting: false,
 				cell: (info) => {
@@ -511,6 +515,7 @@ export default function Index() {
 						Controller,
 						isUpdate,
 						setValue,
+						watch,
 					}}
 				/>
 

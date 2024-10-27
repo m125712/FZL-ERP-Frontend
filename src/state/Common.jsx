@@ -223,7 +223,7 @@ export const useCommonMaterialTrxByUUID = (uuid) =>
 // * MULTI COLOR *//
 // * Dashboard
 export const useCommonMultiColorDashboard = () =>
-	createGlobalState({	
+	createGlobalState({
 		queryKey: commonQK.multiColorDashboard(),
 		url: `/zipper/multi-color-dashboard`,
 	});
@@ -251,4 +251,16 @@ export const useCommonMultiColorLogTapeReceivedByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: commonQK.multiColorLogTapeReceivedByUUID(uuid),
 		url: `/zipper/multi-color-tape-receive/${uuid}`,
+	});
+//* Tape Assign *//
+export const useCommonTapeAssign = () =>
+	createGlobalState({
+		queryKey: commonQK.tapeAssign(),
+		url: `/zipper/tape-assigned`,
+	});
+
+export const useCommonTapeAssignByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.tapeAssignByUUID(uuid),
+		url: `/zipper/tape-assigned/${uuid}`,
 	});

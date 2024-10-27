@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useMetalFinishingProdLog, useMetalTCProduction } from '@/state/Metal';
+import { useMetalFinishingProdLog, useMetalFProduction } from '@/state/Metal';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -13,7 +13,7 @@ import SFGAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, deleteData } = useMetalFinishingProdLog();
-	const { invalidateQuery } = useMetalTCProduction();
+	const { invalidateQuery } = useMetalFProduction();
 	const info = new PageInfo('Production Log', '/metal/finishing/log');
 
 	const haveAccess = useAccess('metal__finishing_log');

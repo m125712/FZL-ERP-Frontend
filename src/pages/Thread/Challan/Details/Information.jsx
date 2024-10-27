@@ -17,6 +17,9 @@ export default function Information({ challan }) {
 		order_number,
 		received,
 		updated_at,
+		is_hand_delivery,
+		name,
+		delivery_cost,
 	} = challan;
 
 	const renderItems = () => {
@@ -34,6 +37,15 @@ export default function Information({ challan }) {
 				value: order_number,
 			},
 			{
+				label: 'Hand Delivery',
+				value: (
+					<StatusButton
+						className={'btn-xs'}
+						value={is_hand_delivery ? 1 : 0}
+					/>
+				),
+			},
+			{
 				label: 'Gate Pass',
 				value: <StatusButton className={'btn-xs'} value={gate_pass} />,
 			},
@@ -45,6 +57,9 @@ export default function Information({ challan }) {
 				label: 'Assign To',
 				value: assign_to_name,
 			},
+
+			{ label: 'Name', value: name },
+			{ label: 'Delivery Cost', value: delivery_cost },
 			{
 				label: 'Created By',
 				value: created_by_name,

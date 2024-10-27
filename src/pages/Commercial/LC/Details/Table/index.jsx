@@ -1,44 +1,50 @@
-import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-import { DateTime } from '@/ui';
 import { useMemo } from 'react';
 
-export default function Index({ pi }) {
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
+import { DateTime } from '@/ui';
+
+export default function Index({ entries }) {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'item_description',
-				header: 'Item Description',
+				accessorKey: 'amount',
+				header: 'Amount',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'size',
-				header: 'Size (CM)',
+				accessorKey: 'handover_date',
+				header: 'Hand Over',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
-				accessorKey: 'pi_quantity',
-				header: 'QTY (PCS)',
+				accessorKey: 'document_receive_date',
+				header: 'Doc Receive',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
-				accessorKey: 'unit_price',
-				header: 'Unit Price ($)',
+				accessorKey: 'acceptance_date',
+				header: 'Acceptance',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
-				accessorKey: 'value',
-				header: 'Value ($)',
+				accessorKey: 'maturity_date',
+				header: 'Maturity',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
-
 			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
+				accessorKey: 'payment_date',
+				header: 'Payment',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'payment_value',
+				header: 'Payment Value',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -62,8 +68,10 @@ export default function Index({ pi }) {
 				},
 			},
 		],
-		[pi]
+		[entries]
 	);
 
-	return <ReactTableTitleOnly title='Details' data={pi} columns={columns} />;
+	return (
+		<ReactTableTitleOnly title='Details' data={entries} columns={columns} />
+	);
 }

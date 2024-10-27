@@ -4,11 +4,15 @@ import ChallanEntry from '@/pages/Delivery/Challan/Entry';
 import PackingLists from '@/pages/Delivery/PackingList';
 import PackingListsDetails from '@/pages/Delivery/PackingList/Details';
 import PackingListsEntry from '@/pages/Delivery/PackingList/Entry';
+import Carton from '@pages/Delivery/Carton';
 // Zipper -Challan
 import Challan from '@pages/Delivery/Challan';
 import ChallanDetails from '@pages/Delivery/Challan/Details';
+// Dashboard
+import Dashboard from '@/pages/Delivery/Dashboard';
 import Log from '@pages/Delivery/Log';
 import RM from '@pages/Delivery/RM';
+import Vehicle from '@pages/Delivery/Vehicle';
 import ThreadChallan from '@pages/Thread/Challan';
 import ThreadChallanDetails from '@pages/Thread/Challan/Details';
 import ThreadChallanEntry from '@pages/Thread/Challan/Entry';
@@ -17,6 +21,14 @@ export const DeliveryRoutes = [
 	{
 		name: 'Delivery',
 		children: [
+			// * Dashboard
+			{
+				name: 'Dashboard',
+				path: '/delivery/dashboard',
+				element: <Dashboard />,
+				page_name: 'delivery__dashboard',
+				actions: ['read'],
+			},
 			// * RM
 			{
 				name: 'RM',
@@ -79,7 +91,9 @@ export const DeliveryRoutes = [
 					'read',
 					'update',
 					'delete',
-					'click_receive_status',
+					//'click_receive_status',
+					'click_received',
+					'click_received_override',
 				],
 			},
 			{
@@ -173,7 +187,37 @@ export const DeliveryRoutes = [
 				actions: ['create', 'read', 'update', 'delete'],
 				hidden: true,
 			},
+			// * Delivery Carton
+			{
+				name: 'Carton',
+				path: '/delivery/carton',
+				element: <Carton />,
+				page_name: 'delivery__carton',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_active',
+					'click_active_override',
+				],
+			},
 
+			// * Delivery Vehicle
+			{
+				name: 'Vehicle',
+				path: '/delivery/vehicle',
+				element: <Vehicle />,
+				page_name: 'delivery__vehicle',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_active',
+					'click_active_override',
+				],
+			},
 			// * Log
 			{
 				name: 'Log',

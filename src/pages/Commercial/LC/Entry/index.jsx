@@ -9,7 +9,7 @@ import { configure, HotKeys } from 'react-hotkeys';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
-import { UpdateModal } from '@/components/Modal';
+import { DeleteModal, UpdateModal } from '@/components/Modal';
 import { DynamicField, FormField, ReactSelect, RemoveButton } from '@/ui';
 
 import cn from '@/lib/cn';
@@ -25,7 +25,12 @@ export default function Index() {
 	const navigate = useNavigate();
 	const { lc_uuid } = useParams();
 
-	const { url: commercialLcUrl, postData, updateData } = useCommercialLC();
+	const {
+		url: commercialLcUrl,
+		postData,
+		updateData,
+		deleteData,
+	} = useCommercialLC();
 	const { data, invalidateQuery } = useCommercialLCPIByUUID(lc_uuid);
 
 	const [deletablePi, setDeletablePi] = useState([]);
@@ -62,6 +67,16 @@ export default function Index() {
 	} = useFieldArray({
 		control,
 		name: 'pi',
+	});
+
+	// * progression dynamic field
+	const {
+		fields: progressionField,
+		append: progressionAppend,
+		remove: progressionRemove,
+	} = useFieldArray({
+		control,
+		name: 'lc_entry',
 	});
 
 	useEffect(() => {
@@ -173,6 +188,35 @@ export default function Index() {
 				),
 			];
 
+			// * Dynamic progresson/Lc_entry
+			const lc_entry_update_promise = [...data.lc_entry].map(
+				async (item) => {
+					if (item.amount > 0) {
+						if (item.uuid) {
+							await updateData.mutateAsync({
+								url: `/commercial/lc-entry/${item.uuid}`,
+								updatedData: {
+									...item,
+									updated_at: GetDateTime(),
+								},
+								isOnCloseNeeded: false,
+							});
+						} else {
+							await postData.mutateAsync({
+								url: `/commercial/lc-entry`,
+								newData: {
+									...item,
+									lc_uuid: data.uuid,
+									uuid: nanoid(),
+									created_at: GetDateTime(),
+								},
+								isOnCloseNeeded: false,
+							});
+						}
+					}
+				}
+			);
+
 			await Promise.all(pi_numbers_promise)
 				.then(() => {
 					reset(LC_NULL);
@@ -192,10 +236,13 @@ export default function Index() {
 			...data,
 			uuid: new_lc_uuid,
 			lc_date: formatDate(data?.lc_date),
-			payment_date: formatDate(data?.payment_date),
-			acceptance_date: formatDate(data?.acceptance_date),
-			maturity_date: formatDate(data?.maturity_date),
-			handover_date: formatDate(data?.handover_date),
+
+			// handover_date: formatDate(data?.handover_date),
+			// document_receive_date: formatDate(data?.document_receive_date),
+			// acceptance_date: formatDate(data?.acceptance_date),
+			// maturity_date: formatDate(data?.maturity_date),
+			// payment_date: formatDate(data?.payment_date),
+
 			shipment_date: formatDate(data?.shipment_date),
 			expiry_date: formatDate(data?.expiry_date),
 			ud_received: data.ud_received ? 1 : 0,
@@ -217,6 +264,22 @@ export default function Index() {
 			url: commercialLcUrl,
 			newData: lc_new_data,
 			isOnCloseNeeded: false,
+		});
+
+		// * Dynamic progresson/Lc_entry
+		const lc_entry_promise = [...data.lc_entry].map(async (item) => {
+			if (item.amount > 0) {
+				await postData.mutateAsync({
+					url: `/commercial/lc-entry`,
+					newData: {
+						...item,
+						lc_uuid: new_lc_uuid,
+						uuid: nanoid(),
+						created_at: GetDateTime(),
+					},
+					isOnCloseNeeded: false,
+				});
+			}
 		});
 
 		// const new_lc_number = res?.data?.[0].insertedId;
@@ -264,6 +327,12 @@ export default function Index() {
 		PiRemove(index);
 	};
 
+	// delete lc_entry
+	const [deleteLCEntry, setDeleteLCEntry] = useState({
+		itemId: null,
+		itemName: null,
+	});
+
 	return (
 		<div>
 			<HotKeys {...{ keyMap, handlers }}>
@@ -279,6 +348,10 @@ export default function Index() {
 							getValues,
 							Controller,
 							watch,
+							progressionField,
+							progressionAppend,
+							progressionRemove,
+							setDeleteLCEntry,
 						}}
 					/>
 
@@ -423,6 +496,17 @@ export default function Index() {
 					setUpdateItem={setUpdateItem}
 					url={`/commercial/pi-cash-lc-null`}
 					updateData={updateData}
+				/>
+			</Suspense>
+			<Suspense>
+				<DeleteModal
+					modalId={'lc_entry_delete'}
+					title={'Lc Entry Delete'}
+					deleteItem={deleteLCEntry}
+					setDeleteItem={setDeleteLCEntry}
+					setItems={progressionField}
+					deleteData={deleteData}
+					url={`/commercial/lc-entry`}
 				/>
 			</Suspense>
 

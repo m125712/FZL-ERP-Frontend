@@ -189,7 +189,7 @@ export default function Information({ lc }) {
 			},
 			{
 				label: 'LC Date',
-				value: format(new Date(lc_date), 'dd/MM/yyyy'),
+				value: lc_date ? format(new Date(lc_date), 'dd/MM/yyyy') : '',
 			},
 		];
 
@@ -204,37 +204,13 @@ export default function Information({ lc }) {
 			},
 			{
 				label: 'Shipment Date',
-				value: format(new Date(shipment_date), 'dd/MM/yyyy'),
+				value: shipment_date
+					? format(new Date(shipment_date), 'dd/MM/yyyy')
+					: '',
 			},
 			{
 				label: 'Expiry Date',
 				value: format(new Date(expiry_date), 'dd/MM/yyyy'),
-			},
-		];
-		const progressionDetails = [
-			{
-				label: 'LDBC/FDBC',
-				value: ldbc_fdbc,
-			},
-			{
-				label: 'Handover Date',
-				value: format(new Date(handover_date), 'dd/MM/yyyy'),
-			},
-			{
-				label: 'Acceptance Date',
-				value: format(new Date(acceptance_date), 'dd/MM/yyyy'),
-			},
-			{
-				label: 'Maturity Date',
-				value: format(new Date(maturity_date), 'dd/MM/yyyy'),
-			},
-			{
-				label: 'Payment Date',
-				value: format(new Date(payment_date), 'dd/MM/yyyy'),
-			},
-			{
-				label: 'Payment Value',
-				value: payment_value,
 			},
 		];
 
@@ -265,7 +241,6 @@ export default function Information({ lc }) {
 			basicInfo,
 			fileDetails,
 			commercialDetails,
-			progressionDetails,
 			others,
 		};
 	};
@@ -277,23 +252,16 @@ export default function Information({ lc }) {
 				title={'Basic Info'}
 				items={renderItems().basicInfo}
 			/>
-			<div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-8'>
+			<div className='grid grid-cols-1 lg:grid-cols-3 lg:gap-8'>
 				<RenderTable
 					className={'border-secondary/30 lg:border-r'}
 					title={'File Details'}
 					items={renderItems().fileDetails}
 				/>
 				<RenderTable
-					className={'border-secondary/30 lg:border-l'}
+					className={'border-secondary/30 lg:border-x'}
 					title={'Commercial Details'}
 					items={renderItems().commercialDetails}
-				/>
-			</div>
-			<div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-8'>
-				<RenderTable
-					className={'border-secondary/30 lg:border-r'}
-					title={'Progression'}
-					items={renderItems().progressionDetails}
 				/>
 				<RenderTable
 					className={'border-secondary/30 lg:border-l'}
@@ -301,6 +269,7 @@ export default function Information({ lc }) {
 					items={renderItems().others}
 				/>
 			</div>
+			
 		</SectionContainer>
 	);
 }

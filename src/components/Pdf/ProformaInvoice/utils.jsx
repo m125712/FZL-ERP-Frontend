@@ -78,12 +78,6 @@ export const getPageHeader = (data) => {
 				data?.bank_swift_code,
 			],
 
-			// [
-			// 	{ text: '', bold: true, color: PRIMARY_COLOR },
-			// 	updated_at,
-			// 	{ text: 'Created By', bold: true, color: PRIMARY_COLOR },
-			// 	data?.created_by_name,
-			// ],
 			[
 				{ text: 'Attention', bold: true, color: PRIMARY_COLOR },
 				data?.merchandiser_name,
@@ -101,25 +95,6 @@ export const getPageHeader = (data) => {
 				'',
 				'',
 			],
-
-			// [
-			// 	{
-			// 		text: 'Remarks',
-			// 		bold: true,
-			// 		color: PRIMARY_COLOR,
-			// 	},
-			// 	{
-			// 		colSpan: 3,
-			// 		text: [
-			// 			{
-			// 				text: data?.remarks,
-			// 			},
-			// 		],
-			// 		alignment: 'left',
-			// 	},
-			// 	'',
-			// 	'',
-			// ],
 		],
 	};
 };

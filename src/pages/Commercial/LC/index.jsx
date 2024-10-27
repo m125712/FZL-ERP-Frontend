@@ -96,7 +96,7 @@ export default function Index() {
 				accessorKey: 'total_value',
 				header: 'Value ($)',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => info.getValue() && info.getValue().toFixed(2),
 			},
 			{
 				accessorKey: 'file_number',

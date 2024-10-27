@@ -8,6 +8,7 @@ export default function StatusButton({
 	...props
 }) {
 	const numberValue = Number(value);
+	//console.log(numberValue, 'numberValue');
 	const Icon = numberValue === 1 ? Check : X;
 
 	return (

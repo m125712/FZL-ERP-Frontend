@@ -90,7 +90,13 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'tape_transferred',
-				header: 'Tape Stock (KG)',
+				header: (
+					<span>
+						Tape Stock
+						<br />
+						(KG)
+					</span>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

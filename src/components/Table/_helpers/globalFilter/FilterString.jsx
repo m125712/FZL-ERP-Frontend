@@ -1,4 +1,5 @@
 import { Fragment, useCallback, useMemo } from 'react';
+
 import { DebouncedInput } from '../../components';
 import { Template } from '../../components/Filter/_components';
 
@@ -23,7 +24,7 @@ const FilterString = ({ columnName, column, firstValue, isFullFilter }) => {
 		return (
 			<Fragment key={id}>
 				<datalist id={id + 'list'}>
-					{sortedUniqueValues.slice(0, 10).map((value, index) => (
+					{sortedUniqueValues.map((value, index) => (
 						<option
 							key={
 								value !== null && value !== undefined
@@ -58,7 +59,7 @@ const FilterString = ({ columnName, column, firstValue, isFullFilter }) => {
 				onChange={handleTextValueChange}
 			/>
 			<datalist id={id + 'list'}>
-				{sortedUniqueValues.slice(0, 10).map((value, index) => (
+				{sortedUniqueValues.map((value, index) => (
 					<option
 						key={
 							value !== null && value !== undefined

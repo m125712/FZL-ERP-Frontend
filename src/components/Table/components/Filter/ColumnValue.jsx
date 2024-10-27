@@ -1,7 +1,9 @@
-import { format, isValid } from 'date-fns';
 import { forwardRef, Fragment, useCallback, useMemo, useState } from 'react';
+import { format, isValid } from 'date-fns';
+
 import DebouncedInput from '../DebouncedInput';
 import { Template } from './_components';
+
 // import DatePicker from 'react-datepicker';
 // import {
 // 	Button,
@@ -146,7 +148,7 @@ function StringInput({ columnName, column, firstValue, isFullFilter }) {
 		return (
 			<Fragment key={id}>
 				<datalist id={id + 'list'}>
-					{sortedUniqueValues.slice(0, 10).map((value, index) => (
+					{sortedUniqueValues.map((value, index) => (
 						<option
 							key={
 								value !== null && value !== undefined
@@ -181,7 +183,7 @@ function StringInput({ columnName, column, firstValue, isFullFilter }) {
 				onChange={handleTextValueChange}
 			/>
 			<datalist id={id + 'list'}>
-				{sortedUniqueValues.slice(0, 10).map((value, index) => (
+				{sortedUniqueValues.map((value, index) => (
 					<option
 						key={
 							value !== null && value !== undefined

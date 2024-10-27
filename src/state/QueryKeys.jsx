@@ -4,6 +4,8 @@
  ** https://tkdodo.eu/blog/leveraging-the-query-function-context#query-key-factories
  **/
 
+import { useDeliveryThreadDashboard } from './Delivery';
+
 export const orderQK = {
 	all: () => ['order'],
 
@@ -109,6 +111,10 @@ export const commercialQK = {
 	lcByUUID: (uuid) => [...commercialQK.lc(), uuid],
 	lcByPi: (uuid) => [...commercialQK.all(), 'lc-by-pi', uuid],
 	lcByNumber: (number) => [...commercialQK.all(), 'lc-by-number', number],
+
+	// * MANUAL PI
+	manualPI: () => [...commercialQK.all(), 'manual-pi'],
+	manualPIDetails: (uuid) => [...commercialQK.manualPI(), 'details', uuid],
 };
 
 // Material Query Keys
@@ -139,7 +145,7 @@ export const materialQK = {
 	stockToSGF: () => [...materialQK.all(), 'stock-to-sfg'],
 	stockToSFGByUUID: (uuid) => [...materialQK.stockToSGF(), uuid],
 
-	// *TrxAgainstOrderDescription//
+	// * TrxAgainstOrderDescription//
 	trxAgainstOrderDescription: () => [
 		...materialQK.all(),
 		'trx-against-order-description',
@@ -200,7 +206,7 @@ export const commonQK = {
 	// * tapeToCoil
 	tapeToCoil: () => [...commonQK.all(), 'tape/to-coil'],
 	tapeToCoilByUUID: (uuid) => [...commonQK.tapeToCoil(), uuid],
-	//* tapeTransferFromStock
+	// * tapeTransferFromStock
 	tapeTransfer: () => [...commonQK.all(), 'tape/transfer'],
 	tapeTransferByUUID: (uuid) => [...commonQK.tapeTransfer(), uuid],
 
@@ -216,7 +222,7 @@ export const commonQK = {
 	tapeRMLog: () => [...commonQK.all(), 'tape/rm-log'],
 	tapeRMLogByUUID: (uuid) => [...commonQK.tapeRMLog(), uuid],
 
-	// *  Order Against Tape RM Log * //
+	// *  Order Against Tape RM Log
 	orderAgainstTapeRMLog: () => [
 		...commonQK.all(),
 		'tape/order/against/rm-log',
@@ -245,7 +251,7 @@ export const commonQK = {
 	// * coilToStockLog
 	coilToStock: () => [...commonQK.all(), 'coil/to-stock'],
 	coilToStockByUUID: (uuid) => [...commonQK.coilToStock(), uuid],
-	//* coilTransfer
+	// * coilTransfer
 	coilTransfer: () => [...commonQK.all(), 'coil/transfer'],
 	coilTransferByUUID: (uuid) => [...commonQK.coilTransfer(), uuid],
 
@@ -253,7 +259,7 @@ export const commonQK = {
 	materialUsed: () => [...commonQK.all(), 'material/used'],
 	materialUsedByUUID: (uuid) => [...commonQK.materialUsed(), uuid],
 
-	// * Coil Order Against Coil RM Log * //
+	// * Coil Order Against Coil RM Log
 	orderAgainstCoilRMLog: () => [
 		...commonQK.all(),
 		'coil/order/against/rm-log',
@@ -293,10 +299,13 @@ export const commonQK = {
 	multiColorLogTapeReceivedByUUID: (uuid) => [
 		...commonQK.multiColorLogTapeReceived(),
 		uuid,
-	]
+	],
+	// * Tape Assign
+	tapeAssign: () => [...commonQK.all(), 'tape/assign'],
+	tapeAssignByUUID: (uuid) => [...commonQK.tapeAssign(), uuid],
 };
 
-// * LabDip * //
+// * LabDip
 export const labDipQK = {
 	all: () => ['labDip'],
 	// * recipe
@@ -317,7 +326,7 @@ export const labDipQK = {
 	LabDipRMLog: () => [...labDipQK.all(), 'rm-log'],
 	LabDipRMLogByUUID: (uuid) => [...labDipQK.LabDipRMLog(), uuid],
 
-	// * Order Against lab_dip RM Log * //
+	// * Order Against lab_dip RM Log
 	orderAgainstLabDipRMLog: () => [
 		...labDipQK.all(),
 		'lab_dip/order-against-rm-log',
@@ -371,11 +380,11 @@ export const dyeingQK = {
 	// * Thread Batch
 	threadBatch: () => [...dyeingQK.all(), 'thread-batch'],
 	threadBatchByUUID: (uuid) => [...dyeingQK.threadBatch(), uuid],
-	//* Thread Batch Entry
+	// * Thread Batch Entry
 	threadBatchEntry: () => [...dyeingQK.all(), 'thread-batch-entry'],
 	threadBatchEntryByUUID: (uuid) => [...dyeingQK.threadBatchEntry(), uuid],
 
-	// * Order Against dyeing RM Log * //
+	// * Order Against dyeing RM Log
 	orderAgainstDyeingRMLog: () => [
 		...dyeingQK.all(),
 		'dyeing/order-against-rm-log',
@@ -384,7 +393,7 @@ export const dyeingQK = {
 		...dyeingQK.orderAgainstDyeingRMLog(),
 		uuid,
 	],
-	//* Dyeing Transfer
+	// * Dyeing Transfer
 	dyeingTransfer: () => [...dyeingQK.all(), 'dyeing-transfer'],
 	dyeingTransferByUUID: (uuid) => [...dyeingQK.dyeingTransfer(), uuid],
 };
@@ -414,14 +423,14 @@ export const nylonQK = {
 		uuid,
 	],
 
-	//* RM Log
+	// * RM Log
 	nylonMetallicFinishingRMLog: () => [...nylonQK.all(), 'rm-log'],
 	nylonMetallicFinishingRMLogByUUID: (uuid) => [
 		...nylonQK.nylonMetallicFinishingRMLog(),
 		uuid,
 	],
 
-	// * Order Against nylonFinishing RM Log * //
+	// * Order Against nylonFinishing RM Log
 	orderAgainstNylonFinishingRMLog: () => [
 		...nylonQK.all(),
 		'nylonFinishing/order-against-rm-log',
@@ -439,7 +448,7 @@ export const nylonQK = {
 	nylonPlasticFinishingTapeLogByUUID: (uuid) => [
 		...nylonQK.nylonPlasticFinishingTapeLog(),
 	],
-	//* Production Log
+	// * Production Log
 	nylonPlasticFinishingProductionLog: () => [
 		...metalQK.all(),
 		'tm-production-log',
@@ -449,7 +458,7 @@ export const nylonQK = {
 		'tm-production-log',
 		uuid,
 	],
-	//* Trx Log
+	// * Trx Log
 	nylonPlasticFinishingTrxLog: () => [...nylonQK.all(), 'tm-trx-log'],
 	nylonPlasticFinishingTrxLogByUUID: (uuid) => [
 		...nylonQK.nylonPlasticFinishingTrxLog(),
@@ -459,11 +468,11 @@ export const nylonQK = {
 	// * PRODUCTION
 	nylonPlasticProduction: () => [...metalQK.all(), 'tm-production'],
 };
-// *Vislon
+// * Vislon
 export const vislonQK = {
 	all: () => ['vislon'],
 
-	//* Teeth Molding
+	// * Teeth Molding
 	// * RM
 	VislonTMRM: () => [...vislonQK.all(), 'tm-rm'],
 	VislonTMRMByUUID: (uuid) => [...vislonQK.VislonTMRM(), uuid],
@@ -472,7 +481,7 @@ export const vislonQK = {
 	VislonTMRMLog: () => [...vislonQK.all(), 'tm-rm-log'],
 	VislonTMRMLogByUUID: (uuid) => [...vislonQK.VislonTMRMLog(), uuid],
 
-	// * Order Against vislonTMRMLog * //// * Order Against vislonTM RM Log * //
+	// * Order Against vislonTMRMLog // * Order Against vislonTM RM Log
 	orderAgainstVislonTMRMLog: () => [
 		...vislonQK.all(),
 		'vislonTM/order-against-rm-log',
@@ -505,7 +514,7 @@ export const vislonQK = {
 	// * Vislon Teeth Molding Transaction Log
 	vislonTMTLog: () => [...vislonQK.all(), 'vislonTMTLog'],
 	vislonTMTLogByUUID: (uuid) => [...vislonQK.vislonTMTLog(), uuid],
-	//* Vislon Teeth Molding Tape Log
+	// * Vislon Teeth Molding Tape Log
 	vislonTMTapeLog: () => [...vislonQK.all(), 'vislonTMTapeLog'],
 	vislonTMTapeLogByUUID: (uuid) => [...vislonQK.vislonTMTapeLog(), uuid],
 
@@ -526,7 +535,7 @@ export const vislonQK = {
 		uuid,
 	],
 
-	// * Order Against vislonFinishing RM Log * //
+	// * Order Against vislonFinishing RM Log
 	orderAgainstVislonFinishingRMLog: () => [
 		...vislonQK.all(),
 		'vislonFinishing/order-against-rm-log',
@@ -555,8 +564,7 @@ export const vislonQK = {
 export const metalQK = {
 	all: () => ['metal'],
 
-	//* Teeth Molding
-
+	// ! Teeth Molding
 	// * Transaction Log
 	metalTMTrxLog: () => [...metalQK.all(), 'tm-trx-log'],
 	metalTMTrxLogByUUID: (uuid) => [...metalQK.all(), 'tm-trx-log', uuid],
@@ -568,8 +576,8 @@ export const metalQK = {
 		'tm-production-log',
 		uuid,
 	],
-	// * Tape Log
 
+	// * Tape Log
 	metalTMTapeLog: () => [...metalQK.all(), 'tm-tape-log'],
 	metalTMTapeLogByUUID: (uuid) => [...metalQK.all(), 'tm-tape-log', uuid],
 
@@ -584,7 +592,7 @@ export const metalQK = {
 	metalTMRMLog: () => [...metalQK.all(), 'tm-rm-log'],
 	metalTMRMLogByUUID: (uuid) => [...metalQK.metalTMRMLog(), uuid],
 
-	// * Order Against Metal TM RM Log * //
+	// * Order Against Metal TM RM Log
 	orderAgainstMetalTMRMLog: () => [
 		...metalQK.all(),
 		'metalTM/order-against-rm-log',
@@ -594,36 +602,7 @@ export const metalQK = {
 		uuid,
 	],
 
-	// * Finishing
-
-	//*RM
-	metalFinishingRM: () => [...metalQK.all(), 'fin-rm'],
-	metalFinishingRMByUUID: (uuid) => [...metalQK.metalFinishingRM(), uuid],
-
-	//*RM Log
-	metalFinishingRMLog: () => [...metalQK.all(), 'fin-rm-log'],
-	metalFinishingRMLogByUUID: (uuid) => [
-		...metalQK.metalFinishingRMLog(),
-		uuid,
-	],
-
-	// * Order Against metalFinishing RM Log * //
-	orderAgainstMetalFinishingRMLog: () => [
-		...metalQK.all(),
-		'metalFinishing/order-against-rm-log',
-	],
-	orderAgainstMetalFinishingRMLogByUUID: (uuid) => [
-		...metalQK.orderAgainstmetalFinishingRMLog(),
-		uuid,
-	],
-
-	// * Finishing  Production log
-	metalFinishingProdLog: () => [...metalQK.all(), 'finishingProdLog'],
-
-	// * Finishing Transaction Log
-	metalFinishingTrxLog: () => [...metalQK.all(), 'finishingTrxLog'],
-
-	//* Teeth Coloring
+	// ! Teeth Coloring
 	// * PRODUCTION
 	metalTCProduction: () => [...metalQK.all(), 'tc-production'],
 
@@ -646,7 +625,7 @@ export const metalQK = {
 	// * RM Log
 	metalTCRMLog: () => [...metalQK.all(), 'tc-rm-log'],
 	metalTCRMLogByUUID: (uuid) => [...metalQK.metalTCRMLog(), uuid],
-	// * Order Against metalTC RM Log * //
+	// * Order Against metalTC RM Log
 	orderAgainstMetalTCRMLog: () => [
 		...metalQK.all(),
 		'metalTC/order-against-rm-log',
@@ -655,13 +634,44 @@ export const metalQK = {
 		...metalQK.orderAgainstMetalTCRMLog(),
 		uuid,
 	],
+
+	// ! Finishing
+	// * PRODUCTION
+	metalFProduction: () => [...metalQK.all(), 'fin-production'],
+
+	//*RM
+	metalFinishingRM: () => [...metalQK.all(), 'fin-rm'],
+	metalFinishingRMByUUID: (uuid) => [...metalQK.metalFinishingRM(), uuid],
+
+	//*RM Log
+	metalFinishingRMLog: () => [...metalQK.all(), 'fin-rm-log'],
+	metalFinishingRMLogByUUID: (uuid) => [
+		...metalQK.metalFinishingRMLog(),
+		uuid,
+	],
+
+	// * Order Against metalFinishing RM Log
+	orderAgainstMetalFinishingRMLog: () => [
+		...metalQK.all(),
+		'metalFinishing/order-against-rm-log',
+	],
+	orderAgainstMetalFinishingRMLogByUUID: (uuid) => [
+		...metalQK.orderAgainstmetalFinishingRMLog(),
+		uuid,
+	],
+
+	// * Finishing  Production log
+	metalFinishingProdLog: () => [...metalQK.all(), 'finishingProdLog'],
+
+	// * Finishing Transaction Log
+	metalFinishingTrxLog: () => [...metalQK.all(), 'finishingTrxLog'],
 };
 
-// *Slider
+// * Slider
 
 export const sliderQK = {
 	all: () => ['slider'],
-	// *Slider Assembly
+	// * Slider Assembly
 
 	// * RM
 	sliderAssemblyRM: () => [...sliderQK.all(), 'assembly-rm'],
@@ -674,14 +684,14 @@ export const sliderQK = {
 		uuid,
 	],
 
-	//* Slider/Dashboard--> (INFO)
+	// * Slider/Dashboard--> (INFO)
 	sliderDashboardInfo: () => [...sliderQK.all(), 'dashboard-info'],
 	sliderDashboardInfoByUUID: (uuid) => [
 		...sliderQK.sliderDashboardInfo(),
 		uuid,
 	],
 
-	//* Die Casting --> (STOCK)
+	// * Die Casting --> (STOCK)
 	sliderDieCastingStock: () => [...sliderQK.all(), 'dc-stock'],
 	sliderDieCastingStockByUUID: (uuid) => [
 		...sliderQK.sliderDieCastingStock(),
@@ -692,7 +702,7 @@ export const sliderQK = {
 		...uuid,
 	],
 
-	//* Die Casting --> (TRANSFER)
+	// * Die Casting --> (TRANSFER)
 	sliderDieCastingTransfer: () => [...sliderQK.all(), 'dc-transfer'],
 	sliderDieCastingTransferByUUID: (uuid) => [
 		...sliderQK.sliderDieCastingStock(),
@@ -715,14 +725,14 @@ export const sliderQK = {
 		uuid,
 	],
 
-	//* Die Casting --> (PRODUCTION)
+	// * Die Casting --> (PRODUCTION)
 	sliderDieCastingProduction: () => [...sliderQK.all(), 'dc-production'],
 	sliderDieCastingProductionByUUID: (uuid) => [
 		...sliderQK.sliderDieCastingProduction(),
 		uuid,
 	],
 
-	// * Order Against sliderAssembly RM Log * //
+	// * Order Against sliderAssembly RM Log
 	orderAgainstSliderAssemblyRMLog: () => [
 		...sliderQK.all(),
 		'sliderAssembly/order-against-rm-log',
@@ -732,7 +742,7 @@ export const sliderQK = {
 		uuid,
 	],
 
-	//* Die Casting
+	// * Die Casting
 	// * RM
 	sliderDieCastingRM: () => [...sliderQK.all(), 'dc-rm'],
 	sliderDieCastingRMByUUID: (uuid) => [
@@ -746,7 +756,7 @@ export const sliderQK = {
 		...sliderQK.sliderDieCastingRMLog(),
 		uuid,
 	],
-	// * Order Against dieCasting RM Log * //
+	// * Order Against dieCasting RM Log
 	orderAgainstDieCastingRMLog: () => [
 		...sliderQK.all(),
 		'dieCasting/order-against-rm-log',
@@ -756,7 +766,7 @@ export const sliderQK = {
 		uuid,
 	],
 
-	//* Coloring
+	// * Coloring
 	// * RM
 	sliderColoringRM: () => [...sliderQK.all(), 'c-rm'],
 	sliderColoringRMByUUID: (uuid) => [...sliderQK.sliderColoringRM(), uuid],
@@ -767,7 +777,7 @@ export const sliderQK = {
 		...sliderQK.sliderColoringRMLog(),
 		uuid,
 	],
-	// * Order Against sliderColor RM Log * //
+	// * Order Against sliderColor RM Log
 	orderAgainstSliderColorRMLog: () => [
 		...sliderQK.all(),
 		'sliderFinishing/order-against-rm-log',
@@ -876,11 +886,24 @@ export const sliderQK = {
 	],
 };
 
-//* Delivery
+// * Delivery
 export const deliveryQk = {
 	all: () => ['delivery'],
+	// * Dashboard
+	// * Zipper
+	deliveryZipperDashboard: () => [...deliveryQk.all(), 'dashboard-zipper'],
+	deliveryZipperDashboardByUUID: (uuid) => [
+		...deliveryQk.deliveryDashboard(),
+		uuid,
+	],
+	// * Thread
+	deliveryThreadDashboard: () => [...deliveryQk.all(), 'dashboard-thread'],
+	deliveryThreadDashboardByUUID: (uuid) => [
+		...deliveryQk.deliveryThreadDashboard(),
+		uuid,
+	],
 
-	// *Packing List
+	// * Packing List
 	deliveryPackingList: () => [...deliveryQk.all(), 'packing-list'],
 	deliveryPackingListByUUID: (uuid) => [
 		...deliveryQk.deliveryPackingList(),
@@ -911,7 +934,7 @@ export const deliveryQk = {
 		packing_list_uuids
 	) => [...deliveryQk.all(), 'challan', 'entry', ...packing_list_uuids],
 
-	// *Packing List Entry
+	// * Packing List Entry
 	deliveryPackingListEntry: () => [
 		...deliveryQk.all(),
 		'packing-list',
@@ -921,16 +944,23 @@ export const deliveryQk = {
 		...deliveryQk.deliveryPackingListEntry(),
 		uuid,
 	],
+	// * Vehicle
+	deliveryVehicle: () => [...deliveryQk.all(), 'vehicle'],
+	deliveryVehicleByUUID: (uuid) => [...deliveryQk.deliveryVehicle(), uuid],
 
-	// *RM
+	// * Carton
+	deliveryCarton: () => [...deliveryQk.all(), 'carton'],
+	deliveryCartonByUUID: (uuid) => [...deliveryQk.deliveryCarton(), uuid],
+
+	// * RM
 	deliveryRM: () => [...deliveryQk.all(), 'rm'],
 	deliveryRMByUUID: (uuid) => [...deliveryQk.deliveryRM(), uuid],
 
-	// *RM Log
+	// * RM Log
 	deliveryRMLog: () => [...deliveryQk.all(), 'rm-log'],
 	deliveryRMLogByUUID: (uuid) => [...deliveryQk.deliveryRMLog(), uuid],
 
-	// *  Order Against Delivery RM Log * //
+	// *  Order Against Delivery RM Log
 	orderAgainstDeliveryRMLog: () => [
 		...deliveryQk.all(),
 		'order-against-rm-log',
@@ -994,7 +1024,7 @@ export const threadQK = {
 	challanDetailsByUUID: (uuid) => [...threadQK.challan(), 'details', uuid],
 };
 
-//* OTHER QUERY KEYS
+// * OTHER QUERY KEYS
 export const otherQK = {
 	all: () => ['other'],
 
@@ -1076,7 +1106,7 @@ export const otherQK = {
 	department: () => [...otherQK.all(), 'department'],
 
 	// Party
-	party: () => [...otherQK.all(), 'party'],
+	party: (params) => [...otherQK.all(), 'party', params],
 
 	//Buyer
 	buyer: () => [...otherQK.all(), 'buyer'],
@@ -1108,131 +1138,136 @@ export const otherQK = {
 		challan_uuid,
 	],
 
-	//* ORDER INFO VALUE LABEL
+	// * ORDER INFO VALUE LABEL
 	orderInfoValueLabel: () => [...otherQK.all(), 'order-info-value-label'],
 
-	//* ORDER PROPERTIES BY ITEM
+	// * ORDER PROPERTIES BY ITEM
 	orderPropertiesByItem: () => [...otherQK.all(), 'order-properties-by-item'],
 
-	//* ORDER PROPERTIES BY ZIPPER NUMBER
+	// * ORDER PROPERTIES BY ZIPPER NUMBER
 	orderPropertiesByZipperNumber: () => [
 		...otherQK.all(),
 		'order-properties-by-zipper-number',
 	],
 
-	//* ORDER PROPERTIES BY END TYPE
+	// * ORDER PROPERTIES BY END TYPE
 	orderPropertiesByEndType: () => [
 		...otherQK.all(),
 		'order-properties-by-end-type',
 	],
 
-	//* ORDER PROPERTIES BY GARMENTS WASH
+	// * ORDER PROPERTIES BY GARMENTS WASH
 	orderPropertiesByGarmentsWash: () => [
 		...otherQK.all(),
 		'order-properties-by-garments-wash',
 	],
 
-	//* ORDER PROPERTIES BY LIGHT PREFERENCE
+	// * ORDER PROPERTIES BY LIGHT PREFERENCE
 	orderPropertiesByLightPreference: () => [
 		...otherQK.all(),
 		'order-properties-by-light-preference',
 	],
 
-	//* ORDER PROPERTIES BY END USER
+	// * ORDER PROPERTIES BY END USER
 	orderPropertiesByEndUser: () => [
 		...otherQK.all(),
 		'order-properties-by-end-user',
 	],
 
-	//* ORDER PROPERTIES BY SLIDER BODY SHAPE
+	// * ORDER PROPERTIES BY SLIDER BODY SHAPE
 	orderPropertiesBySliderBodyShape: () => [
 		...otherQK.all(),
 		'order-properties-by-slider-body-shape',
 	],
 
-	//* ORDER PROPERTIES BY SLIDER LINK
+	// * ORDER PROPERTIES BY SLIDER LINK
 	orderPropertiesBySliderLink: () => [
 		...otherQK.all(),
 		'order-properties-by-slider-link',
 	],
 
-	//* ORDER PROPERTIES BY LOCK TYPE
+	// * ORDER PROPERTIES BY LOCK TYPE
 	orderPropertiesByLockType: () => [
 		...otherQK.all(),
 		'order-properties-by-lock-type',
 	],
 
-	//* ORDER PROPERTIES BY PULLER TYPE
+	// * ORDER PROPERTIES BY PULLER TYPE
 	orderPropertiesByPullerType: () => [
 		...otherQK.all(),
 		'order-properties-by-puller-type',
 	],
 
-	//* ORDER PROPERTIES BY PULLER LINK
+	// * ORDER PROPERTIES BY PULLER LINK
 	orderPropertiesByPullerLink: () => [
 		...otherQK.all(),
 		'order-properties-by-puller-link',
 	],
 
-	//* ORDER PROPERTIES BY COLOR
+	// * ORDER PROPERTIES BY COLOR
 	orderPropertiesByColor: () => [
 		...otherQK.all(),
 		'order-properties-by-color',
 	],
 
-	//* ORDER PROPERTIES BY HAND
+	// * ORDER PROPERTIES BY HAND
 	orderPropertiesByHand: () => [...otherQK.all(), 'order-properties-by-hand'],
 
-	//* ORDER PROPERTIES BY NYLON STOPPER
+	// * ORDER PROPERTIES BY NYLON STOPPER
 	orderPropertiesByNylonStopper: () => [
 		...otherQK.all(),
 		'order-properties-by-nylon-stopper',
 	],
 
-	//* ORDER PROPERTIES BY SPECIAL REQUIREMENT
+	// * ORDER PROPERTIES BY SPECIAL REQUIREMENT
 	orderPropertiesBySpecialRequirement: () => [
 		...otherQK.all(),
 		'order-properties-by-special-requirement',
 	],
 
-	//* ORDER PROPERTIES BY COLORING TYPE
+	// * ORDER PROPERTIES BY COLORING TYPE
 	orderPropertiesByColoringType: () => [
 		...otherQK.all(),
 		'order-properties-by-coloring-type',
 	],
 
-	//* ORDER PROPERTIES BY SLIDER
+	// * ORDER PROPERTIES BY SLIDER
 	orderPropertiesBySlider: () => [
 		...otherQK.all(),
 		'order-properties-by-slider',
 	],
 
-	//* ORDER PROPERTIES BY TOP STOPPER
+	// * ORDER PROPERTIES BY TOP STOPPER
 	orderPropertiesByTopStopper: () => [
 		...otherQK.all(),
 		'order-properties-by-top-stopper',
 	],
 
-	//* ORDER PROPERTIES BY BOTTOM STOPPER
+	// * ORDER PROPERTIES BY BOTTOM STOPPER
 	orderPropertiesByBottomStopper: () => [
 		...otherQK.all(),
 		'order-properties-by-bottom-stopper',
 	],
 
-	//* ORDER PROPERTIES BY LOGO TYPE
+	// * ORDER PROPERTIES BY LOGO TYPE
 	orderPropertiesByLogoType: () => [
 		...otherQK.all(),
 		'order-properties-by-logo-type',
 	],
 
-	//* ORDER PROPERTIES BY TEETH TYPE
+	// * ORDER PROPERTIES BY TEETH TYPE
 	orderPropertiesByTeethType: () => [
 		...otherQK.all(),
 		'order-properties-by-teeth-type',
 	],
+	// Vehicle
+	vehicle: () => [...otherQK.all(), 'delivery-vehicle'],
+
+	// Carton
+	carton: () => [...otherQK.all(), 'delivery-carton'],
 };
 
-//* Challan
+// * Challan
 export const challanQK = {
 	all: () => ['challan'],
 

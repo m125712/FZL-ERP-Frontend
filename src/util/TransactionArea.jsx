@@ -32,6 +32,7 @@ const getTransactionArea = () => {
 		{ label: 'Lab Dip', value: 'lab_dip' },
 		{ label: 'Faulty Product', value: 'faulty_product' },
 		{ label: 'Loan Return', value: 'loan_return' },
+		{ label: 'Head Office', value: 'head_office' },
 	];
 };
 export default getTransactionArea;

@@ -29,6 +29,7 @@ export default function Index() {
 		url: deliveryChallanUrl,
 		postData,
 		updateData,
+		invalidateQuery: invalidateChallan,
 	} = useDeliveryChallan();
 	const { url: deliveryChallanEntryUrl, deleteData: deleteChallanEntry } =
 		useDeliveryChallanEntry();
@@ -99,6 +100,7 @@ export default function Index() {
 	// Submit
 	const onSubmit = async (data) => {
 		// Update item
+
 		if (isUpdate) {
 			const challanData = {
 				...data,
@@ -121,24 +123,24 @@ export default function Index() {
 			const updatedId = challanPromise?.data?.[0]?.updatedUuid;
 
 			// update challan_entry
-			const updatableChallanEntryPromises = data.challan_entry.map(
-				async (item) => {
-					const updatedData = {
-						...item,
-						updated_at: GetDateTime(),
-					};
+			// const updatableChallanEntryPromises = data.challan_entry.map(
+			// 	async (item) => {
+			// 		const updatedData = {
+			// 			...item,
+			// 			updated_at: GetDateTime(),
+			// 		};
 
-					return await updateData.mutateAsync({
-						url: `${deliveryChallanEntryUrl}/${item?.uuid}`,
-						updatedData: updatedData,
-						uuid: item.uuid,
-						isOnCloseNeeded: false,
-					});
-				}
-			);
+			// 		return await updateData.mutateAsync({
+			// 			url: `${deliveryChallanEntryUrl}/${item?.uuid}`,
+			// 			updatedData: updatedData,
+			// 			uuid: item.uuid,
+			// 			isOnCloseNeeded: false,
+			// 		});
+			// 	}
+			// );
 
 			//new challan_entry
-			const newChallanEntryPromises = data?.new_challan_entry.map(
+			const newChallanEntryPromises = data?.new_challan_entry?.map(
 				async (item) => {
 					const data = {
 						...item,
@@ -159,11 +161,12 @@ export default function Index() {
 			try {
 				await Promise.all([
 					challanPromise,
-					...updatableChallanEntryPromises,
-					...newChallanEntryPromises,
+					// ...updatableChallanEntryPromises,
+					// ...newChallanEntryPromises,
 				])
 					.then(() => reset(Object.assign({}, CHALLAN_NULL)))
 					.then(() => {
+						invalidateChallan();
 						navigate(`/delivery/zipper-challan/${updatedId}`);
 					});
 			} catch (err) {
@@ -221,6 +224,7 @@ export default function Index() {
 				await Promise.all([...challan_entry_promises])
 					.then(() => reset(Object.assign({}, CHALLAN_NULL)))
 					.then(() => {
+						invalidateChallan();
 						navigate(`/delivery/challan`);
 					});
 			} catch (err) {

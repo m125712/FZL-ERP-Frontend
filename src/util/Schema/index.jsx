@@ -523,13 +523,9 @@ export const ORDER_SCHEMA = {
 	order_info_uuid: UUID_REQUIRED,
 	item: UUID_REQUIRED,
 	zipper_number: UUID_REQUIRED,
-
+	lock_type: UUID_REQUIRED,
+	
 	end_type: UUID.when('order_type', {
-		is: (value) => value === 'full',
-		then: (schema) => schema.required('Required'),
-		otherwise: (schema) => schema,
-	}),
-	lock_type: UUID.when('order_type', {
 		is: (value) => value === 'full',
 		then: (schema) => schema.required('Required'),
 		otherwise: (schema) => schema,
@@ -545,20 +541,26 @@ export const ORDER_SCHEMA = {
 	remarks: STRING.nullable(),
 
 	// * slider section
+	slider_provided: STRING.default('not_provided'),
 	// puller
-	puller_type: UUID.when('order_type', {
-		is: (value) => value === 'tape',
-		then: (schema) => schema,
-		otherwise: (schema) => schema.required('Required'),
-	}),
-	puller_color: UUID.when('order_type', {
-		is: (value) => value === 'tape',
+	puller_type: UUID.when(['order_type', 'slider_provided'], {
+		is: (orderType, sliderProvided) =>
+			orderType === 'tape' || sliderProvided !== 'not_provided',
 		then: (schema) => schema,
 		otherwise: (schema) => schema.required('Required'),
 	}),
 
-	coloring_type: UUID.when('order_type', {
-		is: (value) => value === 'tape',
+	// using this field puller_color as slider color
+	puller_color: UUID.when(['order_type', 'slider_provided'], {
+		is: (orderType, sliderProvided) =>
+			orderType === 'tape' || sliderProvided !== 'not_provided',
+		then: (schema) => schema,
+		otherwise: (schema) => schema.required('Required'),
+	}),
+
+	coloring_type: UUID.when(['order_type', 'slider_provided'], {
+		is: (orderType, sliderProvided) =>
+			orderType === 'tape' || sliderProvided !== 'not_provided',
 		then: (schema) => schema,
 		otherwise: (schema) => schema.required('Required'),
 	}),
@@ -647,6 +649,7 @@ export const ORDER_NULL = {
 	teeth_type: null,
 	teeth_color: null,
 	puller_color: null,
+	slider_provided: 'not_provided',
 	is_logo_body: false,
 	is_logo_puller: false,
 	special_requirement: '',
@@ -1412,7 +1415,7 @@ export const SLIDER_ITEM_TRANSACTION_NULL = {
 // Delivery
 export const PACKING_LIST_SCHEMA = {
 	order_info_uuid: STRING_REQUIRED,
-	carton_size: STRING_REQUIRED,
+	carton_uuid: STRING_REQUIRED,
 	carton_weight: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
 	packing_list_entry: yup.array().of(
@@ -1473,7 +1476,7 @@ export const PACKING_LIST_SCHEMA = {
 
 export const PACKING_LIST_NULL = {
 	order_info_uuid: '',
-	carton_size: '',
+	carton_size_uuid: '',
 	carton_weight: '',
 	remarks: '',
 	packing_list_entry: [
@@ -1499,7 +1502,22 @@ export const PACKING_LIST_NULL = {
 
 // Challan
 export const CHALLAN_SCHEMA = {
-	assign_to: STRING_REQUIRED,
+	is_hand_delivery: BOOLEAN_DEFAULT_VALUE(false),
+	name: STRING.when('is_hand_delivery', {
+		is: true,
+		then: (Schema) => Schema.required('Required'),
+		otherwise: (Schema) => Schema.nullable(),
+	}),
+	delivery_cost: NUMBER.when('is_hand_delivery', {
+		is: true,
+		then: (Schema) => Schema.required('Required'),
+		otherwise: (Schema) => Schema.nullable(),
+	}),
+	vehicle_uuid: STRING.when('is_hand_delivery', {
+		is: true,
+		then: (Schema) => Schema.nullable(),
+		otherwise: (Schema) => Schema.required('Required'),
+	}),
 	order_info_uuid: STRING_REQUIRED,
 	packing_list_uuids: JSON_STRING_REQUIRED.test(
 		'required',
@@ -1533,7 +1551,10 @@ export const CHALLAN_SCHEMA = {
 };
 
 export const CHALLAN_NULL = {
-	assign_to: '',
+	is_hand_delivery: false,
+	vehicle_uuid: '',
+	name: '',
+	delivery_cost: 0,
 	order_info_uuid: '',
 	packing_list_uuids: [],
 	new_packing_list_uuids: [],
@@ -1547,6 +1568,51 @@ export const CHALLAN_NULL = {
 	],
 
 	new_challan_entry: [],
+};
+//* Vehicle
+export const DELIVERY_VEHICLE_SCHEMA = {
+	type: STRING_REQUIRED,
+	name: STRING_REQUIRED,
+	number: STRING_REQUIRED,
+	driver_name: STRING_REQUIRED,
+	active: BOOLEAN_REQUIRED.default(false),
+	remarks: STRING.nullable(),
+};
+
+export const DELIVERY_VEHICLE_NULL = {
+	uuid: null,
+	type: '',
+	name: '',
+	number: '',
+	driver_name: '',
+	active: false,
+	created_by: null,
+	created_by_name: '',
+	created_at: '',
+	updated_at: null,
+	remarks: '',
+};
+
+//* Carton
+export const DELIVERY_CARTON_SCHEMA = {
+	size: STRING_REQUIRED,
+	name: STRING_REQUIRED,
+	used_for: STRING_REQUIRED,
+	active: BOOLEAN_REQUIRED.default(false),
+	remarks: STRING.nullable(),
+};
+
+export const DELIVERY_CARTON_NULL = {
+	uuid: null,
+	size: '',
+	name: '',
+	used_for: '',
+	active: false,
+	created_by: null,
+	created_by_name: '',
+	created_at: '',
+	updated_at: null,
+	remarks: '',
 };
 
 // Commercial
@@ -1852,8 +1918,7 @@ export const LC_SCHEMA = {
 	party_uuid: STRING_REQUIRED,
 	lc_number: STRING_REQUIRED,
 	lc_date: STRING_REQUIRED,
-	payment_value: NUMBER_DOUBLE_REQUIRED,
-	ldbc_fdbc: STRING.nullable(),
+
 	commercial_executive: STRING_REQUIRED,
 	party_bank: STRING_REQUIRED,
 	production_complete: BOOLEAN_REQUIRED,
@@ -1879,24 +1944,6 @@ export const LC_SCHEMA = {
 		otherwise: (Schema) => Schema.nullable(),
 	}),
 
-	// * Progression
-	handover_date: STRING.nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? null : value
-	),
-	document_receive_date: STRING.nullable().transform(
-		(value, originalValue) =>
-			String(originalValue).trim() === '' ? null : value
-	),
-	acceptance_date: STRING.nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? null : value
-	),
-	maturity_date: STRING.nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? null : value
-	),
-	payment_date: STRING.nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? null : value
-	),
-
 	shipment_date: STRING.nullable().transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? null : value
 	),
@@ -1911,6 +1958,38 @@ export const LC_SCHEMA = {
 	),
 	amd_count: NUMBER,
 	remarks: STRING.nullable(),
+
+	lc_entry: yup.array().of(
+		yup.object().shape({
+			amount: NUMBER_DOUBLE.transform((value, originalValue) =>
+				String(originalValue).trim() === '' ? 0 : value
+			),
+			ldbc_fdbc: STRING.nullable(),
+			handover_date: STRING.nullable().transform(
+				(value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+			),
+			document_receive_date: STRING.nullable().transform(
+				(value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+			),
+			acceptance_date: STRING.nullable().transform(
+				(value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+			),
+			maturity_date: STRING.nullable().transform(
+				(value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+			),
+			payment_date: STRING.nullable().transform((value, originalValue) =>
+				String(originalValue).trim() === '' ? null : value
+			),
+			payment_value: NUMBER_DOUBLE.transform((value, originalValue) =>
+				String(originalValue).trim() === '' ? 0 : value
+			),
+		})
+	),
+
 	pi: yup.array().of(
 		yup.object().shape({
 			uuid: STRING.when('is_old_pi', {
@@ -1929,19 +2008,14 @@ export const LC_NULL = {
 	party_uuid: null,
 	lc_number: null,
 	lc_date: null,
-	payment_value: 0,
-	payment_date: null,
-	ldbc_fdbc: null,
-	acceptance_date: null,
-	maturity_date: null,
+
 	commercial_executive: null,
 	pi_number: null,
 	lc_value: 0,
 	party_bank: null,
 	production_complete: false,
 	lc_cancel: false,
-	handover_date: null,
-	document_receive_date: null,
+
 	shipment_date: null,
 	expiry_date: null,
 	ud_no: null,
@@ -1954,6 +2028,19 @@ export const LC_NULL = {
 	is_rtgs: false,
 	is_old_pi: false,
 	remarks: null,
+
+	lc_entry: [
+		{
+			amount: 0,
+			ldbc_fdbc: null,
+			handover_date: null,
+			document_receive_date: null,
+			acceptance_date: null,
+			maturity_date: null,
+			payment_date: null,
+			payment_value: 0,
+		},
+	],
 	pi: [
 		{
 			uuid: null,
@@ -1961,6 +2048,68 @@ export const LC_NULL = {
 	],
 };
 
+// * Manual LC
+export const MANUAL_PI_SCHEMA = {
+	pi_uuids: yup.array().of(STRING_REQUIRED),
+	marketing_uuid: STRING_REQUIRED,
+	party_uuid: STRING_REQUIRED,
+	buyer_uuid: STRING_REQUIRED,
+	merchandiser_uuid: STRING_REQUIRED,
+	factory_uuid: STRING_REQUIRED,
+	bank_uuid: STRING_REQUIRED,
+	validity: NUMBER_REQUIRED,
+	payment: NUMBER_REQUIRED,
+	receive_amount: NUMBER_DOUBLE_REQUIRED,
+	weight: NUMBER_DOUBLE_REQUIRED,
+	date: STRING_REQUIRED,
+	pi_number: STRING.nullable(),
+	remarks: STRING.nullable(),
+
+	manual_pi_entry: yup.array().of(
+		yup.object().shape({
+			order_number: STRING_REQUIRED,
+			po: STRING.nullable(),
+			style: STRING.nullable(),
+			size: STRING.nullable(),
+			item: STRING.nullable(),
+			specification: STRING_REQUIRED,
+			quantity: NUMBER_REQUIRED,
+			unit_price: NUMBER_DOUBLE_REQUIRED,
+			is_zipper: BOOLEAN_DEFAULT_VALUE(false),
+		})
+	),
+};
+
+export const MANUAL_PI_NULL = {
+	pi_uuids: [],
+	marketing_uuid: null,
+	party_uuid: null,
+	buyer_uuid: null,
+	merchandiser_uuid: null,
+	factory_uuid: null,
+	bank_uuid: null,
+	validity: 0,
+	payment: 0,
+	receive_amount: 0,
+	weight: 0,
+	date: null,
+	pi_number: null,
+	remarks: null,
+
+	manual_pi_entry: [
+		{
+			order_number: '',
+			po: '',
+			style: '',
+			size: '',
+			item: '',
+			specification: '',
+			quantity: 0,
+			unit_price: 0,
+			is_zipper: false,
+		},
+	],
+};
 // Thread
 // Count Length
 export const THREAD_COUNT_LENGTH_SCHEMA = {
@@ -2049,19 +2198,37 @@ export const THREAD_DYES_CATEGORY_NULL = {
 
 // Thread Challan
 export const THREAD_CHALLAN_SCHEMA = {
+	is_hand_delivery: BOOLEAN_DEFAULT_VALUE(false),
+	name: STRING.when('is_hand_delivery', {
+		is: true,
+		then: (Schema) => Schema.required('Required'),
+		otherwise: (Schema) => Schema.nullable(),
+	}),
+	delivery_cost: NUMBER.when('is_hand_delivery', {
+		is: true,
+		then: (Schema) => Schema.required('Required'),
+		otherwise: (Schema) => Schema.nullable(),
+	}),
+	vehicle_uuid: STRING.when('is_hand_delivery', {
+		is: true,
+		then: (Schema) => Schema.nullable(),
+		otherwise: (Schema) => Schema.required('Required'),
+	}),
 	received: BOOLEAN_DEFAULT_VALUE(false),
 	gate_pass: BOOLEAN_DEFAULT_VALUE(false),
-	assign_to: STRING_REQUIRED,
 	order_info_uuid: STRING_REQUIRED,
 	carton_quantity: NUMBER_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
 export const THREAD_CHALLAN_NULL = {
+	is_hand_delivery: false,
+	name: '',
+	delivery_cost: 0,
 	uuid: null,
 	received: false,
 	gate_pass: false,
-	assign_to: null,
+	vehicle_uuid: null,
 	order_info_uuid: null,
 	remarks: '',
 };

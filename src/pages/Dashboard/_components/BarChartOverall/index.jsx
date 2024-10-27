@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useMemo, useState } from 'react';
+import { RefreshCcw } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 import { useFetch } from '@/hooks';
 
@@ -22,7 +23,7 @@ export const description = 'An interactive bar chart';
 
 const chartConfig = {
 	views: {
-		label: 'Page Views',
+		label: 'Quantity',
 	},
 	zipper: {
 		label: 'Zipper',
@@ -72,6 +73,13 @@ export function BarChartOverall(
 							</button>
 						);
 					})}
+					{/* <button
+						type='button'
+						className='btn-filter-outline'
+						onClick={() => setStatus((prevStatus) => !prevStatus)}
+						>
+						<RefreshCcw className='size-4' />
+					</button> */}
 				</div>
 			</CardHeader>
 			<CardContent className='px-2 sm:p-6'>
@@ -79,7 +87,6 @@ export function BarChartOverall(
 					config={chartConfig}
 					className='aspect-auto h-[250px] w-full'>
 					<BarChart
-						accessibilityLayer
 						data={data}
 						margin={{
 							left: 12,

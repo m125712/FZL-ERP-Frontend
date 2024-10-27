@@ -13,20 +13,20 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useSliderDashboardInfo();
-	const info = new PageInfo('Info', url, 'slider__dashboard_info');
-	const haveAccess = useAccess('slider__dashboard_info');
+	const info = new PageInfo('Info', url, 'slider__dashboard');
+	const haveAccess = useAccess('slider__dashboard');
 
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
 
-	console.log(data);
 	const columns = useMemo(
 		() => [
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: false,
+				// enableColumnFilter: false,
+				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -43,98 +43,105 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'zipper_number_name',
-				header: 'Zipper Number',
+				header: 'Zipper',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'end_type_name',
-				header: 'End Type',
+				header: 'End',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'lock_type_name',
-				header: 'Lock Type',
+				header: 'Lock',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'puller_type_name',
-				header: 'Puller Type',
+				header: 'Puller',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 
 			{
 				accessorKey: 'puller_color_name',
-				header: 'Puller Color',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'puller_link_name',
-				header: 'Puller Link',
+				header: 'Color',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'slider_name',
-				header: 'Slider',
+				header: 'Material',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'slider_body_shape_name',
-				header: 'Slider Body Shape',
+				header: 'Body Shape',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'slider_link_name',
-				header: 'Slider Link',
+				header: 'Link',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'coloring_type_name',
-				header: 'Coloring Type',
+				header: 'Coloring',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'logo_type_name',
-				header: 'Logo Type',
+				accessorFn: (row) => {
+					let logo = row.logo_type_name;
+
+					if (row.is_logo_body === 1 && row.is_logo_puller === 1) {
+						logo += ' (Body, Puller)';
+					} else if (row.is_logo_body === 1) {
+						logo += ' (Body)';
+					} else if (row.is_logo_puller === 1) {
+						logo += ' (Puller)';
+					}
+
+					return logo;
+				},
+				id: 'logo_type_name',
+				header: 'Logo',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'order_quantity',
-				header: 'Order Quantity',
+				header: 'Order QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'body_quantity',
-				header: 'Body Quantity',
+				header: 'Body QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'cap_quantity',
-				header: 'Cap Quantity',
+				header: 'Cap QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'puller_quantity',
-				header: 'Puller Quantity',
+				header: 'Puller QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'link_quantity',
-				header: 'Link Quantity',
+				header: 'Link QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -184,7 +191,7 @@ export default function Index() {
 				accessorKey: 'two_way_pin_quantity',
 				header: 'Two Way Pin Quantity',
 				enableColumnFilter: false,
-				cell: (info) =>info.getValue(),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'remarks',

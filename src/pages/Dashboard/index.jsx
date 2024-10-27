@@ -120,6 +120,8 @@ export default function Dashboard() {
 						title='Acceptance Due'
 						data={acceptance_due.value}
 						isLoading={acceptance_due.loading}
+						status={status}
+						onRefresh={() => handleRefresh('acceptance_due')}
 					/>
 					<TableWithRowHeader
 						title='Maturity Due'
@@ -130,6 +132,8 @@ export default function Dashboard() {
 						title='Payment Due'
 						data={payment_due.value}
 						isLoading={payment_due.loading}
+						status={status}
+						onRefresh={() => handleRefresh('document_rcv_due')}
 					/>
 				</div>
 
@@ -250,7 +254,7 @@ export default function Dashboard() {
 				</div>
 
 				<div>
-					<TopTenSalesMan url='/dashboard/top-sales' />
+					{/* <TopTenSalesMan url='/dashboard/top-sales' /> */}
 				</div>
 			</div>
 		</div>

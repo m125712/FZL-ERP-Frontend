@@ -102,6 +102,10 @@ export default function Index({
 		{ label: 'Litre', value: 'ltr' },
 		{ label: 'Meter', value: 'mtr' },
 		{ label: 'Piece', value: 'pcs' },
+		{ label: 'Set', value: 'set' },
+		{ label: 'Roll', value: 'roll' },
+		{ label: 'Gallon', value: 'gallon' },
+		{ label: 'Lbs', value: 'lbs' },
 	];
 
 	return (

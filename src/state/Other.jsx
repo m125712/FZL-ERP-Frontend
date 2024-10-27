@@ -16,10 +16,10 @@ export const useOtherHRUserByDesignation = (designation) =>
 	});
 
 // GET OTHER PARTY
-export const useOtherParty = () =>
+export const useOtherParty = (params) =>
 	createGlobalState({
-		queryKey: otherQK.party(),
-		url: '/other/party/value/label',
+		queryKey: otherQK.party(params),
+		url: `/other/party/value/label?marketing=${params}`,
 	});
 
 // GET OTHER MARKETING USER
@@ -385,4 +385,18 @@ export const useOtherOrderPropertiesByTeethType = () =>
 	createGlobalState({
 		queryKey: otherQK.orderPropertiesByTeethType(),
 		url: '/other/order-properties/by/teeth_type',
+	});
+
+//*GET Vehicle Values
+export const useOtherVehicle = () =>
+	createGlobalState({
+		queryKey: otherQK.vehicle(),
+		url: '/other/delivery/vehicle/value/label',
+	});
+
+//*GET Carton Values
+export const useOtherCarton = () =>
+	createGlobalState({
+		queryKey: otherQK.carton(),
+		url: '/other/delivery/carton/value/label',
 	});

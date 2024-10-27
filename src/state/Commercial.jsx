@@ -117,6 +117,19 @@ export const useCommercialPThreadByOrderInfo = (
 			!!marketingId,
 	});
 
+// * MANUAL PI * //
+export const useCommercialManualPI = () =>
+	createGlobalState({
+		queryKey: commercialQK.manualPI(),
+		url: '/commercial/manual-pi',
+	});
+
+export const useCommercialManualPIDetails = (uuid) =>
+	createGlobalState({
+		queryKey: commercialQK.manualPIDetails(uuid),
+		url: `/commercial/manual-pi/details/by/${uuid}`,
+	});
+
 // * LC * //
 export const useCommercialLC = () =>
 	createGlobalState({

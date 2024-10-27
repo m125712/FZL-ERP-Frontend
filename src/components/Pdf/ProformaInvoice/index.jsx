@@ -1,10 +1,6 @@
 import { PI_MD_SIGN } from '@/assets/img/base64';
 
-import {
-	DEFAULT_FONT_SIZE,
-	tableLayoutStyle,
-	xMargin,
-} from '@/components/Pdf/ui';
+import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
 import { DollarToWord } from '@/lib/NumToWord';
@@ -13,7 +9,7 @@ import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
-	getTable('order_number', 'Order ID'),
+	getTable('order_number', 'Order No'),
 	getTable('style', 'Style'),
 	getTable('pi_item_description', 'Item'),
 	getTable('specification', 'Specification'),
@@ -25,8 +21,8 @@ const node = [
 ];
 
 export default function Index(data) {
-	const headerHeight = 200;
-	let footerHeight = 50;
+	const headerHeight = 180;
+	let footerHeight = 20;
 	let { pi_cash_entry } = data;
 	let { pi_cash_entry_thread } = data;
 
@@ -184,7 +180,7 @@ export default function Index(data) {
 			return {
 				order_number: [...threadOrderID[item]].join(', '),
 				style: [...threadStyle[item]].join(', '),
-				pi_item_description: '100% SPUN POLYESTER SEWEING THREAD',
+				pi_item_description: '100% SPUN POLYESTER SEWING THREAD',
 				specification: '',
 				size:
 					item.split(' ')[0] +
@@ -225,55 +221,10 @@ export default function Index(data) {
 
 		// * Main Table
 		content: [
-			// {
-			// 	table: {
-			// 		widths: ['*'],
-			// 		body: [
-			// 			[
-			// 				{
-			// 					text:
-			// 						'Order Ref No: ' +
-			// 						[
-			// 							...new Set(
-			// 								pi_cash_entry
-			// 									.concat(pi_cash_entry_thread)
-			// 									.map(
-			// 										(entry) =>
-			// 											entry.order_number
-			// 									)
-			// 							),
-			// 						].join(', '),
-			// 					border: [true, true, true, true],
-			// 				},
-			// 			],
-			// 		],
-			// 	},
-			// },
-			// {
-			// 	table: {
-			// 		widths: ['*'],
-			// 		body: [
-			// 			[
-			// 				{
-			// 					text:
-			// 						'Style: ' +
-			// 						[
-			// 							...new Set(
-			// 								pi_cash_entry
-			// 									.concat(pi_cash_entry_thread)
-			// 									.map((entry) => entry.style)
-			// 							),
-			// 						].join(', '),
-			// 					border: [true, true, true, true],
-			// 				},
-			// 			],
-			// 		],
-			// 	},
-			// },
 			{
 				table: {
 					headerRows: 1,
-					widths: [45, 65, 50, 65, 65, 50, 40, 45, 40],
+					widths: [44, 40, 50, '*', 50, 46, 40, 45, 40],
 					body: [
 						// Header
 						TableHeader(node),
@@ -333,7 +284,7 @@ export default function Index(data) {
 			},
 			{
 				text:
-					'Total Value(In Words) : ' +
+					'Total Value (In Words): ' +
 					DollarToWord(grand_total_value),
 				bold: true,
 			},
@@ -346,13 +297,11 @@ export default function Index(data) {
 				decoration: 'underline',
 				bold: true,
 			},
-			{
-				text: '\n',
-			},
+			// {
+			// 	text: '\n',
+			// },
 			{
 				table: {
-					headerRows: 0,
-					heights: 10,
 					widths: [60, '*'],
 					body: headers.map((header, index) => [
 						{ text: header, bold: true },

@@ -1,6 +1,34 @@
 import createGlobalState from '.';
 import { challanQK, deliveryQk } from './QueryKeys';
 
+//*Dashboard
+//* Zipper
+export const useDeliveryZipperDashboard = () =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryZipperDashboard(),
+		url: '/delivery/dashboard',
+	});
+
+export const useDeliveryZipperDashboardByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryZipperDashboardByUUID(uuid),
+		url: `/delivery/dashboard${uuid}`,
+		enabled: !!uuid,
+	});
+//* Thread
+export const useDeliveryThreadDashboard = () =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryThreadDashboard(),
+		url: '/delivery/dashboard-thread',
+	});
+
+export const useDeliveryThreadDashboardByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryThreadDashboardByUUID(uuid),
+		url: `/delivery/dashboard-thread/${uuid}`,
+		enabled: !!uuid,
+	});
+
 // * Challan
 export const useDeliveryChallan = () =>
 	createGlobalState({
@@ -104,6 +132,31 @@ export const useDeliveryPackingListEntryByUUID = (uuid) =>
 		queryKey: deliveryQk.deliveryPackingListEntryByUUID(uuid),
 		url: `/delivery/packing-list-entry/${uuid}`,
 		enabled: !!uuid,
+	});
+//* For Delivery Vehicle
+export const useDeliveryVehicle = () =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryVehicle(),
+		url: '/delivery/vehicle',
+	});
+
+export const useDeliveryVehicleByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryVehicleByUUID(uuid),
+		url: `/delivery/vehicle/${uuid}`,
+	});
+
+//* For Delivery Carton
+export const useDeliveryCarton = () =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryCarton(),
+		url: '/delivery/carton',
+	});
+
+export const useDeliveryCartonByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryCartonByUUID(uuid),
+		url: `/delivery/carton/${uuid}`,
 	});
 
 // * RM

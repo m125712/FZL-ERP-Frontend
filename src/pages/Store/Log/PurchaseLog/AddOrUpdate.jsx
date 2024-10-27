@@ -1,10 +1,4 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
-
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { PURCHASE_ENTRY_NULL, PURCHASE_ENTRY_SCHEMA } from '@util/Schema';
-
+import { useEffect } from 'react';
 import { useOtherMaterial } from '@/state/Other';
 import {
 	useMaterialInfo,
@@ -12,7 +6,13 @@ import {
 	usePurchaseLog,
 } from '@/state/Store';
 import { DevTool } from '@hookform/devtools';
-import { useEffect } from 'react';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
+import { PURCHASE_ENTRY_NULL, PURCHASE_ENTRY_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -48,6 +48,10 @@ export default function Index({
 		{ label: 'Litre', value: 'ltr' },
 		{ label: 'Meter', value: 'mtr' },
 		{ label: 'Piece', value: 'pcs' },
+		{ label: 'Set', value: 'set' },
+		{ label: 'Roll', value: 'roll' },
+		{ label: 'Gallon', value: 'gallon' },
+		{ label: 'Lbs', value: 'lbs' },
 	];
 
 	const onClose = () => {

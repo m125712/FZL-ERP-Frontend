@@ -1,16 +1,18 @@
-import { AddModal } from '@/components/Modal';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useAuth } from '@/context/auth';
 import { useOtherOrderPropertiesByTypeName } from '@/state/Other';
 import { useSliderDieCastingStock } from '@/state/Slider';
-import { CheckBox, FormField, Input, Radio, ReactSelect, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { CheckBox, FormField, Input, Radio, ReactSelect, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import {
 	SLIDER_DIE_CASTING_STOCK_NULL,
 	SLIDER_DIE_CASTING_STOCK_SCHEMA,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -127,7 +129,6 @@ export default function Index({
 		{ label: 'Two-Way Pin', value: 'two_way_pin' },
 	];
 
-	
 	return (
 		<AddModal
 			id={modalId}
@@ -135,6 +136,26 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}>
+			{/* IS BODY, IS PULLER, IS CAP, IS LINK */}
+			<FormField label='type' title='Type' errors={errors}>
+				<Controller
+					name={'type'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<ReactSelect
+								placeholder='Select Item'
+								options={type}
+								value={type?.filter(
+									(item) => item.value == getValues('type')
+								)}
+								onChange={(e) => onChange(e.value)}
+								// isDisabled={order_info_id !== undefined}
+							/>
+						);
+					}}
+				/>
+			</FormField>
 			{/* NAME , ITEM , ZIPPER NUMBER */}
 			<div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
 				<Input
@@ -315,7 +336,7 @@ export default function Index({
 						label='is_logo_body'
 						title='Logo in Body'
 						height='h-[2.9rem]'
-						value={getValues('is_logo_body')? true : false}
+						value={getValues('is_logo_body') ? true : false}
 						className='w-full rounded border border-primary/30 bg-primary/5 px-2'
 						{...{ register, errors }}
 					/>
@@ -324,36 +345,13 @@ export default function Index({
 						label='is_logo_puller'
 						title='Logo in Puller'
 						height='h-[2.9rem]'
-						value={getValues('is_logo_puller')? true : false}
+						value={getValues('is_logo_puller') ? true : false}
 						className='w-full rounded border border-primary/30 bg-primary/5 px-2'
 						{...{ register, errors }}
 					/>
 				</div>
 			</div>
 
-			<div className='mt-4 text-lg font-bold text-primary'>
-				Which Item?
-			</div>
-			{/* IS BODY, IS PULLER, IS CAP, IS LINK */}
-			<FormField label='type' title='Type' errors={errors}>
-				<Controller
-					name={'type'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select Item'
-								options={type}
-								value={type?.filter(
-									(item) => item.value == getValues('type')
-								)}
-								onChange={(e) => onChange(e.value)}
-								// isDisabled={order_info_id !== undefined}
-							/>
-						);
-					}}
-				/>
-			</FormField>
 			{/* REMARKS */}
 			<Textarea
 				label='remarks'
@@ -362,7 +360,6 @@ export default function Index({
 				{...{ register, errors }}
 			/>
 			<DevTool control={control} placement='top-left' />
-		
 		</AddModal>
 	);
 }

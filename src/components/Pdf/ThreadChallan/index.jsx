@@ -13,12 +13,11 @@ const node = [
 	getTable('color', 'Color'),
 	getTable('count', 'Count', 'right'),
 	getTable('length', 'Length', 'right'),
-	getTable('quantity', 'Quantity',),
-	getTable('remarks', 'Remarks'),
+	getTable('quantity', 'Quantity', 'right'),
 ];
 
 export default function Index(data) {
-	const headerHeight = 200;
+	const headerHeight = 150;
 	let footerHeight = 50;
 	let { challan_entry } = data;
 	let totalQuantity = challan_entry?.reduce((acc, item) => {
@@ -54,7 +53,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [50, 50, 50, 50, 35, '*'],
+					widths: ['*', '*', 50, 50, 80],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -69,7 +68,7 @@ export default function Index(data) {
 						),
 						[
 							{
-								text: 'Total Quantity',
+								text: 'Total',
 								bold: true,
 								colSpan: 4,
 								alignment: 'right',
@@ -80,9 +79,8 @@ export default function Index(data) {
 							{
 								text: `${totalQuantity}`,
 								bold: true,
-								alignment: 'left',
+								alignment: 'right',
 							},
-							{},
 						],
 					],
 				},

@@ -46,58 +46,27 @@ export const getPageHeader = (data) => {
 
 			// * Start of table
 			[
+				{ text: 'Order Number', bold: true, color: PRIMARY_COLOR },
+				data?.order_number,
 				{ text: 'Party', bold: true, color: PRIMARY_COLOR },
 				data?.party_name,
+			],
+			[
+				{ text: 'Carton QTY', bold: true, color: PRIMARY_COLOR },
+				data?.carton_quantity,
+
 				{ text: 'Buyer', bold: true, color: PRIMARY_COLOR },
 				data?.buyer_name,
 			],
 			[
-				{ text: 'Merchandiser', bold: true, color: PRIMARY_COLOR },
-				data?.merchandiser_name,
 				{ text: 'Factory', bold: true, color: PRIMARY_COLOR },
 				data?.factory_name,
+				{ text: 'Merchandiser', bold: true, color: PRIMARY_COLOR },
+				data?.merchandiser_name,
 			],
-			[
-				{ text: 'Assign To', bold: true, color: PRIMARY_COLOR },
-				data?.vehicle_name?.data?.vehicle_name,
-				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
-				data?.factory_address,
-			],
-			[
-				{ text: 'Carton Quantity', bold: true, color: PRIMARY_COLOR },
-				data?.carton_quantity,
-				{ text: 'Order Number', bold: true, color: PRIMARY_COLOR },
-				data?.order_number,
-			],
-			[
-				{ text: 'Name', bold: true, color: PRIMARY_COLOR },
-				data?.name,
-				{ text: 'Delivery Cost', bold: true, color: PRIMARY_COLOR },
-				data?.delivery_cost,
-			],
-			[
-				{ text: 'Gate Pass', bold: true, color: PRIMARY_COLOR },
-				data?.gate_pass === 1 ? 'Yes' : 'No',
-
-				{ text: 'Receive Status', bold: true, color: PRIMARY_COLOR },
-				data?.receive_status === 1 ? 'Yes' : 'No',
-			],
-			[
-				{ text: 'Hand Delivery', bold: true, color: PRIMARY_COLOR },
-				data?.gate_pass ? 'Yes' : 'No',
-				'',
-				'',
-			],
-			[
-				{ text: 'Created By', bold: true, color: PRIMARY_COLOR },
-				data?.created_by_name,
-				{ text: 'Updated', bold: true, color: PRIMARY_COLOR },
-				updated_at,
-			],
-
 			[
 				{
-					text: 'Remarks',
+					text: 'Address',
 					bold: true,
 					color: PRIMARY_COLOR,
 				},
@@ -105,7 +74,7 @@ export const getPageHeader = (data) => {
 					colSpan: 3,
 					text: [
 						{
-							text: data?.remarks,
+							text: data?.factory_address,
 						},
 					],
 					alignment: 'left',

@@ -9,17 +9,16 @@ import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
-	getTable('packing_number', 'Packing Number'),
+	getTable('packing_number', 'PL No'),
 	getTable('item_description', 'Item Description'),
 	getTable('style', 'Style'),
 	getTable('color', 'Color'),
-	getTable('size', 'Size'),
-	getTable('quantity', 'Quantity'),
-	getTable('remarks', 'Remarks'),
+	getTable('size', 'Size', 'right'),
+	getTable('quantity', 'Quantity', 'right'),
 ];
 
 export default function Index(data) {
-	const headerHeight = 200;
+	const headerHeight = 150;
 	let footerHeight = 50;
 	let { challan_entry } = data;
 	let totalQuantity = challan_entry?.reduce((acc, item) => {
@@ -55,7 +54,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [45, 48, 45, 70, 30, 35, '*'],
+					widths: [80, '*', '*', '*', 60, 50],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -71,7 +70,7 @@ export default function Index(data) {
 
 						[
 							{
-								text: 'Total Quantity',
+								text: 'Total',
 								bold: true,
 								colSpan: 5,
 								alignment: 'right',
@@ -83,9 +82,8 @@ export default function Index(data) {
 							{
 								text: totalQuantity,
 								bold: true,
-								alignment: 'left',
+								alignment: 'right',
 							},
-							{},
 						],
 					],
 				},

@@ -1,22 +1,15 @@
 import { useAuth } from '@/context/auth';
 import { useOrderBuyer } from '@/state/Order';
+import { useOtherBuyer } from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
-
-
 
 import { AddModal } from '@/components/Modal';
 import { Input } from '@/ui';
 
-
-
 import nanoid from '@/lib/nanoid';
 import { BUYER_NULL, BUYER_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-
-
-
-
 
 export default function Index({
 	modalId = '',
@@ -26,10 +19,16 @@ export default function Index({
 	setUpdateBuyer,
 }) {
 	const { url, updateData, postData } = useOrderBuyer();
-	const { register, handleSubmit, errors, reset, control, context, getValues } = useRHF(
-		BUYER_SCHEMA,
-		BUYER_NULL
-	);
+	const { invalidateQuery: invalidateBuyer } = useOtherBuyer();
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		control,
+		context,
+		getValues,
+	} = useRHF(BUYER_SCHEMA, BUYER_NULL);
 
 	useFetchForRhfReset(
 		`${url}/${updateBuyer?.uuid}`,
@@ -79,6 +78,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateBuyer();
 	};
 
 	return (

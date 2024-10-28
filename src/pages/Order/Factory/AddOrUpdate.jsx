@@ -1,5 +1,6 @@
 import { useAuth } from '@/context/auth';
 import { useOrderFactory } from '@/state/Order';
+import { useOtherFactoryByPartyUUID } from '@/state/Other';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -17,6 +18,8 @@ export default function Index({
 	setUpdateFactory,
 }) {
 	const { url, updateData, postData } = useOrderFactory();
+	const { invalidateQuery: invalidateFactoryByPartyUUID } =
+		useOtherFactoryByPartyUUID();
 	const {
 		register,
 		handleSubmit,
@@ -82,6 +85,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateFactoryByPartyUUID();
 	};
 
 	return (

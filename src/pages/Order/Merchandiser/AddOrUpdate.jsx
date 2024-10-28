@@ -1,5 +1,6 @@
 import { useAuth } from '@/context/auth';
 import { useOrderMerchandiser } from '@/state/Order';
+import { useOtherMerchandiserByPartyUUID } from '@/state/Other';
 import {
 	useFetch,
 	useFetchForRhfReset,
@@ -24,6 +25,8 @@ export default function Index({
 	setUpdateMerchandiser,
 }) {
 	const { url, updateData, postData } = useOrderMerchandiser();
+	const { invalidateQuery: invalidateMerchandiserByPartyUUID } =
+		useOtherMerchandiserByPartyUUID();
 	const {
 		register,
 		handleSubmit,
@@ -90,6 +93,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateMerchandiserByPartyUUID();
 	};
 
 	return (

@@ -1,4 +1,12 @@
 import { useEffect, useState } from 'react';
+import {
+	useOtherBuyer,
+	useOtherFactoryByPartyUUID,
+	useOtherMarketing,
+	useOtherMerchandiserByPartyUUID,
+	useOtherParty,
+	useOtherPartyAll,
+} from '@/state/Other';
 import DatePicker from 'react-datepicker';
 import { useParams } from 'react-router-dom';
 import { useFetch } from '@/hooks';
@@ -31,22 +39,12 @@ export default function Header({
 			? true
 			: false
 	);
-
 	const [partyId, setPartyId] = useState(getValues('party_uuid'));
-	const { value: party } = useFetch('/other/party/value/label');
-	const { value: merchandiser } = useFetch(
-		`/other/merchandiser/value/label/${partyId}`,
-		[partyId]
-	);
-
-	const { value: factory } = useFetch(
-		`/other/factory/value/label/${partyId}`,
-		[partyId]
-	);
-
-	const { value: buyer } = useFetch('/other/buyer/value/label');
-	const { value: marketing } = useFetch('/other/marketing/value/label');
-
+	const { data: party } = useOtherPartyAll();
+	const { data: merchandiser } = useOtherMerchandiserByPartyUUID(partyId);
+	const { data: factory } = useOtherFactoryByPartyUUID(partyId);
+	const { data: buyer } = useOtherBuyer();
+	const { data: marketing } = useOtherMarketing();
 
 	useEffect(() => {
 		setPartyId(getValues('party_uuid'));

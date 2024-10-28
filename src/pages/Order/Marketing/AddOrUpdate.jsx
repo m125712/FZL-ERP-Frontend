@@ -1,5 +1,6 @@
 import { useAuth } from '@/context/auth';
 import { useOrderMarketing } from '@/state/Order';
+import { useOtherMarketing } from '@/state/Other';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -18,6 +19,7 @@ export default function Index({
 	setUpdateMarketing,
 }) {
 	const { url, updateData, postData } = useOrderMarketing();
+	const { invalidateQuery: invalidateMarketing } = useOtherMarketing();
 	const {
 		register,
 		handleSubmit,
@@ -82,6 +84,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateMarketing();
 	};
 
 	return (

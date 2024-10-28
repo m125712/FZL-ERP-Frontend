@@ -21,8 +21,8 @@ const node = [
 	getTable('style', 'Style'),
 	getTable('color', 'Color'),
 	getTable('size', 'Size'),
-	getTable('quantity', 'Qty'),
-	getTable('poli_quantity', 'Poly'),
+	getTable('quantity', 'Qty', 'right'),
+	getTable('poli_quantity', 'Poly', 'right'),
 ];
 
 export default function Index(data) {
@@ -167,13 +167,13 @@ export default function Index(data) {
 							{
 								text: totalQuantity,
 								bold: true,
-								alignment: 'left',
+								alignment: 'right',
 								fontSize: DEFAULT_FONT_SIZE - 2,
 							},
 							{
 								text: totalPoly,
 								bold: true,
-								alignment: 'left',
+								alignment: 'right',
 								fontSize: DEFAULT_FONT_SIZE - 2,
 							},
 						],

@@ -22,7 +22,7 @@ export const CUSTOM_PAGE = ({ type, xMargin, headerHeight, footerHeight }) => {
 	// 		width = 285.72;
 	// 		break;
 	// }
-	console.log(width);
+
 	return {
 		pageSize: { width: width, height: 'auto' },
 		pageOrientation: 'portrait',

@@ -15,6 +15,7 @@ const node = [
 	getTable('color', 'Color'),
 	getTable('size', 'Size', 'right'),
 	getTable('quantity', 'Quantity', 'right'),
+	getTable('poly_quantity', 'Poly', 'right'),
 ];
 
 export default function Index(data) {
@@ -23,6 +24,10 @@ export default function Index(data) {
 	let { challan_entry } = data;
 	let totalQuantity = challan_entry?.reduce((acc, item) => {
 		const quantity = parseInt(item.quantity, 10) || 0;
+		return acc + quantity;
+	}, 0);
+	let totalPolyQty = challan_entry?.reduce((acc, item) => {
+		const quantity = parseInt(item.poly_quantity, 10) || 0;
 		return acc + quantity;
 	}, 0);
 
@@ -54,7 +59,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [80, '*', '*', '*', 60, 50],
+					widths: [80, '*', '*', '*', 60, 50, 50],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -81,6 +86,11 @@ export default function Index(data) {
 							{},
 							{
 								text: totalQuantity,
+								bold: true,
+								alignment: 'right',
+							},
+							{
+								text: totalPolyQty,
 								bold: true,
 								alignment: 'right',
 							},

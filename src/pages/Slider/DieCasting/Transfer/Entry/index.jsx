@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import {
+	useSliderAssemblyProduction,
+	useSliderColoringProduction,
 	useSliderDashboardInfo,
 	useSliderDieCastingStock,
 	useSliderDieCastingTransferAgainstOrder,
@@ -80,6 +82,8 @@ const Index = () => {
 	const { invalidateQuery: invalidateQueryOrder } =
 		useSliderDieCastingTransferAgainstOrder();
 	const { invalidateQuery: invalidateQueryInfo } = useSliderDashboardInfo();
+	const { invalidateQuery: invalidateColoringProdQuery } = useSliderColoringProduction();
+	const { invalidateQuery: invalidateProdQuery } = useSliderAssemblyProduction();
 	const {
 		register,
 		handleSubmit,
@@ -149,6 +153,8 @@ const Index = () => {
 						);
 						invalidateQueryOrder();
 						invalidateQueryInfo();
+						invalidateColoringProdQuery();
+						invalidateProdQuery();
 						navigate(`/slider/die-casting/transfer`);
 					})
 					.catch((err) => console.error(err));

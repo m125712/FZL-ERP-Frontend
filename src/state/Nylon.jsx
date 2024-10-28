@@ -6,7 +6,7 @@ import { nylonQK } from './QueryKeys';
 export const useNylonMFProduction = (enabled = true) =>
 	createGlobalState({
 		queryKey: nylonQK.nylonMFProduction(),
-		url: '/zipper/sfg/by/finishing?item_name=nylon&nylon_stopper=metallic',
+		url: '/zipper/sfg/by/finishing_prod?item_name=nylon&nylon_stopper=metallic',
 		enabled: enabled,
 	});
 
@@ -134,5 +134,5 @@ export const useNylonPlasticFinishingTrxLogByUUID = (
 export const useNylonPlasticFinishingProduction = () =>
 	createGlobalState({
 		queryKey: nylonQK.nylonPlasticProduction(),
-		url: '/zipper/sfg/by/finishing?item_name=nylon&nylon_stopper=plastic',
+		url: '/zipper/sfg/by/finishing_prod?item_name=nylon&nylon_stopper=plastic',
 	});

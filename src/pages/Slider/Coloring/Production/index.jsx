@@ -180,7 +180,42 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
+			{
+				accessorKey: 'u_top_quantity',
+				header: (
+					<span>
+						U Top
+						<br />
+						QTY (PCS)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'h_bottom_quantity',
+				header: (
+					<span>
+						H Bottom
+						<br />
+						QTY (PCS)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'box_pin_quantity',
+				header: (
+					<span>
+						Box Pin
+						<br />
+						QTY (PCS)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'action_add_production',
 				header: '',

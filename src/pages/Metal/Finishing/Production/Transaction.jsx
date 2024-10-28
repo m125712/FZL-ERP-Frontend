@@ -36,7 +36,8 @@ export default function Index({
 	},
 	setUpdateFinishingTRX,
 }) {
-	const { postData } = useMetalFProduction();
+	const { postData, invalidateQuery } = useMetalFProduction();
+
 	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, reset, control, context } = useRHF(
@@ -85,6 +86,8 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateQuery();
 	};
 
 	return (

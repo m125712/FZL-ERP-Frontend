@@ -27,7 +27,11 @@ import Header from './Header';
 
 // UPDATE IS WORKING
 export default function Index() {
-	const { updateData, postData } = useDyeingBatch();
+	const {
+		updateData,
+		postData,
+		invalidateQuery: invalidateDyeingZipperBatch,
+	} = useDyeingBatch();
 	const { batch_uuid, batch_prod_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
@@ -139,9 +143,12 @@ export default function Index() {
 				.then(() =>
 					reset(Object.assign({}, DYEING_BATCH_PRODUCTION_NULL))
 				)
-				.then(
-					navigate(`/dyeing-and-iron/zipper-batch/${batch_prod_uuid}`)
-				)
+				.then(() => {
+					invalidateDyeingZipperBatch();
+					navigate(
+						`/dyeing-and-iron/zipper-batch/${batch_prod_uuid}`
+					);
+				})
 				.catch((err) => console.log(err));
 
 			return;

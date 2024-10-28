@@ -213,10 +213,10 @@ export default function Index() {
 					.then(() =>
 						reset(Object.assign({}, DYEING_THREAD_BATCH_NULL))
 					)
-					.then(() => invalidateDyeingThreadBatch())
-					.then(
-						navigate(`/dyeing-and-iron/thread-batch/${batch_uuid}`)
-					)
+					.then(() => {
+						invalidateDyeingThreadBatch();
+						navigate(`/dyeing-and-iron/thread-batch/${batch_uuid}`);
+					})
 					.catch((err) => console.log(err));
 			}
 
@@ -284,12 +284,12 @@ export default function Index() {
 					.then(() =>
 						reset(Object.assign({}, DYEING_THREAD_BATCH_NULL))
 					)
-					.then(() => invalidateDyeingThreadBatch())
-					.then(
+					.then(() => {
+						invalidateDyeingThreadBatch();
 						navigate(
 							`/dyeing-and-iron/thread-batch/${batch_data.uuid}`
-						)
-					)
+						);
+					})
 					.catch((err) => console.log(err));
 
 				return;
@@ -320,10 +320,10 @@ export default function Index() {
 
 			await Promise.all(promises)
 				.then(() => reset(Object.assign({}, DYEING_THREAD_BATCH_NULL)))
-				.then(() => invalidateDyeingThreadBatch())
-				.then(
-					navigate(`/dyeing-and-iron/thread-batch/${batchData.uuid}`)
-				)
+				.then(() => {
+					invalidateDyeingThreadBatch();
+					navigate(`/dyeing-and-iron/thread-batch/${batchData.uuid}`);
+				})
 				.catch((err) => console.log(err));
 
 			return;

@@ -1,4 +1,10 @@
 import { useDyeingTransfer } from '@/state/Dyeing';
+import { useMetalTMProduction } from '@/state/Metal';
+import {
+	useNylonMFProduction,
+	useNylonPlasticFinishingProduction,
+} from '@/state/Nylon';
+import { useVislonTMP } from '@/state/Vislon';
 import { DevTool } from '@hookform/devtools';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
@@ -20,6 +26,13 @@ export default function Index({
 	setUpdateTransfer,
 }) {
 	const { url, updateData } = useDyeingTransfer();
+	const { invalidateQuery: invalidateNylonMFProduction } =
+		useNylonMFProduction();
+	const { invalidateQuery: invalidateNylonPFProduction } =
+		useNylonPlasticFinishingProduction();
+	const { invalidateQuery: invalidateMetalTMProduction } =
+		useMetalTMProduction();
+	const { invalidateQuery: invalidateQueryVislonTMP } = useVislonTMP();
 	const {
 		register,
 		handleSubmit,
@@ -65,13 +78,10 @@ export default function Index({
 
 			return;
 		}
-
-		// Add new item
-		const updatedData = {
-			...data,
-			uuid: nanoid(),
-			created_at: GetDateTime(),
-		};
+		invalidateNylonMFProduction();
+		invalidateNylonPFProduction();
+		invalidateMetalTMProduction();
+		invalidateQueryVislonTMP();
 	};
 
 	const { value: order_id } = useFetch(

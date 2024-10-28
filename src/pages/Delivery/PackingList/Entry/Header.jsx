@@ -9,12 +9,19 @@ import {
 	Textarea,
 } from '@/ui';
 
-export default function Header({ register, errors, control, getValues }) {
+export default function Header({
+	register,
+	errors,
+	control,
+	getValues,
+	isUpdate,
+}) {
 	const { data: orders } = useOtherOrder();
 	const { data: cartons } = useOtherCarton();
 
 	return (
-		<SectionEntryBody title='Packing List Information'>
+		<SectionEntryBody
+			title={`${isUpdate ? `Update Packing List: ${getValues('packing_number')}` : 'New Packing List Entry'}`}>
 			<div className='grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4'>
 				<FormField
 					label='order_info_uuid'

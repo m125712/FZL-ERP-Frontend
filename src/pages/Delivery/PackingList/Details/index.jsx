@@ -3,7 +3,7 @@ import { useDeliveryPackingListDetailsByUUID } from '@/state/Delivery';
 import { useParams } from 'react-router-dom';
 
 import Pdf from '@/components/Pdf/PackingList';
-import Pdf2 from '@/components/Pdf/PackingList copy';
+import Pdf2 from '@/components/Pdf/PackingListSticker';
 
 import Information from './Information';
 import Table from './Table';

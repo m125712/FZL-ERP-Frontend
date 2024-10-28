@@ -36,7 +36,7 @@ export default function Header({
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody
-				title='Challan Information'
+				title={`${isUpdate ? `Update Challan: ${getValues('challan_number')}` : 'New Challan Entry'}`}
 				header={
 					<div className='flex w-full gap-1 text-sm md:w-fit'>
 						<div className='rounded-md bg-secondary px-1'>

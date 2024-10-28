@@ -102,7 +102,17 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+			{
+				accessorKey: 'count',
+				header: 'Count',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { packing_list_wise_rank } = info.row.original;
+					const { packing_list_wise_count } = info.row.original;
 
+					return `${packing_list_wise_rank}/${packing_list_wise_count}`;
+				},
+			},
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',

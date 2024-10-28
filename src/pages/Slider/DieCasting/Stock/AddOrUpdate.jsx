@@ -1,8 +1,8 @@
 import { useAuth } from '@/context/auth';
-import { useOtherOrderPropertiesByTypeName } from '@/state/Other';
+import { useOtherOrderPropertiesByTypeName, useOtherSliderItem } from '@/state/Other';
 import { useSliderDieCastingStock } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { CheckBox, FormField, Input, Radio, ReactSelect, Textarea } from '@/ui';
@@ -22,6 +22,7 @@ export default function Index({
 	setUpdateStock,
 }) {
 	const { url, updateData, postData } = useSliderDieCastingStock();
+	const { invalidateQuery: invalidateSliderItem } = useOtherSliderItem();
 	const {
 		register,
 		handleSubmit,
@@ -48,6 +49,10 @@ export default function Index({
 		useOtherOrderPropertiesByTypeName('slider_link');
 	const { data: stopper_type } =
 		useOtherOrderPropertiesByTypeName('stopper_type');
+
+	const { value: materials } = useFetch(
+		'/other/material/value/label/unit/quantity'
+	);
 
 	useFetchForRhfReset(
 		`/slider/die-casting/${updateStock?.uuid}`,
@@ -89,6 +94,8 @@ export default function Index({
 				onClose,
 			});
 
+			invalidateSliderItem();
+			
 			return;
 		}
 		// Add new item
@@ -116,6 +123,8 @@ export default function Index({
 			newData,
 			onClose,
 		});
+
+		invalidateSliderItem();
 	};
 
 	const type = [
@@ -137,25 +146,52 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}>
 			{/* IS BODY, IS PULLER, IS CAP, IS LINK */}
-			<FormField label='type' title='Type' errors={errors}>
-				<Controller
-					name={'type'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select Item'
-								options={type}
-								value={type?.filter(
-									(item) => item.value == getValues('type')
-								)}
-								onChange={(e) => onChange(e.value)}
-								// isDisabled={order_info_id !== undefined}
-							/>
-						);
-					}}
-				/>
-			</FormField>
+			<div className='flex gap-2'>
+				<FormField label='type' title='Type' errors={errors}>
+					<Controller
+						name={'type'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Item'
+									options={type}
+									value={type?.filter(
+										(item) =>
+											item.value == getValues('type')
+									)}
+									onChange={(e) => onChange(e.value)}
+									// isDisabled={order_info_id !== undefined}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+				<FormField
+					label='material_uuid'
+					title='Material'
+					errors={errors}>
+					<Controller
+						name={'material_uuid'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Item'
+									options={materials}
+									value={materials?.filter(
+										(item) =>
+											item.value ==
+											getValues('material_uuid')
+									)}
+									onChange={(e) => onChange(e.value)}
+									// isDisabled={order_info_id !== undefined}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+			</div>
 			{/* NAME , ITEM , ZIPPER NUMBER */}
 			<div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
 				<Input

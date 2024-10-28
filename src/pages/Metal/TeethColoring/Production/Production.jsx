@@ -115,8 +115,8 @@ export default function Index({
 			<JoinInput
 				title='wastage'
 				label='wastage'
-				sub_label={`MAX: ${MAX_WASTAGE_KG} kg`}
-				unit='KG'
+				sub_label={`MAX: ${MAX_WASTAGE_KG} pcs`}
+				unit='PCS'
 				{...{ register, errors }}
 				{...{ register, errors }}
 			/>

@@ -119,7 +119,7 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'finishing_prod',
+				accessorKey: 'total_production_quantity',
 				header: (
 					<span>
 						Total Production
@@ -154,12 +154,6 @@ export default function Index() {
 			// 	enableColumnFilter: false,
 			// 	cell: (info) => Number(info.getValue()),
 			// },
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
 		],
 		[data]
 	);

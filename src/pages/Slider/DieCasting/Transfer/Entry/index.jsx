@@ -292,7 +292,7 @@ const Index = () => {
 							'Puller',
 							'Logo',
 							'Slider Body',
-							'Puller Link',
+							'Slider Link',
 							'Stopper Type',
 							'Quantity',
 							'Weight (KG)',
@@ -392,7 +392,7 @@ const Index = () => {
 
 								{/* Puller Link Name */}
 								<td className={cn('w-24', rowClass)}>
-									{item.puller_link_name}
+									{item.slider_link_name}
 								</td>
 
 								{/* Stopper Type */}

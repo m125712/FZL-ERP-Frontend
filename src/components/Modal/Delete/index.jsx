@@ -15,8 +15,8 @@ export default function Index({
 	deleteData,
 	onSuccess,
 	invalidateQuery = () => {},
+	invalidateQueryArray = [],
 }) {
-	
 	const handelClose = () => {
 		setDeleteItem((prev) => ({
 			...prev,
@@ -40,6 +40,13 @@ export default function Index({
 		});
 		onSuccess && onSuccess();
 		invalidateQuery();
+
+		// Invalidate an array of queries
+		if (invalidateQueryArray.length > 0) {
+			invalidateQueryArray.forEach((query) => {
+				query();
+			});
+		}
 	};
 
 	return (

@@ -7,12 +7,14 @@ import ReactTable from '@/components/Table';
 import { DateTime, EditDelete } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
+import { useOtherSliderItem } from '@/state/Other';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useSliderDieCastingStock();
+	const { invalidateQuery: invalidateSliderItem } = useOtherSliderItem();
 	const info = new PageInfo('Stock', url, 'slider__die_casting_stock');
 	const haveAccess = useAccess('slider__die_casting_stock');
 
@@ -21,6 +23,12 @@ export default function Index() {
 			{
 				accessorKey: 'name',
 				header: 'Name',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'material_name',
+				header: 'Material',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -228,6 +236,7 @@ export default function Index() {
 						url,
 						deleteData,
 					}}
+					invalidateQuery={invalidateSliderItem}
 				/>
 			</Suspense>
 		</>

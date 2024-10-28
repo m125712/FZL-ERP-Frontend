@@ -1,14 +1,17 @@
-import { Suspense } from '@/components/Feedback';
-import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
+import { lazy, useMemo, useState } from 'react';
+import { useSliderDieCastingStock } from '@/state/Slider';
 import {
 	useMaterialInfo,
 	useMaterialTrxAgainstOrderDescription,
 } from '@/state/Store';
+import { useAccess } from '@/hooks';
 
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useMemo, useState } from 'react';
+import { useCommonTapeSFG } from '@/state/Common';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
@@ -17,6 +20,9 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } =
 		useMaterialTrxAgainstOrderDescription();
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { invalidateQuery: invalidateSliderDieCastingStock } =
+		useSliderDieCastingStock();
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 
 	const info = new PageInfo('Store / Transfer Against Order', url);
 	const haveAccess = useAccess('store__log');
@@ -185,6 +191,12 @@ export default function Index() {
 						url,
 						deleteData,
 					}}
+					
+					invalidateQueryArray={[
+						invalidateMaterialInfo,
+						invalidateSliderDieCastingStock,
+						invalidateCommonTapeSFG,
+					]}
 				/>
 			</Suspense>
 		</div>

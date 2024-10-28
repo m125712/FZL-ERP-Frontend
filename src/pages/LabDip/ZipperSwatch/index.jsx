@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { useDyeingSwatch } from '@/state/Dyeing';
+import { useCallback, useMemo } from 'react';
+import { useDyeingSwatch, useDyeingDummy } from '@/state/Dyeing';
 import { useAccess, useFetch } from '@/hooks';
 
 import ReactTable from '@/components/Table';
@@ -9,7 +9,8 @@ import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const { data, updateData, isLoading } = useDyeingSwatch();
+	const { data, isLoading } = useDyeingSwatch();
+	const { updateData } = useDyeingDummy();
 	const info = new PageInfo(
 		'LabDip/ZipperSwatch',
 		'order/swatch',
@@ -18,6 +19,20 @@ export default function Index() {
 	const haveAccess = useAccess('lab_dip__zipper_swatch');
 
 	// * fetching the data
+
+	const handleSwatchStatus = useCallback(
+		async (e, idx) => {
+			await updateData.mutateAsync({
+				url: `/zipper/sfg-swatch/${data[idx]?.uuid}`,
+				updatedData: {
+					recipe_uuid: e.value,
+					swatch_approval_date: GetDateTime(),
+				},
+				isOnCloseNeeded: false,
+			});
+		},
+		[updateData, data]
+	);
 
 	const columns = useMemo(
 		() => [
@@ -117,7 +132,6 @@ export default function Index() {
 							value={recipe?.find(
 								(item) => item.value == recipe_uuid
 							)}
-							filterOption={null}
 							onChange={(e) =>
 								handleSwatchStatus(e, info.row.index)
 							}
@@ -136,17 +150,6 @@ export default function Index() {
 		],
 		[data]
 	);
-
-	const handleSwatchStatus = async (e, idx) => {
-		await updateData.mutateAsync({
-			url: `/zipper/sfg-swatch/${data[idx]?.uuid}`,
-			updatedData: {
-				recipe_uuid: e.value,
-				swatch_approval_date: GetDateTime(),
-			},
-			isOnCloseNeeded: false,
-		});
-	};
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

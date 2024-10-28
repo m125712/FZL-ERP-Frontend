@@ -114,3 +114,10 @@ export const useDyeingTransferByUUID = (uuid) =>
 		queryKey: dyeingQK.dyeingTransferByUUID(uuid),
 		url: `/zipper/dyed-tape-transaction${uuid}`,
 	});
+
+// * dummy query for updating swatches
+export const useDyeingDummy = () =>
+	createGlobalState({
+		queryKey: dyeingQK.dyeingDummy(),
+		url: '/commercial/manual-pi',
+	});

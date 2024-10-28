@@ -1,8 +1,8 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
+import { useEffect } from 'react';
 import {
 	useCommonOrderAgainstCoilRMLog,
 	useCommonOrderAgainstTapeRMLog,
+	useCommonTapeSFG,
 } from '@/state/Common';
 import { useOrderAgainstDeliveryRMLog } from '@/state/Delivery';
 import { useOrderAgainstDyeingRMLog } from '@/state/Dyeing';
@@ -13,10 +13,12 @@ import {
 	useOrderAgainstMetalTMRMLog,
 } from '@/state/Metal';
 import { useOrderAgainstNylonMetallicFinishingRMLog } from '@/state/Nylon';
+import { useOtherMaterial } from '@/state/Other';
 import {
 	useOrderAgainstDieCastingRMLog,
 	useOrderAgainstSliderAssemblyRMLog,
 	useOrderAgainstSliderColorRMLog,
+	useSliderDieCastingStock,
 } from '@/state/Slider';
 import {
 	useMaterialInfo,
@@ -27,16 +29,17 @@ import {
 	useOrderAgainstVislonFinishingRMLog,
 	useOrderAgainstVislonTMRMLog,
 } from '@/state/Vislon';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
 import {
 	MATERIAL_TRX_AGAINST_ORDER_NULL,
 	MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
 } from '@util/Schema';
-
-import { useOtherMaterial } from '@/state/Other';
+import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
-import { useEffect } from 'react';
 
 export default function Index({
 	modalId = '',
@@ -81,6 +84,10 @@ export default function Index({
 		useOrderAgainstSliderAssemblyRMLog();
 	const { invalidateQuery: invalidateOrderAgainstSliderColorRMLog } =
 		useOrderAgainstSliderColorRMLog();
+	const { invalidateQuery: invalidateSliderDieCastingStock } =
+		useSliderDieCastingStock();
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
+
 	const { data: material } = useOtherMaterial();
 	const MAX_QUANTITY =
 		Number(updateMaterialTrxToOrder?.stock) +
@@ -155,6 +162,8 @@ export default function Index({
 			invalidateOrderAgainstTMRMLog();
 			invalidateOrderAgainstSliderAssemblyRMLog();
 			invalidateOrderAgainstSliderColorRMLog();
+			invalidateSliderDieCastingStock();
+			invalidateCommonTapeSFG();
 
 			return;
 		}
@@ -200,6 +209,12 @@ export default function Index({
 					)?.unit
 				}
 				register={register}
+			/>
+			<Input
+				label='weight'
+				// sub_label={`Max: ${updateMaterialDetails?.stock}`}
+				// placeholder={`Max: ${updateMaterialDetails?.stock}`}
+				{...{ register, errors }}
 			/>
 			{/* <Input
 				label='trx_quantity'

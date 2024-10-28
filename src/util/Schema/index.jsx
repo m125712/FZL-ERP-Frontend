@@ -238,6 +238,7 @@ export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
 	order_description_uuid: STRING_REQUIRED,
 	trx_to: STRING_REQUIRED,
 	trx_quantity: NUMBER_DOUBLE_REQUIRED,
+	weight: NUMBER_DOUBLE.default(0),
 	remarks: STRING.nullable(),
 };
 
@@ -247,6 +248,7 @@ export const MATERIAL_TRX_AGAINST_ORDER_NULL = {
 	order_description_uuid: null,
 	trx_to: '',
 	trx_quantity: '',
+	weight: 0,
 	created_by: '',
 	remarks: '',
 };
@@ -936,6 +938,7 @@ export const RESET_PASSWORD_NULL = {
 // Tape Add
 export const TAPE_STOCK_ADD_SCHEMA = {
 	name: STRING_REQUIRED,
+	material_uuid: STRING.nullable(),
 	item_uuid: STRING_REQUIRED,
 	zipper_number_uuid: STRING_REQUIRED,
 	is_import: NUMBER.nullable(),
@@ -950,6 +953,7 @@ export const TAPE_STOCK_ADD_SCHEMA = {
 export const TAPE_STOCK_ADD_NULL = {
 	uuid: null,
 	name: '',
+	material_uuid: null,
 	item_uuid: '',
 	zipper_number_uuid: '',
 	is_imported: 0,
@@ -2662,6 +2666,7 @@ export const UPDATE_DYEING_TRANSFER_NULL = {
 // *Slider/Die Casting --> (STOCK)*//
 export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 	name: STRING_REQUIRED, //
+	material_uuid: STRING.nullable(),
 	item: STRING.when('type', {
 		is: 'body',
 		then: (schema) => schema.required('Required'),
@@ -2726,6 +2731,7 @@ export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 export const SLIDER_DIE_CASTING_STOCK_NULL = {
 	uuid: null,
 	name: '',
+	material_uuid: null,
 	item: '',
 	zipper_number: '',
 	end_type: null,
@@ -2822,11 +2828,11 @@ export const SLIDER_DASHBOARD_INFO_NULL = {
 
 // * Slider/Die Casting --> (TRANSFER AGAINST STOCK)*//
 export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
-	section: STRING_REQUIRED,
+	section: STRING_REQUIRED.default('assembly'),
 	order_description_uuid: STRING.when('section', {
 		is: (value) => value == 'coloring',
 		then: (schema) => schema.required('order is required'),
-		otherwise: (schema) => schema.nullable(),
+		otherwise: (schema) => schema.nullable(),																																	
 	}),
 	stocks: yup.array().of(
 		yup.object().shape({
@@ -2863,7 +2869,7 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
 export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_NULL = {
 	uuid: null,
 	order_description_uuid: null,
-	section: '',
+	section: 'assembly',
 	is_body: false,
 	is_cap: false,
 	is_puller: false,

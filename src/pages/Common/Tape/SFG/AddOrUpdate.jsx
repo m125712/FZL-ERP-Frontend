@@ -41,6 +41,10 @@ export default function Index({
 	const { value: zipper_number } = useFetch(
 		`/other/order-properties/by/zipper_number`
 	);
+	const { value: materials } = useFetch(
+		'/other/material/value/label/unit/quantity'
+	);
+
 	const isImportOption = [
 		{
 			label: 'Import ',
@@ -114,7 +118,33 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}>
-			<Textarea label='name' title='Name' {...{ register, errors }} />
+			<div className='flex gap-2'>
+				<Textarea label='name' title='Name' {...{ register, errors }} />
+				<FormField
+					label='material_uuid'
+					title='Material'
+					errors={errors}>
+					<Controller
+						name={'material_uuid'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Item'
+									options={materials}
+									value={materials?.filter(
+										(item) =>
+											item.value ==
+											getValues('material_uuid')
+									)}
+									onChange={(e) => onChange(e.value)}
+									// isDisabled={order_info_id !== undefined}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+			</div>
 			<div className='flex flex-col gap-2 md:flex-row'>
 				<FormField label='item_uuid' title='Item' errors={errors}>
 					<Controller

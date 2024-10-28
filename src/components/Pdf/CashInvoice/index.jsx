@@ -1,14 +1,7 @@
-import { ToWords } from 'to-words';
-
-import {
-	DEFAULT_FONT_SIZE,
-	tableLayoutStyle,
-	xMargin,
-} from '@/components/Pdf/ui';
+import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
-import { DollarToWord, NumToWord } from '@/lib/NumToWord';
-import numToWords from '@/util/NumToWord';
+import { NumToWord } from '@/lib/NumToWord';
 
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
@@ -19,16 +12,15 @@ const node = [
 	getTable('pi_item_description', 'Item'),
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
-	//getTable('h_s_code', 'H S,Code'),
 	getTable('quantity', 'Quantity', 'right'),
-	getTable('unit_price', 'Unit Price\n(BDT)', 'right'),
 	getTable('unit_price_dollar', 'Unit Price\n(US$)', 'right'),
-	getTable('value', 'Value\n(BDT)', 'right'),
 	getTable('value_dollar', 'Value\n(US$)', 'right'),
+	getTable('unit_price', 'Unit Price\n(BDT)', 'right'),
+	getTable('value', 'Value\n(BDT)', 'right'),
 ];
 
 export default function Index(data) {
-	const headerHeight = 200;
+	const headerHeight = 140;
 	let footerHeight = 50;
 	let { pi_cash_entry } = data;
 	let { pi_cash_entry_thread } = data;
@@ -162,7 +154,7 @@ export default function Index(data) {
 			return {
 				order_number: [...threadOrderID[item]].join(', '),
 				style: [...threadStyle[item]].join(', '),
-				pi_item_description: '100% SPUN POLYESTER SEWEING THREAD',
+				pi_item_description: '100% SPUN POLYESTER SEWING THREAD',
 				specification: '',
 				size:
 					item.split(' ')[0] +
@@ -251,7 +243,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [50, 50, 50, 60, 50, 40, 40, 40, 40, 40],
+					widths: [45, 50, 50, '*', 50, 40, 40, 40, 40, 40],
 					body: [
 						// Header
 						TableHeader(node),
@@ -287,9 +279,8 @@ export default function Index(data) {
 								],
 								alignment: 'right',
 								bold: true,
-								colSpan: 7,
+								colSpan: 6,
 							},
-							{},
 							{},
 							{},
 							{},
@@ -299,8 +290,9 @@ export default function Index(data) {
 								text: `BDT: ${Number(grand_total_value * data?.conversion_rate || 0).toFixed(2)}`,
 								alignment: 'right',
 								bold: true,
-								colSpan: 3,
+								colSpan: 4,
 							},
+							{},
 							{},
 							{},
 						],

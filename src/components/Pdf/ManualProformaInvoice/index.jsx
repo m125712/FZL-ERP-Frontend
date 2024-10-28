@@ -44,8 +44,10 @@ export default function Index(data) {
 	});
 	const entry = manual_pi_entry.map((item) => ({
 		...item,
-		unit_price: item.unit_price+'/dzn',
-		quantity: item.is_zipper ? item.quantity + '/pcs' : item.quantity + '/cons' ,
+		unit_price: item.unit_price + '/dzn',
+		quantity: item.is_zipper
+			? item.quantity + '/pcs'
+			: item.quantity + '/cons',
 		value: item.quantity * (item.unit_price / 12),
 	}));
 	const totalQuantityZipper = manual_pi_entry
@@ -172,9 +174,10 @@ export default function Index(data) {
 			},
 			{
 				image: PI_MD_SIGN.src,
-				width: 100,
-				height: 100,
+				width: 80,
+				height: 90,
 				alignment: 'right',
+				margin: [0, -28, 0, 0],
 			},
 		],
 	});

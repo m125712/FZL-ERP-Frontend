@@ -1,12 +1,8 @@
 import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
-import { useFetch } from '@/hooks';
-
-
 
 import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../ui';
 import { company, getEmptyColumn } from '../utils';
-
 
 const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 
@@ -14,16 +10,14 @@ const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 
 export const getPageHeader = (data) => {
 	const created_at = getDateFormate(data?.created_at);
-	// const updated_at = getDateFormate(data?.updated_at);
-	// const delivery_date = getDateFormate(data?.delivery_date);
-	// const pi_number = data?.pi_number;
 	const buyer = new Set();
 	data?.pi_cash_entry?.forEach((item) => {
 		buyer.add(item.buyer_name);
 	});
 	data?.pi_cash_entry_thread?.forEach((item) => {
 		buyer.add(item.buyer_name);
-	})
+	});
+
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
 		widths: [70, '*', 70, '*'],
@@ -58,64 +52,36 @@ export const getPageHeader = (data) => {
 
 			// * Start of table
 			[
-				{ text: 'Party:', bold: true, color: PRIMARY_COLOR },
+				{ text: 'Party', bold: true, color: PRIMARY_COLOR },
 				data?.party_name,
-				// { text: 'Advising Bank:', bold: true, color: PRIMARY_COLOR },
-				// data?.bank_name,
-				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
-				{ text: data?.party_address },
+				{ text: 'Conversion Rate', bold: true, color: PRIMARY_COLOR },
+				`${Number(data?.conversion_rate).toFixed(2)} BDT`,
 			],
-			// [
-			// 	// { text: 'Address', bold: true, color: PRIMARY_COLOR },
-			// 	// { text: data?.bank_address },
-			// 	//{ text: 'Merchandiser', bold: true, color: PRIMARY_COLOR },
-			// ],
 			[
-				{ text: 'Buyer:', bold: true, color: PRIMARY_COLOR },
+				{ text: 'Buyer', bold: true, color: PRIMARY_COLOR },
 				{ text: [...buyer].join(', ') },
-				// { text: 'SWIFT:', bold: true, color: PRIMARY_COLOR },
-				// data?.bank_swift_code,
 				{ text: 'Attention', bold: true, color: PRIMARY_COLOR },
 				data?.merchandiser_name,
 			],
+
 			[
+				{
+					text: 'Address',
+					bold: true,
+					color: PRIMARY_COLOR,
+				},
+				{
+					colSpan: 3,
+					text: [
+						{
+							text: data?.party_address,
+						},
+					],
+					alignment: 'left',
+				},
 				'',
 				'',
-				// { text: 'SWIFT:', bold: true, color: PRIMARY_COLOR },
-				// data?.bank_swift_code,
-				{ text: 'Conversion Rate', bold: true, color: PRIMARY_COLOR },
-				Number(data?.conversion_rate).toFixed(2),
 			],
-
-			// [
-			// 	{ text: '', bold: true, color: PRIMARY_COLOR },
-			// 	updated_at,
-			// 	{ text: 'Created By', bold: true, color: PRIMARY_COLOR },
-			// 	data?.created_by_name,
-			// ],
-			// [
-			// 	// { text: 'Routing No', bold: true, color: PRIMARY_COLOR },
-			// 	// data?.routing_no,
-			// ],
-
-			// [
-			// 	{
-			// 		text: 'Remarks',
-			// 		bold: true,
-			// 		color: PRIMARY_COLOR,
-			// 	},
-			// 	{
-			// 		colSpan: 3,
-			// 		text: [
-			// 			{
-			// 				text: data?.remarks,
-			// 			},
-			// 		],
-			// 		alignment: 'left',
-			// 	},
-			// 	'',
-			// 	'',
-			// ],
 		],
 	};
 };

@@ -38,7 +38,7 @@ function capitalizeAndRemoveUnderscore(str) {
 
 export function BarChartHorizontal(props) {
 	const [time, setTime] = useState('yesterday');
-	const [status, setStatus] = useState(false); 
+	const [status, setStatus] = useState(false);
 
 	let to = format(addDays(new Date(), -1), 'yyyy-MM-dd');
 	let from = format(addDays(new Date(), -daysMap[time] || 1), 'yyyy-MM-dd');
@@ -46,11 +46,11 @@ export function BarChartHorizontal(props) {
 	const chartConfig = {
 		[props.label2]: {
 			label: capitalizeAndRemoveUnderscore(props.label2),
-			color: '#4185f4',
+			color: '#27374D',
 		},
 		[props.label1]: {
 			label: capitalizeAndRemoveUnderscore(props.label1),
-			color: '#FF0000',
+			color: '#00ADB5',
 		},
 		label: {
 			color: 'hsl(var(--background))',
@@ -65,21 +65,14 @@ export function BarChartHorizontal(props) {
 	);
 
 	return (
-		<Card>
-			<CardHeader className='flex items-center justify-between'>
-				<CardTitle>{props.title}</CardTitle>
-			</CardHeader>
-			<CardContent>
-				<ChartContainer config={chartConfig}>
+		<Card className='w-full'>
+			<CardHeader className=''>
+				<CardTitle className='flex items-center justify-between'>
+					<div>
+						{props.title} {props?.total && `#${data?.total_number}`}
+					</div>
 					<div className='flex items-center justify-between'>
-						{props?.total && (
-							<div className='rounded-md border border-secondary/30 bg-base-200 px-3 py-1'>
-								<span className='text-sm font-semibold'>
-									{props?.total_title}: {data?.total_number}
-								</span>
-							</div>
-						)}
-						{props?.time && (
+						{props?.time ? (
 							<select
 								name='time'
 								className='select select-secondary h-8 min-h-0 border-secondary/30 bg-base-200 transition-all duration-100 ease-in-out'
@@ -94,22 +87,17 @@ export function BarChartHorizontal(props) {
 									30 Days
 								</option>
 							</select>
-						) 
-						// : (
-						// 	<button
-						// 		type='button'
-						// 		className='btn-filter-outline'
-						// 		onClick={() => setStatus((prev) => !prev)}>
-						// 		<RefreshCcw className='size-4' />
-						// 	</button>
-							// <span className='live-indicator'>
-							// 	(<span className='live-dot'></span>
-							// 	<span className='live-text'> Live</span>)
-							// </span>
-						// )
-						}
+						) : (
+							<span className='live-indicator space-x-2'>
+								<span className='live-dot'></span>
+								<span className='live-text'> Live</span>
+							</span>
+						)}
 					</div>
-					<br />
+				</CardTitle>
+			</CardHeader>
+			<CardContent>
+				<ChartContainer config={chartConfig}>
 					<BarChart
 						accessibilityLayer
 						data={data?.chart_data}

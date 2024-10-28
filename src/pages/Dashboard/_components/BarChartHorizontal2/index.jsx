@@ -1,7 +1,3 @@
-'use client';
-
-import { useState } from 'react';
-import { RefreshCcw, TrendingUp } from 'lucide-react';
 import {
 	Bar,
 	BarChart,
@@ -15,7 +11,6 @@ import { useFetch } from '@/hooks';
 import {
 	Card,
 	CardContent,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
@@ -30,11 +25,11 @@ import {
 const chartConfig = {
 	not_approved: {
 		label: 'Not approved',
-		color: '#FF0000',
+		color: '#f31260',
 	},
 	approved: {
 		label: 'Approved',
-		color: '#4185f4',
+		color: '#00ADB5',
 	},
 	total: {
 		label: 'Total',
@@ -46,8 +41,7 @@ const chartConfig = {
 };
 
 export function BarChartHorizontal2(props) {
-	const [status, setStatus] = useState(false); 
-	const { value: data } = useFetch(`/dashboard/work-in-hand`, [props.status]); 
+	const { value: data } = useFetch(`/dashboard/work-in-hand`, [props.status]);
 
 	const chartData = data?.map((item) => ({
 		...item,
@@ -55,21 +49,18 @@ export function BarChartHorizontal2(props) {
 	}));
 
 	return (
-		<Card>
+		<Card className='w-full'>
 			<CardHeader>
-				<CardTitle>Production: Demand</CardTitle>
+				<CardTitle className='flex items-center justify-between'>
+					<div>Production: Demand</div>
+					<span className='live-indicator space-x-2'>
+						<span className='live-dot'></span>
+						<span className='live-text'> Live</span>
+					</span>
+				</CardTitle>
 			</CardHeader>
 			<CardContent>
 				<ChartContainer config={chartConfig}>
-					{/* <div className='float-right'>
-						<button
-							type='button'
-							className='btn-filter-outline'
-							onClick={() => setStatus((prev) => !prev)}>
-							<RefreshCcw className='size-4' />
-						</button>
-					</div> */}
-
 					<BarChart
 						data={chartData}
 						layout='vertical'
@@ -128,7 +119,6 @@ export function BarChartHorizontal2(props) {
 					</BarChart>
 				</ChartContainer>
 			</CardContent>
-			<CardFooter className='flex-col items-start gap-2 text-sm'></CardFooter>
 		</Card>
 	);
 }

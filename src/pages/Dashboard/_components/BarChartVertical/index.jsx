@@ -1,19 +1,9 @@
-'use client';
-
 import { useState } from 'react';
 import { addDays, format } from 'date-fns';
-import { TrendingUp } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts';
 import { useFetch } from '@/hooks';
 
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
 	ChartContainer,
 	ChartLegend,
@@ -25,7 +15,7 @@ import {
 const chartConfig = {
 	total_quantity: {
 		label: 'Total Quantity',
-		color: '#4185f4',
+		color: '#00ADB5',
 	},
 };
 const daysMap = {
@@ -46,12 +36,10 @@ export function BarChartVertical() {
 		[from, to]
 	);
 	return (
-		<Card>
+		<Card className='w-full'>
 			<CardHeader>
-				<CardTitle>Production: Status</CardTitle>
-			</CardHeader>
-			<CardContent>
-				<ChartContainer config={chartConfig}>
+				<CardTitle className='flex items-center justify-between'>
+					<div>Production: Status</div>
 					<div className='flex items-center justify-between'>
 						<select
 							name='time'
@@ -64,7 +52,10 @@ export function BarChartVertical() {
 							<option value='last_thirty_days'>30 Days</option>
 						</select>
 					</div>
-					<br />
+				</CardTitle>
+			</CardHeader>
+			<CardContent>
+				<ChartContainer config={chartConfig}>
 					<BarChart
 						accessibilityLayer
 						data={data}

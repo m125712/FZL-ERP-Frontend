@@ -11,14 +11,18 @@ export const sample_lead_time_columns = [
 		accessorKey: 'issue_date',
 		header: 'Issue Date',
 		enableColumnFilter: false,
-		cell: (info) => <DateTime date={info.getValue()} />,
+		cell: (info) => <DateTime date={info.getValue()} isTime={false} />,
 	},
 	{
 		accessorKey: 'delivery_last_date',
 		header: 'Last Delivery Date',
 		enableColumnFilter: false,
 		cell: (info) =>
-			info.getValue() ? <DateTime date={info.getValue()} /> : 'N/A',
+			info.getValue() ? (
+				<DateTime date={info.getValue()} isTime={false} />
+			) : (
+				'N/A'
+			),
 	},
 	{
 		accessorKey: 'status',
@@ -96,7 +100,7 @@ export const pi_register_columns = [
 		accessorKey: 'lc_date',
 		header: 'LC Date',
 		enableColumnFilter: false,
-		cell: (info) => <DateTime date={info.getValue()} />,
+		cell: (info) => <DateTime date={info.getValue()} isTime={false} />,
 	},
 ];
 
@@ -123,13 +127,13 @@ export const doc_rcv_columns = [
 		accessorKey: 'lc_value',
 		header: 'LC Value(USD)',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
+		cell: (info) => Number(info.getValue()).toFixed(2),
 	},
 	{
 		accessorKey: 'lc_date',
 		header: 'LC Date',
 		enableColumnFilter: false,
-		cell: (info) => <DateTime date={info.getValue()} />,
+		cell: (info) => <DateTime date={info.getValue()} isTime={false} />,
 	},
 ];
 export const stock_status_columns = [
@@ -159,9 +163,9 @@ export const stock_status_columns = [
 	},
 	{
 		accessorKey: 'last_purchase_date',
-		header: 'Last Purchase Date',
+		header: 'Purchase Date',
 		enableColumnFilter: false,
-		cell: (info) => <DateTime date={info.getValue()} />,
+		cell: (info) => <DateTime date={info.getValue()} isTime={false} />,
 	},
 	{
 		accessorKey: 'lead_time',

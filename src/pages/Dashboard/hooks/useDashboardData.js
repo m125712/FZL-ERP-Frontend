@@ -33,6 +33,8 @@ const useDashboardData = (dataPreview) => {
 	const { data: amount_percentage, refetch: amountPercentageRefetch } =
 		useDashboardAmountPercentage();
 
+	// /dashboard/challan-register
+
 	if (dataPreview === 'demo') {
 		return {
 			amount_and_doc: fake_amount_and_doc,

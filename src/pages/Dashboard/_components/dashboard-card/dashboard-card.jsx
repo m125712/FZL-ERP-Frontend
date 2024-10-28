@@ -1,10 +1,8 @@
 import React from 'react';
-import { Banknote, CircleDollarSign } from 'lucide-react';
 import { NumericFormat } from 'react-number-format';
 
 import {
 	Card,
-	CardContent,
 	CardDescription,
 	CardFooter,
 	CardHeader,

@@ -1,17 +1,6 @@
-'use client';
-
-import { useState } from 'react';
-import { RefreshCcw, TrendingUp } from 'lucide-react';
 import { Pie, PieChart, ResponsiveContainer } from 'recharts';
 
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
 	ChartContainer,
 	ChartLegend,
@@ -19,24 +8,6 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from '@/components/ui/chart';
-
-// const chartData = [
-// 	{
-// 		name: 'total_acceptance_due',
-// 		amount: 275,
-// 		fill: 'var(--color-total_acceptance_due)',
-// 	},
-// 	{
-// 		name: 'total_maturity_due',
-// 		amount: 200,
-// 		fill: 'var(--color-total_maturity_due)',
-// 	},
-// 	{
-// 		name: 'total_payment_due',
-// 		amount: 187,
-// 		fill: 'var(--color-total_payment_due)',
-// 	},
-// ];
 
 const chartConfig = {
 	amount: {
@@ -62,45 +33,6 @@ export function PieChartDashboard(
 		no_of_doc: [],
 	}
 ) {
-	// const { value: data, loading } = useFetch(`/dashboard/amount-percentage`);
-	// const { value: data2, loading2 } = useFetch(`/dashboard/no-of-doc`);
-
-	// const data1 = [
-	// 	{
-	// 		name: 'total_acceptance_due',
-	// 		amount: 500,
-	// 	},
-	// 	{
-	// 		name: 'total_maturity_due',
-	// 		amount: 300,
-	// 	},
-	// 	{
-	// 		name: 'total_payment_due',
-	// 		amount: 200,
-	// 	},
-	// ];
-	// const data3 = [
-	// 	{
-	// 		name: 'total_acceptance_due',
-	// 		amount: 200,
-	// 	},
-	// 	{
-	// 		name: 'total_maturity_due',
-	// 		amount: 100,
-	// 	},
-	// 	{
-	// 		name: 'total_payment_due',
-	// 		amount: 60,
-	// 	},
-	// ];
-
-	// if (loading || loading2) {
-	// 	return <span className='loading loading-dots loading-lg z-50' />;
-	// }
-
-	// if (!data || data.length === 0 || !data2 || data2.length === 0) {
-	// 	return <div>No data available</div>;
-	// }
 	const mainChartData = amount_percentage.map((item) => ({
 		...item,
 		amount: parseFloat(item.amount),
@@ -116,12 +48,6 @@ export function PieChartDashboard(
 		<Card className='flex flex-col'>
 			<CardHeader className='flex items-center justify-between pb-0'>
 				<CardTitle>Amount (USD) and # of Docs</CardTitle>
-				{/* <button
-					type='button'
-					className='btn-filter-outline'
-					onClick={() => setStatus((prev) => !prev)}>
-					<RefreshCcw className='size-4' />
-				</button> */}
 			</CardHeader>
 			<CardContent className='flex-1 pb-0'>
 				<div className='flex flex-col items-center justify-between gap-4 md:flex-row'>
@@ -243,7 +169,6 @@ export function PieChartDashboard(
 					</ChartContainer>
 				</div>
 			</CardContent>
-			<CardFooter className='flex-col gap-2 text-sm'></CardFooter>
 		</Card>
 	);
 }

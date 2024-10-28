@@ -1,24 +1,13 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BarChartHorizontal } from '@/pages/Dashboard/_components/BarChartHorizontal';
-import { addDays, format } from 'date-fns';
-import { Pie } from 'react-chartjs-2';
-import { defaultFetch, useFetch } from '@/hooks';
 
-import { default as ReactTable, default as Table } from '@/components/Table';
-
-import ProductionChart from './_components/BarChart/Production';
-import StatusBarChart from './_components/BarChart/Status';
 import { BarChartHorizontal2 } from './_components/BarChartHorizontal2';
 import { BarChartOverall } from './_components/BarChartOverall';
 import { BarChartVertical } from './_components/BarChartVertical';
-import InfoCard from './_components/Card/InfoCard';
 import DashboardCard from './_components/dashboard-card/dashboard-card';
 import DashboardHeader from './_components/dashboard-header';
 import { PieChartDashboard } from './_components/PieChartDashboard';
-import { TableWithRowHeader } from './_components/TableWithRowHeader';
 import { TableWithTime } from './_components/TableWithTime';
-import { TopTenSalesMan } from './_components/TopTenSalesMan';
-import { getApproval } from './_utils';
 import {
 	doc_rcv_columns,
 	order_entry_feed_columns,
@@ -39,6 +28,14 @@ export default function Dashboard() {
 		no_of_doc,
 		refreshAll,
 	} = useDashboardData(dataPreview);
+
+	console.log({
+		amount_and_doc,
+		order_entry,
+		amount_percentage,
+		no_of_doc,
+		refreshAll,
+	});
 
 	useEffect(() => {
 		document.title = 'Dashboard';
@@ -98,49 +95,8 @@ export default function Dashboard() {
 						no_of_doc={no_of_doc}
 					/>
 				</div>
-			</div>
-		</div>
-	);
 
-	return (
-		<div className='container px-4 py-8'>
-			<DashboardHeader />
-
-			<div className='mt-8 grid grid-cols-1 gap-8 md:grid-cols-2'>
-				<div className='col-span-1 md:col-span-2'>
-					<BarChartOverall url='/dashboard/order-entry' />
-				</div>
-				<div className='col-span-2 flex flex-col justify-center gap-4 sm:flex-row sm:flex-wrap'>
-					<TableWithRowHeader
-						title='Document Receive Due'
-						data={document_rcv_due.value}
-						isLoading={document_rcv_due.loading}
-					/>
-					<TableWithRowHeader
-						title='Acceptance Due'
-						data={acceptance_due.value}
-						isLoading={acceptance_due.loading}
-						status={status}
-						onRefresh={() => handleRefresh('acceptance_due')}
-					/>
-					<TableWithRowHeader
-						title='Maturity Due'
-						data={maturity_due.value}
-						isLoading={maturity_due.loading}
-					/>
-					<TableWithRowHeader
-						title='Payment Due'
-						data={payment_due.value}
-						isLoading={payment_due.loading}
-						status={status}
-						onRefresh={() => handleRefresh('document_rcv_due')}
-					/>
-				</div>
-
-				<div className='col-span-1 md:col-span-2'>
-					<PieChartDashboard />
-				</div>
-				<div>
+				<div className='flex flex-col gap-4 md:flex-row'>
 					<BarChartHorizontal
 						title='Challan: Issued'
 						url='/dashboard/challan-register'
@@ -150,11 +106,8 @@ export default function Dashboard() {
 						label1='amount'
 						label2='number_of_challan'
 					/>
-				</div>
-
-				<div>
 					<BarChartHorizontal
-						title='Challan: Outstanding' // TODO: Rename
+						title='Challan: Outstanding'
 						url='/dashboard/challan-register'
 						time={false}
 						total={true}
@@ -163,8 +116,7 @@ export default function Dashboard() {
 						label2='number_of_challan'
 					/>
 				</div>
-
-				<div>
+				<div className='flex flex-col gap-4 md:flex-row'>
 					<BarChartHorizontal
 						title='Warehouse: Status'
 						url='/dashboard/goods-in-warehouse'
@@ -174,18 +126,10 @@ export default function Dashboard() {
 						label1='amount'
 						label2='number_of_carton'
 					/>
-				</div>
-
-				<div>
 					<BarChartVertical />
-				</div>
-
-				<div>
 					<BarChartHorizontal2 />
 				</div>
-
-				<div>
-					{/* dfj  */}
+				<div className='flex flex-col gap-4 md:flex-row'>
 					<TableWithTime
 						title='Sample: Status'
 						url='/dashboard/sample-lead-time'
@@ -193,17 +137,13 @@ export default function Dashboard() {
 						total_title='O/S Count'
 						columns={sample_lead_time_columns}
 					/>
-				</div>
-
-				<div>
 					<TableWithTime
 						title='Order Entry Feed with number of count'
 						url='/dashboard/order-entry-feed'
 						columns={order_entry_feed_columns}
 					/>
 				</div>
-
-				<div>
+				<div className='flex flex-col gap-4 md:flex-row'>
 					<TableWithTime
 						title='PI: Issued'
 						url='/dashboard/pi-register'
@@ -212,9 +152,6 @@ export default function Dashboard() {
 						total_title='PI Count'
 						columns={pi_register_columns}
 					/>
-				</div>
-
-				<div>
 					<TableWithTime
 						title='Document Receive Log'
 						url='/dashboard/document-rcv-log'
@@ -224,24 +161,20 @@ export default function Dashboard() {
 						columns={doc_rcv_columns}
 					/>
 				</div>
-
-				<div>
+				<div className='flex flex-col gap-4 md:flex-row'>
 					<TableWithTime
 						title='LC Feed with number of count'
 						url='/dashboard/lc-feed'
 						columns={doc_rcv_columns}
 					/>
-				</div>
 
-				<div>
 					<TableWithTime
 						title='Stock: Status'
 						url='/dashboard/stock-status'
 						columns={stock_status_columns}
 					/>
 				</div>
-
-				<div>
+				<div className='flex flex-col gap-4 md:flex-row'>
 					<TableWithTime
 						title='Credit Sales Status'
 						url='/dashboard/pi-to-be-submitted'
@@ -252,11 +185,8 @@ export default function Dashboard() {
 						total2_title='Total Amount'
 					/>
 				</div>
-
-				<div>
-					{/* <TopTenSalesMan url='/dashboard/top-sales' /> */}
-				</div>
 			</div>
+			{/* <TopTenSalesMan url='/dashboard/top-sales' /> */}
 		</div>
 	);
 }

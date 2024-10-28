@@ -1265,6 +1265,10 @@ export const otherQK = {
 
 	// Carton
 	carton: () => [...otherQK.all(), 'delivery-carton'],
+	//* Party All
+	partyAll: (params) => [...otherQK.all(), 'party-all'],
+	//* Count Length
+	countLength: () => [...otherQK.all(), 'thread-count-length'],
 };
 
 // * Challan

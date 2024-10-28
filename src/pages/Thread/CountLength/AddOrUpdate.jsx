@@ -1,4 +1,5 @@
 import { useAuth } from '@/context/auth';
+import { useOtherCountLength } from '@/state/Other';
 import { useThreadCountLength } from '@/state/Thread';
 import { DevTool } from '@hookform/devtools';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
@@ -22,6 +23,8 @@ export default function Index({
 	setUpdateCountLength,
 }) {
 	const { url, updateData, postData } = useThreadCountLength();
+	const { invalidateQuery: invalidateOtherCountLength } =
+		useOtherCountLength();
 	const { user } = useAuth();
 	const { register, handleSubmit, errors, reset, control, context } = useRHF(
 		THREAD_COUNT_LENGTH_SCHEMA,
@@ -78,6 +81,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateOtherCountLength();
 	};
 	return (
 		<AddModal

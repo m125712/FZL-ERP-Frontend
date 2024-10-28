@@ -1,4 +1,5 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
+import { useOtherCountLength } from '@/state/Other';
 import { useThreadOrderInfo, useThreadOrderInfoEntry } from '@/state/Thread';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -64,9 +65,7 @@ export default function Index() {
 			: (document.title = 'Thread Shade Recipe: Entry');
 	}, []);
 
-	const { value: countLength } = useFetch(
-		`/other/thread/count-length/value/label`
-	);
+	const { data: countLength } = useOtherCountLength();
 
 	const { value: shadeRecipe } = useFetch(
 		`/other/lab-dip/shade-recipe/value/label`

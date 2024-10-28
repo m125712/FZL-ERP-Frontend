@@ -1,6 +1,6 @@
 import { FZL_LOGO } from '@/assets/img/base64';
 
-import { defaultStyle, PRIMARY_COLOR, styles } from './ui';
+import { DEFAULT_FONT_SIZE, defaultStyle, PRIMARY_COLOR, styles } from './ui';
 
 // * PDF DEFAULTS
 export const DEFAULT_A4_PAGE = ({ xMargin, headerHeight, footerHeight }) => ({
@@ -12,23 +12,21 @@ export const DEFAULT_A4_PAGE = ({ xMargin, headerHeight, footerHeight }) => ({
 });
 
 export const CUSTOM_PAGE = ({ type, xMargin, headerHeight, footerHeight }) => {
-	let width = 0,
-		height = 0;
+	let width = 285.72;
 
-	switch (type) {
-		case 'poly':
-			width = 595;
-			height = 842;
-			break;
-		case 'carton':
-			width = 595;
-			height = 842;
-			break;
-	}
+	// switch (type) {
+	// 	case 'poly':
+	// 		width = 285.72;
+	// 		break;
+	// 	case 'carton':
+	// 		width = 285.72;
+	// 		break;
+	// }
+	console.log(width);
 	return {
-		pageSize: { width, height },
+		pageSize: { width: width, height: 'auto' },
 		pageOrientation: 'portrait',
-		pageMargins: [xMargin, headerHeight, xMargin, footerHeight],
+		pageMargins: [5, 5, 5, 5],
 		defaultStyle,
 		styles,
 	};
@@ -58,14 +56,19 @@ export const getTable = (
 	cellStyle,
 });
 
-export const TableHeader = (node) => {
+export const TableHeader = (
+	node,
+	fontSize = DEFAULT_FONT_SIZE,
+	color = PRIMARY_COLOR
+) => {
 	return [
 		...node.map((nodeItem) => ({
 			text: nodeItem.name,
 			// style: nodeItem.headerStyle,
 			alignment: nodeItem.alignment,
-			color: PRIMARY_COLOR,
+			color: color,
 			bold: true,
+			fontSize: fontSize,
 		})),
 	];
 };

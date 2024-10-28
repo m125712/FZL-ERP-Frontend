@@ -3,6 +3,7 @@ import { useDeliveryPackingListDetailsByUUID } from '@/state/Delivery';
 import { useParams } from 'react-router-dom';
 
 import Pdf from '@/components/Pdf/PackingList';
+import Pdf2 from '@/components/Pdf/PackingList copy';
 
 import Information from './Information';
 import Table from './Table';
@@ -30,6 +31,17 @@ export default function Index() {
 		}
 	}, [data]);
 	// ! FOR TESTING
+	// ! FOR TESTING
+	const [data3, setData2] = useState('');
+
+	useEffect(() => {
+		if (data && data?.packing_list_entry) {
+			Pdf2(data)?.getDataUrl((dataUrl) => {
+				setData2(dataUrl);
+			});
+		}
+	}, [data]);
+	// ! FOR TESTING
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -38,6 +50,10 @@ export default function Index() {
 		<div className='space-y-2'>
 			<iframe
 				src={data2}
+				className='h-[40rem] w-full rounded-md border-none'
+			/>
+			<iframe
+				src={data3}
 				className='h-[40rem] w-full rounded-md border-none'
 			/>
 			<Information packing_list={data} />

@@ -400,3 +400,14 @@ export const useOtherCarton = () =>
 		queryKey: otherQK.carton(),
 		url: '/other/delivery/carton/value/label',
 	});
+//*GET All Party
+export const useOtherPartyAll = () =>
+	createGlobalState({
+		queryKey: otherQK.partyAll(),
+		url: `/other/party/value/label`,
+	});
+export const useOtherCountLength = () =>
+	createGlobalState({
+		queryKey: otherQK.countLength(),
+		url: `/other/thread/count-length/value/label`,
+	});

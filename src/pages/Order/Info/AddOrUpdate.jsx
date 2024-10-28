@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useOrderInfo } from '@/state/Order';
-import { useOtherOrderInfoValueLabel } from '@/state/Other';
+import {
+	useOtherBuyer,
+	useOtherFactoryByPartyUUID,
+	useOtherMarketing,
+	useOtherMerchandiserByPartyUUID,
+	useOtherOrderInfoValueLabel,
+	useOtherPartyAll,
+} from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
@@ -44,18 +51,12 @@ export default function Index({
 	} = useRHF(ORDER_INFO_SCHEMA, ORDER_INFO_NULL);
 
 	const [partyId, setPartyId] = useState(getValues('party_uuid'));
-	const { value: ref_order } = useFetch('/other/order/info/value/label');
-	const { value: party } = useFetch('/other/party/value/label');
-	const { value: buyer } = useFetch('/other/buyer/value/label');
-	const { value: marketing } = useFetch('/other/marketing/value/label');
-	const { value: merchandiser } = useFetch(
-		`/other/merchandiser/value/label/${partyId}`,
-		[partyId]
-	);
-	const { value: factory } = useFetch(
-		`/other/factory/value/label/${partyId}`,
-		[partyId]
-	);
+	const { data: ref_order } = useOtherOrderInfoValueLabel();
+	const { data: party } = useOtherPartyAll();
+	const { data: buyer } = useOtherBuyer();
+	const { data: marketing } = useOtherMarketing();
+	const { data: merchandiser } = useOtherMerchandiserByPartyUUID(partyId);
+	const { data: factory } = useOtherFactoryByPartyUUID(partyId);
 	const { invalidateQuery: invalidateOrderInfoValueLabel } =
 		useOtherOrderInfoValueLabel();
 	// const getResult = (key) =>

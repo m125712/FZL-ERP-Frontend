@@ -167,9 +167,7 @@ export default function Index() {
 				])
 					.then(() => reset(Object.assign({}, PACKING_LIST_NULL)))
 					.then(() => {
-						navigate(
-							`/delivery/zipper-packing-list/details/${updatedId}`
-						);
+						navigate(`/delivery/zipper-packing-list/${data?.uuid}`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -340,6 +338,7 @@ export default function Index() {
 								'Warehouse',
 								'Delivered',
 								'Quantity',
+								'Poly QTY',
 								'Short QTY',
 								'Reject QTY',
 								'Balance QTY',
@@ -442,6 +441,18 @@ export default function Index() {
 										getValues(
 											`packing_list_entry[${index}].quantity`
 										) === 0
+									}
+									{...{ register, errors }}
+								/>
+							</td>
+							<td className={`w-32 ${rowClass}`}>
+								<Input
+									label={`packing_list_entry[${index}].poli_quantity`}
+									is_title_needed='false'
+									height='h-8'
+									dynamicerror={
+										errors?.packing_list_entry?.[index]
+											?.poli_quantity
 									}
 									{...{ register, errors }}
 								/>

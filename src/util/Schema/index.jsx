@@ -48,7 +48,7 @@ export {
 	PHONE_NUMBER,
 	PHONE_NUMBER_REQUIRED,
 	STRING,
-	STRING_REQUIRED,
+	STRING_REQUIRED
 };
 
 // Library
@@ -524,7 +524,7 @@ export const ORDER_SCHEMA = {
 	item: UUID_REQUIRED,
 	zipper_number: UUID_REQUIRED,
 	lock_type: UUID_REQUIRED,
-	
+
 	end_type: UUID.when('order_type', {
 		is: (value) => value === 'full',
 		then: (schema) => schema.required('Required'),
@@ -1463,6 +1463,17 @@ export const PACKING_LIST_SCHEMA = {
 							yup.ref('balance_quantity'),
 							'Beyond Balance Quantity'
 						),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
+			poli_quantity: yup.number().when('is_checked', {
+				is: true,
+				then: (Schema) =>
+					Schema.typeError('Must be a number').required(
+						'Poly Quantity is required'
+					),
 				otherwise: (Schema) =>
 					Schema.nullable().transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? null : value

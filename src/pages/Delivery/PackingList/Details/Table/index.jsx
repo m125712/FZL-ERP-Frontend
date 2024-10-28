@@ -56,11 +56,17 @@ export default function Index({ packing_list_entry }) {
 				accessorKey: 'balance_quantity',
 				header: 'Balance Qty',
 				enableColumnFilter: false,
-				cell: (info) =>info.getValue(),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'quantity',
 				header: 'Qty',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'poli_quantity',
+				header: 'Poly',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

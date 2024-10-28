@@ -1,5 +1,5 @@
 import { useAuth } from '@/context/auth';
-import { useMetalTCProduction } from '@/state/Metal';
+import { useMetalFProduction, useMetalTCProduction } from '@/state/Metal';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
@@ -30,6 +30,8 @@ export default function Index({
 	setUpdateFinishingProd,
 }) {
 	const { postData } = useMetalTCProduction();
+	const { invalidateQuery } = useMetalFProduction();
+	
 	const { user } = useAuth();
 
 	const MAX_PROD_PCS = Math.min(
@@ -77,6 +79,8 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateQuery();
 	};
 
 	return (

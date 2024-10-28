@@ -1,18 +1,22 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import { JoinInput, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { DevTool } from '@hookform/devtools';
 import {
-	NUMBER_REQUIRED,
+	useSliderAssemblyProductionEntry,
+	useSliderColoringProduction,
+} from '@/state/Slider';
+import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { JoinInput, Textarea } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
+import {
 	NUMBER_DOUBLE_REQUIRED,
+	NUMBER_REQUIRED,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
 } from '@util/Schema';
-
-import nanoid from '@/lib/nanoid';
-import { useSliderAssemblyProductionEntry, useSliderColoringProduction } from '@/state/Slider';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -29,19 +33,27 @@ export default function Index({
 	setUpdateSliderProd,
 }) {
 	const { postData, url } = useSliderAssemblyProductionEntry();
-	const { invalidateQuery} = useSliderColoringProduction();
+	const { invalidateQuery } = useSliderColoringProduction();
 	const { user } = useAuth();
 
-	const MAX_PROD_KG = Number(updateSliderProd.balance_quantity).toFixed(3);
+	const MAX_PROD_KG = Math.floor(
+		Math.min(
+			Number(updateSliderProd?.u_top_quantity) / 2,
+			updateSliderProd.coloring_stock,
+			updateSliderProd.end_type_name === 'Close End'
+				? updateSliderProd.h_bottom_quantity
+				: updateSliderProd.box_pin_quantity
+		)
+	);
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
 		useRHF(
 			{
 				...SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA,
 				production_quantity: NUMBER_REQUIRED.max(
-					updateSliderProd?.coloring_stock,
+					MAX_PROD_KG,
 					'Beyond Max'
-				),
+				).moreThan(0, 'More than 0'),
 				weight: NUMBER_DOUBLE_REQUIRED,
 			},
 			SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL
@@ -106,14 +118,14 @@ export default function Index({
 				title='Production Quantity'
 				label='production_quantity'
 				unit='PCS'
-				sub_label={`MAX: ${Number(updateSliderProd?.coloring_stock)} PCS`}
+				sub_label={`MAX: ${MAX_PROD_KG} PCS`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
 				title='Production Weight'
 				label='weight'
 				unit='KG'
-				sub_label={`MAX: ${Number(updateSliderProd?.coloring_stock)} KG`}
+				sub_label={`MAX: ${MAX_PROD_KG} KG`}
 				{...{ register, errors }}
 			/>
 			<JoinInput

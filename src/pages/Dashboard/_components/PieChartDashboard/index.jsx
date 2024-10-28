@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { RefreshCcw, TrendingUp } from 'lucide-react';
 import { Pie, PieChart, ResponsiveContainer } from 'recharts';
-import { useFetch } from '@/hooks';
 
 import {
 	Card,
@@ -20,6 +19,24 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from '@/components/ui/chart';
+
+// const chartData = [
+// 	{
+// 		name: 'total_acceptance_due',
+// 		amount: 275,
+// 		fill: 'var(--color-total_acceptance_due)',
+// 	},
+// 	{
+// 		name: 'total_maturity_due',
+// 		amount: 200,
+// 		fill: 'var(--color-total_maturity_due)',
+// 	},
+// 	{
+// 		name: 'total_payment_due',
+// 		amount: 187,
+// 		fill: 'var(--color-total_payment_due)',
+// 	},
+// ];
 
 const chartConfig = {
 	amount: {
@@ -39,30 +56,57 @@ const chartConfig = {
 	},
 };
 
-export function PieChartDashboard(props) {
-	const [status, setStatus] = useState(false);
-	const { value: data, loading } = useFetch(`/dashboard/amount-percentage`, [
-		props.status,
-	]);
-	const { value: data2, loading2 } = useFetch(`/dashboard/no-of-doc`, [
-		props.status,
-	]);
-
-	if (loading || loading2) {
-		return <span className='loading loading-dots loading-lg z-50' />;
+export function PieChartDashboard(
+	{ amount_percentage, no_of_doc } = {
+		amount_percentage: [],
+		no_of_doc: [],
 	}
+) {
+	// const { value: data, loading } = useFetch(`/dashboard/amount-percentage`);
+	// const { value: data2, loading2 } = useFetch(`/dashboard/no-of-doc`);
 
-	if (!data || data.length === 0 || !data2 || data2.length === 0) {
-		return <div>No data available</div>;
-	}
+	// const data1 = [
+	// 	{
+	// 		name: 'total_acceptance_due',
+	// 		amount: 500,
+	// 	},
+	// 	{
+	// 		name: 'total_maturity_due',
+	// 		amount: 300,
+	// 	},
+	// 	{
+	// 		name: 'total_payment_due',
+	// 		amount: 200,
+	// 	},
+	// ];
+	// const data3 = [
+	// 	{
+	// 		name: 'total_acceptance_due',
+	// 		amount: 200,
+	// 	},
+	// 	{
+	// 		name: 'total_maturity_due',
+	// 		amount: 100,
+	// 	},
+	// 	{
+	// 		name: 'total_payment_due',
+	// 		amount: 60,
+	// 	},
+	// ];
 
-	const mainChartData = data.map((item) => ({
+	// if (loading || loading2) {
+	// 	return <span className='loading loading-dots loading-lg z-50' />;
+	// }
+
+	// if (!data || data.length === 0 || !data2 || data2.length === 0) {
+	// 	return <div>No data available</div>;
+	// }
+	const mainChartData = amount_percentage.map((item) => ({
 		...item,
 		amount: parseFloat(item.amount),
 		fill: `var(--color-${item.name})`,
 	}));
-
-	const nestedChartData = data2.map((item) => ({
+	const nestedChartData = no_of_doc.map((item) => ({
 		...item,
 		amount: item.amount,
 		fill: `var(--color-${item.name})`,

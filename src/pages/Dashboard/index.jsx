@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BarChartHorizontal } from '@/pages/Dashboard/_components/BarChartHorizontal';
+import { addDays, format } from 'date-fns';
 import { Pie } from 'react-chartjs-2';
 import { defaultFetch, useFetch } from '@/hooks';
 
@@ -11,6 +12,7 @@ import { BarChartHorizontal2 } from './_components/BarChartHorizontal2';
 import { BarChartOverall } from './_components/BarChartOverall';
 import { BarChartVertical } from './_components/BarChartVertical';
 import InfoCard from './_components/Card/InfoCard';
+import DashboardCard from './_components/dashboard-card/dashboard-card';
 import DashboardHeader from './_components/dashboard-header';
 import { PieChartDashboard } from './_components/PieChartDashboard';
 import { TableWithRowHeader } from './_components/TableWithRowHeader';
@@ -25,16 +27,80 @@ import {
 	sample_lead_time_columns,
 	stock_status_columns,
 } from './columns';
+import { fake_order_entry } from './fakeData';
+import useDashboardData from './hooks/useDashboardData';
 
 export default function Dashboard() {
-	const payment_due = useFetch('/dashboard/payment-due');
-	const maturity_due = useFetch('/dashboard/maturity-due');
-	const acceptance_due = useFetch('/dashboard/acceptance-due');
-	const document_rcv_due = useFetch('/dashboard/document-rcv-due');
+	const [dataPreview, setDataPreview] = useState('demo');
+	const {
+		amount_and_doc,
+		order_entry,
+		amount_percentage,
+		no_of_doc,
+		refreshAll,
+	} = useDashboardData(dataPreview);
 
 	useEffect(() => {
 		document.title = 'Dashboard';
 	}, []);
+
+	return (
+		<div className='relative'>
+			<DashboardHeader
+				dataPreview={dataPreview}
+				setDataPreview={setDataPreview}
+				handleRefresh={refreshAll}
+			/>
+			<div className='space-y-6 p-6 px-4 lg:px-8'>
+				<BarChartOverall
+					data={
+						dataPreview === 'demo' ? fake_order_entry : order_entry
+					}
+				/>
+				<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
+					<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
+						<DashboardCard
+							title='Payment Due'
+							subtitle='# Pending'
+							totalValue={amount_and_doc?.total_payment_due}
+							pendingValue={
+								amount_and_doc?.number_of_pending_payment_due
+							}
+						/>
+						<DashboardCard
+							title='Maturity Due'
+							subtitle='# Pending'
+							totalValue={amount_and_doc?.total_maturity_due}
+							pendingValue={
+								amount_and_doc?.number_of_pending_maturity_due
+							}
+						/>
+						<DashboardCard
+							title='Acceptance Due'
+							subtitle='# Pending'
+							totalValue={amount_and_doc?.total_acceptance_due}
+							pendingValue={
+								amount_and_doc?.number_of_pending_acceptance_due
+							}
+						/>
+						<DashboardCard
+							title='Document Receive Due'
+							subtitle='# Pending'
+							totalValue={amount_and_doc?.total_doc_rcv_due}
+							pendingValue={
+								amount_and_doc?.number_of_pending_doc_rcv
+							}
+						/>
+					</div>
+
+					<PieChartDashboard
+						amount_percentage={amount_percentage}
+						no_of_doc={no_of_doc}
+					/>
+				</div>
+			</div>
+		</div>
+	);
 
 	return (
 		<div className='container px-4 py-8'>

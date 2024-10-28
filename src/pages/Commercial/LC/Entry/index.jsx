@@ -133,7 +133,7 @@ export default function Index() {
 				handover_date: formatDate(data?.handover_date),
 				shipment_date: formatDate(data?.shipment_date),
 				expiry_date: formatDate(data?.expiry_date),
-				ud_received: data.ud_received ? 1 : 0,
+				ud_received: formatDate(data?.ud_received),
 				ud_no: data.ud_no ? 1 : 0,
 				problematical: data.problematical ? 1 : 0,
 				epz: data.epz ? 1 : 0,

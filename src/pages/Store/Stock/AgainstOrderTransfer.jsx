@@ -1,7 +1,4 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import {
 	useCommonOrderAgainstCoilRMLog,
 	useCommonOrderAgainstTapeRMLog,
@@ -26,14 +23,20 @@ import {
 	useOrderAgainstVislonFinishingRMLog,
 	useOrderAgainstVislonTMRMLog,
 } from '@/state/Vislon';
-import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import getTransactionArea from '@/util/TransactionArea';
 import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, ReactSelect } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
 import {
 	MATERIAL_TRX_AGAINST_ORDER_NULL,
 	MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
+	NUMBER_DOUBLE_REQUIRED,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
+import getTransactionArea from '@/util/TransactionArea';
 
 export default function Index({
 	modalId = '',
@@ -84,6 +87,7 @@ export default function Index({
 		trx_quantity: MATERIAL_TRX_AGAINST_ORDER_SCHEMA.trx_quantity
 			.moreThan(0)
 			.max(Number(updateMaterialDetails?.stock).toFixed(3)),
+		weight: MATERIAL_TRX_AGAINST_ORDER_SCHEMA.weight.required('required'),
 	};
 	const { data: order } = useOtherOrderDescription();
 
@@ -205,6 +209,12 @@ export default function Index({
 			<Input
 				label='trx_quantity'
 				sub_label={`Max: ${updateMaterialDetails?.stock}`}
+				placeholder={`Max: ${updateMaterialDetails?.stock}`}
+				{...{ register, errors }}
+			/>
+			<Input
+				label='weight'
+				// sub_label={`Max: ${updateMaterialDetails?.stock}`}
 				placeholder={`Max: ${updateMaterialDetails?.stock}`}
 				{...{ register, errors }}
 			/>

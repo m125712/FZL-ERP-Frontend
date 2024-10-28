@@ -120,7 +120,6 @@ export default function Index() {
 							value={shade_recipe?.filter(
 								(item) => item.value == recipe_uuid
 							)}
-							filterOption={null}
 							onChange={(e) =>
 								handleSwatchStatus(e, info.row.index)
 							}

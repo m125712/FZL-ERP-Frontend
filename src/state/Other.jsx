@@ -19,7 +19,7 @@ export const useOtherHRUserByDesignation = (designation) =>
 export const useOtherParty = (params) =>
 	createGlobalState({
 		queryKey: otherQK.party(params),
-		url: `/other/party/value/label?marketing=${params}`,
+		url: params? `/other/party/value/label?marketing=${params}`: '/other/party/value/label',
 	});
 
 // GET OTHER MARKETING USER

@@ -1,3 +1,5 @@
+import { formatDistanceStrict } from 'date-fns';
+
 import { DateTime } from '@/ui';
 
 export const sample_lead_time_columns = [
@@ -8,22 +10,37 @@ export const sample_lead_time_columns = [
 		cell: (info) => info.getValue(),
 	},
 	{
-		accessorKey: 'issue_date',
-		header: 'Issue Date',
+		accessorFn: (row) => {
+			let date = formatDistanceStrict(
+				row.issue_date,
+				row.delivery_last_date || Date.now(),
+				{ unit: 'day' }
+			);
+
+			return date;
+		},
+		id: 'day_passed',
+		header: 'Day Passed',
 		enableColumnFilter: false,
-		cell: (info) => <DateTime date={info.getValue()} isTime={false} />,
+		cell: (info) => info.getValue(),
 	},
-	{
-		accessorKey: 'delivery_last_date',
-		header: 'Last Delivery Date',
-		enableColumnFilter: false,
-		cell: (info) =>
-			info.getValue() ? (
-				<DateTime date={info.getValue()} isTime={false} />
-			) : (
-				'N/A'
-			),
-	},
+	// {
+	// 	accessorKey: 'issue_date',
+	// 	header: 'Issue Date',
+	// 	enableColumnFilter: false,
+	// 	cell: (info) => <DateTime date={info.getValue()} isTime={false} />,
+	// },
+	// {
+	// 	accessorKey: 'delivery_last_date',
+	// 	header: 'Last Delivery Date',
+	// 	enableColumnFilter: false,
+	// 	cell: (info) =>
+	// 		info.getValue() ? (
+	// 			<DateTime date={info.getValue()} isTime={false} />
+	// 		) : (
+	// 			'N/A'
+	// 		),
+	// },
 	{
 		accessorKey: 'status',
 		header: 'Status',

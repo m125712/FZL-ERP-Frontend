@@ -1,6 +1,5 @@
 import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
-import { useFetch } from '@/hooks';
 
 import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../ui';
 import { company, getEmptyColumn } from '../utils';
@@ -11,9 +10,6 @@ const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 
 export const getPageHeader = (data) => {
 	const created_at = getDateFormate(data?.created_at);
-	// const updated_at = getDateFormate(data?.updated_at);
-	// const delivery_date = getDateFormate(data?.delivery_date);
-	// const pi_number = data?.pi_number;
 	const buyer = new Set();
 	data?.pi_cash_entry?.forEach((item) => {
 		buyer.add(item.buyer_name);
@@ -58,9 +54,9 @@ export const getPageHeader = (data) => {
 
 			// * Start of table
 			[
-				{ text: 'Party:', bold: true, color: PRIMARY_COLOR },
+				{ text: 'Party', bold: true, color: PRIMARY_COLOR },
 				data?.party_name,
-				{ text: 'Advising Bank:', bold: true, color: PRIMARY_COLOR },
+				{ text: 'Advising Bank', bold: true, color: PRIMARY_COLOR },
 				data?.bank_name,
 			],
 			[
@@ -69,12 +65,11 @@ export const getPageHeader = (data) => {
 
 				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
 				{ text: data?.bank_address },
-				//{ text: 'Merchandiser', bold: true, color: PRIMARY_COLOR },
 			],
 			[
-				{ text: 'Buyer:', bold: true, color: PRIMARY_COLOR },
+				{ text: 'Buyer', bold: true, color: PRIMARY_COLOR },
 				{ text: [...buyer].join(', ') },
-				{ text: 'SWIFT:', bold: true, color: PRIMARY_COLOR },
+				{ text: 'SWIFT', bold: true, color: PRIMARY_COLOR },
 				data?.bank_swift_code,
 			],
 

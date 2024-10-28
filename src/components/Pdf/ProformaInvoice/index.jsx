@@ -312,9 +312,10 @@ export default function Index(data) {
 			},
 			{
 				image: PI_MD_SIGN.src,
-				width: 100,
-				height: 100,
+				width: 80,
+				height: 90,
 				alignment: 'right',
+				margin: [0, -28, 0, 0],
 			},
 		],
 	});

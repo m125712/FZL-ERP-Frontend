@@ -12,7 +12,7 @@ const node = [
 	getTable('serial_number', 'S/N'),
 	getTable('order_number', 'O/N'),
 	getTable('party_name', 'Party Name'),
-	getTable('item_description', 'Item Name'),
+	getTable('item', 'Item Name'),
 	getTable('production_quantity', 'Quantity(pcs)', 'right'),
 	getTable('weight', 'Weight(kg)', 'right'),
 	getTable('remarks', 'Remarks'),
@@ -33,7 +33,11 @@ export default function Index(information) {
 		(acc, item) => acc + Number(item.production_quantity),
 		0
 	);
-
+	const tableData = data.map((item) => ({
+		...item,
+		item: item?.item_description ? item?.item_description : item?.item_name,
+	}));
+	console.log(tableData);
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
 			xMargin,
@@ -75,7 +79,7 @@ export default function Index(information) {
 						TableHeader(node),
 
 						// * Body
-						...data?.map((item) =>
+						...tableData?.map((item) =>
 							node.map((nodeItem) => ({
 								text:
 									nodeItem.field === 'order_number' &&

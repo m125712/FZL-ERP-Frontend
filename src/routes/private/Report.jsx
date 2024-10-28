@@ -1,4 +1,5 @@
 import DailyChallan from '@/pages/Report/DailyChallan';
+import DeliveryStatement from '@/pages/Report/DeliveryStatement';
 import LCDue from '@/pages/Report/LC';
 import PIRegister from '@/pages/Report/PIRegister';
 import PIToBeSubmit from '@/pages/Report/PIToBeSubmit';
@@ -65,6 +66,13 @@ export const ReportRoutes = [
 				path: '/report/production-report/sm',
 				element: <ProductionReportSM />,
 				page_name: 'report__production_report_sm',
+				actions: ['read'],
+			},
+			{
+				name: 'Delivery Statement',
+				path: '/report/delivery-statement',
+				element: <DeliveryStatement />,
+				page_name: 'report__delivery_statement',
 				actions: ['read'],
 			},
 		],

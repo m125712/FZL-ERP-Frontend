@@ -1318,4 +1318,6 @@ export const reportQK = {
 
 	// Production Report
 	productionReport: (url) => [...reportQK.all(), `production-report-${url}`],
+	// Delivery Statement
+	deliveryStatement: () => [...reportQK.all(), 'delivery-statement-report'],
 };

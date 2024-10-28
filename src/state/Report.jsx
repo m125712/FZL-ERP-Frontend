@@ -25,7 +25,6 @@ export const usePIRegister = () =>
 		url: '/report/pi-register-report',
 	});
 
-
 export const usePIToBeSubmitted = () =>
 	createGlobalState({
 		queryKey: reportQK.piToBeSubmitted(),
@@ -43,4 +42,9 @@ export const useProductionReport = (url) =>
 	createGlobalState({
 		queryKey: reportQK.productionReport(url),
 		url: `/report/production-report-${url}`,
+	});
+export const useDeliveryStatement = (url) =>
+	createGlobalState({
+		queryKey: reportQK.deliveryStatement(url),
+		url: `/report/delivery-statement-report`,
 	});

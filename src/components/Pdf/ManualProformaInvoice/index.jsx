@@ -44,10 +44,12 @@ export default function Index(data) {
 	});
 	const entry = manual_pi_entry.map((item) => ({
 		...item,
-		unit_price: item.unit_price + '/dzn',
+		unit_price: item.is_zipper
+			? item.unit_price + '/dzn'
+			: item.unit_price + '/cone',
 		quantity: item.is_zipper
-			? item.quantity + '/pcs'
-			: item.quantity + '/cons',
+			? item.quantity + ' pcs'
+			: item.quantity + ' cone',
 		value: item.quantity * (item.unit_price / 12),
 	}));
 	const totalQuantityZipper = manual_pi_entry

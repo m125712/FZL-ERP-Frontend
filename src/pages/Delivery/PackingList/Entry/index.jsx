@@ -1,30 +1,27 @@
 import { Suspense, useEffect, useState } from 'react';
-import {
-	useDeliveryPackingList,
-	useDeliveryPackingListByOrderInfoUUID,
-	useDeliveryPackingListDetailsByUUID,
-	useDeliveryPackingListEntry,
-} from '@/state/Delivery';
+import { useDeliveryPackingList, useDeliveryPackingListByOrderInfoUUID, useDeliveryPackingListDetailsByUUID, useDeliveryPackingListEntry } from '@/state/Delivery';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
+
+
 import { DeleteModal } from '@/components/Modal';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
-import {
-	CheckBoxWithoutLabel,
-	DynamicDeliveryField,
-	Input,
-	RemoveButton,
-} from '@/ui';
+import { CheckBoxWithoutLabel, DynamicDeliveryField, Input, RemoveButton } from '@/ui';
+
+
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
 import { PACKING_LIST_NULL, PACKING_LIST_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
+
+
 import Header from './Header';
+
 
 export default function Index() {
 	const { uuid } = useParams();
@@ -74,13 +71,16 @@ export default function Index() {
 				packingListEntries?.packing_list_entry
 			);
 		}
-	}, [packingListEntries, isUpdate]);
-
-	useEffect(() => {
 		if (isUpdate && details) {
 			reset(details);
 		}
-	}, [details, isUpdate]);
+	}, [packingListEntries, isUpdate, details]);
+
+	// useEffect(() => {
+	// 	if (isUpdate && details) {
+	// 		reset(details);
+	// 	}
+	// }, [details, isUpdate]);
 
 	// packing_list_entry
 	const { fields: packingListEntryField } = useFieldArray({

@@ -57,6 +57,12 @@ export default function Index({ challan }) {
 				enableColumnFilter: false,
 			},
 			{
+				accessorKey: 'poly_quantity',
+				header: 'Poly QTY',
+				cell: (info) => info.getValue(),
+				enableColumnFilter: false,
+			},
+			{
 				accessorKey: 'short_quantity',
 				header: 'Short QTY',
 				cell: (info) => info.getValue(),

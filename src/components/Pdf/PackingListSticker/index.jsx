@@ -21,13 +21,11 @@ const node = [
 	getTable('style', 'Style'),
 	getTable('color', 'Color'),
 	getTable('size', 'Size'),
-	getTable('quantity', 'Qty'),
-	getTable('poli_quantity', 'Poly'),
+	getTable('quantity', 'Qty', 'right'),
+	getTable('poli_quantity', 'Poly', 'right'),
 ];
 
 export default function Index(data) {
-	// const headerHeight = 170;
-	// let footerHeight = 50;
 	const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 	let { packing_list_entry } = data;
 	let totalQuantity = packing_list_entry?.reduce((acc, item) => {
@@ -41,25 +39,7 @@ export default function Index(data) {
 	const pdfDocGenerator = pdfMake.createPdf({
 		...CUSTOM_PAGE({
 			xMargin,
-			// headerHeight,
-			// footerHeight,
 		}),
-
-		// * Page Header
-		// header: {
-		// 	table: getPageHeader(data),
-		// 	layout: 'noBorders',
-		// 	margin: [5, 5, 5, 0],
-		// },
-		// // * Page Footer
-		// footer: (currentPage, pageCount) => ({
-		// 	table: getPageFooter({
-		// 		currentPage,
-		// 		pageCount,
-		// 	}),
-		// 	margin: [xMargin, 2],
-		// 	fontSize: DEFAULT_FONT_SIZE - 2,
-		// }),
 
 		// * Main Table
 		content: [
@@ -116,7 +96,7 @@ export default function Index(data) {
 								fontSize: DEFAULT_FONT_SIZE - 2,
 							},
 							{
-								text: `${data?.challan_number}`,
+								text: `${data?.packing_list_wise_rank}-(${data?.packing_number})`,
 
 								fontSize: DEFAULT_FONT_SIZE - 2,
 								colSpan: 2,
@@ -187,13 +167,13 @@ export default function Index(data) {
 							{
 								text: totalQuantity,
 								bold: true,
-								alignment: 'left',
+								alignment: 'right',
 								fontSize: DEFAULT_FONT_SIZE - 2,
 							},
 							{
 								text: totalPoly,
 								bold: true,
-								alignment: 'left',
+								alignment: 'right',
 								fontSize: DEFAULT_FONT_SIZE - 2,
 							},
 						],

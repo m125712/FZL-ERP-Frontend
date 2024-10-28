@@ -66,7 +66,7 @@ export default function Index({ packing_list_entry }) {
 			},
 			{
 				accessorKey: 'poli_quantity',
-				header: 'Poly',
+				header: 'Poly Qty',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

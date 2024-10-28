@@ -546,6 +546,7 @@ export default function Index() {
 							watch,
 							is_logo_body: getValues('is_logo_body'),
 							is_logo_puller: getValues('is_logo_puller'),
+							isUpdate,
 						}}
 						setType={setType}
 					/>

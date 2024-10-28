@@ -13,7 +13,8 @@ const node = [
 	getTable('style', 'Style'),
 	getTable('color', 'Color'),
 	getTable('size', 'Size'),
-	getTable('quantity', 'Quantity'),
+	getTable('quantity', 'Quantity', 'right'),
+	getTable('poli_quantity', 'Poly', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
 
@@ -23,6 +24,10 @@ export default function Index(data) {
 	let { packing_list_entry } = data;
 	let totalQuantity = packing_list_entry?.reduce((acc, item) => {
 		const quantity = parseInt(item.quantity, 10) || 0;
+		return acc + quantity;
+	}, 0);
+	let totalPoly = packing_list_entry?.reduce((acc, item) => {
+		const quantity = parseInt(item.poli_quantity, 10) || 0;
 		return acc + quantity;
 	}, 0);
 
@@ -54,7 +59,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', '*', '*', '*', '*'],
+					widths: ['*', '*', '*', '*', '*', '*', '*'],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -69,7 +74,7 @@ export default function Index(data) {
 						),
 						[
 							{
-								text: `Total Quantity:`,
+								text: `Total`,
 								alignment: 'right',
 								colSpan: 4,
 								bold: true,
@@ -77,10 +82,16 @@ export default function Index(data) {
 							{},
 							{},
 							{},
+
 							{
 								text: totalQuantity,
 								bold: true,
-								alignment: 'left',
+								alignment: 'right',
+							},
+							{
+								text: totalPoly,
+								bold: true,
+								alignment: 'right',
 							},
 							{},
 						],

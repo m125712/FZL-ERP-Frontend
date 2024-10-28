@@ -19,7 +19,9 @@ export const useOtherHRUserByDesignation = (designation) =>
 export const useOtherParty = (params) =>
 	createGlobalState({
 		queryKey: otherQK.party(params),
-		url: params? `/other/party/value/label?marketing=${params}`: '/other/party/value/label',
+		url: params
+			? `/other/party/value/label?marketing=${params}`
+			: '/other/party/value/label',
 	});
 
 // GET OTHER MARKETING USER
@@ -64,6 +66,13 @@ export const useOtherOrder = () =>
 	createGlobalState({
 		queryKey: otherQK.order(),
 		url: '/other/order/info/value/label',
+	});
+
+// GET OTHER ORDER FOR PACKING LIST
+export const useOtherOrderPackingList = () =>
+	createGlobalState({
+		queryKey: otherQK.orderPackingList(),
+		url: '/other/order/info/value/label?page=challan',
 	});
 
 // GET THREAD ORDER

@@ -26,14 +26,14 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'uuid',
+				accessorKey: 'packing_number',
 				header: 'ID',
 				cell: (info) => {
-					const { packing_number } = info.row.original;
+					const { uuid } = info.row.original;
 					return (
 						<LinkWithCopy
-							title={packing_number}
-							id={info.getValue()}
+							title={info.getValue()}
+							id={uuid}
 							uri='/delivery/zipper-packing-list'
 						/>
 					);
@@ -54,14 +54,14 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'order_info_uuid',
+				accessorKey: 'order_number',
 				header: 'O/N',
 				cell: (info) => {
-					const { order_number } = info.row.original;
+					const { order_info_uuid } = info.row.original;
 					return (
 						<LinkWithCopy
-							title={order_number}
-							id={info.getValue()}
+							title={info.getValue()}
+							id={order_info_uuid}
 							uri='/order/details'
 						/>
 					);
@@ -102,7 +102,17 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+			{
+				accessorKey: 'count',
+				header: 'Count',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { packing_list_wise_rank } = info.row.original;
+					const { packing_list_wise_count } = info.row.original;
 
+					return `${packing_list_wise_rank}/${packing_list_wise_count}`;
+				},
+			},
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',

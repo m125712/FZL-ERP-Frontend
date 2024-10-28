@@ -270,6 +270,7 @@ export default function Index() {
 								'Size',
 								'Delivered',
 								'Quantity',
+								'Poly Qty',
 								'Short QTY',
 								'Reject QTY',
 								'Remarks',
@@ -302,9 +303,9 @@ export default function Index() {
 											`challan_entry[${index}].packing_number`
 										)}
 										id={getValues(
-											`challan_entry[${index}].packing_list_uuid`
+											`packing_list_uuids[${index}]`
 										)}
-										uri='/delivery/packing-list'
+										uri='/delivery/zipper-packing-list'
 									/>
 								</td>
 								<td className={`w-32 ${rowClass}`}>
@@ -329,6 +330,11 @@ export default function Index() {
 								<td className={`${rowClass}`}>
 									{getValues(
 										`challan_entry[${index}].quantity`
+									)}
+								</td>{' '}
+								<td className={`${rowClass}`}>
+									{getValues(
+										`challan_entry[${index}].poly_quantity`
 									)}
 								</td>
 								<td className={`${rowClass}`}>
@@ -356,7 +362,6 @@ export default function Index() {
 										`challan_entry[${index}].reject_quantity`
 									)}
 								</td>
-
 								<td className={`${rowClass}`}>
 									{getValues(
 										`challan_entry[${index}].remarks`

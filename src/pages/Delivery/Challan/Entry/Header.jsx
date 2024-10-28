@@ -1,12 +1,13 @@
+import { useEffect } from 'react';
 import {
 	useOtherHRUserByDesignation,
 	useOtherOrder,
+	useOtherOrderPackingList,
 	useOtherPackingListByOrderInfoUUID,
 	useOtherPackingListByOrderInfoUUIDAndChallanUUID,
 	useOtherVehicle,
 } from '@/state/Other';
 import { Trash2 } from 'lucide-react';
-import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 
 import { DeleteModal } from '@/components/Modal';
@@ -34,7 +35,9 @@ export default function Header({
 	deleteItem,
 }) {
 	const { data: vehicles } = useOtherVehicle();
-	const { data: orders } = useOtherOrder();
+	const { data: orders } = isUpdate
+		? useOtherOrder()
+		: useOtherOrderPackingList();
 	const { data: packingList } = isUpdate
 		? useOtherPackingListByOrderInfoUUIDAndChallanUUID(
 				watch('order_info_uuid'),

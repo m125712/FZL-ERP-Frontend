@@ -371,7 +371,7 @@ export const dyeingQK = {
 
 	// * dummy query for updating swatches
 	dyeingDummy: () => [...dyeingQK.all(), 'dummy'],
-	
+
 	// * planning
 	planning: () => [...dyeingQK.all(), 'planning'],
 	planningByUUID: (uuid) => [...dyeingQK.planning(), uuid],
@@ -1043,6 +1043,7 @@ export const otherQK = {
 	threadOrders: () => [...otherQK.all(), 'thread-orders'],
 	//Order
 	order: () => [...otherQK.all(), 'order'],
+	orderPackingList: () => [...otherQK.all(), 'order-packing-list'],
 	orderDescription: () => [...otherQK.all(), 'order-description'],
 	orderEntry: () => [...otherQK.all(), 'order-entry'],
 	orderDescriptionByOrderNumber: (orderNumber) => [

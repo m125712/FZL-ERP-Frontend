@@ -40,17 +40,38 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'uuid',
+				accessorKey: 'challan_number',
 				header: 'ID',
 				cell: (info) => {
-					const { challan_number } = info.row.original;
+					const { uuid } = info.row.original;
 					return (
 						<LinkWithCopy
-							title={challan_number}
-							id={info.getValue()}
+							title={info.getValue()}
+							id={uuid}
 							uri='/delivery/zipper-challan'
 						/>
 					);
+				},
+			},
+			{
+				accessorKey: 'packing_numbers',
+				header: 'Packing List',
+				width: 'w-28',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return info?.getValue()?.map((packingList, index) => {
+						if (packingList === 'PL-') return '-';
+						const packingListUuid =
+							info?.row.original?.packing_list_uuids?.[index];
+						return (
+							<LinkWithCopy
+								key={packingList}
+								title={packingList}
+								id={packingListUuid}
+								uri='/delivery/zipper-packing-list'
+							/>
+						);
+					});
 				},
 			},
 			{

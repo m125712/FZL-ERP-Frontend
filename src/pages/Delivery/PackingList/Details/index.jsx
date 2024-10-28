@@ -48,10 +48,10 @@ export default function Index() {
 
 	return (
 		<div className='space-y-2'>
-			<iframe
+			{/* <iframe
 				src={data2}
 				className='h-[40rem] w-full rounded-md border-none'
-			/>
+			/> */}
 			<iframe
 				src={data3}
 				className='h-[40rem] w-full rounded-md border-none'

@@ -25,7 +25,12 @@ import Header from './Header';
 
 // UPDATE IS WORKING
 export default function Index() {
-	const { url, updateData, postData, invalidateQuery } = useDyeingBatch();
+	const {
+		url,
+		updateData,
+		postData,
+		invalidateQuery: invalidateDyeingZipperBatch,
+	} = useDyeingBatch();
 	const { batch_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
@@ -141,10 +146,10 @@ export default function Index() {
 
 				await Promise.all(batch_entry_updated_promises)
 					.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
-					.then(() => invalidateQuery())
-					.then(
-						navigate(`/dyeing-and-iron/zipper-batch/${batch_uuid}`)
-					)
+					.then(() => {
+						invalidateDyeingZipperBatch();
+						navigate(`/dyeing-and-iron/zipper-batch/${batch_uuid}`);
+					})
 					.catch((err) => console.log(err));
 			}
 
@@ -212,12 +217,13 @@ export default function Index() {
 					.then(() => {
 						reset(Object.assign({}, DYEING_BATCH_NULL));
 					})
-					.then(() => invalidateQuery())
-					.then(
+
+					.then(() => {
+						invalidateDyeingZipperBatch();
 						navigate(
 							`/dyeing-and-iron/zipper-batch/${batch_data.uuid}`
-						)
-					)
+						);
+					})
 					.catch((err) => console.log(err));
 
 				return;
@@ -248,8 +254,11 @@ export default function Index() {
 
 			await Promise.all(promises)
 				.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
-				.then(() => invalidateQuery())
-				.then(navigate(`/dyeing-and-iron/batch/${batchData.uuid}`))
+
+				.then(() => {
+					invalidateDyeingZipperBatch();
+					navigate(`/dyeing-and-iron/batch/${batchData.uuid}`);
+				})
 				.catch((err) => console.log(err));
 
 			return;

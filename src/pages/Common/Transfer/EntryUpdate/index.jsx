@@ -1,5 +1,11 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useDyeingTransfer } from '@/state/Dyeing';
+import { useMetalTMProduction } from '@/state/Metal';
+import {
+	useNylonMFProduction,
+	useNylonPlasticFinishingProduction,
+} from '@/state/Nylon';
+import { useVislonTMP } from '@/state/Vislon';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
@@ -23,6 +29,13 @@ import GetDateTime from '@/util/GetDateTime';
 
 export default function Index() {
 	const { postData, deleteData } = useDyeingTransfer();
+	const { invalidateQuery: invalidateNylonMFProduction } =
+		useNylonMFProduction();
+	const { invalidateQuery: invalidateNylonPFProduction } =
+		useNylonPlasticFinishingProduction();
+	const { invalidateQuery: invalidateMetalTMProduction } =
+		useMetalTMProduction();
+	const { invalidateQuery: invalidateQueryVislonTMP } = useVislonTMP();
 	const { uuid, order_number, order_description_uuid } = useParams();
 	const [status, setStatus] = useState(false);
 	const { user } = useAuth();
@@ -126,6 +139,10 @@ export default function Index() {
 		await Promise.all(entryData_promises)
 			.then(() => reset(Object.assign({}, DYEING_TRANSFER_NULL)))
 			.then(async () => {
+				invalidateNylonMFProduction();
+				invalidateNylonPFProduction();
+				invalidateMetalTMProduction();
+				invalidateQueryVislonTMP();
 				// await OrderDetailsInvalidate(); common/tape/log
 				navigate('/common/dyed-store');
 			})

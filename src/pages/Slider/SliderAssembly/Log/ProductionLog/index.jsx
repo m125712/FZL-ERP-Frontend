@@ -25,6 +25,7 @@ export default function Index() {
 	);
 	const headers = [
 		'order_number',
+		'item_name',
 		'item_description',
 		'production_quantity',
 		'weight',

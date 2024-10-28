@@ -46,10 +46,10 @@ export default function Index(data) {
 		...item,
 		unit_price: item.is_zipper
 			? item.unit_price + '/dzn'
-			: item.unit_price + '/cons',
+			: item.unit_price + '/cone',
 		quantity: item.is_zipper
 			? item.quantity + ' pcs'
-			: item.quantity + ' cons',
+			: item.quantity + ' cone',
 		value: item.quantity * (item.unit_price / 12),
 	}));
 	const totalQuantityZipper = manual_pi_entry

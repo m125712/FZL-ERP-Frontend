@@ -22,7 +22,7 @@ export const useCommercialPI = () =>
 		url: '/commercial/pi-cash?is_cash=false',
 	});
 
-export const useCommercialPIByQuerry = (params, { enabled = false }) =>
+export const useCommercialPIByQuery = (params, { enabled = false }) =>
 	createGlobalState({
 		queryKey: commercialQK.piByQuery(params),
 		url: `/commercial/pi-cash${params}`,

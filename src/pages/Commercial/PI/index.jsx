@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
-import { useCommercialPI, useCommercialPIByQuerry } from '@/state/Commercial';
+import { useAuth } from '@/context/auth';
+import { useCommercialPIByQuery } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -7,7 +8,6 @@ import ReactTable from '@/components/Table';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
-import { useAuth } from '@/context/auth';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_all_orders')) {
@@ -26,9 +26,12 @@ export default function Index() {
 	const haveAccess = useAccess('commercial__pi');
 	const { user } = useAuth();
 
-	const { data, isLoading, url } = useCommercialPIByQuerry(getPath(haveAccess, user?.uuid), {
-		enabled: !!user?.uuid,
-	});
+	const { data, isLoading, url } = useCommercialPIByQuery(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
 
 	const info = new PageInfo('PI', url, 'commercial__pi');
 
@@ -41,7 +44,8 @@ export default function Index() {
 			{
 				accessorKey: 'id',
 				header: 'PI ID',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
+				width: 'w-36',
 				cell: (info) => (
 					<LinkWithCopy
 						title={info.getValue()}
@@ -76,30 +80,35 @@ export default function Index() {
 				accessorKey: 'marketing_name',
 				header: 'Marketing',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'merchandiser_name',
 				header: 'Merchandiser',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'factory_name',
 				header: 'Factory',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'bank_name',
 				header: 'Bank',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -129,6 +138,7 @@ export default function Index() {
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{

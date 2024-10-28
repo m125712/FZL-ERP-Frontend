@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from 'react';
-import { useAuth } from '@/context/auth';
 import { useCommercialManualPI } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
@@ -9,25 +8,10 @@ import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
-const getPath = (haveAccess, userUUID) => {
-	if (haveAccess.includes('show_all_orders')) {
-		return `?is_cash=false`;
-	}
-
-	if (haveAccess.includes('show_own_orders') && userUUID) {
-		return `?is_cash=false&own_uuid=${userUUID}`;
-	}
-
-	return `?is_cash=false`;
-};
-
 export default function Index() {
 	const navigate = useNavigate();
 	const haveAccess = useAccess('commercial__manual_pi');
-	const { user } = useAuth();
-
 	const { data, isLoading, url } = useCommercialManualPI();
-
 	const info = new PageInfo('Manual PI', url, 'commercial__manual_pi');
 
 	useEffect(() => {
@@ -39,7 +23,8 @@ export default function Index() {
 			{
 				accessorKey: 'pi_number',
 				header: 'PI ID',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
+				width: 'w-36',
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
@@ -55,30 +40,35 @@ export default function Index() {
 				accessorKey: 'marketing_name',
 				header: 'Marketing',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'merchandiser_name',
 				header: 'Merchandiser',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'factory_name',
 				header: 'Factory',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'bank_name',
 				header: 'Bank',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -92,22 +82,19 @@ export default function Index() {
 				header: 'Created At',
 				enableColumnFilter: false,
 				filterFn: 'isWithinRange',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated At',
 				enableColumnFilter: false,
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{

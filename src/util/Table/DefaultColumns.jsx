@@ -9,12 +9,14 @@ export const DEFAULT_COLUMNS = ({
 		accessorKey: 'remarks',
 		header: 'Remarks',
 		enableColumnFilter: false,
+		width: 'w-32',
 		cell: (info) => info.getValue(),
 	},
 	{
 		accessorKey: 'created_by_name',
 		header: 'Created By',
 		enableColumnFilter: false,
+		width: 'w-32',
 		cell: (info) => info.getValue(),
 	},
 	{

@@ -104,6 +104,7 @@ export const PartyColumns = ({
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -138,12 +139,14 @@ export const FactoryColumns = ({
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'party_name',
 				header: 'Party Name',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -178,12 +181,14 @@ export const MerchandiserColumns = ({
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'party_name',
 				header: 'Party Name',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -257,11 +262,12 @@ export const InfoColumns = ({
 				accessorKey: 'id',
 				header: 'Sample/Bill/Cash',
 				enableColumnFilter: false,
+				width: 'w-28',
 				cell: (info) => {
 					const { is_sample, is_bill, is_cash } = info.row.original;
 					return (
 						// TODO: need to fix bill vs cash
-						<div className='flex space-x-1'>
+						<div className='flex gap-6'>
 							<StatusButton size='btn-xs' value={is_sample} />
 							<StatusButton size='btn-xs' value={is_bill} />
 							<StatusButton size='btn-xs' value={is_cash} />
@@ -285,30 +291,35 @@ export const InfoColumns = ({
 				accessorKey: 'buyer_name',
 				header: 'Buyer',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'marketing_name',
 				header: 'Marketing',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'merchandiser_name',
 				header: 'Merchandiser',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'factory_name',
 				header: 'Factory',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -326,7 +337,7 @@ export const InfoColumns = ({
 				header: 'Status',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<StatusButton size='btn-sm' value={info.getValue()} />
+					<StatusButton size='btn-xs' value={info.getValue()} />
 				),
 			},
 
@@ -340,9 +351,19 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 	return useMemo(
 		() => [
 			{
+				accessorKey: 'is_sample',
+				header: 'Sample',
+				enableColumnFilter: false,
+				width: 'w-12',
+				cell: (info) => (
+					<StatusButton size='btn-sm' value={info.getValue()} />
+				),
+			},
+			{
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
+				width: 'w-36',
 				cell: (info) => (
 					<LinkWithCopy
 						title={info.getValue()}
@@ -352,17 +373,10 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				),
 			},
 			{
-				accessorKey: 'is_sample',
-				header: 'Sample',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-sm' value={info.getValue()} />
-				),
-			},
-			{
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: true,
+				width: 'w-36',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -371,8 +385,9 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				enableColumnFilter: false,
 				width: 'w-12',
 				cell: ({ row }) => {
-					const { order_number_wise_count } = row.original;
-					return `${row.getValue('order_number_wise_rank')} / ${order_number_wise_count}`;
+					const { order_number_wise_rank, order_number_wise_count } =
+						row.original;
+					return `${order_number_wise_rank} / ${order_number_wise_count}`;
 				},
 			},
 			{
@@ -394,35 +409,35 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 			{
 				accessorKey: 'order_type',
 				header: 'Type',
-				enableColumnFilter: true,
-				cell: (info) =>
-					info.getValue().charAt(0).toUpperCase() +
-					info.getValue().slice(1),
+				enableColumnFilter: false,
+				// cell: (info) =>
+				// 	info.getValue().charAt(0).toUpperCase() +
+				// 	info.getValue().slice(1),
 			},
 			{
 				accessorKey: 'is_multi_color',
-				header: 'Multi-Color',
+				header: 'Multi Color',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue() ? 'Yes' : 'No',
-				
+				cell: (info) => (info.getValue() ? 'Yes' : 'No'),
 			},
 			{
 				accessorFn: (row) =>
-					`${ row.is_inch ? 'Inch' : row.is_meter ? 'Meter' : 'Cm'}`,
+					`${row.is_inch ? 'Inch' : row.is_meter ? 'Meter' : 'Cm'}`,
 				id: 'kg',
 				header: 'Size Unit',
 				enableColumnFilter: false,
 			},
-			{
-				accessorKey: 'production_percentage',
-				header: 'Progress',
-				enableColumnFilter: false,
-				cell: (info) => <Progress value={info.getValue() || 0} />,
-			},
+			// {
+			// 	accessorKey: 'production_percentage',
+			// 	header: 'Progress',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => <Progress value={info.getValue() || 0} />,
+			// },
 			{
 				accessorKey: 'marketing_name',
 				header: 'Marketing',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -447,11 +462,9 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				accessorKey: 'is_swatch_approved',
 				header: 'Status',
 				enableColumnFilter: false,
-				cell: (info) => {
-					return (
-						<StatusButton size='btn-sm' value={info.getValue()} />
-					);
-				},
+				cell: (info) => (
+					<StatusButton size='btn-sm' value={info.getValue()} />
+				),
 			},
 
 			...DEFAULT_COLUMNS({ handelUpdate, haveAccess }),

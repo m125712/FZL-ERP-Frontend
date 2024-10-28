@@ -24,7 +24,7 @@ export default function Index() {
 			{
 				accessorKey: 'info_id',
 				header: 'ID',
-
+				width: 'w-40',
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
@@ -39,7 +39,7 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'Order ID',
-
+				width: 'w-32',
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					const { is_thread_order } = info.row.original;
@@ -67,30 +67,35 @@ export default function Index() {
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'buyer_name',
 				header: 'Buyer',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'marketing_name',
 				header: 'Marketing',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'merchandiser_name',
 				header: 'Merchandiser',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			// {
@@ -141,7 +146,7 @@ export default function Index() {
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
-				width: 'w-44',
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{

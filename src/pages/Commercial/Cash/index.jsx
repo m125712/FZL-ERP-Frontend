@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useAuth } from '@/context/auth';
 import {
-	useCommercialPIByQuerry,
+	useCommercialPIByQuery,
 	useCommercialPICash,
 } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
@@ -29,7 +29,7 @@ export default function Index() {
 	const haveAccess = useAccess('commercial__pi-cash');
 	const { user } = useAuth();
 
-	const { data, isLoading, url } = useCommercialPIByQuerry(
+	const { data, isLoading, url } = useCommercialPIByQuery(
 		getPath(haveAccess, user?.uuid),
 		{
 			enabled: !!user?.uuid,
@@ -46,7 +46,8 @@ export default function Index() {
 			{
 				accessorKey: 'id',
 				header: 'PI ID',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
+				width: 'w-36',
 				cell: (info) => (
 					<LinkWithCopy
 						title={info.getValue()}
@@ -59,24 +60,28 @@ export default function Index() {
 				accessorKey: 'marketing_name',
 				header: 'Marketing',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'merchandiser_name',
 				header: 'Merchandiser',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'factory_name',
 				header: 'Factory',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -96,22 +101,19 @@ export default function Index() {
 				header: 'Created At',
 				enableColumnFilter: false,
 				filterFn: 'isWithinRange',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated At',
 				enableColumnFilter: false,
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{

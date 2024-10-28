@@ -22,7 +22,8 @@ export default function Index() {
 			{
 				accessorKey: 'batch_number',
 				header: 'Batch ID',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
+				width: 'w-36',
 				cell: (info) => (
 					<LinkOnly
 						title={info.getValue()}
@@ -35,6 +36,7 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'ID',
+				width: 'w-36',
 				cell: (info) => {
 					const { order_info_uuid } = info.row.original;
 					return (
@@ -66,13 +68,25 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'batch_quantity',
-				header: 'Batch QTY',
+				header: (
+					<span>
+						Batch
+						<br />
+						QTY
+					</span>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'balance_quantity',
-				header: 'Balance QTY',
+				header: (
+					<span>
+						Balance
+						<br />
+						QTY
+					</span>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -93,13 +107,25 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'coning_production_quantity',
-				header: 'Production QTY',
+				header: (
+					<span>
+						Production
+						<br />
+						QTY
+					</span>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'coning_carton_quantity',
-				header: 'Carton QTY',
+				header: (
+					<span>
+						Carton
+						<br />
+						QTY
+					</span>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -126,7 +152,13 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'transfer_carton_quantity',
-				header: 'Warehouse Carton',
+				header: (
+					<span>
+						Warehouse
+						<br />
+						Carton
+					</span>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

@@ -53,13 +53,6 @@ export default function Index() {
 		document.title = info.getTabName();
 	}, []);
 
-	// get url path
-	// useEffect(() => {
-	// 	if (user?.uuid) {
-	// 		setPath(getPath(haveAccess, user?.uuid));
-	// 	}
-	// }, [user, haveAccess]);
-
 	// Add
 	const handelAdd = () => navigate('/order/entry');
 

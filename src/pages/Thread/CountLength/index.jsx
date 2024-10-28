@@ -33,19 +33,30 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'min_weight',
-				header: 'Min Weight(kg)',
+				// header: 'Min Weight(kg)',
+				header: (
+					<span>
+						Min Weight <br />
+						(kg)
+					</span>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'max_weight',
-				header: 'Max Weight(kg)',
+				header: (
+					<span>
+						Max Weight <br />
+						(kg)
+					</span>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'cone_per_carton',
-				header: 'Cone Per Carton',
+				header: 'Cone/Carton',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -84,6 +95,7 @@ export default function Index() {
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{

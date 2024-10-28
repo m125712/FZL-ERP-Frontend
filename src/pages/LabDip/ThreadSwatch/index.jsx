@@ -63,13 +63,13 @@ export default function Index() {
 
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'po',
-				header: 'PO',
-				width: 'w-40',
+			// {
+			// 	accessorKey: 'po',
+			// 	header: 'PO',
+			// 	width: 'w-40',
 
-				cell: (info) => info.getValue(),
-			},
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorKey: 'bleaching',
 				header: 'Bleaching',

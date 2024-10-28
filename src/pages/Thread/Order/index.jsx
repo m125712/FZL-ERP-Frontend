@@ -23,10 +23,11 @@ export default function Index() {
 				accessorKey: 'is_sample',
 				header: 'Sample/Bill/Cash',
 				enableColumnFilter: false,
+				width: 'w-28',
 				cell: (info) => {
 					const { is_sample, is_bill, is_cash } = info.row.original;
 					return (
-						<div className='flex space-x-1'>
+						<div className='flex gap-6'>
 							<StatusButton size='btn-xs' value={is_sample} />
 							<StatusButton size='btn-xs' value={is_bill} />
 							<StatusButton size='btn-xs' value={is_cash} />
@@ -37,7 +38,7 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'ID',
-				width: 'w-40',
+				width: 'w-36',
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
@@ -53,24 +54,28 @@ export default function Index() {
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'factory_name',
 				header: 'Factory',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'merchandiser_name',
 				header: 'Merchandiser',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'buyer_name',
 				header: 'Buyer',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{

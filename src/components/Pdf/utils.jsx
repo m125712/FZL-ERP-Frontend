@@ -11,19 +11,28 @@ export const DEFAULT_A4_PAGE = ({ xMargin, headerHeight, footerHeight }) => ({
 	styles,
 });
 
-export const CUSTOM_PAGE = ({
-	width,
-	height,
-	xMargin,
-	headerHeight,
-	footerHeight,
-}) => ({
-	pageSize: { width, height },
-	pageOrientation: 'portrait',
-	pageMargins: [xMargin, headerHeight, xMargin, footerHeight],
-	defaultStyle,
-	styles,
-});
+export const CUSTOM_PAGE = ({ type, xMargin, headerHeight, footerHeight }) => {
+	let width = 0,
+		height = 0;
+
+	switch (type) {
+		case 'poly':
+			width = 595;
+			height = 842;
+			break;
+		case 'carton':
+			width = 595;
+			height = 842;
+			break;
+	}
+	return {
+		pageSize: { width, height },
+		pageOrientation: 'portrait',
+		pageMargins: [xMargin, headerHeight, xMargin, footerHeight],
+		defaultStyle,
+		styles,
+	};
+};
 
 export const company = {
 	logo: FZL_LOGO.src,

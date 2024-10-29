@@ -1,5 +1,9 @@
 import { Suspense, useEffect, useState } from 'react';
-import { useCommercialLC, useCommercialLCPIByUUID } from '@/state/Commercial';
+import {
+	useCommercialLC,
+	useCommercialLCByQuery,
+	useCommercialLCPIByUUID,
+} from '@/state/Commercial';
 import { useOtherPI, useOtherUpdatePI } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -7,7 +11,7 @@ import { format } from 'date-fns';
 import { useFieldArray } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRHF } from '@/hooks';
+import { useAccess, useRHF } from '@/hooks';
 
 import { DeleteModal, UpdateModal } from '@/components/Modal';
 import { DynamicField, FormField, ReactSelect, RemoveButton } from '@/ui';
@@ -20,10 +24,25 @@ import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `?own_uuid=${userUUID}`;
+	}
+
+	return ``;
+};
+
 export default function Index() {
+	const haveAccess = useAccess('commercial__lc');
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const { lc_uuid } = useParams();
+	const { invalidateQuery: invalidate } = useCommercialLCByQuery(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
 
 	const {
 		url: commercialLcUrl,
@@ -67,6 +86,16 @@ export default function Index() {
 	} = useFieldArray({
 		control,
 		name: 'pi',
+	});
+
+	// * UD dynamic field
+	const {
+		fields: udField,
+		append: udAppend,
+		remove: udRemove,
+	} = useFieldArray({
+		control,
+		name: 'lc_entry_others',
 	});
 
 	// * progression dynamic field
@@ -188,6 +217,34 @@ export default function Index() {
 				),
 			];
 
+			// * Dynamic ud/lc_entry_others
+			const lc_entry_others_update_promise = [
+				...data.lc_entry_others,
+			].map(async (item) => {
+				if (item.ud_no) {
+					if (item.uuid) {
+						await updateData.mutateAsync({
+							url: `/commercial/lc-entry-others/${item.uuid}`,
+							updatedData: {
+								...item,
+								updated_at: GetDateTime(),
+							},
+							isOnCloseNeeded: false,
+						});
+					} else {
+						await postData.mutateAsync({
+							url: `/commercial/lc-entry-others`,
+							newData: {
+								...item,
+								lc_uuid: data.uuid,
+								uuid: nanoid(),
+								created_at: GetDateTime(),
+							},
+							isOnCloseNeeded: false,
+						});
+					}
+				}
+			});
 			// * Dynamic progresson/Lc_entry
 			const lc_entry_update_promise = [...data.lc_entry].map(
 				async (item) => {
@@ -221,6 +278,7 @@ export default function Index() {
 				.then(() => {
 					reset(LC_NULL);
 					invalidateQuery();
+					invalidate();
 					navigate(`/commercial/lc/details/${lc_number}`);
 				})
 				.catch((err) => console.log(err));
@@ -266,6 +324,24 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 
+		// * Dynamic Ud/lc_entry_others
+		const lc_entry_others_promise = [...data.lc_entry_others].map(
+			async (item) => {
+				if (item.ud_no) {
+					await postData.mutateAsync({
+						url: `/commercial/lc-entry-others`,
+						newData: {
+							...item,
+							lc_uuid: new_lc_uuid,
+							uuid: nanoid(),
+							created_at: GetDateTime(),
+						},
+						isOnCloseNeeded: false,
+					});
+				}
+			}
+		);
+
 		// * Dynamic progresson/Lc_entry
 		const lc_entry_promise = [...data.lc_entry].map(async (item) => {
 			if (item.amount > 0) {
@@ -306,6 +382,7 @@ export default function Index() {
 			await Promise.all(pi_numbers_promise)
 				.then(() => reset(LC_NULL))
 				.then(() => {
+					invalidate();
 					navigate(`/commercial/lc`);
 				})
 				.catch((err) => console.log(err));
@@ -327,7 +404,13 @@ export default function Index() {
 		PiRemove(index);
 	};
 
-	// delete lc_entry
+	// delete lc_entry_others or UD dynamic field
+	const [deleteLCEntryUD, setDeleteLCEntryUD] = useState({
+		itemId: null,
+		itemName: null,
+	});
+
+	// delete lc_entry or Progression dynamic field
 	const [deleteLCEntry, setDeleteLCEntry] = useState({
 		itemId: null,
 		itemName: null,
@@ -348,10 +431,16 @@ export default function Index() {
 							getValues,
 							Controller,
 							watch,
+
 							progressionField,
 							progressionAppend,
 							progressionRemove,
 							setDeleteLCEntry,
+
+							udField,
+							udAppend,
+							udRemove,
+							setDeleteLCEntryUD,
 						}}
 					/>
 
@@ -507,6 +596,17 @@ export default function Index() {
 					setItems={progressionField}
 					deleteData={deleteData}
 					url={`/commercial/lc-entry`}
+				/>
+			</Suspense>
+			<Suspense>
+				<DeleteModal
+					modalId={'lc_entry_details_delete'}
+					title={'UD Delete'}
+					deleteItem={deleteLCEntryUD}
+					setDeleteItem={setDeleteLCEntryUD}
+					setItems={udField}
+					deleteData={deleteData}
+					url={`/commercial/lc-entry-others`}
 				/>
 			</Suspense>
 

@@ -18,6 +18,7 @@ import {
 	useOrderAgainstDieCastingRMLog,
 	useOrderAgainstSliderAssemblyRMLog,
 	useOrderAgainstSliderColorRMLog,
+	useSliderAssemblyStock,
 	useSliderDieCastingStock,
 } from '@/state/Slider';
 import {
@@ -87,6 +88,8 @@ export default function Index({
 	const { invalidateQuery: invalidateSliderDieCastingStock } =
 		useSliderDieCastingStock();
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
+	const { invalidateQuery: invalidateSliderAssemblyStock } =
+		useSliderAssemblyStock();
 
 	const { data: material } = useOtherMaterial();
 	const MAX_QUANTITY =
@@ -164,6 +167,7 @@ export default function Index({
 			invalidateOrderAgainstSliderColorRMLog();
 			invalidateSliderDieCastingStock();
 			invalidateCommonTapeSFG();
+			invalidateSliderAssemblyStock();
 
 			return;
 		}

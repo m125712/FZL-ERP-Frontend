@@ -50,9 +50,7 @@ export default function Index({
 	const { data: stopper_type } =
 		useOtherOrderPropertiesByTypeName('stopper_type');
 
-	const { value: materials } = useFetch(
-		'/other/material/value/label/unit/quantity'
-	);
+	
 
 	useFetchForRhfReset(
 		`/slider/die-casting/${updateStock?.uuid}`,
@@ -159,30 +157,6 @@ export default function Index({
 									value={type?.filter(
 										(item) =>
 											item.value == getValues('type')
-									)}
-									onChange={(e) => onChange(e.value)}
-									// isDisabled={order_info_id !== undefined}
-								/>
-							);
-						}}
-					/>
-				</FormField>
-				<FormField
-					label='material_uuid'
-					title='Material'
-					errors={errors}>
-					<Controller
-						name={'material_uuid'}
-						control={control}
-						render={({ field: { onChange } }) => {
-							return (
-								<ReactSelect
-									placeholder='Select Item'
-									options={materials}
-									value={materials?.filter(
-										(item) =>
-											item.value ==
-											getValues('material_uuid')
 									)}
 									onChange={(e) => onChange(e.value)}
 									// isDisabled={order_info_id !== undefined}

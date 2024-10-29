@@ -27,6 +27,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'material_name',
+				header: 'Material',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'die_casting_body_name',
 				header: 'Body',
 				enableColumnFilter: false,

@@ -12,6 +12,7 @@ import {
 } from '@/ui';
 
 import DynamicProgression from './DynamicProgression';
+import DynamicUD from './DynamicUD';
 
 export default function Header({
 	register,
@@ -20,10 +21,17 @@ export default function Header({
 	getValues,
 	Controller,
 	watch,
+
 	progressionField,
 	progressionAppend,
 	progressionRemove,
 	setDeleteLCEntry,
+
+	udField,
+	udAppend,
+	udRemove,
+	deleteLCEntryUD,
+	setDeleteLCEntryUD,
 }) {
 	const { lc_uuid } = useParams();
 	const { data: party } = useOtherParty();
@@ -225,19 +233,27 @@ export default function Header({
 							progressionField,
 							progressionAppend,
 							progressionRemove,
-							setDeleteLCEntry
+							setDeleteLCEntry,
+						}}
+					/>
+				</div>
+				<div className='my-2'>
+					<DynamicUD
+						{...{
+							register,
+							errors,
+							control,
+							getValues,
+							Controller,
+							watch,
+							udField,
+							udAppend,
+							udRemove,
+							setDeleteLCEntryUD,
 						}}
 					/>
 				</div>
 				<Section title='Others'>
-					<Input label='ud_no' {...{ register, errors }} />
-					<DateInput
-						label='ud_received'
-						Controller={Controller}
-						control={control}
-						selected={watch('ud_received')}
-						{...{ register, errors }}
-					/>
 					<FormField
 						label='at_sight'
 						title='Payment Rec.'

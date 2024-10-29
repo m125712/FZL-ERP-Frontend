@@ -48,7 +48,7 @@ export {
 	PHONE_NUMBER,
 	PHONE_NUMBER_REQUIRED,
 	STRING,
-	STRING_REQUIRED
+	STRING_REQUIRED,
 };
 
 // Library
@@ -1965,8 +1965,6 @@ export const LC_SCHEMA = {
 	expiry_date: STRING.nullable().transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? null : value
 	),
-	ud_no: STRING.nullable(),
-	ud_received: STRING.nullable(),
 	at_sight: STRING_REQUIRED,
 	amd_date: STRING.nullable().transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? null : value
@@ -2005,6 +2003,21 @@ export const LC_SCHEMA = {
 		})
 	),
 
+	lc_entry_others: yup.array().of(
+		yup.object().shape({
+			ud_no: STRING.nullable().transform((value, originalValue) =>
+				String(originalValue).trim() === '' ? null : value
+			),
+			ud_received: STRING.nullable().transform((value, originalValue) =>
+				String(originalValue).trim() === '' ? null : value
+			),
+			up_number: STRING.nullable().transform((value, originalValue) =>
+				String(originalValue).trim() === '' ? null : value
+			),
+			remarks: STRING.nullable(),
+		})
+	),
+
 	pi: yup.array().of(
 		yup.object().shape({
 			uuid: STRING.when('is_old_pi', {
@@ -2033,8 +2046,6 @@ export const LC_NULL = {
 
 	shipment_date: null,
 	expiry_date: null,
-	ud_no: null,
-	ud_received: null,
 	at_sight: null,
 	amd_date: null,
 	amd_count: 0,
@@ -2056,6 +2067,16 @@ export const LC_NULL = {
 			payment_value: 0,
 		},
 	],
+
+	lc_entry_others: [
+		{
+			ud_no: null,
+			ud_received: null,
+			up_number: null,
+			remarks: null,
+		},
+	],
+
 	pi: [
 		{
 			uuid: null,
@@ -2666,7 +2687,6 @@ export const UPDATE_DYEING_TRANSFER_NULL = {
 // *Slider/Die Casting --> (STOCK)*//
 export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 	name: STRING_REQUIRED, //
-	material_uuid: STRING.nullable(),
 	item: STRING.when('type', {
 		is: 'body',
 		then: (schema) => schema.required('Required'),
@@ -2731,7 +2751,6 @@ export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 export const SLIDER_DIE_CASTING_STOCK_NULL = {
 	uuid: null,
 	name: '',
-	material_uuid: null,
 	item: '',
 	zipper_number: '',
 	end_type: null,
@@ -2761,19 +2780,38 @@ export const SLIDER_DIE_CASTING_STOCK_NULL = {
 // * Slider Assembly --> (STOCK)*//
 export const SLIDER_ASSEMBLY_STOCK_SCHEMA = {
 	name: STRING_REQUIRED, //
-	die_casting_body_uuid: STRING_REQUIRED, //
-	die_casting_puller_uuid: STRING_REQUIRED, //
-	die_casting_cap_uuid: STRING_REQUIRED, //
-	die_casting_link_uuid: STRING, //
+	material_uuid: STRING.nullable().transform((value, originalValue) =>
+		String(originalValue).trim() === '' ? null : value
+	),
+	die_casting_body_uuid: STRING.when('material_uuid', {
+		is: (value) => value === null || value === '', // Check if material_uuid has a value
+		then: (schema) => schema.required('Required'),
+		otherwise: (schema) => schema.nullable(),
+	}), //
+	die_casting_puller_uuid: STRING.when('material_uuid', {
+		is: (value) => value === null || value === '', // Check if material_uuid has a value
+		then: (schema) => schema.required('Required'),
+		otherwise: (schema) => schema.nullable(),
+	}), //
+	die_casting_cap_uuid: STRING.when('material_uuid', {
+		is: (value) => value === null || value === '', // Check if material_uuid has a value
+		then: (schema) => schema.required('Required'),
+		otherwise: (schema) => schema.nullable(),
+	}), //
+	die_casting_link_uuid: STRING.nullable().transform(
+		(value, originalValue) =>
+			String(originalValue).trim() === '' ? null : value
+	), //
 	remarks: STRING.nullable(),
 };
 
 export const SLIDER_ASSEMBLY_STOCK_NULL = {
 	name: '',
-	die_casting_body_uuid: '',
-	die_casting_puller_uuid: '',
-	die_casting_cap_uuid: '',
-	die_casting_link_uuid: '',
+	material_uuid: null,
+	die_casting_body_uuid: null,
+	die_casting_puller_uuid: null,
+	die_casting_cap_uuid: null,
+	die_casting_link_uuid: null,
 
 	remarks: '',
 };
@@ -2832,7 +2870,7 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
 	order_description_uuid: STRING.when('section', {
 		is: (value) => value == 'coloring',
 		then: (schema) => schema.required('order is required'),
-		otherwise: (schema) => schema.nullable(),																																	
+		otherwise: (schema) => schema.nullable(),
 	}),
 	stocks: yup.array().of(
 		yup.object().shape({

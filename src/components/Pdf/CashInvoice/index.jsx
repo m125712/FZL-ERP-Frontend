@@ -33,16 +33,15 @@ export default function Index(data) {
 	}
 	const uniqueItemDescription = new Set();
 	const uniqueItemDescriptionThread = new Set();
-	const TotalUnitPrice = [];
-	const TotalValue = [];
-	const TotalQuantity = [];
 	let style = {};
 	let orderID = {};
 	let threadStyle = {};
 	let threadOrderID = {};
-	let total_unit_price = 0;
-	let total_value = 0;
-	let total_quantity = 0;
+	const TotalUnitPrice = {};
+	const TotalValue = [];
+	const TotalQuantity = [];
+	let total_value = [];
+	let total_quantity = [];
 	let grand_total_value = 0;
 	let grand_total_quantity = 0;
 	const TotalThreadUnitPrice = [];
@@ -53,6 +52,9 @@ export default function Index(data) {
 	let total_thread_quantity = 0;
 	let grand_thread_total_quantity = 0;
 	let is_inch = 0;
+	let is_inchs = [];
+	let order_type = 0;
+	let order_types = [];
 
 	pi_cash_entry.forEach((item) => {
 		uniqueItemDescription.add(item.pi_item_description);
@@ -62,72 +64,151 @@ export default function Index(data) {
 		uniqueItemDescriptionThread.add(item.count_length_name);
 	});
 
+	//* style , orderID , TotalUnitPrice,is_inch,order_type
 	[...uniqueItemDescription].forEach((item) => {
 		style[item] = new Set();
 		orderID[item] = new Set();
+		TotalUnitPrice[item] = new Set();
 		pi_cash_entry.forEach((item2) => {
 			if (item2.pi_item_description === item) {
 				style[item].add(item2.style);
 				orderID[item].add(item2.order_number);
-				total_unit_price += parseFloat(item2.unit_price_pcs);
-				total_value += parseFloat(item2.value);
-				total_quantity += parseFloat(item2.pi_cash_quantity);
+				TotalUnitPrice[item].add(item2.unit_price);
 				is_inch = item2.is_inch;
+				order_type = item2.order_type;
 			}
 		});
-
-		TotalUnitPrice.push((total_value / total_quantity).toFixed(3));
-		TotalValue.push(total_value);
-		grand_total_value += total_value;
-		TotalQuantity.push(total_quantity);
-		grand_total_quantity += total_quantity;
-		total_unit_price = 0;
-		total_value = 0;
-		total_quantity = 0;
+		is_inchs.push(is_inch);
+		order_types.push(order_type);
 	});
 
-	const sizeResults = [...uniqueItemDescription].map((item) => {
-		const sizes = pi_cash_entry
-			.filter((entry) => entry.pi_item_description === item)
-			.map((entry) => parseFloat(entry.size));
-
-		return {
-			min_size: Math.min(...sizes),
-			max_size: Math.max(...sizes),
-		};
-	});
-	const specifications = [...uniqueItemDescription].map((item) => {
-		const uniqueShortNames = new Set();
-
-		pi_cash_entry
-			.filter((entry) => entry.pi_item_description === item)
-			.forEach((entry) => {
-				entry.short_names.forEach((name) => {
-					if (name) uniqueShortNames.add(name);
-				});
+	[...uniqueItemDescription].forEach((item) => {
+		[...TotalUnitPrice[item]].forEach((item3) => {
+			let value = 0;
+			let quantity = 0;
+			pi_cash_entry.forEach((item2) => {
+				if (
+					item2.pi_item_description === item &&
+					item2.unit_price === item3
+				) {
+					value += parseFloat(item2.value);
+					quantity += parseFloat(item2.pi_cash_quantity);
+				}
 			});
+			total_quantity.push(quantity);
+			grand_total_quantity += quantity;
+			total_value.push(Number(value).toFixed(2));
+			grand_total_value += value;
+		});
 
-		return Array.from(uniqueShortNames).join(', ');
+		TotalValue.push(total_value);
+		TotalQuantity.push(total_quantity);
+		total_quantity = [];
+		total_value = [];
 	});
-	const order_info_entry = [...uniqueItemDescription].map((item, index) => {
-		return {
-			order_number: [...orderID[item]].join(', '),
-			style: [...style[item]].join(', '),
-			pi_item_description: item,
-			specification: specifications[index],
-			size: `(${sizeResults[index].min_size || 0} - ${sizeResults[index].max_size || 0}) ${is_inch ? 'inch' : 'cm'}`,
-			//h_s_code: '9607,11.00',
-			quantity: TotalQuantity[index] + ' pcs',
-			unit_price:
-				Number(TotalUnitPrice[index]).toFixed(3) *
-					data?.conversion_rate +
-				'/pcs',
-			unit_price_dollar:
-				Number(TotalUnitPrice[index]).toFixed(3) + '/pcs',
-			value: Number(TotalValue[index] * data?.conversion_rate).toFixed(2),
-			value_dollar: Number(TotalValue[index]).toFixed(2),
-		};
+
+	// * Size
+	const sizeResults = {};
+	[...uniqueItemDescription].map((item) => {
+		sizeResults[item] = [];
+		sizeResults[item] = [...TotalUnitPrice[item]].map((item3) => {
+			const sizes = pi_cash_entry
+				.filter(
+					(entry) =>
+						entry.pi_item_description === item &&
+						entry.unit_price === item3
+				)
+				.map((entry) => parseFloat(entry.size));
+
+			return {
+				min_size: Math.min(...sizes),
+				max_size: Math.max(...sizes),
+			};
+		});
 	});
+	// * Specifications
+	const specifications = [...uniqueItemDescription].map((item) => {
+		return pi_cash_entry
+			.filter((entry) => entry.pi_item_description === item)
+			.flatMap((entry) => [
+				...new Set(
+					entry.short_names.filter(
+						(name) => name !== null && name !== ''
+					)
+				),
+			])
+			.join(', ');
+	});
+	specifications.forEach((spec, index) => {
+		specifications[index] = [...new Set(spec.split(', '))].join(', ');
+	});
+
+	// * order_info_entry
+	const order_info_entry = [...uniqueItemDescription].flatMap(
+		(item, index) => {
+			const unitPrices = [...TotalUnitPrice[item]];
+			const rowCount = unitPrices.length;
+
+			return unitPrices.map((unitPrice, priceIndex) => {
+				// * Row Span
+				const rowSpan = priceIndex === 0 ? rowCount : 0;
+
+				// * Size
+				const getItem = sizeResults[item][priceIndex];
+				let res = '';
+				if (getItem.min_size === getItem.max_size) {
+					res = `${getItem.min_size}`;
+				} else {
+					res = `(${getItem.min_size} - ${getItem.max_size})`;
+				}
+
+				if (order_types[index] === 'tape') {
+					res = `${res} mtr`;
+				} else {
+					res += ` ${is_inchs[index] ? 'in' : 'cm'}`;
+				}
+
+				return {
+					order_number: {
+						text:
+							priceIndex === 0
+								? [...orderID[item]].join(', ')
+								: '',
+						rowSpan,
+					},
+					style: {
+						text:
+							priceIndex === 0 ? [...style[item]].join(', ') : '',
+						rowSpan,
+					},
+					pi_item_description: {
+						text: priceIndex === 0 ? item : '',
+						rowSpan,
+					},
+					specification: {
+						text: priceIndex === 0 ? specifications[index] : '',
+						rowSpan,
+					},
+					h_s_code: {
+						text: priceIndex === 0 ? '9607.11.00' : '',
+						rowSpan,
+					},
+					size: order_types[index] === 'full' ? res : '-',
+					quantity:
+						order_types[index] === 'tape'
+							? res
+							: TotalQuantity[index][priceIndex] + ' pcs',
+					// unit_price: unitPrice + '/dzn',
+					unit_price_dollar: `${unitPrice} /${order_types[index] === 'tape' ? 'mtr' : 'dzn'}`,
+					unit_price: `${Number(unitPrice).toFixed(2) * Number(data?.conversion_rate).toFixed(2)} /${order_types[index] === 'tape' ? 'mtr' : 'dzn'}`,
+					value_dollar: TotalValue[index][priceIndex],
+					value:
+						Number(TotalValue[index][priceIndex]).toFixed(2) *
+						Number(data?.conversion_rate).toFixed(2),
+				};
+			});
+		}
+	);
 	[...uniqueItemDescriptionThread].forEach((item) => {
 		threadStyle[item] = new Set();
 		threadOrderID[item] = new Set();
@@ -164,8 +245,15 @@ export default function Index(data) {
 					')',
 				h_s_code: '5402.62.00',
 				quantity: TotalThreadQuantity[index] + ' cone',
-				unit_price: TotalThreadUnitPrice[index] + '/cone',
-				value: Number(TotalThreadValue[index]).toFixed(2),
+				unit_price_dollar: TotalThreadUnitPrice[index] + '/cone',
+				unit_price:
+					Number(
+						TotalThreadUnitPrice[index] * data?.conversion_rate
+					).toFixed(2) + '/cone',
+				value_dollar: Number(TotalThreadValue[index]).toFixed(2),
+				value: Number(
+					TotalThreadValue[index] * data?.conversion_rate
+				).toFixed(2),
 			};
 		}
 	);
@@ -250,11 +338,15 @@ export default function Index(data) {
 
 						// Body
 						...order_info_entry.map((item) =>
-							node.map((nodeItem) => ({
-								text: item[nodeItem.field],
-								style: nodeItem.cellStyle,
-								alignment: nodeItem.alignment,
-							}))
+							node.map((nodeItem) => {
+								const cellData = item[nodeItem.field];
+								return {
+									text: cellData?.text || cellData,
+									style: nodeItem.cellStyle,
+									alignment: nodeItem.alignment,
+									rowSpan: cellData?.rowSpan,
+								};
+							})
 						),
 						...thread_order_info_entry.map((item) =>
 							node.map((nodeItem) => ({

@@ -1,5 +1,4 @@
 import { PI_MD_SIGN } from '@/assets/img/base64';
-import { set } from 'date-fns';
 
 import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
@@ -57,6 +56,7 @@ export default function Index(data) {
 	let is_inchs = [];
 	let order_type = 0;
 	let order_types = [];
+	// * Bank Policy
 	const bankPolicy = data?.bank_policy
 		.replace(/var_routing_no/g, `${data?.routing_no}`)
 		.replace(/var_pi_validity/g, `${data?.validity}`)
@@ -75,7 +75,7 @@ export default function Index(data) {
 		headers.push(header.trim());
 		values.push(value ? value.trim() : '');
 	});
-
+	//*
 	pi_cash_entry.forEach((item) => {
 		uniqueItemDescription.add(item.pi_item_description);
 	});
@@ -83,7 +83,7 @@ export default function Index(data) {
 	pi_cash_entry_thread.forEach((item) => {
 		uniqueItemDescriptionThread.add(item.count_length_name);
 	});
-
+	//* style , orderID , TotalUnitPrice,is_inch,order_type
 	[...uniqueItemDescription].forEach((item) => {
 		style[item] = new Set();
 		orderID[item] = new Set();
@@ -100,6 +100,7 @@ export default function Index(data) {
 		is_inchs.push(is_inch);
 		order_types.push(order_type);
 	});
+
 	[...uniqueItemDescription].forEach((item) => {
 		[...TotalUnitPrice[item]].forEach((item3) => {
 			let value = 0;
@@ -114,7 +115,7 @@ export default function Index(data) {
 				}
 			});
 			total_quantity.push(quantity);
-
+			grand_total_quantity += quantity;
 			total_value.push(Number(value).toFixed(2));
 			grand_total_value += value;
 		});
@@ -125,6 +126,7 @@ export default function Index(data) {
 		total_value = [];
 	});
 
+	// * Size
 	const sizeResults = {};
 	[...uniqueItemDescription].map((item) => {
 		sizeResults[item] = [];
@@ -143,7 +145,7 @@ export default function Index(data) {
 			};
 		});
 	});
-
+	// * Specifications
 	const specifications = [...uniqueItemDescription].map((item) => {
 		return pi_cash_entry
 			.filter((entry) => entry.pi_item_description === item)
@@ -160,47 +162,64 @@ export default function Index(data) {
 		specifications[index] = [...new Set(spec.split(', '))].join(', ');
 	});
 
+	// * order_info_entry
 	const order_info_entry = [...uniqueItemDescription].flatMap(
 		(item, index) => {
 			const unitPrices = [...TotalUnitPrice[item]];
 			const rowCount = unitPrices.length;
 
 			return unitPrices.map((unitPrice, priceIndex) => {
+				// * Row Span
+				const rowSpan = priceIndex === 0 ? rowCount : 0;
+
+				// * Size
+				const getItem = sizeResults[item][priceIndex];
+				let res = '';
+				if (getItem.min_size === getItem.max_size) {
+					res = `${getItem.min_size}`;
+				} else {
+					res = `(${getItem.min_size} - ${getItem.max_size})`;
+				}
+
+				if (order_types[index] === 'tape') {
+					res = `${res} mtr`;
+				} else {
+					res += ` ${is_inchs[index] ? 'in' : 'cm'}`;
+				}
+
 				return {
 					order_number: {
 						text:
 							priceIndex === 0
 								? [...orderID[item]].join(', ')
 								: '',
-						rowSpan: priceIndex === 0 ? rowCount : 0,
+						rowSpan,
 					},
 					style: {
 						text:
 							priceIndex === 0 ? [...style[item]].join(', ') : '',
-						rowSpan: priceIndex === 0 ? rowCount : 0,
+						rowSpan,
 					},
 					pi_item_description: {
 						text: priceIndex === 0 ? item : '',
-						rowSpan: priceIndex === 0 ? rowCount : 0,
+						rowSpan,
 					},
 					specification: {
 						text: priceIndex === 0 ? specifications[index] : '',
-						rowSpan: priceIndex === 0 ? rowCount : 0,
+						rowSpan,
 					},
 					h_s_code: {
 						text: priceIndex === 0 ? '9607.11.00' : '',
-						rowSpan: priceIndex === 0 ? rowCount : 0,
+						rowSpan,
 					},
-					size:
-						order_types[index] === 'full'
-							? sizeResults[item][priceIndex].min_size ===
-								sizeResults[item][priceIndex].max_size
-								? `${sizeResults[item][priceIndex].min_size} ${is_inchs[index] ? 'in' : 'cm'}`
-								: `${sizeResults[item][priceIndex].min_size} - ${sizeResults[item][priceIndex].max_size} ${is_inchs[index] ? 'in' : 'cm'}`
-							: '',
-					quantity: TotalQuantity[index][priceIndex] + ' pcs',
-					unit_price: unitPrice + '/dzn',
-					value: TotalValue[index][priceIndex],
+					size: order_types[index] === 'full' ? res : '-',
+					quantity:
+						order_types[index] === 'tape'
+							? res
+							: TotalQuantity[index][priceIndex] + ' pcs',
+					// unit_price: unitPrice + '/dzn',
+					unit_price: `${unitPrice} /${order_types[index] === 'tape' ? 'mtr' : 'dzn'}`,
+					value: TotalValue[index][priceIndex], 
 				};
 			});
 		}

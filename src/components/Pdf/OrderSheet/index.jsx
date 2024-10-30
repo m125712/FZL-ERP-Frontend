@@ -54,6 +54,11 @@ export default function OrderSheetPdf(order_sheet) {
 		// Page Layout
 		content: [
 			...order_entry.map((entry, i) => {
+				// * special requirement info
+				const special_req_info = getSpecialReqInfo(entry, sr);
+				
+				//todo: order_type condition will start from here
+
 				const { order_entry } = entry;
 				const uniqueSizes = [
 					...new Set(
@@ -63,9 +68,6 @@ export default function OrderSheetPdf(order_sheet) {
 
 				// * garments info
 				const garments_info = getGarmentInfo(entry, garments);
-
-				// * special requirement info
-				const special_req_info = getSpecialReqInfo(entry, sr);
 
 				const uniqueColor = () => {
 					const uniqueColors = new Set();
@@ -353,6 +355,37 @@ export default function OrderSheetPdf(order_sheet) {
 						},
 					},
 				];
+
+				// if (entry.order_type !== 'slider') {
+
+				// } else {
+				// 	return {
+				// 		margin: [0, 5],
+				// 		table: {
+				// 			widths: ['*', 'auto'],
+				// 			body: [
+				// 				[
+				// 					...TableHeader({
+				// 						entry,
+				// 						special_req_info,
+				// 						uniqueSizes: [1],
+				// 						i,
+				// 					}),
+				// 					{
+				// 						text: 'Grand Total',
+				// 						style: 'tableFooter',
+				// 						alignment: 'right',
+				// 					},
+				// 					{
+				// 						text: grandTotal(order_entry),
+				// 						style: 'tableFooter',
+				// 						alignment: 'Center',
+				// 					},
+				// 				],
+				// 			],
+				// 		},
+				// 	};
+				// }
 			}),
 
 			// * Grand total

@@ -34,7 +34,6 @@ export default function Index({
 		[order_entry]
 	);
 
-	console.log(order_entry[0]?.is_inch);
 	return (
 		<ReactTable title='Details' data={order_entry} columns={columns}>
 			<tr className='bg-slate-200 text-sm'>

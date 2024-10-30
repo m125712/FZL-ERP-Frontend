@@ -1,9 +1,13 @@
+import { lazy, useEffect, useState } from 'react';
+import { useOrderParty } from '@/state/Order';
+import { useOtherPartyAll } from '@/state/Other';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useOrderParty } from '@/state/Order';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useState } from 'react';
+
 import { PartyColumns } from '../columns';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
@@ -11,6 +15,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useOrderParty();
+	const { invalidateQuery: invalidatePartyAll } = useOtherPartyAll();
 	const info = new PageInfo('Order/Party', url, 'order__party');
 	const haveAccess = useAccess(info.getTab());
 
@@ -89,6 +94,7 @@ export default function Index() {
 						url,
 						deleteData,
 					}}
+					invalidateQuery={invalidatePartyAll}
 				/>
 			</Suspense>
 		</div>

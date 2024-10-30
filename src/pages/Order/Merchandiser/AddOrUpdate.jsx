@@ -1,13 +1,10 @@
 import { useAuth } from '@/context/auth';
 import { useOrderMerchandiser } from '@/state/Order';
-import { useOtherMerchandiserByPartyUUID } from '@/state/Other';
 import {
-	useFetch,
-	useFetchForRhfReset,
-	usePostFunc,
-	useRHF,
-	useUpdateFunc,
-} from '@/hooks';
+	useOtherMerchandiserByPartyUUID,
+	useOtherPartyAll,
+} from '@/state/Other';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
@@ -38,7 +35,7 @@ export default function Index({
 		context,
 	} = useRHF(MERCHANDISER_SCHEMA, MERCHANDISER_NULL);
 
-	const { value: party } = useFetch('/other/party/value/label');
+	const { data: party } = useOtherPartyAll();
 	const { user } = useAuth();
 
 	useFetchForRhfReset(

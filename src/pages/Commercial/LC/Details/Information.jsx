@@ -81,25 +81,17 @@ function BankInfo(lc) {
 
 export default function Information({ lc }) {
 	const {
-		uuid,
-		party_uuid,
 		pi_cash_ids,
 		party_name,
 		total_value,
 		file_number,
 		lc_number,
 		lc_date,
-		payment_value,
-		payment_date,
-		ldbc_fdbc,
-		acceptance_date,
-		maturity_date,
 		commercial_executive,
 		party_bank,
 		production_complete,
 		is_rtgs,
 		lc_cancel,
-		handover_date,
 		shipment_date,
 		expiry_date,
 		ud_no,
@@ -109,11 +101,11 @@ export default function Information({ lc }) {
 		amd_count,
 		problematical,
 		epz,
-		created_by,
 		created_by_name,
 		created_at,
 		updated_at,
 		remarks,
+		lc_entry_others,
 	} = lc;
 
 	const renderItems = () => {
@@ -217,11 +209,29 @@ export default function Information({ lc }) {
 		const others = [
 			{
 				label: 'UD No.',
-				value: ud_no,
+				value: lc_entry_others.map(({ ud_no }) => ud_no).join(', '),
 			},
 			{
 				label: 'UD Received',
-				value: ud_received,
+				value: lc_entry_others
+					.map(({ ud_received }) =>
+						format(new Date(ud_received), 'dd/MM/yyyy')
+					)
+					.join(', '),
+			},
+			{
+				label: 'UP Number',
+				value: lc_entry_others
+					.map(({ up_number }) => up_number)
+					.join(', '),
+			},
+			{
+				label: 'UP Number Received',
+				value: lc_entry_others
+					.map(({ up_number_updated_at }) =>
+						format(new Date(up_number_updated_at), 'dd/MM/yyyy')
+					)
+					.join(', '),
 			},
 			{
 				label: 'At Sight',
@@ -269,7 +279,6 @@ export default function Information({ lc }) {
 					items={renderItems().others}
 				/>
 			</div>
-			
 		</SectionContainer>
 	);
 }

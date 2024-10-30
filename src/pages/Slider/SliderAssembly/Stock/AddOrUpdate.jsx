@@ -38,6 +38,9 @@ export default function Index({
 	);
 	const { value: cap } = useFetch('/other/slider/die-casting/by-type/cap');
 	const { value: link } = useFetch('/other/slider/die-casting/by-type/link');
+	const { value: materials } = useFetch(
+		'/other/material/value/label/unit/quantity'
+	);
 
 	const { user } = useAuth();
 
@@ -99,11 +102,37 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}>
 			{/* NAME , ITEM , ZIPPER NUMBER */}
-			<Input
-				label='name'
-				placeholder='Enter Name'
-				{...{ register, errors }}
-			/>
+			<div className='flex gap-4'>
+				<Input
+					label='name'
+					placeholder='Enter Name'
+					{...{ register, errors }}
+				/>
+				<FormField
+					label='material_uuid'
+					title='Material'
+					errors={errors}>
+					<Controller
+						name={'material_uuid'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select material'
+									options={materials}
+									value={materials?.filter(
+										(item) =>
+											item.value ==
+											getValues('material_uuid')
+									)}
+									onChange={(e) => onChange(e.value)}
+									// isDisabled={order_info_id !== undefined}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+			</div>
 			<div className='grid grid-cols-1 gap-4 md:grid-cols-4'>
 				{/* Body */}
 				<FormField

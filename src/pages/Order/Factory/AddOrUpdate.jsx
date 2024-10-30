@@ -1,7 +1,7 @@
 import { useAuth } from '@/context/auth';
 import { useOrderFactory } from '@/state/Order';
-import { useOtherFactoryByPartyUUID } from '@/state/Other';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useOtherFactoryByPartyUUID, useOtherPartyAll } from '@/state/Other';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
@@ -31,7 +31,7 @@ export default function Index({
 		context,
 	} = useRHF(FACTORY_SCHEMA, FACTORY_NULL);
 
-	const { value: party } = useFetch('/other/party/value/label');
+	const { data: party } = useOtherPartyAll();
 
 	const { user } = useAuth();
 	useFetchForRhfReset(

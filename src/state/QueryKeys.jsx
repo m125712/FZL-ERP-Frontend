@@ -48,9 +48,11 @@ export const orderQK = {
 	// merchandisers
 	merchandisers: () => [...orderQK.all(), 'merchandisers'],
 	merchandiser: (uuid) => [...orderQK.merchandisers(), uuid],
+	
 	//Party
 	party: () => [...orderQK.all(), 'party'],
 	partyByUUID: (uuid) => [...orderQK.party(), uuid],
+
 	//properties
 	properties: () => [...orderQK.all(), 'properties'],
 	propertiesByUUID: (uuid) => [...orderQK.party(), uuid],

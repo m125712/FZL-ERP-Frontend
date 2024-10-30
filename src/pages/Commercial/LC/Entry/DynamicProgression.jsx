@@ -13,11 +13,8 @@ export default function index({
 	progressionField,
 	progressionAppend,
 	progressionRemove,
-	setDeleteLCEntry
+	setDeleteLCEntry,
 }) {
-
-
-
 	const handelProgressionAppend = () => {
 		progressionAppend({
 			recipe_uuid: '',
@@ -76,21 +73,21 @@ export default function index({
 						<td className={`${rowClass}`}>
 							<Input
 								label={`lc_entry[${index}].amount`}
-								is_title_needed={false}
+								is_title_needed='false'
 								{...{ register, errors }}
 							/>
 						</td>
 						<td className={`${rowClass}`}>
 							<Input
 								label={`lc_entry[${index}].ldbc_fdbc`}
-								is_title_needed={false}
+								is_title_needed='false'
 								{...{ register, errors }}
 							/>
 						</td>
 						<td className={`w-44 ${rowClass}`}>
 							<DateInput
 								label={`lc_entry[${index}].handover_date`}
-								is_title_needed={false}
+								is_title_needed='false'
 								Controller={Controller}
 								control={control}
 								selected={watch(
@@ -102,7 +99,7 @@ export default function index({
 						<td className={`w-44 ${rowClass}`}>
 							<DateInput
 								label={`lc_entry[${index}].document_receive_date`}
-								is_title_needed={false}
+								is_title_needed='false'
 								Controller={Controller}
 								control={control}
 								selected={watch(
@@ -119,7 +116,7 @@ export default function index({
 						<td className={`w-44 ${rowClass}`}>
 							<DateInput
 								label={`lc_entry[${index}].acceptance_date`}
-								is_title_needed={false}
+								is_title_needed='false'
 								Controller={Controller}
 								control={control}
 								selected={watch(
@@ -138,7 +135,7 @@ export default function index({
 						<td className={`w-44 ${rowClass}`}>
 							<DateInput
 								label={`lc_entry[${index}].maturity_date`}
-								is_title_needed={false}
+								is_title_needed='false'
 								Controller={Controller}
 								control={control}
 								selected={watch(
@@ -155,7 +152,7 @@ export default function index({
 						<td className={`w-44 ${rowClass}`}>
 							<DateInput
 								label={`lc_entry[${index}].payment_date`}
-								is_title_needed={false}
+								is_title_needed='false'
 								Controller={Controller}
 								control={control}
 								selected={watch(
@@ -172,7 +169,7 @@ export default function index({
 						<td className={`${rowClass}`}>
 							<Input
 								label={`lc_entry[${index}].payment_value`}
-								is_title_needed={false}
+								is_title_needed='false'
 								{...{ register, errors }}
 							/>
 						</td>
@@ -190,7 +187,6 @@ export default function index({
 					</tr>
 				))}
 			</DynamicField>
-			
 		</>
 	);
 }

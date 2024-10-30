@@ -17,6 +17,7 @@ import {
 	useOrderAgainstDieCastingRMLog,
 	useOrderAgainstSliderAssemblyRMLog,
 	useOrderAgainstSliderColorRMLog,
+	useSliderAssemblyStock,
 } from '@/state/Slider';
 import { useMaterialInfo, useMaterialStockToSFG } from '@/state/Store';
 import {
@@ -79,6 +80,8 @@ export default function Index({
 		useOrderAgainstSliderAssemblyRMLog();
 	const { invalidateQuery: invalidateOrderAgainstSliderColorRMLog } =
 		useOrderAgainstSliderColorRMLog();
+	const { invalidateQuery: invalidateSliderAssemblyStock } =
+	useSliderAssemblyStock();
 
 	const { user } = useAuth();
 
@@ -145,6 +148,7 @@ export default function Index({
 			invalidateOrderAgainstTMRMLog();
 			invalidateOrderAgainstSliderAssemblyRMLog();
 			invalidateOrderAgainstSliderColorRMLog();
+			invalidateSliderAssemblyStock();
 
 			return;
 		}

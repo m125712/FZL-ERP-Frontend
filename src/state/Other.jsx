@@ -81,6 +81,12 @@ export const useThreadOrder = () =>
 		queryKey: otherQK.threadOrders(),
 		url: '/other/thread/value/label',
 	});
+// GET THREAD ORDER For Challan
+export const useThreadOrderForChallan = () =>
+	createGlobalState({
+		queryKey: otherQK.threadOrdersForChallan(),
+		url: '/other/thread/value/label?page=challan',
+	});
 
 export const useOtherOrderDescription = () =>
 	createGlobalState({
@@ -130,7 +136,12 @@ export const useOtherMaterial = () =>
 		queryKey: otherQK.material(),
 		url: `/other/material/value/label/unit/quantity`,
 	});
-
+// GET OTHER MATERIAL
+export const useOtherMaterialByParams = (params) =>
+	createGlobalState({
+		queryKey: otherQK.materialByParams(params),
+		url: `/other/material/value/label/unit/quantity?${params}`,
+	});
 // GET OTHER BANK
 export const useOtherBank = () =>
 	createGlobalState({
@@ -419,4 +430,23 @@ export const useOtherCountLength = () =>
 	createGlobalState({
 		queryKey: otherQK.countLength(),
 		url: `/other/thread/count-length/value/label`,
+	});
+
+//*GET ALl Zipper-Thread Order List
+export const useAllZipperThreadOrderList = () =>
+	createGlobalState({
+		queryKey: otherQK.allZipperThreadOrderList(),
+		url: `/other/order/zipper-thread/value/label`,
+	});
+//* GET SHADE RECIPE
+export const useOtherShadeRecipe = () =>
+	createGlobalState({
+		queryKey: otherQK.shadeRecipe(),
+		url: `/other/lab-dip/shade-recipe/value/label`,
+	});
+//* GET RECIPE
+export const useOtherRecipe = () =>
+	createGlobalState({
+		queryKey: otherQK.recipe(),
+		url: `/other/lab-dip/recipe/value/label`,
 	});

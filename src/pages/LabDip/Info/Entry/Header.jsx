@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAllZipperThreadOrderList } from '@/state/Other';
 import { useFetch } from '@/hooks';
 
 import {
@@ -25,10 +26,7 @@ export default function Header({
 			? true
 			: false
 	);
-
-	const { value: order_info_uuid } = useFetch(
-		`/other/order/zipper-thread/value/label`
-	);
+	const { data: order_info_uuid } = useAllZipperThreadOrderList();
 
 	return (
 		<div className='flex flex-col gap-4'>
@@ -49,7 +47,7 @@ export default function Header({
 				// 		</div>
 				// 	</div>
 				// }
-				>
+			>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					{/* Order info ID */}
 

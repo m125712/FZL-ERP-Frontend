@@ -3,6 +3,7 @@ import {
 	useOtherHRUserByDesignation,
 	useOtherVehicle,
 	useThreadOrder,
+	useThreadOrderForChallan,
 } from '@/state/Other';
 
 import {
@@ -24,8 +25,9 @@ export default function Header({
 	watch,
 	setValue,
 }) {
-	const { data: users } = useOtherHRUserByDesignation('driver');
-	const { data: orders } = useThreadOrder();
+	const { data: orders } = isUpdate
+		? useThreadOrder()
+		: useThreadOrderForChallan();
 	const { data: vehicles } = useOtherVehicle();
 
 	const isHandDelivery = watch('is_hand_delivery');
@@ -145,7 +147,7 @@ export default function Header({
 										onChange={(e) =>
 											onChange(e.value.toString())
 										}
-										// isDisabled={isUpdate}
+										isDisabled={isUpdate}
 									/>
 								);
 							}}

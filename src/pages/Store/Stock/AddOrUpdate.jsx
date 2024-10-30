@@ -1,6 +1,10 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useOtherMaterialSection, useOtherMaterialType } from '@/state/Other';
+import {
+	useOtherMaterialByParams,
+	useOtherMaterialSection,
+	useOtherMaterialType,
+} from '@/state/Other';
 import { useMaterialInfo, useMaterialInfoByUUID } from '@/state/Store';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
@@ -33,7 +37,8 @@ export default function Index({
 	const { data } = useMaterialInfoByUUID(updateMaterialDetails?.uuid);
 	const { data: section } = useOtherMaterialSection();
 	const { data: materialType } = useOtherMaterialType();
-
+	const { invalidateQuery: invalidateMaterialByDyes } =
+		useOtherMaterialByParams('type=dyes');
 	const {
 		register,
 		handleSubmit,
@@ -95,6 +100,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateMaterialByDyes();
 	};
 
 	const selectUnit = [
@@ -167,7 +173,7 @@ export default function Index({
 					/>
 				</FormField>
 				<div className='mt-6 flex items-center text-sm'>
-					<div className='rounded-md border w-40  border-secondary/30 px-1'>
+					<div className='w-40 rounded-md border border-secondary/30 px-1'>
 						<CheckBox
 							height='h-[2.9rem]'
 							label='is_priority_material'

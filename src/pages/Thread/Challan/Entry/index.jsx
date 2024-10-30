@@ -55,10 +55,7 @@ export default function Index() {
 					.transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? null : value
 					)
-					.max(
-						yup.ref('balance_quantity'),
-						'Beyond Balance Quantity'
-					),
+					.max(yup.ref('max_quantity'), 'Beyond Max Quantity'),
 				short_quantity: NUMBER_DOUBLE.default(0).transform(
 					(value, originalValue) =>
 						String(originalValue).trim() === '' ? 0 : value
@@ -190,19 +187,21 @@ export default function Index() {
 							});
 					}),
 				];
-
-				await Promise.all(batch_entry_updated_promises).then(() =>
-					reset(Object.assign({}, THREAD_CHALLAN_NULL))
-				);
-				// .then(() => invalidateDyeingThreadBatch())
-				// .then(
-				invalidateThreadChallan();
-				navigate(`/thread/challan/${batch_data_updated?.uuid}`)
-					// )
-					.catch((err) => console.log(err));
+				try {
+					await Promise.all(batch_entry_updated_promises)
+						.then(() =>
+							reset(Object.assign({}, THREAD_CHALLAN_NULL))
+						)
+						.then(() => {
+							invalidateThreadChallan();
+							navigate(
+								`/thread/challan/${batch_data_updated?.uuid}`
+							);
+						});
+				} catch (err) {
+					console.error(`Error with Promise.all: ${err}`);
+				}
 			}
-
-			return;
 		}
 
 		// * ADD data
@@ -252,7 +251,10 @@ export default function Index() {
 
 			await Promise.all(promises)
 				.then(() => reset(Object.assign({}, THREAD_CHALLAN_NULL)))
-				.then(navigate(`/thread/challan/${challan_data.uuid}`))
+				.then(() => {
+					invalidateThreadChallan();
+					navigate(`/thread/challan/${challan_data.uuid}`);
+				})
 				.catch((err) => console.log(err));
 
 			return;

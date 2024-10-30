@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDyeingSwatch } from '@/state/Dyeing';
+import { useOtherShadeRecipe } from '@/state/Other';
 import { useThreadSwatch } from '@/state/Thread';
 import { useAccess, useFetch, useFetchFunc, useUpdateFunc } from '@/hooks';
 
@@ -21,7 +22,7 @@ export default function Index() {
 		'lab_dip__thread_swatch'
 	);
 	const haveAccess = useAccess('lab_dip__thread_swatch');
-
+	const { data: shade_recipe } = useOtherShadeRecipe();
 	// * fetching the data
 
 	const columns = useMemo(
@@ -100,10 +101,6 @@ export default function Index() {
 					const { recipe_uuid, bleaching } = info.row.original;
 					const { uuid } = info.row.original;
 
-					const { value: shade_recipe } = useFetch(
-						`/other/lab-dip/shade-recipe/value/label?thread_order_info_uuid=${uuid}&bleaching=${bleaching}`
-					);
-
 					const swatchAccess = haveAccess.includes(
 						'click_swatch_status'
 					);
@@ -116,7 +113,15 @@ export default function Index() {
 							className={'input-xs'}
 							key={recipe_uuid}
 							placeholder='Select order info uuid'
-							options={shade_recipe ?? []}
+							options={
+								shade_recipe.filter(
+									(item) =>
+										(item.bleaching == bleaching &&
+											item.thread_order_info_uuid ===
+												uuid) ||
+										item.label === '---'
+								) ?? []
+							}
 							value={shade_recipe?.filter(
 								(item) => item.value == recipe_uuid
 							)}
@@ -136,7 +141,7 @@ export default function Index() {
 				},
 			},
 		],
-		[data]
+		[data, shade_recipe, haveAccess]
 	);
 
 	const handleSwatchStatus = async (e, idx) => {

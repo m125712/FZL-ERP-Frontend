@@ -94,7 +94,7 @@ export default function Index() {
 				accessorKey: 'tape_transferred',
 				header: 'Tape Stock (KG)',
 				enableColumnFilter: false,
-				cell: (info) =>info.getValue(),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'balance_quantity',
@@ -196,7 +196,7 @@ export default function Index() {
 		trx_to: null,
 		remarks: '',
 	});
-	
+
 	const handelTransaction = (idx) => {
 		const val = data[idx];
 
@@ -213,7 +213,7 @@ export default function Index() {
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
+		<div>
 			<ReactTable title={info.getTitle()} data={data} columns={columns} />
 			<Suspense>
 				<Production

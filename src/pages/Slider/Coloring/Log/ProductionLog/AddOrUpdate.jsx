@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useSliderAssemblyProductionEntryByUUID } from '@/state/Slider';
+import { useSliderAssemblyProductionEntryByUUID, useSliderColoringProduction } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
 import * as yup from 'yup';
 import { useRHF, useUpdateFunc } from '@/hooks';
@@ -31,6 +31,7 @@ export default function Index({
 	const { data, updateData, url } = useSliderAssemblyProductionEntryByUUID(
 		updateSliderProd?.uuid
 	);
+	const { invalidateQuery } = useSliderColoringProduction();
 
 	const MAX_QUANTITY =
 		updateSliderProd?.slider_assembly_prod + updateSliderProd?.trx_quantity;
@@ -93,6 +94,7 @@ export default function Index({
 				onClose,
 			});
 
+			invalidateQuery();
 			return;
 		}
 	};

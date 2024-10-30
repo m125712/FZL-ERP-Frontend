@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useSliderAssemblyProductionEntryByUUID } from '@/state/Slider';
+import { useSliderAssemblyProduction, useSliderAssemblyProductionEntryByUUID } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
 import { Weight } from 'lucide-react';
 import { useRHF } from '@/hooks';
@@ -24,7 +24,7 @@ export default function Index({
 	const { data, updateData, url } = useSliderAssemblyProductionEntryByUUID(
 		updateSliderProd?.uuid
 	);
-
+	const { invalidateQuery } = useSliderAssemblyProduction();
 	const MAX_QUANTITY = Math.floor(Number(updateSliderProd?.max_sa_quantity));
 	const {
 		register,
@@ -76,7 +76,7 @@ export default function Index({
 				updatedData: updatedData,
 				onClose,
 			});
-
+			invalidateQuery();
 			return;
 		}
 	};

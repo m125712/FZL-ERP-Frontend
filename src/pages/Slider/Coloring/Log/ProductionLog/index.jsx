@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useSliderColoringLogProduction } from '@/state/Slider';
+import { useSliderColoringLogProduction, useSliderColoringProduction } from '@/state/Slider';
 import Pdf from '@components/Pdf/SliderColoringProduction';
 import { useAccess } from '@/hooks';
 
@@ -14,6 +14,8 @@ import AddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, deleteData } = useSliderColoringLogProduction();
+	const { invalidateQuery } = useSliderColoringProduction();
+	
 	const info = new PageInfo(
 		'Production Log',
 		'/slider/slider-coloring/log/production'
@@ -293,6 +295,7 @@ export default function Index() {
 					setDeleteItem={setDeleteItem}
 					deleteData={deleteData}
 					url={`/slider/production`}
+					invalidateQuery={invalidateQuery}
 				/>
 			</Suspense>
 		</div>

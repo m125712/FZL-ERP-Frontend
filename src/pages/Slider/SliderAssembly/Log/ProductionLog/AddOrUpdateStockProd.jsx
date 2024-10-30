@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import {
+	useSliderAssemblyProduction,
 	useSliderAssemblyStock,
 	useSliderAssemblyStockProductionByUUID,
 } from '@/state/Slider';
@@ -27,7 +28,7 @@ export default function Index({
 		updateSliderProd?.uuid
 	);
 	const { invalidateQuery } = useSliderAssemblyStock();
-
+	const { invalidateQuery: invalidateSliderAssembly } = useSliderAssemblyProduction();
 	const {
 		register,
 		handleSubmit,
@@ -95,6 +96,7 @@ export default function Index({
 				onClose,
 			});
 
+			invalidateSliderAssembly();
 			invalidateQuery();
 			return;
 		}

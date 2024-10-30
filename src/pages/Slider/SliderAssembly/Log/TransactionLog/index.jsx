@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useSliderAssemblyLogTransaction } from '@/state/Slider';
+import { useSliderAssemblyLogTransaction, useSliderAssemblyProduction } from '@/state/Slider';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -13,6 +13,7 @@ import AddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, deleteData } = useSliderAssemblyLogTransaction();
+	const { invalidateQuery } = useSliderAssemblyProduction();
 	const info = new PageInfo(
 		'Transaction Log',
 		'/slider/slider-assembly/log/transaction'
@@ -262,6 +263,7 @@ export default function Index() {
 					setDeleteItem={setDeleteItem}
 					deleteData={deleteData}
 					url={`/slider/transaction`}
+					invalidateQuery={invalidateQuery}
 				/>
 			</Suspense>
 		</div>

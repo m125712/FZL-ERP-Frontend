@@ -11,6 +11,7 @@ export default function Index({
 	stopper_type_name,
 	zipper_number_name,
 	order_entry,
+	order_type,
 	is_cm,
 	is_inch,
 	is_meter,
@@ -33,17 +34,18 @@ export default function Index({
 		[order_entry]
 	);
 
+	console.log(order_entry[0]?.is_inch);
 	return (
 		<ReactTable title='Details' data={order_entry} columns={columns}>
 			<tr className='bg-slate-200 text-sm'>
-				<td colSpan={6} className='text-right font-bold'>
+				<td colSpan={is_inch || is_meter? 6: 5} className='text-right font-bold'>
 					Total Quantity:
 				</td>
 				<td className='px-3 py-1'>{sliderQuantity.Quantity}</td>
 				<td className='px-3 py-1'>{sliderQuantity.piQuantity}</td>
 				<td className='px-3 py-1'>{sliderQuantity.rejectQuantity}</td>
 				<td className='px-3 py-1'>{sliderQuantity.shortQuantity}</td>
-				<td colSpan={6}></td>
+				<td colSpan={is_inch || is_meter? 6: 4}></td>
 				<td className='px-3 py-1'>{sliderQuantity.deliveryQuantity}</td>
 				<td></td>
 			</tr>

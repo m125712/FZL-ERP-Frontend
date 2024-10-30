@@ -114,7 +114,7 @@ export default function Index() {
 							key={recipe_uuid}
 							placeholder='Select order info uuid'
 							options={
-								shade_recipe.filter(
+								shade_recipe?.filter(
 									(item) =>
 										(item.bleaching == bleaching &&
 											item.thread_order_info_uuid ===

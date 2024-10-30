@@ -45,7 +45,12 @@ export default function Index({ packing_list_entry }) {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
+			{
+				accessorKey: 'is_inch',
+				header: 'Unit',
+				enableColumnFilter: false,
+				cell: (info) => (info.getValue() === 1 ? 'Inch' : 'Cm'),
+			},
 			{
 				accessorKey: 'order_quantity',
 				header: 'Order Qty',
@@ -60,7 +65,7 @@ export default function Index({ packing_list_entry }) {
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'Qty',
+				header: 'Qty(pcs)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

@@ -57,7 +57,6 @@ export default function Index({
 		reset(POLICY_NULL);
 		window[modalId].close();
 	};
-	console.log(getValues());
 	const onSubmit = async (data) => {
 		// Update item
 		if (updatePolicy?.uuid !== null && updatePolicy?.uuid !== undefined) {

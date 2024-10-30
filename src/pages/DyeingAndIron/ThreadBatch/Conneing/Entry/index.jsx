@@ -140,7 +140,6 @@ export default function Index() {
 					const updatedData = {
 						...item,
 					};
-					console.log(updatedData, 'updatedData');
 
 					return await updateData.mutateAsync({
 						url: `${threadBatchEntryUrl}/${item?.batch_entry_uuid}`,
@@ -187,7 +186,6 @@ export default function Index() {
 					const updatedData = {
 						...item,
 					};
-					console.log(item, 'updatedData');
 
 					return await updateData.mutateAsync({
 						url: `${threadBatchEntryUrl}/${item?.batch_entry_uuid}`,

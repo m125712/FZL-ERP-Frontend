@@ -20,8 +20,8 @@ const node = [
 	getTable('item_description', 'Item'),
 	getTable('style', 'Style'),
 	getTable('color', 'Color'),
-	getTable('size', 'Size'),
-	getTable('quantity', 'Qty', 'right'),
+	getTable('size', 'Size', 'right'),
+	getTable('quantity', 'Qty(pcs)', 'right'),
 	getTable('poli_quantity', 'Poly', 'right'),
 ];
 
@@ -36,6 +36,9 @@ export default function Index(data) {
 		const quantity = parseInt(item.poli_quantity, 10) || 0;
 		return acc + quantity;
 	}, 0);
+	data?.packing_list_entry?.map((item) => {
+		item.size = `${item.is_inch === 1 ? `${item.size} in` : `${item.size} cm`}`;
+	});
 	const pdfDocGenerator = pdfMake.createPdf({
 		...CUSTOM_PAGE({
 			xMargin,

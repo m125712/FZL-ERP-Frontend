@@ -35,7 +35,6 @@ export default function Index({
 	const { value: dyes } = useFetch('/other/thread/dyes-category/value/label');
 
 	useFetchForRhfReset(`${url}/${update?.uuid}`, update?.uuid, reset);
-	console.log(getValues(), 'update');
 
 	const onClose = () => {
 		setUpdate((prev) => ({

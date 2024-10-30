@@ -12,8 +12,8 @@ const node = [
 	getTable('style', 'Style'),
 	getTable('color', 'Color'),
 	getTable('count', 'Count', 'right'),
-	getTable('length', 'Length', 'right'),
-	getTable('quantity', 'Quantity', 'right'),
+	getTable('length', 'Length (mtr)', 'right'),
+	getTable('quantity', 'Qty (cone)', 'right'),
 ];
 
 export default function Index(data) {

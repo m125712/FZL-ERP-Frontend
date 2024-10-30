@@ -45,6 +45,12 @@ export default function Index({ challan }) {
 				enableColumnFilter: false,
 			},
 			{
+				accessorKey: 'is_inch',
+				header: 'Unit',
+				cell: (info) => (info.getValue() ? 'Inch' : 'Cm'),
+				enableColumnFilter: false,
+			},
+			{
 				accessorKey: 'delivered',
 				header: 'Delivered',
 				cell: (info) => info.getValue(),
@@ -52,7 +58,7 @@ export default function Index({ challan }) {
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'Quantity',
+				header: 'Quantity(pcs)',
 				cell: (info) => info.getValue(),
 				enableColumnFilter: false,
 			},

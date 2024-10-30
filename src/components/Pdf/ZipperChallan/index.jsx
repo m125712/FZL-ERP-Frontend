@@ -14,7 +14,7 @@ const node = [
 	getTable('style', 'Style'),
 	getTable('color', 'Color'),
 	getTable('size', 'Size', 'right'),
-	getTable('quantity', 'Quantity', 'right'),
+	getTable('quantity', 'Qty(pcs)', 'right'),
 	getTable('poly_quantity', 'Poly', 'right'),
 ];
 
@@ -30,7 +30,9 @@ export default function Index(data) {
 		const quantity = parseInt(item.poly_quantity, 10) || 0;
 		return acc + quantity;
 	}, 0);
-
+	data?.challan_entry?.map((item) => {
+		item.size = `${item.is_inch === 1 ? `${item.size} in` : `${item.size} cm`}`;
+	});
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
 			xMargin,

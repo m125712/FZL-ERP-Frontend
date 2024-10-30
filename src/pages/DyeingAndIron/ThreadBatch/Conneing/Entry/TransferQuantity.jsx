@@ -60,7 +60,6 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
-		console.log(transfer?.batch_entry_uuid, 'onsubmit');
 		const updatedData = {
 			...data,
 		};

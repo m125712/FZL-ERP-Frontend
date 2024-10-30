@@ -26,13 +26,13 @@ export default function Index({ challan }) {
 			},
 			{
 				accessorKey: 'length',
-				header: 'Length',
+				header: 'Length(mtr)',
 				cell: (info) => info.getValue(),
 				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'Quantity',
+				header: 'Quantity(cone)',
 				cell: (info) => info.getValue(),
 				enableColumnFilter: false,
 			},

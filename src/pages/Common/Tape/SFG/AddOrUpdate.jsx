@@ -76,7 +76,6 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
-		//console.log(data);
 		if (
 			updateTapeProd?.uuid !== null &&
 			updateTapeProd?.uuid !== undefined

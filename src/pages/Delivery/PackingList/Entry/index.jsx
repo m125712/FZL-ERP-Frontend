@@ -340,11 +340,12 @@ export default function Index() {
 								'Style',
 								'Color',
 								'Size',
+								'Unit',
 								'Order QTY',
 								'Balance QTY',
 								// 'Warehouse',
 								// 'Delivered',
-								'Quantity',
+								'Quantity(pcs)',
 								'Poly QTY',
 								'Short QTY',
 								'Reject QTY',
@@ -418,6 +419,16 @@ export default function Index() {
 							</td>
 							<td className={`w-32 ${rowClass}`}>
 								{getValues(`packing_list_entry[${index}].size`)}
+							</td>
+							<td className={`w-32 ${rowClass}`}>
+								{getValues(
+									`packing_list_entry[${index}].is_inch`
+								) &&
+								getValues(
+									`packing_list_entry[${index}].order_number`
+								) !== ''
+									? 'inch'
+									: 'cm'}
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(

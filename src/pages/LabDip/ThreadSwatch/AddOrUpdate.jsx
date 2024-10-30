@@ -41,7 +41,7 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
-		console.log("Data", data);
+
 		// Update item
 		const updatedData = {
 			...data,

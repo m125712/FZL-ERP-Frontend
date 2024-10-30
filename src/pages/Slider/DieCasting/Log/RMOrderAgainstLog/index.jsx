@@ -22,7 +22,6 @@ export default function Index() {
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { invalidateQuery: invalidateMaterialTrx } =
 		useMaterialTrxAgainstOrderDescription();
-	console.log(data);
 	const info = new PageInfo(
 		'RM Order Against Die Casting Log',
 		url,

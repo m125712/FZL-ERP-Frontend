@@ -46,7 +46,6 @@ export default function Index({
 		reset(BUYER_NULL);
 		window[modalId].close();
 	};
-	console.log(getValues());
 	const onSubmit = async (data) => {
 		// Update item
 		if (updateBuyer?.uuid !== null && updateBuyer?.uuid !== undefined) {

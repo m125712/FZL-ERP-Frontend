@@ -234,6 +234,7 @@ const Thread = ({
 							'O/N',
 							'Style',
 							'Color',
+							'Count Length',
 							'QTY (PCS)',
 							'Given',
 							'PI QTY',
@@ -297,6 +298,11 @@ const Thread = ({
 						</td>
 						<td className={`w-32 ${rowClass}`}>
 							{getValues(`pi_cash_entry_thread[${index}].color`)}
+						</td>
+						<td className={`w-32 ${rowClass}`}>
+							{getValues(
+								`pi_cash_entry_thread[${index}].count_length_name`
+							)}
 						</td>
 
 						<td className={`${rowClass}`}>

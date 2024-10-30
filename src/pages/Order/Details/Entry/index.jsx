@@ -93,6 +93,7 @@ export default function Index() {
 	const [endType, setEndType] = useState('');
 	const [itemType, setItemType] = useState('');
 	const [type, setType] = useState('full');
+
 	const {
 		register,
 		handleSubmit,
@@ -583,7 +584,10 @@ export default function Index() {
 								readOnly: false,
 							},
 							{
-								header: 'Size',
+								header:
+									watch('order_type') === 'tape'
+										? 'Size (MTR)'
+										: 'Size (DZN)',
 								accessorKey: 'size',
 								type: 'text',
 								hidden: watch('order_type') === 'slider',
@@ -597,14 +601,20 @@ export default function Index() {
 								readOnly: false,
 							},
 							{
-								header: 'Company (USD/DZN)',
+								header:
+									watch('order_type') === 'tape'
+										? 'Company (USD/MTR)'
+										: 'Company (USD/DZN)',
 								accessorKey: 'company_price',
 								type: 'text',
 								hidden: false,
 								readOnly: false,
 							},
 							{
-								header: 'Party (USD/DZN)',
+								header:
+									watch('order_type') === 'tape'
+										? 'Party (USD/MTR)'
+										: 'Party (USD/DZN)',
 								accessorKey: 'party_price',
 								type: 'text',
 								hidden: false,

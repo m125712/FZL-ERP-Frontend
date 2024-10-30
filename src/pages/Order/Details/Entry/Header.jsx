@@ -34,8 +34,6 @@ import {
 	Textarea,
 } from '@/ui';
 
-import { ORDER_NULL } from '@/util/Schema';
-
 export default function Header({
 	endType = '',
 	setEndType,
@@ -171,7 +169,7 @@ export default function Header({
 									render={({ field: { onChange } }) => {
 										return (
 											<ReactSelect
-												placeholder='Select Puller Type'
+												placeholder='Select Type'
 												options={types}
 												value={types?.find(
 													(item) =>

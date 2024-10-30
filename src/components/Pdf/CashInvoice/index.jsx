@@ -13,8 +13,8 @@ const node = [
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
 	getTable('quantity', 'Quantity', 'right'),
-	getTable('unit_price_dollar', 'Unit Price\n(US$)', 'right'),
-	getTable('value_dollar', 'Value\n(US$)', 'right'),
+	// getTable('unit_price_dollar', 'Unit Price\n(US$)', 'right'),
+	// getTable('value_dollar', 'Value\n(US$)', 'right'),
 	getTable('unit_price', 'Unit Price\n(BDT)', 'right'),
 	getTable('value', 'Value\n(BDT)', 'right'),
 ];
@@ -243,7 +243,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [45, 50, 50, '*', 50, 40, 40, 40, 40, 40],
+					widths: [45, 50, 50, '*', 50, 40, 40, 40],
 					body: [
 						// Header
 						TableHeader(node),
@@ -290,10 +290,8 @@ export default function Index(data) {
 								text: `BDT: ${Number(grand_total_value * data?.conversion_rate || 0).toFixed(2)}`,
 								alignment: 'right',
 								bold: true,
-								colSpan: 4,
+								colSpan: 2,
 							},
-							{},
-							{},
 							{},
 						],
 					],

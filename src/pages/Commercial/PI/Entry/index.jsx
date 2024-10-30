@@ -443,6 +443,8 @@ export default function Index() {
 		name: 'new_pi_cash_entry_thread',
 	});
 
+	console.log(getValues());
+
 	// Check if order_number is valid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 

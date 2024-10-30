@@ -65,7 +65,7 @@ export default function Header({
 								<ReactSelect
 									placeholder='Select PIs'
 									options={pi}
-									value={pi?.filter((item) =>
+									value={pi?.find((item) =>
 										pis?.includes(item.value)
 									)}
 									onChange={(e) => {

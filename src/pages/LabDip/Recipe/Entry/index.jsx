@@ -1,5 +1,6 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useLabDipRecipe } from '@/state/LabDip';
+import { useOtherMaterialByParams } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
@@ -64,9 +65,7 @@ export default function Index() {
 			recipe_uuid,
 			reset
 		);
-	const { value: material } = useFetch(
-		'/other/material/value/label/unit/quantity?type=dyes'
-	);
+	const { data: material } = useOtherMaterialByParams('type=dyes');
 	let excludeItem = exclude(
 		watch,
 		material,
@@ -277,7 +276,7 @@ export default function Index() {
 							is_Approved: getValues('approved'),
 							is_Status: getValues('status'),
 							isUpdate,
-							watch
+							watch,
 						}}
 					/>
 					<DynamicField

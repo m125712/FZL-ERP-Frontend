@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useOrderInfo } from '@/state/Order';
 import {
+	useAllZipperThreadOrderList,
 	useOtherBuyer,
 	useOtherFactoryByPartyUUID,
 	useOtherMarketing,
@@ -59,6 +60,8 @@ export default function Index({
 	const { data: factory } = useOtherFactoryByPartyUUID(partyId);
 	const { invalidateQuery: invalidateOrderInfoValueLabel } =
 		useOtherOrderInfoValueLabel();
+	const { invalidateQuery: invalidateOtherZipperThreadOrderList } =
+		useAllZipperThreadOrderList();
 	// const getResult = (key) =>
 	// 	typeof getValues(key) !== 'boolean' && getValues(key) === 1
 	// 		? true
@@ -139,6 +142,7 @@ export default function Index({
 			onClose,
 		});
 		invalidateOrderInfoValueLabel();
+		invalidateOtherZipperThreadOrderList();
 	};
 
 	useEffect(() => {

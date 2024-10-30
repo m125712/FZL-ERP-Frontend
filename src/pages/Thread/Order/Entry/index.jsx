@@ -1,5 +1,8 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
-import { useOtherCountLength } from '@/state/Other';
+import {
+	useAllZipperThreadOrderList,
+	useOtherCountLength,
+} from '@/state/Other';
 import { useThreadOrderInfo, useThreadOrderInfoEntry } from '@/state/Thread';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -42,6 +45,8 @@ export default function Index() {
 	const { uuid, order_info_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
+	const { invalidateQuery: invalidateOtherZipperThreadOrderList } =
+		useAllZipperThreadOrderList();
 	const isUpdate = order_info_uuid !== undefined || uuid !== undefined;
 
 	const {
@@ -226,6 +231,7 @@ export default function Index() {
 				])
 					.then(() => reset(THREAD_ORDER_INFO_ENTRY_NULL))
 					.then(() => {
+						invalidateOtherZipperThreadOrderList();
 						navigate(`/thread/order-info/${order_info_uuid}`);
 					});
 			} catch (err) {
@@ -289,6 +295,7 @@ export default function Index() {
 			])
 				.then(() => reset(THREAD_ORDER_INFO_ENTRY_NULL))
 				.then(() => {
+					invalidateOtherZipperThreadOrderList();
 					navigate(`/thread/order-info/${new_order_info_uuid}`);
 				});
 		} catch (err) {

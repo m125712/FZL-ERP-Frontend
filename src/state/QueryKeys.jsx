@@ -1043,6 +1043,10 @@ export const otherQK = {
 
 	// Thread Orders
 	threadOrders: () => [...otherQK.all(), 'thread-orders'],
+	threadOrdersForChallan: () => [
+		...otherQK.all(),
+		'thread-orders-for-challan',
+	],
 	//Order
 	order: () => [...otherQK.all(), 'order'],
 	orderPackingList: () => [...otherQK.all(), 'order-packing-list'],
@@ -1093,6 +1097,7 @@ export const otherQK = {
 
 	//Material
 	material: () => [...otherQK.all(), 'material'],
+	materialByParams: (params) => [...otherQK.all(), 'material', params],
 	materialSection: () => [...otherQK.all(), 'material-section'],
 	materialType: () => [...otherQK.all(), 'material-type'],
 
@@ -1275,6 +1280,12 @@ export const otherQK = {
 	partyAll: (params) => [...otherQK.all(), 'party-all'],
 	//* Count Length
 	countLength: () => [...otherQK.all(), 'thread-count-length'],
+	//* All Zipper Thread Order list
+	allZipperThreadOrderList: () => [
+		...otherQK.all(),
+		'all-zipper-thread-order-list',
+	],
+	shadeRecipe: () => [...otherQK.all(), 'shade-recipe'],
 };
 
 // * Challan

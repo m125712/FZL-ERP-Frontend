@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { useDyeingSwatch, useDyeingDummy } from '@/state/Dyeing';
+import { useDyeingDummy, useDyeingSwatch } from '@/state/Dyeing';
 import { useAccess, useFetch } from '@/hooks';
 
 import ReactTable from '@/components/Table';
@@ -114,6 +114,7 @@ export default function Index() {
 				cell: (info) => {
 					const { recipe_uuid } = info.row.original;
 					const { order_info_uuid, bleaching } = info.row.original;
+					//! Need to use tanstack Query keys and change condition
 					const { value: recipe } = useFetch(
 						`/other/lab-dip/recipe/value/label?order_info_uuid=${order_info_uuid}&bleaching=${bleaching}`
 					);

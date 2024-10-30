@@ -1,27 +1,30 @@
 import { Suspense, useEffect, useState } from 'react';
-import { useDeliveryPackingList, useDeliveryPackingListByOrderInfoUUID, useDeliveryPackingListDetailsByUUID, useDeliveryPackingListEntry } from '@/state/Delivery';
+import {
+	useDeliveryPackingList,
+	useDeliveryPackingListByOrderInfoUUID,
+	useDeliveryPackingListDetailsByUUID,
+	useDeliveryPackingListEntry,
+} from '@/state/Delivery';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
-
-
 import { DeleteModal } from '@/components/Modal';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
-import { CheckBoxWithoutLabel, DynamicDeliveryField, Input, RemoveButton } from '@/ui';
-
-
+import {
+	CheckBoxWithoutLabel,
+	DynamicDeliveryField,
+	Input,
+	RemoveButton,
+} from '@/ui';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
 import { PACKING_LIST_NULL, PACKING_LIST_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
-
-
 import Header from './Header';
-
 
 export default function Index() {
 	const { uuid } = useParams();
@@ -32,6 +35,7 @@ export default function Index() {
 		postData,
 		updateData,
 		deleteData,
+		invalidateQuery: invalidateDeliveryPackingList,
 	} = useDeliveryPackingList();
 	const {
 		url: deliveryPackingListEntryUrl,
@@ -167,6 +171,7 @@ export default function Index() {
 				])
 					.then(() => reset(Object.assign({}, PACKING_LIST_NULL)))
 					.then(() => {
+						invalidateDeliveryPackingList();
 						navigate(`/delivery/zipper-packing-list/${data?.uuid}`);
 					});
 			} catch (err) {
@@ -226,6 +231,7 @@ export default function Index() {
 				await Promise.all([...commercial_packing_list_entry_promises])
 					.then(() => reset(Object.assign({}, PACKING_LIST_NULL)))
 					.then(() => {
+						invalidateDeliveryPackingList();
 						navigate(`/delivery/zipper-packing-list`);
 					});
 			} catch (err) {
@@ -335,13 +341,13 @@ export default function Index() {
 								'Color',
 								'Size',
 								'Order QTY',
-								'Warehouse',
-								'Delivered',
+								'Balance QTY',
+								// 'Warehouse',
+								// 'Delivered',
 								'Quantity',
 								'Poly QTY',
 								'Short QTY',
 								'Reject QTY',
-								'Balance QTY',
 								'Remarks',
 								,
 							].map((item) => (
@@ -420,6 +426,11 @@ export default function Index() {
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(
+									`packing_list_entry[${index}].balance_quantity`
+								)}
+							</td>
+							{/* <td className={`${rowClass}`}>
+								{getValues(
 									`packing_list_entry[${index}].warehouse`
 								)}
 							</td>
@@ -427,7 +438,7 @@ export default function Index() {
 								{getValues(
 									`packing_list_entry[${index}].delivered`
 								)}
-							</td>
+							</td> */}
 							<td className={`w-32 ${rowClass}`}>
 								<Input
 									label={`packing_list_entry[${index}].quantity`}
@@ -481,11 +492,7 @@ export default function Index() {
 									{...{ register, errors }}
 								/>
 							</td>
-							<td className={`${rowClass}`}>
-								{getValues(
-									`packing_list_entry[${index}].balance_quantity`
-								)}
-							</td>
+
 							<td className={cn(rowClass, 'w-60')}>
 								<Input
 									label={`packing_list_entry[${index}].remarks`}

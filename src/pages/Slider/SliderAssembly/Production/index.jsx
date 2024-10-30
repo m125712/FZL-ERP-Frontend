@@ -329,6 +329,6 @@ export default function Index() {
 					}}
 				/>
 			</Suspense>
-		</>
+		</div>
 	);
 }

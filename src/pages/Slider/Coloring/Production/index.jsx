@@ -284,7 +284,7 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) =>  info.getValue(),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'trx_weight',
@@ -375,6 +375,6 @@ export default function Index() {
 					}}
 				/>
 			</Suspense>
-		</>
+		</div>
 	);
 }

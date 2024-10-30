@@ -15,7 +15,7 @@ export default function Index() {
 	// 	loading,
 	// } = useFetch(`/lab-dip/info/details/${info_uuid}`, [info_uuid]);
 	const { data, isLoading } = UseLabDipInfoByDetails(info_uuid);
-	console.log(data);
+
 
 	useEffect(() => {
 		document.title = 'Info Details';

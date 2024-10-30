@@ -234,7 +234,6 @@ export default function Index() {
 
 	const handelDuplicateDynamicField = useCallback(
 		(index) => {
-			console.log(getValues(`shade_recipe_entry[${index}]`));
 			const item = getValues(`shade_recipe_entry[${index}]`);
 			shadeRecipeAppend({ ...item, uuid: undefined });
 		},

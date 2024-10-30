@@ -37,7 +37,7 @@ export default function Index(information) {
 		...item,
 		item: item?.item_description ? item?.item_description : item?.item_name,
 	}));
-	console.log(tableData);
+
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
 			xMargin,

@@ -7,7 +7,6 @@ import { File } from 'lucide-react';
 const HandlePDF = (props) => {
 	const { filteredRows, title, pdfData } = props;
 	const { extraData, pdf, filterTableHeader } = pdfData || {};
-	console.log(filterTableHeader);
 	const [startDate, setStartDate] = useState(() => {
 		const cookieStartDate = Cookies.get('startDate');
 		return cookieStartDate

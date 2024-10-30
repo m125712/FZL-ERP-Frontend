@@ -33,7 +33,9 @@ export default function Index() {
 		},
 		[updateData, data]
 	);
-
+	const { value: recipe } = useFetch(
+		`/other/lab-dip/recipe/value/label?approved=true`
+	);
 	const columns = useMemo(
 		() => [
 			{
@@ -114,10 +116,7 @@ export default function Index() {
 				cell: (info) => {
 					const { recipe_uuid } = info.row.original;
 					const { order_info_uuid, bleaching } = info.row.original;
-					//! Need to use tanstack Query keys and change condition
-					const { value: recipe } = useFetch(
-						`/other/lab-dip/recipe/value/label?order_info_uuid=${order_info_uuid}&bleaching=${bleaching}`
-					);
+
 					const swatchAccess = haveAccess.includes(
 						'click_swatch_status'
 					);
@@ -129,7 +128,12 @@ export default function Index() {
 						<ReactSelect
 							key={recipe_uuid}
 							placeholder='Select order info uuid'
-							options={recipe ?? []}
+							options={recipe?.filter(
+								(recipeItem) =>
+									recipeItem.bleaching === bleaching &&
+									recipeItem.order_info_uuid ===
+										order_info_uuid
+							)}
 							value={recipe?.find(
 								(item) => item.value == recipe_uuid
 							)}
@@ -149,7 +153,7 @@ export default function Index() {
 				},
 			},
 		],
-		[data]
+		[data, recipe, handleSwatchStatus, haveAccess]
 	);
 
 	if (isLoading)

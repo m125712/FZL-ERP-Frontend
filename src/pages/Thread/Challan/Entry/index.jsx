@@ -368,7 +368,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'length',
-				header: 'Length',
+				header: 'Length(mtr)',
 				enableColumnFilter: true,
 				enableSorting: true,
 			},
@@ -395,7 +395,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'Quantity',
+				header: 'Quantity(cone)',
 				enableColumnFilter: false,
 				enableSorting: false,
 				cell: (info) => {

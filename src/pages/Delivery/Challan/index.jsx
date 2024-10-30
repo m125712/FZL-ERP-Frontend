@@ -82,7 +82,7 @@ export default function Index() {
 					return (
 						<LinkWithCopy
 							title={info.getValue()}
-							id={order_number}
+							id={info.getValue()}
 							uri='/order/details'
 						/>
 					);

@@ -268,8 +268,9 @@ export default function Index() {
 								'Style',
 								'Color',
 								'Size',
+								'Unit',
 								'Delivered',
-								'Quantity',
+								'Quantity(pcs)',
 								'Poly Qty',
 								'Short QTY',
 								'Reject QTY',
@@ -321,6 +322,13 @@ export default function Index() {
 								</td>
 								<td className={`w-32 ${rowClass}`}>
 									{getValues(`challan_entry[${index}].size`)}
+								</td>
+								<td className={`w-32 ${rowClass}`}>
+									{getValues(
+										`challan_entry[${index}].is_inch`
+									)
+										? 'in'
+										: 'cm'}
 								</td>
 								<td className={`${rowClass}`}>
 									{getValues(

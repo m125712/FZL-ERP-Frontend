@@ -75,7 +75,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'zipper_number_name',
-				header: 'Zipper Number',
+				header: 'Zipper No.',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -105,52 +105,50 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'slider_name',
-				header: 'Slider',
+				header: 'Material',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'slider_body_shape_name',
-				header: 'Slider Body Shape',
+				header: 'Body Shape',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'slider_link_name',
-				header: 'Slider Link',
+				header: 'Link',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'coloring_type_name',
-				header: 'Coloring Type',
+				header: 'Coloring',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'logo_type_name',
-				header: 'Logo Type',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'logo_is_body',
-				header: 'Logo Body',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'logo_is_puller',
-				header: 'Logo Puller',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+				accessorFn: (row) => {
+					let logo = row.logo_type_name;
 
-			/////
+					if (row.logo_is_body === 1 && row.logo_is_puller === 1) {
+						logo += ' (Body, Puller)';
+					} else if (row.logo_is_body === 1) {
+						logo += ' (Body)';
+					} else if (row.logo_is_puller === 1) {
+						logo += ' (Puller)';
+					}
 
+					return logo;
+				},
+				id: 'logo_type_name',
+				header: 'Logo',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'stopper_type_name',
-				header: 'Stopper Type',
+				header: 'Stopper',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
@@ -161,6 +159,18 @@ export default function Index() {
 				header: (
 					<span>
 						Ordered
+						<br />
+						QTY (PCS)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'balance_quantity',
+				header: (
+					<span>
+						Balance
 						<br />
 						QTY (PCS)
 					</span>
@@ -181,38 +191,32 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'u_top_quantity',
+				accessorKey: 'coloring_stock_weight',
 				header: (
 					<span>
-						U Top
+						Stock Weight
 						<br />
-						QTY (PCS)
+						(KG)
 					</span>
 				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'u_top_quantity',
+				header: 'U Top',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'h_bottom_quantity',
-				header: (
-					<span>
-						H Bottom
-						<br />
-						QTY (PCS)
-					</span>
-				),
+				header: 'H Bottom',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'box_pin_quantity',
-				header: (
-					<span>
-						Box Pin
-						<br />
-						QTY (PCS)
-					</span>
-				),
+				header: 'Box Pin',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -235,9 +239,21 @@ export default function Index() {
 				accessorKey: 'coloring_prod',
 				header: (
 					<span>
-						Total Production
+						Production
 						<br />
 						(PCS)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'coloring_prod_weight',
+				header: (
+					<span>
+						Weight
+						<br />
+						(KG)
 					</span>
 				),
 				enableColumnFilter: false,
@@ -268,13 +284,13 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) =>info.getValue(),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'trx_weight',
 				header: (
 					<span>
-						Total Transaction Weight
+						Total Trx Weight
 						<br />
 						(KG)
 					</span>
@@ -339,12 +355,8 @@ export default function Index() {
 	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
-		<div className='container mx-auto px-2 md:px-4'>
-			<ReactTable
-				title={info.getTitle()}
-				data={data}
-				columns={columns}
-			/>
+		<>
+			<ReactTable title={info.getTitle()} data={data} columns={columns} />
 			<Suspense>
 				<Production
 					modalId='TeethMoldingProdModal'
@@ -363,6 +375,6 @@ export default function Index() {
 					}}
 				/>
 			</Suspense>
-		</div>
+		</>
 	);
 }

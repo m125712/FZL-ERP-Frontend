@@ -11,8 +11,8 @@ import { Input, JoinInput } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import {
-	NUMBER_REQUIRED,
 	NUMBER_DOUBLE_REQUIRED,
+	NUMBER_REQUIRED,
 	SLIDER_ASSEMBLY_TRANSACTION_NULL,
 	SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
 } from '@util/Schema';
@@ -43,7 +43,10 @@ export default function Index({
 					updateSliderTrx?.coloring_prod,
 					'Beyond Max Quantity'
 				),
-				weight: NUMBER_DOUBLE_REQUIRED,
+				weight: NUMBER_DOUBLE_REQUIRED.max(
+					updateSliderTrx?.coloring_prod_weight,
+					'Beyond Max Quantity'
+				),
 			},
 			SLIDER_ASSEMBLY_TRANSACTION_NULL
 		);
@@ -108,7 +111,7 @@ export default function Index({
 				title='Transaction Weight'
 				label='weight'
 				unit='KG'
-				sub_label={`MAX: ${Number(updateSliderTrx?.coloring_prod)} KG`}
+				sub_label={`MAX: ${Number(updateSliderTrx?.coloring_prod_weight)} KG`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

@@ -24,6 +24,7 @@ export default function Index({
 		uuid: null,
 		stock_uuid: null,
 		coloring_stock: null,
+		coloring_stock_weight: null,
 		coloring_prod: null,
 		production_quantity: null,
 		section: null,
@@ -54,7 +55,7 @@ export default function Index({
 					MAX_PROD_KG,
 					'Beyond Max'
 				).moreThan(0, 'More than 0'),
-				weight: NUMBER_DOUBLE_REQUIRED,
+				weight: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
 			},
 			SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL
 		);
@@ -125,7 +126,7 @@ export default function Index({
 				title='Production Weight'
 				label='weight'
 				unit='KG'
-				sub_label={`MAX: ${MAX_PROD_KG} KG`}
+				sub_label={`MAX: ${updateSliderProd.coloring_stock_weight} KG`}
 				{...{ register, errors }}
 			/>
 			<JoinInput

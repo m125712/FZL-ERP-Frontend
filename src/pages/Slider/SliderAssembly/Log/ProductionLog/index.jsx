@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import {
 	useSliderAssemblyLogJoinedProduction,
-	useSliderAssemblyLogProduction,
+	useSliderAssemblyProduction,
 } from '@/state/Slider';
 import Pdf from '@components/Pdf/SliderAssemblyProduction';
 import { useAccess } from '@/hooks';
@@ -19,6 +19,7 @@ import AddOrUpdateStockProd from './AddOrUpdateStockProd';
 export default function Index() {
 	const { data, isLoading, deleteData } =
 		useSliderAssemblyLogJoinedProduction();
+	const { invalidateQuery } = useSliderAssemblyProduction();
 	const info = new PageInfo(
 		'Production Log',
 		'/slider/slider-assembly/log/production'
@@ -301,6 +302,7 @@ export default function Index() {
 					setDeleteItem={setDeleteItem}
 					deleteData={deleteData}
 					url={`/slider/production`}
+					invalidateQuery={invalidateQuery}
 				/>
 			</Suspense>
 		</div>

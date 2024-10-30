@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useSliderAssemblyTransferEntryByUUID } from '@/state/Slider';
+import { useSliderAssemblyProduction, useSliderAssemblyTransferEntryByUUID } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
@@ -31,6 +31,7 @@ export default function Index({
 		updateSliderTrx?.uuid
 	);
 
+	const { invalidateQuery } = useSliderAssemblyProduction();
 	const {
 		register,
 		handleSubmit,
@@ -88,6 +89,7 @@ export default function Index({
 				onClose,
 			});
 
+			invalidateQuery();
 			return;
 		}
 	};

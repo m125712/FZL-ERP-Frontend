@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useRHF, useUpdateFunc } from '@/hooks';
-import { useSliderAssemblyTransferEntryByUUID } from '@/state/Slider';
+import { useSliderAssemblyTransferEntryByUUID, useSliderColoringProduction } from '@/state/Slider';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import { DevTool } from '@hookform/devtools';
@@ -29,6 +29,7 @@ export default function Index({
 	const { data, updateData, url } = useSliderAssemblyTransferEntryByUUID(
 		updateSliderTrx?.uuid
 	);
+	const { invalidateQuery } = useSliderColoringProduction();
 
 	const {
 		register,
@@ -87,6 +88,7 @@ export default function Index({
 				onClose,
 			});
 
+			invalidateQuery();
 			return;
 		}
 	};

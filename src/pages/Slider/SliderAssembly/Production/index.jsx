@@ -27,7 +27,6 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				width: 'w-40',
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					return (
@@ -52,31 +51,31 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'zipper_number_name',
-				header: 'Zipper',
+				header: 'Zipper No.',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'end_type_name',
-				header: 'End',
+				header: 'End Type',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'lock_type_name',
-				header: 'Lock',
+				header: 'Lock Type',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'puller_type_name',
-				header: 'Puller',
+				header: 'Puller Type',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'puller_color_name',
-				header: 'Color',
+				header: 'Puller Color',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -145,6 +144,18 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'balance_quantity',
+				header: (
+					<span>
+						Balance
+						<br />
+						QTY (PCS)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'body_quantity',
 				header: 'Body',
 				enableColumnFilter: false,
@@ -185,9 +196,21 @@ export default function Index() {
 				accessorKey: 'sa_prod',
 				header: (
 					<span>
-						Total Production
+						Production
 						<br />
 						(PCS)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'sa_prod_weight',
+				header: (
+					<span>
+						Weight
+						<br />
+						(KG)
 					</span>
 				),
 				enableColumnFilter: false,
@@ -306,6 +329,6 @@ export default function Index() {
 					}}
 				/>
 			</Suspense>
-		</div>
+		</>
 	);
 }

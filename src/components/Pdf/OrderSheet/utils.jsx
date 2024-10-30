@@ -203,6 +203,8 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 		is_inch,
 		is_multi_color,
 
+		order_type,
+
 		description,
 	} = entry;
 
@@ -215,6 +217,7 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 					is_multi_color,
 				})
 			: '',
+		order_type === 'tape' ? 'Long Chain' : '',
 		end_type_name
 			? end_type_name === 'Open End'
 				? end_type_name + ' - ' + hand_name
@@ -253,19 +256,21 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 			},
 			...Array.from({ length: uniqueSizes.length + 1 }, () => ''),
 		],
-		[
-			{
-				text: `Slider #${i + 1}`,
-				style: 'tableHeader',
-				alignment: 'Center',
-			},
-			{
-				colSpan: uniqueSizes.length + 2,
-				text: [slider.filter(Boolean).join(' / ')],
-				style: 'tableHeader',
-			},
-			...Array.from({ length: uniqueSizes.length + 1 }, () => ''),
-		],
+		...(order_type === 'tape'
+			? []
+			: [[
+					{
+						text: `Slider #${i + 1}`,
+						style: 'tableHeader',
+						alignment: 'Center',
+					},
+					{
+						colSpan: uniqueSizes.length + 2,
+						text: [slider.filter(Boolean).join(' / ')],
+						style: 'tableHeader',
+					},
+					...Array.from({ length: uniqueSizes.length + 1 }, () => ''),
+				]]),
 		...(special_req_info?.length > 0 || description
 			? [
 					[

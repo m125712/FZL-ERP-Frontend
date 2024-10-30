@@ -44,6 +44,7 @@ export default function Header({
 	control,
 	getValues,
 	watch,
+	reset,
 	Controller,
 	is_logo_body,
 	is_logo_puller,
@@ -179,6 +180,16 @@ export default function Header({
 												onChange={(e) => {
 													onChange(e.value);
 													setType(e.value);
+													reset(
+														Object.assign(
+															{},
+															{
+																...ORDER_NULL,
+																order_type:
+																	e.value,
+															}
+														)
+													);
 												}}
 											/>
 										);

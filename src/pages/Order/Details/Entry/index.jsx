@@ -22,7 +22,6 @@ import {
 	NUMBER,
 	NUMBER_DOUBLE,
 	NUMBER_DOUBLE_REQUIRED,
-	NUMBER_REQUIRED,
 	ORDER_NULL,
 	ORDER_SCHEMA,
 	STRING,
@@ -255,17 +254,6 @@ export default function Index() {
 		</div>,
 	];
 
-	// * if all size is false then default is cm is true
-	// useEffect(() => {
-	// 	if (
-	// 		watch('is_cm') !== true &&
-	// 		watch('is_inch') !== true &&
-	// 		watch('is_meter') !== true
-	// 	) {
-	// 		setValue('is_cm', true);
-	// 	}
-	// }, [watch('is_cm'), watch('is_inch'), watch('is_meter')]);
-
 	const handleOrderEntryRemove = (index) => {
 		if (getValues(`order_entry[${index}].order_entry_uuid`) !== undefined) {
 			setDeleteItem({
@@ -326,6 +314,7 @@ export default function Index() {
 				...item,
 				status: item.order_entry_status ? 1 : 0,
 				swatch_status: 'pending',
+				quantity: watch('order_type') === 'tape' ? 1 : item.quantity,
 				swatch_approval_date: DEFAULT_SWATCH_APPROVAL_DATE,
 				updated_at: GetDateTime(),
 			}));
@@ -426,6 +415,7 @@ export default function Index() {
 			uuid: nanoid(),
 			status: item.order_entry_status ? 1 : 0,
 			swatch_status: 'pending',
+			quantity: watch('order_type') === 'tape' ? 1 : item.quantity,
 			swatch_approval_date: DEFAULT_SWATCH_APPROVAL_DATE,
 			order_description_uuid: new_order_description_uuid,
 			created_at,
@@ -545,6 +535,7 @@ export default function Index() {
 							getValues,
 							Controller,
 							watch,
+							reset,
 							is_logo_body: getValues('is_logo_body'),
 							is_logo_puller: getValues('is_logo_puller'),
 							isUpdate,

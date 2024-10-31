@@ -95,8 +95,8 @@ export default function OrderSheetPdf(order_sheet) {
 
 					return acc;
 				}, {});
-				//todo: order_type condition will start from here
 
+				//todo: order_type condition will start from here
 				if (entry.order_type !== 'slider') {
 					// * garments info
 					const garments_info = getGarmentInfo(entry, garments);
@@ -360,20 +360,120 @@ export default function OrderSheetPdf(order_sheet) {
 						},
 					];
 				} else {
-					return {
-						margin: [0, 5],
-						table: {
-							widths: [50, '*', '*'],
-							body: [
-								...TableHeader({
-									entry,
-									special_req_info,
-									uniqueSizes: [],
-									i,
-								}),
-							],
+					let SliderTotal = 0;
+					return [
+						{
+							margin: [0, 5],
+							table: {
+								widths: [50, '*', '*'],
+								body: [
+									...TableHeader({
+										entry,
+										special_req_info,
+										uniqueSizes: [],
+										i,
+									}),
+
+									// Table Body
+									...Object.keys(res)
+										.map((style) =>
+											res[style].map((color) => {
+												const colorName =
+													Object.keys(color)[0];
+												const quantities =
+													color[colorName];
+
+												return [
+													{
+														rowSpan:
+															res[style].length,
+														text: style,
+														style: 'tableCell',
+													},
+													...quantities.map((qty) => {
+														SliderTotal += qty;
+														return {
+															text:
+																qty === 0
+																	? '-'
+																	: qty,
+															style: 'tableCell',
+															alignment: 'right',
+														};
+													}),
+													{
+														text: quantities.reduce(
+															(acc, qty) =>
+																Number(acc) +
+																Number(qty),
+															0
+														),
+														style: 'tableCell',
+														alignment: 'right',
+													},
+												];
+											})
+										)
+										.flat(),
+
+									// Total
+									[
+										{
+											text: 'Total',
+											style: 'tableFooter',
+											alignment: 'Center',
+										},
+										{
+											text: SliderTotal,
+											style: 'tableFooter',
+											alignment: 'right',
+											colSpan: 2,
+										},
+									],
+									// * remarks
+									...(entry?.remarks?.length > 0
+										? [
+												[
+													{
+														text: 'Remarks',
+														style: 'tableFooter',
+														alignment: 'Center',
+													},
+													{
+														colSpan: 2,
+														text: entry?.remarks,
+														style: 'tableFooter',
+														alignment: 'left',
+													},
+												],
+											]
+										: []),
+								],
+							},
 						},
-					};
+
+						// * slider section total
+						{
+							margin: [0, 5],
+							table: {
+								widths: ['*', 'auto'],
+								body: [
+									[
+										{
+											text: `#${i + 1} Slider Total`,
+											style: 'tableFooter',
+											alignment: 'right',
+										},
+										{
+											text: SliderTotal,
+											style: 'tableFooter',
+											alignment: 'Center',
+										},
+									],
+								],
+							},
+						},
+					];
 				}
 			}),
 

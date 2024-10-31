@@ -21,15 +21,15 @@ export default function Index() {
 	}, [uuid]);
 
 	// ! FOR TESTING
-	const [data2, setData] = useState('');
+	// const [data2, setData] = useState('');
 
-	useEffect(() => {
-		if (data && data?.packing_list_entry) {
-			Pdf(data)?.getDataUrl((dataUrl) => {
-				setData(dataUrl);
-			});
-		}
-	}, [data]);
+	// useEffect(() => {
+	// 	if (data && data?.packing_list_entry) {
+	// 		Pdf(data)?.getDataUrl((dataUrl) => {
+	// 			setData(dataUrl);
+	// 		});
+	// 	}
+	// }, [data]);
 	// ! FOR TESTING
 	// ! FOR TESTING
 	const [data3, setData2] = useState('');

@@ -1,8 +1,12 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
-import { useDeliveryPackingList } from '@/state/Delivery';
+import {
+	useDeliveryPackingList,
+	useDeliveryPackingListDetailsByUUID,
+} from '@/state/Delivery';
 import { useNavigate } from 'react-router-dom';
-import { useAccess } from '@/hooks';
+import { useAccess, useFetch } from '@/hooks';
 
+import Pdf2 from '@/components/Pdf/PackingListSticker';
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
@@ -19,12 +23,44 @@ export default function Index() {
 	const info = new PageInfo('Packing List', url, 'delivery__packing_list');
 	const haveAccess = useAccess('delivery__packing_list');
 
+	const [pdfUuid, setPdfUuid] = useState(null);
+
+	const { data: pdfData, isLoading: pdfLoading } =
+		useDeliveryPackingListDetailsByUUID(pdfUuid, {
+			params: 'is_update=false',
+		});
+
+	useEffect(() => {
+		if (pdfData && !pdfLoading) {
+			Pdf2(pdfData)?.print({}, window);
+			setPdfUuid(null);
+		}
+	}, [pdfData, pdfLoading]);
+
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
 
 	const columns = useMemo(
 		() => [
+			{
+				accessorKey: 'action',
+				header: 'Sticker',
+				enableColumnFilter: false,
+				enableSorting: false,
+				width: 'w-8',
+				cell: (info) => {
+					return (
+						<button
+							type='button'
+							className='btn btn-accent btn-sm font-semibold text-white shadow-md'
+							disabled={pdfLoading}
+							onClick={() => handlePdf(info.row.index)}>
+							Carton Sticker
+						</button>
+					);
+				},
+			},
 			{
 				accessorKey: 'packing_number',
 				header: 'ID',
@@ -113,6 +149,7 @@ export default function Index() {
 					return `${packing_list_wise_rank}/${packing_list_wise_count}`;
 				},
 			},
+
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
@@ -182,7 +219,12 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 	};
+	//handle PDf
 
+	const handlePdf = async (idx) => {
+		const uuid = data[idx]?.uuid;
+		setPdfUuid(uuid);
+	};
 	// Delete
 	const [deleteItem, setDeleteItem] = useState({
 		itemId: null,

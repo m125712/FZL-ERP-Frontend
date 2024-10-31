@@ -50,21 +50,20 @@ export default function Index({
 	};
 	const onSubmit = async (data) => {
 		update.quantity = data.quantity;
-		
+
 		Pdf2(update)?.print({}, window);
 	};
 
 	return (
 		<AddModal
 			id={modalId}
-			title={'Poly Sticker'}
+			title={`Poly Sticker(Total QTY:${update?.quantity})`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
 			<Input label='quantity' {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />
-
 			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);

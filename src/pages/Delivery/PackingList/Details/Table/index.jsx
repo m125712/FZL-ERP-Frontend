@@ -1,14 +1,8 @@
 import { lazy, useMemo, useState } from 'react';
 
-
-
 import { Suspense } from '@/components/Feedback';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, LinkWithCopy } from '@/ui';
-
-
-
-
 
 const PolyTransfer = lazy(() => import('./PolyTransfer'));
 
@@ -80,7 +74,7 @@ export default function Index({ packing_list_entry, data }) {
 			},
 			{
 				accessorKey: 'action',
-				header: '',
+				header: 'Sticker',
 				enableColumnFilter: false,
 				enableSorting: false,
 				width: 'w-8',

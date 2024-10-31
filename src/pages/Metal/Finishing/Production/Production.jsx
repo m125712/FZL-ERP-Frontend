@@ -103,14 +103,6 @@ export default function Index({
 				unit='PCS'
 				{...{ register, errors }}
 			/>
-			<JoinInput
-				title='wastage'
-				label='wastage'
-				sub_label={`MAX: ${MAX_WASTAGE_KG} pcs`}
-				unit='PCS'
-				{...{ register, errors }}
-				{...{ register, errors }}
-			/>
 			<Textarea label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>

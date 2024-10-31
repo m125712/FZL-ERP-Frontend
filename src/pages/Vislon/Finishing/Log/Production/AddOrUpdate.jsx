@@ -11,8 +11,8 @@ import { Input, JoinInput } from '@/ui';
 import {
 	NUMBER_DOUBLE_REQUIRED,
 	NUMBER_REQUIRED,
-	SFG_PRODUCTION_SCHEMA_IN_KG,
-	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
+	SFG_PRODUCTION_SCHEMA_IN_PCS,
+	SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
@@ -37,29 +37,18 @@ export default function Index({
 	const MAX_PROD =
 		Number(updateFinishingLog.balance_quantity) +
 		Number(data?.production_quantity);
-	
-	const MAX_PROD_KG = Number(updateFinishingLog.finishing_stock) +
-	Number(data?.production_quantity_in_kg);
 
-	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
+	const { register, handleSubmit, errors, reset, context } = useRHF(
 		{
-			...SFG_PRODUCTION_SCHEMA_IN_KG,
-			production_quantity: NUMBER_REQUIRED.moreThan(0, 'More Than 0').max(
-				MAX_PROD,
-				'Beyond Max Quantity'
-			),
-			production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
-				0,
-				'More Than 0'
-			).max(MAX_PROD_KG, 'Beyond Max Quantity'),
+			...SFG_PRODUCTION_SCHEMA_IN_PCS,
+			production_quantity:
+				SFG_PRODUCTION_SCHEMA_IN_PCS.production_quantity.max(
+					MAX_PROD,
+					'Beyond Max Quantity'
+				),
 		},
-		SFG_PRODUCTION_SCHEMA_IN_KG_NULL
+		SFG_PRODUCTION_SCHEMA_IN_PCS_NULL
 	);
-
-	const MAX_WASTAGE_KG = Number(
-		// Todo: Fix this
-		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
-	).toFixed(3);
 
 	// * To reset the form with the fetched data
 	useEffect(() => {
@@ -80,7 +69,7 @@ export default function Index({
 			wastage: null,
 			remarks: '',
 		}));
-		reset(SFG_PRODUCTION_SCHEMA_IN_KG_NULL);
+		reset(SFG_PRODUCTION_SCHEMA_IN_PCS_NULL);
 		window[modalId].close();
 	};
 
@@ -120,44 +109,11 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			{/* <FormField label='trx_to' title='Trx to' errors={errors}>
-				<Controller
-					name={'trx_to'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select Transaction Area'
-								options={transactionArea}
-								value={transactionArea?.find(
-									(item) => item.value == getValues('trx_to')
-								)}
-								onChange={(e) => onChange(e.value)}
-								isDisabled={
-									updateFinishingLog?.uuid !== null
-								}
-							/>
-						);
-					}}
-				/>
-			</FormField> */}
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'
 				unit='PCS'
 				sub_label={`MAX: ${MAX_PROD} PCS`}
-				{...{ register, errors }}
-			/>
-			<JoinInput
-				label='production_quantity_in_kg'
-				unit='KG'
-				sub_label={`Max: ${MAX_PROD_KG}`}
-				{...{ register, errors }}
-			/>
-			<JoinInput
-				label='wastage'
-				unit='KG'
-				sub_label={`Max: ${MAX_WASTAGE_KG}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

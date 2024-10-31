@@ -258,19 +258,24 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 		],
 		...(order_type === 'tape'
 			? []
-			: [[
-					{
-						text: `Slider #${i + 1}`,
-						style: 'tableHeader',
-						alignment: 'Center',
-					},
-					{
-						colSpan: uniqueSizes.length + 2,
-						text: [slider.filter(Boolean).join(' / ')],
-						style: 'tableHeader',
-					},
-					...Array.from({ length: uniqueSizes.length + 1 }, () => ''),
-				]]),
+			: [
+					[
+						{
+							text: `Slider #${i + 1}`,
+							style: 'tableHeader',
+							alignment: 'Center',
+						},
+						{
+							colSpan: uniqueSizes.length + 2,
+							text: [slider.filter(Boolean).join(' / ')],
+							style: 'tableHeader',
+						},
+						...Array.from(
+							{ length: uniqueSizes.length + 1 },
+							() => ''
+						),
+					],
+				]),
 		...(special_req_info?.length > 0 || description
 			? [
 					[
@@ -305,10 +310,13 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 				text: 'Style',
 				style: 'tableFooter',
 			},
+
+			// * depending on order_type show quantity or color/size //
 			{
-				text: 'Color / Size(CM)',
+				text: order_type === 'slider' ? 'Quantity' : order_type === 'tape'? 'Color / Size(M)': 'Color / Size(CM)',
 				style: 'tableFooter',
 			},
+
 			...uniqueSizes.map((size) => ({
 				text: size
 					? is_inch
@@ -322,6 +330,7 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 				style: 'tableFooter',
 				alignment: 'right',
 			})),
+
 			{
 				text: 'Total',
 				style: 'tableFooter',

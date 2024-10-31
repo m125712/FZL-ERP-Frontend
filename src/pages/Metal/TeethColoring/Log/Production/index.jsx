@@ -80,12 +80,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'wastage',
-				header: 'Wastage',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
 				enableColumnFilter: false,

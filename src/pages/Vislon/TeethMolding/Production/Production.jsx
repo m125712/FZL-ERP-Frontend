@@ -32,23 +32,19 @@ export default function Index({
 	const { invalidateQuery } = useVislonTMPLog();
 	const { user } = useAuth();
 
-	const MAX_PROD_KG = Number(updateTeethMoldingProd.tape_transferred);
+	const MAX_DYED_TAPE_KG = Number(updateTeethMoldingProd.tape_stock);
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
 		useRHF(
 			{
 				...SFG_PRODUCTION_SCHEMA_IN_KG,
-				production_quantity_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+				dyed_tape_used_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
 					0,
 					'More than 0'
-				).max(MAX_PROD_KG, 'Beyond Max Quantity'),
+				).max(MAX_DYED_TAPE_KG, 'Beyond Max Quantity'),
 			},
-			SFG_PRODUCTION_SCHEMA_IN_KG_NULL
+			{ ...SFG_PRODUCTION_SCHEMA_IN_KG_NULL, dyed_tape_used_in_kg: null }
 		);
-
-	const MAX_WASTAGE_KG = Number(
-		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
-	);
 
 	const onClose = () => {
 		setUpdateTeethMoldingProd((prev) => ({
@@ -63,7 +59,10 @@ export default function Index({
 			remarks: null,
 		}));
 
-		reset(SFG_PRODUCTION_SCHEMA_IN_KG_NULL);
+		reset({
+			...SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
+			dyed_tape_used_in_kg: null,
+		});
 		window[modalId].close();
 	};
 
@@ -104,14 +103,13 @@ export default function Index({
 				title='Production Quantity'
 				label='production_quantity_in_kg'
 				unit='KG'
-				sub_label={`MAX: ${MAX_PROD_KG} kg`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				title='wastage'
-				label='wastage'
+				title='Dyed Tape Used'
+				label='dyed_tape_used_in_kg'
 				unit='KG'
-				sub_label={`MAX: ${MAX_WASTAGE_KG} kg`}
+				sub_label={`MAX: ${MAX_DYED_TAPE_KG} kg`}
 				{...{ register, errors }}
 			/>
 			<Textarea label='remarks' {...{ register, errors }} />

@@ -69,10 +69,24 @@ export const getPageHeader = (batch) => {
 
 			// * Start of table
 			[
-				{ text: 'Quantity', bold: true, color: PRIMARY_COLOR },
+				{
+					text: 'Act.Yarn Qty',
+					bold: true,
+					color: PRIMARY_COLOR,
+				},
 				{ text: batch?.total_yarn_quantity },
 				{ text: 'Volume', bold: true, color: PRIMARY_COLOR },
 				{ text: batch?.water_capacity * batch?.total_yarn_quantity },
+			],
+			[
+				{
+					text: 'Exp.Yarn Qty',
+					bold: true,
+					color: PRIMARY_COLOR,
+				},
+				{ text: batch?.total_expected_weight, colSpan: 3 },
+				{},
+				{},
 			],
 			[
 				{ text: 'Color', bold: true, color: PRIMARY_COLOR },
@@ -110,108 +124,13 @@ export const getPageHeader = (batch) => {
 				{ text: 'Reason', bold: true, color: PRIMARY_COLOR },
 				{ text: batch?.reason },
 			],
+
 			[
 				{ text: 'Created At', bold: true, color: PRIMARY_COLOR },
 				{ text: dyeing_created_at },
 				{ text: 'Updated At', bold: true, color: PRIMARY_COLOR },
 				{ text: dyeing_updated_at },
 			],
-			// [
-			// 	// 	{
-			// 	// 		colSpan: 2,
-			// 	// 		text: 'Conneing\n',
-			// 	// 		bold: true,
-			// 	// 		fontSize: 13,
-			// 	// 		color: black,
-			// 	// 	},
-			// 	// '',
-			// 	// '',
-
-			// 	{
-			// 		colSpan: 3,
-			// 		text: 'Yarn Issues',
-			// 		bold: true,
-			// 		fontSize: 13,
-			// 		color: black,
-			// 	},
-			// 	'',
-			// 	'',
-			// 	{
-			// 		colSpan: 3,
-			// 		text: 'Dyeing',
-			// 		bold: true,
-			// 		fontSize: 13,
-			// 		color: black,
-			// 	},
-			// 	'',
-			// 	'',
-			// ],
-
-			// [
-			// 	// {
-			// 	// 	colSpan: 2,
-			// 	// 	style: 'tableExample',
-			// 	// 	table: {
-			// 	// 		body: [
-			// 	// 			['Machine', batch?.coning_machines],
-			// 	// 			['Operator', batch?.coning_operator_name],
-			// 	// 			['SuperVisor', batch?.coning_supervisor_name],
-			// 	// 			['Created By', batch?.coning_created_by_name],
-			// 	// 			['Created At', conning_created_at],
-			// 	// 			['Updated At', conning_updated_at],
-			// 	// 		],
-			// 	// 	},
-			// 	// },
-			// 	// '',
-			// 	// '',
-			// 	{
-			// 		colSpan: 3,
-			// 		style: 'tableExample',
-			// 		table: {
-			// 			body: [
-			// ['Batch No', batch?.batch_id],
-			// ['Quantity', batch?.yarn_quantity],
-			// [
-			// 	'Volume',
-			// 	batch?.water_capacity * batch?.yarn_quantity,
-			// ],
-			// ['Color', batch?.batch_entry[0]?.color],
-			// ['Bleach', batch?.batch_entry[0]?.bleaching],
-			// 				// ['Created By', batch?.yarn_issue_created_by_name],
-			// 				// ['Created At', batch?.yarn_issue_created_at],
-			// 				// ['Updated At', batch?.yarn_issue_updated_at],
-			// 			],
-			// 		},
-			// 	},
-
-			// 	'',
-			// 	'',
-			// 	{
-			// 		colSpan: 2,
-			// 		style: 'tableExample',
-			// 		table: {
-			// 			body: [
-			// 				['Status', batch?.status],
-			// 				['Category', batch?.category],
-			// 				['Machine', batch?.machine_name],
-			// 				['Water Capacity', batch?.water_capacity],
-			// 				[
-			// 					'Slot',
-			// 					batch?.slot === 0 ? '-' : 'Slot ' + batch?.slot,
-			// 				],
-			// 				['Operator', batch?.dyeing_operator_name],
-			// 				['SuperVisor', batch?.dyeing_supervisor_name],
-			// 				['Pass by', batch?.pass_by_name],
-			// 				['Shift', batch?.shift],
-			// 				['Reason', batch?.reason],
-			// 				['Created at', dyeing_created_at],
-			// 				['Updated at', dyeing_updated_at],
-			// 			],
-			// 		},
-			// 	},
-			// 	'',
-			// 	'',
-			// ],
 		],
 	};
 };

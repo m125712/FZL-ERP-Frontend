@@ -57,7 +57,7 @@ export default function Index() {
 				className='h-[40rem] w-full rounded-md border-none'
 			/>
 			<Information packing_list={data} />
-			<Table packing_list_entry={data?.packing_list_entry} />
+			<Table packing_list_entry={data?.packing_list_entry} data={data} />
 		</div>
 	);
 }

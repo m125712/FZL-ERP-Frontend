@@ -1,9 +1,18 @@
-import { useMemo } from 'react';
+import { lazy, useMemo, useState } from 'react';
 
+
+
+import { Suspense } from '@/components/Feedback';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, LinkWithCopy } from '@/ui';
 
-export default function Index({ packing_list_entry }) {
+
+
+
+
+const PolyTransfer = lazy(() => import('./PolyTransfer'));
+
+export default function Index({ packing_list_entry, data }) {
 	const columns = useMemo(
 		() => [
 			{
@@ -70,6 +79,23 @@ export default function Index({ packing_list_entry }) {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'action',
+				header: '',
+				enableColumnFilter: false,
+				enableSorting: false,
+				width: 'w-8',
+				cell: (info) => {
+					return (
+						<button
+							type='button'
+							className='btn btn-accent btn-sm font-semibold text-white shadow-md'
+							onClick={() => handleUpdate(info.row.index)}>
+							Poly Sticker
+						</button>
+					);
+				},
+			},
+			{
 				accessorKey: 'poli_quantity',
 				header: 'Poly Qty',
 				enableColumnFilter: false,
@@ -110,23 +136,53 @@ export default function Index({ packing_list_entry }) {
 		(a, b) => a + Number(b.quantity),
 		0
 	);
+	const [update, setUpdate] = useState({
+		uuid: null,
+		quantity: null,
+	});
+	const handleUpdate = (idx) => {
+		const val = packing_list_entry[idx];
 
+		setUpdate((prev) => ({
+			...prev,
+			...val,
+			challan_number: data.challan_number,
+			packing_list_wise_rank: data.packing_list_wise_rank,
+			packing_number: data.packing_number,
+			buyer_name: data.buyer_name,
+			created_at: data.created_at,
+			factory_name: data.factory_name,
+		}));
+
+		window['polyModal'].showModal();
+	};
 	return (
-		<ReactTableTitleOnly
-			title='Details'
-			data={packing_list_entry}
-			columns={columns}>
-			<tr className='text-sm'>
-				<td colSpan='3' className='py-2 text-right'>
-					Total Order QTY
-				</td>
-				<td className='pl-3 text-left font-semibold'>{totalQty}</td>
+		<>
+			<ReactTableTitleOnly
+				title='Details'
+				data={packing_list_entry}
+				columns={columns}>
+				<tr className='text-sm'>
+					<td colSpan='3' className='py-2 text-right'>
+						Total Order QTY
+					</td>
+					<td className='pl-3 text-left font-semibold'>{totalQty}</td>
 
-				<td className='text-right'>Total QTY</td>
-				<td className='pl-3 text-left font-semibold'>
-					{Number(totalQuantity).toLocaleString()}
-				</td>
-			</tr>
-		</ReactTableTitleOnly>
+					<td className='text-right'>Total QTY</td>
+					<td className='pl-3 text-left font-semibold'>
+						{Number(totalQuantity).toLocaleString()}
+					</td>
+				</tr>
+			</ReactTableTitleOnly>
+			<Suspense>
+				<PolyTransfer
+					modalId={'polyModal'}
+					{...{
+						update,
+						setUpdate,
+					}}
+				/>
+			</Suspense>
+		</>
 	);
 }

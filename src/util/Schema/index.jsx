@@ -1,34 +1,34 @@
 import * as yup from 'yup';
 
-
-
-import { BOOLEAN // default
-, BOOLEAN_DEFAULT_VALUE // default
-, BOOLEAN_REQUIRED // default
-, EMAIL // default
-, EMAIL_REQUIRED // default
-, FORTUNE_ZIP_EMAIL_PATTERN // default
-, JSON_STRING // default
-, JSON_STRING_REQUIRED // default
-, NAME, NAME_REQUIRED // default
-, NUMBER // default
-, NUMBER_DOUBLE // default
-, NUMBER_DOUBLE_REQUIRED // default
-, NUMBER_REQUIRED // default
-, ORDER_NUMBER // default
-, ORDER_NUMBER_NOT_REQUIRED // default
-, PASSWORD // default
-, PHONE_NUMBER // default
-, PHONE_NUMBER_REQUIRED // default
-, STRING // default
-, STRING_REQUIRED // default
-, URL // default
-, URL_REQUIRED // default
-, UUID // default
-, UUID_FK // default
-, UUID_PK // default
-, UUID_REQUIRED } from './utils';
-
+import {
+	BOOLEAN, // default
+	BOOLEAN_DEFAULT_VALUE, // default
+	BOOLEAN_REQUIRED, // default
+	EMAIL, // default
+	EMAIL_REQUIRED, // default
+	FORTUNE_ZIP_EMAIL_PATTERN, // default
+	JSON_STRING, // default
+	JSON_STRING_REQUIRED, // default
+	NAME,
+	NAME_REQUIRED, // default
+	NUMBER, // default
+	NUMBER_DOUBLE, // default
+	NUMBER_DOUBLE_REQUIRED, // default
+	NUMBER_REQUIRED, // default
+	ORDER_NUMBER, // default
+	ORDER_NUMBER_NOT_REQUIRED, // default
+	PASSWORD, // default
+	PHONE_NUMBER, // default
+	PHONE_NUMBER_REQUIRED, // default
+	STRING, // default
+	STRING_REQUIRED, // default
+	URL, // default
+	URL_REQUIRED, // default
+	UUID, // default
+	UUID_FK, // default
+	UUID_PK, // default
+	UUID_REQUIRED,
+} from './utils';
 
 export {
 	BOOLEAN,
@@ -1463,10 +1463,7 @@ export const PACKING_LIST_SCHEMA = {
 				then: (Schema) =>
 					Schema.typeError('Must be a number')
 						.required('Quantity is required')
-						.max(
-							yup.ref('max_quantity'),
-							'Beyond Max Quantity'
-						),
+						.max(yup.ref('max_quantity'), 'Beyond Max Quantity'),
 				otherwise: (Schema) =>
 					Schema.nullable().transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? null : value
@@ -3128,4 +3125,15 @@ export const SFG_TRANSACTION_SCHEMA = {
 export const SFG_TRANSACTION_SCHEMA_NULL = {
 	...SFG_TRANSACTION_SCHEMA_IN_KG_NULL,
 	...SFG_TRANSACTION_SCHEMA_IN_PCS_NULL,
+};
+
+export const POLY_SCHEMA = {
+	quantity: NUMBER_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const POLY_NULL = {
+	uuid: null,
+	quantity: null,
+	remarks: '',
 };

@@ -1,0 +1,71 @@
+import { useAuth } from '@/context/auth';
+import { useOrderBuyer } from '@/state/Order';
+import { useOtherBuyer } from '@/state/Other';
+import { DevTool } from '@hookform/devtools';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import Pdf2 from '@/components/Pdf/PolySticker';
+import { Input } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
+import { POLY_NULL, POLY_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
+
+export default function Index({
+	modalId = '',
+	update = {
+		uuid: null,
+		packing_number: null,
+		packing_list_uuid: null,
+		sfg_uuid: null,
+		quantity: 0,
+		order_number: null,
+		item_description: null,
+		style: null,
+		color: null,
+		size: null,
+		is_inch: 0,
+		order_quantity: 0,
+	},
+	setUpdate,
+}) {
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		control,
+		context,
+		getValues,
+	} = useRHF(POLY_SCHEMA, POLY_NULL);
+
+	const onClose = () => {
+		setUpdate((prev) => ({
+			...prev,
+			uuid: null,
+		}));
+		reset(POLY_NULL);
+		window[modalId].close();
+	};
+	const onSubmit = async (data) => {
+		update.quantity = data.quantity;
+		
+		Pdf2(update)?.print({}, window);
+	};
+
+	return (
+		<AddModal
+			id={modalId}
+			title={'Poly Sticker'}
+			formContext={context}
+			onSubmit={handleSubmit(onSubmit)}
+			onClose={onClose}
+			isSmall={true}>
+			<Input label='quantity' {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
+
+			<DevTool control={control} placement='top-left' />
+		</AddModal>
+	);
+}

@@ -144,6 +144,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'swatch_approved_quantity',
+				header: 'Approved QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'balance_quantity',
 				header: (
 					<span>

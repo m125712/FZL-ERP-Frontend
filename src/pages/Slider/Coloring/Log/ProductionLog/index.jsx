@@ -1,5 +1,8 @@
 import { useMemo, useState } from 'react';
-import { useSliderColoringLogProduction, useSliderColoringProduction } from '@/state/Slider';
+import {
+	useSliderColoringLogProduction,
+	useSliderColoringProduction,
+} from '@/state/Slider';
 import Pdf from '@components/Pdf/SliderColoringProduction';
 import { useAccess } from '@/hooks';
 
@@ -15,7 +18,7 @@ import AddOrUpdate from './AddOrUpdate';
 export default function Index() {
 	const { data, isLoading, deleteData } = useSliderColoringLogProduction();
 	const { invalidateQuery } = useSliderColoringProduction();
-	
+
 	const info = new PageInfo(
 		'Production Log',
 		'/slider/slider-coloring/log/production'
@@ -155,7 +158,13 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) =>info.getValue(),
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'swatch_approved_quantity',
+				header: 'Approved QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'production_quantity',

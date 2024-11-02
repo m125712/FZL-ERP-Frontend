@@ -122,6 +122,23 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'swatch_approved_quantity',
+				header: 'Approved QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) => {
+					const { swatch_approved_quantity, trx_to_finishing } =
+						row;
+
+					return swatch_approved_quantity - trx_to_finishing;
+				},
+				header: 'Balance',
+				id: 'balance',
+				enableColumnFilter: false,
+			},
+			{
 				accessorKey: 'body_quantity',
 				header: 'Body QTY',
 				enableColumnFilter: false,

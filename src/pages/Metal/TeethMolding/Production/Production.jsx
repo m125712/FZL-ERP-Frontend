@@ -7,7 +7,11 @@ import { AddModal } from '@/components/Modal';
 import { JoinInput, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
-import { SFG_PRODUCTION_NULL, SFG_PRODUCTION_SCHEMA } from '@util/Schema';
+import {
+	NUMBER_DOUBLE_REQUIRED,
+	SFG_PRODUCTION_SCHEMA_IN_PCS,
+	SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
+} from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
@@ -30,18 +34,25 @@ export default function Index({
 	const { invalidateQuery } = useMetalTMProductionLog();
 	const { user } = useAuth();
 
-	const MAX_PROD_PCS = 
-		updateTeethMoldingProd.balance_quantity
-	;
-	const MAX_PROD_KG = updateTeethMoldingProd.tape_transferred
-	;
+	const MAX_PROD_PCS = updateTeethMoldingProd.balance_quantity;
+	const MAX_PROD_KG = updateTeethMoldingProd.tape_stock;
 
-	console.log(updateTeethMoldingProd);
 	const { register, handleSubmit, errors, reset, watch, control, context } =
-		useRHF(SFG_PRODUCTION_SCHEMA, SFG_PRODUCTION_NULL);
-	const MAX_WASTAGE_KG = Number(
-		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
-	).toFixed(3);
+		useRHF(
+			{
+				...SFG_PRODUCTION_SCHEMA_IN_PCS,
+				production_quantity:
+					SFG_PRODUCTION_SCHEMA_IN_PCS.production_quantity.max(
+						MAX_PROD_PCS,
+						'Beyond Max limit'
+					),
+				remaining_dyed_tape: NUMBER_DOUBLE_REQUIRED.max(
+					MAX_PROD_KG,
+					'Beyond Max limit'
+				).moreThan(0, 'More than 0'),
+			},
+			{ ...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL, remaining_dyed_tape: null }
+		);
 
 	const onClose = () => {
 		setUpdateTeethMoldingProd((prev) => ({
@@ -56,7 +67,10 @@ export default function Index({
 			order_number: '',
 			order_description: '',
 		}));
-		reset(SFG_PRODUCTION_NULL);
+		reset({
+			...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
+			remaining_dyed_tape: null,
+		});
 		window[modalId].close();
 	};
 
@@ -65,6 +79,8 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			sfg_uuid: updateTeethMoldingProd?.sfg_uuid,
+			dyed_tape_used_in_kg:
+				updateTeethMoldingProd.tape_stock - data.remaining_dyed_tape,
 			section: 'teeth_molding',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
@@ -96,25 +112,18 @@ export default function Index({
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'
-				sub_label={`MAX: ${MAX_PROD_PCS} pcs`}
 				unit='PCS'
+				sub_label={`MAX: ${MAX_PROD_PCS} kg`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				title='Production Quantity (KG)'
-				label='production_quantity_in_kg'
+				title='Remaining Dyed Tape'
+				label='remaining_dyed_tape'
 				sub_label={`MAX: ${MAX_PROD_KG} kg`}
 				unit='KG'
 				{...{ register, errors }}
 			/>
-			<JoinInput
-				title='wastage'
-				label='wastage'
-				sub_label={`MAX: ${MAX_WASTAGE_KG} kg`}
-				unit='KG'
-				{...{ register, errors }}
-				{...{ register, errors }}
-			/>
+
 			<Textarea label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>

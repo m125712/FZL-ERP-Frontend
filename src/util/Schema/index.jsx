@@ -3043,11 +3043,6 @@ export const SFG_PRODUCTION_SCHEMA_IN_KG = {
 		0,
 		'More Than 0'
 	),
-	wastage: NUMBER_DOUBLE.min(0, 'Minimum of 0')
-		.nullable()
-		.transform((value, originalValue) =>
-			String(originalValue).trim() === '' ? 0 : value
-		),
 	remarks: STRING.nullable(),
 };
 
@@ -3056,7 +3051,6 @@ export const SFG_PRODUCTION_SCHEMA_IN_KG_NULL = {
 	order_entry_uuid: null,
 	section: '',
 	production_quantity_in_kg: '',
-	wastage: '',
 	remarks: '',
 };
 

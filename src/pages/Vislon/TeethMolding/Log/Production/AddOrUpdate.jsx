@@ -6,6 +6,7 @@ import { AddModal } from '@/components/Modal';
 import { Input, JoinInput } from '@/ui';
 
 import {
+	NUMBER_DOUBLE_REQUIRED,
 	SFG_PRODUCTION_SCHEMA_IN_KG,
 	SFG_PRODUCTION_SCHEMA_IN_KG_NULL,
 } from '@util/Schema';
@@ -27,21 +28,23 @@ export default function Index({
 	const { data, updateData, url } = useVislonTMPEntryByUUID(
 		updateTeethMoldingLog?.uuid
 	);
-
 	const { invalidateQuery } = useVislonTMP();
+
+	const MAX_DYED_TAPE_KG =
+	Number(updateTeethMoldingLog.dyed_tape_used_in_kg) +
+	Number(updateTeethMoldingLog.tape_stock);
+
 	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
-		SFG_PRODUCTION_SCHEMA_IN_KG,
-		SFG_PRODUCTION_SCHEMA_IN_KG_NULL
+		{
+			...SFG_PRODUCTION_SCHEMA_IN_KG,
+			dyed_tape_used_in_kg: NUMBER_DOUBLE_REQUIRED.moreThan(
+				0,
+				'More than 0'
+			).max(MAX_DYED_TAPE_KG, 'Beyond Max Quantity'),
+		},
+		{SFG_PRODUCTION_SCHEMA_IN_KG_NULL, dyed_tape_used_in_kg: null}
 	);
 
-	const MAX_PROD_KG =
-		Number(updateTeethMoldingLog.production_quantity_in_kg) +
-		Number(updateTeethMoldingLog.tape_transferred);
-
-	const MAX_WASTAGE_KG = Number(
-		// Todo: Fix this
-		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
-	);
 
 	// * To reset the form with the fetched data
 	useEffect(() => {
@@ -61,7 +64,7 @@ export default function Index({
 			wastage: null,
 			remarks: '',
 		}));
-		reset(SFG_PRODUCTION_SCHEMA_IN_KG_NULL);
+		reset({SFG_PRODUCTION_SCHEMA_IN_KG_NULL, dyed_tape_used_in_kg: null});
 		window[modalId].close();
 	};
 
@@ -101,38 +104,15 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			{/* <FormField label='trx_to' title='Trx to' errors={errors}>
-				<Controller
-					name={'trx_to'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select Transaction Area'
-								options={transactionArea}
-								value={transactionArea?.find(
-									(item) => item.value == getValues('trx_to')
-								)}
-								onChange={(e) => onChange(e.value)}
-								isDisabled={
-									updateTeethMoldingLog?.uuid !== null
-								}
-							/>
-						);
-					}}
-				/>
-			</FormField> */}
-
 			<JoinInput
 				label='production_quantity_in_kg'
 				unit='KG'
-				sub_label={`Max: ${MAX_PROD_KG}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				label='wastage'
+				label='dyed_tape_used_in_kg'
 				unit='KG'
-				sub_label={`Max: ${MAX_WASTAGE_KG}`}
+				sub_label={`Max: ${MAX_DYED_TAPE_KG}`}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

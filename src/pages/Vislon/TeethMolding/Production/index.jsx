@@ -91,7 +91,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'tape_transferred',
+				accessorKey: 'tape_stock',
 				header: 'Tape Stock (KG)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),

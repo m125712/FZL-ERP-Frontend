@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useAuth } from '@/context/auth';
 import {
 	useMetalTMProduction,
 	useMetalTMProductionLog,
@@ -8,11 +7,12 @@ import {
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+import { Input, JoinInput } from '@/ui';
 
 import {
-	SFG_PRODUCTION_LOG_NULL,
-	SFG_PRODUCTION_LOG_SCHEMA,
+	NUMBER_DOUBLE_REQUIRED,
+	SFG_PRODUCTION_SCHEMA_IN_PCS,
+	SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
@@ -45,27 +45,23 @@ export default function Index({
 		Number(dataByUUID?.production_quantity);
 
 	const MAX_QUANTITY_IN_KG =
-		Number(updateTeethMoldingLog?.tape_transferred) +
+		Number(updateTeethMoldingLog?.tape_stock) +
 		Number(dataByUUID?.production_quantity_in_kg);
 
-	const schema = {
-		...SFG_PRODUCTION_LOG_SCHEMA,
-		production_quantity: SFG_PRODUCTION_LOG_SCHEMA.production_quantity
-			.max(MAX_QUANTITY),
-		production_quantity_in_kg:
-			SFG_PRODUCTION_LOG_SCHEMA.production_quantity_in_kg
-				.max(MAX_QUANTITY_IN_KG),
-	};
-	const { user } = useAuth();
-	const {
-		register,
-		handleSubmit,
-		errors,
-		control,
-		Controller,
-		reset,
-		context,
-	} = useRHF(schema, SFG_PRODUCTION_LOG_NULL);
+	const { register, handleSubmit, errors, reset, context } = useRHF(
+		{
+			...SFG_PRODUCTION_SCHEMA_IN_PCS,
+			production_quantity:
+				SFG_PRODUCTION_SCHEMA_IN_PCS.production_quantity.max(
+					MAX_QUANTITY
+				),
+			remaining_dyed_tape: NUMBER_DOUBLE_REQUIRED.max(
+				MAX_QUANTITY_IN_KG,
+				'Beyond Max limit'
+			).moreThan(0, 'More than 0'),
+		},
+		{ ...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL, remaining_dyed_tape: null }
+	);
 
 	useEffect(() => {
 		if (dataByUUID) {
@@ -86,7 +82,10 @@ export default function Index({
 			teeth_molding_stock: null,
 			wastage: null,
 		}));
-		reset(SFG_PRODUCTION_LOG_NULL);
+		reset({
+			...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
+			remaining_dyed_tape: null,
+		});
 		window[modalId].close();
 	};
 
@@ -126,29 +125,6 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<FormField label='section' title='Section' errors={errors}>
-				<Controller
-					name={'section'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select Production Area'
-								options={sectionName}
-								value={sectionName?.find(
-									(item) =>
-										item.value ==
-										updateTeethMoldingLog?.section
-								)}
-								onChange={(e) => onChange(e.value)}
-								isDisabled={
-									updateTeethMoldingLog?.uuid !== null
-								}
-							/>
-						);
-					}}
-				/>
-			</FormField>
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'
@@ -157,19 +133,13 @@ export default function Index({
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				title='Production Quantity In KG'
-				label='production_quantity_in_kg'
+				title='Remaining Dyed Tape'
+				label='remaining_dyed_tape'
 				sub_label={`MAX: ${MAX_QUANTITY_IN_KG} kg`}
 				unit='PCS'
 				{...{ register, errors }}
 			/>
-			<JoinInput
-				title='Wastage'
-				label='wastage'
-				sub_label={`MAX: ${MAX_QUANTITY_IN_KG} kg`}
-				unit='PCS'
-				{...{ register, errors }}
-			/>
+
 			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);

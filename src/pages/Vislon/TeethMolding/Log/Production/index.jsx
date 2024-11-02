@@ -90,12 +90,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'wastage',
+				accessorKey: 'dyed_tape_used_in_kg',
 				header: (
 					<span>
-						wastage
+						Dyed Tape
 						<br />
-						QTY (KG)
+						(KG)
 					</span>
 				),
 				enableColumnFilter: false,

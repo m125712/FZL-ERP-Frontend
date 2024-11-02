@@ -11,22 +11,19 @@ export const DEFAULT_A4_PAGE = ({ xMargin, headerHeight, footerHeight }) => ({
 	styles,
 });
 
-export const CUSTOM_PAGE = ({ type, xMargin, headerHeight, footerHeight }) => {
-	let width = 285.72;
-
-	// switch (type) {
-	// 	case 'poly':
-	// 		width = 285.72;
-	// 		break;
-	// 	case 'carton':
-	// 		width = 285.72;
-	// 		break;
-	// }
+export const CUSTOM_PAGE = ({
+	pageOrientation = 'landscape',
+	xMargin,
+	headerHeight,
+	footerHeight,
+}) => {
+	let width = 290;
+	let height = 181;
 
 	return {
-		pageSize: { width: width, height: 'auto' },
-		pageOrientation: 'portrait',
-		pageMargins: [5, 5, 5, 5],
+		pageSize: { width, height },
+		pageOrientation,
+		pageMargins: [xMargin, headerHeight, xMargin, footerHeight],
 		defaultStyle,
 		styles,
 	};

@@ -1,5 +1,7 @@
 // Thread Clallan
 import ChallanEntry from '@/pages/Delivery/Challan/Entry';
+// Dashboard
+import Dashboard from '@/pages/Delivery/Dashboard';
 // Zipper Packing List
 import PackingLists from '@/pages/Delivery/PackingList';
 import PackingListsDetails from '@/pages/Delivery/PackingList/Details';
@@ -8,8 +10,6 @@ import Carton from '@pages/Delivery/Carton';
 // Zipper -Challan
 import Challan from '@pages/Delivery/Challan';
 import ChallanDetails from '@pages/Delivery/Challan/Details';
-// Dashboard
-import Dashboard from '@/pages/Delivery/Dashboard';
 import Log from '@pages/Delivery/Log';
 import RM from '@pages/Delivery/RM';
 import Vehicle from '@pages/Delivery/Vehicle';
@@ -36,48 +36,6 @@ export const DeliveryRoutes = [
 				element: <RM />,
 				page_name: 'delivery__rm',
 				actions: ['create', 'read', 'used', 'delete'],
-			},
-
-			// * Thread Challan
-			{
-				name: 'Thread Challan',
-				path: '/thread/challan',
-				element: <ThreadChallan />,
-				page_name: 'thread__challan',
-				actions: [
-					'create',
-					'read',
-					'update',
-					'delete',
-					'click_gate_pass',
-					'click_receive_status',
-					'click_gate_pass_override',
-					'click_receive_status_override',
-				],
-			},
-			{
-				name: 'Thread Challan Details',
-				path: '/thread/challan/:uuid',
-				element: <ThreadChallanDetails />,
-				page_name: 'thread__challan_details',
-				actions: ['create', 'read', 'update', 'delete'],
-				hidden: true,
-			},
-			{
-				name: 'Thread Challan Entry',
-				path: '/thread/challan/entry',
-				element: <ThreadChallanEntry />,
-				page_name: 'thread__challan_entry',
-				actions: ['create', 'read', 'update', 'delete'],
-				hidden: true,
-			},
-			{
-				name: 'Thread Challan Update',
-				path: '/thread/challan/:challan_uuid/update',
-				element: <ThreadChallanEntry />,
-				page_name: 'thread__challan_update',
-				actions: ['create', 'read', 'update', 'delete'],
-				hidden: true,
 			},
 
 			// * Zipper Packing List
@@ -187,6 +145,62 @@ export const DeliveryRoutes = [
 				actions: ['create', 'read', 'update', 'delete'],
 				hidden: true,
 			},
+			// * Thread Challan
+			{
+				name: 'Thread Challan',
+				path: '/thread/challan',
+				element: <ThreadChallan />,
+				page_name: 'thread__challan',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_gate_pass',
+					'click_receive_status',
+					'click_gate_pass_override',
+					'click_receive_status_override',
+				],
+			},
+			{
+				name: 'Thread Challan Details',
+				path: '/thread/challan/:uuid',
+				element: <ThreadChallanDetails />,
+				page_name: 'thread__challan_details',
+				actions: ['create', 'read', 'update', 'delete'],
+				hidden: true,
+			},
+			{
+				name: 'Thread Challan Entry',
+				path: '/thread/challan/entry',
+				element: <ThreadChallanEntry />,
+				page_name: 'thread__challan_entry',
+				actions: ['create', 'read', 'update', 'delete'],
+				hidden: true,
+			},
+			{
+				name: 'Thread Challan Update',
+				path: '/thread/challan/:challan_uuid/update',
+				element: <ThreadChallanEntry />,
+				page_name: 'thread__challan_update',
+				actions: ['create', 'read', 'update', 'delete'],
+				hidden: true,
+			},
+			// * Log
+			{
+				name: 'Log',
+				path: '/delivery/log',
+				element: <Log />,
+				page_name: 'delivery__log',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_update_rm_order',
+					'click_delete_rm_order',
+				],
+			},
 			// * Delivery Carton
 			{
 				name: 'Carton',
@@ -216,21 +230,6 @@ export const DeliveryRoutes = [
 					'delete',
 					'click_active',
 					'click_active_override',
-				],
-			},
-			// * Log
-			{
-				name: 'Log',
-				path: '/delivery/log',
-				element: <Log />,
-				page_name: 'delivery__log',
-				actions: [
-					'create',
-					'read',
-					'update',
-					'delete',
-					'click_update_rm_order',
-					'click_delete_rm_order',
 				],
 			},
 		],

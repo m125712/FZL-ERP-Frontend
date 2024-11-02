@@ -33,7 +33,7 @@ export const LabDipRoutes = [
 				isDynamic: true,
 			},
 			{
-				name: 'Info',
+				name: 'Card',
 				path: '/lab-dip/info',
 				element: <Info />,
 				page_name: 'lab_dip__info',

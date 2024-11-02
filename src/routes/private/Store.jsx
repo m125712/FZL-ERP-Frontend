@@ -28,28 +28,6 @@ export const StoreRoutes = [
 					'click_action',
 				],
 			},
-
-			{
-				name: 'Section',
-				path: '/store/section',
-				element: <Section />,
-				page_name: 'store__section',
-				actions: ['create', 'read', 'update', 'delete'],
-			},
-			{
-				name: 'Type',
-				path: '/store/type',
-				element: <MaterialType />,
-				page_name: 'store__type',
-				actions: ['create', 'read', 'update', 'delete'],
-			},
-			{
-				name: 'Vendor',
-				path: '/store/vendor',
-				element: <Vendor />,
-				page_name: 'store__vendor',
-				actions: ['create', 'read', 'update', 'delete'],
-			},
 			{
 				name: 'Receive',
 				path: '/store/receive',
@@ -83,6 +61,27 @@ export const StoreRoutes = [
 						actions: ['create', 'read', 'update'],
 					},
 				],
+			},
+			{
+				name: 'Section',
+				path: '/store/section',
+				element: <Section />,
+				page_name: 'store__section',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Type',
+				path: '/store/type',
+				element: <MaterialType />,
+				page_name: 'store__type',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Vendor',
+				path: '/store/vendor',
+				element: <Vendor />,
+				page_name: 'store__vendor',
+				actions: ['create', 'read', 'update', 'delete'],
 			},
 
 			{

@@ -16,7 +16,7 @@ export const ThreadRoutes = [
 		name: 'Thread',
 		children: [
 			{
-				name: 'Order',
+				name: 'Order Description',
 				path: '/thread/order-info/details',
 				element: <OrderInfo />,
 				page_name: 'thread__order_info_details',
@@ -93,7 +93,6 @@ export const ThreadRoutes = [
 				page_name: 'thread__log',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
-			
 		],
 	},
 ];

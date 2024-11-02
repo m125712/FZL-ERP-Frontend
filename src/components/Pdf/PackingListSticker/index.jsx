@@ -1,20 +1,10 @@
 import { format } from 'date-fns';
-import { color } from 'framer-motion';
 
-import {
-	DEFAULT_FONT_SIZE,
-	tableLayoutStyle,
-	xMargin,
-} from '@/components/Pdf/ui';
-import {
-	CUSTOM_PAGE,
-	DEFAULT_A4_PAGE,
-	getTable,
-	TableHeader,
-} from '@/components/Pdf/utils';
+import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
+import { CUSTOM_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
 import pdfMake from '..';
-import { getPageFooter, getPageHeader } from './utils';
+import { getPageFooter } from './utils';
 
 const node = [
 	getTable('item_description', 'Item'),
@@ -41,14 +31,29 @@ export default function Index(data) {
 	});
 	const pdfDocGenerator = pdfMake.createPdf({
 		...CUSTOM_PAGE({
-			xMargin,
+			pageOrientation: 'landscape',
+			xMargin: 5,
+			headerHeight: 5,
+			footerHeight: 10,
+		}),
+
+		// Page Footer
+		footer: (currentPage, pageCount) => ({
+			table: getPageFooter({
+				currentPage,
+				pageCount,
+				rank: data?.packing_list_wise_rank,
+				packing_number: data?.packing_number,
+			}),
+			margin: [5, -5, 5, 0],
+			fontSize: DEFAULT_FONT_SIZE - 4,
 		}),
 
 		// * Main Table
 		content: [
 			{
 				table: {
-					headerRows: 1,
+					// headerRows: 1,
 					widths: [40, '*', '*', 25, 30, 20],
 					body: [
 						[
@@ -99,7 +104,7 @@ export default function Index(data) {
 								fontSize: DEFAULT_FONT_SIZE - 2,
 							},
 							{
-								text: `${data?.packing_list_wise_rank}-(${data?.packing_number})`,
+								text: `#${data?.packing_list_wise_rank}, (${data?.packing_number})`,
 
 								fontSize: DEFAULT_FONT_SIZE - 2,
 								colSpan: 2,

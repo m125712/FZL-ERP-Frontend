@@ -9,13 +9,14 @@ import PiCashEntry from '@pages/Commercial/Cash/Entry';
 import LC from '@pages/Commercial/LC';
 import LCDetails from '@pages/Commercial/LC/Details';
 import LCEntry from '@pages/Commercial/LC/Entry';
+// Manual PI
+import ManualPI from '@pages/Commercial/ManualPI';
+import ManualPIDetails from '@pages/Commercial/ManualPI/Details';
+import ManualPIEntry from '@pages/Commercial/ManualPI/Entry';
 import PI from '@pages/Commercial/PI';
 import PiDetails from '@pages/Commercial/PI/Details';
 import PiEntry from '@pages/Commercial/PI/Entry';
-// Manual PI
-import ManualPI from '@pages/Commercial/ManualPI';
-import ManualPIEntry from '@pages/Commercial/ManualPI/Entry';
-import ManualPIDetails from '@pages/Commercial/ManualPI/Details';
+
 export const CommercialRoutes = [
 	{
 		name: 'Commercial',
@@ -118,7 +119,40 @@ export const CommercialRoutes = [
 					},
 				],
 			},
-
+			{
+				name: 'Manual PI',
+				path: '/commercial/manual-pi',
+				element: <ManualPI />,
+				page_name: 'commercial__manual_pi',
+				actions: ['create', 'read', 'update', 'delete'],
+				disableCollapse: true,
+				children: [
+					{
+						name: 'PI',
+						path: '/commercial/manual-pi/:manual_pi_uuid',
+						element: <ManualPIDetails />,
+						page_name: 'commercial__manual_pi_details',
+						actions: ['create', 'read', 'update', 'delete'],
+						hidden: true,
+					},
+					{
+						name: 'Manual PI Entry',
+						path: '/commercial/manual-pi/entry',
+						element: <ManualPIEntry />,
+						page_name: 'commercial__manual_pi_entry',
+						actions: ['create', 'read', 'update', 'delete'],
+						hidden: true,
+					},
+					{
+						name: 'Manual PI Update',
+						path: '/commercial/manual-pi/:manual_pi_uuid/update',
+						element: <ManualPIEntry />,
+						page_name: 'commercial__manual_pi_update',
+						actions: ['create', 'read', 'update', 'delete'],
+						hidden: true,
+					},
+				],
+			},
 			{
 				name: 'Cash Invoice',
 				path: '/commercial/pi-cash',
@@ -174,51 +208,6 @@ export const CommercialRoutes = [
 				element: <Bank />,
 				page_name: 'commercial__bank',
 				actions: ['create', 'read', 'update', 'delete'],
-			},
-
-			{
-				name: 'Manual PI',
-				path: '/commercial/manual-pi',
-				element: <ManualPI />,
-				page_name: 'commercial__manual_pi',
-				actions: [
-					'create',
-					'read',
-					'update',
-					'delete',
-				],
-				disableCollapse: true,
-				children: [
-					{
-						name: 'PI',
-						path: '/commercial/manual-pi/:manual_pi_uuid',
-						element: <ManualPIDetails />,
-						page_name: 'commercial__manual_pi_details',
-						actions: [
-							'create',
-							'read',
-							'update',
-							'delete',
-						],
-						hidden: true,
-					},
-					{
-						name: 'Manual PI Entry',
-						path: '/commercial/manual-pi/entry',
-						element: <ManualPIEntry />,
-						page_name: 'commercial__manual_pi_entry',
-						actions: ['create', 'read', 'update', 'delete'],
-						hidden: true,
-					},
-					{
-						name: 'Manual PI Update',
-						path: '/commercial/manual-pi/:manual_pi_uuid/update',
-						element: <ManualPIEntry />,
-						page_name: 'commercial__manual_pi_update',
-						actions: ['create', 'read', 'update', 'delete'],
-						hidden: true,
-					},
-				],
 			},
 		],
 	},

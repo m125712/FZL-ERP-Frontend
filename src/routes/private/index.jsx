@@ -18,22 +18,22 @@ import { VislonRoutes } from './Vislon';
 
 const privateRoutes = [
 	...DashboardRoutes,
+	...ReportRoutes,
 	...OrderRoutes,
-	...LabDipRoutes,
 	...ThreadRoutes,
 	...CommercialRoutes,
-	...DeliveryRoutes,
 	...StoreRoutes,
 	...CommonRoutes,
-	...IssueRoutes,
+	...LabDipRoutes,
 	...DyeingAndIronRoutes,
+	...SliderRoutes,
 	...NylonRoutes,
 	...VislonRoutes,
 	...MetalRoutes,
-	...SliderRoutes,
+	...DeliveryRoutes,
 	...HrRoutes,
 	...LibraryRoutes,
-	...ReportRoutes,
+	...IssueRoutes,
 ];
 
 export default privateRoutes;

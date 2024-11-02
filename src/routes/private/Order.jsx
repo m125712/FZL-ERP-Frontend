@@ -15,7 +15,7 @@ export const OrderRoutes = [
 		name: 'Order',
 		children: [
 			{
-				name: 'Details',
+				name: 'Product Description',
 				path: '/order/details',
 				element: <OrderDetails />,
 				page_name: 'order__details',
@@ -33,27 +33,21 @@ export const OrderRoutes = [
 				],
 			},
 			{
-				name: 'Details',
+				name: 'Product Description',
 				path: '/order/details/:order_number',
 				element: <OrderFilterByOrderNumber />,
 				hidden: true,
 				page_name: 'order__details_by_order_number',
-				actions: [
-					'read',
-					'update',
-				],
+				actions: ['read', 'update'],
 				isDynamic: true,
 			},
 			{
-				name: 'Details',
+				name: 'Product Description',
 				path: '/order/details/:order_number/:order_description_uuid',
 				element: <OrderIndByUUID />,
 				hidden: true,
 				page_name: 'order__details_by_uuid',
-				actions: [
-					'read',
-					'update',
-				],
+				actions: ['read', 'update'],
 				isDynamic: true,
 			},
 			{
@@ -74,7 +68,7 @@ export const OrderRoutes = [
 				isDynamic: true,
 			},
 			{
-				name: 'Info',
+				name: 'Party Description',
 				path: '/order/info',
 				element: <OrderInfo />,
 				page_name: 'order__info',

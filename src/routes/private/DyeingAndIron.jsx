@@ -225,20 +225,20 @@ export const DyeingAndIronRoutes = [
 				page_name: 'dyeing__machine',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
-			// * Dyes Category
-			{
-				name: 'Dyes Category',
-				path: '/dyeing-and-iron/dyes-category',
-				element: <DyesCategory />,
-				page_name: 'dyeing__dyes_category',
-				actions: ['create', 'read', 'update', 'delete'],
-			},
 			// * Programs
 			{
 				name: 'Programs',
 				path: '/dyeing-and-iron/programs',
 				element: <Programs />,
 				page_name: 'dyeing__programs',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			// * Dyes Category
+			{
+				name: 'Dyes Category',
+				path: '/dyeing-and-iron/dyes-category',
+				element: <DyesCategory />,
+				page_name: 'dyeing__dyes_category',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
 

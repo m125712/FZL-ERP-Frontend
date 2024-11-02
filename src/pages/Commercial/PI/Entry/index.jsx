@@ -2,6 +2,7 @@ import { Suspense, useEffect, useState } from 'react';
 import {
 	useCommercialPI,
 	useCommercialPIByOrderInfo,
+	useCommercialPIByQuery,
 	useCommercialPIDetailsByUUID,
 	useCommercialPIEntry,
 	useCommercialPThreadByOrderInfo,
@@ -9,7 +10,7 @@ import {
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useRHF } from '@/hooks';
+import { useAccess, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
@@ -22,8 +23,21 @@ import Header from './Header';
 import Thread from './Thread';
 import Zipper from './Zipper';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_all_orders')) {
+		return `?is_cash=false`;
+	}
+
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `?is_cash=false&own_uuid=${userUUID}`;
+	}
+
+	return `?is_cash=false`;
+};
+
 export default function Index() {
 	const { pi_uuid } = useParams();
+	const haveAccess = useAccess('commercial__pi');
 	const { user } = useAuth();
 	const navigate = useNavigate();
 
@@ -34,6 +48,12 @@ export default function Index() {
 		updateData,
 		deleteData,
 	} = useCommercialPI();
+	const { invalidateQuery } = useCommercialPIByQuery(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
 
 	const isUpdate = pi_uuid !== undefined;
 
@@ -314,6 +334,7 @@ export default function Index() {
 				])
 					.then(() => reset(Object.assign({}, PI_NULL)))
 					.then(() => {
+						invalidateQuery();
 						navigate(`/commercial/pi/${updatedId}`);
 					});
 			} catch (err) {
@@ -414,6 +435,7 @@ export default function Index() {
 				])
 					.then(() => reset(Object.assign({}, PI_NULL)))
 					.then(() => {
+						invalidateQuery();
 						navigate(`/commercial/pi`);
 					});
 			} catch (err) {

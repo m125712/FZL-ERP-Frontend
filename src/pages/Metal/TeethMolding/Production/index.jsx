@@ -89,7 +89,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'tape_transferred',
+				accessorKey: 'tape_stock',
 				header: (
 					<span>
 						Tape Stock

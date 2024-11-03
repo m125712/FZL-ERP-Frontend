@@ -1,16 +1,8 @@
 import { useMemo } from 'react';
 
-
-
 import { LinkWithCopy, Progress, StatusButton } from '@/ui';
 
-
-
 import { DEFAULT_COLUMNS } from '@/util/Table/DefaultColumns';
-
-
-
-
 
 export const BuyerColumns = ({
 	handelUpdate,
@@ -430,7 +422,7 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 			},
 			{
 				accessorFn: (row) =>
-					`${row.is_inch ? 'Inch' : row.is_meter ? 'Meter' : 'Cm'}`,
+					`${row.is_inch ? 'Inch' : row.order_type === 'tape' ? 'Meter' : 'Cm'}`,
 				id: 'kg',
 				header: 'Size Unit',
 				enableColumnFilter: false,

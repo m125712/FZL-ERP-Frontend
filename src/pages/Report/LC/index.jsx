@@ -47,7 +47,8 @@ export default function Index() {
 				accessorKey: 'total_value',
 				header: 'LC Value.',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) =>
+					info.getValue() ?  Number(info.getValue()).toFixed(2) : '',
 			},
 			{
 				accessorKey: 'amount',
@@ -83,7 +84,15 @@ export default function Index() {
 				accessorKey: 'payment_value',
 				header: 'Payment Value',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue().toFixed(2),
+				cell: (info) =>
+					info.getValue() ? Number(info.getValue()).toFixed(2) : '',
+			},
+			{
+				accessorKey: 'total_value',
+				header: 'Total Value',
+				enableColumnFilter: false,
+				cell: (info) =>
+					info.getValue() ? Number(info.getValue()).toFixed(2) : '',
 			},
 			{
 				accessorKey: 'ldbc_fdbc',

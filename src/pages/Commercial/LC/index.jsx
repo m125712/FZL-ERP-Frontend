@@ -4,18 +4,10 @@ import { useCommercialLC, useCommercialLCByQuery } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
-
-
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete, LinkWithCopy, StatusButton } from '@/ui';
 
-
-
 import PageInfo from '@/util/PageInfo';
-
-
-
-
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
@@ -85,7 +77,7 @@ export default function Index() {
 								key={piId}
 								title={piId}
 								id={piId}
-								uri='/commercial/pi/details'
+								uri='/commercial/pi'
 							/>
 						);
 					});

@@ -90,10 +90,17 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'size',
-				header: 'Size (CM)',
+				header: 'Size',
 				width: 'w-24',
 				// enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_inch',
+				header: 'Unit',
+				width: 'w-24',
+				// enableColumnFilter: false,
+				cell: (info) => (info.getValue() == 1 ? 'IN' : 'CM'),
 			},
 			{
 				accessorKey: 'quantity',

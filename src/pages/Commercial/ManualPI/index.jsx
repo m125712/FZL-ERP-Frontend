@@ -37,6 +37,38 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'pi_ids',
+				header: 'PI Numbers',
+				width: 'w-28',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return info?.getValue()?.map((pi_number) => {
+						return (
+							<LinkWithCopy
+								key={pi_number}
+								title={pi_number}
+								id={pi_number}
+								uri='/commercial/pi'
+							/>
+						);
+					});
+				},
+			},
+			{
+				accessorKey: 'order_number',
+				header: 'Order Number',
+				width: 'w-28',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue().join('\n'),
+			},
+			{
+				accessorKey: 'total_value',
+				header: 'Total Value',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue().toLocaleString(),
+			},
+			{
 				accessorKey: 'marketing_name',
 				header: 'Marketing',
 				enableColumnFilter: false,

@@ -56,14 +56,16 @@ export default function Index() {
 						String(originalValue).trim() === '' ? null : value
 					)
 					.max(yup.ref('max_quantity'), 'Beyond Max Quantity'),
-				short_quantity: NUMBER_DOUBLE.default(0).transform(
-					(value, originalValue) =>
+				short_quantity: NUMBER_DOUBLE.default(0)
+					.transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? 0 : value
-				),
-				reject_quantity: NUMBER_DOUBLE.default(0).transform(
-					(value, originalValue) =>
+					)
+					.max(yup.ref('quantity'), 'Beyond Max Quantity'),
+				reject_quantity: NUMBER_DOUBLE.default(0)
+					.transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? 0 : value
-				),
+					)
+					.max(yup.ref('quantity'), 'Beyond Max Quantity'),
 				batch_remarks: STRING.nullable(),
 			})
 		),

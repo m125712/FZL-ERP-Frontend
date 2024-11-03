@@ -11,8 +11,6 @@ import { EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
-import AddOrUpdate from './AddOrUpdate';
-
 export default function Index() {
 	const { data, url, updateData, postData, deleteData, isLoading } =
 		useThreadSwatch();
@@ -85,7 +83,7 @@ export default function Index() {
 					<span>
 						Quantity
 						<br />
-						(PCS)
+						(Cone)
 					</span>
 				),
 				width: 'w-24',

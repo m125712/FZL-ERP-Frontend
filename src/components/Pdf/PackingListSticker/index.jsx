@@ -62,24 +62,29 @@ export default function Index(data) {
 								style: 'header',
 								bold: true,
 								alignment: 'center',
-								colSpan: 6,
+								colSpan: 3,
 								fontSize: DEFAULT_FONT_SIZE - 2,
 							},
 							{},
 							{},
-							{},
+
+							{
+								text: `C/N: #${data?.packing_list_wise_rank}, ${data?.packing_number}`,
+								bold: true,
+								fontSize: DEFAULT_FONT_SIZE - 2,
+								colSpan: 3,
+							},
 							{},
 							{},
 						],
 						[
 							{
-								text: 'O/N',
+								text: 'Challan No',
 								bold: true,
 								fontSize: DEFAULT_FONT_SIZE - 2,
 							},
 							{
-								text: `${data?.order_number}`,
-
+								text: '',
 								fontSize: DEFAULT_FONT_SIZE - 2,
 								colSpan: 2,
 							},
@@ -99,16 +104,17 @@ export default function Index(data) {
 						],
 						[
 							{
-								text: 'C/N',
+								text: 'O/N',
 								bold: true,
 								fontSize: DEFAULT_FONT_SIZE - 2,
 							},
 							{
-								text: `#${data?.packing_list_wise_rank}, (${data?.packing_number})`,
+								text: `${data?.order_number}`,
 
 								fontSize: DEFAULT_FONT_SIZE - 2,
 								colSpan: 2,
 							},
+
 							{},
 							{
 								text: 'Weight',

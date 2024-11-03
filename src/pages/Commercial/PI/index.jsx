@@ -77,6 +77,53 @@ export default function Index() {
 				},
 			},
 			{
+				accessorFn: (row) => {
+					const { order_numbers, thread_order_numbers } = row;
+					return [...order_numbers, ...thread_order_numbers];
+				},
+				id: 'order_numbers',
+				header: 'O/N',
+				width: 'w-28',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const orderNumbers = info.getValue();
+					return orderNumbers?.map((orderNumber) => {
+						if (
+							orderNumber.thread_order_info_uuid === null ||
+							orderNumber.order_info_uuid === null
+						)
+							return;
+						const isThreadOrder =
+							orderNumber.thread_order_number?.includes('TO');
+						const number = isThreadOrder
+							? orderNumber.thread_order_number
+							: orderNumber.order_number;
+						const uuid = isThreadOrder
+							? orderNumber.thread_order_info_uuid
+							: orderNumber.order_info_uuid;
+						return (
+							<LinkWithCopy
+								key={number}
+								title={number}
+								id={isThreadOrder ? uuid : number}
+								uri={
+									isThreadOrder
+										? '/thread/order-info'
+										: '/order/details'
+								}
+							/>
+						);
+					});
+				},
+			},
+			{
+				accessorKey: 'total_amount',
+				header: 'Total Value(USD)',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue().toLocaleString(),
+			},
+			{
 				accessorKey: 'marketing_name',
 				header: 'Marketing',
 				enableColumnFilter: false,

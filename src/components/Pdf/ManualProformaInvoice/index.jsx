@@ -50,7 +50,9 @@ export default function Index(data) {
 		quantity: item.is_zipper
 			? item.quantity + ' pcs'
 			: item.quantity + ' cone',
-		value: item.quantity * (item.unit_price / 12),
+		value: item.is_zipper
+			? item.quantity * (item.unit_price / 12)
+			: item.quantity * item.unit_price,
 	}));
 	const totalQuantityZipper = manual_pi_entry
 		.filter((item) => item.is_zipper)

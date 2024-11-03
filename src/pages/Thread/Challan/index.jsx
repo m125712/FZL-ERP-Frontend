@@ -74,6 +74,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'total_quantity',
+				header: 'Total QTY(Cone)',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'vehicle_name',
 				header: 'Assign To',
 				enableColumnFilter: false,

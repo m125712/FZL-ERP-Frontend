@@ -24,6 +24,7 @@ import {
 	useOtherOrderPropertiesByTopStopper,
 	useOtherOrderPropertiesByZipperNumber,
 } from '@/state/Other';
+import { DevTool } from '@hookform/devtools';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -32,7 +33,6 @@ import { FormField, Input, ReactSelect } from '@/ui';
 import nanoid from '@/lib/nanoid';
 import { PROPERTIES_NULL, PROPERTIES_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-import { DevTool } from '@hookform/devtools';
 
 export default function Index({
 	modalId = '',
@@ -43,91 +43,55 @@ export default function Index({
 }) {
 	const { user } = useAuth();
 	const { url, updateData, postData } = useOrderProperties();
-	const { data: order, invalidateQuery: invalidateOrderInfoValueLabel } =
-		useOtherOrderInfoValueLabel();
 	const { data: item, invalidateQuery: invalidateOrderPropertiesByItem } =
 		useOtherOrderPropertiesByItem();
-	const {
-		data: zipper_number,
-		invalidateQuery: invalidateOrderPropertiesByZipperNumber,
-	} = useOtherOrderPropertiesByZipperNumber();
-	const {
-		data: end_type,
-		invalidateQuery: invalidateOrderPropertiesByEndType,
-	} = useOtherOrderPropertiesByEndType();
+	const { invalidateQuery: invalidateOrderPropertiesByZipperNumber } =
+		useOtherOrderPropertiesByZipperNumber();
+	const { invalidateQuery: invalidateOrderPropertiesByEndType } =
+		useOtherOrderPropertiesByEndType();
 
 	// * garments info*//
-	const {
-		data: garments_wash,
-		invalidateQuery: invalidateOrderPropertiesByGarmentsWash,
-	} = useOtherOrderPropertiesByGarmentsWash();
-	const {
-		data: light_preference,
-		invalidateQuery: invalidateOrderPropertiesByLightPreference,
-	} = useOtherOrderPropertiesByLightPreference();
-	const {
-		data: end_user,
-		invalidateQuery: invalidateOrderPropertiesByEndUser,
-	} = useOtherOrderPropertiesByEndUser();
+	const { invalidateQuery: invalidateOrderPropertiesByGarmentsWash } =
+		useOtherOrderPropertiesByGarmentsWash();
+	const { invalidateQuery: invalidateOrderPropertiesByLightPreference } =
+		useOtherOrderPropertiesByLightPreference();
+	const { invalidateQuery: invalidateOrderPropertiesByEndUser } =
+		useOtherOrderPropertiesByEndUser();
 
 	//* slider info*//
-	const {
-		data: slider_body_shape,
-		invalidateQuery: invalidateOrderPropertiesBySliderBodyShape,
-	} = useOtherOrderPropertiesBySliderBodyShape();
-	const {
-		data: slider_link,
-		invalidateQuery: invalidateOrderPropertiesBySliderLink,
-	} = useOtherOrderPropertiesBySliderLink();
+	const { invalidateQuery: invalidateOrderPropertiesBySliderBodyShape } =
+		useOtherOrderPropertiesBySliderBodyShape();
+	const { invalidateQuery: invalidateOrderPropertiesBySliderLink } =
+		useOtherOrderPropertiesBySliderLink();
 
-	const {
-		data: lock_type,
-		invalidateQuery: invalidateOrderPropertiesByLockType,
-	} = useOtherOrderPropertiesByLockType();
+	const { invalidateQuery: invalidateOrderPropertiesByLockType } =
+		useOtherOrderPropertiesByLockType();
 
 	//* puller info*//
-	const {
-		data: puller_type,
-		invalidateQuery: invalidateOrderPropertiesByPullerType,
-	} = useOtherOrderPropertiesByPullerType();
-	const {
-		data: puller_link,
-		invalidateQuery: invalidateOrderPropertiesByPullerLink,
-	} = useOtherOrderPropertiesByPullerLink();
-	const { data: color, invalidateQuery: invalidateOrderPropertiesByColor } =
+	const { invalidateQuery: invalidateOrderPropertiesByPullerType } =
+		useOtherOrderPropertiesByPullerType();
+	const { invalidateQuery: invalidateOrderPropertiesByPullerLink } =
+		useOtherOrderPropertiesByPullerLink();
+	const { invalidateQuery: invalidateOrderPropertiesByColor } =
 		useOtherOrderPropertiesByColor();
-	const { data: hand, invalidateQuery: invalidateOrderPropertiesByHand } =
+	const { invalidateQuery: invalidateOrderPropertiesByHand } =
 		useOtherOrderPropertiesByHand();
-	const {
-		data: nylon_stop,
-		invalidateQuery: invalidateOrderPropertiesByNylonStopper,
-	} = useOtherOrderPropertiesByNylonStopper();
-	const {
-		data: special_requirement,
-		invalidateQuery: invalidateOrderPropertiesBySpecialRequirement,
-	} = useOtherOrderPropertiesBySpecialRequirement();
-	const {
-		data: coloring_type,
-		invalidateQuery: invalidateOrderPropertiesByColoringType,
-	} = useOtherOrderPropertiesByColoringType();
+	const { invalidateQuery: invalidateOrderPropertiesByNylonStopper } =
+		useOtherOrderPropertiesByNylonStopper();
+	const { invalidateQuery: invalidateOrderPropertiesBySpecialRequirement } =
+		useOtherOrderPropertiesBySpecialRequirement();
+	const { invalidateQuery: invalidateOrderPropertiesByColoringType } =
+		useOtherOrderPropertiesByColoringType();
 	const { data: slider, invalidateQuery: invalidateOrderPropertiesBySlider } =
 		useOtherOrderPropertiesBySlider();
-	const {
-		data: top_stopper,
-		invalidateQuery: invalidateOrderPropertiesByTopStopper,
-	} = useOtherOrderPropertiesByTopStopper();
-	const {
-		data: bottom_stopper,
-		invalidateQuery: invalidateOrderPropertiesByBottomStopper,
-	} = useOtherOrderPropertiesByBottomStopper();
-	const {
-		data: logo_type,
-		invalidateQuery: invalidateOrderPropertiesByLogoType,
-	} = useOtherOrderPropertiesByLogoType();
-	const {
-		data: teeth_type,
-		invalidateQuery: invalidateOrderPropertiesByTeethType,
-	} = useOtherOrderPropertiesByTeethType();
+	const { invalidateQuery: invalidateOrderPropertiesByTopStopper } =
+		useOtherOrderPropertiesByTopStopper();
+	const { invalidateQuery: invalidateOrderPropertiesByBottomStopper } =
+		useOtherOrderPropertiesByBottomStopper();
+	const { invalidateQuery: invalidateOrderPropertiesByLogoType } =
+		useOtherOrderPropertiesByLogoType();
+	const { invalidateQuery: invalidateOrderPropertiesByTeethType } =
+		useOtherOrderPropertiesByTeethType();
 	const {
 		register,
 		handleSubmit,
@@ -186,7 +150,6 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
-		invalidateOrderInfoValueLabel();
 		invalidateOrderPropertiesByItem();
 		invalidateOrderPropertiesByZipperNumber();
 		invalidateOrderPropertiesByEndType();

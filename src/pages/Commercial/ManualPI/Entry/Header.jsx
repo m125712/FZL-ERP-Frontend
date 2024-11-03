@@ -19,6 +19,7 @@ export default function Header({
 	Controller,
 	control,
 	watch,
+	isUpdate,
 }) {
 	const { manual_pi_uuid } = useParams();
 	const [partyId, setPartyId] = useState(getValues('party_uuid'));
@@ -34,7 +35,9 @@ export default function Header({
 	const { value: buyer } = useFetch('/other/buyer/value/label');
 	const { value: marketing } = useFetch('/other/marketing/value/label');
 	const { value: bank } = useFetch('/other/bank/value/label');
-	const { value: pi } = useFetch('/other/pi/value/label');
+	const { value: pi } = isUpdate
+		? useFetch('/other/pi/value/label?is_update=true')
+		: useFetch('/other/pi/value/label');
 
 	useEffect(() => {
 		setPartyId(getValues('party_uuid'));

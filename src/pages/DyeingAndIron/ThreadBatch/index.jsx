@@ -41,6 +41,31 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'order_numbers',
+				header: 'O/N',
+				width: 'w-28',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const  order_numbers = info.getValue();
+					return order_numbers?.map((order_number) => {
+						return (
+							<LinkWithCopy
+								key={order_number}
+								title={order_number.order_number}
+								id={order_number.order_info_uuid}
+								uri='/thread/order-info'
+							/>
+						);
+					});
+				},
+			},
+			{
+				accessorKey: 'total_cone',
+				header: 'Total Qty(Cone)',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'coneing_actions',
 				header: '',
 				enableColumnFilter: false,
@@ -64,6 +89,23 @@ export default function Index() {
 						</div>
 					);
 				},
+			},
+			{
+				accessorKey: 'total_expected_weight',
+				header: (
+					<span>
+						Total Expected
+						<br /> Yarn Qty
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_yarn_quantity',
+				header: 'Total Yarn Qty',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'machine_name',

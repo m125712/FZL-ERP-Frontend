@@ -83,7 +83,13 @@ export default function Index() {
 		itemId: null,
 		itemName: null,
 	});
-
+	const getTotalQty = useCallback(
+		(coil_to_dyeing_entry) =>
+			coil_to_dyeing_entry.reduce((acc, item) => {
+				return acc + Number(item.trx_quantity);
+			}, 0),
+		[watch()]
+	);
 	const handleEntryRemove = (index) => {
 		if (
 			getValues(
@@ -380,6 +386,16 @@ export default function Index() {
 								</tr>
 							);
 						})}
+						<tr className='border-t border-primary/30'>
+							<td
+								className='py-4 text-right font-bold'
+								colSpan='2'>
+								Total Quantity:
+							</td>
+							<td className='py-4 font-bold'>
+								{getTotalQty(watch('dyeing_transfer_entry'))}
+							</td>
+						</tr>
 					</DynamicField>
 					<div className='modal-action'>
 						<button

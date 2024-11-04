@@ -1,5 +1,6 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useDeliveryVehicle } from '@/state/Delivery';
+import { useOtherVehicle } from '@/state/Other';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -16,7 +17,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const { data, isLoading, url, deleteData, updateData } =
 		useDeliveryVehicle();
-
+	const { invalidateQuery: invalidateOtherVehicle } = useOtherVehicle();
 	const info = new PageInfo('Delivery Vehicle', url, 'delivery__vehicle');
 	const haveAccess = useAccess('delivery__vehicle');
 
@@ -190,6 +191,7 @@ export default function Index() {
 					setDeleteItem={setDeleteItem}
 					url={url}
 					deleteData={deleteData}
+					invalidateQueryArray={[invalidateOtherVehicle]}
 				/>
 			</Suspense>
 		</div>

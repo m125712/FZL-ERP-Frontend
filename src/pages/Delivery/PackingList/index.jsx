@@ -67,7 +67,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'packing_list_numbers',
+				accessorKey: 'packing_number',
 				header: 'ID',
 				cell: (info) => {
 					const { uuid } = info.row.original;

@@ -164,8 +164,6 @@ export default function Index() {
 			bleaching: 'non-bleach',
 			company_price: 0,
 			party_price: 0,
-			swatch_status: '',
-			swatch_approval_date: null,
 			remarks: '',
 		});
 	};
@@ -193,8 +191,6 @@ export default function Index() {
 			const order_info_entries_promise = data.order_info_entry.map(
 				async (item) => {
 					if (item.uuid === undefined) {
-						item.swatch_approval_date =
-							item.recipe_uuid === null ? null : GetDateTime();
 						item.order_info_uuid = order_info_uuid;
 						item.created_at = GetDateTime();
 						item.uuid = nanoid();
@@ -207,12 +203,6 @@ export default function Index() {
 						item.updated_at = GetDateTime();
 						const updatedData = {
 							...item,
-							swatch_approval_date:
-								item.recipe_uuid === null
-									? null
-									: item.swatch_approval_date === null
-										? GetDateTime()
-										: item.swatch_approval_date,
 						};
 						return await updateData.mutateAsync({
 							url: `${threadOrderEntryUrl}/${item.uuid}`,

@@ -3,20 +3,12 @@ import { useDeliveryChallan, useDeliveryPackingList } from '@/state/Delivery';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
-
-
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy, StatusButton } from '@/ui';
 
-
-
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
-
-
-
-
 
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 

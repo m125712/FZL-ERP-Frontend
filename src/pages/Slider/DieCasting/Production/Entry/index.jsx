@@ -220,7 +220,7 @@ export default function Index() {
 										is_title_needed='false'
 										register={register}
 										dynamicerror={
-											errors?.array?.[index].mc_no
+											errors?.array?.[index]?.mc_no
 										}
 									/>
 								</td>

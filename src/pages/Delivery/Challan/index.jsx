@@ -3,12 +3,20 @@ import { useDeliveryChallan, useDeliveryPackingList } from '@/state/Delivery';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
+
+
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy, StatusButton } from '@/ui';
 
+
+
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
+
+
+
+
 
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
@@ -54,20 +62,19 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'packing_numbers',
+				accessorKey: 'packing_list_numbers',
+				id: 'packing_list',
 				header: 'Packing List',
 				width: 'w-28',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return info?.getValue()?.map((packingList, index) => {
 						if (packingList === 'PL-') return '-';
-						const packingListUuid =
-							info?.row.original?.packing_list_uuids?.[index];
 						return (
 							<LinkWithCopy
-								key={packingList}
-								title={packingList}
-								id={packingListUuid}
+								key={packingList.packing_number}
+								title={packingList.packing_number}
+								id={packingList.packing_list_uuid}
 								uri='/delivery/zipper-packing-list'
 							/>
 						);
@@ -89,8 +96,20 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'carton_quantity',
+				accessorKey: 'total_carton_quantity',
 				header: 'Carton QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_poly_quantity',
+				header: 'Poly QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_quantity',
+				header: 'Total QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

@@ -34,6 +34,8 @@ import {
 	Textarea,
 } from '@/ui';
 
+import { ORDER_NULL } from '@/util/Schema';
+
 export default function Header({
 	endType = '',
 	setEndType,
@@ -172,7 +174,7 @@ export default function Header({
 											<ReactSelect
 												placeholder='Select Type'
 												options={types}
-												value={types?.find(
+												value={types?.filter(
 													(item) =>
 														item.value ==
 														getValues('order_type')
@@ -180,16 +182,11 @@ export default function Header({
 												onChange={(e) => {
 													onChange(e.value);
 													setType(e.value);
-													reset(
-														Object.assign(
-															{},
-															{
-																...ORDER_NULL,
-																order_type:
-																	e.value,
-															}
-														)
-													);
+													console.log('hello');
+													reset({
+														...ORDER_NULL,
+														order_type: e.value,
+													});
 												}}
 											/>
 										);
@@ -212,7 +209,7 @@ export default function Header({
 									<ReactSelect
 										placeholder='Select Order'
 										options={order}
-										value={order?.find(
+										value={order?.filter(
 											(item) =>
 												item.value ==
 												getValues('order_info_uuid')
@@ -233,7 +230,7 @@ export default function Header({
 									<ReactSelect
 										placeholder='Select Item'
 										options={item}
-										value={item?.find(
+										value={item?.filter(
 											(item) =>
 												item.value === getValues('item')
 										)}
@@ -262,7 +259,7 @@ export default function Header({
 										<ReactSelect
 											placeholder='Select nylon stopper'
 											options={nylon_stop}
-											value={nylon_stop?.find(
+											value={nylon_stop?.filter(
 												(item) =>
 													item.value ==
 													getValues('nylon_stopper')
@@ -286,7 +283,7 @@ export default function Header({
 									<ReactSelect
 										placeholder='Select Zipper Number'
 										options={zipper_number}
-										value={zipper_number?.find(
+										value={zipper_number?.filter(
 											(zipper_number) =>
 												zipper_number.value ==
 												getValues('zipper_number')
@@ -313,7 +310,7 @@ export default function Header({
 											<ReactSelect
 												placeholder='Select End Type'
 												options={end_type}
-												value={end_type?.find(
+												value={end_type?.filter(
 													(end_type) =>
 														end_type.value ==
 														getValues('end_type')
@@ -346,7 +343,7 @@ export default function Header({
 												<ReactSelect
 													placeholder='Select Hand'
 													options={hand}
-													value={hand?.find(
+													value={hand?.filter(
 														(hand) =>
 															hand.value ==
 															getValues('hand')
@@ -379,7 +376,7 @@ export default function Header({
 									<ReactSelect
 										placeholder='Select Lock Type'
 										options={lock_type}
-										value={lock_type?.find(
+										value={lock_type?.filter(
 											(lock_type) =>
 												lock_type.value ==
 												getValues('lock_type')
@@ -404,7 +401,7 @@ export default function Header({
 											<ReactSelect
 												placeholder='Select Teeth Type'
 												options={teeth_type}
-												value={teeth_type?.find(
+												value={teeth_type?.filter(
 													(teeth_type) =>
 														teeth_type.value ==
 														getValues('teeth_type')
@@ -429,7 +426,7 @@ export default function Header({
 											<ReactSelect
 												placeholder='Select Teeth Color'
 												options={color}
-												value={color?.find(
+												value={color?.filter(
 													(color) =>
 														color.value ==
 														getValues('teeth_color')

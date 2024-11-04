@@ -33,6 +33,31 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'order_numbers',
+				header: 'O/N',
+				width: 'w-28',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return info?.getValue()?.map((order_number) => {
+						return (
+							<LinkWithCopy
+								key={order_number}
+								title={order_number}
+								id={order_number}
+								uri='/order/details'
+							/>
+						);
+					});
+				},
+			},
+			{
+				accessorKey: 'total_quantity',
+				header: 'Total Qty(Pcs)',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
+			{
 				accessorKey: 'add_actions',
 				header: '',
 				enableColumnFilter: false,
@@ -57,6 +82,30 @@ export default function Index() {
 			{
 				accessorKey: 'batch_status',
 				header: 'Status',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'expected_kg',
+				header: (
+					<span>
+						Expected Production
+						<br />
+						Qty(kg)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_actual_production_quantity',
+				header: (
+					<span>
+						Total Production
+						<br />
+						Qty(kg)
+					</span>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

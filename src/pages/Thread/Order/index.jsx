@@ -104,6 +104,17 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'price_approval_count',
+				header: 'Price App.Count',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { price_approval_count, order_entry_count } =
+						info.row.original;
+
+					return `${price_approval_count}/${order_entry_count}`;
+				},
+			},
+			{
 				accessorKey: 'delivery_date',
 				header: 'Delivery Date',
 				enableColumnFilter: false,

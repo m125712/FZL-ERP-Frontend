@@ -1,4 +1,5 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
+import { useCommercialManualPI } from '@/state/Commercial';
 import { useThreadOrderInfo, useThreadOrderInfoEntry } from '@/state/Thread';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
@@ -20,6 +21,8 @@ export default function Index() {
 	const { url: threadOrderInfoUrl } = useThreadOrderInfo();
 	const { url: threadOrderEntryUrl } = useThreadOrderInfoEntry();
 	const { updateData, postData, deleteData } = useThreadOrderInfo();
+	const { invalidateQuery: invalidateCommercialManualPI } =
+		useCommercialManualPI();
 	const { manual_pi_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
@@ -184,6 +187,7 @@ export default function Index() {
 				])
 					.then(() => reset(MANUAL_PI_NULL))
 					.then(() => {
+						invalidateCommercialManualPI();
 						navigate(`/commercial/manual-pi/${data?.uuid}`);
 					});
 			} catch (err) {
@@ -239,6 +243,7 @@ export default function Index() {
 			await Promise.all([manual_pi_promise, ...manual_pi_entries_promise])
 				.then(() => reset(MANUAL_PI_NULL))
 				.then(() => {
+					invalidateCommercialManualPI();
 					navigate(`/commercial/manual-pi/${new_manual_pi_uuid}`);
 				});
 		} catch (err) {
@@ -308,6 +313,7 @@ export default function Index() {
 							getValues,
 							Controller,
 							watch,
+							isUpdate,
 						}}
 					/>
 

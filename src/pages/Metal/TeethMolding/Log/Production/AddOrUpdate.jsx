@@ -44,9 +44,9 @@ export default function Index({
 		Number(updateTeethMoldingLog?.balance_quantity) +
 		Number(dataByUUID?.production_quantity);
 
-	const MAX_QUANTITY_IN_KG =
+	const MAX_DUE_TAPE =
 		Number(updateTeethMoldingLog?.tape_stock) +
-		Number(dataByUUID?.production_quantity_in_kg);
+		Number(dataByUUID?.dyed_tape_used_in_kg);
 
 	const { register, handleSubmit, errors, reset, context } = useRHF(
 		{
@@ -55,12 +55,12 @@ export default function Index({
 				SFG_PRODUCTION_SCHEMA_IN_PCS.production_quantity.max(
 					MAX_QUANTITY
 				),
-			remaining_dyed_tape: NUMBER_DOUBLE_REQUIRED.max(
-				MAX_QUANTITY_IN_KG,
+			dyed_tape_used_in_kg: NUMBER_DOUBLE_REQUIRED.max(
+				MAX_DUE_TAPE,
 				'Beyond Max limit'
 			).moreThan(0, 'More than 0'),
 		},
-		{ ...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL, remaining_dyed_tape: null }
+		{ ...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL, dyed_tape_used_in_kg: null }
 	);
 
 	useEffect(() => {
@@ -84,7 +84,7 @@ export default function Index({
 		}));
 		reset({
 			...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
-			remaining_dyed_tape: null,
+			dyed_tape_used_in_kg: null,
 		});
 		window[modalId].close();
 	};
@@ -133,9 +133,9 @@ export default function Index({
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				title='Remaining Dyed Tape'
-				label='remaining_dyed_tape'
-				sub_label={`MAX: ${MAX_QUANTITY_IN_KG} kg`}
+				title='Dyed Tape Used'
+				label='dyed_tape_used_in_kg'
+				sub_label={`MAX: ${MAX_DUE_TAPE} kg`}
 				unit='PCS'
 				{...{ register, errors }}
 			/>

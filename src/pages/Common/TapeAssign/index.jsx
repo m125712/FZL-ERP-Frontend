@@ -60,8 +60,8 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'count',
-				header: 'Count',
+				accessorKey: 'order_number_wise_rank',
+				header: 'O/N count',
 				width: 'w-40',
 				enableColumnFilter: false,
 				cell: (info) => {

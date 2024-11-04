@@ -13,12 +13,11 @@ const node = [
 	getTable('style', 'Style'),
 	getTable('count_length_name', 'Count Length'),
 	getTable('bleaching', 'Bleaching'),
-	getTable('quantity', 'Quantity', 'right'),
-	getTable('remarks', 'Remarks'),
+	getTable('quantity', 'Quantity (cone)', 'right'),
 ];
 
 export default function Index(orderInfo) {
-	const headerHeight = 170;
+	const headerHeight = 160;
 	let footerHeight = 50;
 	let { order_info_entry } = orderInfo;
 
@@ -73,7 +72,7 @@ export default function Index(orderInfo) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [40, '*', 70, 50, 50, '*'],
+					widths: [40, '*', 70, 50, '*'],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -94,14 +93,12 @@ export default function Index(orderInfo) {
 							},
 							{},
 							{},
-
 							{
-								text: `Total Quantity: ${Number(totalQuantity)}`,
+								text: `Total QTY: ${Number(totalQuantity)}`,
 								alignment: 'right',
 								bold: true,
 								colSpan: 2,
 							},
-							{},
 							{},
 						],
 					],

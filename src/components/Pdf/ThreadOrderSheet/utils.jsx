@@ -1,8 +1,8 @@
+import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
 
 import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../ui';
 import { company, getEmptyColumn } from '../utils';
-import { FZL_LOGO } from '@/assets/img/base64';
 
 const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 
@@ -68,13 +68,6 @@ export const getPageHeader = (orderInfo) => {
 				orderInfo?.buyer_name,
 			],
 			[
-				{ text: 'Updated', bold: true, color: PRIMARY_COLOR },
-				updated_at,
-				{ text: 'Created By', bold: true, color: PRIMARY_COLOR },
-				orderInfo?.created_by_name,
-			],
-
-			[
 				{
 					text: 'Remarks',
 					bold: true,
@@ -82,11 +75,7 @@ export const getPageHeader = (orderInfo) => {
 				},
 				{
 					colSpan: 3,
-					text: [
-						{
-							text: orderInfo?.remarks,
-						},
-					],
+					text: orderInfo?.remarks,
 					alignment: 'left',
 				},
 				'',

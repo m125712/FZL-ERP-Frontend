@@ -72,11 +72,14 @@ export default function Index() {
 		}
 	}, [packingListEntry, isUpdate]);
 
+	console.log(challan);
 	useEffect(() => {
 		if (isUpdate && watch('new_packing_list_uuids')?.length === 0) {
 			setValue('new_challan_entry', []);
+			setValue('challan_entry', challan?.challan_entry);
 		} else if (isUpdate && packingListEntry?.packing_list_entry) {
 			setValue('new_challan_entry', packingListEntry?.packing_list_entry);
+			setValue('challan_entry', challan?.challan_entry);
 		}
 	}, [packingListEntry, isUpdate, watch('new_packing_list_uuids')]);
 

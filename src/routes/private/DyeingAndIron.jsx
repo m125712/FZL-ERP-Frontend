@@ -1,6 +1,10 @@
 // Dyeing And Iron
 //* Dyes Category
 import DyesCategory from '@/pages/DyeingAndIron/DyesCategory';
+// * Finishing Batch
+import FinishingBatch from '@/pages/DyeingAndIron/FinishingBatch';
+import FinishingBatchEntry from '@/pages/DyeingAndIron/FinishingBatch/Entry';
+import FinishingBatchDetails from '@/pages/DyeingAndIron/FinishingBatch/Details';
 //* Log
 import DyeingLog from '@/pages/DyeingAndIron/Log';
 //* Machine
@@ -258,6 +262,39 @@ export const DyeingAndIronRoutes = [
 					'click_update_rm_order',
 					'click_delete_rm_order',
 				],
+			},
+
+			// * Finishing Batch
+			{
+				name: 'Finishing Batch',
+				path: '/dyeing-and-iron/finishing-batch',
+				element: <FinishingBatch />,
+				page_name: 'dyeing__finishing_batch',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Finishing Batch Entry',
+				path: '/dyeing-and-iron/finishing-batch/entry',
+				element: <FinishingBatchEntry />,
+				hidden: true,
+				page_name: 'dyeing__finishing_batch_entry',
+				actions: ['create', 'read'],
+			},
+			{
+				name: 'Finishing Batch Details',
+				path: '/dyeing-and-iron/finishing-batch/:batch_uuid',
+				element: <FinishingBatchDetails />,
+				hidden: true,
+				page_name: 'dyeing__finishing_batch_details',
+				actions: ['read'],
+			},
+			{
+				name: 'Finishing Batch Update',
+				path: '/dyeing-and-iron/finishing-batch/:batch_uuid/update',
+				element: <FinishingBatchEntry />,
+				hidden: true,
+				page_name: 'dyeing__finishing_batch_entry_update',
+				actions: ['create', 'read', 'update', 'delete'],
 			},
 		],
 	},

@@ -291,7 +291,7 @@ export default function Index() {
 				extraClass={'py-0.5'}
 			/>
 
-			<Suspense>
+			{/* <Suspense>
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
@@ -312,7 +312,7 @@ export default function Index() {
 						deleteData,
 					}}
 				/>
-			</Suspense>
+			</Suspense> */}
 		</>
 	);
 }

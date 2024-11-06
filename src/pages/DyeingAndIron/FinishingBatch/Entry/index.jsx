@@ -36,6 +36,7 @@ export default function index() {
 		deleteData,
 		invalidateQuery: invalidateNewFinishingBatch,
 	} = useDyeingFinishingBatchByUUID(batch_uuid, 'is_update=true');
+	const { invalidateQuery: invalidateDetails } = useDyeingFinishingBatchByUUID(batch_uuid);
 	const { invalidateQuery } = useDyeingFinishingBatch();
 
 	const {
@@ -138,6 +139,7 @@ export default function index() {
 				.then(() => reset(FINISHING_BATCH_ENTRY_NULL))
 				.then(() => {
 					invalidateQuery();
+					invalidateDetails();
 					navigate(`/dyeing-and-iron/finishing-batch/${data.uuid}`);
 				})
 				.catch((err) => console.log(err));

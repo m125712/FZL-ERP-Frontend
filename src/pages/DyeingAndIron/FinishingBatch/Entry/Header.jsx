@@ -18,7 +18,7 @@ export default function Header({
 	watch,
 }) {
 	const { batch_uuid } = useParams();
-	const { data: orders } = useOtherOrderDescription('dyed_tape_required=false');
+	const { data: orders } = useOtherOrderDescription('dyed_tape_required=false&swatch_approved=true');
 	const statuses = [
 		{ value: 'running', label: 'Running' },
 		{ value: 'completed', label: 'Completed' },

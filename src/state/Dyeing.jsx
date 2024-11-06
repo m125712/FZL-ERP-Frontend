@@ -90,7 +90,6 @@ export const useDyeingThreadBatchEntryByUUID = (uuid) =>
 		url: `/thread/batch-entry${uuid}`,
 	});
 
-
 //* Order Against RM Log
 export const useOrderAgainstDyeingRMLog = () =>
 	createGlobalState({
@@ -120,4 +119,28 @@ export const useDyeingDummy = () =>
 	createGlobalState({
 		queryKey: dyeingQK.dyeingDummy(),
 		url: '/commercial/manual-pi',
+	});
+
+//? Finishing Batch
+//* Get all Finishing Batch
+export const useDyeingFinishingBatch = () =>
+	createGlobalState({
+		queryKey: dyeingQK.finishingBatch(),
+		url: '/zipper/finishing-batch',
+	});
+
+//* Get Specific Finishing Batch
+export const useDyeingFinishingBatchByUUID = (uuid, params) =>
+	createGlobalState({
+		queryKey: dyeingQK.finishingBatchByUUID(uuid, params),
+		url: params
+			? `/zipper/finishing-batch/by/${uuid}?${params}`
+			: `/zipper/finishing-batch/by/${uuid}`,
+	});
+
+//* Get orders for finishing batch using order_description_uuid
+export const useDyeingFinishingBatchOrders = (uuid) =>
+	createGlobalState({
+		queryKey: dyeingQK.finishingBatchOrders(uuid),
+		url: `/zipper/finishing-order-batch/${uuid}`,
 	});

@@ -1,6 +1,29 @@
 import { lazy, useEffect, useState } from 'react';
 import { useOrderParty } from '@/state/Order';
-import { useOtherPartyAll } from '@/state/Other';
+import {
+	useOtherOrderPropertiesByBottomStopper,
+	useOtherOrderPropertiesByColor,
+	useOtherOrderPropertiesByColoringType,
+	useOtherOrderPropertiesByEndType,
+	useOtherOrderPropertiesByEndUser,
+	useOtherOrderPropertiesByGarmentsWash,
+	useOtherOrderPropertiesByHand,
+	useOtherOrderPropertiesByItem,
+	useOtherOrderPropertiesByLightPreference,
+	useOtherOrderPropertiesByLockType,
+	useOtherOrderPropertiesByLogoType,
+	useOtherOrderPropertiesByNylonStopper,
+	useOtherOrderPropertiesByPullerLink,
+	useOtherOrderPropertiesByPullerType,
+	useOtherOrderPropertiesBySlider,
+	useOtherOrderPropertiesBySliderBodyShape,
+	useOtherOrderPropertiesBySliderLink,
+	useOtherOrderPropertiesBySpecialRequirement,
+	useOtherOrderPropertiesByTeethType,
+	useOtherOrderPropertiesByTopStopper,
+	useOtherOrderPropertiesByZipperNumber,
+	useOtherPartyAll,
+} from '@/state/Other';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -16,6 +39,49 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useOrderParty();
 	const { invalidateQuery: invalidatePartyAll } = useOtherPartyAll();
+	const { invalidateQuery: invalidateOrderPropertiesByBottomStopper } =
+		useOtherOrderPropertiesByBottomStopper();
+	const { invalidateQuery: invalidateOrderPropertiesByColor } =
+		useOtherOrderPropertiesByColor();
+	const { invalidateQuery: invalidateOrderPropertiesByColoringType } =
+		useOtherOrderPropertiesByColoringType();
+	const { invalidateQuery: invalidateOrderPropertiesByEndType } =
+		useOtherOrderPropertiesByEndType();
+	const { invalidateQuery: invalidateOrderPropertiesByEndUser } =
+		useOtherOrderPropertiesByEndUser();
+	const { invalidateQuery: invalidateOrderPropertiesByGarmentsWash } =
+		useOtherOrderPropertiesByGarmentsWash();
+	const { invalidateQuery: invalidateOrderPropertiesByHand } =
+		useOtherOrderPropertiesByHand();
+	const { invalidateQuery: invalidateOrderPropertiesByItem } =
+		useOtherOrderPropertiesByItem();
+	const { invalidateQuery: invalidateOrderPropertiesByLightPreference } =
+		useOtherOrderPropertiesByLightPreference();
+	const { invalidateQuery: invalidateOrderPropertiesByLockType } =
+		useOtherOrderPropertiesByLockType();
+	const { invalidateQuery: invalidateOrderPropertiesByLogoType } =
+		useOtherOrderPropertiesByLogoType();
+	const { invalidateQuery: invalidateOrderPropertiesByNylonStopper } =
+		useOtherOrderPropertiesByNylonStopper();
+	const { invalidateQuery: invalidateOrderPropertiesByPullerLink } =
+		useOtherOrderPropertiesByPullerLink();
+	const { invalidateQuery: invalidateOrderPropertiesByPullerType } =
+		useOtherOrderPropertiesByPullerType();
+	const { invalidateQuery: invalidateOrderPropertiesBySlider } =
+		useOtherOrderPropertiesBySlider();
+	const { invalidateQuery: invalidateOrderPropertiesBySliderBodyShape } =
+		useOtherOrderPropertiesBySliderBodyShape();
+	const { invalidateQuery: invalidateOrderPropertiesBySliderLink } =
+		useOtherOrderPropertiesBySliderLink();
+	const { invalidateQuery: invalidateOrderPropertiesBySpecialRequirement } =
+		useOtherOrderPropertiesBySpecialRequirement();
+	const { invalidateQuery: invalidateOrderPropertiesByTeethType } =
+		useOtherOrderPropertiesByTeethType();
+	const { invalidateQuery: invalidateOrderPropertiesByTopStopper } =
+		useOtherOrderPropertiesByTopStopper();
+	const { invalidateQuery: invalidateOrderPropertiesByZipperNumber } =
+		useOtherOrderPropertiesByZipperNumber();
+
 	const info = new PageInfo('Order/Party', url, 'order__party');
 	const haveAccess = useAccess(info.getTab());
 
@@ -65,6 +131,32 @@ export default function Index() {
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
+
+	// * invalidate queries on delete
+	const invalidateDeleteArray = [
+		invalidateOrderPropertiesByBottomStopper,
+		invalidateOrderPropertiesByColor,
+		invalidateOrderPropertiesByColoringType,
+		invalidateOrderPropertiesByEndType,
+		invalidateOrderPropertiesByEndUser,
+		invalidateOrderPropertiesByGarmentsWash,
+		invalidateOrderPropertiesByHand,
+		invalidateOrderPropertiesByItem,
+		invalidateOrderPropertiesByLightPreference,
+		invalidateOrderPropertiesByLockType,
+		invalidateOrderPropertiesByLogoType,
+		invalidateOrderPropertiesByNylonStopper,
+		invalidateOrderPropertiesByPullerLink,
+		invalidateOrderPropertiesByPullerType,
+		invalidateOrderPropertiesBySlider,
+		invalidateOrderPropertiesBySliderBodyShape,
+		invalidateOrderPropertiesBySliderLink,
+		invalidateOrderPropertiesBySpecialRequirement,
+		invalidateOrderPropertiesByTeethType,
+		invalidateOrderPropertiesByTopStopper,
+		invalidateOrderPropertiesByZipperNumber,
+	];
+
 	return (
 		<div>
 			<ReactTable
@@ -95,6 +187,7 @@ export default function Index() {
 						deleteData,
 					}}
 					invalidateQuery={invalidatePartyAll}
+					invalidateQueryArray={invalidateDeleteArray}
 				/>
 			</Suspense>
 		</div>

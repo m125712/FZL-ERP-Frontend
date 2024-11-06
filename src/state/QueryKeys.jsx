@@ -48,7 +48,7 @@ export const orderQK = {
 	// merchandisers
 	merchandisers: () => [...orderQK.all(), 'merchandisers'],
 	merchandiser: (uuid) => [...orderQK.merchandisers(), uuid],
-	
+
 	//Party
 	party: () => [...orderQK.all(), 'party'],
 	partyByUUID: (uuid) => [...orderQK.party(), uuid],
@@ -401,6 +401,20 @@ export const dyeingQK = {
 	// * Dyeing Transfer
 	dyeingTransfer: () => [...dyeingQK.all(), 'dyeing-transfer'],
 	dyeingTransferByUUID: (uuid) => [...dyeingQK.dyeingTransfer(), uuid],
+
+	// ? Finishing Batch
+	finishingBatch: () => [...dyeingQK.all(), 'finishing-batch'],
+	finishingBatchByUUID: (uuid, params) => [
+		...dyeingQK.finishingBatch(),
+		uuid,
+		...(params ? [params] : []),
+	],
+	// * To get finishing batch orders
+	finishingBatchOrders: (uuid) => [
+		...dyeingQK.finishingBatch(),
+		uuid,
+		'orders',
+	],
 };
 
 // * Nylon

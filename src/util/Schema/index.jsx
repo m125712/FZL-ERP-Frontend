@@ -2681,6 +2681,49 @@ export const UPDATE_DYEING_TRANSFER_NULL = {
 	remarks: '',
 };
 
+// ? Finishing Batch
+// * Finishing Batch Entry
+
+export const FINISHING_BATCH_ENTRY_SCHEMA = {
+	order_description_uuid: STRING_REQUIRED,
+	slider_lead_time: NUMBER_REQUIRED,
+	dyeing_lead_time: NUMBER_REQUIRED,
+	status: STRING_REQUIRED,
+	finishing_batch_entry: yup.array().of(
+		yup.object().shape({
+			uuid: STRING,
+			dyeing_batch_uuid: STRING,
+			sfg_uuid: STRING,
+			quantity: NUMBER.max(
+				yup.ref('max_quantity'),
+				`Beyond Max Quantity`
+			),
+			remarks: STRING.nullable(),
+		})
+	),
+	new_finishing_batch_entry: yup.array().of(
+		yup.object().shape({
+			uuid: STRING,
+			dyeing_batch_uuid: STRING,
+			sfg_uuid: STRING,
+			quantity: NUMBER.max(
+				yup.ref('max_quantity'),
+				`Beyond Max Quantity`
+			),
+			remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const FINISHING_BATCH_ENTRY_NULL = {
+	order_description_uuid: null,
+	slider_lead_time: null,
+	dyeing_lead_time: null,
+	status: 'running',
+	finishing_batch_entry: [],
+	new_finishing_batch_entry: [],
+};
+
 // *Slider/Die Casting --> (STOCK)*//
 export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 	name: STRING_REQUIRED, //

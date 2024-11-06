@@ -88,10 +88,12 @@ export const useThreadOrderForChallan = () =>
 		url: '/other/thread/value/label?page=challan',
 	});
 
-export const useOtherOrderDescription = () =>
+export const useOtherOrderDescription = (params) =>
 	createGlobalState({
 		queryKey: otherQK.orderDescription(),
-		url: '/other/order/description/value/label',
+		url: params
+			? `/other/order/description/value/label?${params}`
+			: '/other/order/description/value/label',
 	});
 
 // GET OTHER ORDER PROPERTIES BY TYPE NAME

@@ -36,7 +36,8 @@ export default function index() {
 		deleteData,
 		invalidateQuery: invalidateNewFinishingBatch,
 	} = useDyeingFinishingBatchByUUID(batch_uuid, 'is_update=true');
-	const { invalidateQuery: invalidateDetails } = useDyeingFinishingBatchByUUID(batch_uuid);
+	const { invalidateQuery: invalidateDetails } =
+		useDyeingFinishingBatchByUUID(batch_uuid);
 	const { invalidateQuery } = useDyeingFinishingBatch();
 
 	const {
@@ -147,6 +148,7 @@ export default function index() {
 			return;
 		}
 
+		// * Batch data
 		const finishingData = {
 			...data,
 			uuid: nanoid(),
@@ -160,6 +162,7 @@ export default function index() {
 			isOnCloseNeeded: false,
 		});
 
+		// * new finishing batch entries
 		const finishingEntryData = [...data?.finishing_batch_entry]
 			.filter((item) => item.quantity > 0)
 			.map((item) => ({
@@ -168,6 +171,32 @@ export default function index() {
 				finishing_batch_uuid: finishingData.uuid,
 				created_at: GetDateTime(),
 			}));
+
+
+		// * slider batch entry depending on order_type and slider_provided
+		if (data.order_type === 'tape') {
+		} else if (data.slider_provided === 'completely_provided') {
+		} else {
+			const slider_quantity =
+				data.finishing_batch_entry.length === 1
+					? data.finishing_batch_entry[0].quantity
+					: data.finishing_batch_entry.reduce(
+							(prev, curr) => prev + curr.quantity,
+							0
+						);
+
+			const slider_info = {
+				uuid: nanoid(),
+				finishing_batch_uuid: finishingData.uuid,
+				batch_quantity: slider_quantity,
+				created_at: GetDateTime(),
+			};
+			await postData.mutateAsync({
+				url: '/slider/stock',
+				newData: slider_info,
+				isOnCloseNeeded: false,
+			});
+		}
 
 		let promises = [
 			...finishingEntryData.map(

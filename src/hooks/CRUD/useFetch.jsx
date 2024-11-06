@@ -75,10 +75,10 @@ const useFetchForOrderReset = async (uri, returnId, reset, setType) => {
 
 		async function fetchData() {
 			const res = await api.get(uri);
-			setType(res?.data?.data.order_type)
+			setType(res?.data?.data.order_type);
 			return reset(res?.data?.data);
 		}
-		
+
 		fetchData();
 	}, [returnId]);
 };
@@ -90,7 +90,7 @@ const useFetchForRhfResetForBatchProduct = async (uri, returnId, reset) => {
 		api.get(uri).then((res) => {
 			const data = res?.data?.data;
 
-			data?.batch_entry.map((item) => {
+			data?.dyeing_batch_entry.map((item) => {
 				item.production_quantity = Number(
 					item.given_production_quantity
 				);
@@ -112,7 +112,6 @@ const useFetchForRhfResetForPlanning = async (uri, reset) => {
 		});
 	}, []);
 };
-
 
 const useFetchForRhfResetForUserAccess = (url, returnId, reset) => {
 	useEffect(() => {
@@ -159,8 +158,8 @@ const useFetchForRhfResetForUserAccess = (url, returnId, reset) => {
 export {
 	defaultFetch,
 	useFetch,
-	useFetchForRhfReset,
 	useFetchForOrderReset,
+	useFetchForRhfReset,
 	useFetchForRhfResetForBatchProduct,
 	useFetchForRhfResetForPlanning,
 	useFetchForRhfResetForUserAccess,

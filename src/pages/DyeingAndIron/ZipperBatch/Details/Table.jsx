@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-import { DateTime } from '@/ui';
+import { DateTime, LinkWithCopy } from '@/ui';
 
-export default function Index({ batch_entry }) {
+export default function Index({ dyeing_batch_entry }) {
 	const columns = useMemo(
 		() => [
 			// {
@@ -16,6 +16,15 @@ export default function Index({ batch_entry }) {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={info.getValue()}
+							uri='/order/details'
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'item_description',
@@ -55,20 +64,20 @@ export default function Index({ batch_entry }) {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'given_production_quantity',
-				header: 'Production QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'given_production_quantity',
+			// 	header: 'Production QTY',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorKey: 'given_production_quantity_in_kg',
 				header: 'Production QTY (Kg)',
 				enableColumnFilter: false,
-				cell: (info) =>info.getValue(),
+				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'batch_remarks',
+				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
 			},
@@ -92,13 +101,13 @@ export default function Index({ batch_entry }) {
 				},
 			},
 		],
-		[batch_entry]
+		[dyeing_batch_entry]
 	);
 
 	return (
 		<ReactTableTitleOnly
 			title='Details'
-			data={batch_entry}
+			data={dyeing_batch_entry}
 			columns={columns}
 		/>
 	);

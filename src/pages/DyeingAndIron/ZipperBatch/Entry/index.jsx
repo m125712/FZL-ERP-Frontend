@@ -51,31 +51,31 @@ export default function Index() {
 		setValue,
 	} = useRHF(DYEING_BATCH_SCHEMA, DYEING_BATCH_NULL);
 
-	// batch_entry
+	// dyeing_batch_entry
 	const { fields: BatchEntryField } = useFieldArray({
 		control,
-		name: 'batch_entry',
+		name: 'dyeing_batch_entry',
 	});
 
 	// * Fetch initial data
 	isUpdate
 		? useFetchForRhfReset(
-				`/zipper/batch-details/${batch_uuid}`,
+				`/zipper/dyeing-batch-details/${batch_uuid}`,
 				batch_uuid,
 				reset
 			)
-		: useFetchForRhfResetForPlanning(`/zipper/order-batch`, reset);
-
+		: useFetchForRhfResetForPlanning(`/zipper/dyeing-order-batch`, reset);
 	const getTotalQty = useCallback(
-		(batch_entry) =>
-			batch_entry.reduce((acc, item) => {
+		(dyeing_batch_entry) =>
+			dyeing_batch_entry.reduce((acc, item) => {
 				return item.is_checked ? acc + Number(item.quantity) : acc;
 			}, 0),
 		[watch()]
 	);
+	const isReceived = getValues('received') === 1;
 	const getTotalCalTape = useCallback(
-		(batch_entry) =>
-			batch_entry.reduce((acc, item) => {
+		(dyeing_batch_entry) =>
+			dyeing_batch_entry.reduce((acc, item) => {
 				if (!item.is_checked) return acc;
 
 				const top = parseFloat(item.top) || 0;
@@ -92,9 +92,10 @@ export default function Index() {
 	);
 
 	const onSubmit = async (data) => {
+		// return;
 		// if (
-		// 	getTotalCalTape(watch('batch_entry')) > maxCapacity ||
-		// 	getTotalCalTape(watch('batch_entry')) < minCapacity
+		// 	getTotalCalTape(watch('dyeing_batch_entry')) > maxCapacity ||
+		// 	getTotalCalTape(watch('dyeing_batch_entry')) < minCapacity
 		// ) {
 		// 	ShowLocalToast({
 		// 		type: 'error',
@@ -109,38 +110,37 @@ export default function Index() {
 				updated_at: GetDateTime(),
 			};
 
-			const batch_entry_updated = [...data?.batch_entry]
+			const dyeing_batch_entry_updated = [...data?.dyeing_batch_entry]
 				.filter((item) => item.is_checked)
 				.map((item) => ({
 					...item,
-					uuid: item.batch_entry_uuid,
-					remarks: item.batch_remarks,
+					dyeing_batch_entry_uuid: item.dyeing_batch_entry_uuid,
+					remarks: item.remarks,
 					updated_at: GetDateTime(),
 				}));
 
-			if (batch_entry_updated.length === 0) {
+			if (dyeing_batch_entry_updated.length === 0) {
 				ShowLocalToast({
 					type: 'warning',
 					message: 'Select at least one item to proceed.',
 				});
 			} else {
 				await updateData.mutateAsync({
-					url: `/zipper/batch/${batch_data_updated?.uuid}`,
+					url: `/zipper/dyeing-batch/${batch_data_updated?.uuid}`,
 					updatedData: batch_data_updated,
 					isOnCloseNeeded: false,
 				});
-
-				let batch_entry_updated_promises = [
-					...batch_entry_updated.map(async (item) => {
+				let dyeing_batch_entry_updated_promises = [
+					...dyeing_batch_entry_updated.map(async (item) => {
 						await updateData.mutateAsync({
-							url: `/zipper/batch-entry/${item.uuid}`,
+							url: `/zipper/dyeing-batch-entry/${item.dyeing_batch_entry_uuid}`,
 							updatedData: item,
 							isOnCloseNeeded: false,
 						});
 					}),
 				];
 
-				await Promise.all(batch_entry_updated_promises)
+				await Promise.all(dyeing_batch_entry_updated_promises)
 					.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
 					.then(() => {
 						invalidateDyeingZipperBatch();
@@ -161,21 +161,19 @@ export default function Index() {
 			created_by: user.uuid,
 		};
 
-		const batch_entry = [...data?.batch_entry]
+		const dyeing_batch_entry = [...data?.dyeing_batch_entry]
 			.filter((item) => item.is_checked)
 			.map((item) => ({
 				...item,
 				uuid: nanoid(),
-
-				batch_uuid: batch_data.uuid,
-				remarks: item.batch_remarks,
+				dyeing_batch_uuid: batch_data.uuid,
+				remarks: item.remarks,
 				created_at,
 			}));
-
 		setBatchData(batch_data); // * use for modal
-		setBatchEntry(batch_entry); // * use for modal
+		setBatchEntry(dyeing_batch_entry); // * use for modal
 
-		if (batch_entry.length === 0) {
+		if (dyeing_batch_entry.length === 0) {
 			ShowLocalToast({
 				type: 'warning',
 				message: 'Select at least one item to proceed.',
@@ -183,11 +181,11 @@ export default function Index() {
 		} else {
 			if (
 				// * check if all colors and bleaching are same
-				!batch_entry.every(
-					(item) => item.color === batch_entry[0].color
+				!dyeing_batch_entry.every(
+					(item) => item.color === dyeing_batch_entry[0].color
 				) ||
-				!batch_entry.every(
-					(item) => item.bleaching === batch_entry[0].bleaching
+				!dyeing_batch_entry.every(
+					(item) => item.bleaching === dyeing_batch_entry[0].bleaching
 				)
 			) {
 				window['proceed_modal'].showModal(); // * if not then show modal
@@ -199,10 +197,10 @@ export default function Index() {
 				});
 
 				let promises = [
-					...batch_entry.map(
+					...dyeing_batch_entry.map(
 						async (item) =>
 							await postData.mutateAsync({
-								url: '/zipper/batch-entry',
+								url: '/zipper/dyeing-batch-entry',
 								newData: item,
 								isOnCloseNeeded: false,
 							})
@@ -241,7 +239,7 @@ export default function Index() {
 				...batchEntry.map(
 					async (item) =>
 						await postData.mutateAsync({
-							url: '/zipper/batch-entry',
+							url: '/zipper/dyeing-batch-entry',
 							newData: item,
 							isOnCloseNeeded: false,
 						})
@@ -271,14 +269,14 @@ export default function Index() {
 		if (isAllChecked || isSomeChecked) {
 			return BatchEntryField.forEach((item, index) => {
 				if (isAllChecked) {
-					setValue(`batch_entry[${index}].is_checked`, true);
+					setValue(`dyeing_batch_entry[${index}].is_checked`, true);
 				}
 			});
 		}
 		if (!isAllChecked) {
 			return BatchEntryField.forEach((item, index) => {
 				setValue('is_all_checked', false);
-				setValue(`batch_entry[${index}].is_checked`, false);
+				setValue(`dyeing_batch_entry[${index}].is_checked`, false);
 			});
 		}
 	}, [isAllChecked]);
@@ -293,19 +291,19 @@ export default function Index() {
 	useEffect(() => {
 		if (isAllChecked) {
 			BatchEntryField.forEach((item, index) => {
-				setValue(`batch_entry[${index}].is_checked`, true);
+				setValue(`dyeing_batch_entry[${index}].is_checked`, true);
 			});
 		}
 	}, [isAllChecked, BatchEntryField]);
 
 	const handleRowChecked = (e, index) => {
 		const isChecked = e.target.checked;
-		setValue(`batch_entry[${index}].is_checked`, isChecked);
+		setValue(`dyeing_batch_entry[${index}].is_checked`, isChecked);
 
 		let isEveryChecked = true,
 			isSomeChecked = false;
 
-		for (let item of watch('batch_entry')) {
+		for (let item of watch('dyeing_batch_entry')) {
 			if (item.is_checked) {
 				isSomeChecked = true;
 			} else {
@@ -324,7 +322,10 @@ export default function Index() {
 
 	const setAllBatch = () => {
 		BatchEntryField.map((item, idx) => {
-			setValue(`batch_entry[${idx}].quantity`, item.balance_quantity);
+			setValue(
+				`dyeing_batch_entry[${idx}].quantity`,
+				item.balance_quantity
+			);
 		});
 	};
 
@@ -348,14 +349,14 @@ export default function Index() {
 				enableSorting: false,
 				cell: (info) => (
 					<CheckBoxWithoutLabel
-						label={`batch_entry[${info.row.index}].is_checked`}
+						label={`dyeing_batch_entry[${info.row.index}].is_checked`}
 						checked={watch(
-							`batch_entry[${info.row.index}].is_checked`
+							`dyeing_batch_entry[${info.row.index}].is_checked`
 						)}
 						onChange={(e) => handleRowChecked(e, info.row.index)}
 						disabled={
 							getValues(
-								`batch_entry[${info.row.index}].pi_quantity`
+								`dyeing_batch_entry[${info.row.index}].pi_quantity`
 							) == 0
 						}
 						{...{ register, errors }}
@@ -456,7 +457,7 @@ export default function Index() {
 								className='btn btn-primary btn-xs'
 								onClick={() =>
 									setValue(
-										`batch_entry[${idx}].quantity`,
+										`dyeing_batch_entry[${idx}].quantity`,
 										info.getValue()
 									)
 								}>
@@ -474,10 +475,11 @@ export default function Index() {
 				enableSorting: false,
 				cell: (info) => {
 					const idx = info.row.index;
-					const dynamicerror = errors?.batch_entry?.[idx]?.quantity;
+					const dynamicerror =
+						errors?.dyeing_batch_entry?.[idx]?.quantity;
 					return (
 						<Input
-							label={`batch_entry[${idx}].quantity`}
+							label={`dyeing_batch_entry[${idx}].quantity`}
 							is_title_needed='false'
 							height='h-8'
 							dynamicerror={dynamicerror}
@@ -500,7 +502,8 @@ export default function Index() {
 							parseFloat(bottom) +
 							parseFloat(size)) *
 							parseFloat(
-								watch(`batch_entry[${idx}].quantity`) || 0
+								watch(`dyeing_batch_entry[${idx}].quantity`) ||
+									0
 							)) /
 						100;
 
@@ -510,14 +513,14 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'batch_remarks',
+				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
 				enableSorting: false,
 				width: 'w-44',
 				cell: (info) => (
 					<Textarea
-						label={`batch_entry[${info.row.index}].batch_remarks`}
+						label={`dyeing_batch_entry[${info.row.index}].remarks`}
 						is_title_needed='false'
 						height='h-8'
 						{...{ register, errors }}
@@ -527,8 +530,6 @@ export default function Index() {
 		],
 		[isAllChecked, isSomeChecked, BatchEntryField, register, errors]
 	);
-
-	console.log(BatchEntryField);
 
 	return (
 		<div>
@@ -543,9 +544,9 @@ export default function Index() {
 						errors,
 						control,
 						getValues,
-						totalQuantity: getTotalQty(watch('batch_entry')),
+						totalQuantity: getTotalQty(watch('dyeing_batch_entry')),
 						totalCalTape: Number(
-							getTotalCalTape(watch('batch_entry'))
+							getTotalCalTape(watch('dyeing_batch_entry'))
 						).toFixed(3),
 					}}
 				/>
@@ -557,6 +558,7 @@ export default function Index() {
 				<div className='modal-action'>
 					<button
 						type='submit'
+						disabled={isReceived}
 						className='text-md btn btn-primary btn-block'>
 						Save
 					</button>

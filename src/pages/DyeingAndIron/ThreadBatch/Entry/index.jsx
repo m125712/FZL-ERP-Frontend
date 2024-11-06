@@ -62,14 +62,7 @@ export default function Index() {
 					.transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? null : value
 					)
-					.max(
-						yup.ref(
-							isUpdate ? 'can_trx_quantity' : 'balance_quantity'
-						),
-						isUpdate
-							? 'Beyond Transaction Quantity'
-							: 'Beyond Balance Quantity'
-					),
+					.max(yup.ref('max_quantity'), 'Beyond Balance Quantity'),
 				// batch_remarks: STRING.nullable(),
 			})
 		),

@@ -228,7 +228,7 @@ export default function Index() {
 					.then(() => reset(Object.assign({}, CHALLAN_NULL)))
 					.then(() => {
 						invalidateChallan();
-						navigate(`/delivery/challan`);
+						navigate(`/delivery/zipper-challan/${new_uuid}`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);

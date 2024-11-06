@@ -1,5 +1,6 @@
 import { useAuth } from '@/context/auth';
 import { useDeliveryVehicle } from '@/state/Delivery';
+import { useOtherVehicle } from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
@@ -8,11 +9,7 @@ import { CheckBox, FormField, Input, ReactSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import GetDateTime from '@/util/GetDateTime';
-import {
-
-	DELIVERY_VEHICLE_NULL,
-	DELIVERY_VEHICLE_SCHEMA,
-} from '@/util/Schema';
+import { DELIVERY_VEHICLE_NULL, DELIVERY_VEHICLE_SCHEMA } from '@/util/Schema';
 
 export default function VehicleForm({
 	modalId = '',
@@ -22,6 +19,7 @@ export default function VehicleForm({
 	setUpdate,
 }) {
 	const { url, updateData, postData } = useDeliveryVehicle();
+	const { invalidateQuery: invalidateOtherVehicle } = useOtherVehicle();
 	const { user } = useAuth();
 	const {
 		register,
@@ -87,6 +85,7 @@ export default function VehicleForm({
 			newData,
 			onClose,
 		});
+		invalidateOtherVehicle();
 	};
 
 	return (

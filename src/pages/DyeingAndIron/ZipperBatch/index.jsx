@@ -68,6 +68,7 @@ export default function Index() {
 					const { week } = info.row.original;
 					return (
 						<button
+							disabled={info.row.original.received === 1}
 							className='btn btn-primary btn-xs'
 							onClick={() =>
 								navigate(
@@ -223,7 +224,10 @@ export default function Index() {
 					<EditDelete
 						idx={info.row.index}
 						handelUpdate={handelUpdate}
-						showEdit={haveAccess.includes('update')}
+						showUpdate={
+							haveAccess.includes('update') &&
+							info.row.original.received == 0
+						}
 						showDelete={false}
 					/>
 				),

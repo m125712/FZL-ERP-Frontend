@@ -56,13 +56,13 @@ export const useDyeingPlanningByUUID = (uuid) =>
 export const useDyeingBatch = () =>
 	createGlobalState({
 		queryKey: dyeingQK.batch(),
-		url: '/zipper/batch',
+		url: '/zipper/dyeing-batch',
 	});
 
 export const useDyeingBatchByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: dyeingQK.batchByUUID(uuid),
-		url: `/zipper/batch/${uuid}`,
+		url: `/zipper/dyeing-batch/${uuid}`,
 	});
 
 // * Thread Batch

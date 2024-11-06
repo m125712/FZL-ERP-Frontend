@@ -2476,7 +2476,7 @@ export const DYEING_BATCH_SCHEMA = {
 	machine_uuid: STRING_REQUIRED,
 	slot: NUMBER.default(0),
 	remarks: STRING.nullable(),
-	batch_entry: yup.array().of(
+	dyeing_batch_entry: yup.array().of(
 		yup.object().shape({
 			is_checked: yup.boolean().default(false),
 			quantity: yup.number().when('is_checked', {
@@ -2485,8 +2485,8 @@ export const DYEING_BATCH_SCHEMA = {
 					Schema.typeError('Must be a number')
 						.required('Quantity is required')
 						.max(
-							yup.ref('order_quantity'),
-							'Beyond Order Quantity'
+							yup.ref('max_quantity'),
+							'Beyond Balance Quantity'
 						),
 				otherwise: (Schema) =>
 					Schema.nullable().transform((value, originalValue) =>
@@ -2502,7 +2502,7 @@ export const DYEING_BATCH_NULL = {
 	machine_uuid: null,
 	slot: 0,
 	remarks: '',
-	batch_entry: [
+	dyeing_batch_entry: [
 		{
 			is_checked: false,
 			quantity: null,
@@ -2539,7 +2539,7 @@ export const DYEING_THREAD_BATCH_NULL = {
 // * Dyeing Planning Batch production schema*//
 
 export const DYEING_BATCH_PRODUCTION_SCHEMA = {
-	batch_entry: yup.array().of(
+	dyeing_batch_entry: yup.array().of(
 		yup.object().shape({
 			production_quantity: NUMBER.nullable() // Allows the field to be null
 				.transform((value, originalValue) =>
@@ -2558,7 +2558,7 @@ export const DYEING_BATCH_PRODUCTION_SCHEMA = {
 };
 
 export const DYEING_BATCH_PRODUCTION_NULL = {
-	batch_entry: [
+	dyeing_batch_entry: [
 		{
 			production_quantity: null,
 			production_quantity_in_kg: null,

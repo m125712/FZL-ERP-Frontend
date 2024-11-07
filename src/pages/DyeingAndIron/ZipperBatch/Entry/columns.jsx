@@ -20,14 +20,14 @@ export const Columns = ({
 		if (is_new) {
 			NewBatchOrdersField.map((item, idx) => {
 				setValue(
-					`new_finishing_batch_entry[${idx}].quantity`,
+					`new_dyeing_batch_entry[${idx}].quantity`,
 					item.balance_quantity
 				);
 			});
 		} else {
 			BatchOrdersField.map((item, idx) => {
 				setValue(
-					`finishing_batch_entry[${idx}].quantity`,
+					`dyeing_batch_entry[${idx}].quantity`,
 					item.balance_quantity
 				);
 			});
@@ -108,100 +108,103 @@ export const Columns = ({
 				).toFixed(3);
 			},
 		},
-		{
-			accessorKey: 'balance_quantity',
-			header: (
-				<div className='flex flex-col'>
-					Balanced Batch
-					<label
-						className='btn btn-primary btn-xs'
-						onClick={() => setAllBatch()}>
-						Copy All
-					</label>
-				</div>
-			),
-			enableColumnFilter: false,
-			enableSorting: false,
-			cell: (info) => {
-				const idx = info.row.index;
-				return (
-					<div className='flex gap-4'>
-						<label
-							className='btn btn-primary btn-xs'
-							onClick={() =>
-								setValue(
-									`dyeing_batch_entry[${idx}].quantity`,
-									info.getValue()
-								)
-							}>
-							Copy
-						</label>
-						{info.getValue()}
-					</div>
-				);
-			},
-		},
-
-		{
-			accessorKey: 'batch_qty',
-			header: 'Batch QTY',
-			enableColumnFilter: false,
-			enableSorting: false,
-			cell: (info) => {
-				const idx = info.row.index;
-				const dynamicerror =
-					errors?.dyeing_batch_entry?.[idx]?.quantity;
-				return (
-					<Input
-						label={`dyeing_batch_entry[${idx}].quantity`}
-						is_title_needed='false'
-						height='h-8'
-						dynamicerror={dynamicerror}
-						{...{ register, errors }}
-					/>
-				);
-			},
-		},
-		{
-			accessorKey: 'top',
-			header: 'Cal Tape (Kg)',
-			enableColumnFilter: false,
-			enableSorting: true,
-			cell: ({ row }) => {
-				const { top, bottom, raw_mtr_per_kg, size } = row.original;
-				const idx = row.index;
-
-				const total_size_in_mtr =
-					((parseFloat(top) + parseFloat(bottom) + parseFloat(size)) *
-						parseFloat(
-							watch(`dyeing_batch_entry[${idx}].quantity`) || 0
-						)) /
-					100;
-
-				return Number(
-					total_size_in_mtr / parseFloat(raw_mtr_per_kg)
-				).toFixed(3);
-			},
-		},
-		{
-			accessorKey: 'remarks',
-			header: 'Remarks',
-			enableColumnFilter: false,
-			enableSorting: false,
-			width: 'w-44',
-			cell: (info) => (
-				<Textarea
-					label={`dyeing_batch_entry[${info.row.index}].remarks`}
-					is_title_needed='false'
-					height='h-8'
-					{...{ register, errors }}
-				/>
-			),
-		},
 	];
 	const defaultColumns = useMemo(
 		() => [
 			...commonColumns,
+			{
+				accessorKey: 'balance_quantity',
+				header: (
+					<div className='flex flex-col'>
+						Balanced Batch
+						<label
+							className='btn btn-primary btn-xs'
+							onClick={() => setAllQty()}>
+							Copy All
+						</label>
+					</div>
+				),
+				enableColumnFilter: false,
+				enableSorting: false,
+				cell: (info) => {
+					const idx = info.row.index;
+					return (
+						<div className='flex gap-4'>
+							<label
+								className='btn btn-primary btn-xs'
+								onClick={() =>
+									setValue(
+										`dyeing_batch_entry[${idx}].quantity`,
+										info.getValue()
+									)
+								}>
+								Copy
+							</label>
+							{info.getValue()}
+						</div>
+					);
+				},
+			},
+
+			{
+				accessorKey: 'batch_qty',
+				header: 'Batch QTY',
+				enableColumnFilter: false,
+				enableSorting: false,
+				cell: (info) => {
+					const idx = info.row.index;
+					const dynamicerror =
+						errors?.dyeing_batch_entry?.[idx]?.quantity;
+					return (
+						<Input
+							label={`dyeing_batch_entry[${idx}].quantity`}
+							is_title_needed='false'
+							height='h-8'
+							dynamicerror={dynamicerror}
+							{...{ register, errors }}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'top',
+				header: 'Cal Tape (Kg)',
+				enableColumnFilter: false,
+				enableSorting: true,
+				cell: ({ row }) => {
+					const { top, bottom, raw_mtr_per_kg, size } = row.original;
+					const idx = row.index;
+
+					const total_size_in_mtr =
+						((parseFloat(top) +
+							parseFloat(bottom) +
+							parseFloat(size)) *
+							parseFloat(
+								watch(`dyeing_batch_entry[${idx}].quantity`) ||
+									0
+							)) /
+						100;
+
+					return Number(
+						total_size_in_mtr / parseFloat(raw_mtr_per_kg)
+					).toFixed(3);
+				},
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				enableSorting: false,
+				width: 'w-44',
+				cell: (info) => (
+					<Textarea
+						label={`dyeing_batch_entry[${info.row.index}].remarks`}
+						is_title_needed='false'
+						height='h-8'
+						{...{ register, errors }}
+					/>
+				),
+			},
 			{
 				accessorKey: 'actions',
 				header: 'Actions',
@@ -222,7 +225,103 @@ export const Columns = ({
 		[BatchOrdersField, register, errors]
 	);
 	const newColumns = useMemo(
-		() => [...commonColumns],
+		() => [
+			...commonColumns,
+			{
+				accessorKey: 'balance_quantity',
+				header: (
+					<div className='flex flex-col'>
+						Balanced Batch
+						<label
+							className='btn btn-primary btn-xs'
+							onClick={() => setAllQty()}>
+							Copy All
+						</label>
+					</div>
+				),
+				enableColumnFilter: false,
+				enableSorting: false,
+				cell: (info) => {
+					const idx = info.row.index;
+					return (
+						<div className='flex gap-4'>
+							<label
+								className='btn btn-primary btn-xs'
+								onClick={() =>
+									setValue(
+										`dyeing_batch_entry[${idx}].quantity`,
+										info.getValue()
+									)
+								}>
+								Copy
+							</label>
+							{info.getValue()}
+						</div>
+					);
+				},
+			},
+
+			{
+				accessorKey: 'batch_qty',
+				header: 'Batch QTY',
+				enableColumnFilter: false,
+				enableSorting: false,
+				cell: (info) => {
+					const idx = info.row.index;
+					const dynamicerror =
+						errors?.new_dyeing_batch_entry?.[idx]?.quantity;
+					return (
+						<Input
+							label={`new_dyeing_batch_entry[${idx}].quantity`}
+							is_title_needed='false'
+							height='h-8'
+							dynamicerror={dynamicerror}
+							{...{ register, errors }}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'top',
+				header: 'Cal Tape (Kg)',
+				enableColumnFilter: false,
+				enableSorting: true,
+				cell: ({ row }) => {
+					const { top, bottom, raw_mtr_per_kg, size } = row.original;
+					const idx = row.index;
+
+					const total_size_in_mtr =
+						((parseFloat(top) +
+							parseFloat(bottom) +
+							parseFloat(size)) *
+							parseFloat(
+								watch(
+									`new_dyeing_batch_entry[${idx}].quantity`
+								) || 0
+							)) /
+						100;
+
+					return Number(
+						total_size_in_mtr / parseFloat(raw_mtr_per_kg)
+					).toFixed(3);
+				},
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				enableSorting: false,
+				width: 'w-44',
+				cell: (info) => (
+					<Textarea
+						label={`new_dyeing_batch_entry[${info.row.index}].remarks`}
+						is_title_needed='false'
+						height='h-8'
+						{...{ register, errors }}
+					/>
+				),
+			},
+		],
 		[NewBatchOrdersField, register, errors]
 	);
 

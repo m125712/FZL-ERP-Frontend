@@ -64,7 +64,28 @@ export const useDyeingBatchByUUID = (uuid) =>
 		queryKey: dyeingQK.batchByUUID(uuid),
 		url: `/zipper/dyeing-batch/${uuid}`,
 	});
-
+//* OrderBatch
+export const useDyeingOrderBatch = () =>
+	createGlobalState({
+		queryKey: dyeingQK.orderBatch(),
+		url: '/zipper/dyeing-order-batch',
+	});
+export const useDyeingOrderBatchByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: dyeingQK.orderBatchByUUID(uuid),
+		url: `/zipper/dyeing-order-batch/${uuid}`,
+	});
+//*Batch Details
+export const useDyeingBatchDetails = () =>
+	createGlobalState({
+		queryKey: dyeingQK.batchDetails(),
+		url: '/zipper/dyeing-batch-details',
+	});
+export const useDyeingBatchDetailsByUUID = (uuid, param = '') =>
+	createGlobalState({
+		queryKey: dyeingQK.batchDetailsByUUID(uuid),
+		url: `/zipper/dyeing-batch-details/${uuid}${param}`,
+	});
 // * Thread Batch
 export const useDyeingThreadBatch = () =>
 	createGlobalState({

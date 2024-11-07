@@ -2394,6 +2394,18 @@ export const THREAD_CONING_SCHEMA = {
 			),
 		})
 	),
+	new_finishing_batch_entry: yup.array().of(
+		yup.object().shape({
+			uuid: STRING,
+			dyeing_batch_uuid: STRING,
+			sfg_uuid: STRING,
+			quantity: NUMBER.max(
+				yup.ref('max_quantity'),
+				`Beyond Max Quantity`
+			),
+			remarks: STRING.nullable(),
+		})
+	),
 };
 
 export const THREAD_CONING_NULL = {
@@ -2478,22 +2490,17 @@ export const DYEING_BATCH_SCHEMA = {
 	remarks: STRING.nullable(),
 	dyeing_batch_entry: yup.array().of(
 		yup.object().shape({
-			is_checked: yup.boolean().default(false),
-			quantity: yup.number().when('is_checked', {
-				is: true,
-				then: (Schema) =>
-					Schema.typeError('Must be a number')
-						.required('Quantity is required')
-						.max(
-							yup.ref('max_quantity'),
-							'Beyond Balance Quantity'
-						),
-				otherwise: (Schema) =>
-					Schema.nullable().transform((value, originalValue) =>
-						String(originalValue).trim() === '' ? null : value
-					),
-			}),
-			batch_remarks: STRING.nullable(),
+			quantity: NUMBER.nullable().max(yup.ref('max_quantity')),
+			remarks: STRING.nullable(),
+		})
+	),
+	new_dyeing_batch_entry: yup.array().of(
+		yup.object().shape({
+			quantity: NUMBER.max(
+				yup.ref('max_quantity'),
+				`Beyond Max Quantity`
+			),
+			remarks: STRING.nullable(),
 		})
 	),
 };

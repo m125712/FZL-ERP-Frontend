@@ -146,7 +146,7 @@ export const DyeingAndIronRoutes = [
 				element: <DyeingZipperBatchEntry />,
 				hidden: true,
 				page_name: 'dyeing__zipper_batch_entry_update',
-				actions: ['create', 'read', 'update'],
+				actions: ['create', 'read', 'update','delete'],
 			},
 			{
 				name: ' Zipper Batch Details',

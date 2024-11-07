@@ -98,6 +98,28 @@ export const useDyeingThreadBatchByUUID = (uuid) =>
 		queryKey: dyeingQK.threadBatchByUUID(uuid),
 		url: `/thread/batch/${uuid}`,
 	});
+//* Thread Order Batch
+export const useDyeingThreadOrderBatch = () =>
+	createGlobalState({
+		queryKey: dyeingQK.threadOrderBatch(),
+		url: '/thread/order-batch',
+	});
+export const useDyeingThreadOrderBatchByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: dyeingQK.threadOrderBatchByUUID(uuid),
+		url: `/thread/order-batch/${uuid}`,
+	});
+// * Thread Batch Details
+export const useDyeingThreadBatchDetails = () =>
+	createGlobalState({
+		queryKey: dyeingQK.threadBatchDetails(),
+		url: '/thread/batch-details/by/',
+	});
+export const useDyeingThreadBatchDetailsByUUID = (uuid, param = '') =>
+	createGlobalState({
+		queryKey: dyeingQK.threadBatchDetailsByUUID(uuid),
+		url: `/thread/batch-details/by/${uuid}${param}`,
+	});
 //* Thread Batch Entry
 export const useDyeingThreadBatchEntry = () =>
 	createGlobalState({

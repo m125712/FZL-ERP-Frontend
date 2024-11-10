@@ -13,7 +13,7 @@ import {
 import { ProceedModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
-import { CheckBoxWithoutLabel, Input, Textarea } from '@/ui';
+import { CheckBoxWithoutLabel, Input, LinkWithCopy, Textarea } from '@/ui';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
@@ -35,8 +35,8 @@ export default function Index() {
 	const { batch_uuid, batch_prod_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
-	const [isAllChecked, setIsAllChecked] = useState(false);
-	const [isSomeChecked, setIsSomeChecked] = useState(false);
+	// const [isAllChecked, setIsAllChecked] = useState(false);
+	// const [isSomeChecked, setIsSomeChecked] = useState(false);
 	const isUpdate = batch_uuid !== undefined;
 
 	const {
@@ -60,13 +60,13 @@ export default function Index() {
 
 	// * Fetch initial data
 	// isUpdate
-	// 	? 
-		useFetchForRhfReset(
-				`/zipper/dyeing-batch-details/${batch_uuid}`,
-				batch_uuid,
-				reset
-			)
-		// : useFetchForRhfResetForPlanning(`/zipper/dyeing-order-batch`, reset);
+	// 	?
+	useFetchForRhfReset(
+		`/zipper/dyeing-batch-details/${batch_uuid}`,
+		batch_uuid,
+		reset
+	);
+	// : useFetchForRhfResetForPlanning(`/zipper/dyeing-order-batch`, reset);
 
 	// * Fetch initial data of batch for batch production entry
 	if (batch_prod_uuid) {
@@ -83,7 +83,7 @@ export default function Index() {
 		const created_at = GetDateTime();
 
 		const dyeing_batch_entry = [...data?.dyeing_batch_entry]
-			.filter((item) => item.is_checked)
+			.filter((item) => item.production_quantity_in_kg > 0)
 			.map((item) => ({
 				uuid: nanoid(),
 				dyeing_batch_production_uuid: item.dyeing_batch_production_uuid,
@@ -110,7 +110,8 @@ export default function Index() {
 		if (dyeing_batch_entry.length === 0) {
 			ShowLocalToast({
 				type: 'warning',
-				message: 'Select at least one item to proceed.',
+				message:
+					'There should one or more item quantity greater than zero to proceed.',
 			});
 		} else {
 			let promises = [
@@ -161,46 +162,46 @@ export default function Index() {
 	// Check if order_number is valid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 
-	useEffect(() => {
-		if (isAllChecked || isSomeChecked) {
-			return BatchEntryField.forEach((item, index) => {
-				if (isAllChecked) {
-					setValue(`dyeing_batch_entry[${index}].is_checked`, true);
-				}
-			});
-		}
-		if (!isAllChecked) {
-			return BatchEntryField.forEach((item, index) => {
-				setValue('is_all_checked', false);
-				setValue(`dyeing_batch_entry[${index}].is_checked`, false);
-			});
-		}
-	}, [isAllChecked]);
+	// useEffect(() => {
+	// 	if (isAllChecked || isSomeChecked) {
+	// 		return BatchEntryField.forEach((item, index) => {
+	// 			if (isAllChecked) {
+	// 				setValue(`dyeing_batch_entry[${index}].is_checked`, true);
+	// 			}
+	// 		});
+	// 	}
+	// 	if (!isAllChecked) {
+	// 		return BatchEntryField.forEach((item, index) => {
+	// 			setValue('is_all_checked', false);
+	// 			setValue(`dyeing_batch_entry[${index}].is_checked`, false);
+	// 		});
+	// 	}
+	// }, [isAllChecked]);
 
-	// Todo: fix this
-	const handleRowChecked = (e, index) => {
-		const isChecked = e.target.checked;
-		setValue(`dyeing_batch_entry[${index}].is_checked`, isChecked);
+	// // Todo: fix this
+	// const handleRowChecked = (e, index) => {
+	// 	const isChecked = e.target.checked;
+	// 	setValue(`dyeing_batch_entry[${index}].is_checked`, isChecked);
 
-		let isEveryChecked = true,
-			isSomeChecked = false;
+	// 	let isEveryChecked = true,
+	// 		isSomeChecked = false;
 
-		for (let item of watch('dyeing_batch_entry')) {
-			if (item.is_checked) {
-				isSomeChecked = true;
-			} else {
-				isEveryChecked = false;
-				setValue('is_all_checked', false);
-			}
+	// 	for (let item of watch('dyeing_batch_entry')) {
+	// 		if (item.is_checked) {
+	// 			isSomeChecked = true;
+	// 		} else {
+	// 			isEveryChecked = false;
+	// 			setValue('is_all_checked', false);
+	// 		}
 
-			if (isSomeChecked && !isEveryChecked) {
-				break;
-			}
-		}
+	// 		if (isSomeChecked && !isEveryChecked) {
+	// 			break;
+	// 		}
+	// 	}
 
-		setIsAllChecked(isEveryChecked);
-		setIsSomeChecked(isSomeChecked);
-	};
+	// 	setIsAllChecked(isEveryChecked);
+	// 	setIsSomeChecked(isSomeChecked);
+	// };
 
 	const setAllExpect_kg = () => {
 		BatchEntryField.map((item, idx) => {
@@ -224,48 +225,58 @@ export default function Index() {
 
 	const columns = useMemo(
 		() => [
-			{
-				accessorKey: 'checkbox',
-				header: () => (
-					<CheckBoxWithoutLabel
-						className='bg-white'
-						label='is_all_checked'
-						checked={isAllChecked}
-						onChange={(e) => {
-							setIsAllChecked(e.target.checked);
-							setIsSomeChecked(e.target.checked);
-						}}
-						{...{ register, errors }}
-					/>
-				),
-				enableColumnFilter: false,
-				enableSorting: false,
-				cell: (info) => (
-					<CheckBoxWithoutLabel
-						className={
-							info.row.original.batch_production_uuid
-								? 'bg-gray-400'
-								: 'bg-white'
-						}
-						label={`dyeing_batch_entry[${info.row.index}].is_checked`}
-						checked={watch(
-							`dyeing_batch_entry[${info.row.index}].is_checked`
-						)}
-						onChange={(e) => handleRowChecked(e, info.row.index)}
-						disabled={
-							getValues(
-								`dyeing_batch_entry[${info.row.index}].pi_quantity`
-							) == 0
-						}
-						{...{ register, errors }}
-					/>
-				),
-			},
+			// {
+			// 	accessorKey: 'checkbox',
+			// 	header: () => (
+			// 		<CheckBoxWithoutLabel
+			// 			className='bg-white'
+			// 			label='is_all_checked'
+			// 			checked={isAllChecked}
+			// 			onChange={(e) => {
+			// 				setIsAllChecked(e.target.checked);
+			// 				setIsSomeChecked(e.target.checked);
+			// 			}}
+			// 			{...{ register, errors }}
+			// 		/>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	enableSorting: false,
+			// 	cell: (info) => (
+			// 		<CheckBoxWithoutLabel
+			// 			className={
+			// 				info.row.original.batch_production_uuid
+			// 					? 'bg-gray-400'
+			// 					: 'bg-white'
+			// 			}
+			// 			label={`dyeing_batch_entry[${info.row.index}].is_checked`}
+			// 			checked={watch(
+			// 				`dyeing_batch_entry[${info.row.index}].is_checked`
+			// 			)}
+			// 			onChange={(e) => handleRowChecked(e, info.row.index)}
+			// 			disabled={
+			// 				getValues(
+			// 					`dyeing_batch_entry[${info.row.index}].pi_quantity`
+			// 				) == 0
+			// 			}
+			// 			{...{ register, errors }}
+			// 		/>
+			// 	),
+			// },
 			{
 				accessorKey: 'order_number',
-				header: 'O/N',
-				enableColumnFilter: true,
+				header: 'Order ID',
+				width: 'w-32',
 				enableSorting: true,
+				cell: (info) => {
+					const { order_number } = info.row.original;
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={order_number}
+							uri='/order/details'
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'item_description',
@@ -416,7 +427,7 @@ export default function Index() {
 				),
 			},
 		],
-		[isAllChecked, isSomeChecked, BatchEntryField, register, errors]
+		[BatchEntryField, register, errors]
 	);
 
 	const getTotal = useCallback(
@@ -426,22 +437,20 @@ export default function Index() {
 			let totalProduction = 0;
 
 			dyeing_batch_entry.forEach((item) => {
-				if (item.is_checked) {
-					totalQty += Number(item.quantity);
+				totalQty += Number(item.quantity);
 
-					const top = parseFloat(item.top) || 0;
-					const bottom = parseFloat(item.bottom) || 0;
-					const size = parseFloat(item.size) || 0;
-					const quantity = parseFloat(item.quantity) || 0;
-					const production_quantity_in_kg =
-						parseFloat(item.production_quantity_in_kg) || 0;
-					const dyedMtrPerKg = parseFloat(item.dyed_mtr_per_kg) || 1;
+				const top = parseFloat(item.top) || 0;
+				const bottom = parseFloat(item.bottom) || 0;
+				const size = parseFloat(item.size) || 0;
+				const quantity = parseFloat(item.quantity) || 0;
+				const production_quantity_in_kg =
+					parseFloat(item.production_quantity_in_kg) || 0;
+				const dyedMtrPerKg = parseFloat(item.dyed_mtr_per_kg) || 1;
 
-					const itemTotal =
-						((top + bottom + size) * quantity) / 100 / dyedMtrPerKg;
-					totalCalTape += itemTotal;
-					totalProduction += production_quantity_in_kg;
-				}
+				const itemTotal =
+					((top + bottom + size) * quantity) / 100 / dyedMtrPerKg;
+				totalCalTape += itemTotal;
+				totalProduction += production_quantity_in_kg;
 			});
 
 			return { totalQty, totalCalTape, totalProduction };

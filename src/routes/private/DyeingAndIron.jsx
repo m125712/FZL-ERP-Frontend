@@ -3,8 +3,8 @@
 import DyesCategory from '@/pages/DyeingAndIron/DyesCategory';
 // * Finishing Batch
 import FinishingBatch from '@/pages/DyeingAndIron/FinishingBatch';
-import FinishingBatchEntry from '@/pages/DyeingAndIron/FinishingBatch/Entry';
 import FinishingBatchDetails from '@/pages/DyeingAndIron/FinishingBatch/Details';
+import FinishingBatchEntry from '@/pages/DyeingAndIron/FinishingBatch/Entry';
 //* Log
 import DyeingLog from '@/pages/DyeingAndIron/Log';
 //* Machine
@@ -146,7 +146,7 @@ export const DyeingAndIronRoutes = [
 				element: <DyeingZipperBatchEntry />,
 				hidden: true,
 				page_name: 'dyeing__zipper_batch_entry_update',
-				actions: ['create', 'read', 'update'],
+				actions: ['create', 'read', 'update', 'delete'],
 			},
 			{
 				name: ' Zipper Batch Details',
@@ -209,7 +209,7 @@ export const DyeingAndIronRoutes = [
 				element: <DyeingThreadBatchEntry />,
 				hidden: true,
 				page_name: 'dyeing__thread_batch_entry_update',
-				actions: ['create', 'read', 'update'],
+				actions: ['create', 'read', 'update', 'delete'],
 			},
 			// *Dyeing ThreadBatch Conening
 			{

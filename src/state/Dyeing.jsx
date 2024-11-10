@@ -64,7 +64,28 @@ export const useDyeingBatchByUUID = (uuid) =>
 		queryKey: dyeingQK.batchByUUID(uuid),
 		url: `/zipper/dyeing-batch/${uuid}`,
 	});
-
+//* OrderBatch
+export const useDyeingOrderBatch = () =>
+	createGlobalState({
+		queryKey: dyeingQK.orderBatch(),
+		url: '/zipper/dyeing-order-batch',
+	});
+export const useDyeingOrderBatchByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: dyeingQK.orderBatchByUUID(uuid),
+		url: `/zipper/dyeing-order-batch/${uuid}`,
+	});
+//*Batch Details
+export const useDyeingBatchDetails = () =>
+	createGlobalState({
+		queryKey: dyeingQK.batchDetails(),
+		url: '/zipper/dyeing-batch-details',
+	});
+export const useDyeingBatchDetailsByUUID = (uuid, param = '') =>
+	createGlobalState({
+		queryKey: dyeingQK.batchDetailsByUUID(uuid),
+		url: `/zipper/dyeing-batch-details/${uuid}${param}`,
+	});
 // * Thread Batch
 export const useDyeingThreadBatch = () =>
 	createGlobalState({
@@ -76,6 +97,28 @@ export const useDyeingThreadBatchByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: dyeingQK.threadBatchByUUID(uuid),
 		url: `/thread/batch/${uuid}`,
+	});
+//* Thread Order Batch
+export const useDyeingThreadOrderBatch = () =>
+	createGlobalState({
+		queryKey: dyeingQK.threadOrderBatch(),
+		url: '/thread/order-batch',
+	});
+export const useDyeingThreadOrderBatchByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: dyeingQK.threadOrderBatchByUUID(uuid),
+		url: `/thread/order-batch/${uuid}`,
+	});
+// * Thread Batch Details
+export const useDyeingThreadBatchDetails = () =>
+	createGlobalState({
+		queryKey: dyeingQK.threadBatchDetails(),
+		url: '/thread/batch-details/by/',
+	});
+export const useDyeingThreadBatchDetailsByUUID = (uuid, param = '') =>
+	createGlobalState({
+		queryKey: dyeingQK.threadBatchDetailsByUUID(uuid),
+		url: `/thread/batch-details/by/${uuid}${param}`,
 	});
 //* Thread Batch Entry
 export const useDyeingThreadBatchEntry = () =>

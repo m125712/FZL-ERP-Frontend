@@ -381,6 +381,16 @@ export const dyeingQK = {
 	// *  batch
 	batch: () => [...dyeingQK.all(), 'batch'],
 	batchByUUID: (uuid) => [...dyeingQK.batch(), uuid],
+	//* Order batch
+	orderBatch: () => [...dyeingQK.all(), 'order-batch'],
+	orderBatchByUUID: (uuid) => [...dyeingQK.orderBatch(), uuid],
+	//* Batch Details
+	batchDetails: () => [...dyeingQK.all(), 'batch-details'],
+	batchDetailsByUUID: (uuid, params = '') => [
+		...dyeingQK.batchDetails(),
+		uuid,
+		params,
+	],
 
 	// * Thread Batch
 	threadBatch: () => [...dyeingQK.all(), 'thread-batch'],
@@ -388,7 +398,16 @@ export const dyeingQK = {
 	// * Thread Batch Entry
 	threadBatchEntry: () => [...dyeingQK.all(), 'thread-batch-entry'],
 	threadBatchEntryByUUID: (uuid) => [...dyeingQK.threadBatchEntry(), uuid],
-
+	//* Thread Order Batch
+	threadOrderBatch: () => [...dyeingQK.all(), 'thread-order-batch'],
+	threadOrderBatchByUUID: (uuid) => [...dyeingQK.threadOrderBatch(), uuid],
+	//* Thread Batch Details
+	threadBatchDetails: () => [...dyeingQK.all(), 'thread-batch-details'],
+	threadBatchDetailsByUUID: (uuid, params = '') => [
+		...dyeingQK.threadBatchDetails(),
+		uuid,
+		params,
+	],
 	// * Order Against dyeing RM Log
 	orderAgainstDyeingRMLog: () => [
 		...dyeingQK.all(),

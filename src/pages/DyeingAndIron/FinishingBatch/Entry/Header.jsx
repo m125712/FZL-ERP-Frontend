@@ -1,4 +1,5 @@
 import { useOtherOrderDescription } from '@/state/Other';
+import { useParams } from 'react-router-dom';
 
 import {
 	FormField,
@@ -7,7 +8,6 @@ import {
 	SectionEntryBody,
 	Textarea,
 } from '@/ui';
-import { useParams } from 'react-router-dom';
 
 export default function Header({
 	register,
@@ -18,7 +18,9 @@ export default function Header({
 	watch,
 }) {
 	const { batch_uuid } = useParams();
-	const { data: orders } = useOtherOrderDescription('dyed_tape_required=false&swatch_approved=true');
+	const { data: orders } = useOtherOrderDescription(
+		'dyed_tape_required=false&swatch_approved=true'
+	);
 	const statuses = [
 		{ value: 'running', label: 'Running' },
 		{ value: 'completed', label: 'Completed' },
@@ -44,7 +46,7 @@ export default function Header({
 							render={({ field: { onChange } }) => {
 								return (
 									<ReactSelect
-										placeholder='Select Marketing'
+										placeholder='Select Order No'
 										options={orders}
 										value={orders?.find(
 											(item) =>

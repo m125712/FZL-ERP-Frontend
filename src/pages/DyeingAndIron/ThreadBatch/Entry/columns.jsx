@@ -90,11 +90,11 @@ export const Columns = ({
 				header: (
 					<div className='flex flex-col'>
 						Balance
-						<label
+						{/* <label
 							className='btn btn-primary btn-xs'
 							onClick={() => setAllQty()}>
 							Copy All
-						</label>
+						</label> */}
 					</div>
 				),
 				enableColumnFilter: false,
@@ -201,11 +201,11 @@ export const Columns = ({
 				header: (
 					<div className='flex flex-col'>
 						Balance
-						<label
+						{/* <label
 							className='btn btn-primary btn-xs'
 							onClick={() => setAllQty()}>
 							Copy All
-						</label>
+						</label> */}
 					</div>
 				),
 				enableColumnFilter: false,

@@ -60,11 +60,11 @@ export default function Index() {
 		watch,
 		setValue,
 	} = useRHF(DYEING_BATCH_SCHEMA, DYEING_BATCH_NULL);
-	// useEffect(() => {
-	// 	if (isUpdate) {
-	// 		reset(data); // Reset the form with updated data
-	// 	}
-	// }, [isUpdate, data, reset]);
+	useEffect(() => {
+		if (isUpdate) {
+			reset(data); // Reset the form with updated data
+		}
+	}, [isUpdate, data, reset]);
 	const { fields: BatchOrdersField, remove: BatchOrdersFieldRemove } =
 		useFieldArray({
 			control,
@@ -77,7 +77,7 @@ export default function Index() {
 	});
 	useEffect(() => {
 		if (!isUpdate) {
-			setValue('dyeing_batch_entry', data?.length > 0 ? data : []);
+			setValue('dyeing_batch_entry', data?.dyeing_batch_entry);
 		}
 
 		// * on update sometimes the useFieldArray does not update so we need to set it manually
@@ -132,15 +132,27 @@ export default function Index() {
 				...data,
 				updated_at: GetDateTime(),
 			};
-
-			const dyeing_batch_entry_updated = [...data?.dyeing_batch_entry]
-				.filter((item) => item.quantity > 0)
-				.map((item) => ({
-					...item,
-					dyeing_batch_entry_uuid: item.dyeing_batch_entry_uuid,
-					remarks: item.remarks,
-					updated_at: GetDateTime(),
-				}));
+			let flag = false;
+			data?.dyeing_batch_entry.map((item) => {
+				if (item.quantity < 1) {
+					ShowLocalToast({
+						type: 'error',
+						message:
+							'Quantity should greater than zero in batch orders.',
+					});
+					flag = true;
+					return;
+				}
+			});
+			if (flag) return;
+			const dyeing_batch_entry_updated = [
+				...data?.dyeing_batch_entry,
+			].map((item) => ({
+				...item,
+				dyeing_batch_entry_uuid: item.dyeing_batch_entry_uuid,
+				remarks: item.remarks,
+				updated_at: GetDateTime(),
+			}));
 			const new_dyeing_batch_entry = [...data?.new_dyeing_batch_entry]
 				.filter((item) => item.quantity > 0)
 				.map((item) => ({
@@ -363,6 +375,7 @@ export default function Index() {
 		register,
 		errors,
 		watch,
+		isUpdate,
 	});
 
 	// * table columns for adding new finishing field on update

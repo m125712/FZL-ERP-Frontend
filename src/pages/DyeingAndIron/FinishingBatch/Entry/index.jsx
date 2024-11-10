@@ -1,27 +1,28 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import {
-	useDyeingFinishingBatch,
-	useDyeingFinishingBatchByUUID,
-	useDyeingFinishingBatchOrders,
-} from '@/state/Dyeing';
+import { useDyeingFinishingBatch, useDyeingFinishingBatchByUUID, useDyeingFinishingBatchOrders } from '@/state/Dyeing';
 import { DevTool } from '@hookform/devtools';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
+
+
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
+import { ShowLocalToast } from '@/components/Toast';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
+
+
 
 import nanoid from '@/lib/nanoid';
 import GetDateTime from '@/util/GetDateTime';
-import {
-	FINISHING_BATCH_ENTRY_NULL,
-	FINISHING_BATCH_ENTRY_SCHEMA,
-} from '@/util/Schema';
+import { FINISHING_BATCH_ENTRY_NULL, FINISHING_BATCH_ENTRY_SCHEMA } from '@/util/Schema';
+
+
 
 import { Columns } from './Columns';
 import Header from './Header';
+
 
 export default function index() {
 	const { user } = useAuth();
@@ -36,7 +37,8 @@ export default function index() {
 		deleteData,
 		invalidateQuery: invalidateNewFinishingBatch,
 	} = useDyeingFinishingBatchByUUID(batch_uuid, 'is_update=true');
-	const { invalidateQuery: invalidateDetails } = useDyeingFinishingBatchByUUID(batch_uuid);
+	const { invalidateQuery: invalidateDetails } =
+		useDyeingFinishingBatchByUUID(batch_uuid);
 	const { invalidateQuery } = useDyeingFinishingBatch();
 
 	const {
@@ -95,6 +97,34 @@ export default function index() {
 
 	const onSubmit = async (data) => {
 		if (isUpdate) {
+			const finishingEntry = data?.finishing_batch_entry.filter(
+				(item) => item.quantity > 0
+			);
+			const newFinishingEntry = data?.new_finishing_batch_entry.filter(
+				(item) => item.quantity > 0
+			);
+			if (finishingEntry?.length < 1 && newFinishingEntry?.length < 1) {
+				ShowLocalToast({
+					type: 'warning',
+					message:
+						'There should one or more item quantity greater than zero to proceed.',
+				});
+
+				return;
+			}
+			let flag = false;
+			data?.finishing_batch_entry.map((item) => {
+				if (item.quantity < 1) {
+					ShowLocalToast({
+						type: 'error',
+						message:
+							'Quantity should greater than zero in batch orders.',
+					});
+					flag = true;
+					return;
+				}
+			});
+			if (flag) return;
 			await updateData.mutateAsync({
 				url: `/zipper/finishing-batch/${data.uuid}`,
 				updatedData: { ...data, updated_at: GetDateTime() },
@@ -146,7 +176,20 @@ export default function index() {
 
 			return;
 		}
+		//*Add new data entry
+		const finishingEntry = data?.finishing_batch_entry.filter(
+			(item) => item.quantity > 0
+		);
 
+		if (finishingEntry?.length < 1) {
+			ShowLocalToast({
+				type: 'warning',
+				message:
+					'There should one or more item quantity greater than zero to proceed.',
+			});
+
+			return;
+		}
 		const finishingData = {
 			...data,
 			uuid: nanoid(),

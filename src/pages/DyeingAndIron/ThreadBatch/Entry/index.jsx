@@ -118,7 +118,7 @@ export default function Index() {
 
 	useEffect(() => {
 		if (!isUpdate) {
-			setValue('batch_entry', batch?.length > 0 ? batch : []);
+			setValue('batch_entry', batch?.batch_entry);
 		}
 
 		// * on update sometimes the useFieldArray does not update so we need to set it manually
@@ -193,7 +193,18 @@ export default function Index() {
 				...data,
 				updated_at: GetDateTime(),
 			};
-
+			let flag = false;
+			data?.batch_entry.map((item) => {
+				if (item.quantity < 1) {
+					ShowLocalToast({
+						type: 'error',
+						message: 'Quantity should greater than zero in batch orders.',
+					});
+					flag = true;
+					return;
+				}
+			});
+			if (flag) return;
 			const batch_entry_updated = [...data?.batch_entry]
 				.filter((item) => item.quantity > 0)
 				.map((item) => ({

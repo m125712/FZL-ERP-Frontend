@@ -4,6 +4,7 @@ import { useAccess } from '@/hooks';
 import { EditDelete, Input, LinkWithCopy, Textarea } from '@/ui';
 
 export const Columns = ({
+	isUpdate,
 	setValue,
 	BatchOrdersField = [],
 	NewBatchOrdersField = [],
@@ -117,11 +118,11 @@ export const Columns = ({
 				header: (
 					<div className='flex flex-col'>
 						Balanced Batch
-						<label
+						{/* <label
 							className='btn btn-primary btn-xs'
 							onClick={() => setAllQty()}>
 							Copy All
-						</label>
+						</label> */}
 					</div>
 				),
 				enableColumnFilter: false,
@@ -210,13 +211,13 @@ export const Columns = ({
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('delete'),
+				hidden: !haveAccess.includes('delete') || !isUpdate,
 				width: 'w-24',
 				cell: (info) => (
 					<EditDelete
 						idx={info.row.index}
 						handelDelete={handelDelete}
-						showDelete={haveAccess.includes('delete')}
+						showDelete={haveAccess.includes('delete') && isUpdate}
 						showUpdate={false}
 					/>
 				),
@@ -232,11 +233,11 @@ export const Columns = ({
 				header: (
 					<div className='flex flex-col'>
 						Balanced Batch
-						<label
+						{/* <label
 							className='btn btn-primary btn-xs'
 							onClick={() => setAllQty()}>
 							Copy All
-						</label>
+						</label> */}
 					</div>
 				),
 				enableColumnFilter: false,
@@ -249,7 +250,7 @@ export const Columns = ({
 								className='btn btn-primary btn-xs'
 								onClick={() =>
 									setValue(
-										`dyeing_batch_entry[${idx}].quantity`,
+										`new_dyeing_batch_entry[${idx}].quantity`,
 										info.getValue()
 									)
 								}>

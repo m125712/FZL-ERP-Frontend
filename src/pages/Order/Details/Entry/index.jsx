@@ -434,30 +434,30 @@ export default function Index() {
 		];
 
 		// * Slider
-		const slider_quantity =
-			data.order_entry.length === 1
-				? data.order_entry[0].quantity
-				: data.order_entry.reduce(
-						(prev, curr) => prev + curr.quantity,
-						0
-					);
+		// const slider_quantity =
+		// 	data.order_entry.length === 1
+		// 		? data.order_entry[0].quantity
+		// 		: data.order_entry.reduce(
+		// 				(prev, curr) => prev + curr.quantity,
+		// 				0
+		// 			);
 
-		const slider_info = {
-			uuid: nanoid(),
-			order_description_uuid: new_order_description_uuid,
-			order_quantity: slider_quantity,
-			created_at: GetDateTime(),
-		};
+		// const slider_info = {
+		// 	uuid: nanoid(),
+		// 	order_description_uuid: new_order_description_uuid,
+		// 	order_quantity: slider_quantity,
+		// 	created_at: GetDateTime(),
+		// };
 
-		if (watch('order_type') === 'tape') {
-		} else if (watch('slider_provided') === 'completely_provided') {
-		} else {
-			await postData.mutateAsync({
-				url: '/slider/stock',
-				newData: slider_info,
-				isOnCloseNeeded: false,
-			});
-		}
+		// if (watch('order_type') === 'tape') {
+		// } else if (watch('slider_provided') === 'completely_provided') {
+		// } else {
+		// 	await postData.mutateAsync({
+		// 		url: '/slider/stock',
+		// 		newData: slider_info,
+		// 		isOnCloseNeeded: false,
+		// 	});
+		// }
 
 		// * All promises
 		await Promise.all(order_entry_promises)

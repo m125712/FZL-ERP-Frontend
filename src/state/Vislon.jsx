@@ -42,7 +42,7 @@ export const useOrderAgainstVislonTMRMLogByUUID = (uuid) =>
 export const useVislonTMP = () =>
 	createGlobalState({
 		queryKey: vislonQK.vislonTMP(),
-		url: '/zipper/finishing-batch-entry/by/teeth_molding_prod?item_name=vislon',
+		url: '/zipper/finishing-batch/by/teeth_molding_prod?item_name=vislon',
 	});
 
 // * Production Entry by UUID
@@ -126,7 +126,7 @@ export const useOrderAgainstVislonFinishingRMLogByUUID = (uuid) =>
 export const useVislonFinishingProd = () =>
 	createGlobalState({
 		queryKey: vislonQK.vislonFinishingProd(),
-		url: '/zipper/finishing-batch-entry/by/finishing_prod?item_name=vislon',
+		url: '/zipper/finishing-batch/by/finishing_prod?item_name=vislon',
 	});
 
 // * Finishing production log

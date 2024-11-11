@@ -90,7 +90,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `/zipper/sfg-production/${updatedData?.uuid}`,
+				url: `/zipper/finishing-batch-production/${updatedData?.uuid}`,
 				updatedData: updatedData,
 				onClose,
 			});

@@ -42,14 +42,14 @@ export const useOrderAgainstVislonTMRMLogByUUID = (uuid) =>
 export const useVislonTMP = () =>
 	createGlobalState({
 		queryKey: vislonQK.vislonTMP(),
-		url: '/zipper/sfg/by/teeth_molding_prod?item_name=vislon',
+		url: '/zipper/finishing-batch-entry/by/teeth_molding_prod?item_name=vislon',
 	});
 
 // * Production Entry by UUID
 export const useVislonTMPEntryByUUID = (uuid) => {
 	return createGlobalState({
 		queryKey: vislonQK.vislonTMPEntryByUUID(uuid),
-		url: `/zipper/sfg-production/${uuid}`,
+		url: `/zipper/finishing-batch-production/${uuid}`,
 	});
 };
 
@@ -57,7 +57,7 @@ export const useVislonTMPEntryByUUID = (uuid) => {
 export const useVislonTMTEntryByUUID = (uuid) => {
 	return createGlobalState({
 		queryKey: vislonQK.vislonTMTEntryByUUID(uuid),
-		url: `/zipper/sfg-transaction/${uuid}`,
+		url: `/zipper/finishing-batch-transaction/${uuid}`,
 	});
 };
 
@@ -65,14 +65,14 @@ export const useVislonTMTEntryByUUID = (uuid) => {
 export const useVislonTMPLog = () =>
 	createGlobalState({
 		queryKey: vislonQK.vislonTMPLog(),
-		url: '/zipper/sfg-production/by/teeth_molding?item_name=vislon',
+		url: '/zipper/finishing-batch-production/by/teeth_molding?item_name=vislon',
 	});
 
 // * Transaction Log
 export const useVislonTMTLog = () =>
 	createGlobalState({
 		queryKey: vislonQK.vislonTMTLog(),
-		url: '/zipper/sfg-transaction/by/teeth_molding_prod?item_name=vislon',
+		url: '/zipper/finishing-batch-transaction/by/teeth_molding_prod?item_name=vislon',
 	});
 
 //* Tape Log
@@ -126,19 +126,19 @@ export const useOrderAgainstVislonFinishingRMLogByUUID = (uuid) =>
 export const useVislonFinishingProd = () =>
 	createGlobalState({
 		queryKey: vislonQK.vislonFinishingProd(),
-		url: '/zipper/sfg/by/finishing_prod?item_name=vislon',
+		url: '/zipper/finishing-batch-entry/by/finishing_prod?item_name=vislon',
 	});
 
 // * Finishing production log
 export const useVislonFinishingProdLog = () =>
 	createGlobalState({
 		queryKey: vislonQK.vislonFinishingProdLog(),
-		url: '/zipper/sfg-production/by/finishing?item_name=vislon',
+		url: '/zipper/finishing-batch-production/by/finishing?item_name=vislon',
 	});
 
 // * Finishing transaction log
 export const useVislonFinishingTrxLog = () =>
 	createGlobalState({
 		queryKey: vislonQK.vislonFinishingTrxLog(),
-		url: '/zipper/sfg-transaction/by/finishing_prod?item_name=vislon',
+		url: '/zipper/finishing-batch-transaction/by/finishing_prod?item_name=vislon',
 	});

@@ -155,20 +155,14 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'order_quantity',
+				accessorKey: 'batch_quantity',
 				header: (
 					<span>
-						Ordered
+						Batch
 						<br />
 						QTY (PCS)
 					</span>
 				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'swatch_approved_quantity',
-				header: 'Approved QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

@@ -86,7 +86,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `/zipper/sfg-transaction/${updateLog?.uuid}`,
+				url: `/zipper/finishing-batch-transaction/${updateLog?.uuid}`,
 				updatedData,
 				onClose,
 			});

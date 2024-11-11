@@ -193,7 +193,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url: '/zipper/sfg-transaction',
+						url: '/zipper/finishing-batch-transaction',
 						deleteData,
 					}}
 				/>

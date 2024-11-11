@@ -116,6 +116,36 @@ export default function index() {
 						})
 				);
 
+			// * slider batch entry update depending on order_type and slider_provided
+			if (data.order_type === 'tape') {
+			} else if (data.slider_provided === 'completely_provided') {
+			} else {
+				const slider_quantity_current =
+					data.finishing_batch_entry.length === 1
+						? data.finishing_batch_entry[0].quantity
+						: data.finishing_batch_entry.reduce(
+								(prev, curr) => prev + curr.quantity,
+								0
+							);
+				const slider_quantity_new =
+					data.new_finishing_batch_entry.length === 1
+						? data.new_finishing_batch_entry[0].quantity
+						: data.new_finishing_batch_entry.reduce(
+								(prev, curr) => prev + curr.quantity,
+								0
+							);
+
+				await updateData.mutateAsync({
+					url: `/slider/stock/${data.stock_uuid}`,
+					updatedData: {
+						batch_quantity:
+							slider_quantity_current + slider_quantity_new,
+						updated_at: GetDateTime(),
+					},
+					isOnCloseNeeded: false,
+				});
+			}
+
 			// * create new finishing batch entry
 			const newFinishingEntryData = [...data?.new_finishing_batch_entry]
 				.filter((item) => item.quantity > 0)
@@ -171,7 +201,6 @@ export default function index() {
 				finishing_batch_uuid: finishingData.uuid,
 				created_at: GetDateTime(),
 			}));
-
 
 		// * slider batch entry depending on order_type and slider_provided
 		if (data.order_type === 'tape') {

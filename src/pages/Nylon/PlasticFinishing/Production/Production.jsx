@@ -74,14 +74,14 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			sfg_uuid: updatePFProd?.sfg_uuid,
+			finishing_batch_entry_uuid: updatePFProd?.finishing_batch_entry_uuid,
 			section: 'finishing',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
 
 		await postData.mutateAsync({
-			url: '/zipper/sfg-production',
+			url: '/zipper/finishing-batch-production',
 			newData: updatedData,
 			onClose,
 		});

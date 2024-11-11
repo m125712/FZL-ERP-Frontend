@@ -2791,8 +2791,8 @@ export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 export const SLIDER_DIE_CASTING_STOCK_NULL = {
 	uuid: null,
 	name: '',
-	item: '',
-	zipper_number: '',
+	item: null,
+	zipper_number: null,
 	end_type: null,
 	puller_type: null,
 	logo_type: null,

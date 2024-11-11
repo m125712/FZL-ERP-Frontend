@@ -75,7 +75,7 @@ export default function Index({
 		};
 
 		await postData.mutateAsync({
-			url: '/zipper/sfg-production',
+			url: '/zipper/finishing-batch-production',
 			newData: updatedData,
 			onClose,
 		});

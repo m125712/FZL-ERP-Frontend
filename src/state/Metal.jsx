@@ -6,7 +6,7 @@ import { metalQK } from './QueryKeys';
 export const useMetalTMProduction = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTMProduction(),
-		url: '/zipper/sfg/by/teeth_molding_prod?item_name=metal',
+		url: '/zipper/finishing-batch-entry/by/teeth_molding_prod?item_name=metal',
 	});
 
 // ? Log
@@ -14,13 +14,13 @@ export const useMetalTMProduction = () =>
 export const useMetalTMTrxLog = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTMTrxLog(),
-		url: '/zipper/sfg-transaction/by/teeth_molding_prod?item_name=metal',
+		url: '/zipper/finishing-batch-transaction/by/teeth_molding_prod?item_name=metal',
 	});
 
 export const useMetalTMTrxLogByUUID = (uuid, { enabled = true }) =>
 	createGlobalState({
 		queryKey: metalQK.metalTMTrxLogByUUID(uuid),
-		url: `/zipper/sfg-transaction/${uuid}`,
+		url: `/zipper/finishing-batch-transaction/${uuid}`,
 		enabled: enabled,
 	});
 
@@ -28,12 +28,12 @@ export const useMetalTMTrxLogByUUID = (uuid, { enabled = true }) =>
 export const useMetalTMProductionLog = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTMProductionLog(),
-		url: '/zipper/sfg-production/by/teeth_molding?item_name=metal',
+		url: '/zipper/finishing-batch-production/by/teeth_molding?item_name=metal',
 	});
 export const useMetalTMProductionLogByUUID = (uuid, { enabled = true }) =>
 	createGlobalState({
 		queryKey: metalQK.metalTMProductionLogByUUID(uuid),
-		url: `/zipper/sfg-production/${uuid}`,
+		url: `/zipper/finishing-batch-production/${uuid}`,
 		enabled: enabled,
 	});
 
@@ -91,20 +91,20 @@ export const useOrderAgainstMetalTMRMLogByUUID = (uuid) =>
 export const useMetalTCProduction = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTCProduction(),
-		url: '/zipper/sfg/by/teeth_coloring_prod?item_name=metal',
+		url: '/zipper/finishing-batch-entry/by/teeth_coloring_prod?item_name=metal',
 	});
 
 // * Trx Log
 export const useMetalTCTrxLog = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTCTrxLog(),
-		url: '/zipper/sfg-transaction/by/teeth_coloring_prod?item_name=metal',
+		url: '/zipper/finishing-batch-transaction/by/teeth_coloring_prod?item_name=metal',
 	});
 
 export const useMetalTCTrxLogByUUID = (uuid, { enabled = true }) =>
 	createGlobalState({
 		queryKey: metalQK.metalTCTrxLogByUUID(uuid),
-		url: `/zipper/sfg-transaction/${uuid}`,
+		url: `/zipper/finishing-batch-transaction/${uuid}`,
 		enabled: enabled,
 	});
 
@@ -112,12 +112,12 @@ export const useMetalTCTrxLogByUUID = (uuid, { enabled = true }) =>
 export const useMetalTCProductionLog = () =>
 	createGlobalState({
 		queryKey: metalQK.metalTCProductionLog(),
-		url: '/zipper/sfg-production/by/teeth_coloring?item_name=metal',
+		url: '/zipper/finishing-batch-production/by/teeth_coloring?item_name=metal',
 	});
 export const useMetalTCProductionLogByUUID = (uuid, { enabled = true }) =>
 	createGlobalState({
 		queryKey: metalQK.metalTCProductionLogByUUID(uuid),
-		url: `/zipper/sfg-production/${uuid}`,
+		url: `/zipper/finishing-batch-production/${uuid}`,
 		enabled: enabled,
 	});
 
@@ -163,20 +163,20 @@ export const useOrderAgainstMetalTCRMLogByUUID = (uuid) =>
 export const useMetalFProduction = () =>
 	createGlobalState({
 		queryKey: metalQK.metalFProduction(),
-		url: '/zipper/sfg/by/finishing_prod?item_name=metal',
+		url: '/zipper/finishing-batch-entry/by/finishing_prod?item_name=metal',
 	});
 // * trx log
 export const useMetalFinishingTrxLog = () =>
 	createGlobalState({
 		queryKey: metalQK.metalFinishingTrxLog(),
-		url: '/zipper/sfg-transaction/by/finishing_prod?item_name=metal',
+		url: '/zipper/finishing-batch-transaction/by/finishing_prod?item_name=metal',
 	});
 
 // * production log
 export const useMetalFinishingProdLog = () =>
 	createGlobalState({
 		queryKey: metalQK.metalFinishingProdLog(),
-		url: '/zipper/sfg-production/by/finishing?item_name=metal',
+		url: '/zipper/finishing-batch-production/by/finishing?item_name=metal',
 	});
 
 // * RM

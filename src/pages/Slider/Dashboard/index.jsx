@@ -23,22 +23,28 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'batch_number',
+				header: 'Batch No.',
+				enableColumnFilter: true,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				// enableColumnFilter: false,
+				enableColumnFilter: true,
 				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'item_description',
 				header: 'Item Description',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'item_name',
 				header: 'Item',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -116,21 +122,14 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'order_quantity',
-				header: 'Order QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'swatch_approved_quantity',
-				header: 'Approved QTY',
+				accessorKey: 'batch_quantity',
+				header: 'Batch QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorFn: (row) => {
-					const { swatch_approved_quantity, trx_to_finishing } =
-						row;
+					const { swatch_approved_quantity, trx_to_finishing } = row;
 
 					return swatch_approved_quantity - trx_to_finishing;
 				},

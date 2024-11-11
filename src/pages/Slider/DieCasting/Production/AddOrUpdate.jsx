@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useOtherOrderDescription, useOtherSliderItem } from '@/state/Other';
+import { useOtherOrderBatchDescription, useOtherSliderItem } from '@/state/Other';
 import {
 	useSliderDieCastingProduction,
 	useSliderDieCastingProductionByUUID,
@@ -30,7 +30,7 @@ export default function Index({
 	const { invalidateQuery } = useSliderDieCastingStock();
 
 	const { data: slider_item_name } = useOtherSliderItem();
-	const { data: orders } = useOtherOrderDescription();
+	const { data: orders } = useOtherOrderBatchDescription();
 	const {
 		register,
 		handleSubmit,

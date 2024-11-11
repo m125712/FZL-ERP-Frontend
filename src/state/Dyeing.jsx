@@ -134,8 +134,8 @@ export const useDyeingFinishingBatchByUUID = (uuid, params) =>
 	createGlobalState({
 		queryKey: dyeingQK.finishingBatchByUUID(uuid, params),
 		url: params
-			? `/zipper/finishing-batch/by/${uuid}?${params}`
-			: `/zipper/finishing-batch/by/${uuid}`,
+			? `/zipper/finishing-batch/by/finishing_batch_uuid/${uuid}?${params}`
+			: `/zipper/finishing-batch/by/finishing_batch_uuid/${uuid}`,
 	});
 
 //* Get orders for finishing batch using order_description_uuid

@@ -2914,31 +2914,18 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
 	}),
 	stocks: yup.array().of(
 		yup.object().shape({
-			is_checked: BOOLEAN_REQUIRED,
-			assigned_quantity: NUMBER.when('is_checked', {
-				is: true,
-				then: (Schema) =>
-					Schema.required('Quantity is required').max(
-						yup.ref('quantity'),
-						'Beyond Max Quantity'
-					),
-				otherwise: (Schema) =>
-					Schema.nullable().transform((value, originalValue) =>
-						String(originalValue).trim() === '' ? null : value
-					),
-			}),
-			assigned_weight: NUMBER_DOUBLE.when('is_checked', {
-				is: true,
-				then: (Schema) =>
-					Schema.required('Weight is required').max(
-						yup.ref('weight'),
-						'Beyond Max Weight'
-					),
-				otherwise: (Schema) =>
-					Schema.nullable().transform((value, originalValue) =>
-						String(originalValue).trim() === '' ? null : value
-					),
-			}),
+			assigned_quantity: NUMBER.nullable()
+				.test('required', 'Must be greater than 0', (value) => {
+					if (value === 0) {
+						return false;
+					}
+					return true;
+				})
+				.max(yup.ref('quantity'), 'Beyond Max Quantity')
+				.transform((value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+				),
+			assigned_weight: NUMBER_DOUBLE.nullable(),
 			remarks: STRING.nullable(),
 		})
 	),

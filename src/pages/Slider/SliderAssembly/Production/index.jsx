@@ -26,14 +26,17 @@ export default function Index() {
 		() => [
 			{
 				accessorKey: 'batch_number',
-				header: 'batch No.',
+				header: 'Batch No.',
+				enableColumnFilter: true,
+				width: 'w-36',
 				cell: (info) => {
-					const { order_number } = info.row.original;
+					const { finishing_batch_uuid } = info.row.original;
+
 					return (
 						<LinkWithCopy
 							title={info.getValue()}
-							id={order_number}
-							uri='/order/details'
+							id={finishing_batch_uuid}
+							uri={`/dyeing-and-iron/finishing-batch`}
 						/>
 					);
 				},

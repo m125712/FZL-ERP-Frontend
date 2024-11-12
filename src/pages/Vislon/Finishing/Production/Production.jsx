@@ -12,8 +12,6 @@ import { JoinInput, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import {
-	NUMBER_DOUBLE_REQUIRED,
-	NUMBER_REQUIRED,
 	SFG_PRODUCTION_SCHEMA_IN_PCS,
 	SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
 } from '@util/Schema';
@@ -78,7 +76,7 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			sfg_uuid: updateFinishingProd?.sfg_uuid,
+			finishing_batch_entry_uuid: updateFinishingProd?.finishing_batch_entry_uuid,
 			coloring_prod: updateFinishingProd?.coloring_prod,
 			section: 'finishing',
 			created_by: user?.uuid,

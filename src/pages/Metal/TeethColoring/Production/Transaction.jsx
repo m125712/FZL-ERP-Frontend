@@ -79,7 +79,7 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			sfg_uuid: updateTeethColoringTRX?.sfg_uuid,
+			finishing_batch_entry_uuid: updateTeethColoringTRX?.finishing_batch_entry_uuid,
 			trx_quantity_in_kg: 0,
 			trx_from: 'teeth_coloring_prod',
 			trx_to: 'finishing_stock',

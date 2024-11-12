@@ -67,7 +67,7 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			sfg_uuid: updateFinishingProd?.sfg_uuid,
+			finishing_batch_entry_uuid: updateFinishingProd?.finishing_batch_entry_uuid,
 			section: 'finishing',
 			production_quantity_in_kg: 0,
 			created_by: user?.uuid,

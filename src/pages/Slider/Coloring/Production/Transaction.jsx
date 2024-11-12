@@ -1,8 +1,14 @@
 import { useAuth } from '@/context/auth';
+import { useMetalFProduction } from '@/state/Metal';
+import {
+	useNylonMFProduction,
+	useNylonPlasticFinishingProduction,
+} from '@/state/Nylon';
 import {
 	useSliderAssemblyTransferEntry,
 	useSliderColoringProduction,
 } from '@/state/Slider';
+import { useVislonFinishingProd } from '@/state/Vislon';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
@@ -31,25 +37,33 @@ export default function Index({
 	},
 	setUpdateSliderTrx,
 }) {
-	const { postData, url } = useSliderAssemblyTransferEntry();
+	const { postData } = useSliderAssemblyTransferEntry();
 	const { invalidateQuery } = useSliderColoringProduction();
+	const { invalidateQuery: invalidateVislonFinishingProdLog } =
+		useVislonFinishingProd();
+	const { invalidateQuery: invalidateNylonMetallicFinishingProdLog } =
+		useNylonMFProduction();
+	const { invalidateQuery: invalidateNylonPlasticFinishingProdLog } =
+		useNylonPlasticFinishingProduction();
+	const { invalidateQuery: invalidateNylonFinishingProdLog } =
+		useMetalFProduction();
+
 	const { user } = useAuth();
 
-	const { register, handleSubmit, errors, reset, watch, control, context } =
-		useRHF(
-			{
-				...SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
-				trx_quantity: NUMBER_REQUIRED.max(
-					updateSliderTrx?.coloring_prod,
-					'Beyond Max Quantity'
-				),
-				weight: NUMBER_DOUBLE_REQUIRED.max(
-					updateSliderTrx?.coloring_prod_weight,
-					'Beyond Max Quantity'
-				),
-			},
-			SLIDER_ASSEMBLY_TRANSACTION_NULL
-		);
+	const { register, handleSubmit, errors, reset, control, context } = useRHF(
+		{
+			...SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
+			trx_quantity: NUMBER_REQUIRED.max(
+				updateSliderTrx?.coloring_prod,
+				'Beyond Max Quantity'
+			),
+			weight: NUMBER_DOUBLE_REQUIRED.max(
+				updateSliderTrx?.coloring_prod_weight,
+				'Beyond Max Quantity'
+			),
+		},
+		SLIDER_ASSEMBLY_TRANSACTION_NULL
+	);
 
 	const onClose = () => {
 		setUpdateSliderTrx((prev) => ({
@@ -85,6 +99,10 @@ export default function Index({
 		});
 
 		invalidateQuery();
+		invalidateVislonFinishingProdLog();
+		invalidateNylonMetallicFinishingProdLog();
+		invalidateNylonPlasticFinishingProdLog();
+		invalidateNylonFinishingProdLog();
 	};
 
 	return (

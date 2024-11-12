@@ -1,5 +1,4 @@
 import { lazy, useMemo, useState } from 'react';
-import { useMetalTMProduction } from '@/state/Metal';
 import { useNylonPlasticFinishingProduction } from '@/state/Nylon';
 import { useAccess } from '@/hooks';
 
@@ -25,14 +24,17 @@ export default function Index() {
 		() => [
 			{
 				accessorKey: 'batch_number',
-				header: 'Barch No.',
+				header: 'Batch No.',
+				enableColumnFilter: true,
+				width: 'w-36',
 				cell: (info) => {
-					const { order_number } = info.row.original;
+					const { finishing_batch_uuid } = info.row.original;
+
 					return (
 						<LinkWithCopy
 							title={info.getValue()}
-							id={order_number}
-							uri='/order/details'
+							id={finishing_batch_uuid}
+							uri={`/dyeing-and-iron/finishing-batch`}
 						/>
 					);
 				},
@@ -40,6 +42,7 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
+				enableColumnFilter: true,
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					return (
@@ -54,7 +57,7 @@ export default function Index() {
 			{
 				accessorKey: 'item_description',
 				header: 'Item Description',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => {
 					const { order_description_uuid, order_number } =
 						info.row.original;
@@ -90,18 +93,6 @@ export default function Index() {
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
-			},
-			{
-				accessorKey: 'order_quantity',
-				header: (
-					<span>
-						Ordered QTY
-						<br />
-						(PCS)
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'batch_quantity',

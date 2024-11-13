@@ -143,6 +143,10 @@ export const materialQK = {
 	trx: () => [...materialQK.all(), 'trx'],
 	trxByUUID: (uuid) => [...materialQK.trx(), uuid],
 
+	// * booking
+	booking: () => [...materialQK.all(), 'booking'],
+	bookingByUUID: (uuid) => [...materialQK.booking(), uuid],
+	
 	// stock to sfg
 	stockToSGF: () => [...materialQK.all(), 'stock-to-sfg'],
 	stockToSFGByUUID: (uuid) => [...materialQK.stockToSGF(), uuid],

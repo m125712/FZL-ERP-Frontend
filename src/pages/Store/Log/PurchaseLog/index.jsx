@@ -1,10 +1,12 @@
+import { lazy, useMemo, useState } from 'react';
+import { useMaterialInfo, usePurchaseLog } from '@/state/Store';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useMaterialInfo, usePurchaseLog } from '@/state/Store';
 import { DateTime, EditDelete, LinkOnly } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
@@ -14,10 +16,6 @@ export default function Index() {
 	const { invalidateQuery: invalidateMaterial } = useMaterialInfo();
 	const info = new PageInfo('Store / Purchase', url);
 	const haveAccess = useAccess('store__log');
-
-	console.log({
-		data,
-	});
 
 	const columns = useMemo(
 		() => [

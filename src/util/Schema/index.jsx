@@ -253,6 +253,18 @@ export const MATERIAL_TRX_AGAINST_ORDER_NULL = {
 	remarks: '',
 };
 
+export const MATERIAL_BOOKING_SCHEMA = {
+	marketing_uuid: STRING_REQUIRED,
+	quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
+	remarks: STRING.nullable(),
+};
+
+export const MATERIAL_BOOKING_NULL = {
+	marketing_uuid: null,
+	quantity: '',
+	remarks: '',
+};
+
 export const SFG_TRANSFER_LOG_SCHEMA = {
 	trx_to: STRING_REQUIRED,
 	trx_quantity: NUMBER_DOUBLE_REQUIRED,
@@ -2726,7 +2738,7 @@ export const FINISHING_BATCH_ENTRY_NULL = {
 	order_description_uuid: null,
 	slider_lead_time: null,
 	dyeing_lead_time: null,
-	status: 'running',
+	status: 'hold',
 	finishing_batch_entry: [],
 	new_finishing_batch_entry: [],
 };

@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from 'react';
-import { useAuth } from '@/context/auth';
 import { useDyeingFinishingBatch } from '@/state/Dyeing';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
@@ -12,8 +11,7 @@ import PageInfo from '@/util/PageInfo';
 export default function index() {
 	const navigate = useNavigate();
 	const haveAccess = useAccess('dyeing__finishing_batch');
-	const { user } = useAuth();
-	console.log();
+
 	const { data, isLoading, url } = useDyeingFinishingBatch();
 
 	const info = new PageInfo(
@@ -85,6 +83,18 @@ export default function index() {
 			{
 				accessorKey: 'order_type',
 				header: 'Type',
+				enableColumnFilter: false,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
+			},{
+				accessorKey: 'colors',
+				header: 'Colors',
+				enableColumnFilter: false,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
+			},{
+				accessorKey: 'total_batch_quantity',
+				header: 'Total',
 				enableColumnFilter: false,
 				width: 'w-36',
 				cell: (info) => info.getValue(),

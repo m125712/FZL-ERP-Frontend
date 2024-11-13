@@ -57,6 +57,20 @@ export const useMaterialTrxByUUID = (uuid) =>
 		enabled: !!uuid,
 	});
 
+// * Material Booking * //
+export const useMaterialBooking = () =>
+	createGlobalState({
+		queryKey: materialQK.booking(),
+		url: '/material/booking',
+	});
+
+export const useMaterialBookingByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: materialQK.bookingByUUID(uuid),
+		url: `/material/booking/${uuid}`,
+		enabled: !!uuid,
+	});
+
 // * Material Stock to sfg * //
 export const useMaterialStockToSFG = () =>
 	createGlobalState({

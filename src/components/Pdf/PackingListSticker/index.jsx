@@ -4,6 +4,7 @@ import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
 import { CUSTOM_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
 import pdfMake from '..';
+import { generateBarcodeAsBase64 } from './Barcode';
 import { getPageFooter } from './utils';
 
 const node = [
@@ -51,6 +52,16 @@ export default function Index(data) {
 
 		// * Main Table
 		content: [
+			{
+				image: generateBarcodeAsBase64(
+					data?.packing_number,
+					data?.uuid
+				),
+				width: 150,
+				height: 30,
+				alignment: 'center',
+				colSpan: 6,
+			},
 			{
 				table: {
 					// headerRows: 1,
@@ -193,6 +204,7 @@ export default function Index(data) {
 						],
 					],
 				},
+
 				// layout: 'lightHorizontalLines',
 				//layout: tableLayoutStyle,
 			},

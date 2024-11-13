@@ -6,12 +6,15 @@ import Dashboard from '@/pages/Delivery/Dashboard';
 import PackingLists from '@/pages/Delivery/PackingList';
 import PackingListsDetails from '@/pages/Delivery/PackingList/Details';
 import PackingListsEntry from '@/pages/Delivery/PackingList/Entry';
-import Carton from '@pages/Delivery/Carton';
 // Zipper -Challan
+import Test from '@/pages/Delivery/Test';
+import  WarehouseRecv  from '@/pages/Delivery/WarehouseRecv';
+import Carton from '@pages/Delivery/Carton';
 import Challan from '@pages/Delivery/Challan';
 import ChallanDetails from '@pages/Delivery/Challan/Details';
 import Log from '@pages/Delivery/Log';
 import RM from '@pages/Delivery/RM';
+// import TestBarcode from '@pages/Delivery/Test/Barcode';
 import Vehicle from '@pages/Delivery/Vehicle';
 import ThreadChallan from '@pages/Thread/Challan';
 import ThreadChallanDetails from '@pages/Thread/Challan/Details';
@@ -53,6 +56,13 @@ export const DeliveryRoutes = [
 					'click_received',
 					'click_received_override',
 				],
+			},
+			{
+				name: 'Zipper Warehouse Receive',
+				path: '/delivery/zipper-warehouse-receive',
+				element: <WarehouseRecv />,
+				page_name: 'delivery__warehouse_recv',
+				actions: ['create', 'read'],
 			},
 			{
 				name: 'Packing List Entry',
@@ -232,6 +242,22 @@ export const DeliveryRoutes = [
 					'click_active_override',
 				],
 			},
+			//* Test
+			{
+				name: 'Test',
+				path: '/delivery/test',
+				element: <Test />,
+				page_name: 'delivery__test',
+				actions: ['read'],
+			},
+			//* Test Barcode
+			// {
+			// 	name: 'Test Barcode',
+			// 	path: '/delivery/test/barcode',
+			// 	element: <TestBarcode />,
+			// 	page_name: 'delivery__test_barcode',
+			// 	actions: ['read'],
+			// },
 		],
 	},
 ];

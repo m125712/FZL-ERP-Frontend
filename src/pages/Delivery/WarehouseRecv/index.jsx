@@ -87,7 +87,6 @@ export default function Index() {
 		if (packetListData) {
 			const currentEntries = getValues('entry') || [];
 			const challan = packetListData.challan_uuid;
-			console.log(challan, 'challan');
 			const isDuplicate = currentEntries.some(
 				(entry) =>
 					entry.packing_number === packetListData.packing_number

@@ -26,6 +26,7 @@ export const StoreRoutes = [
 					'delete',
 					'click_trx_against_order',
 					'click_action',
+					'click_booking',
 				],
 			},
 			{
@@ -95,6 +96,10 @@ export const StoreRoutes = [
 					'delete_log',
 					'update_log_against_order',
 					'delete_log_against_order',
+					'update_booking',
+					'delete_booking',
+					'click_trx_against_order',
+					'click_action',
 				],
 			},
 			{

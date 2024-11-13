@@ -9,6 +9,7 @@ import { DateTime, EditDelete, Transfer } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
+const AddOrUpdateBooking = lazy(() => import('./AddOrUpdateBooking'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 const AgainstOrderTransfer = lazy(() => import('./AgainstOrderTransfer'));
 const MaterialTrx = lazy(() => import('./MaterialTrx'));
@@ -17,7 +18,6 @@ export default function Index() {
 	const { data, isLoading, url, deleteData, refetch } = useMaterialInfo();
 	const info = new PageInfo('Store / Stock', url, 'store__stock');
 	const haveAccess = useAccess('store__stock');
-
 
 	const columns = useMemo(
 		() => [
@@ -65,6 +65,12 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'booking_quantity',
+				header: 'Booking QTY',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
 				accessorKey: 'unit',
 				header: 'Unit',
 				enableColumnFilter: false,
@@ -105,6 +111,17 @@ export default function Index() {
 					<Transfer
 						onClick={() => handleTrxAgainstOrder(info.row.index)}
 					/>
+				),
+			},
+			{
+				accessorKey: 'action_booking',
+				header: 'Booking',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_booking'),
+				width: 'w-32',
+				cell: (info) => (
+					<Transfer onClick={() => handleBooking(info.row.index)} />
 				),
 			},
 			{
@@ -226,6 +243,16 @@ export default function Index() {
 		window['MaterialTrxAgainstOrder'].showModal();
 	};
 
+	const handleBooking = (idx) => {
+		setUpdateMaterialDetails((prev) => ({
+			...prev,
+			uuid: data[idx].uuid,
+			stock: data[idx].stock,
+			name: data[idx].name,
+		}));
+		window['MaterialBooking'].showModal();
+	};
+
 	// Delete
 	const [deleteItem, setDeleteItem] = useState({
 		itemId: null,
@@ -263,6 +290,11 @@ export default function Index() {
 				/>
 				<AgainstOrderTransfer
 					modalId={'MaterialTrxAgainstOrder'}
+					updateMaterialDetails={updateMaterialDetails}
+					setUpdateMaterialDetails={setUpdateMaterialDetails}
+				/>
+				<AddOrUpdateBooking
+					modalId={'MaterialBooking'}
 					updateMaterialDetails={updateMaterialDetails}
 					setUpdateMaterialDetails={setUpdateMaterialDetails}
 				/>

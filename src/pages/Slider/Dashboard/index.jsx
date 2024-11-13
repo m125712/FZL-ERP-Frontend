@@ -36,6 +36,13 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: true,
+				width: 'w-40',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'item_description',
 				header: 'Item Description',
 				enableColumnFilter: true,

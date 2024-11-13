@@ -238,7 +238,7 @@ export const useOtherSliderItem = () =>
 export const useOtherPackingListByOrderInfoUUID = (uuid) =>
 	createGlobalState({
 		queryKey: otherQK.deliveryPackingListByOrderInfoUUID(uuid),
-		url: `/other/delivery/packing-list-by-order-info/value/label/${uuid}`,
+		url: `/other/delivery/packing-list-by-order-info/value/label/${uuid}?received=true`,
 		enabled: !!uuid,
 	});
 

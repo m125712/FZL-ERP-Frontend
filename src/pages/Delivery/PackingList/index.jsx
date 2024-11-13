@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import {
 	useDeliveryPackingList,
+	useDeliveryPackingListByUUID,
 	useDeliveryPackingListDetailsByUUID,
 } from '@/state/Delivery';
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +21,9 @@ export default function Index() {
 	const navigate = useNavigate();
 	const { data, isLoading, url, deleteData, updateData } =
 		useDeliveryPackingList();
+	const { invalidateQuery: invalidateDeliveryPackingListByUUID } =
+		useDeliveryPackingListByUUID();
+
 	const info = new PageInfo('Packing List', url, 'delivery__packing_list');
 	const haveAccess = useAccess('delivery__packing_list');
 
@@ -230,6 +234,7 @@ export default function Index() {
 			},
 			isOnCloseNeeded: false,
 		});
+		invalidateDeliveryPackingListByUUID(data[idx]?.uuid);
 	};
 	//handle PDf
 

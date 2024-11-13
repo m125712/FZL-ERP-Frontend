@@ -9,7 +9,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess, useFetch, useRHF } from '@/hooks';
 
 import { ShowLocalToast } from '@/components/Toast';
-import { ActionButtons, DynamicField } from '@/ui';
+import {
+	ActionButtons,
+	DynamicField,
+	FormField,
+	ReactSelect,
+	SectionEntryBody,
+} from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -23,9 +29,20 @@ export default function Index() {
 	const [scannerActive, setScannerActive] = useState(true);
 	const navigate = useNavigate();
 	const haveAccess = useAccess('delivery__warehouse_recv');
+	const scan_option = [
+		{ value: 'warehouse_receive', label: 'Warehouse Receive' },
+		{ value: 'gate_pass', label: 'Gate Pass' },
+	];
 
-	const { handleSubmit, errors, reset, control, useFieldArray, getValues } =
-		useRHF(WAREHOUSE_RECEIVE_SCHEMA, WAREHOUSE_RECEIVE_NULL);
+	const {
+		handleSubmit,
+		errors,
+		reset,
+		control,
+		useFieldArray,
+		getValues,
+		Controller,
+	} = useRHF(WAREHOUSE_RECEIVE_SCHEMA, WAREHOUSE_RECEIVE_NULL);
 
 	const {
 		fields: EntryField,
@@ -38,27 +55,13 @@ export default function Index() {
 
 	const {
 		data: packetListData,
-		url,
+		isLoading,
 		updateData,
+		error,
 	} = useDeliveryPackingListByUUID(symbol);
 
 	const { invalidateQuery: invalidateDeliveryPackingList } =
 		useDeliveryPackingList();
-
-	// Handle focus management
-	// const maintainFocus = useCallback(
-	// 	(e) => {
-	// 		if (containerRef.current) {
-	// 			if (
-	// 				e.relatedTarget === null ||
-	// 				!e.relatedTarget.matches('input, select, textarea, button')
-	// 			) {
-	// 				containerRef.current.focus();
-	// 			}
-	// 		}
-	// 	},
-	// 	[containerRef]
-	// );
 
 	// Set initial focus
 	useEffect(() => {
@@ -71,38 +74,70 @@ export default function Index() {
 		if (!scannedSymbol) return;
 		setSymbol(scannedSymbol);
 	}, []);
-
+	// if (isLoading)
+	// 	return <span className='loading loading-dots loading-lg z-50' />;
 	// Handle packet list data
 	useEffect(() => {
+		// if (error) {
+		// 	ShowLocalToast({
+		// 		type: 'error',
+		// 		message: error,
+		// 	});
+		// }
 		if (packetListData) {
 			const currentEntries = getValues('entry') || [];
+			const challan = packetListData.challan_uuid;
+			console.log(challan, 'challan');
 			const isDuplicate = currentEntries.some(
 				(entry) =>
 					entry.packing_number === packetListData.packing_number
 			);
 			const isRecv = packetListData.is_warehouse_received;
-			if (!isDuplicate) {
-				EntryAppend({ ...packetListData });
-			} else if (isRecv) {
-				ShowLocalToast({
-					type: 'error',
-					message: 'This item has already been received',
-				});
-			} else {
+
+			if (isDuplicate) {
 				ShowLocalToast({
 					type: 'error',
 					message: 'This item has already been scanned',
 				});
+			} else {
+				if (getValues('option') === undefined) {
+					ShowLocalToast({
+						type: 'error',
+						message: 'Please select an option',
+					});
+				} else if (getValues('option') === 'warehouse_receive') {
+					if (isRecv) {
+						ShowLocalToast({
+							type: 'error',
+							message: 'This item has already been received',
+						});
+					} else {
+						EntryAppend({ ...packetListData });
+					}
+				} else {
+					if (challan === null) {
+						ShowLocalToast({
+							type: 'error',
+							message: 'This item does not have challan',
+						});
+					} else if (isRecv) {
+						EntryAppend({ ...packetListData });
+					} else {
+						ShowLocalToast({
+							type: 'error',
+							message: 'This item has not been received',
+						});
+					}
+				}
 			}
-			setSymbol(null);
 		}
-	}, [packetListData]);
+		setSymbol(null);
+	}, [packetListData, EntryAppend, getValues, error]);
 
 	useSymbologyScanner(handleSymbol, {
 		target: containerRef,
-
-		enabled: scannerActive, // Use the scannerActive state to control the scanner
-		eventOptions: { capture: true, passive: true },
+		enabled: scannerActive,
+		eventOptions: { capture: true, passive: false },
 		scannerOptions: {
 			maxDelay: 100,
 		},
@@ -132,6 +167,20 @@ export default function Index() {
 	);
 
 	const onSubmit = async (data) => {
+		if (data.option === 'gate_pass') {
+			await updateData.mutateAsync({
+				url: `/delivery/packing-list/${data?.uuid}`,
+				updatedData: {
+					gate_pass: true,
+					updated_at: GetDateTime(),
+				},
+				uuid: data.uuid,
+				isOnCloseNeeded: false,
+			});
+			reset(Object.assign({}, WAREHOUSE_RECEIVE_NULL));
+			invalidateDeliveryPackingList();
+			navigate(`/delivery/zipper-packing-list`);
+		}
 		try {
 			const updatablePackingListEntryPromises = getValues('entry').map(
 				async (item) => {
@@ -184,10 +233,10 @@ export default function Index() {
 		ignoreTags: ['input', 'select', 'textarea'],
 		ignoreEventsCondition: function () {},
 	});
-
-	const toggleScanner = () => {
-		setScannerActive((prev) => !prev);
-	};
+	// const toggleScanner = useCallback((e) => {
+	// 	e.stopPropagation(); // Prevent event bubbling
+	// 	setScannerActive((prev) => !prev);
+	// }, []);
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
@@ -196,9 +245,7 @@ export default function Index() {
 			ref={containerRef}
 			tabIndex={0}
 			onBlur={() => setScannerActive(false)}
-			onFocus={() => {
-				setIsInputFocused(true);
-			}}
+			onFocus={() => setScannerActive(true)}
 			className='min-h-screen p-4 outline-none'>
 			<div className='mb-4 flex items-center gap-4'>
 				<div
@@ -206,21 +253,48 @@ export default function Index() {
 					<div
 						className={`h-3 w-3 rounded-full ${scannerActive ? 'bg-success' : 'bg-error'}`}></div>
 					<span className='text-sm font-medium'>
-						Scanner {scannerActive ? 'Active' : 'Inactive'}
+						Scanner{' '}
+						{scannerActive
+							? 'Active'
+							: 'Inactive(Click this page to activate)'}
 					</span>
 				</div>
-				<input
-					onClick={toggleScanner}
-					className={`btn btn-sm ${scannerActive ? 'btn-error' : 'btn-success'}`}
-					value={scannerActive ? 'Disable Scanner' : 'Enable Scanner'}
-					type='button'
-				/>
 			</div>
+
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
 					className='mt-4 flex flex-col gap-4'>
+					<SectionEntryBody title='Details'>
+						<FormField
+							label='option'
+							title='Select Option'
+							errors={errors}>
+							<Controller
+								name='option'
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select Option'
+											options={scan_option}
+											value={scan_option?.find(
+												(item) =>
+													item.value ==
+													getValues('option')
+											)}
+											onChange={(e) => {
+												const value = e.value;
+												onChange(value);
+												containerRef.current.focus();
+											}}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+					</SectionEntryBody>
 					<DynamicField
 						title='Entry'
 						handelAppend={handelEntryAppend}
@@ -275,7 +349,8 @@ export default function Index() {
 										removeClick={() =>
 											handleEntryRemove(index)
 										}
-										showRemoveButton={EntryField.length > 1}
+										showDuplicateButton={false}
+										showRemoveButton={EntryField.length > 0}
 									/>
 								</td>
 							</tr>
@@ -285,6 +360,7 @@ export default function Index() {
 					<div className='modal-action'>
 						<button
 							type='submit'
+							disabled={getValues('entry').length < 1}
 							className='text-md btn btn-primary btn-block'>
 							Save
 						</button>

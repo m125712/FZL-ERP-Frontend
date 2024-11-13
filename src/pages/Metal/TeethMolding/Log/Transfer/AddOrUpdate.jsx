@@ -93,7 +93,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `/zipper/sfg-transaction/${updateTeethMoldingLog?.uuid}`,
+				url: `/zipper/finishing-batch-transaction/${updateTeethMoldingLog?.uuid}`,
 				updatedData,
 				onClose,
 			});

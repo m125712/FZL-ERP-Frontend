@@ -51,6 +51,20 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'batch_number',
+				header: 'Barch No.',
+				cell: (info) => {
+					const { order_number } = info.row.original;
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={order_number}
+							uri='/order/details'
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'order_number',
 				header: 'O/N',
 				cell: (info) => {
@@ -149,20 +163,14 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'order_quantity',
+				accessorKey: 'batch_quantity',
 				header: (
 					<span>
-						Ordered
+						batch
 						<br />
 						QTY (PCS)
 					</span>
 				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'swatch_approved_quantity',
-				header: 'Approved QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

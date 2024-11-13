@@ -25,6 +25,23 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'batch_number',
+				header: 'Batch No.',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => {
+					const { finishing_batch_uuid } = info.row.original;
+
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={finishing_batch_uuid}
+							uri={`/dyeing-and-iron/finishing-batch`}
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'order_number',
 				header: 'O/N',
 				cell: (info) => {
@@ -132,10 +149,10 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'order_quantity',
+				accessorKey: 'batch_quantity',
 				header: (
 					<span>
-						Ordered
+						Batch
 						<br />
 						QTY (PCS)
 					</span>

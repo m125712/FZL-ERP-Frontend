@@ -73,7 +73,7 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			sfg_uuid: updateFinishingTRX?.sfg_uuid,
+			finishing_batch_entry_uuid: updateFinishingTRX?.finishing_batch_entry_uuid,
 			trx_quantity_in_kg: 0,
 			trx_from: 'finishing_prod',
 			trx_to: 'warehouse',
@@ -82,7 +82,7 @@ export default function Index({
 		};
 
 		await postData.mutateAsync({
-			url: '/zipper/sfg-transaction',
+			url: '/zipper/finishing-batch-transaction',
 			newData: updatedData,
 			onClose,
 		});

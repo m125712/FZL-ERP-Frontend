@@ -1084,6 +1084,7 @@ export const otherQK = {
 	order: () => [...otherQK.all(), 'order'],
 	orderPackingList: () => [...otherQK.all(), 'order-packing-list'],
 	orderDescription: () => [...otherQK.all(), 'order-description'],
+	orderBatchDescription: () => [...otherQK.all(), 'order-batch-description'],
 	orderEntry: () => [...otherQK.all(), 'order-entry'],
 	orderDescriptionByOrderNumber: (orderNumber) => [
 		...otherQK.all(),

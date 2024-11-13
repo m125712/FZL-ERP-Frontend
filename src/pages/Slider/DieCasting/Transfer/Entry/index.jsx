@@ -14,7 +14,7 @@ import { useRHF } from '@/hooks';
 
 import TableNoData from '@/components/Table/_components/TableNoData';
 import { ShowLocalToast } from '@/components/Toast';
-import { CheckBoxWithoutLabel, DynamicField, Input } from '@/ui';
+import { DynamicField, Input } from '@/ui';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
@@ -82,8 +82,10 @@ const Index = () => {
 	const { invalidateQuery: invalidateQueryOrder } =
 		useSliderDieCastingTransferAgainstOrder();
 	const { invalidateQuery: invalidateQueryInfo } = useSliderDashboardInfo();
-	const { invalidateQuery: invalidateColoringProdQuery } = useSliderColoringProduction();
-	const { invalidateQuery: invalidateProdQuery } = useSliderAssemblyProduction();
+	const { invalidateQuery: invalidateColoringProdQuery } =
+		useSliderColoringProduction();
+	const { invalidateQuery: invalidateProdQuery } =
+		useSliderAssemblyProduction();
 	const {
 		register,
 		handleSubmit,
@@ -110,7 +112,7 @@ const Index = () => {
 		const created_at = GetDateTime();
 
 		const batch_entry = [...data?.stocks]
-			.filter((item) => item.is_checked)
+			.filter((item) => item.assigned_quantity > 0)
 			.map((item) => ({
 				uuid: nanoid(),
 				die_casting_uuid: item.uuid,
@@ -203,49 +205,6 @@ const Index = () => {
 		);
 	}, [stocks, watch('section')]);
 
-	const [isAllChecked, setIsAllChecked] = useState(false);
-	const [isSomeChecked, setIsSomeChecked] = useState(false);
-
-	useEffect(() => {
-		if (isAllChecked || isSomeChecked) {
-			return stockFields.forEach((item, index) => {
-				if (isAllChecked) {
-					setValue(`stocks[${index}].is_checked`, true);
-				}
-			});
-		}
-		if (!isAllChecked) {
-			return stockFields.forEach((item, index) => {
-				setValue('is_all_checked', false);
-				setValue(`stocks[${index}].is_checked`, false);
-			});
-		}
-	}, [isAllChecked]);
-
-	const handleRowChecked = (e, index) => {
-		const isChecked = e.target.checked;
-		setValue(`stocks[${index}].is_checked`, isChecked);
-
-		let isEveryChecked = true,
-			isSomeChecked = false;
-
-		for (let item of watch('stocks')) {
-			if (item.is_checked) {
-				isSomeChecked = true;
-			} else {
-				isEveryChecked = false;
-				setValue('is_all_checked', false);
-			}
-
-			if (isSomeChecked && !isEveryChecked) {
-				break;
-			}
-		}
-
-		setIsAllChecked(isEveryChecked);
-		setIsSomeChecked(isSomeChecked);
-	};
-
 	const rowClass =
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 	const thClass =
@@ -253,7 +212,6 @@ const Index = () => {
 
 	const allowedTypes = ['body', 'cap', 'puller', 'link'];
 
-	console.log(getValues());
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}
@@ -272,23 +230,6 @@ const Index = () => {
 				title={`Entry Details`}
 				tableHead={
 					<>
-						<th
-							key='is_all_checked'
-							scope='col'
-							className={cn(thClass, 'w-20')}>
-							<CheckBoxWithoutLabel
-								label='is_all_checked'
-								checked={isAllChecked}
-								onChange={(e) => {
-									setIsAllChecked(e.target.checked);
-									setIsSomeChecked(e.target.checked);
-								}}
-								{...{
-									register,
-									errors,
-								}}
-							/>
-						</th>
 						{[
 							'Name',
 							'Item Name',
@@ -321,22 +262,6 @@ const Index = () => {
 					stockFields?.map((item, index) => {
 						return (
 							<tr key={item.id}>
-								<td className={cn(`w-8 ${rowClass}`)}>
-									<CheckBoxWithoutLabel
-										label={`stocks[${index}].is_checked`}
-										checked={watch(
-											`stocks[${index}].is_checked`
-										)}
-										onChange={(e) =>
-											handleRowChecked(e, index)
-										}
-										{...{
-											register,
-											errors,
-										}}
-									/>
-								</td>
-
 								{/*  Name */}
 								<td className={cn('w-[150px]', rowClass)}>
 									<span>{item.name}</span>

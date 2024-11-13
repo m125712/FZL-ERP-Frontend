@@ -78,7 +78,7 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			sfg_uuid: updateTeethMoldingProd?.sfg_uuid,
+			finishing_batch_entry_uuid: updateTeethMoldingProd?.finishing_batch_entry_uuid,
 			dyed_tape_used_in_kg:
 				updateTeethMoldingProd.tape_stock - data.remaining_dyed_tape,
 			section: 'teeth_molding',
@@ -87,7 +87,7 @@ export default function Index({
 		};
 
 		await postData.mutateAsync({
-			url: '/zipper/sfg-production',
+			url: '/zipper/finishing-batch-production',
 			newData: updatedData,
 			onClose,
 		});

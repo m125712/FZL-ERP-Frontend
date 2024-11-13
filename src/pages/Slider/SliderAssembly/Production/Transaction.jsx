@@ -2,6 +2,7 @@ import { useAuth } from '@/context/auth';
 import {
 	useSliderAssemblyProduction,
 	useSliderAssemblyTransferEntry,
+	useSliderColoringProduction,
 } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
@@ -32,6 +33,8 @@ export default function Index({
 }) {
 	const { postData, url } = useSliderAssemblyTransferEntry();
 	const { invalidateQuery } = useSliderAssemblyProduction();
+	const { invalidateQuery: invalidateVislonFinishingProdLog } =
+		useSliderColoringProduction();
 	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
@@ -83,6 +86,7 @@ export default function Index({
 		});
 
 		invalidateQuery();
+		invalidateVislonFinishingProdLog();
 	};
 
 	return (

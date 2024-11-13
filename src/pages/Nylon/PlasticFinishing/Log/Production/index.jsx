@@ -24,8 +24,25 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'batch_number',
+				header: 'Batch No.',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => {
+					const { finishing_batch_uuid } = info.row.original;
+
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={finishing_batch_uuid}
+							uri={`/dyeing-and-iron/finishing-batch`}
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'order_number',
-				header: 'O/N',
+				header: 'O/N',enableColumnFilter: true,
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					return (
@@ -40,7 +57,7 @@ export default function Index() {
 			{
 				accessorKey: 'item_description',
 				header: 'Item Description',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => {
 					const { order_description_uuid, order_number } =
 						info.row.original;
@@ -204,7 +221,7 @@ export default function Index() {
 						deleteItem,
 						setDeleteItem,
 						deleteData,
-						url: '/zipper/sfg-production',
+						url: '/zipper/finishing-batch-production',
 					}}
 				/>
 			</Suspense>

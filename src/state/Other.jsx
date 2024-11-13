@@ -96,6 +96,14 @@ export const useOtherOrderDescription = (params) =>
 			: '/other/order/description/value/label',
 	});
 
+export const useOtherOrderBatchDescription = (params) =>
+	createGlobalState({
+		queryKey: otherQK.orderBatchDescription(),
+		url: params
+			? `/other/zipper/finishing-batch/value/label?${params}`
+			: '/other/zipper/finishing-batch/value/label',
+	});
+
 // GET OTHER ORDER PROPERTIES BY TYPE NAME
 export const useOtherOrderPropertiesByTypeName = (name) =>
 	createGlobalState({

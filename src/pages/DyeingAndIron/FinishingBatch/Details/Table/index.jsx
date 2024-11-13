@@ -4,6 +4,8 @@ import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, LinkWithCopy } from '@/ui';
 
 export default function Table({ entries }) {
+	const total_qty = entries.reduce((a, b) => a + b.quantity, 0);
+
 	const columns = useMemo(
 		() => [
 			{
@@ -77,8 +79,16 @@ export default function Table({ entries }) {
 			<ReactTableTitleOnly
 				title='Finishing Batch Details'
 				data={entries}
-				columns={columns}
-			/>
+				columns={columns}>
+				<tr>
+					<td></td>
+					<td></td>
+					<td className='px-4 py-2 text-sm'>Total:</td>
+					<td className='px-4 py-2 text-sm' colSpan='4'>
+						{total_qty}
+					</td>
+				</tr>
+			</ReactTableTitleOnly>
 		</div>
 	);
 }

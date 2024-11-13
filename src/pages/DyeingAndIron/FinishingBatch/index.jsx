@@ -83,6 +83,13 @@ export default function index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'order_type',
+				header: 'Type',
+				enableColumnFilter: false,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'slider_lead_time',
 				header: 'Slider Lead Time',
 				enableColumnFilter: false,

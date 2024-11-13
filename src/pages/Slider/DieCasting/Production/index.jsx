@@ -52,6 +52,12 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'batch_number',
+				header: 'Batch No.',
+				enableColumnFilter: true,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'order_number',
 				header: 'O/N',
 				width: 'w-40',
@@ -63,84 +69,6 @@ export default function Index() {
 				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'item_name',
-			// 	header: 'Item',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'zipper_number_name',
-			// 	header: 'Zipper Number',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'end_type_name',
-			// 	header: 'End Type',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'lock_type_name',
-			// 	header: 'Lock Type',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'puller_type_name',
-			// 	header: 'Puller Type',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'puller_color_name',
-			// 	header: 'Puller Color',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'slider_name',
-			// 	header: 'Slider',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'slider_body_shape_name',
-			// 	header: 'Slider Body Shape',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'slider_link_name',
-			// 	header: 'Slider Link',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'coloring_type_name',
-			// 	header: 'Coloring Type',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'logo_type_name',
-			// 	header: 'Logo Type',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'logo_is_body',
-			// 	header: 'Logo Body',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'logo_is_puller',
-			// 	header: 'Logo Puller',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'mc_no',
 				header: 'M/C',

@@ -1,5 +1,9 @@
 import { useAuth } from '@/context/auth';
-import { useMetalTCProduction, useMetalTCProductionLog } from '@/state/Metal';
+import {
+	useMetalFProduction,
+	useMetalTCProduction,
+	useMetalTCProductionLog,
+} from '@/state/Metal';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
@@ -31,6 +35,8 @@ export default function Index({
 }) {
 	const { postData } = useMetalTCProduction();
 	const { invalidateQuery } = useMetalTCProductionLog();
+	const { invalidateQuery: invalidateNylonFinishingProdLog } =
+		useMetalFProduction();
 	const { user } = useAuth();
 
 	const MAX_PROD_PCS = Math.min(
@@ -38,21 +44,17 @@ export default function Index({
 		Number(updateTeethColoringProd.teeth_coloring_stock)
 	);
 
-	const { register, handleSubmit, errors, reset, watch, control, context } =
-		useRHF(
-			{
-				...SFG_PRODUCTION_SCHEMA_IN_PCS,
-				production_quantity:
-					SFG_PRODUCTION_SCHEMA_IN_PCS.production_quantity.max(
-						MAX_PROD_PCS,
-						'Beyond max quantity'
-					),
-			},
-			SFG_PRODUCTION_SCHEMA_IN_PCS_NULL
-		);
-	const MAX_WASTAGE_KG = Number(
-		MAX_PROD_PCS - (watch('production_quantity') || 0)
-	).toFixed(3);
+	const { register, handleSubmit, errors, reset, control, context } = useRHF(
+		{
+			...SFG_PRODUCTION_SCHEMA_IN_PCS,
+			production_quantity:
+				SFG_PRODUCTION_SCHEMA_IN_PCS.production_quantity.max(
+					MAX_PROD_PCS,
+					'Beyond max quantity'
+				),
+		},
+		SFG_PRODUCTION_SCHEMA_IN_PCS_NULL
+	);
 
 	const onClose = () => {
 		setUpdateTeethColoringProd((prev) => ({
@@ -75,7 +77,8 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			sfg_uuid: updateTeethColoringProd?.sfg_uuid,
+			finishing_batch_entry_uuid:
+				updateTeethColoringProd?.finishing_batch_entry_uuid,
 			section: 'teeth_coloring',
 			production_quantity_in_kg: 0,
 			created_by: user?.uuid,
@@ -83,12 +86,13 @@ export default function Index({
 		};
 
 		await postData.mutateAsync({
-			url: '/zipper/sfg-production',
+			url: '/zipper/finishing-batch-production',
 			newData: updatedData,
 			onClose,
 		});
 
 		invalidateQuery();
+		invalidateNylonFinishingProdLog();
 		return;
 	};
 

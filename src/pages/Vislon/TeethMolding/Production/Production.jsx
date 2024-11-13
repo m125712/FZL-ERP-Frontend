@@ -70,14 +70,14 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			sfg_uuid: updateTeethMoldingProd?.sfg_uuid,
+			finishing_batch_entry_uuid: updateTeethMoldingProd?.finishing_batch_entry_uuid,
 			section: 'teeth_molding',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
 		};
 
 		await postData.mutateAsync({
-			url: '/zipper/sfg-production',
+			url: '/zipper/finishing-batch-production',
 			newData: updatedData,
 			onClose,
 		});

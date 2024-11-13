@@ -84,7 +84,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `/zipper/sfg-transaction/${updateTeethColoringLog?.uuid}`,
+				url: `/zipper/finishing-batch-transaction/${updateTeethColoringLog?.uuid}`,
 				updatedData,
 				onClose,
 			});

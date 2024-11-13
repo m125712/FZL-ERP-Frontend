@@ -1,5 +1,9 @@
 import { useAuth } from '@/context/auth';
-import { useMetalTMProduction, useMetalTMTrxLog } from '@/state/Metal';
+import {
+	useMetalTCProduction,
+	useMetalTMProduction,
+	useMetalTMTrxLog,
+} from '@/state/Metal';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
@@ -38,6 +42,9 @@ export default function Index({
 }) {
 	const { postData } = useMetalTMProduction();
 	const { invalidateQuery } = useMetalTMTrxLog();
+	const { invalidateQuery: invalidateMetalTCProduction } =
+		useMetalTCProduction();
+
 	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
@@ -75,7 +82,8 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			sfg_uuid: updateTeethMoldingTRX?.sfg_uuid,
+			finishing_batch_entry_uuid:
+				updateTeethMoldingTRX?.finishing_batch_entry_uuid,
 			trx_quantity_in_kg: 0,
 			trx_from: 'teeth_molding_prod',
 			trx_to: 'teeth_coloring_stock',
@@ -84,12 +92,13 @@ export default function Index({
 		};
 
 		await postData.mutateAsync({
-			url: '/zipper/sfg-transaction',
+			url: '/zipper/finishing-batch-transaction',
 			newData: updatedData,
 			onClose,
 		});
 
 		invalidateQuery();
+		invalidateMetalTCProduction();
 		return;
 	};
 

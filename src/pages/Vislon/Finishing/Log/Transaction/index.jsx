@@ -209,7 +209,7 @@ export default function Index() {
 					setDeleteItem={setDeleteItem}
 					deleteData={deleteData}
 					invalidateQuery={invalidateQuery}
-					url={`/zipper/sfg-transaction`}
+					url={`/zipper/finishing-batch-transaction`}
 				/>
 			</Suspense>
 		</div>

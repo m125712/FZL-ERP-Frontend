@@ -48,8 +48,26 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'batch_number',
+				header: 'Batch No.',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => {
+					const { finishing_batch_uuid } = info.row.original;
+
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={finishing_batch_uuid}
+							uri={`/dyeing-and-iron/finishing-batch`}
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'order_number',
 				header: 'O/N',
+				enableColumnFilter: true,
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					return (
@@ -61,10 +79,10 @@ export default function Index() {
 					);
 				},
 			},
-			,
 			{
 				accessorKey: 'item_description',
 				header: 'Item Dsc',
+				enableColumnFilter: true,
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -155,20 +173,14 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'order_quantity',
+				accessorKey: 'batch_quantity',
 				header: (
 					<span>
-						Ordered
+						Batch
 						<br />
 						QTY (PCS)
 					</span>
 				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'swatch_approved_quantity',
-				header: 'Approved QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

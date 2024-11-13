@@ -84,7 +84,7 @@ export default function Index({
 		};
 
 		await postData.mutateAsync({
-			url: '/zipper/sfg-transaction',
+			url: '/zipper/finishing-batch-transaction',
 			newData: updatedData,
 			onClose,
 		});

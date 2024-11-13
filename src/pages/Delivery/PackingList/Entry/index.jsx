@@ -2,6 +2,7 @@ import { Suspense, useEffect, useState } from 'react';
 import {
 	useDeliveryPackingList,
 	useDeliveryPackingListByOrderInfoUUID,
+	useDeliveryPackingListByUUID,
 	useDeliveryPackingListDetailsByUUID,
 	useDeliveryPackingListEntry,
 } from '@/state/Delivery';
@@ -65,9 +66,8 @@ export default function Index() {
 		});
 
 	const { data: packingListEntries } = useDeliveryPackingListByOrderInfoUUID(
-		watch('order_info_uuid')
+		watch('order_info_uuid') 
 	);
-
 	useEffect(() => {
 		if (!isUpdate && packingListEntries?.packing_list_entry) {
 			setValue(

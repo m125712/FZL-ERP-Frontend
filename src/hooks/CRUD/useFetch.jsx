@@ -118,9 +118,9 @@ const useFetchForRhfResetForUserAccess = (url, returnId, reset) => {
 		if (returnId === null) return;
 
 		api.get(url).then((res) => {
-			const data = res?.data?.data[0];
+			const data = res?.data?.data;
 			const result = {};
-
+			
 			Object.entries(data)?.forEach(([key, value]) => {
 				const val = JSON.parse(value);
 

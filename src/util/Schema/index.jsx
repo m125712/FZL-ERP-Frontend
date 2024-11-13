@@ -3168,3 +3168,15 @@ export const POLY_NULL = {
 	quantity: null,
 	remarks: '',
 };
+
+export const WAREHOUSE_RECEIVE_SCHEMA = {
+	option: STRING_REQUIRED,
+	entry: yup.array().of(
+		yup.object().shape({
+			remarks: STRING.nullable(),
+		})
+	),
+};
+export const WAREHOUSE_RECEIVE_NULL = {
+	entry: [],
+};

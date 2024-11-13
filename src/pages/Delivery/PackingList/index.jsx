@@ -1,23 +1,19 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
-import { useDeliveryPackingList, useDeliveryPackingListDetailsByUUID } from '@/state/Delivery';
+import {
+	useDeliveryPackingList,
+	useDeliveryPackingListByUUID,
+	useDeliveryPackingListDetailsByUUID,
+} from '@/state/Delivery';
 import { useNavigate } from 'react-router-dom';
 import { useAccess, useFetch } from '@/hooks';
-
-
 
 import Pdf2 from '@/components/Pdf/PackingListSticker';
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
-
-
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
-
-
-
-
 
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
@@ -25,6 +21,9 @@ export default function Index() {
 	const navigate = useNavigate();
 	const { data, isLoading, url, deleteData, updateData } =
 		useDeliveryPackingList();
+	const { invalidateQuery: invalidateDeliveryPackingListByUUID } =
+		useDeliveryPackingListByUUID();
+
 	const info = new PageInfo('Packing List', url, 'delivery__packing_list');
 	const haveAccess = useAccess('delivery__packing_list');
 
@@ -156,18 +155,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'carton_weight',
-				header: 'Carton Weight',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'carton_weight',
-				header: 'Carton Weight',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'count',
 				header: 'Count',
 				enableColumnFilter: false,
@@ -247,6 +234,7 @@ export default function Index() {
 			},
 			isOnCloseNeeded: false,
 		});
+		invalidateDeliveryPackingListByUUID(data[idx]?.uuid);
 	};
 	//handle PDf
 

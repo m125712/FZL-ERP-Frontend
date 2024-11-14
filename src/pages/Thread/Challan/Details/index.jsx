@@ -38,7 +38,7 @@ export default function Index() {
 				className='h-[40rem] w-full rounded-md border-none'
 			/>
 			<Information challan={data} />
-			<Table challan={data?.challan_entry} />
+			<Table challan={data?.batch_entry} />
 		</div>
 	);
 }

@@ -1,3 +1,5 @@
+import JsBarcode from 'jsbarcode';
+
 export function generateBarcodeAsBase64(text, value) {
 	const canvas = document.createElement('canvas');
 	JsBarcode(canvas, value, {

@@ -10,6 +10,7 @@ import { DateTime, EditDelete } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
+import { useOtherCarton } from '@/state/Other';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
@@ -17,7 +18,8 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const { data, isLoading, url, deleteData, updateData } =
 		useDeliveryCarton();
-
+	const { invalidateQuery: invalidateQueryCartonLabelValue } =
+		useOtherCarton();
 	const info = new PageInfo('Delivery Carton', url, 'delivery__carton');
 	const haveAccess = useAccess('delivery__carton');
 
@@ -186,6 +188,7 @@ export default function Index() {
 					setDeleteItem={setDeleteItem}
 					url={url}
 					deleteData={deleteData}
+					invalidateQueryArray={[invalidateQueryCartonLabelValue()]}
 				/>
 			</Suspense>
 		</div>

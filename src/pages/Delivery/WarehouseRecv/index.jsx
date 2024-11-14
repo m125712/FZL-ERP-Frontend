@@ -58,6 +58,7 @@ export default function Index() {
 		isLoading,
 		updateData,
 		error,
+		refetch,
 	} = useDeliveryPackingListByUUID(symbol);
 
 	const { invalidateQuery: invalidateDeliveryPackingList } =
@@ -84,7 +85,12 @@ export default function Index() {
 		// 		message: error,
 		// 	});
 		// }
-		if (packetListData) {
+		if (getValues('option') === undefined && symbol) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Please select an option',
+			});
+		} else if (packetListData) {
 			const currentEntries = getValues('entry') || [];
 			const challan = packetListData.challan_uuid;
 			const isDuplicate = currentEntries.some(
@@ -99,12 +105,7 @@ export default function Index() {
 					message: 'This item has already been scanned',
 				});
 			} else {
-				if (getValues('option') === undefined) {
-					ShowLocalToast({
-						type: 'error',
-						message: 'Please select an option',
-					});
-				} else if (getValues('option') === 'warehouse_receive') {
+				if (getValues('option') === 'warehouse_receive') {
 					if (isRecv) {
 						ShowLocalToast({
 							type: 'error',
@@ -129,9 +130,15 @@ export default function Index() {
 					}
 				}
 			}
+			return;
+		} else if (!packetListData && symbol && !isLoading) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'No packet list found',
+			});
 		}
 		setSymbol(null);
-	}, [packetListData, EntryAppend, getValues, error]);
+	}, [packetListData, EntryAppend, getValues, error, symbol, refetch]);
 
 	useSymbologyScanner(handleSymbol, {
 		target: containerRef,
@@ -359,7 +366,7 @@ export default function Index() {
 					<div className='modal-action'>
 						<button
 							type='submit'
-							disabled={getValues('entry').length < 1}
+							disabled={getValues('entry').length < 1||isLoading}
 							className='text-md btn btn-primary btn-block'>
 							Save
 						</button>

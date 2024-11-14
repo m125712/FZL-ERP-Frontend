@@ -72,7 +72,6 @@ export default function Index() {
 		}
 	}, [packingListEntry, isUpdate]);
 
-	console.log(challan);
 	useEffect(() => {
 		if (isUpdate && watch('new_packing_list_uuids')?.length === 0) {
 			setValue('new_challan_entry', []);
@@ -488,6 +487,7 @@ export default function Index() {
 					url={`/delivery/remove-challan-entry-by`}
 					deleteData={deleteChallanEntry}
 					onSuccess={invalidateDetails}
+					invalidateQuery={invalidateDetails}
 				/>
 			</Suspense>
 

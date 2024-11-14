@@ -4,6 +4,7 @@
  ** https://tkdodo.eu/blog/leveraging-the-query-function-context#query-key-factories
  **/
 
+import { all } from 'axios';
 import { useDeliveryThreadDashboard } from './Delivery';
 
 export const orderQK = {
@@ -1380,3 +1381,13 @@ export const reportQK = {
 	// Delivery Statement
 	deliveryStatement: () => [...reportQK.all(), 'delivery-statement-report'],
 };
+
+export const marketingQK = {
+	all: () => ['marketing'],
+
+	// * Teams
+	getTeams: () => [...marketingQK.all(), 'teams'],
+
+	getTeamDetails: (uuid) => [...marketingQK.all(), 'teams', 'details', uuid],
+	
+}

@@ -3192,3 +3192,26 @@ export const WAREHOUSE_RECEIVE_SCHEMA = {
 export const WAREHOUSE_RECEIVE_NULL = {
 	entry: [],
 };
+
+// * Marketing * //
+// Marketing Team
+
+export const MARKETING_TEAM_SCHEMA = {
+	name: STRING_REQUIRED,
+	remarks: STRING.nullable(),
+
+	marketing_team_entry: yup.array().of(
+		yup.object().shape({
+			marketing_uuid: STRING_REQUIRED,
+			is_team_leader: BOOLEAN_DEFAULT_VALUE(false),
+			remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const MARKETING_TEAM_NULL = {
+	uuid: null,
+	name: '',
+	remarks: '',
+	marketing_team_entry: [],
+};

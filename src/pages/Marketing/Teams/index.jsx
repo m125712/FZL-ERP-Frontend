@@ -1,8 +1,9 @@
-import { useEffect, useMemo } from 'react';
-import { useCommercialManualPI } from '@/state/Commercial';
+import { Suspense, useEffect, useMemo, useState } from 'react';
+import { useMarketingTeams } from '@/state/Marketing';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
+import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
@@ -11,7 +12,7 @@ import PageInfo from '@/util/PageInfo';
 export default function Index() {
 	const navigate = useNavigate();
 	const haveAccess = useAccess('marketing__teams');
-	const { data, isLoading, url } = useCommercialManualPI();
+	const { data, isLoading, url, deleteData } = useMarketingTeams();
 	const info = new PageInfo('Teams', url, 'marketing__teams');
 
 	useEffect(() => {
@@ -21,8 +22,8 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'team_number',
-				header: 'Team Id.',
+				accessorKey: 'name',
+				header: 'Team name',
 				enableColumnFilter: true,
 				width: 'w-36',
 				cell: (info) => {
@@ -35,13 +36,6 @@ export default function Index() {
 						/>
 					);
 				},
-			},
-			{
-				accessorKey: 'team_name',
-				header: 'Name',
-				width: 'w-28',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_by_name',
@@ -74,13 +68,17 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
 				width: 'w-24',
 				cell: (info) => (
 					<EditDelete
 						idx={info.row.index}
 						handelUpdate={handelUpdate}
-						showDelete={false}
+						handelDelete={handelDelete}
+						showDelete={haveAccess.includes('delete')}
+						showUpdate={haveAccess.includes('update')}
 					/>
 				),
 			},
@@ -95,6 +93,16 @@ export default function Index() {
 		navigate(`/marketing/teams/${uuid}/update`);
 	};
 
+	const [deleteItem, setDeleteItem] = useState({});
+
+	const handelDelete = (idx) => {
+		setDeleteItem(() => ({
+			itemId: data[idx].uuid,
+			itemName: data[idx].name,
+		}));
+		window[info.getDeleteModalId()].showModal();
+	};
+
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
@@ -107,6 +115,19 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				handelAdd={handelAdd}
 			/>
+
+			<Suspense>
+				<DeleteModal
+					modalId={info.getDeleteModalId()}
+					title={info.getTitle()}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url,
+						deleteData,
+					}}
+				/>
+			</Suspense>
 		</div>
 	);
 }

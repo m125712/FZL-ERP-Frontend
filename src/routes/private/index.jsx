@@ -7,6 +7,7 @@ import { HrRoutes } from './Hr';
 import { IssueRoutes } from './Issue';
 import { LabDipRoutes } from './LabDip';
 import { LibraryRoutes } from './Library';
+import { MarketingRoutes } from './Marketing';
 import { MetalRoutes } from './Metal';
 import { NylonRoutes } from './Nylon';
 import { OrderRoutes } from './Order';
@@ -34,6 +35,7 @@ const privateRoutes = [
 	...HrRoutes,
 	...LibraryRoutes,
 	...IssueRoutes,
+	...MarketingRoutes,
 ];
 
 export default privateRoutes;

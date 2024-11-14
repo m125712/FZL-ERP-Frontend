@@ -29,6 +29,7 @@ export default function Index() {
 	const [scannerActive, setScannerActive] = useState(true);
 	const navigate = useNavigate();
 	const haveAccess = useAccess('delivery__warehouse_recv');
+
 	const scan_option = [
 		{ value: 'warehouse_receive', label: 'Warehouse Receive' },
 		{ value: 'gate_pass', label: 'Gate Pass' },
@@ -64,7 +65,6 @@ export default function Index() {
 	const { invalidateQuery: invalidateDeliveryPackingList } =
 		useDeliveryPackingList();
 
-	// Set initial focus
 	useEffect(() => {
 		if (containerRef.current) {
 			containerRef.current.focus();
@@ -75,78 +75,76 @@ export default function Index() {
 		if (!scannedSymbol) return;
 		setSymbol(scannedSymbol);
 	}, []);
-	// if (isLoading)
-	// 	return <span className='loading loading-dots loading-lg z-50' />;
-	// Handle packet list data
-	useEffect(() => {
-		// if (error) {
-		// 	ShowLocalToast({
-		// 		type: 'error',
-		// 		message: error,
-		// 	});
-		// }
-		if (getValues('option') === undefined && symbol) {
-			ShowLocalToast({
-				type: 'error',
-				message: 'Please select an option',
+	
+	const handlePacketScan = async (selectedOption) => {
+		const waitForLoading = () => {
+			return new Promise((resolve) => {
+				if (!isLoading) {
+					resolve(true);
+					return;
+				}
 			});
-		} else if (packetListData) {
+		};
+
+		try {
+			await waitForLoading();
+			if (error) {
+				throw new Error(error);
+			}
+			if (!selectedOption) {
+				throw new Error('Please select an option');
+			}
+
+			if (!packetListData) {
+				throw new Error('No packet list found');
+			}
+
 			const currentEntries = getValues('entry') || [];
-			const challan = packetListData.challan_uuid;
 			const isDuplicate = currentEntries.some(
 				(entry) =>
 					entry.packing_number === packetListData.packing_number
 			);
-			const isRecv = packetListData.is_warehouse_received;
 
 			if (isDuplicate) {
+				throw new Error('This item has already been scanned');
+			}
+
+			if (selectedOption === 'warehouse_receive') {
+				if (packetListData.is_warehouse_received) {
+					throw new Error('This item has already been received');
+				}
+				return packetListData;
+			}
+		} catch (error) {
+			throw error;
+		}
+	};
+
+	useEffect(() => {
+		if (!symbol) return;
+
+		const selectedOption = getValues('option');
+
+		handlePacketScan(selectedOption)
+			.then((data) => {
+				EntryAppend({ ...data });
+			})
+			.catch((error) => {
 				ShowLocalToast({
 					type: 'error',
-					message: 'This item has already been scanned',
+					message: error.message,
 				});
-			} else {
-				if (getValues('option') === 'warehouse_receive') {
-					if (isRecv) {
-						ShowLocalToast({
-							type: 'error',
-							message: 'This item has already been received',
-						});
-					} else {
-						EntryAppend({ ...packetListData });
-					}
-				} else {
-					if (challan === null) {
-						ShowLocalToast({
-							type: 'error',
-							message: 'This item does not have challan',
-						});
-					} else if (isRecv) {
-						EntryAppend({ ...packetListData });
-					} else {
-						ShowLocalToast({
-							type: 'error',
-							message: 'This item has not been received',
-						});
-					}
-				}
-			}
-			return;
-		} else if (!packetListData && symbol && !isLoading) {
-			ShowLocalToast({
-				type: 'error',
-				message: 'No packet list found',
+			})
+			.finally(() => {
+				setSymbol(null);
 			});
-		}
-		setSymbol(null);
-	}, [packetListData, EntryAppend, getValues, error, symbol, refetch]);
+	}, [packetListData, EntryAppend, getValues, symbol, isLoading]);
 
 	useSymbologyScanner(handleSymbol, {
 		target: containerRef,
 		enabled: scannerActive,
 		eventOptions: { capture: true, passive: false },
-		scannerOptions: {
-			maxDelay: 100,
-		},
+		scannerOptions: { maxDelay: 100 },
 	});
 
 	const handelEntryAppend = () => {
@@ -173,29 +171,14 @@ export default function Index() {
 	);
 
 	const onSubmit = async (data) => {
-		if (data.option === 'gate_pass') {
-			await updateData.mutateAsync({
-				url: `/delivery/packing-list/${data?.uuid}`,
-				updatedData: {
-					gate_pass: true,
-					updated_at: GetDateTime(),
-				},
-				uuid: data.uuid,
-				isOnCloseNeeded: false,
-			});
-			reset(Object.assign({}, WAREHOUSE_RECEIVE_NULL));
-			invalidateDeliveryPackingList();
-			navigate(`/delivery/zipper-packing-list`);
-		}
 		try {
-			const updatablePackingListEntryPromises = getValues('entry').map(
+			const updatablePackingListEntryPromises = data.entry.map(
 				async (item) => {
 					if (item.uuid) {
 						const updatedData = {
 							is_warehouse_received: true,
 							updated_at: GetDateTime(),
 						};
-
 						return await updateData.mutateAsync({
 							url: `/delivery/packing-list/${item?.uuid}`,
 							updatedData: updatedData,
@@ -239,10 +222,7 @@ export default function Index() {
 		ignoreTags: ['input', 'select', 'textarea'],
 		ignoreEventsCondition: function () {},
 	});
-	// const toggleScanner = useCallback((e) => {
-	// 	e.stopPropagation(); // Prevent event bubbling
-	// 	setScannerActive((prev) => !prev);
-	// }, []);
+
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
@@ -253,6 +233,11 @@ export default function Index() {
 			onBlur={() => setScannerActive(false)}
 			onFocus={() => setScannerActive(true)}
 			className='min-h-screen p-4 outline-none'>
+			{isLoading && (
+				<div className='loading-spinner'>
+					<p>Loading...</p>
+				</div>
+			)}
 			<div className='mb-4 flex items-center gap-4'>
 				<div
 					className={`flex items-center gap-2 ${scannerActive ? 'text-success' : 'text-error'}`}>
@@ -280,27 +265,26 @@ export default function Index() {
 							<Controller
 								name='option'
 								control={control}
-								render={({ field: { onChange } }) => {
-									return (
-										<ReactSelect
-											placeholder='Select Option'
-											options={scan_option}
-											value={scan_option?.find(
-												(item) =>
-													item.value ==
-													getValues('option')
-											)}
-											onChange={(e) => {
-												const value = e.value;
-												onChange(value);
-												containerRef.current.focus();
-											}}
-										/>
-									);
-								}}
+								render={({ field: { onChange } }) => (
+									<ReactSelect
+										placeholder='Select Option'
+										options={scan_option}
+										value={scan_option?.find(
+											(item) =>
+												item.value ==
+												getValues('option')
+										)}
+										onChange={(e) => {
+											const value = e.value;
+											onChange(value);
+											containerRef.current.focus();
+										}}
+									/>
+								)}
 							/>
 						</FormField>
 					</SectionEntryBody>
+
 					<DynamicField
 						title='Entry'
 						handelAppend={handelEntryAppend}
@@ -366,7 +350,9 @@ export default function Index() {
 					<div className='modal-action'>
 						<button
 							type='submit'
-							disabled={getValues('entry').length < 1||isLoading}
+							disabled={
+								getValues('entry').length < 1 || isLoading
+							}
 							className='text-md btn btn-primary btn-block'>
 							Save
 						</button>

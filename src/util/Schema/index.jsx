@@ -3255,3 +3255,47 @@ export const WAREHOUSE_RECEIVE_SCHEMA = {
 export const WAREHOUSE_RECEIVE_NULL = {
 	entry: [],
 };
+
+// * Marketing * //
+// Marketing Team
+
+export const MARKETING_TEAM_SCHEMA = {
+	name: STRING_REQUIRED,
+	remarks: STRING.nullable(),
+
+	marketing_team_entry: yup.array().of(
+		yup.object().shape({
+			marketing_uuid: STRING_REQUIRED,
+			is_team_leader: BOOLEAN_DEFAULT_VALUE(false),
+			remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const MARKETING_TEAM_NULL = {
+	uuid: null,
+	name: '',
+	remarks: '',
+	marketing_team_entry: [],
+};
+
+// marketing targers
+
+export const MARKETING_TARGET_SCHEMA = {
+	marketing_uuid: STRING_REQUIRED,
+	year: NUMBER_REQUIRED.min(
+		new Date().getFullYear(),
+		'Minimum of Current Year'
+	),
+	month: NUMBER_REQUIRED.min(1, 'Minimum of 1').max(12, 'Maximum of 12'),
+	amount: NUMBER_REQUIRED.moreThan(0, 'More Than 0'),
+	remarks: STRING.nullable(),
+};
+
+export const MARKETING_TARGET_NULL = {
+	marketing_uuid: null,
+	year: null,
+	month: null,
+	amount: null,
+	remarks: null,
+};

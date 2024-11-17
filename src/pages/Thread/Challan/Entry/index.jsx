@@ -13,11 +13,10 @@ import { useAccess, useRHF } from '@/hooks';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
-import { CheckBoxWithoutLabel, EditDelete, Input, Textarea } from '@/ui';
+import { EditDelete, Input, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import {
-	BOOLEAN,
 	NUMBER,
 	NUMBER_DOUBLE,
 	STRING,
@@ -25,8 +24,8 @@ import {
 	THREAD_CHALLAN_SCHEMA,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-import { BOOLEAN_DEFAULT_VALUE } from '@/util/Schema/utils';
 
+import columns from './columns';
 import Header from './Header';
 
 const haveAccess = useAccess('delivery__challan');
@@ -36,8 +35,6 @@ export default function Index() {
 	const { challan_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
-	const [isAllChecked, setIsAllChecked] = useState(false);
-	const [isSomeChecked, setIsSomeChecked] = useState(false);
 	const isUpdate = challan_uuid !== undefined;
 	const { invalidateQuery: invalidateThreadChallan } = useThreadChallan();
 
@@ -46,22 +43,53 @@ export default function Index() {
 		...THREAD_CHALLAN_SCHEMA,
 		batch_entry: yup.array().of(
 			yup.object().shape({
-				is_checked: BOOLEAN.default(false),
-				quantity: NUMBER.when('is_checked', {
-					is: true,
-					then: (schema) => schema.required('Required'),
-					otherwise: (schema) => schema.nullable(),
-				})
+				quantity: NUMBER.nullable()
+					.test('required', 'Must be greater than 0', (value) => {
+						if (value === 0) {
+							return false;
+						}
+						return true;
+					})
 					.transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? null : value
 					)
 					.max(yup.ref('max_quantity'), 'Beyond Max Quantity'),
 				short_quantity: NUMBER_DOUBLE.default(0)
+					.nullable()
 					.transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? 0 : value
 					)
 					.max(yup.ref('quantity'), 'Beyond Max Quantity'),
 				reject_quantity: NUMBER_DOUBLE.default(0)
+					.nullable()
+					.transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? 0 : value
+					)
+					.max(yup.ref('quantity'), 'Beyond Max Quantity'),
+				batch_remarks: STRING.nullable(),
+			})
+		),
+		new_batch_entry: yup.array().of(
+			yup.object().shape({
+				quantity: NUMBER.nullable()
+					.test('required', 'Must be greater than 0', (value) => {
+						if (value === 0) {
+							return false;
+						}
+						return true;
+					})
+					.transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					)
+					.max(yup.ref('max_quantity'), 'Beyond Max Quantity'),
+				short_quantity: NUMBER_DOUBLE.default(0)
+					.nullable()
+					.transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? 0 : value
+					)
+					.max(yup.ref('quantity'), 'Beyond Max Quantity'),
+				reject_quantity: NUMBER_DOUBLE.default(0)
+					.nullable()
 					.transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? 0 : value
 					)
@@ -75,7 +103,14 @@ export default function Index() {
 		...THREAD_CHALLAN_NULL,
 		batch_entry: [
 			{
-				is_checked: false,
+				quantity: null,
+				short_quantity: null,
+				reject_quantity: null,
+				remarks: '',
+			},
+		],
+		new_batch_entry: [
+			{
 				quantity: null,
 				short_quantity: null,
 				reject_quantity: null,
@@ -101,6 +136,11 @@ export default function Index() {
 	const { fields: BatchEntryField } = useFieldArray({
 		control,
 		name: 'batch_entry',
+	});
+
+	const { fields: NewBatchEntryField } = useFieldArray({
+		control,
+		name: 'new_batch_entry',
 	});
 
 	// * Fetch initial data
@@ -145,65 +185,73 @@ export default function Index() {
 				updated_at: GetDateTime(),
 			};
 
+			// * updating existing batch entry
 			const batch_entry_updated = [...data?.batch_entry]
-				.filter((item) => item.is_checked)
+				.filter((item) => item.quantity > 0)
 				.map((item) => ({
 					...item,
 					uuid: item.uuid,
 					remarks: item.batch_remarks,
 				}));
 
-			if (batch_entry_updated.length === 0) {
-				ShowLocalToast({
-					type: 'warning',
-					message: 'Select at least one item to proceed.',
-				});
-			} else {
-				await updateData.mutateAsync({
-					url: `/thread/challan/${batch_data_updated?.uuid}`,
-					updatedData: batch_data_updated,
-					isOnCloseNeeded: false,
-				});
+			// * add new_batch_entry on update
+			const new_batch_entry_updated = [...data?.new_batch_entry]
+				.filter((item) => item.quantity > 0)
+				.map((item) => ({
+					...item,
+					uuid: item.uuid,
+					remarks: item.batch_remarks,
+				}));
 
-				let batch_entry_updated_promises = [
-					...batch_entry_updated.map(async (item) => {
-						if (item.uuid)
-							await updateData.mutateAsync({
-								url: `/thread/challan-entry/${item.uuid}`,
-								updatedData: {
-									...item,
-									updated_at: GetDateTime(),
-								},
-								isOnCloseNeeded: false,
-							});
-						else
-							await postData.mutateAsync({
-								url: `/thread/challan-entry`,
-								newData: {
-									...item,
-									uuid: nanoid(),
-									challan_uuid: batch_data_updated?.uuid,
-									created_at: GetDateTime(),
-								},
-								isOnCloseNeeded: false,
-							});
-					}),
-				];
-				try {
-					await Promise.all(batch_entry_updated_promises)
-						.then(() =>
-							reset(Object.assign({}, THREAD_CHALLAN_NULL))
-						)
-						.then(() => {
-							invalidateThreadChallan();
-							navigate(
-								`/thread/challan/${batch_data_updated?.uuid}`
-							);
-						});
-				} catch (err) {
-					console.error(`Error with Promise.all: ${err}`);
-				}
+			await updateData.mutateAsync({
+				url: `/thread/challan/${batch_data_updated?.uuid}`,
+				updatedData: batch_data_updated,
+				isOnCloseNeeded: false,
+			});
+
+			let batch_entry_updated_promises = [
+				...batch_entry_updated.map(async (item) => {
+					await updateData.mutateAsync({
+						url: `/thread/challan-entry/${item.uuid}`,
+						updatedData: {
+							...item,
+							updated_at: GetDateTime(),
+						},
+						isOnCloseNeeded: false,
+					});
+				}),
+			];
+
+			let new_batch_entry_updated_promises = [
+				...new_batch_entry_updated.map(async (item) => {
+					await postData.mutateAsync({
+						url: `/thread/challan-entry`,
+						newData: {
+							...item,
+							uuid: nanoid(),
+							challan_uuid: batch_data_updated?.uuid,
+							created_at: GetDateTime(),
+						},
+						isOnCloseNeeded: false,
+					});
+				}),
+			];
+
+			try {
+				await Promise.all([
+					...batch_entry_updated_promises,
+					...new_batch_entry_updated_promises,
+				])
+					.then(() => reset(Object.assign({}, THREAD_CHALLAN_NULL)))
+					.then(() => {
+						invalidateThreadChallan();
+						navigate(`/thread/challan/${batch_data_updated?.uuid}`);
+					});
+			} catch (err) {
+				console.error(`Error with Promise.all: ${err}`);
 			}
+
+			return;
 		}
 
 		// * ADD data
@@ -218,7 +266,7 @@ export default function Index() {
 		};
 
 		const batch_entry = [...data?.batch_entry]
-			.filter((item) => item.is_checked)
+			.filter((item) => item.quantity > 0)
 			.map((item) => ({
 				...item,
 				uuid: nanoid(),
@@ -267,229 +315,6 @@ export default function Index() {
 	// Check if order_number is valid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 
-	useEffect(() => {
-		if (isAllChecked || isSomeChecked) {
-			return BatchEntryField.forEach((item, index) => {
-				if (isAllChecked) {
-					setValue(`batch_entry[${index}].is_checked`, true);
-				}
-			});
-		}
-		if (!isAllChecked) {
-			return BatchEntryField.forEach((item, index) => {
-				setValue('is_all_checked', false);
-				setValue(`batch_entry[${index}].is_checked`, false);
-			});
-		}
-	}, [isAllChecked]);
-
-	useEffect(() => {
-		if (isAllChecked) {
-			BatchEntryField.forEach((item, index) => {
-				setValue(`batch_entry[${index}].is_checked`, true);
-			});
-		}
-	}, [isAllChecked, BatchEntryField]);
-
-	const handleRowChecked = (e, index) => {
-		const isChecked = e.target.checked;
-		setValue(`batch_entry[${index}].is_checked`, isChecked);
-
-		let isEveryChecked = true,
-			isSomeChecked = false;
-
-		for (let item of watch('batch_entry')) {
-			if (item.is_checked) {
-				isSomeChecked = true;
-			} else {
-				isEveryChecked = false;
-				setValue('is_all_checked', false);
-			}
-
-			if (isSomeChecked && !isEveryChecked) {
-				break;
-			}
-		}
-
-		setIsAllChecked(isEveryChecked);
-		setIsSomeChecked(isSomeChecked);
-	};
-
-	const columns = useMemo(
-		() => [
-			{
-				accessorKey: 'checkbox',
-				header: () => (
-					<CheckBoxWithoutLabel
-						className='bg-white'
-						label='is_all_checked'
-						checked={isAllChecked}
-						onChange={(e) => {
-							setIsAllChecked(e.target.checked);
-							setIsSomeChecked(e.target.checked);
-						}}
-						{...{ register, errors }}
-					/>
-				),
-				enableColumnFilter: false,
-				enableSorting: false,
-				cell: (info) => (
-					<CheckBoxWithoutLabel
-						label={`batch_entry[${info.row.index}].is_checked`}
-						checked={watch(
-							`batch_entry[${info.row.index}].is_checked`
-						)}
-						onChange={(e) => handleRowChecked(e, info.row.index)}
-						{...{ register, errors }}
-					/>
-				),
-			},
-			{
-				accessorKey: 'order_number',
-				header: 'O/N',
-				enableColumnFilter: true,
-				enableSorting: true,
-			},
-			{
-				accessorKey: 'count',
-				header: 'Count',
-				enableColumnFilter: true,
-				enableSorting: true,
-			},
-			{
-				accessorKey: 'style',
-				header: 'Style',
-				enableColumnFilter: true,
-				enableSorting: true,
-			},
-			{
-				accessorKey: 'color',
-				header: 'Color',
-				enableColumnFilter: true,
-				enableSorting: true,
-			},
-			{
-				accessorKey: 'length',
-				header: 'Length(mtr)',
-				enableColumnFilter: true,
-				enableSorting: true,
-			},
-			{
-				accessorKey: 'order_quantity',
-				header: 'Order QTY',
-				enableColumnFilter: true,
-				enableSorting: true,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'warehouse',
-				header: 'Warehouse',
-				enableColumnFilter: true,
-				enableSorting: true,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'balance_quantity',
-				header: 'Balance QTY',
-				enableColumnFilter: true,
-				enableSorting: true,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'quantity',
-				header: 'Quantity(cone)',
-				enableColumnFilter: false,
-				enableSorting: false,
-				cell: (info) => {
-					const idx = info.row.index;
-					const dynamicerror = errors?.batch_entry?.[idx]?.quantity;
-					return (
-						<Input
-							label={`batch_entry[${info.row.index}].quantity`}
-							is_title_needed='false'
-							height='h-8'
-							dynamicerror={dynamicerror}
-							{...{ register, errors }}
-						/>
-					);
-				},
-			},
-			{
-				accessorKey: 'short_quantity',
-				header: 'Short QTY',
-				enableColumnFilter: false,
-				enableSorting: false,
-				cell: (info) => {
-					const idx = info.row.index;
-					const dynamicerror =
-						errors?.batch_entry?.[idx]?.short_quantity;
-					return (
-						<Input
-							label={`batch_entry[${info.row.index}].short_quantity`}
-							is_title_needed='false'
-							height='h-8'
-							dynamicerror={dynamicerror}
-							{...{ register, errors }}
-						/>
-					);
-				},
-			},
-			{
-				accessorKey: 'reject_quantity',
-				header: 'Reject QTY',
-				enableColumnFilter: false,
-				enableSorting: false,
-				cell: (info) => {
-					const idx = info.row.index;
-					const dynamicerror =
-						errors?.batch_entry?.[idx]?.reject_quantity;
-					return (
-						<Input
-							label={`batch_entry[${info.row.index}].reject_quantity`}
-							is_title_needed='false'
-							height='h-8'
-							dynamicerror={dynamicerror}
-							{...{ register, errors }}
-						/>
-					);
-				},
-			},
-			{
-				accessorKey: 'batch_remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				enableSorting: false,
-				width: 'w-44',
-				cell: (info) => (
-					<Textarea
-						label={`batch_entry[${info.row.index}].batch_remarks`}
-						is_title_needed='false'
-						height='h-8'
-						{...{ register, errors }}
-					/>
-				),
-			},
-			{
-				accessorKey: 'actions',
-				header: 'Actions',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('delete'),
-				width: 'w-24',
-				cell: (info) => (
-					<EditDelete
-						idx={info.row.original}
-						handelDelete={handelDelete}
-						showDelete={haveAccess.includes('delete')}
-						showUpdate={false}
-					/>
-				),
-			},
-		],
-		[isAllChecked, isSomeChecked, BatchEntryField, register, errors]
-	);
-
-	// Delete
 	const [deleteItem, setDeleteItem] = useState({
 		itemId: null,
 		itemName: null,
@@ -503,6 +328,24 @@ export default function Index() {
 
 		window['deleteModal Challan Entry'].showModal();
 	};
+
+	const currentColumn = columns({
+		setValue,
+		BatchEntryField,
+		NewBatchEntryField,
+		register,
+		errors,
+		handelDelete,
+	});
+
+	const newColumn = columns({
+		setValue,
+		BatchEntryField,
+		NewBatchEntryField,
+		register,
+		errors,
+		is_new: true,
+	});
 
 	return (
 		<div>
@@ -523,8 +366,20 @@ export default function Index() {
 					}}
 				/>
 
-				<ReactTable data={BatchEntryField} columns={columns} />
-
+				<div className='flex flex-col gap-8'>
+					<ReactTable
+						title={isUpdate ? 'Current Entries' : 'Entries'}
+						data={BatchEntryField}
+						columns={currentColumn}
+					/>
+					{isUpdate && (
+						<ReactTable
+							title='New Entries'
+							data={NewBatchEntryField}
+							columns={newColumn}
+						/>
+					)}
+				</div>
 				<div className='modal-action'>
 					<button className='text-md btn btn-primary btn-block'>
 						Save

@@ -1436,7 +1436,6 @@ export const PACKING_LIST_SCHEMA = {
 	remarks: STRING.nullable(),
 	packing_list_entry: yup.array().of(
 		yup.object().shape({
-			is_checked: BOOLEAN,
 			sfg_uuid: STRING_REQUIRED,
 			packing_list_uuid: STRING.nullable(),
 			order_number: STRING,
@@ -1476,6 +1475,70 @@ export const PACKING_LIST_SCHEMA = {
 					Schema.typeError('Must be a number')
 						.required('Quantity is required')
 						.max(yup.ref('max_quantity'), 'Beyond Max Quantity'),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
+			poli_quantity: yup.number().when('is_checked', {
+				is: true,
+				then: (Schema) =>
+					Schema.typeError('Must be a number').required(
+						'Poly Quantity is required'
+					),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
+			remarks: STRING.nullable(),
+			isDeletable: BOOLEAN,
+		})
+	),
+	new_packing_list_entry: yup.array().of(
+		yup.object().shape({
+			sfg_uuid: STRING_REQUIRED,
+			packing_list_uuid: STRING.nullable(),
+			order_number: STRING,
+			item_description: STRING,
+			style_color_size: STRING,
+			order_quantity: NUMBER_DOUBLE,
+			warehouse: NUMBER_DOUBLE,
+			delivered: NUMBER_DOUBLE,
+			balance_quantity: NUMBER_DOUBLE,
+			short_quantity: yup.number().when('is_checked', {
+				is: true,
+				then: (Schema) =>
+					Schema.typeError('Must be a number').max(
+						yup.ref('order_quantity'),
+						'Beyond Order Quantity'
+					),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
+			reject_quantity: yup.number().when('is_checked', {
+				is: true,
+				then: (Schema) =>
+					Schema.typeError('Must be a number').max(
+						yup.ref('order_quantity'),
+						'Beyond Order Quantity'
+					),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
+			quantity: yup.number().when('is_checked', {
+				is: true,
+				then: (Schema) =>
+					Schema.typeError('Must be a number')
+						.required('Quantity is required')
+						.max(
+							yup.ref('balance_quantity'),
+							'Beyond Max Quantity'
+						),
 				otherwise: (Schema) =>
 					Schema.nullable().transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? null : value

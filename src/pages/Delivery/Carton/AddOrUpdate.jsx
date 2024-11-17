@@ -1,5 +1,6 @@
 import { useAuth } from '@/context/auth';
 import { useDeliveryCarton } from '@/state/Delivery';
+import { useOtherCarton } from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
@@ -7,11 +8,7 @@ import { AddModal } from '@/components/Modal';
 import { CheckBox, FormField, Input, ReactSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
-import {
-	DELIVERY_CARTON_NULL,
-	DELIVERY_CARTON_SCHEMA,
-
-} from '@util/Schema';
+import { DELIVERY_CARTON_NULL, DELIVERY_CARTON_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
@@ -22,6 +19,8 @@ export default function Index({
 	setUpdate,
 }) {
 	const { url, updateData, postData } = useDeliveryCarton();
+	const { invalidateQuery: invalidateQueryCartonLabelValue } =
+		useOtherCarton();
 	const { user } = useAuth();
 	const {
 		register,
@@ -84,6 +83,7 @@ export default function Index({
 			newData,
 			onClose,
 		});
+		invalidateQueryCartonLabelValue();
 	};
 
 	return (

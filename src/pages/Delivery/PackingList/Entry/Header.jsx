@@ -8,7 +8,6 @@ import {
 	SectionEntryBody,
 	Textarea,
 } from '@/ui';
-
 export default function Header({
 	register,
 	errors,
@@ -40,6 +39,7 @@ export default function Header({
 										getValues('order_info_uuid')
 								)}
 								onChange={(e) => onChange(e.value)}
+								isDisabled={isUpdate}
 							/>
 						)}
 					/>

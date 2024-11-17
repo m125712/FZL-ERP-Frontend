@@ -287,6 +287,8 @@ export default function Index() {
 	// Submit
 	const onSubmit = async (data) => {
 		const DEFAULT_SWATCH_APPROVAL_DATE = null;
+
+		// * seperate the order_entry
 		const { order_entry, ...rest } = data;
 
 		// * Update data * //

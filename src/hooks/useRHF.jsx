@@ -26,6 +26,7 @@ export default function useRHF(schema = {}, defaultValues = {}) {
 		unregister,
 		getFieldState,
 		clearErrors,
+		formState,
 	} = form;
 
 	return {
@@ -44,6 +45,7 @@ export default function useRHF(schema = {}, defaultValues = {}) {
 		useFieldArray,
 		getFieldState,
 		clearErrors,
+		formState,
 		context: form,
 	};
 }

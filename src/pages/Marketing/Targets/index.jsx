@@ -1,19 +1,19 @@
 import { Suspense, useEffect, useMemo, useState } from 'react';
-import { useMarketingTeams } from '@/state/Marketing';
-import { useNavigate } from 'react-router-dom';
+import { useMarketingTargets } from '@/state/Marketing';
 import { useAccess } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { DateTime, EditDelete } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+import AddUpdate from './AddUpdate';
+
 export default function Index() {
-	const navigate = useNavigate();
-	const haveAccess = useAccess('marketing__teams');
-	const { data, isLoading, url, deleteData } = useMarketingTeams();
-	const info = new PageInfo('Teams', url, 'marketing__teams');
+	const haveAccess = useAccess('marketing__targets');
+	const { data, isLoading, url, deleteData } = useMarketingTargets();
+	const info = new PageInfo('Marketing Targets', url, 'marketing__targets');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -22,20 +22,32 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'name',
-				header: 'Team name',
+				accessorKey: 'marketing_name',
+				header: 'Marketing',
 				enableColumnFilter: true,
 				width: 'w-36',
-				cell: (info) => {
-					const { uuid } = info.row.original;
-					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={uuid}
-							uri={`/marketing/teams`}
-						/>
-					);
-				},
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'year',
+				header: 'Year',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'month',
+				header: 'Month',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'amount',
+				header: 'Amount',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_by_name',
@@ -86,19 +98,35 @@ export default function Index() {
 		[data]
 	);
 
-	const handelAdd = () => navigate('/marketing/teams/entry');
+	// Add
+	const handelAdd = () => window[info.getAddOrUpdateModalId()].showModal();
+
+	// Update
+	const [addUpdate, setAddUpdate] = useState({
+		uuid: null,
+		marketing_uuid: null,
+		year: null,
+		month: null,
+		amount: null,
+		remarks: null,
+	});
 
 	const handelUpdate = (idx) => {
-		const uuid = data[idx]?.uuid;
-		navigate(`/marketing/teams/${uuid}/update`);
+		setAddUpdate((prev) => ({
+			...prev,
+			uuid: data[idx].uuid,
+		}));
+
+		window[info.getAddOrUpdateModalId()].showModal();
 	};
 
+	// Delete
 	const [deleteItem, setDeleteItem] = useState({});
 
 	const handelDelete = (idx) => {
 		setDeleteItem(() => ({
 			itemId: data[idx].uuid,
-			itemName: data[idx].name,
+			itemName: data[idx].marketing_name,
 		}));
 		window[info.getDeleteModalId()].showModal();
 	};
@@ -115,7 +143,15 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				handelAdd={handelAdd}
 			/>
-
+			<Suspense>
+				<AddUpdate
+					modalId={info.getAddOrUpdateModalId()}
+					{...{
+						addUpdate,
+						setAddUpdate,
+					}}
+				/>
+			</Suspense>
 			<Suspense>
 				<DeleteModal
 					modalId={info.getDeleteModalId()}

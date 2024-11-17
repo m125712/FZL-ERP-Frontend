@@ -3,7 +3,7 @@ import { useMarketingTeamDetails, useMarketingTeams } from '@/state/Marketing';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast';
@@ -39,10 +39,6 @@ export default function Index() {
 		setValue,
 	} = useRHF(MARKETING_TEAM_SCHEMA, MARKETING_TEAM_NULL);
 
-	useEffect(() => {
-		if (data && isUpdate) reset(data);
-	}, [isUpdate, data]);
-
 	// manual_pi_entry
 	const {
 		fields: MarketingEntries,
@@ -53,6 +49,12 @@ export default function Index() {
 		name: 'marketing_team_entry',
 	});
 
+	useEffect(() => {
+		if (data && isUpdate) {
+			reset(data);
+		}
+	}, [isUpdate, data]);
+
 	const [deleteItem, setDeleteItem] = useState({
 		itemId: null,
 		itemName: null,
@@ -61,61 +63,68 @@ export default function Index() {
 	const onClose = () => reset(MARKETING_TEAM_NULL);
 	// Submit
 	const onSubmit = async (data) => {
-		// Update
-		// if (isUpdate) {
-		// 	const manual_pi_updated_data = {
-		// 		...data,
-		// 		updated_at: GetDateTime(),
-		// 	};
+		//Update
+		if (isUpdate) {
+			const marketing_team_data_updated = {
+				...data,
+				updated_at: GetDateTime(),
+			};
 
-		// 	const manual_pi_updated_promise = await updateData.mutateAsync({
-		// 		url: `/commercial/manual-pi/${data?.uuid}`,
-		// 		updatedData: manual_pi_updated_data,
-		// 		isOnCloseNeeded: false,
-		// 	});
+			if (data.marketing_team_entry.length === 0) {
+				ShowLocalToast({
+					type: 'error',
+					message: 'Must add at least one Marketing Team Entry',
+				});
+			} else {
+				const marketing_team_data_updated_promise =
+					await updateData.mutateAsync({
+						url: `/public/marketing-team/${data?.uuid}`,
+						updatedData: marketing_team_data_updated,
+						isOnCloseNeeded: false,
+					});
 
-		// 	const manual_pi_entries_updated_promise = data.manual_pi_entry.map(
-		// 		async (item) => {
-		// 			if (item.uuid === undefined) {
-		// 				item.manual_pi_uuid = manual_pi_uuid;
-		// 				item.created_at = GetDateTime();
-		// 				item.uuid = nanoid();
-		// 				return await postData.mutateAsync({
-		// 					url: '/commercial/manual-pi-entry',
-		// 					newData: item,
-		// 					isOnCloseNeeded: false,
-		// 				});
-		// 			} else {
-		// 				item.updated_at = GetDateTime();
-		// 				const updatedData = {
-		// 					...item,
-		// 					updated_at: GetDateTime(),
-		// 				};
-		// 				return await updateData.mutateAsync({
-		// 					url: `/commercial/manual-pi-entry/${item.uuid}`,
-		// 					updatedData,
-		// 					isOnCloseNeeded: false,
-		// 				});
-		// 			}
-		// 		}
-		// 	);
+				const marketing_team_entry_data_updated_promise =
+					data.marketing_team_entry.map(async (item) => {
+						if (item.uuid === undefined) {
+							await postData.mutateAsync({
+								url: '/public/marketing-team-entry',
+								newData: {
+									...item,
+									uuid: nanoid(),
+									marketing_team_uuid: data.uuid,
+									created_at: GetDateTime(),
+									created_by: user.uuid,
+								},
+								isOnCloseNeeded: false,
+							});
+						} else {
+							return await updateData.mutateAsync({
+								url: `/public/marketing-team-entry/${item.uuid}`,
+								updatedData: {
+									...item,
+									updated_at: GetDateTime(),
+								},
+								isOnCloseNeeded: false,
+							});
+						}
+					});
 
-		// 	try {
-		// 		await Promise.all([
-		// 			manual_pi_updated_promise,
-		// 			...manual_pi_entries_updated_promise,
-		// 		])
-		// 			.then(() => reset(MARKETING_TEAM_NULL))
-		// 			.then(() => {
-		// 				invalidateCommercialManualPI();
-		// 				navigate(`/commercial/manual-pi/${data?.uuid}`);
-		// 			});
-		// 	} catch (err) {
-		// 		console.error(`Error with Promise.all: ${err}`);
-		// 	}
-
-		// 	return;
-		// }
+				try {
+					await Promise.all([
+						marketing_team_data_updated_promise,
+						...marketing_team_entry_data_updated_promise,
+					])
+						.then(() => reset(MARKETING_TEAM_NULL))
+						.then(() => {
+							invalidateCommercialManualPI();
+							navigate(`/commercial/manual-pi/${data?.uuid}`);
+						});
+				} catch (err) {
+					console.error(`Error with Promise.all: ${err}`);
+				}
+			}
+			return;
+		}
 
 		// Add new item
 		const marketing_team_uuid = nanoid();
@@ -213,6 +222,7 @@ export default function Index() {
 						getValues,
 						Controller,
 						watch,
+						setValue,
 						MarketingEntries,
 						MarketingEntriesAppend,
 						MarketingEntriesRemove,
@@ -229,15 +239,15 @@ export default function Index() {
 				</div>
 			</form>
 			<Suspense>
-				{/* <DeleteModal
-					modalId={'order_info_entry_delete'}
-					title={'Order info Entry'}
+				<DeleteModal
+					modalId={'marketing_team_entry_delete_modal'}
+					title={'Delete Marketing Team Entry'}
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
 					setItems={MarketingEntries}
-					url={'/commercial/manual-pi-entry'}
+					url={'/public/marketing-team-entry'}
 					deleteData={deleteData}
-				/> */}
+				/>
 			</Suspense>
 			<DevTool control={control} placement='top-left' />
 		</div>

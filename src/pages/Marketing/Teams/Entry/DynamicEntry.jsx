@@ -1,14 +1,11 @@
 import { useCallback } from 'react';
 import { useOtherMarketing } from '@/state/Other';
 
-import { DateInput } from '@/ui/Core';
-import SwitchToggle from '@/ui/Others/SwitchToggle';
 import {
 	ActionButtons,
 	CheckBox,
 	DynamicField,
 	FormField,
-	Input,
 	ReactSelect,
 	Textarea,
 } from '@/ui';
@@ -20,6 +17,7 @@ export default function index({
 	getValues,
 	Controller,
 	watch,
+	setValue,
 
 	MarketingEntries,
 	MarketingEntriesAppend,
@@ -28,29 +26,37 @@ export default function index({
 }) {
 	const { data: marketing } = useOtherMarketing();
 
+	let filteredMarketing = marketing?.filter(
+		(item) =>
+			// * this returns true if the condition is met in the sone() function
+			!MarketingEntries.some(
+				({ marketing_uuid }) => marketing_uuid === item.value
+			)
+	);
+
 	const handelMarketingEntriesAppend = () => {
 		MarketingEntriesAppend({
-			recipe_uuid: '',
+			uuid: '',
 		});
 	};
 
 	const handelDuplicateDynamicField = useCallback(
 		(index) => {
-			const item = getValues(`lc_entry_others[${index}]`);
+			const item = getValues(`marketing_team_entry[${index}]`);
 			MarketingEntriesAppend({ ...item, uuid: undefined });
 		},
 		[getValues, MarketingEntriesAppend]
 	);
 
 	const handleRecipeRemove = (index) => {
-		const udUuid = getValues(`lc_entry_others[${index}].uuid`);
-		const udNo = getValues(`lc_entry_others[${index}].ud_no`);
-		if (udUuid !== undefined) {
+		const Uuid = getValues(`marketing_team_entry[${index}].uuid`);
+		const name = getValues(`marketing_team_entry[${index}].marketing_name`);
+		if (Uuid !== undefined) {
 			setDeleteItem({
-				itemId: udUuid,
-				itemName: udNo,
+				itemId: Uuid,
+				itemName: name,
 			});
-			window['lc_entry_details_delete'].showModal();
+			window['marketing_team_entry_delete_modal'].showModal();
 		}
 		MarketingEntriesRemove(index);
 	};
@@ -95,7 +101,7 @@ export default function index({
 											<ReactSelect
 												menuPortalTarget={document.body}
 												placeholder='Select Party'
-												options={marketing}
+												options={filteredMarketing}
 												value={marketing?.find(
 													(item) =>
 														item.value ===
@@ -118,6 +124,19 @@ export default function index({
 								label={`marketing_team_entry[${index}].is_team_leader`}
 								is_title_needed='false'
 								{...{ register, errors }}
+								onChange={(e) => {
+									// * logic for checking only one member for team leader
+									if (e.target.checked) {
+										MarketingEntries.map((item, i) => {
+											if (i !== index) {
+												setValue(
+													`marketing_team_entry[${i}].is_team_leader`,
+													false
+												);
+											}
+										});
+									}
+								}}
 							/>
 						</td>
 						<td className={`${rowClass}`}>

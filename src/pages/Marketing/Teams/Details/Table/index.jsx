@@ -1,67 +1,31 @@
 import { useMemo } from 'react';
 
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-import { DateTime } from '@/ui';
+import { DateTime, StatusButton } from '@/ui';
 
 export default function Index({ entries }) {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'order_number',
-				header: 'O/N',
+				accessorKey: 'marketing_name',
+				header: 'Marketing',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'po',
-				header: 'PO',
+				accessorKey: 'is_team_leader',
+				header: 'Team Lead',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
 			},
 			{
-				accessorKey: 'style',
-				header: 'Style',
+				accessorKey: 'created_by_name',
+				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'size',
-				header: 'Size',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'item',
-				header: 'Item',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'specification',
-				header: 'Specification',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'quantity',
-				header: 'Quantity',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'unit_price',
-				header: 'Unit Price',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorFn: (row)=> row.is_zipper ? 'Yes' : 'No',
-				header: 'Zipper',
-				id: 'is_zipper',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-
 			{
 				accessorKey: 'created_at',
 				header: 'Created',

@@ -3215,3 +3215,24 @@ export const MARKETING_TEAM_NULL = {
 	remarks: '',
 	marketing_team_entry: [],
 };
+
+// marketing targers
+
+export const MARKETING_TARGET_SCHEMA = {
+	marketing_uuid: STRING_REQUIRED,
+	year: NUMBER_REQUIRED.min(
+		new Date().getFullYear(),
+		'Minimum of Current Year'
+	),
+	month: NUMBER_REQUIRED.min(1, 'Minimum of 1').max(12, 'Maximum of 12'),
+	amount: NUMBER_REQUIRED.moreThan(0, 'More Than 0'),
+	remarks: STRING.nullable(),
+};
+
+export const MARKETING_TARGET_NULL = {
+	marketing_uuid: null,
+	year: null,
+	month: null,
+	amount: null,
+	remarks: null,
+};

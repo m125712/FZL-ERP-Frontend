@@ -8,7 +8,7 @@ import PackingListsDetails from '@/pages/Delivery/PackingList/Details';
 import PackingListsEntry from '@/pages/Delivery/PackingList/Entry';
 // Zipper -Challan
 import Test from '@/pages/Delivery/Test';
-import  WarehouseRecv  from '@/pages/Delivery/WarehouseRecv';
+import WarehouseRecv from '@/pages/Delivery/WarehouseRecv';
 import Carton from '@pages/Delivery/Carton';
 import Challan from '@pages/Delivery/Challan';
 import ChallanDetails from '@pages/Delivery/Challan/Details';
@@ -55,6 +55,8 @@ export const DeliveryRoutes = [
 					//'click_receive_status',
 					'click_received',
 					'click_received_override',
+					'click_gate_pass',
+					'click_gate_pass_override',
 				],
 			},
 			{

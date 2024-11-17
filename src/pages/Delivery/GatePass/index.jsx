@@ -54,13 +54,7 @@ export default function Index() {
 		name: 'entry',
 	});
 
-	const {
-		data: packetListData,
-		isLoading,
-		updateData,
-		error,
-		refetch,
-	} = useDeliveryPackingListByUUID(symbol);
+	const { data:challan_option } = useDeliveryPackingListByUUID();
 
 	const { invalidateQuery: invalidateDeliveryPackingList } =
 		useDeliveryPackingList();
@@ -75,7 +69,7 @@ export default function Index() {
 		if (!scannedSymbol) return;
 		setSymbol(scannedSymbol);
 	}, []);
-	
+
 	const handlePacketScan = async (selectedOption) => {
 		const waitForLoading = () => {
 			return new Promise((resolve) => {

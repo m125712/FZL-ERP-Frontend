@@ -2,29 +2,23 @@ import { Suspense, useEffect, useState } from 'react';
 import {
 	useDeliveryPackingList,
 	useDeliveryPackingListByOrderInfoUUID,
-	useDeliveryPackingListByUUID,
 	useDeliveryPackingListDetailsByUUID,
 	useDeliveryPackingListEntry,
 } from '@/state/Delivery';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
+import { set } from 'date-fns';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useRHF } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
-import {
-	CheckBoxWithoutLabel,
-	DynamicDeliveryField,
-	Input,
-	RemoveButton,
-} from '@/ui';
 
-import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
 import { PACKING_LIST_NULL, PACKING_LIST_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
+import DynamicDeliveryTable from './DyanamicDeliveryFIeld';
 import Header from './Header';
 
 export default function Index() {
@@ -43,8 +37,6 @@ export default function Index() {
 		deleteData: deletePackingListEntry,
 	} = useDeliveryPackingListEntry();
 
-	const [isAllChecked, setIsAllChecked] = useState(false);
-	const [isSomeChecked, setIsSomeChecked] = useState(false);
 	const isUpdate = uuid !== undefined;
 
 	const {
@@ -60,13 +52,16 @@ export default function Index() {
 		setValue,
 	} = useRHF(PACKING_LIST_SCHEMA, PACKING_LIST_NULL);
 
-	const { data: details, invalidateQuery: invalidateDetails } =
-		useDeliveryPackingListDetailsByUUID(uuid, {
-			params: `is_update=true`,
-		});
+	const {
+		data: details,
+		url,
+		invalidateQuery: invalidateDetails,
+	} = useDeliveryPackingListDetailsByUUID(uuid, {
+		params: `is_update=true`,
+	});
 
 	const { data: packingListEntries } = useDeliveryPackingListByOrderInfoUUID(
-		watch('order_info_uuid') 
+		watch('order_info_uuid')
 	);
 	useEffect(() => {
 		if (!isUpdate && packingListEntries?.packing_list_entry) {
@@ -75,21 +70,32 @@ export default function Index() {
 				packingListEntries?.packing_list_entry
 			);
 		}
-		if (isUpdate && details) {
-			reset(details);
+		if (isUpdate) {
+			setValue('packing_list_entry', details?.packing_list_entry);
+			setValue('new_packing_list_entry', details?.new_packing_list_entry);
 		}
-	}, [packingListEntries, isUpdate, details]);
+		// if (isUpdate && details) {
+		// 	reset(details);
+		// }
+	}, [isUpdate, packingListEntries, details]);
 
-	// useEffect(() => {
-	// 	if (isUpdate && details) {
-	// 		reset(details);
-	// 	}
-	// }, [details, isUpdate]);
+	useFetchForRhfReset(url, '', reset);
 
-	// packing_list_entry
+	useEffect(() => {
+		if (isUpdate && watch('new_packing_list_entry')) {
+			setValue('packing_list_entry', details?.packing_list_entry);
+			setValue('new_packing_list_entry', watch('new_packing_list_entry'));
+		}
+	}, [watch('order_info_uuid')]);
+
 	const { fields: packingListEntryField } = useFieldArray({
 		control,
 		name: 'packing_list_entry',
+	});
+
+	const { fields: newPackingListEntryField } = useFieldArray({
+		control,
+		name: 'new_packing_list_entry',
 	});
 
 	const [deleteItem, setDeleteItem] = useState({
@@ -101,6 +107,28 @@ export default function Index() {
 	const onSubmit = async (data) => {
 		// Update item
 		if (isUpdate) {
+			if (
+				// Check existing packing list
+				(!data.packing_list_entry?.length ||
+					!data.packing_list_entry.some(
+						(item) => item.quantity > 0
+					)) &&
+				// Check new packing list
+				(!data.new_packing_list_entry?.length ||
+					!data.new_packing_list_entry.some(
+						(item) => item.quantity > 0
+					))
+			) {
+				alert('Packing List cannot be null');
+				return;
+			} else if (
+				data?.new_packing_list_entry?.some(
+					(item) => item.quantity > item?.balance_quantity
+				)
+			) {
+				alert('Quantity cannot be greater than balance quantity');
+				return;
+			}
 			const packingListData = {
 				...data,
 				updated_at: GetDateTime(),
@@ -120,7 +148,26 @@ export default function Index() {
 			let updatablePackingListEntryPromises = data.packing_list_entry
 				.filter((item) => item.quantity > 0 && !item.isDeletable)
 				.map(async (item) => {
-					if (item.uuid === null && item.quantity > 0) {
+					const updatedData = {
+						...item,
+						quantity: item.quantity,
+						is_checked: item.is_checked,
+						remarks: item.remarks,
+						updated_at: GetDateTime(),
+					};
+
+					return await updateData.mutateAsync({
+						url: `${deliveryPackingListEntryUrl}/${item?.uuid}`,
+						updatedData: updatedData,
+						uuid: item.uuid,
+						isOnCloseNeeded: false,
+					});
+				});
+
+			let updatableNewPackingListEntryPromises =
+				data.new_packing_list_entry
+					.filter((item) => item.quantity > 0 && !item.isDeletable)
+					.map(async (item) => {
 						return await postData.mutateAsync({
 							url: deliveryPackingListEntryUrl,
 							newData: {
@@ -133,26 +180,7 @@ export default function Index() {
 							},
 							isOnCloseNeeded: false,
 						});
-					}
-
-					if (item.uuid && item.quantity >= 0) {
-						const updatedData = {
-							...item,
-							quantity: item.quantity,
-							is_checked: item.is_checked,
-							remarks: item.remarks,
-							updated_at: GetDateTime(),
-						};
-
-						return await updateData.mutateAsync({
-							url: `${deliveryPackingListEntryUrl}/${item?.uuid}`,
-							updatedData: updatedData,
-							uuid: item.uuid,
-							isOnCloseNeeded: false,
-						});
-					}
-					return null;
-				});
+					});
 
 			let deletablePackingListEntryPromises = data.packing_list_entry
 				.filter((item) => item.isDeletable)
@@ -167,11 +195,13 @@ export default function Index() {
 				await Promise.all([
 					packingListPromise,
 					...updatablePackingListEntryPromises,
+					...updatableNewPackingListEntryPromises,
 					deletablePackingListEntryPromises,
 				])
 					.then(() => reset(Object.assign({}, PACKING_LIST_NULL)))
 					.then(() => {
 						invalidateDeliveryPackingList();
+						invalidateDetails();
 						navigate(`/delivery/zipper-packing-list/${data?.uuid}`);
 					});
 			} catch (err) {
@@ -196,7 +226,7 @@ export default function Index() {
 		delete packingListData['packing_list_entry'];
 
 		const packingListEntryData = [...data.packing_list_entry]
-			.filter((item) => item.is_checked && item.quantity > 0)
+			.filter((item) => item.quantity > 0)
 			.map((item) => ({
 				...item,
 				uuid: nanoid(),
@@ -216,7 +246,6 @@ export default function Index() {
 				newData: packingListData,
 				isOnCloseNeeded: false,
 			});
-
 			// create new /packing/list/entry
 			const commercial_packing_list_entry_promises =
 				packingListEntryData.map((item) =>
@@ -226,12 +255,12 @@ export default function Index() {
 						isOnCloseNeeded: false,
 					})
 				);
-
 			try {
 				await Promise.all([...commercial_packing_list_entry_promises])
 					.then(() => reset(Object.assign({}, PACKING_LIST_NULL)))
 					.then(() => {
 						invalidateDeliveryPackingList();
+						invalidateDetails();
 						navigate(`/delivery/zipper-packing-list`);
 					});
 			} catch (err) {
@@ -244,46 +273,6 @@ export default function Index() {
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 	const rowClass =
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
-
-	useEffect(() => {
-		if (isAllChecked || isSomeChecked) {
-			return packingListEntryField.forEach((item, index) => {
-				if (isAllChecked) {
-					setValue(`packing_list_entry[${index}].is_checked`, true);
-				}
-			});
-		}
-		if (!isAllChecked) {
-			return packingListEntryField.forEach((item, index) => {
-				setValue('is_all_checked', false);
-				setValue(`packing_list_entry[${index}].is_checked`, false);
-			});
-		}
-	}, [isAllChecked]);
-
-	const handleRowChecked = (e, index) => {
-		const isChecked = e.target.checked;
-		setValue(`packing_list_entry[${index}].is_checked`, isChecked);
-
-		let isEveryChecked = true,
-			isSomeChecked = false;
-
-		for (let item of watch('packing_list_entry')) {
-			if (item.is_checked) {
-				isSomeChecked = true;
-			} else {
-				isEveryChecked = false;
-				setValue('is_all_checked', false);
-			}
-
-			if (isSomeChecked && !isEveryChecked) {
-				break;
-			}
-		}
-
-		setIsAllChecked(isEveryChecked);
-		setIsSomeChecked(isSomeChecked);
-	};
 
 	// Remove packing list entry
 	const handlePackingListEntryRemove = (index) => {
@@ -316,223 +305,33 @@ export default function Index() {
 						isUpdate,
 					}}
 				/>
-				<DynamicDeliveryField
-					title={`Details: `}
-					tableHead={
-						<>
-							<th
-								key='is_all_checked'
-								scope='col'
-								className='group w-20 cursor-pointer px-3 py-2'>
-								<CheckBoxWithoutLabel
-									label='is_all_checked'
-									checked={isAllChecked}
-									onChange={(e) => {
-										setIsAllChecked(e.target.checked);
-										setIsSomeChecked(e.target.checked);
-									}}
-									{...{ register, errors }}
-								/>
-							</th>
-							{[
-								'O/N',
-								'Item Description',
-								'Style',
-								'Color',
-								'Size',
-								'Unit',
-								'Order QTY',
-								'Balance QTY',
-								// 'Warehouse',
-								// 'Delivered',
-								'Quantity(pcs)',
-								'Poly QTY',
-								'Short QTY',
-								'Reject QTY',
-								'Remarks',
-								,
-							].map((item) => (
-								<th
-									key={item}
-									scope='col'
-									className='group cursor-pointer px-3 py-2 transition duration-300'>
-									{item}
-								</th>
-							))}
+				<DynamicDeliveryTable
+					title='Packing List Entry'
+					handlePackingListEntryRemove={handlePackingListEntryRemove}
+					packingListEntryField={packingListEntryField}
+					isUpdate={isUpdate}
+					register={register}
+					watch={watch}
+					getValues={getValues}
+					errors={errors}
+					entryFiledName='packing_list_entry'
+				/>
+				{isUpdate && (
+					<DynamicDeliveryTable
+						title='New Packing List Entry'
+						handlePackingListEntryRemove={
+							handlePackingListEntryRemove
+						}
+						packingListEntryField={newPackingListEntryField}
+						isUpdate={isUpdate}
+						register={register}
+						watch={watch}
+						getValues={getValues}
+						errors={errors}
+						entryFiledName='new_packing_list_entry'
+					/>
+				)}
 
-							{isUpdate && (
-								<th
-									key='action'
-									scope='col'
-									className='group cursor-pointer px-3 py-2 transition duration-300'>
-									Delete
-								</th>
-							)}
-						</>
-					}>
-					{packingListEntryField.map((item, index) => (
-						<tr
-							key={item.id}
-							className={cn(
-								'relative cursor-pointer bg-base-100 text-primary transition-colors duration-200 ease-in',
-								isUpdate &&
-									watch(
-										`packing_list_entry[${index}].isDeletable`
-									) &&
-									'bg-error/10 text-error hover:bg-error/20 hover:text-error'
-							)}>
-							<td className={cn(`w-8 ${rowClass}`)}>
-								<CheckBoxWithoutLabel
-									label={`packing_list_entry[${index}].is_checked`}
-									checked={watch(
-										`packing_list_entry[${index}].is_checked`
-									)}
-									onChange={(e) => handleRowChecked(e, index)}
-									disabled={
-										getValues(
-											`packing_list_entry[${index}].pi_cash_quantity`
-										) == 0
-									}
-									{...{ register, errors }}
-								/>
-							</td>
-
-							<td className={`w-32 ${rowClass}`}>
-								{getValues(
-									`packing_list_entry[${index}].order_number`
-								)}
-							</td>
-							<td className={`w-32 ${rowClass}`}>
-								{getValues(
-									`packing_list_entry[${index}].item_description`
-								)}
-							</td>
-							<td className={`w-32 ${rowClass}`}>
-								{getValues(
-									`packing_list_entry[${index}].style`
-								)}
-							</td>
-							<td className={`w-32 ${rowClass}`}>
-								{getValues(
-									`packing_list_entry[${index}].color`
-								)}
-							</td>
-							<td className={`w-32 ${rowClass}`}>
-								{getValues(`packing_list_entry[${index}].size`)}
-							</td>
-							<td className={`w-32 ${rowClass}`}>
-								{getValues(
-									`packing_list_entry[${index}].is_inch`
-								) &&
-								getValues(
-									`packing_list_entry[${index}].order_number`
-								) !== ''
-									? 'inch'
-									: 'cm'}
-							</td>
-							<td className={`${rowClass}`}>
-								{getValues(
-									`packing_list_entry[${index}].order_quantity`
-								)}
-							</td>
-							<td className={`${rowClass}`}>
-								{getValues(
-									`packing_list_entry[${index}].balance_quantity`
-								)}
-							</td>
-							{/* <td className={`${rowClass}`}>
-								{getValues(
-									`packing_list_entry[${index}].warehouse`
-								)}
-							</td>
-							<td className={`${rowClass}`}>
-								{getValues(
-									`packing_list_entry[${index}].delivered`
-								)}
-							</td> */}
-							<td className={`w-32 ${rowClass}`}>
-								<Input
-									label={`packing_list_entry[${index}].quantity`}
-									is_title_needed='false'
-									height='h-8'
-									dynamicerror={
-										errors?.packing_list_entry?.[index]
-											?.quantity
-									}
-									disabled={
-										getValues(
-											`packing_list_entry[${index}].quantity`
-										) === 0
-									}
-									{...{ register, errors }}
-								/>
-							</td>
-							<td className={`w-32 ${rowClass}`}>
-								<Input
-									label={`packing_list_entry[${index}].poli_quantity`}
-									is_title_needed='false'
-									height='h-8'
-									dynamicerror={
-										errors?.packing_list_entry?.[index]
-											?.poli_quantity
-									}
-									{...{ register, errors }}
-								/>
-							</td>
-							<td className={`w-32 ${rowClass}`}>
-								<Input
-									label={`packing_list_entry[${index}].short_quantity`}
-									is_title_needed='false'
-									height='h-8'
-									dynamicerror={
-										errors?.packing_list_entry?.[index]
-											?.short_quantity
-									}
-									{...{ register, errors }}
-								/>
-							</td>
-							<td className={`w-32 ${rowClass}`}>
-								<Input
-									label={`packing_list_entry[${index}].reject_quantity`}
-									is_title_needed='false'
-									height='h-8'
-									dynamicerror={
-										errors?.packing_list_entry?.[index]
-											?.reject_quantity
-									}
-									{...{ register, errors }}
-								/>
-							</td>
-
-							<td className={cn(rowClass, 'w-60')}>
-								<Input
-									label={`packing_list_entry[${index}].remarks`}
-									is_title_needed='false'
-									height='h-8'
-									dynamicerror={
-										errors?.packing_list_entry?.[index]
-											?.remarks
-									}
-									{...{ register, errors }}
-								/>
-							</td>
-							{isUpdate && (
-								<td
-									className={cn(
-										rowClass,
-										'min-w-20 border-l-2 border-base-200'
-									)}>
-									<RemoveButton
-										showButton
-										onClick={() =>
-											handlePackingListEntryRemove(index)
-										}
-									/>
-								</td>
-							)}
-						</tr>
-					))}
-				</DynamicDeliveryField>
 				<div className='modal-action'>
 					<SubmitButton />
 				</div>

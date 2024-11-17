@@ -131,6 +131,30 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'gate_pass',
+				header: 'Gate Pass',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const access = haveAccess.includes('click_gate_pass');
+					const overrideAccess = haveAccess.includes(
+						'click_gate_pass_override'
+					);
+					const { challan_uuid } = info.row.original;
+					console.log(challan_uuid);
+					return (
+						<SwitchToggle
+							disabled={
+								(!overrideAccess &&
+									(!access || info.getValue() !== 1)) ||
+								challan_uuid === null
+							}
+							onChange={() => handelGatePass(info.row.index)}
+							checked={info.getValue() === 1}
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'total_poly_quantity',
 				header: 'Poly',
 				enableColumnFilter: false,
@@ -230,6 +254,17 @@ export default function Index() {
 			updatedData: {
 				is_warehouse_received:
 					data[idx]?.is_warehouse_received === true ? false : true,
+				updated_at: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
+		invalidateDeliveryPackingListByUUID(data[idx]?.uuid);
+	};
+	const handelGatePass = async (idx) => {
+		await updateData.mutateAsync({
+			url: `${url}/${data[idx]?.uuid}`,
+			updatedData: {
+				gate_pass: data[idx]?.gate_pass === 1 ? 0 : 1,
 				updated_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,

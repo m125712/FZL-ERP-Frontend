@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useCommonCoilSFG, useCommonCoilToDyeing } from '@/state/Common';
-import { useAccess, useFetch } from '@/hooks';
+import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';

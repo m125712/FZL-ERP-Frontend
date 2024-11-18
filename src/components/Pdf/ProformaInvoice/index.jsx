@@ -62,6 +62,7 @@ export default function Index(data) {
 		.replace(/var_pi_validity/g, `${data?.validity}`)
 		.replace(/var_bank_name/g, `${data?.bank_name}`)
 		.replace(/var_payment/g, `${data?.payment}`);
+
 	const lines = bankPolicy
 		.split(';')
 		.map((line) => line.trim())
@@ -219,7 +220,7 @@ export default function Index(data) {
 							: TotalQuantity[index][priceIndex] + ' pcs',
 					// unit_price: unitPrice + '/dzn',
 					unit_price: `${unitPrice} /${order_types[index] === 'tape' ? 'mtr' : 'dzn'}`,
-					value: TotalValue[index][priceIndex], 
+					value: TotalValue[index][priceIndex],
 				};
 			});
 		}
@@ -378,7 +379,12 @@ export default function Index(data) {
 					widths: [60, '*'],
 					body: headers.map((header, index) => [
 						{ text: header, bold: true },
-						{ text: values[index] },
+						{
+							text:
+								index === 0 && data?.is_rtgs
+									? 'FDD/RTGS'
+									: values[index],
+						},
 					]),
 				},
 				layout: 'noBorders',

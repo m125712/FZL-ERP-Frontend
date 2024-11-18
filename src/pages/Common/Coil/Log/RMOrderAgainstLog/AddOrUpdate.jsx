@@ -1,19 +1,21 @@
-import { AddModal } from '@/components/Modal';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useEffect } from 'react';
 import { useCommonMaterialTrxByUUID } from '@/state/Common';
-import { useOtherMaterial, useOtherOrderDescription } from '@/state/Other';
+import { useOtherMaterial } from '@/state/Other';
 import {
 	useMaterialInfo,
 	useMaterialTrxAgainstOrderDescription,
 } from '@/state/Store';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import getTransactionArea from '@/util/TransactionArea';
+
 import {
 	RM_MATERIAL_ORDER_AGAINST_EDIT_NULL,
 	RM_MATERIAL_ORDER_AGAINST_EDIT_SCHEMA,
 } from '@util/Schema';
-import { useEffect } from 'react';
+import GetDateTime from '@/util/GetDateTime';
+import getTransactionArea from '@/util/TransactionArea';
 
 export default function Index({
 	modalId = '',
@@ -32,7 +34,6 @@ export default function Index({
 	const { invalidateQuery: invalidateMaterialTrx } =
 		useMaterialTrxAgainstOrderDescription();
 	const { data: material } = useOtherMaterial();
-	const { data: order } = useOtherOrderDescription();
 	const MAX_QUANTITY =
 		Number(updateLog?.stock) + Number(updateLog?.trx_quantity);
 	const schema = {
@@ -54,11 +55,11 @@ export default function Index({
 		context,
 	} = useRHF(schema, RM_MATERIAL_ORDER_AGAINST_EDIT_NULL);
 
-	useFetchForRhfReset(
-		`/zipper/material-trx-against-order/${updateLog?.uuid}`,
-		updateLog?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (updateLog?.uuid !== null && data) {
+			reset(updateLog);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateLog((prev) => ({

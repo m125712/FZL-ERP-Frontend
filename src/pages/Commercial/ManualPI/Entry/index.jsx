@@ -1,11 +1,14 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
-import { useCommercialManualPI } from '@/state/Commercial';
-import { useThreadOrderInfo, useThreadOrderInfoEntry } from '@/state/Thread';
+import {
+	useCommercialManualPI,
+	useCommercialManualPIDetails,
+} from '@/state/Commercial';
+import { useThreadOrderInfo } from '@/state/Thread';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import DynamicFormSpreadSheet from '@/ui/Dynamic/DynamicFormSpreadSheet';
@@ -18,12 +21,12 @@ import GetDateTime from '@/util/GetDateTime';
 import Header from './Header';
 
 export default function Index() {
-	const { url: threadOrderInfoUrl } = useThreadOrderInfo();
-	const { url: threadOrderEntryUrl } = useThreadOrderInfoEntry();
 	const { updateData, postData, deleteData } = useThreadOrderInfo();
+
 	const { invalidateQuery: invalidateCommercialManualPI } =
 		useCommercialManualPI();
 	const { manual_pi_uuid } = useParams();
+	const { data } = useCommercialManualPIDetails(manual_pi_uuid);
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const isUpdate = manual_pi_uuid !== undefined;
@@ -54,12 +57,11 @@ export default function Index() {
 		{ label: 'No', value: false },
 	];
 
-	if (isUpdate)
-		useFetchForRhfReset(
-			`/commercial/manual-pi/details/by/${manual_pi_uuid}`,
-			manual_pi_uuid,
-			reset
-		);
+	useEffect(() => {
+		if (data && isUpdate) {
+			reset(data);
+		}
+	}, [data, isUpdate]);
 
 	// manual_pi_entry
 	const {

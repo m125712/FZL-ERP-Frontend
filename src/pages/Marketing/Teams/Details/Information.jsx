@@ -1,14 +1,10 @@
 import { format } from 'date-fns';
-import { useFetch } from '@/hooks';
 
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
-import { DateTime, LinkWithCopy, TitleValue } from '@/ui';
 
 export default function Information({ data }) {
 	const { name, created_by_name, created_at, updated_at, remarks } = data;
-
-	const { value: pi } = useFetch('/other/pi/value/label');
 
 	const renderItems = () => {
 		const basicInfo = [

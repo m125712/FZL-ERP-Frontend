@@ -1,14 +1,10 @@
 import { useEffect } from 'react';
-import {
-	useCommonCoilSFG,
-	useCommonCoilToDyeingByUUID,
-	useCommonTapeToDyeing,
-} from '@/state/Common';
-import { useOtherMaterial } from '@/state/Other';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useCommonCoilSFG, useCommonCoilToDyeingByUUID } from '@/state/Common';
+import { useOtherOrderDescription } from '@/state/Other';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+import { FormField, Input, ReactSelect } from '@/ui';
 
 import {
 	COMMON_COIL_TO_DYEING_LOG_NULL,
@@ -24,7 +20,7 @@ export default function Index({
 	const { data, url, updateData } = useCommonCoilToDyeingByUUID(
 		entryUUID?.uuid
 	);
-	const { data: material } = useOtherMaterial();
+
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
 	const MAX_QTY = Number(entryUUID?.max_trf_qty);
 
@@ -44,14 +40,13 @@ export default function Index({
 		context,
 	} = useRHF(schema, COMMON_COIL_TO_DYEING_LOG_NULL);
 
-	useFetchForRhfReset(
-		`/zipper/tape-coil-to-dyeing/${entryUUID?.uuid}`,
-		entryUUID?.uuid,
-		reset
-	);
-	const { value: order_id } = useFetch(
-		'/other/order/description/value/label'
-	);
+	useEffect(() => {
+		if (data && entryUUID?.uuid !== null) {
+			reset(data);
+		}
+	}, [data]);
+
+	const { data: order_id } = useOtherOrderDescription();
 
 	const onClose = () => {
 		setEntryUUID(() => ({

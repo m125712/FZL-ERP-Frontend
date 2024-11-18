@@ -4,7 +4,7 @@ import {
 	useCommercialLCByQuery,
 	useCommercialLCPIByUUID,
 } from '@/state/Commercial';
-import { useOtherPI, useOtherUpdatePI } from '@/state/Other';
+import { useOtherPiValues } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { format } from 'date-fns';
@@ -60,11 +60,9 @@ export default function Index() {
 	const [status, setStatus] = useState(false);
 
 	const isUpdate = lc_uuid !== undefined;
-	if (isUpdate) {
-		var { data: pi } = useOtherUpdatePI();
-	} else {
-		var { data: pi } = useOtherPI();
-	}
+	let { data: pi } = useOtherPiValues(
+		isUpdate ? 'is_update=true' : 'is_update=false'
+	);
 
 	const {
 		register,
@@ -109,7 +107,7 @@ export default function Index() {
 	});
 
 	useEffect(() => {
-		if (data) {
+		if (data && isUpdate) {
 			reset(data);
 		}
 	}, [data]);

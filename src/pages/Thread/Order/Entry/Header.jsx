@@ -5,7 +5,6 @@ import {
 	useOtherMarketing,
 	useOtherMerchandiserByPartyUUID,
 	useOtherParty,
-	useOtherPartyAll,
 } from '@/state/Other';
 import DatePicker from 'react-datepicker';
 import { useParams } from 'react-router-dom';
@@ -40,7 +39,7 @@ export default function Header({
 			: false
 	);
 	const [partyId, setPartyId] = useState(getValues('party_uuid'));
-	const { data: party } = useOtherPartyAll();
+	const { data: party } = useOtherParty();
 	const { data: merchandiser } = useOtherMerchandiserByPartyUUID(partyId);
 	const { data: factory } = useOtherFactoryByPartyUUID(partyId);
 	const { data: buyer } = useOtherBuyer();

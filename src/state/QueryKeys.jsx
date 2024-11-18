@@ -1089,7 +1089,11 @@ export const otherQK = {
 	//Order
 	order: () => [...otherQK.all(), 'order'],
 	orderPackingList: () => [...otherQK.all(), 'order-packing-list'],
-	orderDescription: () => [...otherQK.all(), 'order-description'],
+	orderDescription: (params) => [
+		...otherQK.all(),
+		'order-description',
+		...(params ? [params] : []),
+	],
 	orderBatchDescription: () => [...otherQK.all(), 'order-batch-description'],
 	orderEntry: () => [...otherQK.all(), 'order-entry'],
 	orderDescriptionByOrderNumber: (orderNumber) => [
@@ -1151,13 +1155,13 @@ export const otherQK = {
 	lcByPartyUUID: (uuid) => [...otherQK.all(), 'lc-by-party', uuid],
 
 	//PI
-	pi: () => [...otherQK.all(), 'pi'],
+	pi: (query) => [...otherQK.all(), 'pi', ...(query ? [query] : [])],
 
 	//Department
 	department: () => [...otherQK.all(), 'department'],
 
 	// Party
-	party: (params) => [...otherQK.all(), 'party', params],
+	party: (params) => [...otherQK.all(), 'party', ...(params ? [params] : [])],
 
 	//Buyer
 	buyer: () => [...otherQK.all(), 'buyer'],

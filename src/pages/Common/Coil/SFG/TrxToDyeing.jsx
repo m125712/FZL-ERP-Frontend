@@ -4,7 +4,6 @@ import {
 	useFetch,
 	useFetchForRhfReset,
 	useFetchFunc,
-	usePostFunc,
 	useRHF,
 	useUpdateFunc,
 } from "@/hooks";

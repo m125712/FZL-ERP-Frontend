@@ -1,18 +1,19 @@
-import { AddModal } from '@/components/Modal';
-import { ShowLocalToast } from '@/components/Toast';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useEffect } from 'react';
 import {
 	useCommonCoilSFG,
 	useCommonTapeProductionByUUID,
 } from '@/state/Common';
-import { useOtherMaterial } from '@/state/Other';
-import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
+import { Input } from '@/ui';
+
 import {
 	TAPE_OR_COIL_PRODUCTION_LOG_NULL,
 	TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
 } from '@util/Schema';
-import { useEffect } from 'react';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -32,19 +33,6 @@ export default function Index({
 		updateCoilLog?.uuid
 	);
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
-	const { data: material } = useOtherMaterial();
-
-	// const MAX_QUANTITY =
-	// 	Number(updateCoilLog?.trx_quantity_in_coil) +
-	// 	Number(updateCoilLog?.production_quantity)+Number(updateCoilLog?.wastage);
-	// const schema = {
-	// 	...TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA,
-	// 	production_quantity:
-	// 		TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA.production_quantity.max(
-	// 			MAX_PROD
-	// 		),
-	// 	wastage: TAPE_OR_COIL_PRODUCTION_LOG_SCHEMA.wastage.max(MAX_WASTAGE),
-	// };
 
 	const { register, handleSubmit, errors, reset, context, getValues, watch } =
 		useRHF(
@@ -52,11 +40,11 @@ export default function Index({
 			TAPE_OR_COIL_PRODUCTION_LOG_NULL
 		);
 
-	useFetchForRhfReset(
-		`/zipper/tape-coil-production/${updateCoilLog?.uuid}`,
-		updateCoilLog?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data && updateCoilLog?.uuid) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateCoilLog((prev) => ({

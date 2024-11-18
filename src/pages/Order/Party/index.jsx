@@ -22,7 +22,7 @@ import {
 	useOtherOrderPropertiesByTeethType,
 	useOtherOrderPropertiesByTopStopper,
 	useOtherOrderPropertiesByZipperNumber,
-	useOtherPartyAll,
+	useOtherParty,
 } from '@/state/Other';
 import { useAccess } from '@/hooks';
 
@@ -38,7 +38,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useOrderParty();
-	const { invalidateQuery: invalidatePartyAll } = useOtherPartyAll();
+	const { invalidateQuery: invalidatePartyAll } = useOtherParty();
 	const { invalidateQuery: invalidateOrderPropertiesByBottomStopper } =
 		useOtherOrderPropertiesByBottomStopper();
 	const { invalidateQuery: invalidateOrderPropertiesByColor } =

@@ -1,15 +1,9 @@
 import { useEffect } from 'react';
-import {
-	useCommonCoilTransferByUUID,
-	useCommonTapeSFG,
-	useCommonTapeToCoilByUUID,
-	useCommonTapeTransferByUUID,
-} from '@/state/Common';
-import { useOtherMaterial } from '@/state/Other';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useCommonCoilTransferByUUID, useCommonTapeSFG } from '@/state/Common';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { Input, JoinInput } from '@/ui';
+import { Input } from '@/ui';
 
 import { TAPE_TO_COIL_TRX_NULL, TAPE_TO_COIL_TRX_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
@@ -29,7 +23,6 @@ export default function Index({
 		updateTapeLog?.uuid
 	);
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
-	const { data: material } = useOtherMaterial();
 
 	const MAX_QUANTITY =
 		Number(updateTapeLog?.stock_quantity) +
@@ -42,11 +35,12 @@ export default function Index({
 
 	const { register, handleSubmit, errors, reset, context, getValues } =
 		useRHF(schema, TAPE_TO_COIL_TRX_NULL);
-	useFetchForRhfReset(
-		`/zipper/dyed-tape-transaction-from-stock/${updateTapeLog?.uuid}`,
-		updateTapeLog?.uuid,
-		reset
-	);
+
+	useEffect(() => {
+		if (data && updateTapeLog?.uuid !== null) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateTapeLog((prev) => ({

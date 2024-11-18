@@ -2,7 +2,7 @@ import { useAuth } from '@/context/auth';
 import { useOrderMerchandiser } from '@/state/Order';
 import {
 	useOtherMerchandiserByPartyUUID,
-	useOtherPartyAll,
+	useOtherParty,
 } from '@/state/Other';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
@@ -35,7 +35,7 @@ export default function Index({
 		context,
 	} = useRHF(MERCHANDISER_SCHEMA, MERCHANDISER_NULL);
 
-	const { data: party } = useOtherPartyAll();
+	const { data: party } = useOtherParty();
 	const { user } = useAuth();
 
 	useFetchForRhfReset(

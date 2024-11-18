@@ -1,5 +1,5 @@
+import { useOtherPiValues } from '@/state/Other';
 import { format } from 'date-fns';
-import { useFetch } from '@/hooks';
 
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
@@ -101,7 +101,7 @@ export default function Information({ data }) {
 		remarks,
 	} = data;
 
-	const { value: pi } = useFetch('/other/pi/value/label');
+	const { data: pi } = useOtherPiValues();
 
 	console.log(pi?.filter((pi) => pi_uuids?.includes(pi?.value)));
 
@@ -115,14 +115,16 @@ export default function Information({ data }) {
 				label: 'PI IDs',
 				value: pi_uuids && (
 					<div className='flex flex-wrap gap-2'>
-						{pi?.filter((pi) => pi_uuids?.includes(pi?.value))?.map((piId) => (
-							<LinkWithCopy
-								key={piId.value}
-								title={piId.label}
-								id={piId.value}
-								uri='/commercial/pi/details'
-							/>
-						))}
+						{pi
+							?.filter((pi) => pi_uuids?.includes(pi?.value))
+							?.map((piId) => (
+								<LinkWithCopy
+									key={piId.value}
+									title={piId.label}
+									id={piId.value}
+									uri='/commercial/pi/details'
+								/>
+							))}
 					</div>
 				),
 			},

@@ -12,9 +12,10 @@ import WarehouseRecv from '@/pages/Delivery/WarehouseRecv';
 import Carton from '@pages/Delivery/Carton';
 import Challan from '@pages/Delivery/Challan';
 import ChallanDetails from '@pages/Delivery/Challan/Details';
+//Gate Pass
+import GatePass from '@pages/Delivery/GatePass';
 import Log from '@pages/Delivery/Log';
 import RM from '@pages/Delivery/RM';
-// import TestBarcode from '@pages/Delivery/Test/Barcode';
 import Vehicle from '@pages/Delivery/Vehicle';
 import ThreadChallan from '@pages/Thread/Challan';
 import ThreadChallanDetails from '@pages/Thread/Challan/Details';
@@ -64,6 +65,13 @@ export const DeliveryRoutes = [
 				path: '/delivery/zipper-warehouse-receive',
 				element: <WarehouseRecv />,
 				page_name: 'delivery__warehouse_recv',
+				actions: ['create', 'read'],
+			},
+			{
+				name: 'Gate Pass',
+				path: '/delivery/gate-pass',
+				element: <GatePass />,
+				page_name: 'delivery__gate_pass',
 				actions: ['create', 'read'],
 			},
 			{
@@ -158,46 +166,46 @@ export const DeliveryRoutes = [
 				hidden: true,
 			},
 			// * Thread Challan
-			{
-				name: 'Thread Challan',
-				path: '/thread/challan',
-				element: <ThreadChallan />,
-				page_name: 'thread__challan',
-				actions: [
-					'create',
-					'read',
-					'update',
-					'delete',
-					'click_gate_pass',
-					'click_receive_status',
-					'click_gate_pass_override',
-					'click_receive_status_override',
-				],
-			},
-			{
-				name: 'Thread Challan Details',
-				path: '/thread/challan/:uuid',
-				element: <ThreadChallanDetails />,
-				page_name: 'thread__challan_details',
-				actions: ['create', 'read', 'update', 'delete'],
-				hidden: true,
-			},
-			{
-				name: 'Thread Challan Entry',
-				path: '/thread/challan/entry',
-				element: <ThreadChallanEntry />,
-				page_name: 'thread__challan_entry',
-				actions: ['create', 'read', 'update', 'delete'],
-				hidden: true,
-			},
-			{
-				name: 'Thread Challan Update',
-				path: '/thread/challan/:challan_uuid/update',
-				element: <ThreadChallanEntry />,
-				page_name: 'thread__challan_update',
-				actions: ['create', 'read', 'update', 'delete'],
-				hidden: true,
-			},
+			// {
+			// 	name: 'Thread Challan',
+			// 	path: '/thread/challan',
+			// 	element: <ThreadChallan />,
+			// 	page_name: 'thread__challan',
+			// 	actions: [
+			// 		'create',
+			// 		'read',
+			// 		'update',
+			// 		'delete',
+			// 		'click_gate_pass',
+			// 		'click_receive_status',
+			// 		'click_gate_pass_override',
+			// 		'click_receive_status_override',
+			// 	],
+			// },
+			// {
+			// 	name: 'Thread Challan Details',
+			// 	path: '/thread/challan/:uuid',
+			// 	element: <ThreadChallanDetails />,
+			// 	page_name: 'thread__challan_details',
+			// 	actions: ['create', 'read', 'update', 'delete'],
+			// 	hidden: true,
+			// },
+			// {
+			// 	name: 'Thread Challan Entry',
+			// 	path: '/thread/challan/entry',
+			// 	element: <ThreadChallanEntry />,
+			// 	page_name: 'thread__challan_entry',
+			// 	actions: ['create', 'read', 'update', 'delete'],
+			// 	hidden: true,
+			// },
+			// {
+			// 	name: 'Thread Challan Update',
+			// 	path: '/thread/challan/:challan_uuid/update',
+			// 	element: <ThreadChallanEntry />,
+			// 	page_name: 'thread__challan_update',
+			// 	actions: ['create', 'read', 'update', 'delete'],
+			// 	hidden: true,
+			// },
 			// * Log
 			{
 				name: 'Log',
@@ -252,14 +260,6 @@ export const DeliveryRoutes = [
 				page_name: 'delivery__test',
 				actions: ['read'],
 			},
-			//* Test Barcode
-			// {
-			// 	name: 'Test Barcode',
-			// 	path: '/delivery/test/barcode',
-			// 	element: <TestBarcode />,
-			// 	page_name: 'delivery__test_barcode',
-			// 	actions: ['read'],
-			// },
 		],
 	},
 ];

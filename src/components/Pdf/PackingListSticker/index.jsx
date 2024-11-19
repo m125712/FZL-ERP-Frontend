@@ -12,11 +12,19 @@ import pdfMake from '..';
 import { generateBarcodeAsBase64 } from './Barcode';
 import { getPageFooter } from './utils';
 
-const node = [
+const nodeZipper = [
 	getTable('item_description', 'Item'),
 	getTable('style', 'Style'),
 	getTable('color', 'Color'),
 	getTable('size', 'Size', 'right'),
+	getTable('quantity', 'Qty(pcs)', 'right'),
+	getTable('poli_quantity', 'Poly', 'right'),
+];
+const nodeThread = [
+	getTable('item_description', 'Count'),
+	getTable('style', 'Style'),
+	getTable('color', 'Color'),
+	getTable('size', 'Length', 'right'),
 	getTable('quantity', 'Qty(pcs)', 'right'),
 	getTable('poli_quantity', 'Poly', 'right'),
 ];
@@ -33,7 +41,7 @@ export default function Index(data) {
 		return acc + quantity;
 	}, 0);
 	data?.packing_list_entry?.map((item) => {
-		item.size = `${item.is_inch === 1 ? `${item.size} in` : `${item.size} cm`}`;
+		item.size = `${data.item_for === 'zipper' ? (item.is_inch === 1 ? `${item.size} in` : `${item.size} cm`) : `${item.size} mtr`}`;
 	});
 	const pdfDocGenerator = pdfMake.createPdf({
 		...CUSTOM_PAGE_STICKER({
@@ -172,16 +180,33 @@ export default function Index(data) {
 							{},
 						],
 						// * Header
-						TableHeader(node, DEFAULT_FONT_SIZE - 2, '#000000'),
+						data?.item_for == 'zipper'
+							? TableHeader(
+									nodeZipper,
+									DEFAULT_FONT_SIZE - 2,
+									'#000000'
+								)
+							: TableHeader(
+									nodeThread,
+									DEFAULT_FONT_SIZE - 2,
+									'#000000'
+								),
 
 						// * Body
 						...packing_list_entry?.map((item) =>
-							node.map((nodeItem) => ({
-								text: item[nodeItem.field],
-								style: nodeItem.cellStyle,
-								alignment: nodeItem.alignment,
-								fontSize: DEFAULT_FONT_SIZE - 2,
-							}))
+							data?.item_for == 'zipper'
+								? nodeZipper.map((nodeItem) => ({
+										text: item[nodeItem.field],
+										style: nodeItem.cellStyle,
+										alignment: nodeItem.alignment,
+										fontSize: DEFAULT_FONT_SIZE - 2,
+									}))
+								: nodeThread.map((nodeItem) => ({
+										text: item[nodeItem.field],
+										style: nodeItem.cellStyle,
+										alignment: nodeItem.alignment,
+										fontSize: DEFAULT_FONT_SIZE - 2,
+									}))
 						),
 						[
 							{

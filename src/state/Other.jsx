@@ -451,11 +451,17 @@ export const useOtherRecipe = () =>
 		queryKey: otherQK.recipe(),
 		url: `/other/lab-dip/recipe/value/label`,
 	});
+//* GET CHALLAN
+export const useOtherChallan = () =>
+	createGlobalState({
+		queryKey: otherQK.challan(),
+		url: `/other/delivery/challan/value/label`,
+	});
 
 // TAPE-COIL
 export const useOtherTapeCoil = () =>
 	createGlobalState({
-		queryKey: otherQK.tapeCoil(),		
+		queryKey: otherQK.tapeCoil(),
 		url: `/other/tape-coil/value/label`,
 	});
 

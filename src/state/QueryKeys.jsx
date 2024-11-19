@@ -1331,6 +1331,9 @@ export const otherQK = {
 	],
 	shadeRecipe: () => [...otherQK.all(), 'shade-recipe'],
 
+	//*Challan
+	challan: () => [...otherQK.all(), 'challan'],
+
 	//* TAPE-COIL
 	tapeCoil: () => [...otherQK.all(), 'tape-coil'],
 

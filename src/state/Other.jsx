@@ -444,9 +444,21 @@ export const useOtherShadeRecipe = () =>
 		queryKey: otherQK.shadeRecipe(),
 		url: `/other/lab-dip/shade-recipe/value/label`,
 	});
+
 //* GET RECIPE
 export const useOtherRecipe = () =>
 	createGlobalState({
 		queryKey: otherQK.recipe(),
 		url: `/other/lab-dip/recipe/value/label`,
 	});
+
+// TAPE-COIL
+export const useOtherTapeCoil = () =>
+	createGlobalState({
+		queryKey: otherQK.tapeCoil(),		
+		url: `/other/tape-coil/value/label`,
+	});
+
+// * GET GIVEN URL DATA
+export const useGetURLData = (url) =>
+	createGlobalState({ queryKey: otherQK.getURLData(url), url: url });

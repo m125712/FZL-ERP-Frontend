@@ -59,6 +59,16 @@ export default function Index() {
 		PACKING_LIST_NULL
 	);
 
+	const { fields: packingListEntryField } = useFieldArray({
+		control,
+		name: 'packing_list_entry',
+	});
+
+	const { fields: newPackingListEntryField } = useFieldArray({
+		control,
+		name: 'new_packing_list_entry',
+	});
+
 	const {
 		data: details,
 		url,
@@ -97,16 +107,6 @@ export default function Index() {
 	// 		setValue('new_packing_list_entry', watch('new_packing_list_entry'));
 	// 	}
 	// }, [watch('order_info_uuid')]);
-
-	const { fields: packingListEntryField } = useFieldArray({
-		control,
-		name: 'packing_list_entry',
-	});
-
-	const { fields: newPackingListEntryField } = useFieldArray({
-		control,
-		name: 'new_packing_list_entry',
-	});
 
 	const [deleteItem, setDeleteItem] = useState({
 		itemId: null,
@@ -290,17 +290,11 @@ export default function Index() {
 
 	// Remove packing list entry
 	const handlePackingListEntryRemove = (index) => {
-		if (
-			getValues(`packing_list_entry[${index}].packing_list_uuid`) !==
-				null &&
-			getValues(`packing_list_entry[${index}].is_checked`) === true
-		) {
-			setDeleteItem({
-				itemId: getValues(`packing_list_entry[${index}].uuid`),
-				itemName: getValues(`packing_list_entry[${index}].uuid`),
-			});
-			window['packing_list_entry_delete'].showModal();
-		}
+		setDeleteItem({
+			itemId: getValues(`packing_list_entry[${index}].uuid`),
+			itemName: getValues(`packing_list_entry[${index}].uuid`),
+		});
+		window['packing_list_entry_delete'].showModal();
 	};
 
 	return (

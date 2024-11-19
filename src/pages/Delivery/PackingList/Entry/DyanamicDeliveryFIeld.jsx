@@ -25,31 +25,56 @@ const DynamicDeliveryTable = ({
 			title={title}
 			tableHead={
 				<>
-					{[
-						'O/N',
-						'Item Description',
-						'Style',
-						'Color',
-						'Size',
-						'Unit',
-						'Order QTY',
-						'Balance QTY',
-						// 'Warehouse',
-						// 'Delivered',
-						'Quantity(pcs)',
-						'Poly QTY',
-						'Short QTY',
-						'Reject QTY',
-						'Remarks',
-						,
-					].map((item) => (
-						<th
-							key={item}
-							scope='col'
-							className='group cursor-pointer px-3 py-2 transition duration-300'>
-							{item}
-						</th>
-					))}
+					{watch('item_for') === 'zipper'
+						? [
+								'O/N',
+								'Item Description',
+								'Style',
+								'Color',
+								'Size',
+								'Unit',
+								'Order QTY',
+								'Balance QTY',
+								// 'Warehouse',
+								// 'Delivered',
+								'Quantity(pcs)',
+								'Poly QTY',
+								'Short QTY',
+								'Reject QTY',
+								'Remarks',
+								,
+							].map((item) => (
+								<th
+									key={item}
+									scope='col'
+									className='group cursor-pointer px-3 py-2 transition duration-300'>
+									{item}
+								</th>
+							))
+						: [
+								'O/N',
+								'Count',
+								'Style',
+								'Color',
+								'Length',
+								'Unit',
+								'Order QTY',
+								'Balance QTY',
+								// 'Warehouse',
+								// 'Delivered',
+								'Quantity(pcs)',
+								'Poly QTY',
+								'Short QTY',
+								'Reject QTY',
+								'Remarks',
+							].map((item) => (
+								<th
+									key={item}
+									scope='col'
+									className='group cursor-pointer px-3 py-2 transition duration-300'>
+									{item}
+								</th>
+							))}
 
 					{isUpdate && entryFiledName === 'packing_list_entry' && (
 						<th
@@ -84,13 +109,18 @@ const DynamicDeliveryTable = ({
 					<td className={`w-32 ${rowClass}`}>
 						{getValues(`${entryFiledName}[${index}].color`)}
 					</td>
+
 					<td className={`w-32 ${rowClass}`}>
-						{getValues(`${entryFiledName}${index}].size`)}
+						{getValues(`${entryFiledName}[${index}].size`)}
 					</td>
+
 					<td className={`w-32 ${rowClass}`}>
-						{getValues(`${entryFiledName}[${index}].is_inch`)
-							? 'inch'
-							: 'cm'}
+						{getValues(`item_for`) ===
+						'thread'
+							? 'cone'
+							: getValues(`${entryFiledName}[${index}].is_inch`)
+								? 'inch'
+								: 'cm'}
 					</td>
 					<td className={rowClass}>
 						{getValues(
@@ -109,11 +139,11 @@ const DynamicDeliveryTable = ({
 							dynamicerror={
 								errors?.[entryFiledName]?.[index]?.quantity
 							}
-							disabled={
-								getValues(
-									`${entryFiledName}[${index}].quantity`
-								) === 0
-							}
+							// disabled={
+							// 	getValues(
+							// 		`${entryFiledName}[${index}].quantity`
+							// 	) === 0
+							// }
 							register={register}
 							errors={errors}
 						/>

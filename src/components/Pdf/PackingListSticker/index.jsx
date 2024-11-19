@@ -1,7 +1,12 @@
 import { format } from 'date-fns';
 
 import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
-import { CUSTOM_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
+import {
+	CUSTOM_PAGE,
+	CUSTOM_PAGE_STICKER,
+	getTable,
+	TableHeader,
+} from '@/components/Pdf/utils';
 
 import pdfMake from '..';
 import { generateBarcodeAsBase64 } from './Barcode';
@@ -31,7 +36,7 @@ export default function Index(data) {
 		item.size = `${item.is_inch === 1 ? `${item.size} in` : `${item.size} cm`}`;
 	});
 	const pdfDocGenerator = pdfMake.createPdf({
-		...CUSTOM_PAGE({
+		...CUSTOM_PAGE_STICKER({
 			pageOrientation: 'landscape',
 			xMargin: 5,
 			headerHeight: 5,

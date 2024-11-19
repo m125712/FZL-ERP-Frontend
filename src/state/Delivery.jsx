@@ -114,11 +114,11 @@ export const useDeliveryChallanEntryForPackingListByPackingListUUID = (
 
 // /delivery/order-for-packing-list/{order_info_uuid}
 
-export const useDeliveryPackingListByOrderInfoUUID = (order_info_uuid) =>
+export const useDeliveryPackingListByOrderInfoUUID = (order_info_uuid,param) =>
 	createGlobalState({
 		queryKey:
 			deliveryQk.deliveryPackingListByOrderInfoUUID(order_info_uuid),
-		url: `/delivery/order-for-packing-list/${order_info_uuid}`,
+		url: `/delivery/order-for-packing-list/${order_info_uuid}?${param}`,
 		enabled: !!order_info_uuid,
 	});
 

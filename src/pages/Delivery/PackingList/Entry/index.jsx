@@ -1,25 +1,27 @@
 import { Suspense, useEffect, useState } from 'react';
-import {
-	useDeliveryPackingList,
-	useDeliveryPackingListByOrderInfoUUID,
-	useDeliveryPackingListDetailsByUUID,
-	useDeliveryPackingListEntry,
-} from '@/state/Delivery';
+import { useDeliveryPackingList, useDeliveryPackingListByOrderInfoUUID, useDeliveryPackingListDetailsByUUID, useDeliveryPackingListEntry } from '@/state/Delivery';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { set } from 'date-fns';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
+
+
 import { DeleteModal } from '@/components/Modal';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
 
+
+
 import nanoid from '@/lib/nanoid';
-import { PACKING_LIST_NULL, PACKING_LIST_SCHEMA } from '@util/Schema';
+import { PACKING_LIST_NULL, PACKING_LIST_SCHEMA, PACKING_LIST_UPDATE_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
+
+
 
 import DynamicDeliveryTable from './DyanamicDeliveryFIeld';
 import Header from './Header';
+
 
 export default function Index() {
 	const { uuid } = useParams();
@@ -50,7 +52,10 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
-	} = useRHF(PACKING_LIST_SCHEMA, PACKING_LIST_NULL);
+	} = useRHF(
+		isUpdate ? PACKING_LIST_UPDATE_SCHEMA : PACKING_LIST_SCHEMA,
+		PACKING_LIST_NULL
+	);
 
 	const {
 		data: details,
@@ -61,7 +66,8 @@ export default function Index() {
 	});
 
 	const { data: packingListEntries } = useDeliveryPackingListByOrderInfoUUID(
-		watch('order_info_uuid')
+		watch('order_info_uuid'),
+		`item_for=${watch('item_for')}`
 	);
 	useEffect(() => {
 		if (!isUpdate && packingListEntries?.packing_list_entry) {
@@ -70,23 +76,30 @@ export default function Index() {
 				packingListEntries?.packing_list_entry
 			);
 		}
-		if (isUpdate) {
-			setValue('packing_list_entry', details?.packing_list_entry);
-			setValue('new_packing_list_entry', details?.new_packing_list_entry);
-		}
-		// if (isUpdate && details) {
-		// 	reset(details);
+		// if (isUpdate) {
+		// 	setValue('packing_list_entry', details?.packing_list_entry);
+		// 	setValue('new_packing_list_entry', details?.new_packing_list_entry);
 		// }
+		if (isUpdate && details) {
+			reset(details);
+			setValue('packing_list_entry', details?.packing_list_entry);
+			setValue(
+				'new_packing_list_entry',
+				details?.new_packing_list_entry
+					? details?.new_packing_list_entry
+					: []
+			);
+		}
 	}, [isUpdate, packingListEntries, details]);
 
-	useFetchForRhfReset(url, '', reset);
+	// useFetchForRhfReset(url, '', reset);
 
-	useEffect(() => {
-		if (isUpdate && watch('new_packing_list_entry')) {
-			setValue('packing_list_entry', details?.packing_list_entry);
-			setValue('new_packing_list_entry', watch('new_packing_list_entry'));
-		}
-	}, [watch('order_info_uuid')]);
+	// useEffect(() => {
+	// 	if (isUpdate && watch('new_packing_list_entry')) {
+	// 		setValue('packing_list_entry', details?.packing_list_entry);
+	// 		setValue('new_packing_list_entry', watch('new_packing_list_entry'));
+	// 	}
+	// }, [watch('order_info_uuid')]);
 
 	const { fields: packingListEntryField } = useFieldArray({
 		control,
@@ -150,6 +163,7 @@ export default function Index() {
 				.map(async (item) => {
 					const updatedData = {
 						...item,
+						item_for: data.item_for,
 						quantity: item.quantity,
 						is_checked: item.is_checked,
 						remarks: item.remarks,
@@ -173,6 +187,7 @@ export default function Index() {
 							newData: {
 								...item,
 								uuid: nanoid(),
+								item_for: data.item_for,
 								is_checked: item.is_checked,
 								quantity: item?.quantity,
 								packing_list_uuid: uuid,
@@ -224,18 +239,20 @@ export default function Index() {
 
 		delete packingListData['is_all_checked'];
 		delete packingListData['packing_list_entry'];
-
+		console.log(data.packing_list_entry);
 		const packingListEntryData = [...data.packing_list_entry]
 			.filter((item) => item.quantity > 0)
 			.map((item) => ({
 				...item,
 				uuid: nanoid(),
+				item_for: data.item_for,
 				is_checked: true,
 				packing_list_uuid: new_uuid,
 				quantity: item?.quantity,
 				created_at,
 				remarks: item?.remarks || null,
 			}));
+		console.log(packingListEntryData);
 
 		if (packingListEntryData.length === 0) {
 			alert('Select at least one item to proceed.');
@@ -303,6 +320,8 @@ export default function Index() {
 						getValues,
 						Controller,
 						isUpdate,
+						watch,
+						setValue,
 					}}
 				/>
 				<DynamicDeliveryTable

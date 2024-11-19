@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import { useFetchForRhfResetForUserAccess, useRHF } from '@/hooks';
 import { allFlatRoutes } from '@/routes';
 import { useAdminUsers } from '@/state/Admin';
-import { CheckBox } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { BOOLEAN } from '@/util/Schema';
 import { Link } from 'react-router-dom';
+import { useFetchForRhfResetForUserAccess, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { DebouncedInput } from '@/components/Table/components';
+import { CheckBox } from '@/ui';
+
+import GetDateTime from '@/util/GetDateTime';
+import { BOOLEAN } from '@/util/Schema';
 
 export default function Index({
 	modalId = '',
@@ -19,7 +20,6 @@ export default function Index({
 	const ALL_PAGE_ACTIONS = allFlatRoutes.filter(
 		(item) => item.actions !== undefined
 	);
-	// console.log(ALL_PAGE_ACTIONS);
 
 	const [searchPageName, setSearchPageName] = useState('');
 	const filteredPageActions = ALL_PAGE_ACTIONS.filter(({ page_name }) =>
@@ -40,8 +40,6 @@ export default function Index({
 		},
 		{}
 	);
-
-	// console.log(PAGE_ACTIONS);
 
 	const PAGE_ACTIONS_SCHEMA = {};
 	const PAGE_ACTIONS_DEFAULT = {};

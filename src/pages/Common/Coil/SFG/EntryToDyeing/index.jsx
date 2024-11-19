@@ -1,11 +1,12 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useCommonCoilToDyeing, useCommonTapeToDyeing } from '@/state/Common';
 import { useOrderDescription } from '@/state/Order';
+import { useGetURLData } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast';
@@ -34,9 +35,10 @@ export default function Index() {
 	const location = useLocation();
 	const [status, setStatus] = useState(false);
 	const { postData, deleteData } = useOrderDescription();
-	const { value: data } = useFetch(`/zipper/tape-coil/${coil_uuid}`, [
-		coil_uuid,
-	]);
+	const { data } = useGetURLData(`/zipper/tape-coil/${coil_uuid}`);
+	const { data: order_description } = useGetURLData(
+		`/zipper/order/details/single-order/by/${order_description_uuid}/UUID`
+	);
 
 	const segments = location.pathname.split('/').filter((segment) => segment);
 
@@ -46,9 +48,8 @@ export default function Index() {
 		? (MAX_QTY = data?.quantity_in_coil)
 		: (MAX_QTY = data?.quantity);
 
-	const { value: order_id } = useFetch(
-		`/other/order/order-description/value/label/by/${coil_uuid}`,
-		[coil_uuid]
+	const { data: order_id } = useGetURLData(
+		`/other/order/order-description/value/label/by/${coil_uuid}`
 	);
 
 	const { user } = useAuth();
@@ -92,14 +93,12 @@ export default function Index() {
 			: (document.title = 'Order: Entry');
 	}, []);
 
-	if (isUpdate)
-		useFetchForRhfReset(
-			`/zipper/order/details/single-order/by/${order_description_uuid}/UUID`,
-			order_description_uuid,
-			reset
-		);
+	useEffect(() => {
+		if (order_description && isUpdate) {
+			reset(order_description);
+		}
+	}, [order_description]);
 
-	// order_entry
 	const {
 		fields: EntryField,
 		append: EntryAppend,

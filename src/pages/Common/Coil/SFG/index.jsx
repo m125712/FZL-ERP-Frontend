@@ -8,8 +8,6 @@ import ReactTable from '@/components/Table';
 import { DateTime, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
-
-const TrxToDying = lazy(() => import('./TrxToDyeing'));
 const Production = lazy(() => import('./Production'));
 const DyeingAgainstStock = lazy(() => import('./DyeingAgainstStock'));
 const TrxToStock = lazy(() => import('./ToStock'));
@@ -311,16 +309,6 @@ export default function Index() {
 			<Suspense>
 				<Production
 					modalId={'CoilProdModal'}
-					{...{
-						updateCoilProd,
-						setUpdateCoilProd,
-					}}
-				/>
-			</Suspense>
-
-			<Suspense>
-				<TrxToDying
-					modalId={'trx_to_dying_modal'}
 					{...{
 						updateCoilProd,
 						setUpdateCoilProd,

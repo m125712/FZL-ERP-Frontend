@@ -1,15 +1,18 @@
-import { AddModal } from '@/components/Modal';
-import { ShowLocalToast } from '@/components/Toast';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useEffect } from 'react';
 import { useCommonMaterialUsedByUUID, useCommonTapeRM } from '@/state/Common';
 import { useOtherMaterial } from '@/state/Other';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
 import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import getTransactionArea from '@/util/TransactionArea';
+
 import {
 	RM_MATERIAL_USED_EDIT_NULL,
 	RM_MATERIAL_USED_EDIT_SCHEMA,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
+import getTransactionArea from '@/util/TransactionArea';
 
 export default function Index({
 	modalId = '',
@@ -24,17 +27,9 @@ export default function Index({
 	setUpdateTapeLog,
 }) {
 	const { updateData } = useCommonTapeRM();
+	const { data } = useCommonMaterialUsedByUUID(updateTapeLog?.uuid);
 	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
 	const { data: material } = useOtherMaterial();
-	// const MAX_QUANTITY =
-	// 	Number(updateTapeLog?.tape_making) +
-	// 	Number(updateTapeLog?.used_quantity);
-
-	// const schema = {
-	// 	...RM_MATERIAL_USED_EDIT_SCHEMA,
-	// 	used_quantity:
-	// 		RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
-	// };
 
 	const {
 		register,
@@ -48,11 +43,11 @@ export default function Index({
 		watch,
 	} = useRHF(RM_MATERIAL_USED_EDIT_SCHEMA, RM_MATERIAL_USED_EDIT_NULL);
 
-	useFetchForRhfReset(
-		`/material/used/${updateTapeLog?.uuid}`,
-		updateTapeLog?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	let MAX_PROD =
 		Number(updateTapeLog?.tape_making) +

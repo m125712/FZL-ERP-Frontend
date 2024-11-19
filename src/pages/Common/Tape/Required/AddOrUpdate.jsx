@@ -1,7 +1,14 @@
+import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useCommonTapeRequired } from '@/state/Common';
+import { useCommonTapeRequiredByUUID } from '@/state/Common';
+import {
+	useOtherOrderPropertiesByEndType,
+	useOtherOrderPropertiesByItem,
+	useOtherOrderPropertiesByNylonStopper,
+	useOtherOrderPropertiesByZipperNumber,
+} from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
@@ -17,7 +24,9 @@ export default function Index({
 	},
 	setUpdateTapeRequired,
 }) {
-	const { url, updateData, postData } = useCommonTapeRequired();
+	const { data, url, updateData, postData } = useCommonTapeRequiredByUUID(
+		updateTapeRequired?.uuid
+	);
 	const { user } = useAuth();
 	const {
 		register,
@@ -31,20 +40,16 @@ export default function Index({
 		context,
 	} = useRHF(TAPE_REQUIRED_SCHEMA, TAPE_REQUIRED_NULL);
 
-	useFetchForRhfReset(
-		`${url}/${updateTapeRequired?.uuid}`,
-		updateTapeRequired?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
-	const { value: end_type } = useFetch(`/other/order-properties/by/end_type`);
-	const { value: item } = useFetch(`/other/order-properties/by/item`);
-	const { value: zipper_number } = useFetch(
-		`/other/order-properties/by/zipper_number`
-	);
-	const { value: nylon_stop } = useFetch(
-		`/other/order-properties/by/nylon_stopper`
-	);
+	const { data: end_type } = useOtherOrderPropertiesByEndType();
+	const { data: item } = useOtherOrderPropertiesByItem();
+	const { data: zipper_number } = useOtherOrderPropertiesByZipperNumber();
+	const { data: nylon_stop } = useOtherOrderPropertiesByNylonStopper();
 
 	const onClose = () => {
 		setUpdateTapeRequired((prev) => ({
@@ -69,7 +74,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateTapeRequired?.uuid}`,
+				url,
 				uuid: updateTapeRequired?.uuid,
 				updatedData,
 				onClose,
@@ -87,7 +92,7 @@ export default function Index({
 		};
 
 		await postData.mutateAsync({
-			url,
+			url: '/zipper/tape-coil-required',
 			newData: updatedData,
 			onClose,
 		});

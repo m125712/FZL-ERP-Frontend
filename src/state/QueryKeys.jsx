@@ -1330,6 +1330,12 @@ export const otherQK = {
 		'all-zipper-thread-order-list',
 	],
 	shadeRecipe: () => [...otherQK.all(), 'shade-recipe'],
+
+	//* TAPE-COIL
+	tapeCoil: () => [...otherQK.all(), 'tape-coil'],
+
+	// * GET GIVEN URL DATA
+	getURLData: (url) => [...otherQK.all(), 'get-url-data', url],
 };
 
 // * Challan

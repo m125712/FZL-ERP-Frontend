@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { useCommonTapeAssign } from '@/state/Common';
-import { useAccess, useFetch } from '@/hooks';
+import { useOtherTapeCoil } from '@/state/Other';
+import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import { LinkWithCopy, ReactSelect, StatusButton } from '@/ui';
 
-import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
@@ -16,7 +16,7 @@ export default function Index() {
 		'common__tape_assign'
 	);
 	const haveAccess = useAccess('common__tape_assign');
-	const { value: tape } = useFetch(`/other/tape-coil/value/label`);
+	const { data: tape } = useOtherTapeCoil(`/other/tape-coil/value/label`);
 	// * fetching the data
 
 	const columns = useMemo(

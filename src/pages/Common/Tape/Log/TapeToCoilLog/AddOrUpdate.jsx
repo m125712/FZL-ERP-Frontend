@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
 import { useCommonTapeSFG, useCommonTapeToCoilByUUID } from '@/state/Common';
-import { useOtherMaterial } from '@/state/Other';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { Input, JoinInput } from '@/ui';
+import { Input } from '@/ui';
 
 import { TAPE_TO_COIL_TRX_NULL, TAPE_TO_COIL_TRX_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
@@ -28,7 +27,6 @@ export default function Index({
 		updateTapeLog?.uuid
 	);
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
-	const { data: material } = useOtherMaterial();
 
 	const MAX_QUANTITY =
 		Number(
@@ -44,11 +42,12 @@ export default function Index({
 
 	const { register, handleSubmit, errors, reset, context, getValues } =
 		useRHF(schema, TAPE_TO_COIL_TRX_NULL);
-	useFetchForRhfReset(
-		`/zipper/tape-trx/${updateTapeLog?.uuid}`,
-		updateTapeLog?.uuid,
-		reset
-	);
+
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateTapeLog((prev) => ({

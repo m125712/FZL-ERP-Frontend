@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useCommonTapeSFG, useCommonTapeToDyeing } from '@/state/Common';
-import { useAccess, useFetch } from '@/hooks';
+import { useOtherOrderDescription } from '@/state/Other';
+import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
@@ -14,7 +15,6 @@ import AddOrUpdate from './AddOrUpdate';
 export default function Index() {
 	const { data, deleteData, isLoading } = useCommonTapeToDyeing();
 	const info = new PageInfo('Tape -> Dyeing', '/zipper/tape-coil-to-dyeing');
-	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 
 	const haveAccess = useAccess('common__coil_log');
 
@@ -122,9 +122,7 @@ export default function Index() {
 		[data]
 	);
 
-	const { value: order_id } = useFetch(
-		'/other/order/description/value/label'
-	);
+	const { data: order_id } = useOtherOrderDescription();
 
 	// Update
 	const [entry, setEntry] = useState({

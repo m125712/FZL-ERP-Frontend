@@ -1326,6 +1326,9 @@ export const otherQK = {
 		'all-zipper-thread-order-list',
 	],
 	shadeRecipe: () => [...otherQK.all(), 'shade-recipe'],
+
+	//*Challan
+	challan: () => [...otherQK.all(), 'challan'],
 };
 
 // * Challan

@@ -1,27 +1,29 @@
 import { Suspense, useEffect, useState } from 'react';
-import { useDeliveryPackingList, useDeliveryPackingListByOrderInfoUUID, useDeliveryPackingListDetailsByUUID, useDeliveryPackingListEntry } from '@/state/Delivery';
+import {
+	useDeliveryPackingList,
+	useDeliveryPackingListByOrderInfoUUID,
+	useDeliveryPackingListDetailsByUUID,
+	useDeliveryPackingListEntry,
+} from '@/state/Delivery';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { set } from 'date-fns';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
-
-
+import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
 
-
-
 import nanoid from '@/lib/nanoid';
-import { PACKING_LIST_NULL, PACKING_LIST_SCHEMA, PACKING_LIST_UPDATE_SCHEMA } from '@util/Schema';
+import {
+	PACKING_LIST_NULL,
+	PACKING_LIST_SCHEMA,
+	PACKING_LIST_UPDATE_SCHEMA,
+} from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-
-
 
 import DynamicDeliveryTable from './DyanamicDeliveryFIeld';
 import Header from './Header';
-
 
 export default function Index() {
 	const { uuid } = useParams();
@@ -83,12 +85,7 @@ export default function Index() {
 		if (isUpdate && details) {
 			reset(details);
 			setValue('packing_list_entry', details?.packing_list_entry);
-			setValue(
-				'new_packing_list_entry',
-				details?.new_packing_list_entry
-					? details?.new_packing_list_entry
-					: []
-			);
+			setValue('new_packing_list_entry', details?.new_packing_list_entry);
 		}
 	}, [isUpdate, packingListEntries, details]);
 

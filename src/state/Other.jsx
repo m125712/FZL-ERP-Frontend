@@ -460,3 +460,10 @@ export const useOtherRecipe = () =>
 		queryKey: otherQK.recipe(),
 		url: `/other/lab-dip/recipe/value/label`,
 	});
+
+//* GET CHALLAN
+export const useOtherChallan = () =>
+	createGlobalState({
+		queryKey: otherQK.challan(),
+		url: `/other/delivery/challan/value/label`,
+	});

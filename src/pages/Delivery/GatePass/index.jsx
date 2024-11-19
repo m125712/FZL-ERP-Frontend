@@ -3,6 +3,7 @@ import {
 	useDeliveryPackingList,
 	useDeliveryPackingListByUUID,
 } from '@/state/Delivery';
+import { useOtherChallan } from '@/state/Other';
 import { useSymbologyScanner } from '@use-symbology-scanner/react';
 import { configure, HotKeys } from 'react-hotkeys';
 import { useNavigate } from 'react-router-dom';
@@ -28,12 +29,6 @@ export default function Index() {
 	const [symbol, setSymbol] = useState(null);
 	const [scannerActive, setScannerActive] = useState(true);
 	const navigate = useNavigate();
-	const haveAccess = useAccess('delivery__warehouse_recv');
-
-	const scan_option = [
-		{ value: 'warehouse_receive', label: 'Warehouse Receive' },
-		{ value: 'gate_pass', label: 'Gate Pass' },
-	];
 
 	const {
 		handleSubmit,
@@ -43,6 +38,7 @@ export default function Index() {
 		useFieldArray,
 		getValues,
 		Controller,
+		watch,
 	} = useRHF(WAREHOUSE_RECEIVE_SCHEMA, WAREHOUSE_RECEIVE_NULL);
 
 	const {
@@ -54,11 +50,16 @@ export default function Index() {
 		name: 'entry',
 	});
 
-	const { data:challan_option } = useDeliveryPackingListByUUID();
+	const { data: challan_option } = useOtherChallan();
 
 	const { invalidateQuery: invalidateDeliveryPackingList } =
 		useDeliveryPackingList();
-
+	const {
+		data: packetListData,
+		isLoading,
+		error,
+		updateData,
+	} = useDeliveryPackingListByUUID(watch('challan_uuid'));
 	useEffect(() => {
 		if (containerRef.current) {
 			containerRef.current.focus();
@@ -170,7 +171,7 @@ export default function Index() {
 				async (item) => {
 					if (item.uuid) {
 						const updatedData = {
-							is_warehouse_received: true,
+							gate_pass: true,
 							updated_at: GetDateTime(),
 						};
 						return await updateData.mutateAsync({
@@ -228,8 +229,8 @@ export default function Index() {
 			onFocus={() => setScannerActive(true)}
 			className='min-h-screen p-4 outline-none'>
 			{isLoading && (
-				<div className='loading-spinner'>
-					<p>Loading...</p>
+				<div className='flex h-screen items-center justify-center'>
+					<span className='loading loading-dots loading-lg z-50' />
 				</div>
 			)}
 			<div className='mb-4 flex items-center gap-4'>
@@ -253,17 +254,17 @@ export default function Index() {
 					className='mt-4 flex flex-col gap-4'>
 					<SectionEntryBody title='Details'>
 						<FormField
-							label='option'
-							title='Select Option'
+							label='challan_uuid'
+							title='Challan'
 							errors={errors}>
 							<Controller
-								name='option'
+								name='challan_uuid'
 								control={control}
 								render={({ field: { onChange } }) => (
 									<ReactSelect
-										placeholder='Select Option'
-										options={scan_option}
-										value={scan_option?.find(
+										placeholder='Select Challan'
+										options={challan_option}
+										value={challan_option?.find(
 											(item) =>
 												item.value ==
 												getValues('option')

@@ -98,11 +98,18 @@ export default function Index() {
 				header: 'O/N',
 				cell: (info) => {
 					const { order_info_uuid } = info.row.original;
-					return (
+					const { item_for } = info.row.original;
+					return item_for === 'zipper' ? (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={info.getValue()}
+							uri='/order/details'
+						/>
+					) : (
 						<LinkWithCopy
 							title={info.getValue()}
 							id={order_info_uuid}
-							uri='/order/details'
+							uri='/thread/order-info'
 						/>
 					);
 				},

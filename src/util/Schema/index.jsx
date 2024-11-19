@@ -1,34 +1,34 @@
 import * as yup from 'yup';
 
-import {
-	BOOLEAN, // default
-	BOOLEAN_DEFAULT_VALUE, // default
-	BOOLEAN_REQUIRED, // default
-	EMAIL, // default
-	EMAIL_REQUIRED, // default
-	FORTUNE_ZIP_EMAIL_PATTERN, // default
-	JSON_STRING, // default
-	JSON_STRING_REQUIRED, // default
-	NAME,
-	NAME_REQUIRED, // default
-	NUMBER, // default
-	NUMBER_DOUBLE, // default
-	NUMBER_DOUBLE_REQUIRED, // default
-	NUMBER_REQUIRED, // default
-	ORDER_NUMBER, // default
-	ORDER_NUMBER_NOT_REQUIRED, // default
-	PASSWORD, // default
-	PHONE_NUMBER, // default
-	PHONE_NUMBER_REQUIRED, // default
-	STRING, // default
-	STRING_REQUIRED, // default
-	URL, // default
-	URL_REQUIRED, // default
-	UUID, // default
-	UUID_FK, // default
-	UUID_PK, // default
-	UUID_REQUIRED,
-} from './utils';
+
+
+import { BOOLEAN // default
+, BOOLEAN_DEFAULT_VALUE // default
+, BOOLEAN_REQUIRED // default
+, EMAIL // default
+, EMAIL_REQUIRED // default
+, FORTUNE_ZIP_EMAIL_PATTERN // default
+, JSON_STRING // default
+, JSON_STRING_REQUIRED // default
+, NAME, NAME_REQUIRED // default
+, NUMBER // default
+, NUMBER_DOUBLE // default
+, NUMBER_DOUBLE_REQUIRED // default
+, NUMBER_REQUIRED // default
+, ORDER_NUMBER // default
+, ORDER_NUMBER_NOT_REQUIRED // default
+, PASSWORD // default
+, PHONE_NUMBER // default
+, PHONE_NUMBER_REQUIRED // default
+, STRING // default
+, STRING_REQUIRED // default
+, URL // default
+, URL_REQUIRED // default
+, UUID // default
+, UUID_FK // default
+, UUID_PK // default
+, UUID_REQUIRED } from './utils';
+
 
 export {
 	BOOLEAN,
@@ -1437,7 +1437,6 @@ export const PACKING_LIST_SCHEMA = {
 	remarks: STRING.nullable(),
 	packing_list_entry: yup.array().of(
 		yup.object().shape({
-
 			quantity: yup
 				.number()
 				.nullable()
@@ -3234,7 +3233,7 @@ export const POLY_NULL = {
 	quantity: null,
 	remarks: '',
 };
-
+// * Warehouse Receive
 export const WAREHOUSE_RECEIVE_SCHEMA = {
 	option: STRING_REQUIRED,
 	entry: yup.array().of(
@@ -3244,6 +3243,18 @@ export const WAREHOUSE_RECEIVE_SCHEMA = {
 	),
 };
 export const WAREHOUSE_RECEIVE_NULL = {
+	entry: [],
+};
+// * Gate Pass
+export const GATE_PASS_SCHEMA = {
+	challan_uuid: STRING_REQUIRED,
+	entry: yup.array().of(
+		yup.object().shape({
+			remarks: STRING.nullable(),
+		})
+	),
+};
+export const GATE_PASS_NULL = {
 	entry: [],
 };
 

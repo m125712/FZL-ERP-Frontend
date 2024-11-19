@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
-import DatePicker from 'react-datepicker';
+import {
+	useOtherBank,
+	useOtherBuyer,
+	useOtherFactoryByPartyUUID,
+	useOtherMarketing,
+	useOtherMerchandiserByPartyUUID,
+	useOtherParty,
+	useOtherPiValues,
+} from '@/state/Other';
 import { useParams } from 'react-router-dom';
-import { useFetch } from '@/hooks';
 
 import { DateInput, Textarea } from '@/ui/Core';
-import {
-	CheckBox,
-	FormField,
-	Input,
-	ReactSelect,
-	SectionEntryBody,
-} from '@/ui';
+import { FormField, Input, ReactSelect, SectionEntryBody } from '@/ui';
 
 export default function Header({
 	register,
@@ -23,21 +24,17 @@ export default function Header({
 }) {
 	const { manual_pi_uuid } = useParams();
 	const [partyId, setPartyId] = useState(getValues('party_uuid'));
-	const { value: party } = useFetch('/other/party/value/label');
-	const { value: factory } = useFetch(
-		`/other/factory/value/label/${partyId}`,
-		[partyId]
+	const { data: party } = useOtherParty();
+	const { data: factory } = useOtherFactoryByPartyUUID(partyId);
+	const { data: merchandiser } = useOtherMerchandiserByPartyUUID(partyId);
+	const { data: buyer } = useOtherBuyer('/other/buyer/value/label');
+	const { data: marketing } = useOtherMarketing(
+		'/other/marketing/value/label'
 	);
-	const { value: merchandiser } = useFetch(
-		`/other/merchandiser/value/label/${partyId}`,
-		[partyId]
+	const { data: bank } = useOtherBank('/other/bank/value/label');
+	const { data: pi } = useOtherPiValues(
+		isUpdate ? 'is_update=true' : 'is_update=false'
 	);
-	const { value: buyer } = useFetch('/other/buyer/value/label');
-	const { value: marketing } = useFetch('/other/marketing/value/label');
-	const { value: bank } = useFetch('/other/bank/value/label');
-	const { value: pi } = isUpdate
-		? useFetch('/other/pi/value/label?is_update=true')
-		: useFetch('/other/pi/value/label');
 
 	useEffect(() => {
 		setPartyId(getValues('party_uuid'));

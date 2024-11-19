@@ -90,7 +90,7 @@ export const useThreadOrderForChallan = () =>
 
 export const useOtherOrderDescription = (params) =>
 	createGlobalState({
-		queryKey: otherQK.orderDescription(),
+		queryKey: otherQK.orderDescription(params),
 		url: params
 			? `/other/order/description/value/label?${params}`
 			: '/other/order/description/value/label',
@@ -168,15 +168,10 @@ export const useOtherLcByPartyUUID = (uuid) =>
 	});
 
 // GET OTHER PI
-export const useOtherUpdatePI = () =>
+export const useOtherPiValues = (query) =>
 	createGlobalState({
-		queryKey: otherQK.pi(),
-		url: `/other/pi/value/label?is_update=true`,
-	});
-export const useOtherPI = () =>
-	createGlobalState({
-		queryKey: otherQK.pi(),
-		url: `/other/pi/value/label?is_update=false`,
+		queryKey: otherQK.pi(query),
+		url: query ? `/other/pi/value/label?${query}` : `/other/pi/value/label`,
 	});
 
 // GET OTHER ORDER DESCRIPTION BY ORDER NUMBER
@@ -430,12 +425,7 @@ export const useOtherCarton = () =>
 		queryKey: otherQK.carton(),
 		url: '/other/delivery/carton/value/label',
 	});
-//*GET All Party
-export const useOtherPartyAll = () =>
-	createGlobalState({
-		queryKey: otherQK.partyAll(),
-		url: `/other/party/value/label`,
-	});
+
 export const useOtherCountLength = () =>
 	createGlobalState({
 		queryKey: otherQK.countLength(),
@@ -454,16 +444,27 @@ export const useOtherShadeRecipe = () =>
 		queryKey: otherQK.shadeRecipe(),
 		url: `/other/lab-dip/shade-recipe/value/label`,
 	});
+
 //* GET RECIPE
 export const useOtherRecipe = () =>
 	createGlobalState({
 		queryKey: otherQK.recipe(),
 		url: `/other/lab-dip/recipe/value/label`,
 	});
-
 //* GET CHALLAN
 export const useOtherChallan = () =>
 	createGlobalState({
 		queryKey: otherQK.challan(),
 		url: `/other/delivery/challan/value/label`,
 	});
+
+// TAPE-COIL
+export const useOtherTapeCoil = () =>
+	createGlobalState({
+		queryKey: otherQK.tapeCoil(),
+		url: `/other/tape-coil/value/label`,
+	});
+
+// * GET GIVEN URL DATA
+export const useGetURLData = (url) =>
+	createGlobalState({ queryKey: otherQK.getURLData(url), url: url });

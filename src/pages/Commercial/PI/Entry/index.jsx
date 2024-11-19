@@ -190,6 +190,7 @@ export default function Index() {
 				payment: data?.payment,
 				remarks: data?.remarks,
 				weight: data?.weight,
+				is_rtgs: data?.is_rtgs,
 				updated_at: GetDateTime(),
 			};
 

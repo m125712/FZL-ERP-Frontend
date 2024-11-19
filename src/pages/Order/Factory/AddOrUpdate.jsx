@@ -1,6 +1,6 @@
 import { useAuth } from '@/context/auth';
 import { useOrderFactory } from '@/state/Order';
-import { useOtherFactoryByPartyUUID, useOtherPartyAll } from '@/state/Other';
+import { useOtherFactoryByPartyUUID, useOtherParty } from '@/state/Other';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -31,7 +31,7 @@ export default function Index({
 		context,
 	} = useRHF(FACTORY_SCHEMA, FACTORY_NULL);
 
-	const { data: party } = useOtherPartyAll();
+	const { data: party } = useOtherParty();
 
 	const { user } = useAuth();
 	useFetchForRhfReset(

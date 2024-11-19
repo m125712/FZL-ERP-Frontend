@@ -1,28 +1,28 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import { useDyeingFinishingBatch, useDyeingFinishingBatchByUUID, useDyeingFinishingBatchOrders } from '@/state/Dyeing';
+import {
+	useDyeingFinishingBatch,
+	useDyeingFinishingBatchByUUID,
+	useDyeingFinishingBatchOrders,
+} from '@/state/Dyeing';
 import { DevTool } from '@hookform/devtools';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
-
-
 
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
 
-
-
 import nanoid from '@/lib/nanoid';
 import GetDateTime from '@/util/GetDateTime';
-import { FINISHING_BATCH_ENTRY_NULL, FINISHING_BATCH_ENTRY_SCHEMA } from '@/util/Schema';
-
-
+import {
+	FINISHING_BATCH_ENTRY_NULL,
+	FINISHING_BATCH_ENTRY_SCHEMA,
+} from '@/util/Schema';
 
 import { Columns } from './Columns';
 import Header from './Header';
-
 
 export default function index() {
 	const { user } = useAuth();
@@ -52,6 +52,7 @@ export default function index() {
 		getValues,
 		watch,
 		setValue,
+		formState: { dirtyFields },
 	} = useRHF(FINISHING_BATCH_ENTRY_SCHEMA, FINISHING_BATCH_ENTRY_NULL);
 
 	useEffect(() => {
@@ -96,13 +97,23 @@ export default function index() {
 	}, [batchOrders, watch('order_description_uuid'), data]);
 
 	const onSubmit = async (data) => {
+		// * seperate the finishing_batch_entry and new_finishing_batch_entry
+		const { finishing_batch_entry, new_finishing_batch_entry, ...rest } =
+			data;
+
 		if (isUpdate) {
-			const finishingEntry = data?.finishing_batch_entry.filter(
+			// * extract only the edited entries from the current entries
+			const extractedUpdatedEntries = finishing_batch_entry.filter(
+				(entry, index) => dirtyFields?.finishing_batch_entry?.[index]
+			);
+
+			const finishingEntry = finishing_batch_entry.filter(
 				(item) => item.quantity > 0
 			);
-			const newFinishingEntry = data?.new_finishing_batch_entry.filter(
+			const newFinishingEntry = new_finishing_batch_entry.filter(
 				(item) => item.quantity > 0
 			);
+
 			if (finishingEntry?.length < 1 && newFinishingEntry?.length < 1) {
 				ShowLocalToast({
 					type: 'warning',
@@ -112,8 +123,9 @@ export default function index() {
 
 				return;
 			}
+
 			let flag = false;
-			data?.finishing_batch_entry.map((item) => {
+			finishing_batch_entry.map((item) => {
 				if (item.quantity < 1) {
 					ShowLocalToast({
 						type: 'error',
@@ -124,48 +136,48 @@ export default function index() {
 					return;
 				}
 			});
+
 			if (flag) return;
+
 			await updateData.mutateAsync({
-				url: `/zipper/finishing-batch/${data.uuid}`,
-				updatedData: { ...data, updated_at: GetDateTime() },
+				url: `/zipper/finishing-batch/${rest.uuid}`,
+				updatedData: { ...rest, updated_at: GetDateTime() },
 				isOnCloseNeeded: false,
 			});
 
-			// * update existing finishing batch entry
+			// * update existing finishing batch entry which have been edited
 			const finishingEntryUpdatedPromises = [
-				...data?.finishing_batch_entry,
-			]
-				.filter((item) => item.quantity > 0)
-				.map(
-					async (item) =>
-						await updateData.mutateAsync({
-							url: `/zipper/finishing-batch-entry/${item.uuid}`,
-							updatedData: { ...item, updated_at: GetDateTime() },
-							isOnCloseNeeded: false,
-						})
-				);
+				...extractedUpdatedEntries,
+			].map(
+				async (item) =>
+					await updateData.mutateAsync({
+						url: `/zipper/finishing-batch-entry/${item.uuid}`,
+						updatedData: { ...item, updated_at: GetDateTime() },
+						isOnCloseNeeded: false,
+					})
+			);
 
 			// * slider batch entry update depending on order_type and slider_provided
-			if (data.order_type === 'tape') {
-			} else if (data.slider_provided === 'completely_provided') {
+			if (rest.order_type === 'tape') {
+			} else if (rest.slider_provided === 'completely_provided') {
 			} else {
 				const slider_quantity_current =
-					data.finishing_batch_entry.length === 1
-						? data.finishing_batch_entry[0].quantity
-						: data.finishing_batch_entry.reduce(
+					finishing_batch_entry.length === 1
+						? finishing_batch_entry[0].quantity
+						: finishing_batch_entry.reduce(
 								(prev, curr) => prev + curr.quantity,
 								0
 							);
 				const slider_quantity_new =
-					data.new_finishing_batch_entry.length === 1
-						? data.new_finishing_batch_entry[0].quantity
-						: data.new_finishing_batch_entry.reduce(
+					new_finishing_batch_entry.length === 1
+						? new_finishing_batch_entry[0].quantity
+						: new_finishing_batch_entry.reduce(
 								(prev, curr) => prev + curr.quantity,
 								0
 							);
 
 				await updateData.mutateAsync({
-					url: `/slider/stock/${data.stock_uuid}`,
+					url: `/slider/stock/${rest.stock_uuid}`,
 					updatedData: {
 						batch_quantity:
 							slider_quantity_current + slider_quantity_new,
@@ -176,38 +188,37 @@ export default function index() {
 			}
 
 			// * create new finishing batch entry
-			const newFinishingEntryData = [...data?.new_finishing_batch_entry]
-				.filter((item) => item.quantity > 0)
-				.map(
-					async (item) =>
-						await postData.mutateAsync({
-							url: '/zipper/finishing-batch-entry',
-							newData: {
-								...item,
-								uuid: nanoid(),
-								finishing_batch_uuid: data.uuid,
-								created_at: GetDateTime(),
-							},
-							isOnCloseNeeded: false,
-						})
-				);
+			const newFinishingEntryDataPromises = [...newFinishingEntry].map(
+				async (item) =>
+					await postData.mutateAsync({
+						url: '/zipper/finishing-batch-entry',
+						newData: {
+							...item,
+							uuid: nanoid(),
+							finishing_batch_uuid: rest.uuid,
+							created_at: GetDateTime(),
+						},
+						isOnCloseNeeded: false,
+					})
+			);
 
 			await Promise.all([
 				...finishingEntryUpdatedPromises,
-				...newFinishingEntryData,
+				...newFinishingEntryDataPromises,
 			])
 				.then(() => reset(FINISHING_BATCH_ENTRY_NULL))
 				.then(() => {
 					invalidateQuery();
 					invalidateDetails();
-					navigate(`/dyeing-and-iron/finishing-batch/${data.uuid}`);
+					navigate(`/dyeing-and-iron/finishing-batch/${rest.uuid}`);
 				})
 				.catch((err) => console.log(err));
 
 			return;
 		}
+
 		//*Add new data entry
-		const finishingEntry = data?.finishing_batch_entry.filter(
+		const finishingEntry = finishing_batch_entry.filter(
 			(item) => item.quantity > 0
 		);
 
@@ -220,8 +231,9 @@ export default function index() {
 
 			return;
 		}
+
 		const finishingData = {
-			...data,
+			...rest,
 			uuid: nanoid(),
 			created_at: GetDateTime(),
 			created_by: user.uuid,
@@ -234,23 +246,21 @@ export default function index() {
 		});
 
 		// * new finishing batch entries
-		const finishingEntryData = [...data?.finishing_batch_entry]
-			.filter((item) => item.quantity > 0)
-			.map((item) => ({
-				...item,
-				uuid: nanoid(),
-				finishing_batch_uuid: finishingData.uuid,
-				created_at: GetDateTime(),
-			}));
+		const finishingEntryData = [...finishingEntry].map((item) => ({
+			...item,
+			uuid: nanoid(),
+			finishing_batch_uuid: finishingData.uuid,
+			created_at: GetDateTime(),
+		}));
 
 		// * slider batch entry depending on order_type and slider_provided
 		if (data.order_type === 'tape') {
 		} else if (data.slider_provided === 'completely_provided') {
 		} else {
 			const slider_quantity =
-				data.finishing_batch_entry.length === 1
-					? data.finishing_batch_entry[0].quantity
-					: data.finishing_batch_entry.reduce(
+				finishingEntry.length === 1
+					? finishingEntry[0].quantity
+					: finishingEntry.reduce(
 							(prev, curr) => prev + curr.quantity,
 							0
 						);

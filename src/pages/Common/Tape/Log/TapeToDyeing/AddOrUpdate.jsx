@@ -1,18 +1,17 @@
-import { AddModal } from '@/components/Modal';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-
+import { useEffect } from 'react';
 import { useCommonCoilToDyeingByUUID, useCommonTapeSFG } from '@/state/Common';
 import { useOtherMaterial } from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, ReactSelect } from '@/ui';
+
 import {
 	COMMON_COIL_TO_DYEING_LOG_NULL,
 	COMMON_COIL_TO_DYEING_LOG_SCHEMA,
-	NUMBER_REQUIRED,
 } from '@util/Schema';
-import { useEffect } from 'react';
-import { Schema } from 'yup';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -40,11 +39,11 @@ export default function Index({
 		context,
 	} = useRHF(schema, COMMON_COIL_TO_DYEING_LOG_NULL);
 
-	useFetchForRhfReset(
-		`/zipper/tape-coil-to-dyeing/${entry?.uuid}`,
-		entry?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setEntry(() => ({

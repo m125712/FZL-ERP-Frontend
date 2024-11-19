@@ -1,6 +1,5 @@
 import { Table } from 'lucide-react';
 import { get } from 'react-hook-form';
-import { useFetch } from '@/hooks';
 
 import {
 	DEFAULT_FONT_SIZE,

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useCommonMultiColorLog } from '@/state/Common';
-import { useAccess, useFetch } from '@/hooks';
+import { useOtherOrderDescription } from '@/state/Other';
+import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
@@ -13,7 +14,8 @@ import PageInfo from '@/util/PageInfo';
 import AddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
-	const { data, deleteData, isLoading, url, updateData } = useCommonMultiColorLog();
+	const { data, deleteData, isLoading, url, updateData } =
+		useCommonMultiColorLog();
 	const info = new PageInfo('Tape -> Dyeing', url, 'common__multi_color_log');
 
 	const haveAccess = useAccess('common__multi_color_log');
@@ -52,9 +54,7 @@ export default function Index() {
 					return (
 						<SwitchToggle
 							disabled={false}
-							onChange={() =>
-								handelSwitch(info.row.index)
-							}
+							onChange={() => handelSwitch(info.row.index)}
 							checked={info.getValue() === 1}
 						/>
 					);
@@ -138,9 +138,7 @@ export default function Index() {
 		[data]
 	);
 
-	const { value: order_id } = useFetch(
-		'/other/order/description/value/label'
-	);
+	const { data: order_id } = useOtherOrderDescription();
 
 	// Update
 	const [entry, setEntry] = useState({

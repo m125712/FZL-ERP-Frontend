@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import { useOrderInfo } from '@/state/Order';
+import { useOrderInfo, useOrderInfoByUUID } from '@/state/Order';
 import {
 	useAllZipperThreadOrderList,
 	useOtherBuyer,
@@ -8,10 +8,10 @@ import {
 	useOtherMarketing,
 	useOtherMerchandiserByPartyUUID,
 	useOtherOrderInfoValueLabel,
-	useOtherPartyAll,
+	useOtherParty,
 } from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { CheckBox, FormField, Input, ReactSelect, Textarea } from '@/ui';
@@ -37,6 +37,7 @@ export default function Index({
 	setUpdateOrderInfo,
 }) {
 	const { url, updateData, postData } = useOrderInfo();
+	const { data } = useOrderInfoByUUID(updateOrderInfo?.uuid);
 	const { user } = useAuth();
 	const {
 		register,
@@ -53,7 +54,7 @@ export default function Index({
 
 	const [partyId, setPartyId] = useState(getValues('party_uuid'));
 	const { data: ref_order } = useOtherOrderInfoValueLabel();
-	const { data: party } = useOtherPartyAll();
+	const { data: party } = useOtherParty();
 	const { data: buyer } = useOtherBuyer();
 	const { data: marketing } = useOtherMarketing();
 	const { data: merchandiser } = useOtherMerchandiserByPartyUUID(partyId);
@@ -62,14 +63,6 @@ export default function Index({
 		useOtherOrderInfoValueLabel();
 	const { invalidateQuery: invalidateOtherZipperThreadOrderList } =
 		useAllZipperThreadOrderList();
-	// const getResult = (key) =>
-	// 	typeof getValues(key) !== 'boolean' && getValues(key) === 1
-	// 		? true
-	// 		: false;
-
-	// const [isSample, setIsSample] = useState(getResult('is_sample'));
-	// const [isBill, setIsBill] = useState(getResult('is_bill'));
-	// const [isCash, setIsCash] = useState(getResult('is_cash'));
 
 	const PriorityOptions = [
 		{ value: 'FIFO', label: 'FIFO' },
@@ -77,11 +70,11 @@ export default function Index({
 		{ value: '---', label: '---' },
 	];
 
-	useFetchForRhfReset(
-		`${url}/${updateOrderInfo?.uuid}`,
-		updateOrderInfo?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data && updateOrderInfo?.uuid) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateOrderInfo((prev) => ({

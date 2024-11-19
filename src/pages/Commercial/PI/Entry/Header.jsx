@@ -9,6 +9,7 @@ import {
 import { useParams } from 'react-router-dom';
 
 import {
+	CheckBox,
 	FormField,
 	JoinInput,
 	ReactSelect,
@@ -38,7 +39,18 @@ export default function Header({
 	const { data: lc } = useOtherLcByPartyUUID(watch('party_uuid'));
 
 	return (
-		<SectionEntryBody title='PI Information'>
+		<SectionEntryBody
+			title='PI Information'
+			header={
+				<div className='rounded-md bg-primary px-1'>
+					<CheckBox
+						title='RTGS'
+						label='is_rtgs'
+						text='text-primary-content'
+						{...{ register, errors }}
+					/>
+				</div>
+			}>
 			<div className='grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4'>
 				<FormField label='lc_id' title='LC' errors={errors}>
 					<Controller

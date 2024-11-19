@@ -105,6 +105,7 @@ export default function Index() {
 		setValue,
 		watch,
 		clearErrors,
+		formState: { dirtyFields },
 	} = useRHF(
 		{
 			...ORDER_SCHEMA,
@@ -287,30 +288,38 @@ export default function Index() {
 	const onSubmit = async (data) => {
 		const DEFAULT_SWATCH_APPROVAL_DATE = null;
 
+		// * seperate the order_entry
+		const { order_entry, ...rest } = data;
+
 		// * Update data * //
 		if (isUpdate) {
+			// * extract only the edited entries from the current entries
+			const extractedUpdatedEntries = order_entry.filter(
+				(entry, index) => dirtyFields?.order_entry?.[index]
+			);
+
 			// * updated order description * //
 			const order_description_updated = {
-				...data,
-				is_slider_provided: data?.is_slider_provided ? 1 : 0,
-				is_logo_body: data?.is_logo_body ? 1 : 0,
-				is_logo_puller: data?.is_logo_puller ? 1 : 0,
-				is_inch: data?.is_inch ? 1 : 0,
-				is_meter: data?.is_meter ? 1 : 0,
-				is_cm: data?.is_cm ? 1 : 0,
-				is_multi_color: data?.is_multi_color ? 1 : 0,
-				hand: data?.hand,
+				...rest,
+				is_slider_provided: rest?.is_slider_provided ? 1 : 0,
+				is_logo_body: rest?.is_logo_body ? 1 : 0,
+				is_logo_puller: rest?.is_logo_puller ? 1 : 0,
+				is_inch: rest?.is_inch ? 1 : 0,
+				is_meter: rest?.is_meter ? 1 : 0,
+				is_cm: rest?.is_cm ? 1 : 0,
+				is_multi_color: rest?.is_multi_color ? 1 : 0,
+				hand: rest?.hand,
 				updated_at: GetDateTime(),
 			};
 
 			await updateData.mutateAsync({
-				url: `/zipper/order-description/${data?.order_description_uuid}`,
+				url: `/zipper/order-description/${rest?.order_description_uuid}`,
 				updatedData: order_description_updated,
 				isOnCloseNeeded: false,
 			});
 
 			// * updated order entry * //
-			const order_entry_updated = [...data.order_entry].map((item) => ({
+			const order_entry_updated = [...extractedUpdatedEntries].map((item) => ({
 				...item,
 				status: item.order_entry_status ? 1 : 0,
 				swatch_status: 'pending',
@@ -339,7 +348,7 @@ export default function Index() {
 								swatch_approval_date:
 									DEFAULT_SWATCH_APPROVAL_DATE,
 								order_description_uuid:
-									data?.order_description_uuid,
+									rest?.order_description_uuid,
 								created_at: GetDateTime(),
 							},
 							isOnCloseNeeded: false,
@@ -350,9 +359,9 @@ export default function Index() {
 
 			// * Slider
 			const slider_quantity =
-				data.order_entry.length === 1
-					? data.order_entry[0].quantity
-					: data.order_entry.reduce(
+				rest.order_entry.length === 1
+					? rest.order_entry[0].quantity
+					: rest.order_entry.reduce(
 							(prev, curr) => prev + curr.quantity,
 							0
 						);
@@ -366,7 +375,7 @@ export default function Index() {
 			} else if (watch('slider_provided') === 'completely_provided') {
 			} else {
 				await updateData.mutateAsync({
-					url: `/slider/stock/${data?.stock_uuid}`,
+					url: `/slider/stock/${rest?.stock_uuid}`,
 					updatedData: slider_info,
 					isOnCloseNeeded: false,
 				});
@@ -387,15 +396,15 @@ export default function Index() {
 		});
 
 		const order_description = {
-			...data,
-			is_slider_provided: data?.is_slider_provided ? 1 : 0,
-			is_logo_body: data?.is_logo_body ? 1 : 0,
-			is_logo_puller: data?.is_logo_puller ? 1 : 0,
-			is_inch: data?.is_inch ? 1 : 0,
-			is_meter: data?.is_meter ? 1 : 0,
-			is_cm: data?.is_cm ? 1 : 0,
-			is_multi_color: data?.is_multi_color ? 1 : 0,
-			hand: data?.hand,
+			...rest,
+			is_slider_provided: rest?.is_slider_provided ? 1 : 0,
+			is_logo_body: rest?.is_logo_body ? 1 : 0,
+			is_logo_puller: rest?.is_logo_puller ? 1 : 0,
+			is_inch: rest?.is_inch ? 1 : 0,
+			is_meter: rest?.is_meter ? 1 : 0,
+			is_cm: rest?.is_cm ? 1 : 0,
+			is_multi_color: rest?.is_multi_color ? 1 : 0,
+			hand: rest?.hand,
 			status: 0,
 			special_requirement,
 			uuid: new_order_description_uuid,
@@ -410,7 +419,7 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 
-		const order_entry = [...data.order_entry].map((item) => ({
+		const new_order_entry = [...order_entry].map((item) => ({
 			...item,
 			uuid: nanoid(),
 			status: item.order_entry_status ? 1 : 0,
@@ -423,7 +432,7 @@ export default function Index() {
 
 		//* Post new entry */ //
 		let order_entry_promises = [
-			...order_entry.map(
+			...new_order_entry.map(
 				async (item) =>
 					await postData.mutateAsync({
 						url: '/zipper/order-entry',

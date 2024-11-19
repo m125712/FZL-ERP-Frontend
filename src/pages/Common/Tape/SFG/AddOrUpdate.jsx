@@ -1,7 +1,13 @@
+import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useCommonTapeSFG } from '@/state/Common';
+import { useCommonTapeSFG, useCommonTapeSFGByUUID } from '@/state/Common';
+import {
+	useOtherMaterial,
+	useOtherOrderPropertiesByItem,
+	useOtherOrderPropertiesByZipperNumber,
+} from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
@@ -18,7 +24,9 @@ export default function Index({
 	setUpdateTapeProd,
 }) {
 	const { user } = useAuth();
-	const { url, updateData, postData } = useCommonTapeSFG();
+	const { data, url, updateData, postData } = useCommonTapeSFGByUUID(
+		updateTapeProd?.uuid
+	);
 	const {
 		register,
 		handleSubmit,
@@ -30,20 +38,19 @@ export default function Index({
 		getValues,
 	} = useRHF(TAPE_STOCK_ADD_SCHEMA, TAPE_STOCK_ADD_NULL);
 
-	useFetchForRhfReset(
-		`${url}/${updateTapeProd?.uuid}`,
-		updateTapeProd?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
-	const { value: item } = useFetch(`/other/order-properties/by/item`);
+	const { data: item } = useOtherOrderPropertiesByItem();
 
-	const { value: zipper_number } = useFetch(
+	const { data: zipper_number } = useOtherOrderPropertiesByZipperNumber(
 		`/other/order-properties/by/zipper_number`
 	);
-	const { value: materials } = useFetch(
-		'/other/material/value/label/unit/quantity'
-	);
+
+	const { data: materials } = useOtherMaterial();
 
 	const isImportOption = [
 		{
@@ -85,7 +92,7 @@ export default function Index({
 				updated_at: GetDateTime(),
 			};
 			await updateData.mutateAsync({
-				url: `${url}/${updateTapeProd?.uuid}`,
+				url,
 				uuid: updateTapeProd?.uuid,
 				updatedData,
 				onClose,
@@ -104,7 +111,7 @@ export default function Index({
 		};
 
 		await postData.mutateAsync({
-			url,
+			url: '/zipper/tape-coil',
 			newData: updatedData,
 			onClose,
 		});

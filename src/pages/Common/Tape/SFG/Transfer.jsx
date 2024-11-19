@@ -1,6 +1,7 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useCommonCoilSFG, useCommonTapeSFG } from '@/state/Common';
 import { useDyeingTransfer } from '@/state/Dyeing';
+import { useGetURLData } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
@@ -10,7 +11,7 @@ import {
 	useNavigate,
 	useParams,
 } from 'react-router-dom';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast';
@@ -36,7 +37,10 @@ export default function Index() {
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
 	const { uuid, order_number, order_description_uuid } = useParams();
-	const { value: data } = useFetch(`/zipper/tape-coil/${uuid}`, [uuid]);
+	const { data } = useGetURLData(`/zipper/tape-coil/${uuid}`);
+	const { data: dyed_tape_trx } = useGetURLData(
+		`/zipper/dyed-tape-transaction/${uuid}/UUID`
+	);
 	const location = useLocation();
 	const [status, setStatus] = useState(false);
 
@@ -70,9 +74,8 @@ export default function Index() {
 			? (document.title = `Order: Update ${order_number}`)
 			: (document.title = 'Order: Entry');
 	}, []);
-	const { value: order_id } = useFetch(
-		`/other/order/order-description/value/label/by/${uuid}`,
-		[uuid]
+	const { data: order_id } = useGetURLData(
+		`/other/order/order-description/value/label/by/${uuid}`
 	);
 
 	let excludeItem = exclude(
@@ -94,12 +97,11 @@ export default function Index() {
 	const MAX_TAPE_TRX_QTY =
 		MAX_QTY - getTotalQty(watch('dyeing_transfer_entry'));
 
-	if (isUpdate)
-		useFetchForRhfReset(
-			`/zipper/dyed-tape-transaction/${uuid}/UUID`,
-			order_description_uuid,
-			reset
-		);
+	useEffect(() => {
+		if (dyed_tape_trx && isUpdate) {
+			reset(dyed_tape_trx);
+		}
+	}, [dyed_tape_trx]);
 
 	// order_entry
 	const {

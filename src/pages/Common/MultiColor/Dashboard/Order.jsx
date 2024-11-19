@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
 import { useCommonMultiColorDashboardByUUID } from '@/state/Common';
+import { useOtherMaterial, useOtherTapeCoil } from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
-import { useFetch, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
 
-import nanoid from '@/lib/nanoid';
 import {
 	MULTI_COLOR_DASHBOARD_NULL,
 	MULTI_COLOR_DASHBOARD_SCHEMA,
@@ -21,8 +21,9 @@ export default function Index({
 	},
 	setOrder,
 }) {
-	const { data, updateData, postData, url } =
-		useCommonMultiColorDashboardByUUID(order?.uuid);
+	const { data, updateData } = useCommonMultiColorDashboardByUUID(
+		order?.uuid
+	);
 	const { user } = useAuth();
 
 	const MAX_PROD_KG = Number(order.balance_quantity).toFixed(3);
@@ -81,10 +82,8 @@ export default function Index({
 		});
 	};
 
-	const { value: coil } = useFetch(
-		'/other/material/value/label/unit/quantity'
-	);
-	const { value: unFilteredTape } = useFetch(`/other/tape-coil/value/label`);
+	const { data: coil } = useOtherMaterial();
+	const { data: unFilteredTape } = useOtherTapeCoil();
 	const tape = unFilteredTape?.filter((item) => {
 		if (
 			item.item === order.item &&
@@ -139,7 +138,6 @@ export default function Index({
 					title='Tape QTY'
 					label='tape_quantity'
 					unit='KG'
-					
 					{...{ register, errors }}
 				/>
 			</div>
@@ -169,7 +167,6 @@ export default function Index({
 					title='Coil QTY'
 					label='coil_quantity'
 					unit='KG'
-					
 					{...{ register, errors }}
 				/>
 			</div>
@@ -179,11 +176,14 @@ export default function Index({
 					title='Thread QTY'
 					label='thread_quantity'
 					unit='PCS'
-					
 					{...{ register, errors }}
 				/>
 			</div>
-			<Textarea title='Description' label='remarks' {...{ register, errors }} />
+			<Textarea
+				title='Description'
+				label='remarks'
+				{...{ register, errors }}
+			/>
 			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);

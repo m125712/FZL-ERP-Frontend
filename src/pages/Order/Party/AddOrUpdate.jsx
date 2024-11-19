@@ -1,6 +1,6 @@
 import { useAuth } from '@/context/auth';
 import { useOrderFactory, useOrderParty } from '@/state/Order';
-import { useOtherPartyAll } from '@/state/Other';
+import { useOtherParty } from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
@@ -19,7 +19,7 @@ export default function Index({
 	setUpdateParty,
 }) {
 	const { url, updateData, postData } = useOrderParty();
-	const { invalidateQuery: invalidatePartyAll } = useOtherPartyAll();
+	const { invalidateQuery: invalidatePartyAll } = useOtherParty();
 	const { invalidateQuery: invalidateOrderFactory } = useOrderFactory();
 
 	const { register, handleSubmit, errors, reset, control, context } = useRHF(

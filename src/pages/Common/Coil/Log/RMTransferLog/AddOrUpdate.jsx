@@ -1,15 +1,18 @@
+import { useEffect } from 'react';
+import { useCommonCoilRM, useCommonMaterialUsedByUUID } from '@/state/Common';
+import { useOtherMaterial } from '@/state/Other';
+import { useRHF } from '@/hooks';
+
 import { AddModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
-import { useCommonCoilRM } from '@/state/Common';
-import { useOtherMaterial } from '@/state/Other';
 import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import getTransactionArea from '@/util/TransactionArea';
+
 import {
 	RM_MATERIAL_USED_EDIT_NULL,
 	RM_MATERIAL_USED_EDIT_SCHEMA,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
+import getTransactionArea from '@/util/TransactionArea';
 
 export default function Index({
 	modalId = '',
@@ -24,16 +27,8 @@ export default function Index({
 	setUpdateCoilLog,
 }) {
 	const { updateData } = useCommonCoilRM();
+	const { data } = useCommonMaterialUsedByUUID(updateCoilLog?.uuid);
 	const { data: material } = useOtherMaterial();
-	// const MAX_QUANTITY =
-	// 	Number(updateCoilLog?.coil_forming) +
-	// 	Number(updateCoilLog?.used_quantity);
-
-	// const schema = {
-	// 	...RM_MATERIAL_USED_EDIT_SCHEMA,
-	// 	used_quantity:
-	// 		RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
-	// };
 
 	const {
 		register,
@@ -55,11 +50,11 @@ export default function Index({
 		Number(updateCoilLog?.wastage) +
 		(Number(updateCoilLog?.used_quantity) - watch('used_quantity'));
 
-	useFetchForRhfReset(
-		`/material/used/${updateCoilLog?.uuid}`,
-		updateCoilLog?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data && updateCoilLog?.uuid) {
+			reset(data);
+		}
+	}, [data]);
 
 	// const MAX_WASTAGE = MAX_QUANTITY - watch('used_quantity');
 

@@ -63,6 +63,10 @@ export default function Header({
 		}
 	}, [isHandDelivery, setValue]);
 
+	const Item_for = [
+		{ label: 'Zipper', value: 'zipper' },
+		{ label: 'Thread', value: 'thread' },
+	];
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody
@@ -113,6 +117,26 @@ export default function Header({
 					</div>
 				}>
 				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 md:grid-cols-3'>
+					<FormField
+						label='item_for'
+						title='Item For'
+						errors={errors}>
+						<Controller
+							name='item_for'
+							control={control}
+							render={({ field: { onChange } }) => (
+								<ReactSelect
+									placeholder='Select Vehicle'
+									options={Item_for}
+									value={Item_for?.find(
+										(item) =>
+											item.value === getValues('item_for')
+									)}
+									onChange={(e) => onChange(e.value)}
+								/>
+							)}
+						/>
+					</FormField>
 					{!watch('is_hand_delivery') && (
 						<FormField
 							label='vehicle_uuid'

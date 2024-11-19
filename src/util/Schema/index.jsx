@@ -1430,23 +1430,20 @@ export const SLIDER_ITEM_TRANSACTION_NULL = {
 
 // Delivery
 export const PACKING_LIST_SCHEMA = {
+	item_for: STRING_REQUIRED,
 	order_info_uuid: STRING_REQUIRED,
 	carton_uuid: STRING_REQUIRED,
 	carton_weight: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
 	packing_list_entry: yup.array().of(
 		yup.object().shape({
-			sfg_uuid: STRING_REQUIRED,
-			packing_list_uuid: STRING.nullable(),
-			order_number: STRING,
-			item_description: STRING,
-			style_color_size: STRING,
-			order_quantity: NUMBER_DOUBLE,
-			warehouse: NUMBER_DOUBLE,
-			delivered: NUMBER_DOUBLE,
-			balance_quantity: NUMBER_DOUBLE,
-			short_quantity: yup.number().when('is_checked', {
-				is: true,
+
+			quantity: yup
+				.number()
+				.nullable()
+				.max(yup.ref('max_quantity'), 'Beyond Max Quantity'),
+			short_quantity: yup.number().when('quantity', {
+				is: (quantity) => quantity > 0,
 				then: (Schema) =>
 					Schema.typeError('Must be a number').max(
 						yup.ref('order_quantity'),
@@ -1457,8 +1454,8 @@ export const PACKING_LIST_SCHEMA = {
 						String(originalValue).trim() === '' ? null : value
 					),
 			}),
-			reject_quantity: yup.number().when('is_checked', {
-				is: true,
+			reject_quantity: yup.number().when('quantity', {
+				is: (quantity) => quantity > 0,
 				then: (Schema) =>
 					Schema.typeError('Must be a number').max(
 						yup.ref('order_quantity'),
@@ -1469,19 +1466,8 @@ export const PACKING_LIST_SCHEMA = {
 						String(originalValue).trim() === '' ? null : value
 					),
 			}),
-			quantity: yup.number().when('is_checked', {
-				is: true,
-				then: (Schema) =>
-					Schema.typeError('Must be a number')
-						.required('Quantity is required')
-						.max(yup.ref('max_quantity'), 'Beyond Max Quantity'),
-				otherwise: (Schema) =>
-					Schema.nullable().transform((value, originalValue) =>
-						String(originalValue).trim() === '' ? null : value
-					),
-			}),
-			poli_quantity: yup.number().when('is_checked', {
-				is: true,
+			poli_quantity: yup.number().when('quantity', {
+				is: (quantity) => quantity > 0,
 				then: (Schema) =>
 					Schema.typeError('Must be a number').required(
 						'Poly Quantity is required'
@@ -1492,76 +1478,60 @@ export const PACKING_LIST_SCHEMA = {
 					),
 			}),
 			remarks: STRING.nullable(),
-			isDeletable: BOOLEAN,
-		})
-	),
-	new_packing_list_entry: yup.array().of(
-		yup.object().shape({
-			sfg_uuid: STRING_REQUIRED,
-			packing_list_uuid: STRING.nullable(),
-			order_number: STRING,
-			item_description: STRING,
-			style_color_size: STRING,
-			order_quantity: NUMBER_DOUBLE,
-			warehouse: NUMBER_DOUBLE,
-			delivered: NUMBER_DOUBLE,
-			balance_quantity: NUMBER_DOUBLE,
-			short_quantity: yup.number().when('is_checked', {
-				is: true,
-				then: (Schema) =>
-					Schema.typeError('Must be a number').max(
-						yup.ref('order_quantity'),
-						'Beyond Order Quantity'
-					),
-				otherwise: (Schema) =>
-					Schema.nullable().transform((value, originalValue) =>
-						String(originalValue).trim() === '' ? null : value
-					),
-			}),
-			reject_quantity: yup.number().when('is_checked', {
-				is: true,
-				then: (Schema) =>
-					Schema.typeError('Must be a number').max(
-						yup.ref('order_quantity'),
-						'Beyond Order Quantity'
-					),
-				otherwise: (Schema) =>
-					Schema.nullable().transform((value, originalValue) =>
-						String(originalValue).trim() === '' ? null : value
-					),
-			}),
-			quantity: yup.number().when('is_checked', {
-				is: true,
-				then: (Schema) =>
-					Schema.typeError('Must be a number')
-						.required('Quantity is required')
-						.max(
-							yup.ref('balance_quantity'),
-							'Beyond Max Quantity'
-						),
-				otherwise: (Schema) =>
-					Schema.nullable().transform((value, originalValue) =>
-						String(originalValue).trim() === '' ? null : value
-					),
-			}),
-			poli_quantity: yup.number().when('is_checked', {
-				is: true,
-				then: (Schema) =>
-					Schema.typeError('Must be a number').required(
-						'Poly Quantity is required'
-					),
-				otherwise: (Schema) =>
-					Schema.nullable().transform((value, originalValue) =>
-						String(originalValue).trim() === '' ? null : value
-					),
-			}),
-			remarks: STRING.nullable(),
-			isDeletable: BOOLEAN,
+			//isDeletable: BOOLEAN,
 		})
 	),
 };
-
+export const PACKING_LIST_UPDATE_SCHEMA = {
+	...PACKING_LIST_SCHEMA,
+	new_packing_list_entry: yup.array().of(
+		yup.object().shape({
+			quantity: yup
+				.number()
+				.nullable()
+				.max(yup.ref('max_quantity'), 'Beyond Max Quantity'),
+			short_quantity: yup.number().when('quantity', {
+				is: (quantity) => quantity > 0,
+				then: (Schema) =>
+					Schema.typeError('Must be a number').max(
+						yup.ref('order_quantity'),
+						'Beyond Order Quantity'
+					),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
+			reject_quantity: yup.number().when('quantity', {
+				is: (quantity) => quantity > 0,
+				then: (Schema) =>
+					Schema.typeError('Must be a number').max(
+						yup.ref('order_quantity'),
+						'Beyond Order Quantity'
+					),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
+			poli_quantity: yup.number().when('quantity', {
+				is: (quantity) => quantity > 0,
+				then: (Schema) =>
+					Schema.typeError('Must be a number').required(
+						'Poly Quantity is required'
+					),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
+			remarks: STRING.nullable(),
+			//isDeletable: BOOLEAN,
+		})
+	),
+};
 export const PACKING_LIST_NULL = {
+	item_for: '',
 	order_info_uuid: '',
 	carton_size_uuid: '',
 	carton_weight: '',
@@ -1578,7 +1548,28 @@ export const PACKING_LIST_NULL = {
 			warehouse: null,
 			delivered: null,
 			balance_quantity: null,
-			quantity: null,
+			quantity: 0,
+			poli_quantity: 0,
+			short_quantity: 0,
+			reject_quantity: 0,
+			remarks: '',
+			isDeletable: false,
+		},
+	],
+	new_packing_list_entry: [
+		{
+			is_checked: false,
+			sfg_uuid: '',
+			packing_list_uuid: '',
+			order_number: '',
+			item_description: '',
+			style_color_size: '',
+			order_quantity: null,
+			warehouse: null,
+			delivered: null,
+			balance_quantity: null,
+			quantity: 0,
+			poli_quantity: 0,
 			short_quantity: 0,
 			reject_quantity: 0,
 			remarks: '',

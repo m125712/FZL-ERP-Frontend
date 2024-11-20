@@ -33,7 +33,7 @@ export const orderQK = {
 	// info
 	infos: () => [...orderQK.all(), 'info'],
 	info: (id) => [...orderQK.infos(), id],
-	infoByUUID: (uuid) => [...orderQK.info(), uuid],
+	infoByUUID: (uuid) => [...orderQK.infos(), uuid],
 
 	// buyers
 	buyers: () => [...orderQK.all(), 'buyer'], // [order, buyer]
@@ -1081,7 +1081,7 @@ export const otherQK = {
 	],
 
 	// Thread Orders
-	threadOrders: () => [...otherQK.all(), 'thread-orders'],
+	threadOrders: (query) => [...otherQK.all(), 'thread-orders', query],
 	threadOrdersForChallan: () => [
 		...otherQK.all(),
 		'thread-orders-for-challan',

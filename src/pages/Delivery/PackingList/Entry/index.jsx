@@ -7,7 +7,6 @@ import {
 } from '@/state/Delivery';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { set } from 'date-fns';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
@@ -71,6 +70,7 @@ export default function Index() {
 		watch('order_info_uuid'),
 		`item_for=${watch('item_for')}`
 	);
+	
 	useEffect(() => {
 		if (!isUpdate && packingListEntries?.packing_list_entry) {
 			setValue(
@@ -88,8 +88,6 @@ export default function Index() {
 			setValue('new_packing_list_entry', details?.new_packing_list_entry);
 		}
 	}, [isUpdate, packingListEntries, details]);
-
-	// useFetchForRhfReset(url, '', reset);
 
 	// useEffect(() => {
 	// 	if (isUpdate && watch('new_packing_list_entry')) {

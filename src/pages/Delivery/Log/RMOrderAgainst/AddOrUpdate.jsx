@@ -1,18 +1,21 @@
-import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import { useCommonMaterialTrx } from '@/state/Common';
+import { useEffect } from 'react';
+import { useCommonMaterialTrxByUUID } from '@/state/Common';
 import {
 	useMaterialInfo,
 	useMaterialTrxAgainstOrderDescription,
 } from '@/state/Store';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import getTransactionArea from '@/util/TransactionArea';
+
 import {
 	RM_MATERIAL_ORDER_AGAINST_EDIT_NULL,
 	RM_MATERIAL_ORDER_AGAINST_EDIT_SCHEMA,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
+import getTransactionArea from '@/util/TransactionArea';
+
 export default function Index({
 	modalId = '',
 	updateLog = {
@@ -23,7 +26,9 @@ export default function Index({
 	},
 	setUpdateLog,
 }) {
-	const { url, updateData } = useCommonMaterialTrx();
+	const { data, url, updateData } = useCommonMaterialTrxByUUID(
+		updateLog?.uuid
+	);
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { invalidateQuery: invalidateMaterialTrx } =
 		useMaterialTrxAgainstOrderDescription();
@@ -49,7 +54,11 @@ export default function Index({
 		context,
 	} = useRHF(schema, RM_MATERIAL_ORDER_AGAINST_EDIT_NULL);
 
-	useFetchForRhfReset(`${url}/${updateLog?.uuid}`, updateLog?.uuid, reset);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateLog((prev) => ({
@@ -73,7 +82,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateLog?.uuid}`,
+				url,
 				uuid: updateLog?.uuid,
 				updatedData,
 				onClose,

@@ -1,8 +1,9 @@
+import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useDeliveryVehicle } from '@/state/Delivery';
+import { useDeliveryVehicleByUUID } from '@/state/Delivery';
 import { useOtherVehicle } from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { CheckBox, FormField, Input, ReactSelect } from '@/ui';
@@ -18,7 +19,9 @@ export default function VehicleForm({
 	},
 	setUpdate,
 }) {
-	const { url, updateData, postData } = useDeliveryVehicle();
+	const { data, url, updateData, postData } = useDeliveryVehicleByUUID(
+		update?.uuid
+	);
 	const { invalidateQuery: invalidateOtherVehicle } = useOtherVehicle();
 	const { user } = useAuth();
 	const {
@@ -33,7 +36,12 @@ export default function VehicleForm({
 		setValue,
 	} = useRHF(DELIVERY_VEHICLE_SCHEMA, DELIVERY_VEHICLE_NULL);
 
-	useFetchForRhfReset(`${url}/${update?.uuid}`, update?.uuid, reset);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
+
 	const vehicleTypes = [
 		{ value: 'truck', label: 'Truck' },
 		{ value: 'bike', label: 'Bike' },
@@ -58,7 +66,7 @@ export default function VehicleForm({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${update?.uuid}`,
+				url,
 				uuid: update?.uuid,
 				updatedData,
 				onClose,
@@ -81,7 +89,7 @@ export default function VehicleForm({
 		};
 
 		await postData.mutateAsync({
-			url,
+			url: '/delivery/vehicle',
 			newData,
 			onClose,
 		});

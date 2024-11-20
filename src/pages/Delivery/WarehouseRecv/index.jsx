@@ -6,7 +6,7 @@ import {
 import { useSymbologyScanner } from '@use-symbology-scanner/react';
 import { configure, HotKeys } from 'react-hotkeys';
 import { useNavigate } from 'react-router-dom';
-import { useAccess, useFetch, useRHF } from '@/hooks';
+import { useAccess, useRHF } from '@/hooks';
 
 import { ShowLocalToast } from '@/components/Toast';
 import {
@@ -75,7 +75,7 @@ export default function Index() {
 		if (!scannedSymbol) return;
 		setSymbol(scannedSymbol);
 	}, []);
-	
+
 	const handlePacketScan = async (selectedOption) => {
 		const waitForLoading = () => {
 			return new Promise((resolve) => {

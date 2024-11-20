@@ -76,10 +76,12 @@ export const useOtherOrderPackingList = () =>
 	});
 
 // GET THREAD ORDER
-export const useThreadOrder = () =>
+export const useThreadOrder = (query) =>
 	createGlobalState({
-		queryKey: otherQK.threadOrders(),
-		url: '/other/thread/value/label',
+		queryKey: otherQK.threadOrders(query),
+		url: query
+			? `/other/thread/value/label?page=${query}`
+			: '/other/thread/value/label',
 	});
 // GET THREAD ORDER For Challan
 export const useThreadOrderForChallan = () =>

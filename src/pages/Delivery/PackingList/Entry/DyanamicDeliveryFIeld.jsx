@@ -35,6 +35,7 @@ const DynamicDeliveryTable = ({
 								'Unit',
 								'Order QTY',
 								'Balance QTY',
+								'Production QTY',
 								// 'Warehouse',
 								// 'Delivered',
 								'Quantity(pcs)',
@@ -60,6 +61,7 @@ const DynamicDeliveryTable = ({
 								'Unit',
 								'Order QTY',
 								'Balance QTY',
+								'Production QTY',
 								// 'Warehouse',
 								// 'Delivered',
 								'Quantity(pcs)',
@@ -115,8 +117,7 @@ const DynamicDeliveryTable = ({
 					</td>
 
 					<td className={`w-32 ${rowClass}`}>
-						{getValues(`item_for`) ===
-						'thread'
+						{getValues(`item_for`) === 'thread'
 							? 'cone'
 							: getValues(`${entryFiledName}[${index}].is_inch`)
 								? 'inch'
@@ -130,6 +131,11 @@ const DynamicDeliveryTable = ({
 					<td className={rowClass}>
 						{getValues(
 							`${entryFiledName}[${index}].balance_quantity`
+						)}
+					</td>
+					<td className={rowClass}>
+						{getValues(
+							`${entryFiledName}[${index}].finishing_prod`
 						)}
 					</td>
 					<td className={`w-32 ${rowClass}`}>

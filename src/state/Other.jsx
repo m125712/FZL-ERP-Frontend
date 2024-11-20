@@ -62,10 +62,10 @@ export const useOtherMarketing = () =>
 	});
 
 // GET OTHER ORDER
-export const useOtherOrder = () =>
+export const useOtherOrder = (query) =>
 	createGlobalState({
-		queryKey: otherQK.order(),
-		url: '/other/order/info/value/label',
+		queryKey: otherQK.order(query),
+		url: query? `/other/order/info/value/label?page=${query}` : '/other/order/info/value/label',
 	});
 
 // GET OTHER ORDER FOR PACKING LIST

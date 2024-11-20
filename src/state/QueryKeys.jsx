@@ -1087,7 +1087,7 @@ export const otherQK = {
 		'thread-orders-for-challan',
 	],
 	//Order
-	order: () => [...otherQK.all(), 'order'],
+	order: (query) => [...otherQK.all(), 'order', query],
 	orderPackingList: () => [...otherQK.all(), 'order-packing-list'],
 	orderDescription: (params) => [
 		...otherQK.all(),

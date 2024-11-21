@@ -46,8 +46,8 @@ export function TableWithTime(props) {
 
 	return (
 		<Card className='w-full'>
-			<CardHeader className=''>
-				<CardTitle className='flex items-center justify-between'>
+			<CardHeader className='py-3'>
+				<CardTitle className='flex items-center justify-between text-[16px] lg:text-xl'>
 					<div className='flex items-center gap-2'>
 						<div>
 							{props.title}{' '}
@@ -72,16 +72,16 @@ export function TableWithTime(props) {
 							</select>
 						) : (
 							<div className='flex items-center gap-2'>
-								<span className='live-indicator'>
-									(<span className='live-dot'></span>
-									<span className='live-text'> Live</span>)
+								<span className='live-indicator space-x-2'>
+									<span className='live-dot'></span>
+									<span className='live-text'> Live</span>
 								</span>
 							</div>
 						)}
 					</div>
 				</CardTitle>
 			</CardHeader>
-			<CardContent>
+			<CardContent className=''>
 				{isLoading ? (
 					<span className='loading loading-dots loading-lg z-50' />
 				) : (

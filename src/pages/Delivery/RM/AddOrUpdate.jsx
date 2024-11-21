@@ -1,7 +1,6 @@
 import { useAuth } from '@/context/auth';
 import { useDeliveryRM, useDeliveryRMLog } from '@/state/Delivery';
-import * as yup from 'yup';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast';
@@ -23,7 +22,7 @@ export default function Index({
 	setUpdateStock,
 }) {
 	const { user } = useAuth();
-	const { url, postData } = useDeliveryRM();
+	const { postData } = useDeliveryRM();
 	const { invalidateQuery: invalidateRMLog } = useDeliveryRMLog();
 	const MAX_QUANTITY = updateStock?.stock;
 

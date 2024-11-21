@@ -1,16 +1,11 @@
-import { useAuth } from '@/context/auth';
-import { useOrderBuyer } from '@/state/Order';
-import { useOtherBuyer } from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import Pdf2 from '@/components/Pdf/PolySticker';
 import { Input } from '@/ui';
 
-import nanoid from '@/lib/nanoid';
 import { POLY_NULL, POLY_SCHEMA } from '@util/Schema';
-import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',

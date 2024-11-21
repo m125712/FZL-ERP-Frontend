@@ -105,6 +105,10 @@ export default function Header({
 		}
 	}, [isHandDelivery, setValue]);
 
+	const Item_for = [
+		{ label: 'Zipper', value: 'zipper' },
+		{ label: 'Thread', value: 'thread' },
+	];
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody

@@ -301,7 +301,6 @@ export default function index() {
 		return;
 	};
 
-	// const columns = useMemo(
 	// 	() => [
 	// 		{
 	// 			accessorKey: 'recipe_id',
@@ -452,7 +451,6 @@ export default function index() {
 			});
 			window['finishing_batch_entry_delete'].showModal();
 		}
-		BatchOrdersFieldRemove(index);
 	};
 
 	// * table columns for new finishing field on new entry or updating/deleting existing finishing field

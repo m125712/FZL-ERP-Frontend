@@ -62,10 +62,10 @@ export const useOtherMarketing = () =>
 	});
 
 // GET OTHER ORDER
-export const useOtherOrder = () =>
+export const useOtherOrder = (query) =>
 	createGlobalState({
-		queryKey: otherQK.order(),
-		url: '/other/order/info/value/label',
+		queryKey: otherQK.order(query),
+		url: query? `/other/order/info/value/label?page=${query}` : '/other/order/info/value/label',
 	});
 
 // GET OTHER ORDER FOR PACKING LIST
@@ -76,10 +76,12 @@ export const useOtherOrderPackingList = (param) =>
 	});
 
 // GET THREAD ORDER
-export const useThreadOrder = () =>
+export const useThreadOrder = (query) =>
 	createGlobalState({
-		queryKey: otherQK.threadOrders(),
-		url: '/other/thread/value/label',
+		queryKey: otherQK.threadOrders(query),
+		url: query
+			? `/other/thread/value/label?page=${query}`
+			: '/other/thread/value/label',
 	});
 export const useOtherThreadOrderPackingList = () =>
 	createGlobalState({

@@ -111,12 +111,12 @@ export const useOrderMerchandiser = () =>
 		url: '/public/merchandiser',
 	});
 
-export const useOrderMerchandiserByUUID = (uuid) => {
+export const useOrderMerchandiserByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: orderQK.merchandiser(uuid),
 		url: `/public/merchandiser/${uuid}`,
 	});
-};
+
 // * Properties * //
 export const useOrderProperties = () =>
 	createGlobalState({
@@ -125,7 +125,7 @@ export const useOrderProperties = () =>
 	});
 export const useOrderPropertiesByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: orderQK.property(uuid),
+		queryKey: orderQK.propertiesByUUID(uuid),
 		url: `/public/properties/${uuid}`,
 	});
 
@@ -136,9 +136,8 @@ export const useOrderInfo = () =>
 		url: '/zipper/order-info',
 	});
 
-export const useOrderInfoByUUID = (uuid) => {
+export const useOrderInfoByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: orderQK.infoByUUID(uuid),
 		url: `/zipper/order-info/${uuid}`,
 	});
-};

@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import { useOrderInfo, useOrderInfoByUUID } from '@/state/Order';
+import {
+	useOrderInfo,
+	useOrderInfoByUUID,
+	useOrderPropertiesByUUID,
+} from '@/state/Order';
 import {
 	useAllZipperThreadOrderList,
 	useOtherBuyer,
@@ -11,7 +15,7 @@ import {
 	useOtherParty,
 } from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { CheckBox, FormField, Input, ReactSelect, Textarea } from '@/ui';
@@ -38,6 +42,7 @@ export default function Index({
 }) {
 	const { url, updateData, postData } = useOrderInfo();
 	const { data } = useOrderInfoByUUID(updateOrderInfo?.uuid);
+
 	const { user } = useAuth();
 	const {
 		register,

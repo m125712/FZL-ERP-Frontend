@@ -5,7 +5,7 @@ import {
 	useDeliveryPackingListDetailsByUUID,
 } from '@/state/Delivery';
 import { useNavigate } from 'react-router-dom';
-import { useAccess, useFetch } from '@/hooks';
+import { useAccess } from '@/hooks';
 
 import Pdf2 from '@/components/Pdf/PackingListSticker';
 import ReactTable from '@/components/Table';

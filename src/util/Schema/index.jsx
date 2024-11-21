@@ -1,34 +1,34 @@
 import * as yup from 'yup';
 
-
-
-import { BOOLEAN // default
-, BOOLEAN_DEFAULT_VALUE // default
-, BOOLEAN_REQUIRED // default
-, EMAIL // default
-, EMAIL_REQUIRED // default
-, FORTUNE_ZIP_EMAIL_PATTERN // default
-, JSON_STRING // default
-, JSON_STRING_REQUIRED // default
-, NAME, NAME_REQUIRED // default
-, NUMBER // default
-, NUMBER_DOUBLE // default
-, NUMBER_DOUBLE_REQUIRED // default
-, NUMBER_REQUIRED // default
-, ORDER_NUMBER // default
-, ORDER_NUMBER_NOT_REQUIRED // default
-, PASSWORD // default
-, PHONE_NUMBER // default
-, PHONE_NUMBER_REQUIRED // default
-, STRING // default
-, STRING_REQUIRED // default
-, URL // default
-, URL_REQUIRED // default
-, UUID // default
-, UUID_FK // default
-, UUID_PK // default
-, UUID_REQUIRED } from './utils';
-
+import {
+	BOOLEAN, // default
+	BOOLEAN_DEFAULT_VALUE, // default
+	BOOLEAN_REQUIRED, // default
+	EMAIL, // default
+	EMAIL_REQUIRED, // default
+	FORTUNE_ZIP_EMAIL_PATTERN, // default
+	JSON_STRING, // default
+	JSON_STRING_REQUIRED, // default
+	NAME,
+	NAME_REQUIRED, // default
+	NUMBER, // default
+	NUMBER_DOUBLE, // default
+	NUMBER_DOUBLE_REQUIRED, // default
+	NUMBER_REQUIRED, // default
+	ORDER_NUMBER, // default
+	ORDER_NUMBER_NOT_REQUIRED, // default
+	PASSWORD, // default
+	PHONE_NUMBER, // default
+	PHONE_NUMBER_REQUIRED, // default
+	STRING, // default
+	STRING_REQUIRED, // default
+	URL, // default
+	URL_REQUIRED, // default
+	UUID, // default
+	UUID_FK, // default
+	UUID_PK, // default
+	UUID_REQUIRED,
+} from './utils';
 
 export {
 	BOOLEAN,
@@ -1579,6 +1579,7 @@ export const PACKING_LIST_NULL = {
 
 // Challan
 export const CHALLAN_SCHEMA = {
+	item_for: STRING_REQUIRED,
 	is_hand_delivery: BOOLEAN_DEFAULT_VALUE(false),
 	name: STRING.when('is_hand_delivery', {
 		is: true,
@@ -1628,6 +1629,7 @@ export const CHALLAN_SCHEMA = {
 };
 
 export const CHALLAN_NULL = {
+	item_for: 'zipper',
 	is_hand_delivery: false,
 	vehicle_uuid: '',
 	name: '',

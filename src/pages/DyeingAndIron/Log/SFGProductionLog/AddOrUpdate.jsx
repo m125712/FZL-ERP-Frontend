@@ -1,15 +1,17 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from "@/hooks";
-import { FormField, Input, ReactSelect } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
+import { useAuth } from '@/context/auth';
+import { useRHF, useUpdateFunc } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, ReactSelect } from '@/ui';
+
 import {
 	SFG_PRODUCTION_LOG_NULL,
 	SFG_PRODUCTION_LOG_SCHEMA,
-} from "@util/Schema";
+} from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setDyeingAndIron,
 	updateDyeingAndIronLog = {
 		id: null,
@@ -34,8 +36,15 @@ export default function Index({
 			.max(MAX_QUANTITY),
 	};
 	const { user } = useAuth();
-	const { register, handleSubmit, errors, control, Controller, reset,context } =
-		useRHF(schema, SFG_PRODUCTION_LOG_NULL);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		control,
+		Controller,
+		reset,
+		context,
+	} = useRHF(schema, SFG_PRODUCTION_LOG_NULL);
 
 	const onClose = () => {
 		setUpdateDyeingAndIronLog((prev) => ({
@@ -71,7 +80,7 @@ export default function Index({
 			};
 
 			await useUpdateFunc({
-				uri: `/sfg/production/${updateDyeingAndIronLog?.id}/${updateDyeingAndIronLog?.order_description.replace(/[/_\/()]/g, "")}`,
+				uri: `/sfg/production/${updateDyeingAndIronLog?.id}/${updateDyeingAndIronLog?.order_description.replace(/[/_\/()]/g, '')}`,
 				itemId: updateDyeingAndIronLog?.id,
 				data: data,
 				updatedData: updatedData,
@@ -84,12 +93,12 @@ export default function Index({
 	};
 
 	const sectionName = [
-		{ label: "Dying and Iron", value: "dying_and_iron" },
-		{ label: "Teeth Molding", value: "teeth_molding" },
-		{ label: "Teeth Cleaning", value: "teeth_cleaning" },
-		{ label: "Finishing", value: "finishing" },
-		{ label: "Slider Assembly", value: "slider_assembly" },
-		{ label: "Coloring", value: "coloring" },
+		{ label: 'Dying and Iron', value: 'dying_and_iron' },
+		{ label: 'Teeth Molding', value: 'teeth_molding' },
+		{ label: 'Teeth Cleaning', value: 'teeth_cleaning' },
+		{ label: 'Finishing', value: 'finishing' },
+		{ label: 'Slider Assembly', value: 'slider_assembly' },
+		{ label: 'Coloring', value: 'coloring' },
 	];
 
 	return (
@@ -99,16 +108,15 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
-			<FormField label="section" title="Section" errors={errors}>
+			isSmall={true}>
+			<FormField label='section' title='Section' errors={errors}>
 				<Controller
-					name={"section"}
+					name={'section'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder="Select Production Area"
+								placeholder='Select Production Area'
 								options={sectionName}
 								value={sectionName?.find(
 									(item) =>
@@ -123,16 +131,16 @@ export default function Index({
 				/>
 			</FormField>
 			<Input
-				label="used_quantity"
+				label='used_quantity'
 				sub_label={`Max: ${updateDyeingAndIronLog?.dying_and_iron_stock}`}
 				{...{ register, errors }}
 			/>
 			<Input
-				label="production_quantity"
+				label='production_quantity'
 				sub_label={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

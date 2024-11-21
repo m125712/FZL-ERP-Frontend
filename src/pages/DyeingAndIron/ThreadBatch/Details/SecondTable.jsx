@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
-import { useFetch } from '@/hooks';
+import { useGetURLData } from '@/state/Other';
 
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-import { DateTime } from '@/ui';
 
 export default function Index({
 	batch_entry,
@@ -12,9 +11,8 @@ export default function Index({
 	const shade_recipe_uuids = batch_entry.map((entry) => entry.recipe_uuid);
 
 	let shade_recipes_entries = shade_recipe_uuids.map((uuid) => {
-		const { value: shade_recipe } = useFetch(
-			`/lab-dip/recipe/details/${uuid}`,
-			[uuid]
+		const { data: shade_recipe } = useGetURLData(
+			`/lab-dip/recipe/details/${uuid}`
 		);
 		return shade_recipe?.recipe_entry.concat(shade_recipe?.programs);
 	});

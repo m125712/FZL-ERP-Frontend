@@ -79,7 +79,7 @@ export const useThreadPrograms = () =>
 export const useThreadProgramsByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: threadQK.programsByUUID(uuid),
-		url: `/thread/programs${uuid}`,
+		url: `/thread/programs/${uuid}`,
 	});
 
 // * Coning

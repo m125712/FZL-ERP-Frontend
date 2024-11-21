@@ -1078,7 +1078,7 @@ export const otherQK = {
 	hrUserByDesignation: (designation) => [
 		...otherQK.all(),
 		'hr-user-by-designation',
-		designation,
+		...(designation ? [designation] : []),
 	],
 
 	// Thread Orders
@@ -1345,6 +1345,9 @@ export const otherQK = {
 
 	// * GET GIVEN URL DATA
 	getURLData: (url) => [...otherQK.all(), 'get-url-data', url],
+
+	// * GET ALL MACHINES
+	machines: () => [...otherQK.all(), 'machines'],
 };
 
 // * Challan

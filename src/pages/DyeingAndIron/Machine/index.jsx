@@ -4,7 +4,6 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, StatusButton } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';

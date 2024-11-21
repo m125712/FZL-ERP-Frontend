@@ -1,7 +1,9 @@
+import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useThreadPrograms } from '@/state/Thread';
+import { useGetURLData, useOtherMaterial } from '@/state/Other';
+import { useThreadProgramsByUUID } from '@/state/Thread';
 import { DevTool } from '@hookform/devtools';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect } from '@/ui';
@@ -17,7 +19,9 @@ export default function Index({
 	},
 	setUpdate,
 }) {
-	const { url, updateData, postData } = useThreadPrograms();
+	const { data, url, updateData, postData } = useThreadProgramsByUUID(
+		update?.uuid
+	);
 	const { user } = useAuth();
 	const {
 		register,
@@ -29,12 +33,17 @@ export default function Index({
 		getValues,
 		context,
 	} = useRHF(THREAD_PROGRAMS_SCHEMA, THREAD_PROGRAMS_NULL);
-	const { value: material } = useFetch(
-		'/other/material/value/label/unit/quantity'
-	);
-	const { value: dyes } = useFetch('/other/thread/dyes-category/value/label');
 
-	useFetchForRhfReset(`${url}/${update?.uuid}`, update?.uuid, reset);
+	const { data: material } = useOtherMaterial();
+	const { data: dyes } = useGetURLData(
+		'/other/thread/dyes-category/value/label'
+	);
+
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdate((prev) => ({
@@ -54,7 +63,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${update?.uuid}`,
+				url,
 				uuid: update?.uuid,
 				updatedData,
 				onClose,
@@ -73,7 +82,7 @@ export default function Index({
 		};
 
 		await postData.mutateAsync({
-			url,
+			url: '/thread/programs',
 			newData: updatedData,
 			onClose,
 		});

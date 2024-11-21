@@ -11,8 +11,10 @@ export const useOtherHRUser = () =>
 export const useOtherHRUserByDesignation = (designation) =>
 	createGlobalState({
 		queryKey: otherQK.hrUserByDesignation(designation),
-		url: `/other/hr/user/value/label?designation=${designation}`,
-		enabled: !!designation,
+		url: designation
+			? `/other/hr/user/value/label?designation=${designation}`
+			: '/other/hr/user/value/label',
+		// enabled: !!designation,
 	});
 
 // GET OTHER PARTY
@@ -65,7 +67,9 @@ export const useOtherMarketing = () =>
 export const useOtherOrder = (query) =>
 	createGlobalState({
 		queryKey: otherQK.order(query),
-		url: query? `/other/order/info/value/label?page=${query}` : '/other/order/info/value/label',
+		url: query
+			? `/other/order/info/value/label?page=${query}`
+			: '/other/order/info/value/label',
 	});
 
 // GET OTHER ORDER FOR PACKING LIST
@@ -475,3 +479,10 @@ export const useOtherTapeCoil = () =>
 // * GET GIVEN URL DATA
 export const useGetURLData = (url) =>
 	createGlobalState({ queryKey: otherQK.getURLData(url), url: url });
+
+// * GET ALL MACHINES
+export const useOtherMachines = () =>
+	createGlobalState({
+		queryKey: otherQK.machines(),
+		url: '/other/machine/value/label',
+	});

@@ -1,27 +1,22 @@
-import { lazy, useEffect, useMemo, useState } from 'react';
-import { Edit, Plus } from '@/assets/icons';
+import { useEffect, useMemo } from 'react';
+import { Plus } from '@/assets/icons';
 import { useAuth } from '@/context/auth';
 import { useDyeingThreadBatch } from '@/state/Dyeing';
 import { useDyeingCone } from '@/state/Thread';
 import { useNavigate } from 'react-router-dom';
-import { useAccess, useFetch } from '@/hooks';
+import { useAccess } from '@/hooks';
 
-import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
-
-const Yarn = lazy(() => import('../ThreadBatch/Yarn'));
-const Dyeing = lazy(() => import('./Dyeing'));
 
 export default function Index() {
 	const { data, url, updateData, isLoading } = useDyeingThreadBatch();
 	const { invalidateQuery } = useDyeingCone();
 	const info = new PageInfo('Thread Batch', url, 'dyeing__thread_batch');
-	const { value: machine } = useFetch('/other/machine/value/label');
 	const { user } = useAuth();
 	const haveAccess = useAccess('dyeing__thread_batch');
 	const navigate = useNavigate();
@@ -46,7 +41,7 @@ export default function Index() {
 				width: 'w-28',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const  order_numbers = info.getValue();
+					const order_numbers = info.getValue();
 					return order_numbers?.map((order_number) => {
 						return (
 							<LinkWithCopy
@@ -80,7 +75,7 @@ export default function Index() {
 								className='btn btn-accent btn-xs flex w-fit gap-0.5'
 								onClick={() =>
 									navigate(
-										`/dyeing-and-iron/thread-batch/conneing/${info.row.original.uuid}`
+										`/dyeing-and-iron/thread-batch/dyeing/${info.row.original.uuid}`
 									)
 								}>
 								<Plus className='size-4' />
@@ -297,38 +292,6 @@ export default function Index() {
 			});
 		}
 	};
-	//Yarn
-
-	const [yarn, setYarn] = useState({
-		uuid: null,
-		yarn_quantity: null,
-	});
-
-	const handelYarn = (idx) => {
-		setYarn((prev) => ({
-			...prev,
-			uuid: data[idx].uuid,
-			yarn_quantity: data[idx].yarn_quantity,
-			batch_id: data[idx].batch_id,
-		}));
-		window['YarnModal'].showModal();
-	};
-
-	const [dyeing, setDyeing] = useState({
-		uuid: null,
-		dyeing_operator: null,
-		batch_id: null,
-	});
-
-	const handelDyeing = (idx) => {
-		setDyeing((prev) => ({
-			...prev,
-			uuid: data[idx].uuid,
-			batch_id: data[idx].batch_id,
-			dyeing_operator: data[idx].dyeing_operator,
-		}));
-		window['DyeingModal'].showModal();
-	};
 
 	// Add
 	const handelAdd = () => navigate('/dyeing-and-iron/thread-batch/entry');
@@ -358,25 +321,6 @@ export default function Index() {
 				columns={columns}
 				accessor={haveAccess.includes('create')}
 			/>
-
-			<Suspense>
-				<Yarn
-					modalId={'YarnModal'}
-					{...{
-						yarn,
-						setYarn,
-					}}
-				/>
-			</Suspense>
-			<Suspense>
-				<Dyeing
-					modalId={'DyeingModal'}
-					{...{
-						dyeing,
-						setDyeing,
-					}}
-				/>
-			</Suspense>
 		</div>
 	);
 }

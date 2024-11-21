@@ -7,6 +7,7 @@
 import { all } from 'axios';
 
 import { useDeliveryThreadDashboard } from './Delivery';
+import { useOtherThreadOrderPackingList } from './Other';
 
 export const orderQK = {
 	all: () => ['order'],
@@ -1081,7 +1082,12 @@ export const otherQK = {
 	],
 
 	// Thread Orders
-	threadOrders: (query) => [...otherQK.all(), 'thread-orders', query],
+
+	threadOrders: () => [...otherQK.all(), 'thread-orders'],
+	threadOrderPackingList: () => [
+		...otherQK.all(),
+		'thread-order-packing-list',
+	],
 	threadOrdersForChallan: () => [
 		...otherQK.all(),
 		'thread-orders-for-challan',

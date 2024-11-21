@@ -35,7 +35,7 @@ export const getPageHeader = (data) => {
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
-						`Challan Number: ${data?.order_number}\n`,
+						`Challan Number: ${data?.challan_number}\n`,
 						`Date: ${created_at}\n`,
 					],
 					alignment: 'right',

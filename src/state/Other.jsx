@@ -69,7 +69,7 @@ export const useOtherOrder = (query) =>
 	});
 
 // GET OTHER ORDER FOR PACKING LIST
-export const useOtherOrderPackingList = () =>
+export const useOtherOrderPackingList = (param) =>
 	createGlobalState({
 		queryKey: otherQK.orderPackingList(),
 		url: '/other/order/info/value/label?page=challan',
@@ -82,6 +82,11 @@ export const useThreadOrder = (query) =>
 		url: query
 			? `/other/thread/value/label?page=${query}`
 			: '/other/thread/value/label',
+	});
+export const useOtherThreadOrderPackingList = () =>
+	createGlobalState({
+		queryKey: otherQK.threadOrderPackingList(),
+		url: '/other/thread/value/label?page=challan',
 	});
 // GET THREAD ORDER For Challan
 export const useThreadOrderForChallan = () =>
@@ -454,10 +459,10 @@ export const useOtherRecipe = () =>
 		url: `/other/lab-dip/recipe/value/label`,
 	});
 //* GET CHALLAN
-export const useOtherChallan = () =>
+export const useOtherChallan = (query) =>
 	createGlobalState({
 		queryKey: otherQK.challan(),
-		url: `/other/delivery/challan/value/label`,
+		url: `/other/delivery/challan/value/label?${query}`,
 	});
 
 // TAPE-COIL

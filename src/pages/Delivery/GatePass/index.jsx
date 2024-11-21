@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
+	useDeliveryChallanEntryByChallanUUID,
 	useDeliveryPackingList,
 	useDeliveryPackingListByUUID,
 } from '@/state/Delivery';
@@ -16,18 +17,17 @@ import {
 	FormField,
 	ReactSelect,
 	SectionEntryBody,
+	StatusButton,
 } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
-import {
-	WAREHOUSE_RECEIVE_NULL,
-	WAREHOUSE_RECEIVE_SCHEMA,
-} from '@/util/Schema';
+import { GATE_PASS_NULL, GATE_PASS_SCHEMA } from '@/util/Schema';
 
 export default function Index() {
 	const containerRef = useRef(null);
 	const [symbol, setSymbol] = useState(null);
 	const [scannerActive, setScannerActive] = useState(true);
+	const [onFocus, setOnFocus] = useState(true);
 	const navigate = useNavigate();
 
 	const {
@@ -36,10 +36,11 @@ export default function Index() {
 		reset,
 		control,
 		useFieldArray,
+		setValue,
 		getValues,
 		Controller,
 		watch,
-	} = useRHF(WAREHOUSE_RECEIVE_SCHEMA, WAREHOUSE_RECEIVE_NULL);
+	} = useRHF(GATE_PASS_SCHEMA, GATE_PASS_NULL);
 
 	const {
 		fields: EntryField,
@@ -50,7 +51,7 @@ export default function Index() {
 		name: 'entry',
 	});
 
-	const { data: challan_option } = useOtherChallan();
+	const { data: challan_option } = useOtherChallan('gate_pass=false');
 
 	const { invalidateQuery: invalidateDeliveryPackingList } =
 		useDeliveryPackingList();
@@ -59,58 +60,66 @@ export default function Index() {
 		isLoading,
 		error,
 		updateData,
-	} = useDeliveryPackingListByUUID(watch('challan_uuid'));
+	} = useDeliveryChallanEntryByChallanUUID(watch('challan_uuid'));
 	useEffect(() => {
 		if (containerRef.current) {
 			containerRef.current.focus();
 		}
 	}, [containerRef]);
+	useEffect(() => {
+		if (!packetListData) return;
+		setValue('entry', packetListData);
+	}, [packetListData]);
 
 	const handleSymbol = useCallback((scannedSymbol) => {
 		if (!scannedSymbol) return;
 		setSymbol(scannedSymbol);
 	}, []);
 
-	const handlePacketScan = async (selectedOption) => {
-		const waitForLoading = () => {
-			return new Promise((resolve) => {
-				if (!isLoading) {
+	const handlePacketScan = async (selectedOption, scannedSymbol) => {
+		try {
+			await new Promise((resolve) => {
+				if (onFocus && !isLoading) {
 					resolve(true);
 					return;
 				}
 			});
-		};
-
-		try {
-			await waitForLoading();
-			if (error) {
-				throw new Error(error);
+			if (scannedSymbol.length < 2) {
+				return null;
 			}
 			if (!selectedOption) {
-				throw new Error('Please select an option');
+				throw new Error('Please select a challan first');
 			}
 
-			if (!packetListData) {
-				throw new Error('No packet list found');
+			if (!scannedSymbol) {
+				throw new Error('Invalid scan data');
+			}
+
+			if (!Array.isArray(packetListData) || !packetListData?.length) {
+				throw new Error('No packet list data available');
+			}
+
+			const packet = getValues('entry').find(
+				(entry) => entry.uuid.trim() === scannedSymbol.trim()
+			);
+			if (!packet) {
+				throw new Error('Packet not found in this challan');
 			}
 
 			const currentEntries = getValues('entry') || [];
-			const isDuplicate = currentEntries.some(
+			const isGatePassed = currentEntries.find(
 				(entry) =>
-					entry.packing_number === packetListData.packing_number
+					entry.gate_pass === 1 &&
+					entry.uuid.trim() === scannedSymbol.trim()
 			);
 
-			if (isDuplicate) {
-				throw new Error('This item has already been scanned');
+			if (isGatePassed) {
+				throw new Error('This packet has already been gate passed');
 			}
 
-			if (selectedOption === 'warehouse_receive') {
-				if (packetListData.is_warehouse_received) {
-					throw new Error('This item has already been received');
-				}
-				return packetListData;
-			}
+			return packet;
 		} catch (error) {
+			console.error('Scan error:', error);
 			throw error;
 		}
 	};
@@ -118,11 +127,16 @@ export default function Index() {
 	useEffect(() => {
 		if (!symbol) return;
 
-		const selectedOption = getValues('option');
+		const selectedOption = getValues('challan_uuid');
 
-		handlePacketScan(selectedOption)
+		handlePacketScan(selectedOption, symbol)
 			.then((data) => {
-				EntryAppend({ ...data });
+				if (!data) return;
+				getValues('entry').find((entry, index) => {
+					if (entry.uuid === data.uuid) {
+						setValue(`entry.${index}.gate_pass`, 1);
+					}
+				});
 			})
 			.catch((error) => {
 				ShowLocalToast({
@@ -171,7 +185,7 @@ export default function Index() {
 				async (item) => {
 					if (item.uuid) {
 						const updatedData = {
-							gate_pass: true,
+							gate_pass: 1,
 							updated_at: GetDateTime(),
 						};
 						return await updateData.mutateAsync({
@@ -186,7 +200,7 @@ export default function Index() {
 			);
 
 			await Promise.all(updatablePackingListEntryPromises);
-			reset(Object.assign({}, WAREHOUSE_RECEIVE_NULL));
+			reset(Object.assign({}, GATE_PASS_NULL));
 			invalidateDeliveryPackingList();
 			navigate(`/delivery/zipper-packing-list`);
 		} catch (err) {
@@ -269,9 +283,13 @@ export default function Index() {
 												item.value ==
 												getValues('option')
 										)}
+										onFocus={() => {
+											setOnFocus(false);
+										}}
 										onChange={(e) => {
 											const value = e.value;
 											onChange(value);
+											setOnFocus(true);
 											containerRef.current.focus();
 										}}
 									/>
@@ -290,6 +308,7 @@ export default function Index() {
 							'Carton Weight',
 							'Total Poly Quantity',
 							'Total Quantity',
+							'Gate Pass',
 							'Action',
 						].map((item) => (
 							<th
@@ -326,6 +345,31 @@ export default function Index() {
 									)}
 								</td>
 								<td
+									className={`w-80 px-4 py-2 transition-colors duration-300 ${
+										getValues(
+											`entry[${index}].gate_pass`
+										) === 1
+											? 'bg-success/20 font-medium text-success'
+											: 'bg-error/20 font-medium text-error'
+									}`}>
+									<div className='flex items-center gap-2'>
+										<div
+											className={`h-2 w-2 rounded-full ${
+												getValues(
+													`entry[${index}].gate_pass`
+												) === 1
+													? 'bg-success'
+													: 'bg-error'
+											}`}
+										/>
+										{getValues(
+											`entry[${index}].gate_pass`
+										) === 1
+											? 'Passed'
+											: 'Pending'}
+									</div>
+								</td>
+								<td
 									className={`w-20 ${rowClass} border-l-4 border-l-primary`}>
 									<ActionButtons
 										duplicateClick={() =>
@@ -346,7 +390,11 @@ export default function Index() {
 						<button
 							type='submit'
 							disabled={
-								getValues('entry').length < 1 || isLoading
+								getValues('entry').length < 1 ||
+								isLoading ||
+								!getValues('entry').every(
+									(value) => value.gate_pass === 1
+								)
 							}
 							className='text-md btn btn-primary btn-block'>
 							Save

@@ -27,12 +27,12 @@ export default function Index() {
 	const containerRef = useRef(null);
 	const [symbol, setSymbol] = useState(null);
 	const [scannerActive, setScannerActive] = useState(true);
+	const [onFocus, setOnFocus] = useState(true);
 	const navigate = useNavigate();
 	const haveAccess = useAccess('delivery__warehouse_recv');
 
 	const scan_option = [
 		{ value: 'warehouse_receive', label: 'Warehouse Receive' },
-		{ value: 'gate_pass', label: 'Gate Pass' },
 	];
 
 	const {
@@ -72,14 +72,15 @@ export default function Index() {
 	}, [containerRef]);
 
 	const handleSymbol = useCallback((scannedSymbol) => {
-		if (!scannedSymbol) return;
+		if (!scannedSymbol || !onFocus || scannedSymbol.length < 2) return;
+
 		setSymbol(scannedSymbol);
 	}, []);
 
 	const handlePacketScan = async (selectedOption) => {
 		const waitForLoading = () => {
 			return new Promise((resolve) => {
-				if (!isLoading) {
+				if (!isLoading && onFocus) {
 					resolve(true);
 					return;
 				}
@@ -234,8 +235,8 @@ export default function Index() {
 			onFocus={() => setScannerActive(true)}
 			className='min-h-screen p-4 outline-none'>
 			{isLoading && (
-				<div className='loading-spinner'>
-					<p>Loading...</p>
+				<div className='flex h-screen items-center justify-center'>
+					<span className='loading loading-dots loading-lg z-50' />
 				</div>
 			)}
 			<div className='mb-4 flex items-center gap-4'>
@@ -274,9 +275,13 @@ export default function Index() {
 												item.value ==
 												getValues('option')
 										)}
+										onFocus={() => {
+											setOnFocus(false);
+										}}
 										onChange={(e) => {
 											const value = e.value;
 											onChange(value);
+											setOnFocus(true);
 											containerRef.current.focus();
 										}}
 									/>

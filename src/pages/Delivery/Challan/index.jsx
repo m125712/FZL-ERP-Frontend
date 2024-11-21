@@ -48,7 +48,7 @@ export default function Index() {
 						<LinkWithCopy
 							title={info.getValue()}
 							id={uuid}
-							uri='/delivery/zipper-challan'
+							uri='/delivery/challan'
 						/>
 					);
 				},
@@ -128,24 +128,10 @@ export default function Index() {
 				header: 'Gate Pass',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const { gate_pass, receive_status } = info.row.original;
-					const access = haveAccess.includes('click_gate_pass');
-					const overrideAccess = haveAccess.includes(
-						'click_gate_pass_override'
-					);
-
 					return (
-						<SwitchToggle
-							disabled={
-								overrideAccess
-									? false
-									: access
-										? gate_pass === 1 ||
-											receive_status === 1
-										: true
-							}
-							onChange={() => handelGatePass(info.row.index)}
-							checked={Number(info.getValue()) === 1}
+						<StatusButton
+							size='btn-sm'
+							value={Number(info.getValue()) === 1}
 						/>
 					);
 				},
@@ -259,11 +245,11 @@ export default function Index() {
 		});
 	};
 
-	const handelAdd = () => navigate('/delivery/zipper-challan/entry');
+	const handelAdd = () => navigate('/delivery/challan/entry');
 
 	const handelUpdate = (idx) => {
 		const uuid = data[idx]?.uuid;
-		navigate(`/delivery/zipper-challan/${uuid}/update`);
+		navigate(`/delivery/challan/${uuid}/update`);
 	};
 
 	// Delete

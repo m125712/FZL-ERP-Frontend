@@ -1082,15 +1082,12 @@ export const otherQK = {
 	],
 
 	// Thread Orders
-<<<<<<< HEAD
+
 	threadOrders: () => [...otherQK.all(), 'thread-orders'],
 	threadOrderPackingList: () => [
 		...otherQK.all(),
 		'thread-order-packing-list',
 	],
-=======
-	threadOrders: (query) => [...otherQK.all(), 'thread-orders', query],
->>>>>>> upstream/main
 	threadOrdersForChallan: () => [
 		...otherQK.all(),
 		'thread-orders-for-challan',

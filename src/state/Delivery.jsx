@@ -52,7 +52,7 @@ export const useDeliveryChallanDetailsByUUID = (uuid) =>
 export const useDeliveryChallanEntry = () =>
 	createGlobalState({
 		queryKey: challanQK.deliveryChallanEntry(),
-		url: '/delivery/challan-entry',
+		url: '/delivery/update-challan-uuid/for-packing-list',
 	});
 
 export const useDeliveryChallanEntryByUUID = (uuid) =>
@@ -64,7 +64,7 @@ export const useDeliveryChallanEntryByUUID = (uuid) =>
 export const useDeliveryChallanEntryByChallanUUID = (challanUUID) =>
 	createGlobalState({
 		queryKey: challanQK.deliveryChallanEntryByChallanUUID(challanUUID),
-		url: `/delivery/challan-entry/by/${challanUUID}`,
+		url: `/delivery/packing-list?challan_uuid=${challanUUID}`,
 	});
 
 // * Packing List
@@ -114,7 +114,7 @@ export const useDeliveryChallanEntryForPackingListByPackingListUUID = (
 
 // /delivery/order-for-packing-list/{order_info_uuid}
 
-export const useDeliveryPackingListByOrderInfoUUID = (order_info_uuid,param) =>
+export const useDeliveryPackingListByOrderInfoUUID = (order_info_uuid, param) =>
 	createGlobalState({
 		queryKey:
 			deliveryQk.deliveryPackingListByOrderInfoUUID(order_info_uuid),

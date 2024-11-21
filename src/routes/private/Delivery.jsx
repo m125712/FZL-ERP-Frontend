@@ -61,19 +61,13 @@ export const DeliveryRoutes = [
 				],
 			},
 			{
-				name: 'Zipper Warehouse Receive',
-				path: '/delivery/zipper-warehouse-receive',
+				name: 'Warehouse Receive',
+				path: '/delivery/warehouse-receive',
 				element: <WarehouseRecv />,
 				page_name: 'delivery__warehouse_recv',
 				actions: ['create', 'read'],
 			},
-			{
-				name: 'Gate Pass',
-				path: '/delivery/gate-pass',
-				element: <GatePass />,
-				page_name: 'delivery__gate_pass',
-				actions: ['create', 'read'],
-			},
+
 			{
 				name: 'Packing List Entry',
 				path: '/delivery/zipper-packing-list/entry',
@@ -120,8 +114,8 @@ export const DeliveryRoutes = [
 
 			// * Zipper Challan
 			{
-				name: 'Zipper Challan',
-				path: '/delivery/zipper-challan',
+				name: 'Challan',
+				path: '/delivery/challan',
 				element: <Challan />,
 				page_name: 'delivery__challan',
 				actions: [
@@ -136,8 +130,8 @@ export const DeliveryRoutes = [
 				],
 			},
 			{
-				name: 'Zipper Challan Details',
-				path: '/delivery/zipper-challan/:uuid',
+				name: 'Challan Details',
+				path: '/delivery/challan/:uuid',
 				element: <ChallanDetails />,
 				page_name: 'delivery__challan_details',
 				actions: [
@@ -150,20 +144,27 @@ export const DeliveryRoutes = [
 				hidden: true,
 			},
 			{
-				name: 'Zipper Challan Entry',
-				path: '/delivery/zipper-challan/entry',
+				name: 'Challan Entry',
+				path: '/delivery/challan/entry',
 				element: <ChallanEntry />,
 				page_name: 'delivery__challan_entry',
 				actions: ['create', 'read', 'update', 'delete'],
 				hidden: true,
 			},
 			{
-				name: 'Zipper Challan Update',
-				path: '/delivery/zipper-challan/:uuid/update',
+				name: 'Challan Update',
+				path: '/delivery/challan/:uuid/update',
 				element: <ChallanEntry />,
 				page_name: 'delivery__challan_update',
 				actions: ['create', 'read', 'update', 'delete'],
 				hidden: true,
+			},
+			{
+				name: 'Gate Pass',
+				path: '/delivery/gate-pass',
+				element: <GatePass />,
+				page_name: 'delivery__gate_pass',
+				actions: ['create', 'read'],
 			},
 			// * Thread Challan
 			// {

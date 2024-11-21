@@ -134,7 +134,7 @@ export default function Index() {
 				header: '',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_transaction'),
+				hidden: true, //!haveAccess.includes('click_transaction'),
 				width: 'w-8',
 				cell: (info) => {
 					return (

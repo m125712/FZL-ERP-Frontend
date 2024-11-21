@@ -5,7 +5,9 @@ import {
 	useOtherOrderPackingList,
 	useOtherPackingListByOrderInfoUUID,
 	useOtherPackingListByOrderInfoUUIDAndChallanUUID,
+	useOtherThreadOrderPackingList,
 	useOtherVehicle,
+	useThreadOrder,
 } from '@/state/Other';
 import { Trash2 } from 'lucide-react';
 import { Controller } from 'react-hook-form';
@@ -35,20 +37,60 @@ export default function Header({
 	deleteItem,
 }) {
 	const { data: vehicles } = useOtherVehicle();
-	const { data: orders } = isUpdate
-		? useOtherOrder()
-		: useOtherOrderPackingList();
+	const { data: ordersZipperPackingList } = useOtherOrderPackingList();
+	const { data: ordersThreadPackingList } = useOtherThreadOrderPackingList();
+	const { data: ordersZipper } = useOtherOrder();
+	const { data: ordersThread } = useThreadOrder();
 	const { data: packingList } = isUpdate
 		? useOtherPackingListByOrderInfoUUIDAndChallanUUID(
 				watch('order_info_uuid'),
 				watch('uuid')
 			)
 		: useOtherPackingListByOrderInfoUUID(watch('order_info_uuid'));
+	const itemOptions = [
+		{ label: 'Zipper', value: 'zipper' },
+		{ label: 'Thread', value: 'thread' },
+	];
+	const itemFor = watch('item_for');
+	useEffect(() => {
+		if (!isUpdate && getValues('packing_list_uuids')) {
+			setValue('packing_list_uuids', []);
+			setValue('challan_entry', []);
+		}
+	}, [getValues('order_info_uuid')]);
 
-	const handlePackingListRemove = (packing_list_uuid, packing_list_name) => {
+	const orders = isUpdate
+		? itemFor === 'zipper'
+			? ordersZipper
+			: itemFor === 'thread'
+				? ordersThread
+				: []
+		: itemFor === 'zipper'
+			? ordersZipperPackingList
+			: itemFor === 'thread'
+				? ordersThreadPackingList
+				: [];
+
+	useEffect(() => {
+		const itemFor = watch('item_for');
+
+		if (itemFor === 'thread' && !isUpdate) {
+			setValue('order_info_uuid', null);
+			setValue('challan_entry', []);
+		} else if (itemFor === 'zipper' && !isUpdate) {
+			setValue('challan_entry', []);
+			setValue('order_info_uuid', null);
+		}
+	}, [watch('item_for')]);
+	const handlePackingListRemove = (
+		packing_list_uuid,
+		packing_list_name,
+		challan_uuid
+	) => {
 		setDeleteItem({
 			itemId: packing_list_uuid,
 			itemName: packing_list_name,
+			challan_uuid: challan_uuid,
 		});
 		window['packing_list_delete'].showModal();
 	};
@@ -81,7 +123,6 @@ export default function Header({
 								}
 							/>
 						</div>
-
 						<div className='rounded-md bg-secondary px-1'>
 							<CheckBox
 								text='text-secondary-content'
@@ -94,7 +135,6 @@ export default function Header({
 								}
 							/>
 						</div>
-
 						<div className='rounded-md bg-secondary px-1'>
 							<CheckBox
 								text='text-secondary-content'
@@ -113,6 +153,27 @@ export default function Header({
 					</div>
 				}>
 				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 md:grid-cols-3'>
+					<FormField
+						label='item_for'
+						title='Item For'
+						errors={errors}>
+						<Controller
+							name={'item_for'}
+							control={control}
+							render={({ field: { onChange } }) => (
+								<ReactSelect
+									placeholder='Select Item'
+									options={itemOptions}
+									value={itemOptions?.find(
+										(item) =>
+											item.value === getValues('item_for')
+									)}
+									onChange={(e) => onChange(e.value)}
+									isDisabled={isUpdate}
+								/>
+							)}
+						/>
+					</FormField>
 					{!watch('is_hand_delivery') && (
 						<FormField
 							label='vehicle_uuid'
@@ -238,7 +299,6 @@ export default function Header({
 																	item.value
 																);
 															}
-
 															return packing_list_uuids?.includes(
 																item.value
 															);
@@ -276,7 +336,8 @@ export default function Header({
 											onClick={() =>
 												handlePackingListRemove(
 													item.value,
-													item.label
+													item.label,
+													null
 												)
 											}
 											type={'button'}

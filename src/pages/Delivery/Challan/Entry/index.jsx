@@ -10,7 +10,7 @@ import { DevTool } from '@hookform/devtools';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
-import { DeleteModal } from '@/components/Modal';
+import { DeleteModal, UpdateModal } from '@/components/Modal';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
 import { DynamicDeliveryField, LinkWithCopy } from '@/ui';
 
@@ -97,7 +97,23 @@ export default function Index() {
 	const [deleteItem, setDeleteItem] = useState({
 		itemId: null,
 		itemName: null,
+		challan_uuid: null,
 	});
+	// const [updateItem, setUpdateItem] = useState({
+	// 	itemId: null,
+	// 	itemName: null,
+	// });
+	// const handleRecipeRemove = (index) => {
+	// 	const recipeUuid = getValues(`packing_list_uuids[${index}]`);
+	// 	if (recipeUuid !== undefined) {
+	// 		setUpdateItem({
+	// 			itemId: recipeUuid,
+	// 			itemName: recipeUuid,
+	// 		});
+	// 		window['delete_challan_packing_list'].showModal();
+	// 	}
+	// 	recipeRemove(index);
+	// };
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -125,51 +141,52 @@ export default function Index() {
 			const updatedId = challanPromise?.data?.[0]?.updatedUuid;
 
 			// update challan_entry
-			// const updatableChallanEntryPromises = data.challan_entry.map(
-			// 	async (item) => {
-			// 		const updatedData = {
-			// 			...item,
-			// 			updated_at: GetDateTime(),
-			// 		};
-
-			// 		return await updateData.mutateAsync({
-			// 			url: `${deliveryChallanEntryUrl}/${item?.uuid}`,
-			// 			updatedData: updatedData,
-			// 			uuid: item.uuid,
-			// 			isOnCloseNeeded: false,
-			// 		});
-			// 	}
-			// );
-
-			//new challan_entry
-			const newChallanEntryPromises = data?.new_challan_entry?.map(
+			const updatableChallanEntryPromises = data.new_challan_entry.map(
 				async (item) => {
-					const data = {
-						...item,
-						uuid: nanoid(),
-						challan_uuid: uuid,
-						created_at: GetDateTime(),
-						remarks: item?.remarks,
+					const updatedData = {
+						challan_uuid: data?.uuid,
 					};
 
-					return await postData.mutateAsync({
-						url: deliveryChallanEntryUrl,
-						newData: data,
+					return await updateData.mutateAsync({
+						url: `${deliveryChallanEntryUrl}/${
+							item?.packing_list_uuid
+						}`,
+						updatedData: updatedData,
+						uuid: item.uuid,
 						isOnCloseNeeded: false,
 					});
 				}
 			);
 
+			//new challan_entry
+			// const newChallanEntryPromises = data?.new_challan_entry?.map(
+			// 	async (item) => {
+			// 		const data = {
+			// 			...item,
+			// 			uuid: nanoid(),
+			// 			challan_uuid: uuid,
+			// 			created_at: GetDateTime(),
+			// 			remarks: item?.remarks,
+			// 		};
+
+			// 		return await postData.mutateAsync({
+			// 			url: deliveryChallanEntryUrl,
+			// 			newData: data,
+			// 			isOnCloseNeeded: false,
+			// 		});
+			// 	}
+			// );
+
 			try {
 				await Promise.all([
 					challanPromise,
-					// ...updatableChallanEntryPromises,
+					...updatableChallanEntryPromises,
 					// ...newChallanEntryPromises,
 				])
 					.then(() => reset(Object.assign({}, CHALLAN_NULL)))
 					.then(() => {
 						invalidateChallan();
-						navigate(`/delivery/zipper-challan/${updatedId}`);
+						navigate(`/delivery/challan/${updatedId}`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -214,20 +231,36 @@ export default function Index() {
 			});
 
 			// create new /packing/list/entry
-			const challan_entry_promises = challanEntryData.map((item) =>
-				postData.mutateAsync({
-					url: deliveryChallanEntryUrl,
-					newData: item,
-					isOnCloseNeeded: false,
-				})
+			// const challan_entry_promises = challanEntryData.map((item) =>
+			// 	postData.mutateAsync({
+			// 		url: deliveryChallanEntryUrl,
+			// 		newData: item,
+			// 		isOnCloseNeeded: false,
+			// 	})
+			// );
+			const challanEntryPromises = data.challan_entry.map(
+				async (item) => {
+					const updatedData = {
+						challan_uuid: challanData.uuid,
+					};
+
+					return await updateData.mutateAsync({
+						url: `${deliveryChallanEntryUrl}/${
+							item?.packing_list_uuid
+						}`,
+						updatedData: updatedData,
+						uuid: item.uuid,
+						isOnCloseNeeded: false,
+					});
+				}
 			);
 
 			try {
-				await Promise.all([...challan_entry_promises])
+				await Promise.all([...challanEntryPromises])
 					.then(() => reset(Object.assign({}, CHALLAN_NULL)))
 					.then(() => {
 						invalidateChallan();
-						navigate(`/delivery/zipper-challan/${new_uuid}`);
+						navigate(`/delivery/challan/${new_uuid}`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -264,28 +297,51 @@ export default function Index() {
 					title={`Entry Details: `}
 					tableHead={
 						<>
-							{[
-								'PL No.',
-								'Item Description',
-								'Style',
-								'Color',
-								'Size',
-								'Unit',
-								'Delivered',
-								'Quantity(pcs)',
-								'Poly Qty',
-								'Short QTY',
-								'Reject QTY',
-								'Remarks',
-								,
-							].map((item) => (
-								<th
-									key={item}
-									scope='col'
-									className='group cursor-pointer px-3 py-2 transition duration-300'>
-									{item}
-								</th>
-							))}
+							{watch('item_for') === 'zipper'
+								? [
+										'PL No.',
+										'Item Description',
+										'Style',
+										'Color',
+										'Size',
+										'Unit',
+										'Delivered',
+										'Quantity(pcs)',
+										'Poly Qty',
+										'Short QTY',
+										'Reject QTY',
+										'Remarks',
+										,
+									].map((item) => (
+										<th
+											key={item}
+											scope='col'
+											className='group cursor-pointer px-3 py-2 transition duration-300'>
+											{item}
+										</th>
+									))
+								: [
+										'PL No.',
+										'Count',
+										'Style',
+										'Color',
+										'Length',
+										'Unit',
+										'Delivered',
+										'Quantity(cones)',
+										'Poly Qty',
+										'Short QTY',
+										'Reject QTY',
+										'Remarks',
+										,
+									].map((item) => (
+										<th
+											key={item}
+											scope='col'
+											className='group cursor-pointer px-3 py-2 transition duration-300'>
+											{item}
+										</th>
+									))}
 						</>
 					}>
 					{challanEntryField.map((item, index) => {
@@ -344,7 +400,7 @@ export default function Index() {
 								</td>{' '}
 								<td className={`${rowClass}`}>
 									{getValues(
-										`challan_entry[${index}].poly_quantity`
+										`challan_entry[${index}].poli_quantity`
 									)}
 								</td>
 								<td className={`${rowClass}`}>
@@ -387,24 +443,51 @@ export default function Index() {
 						title={`New Entry Details: `}
 						tableHead={
 							<>
-								{[
-									'PL No.',
-									'Item Description',
-									'Style/Color/Size',
-									'Delivered',
-									'Quantity',
-									'Short QTY',
-									'Reject QTY',
-									'Remarks',
-									,
-								].map((item) => (
-									<th
-										key={item}
-										scope='col'
-										className='group cursor-pointer px-3 py-2 transition duration-300'>
-										{item}
-									</th>
-								))}
+								{watch('item_for') === 'zipper'
+									? [
+											'PL No.',
+											'Item Description',
+											'Style',
+											'Color',
+											'Size',
+											'Unit',
+											'Delivered',
+											'Quantity(pcs)',
+											'Poly Qty',
+											'Short QTY',
+											'Reject QTY',
+											'Remarks',
+											,
+										].map((item) => (
+											<th
+												key={item}
+												scope='col'
+												className='group cursor-pointer px-3 py-2 transition duration-300'>
+												{item}
+											</th>
+										))
+									: [
+											'PL No.',
+											'Count',
+											'Style',
+											'Color',
+											'Length',
+											'Unit',
+											'Delivered',
+											'Quantity(cones)',
+											'Poly Qty',
+											'Short QTY',
+											'Reject QTY',
+											'Remarks',
+											,
+										].map((item) => (
+											<th
+												key={item}
+												scope='col'
+												className='group cursor-pointer px-3 py-2 transition duration-300'>
+												{item}
+											</th>
+										))}
 							</>
 						}>
 						{newChallanEntryField.map((item, index) => {
@@ -437,7 +520,17 @@ export default function Index() {
 									</td>
 									<td className={`w-32 ${rowClass}`}>
 										{getValues(
-											`new_challan_entry[${index}].style_color_size`
+											`new_challan_entry[${index}].style`
+										)}
+									</td>
+									<td className={`w-32 ${rowClass}`}>
+										{getValues(
+											`new_challan_entry[${index}].color`
+										)}
+									</td>
+									<td className={`w-32 ${rowClass}`}>
+										{getValues(
+											`new_challan_entry[${index}].size`
 										)}
 									</td>
 
@@ -479,15 +572,13 @@ export default function Index() {
 			</form>
 
 			<Suspense>
-				<DeleteModal
+				<UpdateModal
 					modalId={'packing_list_delete'}
-					title={'Packing List'}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					url={`/delivery/remove-challan-entry-by`}
-					deleteData={deleteChallanEntry}
-					onSuccess={invalidateDetails}
-					invalidateQuery={invalidateDetails}
+					title={`Delete Entry${deleteItem?.itemName}`}
+					url={deliveryChallanEntryUrl}
+					updateItem={deleteItem}
+					setUpdateItem={setDeleteItem}
+					updateData={updateData}
 				/>
 			</Suspense>
 

@@ -78,7 +78,7 @@ export default function Index(data) {
 			{
 				table: {
 					// headerRows: 1,
-					widths: [40, '*', '*', 25, 30, 20],
+					widths: [40, '*', '*', 40, 40, 30],
 					body: [
 						[
 							{

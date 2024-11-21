@@ -147,13 +147,14 @@ export default function Index() {
 						'click_gate_pass_override'
 					);
 					const { challan_uuid } = info.row.original;
-					console.log(challan_uuid);
 					return (
 						<SwitchToggle
 							disabled={
 								(!overrideAccess &&
 									(!access || info.getValue() !== 1)) ||
-								challan_uuid === null
+								challan_uuid === null ||
+								info.row.original.is_warehouse_received ===
+									false
 							}
 							onChange={() => handelGatePass(info.row.index)}
 							checked={info.getValue() === 1}

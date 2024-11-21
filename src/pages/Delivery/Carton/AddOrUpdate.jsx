@@ -1,8 +1,9 @@
+import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useDeliveryCarton } from '@/state/Delivery';
+import { useDeliveryCartonByUUID } from '@/state/Delivery';
 import { useOtherCarton } from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { CheckBox, FormField, Input, ReactSelect } from '@/ui';
@@ -18,7 +19,9 @@ export default function Index({
 	},
 	setUpdate,
 }) {
-	const { url, updateData, postData } = useDeliveryCarton();
+	const { data, url, updateData, postData } = useDeliveryCartonByUUID(
+		update?.uuid
+	);
 	const { invalidateQuery: invalidateQueryCartonLabelValue } =
 		useOtherCarton();
 	const { user } = useAuth();
@@ -41,7 +44,11 @@ export default function Index({
 		{ value: 'bag', label: 'Bag' },
 	];
 
-	useFetchForRhfReset(`${url}/${update?.uuid}`, update?.uuid, reset);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdate((prev) => ({
@@ -61,7 +68,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${update?.uuid}`,
+				url,
 				uuid: update?.uuid,
 				updatedData,
 				onClose,
@@ -79,7 +86,7 @@ export default function Index({
 		};
 
 		await postData.mutateAsync({
-			url,
+			url: '/delivery/carton',
 			newData,
 			onClose,
 		});

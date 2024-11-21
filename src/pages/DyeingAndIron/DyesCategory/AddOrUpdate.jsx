@@ -1,7 +1,8 @@
+import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useThreadDyesCategory, useThreadMachine } from '@/state/Thread';
+import { useThreadDyesCategoryByUUID } from '@/state/Thread';
 import { DevTool } from '@hookform/devtools';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
@@ -20,7 +21,9 @@ export default function Index({
 	},
 	setUpdate,
 }) {
-	const { url, updateData, postData } = useThreadDyesCategory();
+	const { data, url, updateData, postData } = useThreadDyesCategoryByUUID(
+		update?.uuid
+	);
 	const { user } = useAuth();
 	const {
 		register,
@@ -33,7 +36,12 @@ export default function Index({
 		context,
 	} = useRHF(THREAD_DYES_CATEGORY_SCHEMA, THREAD_DYES_CATEGORY_NULL);
 
-	useFetchForRhfReset(`${url}/${update?.uuid}`, update?.uuid, reset);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
+
 	const bleaching = [
 		{ label: 'Bleach', value: 'bleach' },
 		{ label: 'Non-Bleach', value: 'non-bleach' },
@@ -56,7 +64,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${update?.uuid}`,
+				url,
 				uuid: update?.uuid,
 				updatedData,
 				onClose,
@@ -75,7 +83,7 @@ export default function Index({
 		};
 
 		await postData.mutateAsync({
-			url,
+			url: '/thread/dyes-category',
 			newData: updatedData,
 			onClose,
 		});

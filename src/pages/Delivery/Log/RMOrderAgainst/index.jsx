@@ -1,18 +1,18 @@
-import { Suspense } from '@/components/Feedback';
-import { DeleteModal } from '@/components/Modal';
-import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
-
-import { DateTime, EditDelete } from '@/ui';
-import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState } from 'react';
-
+import { useMemo, useState } from 'react';
 import { useOrderAgainstDeliveryRMLog } from '@/state/Delivery';
 import {
 	useMaterialInfo,
 	useMaterialTrxAgainstOrderDescription,
 } from '@/state/Store';
-import { SFG_TRX_NULL } from '@/util/Schema';
+import { useAccess } from '@/hooks';
+
+import { Suspense } from '@/components/Feedback';
+import { DeleteModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
+import { DateTime, EditDelete } from '@/ui';
+
+import PageInfo from '@/util/PageInfo';
+
 import RMAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {

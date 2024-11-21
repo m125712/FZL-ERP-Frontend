@@ -1,8 +1,8 @@
-import { useAuth } from '@/context/auth';
-import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
+import { useEffect } from 'react';
+import { useCommonMaterialUsedByUUID } from '@/state/Common';
 import { useDeliveryRM } from '@/state/Delivery';
 import { useOtherMaterial } from '@/state/Other';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast/ReactToastify';
@@ -28,7 +28,9 @@ export default function Index({
 	},
 	setUpdateRMLog,
 }) {
-	const { url, updateData } = useCommonMaterialUsed();
+	const { data, url, updateData } = useCommonMaterialUsedByUUID(
+		updateRMLog?.uuid
+	);
 	const { invalidateQuery: invalidateRM } = useDeliveryRM();
 	const { data: material } = useOtherMaterial();
 
@@ -60,11 +62,12 @@ export default function Index({
 		watch,
 	} = useRHF(RM_MATERIAL_USED_EDIT_SCHEMA, RM_MATERIAL_USED_EDIT_NULL);
 
-	useFetchForRhfReset(
-		`${url}/${updateRMLog?.uuid}`,
-		updateRMLog?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
+
 	let MAX_PROD =
 		MAX_QUANTITY +
 		Number(updateRMLog?.used_quantity) +
@@ -108,7 +111,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateRMLog?.uuid}`,
+				url,
 				uuid: updateRMLog?.uuid,
 				updatedData,
 				onClose,

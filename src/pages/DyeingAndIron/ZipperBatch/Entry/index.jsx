@@ -365,7 +365,6 @@ export default function Index() {
 				itemName: UUID,
 			});
 			window['finishing_batch_entry_delete'].showModal();
-			BatchOrdersFieldRemove(index);
 		}
 	};
 	const currentColumns = Columns({

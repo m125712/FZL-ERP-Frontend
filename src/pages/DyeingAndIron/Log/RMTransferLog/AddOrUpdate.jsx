@@ -1,8 +1,8 @@
-import { useAuth } from '@/context/auth';
-import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
+import { useEffect } from 'react';
+import { useCommonMaterialUsedByUUID } from '@/state/Common';
 import { useDyeingRM } from '@/state/Dyeing';
 import { useOtherMaterial } from '@/state/Other';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast';
@@ -25,15 +25,12 @@ export default function Index({
 	},
 	setUpdateDyeingLog,
 }) {
-	const { url, updateData } = useCommonMaterialUsed();
+	const { data, url, updateData } = useCommonMaterialUsedByUUID(
+		updateDyeingLog?.uuid
+	);
 	const { invalidateQuery: invalidateDyeingRM } = useDyeingRM();
 	const { data: material } = useOtherMaterial();
 	const MAX_QUANTITY = Number(updateDyeingLog?.dying_and_iron);
-	// const schema = {
-	// 	...RM_MATERIAL_USED_EDIT_SCHEMA,
-	// 	used_quantity:
-	// 		RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity.max(MAX_QUANTITY),
-	// };
 
 	const {
 		register,
@@ -47,11 +44,12 @@ export default function Index({
 		watch,
 	} = useRHF(RM_MATERIAL_USED_EDIT_SCHEMA, RM_MATERIAL_USED_EDIT_NULL);
 
-	useFetchForRhfReset(
-		`${url}/${updateDyeingLog?.uuid}`,
-		updateDyeingLog?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
+
 	let MAX_PROD =
 		MAX_QUANTITY +
 		Number(updateDyeingLog?.used_quantity) +
@@ -91,7 +89,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateDyeingLog?.uuid}`,
+				url,
 				uuid: updateDyeingLog?.uuid,
 				updatedData,
 				onClose,

@@ -24,8 +24,8 @@ export default function Header({
 		{ label: 'Thread', value: 'thread' },
 	];
 
-	const { data: ordersZipper } = useOtherOrder();
-	const { data: ordersThread } = useThreadOrder();
+	const { data: ordersZipper } = useOtherOrder('challan');
+	const { data: ordersThread } = useThreadOrder('packing_list');
 	const itemFor = watch('item_for');
 
 	const orders =

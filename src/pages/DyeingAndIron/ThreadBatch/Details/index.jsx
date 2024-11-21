@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDyeingThreadBatchDetailsByUUID } from '@/state/Dyeing';
-import { useGetURLData } from '@/state/Other';
+import { useLabDipRecipeDetailsByUUID } from '@/state/LabDip';
 import { useThreadMachineByUUID } from '@/state/Thread';
 import BatchSheetPdf from '@components/Pdf/ThreadBulkRecipe';
 import TravelingCard from '@components/Pdf/ThreadTravelCard';
@@ -23,9 +23,8 @@ export default function Index() {
 	const { data: machine } = useThreadMachineByUUID(machine_uuid);
 	const shade_recipe_uuids = batch?.batch_entry[0]?.recipe_uuid;
 
-	const { data: shade_recipe } = useGetURLData(
-		`/lab-dip/recipe/details/${shade_recipe_uuids}`
-	);
+	const { data: shade_recipe } =
+		useLabDipRecipeDetailsByUUID(shade_recipe_uuids);
 
 	const volume =
 		parseFloat(batch?.total_yarn_quantity) *

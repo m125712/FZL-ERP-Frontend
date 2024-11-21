@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
+import { useOtherSliderStockWithDescription } from '@/state/Other';
 import {
 	useSliderDashboardInfo,
 	useSliderDieCastingTransferAgainstOrderByUUID,
 } from '@/state/Slider';
-import { useFetch, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
@@ -38,9 +39,7 @@ export default function Index({
 		SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_UPDATE_NULL
 	);
 
-	const { value: order } = useFetch(
-		'/other/slider/stock-with-order-description/value/label'
-	);
+	const { data: order } = useOtherSliderStockWithDescription();
 
 	useEffect(() => {
 		if (data) {

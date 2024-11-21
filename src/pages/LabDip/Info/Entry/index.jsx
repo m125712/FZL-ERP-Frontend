@@ -1,21 +1,14 @@
-import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
-import { useCommonCoilRMLogByUUID } from '@/state/Common';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useLabDipInfo, UseLabDipInfoByDetails } from '@/state/LabDip';
+import { useOtherRecipe } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { UpdateModal } from '@/components/Modal';
-import SwitchToggle from '@/ui/Others/SwitchToggle';
-import {
-	ActionButtons,
-	CheckBox,
-	DynamicField,
-	FormField,
-	ReactSelect,
-} from '@/ui';
+import { ActionButtons, DynamicField, FormField, ReactSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { LAB_INFO_NULL, LAB_INFO_SCHEMA } from '@util/Schema';
@@ -43,6 +36,7 @@ export default function Index() {
 	// * used for checking if it is for update*//
 	const isUpdate = info_uuid !== undefined && info_number !== undefined;
 
+	const { data } = UseLabDipInfoByDetails(info_uuid);
 	const {
 		register,
 		handleSubmit,
@@ -62,12 +56,11 @@ export default function Index() {
 			: (document.title = 'Order: Entry');
 	}, [info_number]);
 
-	if (isUpdate)
-		useFetchForRhfReset(
-			`/lab-dip/info/details/${info_uuid}`,
-			info_uuid,
-			reset
-		);
+	useEffect(() => {
+		if (data && isUpdate) {
+			reset(data);
+		}
+	}, [data, isUpdate]);
 
 	// recipe
 	const {
@@ -239,11 +232,8 @@ export default function Index() {
 		ignoreEventsCondition: function () {},
 	});
 
-	const { value: rec_uuid } = useFetch(
-		isUpdate
-			? `/other/lab-dip/recipe/value/label?info_uuid=${info_uuid}`
-			: `/other/lab-dip/recipe/value/label?info_uuid=false`,
-		[info_uuid]
+	const { data: rec_uuid } = useOtherRecipe(
+		isUpdate ? `info_uuid=${info_uuid}` : `info_uuid=false`
 	);
 
 	const rowClass =

@@ -1,6 +1,4 @@
-import { useFetch } from '@/hooks';
-
-import { StatusButton, TitleValue } from '@/ui';
+import { TitleValue } from '@/ui';
 
 export default function Information({ batch }) {
 	return (
@@ -15,7 +13,7 @@ export default function Information({ batch }) {
 					<TitleValue title='Machine' value={batch?.machine_name} />
 					<TitleValue
 						title='Slot'
-						value={batch?.slot === 0 ? '-' : "Slot " + batch?.slot}
+						value={batch?.slot === 0 ? '-' : 'Slot ' + batch?.slot}
 					/>
 					<TitleValue
 						title='Created By'

@@ -48,6 +48,12 @@ export const useThreadOrderInfoEntryByUUID = (uuid) =>
 		queryKey: threadQK.orderInfoEntryByUUID(uuid),
 		url: `/thread/order-entry/${uuid}`,
 	});
+
+export const useThreadDetailsByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: threadQK.detailsByUUID(uuid),
+		url: `/thread/order-info-details/by/${uuid}`,
+})
 //Swatch
 export const useThreadSwatch = () =>
 	createGlobalState({

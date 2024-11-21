@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
-import { useAccess, useFetch, useFetchFunc } from '@/hooks';
+import { useEffect } from 'react';
+import { useDyeingBatchDetailsByUUID } from '@/state/Dyeing';
+import { useParams } from 'react-router-dom';
+import { useAccess } from '@/hooks';
 
 import Information from './Information';
 import Table from './Table';
@@ -9,10 +10,7 @@ export default function Index() {
 	const { batch_uuid } = useParams();
 	const haveAccess = useAccess('store__receive_by_uuid');
 
-	const { value: batch, loading } = useFetch(
-		`/zipper/dyeing-batch-details/${batch_uuid}`,
-		[batch_uuid]
-	);
+	const { data: batch, loading } = useDyeingBatchDetailsByUUID(batch_uuid);
 
 	useEffect(() => {
 		document.title = 'Planning Batch Details';

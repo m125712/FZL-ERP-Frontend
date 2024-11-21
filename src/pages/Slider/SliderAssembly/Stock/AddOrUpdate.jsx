@@ -1,7 +1,12 @@
+import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useSliderAssemblyStock } from '@/state/Slider';
+import { useOtherMaterial, useOtherSliderDieCastingType } from '@/state/Other';
+import {
+	useSliderAssemblyStock,
+	useSliderAssemblyStockByUUID,
+} from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
@@ -32,23 +37,20 @@ export default function Index({
 		context,
 	} = useRHF(SLIDER_ASSEMBLY_STOCK_SCHEMA, SLIDER_ASSEMBLY_STOCK_NULL);
 
-	const { value: body } = useFetch('/other/slider/die-casting/by-type/body');
-	const { value: puller } = useFetch(
-		'/other/slider/die-casting/by-type/puller'
-	);
-	const { value: cap } = useFetch('/other/slider/die-casting/by-type/cap');
-	const { value: link } = useFetch('/other/slider/die-casting/by-type/link');
-	const { value: materials } = useFetch(
-		'/other/material/value/label/unit/quantity'
-	);
+	const { data: body } = useOtherSliderDieCastingType('body');
+	const { data: puller } = useOtherSliderDieCastingType('puller');
+	const { data: cap } = useOtherSliderDieCastingType('cap');
+	const { data: link } = useOtherSliderDieCastingType('link');
+	const { data: materials } = useOtherMaterial();
+	const { data } = useSliderAssemblyStockByUUID(updateStock?.uuid);
 
 	const { user } = useAuth();
 
-	useFetchForRhfReset(
-		`/slider/assembly-stock/${updateStock?.uuid}`,
-		updateStock?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateStock((prev) => ({

@@ -1,4 +1,5 @@
 import createGlobalState from '@/state';
+
 import { labDipQK } from './QueryKeys';
 
 export const useLabDipRecipe = () =>
@@ -11,6 +12,12 @@ export const useLabDipRecipeByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: labDipQK.recipeByUUID(uuid),
 		url: `/lab-dip/recipe/${uuid}`,
+	});
+
+export const useLabDipRecipeDetailsByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: labDipQK.recipeDetailsByUUID(uuid),
+		url: `/lab-dip/recipe/details/${uuid}`,
 	});
 
 // * Info

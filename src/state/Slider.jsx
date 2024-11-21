@@ -202,6 +202,12 @@ export const useSliderAssemblyStock = () =>
 		url: '/slider/assembly-stock',
 	});
 
+export const useSliderAssemblyStockByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: sliderQK.sliderAssemblyStockByUUID(uuid),
+		url: `/slider/assembly-stock/${uuid}`,
+	});
+
 // * Slider Assembly Production (Stock)
 export const useSliderAssemblyProduction = () =>
 	createGlobalState({

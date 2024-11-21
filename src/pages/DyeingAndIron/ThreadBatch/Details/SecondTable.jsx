@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useGetURLData } from '@/state/Other';
+import { useLabDipRecipeDetailsByUUID } from '@/state/LabDip';
 
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 
@@ -11,9 +11,7 @@ export default function Index({
 	const shade_recipe_uuids = batch_entry.map((entry) => entry.recipe_uuid);
 
 	let shade_recipes_entries = shade_recipe_uuids.map((uuid) => {
-		const { data: shade_recipe } = useGetURLData(
-			`/lab-dip/recipe/details/${uuid}`
-		);
+		const { data: shade_recipe } = useLabDipRecipeDetailsByUUID(uuid);
 		return shade_recipe?.recipe_entry.concat(shade_recipe?.programs);
 	});
 

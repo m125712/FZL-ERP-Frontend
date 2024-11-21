@@ -1,4 +1,4 @@
-import { useFetch } from '@/hooks';
+import { useOtherMachines } from '@/state/Other';
 
 import { FormField, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
 
@@ -16,7 +16,7 @@ export default function Header({
 	totalCalTape,
 	totalProduction,
 }) {
-	const { value: machine } = useFetch('/other/machine/value/label');
+	const { data: machine } = useOtherMachines();
 	const res = machine?.find(
 		(item) => item.value == getValues('machine_uuid')
 	);

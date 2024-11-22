@@ -1,19 +1,14 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
-import { useDyeingBatch } from '@/state/Dyeing';
+import { useDyeingBatch, useDyeingBatchDetailsByUUID } from '@/state/Dyeing';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import {
-	useFetchForRhfReset,
-	useFetchForRhfResetForBatchProduct,
-	useFetchForRhfResetForPlanning,
-	useRHF,
-} from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { ProceedModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
-import { CheckBoxWithoutLabel, Input, LinkWithCopy, Textarea } from '@/ui';
+import { Input, LinkWithCopy, Textarea } from '@/ui';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
@@ -32,12 +27,13 @@ export default function Index() {
 		postData,
 		invalidateQuery: invalidateDyeingZipperBatch,
 	} = useDyeingBatch();
-	const { batch_uuid, batch_prod_uuid } = useParams();
+	const { batch_prod_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	// const [isAllChecked, setIsAllChecked] = useState(false);
 	// const [isSomeChecked, setIsSomeChecked] = useState(false);
-	const isUpdate = batch_uuid !== undefined;
+	const isUpdate = batch_prod_uuid !== undefined;
+	const { data } = useDyeingBatchDetailsByUUID(batch_prod_uuid);
 
 	const {
 		register,
@@ -59,24 +55,14 @@ export default function Index() {
 	});
 
 	// * Fetch initial data
-	// isUpdate
-	// 	?
-	useFetchForRhfReset(
-		`/zipper/dyeing-batch-details/${batch_uuid}`,
-		batch_uuid,
-		reset
-	);
-	// : useFetchForRhfResetForPlanning(`/zipper/dyeing-order-batch`, reset);
+	useEffect(() => {
+		if (data && batch_prod_uuid) {
+			reset(data);
+		}
+	}, [data, batch_prod_uuid]);
 
-	// * Fetch initial data of batch for batch production entry
-	if (batch_prod_uuid) {
-		useFetchForRhfResetForBatchProduct(
-			// todo: fix the data to get given_production_qty for form
-			`/zipper/dyeing-batch-details/${batch_prod_uuid}`,
-			batch_prod_uuid,
-			reset
-		);
-	}
+	console.log(batch_prod_uuid);
+
 	const isReceived = getValues('received') === 1;
 	// TODO: Submit
 	const onSubmit = async (data) => {

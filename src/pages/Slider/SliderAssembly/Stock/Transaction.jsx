@@ -1,10 +1,11 @@
 import { useAuth } from '@/context/auth';
+import { useOtherSliderStockWithDescription } from '@/state/Other';
 import {
 	useSliderAssemblyStock,
 	useSliderAssemblyStockTransaction,
 } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
-import { useFetch, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
@@ -36,7 +37,7 @@ export default function Index({
 		useSliderAssemblyStockTransaction();
 	const { user } = useAuth();
 
-	const { value: stock } = useFetch(
+	const { data: stock } = useOtherSliderStockWithDescription(
 		'/other/slider/stock-with-order-description/value/label'
 	);
 

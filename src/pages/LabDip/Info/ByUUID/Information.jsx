@@ -1,6 +1,4 @@
-import { useFetch } from '@/hooks';
-
-import { LinkWithCopy, StatusButton, TitleValue } from '@/ui';
+import { TitleValue } from '@/ui';
 
 export default function Information({ info }) {
 	return (

@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { useAllZipperThreadOrderList } from '@/state/Other';
-import { useFetch } from '@/hooks';
 
 import {
-	CheckBox,
 	FormField,
 	Input,
 	ReactSelect,

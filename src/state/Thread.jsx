@@ -48,6 +48,12 @@ export const useThreadOrderInfoEntryByUUID = (uuid) =>
 		queryKey: threadQK.orderInfoEntryByUUID(uuid),
 		url: `/thread/order-entry/${uuid}`,
 	});
+
+export const useThreadDetailsByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: threadQK.detailsByUUID(uuid),
+		url: `/thread/order-info-details/by/${uuid}`,
+})
 //Swatch
 export const useThreadSwatch = () =>
 	createGlobalState({
@@ -79,7 +85,7 @@ export const useThreadPrograms = () =>
 export const useThreadProgramsByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: threadQK.programsByUUID(uuid),
-		url: `/thread/programs${uuid}`,
+		url: `/thread/programs/${uuid}`,
 	});
 
 // * Coning

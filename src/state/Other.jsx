@@ -11,8 +11,10 @@ export const useOtherHRUser = () =>
 export const useOtherHRUserByDesignation = (designation) =>
 	createGlobalState({
 		queryKey: otherQK.hrUserByDesignation(designation),
-		url: `/other/hr/user/value/label?designation=${designation}`,
-		enabled: !!designation,
+		url: designation
+			? `/other/hr/user/value/label?designation=${designation}`
+			: '/other/hr/user/value/label',
+		// enabled: !!designation,
 	});
 
 // GET OTHER PARTY
@@ -65,7 +67,9 @@ export const useOtherMarketing = () =>
 export const useOtherOrder = (query) =>
 	createGlobalState({
 		queryKey: otherQK.order(query),
-		url: query? `/other/order/info/value/label?page=${query}` : '/other/order/info/value/label',
+		url: query
+			? `/other/order/info/value/label?page=${query}`
+			: '/other/order/info/value/label',
 	});
 
 // GET OTHER ORDER FOR PACKING LIST
@@ -230,13 +234,6 @@ export const useOtherDepartment = () =>
 		url: `/other/department/value/label`,
 	});
 
-// GET OTHER LAB DIP
-export const useOtherLabDip = () =>
-	createGlobalState({
-		queryKey: otherQK.labDip(),
-		url: `/other/lab-dip/recipe/value/label`,
-	});
-
 // GET OTHER SLIDER ITEM
 export const useOtherSliderItem = () =>
 	createGlobalState({
@@ -244,6 +241,19 @@ export const useOtherSliderItem = () =>
 		url: `/other/slider-item-name/value/label`,
 	});
 
+// GET OTHER SLIDER DIE-CASTING TYPE
+export const useOtherSliderDieCastingType = (param) =>
+	createGlobalState({
+		queryKey: otherQK.sliderDieCastingType(param),
+		url: `/other/slider/die-casting/by-type/${param}`,
+	});
+
+// GET OTHER SLIDER STOCK
+export const useOtherSliderStockWithDescription = () =>
+	createGlobalState({
+		queryKey: otherQK.sliderStockWithDescription(),
+		url: `/other/slider/stock-with-order-description/value/label`,
+	});
 // GET OTHER Packing List
 export const useOtherPackingListByOrderInfoUUID = (uuid) =>
 	createGlobalState({
@@ -453,10 +463,12 @@ export const useOtherShadeRecipe = () =>
 	});
 
 //* GET RECIPE
-export const useOtherRecipe = () =>
+export const useOtherRecipe = (query) =>
 	createGlobalState({
-		queryKey: otherQK.recipe(),
-		url: `/other/lab-dip/recipe/value/label`,
+		queryKey: otherQK.recipe(query),
+		url: query
+			? `/other/lab-dip/recipe/value/label?${query}`
+			: `/other/lab-dip/recipe/value/label`,
 	});
 //* GET CHALLAN
 export const useOtherChallan = (query) =>
@@ -475,3 +487,10 @@ export const useOtherTapeCoil = () =>
 // * GET GIVEN URL DATA
 export const useGetURLData = (url) =>
 	createGlobalState({ queryKey: otherQK.getURLData(url), url: url });
+
+// * GET ALL MACHINES
+export const useOtherMachines = () =>
+	createGlobalState({
+		queryKey: otherQK.machines(),
+		url: '/other/machine/value/label',
+	});

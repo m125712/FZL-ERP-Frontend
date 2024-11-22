@@ -1,21 +1,14 @@
-import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useCommonTapeRM, useCommonTapeRMLog } from '@/state/Common';
-import {
-	useDyeingBatch,
-	useDyeingThreadBatch,
-	useDyeingThreadBatchEntry,
-} from '@/state/Dyeing';
-import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import { useDyeingThreadBatchEntry } from '@/state/Dyeing';
 import { DevTool } from '@hookform/devtools';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input } from '@/ui';
+
 import {
 	DYEING_THREAD_BATCH_ENTRY_TRANSFER_NULL,
 	DYEING_THREAD_BATCH_ENTRY_TRANSFER_SCHEMA,
 } from '@util/Schema';
-import * as yup from 'yup';
 
 export default function Index({
 	modalId = '',

@@ -1,28 +1,24 @@
-import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import {
 	useDyeingThreadBatch,
 	useDyeingThreadBatchDetailsByUUID,
 	useDyeingThreadOrderBatch,
 } from '@/state/Dyeing';
+import { useGetURLData, useOtherMachines } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import {
-	useFetch,
-	useFetchForRhfReset,
-	useFetchForRhfResetForPlanning,
 	useRHF,
 } from '@/hooks';
 
 import { DeleteModal, ProceedModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
-import { CheckBoxWithoutLabel, Input, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import {
-	BOOLEAN,
 	DYEING_THREAD_BATCH_NULL,
 	DYEING_THREAD_BATCH_SCHEMA,
 	NUMBER,
@@ -36,12 +32,10 @@ import Header from './Header';
 // UPDATE IS WORKING
 export default function Index() {
 	const {
-		data,
 		url,
 		updateData,
 		postData,
 		deleteData,
-		isLoading,
 		invalidateQuery: invalidateDyeingThreadBatch,
 	} = useDyeingThreadBatch();
 
@@ -129,16 +123,29 @@ export default function Index() {
 	}, [batch]);
 
 	// * Fetch initial data
-	isUpdate
-		? useFetchForRhfReset(
-				`/thread/batch-details/by/${batch_uuid}?is_update=true`,
-				batch_uuid,
-				reset
-			)
-		: useFetchForRhfResetForPlanning(`/thread/order-batch`, reset);
+	// isUpdate
+	// 	? useFetchForRhfReset(
+	// 			`/thread/batch-details/by/${batch_uuid}?is_update=true`,
+	// 			batch_uuid,
+	// 			reset
+	// 		)
+	// 	: useFetchForRhfResetForPlanning(`/thread/order-batch`, reset);
+
+	const { data } = useGetURLData(
+		isUpdate
+			? `/thread/batch-details/by/${batch_uuid}?is_update=true`
+			: `/thread/order-batch`
+	);
+
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
+
 	const [minCapacity, setMinCapacity] = useState(0);
 	const [maxCapacity, setMaxCapacity] = useState(0);
-	const { value: machine } = useFetch('/other/machine/value/label');
+	const { data: machine } = useOtherMachines();
 
 	useEffect(() => {
 		const machine_uuid = getValues('machine_uuid');
@@ -197,7 +204,8 @@ export default function Index() {
 				if (item.quantity < 1) {
 					ShowLocalToast({
 						type: 'error',
-						message: 'Quantity should greater than zero in batch orders.',
+						message:
+							'Quantity should greater than zero in batch orders.',
 					});
 					flag = true;
 					return;
@@ -407,6 +415,7 @@ export default function Index() {
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 	const rowClass =
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
+
 	const currentColumns = Columns({
 		isUpdate,
 		setValue,

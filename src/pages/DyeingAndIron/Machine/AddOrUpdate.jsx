@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useThreadMachine } from '@/state/Thread';
+import { useThreadMachineByUUID } from '@/state/Thread';
 import { DevTool } from '@hookform/devtools';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { ShowLocalToast } from '@/components/Toast';
 import { CheckBox, Input } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
@@ -19,7 +18,9 @@ export default function Index({
 	},
 	setUpdateMachine,
 }) {
-	const { url, updateData, postData } = useThreadMachine();
+	const { data, url, updateData, postData } = useThreadMachineByUUID(
+		updateMachine?.uuid
+	);
 	const { user } = useAuth();
 	const {
 		register,
@@ -33,11 +34,11 @@ export default function Index({
 		watch,
 	} = useRHF(THREAD_MACHINE_SCHEMA, THREAD_MACHINE_NULL);
 
-	useFetchForRhfReset(
-		`${url}/${updateMachine?.uuid}`,
-		updateMachine?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateMachine((prev) => ({
@@ -62,7 +63,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateMachine?.uuid}`,
+				url,
 				uuid: updateMachine?.uuid,
 				updatedData,
 				onClose,
@@ -87,7 +88,7 @@ export default function Index({
 		};
 
 		await postData.mutateAsync({
-			url,
+			url: '/public/machine',
 			newData: updatedData,
 			onClose,
 		});

@@ -1,11 +1,9 @@
-import { useFetch } from '@/hooks';
+import { useOtherSliderStockWithDescription } from '@/state/Other';
 
 import { FormField, ReactSelect, SectionEntryBody } from '@/ui';
 
 export default function Header({ errors, control, getValues, Controller }) {
-	const { value: order } = useFetch(
-		'/other/slider/stock-with-order-description/value/label'
-	);
+	const { data: order } = useOtherSliderStockWithDescription();
 
 	const section = [
 		{ value: 'assembly', label: 'Assembly' },

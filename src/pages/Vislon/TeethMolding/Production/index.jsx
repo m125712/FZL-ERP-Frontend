@@ -1,6 +1,6 @@
 import { lazy, useMemo, useState } from 'react';
 import { useVislonTMP } from '@/state/Vislon';
-import { useAccess, useFetch } from '@/hooks';
+import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';

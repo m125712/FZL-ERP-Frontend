@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useDyeingDummy, useDyeingSwatch } from '@/state/Dyeing';
-import { useAccess, useFetch } from '@/hooks';
+import { useOtherRecipe } from '@/state/Other';
+import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import { LinkWithCopy, ReactSelect } from '@/ui';
@@ -33,9 +34,7 @@ export default function Index() {
 		},
 		[updateData, data]
 	);
-	const { value: recipe } = useFetch(
-		`/other/lab-dip/recipe/value/label?approved=true`
-	);
+	const { data: recipe } = useOtherRecipe(`approved=true`);
 	const columns = useMemo(
 		() => [
 			{

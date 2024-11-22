@@ -25,7 +25,7 @@ import Programs from '@/pages/DyeingAndIron/Programs';
 import DyeingRMStock from '@/pages/DyeingAndIron/RMStock';
 // * Batch Thread
 import DyeingThreadBatch from '@/pages/DyeingAndIron/ThreadBatch';
-import DyeingThreadBatchConneing from '@/pages/DyeingAndIron/ThreadBatch/Conneing/Entry';
+import DyeingThreadBatchDyeing from '@/pages/DyeingAndIron/ThreadBatch/Dyeing/Entry';
 import DyeingThreadBatchDetails from '@/pages/DyeingAndIron/ThreadBatch/Details';
 import DyeingThreadBatchEntry from '@/pages/DyeingAndIron/ThreadBatch/Entry';
 // * Batch Zipper
@@ -213,10 +213,10 @@ export const DyeingAndIronRoutes = [
 			},
 			// *Dyeing ThreadBatch Conening
 			{
-				name: 'Batch Conneing',
-				path: '/dyeing-and-iron/thread-batch/conneing/:batch_con_uuid',
-				element: <DyeingThreadBatchConneing />,
-				page_name: 'dyeing__thread_batch_conneing',
+				name: 'Batch Dyeing',
+				path: '/dyeing-and-iron/thread-batch/dyeing/:batch_con_uuid',
+				element: <DyeingThreadBatchDyeing />,
+				page_name: 'dyeing__thread_batch_dyeing',
 				hidden: true,
 				actions: ['create', 'read', 'update'],
 			},

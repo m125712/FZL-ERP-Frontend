@@ -1,6 +1,7 @@
-import { useAccess, useFetch, useFetchFunc } from '@/hooks';
-import { useEffect, useState } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLabDipRecipeDetailsByUUID } from '@/state/LabDip';
+import { useParams } from 'react-router-dom';
+import { useAccess } from '@/hooks';
 
 import Information from './Information';
 import Table from './Table';
@@ -9,10 +10,7 @@ export default function Index() {
 	const { recipe_uuid } = useParams();
 	const haveAccess = useAccess('store__receive_by_uuid');
 
-	const { value: recipe, loading } = useFetch(
-		`/lab-dip/recipe/details/${recipe_uuid}`,
-		[recipe_uuid]
-	);
+	const { data: recipe, loading } = useLabDipRecipeDetailsByUUID(recipe_uuid);
 
 	useEffect(() => {
 		document.title = 'Recipe Details';

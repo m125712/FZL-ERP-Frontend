@@ -1,11 +1,16 @@
+import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useOtherOrderPropertiesByTypeName, useOtherSliderItem } from '@/state/Other';
+import {
+	useGetURLData,
+	useOtherOrderPropertiesByTypeName,
+	useOtherSliderItem,
+} from '@/state/Other';
 import { useSliderDieCastingStock } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { CheckBox, FormField, Input, Radio, ReactSelect, Textarea } from '@/ui';
+import { CheckBox, FormField, Input, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import {
@@ -47,16 +52,13 @@ export default function Index({
 		useOtherOrderPropertiesByTypeName('slider_body_shape');
 	const { data: slider_link } =
 		useOtherOrderPropertiesByTypeName('slider_link');
-	const { data: stopper_type } =
-		useOtherOrderPropertiesByTypeName('stopper_type');
+	const { data } = useGetURLData(`/slider/die-casting/${updateStock?.uuid}`);
 
-	
-
-	useFetchForRhfReset(
-		`/slider/die-casting/${updateStock?.uuid}`,
-		updateStock?.uuid,
-		reset
-	);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateStock((prev) => ({
@@ -93,7 +95,7 @@ export default function Index({
 			});
 
 			invalidateSliderItem();
-			
+
 			return;
 		}
 		// Add new item

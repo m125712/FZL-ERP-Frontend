@@ -42,6 +42,7 @@ import {
 	TitleValue,
 	Transfer,
 	UserName,
+	SimpleDatePicker,
 } from './Others';
 
 export {
@@ -83,4 +84,5 @@ export {
 	TitleValue,
 	Transfer,
 	UserName,
+	SimpleDatePicker,
 };

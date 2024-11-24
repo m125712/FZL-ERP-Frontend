@@ -13,6 +13,7 @@ export default function Information({ data }) {
 		slider_lead_time,
 		dyeing_lead_time,
 		status,
+		production_date,
 		created_by_name,
 		created_at,
 		updated_at,
@@ -58,6 +59,10 @@ export default function Information({ data }) {
 				value: dyeing_lead_time,
 			},
 			{
+				label: 'Production Date',
+				value: format(new Date(production_date), 'dd/MM/yy'),
+			},
+			{
 				label: 'Created By',
 				value: created_by_name,
 			},
@@ -71,7 +76,9 @@ export default function Information({ data }) {
 			},
 			{
 				label: 'Updated At',
-				value: updated_at? format(new Date(updated_at), 'dd/MM/yy'): '',
+				value: updated_at
+					? format(new Date(updated_at), 'dd/MM/yy')
+					: '',
 			},
 		];
 

@@ -244,7 +244,7 @@ export default function Header({
 						/>
 					</FormField>
 					{item
-						?.find((item) => item.value === getValues('item'))
+						?.find((item) => item.value === watch('item'))
 						?.label?.toLowerCase() === 'nylon' && (
 						<FormField
 							label='nylon_stopper'

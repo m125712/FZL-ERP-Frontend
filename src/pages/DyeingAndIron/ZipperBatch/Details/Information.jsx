@@ -1,4 +1,4 @@
-import { TitleValue } from '@/ui';
+import { DateTime, TitleValue } from '@/ui';
 
 export default function Information({ batch }) {
 	return (
@@ -14,6 +14,10 @@ export default function Information({ batch }) {
 					<TitleValue
 						title='Slot'
 						value={batch?.slot === 0 ? '-' : 'Slot ' + batch?.slot}
+					/>
+					<TitleValue
+						title='Production Date'
+						value={<DateTime date={batch?.production_date} />}
 					/>
 					<TitleValue
 						title='Created By'

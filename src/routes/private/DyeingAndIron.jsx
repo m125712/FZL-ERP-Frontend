@@ -1,5 +1,9 @@
 // Dyeing And Iron
 //* Dyes Category
+
+// * Dyeing Dashboard
+import DyeingDashboard from '@/pages/DyeingAndIron/DyeingDashboard';
+//* Dyes Category
 import DyesCategory from '@/pages/DyeingAndIron/DyesCategory';
 // * Finishing Batch
 import FinishingBatch from '@/pages/DyeingAndIron/FinishingBatch';
@@ -25,15 +29,16 @@ import Programs from '@/pages/DyeingAndIron/Programs';
 import DyeingRMStock from '@/pages/DyeingAndIron/RMStock';
 // * Batch Thread
 import DyeingThreadBatch from '@/pages/DyeingAndIron/ThreadBatch';
-import DyeingThreadBatchDyeing from '@/pages/DyeingAndIron/ThreadBatch/Dyeing/Entry';
 import DyeingThreadBatchDetails from '@/pages/DyeingAndIron/ThreadBatch/Details';
+import DyeingThreadBatchDyeing from '@/pages/DyeingAndIron/ThreadBatch/Dyeing/Entry';
 import DyeingThreadBatchEntry from '@/pages/DyeingAndIron/ThreadBatch/Entry';
 // * Batch Zipper
 import DyeingZipperBatch from '@/pages/DyeingAndIron/ZipperBatch';
 import DyeingZipperBatchDetails from '@/pages/DyeingAndIron/ZipperBatch/Details';
 import DyeingZipperBatchEntry from '@/pages/DyeingAndIron/ZipperBatch/Entry';
 import DyeingZipperBatchProduction from '@/pages/DyeingAndIron/ZipperBatch/Production';
-
+// * Production Capacity
+import ProductionCapacity from '@/pages/DyeingAndIron/ProductionCapacity';
 export const DyeingAndIronRoutes = [
 	{
 		name: 'Dyeing And Iron',
@@ -296,6 +301,24 @@ export const DyeingAndIronRoutes = [
 				page_name: 'dyeing__finishing_batch_entry_update',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
+
+			// * Dyeing Dashboard
+			{
+				name: 'Dyeing Dashboard',
+				path: '/dyeing-and-iron/dyeing-dashboard',
+				element: <DyeingDashboard />,
+				page_name: 'dyeing__dyeing_dashboard',
+				actions: ['read', 'create', 'update', 'delete'],
+			},
+
+			// * Production Capacity
+			{
+				name: 'Production Capacity',
+				path: '/dyeing-and-iron/production-capacity',
+				element: <ProductionCapacity />,
+				page_name: 'dyeing__production_capacity',
+				actions: ['read', 'create', 'update', 'delete'],
+			}
 		],
 	},
 ];

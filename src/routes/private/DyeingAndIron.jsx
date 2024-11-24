@@ -37,7 +37,8 @@ import DyeingZipperBatch from '@/pages/DyeingAndIron/ZipperBatch';
 import DyeingZipperBatchDetails from '@/pages/DyeingAndIron/ZipperBatch/Details';
 import DyeingZipperBatchEntry from '@/pages/DyeingAndIron/ZipperBatch/Entry';
 import DyeingZipperBatchProduction from '@/pages/DyeingAndIron/ZipperBatch/Production';
-
+// * Production Capacity
+import ProductionCapacity from '@/pages/DyeingAndIron/ProductionCapacity';
 export const DyeingAndIronRoutes = [
 	{
 		name: 'Dyeing And Iron',
@@ -309,6 +310,15 @@ export const DyeingAndIronRoutes = [
 				page_name: 'dyeing__dyeing_dashboard',
 				actions: ['read', 'create', 'update', 'delete'],
 			},
+
+			// * Production Capacity
+			{
+				name: 'Production Capacity',
+				path: '/dyeing-and-iron/production-capacity',
+				element: <ProductionCapacity />,
+				page_name: 'dyeing__production_capacity',
+				actions: ['read', 'create', 'update', 'delete'],
+			}
 		],
 	},
 ];

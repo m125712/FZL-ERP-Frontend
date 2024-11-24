@@ -29,14 +29,14 @@ export default function DivContent({ data }) {
 				<LinkWithCopy
 					title={batch_no}
 					id={batch_uuid}
-					uri={`/dyeing-and-iron/finishing-batch`}
+					uri={`/dyeing-and-iron/zipper-batch`}
 				/>
 			</div>
 			<div className='grid grid-cols-2'>
 				<span>Order No: </span>
 				<LinkWithCopy
 					title={order_no}
-					id={order_uuid}
+					id={order_no}
 					uri={`/order/details`}
 				/>
 			</div>

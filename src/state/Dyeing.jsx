@@ -196,3 +196,16 @@ export const useDyeingDashboard = (param) =>
 		queryKey: dyeingQK.dyeingDashboard(param),
 		url: `/public/machine/by/${param}`,
 	});
+
+// * Product Capacity
+export const useDyeingProductCapacity = () =>
+	createGlobalState({
+		queryKey: dyeingQK.productCapacity(),
+		url: '/public/production-capacity',
+	});
+
+export const useDyeingProductCapacityByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: dyeingQK.productCapacityByUUID(uuid),
+		url: `/public/production-capacity/${uuid}`,
+	});

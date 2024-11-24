@@ -2300,6 +2300,26 @@ export const THREAD_DYES_CATEGORY_NULL = {
 	remarks: '',
 };
 
+// Production Capacity
+export const PRODUCTION_CAPACITY_SCHEMA = {
+	product: STRING_REQUIRED,
+	item: STRING_REQUIRED,
+	nylon_stopper: STRING_REQUIRED,
+	zipper_number: STRING_REQUIRED,
+	end_type: STRING_REQUIRED,
+	quantity: NUMBER_REQUIRED.moreThan(0, 'Quantity must be more than 0'),
+	remarks: STRING.nullable(),
+};
+
+export const PRODUCTION_CAPACITY_NULL = {
+	product: null,
+	item: null,
+	nylon_stopper: null,
+	zipper_number: null,
+	end_type: null,
+	quantity: 0,
+	remarks: '',
+};
 // Thread Challan
 export const THREAD_CHALLAN_SCHEMA = {
 	is_hand_delivery: BOOLEAN_DEFAULT_VALUE(false),

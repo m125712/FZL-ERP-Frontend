@@ -2558,6 +2558,7 @@ export const DYEING_PLANNING_HEADOFFICE_NULL = {
 export const DYEING_BATCH_SCHEMA = {
 	machine_uuid: STRING_REQUIRED,
 	slot: NUMBER.default(0),
+	production_date: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 	dyeing_batch_entry: yup.array().of(
 		yup.object().shape({
@@ -2579,10 +2580,16 @@ export const DYEING_BATCH_SCHEMA = {
 export const DYEING_BATCH_NULL = {
 	machine_uuid: null,
 	slot: 0,
+	production_date: null,
 	remarks: '',
 	dyeing_batch_entry: [
 		{
-			is_checked: false,
+			quantity: null,
+			batch_remarks: '',
+		},
+	],
+	new_dyeing_batch_entry: [
+		{
 			quantity: null,
 			batch_remarks: '',
 		},
@@ -2594,6 +2601,7 @@ export const DYEING_BATCH_NULL = {
 export const DYEING_THREAD_BATCH_SCHEMA = {
 	machine_uuid: STRING_REQUIRED,
 	slot: NUMBER.default(0),
+	production_date: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
 		yup.object().shape({
@@ -2605,6 +2613,7 @@ export const DYEING_THREAD_BATCH_SCHEMA = {
 export const DYEING_THREAD_BATCH_NULL = {
 	machine_uuid: null,
 	slot: 0,
+	production_date: null,
 	remarks: '',
 	batch_entry: [
 		{
@@ -2767,6 +2776,7 @@ export const FINISHING_BATCH_ENTRY_SCHEMA = {
 	slider_lead_time: NUMBER_REQUIRED,
 	dyeing_lead_time: NUMBER_REQUIRED,
 	status: STRING_REQUIRED,
+	production_date: STRING_REQUIRED,
 	finishing_batch_entry: yup.array().of(
 		yup.object().shape({
 			uuid: STRING,
@@ -2798,6 +2808,7 @@ export const FINISHING_BATCH_ENTRY_NULL = {
 	slider_lead_time: null,
 	dyeing_lead_time: null,
 	status: 'hold',
+	production_date: null,
 	finishing_batch_entry: [],
 	new_finishing_batch_entry: [],
 };

@@ -86,13 +86,15 @@ export default function index() {
 				enableColumnFilter: false,
 				width: 'w-36',
 				cell: (info) => info.getValue(),
-			},{
+			},
+			{
 				accessorKey: 'colors',
 				header: 'Colors',
 				enableColumnFilter: false,
 				width: 'w-36',
 				cell: (info) => info.getValue(),
-			},{
+			},
+			{
 				accessorKey: 'total_batch_quantity',
 				header: 'Total',
 				enableColumnFilter: false,

@@ -446,6 +446,7 @@ export default function Index() {
 						register,
 						errors,
 						control,
+						watch,
 						getValues,
 						Controller,
 						isUpdate,

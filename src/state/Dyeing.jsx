@@ -20,6 +20,7 @@ export const useDyeingRMLog = () =>
 		queryKey: dyeingQK.dyeingRMLog(),
 		url: `/material/used/by/dying_and_iron`,
 	});
+
 export const useDyeingRMLogByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: dyeingQK.dyeingRMLog(uuid),
@@ -64,6 +65,7 @@ export const useDyeingBatchByUUID = (uuid) =>
 		queryKey: dyeingQK.batchByUUID(uuid),
 		url: `/zipper/dyeing-batch/${uuid}`,
 	});
+
 //* OrderBatch
 export const useDyeingOrderBatch = () =>
 	createGlobalState({
@@ -186,4 +188,11 @@ export const useDyeingFinishingBatchOrders = (uuid) =>
 	createGlobalState({
 		queryKey: dyeingQK.finishingBatchOrders(uuid),
 		url: `/zipper/finishing-order-batch/${uuid}`,
+	});
+
+// * Dyeing Dashboard
+export const useDyeingDashboard = (param) =>
+	createGlobalState({
+		queryKey: dyeingQK.dyeingDashboard(param),
+		url: `/public/machine/by/${param}`,
 	});

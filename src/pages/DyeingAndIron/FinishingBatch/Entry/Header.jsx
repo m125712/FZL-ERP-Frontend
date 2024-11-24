@@ -1,6 +1,7 @@
 import { useOtherOrderDescription } from '@/state/Other';
 import { useParams } from 'react-router-dom';
 
+import { DateInput } from '@/ui/Core';
 import {
 	FormField,
 	Input,
@@ -87,6 +88,8 @@ export default function Header({
 							}}
 						/>
 					</FormField>
+				</div>
+				<div className='flex gap-4'>
 					<Input
 						label='slider_lead_time'
 						unit='PCS'
@@ -95,6 +98,13 @@ export default function Header({
 					<Input
 						label='dyeing_lead_time'
 						unit='KG'
+						{...{ register, errors }}
+					/>
+					<DateInput
+						label='production_date'
+						Controller={Controller}
+						control={control}
+						selected={watch('production_date')}
 						{...{ register, errors }}
 					/>
 				</div>

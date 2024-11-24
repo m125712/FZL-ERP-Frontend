@@ -442,6 +442,9 @@ export const dyeingQK = {
 		uuid,
 		'orders',
 	],
+
+	// * Dyeing Dashboard
+	dyeingDashboard: (param) => [...dyeingQK.all(), 'dyeing-dashboard', param],
 };
 
 // * Nylon

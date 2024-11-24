@@ -388,6 +388,7 @@ export default function Index() {
 						register,
 						errors,
 						control,
+						watch,
 						getValues,
 						totalQuantity:
 							getTotalQty(watch('dyeing_batch_entry')) +

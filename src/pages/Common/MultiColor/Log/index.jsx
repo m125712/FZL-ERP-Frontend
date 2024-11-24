@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import TapeReceived from './TapeReceived';
-import Shafayat from './TapeToDyeing';
+import TapeToDyeing from './TapeToDyeing';
 import PageInfo from '@/util/PageInfo';
 
 export default function index() {
@@ -12,7 +12,7 @@ export default function index() {
 
 	return (
 		<div className='flex flex-col gap-6'>
-			<Shafayat />
+			<TapeToDyeing />
 			<TapeReceived />
 		</div>
 	);

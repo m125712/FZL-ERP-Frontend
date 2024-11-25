@@ -2626,7 +2626,7 @@ export const DYEING_BATCH_NULL = {
 
 export const DYEING_THREAD_BATCH_SCHEMA = {
 	machine_uuid: STRING_REQUIRED,
-	slot: NUMBER.default(0),
+	slot: NUMBER_REQUIRED,
 	production_date: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
@@ -2638,7 +2638,7 @@ export const DYEING_THREAD_BATCH_SCHEMA = {
 
 export const DYEING_THREAD_BATCH_NULL = {
 	machine_uuid: null,
-	slot: 0,
+	slot: null,
 	production_date: null,
 	remarks: '',
 	batch_entry: [

@@ -107,6 +107,7 @@ export default function Header({
 										onChange={(e) => {
 											const value = e.value;
 											onChange(value);
+											setSlot(e.open_slot);
 											setMinCapacity(e.min_capacity);
 											setMaxCapacity(e.max_capacity);
 										}}

@@ -9,9 +9,7 @@ import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
-import {
-	useRHF,
-} from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { DeleteModal, ProceedModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
@@ -448,6 +446,7 @@ export default function Index() {
 						control,
 						watch,
 						getValues,
+						setValue,
 						Controller,
 						isUpdate,
 						minCapacity,
@@ -459,6 +458,7 @@ export default function Index() {
 							getTotalCalTape(watch('batch_entry')) +
 								getTotalCalTape(watch('new_batch_entry'))
 						).toFixed(3),
+						isUpdate,
 					}}
 				/>
 

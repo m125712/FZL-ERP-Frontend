@@ -83,11 +83,11 @@ export default function DivContent({ data }) {
 	];
 
 	return (
-		<div className='dropdown dropdown-right dropdown-hover !m-0'>
+		<div className='dropdown dropdown-right dropdown-hover'>
 			<div
 				tabIndex={0}
 				className={cn(
-					'my-3 flex flex-col gap-2 rounded-md px-1 py-2 text-foreground',
+					'my-1 flex flex-col gap-2 rounded-md px-1 py-2 text-foreground',
 					batch_status === 'completed'
 						? 'bg-success/10'
 						: batch_status === 'pending'

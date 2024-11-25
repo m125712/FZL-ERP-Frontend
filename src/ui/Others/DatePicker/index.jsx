@@ -34,6 +34,7 @@ const SimpleDatePicker = ({
 	));
 	return (
 		<DatePicker
+			{...props}
 			customInput={<ExampleCustomInput />}
 			disabled={disabled}
 			selected={selected}

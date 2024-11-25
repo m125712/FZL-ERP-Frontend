@@ -1,6 +1,8 @@
 import { format } from 'date-fns';
-import { capitalize } from './utils';
+
 import cn from '@/lib/cn';
+
+import { capitalize } from './utils';
 
 const renderSubLabel = (sub_label) =>
 	sub_label && <span className='label-text-alt ml-2'>{sub_label}</span>;
@@ -10,7 +12,7 @@ const renderError = (error) => {
 		error?.message && (
 			<label className='label px-2 pb-0 pt-[0.02rem]'>
 				<span className='label-text-alt' />
-				<span className='label-text-alt text-error/80 text-xs font-medium capitalize'>
+				<span className='label-text-alt text-xs font-medium capitalize text-error/80'>
 					{error?.message}
 				</span>
 			</label>

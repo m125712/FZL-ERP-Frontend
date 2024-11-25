@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { LinkWithCopy } from '@/ui';
 
-export default function Index({ challan }) {
+export default function Index({ challan, item_for }) {
 	const columns = useMemo(
 		() => [
 			{
@@ -22,7 +22,10 @@ export default function Index({ challan }) {
 			},
 			{
 				accessorKey: 'item_description',
-				header: 'Item Description',
+				header: () =>
+					item_for === 'thread' || 'sample_thread'
+						? 'Count'
+						: 'Item Description',
 				cell: (info) => info.getValue(),
 				enableColumnFilter: false,
 			},
@@ -40,14 +43,22 @@ export default function Index({ challan }) {
 			},
 			{
 				accessorKey: 'size',
-				header: 'Size',
+				header: () =>
+					item_for === 'thread' || 'sample_thread'
+						? 'Length'
+						: 'Size',
 				cell: (info) => info.getValue(),
 				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'is_inch',
 				header: 'Unit',
-				cell: (info) => (info.getValue() ? 'Inch' : 'Cm'),
+				cell: (info) =>
+					item_for === 'thread' || 'sample_thread'
+						? 'Meter'
+						: info.getValue()
+							? 'Inch'
+							: 'Cm',
 				enableColumnFilter: false,
 			},
 			{
@@ -58,12 +69,15 @@ export default function Index({ challan }) {
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'Quantity(pcs)',
+				header:
+					item_for === 'thread' || 'sample_thread'
+						? 'Qty(cone)'
+						: 'Qty(pcs)',
 				cell: (info) => info.getValue(),
 				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'poly_quantity',
+				accessorKey: 'poli_quantity',
 				header: 'Poly QTY',
 				cell: (info) => info.getValue(),
 				enableColumnFilter: false,
@@ -91,7 +105,25 @@ export default function Index({ challan }) {
 		[challan]
 	);
 
+	const totalQty = challan.reduce((a, b) => a + Number(b.quantity), 0);
+	const totalPolyQty = challan.reduce(
+		(a, b) => a + Number(b.poli_quantity),
+		0
+	);
+
 	return (
-		<ReactTableTitleOnly title='Details' data={challan} columns={columns} />
+		<ReactTableTitleOnly title='Details' data={challan} columns={columns}>
+			<tr className='text-sm'>
+				<td colSpan='7' className='py-2 text-right'>
+					Total
+				</td>
+				<td className='pl-3 text-left font-semibold'>{totalQty}</td>
+
+				{/* <td className='text-right'>Total Poly QTY</td> */}
+				<td className='pl-3 text-left font-semibold'>
+					{Number(totalPolyQty).toLocaleString()}
+				</td>
+			</tr>
+		</ReactTableTitleOnly>
 	);
 }

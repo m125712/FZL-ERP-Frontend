@@ -11,6 +11,7 @@ import { Trash2 } from 'lucide-react';
 import { Controller } from 'react-hook-form';
 
 import { DeleteModal } from '@/components/Modal';
+import { DateInput } from '@/ui/Core';
 import {
 	CheckBox,
 	FormField,
@@ -20,6 +21,7 @@ import {
 	Textarea,
 } from '@/ui';
 
+import GetDateTime from '@/util/GetDateTime';
 import isJSON from '@/util/isJson';
 
 export default function Header({
@@ -34,19 +36,40 @@ export default function Header({
 	setDeleteItem,
 	deleteItem,
 }) {
+	//* Vehicles Fetch
 	const { data: vehicles } = useOtherVehicle();
-	const { data: ordersZipperPackingList } = useOtherOrder('page=challan');
-	const { data: ordersThreadPackingList } = useThreadOrder('page=challan');
-	const { data: ordersThreadSamplePackingList } = useThreadOrder(
-		'page=challan&is_sample=true'
-	);
-	const { data: ordersZipperSamplePackingList } = useOtherOrder(
-		'page=challan&is_sample=true'
-	);
-	const { data: ordersZipper } = useOtherOrder();
-	const { data: ordersThread } = useThreadOrder();
-	const { data: ordersZipperSample } = useOtherOrder('is_sample=true');
-	const { data: ordersThreadSample } = useThreadOrder('is_sample=true');
+
+	//* Orders Fetch
+	const { data: ordersZipper } = isUpdate
+		? useOtherOrder()
+		: useOtherOrder('page=challan');
+
+	const { data: ordersThread } = isUpdate
+		? useThreadOrder()
+		: useThreadOrder('page=challan');
+
+	const { data: ordersZipperSample } = isUpdate
+		? useOtherOrder('is_sample=true')
+		: useOtherOrder('page=challan&is_sample=true');
+
+	const { data: ordersThreadSample } = isUpdate
+		? useThreadOrder('is_sample=true')
+		: useThreadOrder('page=challan&is_sample=true');
+
+	const itemFor = watch('item_for');
+
+	const orders =
+		itemFor === 'zipper'
+			? ordersZipper
+			: itemFor === 'thread'
+				? ordersThread
+				: itemFor === 'sample_zipper'
+					? ordersZipperSample
+					: itemFor === 'sample_thread'
+						? ordersThreadSample
+						: [];
+
+	//* Packing List Fetch
 	const { data: packingList, invalidateQuery: invalidatePackingList } =
 		isUpdate
 			? useOtherPackingListByOrderInfoUUIDAndChallanUUID(
@@ -55,52 +78,30 @@ export default function Header({
 				)
 			: useOtherPackingListByOrderInfoUUID(watch('order_info_uuid'));
 
-	console.log('packingList', ordersThreadSamplePackingList);
 	const itemOptions = [
 		{ label: 'Zipper', value: 'zipper' },
 		{ label: 'Thread', value: 'thread' },
 		{ label: 'Zipper Sample', value: 'sample_zipper' },
 		{ label: 'Thread Sample', value: 'sample_thread' },
 	];
-	const itemFor = watch('item_for');
+
 	useEffect(() => {
-		if (!isUpdate && getValues('packing_list_uuids')) {
+		if (
+			!isUpdate &&
+			(getValues('packing_list_uuids') ||
+				getValues('order_info_uuid') == null)
+		) {
 			setValue('packing_list_uuids', []);
 			setValue('challan_entry', []);
 		}
-	}, [getValues('order_info_uuid')]);
-
-	const orders = isUpdate
-		? itemFor === 'zipper'
-			? ordersZipper
-			: itemFor === 'thread'
-				? ordersThread
-				: itemFor === 'sample_zipper'
-					? ordersZipperSample
-					: itemFor === 'sample_thread'
-						? ordersThreadSample
-						: []
-		: itemFor === 'zipper'
-			? ordersZipperPackingList
-			: itemFor === 'thread'
-				? ordersThreadPackingList
-				: itemFor === 'sample_zipper'
-					? ordersZipperSamplePackingList
-					: itemFor === 'sample_thread'
-						? ordersThreadSamplePackingList
-						: [];
-
-	// useEffect(() => {
-	// 	const itemFor = watch('item_for');
-
-	// 	if (itemFor === 'thread' && !isUpdate) {
-	// 		setValue('order_info_uuid', null);
-	// 		setValue('challan_entry', []);
-	// 	} else if (itemFor === 'zipper' && !isUpdate) {
-	// 		setValue('challan_entry', []);
-	// 		setValue('order_info_uuid', null);
-	// 	}
-	// }, [watch('item_for')]);
+	}, [getValues('order_info_uuid'), watch('item_for')]);
+	console.log(watch('packing_list_uuids'));
+	useEffect(() => {
+		if (!isUpdate) {
+			setValue('order_info_uuid', null);
+			setValue('packing_list_uuids', []);
+		}
+	}, [watch('item_for')]);
 	const handlePackingListRemove = (
 		packing_list_uuid,
 		packing_list_name,
@@ -247,7 +248,7 @@ export default function Header({
 									<ReactSelect
 										placeholder='Select Order Number'
 										options={orders}
-										value={orders?.find(
+										value={orders?.filter(
 											(item) =>
 												item.value ===
 												getValues('order_info_uuid')
@@ -340,7 +341,6 @@ export default function Header({
 							/>
 						</FormField>
 					)}
-
 					{isUpdate && (
 						<div className='flex flex-col gap-1'>
 							<p className='text-sm font-semibold text-secondary'>
@@ -451,6 +451,15 @@ export default function Header({
 							/>
 						</FormField>
 					)}
+					<DateInput
+						title='Delivery Date'
+						label='delivery_date'
+						// startDate={GetDateTime()}
+						Controller={Controller}
+						control={control}
+						selected={watch('delivery_date')}
+						{...{ register, errors }}
+					/>
 					<Textarea label='remarks' {...{ register, errors }} />
 				</div>
 			</SectionEntryBody>

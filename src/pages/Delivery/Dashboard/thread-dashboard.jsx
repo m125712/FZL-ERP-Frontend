@@ -64,17 +64,7 @@ export default function Index() {
 				accessorKey: 'item_description',
 				header: 'Count Length',
 				enableColumnFilter: false,
-				cell: ({ row }) => {
-					const { order_description_uuid, order_number } =
-						row.original;
-					return (
-						<LinkWithCopy
-							title={row.getValue('item_description')}
-							id={order_description_uuid}
-							uri={`/order/details/${order_number}`}
-						/>
-					);
-				},
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'style',

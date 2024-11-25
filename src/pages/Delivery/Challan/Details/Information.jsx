@@ -18,6 +18,7 @@ export default function Information({ challan }) {
 		receive_status,
 		is_hand_delivery,
 		name,
+		delivery_date,
 		delivery_cost,
 		updated_at,
 	} = challan;
@@ -66,6 +67,10 @@ export default function Information({ challan }) {
 			{
 				label: 'Assign To',
 				value: vehicle_name,
+			},
+			{
+				label: 'Delivery Date',
+				value: format(new Date(delivery_date), 'dd/MM/yy'),
 			},
 			{
 				label: 'Created By',

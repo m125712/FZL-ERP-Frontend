@@ -12,24 +12,27 @@ import pdfMake from '..';
 import { generateBarcodeAsBase64 } from './Barcode';
 import { getPageFooter } from './utils';
 
-const nodeZipper = [
-	getTable('item_description', 'Item'),
-	getTable('style', 'Style'),
-	getTable('color', 'Color'),
-	getTable('size', 'Size', 'right'),
-	getTable('quantity', 'Qty(pcs)', 'right'),
-	getTable('poli_quantity', 'Poly', 'right'),
-];
-const nodeThread = [
-	getTable('item_description', 'Count'),
-	getTable('style', 'Style'),
-	getTable('color', 'Color'),
-	getTable('size', 'Length', 'right'),
-	getTable('quantity', 'Qty(pcs)', 'right'),
-	getTable('poli_quantity', 'Poly', 'right'),
-];
-
 export default function Index(data) {
+	const nodeZipper = [
+		getTable('item_description', 'Item'),
+		getTable('style', 'Style'),
+		getTable('color', 'Color'),
+		getTable('size', 'Size', 'right'),
+		getTable('quantity', 'Qty(pcs)', 'right'),
+		getTable('poli_quantity', 'Poly', 'right'),
+	];
+	const nodeThread = [
+		getTable('item_description', 'Count'),
+		getTable('style', 'Style'),
+		getTable('color', 'Color'),
+		getTable('size', 'Length', 'right'),
+		getTable('quantity', 'Qty(cone)', 'right'),
+		getTable('poli_quantity', 'Poly', 'right'),
+	];
+	const node =
+		data?.item_for === 'thread' || data?.item_for === 'sample_thread'
+			? nodeThread
+			: nodeZipper;
 	const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 	let { packing_list_entry } = data;
 	let totalQuantity = packing_list_entry?.reduce((acc, item) => {
@@ -40,8 +43,11 @@ export default function Index(data) {
 		const quantity = parseInt(item.poli_quantity, 10) || 0;
 		return acc + quantity;
 	}, 0);
-	data?.packing_list_entry?.map((item) => {
-		item.size = `${data.item_for === 'zipper' ? (item.is_inch === 1 ? `${item.size} in` : `${item.size} cm`) : `${item.size} mtr`}`;
+	let unit = [];
+	packing_list_entry?.forEach((item) => {
+		unit.push(
+			`${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? `mtr` : item.is_inch === 1 ? `inch` : `cm`}`
+		);
 	});
 	const pdfDocGenerator = pdfMake.createPdf({
 		...CUSTOM_PAGE_STICKER({
@@ -194,19 +200,27 @@ export default function Index(data) {
 
 						// * Body
 						...packing_list_entry?.map((item) =>
-							data?.item_for == 'zipper'
-								? nodeZipper.map((nodeItem) => ({
-										text: item[nodeItem.field],
+							node.map((nodeItem) => {
+								if (nodeItem.field === 'size') {
+									const unitIndex =
+										packing_list_entry.indexOf(item);
+									return {
+										text:
+											item[nodeItem.field] +
+											' ' +
+											(unit[unitIndex] || ''),
 										style: nodeItem.cellStyle,
 										alignment: nodeItem.alignment,
 										fontSize: DEFAULT_FONT_SIZE - 2,
-									}))
-								: nodeThread.map((nodeItem) => ({
-										text: item[nodeItem.field],
-										style: nodeItem.cellStyle,
-										alignment: nodeItem.alignment,
-										fontSize: DEFAULT_FONT_SIZE - 2,
-									}))
+									};
+								}
+								return {
+									text: item[nodeItem.field],
+									style: nodeItem.cellStyle,
+									alignment: nodeItem.alignment,
+									fontSize: DEFAULT_FONT_SIZE - 2,
+								};
+							})
 						),
 						[
 							{

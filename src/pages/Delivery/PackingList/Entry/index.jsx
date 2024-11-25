@@ -80,7 +80,6 @@ export default function Index() {
 		watch('order_info_uuid'),
 		`item_for=${watch('item_for')}`
 	);
-	
 	useEffect(() => {
 		if (!isUpdate && packingListEntries?.packing_list_entry) {
 			setValue(
@@ -212,7 +211,7 @@ export default function Index() {
 					.then(() => {
 						invalidateDeliveryPackingList();
 						invalidateDetails();
-						navigate(`/delivery/zipper-packing-list/${data?.uuid}`);
+						navigate(`/delivery/packing-list/${data?.uuid}`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -234,7 +233,6 @@ export default function Index() {
 
 		delete packingListData['is_all_checked'];
 		delete packingListData['packing_list_entry'];
-		console.log(data.packing_list_entry);
 		const packingListEntryData = [...data.packing_list_entry]
 			.filter((item) => item.quantity > 0)
 			.map((item) => ({
@@ -247,8 +245,6 @@ export default function Index() {
 				created_at,
 				remarks: item?.remarks || null,
 			}));
-		console.log(packingListEntryData);
-
 		if (packingListEntryData.length === 0) {
 			alert('Select at least one item to proceed.');
 		} else {
@@ -273,7 +269,7 @@ export default function Index() {
 					.then(() => {
 						invalidateDeliveryPackingList();
 						invalidateDetails();
-						navigate(`/delivery/zipper-packing-list`);
+						navigate(`/delivery/packing-list`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);

@@ -1,23 +1,28 @@
-import { Suspense, useEffect, useState } from 'react';
+import { useRHF } from '@/hooks';
 import {
 	useDeliveryChallan,
 	useDeliveryChallanDetailsByUUID,
 	useDeliveryChallanEntry,
+	useDeliveryPackingList,
 	useDeliveryPackingListEntryByPackingListUUID,
 } from '@/state/Delivery';
+import {
+	useOtherChallan,
+	useOtherPackingListByOrderInfoUUIDAndChallanUUID,
+} from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
+import { Suspense, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRHF } from '@/hooks';
 
 import { DeleteModal, UpdateModal } from '@/components/Modal';
-import SubmitButton from '@/ui/Others/Button/SubmitButton';
 import { DynamicDeliveryField, LinkWithCopy } from '@/ui';
+import SubmitButton from '@/ui/Others/Button/SubmitButton';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
-import { CHALLAN_NULL, CHALLAN_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
+import { CHALLAN_NULL, CHALLAN_SCHEMA } from '@util/Schema';
 
 import Header from './Header';
 
@@ -36,9 +41,12 @@ export default function Index() {
 
 	const { data: challan, invalidateQuery: invalidateDetails } =
 		useDeliveryChallanDetailsByUUID(uuid);
-
+	const { invalidateQuery: invalidateDeliveryPackingList } =
+		useDeliveryPackingList();
 	const isUpdate = uuid !== undefined;
 
+	const { invalidateQuery: invalidateOtherChallan } =
+		useOtherChallan('gate_pass=false');
 	const {
 		register,
 		handleSubmit,
@@ -51,7 +59,12 @@ export default function Index() {
 		watch,
 		setValue,
 	} = useRHF(CHALLAN_SCHEMA, CHALLAN_NULL);
-
+	// const { invalidateQuery: invalidatePackingList } = isUpdate
+	// 	? useOtherPackingListByOrderInfoUUIDAndChallanUUID(
+	// 			watch('order_info_uuid'),
+	// 			watch('uuid')
+	// 		)
+	// 	: useOtherPackingListByOrderInfoUUID(watch('order_info_uuid'));
 	useEffect(() => {
 		if (challan && isUpdate) {
 			reset({
@@ -186,6 +199,7 @@ export default function Index() {
 					.then(() => reset(Object.assign({}, CHALLAN_NULL)))
 					.then(() => {
 						invalidateChallan();
+						invalidateOtherChallan();
 						navigate(`/delivery/challan/${updatedId}`);
 					});
 			} catch (err) {
@@ -260,6 +274,7 @@ export default function Index() {
 					.then(() => reset(Object.assign({}, CHALLAN_NULL)))
 					.then(() => {
 						invalidateChallan();
+						invalidateOtherChallan();
 						navigate(`/delivery/challan/${new_uuid}`);
 					});
 			} catch (err) {
@@ -297,7 +312,8 @@ export default function Index() {
 					title={`Entry Details: `}
 					tableHead={
 						<>
-							{watch('item_for') === 'zipper'
+							{watch('item_for') === 'zipper' ||
+							watch('item_for') === 'sample_zipper'
 								? [
 										'PL No.',
 										'Item Description',
@@ -364,7 +380,7 @@ export default function Index() {
 										id={getValues(
 											`packing_list_uuids[${index}]`
 										)}
-										uri='/delivery/zipper-packing-list'
+										uri='/delivery/packing-list'
 									/>
 								</td>
 								<td className={`w-32 ${rowClass}`}>
@@ -579,6 +595,7 @@ export default function Index() {
 					updateItem={deleteItem}
 					setUpdateItem={setDeleteItem}
 					updateData={updateData}
+					// invalidateQuery={invalidatePackingList()}
 				/>
 			</Suspense>
 

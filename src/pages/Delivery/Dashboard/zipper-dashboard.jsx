@@ -28,7 +28,7 @@ export default function Index() {
 						<LinkWithCopy
 							title={info.getValue()}
 							id={challan_uuid}
-							uri='/delivery/zipper-challan'
+							uri='/delivery/challan'
 						/>
 					);
 				},
@@ -42,7 +42,7 @@ export default function Index() {
 						<LinkWithCopy
 							title={info.getValue()}
 							id={packing_list_uuid}
-							uri='/delivery/zipper-packing-list'
+							uri='/delivery/packing-list'
 						/>
 					);
 				},
@@ -96,7 +96,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'packing_list_quantity',
-				header: 'Packing List Qty',
+				header: 'Qty',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

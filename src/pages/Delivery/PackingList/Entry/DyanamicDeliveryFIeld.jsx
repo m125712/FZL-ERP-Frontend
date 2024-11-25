@@ -52,31 +52,83 @@ const DynamicDeliveryTable = ({
 									{item}
 								</th>
 							))
-						: [
-								'O/N',
-								'Count',
-								'Style',
-								'Color',
-								'Length',
-								'Unit',
-								'Order QTY',
-								'Balance QTY',
-								'Production QTY',
-								// 'Warehouse',
-								// 'Delivered',
-								'Quantity(pcs)',
-								'Poly QTY',
-								'Short QTY',
-								'Reject QTY',
-								'Remarks',
-							].map((item) => (
-								<th
-									key={item}
-									scope='col'
-									className='group cursor-pointer px-3 py-2 transition duration-300'>
-									{item}
-								</th>
-							))}
+						: watch('item_for') === 'thread'
+							? [
+									'O/N',
+									'Count',
+									'Style',
+									'Color',
+									'Length',
+									'Unit',
+									'Order QTY',
+									'Balance QTY',
+									'Production QTY',
+									// 'Warehouse',
+									// 'Delivered',
+									'Quantity(pcs)',
+									'Poly QTY',
+									'Short QTY',
+									'Reject QTY',
+									'Remarks',
+								].map((item) => (
+									<th
+										key={item}
+										scope='col'
+										className='group cursor-pointer px-3 py-2 transition duration-300'>
+										{item}
+									</th>
+								))
+							: watch('item_for') === 'sample_thread'
+								? [
+										'O/N',
+										'Count',
+										'Style',
+										'Color',
+										'Length',
+										'Unit',
+										'Order QTY',
+										'Balance QTY',
+										// 'Warehouse',
+										// 'Delivered',
+										'Quantity(pcs)',
+										'Poly QTY',
+										'Short QTY',
+										'Reject QTY',
+										'Remarks',
+									].map((item) => (
+										<th
+											key={item}
+											scope='col'
+											className='group cursor-pointer px-3 py-2 transition duration-300'>
+											{item}
+										</th>
+									))
+								: [
+										'O/N',
+										'Item Description',
+										'Style',
+										'Color',
+										'Size',
+										'Unit',
+										'Order QTY',
+										'Balance QTY',
+
+										// 'Warehouse',
+										// 'Delivered',
+										'Quantity(pcs)',
+										'Poly QTY',
+										'Short QTY',
+										'Reject QTY',
+										'Remarks',
+										,
+									].map((item) => (
+										<th
+											key={item}
+											scope='col'
+											className='group cursor-pointer px-3 py-2 transition duration-300'>
+											{item}
+										</th>
+									))}
 
 					{isUpdate && entryFiledName === 'packing_list_entry' && (
 						<th
@@ -133,11 +185,14 @@ const DynamicDeliveryTable = ({
 							`${entryFiledName}[${index}].balance_quantity`
 						)}
 					</td>
-					<td className={rowClass}>
-						{getValues(
-							`${entryFiledName}[${index}].finishing_prod`
-						)}
-					</td>
+					{(watch('item_for') === 'zipper' ||
+						watch('item_for') === 'thread') && (
+						<td className={rowClass}>
+							{getValues(
+								`${entryFiledName}[${index}].finishing_prod`
+							)}
+						</td>
+					)}
 					<td className={`w-32 ${rowClass}`}>
 						<Input
 							label={`${entryFiledName}[${index}].quantity`}

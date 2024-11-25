@@ -68,7 +68,7 @@ export const useOtherOrder = (query) =>
 	createGlobalState({
 		queryKey: otherQK.order(query),
 		url: query
-			? `/other/order/info/value/label?page=${query}`
+			? `/other/order/info/value/label?${query}`
 			: '/other/order/info/value/label',
 	});
 
@@ -76,21 +76,21 @@ export const useOtherOrder = (query) =>
 export const useOtherOrderPackingList = (param) =>
 	createGlobalState({
 		queryKey: otherQK.orderPackingList(),
-		url: '/other/order/info/value/label?page=challan',
+		url: `/other/order/info/value/label?page=challan${param}`,
 	});
 
 // GET THREAD ORDER
-export const useThreadOrder = (query) =>
-	createGlobalState({
-		queryKey: otherQK.threadOrders(query),
-		url: query
-			? `/other/thread/value/label?page=${query}`
-			: '/other/thread/value/label',
-	});
-export const useOtherThreadOrderPackingList = () =>
+export const useThreadOrder = (query) => 
+createGlobalState({
+	queryKey: otherQK.threadOrders(query),
+	url: query
+		? `/other/thread/value/label?${query}`
+		: '/other/thread/value/label',
+});
+export const useOtherThreadOrderPackingList = (param) =>
 	createGlobalState({
 		queryKey: otherQK.threadOrderPackingList(),
-		url: '/other/thread/value/label?page=challan',
+		url: `/other/thread/value/label?page=challan${param}`,
 	});
 // GET THREAD ORDER For Challan
 export const useThreadOrderForChallan = () =>

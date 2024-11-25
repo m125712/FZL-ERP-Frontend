@@ -79,6 +79,7 @@ export const useDeliveryPackingListByUUID = (uuid) =>
 		queryKey: deliveryQk.deliveryPackingListByUUID(uuid),
 		url: `/delivery/packing-list/${uuid}`,
 		enabled: !!uuid,
+		
 	});
 
 export const useDeliveryPackingListDetailsByUUID = (uuid, { params }) =>

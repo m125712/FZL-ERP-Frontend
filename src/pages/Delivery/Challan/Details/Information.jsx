@@ -47,15 +47,12 @@ export default function Information({ challan }) {
 			},
 			{
 				label: 'Gate Pass',
-				value: <StatusButton className={'btn-xs'} status={gate_pass} />,
+				value: <StatusButton className={'btn-xs'} value={gate_pass} />,
 			},
 			{
 				label: 'Receive Status',
 				value: (
-					<StatusButton
-						className={'btn-xs'}
-						status={receive_status}
-					/>
+					<StatusButton className={'btn-xs'} value={receive_status} />
 				),
 			},
 			{

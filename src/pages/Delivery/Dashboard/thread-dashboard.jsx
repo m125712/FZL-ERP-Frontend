@@ -28,7 +28,21 @@ export default function Index() {
 						<LinkWithCopy
 							title={info.getValue()}
 							id={challan_uuid}
-							uri='/thread/challan'
+							uri='/delivery/challan'
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'packing_list_number',
+				header: 'Packing List Number',
+				cell: (info) => {
+					const { packing_list_uuid } = info.row.original;
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={packing_list_uuid}
+							uri='/delivery/packing-list'
 						/>
 					);
 				},
@@ -38,22 +52,29 @@ export default function Index() {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
-				cell: (info) => {
-					const { order_info_uuid } = info.row.original;
+				cell: (info) => (
+					<LinkWithCopy
+						title={info.getValue()}
+						id={info.getValue()}
+						uri='/order/details'
+					/>
+				),
+			},
+			{
+				accessorKey: 'item_description',
+				header: 'Count Length',
+				enableColumnFilter: false,
+				cell: ({ row }) => {
+					const { order_description_uuid, order_number } =
+						row.original;
 					return (
 						<LinkWithCopy
-							title={info.getValue()}
-							id={order_info_uuid}
-							uri='/thread/order-info'
+							title={row.getValue('item_description')}
+							id={order_description_uuid}
+							uri={`/order/details/${order_number}`}
 						/>
 					);
 				},
-			},
-			{
-				accessorKey: 'count_length',
-				header: 'Count Length',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'style',
@@ -68,8 +89,8 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'challan_quantity',
-				header: 'Challan Qty',
+				accessorKey: 'packing_list_quantity',
+				header: ' Qty',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

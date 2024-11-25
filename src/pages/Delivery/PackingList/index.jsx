@@ -1,9 +1,11 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import {
+	useDeliveryChallan,
 	useDeliveryPackingList,
 	useDeliveryPackingListByUUID,
 	useDeliveryPackingListDetailsByUUID,
 } from '@/state/Delivery';
+import { useOtherChallan, useOtherOrder, useThreadOrder } from '@/state/Other';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -21,14 +23,23 @@ export default function Index() {
 	const navigate = useNavigate();
 	const { data, isLoading, url, deleteData, updateData } =
 		useDeliveryPackingList();
-	const { invalidateQuery: invalidateDeliveryPackingListByUUID } =
-		useDeliveryPackingListByUUID();
-
 	const info = new PageInfo('Packing List', url, 'delivery__packing_list');
 	const haveAccess = useAccess('delivery__packing_list');
-
+	const { invalidateQuery: invalidateDeliveryChallan } = useDeliveryChallan();
+	const { invalidateQuery: invalidateOtherChallan } =
+		useOtherChallan('gate_pass=false');
 	const [pdfUuid, setPdfUuid] = useState(null);
 
+	const { invalidateQuery: invalidateOtherOrder } =
+		useOtherOrder('page=challan');
+	const { invalidateQuery: invalidateThreadOrder } =
+		useThreadOrder('page=challan');
+	const { invalidateQuery: invalidateThreadOrderSample } = useThreadOrder(
+		'page=challan&is_sample=true'
+	);
+	const { invalidateQuery: invalidateOtherOrderSample } = useOtherOrder(
+		'page=challan&is_sample=true'
+	);
 	const { data: pdfData, isLoading: pdfLoading } =
 		useDeliveryPackingListDetailsByUUID(pdfUuid, {
 			params: 'is_update=false',
@@ -74,7 +85,7 @@ export default function Index() {
 						<LinkWithCopy
 							title={info.getValue()}
 							id={uuid}
-							uri='/delivery/zipper-packing-list'
+							uri='/delivery/packing-list'
 						/>
 					);
 				},
@@ -88,7 +99,7 @@ export default function Index() {
 						<LinkWithCopy
 							title={challan_number}
 							id={challan_uuid}
-							uri='/delivery/zipper-challan'
+							uri='/delivery/challan'
 						/>
 					);
 				},
@@ -123,15 +134,20 @@ export default function Index() {
 					const overrideAccess = haveAccess.includes(
 						'click_received_override'
 					);
+					// const {
+					// 	invalidateQuery: invalidateDeliveryPackingListByUUID,
+					// } = useDeliveryPackingListByUUID(info.row.original.uuid);
 					return (
 						<SwitchToggle
 							disabled={
 								!overrideAccess &&
 								(!access || info.getValue() !== true)
 							}
-							onChange={() =>
-								handelReceivedStatus(info.row.index)
-							}
+							onChange={() => {
+								handelReceivedStatus(info.row.index);
+
+								// invalidateDeliveryPackingListByUUID();
+							}}
 							checked={info.getValue() === true}
 						/>
 					);
@@ -250,11 +266,11 @@ export default function Index() {
 		[data]
 	);
 
-	const handelAdd = () => navigate('/delivery/zipper-packing-list/entry');
+	const handelAdd = () => navigate('/delivery/packing-list/entry');
 
 	const handelUpdate = (idx) => {
 		const uuid = data[idx]?.uuid;
-		navigate(`/delivery/zipper-packing-list/${uuid}/update`);
+		navigate(`/delivery/packing-list/${uuid}/update`);
 	};
 	const handelReceivedStatus = async (idx) => {
 		await updateData.mutateAsync({
@@ -266,7 +282,12 @@ export default function Index() {
 			},
 			isOnCloseNeeded: false,
 		});
-		invalidateDeliveryPackingListByUUID(data[idx]?.uuid);
+		invalidateDeliveryChallan();
+		invalidateOtherChallan();
+		invalidateOtherOrder();
+		invalidateOtherOrderSample();
+		invalidateThreadOrderSample();
+		invalidateThreadOrder();
 	};
 	const handelGatePass = async (idx) => {
 		await updateData.mutateAsync({
@@ -277,7 +298,9 @@ export default function Index() {
 			},
 			isOnCloseNeeded: false,
 		});
-		invalidateDeliveryPackingListByUUID(data[idx]?.uuid);
+
+		invalidateDeliveryChallan();
+		invalidateOtherChallan();
 	};
 	//handle PDf
 

@@ -17,9 +17,10 @@ import GatePass from '@pages/Delivery/GatePass';
 import Log from '@pages/Delivery/Log';
 import RM from '@pages/Delivery/RM';
 import Vehicle from '@pages/Delivery/Vehicle';
-import ThreadChallan from '@pages/Thread/Challan';
-import ThreadChallanDetails from '@pages/Thread/Challan/Details';
-import ThreadChallanEntry from '@pages/Thread/Challan/Entry';
+
+// import ThreadChallan from '@pages/Thread/Challan';
+// import ThreadChallanDetails from '@pages/Thread/Challan/Details';
+// import ThreadChallanEntry from '@pages/Thread/Challan/Entry';
 
 export const DeliveryRoutes = [
 	{
@@ -42,10 +43,10 @@ export const DeliveryRoutes = [
 				actions: ['create', 'read', 'used', 'delete'],
 			},
 
-			// * Zipper Packing List
+			// *Packing List
 			{
-				name: 'Zipper Packing List',
-				path: '/delivery/zipper-packing-list',
+				name: 'Packing List',
+				path: '/delivery/packing-list',
 				element: <PackingLists />,
 				page_name: 'delivery__packing_list',
 				actions: [
@@ -61,16 +62,8 @@ export const DeliveryRoutes = [
 				],
 			},
 			{
-				name: 'Warehouse Receive',
-				path: '/delivery/warehouse-receive',
-				element: <WarehouseRecv />,
-				page_name: 'delivery__warehouse_recv',
-				actions: ['create', 'read'],
-			},
-
-			{
 				name: 'Packing List Entry',
-				path: '/delivery/zipper-packing-list/entry',
+				path: '/delivery/packing-list/entry',
 				element: <PackingListsEntry />,
 				page_name: 'delivery__packing_list_entry',
 				actions: [
@@ -84,7 +77,7 @@ export const DeliveryRoutes = [
 			},
 			{
 				name: 'Packing List Details',
-				path: '/delivery/zipper-packing-list/:uuid',
+				path: '/delivery/packing-list/:uuid',
 				element: <PackingListsDetails />,
 				page_name: 'delivery__packing_list_details',
 				actions: [
@@ -98,7 +91,7 @@ export const DeliveryRoutes = [
 			},
 			{
 				name: 'Packing List Update',
-				path: '/delivery/zipper-packing-list/:uuid/update',
+				path: '/delivery/packing-list/:uuid/update',
 				element: <PackingListsEntry />,
 				page_name: 'delivery__packing_list_update',
 				actions: [
@@ -111,8 +104,15 @@ export const DeliveryRoutes = [
 
 				hidden: true,
 			},
-
-			// * Zipper Challan
+			// * Warehouse Receive
+			{
+				name: 'Warehouse Receive',
+				path: '/delivery/warehouse-receive',
+				element: <WarehouseRecv />,
+				page_name: 'delivery__warehouse_recv',
+				actions: ['create', 'read'],
+			},
+			// * Challan
 			{
 				name: 'Challan',
 				path: '/delivery/challan',
@@ -159,6 +159,7 @@ export const DeliveryRoutes = [
 				actions: ['create', 'read', 'update', 'delete'],
 				hidden: true,
 			},
+			// * Gate Pass
 			{
 				name: 'Gate Pass',
 				path: '/delivery/gate-pass',
@@ -253,14 +254,14 @@ export const DeliveryRoutes = [
 					'click_active_override',
 				],
 			},
-			//* Test
-			{
-				name: 'Test',
-				path: '/delivery/test',
-				element: <Test />,
-				page_name: 'delivery__test',
-				actions: ['read'],
-			},
+			// //* Test
+			// {
+			// 	name: 'Test',
+			// 	path: '/delivery/test',
+			// 	element: <Test />,
+			// 	page_name: 'delivery__test',
+			// 	actions: ['read'],
+			// },
 		],
 	},
 ];

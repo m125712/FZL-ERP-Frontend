@@ -13,6 +13,8 @@ export default function Index({
 	updateItem,
 	setUpdateItem,
 	updateData,
+	invalidateQuery = () => {},
+	invalidateQueryArray = [],
 }) {
 	const handelClose = () => {
 		setUpdateItem((prev) => ({
@@ -33,6 +35,15 @@ export default function Index({
 			updatedData: updateItem,
 			onClose: handelClose,
 		});
+		
+		invalidateQuery();
+
+		// Invalidate an array of queries
+		if (invalidateQueryArray.length > 0) {
+			invalidateQueryArray.forEach((query) => {
+				query();
+			});
+		}
 	};
 
 	return (
@@ -41,7 +52,7 @@ export default function Index({
 				onSubmit={onSubmit}
 				noValidate
 				method='dialog'
-				className='modal-box text-secondary-content bg-warning'>
+				className='modal-box bg-warning text-secondary-content'>
 				<Header title={`Update ${title}`} onClose={handelCancelClick} />
 				<Body item={updateItem?.itemName} />
 				<DeleteFooter {...{ handelCancelClick }} />

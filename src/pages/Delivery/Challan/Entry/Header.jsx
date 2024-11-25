@@ -2,10 +2,8 @@ import { useEffect } from 'react';
 import {
 	useOtherHRUserByDesignation,
 	useOtherOrder,
-	useOtherOrderPackingList,
 	useOtherPackingListByOrderInfoUUID,
 	useOtherPackingListByOrderInfoUUIDAndChallanUUID,
-	useOtherThreadOrderPackingList,
 	useOtherVehicle,
 	useThreadOrder,
 } from '@/state/Other';
@@ -37,19 +35,32 @@ export default function Header({
 	deleteItem,
 }) {
 	const { data: vehicles } = useOtherVehicle();
-	const { data: ordersZipperPackingList } = useOtherOrderPackingList();
-	const { data: ordersThreadPackingList } = useOtherThreadOrderPackingList();
+	const { data: ordersZipperPackingList } = useOtherOrder('page=challan');
+	const { data: ordersThreadPackingList } = useThreadOrder('page=challan');
+	const { data: ordersThreadSamplePackingList } = useThreadOrder(
+		'page=challan&is_sample=true'
+	);
+	const { data: ordersZipperSamplePackingList } = useOtherOrder(
+		'page=challan&is_sample=true'
+	);
 	const { data: ordersZipper } = useOtherOrder();
 	const { data: ordersThread } = useThreadOrder();
-	const { data: packingList } = isUpdate
-		? useOtherPackingListByOrderInfoUUIDAndChallanUUID(
-				watch('order_info_uuid'),
-				watch('uuid')
-			)
-		: useOtherPackingListByOrderInfoUUID(watch('order_info_uuid'));
+	const { data: ordersZipperSample } = useOtherOrder('is_sample=true');
+	const { data: ordersThreadSample } = useThreadOrder('is_sample=true');
+	const { data: packingList, invalidateQuery: invalidatePackingList } =
+		isUpdate
+			? useOtherPackingListByOrderInfoUUIDAndChallanUUID(
+					watch('order_info_uuid'),
+					watch('uuid')
+				)
+			: useOtherPackingListByOrderInfoUUID(watch('order_info_uuid'));
+
+	console.log('packingList', ordersThreadSamplePackingList);
 	const itemOptions = [
 		{ label: 'Zipper', value: 'zipper' },
 		{ label: 'Thread', value: 'thread' },
+		{ label: 'Zipper Sample', value: 'sample_zipper' },
+		{ label: 'Thread Sample', value: 'sample_thread' },
 	];
 	const itemFor = watch('item_for');
 	useEffect(() => {
@@ -64,24 +75,32 @@ export default function Header({
 			? ordersZipper
 			: itemFor === 'thread'
 				? ordersThread
-				: []
+				: itemFor === 'sample_zipper'
+					? ordersZipperSample
+					: itemFor === 'sample_thread'
+						? ordersThreadSample
+						: []
 		: itemFor === 'zipper'
 			? ordersZipperPackingList
 			: itemFor === 'thread'
 				? ordersThreadPackingList
-				: [];
+				: itemFor === 'sample_zipper'
+					? ordersZipperSamplePackingList
+					: itemFor === 'sample_thread'
+						? ordersThreadSamplePackingList
+						: [];
 
-	useEffect(() => {
-		const itemFor = watch('item_for');
+	// useEffect(() => {
+	// 	const itemFor = watch('item_for');
 
-		if (itemFor === 'thread' && !isUpdate) {
-			setValue('order_info_uuid', null);
-			setValue('challan_entry', []);
-		} else if (itemFor === 'zipper' && !isUpdate) {
-			setValue('challan_entry', []);
-			setValue('order_info_uuid', null);
-		}
-	}, [watch('item_for')]);
+	// 	if (itemFor === 'thread' && !isUpdate) {
+	// 		setValue('order_info_uuid', null);
+	// 		setValue('challan_entry', []);
+	// 	} else if (itemFor === 'zipper' && !isUpdate) {
+	// 		setValue('challan_entry', []);
+	// 		setValue('order_info_uuid', null);
+	// 	}
+	// }, [watch('item_for')]);
 	const handlePackingListRemove = (
 		packing_list_uuid,
 		packing_list_name,
@@ -337,12 +356,17 @@ export default function Header({
 									.map((item) => (
 										<button
 											key={item.value}
-											onClick={() =>
+											onClick={() => {
 												handlePackingListRemove(
 													item.value,
 													item.label,
 													null
-												)
+												);
+												invalidatePackingList();
+											}}
+											disabled={
+												getValues('packing_list_uuids')
+													.length < 2
 											}
 											type={'button'}
 											className='btn btn-outline btn-error btn-sm'>

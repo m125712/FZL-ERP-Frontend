@@ -3,10 +3,12 @@ import {
 	useDeliveryPackingList,
 	useDeliveryPackingListByUUID,
 } from '@/state/Delivery';
+import { QueryCache } from '@tanstack/react-query';
 import { useSymbologyScanner } from '@use-symbology-scanner/react';
+import { set } from 'date-fns';
 import { configure, HotKeys } from 'react-hotkeys';
 import { useNavigate } from 'react-router-dom';
-import { useAccess, useRHF } from '@/hooks';
+import { useAccess, useFetch, useRHF } from '@/hooks';
 
 import { ShowLocalToast } from '@/components/Toast';
 import {
@@ -25,11 +27,12 @@ import {
 
 export default function Index() {
 	const containerRef = useRef(null);
-	const [symbol, setSymbol] = useState(null);
+	const [symbol, setScanUUID] = useState(null);
 	const [scannerActive, setScannerActive] = useState(true);
 	const [onFocus, setOnFocus] = useState(true);
 	const navigate = useNavigate();
 	const haveAccess = useAccess('delivery__warehouse_recv');
+	const [status, setStatus] = useState(false);
 
 	const scan_option = [
 		{ value: 'warehouse_receive', label: 'Warehouse Receive' },
@@ -43,6 +46,7 @@ export default function Index() {
 		useFieldArray,
 		getValues,
 		Controller,
+		watch,
 	} = useRHF(WAREHOUSE_RECEIVE_SCHEMA, WAREHOUSE_RECEIVE_NULL);
 
 	const {
@@ -53,16 +57,12 @@ export default function Index() {
 		control,
 		name: 'entry',
 	});
-
 	const {
-		data: packetListData,
-		isLoading,
-		updateData,
+		value: packetListData,
+		loading: isLoading,
 		error,
-		refetch,
-	} = useDeliveryPackingListByUUID(symbol);
-
-	const { invalidateQuery: invalidateDeliveryPackingList } =
+	} = useFetch(`/delivery/packing-list/${symbol}`, [status]);
+	const { invalidateQuery: invalidateDeliveryPackingList, updateData } =
 		useDeliveryPackingList();
 
 	useEffect(() => {
@@ -71,16 +71,25 @@ export default function Index() {
 		}
 	}, [containerRef]);
 
-	const handleSymbol = useCallback((scannedSymbol) => {
-		if (!scannedSymbol || !onFocus || scannedSymbol.length < 2) return;
-
-		setSymbol(scannedSymbol);
-	}, []);
+	const handleSymbol = useCallback(
+		async (scannedSymbol) => {
+			if (!scannedSymbol || !onFocus || scannedSymbol.length < 2) return;
+			setScanUUID(scannedSymbol);
+			setStatus(!status);
+		},
+		[status]
+	);
+	useSymbologyScanner(handleSymbol, {
+		target: containerRef,
+		enabled: scannerActive,
+		eventOptions: { capture: true, passive: false },
+		scannerOptions: { maxDelay: 30 },
+	});
 
 	const handlePacketScan = async (selectedOption) => {
 		const waitForLoading = () => {
 			return new Promise((resolve) => {
-				if (!isLoading && onFocus) {
+				if (!isLoading && onFocus && symbol) {
 					resolve(true);
 					return;
 				}
@@ -89,6 +98,7 @@ export default function Index() {
 
 		try {
 			await waitForLoading();
+
 			if (error) {
 				throw new Error(error);
 			}
@@ -114,8 +124,8 @@ export default function Index() {
 				if (packetListData.is_warehouse_received) {
 					throw new Error('This item has already been received');
 				}
-				return packetListData;
 			}
+			return packetListData;
 		} catch (error) {
 			throw error;
 		}
@@ -123,9 +133,7 @@ export default function Index() {
 
 	useEffect(() => {
 		if (!symbol) return;
-
 		const selectedOption = getValues('option');
-
 		handlePacketScan(selectedOption)
 			.then((data) => {
 				EntryAppend({ ...data });
@@ -135,18 +143,8 @@ export default function Index() {
 					type: 'error',
 					message: error.message,
 				});
-			})
-			.finally(() => {
-				setSymbol(null);
 			});
-	}, [packetListData, EntryAppend, getValues, symbol, isLoading]);
-
-	useSymbologyScanner(handleSymbol, {
-		target: containerRef,
-		enabled: scannerActive,
-		eventOptions: { capture: true, passive: false },
-		scannerOptions: { maxDelay: 100 },
-	});
+	}, [packetListData]);
 
 	const handelEntryAppend = () => {
 		EntryAppend({
@@ -159,18 +157,6 @@ export default function Index() {
 	const handleEntryRemove = (index) => {
 		EntryRemove(index);
 	};
-
-	const handelDuplicateDynamicField = useCallback(
-		(index) => {
-			const item = getValues(`entry[${index}]`);
-			EntryAppend({
-				...item,
-				order_description_uuid: undefined,
-			});
-		},
-		[getValues, EntryAppend]
-	);
-
 	const onSubmit = async (data) => {
 		try {
 			const updatablePackingListEntryPromises = data.entry.map(
@@ -194,7 +180,7 @@ export default function Index() {
 			await Promise.all(updatablePackingListEntryPromises);
 			reset(Object.assign({}, WAREHOUSE_RECEIVE_NULL));
 			invalidateDeliveryPackingList();
-			navigate(`/delivery/zipper-packing-list`);
+			navigate(`/delivery/packing-list`);
 		} catch (err) {
 			ShowLocalToast({
 				type: 'error',
@@ -204,28 +190,8 @@ export default function Index() {
 		}
 	};
 
-	const keyMap = {
-		NEW_ROW: 'alt+n',
-		COPY_LAST_ROW: 'alt+c',
-		ENTER: 'enter',
-	};
-
-	const handleEnter = (event) => {
-		event.preventDefault();
-		if (Object.keys(errors).length > 0) return;
-	};
-
-	const handlers = {
-		ENTER: (event) => handleEnter(event),
-	};
-
-	configure({
-		ignoreTags: ['input', 'select', 'textarea'],
-		ignoreEventsCondition: function () {},
-	});
-
 	const rowClass =
-		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
+		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	return (
 		<div
@@ -234,11 +200,6 @@ export default function Index() {
 			onBlur={() => setScannerActive(false)}
 			onFocus={() => setScannerActive(true)}
 			className='min-h-screen p-4 outline-none'>
-			{isLoading && (
-				<div className='flex h-screen items-center justify-center'>
-					<span className='loading loading-dots loading-lg z-50' />
-				</div>
-			)}
 			<div className='mb-4 flex items-center gap-4'>
 				<div
 					className={`flex items-center gap-2 ${scannerActive ? 'text-success' : 'text-error'}`}>
@@ -248,122 +209,113 @@ export default function Index() {
 						Scanner{' '}
 						{scannerActive
 							? 'Active'
-							: 'Inactive(Click this page to activate)'}
+							: 'Inactive (Click this dot to active)'}
 					</span>
 				</div>
 			</div>
 
-			<HotKeys {...{ keyMap, handlers }}>
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					noValidate
-					className='mt-4 flex flex-col gap-4'>
-					<SectionEntryBody title='Details'>
-						<FormField
-							label='option'
-							title='Select Option'
-							errors={errors}>
-							<Controller
-								name='option'
-								control={control}
-								render={({ field: { onChange } }) => (
-									<ReactSelect
-										placeholder='Select Option'
-										options={scan_option}
-										value={scan_option?.find(
-											(item) =>
-												item.value ==
-												getValues('option')
-										)}
-										onFocus={() => {
-											setOnFocus(false);
-										}}
-										onChange={(e) => {
-											const value = e.value;
-											onChange(value);
-											setOnFocus(true);
-											containerRef.current.focus();
-										}}
-									/>
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				noValidate
+				className='mt-4 flex flex-col gap-4'>
+				<SectionEntryBody title='Details'>
+					<FormField
+						label='option'
+						title='Select Option'
+						errors={errors}>
+						<Controller
+							name='option'
+							control={control}
+							render={({ field: { onChange } }) => (
+								<ReactSelect
+									placeholder='Select Option'
+									options={scan_option}
+									value={scan_option?.find(
+										(item) =>
+											item.value == getValues('option')
+									)}
+									// onFocus={() => {
+									// 	setOnFocus(false);
+									// }}
+									onChange={(e) => {
+										const value = e.value;
+										onChange(value);
+										setOnFocus(true);
+										containerRef.current.focus();
+									}}
+								/>
+							)}
+						/>
+					</FormField>
+				</SectionEntryBody>
+
+				<DynamicField
+					title='Entry'
+					handelAppend={handelEntryAppend}
+					showAppendButton={false}
+					tableHead={[
+						'Packet List',
+						'Order Number',
+						'Carton Size',
+						'Carton Weight',
+						'Total Poly Quantity',
+						'Total Quantity',
+						'Action',
+					].map((item) => (
+						<th
+							key={item}
+							scope='col'
+							className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+							{item}
+						</th>
+					))}>
+					{EntryField.map((item, index) => (
+						<tr key={item.id}>
+							<td className={`w-80 ${rowClass}`}>
+								{getValues(`entry[${index}].packing_number`)}
+							</td>
+							<td className={`w-80 ${rowClass}`}>
+								{getValues(`entry[${index}].order_number`)}
+							</td>
+							<td className={`w-80 ${rowClass}`}>
+								{getValues(`entry[${index}].carton_size`)}
+							</td>
+							<td className={`w-80 ${rowClass}`}>
+								{getValues(`entry[${index}].carton_weight`)}
+							</td>
+							<td className={`w-80 ${rowClass}`}>
+								{getValues(
+									`entry[${index}].total_poly_quantity`
 								)}
-							/>
-						</FormField>
-					</SectionEntryBody>
+							</td>
+							<td className={`w-80 ${rowClass}`}>
+								{getValues(`entry[${index}].total_quantity`)}
+							</td>
+							<td
+								className={`w-20 ${rowClass} border-l-4 border-l-primary`}>
+								<ActionButtons
+									removeClick={() => handleEntryRemove(index)}
+									showDuplicateButton={false}
+									showRemoveButton={EntryField.length > 0}
+								/>
+							</td>
+						</tr>
+					))}
+				</DynamicField>
 
-					<DynamicField
-						title='Entry'
-						handelAppend={handelEntryAppend}
-						tableHead={[
-							'Packet List',
-							'Order Number',
-							'Carton Size',
-							'Carton Weight',
-							'Total Poly Quantity',
-							'Total Quantity',
-							'Action',
-						].map((item) => (
-							<th
-								key={item}
-								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
-								{item}
-							</th>
-						))}>
-						{EntryField.map((item, index) => (
-							<tr key={item.id}>
-								<td className={`w-80 ${rowClass}`}>
-									{getValues(
-										`entry[${index}].packing_number`
-									)}
-								</td>
-								<td className={`w-80 ${rowClass}`}>
-									{getValues(`entry[${index}].order_number`)}
-								</td>
-								<td className={`w-80 ${rowClass}`}>
-									{getValues(`entry[${index}].carton_size`)}
-								</td>
-								<td className={`w-80 ${rowClass}`}>
-									{getValues(`entry[${index}].carton_weight`)}
-								</td>
-								<td className={`w-80 ${rowClass}`}>
-									{getValues(
-										`entry[${index}].total_poly_quantity`
-									)}
-								</td>
-								<td className={`w-80 ${rowClass}`}>
-									{getValues(
-										`entry[${index}].total_quantity`
-									)}
-								</td>
-								<td
-									className={`w-20 ${rowClass} border-l-4 border-l-primary`}>
-									<ActionButtons
-										duplicateClick={() =>
-											handelDuplicateDynamicField(index)
-										}
-										removeClick={() =>
-											handleEntryRemove(index)
-										}
-										showDuplicateButton={false}
-										showRemoveButton={EntryField.length > 0}
-									/>
-								</td>
-							</tr>
-						))}
-					</DynamicField>
-
-					<div className='modal-action'>
-						<button
-							type='submit'
-							disabled={
-								getValues('entry').length < 1 || isLoading
-							}
-							className='text-md btn btn-primary btn-block'>
-							Save
-						</button>
-					</div>
-				</form>
-			</HotKeys>
+				<div className='modal-action'>
+					<button
+						type='submit'
+						disabled={
+							getValues('entry').length < 1 ||
+							isLoading ||
+							watch('option') === 'warehouse_return'
+						}
+						className='text-md btn btn-primary btn-block'>
+						Save
+					</button>
+				</div>
+			</form>
 		</div>
 	);
 }

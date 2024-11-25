@@ -1468,9 +1468,9 @@ export const PACKING_LIST_SCHEMA = {
 			poli_quantity: yup.number().when('quantity', {
 				is: (quantity) => quantity > 0,
 				then: (Schema) =>
-					Schema.typeError('Must be a number').required(
-						'Poly Quantity is required'
-					),
+					Schema.typeError('Must be a number')
+						.required('Poly Quantity is required')
+						.moreThan(0, 'Must be greater than zero'),
 				otherwise: (Schema) =>
 					Schema.nullable().transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? null : value
@@ -3249,6 +3249,7 @@ export const WAREHOUSE_RECEIVE_SCHEMA = {
 	),
 };
 export const WAREHOUSE_RECEIVE_NULL = {
+	option: 'warehouse_receive',
 	entry: [],
 };
 // * Gate Pass
@@ -3261,6 +3262,7 @@ export const GATE_PASS_SCHEMA = {
 	),
 };
 export const GATE_PASS_NULL = {
+	challan_uuid: null,
 	entry: [],
 };
 

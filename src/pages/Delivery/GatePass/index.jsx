@@ -1,16 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
+	useDeliveryChallan,
+	useDeliveryChallanDetailsByUUID,
 	useDeliveryChallanEntryByChallanUUID,
 	useDeliveryPackingList,
 	useDeliveryPackingListByUUID,
 } from '@/state/Delivery';
 import { useOtherChallan } from '@/state/Other';
 import { useSymbologyScanner } from '@use-symbology-scanner/react';
+import { get } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { useNavigate } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { ShowLocalToast } from '@/components/Toast';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import {
 	ActionButtons,
 	DynamicField,
@@ -52,7 +56,9 @@ export default function Index() {
 	});
 
 	const { data: challan_option } = useOtherChallan('gate_pass=false');
-
+	const { invalidateQuery: invalidateDeliveryChallan } = useDeliveryChallan();
+	const { invalidateQuery: invalidateDeliveryPackingListByUUID } =
+		useDeliveryChallanDetailsByUUID(watch('challan_uuid'));
 	const { invalidateQuery: invalidateDeliveryPackingList } =
 		useDeliveryPackingList();
 	const {
@@ -156,28 +162,28 @@ export default function Index() {
 		scannerOptions: { maxDelay: 100 },
 	});
 
-	const handelEntryAppend = () => {
-		EntryAppend({
-			order_id: null,
-			trx_quantity: 0,
-			remarks: '',
-		});
-	};
+	// const handelEntryAppend = () => {
+	// 	EntryAppend({
+	// 		order_id: null,
+	// 		trx_quantity: 0,
+	// 		remarks: '',
+	// 	});
+	// };
 
-	const handleEntryRemove = (index) => {
-		EntryRemove(index);
-	};
+	// const handleEntryRemove = (index) => {
+	// 	EntryRemove(index);
+	// };
 
-	const handelDuplicateDynamicField = useCallback(
-		(index) => {
-			const item = getValues(`entry[${index}]`);
-			EntryAppend({
-				...item,
-				order_description_uuid: undefined,
-			});
-		},
-		[getValues, EntryAppend]
-	);
+	// const handelDuplicateDynamicField = useCallback(
+	// 	(index) => {
+	// 		const item = getValues(`entry[${index}]`);
+	// 		EntryAppend({
+	// 			...item,
+	// 			order_description_uuid: undefined,
+	// 		});
+	// 	},
+	// 	[getValues, EntryAppend]
+	// );
 
 	const onSubmit = async (data) => {
 		try {
@@ -201,8 +207,10 @@ export default function Index() {
 
 			await Promise.all(updatablePackingListEntryPromises);
 			reset(Object.assign({}, GATE_PASS_NULL));
+			invalidateDeliveryChallan();
 			invalidateDeliveryPackingList();
-			navigate(`/delivery/zipper-packing-list`);
+			invalidateDeliveryPackingListByUUID();
+			navigate(`/delivery/challan/${data.entry[0].challan_uuid}`);
 		} catch (err) {
 			ShowLocalToast({
 				type: 'error',
@@ -233,7 +241,7 @@ export default function Index() {
 	});
 
 	const rowClass =
-		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
+		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	return (
 		<div
@@ -300,7 +308,7 @@ export default function Index() {
 
 					<DynamicField
 						title='Entry'
-						handelAppend={handelEntryAppend}
+						// handelAppend={handelEntryAppend}
 						tableHead={[
 							'Packet List',
 							'Order Number',
@@ -309,7 +317,7 @@ export default function Index() {
 							'Total Poly Quantity',
 							'Total Quantity',
 							'Gate Pass',
-							'Action',
+							// 'Action',
 						].map((item) => (
 							<th
 								key={item}
@@ -344,7 +352,7 @@ export default function Index() {
 										`entry[${index}].total_quantity`
 									)}
 								</td>
-								<td
+								{/* <td
 									className={`w-80 px-4 py-2 transition-colors duration-300 ${
 										getValues(
 											`entry[${index}].gate_pass`
@@ -368,20 +376,61 @@ export default function Index() {
 											? 'Passed'
 											: 'Pending'}
 									</div>
+								</td> */}
+
+								<td className={`w-80 ${rowClass}`}>
+									<SwitchToggle
+										disabled={
+											getValues(
+												`entry[${index}].gate_pass`
+											) === 0
+										}
+										onFocus={() => {
+										
+											setValue(
+												`entry[${index}].gate_pass`,
+												getValues(
+													`entry[${index}].gate_pass`
+												) === 1
+													? 0
+													: 1
+											);
+											setOnFocus(true);
+											containerRef.current.focus();
+										}}
+										// onClick={() =>
+										// 	setValue(
+										// 		`entry[${index}].gate_pass`,
+										// 		getValues(
+										// 			`entry[${index}].gate_pass`
+										// 		) === 1
+										// 			? 0
+										// 			: 1
+										// 	)
+										// }
+
+										checked={
+											Number(
+												getValues(
+													`entry[${index}].gate_pass`
+												)
+											) === 1
+										}
+									/>
 								</td>
-								<td
+								{/* <td
 									className={`w-20 ${rowClass} border-l-4 border-l-primary`}>
 									<ActionButtons
-										duplicateClick={() =>
-											handelDuplicateDynamicField(index)
-										}
+										// duplicateClick={() =>
+										// 	handelDuplicateDynamicField(index)
+										// }
 										removeClick={() =>
 											handleEntryRemove(index)
 										}
 										showDuplicateButton={false}
-										showRemoveButton={EntryField.length > 0}
+										showRemoveButton={false}
 									/>
-								</td>
+								</td> */}
 							</tr>
 						))}
 					</DynamicField>

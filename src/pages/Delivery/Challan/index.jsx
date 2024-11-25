@@ -1,5 +1,9 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
-import { useDeliveryChallan, useDeliveryPackingList } from '@/state/Delivery';
+import {
+	useDeliveryChallan,
+	useDeliveryPackingList,
+	useDeliveryPackingListByUUID,
+} from '@/state/Delivery';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -67,7 +71,7 @@ export default function Index() {
 								key={packingList.packing_number}
 								title={packingList.packing_number}
 								id={packingList.packing_list_uuid}
-								uri='/delivery/zipper-packing-list'
+								uri='/delivery/packing-list'
 							/>
 						);
 					});

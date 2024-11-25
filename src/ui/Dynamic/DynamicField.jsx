@@ -1,11 +1,13 @@
-import cn from '@/lib/cn';
 import { Plus } from 'lucide-react';
+
+import cn from '@/lib/cn';
 
 export default function DynamicField({
 	title = '',
 	tableHead,
 	tableHeadClass = '',
 	headerButtons = [],
+	showAppendButton = true,
 	handelAppend,
 	children,
 }) {
@@ -16,22 +18,20 @@ export default function DynamicField({
 					{title}
 				</span>
 
-				<div className='flex gap-4 items-center'>
-					{headerButtons.length > 0 && headerButtons.map((e) => e)}	
+				<div className='flex items-center gap-4'>
+					{headerButtons.length > 0 && headerButtons.map((e) => e)}
 
-				{handelAppend && (
-					<button
-						type='button'
-						className='btn btn-accent btn-xs rounded'
-						onClick={handelAppend}>
-						<Plus className='w-5' /> NEW
-					</button>
-				)}
+					{handelAppend && showAppendButton && (
+						<button
+							type='button'
+							className='btn btn-accent btn-xs rounded'
+							onClick={handelAppend}>
+							<Plus className='w-5' /> NEW
+						</button>
+					)}
 				</div>
 			</div>
 
-
-			
 			<div className='overflow-x-auto rounded-b border border-t-0 border-primary/30 bg-base-100 text-left text-sm text-primary'>
 				<table className='w-full'>
 					<thead

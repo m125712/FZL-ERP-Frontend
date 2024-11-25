@@ -15,7 +15,7 @@ export default function Index({ challan }) {
 						<LinkWithCopy
 							title={info.getValue()}
 							id={packing_list_uuid}
-							uri='/delivery/zipper-packing-list'
+							uri='/delivery/packing-list'
 						/>
 					);
 				},

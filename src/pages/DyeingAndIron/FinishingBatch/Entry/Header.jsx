@@ -10,6 +10,8 @@ import {
 	Textarea,
 } from '@/ui';
 
+import TableView from './TableView';
+
 export default function Header({
 	register,
 	errors,
@@ -29,7 +31,8 @@ export default function Header({
 		{ value: 'rejected ', label: 'Rejected ' },
 	];
 	return (
-		<div>
+		<div className='flex flex-col gap-8'>
+			<TableView data={orders} />
 			<SectionEntryBody
 				title={
 					watch('batch_number')
@@ -37,6 +40,14 @@ export default function Header({
 						: 'New Batch Entry'
 				}>
 				<div className='grid grid-cols-2 gap-4'>
+					<DateInput
+						label='production_date'
+						Controller={Controller}
+						control={control}
+						selected={watch('production_date')}
+						{...{ register, errors }}
+					/>
+
 					<FormField
 						label='order_description_uuid'
 						title='Order No'
@@ -88,8 +99,6 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-				</div>
-				<div className='flex gap-4'>
 					<Input
 						label='slider_lead_time'
 						unit='PCS'
@@ -98,13 +107,6 @@ export default function Header({
 					<Input
 						label='dyeing_lead_time'
 						unit='KG'
-						{...{ register, errors }}
-					/>
-					<DateInput
-						label='production_date'
-						Controller={Controller}
-						control={control}
-						selected={watch('production_date')}
 						{...{ register, errors }}
 					/>
 				</div>

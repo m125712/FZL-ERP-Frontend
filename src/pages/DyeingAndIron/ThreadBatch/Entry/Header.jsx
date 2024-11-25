@@ -1,9 +1,9 @@
 import { useOtherMachines } from '@/state/Other';
 
+import { DateInput } from '@/ui/Core';
 import { FormField, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
 
 import cn from '@/lib/cn';
-import { DateInput } from '@/ui/Core';
 
 export default function Header({
 	Controller,
@@ -50,6 +50,13 @@ export default function Header({
 					</div>
 				}>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+					<DateInput
+						label='production_date'
+						Controller={Controller}
+						control={control}
+						selected={watch('production_date')}
+						{...{ register, errors }}
+					/>
 					<FormField
 						label='machine_uuid'
 						title='Machine'
@@ -100,13 +107,6 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<DateInput
-						label='production_date'
-						Controller={Controller}
-						control={control}
-						selected={watch('production_date')}
-						{...{ register, errors }}
-					/>
 					<Textarea label='remarks' {...{ register, errors }} />
 				</div>
 			</SectionEntryBody>

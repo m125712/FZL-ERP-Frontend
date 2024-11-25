@@ -1,11 +1,11 @@
-import { useOtherMachines } from '@/state/Other';
+import { useEffect, useState } from 'react';
+import { useOtherMachinesWithSlot } from '@/state/Other';
+import { format } from 'date-fns';
 
+import { DateInput } from '@/ui/Core';
 import { FormField, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
 
 import cn from '@/lib/cn';
-
-import { slot } from '../utils';
-import { DateInput } from '@/ui/Core';
 
 export default function Header({
 	Controller,
@@ -16,12 +16,33 @@ export default function Header({
 	getValues,
 	totalQuantity,
 	totalCalTape,
+	isUpdate,
 }) {
-	const { data: machine } = useOtherMachines();
+	const [slot, setSlot] = useState([]);
+	const { data: machine } = useOtherMachinesWithSlot(
+		watch('production_date')
+			? format(new Date(watch('production_date')), 'yyyy-MM-dd')
+			: ''
+	);
 
 	const res = machine?.find(
 		(item) => item.value == getValues('machine_uuid')
 	);
+
+	const filtered_machine = machine
+		? machine?.filter((item) => item.can_book == true)
+		: [];
+
+	// setting the setSLot sate if the request is for update
+	useEffect(() => {
+		if (isUpdate) {
+			const tempSlot = machine?.find(
+				(item) => item.value == getValues('machine_uuid')
+			);
+			console.log(tempSlot);
+			setSlot(tempSlot?.slot);
+		}
+	}, [isUpdate]);
 
 	return (
 		<div className='flex flex-col gap-4'>
@@ -45,6 +66,13 @@ export default function Header({
 					</div>
 				}>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+					<DateInput
+						label='production_date'
+						Controller={Controller}
+						control={control}
+						selected={watch('production_date')}
+						{...{ register, errors }}
+					/>
 					<FormField
 						label='machine_uuid'
 						title='Machine'
@@ -56,8 +84,8 @@ export default function Header({
 								return (
 									<ReactSelect
 										placeholder='Select Machine'
-										options={machine}
-										value={machine?.find(
+										options={filtered_machine}
+										value={filtered_machine?.find(
 											(item) =>
 												item.value ==
 												getValues('machine_uuid')
@@ -65,6 +93,7 @@ export default function Header({
 										onChange={(e) => {
 											const value = e.value;
 											onChange(value);
+											setSlot(e.open_slot);
 										}}
 									/>
 								);
@@ -93,13 +122,6 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<DateInput
-						label='production_date'
-						Controller={Controller}
-						control={control}
-						selected={watch('production_date')}
-						{...{ register, errors }}
-					/>
 					<Textarea label='remarks' {...{ register, errors }} />
 				</div>
 			</SectionEntryBody>

@@ -168,6 +168,15 @@ export default function Index() {
 					);
 				},
 			},
+			{
+				accessorKey: 'delivery_date',
+				header: 'Delivery Date',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} isTime={false} />;
+				},
+			},
 
 			{
 				accessorKey: 'created_by_name',

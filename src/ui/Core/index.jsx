@@ -38,6 +38,7 @@ export const DateInput = ({
 	register,
 	selected,
 	disabled = false,
+	startDate = null,
 	...props
 }) => {
 	const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
@@ -45,7 +46,9 @@ export const DateInput = ({
 			type='button'
 			className={cn(
 				'input input-secondary flex w-full items-center justify-between rounded border-secondary/30 bg-base-100 px-2 text-left text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-secondary/50',
-				disabled ? 'cursor-not-allowed input-disabled border-error' : 'cursor-pointer'
+				disabled
+					? 'input-disabled cursor-not-allowed border-error'
+					: 'cursor-pointer'
 			)}
 			onClick={onClick}
 			ref={ref}>
@@ -63,6 +66,7 @@ export const DateInput = ({
 						customInput={<ExampleCustomInput />}
 						disabled={disabled}
 						selected={selected}
+						startDate={startDate}
 						onChange={(date) =>
 							onChange(format(date, 'yyyy-MM-dd HH:mm:ss'))
 						}
@@ -121,7 +125,7 @@ export const CheckBox = ({
 	register,
 	errors,
 	type = 'checkbox-accent',
-	isTitleNeeded= true,
+	isTitleNeeded = true,
 	text = 'text-secondary',
 	className,
 	...props
@@ -143,9 +147,11 @@ export const CheckBox = ({
 			/>
 			<span
 				className={cn('w-full text-sm font-semibold capitalize', text)}>
-				{isTitleNeeded === true? props.title
-					? capitalize(props.title)
-					: capitalize(props.label): ''}
+				{isTitleNeeded === true
+					? props.title
+						? capitalize(props.title)
+						: capitalize(props.label)
+					: ''}
 			</span>
 		</label>
 		{renderError(errors?.[props.label])}

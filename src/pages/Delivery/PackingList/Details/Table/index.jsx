@@ -26,7 +26,11 @@ export default function Index({ packing_list_entry, data }) {
 
 			{
 				accessorKey: 'item_description',
-				header: 'Description',
+				header: () =>
+					data?.item_for === 'thread' ||
+					data?.item_for === 'sample_thread'
+						? 'Count'
+						: 'Item Description',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -44,7 +48,11 @@ export default function Index({ packing_list_entry, data }) {
 			},
 			{
 				accessorKey: 'size',
-				header: 'Size',
+				header:
+					data?.item_for === 'thread' ||
+					data?.item_for === 'sample_thread'
+						? 'Length'
+						: 'Size',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -52,7 +60,13 @@ export default function Index({ packing_list_entry, data }) {
 				accessorKey: 'is_inch',
 				header: 'Unit',
 				enableColumnFilter: false,
-				cell: (info) => (info.getValue() === 1 ? 'Inch' : 'Cm'),
+				cell: (info) =>
+					data?.item_for === 'thread' ||
+					data?.item_for === 'sample_thread'
+						? 'Meter'
+						: info.getValue() === 1
+							? 'Inch'
+							: 'Cm',
 			},
 			{
 				accessorKey: 'order_quantity',
@@ -67,8 +81,21 @@ export default function Index({ packing_list_entry, data }) {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'finishing_prod',
+				header: 'Production Qty',
+				enableColumnFilter: false,
+				cell: (info) =>
+					data?.item_for === 'thread' || data?.item_for === 'zipper'
+						? info.getValue()
+						: '-',
+			},
+			{
 				accessorKey: 'quantity',
-				header: 'Qty(pcs)',
+				header:
+					data?.item_for === 'thread' ||
+					data?.item_for === 'sample_thread'
+						? 'Qty(cone)'
+						: 'Qty(pcs)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -157,12 +184,11 @@ export default function Index({ packing_list_entry, data }) {
 				data={packing_list_entry}
 				columns={columns}>
 				<tr className='text-sm'>
-					<td colSpan='3' className='py-2 text-right'>
+					<td colSpan='6' className='py-2 text-right'>
 						Total Order QTY
 					</td>
 					<td className='pl-3 text-left font-semibold'>{totalQty}</td>
-
-					<td className='text-right'>Total QTY</td>
+					<td className='py-2 text-right'>Total QTY</td>
 					<td className='pl-3 text-left font-semibold'>
 						{Number(totalQuantity).toLocaleString()}
 					</td>

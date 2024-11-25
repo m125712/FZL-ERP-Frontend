@@ -10,9 +10,11 @@ import Table from './Table';
 export default function Index() {
 	const { uuid } = useParams();
 
-	const { data, isLoading } = useDeliveryChallanDetailsByUUID(uuid);
+	const { data, isLoading, invalidateQuery } =
+		useDeliveryChallanDetailsByUUID(uuid);
 
 	useEffect(() => {
+		invalidateQuery();
 		document.title = `Challan: ${uuid}`;
 	}, [uuid]);
 	const [data2, setData] = useState('');
@@ -36,7 +38,7 @@ export default function Index() {
 				className='h-[40rem] w-full rounded-md border-none'
 			/>
 			<Information challan={data} />
-			<Table challan={data?.challan_entry} />
+			<Table challan={data?.challan_entry} item_for={data?.item_for} />
 		</div>
 	);
 }

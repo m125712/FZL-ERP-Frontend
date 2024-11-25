@@ -9,7 +9,7 @@ const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 
 export const getPageHeader = (data) => {
-	const created_at = getDateFormate(data?.created_at);
+	const created_at = getDateFormate(data?.delivery_date);
 	const updated_at = data?.updated_at ? getDateFormate(data?.updated_at) : '';
 
 	return {
@@ -31,7 +31,7 @@ export const getPageHeader = (data) => {
 					colSpan: 2,
 					text: [
 						{
-							text: 'Zipper Challan\n',
+							text: `${data?.item_for === 'zipper' || data?.item_for === 'sample_zipper' ? 'Zipper Challan' : 'Thread Challan'}\n`,
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},

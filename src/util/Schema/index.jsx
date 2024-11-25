@@ -1,5 +1,7 @@
+import { startOfDay } from 'date-fns';
 import * as yup from 'yup';
 
+import GetDateTime from '../GetDateTime';
 import {
 	BOOLEAN, // default
 	BOOLEAN_DEFAULT_VALUE, // default
@@ -1616,7 +1618,10 @@ export const CHALLAN_SCHEMA = {
 			remarks: STRING.nullable(),
 		})
 	),
-
+	delivery_date: yup
+		.date()
+		.required('Required')
+		.min(startOfDay(GetDateTime()), 'Delivery Date must be today or later'),
 	new_challan_entry: yup
 		.array()
 		.of(
@@ -1639,6 +1644,7 @@ export const CHALLAN_NULL = {
 	new_packing_list_uuids: [],
 	receive_status: false,
 	gate_pass: false,
+	delivery_date: null,
 	challan_entry: [
 		{
 			packing_list_uuid: '',

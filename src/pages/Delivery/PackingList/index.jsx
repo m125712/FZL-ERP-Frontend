@@ -166,11 +166,12 @@ export default function Index() {
 					return (
 						<SwitchToggle
 							disabled={
-								(!overrideAccess &&
-									(!access || info.getValue() !== 1)) ||
-								challan_uuid === null ||
-								info.row.original.is_warehouse_received ===
-									false
+								!overrideAccess &&
+								(!access ||
+									info.getValue() !== 1 ||
+									challan_uuid === null ||
+									info.row.original.is_warehouse_received ===
+										false)
 							}
 							onChange={() => handelGatePass(info.row.index)}
 							checked={info.getValue() === 1}

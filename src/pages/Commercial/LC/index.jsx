@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { useAuth } from '@/context/auth';
-import { useCommercialLC, useCommercialLCByQuery } from '@/state/Commercial';
+import { useCommercialLCByQuery } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 

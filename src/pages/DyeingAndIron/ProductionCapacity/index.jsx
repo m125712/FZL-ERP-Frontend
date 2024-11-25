@@ -1,73 +1,83 @@
-import { useMemo, useState } from 'react';
-import { useDyeingRM, useDyeingRMLog } from '@/state/Dyeing';
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useDyeingProductCapacity } from '@/state/Dyeing';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
-import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
-import RMAddOrUpdate from './AddOrUpdate';
+const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
+const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useDyeingRMLog();
+	const { data, isLoading, url, deleteData } = useDyeingProductCapacity();
+
 	const info = new PageInfo(
-		'RM Dyeing Log',
+		'Production Capacity',
 		url,
-		'dyeing__dyeing_and_iron_log'
+		'dyeing__production_capacity'
 	);
-	const haveAccess = useAccess(info.getTab());
-	const { invalidateQuery: invalidateDyeingRM } = useDyeingRM();
+	const haveAccess = useAccess('dyeing__production_capacity');
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'material_name',
-				header: 'Material Name',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<span className='capitalize'>{info.getValue()}</span>
-				),
-			},
-			{
-				accessorKey: 'section',
-				header: 'Section',
-				enableColumnFilter: false,
-				cell: (info) => {
-					return (
-						<span className='capitalize'>
-							{info.getValue()?.replace(/_|n_/g, ' ')}
-						</span>
-					);
-				},
-			},
-			{
-				accessorKey: 'used_quantity',
-				header: 'Used QTY',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<span className='capitalize'>{info.getValue()}</span>
-				),
-			},
-			{
-				accessorKey: 'wastage',
-				header: 'Wastage',
+				accessorKey: 'product',
+				header: 'Product',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'unit',
-				header: 'Unit',
+				accessorKey: 'item_name',
+				header: 'Item',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
+			{
+				accessorKey: 'nylon_stopper_name',
+				header: 'Nylon Stopper',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'zipper_number_name',
+				header: 'Zipper No.',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'end_type_name',
+				header: 'End Type',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'quantity',
+				header: 'Quantity',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_by_name',
-				header: 'Issued By',
+				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'remarks',
@@ -76,30 +86,13 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'created_at',
-				header: 'Created',
-				filterFn: 'isWithinRange',
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
-				accessorKey: 'updated_at',
-				header: 'Updated',
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
 				accessorKey: 'actions',
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_rm'),
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -107,7 +100,8 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('click_delete_rm')}
+							showUpdate={haveAccess.includes('update')}
+							showDelete={haveAccess.includes('delete')}
 						/>
 					);
 				},
@@ -116,21 +110,25 @@ export default function Index() {
 		[data]
 	);
 
+	// Fetching data from server
+	useEffect(() => {
+		document.title = info.getTabName();
+	}, []);
+
+	// Add
+	const handelAdd = () => {
+		window[info.getAddOrUpdateModalId()].showModal();
+	};
+
 	// Update
-	const [updateDyeingLog, setUpdateDyeingLog] = useState({
+	const [update, setUpdate] = useState({
 		uuid: null,
-		section: null,
-		material_name: null,
-		dying_and_iron: null,
-		used_quantity: null,
-		wastage: null,
 	});
 
 	const handelUpdate = (idx) => {
-		const selected = data[idx];
-		setUpdateDyeingLog((prev) => ({
+		setUpdate((prev) => ({
 			...prev,
-			...selected,
+			uuid: data[idx].uuid,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -140,32 +138,36 @@ export default function Index() {
 		itemId: null,
 		itemName: null,
 	});
+
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].material_name
-				.replace(/#/g, '')
-				.replace(/\//g, '-'),
+			itemName: data[idx].uuid,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	//invalidateDyeingRM();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
-	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
 		<div>
-			<ReactTable title={info.getTitle()} data={data} columns={columns} />
+			<ReactTable
+				title={info.getTitle()}
+				handelAdd={handelAdd}
+				accessor={haveAccess.includes('create')}
+				data={data}
+				columns={columns}
+			/>
+
 			<Suspense>
-				<RMAddOrUpdate
+				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateDyeingLog,
-						setUpdateDyeingLog,
+						update,
+						setUpdate,
 					}}
 				/>
 			</Suspense>
@@ -176,7 +178,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url: `/material/used`,
+						url,
 						deleteData,
 					}}
 				/>

@@ -1,6 +1,7 @@
 import cn from '@/lib/cn';
 
 const TableTitleOnly = ({ title, subtitle }) => {
+	if (!title && !subtitle) return null;
 	return (
 		<div
 			className={cn(

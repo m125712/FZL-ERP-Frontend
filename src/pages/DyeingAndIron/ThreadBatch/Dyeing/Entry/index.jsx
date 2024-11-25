@@ -1,14 +1,13 @@
-import { lazy, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
 	useDyeingThreadBatch,
+	useDyeingThreadBatchDetailsByUUID,
 	useDyeingThreadBatchEntry,
 } from '@/state/Dyeing';
 import { DevTool } from '@hookform/devtools';
-import { get } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
-import { Suspense } from '@/components/Feedback';
 import { DynamicDeliveryField, Input } from '@/ui';
 
 import cn from '@/lib/cn';
@@ -17,18 +16,14 @@ import {
 	DYEING_THREAD_CONNEING_SCHEMA,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-import isJSON from '@/util/isJson';
 
 import Header from './Header';
-
-const Transfer = lazy(() => import('./TransferQuantity'));
 
 export default function Index() {
 	const { url: threadBatchEntryUrl } = useDyeingThreadBatchEntry();
 	const { url: threadBatchUrl, updateData } = useDyeingThreadBatch();
 	const navigate = useNavigate();
 	const { batch_con_uuid } = useParams();
-	const [orderInfoIds, setOrderInfoIds] = useState('');
 
 	const {
 		register,
@@ -40,8 +35,6 @@ export default function Index() {
 		useFieldArray,
 		getValues,
 		watch,
-		setValue,
-		getFieldState,
 	} = useRHF(DYEING_THREAD_CONNEING_SCHEMA, DYEING_THREAD_CONNEING_NULL);
 
 	// batch_entry
@@ -50,46 +43,18 @@ export default function Index() {
 		name: 'batch_entry',
 	});
 
-	useFetchForRhfReset(
-		`/thread/batch-details/by/${batch_con_uuid}`,
-		orderInfoIds,
-		reset
-	);
+	const { data } = useDyeingThreadBatchDetailsByUUID(batch_con_uuid);
 
 	useEffect(() => {
-		const uuid = getValues('uuid');
-
-		if (uuid === null || uuid === '') {
-			setOrderInfoIds(null);
-		} else {
-			if (isJSON(uuid)) {
-				setOrderInfoIds(() => JSON.parse(uuid).split(',').join(','));
-			} else {
-				const uuid = getValues('uuid');
-				if (!Array.isArray(uuid)) {
-					setOrderInfoIds(() => uuid);
-				} else {
-					setOrderInfoIds(() => uuid.join(','));
-				}
-			}
+		if (data && batch_con_uuid) {
+			reset(data);
 		}
-	}, [watch('uuid')]);
+	}, [data, batch_con_uuid]);
 
-	// Transfer
 	const [transfer, setTransfer] = useState({
 		batch_entry_uuid: null,
 		transfer_quantity: null,
 	});
-
-	const handelTransfer = (idx, e) => {
-		setTransfer((prev) => ({
-			...prev,
-			batch_entry_uuid: data[idx].batch_entry_uuid,
-			transfer_quantity: data[idx].transfer_quantity,
-			//batch_id: data[idx].batch_id,
-		}));
-		window['Transfer'].showModal();
-	};
 
 	const getTotalQty = useCallback(
 		(batch_entry) =>
@@ -121,98 +86,42 @@ export default function Index() {
 	const onSubmit = async (data) => {
 		// Update item
 
-		if (getValues('dyeing_created_at') === null) {
-			const threadBatchData = {
-				...data,
-				dyeing_created_at: GetDateTime(),
-			};
-			// update /commercial/pi/{uuid}
-			const threadBatchPromise = await updateData.mutateAsync({
-				url: `${threadBatchUrl}/${data?.uuid}`,
-				updatedData: threadBatchData,
-				uuid: orderInfoIds,
+		const isCreatedAtNull = getValues('dyeing_created_at') === null;
+		const threadBatchData = {
+			...data,
+			[isCreatedAtNull ? 'dyeing_created_at' : 'dyeing_updated_at']:
+				GetDateTime(),
+		};
+
+		// Update /commercial/pi/{uuid}
+		const threadBatchPromise = updateData.mutateAsync({
+			url: `${threadBatchUrl}/${data?.uuid}`,
+			updatedData: threadBatchData,
+			uuid: batch_con_uuid,
+			isOnCloseNeeded: false,
+		});
+
+		// Update batch entries
+		const updatedThreadBatchPromises = data.batch_entry.map((item) =>
+			updateData.mutateAsync({
+				url: `${threadBatchEntryUrl}/${item?.batch_entry_uuid}`,
+				updatedData: { ...item },
+				uuid: item.batch_entry_uuid,
 				isOnCloseNeeded: false,
-			});
+			})
+		);
 
-			// pi entry
-			let updatedThreadBatchPromises = data.batch_entry.map(
-				async (item) => {
-					const updatedData = {
-						...item,
-					};
-
-					return await updateData.mutateAsync({
-						url: `${threadBatchEntryUrl}/${item?.batch_entry_uuid}`,
-						updatedData: updatedData,
-						uuid: item.batch_entry_uuid,
-						isOnCloseNeeded: false,
-					});
-				}
-			);
-
-			try {
-				await Promise.all([
-					threadBatchPromise,
-					...updatedThreadBatchPromises,
-				])
-					.then(() =>
-						reset(Object.assign({}, DYEING_THREAD_CONNEING_NULL))
-					)
-					.then(() =>
-						navigate(
-							`/dyeing-and-iron/thread-batch/${batch_con_uuid}`
-						)
-					);
-			} catch (err) {
-				console.error(`Error with Promise.all: ${err}`);
-			}
-			return;
-		} else {
-			const threadBatchData = {
-				...data,
-				dyeing_updated_at: GetDateTime(),
-			};
-			// update /commercial/pi/{uuid}
-			const threadBatchPromise = await updateData.mutateAsync({
-				url: `${threadBatchUrl}/${data?.uuid}`,
-				updatedData: threadBatchData,
-				uuid: orderInfoIds,
-				isOnCloseNeeded: false,
-			});
-
-			// pi entry
-			let updatedThreadBatchPromises = data.batch_entry.map(
-				async (item) => {
-					const updatedData = {
-						...item,
-					};
-
-					return await updateData.mutateAsync({
-						url: `${threadBatchEntryUrl}/${item?.batch_entry_uuid}`,
-						updatedData: updatedData,
-						uuid: item.batch_entry_uuid,
-						isOnCloseNeeded: false,
-					});
-				}
-			);
-
-			try {
-				await Promise.all([
-					threadBatchPromise,
-					...updatedThreadBatchPromises,
-				])
-					.then(() =>
-						reset(Object.assign({}, DYEING_THREAD_CONNEING_NULL))
-					)
-					.then(() =>
-						navigate(
-							`/dyeing-and-iron/thread-batch/${batch_con_uuid}`
-						)
-					);
-			} catch (err) {
-				console.error(`Error with Promise.all: ${err}`);
-			}
-			return;
+		try {
+			await Promise.all([
+				threadBatchPromise,
+				...updatedThreadBatchPromises,
+			])
+				.then(() => reset({ ...DYEING_THREAD_CONNEING_NULL }))
+				.then(() =>
+					navigate(`/dyeing-and-iron/thread-batch/${batch_con_uuid}`)
+				);
+		} catch (err) {
+			console.error(`Error with Promise.all: ${err}`);
 		}
 	};
 
@@ -361,7 +270,9 @@ export default function Index() {
 
 						{/* Total weight placed under "Expected Weight" */}
 						<td className='px-3 py-2 text-left font-semibold'>
-							{Number(getTotalCalTape(watch('batch_entry')).toFixed(3))}
+							{Number(
+								getTotalCalTape(watch('batch_entry')).toFixed(3)
+							)}
 						</td>
 						<td className='text-right font-semibold' colSpan={11}>
 							Total Yarn Quantity:
@@ -386,15 +297,6 @@ export default function Index() {
 					</button>
 				</div>
 			</form>
-			<Suspense>
-				<Transfer
-					modalId={'Transfer'}
-					{...{
-						transfer,
-						setTransfer,
-					}}
-				/>
-			</Suspense>
 			<DevTool control={control} placement='top-left' />
 		</div>
 	);

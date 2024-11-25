@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useThreadDetailsByUUID } from '@/state/Thread';
 import OrderSheetPdf from '@components/Pdf/ThreadOrderSheet';
 import { Navigate, useParams } from 'react-router-dom';
 import { useFetchFunc } from '@/hooks';
@@ -8,18 +9,9 @@ import Table from './Table';
 
 export default function Index() {
 	const { order_info_uuid } = useParams();
-	const [orderInfo, setShadeRecipe] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
 
-	useEffect(() => {
-		useFetchFunc(
-			`/thread/order-info-details/by/${order_info_uuid}`,
-			setShadeRecipe,
-			setLoading,
-			setError
-		);
-	}, [order_info_uuid]);
+	const { data: orderInfo, isLoading } =
+		useThreadDetailsByUUID(order_info_uuid);
 
 	// ! FOR TESTING
 	const [data, setData] = useState('');
@@ -34,7 +26,7 @@ export default function Index() {
 	// ! FOR TESTING
 
 	if (!orderInfo) return <Navigate to='/not-found' />;
-	if (loading)
+	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (

@@ -320,6 +320,7 @@ export const labDipQK = {
 	// * recipe
 	recipe: () => [...labDipQK.all(), 'recipe'],
 	recipeByUUID: (uuid) => [...labDipQK.recipe(), uuid],
+	recipeDetailsByUUID: (uuid) => [...labDipQK.recipe(), 'details', uuid],
 
 	// * info
 	info: () => [...labDipQK.all(), 'info'],
@@ -441,6 +442,13 @@ export const dyeingQK = {
 		uuid,
 		'orders',
 	],
+
+	// * Dyeing Dashboard
+	dyeingDashboard: (param) => [...dyeingQK.all(), 'dyeing-dashboard', param],
+
+	// * Production Capacity
+	productCapacity: () => [...dyeingQK.all(), 'production-capacity'],
+	productCapacityByUUID: (uuid) => [...dyeingQK.productCapacity(), uuid],
 };
 
 // * Nylon
@@ -1031,6 +1039,7 @@ export const threadQK = {
 	//Order-info
 	orderInfo: () => [...threadQK.all(), 'order-info'],
 	orderInfoByUUID: (uuid) => [...threadQK.orderInfo(), uuid],
+	detailsByUUID: (uuid) => [...otherQK.all(), 'details-by-uuid', uuid],
 
 	//Order-info-entry
 	orderInfoEntry: () => [...threadQK.all(), 'order-info-entry'],
@@ -1078,7 +1087,7 @@ export const otherQK = {
 	hrUserByDesignation: (designation) => [
 		...otherQK.all(),
 		'hr-user-by-designation',
-		designation,
+		...(designation ? [designation] : []),
 	],
 
 	// Thread Orders
@@ -1156,6 +1165,19 @@ export const otherQK = {
 
 	//Slider Item
 	sliderItem: () => [...otherQK.all(), 'slider-item'],
+
+	//slider die-casting type
+	sliderDieCastingType: (param) => [
+		...otherQK.all(),
+		'slider-die-casting-type',
+		param,
+	],
+
+	//Slider Stock
+	sliderStockWithDescription: () => [
+		...otherQK.all(),
+		'slider-stock-with-description',
+	],
 
 	//LC
 	lcByPartyUUID: (uuid) => [...otherQK.all(), 'lc-by-party', uuid],
@@ -1335,7 +1357,11 @@ export const otherQK = {
 		...otherQK.all(),
 		'all-zipper-thread-order-list',
 	],
+
 	shadeRecipe: () => [...otherQK.all(), 'shade-recipe'],
+
+	// * lAB DIP RECIPE
+	recipe: (query) => [...otherQK.all(), 'recipe', ...(query ? [query] : [])],
 
 	//*Challan
 	challan: () => [...otherQK.all(), 'challan'],
@@ -1345,6 +1371,9 @@ export const otherQK = {
 
 	// * GET GIVEN URL DATA
 	getURLData: (url) => [...otherQK.all(), 'get-url-data', url],
+
+	// * GET ALL MACHINES
+	machines: () => [...otherQK.all(), 'machines'],
 };
 
 // * Challan

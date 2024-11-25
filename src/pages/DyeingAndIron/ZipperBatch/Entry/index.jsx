@@ -6,18 +6,12 @@ import {
 } from '@/state/Dyeing';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { get } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import {
-	useFetchForRhfReset,
-	useFetchForRhfResetForPlanning,
-	useRHF,
-} from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { DeleteModal, ProceedModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
-import { CheckBoxWithoutLabel, Input, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { DYEING_BATCH_NULL, DYEING_BATCH_SCHEMA } from '@util/Schema';
@@ -60,11 +54,13 @@ export default function Index() {
 		watch,
 		setValue,
 	} = useRHF(DYEING_BATCH_SCHEMA, DYEING_BATCH_NULL);
+
 	useEffect(() => {
 		if (isUpdate) {
 			reset(data); // Reset the form with updated data
 		}
 	}, [isUpdate, data, reset]);
+
 	const { fields: BatchOrdersField, remove: BatchOrdersFieldRemove } =
 		useFieldArray({
 			control,
@@ -75,6 +71,7 @@ export default function Index() {
 		control,
 		name: 'new_dyeing_batch_entry',
 	});
+
 	useEffect(() => {
 		if (!isUpdate) {
 			setValue('dyeing_batch_entry', data?.dyeing_batch_entry);
@@ -87,14 +84,7 @@ export default function Index() {
 			setValue('new_dyeing_batch_entry', data?.new_dyeing_batch_entry);
 		}
 	}, [data]);
-	// * Fetch initial data
-	isUpdate
-		? useFetchForRhfReset(
-				`/zipper/dyeing-batch-details/${batch_uuid}?is_update=true`,
-				batch_uuid,
-				reset
-			)
-		: useFetchForRhfResetForPlanning(`/zipper/dyeing-order-batch`, reset);
+
 	const getTotalQty = useCallback(
 		(dyeing_batch_entry) => {
 			if (!dyeing_batch_entry || !Array.isArray(dyeing_batch_entry)) {
@@ -398,6 +388,7 @@ export default function Index() {
 						register,
 						errors,
 						control,
+						watch,
 						getValues,
 						totalQuantity:
 							getTotalQty(watch('dyeing_batch_entry')) +

@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useGetURLData } from '@/state/Other';
 import { useParams } from 'react-router-dom';
-import { useFetch } from '@/hooks';
 
-import { ShowToast } from '@/components/Toast';
 import {
 	CheckBox,
 	FormField,
@@ -43,7 +42,7 @@ export default function Header({
 	);
 
 	// Todo : Fetch lab_dip_info_uuid //
-	const { value: lab_dip_info_id } = useFetch(
+	const { data: lab_dip_info_id } = useGetURLData(
 		`/other/lab-dip/info/value/label`
 	);
 
@@ -64,7 +63,11 @@ export default function Header({
 								onChange={(e) =>
 									setIsApproved(e.target.checked)
 								}
-								disabled={getValues('lab_dip_info_uuid') ? false : true}
+								disabled={
+									getValues('lab_dip_info_uuid')
+										? false
+										: true
+								}
 							/>
 						</div>
 						{/* <div className='rounded-md border border-secondary/30 bg-secondary px-1'>

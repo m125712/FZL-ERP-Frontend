@@ -1,21 +1,23 @@
-import { useFetch } from '@/hooks';
+import { useOtherMachines } from '@/state/Other';
 
 import { FormField, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
 
 import cn from '@/lib/cn';
 
 import { slot } from '../utils';
+import { DateInput } from '@/ui/Core';
 
 export default function Header({
 	Controller,
 	register,
 	errors,
 	control,
+	watch,
 	getValues,
 	totalQuantity,
 	totalCalTape,
 }) {
-	const { value: machine } = useFetch('/other/machine/value/label');
+	const { data: machine } = useOtherMachines();
 
 	const res = machine?.find(
 		(item) => item.value == getValues('machine_uuid')
@@ -91,6 +93,13 @@ export default function Header({
 							}}
 						/>
 					</FormField>
+					<DateInput
+						label='production_date'
+						Controller={Controller}
+						control={control}
+						selected={watch('production_date')}
+						{...{ register, errors }}
+					/>
 					<Textarea label='remarks' {...{ register, errors }} />
 				</div>
 			</SectionEntryBody>

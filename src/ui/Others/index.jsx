@@ -6,6 +6,7 @@ import {
 	StatusButton,
 	Transfer,
 } from './Button';
+import SimpleDatePicker from './DatePicker';
 import { DateTime } from './DateTime';
 import { DepartmentShow, UserName } from './DepartmentShow';
 import { ItemName } from './ItemName';
@@ -36,4 +37,5 @@ export {
 	TitleValue,
 	Transfer,
 	UserName,
+	SimpleDatePicker,
 };

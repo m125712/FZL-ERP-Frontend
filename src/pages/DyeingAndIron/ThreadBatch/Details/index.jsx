@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useDyeingThreadBatchDetailsByUUID } from '@/state/Dyeing';
+import { useLabDipRecipeDetailsByUUID } from '@/state/LabDip';
+import { useThreadMachineByUUID } from '@/state/Thread';
 import BatchSheetPdf from '@components/Pdf/ThreadBulkRecipe';
 import TravelingCard from '@components/Pdf/ThreadTravelCard';
-import { Navigate, useParams } from 'react-router-dom';
-import { useAccess, useFetch, useFetchFunc } from '@/hooks';
+import { useParams } from 'react-router-dom';
+import { useAccess } from '@/hooks';
 
 import Information from './Information';
 import SecondTable from './SecondTable';
@@ -12,21 +15,17 @@ export default function Index() {
 	const { batch_uuid } = useParams();
 	const haveAccess = useAccess('store__receive_by_uuid');
 
-	const { value: batch, loading } = useFetch(
-		`/thread/batch-details/by/${batch_uuid}`,
-		[batch_uuid]
-	);
+	const { data: batch, isLoading } =
+		useDyeingThreadBatchDetailsByUUID(batch_uuid);
+
 	const machine_uuid = batch?.machine_uuid;
 
-	const { value: machine } = useFetch(`/public/machine/${machine_uuid}`, [
-		machine_uuid,
-	]);
+	const { data: machine } = useThreadMachineByUUID(machine_uuid);
 	const shade_recipe_uuids = batch?.batch_entry[0]?.recipe_uuid;
 
-	const { value: shade_recipe } = useFetch(
-		`/lab-dip/recipe/details/${shade_recipe_uuids}`,
-		[shade_recipe_uuids, batch_uuid]
-	);
+	const { data: shade_recipe } =
+		useLabDipRecipeDetailsByUUID(shade_recipe_uuids);
+
 	const volume =
 		parseFloat(batch?.total_yarn_quantity) *
 		parseFloat(batch?.water_capacity);
@@ -74,7 +73,7 @@ export default function Index() {
 	}, []);
 
 	// if (!planningSNO) return <Navigate to='/not-found' />;
-	if (loading)
+	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (

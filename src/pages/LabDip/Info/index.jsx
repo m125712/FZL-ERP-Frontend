@@ -1,20 +1,16 @@
-import { lazy, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useLabDipInfo } from '@/state/LabDip';
-import { Bath } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
-import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, EditDelete, LinkWithCopy, StatusButton } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
-import cn from '@/lib/cn';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const { data, isLoading, isError, url, updateData } = useLabDipInfo();
+	const { data, isLoading, url, updateData } = useLabDipInfo();
 	const navigate = useNavigate();
 	const info = new PageInfo('Lab Dip/Info', url, 'lab_dip__info');
 	const haveAccess = useAccess('lab_dip__info');

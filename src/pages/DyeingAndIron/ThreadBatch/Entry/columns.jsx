@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useAccess } from '@/hooks';
 
-import { EditDelete, Input, LinkWithCopy, Textarea } from '@/ui';
+import { EditDelete, Input, Textarea } from '@/ui';
 
 export const Columns = ({
 	isUpdate,

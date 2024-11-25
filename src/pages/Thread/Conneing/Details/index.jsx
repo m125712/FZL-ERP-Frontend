@@ -1,6 +1,7 @@
-import { useAccess, useFetch, useFetchFunc } from '@/hooks';
-import { useEffect, useState } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDyeingThreadBatchDetailsByUUID } from '@/state/Dyeing';
+import { useParams } from 'react-router-dom';
+import { useAccess } from '@/hooks';
 
 import Information from './Information';
 import Table from './Table';
@@ -9,10 +10,8 @@ export default function Index() {
 	const { batch_uuid } = useParams();
 	const haveAccess = useAccess('store__receive_by_uuid');
 
-	const { value: batch, loading } = useFetch(
-		`/thread/batch-details/by/${batch_uuid}`,
-		[batch_uuid]
-	);
+	const { data: batch, loading } =
+		useDyeingThreadBatchDetailsByUUID(batch_uuid);
 
 	useEffect(() => {
 		document.title = 'Planning Batch Details';

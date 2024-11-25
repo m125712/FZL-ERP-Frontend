@@ -1,11 +1,10 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
-import { useLabDipRecipe } from '@/state/LabDip';
+import { useLabDipRecipe, useLabDipRecipeDetailsByUUID } from '@/state/LabDip';
 import { useOtherMaterialByParams } from '@/state/Other';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import {  useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import {
@@ -13,7 +12,6 @@ import {
 	DynamicField,
 	FormField,
 	Input,
-	JoinInput,
 	ReactSelect,
 	Textarea,
 } from '@/ui';
@@ -40,7 +38,7 @@ export default function Index() {
 
 	// * used for checking if it is for update*//
 	const isUpdate = recipe_uuid !== undefined && recipe_id !== undefined;
-
+	const { data } = useLabDipRecipeDetailsByUUID(recipe_uuid);
 	const {
 		register,
 		handleSubmit,
@@ -59,12 +57,12 @@ export default function Index() {
 			: (document.title = 'Order: Entry');
 	}, []);
 
-	if (isUpdate)
-		useFetchForRhfReset(
-			`/lab-dip/recipe/details/${recipe_uuid}`,
-			recipe_uuid,
-			reset
-		);
+	useEffect(() => {
+		if (data && isUpdate) {
+			reset(data);
+		}
+	}, [data, isUpdate]);
+
 	const { data: material } = useOtherMaterialByParams('type=dyes');
 	let excludeItem = exclude(
 		watch,

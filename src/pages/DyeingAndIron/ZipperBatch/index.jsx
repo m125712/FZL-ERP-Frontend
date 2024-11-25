@@ -1,19 +1,17 @@
 import { useEffect, useMemo } from 'react';
 import { useDyeingBatch } from '@/state/Dyeing';
 import { useNavigate } from 'react-router-dom';
-import { useAccess, useFetch } from '@/hooks';
+import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
-import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
 	const { data, url, isLoading, updateData } = useDyeingBatch();
 	const info = new PageInfo('Batch', url, 'dyeing__zipper_batch');
-	const { value: machine } = useFetch('/other/machine/value/label');
 	const haveAccess = useAccess('dyeing__zipper_batch');
 	const navigate = useNavigate();
 

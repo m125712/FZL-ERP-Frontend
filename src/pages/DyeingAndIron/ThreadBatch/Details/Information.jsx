@@ -1,9 +1,11 @@
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
+import { DateTime } from '@/ui';
 
 export default function Information({ batch, water_capacity }) {
 	const {
 		batch_id,
+		production_date,
 		category,
 		coning_created_at,
 		coning_created_by,
@@ -66,11 +68,11 @@ export default function Information({ batch, water_capacity }) {
 			},
 			{
 				label: 'Created At',
-				value: yarn_issue_created_at,
+				value: <DateTime date={yarn_issue_created_at} />,
 			},
 			{
 				label: 'Updated At',
-				value: yarn_issue_updated_at,
+				value: <DateTime date={yarn_issue_updated_at} />,
 			},
 		];
 
@@ -95,12 +97,12 @@ export default function Information({ batch, water_capacity }) {
 
 			{
 				label: 'Created At',
-				value: coning_created_at,
+				value: <DateTime date={coning_created_at} />,
 			},
 
 			{
 				label: 'Updated At',
-				value: coning_updated_at,
+				value: <DateTime date={coning_updated_at} />,
 			},
 		];
 
@@ -147,14 +149,17 @@ export default function Information({ batch, water_capacity }) {
 				label: 'Reason',
 				value: reason,
 			},
-
+			{
+				label: 'Production Date',
+				value: <DateTime date={production_date} />,
+			},
 			{
 				label: 'Created At',
-				value: dyeing_created_at,
+				value: <DateTime date={dyeing_created_at} />,
 			},
 			{
 				label: 'Updated At',
-				value: dyeing_updated_at,
+				value: <DateTime date={dyeing_updated_at} />,
 			},
 		];
 

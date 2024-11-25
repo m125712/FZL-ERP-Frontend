@@ -3,32 +3,21 @@ import {
 	useAllZipperThreadOrderList,
 	useOtherCountLength,
 } from '@/state/Other';
-import { useThreadOrderInfo, useThreadOrderInfoEntry } from '@/state/Thread';
+import {
+	useThreadDetailsByUUID,
+	useThreadOrderInfo,
+	useThreadOrderInfoEntry,
+} from '@/state/Thread';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import {
-	useFetch,
-	useFetchForRhfReset,
-	usePostFunc,
-	useRHF,
-	useUpdateFunc,
-} from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import DynamicFormSpreadSheet from '@/ui/Dynamic/DynamicFormSpreadSheet';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import {
-	ActionButtons,
-	DynamicField,
-	FormField,
-	Input,
-	ReactSelect,
-	Textarea,
-} from '@/ui';
 
-import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
 import {
 	THREAD_ORDER_INFO_ENTRY_NULL,
@@ -48,7 +37,7 @@ export default function Index() {
 	const { invalidateQuery: invalidateOtherZipperThreadOrderList } =
 		useAllZipperThreadOrderList();
 	const isUpdate = order_info_uuid !== undefined || uuid !== undefined;
-
+	const { data } = useThreadDetailsByUUID(order_info_uuid);
 	const {
 		register,
 		handleSubmit,
@@ -72,20 +61,16 @@ export default function Index() {
 
 	const { data: countLength } = useOtherCountLength();
 
-	const { value: shadeRecipe } = useFetch(
-		`/other/lab-dip/shade-recipe/value/label`
-	);
 	const bleaching = [
 		{ label: 'Bleach', value: 'bleach' },
 		{ label: 'Non-Bleach', value: 'non-bleach' },
 	];
 
-	if (isUpdate)
-		useFetchForRhfReset(
-			`/thread/order-info-details/by/${order_info_uuid}`,
-			order_info_uuid,
-			reset
-		);
+	useEffect(() => {
+		if (data && isUpdate) {
+			reset(data);
+		}
+	}, [data, isUpdate]);
 
 	// order_info_entry
 	const {

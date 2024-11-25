@@ -129,7 +129,7 @@ export default function Dashboard() {
 					<BarChartVertical />
 					<BarChartHorizontal2 />
 				</div>
-				<div className='flex flex-col gap-4 md:flex-row'>
+				<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
 					<TableWithTime
 						title='Sample: Status'
 						url='/dashboard/sample-lead-time'
@@ -143,7 +143,7 @@ export default function Dashboard() {
 						columns={order_entry_feed_columns}
 					/>
 				</div>
-				<div className='flex flex-col gap-4 md:flex-row'>
+				<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
 					<TableWithTime
 						title='PI: Issued'
 						url='/dashboard/pi-register'
@@ -161,7 +161,7 @@ export default function Dashboard() {
 						columns={doc_rcv_columns}
 					/>
 				</div>
-				<div className='flex flex-col gap-4 md:flex-row'>
+				<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
 					<TableWithTime
 						title='LC Feed with number of count'
 						url='/dashboard/lc-feed'
@@ -174,7 +174,7 @@ export default function Dashboard() {
 						columns={stock_status_columns}
 					/>
 				</div>
-				<div className='flex flex-col gap-4 md:flex-row'>
+				<div className='grid grid-cols-1'>
 					<TableWithTime
 						title='Credit Sales Status'
 						url='/dashboard/pi-to-be-submitted'

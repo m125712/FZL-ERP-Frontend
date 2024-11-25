@@ -1,7 +1,6 @@
 import { AddModal } from "@/components/Modal";
 import {
 	useFetchForRhfReset,
-	usePostFunc,
 	useRHF,
 	useUpdateFunc,
 } from "@/hooks";

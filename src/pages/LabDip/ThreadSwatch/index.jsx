@@ -1,19 +1,16 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useDyeingSwatch } from '@/state/Dyeing';
+import { useMemo } from 'react';
 import { useOtherShadeRecipe } from '@/state/Other';
 import { useThreadSwatch } from '@/state/Thread';
-import { useAccess, useFetch, useFetchFunc, useUpdateFunc } from '@/hooks';
+import { useAccess } from '@/hooks';
 
-import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { EditDelete, LinkWithCopy, ReactSelect } from '@/ui';
+import { LinkWithCopy, ReactSelect } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const { data, url, updateData, postData, deleteData, isLoading } =
-		useThreadSwatch();
+	const { data, updateData, isLoading } = useThreadSwatch();
 	const info = new PageInfo(
 		'LabDip/Thread Swatch',
 		'order/swatch',

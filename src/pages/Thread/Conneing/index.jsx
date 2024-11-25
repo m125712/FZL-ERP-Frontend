@@ -1,10 +1,11 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
+import { useOtherMachines } from '@/state/Other';
 import { useDyeingCone } from '@/state/Thread';
-import { useAccess, useFetch } from '@/hooks';
+import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkOnly, LinkWithCopy, Transfer } from '@/ui';
+import { DateTime, LinkOnly, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -14,7 +15,7 @@ const Transaction = lazy(() => import('./Transaction'));
 export default function Index() {
 	const { data, url, isLoading } = useDyeingCone();
 	const info = new PageInfo('Coning', url, 'thread__coning_details');
-	const { value: machine } = useFetch('/other/machine/value/label');
+	const { data: machine } = useOtherMachines();
 	const haveAccess = useAccess('thread__coning_details');
 
 	const columns = useMemo(

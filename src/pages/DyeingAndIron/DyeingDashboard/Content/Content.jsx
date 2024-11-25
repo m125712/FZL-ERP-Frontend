@@ -16,12 +16,12 @@ export default function Content({ data }) {
 	];
 
 	return (
-		<div className='overflow-hidden rounded-t-md border'>
+		<div className='overflow-x-auto rounded-t-md border'>
 			<span className='flex items-center gap-4 bg-primary px-4 py-3 text-lg font-semibold capitalize text-primary-content'>
 				Machines
 			</span>
 
-			<table className='w-full text-sm text-gray-600'>
+			<table className='w-full overflow-x-auto text-sm text-gray-600'>
 				<thead>
 					{header?.map((item, index) => (
 						<th
@@ -34,7 +34,7 @@ export default function Content({ data }) {
 				<tbody>
 					{data?.map((item, index) => (
 						<tr key={index} className='border'>
-							<td className='px-4 border text-left text-xs font-medium'>
+							<td className='border px-4 text-left text-xs font-medium'>
 								{item.machine}
 							</td>
 							<td className='border text-center text-xs font-medium'>

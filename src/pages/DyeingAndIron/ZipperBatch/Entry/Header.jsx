@@ -19,6 +19,8 @@ export default function Header({
 	isUpdate,
 }) {
 	const [slot, setSlot] = useState([]);
+
+	// getting machine and available slots for it for the given date
 	const { data: machine } = useOtherMachinesWithSlot(
 		watch('production_date')
 			? format(new Date(watch('production_date')), 'yyyy-MM-dd')
@@ -29,20 +31,29 @@ export default function Header({
 		(item) => item.value == getValues('machine_uuid')
 	);
 
+	// filtering the machines with available slots in can_book is true
 	const filtered_machine = machine
 		? machine?.filter((item) => item.can_book == true)
 		: [];
 
-	// setting the setSLot sate if the request is for update
+	// setting the setSLot sate if the request is for update to show the options for slots
 	useEffect(() => {
 		if (isUpdate) {
 			const tempSlot = machine?.find(
 				(item) => item.value == getValues('machine_uuid')
 			);
-			console.log(tempSlot);
-			setSlot(tempSlot?.slot);
+
+			// setting the setSLot sate
+			setSlot([
+				// adding the current selected slot since it is not available in the fetched data
+				{
+					value: getValues('slot'),
+					label: 'Slot ' + getValues('slot'),
+				},
+				...(tempSlot?.open_slot || []),
+			]);
 		}
-	}, [isUpdate]);
+	}, [isUpdate, machine]);
 
 	return (
 		<div className='flex flex-col gap-4'>

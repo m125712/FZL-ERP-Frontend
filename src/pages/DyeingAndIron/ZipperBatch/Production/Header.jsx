@@ -1,25 +1,54 @@
-import { useOtherMachines } from '@/state/Other';
+import { useEffect, useState } from 'react';
+import { useOtherMachinesWithSlot } from '@/state/Other';
+import { formatDate } from 'date-fns';
 
+import { DateInput } from '@/ui/Core';
 import { FormField, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
 
 import cn from '@/lib/cn';
 
-import { slot, states } from '../utils';
+import { states } from '../utils';
 
 export default function Header({
 	register,
 	errors,
 	control,
 	getValues,
+	watch,
 	Controller,
 	totalQuantity,
 	totalCalTape,
 	totalProduction,
 }) {
-	const { data: machine } = useOtherMachines();
+	const [slot, setSlot] = useState([]);
+
+	// getting machine and available slots for it for the given date
+	const { data: machine } = useOtherMachinesWithSlot(
+		watch('production_date')
+			? formatDate(new Date(watch('production_date')), 'yyyy-MM-dd')
+			: ''
+	);
+
 	const res = machine?.find(
 		(item) => item.value == getValues('machine_uuid')
 	);
+
+	// setting the setSLot sate if the request is for update to show the options for slots
+	useEffect(() => {
+		const tempSlot = machine?.find(
+			(item) => item.value == getValues('machine_uuid')
+		);
+
+		// setting the setSLot sate
+		setSlot([
+			// adding the current selected slot since it is not available in the fetched data
+			{
+				value: getValues('slot'),
+				label: 'Slot ' + getValues('slot'),
+			},
+			...(tempSlot?.open_slot || []),
+		]);
+	}, [machine]);
 
 	return (
 		<div className='flex flex-col gap-4'>
@@ -50,6 +79,14 @@ export default function Header({
 					</div>
 				}>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+					<DateInput
+						label='production_date'
+						Controller={Controller}
+						control={control}
+						selected={watch('production_date')}
+						{...{ register, errors }}
+						disabled={true}
+					/>
 					<FormField
 						label='machine_uuid'
 						title='Machine'
@@ -73,6 +110,7 @@ export default function Header({
 											setMinCapacity(e.min_capacity);
 											setMaxCapacity(e.max_capacity);
 										}}
+										isDisabled={true}
 									/>
 								);
 							}}
@@ -95,6 +133,7 @@ export default function Header({
 											const value = e.value;
 											onChange(value);
 										}}
+										isDisabled={true}
 									/>
 								);
 							}}

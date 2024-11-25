@@ -1,4 +1,6 @@
-import { useOtherMachines } from '@/state/Other';
+import { useEffect, useState } from 'react';
+import { useOtherMachinesWithSlot } from '@/state/Other';
+import { format } from 'date-fns';
 
 import { DateInput } from '@/ui/Core';
 import { FormField, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
@@ -12,20 +14,47 @@ export default function Header({
 	control,
 	watch,
 	getValues,
+	setValue,
 	totalQuantity,
 	totalWeight,
+	isUpdate,
 }) {
-	const { data: machine } = useOtherMachines();
+	const [slot, setSlot] = useState([]);
+
+	// getting machine and available slots for it for the given date
+	const { data: machine } = useOtherMachinesWithSlot(
+		watch('production_date')
+			? format(new Date(watch('production_date')), 'yyyy-MM-dd')
+			: ''
+	);
+
 	const res = machine?.find(
 		(item) => item.value == getValues('machine_uuid')
 	);
 
-	const slot = [
-		{ label: 'Slot 1', value: 1 },
-		{ label: 'Slot 2', value: 2 },
-		{ label: 'Slot 3', value: 3 },
-		{ label: 'Slot 4', value: 4 },
-	];
+	// filtering the machines with available slots in can_book is true
+	// const filtered_machine = machine
+	// 	? machine?.filter((item) => item.can_book == true)
+	// 	: [];
+
+	// setting the setSLot sate if the request is for update to show the options for slots
+	useEffect(() => {
+		if (isUpdate) {
+			const tempSlot = machine?.find(
+				(item) => item.value == getValues('machine_uuid')
+			);
+
+			// setting the setSLot sate
+			setSlot([
+				// adding the current selected slot since it is not available in the fetched data
+				{
+					value: getValues('slot'),
+					label: 'Slot ' + getValues('slot'),
+				},
+				...(tempSlot?.open_slot || []),
+			]);
+		}
+	}, [isUpdate, machine]);
 
 	return (
 		<div className='flex flex-col gap-4'>
@@ -56,6 +85,10 @@ export default function Header({
 						control={control}
 						selected={watch('production_date')}
 						{...{ register, errors }}
+						anotherOnChange={(e) => {
+							setValue('machine_uuid', null);
+							setValue('slot', null);
+						}}
 					/>
 					<FormField
 						label='machine_uuid'
@@ -69,7 +102,7 @@ export default function Header({
 									<ReactSelect
 										placeholder='Select Machine'
 										options={machine}
-										value={machine?.find(
+										value={machine?.filter(
 											(item) =>
 												item.value ==
 												getValues('machine_uuid')
@@ -77,6 +110,8 @@ export default function Header({
 										onChange={(e) => {
 											const value = e.value;
 											onChange(value);
+											setSlot(e.open_slot);
+											setValue('slot', null);
 											// setMinCapacity(e.min_capacity);
 											// setMaxCapacity(e.max_capacity);
 										}}
@@ -94,7 +129,7 @@ export default function Header({
 									<ReactSelect
 										placeholder='Select Slot'
 										options={slot}
-										value={slot?.find(
+										value={slot?.filter(
 											(item) =>
 												item.value == getValues('slot')
 										)}

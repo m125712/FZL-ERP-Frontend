@@ -390,6 +390,8 @@ export default function Index() {
 						control,
 						watch,
 						getValues,
+						setValue,
+						reset,
 						totalQuantity:
 							getTotalQty(watch('dyeing_batch_entry')) +
 							getTotalQty(watch('new_dyeing_batch_entry')),

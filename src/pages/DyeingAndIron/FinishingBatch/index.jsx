@@ -74,6 +74,13 @@ export default function index() {
 				},
 			},
 			{
+				accessorKey: 'production_date',
+				header: 'Production Date',
+				enableColumnFilter: false,
+				width: 'w-36',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
 				accessorKey: 'status',
 				header: 'Status',
 				enableColumnFilter: false,
@@ -92,7 +99,7 @@ export default function index() {
 				header: 'Colors',
 				enableColumnFilter: false,
 				width: 'w-36',
-				cell: (info) => info.getValue(),
+				cell: (info) => info.getValue().join(', '),
 			},
 			{
 				accessorKey: 'total_batch_quantity',

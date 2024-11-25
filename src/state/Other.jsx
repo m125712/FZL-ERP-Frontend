@@ -80,13 +80,13 @@ export const useOtherOrderPackingList = (param) =>
 	});
 
 // GET THREAD ORDER
-export const useThreadOrder = (query) => 
-createGlobalState({
-	queryKey: otherQK.threadOrders(query),
-	url: query
-		? `/other/thread/value/label?${query}`
-		: '/other/thread/value/label',
-});
+export const useThreadOrder = (query) =>
+	createGlobalState({
+		queryKey: otherQK.threadOrders(query),
+		url: query
+			? `/other/thread/value/label?${query}`
+			: '/other/thread/value/label',
+	});
 export const useOtherThreadOrderPackingList = (param) =>
 	createGlobalState({
 		queryKey: otherQK.threadOrderPackingList(),
@@ -493,4 +493,12 @@ export const useOtherMachines = () =>
 	createGlobalState({
 		queryKey: otherQK.machines(),
 		url: '/other/machine/value/label',
+	});
+
+// * GET ALL MACHINES WITH SLOT
+export const useOtherMachinesWithSlot = (param) =>
+	createGlobalState({
+		queryKey: otherQK.machinesWithSlot(param),
+		url: `/other/machine-with-slot/value/label?production_date=${param}`,
+		enabled: param ? true : false,
 	});

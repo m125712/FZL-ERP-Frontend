@@ -2318,7 +2318,7 @@ export const PRODUCTION_CAPACITY_SCHEMA = {
 };
 
 export const PRODUCTION_CAPACITY_NULL = {
-	product: null,
+	product: 'zipper',
 	item: null,
 	nylon_stopper: null,
 	zipper_number: null,
@@ -2583,7 +2583,7 @@ export const DYEING_PLANNING_HEADOFFICE_NULL = {
 
 export const DYEING_BATCH_SCHEMA = {
 	machine_uuid: STRING_REQUIRED,
-	slot: NUMBER.default(0),
+	slot: NUMBER_REQUIRED,
 	production_date: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 	dyeing_batch_entry: yup.array().of(
@@ -2605,7 +2605,7 @@ export const DYEING_BATCH_SCHEMA = {
 
 export const DYEING_BATCH_NULL = {
 	machine_uuid: null,
-	slot: 0,
+	slot: null,
 	production_date: null,
 	remarks: '',
 	dyeing_batch_entry: [

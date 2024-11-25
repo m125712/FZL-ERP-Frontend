@@ -49,12 +49,23 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'production_date',
+				header: (
+					<div className='flex flex-col'>
+						<span>Production</span>
+						<span>Date</span>
+					</div>
+				),
+				width: 'w-24',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
 				accessorKey: 'total_quantity',
 				header: 'Total Qty(Pcs)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
 			{
 				accessorKey: 'add_actions',
 				header: '',

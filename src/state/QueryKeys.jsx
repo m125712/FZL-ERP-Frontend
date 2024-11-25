@@ -1374,6 +1374,13 @@ export const otherQK = {
 
 	// * GET ALL MACHINES
 	machines: () => [...otherQK.all(), 'machines'],
+
+	// * GET MACHINES WITH SLOT
+	machinesWithSlot: (param) => [
+		...otherQK.all(),
+		'machines-with-slot',
+		param,
+	],
 };
 
 // * Challan

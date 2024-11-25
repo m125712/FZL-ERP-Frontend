@@ -397,6 +397,7 @@ export default function Index() {
 							getTotalCalTape(watch('dyeing_batch_entry')) +
 								getTotalCalTape(watch('new_dyeing_batch_entry'))
 						).toFixed(3),
+						isUpdate,
 					}}
 				/>
 

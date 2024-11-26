@@ -38,6 +38,7 @@ export const DateInput = ({
 	register,
 	selected,
 	disabled = false,
+	anotherOnChange = () => {},
 	startDate = null,
 	...props
 }) => {
@@ -67,9 +68,10 @@ export const DateInput = ({
 						disabled={disabled}
 						selected={selected}
 						startDate={startDate}
-						onChange={(date) =>
-							onChange(format(date, 'yyyy-MM-dd HH:mm:ss'))
-						}
+						onChange={(date) => {
+							onChange(format(date, 'yyyy-MM-dd HH:mm:ss'));
+							anotherOnChange(date);
+						}}
 						renderCustomHeader={DatePickerCustomHeader}
 						{...DatePickerDefaultConfig}
 					/>

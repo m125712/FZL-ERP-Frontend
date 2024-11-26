@@ -456,6 +456,7 @@ export default function Index() {
 						errors,
 						control,
 						getValues,
+						watch,
 						Controller,
 						isUpdate,
 						totalQuantity: getTotal(watch('dyeing_batch_entry'))

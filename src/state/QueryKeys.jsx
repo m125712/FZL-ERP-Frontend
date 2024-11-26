@@ -446,6 +446,14 @@ export const dyeingQK = {
 	// * Dyeing Dashboard
 	dyeingDashboard: (param) => [...dyeingQK.all(), 'dyeing-dashboard', param],
 
+	// * Finishing Dashboard
+	finishingDashboard: (from, to) => [
+		...dyeingQK.all(),
+		'finishing-dashboard',
+		from,
+		to,
+	],
+
 	// * Production Capacity
 	productCapacity: () => [...dyeingQK.all(), 'production-capacity'],
 	productCapacityByUUID: (uuid) => [...dyeingQK.productCapacity(), uuid],
@@ -1109,7 +1117,11 @@ export const otherQK = {
 		'order-description',
 		...(params ? [params] : []),
 	],
-	orderBatchDescription: () => [...otherQK.all(), 'order-batch-description'],
+	orderBatchDescription: (params) => [
+		...otherQK.all(),
+		'order-batch-description',
+		...(params ? [params] : []),
+	],
 	orderEntry: () => [...otherQK.all(), 'order-entry'],
 	orderDescriptionByOrderNumber: (orderNumber) => [
 		...otherQK.all(),

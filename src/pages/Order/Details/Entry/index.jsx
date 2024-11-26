@@ -319,14 +319,17 @@ export default function Index() {
 			});
 
 			// * updated order entry * //
-			const order_entry_updated = [...extractedUpdatedEntries].map((item) => ({
-				...item,
-				status: item.order_entry_status ? 1 : 0,
-				swatch_status: 'pending',
-				quantity: watch('order_type') === 'tape' ? 1 : item.quantity,
-				swatch_approval_date: DEFAULT_SWATCH_APPROVAL_DATE,
-				updated_at: GetDateTime(),
-			}));
+			const order_entry_updated = [...extractedUpdatedEntries].map(
+				(item) => ({
+					...item,
+					status: item.order_entry_status ? 1 : 0,
+					swatch_status: 'pending',
+					quantity:
+						watch('order_type') === 'tape' ? 1 : item.quantity,
+					swatch_approval_date: DEFAULT_SWATCH_APPROVAL_DATE,
+					updated_at: GetDateTime(),
+				})
+			);
 
 			//* Post new entry */ //
 			let order_entry_updated_promises = [

@@ -9,6 +9,8 @@ import DyesCategory from '@/pages/DyeingAndIron/DyesCategory';
 import FinishingBatch from '@/pages/DyeingAndIron/FinishingBatch';
 import FinishingBatchDetails from '@/pages/DyeingAndIron/FinishingBatch/Details';
 import FinishingBatchEntry from '@/pages/DyeingAndIron/FinishingBatch/Entry';
+// * Finishing Dashboard
+import FinishingDashboard from '@/pages/DyeingAndIron/FinishingDashboard';
 //* Log
 import DyeingLog from '@/pages/DyeingAndIron/Log';
 //* Machine
@@ -22,6 +24,8 @@ import DyeingPlanningHeadOfficeEntry from '@/pages/DyeingAndIron/PlanningHeadOff
 import DyeingPlanningSNO from '@/pages/DyeingAndIron/PlanningSNO';
 import DyeingPlanningSNODetails from '@/pages/DyeingAndIron/PlanningSNO/Details';
 import DyeingPlanningSNOEntry from '@/pages/DyeingAndIron/PlanningSNO/Entry';
+// * Production Capacity
+import ProductionCapacity from '@/pages/DyeingAndIron/ProductionCapacity';
 //*Programs
 import Programs from '@/pages/DyeingAndIron/Programs';
 //
@@ -37,8 +41,7 @@ import DyeingZipperBatch from '@/pages/DyeingAndIron/ZipperBatch';
 import DyeingZipperBatchDetails from '@/pages/DyeingAndIron/ZipperBatch/Details';
 import DyeingZipperBatchEntry from '@/pages/DyeingAndIron/ZipperBatch/Entry';
 import DyeingZipperBatchProduction from '@/pages/DyeingAndIron/ZipperBatch/Production';
-// * Production Capacity
-import ProductionCapacity from '@/pages/DyeingAndIron/ProductionCapacity';
+
 export const DyeingAndIronRoutes = [
 	{
 		name: 'Dyeing And Iron',
@@ -311,6 +314,15 @@ export const DyeingAndIronRoutes = [
 				actions: ['read', 'create', 'update', 'delete'],
 			},
 
+			// * Finishing Dashboard
+			{
+				name: 'Finishing Dashboard',
+				path: '/dyeing-and-iron/finishing-dashboard',
+				element: <FinishingDashboard />,
+				page_name: 'dyeing__finishing_dashboard',
+				actions: ['read', 'create', 'update', 'delete'],
+			},
+
 			// * Production Capacity
 			{
 				name: 'Production Capacity',
@@ -318,7 +330,7 @@ export const DyeingAndIronRoutes = [
 				element: <ProductionCapacity />,
 				page_name: 'dyeing__production_capacity',
 				actions: ['read', 'create', 'update', 'delete'],
-			}
+			},
 		],
 	},
 ];

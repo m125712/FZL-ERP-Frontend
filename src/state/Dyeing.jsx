@@ -197,6 +197,14 @@ export const useDyeingDashboard = (param) =>
 		url: `/public/machine/by/${param}`,
 	});
 
+// * Finishing Dashboard
+export const useDyeingFinishingDashboard = (from, to, { enabled = false }) =>
+	createGlobalState({
+		queryKey: dyeingQK.finishingDashboard(from, to),
+		url: `/zipper/finishing-batch-capacity-details?from_date=${from}&to_date=${to}`,
+		enabled,
+	});
+
 // * Product Capacity
 export const useDyeingProductCapacity = () =>
 	createGlobalState({

@@ -1,9 +1,12 @@
+import { lazy, useEffect, useState } from 'react';
+import { useOrderInfo } from '@/state/Order';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useOrderInfo } from '@/state/Order';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useState } from 'react';
+
 import { InfoColumns } from '../columns';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
@@ -11,7 +14,11 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useOrderInfo();
-	const info = new PageInfo('Order Info', url, 'order__info');
+	const info = new PageInfo(
+		'Party Description',
+		url,
+		'order__party_description'
+	);
 	const haveAccess = useAccess(info.getTab());
 
 	// Fetching data from server

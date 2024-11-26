@@ -128,30 +128,7 @@ export default function Information({ data }) {
 					</div>
 				),
 			},
-			{
-				label: 'Marketing',
-				value: marketing_name,
-			},
-			{
-				label: 'Party',
-				value: party_name,
-			},
-			{
-				label: 'Buyer',
-				value: buyer_name,
-			},
-			{
-				label: 'Merchandiser',
-				value: merchandiser_name,
-			},
-			{
-				label: 'Factory',
-				value: factory_name,
-			},
-			{
-				label: 'Bank',
-				value: bank_name,
-			},
+
 			{
 				label: 'Validity',
 				value: validity,
@@ -190,18 +167,54 @@ export default function Information({ data }) {
 			},
 		];
 
+		const buyer_info = [
+			{
+				label: 'Marketing',
+				value: marketing_name,
+			},
+			{
+				label: 'Party',
+				value: party_name,
+			},
+			{
+				label: 'Buyer',
+				value: buyer_name,
+			},
+			{
+				label: 'Merchandiser',
+				value: merchandiser_name,
+			},
+			{
+				label: 'Factory',
+				value: factory_name,
+			},
+			{
+				label: 'Bank',
+				value: bank_name,
+			},
+		];
+
 		return {
 			basicInfo,
+			buyer_info,
 		};
 	};
 
 	return (
 		<SectionContainer title={'Information'} contentClassName={'space-y-0 '}>
-			<RenderTable
-				className={'border-secondary/30 lg:border-b'}
-				title={'Basic Info'}
-				items={renderItems().basicInfo}
-			/>
+			<div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-8'>
+				<RenderTable
+					className={'border-secondary/30 lg:border-r'}
+					title={'PI Details'}
+					items={renderItems().basicInfo}
+				/>
+
+				<RenderTable
+					className={'border-secondary/30 lg:border-l'}
+					title={'Buyer Details'}
+					items={renderItems().buyer_info}
+				/>
+			</div>
 		</SectionContainer>
 	);
 }

@@ -77,7 +77,7 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className='space-y-8 py-6'>
+		<div className='space-y-8'>
 			<iframe
 				src={data}
 				className='h-[40rem] w-full rounded-md border-none'

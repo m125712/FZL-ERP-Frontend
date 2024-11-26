@@ -92,7 +92,7 @@ export function OrderInformation({
 		merchandiser_name,
 		factory_name,
 		factory_address,
-		pi_numbers,	
+		pi_numbers,
 	} = order;
 
 	const { updateData } = useOrderDescription();
@@ -124,7 +124,7 @@ export function OrderInformation({
 			},
 			{
 				label: 'PI No.',
-				value: pi_numbers?.join(', ') ,
+				value: pi_numbers?.join(', '),
 			},
 			{
 				label: 'Priority (Mark / Fact)',

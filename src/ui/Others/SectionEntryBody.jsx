@@ -7,7 +7,7 @@ export default function BodyTemplate({ title, header, children }) {
 				</span>
 				{header}
 			</div>
-			<div className='flex flex-col gap-1.5 space-y-2 border border-t-0 border-secondary/30 bg-base-100 p-4 text-secondary-content'>
+			<div className='flex flex-col gap-1.5 space-y-2 border border-t-0 border-secondary/30 bg-base-100 p-3 text-secondary-content'>
 				{children}
 			</div>
 		</div>

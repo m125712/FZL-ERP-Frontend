@@ -13,12 +13,14 @@ export default function Header({
 			<SectionEntryBody title={'Finishing Dashboard'}>
 				<SimpleDatePicker
 					value={from}
+					placeholder='From'
 					onChange={(data) => {
 						setFrom(format(data, 'yyyy-MM-dd'));
 					}}
 				/>
 				<SimpleDatePicker
 					value={to}
+					placeholder='To'
 					onChange={(data) => {
 						setTo(format(data, 'yyyy-MM-dd'));
 					}}

@@ -13,6 +13,7 @@ import cn from '@lib/cn';
 const SimpleDatePicker = ({
 	className,
 	selected,
+	placeholder = '',
 	onChange = () => {},
 	disabled = false,
 	...props
@@ -28,7 +29,7 @@ const SimpleDatePicker = ({
 			)}
 			onClick={onClick}
 			ref={ref}>
-			{value || 'Select Date'}
+			{value ? value : placeholder ? placeholder : 'Select Date'}
 			<CalenderIcon className='w-4' />
 		</button>
 	));

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDyeingFinishingDashboard } from '@/state/Dyeing';
+import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -21,20 +22,19 @@ export default function index() {
 		'dyeing__finishing_dashboard'
 	);
 
-	const [from, setFrom] = useState('');
-	const [to, setFTo] = useState('');
+	const [from, setFrom] = useState(format(new Date(), 'yyyy-MM-dd'));
+	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
 	const { data } = useDyeingFinishingDashboard(from, to, {
 		enabled: !!(from && to),
 	});
 
-	console.log(data);
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
 
 	return (
 		<div className='flex flex-col gap-8'>
-			<Header {...{ from, setFrom, to, setFTo }} />
+			<Header {...{ from, setFrom, to, setTo }} />
 			<Content data={data} />
 		</div>
 	);

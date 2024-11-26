@@ -9,8 +9,8 @@ export default function Index() {
 	return (
 		<div>
 			<Production />
-			<hr className='my-6 border-2 border-dashed border-secondary/30' />
-			<Transfer />
+			{/* <hr className='my-6 border-2 border-dashed border-secondary/30' /> */}
+			{/* <Transfer /> */}
 		</div>
 	);
 }

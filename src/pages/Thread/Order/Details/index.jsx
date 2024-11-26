@@ -25,9 +25,10 @@ export default function Index() {
 	}, [orderInfo]);
 	// ! FOR TESTING
 
-	if (!orderInfo) return <Navigate to='/not-found' />;
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
+
+	if (!orderInfo) return <Navigate to='/not-found' />;
 
 	return (
 		<div className='space-y-8 py-4'>

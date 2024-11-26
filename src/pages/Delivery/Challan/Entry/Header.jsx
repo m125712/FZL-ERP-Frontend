@@ -7,8 +7,9 @@ import {
 	useOtherVehicle,
 	useThreadOrder,
 } from '@/state/Other';
+import { set } from 'date-fns';
 import { Trash2 } from 'lucide-react';
-import { Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
 import { DeleteModal } from '@/components/Modal';
 import { DateInput } from '@/ui/Core';
@@ -36,6 +37,7 @@ export default function Header({
 	setDeleteItem,
 	deleteItem,
 }) {
+	const { reset } = useForm();
 	//* Vehicles Fetch
 	const { data: vehicles } = useOtherVehicle();
 
@@ -95,13 +97,22 @@ export default function Header({
 			setValue('challan_entry', []);
 		}
 	}, [getValues('order_info_uuid'), watch('item_for')]);
-	console.log(watch('packing_list_uuids'));
+
 	useEffect(() => {
 		if (!isUpdate) {
-			setValue('order_info_uuid', null);
-			setValue('packing_list_uuids', []);
+			setValue('order_info_uuid', []);
 		}
 	}, [watch('item_for')]);
+	const isHandDelivery = watch('is_hand_delivery');
+
+	useEffect(() => {
+		if (isHandDelivery) {
+			setValue('vehicle_uuid', null);
+		} else {
+			setValue('name', '');
+			setValue('delivery_cost', 0);
+		}
+	}, [isHandDelivery, setValue]);
 	const handlePackingListRemove = (
 		packing_list_uuid,
 		packing_list_name,
@@ -114,21 +125,7 @@ export default function Header({
 		});
 		window['packing_list_delete'].showModal();
 	};
-	const isHandDelivery = watch('is_hand_delivery');
 
-	useEffect(() => {
-		if (isHandDelivery) {
-			setValue('vehicle_uuid', null);
-		} else {
-			setValue('name', '');
-			setValue('delivery_cost', 0);
-		}
-	}, [isHandDelivery, setValue]);
-
-	const Item_for = [
-		{ label: 'Zipper', value: 'zipper' },
-		{ label: 'Thread', value: 'thread' },
-	];
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody

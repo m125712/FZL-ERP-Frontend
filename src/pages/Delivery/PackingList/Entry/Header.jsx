@@ -51,11 +51,13 @@ export default function Header({
 						? ordersZipperSample
 						: [];
 	const { data: cartons } = useOtherCarton();
+
 	useEffect(() => {
 		if (isUpdate) return;
 		setValue('order_info_uuid', null);
 		setValue('packing_list_entry', []);
 	}, [watch('item_for')]);
+	
 	return (
 		<SectionEntryBody
 			title={`${isUpdate ? `Update Packing List: ${getValues('packing_number')}` : 'New Packing List Entry'}`}>

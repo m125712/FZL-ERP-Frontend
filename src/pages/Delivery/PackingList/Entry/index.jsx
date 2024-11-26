@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react';
+import { useRHF } from '@/hooks';
 import {
 	useDeliveryPackingList,
 	useDeliveryPackingListByOrderInfoUUID,
@@ -7,19 +7,19 @@ import {
 } from '@/state/Delivery';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
+import { Suspense, useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
 
 import nanoid from '@/lib/nanoid';
+import GetDateTime from '@/util/GetDateTime';
 import {
 	PACKING_LIST_NULL,
 	PACKING_LIST_SCHEMA,
 	PACKING_LIST_UPDATE_SCHEMA,
 } from '@util/Schema';
-import GetDateTime from '@/util/GetDateTime';
 
 import DynamicDeliveryTable from './DyanamicDeliveryFIeld';
 import Header from './Header';
@@ -93,10 +93,16 @@ export default function Index() {
 		// }
 		if (isUpdate && details) {
 			reset(details);
+
 			setValue('packing_list_entry', details?.packing_list_entry);
 			setValue('new_packing_list_entry', details?.new_packing_list_entry);
 		}
-	}, [isUpdate, packingListEntries, details]);
+	}, [
+		isUpdate,
+		packingListEntries,
+		details,
+
+	]);
 
 	// useEffect(() => {
 	// 	if (isUpdate && watch('new_packing_list_entry')) {
@@ -130,10 +136,21 @@ export default function Index() {
 				return;
 			} else if (
 				data?.new_packing_list_entry?.some(
-					(item) => item.quantity > item?.balance_quantity
+					(item) =>
+						item.quantity > 0 &&
+						(data?.item_for === 'zipper' ||
+							data?.item_for === 'sample_zipper') &&
+						item.poli_quantity < 1
+				) ||
+				data?.packing_list_entry?.some(
+					(item) =>
+						item.quantity > 0 &&
+						(data?.item_for === 'zipper' ||
+							data?.item_for === 'sample_zipper') &&
+						item.poli_quantity < 1
 				)
 			) {
-				alert('Quantity cannot be greater than balance quantity');
+				alert('Poly Quantity cannot be zero');
 				return;
 			}
 			const packingListData = {

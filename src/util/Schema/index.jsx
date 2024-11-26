@@ -1467,8 +1467,10 @@ export const PACKING_LIST_SCHEMA = {
 						String(originalValue).trim() === '' ? null : value
 					),
 			}),
-			poli_quantity: yup.number().when('quantity', {
-				is: (quantity) => quantity > 0,
+			poli_quantity: yup.number().when(['quantity', 'item_for'], {
+				is: (quantity, item_for) =>
+					quantity > 0 &&
+					(item_for === 'zipper' || item_for === 'sample_zipper'),
 				then: (Schema) =>
 					Schema.typeError('Must be a number')
 						.required('Poly Quantity is required')
@@ -1515,12 +1517,14 @@ export const PACKING_LIST_UPDATE_SCHEMA = {
 						String(originalValue).trim() === '' ? null : value
 					),
 			}),
-			poli_quantity: yup.number().when('quantity', {
-				is: (quantity) => quantity > 0,
+			poli_quantity: yup.number().when(['quantity', 'item_for'], {
+				is: (quantity, item_for) =>
+					quantity > 0 &&
+					(item_for === 'zipper' || item_for === 'sample_zipper'),
 				then: (Schema) =>
-					Schema.typeError('Must be a number').required(
-						'Poly Quantity is required'
-					),
+					Schema.typeError('Must be a number')
+						.required('Poly Quantity is required')
+						.moreThan(0, 'Must be greater than zero'),
 				otherwise: (Schema) =>
 					Schema.nullable().transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? null : value
@@ -3335,7 +3339,8 @@ export const MARKETING_TARGET_SCHEMA = {
 		'Minimum of Current Year'
 	),
 	month: NUMBER_REQUIRED.min(1, 'Minimum of 1').max(12, 'Maximum of 12'),
-	amount: NUMBER_REQUIRED.moreThan(0, 'More Than 0'),
+	zipper_amount: NUMBER_REQUIRED.moreThan(0, 'More Than 0'),
+	thread_amount: NUMBER_REQUIRED.moreThan(0, 'More Than 0'),
 	remarks: STRING.nullable(),
 };
 
@@ -3343,6 +3348,7 @@ export const MARKETING_TARGET_NULL = {
 	marketing_uuid: null,
 	year: null,
 	month: null,
-	amount: null,
+	zipper_amount: null,
+	thread_amount: null,
 	remarks: null,
 };

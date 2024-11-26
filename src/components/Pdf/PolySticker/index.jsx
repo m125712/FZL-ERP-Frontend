@@ -122,6 +122,23 @@ export default function Index(data) {
 							{},
 							{},
 						],
+						[
+							{
+								text: 'Party',
+								bold: true,
+								fontSize: DEFAULT_FONT_SIZE - 2,
+							},
+							{
+								text: `${data?.party_name}`,
+
+								fontSize: DEFAULT_FONT_SIZE - 2,
+								colSpan: 4,
+							},
+							{},
+							{},
+							{},
+						],
+
 						// * Header
 						TableHeader(node, DEFAULT_FONT_SIZE - 2, '#000000'),
 						[
@@ -138,7 +155,7 @@ export default function Index(data) {
 								fontSize: DEFAULT_FONT_SIZE - 2,
 							},
 							{
-								text: `${data.size}`,
+								text: `${data?.size} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'mtr' : data?.is_inch === 1 ? 'inch' : 'cm'}`,
 								fontSize: DEFAULT_FONT_SIZE - 2,
 							},
 							{

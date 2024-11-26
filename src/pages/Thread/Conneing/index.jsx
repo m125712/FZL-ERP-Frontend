@@ -118,51 +118,51 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'coning_carton_quantity',
-				header: (
-					<span>
-						Carton
-						<br />
-						QTY
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'action_add_transaction',
-				header: '',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: true, //!haveAccess.includes('click_transaction'),
-				width: 'w-8',
-				cell: (info) => {
-					return (
-						<Transfer
-							onClick={() => handelTransaction(info.row.index)}
-						/>
-					);
-				},
-			},
-			{
-				accessorKey: 'transfer_quantity',
-				header: 'Warehouse',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'transfer_carton_quantity',
-				header: (
-					<span>
-						Warehouse
-						<br />
-						Carton
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'coning_carton_quantity',
+			// 	header: (
+			// 		<span>
+			// 			Carton
+			// 			<br />
+			// 			QTY
+			// 		</span>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
+			// {
+			// 	accessorKey: 'action_add_transaction',
+			// 	header: '',
+			// 	enableColumnFilter: false,
+			// 	enableSorting: false,
+			// 	hidden: true, //!haveAccess.includes('click_transaction'),
+			// 	width: 'w-8',
+			// 	cell: (info) => {
+			// 		return (
+			// 			<Transfer
+			// 				onClick={() => handelTransaction(info.row.index)}
+			// 			/>
+			// 		);
+			// 	},
+			// },
+			// {
+			// 	accessorKey: 'transfer_quantity',
+			// 	header: 'Warehouse',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
+			// {
+			// 	accessorKey: 'transfer_carton_quantity',
+			// 	header: (
+			// 		<span>
+			// 			Warehouse
+			// 			<br />
+			// 			Carton
+			// 		</span>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
 
 			////
 

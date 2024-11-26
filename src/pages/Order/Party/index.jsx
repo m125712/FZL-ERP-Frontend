@@ -1,5 +1,5 @@
 import { lazy, useEffect, useState } from 'react';
-import { useOrderParty } from '@/state/Order';
+import { useOrderFactory, useOrderParty } from '@/state/Order';
 import {
 	useOtherOrderPropertiesByBottomStopper,
 	useOtherOrderPropertiesByColor,
@@ -81,7 +81,7 @@ export default function Index() {
 		useOtherOrderPropertiesByTopStopper();
 	const { invalidateQuery: invalidateOrderPropertiesByZipperNumber } =
 		useOtherOrderPropertiesByZipperNumber();
-
+	const { invalidateQuery: invalidateOrderFactory } = useOrderFactory();
 	const info = new PageInfo('Order/Party', url, 'order__party');
 	const haveAccess = useAccess(info.getTab());
 
@@ -131,7 +131,6 @@ export default function Index() {
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
-
 	// * invalidate queries on delete
 	const invalidateDeleteArray = [
 		invalidateOrderPropertiesByBottomStopper,
@@ -155,6 +154,7 @@ export default function Index() {
 		invalidateOrderPropertiesByTeethType,
 		invalidateOrderPropertiesByTopStopper,
 		invalidateOrderPropertiesByZipperNumber,
+		invalidateOrderFactory,
 	];
 
 	return (

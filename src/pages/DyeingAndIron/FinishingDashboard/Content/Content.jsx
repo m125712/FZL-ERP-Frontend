@@ -1,9 +1,12 @@
 import React from 'react';
 import { format } from 'date-fns';
+import { Plus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 import { DateTime } from '@/ui';
 
 export default function Content({ data }) {
+	const navigate = useNavigate();
 	const header = [
 		'Date',
 		'Day',
@@ -32,32 +35,57 @@ export default function Content({ data }) {
 						</tr>
 					</thead>
 					<tbody>
-						{data?.map((item, index) => (
-							<tr key={index} className='border text-lg'>
-								<td className='border px-4 py-2 text-left font-medium'>
-									{
-										<DateTime
-											date={item.production_date}
-											isTime={false}
-										/>
-									}
-								</td>
-								<td className='border px-4 text-left text-xs font-medium'>
-									{format(
-										item.production_date,
-										'ccc'
-									).toLocaleUpperCase()}
-								</td>
+						{data?.map((item, index) => {
+							const production_date = item.production_date;
 
-								{item.data?.map((data, index) => (
-									<td
-										key={index}
-										className='border px-4 text-left text-xs font-medium'>
-										{data.production_quantity}
+							return (
+								<tr key={index} className='border text-lg'>
+									<td className='border px-4 py-2 text-left font-medium'>
+										{
+											<DateTime
+												date={item.production_date}
+												isTime={false}
+											/>
+										}
 									</td>
-								))}
-							</tr>
-						))}
+									<td className='border px-4 text-left text-xs font-medium'>
+										{format(
+											item.production_date,
+											'ccc'
+										).toLocaleUpperCase()}
+									</td>
+
+									{item.data?.map((data, index) => {
+										console.log({
+											data,
+										});
+										return (
+											<td
+												key={index}
+												className='border px-4 text-left text-xs font-medium'>
+												{data.production_capacity_quantity >
+												data.production_quantity ? (
+													<button
+														onClick={() =>
+															navigate(
+																`/dyeing-and-iron/finishing-batch/entry?production_date=${production_date}`
+															)
+														}
+														className='btn btn-primary btn-xs gap-1'>
+														{
+															data.production_quantity
+														}
+														<Plus className='size-4' />
+													</button>
+												) : (
+													data.production_capacity_quantity
+												)}
+											</td>
+										);
+									})}
+								</tr>
+							);
+						})}
 					</tbody>
 				</table>
 			</div>

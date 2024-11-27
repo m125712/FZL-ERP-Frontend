@@ -30,7 +30,7 @@ export default function index() {
 	return (
 		<div className='flex flex-col gap-8'>
 			<Header {...{ dyeingDate, setDyeingDate }} />
-			<Content data={data} />
+			<Content data={data} dyeingDate={dyeingDate} />
 		</div>
 	);
 }

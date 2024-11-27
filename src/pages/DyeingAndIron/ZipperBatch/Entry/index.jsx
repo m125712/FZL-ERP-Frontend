@@ -6,7 +6,12 @@ import {
 } from '@/state/Dyeing';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import {
+	Navigate,
+	useNavigate,
+	useParams,
+	useSearchParams,
+} from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal, ProceedModal } from '@/components/Modal';
@@ -21,6 +26,11 @@ import { Columns } from './columns';
 import Header from './Header';
 
 export default function Index() {
+	let [searchParams] = useSearchParams();
+	const machine_uuid = searchParams.get('machine_uuid');
+	const slot_no = searchParams.get('slot_no');
+	const dyeing_date = searchParams.get('dyeing_date');
+
 	const {
 		url,
 		updateData,
@@ -53,7 +63,12 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
-	} = useRHF(DYEING_BATCH_SCHEMA, DYEING_BATCH_NULL);
+	} = useRHF(DYEING_BATCH_SCHEMA, {
+		...DYEING_BATCH_NULL,
+		production_date: dyeing_date,
+		machine_uuid,
+		slot: slot_no,
+	});
 
 	useEffect(() => {
 		if (isUpdate) {

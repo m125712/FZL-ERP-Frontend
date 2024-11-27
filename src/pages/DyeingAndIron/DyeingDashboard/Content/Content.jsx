@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { SectionEntryBody } from '@/ui';
-
-import DivContent from './divContent';
+import SlotCard from './slot-card';
 
 export default function Content({ data }) {
 	const header = [
@@ -39,32 +37,32 @@ export default function Content({ data }) {
 							</td>
 							<td className='border text-center text-xs font-medium'>
 								{item.slot_1 ? (
-									<DivContent data={item.slot_1} />
+									<SlotCard data={item.slot_1} />
 								) : null}
 							</td>
 							<td className='border text-center text-xs font-medium'>
 								{item.slot_2 ? (
-									<DivContent data={item.slot_2} />
+									<SlotCard data={item.slot_2} />
 								) : null}
 							</td>
 							<td className='border text-center text-xs font-medium'>
 								{item.slot_3 ? (
-									<DivContent data={item.slot_3} />
+									<SlotCard data={item.slot_3} />
 								) : null}
 							</td>
 							<td className='border text-center text-xs font-medium'>
 								{item.slot_4 ? (
-									<DivContent data={item.slot_4} />
+									<SlotCard data={item.slot_4} />
 								) : null}
 							</td>
 							<td className='border text-center text-xs font-medium'>
 								{item.slot_5 ? (
-									<DivContent data={item.slot_5} />
+									<SlotCard data={item.slot_5} />
 								) : null}
 							</td>
 							<td className='border text-center text-xs font-medium'>
 								{item.slot_6 ? (
-									<DivContent data={item.slot_6} />
+									<SlotCard data={item.slot_6} />
 								) : null}
 							</td>
 						</tr>

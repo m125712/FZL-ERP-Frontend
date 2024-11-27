@@ -2,7 +2,7 @@ import { LinkWithCopy } from '@/ui';
 
 import { cn } from '@/lib/utils';
 
-export default function DivContent({ data }) {
+export default function SlotCard({ data }) {
 	const {
 		batch_no,
 		batch_uuid,
@@ -16,6 +16,10 @@ export default function DivContent({ data }) {
 		total_actual_production_quantity,
 		received,
 	} = data;
+
+	console.log({
+		data,
+	});
 
 	const items = [
 		{

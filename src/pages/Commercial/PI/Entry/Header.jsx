@@ -29,7 +29,9 @@ export default function Header({
 	const { pi_uuid } = useParams();
 
 	const { data: bank } = useOtherBank();
-	const { data: party } = useOtherParty(watch('marketing_uuid'));
+	const { data: party } = useOtherParty(
+		watch('marketing_uuid') + '&is_cash=false'
+	);
 	const { data: marketing } = useOtherMarketing();
 
 	const { data: merchandiser } = useOtherMerchandiserByPartyUUID(

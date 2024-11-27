@@ -12,7 +12,7 @@ export const getPageHeader = (orderInfo) => {
 	const created_at = getDateFormate(orderInfo?.created_at);
 	const updated_at = getDateFormate(orderInfo?.updated_at);
 	const delivery_date = getDateFormate(orderInfo?.delivery_date);
-	const pi_number = orderInfo?.pi_number;
+	const pi_number = orderInfo?.pi_numbers;
 
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
@@ -39,7 +39,7 @@ export const getPageHeader = (orderInfo) => {
 						},
 						`O/N: ${orderInfo?.order_number}\n`,
 						`Date: ${created_at}\n`,
-						`PI Number: ${pi_number ? pi_number : '---'}\n`,
+						`PI Number: ${pi_number ? pi_number.join(', ') : '---'}\n`,
 					],
 					alignment: 'right',
 				},
@@ -87,17 +87,37 @@ export const getPageHeader = (orderInfo) => {
 
 const EMPTY_COLUMN = getEmptyColumn(4);
 
-export const getPageFooter = ({ currentPage, pageCount }) => ({
-	body: [
-		[
-			{
-				colSpan: 4,
-				text: `Page ${currentPage} / ${pageCount}`,
-				alignment: 'center',
-				border: [false, false, false, false],
-				// color,
-			},
-			...EMPTY_COLUMN,
+export const getPageFooter = ({ currentPage, pageCount }) => {
+	return {
+		widths: ['*', '*', '*'],
+		body: [
+			[
+				{
+					text: 'SNO',
+					alignment: 'center',
+					border: [false, true, false, false],
+				},
+				{
+					text: '',
+					alignment: 'center',
+					border: [false, false, false, false],
+				},
+				{
+					text: 'Managing Director',
+					alignment: 'center',
+					border: [false, true, false, false],
+				},
+			],
+			[
+				{
+					colSpan: 3,
+					text: `Page ${currentPage} of ${pageCount}`,
+					alignment: 'center',
+					border: [false, false, false, false],
+				},
+				'',
+				'',
+			],
 		],
-	],
-});
+	};
+};

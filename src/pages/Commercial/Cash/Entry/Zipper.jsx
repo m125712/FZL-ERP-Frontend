@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useOtherOrderNumberForZipperByMarketingAndPartyUUID } from '@/state/Other';
 import { Controller } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
@@ -30,7 +30,7 @@ const Zipper = ({
 
 	const [isAllNewChecked, setIsAllNewChecked] = useState(false);
 	const [isSomeNewChecked, setIsSomeNewChecked] = useState(false);
-
+	const [status, setStatus] = useState(false);
 	const { pi_uuid } = useParams();
 
 	const { data: order_number_for_zippers } =
@@ -120,6 +120,37 @@ const Zipper = ({
 	const rowClass =
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
+	const getTotalValue = useCallback(
+		(piArray) => {
+			if (!piArray || !Array.isArray(piArray)) {
+				return 0;
+			}
+
+			return piArray.reduce((acc, item, index) => {
+				if (item.is_checked === false) {
+					return acc;
+				}
+				return acc + item.pi_cash_quantity;
+			}, 0);
+		},
+		[orderEntryField, status, isSomeChecked]
+	);
+
+	const getTotalCheck = useCallback(
+		(piArray) => {
+			if (!piArray || !Array.isArray(piArray)) {
+				return 0;
+			}
+
+			return piArray.reduce((acc, item, index) => {
+				if (item.is_checked === false) {
+					return acc;
+				}
+				return acc + 1;
+			}, 0);
+		},
+		[isSomeChecked]
+	);
 	return (
 		<SectionEntryBody title='Zipper Details'>
 			<div className='grid grid-cols-2 gap-4'>
@@ -202,7 +233,7 @@ const Zipper = ({
 			</div>
 
 			<DynamicDeliveryField
-				title={`Entries`}
+				title={`Entries ${!isUpdate ? `(Checked: ${getTotalCheck(watch('pi_cash_entry'))})` : ''}`}
 				tableHead={
 					<>
 						{!isUpdate && (
@@ -307,6 +338,9 @@ const Zipper = ({
 								label={`pi_cash_entry[${index}].pi_cash_quantity`}
 								is_title_needed='false'
 								height='h-8'
+								onChange={() => {
+									setStatus(!status);
+								}}
 								dynamicerror={
 									errors?.pi_cash_entry?.[index]
 										?.pi_cash_quantity
@@ -348,10 +382,16 @@ const Zipper = ({
 					</tr>
 				))}
 			</DynamicDeliveryField>
-
+			{/* <td className='font-semibold text-primary' colSpan={11}>
+				Total Value:
+				{Number(getTotalValue(watch('pi_cash_entry')))
+					.toFixed(2)
+					.toLocaleString()}
+				$
+			</td> */}
 			{isUpdate && (
 				<DynamicDeliveryField
-					title={`New Entries`}
+					title={`New Entries ${isUpdate ? `(Checked: ${getTotalCheck(watch('new_pi_cash_entry'))})` : ''}`}
 					tableHead={
 						<>
 							<th
@@ -450,6 +490,9 @@ const Zipper = ({
 										errors?.new_pi_cash_entry?.[index]
 											?.pi_cash_quantity
 									}
+									onChange={() => {
+										setStatus(!status);
+									}}
 									disabled={
 										getValues(
 											`new_pi_cash_entry[${index}].pi_cash_quantity`
@@ -473,6 +516,15 @@ const Zipper = ({
 					))}
 				</DynamicDeliveryField>
 			)}
+
+			<td className='font-semibold text-primary' colSpan={11}>
+				Total Value:
+				{Number(
+					getTotalValue(watch('pi_cash_entry')) +
+						getTotalValue(watch('new_pi_cash_entry'))
+				).toFixed(2)}
+				$
+			</td>
 		</SectionEntryBody>
 	);
 };

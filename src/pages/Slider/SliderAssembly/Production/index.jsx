@@ -4,7 +4,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { LinkWithCopy, Transfer } from '@/ui';
+import { LinkWithCopy, StatusButton, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -67,10 +67,25 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'order_type',
+				header: 'Type',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'zipper_number_name',
 				header: 'Zipper No.',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_waterproof',
+				header: 'Waterproof',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => (
+					<StatusButton size='btn-sm' value={info.getValue()} />
+				),
 			},
 			{
 				accessorKey: 'end_type_name',
@@ -209,11 +224,23 @@ export default function Index() {
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_production'),
 				width: 'w-8',
-				cell: (info) => (
-					<Transfer
-						onClick={() => handelProduction(info.row.index)}
-					/>
-				),
+				cell: (info) => {
+					const {
+						max_sa_quantity_with_link,
+						max_sa_quantity_without_link,
+					} = info.row.original;
+					return (
+						<Transfer
+							onClick={() => handelProduction(info.row.index)}
+							disabled={
+								max_sa_quantity_with_link <= 0 &&
+								max_sa_quantity_without_link <= 0
+									? true
+									: false
+							}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'sa_prod',
@@ -247,9 +274,15 @@ export default function Index() {
 				hidden: !haveAccess.includes('click_transaction'),
 				width: 'w-8',
 				cell: (info) => {
+					const { sa_prod, sa_prod_weight } = info.row.original;
 					return (
 						<Transfer
 							onClick={() => handelTransaction(info.row.index)}
+							disabled={
+								sa_prod <= 0 || sa_prod_weight <= 0
+									? true
+									: false
+							}
 						/>
 					);
 				},

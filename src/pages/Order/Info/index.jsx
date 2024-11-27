@@ -35,19 +35,13 @@ export default function Index() {
 	const [updateOrderInfo, setUpdateOrderInfo] = useState({
 		uuid: null,
 		order_number: null,
-		reference_order_info_uuid: null,
-		party_uuid: null,
-		buyer_uuid: null,
-		merchandiser_uuid: null,
-		marketing_uuid: null,
-		factory_uuid: null,
-		issued_by_uuid: null,
 	});
 
 	const handelUpdate = (idx) => {
 		setUpdateOrderInfo((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
+			order_number: data[idx].order_number,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -57,6 +51,8 @@ export default function Index() {
 		itemId: null,
 		itemName: null,
 	});
+
+	console.log(data);
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,

@@ -60,6 +60,7 @@ export const Columns = ({
 		{
 			accessorKey: 'style',
 			header: 'Style',
+			width: 'w-36',
 			enableColumnFilter: true,
 			enableSorting: true,
 		},

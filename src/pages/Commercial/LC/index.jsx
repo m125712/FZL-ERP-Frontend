@@ -56,13 +56,16 @@ export default function Index() {
 				accessorKey: 'lc_number',
 				header: 'LC Number',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<LinkWithCopy
-						title={info.getValue()}
-						id={info.getValue()}
-						uri={`details`}
-					/>
-				),
+				cell: (info) => {
+					const { uuid } = info.row.original;
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={uuid}
+							uri={`details`}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'pi_ids',

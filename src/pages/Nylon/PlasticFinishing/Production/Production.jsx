@@ -40,8 +40,6 @@ export default function Index({
 		Number(updatePFProd?.slider_finishing_stock)
 	);
 
-	const MAX_PROD_KG = Number(updatePFProd?.tape_transferred);
-
 	const { register, handleSubmit, errors, reset, watch, control, context } =
 		useRHF(
 			{
@@ -74,7 +72,8 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			finishing_batch_entry_uuid: updatePFProd?.finishing_batch_entry_uuid,
+			finishing_batch_entry_uuid:
+				updatePFProd?.finishing_batch_entry_uuid,
 			section: 'finishing',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),

@@ -26,7 +26,7 @@ export default function Table({ order_entry, sliderQuantity }) {
 				<td className='px-3 py-1'>{sliderQuantity.piQuantity}</td>
 				<td className='px-3 py-1'>{sliderQuantity.rejectQuantity}</td>
 				<td className='px-3 py-1'>{sliderQuantity.shortQuantity}</td>
-				<td colSpan={6}></td>
+				<td colSpan={7}></td>
 				<td className='px-3 py-1'>{sliderQuantity.deliveryQuantity}</td>
 				<td></td>
 			</tr>

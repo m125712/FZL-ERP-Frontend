@@ -15,7 +15,7 @@ const LCInfo = (lc) => {
 						key={piId}
 						title={piId}
 						id={piId}
-						uri='/commercial/pi/details'
+						uri='/commercial/pi'
 					/>
 				))}
 			/>
@@ -81,7 +81,7 @@ function BankInfo(lc) {
 
 export default function Information({ lc }) {
 	const {
-		pi_cash_ids,
+		pi_ids,
 		party_name,
 		total_value,
 		file_number,
@@ -112,14 +112,14 @@ export default function Information({ lc }) {
 		const basicInfo = [
 			{
 				label: 'PI IDs',
-				value: pi_cash_ids && (
+				value: pi_ids && (
 					<div className='flex flex-wrap gap-2'>
-						{pi_cash_ids?.map((piId) => (
+						{pi_ids?.map((piId) => (
 							<LinkWithCopy
 								key={piId}
 								title={piId}
 								id={piId}
-								uri='/commercial/pi/details'
+								uri='/commercial/pi'
 							/>
 						))}
 					</div>

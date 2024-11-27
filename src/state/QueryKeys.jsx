@@ -32,9 +32,8 @@ export const orderQK = {
 	entry: (uuid) => [...orderQK.entries(), uuid],
 
 	// info
-	infos: () => [...orderQK.all(), 'info'],
-	info: (id) => [...orderQK.infos(), id],
-	infoByUUID: (uuid) => [...orderQK.infos(), uuid],
+	info: () => [...orderQK.all(), 'info'],
+	infoByUUID: (uuid) => [...orderQK.info(), uuid],
 
 	// buyers
 	buyers: () => [...orderQK.all(), 'buyer'], // [order, buyer]

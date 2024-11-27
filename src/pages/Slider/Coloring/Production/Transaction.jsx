@@ -13,7 +13,7 @@ import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { Input, JoinInput } from '@/ui';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import {
@@ -21,6 +21,7 @@ import {
 	NUMBER_REQUIRED,
 	SLIDER_ASSEMBLY_TRANSACTION_NULL,
 	SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
+	STRING,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
@@ -50,9 +51,23 @@ export default function Index({
 
 	const { user } = useAuth();
 
-	const { register, handleSubmit, errors, reset, control, context } = useRHF(
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		control,
+		context,
+		Controller,
+		getValues,
+	} = useRHF(
 		{
 			...SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
+			sfg_uuid: STRING.when({
+				is: () => updateSliderTrx?.order_type === 'slider',
+				then: (schema) => schema.required('Required'),
+				otherwise: (schema) => schema.nullable(),
+			}),
 			trx_quantity: NUMBER_REQUIRED.max(
 				updateSliderTrx?.coloring_prod,
 				'Beyond Max Quantity'
@@ -62,13 +77,14 @@ export default function Index({
 				'Beyond Max Quantity'
 			),
 		},
-		SLIDER_ASSEMBLY_TRANSACTION_NULL
+		{ ...SLIDER_ASSEMBLY_TRANSACTION_NULL, sfg_uuid: null }
 	);
 
 	const onClose = () => {
 		setUpdateSliderTrx((prev) => ({
 			...prev,
 			uuid: null,
+			sfg_uuid: null,
 			stock_uuid: null,
 			slider_item_uuid: null,
 			trx_from: null,
@@ -77,7 +93,7 @@ export default function Index({
 			remarks: '',
 		}));
 
-		reset(SLIDER_ASSEMBLY_TRANSACTION_NULL);
+		reset({ ...SLIDER_ASSEMBLY_TRANSACTION_NULL, sfg_uuid: null });
 		window[modalId].close();
 	};
 
@@ -118,6 +134,30 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
+			{updateSliderTrx?.order_type === 'slider' && (
+				<FormField label='sfg_uuid' title='Style' errors={errors}>
+					<Controller
+						name='sfg_uuid'
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select style'
+									options={updateSliderTrx?.style_object}
+									value={updateSliderTrx?.style_object.filter(
+										(item) =>
+											item.value == getValues('sfg_uuid')
+									)}
+									onChange={(e) => {
+										onChange(e.value);
+									}}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+			)}
+
 			<JoinInput
 				title='Transaction Quantity'
 				label='trx_quantity'

@@ -95,6 +95,9 @@ export default function ItemDescription({ order_description, className }) {
 			// multi color
 			is_multi_color,
 
+			// waterproof
+			is_waterproof,
+
 			// order type
 			order_type,
 		} = order_description;
@@ -157,6 +160,10 @@ export default function ItemDescription({ order_description, className }) {
 			{
 				label: 'Multi Color',
 				value: is_multi_color ? 'Yes' : 'No',
+			},
+			{
+				label: 'Waterproof',
+				value: is_waterproof ? 'Yes' : 'No',
 			},
 			{
 				label: 'order type',

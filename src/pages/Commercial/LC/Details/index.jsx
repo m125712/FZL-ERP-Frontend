@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useCommercialLCByNumber } from '@/state/Commercial';
+import { useCommercialLCPIByUUID } from '@/state/Commercial';
 import { useParams } from 'react-router-dom';
 
 import Information from './Information';
@@ -8,7 +8,7 @@ import Table from './Table';
 export default function Index() {
 	const { lc_number } = useParams();
 	const { data, isLoading, invalidateQuery } =
-		useCommercialLCByNumber(lc_number);
+		useCommercialLCPIByUUID(lc_number);
 
 	useEffect(() => {
 		invalidateQuery();

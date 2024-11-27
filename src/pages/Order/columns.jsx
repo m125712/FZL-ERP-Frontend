@@ -415,6 +415,15 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				// 	info.getValue().slice(1),
 			},
 			{
+				accessorKey: 'is_waterproof',
+				header: 'Waterproof',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => (
+					<StatusButton size='btn-sm' value={info.getValue()} />
+				),
+			},
+			{
 				accessorKey: 'is_multi_color',
 				header: 'Multi Color',
 				enableColumnFilter: false,

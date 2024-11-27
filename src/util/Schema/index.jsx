@@ -1369,7 +1369,6 @@ export const SLIDER_SLIDER_ASSEMBLY_NULL = {
 // * Slider Assembly Production entry
 
 export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA = {
-	with_link: BOOLEAN.default(true),
 	production_quantity: NUMBER_REQUIRED,
 	weight: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
 	wastage: NUMBER.nullable().transform((value, originalValue) =>
@@ -1379,7 +1378,6 @@ export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA = {
 };
 
 export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL = {
-	with_link: true,
 	production_quantity: null,
 	weight: null,
 	wastage: 0,
@@ -2806,7 +2804,7 @@ export const UPDATE_DYEING_TRANSFER_NULL = {
 export const FINISHING_BATCH_ENTRY_SCHEMA = {
 	order_description_uuid: STRING_REQUIRED,
 	slider_lead_time: NUMBER_REQUIRED,
-	dyeing_lead_time: NUMBER_REQUIRED,
+	dyeing_lead_time: NUMBER,
 	status: STRING_REQUIRED,
 	production_date: STRING_REQUIRED,
 	finishing_batch_entry: yup.array().of(

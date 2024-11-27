@@ -5,7 +5,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { LinkWithCopy, Transfer } from '@/ui';
+import { LinkWithCopy, StatusButton, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -96,6 +96,21 @@ export default function Index() {
 				header: 'Zipper No.',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'order_type',
+				header: 'Order Type',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_waterproof',
+				header: 'Waterproof',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => (
+					<StatusButton size='btn-sm' value={info.getValue()} />
+				),
 			},
 			{
 				accessorKey: 'end_type_name',
@@ -246,9 +261,32 @@ export default function Index() {
 				hidden: !haveAccess.includes('click_production'),
 				width: 'w-8',
 				cell: (info) => {
+					const {
+						u_top_quantity,
+						h_bottom_quantity,
+						box_pin_quantity,
+						coloring_stock,
+						end_type_name,
+						order_type,
+					} = info.row.original;
 					return (
 						<Transfer
 							onClick={() => handelProduction(info.row.index)}
+							disabled={
+								(order_type === 'slider'
+									? coloring_stock
+									: Math.floor(
+											Math.min(
+												Number(u_top_quantity) / 2,
+												coloring_stock,
+												end_type_name === 'Close End'
+													? h_bottom_quantity
+													: box_pin_quantity
+											)
+										)) <= 0
+									? true
+									: false
+							}
 						/>
 					);
 				},
@@ -285,9 +323,16 @@ export default function Index() {
 				hidden: !haveAccess.includes('click_transaction'),
 				width: 'w-8',
 				cell: (info) => {
+					const { coloring_prod, coloring_prod_weight } =
+						info.row.original;
 					return (
 						<Transfer
 							onClick={() => handelTransaction(info.row.index)}
+							disabled={
+								coloring_prod <= 0 || coloring_prod_weight <= 0
+									? true
+									: false
+							}
 						/>
 					);
 				},

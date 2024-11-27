@@ -7,7 +7,12 @@ import {
 import { useGetURLData, useOtherMachines } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import {
+	Navigate,
+	useNavigate,
+	useParams,
+	useSearchParams,
+} from 'react-router-dom';
 import * as yup from 'yup';
 import { useRHF } from '@/hooks';
 
@@ -29,6 +34,11 @@ import Header from './Header';
 
 // UPDATE IS WORKING
 export default function Index() {
+	let [searchParams] = useSearchParams();
+	const machine_uuid = searchParams.get('machine_uuid');
+	const slot_no = searchParams.get('slot_no');
+	const dyeing_date = searchParams.get('dyeing_date');
+
 	const {
 		url,
 		updateData,
@@ -76,7 +86,12 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
-	} = useRHF(SCHEMA, DYEING_THREAD_BATCH_NULL); // TODO: need to fix the form validation for quantity
+	} = useRHF(SCHEMA, {
+		...DYEING_THREAD_BATCH_NULL,
+		machine_uuid: machine_uuid,
+		slot: slot_no,
+		production_date: dyeing_date,
+	}); // TODO: need to fix the form validation for quantity
 
 	// batch_entry
 	const [deleteEntry, setDeleteEntry] = useState({
@@ -159,6 +174,7 @@ export default function Index() {
 			);
 		}
 	}, [watch()]);
+
 	const getTotalQty = useCallback(
 		(batch_entry) => {
 			if (!batch_entry || !Array.isArray(batch_entry)) {

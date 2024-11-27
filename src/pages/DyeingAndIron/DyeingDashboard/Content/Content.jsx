@@ -1,10 +1,9 @@
 import React from 'react';
 
-import { SectionEntryBody } from '@/ui';
+import EmptySlotCard from './empty-slot-card';
+import SlotCard from './slot-card';
 
-import DivContent from './divContent';
-
-export default function Content({ data }) {
+export default function Content({ data, dyeingDate }) {
 	const header = [
 		'Machine',
 		'Slot 1',
@@ -14,6 +13,10 @@ export default function Content({ data }) {
 		'Slot 5',
 		'Slot 6',
 	];
+
+	// console.log({
+	// 	data,
+	// });
 
 	return (
 		<div className='overflow-x-auto rounded-t-md border'>
@@ -35,39 +38,75 @@ export default function Content({ data }) {
 				</thead>
 				<tbody>
 					{data?.map((item, index) => (
-						<tr key={index} className='border'>
-							<td className='border px-4 text-left text-xs font-medium'>
+						<tr key={index} className='h-[100px] border'>
+							<td className='overflow-hidden border border-primary/20 px-4 text-left text-xs font-medium'>
 								{item.machine}
 							</td>
-							<td className='border text-center text-xs font-medium'>
+							<td className='relative border border-primary/20 text-center text-xs font-medium'>
 								{item.slot_1 ? (
-									<DivContent data={item.slot_1} />
-								) : null}
+									<SlotCard data={item.slot_1} />
+								) : (
+									<EmptySlotCard
+										slot_no={1}
+										machine_uuid={item.machine_uuid}
+										dyeingDate={dyeingDate}
+									/>
+								)}
 							</td>
-							<td className='border text-center text-xs font-medium'>
+							<td className='relative border border-primary/20 text-center text-xs font-medium'>
 								{item.slot_2 ? (
-									<DivContent data={item.slot_2} />
-								) : null}
+									<SlotCard data={item.slot_2} />
+								) : (
+									<EmptySlotCard
+										slot_no={2}
+										machine_uuid={item.machine_uuid}
+										dyeingDate={dyeingDate}
+									/>
+								)}
 							</td>
-							<td className='border text-center text-xs font-medium'>
+							<td className='relative border border-primary/20 text-center text-xs font-medium'>
 								{item.slot_3 ? (
-									<DivContent data={item.slot_3} />
-								) : null}
+									<SlotCard data={item.slot_3} />
+								) : (
+									<EmptySlotCard
+										slot_no={3}
+										machine_uuid={item.machine_uuid}
+										dyeingDate={dyeingDate}
+									/>
+								)}
 							</td>
-							<td className='border text-center text-xs font-medium'>
+							<td className='relative border border-primary/20 text-center text-xs font-medium'>
 								{item.slot_4 ? (
-									<DivContent data={item.slot_4} />
-								) : null}
+									<SlotCard data={item.slot_4} />
+								) : (
+									<EmptySlotCard
+										slot_no={4}
+										machine_uuid={item.machine_uuid}
+										dyeingDate={dyeingDate}
+									/>
+								)}
 							</td>
-							<td className='border text-center text-xs font-medium'>
+							<td className='relative border border-primary/20 text-center text-xs font-medium'>
 								{item.slot_5 ? (
-									<DivContent data={item.slot_5} />
-								) : null}
+									<SlotCard data={item.slot_5} />
+								) : (
+									<EmptySlotCard
+										slot_no={5}
+										machine_uuid={item.machine_uuid}
+										dyeingDate={dyeingDate}
+									/>
+								)}
 							</td>
-							<td className='border text-center text-xs font-medium'>
+							<td className='relative border border-primary/20 text-center text-xs font-medium'>
 								{item.slot_6 ? (
-									<DivContent data={item.slot_6} />
-								) : null}
+									<SlotCard data={item.slot_6} />
+								) : (
+									<EmptySlotCard
+										slot_no={6}
+										machine_uuid={item.machine_uuid}
+										dyeingDate={dyeingDate}
+									/>
+								)}
 							</td>
 						</tr>
 					))}

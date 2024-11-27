@@ -2,7 +2,7 @@ import { LinkWithCopy } from '@/ui';
 
 import { cn } from '@/lib/utils';
 
-export default function DivContent({ data }) {
+export default function SlotCard({ data }) {
 	const {
 		batch_no,
 		batch_uuid,
@@ -16,6 +16,10 @@ export default function DivContent({ data }) {
 		total_actual_production_quantity,
 		received,
 	} = data;
+
+	// console.log({
+	// 	data,
+	// });
 
 	const items = [
 		{
@@ -83,11 +87,11 @@ export default function DivContent({ data }) {
 	];
 
 	return (
-		<div className='dropdown dropdown-right dropdown-hover'>
+		<div className='dropdown dropdown-right dropdown-hover w-full'>
 			<div
 				tabIndex={0}
 				className={cn(
-					'my-1 flex flex-col gap-2 rounded-md px-1 py-2 text-foreground',
+					'm-1 flex flex-col gap-2 rounded-md px-1 py-2 text-foreground',
 					batch_status === 'completed'
 						? 'bg-success/10'
 						: batch_status === 'pending'

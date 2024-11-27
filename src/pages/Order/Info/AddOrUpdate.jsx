@@ -152,8 +152,8 @@ export default function Index({
 			id={modalId}
 			title={
 				updateOrderInfo?.uuid !== null
-					? 'Order Info: ' + updateOrderInfo?.order_number
-					: 'Order Info'
+					? 'Party Description: ' + updateOrderInfo?.order_number
+					: 'Party Description'
 			}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
@@ -207,7 +207,7 @@ export default function Index({
 					/>
 				</div>
 			</div>
-			<div className='flex flex-col gap-1 md:flex-row'>
+			<div className='grid grid-cols-1 gap-4 text-sm lg:grid-cols-3'>
 				<FormField
 					label='reference_order_info_uuid'
 					title='Ref. Order'
@@ -280,7 +280,7 @@ export default function Index({
 					/>
 				</FormField>
 			</div>
-			<div className='flex flex-col gap-1 md:flex-row'>
+			<div className='grid grid-cols-1 gap-4 text-sm lg:grid-cols-3'>
 				<FormField label='party_uuid' title='Party' errors={errors}>
 					<Controller
 						name={'party_uuid'}
@@ -355,7 +355,7 @@ export default function Index({
 					/>
 				</FormField>
 			</div>
-			<div className='flex flex-col gap-1 md:flex-row'>
+			<div className='grid grid-cols-1 gap-4 text-sm sm:grid-cols-2'>
 				{/* <FormField label='is_cash' title='Cash / LC' errors={errors}>
 					<Controller
 						name={'is_cash'}
@@ -424,7 +424,7 @@ export default function Index({
 					/>
 				</FormField>
 			</div>
-			<Textarea label='remarks' {...{ register, errors }} />
+			<Textarea rows={3} label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);

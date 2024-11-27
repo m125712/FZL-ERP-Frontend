@@ -196,7 +196,7 @@ export default function Header({
 						</div>
 					</div>
 				}>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
 					<FormField
 						label='order_info_uuid'
 						title='O/N'
@@ -363,7 +363,7 @@ export default function Header({
 
 				{/* conditional rendering: checking if order type is full */}
 
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
 					<FormField
 						label='lock_type'
 						title='Lock Type'
@@ -483,9 +483,17 @@ export default function Header({
 					)}
 				</div>
 
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					<Textarea label='description' {...{ register, errors }} />
-					<Textarea label='remarks' {...{ register, errors }} />
+				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2'>
+					<Textarea
+						rows={3}
+						label='description'
+						{...{ register, errors }}
+					/>
+					<Textarea
+						rows={3}
+						label='remarks'
+						{...{ register, errors }}
+					/>
 				</div>
 			</SectionEntryBody>
 
@@ -494,57 +502,64 @@ export default function Header({
 				<SectionEntryBody
 					title='Slider'
 					header={
-						// <div className='flex w-full gap-1 text-sm md:w-fit'>
-						// 	<div className='rounded-md bg-secondary px-1'>
-						// 		{/* <CheckBox
-						// 			text='text-secondary-content'
-						// 			label='is_slider_provided'
-						// 			title='Provided By Party'
-						// 			defaultChecked={isSliderProvided}
-						// 			{...{ register, errors }}
-						// 			onChange={(e) =>
-						// 				setIsSliderProvided(e.target.checked)
-						// 			}
-						// 		/> */}
-
-						// 	</div>
-						// </div>
 						watch('order_type') === 'full' && (
-							<div className='my-2 w-48'>
-								<FormField
-									label='slider_provided'
-									title='Provided'
-									is_title_needed={false}
-									errors={errors}>
-									<Controller
-										name={'slider_provided'}
-										control={control}
-										render={({ field: { onChange } }) => {
-											return (
-												<ReactSelect
-													placeholder='Select provided Type'
-													options={provided}
-													value={provided?.find(
-														(item) =>
-															item.value ==
-															getValues(
-																'slider_provided'
-															)
-													)}
-													onChange={(e) =>
-														onChange(e.value)
-													}
-												/>
-											);
-										}}
+							<div className='flex items-center gap-4 text-sm'>
+								<div className='my-2 h-8 rounded-md bg-secondary px-1'>
+									<CheckBox
+										text='text-secondary-content'
+										label='is_logo_body'
+										title='Body'
+										{...{ register, errors }}
 									/>
-								</FormField>
+								</div>
+
+								<div className='my-2 h-8 rounded-md bg-secondary px-1'>
+									<CheckBox
+										text='text-secondary-content'
+										label='is_logo_puller'
+										title='Puller'
+										{...{ register, errors }}
+									/>
+								</div>
+
+								<div className='my-2 w-48'>
+									<FormField
+										label='slider_provided'
+										title='Provided'
+										is_title_needed={false}
+										errors={errors}>
+										<Controller
+											name={'slider_provided'}
+											control={control}
+											render={({
+												field: { onChange },
+											}) => {
+												return (
+													<ReactSelect
+														placeholder='Select provided Type'
+														options={provided}
+														value={provided?.find(
+															(item) =>
+																item.value ==
+																getValues(
+																	'slider_provided'
+																)
+														)}
+														onChange={(e) =>
+															onChange(e.value)
+														}
+													/>
+												);
+											}}
+										/>
+									</FormField>
+								</div>
 							</div>
 						)
 					}>
 					{watch('slider_provided') !== 'completely_provided' && (
 						<>
-							<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+							<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
 								<FormField
 									label='puller_type'
 									title='Puller Type'
@@ -653,7 +668,7 @@ export default function Header({
 								</FormField>
 							</div>
 
-							<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+							<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2'>
 								<FormField
 									label='slider_body_shape'
 									title='Slider Body Shape'
@@ -710,133 +725,30 @@ export default function Header({
 								</FormField>
 							</div>
 
-							<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-								<div className='flex basis-3/4 flex-col gap-1 text-secondary-content md:flex-row'>
-									{watch('order_type') === 'full' && (
-										<>
-											<FormField
-												label='top_stopper'
-												title='Top Stopper'
-												errors={errors}>
-												<Controller
-													name={'top_stopper'}
-													control={control}
-													render={({
-														field: { onChange },
-													}) => {
-														return (
-															<ReactSelect
-																placeholder='Select Top Stopper'
-																options={
-																	top_stopper
-																}
-																value={top_stopper?.find(
-																	(
-																		top_stopper
-																	) =>
-																		top_stopper.value ==
-																		getValues(
-																			'top_stopper'
-																		)
-																)}
-																onChange={(e) =>
-																	onChange(
-																		e.value
-																	)
-																}
-															/>
-														);
-													}}
-												/>
-											</FormField>
-											<FormField
-												label='bottom_stopper'
-												title='Bottom Stopper'
-												errors={errors}>
-												<Controller
-													name={'bottom_stopper'}
-													control={control}
-													render={({
-														field: { onChange },
-													}) => {
-														return (
-															<ReactSelect
-																placeholder='Select Bottom Stopper'
-																options={
-																	bottom_stopper
-																}
-																value={bottom_stopper?.find(
-																	(
-																		bottom_stopper
-																	) =>
-																		bottom_stopper.value ==
-																		getValues(
-																			'bottom_stopper'
-																		)
-																)}
-																onChange={(e) =>
-																	onChange(
-																		e.value
-																	)
-																}
-															/>
-														);
-													}}
-												/>
-											</FormField>
-										</>
-									)}
-									<FormField
-										label='slider_starting_section'
-										title='Starting Section'
-										errors={errors}>
-										<Controller
-											name={'slider_starting_section'}
-											control={control}
-											render={({
-												field: { onChange },
-											}) => {
-												return (
-													<ReactSelect
-														placeholder='Select Section'
-														options={sliderSections}
-														value={sliderSections?.find(
-															(sliderSections) =>
-																sliderSections.value ==
-																getValues(
-																	'slider_starting_section'
-																)
-														)}
-														onChange={(e) =>
-															onChange(e.value)
-														}
-													/>
-												);
-											}}
-										/>
-									</FormField>
-								</div>
-								<div className='basis-1/4'>
-									<div className='flex gap-1'>
+							<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
+								{watch('order_type') === 'full' && (
+									<>
 										<FormField
-											label='logo_type'
-											title='Logo Type'
+											label='top_stopper'
+											title='Top Stopper'
 											errors={errors}>
 											<Controller
-												name={'logo_type'}
+												name={'top_stopper'}
 												control={control}
 												render={({
 													field: { onChange },
 												}) => {
 													return (
 														<ReactSelect
-															placeholder='Select Logo Type'
-															options={logo_type}
-															value={logo_type?.find(
-																(logo_type) =>
-																	logo_type.value ==
+															placeholder='Select Top Stopper'
+															options={
+																top_stopper
+															}
+															value={top_stopper?.find(
+																(top_stopper) =>
+																	top_stopper.value ==
 																	getValues(
-																		'logo_type'
+																		'top_stopper'
 																	)
 															)}
 															onChange={(e) =>
@@ -849,40 +761,98 @@ export default function Header({
 												}}
 											/>
 										</FormField>
-										<div className='mt-6 flex items-center gap-1 text-sm'>
-											<div className='rounded-md border border-secondary/30 px-1'>
-												<CheckBox
-													label='is_logo_body'
-													title='Body'
-													height='h-[2.9rem]'
-													defaultChecked={isLogoBody}
-													{...{ register, errors }}
+										<FormField
+											label='bottom_stopper'
+											title='Bottom Stopper'
+											errors={errors}>
+											<Controller
+												name={'bottom_stopper'}
+												control={control}
+												render={({
+													field: { onChange },
+												}) => {
+													return (
+														<ReactSelect
+															placeholder='Select Bottom Stopper'
+															options={
+																bottom_stopper
+															}
+															value={bottom_stopper?.find(
+																(
+																	bottom_stopper
+																) =>
+																	bottom_stopper.value ==
+																	getValues(
+																		'bottom_stopper'
+																	)
+															)}
+															onChange={(e) =>
+																onChange(
+																	e.value
+																)
+															}
+														/>
+													);
+												}}
+											/>
+										</FormField>
+									</>
+								)}
+								<FormField
+									label='slider_starting_section'
+									title='Starting Section'
+									errors={errors}>
+									<Controller
+										name={'slider_starting_section'}
+										control={control}
+										render={({ field: { onChange } }) => {
+											return (
+												<ReactSelect
+													placeholder='Select Section'
+													options={sliderSections}
+													value={sliderSections?.find(
+														(sliderSections) =>
+															sliderSections.value ==
+															getValues(
+																'slider_starting_section'
+															)
+													)}
 													onChange={(e) =>
-														setIsLogoBody(
-															e.target.checked
-														)
+														onChange(e.value)
 													}
 												/>
-											</div>
-											<div className='rounded-md border border-secondary/30 px-1'>
-												<CheckBox
-													label='is_logo_puller'
-													title='Puller'
-													height='h-[2.9rem]'
-													defaultChecked={
-														isLogoPuller
-													}
-													{...{ register, errors }}
+											);
+										}}
+									/>
+								</FormField>
+
+								<FormField
+									label='logo_type'
+									title='Logo Type'
+									errors={errors}>
+									<Controller
+										name={'logo_type'}
+										control={control}
+										render={({ field: { onChange } }) => {
+											return (
+												<ReactSelect
+													placeholder='Select Logo Type'
+													options={logo_type}
+													value={logo_type?.find(
+														(logo_type) =>
+															logo_type.value ==
+															getValues(
+																'logo_type'
+															)
+													)}
 													onChange={(e) =>
-														setIsLogoPuller(
-															e.target.checked
-														)
+														onChange(e.value)
 													}
 												/>
-											</div>
-										</div>
-									</div>
-								</div>
+											);
+										}}
+									/>
+								</FormField>
 							</div>
 						</>
 					)}
@@ -891,7 +861,7 @@ export default function Header({
 
 			{watch('order_type') == 'full' && (
 				<SectionEntryBody title='Garments'>
-					<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+					<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
 						<Input label={`garment`} {...{ register, errors }} />
 						<FormField
 							label='garments_wash'
@@ -984,6 +954,7 @@ export default function Header({
 						</FormField>
 
 						<Textarea
+							rows={3}
 							label='garments_remarks'
 							title='Remarks'
 							{...{ register, errors }}

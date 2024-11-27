@@ -131,13 +131,13 @@ export default function Index() {
 		print_in: orders[0]?.print_in,
 	};
 
-	if (!orders) return <Navigate to='/not-found' />;
-	if (orders?.length === 0)
-		return (
-			<div className='flex h-screen items-center justify-center text-4xl'>
-				Not Found
-			</div>
-		);
+	// if (!orders) return <Navigate to='/not-found' />;
+	// if (orders?.length === 0)
+	// 	return (
+	// 		<div className='flex h-screen items-center justify-center text-4xl'>
+	// 			Not Found
+	// 		</div>
+	// 	);
 
 	return (
 		<div className='flex flex-col py-4'>

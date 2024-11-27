@@ -96,7 +96,6 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			stock_uuid: updateSliderProd?.uuid,
-			with_link: data.with_link ? 1 : 0,
 			section: 'sa_prod',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
@@ -130,28 +129,6 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-			<FormField label='with_link' title='Link' errors={errors}>
-				<Controller
-					name={'with_link'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select Logo Type'
-								options={with_link}
-								value={with_link?.filter(
-									(with_link) =>
-										with_link.value ==
-										getValues('with_link')
-								)}
-								onChange={(e) => onChange(e.value)}
-								// isDisabled={order_info_id !== undefined}
-							/>
-						);
-					}}
-				/>
-			</FormField>
-
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'

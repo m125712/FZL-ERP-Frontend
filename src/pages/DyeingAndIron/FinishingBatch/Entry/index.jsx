@@ -6,7 +6,7 @@ import {
 	useDyeingFinishingBatchOrders,
 } from '@/state/Dyeing';
 import { DevTool } from '@hookform/devtools';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
@@ -25,6 +25,8 @@ import { Columns } from './Columns';
 import Header from './Header';
 
 export default function index() {
+	let [searchParams] = useSearchParams();
+	const production_date = searchParams.get('production_date');
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const { batch_uuid } = useParams();
@@ -53,7 +55,10 @@ export default function index() {
 		watch,
 		setValue,
 		formState: { dirtyFields },
-	} = useRHF(FINISHING_BATCH_ENTRY_SCHEMA, FINISHING_BATCH_ENTRY_NULL);
+	} = useRHF(FINISHING_BATCH_ENTRY_SCHEMA, {
+		...FINISHING_BATCH_ENTRY_NULL,
+		production_date,
+	});
 
 	useEffect(() => {
 		if (data && isUpdate) {

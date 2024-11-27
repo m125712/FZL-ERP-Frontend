@@ -1,4 +1,5 @@
 import { lazy, useMemo, useState } from 'react';
+import { BookOpen } from 'lucide-react';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
@@ -84,6 +85,9 @@ export default function Index({ packing_list_entry, data }) {
 				accessorKey: 'finishing_prod',
 				header: 'Production Qty',
 				enableColumnFilter: false,
+				hidden:
+					data?.item_for === 'sample_thread' ||
+					data?.item_for === 'sample_zipper',
 				cell: (info) =>
 					data?.item_for === 'thread' || data?.item_for === 'zipper'
 						? info.getValue()
@@ -105,13 +109,20 @@ export default function Index({ packing_list_entry, data }) {
 				enableColumnFilter: false,
 				enableSorting: false,
 				width: 'w-8',
+				hidden:
+					data?.item_for === 'sample_thread' ||
+					data?.item_for === 'thread',
 				cell: (info) => {
 					return (
 						<button
+							disabled={
+								data?.item_for === 'thread' ||
+								data?.item_for === 'sample_thread'
+							}
 							type='button'
 							className='btn btn-accent btn-sm font-semibold text-white shadow-md'
 							onClick={() => handleUpdate(info.row.index)}>
-							Poly Sticker
+							<BookOpen />
 						</button>
 					);
 				},
@@ -119,6 +130,9 @@ export default function Index({ packing_list_entry, data }) {
 			{
 				accessorKey: 'poli_quantity',
 				header: 'Poly Qty',
+				hidden:
+					data?.item_for === 'sample_thread' ||
+					data?.item_for === 'thread',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -167,12 +181,14 @@ export default function Index({ packing_list_entry, data }) {
 		setUpdate((prev) => ({
 			...prev,
 			...val,
+			item_for: data?.item_for,
 			challan_number: data.challan_number,
 			packing_list_wise_rank: data.packing_list_wise_rank,
 			packing_number: data.packing_number,
 			buyer_name: data.buyer_name,
 			created_at: data.created_at,
 			factory_name: data.factory_name,
+			party_name: data.party_name,
 		}));
 
 		window['polyModal'].showModal();

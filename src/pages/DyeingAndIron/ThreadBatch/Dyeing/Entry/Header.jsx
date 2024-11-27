@@ -1,9 +1,12 @@
+import { useEffect, useState } from 'react';
 import {
 	useGetURLData,
 	useOtherHRUserByDesignation,
-	useOtherMachines,
+	useOtherMachinesWithSlot,
 } from '@/state/Other';
+import { format } from 'date-fns';
 
+import { DateInput } from '@/ui/Core';
 import { FormField, Input, ReactSelect, SectionEntryBody } from '@/ui';
 
 import cn from '@/lib/cn';
@@ -13,30 +16,54 @@ export default function Header({
 	errors,
 	control,
 	getValues,
+	watch,
 	Controller,
 	totalQuantity,
 	totalWeight,
 }) {
-	const { data: batch_number } = useGetURLData(
-		`/other/thread/batch/value/label`
-	);
-	const { data: machine } = useOtherMachines();
-	const res = machine?.find(
-		(item) => item.value == getValues('machine_uuid')
-	);
-
 	// ? since there the required designation is not in the database..
 	// ? this is a workaround, where we use all the hr users
 	const { data: dyeing_operator_option } = useOtherHRUserByDesignation();
 	const { data: pass_by_option } = useOtherHRUserByDesignation();
 	const { data: dyeing_supervisor_option } = useOtherHRUserByDesignation();
 
-	console.log(
-		dyeing_operator_option,
-		pass_by_option,
-		dyeing_supervisor_option
+	const { data: batch_number } = useGetURLData(
+		`/other/thread/batch/value/label`
+	);
+	const [slot, setSlot] = useState([]);
+
+	// getting machine and available slots for it for the given date
+	const { data: machine } = useOtherMachinesWithSlot(
+		watch('production_date')
+			? format(new Date(watch('production_date')), 'yyyy-MM-dd')
+			: ''
 	);
 
+	const res = machine?.find(
+		(item) => item.value == getValues('machine_uuid')
+	);
+
+	// filtering the machines with available slots in can_book is true
+	// const filtered_machine = machine
+	// 	? machine?.filter((item) => item.can_book == true)
+	// 	: [];
+
+	// setting the setSLot sate if the request is for update to show the options for slots
+	useEffect(() => {
+		const tempSlot = machine?.find(
+			(item) => item.value == getValues('machine_uuid')
+		);
+
+		// setting the setSLot sate
+		setSlot([
+			// adding the current selected slot since it is not available in the fetched data
+			{
+				value: getValues('slot'),
+				label: 'Slot ' + getValues('slot'),
+			},
+			...(tempSlot?.open_slot || []),
+		]);
+	}, [machine]);
 
 	const reasonOption = [
 		{
@@ -137,7 +164,14 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-
+					<DateInput
+						label='production_date'
+						Controller={Controller}
+						control={control}
+						selected={watch('production_date')}
+						{...{ register, errors }}
+						disabled={true}
+					/>
 					<FormField
 						label='machine_uuid'
 						title='Machine'
@@ -158,7 +192,32 @@ export default function Header({
 										onChange={(e) => {
 											const value = e.value;
 											onChange(value);
+											setSlot(e.open_slot);
 										}}
+										isDisabled={true}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+					<FormField label='slot' title='Slot' errors={errors}>
+						<Controller
+							name='slot'
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select Slot'
+										options={slot}
+										value={slot?.find(
+											(item) =>
+												item.value == getValues('slot')
+										)}
+										onChange={(e) => {
+											const value = e.value;
+											onChange(value);
+										}}
+										isDisabled={true}
 									/>
 								);
 							}}

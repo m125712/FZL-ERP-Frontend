@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDyeingThreadBatchDetailsByUUID } from '@/state/Dyeing';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import Information from './Information';
@@ -20,6 +20,8 @@ export default function Index() {
 	// if (!planningSNO) return <Navigate to='/not-found' />;
 	if (loading)
 		return <span className='loading loading-dots loading-lg z-50' />;
+
+	if (!batch) return <Navigate to='/not-found' />;
 
 	return (
 		<div className='space-y-8 py-6'>

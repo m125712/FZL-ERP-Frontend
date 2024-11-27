@@ -1,9 +1,13 @@
+import { lazy, useEffect, useState } from 'react';
+import { useOrderBuyer } from '@/state/Order';
+import { useOtherBuyer } from '@/state/Other';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useOrderBuyer } from '@/state/Order';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useState } from 'react';
+
 import { BuyerColumns } from '../columns';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
@@ -14,6 +18,7 @@ export default function Index() {
 	const info = new PageInfo('Order/Buyer', url, 'order__buyer');
 	const haveAccess = useAccess(info.getTab());
 
+	const { invalidateQuery: invalidateBuyer } = useOtherBuyer();
 	// Fetching data from server
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -86,6 +91,7 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateBuyer}
 					{...{
 						deleteItem,
 						setDeleteItem,

@@ -6,6 +6,7 @@ import {
 	useDeliveryPackingListDetailsByUUID,
 } from '@/state/Delivery';
 import { useOtherChallan, useOtherOrder, useThreadOrder } from '@/state/Other';
+import { Book, BookOpen, TableOfContents } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -71,7 +72,7 @@ export default function Index() {
 							className='btn btn-accent btn-sm font-semibold text-white shadow-md'
 							disabled={pdfLoading}
 							onClick={() => handlePdf(info.row.index)}>
-							Carton Sticker
+							<BookOpen />
 						</button>
 					);
 				},

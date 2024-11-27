@@ -160,6 +160,20 @@ export default function Header({
 							</div>
 						)}
 
+						{watch('order_type') !== 'slider' &&
+							item
+								?.find((item) => item.value === watch('item'))
+								?.label?.toLowerCase() === 'nylon' && (
+								<div className='my-2 h-8 rounded-md bg-secondary px-1'>
+									<CheckBox
+										text='text-secondary-content'
+										label='is_waterproof'
+										title='Waterproof'
+										{...{ register, errors }}
+									/>
+								</div>
+							)}
+
 						<div className='my-2 w-28'>
 							<FormField
 								label='order_type'

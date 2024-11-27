@@ -1,4 +1,5 @@
-import { useOtherOrderDescription } from '@/state/Other';
+import { useGetURLData, useOtherOrderDescription } from '@/state/Other';
+import { format } from 'date-fns';
 import { useParams } from 'react-router-dom';
 
 import { DateInput } from '@/ui/Core';
@@ -22,7 +23,7 @@ export default function Header({
 }) {
 	const { batch_uuid } = useParams();
 	const { data: orders } = useOtherOrderDescription(
-		'dyed_tape_required=false&swatch_approved=true'
+		'dyed_tape_required=false&swatch_approved=true&is_balance=true'
 	);
 	const statuses = [
 		{ value: 'running', label: 'Running' },
@@ -30,14 +31,33 @@ export default function Header({
 		{ value: 'hold', label: 'Hold' },
 		{ value: 'rejected ', label: 'Rejected ' },
 	];
+
+	const { data: qty } = useGetURLData(
+		`/zipper/finishing-batch-entry/production-quantity/max/${watch('order_description_uuid')}?production_date=${watch('production_date') ? format(watch('production_date'), 'yyyy-MM-dd') : ''}`,
+		{
+			enabled: !!(
+				watch('order_description_uuid') && watch('production_date')
+			),
+		}
+	);
+
 	return (
 		<div className='flex flex-col gap-8'>
 			<TableView data={orders} />
 			<SectionEntryBody
 				title={
-					watch('batch_number')
-						? 'Update Batch -> ' + watch('batch_number')
-						: 'New Batch Entry'
+					<div className='flex flex-col gap-4'>
+						<span className='text-xl'>
+							{watch('batch_number')
+								? 'Update Batch -> ' + watch('batch_number')
+								: 'New Batch Entry'}
+						</span>
+					
+						<span className='text-sm'>
+							Total Production Capacity:{' '}
+							{qty?.total_production_capacity}
+						</span>
+					</div>
 				}>
 				<div className='grid grid-cols-2 gap-4'>
 					<DateInput

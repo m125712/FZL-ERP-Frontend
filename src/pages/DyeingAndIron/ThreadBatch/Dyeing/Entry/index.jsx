@@ -140,6 +140,7 @@ export default function Index() {
 						errors,
 						control,
 						getValues,
+						watch,
 						Controller,
 						totalQuantity: getTotalQty(watch('batch_entry')),
 						totalWeight: getTotalCalTape(watch('batch_entry')),

@@ -66,7 +66,6 @@ const DynamicDeliveryTable = ({
 									// 'Warehouse',
 									// 'Delivered',
 									'Quantity(pcs)',
-									'Poly QTY',
 									'Short QTY',
 									'Reject QTY',
 									'Remarks',
@@ -91,7 +90,6 @@ const DynamicDeliveryTable = ({
 										// 'Warehouse',
 										// 'Delivered',
 										'Quantity(pcs)',
-										'Poly QTY',
 										'Short QTY',
 										'Reject QTY',
 										'Remarks',
@@ -169,7 +167,8 @@ const DynamicDeliveryTable = ({
 					</td>
 
 					<td className={`w-32 ${rowClass}`}>
-						{getValues(`item_for`) === 'thread'
+						{getValues(`item_for`) === 'thread' ||
+						getValues(`item_for`) === 'sample_thread'
 							? 'cone'
 							: getValues(`${entryFiledName}[${index}].is_inch`)
 								? 'inch'
@@ -209,17 +208,21 @@ const DynamicDeliveryTable = ({
 							errors={errors}
 						/>
 					</td>
-					<td className={`w-32 ${rowClass}`}>
-						<Input
-							label={`${entryFiledName}[${index}].poli_quantity`}
-							is_title_needed='false'
-							dynamicerror={
-								errors?.[entryFiledName]?.[index]?.poli_quantity
-							}
-							register={register}
-							errors={errors}
-						/>
-					</td>
+					{(watch('item_for') === 'zipper' ||
+						watch('item_for') === 'sample_zipper') && (
+						<td className={`w-32 ${rowClass}`}>
+							<Input
+								label={`${entryFiledName}[${index}].poli_quantity`}
+								is_title_needed='false'
+								dynamicerror={
+									errors?.[entryFiledName]?.[index]
+										?.poli_quantity
+								}
+								register={register}
+								errors={errors}
+							/>
+						</td>
+					)}
 					<td className={`w-32 ${rowClass}`}>
 						<Input
 							label={`${entryFiledName}[${index}].short_quantity`}

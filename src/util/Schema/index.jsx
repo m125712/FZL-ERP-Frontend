@@ -533,6 +533,7 @@ export const ORDER_INFO_NULL = {
 export const ORDER_SCHEMA = {
 	// * order type
 	is_multi_color: BOOLEAN.default(false),
+	is_waterproof: BOOLEAN.default(false),
 	order_type: STRING_REQUIRED.default('full'),
 
 	// * item section
@@ -653,6 +654,7 @@ export const ORDER_SCHEMA = {
 
 export const ORDER_NULL = {
 	is_multi_color: false,
+	is_waterproof: false,
 	order_type: 'full',
 	id: null,
 	order_info_uuid: null,
@@ -1467,8 +1469,10 @@ export const PACKING_LIST_SCHEMA = {
 						String(originalValue).trim() === '' ? null : value
 					),
 			}),
-			poli_quantity: yup.number().when('quantity', {
-				is: (quantity) => quantity > 0,
+			poli_quantity: yup.number().when(['quantity', 'item_for'], {
+				is: (quantity, item_for) =>
+					quantity > 0 &&
+					(item_for === 'zipper' || item_for === 'sample_zipper'),
 				then: (Schema) =>
 					Schema.typeError('Must be a number')
 						.required('Poly Quantity is required')
@@ -1515,12 +1519,14 @@ export const PACKING_LIST_UPDATE_SCHEMA = {
 						String(originalValue).trim() === '' ? null : value
 					),
 			}),
-			poli_quantity: yup.number().when('quantity', {
-				is: (quantity) => quantity > 0,
+			poli_quantity: yup.number().when(['quantity', 'item_for'], {
+				is: (quantity, item_for) =>
+					quantity > 0 &&
+					(item_for === 'zipper' || item_for === 'sample_zipper'),
 				then: (Schema) =>
-					Schema.typeError('Must be a number').required(
-						'Poly Quantity is required'
-					),
+					Schema.typeError('Must be a number')
+						.required('Poly Quantity is required')
+						.moreThan(0, 'Must be greater than zero'),
 				otherwise: (Schema) =>
 					Schema.nullable().transform((value, originalValue) =>
 						String(originalValue).trim() === '' ? null : value
@@ -2626,7 +2632,7 @@ export const DYEING_BATCH_NULL = {
 
 export const DYEING_THREAD_BATCH_SCHEMA = {
 	machine_uuid: STRING_REQUIRED,
-	slot: NUMBER.default(0),
+	slot: NUMBER_REQUIRED,
 	production_date: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
@@ -2638,7 +2644,7 @@ export const DYEING_THREAD_BATCH_SCHEMA = {
 
 export const DYEING_THREAD_BATCH_NULL = {
 	machine_uuid: null,
-	slot: 0,
+	slot: null,
 	production_date: null,
 	remarks: '',
 	batch_entry: [
@@ -3335,7 +3341,8 @@ export const MARKETING_TARGET_SCHEMA = {
 		'Minimum of Current Year'
 	),
 	month: NUMBER_REQUIRED.min(1, 'Minimum of 1').max(12, 'Maximum of 12'),
-	amount: NUMBER_REQUIRED.moreThan(0, 'More Than 0'),
+	zipper_amount: NUMBER_REQUIRED.moreThan(0, 'More Than 0'),
+	thread_amount: NUMBER_REQUIRED.moreThan(0, 'More Than 0'),
 	remarks: STRING.nullable(),
 };
 
@@ -3343,6 +3350,7 @@ export const MARKETING_TARGET_NULL = {
 	marketing_uuid: null,
 	year: null,
 	month: null,
-	amount: null,
+	zipper_amount: null,
+	thread_amount: null,
 	remarks: null,
 };

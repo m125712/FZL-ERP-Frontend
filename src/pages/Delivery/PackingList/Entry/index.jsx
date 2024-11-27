@@ -93,6 +93,7 @@ export default function Index() {
 		// }
 		if (isUpdate && details) {
 			reset(details);
+
 			setValue('packing_list_entry', details?.packing_list_entry);
 			setValue('new_packing_list_entry', details?.new_packing_list_entry);
 		}
@@ -112,6 +113,25 @@ export default function Index() {
 
 	// Submit
 	const onSubmit = async (data) => {
+		if (
+			data?.new_packing_list_entry?.some(
+				(item) =>
+					item.quantity > 0 &&
+					(data?.item_for === 'zipper' ||
+						data?.item_for === 'sample_zipper') &&
+					item.poli_quantity < 1
+			) ||
+			data?.packing_list_entry?.some(
+				(item) =>
+					item.quantity > 0 &&
+					(data?.item_for === 'zipper' ||
+						data?.item_for === 'sample_zipper') &&
+					item.poli_quantity < 1
+			)
+		) {
+			alert('Poly Quantity cannot be zero');
+			return;
+		}
 		// Update item
 		if (isUpdate) {
 			if (
@@ -127,13 +147,6 @@ export default function Index() {
 					))
 			) {
 				alert('Packing List cannot be null');
-				return;
-			} else if (
-				data?.new_packing_list_entry?.some(
-					(item) => item.quantity > item?.balance_quantity
-				)
-			) {
-				alert('Quantity cannot be greater than balance quantity');
 				return;
 			}
 			const packingListData = {

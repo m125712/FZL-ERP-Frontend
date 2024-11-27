@@ -66,13 +66,6 @@ export default function Index() {
 		{ label: 'Non-Bleach', value: 'non-bleach' },
 	];
 
-	useEffect(() => {
-		if (data && isUpdate) {
-			reset(data);
-		}
-	}, [data, isUpdate]);
-
-	// order_info_entry
 	const {
 		fields: threadOrderInfoEntryField,
 		append: threadOrderInfoEntryAppend,
@@ -82,6 +75,14 @@ export default function Index() {
 		control,
 		name: 'order_info_entry',
 	});
+
+	useEffect(() => {
+		if (data && isUpdate) {
+			reset(data);
+		}
+	}, [data, isUpdate]);
+
+	// order_info_entry
 
 	const [bleachAll, setBleachAll] = useState();
 

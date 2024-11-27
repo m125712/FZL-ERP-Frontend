@@ -109,7 +109,7 @@ export const useOtherOrderDescription = (params) =>
 
 export const useOtherOrderBatchDescription = (params) =>
 	createGlobalState({
-		queryKey: otherQK.orderBatchDescription(),
+		queryKey: otherQK.orderBatchDescription(params),
 		url: params
 			? `/other/zipper/finishing-batch/value/label?${params}`
 			: '/other/zipper/finishing-batch/value/label',
@@ -485,8 +485,8 @@ export const useOtherTapeCoil = () =>
 	});
 
 // * GET GIVEN URL DATA
-export const useGetURLData = (url) =>
-	createGlobalState({ queryKey: otherQK.getURLData(url), url: url });
+export const useGetURLData = (url, { enabled = true }={}) =>
+	createGlobalState({ queryKey: otherQK.getURLData(url), url: url, enabled });
 
 // * GET ALL MACHINES
 export const useOtherMachines = () =>

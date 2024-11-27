@@ -533,6 +533,7 @@ export const ORDER_INFO_NULL = {
 export const ORDER_SCHEMA = {
 	// * order type
 	is_multi_color: BOOLEAN.default(false),
+	is_waterproof: BOOLEAN.default(false),
 	order_type: STRING_REQUIRED.default('full'),
 
 	// * item section
@@ -653,6 +654,7 @@ export const ORDER_SCHEMA = {
 
 export const ORDER_NULL = {
 	is_multi_color: false,
+	is_waterproof: false,
 	order_type: 'full',
 	id: null,
 	order_info_uuid: null,

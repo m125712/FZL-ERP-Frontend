@@ -17,9 +17,9 @@ export default function SlotCard({ data }) {
 		received,
 	} = data;
 
-	console.log({
-		data,
-	});
+	// console.log({
+	// 	data,
+	// });
 
 	const items = [
 		{
@@ -87,11 +87,11 @@ export default function SlotCard({ data }) {
 	];
 
 	return (
-		<div className='dropdown dropdown-right dropdown-hover'>
+		<div className='dropdown dropdown-right dropdown-hover w-full'>
 			<div
 				tabIndex={0}
 				className={cn(
-					'my-1 flex flex-col gap-2 rounded-md px-1 py-2 text-foreground',
+					'm-1 flex flex-col gap-2 rounded-md px-1 py-2 text-foreground',
 					batch_status === 'completed'
 						? 'bg-success/10'
 						: batch_status === 'pending'

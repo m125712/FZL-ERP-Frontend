@@ -1,8 +1,9 @@
 import React from 'react';
 
+import EmptySlotCard from './empty-slot-card';
 import SlotCard from './slot-card';
 
-export default function Content({ data }) {
+export default function Content({ data, dyeingDate }) {
 	const header = [
 		'Machine',
 		'Slot 1',
@@ -12,6 +13,10 @@ export default function Content({ data }) {
 		'Slot 5',
 		'Slot 6',
 	];
+
+	// console.log({
+	// 	data,
+	// });
 
 	return (
 		<div className='overflow-x-auto rounded-t-md border'>
@@ -33,39 +38,75 @@ export default function Content({ data }) {
 				</thead>
 				<tbody>
 					{data?.map((item, index) => (
-						<tr key={index} className='border'>
-							<td className='border px-4 text-left text-xs font-medium'>
+						<tr key={index} className='h-[100px] border'>
+							<td className='overflow-hidden border border-primary/20 px-4 text-left text-xs font-medium'>
 								{item.machine}
 							</td>
-							<td className='border text-center text-xs font-medium'>
+							<td className='relative border border-primary/20 text-center text-xs font-medium'>
 								{item.slot_1 ? (
 									<SlotCard data={item.slot_1} />
-								) : null}
+								) : (
+									<EmptySlotCard
+										slot_no={1}
+										machine_uuid={item.machine_uuid}
+										dyeingDate={dyeingDate}
+									/>
+								)}
 							</td>
-							<td className='border text-center text-xs font-medium'>
+							<td className='relative border border-primary/20 text-center text-xs font-medium'>
 								{item.slot_2 ? (
 									<SlotCard data={item.slot_2} />
-								) : null}
+								) : (
+									<EmptySlotCard
+										slot_no={2}
+										machine_uuid={item.machine_uuid}
+										dyeingDate={dyeingDate}
+									/>
+								)}
 							</td>
-							<td className='border text-center text-xs font-medium'>
+							<td className='relative border border-primary/20 text-center text-xs font-medium'>
 								{item.slot_3 ? (
 									<SlotCard data={item.slot_3} />
-								) : null}
+								) : (
+									<EmptySlotCard
+										slot_no={3}
+										machine_uuid={item.machine_uuid}
+										dyeingDate={dyeingDate}
+									/>
+								)}
 							</td>
-							<td className='border text-center text-xs font-medium'>
+							<td className='relative border border-primary/20 text-center text-xs font-medium'>
 								{item.slot_4 ? (
 									<SlotCard data={item.slot_4} />
-								) : null}
+								) : (
+									<EmptySlotCard
+										slot_no={4}
+										machine_uuid={item.machine_uuid}
+										dyeingDate={dyeingDate}
+									/>
+								)}
 							</td>
-							<td className='border text-center text-xs font-medium'>
+							<td className='relative border border-primary/20 text-center text-xs font-medium'>
 								{item.slot_5 ? (
 									<SlotCard data={item.slot_5} />
-								) : null}
+								) : (
+									<EmptySlotCard
+										slot_no={5}
+										machine_uuid={item.machine_uuid}
+										dyeingDate={dyeingDate}
+									/>
+								)}
 							</td>
-							<td className='border text-center text-xs font-medium'>
+							<td className='relative border border-primary/20 text-center text-xs font-medium'>
 								{item.slot_6 ? (
 									<SlotCard data={item.slot_6} />
-								) : null}
+								) : (
+									<EmptySlotCard
+										slot_no={6}
+										machine_uuid={item.machine_uuid}
+										dyeingDate={dyeingDate}
+									/>
+								)}
 							</td>
 						</tr>
 					))}

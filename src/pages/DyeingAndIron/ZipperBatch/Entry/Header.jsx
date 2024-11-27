@@ -57,7 +57,24 @@ export default function Header({
 		}
 	}, [isUpdate, machine]);
 
-	useEffect(() => {}, [watch('machine_uuid'), watch('production_date')]);
+	useEffect(() => {
+		if (machine && watch('machine_uuid')) {
+			const machineData = machine?.find(
+				(item) => item.value == watch('machine_uuid')
+			);
+
+			if (machineData) {
+				setSlot([
+					// adding the current selected slot since it is not available in the fetched data
+					{
+						value: getValues('slot'),
+						label: 'Slot ' + getValues('slot'),
+					},
+					...(machineData?.open_slot || []),
+				]);
+			}
+		}
+	}, [machine, watch('machine_uuid')]);
 
 	return (
 		<div className='flex flex-col gap-4'>

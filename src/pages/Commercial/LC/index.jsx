@@ -52,6 +52,15 @@ export default function Index() {
 					/>
 				),
 			},
+
+			{
+				accessorKey: 'is_old_pi',
+				header: 'Old LC',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
+			},
 			{
 				accessorKey: 'lc_number',
 				header: 'LC Number',
@@ -138,14 +147,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime date={info.getValue()} isTime={false} />
-				),
-			},
-			{
-				accessorKey: 'is_old_pi',
-				header: 'Old LC',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
 				),
 			},
 			{

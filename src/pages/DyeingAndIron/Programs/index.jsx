@@ -45,7 +45,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'Quantity',
+				header: 'Quantity(?)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

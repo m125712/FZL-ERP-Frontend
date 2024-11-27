@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useOtherOrderNumberForThreadByMarketingAndPartyUUID } from '@/state/Other';
 import { Controller } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
@@ -33,6 +33,7 @@ const Thread = ({
 
 	const { pi_uuid } = useParams();
 
+	const [status, setStatus] = useState(false);
 	const { data: order_number_for_thread } =
 		useOtherOrderNumberForThreadByMarketingAndPartyUUID(
 			watch('party_uuid'),
@@ -127,6 +128,36 @@ const Thread = ({
 
 	const rowClass =
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
+	const getTotalValue = useCallback(
+		(piArray) => {
+			if (!piArray || !Array.isArray(piArray)) {
+				return 0;
+			}
+
+			return piArray.reduce((acc, item, index) => {
+				if (item.is_checked === false) {
+					return acc;
+				}
+				return acc + item.pi_cash_quantity;
+			}, 0);
+		},
+		[isSomeChecked, threadEntryField, status]
+	);
+	const getTotalCheck = useCallback(
+		(piArray) => {
+			if (!piArray || !Array.isArray(piArray)) {
+				return 0;
+			}
+
+			return piArray.reduce((acc, item, index) => {
+				if (item.is_checked === false) {
+					return acc;
+				}
+				return acc + 1;
+			}, 0);
+		},
+		[isSomeChecked]
+	);
 
 	return (
 		<SectionEntryBody title='Thread Details'>
@@ -211,7 +242,7 @@ const Thread = ({
 			</div>
 
 			<DynamicDeliveryField
-				title={`Entries`}
+				title={`Entries ${!isUpdate ? `(Checked: ${getTotalCheck(watch('pi_cash_entry_thread'))})` : ''}`}
 				tableHead={
 					<>
 						{!isUpdate && (
@@ -318,6 +349,9 @@ const Thread = ({
 									errors?.pi_cash_entry_thread?.[index]
 										?.pi_cash_quantity
 								}
+								onChange={() => {
+									setStatus(!status);
+								}}
 								disabled={
 									getValues(
 										`pi_cash_entry_thread[${index}].pi_cash_quantity`
@@ -352,7 +386,7 @@ const Thread = ({
 
 			{isUpdate && (
 				<DynamicDeliveryField
-					title={`New Entries`}
+					title={`New Entries ${isUpdate ? `(Checked: ${getTotalCheck(watch('new_pi_cash_entry_thread'))})` : ''}`}
 					tableHead={
 						<>
 							<th
@@ -448,6 +482,9 @@ const Thread = ({
 											index
 										]?.pi_cash_quantity
 									}
+									onChange={() => {
+										setStatus(!status);
+									}}
 									disabled={
 										getValues(
 											`new_pi_cash_entry_thread[${index}].pi_cash_quantity`
@@ -465,6 +502,19 @@ const Thread = ({
 					))}
 				</DynamicDeliveryField>
 			)}
+			<tr
+				className={cn(
+					'relative cursor-pointer transition-colors duration-300 ease-in'
+				)}>
+				<td className='font-semibold text-primary' colSpan={11}>
+					Total Value:
+					{Number(
+						getTotalValue(watch('pi_cash_entry_thread')) +
+							getTotalValue(watch('new_pi_cash_entry_thread'))
+					).toFixed(2)}
+					$
+				</td>
+			</tr>
 		</SectionEntryBody>
 	);
 };

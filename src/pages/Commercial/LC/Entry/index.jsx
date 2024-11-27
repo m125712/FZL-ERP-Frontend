@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import {
 	useCommercialLC,
 	useCommercialLCByQuery,
@@ -140,10 +140,25 @@ export default function Index() {
 
 		setDeletablePi((prev) => [...prev, uuid]);
 	};
+	const getTotalValue = useCallback(
+		(piArray) => {
+			if (!piArray || !Array.isArray(piArray)) {
+				return 0;
+			}
 
+			return piArray.reduce((acc, item, index) => {
+				const piIdxValue = pi?.find((e) => e.value === item.uuid);
+				return acc + piIdxValue?.pi_value;
+			}, 0);
+		},
+		[watch()]
+	);
 	// Submit
 	const onSubmit = async (data) => {
-		if (data?.is_old_pi === false && data?.pi[0]?.uuid === null) {
+		if (data?.lc_entry[0]?.ldbc_fdbc === null) {
+			alert('Please add at least one progression');
+			return;
+		} else if (data?.is_old_pi === false && data?.pi[0]?.uuid === null) {
 			alert('Please add at least one PI');
 			return;
 		}
@@ -453,7 +468,7 @@ export default function Index() {
 							tableHead={[
 								'PI',
 								'Bank',
-								'Value',
+								'Value($)',
 								'Marketing',
 								'O/N',
 								'Action',
@@ -568,7 +583,18 @@ export default function Index() {
 							})}
 						</DynamicField>
 					)}
-
+					<tr
+						className={cn(
+							'relative cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30'
+						)}>
+						<td className='font-semibold' colSpan={11}>
+							Total Value:
+							{Number(getTotalValue(watch('pi')))
+								.toFixed(2)
+								.toLocaleString()}
+							$ 
+						</td>
+					</tr>
 					<div className='modal-action'>
 						<button
 							type='submit'

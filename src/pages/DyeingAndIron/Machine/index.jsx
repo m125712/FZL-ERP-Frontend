@@ -27,13 +27,13 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'min_capacity',
-				header: 'Min Capacity',
+				header: 'Min Capacity(kg)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'max_capacity',
-				header: 'Max Capacity',
+				header: 'Max Capacity(kg)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

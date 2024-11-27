@@ -1973,17 +1973,7 @@ export const PI_CASH_NULL = {
 	remarks: '',
 	conversion_rate: 0,
 	receive_amount: 0,
-	pi_cash_entry: [
-		{
-			is_checked: false,
-			sfg_uuid: '',
-			pi_uuid: '',
-			max_quantity: null,
-			pi_cash_quantity: null,
-			remarks: '',
-			isDeletable: false,
-		},
-	],
+	pi_cash_entry: [],
 	new_pi_cash_entry: [],
 	pi_cash_entry_thread: [],
 	new_pi_cash_entry_thread: [],
@@ -2178,7 +2168,7 @@ export const MANUAL_PI_SCHEMA = {
 	receive_amount: NUMBER_DOUBLE_REQUIRED,
 	weight: NUMBER_DOUBLE_REQUIRED,
 	date: STRING_REQUIRED,
-	pi_number: STRING.nullable(),
+	pi_number: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 
 	manual_pi_entry: yup.array().of(
@@ -2589,7 +2579,7 @@ export const DYEING_PLANNING_HEADOFFICE_NULL = {
 
 export const DYEING_BATCH_SCHEMA = {
 	machine_uuid: STRING_REQUIRED,
-	slot: NUMBER_REQUIRED,
+	slot: NUMBER_REQUIRED.moreThan(0, 'Slot should be more than 0'),
 	production_date: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 	dyeing_batch_entry: yup.array().of(
@@ -2632,7 +2622,7 @@ export const DYEING_BATCH_NULL = {
 
 export const DYEING_THREAD_BATCH_SCHEMA = {
 	machine_uuid: STRING_REQUIRED,
-	slot: NUMBER_REQUIRED,
+	slot: NUMBER_REQUIRED.moreThan(0, 'Slot Number must be greater than 0'),
 	production_date: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(

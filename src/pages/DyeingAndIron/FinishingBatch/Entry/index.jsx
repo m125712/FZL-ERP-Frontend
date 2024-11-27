@@ -25,6 +25,8 @@ import { Columns } from './Columns';
 import Header from './Header';
 
 export default function index() {
+	const [orderType, setOrderType] = useState('');
+
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const { batch_uuid } = useParams();
@@ -53,7 +55,18 @@ export default function index() {
 		watch,
 		setValue,
 		formState: { dirtyFields },
-	} = useRHF(FINISHING_BATCH_ENTRY_SCHEMA, FINISHING_BATCH_ENTRY_NULL);
+	} = useRHF(
+		{
+			...FINISHING_BATCH_ENTRY_SCHEMA,
+			dyeing_lead_time:
+				FINISHING_BATCH_ENTRY_SCHEMA.dyeing_lead_time.when({
+					is: () => orderType !== 'slider',
+					then: (schema) => schema.required('Required'),
+					otherwise: (schema) => schema.nullable(),
+				}),
+		},
+		FINISHING_BATCH_ENTRY_NULL
+	);
 
 	useEffect(() => {
 		if (data && isUpdate) {
@@ -301,142 +314,6 @@ export default function index() {
 		return;
 	};
 
-	// 	() => [
-	// 		{
-	// 			accessorKey: 'recipe_id',
-	// 			header: 'Recipe',
-	// 			enableColumnFilter: true,
-	// 			width: 'w-36',
-	// 			cell: (info) => info.getValue(),
-	// 		},
-	// 		{
-	// 			accessorKey: 'style',
-	// 			header: 'Style',
-	// 			enableColumnFilter: true,
-	// 			width: 'w-36',
-	// 			cell: (info) => info.getValue(),
-	// 		},
-	// 		{
-	// 			accessorKey: 'color',
-	// 			header: 'Color',
-	// 			enableColumnFilter: true,
-	// 			width: 'w-36',
-	// 			cell: (info) => info.getValue(),
-	// 		},
-	// 		{
-	// 			accessorKey: 'size',
-	// 			header: 'Size',
-	// 			enableColumnFilter: true,
-	// 			width: 'w-36',
-	// 			cell: (info) => info.getValue(),
-	// 		},
-	// 		{
-	// 			accessorKey: 'order_quantity',
-	// 			header: 'Order QTY',
-	// 			enableColumnFilter: true,
-	// 			width: 'w-36',
-	// 			cell: (info) => info.getValue(),
-	// 		},
-	// 		{
-	// 			accessorKey: 'balance_quantity',
-	// 			width: 'w-36',
-	// 			header: (
-	// 				<div className='flex flex-col'>
-	// 					Balance QTY
-	// 					<label
-	// 						className='btn btn-primary btn-xs'
-	// 						onClick={() => setAllQty()}>
-	// 						Copy All
-	// 					</label>
-	// 				</div>
-	// 			),
-	// 			enableColumnFilter: false,
-	// 			enableSorting: false,
-	// 			cell: (info) => {
-	// 				const idx = info.row.index;
-	// 				return (
-	// 					<div className='flex gap-4'>
-	// 						<label
-	// 							className='btn btn-primary btn-xs'
-	// 							onClick={() =>
-	// 								setValue(
-	// 									`finishing_batch_entry[${idx}].quantity`,
-	// 									info.getValue()
-	// 								)
-	// 							}>
-	// 							Copy
-	// 						</label>
-	// 						{info.getValue()}
-	// 					</div>
-	// 				);
-	// 			},
-	// 		},
-	// 		{
-	// 			accessorKey: 'quantity',
-	// 			header: 'Quantity',
-	// 			enableColumnFilter: false,
-	// 			enableSorting: false,
-	// 			width: 'w-36',
-	// 			cell: (info) => {
-	// 				const idx = info.row.index;
-	// 				const dynamicError =
-	// 					errors?.finishing_batch_entry?.[idx]?.quantity;
-
-	// 				return (
-	// 					<Input
-	// 						label={`finishing_batch_entry[${info.row.index}].quantity`}
-	// 						is_title_needed='false'
-	// 						height='h-8'
-	// 						dynamicerror={dynamicError}
-	// 						{...{ register, errors }}
-	// 					/>
-	// 				);
-	// 			},
-	// 		},
-	// 		{
-	// 			accessorKey: 'remarks',
-	// 			header: 'Remarks',
-	// 			enableColumnFilter: false,
-	// 			enableSorting: false,
-	// 			width: 'w-36',
-	// 			cell: (info) => {
-	// 				const idx = info.row.index;
-	// 				const dynamicError =
-	// 					errors?.finishing_batch_entry?.[idx]?.remarks;
-
-	// 				return (
-	// 					<Textarea
-	// 						label={`finishing_batch_entry[${info.row.index}].remarks`}
-	// 						is_title_needed='false'
-	// 						height='h-8'
-	// 						dynamicerror={dynamicError}
-	// 						{...{ register, errors }}
-	// 					/>
-	// 				);
-	// 			},
-	// 		},
-	// 		{
-	// 			accessorKey: 'actions',
-	// 			header: 'Actions',
-	// 			enableColumnFilter: false,
-	// 			enableSorting: false,
-	// 			hidden: !haveAccess.includes('delete'),
-	// 			width: 'w-24',
-	// 			cell: (info) => (
-	// 				<EditDelete
-	// 					idx={info.row.index}
-	// 					handelDelete={handelDelete}
-	// 					showDelete={haveAccess.includes('delete')}
-	// 					showUpdate={false}
-	// 				/>
-	// 			),
-	// 		},
-	// 	],
-	// 	[BatchOrdersField, watch('order_description_uuid'), errors]
-	// );
-
-	// * for deleting the finishing field entry
-
 	const [deleteEntry, setDeleteEntry] = useState({
 		itemId: null,
 		itemName: null,
@@ -485,6 +362,8 @@ export default function index() {
 							getValues,
 							Controller,
 							watch,
+							orderType,
+							setOrderType,
 						}}
 					/>
 

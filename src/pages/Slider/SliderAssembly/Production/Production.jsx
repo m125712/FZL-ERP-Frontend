@@ -72,9 +72,10 @@ export default function Index({
 		MAX_PROD_KG - (watch('production_quantity_in_kg') || 0)
 	).toFixed(3);
 
-	const MAX_PROD = watch('with_link')
-		? Math.floor(Number(updateSliderProd.max_sa_quantity_with_link))
-		: Math.floor(Number(updateSliderProd.max_sa_quantity_without_link));
+	const MAX_PROD =
+		updateSliderProd?.link_quantity > 0
+			? Math.floor(Number(updateSliderProd.max_sa_quantity_with_link))
+			: Math.floor(Number(updateSliderProd.max_sa_quantity_without_link));
 
 	const onClose = () => {
 		setUpdateSliderProd((prev) => ({
@@ -96,6 +97,7 @@ export default function Index({
 			...data,
 			uuid: nanoid(),
 			stock_uuid: updateSliderProd?.uuid,
+			link: updateSliderProd?.link_quantity,
 			section: 'sa_prod',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
@@ -112,10 +114,6 @@ export default function Index({
 		return;
 	};
 
-	const with_link = [
-		{ label: 'Yes', value: 1 },
-		{ label: 'No', value: 0 },
-	];
 	return (
 		<AddModal
 			id='TeethMoldingProdModal'

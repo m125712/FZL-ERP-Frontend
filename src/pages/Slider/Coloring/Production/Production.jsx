@@ -37,15 +37,18 @@ export default function Index({
 	const { invalidateQuery } = useSliderColoringProduction();
 	const { user } = useAuth();
 
-	const MAX_PROD_KG = Math.floor(
-		Math.min(
-			Number(updateSliderProd?.u_top_quantity) / 2,
-			updateSliderProd.coloring_stock,
-			updateSliderProd.end_type_name === 'Close End'
-				? updateSliderProd.h_bottom_quantity
-				: updateSliderProd.box_pin_quantity
-		)
-	);
+	const MAX_PROD_KG =
+		updateSliderProd?.order_type === 'slider'
+			? updateSliderProd.coloring_stock
+			: Math.floor(
+					Math.min(
+						Number(updateSliderProd?.u_top_quantity) / 2,
+						updateSliderProd.coloring_stock,
+						updateSliderProd.end_type_name === 'Close End'
+							? updateSliderProd.h_bottom_quantity
+							: updateSliderProd.box_pin_quantity
+					)
+				);
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
 		useRHF(

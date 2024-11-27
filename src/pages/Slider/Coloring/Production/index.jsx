@@ -98,6 +98,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'order_type',
+				header: 'Order Type',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'is_waterproof',
 				header: 'Waterproof',
 				enableColumnFilter: false,
@@ -261,20 +267,23 @@ export default function Index() {
 						box_pin_quantity,
 						coloring_stock,
 						end_type_name,
+						order_type,
 					} = info.row.original;
 					return (
 						<Transfer
 							onClick={() => handelProduction(info.row.index)}
 							disabled={
-								Math.floor(
-									Math.min(
-										Number(u_top_quantity) / 2,
-										coloring_stock,
-										end_type_name === 'Close End'
-											? h_bottom_quantity
-											: box_pin_quantity
-									)
-								) <= 0
+								(order_type === 'slider'
+									? coloring_stock
+									: Math.floor(
+											Math.min(
+												Number(u_top_quantity) / 2,
+												coloring_stock,
+												end_type_name === 'Close End'
+													? h_bottom_quantity
+													: box_pin_quantity
+											)
+										)) <= 0
 									? true
 									: false
 							}

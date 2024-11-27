@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { useGetURLData, useOtherOrderDescription } from '@/state/Other';
-import { format } from 'date-fns';
+import { format, set } from 'date-fns';
 import { useParams } from 'react-router-dom';
 
 import { DateInput } from '@/ui/Core';
@@ -20,6 +21,8 @@ export default function Header({
 	getValues,
 	Controller,
 	watch,
+	orderType = '',
+	setOrderType,
 }) {
 	const { batch_uuid } = useParams();
 	const { data: orders } = useOtherOrderDescription(
@@ -52,7 +55,7 @@ export default function Header({
 								? 'Update Batch -> ' + watch('batch_number')
 								: 'New Batch Entry'}
 						</span>
-					
+
 						<span className='text-sm'>
 							Total Production Capacity:{' '}
 							{qty?.total_production_capacity}
@@ -89,6 +92,7 @@ export default function Header({
 										)}
 										onChange={(e) => {
 											onChange(e.value);
+											setOrderType(e.order_type);
 										}}
 										isDisabled={batch_uuid != undefined}
 									/>
@@ -124,11 +128,13 @@ export default function Header({
 						unit='PCS'
 						{...{ register, errors }}
 					/>
-					<Input
-						label='dyeing_lead_time'
-						unit='KG'
-						{...{ register, errors }}
-					/>
+					{orderType !== 'slider' && (
+						<Input
+							label='dyeing_lead_time'
+							unit='KG'
+							{...{ register, errors }}
+						/>
+					)}
 				</div>
 				<Textarea label='remarks' {...{ register, errors }} />
 			</SectionEntryBody>

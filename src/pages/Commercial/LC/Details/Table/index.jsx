@@ -16,31 +16,41 @@ export default function Index({ entries }) {
 				accessorKey: 'handover_date',
 				header: 'Hand Over',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
 			},
 			{
 				accessorKey: 'document_receive_date',
 				header: 'Doc Receive',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
 			},
 			{
 				accessorKey: 'acceptance_date',
 				header: 'Acceptance',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
 			},
 			{
 				accessorKey: 'maturity_date',
 				header: 'Maturity',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
 			},
 			{
 				accessorKey: 'payment_date',
 				header: 'Payment',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
 			},
 			{
 				accessorKey: 'payment_value',

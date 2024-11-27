@@ -1,4 +1,5 @@
 import { ArrowBack, PDF, TransferIn } from '@/assets/icons';
+
 import BadgeCheckbox from './BadgeCheckbox';
 import { EditDelete } from './EditDelete';
 import StatusButton from './StatusButton';
@@ -25,9 +26,10 @@ function Pdf({ props }) {
 	);
 }
 
-const Transfer = ({ onClick }) => {
+const Transfer = ({ onClick, disabled = false }) => {
 	return (
 		<button
+			disabled={disabled}
 			type='button'
 			className='btn btn-circle btn-accent btn-sm font-semibold text-white shadow-md'
 			onClick={onClick}>

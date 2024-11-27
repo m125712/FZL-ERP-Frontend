@@ -88,9 +88,17 @@ export default function Index() {
 				// hidden: !haveAccess.includes('click_production'),
 				width: 'w-8',
 				cell: (info) => {
+					const { min_quantity_with_link, min_quantity_no_link } =
+						info.row.original;
 					return (
 						<Transfer
 							onClick={() => handelProduction(info.row.index)}
+							disabled={
+								min_quantity_with_link <= 0 &&
+								min_quantity_no_link <= 0
+									? true
+									: false
+							}
 						/>
 					);
 				},
@@ -115,9 +123,13 @@ export default function Index() {
 				// hidden: !haveAccess.includes('click_transaction'),
 				width: 'w-8',
 				cell: (info) => {
+					const { quantity, weight } = info.row.original;
 					return (
 						<Transfer
 							onClick={() => handelTransaction(info.row.index)}
+							disabled={
+								quantity <= 0 || weight <= 0 ? true : false
+							}
 						/>
 					);
 				},

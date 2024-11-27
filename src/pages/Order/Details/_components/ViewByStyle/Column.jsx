@@ -123,19 +123,19 @@ const getColumn = ({ show_price }) => {
 		}),
 		createColumn({
 			accessorKey: 'total_pi_quantity',
-			header: 'Total PI QTY',
+			header: 'PI',
 			enableColumnFilter: false,
 			cell: (info) => info.getValue(),
 		}),
 		createColumn({
 			accessorKey: 'total_reject_quantity',
-			header: 'Total Reject QTY',
+			header: 'Reject',
 			enableColumnFilter: false,
 			cell: (info) => info.getValue(),
 		}),
 		createColumn({
 			accessorKey: 'total_short_quantity',
-			header: 'Total Short QTY',
+			header: 'Short',
 			enableColumnFilter: false,
 			cell: (info) => info.getValue(),
 		}),
@@ -186,7 +186,7 @@ const getColumn = ({ show_price }) => {
 		}),
 		createColumn({
 			accessorKey: 'total_delivery_quantity',
-			header: 'Total Delivery QTY',
+			header: 'Delivered',
 			enableColumnFilter: false,
 			cell: (info) => info.getValue(),
 		}),

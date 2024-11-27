@@ -48,6 +48,7 @@ export const Columns = ({
 			accessorKey: 'style',
 			header: 'Style',
 			enableColumnFilter: true,
+			width: 'w-34',
 			enableSorting: true,
 		},
 		{

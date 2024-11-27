@@ -30,13 +30,6 @@ export default function Index({
 	updateOrderInfo = {
 		uuid: null,
 		order_number: null,
-		reference_order_info_uuid: null,
-		party_uuid: null,
-		buyer_uuid: null,
-		merchandiser_uuid: null,
-		marketing_uuid: null,
-		factory_uuid: null,
-		issued_by_uuid: null,
 	},
 	setUpdateOrderInfo,
 }) {
@@ -83,17 +76,10 @@ export default function Index({
 
 	const onClose = () => {
 		setUpdateOrderInfo((prev) => ({
-			...prev,
 			uuid: null,
 			order_number: null,
-			reference_order_info_uuid: null,
-			party_uuid: null,
-			buyer_uuid: null,
-			merchandiser_uuid: null,
-			marketing_uuid: null,
-			factory_uuid: null,
-			issued_by_uuid: null,
 		}));
+
 		reset(ORDER_INFO_NULL);
 		window[modalId].close();
 	};
@@ -117,7 +103,7 @@ export default function Index({
 				url: `${url}/${updateOrderInfo?.uuid}`,
 				uuid: updateOrderInfo?.uuid,
 				updatedData,
-				onClose: onClose,
+				onClose,
 			});
 
 			return;

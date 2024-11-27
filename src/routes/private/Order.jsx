@@ -69,9 +69,9 @@ export const OrderRoutes = [
 			},
 			{
 				name: 'Party Description',
-				path: '/order/info',
+				path: '/order/party-description',
 				element: <OrderInfo />,
-				page_name: 'order__info',
+				page_name: 'order__party_description',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
 			{

@@ -34,9 +34,10 @@ export default function Index({ initial_order, idx }) {
 		}
 	}, [order_description_uuid, initial_order]);
 
-	if (!order) return <Navigate to='/not-found' />;
 	if (loading)
 		return <span className='loading loading-dots loading-lg z-50' />;
+
+	if (!order) return <Navigate to='/not-found' />;
 
 	const sliderQuantity = order?.order_entry.reduce(
 		(totals, item) => {

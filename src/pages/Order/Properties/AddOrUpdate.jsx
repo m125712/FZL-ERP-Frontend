@@ -28,7 +28,7 @@ import { DevTool } from '@hookform/devtools';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { FormField, Input, ReactSelect } from '@/ui';
+import { FormField, Input, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { PROPERTIES_NULL, PROPERTIES_SCHEMA } from '@util/Schema';
@@ -264,7 +264,7 @@ export default function Index({
 			<Input label='name' {...{ register, errors }} />
 			<Input label='short_name' {...{ register, errors }} />
 			<Input label='order_sheet_name' {...{ register, errors }} />
-			<Input label='remarks' {...{ register, errors }} />
+			<Textarea rows={3} label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);

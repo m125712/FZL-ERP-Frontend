@@ -127,6 +127,9 @@ export default function Information({ batch, water_capacity }) {
 				label: 'Slot',
 				value: slot === 0 ? '-' : 'Slot ' + slot,
 			},
+		];
+
+		const others = [
 			{
 				label: 'Operator',
 				value: dyeing_operator_name,
@@ -167,6 +170,7 @@ export default function Information({ batch, water_capacity }) {
 			yarn_issues,
 			conneing,
 			dying,
+			others,
 		};
 	};
 
@@ -185,12 +189,18 @@ export default function Information({ batch, water_capacity }) {
 						items={renderItems().yarn_issues}
 					/>
 				</div>
-
-				<RenderTable
-					// className={'border-secondary/30 lg:border-t'}
-					title={'Dyeing'}
-					items={renderItems().dying}
-				/>
+				<div className='grid grid-cols-1 border-secondary/30 lg:grid-cols-2 lg:gap-8 lg:border-b'>
+					<RenderTable
+						className={'border-secondary/30 lg:border-r'}
+						title={'Dyeing'}
+						items={renderItems().dying}
+					/>
+					<RenderTable
+						className={'border-secondary/30 lg:border-l'}
+						title={'Others'}
+						items={renderItems().others}
+					/>
+				</div>
 			</div>
 		</SectionContainer>
 	);

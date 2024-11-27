@@ -64,7 +64,9 @@ export default function Index() {
 				),
 				width: 'w-24',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
 			},
 			{
 				accessorKey: 'total_cone',

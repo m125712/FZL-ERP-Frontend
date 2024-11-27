@@ -147,8 +147,14 @@ export default function Index({
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				title='Amount'
-				label='amount'
+				title='Zipper Amount'
+				label='zipper_amount'
+				unit='$'
+				{...{ register, errors }}
+			/>
+			<JoinInput
+				title='Thread Amount'
+				label='thread_amount'
 				unit='$'
 				{...{ register, errors }}
 			/>

@@ -1,10 +1,12 @@
 import { lazy, useEffect, useState } from 'react';
-import { useAccess } from '@/hooks';
 import { useOrderFactory } from '@/state/Order';
-import PageInfo from '@/util/PageInfo';
+import { useOtherFactoryByPartyUUID } from '@/state/Other';
+import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
+
+import PageInfo from '@/util/PageInfo';
 
 import { FactoryColumns } from '../columns';
 
@@ -13,6 +15,8 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useOrderFactory();
+	const { invalidateQuery: invalidateFactoryByPartyUUID } =
+		useOtherFactoryByPartyUUID();
 	const info = new PageInfo('Order/Factory', url, 'order__factory');
 	const haveAccess = useAccess('order__factory');
 
@@ -85,6 +89,7 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateFactoryByPartyUUID}
 					{...{
 						deleteItem,
 						setDeleteItem,

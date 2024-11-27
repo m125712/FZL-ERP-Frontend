@@ -143,6 +143,10 @@ export default function Index() {
 
 	// Submit
 	const onSubmit = async (data) => {
+		if (data?.is_old_pi === false && data?.pi[0]?.uuid === null) {
+			alert('Please add at least one PI');
+			return;
+		}
 		const formatDate = (dateString) =>
 			dateString ? format(new Date(dateString), 'yyyy-MM-dd') : null;
 
@@ -538,7 +542,7 @@ export default function Index() {
 										</td>
 										<td className={cn(`pl-1 ${rowClass} `)}>
 											<div className='flex flex-wrap items-center gap-2'>
-												{piIdxValue?.order_numbers
+												{piIdxValue?.order_number
 													?.filter((e) => !!e)
 													?.map((e) => (
 														<span

@@ -1,6 +1,7 @@
 import { lazy, useEffect, useState } from 'react';
-import { useAccess } from '@/hooks';
 import { useOrderMarketing } from '@/state/Order';
+import { useOtherMarketing } from '@/state/Other';
+import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
@@ -14,6 +15,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useOrderMarketing();
+	const { invalidateQuery: invalidateMarketing } = useOtherMarketing();
 	const info = new PageInfo('Order/Marketing', url, 'order__marketing');
 	const haveAccess = useAccess('order__marketing');
 
@@ -95,6 +97,7 @@ export default function Index() {
 						url,
 						deleteData,
 					}}
+					invalidateQuery={invalidateMarketing}
 				/>
 			</Suspense>
 		</div>

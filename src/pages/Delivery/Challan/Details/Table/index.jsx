@@ -4,6 +4,7 @@ import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { LinkWithCopy } from '@/ui';
 
 export default function Index({ challan, item_for }) {
+	console.log(item_for);
 	const columns = useMemo(
 		() => [
 			{
@@ -23,7 +24,7 @@ export default function Index({ challan, item_for }) {
 			{
 				accessorKey: 'item_description',
 				header: () =>
-					item_for === 'thread' || 'sample_thread'
+					item_for === 'thread' || item_for === 'sample_thread'
 						? 'Count'
 						: 'Item Description',
 				cell: (info) => info.getValue(),
@@ -44,7 +45,7 @@ export default function Index({ challan, item_for }) {
 			{
 				accessorKey: 'size',
 				header: () =>
-					item_for === 'thread' || 'sample_thread'
+					item_for === 'thread' || item_for === 'sample_thread'
 						? 'Length'
 						: 'Size',
 				cell: (info) => info.getValue(),
@@ -54,9 +55,9 @@ export default function Index({ challan, item_for }) {
 				accessorKey: 'is_inch',
 				header: 'Unit',
 				cell: (info) =>
-					item_for === 'thread' || 'sample_thread'
+					item_for === 'thread' || item_for === 'sample_thread'
 						? 'Meter'
-						: info.getValue()
+						: info.getValue() === 1
 							? 'Inch'
 							: 'Cm',
 				enableColumnFilter: false,

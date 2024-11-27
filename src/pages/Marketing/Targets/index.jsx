@@ -43,8 +43,15 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'amount',
-				header: 'Amount',
+				accessorKey: 'zipper_amount',
+				header: 'Zipper Amount',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'thread_amount',
+				header: 'Thread Amount',
 				enableColumnFilter: true,
 				width: 'w-36',
 				cell: (info) => info.getValue(),

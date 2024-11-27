@@ -25,9 +25,9 @@ export default function Index(data) {
 		getTable('item_description', 'Count'),
 		getTable('style', 'Style'),
 		getTable('color', 'Color'),
+		getTable('recipe_name', 'Recipe'),
 		getTable('size', 'Length', 'right'),
 		getTable('quantity', 'Qty(cone)', 'right'),
-		getTable('poli_quantity', 'Poly', 'right'),
 	];
 	const node =
 		data?.item_for === 'thread' || data?.item_for === 'sample_thread'
@@ -84,7 +84,7 @@ export default function Index(data) {
 			{
 				table: {
 					// headerRows: 1,
-					widths: [40, '*', '*', 40, 40, 30],
+					widths: [40, '*', '*', 40, 40, 40],
 					body: [
 						[
 							{
@@ -169,9 +169,14 @@ export default function Index(data) {
 								text: `${data?.factory_name}`,
 
 								fontSize: DEFAULT_FONT_SIZE - 2,
-								colSpan: 2,
+								colSpan: 5,
 							},
 							{},
+							{},
+							{},
+							{},
+						],
+						[
 							{
 								text: 'Buyer',
 								bold: true,
@@ -181,22 +186,33 @@ export default function Index(data) {
 								text: `${data?.buyer_name}`,
 
 								fontSize: DEFAULT_FONT_SIZE - 2,
-								colSpan: 2,
+								colSpan: 5,
 							},
+							{},
+							{},
+							{},
+							{},
+						],
+						[
+							{
+								text: 'Party',
+								bold: true,
+								fontSize: DEFAULT_FONT_SIZE - 2,
+							},
+							{
+								text: `${data?.party_name}`,
+
+								fontSize: DEFAULT_FONT_SIZE - 2,
+								colSpan: 5,
+							},
+							{},
+							{},
+							{},
 							{},
 						],
 						// * Header
-						data?.item_for == 'zipper'
-							? TableHeader(
-									nodeZipper,
-									DEFAULT_FONT_SIZE - 2,
-									'#000000'
-								)
-							: TableHeader(
-									nodeThread,
-									DEFAULT_FONT_SIZE - 2,
-									'#000000'
-								),
+
+						TableHeader(node, DEFAULT_FONT_SIZE - 2, '#000000'),
 
 						// * Body
 						...packing_list_entry?.map((item) =>

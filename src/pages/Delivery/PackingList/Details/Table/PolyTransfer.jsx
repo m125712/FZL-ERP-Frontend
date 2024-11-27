@@ -21,7 +21,10 @@ export default function Index({
 		color: null,
 		size: null,
 		is_inch: 0,
+		item_for: null,
 		order_quantity: 0,
+		is_inch: 0,
+		party_name: null,
 	},
 	setUpdate,
 }) {

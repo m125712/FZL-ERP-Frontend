@@ -296,7 +296,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [44, 40, 50, '*', 50, 46, 40, 45, 40],
+					widths: [45, 40, 50, '*', 50, 46, 40, 45, 40],
 					body: [
 						// Header
 						TableHeader(node),

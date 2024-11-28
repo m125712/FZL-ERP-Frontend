@@ -10,6 +10,7 @@ import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import * as yup from 'yup';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
@@ -23,7 +24,13 @@ import {
 } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
-import { DYEING_TRANSFER_NULL, DYEING_TRANSFER_SCHEMA } from '@util/Schema';
+import {
+	DYEING_TRANSFER_NULL,
+	DYEING_TRANSFER_SCHEMA,
+	NUMBER_DOUBLE,
+	STRING,
+	STRING_REQUIRED,
+} from '@util/Schema';
 import { exclude } from '@/util/Exclude';
 import GetDateTime from '@/util/GetDateTime';
 
@@ -55,7 +62,35 @@ export default function Index() {
 		getValues,
 		setValue,
 		watch,
-	} = useRHF(DYEING_TRANSFER_SCHEMA, DYEING_TRANSFER_NULL);
+	} = useRHF(
+		{
+			dyeing_transfer_entry: yup.array().of(
+				yup.object().shape({
+					sfg_uuid: STRING.when({
+						is: () => orderSelected?.order_type === 'tape',
+						then: (schema) => schema.required('Required'),
+						otherwise: (schema) => schema.nullable(),
+					}),
+					order_description_uuid: STRING_REQUIRED,
+					colors: yup.array().of(yup.string()).nullable(),
+					trx_quantity_in_meter: NUMBER_DOUBLE.when({
+						is: () => orderSelected?.order_type === 'tape',
+						then: (schema) =>
+							schema
+								.required('Required')
+								.moreThan(0, 'Must be greater than 0'),
+						otherwise: (schema) => schema.nullable(),
+					}),
+					trx_quantity: NUMBER_DOUBLE.required('Required').transform(
+						(value, originalValue) =>
+							String(originalValue).trim() === '' ? null : value
+					), // Transforms empty strings to null
+					remarks: STRING.nullable(),
+				})
+			),
+		},
+		DYEING_TRANSFER_NULL
+	);
 
 	useEffect(() => {
 		order_number !== undefined
@@ -228,7 +263,7 @@ export default function Index() {
 							'Stock (Kg)',
 							'Balance (Kg)',
 							...(orderSelected?.order_type === 'tape'
-								? ['Style-Color']
+								? ['Style-Color', 'Trx Qty (M)']
 								: []),
 							'Trx Quantity',
 							'Remarks',
@@ -346,53 +381,72 @@ export default function Index() {
 									</td>
 
 									{orderSelected?.order_type === 'tape' && (
-										<td className={`w-36 ${rowClass}`}>
-											<FormField
-												label={`dyeing_transfer_entry[${index}].sfg_uuid`}
-												title='Style'
-												is_title_needed='false'
-												dynamicerror={
-													errors
-														?.dyeing_transfer_entry?.[
-														index
-													].sfg_uuid
-												}>
-												<Controller
-													name={`dyeing_transfer_entry[${index}].sfg_uuid`}
-													control={control}
-													render={({
-														field: { onChange },
-													}) => {
-														return (
-															<ReactSelect
-																menuPortalTarget={
-																	document.body
-																}
-																placeholder='Select Style'
-																options={
-																	orderSelected?.style_color_object
-																}
-																value={orderSelected?.style_color_object?.filter(
-																	(item) =>
-																		item.value ===
-																		getValues(
-																			`dyeing_transfer_entry[${index}].sfg_uuid`
-																		)
-																)}
-																onChange={(
-																	e
-																) => {
-																	onChange(
-																		e.value
-																	);
-																}}
-																// isDisabled={updateCoilProd?.id !== null}
-															/>
-														);
-													}}
+										<>
+											<td className={`w-36 ${rowClass}`}>
+												<FormField
+													label={`dyeing_transfer_entry[${index}].sfg_uuid`}
+													title='Style'
+													is_title_needed='false'
+													dynamicerror={
+														errors
+															?.dyeing_transfer_entry?.[
+															index
+														].sfg_uuid
+													}>
+													<Controller
+														name={`dyeing_transfer_entry[${index}].sfg_uuid`}
+														control={control}
+														render={({
+															field: { onChange },
+														}) => {
+															return (
+																<ReactSelect
+																	menuPortalTarget={
+																		document.body
+																	}
+																	placeholder='Select Style'
+																	options={
+																		orderSelected?.style_color_object
+																	}
+																	value={orderSelected?.style_color_object?.filter(
+																		(
+																			item
+																		) =>
+																			item.value ===
+																			getValues(
+																				`dyeing_transfer_entry[${index}].sfg_uuid`
+																			)
+																	)}
+																	onChange={(
+																		e
+																	) => {
+																		onChange(
+																			e.value
+																		);
+																	}}
+																	// isDisabled={updateCoilProd?.id !== null}
+																/>
+															);
+														}}
+													/>
+												</FormField>
+											</td>
+											<td className={`w-52 ${rowClass}`}>
+												<JoinInput
+													label={`dyeing_transfer_entry[${index}].trx_quantity_in_meter`}
+													is_title_needed='false'
+													// placeholder={`Max: ${}`}  // TODO: fix this with schema
+													unit='M'
+													dynamicerror={
+														errors
+															?.dyeing_transfer_entry?.[
+															index
+														].trx_quantity_in_meter
+													}
+													{...{ register, errors }}
 												/>
-											</FormField>
-										</td>
+											</td>
+										</>
 									)}
 
 									{/* Trx quantity*/}

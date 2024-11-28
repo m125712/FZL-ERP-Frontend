@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
-import { useSliderAssemblyProduction, useSliderAssemblyProductionEntryByUUID } from '@/state/Slider';
+import {
+	useSliderAssemblyProduction,
+	useSliderAssemblyProductionEntryByUUID,
+} from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
 import { Weight } from 'lucide-react';
 import { useRHF } from '@/hooks';
@@ -67,6 +70,7 @@ export default function Index({
 		if (updateSliderProd?.uuid !== null) {
 			const updatedData = {
 				...data,
+				with_link: updateSliderProd?.with_link,
 				updated_at: GetDateTime(),
 			};
 
@@ -98,11 +102,7 @@ export default function Index({
 				sub_label={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>
-			<JoinInput
-				label='weight'
-				unit='KG'
-				{...{ register, errors }}
-			/>
+			<JoinInput label='weight' unit='KG' {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>

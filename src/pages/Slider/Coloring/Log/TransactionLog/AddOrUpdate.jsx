@@ -1,16 +1,20 @@
 import { useEffect } from 'react';
-import { useRHF, useUpdateFunc } from '@/hooks';
-import { useSliderAssemblyTransferEntryByUUID, useSliderColoringProduction } from '@/state/Slider';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+import {
+	useSliderAssemblyTransferEntryByUUID,
+	useSliderColoringProduction,
+} from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
+import { useRHF, useUpdateFunc } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
 import {
 	NUMBER_REQUIRED,
 	SLIDER_ASSEMBLY_TRANSACTION_NULL,
 	SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
 } from '@util/Schema';
-
-import { AddModal } from '@/components/Modal';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -102,6 +106,16 @@ export default function Index({
 		{ label: 'Coloring', value: 'coloring_stock' },
 	];
 
+	const styles = [
+		...(updateSliderTrx?.order_type === 'slider'
+			? [
+					{
+						label: updateSliderTrx?.style,
+						value: updateSliderTrx?.sfg_uuid,
+					},
+				]
+			: []),
+	];
 	return (
 		<AddModal
 			id={modalId}
@@ -114,6 +128,31 @@ export default function Index({
 				`}
 			onClose={onClose}
 			isSmall={true}>
+			{updateSliderTrx?.order_type === 'slider' && (
+				<FormField label='sfg_uuid' title='Style' errors={errors}>
+					<Controller
+						name='sfg_uuid'
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select style'
+									options={styles}
+									value={styles.filter(
+										(item) =>
+											item.value ==
+											updateSliderTrx?.sfg_uuid
+									)}
+									isDisabled={true}
+									// onChange={(e) => {
+									// 	onChange(e.value);
+									// }}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+			)}
 			<JoinInput
 				label='trx_quantity'
 				unit='PCS'

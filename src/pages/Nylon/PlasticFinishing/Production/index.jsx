@@ -71,6 +71,12 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'order_type',
+				header: 'Type',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'is_waterproof',
 				header: 'Waterproof',
 				enableColumnFilter: false,

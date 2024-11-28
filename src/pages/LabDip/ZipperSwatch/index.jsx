@@ -68,6 +68,13 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'order_type',
+				header: 'Type',
+				width: 'w-24',
+				// enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'style',
 				header: 'Style',
 				width: 'w-40',

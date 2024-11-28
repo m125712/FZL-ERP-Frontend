@@ -99,7 +99,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'order_type',
-				header: 'Order Type',
+				header: 'Type',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

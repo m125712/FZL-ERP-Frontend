@@ -108,6 +108,7 @@ export default function createGlobalState({ queryKey, url, enabled = true }) {
 		url,
 		// * Data
 		data: data?.data,
+		originalData: data,
 		toast: data?.toast,
 		// * States
 		isLoading,

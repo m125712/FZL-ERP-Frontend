@@ -4,7 +4,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { LinkWithCopy, Transfer } from '@/ui';
+import { LinkWithCopy, StatusButton, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -71,8 +71,24 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'order_type',
+				header: 'Type',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_waterproof',
+				header: 'Waterproof',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => (
+					<StatusButton size='btn-sm' value={info.getValue()} />
+				),
+			},
+			{
 				accessorKey: 'style',
 				header: 'Style',
+				width: 'w-24',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
@@ -142,11 +158,27 @@ export default function Index() {
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_production'),
-				cell: (info) => (
-					<Transfer
-						onClick={() => handelProduction(info.row.index)}
-					/>
-				),
+				cell: (info) => {
+					const {
+						balance_quantity,
+						finishing_stock,
+						slider_finishing_stock,
+					} = info.row.original;
+					return (
+						<Transfer
+							onClick={() => handelProduction(info.row.index)}
+							disabled={
+								Math.min(
+									Number(balance_quantity),
+									Number(finishing_stock),
+									Number(slider_finishing_stock)
+								) <= 0
+									? true
+									: false
+							}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'finishing_prod',

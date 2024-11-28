@@ -180,23 +180,6 @@ export default function Information({ pi }) {
 				label: 'Weight',
 				value: weight + ' Kg',
 			},
-
-			{
-				label: 'Created By',
-				value: created_by_name,
-			},
-			{
-				label: 'Remarks',
-				value: remarks,
-			},
-			{
-				label: 'Created At',
-				value: format(new Date(created_at), 'dd/MM/yy'),
-			},
-			{
-				label: 'Updated At',
-				value: format(new Date(updated_at), 'dd/MM/yy'),
-			},
 		];
 
 		const otherInfo = [
@@ -226,9 +209,29 @@ export default function Information({ pi }) {
 			},
 		];
 
+		const created_details = [
+			{
+				label: 'Created By',
+				value: created_by_name,
+			},
+			{
+				label: 'Created At',
+				value: format(new Date(created_at), 'dd/MM/yy'),
+			},
+			{
+				label: 'Updated At',
+				value: format(new Date(updated_at), 'dd/MM/yy'),
+			},
+			{
+				label: 'Remarks',
+				value: remarks,
+			},
+		];
+
 		return {
 			basicInfo,
 			otherInfo,
+			created_details,
 		};
 	};
 
@@ -246,16 +249,21 @@ export default function Information({ pi }) {
 
 	return (
 		<SectionContainer buttons={renderButtons()} title={'Information'}>
-			<div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-8'>
+			<div className='grid grid-cols-1 lg:grid-cols-3'>
 				<RenderTable
 					className={'border-secondary/30 lg:border-r'}
 					title={'Basic Info'}
 					items={renderItems().basicInfo}
 				/>
 				<RenderTable
-					className={'border-secondary/30 lg:border-l'}
+					className={'border-secondary/30 lg:border-r'}
 					title={'Party Details'}
 					items={renderItems().otherInfo}
+				/>
+				<RenderTable
+					className={'border-secondary/30'}
+					title={'Created Details'}
+					items={renderItems().created_details}
 				/>
 			</div>
 		</SectionContainer>

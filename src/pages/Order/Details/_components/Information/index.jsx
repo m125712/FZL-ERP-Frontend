@@ -4,6 +4,7 @@ import { useOrderDescription } from '@/state/Order';
 import { format } from 'date-fns';
 
 import SectionContainer from '@/ui/Others/SectionContainer';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import RenderTable from '@/ui/Others/Table/RenderTable';
 import { LinkWithCopy, ReactSelect, StatusButton, TitleValue } from '@/ui';
 
@@ -188,13 +189,22 @@ export function OrderInformation({
 				onClick={handelPdfDownload}>
 				<PDF className='w-4' /> PDF
 			</button>,
-			<button
-				key='pdf-1'
-				type='button'
-				className='btn btn-sm rounded-badge border-none bg-yellow-400 hover:bg-yellow-500'
-				onClick={handleViewChange}>
-				{updateView ? 'View by Style' : 'Default View'}
-			</button>,
+			<div className='flex items-center gap-2'>
+				<SwitchToggle
+					onChange={handleViewChange}
+					checked={updateView}
+				/>
+				<span className='text-sm'>
+					{updateView ? 'View by Style' : 'Default View'}
+				</span>
+			</div>,
+			// <button
+			// 	key='pdf-1'
+			// 	type='button'
+			// 	className='btn btn-sm rounded-badge border-none bg-yellow-400 hover:bg-yellow-500'
+			// 	onClick={handleViewChange}>
+			// 	{updateView ? 'View by Style' : 'Default View'}
+			// </button>,
 		];
 	};
 
@@ -208,44 +218,44 @@ export function OrderInformation({
 		});
 	};
 
-	const renderSelector = () => {
-		const [select, setSelect] = useState(
-			order?.print_in ? order?.print_in : ''
-		);
+	// const renderSelector = () => {
+	// 	const [select, setSelect] = useState(
+	// 		order?.print_in ? order?.print_in : ''
+	// 	);
 
-		const selections = [
-			{
-				label: 'Portrait',
-				value: 'portrait',
-			},
-			{
-				label: 'Landscape',
-				value: 'landscape',
-			},
-			{
-				label: 'Break Down',
-				value: 'break_down',
-			},
-		];
+	// 	const selections = [
+	// 		{
+	// 			label: 'Portrait',
+	// 			value: 'portrait',
+	// 		},
+	// 		{
+	// 			label: 'Landscape',
+	// 			value: 'landscape',
+	// 		},
+	// 		{
+	// 			label: 'Break Down',
+	// 			value: 'break_down',
+	// 		},
+	// 	];
 
-		return (
-			<ReactSelect
-				placeholder='Select Order'
-				options={selections}
-				value={selections?.find((item) => item.value === select)}
-				onChange={(e) => {
-					setSelect(e.value);
-					onChangePrint(e.value);
-				}}
-			/>
-		);
-	};
+	// 	return (
+	// 		<ReactSelect
+	// 			placeholder='Select Order'
+	// 			options={selections}
+	// 			value={selections?.find((item) => item.value === select)}
+	// 			onChange={(e) => {
+	// 				setSelect(e.value);
+	// 				onChangePrint(e.value);
+	// 			}}
+	// 		/>
+	// 	);
+	// };
 
 	return (
 		<SectionContainer
 			title='Order Information'
 			buttons={renderButtons()}
-			selector={renderSelector()}
+			// selector={renderSelector()}
 			className={'mb-8'}>
 			<div className='grid grid-cols-1 bg-base-100 md:grid-cols-2 md:gap-8'>
 				<RenderTable

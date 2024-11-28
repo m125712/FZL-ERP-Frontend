@@ -40,8 +40,10 @@ export default function index() {
 		deleteData,
 		invalidateQuery: invalidateNewFinishingBatch,
 	} = useDyeingFinishingBatchByUUID(batch_uuid, 'is_update=true');
+
 	const { invalidateQuery: invalidateDetails } =
 		useDyeingFinishingBatchByUUID(batch_uuid);
+
 	const { invalidateQuery } = useDyeingFinishingBatch();
 
 	const {
@@ -56,7 +58,6 @@ export default function index() {
 		watch,
 		setValue,
 		formState: { dirtyFields },
-
 	} = useRHF(
 		{
 			...FINISHING_BATCH_ENTRY_SCHEMA,
@@ -67,7 +68,7 @@ export default function index() {
 					otherwise: (schema) => schema.nullable(),
 				}),
 		},
-		FINISHING_BATCH_ENTRY_NULL
+		{ ...FINISHING_BATCH_ENTRY_NULL, production_date }
 	);
 
 	useEffect(() => {

@@ -24,7 +24,7 @@ export default function Information({ challan }) {
 	} = challan;
 
 	const renderItems = () => {
-		return [
+		const basicInfo = [
 			{
 				label: 'Challan Number',
 				value: challan_number,
@@ -56,6 +56,9 @@ export default function Information({ challan }) {
 					<StatusButton className={'btn-xs'} value={receive_status} />
 				),
 			},
+		];
+
+		const deliveryDetails = [
 			{
 				label: 'Name',
 				value: name,
@@ -72,13 +75,12 @@ export default function Information({ challan }) {
 				label: 'Delivery Date',
 				value: format(new Date(delivery_date), 'dd/MM/yy'),
 			},
+		];
+
+		const createdDetails = [
 			{
 				label: 'Created By',
 				value: created_by_name,
-			},
-			{
-				label: 'Remarks',
-				value: remarks,
 			},
 			{
 				label: 'Created At',
@@ -88,7 +90,17 @@ export default function Information({ challan }) {
 				label: 'Updated At',
 				value: format(new Date(updated_at), 'dd/MM/yy'),
 			},
+			{
+				label: 'Remarks',
+				value: remarks,
+			},
 		];
+
+		return {
+			basicInfo,
+			deliveryDetails,
+			createdDetails,
+		};
 	};
 
 	const renderButtons = () => {
@@ -104,7 +116,22 @@ export default function Information({ challan }) {
 
 	return (
 		<SectionContainer buttons={renderButtons()} title={'Information'}>
-			<RenderTable items={renderItems()} />
+			<div className='grid lg:grid-cols-3'>
+				<RenderTable
+					title={'Basic Info'}
+					className='border-secondary/30 lg:border-r'
+					items={renderItems().basicInfo}
+				/>
+				<RenderTable
+					title={'Delivery Details'}
+					className='border-secondary/30 lg:border-r'
+					items={renderItems().deliveryDetails}
+				/>
+				<RenderTable
+					title={'Created Details'}
+					items={renderItems().createdDetails}
+				/>
+			</div>
 		</SectionContainer>
 	);
 }

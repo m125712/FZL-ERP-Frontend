@@ -155,7 +155,7 @@ export default function Index() {
 				handleViewChange={() =>
 					updateView ? setUpdateView(false) : setUpdateView(true)
 				}
-				updateView
+				updateView={updateView}
 			/>
 
 			{!updateView &&

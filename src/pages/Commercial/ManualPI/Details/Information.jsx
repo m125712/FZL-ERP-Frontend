@@ -149,22 +149,6 @@ export default function Information({ data }) {
 				label: 'Date',
 				value: format(new Date(date), 'dd/MM/yyyy'),
 			},
-			{
-				label: 'Created By',
-				value: created_by_name,
-			},
-			{
-				label: 'Created At',
-				value: format(new Date(created_at), 'dd/MM/yyyy'),
-			},
-			{
-				label: 'Updated At',
-				value: format(new Date(updated_at), 'dd/MM/yyyy'),
-			},
-			{
-				label: 'Remarks',
-				value: remarks,
-			},
 		];
 
 		const buyer_info = [
@@ -194,15 +178,35 @@ export default function Information({ data }) {
 			},
 		];
 
+		const created_details = [
+			{
+				label: 'Created By',
+				value: created_by_name,
+			},
+			{
+				label: 'Created At',
+				value: format(new Date(created_at), 'dd/MM/yyyy'),
+			},
+			{
+				label: 'Updated At',
+				value: format(new Date(updated_at), 'dd/MM/yyyy'),
+			},
+			{
+				label: 'Remarks',
+				value: remarks,
+			},
+		];
+
 		return {
 			basicInfo,
 			buyer_info,
+			created_details,
 		};
 	};
 
 	return (
 		<SectionContainer title={'Information'} contentClassName={'space-y-0 '}>
-			<div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-8'>
+			<div className='grid grid-cols-1 lg:grid-cols-3'>
 				<RenderTable
 					className={'border-secondary/30 lg:border-r'}
 					title={'PI Details'}
@@ -210,9 +214,14 @@ export default function Information({ data }) {
 				/>
 
 				<RenderTable
-					className={'border-secondary/30 lg:border-l'}
+					className={'border-secondary/30 lg:border-r'}
 					title={'Buyer Details'}
 					items={renderItems().buyer_info}
+				/>
+				<RenderTable
+					className={'border-secondary/30'}
+					title={'Created Details'}
+					items={renderItems().created_details}
 				/>
 			</div>
 		</SectionContainer>

@@ -1,6 +1,85 @@
+import SectionContainer from '@/ui/Others/SectionContainer';
+import RenderTable from '@/ui/Others/Table/RenderTable';
 import { DateTime, TitleValue } from '@/ui';
 
 export default function Information({ batch }) {
+	const renderItems = () => {
+		const basicInfo = [
+			{
+				label: 'Batch ID',
+				value: batch?.batch_id,
+			},
+			{
+				label: 'Machine',
+				value: batch?.machine_name,
+			},
+
+			{
+				label: 'Slot',
+				value: batch?.slot,
+			},
+			{
+				label: 'Status',
+				value:
+					batch?.batch_status === 'pending' ? (
+						<span className='badge badge-warning badge-sm h-5 capitalize'>
+							{batch?.batch_status}
+						</span>
+					) : batch?.batch_status === 'completed' ? (
+						<span className='badge badge-success badge-sm h-5 capitalize'>
+							{batch?.batch_status}
+						</span>
+					) : (
+						<span className='badge badge-error badge-sm h-5 capitalize'>
+							{batch?.batch_status}
+						</span>
+					),
+			},
+			{
+				label: 'Production Date',
+				value: (
+					<DateTime date={batch?.production_date} isTime={false} />
+				),
+			},
+		];
+
+		const created_details = [
+			{
+				label: 'Created By',
+				value: batch?.created_by_name,
+			},
+			{
+				label: 'Created At',
+				value: <DateTime date={batch?.created_at} isTime={false} />,
+			},
+			{
+				label: 'Updated At',
+				value: <DateTime date={batch?.updated_at} isTime={false} />,
+			},
+			{
+				label: 'Remarks',
+				value: batch?.remarks,
+			},
+		];
+
+		return { basicInfo, created_details };
+	};
+
+	return (
+		<SectionContainer title={'Planning Batch'}>
+			<div className='grid lg:grid-cols-2'>
+				<RenderTable
+					className={'border-secondary/30 lg:border-r'}
+					title='Basic Info'
+					items={renderItems().basicInfo}
+				/>
+				<RenderTable
+					title='Created Details'
+					items={renderItems().created_details}
+				/>
+			</div>
+		</SectionContainer>
+	);
 	return (
 		<div className='my-2 flex flex-col rounded-md px-2 shadow-md'>
 			<span className='flex items-center gap-2 text-2xl font-semibold capitalize leading-tight text-primary md:text-3xl'>

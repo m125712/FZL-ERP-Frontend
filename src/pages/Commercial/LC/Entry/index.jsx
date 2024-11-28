@@ -147,6 +147,7 @@ export default function Index() {
 			}
 
 			return piArray.reduce((acc, item, index) => {
+				if (item.uuid === null || item.uuid === undefined) return acc;
 				const piIdxValue = pi?.find((e) => e.value === item.uuid);
 				return acc + piIdxValue?.pi_value;
 			}, 0);
@@ -463,7 +464,11 @@ export default function Index() {
 
 					{!watch('is_old_pi') && (
 						<DynamicField
-							title='Details'
+							title={`Details(Total Value: ${Number(
+								getTotalValue(watch('pi'))
+							)
+								.toFixed(2)
+								.toLocaleString()})`}
 							handelAppend={handelPiAppend}
 							tableHead={[
 								'PI',
@@ -583,7 +588,7 @@ export default function Index() {
 							})}
 						</DynamicField>
 					)}
-					<tr
+					{/* <tr
 						className={cn(
 							'relative cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30'
 						)}>
@@ -594,7 +599,7 @@ export default function Index() {
 								.toLocaleString()}
 							$ 
 						</td>
-					</tr>
+					</tr> */}
 					<div className='modal-action'>
 						<button
 							type='submit'

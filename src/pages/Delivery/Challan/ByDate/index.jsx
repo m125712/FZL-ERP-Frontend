@@ -1,28 +1,29 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
-import {
-	useDeliveryChallan,
-	useDeliveryPackingList,
-	useDeliveryPackingListByUUID,
-} from '@/state/Delivery';
-import { format } from 'date-fns';
-import { useNavigate } from 'react-router-dom';
-import { useAccess } from '@/hooks';
+import { useEffect, useMemo, useState } from 'react';
+import { useDeliveryChallan } from '@/state/Delivery';
+import { useParams } from 'react-router-dom';
+import { useAccess} from '@/hooks';
 
-import ReactTable from '@/components/Table';
-import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, EditDelete, LinkWithCopy, StatusButton } from '@/ui';
+import Pdf from '@/components/Pdf/ChallanByDate';
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
+
+import {
+	DateTime,
+	LinkWithCopy,
+	SectionEntryBody,
+	StatusButton,
+} from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
-const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
-
 export default function Index() {
-	const navigate = useNavigate();
-	const { data, isLoading, url, deleteData, updateData } =
-		useDeliveryChallan();
-	const info = new PageInfo('Challan', url, 'delivery__challan');
-	const haveAccess = useAccess('delivery__challan');
+	const { date } = useParams();
+
+	const { data, isLoading, url, updateData } = useDeliveryChallan(
+		`?delivery_date=${date}`
+	);
+	const info = new PageInfo(`Challan `, url, 'delivery__challan_by_date');
+	const haveAccess = useAccess('delivery__challan_by_date');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -82,19 +83,12 @@ export default function Index() {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				cell: (info) => {
-					const { order_info_uuid } = info.row.original;
-					const { item_for } = info.row.original;
-					return item_for === 'zipper' ? (
+					const { order_number } = info.row.original;
+					return (
 						<LinkWithCopy
 							title={info.getValue()}
 							id={info.getValue()}
 							uri='/order/details'
-						/>
-					) : (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={order_info_uuid}
-							uri='/thread/order-info'
 						/>
 					);
 				},
@@ -149,50 +143,12 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'receive_status',
-				header: 'Receive Status',
-				enableColumnFilter: false,
-				cell: (info) => {
-					const { gate_pass, receive_status } = info.row.original;
-
-					const access = haveAccess.includes('click_receive_status');
-					const overrideAccess = haveAccess.includes(
-						'click_receive_status_override'
-					);
-
-					return (
-						<SwitchToggle
-							disabled={
-								overrideAccess
-									? false
-									: access
-										? gate_pass === 0 ||
-											receive_status === 1
-										: true
-							}
-							onChange={() => handelReceiveStatus(info.row.index)}
-							checked={Number(info.getValue()) === 1}
-						/>
-					);
-				},
-			},
-			{
 				accessorKey: 'delivery_date',
 				header: 'Delivery Date',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
 				cell: (info) => {
-					const { order_number } = info.row.original;
-					return (
-						<LinkWithCopy
-							title={
-								<DateTime
-									date={info.getValue()}
-									isTime={false}
-								/>
-							}
-							id={format(new Date(info.getValue()), 'yyyy-MM-dd')}
-							uri='/delivery/challan-by-date'
-						/>
-					);
+					return <DateTime date={info.getValue()} isTime={false} />;
 				},
 			},
 
@@ -225,25 +181,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'actions',
-				header: 'Actions',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden:
-					!haveAccess.includes('update') &&
-					!haveAccess.includes('delete'),
-				width: 'w-24',
-				cell: (info) => (
-					<EditDelete
-						idx={info.row.index}
-						handelUpdate={handelUpdate}
-						handelDelete={handelDelete}
-						showDelete={haveAccess.includes('delete')}
-						showUpdate={haveAccess.includes('update')}
-					/>
-				),
-			},
 		],
 		[data]
 	);
@@ -261,68 +198,32 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 	};
+	const [data2, setData] = useState('');
 
-	// Gate Pass
-	const handelGatePass = async (idx) => {
-		const challan = data[idx];
-		const status = challan?.gate_pass == 1 ? 0 : 1;
-		const updated_at = GetDateTime();
-
-		await updateData.mutateAsync({
-			url: `/delivery/challan/${challan?.uuid}`,
-			uuid: challan?.uuid,
-			updatedData: { gate_pass: status, updated_at },
-			isOnCloseNeeded: false,
-		});
-	};
-
-	const handelAdd = () => navigate('/delivery/challan/entry');
-
-	const handelUpdate = (idx) => {
-		const uuid = data[idx]?.uuid;
-		navigate(`/delivery/challan/${uuid}/update`);
-	};
-
-	// Delete
-	const [deleteItem, setDeleteItem] = useState({
-		itemId: null,
-		itemName: null,
-	});
-	const handelDelete = (idx) => {
-		setDeleteItem((prev) => ({
-			...prev,
-			itemId: data[idx].uuid,
-			itemName: data[idx].name,
-		}));
-
-		window[info.getDeleteModalId()].showModal();
-	};
+	useEffect(() => {
+		if (data) {
+			Pdf(data)?.getDataUrl((dataUrl) => {
+				setData(dataUrl);
+			});
+		}
+	}, [data]);
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
 		<div>
-			<ReactTable
-				title={info.getTitle()}
-				data={data}
-				columns={columns}
-				accessor={haveAccess.includes('create')}
-				handelAdd={handelAdd}
+			<iframe
+				src={data2}
+				className='h-[40rem] w-full rounded-md border-none'
 			/>
-
-			<Suspense>
-				<DeleteModal
-					modalId={info.getDeleteModalId()}
+			<SectionEntryBody title={`Delivery Date: ${date}`}>
+				<ReactTableTitleOnly
 					title={info.getTitle()}
-					{...{
-						deleteItem,
-						setDeleteItem,
-						url,
-						deleteData,
-					}}
+					data={data}
+					columns={columns}
 				/>
-			</Suspense>
+			</SectionEntryBody>
 		</div>
 	);
 }

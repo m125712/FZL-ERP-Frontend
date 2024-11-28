@@ -30,10 +30,10 @@ export const useDeliveryThreadDashboardByUUID = (uuid) =>
 	});
 
 // * Challan
-export const useDeliveryChallan = () =>
+export const useDeliveryChallan = (query = '') =>
 	createGlobalState({
-		queryKey: challanQK.deliveryChallan(),
-		url: '/delivery/challan',
+		queryKey: challanQK.deliveryChallan(query),
+		url: `/delivery/challan${query}`,
 	});
 
 export const useDeliveryChallanByUUID = (uuid) =>
@@ -79,7 +79,6 @@ export const useDeliveryPackingListByUUID = (uuid) =>
 		queryKey: deliveryQk.deliveryPackingListByUUID(uuid),
 		url: `/delivery/packing-list/${uuid}`,
 		enabled: !!uuid,
-		
 	});
 
 export const useDeliveryPackingListDetailsByUUID = (uuid, { params }) =>

@@ -1399,7 +1399,7 @@ export const challanQK = {
 	all: () => ['challan'],
 
 	//Challan
-	deliveryChallan: () => [...challanQK.all(), 'delivery-challan'],
+	deliveryChallan: (query) => [...challanQK.all(), 'delivery-challan', query],
 	deliveryChallanByUUID: (uuid) => [...challanQK.deliveryChallan(), uuid],
 	deliveryChallanDetailsByUUID: (uuid) => [
 		...challanQK.all(),

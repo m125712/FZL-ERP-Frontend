@@ -1,6 +1,6 @@
 // DynamicDeliveryTable.jsx
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { get, useForm } from 'react-hook-form';
 
 import { DynamicDeliveryField, Input, RemoveButton } from '@/ui';
 
@@ -110,7 +110,6 @@ const DynamicDeliveryTable = ({
 										'Unit',
 										'Order QTY',
 										'Balance QTY',
-
 										// 'Warehouse',
 										// 'Delivered',
 										'Quantity(pcs)',
@@ -172,12 +171,18 @@ const DynamicDeliveryTable = ({
 							? 'cone'
 							: getValues(`${entryFiledName}[${index}].is_inch`)
 								? 'inch'
-								: 'cm'}
+								: getValues(
+											`${entryFiledName}[${index}].is_meter`
+									  )
+									? 'meter'
+									: 'cm'}
 					</td>
 					<td className={rowClass}>
-						{getValues(
-							`${entryFiledName}[${index}].order_quantity`
-						)}
+						{getValues(`${entryFiledName}[${index}].is_meter`) === 0
+							? '---'
+							: getValues(
+									`${entryFiledName}[${index}].order_quantity`
+								)}
 					</td>
 					<td className={rowClass}>
 						{getValues(

@@ -394,7 +394,7 @@ const Thread = ({
 
 			{isUpdate && (
 				<DynamicDeliveryField
-					title={`New Entries ${!isUpdate ? `(Checked: ${getTotalCheck(watch('new_pi_cash_entry_thread'))})` : ''}`}
+					title={`New Entries ${isUpdate ? `(Checked: ${getTotalCheck(watch('new_pi_cash_entry_thread'))})` : ''}`}
 					tableHead={
 						<>
 							<th

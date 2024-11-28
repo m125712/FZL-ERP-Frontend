@@ -4,7 +4,6 @@ import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { LinkWithCopy } from '@/ui';
 
 export default function Index({ challan, item_for }) {
-	console.log(item_for);
 	const columns = useMemo(
 		() => [
 			{

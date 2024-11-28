@@ -1056,6 +1056,7 @@ export const DYEING_TRANSFER_FROM_STOCK_SCHEMA = {
 export const DYEING_TRANSFER_FROM_STOCK_NULL = {
 	dyeing_transfer_entry: [
 		{
+			sfg_uuid: null,
 			order_description_uuid: null,
 			trx_quantity: null,
 			remarks: '',
@@ -2752,6 +2753,11 @@ export const DYEING_THREAD_CONNEING_NULL = {
 export const DYEING_TRANSFER_SCHEMA = {
 	dyeing_transfer_entry: yup.array().of(
 		yup.object().shape({
+			sfg_uuid: STRING.when( {
+				is: () => yup.ref('order_type') === 'tape',
+				then: (schema) => schema.required('Required'),
+				otherwise: (schema) => schema.nullable(),
+			}),
 			order_description_uuid: STRING_REQUIRED,
 			colors: yup.array().of(yup.string()).nullable(),
 			trx_quantity: NUMBER_DOUBLE.required('Required').transform(
@@ -2766,6 +2772,7 @@ export const DYEING_TRANSFER_SCHEMA = {
 export const DYEING_TRANSFER_NULL = {
 	dyeing_transfer_entry: [
 		{
+			sfg_uuid: null,
 			order_description_uuid: null,
 			colors: [],
 			trx_quantity: null,
@@ -2784,6 +2791,7 @@ export const UPDATE_DYEING_TRANSFER_SCHEMA = {
 
 export const UPDATE_DYEING_TRANSFER_NULL = {
 	order_description_uuid: null,
+	trx_quantity_in_meter: 0,
 	trx_quantity: 0,
 	remarks: '',
 };

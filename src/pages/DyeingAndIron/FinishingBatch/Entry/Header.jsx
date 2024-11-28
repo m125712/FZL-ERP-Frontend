@@ -25,8 +25,8 @@ export default function Header({
 	setOrderType,
 }) {
 	const { batch_uuid } = useParams();
-	const { data: orders } = useOtherOrderDescription(
-		'dyed_tape_required=false&swatch_approved=true&is_balance=true'
+	const { originalData } = useOtherOrderDescription(
+		'dyed_tape_required=false&swatch_approved=true&is_balance=true&page=finishing_batch'
 	);
 	const statuses = [
 		{ value: 'running', label: 'Running' },
@@ -46,7 +46,7 @@ export default function Header({
 
 	return (
 		<div className='flex flex-col gap-8'>
-			<TableView data={orders} />
+			<TableView data={originalData?.pageData} />
 			<SectionEntryBody
 				title={
 					<div className='flex flex-col gap-4'>
@@ -82,8 +82,8 @@ export default function Header({
 								return (
 									<ReactSelect
 										placeholder='Select Order No'
-										options={orders}
-										value={orders?.find(
+										options={originalData?.pageData}
+										value={originalData?.pageData?.find(
 											(item) =>
 												item.value ==
 												getValues(

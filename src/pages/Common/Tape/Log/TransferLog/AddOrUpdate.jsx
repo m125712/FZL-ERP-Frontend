@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import { useCommonTapeSFG, useCommonTapeTransferByUUID } from '@/state/Common';
+import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { Input } from '@/ui';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
 import { TAPE_TO_COIL_TRX_NULL, TAPE_TO_COIL_TRX_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
@@ -33,8 +34,16 @@ export default function Index({
 		trx_quantity: TAPE_TO_COIL_TRX_SCHEMA.trx_quantity.max(MAX_QUANTITY),
 	};
 
-	const { register, handleSubmit, errors, reset, context, getValues } =
-		useRHF(schema, TAPE_TO_COIL_TRX_NULL);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		context,
+		getValues,
+		Controller,
+		control,
+	} = useRHF(schema, TAPE_TO_COIL_TRX_NULL);
 
 	useEffect(() => {
 		if (data) {
@@ -70,6 +79,17 @@ export default function Index({
 		}
 	};
 
+	const styles = [
+		...(getValues('order_type') === 'tape'
+			? [
+					{
+						label: getValues('style') + ' ' + getValues('color'),
+						value: getValues('sfg_uuid'),
+					},
+				]
+			: []),
+	];
+
 	return (
 		<AddModal
 			id={modalId}
@@ -78,6 +98,45 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
+			{getValues('order_type') === 'tape' && (
+				<>
+					<FormField
+						label={`sfg_uuid`}
+						title='Style-Color'
+						is_title_needed='false'>
+						<Controller
+							name={`sfg_uuid`}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										menuPortalTarget={document.body}
+										placeholder='Select Style'
+										options={styles}
+										value={styles?.filter(
+											(item) =>
+												item.value ===
+												getValues(`sfg_uuid`)
+										)}
+										// onChange={(e) => {
+										// 	onChange(e.value);
+										// }}
+										isDisabled={true}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+
+					<JoinInput
+						label={`trx_quantity_in_meter`}
+						title='Quantity in Meter'
+						// placeholder={`Max: ${}`}  // TODO: fix this with schema
+						unit='M'
+						{...{ register, errors }}
+					/>
+				</>
+			)}
 			<Input
 				label='trx_quantity'
 				sub_label={`Max: ${Number(updateTapeLog?.stock_quantity) + Number(updateTapeLog?.trx_quantity)}`}
@@ -85,6 +144,8 @@ export default function Index({
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />
+
+			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);
 }

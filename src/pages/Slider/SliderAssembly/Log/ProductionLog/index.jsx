@@ -66,7 +66,6 @@ export default function Index() {
 					);
 				},
 			},
-			,
 			{
 				accessorKey: 'item_description',
 				header: 'Item Dsc',

@@ -87,6 +87,7 @@ export default function Index({
 		if (updateSliderProd?.uuid !== null) {
 			const updatedData = {
 				...data,
+				with_link: updateSliderProd.with_link,
 				updated_at: GetDateTime(),
 			};
 

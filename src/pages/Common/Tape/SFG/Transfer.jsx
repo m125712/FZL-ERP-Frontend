@@ -11,6 +11,7 @@ import {
 	useNavigate,
 	useParams,
 } from 'react-router-dom';
+import * as yup from 'yup';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
@@ -28,11 +29,16 @@ import nanoid from '@/lib/nanoid';
 import {
 	DYEING_TRANSFER_FROM_STOCK_NULL,
 	DYEING_TRANSFER_FROM_STOCK_SCHEMA,
+	NUMBER_DOUBLE,
+	STRING,
+	STRING_REQUIRED,
 } from '@util/Schema';
 import { exclude } from '@/util/Exclude';
 import GetDateTime from '@/util/GetDateTime';
 
 export default function Index() {
+	const [orderSelected, setOrderSelected] = useState({});
+
 	const { postData, deleteData } = useDyeingTransfer();
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
@@ -65,7 +71,32 @@ export default function Index() {
 		setValue,
 		watch,
 	} = useRHF(
-		DYEING_TRANSFER_FROM_STOCK_SCHEMA,
+		{
+			...DYEING_TRANSFER_FROM_STOCK_SCHEMA,
+			dyeing_transfer_entry: yup.array().of(
+				yup.object().shape({
+					sfg_uuid: STRING.when({
+						is: () => orderSelected?.order_type === 'tape',
+						then: (schema) => schema.required('Required'),
+						otherwise: (schema) => schema.nullable(),
+					}),
+					order_description_uuid: STRING_REQUIRED,
+					trx_quantity_in_meter: NUMBER_DOUBLE.when({
+						is: () => orderSelected?.order_type === 'tape',
+						then: (schema) =>
+							schema
+								.required('Required')
+								.moreThan(0, 'Must be greater than 0'),
+						otherwise: (schema) => schema.nullable(),
+					}),
+					trx_quantity: NUMBER_DOUBLE.required('Required').transform(
+						(value, originalValue) =>
+							String(originalValue).trim() === '' ? null : value
+					), // Transforms empty strings to null
+					remarks: STRING.nullable(),
+				})
+			),
+		},
 		DYEING_TRANSFER_FROM_STOCK_NULL
 	);
 
@@ -249,6 +280,9 @@ export default function Index() {
 							'Tape Required (Kg)',
 							'Provided (Kg)',
 							'Balance (Kg)',
+							...(orderSelected?.order_type === 'tape'
+								? ['Style-Color', 'Trx Qty (M)']
+								: []),
 							'Trx Quantity',
 							'Remarks',
 							'Action',
@@ -335,6 +369,9 @@ export default function Index() {
 																setStatus(
 																	!status
 																);
+																setOrderSelected(
+																	e
+																);
 															}}
 															// isDisabled={updateCoilProd?.id !== null}
 														/>
@@ -354,7 +391,74 @@ export default function Index() {
 												)
 										).toFixed(3)}
 									</td>
-
+									{orderSelected?.order_type === 'tape' && (
+										<>
+											<td className={`w-36 ${rowClass}`}>
+												<FormField
+													label={`dyeing_transfer_entry[${index}].sfg_uuid`}
+													title='Style'
+													is_title_needed='false'
+													dynamicerror={
+														errors
+															?.dyeing_transfer_entry?.[
+															index
+														].sfg_uuid
+													}>
+													<Controller
+														name={`dyeing_transfer_entry[${index}].sfg_uuid`}
+														control={control}
+														render={({
+															field: { onChange },
+														}) => {
+															return (
+																<ReactSelect
+																	menuPortalTarget={
+																		document.body
+																	}
+																	placeholder='Select Style'
+																	options={
+																		orderSelected?.style_color_object
+																	}
+																	value={orderSelected?.style_color_object?.filter(
+																		(
+																			item
+																		) =>
+																			item.value ===
+																			getValues(
+																				`dyeing_transfer_entry[${index}].sfg_uuid`
+																			)
+																	)}
+																	onChange={(
+																		e
+																	) => {
+																		onChange(
+																			e.value
+																		);
+																	}}
+																	// isDisabled={updateCoilProd?.id !== null}
+																/>
+															);
+														}}
+													/>
+												</FormField>
+											</td>
+											<td className={`w-52 ${rowClass}`}>
+												<JoinInput
+													label={`dyeing_transfer_entry[${index}].trx_quantity_in_meter`}
+													is_title_needed='false'
+													// placeholder={`Max: ${}`}  // TODO: fix this with schema
+													unit='M'
+													dynamicerror={
+														errors
+															?.dyeing_transfer_entry?.[
+															index
+														].trx_quantity_in_meter
+													}
+													{...{ register, errors }}
+												/>
+											</td>
+										</>
+									)}
 									{/* Trx quantity */}
 									<td className={`w-52 ${rowClass}`}>
 										<JoinInput

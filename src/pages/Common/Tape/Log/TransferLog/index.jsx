@@ -39,7 +39,14 @@ export default function TapeToCoil() {
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
-
+			{
+				accessorKey: 'order_type',
+				header: 'Type',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
 			{
 				accessorKey: 'zipper_number_name',
 				header: 'Zipper',
@@ -63,6 +70,18 @@ export default function TapeToCoil() {
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
+			},
+			{
+				accessorKey: 'trx_quantity_in_meter',
+				header: (
+					<span>
+						Quantity 
+						<br />
+						(M)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue() > 0? info.getValue(): '---',
 			},
 			{
 				accessorKey: 'trx_quantity',

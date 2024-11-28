@@ -14,11 +14,7 @@ const Update = lazy(() => import('./EntryUpdate/Update'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useDyeingTransfer();
-	const info = new PageInfo(
-		'Dyeing Store',
-		url,
-		'common__dyeing_transfer'
-	);
+	const info = new PageInfo('Dyeing Store', url, 'common__dyeing_transfer');
 	const haveAccess = useAccess('common__dyeing_transfer');
 	const navigate = useNavigate();
 
@@ -53,6 +49,12 @@ export default function Index() {
 						/>
 					);
 				},
+			},
+			{
+				accessorKey: 'order_type',
+				header: 'Type',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			// {
 			// 	accessorKey: 'order_description',
@@ -94,6 +96,18 @@ export default function Index() {
 			// 		);
 			// 	},
 			// },
+			{
+				accessorKey: 'trx_quantity_in_meter',
+				header: (
+					<span>
+						Transferred
+						<br />
+						QTY (M)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => (info.getValue() > 0 ? info.getValue() : '---'),
+			},
 			{
 				accessorKey: 'trx_quantity',
 				header: (

@@ -88,6 +88,16 @@ export default function Index({
 		`/other/order/description/value/label`
 	); // * get order id and set them as value & lables for select options
 
+	const styles = [
+		...(getValues('order_type') === 'tape'
+			? [
+					{
+						value: getValues('sfg_uuid'),
+						label: getValues('style') + ' ' + getValues('color'),
+					},
+				]
+			: []),
+	];
 	return (
 		<AddModal
 			id={modalId}
@@ -117,11 +127,48 @@ export default function Index({
 								onChange={(e) => {
 									onChange(e.value);
 								}}
+								isDisabled={true}
 							/>
 						);
 					}}
 				/>
 			</FormField>
+			{getValues('order_type') === 'tape' && (
+				<>
+					<FormField
+						label='sfg_uuid'
+						title='Style-Color'
+						errors={errors}>
+						<Controller
+							name='sfg_uuid'
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select styler'
+										options={styles}
+										value={styles?.filter(
+											(item) =>
+												item.value ==
+												getValues('sfg_uuid')
+										)}
+										// onChange={(e) => {
+										// 	onChange(e.value);
+										// }}
+										isDisabled={true}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+					<JoinInput
+						label='trx_quantity_in_meter'
+						title='Transfer QTY (M)'
+						unit='M'
+						{...{ register, errors }}
+					/>
+				</>
+			)}
 
 			<JoinInput
 				label='trx_quantity'

@@ -17,7 +17,7 @@ export default function Information({ packing_list }) {
 	} = packing_list;
 
 	const renderItems = () => {
-		return [
+		const basicInfo = [
 			{
 				label: 'Packing List No',
 				value: packing_number,
@@ -35,7 +35,9 @@ export default function Information({ packing_list }) {
 				label: 'Carton Weight',
 				value: carton_weight,
 			},
+		];
 
+		const createdDetails = [
 			{
 				label: 'Created By',
 				value: created_by_name,
@@ -53,6 +55,11 @@ export default function Information({ packing_list }) {
 				value: format(new Date(updated_at), 'dd/MM/yy'),
 			},
 		];
+
+		return {
+			basicInfo,
+			createdDetails,
+		};
 	};
 
 	const renderButtons = () => {
@@ -68,7 +75,17 @@ export default function Information({ packing_list }) {
 
 	return (
 		<SectionContainer buttons={renderButtons()} title={'Information'}>
-			<RenderTable items={renderItems()} />
+			<div className='grid lg:grid-cols-2'>
+				<RenderTable
+					title='Basic Info'
+					items={renderItems().basicInfo}
+					className={'border-secondary/30 lg:border-r'}
+				/>
+				<RenderTable
+					title='Created Details'
+					items={renderItems().createdDetails}
+				/>
+			</div>
 		</SectionContainer>
 	);
 }

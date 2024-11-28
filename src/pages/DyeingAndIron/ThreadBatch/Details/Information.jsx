@@ -154,15 +154,15 @@ export default function Information({ batch, water_capacity }) {
 			},
 			{
 				label: 'Production Date',
-				value: <DateTime date={production_date} />,
+				value: <DateTime date={production_date} isTime={false} />,
 			},
 			{
 				label: 'Created At',
-				value: <DateTime date={dyeing_created_at} />,
+				value: <DateTime date={dyeing_created_at} isTime={false} />,
 			},
 			{
 				label: 'Updated At',
-				value: <DateTime date={dyeing_updated_at} />,
+				value: <DateTime date={dyeing_updated_at} isTime={false} />,
 			},
 		];
 
@@ -177,26 +177,25 @@ export default function Information({ batch, water_capacity }) {
 	return (
 		<SectionContainer title={'Information'}>
 			<div>
-				<div className='grid grid-cols-1 border-secondary/30 lg:grid-cols-2 lg:gap-8 lg:border-b'>
+				<div className='grid grid-cols-1 border-secondary/30 lg:grid-cols-4'>
 					<RenderTable
 						className={'border-secondary/30 lg:border-r'}
 						title={'Conneing'}
 						items={renderItems().conneing}
 					/>
 					<RenderTable
-						className={'border-secondary/30 lg:border-l'}
+						className={'border-secondary/30 lg:border-r'}
 						title={'Yarn Issues'}
 						items={renderItems().yarn_issues}
 					/>
-				</div>
-				<div className='grid grid-cols-1 border-secondary/30 lg:grid-cols-2 lg:gap-8 lg:border-b'>
+
 					<RenderTable
 						className={'border-secondary/30 lg:border-r'}
 						title={'Dyeing'}
 						items={renderItems().dying}
 					/>
 					<RenderTable
-						className={'border-secondary/30 lg:border-l'}
+						className={'border-secondary/30'}
 						title={'Others'}
 						items={renderItems().others}
 					/>

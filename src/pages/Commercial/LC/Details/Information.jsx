@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
-import { DateTime, LinkWithCopy, TitleValue } from '@/ui';
+import { DateTime, LinkWithCopy, StatusButton, TitleValue } from '@/ui';
 
 const LCInfo = (lc) => {
 	return (
@@ -131,39 +131,30 @@ export default function Information({ lc }) {
 			},
 			{
 				label: 'RTGS',
-				value: is_rtgs ? 'Yes' : 'No',
+				value: <StatusButton value={is_rtgs} className={'btn-xs'} />,
 			},
 			{
 				label: 'LC Cancelled',
-				value: lc_cancel ? 'Yes' : 'No',
+				value: <StatusButton value={lc_cancel} className={'btn-xs'} />,
 			},
 			{
 				label: 'Production Complete',
-				value: production_complete ? 'Yes' : 'No',
+				value: (
+					<StatusButton
+						value={production_complete}
+						className={'btn-xs'}
+					/>
+				),
 			},
 			{
 				label: 'Problematic',
-				value: problematical ? 'Yes' : 'No',
+				value: (
+					<StatusButton value={problematical} className={'btn-xs'} />
+				),
 			},
 			{
 				label: 'EPZ',
-				value: epz ? 'Yes' : 'No',
-			},
-			{
-				label: 'Created By',
-				value: created_by_name,
-			},
-			{
-				label: 'Created At',
-				value: format(new Date(created_at), 'dd/MM/yyyy'),
-			},
-			{
-				label: 'Updated At',
-				value: format(new Date(updated_at), 'dd/MM/yyyy'),
-			},
-			{
-				label: 'Remarks',
-				value: remarks,
+				value: <StatusButton value={epz} className={'btn-xs'} />,
 			},
 		];
 		const fileDetails = [
@@ -247,36 +238,62 @@ export default function Information({ lc }) {
 			},
 		];
 
+		const createdDetails = [
+			{
+				label: 'Created By',
+				value: created_by_name,
+			},
+			{
+				label: 'Created At',
+				value: format(new Date(created_at), 'dd/MM/yyyy'),
+			},
+			{
+				label: 'Updated At',
+				value: format(new Date(updated_at), 'dd/MM/yyyy'),
+			},
+			{
+				label: 'Remarks',
+				value: remarks,
+			},
+		];
+
 		return {
 			basicInfo,
 			fileDetails,
 			commercialDetails,
 			others,
+			createdDetails,
 		};
 	};
 
 	return (
-		<SectionContainer title={'Information'} contentClassName={'space-y-0 '}>
-			<RenderTable
-				className={'border-secondary/30 lg:border-b'}
-				title={'Basic Info'}
-				items={renderItems().basicInfo}
-			/>
-			<div className='grid grid-cols-1 lg:grid-cols-3 lg:gap-8'>
+		<SectionContainer title={'Information'} contentClassName={'space-y-0'}>
+			<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5'>
+				<RenderTable
+					className={'border-secondary/30 sm:border-r'}
+					title={'Basic Info'}
+					items={renderItems().basicInfo}
+				/>
+
 				<RenderTable
 					className={'border-secondary/30 lg:border-r'}
 					title={'File Details'}
 					items={renderItems().fileDetails}
 				/>
 				<RenderTable
-					className={'border-secondary/30 lg:border-x'}
+					className={'border-secondary/30 sm:border-r'}
 					title={'Commercial Details'}
 					items={renderItems().commercialDetails}
 				/>
 				<RenderTable
-					className={'border-secondary/30 lg:border-l'}
+					className={'border-secondary/30 lg:border-r'}
 					title={'Others'}
 					items={renderItems().others}
+				/>
+				<RenderTable
+					className={'border-secondary/30'}
+					title={'Created Details'}
+					items={renderItems().createdDetails}
 				/>
 			</div>
 		</SectionContainer>

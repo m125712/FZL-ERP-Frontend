@@ -6,6 +6,16 @@ import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, StatusButton } from '@/ui';
 
 export default function Index({ order_info_entry }) {
+	const totalQty = order_info_entry.reduce(
+		(acc, cur) => acc + cur.quantity,
+		0
+	);
+
+	const totalProductionQty = order_info_entry.reduce(
+		(acc, cur) => acc + cur.production_quantity,
+		0
+	);
+
 	const columns = useMemo(
 		() => [
 			// {
@@ -182,7 +192,20 @@ export default function Index({ order_info_entry }) {
 		<ReactTableTitleOnly
 			title='Details'
 			data={order_info_entry}
-			columns={columns}
-		/>
+			columns={columns}>
+			<tr className='text-sm'>
+				<td colSpan='6' className='py-2 text-right'>
+					Total QTY
+				</td>
+				<td className='pl-3 text-left font-semibold'>{totalQty}</td>
+
+				<td className='text-left'>
+					Total
+					<span className='pl-1 font-semibold'>
+						{totalProductionQty}
+					</span>
+				</td>
+			</tr>
+		</ReactTableTitleOnly>
 	);
 }

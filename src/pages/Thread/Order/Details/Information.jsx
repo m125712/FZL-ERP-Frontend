@@ -55,15 +55,33 @@ export default function Information({ orderInfo }) {
 			},
 			{
 				label: 'Is Sample',
-				value: is_sample === 1 ? 'Yes' : 'No',
+				value: (
+					<StatusButton
+						className={'border-0'}
+						size='btn-xs'
+						value={is_sample}
+					/>
+				),
 			},
 			{
 				label: 'Is Bill',
-				value: is_bill === 1 ? 'Yes' : 'No',
+				value: (
+					<StatusButton
+						className={'border-0'}
+						size='btn-xs'
+						value={is_bill}
+					/>
+				),
 			},
 			{
 				label: 'Is Cash',
-				value: is_cash === 1 ? 'Yes' : 'No',
+				value: (
+					<StatusButton
+						className={'border-0'}
+						size='btn-xs'
+						value={is_cash}
+					/>
+				),
 			},
 			{
 				label: 'PI No.',
@@ -72,24 +90,6 @@ export default function Information({ orderInfo }) {
 			{
 				label: 'Delivery Date',
 				value: format(new Date(delivery_date), 'dd/MM/yyyy'),
-			},
-			{
-				label: 'Remarks',
-				value: remarks,
-			},
-			{
-				label: 'Created By',
-				value: created_by_name,
-			},
-			{
-				label: 'Created At',
-				value: format(new Date(created_at), 'dd/MM/yyyy'),
-			},
-			{
-				label: 'Updated At',
-				value: updated_at
-					? format(new Date(updated_at), 'dd/MM/yyyy')
-					: '',
 			},
 		];
 
@@ -120,9 +120,32 @@ export default function Information({ orderInfo }) {
 				value: marketing_name,
 			},
 		];
+
+		const created_details = [
+			{
+				label: 'Created By',
+				value: created_by_name,
+			},
+			{
+				label: 'Created At',
+				value: format(new Date(created_at), 'dd/MM/yyyy'),
+			},
+			{
+				label: 'Updated At',
+				value: updated_at
+					? format(new Date(updated_at), 'dd/MM/yyyy')
+					: '',
+			},
+
+			{
+				label: 'Remarks',
+				value: remarks,
+			},
+		];
 		return {
 			order_details,
 			buyer_details,
+			created_details,
 		};
 	};
 
@@ -145,16 +168,21 @@ export default function Information({ orderInfo }) {
 
 	return (
 		<SectionContainer title={'Information'} buttons={renderButtons()}>
-			<div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-8'>
+			<div className='grid grid-cols-1 lg:grid-cols-3'>
 				<RenderTable
 					className={'border-secondary/30 lg:border-r'}
 					title={'Order Details'}
 					items={renderItems().order_details}
 				/>
 				<RenderTable
-					className={'border-secondary/30 lg:border-l'}
+					className={'border-secondary/30'}
 					title={'Buyer Details'}
 					items={renderItems().buyer_details}
+				/>
+				<RenderTable
+					className={'border-secondary/30 lg:border-l'}
+					title={'Created Details'}
+					items={renderItems().created_details}
 				/>
 			</div>
 		</SectionContainer>

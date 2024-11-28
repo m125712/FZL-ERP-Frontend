@@ -62,6 +62,9 @@ export default function Information({ data }) {
 				label: 'Production Date',
 				value: format(new Date(production_date), 'dd/MM/yy'),
 			},
+		];
+
+		const createdDetails = [
 			{
 				label: 'Created By',
 				value: created_by_name,
@@ -84,16 +87,24 @@ export default function Information({ data }) {
 
 		return {
 			basicInfo,
+			createdDetails,
 		};
 	};
 
 	return (
 		<SectionContainer title={'Information'}>
-			<RenderTable
-				className={'border-secondary/30 lg:border-r'}
-				title={'Basic Info'}
-				items={renderItems().basicInfo}
-			/>
+			<div className='grid grid-cols-2'>
+				<RenderTable
+					className={'border-secondary/30 lg:border-r'}
+					title={'Basic Info'}
+					items={renderItems().basicInfo}
+				/>
+				<RenderTable
+					className={'border-secondary/30 lg:border-r'}
+					title={'Created Details'}
+					items={renderItems().createdDetails}
+				/>
+			</div>
 		</SectionContainer>
 	);
 }

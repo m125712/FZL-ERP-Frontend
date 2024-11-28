@@ -56,7 +56,6 @@ export default function index() {
 		watch,
 		setValue,
 		formState: { dirtyFields },
-
 	} = useRHF(
 		{
 			...FINISHING_BATCH_ENTRY_SCHEMA,
@@ -67,7 +66,7 @@ export default function index() {
 					otherwise: (schema) => schema.nullable(),
 				}),
 		},
-		FINISHING_BATCH_ENTRY_NULL
+		{ ...FINISHING_BATCH_ENTRY_NULL, production_date }
 	);
 
 	useEffect(() => {

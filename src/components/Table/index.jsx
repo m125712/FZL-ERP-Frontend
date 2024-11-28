@@ -49,6 +49,7 @@ function Table({
 	select,
 	error = null,
 	indicatorValue,
+	showDateRange = true,
 	containerClassName = '',
 	...props
 }) {
@@ -136,6 +137,7 @@ function Table({
 					showColumns={showColumns}
 					extraButton={extraButton}
 					select={select}
+					showDateRange={showDateRange}
 					//filterTableHeader={filterTableHeader}
 					showPdf={showPdf}
 					pdfData={pdfData}

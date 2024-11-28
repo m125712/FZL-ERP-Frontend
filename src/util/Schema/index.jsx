@@ -3297,6 +3297,14 @@ export const GATE_PASS_NULL = {
 	entry: [],
 };
 
+// * Challan By Date
+export const CHALlAN_BY_DATE_SCHEMA = {
+	date: STRING_REQUIRED,
+};
+export const CHALlAN_BY_DATE_SCHEMA_NULL = {
+	date: null,
+};
+
 // * Marketing * //
 // Marketing Team
 

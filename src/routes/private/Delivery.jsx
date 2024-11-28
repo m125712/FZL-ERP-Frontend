@@ -11,6 +11,7 @@ import Test from '@/pages/Delivery/Test';
 import WarehouseRecv from '@/pages/Delivery/WarehouseRecv';
 import Carton from '@pages/Delivery/Carton';
 import Challan from '@pages/Delivery/Challan';
+import ChallanByDate from '@pages/Delivery/Challan/ByDate';
 import ChallanDetails from '@pages/Delivery/Challan/Details';
 //Gate Pass
 import GatePass from '@pages/Delivery/GatePass';
@@ -128,6 +129,24 @@ export const DeliveryRoutes = [
 					'click_gate_pass_override',
 					'click_receive_status_override',
 				],
+			},
+			// *
+			{
+				name: 'Challan By Date',
+				path: '/delivery/challan-by-date/:date',
+				element: <ChallanByDate />,
+				page_name: 'delivery__challan_by_date',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_gate_pass',
+					'click_receive_status',
+					'click_gate_pass_override',
+					'click_receive_status_override',
+				],
+				hidden: true,
 			},
 			{
 				name: 'Challan Details',

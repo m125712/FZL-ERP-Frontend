@@ -95,12 +95,12 @@ export default function Index(data) {
 							node.map((nodeItem) => {
 								if (nodeItem.field === 'size') {
 									const unitIndex =
-										challan_entry.indexOf(item); 
+										challan_entry.indexOf(item);
 									return {
 										text:
 											item[nodeItem.field] +
 											' ' +
-											(unit[unitIndex] || ''), 
+											(unit[unitIndex] || ''),
 										style: nodeItem.cellStyle,
 										alignment: nodeItem.alignment,
 									};

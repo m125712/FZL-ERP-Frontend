@@ -53,7 +53,7 @@ const TableHeader = (props) => {
 						/>
 					)}
 
-					{showDateRange && (
+					{props?.showDateRange && showDateRange && (
 						<DateRange getHeaderGroups={props.getHeaderGroups} />
 					)}
 
@@ -76,7 +76,7 @@ const TableHeader = (props) => {
 							{...{
 								filteredRows: props.filteredRows,
 								title: props.title,
-								pdfData:props.pdfData,
+								pdfData: props.pdfData,
 								//filterTableHeader: props.filterTableHeader,
 								//pdf: props.pdf,
 								//extraData: props.extraData,

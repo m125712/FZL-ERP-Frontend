@@ -7,7 +7,13 @@ import {
 import { format } from 'date-fns';
 
 import { DateInput } from '@/ui/Core';
-import { FormField, Input, ReactSelect, SectionEntryBody } from '@/ui';
+import {
+	FormField,
+	Input,
+	ReactSelect,
+	SectionEntryBody,
+	Textarea,
+} from '@/ui';
 
 import cn from '@/lib/cn';
 
@@ -78,8 +84,9 @@ export default function Header({
 	];
 
 	const statusOption = [
-		{ label: 'RFT', value: 'rft' },
-		{ label: 'Other', value: 'other' },
+		{ value: 'pending', label: 'Pending' },
+		{ value: 'completed', label: 'Completed' },
+		{ value: 'cancelled', label: 'Cancelled' },
 	];
 	const shiftOption = [
 		{ label: 'A', value: 'a' },
@@ -367,6 +374,9 @@ export default function Header({
 							}}
 						/>
 					</FormField>
+				</div>
+				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+					<Textarea label='remarks' {...{ register, errors }} />
 				</div>
 			</SectionEntryBody>
 		</div>

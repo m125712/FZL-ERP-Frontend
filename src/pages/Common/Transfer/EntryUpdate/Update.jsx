@@ -1,12 +1,14 @@
-import { useDyeingTransfer } from '@/state/Dyeing';
+import { useEffect } from 'react';
+import { useDyeingTransferByUUID } from '@/state/Dyeing';
 import { useMetalTMProduction } from '@/state/Metal';
 import {
 	useNylonMFProduction,
 	useNylonPlasticFinishingProduction,
 } from '@/state/Nylon';
+import { useOtherOrderDescription } from '@/state/Other';
 import { useVislonTMP } from '@/state/Vislon';
 import { DevTool } from '@hookform/devtools';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
@@ -25,7 +27,9 @@ export default function Index({
 	},
 	setUpdateTransfer,
 }) {
-	const { url, updateData } = useDyeingTransfer();
+	const { data, url, updateData } = useDyeingTransferByUUID(
+		updateTransfer?.uuid
+	);
 	const { invalidateQuery: invalidateNylonMFProduction } =
 		useNylonMFProduction();
 	const { invalidateQuery: invalidateNylonPFProduction } =
@@ -43,11 +47,12 @@ export default function Index({
 		Controller,
 	} = useRHF(UPDATE_DYEING_TRANSFER_SCHEMA, UPDATE_DYEING_TRANSFER_NULL);
 
-	useFetchForRhfReset(
-		`${url}/${updateTransfer?.uuid}`,
-		updateTransfer?.uuid,
-		reset
-	);
+	console.log(data);
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data]);
 
 	const onClose = () => {
 		setUpdateTransfer((prev) => ({
@@ -84,9 +89,7 @@ export default function Index({
 		invalidateQueryVislonTMP();
 	};
 
-	const { value: order_id } = useFetch(
-		`/other/order/description/value/label`
-	); // * get order id and set them as value & lables for select options
+	const { data: order_id } = useOtherOrderDescription(); // * get order id and set them as value & lables for select options
 
 	const styles = [
 		...(getValues('order_type') === 'tape'

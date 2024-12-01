@@ -30,6 +30,7 @@ export default function Index({
 				show_price: haveAccess?.includes('show_price'),
 				bleaching: bleaching,
 				sizes: { is_cm, is_inch, is_meter },
+				order_type,
 			}),
 		[order_entry]
 	);

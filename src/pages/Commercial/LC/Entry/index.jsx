@@ -60,9 +60,6 @@ export default function Index() {
 	const [status, setStatus] = useState(false);
 
 	const isUpdate = lc_uuid !== undefined;
-	let { data: pi } = useOtherPiValues(
-		isUpdate ? 'is_update=true' : 'is_update=false'
-	);
 
 	const {
 		register,
@@ -74,6 +71,12 @@ export default function Index() {
 		getValues,
 		watch,
 	} = useRHF(LC_SCHEMA, LC_NULL);
+
+	let { data: pi } = useOtherPiValues(
+		isUpdate
+			? `party_uuid=${watch('party_uuid')}&is_update=true`
+			: `party_uuid=${watch('party_uuid')}&is_update=false&page=lc`
+	);
 
 	const excludeItem = exclude(watch, pi, 'pi', 'uuid', status);
 	// purchase

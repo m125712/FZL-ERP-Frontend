@@ -13,6 +13,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAccess, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
 
 import nanoid from '@/lib/nanoid';
@@ -400,7 +401,11 @@ export default function Index() {
 			commercialPiEntryData.length === 0 &&
 			commercialPiThreadEntryData.length === 0
 		) {
-			alert('Select at least one item to proceed.');
+			ShowLocalToast({
+				type: 'warning',
+				message:
+					'Select Zipper or Thread Order to create a PI Entry',
+			});
 		} else {
 			// create new /commercial/pi
 			await postData.mutateAsync({

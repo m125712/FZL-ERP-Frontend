@@ -14,6 +14,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAccess, useRHF } from '@/hooks';
 
 import { DeleteModal, UpdateModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
 import { DynamicField, FormField, ReactSelect, RemoveButton } from '@/ui';
 
 import cn from '@/lib/cn';
@@ -160,10 +161,16 @@ export default function Index() {
 	// Submit
 	const onSubmit = async (data) => {
 		if (data?.lc_entry[0]?.ldbc_fdbc === null) {
-			alert('Please add at least one progression');
+			ShowLocalToast({
+				type: 'warning',
+				message: 'Must add LDBC/FDBC in Progression Section',
+			});
 			return;
 		} else if (data?.is_old_pi === false && data?.pi[0]?.uuid === null) {
-			alert('Please add at least one PI');
+			ShowLocalToast({
+				type: 'warning',
+				message: 'Select at least one PI',
+			});
 			return;
 		}
 		const formatDate = (dateString) =>

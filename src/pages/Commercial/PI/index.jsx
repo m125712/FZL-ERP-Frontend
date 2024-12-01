@@ -117,6 +117,13 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'order_type',
+				header: 'Type',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'total_amount',
 				header: 'Total Value(USD)',
 				enableColumnFilter: false,

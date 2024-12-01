@@ -9,7 +9,7 @@ const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 
 export const getPageHeader = (dyeingDate) => {
-	const created_at = getDateFormate(dyeingDate);
+	const date = getDateFormate(dyeingDate);
 	const day = format(dyeingDate, 'EEEE');
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
@@ -34,7 +34,7 @@ export const getPageHeader = (dyeingDate) => {
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
-						`Date: ${created_at}\n`,
+						`Date: ${date}\n`,
 						`Day: ${day}\n`,
 					],
 					alignment: 'right',

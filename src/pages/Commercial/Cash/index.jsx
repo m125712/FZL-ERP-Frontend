@@ -104,6 +104,13 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'order_type',
+				header: 'Type',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue()?.join(', '),
+			},
+			{
 				accessorKey: 'marketing_name',
 				header: 'Marketing',
 				enableColumnFilter: false,

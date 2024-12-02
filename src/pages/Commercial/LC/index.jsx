@@ -71,7 +71,7 @@ export default function Index() {
 						<LinkWithCopy
 							title={info.getValue()}
 							id={uuid}
-							uri={`details`}
+							uri={`/commercial/lc/details`}
 						/>
 					);
 				},

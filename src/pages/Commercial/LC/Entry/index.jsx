@@ -51,6 +51,7 @@ export default function Index() {
 		updateData,
 		deleteData,
 	} = useCommercialLC();
+
 	const { data, invalidateQuery } = useCommercialLCPIByUUID(lc_uuid);
 
 	const [deletablePi, setDeletablePi] = useState([]);
@@ -58,6 +59,7 @@ export default function Index() {
 		itemId: null,
 		itemName: null,
 	});
+
 	const [status, setStatus] = useState(false);
 
 	const isUpdate = lc_uuid !== undefined;
@@ -144,6 +146,7 @@ export default function Index() {
 
 		setDeletablePi((prev) => [...prev, uuid]);
 	};
+
 	const getTotalValue = useCallback(
 		(piArray) => {
 			if (!piArray || !Array.isArray(piArray)) {
@@ -160,10 +163,13 @@ export default function Index() {
 	);
 	// Submit
 	const onSubmit = async (data) => {
-		if (data?.lc_entry[0]?.ldbc_fdbc === null) {
+		if (
+			data?.lc_entry[0]?.ldbc_fdbc === null ||
+			data?.lc_entry[0]?.amount === 0
+		) {
 			ShowLocalToast({
 				type: 'warning',
-				message: 'Must add LDBC/FDBC in Progression Section',
+				message: 'Must add Amount & LDBC/FDBC in Progression Section',
 			});
 			return;
 		} else if (data?.is_old_pi === false && data?.pi[0]?.uuid === null) {
@@ -307,7 +313,7 @@ export default function Index() {
 					reset(LC_NULL);
 					invalidateQuery();
 					invalidate();
-					navigate(`/commercial/lc/details/${lc_number}`);
+					navigate(`/commercial/lc/details/${lc_updated_data.uuid}`);
 				})
 				.catch((err) => console.log(err));
 			return;

@@ -14,6 +14,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAccess, useRHF } from '@/hooks';
 
 import { DeleteModal, UpdateModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
 import { DynamicField, FormField, ReactSelect, RemoveButton } from '@/ui';
 
 import cn from '@/lib/cn';
@@ -50,6 +51,7 @@ export default function Index() {
 		updateData,
 		deleteData,
 	} = useCommercialLC();
+
 	const { data, invalidateQuery } = useCommercialLCPIByUUID(lc_uuid);
 
 	const [deletablePi, setDeletablePi] = useState([]);
@@ -57,12 +59,10 @@ export default function Index() {
 		itemId: null,
 		itemName: null,
 	});
+
 	const [status, setStatus] = useState(false);
 
 	const isUpdate = lc_uuid !== undefined;
-	let { data: pi } = useOtherPiValues(
-		isUpdate ? 'is_update=true' : 'is_update=false'
-	);
 
 	const {
 		register,
@@ -74,6 +74,12 @@ export default function Index() {
 		getValues,
 		watch,
 	} = useRHF(LC_SCHEMA, LC_NULL);
+
+	let { data: pi } = useOtherPiValues(
+		isUpdate
+			? `party_uuid=${watch('party_uuid')}&is_update=true`
+			: `party_uuid=${watch('party_uuid')}&is_update=false&page=lc`
+	);
 
 	const excludeItem = exclude(watch, pi, 'pi', 'uuid', status);
 	// purchase
@@ -140,6 +146,7 @@ export default function Index() {
 
 		setDeletablePi((prev) => [...prev, uuid]);
 	};
+
 	const getTotalValue = useCallback(
 		(piArray) => {
 			if (!piArray || !Array.isArray(piArray)) {
@@ -156,11 +163,20 @@ export default function Index() {
 	);
 	// Submit
 	const onSubmit = async (data) => {
-		if (data?.lc_entry[0]?.ldbc_fdbc === null) {
-			alert('Please add at least one progression');
+		if (
+			data?.lc_entry[0]?.ldbc_fdbc === null ||
+			data?.lc_entry[0]?.amount === 0
+		) {
+			ShowLocalToast({
+				type: 'warning',
+				message: 'Must add Amount & LDBC/FDBC in Progression Section',
+			});
 			return;
 		} else if (data?.is_old_pi === false && data?.pi[0]?.uuid === null) {
-			alert('Please add at least one PI');
+			ShowLocalToast({
+				type: 'warning',
+				message: 'Select at least one PI',
+			});
 			return;
 		}
 		const formatDate = (dateString) =>
@@ -297,7 +313,7 @@ export default function Index() {
 					reset(LC_NULL);
 					invalidateQuery();
 					invalidate();
-					navigate(`/commercial/lc/details/${lc_number}`);
+					navigate(`/commercial/lc/details/${lc_updated_data.uuid}`);
 				})
 				.catch((err) => console.log(err));
 			return;

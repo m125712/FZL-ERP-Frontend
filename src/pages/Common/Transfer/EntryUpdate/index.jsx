@@ -5,13 +5,14 @@ import {
 	useNylonMFProduction,
 	useNylonPlasticFinishingProduction,
 } from '@/state/Nylon';
+import { useOtherOrderDescription } from '@/state/Other';
 import { useVislonTMP } from '@/state/Vislon';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import {
@@ -48,8 +49,6 @@ export default function Index() {
 	const [status, setStatus] = useState(false);
 	const { user } = useAuth();
 	const navigate = useNavigate();
-	const isUpdate =
-		order_description_uuid !== undefined && order_number !== undefined;
 
 	const {
 		register,
@@ -97,13 +96,6 @@ export default function Index() {
 			? (document.title = `Order: Update ${order_number}`)
 			: (document.title = 'Order: Entry');
 	}, []);
-
-	if (isUpdate)
-		useFetchForRhfReset(
-			`/zipper/dyed-tape-transaction/${uuid}/UUID`,
-			order_description_uuid,
-			reset
-		);
 
 	// order_entry
 	const {
@@ -233,9 +225,9 @@ export default function Index() {
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
-	const { value: order_id } = useFetch(
-		`/other/order/description/value/label`
-	); // * get order id and set them as value & lables for select options
+	// * get order id and set them as value & lables for select options
+	const { data: order_id } = useOtherOrderDescription();
+
 	let excludeItem = exclude(
 		watch,
 		order_id,

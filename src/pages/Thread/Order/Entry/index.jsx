@@ -384,13 +384,13 @@ export default function Index() {
 								readOnly: false,
 							},
 							{
-								header: 'Company (USD/DZN)',
+								header: 'Company (USD/CONE)',
 								accessorKey: 'company_price',
 								type: 'text',
 								readOnly: false,
 							},
 							{
-								header: 'Party (USD/DZN)',
+								header: 'Party (USD/CONE)',
 								accessorKey: 'party_price',
 								type: 'text',
 								readOnly: false,

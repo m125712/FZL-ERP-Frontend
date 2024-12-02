@@ -1644,7 +1644,7 @@ export const CHALLAN_NULL = {
 	vehicle_uuid: '',
 	name: '',
 	delivery_cost: 0,
-	order_info_uuid: '',
+	order_info_uuid: null,
 	packing_list_uuids: [],
 	new_packing_list_uuids: [],
 	receive_status: false,

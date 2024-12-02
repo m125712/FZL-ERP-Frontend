@@ -33,7 +33,9 @@ export default function Header({
 	);
 	const { data: bank } = useOtherBank('/other/bank/value/label');
 	const { data: pi } = useOtherPiValues(
-		isUpdate ? 'is_update=true' : 'is_update=false'
+		isUpdate
+			? 'is_update=true&page=manual_pi'
+			: 'is_update=false&page=manual_pi'
 	);
 
 	useEffect(() => {
@@ -65,7 +67,7 @@ export default function Header({
 								<ReactSelect
 									placeholder='Select PIs'
 									options={pi}
-									value={pi?.find((item) =>
+									value={pi?.filter((item) =>
 										pis?.includes(item.value)
 									)}
 									onChange={(e) => {

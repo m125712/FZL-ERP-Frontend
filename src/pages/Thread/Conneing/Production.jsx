@@ -72,7 +72,7 @@ export default function Index({
 
 		reset({
 			production_quantity: '',
-			production_quantity_in_kg: '',
+			coning_carton_quantity: '',
 			wastage: '',
 			remarks: '',
 		});

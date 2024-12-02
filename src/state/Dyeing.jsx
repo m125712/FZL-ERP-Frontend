@@ -156,7 +156,7 @@ export const useDyeingTransfer = () =>
 export const useDyeingTransferByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: dyeingQK.dyeingTransferByUUID(uuid),
-		url: `/zipper/dyed-tape-transaction${uuid}`,
+		url: `/zipper/dyed-tape-transaction/${uuid}`,
 	});
 
 // * dummy query for updating swatches

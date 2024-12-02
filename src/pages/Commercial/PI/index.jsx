@@ -59,6 +59,8 @@ export default function Index() {
 				header: 'LC Number',
 				enableColumnFilter: false,
 				cell: (info) => {
+					const { lc_uuid } = info.row.original;
+
 					if (!info.getValue()) {
 						return '-/-';
 					}
@@ -69,7 +71,7 @@ export default function Index() {
 						return (
 							<LinkWithCopy
 								title={info.getValue()}
-								id={info.getValue()}
+								id={lc_uuid}
 								uri={`/commercial/lc/details`}
 							/>
 						);
@@ -115,6 +117,13 @@ export default function Index() {
 						);
 					});
 				},
+			},
+			{
+				accessorKey: 'order_type',
+				header: 'Type',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => info.getValue()?.join(', '),
 			},
 			{
 				accessorKey: 'total_amount',

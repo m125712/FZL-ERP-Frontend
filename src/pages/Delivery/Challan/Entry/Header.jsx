@@ -58,18 +58,13 @@ export default function Header({
 		? useThreadOrder('is_sample=true')
 		: useThreadOrder('page=challan&is_sample=true');
 
-	const itemFor = watch('item_for');
-
-	const orders =
-		itemFor === 'zipper'
-			? ordersZipper
-			: itemFor === 'thread'
-				? ordersThread
-				: itemFor === 'sample_zipper'
-					? ordersZipperSample
-					: itemFor === 'sample_thread'
-						? ordersThreadSample
-						: [];
+	const itemFor = {
+		zipper: ordersZipper,
+		thread: ordersThread,
+		sample_zipper: ordersZipperSample,
+		sample_thread: ordersThreadSample,
+	};
+	const orders = itemFor[watch('item_for')] || [];
 
 	//* Packing List Fetch
 	const { data: packingList, invalidateQuery: invalidatePackingList } =
@@ -98,11 +93,6 @@ export default function Header({
 		}
 	}, [getValues('order_info_uuid'), watch('item_for')]);
 
-	useEffect(() => {
-		if (!isUpdate) {
-			setValue('order_info_uuid', []);
-		}
-	}, [watch('item_for')]);
 	const isHandDelivery = watch('is_hand_delivery');
 
 	useEffect(() => {
@@ -113,6 +103,7 @@ export default function Header({
 			setValue('delivery_cost', 0);
 		}
 	}, [isHandDelivery, setValue]);
+
 	const handlePackingListRemove = (
 		packing_list_uuid,
 		packing_list_name,
@@ -189,7 +180,10 @@ export default function Header({
 										(item) =>
 											item.value === getValues('item_for')
 									)}
-									onChange={(e) => onChange(e.value)}
+									onChange={(e) => {
+										onChange(e.value);
+										setValue('order_info_uuid', null);
+									}}
 									isDisabled={isUpdate}
 								/>
 							)}
@@ -250,9 +244,7 @@ export default function Header({
 												item.value ===
 												getValues('order_info_uuid')
 										)}
-										onChange={(e) =>
-											onChange(e.value.toString())
-										}
+										onChange={(e) => onChange(e.value)}
 										isDisabled={isUpdate}
 									/>
 								);
@@ -384,6 +376,34 @@ export default function Header({
 								name='new_packing_list_uuids'
 								control={control}
 								render={({ field: { onChange } }) => {
+									const val = packingList?.filter((item) => {
+										const new_packing_list_uuids =
+											getValues('new_packing_list_uuids');
+
+										if (new_packing_list_uuids === null) {
+											return false;
+										}
+										if (isJSON(new_packing_list_uuids)) {
+											return JSON.parse(
+												new_packing_list_uuids
+											)
+												.split(',')
+												?.includes(item.value);
+										}
+										if (
+											!Array.isArray(
+												new_packing_list_uuids
+											)
+										) {
+											return new_packing_list_uuids?.includes(
+												item.value
+											);
+										}
+
+										return new_packing_list_uuids?.includes(
+											item.value
+										);
+									});
 									return (
 										<ReactSelect
 											isMulti
@@ -394,49 +414,7 @@ export default function Header({
 														'packing_list_uuids'
 													).includes(item.value)
 											)}
-											value={packingList?.filter(
-												(item) => {
-													const new_packing_list_uuids =
-														getValues(
-															'new_packing_list_uuids'
-														);
-
-													if (
-														new_packing_list_uuids ===
-														null
-													) {
-														return false;
-													} else {
-														if (
-															isJSON(
-																new_packing_list_uuids
-															)
-														) {
-															return JSON.parse(
-																new_packing_list_uuids
-															)
-																.split(',')
-																?.includes(
-																	item.value
-																);
-														} else {
-															if (
-																!Array.isArray(
-																	new_packing_list_uuids
-																)
-															) {
-																return new_packing_list_uuids?.includes(
-																	item.value
-																);
-															}
-
-															return new_packing_list_uuids?.includes(
-																item.value
-															);
-														}
-													}
-												}
-											)}
+											value={val}
 											onChange={(e) => {
 												onChange(
 													e.map(({ value }) => value)

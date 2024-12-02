@@ -13,6 +13,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAccess, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
 
 import nanoid from '@/lib/nanoid';
@@ -174,28 +175,44 @@ export default function Index() {
 
 	// Submit
 	const onSubmit = async (data) => {
+		const {
+			pi_cash_entry,
+			pi_cash_entry_thread,
+			new_pi_cash_entry,
+			new_pi_cash_entry_thread,
+			...rest
+		} = data;
+
+		delete rest['is_all_checked'];
+		delete rest['is_all_checked_thread'];
+		delete rest['pi_cash_entry'];
+		delete rest['pi_cash_entry_thread'];
+		delete rest['new_pi_cash_entry_thread'];
+		delete rest['new_pi_cash_entry'];
+		delete rest['new_order_info_thread_uuids'];
+		delete rest['new_order_info_uuids'];
 		// Update item
 		if (isUpdate) {
 			const commercialPiData = {
 				order_info_uuids: JSON.stringify(
-					data?.order_info_uuids?.concat(data?.new_order_info_uuids)
+					rest?.order_info_uuids?.concat(rest?.new_order_info_uuids)
 				),
 				thread_order_info_uuids: JSON.stringify(
-					data?.thread_order_info_uuids?.concat(
-						data?.new_order_info_thread_uuids
+					rest?.thread_order_info_uuids?.concat(
+						rest?.new_order_info_thread_uuids
 					)
 				),
-				bank_uuid: data?.bank_uuid,
-				validity: data?.validity,
-				payment: data?.payment,
-				remarks: data?.remarks,
-				weight: data?.weight,
-				is_rtgs: data?.is_rtgs,
+				bank_uuid: rest?.bank_uuid,
+				validity: rest?.validity,
+				payment: rest?.payment,
+				remarks: rest?.remarks,
+				weight: rest?.weight,
+				is_rtgs: rest?.is_rtgs,
 				updated_at: GetDateTime(),
 			};
 
 			// pi entry update
-			let updatedableCommercialPiEntryPromises = data.pi_cash_entry
+			let updatedableCommercialPiEntryPromises = pi_cash_entry
 				.filter(
 					(item) => item.pi_cash_quantity > 0 && !item.isDeletable
 				)
@@ -218,7 +235,7 @@ export default function Index() {
 				});
 
 			// pi entry delete
-			let deleteableCommercialPiEntryPromises = data.pi_cash_entry
+			let deleteableCommercialPiEntryPromises = pi_cash_entry
 				.filter((item) => item.isDeletable)
 				.map(async (item) =>
 					deleteData.mutateAsync({
@@ -229,8 +246,8 @@ export default function Index() {
 
 			// pi entry new
 			const newPiEntryData =
-				data?.new_pi_cash_entry?.length > 0
-					? [...data?.new_pi_cash_entry]
+				new_pi_cash_entry?.length > 0
+					? [...new_pi_cash_entry]
 							.filter(
 								(item) => item.is_checked && item.quantity > 0
 							)
@@ -240,7 +257,7 @@ export default function Index() {
 								is_checked: true,
 								sfg_uuid: item?.sfg_uuid,
 								pi_cash_quantity: item?.pi_cash_quantity,
-								pi_cash_uuid: data.uuid,
+								pi_cash_uuid: rest.uuid,
 								created_at: GetDateTime(),
 								remarks: item?.remarks || null,
 							}))
@@ -256,7 +273,7 @@ export default function Index() {
 
 			// pi thread entry update
 			let updatedableCommercialPiEntryThreadPromises =
-				data.pi_cash_entry_thread
+				pi_cash_entry_thread
 					.filter(
 						(item) => item.pi_cash_quantity > 0 && !item.isDeletable
 					)
@@ -279,20 +296,19 @@ export default function Index() {
 					});
 
 			// pi thread entry delete
-			let deleteableCommercialPiEntryThreadPromises =
-				data.pi_cash_entry_thread
-					.filter((item) => item.isDeletable)
-					.map(async (item) =>
-						deleteData.mutateAsync({
-							url: `${commercialPiEntryUrl}/${item?.uuid}`,
-							isOnCloseNeeded: false,
-						})
-					);
+			let deleteableCommercialPiEntryThreadPromises = pi_cash_entry_thread
+				.filter((item) => item.isDeletable)
+				.map(async (item) =>
+					deleteData.mutateAsync({
+						url: `${commercialPiEntryUrl}/${item?.uuid}`,
+						isOnCloseNeeded: false,
+					})
+				);
 
 			// pi thread entry new
 			const newPiEntryThreadData =
-				data?.new_pi_cash_entry_thread?.length > 0
-					? [...data?.new_pi_cash_entry_thread]
+				new_pi_cash_entry_thread?.length > 0
+					? [...new_pi_cash_entry_thread]
 							.filter(
 								(item) => item.is_checked && item.quantity > 0
 							)
@@ -301,7 +317,7 @@ export default function Index() {
 								uuid: nanoid(),
 								is_checked: true,
 								pi_cash_quantity: item?.pi_cash_quantity,
-								pi_cash_uuid: data.uuid,
+								pi_cash_uuid: rest.uuid,
 								created_at: GetDateTime(),
 								remarks: item?.remarks || null,
 							}))
@@ -350,27 +366,18 @@ export default function Index() {
 		const created_at = GetDateTime();
 
 		const commercialPiData = {
-			...data,
+			...rest,
 			uuid: new_pi_uuid,
-			order_info_uuids: JSON.stringify(data?.order_info_uuids),
+			order_info_uuids: JSON.stringify(rest?.order_info_uuids),
 			thread_order_info_uuids: JSON.stringify(
-				data?.thread_order_info_uuids
+				rest?.thread_order_info_uuids
 			),
 			created_at,
 			created_by: user.uuid,
 			is_pi: 1,
 		};
 
-		delete commercialPiData['is_all_checked'];
-		delete commercialPiData['is_all_checked_thread'];
-		delete commercialPiData['pi_cash_entry'];
-		delete commercialPiData['pi_cash_entry_thread'];
-		delete commercialPiData['new_pi_cash_entry_thread'];
-		delete commercialPiData['new_pi_cash_entry'];
-		delete commercialPiData['new_order_info_thread_uuids'];
-		delete commercialPiData['new_order_info_uuids'];
-
-		const commercialPiEntryData = [...data.pi_cash_entry]
+		const commercialPiEntryData = [...pi_cash_entry]
 			.filter((item) => item.is_checked && item.quantity > 0)
 			.map((item) => ({
 				...item,
@@ -383,7 +390,7 @@ export default function Index() {
 				remarks: item?.remarks || null,
 			}));
 
-		const commercialPiThreadEntryData = [...data.pi_cash_entry_thread]
+		const commercialPiThreadEntryData = [...pi_cash_entry_thread]
 			.filter((item) => item.is_checked && item.quantity > 0)
 			.map((item) => ({
 				...item,
@@ -400,7 +407,10 @@ export default function Index() {
 			commercialPiEntryData.length === 0 &&
 			commercialPiThreadEntryData.length === 0
 		) {
-			alert('Select at least one item to proceed.');
+			ShowLocalToast({
+				type: 'warning',
+				message: 'Select Zipper or Thread Order to create a PI Entry',
+			});
 		} else {
 			// create new /commercial/pi
 			await postData.mutateAsync({

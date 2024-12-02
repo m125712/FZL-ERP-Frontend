@@ -46,7 +46,7 @@ const Thread = ({
 		useOtherOrderNumberForThreadByMarketingAndPartyUUID(
 			watch('party_uuid'),
 			watch('marketing_uuid'),
-			'is_cash=false'
+			'is_cash=false&is_update=false'
 		);
 
 	useEffect(() => {
@@ -130,6 +130,22 @@ const Thread = ({
 	const rowClass =
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
+	const getTotalAmount = useCallback(
+		(piArray) => {
+			if (!piArray || !Array.isArray(piArray)) {
+				return 0;
+			}
+
+			return piArray.reduce((acc, item, index) => {
+				if (item.is_checked === false) {
+					return acc;
+				}
+				return acc + item.pi_cash_quantity * item.unit_price;
+			}, 0);
+		},
+		[isSomeChecked, threadEntryField, status]
+	);
+
 	const getTotalValue = useCallback(
 		(piArray) => {
 			if (!piArray || !Array.isArray(piArray)) {
@@ -145,6 +161,7 @@ const Thread = ({
 		},
 		[isSomeChecked, threadEntryField, status]
 	);
+
 	const getTotalCheck = useCallback(
 		(piArray) => {
 			if (!piArray || !Array.isArray(piArray)) {
@@ -272,6 +289,7 @@ const Thread = ({
 							'Given',
 							'PI QTY',
 							'Balance QTY',
+							'Unite Price',
 						].map((item) => (
 							<th
 								key={item}
@@ -371,6 +389,11 @@ const Thread = ({
 						<td className={`${rowClass}`}>
 							{getValues(
 								`pi_cash_entry_thread[${index}].balance_quantity`
+							)}
+						</td>
+						<td className={`${rowClass}`}>
+							{getValues(
+								`pi_cash_entry_thread[${index}].unit_price`
 							)}
 						</td>
 						{isUpdate && (
@@ -515,12 +538,22 @@ const Thread = ({
 					'relative cursor-pointer transition-colors duration-300 ease-in'
 				)}>
 				<td className='font-semibold text-primary' colSpan={11}>
-					Total Value:
+					Total Amount:{' '}
 					{Number(
-						getTotalValue(watch('pi_cash_entry_thread')) +
-							getTotalValue(watch('new_pi_cash_entry_thread'))
+						getTotalAmount(watch('pi_cash_entry_thread')) +
+							getTotalAmount(watch('new_pi_cash_entry_thread'))
 					).toFixed(2)}
 					$
+				</td>
+			</tr>
+			<tr
+				className={cn(
+					'relative cursor-pointer transition-colors duration-300 ease-in'
+				)}>
+				<td className='font-semibold text-primary' colSpan={11}>
+					Total Quantity:{' '}
+					{getTotalValue(watch('pi_cash_entry_thread')) +
+						getTotalValue(watch('new_pi_cash_entry_thread'))}
 				</td>
 			</tr>
 		</SectionEntryBody>

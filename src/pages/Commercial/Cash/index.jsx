@@ -5,12 +5,12 @@ import {
 	useCommercialPICash,
 } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
-import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
+import { useAccess } from '@/hooks';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_all_orders')) {
@@ -102,6 +102,13 @@ export default function Index() {
 						);
 					});
 				},
+			},
+			{
+				accessorKey: 'order_type',
+				header: 'Type',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue()?.join(', '),
 			},
 			{
 				accessorKey: 'marketing_name',

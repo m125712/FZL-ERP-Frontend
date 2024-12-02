@@ -173,12 +173,12 @@ const DynamicDeliveryTable = ({
 								? 'inch'
 								: getValues(
 											`${entryFiledName}[${index}].is_meter`
-									  )
+									  )=== 1
 									? 'meter'
 									: 'cm'}
 					</td>
 					<td className={rowClass}>
-						{getValues(`${entryFiledName}[${index}].is_meter`) === 0
+						{getValues(`${entryFiledName}[${index}].is_meter`) === 1
 							? '---'
 							: getValues(
 									`${entryFiledName}[${index}].order_quantity`

@@ -19,33 +19,81 @@ const node = [
 	getTable('slot_5', 'Slot 5'),
 	getTable('slot_6', 'Slot 6'),
 ];
-export default function Index(data) {
-	const headerHeight = 100;
+
+export default function Index(data, dyeingDate) {
+	const headerHeight = 80;
 	let footerHeight = 50;
-	console.log(data);
-	console.log(
-		...data?.map((item) =>
-			node.map((nodeItem) => ({
-				text: item[nodeItem.field],
-				style: nodeItem.cellStyle,
-				alignment: nodeItem.alignment,
-			}))
-		)
-	);
+
+	const formatSlotData = (slotData) => {
+		if (!slotData) return '';
+		else if (slotData.is_zipper === 0) {
+			return [
+				{ text: 'Batch No: ', bold: true },
+				slotData.batch_no || '',
+				'\n',
+				{ text: 'O/N: ', bold: true },
+				slotData.order_no || '',
+				'\n',
+				{ text: 'Item: ', bold: true },
+				slotData.item_description || '',
+				'\n',
+				{ text: 'Color: ', bold: true },
+				slotData.color || '',
+				'\n',
+
+				{ text: 'Qty(cone): ', bold: true },
+				slotData.total_quantity || 0,
+				'\n',
+				{ text: 'Status: ', bold: true },
+				slotData.batch_status || '',
+				'\n',
+				{ text: 'Production Qty(cone): ', bold: true },
+				slotData.total_actual_production_quantity || 0,
+			];
+		} else {
+			return [
+				{ text: 'Batch No: ', bold: true },
+				slotData.batch_no || '',
+				'\n',
+				{ text: 'O/N: ', bold: true },
+				slotData.order_no || '',
+				'\n',
+				{ text: 'Item: ', bold: true },
+				slotData.item_description || '',
+				'\n',
+				{ text: 'Color: ', bold: true },
+				slotData.color || '',
+				'\n',
+				{ text: 'Qty: ', bold: true },
+				slotData.total_quantity || 0,
+				'\n',
+				{ text: 'Expected Kg: ', bold: true },
+				slotData.expected_kg || 0,
+				'\n',
+				{ text: 'Production Qty(kg): ', bold: true },
+				slotData.total_actual_production_quantity || 0,
+				'\n',
+				{ text: 'Status: ', bold: true },
+				slotData.batch_status || '',
+				'\n',
+				{ text: 'Received: ', bold: true },
+				slotData.received === 1 ? 'Yes' : 'No',
+			];
+		}
+	};
+
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
 			xMargin,
 			headerHeight,
 			footerHeight,
 		}),
-
-		// * Page Header
+		pageOrientation: 'landscape',
 		header: {
-			table: getPageHeader(data),
+			table: getPageHeader(dyeingDate),
 			layout: 'noBorders',
 			margin: [xMargin, 30, xMargin, 0],
 		},
-		// * Page Footer
 		footer: (currentPage, pageCount) => ({
 			table: getPageFooter({
 				currentPage,
@@ -54,27 +102,25 @@ export default function Index(data) {
 			margin: [xMargin, 2],
 			fontSize: DEFAULT_FONT_SIZE - 2,
 		}),
-
-		// * Main Table
 		content: [
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', '*', '*', '*', '*', '*'],
+					widths: [70, '*', '*', '*', '*', '*', '*'],
 					body: [
-						// * Header
 						TableHeader(node),
-						// * Body
 						...data?.map((item) =>
 							node.map((nodeItem) => ({
-								text: item[nodeItem.field],
+								text:
+									nodeItem.field === 'machine'
+										? item[nodeItem.field]
+										: formatSlotData(item[nodeItem.field]),
 								style: nodeItem.cellStyle,
 								alignment: nodeItem.alignment,
 							}))
 						),
 					],
 				},
-				layout: tableLayoutStyle,
 			},
 		],
 	});

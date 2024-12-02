@@ -120,6 +120,24 @@ const Zipper = ({
 	const rowClass =
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
+	const getTotalAmount = useCallback(
+		(piArray) => {
+			if (!piArray || !Array.isArray(piArray)) {
+				return 0;
+			}
+
+			return piArray.reduce((acc, item, index) => {
+				if (item.is_checked === false) {
+					return acc;
+				}
+
+				if (item.order_type === 'tape')
+					return acc + item.size * item.unit_price_pcs;
+				else return acc + item.pi_cash_quantity * item.unit_price_pcs;
+			}, 0);
+		},
+		[orderEntryField, status, isSomeChecked]
+	);
 	const getTotalValue = useCallback(
 		(piArray) => {
 			if (!piArray || !Array.isArray(piArray)) {
@@ -130,12 +148,12 @@ const Zipper = ({
 				if (item.is_checked === false) {
 					return acc;
 				}
+
 				return acc + item.pi_cash_quantity;
 			}, 0);
 		},
 		[orderEntryField, status, isSomeChecked]
 	);
-
 	const getTotalCheck = useCallback(
 		(piArray) => {
 			if (!piArray || !Array.isArray(piArray)) {
@@ -257,11 +275,14 @@ const Zipper = ({
 							'Item Description',
 							'Style',
 							'Color',
-							'Size (CM)',
+							'Size',
+							'Unit (Size)',
 							'QTY (PCS)',
 							'Given',
 							'PI QTY',
 							'Balance QTY',
+							'Unit Price',
+							'Unit (Price)',
 						].map((item) => (
 							<th
 								key={item}
@@ -326,6 +347,9 @@ const Zipper = ({
 							{getValues(`pi_cash_entry[${index}].size`)}
 						</td>
 						<td className={`${rowClass}`}>
+							{getValues(`pi_cash_entry[${index}].size_unit`)}
+						</td>
+						<td className={`${rowClass}`}>
 							{getValues(`pi_cash_entry[${index}].quantity`)}
 						</td>
 						<td className={`${rowClass}`}>
@@ -363,6 +387,12 @@ const Zipper = ({
 							{getValues(
 								`pi_cash_entry[${index}].balance_quantity`
 							)}
+						</td>
+						<td className={`${rowClass}`}>
+							{getValues(`pi_cash_entry[${index}].unit_price`)}
+						</td>
+						<td className={`${rowClass}`}>
+							{getValues(`pi_cash_entry[${index}].price_unit`)}
 						</td>
 						{isUpdate && (
 							<td className={`${rowClass}`}>
@@ -518,12 +548,17 @@ const Zipper = ({
 			)}
 
 			<td className='font-semibold text-primary' colSpan={11}>
-				Total Value:
+				Total Value:{' '}
 				{Number(
-					getTotalValue(watch('pi_cash_entry')) +
-						getTotalValue(watch('new_pi_cash_entry'))
+					getTotalAmount(watch('pi_cash_entry')) +
+						getTotalAmount(watch('new_pi_cash_entry'))
 				).toFixed(2)}
 				$
+			</td>
+			<td className='font-semibold text-primary' colSpan={11}>
+				Total Quantity:{' '}
+				{getTotalValue(watch('pi_cash_entry')) +
+					getTotalValue(watch('new_pi_cash_entry'))}
 			</td>
 		</SectionEntryBody>
 	);

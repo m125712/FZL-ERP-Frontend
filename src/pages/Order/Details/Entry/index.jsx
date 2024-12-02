@@ -590,7 +590,10 @@ export default function Index() {
 								header:
 									watch('order_type') === 'tape'
 										? 'Size (MTR)'
-										: 'Size (DZN)',
+										: watch('is_inch')
+											? 'Size (INCH)'
+											: 'Size (CM)',
+
 								accessorKey: 'size',
 								type: 'text',
 								hidden: watch('order_type') === 'slider',

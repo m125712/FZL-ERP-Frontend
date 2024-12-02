@@ -283,6 +283,7 @@ export default function Index() {
 		}
 	};
 
+	console.log(errors);
 	// Check if order_number is valid
 	// if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 	const rowClass =

@@ -7,7 +7,13 @@ import {
 import { format } from 'date-fns';
 
 import { DateInput } from '@/ui/Core';
-import { FormField, Input, ReactSelect, SectionEntryBody } from '@/ui';
+import {
+	FormField,
+	Input,
+	ReactSelect,
+	SectionEntryBody,
+	Textarea,
+} from '@/ui';
 
 import cn from '@/lib/cn';
 
@@ -78,8 +84,9 @@ export default function Header({
 	];
 
 	const statusOption = [
-		{ label: 'RFT', value: 'rft' },
-		{ label: 'Other', value: 'other' },
+		{ value: 'pending', label: 'Pending' },
+		{ value: 'completed', label: 'Completed' },
+		{ value: 'cancelled', label: 'Cancelled' },
 	];
 	const shiftOption = [
 		{ label: 'A', value: 'a' },
@@ -113,260 +120,283 @@ export default function Header({
 						<br />
 					</div>
 				}>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					<FormField label='uuid' title='Batch No' errors={errors}>
-						<Controller
-							name='uuid'
+				<div className='flex gap-4'>
+					<div className='flex flex-col gap-2 flex-1'>
+						<FormField
+							label='uuid'
+							title='Batch No'
+							errors={errors}>
+							<Controller
+								name='uuid'
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select Batch'
+											options={batch_number}
+											value={batch_number?.find(
+												(item) =>
+													item.value ==
+													getValues('uuid')
+											)}
+											onChange={(e) => {
+												const value = e.value;
+												onChange(value);
+											}}
+											isDisabled={true}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+						<DateInput
+							label='production_date'
+							Controller={Controller}
 							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Batch'
-										options={batch_number}
-										value={batch_number?.find(
-											(item) =>
-												item.value == getValues('uuid')
-										)}
-										onChange={(e) => {
-											const value = e.value;
-											onChange(value);
-										}}
-										isDisabled={true}
-									/>
-								);
-							}}
+							selected={watch('production_date')}
+							{...{ register, errors }}
+							disabled={true}
 						/>
-					</FormField>
-					<Input
-						label='yarn_quantity'
-						disabled={true}
-						{...{ register, errors }}
-					/>
-					<FormField label='reason' title='Reason' errors={errors}>
-						<Controller
-							name={'reason'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Reason'
-										options={reasonOption}
-										value={reasonOption?.find(
-											(item) =>
-												item.value ===
-												getValues('reason')
-										)}
-										onChange={(e) => {
-											onChange(e.value);
-										}}
-									/>
-								);
-							}}
+						<FormField
+							label='machine_uuid'
+							title='Machine'
+							errors={errors}>
+							<Controller
+								name='machine_uuid'
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select Machine'
+											options={machine}
+											value={machine?.find(
+												(item) =>
+													item.value ==
+													getValues('machine_uuid')
+											)}
+											onChange={(e) => {
+												const value = e.value;
+												onChange(value);
+												setSlot(e.open_slot);
+											}}
+											isDisabled={true}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+						<FormField label='slot' title='Slot' errors={errors}>
+							<Controller
+								name='slot'
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select Slot'
+											options={slot}
+											value={slot?.find(
+												(item) =>
+													item.value ==
+													getValues('slot')
+											)}
+											onChange={(e) => {
+												const value = e.value;
+												onChange(value);
+											}}
+											isDisabled={true}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+					</div>
+					<div className='flex flex-col gap-2 flex-1'>
+						<Input
+							label='yarn_quantity'
+							disabled={true}
+							{...{ register, errors }}
 						/>
-					</FormField>
-					<DateInput
-						label='production_date'
-						Controller={Controller}
-						control={control}
-						selected={watch('production_date')}
-						{...{ register, errors }}
-						disabled={true}
-					/>
-					<FormField
-						label='machine_uuid'
-						title='Machine'
-						errors={errors}>
-						<Controller
-							name='machine_uuid'
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Machine'
-										options={machine}
-										value={machine?.find(
-											(item) =>
-												item.value ==
-												getValues('machine_uuid')
-										)}
-										onChange={(e) => {
-											const value = e.value;
-											onChange(value);
-											setSlot(e.open_slot);
-										}}
-										isDisabled={true}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					<FormField label='slot' title='Slot' errors={errors}>
-						<Controller
-							name='slot'
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Slot'
-										options={slot}
-										value={slot?.find(
-											(item) =>
-												item.value == getValues('slot')
-										)}
-										onChange={(e) => {
-											const value = e.value;
-											onChange(value);
-										}}
-										isDisabled={true}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					<FormField
-						label='dyeing_operator'
-						title='Operator'
-						errors={errors}>
-						<Controller
-							name={'dyeing_operator'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Dyeing Operator'
-										options={dyeing_operator_option}
-										value={dyeing_operator_option?.find(
-											(item) =>
-												item.value ===
-												getValues('dyeing_operator')
-										)}
-										onChange={(e) => {
-											onChange(e.value);
-										}}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					<FormField label='status' title='Status' errors={errors}>
-						<Controller
-							name={'status'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Status'
-										options={statusOption}
-										value={statusOption?.find(
-											(item) =>
-												item.value ===
-												getValues('status')
-										)}
-										onChange={(e) => {
-											onChange(e.value);
-										}}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-				</div>
+						<FormField
+							label='reason'
+							title='Reason'
+							errors={errors}>
+							<Controller
+								name={'reason'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Reason'
+											options={reasonOption}
+											value={reasonOption?.find(
+												(item) =>
+													item.value ===
+													getValues('reason')
+											)}
+											onChange={(e) => {
+												onChange(e.value);
+											}}
+										/>
+									);
+								}}
+							/>
+						</FormField>
 
+						<FormField
+							label='dyeing_operator'
+							title='Operator'
+							errors={errors}>
+							<Controller
+								name={'dyeing_operator'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select Dyeing Operator'
+											options={dyeing_operator_option}
+											value={dyeing_operator_option?.find(
+												(item) =>
+													item.value ===
+													getValues('dyeing_operator')
+											)}
+											onChange={(e) => {
+												onChange(e.value);
+											}}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+						<FormField
+							label='status'
+							title='Status'
+							errors={errors}>
+							<Controller
+								name={'status'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select Status'
+											options={statusOption}
+											value={statusOption?.find(
+												(item) =>
+													item.value ===
+													getValues('status')
+											)}
+											onChange={(e) => {
+												onChange(e.value);
+											}}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+					</div>
+					<div className='flex flex-col gap-2 flex-1'>
+						<FormField
+							label='category'
+							title='Category'
+							errors={errors}>
+							<Controller
+								name={'category'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select Category'
+											options={categoryOption}
+											value={categoryOption?.find(
+												(item) =>
+													item.value ===
+													getValues('category')
+											)}
+											onChange={(e) => {
+												onChange(e.value);
+											}}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+						<FormField
+							label='pass_by'
+							title='Pass By'
+							errors={errors}>
+							<Controller
+								name={'pass_by'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Pass By'
+											options={pass_by_option}
+											value={pass_by_option?.find(
+												(item) =>
+													item.value ===
+													getValues('pass_by')
+											)}
+											onChange={(e) => {
+												onChange(e.value);
+											}}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+						<FormField label='shift' title='Shift' errors={errors}>
+							<Controller
+								name={'shift'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select Shift'
+											options={shiftOption}
+											value={shiftOption?.find(
+												(item) =>
+													item.value ===
+													getValues('shift')
+											)}
+											onChange={(e) => {
+												onChange(e.value);
+											}}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+						<FormField
+							label='dyeing_supervisor'
+							title='Supervisor'
+							errors={errors}>
+							<Controller
+								name={'dyeing_supervisor'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select Dyeing Supervisor'
+											options={dyeing_supervisor_option}
+											value={dyeing_supervisor_option?.find(
+												(item) =>
+													item.value ===
+													getValues(
+														'dyeing_supervisor'
+													)
+											)}
+											onChange={(e) => {
+												onChange(e.value);
+											}}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+					</div>
+				</div>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					<FormField
-						label='category'
-						title='Category'
-						errors={errors}>
-						<Controller
-							name={'category'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Category'
-										options={categoryOption}
-										value={categoryOption?.find(
-											(item) =>
-												item.value ===
-												getValues('category')
-										)}
-										onChange={(e) => {
-											onChange(e.value);
-										}}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					<FormField label='pass_by' title='Pass By' errors={errors}>
-						<Controller
-							name={'pass_by'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Pass By'
-										options={pass_by_option}
-										value={pass_by_option?.find(
-											(item) =>
-												item.value ===
-												getValues('pass_by')
-										)}
-										onChange={(e) => {
-											onChange(e.value);
-										}}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					<FormField label='shift' title='Shift' errors={errors}>
-						<Controller
-							name={'shift'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Shift'
-										options={shiftOption}
-										value={shiftOption?.find(
-											(item) =>
-												item.value ===
-												getValues('shift')
-										)}
-										onChange={(e) => {
-											onChange(e.value);
-										}}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					<FormField
-						label='dyeing_supervisor'
-						title='Supervisor'
-						errors={errors}>
-						<Controller
-							name={'dyeing_supervisor'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Dyeing Supervisor'
-										options={dyeing_supervisor_option}
-										value={dyeing_supervisor_option?.find(
-											(item) =>
-												item.value ===
-												getValues('dyeing_supervisor')
-										)}
-										onChange={(e) => {
-											onChange(e.value);
-										}}
-									/>
-								);
-							}}
-						/>
-					</FormField>
+					<Textarea label='remarks' {...{ register, errors }} />
 				</div>
 			</SectionEntryBody>
 		</div>

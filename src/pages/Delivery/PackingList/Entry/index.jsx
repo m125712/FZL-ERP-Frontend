@@ -11,6 +11,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
 
 import nanoid from '@/lib/nanoid';
@@ -80,6 +81,7 @@ export default function Index() {
 		watch('order_info_uuid'),
 		`item_for=${watch('item_for')}`
 	);
+	
 	useEffect(() => {
 		if (!isUpdate && packingListEntries?.packing_list_entry) {
 			setValue(
@@ -129,7 +131,10 @@ export default function Index() {
 					item.poli_quantity < 1
 			)
 		) {
-			alert('Poly Quantity cannot be zero');
+			ShowLocalToast({
+				type: 'error',
+				message: 'Poly Quantity cannot be zero',
+			});
 			return;
 		}
 		// Update item
@@ -146,7 +151,10 @@ export default function Index() {
 						(item) => item.quantity > 0
 					))
 			) {
-				alert('Packing List cannot be null');
+				ShowLocalToast({
+					type: 'error',
+					message: 'Packing List cannot be null',
+				});
 				return;
 			}
 			const packingListData = {
@@ -259,7 +267,11 @@ export default function Index() {
 				remarks: item?.remarks || null,
 			}));
 		if (packingListEntryData.length === 0) {
-			alert('Select at least one item to proceed.');
+			ShowLocalToast({
+				type: 'error',
+				message: 'Select at least one item to proceed.',
+			});
+			return;
 		} else {
 			// create new /packing/list
 			await postData.mutateAsync({

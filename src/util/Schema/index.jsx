@@ -1644,7 +1644,7 @@ export const CHALLAN_NULL = {
 	vehicle_uuid: '',
 	name: '',
 	delivery_cost: 0,
-	order_info_uuid: '',
+	order_info_uuid: null,
 	packing_list_uuids: [],
 	new_packing_list_uuids: [],
 	receive_status: false,
@@ -2741,6 +2741,15 @@ export const DYEING_THREAD_CONNEING_NULL = {
 	...DYEING_THREAD_BATCH_DYEING_NULL,
 	uuid: '',
 	machine_uuid: '',
+	dyeing_operator: '',
+	reason: '',
+	category: '',
+	status: 'pending',
+	pass_by: '',
+	shift: '',
+	dyeing_supervisor: '',
+	remarks: '',
+
 	batch_entry: [
 		{
 			uuid: '',
@@ -2753,7 +2762,7 @@ export const DYEING_THREAD_CONNEING_NULL = {
 export const DYEING_TRANSFER_SCHEMA = {
 	dyeing_transfer_entry: yup.array().of(
 		yup.object().shape({
-			sfg_uuid: STRING.when( {
+			sfg_uuid: STRING.when({
 				is: () => yup.ref('order_type') === 'tape',
 				then: (schema) => schema.required('Required'),
 				otherwise: (schema) => schema.nullable(),

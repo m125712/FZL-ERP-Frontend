@@ -26,7 +26,7 @@ export default function Index() {
 			{
 				accessorKey: 'batch_id',
 				header: 'Batch ID',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => (
 					<LinkWithCopy
 						title={info.getValue()}
@@ -39,7 +39,7 @@ export default function Index() {
 				accessorKey: 'order_numbers',
 				header: 'O/N',
 				width: 'w-28',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => {
 					const order_numbers = info.getValue();
 					return order_numbers?.map((order_number) => {

@@ -1087,8 +1087,8 @@ export const TAPE_REQUIRED_SCHEMA = {
 	zipper_number_uuid: UUID_REQUIRED,
 	top: NUMBER_DOUBLE_REQUIRED,
 	bottom: NUMBER_DOUBLE_REQUIRED,
-	raw_mtr_per_kg: NUMBER_DOUBLE_REQUIRED,
-	dyed_mtr_per_kg: NUMBER_DOUBLE_REQUIRED,
+	raw_mtr_per_kg: NUMBER_DOUBLE,
+	dyed_mtr_per_kg: NUMBER_DOUBLE,
 	remarks: STRING.nullable(),
 };
 
@@ -1100,8 +1100,8 @@ export const TAPE_REQUIRED_NULL = {
 	zipper_number_uuid: null,
 	top: '',
 	bottom: '',
-	raw_mtr_per_kg: '',
-	dyed_mtr_per_kg: '',
+	raw_mtr_per_kg: 0,
+	dyed_mtr_per_kg: 0,
 	remarks: '',
 };
 
@@ -2583,13 +2583,16 @@ export const DYEING_BATCH_SCHEMA = {
 	remarks: STRING.nullable(),
 	dyeing_batch_entry: yup.array().of(
 		yup.object().shape({
-			quantity: NUMBER.nullable().max(yup.ref('max_quantity')),
+			quantity: NUMBER.nullable().max(
+				yup.ref('max_quantity'),
+				`Beyond Max Quantity`
+			),
 			remarks: STRING.nullable(),
 		})
 	),
 	new_dyeing_batch_entry: yup.array().of(
 		yup.object().shape({
-			quantity: NUMBER.max(
+			quantity: NUMBER.nullable().max(
 				yup.ref('max_quantity'),
 				`Beyond Max Quantity`
 			),

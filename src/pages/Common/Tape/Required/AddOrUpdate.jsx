@@ -41,7 +41,7 @@ export default function Index({
 	} = useRHF(TAPE_REQUIRED_SCHEMA, TAPE_REQUIRED_NULL);
 
 	useEffect(() => {
-		if (data) {
+		if (data, updateTapeRequired?.uuid) {
 			reset(data);
 		}
 	}, [data]);
@@ -60,7 +60,7 @@ export default function Index({
 		window[modalId].close();
 	};
 
-	console.log(getValues());
+	console.log(errors);
 
 	const onSubmit = async (data) => {
 		// Update item

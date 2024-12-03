@@ -138,7 +138,7 @@ export default function Index() {
 										? 0
 										: value
 								),
-						otherwise: (schema) => schema.required('Required'),
+						otherwise: (schema) => schema.required('Required').moreThan(0, 'Must be greater than 0'),
 					}),
 					quantity: NUMBER.when({
 						is: () => type.toLowerCase() === 'tape',
@@ -146,7 +146,7 @@ export default function Index() {
 							schema.transform((value, originalValue) =>
 								String(originalValue).trim() === '' ? 1 : value
 							),
-						otherwise: (schema) => schema.required('Required'),
+						otherwise: (schema) => schema.required('Required').moreThan(0, 'Must be greater than 0'),
 					}),
 					company_price: NUMBER_DOUBLE_REQUIRED.transform(
 						handelNumberDefaultValue

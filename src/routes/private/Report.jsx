@@ -5,7 +5,7 @@ import PIRegister from '@/pages/Report/PIRegister';
 import PIToBeSubmit from '@/pages/Report/PIToBeSubmit';
 import ProductionReportDirector from '@/pages/Report/ProductionReportDirector';
 import ProductionReportSM from '@/pages/Report/ProductionReportS&M';
-import ProductionReportThreadPartyWise from '@/pages/Report/ProductionReportThreadPartyWise';
+// import ProductionReportThreadPartyWise from '@/pages/Report/ProductionReportThreadPartyWise';
 import ThreadProduction from '@/pages/Report/ThreadProductionStatus';
 import ZipperProduction from '@/pages/Report/ZipperProductionStatus';
 

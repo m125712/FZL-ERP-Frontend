@@ -9,7 +9,11 @@ import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
 	const { data, isLoading, url } = usePIToBeSubmitted();
-	const info = new PageInfo('PI To Be Submitted', url, 'report__pi_to_be_submitted');
+	const info = new PageInfo(
+		'PI To Be Submitted',
+		url,
+		'report__pi_to_be_submitted'
+	);
 
 	const haveAccess = useAccess('report__pi_to_be_submitted');
 
@@ -38,7 +42,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'total_undelivered_balance_quantity',
+				accessorKey: 'total_balance_delivery_quantity',
 				header: 'Undelivered',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),

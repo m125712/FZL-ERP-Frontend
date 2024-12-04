@@ -5,6 +5,7 @@ import PIRegister from '@/pages/Report/PIRegister';
 import PIToBeSubmit from '@/pages/Report/PIToBeSubmit';
 import ProductionReportDirector from '@/pages/Report/ProductionReportDirector';
 import ProductionReportSM from '@/pages/Report/ProductionReportS&M';
+import ProductionReportThreadPartyWise from '@/pages/Report/ProductionReportThreadPartyWise';
 import ThreadProduction from '@/pages/Report/ThreadProductionStatus';
 import ZipperProduction from '@/pages/Report/ZipperProductionStatus';
 
@@ -75,6 +76,13 @@ export const ReportRoutes = [
 				page_name: 'report__delivery_statement',
 				actions: ['read'],
 			},
+			// {
+			// 	name: 'Production Report (Thread)',
+			// 	path: '/report/production-report-thread-party-wise',
+			// 	element: <ProductionReportThreadPartyWise />,
+			// 	page_name: 'report__production_report_thread_party_wise',
+			// 	actions: ['read'],
+			// },
 		],
 	},
 ];

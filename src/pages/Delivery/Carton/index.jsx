@@ -1,5 +1,6 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useDeliveryCarton } from '@/state/Delivery';
+import { useOtherCarton } from '@/state/Other';
 import { useThreadDyesCategory } from '@/state/Thread';
 import { useAccess } from '@/hooks';
 
@@ -10,7 +11,6 @@ import { DateTime, EditDelete } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
-import { useOtherCarton } from '@/state/Other';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
@@ -188,7 +188,8 @@ export default function Index() {
 					setDeleteItem={setDeleteItem}
 					url={url}
 					deleteData={deleteData}
-					invalidateQueryArray={[invalidateQueryCartonLabelValue()]}
+					invalidateQuery={invalidateQueryCartonLabelValue}
+					// invalidateQueryArray={[invalidateQueryCartonLabelValue()]}
 				/>
 			</Suspense>
 		</div>

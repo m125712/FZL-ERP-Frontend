@@ -1,12 +1,15 @@
-import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useMaterialSection, useMaterialSectionByUUID } from '@/state/Store';
-import { Input } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { SECTION_NULL, SECTION_SCHEMA } from '@util/Schema';
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
+import { useOtherMaterialSection } from '@/state/Other';
+import { useMaterialSection, useMaterialSectionByUUID } from '@/state/Store';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
+import { SECTION_NULL, SECTION_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -16,6 +19,8 @@ export default function Index({
 	setUpdateSection,
 }) {
 	const { user } = useAuth();
+	const { invalidateQuery: invalidateMaterialSection } =
+		useOtherMaterialSection();
 	const { url, updateData, postData } = useMaterialSection();
 	const { data } = useMaterialSectionByUUID(updateSection?.uuid);
 
@@ -70,6 +75,8 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateMaterialSection();
 	};
 
 	return (

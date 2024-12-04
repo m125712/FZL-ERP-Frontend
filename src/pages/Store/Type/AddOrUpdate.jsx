@@ -2,6 +2,7 @@ import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
 import { useRHF } from '@/hooks';
 import nanoid from '@/lib/nanoid';
+import { useOtherMaterialType } from '@/state/Other';
 import { useMaterialType, useMaterialTypeByUUID } from '@/state/Store';
 import { Input } from '@/ui';
 import GetDateTime from '@/util/GetDateTime';
@@ -16,6 +17,7 @@ export default function Index({
 	setUpdateMaterialType,
 }) {
 	const { user } = useAuth();
+	const { invalidateQuery: invalidateMaterialType } = useOtherMaterialType()
 	const { url, updateData, postData } = useMaterialType();
 	const { data } = useMaterialTypeByUUID(updateMaterialType?.uuid);
 
@@ -70,6 +72,8 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateMaterialType();
 	};
 
 	return (

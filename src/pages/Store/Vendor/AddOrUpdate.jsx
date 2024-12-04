@@ -1,13 +1,16 @@
-import { AddModal } from '@/components/Modal';
-import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { usePurchaseVendor, usePurchaseVendorByUUID } from '@/state/Store';
-import { Input } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { DevTool } from '@hookform/devtools';
-import { VENDOR_NULL, VENDOR_SCHEMA } from '@util/Schema';
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
+import { useOtherVendor } from '@/state/Other';
+import { usePurchaseVendor, usePurchaseVendorByUUID } from '@/state/Store';
+import { DevTool } from '@hookform/devtools';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input } from '@/ui';
+
+import nanoid from '@/lib/nanoid';
+import { VENDOR_NULL, VENDOR_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -17,6 +20,7 @@ export default function Index({
 	setUpdateVendor,
 }) {
 	const { user } = useAuth();
+	const { invalidateQuery: invalidateVendor } = useOtherVendor();
 	const { url, updateData, postData } = usePurchaseVendor();
 	const { data } = usePurchaseVendorByUUID(updateVendor?.uuid);
 
@@ -71,6 +75,8 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateVendor();
 	};
 
 	return (

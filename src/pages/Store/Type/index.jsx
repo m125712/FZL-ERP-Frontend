@@ -1,6 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
+import { useOtherMaterialType } from '@/state/Other';
 import { useMaterialType } from '@/state/Store';
 
 import { DateTime, EditDelete } from '@/ui';
@@ -12,6 +13,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useMaterialType();
+	const { invalidateQuery: invalidateMaterialType } = useOtherMaterialType()
 	const info = new PageInfo('Store / Material Type', url, 'store__type');
 	const haveAccess = useAccess('store__type');
 
@@ -151,6 +153,7 @@ export default function Index() {
 						url,
 						deleteData,
 					}}
+					invalidateQuery={invalidateMaterialType}
 				/>
 			</Suspense>
 		</>

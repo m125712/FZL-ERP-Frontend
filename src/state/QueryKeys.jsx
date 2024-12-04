@@ -1447,6 +1447,12 @@ export const reportQK = {
 	productionReport: (url) => [...reportQK.all(), `production-report-${url}`],
 	// Delivery Statement
 	deliveryStatement: () => [...reportQK.all(), 'delivery-statement-report'],
+
+	// Production Report Thread Party Wise
+	productionReportThreadPartyWise: () => [
+		...reportQK.all(),
+		'production-report-thread-party-wise',
+	],
 };
 
 export const marketingQK = {

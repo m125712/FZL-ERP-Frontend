@@ -270,15 +270,15 @@ export default function Index() {
 								{/* ORDER NO */}
 								<td className={cn('w-44', tdClass)}>
 									<FormField
-										label={`array[${index}].order_description_uuid`}
+										label={`array[${index}].finishing_batch_uuid`}
 										is_title_needed='false'
 										register={register}
 										dynamicerror={
 											errors?.array?.[index]
-												?.order_description_uuid
+												?.finishing_batch_uuid
 										}>
 										<Controller
-											name={`array[${index}].order_description_uuid`}
+											name={`array[${index}].finishing_batch_uuid`}
 											control={control}
 											render={({
 												field: { onChange },
@@ -291,7 +291,7 @@ export default function Index() {
 															(inItem) =>
 																inItem.value ==
 																getValues(
-																	`array[${index}].order_description_uuid`
+																	`array[${index}].finishing_batch_uuid`
 																)
 														)}
 														onChange={(e) => {

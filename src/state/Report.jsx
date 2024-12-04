@@ -48,3 +48,9 @@ export const useDeliveryStatement = (url) =>
 		queryKey: reportQK.deliveryStatement(url),
 		url: `/report/delivery-statement-report`,
 	});
+
+export const useProductionReportThreadPartyWise = () =>
+	createGlobalState({
+		queryKey: reportQK.productionReportThreadPartyWise(),
+		url: `/report/production-report-thread-party-wise`,
+	});

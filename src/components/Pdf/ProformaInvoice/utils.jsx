@@ -86,7 +86,7 @@ export const getPageHeader = (data) => {
 					bold: true,
 					color: PRIMARY_COLOR,
 				},
-				{ text: Number(data?.weight) > 0 ? data?.weight : '' },
+				{ text: Number(data?.weight) > 0 ? data?.weight + ' Kg' : '' },
 				'',
 				'',
 			],

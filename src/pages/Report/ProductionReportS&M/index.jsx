@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import Thread from './thread';
+import ThreadPartyWise from './thread-party-wise';
 import Zipper from './zipper';
 
 export default function Index() {
@@ -12,6 +13,7 @@ export default function Index() {
 		<div className='space-y-6'>
 			<Zipper />
 			<Thread />
+			<ThreadPartyWise />
 		</div>
 	);
 }

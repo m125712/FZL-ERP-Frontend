@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
-import { useOtherOrderBatchDescription, useOtherSliderItem } from '@/state/Other';
+import {
+	useOtherOrderBatchDescription,
+	useOtherSliderItem,
+} from '@/state/Other';
 import {
 	useSliderDieCastingProduction,
 	useSliderDieCastingProductionByUUID,
@@ -74,7 +77,7 @@ export default function Index({
 				onClose,
 			});
 
-			invalidateQuery()
+			invalidateQuery();
 			return;
 		}
 	};
@@ -117,11 +120,11 @@ export default function Index({
 			</FormField>
 			<FormField
 				title='Order Description'
-				label={`order_description_uuid`}
+				label={`finishing_batch_uuid`}
 				register={register}
-				dynamicerror={errors?.order_description_uuid}>
+				dynamicerror={errors?.finishing_batch_uuid}>
 				<Controller
-					name={`order_description_uuid`}
+					name={`finishing_batch_uuid`}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
@@ -131,7 +134,7 @@ export default function Index({
 								value={orders?.filter(
 									(inItem) =>
 										inItem.value ==
-										getValues(`order_description_uuid`)
+										getValues(`finishing_batch_uuid`)
 								)}
 								onChange={(e) => {
 									onChange(e.value);

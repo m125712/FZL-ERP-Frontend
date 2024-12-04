@@ -21,7 +21,7 @@ import {
 	FINISHING_BATCH_ENTRY_SCHEMA,
 } from '@/util/Schema';
 
-import { Columns } from './Columns';
+import { Columns } from './columns';
 import Header from './Header';
 
 export default function index() {

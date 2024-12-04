@@ -2744,6 +2744,15 @@ export const DYEING_THREAD_CONNEING_NULL = {
 	...DYEING_THREAD_BATCH_DYEING_NULL,
 	uuid: '',
 	machine_uuid: '',
+	dyeing_operator: '',
+	reason: '',
+	category: '',
+	status: 'pending',
+	pass_by: '',
+	shift: '',
+	dyeing_supervisor: '',
+	remarks: '',
+
 	batch_entry: [
 		{
 			uuid: '',

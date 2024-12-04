@@ -8,9 +8,9 @@ const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 
 const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 
-export const getPageHeader = (data) => {
-	// const created_at = getDateFormate(data?.delivery_date);
-
+export const getPageHeader = (dyeingDate) => {
+	const date = getDateFormate(dyeingDate);
+	const day = format(dyeingDate, 'EEEE');
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
 		widths: [70, '*', 70, '*'],
@@ -30,12 +30,12 @@ export const getPageHeader = (data) => {
 					colSpan: 2,
 					text: [
 						{
-							text: `Delivery Challan\n`,
+							text: `Dyeing Dashboard\n`,
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
-						`Date: ${''}\n`,
-						``
+						`Date: ${date}\n`,
+						`Day: ${day}\n`,
 					],
 					alignment: 'right',
 				},

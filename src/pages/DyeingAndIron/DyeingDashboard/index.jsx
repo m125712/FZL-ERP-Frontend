@@ -32,7 +32,7 @@ export default function index() {
 
 	useEffect(() => {
 		if (data) {
-			Pdf(data)?.getDataUrl((dataUrl) => {
+			Pdf(data, dyeingDate)?.getDataUrl((dataUrl) => {
 				setData(dataUrl);
 			});
 		}

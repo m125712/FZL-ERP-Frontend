@@ -82,8 +82,8 @@ export default function Header({
 								return (
 									<ReactSelect
 										placeholder='Select Order No'
-										options={originalData?.pageData}
-										value={originalData?.pageData?.find(
+										options={originalData?.data}
+										value={originalData?.data?.find(
 											(item) =>
 												item.value ==
 												getValues(

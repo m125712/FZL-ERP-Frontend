@@ -1,6 +1,7 @@
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { useAccess } from '@/hooks';
+import { useOtherVendor } from '@/state/Other';
 import { usePurchaseVendor } from '@/state/Store';
 
 import { DateTime, EditDelete } from '@/ui';
@@ -11,6 +12,7 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
+	const { invalidateQuery: invalidateVendor } = useOtherVendor();
 	const { data, isLoading, url, deleteData } = usePurchaseVendor();
 	const info = new PageInfo('Store / Vendor', url, 'store__vendor');
 	const haveAccess = useAccess('store__vendor');
@@ -173,6 +175,7 @@ export default function Index() {
 						url,
 						deleteData,
 					}}
+					invalidateQuery={invalidateVendor}
 				/>
 			</Suspense>
 		</>

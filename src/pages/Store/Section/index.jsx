@@ -1,15 +1,20 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useOtherMaterialSection } from '@/state/Other';
+import { useMaterialSection } from '@/state/Store';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useMaterialSection } from '@/state/Store';
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
+	const { invalidateQuery: invalidateMaterialSection } =
+		useOtherMaterialSection();
 	const { data, isLoading, url, deleteData } = useMaterialSection();
 	const info = new PageInfo(
 		'Store / Material Section',
@@ -147,6 +152,7 @@ export default function Index() {
 						url,
 						deleteData,
 					}}
+					invalidateQuery={invalidateMaterialSection}
 				/>
 			</Suspense>
 		</>

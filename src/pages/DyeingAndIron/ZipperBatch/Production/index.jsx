@@ -479,12 +479,12 @@ export default function Index() {
 							'relative cursor-pointer even:bg-primary/10 focus:bg-primary/30'
 						)}>
 						{/* Span all columns up to "Expected Weight" */}
-						<td className='text-right font-semibold' colSpan={8}>
+						<td className='text-right font-semibold' colSpan={7}>
 							Total Weight:
 						</td>
 
 						{/* Total weight placed under "Expected Weight" */}
-						<td className='px-3 py-2 text-left font-semibold'>
+						<td className='px-3 py-2 text-center font-semibold'>
 							{Number(
 								getTotal(watch('dyeing_batch_entry'))
 									.totalCalTape

@@ -216,7 +216,10 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
+				hidden: !(
+					haveAccess.includes('update') ||
+					haveAccess.includes('delete')
+				),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -225,6 +228,7 @@ export default function Index() {
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
 							showDelete={haveAccess.includes('delete')}
+							showUpdate={haveAccess.includes('update')}
 						/>
 					);
 				},

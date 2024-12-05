@@ -85,7 +85,7 @@ export default function Index() {
 				header: '',
 				enableColumnFilter: false,
 				enableSorting: false,
-				// hidden: !haveAccess.includes('click_production'),
+				hidden: !haveAccess.includes('click_production'),
 				width: 'w-8',
 				cell: (info) => {
 					const { min_quantity_with_link, min_quantity_no_link } =
@@ -120,7 +120,7 @@ export default function Index() {
 				header: '',
 				enableColumnFilter: false,
 				enableSorting: false,
-				// hidden: !haveAccess.includes('click_transaction'),
+				hidden: !haveAccess.includes('click_transaction'),
 				width: 'w-8',
 				cell: (info) => {
 					const { quantity, weight } = info.row.original;
@@ -170,7 +170,10 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
+				hidden: !(
+					haveAccess.includes('update') ||
+					haveAccess.includes('delete')
+				),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -179,6 +182,7 @@ export default function Index() {
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
 							showDelete={haveAccess.includes('delete')}
+							showUpdate={haveAccess.includes('update')}
 						/>
 					);
 				},

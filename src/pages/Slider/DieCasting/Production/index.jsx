@@ -165,9 +165,11 @@ export default function Index() {
 				accessorKey: 'action',
 				header: 'Action',
 				enableColumnFilter: false,
-				hidden: !haveAccess.includes('update'),
+				hidden: !(
+					haveAccess.includes('update') ||
+					haveAccess.includes('delete')
+				),
 				cell: (info) => {
-					const uuid = info.row.original?.uuid;
 					return (
 						<EditDelete
 							idx={info.row.index}

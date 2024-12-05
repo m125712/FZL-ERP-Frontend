@@ -1,20 +1,14 @@
-import { lazy, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSliderDashboardInfo } from '@/state/Slider';
-import { useAccess } from '@/hooks';
 
-import { Suspense } from '@/components/Feedback';
-import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, StatusButton } from '@/ui';
+import { DateTime, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
-const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
-
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useSliderDashboardInfo();
+	const { data, isLoading, url } = useSliderDashboardInfo();
 	const info = new PageInfo('Info', url, 'slider__dashboard');
-	const haveAccess = useAccess('slider__dashboard');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -250,54 +244,9 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
-			{
-				accessorKey: 'action',
-				header: 'Action',
-				enableColumnFilter: false,
-				hidden: !haveAccess.includes('update'),
-				cell: (info) => {
-					const uuid = info.row.original?.uuid;
-					return (
-						<EditDelete
-							handelUpdate={() => handelUpdate(uuid)}
-							handelDelete={() => handelDelete(info.row.id)}
-							showDelete={haveAccess.includes('delete')}
-						/>
-					);
-				},
-			},
 		],
 		[data]
 	);
-
-	// Update
-	const [updateInfo, setUpdateInfo] = useState({
-		uuid: null,
-	});
-
-	// Update
-	const handelUpdate = (uuid) => {
-		setUpdateInfo((prev) => ({
-			...prev,
-			uuid,
-		}));
-		window[info.getAddOrUpdateModalId()].showModal();
-	};
-
-	const [deleteItem, setDeleteItem] = useState({
-		itemId: null,
-		itemName: null,
-	});
-
-	const handelDelete = (idx) => {
-		setDeleteItem((prev) => ({
-			...prev,
-			itemId: data[idx].uuid,
-			itemName: data[idx].item_name.replace(/ /g, '_'),
-		}));
-
-		window[info.getDeleteModalId()].showModal();
-	};
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -311,29 +260,6 @@ export default function Index() {
 				columns={columns}
 				extraClass={'py-0.5'}
 			/>
-
-			{/* <Suspense>
-				<AddOrUpdate
-					modalId={info.getAddOrUpdateModalId()}
-					{...{
-						updateInfo,
-						setUpdateInfo,
-					}}
-				/>
-			</Suspense>
-
-			<Suspense>
-				<DeleteModal
-					modalId={info.getDeleteModalId()}
-					title={info.getTitle()}
-					{...{
-						deleteItem,
-						setDeleteItem,
-						url,
-						deleteData,
-					}}
-				/>
-			</Suspense> */}
 		</>
 	);
 }

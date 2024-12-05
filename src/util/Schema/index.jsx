@@ -1292,10 +1292,10 @@ export const SLIDER_DIE_CASTING_SCHEMA = {
 			mc_no: NUMBER_REQUIRED,
 			die_casting_uuid: STRING_REQUIRED,
 			finishing_batch_uuid: STRING.nullable(),
-			cavity_goods: NUMBER_REQUIRED,
+			cavity_goods: NUMBER_REQUIRED.moreThan(0, 'Must be more than 0'),
 			cavity_defect: NUMBER_REQUIRED,
-			push: NUMBER_REQUIRED,
-			weight: NUMBER_DOUBLE_REQUIRED,
+			push: NUMBER_REQUIRED.moreThan(0, 'Must be more than 0'),
+			weight: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'Must be more than 0'),
 			remarks: STRING.nullable(),
 		})
 	),

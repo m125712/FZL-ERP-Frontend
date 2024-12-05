@@ -265,18 +265,9 @@ export default function Index() {
 							'relative cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30'
 						)}>
 						{/* Span all columns up to "Expected Weight" */}
-						<td className='text-right font-semibold' colSpan={11}>
-							Total Weight:
-						</td>
 
-						{/* Total weight placed under "Expected Weight" */}
-						<td className='px-3 py-2 text-left font-semibold'>
-							{Number(
-								getTotalCalTape(watch('batch_entry')).toFixed(3)
-							)}
-						</td>
 						<td className='text-right font-semibold' colSpan={11}>
-							Total Yarn Quantity:
+							Total:
 						</td>
 						<td className='px-3 py-2 text-left font-semibold'>
 							{Number(
@@ -284,6 +275,13 @@ export default function Index() {
 									watch('batch_entry')
 								).toFixed(3)
 							)}
+						</td>
+
+						<td className='px-3 py-2 text-left font-semibold'>
+							{Number(
+								getTotalCalTape(watch('batch_entry')).toFixed(3)
+							)}{' '}
+							kg
 						</td>
 
 						{/* Empty <td> elements to maintain table structure */}

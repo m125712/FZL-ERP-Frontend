@@ -1,5 +1,8 @@
 import { useMemo, useState } from 'react';
-import { useSliderAssemblyLogTransaction, useSliderAssemblyProduction } from '@/state/Slider';
+import {
+	useSliderAssemblyLogTransaction,
+	useSliderAssemblyProduction,
+} from '@/state/Slider';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -186,7 +189,10 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
+				hidden: !(
+					haveAccess.includes('update') ||
+					haveAccess.includes('delete')
+				),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -195,6 +201,7 @@ export default function Index() {
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
 							showDelete={haveAccess.includes('delete')}
+							showUpdate={haveAccess.includes('update')}
 						/>
 					);
 				},

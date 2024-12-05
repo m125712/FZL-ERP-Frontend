@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { useDyeingFinishingBatch } from '@/state/Dyeing';
+import { differenceInDays, subDays } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -116,11 +117,75 @@ export default function index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'remaining_slider_lead_time',
+				header: (
+					<div>
+						Remaining Date <br />
+						Slider
+					</div>
+				),
+				enableColumnFilter: false,
+				width: 'w-36',
+				cell: (info) => {
+					const { production_date, slider_lead_time } =
+						info.row.original;
+					const slider_day = subDays(
+						production_date,
+						Number(slider_lead_time)
+					);
+					const remainingDays = differenceInDays(
+						slider_day,
+						new Date()
+					);
+					return (
+						<div>
+							<span className='text-xs font-bold text-gray-600'>
+								{remainingDays < 0 ? 0 : remainingDays} days
+							</span>
+							<DateTime date={slider_day} isTime={false} />
+						</div>
+					);
+				},
+			},
+			{
 				accessorKey: 'dyeing_lead_time',
 				header: 'Dyeing Lead Time',
 				enableColumnFilter: false,
 				width: 'w-36',
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'remaining_dyeing_lead_time',
+				header: (
+					<div>
+						Remaining Date <br />
+						Dyeing
+					</div>
+				),
+				enableColumnFilter: false,
+				width: 'w-36',
+				cell: (info) => {
+					const { production_date, dyeing_lead_time } =
+						info.row.original;
+
+					const dyeing_day = subDays(
+						production_date,
+						Number(dyeing_lead_time)
+					);
+					const remainingDays = differenceInDays(
+						dyeing_day,
+						new Date()
+					);
+
+					return (
+						<div>
+							<span className='text-xs font-bold text-gray-600'>
+								{remainingDays < 0 ? 0 : remainingDays} days
+							</span>
+							<DateTime date={dyeing_day} isTime={false} />
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'created_by_name',

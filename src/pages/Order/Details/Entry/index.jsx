@@ -329,7 +329,6 @@ export default function Index() {
 					quantity:
 						watch('order_type') === 'tape' ? 1 : item.quantity,
 					swatch_approval_date: DEFAULT_SWATCH_APPROVAL_DATE,
-					updated_at: GetDateTime(),
 				})
 			);
 
@@ -339,7 +338,7 @@ export default function Index() {
 					if (item.order_entry_uuid) {
 						await updateData.mutateAsync({
 							url: `/zipper/order-entry/${item.order_entry_uuid}`,
-							updatedData: item,
+							updatedData: { ...item, updated_at: GetDateTime() },
 							isOnCloseNeeded: false,
 						});
 					} else {
@@ -348,10 +347,6 @@ export default function Index() {
 							newData: {
 								...item,
 								uuid: nanoid(),
-								status: item.order_entry_status ? 1 : 0,
-								swatch_status: 'pending',
-								swatch_approval_date:
-									DEFAULT_SWATCH_APPROVAL_DATE,
 								order_description_uuid:
 									rest?.order_description_uuid,
 								created_at: GetDateTime(),
@@ -363,28 +358,28 @@ export default function Index() {
 			];
 
 			// * Slider
-			const slider_quantity =
-				rest.order_entry.length === 1
-					? rest.order_entry[0].quantity
-					: rest.order_entry.reduce(
-							(prev, curr) => prev + curr.quantity,
-							0
-						);
+			// const slider_quantity =
+			// 	rest.order_entry.length === 1
+			// 		? rest.order_entry[0].quantity
+			// 		: rest.order_entry.reduce(
+			// 				(prev, curr) => prev + curr.quantity,
+			// 				0
+			// 			);
 
-			const slider_info = {
-				order_quantity: slider_quantity,
-				updated_at: GetDateTime(),
-			};
+			// const slider_info = {
+			// 	order_quantity: slider_quantity,
+			// 	updated_at: GetDateTime(),
+			// };
 
-			if (watch('order_type') === 'tape') {
-			} else if (watch('slider_provided') === 'completely_provided') {
-			} else {
-				await updateData.mutateAsync({
-					url: `/slider/stock/${rest?.stock_uuid}`,
-					updatedData: slider_info,
-					isOnCloseNeeded: false,
-				});
-			}
+			// if (watch('order_type') === 'tape') {
+			// } else if (watch('slider_provided') === 'completely_provided') {
+			// } else {
+			// 	await updateData.mutateAsync({
+			// 		url: `/slider/stock/${rest?.stock_uuid}`,
+			// 		updatedData: slider_info,
+			// 		isOnCloseNeeded: false,
+			// 	});
+			// }
 
 			navigate(
 				`/order/details/${order_number}/${order_description_uuid}`

@@ -4,9 +4,9 @@ import ColoringLog from '@/pages/Slider/Coloring/Log';
 import SliderColoringProduction from '@/pages/Slider/Coloring/Production';
 import ColoringRM from '@/pages/Slider/Coloring/RMStock';
 import SliderDashboard from '@/pages/Slider/Dashboard';
+// * Die Casting
 import DieCastingLog from '@/pages/Slider/DieCasting/Log';
 import DieCastingProduction from '@/pages/Slider/DieCasting/Production';
-// * Die Casting
 import DieCastingEntry from '@/pages/Slider/DieCasting/Production/Entry';
 import DieCastingRMStock from '@/pages/Slider/DieCasting/RMStock';
 import DieCastingStock from '@/pages/Slider/DieCasting/Stock';
@@ -138,7 +138,14 @@ export const SliderRoutes = [
 						path: '/slider/slider-assembly/stock',
 						element: <SliderAssemblyStock />,
 						page_name: 'slider__assembly_stock',
-						actions: ['read', 'create', 'update', 'delete'],
+						actions: [
+							'read',
+							'create',
+							'update',
+							'delete',
+							'click_production',
+							'click_transaction',
+						],
 					},
 					{
 						name: 'Production',

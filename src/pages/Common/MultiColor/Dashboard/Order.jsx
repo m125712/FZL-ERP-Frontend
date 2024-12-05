@@ -72,7 +72,6 @@ export default function Index({
 			onClose,
 		});
 
-		console.log(order?.order_description_uuid);
 		await updateData.mutateAsync({
 			url: `/zipper/order/description/update/by/${updatedData?.tape_coil_uuid}`,
 			updatedData: {

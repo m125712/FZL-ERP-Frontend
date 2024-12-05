@@ -23,14 +23,6 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'name',
-				header: 'Name',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<span className='capitalize'>{info.getValue()}</span>
-				),
-			},
-			{
 				accessorKey: 'item_name',
 				header: 'Item',
 				enableColumnFilter: false,
@@ -47,18 +39,12 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'is_received_in_sewing',
-				header: 'Received',
+				accessorKey: 'name',
+				header: 'Name',
 				enableColumnFilter: false,
-				cell: (info) => {
-					return (
-						<SwitchToggle
-							disabled={false}
-							onChange={() => handelSwitch(info.row.index)}
-							checked={info.getValue() === 1}
-						/>
-					);
-				},
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
 			},
 			{
 				accessorKey: 'order_number',
@@ -87,6 +73,20 @@ export default function Index() {
 				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_received_in_sewing',
+				header: 'Dying Received?',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<SwitchToggle
+							disabled={false}
+							onChange={() => handelSwitch(info.row.index)}
+							checked={info.getValue() === 1}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'created_by_name',

@@ -40,8 +40,14 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'actual_tape_quantity',
+				header: 'Total (KG)',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'expected_tape_quantity',
-				header: 'Expected Total KG',
+				header: 'Expected (KG)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -52,17 +58,15 @@ export default function Index() {
 				enableSorting: false,
 				// hidden: !haveAccess.includes('click_production'),
 				width: 'w-8',
-				cell: (info) => {
-					return (
-						<Transfer
-							onClick={() => handelTapeReceived(info.row.index)}
-						/>
-					);
-				},
+				cell: (info) => (
+					<Transfer
+						onClick={() => handelTapeReceived(info.row.index)}
+					/>
+				),
 			},
 			{
 				accessorKey: 'tape_received',
-				header: 'Received',
+				header: 'Received (KG)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -83,52 +87,74 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'tape_name',
+				accessorFn: (row) => {
+					if (!row.tape_name) return '-';
+					return row.tape_name + ' ' + row.tape_quantity;
+				},
+				id: 'tape',
 				header: 'Tape',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: ({ row }) => {
+					const { tape_name, tape_quantity } = row.original;
+					if (!tape_name) return '-';
+					return (
+						<div className='flex flex-col'>
+							<span className='capitalize'>{tape_name}</span>
+							<span>{tape_quantity}</span>
+						</div>
+					);
+				},
 			},
 			{
-				accessorKey: 'tape_quantity',
-				header: 'Tape QTY',
+				accessorFn: (row) => {
+					if (!row.coil_name) return '-';
+					return row.coil_name + ' ' + row.coil_quantity;
+				},
+				id: 'coil',
+				header: 'Coil',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: ({ row }) => {
+					const { coil_name, coil_quantity } = row.original;
+					if (!coil_name) return '-';
+					return (
+						<div className='flex flex-col'>
+							<span className='capitalize'>{coil_name}</span>
+							<span>{coil_quantity}</span>
+						</div>
+					);
+				},
 			},
 
 			{
-				accessorKey: 'coil_name',
-				header: 'Coil',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'coil_quantity',
-				header: 'Coil QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'thread_name',
+				accessorFn: (row) => {
+					if (!row.thread_name) return '-';
+					return row.thread_name + '-' + row.thread_quantity;
+				},
+				id: 'thread',
 				header: 'Sewing Thread',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: ({ row }) => {
+					const { thread_name, thread_quantity } = row.original;
+					if (!thread_name) return '-';
+					return (
+						<div className='flex flex-col'>
+							<span className='capitalize'>{thread_name}</span>
+							<span>{thread_quantity}</span>
+						</div>
+					);
+				},
 			},
-			{
-				accessorKey: 'thread_quantity',
-				header: 'Thread QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+
 			{
 				accessorKey: 'sewing_section',
 				header: (
 					<div>
-						<div className='border-b-2 border-gray-300'>
+						<div className='border-b-2 border-primary'>
 							Sewing Section
 						</div>
 						<div className='flex justify-between'>
-							<div>Coil</div>
-							<div>Thread</div>
+							<span>Coil</span>
+							<span>Thread</span>
 						</div>
 					</div>
 				),
@@ -158,12 +184,7 @@ export default function Index() {
 					);
 				},
 			},
-			{
-				accessorKey: 'actual_tape_quantity',
-				header: 'Actual Received KG',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+
 			{
 				accessorKey: 'action_add_production',
 				header: 'Action',
@@ -171,13 +192,11 @@ export default function Index() {
 				enableSorting: false,
 				// hidden: !haveAccess.includes('click_production'),
 				width: 'w-8',
-				cell: (info) => {
-					return (
-						<Transfer
-							onClick={() => handelProduction(info.row.index)}
-						/>
-					);
-				},
+				cell: (info) => (
+					<Transfer
+						onClick={() => handelProduction(info.row.index)}
+					/>
+				),
 			},
 		],
 		[data]

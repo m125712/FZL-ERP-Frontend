@@ -263,35 +263,46 @@ export default function ItemDescription({ order_description, className }) {
 				value: tape_name,
 			},
 			{
-				label: 'Required',
-				value: `${total_tape_in_mtr} mtr`,
+				label: 'Required (mtr)',
+				value: `${total_tape_in_mtr}`,
 			},
 			{
-				label: 'Raw (mtr/kg)',
+				label: '',
+				value: '',
+			},
+			{
+				label: 'Expected received (kg)',
 				value: `${Number(
 					total_tape_in_mtr /
 						Number(order_description?.raw_per_kg_meter)
-				).toFixed(3)} kg`,
+				).toFixed(3)}`,
 			},
 			{
-				label: 'received',
-				value: `${tape_received} kg`,
+				label: 'received (kg)',
+				value: `${tape_received}`,
 			},
-
 			{
-				label: 'Dyed (mtr/kg)',
+				label: '',
+				value: '',
+			},
+			{
+				label: 'Expected production (kg)',
 				value: `${Number(
 					total_tape_in_mtr /
 						parseFloat(order_description?.dyed_per_kg_meter)
-				).toFixed(3)} kg`,
+				).toFixed(3)}`,
 			},
 			{
-				label: 'production',
-				value: `${Number(tape_production).toFixed(3)} kg`,
+				label: 'production (kg)',
+				value: `${Number(tape_production).toFixed(3)}`,
 			},
 			{
-				label: 'transfer',
-				value: `${tape_transferred} kg`,
+				label: '',
+				value: '',
+			},
+			{
+				label: 'transfer to floor (kg)',
+				value: `${tape_transferred}`,
 			},
 		];
 

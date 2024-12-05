@@ -10,12 +10,14 @@ import {
 } from '@/state/Thread';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
+import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import DynamicFormSpreadSheet from '@/ui/Dynamic/DynamicFormSpreadSheet';
+import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 
 import nanoid from '@/lib/nanoid';
@@ -26,6 +28,7 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
+import useGenerateFieldDefs from './useGenerateFieldDefs';
 
 export default function Index() {
 	const { url: threadOrderInfoUrl } = useThreadOrderInfo();
@@ -51,6 +54,7 @@ export default function Index() {
 		setValue,
 		trigger,
 		clearErrors,
+		context: form,
 	} = useRHF(THREAD_ORDER_INFO_ENTRY_SCHEMA, THREAD_ORDER_INFO_ENTRY_NULL);
 
 	useEffect(() => {
@@ -318,7 +322,7 @@ export default function Index() {
 
 	const headerButtons = [
 		<div className='flex items-center gap-2'>
-			<label className='text-sm'>Bleach All</label>
+			<label className='text-sm text-white'>Bleach All</label>
 			<SwitchToggle
 				checked={bleachAll}
 				onChange={() => setBleachAll(!bleachAll)}
@@ -326,8 +330,22 @@ export default function Index() {
 		</div>,
 	];
 
+	const handleCopy = (index) => {
+		const field = form.watch('order_info_entry')[index];
+		threadOrderInfoEntryAppend({
+			color: field.color,
+			style: field.style,
+			count_length_uuid: field.count_length_uuid,
+			bleaching: field.bleaching,
+			quantity: field.quantity,
+			company_price: field.company_price,
+			party_price: field.company_price,
+			remarks: field.remarks,
+		});
+	};
+
 	return (
-		<div>
+		<FormProvider {...form}>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
@@ -344,7 +362,7 @@ export default function Index() {
 						}}
 					/>
 
-					<DynamicFormSpreadSheet
+					{/* <DynamicFormSpreadSheet
 						title='Details'
 						fieldArrayName='order_info_entry'
 						handelAppend={handleThreadOrderInfoEntryAppend}
@@ -421,6 +439,19 @@ export default function Index() {
 							remove: threadOrderInfoEntryRemove,
 							update: threadOrderInfoEntryUpdate,
 						}}
+					/> */}
+					<HandsonSpreadSheet
+						extraHeader={headerButtons}
+						title='Details'
+						form={form}
+						fieldName='order_info_entry'
+						fieldDefs={useGenerateFieldDefs({
+							copy: handleCopy,
+							remove: handleThreadOrderInfoEntryRemove,
+							watch: watch,
+						})}
+						handleAdd={handleThreadOrderInfoEntryAppend}
+						fields={threadOrderInfoEntryField}
 					/>
 
 					<div className='modal-action'>
@@ -444,6 +475,6 @@ export default function Index() {
 				/>
 			</Suspense>
 			<DevTool control={control} placement='top-left' />
-		</div>
+		</FormProvider>
 	);
 }

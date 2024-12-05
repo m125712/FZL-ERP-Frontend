@@ -195,7 +195,7 @@ export default function Index() {
 			url: `${url}/${data[idx]?.uuid}`,
 			updatedData: {
 				approved: data[idx]?.approved === 1 ? 0 : 1,
-				updated_at: GetDateTime(),
+				approve_date: data[idx]?.approved === 1 ? null : GetDateTime(),
 			},
 			isOnCloseNeeded: false,
 		});

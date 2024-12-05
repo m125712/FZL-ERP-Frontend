@@ -56,12 +56,6 @@ export default function Index() {
 			: (document.title = 'Order: Entry');
 	}, [info_number]);
 
-	useEffect(() => {
-		if (data && isUpdate) {
-			reset(data);
-		}
-	}, [data, isUpdate]);
-
 	// recipe
 	const {
 		fields: recipeField,
@@ -71,6 +65,12 @@ export default function Index() {
 		control,
 		name: 'recipe',
 	});
+
+	useEffect(() => {
+		if (data && isUpdate) {
+			reset(data);
+		}
+	}, [data, isUpdate]);
 
 	const [updateItem, setUpdateItem] = useState({
 		itemId: null,

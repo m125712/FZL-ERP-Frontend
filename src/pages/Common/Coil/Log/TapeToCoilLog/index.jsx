@@ -1,27 +1,25 @@
 import React, { useMemo, useState } from 'react';
-import { useCommonCoilToStockLog, useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
+import {
+	useCommonCoilToStockLog,
+	useCommonTapeSFG,
+	useCommonTapeToCoil,
+} from '@/state/Common';
 import { useAccess } from '@/hooks';
-
-
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete } from '@/ui';
 
-
-
 import PageInfo from '@/util/PageInfo';
 
-
-
 import AddOrUpdate from './AddOrUpdate';
-
 
 export default function TapeToCoil() {
 	const { data, isLoading, url, deleteData } = useCommonCoilToStockLog();
 	const info = new PageInfo('Tape -> Stock', 'tape-to-coil-trx');
 	const haveAccess = useAccess('common__tape_log');
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 
 	const columns = useMemo(
 		() => [
@@ -204,6 +202,7 @@ export default function TapeToCoil() {
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
 					url='/zipper/tape-trx'
+					invalidateQuery={invalidateCommonTapeSFG}
 					{...{
 						deleteItem,
 						setDeleteItem,

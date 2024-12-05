@@ -1,11 +1,19 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
+import {
+	useCommonCoilSFG,
+	useCommonTapeAssign,
+	useCommonTapeProduction,
+	useCommonTapeSFG,
+} from '@/state/Common';
+import { useOtherTapeCoil } from '@/state/Other';
 import { useRHF, useUpdateFunc } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useCommonTapeProduction, useCommonTapeSFG } from '@/state/Common';
+
+import { AddModal } from '@/components/Modal';
 import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
+import nanoid from '@/lib/nanoid';
 import { TAPE_PROD_NULL, TAPE_PROD_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -23,6 +31,8 @@ export default function Index({
 	const { postData } = useCommonTapeSFG();
 	const { invalidateQuery: invalidateCommonTapeSFG } =
 		useCommonTapeProduction();
+
+	const { invalidateQuery: invalidateOtherTapeCoil } = useOtherTapeCoil();
 
 	const { register, handleSubmit, errors, reset, context } = useRHF(
 		TAPE_PROD_SCHEMA,
@@ -61,6 +71,7 @@ export default function Index({
 			onClose,
 		});
 		invalidateCommonTapeSFG();
+		invalidateOtherTapeCoil();
 	};
 
 	return (

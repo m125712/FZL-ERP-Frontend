@@ -191,6 +191,7 @@ export default function ProductionLog() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateCommonCoilSFG}
 					{...{
 						deleteItem,
 						setDeleteItem,

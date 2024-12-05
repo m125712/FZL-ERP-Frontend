@@ -486,7 +486,11 @@ export const useOtherTapeCoil = () =>
 
 // * GET GIVEN URL DATA
 export const useGetURLData = (url, { enabled = true }={}) =>
-	createGlobalState({ queryKey: otherQK.getURLData(url), url: url, enabled });
+	createGlobalState({ 
+		queryKey: otherQK.getURLData(url), 
+		url: url, 
+		enabled 
+	});
 
 // * GET ALL MACHINES
 export const useOtherMachines = () =>

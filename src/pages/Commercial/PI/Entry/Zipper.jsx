@@ -440,7 +440,8 @@ const Zipper = ({
 								'Item Description',
 								'Style',
 								'Color',
-								'Size (CM)',
+								'Size',
+								'Unit(Size)',
 								'QTY (PCS)',
 								'Given',
 								'PI QTY',
@@ -497,6 +498,13 @@ const Zipper = ({
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(`new_pi_cash_entry[${index}].size`)}
+							</td>
+							<td className={`${rowClass}`}>
+								{getValues(
+									`pi_cash_entry[${index}].is_inch`
+								) === 0
+									? 'CM'
+									: 'INCH'}
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(

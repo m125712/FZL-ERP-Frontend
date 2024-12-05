@@ -1,5 +1,6 @@
 import { lazy, useMemo, useState } from 'react';
 import { useDyeingTransfer } from '@/state/Dyeing';
+import { useOtherOrderDescription } from '@/state/Other';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -14,6 +15,8 @@ const Update = lazy(() => import('./EntryUpdate/Update'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useDyeingTransfer();
+	const { invalidateQuery: invalidateOrderDescription } =
+		useOtherOrderDescription();
 	const info = new PageInfo('Dyeing Store', url, 'common__dyeing_transfer');
 	const haveAccess = useAccess('common__dyeing_transfer');
 	const navigate = useNavigate();
@@ -237,6 +240,7 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateOrderDescription}
 					{...{
 						deleteItem,
 						setDeleteItem,

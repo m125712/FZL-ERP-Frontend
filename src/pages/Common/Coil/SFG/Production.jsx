@@ -1,16 +1,23 @@
+import { useAuth } from '@/context/auth';
+import {
+	useCommonCoilProduction,
+	useCommonCoilSFG,
+	useCommonTapeAssign,
+} from '@/state/Common';
+import { useOtherTapeCoil } from '@/state/Other';
+import { useRHF } from '@/hooks';
+
 import { AddModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast';
-import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { useCommonCoilProduction, useCommonCoilSFG } from '@/state/Common';
 import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
+import nanoid from '@/lib/nanoid';
 import {
 	COIL_PROD_NULL,
 	COIL_PROD_SCHEMA,
 	NUMBER_DOUBLE_REQUIRED,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -29,6 +36,8 @@ export default function Index({
 	const { invalidateQuery: invalidateCommonCoilProduction } =
 		useCommonCoilProduction();
 
+	const { invalidateQuery: invalidateOtherTapeCoil } = useOtherTapeCoil();
+	
 	const MAX_PRODUCTION_QTY = updateCoilProd?.trx_quantity_in_coil;
 
 	const schema = {
@@ -82,6 +91,7 @@ export default function Index({
 			onClose,
 		});
 		invalidateCommonCoilProduction();
+		invalidateOtherTapeCoil();
 	};
 
 	return (

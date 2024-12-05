@@ -1,11 +1,14 @@
+import { useMemo, useState } from 'react';
+import { useCommonCoilRM, useCommonCoilRMLog } from '@/state/Common';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useCommonCoilRM, useCommonCoilRMLog } from '@/state/Common';
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useMemo, useState } from 'react';
+
 import AddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
@@ -41,9 +44,7 @@ export default function Index() {
 				header: 'Used QTY',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className='capitalize'>
-						{info.getValue()}
-					</span>
+					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
 			{
@@ -173,6 +174,7 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateCommonCoilRM}
 					{...{
 						deleteItem,
 						setDeleteItem,

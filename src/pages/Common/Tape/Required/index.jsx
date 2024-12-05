@@ -48,7 +48,7 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].name,
+			itemName: data[idx].item_name,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -98,7 +98,7 @@ export default function Index() {
 				accessorKey: 'bottom',
 				header: 'Bottom',
 				enableColumnFilter: false,
-				cell: (info) =>info.getValue(),
+				cell: (info) => info.getValue(),
 			},
 
 			...DEFAULT_COLUMNS({ handelUpdate, handelDelete, haveAccess }),

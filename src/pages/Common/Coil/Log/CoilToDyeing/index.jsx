@@ -185,6 +185,7 @@ export default function Index() {
 					setDeleteItem={setDeleteItem}
 					deleteData={deleteData}
 					url={`/zipper/tape-coil-to-dyeing`}
+					invalidateQuery={invalidateCommonCoilSFG}
 				/>
 			</Suspense>
 		</div>

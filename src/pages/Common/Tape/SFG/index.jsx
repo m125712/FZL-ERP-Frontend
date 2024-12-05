@@ -1,5 +1,5 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
-import { useCommonTapeSFG } from '@/state/Common';
+import { useCommonCoilSFG, useCommonTapeSFG } from '@/state/Common';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -19,6 +19,7 @@ const TrxToStock = lazy(() => import('./ToStock'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useCommonTapeSFG();
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonCoilSFG();
 	const info = new PageInfo('Common/Tape/SFG', url, 'common__tape_sfg');
 	const haveAccess = useAccess(info.getTab());
 	const navigate = useNavigate();
@@ -329,6 +330,7 @@ export default function Index() {
 		setUpdateTapeProd((prev) => ({
 			...prev,
 			...selectedProd,
+			uuid: selectedProd?.uuid,
 			item_name: selectedProd.item_name,
 			tape_or_coil_stock_id: selectedProd?.uuid,
 			type_of_zipper:
@@ -481,6 +483,7 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateCommonTapeSFG}
 					{...{
 						deleteItem,
 						setDeleteItem,

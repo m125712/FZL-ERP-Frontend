@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useCommonTapeRequiredByUUID } from '@/state/Common';
+import {
+	useCommonTapeRequired,
+	useCommonTapeRequiredByUUID,
+} from '@/state/Common';
 import {
 	useOtherOrderPropertiesByEndType,
 	useOtherOrderPropertiesByItem,
@@ -8,7 +11,7 @@ import {
 	useOtherOrderPropertiesByZipperNumber,
 } from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
-import { useRHF } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
@@ -24,9 +27,8 @@ export default function Index({
 	},
 	setUpdateTapeRequired,
 }) {
-	const { data, url, updateData, postData } = useCommonTapeRequiredByUUID(
-		updateTapeRequired?.uuid
-	);
+	const { data, isLoading, url, deleteData, postData, updateData } =
+		useCommonTapeRequired();
 	const { user } = useAuth();
 	const {
 		register,
@@ -40,12 +42,11 @@ export default function Index({
 		context,
 	} = useRHF(TAPE_REQUIRED_SCHEMA, TAPE_REQUIRED_NULL);
 
-	useEffect(() => {
-		if (data, updateTapeRequired?.uuid) {
-			reset(data);
-		}
-	}, [data]);
-
+	useFetchForRhfReset(
+		`${url}/${updateTapeRequired?.uuid}`,
+		updateTapeRequired?.uuid,
+		reset
+	);
 	const { data: end_type } = useOtherOrderPropertiesByEndType();
 	const { data: item } = useOtherOrderPropertiesByItem();
 	const { data: zipper_number } = useOtherOrderPropertiesByZipperNumber();
@@ -60,8 +61,6 @@ export default function Index({
 		window[modalId].close();
 	};
 
-	console.log(errors);
-
 	const onSubmit = async (data) => {
 		// Update item
 		if (
@@ -74,7 +73,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url,
+				url: `/zipper/tape-coil-required/${updateTapeRequired?.uuid}`,
 				uuid: updateTapeRequired?.uuid,
 				updatedData,
 				onClose,

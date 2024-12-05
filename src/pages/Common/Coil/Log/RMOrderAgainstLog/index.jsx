@@ -1,16 +1,18 @@
-import { Suspense } from '@/components/Feedback';
-import { DeleteModal } from '@/components/Modal';
-import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useCommonOrderAgainstCoilRMLog } from '@/state/Common';
-import { DateTime, EditDelete } from '@/ui';
-import PageInfo from '@/util/PageInfo';
 import { useMemo, useState } from 'react';
-
+import { useCommonOrderAgainstCoilRMLog } from '@/state/Common';
 import {
 	useMaterialInfo,
 	useMaterialTrxAgainstOrderDescription,
 } from '@/state/Store';
+import { useAccess } from '@/hooks';
+
+import { Suspense } from '@/components/Feedback';
+import { DeleteModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
+import { DateTime, EditDelete } from '@/ui';
+
+import PageInfo from '@/util/PageInfo';
+
 import AddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
@@ -199,6 +201,10 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQueryArray={[
+						invalidateMaterialInfo,
+						invalidateMaterialTrx,
+					]}
 					{...{
 						deleteItem,
 						setDeleteItem,

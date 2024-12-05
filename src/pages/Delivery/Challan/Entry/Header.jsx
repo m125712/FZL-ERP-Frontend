@@ -65,6 +65,7 @@ export default function Header({
 		sample_thread: ordersThreadSample,
 	};
 	const orders = itemFor[watch('item_for')] || [];
+	console.log(orders);
 
 	//* Packing List Fetch
 	const { data: packingList, invalidateQuery: invalidatePackingList } =
@@ -82,16 +83,16 @@ export default function Header({
 		{ label: 'Thread Sample', value: 'sample_thread' },
 	];
 
-	useEffect(() => {
-		if (
-			!isUpdate &&
-			(getValues('packing_list_uuids') ||
-				getValues('order_info_uuid') == null)
-		) {
-			setValue('packing_list_uuids', []);
-			setValue('challan_entry', []);
-		}
-	}, [getValues('order_info_uuid'), watch('item_for')]);
+	// useEffect(() => {
+	// 	if (
+	// 		!isUpdate &&
+	// 		(getValues('packing_list_uuids') ||
+	// 			getValues('order_info_uuid') == null)
+	// 	) {
+	// 		setValue('packing_list_uuids', []);
+	// 		setValue('challan_entry', []);
+	// 	}
+	// }, [getValues('order_info_uuid'), watch('item_for')]);
 
 	const isHandDelivery = watch('is_hand_delivery');
 
@@ -182,7 +183,7 @@ export default function Header({
 									)}
 									onChange={(e) => {
 										onChange(e.value);
-										setValue('order_info_uuid', null);
+										
 									}}
 									isDisabled={isUpdate}
 								/>

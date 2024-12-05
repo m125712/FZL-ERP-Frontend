@@ -29,6 +29,7 @@ export default function Index({
 	const { updateData } = useCommonCoilRM();
 	const { data } = useCommonMaterialUsedByUUID(updateCoilLog?.uuid);
 	const { data: material } = useOtherMaterial();
+	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
 
 	const {
 		register,
@@ -98,6 +99,7 @@ export default function Index({
 
 			return;
 		}
+		invalidateCommonCoilRM();
 	};
 
 	const transactionArea = getTransactionArea();

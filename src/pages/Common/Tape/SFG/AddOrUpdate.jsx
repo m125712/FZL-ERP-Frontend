@@ -1,13 +1,18 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useCommonTapeSFG, useCommonTapeSFGByUUID } from '@/state/Common';
+import {
+	useCommonCoilSFG,
+	useCommonTapeSFG,
+	useCommonTapeSFGByUUID,
+} from '@/state/Common';
 import {
 	useOtherMaterial,
 	useOtherOrderPropertiesByItem,
 	useOtherOrderPropertiesByZipperNumber,
+	useOtherTapeCoil,
 } from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
-import { useRHF } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
@@ -24,9 +29,11 @@ export default function Index({
 	setUpdateTapeProd,
 }) {
 	const { user } = useAuth();
-	const { data, url, updateData, postData } = useCommonTapeSFGByUUID(
-		updateTapeProd?.uuid
-	);
+
+	const { data, url, updateData, postData } = useCommonTapeSFG();
+	const { invalidateQuery: invalidateOtherTapeCoil } = useOtherTapeCoil();
+	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 	const {
 		register,
 		handleSubmit,
@@ -38,11 +45,11 @@ export default function Index({
 		getValues,
 	} = useRHF(TAPE_STOCK_ADD_SCHEMA, TAPE_STOCK_ADD_NULL);
 
-	useEffect(() => {
-		if (data) {
-			reset(data);
-		}
-	}, [data]);
+	useFetchForRhfReset(
+		`${url}/${updateTapeProd?.uuid}`,
+		updateTapeProd?.uuid,
+		reset
+	);
 
 	const { data: item } = useOtherOrderPropertiesByItem();
 
@@ -92,7 +99,7 @@ export default function Index({
 				updated_at: GetDateTime(),
 			};
 			await updateData.mutateAsync({
-				url,
+				url: `${url}/${updateTapeProd?.uuid}`,
 				uuid: updateTapeProd?.uuid,
 				updatedData,
 				onClose,
@@ -111,10 +118,13 @@ export default function Index({
 		};
 
 		await postData.mutateAsync({
-			url: '/zipper/tape-coil',
+			url: `/zipper/tape-coil`,
 			newData: updatedData,
 			onClose,
 		});
+		invalidateOtherTapeCoil();
+		invalidateCommonCoilSFG();
+		invalidateCommonTapeSFG();
 	};
 
 	return (

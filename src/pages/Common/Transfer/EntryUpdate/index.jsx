@@ -15,6 +15,7 @@ import * as yup from 'yup';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
 import {
 	ActionButtons,
 	DynamicField,
@@ -153,6 +154,29 @@ export default function Index() {
 		// * Add new data entry
 		const created_at = GetDateTime();
 
+		const isOverStock = data?.dyeing_transfer_entry.map((item, index) => {
+			const selectedValue = order_id?.find(
+				(item) =>
+					item.value ==
+					watch(
+						`dyeing_transfer_entry[${index}].order_description_uuid`
+					)
+			);
+			const stock =
+				Number(selectedValue?.stock || 0) -
+				selectedValue?.tape_transferred;
+			if (Number(item.trx_quantity) > stock) {
+				return true;
+			}
+			return false;
+		});
+		if (isOverStock.includes(true)) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Beyond Stock',
+			});
+			return;
+		}
 		const entryData = [...data.dyeing_transfer_entry].map((item) => ({
 			...item,
 			uuid: nanoid(),
@@ -236,7 +260,7 @@ export default function Index() {
 		status
 	);
 
-	console.log(order_id);
+
 	return (
 		<div>
 			<HotKeys {...{ keyMap, handlers }}>

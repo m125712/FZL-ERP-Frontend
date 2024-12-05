@@ -109,7 +109,8 @@ export default function Index({ recipe, order_info_uuid }) {
 			url: `${url}/${recipe[idx]?.recipe_uuid}`,
 			updatedData: {
 				approved: recipe[idx]?.approved === 1 ? 0 : 1,
-				updated_at: GetDateTime(),
+				approve_date:
+					recipe[idx]?.approved === 1 ? null : GetDateTime(),
 			},
 			isOnCloseNeeded: false,
 		});

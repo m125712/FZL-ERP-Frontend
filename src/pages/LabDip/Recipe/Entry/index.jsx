@@ -4,7 +4,7 @@ import { useOtherMaterialByParams } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import {  useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import {
@@ -57,12 +57,6 @@ export default function Index() {
 			: (document.title = 'Order: Entry');
 	}, []);
 
-	useEffect(() => {
-		if (data && isUpdate) {
-			reset(data);
-		}
-	}, [data, isUpdate]);
-
 	const { data: material } = useOtherMaterialByParams('type=dyes');
 	let excludeItem = exclude(
 		watch,
@@ -80,6 +74,12 @@ export default function Index() {
 		control,
 		name: 'recipe_entry',
 	});
+
+	useEffect(() => {
+		if (data && isUpdate) {
+			reset(data);
+		}
+	}, [data, isUpdate]);
 
 	const [deleteItem, setDeleteItem] = useState({
 		itemId: null,

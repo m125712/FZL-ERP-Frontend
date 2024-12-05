@@ -10,7 +10,7 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"@handsontable/react": "^14.6.0",
+		"@handsontable/react": "^14.6.1",
 		"@hookform/error-message": "^2.0.1",
 		"@hookform/resolvers": "^3.9.0",
 		"@radix-ui/react-select": "^2.1.2",
@@ -27,7 +27,7 @@
 		"clsx": "^2.1.1",
 		"date-fns": "^3.6.0",
 		"framer-motion": "^11.5.4",
-		"handsontable": "^14.6.0",
+		"handsontable": "^14.6.1",
 		"js-cookie": "^3.0.5",
 		"jsbarcode": "^3.11.6",
 		"lucide-react": "^0.439.0",

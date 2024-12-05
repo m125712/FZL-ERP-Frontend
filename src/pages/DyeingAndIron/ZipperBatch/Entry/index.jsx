@@ -69,13 +69,6 @@ export default function Index() {
 		machine_uuid,
 		slot: slot_no,
 	});
-
-	useEffect(() => {
-		if (isUpdate) {
-			reset(data); // Reset the form with updated data
-		}
-	}, [isUpdate, data, reset]);
-
 	const { fields: BatchOrdersField, remove: BatchOrdersFieldRemove } =
 		useFieldArray({
 			control,
@@ -86,6 +79,12 @@ export default function Index() {
 		control,
 		name: 'new_dyeing_batch_entry',
 	});
+
+	useEffect(() => {
+		if (isUpdate) {
+			reset(data); // Reset the form with updated data
+		}
+	}, [isUpdate, data, reset]);
 
 	useEffect(() => {
 		if (!isUpdate) {
@@ -342,7 +341,7 @@ export default function Index() {
 
 				.then(() => {
 					invalidateDyeingZipperBatch();
-					navigate(`/dyeing-and-iron/batch/${batchData.uuid}`);
+					navigate(`/dyeing-and-iron/zipper-batch/${batchData.uuid}`);
 				})
 				.catch((err) => console.log(err));
 

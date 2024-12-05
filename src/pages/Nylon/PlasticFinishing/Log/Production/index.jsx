@@ -42,7 +42,8 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'order_number',
-				header: 'O/N',enableColumnFilter: true,
+				header: 'O/N',
+				enableColumnFilter: true,
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					return (
@@ -142,7 +143,10 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_sfg'),
+				hidden: !(
+					haveAccess.includes('update') ||
+					haveAccess.includes('delete')
+				),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -150,7 +154,8 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('click_delete_sfg')}
+							showDelete={haveAccess.includes('delete')}
+							showUpdate={haveAccess.includes('update')}
 						/>
 					);
 				},

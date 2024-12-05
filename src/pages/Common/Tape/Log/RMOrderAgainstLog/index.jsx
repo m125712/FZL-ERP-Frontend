@@ -1,23 +1,26 @@
 import { useMemo, useState } from 'react';
-import { useAccess } from '@/hooks';
 import { useCommonOrderAgainstTapeRMLog } from '@/state/Common';
 import {
 	useMaterialInfo,
 	useMaterialTrxAgainstOrderDescription,
 } from '@/state/Store';
-import { DateTime, EditDelete } from '@/ui';
-import PageInfo from '@/util/PageInfo';
+import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
+import { DateTime, EditDelete } from '@/ui';
+
+import PageInfo from '@/util/PageInfo';
 
 import RMAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } =
 		useCommonOrderAgainstTapeRMLog();
-
+	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { invalidateQuery: invalidateMaterialTrx } =
+		useMaterialTrxAgainstOrderDescription();
 	const info = new PageInfo('Store/Stock -> Tape', url, 'common__tape_log');
 	const haveAccess = useAccess(info.getTab());
 
@@ -194,6 +197,10 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQueryArray={[
+						invalidateMaterialInfo,
+						invalidateMaterialTrx,
+					]}
 					{...{
 						deleteItem,
 						setDeleteItem,

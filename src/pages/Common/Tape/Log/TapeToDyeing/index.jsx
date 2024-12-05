@@ -15,6 +15,7 @@ import AddOrUpdate from './AddOrUpdate';
 export default function Index() {
 	const { data, deleteData, isLoading } = useCommonTapeToDyeing();
 	const info = new PageInfo('Tape -> Dyeing', '/zipper/tape-coil-to-dyeing');
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 
 	const haveAccess = useAccess('common__coil_log');
 
@@ -182,6 +183,7 @@ export default function Index() {
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
 					deleteData={deleteData}
+					invalidateQuery={invalidateCommonTapeSFG}
 					url={`/zipper/tape-coil-to-dyeing`}
 				/>
 			</Suspense>

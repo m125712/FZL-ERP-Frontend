@@ -41,7 +41,7 @@ const Index = () => {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue()? info.getValue() : 'Stock',
+				cell: (info) => (info.getValue() ? info.getValue() : 'Stock'),
 			},
 			{
 				accessorKey: 'quantity',
@@ -118,7 +118,10 @@ const Index = () => {
 				accessorKey: 'action',
 				header: 'Action',
 				enableColumnFilter: false,
-				hidden: !haveAccess.includes('update'),
+				hidden: !(
+					haveAccess.includes('update') ||
+					haveAccess.includes('delete')
+				),
 				cell: (info) => {
 					return (
 						<EditDelete
@@ -154,12 +157,11 @@ const Index = () => {
 			uuid: data[idx]?.uuid,
 		}));
 
-		if(data[idx]?.order_number){
+		if (data[idx]?.order_number) {
 			window['AgainstOrder'].showModal();
-		}else{
+		} else {
 			window[info.getAddOrUpdateModalId()].showModal();
 		}
-		
 	};
 
 	// Delete

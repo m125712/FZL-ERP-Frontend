@@ -1,4 +1,5 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
+import { useOtherSliderItem } from '@/state/Other';
 import { useSliderDieCastingStock } from '@/state/Slider';
 import { useAccess } from '@/hooks';
 
@@ -7,7 +8,6 @@ import ReactTable from '@/components/Table';
 import { DateTime, EditDelete } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
-import { useOtherSliderItem } from '@/state/Other';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
@@ -106,13 +106,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue().toFixed(3),
 			},
-
-			// {
-			// 	accessorKey: 'pcs_per_kg',
-			// 	header: 'Pcs/Kg',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue().toFixed(3),
-			// },
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
@@ -143,7 +136,10 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
+				hidden: !(
+					haveAccess.includes('update') ||
+					haveAccess.includes('delete')
+				),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -152,6 +148,7 @@ export default function Index() {
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
 							showDelete={haveAccess.includes('delete')}
+							showUpdate={haveAccess.includes('update')}
 						/>
 					);
 				},

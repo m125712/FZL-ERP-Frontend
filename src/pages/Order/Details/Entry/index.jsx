@@ -1,18 +1,14 @@
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
-import {
-	useOrderDescription,
-	useOrderDetails,
-	useOrderDetailsByQuery,
-} from '@/state/Order';
+import { useOrderDescription, useOrderDetailsByQuery } from '@/state/Order';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { configure, HotKeys } from 'react-hotkeys';
+import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import { useAccess, useFetchForOrderReset, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
-import DynamicFormSpreadSheet from '@/ui/Dynamic/DynamicFormSpreadSheet';
+import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { CheckBox } from '@/ui';
 
@@ -30,6 +26,9 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 import { UUID } from '@/util/Schema/utils';
 
+import fullFieldDefs from './field-defs/full-field-defs';
+import sliderFieldDefs from './field-defs/slider-field-defs';
+import tapeFieldDefs from './field-defs/tape-field-defs';
 import Header from './Header';
 
 export function getRowsCount(matrix) {
@@ -106,6 +105,7 @@ export default function Index() {
 		watch,
 		clearErrors,
 		formState: { dirtyFields },
+		context: form,
 	} = useRHF(
 		{
 			...ORDER_SCHEMA,
@@ -138,7 +138,10 @@ export default function Index() {
 										? 0
 										: value
 								),
-						otherwise: (schema) => schema.required('Required').moreThan(0, 'Must be greater than 0'),
+						otherwise: (schema) =>
+							schema
+								.required('Required')
+								.moreThan(0, 'Must be greater than 0'),
 					}),
 					quantity: NUMBER.when({
 						is: () => type.toLowerCase() === 'tape',
@@ -146,7 +149,10 @@ export default function Index() {
 							schema.transform((value, originalValue) =>
 								String(originalValue).trim() === '' ? 1 : value
 							),
-						otherwise: (schema) => schema.required('Required').moreThan(0, 'Must be greater than 0'),
+						otherwise: (schema) =>
+							schema
+								.required('Required')
+								.moreThan(0, 'Must be greater than 0'),
 					}),
 					company_price: NUMBER_DOUBLE_REQUIRED.transform(
 						handelNumberDefaultValue
@@ -247,7 +253,7 @@ export default function Index() {
 				/>
 			</div>
 
-			<label className='text-sm'>Bleach All</label>
+			<label className='text-sm text-white'>Bleach All</label>
 			<SwitchToggle
 				checked={bleachAll}
 				onChange={() => setBleachAll(!bleachAll)}
@@ -279,10 +285,6 @@ export default function Index() {
 			remarks: '',
 		});
 	};
-	const bleachingOptions = [
-		{ label: 'Bleach', value: 'bleach' },
-		{ label: 'Non-Bleach', value: 'non-bleach' },
-	];
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -327,7 +329,6 @@ export default function Index() {
 					quantity:
 						watch('order_type') === 'tape' ? 1 : item.quantity,
 					swatch_approval_date: DEFAULT_SWATCH_APPROVAL_DATE,
-					updated_at: GetDateTime(),
 				})
 			);
 
@@ -337,7 +338,7 @@ export default function Index() {
 					if (item.order_entry_uuid) {
 						await updateData.mutateAsync({
 							url: `/zipper/order-entry/${item.order_entry_uuid}`,
-							updatedData: item,
+							updatedData: { ...item, updated_at: GetDateTime() },
 							isOnCloseNeeded: false,
 						});
 					} else {
@@ -346,10 +347,6 @@ export default function Index() {
 							newData: {
 								...item,
 								uuid: nanoid(),
-								status: item.order_entry_status ? 1 : 0,
-								swatch_status: 'pending',
-								swatch_approval_date:
-									DEFAULT_SWATCH_APPROVAL_DATE,
 								order_description_uuid:
 									rest?.order_description_uuid,
 								created_at: GetDateTime(),
@@ -361,28 +358,28 @@ export default function Index() {
 			];
 
 			// * Slider
-			const slider_quantity =
-				rest.order_entry.length === 1
-					? rest.order_entry[0].quantity
-					: rest.order_entry.reduce(
-							(prev, curr) => prev + curr.quantity,
-							0
-						);
+			// const slider_quantity =
+			// 	rest.order_entry.length === 1
+			// 		? rest.order_entry[0].quantity
+			// 		: rest.order_entry.reduce(
+			// 				(prev, curr) => prev + curr.quantity,
+			// 				0
+			// 			);
 
-			const slider_info = {
-				order_quantity: slider_quantity,
-				updated_at: GetDateTime(),
-			};
+			// const slider_info = {
+			// 	order_quantity: slider_quantity,
+			// 	updated_at: GetDateTime(),
+			// };
 
-			if (watch('order_type') === 'tape') {
-			} else if (watch('slider_provided') === 'completely_provided') {
-			} else {
-				await updateData.mutateAsync({
-					url: `/slider/stock/${rest?.stock_uuid}`,
-					updatedData: slider_info,
-					isOnCloseNeeded: false,
-				});
-			}
+			// if (watch('order_type') === 'tape') {
+			// } else if (watch('slider_provided') === 'completely_provided') {
+			// } else {
+			// 	await updateData.mutateAsync({
+			// 		url: `/slider/stock/${rest?.stock_uuid}`,
+			// 		updatedData: slider_info,
+			// 		isOnCloseNeeded: false,
+			// 	});
+			// }
 
 			navigate(
 				`/order/details/${order_number}/${order_description_uuid}`
@@ -492,29 +489,6 @@ export default function Index() {
 		[getValues, orderEntryAppend]
 	);
 
-	const handleEnter = (event) => {
-		event.preventDefault();
-		if (Object.keys(errors).length > 0) return;
-	};
-
-	const keyMap = {
-		NEW_ROW: 'alt+n',
-		COPY_LAST_ROW: 'alt+c',
-		ENTER: 'enter',
-	};
-
-	const handlers = {
-		NEW_ROW: handelOrderEntryAppend,
-		COPY_LAST_ROW: () =>
-			handelDuplicateDynamicField(orderEntryField.length - 1),
-		ENTER: (event) => handleEnter(event),
-	};
-
-	configure({
-		ignoreTags: ['input', 'select', 'textarea'],
-		ignoreEventsCondition: function () {},
-	});
-
 	const addRow = () => {
 		orderEntryAppend({
 			style: '',
@@ -528,136 +502,96 @@ export default function Index() {
 		});
 	};
 
+	const handleCopy = (index) => {
+		const field = form.watch('order_entry')[index];
+		orderEntryAppend({
+			bleaching: field.bleaching,
+			quantity: field.quantity,
+			color: field.color,
+			style: field.style,
+			size: field.size,
+			company_price: field.company_price,
+		});
+	};
+
 	return (
-		<div>
-			<HotKeys {...{ keyMap, handlers }}>
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					noValidate
-					className='flex flex-col gap-4'>
-					<Header
-						{...{
-							endType,
-							setEndType,
-							itemType,
-							setItemType,
-							register,
-							errors,
-							control,
-							getValues,
-							Controller,
-							watch,
-							reset,
-							is_logo_body: getValues('is_logo_body'),
-							is_logo_puller: getValues('is_logo_puller'),
-							isUpdate,
-						}}
-						setType={setType}
-					/>
+		<FormProvider {...form}>
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				noValidate
+				className='flex flex-col gap-4'>
+				<Header
+					{...{
+						endType,
+						setEndType,
+						itemType,
+						setItemType,
+						register,
+						errors,
+						control,
+						getValues,
+						Controller,
+						watch,
+						reset,
+						is_logo_body: getValues('is_logo_body'),
+						is_logo_puller: getValues('is_logo_puller'),
+						isUpdate,
+					}}
+					setType={setType}
+				/>
 
-					<DynamicFormSpreadSheet
+				{watch('order_type') === 'full' && (
+					<HandsonSpreadSheet
+						extraHeader={headerButtons}
 						title='Details'
-						fieldArrayName='order_entry'
-						handelAppend={addRow}
-						handleRemove={handleOrderEntryRemove}
-						headerButtons={
-							watch('order_type') === 'full' && headerButtons
-						}
-						columnsDefs={[
-							{
-								header: 'Style',
-								accessorKey: 'style',
-								type: 'text',
-								hidden: false,
-								readOnly: false,
-							},
-							{
-								header: 'Color',
-								accessorKey: 'color',
-								type: 'text',
-								hidden: watch('order_type') === 'slider',
-								readOnly: false,
-							},
-							{
-								header: 'Bleach',
-								accessorKey: 'bleaching',
-								type: 'select',
-								options: bleachingOptions,
-								hidden: watch('order_type') === 'slider',
-								readOnly: false,
-							},
-							{
-								header:
-									watch('order_type') === 'tape'
-										? 'Size (MTR)'
-										: watch('is_inch')
-											? 'Size (INCH)'
-											: 'Size (CM)',
-
-								accessorKey: 'size',
-								type: 'text',
-								hidden: watch('order_type') === 'slider',
-								readOnly: false,
-							},
-							{
-								header: 'Quantity',
-								accessorKey: 'quantity',
-								type: 'text',
-								hidden: watch('order_type') === 'tape',
-								readOnly: false,
-							},
-							{
-								header:
-									watch('order_type') === 'tape'
-										? 'Company (USD/MTR)'
-										: 'Company (USD/DZN)',
-								accessorKey: 'company_price',
-								type: 'text',
-								hidden: false,
-								readOnly: false,
-							},
-							{
-								header:
-									watch('order_type') === 'tape'
-										? 'Party (USD/MTR)'
-										: 'Party (USD/DZN)',
-								accessorKey: 'party_price',
-								type: 'text',
-								hidden: false,
-								readOnly: false,
-							},
-
-							{
-								header: 'Actions',
-								hidden: false,
-								type: 'action',
-							},
-						]}
-						{...{
-							formContext: {
-								register,
-								watch,
-								setValue,
-								getValues,
-								clearErrors,
-								errors,
-							},
-							fields: orderEntryField,
-							append: orderEntryAppend,
-							remove: orderEntryRemove,
-							update: orderEntryUpdate,
-						}}
+						form={form}
+						fieldName='order_entry'
+						fieldDefs={fullFieldDefs({
+							copy: handleCopy,
+							remove: handleOrderEntryRemove,
+							watch,
+						})}
+						handleAdd={addRow}
+						fields={orderEntryField}
 					/>
+				)}
+				{watch('order_type') === 'tape' && (
+					<HandsonSpreadSheet
+						title='Details'
+						form={form}
+						fieldName='order_entry'
+						fieldDefs={tapeFieldDefs({
+							copy: handleCopy,
+							remove: handleOrderEntryRemove,
+							watch,
+						})}
+						handleAdd={addRow}
+						fields={orderEntryField}
+					/>
+				)}
+				{watch('order_type') === 'slider' && (
+					<HandsonSpreadSheet
+						title='Details'
+						form={form}
+						fieldName='order_entry'
+						fieldDefs={sliderFieldDefs({
+							copy: handleCopy,
+							remove: handleOrderEntryRemove,
+							watch,
+						})}
+						handleAdd={addRow}
+						fields={orderEntryField}
+					/>
+				)}
 
-					<div className='modal-action'>
-						<button
-							type='submit'
-							className='text-md btn btn-primary btn-block'>
-							Save
-						</button>
-					</div>
-				</form>
-			</HotKeys>
+				<div className='modal-action'>
+					<button
+						type='submit'
+						className='text-md btn btn-primary btn-block'>
+						Save
+					</button>
+				</div>
+			</form>
 			<Suspense>
 				<DeleteModal
 					modalId={'order_entry_delete'}
@@ -671,6 +605,6 @@ export default function Index() {
 			</Suspense>
 
 			<DevTool control={control} placement='top-left' />
-		</div>
+		</FormProvider>
 	);
 }

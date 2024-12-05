@@ -20,7 +20,7 @@ export default function TapeToCoil() {
 	const { data, isLoading, url, deleteData } = useCommonTapeTransfer();
 	const info = new PageInfo('Tape -> Transfer', 'tape-to-coil-trx');
 	const haveAccess = useAccess('common__tape_log');
-
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 	const columns = useMemo(
 		() => [
 			{
@@ -75,13 +75,13 @@ export default function TapeToCoil() {
 				accessorKey: 'trx_quantity_in_meter',
 				header: (
 					<span>
-						Quantity 
+						Quantity
 						<br />
 						(M)
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue() > 0? info.getValue(): '---',
+				cell: (info) => (info.getValue() > 0 ? info.getValue() : '---'),
 			},
 			{
 				accessorKey: 'trx_quantity',
@@ -215,6 +215,7 @@ export default function TapeToCoil() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateCommonTapeSFG}
 					url='/zipper/dyed-tape-transaction-from-stock'
 					{...{
 						deleteItem,

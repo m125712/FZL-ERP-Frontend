@@ -17,6 +17,7 @@ export default function ProductionLog() {
 		'tape-or-coil-prod-section/tape'
 	);
 	const { data, isLoading, deleteData } = useCommonTapeProduction();
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 	const haveAccess = useAccess('common__tape_log');
 
 	const columns = useMemo(
@@ -184,6 +185,7 @@ export default function ProductionLog() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateCommonTapeSFG}
 					{...{
 						deleteItem,
 						setDeleteItem,

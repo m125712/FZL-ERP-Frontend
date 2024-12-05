@@ -1,12 +1,13 @@
-import { useAccess } from '@/hooks';
-import { useCommonTapeRM, useCommonTapeRMLog } from '@/state/Common';
-import { DateTime, EditDelete } from '@/ui';
-import PageInfo from '@/util/PageInfo';
 import { useMemo, useState } from 'react';
+import { useCommonTapeRM, useCommonTapeRMLog } from '@/state/Common';
+import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
+import { DateTime, EditDelete } from '@/ui';
+
+import PageInfo from '@/util/PageInfo';
 
 import AddOrUpdate from './AddOrUpdate';
 
@@ -14,6 +15,7 @@ export default function Index() {
 	const { data, isLoading, url, deleteData } = useCommonTapeRMLog();
 	const info = new PageInfo('Raw Material Used', url, 'common__tape_log');
 	const haveAccess = useAccess(info.getTab());
+	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
 
 	const columns = useMemo(
 		() => [
@@ -171,6 +173,7 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateCommonTapeRM}
 					{...{
 						deleteItem,
 						setDeleteItem,

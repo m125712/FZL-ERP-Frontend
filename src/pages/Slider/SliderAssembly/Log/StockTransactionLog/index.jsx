@@ -105,8 +105,9 @@ export default function Index() {
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) =>info.getValue(),
-			},{
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'weight',
 				header: 'Weight',
 				enableColumnFilter: false,
@@ -141,7 +142,10 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
+				hidden: !(
+					haveAccess.includes('update') ||
+					haveAccess.includes('delete')
+				),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -150,6 +154,7 @@ export default function Index() {
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
 							showDelete={haveAccess.includes('delete')}
+							showUpdate={haveAccess.includes('update')}
 						/>
 					);
 				},

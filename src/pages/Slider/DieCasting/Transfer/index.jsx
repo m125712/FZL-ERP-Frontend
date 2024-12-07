@@ -221,6 +221,7 @@ const Index = () => {
 						deleteData,
 						invalidateQuery,
 					}}
+					url='/slider/die-casting-transaction'
 				/>
 			</Suspense>
 		</>

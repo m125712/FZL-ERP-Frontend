@@ -11,7 +11,6 @@ import MetalTeethMoldingTrxLog from '@/pages/Metal/TeethMolding/Log';
 import MetalTeethMoldingProduction from '@/pages/Metal/TeethMolding/Production';
 import MetalTeethMolding from '@/pages/Metal/TeethMolding/RMStock';
 
-
 export const MetalRoutes = [
 	{
 		name: 'Metal',
@@ -32,8 +31,9 @@ export const MetalRoutes = [
 						element: <MetalTeethMoldingProduction />,
 						page_name: 'metal__teeth_molding_production',
 						actions: [
-							'create',
 							'read',
+							'create',
+							'delete',
 							'update',
 							'click_production',
 							'click_transaction',
@@ -46,14 +46,9 @@ export const MetalRoutes = [
 						page_name: 'metal__teeth_molding_log',
 						actions: [
 							'read',
-							'click_update_sfg',
-							'click_delete_sfg',
-							'click_update_rm',
-							'click_delete_rm',
-							'click_update_rm_order',
-							'click_delete_rm_order',
-							'click_update_tape',
-							'click_delete_tape',
+							'create',
+							'delete',
+							'update',
 						],
 					},
 				],
@@ -75,8 +70,9 @@ export const MetalRoutes = [
 						element: <MetalTeethColoringProduction />,
 						page_name: 'metal__teeth_coloring_production',
 						actions: [
-							'create',
 							'read',
+							'create',
+							'delete',
 							'update',
 							'click_production',
 							'click_transaction',
@@ -89,12 +85,9 @@ export const MetalRoutes = [
 						page_name: 'metal__teeth_coloring_log',
 						actions: [
 							'read',
-							'click_update_sfg',
-							'click_delete_sfg',
-							'click_update_rm',
-							'click_delete_rm',
-							'click_update_rm_order',
-							'click_delete_rm_order',
+							'create',
+							'delete',
+							'update',
 						],
 					},
 				],
@@ -115,8 +108,9 @@ export const MetalRoutes = [
 						element: <MetalFinishingProduction />,
 						page_name: 'metal__finishing_production',
 						actions: [
-							'create',
 							'read',
+							'create',
+							'delete',
 							'update',
 							'click_production',
 							'click_transaction',
@@ -129,12 +123,9 @@ export const MetalRoutes = [
 						page_name: 'metal__finishing_log',
 						actions: [
 							'read',
-							'click_update_sfg',
-							'click_delete_sfg',
-							'click_update_rm',
-							'click_delete_rm',
-							'click_update_rm_order',
-							'click_delete_rm_order',
+							'create',
+							'delete',
+							'update',
 						],
 					},
 				],

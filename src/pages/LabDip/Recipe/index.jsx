@@ -1,11 +1,11 @@
-import { useEffect, useMemo } from 'react';
-import { useLabDipRecipe } from '@/state/LabDip';
-import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
+import { useLabDipRecipe } from '@/state/LabDip';
+import { useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import ReactTable from '@/components/Table';
-import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
@@ -130,6 +130,13 @@ export default function Index() {
 			// 	},
 			// },
 			{
+				accessorKey: 'approved_date',
+				header: 'Approved Date',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
 				enableColumnFilter: false,
@@ -195,7 +202,7 @@ export default function Index() {
 			url: `${url}/${data[idx]?.uuid}`,
 			updatedData: {
 				approved: data[idx]?.approved === 1 ? 0 : 1,
-				approve_date: data[idx]?.approved === 1 ? null : GetDateTime(),
+				approved_date: data[idx]?.approved === 1 ? null : GetDateTime(),
 			},
 			isOnCloseNeeded: false,
 		});

@@ -7,6 +7,7 @@ import {
 	useSliderDieCastingStock,
 	useSliderDieCastingTransferAgainstOrder,
 	useSliderDieCastingTransferAgainstStock,
+	useSliderDiecastingTrxLog,
 } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
 import { useNavigate } from 'react-router-dom';
@@ -86,6 +87,8 @@ const Index = () => {
 		useSliderColoringProduction();
 	const { invalidateQuery: invalidateProdQuery } =
 		useSliderAssemblyProduction();
+	const { invalidateQuery: invalidateTrxLog } = useSliderDiecastingTrxLog();
+
 	const {
 		register,
 		handleSubmit,
@@ -184,6 +187,7 @@ const Index = () => {
 					);
 					invalidateQueryStock();
 					invalidateQueryStocks();
+					invalidateTrxLog();
 					navigate(`/slider/die-casting/transfer`);
 				})
 				.catch((err) => console.error(err));

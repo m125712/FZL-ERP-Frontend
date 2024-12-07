@@ -1,5 +1,10 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
-import { useCommonCoilToDyeing, useCommonTapeToDyeing } from '@/state/Common';
+import {
+	useCommonCoilSFG,
+	useCommonCoilToDyeing,
+	useCommonTapeSFG,
+	useCommonTapeToDyeing,
+} from '@/state/Common';
 import { useOrderDescription } from '@/state/Order';
 import { useGetURLData } from '@/state/Other';
 import { useAuth } from '@context/auth';
@@ -32,6 +37,9 @@ export default function Index() {
 	const { order_number, order_description_uuid, coil_uuid } = useParams();
 	const { invalidateQuery: invalidateTapeToDyeing } = useCommonTapeToDyeing();
 	const { invalidateQuery: invalidateCoilToDyeing } = useCommonCoilToDyeing();
+	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
+
 	const location = useLocation();
 	const [status, setStatus] = useState(false);
 	const { postData, deleteData } = useOrderDescription();
@@ -178,6 +186,9 @@ export default function Index() {
 				// await OrderDetailsInvalidate(); common/tape/log
 				invalidateTapeToDyeing();
 				invalidateCoilToDyeing();
+				invalidateCommonCoilSFG();
+				invalidateCommonTapeSFG();
+
 				navigate(
 					secondElement === 'coil'
 						? '/common/coil/log'

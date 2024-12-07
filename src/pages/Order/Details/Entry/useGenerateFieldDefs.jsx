@@ -46,6 +46,14 @@ const useGenerateFieldDefs = ({ copy, remove, watch }) => {
 				accessorKey: 'company_price',
 				type: 'text',
 			},
+			{
+				header:
+					watch('order_type') === 'tape'
+						? 'Party (USD/MTR)'
+						: 'Party (USD/DZN)',
+				accessorKey: 'party_price',
+				type: 'text',
+			},
 
 			{
 				header: 'Actions',

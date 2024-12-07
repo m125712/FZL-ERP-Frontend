@@ -1,10 +1,10 @@
-import { useMemo } from 'react';
-import { UseLabDipInfoByDetails, useLabDipRecipe } from '@/state/LabDip';
 import { useAccess } from '@/hooks';
+import { UseLabDipInfoByDetails, useLabDipRecipe } from '@/state/LabDip';
+import { useMemo } from 'react';
 
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, LinkWithCopy } from '@/ui';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 
 import GetDateTime from '@/util/GetDateTime';
 
@@ -83,6 +83,16 @@ export default function Index({ recipe, order_info_uuid }) {
 			// 	},
 			// },
 			{
+				accessorKey: 'approved_date',
+				header: 'Approved Date',
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
 				accessorKey: 'recipe_created_at',
 				header: 'Created',
 				filterFn: 'isWithinRange',
@@ -109,7 +119,7 @@ export default function Index({ recipe, order_info_uuid }) {
 			url: `${url}/${recipe[idx]?.recipe_uuid}`,
 			updatedData: {
 				approved: recipe[idx]?.approved === 1 ? 0 : 1,
-				approve_date:
+				approved_date:
 					recipe[idx]?.approved === 1 ? null : GetDateTime(),
 			},
 			isOnCloseNeeded: false,

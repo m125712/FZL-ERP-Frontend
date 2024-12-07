@@ -49,7 +49,12 @@ export default function ThreadTable({ pi_cash_entry_thread }) {
 			},
 			{
 				accessorKey: 'unit_price_pcs',
-				header: 'Unit Price(Cone) ($)',
+				header: (
+					<div className='flex flex-col'>
+						<span>Unit Price</span>
+						<span>(Cone) (BDT)</span>
+					</div>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

@@ -72,13 +72,23 @@ export default function ZipperTable({ pi }) {
 			},
 			{
 				accessorKey: 'unit_price_pcs',
-				header: 'Unit Price(PCS) ($)',
+				header: (
+					<div className='flex flex-col'>
+						<span>Unit Price</span>
+						<span>(PCS) ($)</span>
+					</div>
+				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()).toFixed(2),
 			},
 			{
 				accessorKey: 'unit_price',
-				header: 'Unit Price(Dzn) ($)',
+				header: (
+					<div className='flex flex-col'>
+						<span>Unit Price</span>
+						<span>(Dzn) ($)</span>
+					</div>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

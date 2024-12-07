@@ -260,7 +260,6 @@ export default function Index() {
 		status
 	);
 
-
 	return (
 		<div>
 			<HotKeys {...{ keyMap, handlers }}>
@@ -272,9 +271,9 @@ export default function Index() {
 						title='Transfer Details'
 						handelAppend={handelEntryAppend}
 						tableHead={[
-							'Order Entry ID',
-							'Tape Required (MTR)',
-							'Tape Required (Kg)',
+							'Order Desc',
+							'Tape Req (MTR)',
+							'Tape Req (Kg)',
 							'Provided (Kg)',
 							'Stock (Kg)',
 							'Balance (Kg)',
@@ -320,7 +319,7 @@ export default function Index() {
 							).toFixed(3);
 							return (
 								<tr key={item.id}>
-									{/* order entry id */}
+									{/* Order Desc */}
 									<td className={`w-80 ${rowClass}`}>
 										<FormField
 											label={`dyeing_transfer_entry[${index}].order_description_uuid`}
@@ -380,9 +379,17 @@ export default function Index() {
 											/>
 										</FormField>
 									</td>
+
+									{/* Tape Req (MTR) */}
 									<td>{tape_req || 0}</td>
+
+									{/* Tape Req (Kg) */}
 									<td>{tape_req_kg || 0}</td>
+
+									{/* Provided (Kg) */}
 									<td>{selectedValue?.tape_transferred}</td>
+
+									{/* Stock (Kg) */}
 									<td>
 										{Number(selectedValue?.stock || 0) -
 											selectedValue?.tape_transferred}

@@ -289,7 +289,7 @@ const Thread = ({
 							'Given',
 							'PI QTY',
 							'Balance QTY',
-							'Unite Price',
+							'Unit Price',
 						].map((item) => (
 							<th
 								key={item}
@@ -376,6 +376,9 @@ const Thread = ({
 										?.pi_cash_quantity
 								}
 								disabled={
+									getValues(
+										`pi_cash_entry_thread[${index}].unit_price`
+									) <= 0 ||
 									getValues(
 										`pi_cash_entry_thread[${index}].pi_cash_quantity`
 									) === 0

@@ -374,6 +374,9 @@ const Zipper = ({
 								}}
 								disabled={
 									getValues(
+										`pi_cash_entry[${index}].unit_price`
+									) === 0 ||
+									getValues(
 										`pi_cash_entry[${index}].pi_cash_quantity`
 									) === 0
 								}

@@ -22,13 +22,13 @@ export default function Content({ data }) {
 			</span>
 
 			<div className='overflow-x-auto'>
-				<table className='w-full text-sm text-gray-600'>
+				<table className='w-full text-sm'>
 					<thead>
 						<tr>
 							{header?.map((item, index) => (
 								<th
 									key={index}
-									className='w-32 bg-base-200 px-4 py-2 text-left text-sm font-semibold capitalize leading-tight text-primary'>
+									className='w-24 bg-base-200 px-4 py-2 text-left text-sm font-semibold capitalize leading-tight text-primary'>
 									{item}
 								</th>
 							))}
@@ -48,7 +48,7 @@ export default function Content({ data }) {
 											/>
 										}
 									</td>
-									<td className='border px-4 text-left text-xs font-medium'>
+									<td className='border text-left text-xs font-medium'>
 										{format(
 											item.production_date,
 											'ccc'
@@ -56,13 +56,10 @@ export default function Content({ data }) {
 									</td>
 
 									{item.data?.map((data, index) => {
-										console.log({
-											data,
-										});
 										return (
 											<td
 												key={index}
-												className='border px-4 text-left text-xs font-medium'>
+												className='border text-left text-xs font-medium'>
 												{data.production_capacity_quantity >
 												data.production_quantity ? (
 													<button
@@ -71,14 +68,14 @@ export default function Content({ data }) {
 																`/dyeing-and-iron/finishing-batch/entry?production_date=${production_date}`
 															)
 														}
-														className='btn btn-primary btn-xs gap-1'>
+														className='btn btn-primary btn-xs min-h-12 w-full gap-1'>
 														{
 															data.production_quantity
 														}
 														<Plus className='size-4' />
 													</button>
 												) : (
-													data.production_capacity_quantity
+													data.production_quantity
 												)}
 											</td>
 										);

@@ -3262,6 +3262,7 @@ export const SFG_TRANSACTION_SCHEMA_IN_PCS = {
 
 export const SFG_TRANSACTION_SCHEMA_IN_PCS_NULL = {
 	trx_quantity_in_kg: null,
+	trx_quantity: null,
 	remarks: '',
 };
 

@@ -1,6 +1,12 @@
 import { useMemo } from 'react';
 
-import { LinkWithCopy, Progress, StatusButton } from '@/ui';
+import {
+	DateTime,
+	EditDelete,
+	LinkWithCopy,
+	Progress,
+	StatusButton,
+} from '@/ui';
 
 import { DEFAULT_COLUMNS } from '@/util/Table/DefaultColumns';
 
@@ -486,8 +492,51 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 					<StatusButton size='btn-sm' value={info.getValue()} />
 				),
 			},
-
-			...DEFAULT_COLUMNS({ handelUpdate, haveAccess }),
+			// * for order_details the created_at needs to be order_description_created at
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'order_description_created_at',
+				header: 'Created',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'order_description_updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'actions',
+				header: 'Actions',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('update'),
+				width: 'w-24',
+				cell: (info) => (
+					<EditDelete
+						idx={info.row.index}
+						handelUpdate={handelUpdate}
+						showUpdate={haveAccess.includes('update')}
+						showDelete={false}
+					/>
+				),
+			},
+			// ...DEFAULT_COLUMNS({ handelUpdate, haveAccess }),
 		],
 		[data]
 	);

@@ -171,9 +171,10 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden:
-					!haveAccess.includes('click_update_sfg') &&
-					!haveAccess.includes('click_delete_sfg'),
+				hidden: !(
+					haveAccess.includes('update') ||
+					haveAccess.includes('delete')
+				),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -181,8 +182,8 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showUpdate={haveAccess.includes('click_update_sfg')}
-							showDelete={haveAccess.includes('click_delete_sfg')}
+							showUpdate={haveAccess.includes('update')}
+							showDelete={haveAccess.includes('delete')}
 						/>
 					);
 				},

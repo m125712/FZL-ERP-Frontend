@@ -511,6 +511,7 @@ export default function Index() {
 			style: field.style,
 			size: field.size,
 			company_price: field.company_price,
+			party_price: field.party_price,
 		});
 	};
 

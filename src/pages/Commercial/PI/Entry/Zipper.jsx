@@ -446,6 +446,8 @@ const Zipper = ({
 								'Given',
 								'PI QTY',
 								'Balance QTY',
+								'Unit Price',
+								'Unit (Price)',
 							].map((item) => (
 								<th
 									key={item}
@@ -501,10 +503,8 @@ const Zipper = ({
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(
-									`pi_cash_entry[${index}].is_inch`
-								) === 0
-									? 'CM'
-									: 'INCH'}
+									`new_pi_cash_entry[${index}].size_unit`
+								)}
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(
@@ -545,6 +545,16 @@ const Zipper = ({
 							<td className={`${rowClass}`}>
 								{getValues(
 									`new_pi_cash_entry[${index}].balance_quantity`
+								)}
+							</td>
+							<td className={`${rowClass}`}>
+								{getValues(
+									`new_pi_cash_entry[${index}].unit_price`
+								)}
+							</td>
+							<td className={`${rowClass}`}>
+								{getValues(
+									`new_pi_cash_entry[${index}].price_unit`
 								)}
 							</td>
 						</tr>

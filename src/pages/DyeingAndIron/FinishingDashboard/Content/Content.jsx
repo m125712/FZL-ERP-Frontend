@@ -28,7 +28,7 @@ export default function Content({ data }) {
 							{header?.map((item, index) => (
 								<th
 									key={index}
-									className='w-24 bg-base-200 px-4 py-2 text-left text-sm font-semibold capitalize leading-tight text-primary'>
+									className='w-32 bg-base-200 px-4 py-2 text-left text-sm font-semibold capitalize leading-tight text-primary'>
 									{item}
 								</th>
 							))}
@@ -57,27 +57,65 @@ export default function Content({ data }) {
 
 									{item.data?.map((data, index) => {
 										return (
-											<td
-												key={index}
-												className='border text-left text-xs font-medium'>
-												{data.production_capacity_quantity >
-												data.production_quantity ? (
-													<button
-														onClick={() =>
-															navigate(
-																`/dyeing-and-iron/finishing-batch/entry?production_date=${production_date}`
-															)
-														}
-														className='btn btn-primary btn-xs min-h-12 w-full gap-1'>
-														{
-															data.production_quantity
-														}
-														<Plus className='size-4' />
-													</button>
-												) : (
-													data.production_quantity
-												)}
-											</td>
+											<>
+												<td
+													key={index}
+													className='h-44 border border-gray-200 p-3 text-left text-sm'>
+													{data.production_capacity_quantity >
+													data.production_quantity ? (
+														<div className='flex h-full flex-col justify-between'>
+															<div className='space-y-1'>
+																<div className='font-medium text-primary'>
+																
+																	{data.order_numbers?.join(
+																		', '
+																	)}
+																</div>
+																<div className='text-primary'>
+																	batch numbers:
+																	{data.batch_numbers?.join(
+																		', '
+																	)}
+																</div>
+																<div className='font-semibold text-primary'>
+																	production quantity:
+																	{
+																		data.production_quantity
+																	}
+																</div>
+															</div>
+
+															<button
+																onClick={() =>
+																	navigate(
+																		`/dyeing-and-iron/finishing-batch/entry?production_date=${production_date}`
+																	)
+																}
+																className='mt-2 inline-flex items-center justify-center gap-1 rounded bg-primary px-3 py-2 text-sm font-medium text-white'>
+																<Plus className='size-5' />
+															</button>
+														</div>
+													) : (
+														<div className='space-y-1'>
+															<div className='font-medium text-primary'>
+																{data.order_numbers?.join(
+																	', '
+																)}
+															</div>
+															<div className='text-primary'>
+																{data.batch_numbers?.join(
+																	', '
+																)}
+															</div>
+															<div className='font-semibold text-primary'>
+																{
+																	data.production_quantity
+																}
+															</div>
+														</div>
+													)}
+												</td>
+											</>
 										);
 									})}
 								</tr>

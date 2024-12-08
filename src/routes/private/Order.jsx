@@ -1,14 +1,32 @@
-import Buyer from '@/pages/Order/Buyer';
-import OrderDetails from '@/pages/Order/Details';
-import OrderIndByUUID from '@/pages/Order/Details/ByOrderDescriptionUUID';
-import OrderFilterByOrderNumber from '@/pages/Order/Details/ByOrderNumber';
-import OrderEntry from '@/pages/Order/Details/Entry';
-import Factory from '@/pages/Order/Factory';
-import OrderInfo from '@/pages/Order/Info';
-import Marketing from '@/pages/Order/Marketing';
-import Merchandiser from '@/pages/Order/Merchandiser';
-import Party from '@/pages/Order/Party';
-import Properties from '@/pages/Order/Properties';
+import { lazy } from 'react';
+
+// import Buyer from '@/pages/Order/Buyer';
+// import OrderDetails from '@/pages/Order/Details';
+// import OrderIndByUUID from '@/pages/Order/Details/ByOrderDescriptionUUID';
+// import OrderFilterByOrderNumber from '@/pages/Order/Details/ByOrderNumber';
+// import OrderEntry from '@/pages/Order/Details/Entry';
+// import Factory from '@/pages/Order/Factory';
+// import OrderInfo from '@/pages/Order/Info';
+// import Marketing from '@/pages/Order/Marketing';
+// import Merchandiser from '@/pages/Order/Merchandiser';
+// import Party from '@/pages/Order/Party';
+// import Properties from '@/pages/Order/Properties';
+
+const Buyer = lazy(() => import('@/pages/Order/Buyer'));
+const OrderDetails = lazy(() => import('@/pages/Order/Details'));
+const OrderIndByUUID = lazy(
+	() => import('@/pages/Order/Details/ByOrderDescriptionUUID')
+);
+const OrderFilterByOrderNumber = lazy(
+	() => import('@/pages/Order/Details/ByOrderNumber')
+);
+const OrderEntry = lazy(() => import('@/pages/Order/Details/Entry'));
+const Factory = lazy(() => import('@/pages/Order/Factory'));
+const OrderInfo = lazy(() => import('@/pages/Order/Info'));
+const Marketing = lazy(() => import('@/pages/Order/Marketing'));
+const Merchandiser = lazy(() => import('@/pages/Order/Merchandiser'));
+const Party = lazy(() => import('@/pages/Order/Party'));
+const Properties = lazy(() => import('@/pages/Order/Properties'));
 
 export const OrderRoutes = [
 	{

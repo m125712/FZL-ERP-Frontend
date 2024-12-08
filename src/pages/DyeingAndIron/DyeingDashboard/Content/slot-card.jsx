@@ -132,30 +132,4 @@ export default function SlotCard({ data }) {
 			</div>
 		</div>
 	);
-	return (
-		<div
-			className={cn(
-				'm-0.5 flex flex-col gap-2 rounded-md px-1 py-2 text-foreground',
-				batch_status === 'completed'
-					? 'bg-success/20'
-					: batch_status === 'pending'
-						? 'bg-warning/20'
-						: 'bg-error/20'
-			)}>
-			<div className='overflow-x-auto'>
-				<table className='table table-xs'>
-					<tbody>
-						{items.map((item, index) => (
-							<tr key={index} className='border-foreground/5'>
-								<th>{item.title}</th>
-								<td className='whitespace-nowrap'>
-									{item.content}
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-			</div>
-		</div>
-	);
 }

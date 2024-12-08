@@ -29,14 +29,6 @@ export default function Dashboard() {
 		refreshAll,
 	} = useDashboardData(dataPreview);
 
-	console.log({
-		amount_and_doc,
-		order_entry,
-		amount_percentage,
-		no_of_doc,
-		refreshAll,
-	});
-
 	useEffect(() => {
 		document.title = 'Dashboard';
 	}, []);

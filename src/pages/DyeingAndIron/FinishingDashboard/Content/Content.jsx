@@ -5,8 +5,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { DateTime } from '@/ui';
 
+import QuantityCard from './quantity-card';
+
 export default function Content({ data }) {
-	const navigate = useNavigate();
 	const header = [
 		'Date',
 		'Day',
@@ -57,9 +58,19 @@ export default function Content({ data }) {
 
 									{item.data?.map((data, index) => {
 										return (
+											<td>
+												<QuantityCard
+													data={data}
+													production_date={
+														production_date
+													}
+												/>
+											</td>
+										);
+										return (
 											<td
 												key={index}
-												className='border text-left text-xs font-medium'>
+												className='border px-2 text-left text-xs font-medium'>
 												{data.production_capacity_quantity >
 												data.production_quantity ? (
 													<button
@@ -68,7 +79,7 @@ export default function Content({ data }) {
 																`/dyeing-and-iron/finishing-batch/entry?production_date=${production_date}`
 															)
 														}
-														className='btn btn-primary btn-xs min-h-12 w-full gap-1'>
+														className='btn btn-primary btn-xs min-h-8 w-full gap-1'>
 														{
 															data.production_quantity
 														}

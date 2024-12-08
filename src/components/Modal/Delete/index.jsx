@@ -27,15 +27,11 @@ export default function Index({
 	};
 
 	const handelCancelClick = () => {
-		console.log('handelCancelClick');
-		
 		handelClose();
 	};
 
-
 	const onSubmit = async (e) => {
-		console.log('on submit');
-		 e.preventDefault();
+		e.preventDefault();
 
 		await deleteData.mutateAsync({
 			url: `${url}/${deleteItem?.itemId}`,

@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { useOtherOrderNumberForZipperByMarketingAndPartyUUID } from '@/state/Other';
 import { Controller } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
+import { DeleteModal } from '@/components/Modal';
 import {
 	CheckBoxWithoutLabel,
 	DynamicDeliveryField,
+	EditDelete,
 	FormField,
 	Input,
 	ReactSelect,
@@ -24,6 +26,8 @@ const Zipper = ({
 	register,
 	orderEntryField,
 	newOrderEntryField,
+	deleteData,
+	invalidateCashPi,
 }) => {
 	const [isAllChecked, setIsAllChecked] = useState(false);
 	const [isSomeChecked, setIsSomeChecked] = useState(false);
@@ -169,67 +173,48 @@ const Zipper = ({
 		},
 		[isSomeChecked]
 	);
+
+	// * Delete zipper-details
+	const [deleteEntry, setDeleteEntry] = useState({
+		itemId: null,
+		itemName: null,
+	});
+	const handelDelete = (index) => {
+		const UUID = getValues(`pi_cash_entry[${index}].uuid`);
+
+		if (UUID !== undefined) {
+			setDeleteEntry({
+				itemId: UUID,
+				itemName: UUID,
+			});
+
+			window['cash_zipper_details_delete'].showModal();
+		}
+	};
+
 	return (
-		<SectionEntryBody title='Zipper Details'>
-			<div className='grid grid-cols-2 gap-4'>
-				<FormField
-					label='order_info_uuids'
-					title='Order Numbers (Zipper)'
-					errors={errors}>
-					<Controller
-						name='order_info_uuids'
-						control={control}
-						render={({ field: { onChange } }) => {
-							return (
-								<ReactSelect
-									isDisabled={pi_uuid}
-									isMulti
-									placeholder='Select Order Numbers'
-									options={order_number_for_zippers}
-									value={order_number_for_zippers?.filter(
-										(item) => {
-											const order_info_uuids =
-												getValues('order_info_uuids');
-
-											return order_info_uuids?.includes(
-												item.value
-											);
-										}
-									)}
-									onChange={(e) => {
-										onChange(e.map(({ value }) => value));
-									}}
-								/>
-							);
-						}}
-					/>
-				</FormField>
-
-				{pi_uuid && (
+		<div>
+			<SectionEntryBody title='Zipper Details'>
+				<div className='grid grid-cols-2 gap-4'>
 					<FormField
-						label='new_order_info_uuids'
-						title='New Order Numbers (Zipper)'
+						label='order_info_uuids'
+						title='Order Numbers (Zipper)'
 						errors={errors}>
 						<Controller
-							name='new_order_info_uuids'
+							name='order_info_uuids'
 							control={control}
 							render={({ field: { onChange } }) => {
 								return (
 									<ReactSelect
+										isDisabled={pi_uuid}
 										isMulti
 										placeholder='Select Order Numbers'
-										// options={new_order_number_for_zippers?.filter(
-										// 	(item) =>
-										// 		!watch(
-										// 			'order_info_uuids'
-										// 		)?.includes(item.value)
-										// )}
-										options={new_order_number_for_zippers}
-										value={new_order_number_for_zippers?.filter(
+										options={order_number_for_zippers}
+										value={order_number_for_zippers?.filter(
 											(item) => {
 												const order_info_uuids =
 													getValues(
-														'new_order_info_uuids'
+														'order_info_uuids'
 													);
 
 												return order_info_uuids?.includes(
@@ -247,207 +232,87 @@ const Zipper = ({
 							}}
 						/>
 					</FormField>
-				)}
-			</div>
 
-			<DynamicDeliveryField
-				title={`Entries ${!isUpdate ? `(Checked: ${getTotalCheck(watch('pi_cash_entry'))})` : ''}`}
-				tableHead={
-					<>
-						{!isUpdate && (
-							<th
-								key='is_all_checked'
-								scope='col'
-								className='group w-20 cursor-pointer px-3 py-2'>
-								<CheckBoxWithoutLabel
-									label='is_all_checked'
-									checked={isAllChecked}
-									onChange={(e) => {
-										setIsAllChecked(e.target.checked);
-										setIsSomeChecked(e.target.checked);
-									}}
-									{...{ register, errors }}
-								/>
-							</th>
-						)}
-						{[
-							'O/N',
-							'Item Description',
-							'Style',
-							'Color',
-							'Size',
-							'Unit (Size)',
-							'QTY (PCS)',
-							'Given',
-							'PI QTY',
-							'Balance QTY',
-							'Unit Price',
-							'Unit (Price)',
-						].map((item) => (
-							<th
-								key={item}
-								scope='col'
-								className='group cursor-pointer px-3 py-2 transition duration-300'>
-								{item}
-							</th>
-						))}
+					{pi_uuid && (
+						<FormField
+							label='new_order_info_uuids'
+							title='New Order Numbers (Zipper)'
+							errors={errors}>
+							<Controller
+								name='new_order_info_uuids'
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											isMulti
+											placeholder='Select Order Numbers'
+											// options={new_order_number_for_zippers?.filter(
+											// 	(item) =>
+											// 		!watch(
+											// 			'order_info_uuids'
+											// 		)?.includes(item.value)
+											// )}
+											options={
+												new_order_number_for_zippers
+											}
+											value={new_order_number_for_zippers?.filter(
+												(item) => {
+													const order_info_uuids =
+														getValues(
+															'new_order_info_uuids'
+														);
 
-						{isUpdate && (
-							<th
-								key='action'
-								scope='col'
-								className='group cursor-pointer px-3 py-2 transition duration-300'>
-								Delete
-							</th>
-						)}
-					</>
-				}>
-				{orderEntryField.map((item, index) => (
-					<tr
-						key={item.id}
-						className={cn(
-							'relative cursor-pointer bg-base-100 text-primary transition-colors duration-200 ease-in',
-							isUpdate &&
-								watch(`pi_cash_entry[${index}].isDeletable`) &&
-								'bg-error/10 text-error hover:bg-error/20 hover:text-error'
-						)}>
-						{!isUpdate && (
-							<td className={cn(`w-8 ${rowClass}`)}>
-								<CheckBoxWithoutLabel
-									label={`pi_cash_entry[${index}].is_checked`}
-									checked={watch(
-										`pi_cash_entry[${index}].is_checked`
-									)}
-									onChange={(e) => handleRowChecked(e, index)}
-									disabled={
-										getValues(
-											`pi_cash_entry[${index}].quantity`
-										) == 0
-									}
-									{...{ register, errors }}
-								/>
-							</td>
-						)}
-
-						<td className={`w-32 ${rowClass}`}>
-							{getValues(`pi_cash_entry[${index}].order_number`)}
-						</td>
-						<td className={`w-32 ${rowClass}`}>
-							{getValues(
-								`pi_cash_entry[${index}].item_description`
-							)}
-						</td>
-						<td className={`w-32 ${rowClass}`}>
-							{getValues(`pi_cash_entry[${index}].style`)}
-						</td>
-						<td className={`w-32 ${rowClass}`}>
-							{getValues(`pi_cash_entry[${index}].color`)}
-						</td>
-						<td className={`${rowClass}`}>
-							{getValues(`pi_cash_entry[${index}].size`)}
-						</td>
-						<td className={`${rowClass}`}>
-							{getValues(`pi_cash_entry[${index}].size_unit`)}
-						</td>
-						<td className={`${rowClass}`}>
-							{getValues(`pi_cash_entry[${index}].quantity`)}
-						</td>
-						<td className={`${rowClass}`}>
-							{getValues(
-								`pi_cash_entry[${index}].given_pi_cash_quantity`
-							)}
-						</td>
-						<td className={`w-32 ${rowClass}`}>
-							<Input
-								label={`pi_cash_entry[${index}].pi_cash_quantity`}
-								is_title_needed='false'
-								height='h-8'
-								onChange={() => {
-									setStatus(!status);
+													return order_info_uuids?.includes(
+														item.value
+													);
+												}
+											)}
+											onChange={(e) => {
+												onChange(
+													e.map(({ value }) => value)
+												);
+											}}
+										/>
+									);
 								}}
-								dynamicerror={
-									errors?.pi_cash_entry?.[index]
-										?.pi_cash_quantity
-								}
-								disabled={
-									getValues(
-										`pi_cash_entry[${index}].pi_cash_quantity`
-									) === 0
-								}
-								{...{ register, errors }}
 							/>
-							<Input
-								label={`pi_cash_entry[${index}].sfg_uuid`}
-								is_title_needed='false'
-								className='hidden'
-								{...{ register, errors }}
-							/>
-						</td>
-						<td className={`${rowClass}`}>
-							{getValues(
-								`pi_cash_entry[${index}].balance_quantity`
-							)}
-						</td>
-						<td className={`${rowClass}`}>
-							{getValues(`pi_cash_entry[${index}].unit_price`)}
-						</td>
-						<td className={`${rowClass}`}>
-							{getValues(`pi_cash_entry[${index}].price_unit`)}
-						</td>
-						{isUpdate && (
-							<td className={`${rowClass}`}>
-								<CheckBoxWithoutLabel
-									className={cn(
-										watch(
-											`pi_cash_entry[${index}].isDeletable`
-										)
-											? 'checkbox-error'
-											: 'checkbox-error'
-									)}
-									label={`pi_cash_entry[${index}].isDeletable`}
-									{...{ register, errors }}
-								/>
-							</td>
-						)}
-					</tr>
-				))}
-			</DynamicDeliveryField>
-			{/* <td className='font-semibold text-primary' colSpan={11}>
-				Total Value:
-				{Number(getTotalValue(watch('pi_cash_entry')))
-					.toFixed(2)
-					.toLocaleString()}
-				$
-			</td> */}
-			{isUpdate && (
+						</FormField>
+					)}
+				</div>
+
 				<DynamicDeliveryField
-					title={`New Entries ${isUpdate ? `(Checked: ${getTotalCheck(watch('new_pi_cash_entry'))})` : ''}`}
+					title={`Entries ${!isUpdate ? `(Checked: ${getTotalCheck(watch('pi_cash_entry'))})` : ''}`}
 					tableHead={
 						<>
-							<th
-								key='is_all_checked'
-								scope='col'
-								className='group w-20 cursor-pointer px-3 py-2'>
-								<CheckBoxWithoutLabel
-									label='is_all_new_checked'
-									checked={isAllNewChecked}
-									onChange={(e) => {
-										setIsAllNewChecked(e.target.checked);
-										setIsSomeNewChecked(e.target.checked);
-									}}
-									{...{ register, errors }}
-								/>
-							</th>
+							{!isUpdate && (
+								<th
+									key='is_all_checked'
+									scope='col'
+									className='group w-20 cursor-pointer px-3 py-2'>
+									<CheckBoxWithoutLabel
+										label='is_all_checked'
+										checked={isAllChecked}
+										onChange={(e) => {
+											setIsAllChecked(e.target.checked);
+											setIsSomeChecked(e.target.checked);
+										}}
+										{...{ register, errors }}
+									/>
+								</th>
+							)}
 							{[
 								'O/N',
 								'Item Description',
 								'Style',
 								'Color',
-								'Size (CM)',
+								'Size',
+								'Unit (Size)',
 								'QTY (PCS)',
 								'Given',
 								'PI QTY',
 								'Balance QTY',
+								'Unit Price',
+								'Unit (Price)',
 							].map((item) => (
 								<th
 									key={item}
@@ -456,82 +321,106 @@ const Zipper = ({
 									{item}
 								</th>
 							))}
+
+							{isUpdate && (
+								<th
+									key='action'
+									scope='col'
+									className='group cursor-pointer px-3 py-2 transition duration-300'>
+									Delete
+								</th>
+							)}
 						</>
 					}>
-					{newOrderEntryField.map((item, index) => (
+					{orderEntryField.map((item, index) => (
 						<tr
 							key={item.id}
 							className={cn(
-								'relative cursor-pointer bg-base-100 text-primary transition-colors duration-200 ease-in'
+								'relative cursor-pointer bg-base-100 text-primary transition-colors duration-200 ease-in',
+								isUpdate &&
+									watch(
+										`pi_cash_entry[${index}].isDeletable`
+									) &&
+									'bg-error/10 text-error hover:bg-error/20 hover:text-error'
 							)}>
-							<td className={cn(`w-8 ${rowClass}`)}>
-								<CheckBoxWithoutLabel
-									label={`new_pi_cash_entry[${index}].is_checked`}
-									checked={watch(
-										`new_pi_cash_entry[${index}].is_checked`
-									)}
-									onChange={(e) =>
-										handleRowChecked(e, index, true)
-									}
-									disabled={
-										getValues(
-											`new_pi_cash_entry[${index}].quantity`
-										) == 0
-									}
-									{...{ register, errors }}
-								/>
-							</td>
+							{!isUpdate && (
+								<td className={cn(`w-8 ${rowClass}`)}>
+									<CheckBoxWithoutLabel
+										label={`pi_cash_entry[${index}].is_checked`}
+										checked={watch(
+											`pi_cash_entry[${index}].is_checked`
+										)}
+										onChange={(e) =>
+											handleRowChecked(e, index)
+										}
+										disabled={
+											(!isUpdate &&
+												getValues(
+													`pi_cash_entry[${index}].unit_price`
+												) <= 0) ||
+											getValues(
+												`pi_cash_entry[${index}].quantity`
+											) == 0
+										}
+										{...{ register, errors }}
+									/>
+								</td>
+							)}
 
 							<td className={`w-32 ${rowClass}`}>
 								{getValues(
-									`new_pi_cash_entry[${index}].order_number`
+									`pi_cash_entry[${index}].order_number`
 								)}
 							</td>
 							<td className={`w-32 ${rowClass}`}>
 								{getValues(
-									`new_pi_cash_entry[${index}].item_description`
+									`pi_cash_entry[${index}].item_description`
 								)}
 							</td>
 							<td className={`w-32 ${rowClass}`}>
-								{getValues(`new_pi_cash_entry[${index}].style`)}
+								{getValues(`pi_cash_entry[${index}].style`)}
 							</td>
 							<td className={`w-32 ${rowClass}`}>
-								{getValues(`new_pi_cash_entry[${index}].color`)}
+								{getValues(`pi_cash_entry[${index}].color`)}
 							</td>
 							<td className={`${rowClass}`}>
-								{getValues(`new_pi_cash_entry[${index}].size`)}
+								{getValues(`pi_cash_entry[${index}].size`)}
+							</td>
+							<td className={`${rowClass}`}>
+								{getValues(`pi_cash_entry[${index}].size_unit`)}
+							</td>
+							<td className={`${rowClass}`}>
+								{getValues(`pi_cash_entry[${index}].quantity`)}
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(
-									`new_pi_cash_entry[${index}].quantity`
-								)}
-							</td>
-							<td className={`${rowClass}`}>
-								{getValues(
-									`new_pi_cash_entry[${index}].given_pi_cash_quantity`
+									`pi_cash_entry[${index}].given_pi_cash_quantity`
 								)}
 							</td>
 							<td className={`w-32 ${rowClass}`}>
 								<Input
-									label={`new_pi_cash_entry[${index}].pi_cash_quantity`}
+									label={`pi_cash_entry[${index}].pi_cash_quantity`}
 									is_title_needed='false'
 									height='h-8'
-									dynamicerror={
-										errors?.new_pi_cash_entry?.[index]
-											?.pi_cash_quantity
-									}
 									onChange={() => {
 										setStatus(!status);
 									}}
+									dynamicerror={
+										errors?.pi_cash_entry?.[index]
+											?.pi_cash_quantity
+									}
 									disabled={
 										getValues(
-											`new_pi_cash_entry[${index}].pi_cash_quantity`
+											`pi_cash_entry[${index}].unit_price`
+										) <= 0 ||
+										getValues(
+											`pi_cash_entry[${index}].pi_cash_quantity`
 										) === 0
 									}
 									{...{ register, errors }}
 								/>
 								<Input
-									label={`new_pi_cash_entry[${index}].sfg_uuid`}
+									label={`pi_cash_entry[${index}].sfg_uuid`}
 									is_title_needed='false'
 									className='hidden'
 									{...{ register, errors }}
@@ -539,28 +428,227 @@ const Zipper = ({
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(
-									`new_pi_cash_entry[${index}].balance_quantity`
+									`pi_cash_entry[${index}].balance_quantity`
 								)}
 							</td>
+							<td className={`${rowClass}`}>
+								{getValues(
+									`pi_cash_entry[${index}].unit_price`
+								)}
+							</td>
+							<td className={`${rowClass}`}>
+								{getValues(
+									`pi_cash_entry[${index}].price_unit`
+								)}
+							</td>
+							{isUpdate && (
+								<td className={`${rowClass}`}>
+									<EditDelete
+										idx={index}
+										handelDelete={handelDelete}
+										showDelete={isUpdate}
+										showUpdate={false}
+									/>
+								</td>
+							)}
 						</tr>
 					))}
 				</DynamicDeliveryField>
-			)}
-
-			<td className='font-semibold text-primary' colSpan={11}>
-				Total Value:{' '}
-				{Number(
-					getTotalAmount(watch('pi_cash_entry')) +
-						getTotalAmount(watch('new_pi_cash_entry'))
-				).toFixed(2)}
+				{/* <td className='font-semibold text-primary' colSpan={11}>
+				Total Value:
+				{Number(getTotalValue(watch('pi_cash_entry')))
+					.toFixed(2)
+					.toLocaleString()}
 				$
-			</td>
-			<td className='font-semibold text-primary' colSpan={11}>
-				Total Quantity:{' '}
-				{getTotalValue(watch('pi_cash_entry')) +
-					getTotalValue(watch('new_pi_cash_entry'))}
-			</td>
-		</SectionEntryBody>
+			</td> */}
+				{isUpdate && (
+					<DynamicDeliveryField
+						title={`New Entries ${isUpdate ? `(Checked: ${getTotalCheck(watch('new_pi_cash_entry'))})` : ''}`}
+						tableHead={
+							<>
+								<th
+									key='is_all_checked'
+									scope='col'
+									className='group w-20 cursor-pointer px-3 py-2'>
+									<CheckBoxWithoutLabel
+										label='is_all_new_checked'
+										checked={isAllNewChecked}
+										onChange={(e) => {
+											setIsAllNewChecked(
+												e.target.checked
+											);
+											setIsSomeNewChecked(
+												e.target.checked
+											);
+										}}
+										{...{ register, errors }}
+									/>
+								</th>
+								{[
+									'O/N',
+									'Item Description',
+									'Style',
+									'Color',
+									'Size',
+									'Unit (Size)',
+									'QTY (PCS)',
+									'Given',
+									'PI QTY',
+									'Balance QTY',
+									'Unit Price',
+									'Unit (Price)',
+								].map((item) => (
+									<th
+										key={item}
+										scope='col'
+										className='group cursor-pointer px-3 py-2 transition duration-300'>
+										{item}
+									</th>
+								))}
+							</>
+						}>
+						{newOrderEntryField.map((item, index) => (
+							<tr
+								key={item.id}
+								className={cn(
+									'relative cursor-pointer bg-base-100 text-primary transition-colors duration-200 ease-in'
+								)}>
+								<td className={cn(`w-8 ${rowClass}`)}>
+									<CheckBoxWithoutLabel
+										label={`new_pi_cash_entry[${index}].is_checked`}
+										checked={watch(
+											`new_pi_cash_entry[${index}].is_checked`
+										)}
+										onChange={(e) =>
+											handleRowChecked(e, index, true)
+										}
+										disabled={
+											getValues(
+												`new_pi_cash_entry[${index}].unit_price`
+											) <= 0 ||
+											getValues(
+												`new_pi_cash_entry[${index}].quantity`
+											) == 0
+										}
+										{...{ register, errors }}
+									/>
+								</td>
+
+								<td className={`w-32 ${rowClass}`}>
+									{getValues(
+										`new_pi_cash_entry[${index}].order_number`
+									)}
+								</td>
+								<td className={`w-32 ${rowClass}`}>
+									{getValues(
+										`new_pi_cash_entry[${index}].item_description`
+									)}
+								</td>
+								<td className={`w-32 ${rowClass}`}>
+									{getValues(
+										`new_pi_cash_entry[${index}].style`
+									)}
+								</td>
+								<td className={`w-32 ${rowClass}`}>
+									{getValues(
+										`new_pi_cash_entry[${index}].color`
+									)}
+								</td>
+								<td className={`${rowClass}`}>
+									{getValues(
+										`new_pi_cash_entry[${index}].size`
+									)}
+								</td>
+								<td className={`${rowClass}`}>
+									{getValues(
+										`new_pi_cash_entry[${index}].size_unit`
+									)}
+								</td>
+								<td className={`${rowClass}`}>
+									{getValues(
+										`new_pi_cash_entry[${index}].quantity`
+									)}
+								</td>
+								<td className={`${rowClass}`}>
+									{getValues(
+										`new_pi_cash_entry[${index}].given_pi_cash_quantity`
+									)}
+								</td>
+								<td className={`w-32 ${rowClass}`}>
+									<Input
+										label={`new_pi_cash_entry[${index}].pi_cash_quantity`}
+										is_title_needed='false'
+										height='h-8'
+										dynamicerror={
+											errors?.new_pi_cash_entry?.[index]
+												?.pi_cash_quantity
+										}
+										onChange={() => {
+											setStatus(!status);
+										}}
+										disabled={
+											getValues(
+												`new_pi_cash_entry[${index}].unit_price`
+											) <= 0 ||
+											getValues(
+												`new_pi_cash_entry[${index}].pi_cash_quantity`
+											) === 0
+										}
+										{...{ register, errors }}
+									/>
+									<Input
+										label={`new_pi_cash_entry[${index}].sfg_uuid`}
+										is_title_needed='false'
+										className='hidden'
+										{...{ register, errors }}
+									/>
+								</td>
+								<td className={`${rowClass}`}>
+									{getValues(
+										`new_pi_cash_entry[${index}].balance_quantity`
+									)}
+								</td>
+								<td className={`${rowClass}`}>
+									{getValues(
+										`new_pi_cash_entry[${index}].unit_price`
+									)}
+								</td>
+								<td className={`${rowClass}`}>
+									{getValues(
+										`new_pi_cash_entry[${index}].price_unit`
+									)}
+								</td>
+							</tr>
+						))}
+					</DynamicDeliveryField>
+				)}
+
+				<td className='font-semibold text-primary' colSpan={11}>
+					Total Value:{' '}
+					{Number(
+						getTotalAmount(watch('pi_cash_entry')) +
+							getTotalAmount(watch('new_pi_cash_entry'))
+					).toFixed(2)}
+					$
+				</td>
+				<td className='font-semibold text-primary' colSpan={11}>
+					Total Quantity:{' '}
+					{getTotalValue(watch('pi_cash_entry')) +
+						getTotalValue(watch('new_pi_cash_entry'))}
+				</td>
+			</SectionEntryBody>
+			<Suspense>
+				<DeleteModal
+					modalId={'cash_zipper_details_delete'}
+					title={'Cash Zipper Details Delete'}
+					deleteItem={deleteEntry}
+					setDeleteItem={setDeleteEntry}
+					deleteData={deleteData}
+					url={`/commercial/pi-cash-entry`}
+					invalidateQuery={invalidateCashPi}
+				/>
+			</Suspense>
+		</div>
 	);
 };
 

@@ -94,8 +94,6 @@ export default function Index() {
 		name: 'new_pi_cash_entry_thread',
 	});
 
-	console.log(errors);
-
 	useEffect(() => {
 		if (isUpdate) {
 			reset(pi_details_by_uuid);

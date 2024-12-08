@@ -74,6 +74,7 @@ export default function index() {
 	useEffect(() => {
 		if (data && isUpdate) {
 			reset(data); // Reset the form with updated data
+			setOrderType(data?.order_type);
 		}
 	}, [data, reset]);
 

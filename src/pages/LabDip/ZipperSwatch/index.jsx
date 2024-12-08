@@ -106,7 +106,14 @@ export default function Index() {
 				header: 'Unit',
 				width: 'w-24',
 				// enableColumnFilter: false,
-				cell: (info) => (info.getValue() == 1 ? 'IN' : 'CM'),
+				cell: (info) => {
+					const { order_type } = info.row.original;
+					if (order_type === 'tape') {
+						return 'MTR';
+					} else {
+						return info.getValue() === 1 ? 'INCH' : 'CM';
+					}
+				},
 			},
 			{
 				accessorKey: 'quantity',

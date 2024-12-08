@@ -15,6 +15,7 @@ export const Columns = ({
 	is_new = false,
 }) => {
 	const haveAccess = useAccess('dyeing__thread_batch_entry_update');
+	console.log(isUpdate, 'isUpdate');
 
 	// * setting all quantity in finishing_batch_entry to the balance quantity
 	const setAllQty = () => {
@@ -70,12 +71,6 @@ export const Columns = ({
 			enableSorting: true,
 		},
 		{
-			accessorKey: 'po',
-			header: 'PO',
-			enableColumnFilter: true,
-			enableSorting: true,
-		},
-		{
 			accessorKey: 'order_quantity',
 			header: 'Order QTY',
 			enableColumnFilter: false,
@@ -104,8 +99,9 @@ export const Columns = ({
 					const idx = info.row.index;
 					return (
 						<div className='flex gap-4'>
-							<label
+							<button
 								className='btn btn-primary btn-xs'
+								disabled={isUpdate}
 								onClick={() =>
 									setValue(
 										`batch_entry[${idx}].quantity`,
@@ -113,7 +109,7 @@ export const Columns = ({
 									)
 								}>
 								Copy
-							</label>
+							</button>
 							{info.getValue()}
 						</div>
 					);

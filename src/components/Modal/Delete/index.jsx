@@ -29,10 +29,8 @@ export default function Index({
 	const handelCancelClick = () => {
 		handelClose();
 	};
-
-	const onSubmit = async (e) => {
-		e.preventDefault();
-
+  
+	const onSubmit = async () => {
 		await deleteData.mutateAsync({
 			url: `${url}/${deleteItem?.itemId}`,
 			onClose: handelClose,

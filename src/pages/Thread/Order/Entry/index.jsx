@@ -161,6 +161,7 @@ export default function Index() {
 
 	// Submit
 	const onSubmit = async (data) => {
+		return;
 		// Update
 		if (isUpdate) {
 			const order_info_data = {

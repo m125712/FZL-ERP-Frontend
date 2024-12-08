@@ -10,12 +10,13 @@ import { cn } from '@/lib/utils';
 const CustomRenderer = (props) => {
 	const {
 		watch,
-		formState: { errors },
+		formState: { errors, isSubmitting, isValidating },
 	} = useFormContext();
 
 	if (props.field.isLoading) {
 		return <Skeleton className='h-6 w-full' />;
 	}
+
 	return (
 		<div className='bg-gradient'>
 			{props.field.type === 'custom' && (

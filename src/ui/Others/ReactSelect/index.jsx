@@ -6,7 +6,6 @@ import { ButtonComponents } from './buttons';
 import { classNames, styles } from './utils';
 
 const ReactSelect = ({ className, ...props }) => {
-	// console.log(props);
 	return (
 		<Select
 			unstyled

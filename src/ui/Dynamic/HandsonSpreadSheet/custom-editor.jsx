@@ -127,9 +127,10 @@ class CustomEditor extends BaseEditorComponent {
 						ref={this.inputElementRef}
 						className='h-full w-full rounded-none border-none p-2 focus:border-none'
 						placeholder={this.props.field.placeholder}
-						defaultValue={this.state.value}
+						value={this.state.value}
 						onChange={(e) => {
 							const value = e.target.value;
+
 							if (inputType === 'number') {
 								this.setValue(Number(value), () => {});
 							} else {

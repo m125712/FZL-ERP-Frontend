@@ -66,13 +66,6 @@ function getMeasurement({ item, stopper_type, zipper_number, end_type }) {
 		stopper_type,
 	});
 
-	// console.log({
-	// 	item,
-	// 	zipper_number: Number(zipper_number),
-	// 	end_type,
-	// 	stopper_type,
-	// });
-
 	if (RESULT?.top === 0 && RESULT?.bottom === 0 && RESULT?.mtr === 0)
 		return 0;
 

@@ -1,15 +1,13 @@
-// CountLength
+import { lazy } from 'react';
 
-import Coning from '@pages/Thread/Conneing';
-import ConingDetails from '@pages/Thread/Conneing/Details';
-import ConingEntry from '@pages/Thread/Conneing/Entry';
-import CountLength from '@pages/Thread/CountLength';
-// Log
-import Log from '@pages/Thread/Log';
-//Order
-import OrderInfo from '@pages/Thread/Order';
-import IndOrderInfo from '@pages/Thread/Order/Details';
-import OrderInfoEntry from '@pages/Thread/Order/Entry';
+const Coning = lazy(() => import('@pages/Thread/Conneing'));
+const ConingEntry = lazy(() => import('@pages/Thread/Conneing/Entry'));
+const ConingDetails = lazy(() => import('@pages/Thread/Conneing/Details'));
+const CountLength = lazy(() => import('@pages/Thread/CountLength'));
+const Log = lazy(() => import('@pages/Thread/Log'));
+const OrderInfo = lazy(() => import('@pages/Thread/Order'));
+const IndOrderInfo = lazy(() => import('@pages/Thread/Order/Details'));
+const OrderInfoEntry = lazy(() => import('@pages/Thread/Order/Entry'));
 
 export const ThreadRoutes = [
 	{

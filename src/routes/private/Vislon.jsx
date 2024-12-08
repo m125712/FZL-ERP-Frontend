@@ -1,13 +1,21 @@
-// Teeth Molding
-import VislonFinishingTrxLog from '@/pages/Vislon/Finishing/Log';
-// Finishing Production
-import VislonFinishingProduction from '@/pages/Vislon/Finishing/Production';
-// Finishing
-import VislonFinishing from '@/pages/Vislon/Finishing/RMStock';
-import VislonTeethMoldingTrxLog from '@/pages/Vislon/TeethMolding/Log';
-// Teeth molding Production
-import VislonProduction from '@/pages/Vislon/TeethMolding/Production';
-import VislonTeethMolding from '@/pages/Vislon/TeethMolding/RMStock';
+import { lazy } from 'react';
+
+const VislonFinishingTrxLog = lazy(
+	() => import('@/pages/Vislon/Finishing/Log')
+);
+const VislonFinishingProduction = lazy(
+	() => import('@/pages/Vislon/Finishing/Production')
+);
+const VislonFinishing = lazy(() => import('@/pages/Vislon/Finishing/RMStock'));
+const VislonTeethMoldingTrxLog = lazy(
+	() => import('@/pages/Vislon/TeethMolding/Log')
+);
+const VislonProduction = lazy(
+	() => import('@/pages/Vislon/TeethMolding/Production')
+);
+const VislonTeethMolding = lazy(
+	() => import('@/pages/Vislon/TeethMolding/RMStock')
+);
 
 export const VislonRoutes = [
 	{
@@ -42,12 +50,7 @@ export const VislonRoutes = [
 						path: '/vislon/teeth-molding/log',
 						element: <VislonTeethMoldingTrxLog />,
 						page_name: 'vislon__teeth_molding_log',
-						actions: [
-							'read',
-							'create',
-							'delete',
-							'update',
-						],
+						actions: ['read', 'create', 'delete', 'update'],
 					},
 				],
 			},
@@ -81,12 +84,7 @@ export const VislonRoutes = [
 						path: '/vislon/finishing/log',
 						element: <VislonFinishingTrxLog />,
 						page_name: 'vislon__finishing_log',
-						actions: [
-							'read',
-							'create',
-							'delete',
-							'update',
-						],
+						actions: ['read', 'create', 'delete', 'update'],
 					},
 				],
 			},

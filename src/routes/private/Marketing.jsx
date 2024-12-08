@@ -1,7 +1,9 @@
-import Targets from '@/pages/Marketing/Targets';
-import Teams from '@/pages/Marketing/Teams';
-import TeamDetails from '@/pages/Marketing/Teams/Details';
-import TeamsEntry from '@/pages/Marketing/Teams/Entry';
+import { lazy } from 'react';
+
+const Teams = lazy(() => import('@/pages/Marketing/Teams'));
+const TeamsEntry = lazy(() => import('@/pages/Marketing/Teams/Entry'));
+const TeamDetails = lazy(() => import('@/pages/Marketing/Teams/Details'));
+const Targets = lazy(() => import('@/pages/Marketing/Targets'));
 
 export const MarketingRoutes = [
 	{

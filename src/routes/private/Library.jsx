@@ -1,5 +1,7 @@
-import User from '@pages/Library/User';
-import Policy from '@pages/Library/Policy';
+import { lazy } from 'react';
+
+const User = lazy(() => import('@pages/Library/User'));
+const Policy = lazy(() => import('@pages/Library/Policy'));
 
 export const LibraryRoutes = [
 	{

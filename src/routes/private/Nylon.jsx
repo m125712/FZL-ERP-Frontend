@@ -1,11 +1,23 @@
-//MetallicFinishing
-import NylonMetallicFinishingTrxLog from '@/pages/Nylon/MetallicFinishing/Log';
-import NylonMetallicFinishingProduction from '@/pages/Nylon/MetallicFinishing/Production';
-import NylonMetallicFinishing from '@/pages/Nylon/MetallicFinishing/RMStock/RMStock';
-import NylonPlasticFinishingTrxLog from '@/pages/Nylon/PlasticFinishing/Log';
-import NylonPlasticFinishingProduction from '@/pages/Nylon/PlasticFinishing/Production';
-//PlasticFinishing
-import NylonPlasticFinishing from '@/pages/Nylon/PlasticFinishing/RMStock';
+import { lazy } from 'react';
+
+const NylonMetallicFinishingTrxLog = lazy(
+	() => import('@/pages/Nylon/MetallicFinishing/Log')
+);
+const NylonMetallicFinishingProduction = lazy(
+	() => import('@/pages/Nylon/MetallicFinishing/Production')
+);
+const NylonMetallicFinishing = lazy(
+	() => import('@/pages/Nylon/MetallicFinishing/RMStock/RMStock')
+);
+const NylonPlasticFinishingTrxLog = lazy(
+	() => import('@/pages/Nylon/PlasticFinishing/Log')
+);
+const NylonPlasticFinishingProduction = lazy(
+	() => import('@/pages/Nylon/PlasticFinishing/Production')
+);
+const NylonPlasticFinishing = lazy(
+	() => import('@/pages/Nylon/PlasticFinishing/RMStock')
+);
 
 export const NylonRoutes = [
 	{

@@ -1,22 +1,42 @@
-// * Dashboard
-import ColoringLog from '@/pages/Slider/Coloring/Log';
-// * Coloring
-import SliderColoringProduction from '@/pages/Slider/Coloring/Production';
-import ColoringRM from '@/pages/Slider/Coloring/RMStock';
-import SliderDashboard from '@/pages/Slider/Dashboard';
-// * Die Casting
-import DieCastingLog from '@/pages/Slider/DieCasting/Log';
-import DieCastingProduction from '@/pages/Slider/DieCasting/Production';
-import DieCastingEntry from '@/pages/Slider/DieCasting/Production/Entry';
-import DieCastingRMStock from '@/pages/Slider/DieCasting/RMStock';
-import DieCastingStock from '@/pages/Slider/DieCasting/Stock';
-import DieCastingTransfer from '@/pages/Slider/DieCasting/Transfer';
-import DieCastingTransferEntry from '@/pages/Slider/DieCasting/Transfer/Entry';
-// * Assembly
-import SliderAssemblyLog from '@/pages/Slider/SliderAssembly/Log';
-import SliderAssemblyProduction from '@/pages/Slider/SliderAssembly/Production';
-import SliderAssemblyRM from '@/pages/Slider/SliderAssembly/RMStock';
-import SliderAssemblyStock from '@/pages/Slider/SliderAssembly/Stock';
+import { lazy } from 'react';
+
+const ColoringLog = lazy(() => import('@/pages/Slider/Coloring/Log'));
+const SliderColoringProduction = lazy(
+	() => import('@/pages/Slider/Coloring/Production')
+);
+const ColoringRM = lazy(() => import('@/pages/Slider/Coloring/RMStock'));
+const SliderDashboard = lazy(() => import('@/pages/Slider/Dashboard'));
+
+const DieCastingLog = lazy(() => import('@/pages/Slider/DieCasting/Log'));
+const DieCastingProduction = lazy(
+	() => import('@/pages/Slider/DieCasting/Production')
+);
+const DieCastingEntry = lazy(
+	() => import('@/pages/Slider/DieCasting/Production/Entry')
+);
+const DieCastingRMStock = lazy(
+	() => import('@/pages/Slider/DieCasting/RMStock')
+);
+const DieCastingStock = lazy(() => import('@/pages/Slider/DieCasting/Stock'));
+const DieCastingTransfer = lazy(
+	() => import('@/pages/Slider/DieCasting/Transfer')
+);
+const DieCastingTransferEntry = lazy(
+	() => import('@/pages/Slider/DieCasting/Transfer/Entry')
+);
+
+const SliderAssemblyLog = lazy(
+	() => import('@/pages/Slider/SliderAssembly/Log')
+);
+const SliderAssemblyProduction = lazy(
+	() => import('@/pages/Slider/SliderAssembly/Production')
+);
+const SliderAssemblyRM = lazy(
+	() => import('@/pages/Slider/SliderAssembly/RMStock')
+);
+const SliderAssemblyStock = lazy(
+	() => import('@/pages/Slider/SliderAssembly/Stock')
+);
 
 export const SliderRoutes = [
 	{

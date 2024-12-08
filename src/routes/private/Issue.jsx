@@ -1,8 +1,9 @@
-// Issue
-import Wastage from '@/pages/Issue/Wastage';
-import OrderIssue from '@/pages/Issue/History';
-import Maintenance from '@/pages/Issue/Maintenance';
-import SpareParts from '@/pages/Issue/SpareParts';
+import { lazy } from 'react';
+
+const Wastage = lazy(() => import('@pages/Issue/Wastage'));
+const OrderIssue = lazy(() => import('@pages/Issue/History'));
+const Maintenance = lazy(() => import('@pages/Issue/Maintenance'));
+const SpareParts = lazy(() => import('@pages/Issue/SpareParts'));
 
 export const IssueRoutes = [
 	{

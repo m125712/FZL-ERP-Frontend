@@ -56,6 +56,17 @@ export const useCommercialPIDetailsByPiId = (pi_cash_id) =>
 		enabled: !!pi_cash_id,
 	});
 
+export const useCommercialReceiveAmount = () =>
+	createGlobalState({
+		queryKey: commercialQK.receiveAmount(),
+		url: '/commercial/cash-receive',
+	});
+export const useCommercialReceiveAmountByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commercialQK.receiveAmountByUUID(uuid),
+		url: `/commercial/cash-receive/${uuid}`,
+	});
+
 // * PI Entry * //
 export const useCommercialPIEntry = () =>
 	createGlobalState({

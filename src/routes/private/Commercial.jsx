@@ -1,3 +1,4 @@
+;
 // PI
 
 // Bank
@@ -10,12 +11,17 @@ import LC from '@pages/Commercial/LC';
 import LCDetails from '@pages/Commercial/LC/Details';
 import LCEntry from '@pages/Commercial/LC/Entry';
 // Manual PI
+import Log from '@pages/Commercial/Log';
 import ManualPI from '@pages/Commercial/ManualPI';
 import ManualPIDetails from '@pages/Commercial/ManualPI/Details';
 import ManualPIEntry from '@pages/Commercial/ManualPI/Entry';
 import PI from '@pages/Commercial/PI';
 import PiDetails from '@pages/Commercial/PI/Details';
 import PiEntry from '@pages/Commercial/PI/Entry';
+
+
+
+
 
 export const CommercialRoutes = [
 	{
@@ -165,6 +171,7 @@ export const CommercialRoutes = [
 					'delete',
 					'click_receive_status',
 					'show_own_orders',
+					'click_receive_amount',
 				],
 				disableCollapse: true,
 				children: [
@@ -208,6 +215,20 @@ export const CommercialRoutes = [
 				element: <Bank />,
 				page_name: 'commercial__bank',
 				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Log',
+				path: '/commercial/log',
+				element: <Log />,
+				page_name: 'commercial__log',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_receive_amount_update',
+					'click_receive_amount_delete',
+				],
 			},
 		],
 	},

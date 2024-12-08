@@ -169,13 +169,19 @@ const DynamicDeliveryTable = ({
 						{getValues(`item_for`) === 'thread' ||
 						getValues(`item_for`) === 'sample_thread'
 							? 'cone'
-							: getValues(`${entryFiledName}[${index}].is_inch`)
+							: getValues(
+										`${entryFiledName}[${index}].is_inch`
+								  ) === 1
 								? 'inch'
 								: getValues(
 											`${entryFiledName}[${index}].is_meter`
-									  )=== 1
+									  ) === 1
 									? 'meter'
-									: 'cm'}
+									: getValues(
+												`${entryFiledName}[${index}].order_type`
+										  ) === 'slider'
+										? '-'
+										: 'CM'}
 					</td>
 					<td className={rowClass}>
 						{getValues(`${entryFiledName}[${index}].is_meter`) === 1

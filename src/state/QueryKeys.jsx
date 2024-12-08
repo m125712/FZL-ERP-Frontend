@@ -104,7 +104,8 @@ export const commercialQK = {
 		partyId,
 		marketingId,
 	],
-
+	receiveAmount: () => [...commercialQK.all(), 'receive-amount'],
+	receiveAmountByUUID: (uuid) => [...commercialQK.receiveAmount(), uuid],
 	// pi-entry
 	piEntry: () => [...commercialQK.all(), 'pi-entry'],
 	piEntryByUUID: (uuid) => [...commercialQK.piEntry(), uuid],

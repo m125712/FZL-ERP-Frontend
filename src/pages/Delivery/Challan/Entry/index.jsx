@@ -400,10 +400,18 @@ export default function Index() {
 								</td>
 								<td className={`w-32 ${rowClass}`}>
 									{getValues(
-										`challan_entry[${index}].is_inch`
-									)
-										? 'in'
-										: 'cm'}
+										`challan_entry[${index}].order_type`
+									) === 'slider'
+										? '-'
+										: getValues(
+													`challan_entry[${index}].is_inch`
+											  ) === 1
+											? 'inch'
+											: getValues(
+														`challan_entry[${index}].is_meters`
+												  ) === 1
+												? 'meter'
+												: 'cm'}
 								</td>
 								<td className={`${rowClass}`}>
 									{getValues(
@@ -550,7 +558,21 @@ export default function Index() {
 											`new_challan_entry[${index}].size`
 										)}
 									</td>
-
+									<td className={`w-32 ${rowClass}`}>
+										{getValues(
+											`challan_entry[${index}].order_type`
+										) === 'slider'
+											? '-'
+											: getValues(
+														`challan_entry[${index}].is_inch`
+												  ) === 1
+												? 'inch'
+												: getValues(
+															`challan_entry[${index}].is_meters`
+													  ) === 1
+													? 'meter'
+													: 'cm'}
+									</td>
 									<td className={`${rowClass}`}>
 										{getValues(
 											`new_challan_entry[${index}].delivered`

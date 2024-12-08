@@ -1619,10 +1619,7 @@ export const CHALLAN_SCHEMA = {
 			remarks: STRING.nullable(),
 		})
 	),
-	delivery_date: yup
-		.date()
-		.required('Required')
-		.min(startOfDay(GetDateTime()), 'Delivery Date must be today or later'),
+	delivery_date: yup.date().required('Required'),
 	new_challan_entry: yup
 		.array()
 		.of(
@@ -2009,6 +2006,17 @@ export const PI_CASH_NULL = {
 	new_pi_cash_entry: [],
 	pi_cash_entry_thread: [],
 	new_pi_cash_entry_thread: [],
+};
+// PI CASH RECEIVE
+export const PI_CASH_RECEIVE_SCHEMA = {
+	amount: NUMBER_DOUBLE_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const PI_CASH_RECEIVE_NULL = {
+	uuid: null,
+	amount: 0,
+	remarks: '',
 };
 
 export const BANK_SCHEMA = {

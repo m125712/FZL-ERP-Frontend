@@ -402,12 +402,17 @@ export default function Index() {
 						})}
 						<tr className='border-t border-primary/30'>
 							<td
-								className='py-4 text-right font-bold'
-								colSpan='2'>
+								className='py-4 text-left font-bold'
+								colSpan='4'></td>
+							<td className='py-4 text-right font-bold'>
 								Total Quantity:
 							</td>
 							<td className='py-4 font-bold'>
-								{getTotalQty(watch('coil_to_dyeing_entry'))}
+								{getTotalQty(
+									watch(
+										'coil_to_dyeing_entry'
+									)
+								)}
 							</td>
 						</tr>
 					</DynamicField>

@@ -1,7 +1,6 @@
-// PI
-
 import { lazy } from 'react';
 
+const Log = lazy(() => import('@pages/Commercial/Log'));
 const Bank = lazy(() => import('@pages/Commercial/Bank'));
 const PiCash = lazy(() => import('@pages/Commercial/Cash'));
 const PiCashDetails = lazy(() => import('@pages/Commercial/Cash/Details'));
@@ -166,6 +165,7 @@ export const CommercialRoutes = [
 					'delete',
 					'click_receive_status',
 					'show_own_orders',
+					'click_receive_amount',
 				],
 				disableCollapse: true,
 				children: [
@@ -209,6 +209,20 @@ export const CommercialRoutes = [
 				element: <Bank />,
 				page_name: 'commercial__bank',
 				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Log',
+				path: '/commercial/log',
+				element: <Log />,
+				page_name: 'commercial__log',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_receive_amount_update',
+					'click_receive_amount_delete',
+				],
 			},
 		],
 	},

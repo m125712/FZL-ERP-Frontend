@@ -1,16 +1,19 @@
-import { useEffect, useMemo } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import {
 	useCommercialPIByQuery,
 	useCommercialPICash,
 } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
+import { useAccess } from '@/hooks';
 
+import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
-import { useAccess } from '@/hooks';
+
+const ReceiveAmount = lazy(() => import('./ReceiveAmount'));
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_all_orders')) {
@@ -139,11 +142,27 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'actions1',
+				header: 'Add Receive Amount',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_receive_amount'),
+				width: 'w-30',
+				cell: (info) => (
+					<Transfer
+						onClick={() =>
+							handleUpdateReceiveAmount(info.row.index)
+						}
+					/>
+				),
+			},
+			{
 				accessorKey: 'receive_amount',
 				header: 'Receive Amount',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
@@ -196,6 +215,23 @@ export default function Index() {
 		navigate(`/commercial/pi-cash/${uuid}/update`);
 	};
 
+	const [updateReceiveAmount, setUpdateReceiveAmount] = useState({
+		uuid: '',
+		max_amount: 0,
+		pi_uuid: '',
+		PI_ID: '',
+	});
+	const handleUpdateReceiveAmount = (idx) => {
+		const selected = data[idx];
+		setUpdateReceiveAmount((prev) => ({
+			...prev,
+			...selected,
+			pi_uuid: selected.uuid,
+			max_amount: selected.total_amount - selected.receive_amount,
+			PI_ID: selected.id,
+		}));
+		window['add_receive_amount_modal'].showModal();
+	};
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
@@ -208,6 +244,15 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				handelAdd={handelAdd}
 			/>
+			<Suspense>
+				<ReceiveAmount
+					modalId={'add_receive_amount_modal'}
+					{...{
+						updateReceiveAmount,
+						setUpdateReceiveAmount,
+					}}
+				/>
+			</Suspense>
 		</div>
 	);
 }

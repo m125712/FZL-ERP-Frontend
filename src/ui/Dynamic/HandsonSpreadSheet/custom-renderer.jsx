@@ -17,10 +17,6 @@ const CustomRenderer = (props) => {
 		return <Skeleton className='h-6 w-full' />;
 	}
 
-	console.log({
-		isValidating,
-	});
-
 	return (
 		<div className='bg-gradient'>
 			{props.field.type === 'custom' && (

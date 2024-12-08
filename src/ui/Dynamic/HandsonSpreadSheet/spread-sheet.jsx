@@ -37,10 +37,6 @@ const SpreadSheet = (
 		});
 	});
 
-	console.log({
-		data,
-	});
-
 	return (
 		<div className='overflow-auto rounded-b-md border border-y-0'>
 			<HotTable

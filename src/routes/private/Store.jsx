@@ -1,14 +1,17 @@
-// * Store
-import MaterialLog from '@/pages/Store/Log';
-import Purchase from '@/pages/Store/Receive';
-import PurchaseInd from '@/pages/Store/Receive/Details/ByPurchaseDescriptionUUID';
-import PurchaseEntry from '@/pages/Store/Receive/Entry';
-import Section from '@/pages/Store/Section';
-import Stock from '@/pages/Store/Stock';
-import Test from '@/pages/Store/Test';
-import MaterialType from '@/pages/Store/Type';
+import { lazy } from 'react';
+
+const MaterialLog = lazy(() => import('@/pages/Store/Log'));
+const Purchase = lazy(() => import('@/pages/Store/Receive'));
+const PurchaseInd = lazy(
+	() => import('@/pages/Store/Receive/Details/ByPurchaseDescriptionUUID')
+);
+const PurchaseEntry = lazy(() => import('@/pages/Store/Receive/Entry'));
+const Section = lazy(() => import('@/pages/Store/Section'));
+const Stock = lazy(() => import('@/pages/Store/Stock'));
+const Test = lazy(() => import('@/pages/Store/Test'));
+const MaterialType = lazy(() => import('@/pages/Store/Type'));
 // * Purchase
-import Vendor from '@/pages/Store/Vendor';
+const Vendor = lazy(() => import('@/pages/Store/Vendor'));
 
 export const StoreRoutes = [
 	{

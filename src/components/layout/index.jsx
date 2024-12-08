@@ -1,8 +1,10 @@
+import { Suspense } from 'react';
 import { Outlet, useResolvedPath } from 'react-router-dom';
 
 import { cn } from '@/lib/utils';
 
 import LayoutProvider from './layout-provider';
+import Loader from './loader';
 import Navbar from './navbar';
 import Sidebar from './sidebar';
 
@@ -21,7 +23,9 @@ const Layout = () => {
 								'size-full flex-1 overflow-auto',
 								pathname !== '/' && 'px-4 py-6 lg:px-8'
 							)}>
-							<Outlet />
+							<Suspense fallback={<Loader />}>
+								<Outlet />
+							</Suspense>
 						</div>
 					</div>
 				</main>

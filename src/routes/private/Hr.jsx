@@ -1,6 +1,8 @@
-import Department from '@/pages/Admin/Department';
-import Designation from '@/pages/Admin/Designation';
-import User from '@/pages/Admin/User';
+import { lazy } from 'react';
+
+const Department = lazy(() => import('@/pages/Admin/Department'));
+const Designation = lazy(() => import('@/pages/Admin/Designation'));
+const User = lazy(() => import('@/pages/Admin/User'));
 
 export const HrRoutes = [
 	{

@@ -1,13 +1,25 @@
-import DailyChallan from '@/pages/Report/DailyChallan';
-import DeliveryStatement from '@/pages/Report/DeliveryStatement';
-import LCDue from '@/pages/Report/LC';
-import PIRegister from '@/pages/Report/PIRegister';
-import PIToBeSubmit from '@/pages/Report/PIToBeSubmit';
-import ProductionReportDirector from '@/pages/Report/ProductionReportDirector';
-import ProductionReportSM from '@/pages/Report/ProductionReportS&M';
-// import ProductionReportThreadPartyWise from '@/pages/Report/ProductionReportThreadPartyWise';
-import ThreadProduction from '@/pages/Report/ThreadProductionStatus';
-import ZipperProduction from '@/pages/Report/ZipperProductionStatus';
+import { lazy } from 'react';
+
+const DailyChallan = lazy(() => import('@/pages/Report/DailyChallan'));
+const DeliveryStatement = lazy(
+	() => import('@/pages/Report/DeliveryStatement')
+);
+const LCDue = lazy(() => import('@/pages/Report/LC'));
+const PIRegister = lazy(() => import('@/pages/Report/PIRegister'));
+const PIToBeSubmit = lazy(() => import('@/pages/Report/PIToBeSubmit'));
+const ProductionReportDirector = lazy(
+	() => import('@/pages/Report/ProductionReportDirector')
+);
+const ProductionReportSM = lazy(
+	() => import('@/pages/Report/ProductionReportS&M')
+);
+
+const ThreadProduction = lazy(
+	() => import('@/pages/Report/ThreadProductionStatus')
+);
+const ZipperProduction = lazy(
+	() => import('@/pages/Report/ZipperProductionStatus')
+);
 
 export const ReportRoutes = [
 	{

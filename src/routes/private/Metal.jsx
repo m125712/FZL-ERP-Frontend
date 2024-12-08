@@ -1,15 +1,30 @@
-// Teeth Molding
-import MetalFinishingTrxLog from '@/pages/Metal/Finishing/Log';
-import MetalFinishingProduction from '@/pages/Metal/Finishing/Production';
-// Finishing
-import MetalFinishingRMStock from '@/pages/Metal/Finishing/RMStock';
-import MetalTeethColoringTrxLog from '@/pages/Metal/TeethColoring/Log';
-import MetalTeethColoringProduction from '@/pages/Metal/TeethColoring/Production';
-// TeethColoring
-import MetalTeethColoringRMStock from '@/pages/Metal/TeethColoring/RMStock';
-import MetalTeethMoldingTrxLog from '@/pages/Metal/TeethMolding/Log';
-import MetalTeethMoldingProduction from '@/pages/Metal/TeethMolding/Production';
-import MetalTeethMolding from '@/pages/Metal/TeethMolding/RMStock';
+import { lazy } from 'react';
+
+const MetalFinishingTrxLog = lazy(() => import('@/pages/Metal/Finishing/Log'));
+const MetalFinishingProduction = lazy(
+	() => import('@/pages/Metal/Finishing/Production')
+);
+const MetalFinishingRMStock = lazy(
+	() => import('@/pages/Metal/Finishing/RMStock')
+);
+const MetalTeethColoringTrxLog = lazy(
+	() => import('@/pages/Metal/TeethColoring/Log')
+);
+const MetalTeethColoringProduction = lazy(
+	() => import('@/pages/Metal/TeethColoring/Production')
+);
+const MetalTeethColoringRMStock = lazy(
+	() => import('@/pages/Metal/TeethColoring/RMStock')
+);
+const MetalTeethMoldingTrxLog = lazy(
+	() => import('@/pages/Metal/TeethMolding/Log')
+);
+const MetalTeethMoldingProduction = lazy(
+	() => import('@/pages/Metal/TeethMolding/Production')
+);
+const MetalTeethMolding = lazy(
+	() => import('@/pages/Metal/TeethMolding/RMStock')
+);
 
 export const MetalRoutes = [
 	{
@@ -44,12 +59,7 @@ export const MetalRoutes = [
 						path: '/metal/teeth-molding/log',
 						element: <MetalTeethMoldingTrxLog />,
 						page_name: 'metal__teeth_molding_log',
-						actions: [
-							'read',
-							'create',
-							'delete',
-							'update',
-						],
+						actions: ['read', 'create', 'delete', 'update'],
 					},
 				],
 			},
@@ -83,12 +93,7 @@ export const MetalRoutes = [
 						path: '/metal/teeth-coloring/log',
 						element: <MetalTeethColoringTrxLog />,
 						page_name: 'metal__teeth_coloring_log',
-						actions: [
-							'read',
-							'create',
-							'delete',
-							'update',
-						],
+						actions: ['read', 'create', 'delete', 'update'],
 					},
 				],
 			},
@@ -121,12 +126,7 @@ export const MetalRoutes = [
 						path: '/metal/finishing/log',
 						element: <MetalFinishingTrxLog />,
 						page_name: 'metal__finishing_log',
-						actions: [
-							'read',
-							'create',
-							'delete',
-							'update',
-						],
+						actions: ['read', 'create', 'delete', 'update'],
 					},
 				],
 			},

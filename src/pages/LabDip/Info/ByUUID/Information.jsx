@@ -1,52 +1,127 @@
-import { TitleValue } from '@/ui';
+import { format } from 'date-fns';
+
+import SectionContainer from '@/ui/Others/SectionContainer';
+import RenderTable from '@/ui/Others/Table/RenderTable';
+import { LinkWithCopy, StatusButton, TitleValue } from '@/ui';
 
 export default function Information({ info }) {
+	const {
+		buyer_name,
+		created_at,
+		created_by_name,
+		factory_name,
+		is_thread_order,
+		lab_status,
+		marketing_name,
+		merchandiser_name,
+		name,
+		order_number,
+		party_name,
+		remarks,
+		updated_at,
+	} = info;
+
+	const renderItems = () => {
+		const basicInfo = [
+			{
+				label: 'Name',
+				value: name,
+			},
+			{
+				label: 'Order No.',
+				value: (
+					<LinkWithCopy
+						title={order_number}
+						id={order_number}
+						uri={`/order/details`}
+					/>
+				),
+			},
+
+			{
+				label: 'Lab Status',
+				value: <StatusButton value={lab_status} className={'btn-xs'} />,
+			},
+			{
+				label: 'Thread Order',
+				value: (
+					<StatusButton
+						value={is_thread_order}
+						className={'btn-xs'}
+					/>
+				),
+			},
+		];
+
+		const buyerDetails = [
+			{
+				label: 'Buyer Name',
+				value: buyer_name,
+			},
+			{
+				label: 'Factory Name',
+				value: factory_name,
+			},
+			{
+				label: 'Marketing Name',
+				value: marketing_name,
+			},
+			{
+				label: 'Merchandiser Name',
+				value: merchandiser_name,
+			},
+			{
+				label: 'Party Name',
+				value: party_name,
+			},
+		];
+
+		const createdDetails = [
+			{
+				label: 'Created By',
+				value: created_by_name,
+			},
+			{
+				label: 'Created At',
+				value: format(new Date(created_at), 'dd/MM/yyyy'),
+			},
+			{
+				label: 'Updated At',
+				value: updated_at
+					? format(new Date(updated_at), 'dd/MM/yyyy')
+					: '--',
+			},
+			{
+				label: 'Remarks',
+				value: remarks,
+			},
+		];
+
+		return {
+			basicInfo,
+			buyerDetails,
+			createdDetails,
+		};
+	};
 	return (
-		<div className='my-2 flex flex-col rounded-md px-2 shadow-md'>
-			<span className='flex items-center gap-2 text-2xl font-semibold capitalize leading-tight text-primary md:text-3xl'>
-				Info
-			</span>
-			<hr className='border-1 my-2 border-secondary-content' />
-			<div className='mx-2 flex flex-col items-stretch justify-between md:flex-row'>
-				<div className='flex flex-col gap-0.5 divide-y-2 divide-primary/20 md:divide-y-0'>
-					<TitleValue title='info ID' value={info?.info_id} />
-					<TitleValue title='Order ID' value={info?.order_number} />
-					<TitleValue title='name' value={info?.name} />
-					<TitleValue title='buyer name' value={info?.buyer_name} />
-					<TitleValue title='party name' value={info?.party_name} />
-					<TitleValue
-						title='marketing name'
-						value={info?.marketing_name}
-					/>
-					<TitleValue
-						title='merchandiser name'
-						value={info?.merchandiser_name}
-					/>
-					<TitleValue
-						title='factory_name'
-						value={info?.factory_name}
-					/>
-					{/* <TitleValue
-						title='lab status'
-						value={
-							Number(info?.lab_status) === 0
-								? 'Pending'
-								: 'Approved'
-						}
-					/> */}
-
-					<TitleValue
-						title='Created By'
-						value={info?.created_by_name}
-					/>
-					<TitleValue
-						title='Status'
-						value={Number(info?.lab_status) === 0 ? 'No' : 'Yes'}
-					/>
-
-					<TitleValue title='Remarks' value={info?.remarks} />
-				</div>
+		<SectionContainer title={'Information'} contentClassName={'space-y-0'}>
+			<div className='grid grid-cols-1 lg:grid-cols-3'>
+				<RenderTable
+					className={'border-secondary/30 lg:border-r'}
+					title={'Basic Info'}
+					items={renderItems().basicInfo}
+				/>
+				<RenderTable
+					className={'border-secondary/30 lg:border-r'}
+					title={'Buyer Details'}
+					items={renderItems().buyerDetails}
+				/>
+				<RenderTable
+					className={'border-secondary/30'}
+					title={'Created Details'}
+					items={renderItems().createdDetails}
+				/>
 			</div>
-		</div>
+		</SectionContainer>
 	);
 }

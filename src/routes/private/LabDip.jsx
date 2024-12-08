@@ -1,17 +1,20 @@
-// Pages
-import Log from '@/pages/LabDip/Log';
-import RM from '@/pages/LabDip/RM';
-import Info from '@pages/LabDip/Info';
-import InfoDetails from '@pages/LabDip/Info/ByUUID';
-import InfoEntry from '@pages/LabDip/Info/Entry';
-import Recipe from '@pages/LabDip/Recipe';
-import RecipeDetails from '@pages/LabDip/Recipe/ByRecipeId';
-import RecipeEntry from '@pages/LabDip/Recipe/Entry';
-import ShadeRecipe from '@pages/LabDip/ShadeRecipe';
-import ShadeRecipeDetails from '@pages/LabDip/ShadeRecipe/Details/ByShadeRecipeId';
-import ShadeRecipeEntry from '@pages/LabDip/ShadeRecipe/Entry';
-import ThreadSwatch from '@pages/LabDip/ThreadSwatch';
-import ZipperSwatch from '@pages/LabDip/ZipperSwatch';
+import { lazy } from 'react';
+
+const Log = lazy(() => import('@pages/LabDip/Log'));
+const RM = lazy(() => import('@pages/LabDip/RM'));
+const Info = lazy(() => import('@pages/LabDip/Info'));
+const InfoDetails = lazy(() => import('@pages/LabDip/Info/ByUUID'));
+const InfoEntry = lazy(() => import('@pages/LabDip/Info/Entry'));
+const Recipe = lazy(() => import('@pages/LabDip/Recipe'));
+const RecipeDetails = lazy(() => import('@pages/LabDip/Recipe/ByRecipeId'));
+const RecipeEntry = lazy(() => import('@pages/LabDip/Recipe/Entry'));
+const ShadeRecipe = lazy(() => import('@pages/LabDip/ShadeRecipe'));
+const ShadeRecipeDetails = lazy(
+	() => import('@pages/LabDip/ShadeRecipe/Details/ByShadeRecipeId')
+);
+const ShadeRecipeEntry = lazy(() => import('@pages/LabDip/ShadeRecipe/Entry'));
+const ThreadSwatch = lazy(() => import('@pages/LabDip/ThreadSwatch'));
+const ZipperSwatch = lazy(() => import('@pages/LabDip/ZipperSwatch'));
 
 export const LabDipRoutes = [
 	{

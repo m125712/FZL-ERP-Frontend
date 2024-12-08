@@ -75,13 +75,6 @@ export default function index() {
 				},
 			},
 			{
-				accessorKey: 'production_date',
-				header: 'Production Date',
-				enableColumnFilter: false,
-				width: 'w-36',
-				cell: (info) => <DateTime date={info.getValue()} />,
-			},
-			{
 				accessorKey: 'status',
 				header: 'Status',
 				enableColumnFilter: false,
@@ -110,8 +103,22 @@ export default function index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'production_date',
+				header: 'Production Date',
+				enableColumnFilter: false,
+				width: 'w-36',
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
+			},
+			{
 				accessorKey: 'slider_lead_time',
-				header: 'Slider Lead Time',
+				header: (
+					<div>
+						Finishing Slider <br />
+						Lead Time
+					</div>
+				),
 				enableColumnFilter: false,
 				width: 'w-36',
 				cell: (info) => info.getValue(),
@@ -149,7 +156,12 @@ export default function index() {
 			},
 			{
 				accessorKey: 'dyeing_lead_time',
-				header: 'Dyeing Lead Time',
+				header: (
+					<div>
+						Finishing Dyeing <br />
+						Lead Time
+					</div>
+				),
 				enableColumnFilter: false,
 				width: 'w-36',
 				cell: (info) => info.getValue(),

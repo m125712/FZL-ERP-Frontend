@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useMetalFProduction } from '@/state/Metal';
 import {
@@ -38,6 +39,12 @@ export default function Index({
 	},
 	setUpdateSliderTrx,
 }) {
+	const [styleObject, setStyleObject] = useState({
+		label: null,
+		value: null,
+		left_quantity: 0,
+		given_quantity: 0,
+	});
 	const { postData } = useSliderAssemblyTransferEntry();
 	const { invalidateQuery } = useSliderColoringProduction();
 	const { invalidateQuery: invalidateVislonFinishingProdLog } =
@@ -50,6 +57,14 @@ export default function Index({
 		useMetalFProduction();
 
 	const { user } = useAuth();
+
+	const MAX_TRX =
+		updateSliderTrx?.order_type === 'slider'
+			? Math.min(
+					updateSliderTrx?.coloring_prod,
+					styleObject?.left_quantity
+				)
+			: Number(updateSliderTrx?.coloring_prod);
 
 	const {
 		register,
@@ -71,7 +86,7 @@ export default function Index({
 			trx_quantity: NUMBER_REQUIRED.max(
 				updateSliderTrx?.coloring_prod,
 				'Beyond Max Quantity'
-			),
+			).moreThan(0, 'More than 0'),
 			weight: NUMBER_DOUBLE_REQUIRED.max(
 				updateSliderTrx?.coloring_prod_weight,
 				'Beyond Max Quantity'
@@ -92,6 +107,13 @@ export default function Index({
 			trx_quantity: null,
 			remarks: '',
 		}));
+
+		setStyleObject({
+			label: null,
+			value: null,
+			left_quantity: 0,
+			given_quantity: 0,
+		});
 
 		reset({ ...SLIDER_ASSEMBLY_TRANSACTION_NULL, sfg_uuid: null });
 		window[modalId].close();
@@ -121,6 +143,18 @@ export default function Index({
 		invalidateNylonFinishingProdLog();
 	};
 
+	const styleOption = updateSliderTrx?.style_object?.map((item) => ({
+		value: item.value,
+		label:
+			item.label +
+			' -> ' +
+			item.given_quantity +
+			'/' +
+			item.left_quantity,
+		given_quantity: item.given_quantity,
+		left_quantity: item.left_quantity,
+	}));
+
 	return (
 		<AddModal
 			id='TeethMoldingTrxModal'
@@ -143,13 +177,14 @@ export default function Index({
 							return (
 								<ReactSelect
 									placeholder='Select style'
-									options={updateSliderTrx?.style_object}
-									value={updateSliderTrx?.style_object.filter(
+									options={styleOption}
+									value={styleOption.filter(
 										(item) =>
 											item.value == getValues('sfg_uuid')
 									)}
 									onChange={(e) => {
 										onChange(e.value);
+										setStyleObject(e);
 									}}
 								/>
 							);
@@ -161,7 +196,7 @@ export default function Index({
 			<JoinInput
 				title='Transaction Quantity'
 				label='trx_quantity'
-				sub_label={`MAX: ${Number(updateSliderTrx?.coloring_prod)} PCS`}
+				sub_label={`MAX: ${MAX_TRX} PCS`}
 				unit='PCS'
 				{...{ register, errors }}
 			/>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { useSliderDashboardInfo } from '@/state/Slider';
+import { differenceInDays, subDays } from 'date-fns';
 
 import ReactTable from '@/components/Table';
 import { DateTime, StatusButton } from '@/ui';
@@ -54,6 +55,58 @@ export default function Index() {
 				header: 'Item',
 				enableColumnFilter: true,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'production_date',
+				header: 'Production Date',
+				enableColumnFilter: false,
+				width: 'w-36',
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
+			},
+			{
+				accessorKey: 'slider_lead_time',
+				header: (
+					<div>
+						Finishing Slider <br />
+						Lead Time
+					</div>
+				),
+				enableColumnFilter: false,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'remaining_slider_lead_time',
+				header: (
+					<div>
+						Remaining Date <br />
+						Slider
+					</div>
+				),
+				enableColumnFilter: false,
+				width: 'w-36',
+				cell: (info) => {
+					const { production_date, slider_lead_time } =
+						info.row.original;
+					const slider_day = subDays(
+						production_date,
+						Number(slider_lead_time)
+					);
+					const remainingDays = differenceInDays(
+						slider_day,
+						new Date()
+					);
+					return (
+						<div>
+							<span className='text-xs font-bold text-gray-600'>
+								{remainingDays < 0 ? 0 : remainingDays} days
+							</span>
+							<DateTime date={slider_day} isTime={false} />
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'zipper_number_name',

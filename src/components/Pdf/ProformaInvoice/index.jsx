@@ -262,7 +262,8 @@ export default function Index(data) {
 					')',
 				h_s_code: '5402.62.00',
 				quantity: TotalThreadQuantity[index] + ' cone',
-				unit_price: TotalThreadUnitPrice[index] + '/cone',
+				unit_price:
+					Number(TotalThreadUnitPrice[index]).toFixed(2) + '/cone',
 				value: Number(TotalThreadValue[index]).toFixed(2),
 			};
 		}

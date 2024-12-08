@@ -58,6 +58,12 @@ export const Columns = ({
 			enableSorting: true,
 		},
 		{
+			accessorKey: 'order_type',
+			header: 'Type',
+			enableColumnFilter: true,
+			enableSorting: true,
+		},
+		{
 			accessorKey: 'style',
 			header: 'Style',
 			width: 'w-36',

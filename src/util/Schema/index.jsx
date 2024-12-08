@@ -1723,9 +1723,16 @@ export const PI_SCHEMA = {
 
 	pi_cash_entry: yup.array().of(
 		yup.object().shape({
-			is_checked: BOOLEAN,
-			sfg_uuid: STRING_REQUIRED,
-			max_quantity: NUMBER,
+			is_checked: BOOLEAN_DEFAULT_VALUE(false),
+			sfg_uuid: STRING.when('is_checked', {
+				is: true,
+				then: (Schema) => Schema.required('required'),
+				otherwise: (Schema) =>
+					Schema.nullable().transform((value, originalValue) =>
+						String(originalValue).trim() === '' ? null : value
+					),
+			}),
+			max_quantity: NUMBER.default(0),
 			pi_cash_quantity: yup.number().when('is_checked', {
 				is: true,
 				then: (Schema) =>
@@ -1738,7 +1745,6 @@ export const PI_SCHEMA = {
 					),
 			}),
 			remarks: STRING.nullable(),
-			isDeletable: BOOLEAN,
 		})
 	),
 
@@ -1746,9 +1752,16 @@ export const PI_SCHEMA = {
 		.array()
 		.of(
 			yup.object().shape({
-				is_checked: BOOLEAN,
-				sfg_uuid: STRING_REQUIRED,
-				max_quantity: NUMBER,
+				is_checked: BOOLEAN_DEFAULT_VALUE(false),
+				sfg_uuid: STRING.when('is_checked', {
+					is: true,
+					then: (Schema) => Schema.required('required'),
+					otherwise: (Schema) =>
+						Schema.nullable().transform((value, originalValue) =>
+							String(originalValue).trim() === '' ? null : value
+						),
+				}),
+				max_quantity: NUMBER.default(0),
 				pi_cash_quantity: yup.number().when('is_checked', {
 					is: true,
 					then: (Schema) =>
@@ -1764,15 +1777,14 @@ export const PI_SCHEMA = {
 						),
 				}),
 				remarks: STRING.nullable(),
-				isDeletable: BOOLEAN,
 			})
 		)
 		.optional(),
 
 	pi_cash_entry_thread: yup.array().of(
 		yup.object().shape({
-			is_checked: BOOLEAN,
-			max_quantity: NUMBER,
+			is_checked: BOOLEAN_DEFAULT_VALUE(false),
+			max_quantity: NUMBER.default(0),
 			pi_cash_quantity: yup.number().when('is_checked', {
 				is: true,
 				then: (Schema) =>
@@ -1785,7 +1797,6 @@ export const PI_SCHEMA = {
 					),
 			}),
 			remarks: STRING.nullable(),
-			isDeletable: BOOLEAN.optional(),
 		})
 	),
 
@@ -1793,8 +1804,8 @@ export const PI_SCHEMA = {
 		.array()
 		.of(
 			yup.object().shape({
-				is_checked: BOOLEAN,
-				max_quantity: NUMBER,
+				is_checked: BOOLEAN_DEFAULT_VALUE(false),
+				max_quantity: NUMBER.default(0),
 				pi_cash_quantity: yup.number().when('is_checked', {
 					is: true,
 					then: (Schema) =>
@@ -1810,7 +1821,6 @@ export const PI_SCHEMA = {
 						),
 				}),
 				remarks: STRING.nullable(),
-				isDeletable: BOOLEAN.optional(),
 			})
 		)
 		.optional(),
@@ -1838,16 +1848,43 @@ export const PI_NULL = {
 			is_checked: false,
 			sfg_uuid: '',
 			pi_uuid: '',
-			max_quantity: null,
+			max_quantity: 0,
 			pi_cash_quantity: null,
 			remarks: '',
-			isDeletable: false,
 		},
 	],
-	new_pi_cash_entry: [],
-	pi_cash_entry_thread: [],
-	new_pi_cash_entry_thread: [],
+	new_pi_cash_entry: [
+		{
+			is_checked: false,
+			sfg_uuid: '',
+			pi_uuid: '',
+			max_quantity: 0,
+			pi_cash_quantity: null,
+			remarks: '',
+		},
+	],
+	pi_cash_entry_thread: [
+		{
+			is_checked: false,
+			sfg_uuid: '',
+			pi_uuid: '',
+			max_quantity: 0,
+			pi_cash_quantity: null,
+			remarks: '',
+		},
+	],
+	new_pi_cash_entry_thread: [
+		{
+			is_checked: false,
+			sfg_uuid: '',
+			pi_uuid: '',
+			max_quantity: 0,
+			pi_cash_quantity: null,
+			remarks: '',
+		},
+	],
 };
+
 export const PI_CASH_SCHEMA = {
 	marketing_uuid: STRING_REQUIRED,
 	party_uuid: STRING_REQUIRED,

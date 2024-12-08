@@ -128,6 +128,7 @@ export default function Index() {
 			return acc + itemTotal;
 		}, 0);
 	}, []);
+	
 
 	const onSubmit = async (data) => {
 		// * Update

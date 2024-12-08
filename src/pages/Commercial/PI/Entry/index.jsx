@@ -43,6 +43,8 @@ export default function Index() {
 	const navigate = useNavigate();
 
 	const { url: commercialPiEntryUrl } = useCommercialPIEntry();
+	const { data: pi_details_by_uuid } = useCommercialPIDetailsByUUID(pi_uuid);
+
 	const {
 		url: commercialPiUrl,
 		postData,
@@ -71,12 +73,26 @@ export default function Index() {
 		setValue,
 	} = useRHF(PI_SCHEMA, PI_NULL);
 
-	const [deleteItem, setDeleteItem] = useState({
-		itemId: null,
-		itemName: null,
+	// dynamic fields
+	const { fields: orderEntryField } = useFieldArray({
+		control,
+		name: 'pi_cash_entry',
 	});
 
-	const { data: pi_details_by_uuid } = useCommercialPIDetailsByUUID(pi_uuid);
+	const { fields: newOrderEntryField } = useFieldArray({
+		control,
+		name: 'new_pi_cash_entry',
+	});
+
+	const { fields: threadEntryField } = useFieldArray({
+		control,
+		name: 'pi_cash_entry_thread',
+	});
+
+	const { fields: newThreadEntryField } = useFieldArray({
+		control,
+		name: 'new_pi_cash_entry_thread',
+	});
 
 	useEffect(() => {
 		if (isUpdate) {
@@ -455,29 +471,13 @@ export default function Index() {
 		}
 	};
 
-	// dynamic fields
-	const { fields: orderEntryField } = useFieldArray({
-		control,
-		name: 'pi_cash_entry',
-	});
-
-	const { fields: newOrderEntryField } = useFieldArray({
-		control,
-		name: 'new_pi_cash_entry',
-	});
-
-	const { fields: threadEntryField } = useFieldArray({
-		control,
-		name: 'pi_cash_entry_thread',
-	});
-
-	const { fields: newThreadEntryField } = useFieldArray({
-		control,
-		name: 'new_pi_cash_entry_thread',
-	});
-
 	// Check if order_number is valid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
+
+	const [deleteItem, setDeleteItem] = useState({
+		itemId: null,
+		itemName: null,
+	});
 
 	return (
 		<div>
@@ -510,6 +510,7 @@ export default function Index() {
 						errors,
 						orderEntryField,
 						newOrderEntryField,
+						deleteData,
 					}}
 				/>
 
@@ -526,6 +527,7 @@ export default function Index() {
 						errors,
 						threadEntryField,
 						newThreadEntryField,
+						deleteData,
 					}}
 				/>
 

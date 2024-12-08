@@ -58,7 +58,7 @@ const Footer = () => {
 	);
 };
 
-const DeleteFooter = ({ handelCancelClick }) => (
+const DeleteFooter = ({ handelCancelClick ,onSubmit}) => (
 	<div className='modal-action'>
 		<button
 			type='button'
@@ -67,7 +67,7 @@ const DeleteFooter = ({ handelCancelClick }) => (
 			Cancel
 		</button>
 
-		<button type='submit' className='btn bg-error text-white'>
+		<button type='submit' className='btn bg-error text-white' onClick={onSubmit}>
 			Delete
 		</button>
 	</div>

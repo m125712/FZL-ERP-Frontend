@@ -76,7 +76,8 @@ export default function Index() {
 		itemName: null,
 	});
 
-	const { data: pi_details_by_uuid } = useCommercialPIDetailsByUUID(pi_uuid);
+	const { data: pi_details_by_uuid, invalidateQuery: invalidateCashPi } =
+		useCommercialPIDetailsByUUID(pi_uuid);
 
 	useEffect(() => {
 		if (isUpdate) {
@@ -515,6 +516,8 @@ export default function Index() {
 						errors,
 						orderEntryField,
 						newOrderEntryField,
+						deleteData,
+						invalidateCashPi,
 					}}
 				/>
 
@@ -531,6 +534,8 @@ export default function Index() {
 						errors,
 						threadEntryField,
 						newThreadEntryField,
+						deleteData,
+						invalidateCashPi,
 					}}
 				/>
 

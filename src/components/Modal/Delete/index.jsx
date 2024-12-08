@@ -29,7 +29,7 @@ export default function Index({
 	const handelCancelClick = () => {
 		handelClose();
 	};
-
+  
 	const onSubmit = async () => {
 		await deleteData.mutateAsync({
 			url: `${url}/${deleteItem?.itemId}`,
@@ -49,13 +49,13 @@ export default function Index({
 	return (
 		<dialog id={modalId} className='modal modal-bottom sm:modal-middle'>
 			<form
-				onSubmit={onSubmit}
+				// onSubmit={onSubmit}
 				noValidate
 				method='dialog'
 				className='modal-box bg-base-100 text-error'>
 				<Header title={`Delete ${title}`} onClose={handelCancelClick} />
 				<Body item={deleteItem?.itemName} />
-				<DeleteFooter {...{ handelCancelClick }} />
+				<DeleteFooter {...{ handelCancelClick, onSubmit }} />
 			</form>
 		</dialog>
 	);

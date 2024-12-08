@@ -1,21 +1,22 @@
 // PI
 
-// Bank
-import Bank from '@pages/Commercial/Bank';
-import PiCash from '@pages/Commercial/Cash';
-import PiCashDetails from '@pages/Commercial/Cash/Details';
-import PiCashEntry from '@pages/Commercial/Cash/Entry';
-// LC
-import LC from '@pages/Commercial/LC';
-import LCDetails from '@pages/Commercial/LC/Details';
-import LCEntry from '@pages/Commercial/LC/Entry';
-// Manual PI
-import ManualPI from '@pages/Commercial/ManualPI';
-import ManualPIDetails from '@pages/Commercial/ManualPI/Details';
-import ManualPIEntry from '@pages/Commercial/ManualPI/Entry';
-import PI from '@pages/Commercial/PI';
-import PiDetails from '@pages/Commercial/PI/Details';
-import PiEntry from '@pages/Commercial/PI/Entry';
+import { lazy } from 'react';
+
+const Bank = lazy(() => import('@pages/Commercial/Bank'));
+const PiCash = lazy(() => import('@pages/Commercial/Cash'));
+const PiCashDetails = lazy(() => import('@pages/Commercial/Cash/Details'));
+const PiCashEntry = lazy(() => import('@pages/Commercial/Cash/Entry'));
+const LC = lazy(() => import('@pages/Commercial/LC'));
+const LCDetails = lazy(() => import('@pages/Commercial/LC/Details'));
+const LCEntry = lazy(() => import('@pages/Commercial/LC/Entry'));
+const ManualPI = lazy(() => import('@pages/Commercial/ManualPI'));
+const ManualPIDetails = lazy(
+	() => import('@pages/Commercial/ManualPI/Details')
+);
+const ManualPIEntry = lazy(() => import('@pages/Commercial/ManualPI/Entry'));
+const PI = lazy(() => import('@pages/Commercial/PI'));
+const PiDetails = lazy(() => import('@pages/Commercial/PI/Details'));
+const PiEntry = lazy(() => import('@pages/Commercial/PI/Entry'));
 
 export const CommercialRoutes = [
 	{

@@ -10,14 +10,15 @@ export default function Index() {
 	const { recipe_uuid } = useParams();
 	const haveAccess = useAccess('store__receive_by_uuid');
 
-	const { data: recipe, loading } = useLabDipRecipeDetailsByUUID(recipe_uuid);
+	const { data: recipe, isLoading } =
+		useLabDipRecipeDetailsByUUID(recipe_uuid);
 
 	useEffect(() => {
 		document.title = 'Recipe Details';
 	}, []);
 
 	// if (!recipe) return <Navigate to='/not-found' />;
-	if (loading)
+	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (

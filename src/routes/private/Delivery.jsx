@@ -1,27 +1,23 @@
-// Thread Clallan
-import ChallanEntry from '@/pages/Delivery/Challan/Entry';
-// Dashboard
-import Dashboard from '@/pages/Delivery/Dashboard';
-// Zipper Packing List
-import PackingLists from '@/pages/Delivery/PackingList';
-import PackingListsDetails from '@/pages/Delivery/PackingList/Details';
-import PackingListsEntry from '@/pages/Delivery/PackingList/Entry';
-// Zipper -Challan
-import Test from '@/pages/Delivery/Test';
-import WarehouseRecv from '@/pages/Delivery/WarehouseRecv';
-import Carton from '@pages/Delivery/Carton';
-import Challan from '@pages/Delivery/Challan';
-import ChallanByDate from '@pages/Delivery/Challan/ByDate';
-import ChallanDetails from '@pages/Delivery/Challan/Details';
-//Gate Pass
-import GatePass from '@pages/Delivery/GatePass';
-import Log from '@pages/Delivery/Log';
-import RM from '@pages/Delivery/RM';
-import Vehicle from '@pages/Delivery/Vehicle';
+import { lazy } from 'react';
 
-// import ThreadChallan from '@pages/Thread/Challan';
-// import ThreadChallanDetails from '@pages/Thread/Challan/Details';
-// import ThreadChallanEntry from '@pages/Thread/Challan/Entry';
+const ChallanEntry = lazy(() => import('@pages/Delivery/Challan/Entry'));
+const Dashboard = lazy(() => import('@pages/Delivery/Dashboard'));
+const PackingLists = lazy(() => import('@pages/Delivery/PackingList'));
+const PackingListsDetails = lazy(
+	() => import('@pages/Delivery/PackingList/Details')
+);
+const PackingListsEntry = lazy(
+	() => import('@pages/Delivery/PackingList/Entry')
+);
+const WarehouseRecv = lazy(() => import('@pages/Delivery/WarehouseRecv'));
+const Carton = lazy(() => import('@pages/Delivery/Carton'));
+const Challan = lazy(() => import('@pages/Delivery/Challan'));
+const ChallanByDate = lazy(() => import('@pages/Delivery/Challan/ByDate'));
+const ChallanDetails = lazy(() => import('@pages/Delivery/Challan/Details'));
+const GatePass = lazy(() => import('@pages/Delivery/GatePass'));
+const Log = lazy(() => import('@pages/Delivery/Log'));
+const RM = lazy(() => import('@pages/Delivery/RM'));
+const Vehicle = lazy(() => import('@pages/Delivery/Vehicle'));
 
 export const DeliveryRoutes = [
 	{

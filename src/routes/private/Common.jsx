@@ -1,27 +1,30 @@
-// * Tape
+import { lazy } from 'react';
 
-// * Coil
-import CoilLog from '@/pages/Common/Coil/Log';
-import CoilStock from '@/pages/Common/Coil/RM';
-import CoilProd from '@/pages/Common/Coil/SFG';
-// * Coil Entry to dyeing
-import CoilEntryToDyeing from '@/pages/Common/Coil/SFG/EntryToDyeing';
-// * Tape Entry to dyeing
-import TapeEntryToDyeing from '@/pages/Common/Coil/SFG/EntryToDyeing';
-// * Multi-Color
-import MultiColorDashboard from '@/pages/Common/MultiColor/Dashboard';
-import MultiColorLog from '@/pages/Common/MultiColor/Log';
-import TapeLog from '@/pages/Common/Tape/Log';
-import TapeRequired from '@/pages/Common/Tape/Required';
-import TapeStock from '@/pages/Common/Tape/RM';
-import TapeProd from '@/pages/Common/Tape/SFG';
-//*SFG Tape Transfer
-import SFGEntryToTransfer from '@/pages/Common/Tape/SFG/Transfer';
-//* Tape Assign
-import TapeAssign from '@/pages/Common/TapeAssign';
-//* Dyeing Transfer
-import DyeingTransfer from '@/pages/Common/Transfer';
-import DyeingTransferEntry from '@/pages/Common/Transfer/EntryUpdate';
+const CoilLog = lazy(() => import('@/pages/Common/Coil/Log'));
+const CoilStock = lazy(() => import('@/pages/Common/Coil/RM'));
+const CoilProd = lazy(() => import('@/pages/Common/Coil/SFG'));
+const CoilEntryToDyeing = lazy(
+	() => import('@/pages/Common/Coil/SFG/EntryToDyeing')
+);
+const TapeEntryToDyeing = lazy(
+	() => import('@/pages/Common/Coil/SFG/EntryToDyeing')
+);
+const MultiColorDashboard = lazy(
+	() => import('@/pages/Common/MultiColor/Dashboard')
+);
+const MultiColorLog = lazy(() => import('@/pages/Common/MultiColor/Log'));
+const TapeLog = lazy(() => import('@/pages/Common/Tape/Log'));
+const TapeRequired = lazy(() => import('@/pages/Common/Tape/Required'));
+const TapeStock = lazy(() => import('@/pages/Common/Tape/RM'));
+const TapeProd = lazy(() => import('@/pages/Common/Tape/SFG'));
+const SFGEntryToTransfer = lazy(
+	() => import('@/pages/Common/Tape/SFG/Transfer')
+);
+const TapeAssign = lazy(() => import('@/pages/Common/TapeAssign'));
+const DyeingTransfer = lazy(() => import('@/pages/Common/Transfer'));
+const DyeingTransferEntry = lazy(
+	() => import('@/pages/Common/Transfer/EntryUpdate')
+);
 
 export const CommonRoutes = [
 	{

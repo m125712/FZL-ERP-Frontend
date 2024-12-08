@@ -1,46 +1,84 @@
-// Dyeing And Iron
-//* Dyes Category
+import { lazy } from 'react';
 
 // * Dyeing Dashboard
-import DyeingDashboard from '@/pages/DyeingAndIron/DyeingDashboard';
+const DyeingDashboard = lazy(
+	() => import('@/pages/DyeingAndIron/DyeingDashboard')
+);
+
 //* Dyes Category
-import DyesCategory from '@/pages/DyeingAndIron/DyesCategory';
+const DyesCategory = lazy(() => import('@/pages/DyeingAndIron/DyesCategory'));
+
 // * Finishing Batch
-import FinishingBatch from '@/pages/DyeingAndIron/FinishingBatch';
-import FinishingBatchDetails from '@/pages/DyeingAndIron/FinishingBatch/Details';
-import FinishingBatchEntry from '@/pages/DyeingAndIron/FinishingBatch/Entry';
+const FinishingBatch = lazy(
+	() => import('@/pages/DyeingAndIron/FinishingBatch')
+);
+const FinishingBatchDetails = lazy(
+	() => import('@/pages/DyeingAndIron/FinishingBatch/Details')
+);
+const FinishingBatchEntry = lazy(
+	() => import('@/pages/DyeingAndIron/FinishingBatch/Entry')
+);
+
 // * Finishing Dashboard
-import FinishingDashboard from '@/pages/DyeingAndIron/FinishingDashboard';
+const FinishingDashboard = lazy(
+	() => import('@/pages/DyeingAndIron/FinishingDashboard')
+);
+
 //* Log
-import DyeingLog from '@/pages/DyeingAndIron/Log';
+const DyeingLog = lazy(() => import('@/pages/DyeingAndIron/Log'));
+
 //* Machine
-import Machine from '@/pages/DyeingAndIron/Machine';
-import DyeingPlanning from '@/pages/DyeingAndIron/Planning';
-// * Head office
-import DyeingPlanningHeadOffice from '@/pages/DyeingAndIron/PlanningHeadOffice';
-import DyeingPlanningHeadOfficeDetails from '@/pages/DyeingAndIron/PlanningHeadOffice/Details';
-import DyeingPlanningHeadOfficeEntry from '@/pages/DyeingAndIron/PlanningHeadOffice/Entry';
-// * SNO
-import DyeingPlanningSNO from '@/pages/DyeingAndIron/PlanningSNO';
-import DyeingPlanningSNODetails from '@/pages/DyeingAndIron/PlanningSNO/Details';
-import DyeingPlanningSNOEntry from '@/pages/DyeingAndIron/PlanningSNO/Entry';
-// * Production Capacity
-import ProductionCapacity from '@/pages/DyeingAndIron/ProductionCapacity';
-//*Programs
-import Programs from '@/pages/DyeingAndIron/Programs';
-//
-//*RM
-import DyeingRMStock from '@/pages/DyeingAndIron/RMStock';
-// * Batch Thread
-import DyeingThreadBatch from '@/pages/DyeingAndIron/ThreadBatch';
-import DyeingThreadBatchDetails from '@/pages/DyeingAndIron/ThreadBatch/Details';
-import DyeingThreadBatchDyeing from '@/pages/DyeingAndIron/ThreadBatch/Dyeing/Entry';
-import DyeingThreadBatchEntry from '@/pages/DyeingAndIron/ThreadBatch/Entry';
-// * Batch Zipper
-import DyeingZipperBatch from '@/pages/DyeingAndIron/ZipperBatch';
-import DyeingZipperBatchDetails from '@/pages/DyeingAndIron/ZipperBatch/Details';
-import DyeingZipperBatchEntry from '@/pages/DyeingAndIron/ZipperBatch/Entry';
-import DyeingZipperBatchProduction from '@/pages/DyeingAndIron/ZipperBatch/Production';
+const Machine = lazy(() => import('@/pages/DyeingAndIron/Machine'));
+
+//* Planning
+const DyeingPlanning = lazy(() => import('@/pages/DyeingAndIron/Planning'));
+const DyeingPlanningHeadOffice = lazy(
+	() => import('@/pages/DyeingAndIron/PlanningHeadOffice')
+);
+const DyeingPlanningHeadOfficeDetails = lazy(
+	() => import('@/pages/DyeingAndIron/PlanningHeadOffice/Details')
+);
+const DyeingPlanningHeadOfficeEntry = lazy(
+	() => import('@/pages/DyeingAndIron/PlanningHeadOffice/Entry')
+);
+const DyeingPlanningSNO = lazy(
+	() => import('@/pages/DyeingAndIron/PlanningSNO')
+);
+const DyeingPlanningSNODetails = lazy(
+	() => import('@/pages/DyeingAndIron/PlanningSNO/Details')
+);
+const DyeingPlanningSNOEntry = lazy(
+	() => import('@/pages/DyeingAndIron/PlanningSNO/Entry')
+);
+const ProductionCapacity = lazy(
+	() => import('@/pages/DyeingAndIron/ProductionCapacity')
+);
+const Programs = lazy(() => import('@/pages/DyeingAndIron/Programs'));
+const DyeingRMStock = lazy(() => import('@/pages/DyeingAndIron/RMStock'));
+const DyeingThreadBatch = lazy(
+	() => import('@/pages/DyeingAndIron/ThreadBatch')
+);
+const DyeingThreadBatchDetails = lazy(
+	() => import('@/pages/DyeingAndIron/ThreadBatch/Details')
+);
+const DyeingThreadBatchDyeing = lazy(
+	() => import('@/pages/DyeingAndIron/ThreadBatch/Dyeing/Entry')
+);
+const DyeingThreadBatchEntry = lazy(
+	() => import('@/pages/DyeingAndIron/ThreadBatch/Entry')
+);
+const DyeingZipperBatch = lazy(
+	() => import('@/pages/DyeingAndIron/ZipperBatch')
+);
+const DyeingZipperBatchDetails = lazy(
+	() => import('@/pages/DyeingAndIron/ZipperBatch/Details')
+);
+const DyeingZipperBatchEntry = lazy(
+	() => import('@/pages/DyeingAndIron/ZipperBatch/Entry')
+);
+const DyeingZipperBatchProduction = lazy(
+	() => import('@/pages/DyeingAndIron/ZipperBatch/Production')
+);
 
 export const DyeingAndIronRoutes = [
 	{

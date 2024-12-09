@@ -4,7 +4,7 @@ import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, StatusButton, Transfer } from '@/ui';
+import { Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -65,7 +65,8 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'tape_received',
+				// accessorKey: 'tape_received',
+				accessorKey: 'multi_color_tape_received',
 				header: 'Received (KG)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),

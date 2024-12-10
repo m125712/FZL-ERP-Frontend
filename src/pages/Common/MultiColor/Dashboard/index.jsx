@@ -56,13 +56,35 @@ export default function Index() {
 				header: '',
 				enableColumnFilter: false,
 				enableSorting: false,
-				// hidden: !haveAccess.includes('click_production'),
+				hidden: !haveAccess.includes('click_receive'),
 				width: 'w-8',
-				cell: (info) => (
-					<Transfer
-						onClick={() => handelTapeReceived(info.row.index)}
-					/>
-				),
+				cell: (info) => {
+					const {
+						tape_quantity,
+						coil_quantity,
+						thread_quantity,
+						thread_uuid,
+						coil_uuid,
+						tape_coil_uuid,
+						expected_tape_quantity,
+					} = info.row.original;
+					return (
+						<Transfer
+							onClick={() => handelTapeReceived(info.row.index)}
+							disabled={
+								expected_tape_quantity > 0 &&
+								tape_quantity > 0 &&
+								coil_quantity > 0 &&
+								thread_quantity > 0 &&
+								thread_uuid &&
+								coil_uuid &&
+								tape_coil_uuid
+									? false
+									: true
+							}
+						/>
+					);
+				},
 			},
 			{
 				// accessorKey: 'tape_received',
@@ -78,7 +100,7 @@ export default function Index() {
 				cell: (info) => {
 					return (
 						<SwitchToggle
-							disabled={false}
+							disabled={!haveAccess.includes('click_approve')}
 							onChange={() =>
 								handelSwitch(info.row.index, 'labdip')
 							}
@@ -168,14 +190,14 @@ export default function Index() {
 					return (
 						<div className='flex gap-4'>
 							<SwitchToggle
-								disabled={false}
+								disabled={!haveAccess.includes('click_approve')}
 								onChange={() =>
 									handelSwitch(info.row.index, 'coil')
 								}
 								checked={is_coil_received_sewing === 1}
 							/>
 							<SwitchToggle
-								disabled={false}
+								disabled={!haveAccess.includes('click_approve')}
 								onChange={() =>
 									handelSwitch(info.row.index, 'thread')
 								}
@@ -191,7 +213,7 @@ export default function Index() {
 				header: 'Action',
 				enableColumnFilter: false,
 				enableSorting: false,
-				// hidden: !haveAccess.includes('click_production'),
+				hidden: !haveAccess.includes('update'),
 				width: 'w-8',
 				cell: (info) => (
 					<EditDelete

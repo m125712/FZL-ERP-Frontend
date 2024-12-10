@@ -6,6 +6,7 @@ import {
 } from '@/state/Dyeing';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
+import { FormProvider } from 'react-hook-form';
 import {
 	Navigate,
 	useNavigate,
@@ -15,6 +16,7 @@ import {
 import { useRHF } from '@/hooks';
 
 import { DeleteModal, ProceedModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
 
@@ -63,6 +65,7 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
+		context: form,
 	} = useRHF(DYEING_BATCH_SCHEMA, {
 		...DYEING_BATCH_NULL,
 		production_date: dyeing_date,
@@ -128,7 +131,6 @@ export default function Index() {
 			return acc + itemTotal;
 		}, 0);
 	}, []);
-	
 
 	const onSubmit = async (data) => {
 		// * Update
@@ -392,7 +394,7 @@ export default function Index() {
 		is_new: true,
 	});
 	return (
-		<div>
+		<FormProvider {...form}>
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}
@@ -434,14 +436,7 @@ export default function Index() {
 					/>
 				)}
 
-				<div className='modal-action'>
-					<button
-						type='submit'
-						disabled={isReceived}
-						className='text-md btn btn-primary btn-block'>
-						Save
-					</button>
-				</div>
+				<Footer buttonClassName='!btn-primary' />
 			</form>
 
 			<Suspense>
@@ -464,6 +459,6 @@ export default function Index() {
 					invalidateQuery={invalidateNewDyeingZipperBatchEntry}
 				/>
 			</Suspense>
-		</div>
+		</FormProvider>
 	);
 }

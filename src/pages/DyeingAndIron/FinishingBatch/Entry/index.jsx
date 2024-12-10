@@ -6,10 +6,12 @@ import {
 	useDyeingFinishingBatchOrders,
 } from '@/state/Dyeing';
 import { DevTool } from '@hookform/devtools';
+import { FormProvider } from 'react-hook-form';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
@@ -58,6 +60,7 @@ export default function index() {
 		watch,
 		setValue,
 		formState: { dirtyFields },
+		context: form,
 	} = useRHF(
 		{
 			...FINISHING_BATCH_ENTRY_SCHEMA,
@@ -355,7 +358,7 @@ export default function index() {
 	});
 
 	return (
-		<div>
+		<FormProvider {...form}>
 			<form onSubmit={handleSubmit(onSubmit)} noValidate>
 				<div className='flex flex-col gap-8'>
 					<Header
@@ -385,9 +388,7 @@ export default function index() {
 						/>
 					)}
 				</div>
-				<div className='modal-action'>
-					<SubmitButton />
-				</div>
+				<Footer buttonClassName='!btn-primary' />
 			</form>
 			<DevTool control={control} placement='top-left' />
 			<Suspense>
@@ -402,6 +403,6 @@ export default function index() {
 					invalidateQuery={invalidateNewFinishingBatch}
 				/>
 			</Suspense>
-		</div>
+		</FormProvider>
 	);
 }

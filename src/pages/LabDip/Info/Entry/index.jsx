@@ -3,11 +3,13 @@ import { useLabDipInfo, UseLabDipInfoByDetails } from '@/state/LabDip';
 import { useOtherRecipe } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
+import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { UpdateModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import { ActionButtons, DynamicField, FormField, ReactSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
@@ -48,6 +50,7 @@ export default function Index() {
 		getValues,
 		setValue,
 		watch,
+		context: form,
 	} = useRHF(LAB_INFO_SCHEMA, LAB_INFO_NULL);
 
 	useEffect(() => {
@@ -265,7 +268,7 @@ export default function Index() {
 	let excludeItem = exclude(watch, rec_uuid, 'recipe', 'recipe_uuid', Status);
 
 	return (
-		<div>
+		<FormProvider {...form}>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
@@ -530,13 +533,7 @@ export default function Index() {
 							</tr>
 						))}
 					</DynamicField>
-					<div className='modal-action'>
-						<button
-							type='submit'
-							className='text-md btn btn-primary btn-block'>
-							Save
-						</button>
-					</div>
+					<Footer buttonClassName='!btn-primary' />
 				</form>
 			</HotKeys>
 			<Suspense>
@@ -551,6 +548,6 @@ export default function Index() {
 			</Suspense>
 
 			<DevTool control={control} placement='top-left' />
-		</div>
+		</FormProvider>
 	);
 }

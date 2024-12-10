@@ -9,12 +9,13 @@ import {
 } from '@/state/Commercial';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
+import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAccess, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import { ShowLocalToast } from '@/components/Toast';
-import SubmitButton from '@/ui/Others/Button/SubmitButton';
 
 import nanoid from '@/lib/nanoid';
 import { PI_CASH_NULL, PI_CASH_SCHEMA } from '@util/Schema';
@@ -69,6 +70,7 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
+		context: form,
 	} = useRHF(PI_CASH_SCHEMA, PI_CASH_NULL);
 
 	const [deleteItem, setDeleteItem] = useState({
@@ -486,7 +488,7 @@ export default function Index() {
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 
 	return (
-		<div>
+		<FormProvider {...form}>
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}
@@ -539,9 +541,7 @@ export default function Index() {
 					}}
 				/>
 
-				<div className='modal-action'>
-					<SubmitButton />
-				</div>
+				<Footer buttonClassName='!btn-primary' />
 			</form>
 
 			<Suspense>
@@ -555,6 +555,6 @@ export default function Index() {
 				/>
 			</Suspense>
 			<DevTool control={control} placement='top-left' />
-		</div>
+		</FormProvider>
 	);
 }

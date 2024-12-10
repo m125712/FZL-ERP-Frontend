@@ -8,12 +8,13 @@ import { useOtherPiValues } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { format } from 'date-fns';
-import { useFieldArray } from 'react-hook-form';
+import { FormProvider, useFieldArray } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAccess, useRHF } from '@/hooks';
 
 import { DeleteModal, UpdateModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import { ShowLocalToast } from '@/components/Toast';
 import { DynamicField, FormField, ReactSelect, RemoveButton } from '@/ui';
 
@@ -73,6 +74,7 @@ export default function Index() {
 		Controller,
 		getValues,
 		watch,
+		context: form,
 	} = useRHF(LC_SCHEMA, LC_NULL);
 
 	let { data: pi } = useOtherPiValues(
@@ -451,7 +453,7 @@ export default function Index() {
 	});
 
 	return (
-		<div>
+		<FormProvider {...form}>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					className='flex flex-col gap-4'
@@ -616,13 +618,7 @@ export default function Index() {
 							$ 
 						</td>
 					</tr> */}
-					<div className='modal-action'>
-						<button
-							type='submit'
-							className='text-md btn btn-primary btn-block'>
-							Save
-						</button>
-					</div>
+					<Footer buttonClassName='!btn-primary' />
 				</form>
 			</HotKeys>
 
@@ -660,6 +656,6 @@ export default function Index() {
 			</Suspense>
 
 			<DevTool control={control} placement='top-left' />
-		</div>
+		</FormProvider>
 	);
 }

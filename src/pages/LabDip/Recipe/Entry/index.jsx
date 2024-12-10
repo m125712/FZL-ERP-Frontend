@@ -2,11 +2,13 @@ import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useLabDipRecipe, useLabDipRecipeDetailsByUUID } from '@/state/LabDip';
 import { useOtherMaterialByParams } from '@/state/Other';
 import { useAuth } from '@context/auth';
+import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import {
 	ActionButtons,
 	DynamicField,
@@ -49,6 +51,7 @@ export default function Index() {
 		useFieldArray,
 		getValues,
 		watch,
+		context: form,
 	} = useRHF(LAB_RECIPE_SCHEMA, LAB_RECIPE_NULL);
 
 	useEffect(() => {
@@ -257,7 +260,7 @@ export default function Index() {
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	return (
-		<div>
+		<FormProvider {...form}>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
@@ -390,13 +393,7 @@ export default function Index() {
 							</tr>
 						))}
 					</DynamicField>
-					<div className='modal-action'>
-						<button
-							type='submit'
-							className='text-md btn btn-primary btn-block'>
-							Save
-						</button>
-					</div>
+					<Footer buttonClassName='!btn-primary' />
 				</form>
 			</HotKeys>
 			<Suspense>
@@ -412,6 +409,6 @@ export default function Index() {
 			</Suspense>
 
 			{/* <DevTool control={control} placement='top-left' /> */}
-		</div>
+		</FormProvider>
 	);
 }

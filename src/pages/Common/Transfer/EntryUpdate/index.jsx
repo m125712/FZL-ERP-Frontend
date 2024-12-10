@@ -9,12 +9,14 @@ import { useOtherOrderDescription } from '@/state/Other';
 import { useVislonTMP } from '@/state/Vislon';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
+import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import { ShowLocalToast } from '@/components/Toast';
 import {
 	ActionButtons,
@@ -62,6 +64,7 @@ export default function Index() {
 		getValues,
 		setValue,
 		watch,
+		context: form,
 	} = useRHF(
 		{
 			dyeing_transfer_entry: yup.array().of(
@@ -261,7 +264,7 @@ export default function Index() {
 	);
 
 	return (
-		<div>
+		<FormProvider {...form}>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
@@ -534,13 +537,7 @@ export default function Index() {
 							</td>
 						</tr>
 					</DynamicField>
-					<div className='modal-action'>
-						<button
-							type='submit'
-							className='text-md btn btn-primary btn-block'>
-							Save
-						</button>
-					</div>
+					<Footer buttonClassName='!btn-primary' />
 				</form>
 			</HotKeys>
 			<Suspense>
@@ -556,6 +553,6 @@ export default function Index() {
 			</Suspense>
 
 			<DevTool control={control} placement='top-left' />
-		</div>
+		</FormProvider>
 	);
 }

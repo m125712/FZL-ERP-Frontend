@@ -9,11 +9,13 @@ import { useOrderDescription } from '@/state/Order';
 import { useGetURLData } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
+import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import { ShowLocalToast } from '@/components/Toast';
 import {
 	ActionButtons,
@@ -75,7 +77,7 @@ export default function Index() {
 		useFieldArray,
 		getValues,
 		watch,
-		context,
+		context: form,
 	} = useRHF(COMMON_COIL_TO_DYEING_SCHEMA, COMMON_COIL_TO_DYEING_NULL);
 
 	const getTotalQty = useCallback(
@@ -238,7 +240,7 @@ export default function Index() {
 	//const isMatch = location.pathname.startsWith(basePath); // * checking if the current path matches the base path
 
 	return (
-		<div>
+		<FormProvider {...form}>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
@@ -408,22 +410,12 @@ export default function Index() {
 								Total Quantity:
 							</td>
 							<td className='py-4 font-bold'>
-								{getTotalQty(
-									watch(
-										'coil_to_dyeing_entry'
-									)
-								)}
+								{getTotalQty(watch('coil_to_dyeing_entry'))}
 							</td>
 						</tr>
 					</DynamicField>
 
-					<div className='modal-action'>
-						<button
-							type='submit'
-							className='text-md btn btn-primary btn-block'>
-							Save
-						</button>
-					</div>
+					<Footer buttonClassName='!btn-primary' />
 				</form>
 			</HotKeys>
 			<Suspense>
@@ -439,6 +431,6 @@ export default function Index() {
 			</Suspense>
 
 			<DevTool control={control} placement='top-left' />
-		</div>
+		</FormProvider>
 	);
 }

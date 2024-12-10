@@ -12,10 +12,12 @@ import {
 } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
+import { FormProvider } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal, UpdateModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
 import { DynamicDeliveryField, LinkWithCopy } from '@/ui';
 
@@ -58,6 +60,7 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
+		context: form,
 	} = useRHF(CHALLAN_SCHEMA, CHALLAN_NULL);
 	// const { invalidateQuery: invalidatePackingList } = isUpdate
 	// 	? useOtherPackingListByOrderInfoUUIDAndChallanUUID(
@@ -290,7 +293,7 @@ export default function Index() {
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	return (
-		<div>
+		<FormProvider {...form}>
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}
@@ -605,9 +608,7 @@ export default function Index() {
 					</DynamicDeliveryField>
 				)}
 
-				<div className='modal-action'>
-					<SubmitButton />
-				</div>
+				<Footer buttonClassName='!btn-primary' />
 			</form>
 
 			<Suspense>
@@ -623,6 +624,6 @@ export default function Index() {
 			</Suspense>
 
 			<DevTool control={control} placement='top-left' />
-		</div>
+		</FormProvider>
 	);
 }

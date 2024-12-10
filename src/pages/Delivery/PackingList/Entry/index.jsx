@@ -7,10 +7,12 @@ import {
 } from '@/state/Delivery';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
+import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import { ShowLocalToast } from '@/components/Toast';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
 
@@ -54,6 +56,7 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
+		context: form,
 	} = useRHF(
 		isUpdate ? PACKING_LIST_UPDATE_SCHEMA : PACKING_LIST_SCHEMA,
 		PACKING_LIST_NULL
@@ -81,7 +84,7 @@ export default function Index() {
 		watch('order_info_uuid'),
 		`item_for=${watch('item_for')}`
 	);
-	
+
 	useEffect(() => {
 		if (!isUpdate && packingListEntries?.packing_list_entry) {
 			setValue(
@@ -317,7 +320,7 @@ export default function Index() {
 	};
 
 	return (
-		<div>
+		<FormProvider {...form}>
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}
@@ -361,9 +364,7 @@ export default function Index() {
 					/>
 				)}
 
-				<div className='modal-action'>
-					<SubmitButton />
-				</div>
+				<Footer buttonClassName='!btn-primary' />
 			</form>
 
 			<Suspense>
@@ -379,6 +380,6 @@ export default function Index() {
 				/>
 			</Suspense>
 			<DevTool control={control} placement='top-left' />
-		</div>
+		</FormProvider>
 	);
 }

@@ -80,11 +80,13 @@ export default function Table({ entries }) {
 				title='Finishing Batch Details'
 				data={entries}
 				columns={columns}>
-				<tr>
-					<td></td>
-					<td></td>
-					<td className='px-4 py-2 text-sm'>Total:</td>
-					<td className='px-4 py-2 text-sm' colSpan='4'>
+				<tr className='bg-slate-200'>
+					<td
+						className='px-4 py-2 text-right text-sm font-semibold'
+						colSpan={4}>
+						Total:
+					</td>
+					<td className='px-3 py-2 text-sm' colSpan={5}>
 						{total_qty}
 					</td>
 				</tr>

@@ -51,12 +51,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'item_name',
-				header: 'Item',
-				enableColumnFilter: true,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'production_date',
 				header: 'Production Date',
 				enableColumnFilter: false,
@@ -65,18 +59,18 @@ export default function Index() {
 					<DateTime date={info.getValue()} isTime={false} />
 				),
 			},
-			{
-				accessorKey: 'slider_lead_time',
-				header: (
-					<div>
-						Finishing Slider <br />
-						Lead Time
-					</div>
-				),
-				enableColumnFilter: false,
-				width: 'w-36',
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'slider_lead_time',
+			// 	header: (
+			// 		<div>
+			// 			Finishing Slider <br />
+			// 			Lead Time
+			// 		</div>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	width: 'w-36',
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorKey: 'remaining_slider_lead_time',
 				header: (
@@ -107,6 +101,12 @@ export default function Index() {
 						</div>
 					);
 				},
+			},
+			{
+				accessorKey: 'item_name',
+				header: 'Item',
+				enableColumnFilter: true,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'zipper_number_name',

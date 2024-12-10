@@ -24,7 +24,6 @@ export default function Index({
 	const { data, updateData } = useCommonMultiColorDashboardByUUID(
 		order?.uuid
 	);
-	const { user } = useAuth();
 
 	const MAX_PROD_KG = Number(order.balance_quantity).toFixed(3);
 
@@ -149,7 +148,7 @@ export default function Index({
 						render={({ field: { onChange } }) => {
 							return (
 								<ReactSelect
-									placeholder='Select Logo Type'
+									placeholder='Select Coil'
 									options={coil}
 									value={coil?.filter(
 										(item) =>
@@ -170,7 +169,27 @@ export default function Index({
 				/>
 			</div>
 			<div className='flex gap-4'>
-				<Textarea label='thread_name' {...{ register, errors }} />
+				<FormField label='thread_uuid' title='Thread' errors={errors}>
+					<Controller
+						name={'thread_uuid'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Thread'
+									options={coil}
+									value={coil?.filter(
+										(item) =>
+											item.value ==
+											getValues('thread_uuid')
+									)}
+									onChange={(e) => onChange(e.value)}
+									// isDisabled={order_info_id !== undefined}
+								/>
+							);
+						}}
+					/>
+				</FormField>
 				<JoinInput
 					title='Thread QTY'
 					label='thread_quantity'

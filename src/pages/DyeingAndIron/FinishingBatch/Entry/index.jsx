@@ -59,6 +59,7 @@ export default function index() {
 		getValues,
 		watch,
 		setValue,
+
 		formState: { dirtyFields },
 		context: form,
 	} = useRHF(
@@ -345,6 +346,7 @@ export default function index() {
 		register,
 		errors,
 		watch,
+		isUpdate,
 	});
 
 	// * table columns for adding new finishing field on update
@@ -356,6 +358,20 @@ export default function index() {
 		watch,
 		is_new: true,
 	});
+
+	const getTotal = () => {
+		const batch_total = watch()
+			.finishing_batch_entry?.filter((item) => item.quantity > 0)
+			.reduce((prev, curr) => {
+				return prev + curr.quantity;
+			}, 0);
+
+		const new_batch_total = watch()
+			.new_finishing_batch_entry?.filter((item) => item.quantity > 0)
+			.reduce((prev, curr) => prev + curr.quantity, 0);
+
+		return { batch_total, new_batch_total };
+	};
 
 	return (
 		<FormProvider {...form}>
@@ -371,21 +387,44 @@ export default function index() {
 							watch,
 							orderType,
 							setOrderType,
+							isUpdate,
 						}}
 					/>
 
 					<ReactTable
 						title={'Batch Orders'}
 						data={BatchOrdersField}
-						columns={currentColumns}
-					/>
+						columns={currentColumns}>
+						<tr className='bg-slate-100'>
+							<td
+								colSpan={6}
+								className='p-2 text-right font-semibold'>
+								Total:
+							</td>
+							<td
+								colSpan={isUpdate ? 3 : 2}
+								className='px-4 py-1'>
+								{getTotal().batch_total}
+							</td>
+						</tr>
+					</ReactTable>
 
 					{isUpdate && (
 						<ReactTable
 							title={'Add New Batch Orders'}
 							data={NewBatchOrdersField}
-							columns={NewColumns}
-						/>
+							columns={NewColumns}>
+							<tr className='bg-slate-100'>
+								<td
+									colSpan={6}
+									className='p-2 text-right font-semibold'>
+									Total:
+								</td>
+								<td colSpan={2} className='px-4 py-1'>
+									{getTotal().new_batch_total}
+								</td>
+							</tr>
+						</ReactTable>
 					)}
 				</div>
 				<Footer buttonClassName='!btn-primary' />

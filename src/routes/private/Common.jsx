@@ -214,7 +214,14 @@ export const CommonRoutes = [
 						path: '/common/multi-color/dashboard',
 						element: <MultiColorDashboard />,
 						page_name: 'common__multi_color_dashboard',
-						actions: ['read', 'create', 'update'],
+						actions: [
+							'read',
+							'create',
+							'update',
+							'delete',
+							'click_receive',
+							'click_approve',
+						],
 					},
 					{
 						name: 'Log',

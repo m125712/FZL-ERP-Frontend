@@ -12,6 +12,7 @@ export const Columns = ({
 	errors,
 	watch = () => {},
 	is_new = false,
+	isUpdate = false,
 }) => {
 	const haveAccess = useAccess('dyeing__finishing_batch_entry_update');
 
@@ -79,11 +80,11 @@ export const Columns = ({
 			header: (
 				<div className='flex flex-col'>
 					Balance QTY
-					<label
+					{/* <label
 						className='btn btn-primary btn-xs'
 						onClick={() => setAllQty()}>
 						Copy All
-					</label>
+					</label> */}
 				</div>
 			),
 			enableColumnFilter: false,
@@ -92,16 +93,18 @@ export const Columns = ({
 				const idx = info.row.index;
 				return (
 					<div className='flex gap-4'>
-						<label
-							className='btn btn-primary btn-xs'
-							onClick={() =>
-								setValue(
-									`finishing_batch_entry[${idx}].quantity`,
-									info.getValue()
-								)
-							}>
-							Copy
-						</label>
+						{!isUpdate && (
+							<label
+								className='btn btn-primary btn-xs'
+								onClick={() =>
+									setValue(
+										`finishing_batch_entry[${idx}].quantity`,
+										info.getValue()
+									)
+								}>
+								Copy
+							</label>
+						)}
 						{info.getValue()}
 					</div>
 				);
@@ -156,7 +159,7 @@ export const Columns = ({
 			header: 'Actions',
 			enableColumnFilter: false,
 			enableSorting: false,
-			hidden: !haveAccess.includes('delete'),
+			hidden: !isUpdate,
 			width: 'w-24',
 			cell: (info) => (
 				<EditDelete
@@ -176,11 +179,11 @@ export const Columns = ({
 			header: (
 				<div className='flex flex-col'>
 					Balance QTY
-					<label
+					{/* <label
 						className='btn btn-primary btn-xs'
 						onClick={() => setAllQty()}>
 						Copy All
-					</label>
+					</label> */}
 				</div>
 			),
 			enableColumnFilter: false,

@@ -79,7 +79,7 @@ export default function Index({
 				title='Quantity'
 				label='quantity'
 				unit='KG'
-				// sub_label={`MAX: ${Number(tapeReceived?.coloring_stock)} PCS`}
+				sub_label={`MAX: ${Number(tapeReceived?.expected_tape_quantity)} KG`}
 				{...{ register, errors }}
 			/>
 

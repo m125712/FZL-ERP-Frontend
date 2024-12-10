@@ -70,8 +70,8 @@ export default function Index() {
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden:
-					!haveAccess.includes('update') &&
-					!haveAccess.includes('delete'),
+					!(haveAccess.includes('update') ||
+					haveAccess.includes('delete')),
 				width: 'w-24',
 				cell: (info) => {
 					return (

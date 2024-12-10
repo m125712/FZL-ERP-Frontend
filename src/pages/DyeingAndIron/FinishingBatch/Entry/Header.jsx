@@ -23,10 +23,11 @@ export default function Header({
 	watch,
 	orderType = '',
 	setOrderType,
+	isUpdate
 }) {
 	const { batch_uuid } = useParams();
 	const { originalData } = useOtherOrderDescription(
-		'dyed_tape_required=false&swatch_approved=true&is_balance=true&page=finishing_batch'
+		`dyed_tape_required=false&swatch_approved=true&is_balance=true&page=finishing_batch&is_update=${isUpdate}`
 	);
 	const statuses = [
 		{ value: 'running', label: 'Running' },

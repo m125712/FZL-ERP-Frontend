@@ -95,11 +95,15 @@ export default function Index() {
 				enableSorting: false,
 				hidden: !haveAccess.includes('click_production'),
 				width: 'w-34',
-				cell: (info) => (
-					<Transfer
-						onClick={() => handelProduction(info.row.index)}
-					/>
-				),
+				cell: (info) => {
+					if (info.row.original?.material_name === null) {
+						return (
+							<Transfer
+								onClick={() => handelProduction(info.row.index)}
+							/>
+						);
+					}
+				},
 			},
 			{
 				accessorKey: 'quantity',

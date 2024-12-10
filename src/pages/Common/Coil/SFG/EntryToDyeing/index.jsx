@@ -59,7 +59,7 @@ export default function Index() {
 		: (MAX_QTY = data?.quantity);
 
 	const { data: order_id } = useGetURLData(
-		`/other/order/order-description/value/label/by/${coil_uuid}`
+		`/other/order/order-description/value/label/by/${coil_uuid}?is_slider_needed=false`
 	);
 
 	const { user } = useAuth();

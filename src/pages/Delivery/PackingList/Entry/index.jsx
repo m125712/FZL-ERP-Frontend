@@ -122,15 +122,13 @@ export default function Index() {
 			data?.new_packing_list_entry?.some(
 				(item) =>
 					item.quantity > 0 &&
-					(data?.item_for === 'zipper' ||
-						data?.item_for === 'sample_zipper') &&
+					data?.item_for === 'zipper' &&
 					item.poli_quantity < 1
 			) ||
 			data?.packing_list_entry?.some(
 				(item) =>
 					item.quantity > 0 &&
-					(data?.item_for === 'zipper' ||
-						data?.item_for === 'sample_zipper') &&
+					data?.item_for === 'zipper' &&
 					item.poli_quantity < 1
 			)
 		) {

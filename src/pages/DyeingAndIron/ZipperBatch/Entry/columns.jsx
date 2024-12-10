@@ -138,17 +138,19 @@ export const Columns = ({
 					const idx = info.row.index;
 					return (
 						<div className='flex gap-4'>
-							<button
+							<input
+								type='button'
 								className='btn btn-primary btn-xs'
 								disabled={isUpdate}
+								value={'Copy'}
 								onClick={() =>
 									setValue(
 										`dyeing_batch_entry[${idx}].quantity`,
 										info.getValue()
 									)
-								}>
-								Copy
-							</button>
+								}
+							/>
+
 							{info.getValue()}
 						</div>
 					);

@@ -1431,8 +1431,20 @@ export const SLIDER_ITEM_TRANSACTION_NULL = {
 export const PACKING_LIST_SCHEMA = {
 	item_for: STRING_REQUIRED,
 	order_info_uuid: STRING_REQUIRED,
-	carton_uuid: STRING_REQUIRED,
-	carton_weight: NUMBER_DOUBLE_REQUIRED,
+	carton_uuid: STRING.when('item_for', {
+		is: 'zipper' || 'thread',
+		then: (Schema) => Schema.required('Carton Size required'),
+		otherwise: (Schema) => Schema.nullable(),
+	}),
+	carton_weight: NUMBER.when('item_for', {
+		is: 'zipper' || 'thread',
+		then: (Schema) => Schema.required('Carton Weight is required'),
+		otherwise: (Schema) =>
+			Schema.nullable().transform((value, originalValue) =>
+				String(originalValue).trim() === '' ? null : value
+			),
+	}),
+
 	remarks: STRING.nullable(),
 	packing_list_entry: yup.array().of(
 		yup.object().shape({
@@ -1466,8 +1478,7 @@ export const PACKING_LIST_SCHEMA = {
 			}),
 			poli_quantity: yup.number().when(['quantity', 'item_for'], {
 				is: (quantity, item_for) =>
-					quantity > 0 &&
-					(item_for === 'zipper' || item_for === 'sample_zipper'),
+					quantity > 0 && item_for === 'zipper',
 				then: (Schema) =>
 					Schema.typeError('Must be a number')
 						.required('Poly Quantity is required')

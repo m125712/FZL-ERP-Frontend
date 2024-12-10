@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
+	useCommercialPIByQuery,
+	useCommercialPICash,
 	useCommercialReceiveAmount,
 	useCommercialReceiveAmountByUUID,
 } from '@/state/Commercial';
@@ -7,7 +10,7 @@ import {
 	useCommonCoilSFG,
 	useCommonTapeProductionByUUID,
 } from '@/state/Common';
-import { useRHF } from '@/hooks';
+import { useAccess, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast';
@@ -20,6 +23,17 @@ import {
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_all_orders')) {
+		return `?is_cash=true`;
+	}
+
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `?is_cash=true&own_uuid=${userUUID}`;
+	}
+
+	return `?is_cash=true`;
+};
 export default function Index({
 	modalId = '',
 	updateReceiveAmountLog = {
@@ -33,6 +47,14 @@ export default function Index({
 }) {
 	const { data, url, updateData } = useCommercialReceiveAmountByUUID(
 		updateReceiveAmountLog.uuid
+	);
+	const { user } = useAuth();
+	const haveAccess = useAccess('commercial__pi-cash');
+	const { invalidateQuery: invalidateCommercialPI } = useCommercialPIByQuery(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
 	);
 	const MAX_AMOUNT = updateReceiveAmountLog?.max_amount;
 	const schema = {
@@ -88,6 +110,7 @@ export default function Index({
 
 			return;
 		}
+		invalidateCommercialPI();
 	};
 
 	return (

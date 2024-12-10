@@ -63,9 +63,10 @@ const DynamicDeliveryTable = ({
 									'Order QTY',
 									'Balance QTY',
 									'Production QTY',
+									'Carton Qty',
 									// 'Warehouse',
 									// 'Delivered',
-									'Quantity(pcs)',
+									'Quantity(cone)',
 									'Short QTY',
 									'Reject QTY',
 									'Remarks',
@@ -87,9 +88,10 @@ const DynamicDeliveryTable = ({
 										'Unit',
 										'Order QTY',
 										'Balance QTY',
+										'Carton Qty',
 										// 'Warehouse',
 										// 'Delivered',
-										'Quantity(pcs)',
+										'Quantity(cone)',
 										'Short QTY',
 										'Reject QTY',
 										'Remarks',
@@ -200,6 +202,23 @@ const DynamicDeliveryTable = ({
 						<td className={rowClass}>
 							{getValues(
 								`${entryFiledName}[${index}].finishing_prod`
+							)}
+						</td>
+					)}
+					{(watch('item_for') === 'thread' ||
+						watch('item_for') === 'sample_thread') && (
+						<td className={rowClass}>
+							{Math.ceil(
+								Number(
+									getValues(
+										`${entryFiledName}[${index}].max_quantity`
+									)
+								) /
+									Number(
+										getValues(
+											`${entryFiledName}[${index}].cone_per_carton`
+										)
+									)
 							)}
 						</td>
 					)}

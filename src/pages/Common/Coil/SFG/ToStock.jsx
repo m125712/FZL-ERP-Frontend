@@ -33,10 +33,7 @@ export default function Index({
 	// 	useCommonTapeToCoil();
 	const schema = {
 		...DYEING_AGAINST_STOCK_SCHEMA,
-		trx_quantity: NUMBER_REQUIRED.max(
-			updateCoilProd?.quantity,
-			'More Than Max'
-		),
+		
 	};
 
 	const { register, handleSubmit, errors, reset, context } = useRHF(
@@ -85,7 +82,7 @@ export default function Index({
 			<JoinInput
 				label='trx_quantity'
 				title='Transfer Quantity'
-				sub_label={`Max: ${updateCoilProd?.quantity}`}
+				// sub_label={`Max: ${updateCoilProd?.quantity}`}
 				unit='KG'
 				placeholder={`Max: ${updateCoilProd?.quantity}`}
 				{...{ register, errors }}

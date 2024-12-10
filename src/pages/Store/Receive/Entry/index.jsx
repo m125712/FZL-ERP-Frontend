@@ -9,12 +9,13 @@ import {
 } from '@/state/Store';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { get } from 'react-hook-form';
+import { FormProvider, get } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import {
 	DynamicField,
 	FormField,
@@ -67,6 +68,7 @@ export default function Index() {
 		useFieldArray,
 		getValues,
 		watch,
+		context: form,
 	} = useRHF(PURCHASE_RECEIVE_SCHEMA, PURCHASE_RECEIVE_NULL);
 
 	const isUpdate = purchase_description_uuid !== undefined;
@@ -265,7 +267,7 @@ export default function Index() {
 	);
 
 	return (
-		<>
+		<FormProvider {...form}>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
@@ -430,13 +432,7 @@ export default function Index() {
 						</DynamicField>
 					</div>
 
-					<div className='modal-action'>
-						<button
-							type='submit'
-							className='text-md btn btn-primary btn-block rounded'>
-							Save
-						</button>
-					</div>
+					<Footer buttonClassName='!btn-primary' />
 				</form>
 			</HotKeys>
 			<Suspense>
@@ -451,6 +447,6 @@ export default function Index() {
 				/>
 			</Suspense>
 			<DevTool control={control} placement='top-left' />
-		</>
+		</FormProvider>
 	);
 }

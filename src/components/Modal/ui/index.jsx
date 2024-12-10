@@ -2,6 +2,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { X } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 
+import cn from '@/lib/cn';
+
 const useSubmitDisabled = () => {
 	const form = useFormContext();
 	const queryClient = useQueryClient();
@@ -43,22 +45,27 @@ const Header = ({ title, subTitle, onClose }) => {
 	);
 };
 
-const Footer = () => {
+const Footer = (
+	{ buttonClassName, disabled } = { buttonClassName: '', disabled: false }
+) => {
 	const { isMutating, isSubmitting, isDirty } = useSubmitDisabled();
 
 	return (
 		<div className='modal-action'>
 			<button
-				disabled={isDirty || isSubmitting || isMutating}
+				disabled={isDirty || isSubmitting || isMutating || disabled}
 				type='submit'
-				className='text-md btn btn-accent btn-block'>
+				className={cn(
+					'text-md btn btn-accent btn-block',
+					buttonClassName
+				)}>
 				Save
 			</button>
 		</div>
 	);
 };
 
-const DeleteFooter = ({ handelCancelClick ,onSubmit}) => (
+const DeleteFooter = ({ handelCancelClick, onSubmit }) => (
 	<div className='modal-action'>
 		<button
 			type='button'
@@ -67,7 +74,10 @@ const DeleteFooter = ({ handelCancelClick ,onSubmit}) => (
 			Cancel
 		</button>
 
-		<button type='submit' className='btn bg-error text-white' onClick={onSubmit}>
+		<button
+			type='submit'
+			className='btn bg-error text-white'
+			onClick={onSubmit}>
 			Delete
 		</button>
 	</div>

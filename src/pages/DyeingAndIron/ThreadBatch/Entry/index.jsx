@@ -7,6 +7,7 @@ import {
 import { useGetURLData, useOtherMachines } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
+import { FormProvider } from 'react-hook-form';
 import {
 	Navigate,
 	useNavigate,
@@ -17,6 +18,7 @@ import * as yup from 'yup';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal, ProceedModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
 
@@ -86,6 +88,7 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
+		context: form,
 	} = useRHF(SCHEMA, {
 		...DYEING_THREAD_BATCH_NULL,
 		machine_uuid: machine_uuid,
@@ -450,7 +453,7 @@ export default function Index() {
 		is_new: true,
 	});
 	return (
-		<div>
+		<FormProvider {...form}>
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}
@@ -494,11 +497,7 @@ export default function Index() {
 					/>
 				)}
 
-				<div className='modal-action'>
-					<button className='text-md btn btn-primary btn-block'>
-						Save
-					</button>
-				</div>
+				<Footer buttonClassName='!btn-primary' />
 			</form>
 
 			<Suspense>
@@ -522,6 +521,6 @@ export default function Index() {
 					invalidateQuery={invalidateDyeingThreadBatchDetails}
 				/>
 			</Suspense>
-		</div>
+		</FormProvider>
 	);
 }

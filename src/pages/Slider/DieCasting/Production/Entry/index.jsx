@@ -1,5 +1,8 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
-import { useOtherOrderBatchDescription, useOtherSliderItem } from '@/state/Other';
+import {
+	useOtherOrderBatchDescription,
+	useOtherSliderItem,
+} from '@/state/Other';
 import {
 	useSliderDieCastingProduction,
 	useSliderDieCastingProductionByUUID,
@@ -7,10 +10,12 @@ import {
 } from '@/state/Slider';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { useNavigate, useParams } from 'react-router-dom';
+import { FormProvider } from 'react-hook-form';
+import { Form, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import TableNoData from '@/components/Table/_components/TableNoData';
 import {
 	DynamicField,
@@ -58,6 +63,7 @@ export default function Index() {
 		Controller,
 		useFieldArray,
 		getValues,
+		context: form,
 	} = useRHF(SLIDER_DIE_CASTING_SCHEMA, SLIDER_DIE_CASTING_NULL);
 
 	useEffect(() => {
@@ -183,7 +189,7 @@ export default function Index() {
 	const tdClass = 'px-1 pt-1 pb-2';
 
 	return (
-		<>
+		<FormProvider {...form}>
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				noValidate
@@ -385,16 +391,7 @@ export default function Index() {
 							</tr>
 						))}
 				</DynamicField>
-				<div className='modal-action'>
-					<button
-						type='submit'
-						className='text-md btn btn-primary btn-block'
-						ref={r_saveBtn}
-						// onKeyDown={keyDown}
-					>
-						Save
-					</button>
-				</div>
+				<Footer buttonClassName='!btn-primary' />
 			</form>
 			<Suspense>
 				<DeleteModal
@@ -410,6 +407,6 @@ export default function Index() {
 			</Suspense>
 
 			<DevTool control={control} />
-		</>
+		</FormProvider>
 	);
 }

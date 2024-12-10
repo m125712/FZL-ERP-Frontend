@@ -2,10 +2,12 @@ import { Suspense, useEffect, useState } from 'react';
 import { useMarketingTeamDetails, useMarketingTeams } from '@/state/Marketing';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
+import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import { ShowLocalToast } from '@/components/Toast';
 
 import nanoid from '@/lib/nanoid';
@@ -37,6 +39,7 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
+		context: form,
 	} = useRHF(MARKETING_TEAM_SCHEMA, MARKETING_TEAM_NULL);
 
 	// manual_pi_entry
@@ -202,7 +205,7 @@ export default function Index() {
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	return (
-		<div>
+		<FormProvider {...form}>
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				noValidate
@@ -230,13 +233,7 @@ export default function Index() {
 					}}
 				/>
 
-				<div className='modal-action'>
-					<button
-						type='submit'
-						className='text-md btn btn-primary btn-block'>
-						Save
-					</button>
-				</div>
+				<Footer buttonClassName='!btn-primary' />
 			</form>
 			<Suspense>
 				<DeleteModal
@@ -250,6 +247,6 @@ export default function Index() {
 				/>
 			</Suspense>
 			<DevTool control={control} placement='top-left' />
-		</div>
+		</FormProvider>
 	);
 }

@@ -6,11 +6,13 @@ import {
 import { useThreadOrderInfo } from '@/state/Thread';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
+import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import DynamicFormSpreadSheet from '@/ui/Dynamic/DynamicFormSpreadSheet';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 
@@ -44,6 +46,7 @@ export default function Index() {
 		setValue,
 		trigger,
 		clearErrors,
+		context: form,
 	} = useRHF(MANUAL_PI_SCHEMA, MANUAL_PI_NULL);
 
 	useEffect(() => {
@@ -301,7 +304,7 @@ export default function Index() {
 	];
 
 	return (
-		<div>
+		<FormProvider {...form}>
 			<HotKeys {...{ keyMap, handlers }}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
@@ -409,13 +412,7 @@ export default function Index() {
 						}}
 					/>
 
-					<div className='modal-action'>
-						<button
-							type='submit'
-							className='text-md btn btn-primary btn-block'>
-							Save
-						</button>
-					</div>
+					<Footer buttonClassName='!btn-primary' />
 				</form>
 			</HotKeys>
 			<Suspense>
@@ -430,6 +427,6 @@ export default function Index() {
 				/>
 			</Suspense>
 			<DevTool control={control} placement='top-left' />
-		</div>
+		</FormProvider>
 	);
 }

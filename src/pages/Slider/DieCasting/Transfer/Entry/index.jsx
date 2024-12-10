@@ -10,9 +10,11 @@ import {
 	useSliderDiecastingTrxLog,
 } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
+import { FormProvider } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
+import { Footer } from '@/components/Modal/ui';
 import TableNoData from '@/components/Table/_components/TableNoData';
 import { ShowLocalToast } from '@/components/Toast';
 import { DynamicField, Input } from '@/ui';
@@ -100,6 +102,7 @@ const Index = () => {
 		Controller,
 		watch,
 		reset,
+		context: form,
 	} = useRHF(
 		SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA,
 		SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_NULL
@@ -217,156 +220,166 @@ const Index = () => {
 	const allowedTypes = ['body', 'cap', 'puller', 'link'];
 
 	return (
-		<form
-			onSubmit={handleSubmit(onSubmit)}
-			noValidate
-			className='flex flex-col gap-6'>
-			<Header
-				{...{
-					register,
-					errors,
-					control,
-					getValues,
-					Controller,
-				}}
-			/>
-			<DynamicField
-				title={`Entry Details`}
-				tableHead={
-					<>
-						{[
-							'Name',
-							'Item Name',
-							'Zipper No',
-							'Type',
-							'End Type',
-							'Puller',
-							'Logo',
-							'Slider Body',
-							'Slider Link',
-							'Stopper Type',
-							'Quantity',
-							'Weight (KG)',
-							'Assigned QTY (PCS)',
-							'Assigned Weight (KG)',
-							'Remarks',
-						].map((item) => {
+		<FormProvider {...form}>
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				noValidate
+				className='flex flex-col gap-6'>
+				<Header
+					{...{
+						register,
+						errors,
+						control,
+						getValues,
+						Controller,
+					}}
+				/>
+				<DynamicField
+					title={`Entry Details`}
+					tableHead={
+						<>
+							{[
+								'Name',
+								'Item Name',
+								'Zipper No',
+								'Type',
+								'End Type',
+								'Puller',
+								'Logo',
+								'Slider Body',
+								'Slider Link',
+								'Stopper Type',
+								'Quantity',
+								'Weight (KG)',
+								'Assigned QTY (PCS)',
+								'Assigned Weight (KG)',
+								'Remarks',
+							].map((item) => {
+								return (
+									<th
+										key={item}
+										scope='col'
+										className={thClass}>
+										{item}
+									</th>
+								);
+							})}{' '}
+						</>
+					}>
+					{stockFields.length === 0 && <TableNoData colSpan={11} />}
+					{/* (watch('section') === 'coloring' || watch('section') === 'assembly' && stockFields.length > 0) */}
+
+					{stockFields.length > 0 &&
+						stockFields?.map((item, index) => {
 							return (
-								<th key={item} scope='col' className={thClass}>
-									{item}
-								</th>
-							);
-						})}{' '}
-					</>
-				}>
-				{stockFields.length === 0 && <TableNoData colSpan={11} />}
-				{/* (watch('section') === 'coloring' || watch('section') === 'assembly' && stockFields.length > 0) */}
+								<tr key={item.id}>
+									{/*  Name */}
+									<td className={cn('w-[150px]', rowClass)}>
+										<span>{item.name}</span>
 
-				{stockFields.length > 0 &&
-					stockFields?.map((item, index) => {
-						return (
-							<tr key={item.id}>
-								{/*  Name */}
-								<td className={cn('w-[150px]', rowClass)}>
-									<span>{item.name}</span>
+										<div className='mt-1 flex max-w-[200px] flex-wrap gap-1 gap-y-2'>
+											{getBadges(index, getValues)
+												?.filter(
+													(item) => item.isActive
+												)
+												.map((badge) => (
+													<div
+														key={badge.label}
+														className='badge badge-secondary badge-sm'>
+														{badge.label}
+													</div>
+												))}
+										</div>
+									</td>
 
-									<div className='mt-1 flex max-w-[200px] flex-wrap gap-1 gap-y-2'>
-										{getBadges(index, getValues)
-											?.filter((item) => item.isActive)
-											.map((badge) => (
-												<div
-													key={badge.label}
-													className='badge badge-secondary badge-sm'>
-													{badge.label}
-												</div>
-											))}
-									</div>
-								</td>
+									{/* Item Name */}
+									<td className={cn('w-24', rowClass)}>
+										{item.item_name}
+									</td>
 
-								{/* Item Name */}
-								<td className={cn('w-24', rowClass)}>
-									{item.item_name}
-								</td>
+									{/* Zipper Name */}
+									<td className={cn('w-24', rowClass)}>
+										{item.zipper_number_name}
+									</td>
 
-								{/* Zipper Name */}
-								<td className={cn('w-24', rowClass)}>
-									{item.zipper_number_name}
-								</td>
+									{/* Tyoe Name */}
+									<td className={cn('w-24', rowClass)}>
+										{item.type
+											.split('_') // Split the string by underscores
+											.map(
+												(word) =>
+													word
+														.charAt(0)
+														.toUpperCase() +
+													word.slice(1)
+											) // Capitalize the first letter of each word
+											.join(' ')}
+									</td>
 
-								{/* Tyoe Name */}
-								<td className={cn('w-24', rowClass)}>
-									{item.type
-										.split('_') // Split the string by underscores
-										.map(
-											(word) =>
-												word.charAt(0).toUpperCase() +
-												word.slice(1)
-										) // Capitalize the first letter of each word
-										.join(' ')}
-								</td>
+									{/* End Type */}
+									<td className={cn('w-24', rowClass)}>
+										{item.end_type_name}
+									</td>
 
-								{/* End Type */}
-								<td className={cn('w-24', rowClass)}>
-									{item.end_type_name}
-								</td>
+									{/* Puller Type */}
+									<td className={cn('w-24', rowClass)}>
+										{item.puller_type_name}
+									</td>
 
-								{/* Puller Type */}
-								<td className={cn('w-24', rowClass)}>
-									{item.puller_type_name}
-								</td>
+									{/* Logo */}
+									<td className={cn('w-24', rowClass)}>
+										{item.logo_type_name}
+									</td>
 
-								{/* Logo */}
-								<td className={cn('w-24', rowClass)}>
-									{item.logo_type_name}
-								</td>
+									{/* Slider Body Shape Name */}
+									<td className={cn('w-24', rowClass)}>
+										{item.slider_body_shape_name}
+									</td>
 
-								{/* Slider Body Shape Name */}
-								<td className={cn('w-24', rowClass)}>
-									{item.slider_body_shape_name}
-								</td>
+									{/* Puller Link Name */}
+									<td className={cn('w-24', rowClass)}>
+										{item.slider_link_name}
+									</td>
 
-								{/* Puller Link Name */}
-								<td className={cn('w-24', rowClass)}>
-									{item.slider_link_name}
-								</td>
-
-								{/* Stopper Type */}
-								<td className={cn('w-24', rowClass)}>
-									{item.stopper_type_name}
-								</td>
-								{/* Quantity */}
-								<td className={cn('w-24', rowClass)}>
-									{Number(item.quantity)}
-								</td>
-								{/* Weight */}
-								<td className={cn('w-24', rowClass)}>
-									{Number(item.weight)}
-								</td>
-								{/* PROVIDED QTY */}
-								<td className={cn('w-24', rowClass)}>
-									<Input
-										label={`stocks[${index}].assigned_quantity`}
-										is_title_needed='false'
-										register={register}
-										dynamicerror={
-											errors?.[`stocks`]?.[index]
-												?.assigned_quantity
-										}
-										onChange={(e) => {
-											setValue(
-												`stocks[${index}].assigned_weight`,
-												(
-													(Number(item.weight) /
-														Number(item.quantity)) *
-													Number(e.target.value)
-												).toFixed(4)
-											);
-										}}
-									/>
-								</td>
-								{/* PROVIDED QTY */}
-								<td className={cn('w-24', rowClass)}>
-									{/* <Input
+									{/* Stopper Type */}
+									<td className={cn('w-24', rowClass)}>
+										{item.stopper_type_name}
+									</td>
+									{/* Quantity */}
+									<td className={cn('w-24', rowClass)}>
+										{Number(item.quantity)}
+									</td>
+									{/* Weight */}
+									<td className={cn('w-24', rowClass)}>
+										{Number(item.weight)}
+									</td>
+									{/* PROVIDED QTY */}
+									<td className={cn('w-24', rowClass)}>
+										<Input
+											label={`stocks[${index}].assigned_quantity`}
+											is_title_needed='false'
+											register={register}
+											dynamicerror={
+												errors?.[`stocks`]?.[index]
+													?.assigned_quantity
+											}
+											onChange={(e) => {
+												setValue(
+													`stocks[${index}].assigned_weight`,
+													(
+														(Number(item.weight) /
+															Number(
+																item.quantity
+															)) *
+														Number(e.target.value)
+													).toFixed(4)
+												);
+											}}
+										/>
+									</td>
+									{/* PROVIDED QTY */}
+									<td className={cn('w-24', rowClass)}>
+										{/* <Input
 										label={`stocks[${index}].assigned_weight`}
 										is_title_needed='false'
 										register={register}
@@ -376,32 +389,26 @@ const Index = () => {
 										}
 										disabled={true}
 									/> */}
-									{watch(`stocks[${index}].assigned_weight`)}
-								</td>
-								{/* remarks */}
-								<td className={cn('w-24', rowClass)}>
-									<Input
-										label={`stocks[${index}].remarks`}
-										is_title_needed='false'
-										register={register}
-									/>
-								</td>
-							</tr>
-						);
-					})}
-			</DynamicField>
-			<div className='modal-action'>
-				<button
-					type='submit'
-					className='text-md btn btn-primary btn-block'
-					ref={r_saveBtn}
-					// onKeyDown={keyDown}
-				>
-					Save
-				</button>
-			</div>
-			<DevTool control={control} placement='top-left' />
-		</form>
+										{watch(
+											`stocks[${index}].assigned_weight`
+										)}
+									</td>
+									{/* remarks */}
+									<td className={cn('w-24', rowClass)}>
+										<Input
+											label={`stocks[${index}].remarks`}
+											is_title_needed='false'
+											register={register}
+										/>
+									</td>
+								</tr>
+							);
+						})}
+				</DynamicField>
+				<Footer buttonClassName='!btn-primary' />
+				<DevTool control={control} placement='top-left' />
+			</form>
+		</FormProvider>
 	);
 };
 

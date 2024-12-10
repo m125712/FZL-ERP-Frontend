@@ -6,10 +6,12 @@ import {
 import { QueryCache } from '@tanstack/react-query';
 import { useSymbologyScanner } from '@use-symbology-scanner/react';
 import { set } from 'date-fns';
+import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { useNavigate } from 'react-router-dom';
 import { useAccess, useFetch, useRHF } from '@/hooks';
 
+import { Footer } from '@/components/Modal/ui';
 import { ShowLocalToast } from '@/components/Toast';
 import {
 	ActionButtons,
@@ -47,6 +49,7 @@ export default function Index() {
 		getValues,
 		Controller,
 		watch,
+		context: form,
 	} = useRHF(WAREHOUSE_RECEIVE_SCHEMA, WAREHOUSE_RECEIVE_NULL);
 
 	const {
@@ -194,128 +197,138 @@ export default function Index() {
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	return (
-		<div
-			ref={containerRef}
-			tabIndex={0}
-			onBlur={() => setScannerActive(false)}
-			onFocus={() => setScannerActive(true)}
-			className='min-h-screen p-4 outline-none'>
-			<div className='mb-4 flex items-center gap-4'>
-				<div
-					className={`flex items-center gap-2 ${scannerActive ? 'text-success' : 'text-error'}`}>
+		<FormProvider {...form}>
+			<div
+				ref={containerRef}
+				tabIndex={0}
+				onBlur={() => setScannerActive(false)}
+				onFocus={() => setScannerActive(true)}
+				className='min-h-screen p-4 outline-none'>
+				<div className='mb-4 flex items-center gap-4'>
 					<div
-						className={`h-3 w-3 rounded-full ${scannerActive ? 'bg-success' : 'bg-error'}`}></div>
-					<span className='text-sm font-medium'>
-						Scanner{' '}
-						{scannerActive
-							? 'Active'
-							: 'Inactive (Click this dot to active)'}
-					</span>
+						className={`flex items-center gap-2 ${scannerActive ? 'text-success' : 'text-error'}`}>
+						<div
+							className={`h-3 w-3 rounded-full ${scannerActive ? 'bg-success' : 'bg-error'}`}></div>
+						<span className='text-sm font-medium'>
+							Scanner{' '}
+							{scannerActive
+								? 'Active'
+								: 'Inactive (Click this dot to active)'}
+						</span>
+					</div>
 				</div>
-			</div>
 
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				noValidate
-				className='mt-4 flex flex-col gap-4'>
-				<SectionEntryBody title='Details'>
-					<FormField
-						label='option'
-						title='Select Option'
-						errors={errors}>
-						<Controller
-							name='option'
-							control={control}
-							render={({ field: { onChange } }) => (
-								<ReactSelect
-									placeholder='Select Option'
-									options={scan_option}
-									value={scan_option?.find(
-										(item) =>
-											item.value == getValues('option')
-									)}
-									// onFocus={() => {
-									// 	setOnFocus(false);
-									// }}
-									onChange={(e) => {
-										const value = e.value;
-										onChange(value);
-										setOnFocus(true);
-										containerRef.current.focus();
-									}}
-								/>
-							)}
-						/>
-					</FormField>
-				</SectionEntryBody>
-
-				<DynamicField
-					title='Entry'
-					handelAppend={handelEntryAppend}
-					showAppendButton={false}
-					tableHead={[
-						'Packet List',
-						'Order Number',
-						'Carton Size',
-						'Carton Weight',
-						'Total Poly Quantity',
-						'Total Quantity',
-						'Action',
-					].map((item) => (
-						<th
-							key={item}
-							scope='col'
-							className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
-							{item}
-						</th>
-					))}>
-					{EntryField.map((item, index) => (
-						<tr key={item.id}>
-							<td className={`w-80 ${rowClass}`}>
-								{getValues(`entry[${index}].packing_number`)}
-							</td>
-							<td className={`w-80 ${rowClass}`}>
-								{getValues(`entry[${index}].order_number`)}
-							</td>
-							<td className={`w-80 ${rowClass}`}>
-								{getValues(`entry[${index}].carton_size`)}
-							</td>
-							<td className={`w-80 ${rowClass}`}>
-								{getValues(`entry[${index}].carton_weight`)}
-							</td>
-							<td className={`w-80 ${rowClass}`}>
-								{getValues(
-									`entry[${index}].total_poly_quantity`
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					noValidate
+					className='mt-4 flex flex-col gap-4'>
+					<SectionEntryBody title='Details'>
+						<FormField
+							label='option'
+							title='Select Option'
+							errors={errors}>
+							<Controller
+								name='option'
+								control={control}
+								render={({ field: { onChange } }) => (
+									<ReactSelect
+										placeholder='Select Option'
+										options={scan_option}
+										value={scan_option?.find(
+											(item) =>
+												item.value ==
+												getValues('option')
+										)}
+										// onFocus={() => {
+										// 	setOnFocus(false);
+										// }}
+										onChange={(e) => {
+											const value = e.value;
+											onChange(value);
+											setOnFocus(true);
+											containerRef.current.focus();
+										}}
+									/>
 								)}
-							</td>
-							<td className={`w-80 ${rowClass}`}>
-								{getValues(`entry[${index}].total_quantity`)}
-							</td>
-							<td
-								className={`w-20 ${rowClass} border-l-4 border-l-primary`}>
-								<ActionButtons
-									removeClick={() => handleEntryRemove(index)}
-									showDuplicateButton={false}
-									showRemoveButton={EntryField.length > 0}
-								/>
-							</td>
-						</tr>
-					))}
-				</DynamicField>
+							/>
+						</FormField>
+					</SectionEntryBody>
 
-				<div className='modal-action'>
-					<button
-						type='submit'
-						disabled={
-							getValues('entry').length < 1 ||
-							isLoading ||
-							watch('option') === 'warehouse_return'
-						}
-						className='text-md btn btn-primary btn-block'>
-						Save
-					</button>
-				</div>
-			</form>
-		</div>
+					<DynamicField
+						title='Entry'
+						handelAppend={handelEntryAppend}
+						showAppendButton={false}
+						tableHead={[
+							'Packet List',
+							'Order Number',
+							'Carton Size',
+							'Carton Weight',
+							'Total Poly Quantity',
+							'Total Quantity',
+							'Action',
+						].map((item) => (
+							<th
+								key={item}
+								scope='col'
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+								{item}
+							</th>
+						))}>
+						{EntryField.map((item, index) => (
+							<tr key={item.id}>
+								<td className={`w-80 ${rowClass}`}>
+									{getValues(
+										`entry[${index}].packing_number`
+									)}
+								</td>
+								<td className={`w-80 ${rowClass}`}>
+									{getValues(`entry[${index}].order_number`)}
+								</td>
+								<td className={`w-80 ${rowClass}`}>
+									{getValues(`entry[${index}].carton_size`)}
+								</td>
+								<td className={`w-80 ${rowClass}`}>
+									{getValues(`entry[${index}].carton_weight`)}
+								</td>
+								<td className={`w-80 ${rowClass}`}>
+									{getValues(
+										`entry[${index}].total_poly_quantity`
+									)}
+								</td>
+								<td className={`w-80 ${rowClass}`}>
+									{getValues(
+										`entry[${index}].total_quantity`
+									)}
+								</td>
+								<td
+									className={`w-20 ${rowClass} border-l-4 border-l-primary`}>
+									<ActionButtons
+										removeClick={() =>
+											handleEntryRemove(index)
+										}
+										showDuplicateButton={false}
+										showRemoveButton={EntryField.length > 0}
+									/>
+								</td>
+							</tr>
+						))}
+					</DynamicField>
+
+					<Footer buttonClassName='!btn-primary' />
+					{/* <div className='modal-action'>
+						<button
+							type='submit'
+							disabled={
+								getValues('entry').length < 1 ||
+								isLoading ||
+								watch('option') === 'warehouse_return'
+							}
+							className='text-md btn btn-primary btn-block'>
+							Save
+						</button>
+					</div> */}
+				</form>
+			</div>
+		</FormProvider>
 	);
 }

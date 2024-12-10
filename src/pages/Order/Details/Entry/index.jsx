@@ -8,6 +8,7 @@ import * as yup from 'yup';
 import { useAccess, useFetchForOrderReset, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { CheckBox } from '@/ui';
@@ -584,14 +585,7 @@ export default function Index() {
 						fields={orderEntryField}
 					/>
 				)}
-
-				<div className='modal-action'>
-					<button
-						type='submit'
-						className='text-md btn btn-primary btn-block'>
-						Save
-					</button>
-				</div>
+				<Footer buttonClassName='!btn-primary' />
 			</form>
 			<Suspense>
 				<DeleteModal

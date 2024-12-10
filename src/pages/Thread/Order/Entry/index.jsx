@@ -16,6 +16,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import DynamicFormSpreadSheet from '@/ui/Dynamic/DynamicFormSpreadSheet';
 import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
@@ -161,7 +162,6 @@ export default function Index() {
 
 	// Submit
 	const onSubmit = async (data) => {
-		return;
 		// Update
 		if (isUpdate) {
 			const order_info_data = {
@@ -455,13 +455,7 @@ export default function Index() {
 						fields={threadOrderInfoEntryField}
 					/>
 
-					<div className='modal-action'>
-						<button
-							type='submit'
-							className='text-md btn btn-primary btn-block'>
-							Save
-						</button>
-					</div>
+					<Footer buttonClassName='!btn-primary' />
 				</form>
 			</HotKeys>
 			<Suspense>

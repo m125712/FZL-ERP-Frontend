@@ -121,7 +121,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'received',
-				header: 'Received',
+				header: 'Stock Received',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { received } = info.row.original;

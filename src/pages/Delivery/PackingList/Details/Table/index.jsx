@@ -69,30 +69,30 @@ export default function Index({ packing_list_entry, data }) {
 							? 'Inch'
 							: 'Cm',
 			},
-			{
-				accessorKey: 'order_quantity',
-				header: 'Order Qty',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'balance_quantity',
-				header: 'Balance Qty',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'finishing_prod',
-				header: 'Production Qty',
-				enableColumnFilter: false,
-				hidden:
-					data?.item_for === 'sample_thread' ||
-					data?.item_for === 'sample_zipper',
-				cell: (info) =>
-					data?.item_for === 'thread' || data?.item_for === 'zipper'
-						? info.getValue()
-						: '-',
-			},
+			// {
+			// 	accessorKey: 'order_quantity',
+			// 	header: 'Order Qty',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
+			// {
+			// 	accessorKey: 'balance_quantity',
+			// 	header: 'Balance Qty',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
+			// {
+			// 	accessorKey: 'finishing_prod',
+			// 	header: 'Production Qty',
+			// 	enableColumnFilter: false,
+			// 	hidden:
+			// 		data?.item_for === 'sample_thread' ||
+			// 		data?.item_for === 'sample_zipper',
+			// 	cell: (info) =>
+			// 		data?.item_for === 'thread' || data?.item_for === 'zipper'
+			// 			? info.getValue()
+			// 			: '-',
+			// },
 			{
 				accessorKey: 'quantity',
 				header:
@@ -163,10 +163,10 @@ export default function Index({ packing_list_entry, data }) {
 		[packing_list_entry]
 	);
 
-	const totalQty = packing_list_entry.reduce(
-		(a, b) => a + Number(b.order_quantity),
-		0
-	);
+	// const totalQty = packing_list_entry.reduce(
+	// 	(a, b) => a + Number(b.order_quantity),
+	// 	0
+	// );
 	const totalQuantity = packing_list_entry.reduce(
 		(a, b) => a + Number(b.quantity),
 		0
@@ -201,10 +201,10 @@ export default function Index({ packing_list_entry, data }) {
 				columns={columns}>
 				<tr className='text-sm'>
 					<td colSpan='6' className='py-2 text-right'>
-						Total Order QTY
+						Total QTY
 					</td>
-					<td className='pl-3 text-left font-semibold'>{totalQty}</td>
-					<td className='py-2 text-right'>Total QTY</td>
+					{/* <td className='pl-3 text-left font-semibold'>{totalQty}</td>
+					<td className='py-2 text-right'>Total QTY</td> */}
 					<td className='pl-3 text-left font-semibold'>
 						{Number(totalQuantity).toLocaleString()}
 					</td>

@@ -250,7 +250,9 @@ export default function Index() {
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	// * get order id and set them as value & lables for select options
-	const { data: order_id } = useOtherOrderDescription();
+	const { data: order_id } = useOtherOrderDescription(
+		'is_slider_needed=false'
+	);
 
 	let excludeItem = exclude(
 		watch,

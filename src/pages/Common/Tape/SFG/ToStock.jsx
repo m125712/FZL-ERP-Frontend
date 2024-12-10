@@ -29,10 +29,6 @@ export default function Index({
 		useCommonTapeToCoil();
 	const schema = {
 		...DYEING_AGAINST_STOCK_SCHEMA,
-		trx_quantity: NUMBER_REQUIRED.max(
-			updateTapeProd?.quantity,
-			'More Than Max'
-		),
 	};
 
 	const { register, handleSubmit, errors, reset, context } = useRHF(

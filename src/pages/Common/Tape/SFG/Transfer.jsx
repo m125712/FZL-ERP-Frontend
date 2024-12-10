@@ -106,7 +106,7 @@ export default function Index() {
 			: (document.title = 'Order: Entry');
 	}, []);
 	const { data: order_id } = useGetURLData(
-		`/other/order/order-description/value/label/by/${uuid}`
+		`/other/order/order-description/value/label/by/${uuid}?is_slider_needed=false`
 	);
 
 	let excludeItem = exclude(

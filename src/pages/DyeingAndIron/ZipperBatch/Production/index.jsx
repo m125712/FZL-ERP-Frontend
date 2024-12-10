@@ -61,8 +61,6 @@ export default function Index() {
 		}
 	}, [data, batch_prod_uuid]);
 
-	console.log(batch_prod_uuid);
-
 	const isReceived = getValues('received') === 1;
 	// TODO: Submit
 	const onSubmit = async (data) => {

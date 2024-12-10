@@ -100,6 +100,12 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'total_carton_quantity',
 				header: 'Carton QTY',
 				enableColumnFilter: false,

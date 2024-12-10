@@ -81,9 +81,12 @@ export default function Table({ entries }) {
 				data={entries}
 				columns={columns}>
 				<tr className='bg-slate-200'>
-					
-					<td className='px-4 py-2 text-right text-sm font-semibold' colSpan={4}>Total:</td>
-					<td className='px-3 py-2 text-sm' colSpan={5}> 
+					<td
+						className='px-4 py-2 text-right text-sm font-semibold'
+						colSpan={4}>
+						Total:
+					</td>
+					<td className='px-3 py-2 text-sm' colSpan={5}>
 						{total_qty}
 					</td>
 				</tr>

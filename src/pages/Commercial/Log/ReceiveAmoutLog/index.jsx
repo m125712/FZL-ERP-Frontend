@@ -1,5 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { useCommercialReceiveAmount } from '@/state/Commercial';
+import { useAuth } from '@/context/auth';
+import {
+	useCommercialPIByQuery,
+	useCommercialPICash,
+	useCommercialReceiveAmount,
+} from '@/state/Commercial';
 import { useCommonCoilProduction, useCommonCoilSFG } from '@/state/Common';
 import { useAccess } from '@/hooks';
 
@@ -12,11 +17,29 @@ import PageInfo from '@/util/PageInfo';
 
 import AddOrUpdate from './AddOrUpdate';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_all_orders')) {
+		return `?is_cash=true`;
+	}
+
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `?is_cash=true&own_uuid=${userUUID}`;
+	}
+
+	return `?is_cash=true`;
+};
 export default function ProductionLog() {
 	const info = new PageInfo('Receive Amount Log', 'receive_amount_log');
 
 	const { data, isLoading, url, deleteData } = useCommercialReceiveAmount();
-
+	const { user } = useAuth();
+	const haveAccess_2 = useAccess('commercial__pi-cash');
+	const { invalidateQuery: invalidateCommercialPI } = useCommercialPIByQuery(
+		getPath(haveAccess_2, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
 	const haveAccess = useAccess('commercial__log');
 	const columns = useMemo(
 		() => [
@@ -160,6 +183,7 @@ export default function ProductionLog() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateCommercialPI}
 					{...{
 						deleteItem,
 						setDeleteItem,

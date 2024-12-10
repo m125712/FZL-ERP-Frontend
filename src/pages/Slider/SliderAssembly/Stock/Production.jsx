@@ -141,7 +141,7 @@ export default function Index({
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder='Select Logo Type'
+								placeholder='Select Link'
 								options={with_link}
 								value={with_link?.filter(
 									(with_link) =>

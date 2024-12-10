@@ -4,7 +4,7 @@ import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { Transfer } from '@/ui';
+import { EditDelete, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -194,8 +194,11 @@ export default function Index() {
 				// hidden: !haveAccess.includes('click_production'),
 				width: 'w-8',
 				cell: (info) => (
-					<Transfer
-						onClick={() => handelProduction(info.row.index)}
+					<EditDelete
+						idx={info.row.index}
+						handelUpdate={handelProduction}
+						showDelete={false}
+						showUpdate={haveAccess.includes('update')}
 					/>
 				),
 			},

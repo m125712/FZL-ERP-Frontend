@@ -1227,7 +1227,7 @@ export const MULTI_COLOR_DASHBOARD_SCHEMA = {
 	tape_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
 	coil_uuid: STRING_REQUIRED,
 	coil_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
-	thread_name: STRING_REQUIRED,
+	thread_uuid: STRING_REQUIRED,
 	thread_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
 	remarks: STRING.nullable(),
 };
@@ -1239,7 +1239,7 @@ export const MULTI_COLOR_DASHBOARD_NULL = {
 	tape_quantity: 0,
 	coil_uuid: '',
 	coil_quantity: 0,
-	thread_name: '',
+	thread_uuid: '',
 	thread_quantity: 0,
 	remarks: '',
 };

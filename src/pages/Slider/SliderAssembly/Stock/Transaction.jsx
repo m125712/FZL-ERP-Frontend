@@ -3,6 +3,7 @@ import { useOtherSliderStockWithDescription } from '@/state/Other';
 import {
 	useSliderAssemblyStock,
 	useSliderAssemblyStockTransaction,
+	useSliderColoringProduction,
 } from '@/state/Slider';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
@@ -35,6 +36,8 @@ export default function Index({
 		useSliderAssemblyStock();
 	const { invalidateQuery: invalidateAssemblyStockTransaction } =
 		useSliderAssemblyStockTransaction();
+	const { invalidateQuery: invalidateSliderColoringProduction } =
+		useSliderColoringProduction();
 	const { user } = useAuth();
 
 	const { data: stock } = useOtherSliderStockWithDescription(
@@ -100,6 +103,7 @@ export default function Index({
 
 		invalidateAssemblyStock();
 		invalidateAssemblyStockTransaction();
+		invalidateSliderColoringProduction();
 	};
 
 	return (

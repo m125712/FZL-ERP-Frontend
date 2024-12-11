@@ -12,6 +12,7 @@ import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
 	getTable('machine', 'Machine'),
+	getTable('label', 'Label'),
 	getTable('slot_1', 'Slot 1'),
 	getTable('slot_2', 'Slot 2'),
 	getTable('slot_3', 'Slot 3'),
@@ -23,61 +24,63 @@ const node = [
 export default function Index(data, dyeingDate) {
 	const headerHeight = 80;
 	let footerHeight = 50;
+	const new_column_field = [
+		{ text: 'Batch No ', bold: true },
+		'\n',
+		{ text: 'O/N ', bold: true },
+
+		'\n',
+		{ text: 'Item ', bold: true },
+
+		'\n',
+		{ text: 'Color ', bold: true },
+
+		'\n',
+		{ text: 'Expected Kg ', bold: true },
+
+		'\n',
+		{ text: 'Status ', bold: true },
+		,
+		'\n',
+	];
 
 	const formatSlotData = (slotData) => {
 		if (!slotData) return '';
 		else if (slotData.is_zipper === 0) {
 			return [
-				{ text: 'Batch No: ', bold: true },
 				slotData.batch_no || '',
 				'\n',
-				{ text: 'O/N: ', bold: true },
+
 				slotData.order_no || '',
 				'\n',
-				{ text: 'Item: ', bold: true },
 				slotData.item_description || '',
 				'\n',
-				{ text: 'Color: ', bold: true },
+
 				slotData.color || '',
 				'\n',
 
-				{ text: 'Qty(cone): ', bold: true },
-				slotData.total_quantity || 0,
-				'\n',
-				{ text: 'Status: ', bold: true },
 				slotData.batch_status || '',
 				'\n',
-				{ text: 'Production Qty(cone): ', bold: true },
-				slotData.total_actual_production_quantity || 0,
 			];
 		} else {
 			return [
-				{ text: 'Batch No: ', bold: true },
 				slotData.batch_no || '',
 				'\n',
-				{ text: 'O/N: ', bold: true },
+
 				slotData.order_no || '',
 				'\n',
-				{ text: 'Item: ', bold: true },
+
 				slotData.item_description || '',
 				'\n',
-				{ text: 'Color: ', bold: true },
+
 				slotData.color || '',
 				'\n',
-				{ text: 'Qty: ', bold: true },
-				slotData.total_quantity || 0,
-				'\n',
-				{ text: 'Expected Kg: ', bold: true },
+
 				slotData.expected_kg || 0,
 				'\n',
-				{ text: 'Production Qty(kg): ', bold: true },
-				slotData.total_actual_production_quantity || 0,
-				'\n',
-				{ text: 'Status: ', bold: true },
+
 				slotData.batch_status || '',
 				'\n',
-				{ text: 'Received: ', bold: true },
-				slotData.received === 1 ? 'Yes' : 'No',
 			];
 		}
 	};
@@ -106,7 +109,7 @@ export default function Index(data, dyeingDate) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [70, '*', '*', '*', '*', '*', '*'],
+					widths: [70, 60, '*', '*', '*', '*', '*', '*'],
 					body: [
 						TableHeader(node),
 						...data?.map((item) =>
@@ -114,7 +117,11 @@ export default function Index(data, dyeingDate) {
 								text:
 									nodeItem.field === 'machine'
 										? item[nodeItem.field]
-										: formatSlotData(item[nodeItem.field]),
+										: nodeItem.field === 'label'
+											? new_column_field
+											: formatSlotData(
+													item[nodeItem.field]
+												),
 								style: nodeItem.cellStyle,
 								alignment: nodeItem.alignment,
 							}))

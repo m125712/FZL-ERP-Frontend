@@ -88,7 +88,7 @@ export default function Header({
 			setValue('packing_list_uuids', []);
 			setValue('challan_entry', []);
 		}
-	}, [ watch('item_for')]);
+	}, [watch('item_for')]);
 
 	const isHandDelivery = watch('is_hand_delivery');
 

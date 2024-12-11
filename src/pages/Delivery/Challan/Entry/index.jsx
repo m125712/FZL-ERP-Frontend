@@ -12,7 +12,7 @@ import {
 } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
-import { FormProvider } from 'react-hook-form';
+import { FormProvider, get } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
@@ -412,7 +412,11 @@ export default function Index() {
 											? 'inch'
 											: getValues(
 														`challan_entry[${index}].is_meters`
-												  ) === 1
+												  ) === 1 ||
+												  getValues(`item_for`) ===
+														'thread' ||
+												  getValues(`item_for`) ===
+														'sample_thread'
 												? 'meter'
 												: 'cm'}
 								</td>
@@ -572,7 +576,11 @@ export default function Index() {
 												? 'inch'
 												: getValues(
 															`challan_entry[${index}].is_meters`
-													  ) === 1
+													  ) === 1 ||
+													  getValues(`item_for`) ===
+															'thread' ||
+													  getValues(`item_for`) ===
+															'sample_thread'
 													? 'meter'
 													: 'cm'}
 									</td>

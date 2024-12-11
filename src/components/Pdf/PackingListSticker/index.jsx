@@ -239,28 +239,51 @@ export default function Index(data) {
 							})
 						),
 						[
-							{
-								text: `Total`,
-								alignment: 'right',
-								colSpan: 4,
-								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 2,
-							},
-							{},
-							{},
-							{},
-							{
-								text: totalQuantity,
-								bold: true,
-								alignment: 'right',
-								fontSize: DEFAULT_FONT_SIZE - 2,
-							},
-							{
-								text: totalPoly,
-								bold: true,
-								alignment: 'right',
-								fontSize: DEFAULT_FONT_SIZE - 2,
-							},
+							...(data?.item_for === 'zipper' ||
+							data?.item_for === 'sample_zipper'
+								? [
+										{
+											text: `Total`,
+											alignment: 'right',
+											colSpan: 4,
+											bold: true,
+											fontSize: DEFAULT_FONT_SIZE - 2,
+										},
+										{},
+										{},
+										{},
+										{
+											text: totalQuantity,
+											bold: true,
+											alignment: 'right',
+											fontSize: DEFAULT_FONT_SIZE - 2,
+										},
+										{
+											text: totalPoly,
+											bold: true,
+											alignment: 'right',
+											fontSize: DEFAULT_FONT_SIZE - 2,
+										},
+									]
+								: [
+										{
+											text: `Total`,
+											alignment: 'right',
+											colSpan: 5,
+											bold: true,
+											fontSize: DEFAULT_FONT_SIZE - 2,
+										},
+										{},
+										{},
+										{},
+										{},
+										{
+											text: totalQuantity,
+											bold: true,
+											alignment: 'right',
+											fontSize: DEFAULT_FONT_SIZE - 2,
+										},
+									]),
 						],
 					],
 				},

@@ -47,7 +47,6 @@ export default function Index({
 		Controller,
 	} = useRHF(UPDATE_DYEING_TRANSFER_SCHEMA, UPDATE_DYEING_TRANSFER_NULL);
 
-	console.log(data);
 	useEffect(() => {
 		if (data) {
 			reset(data);
@@ -75,7 +74,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateTransfer?.uuid}`,
+				url: `${url}`,
 				uuid: updateTransfer?.uuid,
 				updatedData,
 				onClose,

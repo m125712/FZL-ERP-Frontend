@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useDeliveryCartonByUUID } from '@/state/Delivery';
+import { useDeliveryCarton, useDeliveryCartonByUUID } from '@/state/Delivery';
 import { useOtherCarton } from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
@@ -24,6 +24,7 @@ export default function Index({
 	);
 	const { invalidateQuery: invalidateQueryCartonLabelValue } =
 		useOtherCarton();
+	const { invalidateQuery: invalidateDeliveryCarton } = useDeliveryCarton();
 	const { user } = useAuth();
 	const {
 		register,
@@ -91,6 +92,7 @@ export default function Index({
 			onClose,
 		});
 		invalidateQueryCartonLabelValue();
+		invalidateDeliveryCarton();
 	};
 
 	return (

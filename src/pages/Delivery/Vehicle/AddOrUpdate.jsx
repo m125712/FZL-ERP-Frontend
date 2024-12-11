@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useDeliveryVehicleByUUID } from '@/state/Delivery';
+import { useDeliveryVehicle, useDeliveryVehicleByUUID } from '@/state/Delivery';
 import { useOtherVehicle } from '@/state/Other';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
@@ -23,6 +23,7 @@ export default function VehicleForm({
 		update?.uuid
 	);
 	const { invalidateQuery: invalidateOtherVehicle } = useOtherVehicle();
+	const { invalidateQuery: invalidateDeliveryVehicle } = useDeliveryVehicle();
 	const { user } = useAuth();
 	const {
 		register,
@@ -94,6 +95,7 @@ export default function VehicleForm({
 			onClose,
 		});
 		invalidateOtherVehicle();
+		invalidateDeliveryVehicle();
 	};
 
 	return (

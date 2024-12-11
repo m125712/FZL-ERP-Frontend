@@ -170,7 +170,7 @@ const DynamicDeliveryTable = ({
 					<td className={`w-32 ${rowClass}`}>
 						{getValues(`item_for`) === 'thread' ||
 						getValues(`item_for`) === 'sample_thread'
-							? 'cone'
+							? 'meter'
 							: getValues(
 										`${entryFiledName}[${index}].is_inch`
 								  ) === 1

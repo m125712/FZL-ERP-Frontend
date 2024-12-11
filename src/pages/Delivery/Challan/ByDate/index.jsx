@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDeliveryChallan } from '@/state/Delivery';
+import { useOtherVehicle } from '@/state/Other';
 import { useParams } from 'react-router-dom';
-import { useAccess} from '@/hooks';
+import { useAccess } from '@/hooks';
 
 import Pdf from '@/components/Pdf/ChallanByDate';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-
 import {
 	DateTime,
 	LinkWithCopy,
+	ReactSelect,
 	SectionEntryBody,
 	StatusButton,
 } from '@/ui';
@@ -17,11 +18,18 @@ import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
+	const [vehicle, setVehicle] = useState('all');
 	const { date } = useParams();
 
+	const { data: vehicles } = useOtherVehicle();
+	const modifiedVehicles = vehicles
+		? [...vehicles, { label: 'All', value: 'all' }]
+		: [];
+
 	const { data, isLoading, url, updateData } = useDeliveryChallan(
-		`?delivery_date=${date}`
+		`?delivery_date=${date}&vehicle=${vehicle}`
 	);
+
 	const info = new PageInfo(`Challan `, url, 'delivery__challan_by_date');
 	const haveAccess = useAccess('delivery__challan_by_date');
 
@@ -185,19 +193,6 @@ export default function Index() {
 		[data]
 	);
 
-	// Receive Status
-	const handelReceiveStatus = async (idx) => {
-		const challan = data[idx];
-		const status = challan?.receive_status == 1 ? 0 : 1;
-		const updated_at = GetDateTime();
-
-		await updateData.mutateAsync({
-			url: `/delivery/challan/${challan?.uuid}`,
-			uuid: challan?.uuid,
-			updatedData: { receive_status: status, updated_at },
-			isOnCloseNeeded: false,
-		});
-	};
 	const [data2, setData] = useState('');
 
 	useEffect(() => {
@@ -212,12 +207,25 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div>
+		<div className='flex flex-col gap-6'>
 			<iframe
 				src={data2}
 				className='h-[40rem] w-full rounded-md border-none'
 			/>
-			<SectionEntryBody title={`Delivery Date: ${date}`}>
+			<SectionEntryBody
+				title={`Delivery Date: ${date}`}
+				header={
+					<div className='my-2 w-24'>
+						<ReactSelect
+							placeholder='Select Vehicle'
+							options={modifiedVehicles}
+							value={modifiedVehicles?.find(
+								(item) => item.value === vehicle
+							)}
+							onChange={(e) => setVehicle(e.value)}
+						/>
+					</div>
+				}>
 				<ReactTableTitleOnly
 					title={info.getTitle()}
 					data={data}

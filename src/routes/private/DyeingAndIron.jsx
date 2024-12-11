@@ -84,84 +84,20 @@ export const DyeingAndIronRoutes = [
 	{
 		name: 'Dyeing And Iron',
 		children: [
+			// * Dashboard
+			{
+				name: 'Dashboard',
+				path: '/dyeing-and-iron/dyeing-dashboard',
+				element: <DyeingDashboard />,
+				page_name: 'dyeing__dyeing_dashboard',
+				actions: ['read', 'create', 'update', 'delete'],
+			},
 			{
 				name: 'RM',
 				path: '/dyeing-and-iron/rm',
 				element: <DyeingRMStock />,
 				page_name: 'dyeing__dyeing_and_iron_rm',
 				actions: ['read', 'click_name', 'click_used'],
-			},
-
-			{
-				name: 'Planning',
-				path: '/dyeing-and-iron/planning',
-				element: <DyeingPlanning />,
-				page_name: 'dyeing__planning',
-				actions: ['read'],
-			},
-			{
-				name: 'Planning SNO',
-				path: '/dyeing-and-iron/planning-sno',
-				element: <DyeingPlanningSNO />,
-				page_name: 'dyeing__planning_sno',
-				actions: ['create', 'read', 'update'],
-			},
-			{
-				name: 'Planning SNO Entry',
-				path: '/dyeing-and-iron/planning-sno/entry/:weeks',
-				element: <DyeingPlanningSNOEntry />,
-				hidden: true,
-				page_name: 'dyeing__planning_sno_entry',
-				actions: ['create', 'read', 'update'],
-			},
-			{
-				name: 'Planning SNO Update',
-				path: '/dyeing-and-iron/planning-sno/:week_id/update',
-				element: <DyeingPlanningSNOEntry />,
-				hidden: true,
-				page_name: 'dyeing__planning_sno_entry_update',
-				actions: ['create', 'read', 'update'],
-			},
-			{
-				name: 'Planning SNO Details',
-				path: '/dyeing-and-iron/planning-sno/:week_id',
-				element: <DyeingPlanningSNODetails />,
-				hidden: true,
-				page_name: 'dyeing__planning_sno_entry_details',
-				actions: ['read'],
-			},
-
-			// * Planning Head Office
-			{
-				name: 'Planning Head Office',
-				path: '/dyeing-and-iron/planning-head-office',
-				element: <DyeingPlanningHeadOffice />,
-				page_name: 'dyeing__planning_head_office',
-				actions: ['create', 'read', 'update'],
-			},
-			{
-				name: 'Planning Head Office',
-				path: '/dyeing-and-iron/planning-head-office/entry/:weeks',
-				element: <DyeingPlanningHeadOfficeEntry />,
-				hidden: true,
-				page_name: 'dyeing__planning_head_office_entry',
-				actions: ['create', 'read', 'update'],
-			},
-			{
-				name: 'Planning Head Office Update',
-				path: '/dyeing-and-iron/planning-head-office/:week_id/update',
-				element: <DyeingPlanningHeadOfficeEntry />,
-				hidden: true,
-				page_name: 'dyeing__planning_head_office_entry_update',
-				actions: ['create', 'read', 'update'],
-			},
-			{
-				name: 'Planning Head Office Details',
-				path: '/dyeing-and-iron/planning-head-office/:week_id',
-				element: <DyeingPlanningHeadOfficeDetails />,
-				hidden: true,
-				page_name: 'dyeing__planning_head_office_details',
-				actions: ['read'],
 			},
 
 			// * Batch
@@ -310,6 +246,15 @@ export const DyeingAndIronRoutes = [
 				],
 			},
 
+			// * Finishing Dashboard
+			{
+				name: 'Finishing Dashboard',
+				path: '/dyeing-and-iron/finishing-dashboard',
+				element: <FinishingDashboard />,
+				page_name: 'dyeing__finishing_dashboard',
+				actions: ['read', 'create', 'update', 'delete'],
+			},
+
 			// * Finishing Batch
 			{
 				name: 'Finishing Batch',
@@ -341,24 +286,6 @@ export const DyeingAndIronRoutes = [
 				hidden: true,
 				page_name: 'dyeing__finishing_batch_entry_update',
 				actions: ['create', 'read', 'update', 'delete'],
-			},
-
-			// * Dyeing Dashboard
-			{
-				name: 'Dyeing Dashboard',
-				path: '/dyeing-and-iron/dyeing-dashboard',
-				element: <DyeingDashboard />,
-				page_name: 'dyeing__dyeing_dashboard',
-				actions: ['read', 'create', 'update', 'delete'],
-			},
-
-			// * Finishing Dashboard
-			{
-				name: 'Finishing Dashboard',
-				path: '/dyeing-and-iron/finishing-dashboard',
-				element: <FinishingDashboard />,
-				page_name: 'dyeing__finishing_dashboard',
-				actions: ['read', 'create', 'update', 'delete'],
 			},
 
 			// * Production Capacity

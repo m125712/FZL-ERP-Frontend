@@ -65,7 +65,6 @@ export default function Header({
 		sample_thread: ordersThreadSample,
 	};
 	const orders = itemFor[watch('item_for')] || [];
-	console.log(orders);
 
 	//* Packing List Fetch
 	const { data: packingList, invalidateQuery: invalidatePackingList } =
@@ -83,16 +82,13 @@ export default function Header({
 		{ label: 'Thread Sample', value: 'sample_thread' },
 	];
 
-	// useEffect(() => {
-	// 	if (
-	// 		!isUpdate &&
-	// 		(getValues('packing_list_uuids') ||
-	// 			getValues('order_info_uuid') == null)
-	// 	) {
-	// 		setValue('packing_list_uuids', []);
-	// 		setValue('challan_entry', []);
-	// 	}
-	// }, [getValues('order_info_uuid'), watch('item_for')]);
+	useEffect(() => {
+		if (!isUpdate) {
+			setValue('order_info_uuid', null);
+			setValue('packing_list_uuids', []);
+			setValue('challan_entry', []);
+		}
+	}, [ watch('item_for')]);
 
 	const isHandDelivery = watch('is_hand_delivery');
 
@@ -183,51 +179,12 @@ export default function Header({
 									)}
 									onChange={(e) => {
 										onChange(e.value);
-										
 									}}
 									isDisabled={isUpdate}
 								/>
 							)}
 						/>
 					</FormField>
-					{!watch('is_hand_delivery') && (
-						<FormField
-							label='vehicle_uuid'
-							title='Assign To'
-							errors={errors}>
-							<Controller
-								name='vehicle_uuid'
-								control={control}
-								render={({ field: { onChange } }) => (
-									<ReactSelect
-										placeholder='Select Vehicle'
-										options={vehicles}
-										value={vehicles?.find(
-											(item) =>
-												item.value ===
-												getValues('vehicle_uuid')
-										)}
-										onChange={(e) => onChange(e.value)}
-									/>
-								)}
-							/>
-						</FormField>
-					)}
-					{watch('is_hand_delivery') && (
-						<Input
-							label='name'
-							title='Name'
-							{...{ register, errors }}
-						/>
-					)}
-					{watch('is_hand_delivery') && (
-						<Input
-							label='delivery_cost'
-							title='Delivery Cost'
-							{...{ register, errors }}
-						/>
-					)}
-
 					<FormField
 						label='order_info_uuid'
 						title='Order Number'
@@ -427,6 +384,44 @@ export default function Header({
 							/>
 						</FormField>
 					)}
+					{!watch('is_hand_delivery') && (
+						<FormField
+							label='vehicle_uuid'
+							title='Assign To'
+							errors={errors}>
+							<Controller
+								name='vehicle_uuid'
+								control={control}
+								render={({ field: { onChange } }) => (
+									<ReactSelect
+										placeholder='Select Vehicle'
+										options={vehicles}
+										value={vehicles?.find(
+											(item) =>
+												item.value ===
+												getValues('vehicle_uuid')
+										)}
+										onChange={(e) => onChange(e.value)}
+									/>
+								)}
+							/>
+						</FormField>
+					)}
+					{watch('is_hand_delivery') && (
+						<Input
+							label='name'
+							title='Name'
+							{...{ register, errors }}
+						/>
+					)}
+					{watch('is_hand_delivery') && (
+						<Input
+							label='delivery_cost'
+							title='Delivery Cost'
+							{...{ register, errors }}
+						/>
+					)}
+
 					<DateInput
 						title='Delivery Date'
 						label='delivery_date'

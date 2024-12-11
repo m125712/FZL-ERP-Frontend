@@ -21,6 +21,7 @@ export default function Information({ challan }) {
 		delivery_date,
 		delivery_cost,
 		updated_at,
+		is_own,
 	} = challan;
 
 	const renderItems = () => {
@@ -55,6 +56,10 @@ export default function Information({ challan }) {
 				value: (
 					<StatusButton className={'btn-xs'} value={receive_status} />
 				),
+			},
+			{
+				label: 'Own Delivery',
+				value: <StatusButton className={'btn-xs'} value={is_own} />,
 			},
 		];
 

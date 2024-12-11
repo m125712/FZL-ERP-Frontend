@@ -70,6 +70,7 @@ export default function Index() {
 			{
 				accessorKey: 'style',
 				header: 'Style',
+				width: 'w-32',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
@@ -133,7 +134,10 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !(haveAccess.includes('update') || haveAccess.includes('delete')),
+				hidden: !(
+					haveAccess.includes('update') ||
+					haveAccess.includes('delete')
+				),
 				width: 'w-24',
 				cell: (info) => {
 					return (

@@ -90,7 +90,7 @@ export default function Index() {
 				accessorKey: 'style',
 				header: 'Style',
 				enableColumnFilter: false,
-				width: 'w-24',
+				width: 'w-32',
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),

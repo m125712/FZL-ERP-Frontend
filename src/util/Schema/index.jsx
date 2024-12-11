@@ -1595,6 +1595,7 @@ export const PACKING_LIST_NULL = {
 export const CHALLAN_SCHEMA = {
 	item_for: STRING_REQUIRED,
 	is_hand_delivery: BOOLEAN_DEFAULT_VALUE(false),
+	is_own_order: BOOLEAN_DEFAULT_VALUE(false),
 	name: STRING.when('is_hand_delivery', {
 		is: true,
 		then: (Schema) => Schema.required('Required'),
@@ -1605,8 +1606,9 @@ export const CHALLAN_SCHEMA = {
 		then: (Schema) => Schema.required('Required'),
 		otherwise: (Schema) => Schema.nullable(),
 	}),
-	vehicle_uuid: STRING.when('is_hand_delivery', {
-		is: true,
+	vehicle_uuid: STRING.when(['is_hand_delivery', 'is_own_order'], {
+		is: (is_hand_delivery, is_own_order) =>
+			is_hand_delivery || is_own_order,
 		then: (Schema) => Schema.nullable(),
 		otherwise: (Schema) => Schema.required('Required'),
 	}),
@@ -1645,7 +1647,8 @@ export const CHALLAN_SCHEMA = {
 export const CHALLAN_NULL = {
 	item_for: 'zipper',
 	is_hand_delivery: false,
-	vehicle_uuid: '',
+	is_own_order: false,
+	vehicle_uuid: null,
 	name: '',
 	delivery_cost: 0,
 	order_info_uuid: null,

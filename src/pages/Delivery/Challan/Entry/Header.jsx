@@ -80,6 +80,8 @@ export default function Header({
 		{ label: 'Thread', value: 'thread' },
 		{ label: 'Zipper Sample', value: 'sample_zipper' },
 		{ label: 'Thread Sample', value: 'sample_thread' },
+		{ label: 'Slider', value: 'slider' },
+		{ label: 'Tape', value: 'tape' },
 	];
 
 	useEffect(() => {
@@ -91,15 +93,22 @@ export default function Header({
 	}, [watch('item_for')]);
 
 	const isHandDelivery = watch('is_hand_delivery');
+	const isOwnDelivery = watch('is_own_delivery');
 
 	useEffect(() => {
-		if (isHandDelivery) {
+		if (isOwnDelivery) {
 			setValue('vehicle_uuid', null);
+			setValue('name', '');
+			setValue('delivery_cost', 0);
+			setValue('is_hand_delivery', false);
+		} else if (isHandDelivery) {
+			setValue('vehicle_uuid', null);
+			setValue('is_own_delivery', false);
 		} else {
 			setValue('name', '');
 			setValue('delivery_cost', 0);
 		}
-	}, [isHandDelivery, setValue]);
+	}, [isHandDelivery, setValue, isOwnDelivery]);
 
 	const handlePackingListRemove = (
 		packing_list_uuid,
@@ -156,6 +165,18 @@ export default function Header({
 										'is_hand_delivery',
 										e.target.checked
 									)
+								}
+							/>
+						</div>
+						<div className='rounded-md bg-secondary px-1'>
+							<CheckBox
+								text='text-secondary-content'
+								label='is_own_order'
+								title='Own Order'
+								{...{ register, errors }}
+								checked={Boolean(watch('is_own_order'))}
+								onChange={(e) =>
+									setValue('is_own_order', e.target.checked)
 								}
 							/>
 						</div>
@@ -384,7 +405,7 @@ export default function Header({
 							/>
 						</FormField>
 					)}
-					{!watch('is_hand_delivery') && (
+					{!watch('is_hand_delivery') && !watch('is_own_order') && (
 						<FormField
 							label='vehicle_uuid'
 							title='Assign To'
@@ -407,14 +428,14 @@ export default function Header({
 							/>
 						</FormField>
 					)}
-					{watch('is_hand_delivery') && (
+					{watch('is_hand_delivery') && !watch('is_own_order') && (
 						<Input
 							label='name'
 							title='Name'
 							{...{ register, errors }}
 						/>
 					)}
-					{watch('is_hand_delivery') && (
+					{watch('is_hand_delivery') && !watch('is_own_order') && (
 						<Input
 							label='delivery_cost'
 							title='Delivery Cost'

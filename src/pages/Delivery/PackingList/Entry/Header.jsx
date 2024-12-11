@@ -19,13 +19,6 @@ export default function Header({
 	isUpdate,
 	watch,
 }) {
-	const itemOptions = [
-		{ label: 'Zipper', value: 'zipper' },
-		{ label: 'Thread', value: 'thread' },
-		{ label: 'Zipper Sample', value: 'sample_zipper' },
-		{ label: 'Thread Sample', value: 'sample_thread' },
-	];
-
 	const { data: ordersZipper } = isUpdate
 		? useOtherOrder('')
 		: useOtherOrder('page=packing_list');
@@ -38,26 +31,28 @@ export default function Header({
 	const { data: ordersThreadSample } = isUpdate
 		? useThreadOrder('')
 		: useThreadOrder('page=packing_list&is_sample=true');
-	const itemFor = watch('item_for');
-
-	const orders =
-		itemFor === 'zipper'
-			? ordersZipper
-			: itemFor === 'thread'
-				? ordersThread
-				: itemFor == 'sample_thread'
-					? ordersThreadSample
-					: itemFor == 'sample_zipper'
-						? ordersZipperSample
-						: [];
+	const itemFor = {
+		zipper: ordersZipper,
+		thread: ordersThread,
+		sample_zipper: ordersZipperSample,
+		sample_thread: ordersThreadSample,
+	};
+	const orders = itemFor[watch('item_for')] || [];
 	const { data: cartons } = useOtherCarton();
-
+	const itemOptions = [
+		{ label: 'Zipper', value: 'zipper' },
+		{ label: 'Thread', value: 'thread' },
+		{ label: 'Zipper Sample', value: 'sample_zipper' },
+		{ label: 'Thread Sample', value: 'sample_thread' },
+		{ label: 'Slider', value: 'slider' },
+		{ label: 'Tape', value: 'tape' },
+	];
 	useEffect(() => {
 		if (isUpdate) return;
 		setValue('order_info_uuid', null);
 		setValue('packing_list_entry', []);
 	}, [watch('item_for')]);
-	
+
 	return (
 		<SectionEntryBody
 			title={`${isUpdate ? `Update Packing List: ${getValues('packing_number')}` : 'New Packing List Entry'}`}>

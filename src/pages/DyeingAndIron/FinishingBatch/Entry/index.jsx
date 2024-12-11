@@ -363,12 +363,12 @@ export default function index() {
 		const batch_total = watch()
 			.finishing_batch_entry?.filter((item) => item.quantity > 0)
 			.reduce((prev, curr) => {
-				return prev + curr.quantity;
+				return prev + Number(curr.quantity);
 			}, 0);
 
 		const new_batch_total = watch()
 			.new_finishing_batch_entry?.filter((item) => item.quantity > 0)
-			.reduce((prev, curr) => prev + curr.quantity, 0);
+			.reduce((prev, curr) => prev + Number(curr.quantity), 0);
 
 		return { batch_total, new_batch_total };
 	};

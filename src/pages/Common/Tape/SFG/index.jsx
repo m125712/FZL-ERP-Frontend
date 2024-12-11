@@ -6,7 +6,7 @@ import { useAccess } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, Transfer } from '@/ui';
+import { DateTime, EditDelete, ReactSelect, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -23,6 +23,24 @@ export default function Index() {
 	const info = new PageInfo('Common/Tape/SFG', url, 'common__tape_sfg');
 	const haveAccess = useAccess(info.getTab());
 	const navigate = useNavigate();
+	const [stock, setStock] = useState(null);
+	const stockState = [
+		{ label: 'Yes', value: true },
+		{ label: 'No', value: false },
+	];
+
+	// * Set initial stock values
+	useEffect(() => {
+		if (data) {
+			setStock(
+				data.map(() => {
+					return {
+						value: false,
+					};
+				})
+			);
+		}
+	}, [data]);
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -119,6 +137,39 @@ export default function Index() {
 			},
 
 			{
+				accessorKey: 'stock',
+				header: 'Stock',
+				width: 'w-24',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<ReactSelect
+						placeholder='Select state'
+						options={stockState}
+						value={stockState?.filter(
+							(item) => item.value == stock[info.row.index]?.value
+						)}
+						onChange={(e) => {
+							console.log(info.row.index);
+							// console.log(stock);
+							setStock(
+								stock.map((item, index) => {
+									if (index === info.row.index) {
+										return {
+											...item,
+											value: e.value,
+										};
+									}
+									return item;
+								})
+							);
+							// console.log(stock?.[info.row.index]);
+						}}
+						// isDisabled={order_info_id !== undefined}
+					/>
+				),
+			},
+
+			{
 				accessorKey: 'coil_action',
 				header: 'To Coil',
 				enableColumnFilter: false,
@@ -132,6 +183,9 @@ export default function Index() {
 						return (
 							<Transfer
 								onClick={() => handleTrxToCoil(info.row.index)}
+								disabled={
+									stock[info.row.index]?.value ? true : false
+								}
 							/>
 						);
 					}
@@ -157,6 +211,9 @@ export default function Index() {
 						return (
 							<Transfer
 								onClick={() => handleTrxToDying(info.row.index)}
+								disabled={
+									stock[info.row.index]?.value ? true : false
+								}
 							/>
 						);
 					}
@@ -177,6 +234,9 @@ export default function Index() {
 							<Transfer
 								onClick={() =>
 									handleDyeingAgainstStock(info.row.index)
+								}
+								disabled={
+									stock[info.row.index]?.value ? false : true
 								}
 							/>
 						);
@@ -209,6 +269,9 @@ export default function Index() {
 						return (
 							<Transfer
 								onClick={() => handleTrxToStock(info.row.index)}
+								disabled={
+									stock[info.row.index]?.value ? false : true
+								}
 							/>
 						);
 					}
@@ -240,6 +303,9 @@ export default function Index() {
 						return (
 							<Transfer
 								onClick={() => handleTransfer(info.row.index)}
+								disabled={
+									stock[info.row.index]?.value ? false : true
+								}
 							/>
 						);
 					}
@@ -316,7 +382,7 @@ export default function Index() {
 				},
 			},
 		],
-		[data]
+		[data, stock]
 	);
 
 	// Update

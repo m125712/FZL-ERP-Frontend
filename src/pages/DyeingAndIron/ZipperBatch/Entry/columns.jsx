@@ -146,7 +146,11 @@ export const Columns = ({
 								onClick={() =>
 									setValue(
 										`dyeing_batch_entry[${idx}].quantity`,
-										info.getValue()
+										info.getValue(),
+										{
+											
+											shouldDirty: true,
+										}
 									)
 								}
 							/>
@@ -261,7 +265,11 @@ export const Columns = ({
 								onClick={() =>
 									setValue(
 										`new_dyeing_batch_entry[${idx}].quantity`,
-										info.getValue()
+										info.getValue(),
+										{
+											
+											shouldDirty: true,
+										}
 									)
 								}>
 								Copy

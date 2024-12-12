@@ -332,11 +332,11 @@ export default function Index() {
 				header: (
 					<div className='flex flex-col'>
 						Expected Tape (Kg)
-						<label
+						{/* <label
 							className='btn btn-primary btn-xs'
 							onClick={() => setAllExpect_kg()}>
 							Copy All
-						</label>
+						</label> */}
 					</div>
 				),
 				enableColumnFilter: false,
@@ -364,7 +364,11 @@ export default function Index() {
 								onClick={() =>
 									setValue(
 										`dyeing_batch_entry[${idx}].production_quantity_in_kg`,
-										expt_kg
+										expt_kg,
+										{
+											
+											shouldDirty: true,
+										}
 									)
 								}>
 								Copy

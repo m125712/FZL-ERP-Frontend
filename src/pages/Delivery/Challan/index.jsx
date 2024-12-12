@@ -84,7 +84,10 @@ export default function Index() {
 				cell: (info) => {
 					const { order_info_uuid } = info.row.original;
 					const { item_for } = info.row.original;
-					return item_for === 'zipper' ? (
+					return item_for === 'zipper' ||
+						item_for === 'sample_zipper' ||
+						item_for === 'slider' ||
+						item_for === 'tape' ? (
 						<LinkWithCopy
 							title={info.getValue()}
 							id={info.getValue()}

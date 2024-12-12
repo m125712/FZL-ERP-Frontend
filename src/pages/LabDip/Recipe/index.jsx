@@ -1,11 +1,11 @@
-import { useAccess } from '@/hooks';
-import { useLabDipRecipe } from '@/state/LabDip';
 import { useEffect, useMemo } from 'react';
+import { useLabDipRecipe } from '@/state/LabDip';
 import { useNavigate } from 'react-router-dom';
+import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
+import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
@@ -93,7 +93,7 @@ export default function Index() {
 							disabled={
 								!lab_dip_info_uuid ||
 								(!overrideAccess &&
-									(!access || Number(info.getValue()) !== 1))
+									(!access || Number(info.getValue()) === 1))
 							}
 							onChange={() =>
 								handelApprovedStatusChange(info.row.index)

@@ -25,7 +25,9 @@ const DynamicDeliveryTable = ({
 			title={title}
 			tableHead={
 				<>
-					{watch('item_for') === 'zipper'
+					{watch('item_for') === 'zipper' ||
+					watch('item_for') === 'slider' ||
+					watch('item_for') === 'tape'
 						? [
 								'O/N',
 								'Item Description',
@@ -198,7 +200,9 @@ const DynamicDeliveryTable = ({
 						)}
 					</td>
 					{(watch('item_for') === 'zipper' ||
-						watch('item_for') === 'thread') && (
+						watch('item_for') === 'thread' ||
+						watch('item_for') === 'slider' ||
+						watch('item_for') === 'tape') && (
 						<td className={rowClass}>
 							{getValues(
 								`${entryFiledName}[${index}].finishing_prod`

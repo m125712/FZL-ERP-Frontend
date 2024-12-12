@@ -44,8 +44,13 @@ export default function Header({
 	//* Orders Fetch
 	const { data: ordersZipper } = isUpdate
 		? useOtherOrder()
-		: useOtherOrder('page=challan');
-
+		: useOtherOrder('page=challan&item_for=full');
+	const { data: ordersSlider } = isUpdate
+		? useOtherOrder()
+		: useOtherOrder('page=challan&item_for=slider');
+	const { data: ordersTape } = isUpdate
+		? useOtherOrder()
+		: useOtherOrder('page=challan&item_for=tape');
 	const { data: ordersThread } = isUpdate
 		? useThreadOrder()
 		: useThreadOrder('page=challan');
@@ -63,6 +68,8 @@ export default function Header({
 		thread: ordersThread,
 		sample_zipper: ordersZipperSample,
 		sample_thread: ordersThreadSample,
+		slider: ordersSlider,
+		tape: ordersTape,
 	};
 	const orders = itemFor[watch('item_for')] || [];
 
@@ -93,7 +100,7 @@ export default function Header({
 	}, [watch('item_for')]);
 
 	const isHandDelivery = watch('is_hand_delivery');
-	const isOwnDelivery = watch('is_own_delivery');
+	const isOwnDelivery = watch('is_own');
 
 	useEffect(() => {
 		if (isOwnDelivery) {
@@ -103,7 +110,7 @@ export default function Header({
 			setValue('is_hand_delivery', false);
 		} else if (isHandDelivery) {
 			setValue('vehicle_uuid', null);
-			setValue('is_own_delivery', false);
+			setValue('is_own', false);
 		} else {
 			setValue('name', '');
 			setValue('delivery_cost', 0);
@@ -171,12 +178,12 @@ export default function Header({
 						<div className='rounded-md bg-secondary px-1'>
 							<CheckBox
 								text='text-secondary-content'
-								label='is_own_order'
+								label='is_own'
 								title='Own Order'
 								{...{ register, errors }}
-								checked={Boolean(watch('is_own_order'))}
+								checked={Boolean(watch('is_own'))}
 								onChange={(e) =>
-									setValue('is_own_order', e.target.checked)
+									setValue('is_own', e.target.checked)
 								}
 							/>
 						</div>
@@ -405,7 +412,7 @@ export default function Header({
 							/>
 						</FormField>
 					)}
-					{!watch('is_hand_delivery') && !watch('is_own_order') && (
+					{!watch('is_hand_delivery') && !watch('is_own') && (
 						<FormField
 							label='vehicle_uuid'
 							title='Assign To'
@@ -428,14 +435,14 @@ export default function Header({
 							/>
 						</FormField>
 					)}
-					{watch('is_hand_delivery') && !watch('is_own_order') && (
+					{watch('is_hand_delivery') && !watch('is_own') && (
 						<Input
 							label='name'
 							title='Name'
 							{...{ register, errors }}
 						/>
 					)}
-					{watch('is_hand_delivery') && !watch('is_own_order') && (
+					{watch('is_hand_delivery') && !watch('is_own') && (
 						<Input
 							label='delivery_cost'
 							title='Delivery Cost'

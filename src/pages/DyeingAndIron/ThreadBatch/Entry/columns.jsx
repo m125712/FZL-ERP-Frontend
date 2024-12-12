@@ -15,7 +15,6 @@ export const Columns = ({
 	is_new = false,
 }) => {
 	const haveAccess = useAccess('dyeing__thread_batch_entry_update');
-	console.log(isUpdate, 'isUpdate');
 
 	// * setting all quantity in finishing_batch_entry to the balance quantity
 	const setAllQty = () => {
@@ -107,7 +106,10 @@ export const Columns = ({
 								onClick={() =>
 									setValue(
 										`batch_entry[${idx}].quantity`,
-										info.getValue()
+										info.getValue(),
+										{
+											shouldDirty: true,
+										}
 									)
 								}
 							/>
@@ -218,7 +220,10 @@ export const Columns = ({
 								onClick={() =>
 									setValue(
 										`new_batch_entry[${idx}].quantity`,
-										info.getValue()
+										info.getValue(),
+										{
+											shouldDirty: true,
+										}
 									)
 								}>
 								Copy

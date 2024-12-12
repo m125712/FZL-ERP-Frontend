@@ -21,7 +21,13 @@ export default function Header({
 }) {
 	const { data: ordersZipper } = isUpdate
 		? useOtherOrder('')
-		: useOtherOrder('page=packing_list');
+		: useOtherOrder('page=packing_list&item_for=full');
+	const { data: ordersSlider } = isUpdate
+		? useOtherOrder('')
+		: useOtherOrder('page=packing_list&item_for=slider');
+	const { data: ordersTape } = isUpdate
+		? useOtherOrder('')
+		: useOtherOrder('page=packing_list&item_for=tape');
 	const { data: ordersThread } = isUpdate
 		? useThreadOrder('')
 		: useThreadOrder('page=packing_list');
@@ -36,7 +42,10 @@ export default function Header({
 		thread: ordersThread,
 		sample_zipper: ordersZipperSample,
 		sample_thread: ordersThreadSample,
+		slider: ordersSlider,
+		tape: ordersTape,
 	};
+
 	const orders = itemFor[watch('item_for')] || [];
 	const { data: cartons } = useOtherCarton();
 	const itemOptions = [

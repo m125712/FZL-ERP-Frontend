@@ -14,7 +14,7 @@ export const Columns = ({
 	is_new = false,
 	isUpdate = false,
 }) => {
-	const haveAccess = useAccess('dyeing__finishing_batch_entry_update');
+	const haveAccess = useAccess('planning__finishing_batch_entry_update');
 
 	// * setting all quantity in finishing_batch_entry to the balance quantity
 	const setAllQty = () => {

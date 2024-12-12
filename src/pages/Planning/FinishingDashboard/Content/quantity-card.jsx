@@ -25,7 +25,7 @@ export default function QuantityCard({ data, production_date }) {
 							id={item.value}
 							key={index}
 							title={item.label}
-							uri='/dyeing-and-iron/finishing-batch'
+							uri='/planning/finishing-batch'
 						/>
 					))}
 				</div>
@@ -84,7 +84,7 @@ export default function QuantityCard({ data, production_date }) {
 				<button
 					onClick={() =>
 						navigate(
-							`/dyeing-and-iron/finishing-batch/entry?production_date=${production_date}`
+							`/planning/finishing-batch/entry?production_date=${production_date}`
 						)
 					}
 					className='btn btn-primary btn-xs min-h-8 w-full gap-1'>

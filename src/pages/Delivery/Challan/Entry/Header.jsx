@@ -44,7 +44,7 @@ export default function Header({
 	//* Orders Fetch
 	const { data: ordersZipper } = isUpdate
 		? useOtherOrder()
-		: useOtherOrder('page=challan&item_for=full');
+		: useOtherOrder('page=challan&item_for=zipper');
 	const { data: ordersSlider } = isUpdate
 		? useOtherOrder()
 		: useOtherOrder('page=challan&item_for=slider');
@@ -53,7 +53,7 @@ export default function Header({
 		: useOtherOrder('page=challan&item_for=tape');
 	const { data: ordersThread } = isUpdate
 		? useThreadOrder()
-		: useThreadOrder('page=challan');
+		: useThreadOrder('page=challan&item_for=thread');
 
 	const { data: ordersZipperSample } = isUpdate
 		? useOtherOrder('is_sample=true')
@@ -78,7 +78,8 @@ export default function Header({
 		isUpdate
 			? useOtherPackingListByOrderInfoUUIDAndChallanUUID(
 					watch('order_info_uuid'),
-					watch('uuid')
+					watch('uuid'),
+					watch('item_for')
 				)
 			: useOtherPackingListByOrderInfoUUID(watch('order_info_uuid'));
 

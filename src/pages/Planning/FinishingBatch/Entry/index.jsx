@@ -231,7 +231,7 @@ export default function index() {
 				.then(() => {
 					invalidateQuery();
 					invalidateDetails();
-					navigate(`/dyeing-and-iron/finishing-batch/${rest.uuid}`);
+					navigate(`/planning/finishing-batch/${rest.uuid}`);
 				})
 				.catch((err) => console.log(err));
 
@@ -315,7 +315,7 @@ export default function index() {
 			.then(() => {
 				invalidateQuery();
 				navigate(
-					`/dyeing-and-iron/finishing-batch/${finishingData.uuid}`
+					`/planning/finishing-batch/${finishingData.uuid}`
 				);
 			})
 			.catch((err) => console.log(err));

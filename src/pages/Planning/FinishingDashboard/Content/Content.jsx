@@ -76,7 +76,7 @@ export default function Content({ data }) {
 													<button
 														onClick={() =>
 															navigate(
-																`/dyeing-and-iron/finishing-batch/entry?production_date=${production_date}`
+																`/planning/finishing-batch/entry?production_date=${production_date}`
 															)
 														}
 														className='btn btn-primary btn-xs min-h-8 w-full gap-1'>

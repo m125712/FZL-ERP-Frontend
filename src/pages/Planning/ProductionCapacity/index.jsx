@@ -17,9 +17,9 @@ export default function Index() {
 	const info = new PageInfo(
 		'Production Capacity',
 		url,
-		'dyeing__production_capacity'
+		'planning__production_capacity'
 	);
-	const haveAccess = useAccess('dyeing__production_capacity');
+	const haveAccess = useAccess('planning__production_capacity');
 
 	const columns = useMemo(
 		() => [

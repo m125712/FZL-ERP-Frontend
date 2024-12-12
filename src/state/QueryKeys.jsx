@@ -1226,11 +1226,16 @@ export const otherQK = {
 		'delivery-packing-list-by-order-info',
 		uuid,
 	],
-	deliveryPackingListByOrderInfoUUIDAndChallanUUID: (uuid, challan_uuid) => [
+	deliveryPackingListByOrderInfoUUIDAndChallanUUID: (
+		uuid,
+		challan_uuid,
+		item_for
+	) => [
 		...otherQK.all(),
 		'delivery-packing-list-by-order-info-and-challan',
 		uuid,
 		challan_uuid,
+		item_for,
 	],
 
 	// * ORDER INFO VALUE LABEL

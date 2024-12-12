@@ -11,14 +11,14 @@ import PageInfo from '@/util/PageInfo';
 
 export default function index() {
 	const navigate = useNavigate();
-	const haveAccess = useAccess('dyeing__finishing_batch');
+	const haveAccess = useAccess('planning__finishing_batch');
 
 	const { data, isLoading, url } = useDyeingFinishingBatch();
 
 	const info = new PageInfo(
 		'Finishing Batch',
 		url,
-		'dyeing__finishing_batch'
+		'planning__finishing_batch'
 	);
 
 	useEffect(() => {
@@ -39,7 +39,7 @@ export default function index() {
 						<LinkWithCopy
 							title={info.getValue()}
 							id={uuid}
-							uri={`/dyeing-and-iron/finishing-batch`}
+							uri={`/planning/finishing-batch`}
 						/>
 					);
 				},
@@ -247,11 +247,11 @@ export default function index() {
 		[data]
 	);
 
-	const handelAdd = () => navigate('/dyeing-and-iron/finishing-batch/entry');
+	const handelAdd = () => navigate('/planning/finishing-batch/entry');
 
 	const handelUpdate = (idx) => {
 		const uuid = data[idx]?.uuid;
-		navigate(`/dyeing-and-iron/finishing-batch/${uuid}/update`);
+		navigate(`/planning/finishing-batch/${uuid}/update`);
 	};
 
 	if (isLoading)

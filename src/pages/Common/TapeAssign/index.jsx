@@ -117,7 +117,7 @@ export default function Index() {
 							isDisabled={
 								swatchAccessOverride
 									? false
-									: tape_uuid === null && swatchAccess
+									: tape_coil_uuid === null && swatchAccess
 										? false
 										: true
 							}

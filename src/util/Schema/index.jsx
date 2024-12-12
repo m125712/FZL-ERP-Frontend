@@ -1606,8 +1606,12 @@ export const CHALLAN_SCHEMA = {
 		then: (Schema) => Schema.required('Required'),
 		otherwise: (Schema) => Schema.nullable(),
 	}),
-	vehicle_uuid: STRING.when(['is_hand_delivery', 'is_own'], {
-		is: (is_hand_delivery, is_own) => is_hand_delivery || is_own,
+	vehicle_uuid: STRING.when(['is_hand_delivery', 'is_own', 'item_for'], {
+		is: (is_hand_delivery, is_own, item_for) =>
+			is_hand_delivery ||
+			is_own ||
+			item_for === 'sample_zipper' ||
+			item_for === 'sample_thread',
 		then: (Schema) => Schema.nullable(),
 		otherwise: (Schema) => Schema.required('Required'),
 	}),

@@ -101,7 +101,6 @@ export const Columns = ({
 										`finishing_batch_entry[${idx}].quantity`,
 										info.getValue(),
 										{
-											shouldValidate: true,
 											shouldDirty: true,
 										}
 									)
@@ -203,7 +202,6 @@ export const Columns = ({
 									`new_finishing_batch_entry[${idx}].quantity`,
 									info.getValue(),
 									{
-										shouldValidate: true,
 										shouldDirty: true,
 									}
 								)

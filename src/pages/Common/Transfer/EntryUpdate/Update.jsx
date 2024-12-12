@@ -8,6 +8,7 @@ import {
 import { useOtherOrderDescription } from '@/state/Other';
 import { useVislonTMP } from '@/state/Vislon';
 import { DevTool } from '@hookform/devtools';
+import * as yup from 'yup';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -19,6 +20,7 @@ import {
 	UPDATE_DYEING_TRANSFER_SCHEMA,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
+import { Watch } from 'lucide-react';
 
 export default function Index({
 	modalId = '',
@@ -45,7 +47,17 @@ export default function Index({
 		control,
 		getValues,
 		Controller,
-	} = useRHF(UPDATE_DYEING_TRANSFER_SCHEMA, UPDATE_DYEING_TRANSFER_NULL);
+		watch
+	} = useRHF(
+		{
+			...UPDATE_DYEING_TRANSFER_SCHEMA,
+			trx_quantity: UPDATE_DYEING_TRANSFER_SCHEMA.trx_quantity.max(
+				yup.ref('max_trx_quantity'),
+				'Beyond Max Quantity'
+			).moreThan(0, 'Must be greater than 0'),
+		},
+		UPDATE_DYEING_TRANSFER_NULL
+	);
 
 	useEffect(() => {
 		if (data) {
@@ -175,6 +187,7 @@ export default function Index({
 			<JoinInput
 				label='trx_quantity'
 				title='Transfer Quantity'
+				sub_label={`Max: ${watch('max_trx_quantity')}`}
 				unit='KG'
 				{...{ register, errors }}
 			/>

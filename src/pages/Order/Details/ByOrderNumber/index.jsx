@@ -5,6 +5,7 @@ import { useAccess, useFetchFunc } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import OrderSheetPdf from '@/components/Pdf/OrderSheet';
+import OrderSheetPdf2 from '@/components/Pdf/OrderSheet2';
 
 import { OrderInformation } from '../_components/Information';
 
@@ -26,7 +27,7 @@ const renderHr = (showHr = false) => {
 	);
 };
 
-const createPDF = (pdfdata, setData, setGetPdfData) => {
+const createPDF = (pdfdata, setData, setGetPdfData, OrderSheetPdf) => {
 	const res = OrderSheetPdf(pdfdata);
 
 	setGetPdfData(res);
@@ -103,9 +104,8 @@ export default function Index() {
 				sr,
 			};
 
-
-			createPDF(order_sheet, setData, setGetPdfData);
-			createPDF(order_sheet, setData2, setGetPdfData2);
+			createPDF(order_sheet, setData, setGetPdfData, OrderSheetPdf);
+			createPDF(order_sheet, setData2, setGetPdfData2, OrderSheetPdf2);
 			// getPdfData.download();
 		}
 	}, [orders, garments, sr]);
@@ -157,7 +157,7 @@ export default function Index() {
 				/>
 				<iframe
 					id='iframeContainer'
-					src={data2	}
+					src={data2}
 					className='h-[40rem] w-full rounded-md border-none'
 				/>
 			</div>

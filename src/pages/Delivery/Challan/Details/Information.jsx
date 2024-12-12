@@ -38,15 +38,7 @@ export default function Information({ challan }) {
 				label: 'O/N',
 				value: order_number,
 			},
-			{
-				label: 'Hand Delivery',
-				value: (
-					<StatusButton
-						className={'btn-xs'}
-						value={is_hand_delivery ? 1 : 0}
-					/>
-				),
-			},
+
 			{
 				label: 'Gate Pass',
 				value: <StatusButton className={'btn-xs'} value={gate_pass} />,
@@ -57,13 +49,26 @@ export default function Information({ challan }) {
 					<StatusButton className={'btn-xs'} value={receive_status} />
 				),
 			},
+		];
+
+		const deliveryDetails = [
+			{
+				label: 'Delivery Date',
+				value: format(new Date(delivery_date), 'dd/MM/yy'),
+			},
 			{
 				label: 'Own Delivery',
 				value: <StatusButton className={'btn-xs'} value={is_own} />,
 			},
-		];
-
-		const deliveryDetails = [
+			{
+				label: 'Hand Delivery',
+				value: (
+					<StatusButton
+						className={'btn-xs'}
+						value={is_hand_delivery ? 1 : 0}
+					/>
+				),
+			},
 			{
 				label: 'Name',
 				value: name,
@@ -75,10 +80,6 @@ export default function Information({ challan }) {
 			{
 				label: 'Assign To',
 				value: vehicle_name,
-			},
-			{
-				label: 'Delivery Date',
-				value: format(new Date(delivery_date), 'dd/MM/yy'),
 			},
 		];
 

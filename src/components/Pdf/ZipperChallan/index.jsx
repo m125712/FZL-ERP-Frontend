@@ -5,55 +5,69 @@ import {
 } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
+import { DollarToWord, NumToWord } from '@/lib/NumToWord';
+
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
-// const node = [
-// 	getTable('packing_number', 'PL No'),
-// 	getTable('item_description', 'Count'),
-// 	getTable('style', 'Style'),
-// 	getTable('color', 'Color'),
-// 	getTable('size', 'Length', 'right'),
-// 	getTable('quantity', 'Qty(cone)', 'right'),
-// 	getTable('poli_quantity', 'Poly', 'right'),
-// ];
 export default function Index(data) {
-	const node =
-		data?.item_for === 'thread' || data?.item_for === 'sample_thread'
-			? [
-					getTable('packing_number', 'PL No'),
-					getTable('item_description', 'Count'),
-					getTable('style', 'Style'),
-					getTable('color', 'Color'),
-					getTable('size', 'Length', 'right'),
-					getTable('quantity', 'Qty(cone)', 'right'),
-					getTable('poli_quantity', 'Poly', 'right'),
-				]
-			: [
-					getTable('packing_number', 'PL No'),
-					getTable('item_description', 'Item Description'),
-					getTable('style', 'Style'),
-					getTable('color', 'Color'),
-					getTable('size', 'Size', 'right'),
-					getTable('quantity', 'Qty(pcs)', 'right'),
-					getTable('poli_quantity', 'Poly', 'right'),
-				];
-	const headerHeight = 150;
+	const isThreadChallan =
+		data?.item_for === 'thread' || data?.item_for === 'sample_thread';
+	const threadNode = [
+		getTable('packing_number', 'PL No'),
+		getTable('item_description', 'Count'),
+		getTable('style', 'Style'),
+		getTable('color', 'Color'),
+		getTable('size', 'Length', 'right'),
+		getTable('quantity', 'Qty(cone)', 'right'),
+		getTable('poli_quantity', 'Poly', 'right'),
+	];
+	const zipperNode = [
+		getTable('packing_number', 'PL No'),
+		getTable('item_description', 'Item Description'),
+		getTable('style', 'Style'),
+		getTable('color', 'Color'),
+		getTable('size', 'Size', 'right'),
+		getTable('quantity', 'Qty(pcs)', 'right'),
+		getTable('poli_quantity', 'Poly', 'right'),
+	];
+	const node = isThreadChallan ? threadNode : zipperNode;
+
+	const headerHeight = 200;
 	let footerHeight = 50;
 	let { challan_entry } = data;
-	let totalQuantity = challan_entry?.reduce((acc, item) => {
-		const quantity = parseInt(item.quantity, 10) || 0;
-		return acc + quantity;
-	}, 0);
-	let totalPolyQty = challan_entry?.reduce((acc, item) => {
-		const quantity = parseInt(item.poli_quantity, 10) || 0;
-		return acc + quantity;
-	}, 0);
+	const uniqueCounts = challan_entry?.reduce(
+		(acc, item) => {
+			acc.itemDescriptions.add(item.item_description);
+			acc.styles.add(item.style);
+			acc.colors.add(item.color);
+			acc.sizes.add(item.size);
+			acc.quantity = acc.quantity + parseInt(item.quantity, 10);
+			acc.poly_quantity =
+				acc.poly_quantity + parseInt(item.poli_quantity, 10);
+			return acc;
+		},
+		{
+			itemDescriptions: new Set(),
+			styles: new Set(),
+			colors: new Set(),
+			sizes: new Set(),
+			quantity: 0,
+			poly_quantity: 0,
+		}
+	);
+
+	const uniqueItemDescription = uniqueCounts.itemDescriptions.size;
+	const uniqueStyle = uniqueCounts.styles.size;
+	const uniqueColor = uniqueCounts.colors.size;
+	const uniqueSize = uniqueCounts.sizes.size;
+	let totalQuantity = uniqueCounts.quantity;
+	let totalPolyQty = uniqueCounts.poly_quantity;
 
 	let unit = [];
 	challan_entry?.forEach((item) => {
 		unit.push(
-			`${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? `mtr` : item.is_inch === 1 ? `inch` : `cm`}`
+			`${isThreadChallan ? `mtr` : item.is_inch === 1 ? `inch` : `cm`}`
 		);
 	});
 
@@ -85,7 +99,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [80, 60, 130, 60, 60, 50, 50],
+					widths: [70, 80, 110, 70, 40, 70, 50],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -117,13 +131,24 @@ export default function Index(data) {
 							{
 								text: 'Total',
 								bold: true,
-								colSpan: 5,
+							},
+							{
+								text: `${uniqueItemDescription} Desc`,
+								bold: true,
+							},
+							{
+								text: `${uniqueStyle} Style`,
+								bold: true,
+							},
+							{
+								text: `${uniqueColor} Color`,
+								bold: true,
+							},
+							{
+								text: `${uniqueSize} Size`,
+								bold: true,
 								alignment: 'right',
 							},
-							{},
-							{},
-							{},
-							{},
 							{
 								text: totalQuantity,
 								bold: true,
@@ -138,6 +163,15 @@ export default function Index(data) {
 					],
 				},
 				layout: tableLayoutStyle,
+			},
+			{
+				text: '\n',
+			},
+			{
+				text: `Total Quantity (In Words): ${NumToWord(totalQuantity)} ${
+					isThreadChallan ? 'cone' : 'pcs only'
+				}`,
+				bold: true,
 			},
 		],
 	});

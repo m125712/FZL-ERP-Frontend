@@ -96,6 +96,14 @@ export default function OrderSheetPdf(order_sheet) {
 					return acc;
 				}, {});
 
+				let heightsForOthers = [
+					...Object.keys(res).flatMap((style) =>
+						res[style].map((color) => 72)
+					),
+				];
+
+				let heightsForSlider = [...Object.keys(res).map((style) => 72)];
+
 				//todo: order_type condition will start from here
 				if (entry.order_type !== 'slider') {
 					// * garments info
@@ -113,6 +121,8 @@ export default function OrderSheetPdf(order_sheet) {
 					const chunkSize = 7;
 					const chunkedArray = chunkArray(uniqueSizes, chunkSize);
 					let TotalChunkQTY = 0;
+					let headerHeight = entry.order_type === 'tape' ? 2 : 3;
+
 					return [
 						chunkedArray.map((chunk, index) => {
 							let chunkTotal = 0;
@@ -125,7 +135,15 @@ export default function OrderSheetPdf(order_sheet) {
 										// ...uniqueSizes.map(() => 20),
 										'*',
 									],
-									heights: 20,
+									heights: function (row) {
+										if (
+											row > headerHeight - 1 &&
+											row <
+												heightsForOthers.length +
+													headerHeight
+										)
+											return 72;
+									},
 									body: [
 										// Table Header
 										...TableHeader({
@@ -367,7 +385,6 @@ export default function OrderSheetPdf(order_sheet) {
 							margin: [0, 5],
 							table: {
 								widths: [50, '*', '*'],
-								heights: 20,
 								body: [
 									...TableHeader({
 										entry,

@@ -23,18 +23,17 @@ export default function Index() {
 	const info = new PageInfo('Common/Tape/SFG', url, 'common__tape_sfg');
 	const haveAccess = useAccess(info.getTab());
 	const navigate = useNavigate();
-	const [stock, setStock] = useState(false);
+	const [stock, setStock] = useState(true);
 	const stockState = [
-		{ label: 'Yes', value: true },
-		{ label: 'No', value: false },
+		{ label: 'Order', value: true },
+		{ label: 'Stock', value: false },
 	];
 
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
 
-	console.log(stock);
-	const columns = useMemo(
+	const columnsOrder = useMemo(
 		() => [
 			{
 				accessorKey: 'material_name',
@@ -87,13 +86,6 @@ export default function Index() {
 					<span className='capitalize'>{info.getValue()}</span>
 				),
 			},
-
-			// {
-			// 	accessorKey: 'quantity_in_coil',
-			// 	header: 'Quantity In Coil',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'actions1',
 				header: '',
@@ -128,8 +120,7 @@ export default function Index() {
 				header: 'To Coil',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden:
-					!haveAccess.includes('click_to_coil') && stock === false,
+				hidden: !haveAccess.includes('click_to_coil'),
 				width: 'w-24',
 				cell: (info) => {
 					if (
@@ -138,10 +129,6 @@ export default function Index() {
 						return (
 							<Transfer
 								onClick={() => handleTrxToCoil(info.row.index)}
-								disabled={
-									!haveAccess.includes('click_to_coil') &&
-									!stock
-								}
 							/>
 						);
 					}
@@ -158,7 +145,7 @@ export default function Index() {
 				header: 'To Dying',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !(!haveAccess.includes('click_to_dyeing') && !stock),
+				hidden: !haveAccess.includes('click_to_dyeing'),
 				width: 'w-24',
 				cell: (info) => {
 					if (
@@ -173,14 +160,167 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'dyeing_against_stock_action',
-				header: 'Dyeing Against Stock',
+				accessorKey: 'raw_per_kg_meter',
+				header: (
+					<span>
+						Raw Tape
+						<br />
+						(Meter/Kg)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'dyed_per_kg_meter',
+				header: (
+					<span>
+						Dyed Tape
+						<br />
+						(Meter/Kg)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'actions',
+				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !(
-					!haveAccess.includes('click_to_dyeing_against_stock') &&
-					stock
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
+				width: 'w-24',
+				cell: (info) => {
+					return (
+						<EditDelete
+							idx={info.row.index}
+							handelUpdate={handelUpdate}
+							handelDelete={handelDelete}
+							showDelete={haveAccess.includes('delete')}
+							showUpdate={haveAccess.includes('update')}
+						/>
+					);
+				},
+			},
+		],
+		[data, stock]
+	);
+
+	const columnsStock = useMemo(
+		() => [
+			{
+				accessorKey: 'material_name',
+				header: 'Material',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'name',
+				header: 'Name',
+				enableColumnFilter: false,
+				width: 'w-40',
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
 				),
+			},
+			{
+				accessorKey: 'item_name',
+				header: 'Item',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
+				accessorKey: 'zipper_number_name',
+				header: (
+					<div>
+						Zipper
+						<br />
+						Number
+					</div>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_import',
+				header: 'Imported?',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return Number(info.getValue()) === 1 ? ' Import' : 'Local';
+				},
+			},
+			{
+				accessorKey: 'is_reverse',
+				header: 'Reverse?',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
+				accessorKey: 'actions1',
+				header: '',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_production'),
+				width: 'w-34',
+				cell: (info) => {
+					if (info.row.original?.material_name === null) {
+						return (
+							<Transfer
+								onClick={() => handelProduction(info.row.index)}
+							/>
+						);
+					}
+				},
+			},
+			{
+				accessorKey: 'quantity',
+				header: (
+					<span>
+						Production
+						<br />
+						(KG)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'dyeing_against_stock_action',
+				header: 'To Dyeing',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_to_dyeing_against_stock'),
 				width: 'w-30',
 				cell: (info) => {
 					if (
@@ -200,7 +340,7 @@ export default function Index() {
 				accessorKey: 'trx_quantity_in_dying',
 				header: (
 					<span>
-						Trx Quantity in Dyeing
+						Trx Quantity
 						<br />
 						(KG)
 					</span>
@@ -213,7 +353,7 @@ export default function Index() {
 				header: 'To Stock',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !(!haveAccess.includes('click_to_stock') && stock),
+				hidden: !haveAccess.includes('click_to_stock'),
 				width: 'w-30',
 				cell: (info) => {
 					if (
@@ -244,7 +384,7 @@ export default function Index() {
 				header: 'To Transfer',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !(!haveAccess.includes('click_to_transfer') && stock),
+				hidden: !haveAccess.includes('click_to_transfer'),
 				width: 'w-24',
 				cell: (info) => {
 					if (
@@ -331,7 +471,6 @@ export default function Index() {
 		],
 		[data, stock]
 	);
-
 	// Update
 	const [updateTapeProd, setUpdateTapeProd] = useState({
 		uuid: null,
@@ -441,20 +580,25 @@ export default function Index() {
 
 	return (
 		<div>
-			<ReactSelect
-				placeholder='Select state'
-				options={stockState}
-				value={stockState?.filter((item) => item.value == stock)}
-				onChange={(e) => {
-					setStock(e.value);
-				}}
-			/>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}
 				accessor={haveAccess.includes('click_production')}
 				data={data}
-				columns={columns}
+				columns={stock ? columnsOrder : columnsStock}
+				extraButton={
+					<ReactSelect
+						className='h-4 w-24 text-sm'
+						placeholder='Select state'
+						options={stockState}
+						value={stockState?.filter(
+							(item) => item.value == stock
+						)}
+						onChange={(e) => {
+							setStock(e.value);
+						}}
+					/>
+				}
 			/>
 			{/* //* Modals  */}
 			<Suspense>

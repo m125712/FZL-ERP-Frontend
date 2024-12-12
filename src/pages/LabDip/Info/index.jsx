@@ -12,7 +12,7 @@ import PageInfo from '@/util/PageInfo';
 export default function Index() {
 	const { data, isLoading, url, updateData } = useLabDipInfo();
 	const navigate = useNavigate();
-	const info = new PageInfo('Lab Dip/Info', url, 'lab_dip__info');
+	const info = new PageInfo('Lab Dip/Card', url, 'lab_dip__info');
 	const haveAccess = useAccess('lab_dip__info');
 
 	const columns = useMemo(

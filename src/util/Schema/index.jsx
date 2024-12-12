@@ -729,15 +729,14 @@ export const LAB_RECIPE_NULL = {
 export const LAB_INFO_SCHEMA = {
 	order_info_uuid: STRING.nullable(),
 	name: STRING_REQUIRED,
-	lab_status: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	remarks: STRING.nullable(),
 	recipe: yup.array().of(
 		yup.object().shape({
-			status: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 			approved: BOOLEAN.transform(handelNumberDefaultValue).default(
 				false
 			),
 			recipe_uuid: STRING_REQUIRED,
+			remarks: STRING.nullable(),
 		})
 	),
 };
@@ -745,13 +744,12 @@ export const LAB_INFO_SCHEMA = {
 export const LAB_INFO_NULL = {
 	order_info_uuid: null,
 	name: '',
-	lab_status: 0,
 	remarks: '',
 	recipe: [
 		{
-			status: false,
 			approved: false,
 			recipe_uuid: null,
+			remarks: '',
 		},
 	],
 };

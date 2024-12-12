@@ -38,10 +38,10 @@ export default function Information({ info }) {
 				),
 			},
 
-			{
-				label: 'Lab Status',
-				value: <StatusButton value={lab_status} className={'btn-xs'} />,
-			},
+			// {
+			// 	label: 'Lab Status',
+			// 	value: <StatusButton value={lab_status} className={'btn-xs'} />,
+			// },
 			{
 				label: 'Thread Order',
 				value: (

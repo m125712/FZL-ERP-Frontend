@@ -49,10 +49,10 @@ export default function Header({
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody
-				title={`${isUpdate ? `Recipe: ${getValues('recipe_id')}` : 'Recipe'}`}
+				title={`${isUpdate ? `Update Recipe: ${getValues('recipe_id')}` : 'Recipe'}`}
 				header={
 					<div className='m-2 flex items-center gap-1 text-sm'>
-						<div className='rounded-md border border-secondary/30 bg-secondary px-1'>
+						{/* <div className='rounded-md border border-secondary/30 bg-secondary px-1'>
 							<CheckBox
 								text='text-secondary-content'
 								label='approved'
@@ -69,7 +69,7 @@ export default function Header({
 										: true
 								}
 							/>
-						</div>
+						</div> */}
 						{/* <div className='rounded-md border border-secondary/30 bg-secondary px-1'>
 							<CheckBox
 								text='text-secondary-content'
@@ -85,7 +85,7 @@ export default function Header({
 				}>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					{/* Lab dip info ID */}
-					<FormField
+					{/* <FormField
 						label='lab_dip_info_uuid'
 						title='Lab dip info ID'
 						errors={errors}>
@@ -108,7 +108,7 @@ export default function Header({
 								);
 							}}
 						/>
-					</FormField>
+					</FormField> */}
 					<Input label={`name`} {...{ register, errors }} />
 					<FormField
 						label='sub_streat'

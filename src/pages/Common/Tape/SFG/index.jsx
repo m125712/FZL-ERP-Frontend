@@ -23,29 +23,17 @@ export default function Index() {
 	const info = new PageInfo('Common/Tape/SFG', url, 'common__tape_sfg');
 	const haveAccess = useAccess(info.getTab());
 	const navigate = useNavigate();
-	const [stock, setStock] = useState(null);
+	const [stock, setStock] = useState(false);
 	const stockState = [
 		{ label: 'Yes', value: true },
 		{ label: 'No', value: false },
 	];
 
-	// * Set initial stock values
-	useEffect(() => {
-		if (data) {
-			setStock(
-				data.map(() => {
-					return {
-						value: false,
-					};
-				})
-			);
-		}
-	}, [data]);
-
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
 
+	console.log(stock);
 	const columns = useMemo(
 		() => [
 			{
@@ -135,46 +123,13 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
-			{
-				accessorKey: 'stock',
-				header: 'Stock',
-				width: 'w-24',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<ReactSelect
-						placeholder='Select state'
-						options={stockState}
-						value={stockState?.filter(
-							(item) => item.value == stock[info.row.index]?.value
-						)}
-						onChange={(e) => {
-							console.log(info.row.index);
-							// console.log(stock);
-							setStock(
-								stock.map((item, index) => {
-									if (index === info.row.index) {
-										return {
-											...item,
-											value: e.value,
-										};
-									}
-									return item;
-								})
-							);
-							// console.log(stock?.[info.row.index]);
-						}}
-						// isDisabled={order_info_id !== undefined}
-					/>
-				),
-			},
-
 			{
 				accessorKey: 'coil_action',
 				header: 'To Coil',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_to_coil'),
+				hidden:
+					!haveAccess.includes('click_to_coil') && stock === false,
 				width: 'w-24',
 				cell: (info) => {
 					if (
@@ -184,7 +139,8 @@ export default function Index() {
 							<Transfer
 								onClick={() => handleTrxToCoil(info.row.index)}
 								disabled={
-									stock[info.row.index]?.value ? true : false
+									!haveAccess.includes('click_to_coil') &&
+									!stock
 								}
 							/>
 						);
@@ -202,7 +158,7 @@ export default function Index() {
 				header: 'To Dying',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_to_dyeing'),
+				hidden: !(!haveAccess.includes('click_to_dyeing') && !stock),
 				width: 'w-24',
 				cell: (info) => {
 					if (
@@ -211,9 +167,6 @@ export default function Index() {
 						return (
 							<Transfer
 								onClick={() => handleTrxToDying(info.row.index)}
-								disabled={
-									stock[info.row.index]?.value ? true : false
-								}
 							/>
 						);
 					}
@@ -224,7 +177,10 @@ export default function Index() {
 				header: 'Dyeing Against Stock',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_to_dyeing_against_stock'),
+				hidden: !(
+					!haveAccess.includes('click_to_dyeing_against_stock') &&
+					stock
+				),
 				width: 'w-30',
 				cell: (info) => {
 					if (
@@ -234,9 +190,6 @@ export default function Index() {
 							<Transfer
 								onClick={() =>
 									handleDyeingAgainstStock(info.row.index)
-								}
-								disabled={
-									stock[info.row.index]?.value ? false : true
 								}
 							/>
 						);
@@ -260,7 +213,7 @@ export default function Index() {
 				header: 'To Stock',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_to_stock'),
+				hidden: !(!haveAccess.includes('click_to_stock') && stock),
 				width: 'w-30',
 				cell: (info) => {
 					if (
@@ -269,9 +222,6 @@ export default function Index() {
 						return (
 							<Transfer
 								onClick={() => handleTrxToStock(info.row.index)}
-								disabled={
-									stock[info.row.index]?.value ? false : true
-								}
 							/>
 						);
 					}
@@ -294,7 +244,7 @@ export default function Index() {
 				header: 'To Transfer',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_to_transfer'),
+				hidden: !(!haveAccess.includes('click_to_transfer') && stock),
 				width: 'w-24',
 				cell: (info) => {
 					if (
@@ -303,9 +253,6 @@ export default function Index() {
 						return (
 							<Transfer
 								onClick={() => handleTransfer(info.row.index)}
-								disabled={
-									stock[info.row.index]?.value ? false : true
-								}
 							/>
 						);
 					}
@@ -494,6 +441,14 @@ export default function Index() {
 
 	return (
 		<div>
+			<ReactSelect
+				placeholder='Select state'
+				options={stockState}
+				value={stockState?.filter((item) => item.value == stock)}
+				onChange={(e) => {
+					setStock(e.value);
+				}}
+			/>
 			<ReactTable
 				title={info.getTitle()}
 				handelAdd={handelAdd}

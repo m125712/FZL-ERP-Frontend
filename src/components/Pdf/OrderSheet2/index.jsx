@@ -125,7 +125,7 @@ export default function OrderSheetPdf(order_sheet) {
 										// ...uniqueSizes.map(() => 20),
 										'*',
 									],
-									heights: 0,
+									heights: 20,
 									body: [
 										// Table Header
 										...TableHeader({
@@ -176,7 +176,6 @@ export default function OrderSheetPdf(order_sheet) {
 																	.length,
 															text: style,
 															style: 'tableCell',
-
 														},
 														{
 															text: colorName,
@@ -368,6 +367,7 @@ export default function OrderSheetPdf(order_sheet) {
 							margin: [0, 5],
 							table: {
 								widths: [50, '*', '*'],
+								heights: 20,
 								body: [
 									...TableHeader({
 										entry,
@@ -487,7 +487,7 @@ export default function OrderSheetPdf(order_sheet) {
 					body: [
 						[
 							{
-								text: 'Grand Total',
+								text: 'Grand TotalLLLL',
 								style: 'tableFooter',
 								alignment: 'right',
 							},

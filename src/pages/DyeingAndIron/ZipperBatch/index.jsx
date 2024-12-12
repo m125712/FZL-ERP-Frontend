@@ -61,6 +61,18 @@ export default function Index() {
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'color',
+				header: 'Color',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'total_quantity',
 				header: 'Total Qty(Pcs)',
 				enableColumnFilter: false,

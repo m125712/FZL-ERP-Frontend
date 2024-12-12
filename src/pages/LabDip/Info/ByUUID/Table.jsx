@@ -116,7 +116,7 @@ export default function Index({ recipe, order_info_uuid }) {
 	);
 	const handelApprovedStatusChange = async (idx) => {
 		await updateData.mutateAsync({
-			url: `${url}/${recipe[idx]?.recipe_uuid}`,
+			url: `/lab-dip/info-entry/${recipe[idx]?.info_entry_uuid}`,
 			updatedData: {
 				approved: recipe[idx]?.approved === 1 ? 0 : 1,
 				approved_date:

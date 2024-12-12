@@ -4,7 +4,6 @@ import { useOtherRecipe } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
-import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
@@ -39,6 +38,7 @@ export default function Index() {
 	const isUpdate = info_uuid !== undefined && info_number !== undefined;
 
 	const { data } = UseLabDipInfoByDetails(info_uuid);
+	const { data: rec_uuid } = useOtherRecipe();
 	const {
 		register,
 		handleSubmit,
@@ -107,7 +107,6 @@ export default function Index() {
 			// * updated order description * //
 			const lab_info_updated = {
 				...data,
-				lab_status: data.lab_status ? 1 : 0,
 				updated_at: GetDateTime(),
 			};
 
@@ -120,22 +119,37 @@ export default function Index() {
 			// * updated recipe * //
 			const recipe_updated = [...data.recipe].map((item) => ({
 				...item,
-				lab_dip_info_uuid: data.uuid,
-				status: item.status ? 1 : 0,
+				lab_dip_info_uuid: data?.uuid,
 				approved: item.approved ? 1 : 0,
-				updated_at: GetDateTime(),
+				approved_date: item.approved ? GetDateTime() : null,
 			}));
 
-			// * insert the recipe data using update function * //
+			//* Post new entry */ //
 			let recipe_updated_promises = [
-				...recipe_updated.map(
-					async (item) =>
+				...recipe_updated.map(async (item) => {
+					if (item.info_entry_uuid) {
 						await updateData.mutateAsync({
-							url: `/lab-dip/update-recipe/by/${item.recipe_uuid}`,
-							updatedData: item,
+							url: `/lab-dip/info-entry/${item.info_entry_uuid}`,
+							updatedData: {
+								...item,
+								uuid: item.info_entry_uuid,
+								updated_at: GetDateTime(),
+							},
 							isOnCloseNeeded: false,
-						})
-				),
+						});
+					} else {
+						await postData.mutateAsync({
+							url: '/lab-dip/info-entry',
+							newData: {
+								...item,
+								uuid: nanoid(),
+								created_by: user?.uuid,
+								created_at: GetDateTime(),
+							},
+							isOnCloseNeeded: false,
+						});
+					}
+				}),
 			];
 			await Promise.all(recipe_updated_promises)
 				.then(() => reset(LAB_INFO_NULL))
@@ -158,7 +172,6 @@ export default function Index() {
 		const lab_info = {
 			...data,
 			uuid: lab_dip_info_uuid,
-			lab_status: data.lab_status ? 1 : 0,
 			created_at,
 			created_by: user?.uuid,
 		};
@@ -172,18 +185,21 @@ export default function Index() {
 
 		const recipe = [...data.recipe].map((item) => ({
 			...item,
+			uuid: nanoid(),
 			lab_dip_info_uuid,
-			status: item.status ? 1 : 0,
 			approved: item.approved ? 1 : 0,
+			created_by: user?.uuid,
+			approved_date: item.approved ? GetDateTime() : null,
+			created_at,
 		}));
 
-		// * insert the recipe data using update function
+		//* Post new entry */ //
 		let recipe_promises = [
 			...recipe.map(
 				async (item) =>
-					await updateData.mutateAsync({
-						url: `/lab-dip/update-recipe/by/${item.recipe_uuid}`,
-						updatedData: item,
+					await postData.mutateAsync({
+						url: '/lab-dip/info-entry',
+						newData: item,
 						isOnCloseNeeded: false,
 					})
 			),
@@ -212,276 +228,161 @@ export default function Index() {
 		[getValues, recipeAppend]
 	);
 
-	const handleEnter = (event) => {
-		event.preventDefault();
-		if (Object.keys(errors).length > 0) return;
-	};
-
-	const keyMap = {
-		NEW_ROW: 'alt+n',
-		COPY_LAST_ROW: 'alt+c',
-		ENTER: 'enter',
-	};
-
-	const handlers = {
-		NEW_ROW: handelRecipeAppend,
-		COPY_LAST_ROW: () =>
-			handelDuplicateDynamicField(recipeField.length - 1),
-		ENTER: (event) => handleEnter(event),
-	};
-
-	configure({
-		ignoreTags: ['input', 'select', 'textarea'],
-		ignoreEventsCondition: function () {},
-	});
-
-	const { data: rec_uuid } = useOtherRecipe(
-		isUpdate ? `info_uuid=${info_uuid}` : `info_uuid=false`
-	);
-
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
-	// const [status, setStatus] = useState({});
-	// const [approved, setApproved] = useState({});
-
-	// * status
-	const getStatus = (status, index) => {
-		//setStatus((prevStatus) => ({ ...prevStatus, [index]: status }));
-		setValue(`recipe[${index}].status`, status.status);
-	};
-
-	const getApproved = (approved, index) => {
+	const getApproved = (e, index) => {
 		//setApproved((prevApproved) => ({ ...prevApproved, [index]: approved }));
-		setValue(`recipe[${index}].approved`, approved.approved);
+		setValue(`recipe[${index}].approved`, e.approved);
 	};
 
-	const status = [
-		{ label: 'Pending', value: 0 },
-		{ label: 'Approved', value: 1 },
-	];
+	// const status = [
+	// 	{ label: 'Pending', value: 0 },
+	// 	{ label: 'Approved', value: 1 },
+	// ];
 
 	const approved = [
 		{ label: 'Pending', value: 0 },
 		{ label: 'Approved', value: 1 },
 	];
+
 	let excludeItem = exclude(watch, rec_uuid, 'recipe', 'recipe_uuid', Status);
 
 	return (
 		<FormProvider {...form}>
-			<HotKeys {...{ keyMap, handlers }}>
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					noValidate
-					className='flex flex-col gap-4'>
-					<Header
-						{...{
-							register,
-							errors,
-							control,
-							getValues,
-							Controller,
-							watch,
-							lab_status: getValues('lab_status'),
-							isUpdate,
-						}}
-					/>
-					<DynamicField
-						title='Recipe'
-						handelAppend={handelRecipeAppend}
-						tableHead={[
-							'Recipe',
-							//'Status',
-							'Approved',
-							'Action',
-						].map((item) => (
-							<th
-								key={item}
-								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
-								{item}
-							</th>
-						))}>
-						{recipeField.map((item, index) => (
-							<tr key={item.id}>
-								{/* Recipe */}
-								<td className={rowClass}>
-									<FormField
-										label={`recipe[${index}].recipe_uuid`}
-										title='Recipe uuid'
-										dynamicerror={
-											errors?.recipe?.[index]?.recipe_uuid
-										}
-										is_title_needed='false'>
-										<Controller
-											name={`recipe[${index}].recipe_uuid`}
-											control={control}
-											render={({
-												field: { onChange },
-											}) => {
-												return (
-													<ReactSelect
-														placeholder='Select recipe uuid'
-														options={rec_uuid?.filter(
-															(inItem) =>
-																!excludeItem?.some(
-																	(
-																		excluded
-																	) =>
-																		excluded?.value ===
-																		inItem?.value
-																)
-														)}
-														value={rec_uuid?.find(
-															(item) =>
-																item.value ==
-																getValues(
-																	`recipe[${index}].recipe_uuid`
-																)
-														)}
-														onChange={(e) => {
-															onChange(e.value);
-															setValue(
-																`recipe[${index}].recipe_uuid`,
-																e.value
-															);
-
-															getStatus(e, index);
-															getApproved(
-																e,
-																index
-															);
-															setStatus(!Status);
-														}}
-														isDisabled={
-															watch(
-																`recipe[${index}].recipe_uuid`
-															) !== '' && isUpdate
-														}
-														menuPortalTarget={
-															document.body
-														}
-													/>
-												);
-											}}
-										/>
-									</FormField>
-								</td>
-								{/* status */}
-								{/* <td className={rowClass}>
-									<FormField
-										label={`recipe[${index}].status`}
-										title='Status'
-										dynamicerror={
-											errors?.recipe?.[index]?.status
-										}
-										is_title_needed='false'>
-										<Controller
-											name={`recipe[${index}].status`}
-											control={control}
-											render={({
-												field: { onChange },
-											}) => {
-												return (
-													<ReactSelect
-														placeholder='Select status'
-														options={status}
-														value={status?.find(
-															(item) =>
-																item.value ==
-																getValues(
-																	`recipe[${index}].status`
-																)
-														)}
-														onChange={(e) => {
-															onChange(e.value);
-															setValue(
-																`recipe[${index}].status`,
-																e.value
-															);
-														}}
-														isDisabled={
-															rec_uuid ==
-															undefined
-														}
-														menuPortalTarget={
-															document.body
-														}
-													/>
-												);
-											}}
-										/>
-									</FormField> */}
-								{/* <div className='rounded-md border border-secondary/30 bg-secondary px-1'>
-										<CheckBox
-											text='text-secondary-content'
-											label={`recipe[${index}].status`}
-											title='Status'
-											height='h-[2.9rem]'
-											value={
-												getValues(
-													`recipe[${index}].status`
-												)
-													? true
-													: false
-											}
-											{...{
-												register,
-												errors,
-											}}
-										/>
-									</div> */}
-								{/* </td> */}
-								{/* approved */}
-								<td className={rowClass}>
-									<FormField
-										label={`recipe[${index}].approved`}
-										title='Approved'
-										dynamicerror={
-											errors?.recipe?.[index]?.approved
-										}
-										is_title_needed='false'>
-										<Controller
-											name={`recipe[${index}].approved`}
-											control={control}
-											render={({
-												field: { onChange },
-											}) => {
-												return (
-													<ReactSelect
-														placeholder='Select approved'
-														options={approved}
-														value={approved?.find(
-															(item) =>
-																item.value ==
-																getValues(
-																	`recipe[${index}].approved`
-																)
-														)}
-														onChange={(e) => {
-															onChange(e.value);
-															setValue(
-																`recipe[${index}].approved`,
-																e.value
-															);
-														}}
-														isDisabled={
-															rec_uuid ==
-																undefined ||
-															!watch(
-																`order_info_uuid`
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				noValidate
+				className='flex flex-col gap-4'>
+				<Header
+					{...{
+						register,
+						errors,
+						control,
+						getValues,
+						Controller,
+						watch,
+						lab_status: getValues('lab_status'),
+						isUpdate,
+					}}
+				/>
+				<DynamicField
+					title='Recipe'
+					handelAppend={handelRecipeAppend}
+					tableHead={[
+						'Recipe',
+						//'Status',
+						'Approved',
+						'Action',
+					].map((item) => (
+						<th
+							key={item}
+							scope='col'
+							className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+							{item}
+						</th>
+					))}>
+					{recipeField.map((item, index) => (
+						<tr key={item.id}>
+							{/* Recipe */}
+							<td className={rowClass}>
+								<FormField
+									label={`recipe[${index}].recipe_uuid`}
+									title='Recipe uuid'
+									dynamicerror={
+										errors?.recipe?.[index]?.recipe_uuid
+									}
+									is_title_needed='false'>
+									<Controller
+										name={`recipe[${index}].recipe_uuid`}
+										control={control}
+										render={({ field: { onChange } }) => {
+											return (
+												<ReactSelect
+													placeholder='Select recipe uuid'
+													options={rec_uuid?.filter(
+														(inItem) =>
+															!excludeItem?.some(
+																(excluded) =>
+																	excluded?.value ===
+																	inItem?.value
 															)
-														}
-														menuPortalTarget={
-															document.body
-														}
-													/>
-												);
-											}}
-										/>
-									</FormField>
-								</td>
-								{/* <Controller
+													)}
+													value={rec_uuid?.find(
+														(item) =>
+															item.value ==
+															getValues(
+																`recipe[${index}].recipe_uuid`
+															)
+													)}
+													onChange={(e) => {
+														onChange(e.value);
+														setValue(
+															`recipe[${index}].recipe_uuid`,
+															e.value
+														);
+													}}
+													isDisabled={
+														watch(
+															`recipe[${index}].recipe_uuid`
+														) !== '' && isUpdate
+													}
+													menuPortalTarget={
+														document.body
+													}
+												/>
+											);
+										}}
+									/>
+								</FormField>
+							</td>
+							{/* approved */}
+							<td className={rowClass}>
+								<FormField
+									label={`recipe[${index}].approved`}
+									title='Approved'
+									dynamicerror={
+										errors?.recipe?.[index]?.approved
+									}
+									is_title_needed='false'>
+									<Controller
+										name={`recipe[${index}].approved`}
+										control={control}
+										render={({ field: { onChange } }) => {
+											return (
+												<ReactSelect
+													placeholder='Select approved'
+													options={approved}
+													value={approved?.find(
+														(item) =>
+															item.value ==
+															getValues(
+																`recipe[${index}].approved`
+															)
+													)}
+													onChange={(e) => {
+														onChange(e.value);
+														setValue(
+															`recipe[${index}].approved`,
+															e.value
+														);
+													}}
+													isDisabled={
+														rec_uuid == undefined ||
+														!watch(
+															`order_info_uuid`
+														)
+													}
+													menuPortalTarget={
+														document.body
+													}
+												/>
+											);
+										}}
+									/>
+								</FormField>
+							</td>
+							{/* <Controller
 											name={`recipe[${index}].approved`}
 											control={control}
 											render={({
@@ -518,24 +419,23 @@ export default function Index() {
 												</div>
 											)}
 										/> */}
-								<td
-									className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
-									<ActionButtons
-										duplicateClick={() =>
-											handelDuplicateDynamicField(index)
-										}
-										removeClick={() =>
-											handleRecipeRemove(index)
-										}
-										showRemoveButton={true}
-									/>
-								</td>
-							</tr>
-						))}
-					</DynamicField>
-					<Footer buttonClassName='!btn-primary' />
-				</form>
-			</HotKeys>
+							<td
+								className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
+								<ActionButtons
+									duplicateClick={() =>
+										handelDuplicateDynamicField(index)
+									}
+									removeClick={() =>
+										handleRecipeRemove(index)
+									}
+									showRemoveButton={true}
+								/>
+							</td>
+						</tr>
+					))}
+				</DynamicField>
+				<Footer buttonClassName='!btn-primary' />
+			</form>
 			<Suspense>
 				<UpdateModal
 					modalId={'recipe_update'}

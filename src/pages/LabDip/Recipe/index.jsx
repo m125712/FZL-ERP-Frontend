@@ -32,22 +32,22 @@ export default function Index() {
 					);
 				},
 			},
-			{
-				accessorKey: 'info_id',
-				header: 'Info ID',
-				cell: (info) => {
-					const { lab_dip_info_uuid } = info.row.original;
-					if (lab_dip_info_uuid) {
-						return (
-							<LinkWithCopy
-								title={info.getValue()}
-								id={lab_dip_info_uuid}
-								uri='/lab-dip/info/details'
-							/>
-						);
-					}
-				},
-			},
+			// {
+			// 	accessorKey: 'info_id',
+			// 	header: 'Info ID',
+			// 	cell: (info) => {
+			// 		const { lab_dip_info_uuid } = info.row.original;
+			// 		if (lab_dip_info_uuid) {
+			// 			return (
+			// 				<LinkWithCopy
+			// 					title={info.getValue()}
+			// 					id={lab_dip_info_uuid}
+			// 					uri='/lab-dip/info/details'
+			// 				/>
+			// 			);
+			// 		}
+			// 	},
+			// },
 			{
 				accessorKey: 'name',
 				header: 'Recipe Name',
@@ -78,31 +78,31 @@ export default function Index() {
 					);
 				},
 			},
-			{
-				accessorKey: 'approved',
-				header: 'Approved',
-				enableColumnFilter: false,
-				cell: (info) => {
-					const access = haveAccess.includes('click_approve');
-					const overrideAccess = haveAccess.includes(
-						'click_approve_override'
-					);
-					const { lab_dip_info_uuid } = info.row.original;
-					return (
-						<SwitchToggle
-							disabled={
-								!lab_dip_info_uuid ||
-								(!overrideAccess &&
-									(!access || Number(info.getValue()) === 1))
-							}
-							onChange={() =>
-								handelApprovedStatusChange(info.row.index)
-							}
-							checked={Number(info.getValue()) === 1}
-						/>
-					);
-				},
-			},
+			// {
+			// 	accessorKey: 'approved',
+			// 	header: 'Approved',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => {
+			// 		const access = haveAccess.includes('click_approve');
+			// 		const overrideAccess = haveAccess.includes(
+			// 			'click_approve_override'
+			// 		);
+			// 		const { lab_dip_info_uuid } = info.row.original;
+			// 		return (
+			// 			<SwitchToggle
+			// 				disabled={
+			// 					!lab_dip_info_uuid ||
+			// 					(!overrideAccess &&
+			// 						(!access || Number(info.getValue()) === 1))
+			// 				}
+			// 				onChange={() =>
+			// 					handelApprovedStatusChange(info.row.index)
+			// 				}
+			// 				checked={Number(info.getValue()) === 1}
+			// 			/>
+			// 		);
+			// 	},
+			// },
 
 			// {
 			// 	accessorKey: 'status',

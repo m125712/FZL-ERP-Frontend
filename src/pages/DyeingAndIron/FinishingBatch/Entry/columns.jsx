@@ -99,7 +99,10 @@ export const Columns = ({
 								onClick={() =>
 									setValue(
 										`finishing_batch_entry[${idx}].quantity`,
-										info.getValue()
+										info.getValue(),
+										{
+											shouldDirty: true,
+										}
 									)
 								}>
 								Copy
@@ -197,7 +200,10 @@ export const Columns = ({
 							onClick={() =>
 								setValue(
 									`new_finishing_batch_entry[${idx}].quantity`,
-									info.getValue()
+									info.getValue(),
+									{
+										shouldDirty: true,
+									}
 								)
 							}>
 							Copy

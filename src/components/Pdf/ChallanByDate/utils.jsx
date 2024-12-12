@@ -6,7 +6,13 @@ import { company, getEmptyColumn } from '../utils';
 
 const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 
-const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
+const getDateFormate = (date) => {
+	if (date) {
+		return format(new Date(date), 'dd/MM/yyyy');
+	} else {
+		return '--/--/--';
+	}
+};
 
 export const getPageHeader = (data) => {
 	// const created_at = getDateFormate(data?.delivery_date);
@@ -35,7 +41,7 @@ export const getPageHeader = (data) => {
 							bold: true,
 						},
 						`Date: ${getDateFormate(data[0]?.delivery_date)}\n`,
-						``
+						``,
 					],
 					alignment: 'right',
 				},

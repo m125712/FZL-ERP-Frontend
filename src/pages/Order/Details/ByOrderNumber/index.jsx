@@ -26,6 +26,16 @@ const renderHr = (showHr = false) => {
 	);
 };
 
+const createPDF = (pdfdata, setData, setGetPdfData) => {
+	const res = OrderSheetPdf(pdfdata);
+
+	setGetPdfData(res);
+
+	res.getDataUrl((dataUrl) => {
+		setData(dataUrl);
+	});
+};
+
 export default function Index() {
 	const { user } = useAuth();
 	const { order_number } = useParams();
@@ -37,7 +47,9 @@ export default function Index() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [data, setData] = useState('');
+	const [data2, setData2] = useState('');
 	const [getPdfData, setGetPdfData] = useState(null);
+	const [getPdfData2, setGetPdfData2] = useState(null);
 	const [updateView, setUpdateView] = useState(false);
 
 	const path = getPath(haveAccess, order_number, user?.uuid);
@@ -91,13 +103,9 @@ export default function Index() {
 				sr,
 			};
 
-			const res = OrderSheetPdf(order_sheet);
 
-			setGetPdfData(res);
-
-			res.getDataUrl((dataUrl) => {
-				setData(dataUrl);
-			});
+			createPDF(order_sheet, setData, setGetPdfData);
+			createPDF(order_sheet, setData2, setGetPdfData2);
 			// getPdfData.download();
 		}
 	}, [orders, garments, sr]);
@@ -140,12 +148,19 @@ export default function Index() {
 	// 	);
 
 	return (
-		<div className='flex flex-col py-4'>
-			<iframe
-				id='iframeContainer'
-				src={data}
-				className='h-[40rem] w-full rounded-md border-none'
-			/>
+		<div className='flex flex-col gap-6 py-4'>
+			<div className='flex gap-6'>
+				<iframe
+					id='iframeContainer'
+					src={data}
+					className='h-[40rem] w-full rounded-md border-none'
+				/>
+				<iframe
+					id='iframeContainer'
+					src={data2	}
+					className='h-[40rem] w-full rounded-md border-none'
+				/>
+			</div>
 
 			<OrderInformation
 				order={order_info}

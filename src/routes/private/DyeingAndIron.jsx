@@ -8,21 +8,19 @@ const DyeingDashboard = lazy(
 //* Dyes Category
 const DyesCategory = lazy(() => import('@/pages/DyeingAndIron/DyesCategory'));
 
-// * Finishing Batch
-const FinishingBatch = lazy(
-	() => import('@/pages/DyeingAndIron/FinishingBatch')
-);
-const FinishingBatchDetails = lazy(
-	() => import('@/pages/DyeingAndIron/FinishingBatch/Details')
-);
-const FinishingBatchEntry = lazy(
-	() => import('@/pages/DyeingAndIron/FinishingBatch/Entry')
-);
+// // * Finishing Batch
+// const FinishingBatch = lazy(() => import('@/pages/Planning/FinishingBatch'));
+// const FinishingBatchDetails = lazy(
+// 	() => import('@/pages/Planning/FinishingBatch/Details')
+// );
+// const FinishingBatchEntry = lazy(
+// 	() => import('@/pages/Planning/FinishingBatch/Entry')
+// );
 
-// * Finishing Dashboard
-const FinishingDashboard = lazy(
-	() => import('@/pages/DyeingAndIron/FinishingDashboard')
-);
+// // * Finishing Dashboard
+// const FinishingDashboard = lazy(
+// 	() => import('@/pages/Planning/FinishingDashboard')
+// );
 
 //* Log
 const DyeingLog = lazy(() => import('@/pages/DyeingAndIron/Log'));
@@ -31,28 +29,28 @@ const DyeingLog = lazy(() => import('@/pages/DyeingAndIron/Log'));
 const Machine = lazy(() => import('@/pages/DyeingAndIron/Machine'));
 
 //* Planning
-const DyeingPlanning = lazy(() => import('@/pages/DyeingAndIron/Planning'));
-const DyeingPlanningHeadOffice = lazy(
-	() => import('@/pages/DyeingAndIron/PlanningHeadOffice')
-);
-const DyeingPlanningHeadOfficeDetails = lazy(
-	() => import('@/pages/DyeingAndIron/PlanningHeadOffice/Details')
-);
-const DyeingPlanningHeadOfficeEntry = lazy(
-	() => import('@/pages/DyeingAndIron/PlanningHeadOffice/Entry')
-);
-const DyeingPlanningSNO = lazy(
-	() => import('@/pages/DyeingAndIron/PlanningSNO')
-);
-const DyeingPlanningSNODetails = lazy(
-	() => import('@/pages/DyeingAndIron/PlanningSNO/Details')
-);
-const DyeingPlanningSNOEntry = lazy(
-	() => import('@/pages/DyeingAndIron/PlanningSNO/Entry')
-);
-const ProductionCapacity = lazy(
-	() => import('@/pages/DyeingAndIron/ProductionCapacity')
-);
+// const DyeingPlanning = lazy(() => import('@/pages/DyeingAndIron/Planning'));
+// const DyeingPlanningHeadOffice = lazy(
+// 	() => import('@/pages/DyeingAndIron/PlanningHeadOffice')
+// );
+// const DyeingPlanningHeadOfficeDetails = lazy(
+// 	() => import('@/pages/DyeingAndIron/PlanningHeadOffice/Details')
+// );
+// const DyeingPlanningHeadOfficeEntry = lazy(
+// 	() => import('@/pages/DyeingAndIron/PlanningHeadOffice/Entry')
+// );
+// const DyeingPlanningSNO = lazy(
+// 	() => import('@/pages/DyeingAndIron/PlanningSNO')
+// );
+// const DyeingPlanningSNODetails = lazy(
+// 	() => import('@/pages/DyeingAndIron/PlanningSNO/Details')
+// );
+// const DyeingPlanningSNOEntry = lazy(
+// 	() => import('@/pages/DyeingAndIron/PlanningSNO/Entry')
+// );
+// const ProductionCapacity = lazy(
+// 	() => import('@/pages/Planning/ProductionCapacity')
+// );
 const Programs = lazy(() => import('@/pages/DyeingAndIron/Programs'));
 const DyeingRMStock = lazy(() => import('@/pages/DyeingAndIron/RMStock'));
 const DyeingThreadBatch = lazy(
@@ -247,55 +245,55 @@ export const DyeingAndIronRoutes = [
 			},
 
 			// * Finishing Dashboard
-			{
-				name: 'Finishing Dashboard',
-				path: '/dyeing-and-iron/finishing-dashboard',
-				element: <FinishingDashboard />,
-				page_name: 'dyeing__finishing_dashboard',
-				actions: ['read', 'create', 'update', 'delete'],
-			},
+			// {
+			// 	name: 'Finishing Dashboard',
+			// 	path: '/dyeing-and-iron/finishing-dashboard',
+			// 	element: <FinishingDashboard />,
+			// 	page_name: 'dyeing__finishing_dashboard',
+			// 	actions: ['read', 'create', 'update', 'delete'],
+			// },
 
 			// * Finishing Batch
-			{
-				name: 'Finishing Batch',
-				path: '/dyeing-and-iron/finishing-batch',
-				element: <FinishingBatch />,
-				page_name: 'dyeing__finishing_batch',
-				actions: ['create', 'read', 'update', 'delete'],
-			},
-			{
-				name: 'Finishing Batch Entry',
-				path: '/dyeing-and-iron/finishing-batch/entry',
-				element: <FinishingBatchEntry />,
-				hidden: true,
-				page_name: 'dyeing__finishing_batch_entry',
-				actions: ['create', 'read'],
-			},
-			{
-				name: 'Finishing Batch Details',
-				path: '/dyeing-and-iron/finishing-batch/:batch_uuid',
-				element: <FinishingBatchDetails />,
-				hidden: true,
-				page_name: 'dyeing__finishing_batch_details',
-				actions: ['read'],
-			},
-			{
-				name: 'Finishing Batch Update',
-				path: '/dyeing-and-iron/finishing-batch/:batch_uuid/update',
-				element: <FinishingBatchEntry />,
-				hidden: true,
-				page_name: 'dyeing__finishing_batch_entry_update',
-				actions: ['create', 'read', 'update', 'delete'],
-			},
+			// {
+			// 	name: 'Finishing Batch',
+			// 	path: '/dyeing-and-iron/finishing-batch',
+			// 	element: <FinishingBatch />,
+			// 	page_name: 'dyeing__finishing_batch',
+			// 	actions: ['create', 'read', 'update', 'delete'],
+			// },
+			// {
+			// 	name: 'Finishing Batch Entry',
+			// 	path: '/dyeing-and-iron/finishing-batch/entry',
+			// 	element: <FinishingBatchEntry />,
+			// 	hidden: true,
+			// 	page_name: 'dyeing__finishing_batch_entry',
+			// 	actions: ['create', 'read'],
+			// },
+			// {
+			// 	name: 'Finishing Batch Details',
+			// 	path: '/dyeing-and-iron/finishing-batch/:batch_uuid',
+			// 	element: <FinishingBatchDetails />,
+			// 	hidden: true,
+			// 	page_name: 'dyeing__finishing_batch_details',
+			// 	actions: ['read'],
+			// },
+			// {
+			// 	name: 'Finishing Batch Update',
+			// 	path: '/dyeing-and-iron/finishing-batch/:batch_uuid/update',
+			// 	element: <FinishingBatchEntry />,
+			// 	hidden: true,
+			// 	page_name: 'dyeing__finishing_batch_entry_update',
+			// 	actions: ['create', 'read', 'update', 'delete'],
+			// },
 
 			// * Production Capacity
-			{
-				name: 'Production Capacity',
-				path: '/dyeing-and-iron/production-capacity',
-				element: <ProductionCapacity />,
-				page_name: 'dyeing__production_capacity',
-				actions: ['read', 'create', 'update', 'delete'],
-			},
+			// {
+			// 	name: 'Production Capacity',
+			// 	path: '/dyeing-and-iron/production-capacity',
+			// 	element: <ProductionCapacity />,
+			// 	page_name: 'dyeing__production_capacity',
+			// 	actions: ['read', 'create', 'update', 'delete'],
+			// },
 		],
 	},
 ];

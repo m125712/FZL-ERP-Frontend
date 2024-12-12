@@ -11,12 +11,12 @@ import Header from './Header';
 
 export default function index() {
 	const navigate = useNavigate();
-	const haveAccess = useAccess('dyeing__finishing_dashboard');
+	const haveAccess = useAccess('planning__finishing_dashboard');
 
 	const info = new PageInfo(
 		'Finishing Dashboard',
-		'/dyeing-and-iron/finishing-dashboard',
-		'dyeing__finishing_dashboard'
+		'/planning/finishing-dashboard',
+		'planning__finishing_dashboard'
 	);
 
 	const [from, setFrom] = useState(format(new Date(), 'yyyy-MM-dd'));

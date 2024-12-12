@@ -264,14 +264,16 @@ export const useOtherPackingListByOrderInfoUUID = (uuid) =>
 
 export const useOtherPackingListByOrderInfoUUIDAndChallanUUID = (
 	uuid,
-	challan_uuid
+	challan_uuid,
+	item_for
 ) =>
 	createGlobalState({
 		queryKey: otherQK.deliveryPackingListByOrderInfoUUIDAndChallanUUID(
 			uuid,
-			challan_uuid
+			challan_uuid,
+			item_for
 		),
-		url: `/other/delivery/packing-list-by-order-info/value/label/${uuid}?challan_uuid=${challan_uuid}`,
+		url: `/other/delivery/packing-list-by-order-info/value/label/${uuid}?challan_uuid=${challan_uuid}&item_for=${item_for}`,
 		enabled: !!uuid,
 	});
 
@@ -485,11 +487,11 @@ export const useOtherTapeCoil = () =>
 	});
 
 // * GET GIVEN URL DATA
-export const useGetURLData = (url, { enabled = true }={}) =>
-	createGlobalState({ 
-		queryKey: otherQK.getURLData(url), 
-		url: url, 
-		enabled 
+export const useGetURLData = (url, { enabled = true } = {}) =>
+	createGlobalState({
+		queryKey: otherQK.getURLData(url),
+		url: url,
+		enabled,
 	});
 
 // * GET ALL MACHINES

@@ -1430,12 +1430,20 @@ export const PACKING_LIST_SCHEMA = {
 	item_for: STRING_REQUIRED,
 	order_info_uuid: STRING_REQUIRED,
 	carton_uuid: STRING.when('item_for', {
-		is: 'zipper' || 'thread',
+		is: (item_for) =>
+			item_for === 'zipper' ||
+			item_for === 'thread' ||
+			item_for === 'tape' ||
+			item_for === 'slider',
 		then: (Schema) => Schema.required('Carton Size required'),
 		otherwise: (Schema) => Schema.nullable(),
 	}),
 	carton_weight: NUMBER.when('item_for', {
-		is: 'zipper' || 'thread',
+		is: (item_for) =>
+			item_for === 'zipper' ||
+			item_for === 'thread' ||
+			item_for === 'tape' ||
+			item_for === 'slider',
 		then: (Schema) => Schema.required('Carton Weight is required'),
 		otherwise: (Schema) =>
 			Schema.nullable().transform((value, originalValue) =>

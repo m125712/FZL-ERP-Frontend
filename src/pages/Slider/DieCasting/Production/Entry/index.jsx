@@ -11,7 +11,7 @@ import {
 import { useAuth } from '@context/auth';
 import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
-import { Form, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
@@ -232,7 +232,7 @@ export default function Index() {
 								</td>
 
 								{/* ITEM NAME */}
-								<td className={cn('w-60', tdClass)}>
+								<td className={cn(tdClass)}>
 									<FormField
 										label={`array[${index}].die_casting_uuid`}
 										is_title_needed='false'
@@ -274,7 +274,7 @@ export default function Index() {
 								</td>
 
 								{/* ORDER NO */}
-								<td className={cn('w-44', tdClass)}>
+								<td className={cn(tdClass)}>
 									<FormField
 										label={`array[${index}].finishing_batch_uuid`}
 										is_title_needed='false'
@@ -314,7 +314,7 @@ export default function Index() {
 								</td>
 
 								{/* CAVITY GOODS */}
-								<td className={cn('w-32', tdClass)}>
+								<td className={cn('w-24', tdClass)}>
 									<Input
 										label={`array[${index}].cavity_goods`}
 										defaultValue={item.cavity_goods}
@@ -327,7 +327,7 @@ export default function Index() {
 								</td>
 
 								{/* CAVITY DEFECT */}
-								<td className={cn('w-32', tdClass)}>
+								<td className={cn('w-24', tdClass)}>
 									<Input
 										label={`array[${index}].cavity_defect`}
 										defaultValue={item.cavity_defect}
@@ -341,7 +341,7 @@ export default function Index() {
 								</td>
 
 								{/* PUSH */}
-								<td className={cn('w-32', tdClass)}>
+								<td className={cn('w-24', tdClass)}>
 									<Input
 										label={`array[${index}].push`}
 										defaultValue={item.push}
@@ -368,7 +368,7 @@ export default function Index() {
 								</td>
 
 								{/* REMARKS */}
-								<td className={cn('', tdClass)}>
+								<td className={cn('w-24', tdClass)}>
 									<Input
 										label={`array[${index}].remarks`}
 										defaultValue={item.remarks}
@@ -380,7 +380,7 @@ export default function Index() {
 									/>
 								</td>
 
-								<td>
+								<td className={cn('w-8', tdClass)}>
 									<RemoveButton
 										onClick={() =>
 											handleSliderDieCastingRemove(index)

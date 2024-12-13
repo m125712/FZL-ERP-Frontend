@@ -27,21 +27,6 @@ export default function Index() {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
-				width: 'w-40',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'order_type',
-				header: 'Type',
-				enableColumnFilter: true,
-				width: 'w-24',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'party_name',
-				header: 'Party',
-				enableColumnFilter: true,
-				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -51,10 +36,29 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'order_type',
+				header: 'Type',
+				enableColumnFilter: true,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: true,
+				width: 'w-40',
+				cell: (info) => info.getValue(),
+			},
+
+			{
 				accessorKey: 'production_date',
-				header: 'Production Date',
+				header: (
+					<div className='flex flex-col'>
+						<span>Production</span>
+						<span>Date</span>
+					</div>
+				),
 				enableColumnFilter: false,
-				width: 'w-36',
+
 				cell: (info) => (
 					<DateTime date={info.getValue()} isTime={false} />
 				),
@@ -68,7 +72,7 @@ export default function Index() {
 			// 		</div>
 			// 	),
 			// 	enableColumnFilter: false,
-			// 	width: 'w-36',
+			//
 			// 	cell: (info) => info.getValue(),
 			// },
 			{
@@ -80,7 +84,7 @@ export default function Index() {
 					</div>
 				),
 				enableColumnFilter: false,
-				width: 'w-36',
+
 				cell: (info) => {
 					const { production_date, slider_lead_time } =
 						info.row.original;
@@ -105,7 +109,7 @@ export default function Index() {
 			{
 				accessorKey: 'item_name',
 				header: 'Item',
-				enableColumnFilter: true,
+				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{

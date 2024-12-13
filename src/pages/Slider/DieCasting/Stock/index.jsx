@@ -3,11 +3,19 @@ import { useOtherSliderItem } from '@/state/Other';
 import { useSliderDieCastingStock } from '@/state/Slider';
 import { useAccess } from '@/hooks';
 
+
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete } from '@/ui';
 
+
+
 import PageInfo from '@/util/PageInfo';
+
+
+
+
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
@@ -84,25 +92,49 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'Die Casting Stock',
+				header: (
+					<>
+						Die Casting
+						<br />
+						Stock (pcs)
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'weight',
-				header: 'Die casting Weight',
+				header: (
+					<>
+						Die Casting
+						<br />
+						Weight (kg)
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue().toFixed(3),
 			},
 			{
 				accessorKey: 'quantity_in_sa',
-				header: 'Assembly Stock',
+				header: (
+					<>
+						Assembly
+						<br />
+						Stock (pcs)
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'quantity_in_sa_weight',
-				header: 'Assembly Stock Weight',
+				header: (
+					<>
+						Assembly
+						<br />
+						Weight (kg)
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue().toFixed(3),
 			},

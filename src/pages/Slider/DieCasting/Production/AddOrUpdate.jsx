@@ -11,7 +11,7 @@ import {
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+import { FormField, Input, JoinInput, ReactSelect, Textarea } from '@/ui';
 
 import {
 	SLIDER_DIE_CASTING_PRODUCT_EDIT_NULL,
@@ -91,7 +91,7 @@ export default function Index({
 			formContext={context}
 			isSmall={true}>
 			<FormField
-				title='Die Casting Name'
+				title='Item'
 				label={`die_casting_uuid`}
 				register={register}
 				dynamicerror={errors?.die_casting_uuid}>
@@ -118,8 +118,9 @@ export default function Index({
 					}}
 				/>
 			</FormField>
+
 			<FormField
-				title='Order Description'
+				title='Finishing Batch'
 				label={`finishing_batch_uuid`}
 				register={register}
 				dynamicerror={errors?.finishing_batch_uuid}>
@@ -146,42 +147,46 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<Input
-				label={`mc_no`}
-				register={register}
-				dynamicerror={errors?.mc_no}
-			/>
-			<Input
-				label={`cavity_goods`}
-				register={register}
-				dynamicerror={errors?.cavity_goods}
-			/>
-			<Input
-				label={`cavity_defect`}
-				register={register}
-				dynamicerror={errors?.cavity_defect}
-			/>
-			<Input
-				label={`push`}
-				register={register}
-				dynamicerror={errors?.push}
-			/>
-			<JoinInput
-				label={`weight`}
-				unit='KG'
-				register={register}
-				{...{ register, errors }}
-			/>
-			<JoinInput
-				title='Production Quantity'
-				label='production_quantity'
-				value={watch('cavity_goods') * watch('push')}
-				unit='PCS'
-				disabled={true}
-				{...{ register, errors }}
-			/>
 
-			<Input label='remarks' {...{ register, errors }} />
+			<div className='flex gap-2'>
+				<Input
+					label={`mc_no`}
+					register={register}
+					dynamicerror={errors?.mc_no}
+				/>
+				<Input
+					label={`cavity_goods`}
+					register={register}
+					dynamicerror={errors?.cavity_goods}
+				/>
+				<Input
+					label={`cavity_defect`}
+					register={register}
+					dynamicerror={errors?.cavity_defect}
+				/>
+			</div>
+			<div className='flex gap-2'>
+				<Input
+					label={`push`}
+					register={register}
+					dynamicerror={errors?.push}
+				/>
+				<JoinInput
+					label={`weight`}
+					unit='KG'
+					register={register}
+					{...{ register, errors }}
+				/>
+				<JoinInput
+					title='Production Quantity'
+					label='production_quantity'
+					value={watch('cavity_goods') * watch('push')}
+					unit='PCS'
+					disabled={true}
+					{...{ register, errors }}
+				/>
+			</div>
+			<Textarea label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

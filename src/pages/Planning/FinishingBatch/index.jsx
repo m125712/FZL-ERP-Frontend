@@ -31,7 +31,6 @@ export default function index() {
 				accessorKey: 'batch_number',
 				header: 'Batch No.',
 				enableColumnFilter: false,
-				width: 'w-36',
 				cell: (info) => {
 					const { uuid } = info.row.original;
 
@@ -48,7 +47,6 @@ export default function index() {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: false,
-				width: 'w-36',
 				cell: (info) => (
 					<LinkWithCopy
 						title={info.getValue()}
@@ -61,7 +59,6 @@ export default function index() {
 				accessorKey: 'item_description',
 				header: 'Item',
 				enableColumnFilter: false,
-				width: 'w-36',
 				cell: (info) => {
 					const { order_number, order_description_uuid } =
 						info.row.original;
@@ -74,42 +71,44 @@ export default function index() {
 					);
 				},
 			},
-			{
-				accessorKey: 'status',
-				header: 'Status',
-				enableColumnFilter: false,
-				width: 'w-36',
-				cell: (info) => info.getValue(),
-			},
+
 			{
 				accessorKey: 'order_type',
 				header: 'Type',
 				enableColumnFilter: false,
-				width: 'w-36',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'colors',
 				header: 'Colors',
 				enableColumnFilter: false,
-				width: 'w-36',
+				width: 'w-24',
 				cell: (info) => info.getValue().join(', '),
 			},
 			{
 				accessorKey: 'total_batch_quantity',
 				header: 'Total',
 				enableColumnFilter: false,
-				width: 'w-36',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'production_date',
-				header: 'Production Date',
+				header: (
+					<div className='flex flex-col'>
+						<span>Production</span>
+						<span>Date</span>
+					</div>
+				),
 				enableColumnFilter: false,
-				width: 'w-36',
 				cell: (info) => (
 					<DateTime date={info.getValue()} isTime={false} />
 				),
+			},
+			{
+				accessorKey: 'status',
+				header: 'Status',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'slider_lead_time',
@@ -120,22 +119,11 @@ export default function index() {
 					</div>
 				),
 				enableColumnFilter: false,
-				width: 'w-36',
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'remaining_slider_lead_time',
-				header: (
-					<div>
-						Remaining Date <br />
-						Slider
-					</div>
-				),
-				enableColumnFilter: false,
-				width: 'w-36',
-				cell: (info) => {
-					const { production_date, slider_lead_time } =
-						info.row.original;
+				accessorFn: (row) => {
+					const { production_date, slider_lead_time } = row;
 					const slider_day = subDays(
 						production_date,
 						Number(slider_lead_time)
@@ -144,10 +132,29 @@ export default function index() {
 						slider_day,
 						new Date()
 					);
+
+					return remainingDays < 0 ? 0 : remainingDays;
+				},
+				id: 'remaining_slider_lead_time',
+				header: (
+					<div>
+						Remaining Date <br />
+						Slider
+					</div>
+				),
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { production_date, slider_lead_time } =
+						info.row.original;
+					const slider_day = subDays(
+						production_date,
+						Number(slider_lead_time)
+					);
+
 					return (
 						<div>
 							<span className='text-xs font-bold text-gray-600'>
-								{remainingDays < 0 ? 0 : remainingDays} days
+								{info.getValue()} days
 							</span>
 							<DateTime date={slider_day} isTime={false} />
 						</div>
@@ -163,7 +170,6 @@ export default function index() {
 					</div>
 				),
 				enableColumnFilter: false,
-				width: 'w-36',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -175,7 +181,6 @@ export default function index() {
 					</div>
 				),
 				enableColumnFilter: false,
-				width: 'w-36',
 				cell: (info) => {
 					const { production_date, dyeing_lead_time } =
 						info.row.original;
@@ -203,28 +208,24 @@ export default function index() {
 				accessorKey: 'created_by_name',
 				header: 'Created By',
 				enableColumnFilter: false,
-				width: 'w-36',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_at',
 				header: 'Created',
 				enableColumnFilter: false,
-				width: 'w-36',
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated',
 				enableColumnFilter: false,
-				width: 'w-36',
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
-				width: 'w-36',
 				cell: (info) => info.getValue(),
 			},
 			{

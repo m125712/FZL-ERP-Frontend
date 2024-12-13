@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from 'react';
-import { Plus } from '@/assets/icons';
 import { useAuth } from '@/context/auth';
 import { useDyeingThreadBatch } from '@/state/Dyeing';
 import { useDyeingCone } from '@/state/Thread';
@@ -8,7 +7,7 @@ import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
@@ -72,6 +71,7 @@ export default function Index() {
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
+				width: 'w-24',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -82,7 +82,23 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_cone',
-				header: 'Total Qty(Cone)',
+				header: (
+					<div className='flex flex-col'>
+						<span>Total Qty</span>
+						<span>(Cone)</span>
+					</div>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_expected_weight',
+				header: (
+					<div className='flex flex-col'>
+						<span>Exp Yarn</span>
+						<span>Qty (KG)</span>
+					</div>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -92,41 +108,72 @@ export default function Index() {
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !haveAccess.includes('create'),
-				width: 'w-24',
 				cell: (info) => {
-					const { week } = info.row.original;
+					const { is_drying_complete, uuid } = info.row.original;
 					return (
-						<div>
-							<button
-								className='btn btn-accent btn-xs flex w-fit gap-0.5'
-								onClick={() =>
-									navigate(
-										`/dyeing-and-iron/thread-batch/dyeing/${info.row.original.uuid}`
-									)
-								}>
-								<Plus className='size-4' />
-								<span>Dyeing</span>
-							</button>
-						</div>
+						<Transfer
+							className='btn btn-accent btn-xs flex w-fit gap-0.5'
+							onClick={() =>
+								navigate(
+									`/dyeing-and-iron/thread-batch/dyeing/${uuid}`
+								)
+							}
+							disabled={is_drying_complete === 'true'}
+						/>
 					);
 				},
 			},
+
 			{
-				accessorKey: 'total_expected_weight',
+				accessorKey: 'total_yarn_quantity',
 				header: (
-					<span>
-						Total Expected
-						<br /> Yarn Qty
-					</span>
+					<div className='flex flex-col'>
+						<span>Actual Yarn</span>
+						<span>Qty (KG)</span>
+					</div>
 				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'total_yarn_quantity',
-				header: 'Total Yarn Qty',
+				accessorKey: 'is_drying_complete',
+				header: (
+					<div className='flex flex-col'>
+						<span>Drying</span>
+						<span>Completed</span>
+					</div>
+				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { is_drying_complete } = info.row.original;
+
+					const access = haveAccess.includes('click_drying_status');
+					const overrideAccess = haveAccess.includes(
+						'click_drying_status_override'
+					);
+					// overrideAccess
+					// 	? false
+					// 	: access
+					// 		? is_drying_complete === 'true'
+					// 		: true;
+					let isDisabled = false;
+					if (!overrideAccess) {
+						if (access) {
+							isDisabled = is_drying_complete === 'true';
+						} else {
+							isDisabled = true;
+						}
+					}
+					return (
+						<SwitchToggle
+							disabled={isDisabled}
+							onChange={() =>
+								handelDryingComplete(info.row.index)
+							}
+							checked={info.getValue() === 'true'}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'machine_name',
@@ -134,30 +181,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'machine_name',
-			// 	header: 'Machine',
-			// 	enableColumnFilter: false,
-			// 	width: 'w-60',
-			// 	cell: (info) => {
-			// 		const { machine_uuid } = info.row.original;
-
-			// 		return (
-			// 			<ReactSelect
-			// 				className={'input-xs'}
-			// 				key={machine_uuid}
-			// 				placeholder='Select Machine'
-			// 				options={machine ?? []}
-			// 				value={machine?.filter(
-			// 					(item) => item.value === machine_uuid
-			// 				)}
-			// 				filterOption={null}
-			// 				onChange={(e) => handleMachine(e, info.row.index)}
-			// 				menuPortalTarget={document.body}
-			// 			/>
-			// 		);
-			// 	},
-			// },
 			{
 				accessorKey: 'slot',
 				header: 'Slot',
@@ -171,49 +194,7 @@ export default function Index() {
 					}
 				},
 			},
-			// {
-			// 	accessorKey: 'dyeing_actions',
-			// 	header: 'Dyeing',
-			// 	enableColumnFilter: false,
-			// 	enableSorting: false,
-			// 	hidden: !haveAccess.includes('update'),
-			// 	width: 'w-12',
-			// 	cell: (info) => (
-			// 		<button
-			// 			className='btn btn-ghost btn-sm size-9 rounded-full p-1'
-			// 			onClick={() => handelDyeing(info.row.index)}>
-			// 			<Edit className='size-6' />
-			// 		</button>
-			// 	),
-			// },
-			{
-				accessorKey: 'is_drying_complete',
-				header: 'Drying Completed',
-				enableColumnFilter: false,
-				cell: (info) => {
-					const { is_drying_complete } = info.row.original;
 
-					const access = haveAccess.includes('click_drying_status');
-					const overrideAccess = haveAccess.includes(
-						'click_drying_status_override'
-					);
-					return (
-						<SwitchToggle
-							disabled={
-								overrideAccess
-									? false
-									: access
-										? is_drying_complete === 'true'
-										: true
-							}
-							onChange={() =>
-								handelDryingComplete(info.row.index)
-							}
-							checked={info.getValue() === 'true'}
-						/>
-					);
-				},
-			},
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',

@@ -1304,7 +1304,7 @@ export const SLIDER_DIE_CASTING_NULL = {
 		{
 			mc_no: '',
 			die_casting_uuid: '',
-			order_info_uuid: null,
+			finishing_batch_uuid: null,
 			cavity_goods: '',
 			cavity_defect: '',
 			push: '',

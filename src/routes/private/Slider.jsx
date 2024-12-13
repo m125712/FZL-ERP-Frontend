@@ -154,20 +154,6 @@ export const SliderRoutes = [
 						],
 					},
 					{
-						name: 'Stock',
-						path: '/slider/slider-assembly/stock',
-						element: <SliderAssemblyStock />,
-						page_name: 'slider__assembly_stock',
-						actions: [
-							'read',
-							'create',
-							'update',
-							'delete',
-							'click_production',
-							'click_transaction',
-						],
-					},
-					{
 						name: 'Production',
 						path: '/slider/slider-assembly/production',
 						element: <SliderAssemblyProduction />,
@@ -181,7 +167,20 @@ export const SliderRoutes = [
 							'click_transaction',
 						],
 					},
-
+					{
+						name: 'Stock',
+						path: '/slider/slider-assembly/stock',
+						element: <SliderAssemblyStock />,
+						page_name: 'slider__assembly_stock',
+						actions: [
+							'read',
+							'create',
+							'update',
+							'delete',
+							'click_production',
+							'click_transaction',
+						],
+					},
 					{
 						name: 'Log',
 						path: '/slider/slider-assembly/log',

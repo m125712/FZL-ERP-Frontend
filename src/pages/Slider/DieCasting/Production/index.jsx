@@ -77,19 +77,31 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'die_casting_name',
-				header: 'Name',
+				header: 'Item',
 				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'cavity_goods',
-				header: 'Cavity Goods',
+				header: (
+					<>
+						Cavity
+						<br />
+						Goods
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'cavity_defect',
-				header: 'Cavity Defect',
+				header: (
+					<>
+						Cavity
+						<br />
+						Defect
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -103,7 +115,7 @@ export default function Index() {
 				accessorKey: 'production_quantity',
 				header: (
 					<>
-						Production QTY
+						Prod QTY
 						<br />
 						(PCS)
 					</>

@@ -5,8 +5,9 @@ import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
 
+import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
@@ -58,12 +59,15 @@ export default function Index() {
 				),
 				width: 'w-24',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
 			},
 			{
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
+				width: 'w-24',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -74,7 +78,24 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_quantity',
-				header: 'Total Qty(Pcs)',
+				header: (
+					<div className='flex flex-col'>
+						<span>Total</span>
+						<span>Qty(Pcs)</span>
+					</div>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'expected_kg',
+				header: (
+					<span>
+						Exp Prod
+						<br />
+						Qty(kg)
+					</span>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -84,46 +105,25 @@ export default function Index() {
 				enableColumnFilter: false,
 				enableSorting: false,
 				hidden: !haveAccess.includes('create'),
-				width: 'w-24',
 				cell: (info) => {
-					const { week } = info.row.original;
+					const { uuid, received } = info.row.original;
 					return (
-						<button
-							disabled={info.row.original.received === 1}
-							className='btn btn-primary btn-xs'
+						<Transfer
 							onClick={() =>
 								navigate(
-									`/dyeing-and-iron/zipper-batch/batch-production/${info.row.original.uuid}`
+									`/dyeing-and-iron/zipper-batch/batch-production/${uuid}`
 								)
-							}>
-							Add Production
-						</button>
+							}
+							disabled={received === 1}
+						/>
 					);
 				},
-			},
-			{
-				accessorKey: 'batch_status',
-				header: 'Status',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'expected_kg',
-				header: (
-					<span>
-						Expected Production
-						<br />
-						Qty(kg)
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_actual_production_quantity',
 				header: (
 					<span>
-						Total Production
+						Total Prod
 						<br />
 						Qty(kg)
 					</span>
@@ -132,8 +132,36 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'batch_status',
+				header: 'Status',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const res = {
+						cancelled: 'badge-error',
+						completed: 'badge-success',
+						pending: 'badge-warning',
+					};
+					return (
+						<span
+							className={cn(
+								'badge badge-sm uppercase',
+								res[info.getValue()]
+							)}>
+							{info.getValue()}
+						</span>
+					);
+				},
+			},
+
+			{
 				accessorKey: 'received',
-				header: 'Stock Received',
+				header: (
+					<span>
+						Stock
+						<br />
+						Received
+					</span>
+				),
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { received } = info.row.original;
@@ -141,15 +169,18 @@ export default function Index() {
 					const overrideAccess = haveAccess.includes(
 						'click_receive_status_override'
 					);
+					// overrideAccess ? false : access ? received === 1 : true;
+					let isDisabled = false;
+					if (!overrideAccess) {
+						if (access) {
+							isDisabled = received === 1;
+						} else {
+							isDisabled = true;
+						}
+					}
 					return (
 						<SwitchToggle
-							disabled={
-								overrideAccess
-									? false
-									: access
-										? received === 1
-										: true
-							}
+							disabled={isDisabled}
 							onChange={() => handelReceived(info.row.index)}
 							checked={info.getValue() === 1}
 						/>
@@ -162,30 +193,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'machine_name',
-			// 	header: 'Machine',
-			// 	enableColumnFilter: false,
-			// 	width: 'w-60',
-			// 	cell: (info) => {
-			// 		const { machine_uuid } = info.row.original;
-
-			// 		return (
-			// 			<ReactSelect
-			// 				className={'input-xs'}
-			// 				key={machine_uuid}
-			// 				placeholder='Select Machine'
-			// 				options={machine ?? []}
-			// 				value={machine?.filter(
-			// 					(item) => item.value === machine_uuid
-			// 				)}
-			// 				filterOption={null}
-			// 				onChange={(e) => handleMachine(e, info.row.index)}
-			// 				menuPortalTarget={document.body}
-			// 			/>
-			// 		);
-			// 	},
-			// },
 			{
 				accessorKey: 'slot',
 				header: 'Slot',
@@ -194,9 +201,8 @@ export default function Index() {
 					const value = info.getValue();
 					if (value === 0) {
 						return '-';
-					} else {
-						return 'Slot ' + value;
 					}
+					return 'Slot ' + value;
 				},
 			},
 			{
@@ -276,16 +282,6 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 	};
-	// const handleMachine = async (e, idx) => {
-	// 	await updateData.mutateAsync({
-	// 		url: `${url}/${data[idx]?.uuid}`,
-	// 		updatedData: {
-	// 			machine_uuid: e.value,
-	// 			updated_at: GetDateTime(),
-	// 		},
-	// 		isOnCloseNeeded: false,
-	// 	});
-	// };
 
 	// get tabname
 	useEffect(() => {

@@ -2,6 +2,7 @@ import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
+import Pdf from '@/components/Pdf/ConeSticker';
 import Pdf2 from '@/components/Pdf/PolySticker';
 import { Input } from '@/ui';
 
@@ -25,6 +26,7 @@ export default function Index({
 		order_quantity: 0,
 		is_inch: 0,
 		party_name: null,
+		recipe_name: null,
 	},
 	setUpdate,
 }) {
@@ -48,14 +50,21 @@ export default function Index({
 	};
 	const onSubmit = async (data) => {
 		update.quantity = data.quantity;
-
-		Pdf2(update)?.print({}, window);
+		if (
+			update?.item_for === 'thread' ||
+			update?.item_for === 'sample_thread'
+		) {
+			Pdf(update)?.print({}, window);
+		} else {
+			Pdf2(update)?.print({}, window);
+		}
 	};
 
 	return (
 		<AddModal
 			id={modalId}
-			title={`Poly Sticker(Total QTY:${update?.quantity})`}
+			title={`${update?.item_for === 'thread' || update?.item_for === 'sample_thread' ? `Cone Sticker (Total QTY: ${update?.quantity})` : `Poly Sticker (Total QTY: ${update?.quantity})`}`}
+			subTitle={`${update?.item_for === 'thread' || update?.item_for === 'sample_thread' ? `Suggest Cone Sticker QTY: ${Math.ceil(update?.quantity / 3)} X 3` : ''}`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}

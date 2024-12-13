@@ -180,7 +180,7 @@ export default function Header({
 							<CheckBox
 								text='text-secondary-content'
 								label='is_own'
-								title='Own Order'
+								title='Own Delivery'
 								{...{ register, errors }}
 								checked={Boolean(watch('is_own'))}
 								onChange={(e) =>

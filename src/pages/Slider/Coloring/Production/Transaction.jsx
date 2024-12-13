@@ -78,7 +78,7 @@ export default function Index({
 	} = useRHF(
 		{
 			...SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
-			sfg_uuid: STRING.when({
+			finishing_batch_entry_uuid: STRING.when({
 				is: () => updateSliderTrx?.order_type === 'slider',
 				then: (schema) => schema.required('Required'),
 				otherwise: (schema) => schema.nullable(),
@@ -92,14 +92,17 @@ export default function Index({
 				'Beyond Max Quantity'
 			),
 		},
-		{ ...SLIDER_ASSEMBLY_TRANSACTION_NULL, sfg_uuid: null }
+		{
+			...SLIDER_ASSEMBLY_TRANSACTION_NULL,
+			finishing_batch_entry_uuid: null,
+		}
 	);
 
 	const onClose = () => {
 		setUpdateSliderTrx((prev) => ({
 			...prev,
 			uuid: null,
-			sfg_uuid: null,
+			finishing_batch_entry_uuid: null,
 			stock_uuid: null,
 			slider_item_uuid: null,
 			trx_from: null,
@@ -115,7 +118,10 @@ export default function Index({
 			given_quantity: 0,
 		});
 
-		reset({ ...SLIDER_ASSEMBLY_TRANSACTION_NULL, sfg_uuid: null });
+		reset({
+			...SLIDER_ASSEMBLY_TRANSACTION_NULL,
+			finishing_batch_entry_uuid: null,
+		});
 		window[modalId].close();
 	};
 
@@ -169,9 +175,12 @@ export default function Index({
 			onClose={onClose}
 			isSmall={true}>
 			{updateSliderTrx?.order_type === 'slider' && (
-				<FormField label='sfg_uuid' title='Style' errors={errors}>
+				<FormField
+					label='finishing_batch_entry_uuid'
+					title='Style'
+					errors={errors}>
 					<Controller
-						name='sfg_uuid'
+						name='finishing_batch_entry_uuid'
 						control={control}
 						render={({ field: { onChange } }) => {
 							return (
@@ -180,7 +189,10 @@ export default function Index({
 									options={styleOption}
 									value={styleOption.filter(
 										(item) =>
-											item.value == getValues('sfg_uuid')
+											item.value ==
+											getValues(
+												'finishing_batch_entry_uuid'
+											)
 									)}
 									onChange={(e) => {
 										onChange(e.value);

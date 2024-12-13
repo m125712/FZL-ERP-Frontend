@@ -1,3 +1,4 @@
+import { useAuth } from '@/context/auth';
 import { firstRoute } from '@/routes';
 import { useNavigate } from 'react-router-dom';
 
@@ -29,6 +30,7 @@ function V1() {
 
 function V3() {
 	const navigate = useNavigate();
+	const { Login, signed, can_access } = useAuth();
 	return (
 		<div className='flex h-screen flex-col items-center justify-center gap-12 py-8'>
 			<svg
@@ -66,13 +68,16 @@ function V3() {
 				<button
 					className='btn btn-primary w-64 rounded-full px-6 py-2 uppercase text-white transition-all duration-500 ease-in-out'
 					onClick={() => {
-						if (firstRoute?.path) {
+						if (firstRoute?.path && signed === true && can_access) {
 							navigate(firstRoute?.path);
 						} else {
 							navigate('/login');
 						}
 					}}>
-					Go Home {firstRoute?.path ? '' : ': Login'}
+					Go Home{' '}
+					{firstRoute?.path && signed === true && can_access
+						? ''
+						: ': Login'}
 				</button>
 			</div>
 		</div>

@@ -37,12 +37,11 @@ const AuthProvider = ({ children }) => {
 	const Login = async (data) => {
 		try {
 			const res = await api.post('/hr/user/login', data);
-			const { token, user: loginUser, can_access: hasAccess } = res?.data;
+			const { token, user: loginUser, can_access } = res?.data;
 
 			updateAuthCookie(`Bearer ` + token || '');
 
 			const userData = JSON.stringify(loginUser);
-			const can_access = hasAccess;
 
 			setUser(() => userData);
 			setCanAccess(() => can_access);
@@ -50,8 +49,13 @@ const AuthProvider = ({ children }) => {
 			updateUserCookie(userData || '');
 			updateUserCanAccess(can_access || '');
 
-			if (token && userData)
-				return (window.location.href = firstRoute?.path);
+			const path = firstRoute?.path;
+
+			// ! it is the main point where the user will be redirected to its first page after login
+			// ! but because of path = undefined, the user is redirected undefined route
+			// ! need to check this
+			if (token && userData && can_access)
+				return (window.location.href = path);
 
 			ShowToast({
 				type: res?.data?.type,

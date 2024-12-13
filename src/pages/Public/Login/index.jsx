@@ -9,16 +9,16 @@ import { Input, PasswordInput } from '@/ui';
 import { LOGIN_NULL, LOGIN_SCHEMA } from '@/util/Schema';
 
 export default function Index() {
-	const { Login, signed } = useAuth();
+	const { Login, signed, can_access } = useAuth();
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (signed === true) {
+		if (signed === true && can_access && firstRoute?.path) {
 			navigate(firstRoute?.path, { replace: true });
 		} else {
 			navigate('/login', { replace: true });
 		}
-	}, [signed]);
+	}, [signed, can_access, firstRoute?.path]);
 
 	const { register, handleSubmit, errors } = useRHF(LOGIN_SCHEMA, LOGIN_NULL);
 

@@ -1,4 +1,5 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
+import { useOtherDyesCategory } from '@/state/Other';
 import { useThreadDyesCategory } from '@/state/Thread';
 import { useAccess } from '@/hooks';
 
@@ -13,8 +14,13 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useThreadDyesCategory();
-
-	const info = new PageInfo('Dyeing/Dyes Category', url, 'dyeing__dyes_category');
+	const { invalidateQuery: invalidateOtherDyesCategory } =
+		useOtherDyesCategory();
+	const info = new PageInfo(
+		'Dyeing/Dyes Category',
+		url,
+		'dyeing__dyes_category'
+	);
 	const haveAccess = useAccess('dyeing__dyes_category');
 
 	const columns = useMemo(
@@ -159,6 +165,7 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateOtherDyesCategory}
 					{...{
 						deleteItem,
 						setDeleteItem,

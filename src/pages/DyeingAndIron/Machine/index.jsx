@@ -1,4 +1,5 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
+import { useOtherMachines } from '@/state/Other';
 import { useThreadMachine } from '@/state/Thread';
 import { useAccess } from '@/hooks';
 
@@ -14,7 +15,8 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData, updateData } = useThreadMachine();
-
+	const { invalidateQuery: invalidateOtherThreadMachine } =
+		useOtherMachines();
 	const info = new PageInfo('Machine', url, 'thread__machine');
 	const haveAccess = useAccess('dyeing__machine');
 	const columns = useMemo(
@@ -275,6 +277,7 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateOtherThreadMachine}
 					{...{
 						deleteItem,
 						setDeleteItem,

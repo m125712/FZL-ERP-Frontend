@@ -162,6 +162,13 @@ export const useOtherMaterial = () =>
 		queryKey: otherQK.material(),
 		url: `/other/material/value/label/unit/quantity`,
 	});
+
+//GET OTHER DYES CATEGORY
+export const useOtherDyesCategory = () =>
+	createGlobalState({
+		queryKey: otherQK.dyesCategory(),
+		url: `/other/thread/dyes-category/value/label`,
+	});
 // GET OTHER MATERIAL
 export const useOtherMaterialByParams = (params) =>
 	createGlobalState({

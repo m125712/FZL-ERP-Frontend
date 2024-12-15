@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useThreadMachineByUUID } from '@/state/Thread';
+import { useOtherMachines } from '@/state/Other';
+import { useThreadMachine, useThreadMachineByUUID } from '@/state/Thread';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
@@ -21,6 +22,9 @@ export default function Index({
 	const { data, url, updateData, postData } = useThreadMachineByUUID(
 		updateMachine?.uuid
 	);
+	const { invalidateQuery: invalidateThreadMachine } = useThreadMachine();
+	const { invalidateQuery: invalidateOtherThreadMachine } =
+		useOtherMachines();
 	const { user } = useAuth();
 	const {
 		register,
@@ -92,6 +96,9 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateThreadMachine();
+		invalidateOtherThreadMachine();
 	};
 
 	return (

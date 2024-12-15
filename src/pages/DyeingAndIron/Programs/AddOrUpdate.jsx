@@ -1,6 +1,10 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useGetURLData, useOtherMaterial } from '@/state/Other';
+import {
+	useGetURLData,
+	useOtherDyesCategory,
+	useOtherMaterial,
+} from '@/state/Other';
 import { useThreadProgramsByUUID } from '@/state/Thread';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
@@ -35,9 +39,7 @@ export default function Index({
 	} = useRHF(THREAD_PROGRAMS_SCHEMA, THREAD_PROGRAMS_NULL);
 
 	const { data: material } = useOtherMaterial();
-	const { data: dyes } = useGetURLData(
-		'/other/thread/dyes-category/value/label'
-	);
+	const { data: dyes } = useOtherDyesCategory();
 
 	useEffect(() => {
 		if (data) {

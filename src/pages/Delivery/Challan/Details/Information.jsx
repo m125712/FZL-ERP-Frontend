@@ -21,7 +21,7 @@ export default function Information({ challan }) {
 		delivery_date,
 		delivery_cost,
 		updated_at,
-		is_own,
+		delivery_type,
 	} = challan;
 
 	const renderItems = () => {
@@ -58,7 +58,7 @@ export default function Information({ challan }) {
 			},
 			{
 				label: 'Delivery Type',
-				value: is_hand_delivery ? 'Hand' : is_own ? 'Own' : 'Normal',
+				value: delivery_type,
 			},
 			{
 				label: 'Name',

@@ -268,8 +268,14 @@ export default function Index() {
 						idx={info.row.index}
 						handelUpdate={handelUpdate}
 						handelDelete={handelDelete}
-						showDelete={haveAccess.includes('delete')}
-						showUpdate={haveAccess.includes('update')}
+						showDelete={
+							haveAccess.includes('delete') &&
+							!info.row.original.is_warehouse_received
+						}
+						showUpdate={
+							haveAccess.includes('update') &&
+							!info.row.original.is_warehouse_received
+						}
 					/>
 				),
 			},

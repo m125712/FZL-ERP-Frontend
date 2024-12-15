@@ -40,7 +40,8 @@ export default function Index() {
 
 	// * used for checking if it is for update*//
 	const isUpdate = recipe_uuid !== undefined && recipe_id !== undefined;
-	const { data } = useLabDipRecipeDetailsByUUID(recipe_uuid);
+	const { data, invalidateQuery: invalidateRecipeDetails } =
+		useLabDipRecipeDetailsByUUID(recipe_uuid);
 	const {
 		register,
 		handleSubmit,
@@ -97,7 +98,6 @@ export default function Index() {
 			});
 			window['recipe_entry_delete'].showModal();
 		}
-		recipeEntryRemove(index);
 	};
 
 	const handelRecipeEntryAppend = () => {
@@ -404,6 +404,7 @@ export default function Index() {
 					setDeleteItem={setDeleteItem}
 					setItems={recipeEntryField}
 					url={`/lab-dip/recipe-entry`}
+					invalidateQuery={invalidateRecipeDetails}
 					deleteData={deleteData}
 				/>
 			</Suspense>

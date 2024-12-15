@@ -5,7 +5,7 @@ import {
 	useOtherDyesCategory,
 	useOtherMaterial,
 } from '@/state/Other';
-import { useThreadProgramsByUUID } from '@/state/Thread';
+import { useThreadPrograms, useThreadProgramsByUUID } from '@/state/Thread';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
@@ -26,6 +26,7 @@ export default function Index({
 	const { data, url, updateData, postData } = useThreadProgramsByUUID(
 		update?.uuid
 	);
+	const { invalidateQuery: invalidateThreadPrograms } = useThreadPrograms();
 	const { user } = useAuth();
 	const {
 		register,
@@ -88,6 +89,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateThreadPrograms();
 	};
 
 	return (

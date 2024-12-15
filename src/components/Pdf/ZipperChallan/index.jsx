@@ -18,6 +18,7 @@ import { getPageFooter, getPageHeader } from './utils';
 export default function Index(data) {
 	const isThreadChallan =
 		data?.item_for === 'thread' || data?.item_for === 'sample_thread';
+	const isTapeChallan = data?.item_for === 'tape';
 	const threadNode = [
 		getTable('packing_number', 'PL No'),
 		getTable('item_description', 'Count'),
@@ -27,6 +28,7 @@ export default function Index(data) {
 		getTable('quantity', 'Qty(cone)', 'right'),
 		getTable('poli_quantity', 'Poly', 'right'),
 	];
+
 	const zipperNode = [
 		getTable('packing_number', 'PL No'),
 		getTable('item_description', 'Item Description'),
@@ -36,7 +38,20 @@ export default function Index(data) {
 		getTable('quantity', 'Qty(pcs)', 'right'),
 		getTable('poli_quantity', 'Poly', 'right'),
 	];
-	const node = isThreadChallan ? threadNode : zipperNode;
+	const tapeNode = [
+		getTable('packing_number', 'PL No'),
+		getTable('item_description', 'Item Description'),
+		getTable('style', 'Style'),
+		getTable('color', 'Color'),
+		getTable('size', 'Size', 'right'),
+		getTable('quantity', 'Qty(cm)', 'right'),
+		getTable('poli_quantity', 'Poly', 'right'),
+	];
+	const node = isThreadChallan
+		? threadNode
+		: isTapeChallan
+			? tapeNode
+			: zipperNode;
 
 	const headerHeight = 200;
 	let footerHeight = 50;
@@ -72,7 +87,7 @@ export default function Index(data) {
 	let unit = [];
 	challan_entry?.forEach((item) => {
 		unit.push(
-			`${isThreadChallan ? `mtr` : item.is_inch === 1 ? `inch` : `cm`}`
+			`${isThreadChallan ? `mtr` : isTapeChallan ? `mtr` : item.is_inch === 1 ? `inch` : `cm`}`
 		);
 	});
 
@@ -174,7 +189,11 @@ export default function Index(data) {
 			},
 			{
 				text: `Total Quantity (In Words): ${NumToWord(totalQuantity)} ${
-					isThreadChallan ? 'cone' : 'pcs only'
+					isThreadChallan
+						? 'cone'
+						: isTapeChallan
+							? 'cm only'
+							: 'pcs only'
 				}`,
 				bold: true,
 			},

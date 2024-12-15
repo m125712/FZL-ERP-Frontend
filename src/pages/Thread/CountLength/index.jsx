@@ -1,4 +1,5 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
+import { useOtherCountLength } from '@/state/Other';
 import { useThreadCountLength } from '@/state/Thread';
 import { useAccess } from '@/hooks';
 
@@ -13,7 +14,8 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useThreadCountLength();
-
+	const { invalidateQuery: invalidateOtherCountLength } =
+		useOtherCountLength();
 	const info = new PageInfo('Count Length', url, 'thread__count_length');
 	const haveAccess = useAccess('thread__count_length');
 
@@ -188,6 +190,7 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					invalidateQuery={invalidateOtherCountLength}
 					{...{
 						deleteItem,
 						setDeleteItem,

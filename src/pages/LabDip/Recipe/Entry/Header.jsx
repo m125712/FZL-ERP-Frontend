@@ -49,66 +49,8 @@ export default function Header({
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody
-				title={`${isUpdate ? `Update Recipe: ${getValues('recipe_id')}` : 'Recipe'}`}
-				header={
-					<div className='m-2 flex items-center gap-1 text-sm'>
-						{/* <div className='rounded-md border border-secondary/30 bg-secondary px-1'>
-							<CheckBox
-								text='text-secondary-content'
-								label='approved'
-								title='Approved'
-								height='h-[2.9rem]'
-								defaultChecked={isApproved}
-								{...{ register, errors }}
-								onChange={(e) =>
-									setIsApproved(e.target.checked)
-								}
-								disabled={
-									getValues('lab_dip_info_uuid')
-										? false
-										: true
-								}
-							/>
-						</div> */}
-						{/* <div className='rounded-md border border-secondary/30 bg-secondary px-1'>
-							<CheckBox
-								text='text-secondary-content'
-								label='status'
-								title='Status'
-								height='h-[2.9rem]'
-								defaultChecked={isStatus}
-								{...{ register, errors }}
-								onChange={(e) => setIsStatus(e.target.checked)}
-							/>
-						</div> */}
-					</div>
-				}>
+				title={`${isUpdate ? `Update Recipe: ${getValues('recipe_id')}` : 'Recipe'}`}>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					{/* Lab dip info ID */}
-					{/* <FormField
-						label='lab_dip_info_uuid'
-						title='Lab dip info ID'
-						errors={errors}>
-						<Controller
-							name={'lab_dip_info_uuid'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select lab dip info id'
-										options={lab_dip_info_id}
-										value={lab_dip_info_id?.find(
-											(item) =>
-												item.value ==
-												getValues('lab_dip_info_uuid')
-										)}
-										onChange={(e) => onChange(e.value)}
-										isDisabled={true}
-									/>
-								);
-							}}
-						/>
-					</FormField> */}
 					<Input label={`name`} {...{ register, errors }} />
 					<FormField
 						label='sub_streat'

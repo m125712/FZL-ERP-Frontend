@@ -8,7 +8,6 @@ import { JoinInput, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import {
-	NUMBER_DOUBLE_REQUIRED,
 	NUMBER_REQUIRED,
 	SFG_PRODUCTION_SCHEMA_IN_PCS,
 	SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
@@ -35,10 +34,13 @@ export default function Index({
 	const { postData } = useNylonMFProduction();
 	const { invalidateQuery } = useNylonMFProductionLog();
 
-	const MAX_PROD = Math.min(
-		Number(updateMFProd?.balance_quantity),
-		Number(updateMFProd?.slider_finishing_stock)
-	);
+	const MAX_PROD =
+		updateMFProd?.order_type === 'tape'
+			? updateMFProd?.balance_quantity
+			: Math.min(
+					Number(updateMFProd?.balance_quantity),
+					Number(updateMFProd?.slider_finishing_stock)
+				);
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
 		useRHF(
@@ -51,7 +53,6 @@ export default function Index({
 			},
 			SFG_PRODUCTION_SCHEMA_IN_PCS_NULL
 		);
-
 
 	const onClose = () => {
 		setUpdateMFProd((prev) => ({
@@ -76,7 +77,8 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			finishing_batch_entry_uuid: updateMFProd?.finishing_batch_entry_uuid,
+			finishing_batch_entry_uuid:
+				updateMFProd?.finishing_batch_entry_uuid,
 			section: 'finishing',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),

@@ -49,7 +49,7 @@ const createStatusColumn = ({ accessorKey, header }) =>
 		},
 	});
 
-const getColumn = ({ item_name, show_price, bleaching, sizes }) => {
+const getColumn = ({ item_name, show_price, bleaching, sizes, order_type }) => {
 	// default columns
 	const DefaultStartColumn = [
 		createColumn({
@@ -78,27 +78,31 @@ const getColumn = ({ item_name, show_price, bleaching, sizes }) => {
 			enableColumnFilter: true,
 			cell: (info) => info.getValue(),
 		}),
-		createColumn({
-			accessorKey: 'size',
-			header: `${sizes.is_inch ? 'Size (Inch)' : 'Size (Meter)'}`,
-			enableColumnFilter: true,
-			hidden: !(sizes.is_inch || sizes.is_meter),
-			cell: (info) => {
-				return info.getValue();
-			},
-		}),
+		// createColumn({
+		// 	accessorKey: 'size',
+		// 	header: `${sizes.is_inch ? 'Size (Inch)' : 'Size (Meter)'}`,
+		// 	enableColumnFilter: true,
+		// 	hidden: !(sizes.is_inch || sizes.is_meter),
+		// 	cell: (info) => {
+		// 		return info.getValue();
+		// 	},
+		// }),
+
 		createColumn({
 			accessorFn: (row) => {
 				return `${
 					sizes.is_inch
 						? Number(row.size * 2.54).toFixed(2)
-						: sizes.is_meter
-							? Number(row.size * 100).toFixed(2)
-							: Number(row.size).toFixed(2)
+						: Number(row.size)
 				}`;
 			},
 			id: 'sizes',
-			header: `Size (Cm)`,
+			header:
+				order_type === 'tape'
+					? 'Size (M)'
+					: sizes.is_inch
+						? 'Size (Inch)'
+						: `Size (Cm)`,
 			enableColumnFilter: true,
 		}),
 

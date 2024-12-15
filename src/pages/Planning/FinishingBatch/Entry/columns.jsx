@@ -44,6 +44,13 @@ export const Columns = ({
 			cell: (info) => info.getValue(),
 		},
 		{
+			accessorKey: 'order_type',
+			header: 'Type',
+			enableColumnFilter: true,
+			width: 'w-36',
+			cell: (info) => info.getValue(),
+		},
+		{
 			accessorKey: 'style',
 			header: 'Style',
 			enableColumnFilter: true,
@@ -60,6 +67,13 @@ export const Columns = ({
 		{
 			accessorKey: 'size',
 			header: 'Size',
+			enableColumnFilter: true,
+			width: 'w-36',
+			cell: (info) => info.getValue(),
+		},
+		{
+			accessorKey: 'unit',
+			header: 'Unit',
 			enableColumnFilter: true,
 			width: 'w-36',
 			cell: (info) => info.getValue(),

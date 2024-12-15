@@ -37,6 +37,13 @@ export default function index({ data }) {
 				},
 			},
 			{
+				accessorKey: 'order_type',
+				header: 'Type',
+				enableColumnFilter: false,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'recipe_id',
 				header: 'Recipe',
 				enableColumnFilter: false,
@@ -60,6 +67,13 @@ export default function index({ data }) {
 			{
 				accessorKey: 'size',
 				header: 'Size',
+				enableColumnFilter: false,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 				width: 'w-36',
 				cell: (info) => info.getValue(),

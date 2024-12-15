@@ -248,7 +248,7 @@ export default function Index() {
 					className='flex flex-col gap-4'>
 					<DynamicField
 						title={`${data?.name} (Mtr/Kg): ${data?.raw_per_kg_meter}, 
-								Remaining: ${MAX_TAPE_TRX_QTY} KG`}
+								Remaining: ${MAX_TAPE_TRX_QTY.toFixed(2)} KG`}
 						handelAppend={handelEntryAppend}
 						tableHead={[
 							'Order Entry ID',

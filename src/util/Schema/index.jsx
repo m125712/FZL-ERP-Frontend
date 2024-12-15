@@ -2886,7 +2886,7 @@ export const FINISHING_BATCH_ENTRY_SCHEMA = {
 			uuid: STRING,
 			dyeing_batch_uuid: STRING,
 			sfg_uuid: STRING,
-			quantity: NUMBER.max(
+			quantity: NUMBER.default(0).max(
 				yup.ref('max_quantity'),
 				`Beyond Max Quantity`
 			),
@@ -2898,7 +2898,7 @@ export const FINISHING_BATCH_ENTRY_SCHEMA = {
 			uuid: STRING,
 			dyeing_batch_uuid: STRING,
 			sfg_uuid: STRING,
-			quantity: NUMBER.max(
+			quantity: NUMBER.default(0).max(
 				yup.ref('max_quantity'),
 				`Beyond Max Quantity`
 			),

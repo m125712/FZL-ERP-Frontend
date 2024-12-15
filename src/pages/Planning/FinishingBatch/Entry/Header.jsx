@@ -23,7 +23,8 @@ export default function Header({
 	watch,
 	orderType = '',
 	setOrderType,
-	isUpdate
+	setSliderType,
+	isUpdate,
 }) {
 	const { batch_uuid } = useParams();
 	const { originalData } = useOtherOrderDescription(
@@ -94,6 +95,7 @@ export default function Header({
 										onChange={(e) => {
 											onChange(e.value);
 											setOrderType(e.order_type);
+											setSliderType(e.slider_provided);
 										}}
 										isDisabled={batch_uuid != undefined}
 									/>
@@ -124,11 +126,13 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<Input
-						label='slider_lead_time'
-						unit='PCS'
-						{...{ register, errors }}
-					/>
+					{orderType !== 'tape' && (
+						<Input
+							label='slider_lead_time'
+							unit='PCS'
+							{...{ register, errors }}
+						/>
+					)}
 					{orderType !== 'slider' && (
 						<Input
 							label='dyeing_lead_time'

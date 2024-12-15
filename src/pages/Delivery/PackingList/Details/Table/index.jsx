@@ -18,7 +18,7 @@ export default function Index({ packing_list_entry, data }) {
 					return (
 						<LinkWithCopy
 							title={order_number}
-							id={info.getValue()}
+							id={order_number}
 							uri='/order/details'
 						/>
 					);
@@ -63,7 +63,8 @@ export default function Index({ packing_list_entry, data }) {
 				enableColumnFilter: false,
 				cell: (info) =>
 					data?.item_for === 'thread' ||
-					data?.item_for === 'sample_thread'
+					data?.item_for === 'sample_thread' ||
+					data?.item_for === 'tape'
 						? 'Meter'
 						: info.getValue() === 1
 							? 'Inch'
@@ -99,7 +100,9 @@ export default function Index({ packing_list_entry, data }) {
 					data?.item_for === 'thread' ||
 					data?.item_for === 'sample_thread'
 						? 'Qty(cone)'
-						: 'Qty(pcs)',
+						: data?.item_for === 'tape'
+							? 'Qty(cm)'
+							: 'Qty(pcs)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

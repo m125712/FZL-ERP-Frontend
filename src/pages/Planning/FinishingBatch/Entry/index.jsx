@@ -28,6 +28,7 @@ import Header from './Header';
 
 export default function index() {
 	const [orderType, setOrderType] = useState('');
+	const [sliderType, setSliderType] = useState('');
 	let [searchParams] = useSearchParams();
 	const production_date = searchParams.get('production_date');
 	const { user } = useAuth();
@@ -68,6 +69,12 @@ export default function index() {
 			dyeing_lead_time:
 				FINISHING_BATCH_ENTRY_SCHEMA.dyeing_lead_time.when({
 					is: () => orderType !== 'slider',
+					then: (schema) => schema.required('Required'),
+					otherwise: (schema) => schema.nullable(),
+				}),
+			slider_lead_time:
+				FINISHING_BATCH_ENTRY_SCHEMA.slider_lead_time.when({
+					is: () => orderType !== 'tape',
 					then: (schema) => schema.required('Required'),
 					otherwise: (schema) => schema.nullable(),
 				}),
@@ -179,8 +186,8 @@ export default function index() {
 			);
 
 			// * slider batch entry update depending on order_type and slider_provided
-			if (rest.order_type === 'tape') {
-			} else if (rest.slider_provided === 'completely_provided') {
+			if (orderType === 'tape') {
+			} else if (sliderType === 'completely_provided') {
 			} else {
 				const slider_quantity_current =
 					finishing_batch_entry.length === 1
@@ -275,7 +282,7 @@ export default function index() {
 		}));
 
 		// * slider batch entry depending on order_type and slider_provided
-		if (data.order_type === 'tape') {
+		if (orderType === 'tape') {
 		} else if (data.slider_provided === 'completely_provided') {
 		} else {
 			const slider_quantity =
@@ -314,9 +321,7 @@ export default function index() {
 			.then(() => reset(FINISHING_BATCH_ENTRY_NULL))
 			.then(() => {
 				invalidateQuery();
-				navigate(
-					`/planning/finishing-batch/${finishingData.uuid}`
-				);
+				navigate(`/planning/finishing-batch/${finishingData.uuid}`);
 			})
 			.catch((err) => console.log(err));
 		return;
@@ -387,6 +392,7 @@ export default function index() {
 							watch,
 							orderType,
 							setOrderType,
+							setSliderType,
 							isUpdate,
 						}}
 					/>

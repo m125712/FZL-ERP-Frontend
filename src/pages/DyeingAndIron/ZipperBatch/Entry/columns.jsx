@@ -148,7 +148,6 @@ export const Columns = ({
 										`dyeing_batch_entry[${idx}].quantity`,
 										info.getValue(),
 										{
-											
 											shouldDirty: true,
 										}
 									)
@@ -187,18 +186,31 @@ export const Columns = ({
 				enableColumnFilter: false,
 				enableSorting: true,
 				cell: ({ row }) => {
-					const { top, bottom, raw_mtr_per_kg, size } = row.original;
+					const { top, bottom, raw_mtr_per_kg, size, order_type } =
+						row.original;
 					const idx = row.index;
 
+					// * for tape order we calculate with size as quantity 
 					const total_size_in_mtr =
-						((parseFloat(top) +
-							parseFloat(bottom) +
-							parseFloat(size)) *
-							parseFloat(
-								watch(`dyeing_batch_entry[${idx}].quantity`) ||
-									0
-							)) /
-						100;
+						order_type === 'tape'
+							? ((parseFloat(top) +
+									parseFloat(bottom) +
+									parseFloat(
+										watch(
+											`dyeing_batch_entry[${idx}].quantity`
+										) || 0
+									)) *
+									1) /
+								100
+							: ((parseFloat(top) +
+									parseFloat(bottom) +
+									parseFloat(size)) *
+									parseFloat(
+										watch(
+											`dyeing_batch_entry[${idx}].quantity`
+										) || 0
+									)) /
+								100;
 
 					return Number(
 						total_size_in_mtr / parseFloat(raw_mtr_per_kg)
@@ -267,7 +279,6 @@ export const Columns = ({
 										`new_dyeing_batch_entry[${idx}].quantity`,
 										info.getValue(),
 										{
-											
 											shouldDirty: true,
 										}
 									)

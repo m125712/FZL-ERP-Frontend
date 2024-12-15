@@ -73,8 +73,9 @@ export default function Index() {
 			{
 				accessorKey: 'color',
 				header: 'Color',
+				width: 'w-24',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => info.getValue()?.join(', '),
 			},
 			{
 				accessorKey: 'total_quantity',

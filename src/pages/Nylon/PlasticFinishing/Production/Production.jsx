@@ -35,10 +35,13 @@ export default function Index({
 	const { postData } = useNylonPlasticFinishingProduction();
 	const { invalidateQuery } = useNylonPlasticFinishingProductionLog();
 	const { user } = useAuth();
-	const MAX_PROD = Math.min(
-		Number(updatePFProd?.balance_quantity),
-		Number(updatePFProd?.slider_finishing_stock)
-	);
+	const MAX_PROD =
+		updatePFProd?.order_type === 'tape'
+			? updatePFProd?.balance_quantity
+			: Math.min(
+					Number(updatePFProd?.balance_quantity),
+					Number(updatePFProd?.slider_finishing_stock)
+				);
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
 		useRHF(

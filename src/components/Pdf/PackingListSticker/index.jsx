@@ -21,6 +21,14 @@ export default function Index(data) {
 		getTable('quantity', 'Qty(pcs)', 'right'),
 		getTable('poli_quantity', 'Poly', 'right'),
 	];
+	const nodeTape = [
+		getTable('item_description', 'Item'),
+		getTable('style', 'Style'),
+		getTable('color', 'Color'),
+		getTable('size', 'Size', 'right'),
+		getTable('quantity', 'Qty(cm)', 'right'),
+		getTable('poli_quantity', 'Poly', 'right'),
+	];
 	const nodeThread = [
 		getTable('item_description', 'Count'),
 		getTable('style', 'Style'),
@@ -32,7 +40,9 @@ export default function Index(data) {
 	const node =
 		data?.item_for === 'thread' || data?.item_for === 'sample_thread'
 			? nodeThread
-			: nodeZipper;
+			: data?.item_for === 'tape'
+				? nodeTape
+				: nodeZipper;
 	const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 	let { packing_list_entry } = data;
 	let totalQuantity = packing_list_entry?.reduce((acc, item) => {
@@ -46,7 +56,7 @@ export default function Index(data) {
 	let unit = [];
 	packing_list_entry?.forEach((item) => {
 		unit.push(
-			`${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? `mtr` : item.is_inch === 1 ? `inch` : `cm`}`
+			`${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? `mtr` : data?.item_for === 'tape' ? `mtr` : item.is_inch === 1 ? `inch` : `cm`}`
 		);
 	});
 	const pdfDocGenerator = pdfMake.createPdf({

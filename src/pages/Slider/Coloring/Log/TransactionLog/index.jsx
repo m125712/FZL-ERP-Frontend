@@ -47,6 +47,11 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'style',
+				header: 'Style',
+				cell: (info) => (info.getValue() ? info.getValue() : '---'),
+			},
+			{
 				accessorKey: 'item_name',
 				header: 'Item',
 				enableColumnFilter: false,

@@ -65,7 +65,7 @@ export const getPageHeader = (data) => {
 				...TitleValue('Marketing', data?.marketing_name),
 			],
 			[
-				...TitleValue('PI No', data?.pi_number),
+				...TitleValue('PI No', data?.pi_cash_numbers?.join(', ')),
 				...TitleValue('Buyer', data?.buyer_name),
 			],
 			[

@@ -12,14 +12,14 @@ import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
-	getTable('total_quantity', 'Cone', 'right'),
+	getTable('quantity', 'Cone', 'right'),
 	getTable('count', 'Count'),
 	getTable('length', 'Length'),
 	getTable('style', 'Style'),
 	getTable('yarn_quantity', 'Yarn'),
-	getTable('total_quantity', 'Tube'),
-	getTable('total_quantity', 'Stiker'),
-	getTable('total_quantity', 'Poly'),
+	getTable('quantity', 'Tube'),
+	getTable('quantity', 'Stiker'),
+	getTable('quantity', 'Poly'),
 	getTable('total_carton', 'Carton'),
 	getTable('act_wit', 'Act.Wit'),
 	getTable('consum', 'Consum.'),

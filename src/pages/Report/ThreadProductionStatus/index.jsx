@@ -68,11 +68,13 @@ export default function Index() {
 				accessorKey: 'style',
 				header: 'Style',
 				enableColumnFilter: false,
+				width: 'w-24',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'color',
 				header: 'Color',
+				width: 'w-24',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

@@ -36,7 +36,7 @@ export default function Index(data, dyeingDate) {
 		{ text: 'Color ', bold: true },
 
 		'\n',
-		{ text: 'Expected Kg ', bold: true },
+		{ text: 'Exp(kg) ', bold: true },
 
 		'\n',
 		{ text: 'Status ', bold: true },

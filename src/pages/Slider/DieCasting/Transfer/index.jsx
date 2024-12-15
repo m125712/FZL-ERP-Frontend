@@ -1,21 +1,17 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
-import { useSliderDieCastingStock, useSliderDieCastingTransferAgainstStock, useSliderDiecastingTrxLog } from '@/state/Slider';
+import {
+	useSliderDieCastingStock,
+	useSliderDieCastingTransferAgainstStock,
+	useSliderDiecastingTrxLog,
+} from '@/state/Slider';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
-
-
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete } from '@/ui';
 
-
-
 import PageInfo from '@/util/PageInfo';
-
-
-
-
 
 const AddOrUpdateStock = lazy(() => import('./AgainstStock/AddOrUpdate'));
 const AddOrUpdateOrder = lazy(() => import('./AgainstOrder/AddOrUpdate'));
@@ -38,6 +34,12 @@ const Index = () => {
 			{
 				accessorKey: 'name',
 				header: 'Name',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'batch_number',
+				header: 'Batch',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

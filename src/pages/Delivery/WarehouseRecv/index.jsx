@@ -252,6 +252,35 @@ export default function Index() {
 								)}
 							/>
 						</FormField>
+						<FormField
+							label='option'
+							title='Select Option'
+							errors={errors}>
+							<Controller
+								name='option'
+								control={control}
+								render={({ field: { onChange } }) => (
+									<ReactSelect
+										placeholder='Select Option'
+										options={scan_option}
+										value={scan_option?.find(
+											(item) =>
+												item.value ==
+												getValues('option')
+										)}
+										// onFocus={() => {
+										// 	setOnFocus(false);
+										// }}
+										onChange={(e) => {
+											const value = e.value;
+											onChange(value);
+											setOnFocus(true);
+											containerRef.current.focus();
+										}}
+									/>
+								)}
+							/>
+						</FormField>
 					</SectionEntryBody>
 
 					<DynamicField

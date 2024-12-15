@@ -100,23 +100,35 @@ export default function Header({
 		}
 	}, [watch('item_for')]);
 
-	const isHandDelivery = watch('is_hand_delivery');
-	const isOwnDelivery = watch('is_own');
+	const types = [
+		{
+			label: 'Own Delivery',
+			value: 'own',
+		},
+		{
+			label: 'Hand Delivery',
+			value: 'hand',
+		},
+		{
+			label: 'Normal Delivery',
+			value: 'normal',
+		},
+	];
 
 	useEffect(() => {
-		if (isOwnDelivery) {
+		if (watch('delivery_type') === 'own') {
 			setValue('vehicle_uuid', null);
 			setValue('name', '');
 			setValue('delivery_cost', 0);
 			setValue('is_hand_delivery', false);
-		} else if (isHandDelivery) {
+		} else if (watch('delivery_type') === 'hand') {
 			setValue('vehicle_uuid', null);
 			setValue('is_own', false);
 		} else {
 			setValue('name', '');
 			setValue('delivery_cost', 0);
 		}
-	}, [isHandDelivery, setValue, isOwnDelivery]);
+	}, [watch('delivery_type'), setValue]);
 
 	const handlePackingListRemove = (
 		packing_list_uuid,
@@ -161,32 +173,39 @@ export default function Header({
 								}
 							/>
 						</div>
-						<div className='rounded-md bg-secondary px-1'>
-							<CheckBox
-								text='text-secondary-content'
-								label='is_hand_delivery'
-								title='Hand Delivery'
-								{...{ register, errors }}
-								checked={Boolean(watch('is_hand_delivery'))}
-								onChange={(e) =>
-									setValue(
-										'is_hand_delivery',
-										e.target.checked
-									)
-								}
-							/>
-						</div>
-						<div className='rounded-md bg-secondary px-1'>
-							<CheckBox
-								text='text-secondary-content'
-								label='is_own'
-								title='Own Delivery'
-								{...{ register, errors }}
-								checked={Boolean(watch('is_own'))}
-								onChange={(e) =>
-									setValue('is_own', e.target.checked)
-								}
-							/>
+						<div className='w-34 my-2'>
+							<FormField
+								label='delivery_type'
+								title='Delivery Type'
+								is_title_needed='false'
+								errors={errors}>
+								<Controller
+									name={'delivery_type'}
+									control={control}
+									render={({ field: { onChange } }) => {
+										return (
+											<ReactSelect
+												placeholder='Select Delivery'
+												options={types}
+												value={types?.filter(
+													(item) =>
+														item.value ==
+														getValues(
+															'delivery_type'
+														)
+												)}
+												onChange={(e) => {
+													onChange(e.value);
+													reset({
+														...ORDER_NULL,
+														order_type: e.value,
+													});
+												}}
+											/>
+										);
+									}}
+								/>
+							</FormField>
 						</div>
 					</div>
 				}>
@@ -413,7 +432,7 @@ export default function Header({
 							/>
 						</FormField>
 					)}
-					{!watch('is_hand_delivery') && !watch('is_own') && (
+					{watch('delivery_type') === 'normal' && (
 						<FormField
 							label='vehicle_uuid'
 							title='Assign To'
@@ -436,14 +455,14 @@ export default function Header({
 							/>
 						</FormField>
 					)}
-					{watch('is_hand_delivery') && !watch('is_own') && (
+					{watch('delivery_type') === 'hand' && (
 						<Input
 							label='name'
 							title='Name'
 							{...{ register, errors }}
 						/>
 					)}
-					{watch('is_hand_delivery') && !watch('is_own') && (
+					{watch('delivery_type') === 'hand' && (
 						<Input
 							label='delivery_cost'
 							title='Delivery Cost'

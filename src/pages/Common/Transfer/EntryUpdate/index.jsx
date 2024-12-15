@@ -396,8 +396,10 @@ export default function Index() {
 
 									{/* Stock (Kg) */}
 									<td>
-										{Number(selectedValue?.stock || 0) -
-											selectedValue?.tape_transferred}
+										{Number(
+											Number(selectedValue?.stock || 0) -
+												selectedValue?.tape_transferred
+										).toFixed(3)}
 									</td>
 									<td>
 										{Number(

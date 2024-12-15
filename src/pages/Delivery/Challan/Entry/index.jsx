@@ -138,6 +138,8 @@ export default function Index() {
 		if (isUpdate) {
 			const challanData = {
 				...data,
+				is_hand_delivery: data?.delivery_type === 'hand' ? true : false,
+				is_own: data?.delivery_type === 'own' ? true : false,
 				updated_at: GetDateTime(),
 				receive_status: data.receive_status === true ? 1 : 0,
 				carton_quantity:
@@ -218,6 +220,8 @@ export default function Index() {
 
 		const challanData = {
 			...data,
+			is_hand_delivery: data?.delivery_type === 'hand' ? true : false,
+			is_own: data?.delivery_type === 'own' ? true : false,
 			uuid: new_uuid,
 			created_at,
 			created_by: user.uuid,
@@ -317,7 +321,9 @@ export default function Index() {
 					tableHead={
 						<>
 							{watch('item_for') === 'zipper' ||
-							watch('item_for') === 'sample_zipper'
+							watch('item_for') === 'sample_zipper' ||
+							watch('item_for') === 'slider' ||
+							watch('item_for') === 'tape'
 								? [
 										'PL No.',
 										'Item Description',
@@ -325,7 +331,6 @@ export default function Index() {
 										'Color',
 										'Size',
 										'Unit',
-										'Delivered',
 										'Quantity(pcs)',
 										'Poly Qty',
 										'Short QTY',
@@ -347,9 +352,7 @@ export default function Index() {
 										'Color',
 										'Length',
 										'Unit',
-										'Delivered',
 										'Quantity(cones)',
-										'Poly Qty',
 										'Short QTY',
 										'Reject QTY',
 										'Remarks',
@@ -422,19 +425,19 @@ export default function Index() {
 								</td>
 								<td className={`${rowClass}`}>
 									{getValues(
-										`challan_entry[${index}].delivered`
-									)}
-								</td>
-								<td className={`${rowClass}`}>
-									{getValues(
 										`challan_entry[${index}].quantity`
 									)}
 								</td>{' '}
-								<td className={`${rowClass}`}>
-									{getValues(
-										`challan_entry[${index}].poli_quantity`
-									)}
-								</td>
+								{(watch('item_for') === 'zipper' ||
+									watch('item_for') === 'sample_zipper' ||
+									watch('item_for') === 'slider' ||
+									watch('item_for') === 'tape') && (
+									<td className={`${rowClass}`}>
+										{getValues(
+											`challan_entry[${index}].poli_quantity`
+										)}
+									</td>
+								)}
 								<td className={`${rowClass}`}>
 									{getValues(
 										`challan_entry[${index}].short_quantity`
@@ -475,7 +478,10 @@ export default function Index() {
 						title={`New Entry Details: `}
 						tableHead={
 							<>
-								{watch('item_for') === 'zipper'
+								{watch('item_for') === 'zipper' ||
+								watch('item_for') === 'sample_zipper' ||
+								watch('item_for') === 'slider' ||
+								watch('item_for') === 'tape'
 									? [
 											'PL No.',
 											'Item Description',
@@ -483,7 +489,6 @@ export default function Index() {
 											'Color',
 											'Size',
 											'Unit',
-											'Delivered',
 											'Quantity(pcs)',
 											'Poly Qty',
 											'Short QTY',
@@ -505,9 +510,7 @@ export default function Index() {
 											'Color',
 											'Length',
 											'Unit',
-											'Delivered',
 											'Quantity(cones)',
-											'Poly Qty',
 											'Short QTY',
 											'Reject QTY',
 											'Remarks',
@@ -586,14 +589,19 @@ export default function Index() {
 									</td>
 									<td className={`${rowClass}`}>
 										{getValues(
-											`new_challan_entry[${index}].delivered`
-										)}
-									</td>
-									<td className={`${rowClass}`}>
-										{getValues(
 											`new_challan_entry[${index}].quantity`
 										)}
 									</td>
+									{(watch('item_for') === 'zipper' ||
+										watch('item_for') === 'sample_zipper' ||
+										watch('item_for') === 'slider' ||
+										watch('item_for') === 'tape') && (
+										<td className={`${rowClass}`}>
+											{getValues(
+												`challan_entry[${index}].poli_quantity`
+											)}
+										</td>
+									)}
 									<td className={`${rowClass}`}>
 										{getValues(
 											`new_challan_entry[${index}].short_quantity`

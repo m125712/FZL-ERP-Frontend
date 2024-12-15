@@ -78,7 +78,12 @@ export const useOtherOrderPackingList = (param) =>
 		queryKey: otherQK.orderPackingList(),
 		url: `/other/order/info/value/label?page=challan${param}`,
 	});
-
+// GET OTHER PACKING LIST
+export const useOtherPackingList = () =>
+	createGlobalState({
+		queryKey: otherQK.packingList(),
+		url: `/other/delivery/packing-list/value/label?is_received=false`,
+	});
 // GET THREAD ORDER
 export const useThreadOrder = (query) =>
 	createGlobalState({
@@ -156,6 +161,13 @@ export const useOtherMaterial = () =>
 	createGlobalState({
 		queryKey: otherQK.material(),
 		url: `/other/material/value/label/unit/quantity`,
+	});
+
+//GET OTHER DYES CATEGORY
+export const useOtherDyesCategory = () =>
+	createGlobalState({
+		queryKey: otherQK.dyesCategory(),
+		url: `/other/thread/dyes-category/value/label`,
 	});
 // GET OTHER MATERIAL
 export const useOtherMaterialByParams = (params) =>

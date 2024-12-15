@@ -21,7 +21,7 @@ export default function Information({ challan }) {
 		delivery_date,
 		delivery_cost,
 		updated_at,
-		is_own,
+		delivery_type,
 	} = challan;
 
 	const renderItems = () => {
@@ -57,17 +57,8 @@ export default function Information({ challan }) {
 				value: format(new Date(delivery_date), 'dd/MM/yy'),
 			},
 			{
-				label: 'Own Delivery',
-				value: <StatusButton className={'btn-xs'} value={is_own} />,
-			},
-			{
-				label: 'Hand Delivery',
-				value: (
-					<StatusButton
-						className={'btn-xs'}
-						value={is_hand_delivery ? 1 : 0}
-					/>
-				),
+				label: 'Delivery Type',
+				value: delivery_type,
 			},
 			{
 				label: 'Name',

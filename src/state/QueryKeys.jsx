@@ -1097,6 +1097,8 @@ export const otherQK = {
 		'hr-user-by-designation',
 		...(designation ? [designation] : []),
 	],
+	//*dyes category
+	dyesCategory: () => [...otherQK.all(), 'dyes-category'],
 
 	// Thread Orders
 
@@ -1112,6 +1114,7 @@ export const otherQK = {
 	//Order
 	order: (query) => [...otherQK.all(), 'order', query],
 	orderPackingList: () => [...otherQK.all(), 'order-packing-list'],
+	packingList: () => [...otherQK.all(), 'packing-list'],
 	orderDescription: (params) => [
 		...otherQK.all(),
 		'order-description',

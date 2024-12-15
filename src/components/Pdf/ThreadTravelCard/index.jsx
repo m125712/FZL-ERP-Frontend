@@ -12,6 +12,7 @@ import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
+	getTable('order_number', 'O/N'),
 	getTable('quantity', 'Cone', 'right'),
 	getTable('count', 'Count'),
 	getTable('length', 'Length'),
@@ -74,7 +75,7 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40],
+					widths: [45, 25, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -173,7 +174,7 @@ export default function Index(batch, shade_recipes_entries, programs) {
 							{ text: 'Shift InCharge', rowSpan: 3 },
 						],
 						['', '', '', '', '', '', '', '', '', '', '', ''],
-						['', '', '', '', '', '', '', '', '1 ', '2 ', '3 ', ''],
+						['', '', '', '', '', '', '', '', '', '', '', ''],
 						[
 							'',
 							'',

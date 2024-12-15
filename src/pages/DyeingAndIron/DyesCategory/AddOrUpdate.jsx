@@ -1,6 +1,10 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useThreadDyesCategoryByUUID } from '@/state/Thread';
+import { useOtherDyesCategory } from '@/state/Other';
+import {
+	useThreadDyesCategory,
+	useThreadDyesCategoryByUUID,
+} from '@/state/Thread';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
@@ -24,6 +28,10 @@ export default function Index({
 	const { data, url, updateData, postData } = useThreadDyesCategoryByUUID(
 		update?.uuid
 	);
+	const { invalidateQuery: invalidateThreadDyesCategory } =
+		useThreadDyesCategory();
+	const { invalidateQuery: invalidateOtherDyesCategory } =
+		useOtherDyesCategory();
 	const { user } = useAuth();
 	const {
 		register,
@@ -87,6 +95,8 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateThreadDyesCategory();
+		invalidateOtherDyesCategory();
 	};
 
 	return (

@@ -45,6 +45,23 @@ export const CUSTOM_PAGE_STICKER = ({
 		styles,
 	};
 };
+export const CUSTOM_PAGE_CONE_STICKER = ({
+	pageOrientation = 'landscape',
+	xMargin,
+	headerHeight,
+	footerHeight,
+}) => {
+	let width = 71;
+	let height = 227;
+
+	return {
+		pageSize: { width, height },
+		pageOrientation,
+		pageMargins: [xMargin, headerHeight, xMargin, footerHeight],
+		defaultStyle,
+		styles,
+	};
+};
 
 export const company = {
 	logo: FZL_LOGO.src,

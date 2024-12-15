@@ -78,64 +78,6 @@ export default function Index() {
 					);
 				},
 			},
-			// {
-			// 	accessorKey: 'approved',
-			// 	header: 'Approved',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => {
-			// 		const access = haveAccess.includes('click_approve');
-			// 		const overrideAccess = haveAccess.includes(
-			// 			'click_approve_override'
-			// 		);
-			// 		const { lab_dip_info_uuid } = info.row.original;
-			// 		return (
-			// 			<SwitchToggle
-			// 				disabled={
-			// 					!lab_dip_info_uuid ||
-			// 					(!overrideAccess &&
-			// 						(!access || Number(info.getValue()) === 1))
-			// 				}
-			// 				onChange={() =>
-			// 					handelApprovedStatusChange(info.row.index)
-			// 				}
-			// 				checked={Number(info.getValue()) === 1}
-			// 			/>
-			// 		);
-			// 	},
-			// },
-
-			// {
-			// 	accessorKey: 'status',
-			// 	header: 'Status',
-			// 	enableColumnFilter: false,
-
-			// 	cell: (info) => {
-			// 		const access = haveAccess.includes('click_status');
-			// 		const overrideAccess = haveAccess.includes(
-			// 			'click_status_override'
-			// 		);
-			// 		return (
-			// 			<SwitchToggle
-			// 				disabled={
-			// 					overrideAccess
-			// 						? false
-			// 						: access
-			// 							? Number(info.getValue()) === 1
-			// 							: true
-			// 				}
-			// 				onChange={() => handelStatusChange(info.row.index)}
-			// 				checked={Number(info.getValue()) === 1}
-			// 			/>
-			// 		);
-			// 	},
-			// },
-			{
-				accessorKey: 'approved_date',
-				header: 'Approved Date',
-				enableColumnFilter: false,
-				filterFn: 'isWithinRange',
-				cell: (info) => <DateTime date={info.getValue()} />,
-			},
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',

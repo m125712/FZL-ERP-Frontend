@@ -29,7 +29,7 @@ export default function Header({
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody
-				title={`${isUpdate ? `Info: ${getValues('info_id')}` : 'Info'}`}
+				title={`${isUpdate ? `Card Info: ${getValues('info_id')}` : 'Card Info'}`}
 				// header={
 				// 	<div className='m-2 flex items-center gap-1 text-sm'>
 				// 		<div className='w-24 rounded-md border border-secondary/30 bg-secondary'>

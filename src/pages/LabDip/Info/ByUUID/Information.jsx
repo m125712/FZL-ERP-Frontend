@@ -6,12 +6,13 @@ import { LinkWithCopy, StatusButton, TitleValue } from '@/ui';
 
 export default function Information({ info }) {
 	const {
+		uuid,
 		buyer_name,
 		created_at,
 		created_by_name,
 		factory_name,
+		info_id,
 		is_thread_order,
-		lab_status,
 		marketing_name,
 		merchandiser_name,
 		name,
@@ -23,6 +24,10 @@ export default function Information({ info }) {
 
 	const renderItems = () => {
 		const basicInfo = [
+			{
+				label: 'Card ID',
+				value: info_id,
+			},
 			{
 				label: 'Name',
 				value: name,
@@ -37,11 +42,6 @@ export default function Information({ info }) {
 					/>
 				),
 			},
-
-			// {
-			// 	label: 'Lab Status',
-			// 	value: <StatusButton value={lab_status} className={'btn-xs'} />,
-			// },
 			{
 				label: 'Thread Order',
 				value: (

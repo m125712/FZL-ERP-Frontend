@@ -94,31 +94,6 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'lab_status',
-			// 	header: 'Status',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => {
-			// 		const { lab_status } = info.row.original;
-			// 		const access = haveAccess.includes('click_status');
-			// 		const overrideAccess = haveAccess.includes(
-			// 			'click_status_override'
-			// 		);
-			// 		return (
-			// 			<SwitchToggle
-			// 				disabled={
-			// 					overrideAccess
-			// 						? false
-			// 						: access
-			// 							? lab_status === 1
-			// 							: true
-			// 				}
-			// 				onChange={() => handelStatusChange(info.row.index)}
-			// 				checked={Number(info.getValue()) === 1}
-			// 			/>
-			// 		);
-			// 	},
-			// },
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',

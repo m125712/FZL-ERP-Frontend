@@ -109,16 +109,9 @@ export default function Index({ packing_list_entry, data }) {
 				enableColumnFilter: false,
 				enableSorting: false,
 				width: 'w-8',
-				hidden:
-					data?.item_for === 'sample_thread' ||
-					data?.item_for === 'thread',
 				cell: (info) => {
 					return (
 						<button
-							disabled={
-								data?.item_for === 'thread' ||
-								data?.item_for === 'sample_thread'
-							}
 							type='button'
 							className='btn btn-accent btn-sm font-semibold text-white shadow-md'
 							onClick={() => handleUpdate(info.row.index)}>

@@ -150,9 +150,10 @@ export default function Index() {
 							placeholder='Select order info uuid'
 							options={recipe?.filter(
 								(recipeItem) =>
-									recipeItem.bleaching === bleaching &&
-									recipeItem.order_info_uuid ===
-										order_info_uuid
+									(recipeItem.bleaching === bleaching &&
+										recipeItem.order_info_uuid ===
+											order_info_uuid) ||
+									recipeItem.value === null
 							)}
 							value={recipe?.find(
 								(item) => item.value == recipe_uuid

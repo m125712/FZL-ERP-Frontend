@@ -138,6 +138,8 @@ export default function Index() {
 		if (isUpdate) {
 			const challanData = {
 				...data,
+				is_hand_delivery: data?.delivery_type === 'hand' ? true : false,
+				is_own: data?.delivery_type === 'own' ? true : false,
 				updated_at: GetDateTime(),
 				receive_status: data.receive_status === true ? 1 : 0,
 				carton_quantity:
@@ -218,6 +220,8 @@ export default function Index() {
 
 		const challanData = {
 			...data,
+			is_hand_delivery: data?.delivery_type === 'hand' ? true : false,
+			is_own: data?.delivery_type === 'own' ? true : false,
 			uuid: new_uuid,
 			created_at,
 			created_by: user.uuid,

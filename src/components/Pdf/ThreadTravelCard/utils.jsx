@@ -34,7 +34,14 @@ export const getPageHeader = (batch) => {
 	const dyeing_updated_at = batch?.dyeing_updated_at
 		? getDateFormate(batch?.dyeing_updated_at)
 		: '';
-
+	const sub_streat = new Set();
+	batch?.batch_entry?.forEach((item) => {
+		sub_streat.add(item.sub_streat);
+	});
+	const recipe = new Set();
+	batch?.batch_entry?.forEach((item) => {
+		recipe.add(item.recipe_name);
+	});
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
 		widths: [70, '*', 70, '*'],
@@ -84,9 +91,11 @@ export const getPageHeader = (batch) => {
 					bold: true,
 					color: PRIMARY_COLOR,
 				},
-				{ text: batch?.total_expected_weight, colSpan: 3 },
-				{},
-				{},
+				{ text: batch?.total_expected_weight },
+				{ text: 'Sub Streat', bold: true, color: PRIMARY_COLOR },
+				{
+					text: [...sub_streat].join(', '),
+				},
 			],
 			[
 				{ text: 'Color', bold: true, color: PRIMARY_COLOR },
@@ -95,8 +104,8 @@ export const getPageHeader = (batch) => {
 				{ text: batch?.batch_entry[0]?.bleaching },
 			],
 			[
-				{ text: 'Status', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.status },
+				{ text: 'Shade', bold: true, color: PRIMARY_COLOR },
+				{ text: [...recipe].join(', ') },
 				{ text: 'Category', bold: true, color: PRIMARY_COLOR },
 				{ text: batch?.category },
 			],
@@ -130,7 +139,6 @@ export const getPageHeader = (batch) => {
 				{ text: 'Updated At', bold: true, color: PRIMARY_COLOR },
 				{ text: dyeing_updated_at },
 			],
-		
 		],
 	};
 };

@@ -57,17 +57,8 @@ export default function Information({ challan }) {
 				value: format(new Date(delivery_date), 'dd/MM/yy'),
 			},
 			{
-				label: 'Own Delivery',
-				value: <StatusButton className={'btn-xs'} value={is_own} />,
-			},
-			{
-				label: 'Hand Delivery',
-				value: (
-					<StatusButton
-						className={'btn-xs'}
-						value={is_hand_delivery ? 1 : 0}
-					/>
-				),
+				label: 'Delivery Type',
+				value: is_hand_delivery ? 'Hand' : is_own ? 'Own' : 'Normal',
 			},
 			{
 				label: 'Name',

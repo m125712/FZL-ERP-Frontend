@@ -16,16 +16,23 @@ import {
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
-const node = [
-	getTable('item_description', 'Item'),
-	getTable('style', 'Style'),
-	getTable('color', 'Color'),
-	getTable('size', 'Size', 'right'),
-	getTable('quantity', 'Qty(pcs)', 'right'),
-];
-
 export default function Index(data) {
 	const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
+	const normalNode = [
+		getTable('item_description', 'Item'),
+		getTable('style', 'Style'),
+		getTable('color', 'Color'),
+		getTable('size', 'Size', 'right'),
+		getTable('quantity', 'Qty(pcs)', 'right'),
+	];
+	const tapeNode = [
+		getTable('item_description', 'Item'),
+		getTable('style', 'Style'),
+		getTable('color', 'Color'),
+		getTable('size', 'Size', 'right'),
+		getTable('quantity', 'Qty(cm)', 'right'),
+	];
+	const node = data?.item_for == 'tape' ? tapeNode : normalNode;
 	const pdfDocGenerator = pdfMake.createPdf({
 		...CUSTOM_PAGE({
 			pageOrientation: 'landscape',
@@ -155,7 +162,7 @@ export default function Index(data) {
 								fontSize: DEFAULT_FONT_SIZE - 2,
 							},
 							{
-								text: `${data?.size} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'mtr' : data?.is_inch === 1 ? 'inch' : 'cm'}`,
+								text: `${data?.size} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' || data?.item_for === 'tape' ? 'mtr' : data?.is_inch === 1 ? 'inch' : 'cm'}`,
 								fontSize: DEFAULT_FONT_SIZE - 2,
 							},
 							{

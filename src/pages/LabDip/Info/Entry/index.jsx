@@ -7,7 +7,7 @@ import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
-import { UpdateModal } from '@/components/Modal';
+import { DeleteModal, UpdateModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
 import { ActionButtons, DynamicField, FormField, ReactSelect } from '@/ui';
 
@@ -81,15 +81,18 @@ export default function Index() {
 	});
 
 	const handleRecipeRemove = (index) => {
+		const infoUuid = getValues(`recipe[${index}].info_entry_uuid`);
 		const recipeUuid = getValues(`recipe[${index}].recipe_uuid`);
+		const recipeName = rec_uuid?.find(
+			(item) => item.value == getValues(`recipe[${index}].recipe_uuid`)
+		);
 		if (recipeUuid !== undefined) {
 			setUpdateItem({
-				itemId: recipeUuid,
-				itemName: recipeUuid,
+				itemId: infoUuid,
+				itemName: recipeName?.label,
 			});
 			window['recipe_update'].showModal();
 		}
-		recipeRemove(index);
 	};
 
 	const handelRecipeAppend = () => {
@@ -382,43 +385,6 @@ export default function Index() {
 									/>
 								</FormField>
 							</td>
-							{/* <Controller
-											name={`recipe[${index}].approved`}
-											control={control}
-											render={({
-												field: { onChange },
-											}) => (
-												<div className='rounded-md border border-secondary/30 bg-secondary px-1'>
-													<CheckBox
-														text='text-secondary-content'
-														label={`recipe[${index}].approved`}
-														title='approved'
-														height='h-[2.9rem]'
-														defaultChecked={
-															getValues(
-																`recipe[${index}].approved`
-															) === 1
-														} // Ensure this reflects the correct boolean state
-														onChange={(e) => {
-															let newApproved = e
-																.target.checked
-																? 1
-																: 0;
-															onChange(
-																newApproved
-															);
-															getApproved(
-																newApproved,
-																index
-															);
-														}}
-														{...{
-															register,
-														}}
-													/>
-												</div>
-											)}
-										/> */}
 							<td
 								className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
 								<ActionButtons
@@ -437,13 +403,14 @@ export default function Index() {
 				<Footer buttonClassName='!btn-primary' />
 			</form>
 			<Suspense>
-				<UpdateModal
+				<DeleteModal
 					modalId={'recipe_update'}
 					title={'Recipe Entry'}
-					url={`/lab-dip/update-recipe/remove-lab-dip-info-uuid/by`}
-					updateItem={updateItem}
-					setUpdateItem={setUpdateItem}
-					updateData={updateData}
+					url={`/lab-dip/info-entry`}
+					deleteItem={updateItem}
+					setDeleteItem={setUpdateItem}
+					deleteData={deleteData}
+					invalidateQuery={invalidateQueryLabDipInfoByDetails}
 				/>
 			</Suspense>
 

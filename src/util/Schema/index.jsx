@@ -3358,6 +3358,7 @@ export const POLY_NULL = {
 // * Warehouse Receive
 export const WAREHOUSE_RECEIVE_SCHEMA = {
 	option: STRING_REQUIRED,
+	packet_list_uuid: STRING.nullable(),
 	entry: yup.array().of(
 		yup.object().shape({
 			remarks: STRING.nullable(),
@@ -3365,6 +3366,7 @@ export const WAREHOUSE_RECEIVE_SCHEMA = {
 	),
 };
 export const WAREHOUSE_RECEIVE_NULL = {
+	packet_list_uuid: null,
 	option: 'warehouse_receive',
 	entry: [],
 };

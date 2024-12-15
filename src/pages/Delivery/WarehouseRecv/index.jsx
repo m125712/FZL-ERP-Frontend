@@ -3,6 +3,7 @@ import {
 	useDeliveryPackingList,
 	useDeliveryPackingListByUUID,
 } from '@/state/Delivery';
+import { useOtherOrderPackingList, useOtherPackingList } from '@/state/Other';
 import { QueryCache } from '@tanstack/react-query';
 import { useSymbologyScanner } from '@use-symbology-scanner/react';
 import { set } from 'date-fns';
@@ -21,6 +22,7 @@ import {
 	SectionEntryBody,
 } from '@/ui';
 
+import { exclude } from '@/util/Exclude';
 import GetDateTime from '@/util/GetDateTime';
 import {
 	WAREHOUSE_RECEIVE_NULL,
@@ -49,6 +51,7 @@ export default function Index() {
 		getValues,
 		Controller,
 		watch,
+		setValue,
 		context: form,
 	} = useRHF(WAREHOUSE_RECEIVE_SCHEMA, WAREHOUSE_RECEIVE_NULL);
 
@@ -65,6 +68,7 @@ export default function Index() {
 		loading: isLoading,
 		error,
 	} = useFetch(`/delivery/packing-list/${symbol}`, [status]);
+	const { data: packetList } = useOtherPackingList();
 	const { invalidateQuery: invalidateDeliveryPackingList, updateData } =
 		useDeliveryPackingList();
 
@@ -193,6 +197,8 @@ export default function Index() {
 		}
 	};
 
+	let excludeItem = exclude(watch, packetList, 'entry', 'uuid', status);
+
 	const rowClass =
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
@@ -253,27 +259,37 @@ export default function Index() {
 							/>
 						</FormField>
 						<FormField
-							label='option'
-							title='Select Option'
+							label='packet_list_uuid'
+							title='Packet List'
 							errors={errors}>
 							<Controller
-								name='option'
+								name='packet_list_uuid'
 								control={control}
 								render={({ field: { onChange } }) => (
 									<ReactSelect
-										placeholder='Select Option'
-										options={scan_option}
-										value={scan_option?.find(
+										placeholder='Select Packet List'
+										options={packetList?.filter(
+											(inItem) =>
+												!excludeItem?.some(
+													(excluded) =>
+														excluded?.value ===
+														inItem?.value
+												)
+										)}
+										value={packetList?.filter(
 											(item) =>
 												item.value ==
-												getValues('option')
+												getValues('packet_list_uuid')
 										)}
 										// onFocus={() => {
 										// 	setOnFocus(false);
 										// }}
 										onChange={(e) => {
 											const value = e.value;
-											onChange(value);
+											setScanUUID(value);
+											setStatus(!status);
+											setValue('packet_list_uuid', null);
+											onChange(null);
 											setOnFocus(true);
 											containerRef.current.focus();
 										}}

@@ -1112,6 +1112,7 @@ export const otherQK = {
 	//Order
 	order: (query) => [...otherQK.all(), 'order', query],
 	orderPackingList: () => [...otherQK.all(), 'order-packing-list'],
+	packingList: () => [...otherQK.all(), 'packing-list'],
 	orderDescription: (params) => [
 		...otherQK.all(),
 		'order-description',

@@ -5,9 +5,10 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, Transfer } from '@/ui';
+import { DateTime, ReactSelect, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
+
 const Production = lazy(() => import('./Production'));
 const DyeingAgainstStock = lazy(() => import('./DyeingAgainstStock'));
 const TrxToStock = lazy(() => import('./ToStock'));
@@ -17,11 +18,16 @@ export default function Index() {
 	const info = new PageInfo('Common/Coil/SFG', url, 'common__coil_sfg');
 	const haveAccess = useAccess(info.getTab());
 	const navigate = useNavigate();
+	const [stock, setStock] = useState(true);
+	const stockState = [
+		{ label: 'Order', value: true },
+		{ label: 'Stock', value: false },
+	];
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
 
-	const columns = useMemo(
+	const columnsOrder = useMemo(
 		() => [
 			{
 				accessorKey: 'name',
@@ -124,6 +130,149 @@ export default function Index() {
 					/>
 				),
 			},
+
+			{
+				accessorKey: 'raw_per_kg_meter',
+				header: (
+					<span>
+						Raw Tape
+						<br />
+						(Meter/Kg)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'dyed_per_kg_meter',
+				header: (
+					<span>
+						Dyed Tape
+						<br />
+						(Meter/Kg)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+		],
+		[data]
+	);
+	const columnsStock = useMemo(
+		() => [
+			{
+				accessorKey: 'name',
+				header: 'Name',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
+				accessorKey: 'item_name',
+				header: 'Item',
+				enableColumnFilter: false,
+				width: 'w-30',
+
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
+				accessorKey: 'zipper_number_name',
+				header: (
+					<div>
+						Zipper
+						<br />
+						Number
+					</div>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_import',
+				header: 'Is Imported',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return Number(info.getValue()) === 1 ? ' Import' : 'Local';
+				},
+			},
+			{
+				accessorKey: 'is_reverse',
+				header: 'Is Reverse',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return Number(info.getValue()) === 1
+						? ' Reverse'
+						: 'Forward';
+				},
+			},
+
+			{
+				accessorKey: 'trx_quantity_in_coil',
+				header: (
+					<span>
+						Stock
+						<br />
+						(KG)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'actions1',
+				header: '',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_production'),
+				width: 'w-34',
+				cell: (info) => (
+					<Transfer
+						onClick={() => handelProduction(info.row.index)}
+					/>
+				),
+			},
+			{
+				accessorKey: 'quantity_in_coil',
+
+				header: (
+					<span>
+						Production
+						<br />
+						(KG)
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
 			{
 				accessorKey: 'dyeing_against_stock_action',
 				header: 'Dyeing Against Stock',
@@ -304,7 +453,20 @@ export default function Index() {
 				title={info.getTitle()}
 				//accessor={haveAccess.includes('click_production')}
 				data={data}
-				columns={columns}
+				columns={stock ? columnsOrder : columnsStock}
+				extraButton={
+					<ReactSelect
+						className='h-4 w-24 text-sm'
+						placeholder='Select state'
+						options={stockState}
+						value={stockState?.filter(
+							(item) => item.value == stock
+						)}
+						onChange={(e) => {
+							setStock(e.value);
+						}}
+					/>
+				}
 			/>
 			<Suspense>
 				<Production

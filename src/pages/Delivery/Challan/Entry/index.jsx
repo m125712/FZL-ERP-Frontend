@@ -331,7 +331,9 @@ export default function Index() {
 										'Color',
 										'Size',
 										'Unit',
-										'Quantity(pcs)',
+										watch('item_for') === 'tape'
+											? 'Quantity(Cm)'
+											: 'Quantity(pcs)',
 										'Poly Qty',
 										'Short QTY',
 										'Reject QTY',
@@ -414,8 +416,8 @@ export default function Index() {
 											  ) === 1
 											? 'inch'
 											: getValues(
-														`challan_entry[${index}].is_meters`
-												  ) === 1 ||
+														`challan_entry[${index}].order_type`
+												  ) === 'tape' ||
 												  getValues(`item_for`) ===
 														'thread' ||
 												  getValues(`item_for`) ===

@@ -2875,7 +2875,7 @@ export const UPDATE_DYEING_TRANSFER_NULL = {
 
 export const FINISHING_BATCH_ENTRY_SCHEMA = {
 	order_description_uuid: STRING_REQUIRED,
-	slider_lead_time: NUMBER_REQUIRED,
+	slider_lead_time: NUMBER,
 	dyeing_lead_time: NUMBER,
 	status: STRING_REQUIRED,
 	production_date: STRING_REQUIRED,

@@ -23,6 +23,7 @@ export default function Header({
 	watch,
 	orderType = '',
 	setOrderType,
+	sliderType = '',
 	setSliderType,
 	isUpdate,
 }) {
@@ -126,7 +127,10 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					{orderType !== 'tape' && (
+					{!(
+						orderType === 'tape' ||
+						sliderType === 'completely_provided'
+					) && (
 						<Input
 							label='slider_lead_time'
 							unit='PCS'

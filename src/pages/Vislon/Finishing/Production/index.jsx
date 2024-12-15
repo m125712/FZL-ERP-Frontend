@@ -155,20 +155,23 @@ export default function Index() {
 				hidden: !haveAccess.includes('click_production'),
 				width: 'w-8',
 				cell: (info) => {
-					const { balance_quantity, slider_finishing_stock } =
-						info.row.original;
+					const {
+						balance_quantity,
+						slider_finishing_stock,
+						order_type,
+					} = info.row.original;
 
+					const access =
+						order_type === 'tape'
+							? Number(balance_quantity) <= 0
+							: Math.min(
+									Number(balance_quantity),
+									Number(slider_finishing_stock)
+								) <= 0;
 					return (
 						<Transfer
 							onClick={() => handelProduction(info.row.index)}
-							disabled={
-								Math.min(
-									Number(balance_quantity),
-									Number(slider_finishing_stock)
-								) <= 0
-									? true
-									: false
-							}
+							disabled={access}
 						/>
 					);
 				},

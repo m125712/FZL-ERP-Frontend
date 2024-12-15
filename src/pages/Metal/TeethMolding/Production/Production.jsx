@@ -113,7 +113,7 @@ export default function Index({
 				title='Production Quantity'
 				label='production_quantity'
 				unit='PCS'
-				sub_label={`MAX: ${MAX_PROD_PCS} kg`}
+				sub_label={`MAX: ${MAX_PROD_PCS} pcs`}
 				{...{ register, errors }}
 			/>
 			<JoinInput

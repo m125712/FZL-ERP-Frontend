@@ -54,7 +54,9 @@ export default function Index({ challan, item_for }) {
 				accessorKey: 'is_inch',
 				header: 'Unit',
 				cell: (info) =>
-					item_for === 'thread' || item_for === 'sample_thread'
+					item_for === 'thread' ||
+					item_for === 'sample_thread' ||
+					item_for === 'tape'
 						? 'Meter'
 						: info.getValue() === 1
 							? 'Inch'
@@ -70,9 +72,11 @@ export default function Index({ challan, item_for }) {
 			{
 				accessorKey: 'quantity',
 				header:
-					item_for === 'thread' || 'sample_thread'
+					item_for === 'thread' || item_for === 'sample_thread'
 						? 'Qty(cone)'
-						: 'Qty(pcs)',
+						: item_for === 'tape'
+							? 'Qty(cm)'
+							: 'Qty(pcs)',
 				cell: (info) => info.getValue(),
 				enableColumnFilter: false,
 			},

@@ -31,14 +31,20 @@ export default function Index({
 }) {
 	const { postData } = useMetalTCProduction();
 	const { invalidateQuery } = useMetalFProduction();
-	
+
 	const { user } = useAuth();
 
-	const MAX_PROD_PCS = Math.min(
-		Number(updateFinishingProd.balance_quantity),
-		Number(updateFinishingProd.finishing_stock),
-		Number(updateFinishingProd.slider_finishing_stock)
-	);
+	const MAX_PROD_PCS =
+		updateFinishingProd?.order_type === 'tape'
+			? Math.min(
+					Number(updateFinishingProd.balance_quantity),
+					Number(updateFinishingProd.finishing_stock)
+				)
+			: Math.min(
+					Number(updateFinishingProd.balance_quantity),
+					Number(updateFinishingProd.finishing_stock),
+					Number(updateFinishingProd.slider_finishing_stock)
+				);
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
 		useRHF(SFG_PRODUCTION_SCHEMA_IN_PCS, SFG_PRODUCTION_SCHEMA_IN_PCS_NULL);
@@ -67,7 +73,8 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			finishing_batch_entry_uuid: updateFinishingProd?.finishing_batch_entry_uuid,
+			finishing_batch_entry_uuid:
+				updateFinishingProd?.finishing_batch_entry_uuid,
 			section: 'finishing',
 			production_quantity_in_kg: 0,
 			created_by: user?.uuid,

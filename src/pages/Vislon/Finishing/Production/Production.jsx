@@ -37,23 +37,28 @@ export default function Index({
 		useVislonFinishingProdLog();
 	const { user } = useAuth();
 
-	const MAX_PROD = Math.min(
-		Number(updateFinishingProd.balance_quantity),
-		Number(updateFinishingProd.slider_finishing_stock)
-	);
+	const MAX_PROD =
+		updateFinishingProd?.order_type === 'tape'
+			? Math.min(
+				Number(updateFinishingProd.balance_quantity),
+				Number(updateFinishingProd.finishing_stock)
+			)
+			: Math.min(
+					Number(updateFinishingProd.balance_quantity),
+					Number(updateFinishingProd.slider_finishing_stock)
+				);
 
-	const { register, handleSubmit, errors, reset, control, context } =
-		useRHF(
-			{
-				...SFG_PRODUCTION_SCHEMA_IN_PCS,
-				production_quantity:
-					SFG_PRODUCTION_SCHEMA_IN_PCS.production_quantity.max(
-						MAX_PROD,
-						'Beyond Max Quantity'
-					),
-			},
-			SFG_PRODUCTION_SCHEMA_IN_PCS_NULL
-		);
+	const { register, handleSubmit, errors, reset, control, context } = useRHF(
+		{
+			...SFG_PRODUCTION_SCHEMA_IN_PCS,
+			production_quantity:
+				SFG_PRODUCTION_SCHEMA_IN_PCS.production_quantity.max(
+					MAX_PROD,
+					'Beyond Max Quantity'
+				),
+		},
+		SFG_PRODUCTION_SCHEMA_IN_PCS_NULL
+	);
 
 	const onClose = () => {
 		setUpdateFinishingProd((prev) => ({
@@ -76,7 +81,8 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			finishing_batch_entry_uuid: updateFinishingProd?.finishing_batch_entry_uuid,
+			finishing_batch_entry_uuid:
+				updateFinishingProd?.finishing_batch_entry_uuid,
 			coloring_prod: updateFinishingProd?.coloring_prod,
 			section: 'finishing',
 			created_by: user?.uuid,

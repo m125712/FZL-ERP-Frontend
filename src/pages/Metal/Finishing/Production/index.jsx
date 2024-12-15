@@ -163,19 +163,24 @@ export default function Index() {
 						balance_quantity,
 						finishing_stock,
 						slider_finishing_stock,
+						order_type,
 					} = info.row.original;
-					return (
-						<Transfer
-							onClick={() => handelProduction(info.row.index)}
-							disabled={
-								Math.min(
+
+					const access =
+						order_type === 'tape'
+							? Math.min(
+									Number(balance_quantity),
+									Number(finishing_stock)
+								) <= 0
+							: Math.min(
 									Number(balance_quantity),
 									Number(finishing_stock),
 									Number(slider_finishing_stock)
-								) <= 0
-									? true
-									: false
-							}
+								) <= 0;
+					return (
+						<Transfer
+							onClick={() => handelProduction(info.row.index)}
+							disabled={access}
 						/>
 					);
 				},

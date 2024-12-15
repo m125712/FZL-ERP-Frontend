@@ -74,7 +74,7 @@ export default function index() {
 				}),
 			slider_lead_time:
 				FINISHING_BATCH_ENTRY_SCHEMA.slider_lead_time.when({
-					is: () => orderType !== 'tape',
+					is: () => !(orderType === 'tape' || sliderType === 'completely_provided'),
 					then: (schema) => schema.required('Required'),
 					otherwise: (schema) => schema.nullable(),
 				}),
@@ -283,7 +283,7 @@ export default function index() {
 
 		// * slider batch entry depending on order_type and slider_provided
 		if (orderType === 'tape') {
-		} else if (data.slider_provided === 'completely_provided') {
+		} else if (sliderType === 'completely_provided') {
 		} else {
 			const slider_quantity =
 				finishingEntry.length === 1
@@ -392,6 +392,7 @@ export default function index() {
 							watch,
 							orderType,
 							setOrderType,
+							sliderType,
 							setSliderType,
 							isUpdate,
 						}}

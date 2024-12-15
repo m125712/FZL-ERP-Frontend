@@ -10,6 +10,17 @@ export const DEFAULT_A4_PAGE = ({ xMargin, headerHeight, footerHeight }) => ({
 	defaultStyle,
 	styles,
 });
+export const DEFAULT_LETTER_PAGE = ({
+	xMargin,
+	headerHeight,
+	footerHeight,
+}) => ({
+	pageSize: 'LETTER',
+	pageOrientation: 'portrait',
+	pageMargins: [xMargin, headerHeight, xMargin, footerHeight],
+	defaultStyle,
+	styles,
+});
 
 export const CUSTOM_PAGE = ({
 	pageOrientation = 'landscape',

@@ -3,7 +3,12 @@ import {
 	tableLayoutStyle,
 	xMargin,
 } from '@/components/Pdf/ui';
-import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
+import {
+	DEFAULT_A4_PAGE,
+	DEFAULT_LETTER_PAGE,
+	getTable,
+	TableHeader,
+} from '@/components/Pdf/utils';
 
 import { DollarToWord, NumToWord } from '@/lib/NumToWord';
 
@@ -72,7 +77,7 @@ export default function Index(data) {
 	});
 
 	const pdfDocGenerator = pdfMake.createPdf({
-		...DEFAULT_A4_PAGE({
+		...DEFAULT_LETTER_PAGE({
 			xMargin,
 			headerHeight,
 			footerHeight,

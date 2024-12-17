@@ -49,7 +49,7 @@ export default function Index({
 				remaining_dyed_tape: NUMBER_DOUBLE_REQUIRED.max(
 					MAX_PROD_KG,
 					'Beyond Max limit'
-				).moreThan(0, 'More than 0'),
+				).min(0, 'Negative value not allowed'),
 			},
 			{ ...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL, remaining_dyed_tape: null }
 		);
@@ -78,7 +78,8 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			finishing_batch_entry_uuid: updateTeethMoldingProd?.finishing_batch_entry_uuid,
+			finishing_batch_entry_uuid:
+				updateTeethMoldingProd?.finishing_batch_entry_uuid,
 			dyed_tape_used_in_kg:
 				updateTeethMoldingProd.tape_stock - data.remaining_dyed_tape,
 			section: 'teeth_molding',

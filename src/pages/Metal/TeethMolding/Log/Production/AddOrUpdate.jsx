@@ -58,7 +58,7 @@ export default function Index({
 			dyed_tape_used_in_kg: NUMBER_DOUBLE_REQUIRED.max(
 				MAX_DUE_TAPE,
 				'Beyond Max limit'
-			).moreThan(0, 'More than 0'),
+			).min(0, 'Negative value not allowed'),
 		},
 		{ ...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL, dyed_tape_used_in_kg: null }
 	);

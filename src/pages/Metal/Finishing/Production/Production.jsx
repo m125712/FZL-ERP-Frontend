@@ -1,5 +1,9 @@
 import { useAuth } from '@/context/auth';
-import { useMetalFProduction, useMetalTCProduction } from '@/state/Metal';
+import {
+	useMetalFinishingProdLog,
+	useMetalFProduction,
+	useMetalTCProduction,
+} from '@/state/Metal';
 import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
@@ -31,6 +35,8 @@ export default function Index({
 }) {
 	const { postData } = useMetalTCProduction();
 	const { invalidateQuery } = useMetalFProduction();
+	const { invalidateQuery: invalidateMetalFinishingProdLog } =
+		useMetalFinishingProdLog();
 
 	const { user } = useAuth();
 
@@ -47,10 +53,17 @@ export default function Index({
 				);
 
 	const { register, handleSubmit, errors, reset, watch, control, context } =
-		useRHF(SFG_PRODUCTION_SCHEMA_IN_PCS, SFG_PRODUCTION_SCHEMA_IN_PCS_NULL);
-	const MAX_WASTAGE_KG = Number(
-		MAX_PROD_PCS - (watch('production_quantity') || 0)
-	).toFixed(3);
+		useRHF(
+			{
+				...SFG_PRODUCTION_SCHEMA_IN_PCS,
+				production_quantity:
+					SFG_PRODUCTION_SCHEMA_IN_PCS.production_quantity.max(
+						MAX_PROD_PCS,
+						'Beyond max quantity'
+					),
+			},
+			SFG_PRODUCTION_SCHEMA_IN_PCS_NULL
+		);
 
 	const onClose = () => {
 		setUpdateFinishingProd((prev) => ({
@@ -88,6 +101,7 @@ export default function Index({
 		});
 
 		invalidateQuery();
+		invalidateMetalFinishingProdLog();
 	};
 
 	return (

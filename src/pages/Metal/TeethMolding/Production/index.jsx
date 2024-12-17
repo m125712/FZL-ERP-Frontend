@@ -158,7 +158,7 @@ export default function Index() {
 						<Transfer
 							onClick={() => handelProduction(info.row.index)}
 							disabled={
-								tape_stock <= 0 && balance_quantity <= 0
+								tape_stock <= 0 || balance_quantity <= 0
 									? true
 									: false
 							}

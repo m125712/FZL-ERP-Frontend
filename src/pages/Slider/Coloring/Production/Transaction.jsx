@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '@/context/auth';
-import { useMetalFProduction } from '@/state/Metal';
+import { useMetalFProduction, useMetalTMProduction } from '@/state/Metal';
 import {
 	useNylonMFProduction,
 	useNylonPlasticFinishingProduction,
@@ -55,7 +55,8 @@ export default function Index({
 		useNylonPlasticFinishingProduction();
 	const { invalidateQuery: invalidateNylonFinishingProdLog } =
 		useMetalFProduction();
-
+	const { invalidateQuery: invalidateMetalTMProduction } =
+		useMetalTMProduction();
 	const { user } = useAuth();
 
 	const MAX_TRX =
@@ -147,6 +148,7 @@ export default function Index({
 		invalidateNylonMetallicFinishingProdLog();
 		invalidateNylonPlasticFinishingProdLog();
 		invalidateNylonFinishingProdLog();
+		invalidateMetalTMProduction();
 	};
 
 	const styleOption = updateSliderTrx?.style_object?.map((item) => ({

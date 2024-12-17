@@ -1438,7 +1438,7 @@ export const PACKING_LIST_SCHEMA = {
 		then: (Schema) => Schema.required('Carton Size required'),
 		otherwise: (Schema) => Schema.nullable(),
 	}),
-	carton_weight: NUMBER.when('item_for', {
+	carton_weight: NUMBER_DOUBLE.when('item_for', {
 		is: (item_for) =>
 			item_for === 'zipper' ||
 			item_for === 'thread' ||

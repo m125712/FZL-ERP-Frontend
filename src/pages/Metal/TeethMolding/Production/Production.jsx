@@ -46,12 +46,11 @@ export default function Index({
 						MAX_PROD_PCS,
 						'Beyond Max limit'
 					),
-				remaining_dyed_tape: NUMBER_DOUBLE_REQUIRED.max(
-					MAX_PROD_KG,
-					'Beyond Max limit'
-				).min(0, 'Negative value not allowed'),
+				remaining_dyed_tape: NUMBER_DOUBLE_REQUIRED.default(0)
+					.max(MAX_PROD_KG, 'Beyond Max limit')
+					.min(0, 'Negative value not allowed'),
 			},
-			{ ...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL, remaining_dyed_tape: null }
+			{ ...SFG_PRODUCTION_SCHEMA_IN_PCS_NULL, remaining_dyed_tape: 0 }
 		);
 
 	const onClose = () => {

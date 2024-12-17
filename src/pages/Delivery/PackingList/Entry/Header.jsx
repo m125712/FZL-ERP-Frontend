@@ -30,7 +30,7 @@ export default function Header({
 		: useOtherOrder('page=packing_list&item_for=tape');
 	const { data: ordersThread } = isUpdate
 		? useThreadOrder('')
-		: useThreadOrder('page=packing_list');
+		: useThreadOrder('page=packing_list&is_sample=false');
 	const { data: ordersZipperSample } = isUpdate
 		? useOtherOrder('')
 		: useOtherOrder('page=packing_list&is_sample=true');

@@ -284,7 +284,7 @@ export const InfoColumns = ({
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => (
 					<LinkWithCopy
 						title={info.getValue()}

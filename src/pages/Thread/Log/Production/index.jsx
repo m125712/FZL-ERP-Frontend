@@ -59,7 +59,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'balance_quantity',
+				accessorKey: 'coning_balance_quantity',
 				header: 'Balance QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -140,6 +140,7 @@ export default function Index() {
 	const [updateConingProd, setUpdateConingProd] = useState({
 		uuid: null,
 		batch_entry_uuid: null,
+		balance_quantity: null,
 		coning_carton_quantity: null,
 		production_quantity: null,
 		wastage: null,
@@ -151,6 +152,7 @@ export default function Index() {
 		setUpdateConingProd((prev) => ({
 			...prev,
 			...selected,
+			balance_quantity: selected.coning_balance_quantity,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};

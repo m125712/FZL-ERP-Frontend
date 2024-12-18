@@ -37,7 +37,7 @@ export default function Index() {
 			{
 				accessorKey: 'order_numbers',
 				header: 'O/N',
-				width: 'w-28',
+				width: 'w-40',
 				enableColumnFilter: true,
 				cell: (info) => {
 					const order_numbers = info.getValue();

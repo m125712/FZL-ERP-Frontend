@@ -45,6 +45,7 @@ export default function Index({ packing_list_entry, data }) {
 				accessorKey: 'color',
 				header: 'Color',
 				enableColumnFilter: false,
+				hidden: data?.item_for === 'slider',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -55,12 +56,14 @@ export default function Index({ packing_list_entry, data }) {
 						? 'Length'
 						: 'Size',
 				enableColumnFilter: false,
+				hidden: data?.item_for === 'slider',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'is_inch',
 				header: 'Unit',
 				enableColumnFilter: false,
+				hidden: data?.item_for === 'slider',
 				cell: (info) =>
 					data?.item_for === 'thread' ||
 					data?.item_for === 'sample_thread' ||
@@ -70,30 +73,6 @@ export default function Index({ packing_list_entry, data }) {
 							? 'Inch'
 							: 'Cm',
 			},
-			// {
-			// 	accessorKey: 'order_quantity',
-			// 	header: 'Order Qty',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'balance_quantity',
-			// 	header: 'Balance Qty',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'finishing_prod',
-			// 	header: 'Production Qty',
-			// 	enableColumnFilter: false,
-			// 	hidden:
-			// 		data?.item_for === 'sample_thread' ||
-			// 		data?.item_for === 'sample_zipper',
-			// 	cell: (info) =>
-			// 		data?.item_for === 'thread' || data?.item_for === 'zipper'
-			// 			? info.getValue()
-			// 			: '-',
-			// },
 			{
 				accessorKey: 'quantity',
 				header:

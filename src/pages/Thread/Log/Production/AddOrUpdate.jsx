@@ -5,12 +5,7 @@ import { useRHF } from '@/hooks';
 import { AddModal } from '@/components/Modal';
 import { JoinInput, Textarea } from '@/ui';
 
-import {
-	NUMBER_DOUBLE,
-	NUMBER_DOUBLE_REQUIRED,
-	NUMBER_REQUIRED,
-	STRING,
-} from '@util/Schema';
+import { NUMBER_REQUIRED, STRING } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({

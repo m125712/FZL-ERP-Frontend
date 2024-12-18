@@ -18,6 +18,8 @@ export default function Index(data) {
 	const isThreadChallan =
 		data?.item_for === 'thread' || data?.item_for === 'sample_thread';
 	const isTapeChallan = data?.item_for === 'tape';
+	const isSliderChallan = data?.item_for === 'slider';
+
 	const threadNode = [
 		getTable('packing_number', 'PL No'),
 		getTable('item_description', 'Count'),
@@ -46,11 +48,20 @@ export default function Index(data) {
 		getTable('quantity', 'Qty(cm)', 'right'),
 		getTable('poli_quantity', 'Poly', 'right'),
 	];
+	const sliderNode = [
+		getTable('packing_number', 'PL No'),
+		getTable('item_description', 'Item Description'),
+		getTable('style', 'Style'),
+		getTable('quantity', 'Qty(cm)', 'right'),
+		getTable('poli_quantity', 'Poly', 'right'),
+	];
 	const node = isThreadChallan
 		? threadNode
 		: isTapeChallan
 			? tapeNode
-			: zipperNode;
+			: isSliderChallan
+				? sliderNode
+				: zipperNode;
 
 	const headerHeight = 200;
 	let footerHeight = 50;
@@ -118,7 +129,9 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [70, 80, 110, 70, 40, 70, 50],
+					widths: isSliderChallan
+						? [110, 110, 110, 80, 80]
+						: [70, 80, 110, 70, 40, 70, 50],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -146,46 +159,72 @@ export default function Index(data) {
 							})
 						),
 
-						[
-							{
-								text: 'Total',
-								bold: true,
-								fontSize: DEFAULT_FONT_SIZE + 2,
-							},
-							{
-								text: `${uniqueItemDescription} Desc`,
-								bold: true,
-								fontSize: DEFAULT_FONT_SIZE + 2,
-							},
-							{
-								text: `${uniqueStyle} Style`,
-								bold: true,
-								fontSize: DEFAULT_FONT_SIZE + 2,
-							},
-							{
-								text: `${uniqueColor} Color`,
-								bold: true,
-								fontSize: DEFAULT_FONT_SIZE + 2,
-							},
-							{
-								text: `${uniqueSize} Size`,
-								bold: true,
-								fontSize: DEFAULT_FONT_SIZE + 2,
-								alignment: 'right',
-							},
-							{
-								text: totalQuantity,
-								bold: true,
-								fontSize: DEFAULT_FONT_SIZE + 2,
-								alignment: 'right',
-							},
-							{
-								text: totalPolyQty,
-								bold: true,
-								fontSize: DEFAULT_FONT_SIZE + 2,
-								alignment: 'right',
-							},
-						],
+						isSliderChallan
+							? [
+									{
+										text: 'Total',
+										bold: true,
+									},
+									{
+										text: `${uniqueItemDescription} Desc`,
+										bold: true,
+									},
+									{
+										text: `${uniqueStyle} Style`,
+										bold: true,
+									},
+									{
+										text: totalQuantity,
+										bold: true,
+										alignment: 'right',
+									},
+									{
+										text: totalPolyQty,
+										bold: true,
+										alignment: 'right',
+									},
+								]
+							: [
+									{
+										text: 'Total',
+										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
+									{
+										text: `${uniqueItemDescription} Desc`,
+										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
+									{
+										text: `${uniqueStyle} Style`,
+										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
+									{
+										text: `${uniqueColor} Color`,
+										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
+									{
+										text: `${uniqueSize} Size`,
+										bold: true,
+										alignment: 'right',
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
+									{
+										text: totalQuantity,
+										bold: true,
+										alignment: 'right',
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
+									{
+										text: totalPolyQty,
+										bold: true,
+										alignment: 'right',
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
+								],
+
 					],
 				},
 				layout: tableLayoutStyle,

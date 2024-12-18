@@ -39,7 +39,7 @@ export default function Index({
 		SLIDER_DIE_CASTING_TRANSFER_AGAINST_ORDER_UPDATE_NULL
 	);
 
-	const { data: order } = useOtherSliderStockWithDescription();
+	// const { data: order } = useOtherSliderStockWithDescription();
 
 	useEffect(() => {
 		if (data) {
@@ -94,11 +94,11 @@ export default function Index({
 						return (
 							<ReactSelect
 								placeholder='Select Type'
-								options={order}
-								value={order?.filter(
-									(item) =>
-										item.value === getValues('stock_uuid')
-								)}
+								// options={order}
+								value={{
+									value: getValues('stock_uuid'),
+									label: getValues('order_item_description'),
+								}}
 								onChange={(e) => {
 									onChange(e.value);
 								}}

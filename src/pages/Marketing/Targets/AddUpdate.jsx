@@ -123,11 +123,13 @@ export default function Index({
 								// menuPortalTarget={document.body}
 								placeholder='Select Party'
 								options={marketing}
-								value={marketing?.find(
-									(item) =>
-										item.value ===
-										getValues(`marketing_uuid`)
-								)}
+								value={
+									marketing?.find(
+										(item) =>
+											item.value ===
+											getValues(`marketing_uuid`)
+									) || null
+								}
 								onChange={(e) => onChange(e.value)}
 							/>
 						);

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useDyeingThreadBatch } from '@/state/Dyeing';
 import { useDyeingCone } from '@/state/Thread';
@@ -11,6 +11,7 @@ import { DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
+import { cn } from '@/lib/utils';
 
 export default function Index() {
 	const { data, url, updateData, isLoading } = useDyeingThreadBatch();
@@ -19,6 +20,14 @@ export default function Index() {
 	const { user } = useAuth();
 	const haveAccess = useAccess('dyeing__thread_batch');
 	const navigate = useNavigate();
+	const [status, setStatus] = useState([]);
+
+	useEffect(() => {
+		if (data) {
+			setStatus(data.map((item) => item.is_drying_complete === 'true'));
+		}
+	}, [data]);
+
 	const columns = useMemo(
 		() => [
 			// * batch_id
@@ -136,6 +145,27 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'status',
+				header: 'Status',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const res = {
+						cancelled: 'badge-error',
+						completed: 'badge-success',
+						pending: 'badge-warning',
+					};
+					return (
+						<span
+							className={cn(
+								'badge badge-sm uppercase',
+								res[info.getValue()]
+							)}>
+							{info.getValue()}
+						</span>
+					);
+				},
+			},
+			{
 				accessorKey: 'is_drying_complete',
 				header: (
 					<div className='flex flex-col'>
@@ -237,17 +267,22 @@ export default function Index() {
 				enableSorting: false,
 				hidden: !haveAccess.includes('update'),
 				width: 'w-24',
-				cell: (info) => (
-					<EditDelete
-						idx={info.row.index}
-						handelUpdate={handelUpdate}
-						showEdit={haveAccess.includes('update')}
-						showDelete={false}
-					/>
-				),
+				cell: (info) => {
+					return (
+						<EditDelete
+							idx={info.row.index}
+							handelUpdate={handelUpdate}
+							showUpdate={
+								haveAccess.includes('update') &&
+								!status[info.row.index]
+							}
+							showDelete={false}
+						/>
+					);
+				},
 			},
 		],
-		[data]
+		[data, status]
 	);
 
 	//Drying Completed

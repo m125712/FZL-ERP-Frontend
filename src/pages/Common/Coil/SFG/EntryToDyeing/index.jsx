@@ -5,6 +5,7 @@ import {
 	useCommonTapeSFG,
 	useCommonTapeToDyeing,
 } from '@/state/Common';
+import { useDyeingOrderBatch } from '@/state/Dyeing';
 import { useOrderDescription } from '@/state/Order';
 import { useGetURLData } from '@/state/Other';
 import { useAuth } from '@context/auth';
@@ -41,6 +42,8 @@ export default function Index() {
 	const { invalidateQuery: invalidateCoilToDyeing } = useCommonCoilToDyeing();
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
+	const { invalidateQuery: invalidateDyeingOrderBatch } =
+		useDyeingOrderBatch();
 
 	const location = useLocation();
 	const [status, setStatus] = useState(false);
@@ -190,6 +193,7 @@ export default function Index() {
 				invalidateCoilToDyeing();
 				invalidateCommonCoilSFG();
 				invalidateCommonTapeSFG();
+				invalidateDyeingOrderBatch();
 
 				navigate(
 					secondElement === 'coil'

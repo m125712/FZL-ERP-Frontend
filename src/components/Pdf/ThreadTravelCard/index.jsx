@@ -75,7 +75,7 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [45, 25, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35],
+					widths: [50, 25, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35],
 					body: [
 						// * Header
 						TableHeader(node),

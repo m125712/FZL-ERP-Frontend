@@ -14,12 +14,9 @@ import SFGAddOrUpdate from './AddOrUpdate';
 export default function Index() {
 	const { data, isLoading, deleteData } = useConningProdLog();
 	const { invalidateQuery } = useDyeingCone();
-	const info = new PageInfo(
-		'Production Log',
-		'sfg/trx/by/teeth_molding_prod/by/vislon'
-	);
+	const info = new PageInfo('Production Log', '/thread/log');
 
-	const haveAccess = useAccess('vislon__teeth_molding_log');
+	const haveAccess = useAccess('thread__log');
 
 	const columns = useMemo(
 		() => [
@@ -115,7 +112,9 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_sfg'),
+				hidden:
+					!haveAccess.includes('click_production_update') &&
+					!haveAccess.includes('click_production_delete'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -123,7 +122,12 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('click_delete_sfg')}
+							showDelete={haveAccess.includes(
+								'click_production_update'
+							)}
+							showUpdate={haveAccess.includes(
+								'click_production_delete'
+							)}
 						/>
 					);
 				},
@@ -161,7 +165,14 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].uuid,
+			itemName:
+				data[idx].batch_number +
+				' ' +
+				data[idx].order_number +
+				' ' +
+				data[idx].color +
+				' ' +
+				data[idx].style,
 		}));
 
 		window[info.getDeleteModalId()].showModal();

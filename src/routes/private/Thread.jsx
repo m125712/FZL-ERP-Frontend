@@ -89,7 +89,7 @@ export const ThreadRoutes = [
 				path: '/thread/log',
 				element: <Log />,
 				page_name: 'thread__log',
-				actions: ['create', 'read', 'update', 'delete'],
+				actions: ['create', 'read', 'update', 'delete','click_production_update','click_production_delete'],
 			},
 		],
 	},

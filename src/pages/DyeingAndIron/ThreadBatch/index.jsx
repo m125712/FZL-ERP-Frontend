@@ -37,7 +37,7 @@ export default function Index() {
 			{
 				accessorKey: 'order_numbers',
 				header: 'O/N',
-				width: 'w-28',
+				width: 'w-40',
 				enableColumnFilter: true,
 				cell: (info) => {
 					const order_numbers = info.getValue();
@@ -241,7 +241,10 @@ export default function Index() {
 					<EditDelete
 						idx={info.row.index}
 						handelUpdate={handelUpdate}
-						showEdit={haveAccess.includes('update')}
+						showEdit={
+							haveAccess.includes('update') &&
+							info.row.original.is_drying_complete !== 'true'
+						}
 						showDelete={false}
 					/>
 				),

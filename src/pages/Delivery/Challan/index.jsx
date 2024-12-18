@@ -106,6 +106,7 @@ export default function Index() {
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
+				width: 'w-24',
 				cell: (info) => info.getValue(),
 			},
 			{

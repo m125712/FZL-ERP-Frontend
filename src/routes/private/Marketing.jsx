@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 
+const Dashboard = lazy(() => import('@/pages/Marketing/Dashboard'));
 const Teams = lazy(() => import('@/pages/Marketing/Teams'));
 const TeamsEntry = lazy(() => import('@/pages/Marketing/Teams/Entry'));
 const TeamDetails = lazy(() => import('@/pages/Marketing/Teams/Details'));
@@ -9,6 +10,13 @@ export const MarketingRoutes = [
 	{
 		name: 'Marketing',
 		children: [
+			{
+				name: 'Dashboard',
+				path: '/marketing/dashboard',
+				element: <Dashboard />,
+				page_name: 'marketing__dashboard',
+				actions: ['read'],
+			},
 			{
 				name: 'Teams',
 				path: '/marketing/teams',

@@ -327,7 +327,7 @@ export default function Index() {
 		watch('item_for') === 'thread' ||
 		watch('item_for') === 'sample_thread'
 	) {
-		tableHeadZipper = [
+		tableHead = [
 			'PL No.',
 			'Count',
 			'Style',

@@ -159,7 +159,6 @@ export default function Index(data) {
 							})
 						),
 
-<<<<<<< HEAD
 						isSliderChallan
 							? [
 									{

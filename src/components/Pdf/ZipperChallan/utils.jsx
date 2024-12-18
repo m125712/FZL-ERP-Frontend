@@ -26,7 +26,7 @@ export const getPageHeader = (data) => {
 
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
-		widths: [70, '*', 70, '*'],
+		widths: [70, '*', 100, '*'],
 		body: [
 			[
 				{
@@ -36,7 +36,12 @@ export const getPageHeader = (data) => {
 					alignment: 'left',
 				},
 				{
-					text: [`${company.address}\n`, `${company.phone}\n`],
+					text: [
+						`${company.address}\n`,
+						`${company.email}\n`,
+						`${company.challan_phone}\n`,
+						`${company.bin}, ${company.tax}\n`,
+					],
 					alignment: 'left',
 				},
 				{
@@ -74,7 +79,10 @@ export const getPageHeader = (data) => {
 			],
 			[
 				...TitleValue('Factory', data?.factory_name),
-				...TitleValue('Carton QTY', data?.carton_quantity),
+				...TitleValue(
+					'Carton Quantity',
+					`${data?.total_carton_quantity} pcs`
+				),
 			],
 			[
 				{
@@ -118,6 +126,7 @@ export const getPageFooter = ({ currentPage, pageCount }) => {
 			[
 				{
 					text: 'Received By',
+					fontSize: DEFAULT_FONT_SIZE + 3,
 					alignment: 'center',
 					border: [false, true, false, false],
 				},
@@ -128,6 +137,7 @@ export const getPageFooter = ({ currentPage, pageCount }) => {
 				},
 				{
 					text: 'Checked By',
+					fontSize: DEFAULT_FONT_SIZE + 3,
 					alignment: 'center',
 					border: [false, true, false, false],
 				},
@@ -138,6 +148,7 @@ export const getPageFooter = ({ currentPage, pageCount }) => {
 				},
 				{
 					text: 'Prepared By',
+					fontSize: DEFAULT_FONT_SIZE + 3,
 					alignment: 'center',
 					border: [false, true, false, false],
 				},

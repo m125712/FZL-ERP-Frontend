@@ -10,8 +10,9 @@ export default function Header({
 }) {
 	return (
 		<div>
-			<SectionEntryBody title={'Finishing Dashboard'}>
+			<SectionEntryBody title={'Stock Report'}>
 				<SimpleDatePicker
+					key={'from'}
 					value={from}
 					placeholder='From'
 					onChange={(data) => {
@@ -19,9 +20,9 @@ export default function Header({
 					}}
 				/>
 				<SimpleDatePicker
+					key={'to'}
 					value={to}
 					placeholder='To'
-					minDate={from}
 					disabled={from ? false : true}
 					onChange={(data) => {
 						setTo(format(data, 'yyyy-MM-dd'));

@@ -4,13 +4,12 @@ import {
 	xMargin,
 } from '@/components/Pdf/ui';
 import {
-	DEFAULT_A4_PAGE,
 	DEFAULT_LETTER_PAGE,
 	getTable,
 	TableHeader,
 } from '@/components/Pdf/utils';
 
-import { DollarToWord, NumToWord } from '@/lib/NumToWord';
+import { NumToWord } from '@/lib/NumToWord';
 
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
@@ -160,6 +159,7 @@ export default function Index(data) {
 							})
 						),
 
+<<<<<<< HEAD
 						isSliderChallan
 							? [
 									{
@@ -189,51 +189,56 @@ export default function Index(data) {
 									{
 										text: 'Total',
 										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 									{
 										text: `${uniqueItemDescription} Desc`,
 										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 									{
 										text: `${uniqueStyle} Style`,
 										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 									{
 										text: `${uniqueColor} Color`,
 										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 									{
 										text: `${uniqueSize} Size`,
 										bold: true,
 										alignment: 'right',
+										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 									{
 										text: totalQuantity,
 										bold: true,
 										alignment: 'right',
+										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 									{
 										text: totalPolyQty,
 										bold: true,
 										alignment: 'right',
+										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 								],
+
 					],
 				},
 				layout: tableLayoutStyle,
 			},
 			{
-				text: '\n',
+				text: '\n\n',
 			},
 			{
 				text: `Total Quantity (In Words): ${NumToWord(totalQuantity)} ${
-					isThreadChallan
-						? 'cone'
-						: isTapeChallan
-							? 'cm only'
-							: 'pcs only'
-				}`,
+					isThreadChallan ? 'cone' : isTapeChallan ? 'cm' : 'pcs'
+				} only`,
 				bold: true,
+				fontSize: DEFAULT_FONT_SIZE + 2,
 			},
 		],
 	});

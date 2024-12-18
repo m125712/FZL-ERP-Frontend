@@ -1,6 +1,14 @@
 import createGlobalState from '.';
 import { reportQK } from './QueryKeys';
 
+//* Stock
+export const useReportStock = (from, to, { enabled = false }) =>
+	createGlobalState({
+		queryKey: reportQK.stock(from, to),
+		url: `/report/material-stock-report?from_date=${from}&to_date=${to}`,
+		enabled,
+	});
+
 export const useZipperProduction = () =>
 	createGlobalState({
 		queryKey: reportQK.zipperProduction(),

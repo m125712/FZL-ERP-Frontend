@@ -15,11 +15,7 @@ export default function index() {
 
 	const { data, isLoading, url } = useDyeingFinishingBatch();
 
-	const info = new PageInfo(
-		'Finishing Batch',
-		url,
-		'planning__finishing_batch'
-	);
+	const info = new PageInfo('Batch', url, 'planning__finishing_batch');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -170,7 +166,7 @@ export default function index() {
 					</div>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (info.getValue() ? info.getValue() : '---'),
 			},
 			{
 				accessorKey: 'remaining_dyeing_lead_time',
@@ -184,6 +180,7 @@ export default function index() {
 				cell: (info) => {
 					const { production_date, dyeing_lead_time } =
 						info.row.original;
+					if (dyeing_lead_time === null) return <span>---</span>;
 
 					const dyeing_day = subDays(
 						production_date,

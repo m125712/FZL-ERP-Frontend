@@ -20,6 +20,7 @@ const ThreadProduction = lazy(
 const ZipperProduction = lazy(
 	() => import('@/pages/Report/ZipperProductionStatus')
 );
+const Store = lazy(() => import('@/pages/Report/Store'));
 
 export const ReportRoutes = [
 	{
@@ -86,6 +87,13 @@ export const ReportRoutes = [
 				path: '/report/delivery-statement',
 				element: <DeliveryStatement />,
 				page_name: 'report__delivery_statement',
+				actions: ['read'],
+			},
+			{
+				name: 'Store',
+				path: '/report/store',
+				element: <Store />,
+				page_name: 'report__store',
 				actions: ['read'],
 			},
 			// {

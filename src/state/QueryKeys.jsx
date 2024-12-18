@@ -1438,6 +1438,9 @@ export const challanQK = {
 export const reportQK = {
 	all: () => ['report'],
 
+	//* Stock
+	stock: (from, to) => [...reportQK.all(), 'stock', from, to],
+
 	//* Zipper Production
 	zipperProduction: () => [...reportQK.all(), 'zipper-production'],
 

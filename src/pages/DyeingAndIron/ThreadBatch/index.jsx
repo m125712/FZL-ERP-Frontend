@@ -241,10 +241,7 @@ export default function Index() {
 					<EditDelete
 						idx={info.row.index}
 						handelUpdate={handelUpdate}
-						showEdit={
-							haveAccess.includes('update') &&
-							info.row.original.is_drying_complete !== 'true'
-						}
+						showEdit={haveAccess.includes('update')}
 						showDelete={false}
 					/>
 				),

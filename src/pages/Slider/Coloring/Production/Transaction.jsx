@@ -7,6 +7,7 @@ import {
 } from '@/state/Nylon';
 import {
 	useSliderAssemblyTransferEntry,
+	useSliderColoringLogTransaction,
 	useSliderColoringProduction,
 } from '@/state/Slider';
 import { useVislonFinishingProd } from '@/state/Vislon';
@@ -57,6 +58,8 @@ export default function Index({
 		useMetalFProduction();
 	const { invalidateQuery: invalidateMetalTMProduction } =
 		useMetalTMProduction();
+	const { invalidateQuery: invalidateSliderColoringLogTransaction } =
+		useSliderColoringLogTransaction();
 	const { user } = useAuth();
 
 	const MAX_TRX =
@@ -85,7 +88,7 @@ export default function Index({
 				otherwise: (schema) => schema.nullable(),
 			}),
 			trx_quantity: NUMBER_REQUIRED.max(
-				updateSliderTrx?.coloring_prod,
+				MAX_TRX,
 				'Beyond Max Quantity'
 			).moreThan(0, 'More than 0'),
 			weight: NUMBER_DOUBLE_REQUIRED.max(
@@ -149,6 +152,7 @@ export default function Index({
 		invalidateNylonPlasticFinishingProdLog();
 		invalidateNylonFinishingProdLog();
 		invalidateMetalTMProduction();
+		invalidateSliderColoringLogTransaction();
 	};
 
 	const styleOption = updateSliderTrx?.style_object?.map((item) => ({

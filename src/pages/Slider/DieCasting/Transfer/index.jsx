@@ -9,7 +9,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -39,15 +39,35 @@ const Index = () => {
 			},
 			{
 				accessorKey: 'batch_number',
-				header: 'Batch',
+				header: 'Batch No.',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { finishing_batch_uuid } = info.row.original;
+
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={finishing_batch_uuid}
+							uri={`/planning/finishing-batch`}
+						/>
+					);
+				},
 			},
+
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: false,
-				cell: (info) => (info.getValue() ? info.getValue() : 'Stock'),
+				cell: (info) =>
+					info.getValue() ? (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={info.getValue()}
+							uri='/order/details'
+						/>
+					) : (
+						'Stock'
+					),
 			},
 			{
 				accessorKey: 'quantity',

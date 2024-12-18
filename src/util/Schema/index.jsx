@@ -1366,9 +1366,11 @@ export const SLIDER_SLIDER_ASSEMBLY_NULL = {
 export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA = {
 	production_quantity: NUMBER_REQUIRED,
 	weight: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
-	wastage: NUMBER.nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? 0 : value
-	),
+	wastage: NUMBER.nullable()
+		.transform((value, originalValue) =>
+			String(originalValue).trim() === '' ? 0 : value
+		)
+		.min(0, 'Minimum of 0'),
 	remarks: STRING.nullable(),
 };
 

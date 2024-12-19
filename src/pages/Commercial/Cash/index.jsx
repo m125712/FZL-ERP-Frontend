@@ -84,7 +84,7 @@ export default function Index() {
 						)
 							return;
 						const isThreadOrder =
-							orderNumber.thread_order_number?.includes('TO');
+							orderNumber.thread_order_number?.includes('ST');
 						const number = isThreadOrder
 							? orderNumber.thread_order_number
 							: orderNumber.order_number;

@@ -162,8 +162,8 @@ export default function Index() {
 								'Total QTY',
 								'Balance QTY',
 								'Total Carton',
-								'Yarn Quantity',
 								'Expected Weight (KG)',
+								'Yarn Quantity (KG)',
 								'Remarks',
 							].map((item) => (
 								<th
@@ -227,17 +227,6 @@ export default function Index() {
 									`batch_entry[${index}].total_carton`
 								)}
 							</td>
-							<td className={` ${rowClass}`}>
-								<Input
-									label={`batch_entry[${index}].yarn_quantity`}
-									is_title_needed='false'
-									dynamicerror={
-										errors?.batch_entry?.[index]
-											?.yarn_quantity
-									}
-									register={register}
-								/>
-							</td>
 							<td className={`${rowClass}`}>
 								{Number(
 									parseFloat(
@@ -251,6 +240,17 @@ export default function Index() {
 											)
 										)
 								).toFixed(3)}
+							</td>
+							<td className={` ${rowClass}`}>
+								<Input
+									label={`batch_entry[${index}].yarn_quantity`}
+									is_title_needed='false'
+									dynamicerror={
+										errors?.batch_entry?.[index]
+											?.yarn_quantity
+									}
+									register={register}
+								/>
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(

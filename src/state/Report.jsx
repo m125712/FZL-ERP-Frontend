@@ -62,3 +62,9 @@ export const useProductionReportThreadPartyWise = () =>
 		queryKey: reportQK.productionReportThreadPartyWise(),
 		url: `/report/production-report-thread-party-wise`,
 	});
+
+export const useSample = (date) =>
+	createGlobalState({
+		queryKey: reportQK.sample(date),
+		url: `/report/sample-report-by-date?date=${date}`,
+	});

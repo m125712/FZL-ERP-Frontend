@@ -156,8 +156,8 @@ const DynamicDeliveryTable = ({
 									  ) === 1
 									? 'inch'
 									: getValues(
-												`${entryFiledName}[${index}].is_meter`
-										  ) === 1
+												`${entryFiledName}[${index}].order_type`
+										  ) === 'tape'
 										? 'meter'
 										: 'CM'}
 						</td>
@@ -174,7 +174,7 @@ const DynamicDeliveryTable = ({
 							`${entryFiledName}[${index}].balance_quantity`
 						)}
 					</td>
-					{(watch('item_for') !== 'sample_zipper') && (
+					{watch('item_for') !== 'sample_zipper' && (
 						<td className={rowClass}>
 							{getValues(
 								`${entryFiledName}[${index}].finishing_prod`

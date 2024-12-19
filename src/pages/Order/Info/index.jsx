@@ -52,7 +52,6 @@ export default function Index() {
 		itemName: null,
 	});
 
-	console.log(data);
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,

@@ -17,8 +17,6 @@ import {
 	Textarea,
 } from '@/ui';
 
-import { PI_NULL } from '@util/Schema';
-
 export default function Header({
 	register,
 	errors,

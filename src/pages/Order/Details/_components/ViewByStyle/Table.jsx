@@ -12,6 +12,7 @@ export default function Table({ order_entry, sliderQuantity }) {
 		() =>
 			getColumn({
 				show_price: haveAccess?.includes('show_price'),
+				is_sample: order_entry?.[0]?.is_sample,
 			}),
 		[order_entry]
 	);

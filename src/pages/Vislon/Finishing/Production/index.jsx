@@ -74,7 +74,14 @@ export default function Index() {
 			{
 				accessorKey: 'order_type',
 				header: 'Type',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: true,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{

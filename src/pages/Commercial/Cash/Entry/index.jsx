@@ -502,6 +502,7 @@ export default function Index() {
 						Controller,
 						isUpdate,
 						watch,
+						reset,
 					}}
 				/>
 

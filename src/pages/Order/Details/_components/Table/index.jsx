@@ -15,11 +15,11 @@ export default function Index({
 	is_cm,
 	is_inch,
 	is_meter,
+	is_sample,
 	sliderQuantity,
 	bleaching,
 }) {
 	const haveAccess = useAccess('order__details');
-
 	const columns = useMemo(
 		() =>
 			getColumn({
@@ -31,6 +31,7 @@ export default function Index({
 				bleaching: bleaching,
 				sizes: { is_cm, is_inch, is_meter },
 				order_type,
+				is_sample,
 			}),
 		[order_entry]
 	);

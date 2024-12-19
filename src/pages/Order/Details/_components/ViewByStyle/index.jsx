@@ -18,6 +18,8 @@ const Index = ({ initial_orders }) => {
 					is_cm: order?.is_cm,
 					is_inch: order?.is_inch,
 					is_meter: order?.is_meter,
+					is_sample: order?.is_sample,
+					order_type: order?.order_type,
 				});
 			});
 		});
@@ -26,6 +28,7 @@ const Index = ({ initial_orders }) => {
 		setEntries(allEntries);
 	}, [initial_orders]); // include `initial_orders` as a dependency
 
+	console.log(initial_orders);
 	const sliderQuantity = entrys.reduce(
 		(totals, item) => {
 			totals.Quantity += parseFloat(item.quantity) || 0;

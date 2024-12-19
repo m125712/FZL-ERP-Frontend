@@ -97,6 +97,8 @@ export default function Index() {
 				itemName: getValues(`recipe_entry[${index}].uuid`),
 			});
 			window['recipe_entry_delete'].showModal();
+		} else {
+			recipeEntryRemove(index);
 		}
 	};
 

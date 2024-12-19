@@ -86,12 +86,14 @@ export default function Index() {
 		const recipeName = rec_uuid?.find(
 			(item) => item.value == getValues(`recipe[${index}].recipe_uuid`)
 		);
-		if (recipeUuid !== undefined) {
+		if (infoUuid !== undefined) {
 			setUpdateItem({
 				itemId: infoUuid,
 				itemName: recipeName?.label,
 			});
 			window['recipe_update'].showModal();
+		} else {
+			recipeRemove(index);
 		}
 	};
 

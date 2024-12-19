@@ -1728,7 +1728,7 @@ export const PI_SCHEMA = {
 	lc_uuid: STRING.nullable(),
 	marketing_uuid: STRING_REQUIRED,
 	party_uuid: STRING_REQUIRED,
-	order_info_uuids: JSON_STRING_REQUIRED,
+	order_info_uuids: JSON_STRING.optional(),
 	thread_order_info_uuids: JSON_STRING.optional(),
 	new_order_info_uuids: JSON_STRING.optional(),
 	new_order_info_thread_uuids: JSON_STRING.optional(),

@@ -232,7 +232,7 @@ export default function Index() {
 
 			// pi entry update
 			let updatedableCommercialPiEntryPromises = pi_cash_entry
-				.filter(
+				?.filter(
 					(item) => item.pi_cash_quantity > 0 && !item.isDeletable
 				)
 				.map(async (item) => {
@@ -255,7 +255,7 @@ export default function Index() {
 
 			// pi entry delete
 			let deleteableCommercialPiEntryPromises = pi_cash_entry
-				.filter((item) => item.isDeletable)
+				?.filter((item) => item.isDeletable)
 				.map(async (item) =>
 					deleteData.mutateAsync({
 						url: `${commercialPiEntryUrl}/${item?.uuid}`,
@@ -293,7 +293,7 @@ export default function Index() {
 			// pi thread entry update
 			let updatedableCommercialPiEntryThreadPromises =
 				pi_cash_entry_thread
-					.filter(
+					?.filter(
 						(item) => item.pi_cash_quantity > 0 && !item.isDeletable
 					)
 					.map(async (item) => {
@@ -316,7 +316,7 @@ export default function Index() {
 
 			// pi thread entry delete
 			let deleteableCommercialPiEntryThreadPromises = pi_cash_entry_thread
-				.filter((item) => item.isDeletable)
+				?.filter((item) => item.isDeletable)
 				.map(async (item) =>
 					deleteData.mutateAsync({
 						url: `${commercialPiEntryUrl}/${item?.uuid}`,
@@ -327,11 +327,11 @@ export default function Index() {
 			// pi thread entry new
 			const newPiEntryThreadData =
 				new_pi_cash_entry_thread?.length > 0
-					? [...new_pi_cash_entry_thread]
-							.filter(
+					? new_pi_cash_entry_thread
+							?.filter(
 								(item) => item.is_checked && item.quantity > 0
 							)
-							.map((item) => ({
+							?.map((item) => ({
 								...item,
 								uuid: nanoid(),
 								is_checked: true,
@@ -396,31 +396,33 @@ export default function Index() {
 			is_pi: 1,
 		};
 
-		const commercialPiEntryData = [...pi_cash_entry]
-			.filter((item) => item.is_checked && item.quantity > 0)
-			.map((item) => ({
-				...item,
-				uuid: nanoid(),
-				is_checked: true,
-				sfg_uuid: item?.sfg_uuid,
-				pi_cash_quantity: item?.pi_cash_quantity,
-				pi_cash_uuid: new_pi_uuid,
-				created_at,
-				remarks: item?.remarks || null,
-			}));
+		const commercialPiEntryData =
+			pi_cash_entry
+				?.filter((item) => item.is_checked && item.quantity > 0)
+				.map((item) => ({
+					...item,
+					uuid: nanoid(),
+					is_checked: true,
+					sfg_uuid: item?.sfg_uuid,
+					pi_cash_quantity: item?.pi_cash_quantity,
+					pi_cash_uuid: new_pi_uuid,
+					created_at,
+					remarks: item?.remarks || null,
+				})) || [];
 
-		const commercialPiThreadEntryData = [...pi_cash_entry_thread]
-			.filter((item) => item.is_checked && item.quantity > 0)
-			.map((item) => ({
-				...item,
-				uuid: nanoid(),
-				is_checked: true,
-				sfg_uuid: item?.sfg_uuid,
-				pi_cash_quantity: item?.pi_cash_quantity,
-				pi_cash_uuid: new_pi_uuid,
-				created_at,
-				remarks: item?.remarks || null,
-			}));
+		const commercialPiThreadEntryData =
+			pi_cash_entry_thread
+				?.filter((item) => item.is_checked && item.quantity > 0)
+				.map((item) => ({
+					...item,
+					uuid: nanoid(),
+					is_checked: true,
+					sfg_uuid: item?.sfg_uuid,
+					pi_cash_quantity: item?.pi_cash_quantity,
+					pi_cash_uuid: new_pi_uuid,
+					created_at,
+					remarks: item?.remarks || null,
+				})) || [];
 
 		if (
 			commercialPiEntryData.length === 0 &&
@@ -439,14 +441,14 @@ export default function Index() {
 			});
 
 			// create new /commercial/pi-entry
-			const commercial_pi_cash_entry_promises = commercialPiEntryData.map(
-				(item) =>
+			const commercial_pi_cash_entry_promises =
+				commercialPiEntryData?.map((item) =>
 					postData.mutateAsync({
 						url: commercialPiEntryUrl,
 						newData: item,
 						isOnCloseNeeded: false,
 					})
-			);
+				);
 
 			// create new /commercial/pi-entry-thread
 			const commercial_pi_cash_entry_thread_promises =

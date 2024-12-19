@@ -516,22 +516,22 @@ export const nylonQK = {
 	//* Production Log
 	nylonPlasticFinishingProductionLog: () => [
 		...metalQK.all(),
-		'tm-production-log',
+		'npf-production-log',
 	],
 	nylonPlasticFinishingProductionLogByUUID: (uuid) => [
 		...metalQK.all(),
-		'tm-production-log',
+		'npf-production-log',
 		uuid,
 	],
 	//* Trx Log
-	nylonPlasticFinishingTrxLog: () => [...nylonQK.all(), 'tm-trx-log'],
+	nylonPlasticFinishingTrxLog: () => [...nylonQK.all(), 'npf-trx-log'],
 	nylonPlasticFinishingTrxLogByUUID: (uuid) => [
 		...nylonQK.nylonPlasticFinishingTrxLog(),
 		uuid,
 	],
 
 	//* PRODUCTION
-	nylonPlasticProduction: () => [...metalQK.all(), 'tm-production'],
+	nylonPlasticProduction: () => [...metalQK.all(), 'np-production'],
 };
 //* Vislon
 export const vislonQK = {
@@ -539,11 +539,11 @@ export const vislonQK = {
 
 	//* Teeth Molding
 	//* RM
-	VislonTMRM: () => [...vislonQK.all(), 'tm-rm'],
+	VislonTMRM: () => [...vislonQK.all(), 'vtm-rm'],
 	VislonTMRMByUUID: (uuid) => [...vislonQK.VislonTMRM(), uuid],
 
 	//* RM Log
-	VislonTMRMLog: () => [...vislonQK.all(), 'tm-rm-log'],
+	VislonTMRMLog: () => [...vislonQK.all(), 'vtm-rm-log'],
 	VislonTMRMLogByUUID: (uuid) => [...vislonQK.VislonTMRMLog(), uuid],
 
 	//* Order Against vislonTMRMLog //* Order Against vislonTM RM Log
@@ -631,30 +631,30 @@ export const metalQK = {
 
 	//* ! Teeth Molding
 	//* Transaction Log
-	metalTMTrxLog: () => [...metalQK.all(), 'tm-trx-log'],
-	metalTMTrxLogByUUID: (uuid) => [...metalQK.all(), 'tm-trx-log', uuid],
+	metalTMTrxLog: () => [...metalQK.all(), 'mtm-trx-log'],
+	metalTMTrxLogByUUID: (uuid) => [...metalQK.all(), 'mtm-trx-log', uuid],
 
 	//* PRODUCTION Log
-	metalTMProductionLog: () => [...metalQK.all(), 'tm-production-log'],
+	metalTMProductionLog: () => [...metalQK.all(), 'mtm-production-log'],
 	metalTMProductionLogByUUID: (uuid) => [
 		...metalQK.all(),
-		'tm-production-log',
+		'mtm-production-log',
 		uuid,
 	],
 
 	//* Tape Log
-	metalTMTapeLog: () => [...metalQK.all(), 'tm-tape-log'],
-	metalTMTapeLogByUUID: (uuid) => [...metalQK.all(), 'tm-tape-log', uuid],
+	metalTMTapeLog: () => [...metalQK.all(), 'mtm-tape-log'],
+	metalTMTapeLogByUUID: (uuid) => [...metalQK.all(), 'mtm-tape-log', uuid],
 
 	//* PRODUCTION
-	metalTMProduction: () => [...metalQK.all(), 'tm-production'],
+	metalTMProduction: () => [...metalQK.all(), 'mtm-production'],
 
 	//* RM
-	metalTMRM: () => [...metalQK.all(), 'tm-rm'],
+	metalTMRM: () => [...metalQK.all(), 'mtm-rm'],
 	metalTMRMByUUID: (uuid) => [...metalQK.metalTMRM(), uuid],
 
 	//* RM Log
-	metalTMRMLog: () => [...metalQK.all(), 'tm-rm-log'],
+	metalTMRMLog: () => [...metalQK.all(), 'mtm-rm-log'],
 	metalTMRMLogByUUID: (uuid) => [...metalQK.metalTMRMLog(), uuid],
 
 	//* Order Against Metal TM RM Log

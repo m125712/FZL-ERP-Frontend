@@ -36,7 +36,7 @@ export const getPageHeader = (data) => {
 					colSpan: 2,
 					text: [
 						{
-							text: `Delivery Challan\n`,
+							text: `Gate Pass Report\n`,
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},

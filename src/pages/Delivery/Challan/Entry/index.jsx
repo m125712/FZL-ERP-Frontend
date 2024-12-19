@@ -428,8 +428,8 @@ export default function Index() {
 										) === 1
 											? 'inch'
 											: getValues(
-														`challan_entry[${index}].is_meters`
-												  ) === 1 ||
+														`challan_entry[${index}].order_type`
+												  ) === 'tape' ||
 												  getValues(`item_for`) ===
 														'thread' ||
 												  getValues(`item_for`) ===
@@ -557,8 +557,8 @@ export default function Index() {
 											) === 1
 												? 'inch'
 												: getValues(
-															`new_challan_entry[${index}].is_meters`
-													  ) === 1 ||
+															`new_challan_entry[${index}].order_type`
+													  ) === 'tape' ||
 													  getValues(`item_for`) ===
 															'thread' ||
 													  getValues(`item_for`) ===

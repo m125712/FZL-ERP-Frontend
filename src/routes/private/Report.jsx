@@ -22,6 +22,9 @@ const ZipperProduction = lazy(
 );
 const Store = lazy(() => import('@/pages/Report/Store'));
 
+const Sample = lazy(() => import('@/pages/Report/Sample'));
+
+
 export const ReportRoutes = [
 	{
 		name: 'Report',
@@ -96,6 +99,13 @@ export const ReportRoutes = [
 				page_name: 'report__store',
 				actions: ['read'],
 			},
+			{
+				name: 'Sample',
+				path: '/report/sample',
+				element: <Sample />,
+				page_name: 'report__sample',
+				actions: ['read'],
+			}
 			// {
 			// 	name: 'Production Report (Thread)',
 			// 	path: '/report/production-report-thread-party-wise',

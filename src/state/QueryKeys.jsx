@@ -1469,6 +1469,9 @@ export const reportQK = {
 		...reportQK.all(),
 		'production-report-thread-party-wise',
 	],
+
+	// * Sample Report
+	sample: (date) => [...reportQK.all(), 'sample-report-by-date', date],
 };
 
 export const marketingQK = {

@@ -385,31 +385,33 @@ export default function Index() {
 			is_pi: 0,
 		};
 
-		const commercialPiEntryData = [...pi_cash_entry]
-			.filter((item) => item.is_checked && item.quantity > 0)
-			.map((item) => ({
-				...item,
-				uuid: nanoid(),
-				is_checked: true,
-				sfg_uuid: item?.sfg_uuid,
-				pi_cash_quantity: item?.pi_cash_quantity,
-				pi_cash_uuid: new_pi_uuid,
-				created_at,
-				remarks: item?.remarks || null,
-			}));
+		const commercialPiEntryData =
+			pi_cash_entry
+				?.filter((item) => item.is_checked && item.quantity > 0)
+				.map((item) => ({
+					...item,
+					uuid: nanoid(),
+					is_checked: true,
+					sfg_uuid: item?.sfg_uuid,
+					pi_cash_quantity: item?.pi_cash_quantity,
+					pi_cash_uuid: new_pi_uuid,
+					created_at,
+					remarks: item?.remarks || null,
+				})) || [];
 
-		const commercialPiThreadEntryData = [...pi_cash_entry_thread]
-			.filter((item) => item.is_checked && item.quantity > 0)
-			.map((item) => ({
-				...item,
-				uuid: nanoid(),
-				is_checked: true,
-				sfg_uuid: item?.sfg_uuid,
-				pi_cash_quantity: item?.pi_cash_quantity,
-				pi_cash_uuid: new_pi_uuid,
-				created_at,
-				remarks: item?.remarks || null,
-			}));
+		const commercialPiThreadEntryData =
+			pi_cash_entry_thread
+				?.filter((item) => item.is_checked && item.quantity > 0)
+				.map((item) => ({
+					...item,
+					uuid: nanoid(),
+					is_checked: true,
+					sfg_uuid: item?.sfg_uuid,
+					pi_cash_quantity: item?.pi_cash_quantity,
+					pi_cash_uuid: new_pi_uuid,
+					created_at,
+					remarks: item?.remarks || null,
+				})) || [];
 
 		if (
 			commercialPiEntryData.length === 0 &&

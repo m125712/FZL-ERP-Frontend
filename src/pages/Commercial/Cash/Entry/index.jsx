@@ -105,7 +105,7 @@ export default function Index() {
 		setValue('pi_cash_entry', updatedPiEntries);
 	}, [isUpdate, watch('order_info_uuids')]);
 
-	// Fetch zipper entries by order info ids
+	//* Fetch zipper entries by order info ids
 	const { data: pi_cash_entry_by_order_info } = useCommercialPIByOrderInfo(
 		isUpdate
 			? `${watch('new_order_info_uuids')?.join(',')}`
@@ -137,7 +137,7 @@ export default function Index() {
 		}
 	}, [isUpdate, pi_cash_entry_by_order_info]);
 
-	// Fetch thread entries by thread order info ids
+	//* Fetch thread entries by thread order info ids
 	const { data: pi_cash_entry_thread_by_order_info } =
 		useCommercialPThreadByOrderInfo(
 			isUpdate
@@ -176,9 +176,9 @@ export default function Index() {
 		}
 	}, [isUpdate, pi_cash_entry_thread_by_order_info]);
 
-	// Submit
+	//* Submit
 	const onSubmit = async (data) => {
-		// * separate the data
+		//* separate the data
 		const {
 			pi_cash_entry,
 			pi_cash_entry_thread,
@@ -187,16 +187,7 @@ export default function Index() {
 			...rest
 		} = data;
 
-		delete rest['is_all_checked'];
-		delete rest['is_all_checked_thread'];
-		delete rest['pi_cash_entry'];
-		delete rest['pi_cash_entry_thread'];
-		delete rest['new_pi_cash_entry_thread'];
-		delete rest['new_pi_cash_entry'];
-		delete rest['new_order_info_thread_uuids'];
-		delete rest['new_order_info_uuids'];
-
-		// Update item
+		//* Update item
 		if (isUpdate) {
 			const commercialPiData = {
 				order_info_uuids: JSON.stringify(
@@ -218,7 +209,7 @@ export default function Index() {
 				is_pi: 0,
 			};
 
-			// pi entry update
+			//* pi entry update
 			let updatedableCommercialPiEntryPromises = pi_cash_entry
 				.filter(
 					(item) => item.pi_cash_quantity > 0 && !item.isDeletable
@@ -241,7 +232,7 @@ export default function Index() {
 					return null;
 				});
 
-			// pi entry delete
+			//* pi entry delete
 			let deleteableCommercialPiEntryPromises = pi_cash_entry
 				.filter((item) => item.isDeletable)
 				.map(async (item) =>
@@ -251,7 +242,7 @@ export default function Index() {
 					})
 				);
 
-			// pi entry new
+			//* pi entry new
 			const newPiEntryData =
 				new_pi_cash_entry?.length > 0
 					? [...data?.new_pi_cash_entry]
@@ -278,7 +269,7 @@ export default function Index() {
 				})
 			);
 
-			// pi thread entry update
+			//* pi thread entry update
 			let updatedableCommercialPiEntryThreadPromises =
 				pi_cash_entry_thread
 					.filter(
@@ -302,7 +293,7 @@ export default function Index() {
 						return null;
 					});
 
-			// pi thread entry delete
+			//* pi thread entry delete
 			let deleteableCommercialPiEntryThreadPromises =
 				data.pi_cash_entry_thread
 					.filter((item) => item.isDeletable)
@@ -313,7 +304,7 @@ export default function Index() {
 						})
 					);
 
-			// pi thread entry new
+			//* pi thread entry new
 			const newPiEntryThreadData =
 				new_pi_cash_entry_thread?.length > 0
 					? [...new_pi_cash_entry_thread]
@@ -369,7 +360,7 @@ export default function Index() {
 			return;
 		}
 
-		// Add new item
+		//* Add new item
 		var new_pi_uuid = nanoid();
 		const created_at = GetDateTime();
 
@@ -422,14 +413,14 @@ export default function Index() {
 				message: 'Select Zipper or Thread Order to create a PI Entry',
 			});
 		} else {
-			// create new /commercial/pi
+			//* create new /commercial/pi
 			await postData.mutateAsync({
 				url: commercialPiUrl,
 				newData: commercialPiData,
 				isOnCloseNeeded: false,
 			});
 
-			// create new /commercial/pi-entry
+			//* create new /commercial/pi-entry
 			const commercial_pi_cash_entry_promises = commercialPiEntryData.map(
 				(item) =>
 					postData.mutateAsync({
@@ -439,7 +430,7 @@ export default function Index() {
 					})
 			);
 
-			// create new /commercial/pi-entry-thread
+			//* create new /commercial/pi-entry-thread
 			const commercial_pi_cash_entry_thread_promises =
 				commercialPiThreadEntryData.map((item) =>
 					postData.mutateAsync({
@@ -465,7 +456,7 @@ export default function Index() {
 		}
 	};
 
-	// dynamic fields
+	//* dynamic fields
 	const { fields: orderEntryField } = useFieldArray({
 		control,
 		name: 'pi_cash_entry',
@@ -486,7 +477,7 @@ export default function Index() {
 		name: 'new_pi_cash_entry_thread',
 	});
 
-	// Check if order_number is valid
+	//* Check if order_number is valid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 
 	return (

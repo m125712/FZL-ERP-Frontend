@@ -247,23 +247,17 @@ const Zipper = ({
 										<ReactSelect
 											isMulti
 											placeholder='Select Order Numbers'
-											// options={new_order_number_for_zippers?.filter(
-											// 	(item) =>
-											// 		!watch(
-											// 			'order_info_uuids'
-											// 		)?.includes(item.value)
-											// )}
 											options={
 												new_order_number_for_zippers
 											}
 											value={new_order_number_for_zippers?.filter(
 												(item) => {
-													const order_info_uuids =
+													const new_order_info_uuids =
 														getValues(
 															'new_order_info_uuids'
 														);
 
-													return order_info_uuids?.includes(
+													return new_order_info_uuids?.includes(
 														item.value
 													);
 												}

@@ -9,9 +9,9 @@ import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
 
+import { cn } from '@/lib/utils';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
-import { cn } from '@/lib/utils';
 
 export default function Index() {
 	const { data, url, updateData, isLoading } = useDyeingThreadBatch();
@@ -44,12 +44,24 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'order_numbers',
+				accessorFn: (row) => {
+					const { order_numbers } = row;
+					let concat = '';
+					if (order_numbers) {
+						concat = order_numbers
+							.map((order_number) => order_number.order_number)
+							.join(', ');
+					}
+
+					return concat;
+				},
+				id: 'order_numbers',
 				header: 'O/N',
 				width: 'w-40',
 				enableColumnFilter: true,
 				cell: (info) => {
-					const order_numbers = info.getValue();
+					const { order_numbers } = info.row.original;
+
 					return order_numbers?.map((order_number) => {
 						return (
 							<LinkWithCopy

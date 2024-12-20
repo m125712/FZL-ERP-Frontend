@@ -30,8 +30,8 @@ const DashboardHeader = ({ handleRefresh, dataPreview, setDataPreview }) => {
 							<SelectValue placeholder='Data Preview' />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value='demo'>Demo</SelectItem>
 							<SelectItem value='real'>Real</SelectItem>
+							<SelectItem value='demo'>Demo</SelectItem>
 						</SelectContent>
 					</Select>
 

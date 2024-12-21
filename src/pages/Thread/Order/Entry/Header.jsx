@@ -9,7 +9,7 @@ import {
 import DatePicker from 'react-datepicker';
 import { useParams } from 'react-router-dom';
 
-import { DateInput, Textarea } from '@/ui/Core';
+import { Textarea } from '@/ui/Core';
 import { CheckBox, FormField, ReactSelect, SectionEntryBody } from '@/ui';
 
 export default function Header({
@@ -105,9 +105,6 @@ export default function Header({
 												getValues('marketing_uuid')
 										)}
 										onChange={(e) => onChange(e.value)}
-										isDisabled={
-											order_info_uuid !== undefined
-										}
 									/>
 								);
 							}}
@@ -128,9 +125,6 @@ export default function Header({
 												getValues('buyer_uuid')
 										)}
 										onChange={(e) => onChange(e.value)}
-										isDisabled={
-											order_info_uuid !== undefined
-										}
 									/>
 								);
 							}}
@@ -154,9 +148,6 @@ export default function Header({
 											onChange(e.value);
 											setPartyId(e.value);
 										}}
-										isDisabled={
-											order_info_uuid !== undefined
-										}
 									/>
 								);
 							}}
@@ -184,9 +175,6 @@ export default function Header({
 										onChange={(e) => {
 											onChange(e.value);
 										}}
-										isDisabled={
-											order_info_uuid !== undefined
-										}
 									/>
 								);
 							}}
@@ -212,9 +200,6 @@ export default function Header({
 										onChange={(e) => {
 											onChange(e.value);
 										}}
-										isDisabled={
-											order_info_uuid !== undefined
-										}
 									/>
 								);
 							}}

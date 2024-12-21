@@ -210,7 +210,6 @@ export default function Index({
 											)
 									)}
 									onChange={(e) => onChange(e.value)}
-									isDisabled={updateOrderInfo?.uuid !== null}
 								/>
 							);
 						}}
@@ -234,7 +233,6 @@ export default function Index({
 											getValues('marketing_uuid')
 									)}
 									onChange={(e) => onChange(e.value)}
-									isDisabled={updateOrderInfo?.uuid !== null}
 								/>
 							);
 						}}
@@ -255,7 +253,6 @@ export default function Index({
 											getValues('buyer_uuid')
 									)}
 									onChange={(e) => onChange(e.value)}
-									isDisabled={updateOrderInfo?.uuid !== null}
 								/>
 							);
 						}}
@@ -281,7 +278,6 @@ export default function Index({
 										onChange(e.value);
 										setPartyId(e.value);
 									}}
-									isDisabled={updateOrderInfo?.uuid !== null}
 								/>
 							);
 						}}
@@ -307,7 +303,6 @@ export default function Index({
 									onChange={(e) => {
 										onChange(e.value);
 									}}
-									isDisabled={updateOrderInfo?.uuid !== null}
 								/>
 							);
 						}}
@@ -330,7 +325,6 @@ export default function Index({
 									onChange={(e) => {
 										onChange(e.value);
 									}}
-									isDisabled={updateOrderInfo?.uuid !== null}
 								/>
 							);
 						}}

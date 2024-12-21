@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import {
-	useOrderInfo,
-	useOrderInfoByUUID,
-	useOrderPropertiesByUUID,
-} from '@/state/Order';
+import { useOrderInfo, useOrderInfoByUUID } from '@/state/Order';
 import {
 	useAllZipperThreadOrderList,
 	useOtherBuyer,
@@ -18,7 +14,7 @@ import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { CheckBox, FormField, Input, ReactSelect, Textarea } from '@/ui';
+import { CheckBox, FormField, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { ORDER_INFO_NULL, ORDER_INFO_SCHEMA } from '@util/Schema';

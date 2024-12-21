@@ -4,13 +4,13 @@ import {
 	useCommonMultiColorDashboard,
 	useCommonMultiColorLogTapeReceived,
 } from '@/state/Common';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { JoinInput, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	MULTI_COLOR_TAPE_RECEIVED_NULL,
 	MULTI_COLOR_TAPE_RECEIVED_SCHEMA,

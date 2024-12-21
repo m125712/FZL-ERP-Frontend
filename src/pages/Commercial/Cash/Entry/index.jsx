@@ -8,7 +8,6 @@ import {
 	useCommercialPThreadByOrderInfo,
 } from '@/state/Commercial';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAccess, useRHF } from '@/hooks';
@@ -18,6 +17,7 @@ import { Footer } from '@/components/Modal/ui';
 import { ShowLocalToast } from '@/components/Toast';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { PI_CASH_NULL, PI_CASH_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 

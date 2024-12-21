@@ -6,7 +6,6 @@ import {
 	useDyeingFinishingBatchOrders,
 } from '@/state/Dyeing';
 import { useSliderAssemblyProduction } from '@/state/Slider';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
@@ -18,6 +17,7 @@ import { ShowLocalToast } from '@/components/Toast';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import GetDateTime from '@/util/GetDateTime';
 import {
 	FINISHING_BATCH_ENTRY_NULL,

@@ -6,7 +6,6 @@ import {
 	useDeliveryPackingListEntry,
 } from '@/state/Delivery';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
@@ -16,6 +15,7 @@ import { Footer } from '@/components/Modal/ui';
 import { ShowLocalToast } from '@/components/Toast';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	PACKING_LIST_NULL,
 	PACKING_LIST_SCHEMA,

@@ -1,12 +1,15 @@
 import { useEffect } from 'react';
-import { useSliderAssemblyProductionEntryByUUID, useSliderColoringProduction } from '@/state/Slider';
-import { DevTool } from '@hookform/devtools';
+import {
+	useSliderAssemblyProductionEntryByUUID,
+	useSliderColoringProduction,
+} from '@/state/Slider';
 import * as yup from 'yup';
 import { useRHF, useUpdateFunc } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	NUMBER_REQUIRED,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,

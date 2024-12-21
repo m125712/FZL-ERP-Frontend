@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useCommonTapeSFG, useCommonTapeTransferByUUID } from '@/state/Common';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
+import { DevTool } from '@/lib/react-hook-devtool';
 import { TAPE_TO_COIL_TRX_NULL, TAPE_TO_COIL_TRX_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 

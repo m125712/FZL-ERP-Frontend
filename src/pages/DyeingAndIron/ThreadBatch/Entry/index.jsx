@@ -6,7 +6,6 @@ import {
 } from '@/state/Dyeing';
 import { useGetURLData, useOtherMachines } from '@/state/Other';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import {
 	Navigate,
@@ -23,6 +22,7 @@ import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	DYEING_THREAD_BATCH_NULL,
 	DYEING_THREAD_BATCH_SCHEMA,

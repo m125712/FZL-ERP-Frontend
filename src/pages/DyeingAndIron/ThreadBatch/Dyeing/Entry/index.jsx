@@ -4,13 +4,13 @@ import {
 	useDyeingThreadBatchDetailsByUUID,
 	useDyeingThreadBatchEntry,
 } from '@/state/Dyeing';
-import { DevTool } from '@hookform/devtools';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DynamicDeliveryField, Input } from '@/ui';
 
 import cn from '@/lib/cn';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	DYEING_THREAD_CONNEING_NULL,
 	DYEING_THREAD_CONNEING_SCHEMA,

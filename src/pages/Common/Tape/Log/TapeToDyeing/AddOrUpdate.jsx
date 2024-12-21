@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useCommonCoilToDyeingByUUID, useCommonTapeSFG } from '@/state/Common';
 import { useOtherMaterial } from '@/state/Other';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect } from '@/ui';
 
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	COMMON_COIL_TO_DYEING_LOG_NULL,
 	COMMON_COIL_TO_DYEING_LOG_SCHEMA,

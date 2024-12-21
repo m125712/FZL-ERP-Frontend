@@ -1,7 +1,6 @@
 import { useAuth } from '@/context/auth';
 import { useOtherCountLength } from '@/state/Other';
 import { useThreadCountLength } from '@/state/Thread';
-import { DevTool } from '@hookform/devtools';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -9,6 +8,7 @@ import { ShowLocalToast } from '@/components/Toast';
 import { Input } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	THREAD_COUNT_LENGTH_NULL,
 	THREAD_COUNT_LENGTH_SCHEMA,

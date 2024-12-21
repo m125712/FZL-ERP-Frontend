@@ -11,13 +11,13 @@ import {
 	useOtherOrderPropertiesByZipperNumber,
 	useOtherTapeCoil,
 } from '@/state/Other';
-import { DevTool } from '@hookform/devtools';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { TAPE_STOCK_ADD_NULL, TAPE_STOCK_ADD_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 

@@ -9,7 +9,6 @@ import {
 	useThreadOrderInfoEntry,
 } from '@/state/Thread';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -21,6 +20,7 @@ import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	THREAD_ORDER_INFO_ENTRY_NULL,
 	THREAD_ORDER_INFO_ENTRY_SCHEMA,

@@ -5,7 +5,6 @@ import {
 	useDyeingOrderBatch,
 } from '@/state/Dyeing';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import {
 	Navigate,
@@ -21,6 +20,7 @@ import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { DYEING_BATCH_NULL, DYEING_BATCH_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
@@ -126,7 +126,7 @@ export default function Index() {
 			const quantity = parseFloat(item.quantity) || 0;
 			const rawMtrPerKg = parseFloat(item.raw_mtr_per_kg) || 1;
 
-			// * for tape order we calculate with size as quantity 
+			// * for tape order we calculate with size as quantity
 			const itemTotal =
 				item.order_type === 'tape'
 					? ((top + bottom + quantity) * 1) / 100 / rawMtrPerKg

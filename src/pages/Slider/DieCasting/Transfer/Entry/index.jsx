@@ -9,7 +9,6 @@ import {
 	useSliderDieCastingTransferAgainstStock,
 	useSliderDiecastingTrxLog,
 } from '@/state/Slider';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useRHF } from '@/hooks';
@@ -21,6 +20,7 @@ import { DynamicField, Input } from '@/ui';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import GetDateTime from '@/util/GetDateTime';
 import {
 	SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_NULL,

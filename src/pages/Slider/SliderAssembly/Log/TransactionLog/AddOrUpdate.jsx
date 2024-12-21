@@ -1,11 +1,14 @@
 import { useEffect } from 'react';
-import { useSliderAssemblyProduction, useSliderAssemblyTransferEntryByUUID } from '@/state/Slider';
-import { DevTool } from '@hookform/devtools';
+import {
+	useSliderAssemblyProduction,
+	useSliderAssemblyTransferEntryByUUID,
+} from '@/state/Slider';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { Input, JoinInput } from '@/ui';
 
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	NUMBER_DOUBLE_REQUIRED,
 	NUMBER_REQUIRED,

@@ -1,12 +1,12 @@
 import { useAuth } from '@/context/auth';
 import { useLibraryPolicy } from '@/state/Library';
-import { DevTool } from '@hookform/devtools';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { POLICY_NULL, POLICY_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 

@@ -1,7 +1,6 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDyeingBatch, useDyeingBatchDetailsByUUID } from '@/state/Dyeing';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
@@ -12,6 +11,7 @@ import { Input, LinkWithCopy, Textarea } from '@/ui';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	DYEING_BATCH_PRODUCTION_NULL,
 	DYEING_BATCH_PRODUCTION_SCHEMA,

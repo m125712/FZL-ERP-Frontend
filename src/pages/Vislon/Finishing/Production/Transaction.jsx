@@ -1,18 +1,19 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
+import { useVislonFinishingProd, useVislonTMP } from '@/state/Vislon';
 import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
+import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
-	NUMBER_REQUIRED,
 	NUMBER,
+	NUMBER_REQUIRED,
 	VISLON_TRANSACTION_SCHEMA,
 	VISLON_TRANSACTION_SCHEMA_NULL,
 } from '@util/Schema';
-
-import nanoid from '@/lib/nanoid';
-import { useVislonTMP, useVislonFinishingProd } from '@/state/Vislon';
-import { DevTool } from '@hookform/devtools';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -28,24 +29,25 @@ export default function Index({
 	setUpdateFinishingTRX,
 }) {
 	const { postData } = useVislonTMP();
-	const { invalidateQuery} = useVislonFinishingProd();
+	const { invalidateQuery } = useVislonFinishingProd();
 	const { user } = useAuth();
 
-	const { register, handleSubmit, errors, reset, watch, control, context } = useRHF(
-		{
-			...VISLON_TRANSACTION_SCHEMA,
-			trx_quantity_in_kg: NUMBER,
-			trx_quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0').max(
-				Number(updateFinishingTRX?.finishing_prod),
-				'Beyond Max Quantity'
-			),
-		},
-		{
-			...VISLON_TRANSACTION_SCHEMA_NULL,
-			trx_quantity_in_kg: 0,
-			trx_quantity: 0,
-		}
-	);
+	const { register, handleSubmit, errors, reset, watch, control, context } =
+		useRHF(
+			{
+				...VISLON_TRANSACTION_SCHEMA,
+				trx_quantity_in_kg: NUMBER,
+				trx_quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0').max(
+					Number(updateFinishingTRX?.finishing_prod),
+					'Beyond Max Quantity'
+				),
+			},
+			{
+				...VISLON_TRANSACTION_SCHEMA_NULL,
+				trx_quantity_in_kg: 0,
+				trx_quantity: 0,
+			}
+		);
 
 	const onClose = () => {
 		setUpdateFinishingTRX((prev) => ({

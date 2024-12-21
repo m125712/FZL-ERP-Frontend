@@ -1,20 +1,23 @@
-import { Suspense } from '@/components/Feedback';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
-import cn from '@/lib/cn';
-import { DynamicDeliveryField, Input } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { DevTool } from '@hookform/devtools';
-import { THREAD_CONING_NULL, THREAD_CONING_SCHEMA } from '@util/Schema';
 import { lazy, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-
 import { useAuth } from '@/context/auth';
 import {
 	useDyeingThreadBatch,
 	useDyeingThreadBatchEntry,
 } from '@/state/Dyeing';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { Suspense } from '@/components/Feedback';
+import { DynamicDeliveryField, Input } from '@/ui';
+
+import cn from '@/lib/cn';
+import { DevTool } from '@/lib/react-hook-devtool';
+import { THREAD_CONING_NULL, THREAD_CONING_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 import isJSON from '@/util/isJson';
+
 import Header from './Header';
+
 const Transfer = lazy(() => import('./TransferQuantity'));
 
 export default function Index() {
@@ -263,9 +266,7 @@ export default function Index() {
 								)}
 							</td>
 							<td className={`${rowClass}`}>
-								{getValues(
-									`batch_entry[${index}].recipe_name`
-								)}
+								{getValues(`batch_entry[${index}].recipe_name`)}
 							</td>
 							<td className={`${rowClass}`}>
 								{getValues(

@@ -1,18 +1,19 @@
-import { AddModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
+import { useState } from 'react';
 import { useDyeingTransfer } from '@/state/Dyeing';
 import { useOrderBuyer } from '@/state/Order';
+import { Controller, useWatch } from 'react-hook-form';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
-import GetDateTime from '@/util/GetDateTime';
-import { DevTool } from '@hookform/devtools';
+import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	UPDATE_DYEING_TRANSFER_NULL,
 	UPDATE_DYEING_TRANSFER_SCHEMA,
 } from '@util/Schema';
-import { useState } from 'react';
-import { Controller, useWatch } from 'react-hook-form';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -22,8 +23,15 @@ export default function Index({
 	setUpdateTransfer,
 }) {
 	const { url, updateData } = useDyeingTransfer();
-	const { register, handleSubmit, errors, reset, control, getValues ,context} =
-		useRHF(UPDATE_DYEING_TRANSFER_SCHEMA, UPDATE_DYEING_TRANSFER_NULL);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		control,
+		getValues,
+		context,
+	} = useRHF(UPDATE_DYEING_TRANSFER_SCHEMA, UPDATE_DYEING_TRANSFER_NULL);
 
 	useFetchForRhfReset(
 		`${url}/${updateTransfer?.uuid}`,

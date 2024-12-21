@@ -1,7 +1,6 @@
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { useOrderDescription, useOrderDetailsByQuery } from '@/state/Order';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
@@ -14,6 +13,7 @@ import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { CheckBox } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	handelNumberDefaultValue,
 	NUMBER,

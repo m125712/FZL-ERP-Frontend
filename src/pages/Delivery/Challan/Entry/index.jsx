@@ -11,7 +11,6 @@ import {
 	useOtherPackingListByOrderInfoUUIDAndChallanUUID,
 } from '@/state/Other';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider, get } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
@@ -23,6 +22,7 @@ import { DynamicDeliveryField, LinkWithCopy } from '@/ui';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { CHALLAN_NULL, CHALLAN_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 

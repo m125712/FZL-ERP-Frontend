@@ -1,4 +1,3 @@
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -6,6 +5,7 @@ import Pdf from '@/components/Pdf/ConeSticker';
 import Pdf2 from '@/components/Pdf/PolySticker';
 import { Input } from '@/ui';
 
+import { DevTool } from '@/lib/react-hook-devtool';
 import { POLY_NULL, POLY_SCHEMA } from '@util/Schema';
 
 export default function Index({

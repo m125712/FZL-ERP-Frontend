@@ -10,13 +10,13 @@ import {
 	useOtherOrderInfoValueLabel,
 	useOtherParty,
 } from '@/state/Other';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { CheckBox, FormField, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { ORDER_INFO_NULL, ORDER_INFO_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
@@ -401,7 +401,7 @@ export default function Index({
 				</FormField>
 			</div>
 			<Textarea rows={3} label='remarks' {...{ register, errors }} />
-			<DevTool control={control} placement='top-left' />
+			<DevTool type='button' control={control} placement='top-left' />
 		</AddModal>
 	);
 }

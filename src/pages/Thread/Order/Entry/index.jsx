@@ -299,11 +299,11 @@ export default function Index() {
 		if (Object.keys(errors).length > 0) return;
 	};
 
-	const keyMap = {
-		NEW_ROW: 'alt+n',
-		COPY_LAST_ROW: 'alt+c',
-		ENTER: 'enter',
-	};
+	// const keyMap = {
+	// 	NEW_ROW: 'alt+n',
+	// 	COPY_LAST_ROW: 'alt+c',
+	// 	ENTER: 'enter',
+	// };
 
 	const handlers = {
 		NEW_ROW: handleThreadOrderInfoEntryAppend,
@@ -346,7 +346,7 @@ export default function Index() {
 
 	return (
 		<FormProvider {...form}>
-			<HotKeys {...{ keyMap, handlers }}>
+			{/* <HotKeys {...{ keyMap, handlers }}> */}
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
@@ -456,7 +456,7 @@ export default function Index() {
 
 					<Footer buttonClassName='!btn-primary' />
 				</form>
-			</HotKeys>
+			{/* </HotKeys> */}
 			<Suspense>
 				<DeleteModal
 					modalId={'order_info_entry_delete'}

@@ -90,12 +90,8 @@ export default function Index(data) {
 			}
 		) || {};
 
-	// const uniqueItemDescription = uniqueCounts.itemDescriptions.size;
-	// const uniqueStyle = uniqueCounts.styles.size;
-	// const uniqueColor = uniqueCounts.colors.size;
-	// const uniqueSize = uniqueCounts.sizes.size;
+;
 	const grandTotalQuantity = uniqueCounts(challan_entry).quantity;
-	// const totalPolyQty = uniqueCounts.poly_quantity;
 
 	const unit =
 		challan_entry?.map((item) =>

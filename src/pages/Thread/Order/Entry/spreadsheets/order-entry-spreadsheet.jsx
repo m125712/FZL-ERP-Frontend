@@ -1,0 +1,91 @@
+import React from 'react';
+import { useOtherCountLength } from '@/state/Other';
+
+import TestSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet/test';
+import SelectEditor from '@/ui/Dynamic/HandsonSpreadSheet/test/select-editor';
+
+const OrderEntrySpreadsheet = (
+	{ title, extraHeader, fieldName, form, handleAdd } = {
+		title: '',
+		extraHeader: null,
+		form: {},
+		fieldName: '',
+		handleAdd: () => {},
+	}
+) => {
+	const { data: countLength } = useOtherCountLength();
+	const columns = [
+		{
+			data: 'color',
+		},
+		{
+			data: 'style',
+		},
+		{
+			editor: SelectEditor,
+			data: 'count_length_uuid',
+			type: 'select',
+			selectOptions: countLength
+				? countLength.map((item) => item.value)
+				: [],
+			fullOptions: countLength ? countLength : [],
+		},
+
+		{
+			data: 'bleaching',
+			type: 'select',
+			selectOptions: ['bleach', 'non-bleach'],
+		},
+		{
+			data: 'quantity',
+		},
+		{
+			data: 'company_price',
+		},
+		{
+			data: 'party_price',
+		},
+		{
+			data: 'remarks',
+		},
+	];
+	const data = form.watch(fieldName).map((item) => {
+		return {
+			color: item.color,
+			style: item.style,
+			count_length_uuid: item.count_length_uuid,
+			bleaching: item.bleaching,
+			quantity: item.quantity,
+			company_price: item.company_price,
+			party_price: item.party_price,
+			remarks: item.remarks,
+		};
+	});
+
+	const colHeaders = [
+		'Color',
+		'Style',
+		'Count Length',
+		'Bleaching',
+		'Quantity',
+		'Company (USD/CONE)',
+		'Party (USD/CONE)',
+		'Remarks',
+	];
+	return (
+		<TestSpreadSheet
+			{...{
+				title,
+				extraHeader,
+				fieldName,
+				form,
+				handleAdd,
+				columns,
+				colHeaders,
+				data,
+			}}
+		/>
+	);
+};
+
+export default OrderEntrySpreadsheet;

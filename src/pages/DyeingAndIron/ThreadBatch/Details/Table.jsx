@@ -19,7 +19,7 @@ export default function Index({ batch_entry }) {
 			},
 			{
 				accessorKey: 'recipe_name',
-				header: 'Shade Recipe',
+				header: 'Recipe',
 				enableColumnFilter: false,
 			},
 			{
@@ -47,18 +47,18 @@ export default function Index({ batch_entry }) {
 			// 	header: 'PO',
 			// 	enableColumnFilter: false,
 			// },
-			{
-				accessorKey: 'order_quantity',
-				header: 'Order QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'balance_quantity',
-				header: 'Balance',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'order_quantity',
+			// 	header: 'Order QTY',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
+			// {
+			// 	accessorKey: 'balance_quantity',
+			// 	header: 'Balance',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorKey: 'quantity',
 				header: 'QTY',

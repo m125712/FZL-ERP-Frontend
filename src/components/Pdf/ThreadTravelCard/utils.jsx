@@ -75,69 +75,55 @@ export const getPageHeader = (batch) => {
 			PAGE_HEADER_EMPTY_ROW,
 
 			// * Start of table
+
 			[
 				{
-					text: 'Act.Yarn Qty',
+					text: 'Yarn Qty (KG)',
 					bold: true,
 					color: PRIMARY_COLOR,
 				},
-				{ text: batch?.total_yarn_quantity },
-				{ text: 'Volume', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.water_capacity * batch?.total_yarn_quantity },
+				{
+					text: `${batch?.total_yarn_quantity} / ${batch?.total_expected_weight} #Sub-Streat (${[...sub_streat].join(', ')})`,
+				},
+				{ text: 'Supervisor', bold: true, color: PRIMARY_COLOR },
+				{ text: batch?.dyeing_supervisor_name },
 			],
 			[
-				{
-					text: 'Exp.Yarn Qty',
-					bold: true,
-					color: PRIMARY_COLOR,
-				},
-				{ text: batch?.total_expected_weight },
-				{ text: 'Sub Streat', bold: true, color: PRIMARY_COLOR },
-				{
-					text: [...sub_streat].join(', '),
-				},
+				{ text: 'Liquor Ratio', bold: true, color: PRIMARY_COLOR },
+				{ text: `1:10` },
+				{ text: 'Machine', bold: true, color: PRIMARY_COLOR },
+				{ text: batch?.machine_name },
+			],
+			[
+				{ text: 'Volume', bold: true, color: PRIMARY_COLOR },
+				{ text: batch?.water_capacity * batch?.total_yarn_quantity },
+				{ text: 'Slot', bold: true, color: PRIMARY_COLOR },
+				{ text: batch?.slot === 0 ? '-' : 'Slot ' + batch?.slot },
 			],
 			[
 				{ text: 'Color', bold: true, color: PRIMARY_COLOR },
 				{ text: batch?.batch_entry[0]?.color },
+				{ text: 'Shift', bold: true, color: PRIMARY_COLOR },
+				{ text: batch?.shift },
+			],
+			[
 				{ text: 'Bleach', bold: true, color: PRIMARY_COLOR },
 				{ text: batch?.batch_entry[0]?.bleaching },
-			],
-			[
-				{ text: 'Shade', bold: true, color: PRIMARY_COLOR },
-				{ text: [...recipe].join(', ') },
-				{ text: 'Category', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.category },
-			],
-			[
-				{ text: 'Machine', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.machine_name },
-				{ text: 'Water Capacity', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.water_capacity },
-			],
-			[
-				{ text: 'Slot', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.slot === 0 ? '-' : 'Slot ' + batch?.slot },
 				{ text: 'Operator', bold: true, color: PRIMARY_COLOR },
 				{ text: batch?.dyeing_operator_name },
 			],
 			[
-				{ text: 'SuperVisor', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.dyeing_supervisor_name },
+				{ text: 'Status', bold: true, color: PRIMARY_COLOR },
+				{ text: batch?.status },
 				{ text: 'Pass By', bold: true, color: PRIMARY_COLOR },
 				{ text: batch?.pass_by_name },
 			],
+
 			[
-				{ text: 'Shift', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.shift },
 				{ text: 'Reason', bold: true, color: PRIMARY_COLOR },
 				{ text: batch?.reason },
-			],
-			[
-				{ text: 'Created At', bold: true, color: PRIMARY_COLOR },
-				{ text: dyeing_created_at },
-				{ text: 'Updated At', bold: true, color: PRIMARY_COLOR },
-				{ text: dyeing_updated_at },
+				{ text: 'Category', bold: true, color: PRIMARY_COLOR },
+				{ text: batch?.category },
 			],
 		],
 	};

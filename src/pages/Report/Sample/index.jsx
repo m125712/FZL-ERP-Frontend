@@ -3,7 +3,7 @@ import { useSample } from '@/state/Report';
 import { format } from 'date-fns';
 
 import ReactTable from '@/components/Table';
-import { DateTime, StatusButton } from '@/ui';
+import { DateTime } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -17,7 +17,7 @@ export default function Index() {
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
-
+	// ;,
 	const columns = useMemo(
 		() => [
 			{
@@ -41,6 +41,24 @@ export default function Index() {
 			{
 				accessorKey: 'item_description',
 				header: 'Product',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'item_details_short',
+				header: 'Item',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'slider_details',
+				header: 'Slider',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'other_details',
+				header: 'Other',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

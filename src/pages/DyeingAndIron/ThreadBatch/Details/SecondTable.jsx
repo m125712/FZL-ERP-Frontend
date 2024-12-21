@@ -50,7 +50,9 @@ export default function Index({
 
 	return (
 		<ReactTableTitleOnly
-			title={`Lab -> Yarn Weight:${Number(total_yarn_quantity).toFixed(3)} Water Capacity:(${Number(water_capacity).toFixed(2)} Volume: ${Number(volume).toFixed(3)})`}
+			title={`Yarn Weight:${Number(total_yarn_quantity).toFixed(3)},
+					 Water Capacity: ${Number(water_capacity).toFixed(2)}, 
+					 Volume: ${Number(volume).toFixed(3)}`}
 			data={shade_recipes_entries}
 			columns={columns}
 		/>

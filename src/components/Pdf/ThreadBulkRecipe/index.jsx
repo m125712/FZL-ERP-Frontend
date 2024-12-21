@@ -57,7 +57,6 @@ const separatePaleOrMedium = (programs) => {
 	return { chemicals, neutralizer };
 };
 
-
 const separateDark = (programs) => {
 	const chemicalDark = [];
 	const chemicalHydrosa = [];
@@ -83,7 +82,7 @@ const separateDark = (programs) => {
 	return { chemicalDark, chemicalHydrosa, neutralizer };
 };
 export default function Index(batch, shade_recipes_entries, programs) {
-	const headerHeight = 220;
+	const headerHeight = 190;
 	let footerHeight = 50;
 	const { batch_entry } = batch;
 
@@ -185,7 +184,7 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			{
 				...(programs?.chemicalDark?.length > 0 && {
 					text: 'Chemicals Dark',
-					style: 'tableTitle', 
+					style: 'tableTitle',
 					alignment: 'left',
 					bold: true,
 					fontSize: DEFAULT_FONT_SIZE + 4,

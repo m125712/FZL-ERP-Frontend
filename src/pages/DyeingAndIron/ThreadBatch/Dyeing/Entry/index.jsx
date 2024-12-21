@@ -148,85 +148,44 @@ export default function Index() {
 				/>
 				<DynamicDeliveryField
 					title={`Details: `}
-					tableHead={
-						<>
-							{[
-								'O/N',
-								'Color',
-								'PO',
-								'Style',
-								'Count Length',
-								'Shade Recipe',
-								'Order QTY',
-								'QTY',
-								'Total QTY',
-								'Balance QTY',
-								'Total Carton',
-								'Expected Weight (KG)',
-								'Yarn Quantity (KG)',
-								'Remarks',
-							].map((item) => (
-								<th
-									key={item}
-									scope='col'
-									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
-									{item}
-								</th>
-							))}
-						</>
-					}>
+					tableHead={[
+						'O/N',
+						'Color',
+						'Style',
+						'Count Length',
+						'Recipe',
+						'Batch Quantity',
+						'Expected Weight (KG)',
+						'Yarn Quantity (KG)',
+						'Remarks',
+					].map((item) => (
+						<th
+							key={item}
+							scope='col'
+							className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
+							{item}
+						</th>
+					))}>
 					{orderEntryField.map((item, index) => (
 						<tr
 							key={item.id}
-							className={cn(
-								'relative cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30'
-							)}>
-							<td className={`w-32 ${rowClass}`}>
-								{getValues(
-									`batch_entry[${index}].order_number`
-								)}
+							className='relative cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30'>
+							<td className={`${rowClass}`}>
+								{item.order_number}
 							</td>
-							<td className={`w-32 ${rowClass}`}>
-								{getValues(`batch_entry[${index}].color`)}
-							</td>
-							<td className={`w-32 ${rowClass}`}>
-								{getValues(`batch_entry[${index}].po`)}
-							</td>
-							<td className={`w-32 ${rowClass}`}>
-								{getValues(`batch_entry[${index}].style`)}
+							<td className={`w-32 ${rowClass}`}>{item.color}</td>
+							<td className={`w-32 ${rowClass}`}>{item.style}</td>
+							<td className={`${rowClass}`}>
+								{item.count_length}
 							</td>
 							<td className={`${rowClass}`}>
-								{getValues(
-									`batch_entry[${index}].count_length`
-								)}
-							</td>
-							<td className={`${rowClass}`}>
-								{getValues(`batch_entry[${index}].recipe_name`)}
-							</td>
-							<td className={`${rowClass}`}>
-								{getValues(
-									`batch_entry[${index}].order_quantity`
-								)}
-							</td>
-							<td className={`${rowClass}`}>
-								{getValues(`batch_entry[${index}].quantity`)}
+								{item.recipe_name}
 							</td>
 
 							<td className={`${rowClass}`}>
-								{getValues(
-									`batch_entry[${index}].total_quantity`
-								)}
+								{item.total_quantity}
 							</td>
-							<td className={`${rowClass}`}>
-								{getValues(
-									`batch_entry[${index}].balance_quantity`
-								)}
-							</td>
-							<td className={`${rowClass}`}>
-								{getValues(
-									`batch_entry[${index}].total_carton`
-								)}
-							</td>
+
 							<td className={`${rowClass}`}>
 								{Number(
 									parseFloat(
@@ -253,9 +212,7 @@ export default function Index() {
 								/>
 							</td>
 							<td className={`${rowClass}`}>
-								{getValues(
-									`batch_entry[${index}].batch_remarks`
-								)}
+								{item.batch_remarks}
 							</td>
 						</tr>
 					))}
@@ -266,8 +223,14 @@ export default function Index() {
 						)}>
 						{/* Span all columns up to "Expected Weight" */}
 
-						<td className='text-right font-semibold' colSpan={11}>
+						<td className='text-right font-semibold' colSpan={6}>
 							Total:
+						</td>
+						<td className='px-3 py-2 text-left font-semibold'>
+							{Number(
+								getTotalCalTape(watch('batch_entry')).toFixed(3)
+							)}{' '}
+							kg
 						</td>
 						<td className='px-3 py-2 text-left font-semibold'>
 							{Number(
@@ -275,13 +238,6 @@ export default function Index() {
 									watch('batch_entry')
 								).toFixed(3)
 							)}
-						</td>
-
-						<td className='px-3 py-2 text-left font-semibold'>
-							{Number(
-								getTotalCalTape(watch('batch_entry')).toFixed(3)
-							)}{' '}
-							kg
 						</td>
 
 						{/* Empty <td> elements to maintain table structure */}

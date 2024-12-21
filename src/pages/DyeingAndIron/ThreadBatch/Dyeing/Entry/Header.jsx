@@ -49,11 +49,6 @@ export default function Header({
 		(item) => item.value == getValues('machine_uuid')
 	);
 
-	// filtering the machines with available slots in can_book is true
-	// const filtered_machine = machine
-	// 	? machine?.filter((item) => item.can_book == true)
-	// 	: [];
-
 	// setting the setSLot sate if the request is for update to show the options for slots
 	useEffect(() => {
 		const tempSlot = machine?.find(
@@ -81,6 +76,7 @@ export default function Header({
 	const categoryOption = [
 		{ label: 'Light', value: 'light' },
 		{ label: 'Medium', value: 'medium' },
+		{ label: 'Deep', value: 'deep' },
 	];
 
 	const statusOption = [
@@ -91,11 +87,8 @@ export default function Header({
 	const shiftOption = [
 		{ label: 'A', value: 'a' },
 		{ label: 'B', value: 'b' },
-	];
-	const machine_speed = [
-		{ label: 'Low', value: 'low' },
-		{ label: 'Medium', value: 'medium' },
-		{ label: 'High', value: 'high' },
+		{ label: 'C', value: 'c' },
+		{ label: 'D', value: 'd' },
 	];
 
 	return (
@@ -114,14 +107,14 @@ export default function Header({
 									totalWeight < parseFloat(res?.min_capacity)
 									? 'text-error'
 									: ''
-							)}>{`Batch Quantity (KG): ${Number(totalWeight).toFixed(3)}`}</span>
+							)}>{`Batch QTY (KG): ${Number(totalWeight).toFixed(3)}`}</span>
 						<br />
-						<span>{`Batch Quantity (Cone): ${totalQuantity}`}</span>
+						<span>{`Batch QTY (Cone): ${totalQuantity}`}</span>
 						<br />
 					</div>
 				}>
 				<div className='flex gap-4'>
-					<div className='flex flex-col gap-2 flex-1'>
+					<div className='flex flex-1 flex-col gap-2'>
 						<FormField
 							label='uuid'
 							title='Batch No'
@@ -210,7 +203,7 @@ export default function Header({
 							/>
 						</FormField>
 					</div>
-					<div className='flex flex-col gap-2 flex-1'>
+					<div className='flex flex-1 flex-col gap-2'>
 						<Input
 							label='yarn_quantity'
 							disabled={true}
@@ -293,7 +286,7 @@ export default function Header({
 							/>
 						</FormField>
 					</div>
-					<div className='flex flex-col gap-2 flex-1'>
+					<div className='flex flex-1 flex-col gap-2'>
 						<FormField
 							label='category'
 							title='Category'

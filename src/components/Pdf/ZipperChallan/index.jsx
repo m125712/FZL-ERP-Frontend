@@ -19,42 +19,44 @@ export default function Index(data) {
 		data?.item_for === 'thread' || data?.item_for === 'sample_thread';
 	const isTapeChallan = data?.item_for === 'tape';
 	const isSliderChallan = data?.item_for === 'slider';
+	const { packing_list_numbers } = data;
 
-	const threadNode = [
-		getTable('packing_number', 'PL No'),
-		getTable('item_description', 'Count'),
-		getTable('style', 'Style'),
-		getTable('color', 'Color'),
-		getTable('size', 'Length', 'right'),
-		getTable('quantity', 'Qty(cone)', 'right'),
-		getTable('poli_quantity', 'Poly', 'right'),
-	];
+	const createNode = (fields) => fields.map((field) => getTable(...field));
 
-	const zipperNode = [
-		getTable('packing_number', 'PL No'),
-		getTable('item_description', 'Item Description'),
-		getTable('style', 'Style'),
-		getTable('color', 'Color'),
-		getTable('size', 'Size', 'right'),
-		getTable('quantity', 'Qty(pcs)', 'right'),
-		getTable('poli_quantity', 'Poly', 'right'),
-	];
-	const tapeNode = [
-		getTable('packing_number', 'PL No'),
-		getTable('item_description', 'Item Description'),
-		getTable('style', 'Style'),
-		getTable('color', 'Color'),
-		getTable('size', 'Size', 'right'),
-		getTable('quantity', 'Qty(cm)', 'right'),
-		getTable('poli_quantity', 'Poly', 'right'),
-	];
-	const sliderNode = [
-		getTable('packing_number', 'PL No'),
-		getTable('item_description', 'Item Description'),
-		getTable('style', 'Style'),
-		getTable('quantity', 'Qty(cm)', 'right'),
-		getTable('poli_quantity', 'Poly', 'right'),
-	];
+	const threadNode = createNode([
+		['item_description', 'Count'],
+		['style', 'Style'],
+		['color', 'Color'],
+		['size', 'Length', 'right'],
+		['quantity', 'Qty(cone)', 'right'],
+		['poli_quantity', 'Poly', 'right'],
+	]);
+
+	const zipperNode = createNode([
+		['item_description', 'Item Description'],
+		['style', 'Style'],
+		['color', 'Color'],
+		['size', 'Size', 'right'],
+		['quantity', 'Qty(pcs)', 'right'],
+		['poli_quantity', 'Poly', 'right'],
+	]);
+
+	const tapeNode = createNode([
+		['item_description', 'Item Description'],
+		['style', 'Style'],
+		['color', 'Color'],
+		['size', 'Size', 'right'],
+		['quantity', 'Qty(cm)', 'right'],
+		['poli_quantity', 'Poly', 'right'],
+	]);
+
+	const sliderNode = createNode([
+		['item_description', 'Item Description'],
+		['style', 'Style'],
+		['quantity', 'Qty(cm)', 'right'],
+		['poli_quantity', 'Poly', 'right'],
+	]);
+
 	const node = isThreadChallan
 		? threadNode
 		: isTapeChallan
@@ -64,42 +66,45 @@ export default function Index(data) {
 				: zipperNode;
 
 	const headerHeight = 200;
-	let footerHeight = 50;
-	let { challan_entry } = data;
-	const uniqueCounts = challan_entry?.reduce(
-		(acc, item) => {
-			acc.itemDescriptions.add(item.item_description);
-			acc.styles.add(item.style);
-			acc.colors.add(item.color);
-			acc.sizes.add(item.size);
-			acc.quantity = acc.quantity + parseInt(item.quantity, 10);
-			acc.poly_quantity =
-				acc.poly_quantity + parseInt(item.poli_quantity, 10);
-			return acc;
-		},
-		{
-			itemDescriptions: new Set(),
-			styles: new Set(),
-			colors: new Set(),
-			sizes: new Set(),
-			quantity: 0,
-			poly_quantity: 0,
-		}
-	);
+	const footerHeight = 50;
+	const { challan_entry } = data;
 
-	const uniqueItemDescription = uniqueCounts.itemDescriptions.size;
-	const uniqueStyle = uniqueCounts.styles.size;
-	const uniqueColor = uniqueCounts.colors.size;
-	const uniqueSize = uniqueCounts.sizes.size;
-	let totalQuantity = uniqueCounts.quantity;
-	let totalPolyQty = uniqueCounts.poly_quantity;
+	const uniqueCounts = (challan_entry) =>
+		challan_entry?.reduce(
+			(acc, item) => {
+				acc.itemDescriptions.add(item.item_description);
+				acc.styles.add(item.style);
+				acc.colors.add(item.color);
+				acc.sizes.add(item.size);
+				acc.quantity += parseInt(item.quantity, 10) || 0;
+				acc.poly_quantity += parseInt(item.poli_quantity, 10) || 0;
+				return acc;
+			},
+			{
+				itemDescriptions: new Set(),
+				styles: new Set(),
+				colors: new Set(),
+				sizes: new Set(),
+				quantity: 0,
+				poly_quantity: 0,
+			}
+		) || {};
 
-	let unit = [];
-	challan_entry?.forEach((item) => {
-		unit.push(
-			`${isThreadChallan ? `mtr` : isTapeChallan ? `mtr` : item.is_inch === 1 ? `inch` : `cm`}`
-		);
-	});
+	// const uniqueItemDescription = uniqueCounts.itemDescriptions.size;
+	// const uniqueStyle = uniqueCounts.styles.size;
+	// const uniqueColor = uniqueCounts.colors.size;
+	// const uniqueSize = uniqueCounts.sizes.size;
+	const grandTotalQuantity = uniqueCounts(challan_entry).quantity;
+	// const totalPolyQty = uniqueCounts.poly_quantity;
+
+	const unit =
+		challan_entry?.map((item) =>
+			isThreadChallan || isTapeChallan
+				? 'mtr'
+				: item.is_inch === 1
+					? 'inch'
+					: 'cm'
+		) || [];
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_LETTER_PAGE({
@@ -125,121 +130,184 @@ export default function Index(data) {
 		}),
 
 		// * Main Table
-		content: [
+		content: packing_list_numbers.map((pl, index) => [
+			{
+				text: `PL NO: ${pl.packing_number}`,
+				fontSize: DEFAULT_FONT_SIZE + 2,
+				bold: true,
+				alignment: 'left',
+			},
 			{
 				table: {
 					headerRows: 1,
 					widths: isSliderChallan
-						? [110, 110, 110, 80, 80]
-						: [70, 80, 110, 70, 40, 70, 50],
+						? [150, 150, 80, 80]
+						: [140, 130, 70, 40, 70, 50],
 					body: [
 						// * Header
 						TableHeader(node),
 
 						// * Body
-						...challan_entry?.map((item) =>
-							node.map((nodeItem) => {
-								if (nodeItem.field === 'size') {
-									const unitIndex =
-										challan_entry.indexOf(item);
+						...challan_entry
+							?.filter(
+								(item) =>
+									item.packing_number === pl.packing_number
+							)
+							.map((item) =>
+								node.map((nodeItem, index) => {
+									const text =
+										nodeItem.field === 'size'
+											? `${item[nodeItem.field]} ${unit[index] || ''}`
+											: item[nodeItem.field];
 									return {
-										text:
-											item[nodeItem.field] +
-											' ' +
-											(unit[unitIndex] || ''),
+										text,
 										style: nodeItem.cellStyle,
 										alignment: nodeItem.alignment,
+										colSpan: nodeItem.colSpan,
 									};
-								}
-								return {
-									text: item[nodeItem.field],
-									style: nodeItem.cellStyle,
-									alignment: nodeItem.alignment,
-								};
-							})
-						),
+								})
+							),
 
 						isSliderChallan
 							? [
 									{
-										text: 'Total',
+										text: `Total ${
+											uniqueCounts(
+												challan_entry?.filter(
+													(item) =>
+														item.packing_number ===
+														pl.packing_number
+												)
+											).itemDescriptions?.size
+										} Desc`,
 										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 									{
-										text: `${uniqueItemDescription} Desc`,
+										text: `${
+											uniqueCounts(
+												challan_entry?.filter(
+													(item) =>
+														item.packing_number ===
+														pl.packing_number
+												)
+											)?.styles.size
+										} Style`,
 										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 									{
-										text: `${uniqueStyle} Style`,
-										bold: true,
-									},
-									{
-										text: totalQuantity,
+										text: uniqueCounts(
+											challan_entry?.filter(
+												(item) =>
+													item.packing_number ===
+													pl.packing_number
+											)
+										)?.quantity,
 										bold: true,
 										alignment: 'right',
+										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 									{
-										text: totalPolyQty,
+										text: uniqueCounts(
+											challan_entry?.filter(
+												(item) =>
+													item.packing_number ===
+													pl.packing_number
+											)
+										).poly_quantity,
 										bold: true,
 										alignment: 'right',
+										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 								]
 							: [
 									{
-										text: 'Total',
+										text: `Total ${
+											uniqueCounts(
+												challan_entry?.filter(
+													(item) =>
+														item.packing_number ===
+														pl.packing_number
+												)
+											).itemDescriptions?.size
+										} Desc`,
+										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
+
+									{
+										text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).styles?.size} Style`,
 										bold: true,
 										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 									{
-										text: `${uniqueItemDescription} Desc`,
+										text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).colors?.size} Color`,
 										bold: true,
 										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 									{
-										text: `${uniqueStyle} Style`,
-										bold: true,
-										fontSize: DEFAULT_FONT_SIZE + 2,
-									},
-									{
-										text: `${uniqueColor} Color`,
-										bold: true,
-										fontSize: DEFAULT_FONT_SIZE + 2,
-									},
-									{
-										text: `${uniqueSize} Size`,
-										bold: true,
-										alignment: 'right',
-										fontSize: DEFAULT_FONT_SIZE + 2,
-									},
-									{
-										text: totalQuantity,
+										text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).sizes?.size} Size`,
 										bold: true,
 										alignment: 'right',
 										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 									{
-										text: totalPolyQty,
+										text: uniqueCounts(
+											challan_entry?.filter(
+												(item) =>
+													item.packing_number ===
+													pl.packing_number
+											)
+										).quantity,
+										bold: true,
+										alignment: 'right',
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
+									{
+										text: uniqueCounts(
+											challan_entry?.filter(
+												(item) =>
+													item.packing_number ===
+													pl.packing_number
+											)
+										).poly_quantity,
 										bold: true,
 										alignment: 'right',
 										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 								],
-
 					],
 				},
-				layout: tableLayoutStyle,
 			},
-			{
-				text: '\n\n',
-			},
-			{
-				text: `Total Quantity (In Words): ${NumToWord(totalQuantity)} ${
-					isThreadChallan ? 'cone' : isTapeChallan ? 'cm' : 'pcs'
-				} only`,
-				bold: true,
-				fontSize: DEFAULT_FONT_SIZE + 2,
-			},
-		],
+			{ text: '\n\n' },
+			index === packing_list_numbers.length - 1
+				? {
+						text: `Grand Total Quantity : ${grandTotalQuantity} ${
+							isThreadChallan
+								? 'cone'
+								: isTapeChallan
+									? 'cm'
+									: 'pcs'
+						}`,
+						bold: true,
+						fontSize: DEFAULT_FONT_SIZE + 2,
+					}
+				: null,
+			index === packing_list_numbers.length - 1
+				? {
+						text: `Grand Total Quantity (In Words): ${NumToWord(grandTotalQuantity)} ${
+							isThreadChallan
+								? 'cone'
+								: isTapeChallan
+									? 'cm'
+									: 'pcs'
+						} only`,
+						bold: true,
+						fontSize: DEFAULT_FONT_SIZE + 2,
+					}
+				: null,
+		]),
 	});
 
 	return pdfDocGenerator;

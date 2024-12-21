@@ -76,18 +76,14 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'unit',
+				accessorFn: (row) => {
+					if (row.order_type === 'tape') return 'Meter';
+					return row.is_inch ? 'Inch' : 'Cm';
+				},
+				id: 'unit',
 				header: 'Unit',
 				enableColumnFilter: false,
-				cell: (info) => {
-					const { is_inch, order_type } = info.row.original;
-
-					return order_type === 'tape'
-						? 'Meter'
-						: is_inch
-							? 'Inch'
-							: 'Cm';
-				},
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'quantity',

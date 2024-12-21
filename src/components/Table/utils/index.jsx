@@ -1,4 +1,14 @@
-import FuzzyFilter, { fuzzySort, isWithinRange } from "./FuzzyFilter";
-import { GetFlatHeader } from "./GetHeader";
+import FuzzyFilter, {
+	dateRangeColumnId,
+	fuzzySort,
+	isWithinRange,
+} from './FuzzyFilter';
+import { GetFlatHeader } from './GetHeader';
 
-export { FuzzyFilter, GetFlatHeader, fuzzySort, isWithinRange };
+export {
+	FuzzyFilter,
+	GetFlatHeader,
+	fuzzySort,
+	isWithinRange,
+	dateRangeColumnId,
+};

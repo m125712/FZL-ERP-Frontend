@@ -52,8 +52,6 @@ export const notShowingColumns = [
 	'id',
 	'action',
 	'actions',
-	// 'created_at',
-	// 'updated_at',
 	'reset_password',
 	'page_assign',
 	'reset_pass_actions',

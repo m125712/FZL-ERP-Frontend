@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
 export const Filter = ({ column }) => {
 	return (
 		<div style={{ marginTop: 5 }}>
-			{column.canFilter && column.render("Filter")}
+			{column.canFilter && column.render('Filter')}
 		</div>
 	);
 };
@@ -14,11 +14,11 @@ export function dateBetweenFilterFn(rows, id, filterValues) {
 	if (ed || sd) {
 		return rows.filter((r) => {
 			// format data
-			var dateAndHour = r.values[id].split(" ");
-			var [year, month, day] = dateAndHour[0].split("-");
-			var date = [month, day, year].join("/");
+			var dateAndHour = r.values[id].split(' ');
+			var [year, month, day] = dateAndHour[0].split('-');
+			var date = [month, day, year].join('/');
 			var hour = dateAndHour[1];
-			var formattedData = date + " " + hour;
+			var formattedData = date + ' ' + hour;
 
 			const cellDate = new Date(formattedData);
 
@@ -64,21 +64,21 @@ export function DateRangeColumnFilter({
 					const val = e.target.value;
 					setFilter((old = []) => [val ? val : undefined, old[1]]);
 				}}
-				type="date"
-				value={filterValue[0] || ""}
+				type='date'
+				value={filterValue[0] || ''}
 			/>
-			{" to "}
+			{' to '}
 			<input
 				//max={max.toISOString().slice(0, 10)}
 				onChange={(e) => {
 					const val = e.target.value;
 					setFilter((old = []) => [
 						old[0],
-						val ? val.concat("T23:59:59.999Z") : undefined,
+						val ? val.concat('T23:59:59.999Z') : undefined,
 					]);
 				}}
-				type="date"
-				value={filterValue[1]?.slice(0, 10) || ""}
+				type='date'
+				value={filterValue[1]?.slice(0, 10) || ''}
 			/>
 		</div>
 	);

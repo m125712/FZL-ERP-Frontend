@@ -28,6 +28,7 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
+import OrderEntrySpreadsheet from './spreadsheets/order-entry-spreadsheet';
 import useGenerateFieldDefs from './useGenerateFieldDefs';
 
 export default function Index() {
@@ -95,7 +96,11 @@ export default function Index() {
 			threadOrderInfoEntryField.forEach((item, index) => {
 				setValue(
 					`order_info_entry[${index}].bleaching`,
-					bleachAll ? 'bleach' : 'non-bleach'
+					bleachAll ? 'bleach' : 'non-bleach',
+					{
+						shouldDirty: true,
+						shouldValidate: true,
+					}
 				);
 			});
 		}
@@ -440,7 +445,15 @@ export default function Index() {
 							update: threadOrderInfoEntryUpdate,
 						}}
 					/> */}
-					<HandsonSpreadSheet
+
+					<OrderEntrySpreadsheet
+						extraHeader={headerButtons}
+						title='Details'
+						form={form}
+						fieldName='order_info_entry'
+						handleAdd={handleThreadOrderInfoEntryAppend}
+					/>
+					{/* <HandsonSpreadSheet
 						extraHeader={headerButtons}
 						title='Details'
 						form={form}
@@ -452,7 +465,7 @@ export default function Index() {
 						})}
 						handleAdd={handleThreadOrderInfoEntryAppend}
 						fields={threadOrderInfoEntryField}
-					/>
+					/> */}
 
 					<Footer buttonClassName='!btn-primary' />
 				</form>

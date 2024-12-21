@@ -45,7 +45,7 @@ export default function Index({
 				cell: (info) => info.getValue(),
 			},
 		],
-		[shade_recipes_entries]
+		[shade_recipes_entries, batch_entry]
 	);
 
 	return (

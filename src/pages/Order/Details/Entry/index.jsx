@@ -9,6 +9,7 @@ import { useAccess, useFetchForOrderReset, useRHF } from '@/hooks';
 import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
 import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet';
+import TestSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet/test';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { CheckBox } from '@/ui';
 
@@ -31,6 +32,9 @@ import fullFieldDefs from './field-defs/full-field-defs';
 import sliderFieldDefs from './field-defs/slider-field-defs';
 import tapeFieldDefs from './field-defs/tape-field-defs';
 import Header from './Header';
+import FullOrder from './spread-sheets/full-order';
+import Slider from './spread-sheets/slider';
+import Tape from './spread-sheets/tape';
 
 export function getRowsCount(matrix) {
 	return matrix.length;
@@ -202,14 +206,19 @@ export default function Index() {
 		itemId: null,
 		itemName: null,
 	});
-	const [bleachAll, setBleachAll] = useState();
+	const [bleachAll, setBleachAll] = useState(null);
 
 	useEffect(() => {
 		if (bleachAll !== null) {
 			orderEntryField.forEach((item, index) => {
 				setValue(
 					`order_entry[${index}].bleaching`,
-					bleachAll ? 'bleach' : 'non-bleach'
+					bleachAll === true ? 'bleach' : 'non-bleach',
+					{
+						shouldValidate: true,
+						shouldDirty: true,
+						shouldTouch: true,
+					}
 				);
 			});
 		}
@@ -543,6 +552,37 @@ export default function Index() {
 				/>
 
 				{watch('order_type') === 'full' && (
+					<FullOrder
+						handleAdd={handelOrderEntryAppend}
+						title='Details'
+						extraHeader={headerButtons}
+						form={form}
+						fieldName='order_entry'
+					/>
+				)}
+
+				{watch('order_type') === 'tape' && (
+					<Tape
+						handleAdd={handelOrderEntryAppend}
+						title='Details'
+						extraHeader={headerButtons}
+						form={form}
+						fieldName='order_entry'
+					/>
+				)}
+				{watch('order_type') === 'slider' && (
+					<Slider
+						handleAdd={handelOrderEntryAppend}
+						title='Details'
+						extraHeader={headerButtons}
+						form={form}
+						fieldName='order_entry'
+					/>
+				)}
+
+				{/* 
+
+				{watch('order_type') === 'full' && (
 					<HandsonSpreadSheet
 						extraHeader={headerButtons}
 						title='Details'
@@ -584,7 +624,8 @@ export default function Index() {
 						handleAdd={addRow}
 						fields={orderEntryField}
 					/>
-				)}
+				)} */}
+
 				<Footer buttonClassName='!btn-primary' />
 			</form>
 			<Suspense>

@@ -56,6 +56,23 @@ export const CUSTOM_PAGE_STICKER = ({
 		styles,
 	};
 };
+export const CUSTOM_PAGE_THREAD_STICKER = ({
+	pageOrientation = 'portrait',
+	xMargin,
+	headerHeight,
+	footerHeight,
+}) => {
+	let width = 210;
+	let height = 281;
+
+	return {
+		pageSize: { width, height },
+		pageOrientation,
+		pageMargins: [xMargin, headerHeight, xMargin, footerHeight],
+		defaultStyle,
+		styles,
+	};
+};
 export const CUSTOM_PAGE_CONE_STICKER = ({
 	pageOrientation = 'landscape',
 	xMargin,
@@ -102,7 +119,8 @@ export const getTable = (
 export const TableHeader = (
 	node,
 	fontSize = DEFAULT_FONT_SIZE,
-	color = PRIMARY_COLOR
+	color = PRIMARY_COLOR,
+	colSpan = 1
 ) => {
 	return [
 		...node.map((nodeItem) => ({
@@ -112,6 +130,7 @@ export const TableHeader = (
 			color: color,
 			bold: true,
 			fontSize: fontSize,
+			colSpan: colSpan,
 		})),
 	];
 };

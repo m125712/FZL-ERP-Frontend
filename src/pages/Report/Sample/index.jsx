@@ -2,12 +2,19 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSample } from '@/state/Report';
 import { format } from 'date-fns';
 
+
+
 import ReactTable from '@/components/Table';
 import { DateTime } from '@/ui';
 
+
+
 import PageInfo from '@/util/PageInfo';
 
+
+
 import Header from './Header';
+
 
 export default function Index() {
 	const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
@@ -45,7 +52,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'item_details_short',
+				accessorKey: 'item_details',
 				header: 'Item',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),

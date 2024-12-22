@@ -2,19 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSample } from '@/state/Report';
 import { format } from 'date-fns';
 
-
-
 import ReactTable from '@/components/Table';
-import { DateTime } from '@/ui';
-
-
+import { DateTime, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
-
-
 import Header from './Header';
-
 
 export default function Index() {
 	const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
@@ -24,7 +17,8 @@ export default function Index() {
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
-	// ;,
+	console.log(data);
+
 	const columns = useMemo(
 		() => [
 			{
@@ -39,17 +33,34 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
 			{
 				accessorKey: 'order_number',
-				header: 'Order Ref.',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				header: 'O/N',
+				enableColumnFilter: true,
+				cell: (info) => (
+					<LinkWithCopy
+						title={info.getValue()}
+						id={info.getValue()}
+						uri='/order/details'
+					/>
+				),
 			},
 			{
 				accessorKey: 'item_description',
 				header: 'Product',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: ({ row }) => {
+					const { order_description_uuid, order_number } =
+						row.original;
+					return (
+						<LinkWithCopy
+							title={row.getValue('item_description')}
+							id={order_description_uuid}
+							uri={`/order/details/${order_number}`}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'item_details',

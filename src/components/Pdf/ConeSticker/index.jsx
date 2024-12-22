@@ -5,7 +5,7 @@ import pdfMake from '..';
 
 export default function Index(data) {
 	const contentArray = Array(data?.quantity || 1).fill(data);
-	const fontSize = DEFAULT_FONT_SIZE - 3;
+	const fontSize = DEFAULT_FONT_SIZE - 4;
 	const tableLayout = {
 		hLineWidth: function (i, node) {
 			return 0;
@@ -13,17 +13,8 @@ export default function Index(data) {
 		vLineWidth: function (i) {
 			return 0;
 		},
-		paddingLeft: function (i) {
-			return i === 0 ? 14 : 0;
-		},
-		paddingRight: function (i, node) {
-			return i === node.table.widths.length - 1 ? 14 : 22;
-		},
 		paddingTop: function (i) {
-			return i === 0 ? 38 : 0;
-		},
-		paddingBottom: function (i) {
-			return 0;
+			return i === 0 ? 37 : 0;
 		},
 	};
 	const contents = contentArray.map((index) => {
@@ -31,7 +22,9 @@ export default function Index(data) {
 			layout: tableLayout,
 
 			table: {
+				widths: [71, 71, 71],
 				body: [
+					// * item description
 					[
 						{
 							text:
@@ -40,21 +33,8 @@ export default function Index(data) {
 								data?.size +
 								' M',
 							alignment: 'center',
-							width: 68,
-							fontSize: fontSize,
-							margin: [0, 0, 0, 0],
-						},
-
-						{
-							text:
-								data?.item_description +
-								' ' +
-								data?.size +
-								' M',
-							alignment: 'center',
-							width: 68,
-							fontSize: fontSize,
-							margin: [0, 0, 0, 0],
+							fontSize: fontSize + 2,
+							bold: true,
 						},
 
 						{
@@ -64,84 +44,82 @@ export default function Index(data) {
 								data?.size +
 								' M',
 							alignment: 'center',
-							width: 68,
-							fontSize: fontSize,
-							margin: [0, 0, 0, 0],
+							fontSize: fontSize + 2,
+							bold: true,
+						},
+
+						{
+							text:
+								data?.item_description +
+								' ' +
+								data?.size +
+								' M',
+							alignment: 'center',
+							fontSize: fontSize + 2,
+							bold: true,
 						},
 					],
+
+					// * color
 					[
 						{
 							text: data?.color,
 							alignment: 'center',
-							width: 68,
 							fontSize: fontSize,
-							margin: [0, 0, 0, 0],
 						},
 
 						{
 							text: data?.color,
 							alignment: 'center',
-							width: 68,
 							fontSize: fontSize,
-							margin: [0, 0, 0, 0],
 						},
 
 						{
 							text: data?.color,
 							alignment: 'center',
-							width: 68,
 							fontSize: fontSize,
-							margin: [0, 0, 0, 0],
 						},
 					],
+
+					// * recipe
 					[
 						{
 							text: data?.recipe_name,
 							alignment: 'center',
-							width: 68,
 							fontSize: fontSize,
-							margin: [0, 0, 0, 0],
 						},
 
 						{
 							text: data?.recipe_name,
 							alignment: 'center',
-							width: 68,
 							fontSize: fontSize,
-							margin: [0, 0, 0, 0],
 						},
 
 						{
 							text: data?.recipe_name,
 							alignment: 'center',
-							width: 68,
 							fontSize: fontSize,
-							margin: [0, 0, 0, 0],
 						},
 					],
+
+					// * packing number
 					[
 						{
 							text: data?.packing_number,
 							alignment: 'center',
-							width: 68,
 							fontSize: fontSize,
-							margin: [0, 0, 0, 0],
-						},
-
-						{
-							text: data?.packing_number,
-							alignment: 'center',
-							width: 68,
-							fontSize: fontSize,
-							margin: [0, 0, 0, 0],
 						},
 
 						{
 							text: data?.packing_number,
 							alignment: 'center',
-							width: 68,
 							fontSize: fontSize,
-							margin: [0, 0, 0, 0],
+						},
+
+						{
+							text: data?.packing_number,
+							alignment: 'center',
+							fontSize: fontSize,
 						},
 					],
 				],

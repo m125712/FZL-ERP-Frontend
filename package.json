@@ -30,6 +30,7 @@
 		"handsontable": "^14.6.1",
 		"js-cookie": "^3.0.5",
 		"jsbarcode": "^3.11.6",
+		"lucide": "^0.469.0",
 		"lucide-react": "^0.439.0",
 		"nanoid": "^5.0.7",
 		"numeral": "^2.0.6",

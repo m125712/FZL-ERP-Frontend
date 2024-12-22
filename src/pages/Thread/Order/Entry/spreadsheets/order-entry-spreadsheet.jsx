@@ -1,16 +1,27 @@
 import React from 'react';
 import { useOtherCountLength } from '@/state/Other';
 
+import renderActions from '@/ui/Dynamic/HandsonSpreadSheet/_actions/render-actions';
 import TestSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet/test';
 import SelectEditor from '@/ui/Dynamic/HandsonSpreadSheet/test/select-editor';
 
 const OrderEntrySpreadsheet = (
-	{ title, extraHeader, fieldName, form, handleAdd } = {
+	{
+		title,
+		extraHeader,
+		fieldName,
+		form,
+		handleAdd,
+		handleCopy,
+		handleRemove,
+	} = {
 		title: '',
 		extraHeader: null,
 		form: {},
 		fieldName: '',
 		handleAdd: () => {},
+		handleRemove: () => {},
+		handleCopy: () => {},
 	}
 ) => {
 	const { data: countLength } = useOtherCountLength();
@@ -48,6 +59,7 @@ const OrderEntrySpreadsheet = (
 		{
 			data: 'remarks',
 		},
+		renderActions(handleRemove, handleCopy),
 	];
 	const data = form.watch(fieldName).map((item) => {
 		return {
@@ -71,6 +83,7 @@ const OrderEntrySpreadsheet = (
 		'Company (USD/CONE)',
 		'Party (USD/CONE)',
 		'Remarks',
+		'Actions',
 	];
 	return (
 		<TestSpreadSheet

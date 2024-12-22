@@ -554,6 +554,8 @@ export default function Index() {
 				{watch('order_type') === 'full' && (
 					<FullOrder
 						handleAdd={handelOrderEntryAppend}
+						handleRemove={handleOrderEntryRemove}
+						handleCopy={handleCopy}
 						title='Details'
 						extraHeader={headerButtons}
 						form={form}
@@ -564,6 +566,8 @@ export default function Index() {
 				{watch('order_type') === 'tape' && (
 					<Tape
 						handleAdd={handelOrderEntryAppend}
+						handleRemove={handleOrderEntryRemove}
+						handleCopy={handleCopy}
 						title='Details'
 						extraHeader={headerButtons}
 						form={form}
@@ -573,6 +577,8 @@ export default function Index() {
 				{watch('order_type') === 'slider' && (
 					<Slider
 						handleAdd={handelOrderEntryAppend}
+						handleRemove={handleOrderEntryRemove}
+						handleCopy={handleCopy}
 						title='Details'
 						extraHeader={headerButtons}
 						form={form}

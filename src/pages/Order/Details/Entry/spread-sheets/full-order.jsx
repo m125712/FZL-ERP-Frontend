@@ -1,14 +1,28 @@
 import React from 'react';
+import { createIcons, icons } from 'lucide';
 
+import renderActions from '@/ui/Dynamic/HandsonSpreadSheet/_actions/render-actions';
 import TestSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet/test';
 
+createIcons({ icons });
+
 const FullOrder = (
-	{ title, extraHeader, fieldName, form, handleAdd } = {
+	{
+		title,
+		extraHeader,
+		fieldName,
+		form,
+		handleAdd,
+		handleRemove,
+		handleCopy,
+	} = {
 		title: '',
 		extraHeader: null,
 		form: {},
 		fieldName: '',
 		handleAdd: () => {},
+		handleRemove: () => {},
+		handleCopy: () => {},
 	}
 ) => {
 	const columns = [
@@ -36,6 +50,8 @@ const FullOrder = (
 		{
 			data: 'party_price',
 		},
+
+		renderActions(handleRemove, handleCopy),
 	];
 	const data = form.watch(fieldName).map((item) => {
 		return {
@@ -57,6 +73,7 @@ const FullOrder = (
 		'Quantity',
 		'Company (USD/DZN)',
 		'Party (USD/DZN)',
+		'Actions',
 	];
 	return (
 		<TestSpreadSheet

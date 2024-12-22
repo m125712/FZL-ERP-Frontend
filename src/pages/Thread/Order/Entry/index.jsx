@@ -344,7 +344,7 @@ export default function Index() {
 			bleaching: field.bleaching,
 			quantity: field.quantity,
 			company_price: field.company_price,
-			party_price: field.company_price,
+			party_price: field.party_price,
 			remarks: field.remarks,
 		});
 	};
@@ -352,123 +352,46 @@ export default function Index() {
 	return (
 		<FormProvider {...form}>
 			{/* <HotKeys {...{ keyMap, handlers }}> */}
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					noValidate
-					className='flex flex-col gap-4'>
-					<Header
-						{...{
-							register,
-							errors,
-							control,
-							getValues,
-							Controller,
-							watch,
-						}}
-					/>
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				noValidate
+				className='flex flex-col gap-4'>
+				<Header
+					{...{
+						register,
+						errors,
+						control,
+						getValues,
+						Controller,
+						watch,
+					}}
+				/>
 
-					{/* <DynamicFormSpreadSheet
-						title='Details'
-						fieldArrayName='order_info_entry'
-						handelAppend={handleThreadOrderInfoEntryAppend}
-						handleRemove={handleThreadOrderInfoEntryRemove}
-						headerButtons={headerButtons}
-						columnsDefs={[
-							{
-								header: 'Color',
-								accessorKey: 'color',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Style',
-								accessorKey: 'style',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Count Length',
-								accessorKey: 'count_length_uuid',
-								type: 'select',
-								options: countLength || [],
-								readOnly: false,
-							},
-							{
-								header: 'Bleaching',
-								accessorKey: 'bleaching',
-								type: 'select',
-								options: bleaching,
-								readOnly: false,
-							},
-							{
-								header: 'Quantity',
-								accessorKey: 'quantity',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Company (USD/CONE)',
-								accessorKey: 'company_price',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Party (USD/CONE)',
-								accessorKey: 'party_price',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Remarks',
-								accessorKey: 'remarks',
-								type: 'text',
-								readOnly: false,
-							},
+				<OrderEntrySpreadsheet
+					extraHeader={headerButtons}
+					title='Details'
+					form={form}
+					fieldName='order_info_entry'
+					handleCopy={handleCopy}
+					handleAdd={handleThreadOrderInfoEntryAppend}
+					handleRemove={handleThreadOrderInfoEntryRemove}
+				/>
+				{/* <HandsonSpreadSheet
+					extraHeader={headerButtons}
+					title='Details'
+					form={form}
+					fieldName='order_info_entry'
+					fieldDefs={useGenerateFieldDefs({
+						copy: handleCopy,
+						remove: handleThreadOrderInfoEntryRemove,
+						watch: watch,
+					})}
+					handleAdd={handleThreadOrderInfoEntryAppend}
+					fields={threadOrderInfoEntryField}
+				/> */}
 
-							{
-								header: 'Actions',
-								type: 'action',
-							},
-						]}
-						{...{
-							formContext: {
-								register,
-								watch,
-								setValue,
-								getValues,
-								clearErrors,
-								errors,
-							},
-							fields: threadOrderInfoEntryField,
-							append: threadOrderInfoEntryAppend,
-							remove: threadOrderInfoEntryRemove,
-							update: threadOrderInfoEntryUpdate,
-						}}
-					/> */}
-
-					<OrderEntrySpreadsheet
-						extraHeader={headerButtons}
-						title='Details'
-						form={form}
-						fieldName='order_info_entry'
-						handleAdd={handleThreadOrderInfoEntryAppend}
-					/>
-					{/* <HandsonSpreadSheet
-						extraHeader={headerButtons}
-						title='Details'
-						form={form}
-						fieldName='order_info_entry'
-						fieldDefs={useGenerateFieldDefs({
-							copy: handleCopy,
-							remove: handleThreadOrderInfoEntryRemove,
-							watch: watch,
-						})}
-						handleAdd={handleThreadOrderInfoEntryAppend}
-						fields={threadOrderInfoEntryField}
-					/> */}
-
-					<Footer buttonClassName='!btn-primary' />
-				</form>
+				<Footer buttonClassName='!btn-primary' />
+			</form>
 			{/* </HotKeys> */}
 			<Suspense>
 				<DeleteModal

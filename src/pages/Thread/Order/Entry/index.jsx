@@ -16,6 +16,7 @@ import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
+import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 
 import nanoid from '@/lib/nanoid';
@@ -28,6 +29,7 @@ import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
 import OrderEntrySpreadsheet from './spreadsheets/order-entry-spreadsheet';
+import useGenerateFieldDefs from './useGenerateFieldDefs';
 
 export default function Index() {
 	const { url: threadOrderInfoUrl } = useThreadOrderInfo();
@@ -375,18 +377,18 @@ export default function Index() {
 					handleRemove={handleThreadOrderInfoEntryRemove}
 				/>
 				{/* <HandsonSpreadSheet
-						extraHeader={headerButtons}
-						title='Details'
-						form={form}
-						fieldName='order_info_entry'
-						fieldDefs={useGenerateFieldDefs({
-							copy: handleCopy,
-							remove: handleThreadOrderInfoEntryRemove,
-							watch: watch,
-						})}
-						handleAdd={handleThreadOrderInfoEntryAppend}
-						fields={threadOrderInfoEntryField}
-					/> */}
+					extraHeader={headerButtons}
+					title='Details'
+					form={form}
+					fieldName='order_info_entry'
+					fieldDefs={useGenerateFieldDefs({
+						copy: handleCopy,
+						remove: handleThreadOrderInfoEntryRemove,
+						watch: watch,
+					})}
+					handleAdd={handleThreadOrderInfoEntryAppend}
+					fields={threadOrderInfoEntryField}
+				/> */}
 
 				<Footer buttonClassName='!btn-primary' />
 			</form>

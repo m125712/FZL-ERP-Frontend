@@ -77,11 +77,11 @@ export default function Index(data) {
 				table: {
 					// headerRows: 1,
 
-					widths: [20, 35, 18, 35, 20, 27],
+					widths: [21, 35, 18, 35, 20, 27],
 					body: [
 						[
 							{
-								text: 'Challan No',
+								text: 'Challan',
 								bold: true,
 								fontSize: DEFAULT_FONT_SIZE - 3,
 							},
@@ -172,23 +172,30 @@ export default function Index(data) {
 								fontSize: DEFAULT_FONT_SIZE - 3,
 							},
 							{
-								text: 'Count',
+								text: 'C/L',
 								bold: true,
 								fontSize: DEFAULT_FONT_SIZE - 3,
 							},
 							{
-								text: `${Array.from(count).join(', ')}`,
+								text: `${Array.from(count).join(', ') + '-' + Array.from(length).join(', ')}`,
 								fontSize: DEFAULT_FONT_SIZE - 3,
 							},
 							{
-								text: 'Length',
+								text: `C/N: #${data?.packing_list_wise_rank}, ${data?.packing_number}`,
 								bold: true,
 								fontSize: DEFAULT_FONT_SIZE - 3,
+								colSpan: 2,
 							},
-							{
-								text: `${Array.from(length).join(', ')}`,
-								fontSize: DEFAULT_FONT_SIZE - 3,
-							},
+							{},
+							// {
+							// 	text: 'Length',
+							// 	bold: true,
+							// 	fontSize: DEFAULT_FONT_SIZE - 3,
+							// },
+							// {
+							// 	text: `${}`,
+							// 	fontSize: DEFAULT_FONT_SIZE - 3,
+							// },
 						],
 						[
 							{
@@ -199,7 +206,9 @@ export default function Index(data) {
 							{
 								text: `${Array.from(color).join(', ')}`,
 								fontSize: DEFAULT_FONT_SIZE - 3,
+								colSpan: 2,
 							},
+							{},
 							{
 								text: 'Shade',
 								bold: true,
@@ -209,13 +218,9 @@ export default function Index(data) {
 							{
 								text: `${Array.from(shade).join(', ')}`,
 								fontSize: DEFAULT_FONT_SIZE - 3,
-							},
-							{
-								text: `C/N: #${data?.packing_list_wise_rank}, ${data?.packing_number}`,
-								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 3,
 								colSpan: 2,
 							},
+
 							{},
 						],
 						[

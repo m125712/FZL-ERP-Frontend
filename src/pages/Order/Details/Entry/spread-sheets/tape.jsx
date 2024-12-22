@@ -1,14 +1,25 @@
 import React from 'react';
 
+import renderActions from '@/ui/Dynamic/HandsonSpreadSheet/_actions/render-actions';
 import TestSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet/test';
 
 const Tape = (
-	{ title, extraHeader, fieldName, form, handleAdd } = {
+	{
+		title,
+		extraHeader,
+		fieldName,
+		form,
+		handleAdd,
+		handleCopy,
+		handleRemove,
+	} = {
 		title: '',
 		extraHeader: null,
 		form: {},
 		fieldName: '',
 		handleAdd: () => {},
+		handleRemove: () => {},
+		handleCopy: () => {},
 	}
 ) => {
 	const columns = [
@@ -33,6 +44,7 @@ const Tape = (
 		{
 			data: 'party_price',
 		},
+		renderActions(handleRemove, handleCopy),
 	];
 	const data = form.watch(fieldName).map((item) => {
 		return {
@@ -52,6 +64,7 @@ const Tape = (
 		'Size (MTR)',
 		'Company (USD/MTR)',
 		'Party (USD/MTR)',
+		'Actions',
 	];
 	return (
 		<TestSpreadSheet

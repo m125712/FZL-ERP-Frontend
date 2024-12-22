@@ -16,7 +16,6 @@ import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
-import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 
 import nanoid from '@/lib/nanoid';
@@ -29,7 +28,6 @@ import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
 import OrderEntrySpreadsheet from './spreadsheets/order-entry-spreadsheet';
-import useGenerateFieldDefs from './useGenerateFieldDefs';
 
 export default function Index() {
 	const { url: threadOrderInfoUrl } = useThreadOrderInfo();
@@ -352,108 +350,31 @@ export default function Index() {
 	return (
 		<FormProvider {...form}>
 			{/* <HotKeys {...{ keyMap, handlers }}> */}
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					noValidate
-					className='flex flex-col gap-4'>
-					<Header
-						{...{
-							register,
-							errors,
-							control,
-							getValues,
-							Controller,
-							watch,
-						}}
-					/>
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				noValidate
+				className='flex flex-col gap-4'>
+				<Header
+					{...{
+						register,
+						errors,
+						control,
+						getValues,
+						Controller,
+						watch,
+					}}
+				/>
 
-					{/* <DynamicFormSpreadSheet
-						title='Details'
-						fieldArrayName='order_info_entry'
-						handelAppend={handleThreadOrderInfoEntryAppend}
-						handleRemove={handleThreadOrderInfoEntryRemove}
-						headerButtons={headerButtons}
-						columnsDefs={[
-							{
-								header: 'Color',
-								accessorKey: 'color',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Style',
-								accessorKey: 'style',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Count Length',
-								accessorKey: 'count_length_uuid',
-								type: 'select',
-								options: countLength || [],
-								readOnly: false,
-							},
-							{
-								header: 'Bleaching',
-								accessorKey: 'bleaching',
-								type: 'select',
-								options: bleaching,
-								readOnly: false,
-							},
-							{
-								header: 'Quantity',
-								accessorKey: 'quantity',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Company (USD/CONE)',
-								accessorKey: 'company_price',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Party (USD/CONE)',
-								accessorKey: 'party_price',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Remarks',
-								accessorKey: 'remarks',
-								type: 'text',
-								readOnly: false,
-							},
-
-							{
-								header: 'Actions',
-								type: 'action',
-							},
-						]}
-						{...{
-							formContext: {
-								register,
-								watch,
-								setValue,
-								getValues,
-								clearErrors,
-								errors,
-							},
-							fields: threadOrderInfoEntryField,
-							append: threadOrderInfoEntryAppend,
-							remove: threadOrderInfoEntryRemove,
-							update: threadOrderInfoEntryUpdate,
-						}}
-					/> */}
-
-					<OrderEntrySpreadsheet
-						extraHeader={headerButtons}
-						title='Details'
-						form={form}
-						fieldName='order_info_entry'
-						handleAdd={handleThreadOrderInfoEntryAppend}
-					/>
-					{/* <HandsonSpreadSheet
+				<OrderEntrySpreadsheet
+					extraHeader={headerButtons}
+					title='Details'
+					form={form}
+					fieldName='order_info_entry'
+					handleCopy={handleCopy}
+					handleAdd={handleThreadOrderInfoEntryAppend}
+					handleRemove={handleThreadOrderInfoEntryRemove}
+				/>
+				{/* <HandsonSpreadSheet
 						extraHeader={headerButtons}
 						title='Details'
 						form={form}
@@ -467,8 +388,8 @@ export default function Index() {
 						fields={threadOrderInfoEntryField}
 					/> */}
 
-					<Footer buttonClassName='!btn-primary' />
-				</form>
+				<Footer buttonClassName='!btn-primary' />
+			</form>
 			{/* </HotKeys> */}
 			<Suspense>
 				<DeleteModal

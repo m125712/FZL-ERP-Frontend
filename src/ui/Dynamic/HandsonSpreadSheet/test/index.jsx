@@ -1,7 +1,6 @@
-import HotTable, { HotColumn } from '@handsontable/react';
+import HotTable from '@handsontable/react';
 import { registerAllModules } from 'handsontable/registry';
 
-import CustomRenderer from '../custom-renderer';
 import SpreadSheetContainer from '../spreadsheet-container';
 
 registerAllModules();
@@ -52,25 +51,10 @@ const TestSpreadSheet = (
 				width='100%'
 				stretchH='all'
 				colHeaders={colHeaders}
-				columnSorting={true}
 				autoWrapRow={true}
 				autoWrapCol={true}
 				licenseKey='non-commercial-and-evaluation'
-				columns={columns}>
-				{/* {columns.map((col) => {
-					if (col.type === 'select') {
-						return (
-							<HotColumn data={col.data} width={250}>
-								<CustomRenderer
-									hot-renderer
-									field={col.data}
-									fieldName={fieldName}
-								/>
-							</HotColumn>
-						);
-					}
-				})} */}
-			</HotTable>
+				columns={columns}></HotTable>
 		</SpreadSheetContainer>
 	);
 };

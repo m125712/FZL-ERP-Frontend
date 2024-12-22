@@ -344,7 +344,7 @@ export default function Index() {
 			bleaching: field.bleaching,
 			quantity: field.quantity,
 			company_price: field.company_price,
-			party_price: field.company_price,
+			party_price: field.party_price,
 			remarks: field.remarks,
 		});
 	};

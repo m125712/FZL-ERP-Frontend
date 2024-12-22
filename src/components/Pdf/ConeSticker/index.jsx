@@ -6,13 +6,6 @@ import pdfMake from '..';
 export default function Index(data) {
 	const contentArray = Array(data?.quantity || 1).fill(data);
 	const fontSize = DEFAULT_FONT_SIZE - 3;
-	const item_description = {
-		text: data?.item_description + ' ' + data?.size + ' M',
-		alignment: 'center',
-		width: 68,
-		fontSize: fontSize,
-		margin: [0, 0, 0, 0],
-	};
 	const tableLayout = {
 		hLineWidth: function (i, node) {
 			return 0;

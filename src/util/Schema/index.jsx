@@ -2641,6 +2641,12 @@ export const DYEING_PLANNING_HEADOFFICE_NULL = {
 // * Dyeing Planning Batch schema*//
 
 export const DYEING_BATCH_SCHEMA = {
+	batch_type: STRING_REQUIRED,
+	order_info_uuid: STRING.when('batch_type', {
+		is: (batch_type) => batch_type === 'extra',
+		then: (Schema) => Schema.required('Required'),
+		otherwise: (Schema) => Schema.nullable(),
+	}),
 	machine_uuid: STRING_REQUIRED,
 	slot: NUMBER_REQUIRED.moreThan(0, 'Slot should be more than 0'),
 	production_date: STRING_REQUIRED,
@@ -2666,6 +2672,8 @@ export const DYEING_BATCH_SCHEMA = {
 };
 
 export const DYEING_BATCH_NULL = {
+	batch_type: 'normal',
+	order_info_uuid: null,
 	machine_uuid: null,
 	slot: null,
 	production_date: null,

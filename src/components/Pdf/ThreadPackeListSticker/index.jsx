@@ -18,25 +18,23 @@ const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 export default function Index(data) {
 	const nodeThread = [
 		getTable('style', 'Style'),
-		getTable('quantity', 'Qty(cone)', 'right'),
+		getTable('quantity', 'Qty(cone)'),
 	];
 	const node = nodeThread;
 	const shade = new Set();
 	const subStreat = new Set();
-	const count = new Set();
-	const length = new Set();
+	const countLength = new Set();
 	const color = new Set();
 
 	data?.packing_list_entry?.forEach((item) => {
 		shade.add(item.recipe_name);
-		subStreat.add(item.sub_streat);
-		count.add(item.item_description);
-		length.add(item.size);
+		subStreat.add(item.sub_streat.toUpperCase());
+		countLength.add(item.item_description + '-' + item.size);
 		color.add(item.color);
 	});
 
-	let { packing_list_entry } = data;
-	let totalQuantity = packing_list_entry?.reduce((acc, item) => {
+	const { packing_list_entry } = data;
+	const totalQuantity = packing_list_entry?.reduce((acc, item) => {
 		const quantity = parseInt(item.quantity, 10) || 0;
 		return acc + quantity;
 	}, 0);
@@ -77,7 +75,7 @@ export default function Index(data) {
 				table: {
 					// headerRows: 1,
 
-					widths: [21, 35, 18, 35, 20, 27],
+					widths: [21, 35, 12, 35, 13, 33],
 					body: [
 						[
 							{
@@ -163,7 +161,7 @@ export default function Index(data) {
 						],
 						[
 							{
-								text: 'Sub Streat',
+								text: 'S/S',
 								bold: true,
 								fontSize: DEFAULT_FONT_SIZE - 3,
 							},
@@ -177,7 +175,7 @@ export default function Index(data) {
 								fontSize: DEFAULT_FONT_SIZE - 3,
 							},
 							{
-								text: `${Array.from(count).join(', ') + '-' + Array.from(length).join(', ')}`,
+								text: `${Array.from(countLength).join(',\n ')}`,
 								fontSize: DEFAULT_FONT_SIZE - 3,
 							},
 							{
@@ -187,15 +185,6 @@ export default function Index(data) {
 								colSpan: 2,
 							},
 							{},
-							// {
-							// 	text: 'Length',
-							// 	bold: true,
-							// 	fontSize: DEFAULT_FONT_SIZE - 3,
-							// },
-							// {
-							// 	text: `${}`,
-							// 	fontSize: DEFAULT_FONT_SIZE - 3,
-							// },
 						],
 						[
 							{
@@ -227,7 +216,7 @@ export default function Index(data) {
 							{
 								table: {
 									headerRows: 1,
-									widths: ['*', '*'],
+									widths: ['*', 30],
 									body: [
 										TableHeader(
 											node,
@@ -237,11 +226,12 @@ export default function Index(data) {
 										...packing_list_entry.map((item) => [
 											{
 												text: item.style,
-												fontSize: DEFAULT_FONT_SIZE - 4,
+												fontSize: DEFAULT_FONT_SIZE - 3,
 											},
 											{
 												text: item.quantity,
-												fontSize: DEFAULT_FONT_SIZE - 4,
+												alignment: 'right',
+												fontSize: DEFAULT_FONT_SIZE - 3,
 											},
 										]),
 										[
@@ -250,13 +240,13 @@ export default function Index(data) {
 												alignment: 'right',
 
 												bold: true,
-												fontSize: DEFAULT_FONT_SIZE - 4,
+												fontSize: DEFAULT_FONT_SIZE - 3,
 											},
 											{
 												text: totalQuantity,
 												bold: true,
 												alignment: 'right',
-												fontSize: DEFAULT_FONT_SIZE - 4,
+												fontSize: DEFAULT_FONT_SIZE - 3,
 											},
 										],
 									],
@@ -271,9 +261,6 @@ export default function Index(data) {
 						],
 					],
 				},
-
-				// layout: 'lightHorizontalLines',
-				//layout: tableLayoutStyle,
 				layout: 'noBorders',
 			},
 		],

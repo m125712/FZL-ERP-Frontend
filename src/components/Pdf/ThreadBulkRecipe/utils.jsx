@@ -1,4 +1,5 @@
 import { FZL_LOGO } from '@/assets/img/base64';
+import { layouts } from 'chart.js';
 import { format } from 'date-fns';
 
 import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../ui';
@@ -33,6 +34,12 @@ export const getPageHeader = (batch) => {
 	const dyeing_updated_at = batch?.dyeing_updated_at
 		? getDateFormate(batch?.dyeing_updated_at)
 		: '';
+	const buyer = new Set();
+	const order_ref_no = new Set();
+	batch?.order_entry?.forEach((item) => {
+		buyer.add(item.buyer);
+		order_ref_no.add(item.order_ref_no);
+	});
 
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
@@ -69,52 +76,176 @@ export const getPageHeader = (batch) => {
 			// * Start of table
 			[
 				{
-					text: 'Yarn Qty (KG)',
-					bold: true,
-					color: PRIMARY_COLOR,
+					colSpan: 4,
+					table: {
+						widths: [75, 75, 75, 80, 80, 80],
+						headerRows: 1,
+						body: [
+							[
+								{
+									text: 'Buyer',
+									bold: true,
+								},
+								{
+									text: '',
+								},
+								{
+									text: 'Ref No',
+									bold: true,
+								},
+								{
+									text: '',
+								},
+								{
+									text: 'Batch No',
+									bold: true,
+								},
+								{
+									text: batch?.batch_id,
+								},
+							],
+							[
+								{
+									text: 'Order Ref No',
+									bold: true,
+								},
+								{
+									text: '',
+								},
+								{
+									text: 'Delv Dt',
+									bold: true,
+								},
+								{
+									text: '',
+								},
+								{
+									text: 'Date',
+									bold: true,
+								},
+								{
+									text: batch?.batch_id,
+								},
+							],
+							[
+								{
+									text: 'Shade',
+									bold: true,
+								},
+								{
+									text: '',
+								},
+								{
+									text: 'Yarn Type',
+									bold: true,
+								},
+								{
+									text: '',
+								},
+								{
+									text: 'Substrate',
+									bold: true,
+								},
+								{
+									text: batch?.batch_id,
+								},
+							],
+							[
+								{
+									text: 'Color',
+									bold: true,
+								},
+								{
+									text: '',
+								},
+								{
+									text: 'Yarn Type',
+									bold: true,
+								},
+								{
+									text: '',
+								},
+								{
+									text: 'Batch Weight',
+									bold: true,
+								},
+								{
+									text: batch?.batch_id,
+								},
+							],
+							[
+								{
+									text: 'Product',
+									bold: true,
+								},
+								{
+									text: '',
+								},
+								{
+									text: 'Lab Status',
+									bold: true,
+								},
+								{
+									text: '',
+								},
+								{
+									text: 'Slot',
+									bold: true,
+								},
+								{
+									text: batch?.batch_id,
+								},
+							],
+							[
+								{
+									text: 'Machine No',
+									bold: true,
+								},
+								{
+									text: '',
+								},
+								{
+									text: '',
+									bold: true,
+								},
+								{
+									text: '',
+								},
+								{
+									text: 'Volume',
+									bold: true,
+								},
+								{
+									text: batch?.batch_id,
+								},
+							],
+							[
+								{
+									text: 'Light Source',
+									bold: true,
+								},
+								{
+									text: '',
+								},
+								{
+									text: '',
+									bold: true,
+								},
+								{
+									text: '',
+								},
+								{
+									text: 'Fiber Type',
+									bold: true,
+								},
+								{
+									text: batch?.batch_id,
+								},
+							],
+						],
+					},
+					layout: 'noBorders',
 				},
-				{
-					text: `${batch?.total_yarn_quantity} / ${batch?.total_expected_weight}`,
-				},
-				{ text: 'Supervisor', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.dyeing_supervisor_name },
-			],
-			[
-				{ text: 'Liquor Ratio', bold: true, color: PRIMARY_COLOR },
-				{ text: `1:10` },
-				{ text: 'Machine', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.machine_name },
-			],
-			[
-				{ text: 'Volume', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.water_capacity * batch?.total_yarn_quantity },
-				{ text: 'Slot', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.slot === 0 ? '-' : 'Slot ' + batch?.slot },
-			],
-			[
-				{ text: 'Color', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.batch_entry[0]?.color },
-				{ text: 'Shift', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.shift },
-			],
-			[
-				{ text: 'Bleach', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.batch_entry[0]?.bleaching },
-				{ text: 'Operator', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.dyeing_operator_name },
-			],
-			[
-				{ text: 'Status', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.status },
-				{ text: 'Pass By', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.pass_by_name },
-			],
-
-			[
-				{ text: 'Reason', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.reason },
-				{ text: 'Category', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.category },
 			],
 		],
 	};

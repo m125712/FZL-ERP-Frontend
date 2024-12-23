@@ -5,7 +5,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, LinkOnly, Transfer } from '@/ui';
+import { BatchType, DateTime, LinkOnly, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -48,6 +48,12 @@ export default function Index() {
 						/>
 					);
 				},
+			},
+			{
+				accessorKey: 'batch_type',
+				header: 'Type',
+				enableColumnFilter: false,
+				cell: (info) => <BatchType value={info.getValue()} />,
 			},
 			{
 				accessorKey: 'color',

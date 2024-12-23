@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
+import BatchType from '@/ui/Others/BatchType';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
 
@@ -78,21 +79,7 @@ export default function Index() {
 				accessorKey: 'batch_type',
 				header: 'Type',
 				enableColumnFilter: false,
-				cell: (info) => {
-					const res = {
-						normal: 'badge badge-primary',
-						extra: 'badge badge-warning',
-					};
-					return (
-						<span
-							className={cn(
-								res[info.getValue()],
-								'badge-sm uppercase'
-							)}>
-							{info.getValue()}
-						</span>
-					);
-				},
+				cell: (info) => <BatchType value={info.getValue()} />,
 			},
 			{
 				accessorKey: 'production_date',

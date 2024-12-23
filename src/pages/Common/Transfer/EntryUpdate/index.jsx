@@ -69,21 +69,8 @@ export default function Index() {
 		{
 			dyeing_transfer_entry: yup.array().of(
 				yup.object().shape({
-					// sfg_uuid: STRING.when({
-					// 	is: () => orderSelected?.order_type === 'tape',
-					// 	then: (schema) => schema.required('Required'),
-					// 	otherwise: (schema) => schema.nullable(),
-					// }),
 					order_description_uuid: STRING_REQUIRED,
 					colors: yup.array().of(yup.string()).nullable(),
-					// trx_quantity_in_meter: NUMBER_DOUBLE.when({
-					// 	is: () => orderSelected?.order_type === 'tape',
-					// 	then: (schema) =>
-					// 		schema
-					// 			.required('Required')
-					// 			.moreThan(0, 'Must be greater than 0'),
-					// 	otherwise: (schema) => schema.nullable(),
-					// }),
 					trx_quantity: NUMBER_DOUBLE.required('Required').transform(
 						(value, originalValue) =>
 							String(originalValue).trim() === '' ? null : value
@@ -282,9 +269,6 @@ export default function Index() {
 							'Provided (Kg)',
 							'Stock (Kg)',
 							'Balance (Kg)',
-							// ...(orderSelected?.order_type === 'tape'
-							// 	? ['Style-Color', 'Trx Qty (M)']
-							// 	: []),
 							'Trx Quantity',
 							'Remarks',
 							'Action',
@@ -409,76 +393,6 @@ export default function Index() {
 												)
 										).toFixed(3)}
 									</td>
-
-									{/* {orderSelected?.order_type === 'tape' && (
-										<>
-											<td className={`w-36 ${rowClass}`}>
-												<FormField
-													label={`dyeing_transfer_entry[${index}].sfg_uuid`}
-													title='Style'
-													is_title_needed='false'
-													dynamicerror={
-														errors
-															?.dyeing_transfer_entry?.[
-															index
-														].sfg_uuid
-													}>
-													<Controller
-														name={`dyeing_transfer_entry[${index}].sfg_uuid`}
-														control={control}
-														render={({
-															field: { onChange },
-														}) => {
-															return (
-																<ReactSelect
-																	menuPortalTarget={
-																		document.body
-																	}
-																	placeholder='Select Style'
-																	options={
-																		orderSelected?.style_color_object
-																	}
-																	value={orderSelected?.style_color_object?.filter(
-																		(
-																			item
-																		) =>
-																			item.value ===
-																			getValues(
-																				`dyeing_transfer_entry[${index}].sfg_uuid`
-																			)
-																	)}
-																	onChange={(
-																		e
-																	) => {
-																		onChange(
-																			e.value
-																		);
-																	}}
-																	// isDisabled={updateCoilProd?.id !== null}
-																/>
-															);
-														}}
-													/>
-												</FormField>
-											</td>
-											<td className={`w-52 ${rowClass}`}>
-												<JoinInput
-													label={`dyeing_transfer_entry[${index}].trx_quantity_in_meter`}
-													is_title_needed='false'
-													// placeholder={`Max: ${}`}  // TODO: fix this with schema
-													unit='M'
-													dynamicerror={
-														errors
-															?.dyeing_transfer_entry?.[
-															index
-														].trx_quantity_in_meter
-													}
-													{...{ register, errors }}
-												/>
-											</td>
-										</>
-									)} */}
-
 									{/* Trx quantity*/}
 									<td className={`w-52 ${rowClass}`}>
 										<JoinInput

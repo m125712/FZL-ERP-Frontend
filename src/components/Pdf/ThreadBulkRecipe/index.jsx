@@ -82,7 +82,7 @@ const separateDark = (programs) => {
 	return { chemicalDark, chemicalHydrosa, neutralizer };
 };
 export default function Index(batch, shade_recipes_entries, programs) {
-	const headerHeight = 190;
+	const headerHeight = 220;
 	let footerHeight = 50;
 	const { batch_entry } = batch;
 

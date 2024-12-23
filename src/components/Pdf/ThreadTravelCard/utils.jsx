@@ -60,7 +60,9 @@ export const getPageHeader = (batch) => {
 		color.add(item.color);
 		count_length.add(item.count_length);
 		substrate.add(item.sub_streat);
-		delivery_date.add(getDateFormate(item.delivery_date));
+		delivery_date.add(
+			item.delivery_date ? getDateFormate(item.delivery_date) : ''
+		);
 		orderCreatedDate.add(getDateFormate(item.order_created_at));
 		bleach.add(item.bleaching);
 	});
@@ -146,7 +148,7 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text: created_at,
+									text: '',
 								},
 								{ text: 'Substrate', bold: true },
 								{ text: Array.from(substrate).join(', ') },

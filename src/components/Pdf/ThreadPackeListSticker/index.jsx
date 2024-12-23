@@ -20,8 +20,6 @@ export default function Index(data) {
 		shade.add(item.recipe_name);
 		subStreat.add(item.sub_streat.toUpperCase());
 		countLength.add(item.item_description + '-' + item.size);
-		subStreat.add(item.sub_streat);
-		countLength.add(item.item_description + '-' + item.size);
 		color.add(item.color);
 		style.add(item.style);
 		totalQuantity += parseInt(item.quantity, 10) || 0;

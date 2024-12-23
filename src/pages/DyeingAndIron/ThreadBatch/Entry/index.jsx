@@ -13,7 +13,6 @@ import {
 	useParams,
 	useSearchParams,
 } from 'react-router-dom';
-import * as yup from 'yup';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal, ProceedModal } from '@/components/Modal';
@@ -26,8 +25,7 @@ import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	DYEING_THREAD_BATCH_NULL,
 	DYEING_THREAD_BATCH_SCHEMA,
-	NUMBER,
-	STRING,
+	DYEING_THREAD_BATCH_SCHEMA_UPDATE,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
@@ -53,29 +51,10 @@ export default function Index() {
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const isUpdate = batch_uuid !== undefined;
-	const { data: batch, invalidateQuery: invalidateDyeingThreadBatchDetails } =
-		isUpdate
-			? useDyeingThreadBatchDetailsByUUID(batch_uuid, '?is_update=true')
-			: useDyeingThreadOrderBatch();
+
 	const [proceed, setProceed] = useState(false);
 	const [batchData, setBatchData] = useState(null);
 	const [batchEntry, setBatchEntry] = useState(null);
-
-	// * if can_trx_quty exist koray taholay etar
-	const SCHEMA = {
-		...DYEING_THREAD_BATCH_SCHEMA,
-		batch_entry: yup.array().of(
-			yup.object().shape({
-				quantity: NUMBER.nullable()
-					.max(yup.ref('max_quantity'), 'Beyond Balance Quantity')
-					.transform((value, originalValue) =>
-						String(originalValue).trim() === '' ? null : value
-					)
-					.max(yup.ref('max_quantity'), 'Beyond Balance Quantity'),
-				batch_remarks: STRING.nullable(),
-			})
-		),
-	};
 
 	const {
 		register,
@@ -89,12 +68,26 @@ export default function Index() {
 		watch,
 		setValue,
 		context: form,
-	} = useRHF(SCHEMA, {
-		...DYEING_THREAD_BATCH_NULL,
-		machine_uuid: machine_uuid,
-		slot: slot_no,
-		production_date: dyeing_date,
-	}); // TODO: need to fix the form validation for quantity
+	} = useRHF(
+		isUpdate
+			? DYEING_THREAD_BATCH_SCHEMA_UPDATE
+			: DYEING_THREAD_BATCH_SCHEMA,
+		{
+			...DYEING_THREAD_BATCH_NULL,
+			machine_uuid: machine_uuid,
+			slot: slot_no,
+			production_date: dyeing_date,
+		}
+	); // TODO: need to fix the form validation for quantity
+
+	const { data: batch, invalidateQuery: invalidateDyeingThreadBatchDetails } =
+		isUpdate
+			? useDyeingThreadBatchDetailsByUUID(batch_uuid, '?is_update=true')
+			: watch('batch_type') === 'extra' && watch('order_info_uuid')
+				? useDyeingThreadOrderBatch(
+						`batch_type=extra&order_info_uuid=${watch('order_info_uuid')}`
+					)
+				: useDyeingThreadOrderBatch();
 
 	// batch_entry
 	const [deleteEntry, setDeleteEntry] = useState({
@@ -138,26 +131,11 @@ export default function Index() {
 		}
 	}, [batch]);
 
-	// * Fetch initial data
-	// isUpdate
-	// 	? useFetchForRhfReset(
-	// 			`/thread/batch-details/by/${batch_uuid}?is_update=true`,
-	// 			batch_uuid,
-	// 			reset
-	// 		)
-	// 	: useFetchForRhfResetForPlanning(`/thread/order-batch`, reset);
-
-	const { data } = useGetURLData(
-		isUpdate
-			? `/thread/batch-details/by/${batch_uuid}?is_update=true`
-			: `/thread/order-batch`
-	);
-
 	useEffect(() => {
-		if (data) {
-			reset(data);
+		if (isUpdate) {
+			reset(batch); // Reset the form with updated data
 		}
-	}, [data]);
+	}, [isUpdate, batch, reset]);
 
 	const [minCapacity, setMinCapacity] = useState(0);
 	const [maxCapacity, setMaxCapacity] = useState(0);

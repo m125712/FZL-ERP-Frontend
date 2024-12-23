@@ -411,7 +411,11 @@ export const dyeingQK = {
 	threadBatchEntry: () => [...dyeingQK.all(), 'thread-batch-entry'],
 	threadBatchEntryByUUID: (uuid) => [...dyeingQK.threadBatchEntry(), uuid],
 	//* Thread Order Batch
-	threadOrderBatch: () => [...dyeingQK.all(), 'thread-order-batch'],
+	threadOrderBatch: (params) => [
+		...dyeingQK.all(),
+		'thread-order-batch',
+		params,
+	],
 	threadOrderBatchByUUID: (uuid) => [...dyeingQK.threadOrderBatch(), uuid],
 	//* Thread Batch Details
 	threadBatchDetails: () => [...dyeingQK.all(), 'thread-batch-details'],

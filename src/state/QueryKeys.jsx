@@ -394,7 +394,7 @@ export const dyeingQK = {
 	batch: () => [...dyeingQK.all(), 'batch'],
 	batchByUUID: (uuid) => [...dyeingQK.batch(), uuid],
 	//* Order batch
-	orderBatch: () => [...dyeingQK.all(), 'order-batch'],
+	orderBatch: (params) => [...dyeingQK.all(), 'order-batch', params],
 	orderBatchByUUID: (uuid) => [...dyeingQK.orderBatch(), uuid],
 	//* Batch Details
 	batchDetails: () => [...dyeingQK.all(), 'batch-details'],

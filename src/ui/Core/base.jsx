@@ -30,12 +30,17 @@ export const FormField = ({
 	dynamicerror = {},
 	children,
 	className,
+	labelClassName,
 }) => {
 	return (
 		<div className={cn('form-control w-full', className)}>
 			{is_title_needed === 'true' ? (
 				<label name={label} className='label pb-1 pt-0'>
-					<span className='label-text font-semibold capitalize text-secondary'>
+					<span
+						className={cn(
+							'label-text font-semibold capitalize text-secondary',
+							labelClassName
+						)}>
 						{title ? capitalize(title) : capitalize(label)}
 					</span>
 					{renderSubLabel(sub_label)}

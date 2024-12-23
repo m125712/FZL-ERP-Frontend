@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useOtherMachinesWithSlot } from '@/state/Other';
+import {
+	useOtherMachinesWithSlot,
+	useOtherOrderInfoValueLabel,
+} from '@/state/Other';
 import { format } from 'date-fns';
 
 import { DateInput } from '@/ui/Core';
@@ -28,6 +31,8 @@ export default function Header({
 			? format(new Date(watch('production_date')), 'yyyy-MM-dd')
 			: ''
 	);
+
+	const { data: orders } = useOtherOrderInfoValueLabel();
 
 	const res = machine?.find(
 		(item) => item.value == getValues('machine_uuid')
@@ -104,8 +109,9 @@ export default function Header({
 							<br />
 							<span>{`Batch Quantity (PCS): ${totalQuantity}`}</span>
 						</div>
-						<div className='min-w-52'>
+						<div className='flex w-[440px] gap-4 pr-4'>
 							<FormField
+								labelClassName={'text-white'}
 								label='batch_type'
 								title='Batch Type'
 								errors={errors}>
@@ -126,6 +132,7 @@ export default function Header({
 													const value = e.value;
 													onChange(value);
 												}}
+												isDisabled={isUpdate}
 											/>
 										);
 									}}
@@ -134,6 +141,7 @@ export default function Header({
 							<FormField
 								label='order_info_uuid'
 								title='O/N'
+								labelClassName={'text-white'}
 								errors={errors}>
 								<Controller
 									name='order_info_uuid'
@@ -142,8 +150,8 @@ export default function Header({
 										return (
 											<ReactSelect
 												placeholder='Select O/N'
-												options={batchType}
-												value={batchType?.filter(
+												options={orders}
+												value={orders?.filter(
 													(item) =>
 														item.value ==
 														getValues(

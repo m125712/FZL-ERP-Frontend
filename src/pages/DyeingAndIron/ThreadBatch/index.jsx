@@ -75,6 +75,26 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'batch_type',
+				header: 'Type',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const res = {
+						normal: 'badge badge-primary',
+						extra: 'badge badge-warning',
+					};
+					return (
+						<span
+							className={cn(
+								res[info.getValue()],
+								'badge-sm uppercase'
+							)}>
+							{info.getValue()}
+						</span>
+					);
+				},
+			},
+			{
 				accessorKey: 'production_date',
 				header: (
 					<div className='flex flex-col'>
@@ -82,7 +102,6 @@ export default function Index() {
 						<span>Date</span>
 					</div>
 				),
-				width: 'w-24',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime date={info.getValue()} isTime={false} />
@@ -193,11 +212,6 @@ export default function Index() {
 					const overrideAccess = haveAccess.includes(
 						'click_drying_status_override'
 					);
-					// overrideAccess
-					// 	? false
-					// 	: access
-					// 		? is_drying_complete === 'true'
-					// 		: true;
 					let isDisabled = false;
 					if (!overrideAccess) {
 						if (access) {

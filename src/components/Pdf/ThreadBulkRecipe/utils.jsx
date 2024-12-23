@@ -1,6 +1,6 @@
 import { FZL_LOGO } from '@/assets/img/base64';
 import { layouts } from 'chart.js';
-import { format } from 'date-fns';
+import { format, sub } from 'date-fns';
 
 import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../ui';
 import { company, getEmptyColumn } from '../utils';
@@ -36,9 +36,25 @@ export const getPageHeader = (batch) => {
 		: '';
 	const buyer = new Set();
 	const order_ref_no = new Set();
-	batch?.order_entry?.forEach((item) => {
-		buyer.add(item.buyer);
-		order_ref_no.add(item.order_ref_no);
+	const shade = new Set();
+	const color = new Set();
+	const count_length = new Set();
+	const substrate = new Set();
+	const delivery_date = new Set();
+	const orderCreatedDate = new Set();
+	const bleach = new Set();
+	const party = new Set();
+	batch?.batch_entry?.forEach((item) => {
+		party.add(item.party_name);
+		buyer.add(item.buyer_name);
+		order_ref_no.add(item.order_number);
+		shade.add(item.recipe_name);
+		color.add(item.color);
+		count_length.add(item.count_length);
+		substrate.add(item.sub_streat);
+		delivery_date.add(getDateFormate(item.delivery_date));
+		orderCreatedDate.add(getDateFormate(item.order_created_at));
+		bleach.add(item.bleaching);
 	});
 
 	return {
@@ -78,23 +94,23 @@ export const getPageHeader = (batch) => {
 				{
 					colSpan: 4,
 					table: {
-						widths: [75, 75, 75, 80, 80, 80],
+						widths: [70, 100, 75, 80, 80, 80],
 						headerRows: 1,
 						body: [
 							[
 								{
-									text: 'Buyer',
+									text: 'Party',
 									bold: true,
 								},
 								{
-									text: '',
+									text: `${Array.from(party).join(', ')}`,
 								},
 								{
-									text: 'Ref No',
+									text: 'Delv Dt',
 									bold: true,
 								},
 								{
-									text: '',
+									text: `${Array.from(delivery_date).join(', ')}`,
 								},
 								{
 									text: 'Batch No',
@@ -106,25 +122,25 @@ export const getPageHeader = (batch) => {
 							],
 							[
 								{
-									text: 'Order Ref No',
+									text: 'Order No',
 									bold: true,
 								},
 								{
-									text: '',
+									text: `${Array.from(order_ref_no).join(', ')}`,
 								},
 								{
-									text: 'Delv Dt',
+									text: 'Yarn Type',
 									bold: true,
 								},
 								{
-									text: '',
+									text: ``,
 								},
 								{
 									text: 'Date',
 									bold: true,
 								},
 								{
-									text: batch?.batch_id,
+									text: created_at,
 								},
 							],
 							[
@@ -133,10 +149,10 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text: '',
+									text: `${Array.from(shade).join(', ')}`,
 								},
 								{
-									text: 'Yarn Type',
+									text: 'Lab Status',
 									bold: true,
 								},
 								{
@@ -147,7 +163,7 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text: batch?.batch_id,
+									text: `${Array.from(substrate).join(', ')}`,
 								},
 							],
 							[
@@ -156,10 +172,10 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text: '',
+									text: `${Array.from(color).join(', ')}`,
 								},
 								{
-									text: 'Yarn Type',
+									text: '',
 									bold: true,
 								},
 								{
@@ -170,7 +186,10 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text: batch?.batch_id,
+									text:
+										batch?.total_yarn_quantity +
+										'/' +
+										batch?.total_expected_weight,
 								},
 							],
 							[
@@ -179,10 +198,10 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text: '',
+									text: `${Array.from(count_length).join(', ')}`,
 								},
 								{
-									text: 'Lab Status',
+									text: '',
 									bold: true,
 								},
 								{
@@ -193,7 +212,7 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text: batch?.batch_id,
+									text: 'Slot ' + batch?.slot,
 								},
 							],
 							[
@@ -202,7 +221,7 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text: '',
+									text: batch?.machine_name,
 								},
 								{
 									text: '',
@@ -216,7 +235,9 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text: batch?.batch_id,
+									text:
+										batch?.water_capacity *
+										batch?.total_yarn_quantity,
 								},
 							],
 							[
@@ -239,7 +260,7 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text: batch?.batch_id,
+									text: '',
 								},
 							],
 						],

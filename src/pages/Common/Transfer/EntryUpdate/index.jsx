@@ -69,21 +69,21 @@ export default function Index() {
 		{
 			dyeing_transfer_entry: yup.array().of(
 				yup.object().shape({
-					sfg_uuid: STRING.when({
-						is: () => orderSelected?.order_type === 'tape',
-						then: (schema) => schema.required('Required'),
-						otherwise: (schema) => schema.nullable(),
-					}),
+					// sfg_uuid: STRING.when({
+					// 	is: () => orderSelected?.order_type === 'tape',
+					// 	then: (schema) => schema.required('Required'),
+					// 	otherwise: (schema) => schema.nullable(),
+					// }),
 					order_description_uuid: STRING_REQUIRED,
 					colors: yup.array().of(yup.string()).nullable(),
-					trx_quantity_in_meter: NUMBER_DOUBLE.when({
-						is: () => orderSelected?.order_type === 'tape',
-						then: (schema) =>
-							schema
-								.required('Required')
-								.moreThan(0, 'Must be greater than 0'),
-						otherwise: (schema) => schema.nullable(),
-					}),
+					// trx_quantity_in_meter: NUMBER_DOUBLE.when({
+					// 	is: () => orderSelected?.order_type === 'tape',
+					// 	then: (schema) =>
+					// 		schema
+					// 			.required('Required')
+					// 			.moreThan(0, 'Must be greater than 0'),
+					// 	otherwise: (schema) => schema.nullable(),
+					// }),
 					trx_quantity: NUMBER_DOUBLE.required('Required').transform(
 						(value, originalValue) =>
 							String(originalValue).trim() === '' ? null : value
@@ -282,9 +282,9 @@ export default function Index() {
 							'Provided (Kg)',
 							'Stock (Kg)',
 							'Balance (Kg)',
-							...(orderSelected?.order_type === 'tape'
-								? ['Style-Color', 'Trx Qty (M)']
-								: []),
+							// ...(orderSelected?.order_type === 'tape'
+							// 	? ['Style-Color', 'Trx Qty (M)']
+							// 	: []),
 							'Trx Quantity',
 							'Remarks',
 							'Action',
@@ -410,7 +410,7 @@ export default function Index() {
 										).toFixed(3)}
 									</td>
 
-									{orderSelected?.order_type === 'tape' && (
+									{/* {orderSelected?.order_type === 'tape' && (
 										<>
 											<td className={`w-36 ${rowClass}`}>
 												<FormField
@@ -477,7 +477,7 @@ export default function Index() {
 												/>
 											</td>
 										</>
-									)}
+									)} */}
 
 									{/* Trx quantity*/}
 									<td className={`w-52 ${rowClass}`}>

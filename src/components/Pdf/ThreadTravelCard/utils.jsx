@@ -52,6 +52,7 @@ export const getPageHeader = (batch) => {
 	const orderCreatedDate = new Set();
 	const bleach = new Set();
 	const party = new Set();
+	const swatch_date = new Set();
 	batch?.batch_entry?.forEach((item) => {
 		party.add(item.party_name);
 		buyer.add(item.buyer_name);
@@ -62,6 +63,11 @@ export const getPageHeader = (batch) => {
 		substrate.add(item.sub_streat);
 		delivery_date.add(
 			item.delivery_date ? getDateFormate(item.delivery_date) : ''
+		);
+		swatch_date.add(
+			item.swatch_approval_date
+				? getDateFormate(item.swatch_approval_date)
+				: ''
 		);
 		orderCreatedDate.add(getDateFormate(item.order_created_at));
 		bleach.add(item.bleaching);
@@ -104,7 +110,7 @@ export const getPageHeader = (batch) => {
 				{
 					colSpan: 4,
 					table: {
-						widths: [50, 50, 50, 50, 50, 50, 70, 70],
+						widths: [50, 50, 50, 50, 50, 70, 70, 70],
 						headerRows: 1,
 						body: [
 							[
@@ -148,7 +154,7 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text: '',
+									text: Array.from(swatch_date).join(', '),
 								},
 								{ text: 'Substrate', bold: true },
 								{ text: Array.from(substrate).join(', ') },

@@ -469,7 +469,7 @@ export const PROPERTIES_SCHEMA = {
 	type: STRING_REQUIRED,
 	name: STRING_REQUIRED,
 	short_name: STRING_REQUIRED,
-	order_sheet_name: STRING_REQUIRED,
+	order_sheet_name: STRING.nullable(),
 	remarks: STRING.nullable(),
 };
 

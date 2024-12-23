@@ -196,7 +196,6 @@ export default function Header({
 												onChange={(e) => {
 													onChange(e.value);
 													setType(e.value);
-													console.log('hello');
 													reset({
 														...ORDER_NULL,
 														order_type: e.value,

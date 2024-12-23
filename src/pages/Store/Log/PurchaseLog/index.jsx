@@ -1,5 +1,5 @@
 import { lazy, useMemo, useState } from 'react';
-import { useMaterialInfo, usePurchaseLog } from '@/state/Store';
+import { usePurchaseLog } from '@/state/Store';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -13,7 +13,6 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = usePurchaseLog();
-	const { invalidateQuery: invalidateMaterial } = useMaterialInfo();
 	const info = new PageInfo('Store / Purchase', url);
 	const haveAccess = useAccess('store__log');
 
@@ -85,7 +84,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'remarks',
+				accessorKey: 'entry_remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),

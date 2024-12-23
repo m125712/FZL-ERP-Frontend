@@ -31,9 +31,6 @@ export default function Index() {
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
-	console.log({
-		data,
-	});
 	return (
 		<div className='space-y-8 py-4'>
 			<iframe

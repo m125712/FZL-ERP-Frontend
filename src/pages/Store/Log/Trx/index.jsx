@@ -1,17 +1,18 @@
+import { lazy, useMemo, useState } from 'react';
+import { useMaterialTrx } from '@/state/Store';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useMaterialInfo, useMaterialTrx } from '@/state/Store';
-import { DateTime, EditDelete, SectionName } from '@/ui';
+import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useMaterialTrx();
-	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const info = new PageInfo('Store / Transfer', url);
 	const haveAccess = useAccess('store__log');
 
@@ -24,10 +25,15 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'trx_to',
+				accessorFn: (row) => {
+					return row?.trx_to
+						.replace(/_/g, ' ')
+						.replace(/^\w/, (c) => c.toUpperCase());
+				},
+				id: 'trx_to',
 				header: 'Section',
 				enableColumnFilter: false,
-				cell: (info) => <SectionName section={info.getValue()} />,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'trx_quantity',
@@ -92,7 +98,6 @@ export default function Index() {
 		],
 		[data]
 	);
-	
 
 	// Update
 	const [updateMaterialTrx, setUpdateMaterialTrx] = useState({

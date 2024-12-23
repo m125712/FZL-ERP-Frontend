@@ -36,8 +36,10 @@ export default function Index() {
 
 	useEffect(() => {
 		if (data && data?.packing_list_entry) {
-			if (data?.item_for === 'thread') {
-				console.log('here');
+			if (
+				data?.item_for === 'thread' ||
+				data?.item_for === 'sample_thread'
+			) {
 				Pdf(data)?.getDataUrl((dataUrl) => {
 					setData2(dataUrl);
 				});

@@ -103,8 +103,6 @@ export default function Information({ data }) {
 
 	const { data: pi } = useOtherPiValues();
 
-	console.log(pi?.filter((pi) => pi_uuids?.includes(pi?.value)));
-
 	const renderItems = () => {
 		const basicInfo = [
 			{

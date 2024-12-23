@@ -17,7 +17,6 @@ export default function Index() {
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
-	console.log(data);
 
 	const columns = useMemo(
 		() => [

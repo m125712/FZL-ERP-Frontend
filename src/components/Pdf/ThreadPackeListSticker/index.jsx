@@ -1,45 +1,29 @@
-import Table from '@/pages/Planning/FinishingBatch/Details/Table';
 import { format } from 'date-fns';
-import { color } from 'framer-motion';
-import { get } from 'react-hook-form';
 
-import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
-import {
-	CUSTOM_PAGE_THREAD_STICKER,
-	getTable,
-	TableHeader,
-} from '@/components/Pdf/utils';
+import { DEFAULT_FONT_SIZE } from '@/components/Pdf/ui';
+import { CUSTOM_PAGE_THREAD_STICKER } from '@/components/Pdf/utils';
 
 import pdfMake from '..';
 import { generateBarcodeAsBase64 } from './Barcode';
 import { getPageFooter } from './utils';
 
-const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
+const getDateFormate = (date) => format(new Date(date), 'dd/MM/yy');
 export default function Index(data) {
-	const nodeThread = [
-		getTable('style', 'Style'),
-		getTable('quantity', 'Qty(cone)', 'right'),
-	];
-	const node = nodeThread;
 	const shade = new Set();
 	const subStreat = new Set();
-	const count = new Set();
-	const length = new Set();
+	const countLength = new Set();
 	const color = new Set();
+	const style = new Set();
+	let totalQuantity = 0;
 
 	data?.packing_list_entry?.forEach((item) => {
 		shade.add(item.recipe_name);
 		subStreat.add(item.sub_streat);
-		count.add(item.item_description);
-		length.add(item.size);
+		countLength.add(item.item_description + '-' + item.size);
 		color.add(item.color);
+		style.add(item.style);
+		totalQuantity += parseInt(item.quantity, 10) || 0;
 	});
-
-	let { packing_list_entry } = data;
-	let totalQuantity = packing_list_entry?.reduce((acc, item) => {
-		const quantity = parseInt(item.quantity, 10) || 0;
-		return acc + quantity;
-	}, 0);
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		...CUSTOM_PAGE_THREAD_STICKER({
@@ -73,207 +57,99 @@ export default function Index(data) {
 				alignment: 'center',
 				colSpan: 6,
 			},
+
 			{
 				table: {
-					// headerRows: 1,
-
-					widths: [21, 35, 18, 35, 20, 27],
+					widths: ['*', '*', '*'],
 					body: [
 						[
 							{
-								text: 'Challan',
-								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 3,
-							},
-							{
 								text: '',
-								fontSize: DEFAULT_FONT_SIZE - 3,
-							},
-							{
-								text: 'O/N',
 								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 3,
 							},
 							{
-								text: `${data?.order_number}`,
-
-								fontSize: DEFAULT_FONT_SIZE - 3,
-							},
-							{
-								text: 'Date',
+								text: data?.order_number,
 								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 3,
 							},
 							{
-								text: `${getDateFormate(data?.created_at)}`,
-
-								fontSize: DEFAULT_FONT_SIZE - 3,
+								text: getDateFormate(data?.created_at),
+								bold: true,
 							},
 						],
 						[
 							{
-								text: 'Factory',
+								text: `${
+									Array.from(countLength).join(', ') +
+									' #' +
+									Array.from(subStreat).join(', ')
+								}`,
 								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 3,
-							},
-							{
-								text: `${data?.factory_name}`,
-
-								fontSize: DEFAULT_FONT_SIZE - 3,
-								colSpan: 5,
-							},
-							{},
-							{},
-							{},
-							{},
-						],
-						[
-							{
-								text: 'Party',
-								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 3,
-							},
-							{
-								text: `${data?.party_name}`,
-
-								fontSize: DEFAULT_FONT_SIZE - 3,
-								colSpan: 5,
-							},
-							{},
-							{},
-							{},
-							{},
-						],
-						[
-							{
-								text: 'Buyer',
-								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 3,
-							},
-							{
-								text: `${data?.buyer_name}`,
-
-								fontSize: DEFAULT_FONT_SIZE - 3,
-								colSpan: 5,
-							},
-							{},
-							{},
-							{},
-							{},
-						],
-						[
-							{
-								text: 'Sub Streat',
-								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 3,
-							},
-							{
-								text: `${Array.from(subStreat).join(', ')}`,
-								fontSize: DEFAULT_FONT_SIZE - 3,
-							},
-							{
-								text: 'C/L',
-								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 3,
-							},
-							{
-								text: `${Array.from(count).join(', ') + '-' + Array.from(length).join(', ')}`,
-								fontSize: DEFAULT_FONT_SIZE - 3,
-							},
-							{
-								text: `C/N: #${data?.packing_list_wise_rank}, ${data?.packing_number}`,
-								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 3,
-								colSpan: 2,
-							},
-							{},
-							// {
-							// 	text: 'Length',
-							// 	bold: true,
-							// 	fontSize: DEFAULT_FONT_SIZE - 3,
-							// },
-							// {
-							// 	text: `${}`,
-							// 	fontSize: DEFAULT_FONT_SIZE - 3,
-							// },
-						],
-						[
-							{
-								text: 'Color',
-								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 3,
-							},
-							{
-								text: `${Array.from(color).join(', ')}`,
-								fontSize: DEFAULT_FONT_SIZE - 3,
 								colSpan: 2,
 							},
 							{},
 							{
-								text: 'Shade',
+								text: `${totalQuantity} cone`,
 								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 3,
 							},
+						],
 
+						[
 							{
-								text: `${Array.from(shade).join(', ')}`,
-								fontSize: DEFAULT_FONT_SIZE - 3,
-								colSpan: 2,
+								text: `${Array.from(color).join(', ')} - (${Array.from(shade).join(', ')})`,
+								bold: true,
+								colSpan: 3,
 							},
-
+							{},
 							{},
 						],
 						[
 							{
-								table: {
-									headerRows: 1,
-									widths: ['*', '*'],
-									body: [
-										TableHeader(
-											node,
-											DEFAULT_FONT_SIZE - 3,
-											'#000000'
-										),
-										...packing_list_entry.map((item) => [
-											{
-												text: item.style,
-												fontSize: DEFAULT_FONT_SIZE - 4,
-											},
-											{
-												text: item.quantity,
-												fontSize: DEFAULT_FONT_SIZE - 4,
-											},
-										]),
-										[
-											{
-												text: `Total`,
-												alignment: 'right',
-
-												bold: true,
-												fontSize: DEFAULT_FONT_SIZE - 4,
-											},
-											{
-												text: totalQuantity,
-												bold: true,
-												alignment: 'right',
-												fontSize: DEFAULT_FONT_SIZE - 4,
-											},
-										],
-									],
-								},
-								colSpan: 6,
+								text: Array.from(style).join(', '),
+								bold: true,
+								colSpan: 3,
 							},
 							{},
 							{},
+						],
+						[
+							{
+								text: '\n',
+								bold: true,
+								colSpan: 3,
+							},
 							{},
+							{},
+						],
+						[
+							{
+								text: data?.buyer_name,
+								bold: true,
+								colSpan: 3,
+							},
+							{},
+							{},
+						],
+						[
+							{
+								text: data?.party_name,
+								bold: true,
+								colSpan: 3,
+							},
+							{},
+							{},
+						],
+						[
+							{
+								text: data?.factory_name,
+								bold: true,
+								colSpan: 3,
+							},
 							{},
 							{},
 						],
 					],
 				},
 
-				// layout: 'lightHorizontalLines',
-				//layout: tableLayoutStyle,
 				layout: 'noBorders',
 			},
 		],

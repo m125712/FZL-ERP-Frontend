@@ -28,7 +28,6 @@ const Index = ({ initial_orders }) => {
 		setEntries(allEntries);
 	}, [initial_orders]); // include `initial_orders` as a dependency
 
-	console.log(initial_orders);
 	const sliderQuantity = entrys.reduce(
 		(totals, item) => {
 			totals.Quantity += parseFloat(item.quantity) || 0;

@@ -55,7 +55,6 @@ export default function Header({
 		</div>
 	);
 
-	console.log('asdasd');
 	return (
 		<SectionEntryBody title='LC Information'>
 			<div className='flex flex-col gap-2'>

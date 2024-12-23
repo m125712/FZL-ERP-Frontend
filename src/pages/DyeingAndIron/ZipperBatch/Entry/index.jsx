@@ -1,4 +1,11 @@
-import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+	Suspense,
+	use,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import {
 	useDyeingBatch,
 	useDyeingBatchDetailsByUUID,
@@ -21,7 +28,11 @@ import { ShowLocalToast } from '@/components/Toast';
 
 import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
-import { DYEING_BATCH_NULL, DYEING_BATCH_SCHEMA } from '@util/Schema';
+import {
+	DYEING_BATCH_NULL,
+	DYEING_BATCH_SCHEMA,
+	DYEING_BATCH_SCHEMA_UPDATE,
+} from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
 import { Columns } from './columns';
@@ -42,11 +53,9 @@ export default function Index() {
 	} = useDyeingBatch();
 
 	const { batch_uuid } = useParams();
+
 	const isUpdate = batch_uuid !== undefined;
-	const { data, invalidateQuery: invalidateNewDyeingZipperBatchEntry } =
-		isUpdate
-			? useDyeingBatchDetailsByUUID(batch_uuid, '?is_update=true')
-			: useDyeingOrderBatch();
+
 	const { user } = useAuth();
 	const navigate = useNavigate();
 
@@ -66,12 +75,13 @@ export default function Index() {
 		watch,
 		setValue,
 		context: form,
-	} = useRHF(DYEING_BATCH_SCHEMA, {
+	} = useRHF(isUpdate ? DYEING_BATCH_SCHEMA_UPDATE : DYEING_BATCH_SCHEMA, {
 		...DYEING_BATCH_NULL,
 		production_date: dyeing_date,
 		machine_uuid,
 		slot: slot_no,
 	});
+
 	const { fields: BatchOrdersField, remove: BatchOrdersFieldRemove } =
 		useFieldArray({
 			control,
@@ -82,6 +92,15 @@ export default function Index() {
 		control,
 		name: 'new_dyeing_batch_entry',
 	});
+
+	const { data, invalidateQuery: invalidateNewDyeingZipperBatchEntry } =
+		isUpdate
+			? useDyeingBatchDetailsByUUID(batch_uuid, '?is_update=true')
+			: watch('batch_type') === 'extra' && watch('order_info_uuid')
+				? useDyeingOrderBatch(
+						`batch_type=extra&order_info_uuid=${watch('order_info_uuid')}`
+					)
+				: useDyeingOrderBatch();
 
 	useEffect(() => {
 		if (isUpdate) {
@@ -265,6 +284,7 @@ export default function Index() {
 				remarks: item.remarks,
 				created_at,
 			}));
+
 		setBatchData(batch_data); // * use for modal
 		setBatchEntry(dyeing_batch_entry); // * use for modal
 

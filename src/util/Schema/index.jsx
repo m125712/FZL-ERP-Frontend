@@ -2653,22 +2653,58 @@ export const DYEING_BATCH_SCHEMA = {
 	remarks: STRING.nullable(),
 	dyeing_batch_entry: yup.array().of(
 		yup.object().shape({
-			quantity: NUMBER.nullable().max(
-				yup.ref('max_quantity'),
-				`Beyond Max Quantity`
-			),
+			quantity: NUMBER.when('batch_type', {
+				is: (batch_type) => batch_type === 'extra',
+				then: (Schema) => Schema.nullable(),
+				otherwise: (Schema) =>
+					Schema.max(yup.ref('max_quantity'), `Beyond Max Quantity`),
+			}),
 			remarks: STRING.nullable(),
+			batch_type: STRING.nullable(),
 		})
 	),
-	new_dyeing_batch_entry: yup.array().of(
+};
+export const DYEING_BATCH_SCHEMA_UPDATE = {
+	batch_type: STRING_REQUIRED,
+	order_info_uuid: STRING.when('batch_type', {
+		is: (batch_type) => batch_type === 'extra',
+		then: (Schema) => Schema.required('Required'),
+		otherwise: (Schema) => Schema.nullable(),
+	}),
+	machine_uuid: STRING_REQUIRED,
+	slot: NUMBER_REQUIRED.moreThan(0, 'Slot should be more than 0'),
+	production_date: STRING_REQUIRED,
+	remarks: STRING.nullable(),
+	dyeing_batch_entry: yup.array().of(
 		yup.object().shape({
-			quantity: NUMBER.nullable().max(
-				yup.ref('max_quantity'),
-				`Beyond Max Quantity`
-			),
+			quantity: NUMBER.when('batch_type', {
+				is: (batch_type) => batch_type === 'extra',
+				then: (Schema) => Schema.nullable(),
+				otherwise: (Schema) =>
+					Schema.max(yup.ref('max_quantity'), `Beyond Max Quantity`),
+			}),
 			remarks: STRING.nullable(),
+			batch_type: STRING.nullable(),
 		})
 	),
+	new_dyeing_batch_entry: yup
+		.array()
+		.of(
+			yup.object().shape({
+				quantity: NUMBER.when('batch_type', {
+					is: (batch_type) => batch_type === 'extra',
+					then: (Schema) => Schema.nullable(),
+					otherwise: (Schema) =>
+						Schema.max(
+							yup.ref('max_quantity'),
+							`Beyond Max Quantity`
+						),
+				}),
+				remarks: STRING.nullable(),
+				batch_type: STRING.nullable(),
+			})
+		)
+		.optional(),
 };
 
 export const DYEING_BATCH_NULL = {

@@ -104,10 +104,10 @@ export const useDyeingThreadBatchByUUID = (uuid) =>
 		url: `/thread/batch/${uuid}`,
 	});
 //* Thread Order Batch
-export const useDyeingThreadOrderBatch = () =>
+export const useDyeingThreadOrderBatch = (params) =>
 	createGlobalState({
-		queryKey: dyeingQK.threadOrderBatch(),
-		url: '/thread/order-batch',
+		queryKey: dyeingQK.threadOrderBatch(params),
+		url: params ? `/thread/order-batch?${params}` : '/thread/order-batch',
 	});
 export const useDyeingThreadOrderBatchByUUID = (uuid) =>
 	createGlobalState({

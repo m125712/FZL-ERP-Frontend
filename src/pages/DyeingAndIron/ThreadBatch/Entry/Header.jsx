@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useOtherMachinesWithSlot } from '@/state/Other';
+import { useOtherMachinesWithSlot, useThreadOrder } from '@/state/Other';
 import { format } from 'date-fns';
 
 import { DateInput } from '@/ui/Core';
@@ -27,6 +27,11 @@ export default function Header({
 			? format(new Date(watch('production_date')), 'yyyy-MM-dd')
 			: ''
 	);
+	const { data: orders } = useThreadOrder();
+	const batchType = [
+		{ value: 'normal', label: 'Normal' },
+		{ value: 'extra', label: 'Extra' },
+	];
 
 	const res = machine?.find(
 		(item) => item.value == getValues('machine_uuid')
@@ -78,23 +83,90 @@ export default function Header({
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody
-				title={
-					<div>
-						<span>{`${getValues('batch_id') ? `Batch ID: ${getValues('batch_id')}` : 'Entry New Batch'}`}</span>
-						<br />
-						<span>{`Machine Capacity (KG): ${res?.min_capacity || 0} - 
+				header={
+					<div className='flex w-full items-center justify-between py-2'>
+						<div>
+							<span>{`${getValues('batch_id') ? `Batch ID: ${getValues('batch_id')}` : 'Entry New Batch'}`}</span>
+							<br />
+							<span>{`Machine Capacity (KG): ${res?.min_capacity || 0} - 
 														${res?.max_capacity || 0}`}</span>
-						<br />
-						<span
-							className={cn(
-								totalWeight > parseFloat(res?.max_capacity) ||
-									totalWeight < parseFloat(res?.min_capacity)
-									? 'text-error'
-									: ''
-							)}>{`Batch Quantity (KG): ${Number(totalWeight).toFixed(3)}`}</span>
-						<br />
-						<span>{`Batch Quantity (Cone): ${totalQuantity}`}</span>
-						<br />
+							<br />
+							<span
+								className={cn(
+									totalWeight >
+										parseFloat(res?.max_capacity) ||
+										totalWeight <
+											parseFloat(res?.min_capacity)
+										? 'text-error'
+										: ''
+								)}>{`Batch Quantity (KG): ${Number(totalWeight).toFixed(3)}`}</span>
+							<br />
+							<span>{`Batch Quantity (Cone): ${totalQuantity}`}</span>
+						</div>
+						<div className='flex w-[440px] gap-4 pr-4'>
+							<FormField
+								labelClassName={'text-white'}
+								label='batch_type'
+								title='Batch Type'
+								errors={errors}>
+								<Controller
+									name='batch_type'
+									control={control}
+									render={({ field: { onChange } }) => {
+										return (
+											<ReactSelect
+												placeholder='Select Batch Type'
+												options={batchType}
+												value={batchType?.filter(
+													(item) =>
+														item.value ==
+														getValues('batch_type')
+												)}
+												onChange={(e) => {
+													const value = e.value;
+													onChange(value);
+												}}
+												isDisabled={isUpdate}
+											/>
+										);
+									}}
+								/>
+							</FormField>
+							<FormField
+								label='order_info_uuid'
+								title='O/N'
+								labelClassName={'text-white'}
+								errors={errors}>
+								<Controller
+									name='order_info_uuid'
+									control={control}
+									render={({ field: { onChange } }) => {
+										return (
+											<ReactSelect
+												placeholder='Select O/N'
+												options={orders}
+												value={orders?.filter(
+													(item) =>
+														item.value ==
+														getValues(
+															'order_info_uuid'
+														)
+												)}
+												onChange={(e) => {
+													const value = e.value;
+													onChange(value);
+												}}
+												isDisabled={
+													isUpdate ||
+													getValues('batch_type') ==
+														'normal'
+												}
+											/>
+										);
+									}}
+								/>
+							</FormField>
+						</div>
 					</div>
 				}>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>

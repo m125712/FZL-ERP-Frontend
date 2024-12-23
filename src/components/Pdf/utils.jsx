@@ -29,7 +29,7 @@ export const CUSTOM_PAGE = ({
 	footerHeight,
 }) => {
 	let width = 290;
-	let height = 181;
+	let height = 141;
 
 	return {
 		pageSize: { width, height },

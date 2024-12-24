@@ -1,6 +1,7 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useOtherMachines } from '@/state/Other';
 import { useDyeingCone } from '@/state/Thread';
+import { BookOpen } from 'lucide-react';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -11,6 +12,7 @@ import PageInfo from '@/util/PageInfo';
 
 const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
+const PolyTransfer = lazy(() => import('./PolyTransfer'));
 
 export default function Index() {
 	const { data, url, isLoading } = useDyeingCone();
@@ -172,7 +174,23 @@ export default function Index() {
 			// },
 
 			////
-
+			{
+				accessorKey: 'action',
+				header: 'Sticker',
+				enableColumnFilter: false,
+				enableSorting: false,
+				width: 'w-8',
+				cell: (info) => {
+					return (
+						<button
+							type='button'
+							className='btn btn-accent btn-sm font-semibold text-white shadow-md'
+							onClick={() => handleUpdate(info.row.index)}>
+							<BookOpen />
+						</button>
+					);
+				},
+			},
 			// * created_at
 			{
 				accessorKey: 'created_at',
@@ -225,6 +243,20 @@ export default function Index() {
 	// 	const { uuid } = data[idx];
 	// 	navigate(`/thread/coning/${uuid}/update`);
 	// };
+	const [update, setUpdate] = useState({
+		uuid: null,
+		quantity: null,
+	});
+	const handleUpdate = (idx) => {
+		const val = data[idx];
+
+		setUpdate((prev) => ({
+			...prev,
+			...val,
+		}));
+
+		window['polyModal'].showModal();
+	};
 
 	const [coningProd, setConingProd] = useState({
 		uuid: null,
@@ -298,6 +330,15 @@ export default function Index() {
 					{...{
 						coningTrx,
 						setConingTrx,
+					}}
+				/>
+			</Suspense>
+			<Suspense>
+				<PolyTransfer
+					modalId={'polyModal'}
+					{...{
+						update,
+						setUpdate,
 					}}
 				/>
 			</Suspense>

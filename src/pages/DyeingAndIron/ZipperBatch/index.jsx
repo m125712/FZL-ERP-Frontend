@@ -21,7 +21,7 @@ export default function Index() {
 			{
 				accessorKey: 'batch_id',
 				header: 'Batch ID',
-				enableColumnFilter: false,
+				// enableColumnFilter: false,
 				cell: (info) => (
 					<LinkWithCopy
 						title={info.getValue()}
@@ -31,21 +31,28 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'order_numbers',
+				accessorFn: (row) => {
+					return row.order_numbers
+						.map((order_number) => order_number)
+						.join(', ');
+				},
+				id: 'order_numbers',
 				header: 'O/N',
 				width: 'w-28',
-				enableColumnFilter: false,
+				// enableColumnFilter: false,
 				cell: (info) => {
-					return info?.getValue()?.map((order_number) => {
-						return (
-							<LinkWithCopy
-								key={order_number}
-								title={order_number}
-								id={order_number}
-								uri='/order/details'
-							/>
-						);
-					});
+					return info?.row?.original?.order_numbers?.map(
+						(order_number) => {
+							return (
+								<LinkWithCopy
+									key={order_number}
+									title={order_number}
+									id={order_number}
+									uri='/order/details'
+								/>
+							);
+						}
+					);
 				},
 			},
 			{

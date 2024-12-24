@@ -41,7 +41,10 @@ export const Columns = ({
 			header: 'Recipe',
 			enableColumnFilter: true,
 			width: 'w-36',
-			cell: (info) => info.getValue(),
+			cell: (info) =>
+				info.row.original.order_type == 'slider'
+					? '--'
+					: info.getValue(),
 		},
 		{
 			accessorKey: 'order_type',

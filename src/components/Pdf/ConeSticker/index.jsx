@@ -6,6 +6,10 @@ import pdfMake from '..';
 export default function Index(data) {
 	const contentArray = Array(data?.quantity || 1).fill(data);
 	const fontSize = DEFAULT_FONT_SIZE - 4;
+	const count_length = data?.count_length
+		? data?.count_length + 'M'
+		: data?.item_description + ' ' + data?.size + ' M';
+	const ID = data?.packing_number ? data?.packing_number : data?.batch_number;
 	const tableLayout = {
 		hLineWidth: function (i, node) {
 			return 0;
@@ -16,6 +20,9 @@ export default function Index(data) {
 		paddingTop: function (i) {
 			return i === 0 ? 37 : 0;
 		},
+		paddingBottom: function (i) {
+			return i === 0;
+		},
 	};
 	const contents = contentArray.map((index) => {
 		return {
@@ -24,36 +31,24 @@ export default function Index(data) {
 			table: {
 				widths: [71, 71, 71],
 				body: [
-					// * item description
+					// * count length
 					[
 						{
-							text:
-								data?.item_description +
-								' ' +
-								data?.size +
-								' M',
+							text: count_length,
 							alignment: 'center',
 							fontSize: fontSize + 2,
 							bold: true,
 						},
 
 						{
-							text:
-								data?.item_description +
-								' ' +
-								data?.size +
-								' M',
+							text: count_length,
 							alignment: 'center',
 							fontSize: fontSize + 2,
 							bold: true,
 						},
 
 						{
-							text:
-								data?.item_description +
-								' ' +
-								data?.size +
-								' M',
+							text: count_length,
 							alignment: 'center',
 							fontSize: fontSize + 2,
 							bold: true,
@@ -102,22 +97,22 @@ export default function Index(data) {
 						},
 					],
 
-					// * packing number
+					// * packing number/batch number
 					[
 						{
-							text: data?.packing_number,
+							text: ID,
 							alignment: 'center',
 							fontSize: fontSize,
 						},
 
 						{
-							text: data?.packing_number,
+							text: ID,
 							alignment: 'center',
 							fontSize: fontSize,
 						},
 
 						{
-							text: data?.packing_number,
+							text: ID,
 							alignment: 'center',
 							fontSize: fontSize,
 						},

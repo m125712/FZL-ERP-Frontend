@@ -103,12 +103,21 @@ export default function Index({ dyeing_batch_entry }) {
 		],
 		[dyeing_batch_entry]
 	);
-
+	const totalQty = dyeing_batch_entry?.reduce(
+		(a, b) => a + Number(b.quantity),
+		0
+	);
 	return (
 		<ReactTableTitleOnly
 			title='Details'
 			data={dyeing_batch_entry}
-			columns={columns}
-		/>
+			columns={columns}>
+			<tr className='text-sm'>
+				<td colSpan='7' className='py-2 text-right'>
+					Total QTY
+				</td>
+				<td className='pl-3 text-left font-semibold'>{totalQty}</td>
+			</tr>
+		</ReactTableTitleOnly>
 	);
 }

@@ -78,11 +78,11 @@ export const getPageHeader = (batch) => {
 					colSpan: 2,
 					text: [
 						{
-							text: 'Bulk Recipe\n',
+							text: `Bulk Recipe #${batch?.batch_type}\n`,
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
-						`Batch No: ${batch?.batch_id}\n`,
+						`B/N: ${batch?.batch_id}\n`,
 						`Date: ${created_at}\n`,
 					],
 					alignment: 'right',

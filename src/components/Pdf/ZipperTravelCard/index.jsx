@@ -1,8 +1,4 @@
-import {
-	DEFAULT_FONT_SIZE,
-	tableLayoutStyle,
-	xMargin,
-} from '@/components/Pdf/ui';
+import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
 import pdfMake from '..';
@@ -11,8 +7,8 @@ import { getPageFooter, getPageHeader } from './utils';
 const node = [
 	getTable('order_number', 'O/N'),
 	getTable('item_description', 'Description'),
-	getTable('quantity', 'Qty', 'right'),
-	getTable('production_quantity_in_kg', 'Production', 'right'),
+	getTable('quantity', 'Quantity (pcs)', 'right'),
+	getTable('production_quantity_in_kg', 'Production (KG)', 'right'),
 ];
 
 export default function Index(batch) {

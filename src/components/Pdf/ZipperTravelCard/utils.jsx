@@ -31,7 +31,7 @@ export const getPageHeader = (batch) => {
 					colSpan: 2,
 					text: [
 						{
-							text: 'Travel Card\n',
+							text: `Travel Card #${batch?.batch_type}\n`,
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},

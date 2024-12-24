@@ -152,11 +152,12 @@ export default function Header({
 					{...{ register, errors }}
 				/>
 
-				{/* <JoinInput
+				<JoinInput
 					label='receive_amount'
+					disabled={true}
 					unit='BDT'
 					{...{ register, errors }}
-				/> */}
+				/>
 
 				<Textarea label='remarks' {...{ register, errors }} />
 			</div>

@@ -451,7 +451,9 @@ export default function Index() {
 								Total Quantity:
 							</td>
 							<td className='py-4 font-bold'>
-								{getTotalQty(watch('dyeing_transfer_entry'))}
+								{getTotalQty(
+									watch('dyeing_transfer_entry')
+								).toFixed(3)}
 							</td>
 						</tr>
 					</DynamicField>

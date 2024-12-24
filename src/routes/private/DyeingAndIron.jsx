@@ -108,6 +108,7 @@ export const DyeingAndIronRoutes = [
 					'create',
 					'read',
 					'update',
+					'click_production',
 					'click_receive_status',
 					'click_receive_status_override',
 				],

@@ -1,19 +1,23 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
-import {
-	useDeliveryChallan,
-	useDeliveryPackingList,
-	useDeliveryPackingListByUUID,
-} from '@/state/Delivery';
+import { useDeliveryChallan, useDeliveryPackingList, useDeliveryPackingListByUUID } from '@/state/Delivery';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
+
+
 
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy, StatusButton } from '@/ui';
 
+
+
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
+
+
+
+
 
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
@@ -265,7 +269,7 @@ export default function Index() {
 		const updated_at = GetDateTime();
 
 		await updateData.mutateAsync({
-			url: `/delivery/challan/${challan?.uuid}`,
+			url: `/delivery/challan/update-receive-status/${challan?.uuid}`,
 			uuid: challan?.uuid,
 			updatedData: { receive_status: status, updated_at },
 			isOnCloseNeeded: false,

@@ -392,6 +392,7 @@ export default function Index() {
 										showRemoveButton={
 											recipeEntryField.length > 1
 										}
+										showDuplicateButton={false}
 									/>
 								</td>
 							</tr>

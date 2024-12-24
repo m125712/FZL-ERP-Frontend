@@ -138,7 +138,7 @@ export default function Index({
 				title='Production Weight'
 				label='weight'
 				unit='KG'
-				sub_label={`MAX: ${MAX_PROD} KG`}
+				// sub_label={`MAX: ${MAX_PROD} KG`}
 				{...{ register, errors }}
 			/>
 			<JoinInput

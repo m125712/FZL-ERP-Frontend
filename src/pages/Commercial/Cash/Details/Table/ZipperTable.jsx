@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, LinkWithCopy } from '@/ui';
 
-export default function ZipperTable({ pi }) {
+export default function ZipperTable({ pi, conventionRate }) {
 	const columns = useMemo(
 		() => [
 			{
@@ -79,7 +79,8 @@ export default function ZipperTable({ pi }) {
 					</div>
 				),
 				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()).toFixed(4),
+				cell: (info) =>
+					Number(info.getValue() * conventionRate).toFixed(4),
 			},
 			{
 				accessorKey: 'unit_price',
@@ -90,7 +91,7 @@ export default function ZipperTable({ pi }) {
 					</div>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => info.getValue() * conventionRate,
 			},
 			{
 				accessorKey: 'value',

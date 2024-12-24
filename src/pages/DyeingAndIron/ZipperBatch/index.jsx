@@ -119,7 +119,10 @@ export default function Index() {
 									`/dyeing-and-iron/zipper-batch/batch-production/${uuid}`
 								)
 							}
-							disabled={received === 1}
+							disabled={
+								received === 1 ||
+								!haveAccess.includes('click_production')
+							}
 						/>
 					);
 				},

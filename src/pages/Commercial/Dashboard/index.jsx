@@ -20,12 +20,11 @@ export default function Index() {
 				accessorKey: 'id',
 				header: 'Cash Invoice ID',
 				cell: (info) => {
-					const { challan_uuid } = info.row.original;
 					return (
 						<LinkWithCopy
 							title={info.getValue()}
-							id={challan_uuid}
-							uri='/delivery/challan'
+							id={info.getValue()}
+							uri='/commercial/pi-cash'
 						/>
 					);
 				},

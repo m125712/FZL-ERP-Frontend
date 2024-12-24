@@ -27,14 +27,25 @@ export const CUSTOM_PAGE = ({
 	xMargin,
 	headerHeight,
 	footerHeight,
+	leftMargin,
+	rightMargin,
 }) => {
 	let width = 290;
 	let height = 141;
 
+	let left, right;
+	if (leftMargin && rightMargin) {
+		left = leftMargin;
+		right = rightMargin;
+	} else {
+		left = xMargin;
+		right = xMargin;
+	}
+
 	return {
 		pageSize: { width, height },
 		pageOrientation,
-		pageMargins: [xMargin, headerHeight, xMargin, footerHeight],
+		pageMargins: [left, headerHeight, right, footerHeight],
 		defaultStyle,
 		styles,
 	};

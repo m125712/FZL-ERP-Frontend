@@ -1,20 +1,9 @@
 import { format } from 'date-fns';
-import { color } from 'framer-motion';
 
-import {
-	DEFAULT_FONT_SIZE,
-	tableLayoutStyle,
-	xMargin,
-} from '@/components/Pdf/ui';
-import {
-	CUSTOM_PAGE,
-	DEFAULT_A4_PAGE,
-	getTable,
-	TableHeader,
-} from '@/components/Pdf/utils';
+import { DEFAULT_FONT_SIZE } from '@/components/Pdf/ui';
+import { CUSTOM_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
 import pdfMake from '..';
-import { getPageFooter, getPageHeader } from './utils';
 
 export default function Index(data) {
 	const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
@@ -40,12 +29,22 @@ export default function Index(data) {
 		getTable('quantity', 'Qty(cm)', 'right'),
 	];
 	const node = data?.item_for == 'tape' ? tapeNode : normalNode;
+
+	let val;
+	if (data?.item_for === 'slider') {
+		val = '-';
+	} else if (data?.item_for === 'tape') {
+		val = `${data?.size} mtr`;
+	} else {
+		val = `${data?.size} ${data?.is_inch === 1 ? 'inch' : 'cm'}`;
+	}
 	const pdfDocGenerator = pdfMake.createPdf({
 		...CUSTOM_PAGE({
 			pageOrientation: 'landscape',
-			xMargin: 5,
-			headerHeight: 5,
-			footerHeight: 10,
+			leftMargin: 10,
+			rightMargin: 20,
+			headerHeight: 1,
+			footerHeight: 1,
 		}),
 
 		// * Main Table
@@ -53,7 +52,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [40, '*', '*', 25, 30],
+					widths: [40, 40, '*', 40, 30],
 					body: [
 						[
 							{
@@ -62,14 +61,14 @@ export default function Index(data) {
 								bold: true,
 
 								colSpan: 3,
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 							},
 							{},
 							{},
 							{
 								text: `C/N: #${data?.packing_list_wise_rank}, ${data?.packing_number}`,
 								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 								colSpan: 2,
 							},
 							{},
@@ -78,19 +77,19 @@ export default function Index(data) {
 							{
 								text: 'Challan No',
 								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 							},
 							{},
 
 							{
 								text: 'Date',
 								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 							},
 							{
 								text: `${getDateFormate(data?.created_at)}`,
 
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 								colSpan: 2,
 							},
 							{},
@@ -99,23 +98,23 @@ export default function Index(data) {
 							{
 								text: 'O/N',
 								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 							},
 							{
 								text: `${data?.order_number}`,
 
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 								colSpan: 1,
 							},
 							{
 								text: 'Buyer',
 								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 							},
 							{
 								text: `${data?.buyer_name}`,
 
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 								colSpan: 2,
 							},
 							{},
@@ -124,12 +123,12 @@ export default function Index(data) {
 							{
 								text: 'Factory',
 								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 							},
 							{
 								text: `${data?.factory_name}`,
 
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 								colSpan: 4,
 							},
 							{},
@@ -140,12 +139,12 @@ export default function Index(data) {
 							{
 								text: 'Party',
 								bold: true,
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 							},
 							{
 								text: `${data?.party_name}`,
 
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 								colSpan: 4,
 							},
 							{},
@@ -158,11 +157,11 @@ export default function Index(data) {
 						[
 							{
 								text: `${data.item_description}`,
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 							},
 							{
 								text: `${data.style}`,
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 							},
 							{
 								text: `${
@@ -170,15 +169,17 @@ export default function Index(data) {
 										? '-'
 										: data?.color
 								}`,
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 							},
 							{
-								text: `${data?.item_for === 'slider' ? '-' : `${data?.size} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' || data?.item_for === 'tape' ? 'mtr' : data?.is_inch === 1 ? 'inch' : 'cm'}`}`,
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								text: val,
+								fontSize: DEFAULT_FONT_SIZE - 1,
+								alignment: 'right',
 							},
 							{
 								text: `${data.quantity}`,
-								fontSize: DEFAULT_FONT_SIZE - 2,
+								fontSize: DEFAULT_FONT_SIZE - 1,
+								alignment: 'right',
 							},
 						],
 					],

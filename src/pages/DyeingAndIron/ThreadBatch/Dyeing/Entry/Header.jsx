@@ -388,7 +388,7 @@ export default function Header({
 						</FormField>
 					</div>
 				</div>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
+				<div className='flex flex-col gap-1 text-secondary-content md:flex-row'>
 					<Textarea label='remarks' {...{ register, errors }} />
 				</div>
 			</SectionEntryBody>

@@ -60,6 +60,13 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'description',
+				header: 'Description',
+				enableColumnFilter: false,
+				width: 'w-40',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'order_number_wise_rank',
 				header: 'O/N count',
 				width: 'w-40',
@@ -83,8 +90,10 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
 			{
-				accessorKey: 'tape_assign',
+				accessorFn: (row) => row.tape_coil_uuid,
+				id: 'tape_assign',
 				header: 'Tape Assign',
 				enableColumnFilter: false,
 				hidden: !haveAccess.includes('update'),

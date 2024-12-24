@@ -342,12 +342,11 @@ export default function Header({
 									(end_type) =>
 										end_type.value == getValues('end_type')
 								)
-								?.label?.toLowerCase() === 'open end' && (
+								?.label?.toLowerCase() !== 'close end' && (
 								<FormField
 									label='hand'
 									title='Hand'
 									errors={errors}>
-									{' '}
 									<Controller
 										name={'hand'}
 										control={control}

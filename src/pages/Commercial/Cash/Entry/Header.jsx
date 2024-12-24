@@ -154,6 +154,7 @@ export default function Header({
 
 				<JoinInput
 					label='receive_amount'
+					disabled={true}
 					unit='BDT'
 					{...{ register, errors }}
 				/>

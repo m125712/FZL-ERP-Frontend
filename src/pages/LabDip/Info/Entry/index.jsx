@@ -397,6 +397,7 @@ export default function Index() {
 										handleRecipeRemove(index)
 									}
 									showRemoveButton={true}
+									showDuplicateButton={false}
 								/>
 							</td>
 						</tr>

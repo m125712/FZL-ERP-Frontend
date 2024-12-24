@@ -20,28 +20,53 @@ export default function Index() {
 				accessorKey: 'id',
 				header: 'Cash Invoice ID',
 				cell: (info) => {
-					const { challan_uuid } = info.row.original;
 					return (
 						<LinkWithCopy
 							title={info.getValue()}
-							id={challan_uuid}
-							uri='/delivery/challan'
+							id={info.getValue()}
+							uri='/commercial/pi-cash'
 						/>
 					);
 				},
 			},
 
 			{
-				accessorKey: 'order_number',
+				accessorFn: (row) => {
+					const { order_number } = row;
+					return order_number;
+				},
+				id: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: true,
-				cell: (info) => (
-					<LinkWithCopy
-						title={info.getValue()}
-						id={info.getValue()}
-						uri='/order/details'
-					/>
-				),
+				width: 'w-28',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const orderNumbers = info.getValue();
+					return orderNumbers?.map((orderNumber) => {
+						if (
+							orderNumber.thread_order_info_uuid === null ||
+							orderNumber.order_info_uuid === null
+						)
+							return;
+						const isThreadOrder =
+							orderNumber.order_number?.includes('ST');
+						const number = orderNumber.order_number;
+						const uuid = isThreadOrder
+							? orderNumber.thread_order_info_uuid
+							: orderNumber.order_info_uuid;
+						return (
+							<LinkWithCopy
+								key={number}
+								title={number}
+								id={isThreadOrder ? uuid : number}
+								uri={
+									isThreadOrder
+										? '/thread/order-info'
+										: '/order/details'
+								}
+							/>
+						);
+					});
+				},
 			},
 			{
 				accessorKey: 'value',

@@ -29,9 +29,11 @@ export default function Header({
 }) {
 	// ? since there the required designation is not in the database..
 	// ? this is a workaround, where we use all the hr users
-	const { data: dyeing_operator_option } = useOtherHRUserByDesignation();
-	const { data: pass_by_option } = useOtherHRUserByDesignation();
-	const { data: dyeing_supervisor_option } = useOtherHRUserByDesignation();
+	const { data: dyeing_operator_option } =
+		useOtherHRUserByDesignation('thread');
+	const { data: pass_by_option } = useOtherHRUserByDesignation('thread');
+	const { data: dyeing_supervisor_option } =
+		useOtherHRUserByDesignation('thread');
 
 	const { data: batch_number } = useGetURLData(
 		`/other/thread/batch/value/label`

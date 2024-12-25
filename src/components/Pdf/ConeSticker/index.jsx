@@ -60,19 +60,22 @@ export default function Index(data) {
 						{
 							text: data?.color,
 							alignment: 'center',
-							fontSize: fontSize,
+							fontSize: fontSize + 1.5,
+							bold: true,
 						},
 
 						{
 							text: data?.color,
 							alignment: 'center',
-							fontSize: fontSize,
+							fontSize: fontSize + 1.5,
+							bold: true,
 						},
 
 						{
 							text: data?.color,
 							alignment: 'center',
-							fontSize: fontSize,
+							fontSize: fontSize + 1.5,
+							bold: true,
 						},
 					],
 

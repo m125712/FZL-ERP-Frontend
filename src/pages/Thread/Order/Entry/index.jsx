@@ -10,13 +10,11 @@ import {
 } from '@/state/Thread';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
-import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
-import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 
 import nanoid from '@/lib/nanoid';
@@ -29,7 +27,6 @@ import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
 import OrderEntrySpreadsheet from './spreadsheets/order-entry-spreadsheet';
-import useGenerateFieldDefs from './useGenerateFieldDefs';
 
 export default function Index() {
 	const { url: threadOrderInfoUrl } = useThreadOrderInfo();
@@ -53,8 +50,6 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
-		trigger,
-		clearErrors,
 		context: form,
 	} = useRHF(THREAD_ORDER_INFO_ENTRY_SCHEMA, THREAD_ORDER_INFO_ENTRY_NULL);
 
@@ -304,27 +299,6 @@ export default function Index() {
 		if (Object.keys(errors).length > 0) return;
 	};
 
-	// const keyMap = {
-	// 	NEW_ROW: 'alt+n',
-	// 	COPY_LAST_ROW: 'alt+c',
-	// 	ENTER: 'enter',
-	// };
-
-	const handlers = {
-		NEW_ROW: handleThreadOrderInfoEntryAppend,
-		COPY_LAST_ROW: () =>
-			handelDuplicateDynamicField(threadOrderInfoEntryField.length - 1),
-		ENTER: (event) => handleEnter(event),
-	};
-
-	configure({
-		ignoreTags: ['input', 'select', 'textarea'],
-		ignoreEventsCondition: function () {},
-	});
-
-	const rowClass =
-		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
-
 	const headerButtons = [
 		<div className='flex items-center gap-2'>
 			<label className='text-sm text-white'>Bleach All</label>
@@ -351,7 +325,6 @@ export default function Index() {
 
 	return (
 		<FormProvider {...form}>
-			{/* <HotKeys {...{ keyMap, handlers }}> */}
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				noValidate
@@ -392,7 +365,6 @@ export default function Index() {
 
 				<Footer buttonClassName='!btn-primary' />
 			</form>
-			{/* </HotKeys> */}
 			<Suspense>
 				<DeleteModal
 					modalId={'order_info_entry_delete'}

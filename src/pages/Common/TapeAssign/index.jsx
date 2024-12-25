@@ -67,21 +67,11 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'order_number_wise_rank',
+				accessorFn: (row) =>
+					`${row.order_number_wise_rank || 0}/${row.order_number_wise_count || 0}`,
+				id: 'order_number_wise_rank',
 				header: 'O/N count',
-				width: 'w-40',
 				enableColumnFilter: false,
-				cell: (info) => {
-					const { order_number_wise_count } = info.row.original;
-					const { order_number_wise_rank } = info.row.original;
-
-					return (
-						<div className='flex space-x-1'>
-							<span>{order_number_wise_rank}/</span>
-							<span>{order_number_wise_count}</span>
-						</div>
-					);
-				},
 			},
 			{
 				accessorKey: 'party_name',
@@ -96,6 +86,7 @@ export default function Index() {
 				id: 'tape_assign',
 				header: 'Tape Assign',
 				enableColumnFilter: false,
+				width: 'w-60',
 				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
 					const { tape_coil_uuid } = info.row.original;

@@ -39,13 +39,14 @@ export default function Index() {
 				accessorKey: 'material_name',
 				header: 'Material',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
-				width: 'w-40',
+				width: 'w-36',
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),

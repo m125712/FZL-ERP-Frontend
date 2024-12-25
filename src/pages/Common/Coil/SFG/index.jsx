@@ -33,6 +33,7 @@ export default function Index() {
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
+				width: 'w-36',
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
@@ -61,7 +62,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'is_import',
-				header: 'Is Imported',
+				header: 'Imported?',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return Number(info.getValue()) === 1 ? ' Import' : 'Local';
@@ -69,7 +70,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'is_reverse',
-				header: 'Is Reverse',
+				header: 'Reverse?',
 				enableColumnFilter: false,
 				cell: (info) => {
 					return Number(info.getValue()) === 1

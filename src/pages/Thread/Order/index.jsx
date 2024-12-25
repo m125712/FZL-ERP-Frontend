@@ -86,14 +86,11 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'swatch_status',
-				header: 'Swatch Approved',
+				accessorFn: (row) =>
+					`${row.swatch_approval_count || 0}/${row.order_entry_count || 0}`,
+				id: 'swatch_status',
+				header: 'Swatch',
 				enableColumnFilter: false,
-				cell: (info) => {
-					const { order_entry_count, swatch_approval_count } =
-						info.row.original;
-					return `${swatch_approval_count} / ${order_entry_count}`;
-				},
 			},
 			{
 				accessorKey: 'is_swatches_approved',
@@ -111,15 +108,11 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'price_approval_count',
-				header: 'Price App.Count',
+				accessorFn: (row) =>
+					`${row.price_approval_count || 0}/${row.order_entry_count || 0}`,
+				id: 'price_approval_count',
+				header: 'Price App',
 				enableColumnFilter: false,
-				cell: (info) => {
-					const { price_approval_count, order_entry_count } =
-						info.row.original;
-
-					return `${price_approval_count}/${order_entry_count}`;
-				},
 			},
 			{
 				accessorKey: 'delivery_date',
@@ -129,7 +122,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'created_by_name',
-				header: 'Issued By',
+				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

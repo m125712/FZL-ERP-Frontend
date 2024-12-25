@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
@@ -32,42 +31,14 @@ export default function Index() {
 					);
 				},
 			},
-			// {
-			// 	accessorKey: 'info_id',
-			// 	header: 'Info ID',
-			// 	cell: (info) => {
-			// 		const { lab_dip_info_uuid } = info.row.original;
-			// 		if (lab_dip_info_uuid) {
-			// 			return (
-			// 				<LinkWithCopy
-			// 					title={info.getValue()}
-			// 					id={lab_dip_info_uuid}
-			// 					uri='/lab-dip/info/details'
-			// 				/>
-			// 			);
-			// 		}
-			// 	},
-			// },
 			{
 				accessorKey: 'name',
 				header: 'Recipe Name',
 				enableColumnFilter: false,
-				// width: 'w-12',
+				width: 'w-36',
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'sub_streat',
-				header: 'Sub Streat',
-				enableColumnFilter: false,
-				cell: (info) =>
-					info.getValue() === 'txp'
-						? 'TXP'
-						: info.getValue() === 'ssp'
-							? 'SSP'
-							: info.getValue() === 'others'
-								? 'Others'
-								: '',
-			},
+
 			{
 				accessorKey: 'bleaching',
 				header: 'Bleaching',
@@ -77,6 +48,17 @@ export default function Index() {
 						<span className='capitalize'>{info.getValue()}</span>
 					);
 				},
+			},
+			{
+				accessorFn: (row) => {
+					if (row.sub_streat === 'txp') return 'txp';
+					if (row.sub_streat === 'ssp') return 'ssp';
+					if (row.sub_streat === 'others') return 'others';
+					return '';
+				},
+				id: 'sub_streat',
+				header: 'Sub Streat',
+				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'created_by_name',

@@ -128,7 +128,7 @@ export default function Index(data) {
 					headerRows: 1,
 					widths: isSliderChallan
 						? [150, 150, 80, 80]
-						: [140, 130, 70, 40, 70, 50],
+						: [140, 130, 70, 60, 60, 40],
 					body: [
 						// * Header
 						TableHeader(node),

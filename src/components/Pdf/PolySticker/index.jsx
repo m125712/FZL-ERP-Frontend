@@ -3,6 +3,8 @@ import { format } from 'date-fns';
 import { DEFAULT_FONT_SIZE } from '@/components/Pdf/ui';
 import { CUSTOM_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
+import GetDateTime from '@/util/GetDateTime';
+
 import pdfMake from '..';
 
 export default function Index(data) {
@@ -21,19 +23,14 @@ export default function Index(data) {
 		getTable('size', 'Size', 'right'),
 		getTable('quantity', 'Qty(cm)', 'right'),
 	];
-	const sliderNode = [
-		getTable('item_description', 'Item'),
-		getTable('style', 'Style'),
-		getTable('color', 'Color'),
-		getTable('size', 'Size', 'right'),
-		getTable('quantity', 'Qty(cm)', 'right'),
-	];
-	const node = data?.item_for == 'tape' ? tapeNode : normalNode;
+
+	const node = data?.order_type == 'tape' ? tapeNode : normalNode;
+	const orderType = data?.order_type ? data?.order_type : data?.item_for;
 
 	let val;
-	if (data?.item_for === 'slider') {
+	if (orderType === 'slider') {
 		val = '-';
-	} else if (data?.item_for === 'tape') {
+	} else if (orderType === 'tape') {
 		val = `${data?.size} mtr`;
 	} else {
 		val = `${data?.size} ${data?.is_inch === 1 ? 'inch' : 'cm'}`;
@@ -66,7 +63,7 @@ export default function Index(data) {
 							{},
 							{},
 							{
-								text: `C/N: #${data?.packing_list_wise_rank}, ${data?.packing_number}`,
+								text: `${data?.packing_number ? `C/N: #${data?.packing_list_wise_rank}, ${data?.packing_number}` : `B/N: ${data?.batch_number}`}`,
 								bold: true,
 								fontSize: DEFAULT_FONT_SIZE - 1,
 								colSpan: 2,
@@ -87,7 +84,7 @@ export default function Index(data) {
 								fontSize: DEFAULT_FONT_SIZE - 1,
 							},
 							{
-								text: `${getDateFormate(data?.created_at)}`,
+								text: `${getDateFormate(GetDateTime())}`,
 
 								fontSize: DEFAULT_FONT_SIZE - 1,
 								colSpan: 2,
@@ -165,9 +162,7 @@ export default function Index(data) {
 							},
 							{
 								text: `${
-									data?.item_for === 'slider'
-										? '-'
-										: data?.color
+									orderType === 'slider' ? '-' : data?.color
 								}`,
 								fontSize: DEFAULT_FONT_SIZE - 1,
 							},

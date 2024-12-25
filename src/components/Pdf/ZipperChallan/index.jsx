@@ -90,17 +90,7 @@ export default function Index(data) {
 			}
 		) || {};
 
-;
 	const grandTotalQuantity = uniqueCounts(challan_entry).quantity;
-
-	const unit =
-		challan_entry?.map((item) =>
-			isThreadChallan || isTapeChallan
-				? 'mtr'
-				: item.is_inch === 1
-					? 'inch'
-					: 'cm'
-		) || [];
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_LETTER_PAGE({
@@ -138,7 +128,7 @@ export default function Index(data) {
 					headerRows: 1,
 					widths: isSliderChallan
 						? [150, 150, 80, 80]
-						: [140, 130, 70, 40, 70, 50],
+						: [140, 130, 70, 60, 60, 40],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -150,10 +140,17 @@ export default function Index(data) {
 									item.packing_number === pl.packing_number
 							)
 							.map((item) =>
-								node.map((nodeItem, index) => {
+								node.map((nodeItem) => {
 									const text =
 										nodeItem.field === 'size'
-											? `${item[nodeItem.field]} ${unit[index] || ''}`
+											? `${item[nodeItem.field]} ${
+													isThreadChallan ||
+													isTapeChallan
+														? 'mtr'
+														: item.is_inch === 1
+															? 'inch'
+															: 'cm' || ''
+												}`
 											: item[nodeItem.field];
 									return {
 										text,

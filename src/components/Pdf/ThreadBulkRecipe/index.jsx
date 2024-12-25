@@ -85,7 +85,7 @@ export default function Index(batch, shade_recipes_entries, programs) {
 	const headerHeight = 220;
 	let footerHeight = 50;
 	const { batch_entry } = batch;
-
+	console.log(shade_recipes_entries);
 	const processDyePrograms = (programs) => {
 		if (!programs?.length) return [];
 
@@ -93,6 +93,18 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			? separateDark(programs)
 			: separatePaleOrMedium(programs);
 	};
+	const yellow = shade_recipes_entries?.filter((e) =>
+		e?.material_name.toLowerCase().includes('yellow')
+	);
+	const red = shade_recipes_entries?.filter((e) =>
+		e?.material_name.toLowerCase().includes('red')
+	);
+	const other = shade_recipes_entries?.filter(
+		(e) =>
+			!e?.material_name.toLowerCase().includes('red') &&
+			!e?.material_name.toLowerCase().includes('yellow')
+	);
+	const shade = yellow?.concat(red)?.concat(other);
 
 	programs = processDyePrograms(programs);
 	const pdfDocGenerator = pdfMake.createPdf({
@@ -164,8 +176,8 @@ export default function Index(batch, shade_recipes_entries, programs) {
 					widths: ['*', '*', '*', 30, 30, 30, '*'],
 					body: [
 						TableHeader(node2),
-						...(Array.isArray(shade_recipes_entries)
-							? shade_recipes_entries.map((item) =>
+						...(Array.isArray(shade)
+							? shade.map((item) =>
 									node2.map((nodeItem) => ({
 										text: item[nodeItem.field] || '',
 										style: nodeItem.cellStyle,

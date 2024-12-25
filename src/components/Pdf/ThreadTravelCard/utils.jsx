@@ -220,11 +220,12 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text: batch?.total_yarn_quantity + ' (KG)',
-									// text:
-									// 	batch?.total_yarn_quantity +
-									// 	'/' +
-									// 	batch?.total_expected_weight,
+									// text: batch?.total_yarn_quantity + ' (KG)',
+									text:
+										batch?.total_yarn_quantity +
+										'/' +
+										batch?.total_expected_weight +
+										' (KG)',
 								},
 							],
 							[

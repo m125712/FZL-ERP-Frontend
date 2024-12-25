@@ -89,8 +89,8 @@ export default function Index() {
 				width: 'w-60',
 				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
-					const { tape_coil_uuid } = info.row.original;
-					const { item, zipper_number } = info.row.original;
+					const { tape_coil_uuid, item, zipper_number } =
+						info.row.original;
 
 					const swatchAccess =
 						haveAccess.includes('click_tape_assign');
@@ -105,7 +105,9 @@ export default function Index() {
 							options={tape?.filter(
 								(tapeItem) =>
 									tapeItem.item === item &&
-									tapeItem.zipper_number === zipper_number
+									(tapeItem.zipper_number === zipper_number ||
+										tapeItem.zipper_number ===
+											'6Vs8xVrvoEcfnWg') //* 6Vs8xVrvoEcfnWg is for 4.5
 							)}
 							value={tape?.find(
 								(item) => item.value == tape_coil_uuid

@@ -516,24 +516,6 @@ export default function Header({
 					header={
 						watch('order_type') === 'full' && (
 							<div className='flex items-center gap-4 text-sm'>
-								<div className='my-2 h-8 rounded-md bg-secondary px-1'>
-									<CheckBox
-										text='text-secondary-content'
-										label='is_logo_body'
-										title='Body'
-										{...{ register, errors }}
-									/>
-								</div>
-
-								<div className='my-2 h-8 rounded-md bg-secondary px-1'>
-									<CheckBox
-										text='text-secondary-content'
-										label='is_logo_puller'
-										title='Puller'
-										{...{ register, errors }}
-									/>
-								</div>
-
 								<div className='my-2 w-48'>
 									<FormField
 										label='slider_provided'
@@ -865,6 +847,18 @@ export default function Header({
 										}}
 									/>
 								</FormField>
+
+								<CheckBox
+									label='is_logo_body'
+									title='Body Logo'
+									{...{ register, errors }}
+								/>
+
+								<CheckBox
+									label='is_logo_puller'
+									title='Puller Logo'
+									{...{ register, errors }}
+								/>
 							</div>
 						</>
 					)}

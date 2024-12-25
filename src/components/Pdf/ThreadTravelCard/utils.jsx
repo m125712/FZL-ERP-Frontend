@@ -96,7 +96,7 @@ export const getPageHeader = (batch) => {
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
-						`Batch No: ${batch?.batch_id}\n`,
+						`B/N: ${batch?.batch_id}\n`,
 						`Date: ${created_at}\n`,
 					],
 					alignment: 'right',
@@ -110,7 +110,7 @@ export const getPageHeader = (batch) => {
 				{
 					colSpan: 4,
 					table: {
-						widths: [50, 50, 50, 50, 50, 70, 70, 70],
+						widths: [50, 50, 50, 50, 50, 70, 45, 95],
 						headerRows: 1,
 						body: [
 							[
@@ -224,8 +224,7 @@ export const getPageHeader = (batch) => {
 									text:
 										batch?.total_yarn_quantity +
 										'/' +
-										batch?.total_expected_weight +
-										' (KG)',
+										batch?.total_expected_weight,
 								},
 							],
 							[

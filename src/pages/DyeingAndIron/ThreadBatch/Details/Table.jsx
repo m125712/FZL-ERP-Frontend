@@ -1,21 +1,39 @@
 import { useMemo } from 'react';
 
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-import { DateTime } from '@/ui';
+import { DateTime, LinkWithCopy } from '@/ui';
 
 export default function Index({ batch_entry }) {
+	const total = batch_entry?.reduce(
+		(acc, item) => {
+			acc.quantity += item.quantity;
+			acc.carton += item.total_carton;
+			acc.expected += item.quantity * item.max_weight;
+			acc.actual += item.yarn_quantity;
+			return acc;
+		},
+		{
+			quantity: 0,
+			carton: 0,
+			expected: 0,
+			actual: 0,
+		}
+	);
 	const columns = useMemo(
 		() => [
-			// {
-			// 	accessorKey: 'recipe_name',
-			// 	header: 'Recipe Name',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: false,
+				cell: (info) => {
+					const { order_info_uuid } = info.row.original;
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={order_info_uuid}
+							uri={`/thread/order-info`}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'recipe_name',
@@ -42,23 +60,6 @@ export default function Index({ batch_entry }) {
 				header: 'Bleaching     ',
 				enableColumnFilter: false,
 			},
-			// {
-			// 	accessorKey: 'po',
-			// 	header: 'PO',
-			// 	enableColumnFilter: false,
-			// },
-			// {
-			// 	accessorKey: 'order_quantity',
-			// 	header: 'Order QTY',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'balance_quantity',
-			// 	header: 'Balance',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'quantity',
 				header: 'QTY',
@@ -67,9 +68,16 @@ export default function Index({ batch_entry }) {
 			},
 			{
 				accessorKey: 'total_carton',
-				header: 'Total Carton',
+				header: 'Carton',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) => row.quantity * row.max_weight,
+				accessorKey: 'expected_yarn',
+				header: 'Expected Yarn',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue().toFixed(4),
 			},
 			{
 				accessorKey: 'yarn_quantity',
@@ -110,7 +118,16 @@ export default function Index({ batch_entry }) {
 		<ReactTableTitleOnly
 			title='Details'
 			data={batch_entry}
-			columns={columns}
-		/>
+			columns={columns}>
+			<tr className='text-lg font-bold'>
+				<th className='pe-4 text-right' colSpan={6}>
+					Total
+				</th>
+				<td className='ps-3'>{total?.quantity}</td>
+				<td className='ps-3'>{total?.carton}</td>
+				<td className='ps-3'>{total?.expected.toFixed(4)}</td>
+				<td className='ps-3'>{total?.actual.toFixed(4)}</td>
+			</tr>
+		</ReactTableTitleOnly>
 	);
 }

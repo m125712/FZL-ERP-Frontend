@@ -6,7 +6,7 @@ import { company, getEmptyColumn } from '../utils';
 
 const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 
-const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
+const getDateFormate = (date) => format(new Date(date), 'MMM dd, yyyy');
 
 export const getPageHeader = (batch) => {
 	const created_at = getDateFormate(batch?.created_at);
@@ -36,7 +36,7 @@ export const getPageHeader = (batch) => {
 							bold: true,
 						},
 						`Batch: ${batch?.batch_id}\n`,
-						`Date:${created_at} `,
+						`Date: ${created_at} `,
 					],
 					alignment: 'right',
 				},
@@ -49,7 +49,7 @@ export const getPageHeader = (batch) => {
 				{ text: 'Batch', bold: true, color: PRIMARY_COLOR },
 				batch?.batch_id,
 				{ text: 'Production Date', bold: true, color: PRIMARY_COLOR },
-				batch?.production_date,
+				getDateFormate(batch?.production_date),
 			],
 			[
 				{ text: 'Machine', bold: true, color: PRIMARY_COLOR },

@@ -5,7 +5,7 @@ import { useAccess } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { DateTime, EditDelete, LinkOnly, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -22,16 +22,32 @@ export default function Index() {
 		() => [
 			{
 				accessorKey: 'batch_number',
-				header: 'Batch No.',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				header: 'Batch ID',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => (
+					<LinkOnly
+						title={info.getValue()}
+						id={info.row.original.batch_uuid}
+						uri='/dyeing-and-iron/thread-batch'
+					/>
+				),
 			},
 
 			{
 				accessorKey: 'order_number',
-				header: 'Order No.',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				header: 'ID',
+				width: 'w-36',
+				cell: (info) => {
+					const { order_info_uuid } = info.row.original;
+					return (
+						<LinkOnly
+							uri='/thread/order-info'
+							id={order_info_uuid}
+							title={info.getValue()}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'color',

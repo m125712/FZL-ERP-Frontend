@@ -212,6 +212,9 @@ const Index = () => {
 			...prev,
 			itemId: data[idx].uuid,
 			itemName: data[idx].name,
+			url: data[idx].against_order
+				? '/slider/die-casting-transaction'
+				: '/slider/trx-against-stock',
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -259,7 +262,7 @@ const Index = () => {
 						deleteData,
 						invalidateQuery,
 					}}
-					url='/slider/die-casting-transaction'
+					url={deleteItem?.url}
 				/>
 			</Suspense>
 		</>

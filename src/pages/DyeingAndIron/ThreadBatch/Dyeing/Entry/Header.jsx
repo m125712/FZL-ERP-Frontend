@@ -79,6 +79,7 @@ export default function Header({
 		{ label: 'Light', value: 'light' },
 		{ label: 'Medium', value: 'medium' },
 		{ label: 'Deep', value: 'deep' },
+		{ label: 'White', value: 'white' },
 	];
 
 	const statusOption = [

@@ -109,22 +109,22 @@ export default function Index() {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				cell: (info) => {
-					const { order_info_uuid } = info.row.original;
-					const { item_for } = info.row.original;
-					return item_for === 'zipper' ||
-						item_for === 'sample_zipper' ||
-						item_for === 'slider' ||
-						item_for === 'tape' ? (
+					const { order_info_uuid, item_for } = info.row.original;
+
+					if (item_for === 'thread' || item_for === 'sample_thread') {
+						return (
+							<LinkWithCopy
+								title={info.getValue()}
+								id={order_info_uuid}
+								uri='/thread/order-info'
+							/>
+						);
+					}
+					return (
 						<LinkWithCopy
 							title={info.getValue()}
 							id={info.getValue()}
 							uri='/order/details'
-						/>
-					) : (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={order_info_uuid}
-							uri='/thread/order-info'
 						/>
 					);
 				},
@@ -138,19 +138,19 @@ export default function Index() {
 					const overrideAccess = haveAccess.includes(
 						'click_received_override'
 					);
-					// const {
-					// 	invalidateQuery: invalidateDeliveryPackingListByUUID,
-					// } = useDeliveryPackingListByUUID(info.row.original.uuid);
+					const { challan_uuid, is_warehouse_received, gate_pass } =
+						info.row.original;
+
+					let permission = false;
+					if (challan_uuid === null && !gate_pass) {
+						if (!is_warehouse_received && access) permission = true;
+						if (overrideAccess) permission = true;
+					}
 					return (
 						<SwitchToggle
-							disabled={
-								!overrideAccess &&
-								(!access || info.getValue() !== true)
-							}
+							disabled={!permission}
 							onChange={() => {
 								handelReceivedStatus(info.row.index);
-
-								// invalidateDeliveryPackingListByUUID();
 							}}
 							checked={info.getValue() === true}
 						/>
@@ -166,19 +166,20 @@ export default function Index() {
 					const overrideAccess = haveAccess.includes(
 						'click_gate_pass_override'
 					);
-					const { challan_uuid } = info.row.original;
+					const { challan_uuid, is_warehouse_received, gate_pass } =
+						info.row.original;
+
+					let permission = false;
+					if (is_warehouse_received && challan_uuid !== null) {
+						if (!gate_pass && access) permission = true;
+						if (overrideAccess) permission = true;
+					}
+
 					return (
 						<SwitchToggle
-							disabled={
-								!overrideAccess &&
-								(!access ||
-									info.getValue() !== 1 ||
-									challan_uuid === null ||
-									info.row.original.is_warehouse_received ===
-										false)
-							}
-							onChange={() => handelGatePass(info.row.index)}
 							checked={info.getValue() === 1}
+							onChange={() => handelGatePass(info.row.index)}
+							disabled={!permission}
 						/>
 					);
 				},

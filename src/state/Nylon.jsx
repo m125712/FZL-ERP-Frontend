@@ -101,7 +101,7 @@ export const useNylonPlasticFinishingTapeLogByUUID = (uuid) =>
 export const useNylonPlasticFinishingProductionLog = () =>
 	createGlobalState({
 		queryKey: nylonQK.nylonPlasticFinishingProductionLog(),
-		url: '/zipper/finishing-batch-production/by/finishing?item_name=nylon&stopper_type=plastic',
+		url: '/zipper/finishing-batch-production/by/finishing?item_name=nylon&nylon_stopper=plastic',
 	});
 export const useNylonPlasticFinishingProductionLogByUUID = (
 	uuid,

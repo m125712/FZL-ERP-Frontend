@@ -82,7 +82,7 @@ const separateDark = (programs) => {
 	return { chemicalDark, chemicalHydrosa, neutralizer };
 };
 export default function Index(batch, shade_recipes_entries, programs) {
-	const headerHeight = 220;
+	const headerHeight = 200;
 	let footerHeight = 50;
 	const { batch_entry } = batch;
 	const processDyePrograms = (programs) => {
@@ -94,7 +94,7 @@ export default function Index(batch, shade_recipes_entries, programs) {
 	};
 
 	programs = processDyePrograms(programs);
-	
+
 	const yellow = shade_recipes_entries?.filter((e) =>
 		e?.material_name.toLowerCase().includes('yellow')
 	);

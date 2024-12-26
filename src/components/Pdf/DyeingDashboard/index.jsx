@@ -110,7 +110,7 @@ export default function Index(data, dyeingDate) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [30, 40, '*', '*', '*', '*', '*', '*'],
+					widths: [40, 40, '*', '*', '*', '*', '*', '*'],
 					body: [
 						TableHeader(node),
 						...data?.map((item) =>

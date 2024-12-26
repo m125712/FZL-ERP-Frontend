@@ -46,6 +46,7 @@ export default function Index(data) {
 	let grand_total_value = 0;
 	let grand_total_quantity = 0;
 	let grand_total_quantity_mtr = 0;
+	let grand_total_slider = 0;
 	const TotalThreadUnitPrice = [];
 	const TotalThreadValue = [];
 	const TotalThreadQuantity = [];
@@ -108,15 +109,15 @@ export default function Index(data) {
 			let value = 0;
 			let quantity = 0;
 			let isTapeOrder = false;
+			let isSliderOrder = false;
 			pi_cash_entry.forEach((item2) => {
 				if (
 					item2.pi_item_description === item &&
 					item2.unit_price === item3 &&
-					item2.order_type !== 'tape'
+					item2.order_type === 'full'
 				) {
 					value += parseFloat(item2.value);
 					quantity += parseFloat(item2.pi_cash_quantity);
-					isTapeOrder = false;
 				} else if (
 					item2.pi_item_description === item &&
 					item2.unit_price === item3 &&
@@ -125,10 +126,20 @@ export default function Index(data) {
 					value += parseFloat(item2.value);
 					quantity += parseFloat(item2.size);
 					isTapeOrder = true;
+				} else if (
+					item2.pi_item_description === item &&
+					item2.unit_price === item3 &&
+					item2.order_type === 'slider'
+				) {
+					value += parseFloat(item2.value);
+					quantity += parseFloat(item2.pi_cash_quantity);
+					grand_total_slider += parseFloat(item2.pi_cash_quantity);
+					isSliderOrder = true;
 				}
 			});
 			total_quantity.push(quantity);
-			grand_total_quantity += !isTapeOrder ? quantity : 0;
+			grand_total_quantity +=
+				!isTapeOrder && !isSliderOrder ? quantity : 0;
 			grand_total_quantity_mtr += isTapeOrder ? quantity : 0;
 			total_value.push(Number(value).toFixed(2));
 			grand_total_value += value;
@@ -337,14 +348,31 @@ export default function Index(data) {
 							{
 								text: [
 									Number(grand_total_quantity) > 0
-										? `Total Zipper: ${Number(grand_total_quantity)} pcs ${grand_total_quantity_mtr > 0 ? `, ${grand_total_quantity_mtr} mtr` : ''}`
-										: `${grand_total_quantity_mtr > 0 ? `Total Zipper: ${grand_total_quantity_mtr} mtr` : ''}`,
+										? `Total Zipper: ${grand_total_quantity} pcs`
+										: '',
 									Number(grand_total_quantity) > 0 &&
+									Number(grand_total_quantity_mtr) > 0
+										? ','
+										: '',
+									Number(grand_total_quantity_mtr) > 0
+										? `Total Tape: ${grand_total_quantity_mtr} mtr`
+										: '',
+									(Number(grand_total_quantity) > 0 ||
+										Number(grand_total_quantity_mtr) > 0) &&
+									Number(grand_total_slider) > 0
+										? ','
+										: '',
+									Number(grand_total_slider) > 0
+										? `Total Slider: ${grand_total_slider} pcs`
+										: '',
+									(Number(grand_total_quantity) > 0 ||
+										Number(grand_total_quantity_mtr) > 0 ||
+										Number(grand_total_slider) > 0) &&
 									Number(grand_thread_total_quantity) > 0
-										? ', '
+										? ','
 										: '',
 									Number(grand_thread_total_quantity) > 0
-										? `Total Thread: ${grand_thread_total_quantity} cone`
+										? `Total Thread: ${grand_thread_total_quantity} cones`
 										: '',
 								],
 								alignment: 'right',

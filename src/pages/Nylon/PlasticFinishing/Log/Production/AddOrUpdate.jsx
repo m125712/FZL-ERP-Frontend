@@ -104,7 +104,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Nylon Plastic Finshing Transfer Log`}
+			title={`Nylon Plastic Finishing Transfer Log`}
 			onSubmit={handleSubmit(onSubmit)}
 			formContext={context}
 			onClose={onClose}

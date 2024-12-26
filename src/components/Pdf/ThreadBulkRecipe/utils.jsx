@@ -96,7 +96,7 @@ export const getPageHeader = (batch) => {
 				{
 					colSpan: 4,
 					table: {
-						widths: [70, 100, 75, 80, 80, 80],
+						widths: [60, 200, 60, 160],
 						headerRows: 1,
 						body: [
 							[
@@ -106,13 +106,6 @@ export const getPageHeader = (batch) => {
 								},
 								{
 									text: `${Array.from(party).join(', ')}`,
-								},
-								{
-									text: 'Delv Dt',
-									bold: true,
-								},
-								{
-									text: `${Array.from(delivery_date).join(', ')}`,
 								},
 								{
 									text: 'Batch No',
@@ -131,13 +124,6 @@ export const getPageHeader = (batch) => {
 									text: `${Array.from(order_ref_no).join(', ')}`,
 								},
 								{
-									text: 'Yarn Type',
-									bold: true,
-								},
-								{
-									text: ``,
-								},
-								{
 									text: 'Date',
 									bold: true,
 								},
@@ -152,13 +138,6 @@ export const getPageHeader = (batch) => {
 								},
 								{
 									text: `${Array.from(shade).join(', ')}`,
-								},
-								{
-									text: 'Lab Status',
-									bold: true,
-								},
-								{
-									text: '',
 								},
 								{
 									text: 'Substrate',
@@ -177,13 +156,6 @@ export const getPageHeader = (batch) => {
 									text: `${Array.from(color).join(', ')}`,
 								},
 								{
-									text: '',
-									bold: true,
-								},
-								{
-									text: '',
-								},
-								{
 									text: 'Batch Weight',
 									bold: true,
 								},
@@ -197,41 +169,11 @@ export const getPageHeader = (batch) => {
 							],
 							[
 								{
-									text: 'Product',
-									bold: true,
-								},
-								{
-									text: `${Array.from(count_length).join(', ')}`,
-								},
-								{
-									text: '',
-									bold: true,
-								},
-								{
-									text: '',
-								},
-								{
-									text: 'Slot',
-									bold: true,
-								},
-								{
-									text: 'Slot ' + batch?.slot,
-								},
-							],
-							[
-								{
 									text: 'Machine No',
 									bold: true,
 								},
 								{
 									text: batch?.machine_name,
-								},
-								{
-									text: '',
-									bold: true,
-								},
-								{
-									text: '',
 								},
 								{
 									text: 'Volume',
@@ -245,14 +187,23 @@ export const getPageHeader = (batch) => {
 							],
 							[
 								{
-									text: 'Light Source',
+									text: 'Slot',
 									bold: true,
 								},
 								{
-									text: '',
+									text: 'Slot ' + batch?.slot,
 								},
 								{
-									text: '',
+									text: 'Delv Dt',
+									bold: true,
+								},
+								{
+									text: `${Array.from(delivery_date).join(', ')}`,
+								},
+							],
+							[
+								{
+									text: 'Light Source',
 									bold: true,
 								},
 								{

@@ -1446,10 +1446,18 @@ export const reportQK = {
 	stock: (from, to) => [...reportQK.all(), 'stock', from, to],
 
 	//* Zipper Production
-	zipperProduction: () => [...reportQK.all(), 'zipper-production'],
+	zipperProduction: (query) => [
+		...reportQK.all(),
+		'zipper-production',
+		query,
+	],
 
 	//* Thread Production
-	threadProduction: () => [...reportQK.all(), 'thread-production'],
+	threadProduction: (query) => [
+		...reportQK.all(),
+		'thread-production',
+		query,
+	],
 
 	//* Daily Challan
 	dailyChallan: () => [...reportQK.all(), 'daily-challan'],

@@ -1,5 +1,5 @@
-import { useEffect, useMemo } from 'react';
-import { useDailyChallan, useZipperProduction } from '@/state/Report';
+import { useEffect, useMemo, useState } from 'react';
+import { useDailyChallan } from '@/state/Report';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
@@ -8,7 +8,10 @@ import { DateTime, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+import { ProductionStatus } from '../utils';
+
 export default function Index() {
+	const [status, setStatus] = useState('pending');
 	const { data, isLoading, url } = useDailyChallan();
 	const info = new PageInfo(
 		'Daily Challan Status',
@@ -45,6 +48,12 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'product',
+				header: 'Product',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -121,6 +130,14 @@ export default function Index() {
 			data={data}
 			columns={columns}
 			extraClass={'py-0.5'}
+			extraButton={
+				<ProductionStatus
+					className='w-44'
+					status={status}
+					setStatus={setStatus}
+					page='report__daily_challan'
+				/>
+			}
 		/>
 	);
 }

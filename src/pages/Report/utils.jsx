@@ -21,10 +21,13 @@ const zipperProductionOptions = [
 ];
 
 const threadProductionOptions = [
-	{ value: 'all', label: 'All' },
 	{ value: 'pending', label: 'Pending' },
 	{ value: 'completed', label: 'Completed' },
 	{ value: 'over_delivered', label: 'Over Delivered' },
+	{ value: 'sample_pending', label: 'Sample Pending' },
+	{ value: 'sample_completed', label: 'Sample Completed' },
+	{ value: 'sample_over_delivered', label: 'Sample Over Delivered' },
+	{ value: 'all', label: 'All' },
 ];
 
 export const ProductionStatus = ({ className, status, setStatus, page }) => {
@@ -36,6 +39,9 @@ export const ProductionStatus = ({ className, status, setStatus, page }) => {
 
 		case 'report__thread_production':
 			options = threadProductionOptions;
+			break;
+		case 'report__daily_challan':
+			options = defaultOptions;
 			break;
 
 		default:

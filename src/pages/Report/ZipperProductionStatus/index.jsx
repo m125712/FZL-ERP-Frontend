@@ -12,7 +12,9 @@ import { ProductionStatus } from '../utils';
 
 export default function Index() {
 	const [status, setStatus] = useState('pending');
-	const { data, isLoading, url } = useZipperProduction();
+	const { data, isLoading, url, refetch } = useZipperProduction(
+		`status=${status}`
+	);
 	const info = new PageInfo(
 		'Zipper Production Status',
 		url,
@@ -46,6 +48,7 @@ export default function Index() {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
+				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -220,6 +223,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'total_packing_list_quantity',
+				header: 'Packing List',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorFn: (row) =>
 					row.total_delivery_delivered_quantity +
 					row.total_delivery_balance_quantity,
@@ -254,7 +263,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 		],
-		[data]
+		[data, status]
 	);
 
 	if (isLoading)

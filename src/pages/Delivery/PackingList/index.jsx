@@ -2,11 +2,10 @@ import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import {
 	useDeliveryChallan,
 	useDeliveryPackingList,
-	useDeliveryPackingListByUUID,
 	useDeliveryPackingListDetailsByUUID,
 } from '@/state/Delivery';
 import { useOtherChallan, useOtherOrder, useThreadOrder } from '@/state/Other';
-import { Book, BookOpen, TableOfContents } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -79,7 +78,8 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'packing_number',
-				header: 'ID',
+				header: 'Packing List',
+				width: 'w-36',
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
@@ -93,7 +93,8 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'challan_number',
-				header: 'C/N',
+				header: 'Challan',
+				width: 'w-36',
 				cell: (info) => {
 					const { challan_number, challan_uuid } = info.row.original;
 					return (
@@ -108,6 +109,7 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
+				width: 'w-40',
 				cell: (info) => {
 					const { order_info_uuid, item_for } = info.row.original;
 
@@ -188,17 +190,18 @@ export default function Index() {
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'total_poly_quantity',
-				header: 'Poly',
-				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_quantity',
 				header: 'Total Qty',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_poly_quantity',
+				header: 'Poly',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -210,7 +213,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'carton_weight',
-				header: 'Carton Weight',
+				header: 'Weight',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

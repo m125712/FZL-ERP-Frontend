@@ -12,7 +12,7 @@ import { ProductionStatus } from '../utils';
 
 export default function Index() {
 	const [status, setStatus] = useState('pending');
-	const { data, isLoading, url } = useThreadProduction();
+	const { data, isLoading, url } = useThreadProduction(`status=${status}`);
 	const info = new PageInfo(
 		'Thread Production Status',
 		url,
@@ -29,7 +29,8 @@ export default function Index() {
 			{
 				accessorKey: 'batch_number',
 				header: 'Batch',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
+				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -48,7 +49,8 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
+				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -163,7 +165,16 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'total_delivery_balance_quantity',
+				accessorKey: 'total_packing_list_quantity',
+				header: 'Packing List',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) =>
+					row.total_delivery_delivered_quantity +
+					row.total_delivery_balance_quantity,
+				id: 'total_delivery_balance_quantity',
 				header: 'Challan',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -210,6 +221,7 @@ export default function Index() {
 				extraClass={'py-0.5'}
 				extraButton={
 					<ProductionStatus
+						className='w-44'
 						status={status}
 						setStatus={setStatus}
 						page='report__thread_production'

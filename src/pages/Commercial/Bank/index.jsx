@@ -11,25 +11,6 @@ import PageInfo from '@/util/PageInfo';
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
-// function IndeterminateCheckbox({ indeterminate, ...rest }) {
-// 	const ref = useRef(null);
-
-// 	useEffect(() => {
-// 		if (typeof indeterminate === "boolean") {
-// 			ref.current.indeterminate = indeterminate;
-// 		}
-// 	}, [ref, indeterminate]);
-
-// 	return (
-// 		<input
-// 			type="checkbox"
-// 			className="checkbox-secondary checkbox checkbox-sm"
-// 			ref={ref}
-// 			{...rest}
-// 		/>
-// 	);
-// }
-
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useCommercialBank();
 	const info = new PageInfo('Commercial/Bank', url, 'commercial__bank');
@@ -39,25 +20,6 @@ export default function Index() {
 
 	const columns = useMemo(
 		() => [
-			// {
-			// 	accessorKey: "select",
-			// 	header: ({ table }) => (
-			// 		<IndeterminateCheckbox
-			// 			checked={table.getIsAllRowsSelected()}
-			// 			indeterminate={table.getIsSomeRowsSelected()}
-			// 			onChange={table.getToggleAllRowsSelectedHandler()}
-			// 		/>
-			// 	),
-			// 	enableColumnFilter: false,
-			// 	enableSorting: false,
-			// 	cell: ({ row }) => (
-			// 		<IndeterminateCheckbox
-			// 			checked={row.getIsSelected()}
-			// 			indeterminate={row.getIsSomeSelected()}
-			// 			onChange={row.getToggleSelectedHandler()}
-			// 		/>
-			// 	),
-			// },
 			{
 				accessorKey: 'name',
 				header: 'Name',
@@ -88,7 +50,7 @@ export default function Index() {
 			{
 				accessorKey: 'policy',
 				header: 'Policy',
-				width: 'w-24',
+				width: 'w-72',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

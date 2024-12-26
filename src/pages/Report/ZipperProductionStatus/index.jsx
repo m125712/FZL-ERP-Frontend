@@ -1,13 +1,17 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useZipperProduction } from '@/state/Report';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, StatusButton } from '@/ui';
+import { DateTime, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+import { ProductionStatus } from '../utils';
+
 export default function Index() {
+	const [status, setStatus] = useState('pending');
 	const { data, isLoading, url } = useZipperProduction();
 	const info = new PageInfo(
 		'Zipper Production Status',
@@ -23,22 +27,53 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'id',
+				header: 'Sample/Bill/Cash',
+				enableColumnFilter: false,
+				width: 'w-28',
+				cell: (info) => {
+					const { is_sample, is_bill, is_cash } = info.row.original;
+					return (
+						<div className='flex gap-6'>
+							<StatusButton size='btn-xs' value={is_sample} />
+							<StatusButton size='btn-xs' value={is_bill} />
+							<StatusButton size='btn-xs' value={is_cash} />
+						</div>
+					);
+				},
+			},
+			{
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'order_created_at',
-				header: 'Order Created At',
+				accessorFn: (row) => format(row.order_created_at, 'dd/MM/yy'),
+				id: 'order_created_at',
+				header: 'Created At',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.order_created_at}
+						isTime={false}
+					/>
+				),
 			},
 			{
-				accessorKey: 'order_description_updated_at',
-				header: 'Order Dsc Updated At',
+				accessorFn: (row) =>
+					row.order_description_updated_at
+						? format(row.order_description_updated_at, 'dd/MM/yy')
+						: '--',
+				id: 'order_description_updated_at',
+				header: 'Updated At',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.order_description_updated_at}
+						isTime={false}
+					/>
+				),
 			},
 			{
 				accessorKey: 'marketing_name',
@@ -50,23 +85,10 @@ export default function Index() {
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'bill_cash_sample',
-				header: 'Bill/LC/Sample',
-				enableColumnFilter: false,
-				cell: (info) => {
-					const { is_bill, is_cash, is_sample } = info.row.original;
-					return (
-						<div className='flex space-x-1'>
-							<StatusButton size='btn-xs' value={is_bill} />
-							<StatusButton size='btn-xs' value={!is_cash} />
-							<StatusButton size='btn-xs' value={is_sample} />
-						</div>
-					);
-				},
-			},
+
 			{
 				accessorKey: 'item_description',
 				header: 'Item Description',
@@ -80,14 +102,13 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => (
 					<div className='flex-wrap'>
-						{' '}
 						{info.getValue().join(', ')}
 					</div>
 				),
 			},
 			{
 				accessorKey: 'swatch_approval_count',
-				header: 'Swatch Approval Count',
+				header: 'Swatch',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -98,22 +119,24 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => (
 					<div className='flex-wrap'>
-						{' '}
 						{info.getValue().join(', ')}
 					</div>
 				),
 			},
 			{
-				accessorKey: 'sizes',
+				accessorFn: (row) => row.sizes + ' (' + row.size_count + ')',
+				id: 'sizes',
 				header: 'Size (cm)',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'size_count',
-				header: 'Size Count',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { sizes, size_count } = info.row.original;
+					return (
+						<div className='flex flex-col'>
+							<span>{sizes} </span>
+							<span>#{size_count}</span>
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'total_quantity',
@@ -123,45 +146,70 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'assembly_production_quantity',
-				header: 'Assembly Prod QTY',
+				header: (
+					<>
+						Slider <br />
+						Assembly
+					</>
+				),
 				enableColumnFilter: false,
-				cell: (info) =>info.getValue(),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'coloring_production_quantity',
-				header: 'Coloring Prod QTY',
+				header: (
+					<>
+						Slider <br />
+						Coloring
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_tape_coil_to_dyeing_quantity',
-				header: 'Tape Prep (kg)',
+				header: (
+					<>
+						Tape Prep <br />
+						(kg)
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_dyeing_transaction_quantity',
-				header: 'Dyeing (kg)',
+				header: (
+					<>
+						Dyeing <br />
+						(kg)
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'teeth_molding',
+				accessorFn: (row) =>
+					row.teeth_molding_quantity + ' ' + row.teeth_molding_unit,
+				id: 'teeth_molding',
 				header: 'Teeth Molding',
+				header: (
+					<>
+						Teeth <br />
+						Molding
+					</>
+				),
 				enableColumnFilter: false,
-				cell: (info) => {
-					const { teeth_molding_quantity, teeth_molding_unit } =
-						info.row.original;
-					return (
-						Number(teeth_molding_quantity) +
-						' ' +
-						teeth_molding_unit
-					);
-				},
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'teeth_coloring_quantity',
-				header: 'Teeth Coloring',
+				header: (
+					<>
+						Teeth <br />
+						Coloring
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -172,14 +220,11 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'total_delivery_delivered_quantity',
-				header: 'Delivered (Gate Pass 1)',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'total_delivery_balance_quantity',
-				header: 'Bal. Delivery (Gate Pass 0)',
+				accessorFn: (row) =>
+					row.total_delivery_delivered_quantity +
+					row.total_delivery_balance_quantity,
+				id: 'total_delivery_balance_quantity',
+				header: 'Challan',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -196,10 +241,16 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'total_delivery_delivered_quantity',
+				header: 'Delivered',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
-				width: "w-32",
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 		],
@@ -210,14 +261,20 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<>
-			<ReactTable
-				title={info.getTitle()}
-				accessor={false}
-				data={data}
-				columns={columns}
-				extraClass={'py-0.5'}
-			/>
-		</>
+		<ReactTable
+			title={info.getTitle()}
+			accessor={false}
+			data={data}
+			columns={columns}
+			extraClass={'py-0.5'}
+			extraButton={
+				<ProductionStatus
+					className='w-44'
+					status={status}
+					setStatus={setStatus}
+					page='report__zipper_production'
+				/>
+			}
+		/>
 	);
 }

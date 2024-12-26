@@ -113,7 +113,7 @@ export default function DateRange({ getHeaderGroups }) {
 			withPortal
 			renderCustomHeader={CustomHeader}
 			customInput={
-				<ExampleCustomInput className='btn-filter-outline h-full pe-7' />
+				<ExampleCustomInput className='btn-filter-outline h-[2.35rem] h-full pe-7' />
 			}
 			{...DefaultConfig}
 		/>

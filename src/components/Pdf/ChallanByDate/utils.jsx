@@ -1,7 +1,7 @@
 import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
 
-import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../ui';
+import { DEFAULT_FONT_SIZE } from '../ui';
 import { company, getEmptyColumn } from '../utils';
 
 const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
@@ -29,7 +29,10 @@ export const getPageHeader = (data) => {
 					alignment: 'left',
 				},
 				{
-					text: [`${company.address}\n`, `${company.phone}\n`],
+					text: [
+						`${company.address}\n`,
+						`${company.challan_phone}\n`,
+					],
 					alignment: 'left',
 				},
 				{
@@ -41,6 +44,7 @@ export const getPageHeader = (data) => {
 							bold: true,
 						},
 						`Date: ${getDateFormate(data[0]?.delivery_date)}\n`,
+						`Vehicle: ${data[0]?.vehicle_name || '-'}\n`,
 						``,
 					],
 					alignment: 'right',

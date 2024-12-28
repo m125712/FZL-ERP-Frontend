@@ -18,18 +18,6 @@ export default function Index({ order_info_entry }) {
 
 	const columns = useMemo(
 		() => [
-			// {
-			// 	accessorKey: 'po',
-			// 	header: 'PO',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'recipe_name',
-			// 	header: 'Shade',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'id',
 				header: 'ID',
@@ -40,7 +28,8 @@ export default function Index({ order_info_entry }) {
 				accessorKey: 'status',
 				header: () => (
 					<span>
-						Status <br /> (Price/Swatch)
+						Status <br />
+						(Price/Swatch)
 					</span>
 				),
 				enableColumnFilter: false,
@@ -83,6 +72,12 @@ export default function Index({ order_info_entry }) {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'recipe_name',
+				header: 'Recipe',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'count_length_name',
 				header: 'Count Length',
 				enableColumnFilter: false,
@@ -103,8 +98,14 @@ export default function Index({ order_info_entry }) {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'production_quantity',
-				header: 'Production QTY',
+				accessorKey: 'short_quantity',
+				header: 'Short',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'reject_quantity',
+				header: 'Reject',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -115,41 +116,30 @@ export default function Index({ order_info_entry }) {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'production_quantity',
+				header: 'Production',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
+			{
 				accessorKey: 'delivered',
-				header: 'Delivered QTY',
+				header: 'Delivered',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'short_quantity',
-				header: 'Short QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'reject_quantity',
-				header: 'Reject QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+
 			{
 				accessorKey: 'warehouse',
-				header: 'Warehouse QTY',
+				header: 'Warehouse',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'company_price',
-				header: 'Company Price',
-				enableColumnFilter: false,
-				hidden: !useAccess('thread__order_info_in_details').includes(
-					'show_price'
-				),
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'party_price',
-				header: 'Party Price',
+				accessorFn: (row) =>
+					`${row.company_price || 0}/${row.party_price || 0}`,
+				id: 'price',
+				header: 'Price',
 				enableColumnFilter: false,
 				hidden: !useAccess('thread__order_info_in_details').includes(
 					'show_price'

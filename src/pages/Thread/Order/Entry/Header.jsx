@@ -7,10 +7,15 @@ import {
 	useOtherParty,
 } from '@/state/Other';
 import DatePicker from 'react-datepicker';
-import { useParams } from 'react-router-dom';
 
 import { Textarea } from '@/ui/Core';
 import { CheckBox, FormField, ReactSelect, SectionEntryBody } from '@/ui';
+
+const getBoolean = ({ field, getValues }) => {
+	return typeof getValues(field) !== 'boolean' && getValues('is_sample') === 1
+		? true
+		: false;
+};
 
 export default function Header({
 	register,
@@ -19,23 +24,14 @@ export default function Header({
 	Controller,
 	control,
 }) {
-	const { order_info_uuid } = useParams();
-
 	const [isSample, setIsSample] = useState(
-		typeof getValues('is_sample') !== 'boolean' &&
-			getValues('is_sample') === 1
-			? true
-			: false
+		getBoolean({ field: 'is_sample', getValues })
 	);
 	const [isBill, setIsBill] = useState(
-		typeof getValues('is_bill') !== 'boolean' && getValues('is_bill') === 1
-			? true
-			: false
+		getBoolean({ field: 'is_bill', getValues })
 	);
 	const [isCash, setIsCash] = useState(
-		typeof getValues('is_cash') !== 'boolean' && getValues('is_cash') === 1
-			? true
-			: false
+		getBoolean({ field: 'is_cash', getValues })
 	);
 	const [partyId, setPartyId] = useState(getValues('party_uuid'));
 	const { data: party } = useOtherParty();
@@ -60,8 +56,8 @@ export default function Header({
 								title='Sample'
 								text='text-primary-content'
 								defaultChecked={isSample}
-								{...{ register, errors }}
 								onChange={(e) => setIsSample(e.target.checked)}
+								{...{ register, errors }}
 							/>
 						</div>
 						<div className='rounded-md border border-accent/50 bg-primary px-1'>
@@ -70,8 +66,8 @@ export default function Header({
 								label='is_bill'
 								text='text-primary-content'
 								defaultChecked={isBill}
-								{...{ register, errors }}
 								onChange={(e) => setIsBill(e.target.checked)}
+								{...{ register, errors }}
 							/>
 						</div>
 						<div className='rounded-md border border-accent/50 bg-primary px-1'>
@@ -80,8 +76,8 @@ export default function Header({
 								label='is_cash'
 								text='text-primary-content'
 								defaultChecked={isCash}
-								{...{ register, errors }}
 								onChange={(e) => setIsCash(e.target.checked)}
+								{...{ register, errors }}
 							/>
 						</div>
 					</div>

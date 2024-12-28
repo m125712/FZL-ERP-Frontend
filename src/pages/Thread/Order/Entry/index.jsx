@@ -1,8 +1,6 @@
-import { Suspense, useCallback, useEffect, useState } from 'react';
-import {
-	useAllZipperThreadOrderList,
-	useOtherCountLength,
-} from '@/state/Other';
+import { Suspense, useEffect, useState } from 'react';
+import { toggleBleach } from '@/pages/Order/Details/Entry/utils';
+import { useAllZipperThreadOrderList } from '@/state/Other';
 import {
 	useThreadDetailsByUUID,
 	useThreadOrderInfo,
@@ -15,6 +13,8 @@ import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
+import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet'; //! why it is must??
+
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 
 import nanoid from '@/lib/nanoid';
@@ -59,13 +59,6 @@ export default function Index() {
 			: (document.title = 'Thread Shade Recipe: Entry');
 	}, []);
 
-	const { data: countLength } = useOtherCountLength();
-
-	const bleaching = [
-		{ label: 'Bleach', value: 'bleach' },
-		{ label: 'Non-Bleach', value: 'non-bleach' },
-	];
-
 	const {
 		fields: threadOrderInfoEntryField,
 		append: threadOrderInfoEntryAppend,
@@ -83,26 +76,14 @@ export default function Index() {
 	}, [data, isUpdate]);
 
 	// order_info_entry
-
-	const [bleachAll, setBleachAll] = useState();
-
-	useEffect(() => {
-		if (bleachAll !== null) {
-			threadOrderInfoEntryField.forEach((item, index) => {
-				setValue(
-					`order_info_entry[${index}].bleaching`,
-					bleachAll ? 'bleach' : 'non-bleach',
-					{
-						shouldDirty: true,
-						shouldValidate: true,
-					}
-				);
-			});
-		}
-	}, [bleachAll, threadOrderInfoEntryField]);
+	const [bleachAll, setBleachAll] = toggleBleach({
+		item: threadOrderInfoEntryField,
+		setValue,
+		field: 'order_info_entry',
+	});
 
 	useEffect(() => {
-		const subscription = watch((value, { name, type }) => {
+		const subscription = watch((value) => {
 			const { order_info_entry } = value;
 			if (order_info_entry?.length > 0) {
 				const allBleach = order_info_entry.every(
@@ -144,8 +125,6 @@ export default function Index() {
 		threadOrderInfoEntryAppend({
 			order_info_uuid: null,
 			lab_ref: '',
-			// po: '',
-			// recipe_uuid: null,
 			style: '',
 			color: '',
 			count_length_uuid: null,
@@ -157,7 +136,6 @@ export default function Index() {
 			remarks: '',
 		});
 	};
-	const onClose = () => reset(THREAD_ORDER_INFO_ENTRY_NULL);
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -286,19 +264,6 @@ export default function Index() {
 	// Check if uuid is valuuid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 
-	const handelDuplicateDynamicField = useCallback(
-		(index) => {
-			const item = getValues(`order_info_entry[${index}]`);
-			threadOrderInfoEntryAppend({ ...item, uuid: undefined });
-		},
-		[getValues, threadOrderInfoEntryAppend]
-	);
-
-	const handleEnter = (event) => {
-		event.preventDefault();
-		if (Object.keys(errors).length > 0) return;
-	};
-
 	const headerButtons = [
 		<div className='flex items-center gap-2'>
 			<label className='text-sm text-white'>Bleach All</label>
@@ -349,19 +314,6 @@ export default function Index() {
 					handleAdd={handleThreadOrderInfoEntryAppend}
 					handleRemove={handleThreadOrderInfoEntryRemove}
 				/>
-				{/* <HandsonSpreadSheet
-					extraHeader={headerButtons}
-					title='Details'
-					form={form}
-					fieldName='order_info_entry'
-					fieldDefs={useGenerateFieldDefs({
-						copy: handleCopy,
-						remove: handleThreadOrderInfoEntryRemove,
-						watch: watch,
-					})}
-					handleAdd={handleThreadOrderInfoEntryAppend}
-					fields={threadOrderInfoEntryField}
-				/> */}
 
 				<Footer buttonClassName='!btn-primary' />
 			</form>

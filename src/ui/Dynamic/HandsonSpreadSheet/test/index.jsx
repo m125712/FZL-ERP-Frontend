@@ -47,14 +47,15 @@ const TestSpreadSheet = (
 					});
 				}}
 				data={data}
+				columns={columns}
+				colHeaders={colHeaders}
 				height='auto'
 				width='100%'
 				stretchH='all'
-				colHeaders={colHeaders}
 				autoWrapRow={true}
 				autoWrapCol={true}
 				licenseKey='non-commercial-and-evaluation'
-				columns={columns}></HotTable>
+			/>
 		</SpreadSheetContainer>
 	);
 };

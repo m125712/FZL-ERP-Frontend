@@ -13,7 +13,6 @@ import {
 	useOtherOrderPropertiesByLockType,
 	useOtherOrderPropertiesByLogoType,
 	useOtherOrderPropertiesByNylonStopper,
-	useOtherOrderPropertiesByPullerLink,
 	useOtherOrderPropertiesByPullerType,
 	useOtherOrderPropertiesBySlider,
 	useOtherOrderPropertiesBySliderBodyShape,
@@ -36,6 +35,8 @@ import {
 
 import { ORDER_NULL } from '@/util/Schema';
 
+import { provided, sliderSections, types } from '../utils';
+
 export default function Header({
 	endType = '',
 	setEndType,
@@ -53,6 +54,8 @@ export default function Header({
 	setType,
 }) {
 	const { order_number, order_description_uuid } = useParams();
+	const isUpdate =
+		order_description_uuid !== undefined && order_number !== undefined;
 
 	const { data: order } = useOtherOrderInfoValueLabel();
 	const { data: item } = useOtherOrderPropertiesByItem();
@@ -74,7 +77,6 @@ export default function Header({
 
 	//* puller info*//
 	const { data: puller_type } = useOtherOrderPropertiesByPullerType();
-	const { data: puller_link } = useOtherOrderPropertiesByPullerLink();
 	const { data: color } = useOtherOrderPropertiesByColor();
 	const { data: hand } = useOtherOrderPropertiesByHand();
 	const { data: nylon_stop } = useOtherOrderPropertiesByNylonStopper();
@@ -87,12 +89,6 @@ export default function Header({
 	const { data: logo_type } = useOtherOrderPropertiesByLogoType();
 	const { data: teeth_type } = useOtherOrderPropertiesByTeethType();
 
-	const [isSliderProvided, setIsSliderProvided] = useState(
-		typeof getValues('is_slider_provided') !== 'boolean' &&
-			getValues('is_slider_provided') === 1
-			? true
-			: false
-	);
 	const [isLogoBody, setIsLogoBody] = useState(
 		typeof is_logo_body !== 'boolean' && is_logo_body === 1 ? true : false
 	);
@@ -101,25 +97,6 @@ export default function Header({
 			? true
 			: false
 	);
-
-	const sliderSections = [
-		{ value: 'die_casting', label: 'Die Casting' },
-		{ value: 'slider_assembly', label: 'Assembly' },
-		{ value: 'coloring', label: 'Coloring' },
-		{ value: '---', label: '---' },
-	];
-
-	const types = [
-		{ value: 'full', label: 'Full Order' },
-		{ value: 'slider', label: 'Slider' },
-		{ value: 'tape', label: 'Tape' },
-	];
-
-	const provided = [
-		{ value: 'completely_provided', label: 'Completely Provided' },
-		{ value: 'partial_provided', label: 'Partial Provided' },
-		{ value: 'not_provided', label: 'Not Provided' },
-	];
 
 	const [sp_req, setSpReq] = useState({});
 	const [garmentsWash, setGramentsWash] = useState({});
@@ -201,6 +178,7 @@ export default function Header({
 														order_type: e.value,
 													});
 												}}
+												isDisabled={isUpdate}
 											/>
 										);
 									}}
@@ -374,7 +352,6 @@ export default function Header({
 				</div>
 
 				{/* conditional rendering: checking if order type is full */}
-
 				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
 					<FormField
 						label='lock_type'

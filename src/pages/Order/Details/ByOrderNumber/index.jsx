@@ -51,7 +51,7 @@ export default function Index() {
 	const [data2, setData2] = useState('');
 	const [getPdfData, setGetPdfData] = useState(null);
 	const [getPdfData2, setGetPdfData2] = useState(null);
-	const [updateView, setUpdateView] = useState(true);
+	const [updateView, setUpdateView] = useState(false);
 
 	const path = getPath(haveAccess, order_number, user?.uuid);
 

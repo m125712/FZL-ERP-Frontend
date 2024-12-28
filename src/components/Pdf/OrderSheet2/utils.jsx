@@ -186,6 +186,7 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 		logo_type_name,
 		top_stopper_name,
 		bottom_stopper_name,
+		is_waterproof,
 
 		// new
 		coloring_type_name,
@@ -227,6 +228,7 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 		teeth_color_name
 			? `Teeth: ${teeth_type_name ? teeth_type_name + ' - ' : ''} ${teeth_color_name} Color`
 			: '',
+		is_waterproof ? 'Waterproof' : '',
 	];
 	let slider = [
 		puller_type_name ? `${puller_type_name} Puller` : '',

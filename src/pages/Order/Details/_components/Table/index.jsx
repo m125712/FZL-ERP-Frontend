@@ -16,7 +16,7 @@ export default function Index({
 	is_inch,
 	is_meter,
 	is_sample,
-	sliderQuantity,
+	total,
 	bleaching,
 }) {
 	const haveAccess = useAccess('order__details');
@@ -38,19 +38,16 @@ export default function Index({
 
 	return (
 		<ReactTable title='Details' data={order_entry} columns={columns}>
-			<tr className='bg-slate-200 text-sm'>
-				<td
-					colSpan={is_inch || is_meter ? 6 : 5}
-					className='text-right font-bold'>
-					Total Quantity:
+			<tr className='bg-slate-200 text-lg font-bold'>
+				<td colSpan={6} className='text-right'>
+					Total:
 				</td>
-				<td className='px-3 py-1'>{sliderQuantity.Quantity}</td>
-				<td className='px-3 py-1'>{sliderQuantity.piQuantity}</td>
-				<td className='px-3 py-1'>{sliderQuantity.rejectQuantity}</td>
-				<td className='px-3 py-1'>{sliderQuantity.shortQuantity}</td>
-				<td colSpan={is_inch || is_meter ? 6 : 4}></td>
-				<td className='px-3 py-1'>{sliderQuantity.deliveryQuantity}</td>
+				<td className='px-3 py-1'>{total.Quantity}</td>
+				<td className='px-3 py-1'>{total.piQuantity}</td>
+				<td className='px-3 py-1'>{total.rejectQuantity}</td>
+				<td className='px-3 py-1'>{total.shortQuantity}</td>
 				<td></td>
+				<td className='px-3 py-1'>{total.deliveryQuantity}</td>
 				<td></td>
 			</tr>
 		</ReactTable>

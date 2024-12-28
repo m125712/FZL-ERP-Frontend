@@ -1,5 +1,3 @@
-import { useAccess } from '@/hooks';
-
 import { StatusButton } from '@/ui';
 
 const createColumn = (props) => ({
@@ -88,6 +86,15 @@ const getColumn = ({ show_price, is_sample }) => {
 			cell: (info) => info.getValue(),
 		}),
 		createColumn({
+			accessorFn: (row) => row?.bleaching === 'bleach',
+			id: 'bleach',
+			header: 'Bleach',
+			enableColumnFilter: false,
+			cell: (info) => (
+				<StatusButton size='btn-xs' value={info.getValue()} />
+			),
+		}),
+		createColumn({
 			accessorKey: 'order_type',
 			header: 'Type',
 			enableColumnFilter: true,
@@ -95,13 +102,9 @@ const getColumn = ({ show_price, is_sample }) => {
 		}),
 		createColumn({
 			accessorFn: (row) => {
-				return `${
-					row.order_type === 'slider' || row.order_type === 'tape'
-						? '---'
-						: row.is_inch
-							? Number(row.size * 2.54).toFixed(2)
-							: '---'
-				}`;
+				if (row.order_type === 'slider' || row.order_type === 'tape')
+					return '---';
+				return row.is_inch ? row.size : '---';
 			},
 			id: 'sizes_inch',
 			header: `Size (Inch)`,
@@ -109,24 +112,20 @@ const getColumn = ({ show_price, is_sample }) => {
 		}),
 		createColumn({
 			accessorFn: (row) => {
-				return `${
-					row.order_type === 'slider'
-						? '---'
-						: row.order_type === 'tape'
-							? Number(row.size * 39.37).toFixed(2)
-							: Number(row.size).toFixed(2)
-				}`;
+				console.log(row);
+
+				if (row.order_type === 'slider' || row.order_type === 'tape')
+					return '---';
+				return row.is_inch ? '---' : row.size;
 			},
 			id: 'sizes_cm',
 			header: `Size (Cm)`,
 			enableColumnFilter: true,
 		}),
 		createColumn({
-			accessorFn: (row) => {
-				return `${row.order_type === 'tape' ? row.size : '---'}`;
-			},
+			accessorFn: (row) => (row.order_type === 'tape' ? row.size : '---'),
 			id: 'sizes_meter',
-			header: `Size (M)`,
+			header: `Size (MTR)`,
 			enableColumnFilter: true,
 		}),
 
@@ -154,21 +153,16 @@ const getColumn = ({ show_price, is_sample }) => {
 			enableColumnFilter: false,
 			cell: (info) => info.getValue(),
 		}),
-		createColumn({
-			accessorKey: 'bleaching',
-			header: 'Bleaching',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		}),
 
 		...(!is_sample
 			? [
 					createColumn({
 						accessorKey: 'dying_and_iron_prod',
 						header: (
-							<span>
-								Tape <br /> Production
-							</span>
+							<>
+								Tape <br />
+								Production
+							</>
 						),
 						enableColumnFilter: false,
 						cell: (info) => info.getValue(),
@@ -176,17 +170,19 @@ const getColumn = ({ show_price, is_sample }) => {
 					createStockProdColumn({
 						accessorKey: 'teeth_molding',
 						header: (
-							<span>
-								Teeth <br /> Molding
-							</span>
+							<>
+								Teeth <br />
+								Molding
+							</>
 						),
 					}),
 					createStockProdColumn({
 						accessorKey: 'teeth_coloring',
 						header: (
-							<span>
-								Teeth <br /> Coloring
-							</span>
+							<>
+								Teeth <br />
+								Coloring
+							</>
 						),
 					}),
 				]
@@ -225,11 +221,10 @@ const getColumn = ({ show_price, is_sample }) => {
 		createColumn({
 			accessorKey: 'company_price',
 			header: (
-				<span>
-					Price (USD)
-					<br />
+				<>
+					Price (USD) <br />
 					(Company/Party)
-				</span>
+				</>
 			),
 			enableColumnFilter: false,
 			hidden: !show_price,

@@ -1,12 +1,11 @@
-import { useState } from 'react';
 import { useGetURLData, useOtherOrderDescription } from '@/state/Other';
-import { format, set } from 'date-fns';
+import { format } from 'date-fns';
 import { useParams } from 'react-router-dom';
 
 import { DateInput } from '@/ui/Core';
 import {
 	FormField,
-	Input,
+	JoinInput,
 	ReactSelect,
 	SectionEntryBody,
 	Textarea,
@@ -65,7 +64,7 @@ export default function Header({
 						</span>
 					</div>
 				}>
-				<div className='grid grid-cols-2 gap-4'>
+				<div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
 					<DateInput
 						label='production_date'
 						Controller={Controller}
@@ -104,6 +103,7 @@ export default function Header({
 							}}
 						/>
 					</FormField>
+
 					<FormField label='status' title='Status' errors={errors}>
 						<Controller
 							name='status'
@@ -131,21 +131,21 @@ export default function Header({
 						orderType === 'tape' ||
 						sliderType === 'completely_provided'
 					) && (
-						<Input
+						<JoinInput
 							label='slider_lead_time'
-							unit='PCS'
+							unit='Days'
 							{...{ register, errors }}
 						/>
 					)}
 					{orderType !== 'slider' && (
-						<Input
+						<JoinInput
 							label='dyeing_lead_time'
-							unit='KG'
+							unit='Days'
 							{...{ register, errors }}
 						/>
 					)}
+					<Textarea label='remarks' {...{ register, errors }} />
 				</div>
-				<Textarea label='remarks' {...{ register, errors }} />
 			</SectionEntryBody>
 		</div>
 	);

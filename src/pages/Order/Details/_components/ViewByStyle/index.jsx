@@ -28,7 +28,7 @@ const Index = ({ initial_orders }) => {
 		setEntries(allEntries);
 	}, [initial_orders]); // include `initial_orders` as a dependency
 
-	const sliderQuantity = entrys.reduce(
+	const total = entrys.reduce(
 		(totals, item) => {
 			totals.Quantity += parseFloat(item.quantity) || 0;
 			totals.piQuantity += parseFloat(item.total_pi_quantity) || 0;
@@ -37,6 +37,7 @@ const Index = ({ initial_orders }) => {
 			totals.rejectQuantity +=
 				parseFloat(item.total_reject_quantity) || 0;
 			totals.shortQuantity += parseFloat(item.total_short_quantity) || 0;
+
 			return totals;
 		},
 		{
@@ -51,10 +52,6 @@ const Index = ({ initial_orders }) => {
 	const hasInitialOrder =
 		Object.keys(initial_orders || []).length > 0 ? true : false;
 
-	// console.log('initial_orders', initial_orders);
-	// console.log('entrys', entrys);
-	// console.log('sliderQuantity', sliderQuantity);
-
 	return (
 		<div>
 			<Suspense>
@@ -68,7 +65,7 @@ const Index = ({ initial_orders }) => {
 				))}
 			</Suspense>
 			<Suspense>
-				<Table order_entry={entrys} sliderQuantity={sliderQuantity} />
+				<Table order_entry={entrys} total={total} />
 			</Suspense>
 		</div>
 	);

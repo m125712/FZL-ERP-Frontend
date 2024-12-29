@@ -21,7 +21,6 @@ export default function Index({
 		style: null,
 		color: null,
 		size: null,
-		is_inch: 0,
 		item_for: null,
 		order_quantity: 0,
 		is_inch: 0,

@@ -22,6 +22,7 @@ export default function Index() {
 				accessorKey: 'material_name',
 				header: 'Name',
 				enableColumnFilter: false,
+				width: 'w-20',
 				cell: (info) => info.getValue(),
 			},
 			{

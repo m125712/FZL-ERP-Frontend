@@ -195,7 +195,6 @@ export default function Index() {
 				accessorFn: (row) =>
 					row.teeth_molding_quantity + ' ' + row.teeth_molding_unit,
 				id: 'teeth_molding',
-				header: 'Teeth Molding',
 				header: (
 					<>
 						Teeth <br />

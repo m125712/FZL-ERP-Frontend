@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PDF } from '@/assets/icons';
 import { useOrderDescription } from '@/state/Order';
 import { format } from 'date-fns';
@@ -6,11 +6,10 @@ import { format } from 'date-fns';
 import SectionContainer from '@/ui/Others/SectionContainer';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import RenderTable from '@/ui/Others/Table/RenderTable';
-import { LinkWithCopy, ReactSelect, StatusButton, TitleValue } from '@/ui';
+import { LinkWithCopy, StatusButton, TitleValue } from '@/ui';
 
 import ItemDescription from './Item';
 import OrderDescription from './Order';
-import SliderDescription from './Slider';
 
 export default function SingleInformation({ order, idx, hasInitialOrder }) {
 	const [check, setCheck] = useState(true);
@@ -198,13 +197,6 @@ export function OrderInformation({
 					{updateView ? 'View by Style' : 'Default View'}
 				</span>
 			</div>,
-			// <button
-			// 	key='pdf-1'
-			// 	type='button'
-			// 	className='btn btn-sm rounded-badge border-none bg-yellow-400 hover:bg-yellow-500'
-			// 	onClick={handleViewChange}>
-			// 	{updateView ? 'View by Style' : 'Default View'}
-			// </button>,
 		];
 	};
 
@@ -217,39 +209,6 @@ export function OrderInformation({
 			isOnCloseNeeded: false,
 		});
 	};
-
-	// const renderSelector = () => {
-	// 	const [select, setSelect] = useState(
-	// 		order?.print_in ? order?.print_in : ''
-	// 	);
-
-	// 	const selections = [
-	// 		{
-	// 			label: 'Portrait',
-	// 			value: 'portrait',
-	// 		},
-	// 		{
-	// 			label: 'Landscape',
-	// 			value: 'landscape',
-	// 		},
-	// 		{
-	// 			label: 'Break Down',
-	// 			value: 'break_down',
-	// 		},
-	// 	];
-
-	// 	return (
-	// 		<ReactSelect
-	// 			placeholder='Select Order'
-	// 			options={selections}
-	// 			value={selections?.find((item) => item.value === select)}
-	// 			onChange={(e) => {
-	// 				setSelect(e.value);
-	// 				onChangePrint(e.value);
-	// 			}}
-	// 		/>
-	// 	);
-	// };
 
 	return (
 		<SectionContainer

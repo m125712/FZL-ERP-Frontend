@@ -39,7 +39,7 @@ export default function Index({ initial_order, idx }) {
 
 	if (!order) return <Navigate to='/not-found' />;
 
-	const sliderQuantity = order?.order_entry.reduce(
+	const total = order?.order_entry.reduce(
 		(totals, item) => {
 			totals.Quantity += parseFloat(item.quantity) || 0;
 			totals.piQuantity += parseFloat(item.total_pi_quantity) || 0;
@@ -66,13 +66,12 @@ export default function Index({ initial_order, idx }) {
 					order={order}
 					idx={idx}
 					hasInitialOrder={hasInitialOrder}
-					sliderQuantity={sliderQuantity}
 				/>
 			</Suspense>
 
 			<Suspense>
 				<Timeline {...order} />
-				<Table {...order} sliderQuantity={sliderQuantity} />
+				<Table {...order} total={total} />
 			</Suspense>
 		</div>
 	);

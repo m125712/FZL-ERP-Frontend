@@ -1,5 +1,3 @@
-import { useAccess } from '@/hooks';
-
 import { StatusButton } from '@/ui';
 
 const createColumn = (props) => ({
@@ -85,28 +83,20 @@ const getColumn = ({
 			enableColumnFilter: true,
 			cell: (info) => info.getValue(),
 		}),
-		// createColumn({
-		// 	accessorKey: 'size',
-		// 	header: `${sizes.is_inch ? 'Size (Inch)' : 'Size (Meter)'}`,
-		// 	enableColumnFilter: true,
-		// 	hidden: !(sizes.is_inch || sizes.is_meter),
-		// 	cell: (info) => {
-		// 		return info.getValue();
-		// 	},
-		// }),
-
 		createColumn({
-			accessorFn: (row) => {
-				return `${
-					sizes.is_inch
-						? Number(row.size * 2.54).toFixed(2)
-						: Number(row.size)
-				}`;
-			},
-			id: 'sizes',
+			accessorFn: (row) => row?.bleaching === 'bleach',
+			id: 'bleach',
+			header: 'Bleach',
+			enableColumnFilter: false,
+			cell: (info) => (
+				<StatusButton size='btn-xs' value={info.getValue()} />
+			),
+		}),
+		createColumn({
+			accessorKey: 'size',
 			header:
 				order_type === 'tape'
-					? 'Size (M)'
+					? 'Size (MTR)'
 					: sizes.is_inch
 						? 'Size (Inch)'
 						: `Size (Cm)`,
@@ -137,21 +127,16 @@ const getColumn = ({
 			enableColumnFilter: false,
 			cell: (info) => info.getValue(),
 		}),
-		createColumn({
-			accessorKey: 'bleaching',
-			header: 'Bleaching',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		}),
 
 		...(!is_sample
 			? [
 					createColumn({
 						accessorKey: 'dying_and_iron_prod',
 						header: (
-							<span>
-								Tape <br /> Production
-							</span>
+							<>
+								Tape <br />
+								Production
+							</>
 						),
 						enableColumnFilter: false,
 						cell: (info) => info.getValue(),

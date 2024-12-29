@@ -973,7 +973,11 @@ export const deliveryQk = {
 	],
 
 	//* Packing List
-	deliveryPackingList: (query) => [...deliveryQk.all(), 'packing-list', query],
+	deliveryPackingList: (query) => [
+		...deliveryQk.all(),
+		'packing-list',
+		query,
+	],
 	deliveryPackingListByUUID: (uuid) => [
 		...deliveryQk.deliveryPackingList(),
 		uuid,
@@ -1444,6 +1448,13 @@ export const reportQK = {
 
 	//* Stock
 	stock: (from, to) => [...reportQK.all(), 'stock', from, to],
+	//*Production Report DateWise
+	productionReportDateWise: (from, to) => [
+		...reportQK.all(),
+		'production-report-date-wise',
+		from,
+		to,
+	],
 
 	//* Zipper Production
 	zipperProduction: (query) => [

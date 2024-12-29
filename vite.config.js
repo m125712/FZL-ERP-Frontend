@@ -1,7 +1,6 @@
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 import { defineConfig } from 'vite';
-import eslintPlugin from 'vite-plugin-eslint';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -39,9 +38,7 @@ export default defineConfig({
 		},
 	},
 	plugins: [react()],
-	// plugins: [react(), eslintPlugin()],
 	server: {
-		// port: 3000,
 		port: isProduction ? 4015 : 3000,
 	},
 });

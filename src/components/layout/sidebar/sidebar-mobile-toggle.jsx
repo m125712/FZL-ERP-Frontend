@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
 import { Menu } from 'lucide-react';
+import { motion } from 'motion/react';
 
 import { useLayout } from '../layout-provider';
 

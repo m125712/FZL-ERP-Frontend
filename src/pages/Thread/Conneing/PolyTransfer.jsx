@@ -1,4 +1,4 @@
-import { color } from 'framer-motion';
+import { color } from 'motion/react';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';

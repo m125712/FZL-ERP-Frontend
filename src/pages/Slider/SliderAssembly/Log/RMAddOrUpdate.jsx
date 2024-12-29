@@ -1,23 +1,18 @@
 import { useAuth } from '@/context/auth';
 import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
 import { useSliderAssemblyRM } from '@/state/Slider';
-import { warning } from 'framer-motion';
+import { warning } from 'motion/react';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
-
-
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect } from '@/ui';
 
-
-
-import { RM_MATERIAL_USED_EDIT_NULL, RM_MATERIAL_USED_EDIT_SCHEMA } from '@util/Schema';
+import {
+	RM_MATERIAL_USED_EDIT_NULL,
+	RM_MATERIAL_USED_EDIT_SCHEMA,
+} from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
-
-
-
-
 
 export default function Index({
 	modalId = '',

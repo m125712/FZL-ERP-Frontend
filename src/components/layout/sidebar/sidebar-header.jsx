@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
 import { CopyMinus, X } from 'lucide-react';
+import { motion } from 'motion/react';
 
 import BrandLogo from '../brand-logo';
 import { useLayout } from '../layout-provider';

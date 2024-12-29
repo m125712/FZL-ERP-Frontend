@@ -224,7 +224,7 @@ export default function Index(data) {
 														pl.packing_number
 												)
 											).itemDescriptions?.size
-										} Desc`,
+										} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'Count' : 'Desc'}`,
 										bold: true,
 										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
@@ -240,7 +240,7 @@ export default function Index(data) {
 										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 									{
-										text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).sizes?.size} Size`,
+										text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).sizes?.size} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'Length' : 'Size'}`,
 										bold: true,
 										alignment: 'right',
 										fontSize: DEFAULT_FONT_SIZE + 2,

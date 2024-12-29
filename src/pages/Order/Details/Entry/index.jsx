@@ -382,7 +382,22 @@ export default function Index() {
 
 	const handleCopy = (index) => {
 		const field = form.watch('order_entry')[index];
+
+		const length = form.watch('order_entry').length;
+		let newIndex;
+		if (length > 0) {
+			// Get the index value of the previous row
+			const previousIndex = form.getValues(
+				`order_entry.${length - 1}.index`
+			);
+			newIndex = previousIndex ? previousIndex + 1 : length + 1;
+		} else {
+			// For the first row, set index to 1
+			newIndex = length + 1;
+		}
+
 		orderEntryAppend({
+			index: newIndex,
 			bleaching: field.bleaching,
 			quantity: field.quantity,
 			color: field.color,

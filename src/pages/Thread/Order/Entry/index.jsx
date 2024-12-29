@@ -276,7 +276,22 @@ export default function Index() {
 
 	const handleCopy = (index) => {
 		const field = form.watch('order_info_entry')[index];
+
+		const length = form.watch('order_info_entry').length;
+		let newIndex;
+		if (length > 0) {
+			// Get the index value of the previous row
+			const previousIndex = form.getValues(
+				`order_info_entry.${length - 1}.index`
+			);
+			newIndex = previousIndex ? previousIndex + 1 : length + 1;
+		} else {
+			// For the first row, set index to 1
+			newIndex = length + 1;
+		}
+
 		threadOrderInfoEntryAppend({
+			index: newIndex,
 			color: field.color,
 			style: field.style,
 			count_length_uuid: field.count_length_uuid,

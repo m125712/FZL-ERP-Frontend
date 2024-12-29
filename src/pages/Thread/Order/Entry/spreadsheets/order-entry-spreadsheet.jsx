@@ -27,6 +27,9 @@ const OrderEntrySpreadsheet = (
 	const { data: countLength } = useOtherCountLength();
 	const columns = [
 		{
+			data: 'index',
+		},
+		{
 			data: 'color',
 		},
 		{
@@ -63,6 +66,7 @@ const OrderEntrySpreadsheet = (
 	];
 	const data = form.watch(fieldName).map((item) => {
 		return {
+			index: item.index,
 			color: item.color,
 			style: item.style,
 			count_length_uuid: item.count_length_uuid,
@@ -75,6 +79,7 @@ const OrderEntrySpreadsheet = (
 	});
 
 	const colHeaders = [
+		'Id',
 		'Color',
 		'Style',
 		'Count Length',
@@ -96,6 +101,7 @@ const OrderEntrySpreadsheet = (
 				columns,
 				colHeaders,
 				data,
+				isIndex: true,
 			}}
 		/>
 	);

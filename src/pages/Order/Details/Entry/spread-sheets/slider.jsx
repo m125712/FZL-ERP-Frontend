@@ -24,6 +24,9 @@ const Slider = (
 ) => {
 	const columns = [
 		{
+			data: 'index',
+		},
+		{
 			data: 'style',
 		},
 		{
@@ -39,6 +42,7 @@ const Slider = (
 	];
 	const data = form.watch(fieldName).map((item) => {
 		return {
+			index: item.index,
 			style: item.style,
 			quantity: item.quantity,
 			company_price: item.company_price,
@@ -47,6 +51,7 @@ const Slider = (
 	});
 
 	const colHeaders = [
+		'Id',
 		'Style',
 		'Quantity',
 		'Company (USD/DZN)',
@@ -64,6 +69,7 @@ const Slider = (
 				columns,
 				colHeaders,
 				data,
+				isIndex: true,
 			}}
 		/>
 	);

@@ -633,6 +633,7 @@ export const ORDER_SCHEMA = {
 
 	order_entry: yup.array().of(
 		yup.object().shape({
+			index: NUMBER_REQUIRED,
 			style: STRING_REQUIRED,
 			color: STRING_REQUIRED,
 			size: NUMBER_DOUBLE_REQUIRED,
@@ -676,6 +677,7 @@ export const ORDER_NULL = {
 	is_cm: true,
 	order_entry: [
 		{
+			index: null,
 			order_description_uuid: null,
 			style: '',
 			color: '',
@@ -2485,6 +2487,7 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 	remarks: STRING.nullable(),
 	order_info_entry: yup.array().of(
 		yup.object().shape({
+			index: NUMBER_REQUIRED,
 			color: STRING_REQUIRED,
 			// shade_recipe_uuid: STRING.nullable(),
 			// po: STRING_REQUIRED,
@@ -2517,6 +2520,7 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 	delivery_date: null,
 	order_info_entry: [
 		{
+			index: null,
 			uuid: null,
 			order_info_uuid: null,
 			// po: '',

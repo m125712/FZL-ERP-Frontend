@@ -15,6 +15,7 @@ const TestSpreadSheet = (
 		columns,
 		colHeaders,
 		data,
+		isIndex,
 	} = {
 		title: '',
 		extraHeader: null,
@@ -24,6 +25,7 @@ const TestSpreadSheet = (
 		columns: [],
 		colHeaders: [],
 		data: [],
+		isIndex: false,
 	}
 ) => {
 	data.map((item, index) => {
@@ -31,6 +33,28 @@ const TestSpreadSheet = (
 			form.register(`${fieldName}.${index}.${key}`);
 		});
 	});
+
+	const columnsWithIndex = (row, form, fieldName) => {
+		// Calculate the index value for the current row
+		let newIndex;
+		if (row > 0) {
+			// Get the index value of the previous row
+			const previousIndex = form.getValues(
+				`${fieldName}.${row - 1}.index`
+			);
+			newIndex = previousIndex ? previousIndex + 1 : row + 1;
+		} else {
+			// For the first row, set index to 1
+			newIndex = 1;
+		}
+
+		// Update the index value for the current row
+		form.setValue(`${fieldName}.${row}.index`, newIndex, {
+			shouldDirty: true,
+			shouldTouch: true,
+			shouldValidate: false,
+		});
+	};
 
 	return (
 		<SpreadSheetContainer {...{ title, extraHeader, handleAdd }}>
@@ -44,7 +68,18 @@ const TestSpreadSheet = (
 							shouldTouch: true,
 							shouldValidate: false,
 						});
+
+						if (isIndex) {
+							columnsWithIndex(row, form, fieldName);
+						}
 					});
+				}}
+				cells={(row, col) => {
+					const cellProperties = {};
+					if (col === 0 && isIndex) {
+						cellProperties.readOnly = true; // Make the index column read-only
+					}
+					return cellProperties;
 				}}
 				data={data}
 				columns={columns}

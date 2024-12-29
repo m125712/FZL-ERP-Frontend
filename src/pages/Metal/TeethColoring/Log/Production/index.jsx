@@ -101,7 +101,14 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'size',
-				header: 'size',
+				header: 'Size',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},{
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>

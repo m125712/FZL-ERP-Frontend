@@ -22,10 +22,18 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const navigate = useNavigate();
-	const { data, isLoading, url, deleteData, updateData } =
-		useDeliveryPackingList();
-	const info = new PageInfo('Packing List', url, 'delivery__packing_list');
 	const haveAccess = useAccess('delivery__packing_list');
+	const access = haveAccess?.filter(
+		(item) =>
+			item == 'thread' ||
+			item == 'sample_zipper' ||
+			item == 'zipper' ||
+			item == 'all'
+	);
+	const { data, isLoading, url, deleteData, updateData } =
+		useDeliveryPackingList(`?can_show=${access.join(',')}`);
+	const info = new PageInfo('Packing List', url, 'delivery__packing_list');
+
 	const { invalidateQuery: invalidateDeliveryChallan } = useDeliveryChallan();
 	const { invalidateQuery: invalidateOtherChallan } =
 		useOtherChallan('gate_pass=false');

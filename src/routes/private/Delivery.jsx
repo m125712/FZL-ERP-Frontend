@@ -135,7 +135,6 @@ export const DeliveryRoutes = [
 					'click_received_override',
 					'click_gate_pass',
 					'click_gate_pass_override',
-					'all',
 					'zipper',
 					'sample_zipper',
 					'thread',

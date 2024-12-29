@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 import { useLayout } from '../layout-provider';
 import SidebarContent from './sidebar-content';
@@ -7,7 +7,7 @@ const SidebarDesktop = () => {
 	const { isCollapsed } = useLayout();
 	return (
 		<motion.div
-		initial='open'
+			initial='open'
 			variants={{
 				open: { opacity: 1, width: '18rem' },
 				closed: { opacity: 1, width: 0, overflow: 'hidden' },

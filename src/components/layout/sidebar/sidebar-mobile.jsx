@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 import { useLayout } from '../layout-provider';
 import SidebarContent from './sidebar-content';

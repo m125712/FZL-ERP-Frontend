@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
 import { House } from 'lucide-react';
+import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import useBreadcrumbs from 'use-react-router-breadcrumbs';
 

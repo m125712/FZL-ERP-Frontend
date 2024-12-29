@@ -128,25 +128,19 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'batch_quantity',
-				header: (
-					<span>
-						Batch QTY
-						<br />
-						(PCS)
-					</span>
-				),
+				header: <span>Batch QTY</span>,
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'tape_transferred',
-				header: 'Tape Stock (KG)',
+				header: <span>Tape (KG)</span>,
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'slider_finishing_stock',
-				header: 'Slider Stock (PCS)',
+				header: 'Slider (PCS)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

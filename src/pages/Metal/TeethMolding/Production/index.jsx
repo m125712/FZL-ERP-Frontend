@@ -116,7 +116,8 @@ export default function Index() {
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),
-			},{
+			},
+			{
 				accessorKey: 'unit',
 				header: 'Unit',
 				enableColumnFilter: false,
@@ -126,37 +127,19 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'batch_quantity',
-				header: (
-					<span>
-						Batch QTY
-						<br />
-						(PCS)
-					</span>
-				),
+				header: <span>Batch QTY</span>,
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'tape_stock',
-				header: (
-					<span>
-						Tape Stock
-						<br />
-						(KG)
-					</span>
-				),
+				header: <span>Tape (KG)</span>,
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'balance_quantity',
-				header: (
-					<span>
-						Balance
-						<br />
-						(PCS)
-					</span>
-				),
+				header: <span>Balance (PCS)</span>,
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

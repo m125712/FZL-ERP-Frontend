@@ -129,37 +129,25 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'batch_quantity',
-				header: (
-					<span>
-						Batch
-						<br />
-						QTY (PCS)
-					</span>
-				),
+				header: <span>Batch QTY</span>,
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'finishing_stock',
-				header: 'Finishing Stock (KG)',
+				header: 'Tape (KG)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'slider_finishing_stock',
-				header: 'Slider Finishing Stock (PCS)',
+				header: <span>Slider (PCS)</span>,
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'balance_quantity',
-				header: (
-					<span>
-						Balance
-						<br />
-						(PCS)
-					</span>
-				),
+				header: <span>Balance (PCS)</span>,
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

@@ -87,17 +87,26 @@ export const Columns = ({
 		},
 		{
 			accessorKey: 'size',
-			header: 'Size (CM)',
+			header: 'Size',
 			enableColumnFilter: false,
 			enableSorting: true,
 		},
 		{
-			accessorKey: 'order_quantity',
+			accessorKey: 'unit',
+			header: 'Unit',
+			enableColumnFilter: false,
+			enableSorting: true,
+		},
+		{
+			accessorFn: (row) => {
+				if (row.unit === 'Meter') return '-';
+				return row.order_quantity;
+			},
+			id: 'order_quantity',
 			header: 'Order QTY',
 			enableColumnFilter: false,
 			enableSorting: true,
 			width: 'w-20',
-			cell: (info) => info.getValue(),
 		},
 		{
 			accessorFn: (row) => getRequiredTapeKg({ row, type: 'raw' }),
@@ -118,6 +127,7 @@ export const Columns = ({
 		() => [
 			...commonColumns,
 			{
+				// ! balance quantity needs to be changed for tape order
 				accessorKey: 'balance_quantity',
 				header: (
 					<div className='flex flex-col'>

@@ -108,6 +108,14 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'unit',
+				header: 'Unit',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
 				accessorKey: 'trx_to',
 				header: 'Transferred To',
 				enableColumnFilter: false,

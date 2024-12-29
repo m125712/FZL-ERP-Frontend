@@ -21,7 +21,7 @@ export default function Index(data) {
 		getTable('style', 'Style'),
 		getTable('color', 'Color'),
 		getTable('size', 'Size', 'right'),
-		getTable('quantity', 'Qty(cm)', 'right'),
+		getTable('quantity', 'Qty(mtr)', 'right'),
 	];
 
 	const node = data?.order_type == 'tape' ? tapeNode : normalNode;
@@ -33,8 +33,9 @@ export default function Index(data) {
 	} else if (orderType === 'tape') {
 		val = `${data?.size} mtr`;
 	} else {
-		val = `${data?.size} ${data?.is_inch === 1 ? 'inch' : 'cm'}`;
+		val = `${data?.size} ${data?.unit}`;
 	}
+
 	const pdfDocGenerator = pdfMake.createPdf({
 		...CUSTOM_PAGE({
 			pageOrientation: 'landscape',

@@ -21,8 +21,8 @@ const ZipperProduction = lazy(
 	() => import('@/pages/Report/ZipperProductionStatus')
 );
 const Store = lazy(() => import('@/pages/Report/Store'));
-const ProductionStatement = lazy(
-	() => import('@/pages/Report/ProductionStatementReport')
+const DailyProduction = lazy(
+	() => import('@/pages/Report/DailyProduction')
 );
 
 const Sample = lazy(() => import('@/pages/Report/Sample'));
@@ -102,10 +102,10 @@ export const ReportRoutes = [
 				actions: ['read'],
 			},
 			{
-				name: 'Production Statement Report',
+				name: 'Daily Production',
 				path: '/report/production-statement',
-				element: <ProductionStatement />,
-				page_name: 'report__production_statement',
+				element: <DailyProduction />,
+				page_name: 'report__daily_production',
 				actions: ['read'],
 			},
 			{

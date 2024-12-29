@@ -19,15 +19,6 @@ export default function Header({
 						setFrom(format(data, 'yyyy-MM-dd'));
 					}}
 				/>
-				<SimpleDatePicker
-					key={'to'}
-					value={to}
-					placeholder='To'
-					disabled={from ? false : true}
-					onChange={(data) => {
-						setTo(format(data, 'yyyy-MM-dd'));
-					}}
-				/>
 			</SectionEntryBody>
 		</div>
 	);

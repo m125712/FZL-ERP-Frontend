@@ -8,9 +8,8 @@ const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 
 const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 
-export const getPageHeader = (dyeingDate) => {
-	const date = getDateFormate(dyeingDate);
-	const day = format(dyeingDate, 'EEEE');
+export const getPageHeader = (from) => {
+	console.log('from', from);
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
 		widths: [70, '*', 70, '*'],
@@ -30,12 +29,11 @@ export const getPageHeader = (dyeingDate) => {
 					colSpan: 2,
 					text: [
 						{
-							text: `Dyeing Dashboard\n`,
+							text: `Daily Production Report\n`,
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
-						`Date: ${date}\n`,
-						`Day: ${day}\n`,
+						`Date: ${getDateFormate(from)} \n`,
 					],
 					alignment: 'right',
 				},

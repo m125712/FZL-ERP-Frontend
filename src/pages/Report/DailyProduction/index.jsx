@@ -84,23 +84,23 @@ export default function index() {
 
 	return (
 		<>
-			<button
-				type='button'
-				onClick={() => {
-					Pdf(data, from)?.print({}, window);
-				}}
-				className='btn btn-primary'>
-				PDF
-			</button>
 			<div className='flex flex-col gap-8'>
 				<Header {...{ from, setFrom }} />
-				<ReactTable
+				<button
+					type='button'
+					onClick={() => {
+						Pdf(data, from)?.print({}, window);
+					}}
+					className='btn btn-primary'>
+					Generate PDF
+				</button>
+				{/* <ReactTable
 					title={info.getTitle()}
 					accessor={false}
 					data={data}
 					columns={columns}
 					extraClass={'py-0.5'}
-				/>
+				/> */}
 			</div>
 		</>
 	);

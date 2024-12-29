@@ -43,7 +43,7 @@ export default function Index(data, from) {
 				);
 			}, 0) || 0;
 
-		return item.parties?.flatMap((partyItem, partyIndex) => {
+		return item.parties?.flatMap((partyItem,) => {
 			let totalPartyWiseCloseEnd = 0;
 			let totalPartyWiseOpenEnd = 0;
 			let totalPartyWiseTotalQuantity = 0;

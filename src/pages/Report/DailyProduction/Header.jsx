@@ -10,7 +10,7 @@ export default function Header({
 }) {
 	return (
 		<div>
-			<SectionEntryBody title={'Stock Report'}>
+			<SectionEntryBody title={'Generate Report'}>
 				<SimpleDatePicker
 					key={'from'}
 					value={from}

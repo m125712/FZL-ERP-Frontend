@@ -1,16 +1,18 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
-import {
-	useDeliveryChallan,
-	useDeliveryPackingList,
-	useDeliveryPackingListByUUID,
-} from '@/state/Delivery';
+import { useDeliveryChallan } from '@/state/Delivery';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, EditDelete, LinkWithCopy, StatusButton } from '@/ui';
+import {
+	DateTime,
+	EditDelete,
+	LinkOnly,
+	LinkWithCopy,
+	StatusButton,
+} from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
@@ -34,9 +36,8 @@ export default function Index() {
 				accessorKey: 'is_hand_delivery',
 				header: (
 					<span>
-						Hand
-						<br />
-						Delivery
+						Hand <br />
+						Del.
 					</span>
 				),
 				enableColumnFilter: false,
@@ -45,8 +46,72 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'gate_pass',
+				header: (
+					<span>
+						Gate <br />
+						Pass
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<StatusButton
+							size='btn-sm'
+							value={Number(info.getValue()) === 1}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'receive_status',
+				header: 'Received',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { gate_pass, receive_status } = info.row.original;
+
+					const access = haveAccess.includes('click_receive_status');
+					const overrideAccess = haveAccess.includes(
+						'click_receive_status_override'
+					);
+					let permission = false;
+					if (gate_pass) {
+						if (!receive_status && access) permission = true;
+						if (overrideAccess) permission = true;
+					}
+
+					return (
+						<SwitchToggle
+							checked={Number(info.getValue()) === 1}
+							onChange={() => handelReceiveStatus(info.row.index)}
+							disabled={!permission}
+						/>
+					);
+				},
+			},
+			{
+				accessorFn: (row) => format(row.delivery_date, 'dd/MM/yy'),
+				id: 'delivery_date',
+				header: 'Delivered On',
+				enableColumnFilter: true,
+				width: 'w-32',
+				cell: (info) => {
+					const { delivery_date } = info.row.original;
+					return (
+						<LinkOnly
+							title={
+								<DateTime date={delivery_date} isTime={false} />
+							}
+							id={format(new Date(delivery_date), 'yyyy-MM-dd')}
+							uri='/delivery/challan-by-date'
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'challan_number',
 				header: 'ID',
+				width: 'w-40',
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
@@ -59,13 +124,44 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'packing_list_numbers',
-				id: 'packing_list',
+				accessorKey: 'order_number',
+				header: 'O/N',
+				width: 'w-40',
+				cell: (info) => {
+					const { order_info_uuid, item_for } = info.row.original;
+
+					if (item_for === 'thread' || item_for === 'sample_thread') {
+						return (
+							<LinkWithCopy
+								title={info.getValue()}
+								id={order_info_uuid}
+								uri='/thread/order-info'
+							/>
+						);
+					}
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={info.getValue()}
+							uri='/order/details'
+						/>
+					);
+				},
+			},
+			{
+				//* joining packing list numbers
+				accessorFn: (row) =>
+					row.packing_list_numbers
+						.map((item) => item.packing_number)
+						.join(', '),
+				id: 'packing_list_numbers',
 				header: 'Packing List',
 				width: 'w-28',
 				enableColumnFilter: false,
 				cell: (info) => {
-					return info?.getValue()?.map((packingList, index) => {
+					const { packing_list_numbers } = info.row.original;
+
+					return packing_list_numbers?.map((packingList) => {
 						if (packingList === 'PL-') return '-';
 						return (
 							<LinkWithCopy
@@ -78,30 +174,7 @@ export default function Index() {
 					});
 				},
 			},
-			{
-				accessorKey: 'order_number',
-				header: 'O/N',
-				cell: (info) => {
-					const { order_info_uuid } = info.row.original;
-					const { item_for } = info.row.original;
-					return item_for === 'zipper' ||
-						item_for === 'sample_zipper' ||
-						item_for === 'slider' ||
-						item_for === 'tape' ? (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={info.getValue()}
-							uri='/order/details'
-						/>
-					) : (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={order_info_uuid}
-							uri='/thread/order-info'
-						/>
-					);
-				},
-			},
+
 			{
 				accessorKey: 'party_name',
 				header: 'Party',
@@ -141,69 +214,9 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'delivery_cost',
-				header: 'Delivery Cost',
+				header: 'Cost',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'gate_pass',
-				header: 'Gate Pass',
-				enableColumnFilter: false,
-				cell: (info) => {
-					return (
-						<StatusButton
-							size='btn-sm'
-							value={Number(info.getValue()) === 1}
-						/>
-					);
-				},
-			},
-			{
-				accessorKey: 'receive_status',
-				header: 'Receive Status',
-				enableColumnFilter: false,
-				cell: (info) => {
-					const { gate_pass, receive_status } = info.row.original;
-
-					const access = haveAccess.includes('click_receive_status');
-					const overrideAccess = haveAccess.includes(
-						'click_receive_status_override'
-					);
-
-					return (
-						<SwitchToggle
-							disabled={
-								overrideAccess
-									? false
-									: access
-										? gate_pass === 0 ||
-											receive_status === 1
-										: true
-							}
-							onChange={() => handelReceiveStatus(info.row.index)}
-							checked={Number(info.getValue()) === 1}
-						/>
-					);
-				},
-			},
-			{
-				accessorKey: 'delivery_date',
-				header: 'Delivery Date',
-				cell: (info) => {
-					const { order_number } = info.row.original;
-					return (
-						<LinkWithCopy
-							title={
-								<DateTime
-									date={info.getValue()}
-									isTime={false}
-								/>
-							}
-							id={format(new Date(info.getValue()), 'yyyy-MM-dd')}
-							uri='/delivery/challan-by-date'
-						/>
-					);
-				},
 			},
 
 			{
@@ -265,7 +278,7 @@ export default function Index() {
 		const updated_at = GetDateTime();
 
 		await updateData.mutateAsync({
-			url: `/delivery/challan/${challan?.uuid}`,
+			url: `/delivery/challan/update-receive-status/${challan?.uuid}`,
 			uuid: challan?.uuid,
 			updatedData: { receive_status: status, updated_at },
 			isOnCloseNeeded: false,

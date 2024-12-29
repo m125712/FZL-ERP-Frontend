@@ -2,7 +2,6 @@ import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useLabDipInfo, UseLabDipInfoByDetails } from '@/state/LabDip';
 import { useOtherRecipe } from '@/state/Other';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
@@ -12,6 +11,7 @@ import { Footer } from '@/components/Modal/ui';
 import { ActionButtons, DynamicField, FormField, ReactSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { LAB_INFO_NULL, LAB_INFO_SCHEMA } from '@util/Schema';
 import { exclude } from '@/util/Exclude';
 import GetDateTime from '@/util/GetDateTime';
@@ -86,12 +86,14 @@ export default function Index() {
 		const recipeName = rec_uuid?.find(
 			(item) => item.value == getValues(`recipe[${index}].recipe_uuid`)
 		);
-		if (recipeUuid !== undefined) {
+		if (infoUuid !== undefined) {
 			setUpdateItem({
 				itemId: infoUuid,
 				itemName: recipeName?.label,
 			});
 			window['recipe_update'].showModal();
+		} else {
+			recipeRemove(index);
 		}
 	};
 
@@ -395,6 +397,7 @@ export default function Index() {
 										handleRecipeRemove(index)
 									}
 									showRemoveButton={true}
+									showDuplicateButton={false}
 								/>
 							</td>
 						</tr>

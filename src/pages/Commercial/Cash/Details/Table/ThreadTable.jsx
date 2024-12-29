@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, LinkWithCopy } from '@/ui';
 
-export default function ThreadTable({ pi_cash_entry_thread }) {
+export default function ThreadTable({ pi_cash_entry_thread, conventionRate }) {
 	const columns = useMemo(
 		() => [
 			{
@@ -56,13 +56,13 @@ export default function ThreadTable({ pi_cash_entry_thread }) {
 					</div>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => info.getValue() * conventionRate,
 			},
 			{
 				accessorKey: 'value',
 				header: 'Value ($)',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => info.getValue() ,
 			},
 			{
 				accessorKey: 'remarks',

@@ -4,13 +4,13 @@ import {
 	useSliderAssemblyStockProduction,
 	useSliderDieCastingStock,
 } from '@/state/Slider';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	NUMBER_REQUIRED,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,

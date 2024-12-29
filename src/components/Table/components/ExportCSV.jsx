@@ -1,6 +1,7 @@
-import { Download, Excel } from '@/assets/icons';
+import { Download } from '@/assets/icons';
 import { format } from 'date-fns';
 import { CSVLink } from 'react-csv';
+
 import { GetFlatHeader } from '../utils';
 
 export default function ExportCSV({ getAllLeafColumns, filteredRows, title }) {

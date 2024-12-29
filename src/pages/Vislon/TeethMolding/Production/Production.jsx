@@ -1,12 +1,12 @@
 import { useAuth } from '@/context/auth';
 import { useVislonTMP, useVislonTMPLog } from '@/state/Vislon';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { JoinInput, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	NUMBER_DOUBLE_REQUIRED,
 	SFG_PRODUCTION_SCHEMA_IN_KG,
@@ -70,7 +70,8 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			finishing_batch_entry_uuid: updateTeethMoldingProd?.finishing_batch_entry_uuid,
+			finishing_batch_entry_uuid:
+				updateTeethMoldingProd?.finishing_batch_entry_uuid,
 			section: 'teeth_molding',
 			created_by: user?.uuid,
 			created_at: GetDateTime(),

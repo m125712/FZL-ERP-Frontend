@@ -5,7 +5,6 @@ import {
 	useThreadOrderDetailsForChallanByUUID,
 } from '@/state/Thread';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import { useAccess, useRHF } from '@/hooks';
@@ -16,6 +15,7 @@ import { ShowLocalToast } from '@/components/Toast';
 import { EditDelete, Input, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	NUMBER,
 	NUMBER_DOUBLE,

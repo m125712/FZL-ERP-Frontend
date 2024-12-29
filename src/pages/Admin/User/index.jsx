@@ -198,10 +198,6 @@ export default function Order() {
 		const user = data[idx];
 		const status = user?.status == 1 ? 0 : 1;
 		const updated_at = GetDateTime();
-		console.log({
-			status,
-			updated_at,
-		});
 
 		await updateData.mutateAsync({
 			url: `/hr/user/status/${user?.uuid}`,

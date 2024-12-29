@@ -5,10 +5,10 @@ import {
 	useCommonTapeSFG,
 	useCommonTapeToDyeing,
 } from '@/state/Common';
+import { useDyeingOrderBatch } from '@/state/Dyeing';
 import { useOrderDescription } from '@/state/Order';
 import { useGetURLData } from '@/state/Other';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -28,6 +28,7 @@ import {
 } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	COMMON_COIL_TO_DYEING_NULL,
 	COMMON_COIL_TO_DYEING_SCHEMA,
@@ -41,6 +42,8 @@ export default function Index() {
 	const { invalidateQuery: invalidateCoilToDyeing } = useCommonCoilToDyeing();
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
+	const { invalidateQuery: invalidateDyeingOrderBatch } =
+		useDyeingOrderBatch();
 
 	const location = useLocation();
 	const [status, setStatus] = useState(false);
@@ -190,6 +193,7 @@ export default function Index() {
 				invalidateCoilToDyeing();
 				invalidateCommonCoilSFG();
 				invalidateCommonTapeSFG();
+				invalidateDyeingOrderBatch();
 
 				navigate(
 					secondElement === 'coil'

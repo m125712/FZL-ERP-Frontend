@@ -2,13 +2,7 @@ import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
 
 import { DEFAULT_FONT_SIZE } from '../ui';
-
-export const company = {
-	name: 'Fortune Zipper LTD.',
-	address: 'Aukpara, Ashulia, Savar, DHK-1340',
-	contact: 'Email: info@fortunezip.com,\n Phone: 01521533595',
-	bin_tax_hscode: 'BIN: 000537296-0403, VAT: 17141000815',
-};
+import { company } from '../utils';
 
 const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
 	let value = is_cash == 1 ? 'Cash' : 'LC';
@@ -51,7 +45,12 @@ export const getPageHeader = (order_info) => {
 				alignment: 'left',
 			},
 			{
-				text: [`${company.address}\n`, `${company.contact}\n`],
+				text: [
+					`${company.address}\n`,
+					`${company.email}\n`,
+					`${company.phone}\n`,
+					`${company.bin}, ${company.tax}\n`,
+				],
 				alignment: 'left',
 				margin: [40, 0, 0, 0],
 			},
@@ -186,6 +185,7 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 		logo_type_name,
 		top_stopper_name,
 		bottom_stopper_name,
+		is_waterproof,
 
 		// new
 		coloring_type_name,
@@ -227,6 +227,7 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 		teeth_color_name
 			? `Teeth: ${teeth_type_name ? teeth_type_name + ' - ' : ''} ${teeth_color_name} Color`
 			: '',
+		is_waterproof ? 'Waterproof' : '',
 	];
 	let slider = [
 		puller_type_name ? `${puller_type_name} Puller` : '',
@@ -318,20 +319,14 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 						? 'Quantity'
 						: order_type === 'tape'
 							? 'Color / Size(M)'
-							: 'Color / Size(CM)',
+							: is_inch
+								? 'Color / Size(IN)'
+								: 'Color / Size(CM)',
 				style: 'tableFooter',
 			},
 
 			...uniqueSizes.map((size) => ({
-				text: size
-					? is_inch
-						? Number(size * 2.54).toFixed(2)
-						: is_meter
-							? Number(size * 100).toFixed(2)
-							: is_cm
-								? size.toFixed(2)
-								: size.toFixed(2)
-					: '-',
+				text: size ? size : '-',
 				style: 'tableFooter',
 				alignment: 'right',
 			})),

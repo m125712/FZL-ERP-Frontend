@@ -6,7 +6,6 @@ import {
 	useDeliveryPackingListEntry,
 } from '@/state/Delivery';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
@@ -14,9 +13,9 @@ import { useRHF } from '@/hooks';
 import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
 import { ShowLocalToast } from '@/components/Toast';
-import SubmitButton from '@/ui/Others/Button/SubmitButton';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	PACKING_LIST_NULL,
 	PACKING_LIST_SCHEMA,
@@ -92,10 +91,7 @@ export default function Index() {
 				packingListEntries?.packing_list_entry
 			);
 		}
-		// if (isUpdate) {
-		// 	setValue('packing_list_entry', details?.packing_list_entry);
-		// 	setValue('new_packing_list_entry', details?.new_packing_list_entry);
-		// }
+
 		if (isUpdate && details) {
 			reset(details);
 
@@ -103,13 +99,6 @@ export default function Index() {
 			setValue('new_packing_list_entry', details?.new_packing_list_entry);
 		}
 	}, [isUpdate, packingListEntries, details]);
-
-	// useEffect(() => {
-	// 	if (isUpdate && watch('new_packing_list_entry')) {
-	// 		setValue('packing_list_entry', details?.packing_list_entry);
-	// 		setValue('new_packing_list_entry', watch('new_packing_list_entry'));
-	// 	}
-	// }, [watch('order_info_uuid')]);
 
 	const [deleteItem, setDeleteItem] = useState({
 		itemId: null,
@@ -122,13 +111,17 @@ export default function Index() {
 			data?.new_packing_list_entry?.some(
 				(item) =>
 					item.quantity > 0 &&
-					data?.item_for === 'zipper' &&
+					(data?.item_for === 'zipper' ||
+						data?.item_for === 'slider' ||
+						data?.item_for === 'tape') &&
 					item.poli_quantity < 1
 			) ||
 			data?.packing_list_entry?.some(
 				(item) =>
 					item.quantity > 0 &&
-					data?.item_for === 'zipper' &&
+					(data?.item_for === 'zipper' ||
+						data?.item_for === 'slider' ||
+						data?.item_for === 'tape') &&
 					item.poli_quantity < 1
 			)
 		) {

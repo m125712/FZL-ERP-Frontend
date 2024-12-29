@@ -3,7 +3,6 @@ import { useCommonCoilSFG, useCommonTapeSFG } from '@/state/Common';
 import { useDyeingTransfer } from '@/state/Dyeing';
 import { useGetURLData } from '@/state/Other';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import {
@@ -28,6 +27,7 @@ import {
 } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	DYEING_TRANSFER_FROM_STOCK_NULL,
 	DYEING_TRANSFER_FROM_STOCK_SCHEMA,

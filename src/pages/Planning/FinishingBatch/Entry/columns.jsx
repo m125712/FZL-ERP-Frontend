@@ -37,52 +37,48 @@ export const Columns = ({
 
 	const defaultColumns = [
 		{
-			accessorKey: 'recipe_id',
+			accessorFn: (row) =>
+				row.order_type == 'slider' ? '--' : row.recipe_id,
+			id: 'recipe_id',
 			header: 'Recipe',
 			enableColumnFilter: true,
-			width: 'w-36',
+			width: 'w-24',
 			cell: (info) => info.getValue(),
 		},
-		{
-			accessorKey: 'order_type',
-			header: 'Type',
-			enableColumnFilter: true,
-			width: 'w-36',
-			cell: (info) => info.getValue(),
-		},
+		// {
+		// 	accessorKey: 'order_type',
+		// 	header: 'Type',
+		// 	enableColumnFilter: true,
+		// 	cell: (info) => info.getValue(),
+		// },
 		{
 			accessorKey: 'style',
 			header: 'Style',
 			enableColumnFilter: true,
-			width: 'w-36',
 			cell: (info) => info.getValue(),
 		},
 		{
 			accessorKey: 'color',
 			header: 'Color',
 			enableColumnFilter: true,
-			width: 'w-36',
 			cell: (info) => info.getValue(),
 		},
 		{
 			accessorKey: 'size',
 			header: 'Size',
 			enableColumnFilter: true,
-			width: 'w-36',
 			cell: (info) => info.getValue(),
 		},
 		{
 			accessorKey: 'unit',
 			header: 'Unit',
-			enableColumnFilter: true,
-			width: 'w-36',
+			enableColumnFilter: false,
 			cell: (info) => info.getValue(),
 		},
 		{
 			accessorKey: 'order_quantity',
 			header: 'Order QTY',
 			enableColumnFilter: true,
-			width: 'w-36',
 			cell: (info) => info.getValue(),
 		},
 	];
@@ -90,7 +86,6 @@ export const Columns = ({
 	const finishingBatchColumns = [
 		{
 			accessorKey: 'balance_quantity',
-			width: 'w-36',
 			header: (
 				<div className='flex flex-col'>
 					Balance QTY
@@ -132,7 +127,6 @@ export const Columns = ({
 			header: 'Quantity',
 			enableColumnFilter: false,
 			enableSorting: false,
-			width: 'w-36',
 			cell: (info) => {
 				const idx = info.row.index;
 				const dynamicError =
@@ -154,7 +148,6 @@ export const Columns = ({
 			header: 'Remarks',
 			enableColumnFilter: false,
 			enableSorting: false,
-			width: 'w-36',
 			cell: (info) => {
 				const idx = info.row.index;
 				const dynamicError =
@@ -192,7 +185,6 @@ export const Columns = ({
 	const newFinishingBatchColumns = [
 		{
 			accessorKey: 'balance_quantity',
-			width: 'w-36',
 			header: (
 				<div className='flex flex-col'>
 					Balance QTY
@@ -232,7 +224,6 @@ export const Columns = ({
 			header: 'Quantity',
 			enableColumnFilter: false,
 			enableSorting: false,
-			width: 'w-36',
 			cell: (info) => {
 				const idx = info.row.index;
 				const dynamicError =
@@ -254,7 +245,6 @@ export const Columns = ({
 			header: 'Remarks',
 			enableColumnFilter: false,
 			enableSorting: false,
-			width: 'w-36',
 			cell: (info) => {
 				const idx = info.row.index;
 				const dynamicError =

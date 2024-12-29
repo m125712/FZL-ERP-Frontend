@@ -7,7 +7,6 @@ import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete, StatusButton } from '@/ui';
 
-import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
@@ -29,13 +28,23 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'min_capacity',
-				header: 'Min Capacity(kg)',
+				header: (
+					<>
+						Min Capacity
+						<br /> (kg)
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'max_capacity',
-				header: 'Max Capacity(kg)',
+				header: (
+					<>
+						Max Capacity
+						<br /> (kg)
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -69,7 +78,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'is_sewing_thread',
-				header: 'Sewing Thread',
+				header: 'Thread',
 				enableColumnFilter: false,
 				hidden: !haveAccess.includes('update'),
 				cell: (info) => (

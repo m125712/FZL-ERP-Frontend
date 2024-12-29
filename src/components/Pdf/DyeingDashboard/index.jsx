@@ -58,7 +58,8 @@ export default function Index(data, dyeingDate) {
 
 				slotData.color || '',
 				'\n',
-
+				slotData.expected_kg || 0,
+				'\n',
 				slotData.batch_status || '',
 				'\n',
 			];
@@ -109,7 +110,7 @@ export default function Index(data, dyeingDate) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [70, 60, '*', '*', '*', '*', '*', '*'],
+					widths: [40, 40, '*', '*', '*', '*', '*', '*'],
 					body: [
 						TableHeader(node),
 						...data?.map((item) =>
@@ -117,6 +118,8 @@ export default function Index(data, dyeingDate) {
 								text:
 									nodeItem.field === 'machine'
 										? item[nodeItem.field]
+												.split('(')
+												.join('\n(')
 										: nodeItem.field === 'label'
 											? new_column_field
 											: formatSlotData(

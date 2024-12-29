@@ -5,7 +5,7 @@ import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
+import { BatchType, DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
 
 import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
@@ -18,11 +18,10 @@ export default function Index() {
 
 	const columns = useMemo(
 		() => [
-			// * batch_id
 			{
 				accessorKey: 'batch_id',
 				header: 'Batch ID',
-				enableColumnFilter: false,
+				// enableColumnFilter: false,
 				cell: (info) => (
 					<LinkWithCopy
 						title={info.getValue()}
@@ -32,22 +31,35 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'order_numbers',
+				accessorFn: (row) => {
+					return row.order_numbers
+						?.map((order_number) => order_number)
+						?.join(', ');
+				},
+				id: 'order_numbers',
 				header: 'O/N',
 				width: 'w-28',
-				enableColumnFilter: false,
+				// enableColumnFilter: false,
 				cell: (info) => {
-					return info?.getValue()?.map((order_number) => {
-						return (
-							<LinkWithCopy
-								key={order_number}
-								title={order_number}
-								id={order_number}
-								uri='/order/details'
-							/>
-						);
-					});
+					return info?.row?.original?.order_numbers?.map(
+						(order_number) => {
+							return (
+								<LinkWithCopy
+									key={order_number}
+									title={order_number}
+									id={order_number}
+									uri='/order/details'
+								/>
+							);
+						}
+					);
 				},
+			},
+			{
+				accessorKey: 'batch_type',
+				header: 'Type',
+				enableColumnFilter: false,
+				cell: (info) => <BatchType value={info.getValue()} />,
 			},
 			{
 				accessorKey: 'production_date',
@@ -57,7 +69,6 @@ export default function Index() {
 						<span>Date</span>
 					</div>
 				),
-				width: 'w-24',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime date={info.getValue()} isTime={false} />
@@ -115,7 +126,10 @@ export default function Index() {
 									`/dyeing-and-iron/zipper-batch/batch-production/${uuid}`
 								)
 							}
-							disabled={received === 1}
+							disabled={
+								received === 1 ||
+								!haveAccess.includes('click_production')
+							}
 						/>
 					);
 				},

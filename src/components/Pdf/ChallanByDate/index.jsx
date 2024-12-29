@@ -14,10 +14,7 @@ const node = [
 	getTable('challan_number', 'C/N'),
 	getTable('order_number', 'O/N'),
 	getTable('packing_numbers', 'Packing List'),
-	getTable('vehicle_name', 'Vehicle'),
-	getTable('vehicle_driver_name', 'Driver'),
 	getTable('carton_quantity', 'Carton', 'right'),
-	getTable('gate_pass', 'Gate', 'right'),
 	getTable('total_quantity', 'Qty', 'right'),
 	getTable('total_poly_quantity', 'Poly', 'right'),
 ];
@@ -53,7 +50,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [45, 40, 50, '*', '*', 40, 40, 40, 40],
+					widths: [50, 50, '*', 28, 40, 40],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -63,16 +60,11 @@ export default function Index(data) {
 								text:
 									nodeItem.field === 'packing_numbers'
 										? item[nodeItem.field].join(', ')
-										: nodeItem.field === 'gate_pass'
+										: nodeItem.field === 'receive_status'
 											? item[nodeItem.field] === 0
 												? 'pending'
-												: 'passed'
-											: nodeItem.field ===
-												  'receive_status'
-												? item[nodeItem.field] === 0
-													? 'pending'
-													: 'received'
-												: item[nodeItem.field],
+												: 'received'
+											: item[nodeItem.field],
 								style: nodeItem.cellStyle,
 								alignment: nodeItem.alignment,
 							}))

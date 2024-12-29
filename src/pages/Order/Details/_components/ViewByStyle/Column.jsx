@@ -1,5 +1,3 @@
-import { useAccess } from '@/hooks';
-
 import { StatusButton } from '@/ui';
 
 const createColumn = (props) => ({
@@ -51,14 +49,14 @@ const createStatusColumn = ({ accessorKey, header }) =>
 		},
 	});
 
-const getColumn = ({ show_price }) => {
+const getColumn = ({ show_price, is_sample }) => {
 	// default columns
 	const DefaultStartColumn = [
 		createColumn({
-			accessorKey: 'id',
+			accessorKey: 'index',
 			header: 'ID',
 			enableColumnFilter: false,
-			cell: (info) => info.row.index + 1,
+			cell: (info) => info.getValue(),
 		}),
 		createColumn({
 			accessorKey: 'item_description',
@@ -80,6 +78,7 @@ const getColumn = ({ show_price }) => {
 			enableColumnFilter: true,
 			cell: (info) => info.getValue(),
 		}),
+
 		createColumn({
 			accessorKey: 'color',
 			header: 'Color',
@@ -87,31 +86,46 @@ const getColumn = ({ show_price }) => {
 			cell: (info) => info.getValue(),
 		}),
 		createColumn({
+			accessorFn: (row) => row?.bleaching === 'bleach',
+			id: 'bleach',
+			header: 'Bleach',
+			enableColumnFilter: false,
+			cell: (info) => (
+				<StatusButton size='btn-xs' value={info.getValue()} />
+			),
+		}),
+		createColumn({
+			accessorKey: 'order_type',
+			header: 'Type',
+			enableColumnFilter: true,
+			cell: (info) => info.getValue(),
+		}),
+		createColumn({
 			accessorFn: (row) => {
-				return `${
-					row.is_inch
-						? Number(row.size).toFixed(2)
-						: row.is_meter
-							? Number(row.size).toFixed(2)
-							: '---'
-				}`;
+				if (row.order_type === 'slider' || row.order_type === 'tape')
+					return '---';
+				return row.is_inch ? row.size : '---';
 			},
-			id: 'sizess',
+			id: 'sizes_inch',
 			header: `Size (Inch)`,
 			enableColumnFilter: true,
 		}),
 		createColumn({
 			accessorFn: (row) => {
-				return `${
-					row.is_inch
-						? Number(row.size * 2.54).toFixed(2)
-						: row.is_meter
-							? Number(row.size * 100).toFixed(2)
-							: Number(row.size).toFixed(2)
-				}`;
+				console.log(row);
+
+				if (row.order_type === 'slider' || row.order_type === 'tape')
+					return '---';
+				return row.is_inch ? '---' : row.size;
 			},
-			id: 'sizes',
+			id: 'sizes_cm',
 			header: `Size (Cm)`,
+			enableColumnFilter: true,
+		}),
+		createColumn({
+			accessorFn: (row) => (row.order_type === 'tape' ? row.size : '---'),
+			id: 'sizes_meter',
+			header: `Size (MTR)`,
 			enableColumnFilter: true,
 		}),
 
@@ -139,50 +153,64 @@ const getColumn = ({ show_price }) => {
 			enableColumnFilter: false,
 			cell: (info) => info.getValue(),
 		}),
-		createColumn({
-			accessorKey: 'bleaching',
-			header: 'Bleaching',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		}),
-		createColumn({
-			accessorKey: 'dying_and_iron_prod',
-			header: (
-				<span>
-					Tape <br /> Production
-				</span>
-			),
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		}),
-		createStockProdColumn({
-			accessorKey: 'teeth_molding',
-			header: (
-				<span>
-					Teeth <br /> Molding
-				</span>
-			),
-		}),
-		createStockProdColumn({
-			accessorKey: 'teeth_coloring',
-			header: (
-				<span>
-					Teeth <br /> Coloring
-				</span>
-			),
-		}),
+
+		...(!is_sample
+			? [
+					createColumn({
+						accessorKey: 'dying_and_iron_prod',
+						header: (
+							<>
+								Tape <br />
+								Production
+							</>
+						),
+						enableColumnFilter: false,
+						cell: (info) => info.getValue(),
+					}),
+					createStockProdColumn({
+						accessorKey: 'teeth_molding',
+						header: (
+							<>
+								Teeth <br />
+								Molding
+							</>
+						),
+					}),
+					createStockProdColumn({
+						accessorKey: 'teeth_coloring',
+						header: (
+							<>
+								Teeth <br />
+								Coloring
+							</>
+						),
+					}),
+				]
+			: []),
+
 		// createTapRequiredColumn({ measurement }),
 	];
 	const DefaultEndColumn = [
+		...(!is_sample
+			? [
+					createColumn({
+						accessorKey: 'coloring_prod',
+						header: 'Slider',
+						enableColumnFilter: false,
+						cell: (info) => info.getValue(),
+					}),
+					createStockProdColumn({
+						accessorKey: 'finishing',
+						header: 'Finishing',
+					}),
+				]
+			: []),
+
 		createColumn({
-			accessorKey: 'coloring_prod',
-			header: 'Slider',
+			accessorKey: 'total_warehouse_quantity',
+			header: 'Warehouse',
 			enableColumnFilter: false,
 			cell: (info) => info.getValue(),
-		}),
-		createStockProdColumn({
-			accessorKey: 'finishing',
-			header: 'Finishing',
 		}),
 		createColumn({
 			accessorKey: 'total_delivery_quantity',
@@ -193,11 +221,10 @@ const getColumn = ({ show_price }) => {
 		createColumn({
 			accessorKey: 'company_price',
 			header: (
-				<span>
-					Price (USD)
-					<br />
+				<>
+					Price (USD) <br />
 					(Company/Party)
-				</span>
+				</>
 			),
 			enableColumnFilter: false,
 			hidden: !show_price,

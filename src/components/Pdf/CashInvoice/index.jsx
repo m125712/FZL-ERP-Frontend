@@ -44,6 +44,8 @@ export default function Index(data) {
 	let total_quantity = [];
 	let grand_total_value = 0;
 	let grand_total_quantity = 0;
+	let grand_total_quantity_mtr = 0;
+	let grand_total_slider = 0;
 	const TotalThreadUnitPrice = [];
 	const TotalThreadValue = [];
 	const TotalThreadQuantity = [];
@@ -86,17 +88,37 @@ export default function Index(data) {
 		[...TotalUnitPrice[item]].forEach((item3) => {
 			let value = 0;
 			let quantity = 0;
+			let isTapeOrder = false;
 			pi_cash_entry.forEach((item2) => {
 				if (
 					item2.pi_item_description === item &&
-					item2.unit_price === item3
+					item2.unit_price === item3 &&
+					item2.order_type === 'full'
 				) {
 					value += parseFloat(item2.value);
 					quantity += parseFloat(item2.pi_cash_quantity);
+				} else if (
+					item2.pi_item_description === item &&
+					item2.unit_price === item3 &&
+					item2.order_type === 'tape'
+				) {
+					value += parseFloat(item2.value);
+					quantity += parseFloat(item2.size);
+					isTapeOrder = true;
+				} else if (
+					item2.pi_item_description === item &&
+					item2.unit_price === item3 &&
+					item2.order_type === 'slider'
+				) {
+					value += parseFloat(item2.value);
+					quantity += parseFloat(item2.pi_cash_quantity);
+					grand_total_slider += parseFloat(item2.pi_cash_quantity);
+					isSliderOrder = true;
 				}
 			});
 			total_quantity.push(quantity);
-			grand_total_quantity += quantity;
+			grand_total_quantity += !isTapeOrder ? quantity : 0;
+			grand_total_quantity_mtr += isTapeOrder ? quantity : 0;
 			total_value.push(Number(value).toFixed(2));
 			grand_total_value += value;
 		});
@@ -165,7 +187,7 @@ export default function Index(data) {
 				if (order_types[index] === 'tape') {
 					res = `${res} mtr`;
 				} else {
-					res += ` ${is_inchs[index] ? 'in' : 'cm'}`;
+					res += ` ${is_inchs[index] ? 'inch' : 'cm'}`;
 				}
 
 				return {
@@ -195,9 +217,8 @@ export default function Index(data) {
 					},
 					size: order_types[index] === 'full' ? res : '-',
 					quantity:
-						order_types[index] === 'tape'
-							? res
-							: TotalQuantity[index][priceIndex] + ' pcs',
+						TotalQuantity[index][priceIndex] +
+						`${order_types[index] === 'tape' ? ' mtr' : ' pcs'}`,
 					// unit_price: unitPrice + '/dzn',
 					unit_price_dollar: `${unitPrice} /${order_types[index] === 'tape' ? 'mtr' : 'dzn'}`,
 					unit_price: `${Number(unitPrice).toFixed(2) * Number(data?.conversion_rate).toFixed(2)} /${order_types[index] === 'tape' ? 'mtr' : 'dzn'}`,
@@ -359,14 +380,31 @@ export default function Index(data) {
 							{
 								text: [
 									Number(grand_total_quantity) > 0
-										? `Total Zipper: ${Number(grand_total_quantity)} pcs`
+										? `Total Zipper: ${grand_total_quantity} pcs`
 										: '',
 									Number(grand_total_quantity) > 0 &&
+									Number(grand_total_quantity_mtr) > 0
+										? ','
+										: '',
+									Number(grand_total_quantity_mtr) > 0
+										? `Total Tape: ${grand_total_quantity_mtr} mtr`
+										: '',
+									(Number(grand_total_quantity) > 0 ||
+										Number(grand_total_quantity_mtr) > 0) &&
+									Number(grand_total_slider) > 0
+										? ','
+										: '',
+									Number(grand_total_slider) > 0
+										? `Total Slider: ${grand_total_slider} pcs`
+										: '',
+									(Number(grand_total_quantity) > 0 ||
+										Number(grand_total_quantity_mtr) > 0 ||
+										Number(grand_total_slider) > 0) &&
 									Number(grand_thread_total_quantity) > 0
-										? ', '
+										? ','
 										: '',
 									Number(grand_thread_total_quantity) > 0
-										? `Total Thread: ${grand_thread_total_quantity} cone`
+										? `Total Thread: ${grand_thread_total_quantity} cones`
 										: '',
 								],
 								alignment: 'right',

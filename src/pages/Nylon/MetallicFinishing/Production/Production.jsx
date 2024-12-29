@@ -1,12 +1,12 @@
 import { useAuth } from '@/context/auth';
 import { useNylonMFProduction, useNylonMFProductionLog } from '@/state/Nylon';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { JoinInput, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	NUMBER_REQUIRED,
 	SFG_PRODUCTION_SCHEMA_IN_PCS,

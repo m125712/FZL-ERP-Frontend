@@ -60,21 +60,18 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'order_number_wise_rank',
-				header: 'O/N count',
-				width: 'w-40',
+				accessorKey: 'description',
+				header: 'Description',
 				enableColumnFilter: false,
-				cell: (info) => {
-					const { order_number_wise_count } = info.row.original;
-					const { order_number_wise_rank } = info.row.original;
-
-					return (
-						<div className='flex space-x-1'>
-							<span>{order_number_wise_rank}/</span>
-							<span>{order_number_wise_count}</span>
-						</div>
-					);
-				},
+				width: 'w-40',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) =>
+					`${row.order_number_wise_rank || 0}/${row.order_number_wise_count || 0}`,
+				id: 'order_number_wise_rank',
+				header: 'O/N count',
+				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'party_name',
@@ -83,14 +80,17 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
 			{
-				accessorKey: 'tape_assign',
+				accessorFn: (row) => row.tape_coil_uuid,
+				id: 'tape_assign',
 				header: 'Tape Assign',
 				enableColumnFilter: false,
+				width: 'w-60',
 				hidden: !haveAccess.includes('update'),
 				cell: (info) => {
-					const { tape_coil_uuid } = info.row.original;
-					const { item, zipper_number } = info.row.original;
+					const { tape_coil_uuid, item, zipper_number } =
+						info.row.original;
 
 					const swatchAccess =
 						haveAccess.includes('click_tape_assign');
@@ -105,7 +105,9 @@ export default function Index() {
 							options={tape?.filter(
 								(tapeItem) =>
 									tapeItem.item === item &&
-									tapeItem.zipper_number === zipper_number
+									(tapeItem.zipper_number === zipper_number ||
+										tapeItem.zipper_number ===
+											'6Vs8xVrvoEcfnWg') //* 6Vs8xVrvoEcfnWg is for 4.5
 							)}
 							value={tape?.find(
 								(item) => item.value == tape_coil_uuid

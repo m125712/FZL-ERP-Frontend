@@ -2,12 +2,12 @@ import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
 import { useCommonMultiColorDashboardByUUID } from '@/state/Common';
 import { useOtherMaterial, useOtherTapeCoil } from '@/state/Other';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
 
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	MULTI_COLOR_DASHBOARD_NULL,
 	MULTI_COLOR_DASHBOARD_SCHEMA,

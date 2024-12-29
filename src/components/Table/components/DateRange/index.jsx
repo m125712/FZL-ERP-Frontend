@@ -1,8 +1,11 @@
+import { forwardRef, useCallback, useState } from 'react';
 import { CalenderIcon } from '@assets/icons';
 import { format } from 'date-fns';
-import { forwardRef, useCallback, useState } from 'react';
 import DatePicker from 'react-datepicker';
+
 import 'react-datepicker/dist/react-datepicker.css';
+
+import { dateRangeColumnId } from '../../utils';
 import {
 	Button,
 	DefaultConfig,
@@ -27,7 +30,9 @@ ExampleCustomInput.displayName = 'ExampleCustomInput';
 export default function DateRange({ getHeaderGroups }) {
 	const column = getHeaderGroups()
 		.flatMap(({ headers }) => headers)
-		.find(({ id }) => id === 'created_at')?.column;
+		.find(({ id }) =>
+			dateRangeColumnId.some((columnId) => id.includes(columnId))
+		)?.column;
 
 	if (!column) return null;
 
@@ -108,7 +113,7 @@ export default function DateRange({ getHeaderGroups }) {
 			withPortal
 			renderCustomHeader={CustomHeader}
 			customInput={
-				<ExampleCustomInput className='btn-filter-outline h-full pe-7' />
+				<ExampleCustomInput className='btn-filter-outline h-[2.35rem] pe-7' />
 			}
 			{...DefaultConfig}
 		/>

@@ -28,7 +28,7 @@ export default function OrderSheetPdf(order_sheet) {
 		defaultStyle,
 		styles,
 
-		// Page Header
+		// * Page Header
 		header: {
 			table: {
 				widths: [35, '*', 50, '*'],
@@ -38,20 +38,20 @@ export default function OrderSheetPdf(order_sheet) {
 			margin: [xMargin, 10, xMargin, 0],
 		},
 
-		// Page Footer
+		// * Page Footer
 		footer: function (currentPage, pageCount) {
 			return {
 				table: getPageFooter({
 					currentPage,
 					pageCount,
 				}),
-				// layout: "noBorders",
+				// * layout: "noBorders",
 				margin: [xMargin, 2],
 				fontSize: DEFAULT_FONT_SIZE - 2,
 			};
 		},
 
-		// Page Layout
+		// * Page Layout
 		content: [
 			...order_entry.map((entry, i) => {
 				// * special requirement info
@@ -122,11 +122,11 @@ export default function OrderSheetPdf(order_sheet) {
 										50,
 										67,
 										...chunkedArray[0].map(() => '*'),
-										// ...uniqueSizes.map(() => 20),
+										// * ...uniqueSizes.map(() => 20),
 										'*',
 									],
 									body: [
-										// Table Header
+										// * Table Header
 										...TableHeader({
 											entry,
 											special_req_info,
@@ -134,7 +134,7 @@ export default function OrderSheetPdf(order_sheet) {
 											i,
 										}),
 
-										// Table Body
+										// * Table Body
 										...Object.keys(res)
 											.map((style) =>
 												res[style].map((color) => {
@@ -154,7 +154,7 @@ export default function OrderSheetPdf(order_sheet) {
 													// * check if the chunk is not the 1st chunk (this might not be required because the 1st chunk length might be less than the chunk size)
 													// * and if the sliced quantities length is less than the chunk size
 													if (
-														// index > 0 &&   // * 1st chunk length might be less than the chunk size so this condition is not required
+														// * index > 0 &&   // * 1st chunk length might be less than the chunk size so this condition is not required
 														slicedQuantities.length <
 														chunkSize
 													) {
@@ -243,7 +243,7 @@ export default function OrderSheetPdf(order_sheet) {
 														TotalChunkQTY += total;
 
 														return total;
-													})(), // Immediately invoke the function,
+													})(), // * Immediately invoke the function,
 													style: 'tableFooter',
 													alignment: 'right',
 												};
@@ -274,14 +274,14 @@ export default function OrderSheetPdf(order_sheet) {
 															text: [
 																entry?.garment
 																	? entry?.garment
-																	: '', // Include garments if it exists
+																	: '', // * Include garments if it exists
 																garments &&
 																(garments_info.length >
 																	0 ||
 																	entry?.light_preference_name ||
 																	entry?.end_user_short_name)
 																	? ' / '
-																	: '', // Show separator if garments and at least one other value exists
+																	: '', // * Show separator if garments and at least one other value exists
 																garments_info.length >
 																0
 																	? `(${garments_info?.join(', ')})`
@@ -291,14 +291,14 @@ export default function OrderSheetPdf(order_sheet) {
 																(entry?.light_preference_name ||
 																	entry?.end_user_short_name)
 																	? ' / '
-																	: '', // Show separator if either light preference or end user exists after garments_info
+																	: '', // * Show separator if either light preference or end user exists after garments_info
 																entry?.light_preference_name
 																	? entry?.light_preference_name
 																	: '',
 																entry?.light_preference_name &&
 																entry?.end_user_short_name
 																	? ' / '
-																	: '', // Show separator if both light preference and end user exist
+																	: '', // * Show separator if both light preference and end user exist
 																entry?.end_user_short_name
 																	? entry?.end_user_short_name
 																	: '',
@@ -374,7 +374,7 @@ export default function OrderSheetPdf(order_sheet) {
 										i,
 									}),
 
-									// Table Body
+									// * Table Body
 									...Object.keys(res)
 										.map((style) =>
 											res[style].map((color) => {
@@ -416,7 +416,7 @@ export default function OrderSheetPdf(order_sheet) {
 										)
 										.flat(),
 
-									// Total
+									// * Total
 									[
 										{
 											text: 'Total',
@@ -501,13 +501,13 @@ export default function OrderSheetPdf(order_sheet) {
 		],
 	});
 
-	// test
-	// return new Promise((resolve) => {
-	// 	pdfDocGenerator.getDataUrl((dataUrl) => {
-	// 		resolve(dataUrl);
-	// 	});
-	// });
-	// return pdfDocGenerator.download();
+	// * test
+	// * return new Promise((resolve) => {
+	// * 	pdfDocGenerator.getDataUrl((dataUrl) => {
+	// * 		resolve(dataUrl);
+	// * 	});
+	// * });
+	// * return pdfDocGenerator.download();
 
 	return pdfDocGenerator;
 }

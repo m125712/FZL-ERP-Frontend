@@ -1,13 +1,13 @@
 import { useAuth } from '@/context/auth';
 import { useOrderBuyer } from '@/state/Order';
 import { useOtherBuyer } from '@/state/Other';
-import { DevTool } from '@hookform/devtools';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { Input } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { BUYER_NULL, BUYER_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 

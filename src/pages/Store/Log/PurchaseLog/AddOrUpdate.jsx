@@ -5,12 +5,12 @@ import {
 	usePurchaseEntryByUUID,
 	usePurchaseLog,
 } from '@/state/Store';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
+import { DevTool } from '@/lib/react-hook-devtool';
 import { PURCHASE_ENTRY_NULL, PURCHASE_ENTRY_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 

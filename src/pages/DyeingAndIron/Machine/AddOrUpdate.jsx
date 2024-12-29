@@ -2,13 +2,13 @@ import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
 import { useOtherMachines } from '@/state/Other';
 import { useThreadMachine, useThreadMachineByUUID } from '@/state/Thread';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { CheckBox, Input } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { THREAD_MACHINE_NULL, THREAD_MACHINE_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 

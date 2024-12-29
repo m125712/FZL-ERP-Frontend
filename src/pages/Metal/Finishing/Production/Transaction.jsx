@@ -1,12 +1,12 @@
 import { useAuth } from '@/context/auth';
 import { useMetalFProduction } from '@/state/Metal';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { Input, JoinInput } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	SFG_TRANSACTION_SCHEMA_IN_PCS,
 	SFG_TRANSACTION_SCHEMA_IN_PCS_NULL,
@@ -73,7 +73,8 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			finishing_batch_entry_uuid: updateFinishingTRX?.finishing_batch_entry_uuid,
+			finishing_batch_entry_uuid:
+				updateFinishingTRX?.finishing_batch_entry_uuid,
 			trx_quantity_in_kg: 0,
 			trx_from: 'finishing_prod',
 			trx_to: 'warehouse',

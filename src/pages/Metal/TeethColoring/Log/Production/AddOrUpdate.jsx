@@ -4,15 +4,15 @@ import {
 	useMetalTCProductionLog,
 	useMetalTCProductionLogByUUID,
 } from '@/state/Metal';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect } from '@/ui';
 
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
-	SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
 	SFG_PRODUCTION_SCHEMA_IN_PCS,
+	SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
@@ -67,9 +67,6 @@ export default function Index({
 
 	useEffect(() => {
 		if (dataByUUID) {
-			console.log({
-				dataByUUID,
-			});
 			reset(dataByUUID);
 		}
 	}, [dataByUUID]);

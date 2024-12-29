@@ -5,12 +5,12 @@ import {
 	useMaterialBookingByUUID,
 	useMaterialInfo,
 } from '@/state/Store';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, JoinInputSelect, ReactSelect, Textarea } from '@/ui';
 
+import { DevTool } from '@/lib/react-hook-devtool';
 import { MATERIAL_BOOKING_NULL, MATERIAL_BOOKING_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 

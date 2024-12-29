@@ -55,6 +55,7 @@ export default function Index() {
 				accessorKey: 'item_description',
 				header: 'Item Description',
 				// enableColumnFilter: false,
+				width: 'w-24',
 				cell: (info) => {
 					const { order_description_uuid, order_number } =
 						info.row.original;
@@ -102,18 +103,16 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'is_inch',
-				header: 'Unit',
-				width: 'w-24',
-				// enableColumnFilter: false,
-				cell: (info) => {
-					const { order_type } = info.row.original;
-					if (order_type === 'tape') {
+				accessorFn: (row) => {
+					if (row.order_type === 'tape') {
 						return 'MTR';
 					} else {
-						return info.getValue() === 1 ? 'INCH' : 'CM';
+						return row.is_inch === 1 ? 'INCH' : 'CM';
 					}
 				},
+				id: 'unit',
+				header: 'Unit',
+				width: 'w-24',
 			},
 			{
 				accessorKey: 'quantity',
@@ -133,6 +132,7 @@ export default function Index() {
 				header: 'Swatch Status',
 				enableColumnFilter: false,
 				hidden: !haveAccess.includes('update'),
+				width: 'min-w-52',
 				cell: (info) => {
 					const { recipe_uuid } = info.row.original;
 					const { order_info_uuid, bleaching } = info.row.original;

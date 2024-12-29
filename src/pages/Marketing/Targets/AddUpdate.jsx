@@ -5,13 +5,13 @@ import {
 	useMarketingTargets,
 } from '@/state/Marketing';
 import { useOtherMarketing } from '@/state/Other';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { MARKETING_TARGET_NULL, MARKETING_TARGET_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
@@ -123,11 +123,13 @@ export default function Index({
 								// menuPortalTarget={document.body}
 								placeholder='Select Party'
 								options={marketing}
-								value={marketing?.find(
-									(item) =>
-										item.value ===
-										getValues(`marketing_uuid`)
-								)}
+								value={
+									marketing?.find(
+										(item) =>
+											item.value ===
+											getValues(`marketing_uuid`)
+									) || null
+								}
 								onChange={(e) => onChange(e.value)}
 							/>
 						);

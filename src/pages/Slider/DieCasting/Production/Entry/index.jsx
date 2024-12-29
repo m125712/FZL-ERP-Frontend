@@ -9,7 +9,6 @@ import {
 	useSliderDieCastingStock,
 } from '@/state/Slider';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
@@ -28,6 +27,7 @@ import {
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	SLIDER_DIE_CASTING_NULL,
 	SLIDER_DIE_CASTING_SCHEMA,

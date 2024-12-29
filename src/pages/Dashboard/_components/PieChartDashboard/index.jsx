@@ -27,20 +27,15 @@ const chartConfig = {
 	},
 };
 
-export function PieChartDashboard(
-	{ amount_percentage, no_of_doc } = {
-		amount_percentage: [],
-		no_of_doc: [],
-	}
-) {
-	const mainChartData = amount_percentage.map((item) => ({
+export function PieChartDashboard({ amount_percentage, no_of_doc }) {
+	const mainChartData = amount_percentage?.map((item) => ({
 		...item,
-		amount: parseFloat(item.amount),
+		amount: parseFloat(item.amount || 0),
 		fill: `var(--color-${item.name})`,
 	}));
-	const nestedChartData = no_of_doc.map((item) => ({
+	const nestedChartData = no_of_doc?.map((item) => ({
 		...item,
-		amount: item.amount,
+		amount: parseFloat(item.amount || 0),
 		fill: `var(--color-${item.name})`,
 	}));
 

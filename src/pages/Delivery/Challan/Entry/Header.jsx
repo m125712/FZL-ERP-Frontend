@@ -24,6 +24,7 @@ import {
 
 import GetDateTime from '@/util/GetDateTime';
 import isJSON from '@/util/isJson';
+import { CHALLAN_NULL } from '@/util/Schema';
 
 export default function Header({
 	register,
@@ -197,7 +198,7 @@ export default function Header({
 												onChange={(e) => {
 													onChange(e.value);
 													reset({
-														...ORDER_NULL,
+														...CHALLAN_NULL,
 														order_type: e.value,
 													});
 												}}

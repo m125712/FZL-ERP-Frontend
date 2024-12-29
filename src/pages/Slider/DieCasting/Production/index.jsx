@@ -7,7 +7,7 @@ import { useAccess } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -54,8 +54,18 @@ export default function Index() {
 			{
 				accessorKey: 'batch_number',
 				header: 'Batch No.',
-				enableColumnFilter: true,
-				cell: (info) => info.getValue(),
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { finishing_batch_uuid } = info.row.original;
+
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={finishing_batch_uuid}
+							uri={`/planning/finishing-batch`}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'order_number',

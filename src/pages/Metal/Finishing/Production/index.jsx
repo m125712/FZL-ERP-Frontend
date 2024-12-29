@@ -1,5 +1,6 @@
 import { lazy, useMemo, useState } from 'react';
 import { useMetalFProduction } from '@/state/Metal';
+import { BookOpen } from 'lucide-react';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -10,7 +11,7 @@ import PageInfo from '@/util/PageInfo';
 
 const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));
-
+const PolyTransfer = lazy(() => import('./PolyTransfer'));
 export default function Index() {
 	const { data, url, isLoading } = useMetalFProduction();
 	const info = new PageInfo(
@@ -73,7 +74,14 @@ export default function Index() {
 			{
 				accessorKey: 'order_type',
 				header: 'Type',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: true,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -221,10 +229,40 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+			{
+				accessorKey: 'action',
+				header: 'Sticker',
+				enableColumnFilter: false,
+				enableSorting: false,
+				width: 'w-8',
+				cell: (info) => {
+					return (
+						<button
+							type='button'
+							className='btn btn-accent btn-sm font-semibold text-white shadow-md'
+							onClick={() => handleUpdateSticker(info.row.index)}>
+							<BookOpen />
+						</button>
+					);
+				},
+			},
 		],
 		[data]
 	);
+	const [update, setUpdate] = useState({
+		uuid: null,
+		quantity: null,
+	});
+	const handleUpdateSticker = (idx) => {
+		const val = data[idx];
 
+		setUpdate((prev) => ({
+			...prev,
+			...val,
+		}));
+
+		window['polyModal'].showModal();
+	};
 	const [updateFinishingProd, setUpdateFinishingProd] = useState({
 		sfg_uuid: null,
 		order_number: null,
@@ -288,6 +326,15 @@ export default function Index() {
 					{...{
 						updateFinishingTRX,
 						setUpdateFinishingTRX,
+					}}
+				/>
+			</Suspense>
+			<Suspense>
+				<PolyTransfer
+					modalId={'polyModal'}
+					{...{
+						update,
+						setUpdate,
 					}}
 				/>
 			</Suspense>

@@ -15,11 +15,7 @@ export default function index() {
 
 	const { data, isLoading, url } = useDyeingFinishingBatch();
 
-	const info = new PageInfo(
-		'Finishing Batch',
-		url,
-		'planning__finishing_batch'
-	);
+	const info = new PageInfo('Batch', url, 'planning__finishing_batch');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -92,6 +88,16 @@ export default function index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				// accessorKey: 'total_batch_production_quantity',
+				accessorFn: (row) =>
+					row.total_batch_quantity -
+					row.total_batch_production_quantity,
+				id: 'balance',
+				header: 'Balance',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'production_date',
 				header: (
 					<div className='flex flex-col'>
@@ -110,17 +116,17 @@ export default function index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'slider_lead_time',
-				header: (
-					<div>
-						Finishing Slider <br />
-						Lead Time
-					</div>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'slider_lead_time',
+			// 	header: (
+			// 		<div>
+			// 			Finishing Slider <br />
+			// 			Lead Time
+			// 		</div>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorFn: (row) => {
 					const { production_date, slider_lead_time } = row;
@@ -139,7 +145,7 @@ export default function index() {
 				header: (
 					<div>
 						Remaining Date <br />
-						Slider
+						#Slider
 					</div>
 				),
 				enableColumnFilter: false,
@@ -161,29 +167,30 @@ export default function index() {
 					);
 				},
 			},
-			{
-				accessorKey: 'dyeing_lead_time',
-				header: (
-					<div>
-						Finishing Dyeing <br />
-						Lead Time
-					</div>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'dyeing_lead_time',
+			// 	header: (
+			// 		<div>
+			// 			Finishing Dyeing <br />
+			// 			Lead Time
+			// 		</div>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (info.getValue() ? info.getValue() : '---'),
+			// },
 			{
 				accessorKey: 'remaining_dyeing_lead_time',
 				header: (
 					<div>
 						Remaining Date <br />
-						Dyeing
+						#Dyeing
 					</div>
 				),
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { production_date, dyeing_lead_time } =
 						info.row.original;
+					if (dyeing_lead_time === null) return <span>---</span>;
 
 					const dyeing_day = subDays(
 						production_date,

@@ -362,7 +362,7 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				enableColumnFilter: false,
 				width: 'w-12',
 				cell: (info) => (
-					<StatusButton size='btn-sm' value={info.getValue()} />
+					<StatusButton size='btn-xs' value={info.getValue()} />
 				),
 			},
 			{
@@ -386,15 +386,12 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'order_number_wise_rank',
+				accessorFn: (row) =>
+					`${row.order_number_wise_rank || 0}/${row.order_number_wise_count || 0}`,
+				id: 'order_number_wise_rank',
 				header: 'Count',
 				enableColumnFilter: false,
 				width: 'w-12',
-				cell: ({ row }) => {
-					const { order_number_wise_rank, order_number_wise_count } =
-						row.original;
-					return `${order_number_wise_rank} / ${order_number_wise_count}`;
-				},
 			},
 			{
 				accessorKey: 'item_description',
@@ -425,22 +422,18 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				header: 'Multi Color',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<StatusButton size='btn-sm' value={info.getValue()} />
+					<StatusButton size='btn-xs' value={info.getValue()} />
 				),
 			},
 			{
-				accessorFn: (row) =>
-					`${row.is_inch ? 'Inch' : row.order_type === 'tape' ? 'Meter' : 'Cm'}`,
-				id: 'kg',
-				header: 'Size Unit',
+				accessorFn: (row) => {
+					if (row.order_type === 'tape') return 'MTR';
+					return row.is_inch ? 'INCH' : 'CM';
+				},
+				id: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 			},
-			// {
-			// 	accessorKey: 'production_percentage',
-			// 	header: 'Progress',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => <Progress value={info.getValue() || 0} />,
-			// },
 			{
 				accessorKey: 'marketing_name',
 				header: 'Marketing',
@@ -456,33 +449,25 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'swatch_count',
-				header: 'Swatch Count',
+				accessorFn: (row) =>
+					`${row.swatch_approval_count || 0}/${row.order_entry_count || 0}`,
+				id: 'swatch_count',
+				header: 'Swatch',
 				enableColumnFilter: false,
-				cell: (info) => {
-					const { order_entry_count, swatch_approval_count } =
-						info.row.original;
-
-					return `${swatch_approval_count}/${order_entry_count}`;
-				},
 			},
 			{
-				accessorKey: 'price_approval_count',
-				header: 'Price App.Count',
+				accessorFn: (row) =>
+					`${row.price_approval_count || 0}/${row.order_entry_count || 0}`,
+				id: 'price_approval_count',
+				header: 'Price App',
 				enableColumnFilter: false,
-				cell: (info) => {
-					const { price_approval_count, order_entry_count } =
-						info.row.original;
-
-					return `${price_approval_count}/${order_entry_count}`;
-				},
 			},
 			{
 				accessorKey: 'is_swatch_approved',
 				header: 'Status',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<StatusButton size='btn-sm' value={info.getValue()} />
+					<StatusButton size='btn-xs' value={info.getValue()} />
 				),
 			},
 			// * for order_details the created_at needs to be order_description_created at

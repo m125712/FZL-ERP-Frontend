@@ -3,6 +3,8 @@ import { useAccess } from '@/hooks';
 
 import { EditDelete, Input, LinkWithCopy, Textarea } from '@/ui';
 
+import { getRequiredTapeKg } from '@/util/GetRequiredTapeKg';
+
 export const Columns = ({
 	isUpdate,
 	setValue,
@@ -86,37 +88,32 @@ export const Columns = ({
 		{
 			accessorKey: 'size',
 			header: 'Size (CM)',
-			enableColumnFilter: true,
+			enableColumnFilter: false,
 			enableSorting: true,
 		},
 		{
 			accessorKey: 'order_quantity',
 			header: 'Order QTY',
-			enableColumnFilter: true,
+			enableColumnFilter: false,
 			enableSorting: true,
 			width: 'w-20',
 			cell: (info) => info.getValue(),
 		},
 		{
-			accessorKey: 'top',
-			header: 'Tape QTY (Kg)',
-			enableColumnFilter: true,
+			accessorFn: (row) => getRequiredTapeKg({ row, type: 'raw' }),
+			id: 'tape_req_kg',
+			header: (
+				<>
+					Tape Req
+					<br /> (Kg)
+				</>
+			),
+			enableColumnFilter: false,
 			enableSorting: true,
-			cell: ({ row }) => {
-				const { top, bottom, raw_mtr_per_kg, size, order_quantity } =
-					row.original;
-
-				const total_size_in_mtr =
-					((parseFloat(top) + parseFloat(bottom) + parseFloat(size)) *
-						parseFloat(order_quantity)) /
-					100;
-
-				return Number(
-					total_size_in_mtr / parseFloat(raw_mtr_per_kg)
-				).toFixed(3);
-			},
+			cell: (info) => info.getValue().toFixed(3),
 		},
 	];
+
 	const defaultColumns = useMemo(
 		() => [
 			...commonColumns,
@@ -124,7 +121,7 @@ export const Columns = ({
 				accessorKey: 'balance_quantity',
 				header: (
 					<div className='flex flex-col'>
-						Balanced Batch
+						Balance QTY
 						{/* <label
 							className='btn btn-primary btn-xs'
 							onClick={() => setAllQty()}>
@@ -171,6 +168,7 @@ export const Columns = ({
 						errors?.dyeing_batch_entry?.[idx]?.quantity;
 					return (
 						<Input
+							key={idx}
 							label={`dyeing_batch_entry[${idx}].quantity`}
 							is_title_needed='false'
 							height='h-8'
@@ -181,36 +179,36 @@ export const Columns = ({
 				},
 			},
 			{
-				accessorKey: 'top',
-				header: 'Cal Tape (Kg)',
+				id: 'cal_tape_req_kg',
+				header: (
+					<>
+						Cal Tape
+						<br /> (Kg)
+					</>
+				),
 				enableColumnFilter: false,
 				enableSorting: true,
 				cell: ({ row }) => {
 					const { top, bottom, raw_mtr_per_kg, size, order_type } =
 						row.original;
-					const idx = row.index;
+					const index = row.index;
 
-					// * for tape order we calculate with size as quantity 
-					const total_size_in_mtr =
-						order_type === 'tape'
-							? ((parseFloat(top) +
-									parseFloat(bottom) +
-									parseFloat(
-										watch(
-											`dyeing_batch_entry[${idx}].quantity`
-										) || 0
-									)) *
-									1) /
-								100
-							: ((parseFloat(top) +
-									parseFloat(bottom) +
-									parseFloat(size)) *
-									parseFloat(
-										watch(
-											`dyeing_batch_entry[${idx}].quantity`
-										) || 0
-									)) /
-								100;
+					// * for tape order we calculate with size as quantity
+					const quantity = parseFloat(
+						watch(`dyeing_batch_entry[${index}].quantity`) || 0
+					);
+
+					let total_size_in_mtr = 0;
+					if (order_type === 'tape') {
+						// ! calculation is not correct
+						total_size_in_mtr =
+							((parseFloat(top) + parseFloat(bottom) + quantity) *
+								1) /
+							100;
+					}
+					const top_bottom_size =
+						parseFloat(top) + parseFloat(bottom) + parseFloat(size);
+					total_size_in_mtr = (top_bottom_size * quantity) / 100;
 
 					return Number(
 						total_size_in_mtr / parseFloat(raw_mtr_per_kg)
@@ -225,6 +223,7 @@ export const Columns = ({
 				width: 'w-44',
 				cell: (info) => (
 					<Textarea
+						key={info.row.index}
 						label={`dyeing_batch_entry[${info.row.index}].remarks`}
 						is_title_needed='false'
 						height='h-8'
@@ -249,8 +248,9 @@ export const Columns = ({
 				),
 			},
 		],
-		[BatchOrdersField, register, errors]
+		[BatchOrdersField, watch, register, errors]
 	);
+
 	const newColumns = useMemo(
 		() => [
 			...commonColumns,

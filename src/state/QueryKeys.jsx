@@ -394,7 +394,7 @@ export const dyeingQK = {
 	batch: () => [...dyeingQK.all(), 'batch'],
 	batchByUUID: (uuid) => [...dyeingQK.batch(), uuid],
 	//* Order batch
-	orderBatch: () => [...dyeingQK.all(), 'order-batch'],
+	orderBatch: (params) => [...dyeingQK.all(), 'order-batch', params],
 	orderBatchByUUID: (uuid) => [...dyeingQK.orderBatch(), uuid],
 	//* Batch Details
 	batchDetails: () => [...dyeingQK.all(), 'batch-details'],
@@ -411,7 +411,11 @@ export const dyeingQK = {
 	threadBatchEntry: () => [...dyeingQK.all(), 'thread-batch-entry'],
 	threadBatchEntryByUUID: (uuid) => [...dyeingQK.threadBatchEntry(), uuid],
 	//* Thread Order Batch
-	threadOrderBatch: () => [...dyeingQK.all(), 'thread-order-batch'],
+	threadOrderBatch: (params) => [
+		...dyeingQK.all(),
+		'thread-order-batch',
+		params,
+	],
 	threadOrderBatchByUUID: (uuid) => [...dyeingQK.threadOrderBatch(), uuid],
 	//* Thread Batch Details
 	threadBatchDetails: () => [...dyeingQK.all(), 'thread-batch-details'],
@@ -516,22 +520,22 @@ export const nylonQK = {
 	//* Production Log
 	nylonPlasticFinishingProductionLog: () => [
 		...metalQK.all(),
-		'tm-production-log',
+		'npf-production-log',
 	],
 	nylonPlasticFinishingProductionLogByUUID: (uuid) => [
 		...metalQK.all(),
-		'tm-production-log',
+		'npf-production-log',
 		uuid,
 	],
 	//* Trx Log
-	nylonPlasticFinishingTrxLog: () => [...nylonQK.all(), 'tm-trx-log'],
+	nylonPlasticFinishingTrxLog: () => [...nylonQK.all(), 'npf-trx-log'],
 	nylonPlasticFinishingTrxLogByUUID: (uuid) => [
 		...nylonQK.nylonPlasticFinishingTrxLog(),
 		uuid,
 	],
 
 	//* PRODUCTION
-	nylonPlasticProduction: () => [...metalQK.all(), 'tm-production'],
+	nylonPlasticProduction: () => [...metalQK.all(), 'np-production'],
 };
 //* Vislon
 export const vislonQK = {
@@ -539,11 +543,11 @@ export const vislonQK = {
 
 	//* Teeth Molding
 	//* RM
-	VislonTMRM: () => [...vislonQK.all(), 'tm-rm'],
+	VislonTMRM: () => [...vislonQK.all(), 'vtm-rm'],
 	VislonTMRMByUUID: (uuid) => [...vislonQK.VislonTMRM(), uuid],
 
 	//* RM Log
-	VislonTMRMLog: () => [...vislonQK.all(), 'tm-rm-log'],
+	VislonTMRMLog: () => [...vislonQK.all(), 'vtm-rm-log'],
 	VislonTMRMLogByUUID: (uuid) => [...vislonQK.VislonTMRMLog(), uuid],
 
 	//* Order Against vislonTMRMLog //* Order Against vislonTM RM Log
@@ -631,30 +635,30 @@ export const metalQK = {
 
 	//* ! Teeth Molding
 	//* Transaction Log
-	metalTMTrxLog: () => [...metalQK.all(), 'tm-trx-log'],
-	metalTMTrxLogByUUID: (uuid) => [...metalQK.all(), 'tm-trx-log', uuid],
+	metalTMTrxLog: () => [...metalQK.all(), 'mtm-trx-log'],
+	metalTMTrxLogByUUID: (uuid) => [...metalQK.all(), 'mtm-trx-log', uuid],
 
 	//* PRODUCTION Log
-	metalTMProductionLog: () => [...metalQK.all(), 'tm-production-log'],
+	metalTMProductionLog: () => [...metalQK.all(), 'mtm-production-log'],
 	metalTMProductionLogByUUID: (uuid) => [
 		...metalQK.all(),
-		'tm-production-log',
+		'mtm-production-log',
 		uuid,
 	],
 
 	//* Tape Log
-	metalTMTapeLog: () => [...metalQK.all(), 'tm-tape-log'],
-	metalTMTapeLogByUUID: (uuid) => [...metalQK.all(), 'tm-tape-log', uuid],
+	metalTMTapeLog: () => [...metalQK.all(), 'mtm-tape-log'],
+	metalTMTapeLogByUUID: (uuid) => [...metalQK.all(), 'mtm-tape-log', uuid],
 
 	//* PRODUCTION
-	metalTMProduction: () => [...metalQK.all(), 'tm-production'],
+	metalTMProduction: () => [...metalQK.all(), 'mtm-production'],
 
 	//* RM
-	metalTMRM: () => [...metalQK.all(), 'tm-rm'],
+	metalTMRM: () => [...metalQK.all(), 'mtm-rm'],
 	metalTMRMByUUID: (uuid) => [...metalQK.metalTMRM(), uuid],
 
 	//* RM Log
-	metalTMRMLog: () => [...metalQK.all(), 'tm-rm-log'],
+	metalTMRMLog: () => [...metalQK.all(), 'mtm-rm-log'],
 	metalTMRMLogByUUID: (uuid) => [...metalQK.metalTMRMLog(), uuid],
 
 	//* Order Against Metal TM RM Log
@@ -969,7 +973,7 @@ export const deliveryQk = {
 	],
 
 	//* Packing List
-	deliveryPackingList: () => [...deliveryQk.all(), 'packing-list'],
+	deliveryPackingList: (query) => [...deliveryQk.all(), 'packing-list', query],
 	deliveryPackingListByUUID: (uuid) => [
 		...deliveryQk.deliveryPackingList(),
 		uuid,
@@ -1442,10 +1446,18 @@ export const reportQK = {
 	stock: (from, to) => [...reportQK.all(), 'stock', from, to],
 
 	//* Zipper Production
-	zipperProduction: () => [...reportQK.all(), 'zipper-production'],
+	zipperProduction: (query) => [
+		...reportQK.all(),
+		'zipper-production',
+		query,
+	],
 
 	//* Thread Production
-	threadProduction: () => [...reportQK.all(), 'thread-production'],
+	threadProduction: (query) => [
+		...reportQK.all(),
+		'thread-production',
+		query,
+	],
 
 	//* Daily Challan
 	dailyChallan: () => [...reportQK.all(), 'daily-challan'],
@@ -1469,6 +1481,9 @@ export const reportQK = {
 		...reportQK.all(),
 		'production-report-thread-party-wise',
 	],
+
+	// * Sample Report
+	sample: (date) => [...reportQK.all(), 'sample-report-by-date', date],
 };
 
 export const marketingQK = {

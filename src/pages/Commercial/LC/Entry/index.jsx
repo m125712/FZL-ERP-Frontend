@@ -6,7 +6,6 @@ import {
 } from '@/state/Commercial';
 import { useOtherPiValues } from '@/state/Other';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { format } from 'date-fns';
 import { FormProvider, useFieldArray } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
@@ -20,6 +19,7 @@ import { DynamicField, FormField, ReactSelect, RemoveButton } from '@/ui';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { LC_NULL, LC_SCHEMA } from '@util/Schema';
 import { exclude } from '@/util/Exclude';
 import GetDateTime from '@/util/GetDateTime';

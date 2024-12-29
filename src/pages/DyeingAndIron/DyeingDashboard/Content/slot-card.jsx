@@ -9,7 +9,6 @@ export default function SlotCard({ data }) {
 		order_no,
 		order_uuid,
 		color,
-		weight,
 		total_quantity,
 		expected_kg,
 		batch_status,
@@ -46,10 +45,6 @@ export default function SlotCard({ data }) {
 		{
 			title: 'Color',
 			content: color,
-		},
-		{
-			title: 'Weight',
-			content: weight,
 		},
 		{
 			title: 'Total Quantity',

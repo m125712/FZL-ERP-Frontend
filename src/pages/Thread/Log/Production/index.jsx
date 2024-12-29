@@ -5,7 +5,7 @@ import { useAccess } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { DateTime, EditDelete, LinkOnly } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -14,27 +14,40 @@ import SFGAddOrUpdate from './AddOrUpdate';
 export default function Index() {
 	const { data, isLoading, deleteData } = useConningProdLog();
 	const { invalidateQuery } = useDyeingCone();
-	const info = new PageInfo(
-		'Production Log',
-		'sfg/trx/by/teeth_molding_prod/by/vislon'
-	);
+	const info = new PageInfo('Production Log', '/thread/log', 'thread__log');
 
-	const haveAccess = useAccess('vislon__teeth_molding_log');
+	const haveAccess = useAccess('thread__log');
 
 	const columns = useMemo(
 		() => [
 			{
 				accessorKey: 'batch_number',
-				header: 'Batch No.',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				header: 'Batch ID',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => (
+					<LinkOnly
+						title={info.getValue()}
+						id={info.row.original.batch_uuid}
+						uri='/dyeing-and-iron/thread-batch'
+					/>
+				),
 			},
 
 			{
 				accessorKey: 'order_number',
-				header: 'Order No.',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				header: 'ID',
+				width: 'w-36',
+				cell: (info) => {
+					const { order_info_uuid } = info.row.original;
+					return (
+						<LinkOnly
+							uri='/thread/order-info'
+							id={order_info_uuid}
+							title={info.getValue()}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'color',
@@ -55,21 +68,21 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'batch_quantity',
-				header: 'Batch QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'balance_quantity',
-				header: 'Balance QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'batch_quantity',
+			// 	header: 'Batch QTY',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
+			// {
+			// 	accessorKey: 'coning_balance_quantity',
+			// 	header: 'Balance QTY',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorKey: 'production_quantity',
-				header: 'Production QTY (PCS)',
+				header: 'Production QTY (Cone)',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -115,7 +128,9 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_sfg'),
+				hidden:
+					!haveAccess.includes('click_production_update') &&
+					!haveAccess.includes('click_production_delete'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -123,7 +138,12 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('click_delete_sfg')}
+							showDelete={haveAccess.includes(
+								'click_production_update'
+							)}
+							showUpdate={haveAccess.includes(
+								'click_production_delete'
+							)}
 						/>
 					);
 				},
@@ -136,6 +156,7 @@ export default function Index() {
 	const [updateConingProd, setUpdateConingProd] = useState({
 		uuid: null,
 		batch_entry_uuid: null,
+		balance_quantity: null,
 		coning_carton_quantity: null,
 		production_quantity: null,
 		wastage: null,
@@ -147,6 +168,7 @@ export default function Index() {
 		setUpdateConingProd((prev) => ({
 			...prev,
 			...selected,
+			balance_quantity: selected.coning_balance_quantity,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -161,7 +183,14 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].uuid,
+			itemName:
+				data[idx].batch_number +
+				' ' +
+				data[idx].order_number +
+				' ' +
+				data[idx].color +
+				' ' +
+				data[idx].style,
 		}));
 
 		window[info.getDeleteModalId()].showModal();

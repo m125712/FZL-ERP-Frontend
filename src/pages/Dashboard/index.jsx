@@ -20,7 +20,7 @@ import { fake_order_entry } from './fakeData';
 import useDashboardData from './hooks/useDashboardData';
 
 export default function Dashboard() {
-	const [dataPreview, setDataPreview] = useState('demo');
+	const [dataPreview, setDataPreview] = useState('real');
 	const {
 		amount_and_doc,
 		order_entry,

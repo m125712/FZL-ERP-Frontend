@@ -2,13 +2,13 @@ import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
 import { useOtherVendor } from '@/state/Other';
 import { usePurchaseVendor, usePurchaseVendorByUUID } from '@/state/Store';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { Input } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { VENDOR_NULL, VENDOR_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 

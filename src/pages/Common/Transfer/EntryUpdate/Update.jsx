@@ -7,7 +7,7 @@ import {
 } from '@/state/Nylon';
 import { useOtherOrderDescription } from '@/state/Other';
 import { useVislonTMP } from '@/state/Vislon';
-import { DevTool } from '@hookform/devtools';
+import { Watch } from 'lucide-react';
 import * as yup from 'yup';
 import { useRHF } from '@/hooks';
 
@@ -15,12 +15,12 @@ import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	UPDATE_DYEING_TRANSFER_NULL,
 	UPDATE_DYEING_TRANSFER_SCHEMA,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-import { Watch } from 'lucide-react';
 
 export default function Index({
 	modalId = '',
@@ -47,14 +47,13 @@ export default function Index({
 		control,
 		getValues,
 		Controller,
-		watch
+		watch,
 	} = useRHF(
 		{
 			...UPDATE_DYEING_TRANSFER_SCHEMA,
-			trx_quantity: UPDATE_DYEING_TRANSFER_SCHEMA.trx_quantity.max(
-				yup.ref('max_trx_quantity'),
-				'Beyond Max Quantity'
-			).moreThan(0, 'Must be greater than 0'),
+			trx_quantity: UPDATE_DYEING_TRANSFER_SCHEMA.trx_quantity
+				.max(yup.ref('max_trx_quantity'), 'Beyond Max Quantity')
+				.moreThan(0, 'Must be greater than 0'),
 		},
 		UPDATE_DYEING_TRANSFER_NULL
 	);

@@ -9,16 +9,16 @@ export const useReportStock = (from, to, { enabled = false }) =>
 		enabled,
 	});
 
-export const useZipperProduction = () =>
+export const useZipperProduction = (query) =>
 	createGlobalState({
-		queryKey: reportQK.zipperProduction(),
-		url: '/report/zipper-production-status-report',
+		queryKey: reportQK.zipperProduction(query),
+		url: '/report/zipper-production-status-report?' + query,
 	});
 
-export const useThreadProduction = () =>
+export const useThreadProduction = (query) =>
 	createGlobalState({
-		queryKey: reportQK.threadProduction(),
-		url: '/report/thread-production-batch-wise-report',
+		queryKey: reportQK.threadProduction(query),
+		url: '/report/thread-production-batch-wise-report?' + query,
 	});
 
 export const useDailyChallan = () =>
@@ -61,4 +61,10 @@ export const useProductionReportThreadPartyWise = () =>
 	createGlobalState({
 		queryKey: reportQK.productionReportThreadPartyWise(),
 		url: `/report/production-report-thread-party-wise`,
+	});
+
+export const useSample = (date) =>
+	createGlobalState({
+		queryKey: reportQK.sample(date),
+		url: `/report/sample-report-by-date?date=${date}`,
 	});

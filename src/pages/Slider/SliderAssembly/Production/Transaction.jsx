@@ -4,13 +4,13 @@ import {
 	useSliderAssemblyTransferEntry,
 	useSliderColoringProduction,
 } from '@/state/Slider';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { Input, JoinInput } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	NUMBER_DOUBLE_REQUIRED,
 	NUMBER_REQUIRED,

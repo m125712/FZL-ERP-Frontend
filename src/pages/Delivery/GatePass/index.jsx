@@ -4,11 +4,10 @@ import {
 	useDeliveryChallanDetailsByUUID,
 	useDeliveryChallanEntryByChallanUUID,
 	useDeliveryPackingList,
-	useDeliveryPackingListByUUID,
 } from '@/state/Delivery';
 import { useOtherChallan } from '@/state/Other';
 import { useSymbologyScanner } from '@use-symbology-scanner/react';
-import { FormProvider, get } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { useNavigate } from 'react-router-dom';
 import { useRHF } from '@/hooks';
@@ -16,14 +15,7 @@ import { useRHF } from '@/hooks';
 import { Footer } from '@/components/Modal/ui';
 import { ShowLocalToast } from '@/components/Toast';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import {
-	ActionButtons,
-	DynamicField,
-	FormField,
-	ReactSelect,
-	SectionEntryBody,
-	StatusButton,
-} from '@/ui';
+import { DynamicField, FormField, ReactSelect, SectionEntryBody } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import { GATE_PASS_NULL, GATE_PASS_SCHEMA } from '@/util/Schema';
@@ -83,6 +75,14 @@ export default function Index() {
 		if (!scannedSymbol) return;
 		setSymbol(scannedSymbol);
 	}, []);
+	const [totalQuantity, setTotalQuantity] = useState(0);
+
+	useEffect(() => {
+		const total = packetListData
+			?.filter((item) => item.gate_pass === 1)
+			.reduce((acc, item) => acc + item.quantity, 0);
+		setTotalQuantity(total);
+	}, [packetListData, symbol]);
 
 	const handlePacketScan = async (selectedOption, scannedSymbol) => {
 		try {
@@ -163,29 +163,6 @@ export default function Index() {
 		eventOptions: { capture: true, passive: false },
 		scannerOptions: { maxDelay: 100 },
 	});
-
-	// const handelEntryAppend = () => {
-	// 	EntryAppend({
-	// 		order_id: null,
-	// 		trx_quantity: 0,
-	// 		remarks: '',
-	// 	});
-	// };
-
-	// const handleEntryRemove = (index) => {
-	// 	EntryRemove(index);
-	// };
-
-	// const handelDuplicateDynamicField = useCallback(
-	// 	(index) => {
-	// 		const item = getValues(`entry[${index}]`);
-	// 		EntryAppend({
-	// 			...item,
-	// 			order_description_uuid: undefined,
-	// 		});
-	// 	},
-	// 	[getValues, EntryAppend]
-	// );
 
 	const onSubmit = async (data) => {
 		try {
@@ -277,7 +254,7 @@ export default function Index() {
 						onSubmit={handleSubmit(onSubmit)}
 						noValidate
 						className='mt-4 flex flex-col gap-4'>
-						<SectionEntryBody title='Details'>
+						<SectionEntryBody title={`Details `}>
 							<FormField
 								label='challan_uuid'
 								title='Challan'
@@ -310,8 +287,7 @@ export default function Index() {
 						</SectionEntryBody>
 
 						<DynamicField
-							title='Entry'
-							// handelAppend={handelEntryAppend}
+							title={`Entry: Total Scan Item ${totalQuantity}/${getValues('entry')?.length}`}
 							tableHead={[
 								'Packet List',
 								'Order Number',

@@ -85,7 +85,7 @@ export default function Index() {
 				},
 				id: 'order_numbers',
 				header: 'O/N',
-				width: 'w-28',
+				width: 'w-40',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const orderNumbers = info.getValue();
@@ -96,7 +96,7 @@ export default function Index() {
 						)
 							return;
 						const isThreadOrder =
-							orderNumber.thread_order_number?.includes('TO');
+							orderNumber.thread_order_number?.includes('ST');
 						const number = isThreadOrder
 							? orderNumber.thread_order_number
 							: orderNumber.order_number;

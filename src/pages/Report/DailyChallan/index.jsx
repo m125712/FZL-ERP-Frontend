@@ -1,5 +1,6 @@
-import { useEffect, useMemo } from 'react';
-import { useDailyChallan, useZipperProduction } from '@/state/Report';
+import { useEffect, useMemo, useState } from 'react';
+import { useDailyChallan } from '@/state/Report';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
@@ -7,7 +8,10 @@ import { DateTime, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+import { ProductionStatus } from '../utils';
+
 export default function Index() {
+	const [status, setStatus] = useState('pending');
 	const { data, isLoading, url } = useDailyChallan();
 	const info = new PageInfo(
 		'Daily Challan Status',
@@ -24,26 +28,20 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'challan_date',
+				accessorFn: (row) => format(row.challan_date, 'dd/MM/yy'),
+				id: 'challan_date',
 				header: 'Challan Date',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.challan_date}
+						isTime={false}
+					/>
+				),
 			},
 			{
 				accessorKey: 'challan_id',
 				header: 'Challan No.',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'gate_pass',
-				header: 'Gate Pass',
-				enableColumnFilter: false,
-				cell: (info) => <StatusButton size='btn-xs' value={info.getValue()} />,
-			},
-			{
-				accessorKey: 'created_by_name',
-				header: 'Prepared By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -53,6 +51,41 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+			{
+				accessorKey: 'product',
+				header: 'Product',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'gate_pass',
+				header: 'Gate Pass',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
+			},
+			{
+				accessorKey: 'total_quantity',
+				header: 'Total Quantity',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'receive_status',
+				header: 'Received',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Prepared By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
 			{
 				accessorKey: 'pi_cash_number',
 				header: 'PI No.',
@@ -83,18 +116,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'total_quantity',
-				header: 'Order QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'receive_status',
-				header: 'Challan Received',
-				enableColumnFilter: false,
-				cell: (info) => <StatusButton size='btn-xs' value={info.getValue()} />,
-			},
 		],
 		[data]
 	);
@@ -103,14 +124,20 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<>
-			<ReactTable
-				title={info.getTitle()}
-				accessor={false}
-				data={data}
-				columns={columns}
-				extraClass={'py-0.5'}
-			/>
-		</>
+		<ReactTable
+			title={info.getTitle()}
+			accessor={false}
+			data={data}
+			columns={columns}
+			extraClass={'py-0.5'}
+			extraButton={
+				<ProductionStatus
+					className='w-44'
+					status={status}
+					setStatus={setStatus}
+					page='report__daily_challan'
+				/>
+			}
+		/>
 	);
 }

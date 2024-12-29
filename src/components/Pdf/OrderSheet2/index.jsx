@@ -121,7 +121,12 @@ export default function OrderSheetPdf(order_sheet) {
 					const chunkSize = 7;
 					const chunkedArray = chunkArray(uniqueSizes, chunkSize);
 					let TotalChunkQTY = 0;
-					let headerHeight = entry.order_type === 'tape' ? 2 : 3;
+					let headerHeight =
+						entry.order_type === 'tape'
+							? 2
+							: entry.description || special_req_info?.length > 0
+								? 4
+								: 3;
 
 					return [
 						chunkedArray.map((chunk, index) => {

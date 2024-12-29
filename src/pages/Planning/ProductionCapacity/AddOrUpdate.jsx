@@ -10,13 +10,13 @@ import {
 	useOtherOrderPropertiesByNylonStopper,
 	useOtherOrderPropertiesByZipperNumber,
 } from '@/state/Other';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	PRODUCTION_CAPACITY_NULL,
 	PRODUCTION_CAPACITY_SCHEMA,

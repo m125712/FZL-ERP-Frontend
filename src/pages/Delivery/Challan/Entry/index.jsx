@@ -11,7 +11,6 @@ import {
 	useOtherPackingListByOrderInfoUUIDAndChallanUUID,
 } from '@/state/Other';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider, get } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
@@ -23,6 +22,7 @@ import { DynamicDeliveryField, LinkWithCopy } from '@/ui';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { CHALLAN_NULL, CHALLAN_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
@@ -290,11 +290,56 @@ export default function Index() {
 		}
 	};
 
-	console.log(errors);
 	// Check if order_number is valid
 	// if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 	const rowClass =
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
+
+	let tableHead = [
+		'PL No.',
+		'Item Description',
+		'Style',
+		'Color',
+		'Size',
+		'Unit',
+		watch('item_for') === 'tape' ? 'Quantity(Cm)' : 'Quantity(pcs)',
+		'Poly Qty',
+		'Short QTY',
+		'Reject QTY',
+		'Remarks',
+		,
+	];
+
+	if (watch('item_for') === 'slider') {
+		tableHead = [
+			'PL No.',
+			'Item Description',
+			'Style',
+			'Quantity(pcs)',
+			'Poly Qty',
+			'Short QTY',
+			'Reject QTY',
+			'Remarks',
+			,
+		];
+	} else if (
+		watch('item_for') === 'thread' ||
+		watch('item_for') === 'sample_thread'
+	) {
+		tableHead = [
+			'PL No.',
+			'Count',
+			'Style',
+			'Color',
+			'Length',
+			'Unit',
+			'Quantity(cones)',
+			'Short QTY',
+			'Reject QTY',
+			'Remarks',
+			,
+		];
+	}
 
 	return (
 		<FormProvider {...form}>
@@ -320,53 +365,14 @@ export default function Index() {
 					title={`Entry Details: `}
 					tableHead={
 						<>
-							{watch('item_for') === 'zipper' ||
-							watch('item_for') === 'sample_zipper' ||
-							watch('item_for') === 'slider' ||
-							watch('item_for') === 'tape'
-								? [
-										'PL No.',
-										'Item Description',
-										'Style',
-										'Color',
-										'Size',
-										'Unit',
-										watch('item_for') === 'tape'
-											? 'Quantity(Cm)'
-											: 'Quantity(pcs)',
-										'Poly Qty',
-										'Short QTY',
-										'Reject QTY',
-										'Remarks',
-										,
-									].map((item) => (
-										<th
-											key={item}
-											scope='col'
-											className='group cursor-pointer px-3 py-2 transition duration-300'>
-											{item}
-										</th>
-									))
-								: [
-										'PL No.',
-										'Count',
-										'Style',
-										'Color',
-										'Length',
-										'Unit',
-										'Quantity(cones)',
-										'Short QTY',
-										'Reject QTY',
-										'Remarks',
-										,
-									].map((item) => (
-										<th
-											key={item}
-											scope='col'
-											className='group cursor-pointer px-3 py-2 transition duration-300'>
-											{item}
-										</th>
-									))}
+							{tableHead.map((item) => (
+								<th
+									key={item}
+									scope='col'
+									className='group cursor-pointer px-3 py-2 transition duration-300'>
+									{item}
+								</th>
+							))}
 						</>
 					}>
 					{challanEntryField.map((item, index) => {
@@ -400,20 +406,25 @@ export default function Index() {
 								<td className={`w-32 ${rowClass}`}>
 									{getValues(`challan_entry[${index}].style`)}
 								</td>
-								<td className={`w-32 ${rowClass}`}>
-									{getValues(`challan_entry[${index}].color`)}
-								</td>
-								<td className={`w-32 ${rowClass}`}>
-									{getValues(`challan_entry[${index}].size`)}
-								</td>
-								<td className={`w-32 ${rowClass}`}>
-									{getValues(
-										`challan_entry[${index}].order_type`
-									) === 'slider'
-										? '-'
-										: getValues(
-													`challan_entry[${index}].is_inch`
-											  ) === 1
+								{watch('item_for') !== 'slider' && (
+									<td className={`w-32 ${rowClass}`}>
+										{getValues(
+											`challan_entry[${index}].color`
+										)}
+									</td>
+								)}
+								{watch('item_for') !== 'slider' && (
+									<td className={`w-32 ${rowClass}`}>
+										{getValues(
+											`challan_entry[${index}].size`
+										)}
+									</td>
+								)}
+								{watch('item_for') !== 'slider' && (
+									<td className={`w-32 ${rowClass}`}>
+										{getValues(
+											`challan_entry[${index}].is_inch`
+										) === 1
 											? 'inch'
 											: getValues(
 														`challan_entry[${index}].order_type`
@@ -424,7 +435,8 @@ export default function Index() {
 														'sample_thread'
 												? 'meter'
 												: 'cm'}
-								</td>
+									</td>
+								)}
 								<td className={`${rowClass}`}>
 									{getValues(
 										`challan_entry[${index}].quantity`
@@ -480,51 +492,14 @@ export default function Index() {
 						title={`New Entry Details: `}
 						tableHead={
 							<>
-								{watch('item_for') === 'zipper' ||
-								watch('item_for') === 'sample_zipper' ||
-								watch('item_for') === 'slider' ||
-								watch('item_for') === 'tape'
-									? [
-											'PL No.',
-											'Item Description',
-											'Style',
-											'Color',
-											'Size',
-											'Unit',
-											'Quantity(pcs)',
-											'Poly Qty',
-											'Short QTY',
-											'Reject QTY',
-											'Remarks',
-											,
-										].map((item) => (
-											<th
-												key={item}
-												scope='col'
-												className='group cursor-pointer px-3 py-2 transition duration-300'>
-												{item}
-											</th>
-										))
-									: [
-											'PL No.',
-											'Count',
-											'Style',
-											'Color',
-											'Length',
-											'Unit',
-											'Quantity(cones)',
-											'Short QTY',
-											'Reject QTY',
-											'Remarks',
-											,
-										].map((item) => (
-											<th
-												key={item}
-												scope='col'
-												className='group cursor-pointer px-3 py-2 transition duration-300'>
-												{item}
-											</th>
-										))}
+								{tableHead.map((item) => (
+									<th
+										key={item}
+										scope='col'
+										className='group cursor-pointer px-3 py-2 transition duration-300'>
+										{item}
+									</th>
+								))}
 							</>
 						}>
 						{newChallanEntryField.map((item, index) => {
@@ -560,35 +535,37 @@ export default function Index() {
 											`new_challan_entry[${index}].style`
 										)}
 									</td>
-									<td className={`w-32 ${rowClass}`}>
-										{getValues(
-											`new_challan_entry[${index}].color`
-										)}
-									</td>
-									<td className={`w-32 ${rowClass}`}>
-										{getValues(
-											`new_challan_entry[${index}].size`
-										)}
-									</td>
-									<td className={`w-32 ${rowClass}`}>
-										{getValues(
-											`challan_entry[${index}].order_type`
-										) === 'slider'
-											? '-'
-											: getValues(
-														`challan_entry[${index}].is_inch`
-												  ) === 1
+									{watch('item_for') !== 'slider' && (
+										<td className={`w-32 ${rowClass}`}>
+											{getValues(
+												`new_challan_entry[${index}].color`
+											)}
+										</td>
+									)}
+									{watch('item_for') !== 'slider' && (
+										<td className={`w-32 ${rowClass}`}>
+											{getValues(
+												`new_challan_entry[${index}].size`
+											)}
+										</td>
+									)}
+									{watch('item_for') !== 'slider' && (
+										<td className={`w-32 ${rowClass}`}>
+											{getValues(
+												`new_challan_entry[${index}].is_inch`
+											) === 1
 												? 'inch'
 												: getValues(
-															`challan_entry[${index}].is_meters`
-													  ) === 1 ||
+															`new_challan_entry[${index}].order_type`
+													  ) === 'tape' ||
 													  getValues(`item_for`) ===
 															'thread' ||
 													  getValues(`item_for`) ===
 															'sample_thread'
 													? 'meter'
 													: 'cm'}
-									</td>
+										</td>
+									)}
 									<td className={`${rowClass}`}>
 										{getValues(
 											`new_challan_entry[${index}].quantity`
@@ -600,7 +577,7 @@ export default function Index() {
 										watch('item_for') === 'tape') && (
 										<td className={`${rowClass}`}>
 											{getValues(
-												`challan_entry[${index}].poli_quantity`
+												`new_challan_entry[${index}].poli_quantity`
 											)}
 										</td>
 									)}

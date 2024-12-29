@@ -61,7 +61,9 @@ export default function Index() {
 			: (document.title = 'Order: Entry');
 	}, []);
 
-	const { data: material } = useOtherMaterialByParams('type=dyes');
+	const { data: material } = useOtherMaterialByParams(
+		'type=dyes,dyes chemicals'
+	);
 	let excludeItem = exclude(
 		watch,
 		material,
@@ -97,6 +99,8 @@ export default function Index() {
 				itemName: getValues(`recipe_entry[${index}].uuid`),
 			});
 			window['recipe_entry_delete'].showModal();
+		} else {
+			recipeEntryRemove(index);
 		}
 	};
 
@@ -352,7 +356,7 @@ export default function Index() {
 								</td>
 
 								{/* Quantity */}
-								<td className={` ${rowClass}`}>
+								<td className={` ${rowClass} w-96`}>
 									<Input
 										label={`recipe_entry[${index}].quantity`}
 										is_title_needed='false'
@@ -365,7 +369,7 @@ export default function Index() {
 								</td>
 
 								{/* Remarks */}
-								<td className={` ${rowClass}`}>
+								<td className={` ${rowClass} w-96`}>
 									<Textarea
 										label={`recipe_entry[${index}].remarks`}
 										is_title_needed='false'
@@ -388,6 +392,7 @@ export default function Index() {
 										showRemoveButton={
 											recipeEntryField.length > 1
 										}
+										showDuplicateButton={false}
 									/>
 								</td>
 							</tr>

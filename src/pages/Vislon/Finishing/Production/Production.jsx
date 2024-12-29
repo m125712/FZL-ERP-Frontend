@@ -4,13 +4,13 @@ import {
 	useVislonFinishingProdLog,
 	useVislonTMP,
 } from '@/state/Vislon';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { JoinInput, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	SFG_PRODUCTION_SCHEMA_IN_PCS,
 	SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
@@ -40,9 +40,9 @@ export default function Index({
 	const MAX_PROD =
 		updateFinishingProd?.order_type === 'tape'
 			? Math.min(
-				Number(updateFinishingProd.balance_quantity),
-				Number(updateFinishingProd.finishing_stock)
-			)
+					Number(updateFinishingProd.balance_quantity),
+					Number(updateFinishingProd.finishing_stock)
+				)
 			: Math.min(
 					Number(updateFinishingProd.balance_quantity),
 					Number(updateFinishingProd.slider_finishing_stock)

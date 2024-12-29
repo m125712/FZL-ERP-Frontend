@@ -5,7 +5,6 @@ import {
 } from '@/state/Commercial';
 import { useThreadOrderInfo } from '@/state/Thread';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -17,6 +16,7 @@ import DynamicFormSpreadSheet from '@/ui/Dynamic/DynamicFormSpreadSheet';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { MANUAL_PI_NULL, MANUAL_PI_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 

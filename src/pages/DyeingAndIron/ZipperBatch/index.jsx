@@ -33,8 +33,8 @@ export default function Index() {
 			{
 				accessorFn: (row) => {
 					return row.order_numbers
-						.map((order_number) => order_number)
-						.join(', ');
+						?.map((order_number) => order_number)
+						?.join(', ');
 				},
 				id: 'order_numbers',
 				header: 'O/N',

@@ -89,6 +89,7 @@ export const getPageHeader = (data) => {
 const EMPTY_COLUMN = getEmptyColumn(4);
 
 export const getPageFooter = ({
+	data,
 	currentPage,
 	pageCount,
 	rank,
@@ -97,10 +98,27 @@ export const getPageFooter = ({
 	body: [
 		[
 			{
-				text: `Page ${currentPage} / ${pageCount}, C/N #${rank}, ${packing_number}`,
-				alignment: 'center',
+				text: data?.buyer_name,
+
+				fontSize: DEFAULT_FONT_SIZE + 1,
 				border: [false, false, false, false],
-				// color,
+			},
+		],
+		[
+			{
+				text: data?.factory_name,
+
+				fontSize: DEFAULT_FONT_SIZE + 1,
+				border: [false, false, false, false],
+			},
+		],
+		[
+			{
+				text: data?.party_name,
+				bold: true,
+
+				fontSize: DEFAULT_FONT_SIZE + 1,
+				border: [false, false, false, false],
 			},
 		],
 	],

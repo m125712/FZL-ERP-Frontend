@@ -1,16 +1,11 @@
 import { format } from 'date-fns';
 
-
-
 import { DEFAULT_FONT_SIZE } from '@/components/Pdf/ui';
 import { CUSTOM_PAGE_THREAD_STICKER } from '@/components/Pdf/utils';
-
-
 
 import pdfMake from '..';
 import { generateBarcodeAsBase64 } from './Barcode';
 import { getPageFooter } from './utils';
-
 
 const getDateFormate = (date) => format(new Date(date), 'dd/MM/yy');
 export default function Index(data) {
@@ -36,7 +31,7 @@ export default function Index(data) {
 		...CUSTOM_PAGE_THREAD_STICKER({
 			xMargin: 5,
 			headerHeight: 5,
-			footerHeight: 10,
+			footerHeight: 60,
 		}),
 
 		// Page Footer
@@ -46,9 +41,8 @@ export default function Index(data) {
 				pageCount,
 				rank: data?.packing_list_wise_rank,
 				packing_number: data?.packing_number,
+				data: data,
 			}),
-			margin: [5, -5, 5, 0],
-			fontSize: DEFAULT_FONT_SIZE - 3,
 		}),
 
 		// * Main Table
@@ -98,7 +92,7 @@ export default function Index(data) {
 						],
 
 						[
-							{},
+							{ text: data?.packing_number, bold: true },
 							{
 								text: `${Array.from(shade).join(', ')}`,
 								bold: true,
@@ -123,34 +117,6 @@ export default function Index(data) {
 								text: `${Array.from(style).join(', ')}`,
 								bold: true,
 								colSpan: 3,
-							},
-							{},
-							{},
-						],
-						[
-							{
-								text: data?.buyer_name,
-								colSpan: 3,
-								fontSize: DEFAULT_FONT_SIZE + 1,
-							},
-							{},
-							{},
-						],
-						[
-							{
-								text: data?.factory_name,
-								colSpan: 3,
-								fontSize: DEFAULT_FONT_SIZE + 1,
-							},
-							{},
-							{},
-						],
-						[
-							{
-								text: data?.party_name,
-								bold: true,
-								colSpan: 3,
-								fontSize: DEFAULT_FONT_SIZE + 1,
 							},
 							{},
 							{},

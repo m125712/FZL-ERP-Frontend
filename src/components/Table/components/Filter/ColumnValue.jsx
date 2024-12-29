@@ -35,6 +35,7 @@ function StatusInput({ columnName, column, isFullFilter }) {
 
 	return (
 		<Template
+			key={column.id}
 			columnName={columnName}
 			onClick={() => setFilterValue(undefined)}>
 			<select
@@ -92,6 +93,7 @@ function NumberInput({ columnName, column, isFullFilter }) {
 
 	return (
 		<Template
+			key={column.id}
 			columnName={columnName}
 			onClick={() => setFilterValue(undefined)}
 			showResetButton={getFilterValue()?.[0] || getFilterValue()?.[1]}>

@@ -127,13 +127,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'batch_quantity',
-				header: (
-					<span>
-						Batch QTY
-						<br />
-						(PCS)
-					</span>
-				),
+				header: <span>Batch QTY</span>,
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -145,13 +139,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'balance_quantity',
-				header: (
-					<span>
-						Balance
-						<br />
-						(PCS)
-					</span>
-				),
+				header: <span>Balance (PCS)</span>,
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

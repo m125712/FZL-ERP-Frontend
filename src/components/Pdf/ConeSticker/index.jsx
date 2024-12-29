@@ -21,7 +21,7 @@ export default function Index(data) {
 			return i === 0 ? 37 : 0;
 		},
 		paddingBottom: function (i) {
-			return i === 0;
+			return 0;
 		},
 	};
 	const contents = contentArray.map((index) => {
@@ -85,18 +85,21 @@ export default function Index(data) {
 							text: data?.recipe_name,
 							alignment: 'center',
 							fontSize: fontSize,
+							bold: true,
 						},
 
 						{
 							text: data?.recipe_name,
 							alignment: 'center',
 							fontSize: fontSize,
+							bold: true,
 						},
 
 						{
 							text: data?.recipe_name,
 							alignment: 'center',
 							fontSize: fontSize,
+							bold: true,
 						},
 					],
 

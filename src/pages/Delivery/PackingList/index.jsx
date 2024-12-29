@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import Pdf2 from '@/components/Pdf/PackingListSticker';
+import Pdf from '@/components/Pdf/ThreadPackeListSticker';
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
@@ -21,10 +22,18 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const navigate = useNavigate();
-	const { data, isLoading, url, deleteData, updateData } =
-		useDeliveryPackingList();
-	const info = new PageInfo('Packing List', url, 'delivery__packing_list');
 	const haveAccess = useAccess('delivery__packing_list');
+	const access = haveAccess?.filter(
+		(item) =>
+			item == 'thread' ||
+			item == 'sample_zipper' ||
+			item == 'zipper' ||
+			item == 'all'
+	);
+	const { data, isLoading, url, deleteData, updateData } =
+		useDeliveryPackingList(`?can_show=${access.join(',')}`);
+	const info = new PageInfo('Packing List', url, 'delivery__packing_list');
+
 	const { invalidateQuery: invalidateDeliveryChallan } = useDeliveryChallan();
 	const { invalidateQuery: invalidateOtherChallan } =
 		useOtherChallan('gate_pass=false');
@@ -46,8 +55,21 @@ export default function Index() {
 		});
 
 	useEffect(() => {
-		if (pdfData && !pdfLoading) {
+		if (
+			pdfData &&
+			!pdfLoading &&
+			pdfData?.item_for !== 'thread' &&
+			pdfData?.item_for !== 'sample_thread'
+		) {
 			Pdf2(pdfData)?.print({}, window);
+			setPdfUuid(null);
+		} else if (
+			pdfData &&
+			!pdfLoading &&
+			(pdfData?.item_for === 'thread' ||
+				pdfData?.item_for === 'sample_thread')
+		) {
+			Pdf(pdfData)?.print({}, window);
 			setPdfUuid(null);
 		}
 	}, [pdfData, pdfLoading]);

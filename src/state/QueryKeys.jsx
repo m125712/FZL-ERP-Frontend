@@ -973,7 +973,7 @@ export const deliveryQk = {
 	],
 
 	//* Packing List
-	deliveryPackingList: () => [...deliveryQk.all(), 'packing-list'],
+	deliveryPackingList: (query) => [...deliveryQk.all(), 'packing-list', query],
 	deliveryPackingListByUUID: (uuid) => [
 		...deliveryQk.deliveryPackingList(),
 		uuid,

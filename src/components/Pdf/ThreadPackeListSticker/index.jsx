@@ -11,7 +11,8 @@ const getDateFormate = (date) => format(new Date(date), 'dd/MM/yy');
 export default function Index(data) {
 	const shade = new Set();
 	const subStreat = new Set();
-	const countLength = new Set();
+	const count = new Set();
+	const length = new Set();
 	const color = new Set();
 	const style = new Set();
 	let totalQuantity = 0;
@@ -19,7 +20,8 @@ export default function Index(data) {
 	data?.packing_list_entry?.forEach((item) => {
 		shade.add(item.recipe_name);
 		subStreat.add(item.sub_streat.toUpperCase());
-		countLength.add(item.item_description + '-' + item.size);
+		count.add(item.item_description);
+		length.add(item.size);
 		color.add(item.color);
 		style.add(item.style);
 		totalQuantity += parseInt(item.quantity, 10) || 0;
@@ -29,7 +31,7 @@ export default function Index(data) {
 		...CUSTOM_PAGE_THREAD_STICKER({
 			xMargin: 5,
 			headerHeight: 5,
-			footerHeight: 10,
+			footerHeight: 60,
 		}),
 
 		// Page Footer
@@ -39,9 +41,8 @@ export default function Index(data) {
 				pageCount,
 				rank: data?.packing_list_wise_rank,
 				packing_number: data?.packing_number,
+				data: data,
 			}),
-			margin: [5, -5, 5, 0],
-			fontSize: DEFAULT_FONT_SIZE - 3,
 		}),
 
 		// * Main Table
@@ -64,11 +65,11 @@ export default function Index(data) {
 					body: [
 						[
 							{
-								text: '',
+								text: Array.from(subStreat).join(', '),
 								bold: true,
 							},
 							{
-								text: data?.order_number,
+								text: Array.from(count).join(', '),
 								bold: true,
 							},
 							{
@@ -78,69 +79,42 @@ export default function Index(data) {
 						],
 						[
 							{
-								text: `${
-									Array.from(countLength).join(', ') +
-									' #' +
-									Array.from(subStreat).join(', ')
-								}`,
+								text: data?.order_number,
+								bold: true,
+							},
+
+							{
+								text: `${Array.from(color).join(', ')}`,
 								bold: true,
 								colSpan: 2,
 							},
 							{},
-							{
-								text: `${totalQuantity} cone`,
-								bold: true,
-							},
 						],
 
 						[
+							{ text: data?.packing_number, bold: true },
 							{
-								text: `${Array.from(color).join(', ')} - (${Array.from(shade).join(', ')})`,
+								text: `${Array.from(shade).join(', ')}`,
 								bold: true,
-								colSpan: 3,
+								colSpan: 2,
 							},
-							{},
 							{},
 						],
 						[
 							{
-								text: Array.from(style).join(', '),
+								text: Array.from(length).join(', '),
 								bold: true,
-								colSpan: 3,
 							},
-							{},
+							{
+								text: `${totalQuantity} Cone`,
+								bold: true,
+								fontSize: DEFAULT_FONT_SIZE + 1,
+							},
 							{},
 						],
 						[
 							{
-								text: '\n',
-								bold: true,
-								colSpan: 3,
-							},
-							{},
-							{},
-						],
-						[
-							{
-								text: data?.buyer_name,
-								bold: true,
-								colSpan: 3,
-							},
-							{},
-							{},
-						],
-						[
-							{
-								text: data?.party_name,
-								bold: true,
-								colSpan: 3,
-							},
-							{},
-							{},
-						],
-						[
-							{
-								text: data?.factory_name,
+								text: `${Array.from(style).join(', ')}`,
 								bold: true,
 								colSpan: 3,
 							},

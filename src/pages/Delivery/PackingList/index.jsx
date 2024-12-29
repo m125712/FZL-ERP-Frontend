@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import Pdf2 from '@/components/Pdf/PackingListSticker';
+import Pdf from '@/components/Pdf/ThreadPackeListSticker';
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
@@ -46,8 +47,21 @@ export default function Index() {
 		});
 
 	useEffect(() => {
-		if (pdfData && !pdfLoading) {
+		if (
+			pdfData &&
+			!pdfLoading &&
+			pdfData?.item_for !== 'thread' &&
+			pdfData?.item_for !== 'sample_thread'
+		) {
 			Pdf2(pdfData)?.print({}, window);
+			setPdfUuid(null);
+		} else if (
+			pdfData &&
+			!pdfLoading &&
+			(pdfData?.item_for === 'thread' ||
+				pdfData?.item_for === 'sample_thread')
+		) {
+			Pdf(pdfData)?.print({}, window);
 			setPdfUuid(null);
 		}
 	}, [pdfData, pdfLoading]);

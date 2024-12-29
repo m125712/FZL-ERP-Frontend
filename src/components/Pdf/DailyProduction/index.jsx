@@ -1,15 +1,8 @@
-import { get } from 'react-hook-form';
-
-
-
-import { DEFAULT_FONT_SIZE, tableLayoutStyle, xMargin } from '@/components/Pdf/ui';
+import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
-
-
 
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
-
 
 const node = [
 	getTable('type', 'Type'),
@@ -43,7 +36,7 @@ export default function Index(data, from) {
 				);
 			}, 0) || 0;
 
-		return item.parties?.flatMap((partyItem,) => {
+		return item.parties?.flatMap((partyItem) => {
 			let totalPartyWiseCloseEnd = 0;
 			let totalPartyWiseOpenEnd = 0;
 			let totalPartyWiseTotalQuantity = 0;

@@ -24,6 +24,9 @@ const Tape = (
 ) => {
 	const columns = [
 		{
+			data: 'index',
+		},
+		{
 			data: 'style',
 		},
 		{
@@ -48,6 +51,7 @@ const Tape = (
 	];
 	const data = form.watch(fieldName).map((item) => {
 		return {
+			index: item.index,
 			style: item.style,
 			color: item.color,
 			bleaching: item.bleaching,
@@ -58,6 +62,7 @@ const Tape = (
 	});
 
 	const colHeaders = [
+		'Id',
 		'Style',
 		'Color',
 		'Bleaching',
@@ -77,6 +82,7 @@ const Tape = (
 				columns,
 				colHeaders,
 				data,
+				isIndex: true,
 			}}
 		/>
 	);

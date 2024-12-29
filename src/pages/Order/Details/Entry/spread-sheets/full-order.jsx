@@ -27,6 +27,9 @@ const FullOrder = (
 ) => {
 	const columns = [
 		{
+			data: 'index',
+		},
+		{
 			data: 'style',
 		},
 		{
@@ -55,6 +58,7 @@ const FullOrder = (
 	];
 	const data = form.watch(fieldName).map((item) => {
 		return {
+			index: item.index,
 			style: item.style,
 			color: item.color,
 			bleaching: item.bleaching,
@@ -66,6 +70,7 @@ const FullOrder = (
 	});
 
 	const colHeaders = [
+		'Id',
 		'Style',
 		'Color',
 		'Bleaching',
@@ -86,6 +91,7 @@ const FullOrder = (
 				columns,
 				colHeaders,
 				data,
+				isIndex: true,
 			}}
 		/>
 	);

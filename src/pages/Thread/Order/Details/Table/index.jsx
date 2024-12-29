@@ -19,10 +19,10 @@ export default function Index({ order_info_entry }) {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'id',
+				accessorKey: 'index',
 				header: 'ID',
 				enableColumnFilter: false,
-				cell: (info) => info.row.index + 1,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'status',

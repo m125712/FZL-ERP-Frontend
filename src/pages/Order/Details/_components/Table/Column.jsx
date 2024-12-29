@@ -58,10 +58,10 @@ const getColumn = ({
 	// default columns
 	const DefaultStartColumn = [
 		createColumn({
-			accessorKey: 'id',
+			accessorKey: 'index',
 			header: 'ID',
 			enableColumnFilter: false,
-			cell: (info) => info.row.index + 1,
+			cell: (info) => info.getValue(),
 		}),
 		createStatusColumn({
 			accessorKey: 'swatch_status',

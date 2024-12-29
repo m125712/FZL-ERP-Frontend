@@ -53,10 +53,10 @@ const getColumn = ({ show_price, is_sample }) => {
 	// default columns
 	const DefaultStartColumn = [
 		createColumn({
-			accessorKey: 'id',
+			accessorKey: 'index',
 			header: 'ID',
 			enableColumnFilter: false,
-			cell: (info) => info.row.index + 1,
+			cell: (info) => info.getValue(),
 		}),
 		createColumn({
 			accessorKey: 'item_description',

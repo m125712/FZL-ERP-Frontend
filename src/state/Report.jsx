@@ -14,6 +14,12 @@ export const useProductionReportDateWise = (from = '', to = '') =>
 		url: `/report/daily-production-report?from_date=${from}&to_date=${to}`,
 		enabled: !!from && !!to,
 	});
+export const useProductionStatementReport = (from = '', to = '') =>
+	createGlobalState({
+		queryKey: reportQK.productionReport(from, to),
+		url: `/report/delivery-statement-report?from_date=${from}&to_date=${to}`,
+		enabled: !!from && !!to,
+	});
 
 export const useZipperProduction = (query) =>
 	createGlobalState({

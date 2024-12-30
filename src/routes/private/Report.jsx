@@ -4,6 +4,9 @@ const DailyChallan = lazy(() => import('@/pages/Report/DailyChallan'));
 const DeliveryStatement = lazy(
 	() => import('@/pages/Report/DeliveryStatement')
 );
+const ProductionStatement = lazy(
+	() => import('@/pages/Report/ProductionStatement')
+);
 const LCDue = lazy(() => import('@/pages/Report/LC'));
 const PIRegister = lazy(() => import('@/pages/Report/PIRegister'));
 const PIToBeSubmit = lazy(() => import('@/pages/Report/PIToBeSubmit'));
@@ -104,6 +107,13 @@ export const ReportRoutes = [
 				path: '/report/daily-production',
 				element: <DailyProduction />,
 				page_name: 'report__daily_production',
+				actions: ['read'],
+			},
+			{
+				name: 'Production Statement',
+				path: '/report/production-statement',
+				element: <ProductionStatement />,
+				page_name: 'report__production_statement',
 				actions: ['read'],
 			},
 			{

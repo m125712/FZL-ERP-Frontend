@@ -1,6 +1,8 @@
 import React from 'react';
 import { useOtherCountLength } from '@/state/Other';
 
+import handleActions from '@/ui/Dynamic/HandsonSpreadSheet/_actions/handle-actions';
+import handleSelect from '@/ui/Dynamic/HandsonSpreadSheet/_actions/handle-select';
 import renderActions from '@/ui/Dynamic/HandsonSpreadSheet/_actions/render-actions';
 import TestSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet/test';
 import SelectEditor from '@/ui/Dynamic/HandsonSpreadSheet/test/select-editor';
@@ -37,6 +39,25 @@ const OrderEntrySpreadsheet = (
 		},
 		{
 			editor: SelectEditor,
+			renderer: (
+				_instance,
+				td,
+				_row,
+				_col,
+				_prop,
+				value,
+				_cellProperties
+			) =>
+				handleSelect(
+					_instance,
+					td,
+					_row,
+					_col,
+					_prop,
+					value,
+					_cellProperties,
+					countLength
+				),
 			data: 'count_length_uuid',
 			type: 'select',
 			selectOptions: countLength

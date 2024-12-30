@@ -48,13 +48,13 @@ export default function Index(data) {
 		// * Main Table
 		content: [
 			{
-				margin: [0, 94, 0, 0],
+				margin: [0, 92, 0, 0],
 				image: generateBarcodeAsBase64(
 					data?.packing_number,
 					data?.uuid
 				),
-				width: 150,
-				height: 30,
+				width: 200,
+				// height: 20,
 				alignment: 'center',
 				colSpan: 6,
 			},
@@ -102,21 +102,23 @@ export default function Index(data) {
 						],
 						[
 							{
-								text: Array.from(length).join(', '),
+								text: Array.from(length).join(', ') + ' M',
 								bold: true,
+								colSpan: 2,
 							},
+							{},
 							{
 								text: `${totalQuantity} Cone`,
 								bold: true,
 								fontSize: DEFAULT_FONT_SIZE + 1,
 							},
-							{},
 						],
 						[
 							{
 								text: `${Array.from(style).join(', ')}`,
 								bold: true,
 								colSpan: 3,
+								fontSize: DEFAULT_FONT_SIZE - 1,
 							},
 							{},
 							{},

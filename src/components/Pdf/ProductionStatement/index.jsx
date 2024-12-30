@@ -23,6 +23,15 @@ export default function Index(data, from, to) {
 	const headerHeight = 80;
 	let footerHeight = 50;
 	const PdfData = data || [];
+	const title = [
+		'Current Total',
+		'Opening Bal.',
+		'Closing Bal.',
+		'P.Current Total',
+		'P.Opening Bal.',
+		'P.Closing Bal.',
+	];
+
 	let grandTotalCloseEnd = 0;
 	let grandTotalOpenEnd = 0;
 	let grandTotalQuantity = 0;
@@ -35,6 +44,7 @@ export default function Index(data, from, to) {
 	let grandClosingValue = 0;
 	let grandOpeningValue = 0;
 	let grandTotalValue = 0;
+
 	PdfData?.forEach((item) => {
 		let partyTotalCloseEnd = 0;
 		let partyTotalOpenEnd = 0;
@@ -262,96 +272,42 @@ export default function Index(data, from, to) {
 						rowSpan: itemRowSpan,
 					},
 					size: {
-						text:
-							otherItem.size === 'Current Total' ||
-							otherItem.size === 'Opening Bal.' ||
-							otherItem.size === 'Closing Bal.' ||
-							otherItem.size === 'P.Current Total' ||
-							otherItem.size === 'P.Opening Bal.' ||
-							otherItem.size === 'P.Closing Bal.'
+						text: title.includes(otherItem.size)
+							? otherItem.size
 								? otherItem.size
-									? otherItem.size
-									: '---'
-								: `${otherItem.size.includes('-') ? `(${otherItem.size})` : otherItem.size} ${otherItem.unit}`,
+								: '---'
+							: `${otherItem.size.includes('-') ? `(${otherItem.size})` : otherItem.size} ${otherItem.unit}`,
 						rowSpan: 1,
-						bold:
-							otherItem.size === 'Current Total' ||
-							otherItem.size === 'Opening Bal.' ||
-							otherItem.size === 'Closing Bal.' ||
-							otherItem.size === 'P.Current Total' ||
-							otherItem.size === 'P.Opening Bal.' ||
-							otherItem.size === 'P.Closing Bal.'
-								? true
-								: false,
+						bold: title.includes(otherItem.size) ? true : false,
 					},
 					running_total_close_end_quantity: {
 						text: otherItem.running_total_close_end_quantity,
 						rowSpan: 1,
-						bold:
-							otherItem.size === 'Current Total' ||
-							otherItem.size === 'Opening Bal.' ||
-							otherItem.size === 'Closing Bal.' ||
-							otherItem.size === 'P.Current Total' ||
-							otherItem.size === 'P.Opening Bal.' ||
-							otherItem.size === 'P.Closing Bal.'
-								? true
-								: false,
+						bold: title.includes(otherItem.size) ? true : false,
 					},
 					running_total_open_end_quantity: {
 						text: otherItem.running_total_open_end_quantity,
 						rowSpan: 1,
-						bold:
-							otherItem.size === 'Current Total' ||
-							otherItem.size === 'Opening Bal.' ||
-							otherItem.size === 'Closing Bal.' ||
-							otherItem.size === 'P.Current Total' ||
-							otherItem.size === 'P.Opening Bal.' ||
-							otherItem.size === 'P.Closing Bal.'
-								? true
-								: false,
+						bold: title.includes(otherItem.size) ? true : false,
 					},
 					running_total_quantity: {
 						text: otherItem.running_total_quantity,
 						rowSpan: 1,
 
-						bold:
-							otherItem.size === 'Current Total' ||
-							otherItem.size === 'Opening Bal.' ||
-							otherItem.size === 'Closing Bal.' ||
-							otherItem.size === 'P.Current Total' ||
-							otherItem.size === 'P.Opening Bal.' ||
-							otherItem.size === 'P.Closing Bal.'
-								? true
-								: false,
+						bold: title.includes(otherItem.size) ? true : false,
 					},
 					company_price_dzn: {
 						text: otherItem.company_price_dzn
 							? otherItem.company_price_dzn + '/DZN'
 							: '---',
 						rowSpan: 1,
-						bold:
-							otherItem.size === 'Current Total' ||
-							otherItem.size === 'Opening Bal.' ||
-							otherItem.size === 'Closing Bal.' ||
-							otherItem.size === 'P.Current Total' ||
-							otherItem.size === 'P.Opening Bal.' ||
-							otherItem.size === 'P.Closing Bal.'
-								? true
-								: false,
+						bold: title.includes(otherItem.size) ? true : false,
 					},
 					value: {
 						text: otherItem.running_total_value,
 
 						rowSpan: 1,
-						bold:
-							otherItem.size === 'Current Total' ||
-							otherItem.size === 'Opening Bal.' ||
-							otherItem.size === 'Closing Bal.' ||
-							otherItem.size === 'P.Current Total' ||
-							otherItem.size === 'P.Opening Bal.' ||
-							otherItem.size === 'P.Closing Bal.'
-								? true
-								: false,
+						bold: title.includes(otherItem.size) ? true : false,
 					},
 				}));
 			});

@@ -3,7 +3,6 @@ import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 import { Pdf } from '@/ui/Others';
 
 import pdfMake from '..';
-
 import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
@@ -14,9 +13,9 @@ const node = [
 	getTable('order_qty', 'Ord.Qty'),
 	getTable('item_description', 'Item'),
 	getTable('size', 'Size'),
-	getTable('running_total_close_end_quantity', 'C/E'),
-	getTable('running_total_open_end_quantity', 'O/E'),
-	getTable('running_total_quantity', 'Total Qty'),
+	getTable('running_total_close_end_quantity', 'C/E', 'right'),
+	getTable('running_total_open_end_quantity', 'O/E', 'right'),
+	getTable('running_total_quantity', 'Total Qty', 'right'),
 	getTable('company_price_dzn', 'Price', 'right'),
 	getTable('value', 'Value', 'right'),
 ];

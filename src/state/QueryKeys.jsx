@@ -1455,7 +1455,12 @@ export const reportQK = {
 		from,
 		to,
 	],
-
+	productionReport: (from, to) => [
+		...reportQK.all(),
+		'production-report',
+		from,
+		to,
+	],
 	//* Zipper Production
 	zipperProduction: (query) => [
 		...reportQK.all(),

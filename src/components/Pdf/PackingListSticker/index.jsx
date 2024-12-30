@@ -26,7 +26,7 @@ export default function Index(data) {
 		getTable('style', 'Style'),
 		getTable('color', 'Color'),
 		getTable('size', 'Size', 'right'),
-		getTable('quantity', 'Qty(cm)', 'right'),
+		getTable('quantity', 'Qty(mtr)', 'right'),
 		getTable('poli_quantity', 'Poly', 'right'),
 	];
 	const nodeThread = [

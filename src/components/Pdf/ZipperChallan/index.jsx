@@ -46,14 +46,14 @@ export default function Index(data) {
 		['style', 'Style'],
 		['color', 'Color'],
 		['size', 'Size', 'right'],
-		['quantity', 'Qty(cm)', 'right'],
+		['quantity', 'Qty(mtr)', 'right'],
 		['poli_quantity', 'Poly', 'right'],
 	]);
 
 	const sliderNode = createNode([
 		['item_description', 'Item Description'],
 		['style', 'Style'],
-		['quantity', 'Qty(cm)', 'right'],
+		['quantity', 'Qty(pcs)', 'right'],
 		['poli_quantity', 'Poly', 'right'],
 	]);
 
@@ -280,7 +280,7 @@ export default function Index(data) {
 							isThreadChallan
 								? 'cone'
 								: isTapeChallan
-									? 'cm'
+									? 'mtr'
 									: 'pcs'
 						}`,
 						bold: true,
@@ -291,11 +291,11 @@ export default function Index(data) {
 				? {
 						text: `Grand Total Quantity (In Words): ${NumToWord(grandTotalQuantity)} ${
 							isThreadChallan
-								? 'cone'
+								? 'Cone'
 								: isTapeChallan
-									? 'cm'
-									: 'pcs'
-						} only`,
+									? 'Meter'
+									: 'Pcs'
+						} Only`,
 						bold: true,
 						fontSize: DEFAULT_FONT_SIZE + 2,
 					}

@@ -158,9 +158,20 @@ export default function Index() {
 		// * Update
 		if (isUpdate) {
 			const batch_data_updated = {
-				...data,
+				uuid: data.uuid,
+				batch_status: data.batch_status,
+				machine_uuid: data.machine_uuid,
+				slot: data.slot,
+				received: data.received ? 1 : 0,
+				production_date: data.production_date,
+				batch_type: data.batch_type,
+				order_info_uuid: data.order_info_uuid,
+				remarks: data.remarks,
 				updated_at: GetDateTime(),
 			};
+
+			setBatchData(batch_data_updated); // * use for modal
+
 			let flag = false;
 			data?.dyeing_batch_entry.map((item) => {
 				if (item.quantity < 1) {
@@ -173,6 +184,7 @@ export default function Index() {
 					return;
 				}
 			});
+
 			if (flag) return;
 			const dyeing_batch_entry_updated = [
 				...data?.dyeing_batch_entry,
@@ -182,6 +194,7 @@ export default function Index() {
 				remarks: item.remarks,
 				updated_at: GetDateTime(),
 			}));
+
 			const new_dyeing_batch_entry = [...data?.new_dyeing_batch_entry]
 				.filter((item) => item.quantity > 0)
 				.map((item) => ({
@@ -191,6 +204,8 @@ export default function Index() {
 					remarks: item.remarks,
 					created_at: GetDateTime(),
 				}));
+
+			setBatchEntry(new_dyeing_batch_entry); // * use for modal
 
 			if (
 				dyeing_batch_entry_updated.length === 0 &&
@@ -233,6 +248,7 @@ export default function Index() {
 						updatedData: batch_data_updated,
 						isOnCloseNeeded: false,
 					});
+
 					let dyeing_batch_entry_updated_promises = [
 						...dyeing_batch_entry_updated.map(async (item) => {
 							await updateData.mutateAsync({
@@ -269,7 +285,14 @@ export default function Index() {
 		// * ADD data
 		const created_at = GetDateTime();
 		const batch_data = {
-			...data,
+			batch_status: data.batch_status,
+			machine_uuid: data.machine_uuid,
+			slot: data.slot,
+			received: data.received ? 1 : 0,
+			production_date: data.production_date,
+			batch_type: data.batch_type,
+			order_info_uuid: data.order_info_uuid,
+			remarks: data.remarks,
 			uuid: nanoid(),
 			created_at,
 			created_by: user.uuid,
@@ -345,11 +368,19 @@ export default function Index() {
 	// * useEffect for modal process submit
 	useEffect(() => {
 		const proceedSubmit = async () => {
-			await postData.mutateAsync({
-				url,
-				newData: batchData,
-				isOnCloseNeeded: false,
-			});
+			if (isUpdate) {
+				await updateData.mutateAsync({
+					url: `${url}/${batchData?.uuid}`,
+					updatedData: batchData,
+					isOnCloseNeeded: false,
+				});
+			} else {
+				await postData.mutateAsync({
+					url,
+					newData: batchData,
+					isOnCloseNeeded: false,
+				});
+			}
 
 			let promises = [
 				...batchEntry.map(

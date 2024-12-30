@@ -17,6 +17,7 @@ const node = [
 export default function Index(data, from) {
 	const headerHeight = 80;
 	let footerHeight = 50;
+
 	const tableData = data.flatMap((item) => {
 		const typeRowSpan =
 			item.parties?.reduce((total, parties) => {
@@ -174,7 +175,40 @@ export default function Index(data, from) {
 			});
 		});
 	});
+	const grandTotalCloseEnd = tableData.reduce((total, item) => {
+		return total + (item.running_total_close_end_quantity?.text || 0);
+	}, 0);
 
+	const grandTotalOpenEnd = tableData.reduce((total, item) => {
+		return total + (item.running_total_open_end_quantity?.text || 0);
+	}, 0);
+
+	const grandTotalQuantity = tableData.reduce((total, item) => {
+		return total + (item.running_total_quantity?.text || 0);
+	}, 0);
+
+	tableData.push({
+		type: { text: 'Grand Total', rowSpan: 1, bold: true },
+		party_name: { text: '', rowSpan: 1 },
+		order_number: { text: '', rowSpan: 1 },
+		item_description: { text: '', rowSpan: 1 },
+		size: { text: '', rowSpan: 1 },
+		running_total_close_end_quantity: {
+			text: grandTotalCloseEnd,
+			rowSpan: 1,
+			bold: true,
+		},
+		running_total_open_end_quantity: {
+			text: grandTotalOpenEnd,
+			rowSpan: 1,
+			bold: true,
+		},
+		running_total_quantity: {
+			text: grandTotalQuantity,
+			rowSpan: 1,
+			bold: true,
+		},
+	});
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
 			xMargin,

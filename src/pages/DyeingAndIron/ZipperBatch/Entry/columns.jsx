@@ -127,7 +127,6 @@ export const Columns = ({
 		() => [
 			...commonColumns,
 			{
-				// ! balance quantity needs to be changed for tape order
 				accessorKey: 'balance_quantity',
 				header: (
 					<div className='flex flex-col'>
@@ -189,40 +188,26 @@ export const Columns = ({
 				},
 			},
 			{
-				id: 'cal_tape_req_kg',
+				accessorKey: 'cal_tape_req_kg',
 				header: (
 					<>
-						Cal Tape
-						<br /> (Kg)
+						Cal Tape <br />
+						(Kg)
 					</>
 				),
 				enableColumnFilter: false,
 				enableSorting: true,
 				cell: ({ row }) => {
-					const { top, bottom, raw_mtr_per_kg, size, order_type } =
-						row.original;
-					const index = row.index;
-
-					// * for tape order we calculate with size as quantity
+					const { index } = row;
 					const quantity = parseFloat(
 						watch(`dyeing_batch_entry[${index}].quantity`) || 0
 					);
 
-					let total_size_in_mtr = 0;
-					if (order_type === 'tape') {
-						// ! calculation is not correct
-						total_size_in_mtr =
-							((parseFloat(top) + parseFloat(bottom) + quantity) *
-								1) /
-							100;
-					}
-					const top_bottom_size =
-						parseFloat(top) + parseFloat(bottom) + parseFloat(size);
-					total_size_in_mtr = (top_bottom_size * quantity) / 100;
-
-					return Number(
-						total_size_in_mtr / parseFloat(raw_mtr_per_kg)
-					).toFixed(3);
+					return getRequiredTapeKg({
+						row: row.original,
+						type: 'raw',
+						input_quantity: quantity,
+					}).toFixed(3);
 				},
 			},
 			{

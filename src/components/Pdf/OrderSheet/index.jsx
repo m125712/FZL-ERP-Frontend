@@ -67,6 +67,7 @@ export default function OrderSheetPdf(order_sheet) {
 					const color = item.color;
 					const size = Number(item.size);
 					const quantity = Number(item.quantity);
+					const bleach = item.bleaching;
 
 					if (!acc[key]) {
 						acc[key] = [];
@@ -80,6 +81,9 @@ export default function OrderSheetPdf(order_sheet) {
 						acc[key].push({
 							[color]: uniqueSizes.map((sizeItem) =>
 								sizeItem === size ? quantity : 0
+							),
+							bleach: uniqueSizes.map((sizeItem) =>
+								sizeItem === size ? bleach : ''
 							),
 						});
 					} else {
@@ -95,6 +99,8 @@ export default function OrderSheetPdf(order_sheet) {
 
 					return acc;
 				}, {});
+
+				console.log(res);
 
 				//todo: order_type condition will start from here
 				if (entry.order_type !== 'slider') {
@@ -143,9 +149,23 @@ export default function OrderSheetPdf(order_sheet) {
 													const quantities =
 														color[colorName];
 
+													// * the bleaching status for each quantity
+													const bleaching =
+														color.bleach;
+
+													console.log(bleaching);
+
 													// * Slicing the quantities array for each chunk
 													const slicedQuantities =
 														quantities.slice(
+															index * chunkSize,
+															index * chunkSize +
+																chunk.length
+														);
+
+													// * Slicing the bleaching array for each chunk
+													const slicedBleaching =
+														bleaching.slice(
 															index * chunkSize,
 															index * chunkSize +
 																chunk.length
@@ -181,11 +201,17 @@ export default function OrderSheetPdf(order_sheet) {
 															style: 'tableCell',
 														},
 														...slicedQuantities.map(
-															(qty) => ({
+															(qty, i) => ({
 																text:
 																	qty === 0
 																		? '-'
-																		: qty,
+																		: slicedBleaching[
+																					i
+																			  ] ===
+																			  'bleach'
+																			? 'B -' +
+																				qty
+																			: qty,
 																style: 'tableCell',
 																alignment:
 																	'right',

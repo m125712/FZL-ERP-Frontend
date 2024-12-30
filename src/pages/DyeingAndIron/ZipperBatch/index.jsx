@@ -103,9 +103,8 @@ export default function Index() {
 				accessorKey: 'expected_kg',
 				header: (
 					<span>
-						Exp Prod
-						<br />
-						Qty(kg)
+						Exp Prod <br />
+						Qty (kg)
 					</span>
 				),
 				enableColumnFilter: false,
@@ -138,9 +137,8 @@ export default function Index() {
 				accessorKey: 'total_actual_production_quantity',
 				header: (
 					<span>
-						Total Prod
-						<br />
-						Qty(kg)
+						Total Prod <br />
+						Qty (kg)
 					</span>
 				),
 				enableColumnFilter: false,

@@ -62,6 +62,7 @@ export default function Index() {
 	const [proceed, setProceed] = useState(false);
 	const [batchData, setBatchData] = useState(null);
 	const [batchEntry, setBatchEntry] = useState(null);
+	const [patchBatchEntry, setPatchBatchEntry] = useState(null);
 
 	const {
 		register,
@@ -205,6 +206,7 @@ export default function Index() {
 					created_at: GetDateTime(),
 				}));
 
+			setPatchBatchEntry(dyeing_batch_entry_updated); // * use for modal
 			setBatchEntry(new_dyeing_batch_entry); // * use for modal
 
 			if (
@@ -368,19 +370,55 @@ export default function Index() {
 	// * useEffect for modal process submit
 	useEffect(() => {
 		const proceedSubmit = async () => {
+			// * UPDATE
 			if (isUpdate) {
-				await updateData.mutateAsync({
+				const batchDataPromise = await updateData.mutateAsync({
 					url: `${url}/${batchData?.uuid}`,
 					updatedData: batchData,
 					isOnCloseNeeded: false,
 				});
-			} else {
-				await postData.mutateAsync({
-					url,
-					newData: batchData,
-					isOnCloseNeeded: false,
-				});
+
+				let dyeing_batch_entry_updated_promises = [
+					...patchBatchEntry.map(async (item) => {
+						await updateData.mutateAsync({
+							url: `/zipper/dyeing-batch-entry/${item.dyeing_batch_entry_uuid}`,
+							updatedData: item,
+							isOnCloseNeeded: false,
+						});
+					}),
+					...batchEntry.map(
+						async (item) =>
+							await postData.mutateAsync({
+								url: '/zipper/dyeing-batch-entry',
+								newData: item,
+								isOnCloseNeeded: false,
+							})
+					),
+				];
+
+				await Promise.all([
+					batchDataPromise,
+					...dyeing_batch_entry_updated_promises,
+				])
+					.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
+
+					.then(() => {
+						invalidateDyeingZipperBatch();
+						navigate(
+							`/dyeing-and-iron/zipper-batch/${batchData.uuid}`
+						);
+					})
+					.catch((err) => console.log(err));
+
+				return;
 			}
+
+			// * ADD
+			await postData.mutateAsync({
+				url,
+				newData: batchData,
+				isOnCloseNeeded: false,
+			});
 
 			let promises = [
 				...batchEntry.map(

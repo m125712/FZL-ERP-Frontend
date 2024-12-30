@@ -13,6 +13,9 @@ const FinishingBatchEntry = lazy(
 const FinishingDashboard = lazy(
 	() => import('@/pages/Planning/FinishingDashboard')
 );
+const DateWiseBatchReport = lazy(
+	() => import('@/pages/Planning/DateWiseBatchReport')
+);
 const ProductionCapacity = lazy(
 	() => import('@/pages/Planning/ProductionCapacity')
 );
@@ -27,6 +30,14 @@ export const PlanningRoutes = [
 				element: <FinishingDashboard />,
 				page_name: 'planning__finishing_dashboard',
 				actions: ['read', 'create', 'update', 'delete'],
+			},
+			{
+				name: 'Batch Report DateWise',
+				path: '/planning/finishing-dashboard/batch-report/:date',
+				element: <DateWiseBatchReport />,
+				hidden: true,
+				page_name: 'planning__finishing_dashboard_batch_report',
+				actions: ['read'],
 			},
 
 			// * Finishing Batch

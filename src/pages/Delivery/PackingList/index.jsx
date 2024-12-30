@@ -317,7 +317,7 @@ export default function Index() {
 	};
 	const handelReceivedStatus = async (idx) => {
 		await updateData.mutateAsync({
-			url: `${url}/${data[idx]?.uuid}`,
+			url: `/delivery/packing-list/${data[idx]?.uuid}`,
 			updatedData: {
 				is_warehouse_received:
 					data[idx]?.is_warehouse_received === true ? false : true,
@@ -334,7 +334,7 @@ export default function Index() {
 	};
 	const handelGatePass = async (idx) => {
 		await updateData.mutateAsync({
-			url: `${url}/${data[idx]?.uuid}`,
+			url: `/delivery/packing-list/${data[idx]?.uuid}`,
 			updatedData: {
 				gate_pass: data[idx]?.gate_pass === 1 ? 0 : 1,
 				updated_at: GetDateTime(),

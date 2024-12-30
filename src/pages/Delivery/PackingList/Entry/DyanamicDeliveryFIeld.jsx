@@ -29,12 +29,11 @@ const DynamicDeliveryTable = ({
 		'Order QTY',
 		'Balance QTY',
 		'Production QTY',
-		watch('item_for') === 'tape' ? 'Quantity(cm)' : 'Quantity(pcs)',
+		'Quantity',
 		'Poly QTY',
 		'Short QTY',
 		'Reject QTY',
 		'Remarks',
-		,
 	];
 	if (watch('item_for') === 'slider') {
 		tableHead = [
@@ -44,7 +43,7 @@ const DynamicDeliveryTable = ({
 			'Order QTY',
 			'Balance QTY',
 			'Production QTY',
-			'Quantity(pcs)',
+			'Quantity',
 			'Poly QTY',
 			'Short QTY',
 			'Reject QTY',
@@ -66,7 +65,7 @@ const DynamicDeliveryTable = ({
 			'Balance QTY',
 			'Production QTY',
 			'Carton Qty',
-			'Quantity(cone)',
+			'Quantity',
 			'Short QTY',
 			'Reject QTY',
 			'Remarks',
@@ -81,7 +80,7 @@ const DynamicDeliveryTable = ({
 			'Unit',
 			'Order QTY',
 			'Balance QTY',
-			'Quantity(pcs)',
+			'Quantity',
 			'Poly QTY',
 			'Short QTY',
 			'Reject QTY',
@@ -146,22 +145,9 @@ const DynamicDeliveryTable = ({
 						</td>
 					)}
 
-					{watch('item_for') !== 'slider' && (
-						<td className={`w-32 ${rowClass}`}>
-							{getValues(`item_for`) === 'thread' ||
-							getValues(`item_for`) === 'sample_thread'
-								? 'meter'
-								: getValues(
-											`${entryFiledName}[${index}].is_inch`
-									  ) === 1
-									? 'inch'
-									: getValues(
-												`${entryFiledName}[${index}].order_type`
-										  ) === 'tape'
-										? 'meter'
-										: 'CM'}
-						</td>
-					)}
+					<td className={`w-32 ${rowClass}`}>
+						{getValues(`${entryFiledName}[${index}].unit`)}
+					</td>
 					<td className={rowClass}>
 						{getValues(`${entryFiledName}[${index}].is_meter`) === 1
 							? '---'

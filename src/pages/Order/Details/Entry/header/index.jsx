@@ -175,7 +175,23 @@ export default function Header({
 													setType(e.value);
 													reset({
 														...ORDER_NULL,
-														order_type: e.value,
+														order_type:
+															watch('order_type'),
+														order_info_uuid:
+															watch(
+																'order_info_uuid'
+															),
+														item: watch('item'),
+														nylon_stopper:
+															watch(
+																'nylon_stopper'
+															),
+														zipper_number:
+															watch(
+																'zipper_number'
+															),
+														lock_type:
+															watch('lock_type'),
 													});
 												}}
 												isDisabled={isUpdate}

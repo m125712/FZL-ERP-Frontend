@@ -55,6 +55,7 @@ export default function Index() {
 	const [proceed, setProceed] = useState(false);
 	const [batchData, setBatchData] = useState(null);
 	const [batchEntry, setBatchEntry] = useState(null);
+	const [patchEntry, setPatchBatchEntry] = useState(null);
 
 	const {
 		register,
@@ -190,10 +191,16 @@ export default function Index() {
 	const onSubmit = async (data) => {
 		// * Update
 		if (isUpdate) {
+			const {
+				batch_entry,
+				new_batch_entry: new_batch_entries,
+				...rest
+			} = data;
 			const batch_data_updated = {
-				...data,
+				...rest,
 				updated_at: GetDateTime(),
 			};
+
 			let flag = false;
 			data?.batch_entry.map((item) => {
 				if (item.quantity < 1) {
@@ -206,8 +213,10 @@ export default function Index() {
 					return;
 				}
 			});
+
 			if (flag) return;
-			const batch_entry_updated = [...data?.batch_entry]
+
+			const batch_entry_updated = [...batch_entry]
 				.filter((item) => item.quantity > 0)
 				.map((item) => ({
 					...item,
@@ -215,7 +224,8 @@ export default function Index() {
 					remarks: item.batch_remarks,
 					updated_at: GetDateTime(),
 				}));
-			const new_batch_entry = [...data?.new_batch_entry]
+
+			const new_batch_entry = [...new_batch_entries]
 				.filter((item) => item.quantity > 0)
 				.map((item) => ({
 					...item,
@@ -224,6 +234,11 @@ export default function Index() {
 					remarks: item.remarks,
 					created_at: GetDateTime(),
 				}));
+
+			setBatchData(batch_data_updated); // * use for modal
+			setBatchEntry(new_batch_entry); // * use for modal
+			setPatchBatchEntry(batch_entry_updated); // * use for modal
+
 			if (
 				batch_entry_updated.length === 0 &&
 				new_batch_entry.length === 0
@@ -298,15 +313,16 @@ export default function Index() {
 		}
 
 		// * ADD data
+		const { batch_entry: batch_entries, ...rest } = data;
 		const created_at = GetDateTime();
 		const batch_data = {
-			...data,
+			...rest,
 			uuid: nanoid(),
 			created_at,
 			created_by: user.uuid,
 		};
 
-		const batch_entry = [...data?.batch_entry]
+		const batch_entry = [...batch_entries]
 			.filter((item) => item.quantity > 0)
 			.map((item) => ({
 				...item,
@@ -375,6 +391,51 @@ export default function Index() {
 	// * useEffect for modal procees submit
 	useEffect(() => {
 		const proceedSubmit = async () => {
+			// * UPDATE
+			if (isUpdate) {
+				const batchDataPromise = await updateData.mutateAsync({
+					url: `${url}/${batchData?.uuid}`,
+					updatedData: batchData,
+					isOnCloseNeeded: false,
+				});
+
+				let batch_entry_updated_promises = [
+					...patchEntry.map(async (item) => {
+						await updateData.mutateAsync({
+							url: `/thread/batch-entry/${item.uuid}`,
+							updatedData: item,
+							isOnCloseNeeded: false,
+						});
+					}),
+					...batchEntry.map(
+						async (item) =>
+							await postData.mutateAsync({
+								url: '/thread/batch-entry',
+								newData: item,
+								isOnCloseNeeded: false,
+							})
+					),
+				];
+
+				await Promise.all([
+					batchDataPromise,
+					...batch_entry_updated_promises,
+				])
+					.then(() =>
+						reset(Object.assign({}, DYEING_THREAD_BATCH_NULL))
+					)
+					.then(() => {
+						invalidateDyeingThreadBatch();
+						navigate(
+							`/dyeing-and-iron/thread-batch/${batchData.uuid}`
+						);
+					})
+					.catch((err) => console.log(err));
+
+				return;
+			}
+
+			// * ADD data
 			await postData.mutateAsync({
 				url,
 				newData: batchData,

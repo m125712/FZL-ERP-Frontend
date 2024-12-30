@@ -1,11 +1,14 @@
-import { DeleteModal } from '@/components/Modal';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import {
 	useLabDipShadeRecipeDescription,
 	useLabDipShadeRecipeEntry,
 } from '@/state/LabDip';
+import { useAuth } from '@context/auth';
+import { configure, HotKeys } from 'react-hotkeys';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
+import { DeleteModal } from '@/components/Modal';
 import {
 	ActionButtons,
 	DynamicField,
@@ -15,13 +18,12 @@ import {
 	ReactSelect,
 	RemoveButton,
 } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
+
+import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { SHADE_RECIPE_NULL, SHADE_RECIPE_SCHEMA } from '@util/Schema';
-import { Suspense, useCallback, useEffect, useState } from 'react';
-import { HotKeys, configure } from 'react-hotkeys';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import GetDateTime from '@/util/GetDateTime';
+
 import Header from './Header';
 
 export default function Index() {

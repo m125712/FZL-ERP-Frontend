@@ -1,12 +1,12 @@
 import { useAuth } from '@/context/auth';
 import { useAdminDesignations, useAdminUsers } from '@/state/Admin';
-import { DevTool } from '@hookform/devtools';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { Input, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { USER_DESIGNATION_NULL, USER_DESIGNATION_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 

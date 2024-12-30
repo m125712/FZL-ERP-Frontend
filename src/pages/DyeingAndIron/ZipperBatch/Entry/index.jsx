@@ -1,11 +1,17 @@
-import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+	Suspense,
+	use,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import {
 	useDyeingBatch,
 	useDyeingBatchDetailsByUUID,
 	useDyeingOrderBatch,
 } from '@/state/Dyeing';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import {
 	Navigate,
@@ -21,7 +27,12 @@ import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
 
 import nanoid from '@/lib/nanoid';
-import { DYEING_BATCH_NULL, DYEING_BATCH_SCHEMA } from '@util/Schema';
+import { DevTool } from '@/lib/react-hook-devtool';
+import {
+	DYEING_BATCH_NULL,
+	DYEING_BATCH_SCHEMA,
+	DYEING_BATCH_SCHEMA_UPDATE,
+} from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
 import { Columns } from './columns';
@@ -42,17 +53,16 @@ export default function Index() {
 	} = useDyeingBatch();
 
 	const { batch_uuid } = useParams();
+
 	const isUpdate = batch_uuid !== undefined;
-	const { data, invalidateQuery: invalidateNewDyeingZipperBatchEntry } =
-		isUpdate
-			? useDyeingBatchDetailsByUUID(batch_uuid, '?is_update=true')
-			: useDyeingOrderBatch();
+
 	const { user } = useAuth();
 	const navigate = useNavigate();
 
 	const [proceed, setProceed] = useState(false);
 	const [batchData, setBatchData] = useState(null);
 	const [batchEntry, setBatchEntry] = useState(null);
+	const [patchBatchEntry, setPatchBatchEntry] = useState(null);
 
 	const {
 		register,
@@ -66,12 +76,13 @@ export default function Index() {
 		watch,
 		setValue,
 		context: form,
-	} = useRHF(DYEING_BATCH_SCHEMA, {
+	} = useRHF(isUpdate ? DYEING_BATCH_SCHEMA_UPDATE : DYEING_BATCH_SCHEMA, {
 		...DYEING_BATCH_NULL,
 		production_date: dyeing_date,
 		machine_uuid,
 		slot: slot_no,
 	});
+
 	const { fields: BatchOrdersField, remove: BatchOrdersFieldRemove } =
 		useFieldArray({
 			control,
@@ -82,6 +93,15 @@ export default function Index() {
 		control,
 		name: 'new_dyeing_batch_entry',
 	});
+
+	const { data, invalidateQuery: invalidateNewDyeingZipperBatchEntry } =
+		isUpdate
+			? useDyeingBatchDetailsByUUID(batch_uuid, '?is_update=true')
+			: watch('batch_type') === 'extra' && watch('order_info_uuid')
+				? useDyeingOrderBatch(
+						`batch_type=extra&order_info_uuid=${watch('order_info_uuid')}`
+					)
+				: useDyeingOrderBatch();
 
 	useEffect(() => {
 		if (isUpdate) {
@@ -126,7 +146,7 @@ export default function Index() {
 			const quantity = parseFloat(item.quantity) || 0;
 			const rawMtrPerKg = parseFloat(item.raw_mtr_per_kg) || 1;
 
-			// * for tape order we calculate with size as quantity 
+			// * for tape order we calculate with size as quantity
 			const itemTotal =
 				item.order_type === 'tape'
 					? ((top + bottom + quantity) * 1) / 100 / rawMtrPerKg
@@ -139,9 +159,20 @@ export default function Index() {
 		// * Update
 		if (isUpdate) {
 			const batch_data_updated = {
-				...data,
+				uuid: data.uuid,
+				batch_status: data.batch_status,
+				machine_uuid: data.machine_uuid,
+				slot: data.slot,
+				received: data.received ? 1 : 0,
+				production_date: data.production_date,
+				batch_type: data.batch_type,
+				order_info_uuid: data.order_info_uuid,
+				remarks: data.remarks,
 				updated_at: GetDateTime(),
 			};
+
+			setBatchData(batch_data_updated); // * use for modal
+
 			let flag = false;
 			data?.dyeing_batch_entry.map((item) => {
 				if (item.quantity < 1) {
@@ -154,6 +185,7 @@ export default function Index() {
 					return;
 				}
 			});
+
 			if (flag) return;
 			const dyeing_batch_entry_updated = [
 				...data?.dyeing_batch_entry,
@@ -163,6 +195,7 @@ export default function Index() {
 				remarks: item.remarks,
 				updated_at: GetDateTime(),
 			}));
+
 			const new_dyeing_batch_entry = [...data?.new_dyeing_batch_entry]
 				.filter((item) => item.quantity > 0)
 				.map((item) => ({
@@ -172,6 +205,9 @@ export default function Index() {
 					remarks: item.remarks,
 					created_at: GetDateTime(),
 				}));
+
+			setPatchBatchEntry(dyeing_batch_entry_updated); // * use for modal
+			setBatchEntry(new_dyeing_batch_entry); // * use for modal
 
 			if (
 				dyeing_batch_entry_updated.length === 0 &&
@@ -214,6 +250,7 @@ export default function Index() {
 						updatedData: batch_data_updated,
 						isOnCloseNeeded: false,
 					});
+
 					let dyeing_batch_entry_updated_promises = [
 						...dyeing_batch_entry_updated.map(async (item) => {
 							await updateData.mutateAsync({
@@ -250,7 +287,14 @@ export default function Index() {
 		// * ADD data
 		const created_at = GetDateTime();
 		const batch_data = {
-			...data,
+			batch_status: data.batch_status,
+			machine_uuid: data.machine_uuid,
+			slot: data.slot,
+			received: data.received ? 1 : 0,
+			production_date: data.production_date,
+			batch_type: data.batch_type,
+			order_info_uuid: data.order_info_uuid,
+			remarks: data.remarks,
 			uuid: nanoid(),
 			created_at,
 			created_by: user.uuid,
@@ -265,6 +309,7 @@ export default function Index() {
 				remarks: item.remarks,
 				created_at,
 			}));
+
 		setBatchData(batch_data); // * use for modal
 		setBatchEntry(dyeing_batch_entry); // * use for modal
 
@@ -325,6 +370,50 @@ export default function Index() {
 	// * useEffect for modal process submit
 	useEffect(() => {
 		const proceedSubmit = async () => {
+			// * UPDATE
+			if (isUpdate) {
+				const batchDataPromise = await updateData.mutateAsync({
+					url: `${url}/${batchData?.uuid}`,
+					updatedData: batchData,
+					isOnCloseNeeded: false,
+				});
+
+				let dyeing_batch_entry_updated_promises = [
+					...patchBatchEntry.map(async (item) => {
+						await updateData.mutateAsync({
+							url: `/zipper/dyeing-batch-entry/${item.dyeing_batch_entry_uuid}`,
+							updatedData: item,
+							isOnCloseNeeded: false,
+						});
+					}),
+					...batchEntry.map(
+						async (item) =>
+							await postData.mutateAsync({
+								url: '/zipper/dyeing-batch-entry',
+								newData: item,
+								isOnCloseNeeded: false,
+							})
+					),
+				];
+
+				await Promise.all([
+					batchDataPromise,
+					...dyeing_batch_entry_updated_promises,
+				])
+					.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
+
+					.then(() => {
+						invalidateDyeingZipperBatch();
+						navigate(
+							`/dyeing-and-iron/zipper-batch/${batchData.uuid}`
+						);
+					})
+					.catch((err) => console.log(err));
+
+				return;
+			}
+
+			// * ADD
 			await postData.mutateAsync({
 				url,
 				newData: batchData,

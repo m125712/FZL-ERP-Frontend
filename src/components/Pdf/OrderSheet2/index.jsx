@@ -67,6 +67,7 @@ export default function OrderSheetPdf(order_sheet) {
 					const color = item.color;
 					const size = Number(item.size);
 					const quantity = Number(item.quantity);
+					const bleach = item.bleaching;
 
 					if (!acc[key]) {
 						acc[key] = [];
@@ -80,6 +81,9 @@ export default function OrderSheetPdf(order_sheet) {
 						acc[key].push({
 							[color]: uniqueSizes.map((sizeItem) =>
 								sizeItem === size ? quantity : 0
+							),
+							bleach: uniqueSizes.map((sizeItem) =>
+								sizeItem === size ? bleach : ''
 							),
 						});
 					} else {
@@ -121,7 +125,27 @@ export default function OrderSheetPdf(order_sheet) {
 					const chunkSize = 7;
 					const chunkedArray = chunkArray(uniqueSizes, chunkSize);
 					let TotalChunkQTY = 0;
-					let headerHeight = entry.order_type === 'tape' ? 2 : 3;
+					let headerHeight;
+					// headerHeight =
+					// 	entry.order_type === 'tape'
+					// 		? 2
+					// 		: entry.description || special_req_info?.length > 0
+					// 			? 4
+					// 			: 3;
+
+					if (entry.order_type === 'tape') {
+						if (entry.description || special_req_info?.length > 0) {
+							headerHeight = 3;
+						} else {
+							headerHeight = 2;
+						}
+					} else {
+						if (entry.description || special_req_info?.length > 0) {
+							headerHeight = 4;
+						} else {
+							headerHeight = 3;
+						}
+					}
 
 					return [
 						chunkedArray.map((chunk, index) => {
@@ -162,9 +186,21 @@ export default function OrderSheetPdf(order_sheet) {
 													const quantities =
 														color[colorName];
 
+													// * the bleaching status for each quantity
+													const bleaching =
+														color.bleach;
+
 													// * Slicing the quantities array for each chunk
 													const slicedQuantities =
 														quantities.slice(
+															index * chunkSize,
+															index * chunkSize +
+																chunk.length
+														);
+
+													// * Slicing the bleaching array for each chunk
+													const slicedBleaching =
+														bleaching.slice(
 															index * chunkSize,
 															index * chunkSize +
 																chunk.length
@@ -200,11 +236,17 @@ export default function OrderSheetPdf(order_sheet) {
 															style: 'tableCell',
 														},
 														...slicedQuantities.map(
-															(qty) => ({
+															(qty, i) => ({
 																text:
 																	qty === 0
 																		? '-'
-																		: qty,
+																		: slicedBleaching[
+																					i
+																			  ] ===
+																			  'bleach'
+																			? 'B -' +
+																				qty
+																			: qty,
 																style: 'tableCell',
 																alignment:
 																	'right',

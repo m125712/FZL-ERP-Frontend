@@ -3,12 +3,12 @@ import {
 	useSliderAssemblyStock,
 	useSliderAssemblyStockTransactionByUUID,
 } from '@/state/Slider';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { Input, JoinInput } from '@/ui';
 
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	NUMBER_REQUIRED,
 	SLIDER_ASSEMBLY_TRANSACTION_NULL,
@@ -104,11 +104,7 @@ export default function Index({
 				sub_label={`Max: ${Number(updateSliderTrx?.max_assembly_stock_quantity)} PCS`}
 				{...{ register, errors }}
 			/>
-			<JoinInput
-				label='weight'
-				unit='KG'
-				{...{ register, errors }}
-			/>
+			<JoinInput label='weight' unit='KG' {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>

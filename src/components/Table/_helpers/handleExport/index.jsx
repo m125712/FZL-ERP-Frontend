@@ -1,30 +1,31 @@
 import { format } from 'date-fns';
-import { CSVLink } from 'react-csv';
-import { GetFlatHeader } from '../../utils';
 import { FileSpreadsheet } from 'lucide-react';
+import { CSVLink } from 'react-csv';
+
+import { GetFlatHeader } from '../../utils';
 
 const HandleExport = ({ getAllLeafColumns, filteredRows, title }) => {
-	const showingColumns = ['action', 'actions', 'resetPass'];
-	const filteredCsvColumn = getAllLeafColumns().filter(
-		({ id, getIsVisible }) => !showingColumns.includes(id) && getIsVisible()
-	);
+	// * Exclude unnecessary columns and filter visible ones
+	const excludedColumns = new Set(['action', 'actions', 'resetPass']);
+	const csvHeaders = [];
+	const csvHeadersId = [];
 
-	const { csvHeaders, csvHeadersId } = filteredCsvColumn.reduce(
-		(acc, column) => {
-			acc.csvHeaders.push(GetFlatHeader(column.columnDef.header));
-			acc.csvHeadersId.push(column.id);
-			return acc;
-		},
-		{ csvHeaders: [], csvHeadersId: [] }
-	);
+	getAllLeafColumns().forEach(({ id, getIsVisible, columnDef }) => {
+		if (getIsVisible() && !excludedColumns.has(id)) {
+			csvHeaders.push(GetFlatHeader(columnDef.header));
+			csvHeadersId.push(id);
+		}
+	});
 
+	// * Generate the CSV data
 	const csvData = [
-		csvHeaders,
+		csvHeaders, // * Header row
 		...filteredRows.map((row) =>
-			csvHeadersId.map((column) => row.original[column])
-		),
+			csvHeadersId.map((id) => row.getValue(id))
+		), // * Data rows
 	];
 
+	// * Generate filename with current date
 	const dateTime = format(new Date(), 'dd-MM-yyyy');
 	const filename = `${title} - ${dateTime}.csv`;
 
@@ -32,7 +33,7 @@ const HandleExport = ({ getAllLeafColumns, filteredRows, title }) => {
 		<CSVLink
 			type='button'
 			className='btn-filter'
-			data={csvData}
+			data={csvData} // * Pass precomputed data
 			filename={filename}>
 			<FileSpreadsheet className='size-4' />
 			<span className='hidden lg:block'>Excel</span>

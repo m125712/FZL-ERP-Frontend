@@ -20,6 +20,7 @@ export default function Information({ info }) {
 		party_name,
 		remarks,
 		updated_at,
+		order_info_uuid,
 	} = info;
 
 	const renderItems = () => {
@@ -32,16 +33,27 @@ export default function Information({ info }) {
 				label: 'Name',
 				value: name,
 			},
-			{
-				label: 'Order No.',
-				value: (
-					<LinkWithCopy
-						title={order_number}
-						id={order_number}
-						uri={`/order/details`}
-					/>
-				),
-			},
+			order_number.includes('ST')
+				? {
+						label: 'Order No',
+						value: (
+							<LinkWithCopy
+								title={order_number}
+								id={order_info_uuid}
+								uri={`/thread/order-info`}
+							/>
+						),
+					}
+				: {
+						label: 'Order No.',
+						value: (
+							<LinkWithCopy
+								title={order_number}
+								id={order_number}
+								uri={`/order/details`}
+							/>
+						),
+					},
 			{
 				label: 'Thread Order',
 				value: (

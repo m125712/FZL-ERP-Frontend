@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import {
-	useOrderInfo,
-	useOrderInfoByUUID,
-	useOrderPropertiesByUUID,
-} from '@/state/Order';
+import { useOrderInfo, useOrderInfoByUUID } from '@/state/Order';
 import {
 	useAllZipperThreadOrderList,
 	useOtherBuyer,
@@ -14,13 +10,13 @@ import {
 	useOtherOrderInfoValueLabel,
 	useOtherParty,
 } from '@/state/Other';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { CheckBox, FormField, Input, ReactSelect, Textarea } from '@/ui';
+import { CheckBox, FormField, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { ORDER_INFO_NULL, ORDER_INFO_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
@@ -214,7 +210,6 @@ export default function Index({
 											)
 									)}
 									onChange={(e) => onChange(e.value)}
-									isDisabled={updateOrderInfo?.uuid !== null}
 								/>
 							);
 						}}
@@ -238,7 +233,6 @@ export default function Index({
 											getValues('marketing_uuid')
 									)}
 									onChange={(e) => onChange(e.value)}
-									isDisabled={updateOrderInfo?.uuid !== null}
 								/>
 							);
 						}}
@@ -259,7 +253,6 @@ export default function Index({
 											getValues('buyer_uuid')
 									)}
 									onChange={(e) => onChange(e.value)}
-									isDisabled={updateOrderInfo?.uuid !== null}
 								/>
 							);
 						}}
@@ -285,7 +278,6 @@ export default function Index({
 										onChange(e.value);
 										setPartyId(e.value);
 									}}
-									isDisabled={updateOrderInfo?.uuid !== null}
 								/>
 							);
 						}}
@@ -311,7 +303,6 @@ export default function Index({
 									onChange={(e) => {
 										onChange(e.value);
 									}}
-									isDisabled={updateOrderInfo?.uuid !== null}
 								/>
 							);
 						}}
@@ -334,7 +325,6 @@ export default function Index({
 									onChange={(e) => {
 										onChange(e.value);
 									}}
-									isDisabled={updateOrderInfo?.uuid !== null}
 								/>
 							);
 						}}
@@ -411,7 +401,7 @@ export default function Index({
 				</FormField>
 			</div>
 			<Textarea rows={3} label='remarks' {...{ register, errors }} />
-			<DevTool control={control} placement='top-left' />
+			<DevTool type='button' control={control} placement='top-left' />
 		</AddModal>
 	);
 }

@@ -10,13 +10,13 @@ import {
 	useOtherOrderPropertiesByNylonStopper,
 	useOtherOrderPropertiesByZipperNumber,
 } from '@/state/Other';
-import { DevTool } from '@hookform/devtools';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { TAPE_REQUIRED_NULL, TAPE_REQUIRED_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 

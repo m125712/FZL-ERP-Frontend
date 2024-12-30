@@ -4,13 +4,13 @@ import {
 	useSliderAssemblyProduction,
 	useSliderAssemblyProductionEntry,
 } from '@/state/Slider';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	NUMBER_REQUIRED,
 	SLIDER_ASSEMBLY_PRODUCTION_ENTRY_NULL,
@@ -138,7 +138,7 @@ export default function Index({
 				title='Production Weight'
 				label='weight'
 				unit='KG'
-				sub_label={`MAX: ${MAX_PROD} KG`}
+				// sub_label={`MAX: ${MAX_PROD} KG`}
 				{...{ register, errors }}
 			/>
 			<JoinInput

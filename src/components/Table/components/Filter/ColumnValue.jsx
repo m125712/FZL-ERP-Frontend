@@ -1,20 +1,7 @@
-import { forwardRef, Fragment, useCallback, useMemo, useState } from 'react';
-import { format, isValid } from 'date-fns';
+import { Fragment, useCallback, useMemo } from 'react';
 
 import DebouncedInput from '../DebouncedInput';
 import { Template } from './_components';
-
-// import DatePicker from 'react-datepicker';
-// import {
-// 	Button,
-// 	DefaultConfig,
-// 	getMinMaxDate,
-// 	getYear,
-// 	months,
-// 	Select,
-// 	utilFunc,
-// } from '@/components/Table/utils';
-// import { CalenderIcon } from '@/assets/icons';
 
 function StatusInput({ columnName, column, isFullFilter }) {
 	const { setFilterValue } = column;
@@ -48,6 +35,7 @@ function StatusInput({ columnName, column, isFullFilter }) {
 
 	return (
 		<Template
+			key={column.id}
 			columnName={columnName}
 			onClick={() => setFilterValue(undefined)}>
 			<select
@@ -105,6 +93,7 @@ function NumberInput({ columnName, column, isFullFilter }) {
 
 	return (
 		<Template
+			key={column.id}
 			columnName={columnName}
 			onClick={() => setFilterValue(undefined)}
 			showResetButton={getFilterValue()?.[0] || getFilterValue()?.[1]}>

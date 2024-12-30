@@ -25,6 +25,7 @@ export default function Header({
 	Controller,
 	isUpdate,
 	watch,
+	reset,
 }) {
 	const { pi_uuid } = useParams();
 
@@ -95,6 +96,12 @@ export default function Header({
 									)}
 									onChange={(e) => {
 										onChange(e.value);
+										reset({
+											marketing_uuid: e.value,
+											party_uuid: '',
+											merchandiser_uuid: '',
+											factory_uuid: '',
+										});
 									}}
 									isDisabled={pi_uuid != undefined}
 								/>
@@ -111,11 +118,13 @@ export default function Header({
 								<ReactSelect
 									placeholder='Select Party'
 									options={party}
-									value={party?.find(
-										(item) =>
-											item.value ==
-											getValues('party_uuid')
-									)}
+									value={
+										party?.filter(
+											(item) =>
+												item.value ==
+												watch('party_uuid')
+										) || null
+									}
 									onChange={(e) => {
 										onChange(e.value);
 									}}
@@ -128,10 +137,7 @@ export default function Header({
 			</div>
 
 			<div className='grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4 xl:grid-cols-6'>
-				<FormField
-					label='merchandiser_uuid'
-					title='Merchandiser'
-					errors={errors}>
+				<FormField label='cc' title='Merchandiser' errors={errors}>
 					<Controller
 						name='merchandiser_uuid'
 						control={control}
@@ -140,11 +146,13 @@ export default function Header({
 								<ReactSelect
 									placeholder='Select Merchandiser'
 									options={merchandiser}
-									value={merchandiser?.find(
-										(item) =>
-											item.value ==
-											getValues('merchandiser_uuid')
-									)}
+									value={
+										merchandiser?.find(
+											(item) =>
+												item.value ==
+												watch('merchandiser_uuid')
+										) || null
+									}
 									onChange={(e) => onChange(e.value)}
 									isDisabled={pi_uuid != undefined}
 								/>
@@ -161,11 +169,13 @@ export default function Header({
 								<ReactSelect
 									placeholder='Select Factory'
 									options={factory}
-									value={factory?.find(
-										(item) =>
-											item.value ==
-											getValues('factory_uuid')
-									)}
+									value={
+										factory?.filter(
+											(item) =>
+												item.value ==
+												watch('factory_uuid')
+										) || null
+									}
 									onChange={(e) => onChange(e.value)}
 									isDisabled={pi_uuid != undefined}
 								/>

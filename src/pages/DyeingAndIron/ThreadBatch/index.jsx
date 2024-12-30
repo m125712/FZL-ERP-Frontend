@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useDyeingThreadBatch } from '@/state/Dyeing';
 import { useDyeingCone } from '@/state/Thread';
@@ -6,9 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
+import BatchType from '@/ui/Others/BatchType';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
 
+import { cn } from '@/lib/utils';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
@@ -19,6 +21,14 @@ export default function Index() {
 	const { user } = useAuth();
 	const haveAccess = useAccess('dyeing__thread_batch');
 	const navigate = useNavigate();
+	const [status, setStatus] = useState([]);
+
+	useEffect(() => {
+		if (data) {
+			setStatus(data.map((item) => item.is_drying_complete === 'true'));
+		}
+	}, [data]);
+
 	const columns = useMemo(
 		() => [
 			// * batch_id
@@ -35,12 +45,24 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'order_numbers',
+				accessorFn: (row) => {
+					const { order_numbers } = row;
+					let concat = '';
+					if (order_numbers) {
+						concat = order_numbers
+							.map((order_number) => order_number.order_number)
+							.join(', ');
+					}
+
+					return concat;
+				},
+				id: 'order_numbers',
 				header: 'O/N',
-				width: 'w-28',
+				width: 'w-40',
 				enableColumnFilter: true,
 				cell: (info) => {
-					const order_numbers = info.getValue();
+					const { order_numbers } = info.row.original;
+
 					return order_numbers?.map((order_number) => {
 						return (
 							<LinkWithCopy
@@ -54,6 +76,12 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'batch_type',
+				header: 'Type',
+				enableColumnFilter: false,
+				cell: (info) => <BatchType value={info.getValue()} />,
+			},
+			{
 				accessorKey: 'production_date',
 				header: (
 					<div className='flex flex-col'>
@@ -61,7 +89,6 @@ export default function Index() {
 						<span>Date</span>
 					</div>
 				),
-				width: 'w-24',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime date={info.getValue()} isTime={false} />
@@ -136,6 +163,27 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'status',
+				header: 'Status',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const res = {
+						cancelled: 'badge-error',
+						completed: 'badge-success',
+						pending: 'badge-warning',
+					};
+					return (
+						<span
+							className={cn(
+								'badge badge-sm uppercase',
+								res[info.getValue()]
+							)}>
+							{info.getValue()}
+						</span>
+					);
+				},
+			},
+			{
 				accessorKey: 'is_drying_complete',
 				header: (
 					<div className='flex flex-col'>
@@ -151,11 +199,6 @@ export default function Index() {
 					const overrideAccess = haveAccess.includes(
 						'click_drying_status_override'
 					);
-					// overrideAccess
-					// 	? false
-					// 	: access
-					// 		? is_drying_complete === 'true'
-					// 		: true;
 					let isDisabled = false;
 					if (!overrideAccess) {
 						if (access) {
@@ -237,17 +280,22 @@ export default function Index() {
 				enableSorting: false,
 				hidden: !haveAccess.includes('update'),
 				width: 'w-24',
-				cell: (info) => (
-					<EditDelete
-						idx={info.row.index}
-						handelUpdate={handelUpdate}
-						showEdit={haveAccess.includes('update')}
-						showDelete={false}
-					/>
-				),
+				cell: (info) => {
+					return (
+						<EditDelete
+							idx={info.row.index}
+							handelUpdate={handelUpdate}
+							showUpdate={
+								haveAccess.includes('update') &&
+								!status[info.row.index]
+							}
+							showDelete={false}
+						/>
+					);
+				},
 			},
 		],
-		[data]
+		[data, status]
 	);
 
 	//Drying Completed

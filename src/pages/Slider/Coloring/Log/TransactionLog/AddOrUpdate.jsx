@@ -3,12 +3,12 @@ import {
 	useSliderAssemblyTransferEntryByUUID,
 	useSliderColoringProduction,
 } from '@/state/Slider';
-import { DevTool } from '@hookform/devtools';
 import { useRHF, useUpdateFunc } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	NUMBER_REQUIRED,
 	SLIDER_ASSEMBLY_TRANSACTION_NULL,

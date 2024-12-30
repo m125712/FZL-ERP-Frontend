@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { NavLink, useResolvedPath } from 'react-router-dom';
 
 import cn from '@/lib/cn';

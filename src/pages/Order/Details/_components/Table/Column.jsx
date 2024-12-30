@@ -1,5 +1,3 @@
-import { useAccess } from '@/hooks';
-
 import { StatusButton } from '@/ui';
 
 const createColumn = (props) => ({
@@ -49,14 +47,21 @@ const createStatusColumn = ({ accessorKey, header }) =>
 		},
 	});
 
-const getColumn = ({ item_name, show_price, bleaching, sizes, order_type }) => {
+const getColumn = ({
+	item_name,
+	show_price,
+	bleaching,
+	sizes,
+	order_type,
+	is_sample,
+}) => {
 	// default columns
 	const DefaultStartColumn = [
 		createColumn({
-			accessorKey: 'id',
+			accessorKey: 'index',
 			header: 'ID',
 			enableColumnFilter: false,
-			cell: (info) => info.row.index + 1,
+			cell: (info) => info.getValue(),
 		}),
 		createStatusColumn({
 			accessorKey: 'swatch_status',
@@ -78,28 +83,20 @@ const getColumn = ({ item_name, show_price, bleaching, sizes, order_type }) => {
 			enableColumnFilter: true,
 			cell: (info) => info.getValue(),
 		}),
-		// createColumn({
-		// 	accessorKey: 'size',
-		// 	header: `${sizes.is_inch ? 'Size (Inch)' : 'Size (Meter)'}`,
-		// 	enableColumnFilter: true,
-		// 	hidden: !(sizes.is_inch || sizes.is_meter),
-		// 	cell: (info) => {
-		// 		return info.getValue();
-		// 	},
-		// }),
-
 		createColumn({
-			accessorFn: (row) => {
-				return `${
-					sizes.is_inch
-						? Number(row.size * 2.54).toFixed(2)
-						: Number(row.size)
-				}`;
-			},
-			id: 'sizes',
+			accessorFn: (row) => row?.bleaching === 'bleach',
+			id: 'bleach',
+			header: 'Bleach',
+			enableColumnFilter: false,
+			cell: (info) => (
+				<StatusButton size='btn-xs' value={info.getValue()} />
+			),
+		}),
+		createColumn({
+			accessorKey: 'size',
 			header:
 				order_type === 'tape'
-					? 'Size (M)'
+					? 'Size (MTR)'
 					: sizes.is_inch
 						? 'Size (Inch)'
 						: `Size (Cm)`,
@@ -130,34 +127,46 @@ const getColumn = ({ item_name, show_price, bleaching, sizes, order_type }) => {
 			enableColumnFilter: false,
 			cell: (info) => info.getValue(),
 		}),
-		createColumn({
-			accessorKey: 'bleaching',
-			header: 'Bleaching',
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		}),
-		createColumn({
-			accessorKey: 'dying_and_iron_prod',
-			header: (
-				<span>
-					Tape <br /> Production
-				</span>
-			),
-			enableColumnFilter: false,
-			cell: (info) => info.getValue(),
-		}),
+
+		...(!is_sample
+			? [
+					createColumn({
+						accessorKey: 'dying_and_iron_prod',
+						header: (
+							<>
+								Tape <br />
+								Production
+							</>
+						),
+						enableColumnFilter: false,
+						cell: (info) => info.getValue(),
+					}),
+				]
+			: []),
 		// createTapRequiredColumn({ measurement }),
 	];
+
 	const DefaultEndColumn = [
+		...(!is_sample
+			? [
+					createColumn({
+						accessorKey: 'coloring_prod',
+						header: 'Slider',
+						enableColumnFilter: false,
+						cell: (info) => info.getValue(),
+					}),
+					createStockProdColumn({
+						accessorKey: 'finishing',
+						header: 'Finishing',
+					}),
+				]
+			: []),
+
 		createColumn({
-			accessorKey: 'coloring_prod',
-			header: 'Slider',
+			accessorKey: 'total_warehouse_quantity',
+			header: 'Warehouse',
 			enableColumnFilter: false,
 			cell: (info) => info.getValue(),
-		}),
-		createStockProdColumn({
-			accessorKey: 'finishing',
-			header: 'Finishing',
 		}),
 		createColumn({
 			accessorKey: 'total_delivery_quantity',
@@ -191,36 +200,48 @@ const getColumn = ({ item_name, show_price, bleaching, sizes, order_type }) => {
 	if (item_name === 'vislon') {
 		return [
 			...DefaultStartColumn,
-			createStockProdColumn({
-				accessorKey: 'teeth_molding',
-				header: (
-					<span>
-						Teeth <br /> Molding
-					</span>
-				),
-			}),
+
+			...(!is_sample
+				? [
+						createStockProdColumn({
+							accessorKey: 'teeth_molding',
+							header: (
+								<span>
+									Teeth <br /> Molding
+								</span>
+							),
+						}),
+					]
+				: []),
+
 			...DefaultEndColumn,
 		];
 	}
 	if (item_name === 'metal') {
 		return [
 			...DefaultStartColumn,
-			createStockProdColumn({
-				accessorKey: 'teeth_molding',
-				header: (
-					<span>
-						Teeth <br /> Molding
-					</span>
-				),
-			}),
-			createStockProdColumn({
-				accessorKey: 'teeth_coloring',
-				header: (
-					<span>
-						Teeth <br /> Coloring
-					</span>
-				),
-			}),
+
+			...(!is_sample
+				? [
+						createStockProdColumn({
+							accessorKey: 'teeth_molding',
+							header: (
+								<span>
+									Teeth <br /> Molding
+								</span>
+							),
+						}),
+						createStockProdColumn({
+							accessorKey: 'teeth_coloring',
+							header: (
+								<span>
+									Teeth <br /> Coloring
+								</span>
+							),
+						}),
+					]
+				: []),
+
 			...DefaultEndColumn,
 		];
 	}

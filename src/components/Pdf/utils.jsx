@@ -27,14 +27,25 @@ export const CUSTOM_PAGE = ({
 	xMargin,
 	headerHeight,
 	footerHeight,
+	leftMargin,
+	rightMargin,
 }) => {
 	let width = 290;
-	let height = 181;
+	let height = 141;
+
+	let left, right;
+	if (leftMargin && rightMargin) {
+		left = leftMargin;
+		right = rightMargin;
+	} else {
+		left = xMargin;
+		right = xMargin;
+	}
 
 	return {
 		pageSize: { width, height },
 		pageOrientation,
-		pageMargins: [xMargin, headerHeight, xMargin, footerHeight],
+		pageMargins: [left, headerHeight, right, footerHeight],
 		defaultStyle,
 		styles,
 	};
@@ -47,6 +58,23 @@ export const CUSTOM_PAGE_STICKER = ({
 }) => {
 	let width = 283;
 	let height = 425;
+
+	return {
+		pageSize: { width, height },
+		pageOrientation,
+		pageMargins: [xMargin, headerHeight, xMargin, footerHeight],
+		defaultStyle,
+		styles,
+	};
+};
+export const CUSTOM_PAGE_THREAD_STICKER = ({
+	pageOrientation = 'portrait',
+	xMargin,
+	headerHeight,
+	footerHeight,
+}) => {
+	let width = 210;
+	let height = 281;
 
 	return {
 		pageSize: { width, height },
@@ -79,7 +107,8 @@ export const company = {
 	name: 'Fortune Zipper LTD.',
 	address: 'Aukpara, Ashulia, Savar, DHK-1340',
 	email: 'Email: info@fortunezip.com',
-	phone: 'Phone: 01521533595',
+	phone: 'Phone: 01810001301',
+	challan_phone: 'Phone: 01810001301',
 	bin: 'BIN: 000537296-0403',
 	tax: 'VAT: 17141000815',
 };
@@ -101,7 +130,8 @@ export const getTable = (
 export const TableHeader = (
 	node,
 	fontSize = DEFAULT_FONT_SIZE,
-	color = PRIMARY_COLOR
+	color = PRIMARY_COLOR,
+	colSpan = 1
 ) => {
 	return [
 		...node.map((nodeItem) => ({
@@ -111,6 +141,7 @@ export const TableHeader = (
 			color: color,
 			bold: true,
 			fontSize: fontSize,
+			colSpan: colSpan,
 		})),
 	];
 };

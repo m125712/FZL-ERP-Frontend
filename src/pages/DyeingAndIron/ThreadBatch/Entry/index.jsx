@@ -6,7 +6,6 @@ import {
 } from '@/state/Dyeing';
 import { useGetURLData, useOtherMachines } from '@/state/Other';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import {
 	Navigate,
@@ -14,7 +13,6 @@ import {
 	useParams,
 	useSearchParams,
 } from 'react-router-dom';
-import * as yup from 'yup';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal, ProceedModal } from '@/components/Modal';
@@ -23,11 +21,11 @@ import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	DYEING_THREAD_BATCH_NULL,
 	DYEING_THREAD_BATCH_SCHEMA,
-	NUMBER,
-	STRING,
+	DYEING_THREAD_BATCH_SCHEMA_UPDATE,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
@@ -53,29 +51,11 @@ export default function Index() {
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const isUpdate = batch_uuid !== undefined;
-	const { data: batch, invalidateQuery: invalidateDyeingThreadBatchDetails } =
-		isUpdate
-			? useDyeingThreadBatchDetailsByUUID(batch_uuid, '?is_update=true')
-			: useDyeingThreadOrderBatch();
+
 	const [proceed, setProceed] = useState(false);
 	const [batchData, setBatchData] = useState(null);
 	const [batchEntry, setBatchEntry] = useState(null);
-
-	// * if can_trx_quty exist koray taholay etar
-	const SCHEMA = {
-		...DYEING_THREAD_BATCH_SCHEMA,
-		batch_entry: yup.array().of(
-			yup.object().shape({
-				quantity: NUMBER.nullable()
-					.max(yup.ref('max_quantity'), 'Beyond Balance Quantity')
-					.transform((value, originalValue) =>
-						String(originalValue).trim() === '' ? null : value
-					)
-					.max(yup.ref('max_quantity'), 'Beyond Balance Quantity'),
-				batch_remarks: STRING.nullable(),
-			})
-		),
-	};
+	const [patchEntry, setPatchBatchEntry] = useState(null);
 
 	const {
 		register,
@@ -89,12 +69,26 @@ export default function Index() {
 		watch,
 		setValue,
 		context: form,
-	} = useRHF(SCHEMA, {
-		...DYEING_THREAD_BATCH_NULL,
-		machine_uuid: machine_uuid,
-		slot: slot_no,
-		production_date: dyeing_date,
-	}); // TODO: need to fix the form validation for quantity
+	} = useRHF(
+		isUpdate
+			? DYEING_THREAD_BATCH_SCHEMA_UPDATE
+			: DYEING_THREAD_BATCH_SCHEMA,
+		{
+			...DYEING_THREAD_BATCH_NULL,
+			machine_uuid: machine_uuid,
+			slot: slot_no,
+			production_date: dyeing_date,
+		}
+	); // TODO: need to fix the form validation for quantity
+
+	const { data: batch, invalidateQuery: invalidateDyeingThreadBatchDetails } =
+		isUpdate
+			? useDyeingThreadBatchDetailsByUUID(batch_uuid, '?is_update=true')
+			: watch('batch_type') === 'extra' && watch('order_info_uuid')
+				? useDyeingThreadOrderBatch(
+						`batch_type=extra&order_info_uuid=${watch('order_info_uuid')}`
+					)
+				: useDyeingThreadOrderBatch();
 
 	// batch_entry
 	const [deleteEntry, setDeleteEntry] = useState({
@@ -138,26 +132,11 @@ export default function Index() {
 		}
 	}, [batch]);
 
-	// * Fetch initial data
-	// isUpdate
-	// 	? useFetchForRhfReset(
-	// 			`/thread/batch-details/by/${batch_uuid}?is_update=true`,
-	// 			batch_uuid,
-	// 			reset
-	// 		)
-	// 	: useFetchForRhfResetForPlanning(`/thread/order-batch`, reset);
-
-	const { data } = useGetURLData(
-		isUpdate
-			? `/thread/batch-details/by/${batch_uuid}?is_update=true`
-			: `/thread/order-batch`
-	);
-
 	useEffect(() => {
-		if (data) {
-			reset(data);
+		if (isUpdate) {
+			reset(batch); // Reset the form with updated data
 		}
-	}, [data]);
+	}, [isUpdate, batch, reset]);
 
 	const [minCapacity, setMinCapacity] = useState(0);
 	const [maxCapacity, setMaxCapacity] = useState(0);
@@ -212,10 +191,16 @@ export default function Index() {
 	const onSubmit = async (data) => {
 		// * Update
 		if (isUpdate) {
+			const {
+				batch_entry,
+				new_batch_entry: new_batch_entries,
+				...rest
+			} = data;
 			const batch_data_updated = {
-				...data,
+				...rest,
 				updated_at: GetDateTime(),
 			};
+
 			let flag = false;
 			data?.batch_entry.map((item) => {
 				if (item.quantity < 1) {
@@ -228,8 +213,10 @@ export default function Index() {
 					return;
 				}
 			});
+
 			if (flag) return;
-			const batch_entry_updated = [...data?.batch_entry]
+
+			const batch_entry_updated = [...batch_entry]
 				.filter((item) => item.quantity > 0)
 				.map((item) => ({
 					...item,
@@ -237,7 +224,8 @@ export default function Index() {
 					remarks: item.batch_remarks,
 					updated_at: GetDateTime(),
 				}));
-			const new_batch_entry = [...data?.new_batch_entry]
+
+			const new_batch_entry = [...new_batch_entries]
 				.filter((item) => item.quantity > 0)
 				.map((item) => ({
 					...item,
@@ -246,6 +234,11 @@ export default function Index() {
 					remarks: item.remarks,
 					created_at: GetDateTime(),
 				}));
+
+			setBatchData(batch_data_updated); // * use for modal
+			setBatchEntry(new_batch_entry); // * use for modal
+			setPatchBatchEntry(batch_entry_updated); // * use for modal
+
 			if (
 				batch_entry_updated.length === 0 &&
 				new_batch_entry.length === 0
@@ -320,15 +313,16 @@ export default function Index() {
 		}
 
 		// * ADD data
+		const { batch_entry: batch_entries, ...rest } = data;
 		const created_at = GetDateTime();
 		const batch_data = {
-			...data,
+			...rest,
 			uuid: nanoid(),
 			created_at,
 			created_by: user.uuid,
 		};
 
-		const batch_entry = [...data?.batch_entry]
+		const batch_entry = [...batch_entries]
 			.filter((item) => item.quantity > 0)
 			.map((item) => ({
 				...item,
@@ -397,6 +391,51 @@ export default function Index() {
 	// * useEffect for modal procees submit
 	useEffect(() => {
 		const proceedSubmit = async () => {
+			// * UPDATE
+			if (isUpdate) {
+				const batchDataPromise = await updateData.mutateAsync({
+					url: `${url}/${batchData?.uuid}`,
+					updatedData: batchData,
+					isOnCloseNeeded: false,
+				});
+
+				let batch_entry_updated_promises = [
+					...patchEntry.map(async (item) => {
+						await updateData.mutateAsync({
+							url: `/thread/batch-entry/${item.uuid}`,
+							updatedData: item,
+							isOnCloseNeeded: false,
+						});
+					}),
+					...batchEntry.map(
+						async (item) =>
+							await postData.mutateAsync({
+								url: '/thread/batch-entry',
+								newData: item,
+								isOnCloseNeeded: false,
+							})
+					),
+				];
+
+				await Promise.all([
+					batchDataPromise,
+					...batch_entry_updated_promises,
+				])
+					.then(() =>
+						reset(Object.assign({}, DYEING_THREAD_BATCH_NULL))
+					)
+					.then(() => {
+						invalidateDyeingThreadBatch();
+						navigate(
+							`/dyeing-and-iron/thread-batch/${batchData.uuid}`
+						);
+					})
+					.catch((err) => console.log(err));
+
+				return;
+			}
+
+			// * ADD data
 			await postData.mutateAsync({
 				url,
 				newData: batchData,

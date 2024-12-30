@@ -167,13 +167,17 @@ export default function Index() {
 				// handelPdfDownload={() =>
 				// 	getPdfData?.download(`Order Sheet ${order_number}.pdf`)
 				// }
-				handleViewChange={() =>
-					updateView ? setUpdateView(false) : setUpdateView(true)
-				}
+				handleViewChange={() => setUpdateView(!updateView)}
 				updateView={updateView}
 			/>
 
-			{!updateView &&
+			{updateView ? (
+				<div>
+					<Suspense>
+						<ViewByStyle initial_orders={orders} />
+					</Suspense>
+				</div>
+			) : (
 				orders?.map((order, idx) => (
 					<div key={idx}>
 						<Suspense>
@@ -185,14 +189,7 @@ export default function Index() {
 
 						{renderHr(idx !== orders.length - 1)}
 					</div>
-				))}
-
-			{updateView && (
-				<div>
-					<Suspense>
-						<ViewByStyle initial_orders={orders} />
-					</Suspense>
-				</div>
+				))
 			)}
 		</div>
 	);

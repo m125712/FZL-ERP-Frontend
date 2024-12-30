@@ -212,10 +212,10 @@ export default function Index() {
 				src={data2}
 				className='h-[40rem] w-full rounded-md border-none'
 			/>
-			<SectionEntryBody
-				title={`Delivery Date: ${date}`}
-				header={
-					<div className='my-2 w-24'>
+			<ReactTableTitleOnly
+				title={
+					<div className='my-2'>
+						{`Delivery Date: ${date}`}
 						<ReactSelect
 							placeholder='Select Vehicle'
 							options={modifiedVehicles}
@@ -225,13 +225,10 @@ export default function Index() {
 							onChange={(e) => setVehicle(e.value)}
 						/>
 					</div>
-				}>
-				<ReactTableTitleOnly
-					title={info.getTitle()}
-					data={data}
-					columns={columns}
-				/>
-			</SectionEntryBody>
+				}
+				data={data}
+				columns={columns}
+			/>
 		</div>
 	);
 }

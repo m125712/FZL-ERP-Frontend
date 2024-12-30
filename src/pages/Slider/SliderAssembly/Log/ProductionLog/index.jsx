@@ -53,6 +53,22 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'batch_number',
+				header: 'Batch No.',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { finishing_batch_uuid } = info.row.original;
+
+					return (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={finishing_batch_uuid}
+							uri={`/planning/finishing-batch`}
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'order_number',
 				header: 'O/N',
 				cell: (info) => {
@@ -269,7 +285,11 @@ export default function Index() {
 			itemName: data[idx].order_number,
 		}));
 
-		window[info.getDeleteModalId()].showModal();
+		if (data[idx]?.order_number === 'Assembly Stock') {
+			window['StockProductionDelete'].showModal();
+		} else {
+			window[info.getDeleteModalId()].showModal();
+		}
 	};
 
 	if (isLoading)
@@ -311,6 +331,17 @@ export default function Index() {
 					setDeleteItem={setDeleteItem}
 					deleteData={deleteData}
 					url={`/slider/production`}
+					invalidateQuery={invalidateQuery}
+				/>
+			</Suspense>
+			<Suspense>
+				<DeleteModal
+					modalId={'StockProductionDelete'}
+					title={info.getTitle()}
+					deleteItem={deleteItem}
+					setDeleteItem={setDeleteItem}
+					deleteData={deleteData}
+					url={`/slider/die-casting-to-assembly-stock`}
 					invalidateQuery={invalidateQuery}
 				/>
 			</Suspense>

@@ -41,6 +41,12 @@ body {
 	background: var(--accent-color);
 }
 
+.htCore > tbody > tr > td {
+	padding: 0.5rem 0.5rem !important;
+	height: 16px !important;
+	font-size: 16px !important;
+}
+
 .react-datepicker__portal {
 	background-color: rgba(39, 55, 77, 0.6) !important;
 }
@@ -276,15 +282,15 @@ body {
 	} */
 
 	.btn-filter-outline {
-		@apply btn btn-outline btn-secondary btn-sm rounded-md border-secondary/30 px-1.5 text-secondary hover:border-transparent hover:bg-secondary lg:px-2;
+		@apply btn btn-outline btn-secondary btn-sm h-[2.35rem] rounded-md border-secondary/30 px-1.5 text-secondary hover:border-transparent hover:bg-secondary lg:px-3;
 	}
 
 	.btn-filter {
-		@apply btn btn-secondary btn-sm rounded-md px-1.5 lg:px-2;
+		@apply btn btn-secondary btn-sm h-[2.35rem] rounded-md px-1.5 lg:px-3;
 	}
 
 	.btn-filter-accent {
-		@apply btn btn-accent btn-sm rounded-md px-1.5 lg:px-2;
+		@apply btn btn-accent btn-sm h-[2.35rem] rounded-md px-1.5 lg:px-3;
 	}
 
 	.input-filter {

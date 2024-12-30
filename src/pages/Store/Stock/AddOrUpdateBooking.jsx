@@ -1,13 +1,13 @@
 import { useAuth } from '@/context/auth';
 import { useOtherMarketing } from '@/state/Other';
 import { useMaterialBooking, useMaterialInfo } from '@/state/Store';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, JoinInputSelect, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { MATERIAL_BOOKING_NULL, MATERIAL_BOOKING_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
@@ -26,7 +26,7 @@ export default function Index({
 		postData,
 		invalidateQuery: invalidateMaterialbooking,
 	} = useMaterialBooking();
-	const { invalidateQuery: invalidateMaterialInfo }  = useMaterialInfo();
+	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { data: marketing } = useOtherMarketing();
 
 	const {

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useMotionValue, useScroll, useTransform } from 'framer-motion';
+import { useMotionValue, useScroll, useTransform } from 'motion/react';
 
 function useBoundedScroll(threshold) {
 	let { scrollY } = useScroll();

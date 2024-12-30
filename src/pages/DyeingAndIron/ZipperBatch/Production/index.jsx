@@ -1,7 +1,6 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDyeingBatch, useDyeingBatchDetailsByUUID } from '@/state/Dyeing';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
@@ -12,11 +11,13 @@ import { Input, LinkWithCopy, Textarea } from '@/ui';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	DYEING_BATCH_PRODUCTION_NULL,
 	DYEING_BATCH_PRODUCTION_SCHEMA,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
+import { getRequiredTapeKg } from '@/util/GetRequiredTapeKg';
 
 import Header from './Header';
 
@@ -30,8 +31,6 @@ export default function Index() {
 	const { batch_prod_uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
-	// const [isAllChecked, setIsAllChecked] = useState(false);
-	// const [isSomeChecked, setIsSomeChecked] = useState(false);
 	const isUpdate = batch_prod_uuid !== undefined;
 	const { data } = useDyeingBatchDetailsByUUID(batch_prod_uuid);
 
@@ -146,47 +145,6 @@ export default function Index() {
 	// Check if order_number is valid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 
-	// useEffect(() => {
-	// 	if (isAllChecked || isSomeChecked) {
-	// 		return BatchEntryField.forEach((item, index) => {
-	// 			if (isAllChecked) {
-	// 				setValue(`dyeing_batch_entry[${index}].is_checked`, true);
-	// 			}
-	// 		});
-	// 	}
-	// 	if (!isAllChecked) {
-	// 		return BatchEntryField.forEach((item, index) => {
-	// 			setValue('is_all_checked', false);
-	// 			setValue(`dyeing_batch_entry[${index}].is_checked`, false);
-	// 		});
-	// 	}
-	// }, [isAllChecked]);
-
-	// // Todo: fix this
-	// const handleRowChecked = (e, index) => {
-	// 	const isChecked = e.target.checked;
-	// 	setValue(`dyeing_batch_entry[${index}].is_checked`, isChecked);
-
-	// 	let isEveryChecked = true,
-	// 		isSomeChecked = false;
-
-	// 	for (let item of watch('dyeing_batch_entry')) {
-	// 		if (item.is_checked) {
-	// 			isSomeChecked = true;
-	// 		} else {
-	// 			isEveryChecked = false;
-	// 			setValue('is_all_checked', false);
-	// 		}
-
-	// 		if (isSomeChecked && !isEveryChecked) {
-	// 			break;
-	// 		}
-	// 	}
-
-	// 	setIsAllChecked(isEveryChecked);
-	// 	setIsSomeChecked(isSomeChecked);
-	// };
-
 	const setAllExpect_kg = () => {
 		BatchEntryField.map((item, idx) => {
 			const { top, bottom, dyed_mtr_per_kg, size, quantity } = item;
@@ -209,43 +167,6 @@ export default function Index() {
 
 	const columns = useMemo(
 		() => [
-			// {
-			// 	accessorKey: 'checkbox',
-			// 	header: () => (
-			// 		<CheckBoxWithoutLabel
-			// 			className='bg-white'
-			// 			label='is_all_checked'
-			// 			checked={isAllChecked}
-			// 			onChange={(e) => {
-			// 				setIsAllChecked(e.target.checked);
-			// 				setIsSomeChecked(e.target.checked);
-			// 			}}
-			// 			{...{ register, errors }}
-			// 		/>
-			// 	),
-			// 	enableColumnFilter: false,
-			// 	enableSorting: false,
-			// 	cell: (info) => (
-			// 		<CheckBoxWithoutLabel
-			// 			className={
-			// 				info.row.original.batch_production_uuid
-			// 					? 'bg-gray-400'
-			// 					: 'bg-white'
-			// 			}
-			// 			label={`dyeing_batch_entry[${info.row.index}].is_checked`}
-			// 			checked={watch(
-			// 				`dyeing_batch_entry[${info.row.index}].is_checked`
-			// 			)}
-			// 			onChange={(e) => handleRowChecked(e, info.row.index)}
-			// 			disabled={
-			// 				getValues(
-			// 					`dyeing_batch_entry[${info.row.index}].pi_quantity`
-			// 				) == 0
-			// 			}
-			// 			{...{ register, errors }}
-			// 		/>
-			// 	),
-			// },
 			{
 				accessorKey: 'order_number',
 				header: 'Order ID',
@@ -282,23 +203,22 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'size',
-				header: 'Size (CM)',
+				header: 'Size',
 				enableColumnFilter: true,
 				enableSorting: true,
 			},
 			{
-				accessorKey: 'order_quantity',
-				header: 'Order QTY',
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: (info) => info.getValue(),
 			},
 			// {
-			// 	accessorKey: 'balance_quantity',
-			// 	header: 'Balanced Batch',
+			// 	accessorKey: 'order_quantity',
+			// 	header: 'Order QTY',
 			// 	enableColumnFilter: true,
 			// 	enableSorting: true,
-			// 	cell: (info) => Number(info.getValue()),
+			// 	cell: (info) => info.getValue(),
 			// },
 			{
 				accessorKey: 'quantity',
@@ -307,80 +227,35 @@ export default function Index() {
 				enableSorting: true,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'production_quantity',
-			// 	header: 'Production QTY',
-			// 	enableColumnFilter: false,
-			// 	enableSorting: false,
-			// 	cell: (info) => {
-			// 		const idx = info.row.index;
-			// 		const dynamicerror =
-			// 			errors?.dyeing_batch_entry?.[idx]?.production_quantity;
-			// 		return (
-			// 			<Input
-			// 				label={`dyeing_batch_entry[${info.row.index}].production_quantity`}
-			// 				is_title_needed='false'
-			// 				height='h-8'
-			// 				dynamicerror={dynamicerror}
-			// 				{...{ register, errors }}
-			// 			/>
-			// 		);
-			// 	},
-			// },
 			{
-				accessorKey: 'top',
+				accessorKey: 'cal_tape_req_kg',
 				header: (
-					<div className='flex flex-col'>
-						Expected Tape (Kg)
-						{/* <label
-							className='btn btn-primary btn-xs'
-							onClick={() => setAllExpect_kg()}>
-							Copy All
-						</label> */}
-					</div>
+					<>
+						Exp Tape <br />
+						(Kg)
+					</>
 				),
 				enableColumnFilter: false,
-				enableSorting: false,
+				enableSorting: true,
 				cell: ({ row }) => {
-					const { top, bottom, dyed_mtr_per_kg, size, quantity } =
-						row.original;
-					const idx = row.index;
+					const quantity = parseFloat(row.original.quantity);
 
-					const total_size_in_mtr =
-						((parseFloat(top) +
-							parseFloat(bottom) +
-							parseFloat(size)) *
-							parseFloat(quantity)) /
-						100;
-
-					const expt_kg = Number(
-						total_size_in_mtr / parseFloat(dyed_mtr_per_kg)
-					).toFixed(3);
-
-					return (
-						<div className='flex gap-4'>
-							<label
-								className='btn btn-primary btn-xs'
-								onClick={() =>
-									setValue(
-										`dyeing_batch_entry[${idx}].production_quantity_in_kg`,
-										expt_kg,
-										{
-											
-											shouldDirty: true,
-										}
-									)
-								}>
-								Copy
-							</label>
-							{expt_kg}
-						</div>
-					);
+					return getRequiredTapeKg({
+						row: row.original,
+						type: 'dyed',
+						input_quantity: quantity,
+					}).toFixed(3);
 				},
 			},
 			{
 				accessorKey: 'production_quantity_in_kg',
 				header: 'Production QTY (KG)',
+				header: (
+					<>
+						Production <br />
+						(Kg)
+					</>
+				),
 				enableColumnFilter: false,
 				enableSorting: false,
 				cell: (info) => {
@@ -424,7 +299,7 @@ export default function Index() {
 			let totalCalTape = 0;
 			let totalProduction = 0;
 
-			dyeing_batch_entry.forEach((item) => {
+			dyeing_batch_entry.forEach((item, index) => {
 				totalQty += Number(item.quantity);
 
 				const top = parseFloat(item.top) || 0;
@@ -436,7 +311,11 @@ export default function Index() {
 				const dyedMtrPerKg = parseFloat(item.dyed_mtr_per_kg) || 1;
 
 				const itemTotal =
-					((top + bottom + size) * quantity) / 100 / dyedMtrPerKg;
+					watch(`dyeing_batch_entry[${index}].order_type`) === 'tape'
+						? (top + bottom + quantity) / 100 / dyedMtrPerKg
+						: ((top + bottom + size) * quantity) /
+							100 /
+							dyedMtrPerKg;
 				totalCalTape += itemTotal;
 				totalProduction += production_quantity_in_kg;
 			});

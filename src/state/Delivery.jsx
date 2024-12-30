@@ -68,10 +68,10 @@ export const useDeliveryChallanEntryByChallanUUID = (challanUUID) =>
 	});
 
 // * Packing List
-export const useDeliveryPackingList = () =>
+export const useDeliveryPackingList = (query = '') =>
 	createGlobalState({
-		queryKey: deliveryQk.deliveryPackingList(),
-		url: '/delivery/packing-list',
+		queryKey: deliveryQk.deliveryPackingList(query),
+		url: `/delivery/packing-list${query}`,
 	});
 
 export const useDeliveryPackingListByUUID = (uuid) =>

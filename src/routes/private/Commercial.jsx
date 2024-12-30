@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 
+const Dashboard = lazy(() => import('@pages/Commercial/Dashboard'));
 const Log = lazy(() => import('@pages/Commercial/Log'));
 const Bank = lazy(() => import('@pages/Commercial/Bank'));
 const PiCash = lazy(() => import('@pages/Commercial/Cash'));
@@ -21,6 +22,13 @@ export const CommercialRoutes = [
 	{
 		name: 'Commercial',
 		children: [
+			{
+				name: 'Dashboard',
+				path: '/commercial/dashboard',
+				element: <Dashboard />,
+				page_name: 'commercial__dashboard',
+				actions: ['read'],
+			},
 			{
 				name: 'LC',
 				path: '/commercial/lc',

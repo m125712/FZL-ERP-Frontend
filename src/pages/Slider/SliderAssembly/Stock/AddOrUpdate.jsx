@@ -5,13 +5,13 @@ import {
 	useSliderAssemblyStock,
 	useSliderAssemblyStockByUUID,
 } from '@/state/Slider';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	SLIDER_ASSEMBLY_STOCK_NULL,
 	SLIDER_ASSEMBLY_STOCK_SCHEMA,

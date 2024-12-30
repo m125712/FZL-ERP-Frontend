@@ -1,10 +1,10 @@
 import { useDyeingThreadBatchEntry } from '@/state/Dyeing';
-import { DevTool } from '@hookform/devtools';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { Input } from '@/ui';
 
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	DYEING_THREAD_BATCH_ENTRY_TRANSFER_NULL,
 	DYEING_THREAD_BATCH_ENTRY_TRANSFER_SCHEMA,

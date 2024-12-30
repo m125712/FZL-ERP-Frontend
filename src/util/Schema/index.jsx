@@ -469,7 +469,7 @@ export const PROPERTIES_SCHEMA = {
 	type: STRING_REQUIRED,
 	name: STRING_REQUIRED,
 	short_name: STRING_REQUIRED,
-	order_sheet_name: STRING_REQUIRED,
+	order_sheet_name: STRING.nullable(),
 	remarks: STRING.nullable(),
 };
 
@@ -502,7 +502,7 @@ export const ORDER_INFO_SCHEMA = {
 	merchandiser_uuid: STRING.nullable(),
 	factory_uuid: STRING_REQUIRED,
 	party_uuid: STRING_REQUIRED,
-	buyer_uuid: STRING_REQUIRED,
+	buyer_uuid: STRING.nullable(),
 	marketing_priority: STRING,
 	factory_priority: STRING,
 	remarks: STRING.nullable(),
@@ -633,6 +633,7 @@ export const ORDER_SCHEMA = {
 
 	order_entry: yup.array().of(
 		yup.object().shape({
+			index: NUMBER_REQUIRED,
 			style: STRING_REQUIRED,
 			color: STRING_REQUIRED,
 			size: NUMBER_DOUBLE_REQUIRED,
@@ -676,6 +677,7 @@ export const ORDER_NULL = {
 	is_cm: true,
 	order_entry: [
 		{
+			index: null,
 			order_description_uuid: null,
 			style: '',
 			color: '',
@@ -1366,9 +1368,11 @@ export const SLIDER_SLIDER_ASSEMBLY_NULL = {
 export const SLIDER_ASSEMBLY_PRODUCTION_ENTRY_SCHEMA = {
 	production_quantity: NUMBER_REQUIRED,
 	weight: NUMBER_DOUBLE_REQUIRED.moreThan(0, 'More than 0'),
-	wastage: NUMBER.nullable().transform((value, originalValue) =>
-		String(originalValue).trim() === '' ? 0 : value
-	),
+	wastage: NUMBER.nullable()
+		.transform((value, originalValue) =>
+			String(originalValue).trim() === '' ? 0 : value
+		)
+		.min(0, 'Minimum of 0'),
 	remarks: STRING.nullable(),
 };
 
@@ -1726,7 +1730,7 @@ export const PI_SCHEMA = {
 	lc_uuid: STRING.nullable(),
 	marketing_uuid: STRING_REQUIRED,
 	party_uuid: STRING_REQUIRED,
-	order_info_uuids: JSON_STRING_REQUIRED,
+	order_info_uuids: JSON_STRING.optional(),
 	thread_order_info_uuids: JSON_STRING.optional(),
 	new_order_info_uuids: JSON_STRING.optional(),
 	new_order_info_thread_uuids: JSON_STRING.optional(),
@@ -2475,7 +2479,7 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 	marketing_uuid: STRING_REQUIRED,
 	factory_uuid: STRING_REQUIRED,
 	merchandiser_uuid: STRING.nullable(),
-	buyer_uuid: STRING_REQUIRED,
+	buyer_uuid: STRING.nullable(),
 	is_sample: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	is_bill: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	is_cash: BOOLEAN.transform(handelNumberDefaultValue).default(false),
@@ -2483,6 +2487,7 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 	remarks: STRING.nullable(),
 	order_info_entry: yup.array().of(
 		yup.object().shape({
+			index: NUMBER_REQUIRED,
 			color: STRING_REQUIRED,
 			// shade_recipe_uuid: STRING.nullable(),
 			// po: STRING_REQUIRED,
@@ -2515,6 +2520,7 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 	delivery_date: null,
 	order_info_entry: [
 		{
+			index: null,
 			uuid: null,
 			order_info_uuid: null,
 			// po: '',
@@ -2639,31 +2645,75 @@ export const DYEING_PLANNING_HEADOFFICE_NULL = {
 // * Dyeing Planning Batch schema*//
 
 export const DYEING_BATCH_SCHEMA = {
+	batch_type: STRING_REQUIRED,
+	order_info_uuid: STRING.when('batch_type', {
+		is: (batch_type) => batch_type === 'extra',
+		then: (Schema) => Schema.required('Required'),
+		otherwise: (Schema) => Schema.nullable(),
+	}),
 	machine_uuid: STRING_REQUIRED,
 	slot: NUMBER_REQUIRED.moreThan(0, 'Slot should be more than 0'),
 	production_date: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 	dyeing_batch_entry: yup.array().of(
 		yup.object().shape({
-			quantity: NUMBER.nullable().max(
-				yup.ref('max_quantity'),
-				`Beyond Max Quantity`
-			),
+			quantity: NUMBER.when('batch_type', {
+				is: (batch_type) => batch_type === 'extra',
+				then: (Schema) => Schema.nullable(),
+				otherwise: (Schema) =>
+					Schema.max(yup.ref('max_quantity'), `Beyond Max Quantity`),
+			}),
 			remarks: STRING.nullable(),
-		})
-	),
-	new_dyeing_batch_entry: yup.array().of(
-		yup.object().shape({
-			quantity: NUMBER.nullable().max(
-				yup.ref('max_quantity'),
-				`Beyond Max Quantity`
-			),
-			remarks: STRING.nullable(),
+			batch_type: STRING.nullable(),
 		})
 	),
 };
+export const DYEING_BATCH_SCHEMA_UPDATE = {
+	batch_type: STRING_REQUIRED,
+	order_info_uuid: STRING.when('batch_type', {
+		is: (batch_type) => batch_type === 'extra',
+		then: (Schema) => Schema.required('Required'),
+		otherwise: (Schema) => Schema.nullable(),
+	}),
+	machine_uuid: STRING_REQUIRED,
+	slot: NUMBER_REQUIRED.moreThan(0, 'Slot should be more than 0'),
+	production_date: STRING_REQUIRED,
+	remarks: STRING.nullable(),
+	dyeing_batch_entry: yup.array().of(
+		yup.object().shape({
+			quantity: NUMBER.when('batch_type', {
+				is: (batch_type) => batch_type === 'extra',
+				then: (Schema) => Schema.nullable(),
+				otherwise: (Schema) =>
+					Schema.max(yup.ref('max_quantity'), `Beyond Max Quantity`),
+			}),
+			remarks: STRING.nullable(),
+			batch_type: STRING.nullable(),
+		})
+	),
+	new_dyeing_batch_entry: yup
+		.array()
+		.of(
+			yup.object().shape({
+				quantity: NUMBER.when('batch_type', {
+					is: (batch_type) => batch_type === 'extra',
+					then: (Schema) => Schema.nullable(),
+					otherwise: (Schema) =>
+						Schema.max(
+							yup.ref('max_quantity'),
+							`Beyond Max Quantity`
+						),
+				}),
+				remarks: STRING.nullable(),
+				batch_type: STRING.nullable(),
+			})
+		)
+		.optional(),
+};
 
 export const DYEING_BATCH_NULL = {
+	batch_type: 'normal',
+	order_info_uuid: null,
 	machine_uuid: null,
 	slot: null,
 	production_date: null,
@@ -2685,18 +2735,76 @@ export const DYEING_BATCH_NULL = {
 // * Dyeing Thread Batch schema*//
 
 export const DYEING_THREAD_BATCH_SCHEMA = {
+	batch_type: STRING_REQUIRED,
+	order_info_uuid: STRING.when('batch_type', {
+		is: (batch_type) => batch_type === 'extra',
+		then: (Schema) => Schema.required('Required'),
+		otherwise: (Schema) => Schema.nullable(),
+	}),
 	machine_uuid: STRING_REQUIRED,
-	slot: NUMBER_REQUIRED.moreThan(0, 'Slot Number must be greater than 0'),
+	slot: NUMBER_REQUIRED.moreThan(0, 'Slot should be more than 0'),
 	production_date: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 	batch_entry: yup.array().of(
 		yup.object().shape({
+			quantity: NUMBER.when('batch_type', {
+				is: (batch_type) => batch_type === 'extra',
+				then: (Schema) => Schema.nullable(),
+				otherwise: (Schema) =>
+					Schema.max(yup.ref('max_quantity'), `Beyond Max Quantity`),
+			}),
 			batch_remarks: STRING.nullable(),
+			batch_type: STRING.nullable(),
 		})
 	),
 };
+export const DYEING_THREAD_BATCH_SCHEMA_UPDATE = {
+	batch_type: STRING_REQUIRED,
+	order_info_uuid: STRING.when('batch_type', {
+		is: (batch_type) => batch_type === 'extra',
+		then: (Schema) => Schema.required('Required'),
+		otherwise: (Schema) => Schema.nullable(),
+	}),
+	machine_uuid: STRING_REQUIRED,
+	slot: NUMBER_REQUIRED.moreThan(0, 'Slot should be more than 0'),
+	production_date: STRING_REQUIRED,
+	remarks: STRING.nullable(),
+	batch_entry: yup.array().of(
+		yup.object().shape({
+			quantity: NUMBER.when('batch_type', {
+				is: (batch_type) => batch_type === 'extra',
+				then: (Schema) => Schema.nullable(),
+				otherwise: (Schema) =>
+					Schema.max(yup.ref('max_quantity'), `Beyond Max Quantity`),
+			}),
+			batch_remarks: STRING.nullable(),
+			batch_type: STRING.nullable(),
+		})
+	),
+
+	new_batch_entry: yup
+		.array()
+		.of(
+			yup.object().shape({
+				quantity: NUMBER.when('batch_type', {
+					is: (batch_type) => batch_type === 'extra',
+					then: (Schema) => Schema.nullable(),
+					otherwise: (Schema) =>
+						Schema.max(
+							yup.ref('max_quantity'),
+							`Beyond Max Quantity`
+						),
+				}),
+				batch_remarks: STRING.nullable(),
+				batch_type: STRING.nullable(),
+			})
+		)
+		.optional(),
+};
 
 export const DYEING_THREAD_BATCH_NULL = {
+	batch_type: 'normal',
+	order_info_uuid: null,
 	machine_uuid: null,
 	slot: null,
 	production_date: null,

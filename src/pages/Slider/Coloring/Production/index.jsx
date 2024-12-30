@@ -50,8 +50,7 @@ export default function Index() {
 			{
 				accessorKey: 'batch_number',
 				header: 'Batch No.',
-				enableColumnFilter: true,
-				width: 'w-36',
+				enableColumnFilter: false,
 				cell: (info) => {
 					const { finishing_batch_uuid } = info.row.original;
 
@@ -59,7 +58,7 @@ export default function Index() {
 						<LinkWithCopy
 							title={info.getValue()}
 							id={finishing_batch_uuid}
-							uri={`/dyeing-and-iron/finishing-batch`}
+							uri={`/planning/finishing-batch`}
 						/>
 					);
 				},

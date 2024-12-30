@@ -23,11 +23,11 @@ const node = [
 	getTable('quantity', 'Poly'),
 	getTable('total_carton', 'Carton'),
 	getTable('act_wit', 'Act.Wit'),
-	getTable('consum', 'Consum.'),
+	getTable('consum', 'Consum'),
 ];
 
 export default function Index(batch, shade_recipes_entries, programs) {
-	const headerHeight = 220;
+	const headerHeight = 200;
 	let footerHeight = 50;
 	const { batch_entry } = batch;
 

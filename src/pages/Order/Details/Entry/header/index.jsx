@@ -13,7 +13,6 @@ import {
 	useOtherOrderPropertiesByLockType,
 	useOtherOrderPropertiesByLogoType,
 	useOtherOrderPropertiesByNylonStopper,
-	useOtherOrderPropertiesByPullerLink,
 	useOtherOrderPropertiesByPullerType,
 	useOtherOrderPropertiesBySlider,
 	useOtherOrderPropertiesBySliderBodyShape,
@@ -36,6 +35,8 @@ import {
 
 import { ORDER_NULL } from '@/util/Schema';
 
+import { provided, sliderSections, types } from '../utils';
+
 export default function Header({
 	endType = '',
 	setEndType,
@@ -53,6 +54,8 @@ export default function Header({
 	setType,
 }) {
 	const { order_number, order_description_uuid } = useParams();
+	const isUpdate =
+		order_description_uuid !== undefined && order_number !== undefined;
 
 	const { data: order } = useOtherOrderInfoValueLabel();
 	const { data: item } = useOtherOrderPropertiesByItem();
@@ -74,7 +77,6 @@ export default function Header({
 
 	//* puller info*//
 	const { data: puller_type } = useOtherOrderPropertiesByPullerType();
-	const { data: puller_link } = useOtherOrderPropertiesByPullerLink();
 	const { data: color } = useOtherOrderPropertiesByColor();
 	const { data: hand } = useOtherOrderPropertiesByHand();
 	const { data: nylon_stop } = useOtherOrderPropertiesByNylonStopper();
@@ -87,12 +89,6 @@ export default function Header({
 	const { data: logo_type } = useOtherOrderPropertiesByLogoType();
 	const { data: teeth_type } = useOtherOrderPropertiesByTeethType();
 
-	const [isSliderProvided, setIsSliderProvided] = useState(
-		typeof getValues('is_slider_provided') !== 'boolean' &&
-			getValues('is_slider_provided') === 1
-			? true
-			: false
-	);
 	const [isLogoBody, setIsLogoBody] = useState(
 		typeof is_logo_body !== 'boolean' && is_logo_body === 1 ? true : false
 	);
@@ -101,25 +97,6 @@ export default function Header({
 			? true
 			: false
 	);
-
-	const sliderSections = [
-		{ value: 'die_casting', label: 'Die Casting' },
-		{ value: 'slider_assembly', label: 'Assembly' },
-		{ value: 'coloring', label: 'Coloring' },
-		{ value: '---', label: '---' },
-	];
-
-	const types = [
-		{ value: 'full', label: 'Full Order' },
-		{ value: 'slider', label: 'Slider' },
-		{ value: 'tape', label: 'Tape' },
-	];
-
-	const provided = [
-		{ value: 'completely_provided', label: 'Completely Provided' },
-		{ value: 'partial_provided', label: 'Partial Provided' },
-		{ value: 'not_provided', label: 'Not Provided' },
-	];
 
 	const [sp_req, setSpReq] = useState({});
 	const [garmentsWash, setGramentsWash] = useState({});
@@ -196,12 +173,28 @@ export default function Header({
 												onChange={(e) => {
 													onChange(e.value);
 													setType(e.value);
-													console.log('hello');
 													reset({
 														...ORDER_NULL,
-														order_type: e.value,
+														order_type:
+															watch('order_type'),
+														order_info_uuid:
+															watch(
+																'order_info_uuid'
+															),
+														item: watch('item'),
+														nylon_stopper:
+															watch(
+																'nylon_stopper'
+															),
+														zipper_number:
+															watch(
+																'zipper_number'
+															),
+														lock_type:
+															watch('lock_type'),
 													});
 												}}
+												isDisabled={isUpdate}
 											/>
 										);
 									}}
@@ -343,12 +336,11 @@ export default function Header({
 									(end_type) =>
 										end_type.value == getValues('end_type')
 								)
-								?.label?.toLowerCase() === 'open end' && (
+								?.label?.toLowerCase() !== 'close end' && (
 								<FormField
 									label='hand'
 									title='Hand'
 									errors={errors}>
-									{' '}
 									<Controller
 										name={'hand'}
 										control={control}
@@ -376,7 +368,6 @@ export default function Header({
 				</div>
 
 				{/* conditional rendering: checking if order type is full */}
-
 				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
 					<FormField
 						label='lock_type'
@@ -518,24 +509,6 @@ export default function Header({
 					header={
 						watch('order_type') === 'full' && (
 							<div className='flex items-center gap-4 text-sm'>
-								<div className='my-2 h-8 rounded-md bg-secondary px-1'>
-									<CheckBox
-										text='text-secondary-content'
-										label='is_logo_body'
-										title='Body'
-										{...{ register, errors }}
-									/>
-								</div>
-
-								<div className='my-2 h-8 rounded-md bg-secondary px-1'>
-									<CheckBox
-										text='text-secondary-content'
-										label='is_logo_puller'
-										title='Puller'
-										{...{ register, errors }}
-									/>
-								</div>
-
 								<div className='my-2 w-48'>
 									<FormField
 										label='slider_provided'
@@ -867,6 +840,18 @@ export default function Header({
 										}}
 									/>
 								</FormField>
+
+								<CheckBox
+									label='is_logo_body'
+									title='Body Logo'
+									{...{ register, errors }}
+								/>
+
+								<CheckBox
+									label='is_logo_puller'
+									title='Puller Logo'
+									{...{ register, errors }}
+								/>
 							</div>
 						</>
 					)}

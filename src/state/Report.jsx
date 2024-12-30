@@ -1,16 +1,36 @@
 import createGlobalState from '.';
 import { reportQK } from './QueryKeys';
 
-export const useZipperProduction = () =>
+//* Stock
+export const useReportStock = (from, to, { enabled = false }) =>
 	createGlobalState({
-		queryKey: reportQK.zipperProduction(),
-		url: '/report/zipper-production-status-report',
+		queryKey: reportQK.stock(from, to),
+		url: `/report/material-stock-report?from_date=${from}&to_date=${to}`,
+		enabled,
+	});
+export const useProductionReportDateWise = (from = '', to = '') =>
+	createGlobalState({
+		queryKey: reportQK.productionReportDateWise(from, to),
+		url: `/report/daily-production-report?from_date=${from}&to_date=${to}`,
+		enabled: !!from && !!to,
+	});
+export const useProductionStatementReport = (from = '', to = '') =>
+	createGlobalState({
+		queryKey: reportQK.productionReport(from, to),
+		url: `/report/delivery-statement-report?from_date=${from}&to_date=${to}`,
+		enabled: !!from && !!to,
 	});
 
-export const useThreadProduction = () =>
+export const useZipperProduction = (query) =>
 	createGlobalState({
-		queryKey: reportQK.threadProduction(),
-		url: '/report/thread-production-batch-wise-report',
+		queryKey: reportQK.zipperProduction(query),
+		url: '/report/zipper-production-status-report?' + query,
+	});
+
+export const useThreadProduction = (query) =>
+	createGlobalState({
+		queryKey: reportQK.threadProduction(query),
+		url: '/report/thread-production-batch-wise-report?' + query,
 	});
 
 export const useDailyChallan = () =>
@@ -53,4 +73,10 @@ export const useProductionReportThreadPartyWise = () =>
 	createGlobalState({
 		queryKey: reportQK.productionReportThreadPartyWise(),
 		url: `/report/production-report-thread-party-wise`,
+	});
+
+export const useSample = (date) =>
+	createGlobalState({
+		queryKey: reportQK.sample(date),
+		url: `/report/sample-report-by-date?date=${date}`,
 	});

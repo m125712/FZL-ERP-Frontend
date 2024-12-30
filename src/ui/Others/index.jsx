@@ -1,3 +1,4 @@
+import BatchType from './BatchType';
 import {
 	BadgeCheckbox,
 	EditDelete,
@@ -38,4 +39,5 @@ export {
 	Transfer,
 	UserName,
 	SimpleDatePicker,
+	BatchType,
 };

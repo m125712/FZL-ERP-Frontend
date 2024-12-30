@@ -2,13 +2,13 @@ import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
 import { useDeliveryVehicle, useDeliveryVehicleByUUID } from '@/state/Delivery';
 import { useOtherVehicle } from '@/state/Other';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { CheckBox, FormField, Input, ReactSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import GetDateTime from '@/util/GetDateTime';
 import { DELIVERY_VEHICLE_NULL, DELIVERY_VEHICLE_SCHEMA } from '@/util/Schema';
 

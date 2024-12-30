@@ -14,7 +14,12 @@ const FilterString = ({ columnName, column, firstValue, isFullFilter }) => {
 
 	const handleTextValueChange = useCallback(
 		(e) => {
-			const val = typeof e === 'string' ? e : e.target.value;
+			let val = undefined;
+			if (typeof e === 'string') {
+				val = e;
+			} else if (typeof e === 'object') {
+				val = e[0];
+			}
 			setFilterValue(val);
 		},
 		[column]

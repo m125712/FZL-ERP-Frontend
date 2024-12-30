@@ -19,117 +19,89 @@ const DynamicDeliveryTable = ({
 }) => {
 	const rowClass =
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
+	let tableHead = [
+		'O/N',
+		'Item Description',
+		'Style',
+		'Color',
+		'Size',
+		'Unit',
+		'Order QTY',
+		'Balance QTY',
+		'Production QTY',
+		'Quantity',
+		'Poly QTY',
+		'Short QTY',
+		'Reject QTY',
+		'Remarks',
+	];
+	if (watch('item_for') === 'slider') {
+		tableHead = [
+			'O/N',
+			'Item Description',
+			'Style',
+			'Order QTY',
+			'Balance QTY',
+			'Production QTY',
+			'Quantity',
+			'Poly QTY',
+			'Short QTY',
+			'Reject QTY',
+			'Remarks',
+			,
+		];
+	} else if (
+		watch('item_for') === 'thread' ||
+		watch('item_for') === 'sample_thread'
+	) {
+		tableHead = [
+			'O/N',
+			'Count',
+			'Style',
+			'Color',
+			'Length',
+			'Unit',
+			'Order QTY',
+			'Balance QTY',
+			'Production QTY',
+			'Carton Qty',
+			'Quantity',
+			'Short QTY',
+			'Reject QTY',
+			'Remarks',
+		];
+	} else if (watch('item_for') === 'sample_zipper') {
+		tableHead = [
+			'O/N',
+			'Item Description',
+			'Style',
+			'Color',
+			'Size',
+			'Unit',
+			'Order QTY',
+			'Balance QTY',
+			'Quantity',
+			'Poly QTY',
+			'Short QTY',
+			'Reject QTY',
+			'Remarks',
+			,
+		];
+	}
 
 	return (
 		<DynamicDeliveryField
 			title={title}
 			tableHead={
 				<>
-					{watch('item_for') === 'zipper' ||
-					watch('item_for') === 'slider' ||
-					watch('item_for') === 'tape'
-						? [
-								'O/N',
-								'Item Description',
-								'Style',
-								'Color',
-								'Size',
-								'Unit',
-								'Order QTY',
-								'Balance QTY',
-								'Production QTY',
-								// 'Warehouse',
-								// 'Delivered',
-								'Quantity(pcs)',
-								'Poly QTY',
-								'Short QTY',
-								'Reject QTY',
-								'Remarks',
-								,
-							].map((item) => (
-								<th
-									key={item}
-									scope='col'
-									className='group cursor-pointer px-3 py-2 transition duration-300'>
-									{item}
-								</th>
-							))
-						: watch('item_for') === 'thread'
-							? [
-									'O/N',
-									'Count',
-									'Style',
-									'Color',
-									'Length',
-									'Unit',
-									'Order QTY',
-									'Balance QTY',
-									'Production QTY',
-									'Carton Qty',
-									// 'Warehouse',
-									// 'Delivered',
-									'Quantity(cone)',
-									'Short QTY',
-									'Reject QTY',
-									'Remarks',
-								].map((item) => (
-									<th
-										key={item}
-										scope='col'
-										className='group cursor-pointer px-3 py-2 transition duration-300'>
-										{item}
-									</th>
-								))
-							: watch('item_for') === 'sample_thread'
-								? [
-										'O/N',
-										'Count',
-										'Style',
-										'Color',
-										'Length',
-										'Unit',
-										'Order QTY',
-										'Balance QTY',
-										'Carton Qty',
-										// 'Warehouse',
-										// 'Delivered',
-										'Quantity(cone)',
-										'Short QTY',
-										'Reject QTY',
-										'Remarks',
-									].map((item) => (
-										<th
-											key={item}
-											scope='col'
-											className='group cursor-pointer px-3 py-2 transition duration-300'>
-											{item}
-										</th>
-									))
-								: [
-										'O/N',
-										'Item Description',
-										'Style',
-										'Color',
-										'Size',
-										'Unit',
-										'Order QTY',
-										'Balance QTY',
-										// 'Warehouse',
-										// 'Delivered',
-										'Quantity(pcs)',
-										'Poly QTY',
-										'Short QTY',
-										'Reject QTY',
-										'Remarks',
-										,
-									].map((item) => (
-										<th
-											key={item}
-											scope='col'
-											className='group cursor-pointer px-3 py-2 transition duration-300'>
-											{item}
-										</th>
-									))}
+					{tableHead.map((item) => (
+						<th
+							key={item}
+							scope='col'
+							className='group cursor-pointer px-3 py-2 transition duration-300'>
+							{item}
+						</th>
+					))}
 
 					{isUpdate && entryFiledName === 'packing_list_entry' && (
 						<th
@@ -161,31 +133,20 @@ const DynamicDeliveryTable = ({
 					<td className={`w-32 ${rowClass}`}>
 						{getValues(`${entryFiledName}[${index}].style`)}
 					</td>
-					<td className={`w-32 ${rowClass}`}>
-						{getValues(`${entryFiledName}[${index}].color`)}
-					</td>
+					{watch('item_for') !== 'slider' && (
+						<td className={`w-32 ${rowClass}`}>
+							{getValues(`${entryFiledName}[${index}].color`)}
+						</td>
+					)}
+
+					{watch('item_for') !== 'slider' && (
+						<td className={`w-32 ${rowClass}`}>
+							{getValues(`${entryFiledName}[${index}].size`)}
+						</td>
+					)}
 
 					<td className={`w-32 ${rowClass}`}>
-						{getValues(`${entryFiledName}[${index}].size`)}
-					</td>
-
-					<td className={`w-32 ${rowClass}`}>
-						{getValues(`item_for`) === 'thread' ||
-						getValues(`item_for`) === 'sample_thread'
-							? 'meter'
-							: getValues(
-										`${entryFiledName}[${index}].is_inch`
-								  ) === 1
-								? 'inch'
-								: getValues(
-											`${entryFiledName}[${index}].is_meter`
-									  ) === 1
-									? 'meter'
-									: getValues(
-												`${entryFiledName}[${index}].order_type`
-										  ) === 'slider'
-										? '-'
-										: 'CM'}
+						{getValues(`${entryFiledName}[${index}].unit`)}
 					</td>
 					<td className={rowClass}>
 						{getValues(`${entryFiledName}[${index}].is_meter`) === 1
@@ -199,10 +160,7 @@ const DynamicDeliveryTable = ({
 							`${entryFiledName}[${index}].balance_quantity`
 						)}
 					</td>
-					{(watch('item_for') === 'zipper' ||
-						watch('item_for') === 'thread' ||
-						watch('item_for') === 'slider' ||
-						watch('item_for') === 'tape') && (
+					{watch('item_for') !== 'sample_zipper' && (
 						<td className={rowClass}>
 							{getValues(
 								`${entryFiledName}[${index}].finishing_prod`
@@ -243,7 +201,9 @@ const DynamicDeliveryTable = ({
 						/>
 					</td>
 					{(watch('item_for') === 'zipper' ||
-						watch('item_for') === 'sample_zipper') && (
+						watch('item_for') === 'sample_zipper' ||
+						watch('item_for') === 'slider' ||
+						watch('item_for') === 'tape') && (
 						<td className={`w-32 ${rowClass}`}>
 							<Input
 								label={`${entryFiledName}[${index}].poli_quantity`}

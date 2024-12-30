@@ -220,7 +220,9 @@ export const CommonRoutes = [
 							'update',
 							'delete',
 							'click_receive',
-							'click_approve',
+							'click_approve_thread',
+							'click_approve_coil',
+							'click_approve_swatch',
 						],
 					},
 					{

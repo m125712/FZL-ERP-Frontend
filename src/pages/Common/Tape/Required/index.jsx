@@ -74,7 +74,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'nylon_stopper_name',
-				header: 'Nylon Stopper',
+				header: 'Stopper',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>

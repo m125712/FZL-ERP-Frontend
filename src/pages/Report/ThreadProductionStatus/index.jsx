@@ -1,14 +1,18 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useThreadProduction } from '@/state/Report';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, StatusButton } from '@/ui';
+import { DateTime, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+import { ProductionStatus } from '../utils';
+
 export default function Index() {
-	const { data, isLoading, url } = useThreadProduction();
+	const [status, setStatus] = useState('pending');
+	const { data, isLoading, url } = useThreadProduction(`status=${status}`);
 	const info = new PageInfo(
 		'Thread Production Status',
 		url,
@@ -25,42 +29,68 @@ export default function Index() {
 			{
 				accessorKey: 'batch_number',
 				header: 'Batch',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
+				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'batch_created_at',
-				header: 'Batch Created At',
+				accessorFn: (row) => format(row.batch_created_at, 'dd/MM/yy'),
+				id: 'batch_created_at',
+				header: 'Created At',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.batch_created_at}
+						isTime={false}
+					/>
+				),
 			},
+
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
+				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'order_created_at',
-				header: 'Order Created At',
+				accessorFn: (row) => format(row.order_created_at, 'dd/MM/yy'),
+				id: 'order_created_at',
+				header: 'Created At',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.order_created_at}
+						isTime={false}
+					/>
+				),
 			},
 			{
-				accessorKey: 'order_updated_at',
-				header: 'Order updated At',
+				accessorFn: (row) =>
+					row.order_updated_at
+						? format(row.order_updated_at, 'dd/MM/yy')
+						: '--',
+				id: 'order_updated_at',
+				header: 'Updated At',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.order_updated_at}
+						isTime={false}
+					/>
+				),
 			},
 			{
 				accessorKey: 'marketing_name',
 				header: 'S&M',
+				width: 'w-24',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'party_name',
 				header: 'Party',
+				width: 'w-24',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -79,10 +109,17 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'swatch_approval_date',
-				header: 'Swatch Approval Date',
+				accessorFn: (row) =>
+					format(row.swatch_approval_date, 'dd/MM/yy'),
+				id: 'swatch_approval_date',
+				header: 'Swatch',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.swatch_approval_date}
+						isTime={false}
+					/>
+				),
 			},
 			{
 				accessorKey: 'count',
@@ -103,15 +140,13 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) =>
-					`${row.total_quantity} / ${row.total_weight}`,
-				id: 'kg',
-				header: 'KG',
+				accessorKey: 'total_weight',
+				header: 'Expected',
 				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'yarn_quantity',
-				header: 'Yarn (Issued)',
+				header: 'Issued',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -130,14 +165,17 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'total_delivery_delivered_quantity',
-				header: 'Delivered',
+				accessorKey: 'total_packing_list_quantity',
+				header: 'Packing List',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'total_delivery_balance_quantity',
-				header: 'Bal. Delivered',
+				accessorFn: (row) =>
+					row.total_delivery_delivered_quantity +
+					row.total_delivery_balance_quantity,
+				id: 'total_delivery_balance_quantity',
+				header: 'Challan',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -153,6 +191,13 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+			{
+				accessorKey: 'total_delivery_delivered_quantity',
+				header: 'Delivered',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
@@ -174,6 +219,14 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				extraClass={'py-0.5'}
+				extraButton={
+					<ProductionStatus
+						className='w-44'
+						status={status}
+						setStatus={setStatus}
+						page='report__thread_production'
+					/>
+				}
 			/>
 		</>
 	);

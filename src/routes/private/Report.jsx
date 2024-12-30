@@ -4,6 +4,9 @@ const DailyChallan = lazy(() => import('@/pages/Report/DailyChallan'));
 const DeliveryStatement = lazy(
 	() => import('@/pages/Report/DeliveryStatement')
 );
+const ProductionStatement = lazy(
+	() => import('@/pages/Report/ProductionStatement')
+);
 const LCDue = lazy(() => import('@/pages/Report/LC'));
 const PIRegister = lazy(() => import('@/pages/Report/PIRegister'));
 const PIToBeSubmit = lazy(() => import('@/pages/Report/PIToBeSubmit'));
@@ -20,6 +23,10 @@ const ThreadProduction = lazy(
 const ZipperProduction = lazy(
 	() => import('@/pages/Report/ZipperProductionStatus')
 );
+const Store = lazy(() => import('@/pages/Report/Store'));
+const DailyProduction = lazy(() => import('@/pages/Report/DailyProduction'));
+
+const Sample = lazy(() => import('@/pages/Report/Sample'));
 
 export const ReportRoutes = [
 	{
@@ -86,6 +93,34 @@ export const ReportRoutes = [
 				path: '/report/delivery-statement',
 				element: <DeliveryStatement />,
 				page_name: 'report__delivery_statement',
+				actions: ['read'],
+			},
+			{
+				name: 'Store',
+				path: '/report/store',
+				element: <Store />,
+				page_name: 'report__store',
+				actions: ['read'],
+			},
+			{
+				name: 'Daily Production',
+				path: '/report/daily-production',
+				element: <DailyProduction />,
+				page_name: 'report__daily_production',
+				actions: ['read'],
+			},
+			{
+				name: 'Production Statement',
+				path: '/report/production-statement',
+				element: <ProductionStatement />,
+				page_name: 'report__production_statement',
+				actions: ['read'],
+			},
+			{
+				name: 'Sample',
+				path: '/report/sample',
+				element: <Sample />,
+				page_name: 'report__sample',
 				actions: ['read'],
 			},
 			// {

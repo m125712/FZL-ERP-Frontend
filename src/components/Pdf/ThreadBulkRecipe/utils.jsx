@@ -1,6 +1,6 @@
 import { FZL_LOGO } from '@/assets/img/base64';
-import { black } from 'daisyui/src/theming/themes';
-import { format } from 'date-fns';
+import { layouts } from 'chart.js';
+import { format, sub } from 'date-fns';
 
 import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../ui';
 import { company, getEmptyColumn } from '../utils';
@@ -34,6 +34,30 @@ export const getPageHeader = (batch) => {
 	const dyeing_updated_at = batch?.dyeing_updated_at
 		? getDateFormate(batch?.dyeing_updated_at)
 		: '';
+	const buyer = new Set();
+	const order_ref_no = new Set();
+	const shade = new Set();
+	const color = new Set();
+	const count_length = new Set();
+	const substrate = new Set();
+	const delivery_date = new Set();
+	const orderCreatedDate = new Set();
+	const bleach = new Set();
+	const party = new Set();
+	batch?.batch_entry?.forEach((item) => {
+		party.add(item.party_name);
+		buyer.add(item.buyer_name);
+		order_ref_no.add(item.order_number);
+		shade.add(item.recipe_name);
+		color.add(item.color);
+		count_length.add(item.count_length);
+		substrate.add(item.sub_streat);
+		delivery_date.add(
+			item.delivery_date ? getDateFormate(item.delivery_date) : ''
+		);
+		orderCreatedDate.add(getDateFormate(item.order_created_at));
+		bleach.add(item.bleaching);
+	});
 
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
@@ -54,11 +78,11 @@ export const getPageHeader = (batch) => {
 					colSpan: 2,
 					text: [
 						{
-							text: 'Thread Bulk Recipe\n',
+							text: `Bulk Recipe #${batch?.batch_type}\n`,
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
-						`Batch No: ${batch?.batch_id}\n`,
+						`B/N: ${batch?.batch_id}\n`,
 						`Date: ${created_at}\n`,
 					],
 					alignment: 'right',
@@ -70,66 +94,133 @@ export const getPageHeader = (batch) => {
 			// * Start of table
 			[
 				{
-					text: 'Act.Yarn Qty',
-					bold: true,
-					color: PRIMARY_COLOR,
+					colSpan: 4,
+					table: {
+						widths: [60, 200, 60, 160],
+						headerRows: 1,
+						body: [
+							[
+								{
+									text: 'Party',
+									bold: true,
+								},
+								{
+									text: `${Array.from(party).join(', ')}`,
+								},
+								{
+									text: 'Batch No',
+									bold: true,
+								},
+								{
+									text: batch?.batch_id,
+								},
+							],
+							[
+								{
+									text: 'Order No',
+									bold: true,
+								},
+								{
+									text: `${Array.from(order_ref_no).join(', ')}`,
+								},
+								{
+									text: 'Date',
+									bold: true,
+								},
+								{
+									text: created_at,
+								},
+							],
+							[
+								{
+									text: 'Shade',
+									bold: true,
+								},
+								{
+									text: `${Array.from(shade).join(', ')}`,
+								},
+								{
+									text: 'Substrate',
+									bold: true,
+								},
+								{
+									text: `${Array.from(substrate).join(', ')}`,
+								},
+							],
+							[
+								{
+									text: 'Color',
+									bold: true,
+								},
+								{
+									text: `${Array.from(color).join(', ')}`,
+								},
+								{
+									text: 'Batch Weight',
+									bold: true,
+								},
+								{
+									text: batch?.total_yarn_quantity + ' (KG)',
+									// text:
+									// 	batch?.total_yarn_quantity +
+									// 	'/' +
+									// 	batch?.total_expected_weight,
+								},
+							],
+							[
+								{
+									text: 'Machine No',
+									bold: true,
+								},
+								{
+									text: batch?.machine_name,
+								},
+								{
+									text: 'Volume',
+									bold: true,
+								},
+								{
+									text:
+										batch?.water_capacity *
+										batch?.total_yarn_quantity,
+								},
+							],
+							[
+								{
+									text: 'Slot',
+									bold: true,
+								},
+								{
+									text: 'Slot ' + batch?.slot,
+								},
+								{
+									text: 'Delv Dt',
+									bold: true,
+								},
+								{
+									text: `${Array.from(delivery_date).join(', ')}`,
+								},
+							],
+							[
+								{
+									text: 'Light Source',
+									bold: true,
+								},
+								{
+									text: '',
+								},
+								{
+									text: 'Fiber Type',
+									bold: true,
+								},
+								{
+									text: '',
+								},
+							],
+						],
+					},
+					layout: 'noBorders',
 				},
-				{ text: batch?.total_yarn_quantity },
-				{ text: 'Volume', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.water_capacity * batch?.total_yarn_quantity },
-			],
-			[
-				{
-					text: 'Exp.Yarn Qty',
-					bold: true,
-					color: PRIMARY_COLOR,
-				},
-				{ text: batch?.total_expected_weight, colSpan: 3 },
-				{},
-				{},
-			],
-			[
-				{ text: 'Color', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.batch_entry[0]?.color },
-				{ text: 'Bleach', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.batch_entry[0]?.bleaching },
-			],
-			[
-				{ text: 'Status', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.status },
-				{ text: 'Category', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.category },
-			],
-			[
-				{ text: 'Machine', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.machine_name },
-				{ text: 'Water Capacity', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.water_capacity },
-			],
-			[
-				{ text: 'Slot', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.slot === 0 ? '-' : 'Slot ' + batch?.slot },
-				{ text: 'Operator', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.dyeing_operator_name },
-			],
-			[
-				{ text: 'SuperVisor', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.dyeing_supervisor_name },
-				{ text: 'Pass By', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.pass_by_name },
-			],
-			[
-				{ text: 'Shift', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.shift },
-				{ text: 'Reason', bold: true, color: PRIMARY_COLOR },
-				{ text: batch?.reason },
-			],
-
-			[
-				{ text: 'Created At', bold: true, color: PRIMARY_COLOR },
-				{ text: dyeing_created_at },
-				{ text: 'Updated At', bold: true, color: PRIMARY_COLOR },
-				{ text: dyeing_updated_at },
 			],
 		],
 	};

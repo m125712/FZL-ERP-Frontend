@@ -5,7 +5,7 @@ import {
 	useDyeingFinishingBatchByUUID,
 	useDyeingFinishingBatchOrders,
 } from '@/state/Dyeing';
-import { DevTool } from '@hookform/devtools';
+import { useSliderAssemblyProduction } from '@/state/Slider';
 import { FormProvider } from 'react-hook-form';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
@@ -17,6 +17,7 @@ import { ShowLocalToast } from '@/components/Toast';
 import SubmitButton from '@/ui/Others/Button/SubmitButton';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import GetDateTime from '@/util/GetDateTime';
 import {
 	FINISHING_BATCH_ENTRY_NULL,
@@ -48,6 +49,8 @@ export default function index() {
 		useDyeingFinishingBatchByUUID(batch_uuid);
 
 	const { invalidateQuery } = useDyeingFinishingBatch();
+	const { invalidateQuery: invalidateSliderAssembly } =
+		useSliderAssemblyProduction();
 
 	const {
 		register,
@@ -74,7 +77,11 @@ export default function index() {
 				}),
 			slider_lead_time:
 				FINISHING_BATCH_ENTRY_SCHEMA.slider_lead_time.when({
-					is: () => !(orderType === 'tape' || sliderType === 'completely_provided'),
+					is: () =>
+						!(
+							orderType === 'tape' ||
+							sliderType === 'completely_provided'
+						),
 					then: (schema) => schema.required('Required'),
 					otherwise: (schema) => schema.nullable(),
 				}),
@@ -238,6 +245,7 @@ export default function index() {
 				.then(() => {
 					invalidateQuery();
 					invalidateDetails();
+					invalidateSliderAssembly();
 					navigate(`/planning/finishing-batch/${rest.uuid}`);
 				})
 				.catch((err) => console.log(err));
@@ -321,6 +329,8 @@ export default function index() {
 			.then(() => reset(FINISHING_BATCH_ENTRY_NULL))
 			.then(() => {
 				invalidateQuery();
+				invalidateDetails();
+				invalidateSliderAssembly();
 				navigate(`/planning/finishing-batch/${finishingData.uuid}`);
 			})
 			.catch((err) => console.log(err));

@@ -1,18 +1,7 @@
-'use client';
-
-import * as React from 'react';
 import { useMemo, useState } from 'react';
-import { RefreshCcw } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
-import { useFetch } from '@/hooks';
 
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
 	ChartContainer,
 	ChartTooltip,

@@ -40,22 +40,20 @@ export default function Index() {
 			{
 				accessorKey: 'style',
 				header: 'Style',
-				width: 'w-40',
-
+				width: 'w-24',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'color',
 				header: 'Color',
-				width: 'w-40',
-
+				width: 'w-24',
 				cell: (info) => info.getValue(),
 			},
 
 			{
 				accessorKey: 'count_length_name',
 				header: 'Count Length',
-				width: 'w-40',
+				width: 'w-24',
 
 				cell: (info) => info.getValue(),
 			},
@@ -69,7 +67,7 @@ export default function Index() {
 			{
 				accessorKey: 'bleaching',
 				header: 'Bleaching',
-				width: 'w-40',
+				width: 'w-16',
 
 				cell: (info) => info.getValue(),
 			},
@@ -90,7 +88,7 @@ export default function Index() {
 			{
 				accessorKey: 'recipe_name',
 				header: 'Swatch Status',
-				width: 'w-60',
+				width: 'min-w-60',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { recipe_uuid, bleaching } = info.row.original;

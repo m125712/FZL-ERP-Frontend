@@ -38,6 +38,7 @@ export default function Index({ challan, item_for }) {
 			{
 				accessorKey: 'color',
 				header: 'Color',
+				hidden: item_for === 'slider',
 				cell: (info) => info.getValue(),
 				enableColumnFilter: false,
 			},
@@ -47,12 +48,14 @@ export default function Index({ challan, item_for }) {
 					item_for === 'thread' || item_for === 'sample_thread'
 						? 'Length'
 						: 'Size',
+				hidden: item_for === 'slider',
 				cell: (info) => info.getValue(),
 				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'is_inch',
 				header: 'Unit',
+				hidden: item_for === 'slider',
 				cell: (info) =>
 					item_for === 'thread' ||
 					item_for === 'sample_thread' ||
@@ -61,12 +64,6 @@ export default function Index({ challan, item_for }) {
 						: info.getValue() === 1
 							? 'Inch'
 							: 'Cm',
-				enableColumnFilter: false,
-			},
-			{
-				accessorKey: 'delivered',
-				header: 'Delivered',
-				cell: (info) => info.getValue(),
 				enableColumnFilter: false,
 			},
 			{
@@ -119,7 +116,7 @@ export default function Index({ challan, item_for }) {
 		<ReactTableTitleOnly title='Details' data={challan} columns={columns}>
 			<tr className='text-sm'>
 				<td colSpan='7' className='py-2 text-right'>
-					Total
+					Total Qty
 				</td>
 				<td className='pl-3 text-left font-semibold'>{totalQty}</td>
 

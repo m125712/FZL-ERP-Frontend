@@ -21,7 +21,7 @@ export default function Header({
 				<SimpleDatePicker
 					value={to}
 					placeholder='To'
-					minDate={from}			
+					minDate={from}
 					disabled={from ? false : true}
 					onChange={(data) => {
 						setTo(format(data, 'yyyy-MM-dd'));

@@ -4,7 +4,6 @@ import * as yup from 'yup';
 import 'handsontable/dist/handsontable.full.min.css';
 
 import { HotColumn, HotTable } from '@handsontable/react';
-import { DevTool } from '@hookform/devtools';
 import { ErrorMessage } from '@hookform/error-message';
 import { registerAllModules } from 'handsontable/registry';
 import { Copy, Trash2 } from 'lucide-react';
@@ -13,6 +12,7 @@ import { useRHF } from '@/hooks';
 
 import { ReactSelect } from '@/ui';
 
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	BOOLEAN_REQUIRED,
 	NUMBER_DOUBLE_REQUIRED,

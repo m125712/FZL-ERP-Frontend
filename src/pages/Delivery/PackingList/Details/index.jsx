@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useDeliveryPackingListDetailsByUUID } from '@/state/Delivery';
 import { useParams } from 'react-router-dom';
 
-import Pdf from '@/components/Pdf/PackingList';
 import Pdf2 from '@/components/Pdf/PackingListSticker';
+import Pdf from '@/components/Pdf/ThreadPackeListSticker';
 
 import Information from './Information';
 import Table from './Table';
@@ -36,9 +36,18 @@ export default function Index() {
 
 	useEffect(() => {
 		if (data && data?.packing_list_entry) {
-			Pdf2(data)?.getDataUrl((dataUrl) => {
-				setData2(dataUrl);
-			});
+			if (
+				data?.item_for === 'thread' ||
+				data?.item_for === 'sample_thread'
+			) {
+				Pdf(data)?.getDataUrl((dataUrl) => {
+					setData2(dataUrl);
+				});
+			} else {
+				Pdf2(data)?.getDataUrl((dataUrl) => {
+					setData2(dataUrl);
+				});
+			}
 		}
 	}, [data]);
 	// ! FOR TESTING

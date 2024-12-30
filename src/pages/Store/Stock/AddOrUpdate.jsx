@@ -6,7 +6,6 @@ import {
 	useOtherMaterialType,
 } from '@/state/Other';
 import { useMaterialInfo, useMaterialInfoByUUID } from '@/state/Store';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -20,6 +19,7 @@ import {
 } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { MATERIAL_NULL, MATERIAL_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 

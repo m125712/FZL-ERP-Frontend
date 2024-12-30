@@ -1,13 +1,16 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useCommonMultiColorLogTapeReceivedByUUID, useCommonMultiColorDashboard } from '@/state/Common';
-import { DevTool } from '@hookform/devtools';
+import {
+	useCommonMultiColorDashboard,
+	useCommonMultiColorLogTapeReceivedByUUID,
+} from '@/state/Common';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { JoinInput, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	MULTI_COLOR_TAPE_RECEIVED_NULL,
 	MULTI_COLOR_TAPE_RECEIVED_SCHEMA,
@@ -24,7 +27,8 @@ export default function Index({
 	const { data, updateData, url } = useCommonMultiColorLogTapeReceivedByUUID(
 		tapeReceived?.uuid
 	);
-	const { invalidateQuery: indexPageInvalidate } = useCommonMultiColorDashboard();
+	const { invalidateQuery: indexPageInvalidate } =
+		useCommonMultiColorDashboard();
 	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, reset, control, context } = useRHF(

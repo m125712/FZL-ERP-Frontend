@@ -120,7 +120,7 @@ const useFetchForRhfResetForUserAccess = (url, returnId, reset) => {
 		api.get(url).then((res) => {
 			const data = res?.data?.data;
 			const result = {};
-			
+
 			Object.entries(data)?.forEach(([key, value]) => {
 				const val = JSON.parse(value);
 
@@ -147,8 +147,6 @@ const useFetchForRhfResetForUserAccess = (url, returnId, reset) => {
 				},
 				{}
 			);
-
-			console.log(PAGE_ACTIONS);
 
 			reset(PAGE_ACTIONS);
 		});

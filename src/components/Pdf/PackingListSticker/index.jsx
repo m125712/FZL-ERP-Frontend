@@ -26,7 +26,7 @@ export default function Index(data) {
 		getTable('style', 'Style'),
 		getTable('color', 'Color'),
 		getTable('size', 'Size', 'right'),
-		getTable('quantity', 'Qty(cm)', 'right'),
+		getTable('quantity', 'Qty(mtr)', 'right'),
 		getTable('poli_quantity', 'Poly', 'right'),
 	];
 	const nodeThread = [
@@ -162,7 +162,7 @@ export default function Index(data) {
 								fontSize: DEFAULT_FONT_SIZE - 2,
 							},
 							{
-								text: `${data?.carton_weight} Kg`,
+								text: `${data?.carton_weight ? `${data?.carton_weight} Kg` : '--'}`,
 
 								fontSize: DEFAULT_FONT_SIZE - 2,
 								colSpan: 2,
@@ -227,7 +227,10 @@ export default function Index(data) {
 						// * Body
 						...packing_list_entry?.map((item) =>
 							node.map((nodeItem) => {
-								if (nodeItem.field === 'size') {
+								if (
+									nodeItem.field === 'size' &&
+									data?.item_for !== 'slider'
+								) {
 									const unitIndex =
 										packing_list_entry.indexOf(item);
 									return {
@@ -239,9 +242,24 @@ export default function Index(data) {
 										alignment: nodeItem.alignment,
 										fontSize: DEFAULT_FONT_SIZE - 2,
 									};
+								} else if (
+									nodeItem.field === 'size' &&
+									data?.item_for === 'slider'
+								) {
+									return {
+										text: '--',
+										style: nodeItem.cellStyle,
+										alignment: nodeItem.alignment,
+										fontSize: DEFAULT_FONT_SIZE - 2,
+									};
 								}
 								return {
-									text: item[nodeItem.field],
+									text:
+										item[nodeItem.field] !== null &&
+										item[nodeItem.field] !== undefined &&
+										item[nodeItem.field] !== ''
+											? item[nodeItem.field]
+											: '--',
 									style: nodeItem.cellStyle,
 									alignment: nodeItem.alignment,
 									fontSize: DEFAULT_FONT_SIZE - 2,
@@ -249,8 +267,8 @@ export default function Index(data) {
 							})
 						),
 						[
-							...(data?.item_for === 'zipper' ||
-							data?.item_for === 'sample_zipper'
+							...(data?.item_for !== 'thread' &&
+							data?.item_for !== 'sample_thread'
 								? [
 										{
 											text: `Total`,

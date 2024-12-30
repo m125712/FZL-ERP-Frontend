@@ -1,13 +1,13 @@
 import { useAuth } from '@/context/auth';
 import { useOrderFactory, useOrderParty } from '@/state/Order';
 import { useOtherParty } from '@/state/Other';
-import { DevTool } from '@hookform/devtools';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { Input } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import { PARTY_NULL, PARTY_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 

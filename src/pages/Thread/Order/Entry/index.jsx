@@ -1,27 +1,24 @@
-import { Suspense, useCallback, useEffect, useState } from 'react';
-import {
-	useAllZipperThreadOrderList,
-	useOtherCountLength,
-} from '@/state/Other';
+import { Suspense, useEffect, useState } from 'react';
+import { toggleBleach } from '@/pages/Order/Details/Entry/utils';
+import { useAllZipperThreadOrderList } from '@/state/Other';
 import {
 	useThreadDetailsByUUID,
 	useThreadOrderInfo,
 	useThreadOrderInfoEntry,
 } from '@/state/Thread';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
-import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
-import DynamicFormSpreadSheet from '@/ui/Dynamic/DynamicFormSpreadSheet';
-import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet';
+import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet'; //! why it is must??
+
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	THREAD_ORDER_INFO_ENTRY_NULL,
 	THREAD_ORDER_INFO_ENTRY_SCHEMA,
@@ -29,7 +26,7 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
-import useGenerateFieldDefs from './useGenerateFieldDefs';
+import OrderEntrySpreadsheet from './spreadsheets/order-entry-spreadsheet';
 
 export default function Index() {
 	const { url: threadOrderInfoUrl } = useThreadOrderInfo();
@@ -53,8 +50,6 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
-		trigger,
-		clearErrors,
 		context: form,
 	} = useRHF(THREAD_ORDER_INFO_ENTRY_SCHEMA, THREAD_ORDER_INFO_ENTRY_NULL);
 
@@ -63,13 +58,6 @@ export default function Index() {
 			? (document.title = `Thread Shade Recipe: Update ${uuid}`)
 			: (document.title = 'Thread Shade Recipe: Entry');
 	}, []);
-
-	const { data: countLength } = useOtherCountLength();
-
-	const bleaching = [
-		{ label: 'Bleach', value: 'bleach' },
-		{ label: 'Non-Bleach', value: 'non-bleach' },
-	];
 
 	const {
 		fields: threadOrderInfoEntryField,
@@ -88,22 +76,14 @@ export default function Index() {
 	}, [data, isUpdate]);
 
 	// order_info_entry
-
-	const [bleachAll, setBleachAll] = useState();
-
-	useEffect(() => {
-		if (bleachAll !== null) {
-			threadOrderInfoEntryField.forEach((item, index) => {
-				setValue(
-					`order_info_entry[${index}].bleaching`,
-					bleachAll ? 'bleach' : 'non-bleach'
-				);
-			});
-		}
-	}, [bleachAll, threadOrderInfoEntryField]);
+	const [bleachAll, setBleachAll] = toggleBleach({
+		item: threadOrderInfoEntryField,
+		setValue,
+		field: 'order_info_entry',
+	});
 
 	useEffect(() => {
-		const subscription = watch((value, { name, type }) => {
+		const subscription = watch((value) => {
 			const { order_info_entry } = value;
 			if (order_info_entry?.length > 0) {
 				const allBleach = order_info_entry.every(
@@ -145,8 +125,6 @@ export default function Index() {
 		threadOrderInfoEntryAppend({
 			order_info_uuid: null,
 			lab_ref: '',
-			// po: '',
-			// recipe_uuid: null,
 			style: '',
 			color: '',
 			count_length_uuid: null,
@@ -158,7 +136,6 @@ export default function Index() {
 			remarks: '',
 		});
 	};
-	const onClose = () => reset(THREAD_ORDER_INFO_ENTRY_NULL);
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -287,40 +264,6 @@ export default function Index() {
 	// Check if uuid is valuuid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 
-	const handelDuplicateDynamicField = useCallback(
-		(index) => {
-			const item = getValues(`order_info_entry[${index}]`);
-			threadOrderInfoEntryAppend({ ...item, uuid: undefined });
-		},
-		[getValues, threadOrderInfoEntryAppend]
-	);
-
-	const handleEnter = (event) => {
-		event.preventDefault();
-		if (Object.keys(errors).length > 0) return;
-	};
-
-	const keyMap = {
-		NEW_ROW: 'alt+n',
-		COPY_LAST_ROW: 'alt+c',
-		ENTER: 'enter',
-	};
-
-	const handlers = {
-		NEW_ROW: handleThreadOrderInfoEntryAppend,
-		COPY_LAST_ROW: () =>
-			handelDuplicateDynamicField(threadOrderInfoEntryField.length - 1),
-		ENTER: (event) => handleEnter(event),
-	};
-
-	configure({
-		ignoreTags: ['input', 'select', 'textarea'],
-		ignoreEventsCondition: function () {},
-	});
-
-	const rowClass =
-		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
-
 	const headerButtons = [
 		<div className='flex items-center gap-2'>
 			<label className='text-sm text-white'>Bleach All</label>
@@ -333,131 +276,62 @@ export default function Index() {
 
 	const handleCopy = (index) => {
 		const field = form.watch('order_info_entry')[index];
+
+		const length = form.watch('order_info_entry').length;
+		let newIndex;
+		if (length > 0) {
+			// Get the index value of the previous row
+			const previousIndex = form.getValues(
+				`order_info_entry.${length - 1}.index`
+			);
+			newIndex = previousIndex ? previousIndex + 1 : length + 1;
+		} else {
+			// For the first row, set index to 1
+			newIndex = length + 1;
+		}
+
 		threadOrderInfoEntryAppend({
+			index: newIndex,
 			color: field.color,
 			style: field.style,
 			count_length_uuid: field.count_length_uuid,
 			bleaching: field.bleaching,
 			quantity: field.quantity,
 			company_price: field.company_price,
-			party_price: field.company_price,
+			party_price: field.party_price,
 			remarks: field.remarks,
 		});
 	};
 
 	return (
 		<FormProvider {...form}>
-			<HotKeys {...{ keyMap, handlers }}>
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					noValidate
-					className='flex flex-col gap-4'>
-					<Header
-						{...{
-							register,
-							errors,
-							control,
-							getValues,
-							Controller,
-							watch,
-						}}
-					/>
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				noValidate
+				className='flex flex-col gap-4'>
+				<Header
+					{...{
+						register,
+						errors,
+						control,
+						getValues,
+						Controller,
+						watch,
+					}}
+				/>
 
-					{/* <DynamicFormSpreadSheet
-						title='Details'
-						fieldArrayName='order_info_entry'
-						handelAppend={handleThreadOrderInfoEntryAppend}
-						handleRemove={handleThreadOrderInfoEntryRemove}
-						headerButtons={headerButtons}
-						columnsDefs={[
-							{
-								header: 'Color',
-								accessorKey: 'color',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Style',
-								accessorKey: 'style',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Count Length',
-								accessorKey: 'count_length_uuid',
-								type: 'select',
-								options: countLength || [],
-								readOnly: false,
-							},
-							{
-								header: 'Bleaching',
-								accessorKey: 'bleaching',
-								type: 'select',
-								options: bleaching,
-								readOnly: false,
-							},
-							{
-								header: 'Quantity',
-								accessorKey: 'quantity',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Company (USD/CONE)',
-								accessorKey: 'company_price',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Party (USD/CONE)',
-								accessorKey: 'party_price',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Remarks',
-								accessorKey: 'remarks',
-								type: 'text',
-								readOnly: false,
-							},
+				<OrderEntrySpreadsheet
+					extraHeader={headerButtons}
+					title='Details'
+					form={form}
+					fieldName='order_info_entry'
+					handleCopy={handleCopy}
+					handleAdd={handleThreadOrderInfoEntryAppend}
+					handleRemove={handleThreadOrderInfoEntryRemove}
+				/>
 
-							{
-								header: 'Actions',
-								type: 'action',
-							},
-						]}
-						{...{
-							formContext: {
-								register,
-								watch,
-								setValue,
-								getValues,
-								clearErrors,
-								errors,
-							},
-							fields: threadOrderInfoEntryField,
-							append: threadOrderInfoEntryAppend,
-							remove: threadOrderInfoEntryRemove,
-							update: threadOrderInfoEntryUpdate,
-						}}
-					/> */}
-					<HandsonSpreadSheet
-						extraHeader={headerButtons}
-						title='Details'
-						form={form}
-						fieldName='order_info_entry'
-						fieldDefs={useGenerateFieldDefs({
-							copy: handleCopy,
-							remove: handleThreadOrderInfoEntryRemove,
-							watch: watch,
-						})}
-						handleAdd={handleThreadOrderInfoEntryAppend}
-						fields={threadOrderInfoEntryField}
-					/>
-
-					<Footer buttonClassName='!btn-primary' />
-				</form>
-			</HotKeys>
+				<Footer buttonClassName='!btn-primary' />
+			</form>
 			<Suspense>
 				<DeleteModal
 					modalId={'order_info_entry_delete'}

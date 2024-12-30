@@ -5,10 +5,10 @@ import {
 	useCommonTapeSFG,
 	useCommonTapeToDyeing,
 } from '@/state/Common';
+import { useDyeingOrderBatch } from '@/state/Dyeing';
 import { useOrderDescription } from '@/state/Order';
 import { useGetURLData } from '@/state/Other';
 import { useAuth } from '@context/auth';
-import { DevTool } from '@hookform/devtools';
 import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -28,6 +28,7 @@ import {
 } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	COMMON_COIL_TO_DYEING_NULL,
 	COMMON_COIL_TO_DYEING_SCHEMA,
@@ -41,6 +42,8 @@ export default function Index() {
 	const { invalidateQuery: invalidateCoilToDyeing } = useCommonCoilToDyeing();
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
+	const { invalidateQuery: invalidateDyeingOrderBatch } =
+		useDyeingOrderBatch();
 
 	const location = useLocation();
 	const [status, setStatus] = useState(false);
@@ -190,6 +193,7 @@ export default function Index() {
 				invalidateCoilToDyeing();
 				invalidateCommonCoilSFG();
 				invalidateCommonTapeSFG();
+				invalidateDyeingOrderBatch();
 
 				navigate(
 					secondElement === 'coil'
@@ -216,23 +220,6 @@ export default function Index() {
 		if (Object.keys(errors).length > 0) return;
 	};
 
-	const keyMap = {
-		NEW_ROW: 'alt+n',
-		COPY_LAST_ROW: 'alt+c',
-		ENTER: 'enter',
-	};
-
-	const handlers = {
-		NEW_ROW: handelEntryAppend,
-		COPY_LAST_ROW: () => handelDuplicateDynamicField(EntryField.length - 1),
-		ENTER: (event) => handleEnter(event),
-	};
-
-	configure({
-		ignoreTags: ['input', 'select', 'textarea'],
-		ignoreEventsCondition: function () {},
-	});
-
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
@@ -241,183 +228,172 @@ export default function Index() {
 
 	return (
 		<FormProvider {...form}>
-			<HotKeys {...{ keyMap, handlers }}>
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					noValidate
-					className='flex flex-col gap-4'>
-					<DynamicField
-						title={`${data?.name} (Mtr/Kg): ${data?.raw_per_kg_meter}, 
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				noValidate
+				className='flex flex-col gap-4'>
+				<DynamicField
+					title={`${data?.name} (Mtr/Kg): ${data?.raw_per_kg_meter}, 
 								Remaining: ${MAX_TAPE_TRX_QTY.toFixed(2)} KG`}
-						handelAppend={handelEntryAppend}
-						tableHead={[
-							'Order Entry ID',
-							'Tape Required (MTR)',
-							'Tape Required (Kg)',
-							'Provided (Kg)',
-							'Balance (Kg)',
-							'Trx Quantity',
-							'Remarks',
-							'Action',
-						].map((item) => (
-							<th
-								key={item}
-								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
-								{item}
-							</th>
-						))}>
-						{EntryField.map((item, index) => {
-							const selectedValue = order_id?.find(
-								(item) =>
-									item.value ==
-									getValues(
-										`coil_to_dyeing_entry[${index}].order_id`
-									)
-							);
+					handelAppend={handelEntryAppend}
+					tableHead={[
+						'Order Description',
+						'Tape Req (MTR)',
+						'Tape Req (Kg)',
+						'Provided (Kg)',
+						'Balance (Kg)',
+						'Trx Quantity',
+						'Remarks',
+						'Action',
+					].map((item) => (
+						<th
+							key={item}
+							scope='col'
+							className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+							{item}
+						</th>
+					))}>
+					{EntryField.map((item, index) => {
+						const selectedValue = order_id?.find(
+							(item) =>
+								item.value ==
+								getValues(
+									`coil_to_dyeing_entry[${index}].order_id`
+								)
+						);
 
-							const top_bottom =
-								Number(selectedValue?.total_quantity || 0) *
-								Number(
-									Number(selectedValue?.top || 0) +
-										Number(selectedValue?.bottom || 0)
-								).toFixed(3);
+						const mtr_per_kg = data?.raw_mtr_per_kg;
 
-							const tape_req = Number(
-								(Number(selectedValue?.total_size) +
-									top_bottom) /
-									100
+						console.log(selectedValue);
+
+						const top_bottom =
+							parseFloat(selectedValue?.total_quantity || 0) *
+							parseFloat(
+								parseFloat(selectedValue?.top || 0) +
+									parseFloat(selectedValue?.bottom || 0)
 							).toFixed(3);
 
-							const tape_req_kg = Number(
-								tape_req / Number(data?.raw_per_kg_meter)
-							).toFixed(3);
+						const tape_req = Number(
+							(Number(selectedValue?.total_size) + top_bottom) /
+								100
+						).toFixed(3);
 
-							return (
-								<tr key={item.id}>
-									<td className={`w-96 ${rowClass}`}>
-										<FormField
-											label={`coil_to_dyeing_entry[${index}].order_id`}
-											title='Material'
-											is_title_needed='false'
-											dynamicerror={
-												errors?.coil_to_dyeing_entry?.[
-													index
-												]?.order_id
-											}>
-											<Controller
-												name={`coil_to_dyeing_entry[${index}].order_id`}
-												control={control}
-												render={({
-													field: { onChange },
-												}) => {
-													return (
-														<ReactSelect
-															menuPortalTarget={
-																document.body
-															}
-															placeholder='Select Order Entry ID'
-															options={order_id?.filter(
-																(inItem) =>
-																	!excludeItem?.some(
-																		(
-																			excluded
-																		) =>
-																			excluded?.value ===
-																			inItem?.value
-																	)
-															)}
-															value={
-																selectedValue
-															}
-															onChange={(e) => {
-																onChange(
-																	e.value
-																);
-																setStatus(
-																	!status
-																);
-															}}
-															// isDisabled={updateCoilProd?.id !== null}
-														/>
-													);
-												}}
-											/>
-										</FormField>
-									</td>
-									<td>{tape_req || 0}</td>
-									<td>{tape_req_kg || 0}</td>
-									<td>{selectedValue?.tape_received}</td>
-									<td>
-										{Number(
-											tape_req_kg -
-												Number(
-													selectedValue?.tape_received
-												)
-										).toFixed(3)}
-									</td>
-									<td className={`w-56 ${rowClass}`}>
-										<JoinInput
-											label={`coil_to_dyeing_entry[${index}].trx_quantity`}
-											is_title_needed='false'
-											unit='KG'
-											dynamicerror={
-												errors?.coil_to_dyeing_entry?.[
-													index
-												]?.trx_quantity
-											}
-											{...{ register, errors }}
-										/>
-									</td>
-									<td className={` ${rowClass}`}>
-										<Textarea
-											title='remarks'
-											label={`coil_to_dyeing_entry[${index}].remarks`}
-											is_title_needed='false'
-											dynamicerror={
-												errors?.coil_to_dyeing_entry?.[
-													index
-												]?.remarks
-											}
-											register={register}
-										/>
-									</td>
+						const tape_req_kg = Number(
+							tape_req / Number(data?.raw_per_kg_meter)
+						).toFixed(3);
 
-									<td
-										className={`w-20 ${rowClass} border-l-4 border-l-primary`}>
-										<ActionButtons
-											duplicateClick={() =>
-												handelDuplicateDynamicField(
-													index
-												)
-											}
-											removeClick={() =>
-												handleEntryRemove(index)
-											}
-											showRemoveButton={
-												EntryField.length > 1
-											}
+						return (
+							<tr key={item.id}>
+								<td className={`w-96 ${rowClass}`}>
+									<FormField
+										label={`coil_to_dyeing_entry[${index}].order_id`}
+										title='Material'
+										is_title_needed='false'
+										dynamicerror={
+											errors?.coil_to_dyeing_entry?.[
+												index
+											]?.order_id
+										}>
+										<Controller
+											name={`coil_to_dyeing_entry[${index}].order_id`}
+											control={control}
+											render={({
+												field: { onChange },
+											}) => {
+												return (
+													<ReactSelect
+														menuPortalTarget={
+															document.body
+														}
+														placeholder='Select Order Entry ID'
+														options={order_id?.filter(
+															(inItem) =>
+																!excludeItem?.some(
+																	(
+																		excluded
+																	) =>
+																		excluded?.value ===
+																		inItem?.value
+																)
+														)}
+														value={selectedValue}
+														onChange={(e) => {
+															onChange(e.value);
+															setStatus(!status);
+														}}
+														// isDisabled={updateCoilProd?.id !== null}
+													/>
+												);
+											}}
 										/>
-									</td>
-								</tr>
-							);
-						})}
-						<tr className='border-t border-primary/30'>
-							<td
-								className='py-4 text-left font-bold'
-								colSpan='4'></td>
-							<td className='py-4 text-right font-bold'>
-								Total Quantity:
-							</td>
-							<td className='py-4 font-bold'>
-								{getTotalQty(watch('coil_to_dyeing_entry'))}
-							</td>
-						</tr>
-					</DynamicField>
+									</FormField>
+								</td>
+								<td>{tape_req || 0}</td>
+								<td>{tape_req_kg || 0}</td>
+								<td>{selectedValue?.tape_received}</td>
+								<td>
+									{Number(
+										tape_req_kg -
+											Number(selectedValue?.tape_received)
+									).toFixed(3)}
+								</td>
+								<td className={`w-56 ${rowClass}`}>
+									<JoinInput
+										label={`coil_to_dyeing_entry[${index}].trx_quantity`}
+										is_title_needed='false'
+										unit='KG'
+										dynamicerror={
+											errors?.coil_to_dyeing_entry?.[
+												index
+											]?.trx_quantity
+										}
+										{...{ register, errors }}
+									/>
+								</td>
+								<td className={` ${rowClass}`}>
+									<Textarea
+										title='remarks'
+										label={`coil_to_dyeing_entry[${index}].remarks`}
+										is_title_needed='false'
+										dynamicerror={
+											errors?.coil_to_dyeing_entry?.[
+												index
+											]?.remarks
+										}
+										register={register}
+									/>
+								</td>
 
-					<Footer buttonClassName='!btn-primary' />
-				</form>
-			</HotKeys>
+								<td
+									className={`w-20 ${rowClass} border-l-4 border-l-primary`}>
+									<ActionButtons
+										duplicateClick={() =>
+											handelDuplicateDynamicField(index)
+										}
+										removeClick={() =>
+											handleEntryRemove(index)
+										}
+										showRemoveButton={EntryField.length > 1}
+									/>
+								</td>
+							</tr>
+						);
+					})}
+					<tr className='border-t border-primary/30'>
+						<td
+							className='py-4 text-left font-bold'
+							colSpan='4'></td>
+						<td className='py-4 text-right font-bold'>
+							Total Quantity:
+						</td>
+						<td className='py-4 font-bold'>
+							{getTotalQty(watch('coil_to_dyeing_entry'))}
+						</td>
+					</tr>
+				</DynamicField>
+
+				<Footer buttonClassName='!btn-primary' />
+			</form>
 			<Suspense>
 				<DeleteModal
 					modalId={'order_entry_delete'}

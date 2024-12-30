@@ -9,14 +9,12 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 
-const DashboardCard = (
-	{ title, subtitle, totalValue, pendingValue } = {
-		title: '',
-		subtitle: '',
-		totalValue,
-		pendingValue,
-	}
-) => {
+const DashboardCard = ({
+	title,
+	subtitle,
+	totalValue = 0,
+	pendingValue = 0,
+}) => {
 	return (
 		<Card className='flex flex-col justify-between overflow-hidden'>
 			<CardHeader className='px-3 py-2'>
@@ -32,10 +30,6 @@ const DashboardCard = (
 					/>
 				</CardTitle>
 			</CardHeader>
-
-			{/* <CardContent className='px-3'>
-				<Banknote className='size-14 text-accent' />
-			</CardContent> */}
 
 			<CardFooter className='flex items-center bg-neutral-100 px-3 py-2'>
 				<CardDescription>

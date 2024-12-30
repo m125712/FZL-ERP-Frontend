@@ -8,11 +8,11 @@ export const useOtherHRUser = () =>
 		url: `/other/hr/user/value/label?designation=driver`,
 	});
 
-export const useOtherHRUserByDesignation = (designation) =>
+export const useOtherHRUserByDesignation = (department) =>
 	createGlobalState({
-		queryKey: otherQK.hrUserByDesignation(designation),
-		url: designation
-			? `/other/hr/user/value/label?designation=${designation}`
+		queryKey: otherQK.hrUserByDesignation(department),
+		url: department
+			? `/other/hr/user/value/label?department=${department}`
 			: '/other/hr/user/value/label',
 		// enabled: !!designation,
 	});

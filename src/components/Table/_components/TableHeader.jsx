@@ -10,6 +10,7 @@ import {
 	SearchBox,
 } from '../_helpers';
 import DateRange from '../components/DateRange';
+import { dateRangeColumnId } from '../utils';
 import TableTitle from './TableTitle';
 
 const TableHeader = (props) => {
@@ -19,7 +20,7 @@ const TableHeader = (props) => {
 
 	const showDateRange = props
 		.getAllLeafColumns()
-		.some((column) => column.id === 'created_at');
+		.some((column) => dateRangeColumnId.includes(column.id));
 
 	return (
 		<div key={props.title} className='mb-4 flex flex-col'>

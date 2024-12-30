@@ -1,12 +1,12 @@
 import { useAuth } from '@/context/auth';
 import { useVislonTMP, useVislonTMTLog } from '@/state/Vislon';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { Input, JoinInput } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	NUMBER_DOUBLE_REQUIRED,
 	VISLON_TRANSACTION_SCHEMA,
@@ -63,7 +63,8 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			finishing_batch_entry_uuid: updateTeethMoldingTRX?.finishing_batch_entry_uuid,
+			finishing_batch_entry_uuid:
+				updateTeethMoldingTRX?.finishing_batch_entry_uuid,
 			trx_from: 'teeth_molding_prod',
 			trx_to: 'finishing_stock',
 			created_by: user?.uuid,

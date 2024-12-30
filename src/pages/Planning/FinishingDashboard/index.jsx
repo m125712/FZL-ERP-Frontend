@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDyeingFinishingDashboard } from '@/state/Dyeing';
 import { format } from 'date-fns';
-import { useNavigate } from 'react-router-dom';
-import { useAccess } from '@/hooks';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -10,9 +8,6 @@ import Content from './Content/Content';
 import Header from './Header';
 
 export default function index() {
-	const navigate = useNavigate();
-	const haveAccess = useAccess('planning__finishing_dashboard');
-
 	const info = new PageInfo(
 		'Finishing Dashboard',
 		'/planning/finishing-dashboard',

@@ -100,7 +100,7 @@ export default function Index() {
 				cell: (info) => {
 					return (
 						<SwitchToggle
-							disabled={!haveAccess.includes('click_approve')}
+							disabled={!haveAccess.includes('click_approve_swatch')}
 							onChange={() =>
 								handelSwitch(info.row.index, 'labdip')
 							}
@@ -190,14 +190,14 @@ export default function Index() {
 					return (
 						<div className='flex gap-4'>
 							<SwitchToggle
-								disabled={!haveAccess.includes('click_approve')}
+								disabled={!haveAccess.includes('click_approve_coil')}
 								onChange={() =>
 									handelSwitch(info.row.index, 'coil')
 								}
 								checked={is_coil_received_sewing === 1}
 							/>
 							<SwitchToggle
-								disabled={!haveAccess.includes('click_approve')}
+								disabled={!haveAccess.includes('click_approve_thread')}
 								onChange={() =>
 									handelSwitch(info.row.index, 'thread')
 								}

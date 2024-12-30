@@ -73,7 +73,14 @@ export default function Index() {
 			{
 				accessorKey: 'order_type',
 				header: 'Type',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: true,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -104,7 +111,15 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'size',
-				header: 'size',
+				header: 'Size',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>{info.getValue()}</span>
+				),
+			},
+			{
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
@@ -112,37 +127,19 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'batch_quantity',
-				header: (
-					<span>
-						Batch QTY
-						<br />
-						(PCS)
-					</span>
-				),
+				header: <span>Batch QTY</span>,
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'tape_stock',
-				header: (
-					<span>
-						Tape Stock
-						<br />
-						(KG)
-					</span>
-				),
+				header: <span>Tape (KG)</span>,
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'balance_quantity',
-				header: (
-					<span>
-						Balance
-						<br />
-						(PCS)
-					</span>
-				),
+				header: <span>Balance (PCS)</span>,
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

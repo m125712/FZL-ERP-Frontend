@@ -24,6 +24,7 @@ import {
 } from './Dynamic';
 import {
 	BadgeCheckbox,
+	BatchType,
 	DateTime,
 	DepartmentShow,
 	EditDelete,
@@ -37,12 +38,12 @@ import {
 	ResetPassword,
 	SectionEntryBody,
 	SectionName,
+	SimpleDatePicker,
 	StatusButton,
 	TitleList,
 	TitleValue,
 	Transfer,
 	UserName,
-	SimpleDatePicker,
 } from './Others';
 
 export {
@@ -85,4 +86,5 @@ export {
 	Transfer,
 	UserName,
 	SimpleDatePicker,
+	BatchType,
 };

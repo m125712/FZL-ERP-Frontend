@@ -64,7 +64,7 @@ const SpreadSheet = (
 							{
 								shouldDirty: true,
 								shouldTouch: true,
-								shouldValidate: true,
+								shouldValidate: false,
 							}
 						);
 					});

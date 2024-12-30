@@ -7,16 +7,17 @@ import {
 } from '@/state/Nylon';
 import {
 	useSliderAssemblyTransferEntry,
+	useSliderColoringLogTransaction,
 	useSliderColoringProduction,
 } from '@/state/Slider';
 import { useVislonFinishingProd } from '@/state/Vislon';
-import { DevTool } from '@hookform/devtools';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	NUMBER_DOUBLE_REQUIRED,
 	NUMBER_REQUIRED,
@@ -57,6 +58,8 @@ export default function Index({
 		useMetalFProduction();
 	const { invalidateQuery: invalidateMetalTMProduction } =
 		useMetalTMProduction();
+	const { invalidateQuery: invalidateSliderColoringLogTransaction } =
+		useSliderColoringLogTransaction();
 	const { user } = useAuth();
 
 	const MAX_TRX =
@@ -85,7 +88,7 @@ export default function Index({
 				otherwise: (schema) => schema.nullable(),
 			}),
 			trx_quantity: NUMBER_REQUIRED.max(
-				updateSliderTrx?.coloring_prod,
+				MAX_TRX,
 				'Beyond Max Quantity'
 			).moreThan(0, 'More than 0'),
 			weight: NUMBER_DOUBLE_REQUIRED.max(
@@ -149,6 +152,7 @@ export default function Index({
 		invalidateNylonPlasticFinishingProdLog();
 		invalidateNylonFinishingProdLog();
 		invalidateMetalTMProduction();
+		invalidateSliderColoringLogTransaction();
 	};
 
 	const styleOption = updateSliderTrx?.style_object?.map((item) => ({

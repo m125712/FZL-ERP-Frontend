@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
-import { useConningTrxLog, useDyeingCone } from "@/state/Thread"
+import { useConningTrxLog, useDyeingCone } from '@/state/Thread';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { DateTime, EditDelete } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 

@@ -1,15 +1,17 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useNylonMFProduction } from '@/state/Nylon';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { Input, JoinInput } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { DevTool } from '@hookform/devtools';
+
+import nanoid from '@/lib/nanoid';
+import { DevTool } from '@/lib/react-hook-devtool';
 import {
 	SFG_TRANSACTION_SCHEMA_IN_PCS,
 	SFG_TRANSACTION_SCHEMA_IN_PCS_NULL,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -37,12 +39,12 @@ export default function Index({
 	const { postData } = useNylonMFProduction();
 	const { user } = useAuth();
 
-	const { register, handleSubmit, errors, reset, control ,context} = useRHF(
+	const { register, handleSubmit, errors, reset, control, context } = useRHF(
 		{
 			...SFG_TRANSACTION_SCHEMA_IN_PCS,
-			trx_quantity: SFG_TRANSACTION_SCHEMA_IN_PCS.trx_quantity.moreThan(0, 'More than 0').max(
-				updateMFTRX?.finishing_prod
-			),
+			trx_quantity: SFG_TRANSACTION_SCHEMA_IN_PCS.trx_quantity
+				.moreThan(0, 'More than 0')
+				.max(updateMFTRX?.finishing_prod),
 		},
 		SFG_TRANSACTION_SCHEMA_IN_PCS_NULL
 	);

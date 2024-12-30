@@ -2,15 +2,15 @@ import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import {
 	useDeliveryChallan,
 	useDeliveryPackingList,
-	useDeliveryPackingListByUUID,
 	useDeliveryPackingListDetailsByUUID,
 } from '@/state/Delivery';
 import { useOtherChallan, useOtherOrder, useThreadOrder } from '@/state/Other';
-import { Book, BookOpen, TableOfContents } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import Pdf2 from '@/components/Pdf/PackingListSticker';
+import Pdf from '@/components/Pdf/ThreadPackeListSticker';
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
@@ -22,10 +22,18 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const navigate = useNavigate();
-	const { data, isLoading, url, deleteData, updateData } =
-		useDeliveryPackingList();
-	const info = new PageInfo('Packing List', url, 'delivery__packing_list');
 	const haveAccess = useAccess('delivery__packing_list');
+	const access = haveAccess?.filter(
+		(item) =>
+			item == 'thread' ||
+			item == 'sample_zipper' ||
+			item == 'zipper' ||
+			item == 'all'
+	);
+	const { data, isLoading, url, deleteData, updateData } =
+		useDeliveryPackingList(`?can_show=${access.join(',')}`);
+	const info = new PageInfo('Packing List', url, 'delivery__packing_list');
+
 	const { invalidateQuery: invalidateDeliveryChallan } = useDeliveryChallan();
 	const { invalidateQuery: invalidateOtherChallan } =
 		useOtherChallan('gate_pass=false');
@@ -47,8 +55,21 @@ export default function Index() {
 		});
 
 	useEffect(() => {
-		if (pdfData && !pdfLoading) {
+		if (
+			pdfData &&
+			!pdfLoading &&
+			pdfData?.item_for !== 'thread' &&
+			pdfData?.item_for !== 'sample_thread'
+		) {
 			Pdf2(pdfData)?.print({}, window);
+			setPdfUuid(null);
+		} else if (
+			pdfData &&
+			!pdfLoading &&
+			(pdfData?.item_for === 'thread' ||
+				pdfData?.item_for === 'sample_thread')
+		) {
+			Pdf(pdfData)?.print({}, window);
 			setPdfUuid(null);
 		}
 	}, [pdfData, pdfLoading]);
@@ -79,7 +100,8 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'packing_number',
-				header: 'ID',
+				header: 'Packing List',
+				width: 'w-36',
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
@@ -93,7 +115,8 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'challan_number',
-				header: 'C/N',
+				header: 'Challan',
+				width: 'w-36',
 				cell: (info) => {
 					const { challan_number, challan_uuid } = info.row.original;
 					return (
@@ -108,23 +131,24 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
+				width: 'w-40',
 				cell: (info) => {
-					const { order_info_uuid } = info.row.original;
-					const { item_for } = info.row.original;
-					return item_for === 'zipper' ||
-						item_for === 'sample_zipper' ||
-						item_for === 'slider' ||
-						item_for === 'tape' ? (
+					const { order_info_uuid, item_for } = info.row.original;
+
+					if (item_for === 'thread' || item_for === 'sample_thread') {
+						return (
+							<LinkWithCopy
+								title={info.getValue()}
+								id={order_info_uuid}
+								uri='/thread/order-info'
+							/>
+						);
+					}
+					return (
 						<LinkWithCopy
 							title={info.getValue()}
 							id={info.getValue()}
 							uri='/order/details'
-						/>
-					) : (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={order_info_uuid}
-							uri='/thread/order-info'
 						/>
 					);
 				},
@@ -138,19 +162,19 @@ export default function Index() {
 					const overrideAccess = haveAccess.includes(
 						'click_received_override'
 					);
-					// const {
-					// 	invalidateQuery: invalidateDeliveryPackingListByUUID,
-					// } = useDeliveryPackingListByUUID(info.row.original.uuid);
+					const { challan_uuid, is_warehouse_received, gate_pass } =
+						info.row.original;
+
+					let permission = false;
+					if (challan_uuid === null && !gate_pass) {
+						if (!is_warehouse_received && access) permission = true;
+						if (overrideAccess) permission = true;
+					}
 					return (
 						<SwitchToggle
-							disabled={
-								!overrideAccess &&
-								(!access || info.getValue() !== true)
-							}
+							disabled={!permission}
 							onChange={() => {
 								handelReceivedStatus(info.row.index);
-
-								// invalidateDeliveryPackingListByUUID();
 							}}
 							checked={info.getValue() === true}
 						/>
@@ -166,19 +190,20 @@ export default function Index() {
 					const overrideAccess = haveAccess.includes(
 						'click_gate_pass_override'
 					);
-					const { challan_uuid } = info.row.original;
+					const { challan_uuid, is_warehouse_received, gate_pass } =
+						info.row.original;
+
+					let permission = false;
+					if (is_warehouse_received && challan_uuid !== null) {
+						if (!gate_pass && access) permission = true;
+						if (overrideAccess) permission = true;
+					}
+
 					return (
 						<SwitchToggle
-							disabled={
-								!overrideAccess &&
-								(!access ||
-									info.getValue() !== 1 ||
-									challan_uuid === null ||
-									info.row.original.is_warehouse_received ===
-										false)
-							}
-							onChange={() => handelGatePass(info.row.index)}
 							checked={info.getValue() === 1}
+							onChange={() => handelGatePass(info.row.index)}
+							disabled={!permission}
 						/>
 					);
 				},
@@ -187,17 +212,18 @@ export default function Index() {
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'total_poly_quantity',
-				header: 'Poly',
-				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_quantity',
 				header: 'Total Qty',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_poly_quantity',
+				header: 'Poly',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -209,7 +235,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'carton_weight',
-				header: 'Carton Weight',
+				header: 'Weight',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -291,7 +317,7 @@ export default function Index() {
 	};
 	const handelReceivedStatus = async (idx) => {
 		await updateData.mutateAsync({
-			url: `${url}/${data[idx]?.uuid}`,
+			url: `/delivery/packing-list/${data[idx]?.uuid}`,
 			updatedData: {
 				is_warehouse_received:
 					data[idx]?.is_warehouse_received === true ? false : true,
@@ -308,7 +334,7 @@ export default function Index() {
 	};
 	const handelGatePass = async (idx) => {
 		await updateData.mutateAsync({
-			url: `${url}/${data[idx]?.uuid}`,
+			url: `/delivery/packing-list/${data[idx]?.uuid}`,
 			updatedData: {
 				gate_pass: data[idx]?.gate_pass === 1 ? 0 : 1,
 				updated_at: GetDateTime(),

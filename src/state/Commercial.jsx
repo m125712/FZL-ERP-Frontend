@@ -2,6 +2,13 @@ import createGlobalState from '.';
 import { commercialQK } from './QueryKeys';
 
 // * Bank * //
+export const useCommercialDashboard = () =>
+	createGlobalState({
+		queryKey: commercialQK.dashboard(),
+		url: '/report/cash-invoice-report',
+	});
+
+// * Bank * //
 export const useCommercialBank = () =>
 	createGlobalState({
 		queryKey: commercialQK.bank(),

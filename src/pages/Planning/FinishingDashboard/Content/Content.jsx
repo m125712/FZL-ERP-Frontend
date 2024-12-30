@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-import { DateTime } from '@/ui';
+import { DateTime, LinkOnly } from '@/ui';
 
 import QuantityCard from './quantity-card';
 
@@ -40,9 +40,22 @@ export default function Content({ data }) {
 								<tr key={index} className='border text-lg'>
 									<td className='border px-4 py-2 text-left font-medium'>
 										{
-											<DateTime
-												date={item.production_date}
-												isTime={false}
+											<LinkOnly
+												title={
+													<DateTime
+														date={
+															item.production_date
+														}
+														isTime={false}
+													/>
+												}
+												id={format(
+													new Date(
+														item.production_date
+													),
+													'yyyy-MM-dd'
+												)}
+												uri='/planning/finishing-dashboard/batch-report'
 											/>
 										}
 									</td>

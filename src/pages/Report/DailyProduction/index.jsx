@@ -67,15 +67,6 @@ export default function index() {
 		],
 		[data]
 	);
-	// const [data2, setData] = useState('');
-
-	// useEffect(() => {
-	// 	if (data && data.order_info_uuid !== null && from) {
-	// 		Pdf(data, from)?.getDataUrl((dataUrl) => {
-	// 			setData(dataUrl);
-	// 		});
-	// 	}
-	// }, [data]);
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
@@ -94,13 +85,6 @@ export default function index() {
 					className='btn btn-primary'>
 					Generate PDF
 				</button>
-				{/* <ReactTable
-					title={info.getTitle()}
-					accessor={false}
-					data={data}
-					columns={columns}
-					extraClass={'py-0.5'}
-				/> */}
 			</div>
 		</>
 	);

@@ -1511,3 +1511,15 @@ export const marketingQK = {
 	getTargets: () => [...marketingQK.all(), 'targets'],
 	getTargetDetails: (uuid) => [...marketingQK.all(), 'targets', uuid],
 };
+
+export const planningQK = {
+	all: () => ['planning'],
+
+	//*Date Wise Batch Report
+	dateWiseBatchReport: (date, item) => [
+		...planningQK.all(),
+		'date-wise-batch-report',
+		date,
+		item,
+	],
+};

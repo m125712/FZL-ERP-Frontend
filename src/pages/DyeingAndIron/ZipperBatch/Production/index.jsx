@@ -17,6 +17,7 @@ import {
 	DYEING_BATCH_PRODUCTION_SCHEMA,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
+import { getRequiredTapeKg } from '@/util/GetRequiredTapeKg';
 
 import Header from './Header';
 
@@ -202,17 +203,23 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'size',
-				header: 'Size (CM)',
+				header: 'Size',
 				enableColumnFilter: true,
 				enableSorting: true,
 			},
 			{
-				accessorKey: 'order_quantity',
-				header: 'Order QTY',
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: (info) => info.getValue(),
 			},
+			// {
+			// 	accessorKey: 'order_quantity',
+			// 	header: 'Order QTY',
+			// 	enableColumnFilter: true,
+			// 	enableSorting: true,
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorKey: 'quantity',
 				header: 'Batch QTY',
@@ -221,60 +228,34 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'top',
-				header: <div className='flex flex-col'>Expected Tape (Kg)</div>,
+				accessorKey: 'cal_tape_req_kg',
+				header: (
+					<>
+						Exp Tape <br />
+						(Kg)
+					</>
+				),
 				enableColumnFilter: false,
-				enableSorting: false,
+				enableSorting: true,
 				cell: ({ row }) => {
-					const {
-						top,
-						bottom,
-						dyed_mtr_per_kg,
-						size,
-						quantity,
-						order_type,
-					} = row.original;
-					const idx = row.index;
+					const quantity = parseFloat(row.original.quantity);
 
-					const total_size_in_mtr =
-						order_type === 'tape'
-							? (parseFloat(top) +
-									parseFloat(bottom) +
-									parseFloat(quantity)) /
-								100
-							: ((parseFloat(top) +
-									parseFloat(bottom) +
-									parseFloat(size)) *
-									parseFloat(quantity)) /
-								100;
-
-					const expt_kg = Number(
-						total_size_in_mtr / parseFloat(dyed_mtr_per_kg)
-					).toFixed(3);
-
-					return (
-						<div className='flex gap-4'>
-							<label
-								className='btn btn-primary btn-xs'
-								onClick={() =>
-									setValue(
-										`dyeing_batch_entry[${idx}].production_quantity_in_kg`,
-										expt_kg,
-										{
-											shouldDirty: true,
-										}
-									)
-								}>
-								Copy
-							</label>
-							{expt_kg}
-						</div>
-					);
+					return getRequiredTapeKg({
+						row: row.original,
+						type: 'dyed',
+						input_quantity: quantity,
+					}).toFixed(3);
 				},
 			},
 			{
 				accessorKey: 'production_quantity_in_kg',
 				header: 'Production QTY (KG)',
+				header: (
+					<>
+						Production <br />
+						(Kg)
+					</>
+				),
 				enableColumnFilter: false,
 				enableSorting: false,
 				cell: (info) => {

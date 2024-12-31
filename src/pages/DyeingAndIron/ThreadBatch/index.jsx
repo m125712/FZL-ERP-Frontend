@@ -108,6 +108,13 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'recipe_name',
+				header: 'Shade',
+				width: 'w-24',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'total_cone',
 				header: (
 					<div className='flex flex-col'>

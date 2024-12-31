@@ -30,6 +30,8 @@ export default function Header({
 	const subStreatOption = [
 		{ label: 'TXP', value: 'txp' },
 		{ label: 'SSP', value: 'ssp' },
+		{ label: 'ZS', value: 'zipper_sample' },
+		{ label: 'Bulk ', value: 'bulk' },
 		{ label: 'Others', value: 'others' },
 	];
 

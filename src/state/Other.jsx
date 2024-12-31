@@ -290,10 +290,10 @@ export const useOtherPackingListByOrderInfoUUIDAndChallanUUID = (
 	});
 
 //* GET ORDER INFO VALUE LABEL
-export const useOtherOrderInfoValueLabel = () =>
+export const useOtherOrderInfoValueLabel = (query) =>
 	createGlobalState({
-		queryKey: otherQK.orderInfoValueLabel(),
-		url: '/other/order/info/value/label',
+		queryKey: otherQK.orderInfoValueLabel(query),
+		url: query? `/other/order/info/value/label?${query}` : '/other/order/info/value/label',
 	});
 
 //* GET ORDER PROPERTIES BY ITEM

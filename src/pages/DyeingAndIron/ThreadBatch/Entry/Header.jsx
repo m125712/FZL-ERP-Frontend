@@ -27,7 +27,7 @@ export default function Header({
 			? format(new Date(watch('production_date')), 'yyyy-MM-dd')
 			: ''
 	);
-	const { data: orders } = useThreadOrder();
+	const { data: orders } = useThreadOrder('recipe_required=true');
 	const batchType = [
 		{ value: 'normal', label: 'Normal' },
 		{ value: 'extra', label: 'Extra' },
@@ -125,6 +125,12 @@ export default function Header({
 												onChange={(e) => {
 													const value = e.value;
 													onChange(value);
+													if (value == 'normal') {
+														setValue(
+															'order_info_uuid',
+															null
+														);
+													}
 												}}
 												isDisabled={isUpdate}
 											/>

@@ -1114,7 +1114,10 @@ export const otherQK = {
 
 	//* Thread Orders
 
-	threadOrders: (query) => [...otherQK.all(), 'thread-orders', query],
+	threadOrders: (query) => [
+		...otherQK.all(),
+		...(query ? ['thread-orders', query] : ['thread-orders']),
+	],
 	threadOrderPackingList: () => [
 		...otherQK.all(),
 		'thread-order-packing-list',
@@ -1254,7 +1257,12 @@ export const otherQK = {
 	],
 
 	//* ORDER INFO VALUE LABEL
-	orderInfoValueLabel: () => [...otherQK.all(), 'order-info-value-label'],
+	orderInfoValueLabel: (query) => [
+		...otherQK.all(),
+		...(query
+			? ['order-info-value-label', query]
+			: ['order-info-value-label']),
+	],
 
 	//* ORDER PROPERTIES BY ITEM
 	orderPropertiesByItem: () => [...otherQK.all(), 'order-properties-by-item'],

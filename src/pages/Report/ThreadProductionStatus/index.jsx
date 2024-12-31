@@ -109,6 +109,13 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'recipe_name',
+				header: 'Shade',
+				width: 'w-24',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorFn: (row) =>
 					format(row.swatch_approval_date, 'dd/MM/yy'),
 				id: 'swatch_approval_date',

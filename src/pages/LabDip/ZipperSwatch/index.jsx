@@ -4,7 +4,7 @@ import { useOtherRecipe } from '@/state/Other';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { LinkWithCopy, ReactSelect } from '@/ui';
+import { DateTime, LinkWithCopy, ReactSelect } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
@@ -172,6 +172,19 @@ export default function Index() {
 						/>
 					);
 				},
+			},
+			{
+				accessorKey: 'swatch_approval_date',
+				header: (
+					<span>
+						Approval
+						<br />
+						Date
+					</span>
+				),
+				width: 'w-24',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 		],
 		[data, recipe, handleSwatchStatus, haveAccess]

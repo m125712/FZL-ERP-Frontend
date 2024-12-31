@@ -32,7 +32,7 @@ export default function Header({
 			: ''
 	);
 
-	const { data: orders } = useOtherOrderInfoValueLabel();
+	const { data: orders } = useOtherOrderInfoValueLabel('page=dyeing_batch');
 
 	const res = machine?.find(
 		(item) => item.value == getValues('machine_uuid')
@@ -131,6 +131,12 @@ export default function Header({
 												onChange={(e) => {
 													const value = e.value;
 													onChange(value);
+													if (value == 'normal') {
+														setValue(
+															'order_info_uuid',
+															null
+														);
+													}
 												}}
 												isDisabled={isUpdate}
 											/>

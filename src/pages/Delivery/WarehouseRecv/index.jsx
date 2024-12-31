@@ -68,9 +68,9 @@ export default function Index() {
 		loading: isLoading,
 		error,
 	} = useFetch(`/delivery/packing-list/${symbol}`, [status]);
-	const { data: packetList } = useOtherPackingList();
-	const { invalidateQuery: invalidateDeliveryPackingList, updateData } =
-		useDeliveryPackingList();
+	const { data: packetList, updateData } = useOtherPackingList();
+	// const { invalidateQuery: invalidateDeliveryPackingList, updateData } =
+	// 	useDeliveryPackingList();
 
 	useEffect(() => {
 		if (containerRef.current) {
@@ -151,7 +151,7 @@ export default function Index() {
 					message: error.message,
 				});
 			});
-	}, [packetListData]);
+	}, [packetListData, isLoading, error]);
 
 	const handelEntryAppend = () => {
 		EntryAppend({

@@ -69,8 +69,8 @@ export default function Index() {
 		error,
 	} = useFetch(`/delivery/packing-list/${symbol}`, [status]);
 	const { data: packetList, updateData } = useOtherPackingList();
-	// const { invalidateQuery: invalidateDeliveryPackingList, updateData } =
-	// 	useDeliveryPackingList();
+	const { invalidateQuery: invalidateDeliveryPackingList } =
+		useDeliveryPackingList();
 
 	useEffect(() => {
 		if (containerRef.current) {

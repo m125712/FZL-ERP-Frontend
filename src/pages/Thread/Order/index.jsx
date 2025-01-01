@@ -1,6 +1,6 @@
 import { lazy, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import { useThreadOrderInfo } from '@/state/Thread';
+import { useThreadOrderInfoByQuery } from '@/state/Thread';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -40,7 +40,7 @@ export default function Index() {
 	const haveAccess = useAccess('thread__order_info_details');
 	const { user } = useAuth();
 
-	const { data, isLoading, url, deleteData } = useThreadOrderInfo(
+	const { data, isLoading, url, deleteData } = useThreadOrderInfoByQuery(
 		getPath(haveAccess, user?.uuid),
 		{
 			enabled: !!user?.uuid,

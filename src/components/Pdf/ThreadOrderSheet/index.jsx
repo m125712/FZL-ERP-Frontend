@@ -14,6 +14,7 @@ const node = [
 	getTable('count_length_name', 'Count Length'),
 	getTable('bleaching', 'Bleaching'),
 	getTable('quantity', 'Quantity (cone)', 'right'),
+	getTable('remarks', 'Remarks'),
 ];
 
 export default function Index(orderInfo) {
@@ -72,7 +73,7 @@ export default function Index(orderInfo) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', 70, 50, '*'],
+					widths: ['*', '*', 70, 50, '*', '*'],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -99,6 +100,7 @@ export default function Index(orderInfo) {
 								bold: true,
 								colSpan: 2,
 							},
+							{},
 							{},
 						],
 					],

@@ -1058,6 +1058,7 @@ export const threadQK = {
 
 	//Order-info
 	orderInfo: () => [...threadQK.all(), 'order-info'],
+	orderInfoByQuery: (query) => [...threadQK.orderInfo(), query],
 	orderInfoByUUID: (uuid) => [...threadQK.orderInfo(), uuid],
 	detailsByUUID: (uuid) => [...otherQK.all(), 'details-by-uuid', uuid],
 

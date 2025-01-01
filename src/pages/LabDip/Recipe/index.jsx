@@ -50,13 +50,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorFn: (row) => {
-					if (row.sub_streat === 'txp') return 'txp';
-					if (row.sub_streat === 'ssp') return 'ssp';
-					if (row.sub_streat === 'others') return 'others';
-					return '';
-				},
-				id: 'sub_streat',
+				accessorKey: 'sub_streat',
 				header: 'Sub Streat',
 				enableColumnFilter: false,
 			},

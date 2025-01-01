@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useDyeingDummy, useDyeingSwatch } from '@/state/Dyeing';
 import { useOtherRecipe } from '@/state/Other';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
@@ -118,8 +119,7 @@ export default function Index() {
 				accessorKey: 'quantity',
 				header: (
 					<span>
-						Quantity
-						<br />
+						Quantity <br />
 						(PCS)
 					</span>
 				),
@@ -174,17 +174,23 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'swatch_approval_date',
+				accessorFn: (row) => {
+					if (row.swatch_approval_date === null) return null;
+
+					return format(row.swatch_approval_date, 'dd/MM/yyyy');
+				},
+				id: 'swatch_approval_date',
 				header: (
 					<span>
-						Approval
-						<br />
+						Approval <br />
 						Date
 					</span>
 				),
 				width: 'w-24',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime date={info.row.original.swatch_approval_date} />
+				),
 			},
 		],
 		[data, recipe, handleSwatchStatus, haveAccess]

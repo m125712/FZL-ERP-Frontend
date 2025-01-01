@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useOtherShadeRecipe } from '@/state/Other';
 import { useThreadSwatch } from '@/state/Thread';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
@@ -17,8 +18,9 @@ export default function Index() {
 		'lab_dip__thread_swatch'
 	);
 	const haveAccess = useAccess('lab_dip__thread_swatch');
-	const { data: shade_recipe } = useOtherShadeRecipe();
+
 	// * fetching the data
+	const { data: shade_recipe } = useOtherShadeRecipe();
 
 	const columns = useMemo(
 		() => [
@@ -134,17 +136,23 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'swatch_approval_date',
+				accessorFn: (row) => {
+					if (row.swatch_approval_date === null) return '---';
+
+					return format(row.swatch_approval_date, 'dd/MM/yyyy');
+				},
+				id: 'swatch_approval_date',
 				header: (
 					<span>
-						Approval
-						<br />
+						Approval <br />
 						Date
 					</span>
 				),
 				width: 'w-24',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime date={info.row.original.swatch_approval_date} />
+				),
 			},
 		],
 		[data, shade_recipe, haveAccess]

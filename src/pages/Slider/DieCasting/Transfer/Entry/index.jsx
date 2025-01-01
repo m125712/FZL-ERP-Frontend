@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useAuth } from '@/context/auth';
 import {
 	useSliderAssemblyProduction,
@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { Footer } from '@/components/Modal/ui';
+import ReactTable from '@/components/Table';
 import TableNoData from '@/components/Table/_components/TableNoData';
 import { ShowLocalToast } from '@/components/Toast';
 import { DynamicField, Input } from '@/ui';
@@ -212,203 +213,198 @@ const Index = () => {
 		);
 	}, [stocks, watch('section')]);
 
-	const rowClass =
-		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
-	const thClass =
-		'group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300';
-
 	const allowedTypes = ['body', 'cap', 'puller', 'link'];
 
-	return (
-		<FormProvider {...form}>
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				noValidate
-				className='flex flex-col gap-6'>
-				<Header
-					{...{
-						register,
-						errors,
-						control,
-						getValues,
-						Controller,
-					}}
-				/>
-				<DynamicField
-					title={`Entry Details`}
-					tableHead={
-						<>
-							{[
-								'Name',
-								'Item Name',
-								'Zipper No',
-								'Type',
-								'End Type',
-								'Puller',
-								'Logo',
-								'Slider Body',
-								'Slider Link',
-								'Stopper Type',
-								'Quantity',
-								'Weight (KG)',
-								'Assigned QTY (PCS)',
-								'Assigned Weight (KG)',
-								'Remarks',
-							].map((item) => {
-								return (
-									<th
-										key={item}
-										scope='col'
-										className={thClass}>
-										{item}
-									</th>
+	const columns = useMemo(
+		() => [
+			{
+				accessorKey: 'name',
+				header: 'Name',
+				enableColumnFilter: true,
+				cell: (info) => {
+					const index = info.row.index;
+					// <div className='mt-1 flex max-w-[200px] flex-wrap gap-1 gap-y-2'>
+					// 	{getBadges(index, getValues)
+					// 		?.filter((item) => item.isActive)
+					// 		.map((badge) => (
+					// 			<div
+					// 				key={badge.label}
+					// 				className='badge badge-secondary badge-sm'>
+					// 				{badge.label}
+					// 			</div>
+					// 		))}
+					// </div>;
+					return info.getValue();
+				},
+			},
+			{
+				accessorFn: (row) => (row?.item_name ? row?.item_name : '---'),
+				id: 'item_name',
+				header: 'Item Name',
+				enableColumnFilter: true,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'zipper_number_name',
+				header: 'Zipper No',
+				enableColumnFilter: true,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'type',
+				header: 'Type',
+				enableColumnFilter: true,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) =>
+					row?.end_type_name ? row?.end_type_name : '---',
+				id: 'end_type_name',
+				header: 'End Type',
+				enableColumnFilter: true,
+				// cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) =>
+					row?.puller_type_name ? row?.puller_type_name : '---',
+				id: 'puller_type_name',
+				header: 'Puller',
+				enableColumnFilter: true,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) =>
+					row?.logo_type_name ? row?.logo_type_name : '---',
+				id: 'logo_type_name',
+				header: 'Logo',
+				enableColumnFilter: true,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) =>
+					row?.slider_body_shape_name
+						? row?.slider_body_shape_name
+						: '---',
+				id: 'slider_body_shape_name',
+				header: 'Slider Body',
+				enableColumnFilter: true,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) =>
+					row?.slider_link_name ? row?.slider_link_name : '---',
+				id: 'slider_link_name',
+				header: 'Slider Link',
+				enableColumnFilter: true,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) =>
+					row?.stopper_type_name ? row?.stopper_type_name : '---',
+				id: 'stopper_type_name',
+				header: 'Stopper Type',
+				enableColumnFilter: true,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'quantity',
+				header: 'Quantity',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'weight',
+				header: 'Weight (KG)',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'assigned_quantity',
+				header: 'Assigned QTY (PCS)',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const idx = info.row.index;
+					const { weight, quantity } = info.row.original;
+
+					return (
+						<Input
+							label={`stocks[${idx}].assigned_quantity`}
+							is_title_needed='false'
+							register={register}
+							dynamicerror={
+								errors?.[`stocks`]?.[idx]?.assigned_quantity
+							}
+							onChange={(e) => {
+								setValue(
+									`stocks[${idx}].assigned_weight`,
+									(
+										(Number(weight) / Number(quantity)) *
+										Number(e.target.value)
+									).toFixed(4)
 								);
-							})}{' '}
-						</>
-					}>
-					{stockFields.length === 0 && <TableNoData colSpan={11} />}
-					{/* (watch('section') === 'coloring' || watch('section') === 'assembly' && stockFields.length > 0) */}
+							}}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'assigned_weight',
+				header: 'Assigned Weight (KG)',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const idx = info.row.index;
 
-					{stockFields.length > 0 &&
-						stockFields?.map((item, index) => {
-							return (
-								<tr key={item.id}>
-									{/*  Name */}
-									<td className={cn('w-[150px]', rowClass)}>
-										<span>{item.name}</span>
+					return watch(`stocks[${idx}].assigned_weight`);
+				},
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const idx = info.row.index;
+					return (
+						<Input
+							label={`stocks[${idx}].remarks`}
+							is_title_needed='false'
+							register={register}
+						/>
+					);
+				},
+			},
+		],
+		[stockFields, watch, register, errors]
+	);
 
-										<div className='mt-1 flex max-w-[200px] flex-wrap gap-1 gap-y-2'>
-											{getBadges(index, getValues)
-												?.filter(
-													(item) => item.isActive
-												)
-												.map((badge) => (
-													<div
-														key={badge.label}
-														className='badge badge-secondary badge-sm'>
-														{badge.label}
-													</div>
-												))}
-										</div>
-									</td>
+	return (
+		<>
+			<FormProvider {...form}>
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					noValidate
+					className='flex flex-col gap-6'>
+					<Header
+						{...{
+							register,
+							errors,
+							control,
+							getValues,
+							Controller,
+						}}
+					/>
 
-									{/* Item Name */}
-									<td className={cn('w-24', rowClass)}>
-										{item.item_name}
-									</td>
-
-									{/* Zipper Name */}
-									<td className={cn('w-24', rowClass)}>
-										{item.zipper_number_name}
-									</td>
-
-									{/* Tyoe Name */}
-									<td className={cn('w-24', rowClass)}>
-										{item.type
-											.split('_') // Split the string by underscores
-											.map(
-												(word) =>
-													word
-														.charAt(0)
-														.toUpperCase() +
-													word.slice(1)
-											) // Capitalize the first letter of each word
-											.join(' ')}
-									</td>
-
-									{/* End Type */}
-									<td className={cn('w-24', rowClass)}>
-										{item.end_type_name}
-									</td>
-
-									{/* Puller Type */}
-									<td className={cn('w-24', rowClass)}>
-										{item.puller_type_name}
-									</td>
-
-									{/* Logo */}
-									<td className={cn('w-24', rowClass)}>
-										{item.logo_type_name}
-									</td>
-
-									{/* Slider Body Shape Name */}
-									<td className={cn('w-24', rowClass)}>
-										{item.slider_body_shape_name}
-									</td>
-
-									{/* Puller Link Name */}
-									<td className={cn('w-24', rowClass)}>
-										{item.slider_link_name}
-									</td>
-
-									{/* Stopper Type */}
-									<td className={cn('w-24', rowClass)}>
-										{item.stopper_type_name}
-									</td>
-									{/* Quantity */}
-									<td className={cn('w-24', rowClass)}>
-										{Number(item.quantity)}
-									</td>
-									{/* Weight */}
-									<td className={cn('w-24', rowClass)}>
-										{Number(item.weight)}
-									</td>
-									{/* PROVIDED QTY */}
-									<td className={cn('w-24', rowClass)}>
-										<Input
-											label={`stocks[${index}].assigned_quantity`}
-											is_title_needed='false'
-											register={register}
-											dynamicerror={
-												errors?.[`stocks`]?.[index]
-													?.assigned_quantity
-											}
-											onChange={(e) => {
-												setValue(
-													`stocks[${index}].assigned_weight`,
-													(
-														(Number(item.weight) /
-															Number(
-																item.quantity
-															)) *
-														Number(e.target.value)
-													).toFixed(4)
-												);
-											}}
-										/>
-									</td>
-									{/* PROVIDED QTY */}
-									<td className={cn('w-24', rowClass)}>
-										{/* <Input
-										label={`stocks[${index}].assigned_weight`}
-										is_title_needed='false'
-										register={register}
-										dynamicerror={
-											errors?.[`stocks`]?.[index]
-												?.assigned_weight
-										}
-										disabled={true}
-									/> */}
-										{watch(
-											`stocks[${index}].assigned_weight`
-										)}
-									</td>
-									{/* remarks */}
-									<td className={cn('w-24', rowClass)}>
-										<Input
-											label={`stocks[${index}].remarks`}
-											is_title_needed='false'
-											register={register}
-										/>
-									</td>
-								</tr>
-							);
-						})}
-				</DynamicField>
-				<Footer buttonClassName='!btn-primary' />
-				<DevTool control={control} placement='top-left' />
-			</form>
-		</FormProvider>
+					<ReactTable
+						title={'Entry Details'}
+						accessor={false}
+						data={stockFields}
+						columns={columns}
+						extraClass={'py-0.5'}
+					/>
+					<Footer buttonClassName='!btn-primary' />
+					<DevTool control={control} placement='top-left' />
+				</form>
+			</FormProvider>
+		</>
 	);
 };
 

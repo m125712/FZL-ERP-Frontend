@@ -27,10 +27,11 @@ export const useThreadMachineByUUID = (uuid) =>
 	});
 
 //Order-info
-export const useThreadOrderInfo = () =>
+export const useThreadOrderInfo = (query, { enabled = false }) =>
 	createGlobalState({
 		queryKey: threadQK.orderInfo(),
-		url: '/thread/order-info',
+		url: `/thread/order-info${query}`,
+		enabled: enabled,
 	});
 export const useThreadOrderInfoByUUID = (uuid) =>
 	createGlobalState({
@@ -53,7 +54,7 @@ export const useThreadDetailsByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: threadQK.detailsByUUID(uuid),
 		url: `/thread/order-info-details/by/${uuid}`,
-})
+	});
 //Swatch
 export const useThreadSwatch = () =>
 	createGlobalState({

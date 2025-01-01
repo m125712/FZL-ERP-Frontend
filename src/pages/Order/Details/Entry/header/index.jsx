@@ -57,6 +57,8 @@ export default function Header({
 	const isUpdate =
 		order_description_uuid !== undefined && order_number !== undefined;
 
+	const [endLabel, setEndLabel] = useState('');
+
 	const { data: order } = useOtherOrderInfoValueLabel();
 	const { data: item } = useOtherOrderPropertiesByItem();
 	const { data: zipper_number } = useOtherOrderPropertiesByZipperNumber();
@@ -331,12 +333,14 @@ export default function Header({
 									}}
 								/>
 							</FormField>
-							{end_type
-								?.find(
+							{(end_type?.find(
+								(end_type) =>
+									end_type.value == getValues('end_type')
+							)?.label === 'Open End' ||
+								end_type?.find(
 									(end_type) =>
-										end_type.value == getValues('end_type')
-								)
-								?.label?.toLowerCase() !== 'close end' && (
+										end_type.value === getValues('end_type')
+								)?.label === '2 Way - Open End') && (
 								<FormField
 									label='hand'
 									title='Hand'

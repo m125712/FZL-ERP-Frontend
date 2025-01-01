@@ -9,7 +9,7 @@ import {
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useRHF } from '@/hooks';
+import { useAccess, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
@@ -29,11 +29,18 @@ import Header from './Header';
 import OrderEntrySpreadsheet from './spreadsheets/order-entry-spreadsheet';
 
 export default function Index() {
-	const { url: threadOrderInfoUrl } = useThreadOrderInfo();
-	const { url: threadOrderEntryUrl } = useThreadOrderInfoEntry();
-	const { updateData, postData, deleteData } = useThreadOrderInfo();
-	const { uuid, order_info_uuid } = useParams();
 	const { user } = useAuth();
+	const haveAccess = useAccess('thread__order_info_details');
+
+	const {
+		url: threadOrderInfoUrl,
+		updateData,
+		postData,
+		deleteData,
+	} = useThreadOrderInfo();
+	const { url: threadOrderEntryUrl } = useThreadOrderInfoEntry();
+	const { uuid, order_info_uuid } = useParams();
+
 	const navigate = useNavigate();
 	const { invalidateQuery: invalidateOtherZipperThreadOrderList } =
 		useAllZipperThreadOrderList();

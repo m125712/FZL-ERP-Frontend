@@ -123,7 +123,8 @@ export default function ItemDescription({ order_description, className }) {
 				label: 'end',
 				value: end_type_name,
 			},
-			...(end_type_name?.toLowerCase() === 'open end'
+			...(end_type_name === 'Open End' ||
+			end_type_name === '2 Way - Open End'
 				? [
 						{
 							label: 'Hand',

@@ -321,6 +321,8 @@ export const commonQK = {
 //* LabDip
 export const labDipQK = {
 	all: () => ['labDip'],
+	//* dashboard
+	dashboard: () => [...labDipQK.all(), 'dashboard'],
 	//* recipe
 	recipe: () => [...labDipQK.all(), 'recipe'],
 	recipeByUUID: (uuid) => [...labDipQK.recipe(), uuid],

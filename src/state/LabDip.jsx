@@ -2,6 +2,11 @@ import createGlobalState from '@/state';
 
 import { labDipQK } from './QueryKeys';
 
+export const useLabDipDashboard = () =>
+	createGlobalState({
+		queryKey: labDipQK.dashboard(),
+		url: '/lab-dip/info-recipe-dashboard',
+	});
 export const useLabDipRecipe = () =>
 	createGlobalState({
 		queryKey: labDipQK.recipe(),

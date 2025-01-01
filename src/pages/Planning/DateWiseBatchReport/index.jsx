@@ -51,6 +51,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'batch_number',
+				header: 'B/N',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,

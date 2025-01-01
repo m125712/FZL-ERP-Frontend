@@ -1,4 +1,5 @@
 import { lazy, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useThreadOrderInfo } from '@/state/Thread';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
@@ -11,10 +12,41 @@ import PageInfo from '@/util/PageInfo';
 
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_all_orders')) {
+		return `?all=true`;
+	}
+	if (
+		haveAccess.includes('show_approved_orders') &&
+		haveAccess.includes('show_own_orders') &&
+		userUUID
+	) {
+		return `?own_uuid=${userUUID}?approved=true`;
+	}
+
+	if (haveAccess.includes('show_approved_orders')) {
+		return '?all=false&approved=true';
+	}
+
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `?own_uuid=${userUUID}`;
+	}
+
+	return `?all=false`;
+};
+
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useThreadOrderInfo();
 	const navigate = useNavigate();
 	const haveAccess = useAccess('thread__order_info_details');
+	const { user } = useAuth();
+
+	const { data, isLoading, url, deleteData } = useThreadOrderInfo(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
+
 	const info = new PageInfo('Order Info', url, 'thread__order_info_details');
 
 	const columns = useMemo(

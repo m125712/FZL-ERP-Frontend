@@ -74,7 +74,7 @@ export default function Index() {
 				otherwise: (schema) => schema,
 			}),
 			hand: UUID.when({
-				is: () => endType.toLowerCase() === 'open end',
+				is: () => endType === 'Open End' || endType === '2 Way - Open End',
 				then: (schema) => schema.required('Required'),
 				otherwise: (schema) => schema,
 			}),

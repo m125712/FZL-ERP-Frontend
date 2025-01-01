@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useLabDipDashboard } from '@/state/LabDip';
 import { usePIRegister } from '@/state/Report';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
@@ -80,10 +81,19 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'approved_date',
+				accessorFn: (row) => {
+					if (row.approved_date === null) {
+						return '--';
+					} else {
+						return format(row.approved_date, 'dd/MM/yy');
+					}
+				},
+				id: 'approved_date',
 				header: 'Approved Date',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime date={info.row.original.approved_date} />
+				),
 			},
 		],
 		[data]

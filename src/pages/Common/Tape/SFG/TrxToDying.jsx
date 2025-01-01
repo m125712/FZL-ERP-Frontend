@@ -1,4 +1,4 @@
-import { AddModal } from '@/components/Modal';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import {
 	useFetch,
@@ -7,14 +7,16 @@ import {
 	useRHF,
 	useUpdateFunc,
 } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { Need } from '@/util/Need';
+
 import {
 	TAPE_STOCK_TRX_TO_DYING_NULL,
 	TAPE_STOCK_TRX_TO_DYING_SCHEMA,
 } from '@util/Schema';
-import { useEffect, useState } from 'react';
+import GetDateTime from '@/util/GetDateTime';
+import { Need } from '@/util/Need';
 
 export default function Index({
 	modalId = '',
@@ -68,8 +70,15 @@ export default function Index({
 		// ),
 	};
 
-	const { register, handleSubmit, control, Controller, errors, reset, context } =
-		useRHF(schema, TAPE_STOCK_TRX_TO_DYING_NULL);
+	const {
+		register,
+		handleSubmit,
+		control,
+		Controller,
+		errors,
+		reset,
+		context,
+	} = useRHF(schema, TAPE_STOCK_TRX_TO_DYING_NULL);
 
 	useFetchForRhfReset(
 		`/tape-or-coil-stock/${updateTapeProd?.id}`,
@@ -108,7 +117,6 @@ export default function Index({
 			trx_from: 'tape_making',
 			trx_to: 'dying_and_iron_stock',
 			type: updateTapeProd?.type,
-			quantity: updateTapeProd?.quantity - data?.trx_quantity,
 			zipper_number: updateTapeProd?.zipper_number,
 			type_of_zipper: updateTapeProd?.type_of_zipper,
 			name: updateTapeProd?.name,

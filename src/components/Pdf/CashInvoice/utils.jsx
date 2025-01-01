@@ -86,19 +86,59 @@ export const getPageHeader = (data) => {
 	};
 };
 
-const EMPTY_COLUMN = getEmptyColumn(4);
+const EMPTY_COLUMN = getEmptyColumn(6);
 
-export const getPageFooter = ({ currentPage, pageCount }) => ({
-	body: [
-		[
-			{
-				colSpan: 4,
-				text: `Page ${currentPage} / ${pageCount}`,
-				alignment: 'center',
-				border: [false, false, false, false],
-				// color,
-			},
-			...EMPTY_COLUMN,
+export const getPageFooter = ({ currentPage, pageCount }) => {
+	return {
+		widths: ['*', 15, '*', 15, '*', 15, '*'],
+		body: [
+			[
+				{
+					text: 'Marketing',
+					alignment: 'center',
+
+					border: [false, true, false, false],
+				},
+				{
+					text: '',
+					alignment: 'center',
+					border: [false, false, false, false],
+				},
+				{
+					text: 'Accounts',
+					alignment: 'center',
+					border: [false, true, false, false],
+				},
+				{
+					text: '',
+					alignment: 'center',
+					border: [false, false, false, false],
+				},
+				{
+					text: 'SNO',
+					alignment: 'center',
+					border: [false, true, false, false],
+				},
+				{
+					text: '',
+					alignment: 'center',
+					border: [false, false, false, false],
+				},
+				{
+					text: 'Managing Director',
+					alignment: 'center',
+					border: [false, true, false, false],
+				},
+			],
+			[
+				{
+					colSpan: 7,
+					text: `Page ${currentPage} of ${pageCount}`,
+					alignment: 'center',
+					border: [false, false, false, false],
+				},
+				...EMPTY_COLUMN,
+			],
 		],
-	],
-});
+	};
+};

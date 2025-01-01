@@ -13,6 +13,7 @@ import { getPageFooter, getPageHeader } from './utils';
 const node = [
 	getTable('item_description', 'Item Description'),
 	getTable('order_number', 'O/N'),
+	getTable('batch_number', 'B/N'),
 	getTable('party_name', 'Party'),
 	getTable('style', 'Style'),
 	getTable('color', 'Color'),
@@ -56,7 +57,7 @@ export default function Index(data, date, item) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', '*', '*', '*', 50, 20, 55, 60, 70],
+					widths: ['*', '*', '*', '*', '*', '*', 50, 20, 55, 60, 70],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -74,8 +75,9 @@ export default function Index(data, date, item) {
 								text: `Total: ${Number(totalQuantity)}`,
 								alignment: 'right',
 								bold: true,
-								colSpan: 8,
+								colSpan: 9,
 							},
+							{},
 							{},
 							{},
 							{},

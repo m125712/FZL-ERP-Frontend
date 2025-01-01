@@ -150,30 +150,6 @@ export default function Header({
 				title={`${isUpdate ? `Update Challan: ${getValues('challan_number')}` : 'New Challan Entry'}`}
 				header={
 					<div className='flex w-full gap-1 text-sm md:w-fit'>
-						<div className='rounded-md bg-secondary px-1'>
-							<CheckBox
-								text='text-secondary-content'
-								label='receive_status'
-								title='Receive Status'
-								{...{ register, errors }}
-								checked={Boolean(watch('receive_status'))}
-								onChange={(e) =>
-									setValue('receive_status', e.target.checked)
-								}
-							/>
-						</div>
-						<div className='rounded-md bg-secondary px-1'>
-							<CheckBox
-								text='text-secondary-content'
-								label='gate_pass'
-								title='Gate Pass'
-								{...{ register, errors }}
-								checked={Boolean(watch('gate_pass'))}
-								onChange={(e) =>
-									setValue('gate_pass', e.target.checked)
-								}
-							/>
-						</div>
 						<div className='w-34 my-2'>
 							<FormField
 								label='delivery_type'

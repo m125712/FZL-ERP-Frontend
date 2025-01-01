@@ -30,7 +30,7 @@ export const CommercialRoutes = [
 				actions: ['read'],
 			},
 			{
-				name: 'LC',
+				name: 'Letter of Credit',
 				path: '/commercial/lc',
 				element: <LC />,
 				page_name: 'commercial__lc',
@@ -80,7 +80,7 @@ export const CommercialRoutes = [
 			},
 
 			{
-				name: 'PI',
+				name: 'Proforma Invoice',
 				path: '/commercial/pi',
 				element: <PI />,
 				page_name: 'commercial__pi',
@@ -128,7 +128,7 @@ export const CommercialRoutes = [
 				],
 			},
 			{
-				name: 'Manual PI',
+				name: 'Manual Proforma Invoice',
 				path: '/commercial/manual-pi',
 				element: <ManualPI />,
 				page_name: 'commercial__manual_pi',

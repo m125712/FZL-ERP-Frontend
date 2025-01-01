@@ -45,6 +45,13 @@ export const CommonRoutes = [
 				],
 			},
 			{
+				name: 'Tape Required',
+				path: '/common/tape-required',
+				element: <TapeRequired />,
+				page_name: 'common__tape_required',
+				actions: ['read', 'create', 'update', 'delete'],
+			},
+			{
 				name: 'Tape',
 				children: [
 					{
@@ -92,13 +99,7 @@ export const CommonRoutes = [
 							'click_update_transfer',
 						],
 					},
-					{
-						name: 'Required',
-						path: '/common/tape/required',
-						element: <TapeRequired />,
-						page_name: 'common__tape_required',
-						actions: ['read', 'create', 'update', 'delete'],
-					},
+
 					{
 						name: 'SFG To Transfer',
 						path: '/common/tape/sfg/entry-to-transfer/:uuid',

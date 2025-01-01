@@ -74,7 +74,7 @@ export const StoreRoutes = [
 				actions: ['create', 'read', 'update', 'delete'],
 			},
 			{
-				name: 'Type',
+				name: 'Material Type',
 				path: '/store/type',
 				element: <MaterialType />,
 				page_name: 'store__type',

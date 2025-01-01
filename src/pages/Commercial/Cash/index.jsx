@@ -1,9 +1,6 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import {
-	useCommercialPIByQuery,
-	useCommercialPICash,
-} from '@/state/Commercial';
+import { useCommercialPIByQuery } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -48,7 +45,7 @@ export default function Index() {
 		() => [
 			{
 				accessorKey: 'id',
-				header: 'PI ID',
+				header: 'CI ID',
 				enableColumnFilter: true,
 				width: 'w-36',
 				cell: (info) => (
@@ -61,10 +58,40 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_amount',
-				header: 'Total Value(BDT)',
+				header: (
+					<>
+						Total Value <br />
+						(BDT)
+					</>
+				),
 				enableColumnFilter: false,
-				width: 'w-32',
 				cell: (info) => info.getValue().toLocaleString(),
+			},
+			{
+				accessorKey: 'actions1',
+				header: '',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_receive_amount'),
+				cell: (info) => (
+					<Transfer
+						onClick={() =>
+							handleUpdateReceiveAmount(info.row.index)
+						}
+					/>
+				),
+			},
+			{
+				accessorKey: 'receive_amount',
+				header: 'Receive Amount',
+				header: (
+					<>
+						Received <br />
+						(BDT)
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorFn: (row) => {
@@ -110,7 +137,6 @@ export default function Index() {
 				accessorKey: 'order_type',
 				header: 'Type',
 				enableColumnFilter: false,
-				width: 'w-32',
 				cell: (info) => info.getValue()?.join(', '),
 			},
 			{
@@ -139,27 +165,6 @@ export default function Index() {
 				header: 'Factory',
 				enableColumnFilter: false,
 				width: 'w-32',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'actions1',
-				header: 'Add Receive Amount',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('click_receive_amount'),
-				width: 'w-30',
-				cell: (info) => (
-					<Transfer
-						onClick={() =>
-							handleUpdateReceiveAmount(info.row.index)
-						}
-					/>
-				),
-			},
-			{
-				accessorKey: 'receive_amount',
-				header: 'Receive Amount',
-				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 

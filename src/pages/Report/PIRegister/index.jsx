@@ -1,9 +1,10 @@
 import { useEffect, useMemo } from 'react';
 import { usePIRegister } from '@/state/Report';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, StatusButton } from '@/ui';
+import { DateTime } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -26,13 +27,23 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'pi_cash_created_date',
+				accessorFn: (row) =>
+					format(row.pi_cash_created_date, 'dd/MM/yy'),
+				id: 'pi_cash_created_date',
 				header: 'PI Date',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime date={info.row.original.pi_cash_created_date} />
+				),
 			},
 			{
-				accessorKey: 'orders',
+				accessorFn: (row) => {
+					return [
+						...row.order_numbers,
+						...row.thread_order_numbers,
+					].join(', ');
+				},
+				id: 'orders',
 				header: 'O/N',
 				enableColumnFilter: false,
 				width: 'w-52',
@@ -43,13 +54,12 @@ export default function Index() {
 
 					return (
 						<div className='flex flex-wrap'>
-				
 							{orders.map((order, index) => (
-							<span
-								key={index}
-								className='rounded-full border bg-slate-300 px-2 mr-2'>
-								{order}
-							</span>
+								<span
+									key={index}
+									className='mr-2 rounded-full border bg-slate-300 px-2'>
+									{order}
+								</span>
 							))}
 						</div>
 					);
@@ -111,14 +121,12 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<>
-			<ReactTable
-				title={info.getTitle()}
-				accessor={false}
-				data={data}
-				columns={columns}
-				extraClass={'py-0.5'}
-			/>
-		</>
+		<ReactTable
+			title={info.getTitle()}
+			accessor={false}
+			data={data}
+			columns={columns}
+			extraClass={'py-0.5'}
+		/>
 	);
 }

@@ -249,7 +249,6 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'production_quantity_in_kg',
-				header: 'Production QTY (KG)',
 				header: (
 					<>
 						Production <br />

@@ -27,7 +27,6 @@ export default function Index({
 		total_trx_quantity: null,
 		metal_teeth_molding: null,
 		uuid: null,
-		sfg_uuid: null,
 		trx_quantity_in_kg: null,
 		trx_quantity_in: null,
 		trx_from: null,

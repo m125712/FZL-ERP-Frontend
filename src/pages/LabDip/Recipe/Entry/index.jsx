@@ -281,7 +281,6 @@ export default function Index() {
 							is_Approved: getValues('approved'),
 							is_Status: getValues('status'),
 							isUpdate,
-							watch,
 						}}
 					/>
 					<DynamicField

@@ -516,7 +516,6 @@ export default function Index() {
 							getTotalCalTape(watch('batch_entry')) +
 								getTotalCalTape(watch('new_batch_entry'))
 						).toFixed(3),
-						isUpdate,
 					}}
 				/>
 

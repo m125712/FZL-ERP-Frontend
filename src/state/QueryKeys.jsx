@@ -1463,7 +1463,7 @@ export const reportQK = {
 		from,
 		to,
 	],
-	productionReport: (from, to) => [
+	productionReportStatementReport: (from, to) => [
 		...reportQK.all(),
 		'production-report',
 		from,

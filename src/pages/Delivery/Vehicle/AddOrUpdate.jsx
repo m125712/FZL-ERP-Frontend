@@ -79,7 +79,6 @@ export default function VehicleForm({
 		const newData = {
 			...data,
 			uuid: nanoid(),
-			active: data.active ? 1 : 0,
 			type: data.type,
 			name: data.name,
 			number: data.number,

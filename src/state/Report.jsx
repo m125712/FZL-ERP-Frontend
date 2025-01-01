@@ -1,6 +1,7 @@
 import createGlobalState from '.';
 import { reportQK } from './QueryKeys';
 
+
 //* Stock
 export const useReportStock = (from, to, { enabled = false }) =>
 	createGlobalState({
@@ -16,7 +17,7 @@ export const useProductionReportDateWise = (from = '', to = '') =>
 	});
 export const useProductionStatementReport = (from = '', to = '') =>
 	createGlobalState({
-		queryKey: reportQK.productionReport(from, to),
+		queryKey: reportQK.productionReportStatementReport(from, to),
 		url: `/report/delivery-statement-report?from_date=${from}&to_date=${to}`,
 		enabled: !!from && !!to,
 	});

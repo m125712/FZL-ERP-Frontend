@@ -1636,8 +1636,6 @@ export const CHALLAN_SCHEMA = {
 		}
 	),
 	new_packing_list_uuids: JSON_STRING_REQUIRED,
-	receive_status: BOOLEAN_DEFAULT_VALUE(false),
-	gate_pass: BOOLEAN_DEFAULT_VALUE(false),
 	challan_entry: yup.array().of(
 		yup.object().shape({
 			// packing_list_entry_uuid: STRING_REQUIRED,
@@ -1665,8 +1663,6 @@ export const CHALLAN_NULL = {
 	order_info_uuid: null,
 	packing_list_uuids: [],
 	new_packing_list_uuids: [],
-	receive_status: false,
-	gate_pass: false,
 	delivery_date: null,
 	challan_entry: [
 		{

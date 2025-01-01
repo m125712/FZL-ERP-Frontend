@@ -15,6 +15,7 @@ const ShadeRecipeDetails = lazy(
 const ShadeRecipeEntry = lazy(() => import('@pages/LabDip/ShadeRecipe/Entry'));
 const ThreadSwatch = lazy(() => import('@pages/LabDip/ThreadSwatch'));
 const ZipperSwatch = lazy(() => import('@pages/LabDip/ZipperSwatch'));
+const DashBoard = lazy(() => import('@pages/LabDip/Dashboard'));
 
 export const LabDipRoutes = [
 	{
@@ -33,6 +34,14 @@ export const LabDipRoutes = [
 					'click_name',
 					'click_used',
 				],
+				isDynamic: true,
+			},
+			{
+				name: 'Dashboard',
+				path: '/lab-dip/dashboard',
+				element: <DashBoard />,
+				page_name: 'lab_dip__dashboard',
+				actions: ['read'],
 				isDynamic: true,
 			},
 			{
@@ -117,39 +126,6 @@ export const LabDipRoutes = [
 				actions: ['create', 'read', 'update', 'delete'],
 				isDynamic: true,
 			},
-
-			// {
-			// 	name: 'Shade Recipe Entry',
-			// 	path: '/lab-dip/shade_recipe/entry',
-			// 	element: <ShadeRecipeEntry />,
-			// 	hidden: true,
-			// 	page_name: 'lab_dip__shade_recipe_entry',
-			// 	actions: ['create', 'read', 'update', 'delete'],
-			// },
-			// {
-			// 	name: 'Shade Recipe Details',
-			// 	path: '/lab-dip/shade_recipe/:shade_recipe_uuid',
-			// 	element: <ShadeRecipeDetails />,
-			// 	hidden: true,
-			// 	page_name: 'lab_dip__shade_recipe_details',
-			// 	actions: ['create', 'read', 'update', 'delete'],
-			// },
-			// {
-			// 	name: 'Shade Recipe',
-			// 	path: '/lab-dip/shade_recipe',
-			// 	element: <ShadeRecipe />,
-			// 	page_name: 'lab_dip__shade_recipe',
-			// 	actions: ['create', 'read', 'update', 'delete'],
-			// },
-			// {
-			// 	name: 'Shade Recipe Update',
-			// 	path: '/lab-dip/shade_recipe/:shade_recipe_uuid/update',
-			// 	element: <ShadeRecipeEntry />,
-			// 	page_name: 'lab_dip__shade_recipe_entry_update',
-			// 	hidden: true,
-			// 	actions: ['create', 'read', 'update', 'delete'],
-			// 	isDynamic: true,
-			// },
 			{
 				name: 'Zipper Swatch',
 				path: '/lab-dip/zipper-swatch',

@@ -25,14 +25,13 @@ export const DEFAULT_LETTER_PAGE = ({
 export const CUSTOM_PAGE = ({
 	pageOrientation = 'landscape',
 	xMargin,
+	width = 290, // Inch: 4.02778
+	height = 141, // Inch: 2.04167
 	headerHeight,
 	footerHeight,
 	leftMargin,
 	rightMargin,
 }) => {
-	let width = 290;
-	let height = 141;
-
 	let left, right;
 	if (leftMargin && rightMargin) {
 		left = leftMargin;
@@ -138,10 +137,10 @@ export const TableHeader = (
 			text: nodeItem.name,
 			// style: nodeItem.headerStyle,
 			alignment: nodeItem.alignment,
-			color: color,
+			color,
 			bold: true,
-			fontSize: fontSize,
-			colSpan: colSpan,
+			fontSize,
+			colSpan,
 		})),
 	];
 };

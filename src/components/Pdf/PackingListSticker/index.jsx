@@ -1,50 +1,29 @@
 import { format } from 'date-fns';
 
-import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
-import {
-	CUSTOM_PAGE,
-	CUSTOM_PAGE_STICKER,
-	getTable,
-	TableHeader,
-} from '@/components/Pdf/utils';
+import { DEFAULT_FONT_SIZE } from '@/components/Pdf/ui';
+import { CUSTOM_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
 import pdfMake from '..';
 import { generateBarcodeAsBase64 } from './Barcode';
 import { getPageFooter } from './utils';
 
+const nodeZipper = [
+	getTable('item_description', 'Item'),
+	getTable('style', 'Style'),
+	getTable('color', 'Color'),
+	getTable('size', 'Size', 'right'),
+	getTable('quantity', 'Qty (pcs)', 'right'),
+	getTable('poli_quantity', 'Poly', 'right'),
+];
+
 export default function Index(data) {
-	const nodeZipper = [
-		getTable('item_description', 'Item'),
-		getTable('style', 'Style'),
-		getTable('color', 'Color'),
-		getTable('size', 'Size', 'right'),
-		getTable('quantity', 'Qty(pcs)', 'right'),
-		getTable('poli_quantity', 'Poly', 'right'),
-	];
-	const nodeTape = [
-		getTable('item_description', 'Item'),
-		getTable('style', 'Style'),
-		getTable('color', 'Color'),
-		getTable('size', 'Size', 'right'),
-		getTable('quantity', 'Qty(mtr)', 'right'),
-		getTable('poli_quantity', 'Poly', 'right'),
-	];
-	const nodeThread = [
-		getTable('item_description', 'Count'),
-		getTable('style', 'Style'),
-		getTable('color', 'Color'),
-		getTable('recipe_name', 'Recipe'),
-		getTable('size', 'Length', 'right'),
-		getTable('quantity', 'Qty(cone)', 'right'),
-	];
-	const node =
-		data?.item_for === 'thread' || data?.item_for === 'sample_thread'
-			? nodeThread
-			: data?.item_for === 'tape'
-				? nodeTape
-				: nodeZipper;
+	const isTape = data?.item_for === 'tape';
+	const isSlider = data?.item_for === 'slider';
+	const node = nodeZipper;
+
 	const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 	let { packing_list_entry } = data;
+
 	let totalQuantity = packing_list_entry?.reduce((acc, item) => {
 		const quantity = parseInt(item.quantity, 10) || 0;
 		return acc + quantity;
@@ -53,16 +32,12 @@ export default function Index(data) {
 		const quantity = parseInt(item.poli_quantity, 10) || 0;
 		return acc + quantity;
 	}, 0);
-	let unit = [];
-	packing_list_entry?.forEach((item) => {
-		unit.push(
-			`${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? `mtr` : data?.item_for === 'tape' ? `mtr` : item.is_inch === 1 ? `inch` : `cm`}`
-		);
-	});
+
 	const pdfDocGenerator = pdfMake.createPdf({
-		...CUSTOM_PAGE_STICKER({
+		...CUSTOM_PAGE({
 			pageOrientation: 'landscape',
 			xMargin: 5,
+			height: 290, // Inch: 4.02778
 			headerHeight: 5,
 			footerHeight: 10,
 		}),
@@ -86,7 +61,7 @@ export default function Index(data) {
 					data?.packing_number,
 					data?.uuid
 				),
-				width: 150,
+				width: 270,
 				height: 30,
 				alignment: 'center',
 				colSpan: 6,
@@ -94,7 +69,7 @@ export default function Index(data) {
 			{
 				table: {
 					// headerRows: 1,
-					widths: [40, '*', '*', 40, 40, 40],
+					widths: [40, '*', '*', 40, 40, 20],
 					body: [
 						[
 							{
@@ -220,46 +195,29 @@ export default function Index(data) {
 							{},
 							{},
 						],
-						// * Header
 
+						// * Header
 						TableHeader(node, DEFAULT_FONT_SIZE - 2, '#000000'),
 
 						// * Body
 						...packing_list_entry?.map((item) =>
 							node.map((nodeItem) => {
-								if (
-									nodeItem.field === 'size' &&
-									data?.item_for !== 'slider'
-								) {
-									const unitIndex =
-										packing_list_entry.indexOf(item);
-									return {
-										text:
-											item[nodeItem.field] +
-											' ' +
-											(unit[unitIndex] || ''),
-										style: nodeItem.cellStyle,
-										alignment: nodeItem.alignment,
-										fontSize: DEFAULT_FONT_SIZE - 2,
-									};
-								} else if (
-									nodeItem.field === 'size' &&
-									data?.item_for === 'slider'
-								) {
-									return {
-										text: '--',
-										style: nodeItem.cellStyle,
-										alignment: nodeItem.alignment,
-										fontSize: DEFAULT_FONT_SIZE - 2,
-									};
+								const { field } = nodeItem;
+								let text = item[nodeItem.field];
+
+								if (field === 'size') {
+									text += isTape ? ' mtr' : ` ${item.unit}`;
+									if (isSlider) text = '---';
 								}
+								if (field === 'quantity') {
+									if (isTape) text = '---';
+								}
+								if (field === 'poli_quantity') {
+									if (isTape) text = '---';
+								}
+
 								return {
-									text:
-										item[nodeItem.field] !== null &&
-										item[nodeItem.field] !== undefined &&
-										item[nodeItem.field] !== ''
-											? item[nodeItem.field]
-											: '--',
+									text,
 									style: nodeItem.cellStyle,
 									alignment: nodeItem.alignment,
 									fontSize: DEFAULT_FONT_SIZE - 2,
@@ -267,51 +225,33 @@ export default function Index(data) {
 							})
 						),
 						[
-							...(data?.item_for !== 'thread' &&
-							data?.item_for !== 'sample_thread'
-								? [
-										{
-											text: `Total`,
-											alignment: 'right',
-											colSpan: 4,
-											bold: true,
-											fontSize: DEFAULT_FONT_SIZE - 2,
-										},
-										{},
-										{},
-										{},
-										{
-											text: totalQuantity,
-											bold: true,
-											alignment: 'right',
-											fontSize: DEFAULT_FONT_SIZE - 2,
-										},
-										{
-											text: totalPoly,
-											bold: true,
-											alignment: 'right',
-											fontSize: DEFAULT_FONT_SIZE - 2,
-										},
-									]
-								: [
-										{
-											text: `Total`,
-											alignment: 'right',
-											colSpan: 5,
-											bold: true,
-											fontSize: DEFAULT_FONT_SIZE - 2,
-										},
-										{},
-										{},
-										{},
-										{},
-										{
-											text: totalQuantity,
-											bold: true,
-											alignment: 'right',
-											fontSize: DEFAULT_FONT_SIZE - 2,
-										},
-									]),
+							{
+								text: `Total`,
+								alignment: 'right',
+								colSpan: isTape ? 3 : 4,
+								bold: true,
+								fontSize: DEFAULT_FONT_SIZE - 2,
+							},
+							{},
+							{},
+							{
+								text: totalQuantity + ' mtr',
+								alignment: 'right',
+								bold: true,
+								fontSize: DEFAULT_FONT_SIZE - 2,
+							},
+							{
+								text: isTape ? '' : totalQuantity,
+								alignment: 'right',
+								bold: true,
+								fontSize: DEFAULT_FONT_SIZE - 2,
+							},
+							{
+								text: isTape ? '' : totalPoly,
+								bold: true,
+								alignment: 'right',
+								fontSize: DEFAULT_FONT_SIZE - 2,
+							},
 						],
 					],
 				},

@@ -61,6 +61,12 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'item_description',
 				header: 'Count Length',
 				enableColumnFilter: false,

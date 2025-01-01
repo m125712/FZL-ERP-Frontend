@@ -69,12 +69,18 @@ export default function Index() {
 						row.original;
 					return (
 						<LinkWithCopy
-							title={row.getValue('item_description')}
-							id={order_description_uuid}
-							uri={`/order/details/${order_number}`}
+						title={row.getValue('item_description')}
+						id={order_description_uuid}
+						uri={`/order/details/${order_number}`}
 						/>
 					);
 				},
+			},
+			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'style',

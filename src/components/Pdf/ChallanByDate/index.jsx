@@ -13,6 +13,7 @@ import { getPageFooter, getPageHeader } from './utils';
 const node = [
 	getTable('challan_number', 'C/N'),
 	getTable('order_number', 'O/N'),
+	getTable('party_name', 'Party'),
 	getTable('packing_numbers', 'Packing List'),
 	getTable('carton_quantity', 'Carton', 'right'),
 	getTable('total_quantity', 'Qty', 'right'),
@@ -50,7 +51,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [50, 50, '*', 28, 40, 40],
+					widths: [50, 50, '*', '*', 28, 40, 40],
 					body: [
 						// * Header
 						TableHeader(node),

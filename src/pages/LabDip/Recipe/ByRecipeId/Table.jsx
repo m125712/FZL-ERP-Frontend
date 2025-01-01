@@ -1,16 +1,9 @@
 import { useMemo } from 'react';
 
-
-
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime } from '@/ui';
 
-
-
-
-
 export default function Index({ recipe_entry }) {
-	// console.log(recipe_entry);
 	const yellow = recipe_entry?.filter((e) =>
 		e?.material_name.toLowerCase().includes('yellow')
 	);
@@ -49,10 +42,6 @@ export default function Index({ recipe_entry }) {
 	);
 
 	return (
-		<ReactTableTitleOnly
-			title='Details'
-			data={shade}
-			columns={columns}
-		/>
+		<ReactTableTitleOnly title='Details' data={shade} columns={columns} />
 	);
 }

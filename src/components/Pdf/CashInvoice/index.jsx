@@ -304,51 +304,6 @@ export default function Index(data) {
 
 		// * Main Table
 		content: [
-			// {
-			// 	table: {
-			// 		widths: ['*'],
-			// 		body: [
-			// 			[
-			// 				{
-			// 					text:
-			// 						'Order Ref No: ' +
-			// 						[
-			// 							...new Set(
-			// 								pi_cash_entry
-			// 									.concat(pi_cash_entry_thread)
-			// 									.map(
-			// 										(entry) =>
-			// 											entry.order_number
-			// 									)
-			// 							),
-			// 						].join(', '),
-			// 					border: [true, true, true, true],
-			// 				},
-			// 			],
-			// 		],
-			// 	},
-			// },
-			// {
-			// 	table: {
-			// 		widths: ['*'],
-			// 		body: [
-			// 			[
-			// 				{
-			// 					text:
-			// 						'Style: ' +
-			// 						[
-			// 							...new Set(
-			// 								pi_cash_entry
-			// 									.concat(pi_cash_entry_thread)
-			// 									.map((entry) => entry.style)
-			// 							),
-			// 						].join(', '),
-			// 					border: [true, true, true, true],
-			// 				},
-			// 			],
-			// 		],
-			// 	},
-			// },
 			{
 				table: {
 					headerRows: 1,

@@ -64,19 +64,47 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'is_delivered',
+				header: 'Delivered',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { is_delivered, gate_pass } = info.row.original;
+
+					const access = haveAccess.includes('click_delivered');
+					const overrideAccess = haveAccess.includes(
+						'click_delivered_override'
+					);
+					let permission = false;
+					if (gate_pass === 1) {
+						if (is_delivered === 0 && access) permission = true;
+						if (overrideAccess) permission = true;
+					}
+
+					return (
+						<SwitchToggle
+							checked={Number(info.getValue()) === 1}
+							onChange={() =>
+								handelDeliveryStatus(info.row.index)
+							}
+							disabled={!permission}
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'receive_status',
 				header: 'Received',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const { gate_pass, receive_status } = info.row.original;
+					const { is_delivered, receive_status } = info.row.original;
 
 					const access = haveAccess.includes('click_receive_status');
 					const overrideAccess = haveAccess.includes(
 						'click_receive_status_override'
 					);
 					let permission = false;
-					if (gate_pass) {
-						if (!receive_status && access) permission = true;
+					if (is_delivered === 1) {
+						if (receive_status === 0 && access) permission = true;
 						if (overrideAccess) permission = true;
 					}
 
@@ -284,17 +312,15 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 	};
-
-	// Gate Pass
-	const handelGatePass = async (idx) => {
+	const handelDeliveryStatus = async (idx) => {
 		const challan = data[idx];
-		const status = challan?.gate_pass == 1 ? 0 : 1;
+		const status = challan?.is_delivered == 1 ? 0 : 1;
 		const updated_at = GetDateTime();
 
 		await updateData.mutateAsync({
-			url: `/delivery/challan/${challan?.uuid}`,
+			url: `/delivery/challan/update-delivered/${challan?.uuid}`,
 			uuid: challan?.uuid,
-			updatedData: { gate_pass: status, updated_at },
+			updatedData: { is_delivered: status, updated_at },
 			isOnCloseNeeded: false,
 		});
 	};

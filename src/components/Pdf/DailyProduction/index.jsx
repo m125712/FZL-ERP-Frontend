@@ -18,47 +18,19 @@ export default function Index(data, from) {
 	const headerHeight = 80;
 	let footerHeight = 50;
 
-	const tableData = data.flatMap((item) => {
-		const typeRowSpan =
-			item.parties?.reduce((total, parties) => {
-				return (
-					total +
-						parties.orders?.reduce((orderTotal, order) => {
-							return (
-								orderTotal +
-									order.items?.reduce((itemTotal, item) => {
-										return (
-											itemTotal +
-											(item.other?.length || 1)
-										);
-									}, 0) || 0
-							);
-						}, 0) || 0
-				);
-			}, 0) || 0;
+	const pdfData = data || [];
+	const title = ['Order Wise Total', 'Party Wise Total', 'Type Wise Total'];
 
-		return item.parties?.flatMap((partyItem) => {
+	pdfData.forEach((item, index) => {
+		let totalTypeWiseCloseEnd = 0;
+		let totalTypeWiseOpenEnd = 0;
+		let totalTypeWiseTotalQuantity = 0;
+		return item.parties?.forEach((partyItem, partyIndex) => {
 			let totalPartyWiseCloseEnd = 0;
 			let totalPartyWiseOpenEnd = 0;
 			let totalPartyWiseTotalQuantity = 0;
-			const partyRowSpan =
-				partyItem.orders?.reduce((total, orders) => {
-					return (
-						total +
-							orders.items?.reduce((itemTotal, item) => {
-								return itemTotal + (item.other?.length || 1);
-							}, 0) || 0
-					);
-				}, 0) || 0;
-
-			return partyItem.orders?.flatMap((orderItem, orderIndex) => {
-				const orderRowSpan =
-					orderItem.items?.reduce((total, item) => {
-						return total + (item.other?.length || 1);
-					}, 0) || 0;
-
-				return orderItem.items?.flatMap((itemItem, itemIndex) => {
-					const itemRowSpan = itemItem.other?.length || 1;
+			partyItem.orders?.forEach((orderItem, orderIndex) => {
+				orderItem.items?.forEach((itemItem, itemIndex) => {
 					const totalCloseEnd = itemItem.other?.reduce(
 						(total, item) => {
 							return (
@@ -68,7 +40,6 @@ export default function Index(data, from) {
 						},
 						0
 					);
-
 					const totalOpenEnd = itemItem.other?.reduce(
 						(total, item) => {
 							return (
@@ -87,6 +58,9 @@ export default function Index(data, from) {
 					totalPartyWiseCloseEnd += totalCloseEnd;
 					totalPartyWiseOpenEnd += totalOpenEnd;
 					totalPartyWiseTotalQuantity += totalQuantity;
+					totalTypeWiseCloseEnd += totalCloseEnd;
+					totalTypeWiseOpenEnd += totalOpenEnd;
+					totalTypeWiseTotalQuantity += totalQuantity;
 					if (
 						!itemItem.other?.find(
 							(otherItem) => otherItem.size === 'Order Wise Total'
@@ -115,7 +89,66 @@ export default function Index(data, from) {
 							running_total_quantity: totalPartyWiseTotalQuantity,
 						});
 					}
+					if (
+						!itemItem.other?.find(
+							(otherItem) => otherItem.size === 'Type Wise Total'
+						) &&
+						itemIndex === orderItem.items.length - 1 &&
+						orderIndex === partyItem.orders.length - 1 &&
+						partyIndex === item.parties.length - 1
+					) {
+						itemItem.other?.push({
+							size: 'Type Wise Total',
+							running_total_close_end_quantity:
+								totalTypeWiseCloseEnd,
+							running_total_open_end_quantity:
+								totalTypeWiseOpenEnd,
+							running_total_quantity: totalTypeWiseTotalQuantity,
+						});
+					}
+				});
+			});
+		});
+	});
 
+	const tableData = pdfData.flatMap((item) => {
+		const typeRowSpan =
+			item.parties?.reduce((total, parties) => {
+				return (
+					total +
+						parties.orders?.reduce((orderTotal, order) => {
+							return (
+								orderTotal +
+									order.items?.reduce((itemTotal, item) => {
+										return (
+											itemTotal +
+											(item.other?.length || 1)
+										);
+									}, 0) || 0
+							);
+						}, 0) || 0
+				);
+			}, 0) || 0;
+
+		return item.parties?.flatMap((partyItem) => {
+			const partyRowSpan =
+				partyItem.orders?.reduce((total, orders) => {
+					return (
+						total +
+							orders.items?.reduce((itemTotal, item) => {
+								return itemTotal + (item.other?.length || 1);
+							}, 0) || 0
+					);
+				}, 0) || 0;
+
+			return partyItem.orders?.flatMap((orderItem, orderIndex) => {
+				const orderRowSpan =
+					orderItem.items?.reduce((total, item) => {
+						return total + (item.other?.length || 1);
+					}, 0) || 0;
+
+				return orderItem.items?.flatMap((itemItem) => {
+					const itemRowSpan = itemItem.other?.length || 1;
 					return itemItem.other?.map((otherItem) => ({
 						type: {
 							text: item.type,
@@ -136,39 +169,23 @@ export default function Index(data, from) {
 						size: {
 							text: otherItem.size,
 							rowSpan: 1,
-							bold:
-								otherItem.size === 'Order Wise Total' ||
-								otherItem.size === 'Party Wise Total'
-									? true
-									: false,
+							bold: title.includes(otherItem.size) ? true : false,
 						},
 						running_total_close_end_quantity: {
 							text: otherItem.running_total_close_end_quantity,
 							rowSpan: 1,
-							bold:
-								otherItem.size === 'Order Wise Total' ||
-								otherItem.size === 'Party Wise Total'
-									? true
-									: false,
+							bold: title.includes(otherItem.size) ? true : false,
 						},
 						running_total_open_end_quantity: {
 							text: otherItem.running_total_open_end_quantity,
 							rowSpan: 1,
-							bold:
-								orderItem.order_number === 'Order Wise Total' ||
-								partyItem.party_name === 'Party Wise Total'
-									? true
-									: false,
+							bold: title.includes(otherItem.size) ? true : false,
 						},
 						running_total_quantity: {
 							text: otherItem.running_total_quantity,
 							rowSpan: 1,
 
-							bold:
-								otherItem.size === 'Order Wise Total' ||
-								otherItem.size === 'Party Wise Total'
-									? true
-									: false,
+							bold: title.includes(otherItem.size) ? true : false,
 						},
 					}));
 				});
@@ -188,7 +205,11 @@ export default function Index(data, from) {
 	}, 0);
 
 	tableData.push({
-		type: { text: 'Grand Total', rowSpan: 1, bold: true },
+		type: {
+			text: 'Grand Total',
+			colSpan: 5,
+			bold: true,
+		},
 		party_name: { text: '', rowSpan: 1 },
 		order_number: { text: '', rowSpan: 1 },
 		item_description: { text: '', rowSpan: 1 },

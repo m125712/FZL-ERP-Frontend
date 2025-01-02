@@ -1,5 +1,9 @@
 import { lazy } from 'react';
 
+
+
+
+
 const ChallanEntry = lazy(() => import('@pages/Delivery/Challan/Entry'));
 const Dashboard = lazy(() => import('@pages/Delivery/Dashboard'));
 const PackingLists = lazy(() => import('@pages/Delivery/PackingList'));
@@ -45,7 +49,7 @@ export const DeliveryRoutes = [
 				path: '/delivery/gate-pass',
 				element: <GatePass />,
 				page_name: 'delivery__gate_pass',
-				actions: ['create', 'read'],
+				actions: ['create', 'read','click_manual_gate_pass'],
 			},
 			// * Challan
 			{
@@ -62,6 +66,8 @@ export const DeliveryRoutes = [
 					'click_receive_status',
 					'click_gate_pass_override',
 					'click_receive_status_override',
+					'click_delivered',
+					'click_delivered_override',
 				],
 			},
 			{

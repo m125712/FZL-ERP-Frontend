@@ -1,7 +1,6 @@
 import createGlobalState from '.';
 import { reportQK } from './QueryKeys';
 
-
 //* Stock
 export const useReportStock = (from, to, { enabled = false }) =>
 	createGlobalState({
@@ -76,8 +75,8 @@ export const useProductionReportThreadPartyWise = () =>
 		url: `/report/production-report-thread-party-wise`,
 	});
 
-export const useSample = (date) =>
+export const useSample = (date, is_sample = 1) =>
 	createGlobalState({
-		queryKey: reportQK.sample(date),
-		url: `/report/sample-report-by-date?date=${date}`,
+		queryKey: reportQK.sample(date, is_sample),
+		url: `/report/sample-report-by-date?date=${date}&is_sample=${is_sample}`,
 	});

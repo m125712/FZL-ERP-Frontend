@@ -51,6 +51,7 @@ export default function Index() {
 	const [endType, setEndType] = useState('');
 	const [itemType, setItemType] = useState('');
 	const [type, setType] = useState('full');
+	const [orderNo, setOrderNo] = useState(null);
 
 	const {
 		register,
@@ -74,7 +75,8 @@ export default function Index() {
 				otherwise: (schema) => schema,
 			}),
 			hand: UUID.when({
-				is: () => endType === 'Open End' || endType === '2 Way - Open End',
+				is: () =>
+					endType === 'Open End' || endType === '2 Way - Open End',
 				then: (schema) => schema.required('Required'),
 				otherwise: (schema) => schema,
 			}),
@@ -372,7 +374,7 @@ export default function Index() {
 			.then(() => reset(Object.assign({}, ORDER_NULL)))
 			.then(async () => {
 				await indexPageInvalidate();
-				navigate(`/order/details`);
+				navigate(`/order/details/${orderNo}/${order_description.uuid}`);
 			})
 			.catch((err) => console.log(err));
 	};
@@ -427,6 +429,7 @@ export default function Index() {
 						Controller,
 						watch,
 						reset,
+						setOrderNo,
 						is_logo_body: getValues('is_logo_body'),
 						is_logo_puller: getValues('is_logo_puller'),
 						isUpdate,

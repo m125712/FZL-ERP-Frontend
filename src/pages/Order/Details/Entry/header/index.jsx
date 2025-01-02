@@ -48,6 +48,7 @@ export default function Header({
 	getValues,
 	watch,
 	reset,
+	setOrderNo,
 	Controller,
 	is_logo_body,
 	is_logo_puller,
@@ -223,7 +224,10 @@ export default function Header({
 												item.value ==
 												getValues('order_info_uuid')
 										)}
-										onChange={(e) => onChange(e.value)}
+										onChange={(e) => {
+											onChange(e.value);
+											setOrderNo(e.label);
+										}}
 										isDisabled={order_number !== undefined}
 									/>
 								);

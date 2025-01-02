@@ -1510,7 +1510,12 @@ export const reportQK = {
 	],
 
 	// * Sample Report
-	sample: (date) => [...reportQK.all(), 'sample-report-by-date', date],
+	sample: (date, is_sample) => [
+		...reportQK.all(),
+		'sample-report-by-date',
+		date,
+		is_sample,
+	],
 };
 
 export const marketingQK = {

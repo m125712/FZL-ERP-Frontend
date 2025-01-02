@@ -1,5 +1,9 @@
 import { lazy } from 'react';
 
+
+
+
+
 const ChallanEntry = lazy(() => import('@pages/Delivery/Challan/Entry'));
 const Dashboard = lazy(() => import('@pages/Delivery/Dashboard'));
 const PackingLists = lazy(() => import('@pages/Delivery/PackingList'));
@@ -62,6 +66,8 @@ export const DeliveryRoutes = [
 					'click_receive_status',
 					'click_gate_pass_override',
 					'click_receive_status_override',
+					'click_delivered',
+					'click_delivered_override',
 				],
 			},
 			{

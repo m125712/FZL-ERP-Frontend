@@ -54,14 +54,14 @@ export const getPageHeader = (data) => {
 
 			// * Start of table
 			[
-				{ text: 'Party', bold: true, color: PRIMARY_COLOR },
-				data?.party_name,
+				{ text: 'Proforma For', bold: true, color: PRIMARY_COLOR },
+				data?.factory_name,
 				{ text: 'Advising Bank', bold: true, color: PRIMARY_COLOR },
 				data?.bank_name,
 			],
 			[
 				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
-				{ text: data?.party_address },
+				{ text: data?.factory_address },
 
 				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
 				{ text: data?.bank_address },

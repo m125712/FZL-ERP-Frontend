@@ -75,14 +75,17 @@ export default function Index() {
 		if (!scannedSymbol) return;
 		setSymbol(scannedSymbol);
 	}, []);
-	const [totalQuantity, setTotalQuantity] = useState(0);
+	// const [totalQuantity, setTotalQuantity] = useState(0);
 
-	useEffect(() => {
-		const total = packetListData
-			?.filter((item) => item.gate_pass === 1)
-			.reduce((acc, item) => acc + item.quantity, 0);
-		setTotalQuantity(total);
-	}, [packetListData, symbol]);
+	const totalQuantity = useCallback(
+		(packetListData) => {
+			const total = packetListData
+				?.filter((item) => item.gate_pass === 1)
+				.reduce((acc, item) => acc + 1, 0);
+			return total;
+		},
+		[packetListData, symbol]
+	);
 
 	const handlePacketScan = async (selectedOption, scannedSymbol) => {
 		try {
@@ -287,7 +290,7 @@ export default function Index() {
 						</SectionEntryBody>
 
 						<DynamicField
-							title={`Entry: Total Scan Item ${totalQuantity}/${getValues('entry')?.length}`}
+							title={`Entry: Total Scan Item ${totalQuantity(getValues('entry'))}/${getValues('entry')?.length}`}
 							tableHead={[
 								'Packet List',
 								'Order Number',

@@ -300,7 +300,7 @@ export default function Index() {
 					</SectionEntryBody>
 
 					<DynamicField
-						title='Entry'
+						title={`Entry: Total Scan Item: ${getValues('entry')?.length}`}
 						handelAppend={handelEntryAppend}
 						showAppendButton={false}
 						tableHead={[

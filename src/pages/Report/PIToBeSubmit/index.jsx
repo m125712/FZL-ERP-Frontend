@@ -3,7 +3,7 @@ import { usePIToBeSubmitted } from '@/state/Report';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, StatusButton } from '@/ui';
+import { DateTime, LinkWithCopy, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -30,6 +30,39 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorFn: (row) => {
+					const { order_object } = row;
+					return order_object.map((order) => {
+						return order.label;
+					});
+				},
+				id: 'order_object',
+				header: 'O/N',
+				width: 'w-40',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const orderNumbers = info.row.original.order_object;
+					return orderNumbers?.map((orderNumber) => {
+						if (orderNumber === null) return;
+						const isThreadOrder = orderNumber.label?.includes('ST');
+						const number = orderNumber.label;
+						const uuid = orderNumber.uuid;
+						return (
+							<LinkWithCopy
+								key={number}
+								title={number}
+								id={isThreadOrder ? uuid : number}
+								uri={
+									isThreadOrder
+										? '/thread/order-info'
+										: '/order/details'
+								}
+							/>
+						);
+					});
+				},
+			},
+			{
 				accessorKey: 'total_quantity',
 				header: 'Order  QTY',
 				enableColumnFilter: false,
@@ -42,14 +75,39 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'total_balance_delivery_quantity',
-				header: 'Undelivered',
+				accessorKey: 'total_pi',
+				header: 'PI Qty',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'total_balance_pi_value',
-				header: 'Total PI Value',
+				accessorKey: 'total_non_pi',
+				header: 'Non PI Qty',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
+			{
+				accessorKey: 'total_quantity_value',
+				header: 'Total Quantity Value',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_delivered_value',
+				header: 'Delivered Value',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_pi_value',
+				header: 'PI Qty Value',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_non_pi_value',
+				header: 'Non PI Qty Value',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

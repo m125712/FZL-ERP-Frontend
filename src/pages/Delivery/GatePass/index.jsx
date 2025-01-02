@@ -10,7 +10,7 @@ import { useSymbologyScanner } from '@use-symbology-scanner/react';
 import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { useNavigate } from 'react-router-dom';
-import { useRHF } from '@/hooks';
+import { useAccess, useRHF } from '@/hooks';
 
 import { Footer } from '@/components/Modal/ui';
 import { ShowLocalToast } from '@/components/Toast';
@@ -26,6 +26,7 @@ export default function Index() {
 	const [scannerActive, setScannerActive] = useState(true);
 	const [onFocus, setOnFocus] = useState(true);
 	const navigate = useNavigate();
+	const haveAccess = useAccess('delivery__gate_pass');
 
 	const {
 		handleSubmit,
@@ -369,9 +370,9 @@ export default function Index() {
 									<td className={`w-80 ${rowClass}`}>
 										<SwitchToggle
 											disabled={
-												getValues(
-													`entry[${index}].gate_pass`
-												) === 0
+												!haveAccess.includes(
+													'click_manual_gate_pass'
+												)
 											}
 											onFocus={() => {
 												setValue(

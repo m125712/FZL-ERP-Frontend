@@ -68,6 +68,13 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
+			{
+				accessorKey: 'total_quantity_value',
+				header: 'Value',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'total_delivered',
 				header: 'Delivered',
@@ -75,8 +82,20 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'total_delivered_value',
+				header: 'Value',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'total_pi',
 				header: 'PI Qty',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_pi_value',
+				header: 'Value',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -88,26 +107,8 @@ export default function Index() {
 			},
 
 			{
-				accessorKey: 'total_quantity_value',
-				header: 'Total Quantity Value',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'total_delivered_value',
-				header: 'Delivered Value',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'total_pi_value',
-				header: 'PI Qty Value',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'total_non_pi_value',
-				header: 'Non PI Qty Value',
+				header: 'Value',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

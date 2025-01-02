@@ -65,7 +65,7 @@ export default function Index(data) {
 				? sliderNode
 				: zipperNode;
 
-	const headerHeight = 207;
+	const headerHeight = 220;
 	const footerHeight = 50;
 	const { challan_entry } = data;
 

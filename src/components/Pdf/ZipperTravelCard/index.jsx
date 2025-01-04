@@ -9,6 +9,7 @@ import { getPageFooter, getPageHeader } from './utils';
 const node = [
 	getTable('order_number', 'O/N'),
 	getTable('item_description', 'Description'),
+	getTable('color', 'Color'),
 	getTable('quantity', 'Quantity (pcs)', 'right'),
 	getTable('production_quantity_in_kg', 'Expected (KG)', 'right'),
 	getTable('production_quantity_in_kg', 'Actual (KG)', 'right'),
@@ -68,7 +69,7 @@ export default function Index(batch) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', '*', '*', '*'],
+					widths: ['*', '*', '*', '*', '*', '*'],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -81,6 +82,10 @@ export default function Index(batch) {
 							},
 							{
 								text: item.item_description,
+								alignment: 'left',
+							},
+							{
+								text: item.color,
 								alignment: 'left',
 							},
 							{
@@ -105,8 +110,9 @@ export default function Index(batch) {
 								text: 'Total',
 								bold: true,
 								alignment: 'right',
-								colSpan: 2,
+								colSpan: 3,
 							},
+							{},
 							{},
 							{
 								text: total_quantity,

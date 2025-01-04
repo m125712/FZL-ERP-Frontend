@@ -1,6 +1,5 @@
 import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
-import { Pdf } from '@/ui/Others';
 
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
@@ -302,36 +301,29 @@ export default function Index(data, from, to) {
 								? otherItem.size
 								: '---'
 							: `${otherItem.size.includes('-') ? `(${otherItem.size})` : otherItem.size} ${otherItem.unit}`,
-						rowSpan: 1,
+
 						bold: title.includes(otherItem.size) ? true : false,
 					},
 					running_total_close_end_quantity: {
 						text: otherItem.running_total_close_end_quantity,
-						rowSpan: 1,
 						bold: title.includes(otherItem.size) ? true : false,
 					},
 					running_total_open_end_quantity: {
 						text: otherItem.running_total_open_end_quantity,
-						rowSpan: 1,
 						bold: title.includes(otherItem.size) ? true : false,
 					},
 					running_total_quantity: {
 						text: otherItem.running_total_quantity,
-						rowSpan: 1,
-
 						bold: title.includes(otherItem.size) ? true : false,
 					},
 					company_price_dzn: {
 						text: otherItem.company_price_dzn
 							? otherItem.company_price_dzn + '/DZN'
 							: '---',
-						rowSpan: 1,
 						bold: title.includes(otherItem.size) ? true : false,
 					},
 					value: {
-						text: otherItem.running_total_value,
-
-						rowSpan: 1,
+						text: Number(otherItem.running_total_value).toFixed(3),
 						bold: title.includes(otherItem.size) ? true : false,
 					},
 				}));

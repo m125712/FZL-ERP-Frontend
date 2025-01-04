@@ -45,11 +45,12 @@ export default function SingleInformation({ order, idx, hasInitialOrder }) {
 			/>,
 		];
 	};
-
+	let title = order?.item_description;
+	if (hasInitialOrder) {
+		title += ` #${idx + 1}`;
+	}
 	return (
-		<SectionContainer
-			title={`${idx !== undefined && `${order?.item_description} #${idx + 1}`}`}
-			buttons={renderButtons()}>
+		<SectionContainer title={title} buttons={renderButtons()}>
 			{!hasInitialOrder && <OrderDescription order={order} />}
 			<ItemDescription
 				className={'border-secondary/30 md:border-b 2xl:border-b-0'}

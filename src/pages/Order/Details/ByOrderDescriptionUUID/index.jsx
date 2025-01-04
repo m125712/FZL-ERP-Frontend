@@ -63,8 +63,8 @@ export default function Index({ initial_order, idx }) {
 		<div className='space-y-4'>
 			<Suspense fallback={<InformationSkeleton />}>
 				<SingleInformation
-					order={order}
 					idx={idx}
+					order={order}
 					hasInitialOrder={hasInitialOrder}
 				/>
 			</Suspense>

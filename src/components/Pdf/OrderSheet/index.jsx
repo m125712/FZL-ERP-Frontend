@@ -100,8 +100,6 @@ export default function OrderSheetPdf(order_sheet) {
 					return acc;
 				}, {});
 
-				console.log(res);
-
 				//todo: order_type condition will start from here
 				if (entry.order_type !== 'slider') {
 					// * garments info
@@ -194,11 +192,9 @@ export default function OrderSheetPdf(order_sheet) {
 																res[style]
 																	.length,
 															text: style,
-															style: 'tableCell',
 														},
 														{
 															text: colorName,
-															style: 'tableCell',
 														},
 														...slicedQuantities.map(
 															(qty, i) => ({
@@ -212,7 +208,6 @@ export default function OrderSheetPdf(order_sheet) {
 																			? 'B -' +
 																				qty
 																			: qty,
-																style: 'tableCell',
 																alignment:
 																	'right',
 															})
@@ -226,7 +221,6 @@ export default function OrderSheetPdf(order_sheet) {
 																	Number(qty),
 																0
 															),
-															style: 'tableCell',
 															alignment: 'right',
 														},
 													];
@@ -238,12 +232,10 @@ export default function OrderSheetPdf(order_sheet) {
 										[
 											{
 												text: 'Total Color',
-												style: 'tableFooter',
 												alignment: 'Center',
 											},
 											{
 												text: uniqueColor(),
-												style: 'tableFooter',
 												alignment: 'right',
 											},
 											...chunk.map((size) => {
@@ -269,14 +261,12 @@ export default function OrderSheetPdf(order_sheet) {
 														TotalChunkQTY += total;
 
 														return total;
-													})(), // * Immediately invoke the function,
-													style: 'tableFooter',
+													})(), // * Immediately invoke the function
 													alignment: 'right',
 												};
 											}),
 											{
 												text: chunkTotal,
-												style: 'tableFooter',
 												alignment: 'right',
 											},
 										],
@@ -342,7 +332,6 @@ export default function OrderSheetPdf(order_sheet) {
 													[
 														{
 															text: 'Remarks',
-															style: 'tableFooter',
 															alignment: 'Center',
 														},
 														{
@@ -350,7 +339,6 @@ export default function OrderSheetPdf(order_sheet) {
 																chunk.length +
 																2,
 															text: entry?.remarks,
-															style: 'tableFooter',
 															alignment: 'left',
 														},
 													],
@@ -414,7 +402,6 @@ export default function OrderSheetPdf(order_sheet) {
 														rowSpan:
 															res[style].length,
 														text: style,
-														style: 'tableCell',
 													},
 													...quantities.map((qty) => {
 														SliderTotal += qty;
@@ -423,7 +410,6 @@ export default function OrderSheetPdf(order_sheet) {
 																qty === 0
 																	? '-'
 																	: qty,
-															style: 'tableCell',
 															alignment: 'right',
 														};
 													}),
@@ -434,7 +420,6 @@ export default function OrderSheetPdf(order_sheet) {
 																Number(qty),
 															0
 														),
-														style: 'tableCell',
 														alignment: 'right',
 													},
 												];
@@ -462,13 +447,11 @@ export default function OrderSheetPdf(order_sheet) {
 												[
 													{
 														text: 'Remarks',
-														style: 'tableFooter',
 														alignment: 'Center',
 													},
 													{
 														colSpan: 2,
 														text: entry?.remarks,
-														style: 'tableFooter',
 														alignment: 'left',
 													},
 												],

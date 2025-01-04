@@ -1,14 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import {
-	useProductionReportDateWise,
-	useProductionStatementReport,
-	useReportStock,
-} from '@/state/Report';
-import { formToJSON } from 'axios';
+import { useProductionStatementReport } from '@/state/Report';
 import { format } from 'date-fns';
 
 import Pdf from '@/components/Pdf/ProductionStatement';
-import ReactTable from '@/components/Table';
 
 import PageInfo from '@/util/PageInfo';
 

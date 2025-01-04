@@ -47,7 +47,7 @@ export default function OrderSheetPdf(order_sheet) {
 				}),
 				// layout: "noBorders",
 				margin: [xMargin, 2],
-				fontSize: DEFAULT_FONT_SIZE - 2,
+				fontSize: DEFAULT_FONT_SIZE,
 			};
 		},
 
@@ -229,11 +229,9 @@ export default function OrderSheetPdf(order_sheet) {
 																res[style]
 																	.length,
 															text: style,
-															style: 'tableCell',
 														},
 														{
 															text: colorName,
-															style: 'tableCell',
 														},
 														...slicedQuantities.map(
 															(qty, i) => ({
@@ -247,7 +245,6 @@ export default function OrderSheetPdf(order_sheet) {
 																			? 'B -' +
 																				qty
 																			: qty,
-																style: 'tableCell',
 																alignment:
 																	'right',
 															})
@@ -261,7 +258,6 @@ export default function OrderSheetPdf(order_sheet) {
 																	Number(qty),
 																0
 															),
-															style: 'tableCell',
 															alignment: 'right',
 														},
 													];
@@ -273,12 +269,10 @@ export default function OrderSheetPdf(order_sheet) {
 										[
 											{
 												text: 'Total Color',
-												style: 'tableFooter',
 												alignment: 'Center',
 											},
 											{
 												text: uniqueColor(),
-												style: 'tableFooter',
 												alignment: 'right',
 											},
 											...chunk.map((size) => {
@@ -305,13 +299,11 @@ export default function OrderSheetPdf(order_sheet) {
 
 														return total;
 													})(), // Immediately invoke the function,
-													style: 'tableFooter',
 													alignment: 'right',
 												};
 											}),
 											{
 												text: chunkTotal,
-												style: 'tableFooter',
 												alignment: 'right',
 											},
 										],
@@ -325,7 +317,6 @@ export default function OrderSheetPdf(order_sheet) {
 													[
 														{
 															text: 'Garments',
-															style: 'tableHeader',
 															alignment: 'Center',
 														},
 														{
@@ -364,7 +355,6 @@ export default function OrderSheetPdf(order_sheet) {
 																	? entry?.end_user_short_name
 																	: '',
 															],
-															style: 'tableHeader',
 															alignment: 'left',
 														},
 													],
@@ -377,7 +367,6 @@ export default function OrderSheetPdf(order_sheet) {
 													[
 														{
 															text: 'Remarks',
-															style: 'tableFooter',
 															alignment: 'Center',
 														},
 														{
@@ -385,7 +374,6 @@ export default function OrderSheetPdf(order_sheet) {
 																chunk.length +
 																2,
 															text: entry?.remarks,
-															style: 'tableFooter',
 															alignment: 'left',
 														},
 													],
@@ -449,7 +437,6 @@ export default function OrderSheetPdf(order_sheet) {
 														rowSpan:
 															res[style].length,
 														text: style,
-														style: 'tableCell',
 													},
 													...quantities.map((qty) => {
 														SliderTotal += qty;
@@ -458,7 +445,6 @@ export default function OrderSheetPdf(order_sheet) {
 																qty === 0
 																	? '-'
 																	: qty,
-															style: 'tableCell',
 															alignment: 'right',
 														};
 													}),
@@ -469,7 +455,6 @@ export default function OrderSheetPdf(order_sheet) {
 																Number(qty),
 															0
 														),
-														style: 'tableCell',
 														alignment: 'right',
 													},
 												];
@@ -497,13 +482,11 @@ export default function OrderSheetPdf(order_sheet) {
 												[
 													{
 														text: 'Remarks',
-														style: 'tableFooter',
 														alignment: 'Center',
 													},
 													{
 														colSpan: 2,
 														text: entry?.remarks,
-														style: 'tableFooter',
 														alignment: 'left',
 													},
 												],
@@ -546,7 +529,7 @@ export default function OrderSheetPdf(order_sheet) {
 					body: [
 						[
 							{
-								text: 'Grand TotalLLLL',
+								text: 'Grand Total',
 								style: 'tableFooter',
 								alignment: 'right',
 							},

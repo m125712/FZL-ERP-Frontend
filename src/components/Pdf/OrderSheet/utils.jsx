@@ -247,13 +247,13 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 		[
 			{
 				text: `Tape #${i + 1}`,
-				style: 'tableHeader',
+				// style: 'tableHeader',
 				alignment: 'Center',
 			},
 			{
 				colSpan: uniqueSizes.length + 2,
 				text: [tape.filter(Boolean).join(' / ')],
-				style: 'tableHeader',
+				// style: 'tableHeader',
 			},
 			...Array.from({ length: uniqueSizes.length + 1 }, () => ''),
 		],
@@ -263,13 +263,13 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 					[
 						{
 							text: `Slider #${i + 1}`,
-							style: 'tableHeader',
+							// style: 'tableHeader',
 							alignment: 'Center',
 						},
 						{
 							colSpan: uniqueSizes.length + 2,
 							text: [slider.filter(Boolean).join(' / ')],
-							style: 'tableHeader',
+							// style: 'tableHeader',
 						},
 						...Array.from(
 							{ length: uniqueSizes.length + 1 },
@@ -282,7 +282,7 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 					[
 						{
 							text: `Others #${i + 1}`,
-							style: 'tableHeader',
+							// style: 'tableHeader',
 							alignment: 'Center',
 						},
 						{
@@ -297,7 +297,7 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 
 								description ? `(${description})` : '',
 							],
-							style: 'tableHeader',
+							// style: 'tableHeader',
 						},
 						...Array.from(
 							{ length: uniqueSizes.length + 1 },

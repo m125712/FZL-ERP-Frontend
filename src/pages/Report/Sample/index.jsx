@@ -30,6 +30,7 @@ export default function Index() {
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 
@@ -49,6 +50,7 @@ export default function Index() {
 				accessorKey: 'item_description',
 				header: 'Product',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: ({ row }) => {
 					const { order_description_uuid, order_number } =
 						row.original;
@@ -65,12 +67,14 @@ export default function Index() {
 				accessorKey: 'item_details',
 				header: 'Item',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'slider_details',
 				header: 'Slider',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -84,7 +88,9 @@ export default function Index() {
 				header: 'Order Date',
 				enableColumnFilter: false,
 				cell: (info) =>
-					info.getValue() && <DateTime date={info.getValue()} />,
+					info.getValue() && (
+						<DateTime date={info.getValue()} isTime={false} />
+					),
 			},
 			{
 				accessorKey: 'item_name',
@@ -95,6 +101,7 @@ export default function Index() {
 			{
 				accessorKey: 'style',
 				header: 'Style',
+				width: 'w-32',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -102,6 +109,7 @@ export default function Index() {
 				accessorKey: 'color',
 				header: 'Color',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{

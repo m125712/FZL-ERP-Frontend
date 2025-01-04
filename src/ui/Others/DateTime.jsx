@@ -14,11 +14,17 @@ const Body = ({ value, className = '' }) => {
 	);
 };
 
-function DateTime({ date, isDate = true, isTime = true }) {
+function DateTime({
+	date,
+	isDate = true,
+	isTime = true,
+	customizedDateFormate = 'dd/MM/yy',
+	customizedTimeFormate = 'h:mm a',
+}) {
 	if (!date) return '--';
 
-	const customizedDate = format(new Date(date), 'dd/MM/yy');
-	const customizedTime = format(new Date(date), 'h:mm a');
+	const customizedDate = format(new Date(date), customizedDateFormate);
+	const customizedTime = format(new Date(date), customizedTimeFormate);
 
 	return (
 		<div className='flex flex-col'>

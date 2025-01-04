@@ -1,11 +1,11 @@
 import { useEffect, useMemo } from 'react';
 import { useDyeingFinishingBatch } from '@/state/Dyeing';
-import { differenceInDays, subDays } from 'date-fns';
+import { differenceInDays, format, subDays } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { DateTime, EditDelete, LinkOnly, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -25,7 +25,7 @@ export default function index() {
 		() => [
 			{
 				accessorKey: 'batch_number',
-				header: 'Batch No.',
+				header: 'Batch',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { uuid } = info.row.original;
@@ -55,6 +55,7 @@ export default function index() {
 				accessorKey: 'item_description',
 				header: 'Item',
 				enableColumnFilter: false,
+				width: 'w-44',
 				cell: (info) => {
 					const { order_number, order_description_uuid } =
 						info.row.original;
@@ -106,10 +107,20 @@ export default function index() {
 					</div>
 				),
 				enableColumnFilter: false,
+				// cell: (info) => (
+				// 	<DateTime date={info.getValue()} isTime={false} />
+				// ),
 				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
+					<LinkOnly
+						title={
+							<DateTime date={info.getValue()} isTime={false} />
+						}
+						id={format(new Date(info.getValue()), 'yyyy-MM-dd')}
+						uri='/planning/finishing-dashboard/batch-report'
+					/>
 				),
 			},
+
 			{
 				accessorKey: 'status',
 				header: 'Status',
@@ -159,7 +170,7 @@ export default function index() {
 
 					return (
 						<div>
-							<span className='text-xs font-bold text-gray-600'>
+							<span className='text-sm font-bold text-gray-600'>
 								{info.getValue()} days
 							</span>
 							<DateTime date={slider_day} isTime={false} />
@@ -203,7 +214,7 @@ export default function index() {
 
 					return (
 						<div>
-							<span className='text-xs font-bold text-gray-600'>
+							<span className='text-sm font-bold text-gray-600'>
 								{remainingDays < 0 ? 0 : remainingDays} days
 							</span>
 							<DateTime date={dyeing_day} isTime={false} />

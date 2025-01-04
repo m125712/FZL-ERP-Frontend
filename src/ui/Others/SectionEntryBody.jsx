@@ -1,4 +1,6 @@
-export default function BodyTemplate({ title, header, children }) {
+import { cn } from '@/lib/utils';
+
+export default function BodyTemplate({ title, header, className, children }) {
 	return (
 		<div className='rounded-md bg-primary text-primary-content'>
 			<div className='mr-2 flex items-center justify-between'>
@@ -7,7 +9,11 @@ export default function BodyTemplate({ title, header, children }) {
 				</span>
 				{header}
 			</div>
-			<div className='flex flex-col gap-1.5 space-y-2 border border-t-0 border-secondary/30 bg-base-100 p-3 text-secondary-content'>
+			<div
+				className={cn(
+					'flex flex-col gap-1.5 border border-t-0 border-secondary/30 bg-base-100 p-3 text-secondary-content',
+					className
+				)}>
 				{children}
 			</div>
 		</div>

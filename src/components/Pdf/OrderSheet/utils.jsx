@@ -219,11 +219,11 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 			: '',
 		order_type === 'tape' ? 'Long Chain' : '',
 		end_type_name
-			? end_type_name === 'Open End' || end_type_name === '2 Way - Open End'
+			? end_type_name === 'Open End' ||
+				end_type_name === '2 Way - Open End'
 				? end_type_name + ' - ' + hand_name
 				: end_type_name
 			: '',
-		lock_type_name,
 		teeth_color_name
 			? `Teeth: ${teeth_type_name ? teeth_type_name + ' - ' : ''} ${teeth_color_name} Color`
 			: '',
@@ -231,6 +231,7 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 	];
 	let slider = [
 		puller_type_name ? `${puller_type_name} Puller` : '',
+		lock_type_name,
 		coloring_type_name,
 		slider_color_name ? `Slider: ${slider_color_name}` : '',
 		slider_material,

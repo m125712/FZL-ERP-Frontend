@@ -1,22 +1,19 @@
-import { Suspense } from '@/components/Feedback';
-import ReactTable from '@/components/Table';
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useSliderColoringRM } from '@/state/Slider';
 import { useAccess } from '@/hooks';
 
-import { useSliderColoringRM } from '@/state/Slider';
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
 import { EditDelete, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
 	const { data, isLoading, url } = useSliderColoringRM();
 
-	const info = new PageInfo(
-		'Die Casting RM Stock',
-		url,
-		'slider__coloring_rm'
-	);
+	const info = new PageInfo('Coloring RM Stock', url, 'slider__coloring_rm');
 	const hameAccess = useAccess(info.getTab());
 
 	useEffect(() => {

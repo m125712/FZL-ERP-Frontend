@@ -26,6 +26,7 @@ export const orderQK = {
 	//* Description
 	descriptions: () => [...orderQK.all(), 'description'],
 	description: (uuid) => [...orderQK.descriptions(), uuid],
+	orderDescriptionWithEntry: (uuid) => [...orderQK.descriptions(), uuid, 'entry'],
 
 	//* Entry
 	entries: () => [...orderQK.all(), 'entries'],

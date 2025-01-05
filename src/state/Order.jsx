@@ -40,6 +40,12 @@ export const useOrderDescriptionByUUID = (uuid) =>
 		url: `/zipper/order-description/${uuid}`,
 	});
 
+export const useOrderDescriptionWithEntry = (uuid) =>
+	createGlobalState({
+		queryKey: orderQK.orderDescriptionWithEntry(uuid),
+		url: `/zipper/order/details/single-order/by/${uuid}/UUID`,
+	});
+
 // * Entry * //
 export const useOrderEntries = () =>
 	createGlobalState({

@@ -1,8 +1,14 @@
 import { lazy, useEffect, useState } from 'react';
+import {
+	useOtherOrderPropertiesByGarmentsWash,
+	useOtherOrderPropertiesBySpecialRequirement,
+} from '@/state/Other';
 import { Navigate, useParams } from 'react-router-dom';
 import { useFetchFunc } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
+import OrderSheetPdf from '@/components/Pdf/OrderSheet';
+import OrderSheetPdf2 from '@/components/Pdf/OrderSheet2';
 
 import InformationSkeleton from '../_components/Information/skeleton';
 
@@ -10,15 +16,35 @@ const SingleInformation = lazy(() => import('../_components/Information'));
 const Table = lazy(() => import('../_components/Table'));
 const Timeline = lazy(() => import('../_components/Timeline'));
 
+const createPDF = (pdfdata, setGetPdfData, PdfGenerator) => {
+	const res = PdfGenerator(pdfdata);
+
+	res.getDataUrl((dataUrl) => {
+		setGetPdfData(dataUrl);
+	});
+};
+
 export default function Index({ initial_order, idx }) {
 	const { order_number, order_description_uuid } = useParams();
+	const isEnabled =
+		order_description_uuid !== null && order_description_uuid !== undefined;
+
+	const { data: garments } = useOtherOrderPropertiesByGarmentsWash({
+		enabled: isEnabled,
+	});
+
+	const { data: sr } = useOtherOrderPropertiesBySpecialRequirement({
+		enabled: isEnabled,
+	});
+
+	const [getPdfData, setGetPdfData] = useState(null);
+	const [getPdfData2, setGetPdfData2] = useState(null);
 
 	const [order, setOrder] = useState(initial_order || []);
-	const [sliderQty, setSliderQty] = useState(0);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const hasInitialOrder =
-		Object.keys(initial_order || []).length > 0 ? true : false;
+		Object.keys(initial_order || []).length > 0;
 
 	useEffect(() => {
 		document.title = order_number;
@@ -32,14 +58,45 @@ export default function Index({ initial_order, idx }) {
 		} else {
 			setLoading(false);
 		}
-	}, [order_description_uuid, initial_order]);
+	}, [order_description_uuid]);
 
-	if (loading)
-		return <span className='loading loading-dots loading-lg z-50' />;
+	useEffect(() => {
+		if (order?.order_entry?.length > 0 && order_description_uuid) {
+			const order_info = {
+				id: order?.id,
+				pi_numbers: order?.pi_numbers,
+				is_bill: order?.is_bill,
+				is_cash: order?.is_cash,
+				is_sample: order?.is_sample,
+				is_inch: order?.is_inch,
+				order_status: order?.order_status,
+				order_number: order?.order_number,
+				party_name: order?.party_name,
+				buyer_name: order?.buyer_name,
+				marketing_name: order?.marketing_name,
+				merchandiser_name: order?.merchandiser_name,
+				factory_name: order?.factory_name,
+				factory_address: order?.factory_address,
+				user_name: order?.user_name,
+				marketing_priority: order?.marketing_priority,
+				factory_priority: order?.factory_priority,
+				updated_at: order?.updated_at,
+				created_at: order?.created_at,
+			};
 
-	if (!order) return <Navigate to='/not-found' />;
+			const order_sheet = {
+				order_info,
+				order_entry: [order],
+				garments,
+				sr,
+			};
 
-	const total = order?.order_entry.reduce(
+			createPDF(order_sheet, setGetPdfData, OrderSheetPdf);
+			createPDF(order_sheet, setGetPdfData2, OrderSheetPdf2);
+		}
+	}, [order, garments, sr, order_description_uuid]);
+
+	const total = order?.order_entry?.reduce(
 		(totals, item) => {
 			totals.Quantity += parseFloat(item.quantity) || 0;
 			totals.piQuantity += parseFloat(item.total_pi_quantity) || 0;
@@ -59,9 +116,28 @@ export default function Index({ initial_order, idx }) {
 		}
 	);
 
-	
+	if (loading)
+		return <span className='loading loading-dots loading-lg z-50' />;
+
+	if (!order) return <Navigate to='/not-found' />;
+
 	return (
 		<div className='space-y-4'>
+			{order_description_uuid && (
+				<div className='flex gap-6'>
+					<iframe
+						id='iframeContainer'
+						src={getPdfData}
+						className='h-[40rem] w-full rounded-md border-none'
+					/>
+					<iframe
+						id='iframeContainer'
+						src={getPdfData2}
+						className='h-[40rem] w-full rounded-md border-none'
+					/>
+				</div>
+			)}
+
 			<Suspense fallback={<InformationSkeleton />}>
 				<SingleInformation
 					idx={idx}

@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react';
+import { useAuth } from '@/context/auth';
 import { usePIToBeSubmitted } from '@/state/Report';
 import { useAccess } from '@/hooks';
 
@@ -7,15 +8,44 @@ import { DateTime, LinkWithCopy, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_all_orders')) {
+		return `all=true`;
+	}
+	if (
+		haveAccess.includes('show_approved_orders') &&
+		haveAccess.includes('show_own_orders') &&
+		userUUID
+	) {
+		return `own_uuid=${userUUID}&approved=true`;
+	}
+
+	if (haveAccess.includes('show_approved_orders')) {
+		return 'all=false&approved=true';
+	}
+
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return `all=false`;
+};
+
 export default function Index() {
-	const { data, isLoading, url } = usePIToBeSubmitted();
+	const haveAccess = useAccess('report__pi_to_be_submitted');
+	const { user } = useAuth();
+
+	const { data, isLoading, url } = usePIToBeSubmitted(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
 	const info = new PageInfo(
 		'PI To Be Submitted',
 		url,
 		'report__pi_to_be_submitted'
 	);
-
-	const haveAccess = useAccess('report__pi_to_be_submitted');
 
 	useEffect(() => {
 		document.title = info.getTabName();

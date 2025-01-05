@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react';
+import { useAuth } from '@/context/auth';
 import { useProductionReport } from '@/state/Report';
 import { useAccess } from '@/hooks';
 
@@ -7,19 +8,45 @@ import { DateTime, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_all_orders')) {
+		return `all=true`;
+	}
+	if (
+		haveAccess.includes('show_approved_orders') &&
+		haveAccess.includes('show_own_orders') &&
+		userUUID
+	) {
+		return `own_uuid=${userUUID}&approved=true`;
+	}
+
+	if (haveAccess.includes('show_approved_orders')) {
+		return 'all=false&approved=true';
+	}
+
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return `all=false`;
+};
+
 export default function Index() {
+	const haveAccess = useAccess('report__production_report_sm');
+	const { user } = useAuth();
+
 	const { data, isLoading, url } = useProductionReport(
-		'thread-sales-marketing'
+		`thread-sales-marketing?${getPath(haveAccess, user?.uuid)}`,
+		{
+			enabled: !!user?.uuid,
+		}
 	);
-	
+
 	const info = new PageInfo(
 		'Production Report S&M (Thread)',
 		url,
 		'report__production_report_sm'
 	);
-
-	const haveAccess = useAccess('report__production_report_sm');
-
 
 	const columns = useMemo(
 		() => [
@@ -59,7 +86,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			
 		],
 		[data]
 	);

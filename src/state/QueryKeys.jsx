@@ -26,7 +26,11 @@ export const orderQK = {
 	//* Description
 	descriptions: () => [...orderQK.all(), 'description'],
 	description: (uuid) => [...orderQK.descriptions(), uuid],
-	orderDescriptionWithEntry: (uuid) => [...orderQK.descriptions(), uuid, 'entry'],
+	orderDescriptionWithEntry: (uuid) => [
+		...orderQK.descriptions(),
+		uuid,
+		'entry',
+	],
 
 	//* Entry
 	entries: () => [...orderQK.all(), 'entries'],
@@ -1461,11 +1465,12 @@ export const reportQK = {
 	//* Stock
 	stock: (from, to) => [...reportQK.all(), 'stock', from, to],
 	//*Production Report DateWise
-	productionReportDateWise: (from, to) => [
+	productionReportDateWise: (from, to, query) => [
 		...reportQK.all(),
 		'production-report-date-wise',
 		from,
 		to,
+		query,
 	],
 	productionReportStatementReport: (from, to) => [
 		...reportQK.all(),
@@ -1488,13 +1493,17 @@ export const reportQK = {
 	],
 
 	//* Daily Challan
-	dailyChallan: () => [...reportQK.all(), 'daily-challan'],
+	dailyChallan: (query) => [...reportQK.all(), 'daily-challan', query],
 
 	//* PI Register
-	piRegister: () => [...reportQK.all(), 'pi-register'],
+	piRegister: (query) => [...reportQK.all(), 'pi-register', query],
 
 	//* PI To Be Submitted
-	piToBeSubmitted: () => [...reportQK.all(), 'pi-to-be-submitted'],
+	piToBeSubmitted: (query) => [
+		...reportQK.all(),
+		'pi-to-be-submitted',
+		query,
+	],
 
 	//* Lc
 	lc: (url) => [...reportQK.all(), 'lc' + url],
@@ -1505,9 +1514,10 @@ export const reportQK = {
 	deliveryStatement: () => [...reportQK.all(), 'delivery-statement-report'],
 
 	//* Production Report Thread Party Wise
-	productionReportThreadPartyWise: () => [
+	productionReportThreadPartyWise: (query) => [
 		...reportQK.all(),
 		'production-report-thread-party-wise',
+		query,
 	],
 
 	// * Sample Report

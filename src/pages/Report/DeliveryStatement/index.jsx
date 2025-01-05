@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react';
+import { useAuth } from '@/context/auth';
 import { useDeliveryStatement } from '@/state/Report';
 import { useAccess } from '@/hooks';
 
@@ -7,15 +8,44 @@ import { DateTime, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_all_orders')) {
+		return `all=true`;
+	}
+	if (
+		haveAccess.includes('show_approved_orders') &&
+		haveAccess.includes('show_own_orders') &&
+		userUUID
+	) {
+		return `own_uuid=${userUUID}&approved=true`;
+	}
+
+	if (haveAccess.includes('show_approved_orders')) {
+		return 'all=false&approved=true';
+	}
+
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return `all=false`;
+};
+
 export default function Index() {
-	const { data, isLoading, url } = useDeliveryStatement();
+	const haveAccess = useAccess('report__delivery_statement');
+	const { user } = useAuth();
+
+	const { data, isLoading, url } = useDeliveryStatement(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
 	const info = new PageInfo(
 		'Delivery Statement',
 		url,
 		'report__delivery_statement'
 	);
-
-	const haveAccess = useAccess('report__delivery_statement');
 
 	const columns = useMemo(
 		() => [

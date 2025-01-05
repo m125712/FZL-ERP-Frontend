@@ -21,7 +21,7 @@ const getPath = (haveAccess, userUUID) => {
 		haveAccess.includes('show_own_orders') &&
 		userUUID
 	) {
-		return `?own_uuid=${userUUID}?approved=true`;
+		return `?own_uuid=${userUUID}&approved=true`;
 	}
 
 	if (haveAccess.includes('show_approved_orders')) {

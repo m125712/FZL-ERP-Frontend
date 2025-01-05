@@ -151,8 +151,6 @@ export default function OrderSheetPdf(order_sheet) {
 													const bleaching =
 														color.bleach;
 
-													console.log(bleaching);
-
 													// * Slicing the quantities array for each chunk
 													const slicedQuantities =
 														quantities.slice(

@@ -3201,7 +3201,7 @@ export const SLIDER_DASHBOARD_INFO_NULL = {
 
 // * Slider/Die Casting --> (TRANSFER AGAINST STOCK)*//
 export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
-	section: STRING_REQUIRED.default('assembly'),
+	section: STRING_REQUIRED,
 	order_description_uuid: STRING.when('section', {
 		is: (value) => value == 'coloring',
 		then: (schema) => schema.required('order is required'),
@@ -3229,7 +3229,7 @@ export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_SCHEMA = {
 export const SLIDER_DIE_CASTING_TRANSFER_AGAINST_STOCK_NULL = {
 	uuid: null,
 	order_description_uuid: null,
-	section: 'assembly',
+	section: null,
 	is_body: false,
 	is_cap: false,
 	is_puller: false,

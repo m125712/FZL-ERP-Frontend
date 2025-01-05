@@ -59,6 +59,7 @@ export default function Index({ initial_order, idx }) {
 		}
 	);
 
+	
 	return (
 		<div className='space-y-4'>
 			<Suspense fallback={<InformationSkeleton />}>

@@ -43,6 +43,7 @@ export default function Information({ orderInfo }) {
 		pi_numbers,
 		created_by_name,
 		remarks,
+		revision_no,
 		created_at,
 		updated_at,
 	} = orderInfo;
@@ -86,6 +87,10 @@ export default function Information({ orderInfo }) {
 			{
 				label: 'PI No.',
 				value: pi_numbers?.join(', '),
+			},
+			{
+				label: 'Revision No.',
+				value: revision_no,
 			},
 			{
 				label: 'Delivery Date',

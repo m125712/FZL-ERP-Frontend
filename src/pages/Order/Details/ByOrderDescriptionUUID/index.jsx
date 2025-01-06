@@ -43,8 +43,7 @@ export default function Index({ initial_order, idx }) {
 	const [order, setOrder] = useState(initial_order || []);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const hasInitialOrder =
-		Object.keys(initial_order || []).length > 0;
+	const hasInitialOrder = Object.keys(initial_order || []).length > 0;
 
 	useEffect(() => {
 		document.title = order_number;
@@ -80,6 +79,7 @@ export default function Index({ initial_order, idx }) {
 				user_name: order?.user_name,
 				marketing_priority: order?.marketing_priority,
 				factory_priority: order?.factory_priority,
+				revisions: order?.revision_no,
 				updated_at: order?.updated_at,
 				created_at: order?.created_at,
 			};

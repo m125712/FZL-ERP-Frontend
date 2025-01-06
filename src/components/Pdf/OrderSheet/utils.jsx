@@ -62,7 +62,7 @@ export const getPageHeader = (order_info) => {
 						fontSize: DEFAULT_FONT_SIZE + 4,
 						bold: true,
 					},
-					`O/N: ${order_number}\n`,
+					`O/N: ${order_number} ${order_info.revisions > 0 ? `Rev ${order_info.revisions}` : ''} \n`,
 					`Date: ${order_info?.created_at ? format(new Date(order_info?.created_at), 'dd-MM-yyyy') : ''}\n`,
 					`PI No.: ${order_info?.pi_numbers ? order_info?.pi_numbers.join(', ') : '---'}\n`,
 				],
@@ -204,6 +204,7 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 		is_multi_color,
 
 		order_type,
+		slider_provided,
 
 		description,
 	} = entry;
@@ -229,6 +230,7 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 			: '',
 		is_waterproof ? 'Waterproof' : '',
 	];
+
 	let slider = [
 		puller_type_name ? `${puller_type_name} Puller` : '',
 		lock_type_name,
@@ -242,6 +244,10 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 			: '',
 		top_stopper_name ? `Top Stopper: ${top_stopper_name}` : '',
 		bottom_stopper_name ? `Bottom Stopper: ${bottom_stopper_name}` : '',
+		slider_provided
+			.split('_')
+			.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+			.join(' '),
 	];
 
 	return [

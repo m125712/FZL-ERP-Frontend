@@ -63,7 +63,6 @@ export default function OrderDescription({ order }) {
 				label: 'Priority (Mark / Fact)',
 				value: marketing_priority + ' / ' + factory_priority,
 			},
-
 			{
 				label: 'Created By',
 				value: user_name,

@@ -528,6 +528,7 @@ export const ORDER_INFO_NULL = {
 
 export const ORDER_SCHEMA = {
 	// * order type
+	revision_no: STRING_REQUIRED.default('0'),
 	is_multi_color: BOOLEAN.default(false),
 	is_waterproof: BOOLEAN.default(false),
 	order_type: STRING_REQUIRED.default('full'),
@@ -650,6 +651,7 @@ export const ORDER_SCHEMA = {
 };
 
 export const ORDER_NULL = {
+	revision_no: '0',
 	is_multi_color: false,
 	is_waterproof: false,
 	order_type: 'full',
@@ -2471,6 +2473,7 @@ export const THREAD_SHADE_RECIPE_NULL = {
 
 // Order Info Entry
 export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
+	revision_no: STRING_REQUIRED.default('0'),
 	party_uuid: STRING_REQUIRED,
 	marketing_uuid: STRING_REQUIRED,
 	factory_uuid: STRING_REQUIRED,
@@ -2502,6 +2505,7 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 };
 
 export const THREAD_ORDER_INFO_ENTRY_NULL = {
+	revision_no: '0',
 	uuid: null,
 	party_uuid: null,
 	marketing_uuid: null,

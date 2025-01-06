@@ -271,21 +271,22 @@ export default function Index() {
 					return (
 						<Transfer
 							onClick={() => handelProduction(info.row.index)}
-							disabled={
-								(order_type === 'slider'
-									? coloring_stock
-									: Math.floor(
-											Math.min(
-												Number(u_top_quantity) / 2,
-												coloring_stock,
-												end_type_name === 'Close End'
-													? h_bottom_quantity
-													: box_pin_quantity
-											)
-										)) <= 0
-									? true
-									: false
-							}
+							// disabled={
+							// 	(order_type === 'slider'
+							// 		? coloring_stock
+							// 		: Math.floor(
+							// 				Math.min(
+							// 					Number(u_top_quantity) / 2,
+							// 					coloring_stock,
+							// 					end_type_name === 'Close End'
+							// 						? h_bottom_quantity
+							// 						: box_pin_quantity
+							// 				)
+							// 			)) <= 0
+							// 		? true
+							// 		: false
+							// }
+							disabled={coloring_stock <= 0 ? true : false}
 						/>
 					);
 				},

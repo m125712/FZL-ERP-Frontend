@@ -93,6 +93,10 @@ export default function Index() {
 				marketing_priority: orders[0]?.marketing_priority,
 				factory_priority: orders[0]?.factory_priority,
 				// date: format(new Date(orders[0]?.created_at), 'dd/MM/yyyy'),
+				revisions: orders.reduce(
+					(acc, curr) => acc + curr.revision_no,
+					0
+				),
 				updated_at: orders[0]?.updated_at,
 				created_at: orders[0]?.created_at,
 			};
@@ -136,10 +140,10 @@ export default function Index() {
 		created_by_name: orders[0]?.created_by_name,
 		order_info_uuid: orders[0]?.order_info_uuid,
 		reference_order: orders[0]?.reference_order,
+		revision_no: orders[0]?.revision_no,
 		print_in: orders[0]?.print_in,
 	};
-	
-	console.log(orders);
+
 	// if (!orders) return <Navigate to='/not-found' />;
 	// if (orders?.length === 0)
 	// 	return (

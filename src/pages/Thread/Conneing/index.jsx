@@ -52,6 +52,12 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'batch_type',
 				header: 'Type',
 				enableColumnFilter: false,

@@ -8,6 +8,7 @@ import ReactTable from '@/components/Table';
 
 import PageInfo from '@/util/PageInfo';
 
+import Excel from './Excel';
 import Header from './Header';
 
 export default function index() {
@@ -84,6 +85,14 @@ export default function index() {
 					}}
 					className='btn btn-primary'>
 					Generate PDF
+				</button>
+				<button
+					type='button'
+					onClick={() => {
+						Excel(data, from);
+					}}
+					className='btn btn-primary'>
+					Generate Excel
 				</button>
 			</div>
 		</>

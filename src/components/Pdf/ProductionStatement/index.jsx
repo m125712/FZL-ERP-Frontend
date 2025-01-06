@@ -321,7 +321,9 @@ export default function Index(data, from, to) {
 					},
 					company_price_dzn: {
 						text: otherItem.company_price_dzn
-							? otherItem.company_price_dzn + '/DZN'
+							? otherItem.company_price_dzn +
+								'/' +
+								otherItem.price_unit
 							: '---',
 						bold: title.includes(otherItem.size) ? true : false,
 					},

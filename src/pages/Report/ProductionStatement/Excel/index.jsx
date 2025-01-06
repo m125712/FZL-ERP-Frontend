@@ -349,7 +349,11 @@ export default function Index(data, from, to) {
 						},
 						{
 							text: otherItem.company_price_dzn
-								? String(otherItem.company_price_dzn + '/DZN')
+								? String(
+										otherItem.company_price_dzn +
+											'/' +
+											otherItem.price_unit
+									)
 								: '---',
 						},
 						{
@@ -362,15 +366,149 @@ export default function Index(data, from, to) {
 			});
 		});
 	});
+	tableData.unshift([
+		{
+			text: 'Party',
+		},
+		{
+			text: 'Type',
+		},
+		{
+			text: 'Team',
+		},
+		{
+			text: 'Order Number',
+		},
+		{
+			text: 'Total Quantity',
+		},
+		{
+			text: 'Item Description',
+		},
+		{
+			text: 'Size',
+		},
+		{
+			text: 'Close End Quantity',
+		},
+		{
+			text: 'Open End Quantity',
+		},
+		{
+			text: 'Total Quantity',
+		},
+		{
+			text: 'Unit Price',
+		},
+		{
+			text: 'Value',
+		},
+	]);
+	tableData.push([
+		{
+			text: 'Grand Current Total',
+
+			colSpan: 7,
+		},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+
+		{
+			text: Number(grandTotal.current.close_end_quantity).toFixed(2),
+		},
+		{
+			text: Number(grandTotal.current.open_end_quantity).toFixed(2),
+		},
+
+		{
+			text: Number(grandTotal.current.quantity).toFixed(2),
+		},
+		{},
+		{
+			text: Number(grandTotal.current.value).toFixed(2),
+		},
+	]);
+	tableData.push([
+		{
+			text: 'Grand Opening Total',
+			bold: true,
+			colSpan: 7,
+		},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+
+		{
+			text: Number(grandTotal.opening.close_end_quantity).toFixed(2),
+			bold: true,
+		},
+		{
+			text: Number(grandTotal.opening.open_end_quantity).toFixed(2),
+			bold: true,
+		},
+
+		{
+			text: Number(grandTotal.opening.quantity).toFixed(2),
+			bold: true,
+		},
+		{},
+		{
+			text: Number(grandTotal.opening.value).toFixed(2),
+			bold: true,
+		},
+	]);
+	tableData.push([
+		{
+			text: 'Grand Closing Total',
+			bold: true,
+			colSpan: 7,
+		},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+
+		{
+			text: Number(grandTotal.closing.close_end_quantity).toFixed(2),
+			bold: true,
+		},
+		{
+			text: Number(grandTotal.closing.open_end_quantity).toFixed(2),
+			bold: true,
+		},
+
+		{
+			text: Number(grandTotal.closing.quantity).toFixed(2),
+			bold: true,
+		},
+		{},
+		{
+			text: Number(grandTotal.closing.value).toFixed(2),
+			bold: true,
+		},
+	]);
 	const content = {
-		title: 'Export Report',
+		title: 'Production Statement',
 		data: tableData,
 	};
 
 	function downloadFile() {
-		const exporter = new ExcelConverter('Export test', content, {
-			defaultOptions: { defaultColWidth: 20 },
-		});
+		const exporter = new ExcelConverter(
+			`Production Statement ${from} - ${to}`,
+			content,
+			{
+				defaultOptions: { defaultColWidth: 20 },
+			}
+		);
 		exporter.downloadExcel();
 	}
 	return downloadFile();

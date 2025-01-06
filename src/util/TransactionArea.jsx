@@ -56,7 +56,6 @@ const getTransactionArea = () => {
 		{ label: 'Tape Loom Section', value: 'tape_loom' },
 		{ label: 'Tape Making', value: 'tape_making' }, //* can not delete
 		{ label: 'Thread Dying', value: 'thread_dying' },
-		{ label: 'Vislon', value: 'vislon' },
 		{ label: 'Vislon Finishing Section', value: 'vislon_finishing' },
 		{ label: 'Vislon Gapping', value: 'vislon_gapping' },
 		{ label: 'Vislon Injection', value: 'vislon_injection' },

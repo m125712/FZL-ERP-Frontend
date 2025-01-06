@@ -104,6 +104,15 @@ export default function Header({
 	const [sp_req, setSpReq] = useState({});
 	const [garmentsWash, setGramentsWash] = useState({});
 
+	const revisions = [
+		{ value: '0', label: 'Revision 0' },
+		{ value: '1', label: 'Revision 1' },
+		{ value: '2', label: 'Revision 2' },
+		{ value: '3', label: 'Revision 3' },
+		{ value: '4', label: 'Revision 4' },
+		{ value: '5', label: 'Revision 5' },
+	];
+
 	useEffect(() => {
 		if (order_description_uuid !== undefined) {
 			setSpReq((prev) => ({
@@ -198,6 +207,35 @@ export default function Header({
 													});
 												}}
 												isDisabled={isUpdate}
+											/>
+										);
+									}}
+								/>
+							</FormField>
+						</div>
+						<div className='my-2 w-28'>
+							<FormField
+								label='revision_no'
+								title='Revision No'
+								is_title_needed='false'
+								errors={errors}>
+								<Controller
+									name={'revision_no'}
+									control={control}
+									render={({ field: { onChange } }) => {
+										return (
+											<ReactSelect
+												placeholder='Select Type'
+												options={revisions}
+												value={revisions?.filter(
+													(item) =>
+														item.value ==
+														getValues('revision_no')
+												)}
+												onChange={(e) => {
+													onChange(e.value);
+												}}
+												isDisabled={!isUpdate}
 											/>
 										);
 									}}
@@ -376,32 +414,9 @@ export default function Header({
 				</div>
 
 				{/* conditional rendering: checking if order type is full */}
-				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
-					<FormField
-						label='lock_type'
-						title='Lock Type'
-						errors={errors}>
-						<Controller
-							name={'lock_type'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Lock Type'
-										options={lock_type}
-										value={lock_type?.filter(
-											(lock_type) =>
-												lock_type.value ==
-												getValues('lock_type')
-										)}
-										onChange={(e) => onChange(e.value)}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					{watch('order_type') === 'full' && (
-						<>
+				{watch('order_type') === 'full' && (
+					<>
+						<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
 							<FormField
 								label='teeth_type'
 								title='Teeth Type'
@@ -452,49 +467,48 @@ export default function Header({
 									}}
 								/>
 							</FormField>
-							<FormField
-								label='special_requirement'
-								title='Special Req'
-								errors={errors}>
-								<Controller
-									name={'special_requirement'}
-									control={control}
-									render={({ field: { onChange } }) => {
-										return (
-											<ReactSelect
-												placeholder='Select Multi Requirement'
-												options={special_requirement}
-												value={special_requirement?.filter(
-													(item) =>
-														sp_req?.special_req?.includes(
-															item.value
-														)
-												)}
-												onChange={(e) => {
-													setSpReq((prev) => ({
-														...prev,
-														special_req: e.map(
+						</div>
+						<FormField
+							label='special_requirement'
+							title='Special Req'
+							errors={errors}>
+							<Controller
+								name={'special_requirement'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select Multi Requirement'
+											options={special_requirement}
+											value={special_requirement?.filter(
+												(item) =>
+													sp_req?.special_req?.includes(
+														item.value
+													)
+											)}
+											onChange={(e) => {
+												setSpReq((prev) => ({
+													...prev,
+													special_req: e.map(
+														(item) => item.value
+													),
+												}));
+												onChange(
+													JSON.stringify({
+														values: e.map(
 															(item) => item.value
 														),
-													}));
-													onChange(
-														JSON.stringify({
-															values: e.map(
-																(item) =>
-																	item.value
-															),
-														})
-													);
-												}}
-												isMulti={true}
-											/>
-										);
-									}}
-								/>
-							</FormField>
-						</>
-					)}
-				</div>
+													})
+												);
+											}}
+											isMulti={true}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+					</>
+				)}
 
 				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2'>
 					<Textarea
@@ -637,6 +651,36 @@ export default function Header({
 									/>
 								</FormField>
 								<FormField
+									label='lock_type'
+									title='Lock Type'
+									errors={errors}>
+									<Controller
+										name={'lock_type'}
+										control={control}
+										render={({ field: { onChange } }) => {
+											return (
+												<ReactSelect
+													placeholder='Select Lock Type'
+													options={lock_type}
+													value={lock_type?.filter(
+														(lock_type) =>
+															lock_type.value ==
+															getValues(
+																'lock_type'
+															)
+													)}
+													onChange={(e) =>
+														onChange(e.value)
+													}
+												/>
+											);
+										}}
+									/>
+								</FormField>
+							</div>
+
+							<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 md:grid-cols-3'>
+								<FormField
 									label='slider'
 									title='Slider Material'
 									errors={errors}>
@@ -661,9 +705,6 @@ export default function Header({
 										}}
 									/>
 								</FormField>
-							</div>
-
-							<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2'>
 								<FormField
 									label='slider_body_shape'
 									title='Slider Body Shape'

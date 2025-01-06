@@ -65,6 +65,7 @@ export default function ItemDescription({ order_description, className }) {
 			is_inch,
 			is_meter,
 			is_cm,
+			revision_no,
 			remarks,
 
 			// slider
@@ -169,6 +170,10 @@ export default function ItemDescription({ order_description, className }) {
 			{
 				label: 'order type',
 				value: order_type,
+			},
+			{
+				label: 'Revision No.',
+				value: revision_no,
 			},
 			{
 				label: 'remarks',

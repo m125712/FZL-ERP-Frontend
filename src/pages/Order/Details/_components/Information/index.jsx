@@ -94,6 +94,7 @@ export function OrderInformation({
 		factory_name,
 		factory_address,
 		pi_numbers,
+		revision_no,
 	} = order;
 
 	const { updateData } = useOrderDescription();

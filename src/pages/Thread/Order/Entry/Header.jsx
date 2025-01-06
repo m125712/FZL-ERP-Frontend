@@ -7,6 +7,7 @@ import {
 	useOtherParty,
 } from '@/state/Other';
 import DatePicker from 'react-datepicker';
+import { useParams } from 'react-router-dom';
 
 import { Textarea } from '@/ui/Core';
 import { CheckBox, FormField, ReactSelect, SectionEntryBody } from '@/ui';
@@ -24,6 +25,9 @@ export default function Header({
 	Controller,
 	control,
 }) {
+	const { order_info_uuid } = useParams();
+	const isUpdate = order_info_uuid !== undefined;
+
 	const [isSample, setIsSample] = useState(
 		getBoolean({ field: 'is_sample', getValues })
 	);
@@ -39,6 +43,14 @@ export default function Header({
 	const { data: factory } = useOtherFactoryByPartyUUID(partyId);
 	const { data: buyer } = useOtherBuyer();
 	const { data: marketing } = useOtherMarketing();
+	const revisions = [
+		{ value: '0', label: 'Revision 0' },
+		{ value: '1', label: 'Revision 1' },
+		{ value: '2', label: 'Revision 2' },
+		{ value: '3', label: 'Revision 3' },
+		{ value: '4', label: 'Revision 4' },
+		{ value: '5', label: 'Revision 5' },
+	];
 
 	useEffect(() => {
 		setPartyId(getValues('party_uuid'));
@@ -79,6 +91,35 @@ export default function Header({
 								onChange={(e) => setIsCash(e.target.checked)}
 								{...{ register, errors }}
 							/>
+						</div>
+						<div className='w-28'>
+							<FormField
+								label='revision_no'
+								title='Revision No'
+								is_title_needed='false'
+								errors={errors}>
+								<Controller
+									name={'revision_no'}
+									control={control}
+									render={({ field: { onChange } }) => {
+										return (
+											<ReactSelect
+												placeholder='Select Type'
+												options={revisions}
+												value={revisions?.filter(
+													(item) =>
+														item.value ==
+														getValues('revision_no')
+												)}
+												onChange={(e) => {
+													onChange(e.value);
+												}}
+												isDisabled={!isUpdate}
+											/>
+										);
+									}}
+								/>
+							</FormField>
 						</div>
 					</div>
 				}>

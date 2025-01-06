@@ -41,7 +41,7 @@ export default function Index({
 	const { user } = useAuth();
 
 	const { data: stock } = useOtherSliderStockWithDescription(
-		'/other/slider/stock-with-order-description/value/label'
+		'/other/slider/stock-with-order-description/value/label?section=assembly_stock'
 	);
 
 	const {

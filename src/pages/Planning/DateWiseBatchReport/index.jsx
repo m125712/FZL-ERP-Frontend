@@ -15,15 +15,20 @@ import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
 	const { date } = useParams();
-	const [selectItem, setSelectItem] = useState('');
+	const [selectItem, setSelectItem] = useState('all');
 	const { data, isLoading, url } = usePlanningDateWiseBatchReport(
 		date,
 		selectItem
 	);
-	let { data: items } = useOtherOrderPropertiesByItem();
-	items = items?.filter((item) => item.value !== null);
-	items = items ? [{ value: 'all', label: 'All' }, ...items] : [];
+	const items = [
+		{ value: 'all', label: 'All' },
+		{ value: 'nylon_plastic', label: 'Nylon Plastic' },
+		{ value: 'nylon', label: 'Nylon' },
+		{ value: 'metal', label: 'Metal' },
+		{ value: 'vislon ', label: 'Vislon' },
+	];
 
+	console.log(items);
 	const info = new PageInfo(
 		`Daily Production Plan (${format(new Date(date), 'dd/MM/yyyy')})`,
 		url,
@@ -118,16 +123,18 @@ export default function Index() {
 
 			<ReactTableTitleOnly
 				title={
-					<div className='my-2 flex'>
+					<div className='my-2 flex items-center gap-4'>
 						{`Daily Production Plan (${format(new Date(date), 'dd/MM/yyyy')})`}
-						<ReactSelect
-							placeholder='Select Item'
-							options={items}
-							value={items?.find(
-								(item) => item.value === selectItem
-							)}
-							onChange={(e) => setSelectItem(e.value)}
-						/>
+						<div className='w-40'>
+							<ReactSelect
+								placeholder='Select Item'
+								options={items}
+								value={items?.find(
+									(item) => item.value === selectItem
+								)}
+								onChange={(e) => setSelectItem(e.value)}
+							/>
+						</div>
 					</div>
 				}
 				accessor={false}

@@ -3,19 +3,11 @@ import { useOtherSliderItem } from '@/state/Other';
 import { useSliderDieCastingStock } from '@/state/Slider';
 import { useAccess } from '@/hooks';
 
-
-
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete } from '@/ui';
 
-
-
 import PageInfo from '@/util/PageInfo';
-
-
-
-
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));

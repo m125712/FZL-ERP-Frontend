@@ -74,7 +74,7 @@ export default function Index(data, from, to) {
 		};
 
 		item.orders?.forEach((orderItem, orderIndex) => {
-			orderItem.items?.forEach((itemItem) => {
+			orderItem.items?.forEach((itemItem, itemIndex) => {
 				const totalCloseEnd = itemItem.other?.reduce((total, item) => {
 					return total + (item.running_total_close_end_quantity || 0);
 				}, 0);
@@ -213,7 +213,10 @@ export default function Index(data, from, to) {
 					company_price_pcs: 1,
 					running_total_value: ClosingTotalValue,
 				});
-				if (item.orders.length === orderIndex + 1) {
+				if (
+					item.orders.length === orderIndex + 1 &&
+					itemIndex + 1 === orderItem.items.length
+				) {
 					itemItem.other.push({
 						size: 'P.Current Total',
 						running_total_close_end_quantity:

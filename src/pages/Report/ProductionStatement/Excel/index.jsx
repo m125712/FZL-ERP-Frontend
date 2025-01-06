@@ -1,26 +1,6 @@
-import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
-import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
+import { ExcelConverter } from 'pdfmake-to-excel';
 
-import pdfMake from '..';
-import { getPageFooter, getPageHeader } from './utils';
-
-const node = [
-	getTable('party_name', 'Party'),
-	getTable('type', 'Type'),
-	getTable('marketing', 'Team'),
-	getTable('order_number', 'O/N'),
-	getTable('order_qty', 'Ord.Qty'),
-	getTable('item_description', 'Item'),
-	getTable('size', 'Size'),
-	getTable('running_total_close_end_quantity', 'C/E', 'right'),
-	getTable('running_total_open_end_quantity', 'O/E', 'right'),
-	getTable('running_total_quantity', 'Total Qty', 'right'),
-	getTable('company_price_dzn', 'Price', 'right'),
-	getTable('value', 'Value', 'right'),
-];
 export default function Index(data, from, to) {
-	const headerHeight = 80;
-	let footerHeight = 50;
 	const PdfData = data || [];
 	const title = [
 		'Current Total',
@@ -30,6 +10,15 @@ export default function Index(data, from, to) {
 		'P.Opening Bal.',
 		'P.Closing Bal.',
 	];
+	let orderRowSpan = 0;
+	let typeRowSpan = 0;
+	let itemRowSpan = 0;
+
+	const nextIndex = {
+		type: 0,
+		order: 0,
+		item: 0,
+	};
 	const grandTotal = {
 		current: {
 			close_end_quantity: 0,
@@ -253,8 +242,11 @@ export default function Index(data, from, to) {
 		});
 	});
 
-	const tableData = PdfData.flatMap((item) => {
-		const typeRowSpan =
+	const tableData = PdfData.flatMap((item, idx) => {
+		if (idx !== 0) {
+			nextIndex.type += typeRowSpan;
+		}
+		typeRowSpan =
 			item?.orders?.reduce((total, orders) => {
 				return (
 					total +
@@ -265,246 +257,259 @@ export default function Index(data, from, to) {
 			}, 0) || 0;
 
 		return item?.orders?.flatMap((orderItem, orderIndex) => {
-			const orderRowSpan =
+			nextIndex.order += orderRowSpan;
+
+			orderRowSpan =
 				orderItem.items?.reduce((total, item) => {
 					return total + (item.other?.length || 1);
 				}, 0) || 0;
 
 			return orderItem.items?.flatMap((itemItem, itemIndex) => {
-				const itemRowSpan = itemItem.other?.length || 1;
+				nextIndex.item += itemRowSpan;
 
-				return itemItem.other?.map((otherItem) => ({
-					party_name: {
-						text: item.party_name,
-						rowSpan: typeRowSpan,
-					},
-					type: {
-						text: item.type,
-						rowSpan: typeRowSpan,
-					},
-					marketing: {
-						text: item.marketing_name,
-						rowSpan: typeRowSpan,
-					},
-					order_number: {
-						text: orderItem.order_number,
-						rowSpan: orderRowSpan,
-					},
-					order_qty: {
-						text: orderItem.total_quantity,
-						rowSpan: orderRowSpan,
-					},
-					item_description: {
-						text: itemItem.item_description,
-						rowSpan: itemRowSpan,
-					},
-					size: {
-						text: title.includes(otherItem.size)
-							? otherItem.size
+				itemRowSpan = itemItem.other?.length || 1;
+
+				return itemItem.other?.map((otherItem, index) => {
+					const flatIndex =
+						index +
+						itemItem.other.length * itemIndex +
+						itemItem.other.length *
+							orderItem.items.length *
+							orderIndex +
+						idx * item.orders.length;
+					itemItem.other.length * orderItem.items.length;
+					return [
+						index === 0 && orderIndex === 0 && itemIndex === 0
+							? {
+									text: item.party_name,
+									rowSpan: typeRowSpan,
+								}
+							: {
+									text: '',
+								},
+						index === 0 && orderIndex === 0 && itemIndex === 0
+							? {
+									text: item.type,
+									rowSpan: typeRowSpan,
+								}
+							: {
+									text: '',
+								},
+						index === 0 && orderIndex === 0 && itemIndex === 0
+							? {
+									text: item.marketing_name,
+									rowSpan: typeRowSpan,
+								}
+							: {
+									text: '',
+								},
+						index === 0 && itemIndex === 0
+							? {
+									text: orderItem.order_number,
+									rowSpan: orderRowSpan,
+								}
+							: {
+									text: '',
+								},
+						index === 0 && itemIndex === 0
+							? {
+									text: orderItem.total_quantity,
+									rowSpan: orderRowSpan,
+								}
+							: {
+									text: '',
+								},
+						index === 0
+							? {
+									text: itemItem.item_description,
+									rowSpan: itemRowSpan,
+								}
+							: {
+									text: '',
+								},
+						{
+							text: title.includes(otherItem.size)
 								? otherItem.size
-								: '---'
-							: `${otherItem.size.includes('-') ? `(${otherItem.size})` : otherItem.size} ${otherItem.unit}`,
-
-						bold: title.includes(otherItem.size) ? true : false,
-					},
-					running_total_close_end_quantity: {
-						text: otherItem.running_total_close_end_quantity,
-						bold: title.includes(otherItem.size) ? true : false,
-					},
-					running_total_open_end_quantity: {
-						text: otherItem.running_total_open_end_quantity,
-						bold: title.includes(otherItem.size) ? true : false,
-					},
-					running_total_quantity: {
-						text: otherItem.running_total_quantity,
-						bold: title.includes(otherItem.size) ? true : false,
-					},
-					company_price_dzn: {
-						text: otherItem.company_price_dzn
-							? otherItem.company_price_dzn +
-								'/' +
-								otherItem.price_unit
-							: '---',
-						bold: title.includes(otherItem.size) ? true : false,
-					},
-					value: {
-						text: Number(otherItem.running_total_value).toFixed(3),
-						bold: title.includes(otherItem.size) ? true : false,
-					},
-				}));
+									? otherItem.size
+									: '---'
+								: `${otherItem.size.includes('-') ? `(${otherItem.size})` : otherItem.size} ${otherItem.unit}`,
+						},
+						{
+							text: String(
+								otherItem.running_total_close_end_quantity
+							),
+						},
+						{
+							text: String(
+								otherItem.running_total_open_end_quantity
+							),
+						},
+						{
+							text: String(otherItem.running_total_quantity),
+						},
+						{
+							text: otherItem.company_price_dzn
+								? String(
+										otherItem.company_price_dzn +
+											'/' +
+											otherItem.price_unit
+									)
+								: '---',
+						},
+						{
+							text: String(
+								Number(otherItem.running_total_value).toFixed(3)
+							),
+						},
+					];
+				});
 			});
 		});
 	});
-
-	const pdfDocGenerator = pdfMake.createPdf({
-		...DEFAULT_A4_PAGE({
-			xMargin,
-			headerHeight,
-			footerHeight,
-		}),
-		pageOrientation: 'landscape',
-		header: {
-			table: getPageHeader(from, to),
-			layout: 'noBorders',
-			margin: [xMargin, 30, xMargin, 0],
+	tableData.unshift([
+		{
+			text: 'Party',
 		},
-		footer: (currentPage, pageCount) => ({
-			table: getPageFooter({
-				currentPage,
-				pageCount,
-			}),
-			margin: [xMargin, 2],
-			fontSize: DEFAULT_FONT_SIZE - 2,
-		}),
-		content: [
+		{
+			text: 'Type',
+		},
+		{
+			text: 'Team',
+		},
+		{
+			text: 'Order Number',
+		},
+		{
+			text: 'Total Quantity',
+		},
+		{
+			text: 'Item Description',
+		},
+		{
+			text: 'Size',
+		},
+		{
+			text: 'Close End Quantity',
+		},
+		{
+			text: 'Open End Quantity',
+		},
+		{
+			text: 'Total Quantity',
+		},
+		{
+			text: 'Unit Price',
+		},
+		{
+			text: 'Value',
+		},
+	]);
+	tableData.push([
+		{
+			text: 'Grand Current Total',
+
+			colSpan: 7,
+		},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+
+		{
+			text: Number(grandTotal.current.close_end_quantity).toFixed(2),
+		},
+		{
+			text: Number(grandTotal.current.open_end_quantity).toFixed(2),
+		},
+
+		{
+			text: Number(grandTotal.current.quantity).toFixed(2),
+		},
+		{},
+		{
+			text: Number(grandTotal.current.value).toFixed(2),
+		},
+	]);
+	tableData.push([
+		{
+			text: 'Grand Opening Total',
+			bold: true,
+			colSpan: 7,
+		},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+
+		{
+			text: Number(grandTotal.opening.close_end_quantity).toFixed(2),
+			bold: true,
+		},
+		{
+			text: Number(grandTotal.opening.open_end_quantity).toFixed(2),
+			bold: true,
+		},
+
+		{
+			text: Number(grandTotal.opening.quantity).toFixed(2),
+			bold: true,
+		},
+		{},
+		{
+			text: Number(grandTotal.opening.value).toFixed(2),
+			bold: true,
+		},
+	]);
+	tableData.push([
+		{
+			text: 'Grand Closing Total',
+			bold: true,
+			colSpan: 7,
+		},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+
+		{
+			text: Number(grandTotal.closing.close_end_quantity).toFixed(2),
+			bold: true,
+		},
+		{
+			text: Number(grandTotal.closing.open_end_quantity).toFixed(2),
+			bold: true,
+		},
+
+		{
+			text: Number(grandTotal.closing.quantity).toFixed(2),
+			bold: true,
+		},
+		{},
+		{
+			text: Number(grandTotal.closing.value).toFixed(2),
+			bold: true,
+		},
+	]);
+	const content = {
+		title: 'Production Statement',
+		data: tableData,
+	};
+
+	function downloadFile() {
+		const exporter = new ExcelConverter(
+			`Production Statement ${from} - ${to}`,
+			content,
 			{
-				table: {
-					headerRows: 1,
-					widths: [100, 40, 80, 50, 50, 70, 60, 45, 45, 45, 45, 45],
-					body: [
-						TableHeader(node),
-
-						// Body
-						...tableData?.map((item) =>
-							node?.map((nodeItem) => {
-								const cellData = nodeItem.field
-									? item[nodeItem.field]
-									: '---';
-								return {
-									text: cellData?.text || cellData,
-									style: nodeItem.cellStyle,
-									alignment: nodeItem.alignment,
-									rowSpan: cellData?.rowSpan,
-									colSpan: cellData?.colSpan,
-									bold: cellData?.bold,
-								};
-							})
-						),
-						[
-							{
-								text: 'Grand Current Total',
-								bold: true,
-								colSpan: 7,
-							},
-							{},
-							{},
-							{},
-							{},
-							{},
-							{},
-
-							{
-								text: Number(
-									grandTotal.current.close_end_quantity
-								).toFixed(2),
-								bold: true,
-							},
-							{
-								text: Number(
-									grandTotal.current.open_end_quantity
-								).toFixed(2),
-								bold: true,
-							},
-
-							{
-								text: Number(
-									grandTotal.current.quantity
-								).toFixed(2),
-								bold: true,
-							},
-							{},
-							{
-								text: Number(grandTotal.current.value).toFixed(
-									2
-								),
-								bold: true,
-							},
-						],
-						[
-							{
-								text: 'Grand Opening Total',
-								bold: true,
-								colSpan: 7,
-							},
-							{},
-							{},
-							{},
-							{},
-							{},
-							{},
-
-							{
-								text: Number(
-									grandTotal.opening.close_end_quantity
-								).toFixed(2),
-								bold: true,
-							},
-							{
-								text: Number(
-									grandTotal.opening.open_end_quantity
-								).toFixed(2),
-								bold: true,
-							},
-
-							{
-								text: Number(
-									grandTotal.opening.quantity
-								).toFixed(2),
-								bold: true,
-							},
-							{},
-							{
-								text: Number(grandTotal.opening.value).toFixed(
-									2
-								),
-								bold: true,
-							},
-						],
-						[
-							{
-								text: 'Grand Closing Total',
-								bold: true,
-								colSpan: 7,
-							},
-							{},
-							{},
-							{},
-							{},
-							{},
-							{},
-
-							{
-								text: Number(
-									grandTotal.closing.close_end_quantity
-								).toFixed(2),
-								bold: true,
-							},
-							{
-								text: Number(
-									grandTotal.closing.open_end_quantity
-								).toFixed(2),
-								bold: true,
-							},
-
-							{
-								text: Number(
-									grandTotal.closing.quantity
-								).toFixed(2),
-								bold: true,
-							},
-							{},
-							{
-								text: Number(grandTotal.closing.value).toFixed(
-									2
-								),
-								bold: true,
-							},
-						],
-					],
-				},
-			},
-		],
-	});
-
-	return pdfDocGenerator;
+				defaultOptions: { defaultColWidth: 20 },
+			}
+		);
+		exporter.downloadExcel();
+	}
+	return downloadFile();
 }

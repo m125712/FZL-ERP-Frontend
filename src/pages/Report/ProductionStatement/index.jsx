@@ -2,10 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { useProductionStatementReport } from '@/state/Report';
 import { format } from 'date-fns';
 
+
 import Pdf from '@/components/Pdf/ProductionStatement';
 
 import PageInfo from '@/util/PageInfo';
 
+import Excel from './Excel';
 import Header from './Header';
 
 export default function index() {
@@ -83,6 +85,14 @@ export default function index() {
 					}}
 					className='btn btn-primary'>
 					Generate PDF
+				</button>
+				<button
+					type='button'
+					onClick={() => {
+						Excel(data, from, to);
+					}}
+					className='btn btn-primary'>
+					Generate Excel
 				</button>
 			</div>
 		</>

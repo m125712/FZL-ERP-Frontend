@@ -37,7 +37,7 @@ export const getPageHeader = (orderInfo) => {
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
-						`O/N: ${orderInfo?.order_number} Rev ${orderInfo?.revision_no}\n`,
+						`O/N: ${orderInfo?.order_number}  ${orderInfo?.revision_no > 0 ? `Rev: ${orderInfo?.revision_no}` : ''}\n`,
 						`Date: ${created_at}\n`,
 						`PI Number: ${pi_number ? pi_number.join(', ') : '---'}\n`,
 					],

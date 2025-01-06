@@ -293,7 +293,9 @@ export const useOtherPackingListByOrderInfoUUIDAndChallanUUID = (
 export const useOtherOrderInfoValueLabel = (query) =>
 	createGlobalState({
 		queryKey: otherQK.orderInfoValueLabel(query),
-		url: query? `/other/order/info/value/label?${query}` : '/other/order/info/value/label',
+		url: query
+			? `/other/order/info/value/label?${query}`
+			: '/other/order/info/value/label',
 	});
 
 //* GET ORDER PROPERTIES BY ITEM
@@ -318,10 +320,13 @@ export const useOtherOrderPropertiesByEndType = () =>
 	});
 
 //* GET ORDER PROPERTIES BY GARMENTS WASH
-export const useOtherOrderPropertiesByGarmentsWash = () =>
+export const useOtherOrderPropertiesByGarmentsWash = ({
+	enabled = true,
+} = {}) =>
 	createGlobalState({
 		queryKey: otherQK.orderPropertiesByGarmentsWash(),
 		url: '/other/order-properties/by/garments_wash',
+		enabled,
 	});
 
 //* GET ORDER PROPERTIES BY LIGHT PREFERENCE
@@ -395,10 +400,13 @@ export const useOtherOrderPropertiesByNylonStopper = () =>
 	});
 
 //* GET ORDER PROPERTIES BY SPECIAL REQUIREMENT
-export const useOtherOrderPropertiesBySpecialRequirement = () =>
+export const useOtherOrderPropertiesBySpecialRequirement = ({
+	enabled = true,
+} = {}) =>
 	createGlobalState({
 		queryKey: otherQK.orderPropertiesBySpecialRequirement(),
 		url: '/other/order-properties/by/special_requirement',
+		enabled,
 	});
 
 //* GET ORDER PROPERTIES BY COLORING TYPE

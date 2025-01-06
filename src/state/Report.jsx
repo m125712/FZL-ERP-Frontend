@@ -8,11 +8,18 @@ export const useReportStock = (from, to, { enabled = false }) =>
 		url: `/report/material-stock-report?from_date=${from}&to_date=${to}`,
 		enabled,
 	});
-export const useProductionReportDateWise = (from = '', to = '') =>
+export const useProductionReportDateWise = (
+	from = '',
+	to = '',
+	query,
+	{ enabled = false } = {}
+) =>
 	createGlobalState({
-		queryKey: reportQK.productionReportDateWise(from, to),
-		url: `/report/daily-production-report?from_date=${from}&to_date=${to}`,
-		enabled: !!from && !!to,
+		queryKey: reportQK.productionReportDateWise(from, to, query),
+		url:
+			`/report/daily-production-report?from_date=${from}&to_date=${to}&` +
+			query,
+		enabled: !!from && !!to && enabled,
 	});
 export const useProductionStatementReport = (from = '', to = '') =>
 	createGlobalState({
@@ -21,58 +28,76 @@ export const useProductionStatementReport = (from = '', to = '') =>
 		enabled: !!from && !!to,
 	});
 
-export const useZipperProduction = (query) =>
+export const useZipperProduction = (query, { enabled = false } = {}) =>
 	createGlobalState({
 		queryKey: reportQK.zipperProduction(query),
 		url: '/report/zipper-production-status-report?' + query,
+		enabled,
 	});
 
-export const useThreadProduction = (query) =>
+export const useThreadProduction = (query, { enabled = false } = {}) =>
 	createGlobalState({
 		queryKey: reportQK.threadProduction(query),
 		url: '/report/thread-production-batch-wise-report?' + query,
+		enabled,
 	});
 
-export const useDailyChallan = () =>
+export const useDailyChallan = (query, { enabled = false } = {}) =>
 	createGlobalState({
-		queryKey: reportQK.dailyChallan(),
-		url: '/report/daily-challan-report',
+		queryKey: reportQK.dailyChallan(query),
+		url: '/report/daily-challan-report?' + query,
+		enabled,
 	});
 
-export const usePIRegister = () =>
+export const usePIRegister = (
+	query,
+	{ enabled = false } = { enabled: false }
+) =>
 	createGlobalState({
-		queryKey: reportQK.piRegister(),
-		url: '/report/pi-register-report',
+		queryKey: reportQK.piRegister(query),
+		url: '/report/pi-register-report?' + query,
+		enabled,
 	});
 
-export const usePIToBeSubmitted = () =>
+export const usePIToBeSubmitted = (
+	query,
+	{ enabled = false } = { enabled: false }
+) =>
 	createGlobalState({
-		queryKey: reportQK.piToBeSubmitted(),
-		url: '/report/pi-to-be-register-report',
+		queryKey: reportQK.piToBeSubmitted(query),
+		url: '/report/pi-to-be-register-report?' + query,
+		enabled,
 	});
 
-export const useLC = (url) => {
+export const useLC = (url, { enabled = false } = {}) => {
 	return createGlobalState({
 		queryKey: reportQK.lc(url),
 		url,
+		enabled,
 	});
 };
 
-export const useProductionReport = (url) =>
+export const useProductionReport = (url, { enabled = false } = {}) =>
 	createGlobalState({
 		queryKey: reportQK.productionReport(url),
 		url: `/report/production-report-${url}`,
+		enabled,
 	});
-export const useDeliveryStatement = (url) =>
+export const useDeliveryStatement = (url, { enabled = false } = {}) =>
 	createGlobalState({
 		queryKey: reportQK.deliveryStatement(url),
-		url: `/report/delivery-statement-report`,
+		url: `/report/delivery-statement-report?` + url,
+		enabled,
 	});
 
-export const useProductionReportThreadPartyWise = () =>
+export const useProductionReportThreadPartyWise = (
+	query,
+	{ enabled = false } = {}
+) =>
 	createGlobalState({
-		queryKey: reportQK.productionReportThreadPartyWise(),
-		url: `/report/production-report-thread-party-wise`,
+		queryKey: reportQK.productionReportThreadPartyWise(query),
+		url: `/report/production-report-thread-party-wise?` + query,
+		enabled,
 	});
 
 export const useSample = (date, is_sample = 1) =>

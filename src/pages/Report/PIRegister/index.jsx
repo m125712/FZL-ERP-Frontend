@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react';
+import { useAuth } from '@/context/auth';
 import { usePIRegister } from '@/state/Report';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
@@ -8,11 +9,39 @@ import { DateTime } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
-export default function Index() {
-	const { data, isLoading, url } = usePIRegister();
-	const info = new PageInfo('PI Register', url, 'report__pi_register');
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_all_orders')) {
+		return `all=true`;
+	}
+	if (
+		haveAccess.includes('show_approved_orders') &&
+		haveAccess.includes('show_own_orders') &&
+		userUUID
+	) {
+		return `own_uuid=${userUUID}&approved=true`;
+	}
 
+	if (haveAccess.includes('show_approved_orders')) {
+		return 'all=false&approved=true';
+	}
+
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return `all=false`;
+};
+
+export default function Index() {
 	const haveAccess = useAccess('report__pi_register');
+	const { user } = useAuth();
+	const { data, isLoading, url } = usePIRegister(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
+	const info = new PageInfo('PI Register', url, 'report__pi_register');
 
 	useEffect(() => {
 		document.title = info.getTabName();

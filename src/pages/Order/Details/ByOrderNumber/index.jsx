@@ -138,7 +138,8 @@ export default function Index() {
 		reference_order: orders[0]?.reference_order,
 		print_in: orders[0]?.print_in,
 	};
-
+	
+	console.log(orders);
 	// if (!orders) return <Navigate to='/not-found' />;
 	// if (orders?.length === 0)
 	// 	return (

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useDailyChallan } from '@/state/Report';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
@@ -10,16 +11,45 @@ import PageInfo from '@/util/PageInfo';
 
 import { ProductionStatus } from '../utils';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_all_orders')) {
+		return `all=true`;
+	}
+	if (
+		haveAccess.includes('show_approved_orders') &&
+		haveAccess.includes('show_own_orders') &&
+		userUUID
+	) {
+		return `own_uuid=${userUUID}&approved=true`;
+	}
+
+	if (haveAccess.includes('show_approved_orders')) {
+		return 'all=false&approved=true';
+	}
+
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return `all=false`;
+};
+
 export default function Index() {
+	const haveAccess = useAccess('report__daily_challan');
+	const { user } = useAuth();
+
 	const [status, setStatus] = useState('pending');
-	const { data, isLoading, url } = useDailyChallan();
+	const { data, isLoading, url } = useDailyChallan(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
 	const info = new PageInfo(
 		'Daily Challan Status',
 		url,
 		'report__daily_challan'
 	);
-
-	const haveAccess = useAccess('report__daily_challan');
 
 	useEffect(() => {
 		document.title = info.getTabName();

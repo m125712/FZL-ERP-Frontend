@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useProductionReportDateWise, useReportStock } from '@/state/Report';
 import { formToJSON } from 'axios';
 import { format } from 'date-fns';
+import { useAccess } from '@/hooks';
 
 import Pdf from '@/components/Pdf/DailyProduction';
 import ReactTable from '@/components/Table';
@@ -10,7 +12,33 @@ import PageInfo from '@/util/PageInfo';
 
 import Header from './Header';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_all_orders')) {
+		return `all=true`;
+	}
+	if (
+		haveAccess.includes('show_approved_orders') &&
+		haveAccess.includes('show_own_orders') &&
+		userUUID
+	) {
+		return `own_uuid=${userUUID}&approved=true`;
+	}
+
+	if (haveAccess.includes('show_approved_orders')) {
+		return 'all=false&approved=true';
+	}
+
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return `all=false`;
+};
+
 export default function index() {
+	const haveAccess = useAccess('report__daily_production');
+	const { user } = useAuth();
+
 	const info = new PageInfo(
 		'Daily Production',
 		null,
@@ -18,7 +46,14 @@ export default function index() {
 	);
 
 	const [from, setFrom] = useState(format(new Date(), 'yyyy-MM-dd'));
-	const { data, isLoading } = useProductionReportDateWise(from, from);
+	const { data, isLoading } = useProductionReportDateWise(
+		from,
+		from,
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
 
 	const columns = useMemo(
 		() => [

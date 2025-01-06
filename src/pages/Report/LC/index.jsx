@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useLC } from '@/state/Report';
+import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import { DateTime, StatusButton } from '@/ui';
@@ -8,9 +10,41 @@ import PageInfo from '@/util/PageInfo';
 
 import Header from './Header';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_all_orders')) {
+		return `all=true`;
+	}
+	if (
+		haveAccess.includes('show_approved_orders') &&
+		haveAccess.includes('show_own_orders') &&
+		userUUID
+	) {
+		return `own_uuid=${userUUID}&approved=true`;
+	}
+
+	if (haveAccess.includes('show_approved_orders')) {
+		return 'all=false&approved=true';
+	}
+
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return `all=false`;
+};
+
 export default function Index() {
+	const haveAccess = useAccess('report__lc_due');
+	const { user } = useAuth();
+
 	const [due, setDue] = useState('/report/lc-report?document_receiving=true');
-	const { data, isLoading, url } = useLC(due);
+	const { data, isLoading, url } = useLC(
+		`${due}&${getPath(haveAccess, user?.uuid)}`,
+		{
+			enabled: !!user?.uuid,
+		}
+	);
+
 	const info = new PageInfo('LC', url, 'report__lc_due');
 
 	useEffect(() => {
@@ -48,7 +82,7 @@ export default function Index() {
 				header: 'LC Value.',
 				enableColumnFilter: false,
 				cell: (info) =>
-					info.getValue() ?  Number(info.getValue()).toFixed(2) : '',
+					info.getValue() ? Number(info.getValue()).toFixed(2) : '',
 			},
 			{
 				accessorKey: 'amount',

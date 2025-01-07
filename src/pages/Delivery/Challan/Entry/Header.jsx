@@ -45,24 +45,24 @@ export default function Header({
 	//* Orders Fetch
 	const { data: ordersZipper } = isUpdate
 		? useOtherOrder()
-		: useOtherOrder('page=challan&item_for=zipper');
+		: useOtherOrder('page=challan&item_for=zipper&party_name=true');
 	const { data: ordersSlider } = isUpdate
 		? useOtherOrder()
-		: useOtherOrder('page=challan&item_for=slider');
+		: useOtherOrder('page=challan&item_for=slider&party_name=true');
 	const { data: ordersTape } = isUpdate
 		? useOtherOrder()
-		: useOtherOrder('page=challan&item_for=tape');
+		: useOtherOrder('page=challan&item_for=tape&party_name=true');
 	const { data: ordersThread } = isUpdate
 		? useThreadOrder()
-		: useThreadOrder('page=challan&item_for=thread');
+		: useThreadOrder('page=challan&item_for=thread&party_name=true');
 
 	const { data: ordersZipperSample } = isUpdate
-		? useOtherOrder('is_sample=true')
-		: useOtherOrder('page=challan&is_sample=true');
+		? useOtherOrder('is_sample=true&party_name=true')
+		: useOtherOrder('page=challan&is_sample=true&party_name=true');
 
 	const { data: ordersThreadSample } = isUpdate
-		? useThreadOrder('is_sample=true')
-		: useThreadOrder('page=challan&is_sample=true');
+		? useThreadOrder('is_sample=true&party_name=true')
+		: useThreadOrder('page=challan&is_sample=true&party_name=true');
 
 	const itemFor = {
 		zipper: ordersZipper,

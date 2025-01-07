@@ -295,7 +295,6 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 	};
-
 	// get tabname
 	useEffect(() => {
 		document.title = info.getTabName();

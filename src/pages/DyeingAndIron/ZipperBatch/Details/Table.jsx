@@ -9,9 +9,17 @@ export default function Index({ dyeing_batch_entry }) {
 	const total = dyeing_batch_entry?.reduce(
 		(acc, item) => {
 			acc.quantity += item?.quantity;
-			acc.raw_tape += getRequiredTapeKg({ row: item, type: 'raw' });
+			acc.raw_tape += getRequiredTapeKg({
+				row: item,
+				type: 'raw',
+				input_quantity: item.quantity,
+			});
 			acc.actual += item?.given_production_quantity_in_kg;
-			acc.dyed_tape += getRequiredTapeKg({ row: item, type: 'dyed' });
+			acc.dyed_tape += getRequiredTapeKg({
+				row: item,
+				type: 'dyed',
+				input_quantity: item.quantity,
+			});
 
 			return acc;
 		},

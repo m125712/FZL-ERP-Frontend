@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import {
 	useDeliveryChallan,
 	useDeliveryChallanDetailsByUUID,
@@ -290,6 +290,34 @@ export default function Index() {
 		}
 	};
 
+	const totalQuantity = useCallback(
+		(entryFiled) =>
+			entryFiled?.reduce(
+				(acc, item) => {
+					return {
+						totalQty: acc.totalQty + Number(item.quantity),
+						totalPolyQty:
+							acc.totalPolyQty + Number(item.poli_quantity),
+						totalShortQty:
+							acc.totalShortQty + Number(item.short_quantity),
+						totalRejectQty:
+							acc.totalRejectQty + Number(item.reject_quantity),
+					};
+				},
+				{
+					totalQty: 0,
+					totalPolyQty: 0,
+					totalShortQty: 0,
+					totalRejectQty: 0,
+				}
+			),
+		[watch()]
+	);
+
+	const total = totalQuantity(watch('challan_entry'));
+
+	const newTotal = totalQuantity(watch('new_challan_entry'));
+
 	// Check if order_number is valid
 	// if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 	const rowClass =
@@ -485,6 +513,27 @@ export default function Index() {
 							</tr>
 						);
 					})}
+
+					<tr className='bg-slate-200 text-sm font-semibold text-primary'>
+						<td colSpan={watch('item_for') === 'slider' ? 3 : 6}>
+							<div className='flex justify-end py-2'>
+								Total Quantity:
+							</div>
+						</td>
+						<td>
+							<div className='px-3'>{total?.totalQty}</div>
+						</td>
+						<td>
+							<div className='px-3'>{total?.totalPolyQty}</div>
+						</td>
+						<td>
+							<div className='px-3'>{total?.totalShortQty}</div>
+						</td>
+						<td>
+							<div className='px-3'>{total?.totalRejectQty}</div>
+						</td>
+						<td></td>
+					</tr>
 				</DynamicDeliveryField>
 
 				{isUpdate && (
@@ -600,6 +649,36 @@ export default function Index() {
 								</tr>
 							);
 						})}
+
+						<tr className='bg-slate-200 text-sm font-semibold text-primary'>
+							<td
+								colSpan={
+									watch('item_for') === 'slider' ? 3 : 6
+								}>
+								<div className='flex justify-end py-2'>
+									Total Quantity:
+								</div>
+							</td>
+							<td>
+								<div className='px-3'>{newTotal?.totalQty}</div>
+							</td>
+							<td>
+								<div className='px-3'>
+									{newTotal?.totalPolyQty}
+								</div>
+							</td>
+							<td>
+								<div className='px-3'>
+									{newTotal?.totalShortQty}
+								</div>
+							</td>
+							<td>
+								<div className='px-3'>
+									{newTotal?.totalRejectQty}
+								</div>
+							</td>
+							<td></td>
+						</tr>
 					</DynamicDeliveryField>
 				)}
 

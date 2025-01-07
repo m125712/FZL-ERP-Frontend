@@ -100,6 +100,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'teeth_color_name',
+				header: 'Teeth Color',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'end_type_name',
 				header: 'End Type',
 				enableColumnFilter: false,

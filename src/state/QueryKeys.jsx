@@ -1,3 +1,4 @@
+;
 /**
  *? Effective React Query Keys
  ** https://tkdodo.eu/blog/effective-react-query-keys#use-query-key-factories
@@ -6,8 +7,11 @@
 
 import { all } from 'axios';
 
+
+
 import { useDeliveryThreadDashboard } from './Delivery';
 import { useOtherThreadOrderPackingList } from './Other';
+
 
 export const orderQK = {
 	all: () => ['order'],
@@ -1524,6 +1528,12 @@ export const reportQK = {
 	sample: (date, is_sample) => [
 		...reportQK.all(),
 		'sample-report-by-date',
+		date,
+		is_sample,
+	],
+	sampleCombined: (date, is_sample) => [
+		...reportQK.all(),
+		'sample-report-by-date-combined',
 		date,
 		is_sample,
 	],

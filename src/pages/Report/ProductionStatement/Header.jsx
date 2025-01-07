@@ -10,7 +10,7 @@ export default function Header({
 }) {
 	return (
 		<div>
-			<SectionEntryBody title={'Generate Report'}>
+			<SectionEntryBody title={'Production Statement Report'}>
 				<SimpleDatePicker
 					key={'from'}
 					value={from}
@@ -22,7 +22,7 @@ export default function Header({
 				<SimpleDatePicker
 					key={'to'}
 					value={to}
-					placeholder='From'
+					placeholder='To'
 					onChange={(data) => {
 						setTo(format(data, 'yyyy-MM-dd'));
 					}}

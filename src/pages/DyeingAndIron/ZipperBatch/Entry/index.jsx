@@ -149,7 +149,7 @@ export default function Index() {
 			// * for tape order we calculate with size as quantity
 			const itemTotal =
 				item.order_type === 'tape'
-					? ((top + bottom + quantity) * 1) / 100 / rawMtrPerKg
+					? quantity / rawMtrPerKg
 					: ((top + bottom + size) * quantity) / 100 / rawMtrPerKg;
 			return acc + itemTotal;
 		}, 0);

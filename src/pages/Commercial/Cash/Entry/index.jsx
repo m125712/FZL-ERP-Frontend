@@ -198,6 +198,8 @@ export default function Index() {
 						rest?.new_order_info_thread_uuids
 					)
 				),
+				merchandiser_uuid: rest?.merchandiser_uuid,
+				factory_uuid: rest?.factory_uuid,
 				bank_uuid: rest?.bank_uuid,
 				validity: rest?.validity,
 				payment: rest?.payment,

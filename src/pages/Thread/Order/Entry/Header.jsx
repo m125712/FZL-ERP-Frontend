@@ -44,12 +44,12 @@ export default function Header({
 	const { data: buyer } = useOtherBuyer();
 	const { data: marketing } = useOtherMarketing();
 	const revisions = [
-		{ value: '0', label: 'Revision 0' },
-		{ value: '1', label: 'Revision 1' },
-		{ value: '2', label: 'Revision 2' },
-		{ value: '3', label: 'Revision 3' },
-		{ value: '4', label: 'Revision 4' },
-		{ value: '5', label: 'Revision 5' },
+		{ value: 0, label: 'Revision 0' },
+		{ value: 1, label: 'Revision 1' },
+		{ value: 2, label: 'Revision 2' },
+		{ value: 3, label: 'Revision 3' },
+		{ value: 4, label: 'Revision 4' },
+		{ value: 5, label: 'Revision 5' },
 	];
 
 	useEffect(() => {

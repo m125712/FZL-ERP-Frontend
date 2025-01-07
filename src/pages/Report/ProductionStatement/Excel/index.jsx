@@ -270,14 +270,6 @@ export default function Index(data, from, to) {
 				itemRowSpan = itemItem.other?.length || 1;
 
 				return itemItem.other?.map((otherItem, index) => {
-					const flatIndex =
-						index +
-						itemItem.other.length * itemIndex +
-						itemItem.other.length *
-							orderItem.items.length *
-							orderIndex +
-						idx * item.orders.length;
-					itemItem.other.length * orderItem.items.length;
 					return [
 						index === 0 && orderIndex === 0 && itemIndex === 0
 							? {

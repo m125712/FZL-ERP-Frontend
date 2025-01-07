@@ -28,6 +28,7 @@ const DailyProduction = lazy(() => import('@/pages/Report/DailyProduction'));
 
 const Sample = lazy(() => import('@/pages/Report/Sample'));
 const Bulk = lazy(() => import('@/pages/Report/Bulk'));
+const Orders = lazy(() => import('@/pages/Report/Order'));
 
 export const ReportRoutes = [
 	{
@@ -183,6 +184,13 @@ export const ReportRoutes = [
 				path: '/report/bulk',
 				element: <Bulk />,
 				page_name: 'report__bulk',
+				actions: ['read'],
+			},
+			{
+				name: 'Orders',
+				path: '/report/orders',
+				element: <Orders />,
+				page_name: 'report__orders',
 				actions: ['read'],
 			},
 			// {

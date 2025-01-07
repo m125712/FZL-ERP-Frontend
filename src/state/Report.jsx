@@ -105,3 +105,8 @@ export const useSample = (date, is_sample = 1) =>
 		queryKey: reportQK.sample(date, is_sample),
 		url: `/report/sample-report-by-date?date=${date}&is_sample=${is_sample}`,
 	});
+export const useSampleCombined = (date, is_sample = 1) =>
+	createGlobalState({
+		queryKey: reportQK.sampleCombined(date, is_sample),
+		url: `/report/sample-report-by-date-combined?date=${date}&is_sample=${is_sample}`,
+	});

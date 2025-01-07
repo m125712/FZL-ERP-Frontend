@@ -1,7 +1,8 @@
 import { ExcelConverter } from 'pdfmake-to-excel';
 
-export default function Index(data, from, to) {
+export default function Index(data, from) {
 	const pdfData = data || [];
+
 	pdfData.forEach((item, index) => {
 		let totalTypeWiseCloseEnd = 0;
 		let totalTypeWiseOpenEnd = 0;
@@ -131,7 +132,7 @@ export default function Index(data, from, to) {
 				return orderItem.items?.flatMap((itemItem, itemIndex) => {
 					const itemRowSpan = itemItem.other?.length || 1;
 					return itemItem.other?.map((otherItem, otherIndex) => {
-						[
+						return [
 							partyIndex === 0 &&
 							orderIndex === 0 &&
 							itemIndex === 0 &&
@@ -140,7 +141,9 @@ export default function Index(data, from, to) {
 										text: item.type,
 										rowSpan: typeRowSpan,
 									}
-								: {},
+								: {
+										text: '',
+									},
 							orderIndex === 0 &&
 							itemIndex === 0 &&
 							otherIndex === 0
@@ -148,19 +151,25 @@ export default function Index(data, from, to) {
 										text: partyItem.party_name,
 										rowSpan: partyRowSpan,
 									}
-								: {},
+								: {
+										text: '',
+									},
 							itemIndex === 0 && otherIndex === 0
 								? {
 										text: orderItem.order_number,
 										rowSpan: orderRowSpan,
 									}
-								: {},
+								: {
+										text: '',
+									},
 							otherIndex === 0
 								? {
 										text: itemItem.item_description,
 										rowSpan: itemRowSpan,
 									}
-								: {},
+								: {
+										text: '',
+									},
 							{
 								text: otherItem.size,
 								rowSpan: 1,
@@ -184,40 +193,65 @@ export default function Index(data, from, to) {
 		});
 	});
 	const grandTotalCloseEnd = tableData.reduce((total, item) => {
-		return total + (item.running_total_close_end_quantity?.text || 0);
+		return total + (item[5]?.text || 0);
 	}, 0);
 
 	const grandTotalOpenEnd = tableData.reduce((total, item) => {
-		return total + (item.running_total_open_end_quantity?.text || 0);
+		return total + (item[6]?.text || 0);
 	}, 0);
 
 	const grandTotalQuantity = tableData.reduce((total, item) => {
-		return total + (item.running_total_quantity?.text || 0);
+		return total + (item[7]?.text || 0);
 	}, 0);
 
-	tableData.push({
-		type: {
+	tableData.push([
+		{
 			text: 'Grand Total',
 			colSpan: 5,
 		},
-		party_name: { text: '', rowSpan: 1 },
-		order_number: { text: '', rowSpan: 1 },
-		item_description: { text: '', rowSpan: 1 },
-		size: { text: '', rowSpan: 1 },
-		running_total_close_end_quantity: {
+		{ text: '' },
+		{ text: '' },
+		{ text: '' },
+		{ text: '' },
+		{
 			text: grandTotalCloseEnd,
 			rowSpan: 1,
 		},
-		running_total_open_end_quantity: {
+		{
 			text: grandTotalOpenEnd,
 			rowSpan: 1,
 		},
-		running_total_quantity: {
+		{
 			text: grandTotalQuantity,
 			rowSpan: 1,
 		},
-	});
-
+	]);
+	tableData.unshift([
+		{
+			text: 'Type',
+		},
+		{
+			text: 'Party',
+		},
+		{
+			text: 'O/N',
+		},
+		{
+			text: 'Item',
+		},
+		{
+			text: 'Size',
+		},
+		{
+			text: 'C/E',
+		},
+		{
+			text: 'O/E',
+		},
+		{
+			text: 'Total Qty',
+		},
+	]);
 	const content = {
 		title: 'Daily Production Report',
 		data: tableData,

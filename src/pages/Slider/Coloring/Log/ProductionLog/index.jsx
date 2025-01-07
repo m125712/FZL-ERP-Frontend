@@ -96,6 +96,12 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'teeth_color_name',
+				header: 'Teeth Color',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'item_description',
 				header: 'Item Dsc',
 				cell: (info) => info.getValue(),

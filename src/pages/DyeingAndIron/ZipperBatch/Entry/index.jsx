@@ -144,13 +144,13 @@ export default function Index() {
 			const bottom = parseFloat(item.bottom) || 0;
 			const size = parseFloat(item.size) || 0;
 			const quantity = parseFloat(item.quantity) || 0;
-			const dyedMtrPerKg = parseFloat(item.dyed_mtr_per_kg) || 1;
+			const rawMtrPerKg = parseFloat(item.raw_mtr_per_kg) || 1;
 
 			// * for tape order we calculate with size as quantity
 			const itemTotal =
 				item.order_type === 'tape'
-					? quantity / dyedMtrPerKg
-					: ((top + bottom + size) * quantity) / 100 / dyedMtrPerKg;
+					? quantity / rawMtrPerKg
+					: ((top + bottom + size) * quantity) / 100 / rawMtrPerKg;
 			return acc + itemTotal;
 		}, 0);
 	}, []);

@@ -2044,6 +2044,7 @@ export const PI_CASH_RECEIVE_NULL = {
 
 export const BANK_SCHEMA = {
 	name: STRING_REQUIRED,
+	account_no: STRING.nullable(),
 	swift_code: STRING_REQUIRED,
 	routing_no: STRING.nullable(),
 	address: STRING_REQUIRED,
@@ -2054,6 +2055,7 @@ export const BANK_SCHEMA = {
 export const BANK_NULL = {
 	uuid: null,
 	name: '',
+	account_no: '',
 	swift_code: '',
 	routing_no: '',
 	address: '',

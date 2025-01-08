@@ -6,7 +6,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { ExtraSelect } from '@/components/TableExtraButtons/ExtraSelect';
+import { ExtraSelect } from '@/ui/Others/TableExtraButtons/StatusSelect';
 import { DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';

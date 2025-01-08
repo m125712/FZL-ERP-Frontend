@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { ExtraSelect } from '@/components/TableExtraButtons/ExtraSelect';
+import { ExtraSelect } from '@/ui/Others/TableExtraButtons/StatusSelect';
 import { DateTime, EditDelete, LinkOnly, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';

@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { ExtraSelect } from '@/components/TableExtraButtons/ExtraSelect';
+import { ExtraSelect } from '@/ui/Others/TableExtraButtons/StatusSelect';
 import { DateTime, LinkWithCopy, ReactSelect } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';

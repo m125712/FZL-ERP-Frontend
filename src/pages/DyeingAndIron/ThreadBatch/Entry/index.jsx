@@ -18,8 +18,8 @@ import { useRHF } from '@/hooks';
 import { DeleteModal, ProceedModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
 import ReactTable from '@/components/Table';
-import { ExtraSelect } from '@/components/TableExtraButtons/ExtraSelect';
 import { ShowLocalToast } from '@/components/Toast';
+import { ExtraSelect } from '@/ui/Others/TableExtraButtons/StatusSelect';
 
 import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';

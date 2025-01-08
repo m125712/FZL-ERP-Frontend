@@ -4,7 +4,7 @@ import { useOtherTapeCoil } from '@/state/Other';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { ExtraSelect } from '@/components/TableExtraButtons/ExtraSelect';
+import { ExtraSelect } from '@/ui/Others/TableExtraButtons/StatusSelect';
 import { LinkWithCopy, ReactSelect, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';

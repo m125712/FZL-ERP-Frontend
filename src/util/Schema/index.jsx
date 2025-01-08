@@ -1,36 +1,36 @@
 import { startOfDay } from 'date-fns';
 import * as yup from 'yup';
 
+
+
 import GetDateTime from '../GetDateTime';
-import {
-	BOOLEAN, // default
-	BOOLEAN_DEFAULT_VALUE, // default
-	BOOLEAN_REQUIRED, // default
-	EMAIL, // default
-	EMAIL_REQUIRED, // default
-	FORTUNE_ZIP_EMAIL_PATTERN, // default
-	JSON_STRING, // default
-	JSON_STRING_REQUIRED, // default
-	NAME,
-	NAME_REQUIRED, // default
-	NUMBER, // default
-	NUMBER_DOUBLE, // default
-	NUMBER_DOUBLE_REQUIRED, // default
-	NUMBER_REQUIRED, // default
-	ORDER_NUMBER, // default
-	ORDER_NUMBER_NOT_REQUIRED, // default
-	PASSWORD, // default
-	PHONE_NUMBER, // default
-	PHONE_NUMBER_REQUIRED, // default
-	STRING, // default
-	STRING_REQUIRED, // default
-	URL, // default
-	URL_REQUIRED, // default
-	UUID, // default
-	UUID_FK, // default
-	UUID_PK, // default
-	UUID_REQUIRED,
-} from './utils';
+import { BOOLEAN // default
+, BOOLEAN_DEFAULT_VALUE // default
+, BOOLEAN_REQUIRED // default
+, EMAIL // default
+, EMAIL_REQUIRED // default
+, FORTUNE_ZIP_EMAIL_PATTERN // default
+, JSON_STRING // default
+, JSON_STRING_REQUIRED // default
+, NAME, NAME_REQUIRED // default
+, NUMBER // default
+, NUMBER_DOUBLE // default
+, NUMBER_DOUBLE_REQUIRED // default
+, NUMBER_REQUIRED // default
+, ORDER_NUMBER // default
+, ORDER_NUMBER_NOT_REQUIRED // default
+, PASSWORD // default
+, PHONE_NUMBER // default
+, PHONE_NUMBER_REQUIRED // default
+, STRING // default
+, STRING_REQUIRED // default
+, URL // default
+, URL_REQUIRED // default
+, UUID // default
+, UUID_FK // default
+, UUID_PK // default
+, UUID_REQUIRED } from './utils';
+
 
 export {
 	BOOLEAN,
@@ -2044,6 +2044,7 @@ export const PI_CASH_RECEIVE_NULL = {
 
 export const BANK_SCHEMA = {
 	name: STRING_REQUIRED,
+	account_no: STRING.nullable(),
 	swift_code: STRING_REQUIRED,
 	routing_no: STRING.nullable(),
 	address: STRING_REQUIRED,
@@ -2054,6 +2055,7 @@ export const BANK_SCHEMA = {
 export const BANK_NULL = {
 	uuid: null,
 	name: '',
+	account_no: '',
 	swift_code: '',
 	routing_no: '',
 	address: '',

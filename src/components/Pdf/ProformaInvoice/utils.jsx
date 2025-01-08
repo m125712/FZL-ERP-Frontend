@@ -69,15 +69,15 @@ export const getPageHeader = (data) => {
 			[
 				{ text: 'Buyer', bold: true, color: PRIMARY_COLOR },
 				{ text: [...buyer].join(', ') },
-				{ text: 'SWIFT', bold: true, color: PRIMARY_COLOR },
-				data?.bank_swift_code,
+				{ text: 'Account No', bold: true, color: PRIMARY_COLOR },
+				data?.bank_account_no,
 			],
 
 			[
 				{ text: 'Attention', bold: true, color: PRIMARY_COLOR },
 				data?.merchandiser_name,
-				{ text: 'Routing No', bold: true, color: PRIMARY_COLOR },
-				data?.bank_routing_no,
+				{ text: 'SWIFT', bold: true, color: PRIMARY_COLOR },
+				data?.bank_swift_code,
 			],
 
 			[
@@ -87,8 +87,8 @@ export const getPageHeader = (data) => {
 					color: PRIMARY_COLOR,
 				},
 				{ text: Number(data?.weight) > 0 ? data?.weight + ' Kg' : '' },
-				'',
-				'',
+				{ text: 'Routing No', bold: true, color: PRIMARY_COLOR },
+				data?.bank_routing_no,
 			],
 		],
 	};

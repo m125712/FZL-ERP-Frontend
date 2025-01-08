@@ -1,5 +1,7 @@
 import { ArrowUpDown, PDF, Reload, Up } from '@/assets/icons';
-import DropdownMenu from '../DropdownMenu';
+
+import { Drawer, Template } from './Drawer';
+import DropdownMenu from './DropdownMenu';
 import FilterButton from './FilterButton';
 import Title, { AddButton, TitleOnly } from './Title';
 
@@ -58,4 +60,6 @@ export {
 	Title,
 	TitleOnly,
 	ReloadButton,
+	Drawer,
+	Template,
 };

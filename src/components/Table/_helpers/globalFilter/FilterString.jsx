@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useMemo } from 'react';
 
-import { DebouncedInput } from '../../components';
-import { Template } from '../../components/Filter/_components';
+import { Template } from '../../ui';
+import { DebouncedInput } from '../../utils';
 
 const FilterString = ({ columnName, column, firstValue, isFullFilter }) => {
 	const { id, getFacetedUniqueValues, getFilterValue, setFilterValue } =

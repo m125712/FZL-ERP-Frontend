@@ -1,10 +1,11 @@
-import ColumnVisibility from './columnVisibility';
 import GlobalFilter from './globalFilter';
+import ColumnVisibility from './handleColumnVisibility';
+import DateRange from './handleDateRange';
 import HandleExport from './handleExport';
-import HandleReload from './handleReload';
-import HandleEntry from './handleEntry';
+import HandleEntry from './handleNew';
 import HandlePDF from './handlePDF';
-import SearchBox from './searchBox';
+import HandleReload from './handleReload';
+import SearchBox from './handleSearchBox';
 
 export {
 	SearchBox,
@@ -14,4 +15,5 @@ export {
 	HandleReload,
 	HandleEntry,
 	HandlePDF,
+	DateRange,
 };

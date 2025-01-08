@@ -1,4 +1,4 @@
-import { DebouncedInput } from '../../components';
+import { DebouncedInput } from '../../utils';
 
 const SearchBox = (props) => {
 	return (

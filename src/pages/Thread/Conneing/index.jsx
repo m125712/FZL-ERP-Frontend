@@ -1,12 +1,11 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
-import { useOtherMachines } from '@/state/Other';
 import { useDyeingCone } from '@/state/Thread';
 import { BookOpen } from 'lucide-react';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { BatchType, DateTime, LinkOnly, Transfer } from '@/ui';
+import { BatchType, CustomLink, DateTime, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -17,7 +16,6 @@ const PolyTransfer = lazy(() => import('./PolyTransfer'));
 export default function Index() {
 	const { data, url, isLoading } = useDyeingCone();
 	const info = new PageInfo('Coning', url, 'thread__coning_details');
-	const { data: machine } = useOtherMachines();
 	const haveAccess = useAccess('thread__coning_details');
 
 	const columns = useMemo(
@@ -28,10 +26,9 @@ export default function Index() {
 				enableColumnFilter: true,
 				width: 'w-36',
 				cell: (info) => (
-					<LinkOnly
-						title={info.getValue()}
-						id={info.row.original.batch_uuid}
-						uri='/dyeing-and-iron/thread-batch'
+					<CustomLink
+						label={info.getValue()}
+						url={`/dyeing-and-iron/thread-batch/${info.row.original.batch_uuid}`}
 					/>
 				),
 			},
@@ -40,21 +37,18 @@ export default function Index() {
 				accessorKey: 'order_number',
 				header: 'ID',
 				width: 'w-36',
-				cell: (info) => {
-					const { order_info_uuid } = info.row.original;
-					return (
-						<LinkOnly
-							uri='/thread/order-info'
-							id={order_info_uuid}
-							title={info.getValue()}
-						/>
-					);
-				},
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/thread/order-info/${info.row.original.order_info_uuid}`}
+					/>
+				),
 			},
 			{
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
+				width: 'w-36',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -67,6 +61,7 @@ export default function Index() {
 				accessorKey: 'color',
 				header: 'Color',
 				enableColumnFilter: false,
+				width: 'w-36',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -86,8 +81,7 @@ export default function Index() {
 				accessorKey: 'batch_quantity',
 				header: (
 					<span>
-						Batch
-						<br />
+						Batch <br />
 						QTY
 					</span>
 				),
@@ -98,8 +92,7 @@ export default function Index() {
 				accessorKey: 'balance_quantity',
 				header: (
 					<span>
-						Balance
-						<br />
+						Balance <br />
 						QTY
 					</span>
 				),
@@ -133,53 +126,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'coning_carton_quantity',
-			// 	header: (
-			// 		<span>
-			// 			Carton
-			// 			<br />
-			// 			QTY
-			// 		</span>
-			// 	),
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'action_add_transaction',
-			// 	header: '',
-			// 	enableColumnFilter: false,
-			// 	enableSorting: false,
-			// 	hidden: true, //!haveAccess.includes('click_transaction'),
-			// 	width: 'w-8',
-			// 	cell: (info) => {
-			// 		return (
-			// 			<Transfer
-			// 				onClick={() => handelTransaction(info.row.index)}
-			// 			/>
-			// 		);
-			// 	},
-			// },
-			// {
-			// 	accessorKey: 'transfer_quantity',
-			// 	header: 'Warehouse',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'transfer_carton_quantity',
-			// 	header: (
-			// 		<span>
-			// 			Warehouse
-			// 			<br />
-			// 			Carton
-			// 		</span>
-			// 	),
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-
-			////
 			{
 				accessorKey: 'action',
 				header: 'Sticker',
@@ -223,32 +169,10 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// * actions
-			// {
-			// 	accessorKey: 'actions',
-			// 	header: 'Actions',
-			// 	enableColumnFilter: false,
-			// 	enableSorting: false,
-			// 	hidden: !haveAccess.includes('update'),
-			// 	width: 'w-24',
-			// 	cell: (info) => (
-			// 		<EditDelete
-			// 			idx={info.row.index}
-			// 			handelUpdate={handelUpdate}
-			// 			showEdit={haveAccess.includes('update')}
-			// 			showDelete={false}
-			// 		/>
-			// 	),
-			// },
 		],
-		[data, machine]
+		[data]
 	);
 
-	// Update
-	// const handelUpdate = (idx) => {
-	// 	const { uuid } = data[idx];
-	// 	navigate(`/thread/coning/${uuid}/update`);
-	// };
 	const [update, setUpdate] = useState({
 		uuid: null,
 		quantity: null,
@@ -291,25 +215,12 @@ export default function Index() {
 		remarks: null,
 	});
 
-	const handelTransaction = (idx) => {
-		const val = data[idx];
-
-		setConingTrx((prev) => ({
-			...prev,
-			...val,
-		}));
-
-		window['ConingTrxModal'].showModal();
-	};
-
-	// get tabname
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
-	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
 		<div>

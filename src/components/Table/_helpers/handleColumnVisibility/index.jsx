@@ -1,7 +1,8 @@
-import FilterButton from '../../ui/FilterButton';
-import { notShowingColumns, SlicedColumn } from './_components';
+import { FilterButton } from '../../ui';
+import { notShowingColumns } from '../../utils';
+import Item from './Item';
 
-function FilterColumn({ columns }) {
+const ColumnVisibility = ({ columns }) => {
 	const showItem = 6;
 	const allColumn = columns?.filter(
 		(column) =>
@@ -16,7 +17,7 @@ function FilterColumn({ columns }) {
 				{Array.from(
 					{ length: Math.ceil(allColumn.length / showItem) },
 					(_, i) => (
-						<SlicedColumn
+						<Item
 							key={i}
 							columns={allColumn.slice(
 								i * showItem,
@@ -28,6 +29,6 @@ function FilterColumn({ columns }) {
 			</div>
 		</FilterButton>
 	);
-}
+};
 
-export default FilterColumn;
+export default ColumnVisibility;

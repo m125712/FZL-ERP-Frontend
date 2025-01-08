@@ -1,7 +1,9 @@
 import { flexRender } from '@tanstack/react-table';
-import { FilterColumnValue } from '../components/Filter';
+
+import { cn } from '@/lib/utils';
+
+import FilterColumn from '../_helpers/globalFilter/FilterColumn';
 import { SortingIndicator } from '../ui';
-import clsx from 'clsx';
 
 const TableHead = ({ getHeaderGroups, getPreFilteredRowModel }) => {
 	return (
@@ -19,7 +21,7 @@ const TableHead = ({ getHeaderGroups, getPreFilteredRowModel }) => {
 							<th
 								key={id}
 								colSpan={colSpan}
-								className={clsx(
+								className={cn(
 									'group space-y-1 whitespace-nowrap px-3 py-2 text-left font-semibold tracking-wide text-primary first:pl-6',
 									column.getCanSort()
 										? 'cursor-pointer select-none transition duration-300 hover:bg-secondary/10'
@@ -32,7 +34,7 @@ const TableHead = ({ getHeaderGroups, getPreFilteredRowModel }) => {
 								}>
 								{!isPlaceholder && (
 									<div
-										className={clsx(
+										className={cn(
 											'flex place-items-baseline gap-1 place-self-start',
 											column.columnDef.width
 										)}
@@ -48,7 +50,7 @@ const TableHead = ({ getHeaderGroups, getPreFilteredRowModel }) => {
 									</div>
 								)}
 								{column.getCanFilter() ? (
-									<FilterColumnValue
+									<FilterColumn
 										{...{ column, getPreFilteredRowModel }}
 									/>
 								) : null}

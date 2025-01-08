@@ -1,7 +1,9 @@
+import { forwardRef, useCallback, useState } from 'react';
 import { CalenderIcon } from '@/assets/icons';
 import { format } from 'date-fns';
-import { forwardRef, useCallback, useState } from 'react';
 import DatePicker from 'react-datepicker';
+
+import { Template } from '../../ui';
 import {
 	Button,
 	DefaultConfig,
@@ -10,8 +12,7 @@ import {
 	months,
 	Select,
 	utilFunc,
-} from '../../components/DateRange/utils';
-import { Template } from '../../components/Filter/_components';
+} from '../handleDateRange/utils';
 
 const ExampleCustomInput = forwardRef(({ value, onClick, className }, ref) => {
 	return (
@@ -23,9 +24,7 @@ const ExampleCustomInput = forwardRef(({ value, onClick, className }, ref) => {
 });
 
 ExampleCustomInput.displayName = 'ExampleCustomInput';
-// columnName,
-// 	column,
-// 	getPreFilteredRowModel,
+
 const FilterDate = ({ columnName, column, isFullFilter }) => {
 	if (!column) return null;
 

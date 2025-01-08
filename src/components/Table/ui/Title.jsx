@@ -1,5 +1,6 @@
-import cn from '@/lib/cn';
 import { Plus } from 'lucide-react';
+
+import cn from '@/lib/cn';
 
 const AddButton = ({ onClick }) => {
 	return (

@@ -1,10 +1,8 @@
 import { useMemo } from 'react';
 
-import {
-	DrawerBody,
-	notShowingColumns,
-} from '../../components/Filter/_components';
-import { GetFlatHeader } from '../../utils';
+import { Drawer } from '@/components/Table/ui';
+import { GetFlatHeader, notShowingColumns } from '@/components/Table/utils';
+
 import FilterColumn from './FilterColumn';
 
 const GlobalFilter = ({ getHeaderGroups, getPreFilteredRowModel, title }) => {
@@ -29,7 +27,7 @@ const GlobalFilter = ({ getHeaderGroups, getPreFilteredRowModel, title }) => {
 	);
 
 	return (
-		<DrawerBody htmlId={htmlId}>
+		<Drawer htmlId={htmlId}>
 			{headers
 				.filter(({ column }) => column.columnDef.header !== '')
 				.map(({ id, column }) => (
@@ -43,7 +41,7 @@ const GlobalFilter = ({ getHeaderGroups, getPreFilteredRowModel, title }) => {
 						/>
 					</div>
 				))}
-		</DrawerBody>
+		</Drawer>
 	);
 };
 

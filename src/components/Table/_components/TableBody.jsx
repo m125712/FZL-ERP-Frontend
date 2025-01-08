@@ -1,5 +1,6 @@
-import clsx from 'clsx';
 import { flexRender } from '@tanstack/react-table';
+
+import { cn } from '@/lib/utils';
 
 const TableBody = ({ rows, extraClass = '' }) => {
 	return rows?.map(({ id, getVisibleCells }) => (
@@ -11,7 +12,7 @@ const TableBody = ({ rows, extraClass = '' }) => {
 					return (
 						<td
 							key={id}
-							className={clsx(
+							className={cn(
 								'group px-3 py-2 text-left text-sm font-normal tracking-wide first:pl-6',
 								!columnDef.width && 'whitespace-nowrap',
 								extraClass

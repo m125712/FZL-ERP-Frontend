@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import {
+	CustomLink,
 	DateTime,
 	EditDelete,
 	LinkWithCopy,
@@ -286,10 +287,10 @@ export const InfoColumns = ({
 				header: 'O/N',
 				enableColumnFilter: true,
 				cell: (info) => (
-					<LinkWithCopy
-						title={info.getValue()}
-						id={info.getValue()}
-						uri='/order/details'
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
 					/>
 				),
 			},

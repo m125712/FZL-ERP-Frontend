@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
-import { DebouncedInput } from '../../components';
-import { Template } from '../../components/Filter/_components';
+
+import { Template } from '../../ui';
+import { DebouncedInput } from '../../utils';
 
 const FilterNumber = ({ columnName, column, isFullFilter }) => {
 	const { getFilterValue, setFilterValue, getFacetedMinMaxValues } = column;

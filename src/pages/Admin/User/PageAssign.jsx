@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useFetchForRhfResetForUserAccess, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { DebouncedInput } from '@/components/Table/components';
+import { DebouncedInput } from '@/components/Table/utils';
 import { CheckBox } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';

@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
-import { Template } from '../../components/Filter/_components';
+
+import { Template } from '../../ui';
 
 const FilterStatus = ({ columnName, column, isFullFilter }) => {
 	const { setFilterValue } = column;

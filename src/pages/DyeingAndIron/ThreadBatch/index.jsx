@@ -105,6 +105,7 @@ export default function Index() {
 				accessorKey: 'color',
 				header: 'Color',
 				enableColumnFilter: false,
+				width: 'w-24',
 				cell: (info) => info.getValue(),
 			},
 			{

@@ -58,23 +58,23 @@ export default function Index(data) {
 					// * color
 					[
 						{
-							text: data?.color,
+							text: data?.color.replace(/\(/g, '\n('),
 							alignment: 'center',
-							fontSize: fontSize + 1.5,
+							fontSize: fontSize + 0.9,
 							bold: true,
 						},
 
 						{
-							text: data?.color,
+							text: data?.color.replace(/\(/g, '\n('),
 							alignment: 'center',
-							fontSize: fontSize + 1.5,
+							fontSize: fontSize + 0.9,
 							bold: true,
 						},
 
 						{
-							text: data?.color,
+							text: data?.color.replace(/\(/g, '\n('),
 							alignment: 'center',
-							fontSize: fontSize + 1.5,
+							fontSize: fontSize + 0.5,
 							bold: true,
 						},
 					],

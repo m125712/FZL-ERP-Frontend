@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import {
 	ColumnVisibility,
+	DateRange,
 	GlobalFilter,
 	HandleEntry,
 	HandleExport,
@@ -9,7 +10,7 @@ import {
 	HandleReload,
 	SearchBox,
 } from '../_helpers';
-import DateRange from '../components/DateRange';
+// import DateRange from '../components/DateRange';
 import { dateRangeColumnId } from '../utils';
 import TableTitle from './TableTitle';
 

@@ -25,6 +25,7 @@ import {
 import {
 	BadgeCheckbox,
 	BatchType,
+	CustomLink,
 	DateTime,
 	DepartmentShow,
 	EditDelete,
@@ -89,4 +90,5 @@ export {
 	SimpleDatePicker,
 	BatchType,
 	StatusSelect,
+	CustomLink,
 };

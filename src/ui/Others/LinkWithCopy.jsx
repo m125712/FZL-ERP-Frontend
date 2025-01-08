@@ -1,9 +1,11 @@
 import { Clipboard } from 'lucide-react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { ShowLocalToast } from '@/components/Toast';
 
-const CopyButton = ({ id }) => {
+import { cn } from '@/lib/utils';
+
+const CopyButton = ({ id, className }) => {
 	const handleOnClick = () => {
 		navigator.clipboard.writeText(id);
 
@@ -18,7 +20,12 @@ const CopyButton = ({ id }) => {
 			type='button'
 			onClick={() => handleOnClick()}
 			aria-label='Copy ID to clipboard'>
-			<Clipboard className='h-4 w-4 transition-transform duration-200 hover:scale-110' />
+			<Clipboard
+				className={cn(
+					'h-4 w-4 transition-transform duration-200 hover:scale-110',
+					className
+				)}
+			/>
 		</div>
 	);
 };
@@ -55,4 +62,40 @@ const LinkCopyOnly = ({ id }) => (
 	</button>
 );
 
-export { LinkCopyOnly, LinkOnly, LinkWithCopy };
+const CustomLink = ({
+	label = null,
+	url = null,
+	showCopyButton = true,
+	openInNewTab = false,
+}) => {
+	if (!label) return '--';
+
+	return (
+		<div className='flex items-center gap-2'>
+			{showCopyButton && (
+				<CopyButton
+					id={label}
+					className='transition-colors duration-300 hover:text-info hover:decoration-info'
+				/>
+			)}
+
+			{url === null ? (
+				<span>{label}</span>
+			) : (
+				<Link
+					to={url}
+					className={cn(
+						'font-semibold underline underline-offset-2 transition-colors duration-300 hover:text-info hover:decoration-info',
+						url !== null
+							? 'cursor-pointer'
+							: 'pointer-events-none cursor-not-allowed'
+					)}
+					target={openInNewTab ? '_blank' : '_self'}>
+					{label}
+				</Link>
+			)}
+		</div>
+	);
+};
+
+export { LinkCopyOnly, LinkOnly, LinkWithCopy, CustomLink };

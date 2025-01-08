@@ -19,7 +19,7 @@ export default function Content({ data }) {
 			</span>
 
 			<div className='overflow-x-auto'>
-				<table className='table table-zebra w-full'>
+				<table className='table table-xs w-full'>
 					<thead>
 						<tr className='bg-primary text-left text-lg font-semibold capitalize text-primary-content'>
 							{header?.map((item, index) => (

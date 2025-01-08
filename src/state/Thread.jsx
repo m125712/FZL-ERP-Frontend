@@ -63,10 +63,10 @@ export const useThreadDetailsByUUID = (uuid) =>
 		url: `/thread/order-info-details/by/${uuid}`,
 	});
 //Swatch
-export const useThreadSwatch = () =>
+export const useThreadSwatch = (query) =>
 	createGlobalState({
-		queryKey: threadQK.swatch(),
-		url: '/thread/order-swatch',
+		queryKey: threadQK.swatch(query),
+		url: query ? `/thread/order-swatch?${query}` : '/thread/order-swatch',
 	});
 export const useThreadSwatchByUUID = (uuid) =>
 	createGlobalState({

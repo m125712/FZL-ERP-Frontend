@@ -1,10 +1,11 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useCommercialPIByQuery } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
+import { ExtraSelect } from '@/components/TableExtraButtons/ExtraSelect';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
@@ -22,12 +23,19 @@ const getPath = (haveAccess, userUUID) => {
 };
 
 export default function Index() {
+	const [status, setStatus] = useState('all');
+	const options = [
+		{ value: 'all', label: 'All' },
+		{ value: 'pending', label: 'Pending' },
+		{ value: 'completed', label: 'Completed' },
+	];
+	
 	const navigate = useNavigate();
 	const haveAccess = useAccess('commercial__pi');
 	const { user } = useAuth();
 
 	const { data, isLoading, url } = useCommercialPIByQuery(
-		getPath(haveAccess, user?.uuid),
+		getPath(haveAccess, user?.uuid) + `&type=${status}`,
 		{
 			enabled: !!user?.uuid,
 		}
@@ -234,6 +242,13 @@ export default function Index() {
 				columns={columns}
 				accessor={haveAccess.includes('create')}
 				handelAdd={handelAdd}
+				extraButton={
+					<ExtraSelect
+						options={options}
+						status={status}
+						setStatus={setStatus}
+					/>
+				}
 			/>
 		</div>
 	);

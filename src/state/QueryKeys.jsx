@@ -391,7 +391,7 @@ export const dyeingQK = {
 	dyeingRMLogByUUID: (uuid) => [...dyeingQK.dyeingRMLog(), uuid],
 
 	//* swatch
-	swatch: () => [...dyeingQK.all(), 'swatch'],
+	swatch: (query) => [...dyeingQK.all(), 'swatch', ...(query ? [query] : [])],
 	swatchByUUID: (uuid) => [...dyeingQK.swatch(), uuid],
 
 	//* dummy query for updating swatches
@@ -449,7 +449,11 @@ export const dyeingQK = {
 	dyeingTransferByUUID: (uuid) => [...dyeingQK.dyeingTransfer(), uuid],
 
 	//* ? Finishing Batch
-	finishingBatch: () => [...dyeingQK.all(), 'finishing-batch'],
+	finishingBatch: (query) => [
+		...dyeingQK.all(),
+		'finishing-batch',
+		...(query ? [query] : []),
+	],
 	finishingBatchByUUID: (uuid, params) => [
 		...dyeingQK.finishingBatch(),
 		uuid,
@@ -1078,7 +1082,7 @@ export const threadQK = {
 	orderInfoEntryByUUID: (uuid) => [...threadQK.orderInfoEntry(), uuid],
 
 	//Swatch
-	swatch: () => [...threadQK.all(), 'swatch'],
+	swatch: (query) => [...threadQK.all(), 'swatch', ...(query ? [query] : [])],
 	swatchByUUID: (uuid) => [...threadQK.swatch(), uuid],
 
 	//DyesCategory

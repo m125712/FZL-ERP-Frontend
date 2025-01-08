@@ -41,6 +41,7 @@ import {
 	SectionName,
 	SimpleDatePicker,
 	StatusButton,
+	StatusSelect,
 	TitleList,
 	TitleValue,
 	Transfer,
@@ -88,5 +89,6 @@ export {
 	UserName,
 	SimpleDatePicker,
 	BatchType,
+	StatusSelect,
 	CustomLink,
 };

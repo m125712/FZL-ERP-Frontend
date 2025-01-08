@@ -33,7 +33,7 @@ export default function Information({ info }) {
 				label: 'Name',
 				value: name,
 			},
-			order_number.includes('ST')
+			order_number?.includes('ST')
 				? {
 						label: 'Order No',
 						value: (

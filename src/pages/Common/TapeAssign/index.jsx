@@ -1,23 +1,37 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useCommonTapeAssign } from '@/state/Common';
 import { useOtherTapeCoil } from '@/state/Other';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { LinkWithCopy, ReactSelect, StatusButton } from '@/ui';
+import { LinkWithCopy, ReactSelect, StatusButton, StatusSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const { data, updateData, isLoading } = useCommonTapeAssign();
+	const [status, setStatus] = useState('bulk_pending');
+	// options for extra table select
+	const options = [
+		{ value: 'bulk_pending', label: 'Bulk Pending' },
+		{ value: 'bulk_completed', label: 'Bulk Completed' },
+		{ value: 'bulk_all', label: 'Bulk All' },
+		{ value: 'sample_pending', label: 'Sample Pending' },
+		{ value: 'sample_completed', label: 'Sample Completed' },
+		{ value: 'sample_all', label: 'Sample All' },
+	];
+
+	const { data, updateData, isLoading } = useCommonTapeAssign(
+		`type=${status}`
+	);
+
 	const info = new PageInfo(
 		'Common/Tape Assign',
 		'common/tape_assign',
 		'common__tape_assign'
 	);
+
 	const haveAccess = useAccess('common__tape_assign');
-	const { data: tape } = useOtherTapeCoil(`/other/tape-coil/value/label`);
-	// * fetching the data
+	const { data: tape } = useOtherTapeCoil();
 
 	const columns = useMemo(
 		() => [
@@ -129,7 +143,7 @@ export default function Index() {
 				},
 			},
 		],
-		[data, tape]
+		[data, tape, status]
 	);
 
 	const handleSwatchStatus = async (e, idx) => {
@@ -147,7 +161,18 @@ export default function Index() {
 
 	return (
 		<div>
-			<ReactTable title={info.getTitle()} data={data} columns={columns} />
+			<ReactTable
+				title={info.getTitle()}
+				data={data}
+				columns={columns}
+				extraButton={
+					<StatusSelect
+						status={status}
+						setStatus={setStatus}
+						options={options}
+					/>
+				}
+			/>
 		</div>
 	);
 }

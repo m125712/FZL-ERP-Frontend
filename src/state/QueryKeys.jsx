@@ -1,4 +1,3 @@
-;
 /**
  *? Effective React Query Keys
  ** https://tkdodo.eu/blog/effective-react-query-keys#use-query-key-factories
@@ -7,11 +6,8 @@
 
 import { all } from 'axios';
 
-
-
 import { useDeliveryThreadDashboard } from './Delivery';
 import { useOtherThreadOrderPackingList } from './Other';
-
 
 export const orderQK = {
 	all: () => ['order'],
@@ -323,7 +319,11 @@ export const commonQK = {
 		uuid,
 	],
 	//* Tape Assign
-	tapeAssign: () => [...commonQK.all(), 'tape/assign'],
+	tapeAssign: (query) => [
+		...commonQK.all(),
+		'tape/assign',
+		...(query ? [query] : []),
+	],
 	tapeAssignByUUID: (uuid) => [...commonQK.tapeAssign(), uuid],
 };
 
@@ -391,7 +391,7 @@ export const dyeingQK = {
 	dyeingRMLogByUUID: (uuid) => [...dyeingQK.dyeingRMLog(), uuid],
 
 	//* swatch
-	swatch: () => [...dyeingQK.all(), 'swatch'],
+	swatch: (query) => [...dyeingQK.all(), 'swatch', ...(query ? [query] : [])],
 	swatchByUUID: (uuid) => [...dyeingQK.swatch(), uuid],
 
 	//* dummy query for updating swatches
@@ -449,7 +449,11 @@ export const dyeingQK = {
 	dyeingTransferByUUID: (uuid) => [...dyeingQK.dyeingTransfer(), uuid],
 
 	//* ? Finishing Batch
-	finishingBatch: () => [...dyeingQK.all(), 'finishing-batch'],
+	finishingBatch: (query) => [
+		...dyeingQK.all(),
+		'finishing-batch',
+		...(query ? [query] : []),
+	],
 	finishingBatchByUUID: (uuid, params) => [
 		...dyeingQK.finishingBatch(),
 		uuid,
@@ -1078,7 +1082,7 @@ export const threadQK = {
 	orderInfoEntryByUUID: (uuid) => [...threadQK.orderInfoEntry(), uuid],
 
 	//Swatch
-	swatch: () => [...threadQK.all(), 'swatch'],
+	swatch: (query) => [...threadQK.all(), 'swatch', ...(query ? [query] : [])],
 	swatchByUUID: (uuid) => [...threadQK.swatch(), uuid],
 
 	//DyesCategory
@@ -1419,7 +1423,11 @@ export const otherQK = {
 	challan: () => [...otherQK.all(), 'challan'],
 
 	//* TAPE-COIL
-	tapeCoil: () => [...otherQK.all(), 'tape-coil'],
+	tapeCoil: (query) => [
+		...otherQK.all(),
+		'tape-coil',
+		...(query ? [query] : []),
+	],
 
 	//* GET GIVEN URL DATA
 	getURLData: (url) => [...otherQK.all(), 'get-url-data', url],

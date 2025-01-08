@@ -51,7 +51,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'sub_streat',
-				header: 'Sub Streat',
+				header: 'Substrate',
 				enableColumnFilter: false,
 			},
 			{

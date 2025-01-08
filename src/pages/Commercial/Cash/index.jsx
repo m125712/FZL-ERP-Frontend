@@ -6,7 +6,8 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
+
+import { CustomLink, DateTime, EditDelete, LinkWithCopy, Transfer, StatusSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -25,12 +26,19 @@ const getPath = (haveAccess, userUUID) => {
 };
 
 export default function Index() {
+	const [status, setStatus] = useState('all');
+	const options = [
+		{ value: 'all', label: 'All' },
+		{ value: 'pending', label: 'Pending' },
+		{ value: 'completed', label: 'Completed' },
+	];
+
 	const navigate = useNavigate();
 	const haveAccess = useAccess('commercial__pi-cash');
 	const { user } = useAuth();
 
 	const { data, isLoading, url } = useCommercialPIByQuery(
-		getPath(haveAccess, user?.uuid),
+		getPath(haveAccess, user?.uuid) + `&type=${status}`,
 		{
 			enabled: !!user?.uuid,
 		}
@@ -265,6 +273,13 @@ export default function Index() {
 				columns={columns}
 				accessor={haveAccess.includes('create')}
 				handelAdd={handelAdd}
+				extraButton={
+					<StatusSelect
+						options={options}
+						status={status}
+						setStatus={setStatus}
+					/>
+				}
 			/>
 			<Suspense>
 				<ReceiveAmount

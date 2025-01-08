@@ -21,6 +21,7 @@ import { Progress } from './Progress';
 import ReactSelect from './ReactSelect';
 import SectionEntryBody from './SectionEntryBody';
 import SectionName from './SectionName';
+import { StatusSelect } from './TableExtraButtons/StatusSelect';
 import { TitleList, TitleValue } from './TitleValue';
 
 export {
@@ -45,5 +46,6 @@ export {
 	UserName,
 	SimpleDatePicker,
 	BatchType,
+	StatusSelect,
 	CustomLink,
 };

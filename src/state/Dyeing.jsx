@@ -28,10 +28,10 @@ export const useDyeingRMLogByUUID = (uuid) =>
 	});
 
 // * Info
-export const useDyeingSwatch = () =>
+export const useDyeingSwatch = (query) =>
 	createGlobalState({
-		queryKey: dyeingQK.swatch(),
-		url: '/zipper/sfg-swatch',
+		queryKey: dyeingQK.swatch(query),
+		url: query ? `/zipper/sfg-swatch?${query}` : '/zipper/sfg-swatch',
 	});
 
 export const useDyeingSwatchByUUID = (uuid) =>
@@ -88,7 +88,7 @@ export const useDyeingBatchDetails = () =>
 	});
 export const useDyeingBatchDetailsByUUID = (uuid, param = '') =>
 	createGlobalState({
-		queryKey: dyeingQK.batchDetailsByUUID(uuid),
+		queryKey: dyeingQK.batchDetailsByUUID(uuid, param),
 		url: `/zipper/dyeing-batch-details/${uuid}${param}`,
 	});
 // * Thread Batch
@@ -122,7 +122,7 @@ export const useDyeingThreadBatchDetails = () =>
 	});
 export const useDyeingThreadBatchDetailsByUUID = (uuid, param = '') =>
 	createGlobalState({
-		queryKey: dyeingQK.threadBatchDetailsByUUID(uuid),
+		queryKey: dyeingQK.threadBatchDetailsByUUID(uuid, param),
 		url: `/thread/batch-details/by/${uuid}${param}`,
 	});
 //* Thread Batch Entry
@@ -171,10 +171,12 @@ export const useDyeingDummy = () =>
 
 //? Finishing Batch
 //* Get all Finishing Batch
-export const useDyeingFinishingBatch = () =>
+export const useDyeingFinishingBatch = (query) =>
 	createGlobalState({
-		queryKey: dyeingQK.finishingBatch(),
-		url: '/zipper/finishing-batch',
+		queryKey: dyeingQK.finishingBatch(query),
+		url: query
+			? `/zipper/finishing-batch?${query}`
+			: '/zipper/finishing-batch',
 	});
 
 //* Get Specific Finishing Batch

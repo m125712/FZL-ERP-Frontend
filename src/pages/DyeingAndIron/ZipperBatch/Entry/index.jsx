@@ -25,6 +25,7 @@ import { DeleteModal, ProceedModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
 import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
+import { StatusSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
@@ -63,6 +64,12 @@ export default function Index() {
 	const [batchData, setBatchData] = useState(null);
 	const [batchEntry, setBatchEntry] = useState(null);
 	const [patchBatchEntry, setPatchBatchEntry] = useState(null);
+	const [status, setStatus] = useState('bulk'); // * options for extra select in table
+	const options = [
+		{ value: 'bulk', label: 'Bulk' },
+		{ value: 'sample', label: 'Sample' },
+		{ value: 'all', label: 'All' },
+	];
 
 	const {
 		register,
@@ -96,12 +103,15 @@ export default function Index() {
 
 	const { data, invalidateQuery: invalidateNewDyeingZipperBatchEntry } =
 		isUpdate
-			? useDyeingBatchDetailsByUUID(batch_uuid, '?is_update=true')
+			? useDyeingBatchDetailsByUUID(
+					batch_uuid,
+					`?is_update=true&type=${status}`
+				)
 			: watch('batch_type') === 'extra' && watch('order_info_uuid')
 				? useDyeingOrderBatch(
-						`batch_type=extra&order_info_uuid=${watch('order_info_uuid')}`
+						`batch_type=extra&order_info_uuid=${watch('order_info_uuid')}&type=${status}`
 					)
-				: useDyeingOrderBatch();
+				: useDyeingOrderBatch(`type=${status}`);
 
 	useEffect(() => {
 		if (isUpdate) {
@@ -120,7 +130,7 @@ export default function Index() {
 			setValue('dyeing_batch_entry', data?.dyeing_batch_entry);
 			setValue('new_dyeing_batch_entry', data?.new_dyeing_batch_entry);
 		}
-	}, [data]);
+	}, [data, status]);
 
 	const getTotalQty = useCallback(
 		(dyeing_batch_entry) => {
@@ -133,6 +143,7 @@ export default function Index() {
 		},
 		[watch()]
 	);
+
 	const isReceived = getValues('received') === 1;
 	const getTotalCalTape = useCallback((dyeing_batch_entry) => {
 		if (!dyeing_batch_entry || !Array.isArray(dyeing_batch_entry)) {
@@ -474,6 +485,7 @@ export default function Index() {
 		errors,
 		watch,
 		isUpdate,
+		status: status,
 	});
 
 	// * table columns for adding new finishing field on update
@@ -483,8 +495,10 @@ export default function Index() {
 		register,
 		errors,
 		watch,
+		status: status,
 		is_new: true,
 	});
+
 	return (
 		<FormProvider {...form}>
 			<form
@@ -518,6 +532,15 @@ export default function Index() {
 					title={'Batch Orders'}
 					data={BatchOrdersField}
 					columns={currentColumns}
+					extraButton={
+						!isUpdate && (
+							<StatusSelect
+								status={status}
+								setStatus={setStatus}
+								options={options}
+							/>
+						)
+					}
 				/>
 
 				{isUpdate && (
@@ -525,6 +548,13 @@ export default function Index() {
 						title={'Add New Batch'}
 						data={NewBatchOrdersField}
 						columns={NewColumns}
+						extraButton={
+							<StatusSelect
+								status={status}
+								setStatus={setStatus}
+								options={options}
+							/>
+						}
 					/>
 				)}
 

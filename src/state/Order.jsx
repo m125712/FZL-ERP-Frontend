@@ -10,7 +10,7 @@ export const useOrderDetails = () =>
 
 export const useOrderDetailsByQuery = (query, { enabled = false }) =>
 	createGlobalState({
-		queryKey: orderQK.detailsByQuery(),
+		queryKey: orderQK.detailsByQuery(query),
 		url: `/zipper/order/details${query}`,
 		enabled: enabled,
 	});

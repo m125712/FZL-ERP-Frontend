@@ -34,8 +34,8 @@ export const getPageHeader = (data) => {
 					text: [
 						`${company.address}\n`,
 						`${company.phone}\n`,
-						'BIN:000537296-0403\n',
-						'VAT:17141000815\n',
+						`${company.bin}\n`,
+						`${company.tax}\n`,
 					],
 					alignment: 'left',
 				},

@@ -80,7 +80,7 @@ export default function index() {
 				header: 'Colors',
 				enableColumnFilter: false,
 				width: 'w-24',
-				cell: (info) => info.getValue().join(', '),
+				// cell: (info) => info.getValue().join(', '),
 			},
 			{
 				accessorKey: 'total_batch_quantity',

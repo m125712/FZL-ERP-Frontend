@@ -317,7 +317,7 @@ export default function Index(data) {
 			total_quantity_thread = [];
 			total_value_thread = [];
 		});
-		TotalThreadValue.push(countLengthTotalQuantity);
+		TotalThreadValue.push(countLengthTotalValue);
 		TotalThreadQuantity.push(countLengthTotalQuantity);
 	});
 	const thread_order_info_entry = [];
@@ -543,6 +543,22 @@ export default function Index(data) {
 			{
 				text: '\n',
 			},
+			isThreadOrderExist && isZipperOrderExist
+				? {
+						text:
+							'Grand Total (USD): ' +
+							(parseFloat(grand_total_zipper_value) +
+								parseFloat(grand_total_thread_value)) +
+							'',
+
+						bold: true,
+					}
+				: {},
+			isThreadOrderExist && isZipperOrderExist
+				? {
+						text: '\n',
+					}
+				: {},
 			{
 				text:
 					'Total Value (In Words): ' +

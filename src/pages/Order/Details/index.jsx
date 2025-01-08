@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import { useOrderDetails, useOrderDetailsByQuery } from '@/state/Order';
-import { options } from 'numeral';
+import { useOrderDetailsByQuery } from '@/state/Order';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { ExtraSelect } from '@/ui/Others/TableExtraButtons/StatusSelect';
+import { StatusSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -90,7 +89,7 @@ export default function Index() {
 			columns={columns}
 			handelAdd={handelAdd}
 			extraButton={
-				<ExtraSelect
+				<StatusSelect
 					status={status}
 					setStatus={setStatus}
 					options={options}

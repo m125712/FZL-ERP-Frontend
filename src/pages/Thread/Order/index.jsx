@@ -6,8 +6,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { ExtraSelect } from '@/ui/Others/TableExtraButtons/StatusSelect';
-import { DateTime, EditDelete, LinkOnly, StatusButton } from '@/ui';
+import { DateTime, EditDelete, LinkOnly, StatusButton, StatusSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -245,7 +244,7 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				extraButton={
-					<ExtraSelect
+					<StatusSelect
 						status={status}
 						setStatus={setStatus}
 						options={options}

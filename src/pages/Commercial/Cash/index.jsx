@@ -6,8 +6,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { ExtraSelect } from '@/ui/Others/TableExtraButtons/StatusSelect';
-import { DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy, Transfer, StatusSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -257,7 +256,7 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				handelAdd={handelAdd}
 				extraButton={
-					<ExtraSelect
+					<StatusSelect
 						options={options}
 						status={status}
 						setStatus={setStatus}

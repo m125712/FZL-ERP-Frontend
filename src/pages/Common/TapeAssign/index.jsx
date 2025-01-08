@@ -4,8 +4,7 @@ import { useOtherTapeCoil } from '@/state/Other';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { ExtraSelect } from '@/ui/Others/TableExtraButtons/StatusSelect';
-import { LinkWithCopy, ReactSelect, StatusButton } from '@/ui';
+import { LinkWithCopy, ReactSelect, StatusButton, StatusSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -167,7 +166,7 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				extraButton={
-					<ExtraSelect
+					<StatusSelect
 						status={status}
 						setStatus={setStatus}
 						options={options}

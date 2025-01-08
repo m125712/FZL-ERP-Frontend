@@ -5,8 +5,8 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { ExtraSelect } from '@/ui/Others/TableExtraButtons/StatusSelect';
-import { DateTime, LinkWithCopy, ReactSelect } from '@/ui';
+
+import { DateTime, LinkWithCopy, ReactSelect, StatusSelect } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
@@ -187,7 +187,7 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				extraButton={
-					<ExtraSelect
+					<StatusSelect
 						options={options}
 						status={status}
 						setStatus={setStatus}

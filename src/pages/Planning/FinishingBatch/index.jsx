@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { ExtraSelect } from '@/ui/Others/TableExtraButtons/StatusSelect';
-import { DateTime, EditDelete, LinkOnly, LinkWithCopy } from '@/ui';
+
+import { DateTime, EditDelete, LinkOnly, LinkWithCopy, StatusSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -293,7 +293,7 @@ export default function index() {
 				accessor={haveAccess.includes('create')}
 				handelAdd={handelAdd}
 				extraButton={
-					<ExtraSelect
+					<StatusSelect
 						options={options}
 						status={status}
 						setStatus={setStatus}

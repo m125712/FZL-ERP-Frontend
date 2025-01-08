@@ -2,7 +2,7 @@ import { ReactSelect } from '@/ui';
 
 import { cn } from '@/lib/utils';
 
-export const ExtraSelect = ({ className, status, setStatus, options = [] }) => {
+export const StatusSelect = ({ className, status, setStatus, options = [] }) => {
 	return (
 		<ReactSelect
 			className={cn('h-4 min-w-36 text-sm', className)}

@@ -19,7 +19,7 @@ import { DeleteModal, ProceedModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
 import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
-import { ExtraSelect } from '@/ui/Others/TableExtraButtons/StatusSelect';
+import { StatusSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
@@ -541,7 +541,7 @@ export default function Index() {
 					columns={currentColumns}
 					extraButton={
 						!isUpdate && (
-							<ExtraSelect
+							<StatusSelect
 								status={status}
 								setStatus={setStatus}
 								options={options}
@@ -556,7 +556,7 @@ export default function Index() {
 						data={NewBatchOrdersField}
 						columns={NewColumns}
 						extraButton={
-							<ExtraSelect
+							<StatusSelect
 								status={status}
 								setStatus={setStatus}
 								options={options}

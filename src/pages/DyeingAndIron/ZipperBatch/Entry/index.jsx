@@ -35,6 +35,7 @@ import {
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
+import { OrderType } from '../utils';
 import { Columns } from './columns';
 import Header from './Header';
 
@@ -63,6 +64,8 @@ export default function Index() {
 	const [batchData, setBatchData] = useState(null);
 	const [batchEntry, setBatchEntry] = useState(null);
 	const [patchBatchEntry, setPatchBatchEntry] = useState(null);
+	const [status, setStatus] = useState(isUpdate ? 'all' : 'bulk');
+	const [status2, setStatus2] = useState('bulk');
 
 	const {
 		register,
@@ -111,16 +114,73 @@ export default function Index() {
 
 	useEffect(() => {
 		if (!isUpdate) {
-			setValue('dyeing_batch_entry', data?.dyeing_batch_entry);
+			// * filter the data by the status of the order (bulk or sample or all)
+			if (status === 'bulk') {
+				setValue(
+					'dyeing_batch_entry',
+					data?.dyeing_batch_entry.filter(
+						(item) => item.is_sample === 0
+					)
+				);
+			} else if (status === 'sample') {
+				setValue(
+					'dyeing_batch_entry',
+					data?.dyeing_batch_entry.filter(
+						(item) => item.is_sample === 1
+					)
+				);
+			} else {
+				setValue('dyeing_batch_entry', data?.dyeing_batch_entry);
+			}
 		}
 
 		// * on update sometimes the useFieldArray does not update so we need to set it manually
 		// * this condition is need to trigger the useFieldArray to update to show the data
 		if (isUpdate) {
-			setValue('dyeing_batch_entry', data?.dyeing_batch_entry);
-			setValue('new_dyeing_batch_entry', data?.new_dyeing_batch_entry);
+			// * filter the data by the status of the order (bulk or sample or all)
+			// * for the existing data
+			if (status === 'bulk') {
+				setValue(
+					'dyeing_batch_entry',
+					data?.dyeing_batch_entry.filter(
+						(item) => item.is_sample === 0
+					)
+				);
+			} else if (status === 'sample') {
+				setValue(
+					'dyeing_batch_entry',
+					data?.dyeing_batch_entry.filter(
+						(item) => item.is_sample === 1
+					)
+				);
+			} else {
+				setValue('dyeing_batch_entry', data?.dyeing_batch_entry);
+			}
+
+			// * for the new data
+			// * filter the data by the status of the order (bulk or sample or all)
+			if (status2 === 'bulk') {
+				setValue(
+					'new_dyeing_batch_entry',
+					data?.new_dyeing_batch_entry.filter(
+						(item) => item.is_sample === 0
+					)
+				);
+			} else if (status2 === 'sample') {
+				setValue(
+					'new_dyeing_batch_entry',
+					data?.new_dyeing_batch_entry.filter(
+						(item) => item.is_sample === 1
+					)
+				);
+			} else {
+				setValue(
+					'new_dyeing_batch_entry',
+					data?.new_dyeing_batch_entry
+				);
+			}
 		}
-	}, [data]);
+	}, [data, status, status2]);
 
 	const getTotalQty = useCallback(
 		(dyeing_batch_entry) => {
@@ -133,6 +193,7 @@ export default function Index() {
 		},
 		[watch()]
 	);
+
 	const isReceived = getValues('received') === 1;
 	const getTotalCalTape = useCallback((dyeing_batch_entry) => {
 		if (!dyeing_batch_entry || !Array.isArray(dyeing_batch_entry)) {
@@ -474,6 +535,7 @@ export default function Index() {
 		errors,
 		watch,
 		isUpdate,
+		status: status,
 	});
 
 	// * table columns for adding new finishing field on update
@@ -483,8 +545,10 @@ export default function Index() {
 		register,
 		errors,
 		watch,
+		status: status2,
 		is_new: true,
 	});
+
 	return (
 		<FormProvider {...form}>
 			<form
@@ -518,6 +582,13 @@ export default function Index() {
 					title={'Batch Orders'}
 					data={BatchOrdersField}
 					columns={currentColumns}
+					extraButton={
+						<OrderType
+							className='w-44'
+							status={status}
+							setStatus={setStatus}
+						/>
+					}
 				/>
 
 				{isUpdate && (
@@ -525,6 +596,13 @@ export default function Index() {
 						title={'Add New Batch'}
 						data={NewBatchOrdersField}
 						columns={NewColumns}
+						extraButton={
+							<OrderType
+								className='w-44'
+								status={status2}
+								setStatus={setStatus2}
+							/>
+						}
 					/>
 				)}
 

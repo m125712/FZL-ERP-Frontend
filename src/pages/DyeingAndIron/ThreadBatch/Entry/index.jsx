@@ -29,6 +29,7 @@ import {
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
+import { OrderType } from '../../ZipperBatch/utils';
 import { Columns } from './columns';
 import Header from './Header';
 
@@ -56,6 +57,8 @@ export default function Index() {
 	const [batchData, setBatchData] = useState(null);
 	const [batchEntry, setBatchEntry] = useState(null);
 	const [patchEntry, setPatchBatchEntry] = useState(null);
+	const [status, setStatus] = useState(isUpdate ? 'all' : 'bulk');
+	const [status2, setStatus2] = useState('bulk');
 
 	const {
 		register,
@@ -121,16 +124,61 @@ export default function Index() {
 
 	useEffect(() => {
 		if (!isUpdate) {
-			setValue('batch_entry', batch?.batch_entry);
+			// * filter the data by the status of the order (bulk or sample or all)
+			if (status === 'bulk') {
+				setValue(
+					'batch_entry',
+					batch?.batch_entry.filter((item) => item.is_sample === 0)
+				);
+			} else if (status === 'sample') {
+				setValue(
+					'batch_entry',
+					batch?.batch_entry.filter((item) => item.is_sample === 1)
+				);
+			} else {
+				setValue('batch_entry', batch?.batch_entry);
+			}
 		}
 
 		// * on update sometimes the useFieldArray does not update so we need to set it manually
 		// * this condition is need to trigger the useFieldArray to update to show the data
 		if (isUpdate) {
-			setValue('batch_entry', batch?.batch_entry);
-			setValue('new_batch_entry', batch?.new_batch_entry);
+			// * for the existing data
+			if (status === 'bulk') {
+				setValue(
+					'batch_entry',
+					batch?.batch_entry.filter((item) => item.is_sample === 0)
+				);
+			} else if (status === 'sample') {
+				setValue(
+					'batch_entry',
+					batch?.batch_entry.filter((item) => item.is_sample === 1)
+				);
+			} else {
+				setValue('batch_entry', batch?.batch_entry);
+			}
+
+			// * for the new data
+			// * filter the data by the status of the order (bulk or sample or all)
+			if (status2 === 'bulk') {
+				setValue(
+					'new_batch_entry',
+					batch?.new_batch_entry.filter(
+						(item) => item.is_sample === 0
+					)
+				);
+			} else if (status2 === 'sample') {
+				setValue(
+					'new_batch_entry',
+					batch?.new_batch_entry.filter(
+						(item) => item.is_sample === 1
+					)
+				);
+			} else {
+				setValue('new_batch_entry', batch?.new_batch_entry);
+			}
 		}
-	}, [batch]);
+	}, [batch, status, status2]);
 
 	useEffect(() => {
 		if (isUpdate) {
@@ -525,6 +573,13 @@ export default function Index() {
 					title={'Batch Orders'}
 					data={BatchOrdersField}
 					columns={currentColumns}
+					extraButton={
+						<OrderType
+							className='w-44'
+							status={status}
+							setStatus={setStatus}
+						/>
+					}
 				/>
 
 				{isUpdate && (
@@ -532,6 +587,13 @@ export default function Index() {
 						title={'Add New Batch'}
 						data={NewBatchOrdersField}
 						columns={NewColumns}
+						extraButton={
+							<OrderType
+								className='w-44'
+								status={status2}
+								setStatus={setStatus2}
+							/>
+						}
 					/>
 				)}
 

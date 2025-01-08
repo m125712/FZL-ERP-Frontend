@@ -41,11 +41,12 @@ export default function Index() {
 				width: 'w-28',
 				// enableColumnFilter: false,
 				cell: (info) => {
+					const idx = info.row.index;
 					return info?.row?.original?.order_numbers?.map(
-						(order_number) => {
+						(order_number, index) => {
 							return (
 								<LinkWithCopy
-									key={order_number}
+									key={order_number + index + idx}
 									title={order_number}
 									id={order_number}
 									uri='/order/details'

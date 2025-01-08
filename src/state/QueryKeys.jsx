@@ -1,4 +1,3 @@
-;
 /**
  *? Effective React Query Keys
  ** https://tkdodo.eu/blog/effective-react-query-keys#use-query-key-factories
@@ -7,11 +6,8 @@
 
 import { all } from 'axios';
 
-
-
 import { useDeliveryThreadDashboard } from './Delivery';
 import { useOtherThreadOrderPackingList } from './Other';
-
 
 export const orderQK = {
 	all: () => ['order'],
@@ -323,7 +319,11 @@ export const commonQK = {
 		uuid,
 	],
 	//* Tape Assign
-	tapeAssign: () => [...commonQK.all(), 'tape/assign'],
+	tapeAssign: (query) => [
+		...commonQK.all(),
+		'tape/assign',
+		...(query ? [query] : []),
+	],
 	tapeAssignByUUID: (uuid) => [...commonQK.tapeAssign(), uuid],
 };
 
@@ -1419,7 +1419,11 @@ export const otherQK = {
 	challan: () => [...otherQK.all(), 'challan'],
 
 	//* TAPE-COIL
-	tapeCoil: () => [...otherQK.all(), 'tape-coil'],
+	tapeCoil: (query) => [
+		...otherQK.all(),
+		'tape-coil',
+		...(query ? [query] : []),
+	],
 
 	//* GET GIVEN URL DATA
 	getURLData: (url) => [...otherQK.all(), 'get-url-data', url],

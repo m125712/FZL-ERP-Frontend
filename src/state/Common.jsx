@@ -253,10 +253,10 @@ export const useCommonMultiColorLogTapeReceivedByUUID = (uuid) =>
 		url: `/zipper/multi-color-tape-receive/${uuid}`,
 	});
 //* Tape Assign *//
-export const useCommonTapeAssign = () =>
+export const useCommonTapeAssign = (query) =>
 	createGlobalState({
-		queryKey: commonQK.tapeAssign(),
-		url: `/zipper/tape-assigned`,
+		queryKey: commonQK.tapeAssign(query),
+		url: query ? `/zipper/tape-assigned?${query}` : `/zipper/tape-assigned`,
 	});
 
 export const useCommonTapeAssignByUUID = (uuid) =>

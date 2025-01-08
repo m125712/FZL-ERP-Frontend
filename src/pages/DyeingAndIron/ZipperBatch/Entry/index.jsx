@@ -24,6 +24,7 @@ import { useRHF } from '@/hooks';
 import { DeleteModal, ProceedModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
 import ReactTable from '@/components/Table';
+import { ExtraSelect } from '@/components/TableExtraButtons/ExtraSelect';
 import { ShowLocalToast } from '@/components/Toast';
 
 import nanoid from '@/lib/nanoid';
@@ -35,7 +36,6 @@ import {
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
-import { OrderType } from '../utils';
 import { Columns } from './columns';
 import Header from './Header';
 
@@ -64,8 +64,12 @@ export default function Index() {
 	const [batchData, setBatchData] = useState(null);
 	const [batchEntry, setBatchEntry] = useState(null);
 	const [patchBatchEntry, setPatchBatchEntry] = useState(null);
-	const [status, setStatus] = useState(isUpdate ? 'all' : 'bulk');
-	const [status2, setStatus2] = useState('bulk');
+	const [status, setStatus] = useState('bulk'); // * options for extra select in table
+	const options = [
+		{ value: 'bulk', label: 'Bulk' },
+		{ value: 'sample', label: 'Sample' },
+		{ value: 'all', label: 'All' },
+	];
 
 	const {
 		register,
@@ -99,12 +103,15 @@ export default function Index() {
 
 	const { data, invalidateQuery: invalidateNewDyeingZipperBatchEntry } =
 		isUpdate
-			? useDyeingBatchDetailsByUUID(batch_uuid, '?is_update=true')
+			? useDyeingBatchDetailsByUUID(
+					batch_uuid,
+					`?is_update=true&type=${status}`
+				)
 			: watch('batch_type') === 'extra' && watch('order_info_uuid')
 				? useDyeingOrderBatch(
-						`batch_type=extra&order_info_uuid=${watch('order_info_uuid')}`
+						`batch_type=extra&order_info_uuid=${watch('order_info_uuid')}&type=${status}`
 					)
-				: useDyeingOrderBatch();
+				: useDyeingOrderBatch(`type=${status}`);
 
 	useEffect(() => {
 		if (isUpdate) {
@@ -114,73 +121,16 @@ export default function Index() {
 
 	useEffect(() => {
 		if (!isUpdate) {
-			// * filter the data by the status of the order (bulk or sample or all)
-			if (status === 'bulk') {
-				setValue(
-					'dyeing_batch_entry',
-					data?.dyeing_batch_entry.filter(
-						(item) => item.is_sample === 0
-					)
-				);
-			} else if (status === 'sample') {
-				setValue(
-					'dyeing_batch_entry',
-					data?.dyeing_batch_entry.filter(
-						(item) => item.is_sample === 1
-					)
-				);
-			} else {
-				setValue('dyeing_batch_entry', data?.dyeing_batch_entry);
-			}
+			setValue('dyeing_batch_entry', data?.dyeing_batch_entry);
 		}
 
 		// * on update sometimes the useFieldArray does not update so we need to set it manually
 		// * this condition is need to trigger the useFieldArray to update to show the data
 		if (isUpdate) {
-			// * filter the data by the status of the order (bulk or sample or all)
-			// * for the existing data
-			if (status === 'bulk') {
-				setValue(
-					'dyeing_batch_entry',
-					data?.dyeing_batch_entry.filter(
-						(item) => item.is_sample === 0
-					)
-				);
-			} else if (status === 'sample') {
-				setValue(
-					'dyeing_batch_entry',
-					data?.dyeing_batch_entry.filter(
-						(item) => item.is_sample === 1
-					)
-				);
-			} else {
-				setValue('dyeing_batch_entry', data?.dyeing_batch_entry);
-			}
-
-			// * for the new data
-			// * filter the data by the status of the order (bulk or sample or all)
-			if (status2 === 'bulk') {
-				setValue(
-					'new_dyeing_batch_entry',
-					data?.new_dyeing_batch_entry.filter(
-						(item) => item.is_sample === 0
-					)
-				);
-			} else if (status2 === 'sample') {
-				setValue(
-					'new_dyeing_batch_entry',
-					data?.new_dyeing_batch_entry.filter(
-						(item) => item.is_sample === 1
-					)
-				);
-			} else {
-				setValue(
-					'new_dyeing_batch_entry',
-					data?.new_dyeing_batch_entry
-				);
-			}
+			setValue('dyeing_batch_entry', data?.dyeing_batch_entry);
+			setValue('new_dyeing_batch_entry', data?.new_dyeing_batch_entry);
 		}
-	}, [data, status, status2]);
+	}, [data, status]);
 
 	const getTotalQty = useCallback(
 		(dyeing_batch_entry) => {
@@ -545,7 +495,7 @@ export default function Index() {
 		register,
 		errors,
 		watch,
-		status: status2,
+		status: status,
 		is_new: true,
 	});
 
@@ -583,11 +533,13 @@ export default function Index() {
 					data={BatchOrdersField}
 					columns={currentColumns}
 					extraButton={
-						<OrderType
-							className='w-44'
-							status={status}
-							setStatus={setStatus}
-						/>
+						!isUpdate && (
+							<ExtraSelect
+								status={status}
+								setStatus={setStatus}
+								options={options}
+							/>
+						)
 					}
 				/>
 
@@ -597,10 +549,10 @@ export default function Index() {
 						data={NewBatchOrdersField}
 						columns={NewColumns}
 						extraButton={
-							<OrderType
-								className='w-44'
-								status={status2}
-								setStatus={setStatus2}
+							<ExtraSelect
+								status={status}
+								setStatus={setStatus}
+								options={options}
 							/>
 						}
 					/>

@@ -6,6 +6,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
+import { ExtraSelect } from '@/components/TableExtraButtons/ExtraSelect';
 import { DateTime, EditDelete, LinkOnly, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
@@ -36,12 +37,20 @@ const getPath = (haveAccess, userUUID) => {
 };
 
 export default function Index() {
+	const [status, setStatus] = useState('bulk');
+	// * options for extra select in table
+	const options = [
+		{ value: 'bulk', label: 'Bulk' },
+		{ value: 'sample', label: 'Sample' },
+		{ value: 'all', label: 'All' },
+	];
+
 	const navigate = useNavigate();
 	const haveAccess = useAccess('thread__order_info_details');
 	const { user } = useAuth();
 
 	const { data, isLoading, url, deleteData } = useThreadOrderInfoByQuery(
-		getPath(haveAccess, user?.uuid),
+		getPath(haveAccess, user?.uuid) + `&type=${status}`,
 		{
 			enabled: !!user?.uuid,
 		}
@@ -235,6 +244,13 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				data={data}
 				columns={columns}
+				extraButton={
+					<ExtraSelect
+						status={status}
+						setStatus={setStatus}
+						options={options}
+					/>
+				}
 			/>
 
 			<Suspense>

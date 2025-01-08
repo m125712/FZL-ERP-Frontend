@@ -88,7 +88,7 @@ export const useDyeingBatchDetails = () =>
 	});
 export const useDyeingBatchDetailsByUUID = (uuid, param = '') =>
 	createGlobalState({
-		queryKey: dyeingQK.batchDetailsByUUID(uuid),
+		queryKey: dyeingQK.batchDetailsByUUID(uuid, param),
 		url: `/zipper/dyeing-batch-details/${uuid}${param}`,
 	});
 // * Thread Batch
@@ -122,7 +122,7 @@ export const useDyeingThreadBatchDetails = () =>
 	});
 export const useDyeingThreadBatchDetailsByUUID = (uuid, param = '') =>
 	createGlobalState({
-		queryKey: dyeingQK.threadBatchDetailsByUUID(uuid),
+		queryKey: dyeingQK.threadBatchDetailsByUUID(uuid, param),
 		url: `/thread/batch-details/by/${uuid}${param}`,
 	});
 //* Thread Batch Entry

@@ -1,17 +1,33 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDyeingBatch } from '@/state/Dyeing';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { BatchType, DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
+import {
+	BatchType,
+	DateTime,
+	EditDelete,
+	LinkWithCopy,
+	StatusSelect,
+	Transfer,
+} from '@/ui';
 
 import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const { data, url, isLoading, updateData } = useDyeingBatch();
+	const [status, setStatus] = useState('pending');
+	const options = [
+		{ value: 'all', label: 'All' },
+		{ value: 'pending', label: 'Pending' },
+		{ value: 'completed', label: 'Completed' },
+	];
+	console.log(status);
+	const { data, url, isLoading, updateData } = useDyeingBatch(
+		`type=${status}`
+	);
 	const info = new PageInfo('Batch', url, 'dyeing__zipper_batch');
 	const haveAccess = useAccess('dyeing__zipper_batch');
 	const navigate = useNavigate();
@@ -312,6 +328,13 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				accessor={haveAccess.includes('create')}
+				extraButton={
+					<StatusSelect
+						options={options}
+						status={status}
+						setStatus={setStatus}
+					/>
+				}
 			/>
 		</div>
 	);

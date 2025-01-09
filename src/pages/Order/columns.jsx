@@ -286,13 +286,15 @@ export const InfoColumns = ({
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
-				cell: (info) => (
-					<CustomLink
-						label={info.getValue()}
-						url={`/order/details/${info.getValue()}`}
-						openInNewTab={true}
-					/>
-				),
+				cell: (info) => {
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${info.getValue()}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'buyer_name',
@@ -370,14 +372,15 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
-				width: 'w-36',
-				cell: (info) => (
-					<LinkWithCopy
-						title={info.getValue()}
-						id={info.getValue()}
-						uri='/order/details'
-					/>
-				),
+				cell: (info) => {
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${info.getValue()}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'party_name',
@@ -396,16 +399,16 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 			},
 			{
 				accessorKey: 'item_description',
-				header: 'Item Description',
-				enableColumnFilter: false,
-				cell: ({ row }) => {
+				header: 'Item',
+				enableColumnFilter: true,
+				cell: (info) => {
 					const { order_description_uuid, order_number } =
-						row.original;
+						info.row.original;
 					return (
-						<LinkWithCopy
-							title={row.getValue('item_description')}
-							id={order_description_uuid}
-							uri={`/order/details/${order_number}`}
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${order_number}/${order_description_uuid}`}
+							openInNewTab={true}
 						/>
 					);
 				},

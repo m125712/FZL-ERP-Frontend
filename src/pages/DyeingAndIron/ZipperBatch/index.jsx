@@ -18,13 +18,12 @@ import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const [status, setStatus] = useState('pending');
 	const options = [
 		{ value: 'all', label: 'All' },
 		{ value: 'pending', label: 'Pending' },
 		{ value: 'completed', label: 'Completed' },
 	];
-	console.log(status);
+	const [status, setStatus] = useState('pending');
 	const { data, url, isLoading, updateData } = useDyeingBatch(
 		`type=${status}`
 	);
@@ -81,10 +80,10 @@ export default function Index() {
 			{
 				accessorKey: 'production_date',
 				header: (
-					<div className='flex flex-col'>
-						<span>Production</span>
-						<span>Date</span>
-					</div>
+					<>
+						Production <br />
+						Date
+					</>
 				),
 				enableColumnFilter: false,
 				cell: (info) => (
@@ -108,10 +107,10 @@ export default function Index() {
 			{
 				accessorKey: 'total_quantity',
 				header: (
-					<div className='flex flex-col'>
-						<span>Total</span>
-						<span>Qty(Pcs)</span>
-					</div>
+					<>
+						Total Qty <br />
+						(Pcs)
+					</>
 				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -290,7 +289,7 @@ export default function Index() {
 				),
 			},
 		],
-		[data]
+		[data, status]
 	);
 
 	// Add

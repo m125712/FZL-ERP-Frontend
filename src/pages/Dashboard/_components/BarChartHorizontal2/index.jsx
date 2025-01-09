@@ -8,12 +8,7 @@ import {
 } from 'recharts';
 import { useFetch } from '@/hooks';
 
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
 	ChartContainer,
 	ChartLegend,
@@ -59,17 +54,12 @@ export function BarChartHorizontal2(props) {
 					</span>
 				</CardTitle>
 			</CardHeader>
+
 			<CardContent>
-				<ChartContainer config={chartConfig}>
-					<BarChart
-						data={chartData}
-						layout='vertical'
-						margin={{
-							top: 5,
-							right: 50,
-							left: 5,
-							bottom: 5,
-						}}>
+				<ChartContainer
+					className='aspect-auto h-[300px] w-full'
+					config={chartConfig}>
+					<BarChart data={chartData} layout='vertical'>
 						<CartesianGrid horizontal={false} />
 						<YAxis
 							dataKey='item_name'

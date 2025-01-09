@@ -46,6 +46,10 @@ export default function Dashboard() {
 						dataPreview === 'demo' ? fake_order_entry : order_entry
 					}
 				/>
+
+				<div className='flex flex-col gap-4 md:flex-row'>
+					<BarChartHorizontal2 />
+				</div>
 				<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
 					<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
 						<DashboardCard
@@ -108,6 +112,7 @@ export default function Dashboard() {
 						label2='number_of_challan'
 					/>
 				</div>
+
 				<div className='flex flex-col gap-4 md:flex-row'>
 					<BarChartHorizontal
 						title='Warehouse: Status'
@@ -119,8 +124,8 @@ export default function Dashboard() {
 						label2='number_of_carton'
 					/>
 					<BarChartVertical />
-					<BarChartHorizontal2 />
 				</div>
+
 				<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
 					<TableWithTime
 						title='Sample: Status'
@@ -135,6 +140,7 @@ export default function Dashboard() {
 						columns={order_entry_feed_columns}
 					/>
 				</div>
+
 				<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
 					<TableWithTime
 						title='PI: Issued'
@@ -153,6 +159,7 @@ export default function Dashboard() {
 						columns={doc_rcv_columns}
 					/>
 				</div>
+
 				<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
 					<TableWithTime
 						title='LC Feed with number of count'
@@ -166,6 +173,7 @@ export default function Dashboard() {
 						columns={stock_status_columns}
 					/>
 				</div>
+
 				<div className='grid grid-cols-1'>
 					<TableWithTime
 						title='Credit Sales Status'

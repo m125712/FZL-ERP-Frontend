@@ -21,22 +21,22 @@ const FilterColumn = ({
 		id: column.id,
 	});
 
-	const type = typeof firstValue;
+	if (!firstValue) return null;
 
+	const type = typeof firstValue;
 	switch (type) {
 		case 'undefined':
 			return null;
 		case 'number':
 			return <FilterNumber {...{ columnName, column, isFullFilter }} />;
-
-		default:
-			return (
-				<FilterString
-					key={column.id}
-					{...{ columnName, column, isFullFilter, firstValue }}
-				/>
-			);
 	}
+
+	return (
+		<FilterString
+			key={column.id}
+			{...{ columnName, column, isFullFilter, firstValue }}
+		/>
+	);
 };
 
 export default FilterColumn;

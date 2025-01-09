@@ -317,7 +317,7 @@ export default function Index(data) {
 					[...threadUnitPrice[index][countLength]]?.length || 1;
 				[...threadUnitPrice[index][countLength]].forEach(
 					(unit_price, unit_price_index) => {
-						const styles = [...threadStyle[item]].join(',');
+						const styles = [...threadStyle[item]].join(', ');
 						const quantity =
 							TotalThreadQuantity[index][countLength][
 								unit_price_index

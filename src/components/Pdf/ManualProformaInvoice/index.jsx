@@ -10,7 +10,6 @@ import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
 	getTable('order_number', 'Order No'),
-	//getTable('po', 'PO'),
 	getTable('style', 'Style'),
 	getTable('item', 'Item'),
 	getTable('specification', 'Specification'),

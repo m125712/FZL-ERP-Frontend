@@ -6,15 +6,21 @@ import { NumToWord } from '@/lib/NumToWord';
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
-const node = [
+const zipperNode = [
 	getTable('order_number', 'Order ID'),
 	getTable('style', 'Style'),
 	getTable('pi_item_description', 'Item'),
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
 	getTable('quantity', 'Quantity', 'right'),
-	// getTable('unit_price_dollar', 'Unit Price\n(US$)', 'right'),
-	// getTable('value_dollar', 'Value\n(US$)', 'right'),
+	getTable('unit_price', 'Unit Price\n(BDT)', 'right'),
+	getTable('value', 'Value\n(BDT)', 'right'),
+];
+const threadNode = [
+	getTable('order_number', 'Order ID'),
+	getTable('style', 'Style'),
+	getTable('count_length', 'Size'),
+	getTable('quantity', 'Quantity', 'right'),
 	getTable('unit_price', 'Unit Price\n(BDT)', 'right'),
 	getTable('value', 'Value\n(BDT)', 'right'),
 ];
@@ -31,12 +37,15 @@ export default function Index(data) {
 	if (!pi_cash_entry_thread) {
 		pi_cash_entry_thread = [];
 	}
+	const isThreadOrderExist = pi_cash_entry_thread.length > 0;
+	const isZipperOrderExist = pi_cash_entry.length > 0;
 	const uniqueItemDescription = new Set();
 	const uniqueItemDescriptionThread = new Set();
 	let style = {};
 	let orderID = {};
 	let threadStyle = {};
-	let threadOrderID = {};
+	let threadCountLength = {};
+	let threadUnitPrice = [];
 	const TotalUnitPrice = {};
 	const TotalValue = [];
 	const TotalQuantity = [];
@@ -53,17 +62,20 @@ export default function Index(data) {
 	let total_thread_value = 0;
 	let total_thread_quantity = 0;
 	let grand_thread_total_quantity = 0;
+	let grand_total_thread_value = 0;
 	let is_inch = 0;
 	let is_inchs = [];
 	let order_type = 0;
 	let order_types = [];
+	let total_quantity_thread = [];
+	let total_value_thread = [];
 
 	pi_cash_entry.forEach((item) => {
 		uniqueItemDescription.add(item.pi_item_description);
 	});
 
 	pi_cash_entry_thread.forEach((item) => {
-		uniqueItemDescriptionThread.add(item.count_length_name);
+		uniqueItemDescriptionThread.add(item.order_number);
 	});
 
 	//* style , orderID , TotalUnitPrice,is_inch,order_type
@@ -232,53 +244,119 @@ export default function Index(data) {
 	);
 	[...uniqueItemDescriptionThread].forEach((item) => {
 		threadStyle[item] = new Set();
-		threadOrderID[item] = new Set();
+		threadCountLength[item] = new Set();
 		pi_cash_entry_thread.forEach((item2) => {
-			if (item2.count_length_name === item) {
+			if (item2.order_number === item) {
 				threadStyle[item].add(item2.style);
-				threadOrderID[item].add(item2.order_number);
-				total_thread_unit_price += parseFloat(item2.unit_price_pcs);
-				total_thread_value += parseFloat(item2.value);
-				total_thread_quantity += parseFloat(item2.pi_cash_quantity);
+				threadCountLength[item].add(item2.count_length_name);
 			}
 		});
-		TotalThreadUnitPrice.push(total_thread_value / total_thread_quantity);
-		TotalThreadValue.push(total_thread_value);
-		grand_total_value += total_thread_value;
-		TotalThreadQuantity.push(total_thread_quantity);
-		grand_thread_total_quantity += total_thread_quantity;
-		total_thread_unit_price = 0;
-		total_thread_value = 0;
-		total_thread_quantity = 0;
+		is_inchs.push(is_inch);
+		order_types.push(order_type);
 	});
-	const thread_order_info_entry = [...uniqueItemDescriptionThread].map(
-		(item, index) => {
-			return {
-				order_number: [...threadOrderID[item]].join(', '),
-				style: [...threadStyle[item]].join(', '),
-				pi_item_description: '100% SPUN POLYESTER SEWING THREAD',
-				specification: '',
-				size:
-					item.split(' ')[0] +
-					'\n (' +
-					item.match(/\d+$/)[0] +
-					' mtr' +
-					')',
-				h_s_code: '5402.62.00',
-				quantity: TotalThreadQuantity[index] + ' cone',
-				unit_price_dollar: TotalThreadUnitPrice[index] + '/cone',
-				unit_price:
-					Number(
-						TotalThreadUnitPrice[index] * data?.conversion_rate
-					).toFixed(2) + '/cone',
-				value_dollar: Number(TotalThreadValue[index]).toFixed(2),
-				value: Number(
-					TotalThreadValue[index] * data?.conversion_rate
-				).toFixed(2),
-			};
-		}
-	);
+	[...uniqueItemDescriptionThread].forEach((item) => {
+		let countLengthTotalUnitPrice = {};
+		[...threadCountLength[item]].forEach((item3) => {
+			countLengthTotalUnitPrice[item3] = new Set();
+			pi_cash_entry_thread.forEach((item2) => {
+				if (
+					item2.order_number === item &&
+					item2.count_length_name === item3
+				) {
+					countLengthTotalUnitPrice[item3].add(item2.unit_price);
+				}
+			});
+		});
+		threadUnitPrice.push(countLengthTotalUnitPrice);
+	});
 
+	[...uniqueItemDescriptionThread].forEach((item, index) => {
+		let countLengthTotalValue = {};
+		let countLengthTotalQuantity = {};
+		[...threadCountLength[item]].forEach((item3) => {
+			[...threadUnitPrice[index][item3]].forEach((item4) => {
+				let value = 0;
+				let quantity = 0;
+				pi_cash_entry_thread.forEach((item2) => {
+					if (
+						item2.order_number === item &&
+						item2.unit_price === item4 &&
+						item2.count_length_name === item3
+					) {
+						value += parseFloat(item2.value);
+						quantity += parseFloat(item2.pi_cash_quantity);
+					}
+				});
+				total_quantity_thread.push(quantity);
+				total_value_thread.push(Number(value).toFixed(2));
+				grand_total_thread_value += value;
+				grand_thread_total_quantity += quantity;
+			});
+
+			countLengthTotalQuantity[item3] = total_quantity_thread;
+			countLengthTotalValue[item3] = total_value_thread;
+			total_quantity_thread = [];
+			total_value_thread = [];
+		});
+		TotalThreadValue.push(countLengthTotalValue);
+		TotalThreadQuantity.push(countLengthTotalQuantity);
+	});
+
+	const thread_order_info_entry = [];
+	[...uniqueItemDescriptionThread].forEach((item, index) => {
+		const orderRowSpan =
+			[...threadCountLength[item]]?.reduce((itemTotal, countLength) => {
+				return (
+					itemTotal +
+					([...threadUnitPrice[index][countLength]]?.length || 1)
+				);
+			}, 0) || 0;
+		[...threadCountLength[item]].forEach(
+			(countLength, countLengthIndex) => {
+				const countLengthRowSpan =
+					[...threadUnitPrice[index][countLength]]?.length || 1;
+				[...threadUnitPrice[index][countLength]].forEach(
+					(unit_price, unit_price_index) => {
+						const styles = [...threadStyle[item]].join(',');
+						const quantity =
+							TotalThreadQuantity[index][countLength][
+								unit_price_index
+							] + ' cones';
+						const count_length =
+							countLength.split(' ')[0] +
+							' (' +
+							countLength.match(/\d+$/)[0] +
+							' mtr' +
+							')';
+						unit_price =
+							unit_price *
+							Number(data?.conversion_rate).toFixed(2);
+						unit_price = unit_price + '/cone';
+						const value =
+							TotalThreadValue[index][countLength][
+								unit_price_index
+							] * Number(data?.conversion_rate).toFixed(2);
+
+						thread_order_info_entry.push({
+							order_number: { text: item, rowSpan: orderRowSpan },
+							style: {
+								text: styles,
+								rowSpan: orderRowSpan,
+							},
+							count_length: {
+								text: count_length,
+								rowSpan: countLengthRowSpan,
+							},
+							unit_price: unit_price,
+							quantity: quantity,
+							value: value,
+						});
+					}
+				);
+			}
+		);
+	});
+	console.log(thread_order_info_entry);
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
 			xMargin,
@@ -304,97 +382,153 @@ export default function Index(data) {
 
 		// * Main Table
 		content: [
-			{
-				table: {
-					headerRows: 1,
-					widths: [45, 50, 50, '*', 50, 40, 40, 40],
-					body: [
-						// Header
-						TableHeader(node),
+			isZipperOrderExist
+				? {
+						table: {
+							headerRows: 1,
+							widths: [45, 40, 50, '*', 46, 40, 45, 40],
+							body: [
+								// Header
+								TableHeader(zipperNode),
 
-						// Body
-						...order_info_entry.map((item) =>
-							node.map((nodeItem) => {
-								const cellData = item[nodeItem.field];
-								return {
-									text: cellData?.text || cellData,
-									style: nodeItem.cellStyle,
-									alignment: nodeItem.alignment,
-									rowSpan: cellData?.rowSpan,
-								};
-							})
-						),
-						...thread_order_info_entry.map((item) =>
-							node.map((nodeItem) => ({
-								text: item[nodeItem.field],
-								style: nodeItem.cellStyle,
-								alignment: nodeItem.alignment,
-							}))
-						),
-						[
-							{
-								text: [
-									Number(grand_total_quantity) > 0
-										? `Total Zipper: ${grand_total_quantity} pcs`
-										: '',
-									Number(grand_total_quantity) > 0 &&
-									Number(grand_total_quantity_mtr) > 0
-										? ','
-										: '',
-									Number(grand_total_quantity_mtr) > 0
-										? `Total Tape: ${grand_total_quantity_mtr} mtr`
-										: '',
-									(Number(grand_total_quantity) > 0 ||
-										Number(grand_total_quantity_mtr) > 0) &&
-									Number(grand_total_slider) > 0
-										? ','
-										: '',
-									Number(grand_total_slider) > 0
-										? `Total Slider: ${grand_total_slider} pcs`
-										: '',
-									(Number(grand_total_quantity) > 0 ||
-										Number(grand_total_quantity_mtr) > 0 ||
-										Number(grand_total_slider) > 0) &&
-									Number(grand_thread_total_quantity) > 0
-										? ','
-										: '',
-									Number(grand_thread_total_quantity) > 0
-										? `Total Thread: ${grand_thread_total_quantity} cones`
-										: '',
+								// Body
+								...order_info_entry.map((item) =>
+									zipperNode.map((nodeItem) => {
+										const cellData = item[nodeItem.field];
+										return {
+											text: cellData.text || cellData,
+											style: nodeItem.cellStyle,
+											alignment: nodeItem.alignment,
+											rowSpan: cellData.rowSpan,
+										};
+									})
+								),
+								[
+									{
+										text: [
+											Number(grand_total_quantity) > 0
+												? `Total Zipper: ${grand_total_quantity} pcs`
+												: '',
+											Number(grand_total_quantity) > 0 &&
+											Number(grand_total_quantity_mtr) > 0
+												? ','
+												: '',
+											Number(grand_total_quantity_mtr) > 0
+												? `Total Tape: ${grand_total_quantity_mtr} mtr`
+												: '',
+											(Number(grand_total_quantity) > 0 ||
+												Number(
+													grand_total_quantity_mtr
+												) > 0) &&
+											Number(grand_total_slider) > 0
+												? ','
+												: '',
+											Number(grand_total_slider) > 0
+												? `Total Slider: ${grand_total_slider} pcs`
+												: '',
+										],
+										alignment: 'right',
+										bold: true,
+										colSpan: 6,
+									},
+									{},
+									{},
+									{},
+									{},
+									{},
+									{
+										text: `BDT: ${Number(grand_total_value * Number(data?.conversion_rate).toFixed(2) || 0).toFixed(2)}`,
+										alignment: 'right',
+										bold: true,
+										colSpan: 2,
+									},
+									{},
 								],
-								alignment: 'right',
-								bold: true,
-								colSpan: 6,
-							},
-							{},
-							{},
-							{},
-							{},
-							{},
-							{
-								text: `BDT: ${Number(grand_total_value * data?.conversion_rate || 0).toFixed(2)}`,
-								alignment: 'right',
-								bold: true,
-								colSpan: 2,
-							},
-							{},
-						],
-					],
-				},
-			},
+							],
+						},
+					}
+				: {},
+			isThreadOrderExist && isZipperOrderExist
+				? {
+						text: '\n',
+					}
+				: {},
+			isThreadOrderExist
+				? {
+						table: {
+							headerRows: 1,
+							widths: [45, '*', 80, 55, 45, 40],
+							body: [
+								[
+									{ text: 'Item' },
+									{
+										text: '100% SPUN POLYESTER SEWING THREAD',
+										colSpan: 5,
+									},
+									{},
+									{},
+									{},
+									{},
+								],
+								// Header
+								TableHeader(threadNode),
+
+								// Body
+								...thread_order_info_entry.map((item) =>
+									threadNode.map((nodeItem) => {
+										const cellData = item[nodeItem.field];
+										return {
+											text: cellData?.text || cellData,
+											style: nodeItem.cellStyle,
+											alignment: nodeItem.alignment,
+											rowSpan: cellData?.rowSpan,
+										};
+									})
+								),
+								[
+									{
+										text: `Total Thread: ${grand_thread_total_quantity} cones`,
+										alignment: 'right',
+										bold: true,
+										colSpan: 4,
+									},
+									{},
+									{},
+									{},
+									{
+										text: `BDT: ${Number(grand_total_thread_value * Number(data?.conversion_rate).toFixed(2) || 0).toFixed(2)}`,
+										alignment: 'right',
+										bold: true,
+										colSpan: 2,
+									},
+									{},
+								],
+							],
+						},
+					}
+				: {},
 			{
 				text: '\n',
 			},
-			{
-				text:
-					'Total Value(In Words) : ' +
-					NumToWord(grand_total_value * data?.conversion_rate) +
-					' Taka Only',
-				bold: true,
-			},
-			{
-				text: '\n',
-			},
+			isThreadOrderExist && isZipperOrderExist
+				? {
+						text:
+							'Grand Total (BDT): ' +
+							(parseFloat(
+								Number(
+									grand_total_value *
+										Number(data?.conversion_rate).toFixed(2)
+								)
+							) +
+								parseFloat(
+									grand_total_thread_value *
+										Number(data?.conversion_rate).toFixed(2)
+								)) +
+							'',
+
+						bold: true,
+					}
+				: {},
 		],
 	});
 

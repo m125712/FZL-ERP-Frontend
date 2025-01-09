@@ -6,7 +6,13 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkOnly, StatusButton, StatusSelect } from '@/ui';
+import {
+	DateTime,
+	EditDelete,
+	LinkOnly,
+	StatusButton,
+	StatusSelect,
+} from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -36,7 +42,7 @@ const getPath = (haveAccess, userUUID) => {
 };
 
 export default function Index() {
-	const [status, setStatus] = useState('bulk');
+	const [status, setStatus] = useState('all');
 	// * options for extra select in table
 	const options = [
 		{ value: 'bulk', label: 'Bulk' },

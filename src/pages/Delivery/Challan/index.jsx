@@ -12,6 +12,7 @@ import {
 	LinkOnly,
 	LinkWithCopy,
 	StatusButton,
+	StatusSelect,
 } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
@@ -20,9 +21,18 @@ import PageInfo from '@/util/PageInfo';
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
+	const [status, setStatus] = useState('pending');
+	const options = [
+		{ value: 'all', label: 'All' },
+		{ value: 'pending', label: 'Pending' },
+		{ value: 'delivered', label: 'Delivered' },
+		{ value: 'received', label: 'Received' },
+		{ value: 'gate_pass', label: 'Gate Pass' },
+	];
 	const navigate = useNavigate();
-	const { data, isLoading, url, deleteData, updateData } =
-		useDeliveryChallan();
+	const { data, isLoading, url, deleteData, updateData } = useDeliveryChallan(
+		`type=${status}`
+	);
 	const info = new PageInfo('Challan', url, 'delivery__challan');
 	const haveAccess = useAccess('delivery__challan');
 
@@ -358,6 +368,13 @@ export default function Index() {
 				columns={columns}
 				accessor={haveAccess.includes('create')}
 				handelAdd={handelAdd}
+				extraButton={
+					<StatusSelect
+						status={status}
+						setStatus={setStatus}
+						options={options}
+					/>
+				}
 			/>
 
 			<Suspense>

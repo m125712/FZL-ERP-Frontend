@@ -8,7 +8,7 @@ import { useAccess } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -29,16 +29,14 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				cell: (info) => {
-					const { order_number } = info.row.original;
-					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={order_number}
-							uri='/order/details'
-						/>
-					);
-				},
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						showCopyButton={false}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'assembly_stock_name',

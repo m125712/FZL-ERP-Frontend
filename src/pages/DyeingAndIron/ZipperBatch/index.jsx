@@ -7,9 +7,9 @@ import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import {
 	BatchType,
+	CustomLink,
 	DateTime,
 	EditDelete,
-	LinkWithCopy,
 	StatusSelect,
 	Transfer,
 } from '@/ui';
@@ -38,10 +38,10 @@ export default function Index() {
 				header: 'Batch ID',
 				// enableColumnFilter: false,
 				cell: (info) => (
-					<LinkWithCopy
-						title={info.getValue()}
+					<CustomLink
+						label={info.getValue()}
 						id={info.row.original.uuid}
-						uri='/dyeing-and-iron/zipper-batch'
+						url={`/dyeing-and-iron/zipper-batch/${info.row.original.uuid}`}
 					/>
 				),
 			},
@@ -60,11 +60,10 @@ export default function Index() {
 					return info?.row?.original?.order_numbers?.map(
 						(order_number, index) => {
 							return (
-								<LinkWithCopy
+								<CustomLink
 									key={order_number + index + idx}
-									title={order_number}
-									id={order_number}
-									uri='/order/details'
+									label={order_number}
+									url={`/order/details/${order_number}`}
 								/>
 							);
 						}

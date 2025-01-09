@@ -91,7 +91,6 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'receive_amount',
-				header: 'Receive Amount',
 				header: (
 					<>
 						Received <br />

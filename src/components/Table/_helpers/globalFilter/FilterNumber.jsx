@@ -50,7 +50,7 @@ const FilterNumber = ({ columnName, column, isFullFilter }) => {
 			onClick={() => setFilterValue(undefined)}
 			showResetButton={getFilterValue()?.[0] || getFilterValue()?.[1]}>
 			<div className='flex flex-col justify-between gap-1 md:flex-row'>
-				<DebouncedInput
+				{/* <DebouncedInput
 					placeholder={`Min: ${min}`}
 					value={getFilterValue()?.[0] ?? ''}
 					onChange={handleMinValueChange}
@@ -62,7 +62,7 @@ const FilterNumber = ({ columnName, column, isFullFilter }) => {
 					value={getFilterValue()?.[1] ?? ''}
 					onChange={handleMaxValueChange}
 					{...DefaultInputProps}
-				/>
+				/> */}
 			</div>
 		</Template>
 	);

@@ -314,17 +314,22 @@ export default function Index() {
 		(entryFiled) =>
 			entryFiled?.reduce(
 				(acc, item) => {
-					if (item.quantity > 0)
+					if (item?.quantity > 0) {
 						return {
-							totalQty: acc.totalQty + Number(item.quantity),
+							totalQty:
+								acc.totalQty + Number(item?.quantity || 0),
 							totalPolyQty:
-								acc.totalPolyQty + Number(item.poli_quantity),
+								acc.totalPolyQty +
+								Number(item?.poli_quantity || 0),
 							totalShortQty:
-								acc.totalShortQty + Number(item.short_quantity),
+								acc.totalShortQty +
+								Number(item?.short_quantity || 0),
 							totalRejectQty:
 								acc.totalRejectQty +
-								Number(item.reject_quantity),
+								Number(item?.reject_quantity || 0),
 						};
+					}
+					return acc; // Return the accumulator if the condition isn't met
 				},
 				{
 					totalQty: 0,
@@ -336,6 +341,9 @@ export default function Index() {
 		[watch()]
 	);
 
+	// const totalQuantity = (e) => {
+	// 	console.log(e);
+	// }
 	return (
 		<FormProvider {...form}>
 			<form

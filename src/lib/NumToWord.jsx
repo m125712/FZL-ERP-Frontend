@@ -18,6 +18,20 @@ const dollarToWords = new ToWords({
 		},
 	},
 });
+const takaToWords = new ToWords({
+	localeCode: 'en-BD',
+	currencyOptions: {
+		name: 'Taka',
+		plural: 'Taka',
+		symbol: '',
+		fraction: {
+			name: 'Poisha',
+			plural: 'Poisha',
+		},
+	},
+});
 
 export const DollarToWord = (number) =>
 	dollarToWords.convert(number, { currency: true, ignoreZeroCurrency: true });
+export const TakaToWord = (number) =>
+	takaToWords.convert(number, { currency: true, ignoreZeroCurrency: true });

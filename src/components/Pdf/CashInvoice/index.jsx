@@ -1,7 +1,7 @@
 import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
-import { NumToWord } from '@/lib/NumToWord';
+import { TakaToWord } from '@/lib/NumToWord';
 
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
@@ -529,6 +529,26 @@ export default function Index(data) {
 						bold: true,
 					}
 				: {},
+			{
+				text:
+					'Total Value(In Words) : ' +
+					TakaToWord(
+						parseFloat(
+							Number(
+								grand_total_value *
+									Number(data?.conversion_rate).toFixed(2)
+							)
+						) +
+							parseFloat(
+								grand_total_thread_value *
+									Number(data?.conversion_rate).toFixed(2)
+							)
+					),
+				bold: true,
+			},
+			{
+				text: '\n',
+			},
 		],
 	});
 

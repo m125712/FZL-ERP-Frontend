@@ -402,7 +402,7 @@ export const dyeingQK = {
 	planningByUUID: (uuid) => [...dyeingQK.planning(), uuid],
 
 	//*  batch
-	batch: () => [...dyeingQK.all(), 'batch'],
+	batch: (query) => [...dyeingQK.all(), 'batch', ...(query ? [query] : [])],
 	batchByUUID: (uuid) => [...dyeingQK.batch(), uuid],
 	//* Order batch
 	orderBatch: (params) => [...dyeingQK.all(), 'order-batch', params],
@@ -416,7 +416,11 @@ export const dyeingQK = {
 	],
 
 	//* Thread Batch
-	threadBatch: () => [...dyeingQK.all(), 'thread-batch'],
+	threadBatch: (query) => [
+		...dyeingQK.all(),
+		'thread-batch',
+		...(query ? [query] : []),
+	],
 	threadBatchByUUID: (uuid) => [...dyeingQK.threadBatch(), uuid],
 	//* Thread Batch Entry
 	threadBatchEntry: () => [...dyeingQK.all(), 'thread-batch-entry'],

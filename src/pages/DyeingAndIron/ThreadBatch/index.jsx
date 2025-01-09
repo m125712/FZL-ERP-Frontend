@@ -8,14 +8,28 @@ import { useAccess } from '@/hooks';
 import ReactTable from '@/components/Table';
 import BatchType from '@/ui/Others/BatchType';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
+import {
+	DateTime,
+	EditDelete,
+	LinkWithCopy,
+	StatusSelect,
+	Transfer,
+} from '@/ui';
 
 import { cn } from '@/lib/utils';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const { data, url, updateData, isLoading } = useDyeingThreadBatch();
+	const [currentStatus, setCurrentStatus] = useState('pending');
+	const options = [
+		{ value: 'all', label: 'All' },
+		{ value: 'pending', label: 'Pending' },
+		{ value: 'completed', label: 'Completed' },
+	];
+	const { data, url, updateData, isLoading } = useDyeingThreadBatch(
+		`type=${currentStatus}`
+	);
 	const { invalidateQuery } = useDyeingCone();
 	const info = new PageInfo('Thread Batch', url, 'dyeing__thread_batch');
 	const { user } = useAuth();
@@ -383,6 +397,13 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				accessor={haveAccess.includes('create')}
+				extraButton={
+					<StatusSelect
+						status={currentStatus}
+						setStatus={setCurrentStatus}
+						options={options}
+					/>
+				}
 			/>
 		</div>
 	);

@@ -36,7 +36,7 @@ const getPath = (haveAccess, userUUID) => {
 
 export default function Index() {
 	// const [path, setPath] = useState(null);
-	const [status, setStatus] = useState('bulk');
+	const [status, setStatus] = useState('all');
 	// * options for extra select in table
 	const options = [
 		{ value: 'bulk', label: 'Bulk' },

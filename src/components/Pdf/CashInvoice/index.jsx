@@ -1,7 +1,7 @@
 import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
-import { NumToWord } from '@/lib/NumToWord';
+import { TakaToWord } from '@/lib/NumToWord';
 
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
@@ -13,15 +13,15 @@ const zipperNode = [
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
 	getTable('quantity', 'Quantity', 'right'),
-	getTable('unit_price', 'Unit Price\n(BDT)', 'right'),
+	getTable('unit_price', 'Price\n(BDT)', 'right'),
 	getTable('value', 'Value\n(BDT)', 'right'),
 ];
 const threadNode = [
 	getTable('order_number', 'Order ID'),
 	getTable('style', 'Style'),
 	getTable('count_length', 'Size'),
-	getTable('quantity', 'Quantity', 'right'),
-	getTable('unit_price', 'Unit Price\n(BDT)', 'right'),
+	getTable('quantity', 'Quantity ', 'right'),
+	getTable('unit_price', 'Price/cone\n(BDT)', 'right'),
 	getTable('value', 'Value\n(BDT)', 'right'),
 ];
 
@@ -229,15 +229,20 @@ export default function Index(data) {
 					},
 					size: order_types[index] === 'full' ? res : '-',
 					quantity:
-						TotalQuantity[index][priceIndex] +
+						TotalQuantity[index][priceIndex].toLocaleString() +
 						`${order_types[index] === 'tape' ? ' mtr' : ' pcs'}`,
 					// unit_price: unitPrice + '/dzn',
 					unit_price_dollar: `${unitPrice} /${order_types[index] === 'tape' ? 'mtr' : 'dzn'}`,
-					unit_price: `${Number(unitPrice).toFixed(2) * Number(data?.conversion_rate).toFixed(2)} /${order_types[index] === 'tape' ? 'mtr' : 'dzn'}`,
-					value_dollar: TotalValue[index][priceIndex],
-					value:
+					unit_price: `${Number(unitPrice).toFixed(2) * Number(data?.conversion_rate).toFixed(2).toLocaleString()} /${order_types[index] === 'tape' ? 'mtr' : 'dzn'}`,
+					value_dollar:
+						TotalValue[index][priceIndex].toLocaleString(),
+					value: (
 						Number(TotalValue[index][priceIndex]).toFixed(2) *
-						Number(data?.conversion_rate).toFixed(2),
+						Number(data?.conversion_rate).toFixed(2)
+					).toLocaleString(undefined, {
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2,
+					}),
 				};
 			});
 		}
@@ -317,11 +322,11 @@ export default function Index(data) {
 					[...threadUnitPrice[index][countLength]]?.length || 1;
 				[...threadUnitPrice[index][countLength]].forEach(
 					(unit_price, unit_price_index) => {
-						const styles = [...threadStyle[item]].join(',');
+						const styles = [...threadStyle[item]].join(', ');
 						const quantity =
 							TotalThreadQuantity[index][countLength][
 								unit_price_index
-							] + ' cones';
+							];
 						const count_length =
 							countLength.split(' ')[0] +
 							' (' +
@@ -330,13 +335,15 @@ export default function Index(data) {
 							')';
 						unit_price =
 							unit_price *
-							Number(data?.conversion_rate).toFixed(2);
-						unit_price = unit_price + '/cone';
-						const value =
+							Number(data?.conversion_rate)
+								.toFixed(2)
+								.toLocaleString();
+						unit_price = unit_price;
+						const value = Number(
 							TotalThreadValue[index][countLength][
 								unit_price_index
-							] * Number(data?.conversion_rate).toFixed(2);
-
+							] * Number(data?.conversion_rate).toFixed(2)
+						);
 						thread_order_info_entry.push({
 							order_number: { text: item, rowSpan: orderRowSpan },
 							style: {
@@ -347,16 +354,18 @@ export default function Index(data) {
 								text: count_length,
 								rowSpan: countLengthRowSpan,
 							},
-							unit_price: unit_price,
-							quantity: quantity,
-							value: value,
+							unit_price: unit_price.toLocaleString(),
+							quantity: quantity.toLocaleString(),
+							value: Number(value).toLocaleString(undefined, {
+								minimumFractionDigits: 2,
+								maximumFractionDigits: 2,
+							}),
 						});
 					}
 				);
 			}
 		);
 	});
-	console.log(thread_order_info_entry);
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
 			xMargin,
@@ -407,14 +416,14 @@ export default function Index(data) {
 									{
 										text: [
 											Number(grand_total_quantity) > 0
-												? `Total Zipper: ${grand_total_quantity} pcs`
+												? `Total Zipper: ${grand_total_quantity.toLocaleString()} pcs`
 												: '',
 											Number(grand_total_quantity) > 0 &&
 											Number(grand_total_quantity_mtr) > 0
 												? ','
 												: '',
 											Number(grand_total_quantity_mtr) > 0
-												? `Total Tape: ${grand_total_quantity_mtr} mtr`
+												? `Total Tape: ${grand_total_quantity_mtr.toLocaleString()} mtr`
 												: '',
 											(Number(grand_total_quantity) > 0 ||
 												Number(
@@ -424,7 +433,7 @@ export default function Index(data) {
 												? ','
 												: '',
 											Number(grand_total_slider) > 0
-												? `Total Slider: ${grand_total_slider} pcs`
+												? `Total Slider: ${grand_total_slider.toLocaleString()} pcs`
 												: '',
 										],
 										alignment: 'right',
@@ -437,7 +446,15 @@ export default function Index(data) {
 									{},
 									{},
 									{
-										text: `BDT: ${Number(grand_total_value * Number(data?.conversion_rate).toFixed(2) || 0).toFixed(2)}`,
+										text: `BDT: ${Number(
+											grand_total_value *
+												Number(
+													data?.conversion_rate
+												).toFixed(2) || 0
+										).toLocaleString(undefined, {
+											minimumFractionDigits: 2,
+											maximumFractionDigits: 2,
+										})}`,
 										alignment: 'right',
 										bold: true,
 										colSpan: 2,
@@ -487,7 +504,7 @@ export default function Index(data) {
 								),
 								[
 									{
-										text: `Total Thread: ${grand_thread_total_quantity} cones`,
+										text: `Total Thread: ${grand_thread_total_quantity.toLocaleString()} cones`,
 										alignment: 'right',
 										bold: true,
 										colSpan: 4,
@@ -496,7 +513,15 @@ export default function Index(data) {
 									{},
 									{},
 									{
-										text: `BDT: ${Number(grand_total_thread_value * Number(data?.conversion_rate).toFixed(2) || 0).toFixed(2)}`,
+										text: `BDT: ${Number(
+											grand_total_thread_value *
+												Number(
+													data?.conversion_rate
+												).toFixed(2) || 0
+										).toLocaleString(undefined, {
+											minimumFractionDigits: 2,
+											maximumFractionDigits: 2,
+										})}`,
 										alignment: 'right',
 										bold: true,
 										colSpan: 2,
@@ -514,21 +539,42 @@ export default function Index(data) {
 				? {
 						text:
 							'Grand Total (BDT): ' +
-							(parseFloat(
+							(
 								Number(
 									grand_total_value *
 										Number(data?.conversion_rate).toFixed(2)
-								)
-							) +
-								parseFloat(
-									grand_total_thread_value *
-										Number(data?.conversion_rate).toFixed(2)
-								)) +
+								) +
+								grand_total_thread_value *
+									Number(data?.conversion_rate).toFixed(2)
+							).toLocaleString(undefined, {
+								minimumFractionDigits: 2,
+								maximumFractionDigits: 2,
+							}) +
 							'',
 
 						bold: true,
 					}
 				: {},
+			{
+				text:
+					'Total Value(In Words) : ' +
+					TakaToWord(
+						parseFloat(
+							Number(
+								grand_total_value *
+									Number(data?.conversion_rate).toFixed(2)
+							)
+						) +
+							parseFloat(
+								grand_total_thread_value *
+									Number(data?.conversion_rate).toFixed(2)
+							)
+					),
+				bold: true,
+			},
+			{
+				text: '\n',
+			},
 		],
 	});
 

@@ -15,16 +15,16 @@ const zipperNode = [
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
 	getTable('quantity', 'Quantity', 'right'),
-	getTable('unit_price', 'Unit Price\n(US$)', 'right'),
-	getTable('value', 'Value\n(US$)', 'right'),
+	getTable('unit_price', 'Price ($)', 'right'),
+	getTable('value', 'Value ($)', 'right'),
 ];
 const threadNode = [
 	getTable('order_number', 'Order No'),
 	getTable('style', 'Style'),
 	getTable('count_length', 'Size'),
-	getTable('quantity', 'Quantity', 'right'),
-	getTable('unit_price', 'Unit Price\n(US$)', 'right'),
-	getTable('value', 'Value\n(US$)', 'right'),
+	getTable('quantity', 'Quantity\n(cones)', 'right'),
+	getTable('unit_price', 'Price/cone\n($)', 'right'),
+	getTable('value', 'Value\n($)', 'right'),
 ];
 
 export default function Index(data) {
@@ -252,11 +252,14 @@ export default function Index(data) {
 					},
 					size: order_types[index] === 'full' ? res : '-',
 					quantity:
-						TotalQuantity[index][priceIndex] +
+						TotalQuantity[index][priceIndex].toLocaleString() +
 						`${order_types[index] === 'tape' ? ' mtr' : ' pcs'}`,
 					// unit_price: unitPrice + '/dzn',
-					unit_price: `${unitPrice} /${order_types[index] === 'tape' ? 'mtr' : 'dzn'}`,
-					value: TotalValue[index][priceIndex],
+					unit_price: `${unitPrice.toLocaleString()} /${order_types[index] === 'tape' ? 'mtr' : 'dzn'}`,
+					value: Number(TotalValue[index][priceIndex]).toLocaleString(
+						undefined,
+						{ minimumFractionDigits: 2, maximumFractionDigits: 2 }
+					),
 				};
 			});
 		}
@@ -335,18 +338,18 @@ export default function Index(data) {
 					[...threadUnitPrice[index][countLength]]?.length || 1;
 				[...threadUnitPrice[index][countLength]].forEach(
 					(unit_price, unit_price_index) => {
-						const styles = [...threadStyle[item]].join(',');
+						const styles = [...threadStyle[item]].join(', ');
 						const quantity =
 							TotalThreadQuantity[index][countLength][
 								unit_price_index
-							] + ' cones';
+							].toLocaleString();
 						const count_length =
 							countLength.split(' ')[0] +
 							' (' +
 							countLength.match(/\d+$/)[0] +
 							' mtr' +
 							')';
-						unit_price = unit_price + '/cone';
+						unit_price = unit_price;
 
 						thread_order_info_entry.push({
 							order_number: { text: item, rowSpan: orderRowSpan },
@@ -358,18 +361,23 @@ export default function Index(data) {
 								text: count_length,
 								rowSpan: countLengthRowSpan,
 							},
-							unit_price: unit_price,
-							quantity: quantity,
-							value: TotalThreadValue[index][countLength][
-								unit_price_index
-							],
+							unit_price: unit_price.toLocaleString(),
+							quantity: quantity.toLocaleString(),
+							value: Number(
+								TotalThreadValue[index][countLength][
+									unit_price_index
+								]
+							).toLocaleString(undefined, {
+								minimumFractionDigits: 2,
+								maximumFractionDigits: 2,
+							}),
 						});
 					}
 				);
 			}
 		);
 	});
-
+	const grandTotal = grand_total_zipper_value + grand_total_thread_value;
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
 			xMargin,
@@ -520,7 +528,7 @@ export default function Index(data) {
 								),
 								[
 									{
-										text: `Total Thread: ${grand_thread_total_quantity} cones`,
+										text: `Total Thread: ${grand_thread_total_quantity.toLocaleString()} cones`,
 										alignment: 'right',
 										bold: true,
 										colSpan: 4,
@@ -529,7 +537,7 @@ export default function Index(data) {
 									{},
 									{},
 									{
-										text: `U.S.$: ${Number(grand_total_thread_value || 0).toFixed(2)}`,
+										text: `U.S.$: ${Number(grand_total_thread_value || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
 										alignment: 'right',
 										bold: true,
 										colSpan: 2,
@@ -547,8 +555,10 @@ export default function Index(data) {
 				? {
 						text:
 							'Grand Total (USD): ' +
-							(parseFloat(grand_total_zipper_value) +
-								parseFloat(grand_total_thread_value)) +
+							(
+								grand_total_zipper_value +
+								grand_total_thread_value
+							).toLocaleString() +
 							'',
 
 						bold: true,

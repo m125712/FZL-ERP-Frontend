@@ -24,26 +24,34 @@ export default function Index() {
 				accessorKey: 'batch_number',
 				header: 'Batch ID',
 				enableColumnFilter: true,
-				width: 'w-36',
-				cell: (info) => (
-					<CustomLink
-						label={info.getValue()}
-						url={`/dyeing-and-iron/thread-batch/${info.row.original.batch_uuid}`}
-					/>
-				),
+				cell: (info) => {
+					const { batch_uuid } = info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/dyeing-and-iron/thread-batch/${batch_uuid}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 
 			{
 				accessorKey: 'order_number',
-				header: 'ID',
-				width: 'w-36',
-				cell: (info) => (
-					<CustomLink
-						label={info.getValue()}
-						url={`/thread/order-info/${info.row.original.order_info_uuid}`}
-					/>
-				),
+				header: 'O/N',
+				enableColumnFilter: true,
+				cell: (info) => {
+					const { order_info_uuid } = info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/thread/order-info/${order_info_uuid}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
+			,
 			{
 				accessorKey: 'party_name',
 				header: 'Party',

@@ -6,16 +6,6 @@ import { NumToWord } from '@/lib/NumToWord';
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
-const node = [
-	getTable('order_number', 'Order ID'),
-	getTable('style', 'Style'),
-	getTable('pi_item_description', 'Item'),
-	getTable('specification', 'Specification'),
-	getTable('size', 'Size'),
-	getTable('quantity', 'Quantity', 'right'),
-	getTable('unit_price', 'Unit Price\n(BDT)', 'right'),
-	getTable('value', 'Value\n(BDT)', 'right'),
-];
 const zipperNode = [
 	getTable('order_number', 'Order ID'),
 	getTable('style', 'Style'),

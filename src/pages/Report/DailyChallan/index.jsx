@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, LinkWithCopy, StatusButton } from '@/ui';
+import { CustomLink, DateTime, LinkWithCopy, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -72,14 +72,14 @@ export default function Index() {
 			{
 				accessorKey: 'challan_id',
 				header: 'Challan No.',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={uuid}
-							uri='/delivery/challan'
+						<CustomLink
+							label={info.getValue()}
+							url={`/delivery/challan/${uuid}`}
+							openInNewTab={true}
 						/>
 					);
 				},
@@ -87,14 +87,16 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<LinkWithCopy
-						title={info.getValue()}
-						id={info.getValue()}
-						uri='/order/details'
-					/>
-				),
+				enableColumnFilter: true,
+				cell: (info) => {
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${info.getValue()}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'product',

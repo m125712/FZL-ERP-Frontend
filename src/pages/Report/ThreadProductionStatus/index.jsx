@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, StatusButton } from '@/ui';
+import { CustomLink, DateTime, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -61,8 +61,16 @@ export default function Index() {
 				accessorKey: 'batch_number',
 				header: 'Batch',
 				enableColumnFilter: true,
-				width: 'w-40',
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { uuid } = info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/dyeing-and-iron/thread-batch/${uuid}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 			{
 				accessorFn: (row) => format(row.batch_created_at, 'dd/MM/yy'),
@@ -81,8 +89,16 @@ export default function Index() {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
-				width: 'w-40',
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { order_info_uuid } = info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/thread/order-info/${order_info_uuid}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 			{
 				accessorFn: (row) => format(row.order_created_at, 'dd/MM/yy'),

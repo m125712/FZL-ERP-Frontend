@@ -16,6 +16,7 @@ import { Footer } from '@/components/Modal/ui';
 import { ShowLocalToast } from '@/components/Toast';
 import {
 	ActionButtons,
+	CustomLink,
 	DynamicField,
 	FormField,
 	ReactSelect,
@@ -322,12 +323,39 @@ export default function Index() {
 						{EntryField.map((item, index) => (
 							<tr key={item.id}>
 								<td className={`w-80 ${rowClass}`}>
-									{getValues(
-										`entry[${index}].packing_number`
-									)}
+									<CustomLink
+										label={getValues(
+											`entry[${index}].packing_number`
+										)}
+										url={`/delivery/packing-list/${getValues(
+											`entry[${index}].uuid`
+										)}`}
+										showCopyButton={false}
+									/>
 								</td>
 								<td className={`w-80 ${rowClass}`}>
-									{getValues(`entry[${index}].order_number`)}
+									{getValues(`entry[${index}].item_for`) ===
+										'thread' ||
+									getValues(`entry[${index}].item_for`) ===
+										'sample_thread' ? (
+										<CustomLink
+											label={getValues(
+												`entry[${index}].order_number`
+											)}
+											url={`/thread/order-info/${getValues(`entry[${index}].order_info_uuid`)}`}
+											showCopyButton={false}
+										/>
+									) : (
+										<CustomLink
+											label={getValues(
+												`entry[${index}].order_number`
+											)}
+											url={`/order/details/${getValues(
+												`entry[${index}].order_number`
+											)}`}
+											showCopyButton={false}
+										/>
+									)}
 								</td>
 								<td className={`w-80 ${rowClass}`}>
 									{getValues(`entry[${index}].carton_size`)}

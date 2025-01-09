@@ -3,7 +3,7 @@ import { useSliderDashboardInfo } from '@/state/Slider';
 import { differenceInDays, subDays } from 'date-fns';
 
 import ReactTable from '@/components/Table';
-import { DateTime, StatusButton } from '@/ui';
+import { CustomLink, DateTime, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -21,19 +21,40 @@ export default function Index() {
 				accessorKey: 'batch_number',
 				header: 'Batch No.',
 				enableColumnFilter: true,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/planning/finishing-batch/${info.row.original.finishing_batch_uuid}`}
+						showCopyButton={false}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						showCopyButton={false}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'item_description',
 				header: 'Item Description',
 				enableColumnFilter: true,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.row.original.order_number}/${info.row.original.order_description_uuid}`}
+						showCopyButton={false}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'order_type',

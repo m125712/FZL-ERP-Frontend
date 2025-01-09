@@ -1,7 +1,7 @@
 // DynamicDeliveryTable.jsx
 import React from 'react';
 
-import { DynamicDeliveryField, Input, RemoveButton } from '@/ui';
+import { CustomLink, DynamicDeliveryField, Input, RemoveButton } from '@/ui';
 
 import cn from '@/lib/cn';
 
@@ -126,12 +126,45 @@ const DynamicDeliveryTable = ({
 							'bg-error/10 text-error hover:bg-error/20'
 					)}>
 					<td className={`w-32 ${rowClass}`}>
-						{getValues(`${entryFiledName}[${index}].order_number`)}
+						{/* <CustomLink
+							label={getValues(
+								`${entryFiledName}[${index}].order_number`
+							)}
+							url={`/order/details/${getValues(`${entryFiledName}[${index}].order_number`)}`}
+							showCopyButton={false}
+						/> */}
+
+						{getValues(`${entryFiledName}[${index}].item_for`) ===
+							'thread' ||
+						getValues(`${entryFiledName}[${index}].item_for`) ===
+							'sample_thread' ? (
+							<CustomLink
+								label={getValues(
+									`${entryFiledName}[${index}].order_number`
+								)}
+								url={`/thread/order-info/${getValues(`${entryFiledName}[${index}].order_info_uuid`)}`}
+								showCopyButton={false}
+							/>
+						) : (
+							<CustomLink
+								label={getValues(
+									`${entryFiledName}[${index}].order_number`
+								)}
+								url={`/order/details/${getValues(
+									`${entryFiledName}[${index}].order_number`
+								)}`}
+								showCopyButton={false}
+							/>
+						)}
 					</td>
 					<td className={`w-32 ${rowClass}`}>
-						{getValues(
-							`${entryFiledName}[${index}].item_description`
-						)}
+						<CustomLink
+							label={getValues(
+								`${entryFiledName}[${index}].item_description`
+							)}
+							url={`/order/details/${getValues(`${entryFiledName}[${index}].order_number`)}/${getValues(`${entryFiledName}[${index}].order_description_uuid`)}`}
+							showCopyButton={false}
+						/>
 					</td>
 					<td className={`w-32 ${rowClass}`}>
 						{getValues(`${entryFiledName}[${index}].style`)}

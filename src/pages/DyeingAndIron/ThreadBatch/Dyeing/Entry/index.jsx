@@ -7,7 +7,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
-import { DynamicDeliveryField, Input } from '@/ui';
+import { CustomLink, DynamicDeliveryField, Input } from '@/ui';
 
 import cn from '@/lib/cn';
 import { DevTool } from '@/lib/react-hook-devtool';
@@ -171,7 +171,13 @@ export default function Index() {
 							key={item.id}
 							className='relative cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30'>
 							<td className={`${rowClass}`}>
-								{item.order_number}
+								{
+									<CustomLink
+										label={item.order_number}
+										url={`/thread/order-info/${item.order_info_uuid}`}
+										showCopyButton={false}
+									/>
+								}
 							</td>
 							<td className={`w-32 ${rowClass}`}>{item.color}</td>
 							<td className={`w-32 ${rowClass}`}>{item.style}</td>

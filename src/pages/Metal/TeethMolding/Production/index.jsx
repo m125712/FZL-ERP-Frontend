@@ -4,7 +4,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { LinkWithCopy, StatusButton, Transfer } from '@/ui';
+import { CustomLink, LinkWithCopy, StatusButton, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -26,49 +26,40 @@ export default function Index() {
 				accessorKey: 'batch_number',
 				header: 'Batch No.',
 				enableColumnFilter: true,
-				width: 'w-36',
-				cell: (info) => {
-					const { finishing_batch_uuid } = info.row.original;
-
-					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={finishing_batch_uuid}
-							uri={`/dyeing-and-iron/finishing-batch`}
-						/>
-					);
-				},
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/planning/finishing-batch/${info.row.original.finishing_batch_uuid}`}
+						showCopyButton={false}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
-				cell: (info) => {
-					const { order_number } = info.row.original;
-					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={order_number}
-							uri='/order/details'
-						/>
-					);
-				},
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						showCopyButton={false}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'item_description',
 				header: 'Item Description',
 				enableColumnFilter: true,
-				cell: (info) => {
-					const { order_description_uuid, order_number } =
-						info.row.original;
-					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={order_description_uuid}
-							uri={`/order/details/${order_number}`}
-						/>
-					);
-				},
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.row.original.order_number}/${info.row.original.order_description_uuid}`}
+						showCopyButton={false}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'order_type',

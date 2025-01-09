@@ -271,7 +271,6 @@ export default function Index() {
 			{
 				accessorKey: 'created_at',
 				header: 'Created at',
-				width: 'w-40',
 				enableColumnFilter: false,
 				filterFn: 'isWithinRange',
 				cell: (info) => {
@@ -282,7 +281,6 @@ export default function Index() {
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated at',
-				width: 'w-24',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
@@ -322,9 +320,10 @@ export default function Index() {
 
 	//Drying Completed
 	const handelDryingComplete = async (idx) => {
-		if (data[idx]?.is_drying_complete === null) {
+		const { uuid, is_drying_complete } = data[idx];
+		if (is_drying_complete === null) {
 			await updateData.mutateAsync({
-				url: `${url}/${data[idx]?.uuid}`,
+				url: `/thread/batch/${uuid}`,
 				updatedData: {
 					is_drying_complete: true,
 					drying_created_at: GetDateTime(),
@@ -335,38 +334,15 @@ export default function Index() {
 			invalidateQuery();
 		} else {
 			await updateData.mutateAsync({
-				url: `${url}/${data[idx]?.uuid}`,
+				url: `/thread/batch/${uuid}`,
 				updatedData: {
 					is_drying_complete:
-						data[idx]?.is_drying_complete === 'true' ? false : true,
+						is_drying_complete === 'true' ? false : true,
 					drying_updated_at: GetDateTime(),
 				},
 				isOnCloseNeeded: false,
 			});
 			invalidateQuery();
-		}
-	};
-	// Machine
-	const handleMachine = async (e, idx) => {
-		if (data[idx]?.machine_uuid === null) {
-			await updateData.mutateAsync({
-				url: `${url}/${data[idx]?.uuid}`,
-				updatedData: {
-					machine_uuid: e.value,
-					lab_created_by: user?.uuid,
-					lab_created_at: GetDateTime(),
-				},
-				isOnCloseNeeded: false,
-			});
-		} else {
-			await updateData.mutateAsync({
-				url: `${url}/${data[idx]?.uuid}`,
-				updatedData: {
-					machine_uuid: e.value,
-					lab_updated_at: GetDateTime(),
-				},
-				isOnCloseNeeded: false,
-			});
 		}
 	};
 
@@ -380,7 +356,6 @@ export default function Index() {
 		navigate(`/dyeing-and-iron/thread-batch/${uuid}/update`);
 	};
 
-	// get tabname
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);

@@ -305,14 +305,14 @@ export default function Index() {
 	// Received
 	const handelReceived = async (idx) => {
 		await updateData.mutateAsync({
-			url: `${url}/${data[idx]?.uuid}`,
+			url: `zipper/dyeing-batch/${data[idx]?.uuid}`,
 			updatedData: {
 				received: data[idx]?.received === 1 ? 0 : 1,
 			},
 			isOnCloseNeeded: false,
 		});
 	};
-	// get tabname
+
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);

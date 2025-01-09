@@ -1452,7 +1452,11 @@ export const challanQK = {
 	all: () => ['challan'],
 
 	//Challan
-	deliveryChallan: (query) => [...challanQK.all(), 'delivery-challan', query],
+	deliveryChallan: (query) => [
+		...challanQK.all(),
+		'delivery-challan',
+		...(query ? [query] : []),
+	],
 	deliveryChallanByUUID: (uuid) => [...challanQK.deliveryChallan(), uuid],
 	deliveryChallanDetailsByUUID: (uuid) => [
 		...challanQK.all(),

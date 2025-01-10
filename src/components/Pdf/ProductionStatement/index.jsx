@@ -295,7 +295,10 @@ export default function Index(data, from, to) {
 						rowSpan: orderRowSpan,
 					},
 					item_description: {
-						text: itemItem.item_description,
+						text:
+							itemItem.item_description +
+							'\n' +
+							itemItem.packing_number,
 						rowSpan: itemRowSpan,
 					},
 					size: {

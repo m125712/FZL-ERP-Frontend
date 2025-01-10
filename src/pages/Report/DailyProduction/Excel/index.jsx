@@ -146,6 +146,7 @@ export default function Index(data, from) {
 							{
 								text: itemItem.item_description,
 							},
+							
 							{
 								text: otherItem.size,
 							},

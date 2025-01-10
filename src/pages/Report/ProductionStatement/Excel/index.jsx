@@ -290,6 +290,9 @@ export default function Index(data, from, to) {
 						{
 							text: itemItem.item_description,
 						},
+						{
+							text: itemItem.packing_number,
+						},
 
 						{
 							text: title.includes(otherItem.size)
@@ -348,6 +351,9 @@ export default function Index(data, from, to) {
 		},
 		{
 			text: 'Item Description',
+		},
+		{
+			text: 'Packing Number',
 		},
 		{
 			text: 'Size',

@@ -271,54 +271,29 @@ export default function Index(data, from, to) {
 
 				return itemItem.other?.map((otherItem, index) => {
 					return [
-						index === 0 && orderIndex === 0 && itemIndex === 0
-							? {
-									text: item.party_name,
-									rowSpan: typeRowSpan,
-								}
-							: {
-									text: '',
-								},
-						index === 0 && orderIndex === 0 && itemIndex === 0
-							? {
-									text: item.type,
-									rowSpan: typeRowSpan,
-								}
-							: {
-									text: '',
-								},
-						index === 0 && orderIndex === 0 && itemIndex === 0
-							? {
-									text: item.marketing_name,
-									rowSpan: typeRowSpan,
-								}
-							: {
-									text: '',
-								},
-						index === 0 && itemIndex === 0
-							? {
-									text: orderItem.order_number,
-									rowSpan: orderRowSpan,
-								}
-							: {
-									text: '',
-								},
-						index === 0 && itemIndex === 0
-							? {
-									text: orderItem.total_quantity,
-									rowSpan: orderRowSpan,
-								}
-							: {
-									text: '',
-								},
-						index === 0
-							? {
-									text: itemItem.item_description,
-									rowSpan: itemRowSpan,
-								}
-							: {
-									text: '',
-								},
+						{
+							text: item.party_name,
+						},
+						{
+							text: item.type,
+						},
+						{
+							text: item.marketing_name,
+						},
+
+						{
+							text: orderItem.order_number,
+						},
+						{
+							text: orderItem.total_quantity,
+						},
+						{
+							text: itemItem.item_description,
+						},
+						{
+							text: itemItem.packing_number,
+						},
+
 						{
 							text: title.includes(otherItem.size)
 								? otherItem.size
@@ -376,6 +351,9 @@ export default function Index(data, from, to) {
 		},
 		{
 			text: 'Item Description',
+		},
+		{
+			text: 'Packing Number',
 		},
 		{
 			text: 'Size',

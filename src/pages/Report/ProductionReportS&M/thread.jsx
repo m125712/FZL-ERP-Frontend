@@ -4,7 +4,7 @@ import { useProductionReport } from '@/state/Report';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, StatusButton } from '@/ui';
+import { CustomLink, DateTime, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -62,11 +62,21 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				enableColumnFilter: true,
+				cell: (info) => {
+					const { order_info_uuid } = info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/thread/order-info/${order_info_uuid}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'count_length_name',

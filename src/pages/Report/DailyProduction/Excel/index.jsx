@@ -133,58 +133,31 @@ export default function Index(data, from) {
 					const itemRowSpan = itemItem.other?.length || 1;
 					return itemItem.other?.map((otherItem, otherIndex) => {
 						return [
-							partyIndex === 0 &&
-							orderIndex === 0 &&
-							itemIndex === 0 &&
-							otherIndex === 0
-								? {
-										text: item.type,
-										rowSpan: typeRowSpan,
-									}
-								: {
-										text: '',
-									},
-							orderIndex === 0 &&
-							itemIndex === 0 &&
-							otherIndex === 0
-								? {
-										text: partyItem.party_name,
-										rowSpan: partyRowSpan,
-									}
-								: {
-										text: '',
-									},
-							itemIndex === 0 && otherIndex === 0
-								? {
-										text: orderItem.order_number,
-										rowSpan: orderRowSpan,
-									}
-								: {
-										text: '',
-									},
-							otherIndex === 0
-								? {
-										text: itemItem.item_description,
-										rowSpan: itemRowSpan,
-									}
-								: {
-										text: '',
-									},
+							{
+								text: item.type,
+							},
+
+							{
+								text: partyItem.party_name,
+							},
+							{
+								text: orderItem.order_number,
+							},
+							{
+								text: itemItem.item_description,
+							},
+							
 							{
 								text: otherItem.size,
-								rowSpan: 1,
 							},
 							{
 								text: otherItem.running_total_close_end_quantity,
-								rowSpan: 1,
 							},
 							{
 								text: otherItem.running_total_open_end_quantity,
-								rowSpan: 1,
 							},
 							{
 								text: otherItem.running_total_quantity,
-								rowSpan: 1,
 							},
 						];
 					});

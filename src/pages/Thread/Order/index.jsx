@@ -7,6 +7,7 @@ import { useAccess } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import {
+	CustomLink,
 	DateTime,
 	EditDelete,
 	LinkOnly,
@@ -83,15 +84,15 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'order_number',
-				header: 'ID',
-				width: 'w-36',
+				header: 'O/N',
+				enableColumnFilter: true,
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
-						<LinkOnly
-							uri='/thread/order-info'
-							id={uuid}
-							title={info.getValue()}
+						<CustomLink
+							label={info.getValue()}
+							url={`/thread/order-info/${uuid}`}
+							openInNewTab={true}
 						/>
 					);
 				},

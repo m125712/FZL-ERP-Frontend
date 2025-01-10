@@ -3,7 +3,7 @@ import { useSampleCombined } from '@/state/Report';
 import { format } from 'date-fns';
 
 import ReactTable from '@/components/Table';
-import { DateTime, LinkWithCopy, ReactSelect } from '@/ui';
+import { CustomLink, DateTime, LinkWithCopy, ReactSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -43,25 +43,25 @@ export default function Index() {
 				header: 'O/N',
 				enableColumnFilter: true,
 				cell: (info) => (
-					<LinkWithCopy
-						title={info.getValue()}
-						id={info.getValue()}
-						uri='/order/details'
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
 					/>
 				),
 			},
 			{
 				accessorKey: 'item_description',
-				header: 'Product',
-				enableColumnFilter: false,
-				cell: ({ row }) => {
+				header: 'Item',
+				enableColumnFilter: true,
+				cell: (info) => {
 					const { order_description_uuid, order_number } =
-						row.original;
+						info.row.original;
 					return (
-						<LinkWithCopy
-							title={row.getValue('item_description')}
-							id={order_description_uuid}
-							uri={`/order/details/${order_number}`}
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${order_number}/${order_description_uuid}`}
+							openInNewTab={true}
 						/>
 					);
 				},

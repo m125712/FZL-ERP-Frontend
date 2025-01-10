@@ -4,7 +4,7 @@ import { usePIToBeSubmitted } from '@/state/Report';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, LinkWithCopy, StatusButton } from '@/ui';
+import { CustomLink, DateTime, LinkWithCopy, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -78,15 +78,14 @@ export default function Index() {
 						const number = orderNumber.label;
 						const uuid = orderNumber.uuid;
 						return (
-							<LinkWithCopy
-								key={number}
-								title={number}
-								id={isThreadOrder ? uuid : number}
-								uri={
+							<CustomLink
+								label={number}
+								url={
 									isThreadOrder
-										? '/thread/order-info'
-										: '/order/details'
+										? `/thread/order-info/${uuid}`
+										: `/order/details/${number}`
 								}
+								openInNewTab={true}
 							/>
 						);
 					});

@@ -61,9 +61,18 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'lc_number',
-				header: 'LC No.',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				header: 'LC No',
+				enableColumnFilter: true,
+				cell: (info) => {
+					const { uuid } = info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/commercial/lc/details/${uuid}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'lc_date',

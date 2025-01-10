@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, StatusButton } from '@/ui';
+import { CustomLink, DateTime, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -77,8 +77,13 @@ export default function Index() {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
-				width: 'w-40',
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorFn: (row) => format(row.order_created_at, 'dd/MM/yy'),
@@ -120,12 +125,21 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
-
 			{
 				accessorKey: 'item_description',
-				header: 'Item Description',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				header: 'Item',
+				enableColumnFilter: true,
+				cell: (info) => {
+					const { order_description_uuid, order_number } =
+						info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${order_number}/${order_description_uuid}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'colors',

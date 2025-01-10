@@ -1,13 +1,15 @@
-import { RouterProvider } from 'react-router-dom';
-import MainLayout from './layouts/Main';
-
 import { router } from '@/routes/router';
+import AuthProvider from '@context/auth';
+import { RouterProvider } from 'react-router-dom';
+
+import { Toast } from '@/components/Toast';
 
 function App() {
 	return (
-		<MainLayout>
+		<AuthProvider>
 			<RouterProvider router={router} />
-		</MainLayout>
+			<Toast />
+		</AuthProvider>
 	);
 }
 

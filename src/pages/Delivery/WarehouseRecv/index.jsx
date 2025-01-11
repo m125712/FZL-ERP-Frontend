@@ -330,7 +330,6 @@ export default function Index() {
 										url={`/delivery/packing-list/${getValues(
 											`entry[${index}].uuid`
 										)}`}
-										showCopyButton={false}
 									/>
 								</td>
 								<td className={`w-80 ${rowClass}`}>
@@ -343,7 +342,6 @@ export default function Index() {
 												`entry[${index}].order_number`
 											)}
 											url={`/thread/order-info/${getValues(`entry[${index}].order_info_uuid`)}`}
-											showCopyButton={false}
 										/>
 									) : (
 										<CustomLink
@@ -353,7 +351,6 @@ export default function Index() {
 											url={`/order/details/${getValues(
 												`entry[${index}].order_number`
 											)}`}
-											showCopyButton={false}
 										/>
 									)}
 								</td>

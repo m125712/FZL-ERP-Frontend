@@ -45,7 +45,6 @@ const Index = () => {
 					<CustomLink
 						label={info.getValue()}
 						url={`/planning/finishing-batch/${info.row.original.finishing_batch_uuid}`}
-						showCopyButton={false}
 						openInNewTab={true}
 					/>
 				),
@@ -59,7 +58,6 @@ const Index = () => {
 					<CustomLink
 						label={info.getValue()}
 						url={`/order/details/${info.getValue()}`}
-						showCopyButton={false}
 						openInNewTab={true}
 					/>
 				),

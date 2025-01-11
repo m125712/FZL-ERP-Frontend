@@ -131,7 +131,6 @@ const DynamicDeliveryTable = ({
 								`${entryFiledName}[${index}].order_number`
 							)}
 							url={`/order/details/${getValues(`${entryFiledName}[${index}].order_number`)}`}
-							showCopyButton={false}
 						/> */}
 
 						{getValues(`${entryFiledName}[${index}].item_for`) ===
@@ -143,7 +142,6 @@ const DynamicDeliveryTable = ({
 									`${entryFiledName}[${index}].order_number`
 								)}
 								url={`/thread/order-info/${getValues(`${entryFiledName}[${index}].order_info_uuid`)}`}
-								showCopyButton={false}
 							/>
 						) : (
 							<CustomLink
@@ -153,7 +151,6 @@ const DynamicDeliveryTable = ({
 								url={`/order/details/${getValues(
 									`${entryFiledName}[${index}].order_number`
 								)}`}
-								showCopyButton={false}
 							/>
 						)}
 					</td>
@@ -163,7 +160,6 @@ const DynamicDeliveryTable = ({
 								`${entryFiledName}[${index}].item_description`
 							)}
 							url={`/order/details/${getValues(`${entryFiledName}[${index}].order_number`)}/${getValues(`${entryFiledName}[${index}].order_description_uuid`)}`}
-							showCopyButton={false}
 						/>
 					</td>
 					<td className={`w-32 ${rowClass}`}>

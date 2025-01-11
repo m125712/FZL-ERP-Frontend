@@ -33,7 +33,6 @@ export default function Index() {
 					<CustomLink
 						label={info.getValue()}
 						url={`/order/details/${info.getValue()}`}
-						showCopyButton={false}
 						openInNewTab={true}
 					/>
 				),

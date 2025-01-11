@@ -175,7 +175,6 @@ export default function Index() {
 									<CustomLink
 										label={item.order_number}
 										url={`/thread/order-info/${item.order_info_uuid}`}
-										showCopyButton={false}
 									/>
 								}
 							</td>

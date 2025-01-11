@@ -27,8 +27,8 @@ const FilterColumn = ({
 	switch (type) {
 		case 'undefined':
 			return null;
-		case 'number':
-			return <FilterNumber {...{ columnName, column, isFullFilter }} />;
+		// case 'number':
+		// 	return <FilterNumber {...{ columnName, column, isFullFilter }} />;
 	}
 
 	return (

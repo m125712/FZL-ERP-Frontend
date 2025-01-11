@@ -178,30 +178,32 @@ export default function Index(data, from, to) {
 				);
 				partyTotal.closing.value += ClosingTotalValue;
 				grandTotal.closing.value += ClosingTotalValue;
-				itemItem.other.push({
-					size: 'Current Total',
-					running_total_close_end_quantity: totalCloseEnd,
-					running_total_open_end_quantity: totalOpenEnd,
-					running_total_quantity: totalQuantity,
-					company_price_pcs: 1,
-					running_total_value: totalValue,
-				});
-				itemItem.other.push({
-					size: 'Opening Bal.',
-					running_total_close_end_quantity: totalOpeningCloseEnd,
-					running_total_open_end_quantity: totalOpeningOpenEnd,
-					running_total_quantity: OpeningTotalQuantity,
-					company_price_pcs: 1,
-					running_total_value: OpeningTotalValue,
-				});
-				itemItem.other.push({
-					size: 'Closing Bal.',
-					running_total_close_end_quantity: totalClosingCloseEnd,
-					running_total_open_end_quantity: totalClosingOpenEnd,
-					running_total_quantity: CloseTotalQuantity,
-					company_price_pcs: 1,
-					running_total_value: ClosingTotalValue,
-				});
+				if (itemIndex + 1 === orderItem.items.length) {
+					itemItem.other.push({
+						size: 'Current Total',
+						running_total_close_end_quantity: totalCloseEnd,
+						running_total_open_end_quantity: totalOpenEnd,
+						running_total_quantity: totalQuantity,
+						company_price_pcs: 1,
+						running_total_value: totalValue,
+					});
+					itemItem.other.push({
+						size: 'Opening Bal.',
+						running_total_close_end_quantity: totalOpeningCloseEnd,
+						running_total_open_end_quantity: totalOpeningOpenEnd,
+						running_total_quantity: OpeningTotalQuantity,
+						company_price_pcs: 1,
+						running_total_value: OpeningTotalValue,
+					});
+					itemItem.other.push({
+						size: 'Closing Bal.',
+						running_total_close_end_quantity: totalClosingCloseEnd,
+						running_total_open_end_quantity: totalClosingOpenEnd,
+						running_total_quantity: CloseTotalQuantity,
+						company_price_pcs: 1,
+						running_total_value: ClosingTotalValue,
+					});
+				}
 				if (
 					item.orders.length === orderIndex + 1 &&
 					itemIndex + 1 === orderItem.items.length
@@ -328,6 +330,7 @@ export default function Index(data, from, to) {
 								Number(otherItem.running_total_value).toFixed(3)
 							),
 						},
+						{},
 					];
 				});
 			});
@@ -373,6 +376,9 @@ export default function Index(data, from, to) {
 		{
 			text: 'Value',
 		},
+		{
+			text: 'Value (BDT)',
+		},
 	]);
 	tableData.push([
 		{
@@ -401,6 +407,7 @@ export default function Index(data, from, to) {
 		{
 			text: Number(grandTotal.current.value).toFixed(2),
 		},
+		{},
 	]);
 	tableData.push([
 		{

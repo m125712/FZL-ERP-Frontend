@@ -9,14 +9,15 @@ const node = [
 	getTable('type', 'Type'),
 	getTable('marketing', 'Team'),
 	getTable('order_number', 'O/N'),
-	getTable('order_qty', 'Ord.Qty'),
 	getTable('item_description', 'Item'),
+	getTable('packing_number', 'P/N'),
 	getTable('size', 'Size'),
 	getTable('running_total_close_end_quantity', 'C/E', 'right'),
 	getTable('running_total_open_end_quantity', 'O/E', 'right'),
 	getTable('running_total_quantity', 'Total Qty', 'right'),
 	getTable('company_price_dzn', 'Price', 'right'),
 	getTable('value', 'Value', 'right'),
+	getTable('value_bdt', 'Value (BDT)', 'right'),
 ];
 export default function Index(data, from, to) {
 	const headerHeight = 80;
@@ -189,30 +190,32 @@ export default function Index(data, from, to) {
 				);
 				partyTotal.closing.value += ClosingTotalValue;
 				grandTotal.closing.value += ClosingTotalValue;
-				itemItem.other.push({
-					size: 'Current Total',
-					running_total_close_end_quantity: totalCloseEnd,
-					running_total_open_end_quantity: totalOpenEnd,
-					running_total_quantity: totalQuantity,
-					company_price_pcs: 1,
-					running_total_value: totalValue,
-				});
-				itemItem.other.push({
-					size: 'Opening Bal.',
-					running_total_close_end_quantity: totalOpeningCloseEnd,
-					running_total_open_end_quantity: totalOpeningOpenEnd,
-					running_total_quantity: OpeningTotalQuantity,
-					company_price_pcs: 1,
-					running_total_value: OpeningTotalValue,
-				});
-				itemItem.other.push({
-					size: 'Closing Bal.',
-					running_total_close_end_quantity: totalClosingCloseEnd,
-					running_total_open_end_quantity: totalClosingOpenEnd,
-					running_total_quantity: CloseTotalQuantity,
-					company_price_pcs: 1,
-					running_total_value: ClosingTotalValue,
-				});
+				if (itemIndex + 1 === orderItem.items.length) {
+					itemItem.other.push({
+						size: 'Current Total',
+						running_total_close_end_quantity: totalCloseEnd,
+						running_total_open_end_quantity: totalOpenEnd,
+						running_total_quantity: totalQuantity,
+						company_price_pcs: 1,
+						running_total_value: totalValue,
+					});
+					itemItem.other.push({
+						size: 'Opening Bal.',
+						running_total_close_end_quantity: totalOpeningCloseEnd,
+						running_total_open_end_quantity: totalOpeningOpenEnd,
+						running_total_quantity: OpeningTotalQuantity,
+						company_price_pcs: 1,
+						running_total_value: OpeningTotalValue,
+					});
+					itemItem.other.push({
+						size: 'Closing Bal.',
+						running_total_close_end_quantity: totalClosingCloseEnd,
+						running_total_open_end_quantity: totalClosingOpenEnd,
+						running_total_quantity: CloseTotalQuantity,
+						company_price_pcs: 1,
+						running_total_value: ClosingTotalValue,
+					});
+				}
 				if (
 					item.orders.length === orderIndex + 1 &&
 					itemIndex + 1 === orderItem.items.length
@@ -287,18 +290,19 @@ export default function Index(data, from, to) {
 						rowSpan: typeRowSpan,
 					},
 					order_number: {
-						text: orderItem.order_number,
-						rowSpan: orderRowSpan,
-					},
-					order_qty: {
-						text: orderItem.total_quantity,
+						text:
+							orderItem.order_number +
+							' (' +
+							orderItem.total_quantity +
+							')',
 						rowSpan: orderRowSpan,
 					},
 					item_description: {
-						text:
-							itemItem.item_description +
-							'\n' +
-							itemItem.packing_number,
+						text: itemItem.item_description,
+						rowSpan: itemRowSpan,
+					},
+					packing_number: {
+						text: itemItem.packing_number,
 						rowSpan: itemRowSpan,
 					},
 					size: {
@@ -363,7 +367,9 @@ export default function Index(data, from, to) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [100, 40, 80, 50, 50, 70, 60, 45, 45, 45, 45, 45],
+					widths: [
+						65, 40, 80, 50, 70, 50, 60, 45, 45, 45, 45, 45, 45,
+					],
 					body: [
 						TableHeader(node),
 
@@ -422,6 +428,7 @@ export default function Index(data, from, to) {
 								),
 								bold: true,
 							},
+							{},
 						],
 						[
 							{
@@ -462,6 +469,7 @@ export default function Index(data, from, to) {
 								),
 								bold: true,
 							},
+							{},
 						],
 						[
 							{
@@ -502,6 +510,7 @@ export default function Index(data, from, to) {
 								),
 								bold: true,
 							},
+							{},
 						],
 					],
 				},

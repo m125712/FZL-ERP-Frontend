@@ -81,22 +81,47 @@ export default function Index(data, from, to) {
 		};
 
 		item.orders?.forEach((orderItem, orderIndex) => {
+			const orderTotal = {
+				current: {
+					close_end_quantity: 0,
+					open_end_quantity: 0,
+					quantity: 0,
+					value: 0,
+					value_bdt: 0,
+				},
+				closing: {
+					close_end_quantity: 0,
+					open_end_quantity: 0,
+					quantity: 0,
+					value: 0,
+					value_bdt: 0,
+				},
+				opening: {
+					close_end_quantity: 0,
+					open_end_quantity: 0,
+					quantity: 0,
+					value: 0,
+					value_bdt: 0,
+				},
+			};
 			orderItem.items?.forEach((itemItem, itemIndex) => {
 				const totalCloseEnd = itemItem.other?.reduce((total, item) => {
 					return total + (item.running_total_close_end_quantity || 0);
 				}, 0);
-
+				orderTotal.current.close_end_quantity += totalCloseEnd;
 				partyTotal.current.close_end_quantity += totalCloseEnd;
 				grandTotal.current.close_end_quantity += totalCloseEnd;
 				const totalOpenEnd = itemItem.other?.reduce((total, item) => {
 					return total + (item.running_total_open_end_quantity || 0);
 				}, 0);
+
+				orderTotal.current.open_end_quantity += totalOpenEnd;
 				partyTotal.current.open_end_quantity += totalOpenEnd;
 				grandTotal.current.open_end_quantity += totalOpenEnd;
 				const totalQuantity = itemItem.other?.reduce((total, item) => {
 					return total + (item.running_total_quantity || 0);
 				}, 0);
-
+				orderTotal.current.quantity += totalQuantity;
 				partyTotal.current.quantity += totalQuantity;
 				grandTotal.current.quantity += totalQuantity;
 				const totalOpeningCloseEnd = itemItem.other?.reduce(
@@ -107,7 +132,7 @@ export default function Index(data, from, to) {
 					},
 					0
 				);
-
+				orderTotal.opening.close_end_quantity += totalOpeningCloseEnd;
 				partyTotal.opening.close_end_quantity += totalOpeningCloseEnd;
 				grandTotal.opening.close_end_quantity += totalOpeningCloseEnd;
 				const totalOpeningOpenEnd = itemItem.other?.reduce(
@@ -118,7 +143,7 @@ export default function Index(data, from, to) {
 					},
 					0
 				);
-
+				orderTotal.opening.open_end_quantity += totalOpeningOpenEnd;
 				partyTotal.opening.open_end_quantity += totalOpeningOpenEnd;
 				grandTotal.opening.open_end_quantity += totalOpeningOpenEnd;
 				const OpeningTotalQuantity = itemItem.other?.reduce(
@@ -127,7 +152,7 @@ export default function Index(data, from, to) {
 					},
 					0
 				);
-
+				orderTotal.opening.quantity += OpeningTotalQuantity;
 				partyTotal.opening.quantity += OpeningTotalQuantity;
 				grandTotal.opening.quantity += OpeningTotalQuantity;
 				const totalClosingCloseEnd = itemItem.other?.reduce(
@@ -138,6 +163,7 @@ export default function Index(data, from, to) {
 					},
 					0
 				);
+				orderTotal.closing.close_end_quantity += totalClosingCloseEnd;
 				partyTotal.closing.close_end_quantity += totalClosingCloseEnd;
 				grandTotal.closing.close_end_quantity += totalClosingCloseEnd;
 				const totalClosingOpenEnd = itemItem.other?.reduce(
@@ -148,7 +174,7 @@ export default function Index(data, from, to) {
 					},
 					0
 				);
-
+				orderTotal.closing.open_end_quantity += totalClosingOpenEnd;
 				partyTotal.closing.open_end_quantity += totalClosingOpenEnd;
 				grandTotal.closing.open_end_quantity += totalClosingOpenEnd;
 				const CloseTotalQuantity = itemItem.other?.reduce(
@@ -157,6 +183,7 @@ export default function Index(data, from, to) {
 					},
 					0
 				);
+				orderTotal.closing.quantity += CloseTotalQuantity;
 				partyTotal.closing.quantity += CloseTotalQuantity;
 				grandTotal.closing.quantity += CloseTotalQuantity;
 				const totalValue = itemItem.other?.reduce((total, item) => {
@@ -167,6 +194,7 @@ export default function Index(data, from, to) {
 						}, 0) || 0)
 					);
 				}, 0);
+				orderTotal.current.value += totalValue;
 				partyTotal.current.value += totalValue;
 				grandTotal.current.value += totalValue;
 				const OpeningTotalValue = itemItem.other?.reduce(
@@ -180,7 +208,7 @@ export default function Index(data, from, to) {
 					},
 					0
 				);
-
+				orderTotal.opening.value += OpeningTotalValue;
 				partyTotal.opening.value += OpeningTotalValue;
 				grandTotal.opening.value += OpeningTotalValue;
 				const ClosingTotalValue = itemItem.other?.reduce(
@@ -194,6 +222,7 @@ export default function Index(data, from, to) {
 					},
 					0
 				);
+				orderTotal.closing.value += ClosingTotalValue;
 				partyTotal.closing.value += ClosingTotalValue;
 				grandTotal.closing.value += ClosingTotalValue;
 				const totalValueBDT = itemItem.other?.reduce(
@@ -206,6 +235,7 @@ export default function Index(data, from, to) {
 					},
 					0
 				);
+				orderTotal.current.value_bdt += totalValueBDT;
 				partyTotal.current.value_bdt += totalValueBDT;
 				grandTotal.current.value_bdt += totalValueBDT;
 				const OpeningTotalValueBDT = itemItem.other?.reduce(
@@ -218,7 +248,7 @@ export default function Index(data, from, to) {
 					},
 					0
 				);
-
+				orderTotal.opening.value_bdt += OpeningTotalValueBDT;
 				partyTotal.opening.value_bdt += OpeningTotalValueBDT;
 				grandTotal.opening.value_bdt += OpeningTotalValueBDT;
 				const ClosingTotalValueBDT = itemItem.other?.reduce(
@@ -231,36 +261,42 @@ export default function Index(data, from, to) {
 					},
 					0
 				);
-
+				orderTotal.closing.value_bdt += ClosingTotalValueBDT;
 				partyTotal.closing.value_bdt += ClosingTotalValueBDT;
 				grandTotal.closing.value_bdt += ClosingTotalValueBDT;
 				if (itemIndex + 1 === orderItem.items.length) {
 					itemItem.other.push({
 						size: 'Current Total',
-						running_total_close_end_quantity: totalCloseEnd,
-						running_total_open_end_quantity: totalOpenEnd,
-						running_total_quantity: totalQuantity,
+						running_total_close_end_quantity:
+							orderTotal.current.close_end_quantity,
+						running_total_open_end_quantity:
+							orderTotal.current.open_end_quantity,
+						running_total_quantity: orderTotal.current.quantity,
 						company_price_pcs: 1,
-						running_total_value: totalValue,
-						running_total_value_bdt: totalValueBDT,
+						running_total_value: orderTotal.current.value,
+						running_total_value_bdt: orderTotal.current.value_bdt,
 					});
 					itemItem.other.push({
 						size: 'Opening Bal.',
-						running_total_close_end_quantity: totalOpeningCloseEnd,
-						running_total_open_end_quantity: totalOpeningOpenEnd,
-						running_total_quantity: OpeningTotalQuantity,
+						running_total_close_end_quantity:
+							orderTotal.opening.close_end_quantity,
+						running_total_open_end_quantity:
+							orderTotal.opening.open_end_quantity,
+						running_total_quantity: orderTotal.opening.quantity,
 						company_price_pcs: 1,
-						running_total_value: OpeningTotalValue,
-						running_total_value_bdt: OpeningTotalValueBDT,
+						running_total_value: orderTotal.opening.value,
+						running_total_value_bdt: orderTotal.opening.value_bdt,
 					});
 					itemItem.other.push({
 						size: 'Closing Bal.',
-						running_total_close_end_quantity: totalClosingCloseEnd,
-						running_total_open_end_quantity: totalClosingOpenEnd,
-						running_total_quantity: CloseTotalQuantity,
+						running_total_close_end_quantity:
+							orderTotal.closing.close_end_quantity,
+						running_total_open_end_quantity:
+							orderTotal.closing.open_end_quantity,
+						running_total_quantity: orderTotal.closing.quantity,
 						company_price_pcs: 1,
-						running_total_value: ClosingTotalValue,
-						running_total_value_bdt: ClosingTotalValueBDT,
+						running_total_value: orderTotal.closing.value,
+						running_total_value_bdt: orderTotal.closing.value_bdt,
 					});
 				}
 				if (

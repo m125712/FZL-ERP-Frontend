@@ -1,11 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDyeingDashboard } from '@/state/Dyeing';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import Pdf from '@/components/Pdf/DyeingDashboard';
-import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -13,7 +11,6 @@ import Content from './Content/Content';
 import Header from './Header';
 
 export default function index() {
-	const navigate = useNavigate();
 	const haveAccess = useAccess('dyeing__dyeing_dashboard');
 
 	const info = new PageInfo(

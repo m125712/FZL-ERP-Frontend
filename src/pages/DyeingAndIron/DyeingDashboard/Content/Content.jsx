@@ -1,5 +1,3 @@
-import React from 'react';
-
 import EmptySlotCard from './empty-slot-card';
 import SlotCard from './slot-card';
 
@@ -13,10 +11,6 @@ export default function Content({ data, dyeingDate }) {
 		'Slot 5',
 		'Slot 6',
 	];
-
-	// console.log({
-	// 	data,
-	// });
 
 	return (
 		<div className='overflow-x-auto rounded-t-md border'>

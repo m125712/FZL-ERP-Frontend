@@ -29,12 +29,14 @@ export default function Index() {
 				accessorKey: 'marketing_name',
 				header: 'Marketing',
 				enableColumnFilter: false,
+				width: 'w-24',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 
@@ -42,6 +44,7 @@ export default function Index() {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
+				width: 'w-40',
 				cell: (info) => (
 					<CustomLink
 						label={info.getValue()}
@@ -54,6 +57,7 @@ export default function Index() {
 				accessorKey: 'item_description',
 				header: 'Item',
 				enableColumnFilter: true,
+				width: 'w-32',
 				cell: (info) => {
 					const { order_description_uuid, order_number } =
 						info.row.original;
@@ -70,29 +74,35 @@ export default function Index() {
 				accessorKey: 'item_details',
 				header: 'Item',
 				enableColumnFilter: false,
-				width: 'w-40',
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'slider_details',
 				header: 'Slider',
 				enableColumnFilter: false,
-				width: 'w-40',
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'other_details',
 				header: 'Other',
 				enableColumnFilter: false,
-				width: 'w-30',
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'issue_date',
+				accessorFn: (row) => format(row.issue_date, 'dd MMM, yy'),
+				id: 'issue_date',
 				header: 'Order Date',
 				enableColumnFilter: false,
-				cell: (info) =>
-					info.getValue() && <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime
+						date={info.getValue()}
+						customizedDateFormate='dd MMM, yy'
+						isTime={false}
+					/>
+				),
 			},
 			{
 				accessorKey: 'item_name',
@@ -104,21 +114,21 @@ export default function Index() {
 				accessorKey: 'style',
 				header: 'Style',
 				enableColumnFilter: false,
-				width: 'w-40',
+				width: 'w-32',
 				cell: (info) => info.getValue().join(', '),
 			},
 			{
 				accessorKey: 'color',
 				header: 'Color',
 				enableColumnFilter: false,
-				width: 'w-40',
+				width: 'w-32',
 				cell: (info) => info.getValue().join(', '),
 			},
 			{
 				accessorKey: 'size',
 				header: 'Size',
 				enableColumnFilter: false,
-				width: 'w-40',
+				width: 'w-32',
 				cell: (info) => info.getValue().join(', '),
 			},
 			{

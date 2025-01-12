@@ -1,4 +1,4 @@
-import { LinkWithCopy } from '@/ui';
+import { CustomLink } from '@/ui';
 
 import { cn } from '@/lib/utils';
 
@@ -7,37 +7,44 @@ export default function SlotCard({ data }) {
 		batch_no,
 		batch_uuid,
 		order_no,
-		order_uuid,
+		is_zipper,
 		color,
 		total_quantity,
 		expected_kg,
 		batch_status,
 		total_actual_production_quantity,
 		received,
+		order_uuid,
 	} = data;
 
-	// console.log({
-	// 	data,
-	// });
+	let batchUrl = `/dyeing-and-iron/thread-batch/${batch_uuid}`,
+		orderNumberUrl = `/thread/order-info/${order_uuid}`;
+
+	if (is_zipper === 1) {
+		batchUrl = `/dyeing-and-iron/zipper-batch/${batch_uuid}`;
+		orderNumberUrl = `/order/details/${order_no}`;
+	}
 
 	const items = [
 		{
-			title: 'Batch No',
+			title: 'B/N',
 			content: (
-				<LinkWithCopy
-					title={batch_no}
-					id={batch_uuid}
-					uri={`/dyeing-and-iron/zipper-batch`}
+				<CustomLink
+					label={batch_no}
+					url={batchUrl}
+					openInNewTab
+					showCopyButton={false}
 				/>
 			),
 		},
 		{
-			title: 'Order No',
+			title: 'O/N',
 			content: (
-				<LinkWithCopy
-					title={order_no}
-					id={order_no}
-					uri={`/order/details`}
+				<CustomLink
+					label={order_no}
+					url={orderNumberUrl}
+					openInNewTab
+					showCopyButton={false}
 				/>
 			),
 		},
@@ -47,15 +54,19 @@ export default function SlotCard({ data }) {
 			content: color,
 		},
 		{
-			title: 'Total Quantity',
+			title: 'QTY',
 			content: total_quantity,
 		},
 		{
-			title: 'Expected Weight (KG)',
+			title: 'Exp (KG)',
 			content: expected_kg,
 		},
 		{
-			title: 'Batch Status',
+			title: 'Prod QTY',
+			content: total_actual_production_quantity,
+		},
+		{
+			title: 'Status',
 			content:
 				batch_status === 'completed' ? (
 					<span className='badge badge-success badge-xs h-5 text-[10px]'>
@@ -70,10 +81,6 @@ export default function SlotCard({ data }) {
 						Cancelled
 					</span>
 				),
-		},
-		{
-			title: 'Total QTY',
-			content: total_actual_production_quantity,
 		},
 		{
 			title: 'Received',
@@ -107,23 +114,6 @@ export default function SlotCard({ data }) {
 						</tbody>
 					</table>
 				</div>
-			</div>
-
-			<div
-				tabIndex={1}
-				className='menu dropdown-content z-[1] w-60 overflow-x-auto rounded-box bg-base-100 p-2 shadow'>
-				<table className='table table-xs'>
-					<tbody>
-						{items.map((item, index) => (
-							<tr key={index} className='border-foreground/5'>
-								<th>{item.title}</th>
-								<td className='whitespace-nowrap'>
-									{item.content}
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
 			</div>
 		</div>
 	);

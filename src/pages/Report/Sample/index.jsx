@@ -50,6 +50,7 @@ export default function Index() {
 				accessorKey: 'item_description',
 				header: 'Item',
 				enableColumnFilter: true,
+				width: 'w-32',
 				cell: (info) => {
 					const { order_description_uuid, order_number } =
 						info.row.original;

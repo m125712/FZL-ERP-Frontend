@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useAccess } from '@/hooks';
 
-import { EditDelete, Input, Textarea } from '@/ui';
+import { CustomLink, EditDelete, Input, Textarea } from '@/ui';
 
 export const Columns = ({
 	setValue,
@@ -43,7 +43,17 @@ export const Columns = ({
 			header: 'Recipe',
 			enableColumnFilter: true,
 			width: 'w-24',
-			cell: (info) => info.getValue(),
+			cell: (info) => {
+				info.getValue();
+
+				if (info.row.original.order_type == 'slider') return '--';
+				return (
+					<CustomLink
+						label={info.getValue()}
+						url={`/lab-dip/recipe/details/${info.row.original.recipe_uuid}`}
+					/>
+				);
+			},
 		},
 		// {
 		// 	accessorKey: 'order_type',

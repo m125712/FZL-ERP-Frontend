@@ -11,14 +11,13 @@ import {
 	useOtherPackingListByOrderInfoUUIDAndChallanUUID,
 } from '@/state/Other';
 import { useAuth } from '@context/auth';
-import { FormProvider, get } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
-import { DeleteModal, UpdateModal } from '@/components/Modal';
+import { UpdateModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
-import SubmitButton from '@/ui/Others/Button/SubmitButton';
-import { DynamicDeliveryField, LinkWithCopy } from '@/ui';
+import { CustomLink, DynamicDeliveryField, LinkWithCopy } from '@/ui';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
@@ -416,19 +415,29 @@ export default function Index() {
 										'bg-error/10 text-error hover:bg-error/20 hover:text-error'
 								)}>
 								<td className={`w-32 ${rowClass}`}>
-									<LinkWithCopy
-										title={getValues(
+									<CustomLink
+										label={getValues(
 											`challan_entry[${index}].packing_number`
 										)}
-										id={getValues(
-											`packing_list_uuids[${index}]`
-										)}
-										uri='/delivery/packing-list'
+										url={`/delivery/packing-list/${getValues(
+											`challan_entry[${index}].packing_list_uuid`
+										)}`}
+										openInNewTab={true}
 									/>
 								</td>
 								<td className={`w-32 ${rowClass}`}>
-									{getValues(
-										`challan_entry[${index}].item_description`
+									{watch('item_for') === 'thread' ||
+									watch('item_for') === 'sample_thread' ? (
+										getValues(
+											`challan_entry[${index}].item_description`
+										)
+									) : (
+										<CustomLink
+											label={getValues(
+												`challan_entry[${index}].item_description`
+											)}
+											url={`/order/details/${getValues(`challan_entry[${index}].order_number`)}/${getValues(`challan_entry[${index}].order_description_uuid`)}`}
+										/>
 									)}
 								</td>
 								<td className={`w-32 ${rowClass}`}>
@@ -564,19 +573,30 @@ export default function Index() {
 											'bg-error/10 text-error hover:bg-error/20 hover:text-error'
 									)}>
 									<td className={`w-32 ${rowClass}`}>
-										<LinkWithCopy
-											title={getValues(
+										<CustomLink
+											label={getValues(
 												`new_challan_entry[${index}].packing_number`
 											)}
-											id={getValues(
+											url={`/delivery/packing-list/${getValues(
 												`new_challan_entry[${index}].packing_list_uuid`
-											)}
-											uri='/delivery/packing-list'
+											)}`}
+											openInNewTab={true}
 										/>
 									</td>
 									<td className={`w-32 ${rowClass}`}>
-										{getValues(
-											`new_challan_entry[${index}].item_description`
+										{watch('item_for') === 'thread' ||
+										watch('item_for') ===
+											'sample_thread' ? (
+											getValues(
+												`new_challan_entry[${index}].item_description`
+											)
+										) : (
+											<CustomLink
+												label={getValues(
+													`new_challan_entry[${index}].item_description`
+												)}
+												url={`/order/details/${getValues(`new_challan_entry[${index}].order_number`)}/${getValues(`new_challan_entry[${index}].order_description_uuid`)}`}
+											/>
 										)}
 									</td>
 									<td className={`w-32 ${rowClass}`}>

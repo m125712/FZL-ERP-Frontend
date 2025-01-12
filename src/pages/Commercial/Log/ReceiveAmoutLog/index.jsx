@@ -11,7 +11,7 @@ import { useAccess } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete } from '@/ui';
+import { CustomLink, DateTime, EditDelete } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -48,7 +48,11 @@ export default function ProductionLog() {
 				header: 'Cash ID',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<span className='capitalize'>{info.getValue()}</span>
+					<CustomLink
+						label={info.getValue()}
+						url={`/commercial/pi-cash/${info.getValue()}`}
+						openInNewTab={true}
+					/>
 				),
 			},
 			{

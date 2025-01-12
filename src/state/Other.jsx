@@ -528,3 +528,10 @@ export const useOtherMachinesWithSlot = (param) =>
 		url: `/other/machine-with-slot/value/label?production_date=${param}`,
 		enabled: param ? true : false,
 	});
+
+// * GET RM
+export const useOtherRM = (field = 'single-field', param) =>
+	createGlobalState({
+		queryKey: otherQK.rm(field, param),
+		url: `/material/stock/by/${field}/${param}`,
+	});

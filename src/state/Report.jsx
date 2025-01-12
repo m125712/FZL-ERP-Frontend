@@ -21,10 +21,22 @@ export const useProductionReportDateWise = (
 			query,
 		enabled: !!from && !!to && enabled,
 	});
-export const useProductionStatementReport = (from = '', to = '') =>
+export const useProductionStatementReport = (
+	from = '',
+	to = '',
+	party = '',
+	marketing = '',
+	type = ''
+) =>
 	createGlobalState({
-		queryKey: reportQK.productionReportStatementReport(from, to),
-		url: `/report/delivery-statement-report?from_date=${from}&to_date=${to}`,
+		queryKey: reportQK.productionReportStatementReport(
+			from,
+			to,
+			party,
+			marketing,
+			type
+		),
+		url: `/report/delivery-statement-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&type=${type}`,
 		enabled: !!from && !!to,
 	});
 

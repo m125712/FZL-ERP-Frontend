@@ -4,7 +4,7 @@ import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { EditDelete, Transfer } from '@/ui';
+import { CustomLink, EditDelete, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -30,14 +30,26 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				enableColumnFilter: true,
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'item_description',
-				header: 'Item',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				header: 'Item Description',
+				enableColumnFilter: true,
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.row.original.order_number}/${info.row.original.order_description_uuid}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'actual_tape_quantity',
@@ -100,7 +112,9 @@ export default function Index() {
 				cell: (info) => {
 					return (
 						<SwitchToggle
-							disabled={!haveAccess.includes('click_approve_swatch')}
+							disabled={
+								!haveAccess.includes('click_approve_swatch')
+							}
 							onChange={() =>
 								handelSwitch(info.row.index, 'labdip')
 							}
@@ -190,14 +204,18 @@ export default function Index() {
 					return (
 						<div className='flex gap-4'>
 							<SwitchToggle
-								disabled={!haveAccess.includes('click_approve_coil')}
+								disabled={
+									!haveAccess.includes('click_approve_coil')
+								}
 								onChange={() =>
 									handelSwitch(info.row.index, 'coil')
 								}
 								checked={is_coil_received_sewing === 1}
 							/>
 							<SwitchToggle
-								disabled={!haveAccess.includes('click_approve_thread')}
+								disabled={
+									!haveAccess.includes('click_approve_thread')
+								}
 								onChange={() =>
 									handelSwitch(info.row.index, 'thread')
 								}

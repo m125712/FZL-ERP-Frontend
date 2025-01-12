@@ -1445,6 +1445,9 @@ export const otherQK = {
 		'machines-with-slot',
 		param,
 	],
+
+	//* GET RM
+	rm: (field, param) => [...otherQK.all(), 'rm', field, param],
 };
 
 //* Challan
@@ -1492,11 +1495,14 @@ export const reportQK = {
 		to,
 		query,
 	],
-	productionReportStatementReport: (from, to) => [
+	productionReportStatementReport: (from, to, party, marketing, type) => [
 		...reportQK.all(),
 		'production-report',
 		from,
 		to,
+		party,
+		marketing,
+		type,
 	],
 	//* Zipper Production
 	zipperProduction: (query) => [

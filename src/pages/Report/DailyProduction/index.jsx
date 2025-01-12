@@ -116,7 +116,7 @@ export default function index() {
 				<button
 					type='button'
 					onClick={() => {
-						Pdf(data, from)?.print({}, window);
+						Pdf(data, from)?.print({}, window.open('', '_blank'));
 					}}
 					className='btn btn-primary'>
 					Generate PDF

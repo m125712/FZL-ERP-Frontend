@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { useProductionStatementReport } from '@/state/Report';
 import { format } from 'date-fns';
 
-
 import Pdf from '@/components/Pdf/ProductionStatement';
 
 import PageInfo from '@/util/PageInfo';
@@ -19,7 +18,16 @@ export default function index() {
 
 	const [from, setFrom] = useState(format(new Date(), 'yyyy-MM-dd'));
 	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
-	const { data, isLoading } = useProductionStatementReport(from, to);
+	const [marketing, setMarketing] = useState();
+	const [type, setType] = useState();
+	const [party, setParty] = useState();
+	const { data, isLoading } = useProductionStatementReport(
+		from,
+		to,
+		party,
+		marketing,
+		type
+	);
 
 	const columns = useMemo(
 		() => [
@@ -77,7 +85,20 @@ export default function index() {
 	return (
 		<>
 			<div className='flex flex-col gap-8'>
-				<Header {...{ from, setFrom, to, setTo }} />
+				<Header
+					{...{
+						from,
+						setFrom,
+						to,
+						setTo,
+						party,
+						setParty,
+						marketing,
+						setMarketing,
+						type,
+						setType,
+					}}
+				/>
 				<button
 					type='button'
 					onClick={() => {

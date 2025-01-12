@@ -37,18 +37,21 @@ export default function Index(data, from, to) {
 			open_end_quantity: 0,
 			quantity: 0,
 			value: 0,
+			value_bdt: 0,
 		},
 		closing: {
 			close_end_quantity: 0,
 			open_end_quantity: 0,
 			quantity: 0,
 			value: 0,
+			value_bdt: 0,
 		},
 		opening: {
 			close_end_quantity: 0,
 			open_end_quantity: 0,
 			quantity: 0,
 			value: 0,
+			value_bdt: 0,
 		},
 	};
 
@@ -59,18 +62,21 @@ export default function Index(data, from, to) {
 				open_end_quantity: 0,
 				quantity: 0,
 				value: 0,
+				value_bdt: 0,
 			},
 			closing: {
 				close_end_quantity: 0,
 				open_end_quantity: 0,
 				quantity: 0,
 				value: 0,
+				value_bdt: 0,
 			},
 			opening: {
 				close_end_quantity: 0,
 				open_end_quantity: 0,
 				quantity: 0,
 				value: 0,
+				value_bdt: 0,
 			},
 		};
 
@@ -190,6 +196,44 @@ export default function Index(data, from, to) {
 				);
 				partyTotal.closing.value += ClosingTotalValue;
 				grandTotal.closing.value += ClosingTotalValue;
+				const totalValueBDT = itemItem.other?.reduce(
+					(total = 0, item) => {
+						return (
+							total +
+							(item.running_total_value * item.conversion_rate ||
+								0)
+						);
+					},
+					0
+				);
+				partyTotal.current.value_bdt += totalValueBDT;
+				grandTotal.current.value_bdt += totalValueBDT;
+				const OpeningTotalValueBDT = itemItem.other?.reduce(
+					(total = 0, item) => {
+						return (
+							total +
+							(item.opening_total_value * item.conversion_rate ||
+								0)
+						);
+					},
+					0
+				);
+
+				partyTotal.opening.value_bdt += OpeningTotalValueBDT;
+				grandTotal.opening.value_bdt += OpeningTotalValueBDT;
+				const ClosingTotalValueBDT = itemItem.other?.reduce(
+					(total = 0, item) => {
+						return (
+							total +
+							(item.closing_total_value * item.conversion_rate ||
+								0)
+						);
+					},
+					0
+				);
+
+				partyTotal.closing.value_bdt += ClosingTotalValueBDT;
+				grandTotal.closing.value_bdt += ClosingTotalValueBDT;
 				if (itemIndex + 1 === orderItem.items.length) {
 					itemItem.other.push({
 						size: 'Current Total',
@@ -198,6 +242,7 @@ export default function Index(data, from, to) {
 						running_total_quantity: totalQuantity,
 						company_price_pcs: 1,
 						running_total_value: totalValue,
+						running_total_value_bdt: totalValueBDT,
 					});
 					itemItem.other.push({
 						size: 'Opening Bal.',
@@ -206,6 +251,7 @@ export default function Index(data, from, to) {
 						running_total_quantity: OpeningTotalQuantity,
 						company_price_pcs: 1,
 						running_total_value: OpeningTotalValue,
+						running_total_value_bdt: OpeningTotalValueBDT,
 					});
 					itemItem.other.push({
 						size: 'Closing Bal.',
@@ -214,6 +260,7 @@ export default function Index(data, from, to) {
 						running_total_quantity: CloseTotalQuantity,
 						company_price_pcs: 1,
 						running_total_value: ClosingTotalValue,
+						running_total_value_bdt: ClosingTotalValueBDT,
 					});
 				}
 				if (
@@ -229,6 +276,7 @@ export default function Index(data, from, to) {
 						running_total_quantity: partyTotal.current.quantity,
 						company_price_pcs: 1,
 						running_total_value: partyTotal.current.value,
+						running_total_value_bdt: partyTotal.current.value_bdt,
 					});
 
 					itemItem.other.push({
@@ -240,6 +288,7 @@ export default function Index(data, from, to) {
 						running_total_quantity: partyTotal.opening.quantity,
 						company_price_pcs: 1,
 						running_total_value: partyTotal.opening.value,
+						running_total_value_bdt: partyTotal.opening.value_bdt,
 					});
 					itemItem.other.push({
 						size: 'P.Closing Bal.',
@@ -250,6 +299,7 @@ export default function Index(data, from, to) {
 						running_total_quantity: partyTotal.closing.quantity,
 						company_price_pcs: 1,
 						running_total_value: partyTotal.closing.value,
+						running_total_value_bdt: partyTotal.closing.value_bdt,
 					});
 				}
 			});
@@ -336,6 +386,17 @@ export default function Index(data, from, to) {
 					},
 					value: {
 						text: Number(otherItem.running_total_value).toFixed(3),
+						bold: title.includes(otherItem.size) ? true : false,
+					},
+					value_bdt: {
+						text: title.includes(otherItem.size)
+							? Number(otherItem.running_total_value_bdt).toFixed(
+									3
+								)
+							: Number(
+									otherItem.running_total_value *
+										Number(otherItem.conversion_rate)
+								).toFixed(3),
 						bold: title.includes(otherItem.size) ? true : false,
 					},
 				}));
@@ -428,7 +489,12 @@ export default function Index(data, from, to) {
 								),
 								bold: true,
 							},
-							{},
+							{
+								text: Number(
+									grandTotal.current.value_bdt
+								).toFixed(2),
+								bold: true,
+							},
 						],
 						[
 							{
@@ -469,7 +535,12 @@ export default function Index(data, from, to) {
 								),
 								bold: true,
 							},
-							{},
+							{
+								text: Number(
+									grandTotal.opening.value_bdt
+								).toFixed(2),
+								bold: true,
+							},
 						],
 						[
 							{
@@ -510,7 +581,12 @@ export default function Index(data, from, to) {
 								),
 								bold: true,
 							},
-							{},
+							{
+								text: Number(
+									grandTotal.closing.value_bdt
+								).toFixed(2),
+								bold: true,
+							},
 						],
 					],
 				},

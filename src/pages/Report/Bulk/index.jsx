@@ -37,13 +37,19 @@ export default function Index() {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
-				cell: (info) => (
-					<CustomLink
-						label={info.getValue()}
-						url={`/order/details/${info.getValue()}`}
-						openInNewTab={true}
-					/>
-				),
+				cell: (info) => {
+					const order_uuid = info.row.original.order_info_uuid;
+					const link = info.getValue().includes('ST')
+						? `/thread/order-info/${order_uuid}`
+						: `/order/details/${info.getValue()}`;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={link}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'item_description',

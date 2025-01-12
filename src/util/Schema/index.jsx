@@ -94,11 +94,13 @@ export const POLICY_NULL = {
 
 // Section
 export const SECTION_SCHEMA = {
+	index: NUMBER_REQUIRED.default(0).min(0, 'Minimum of 0'),
 	name: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
 export const SECTION_NULL = {
+	index: 0,
 	uuid: null,
 	name: '',
 	short_name: '',

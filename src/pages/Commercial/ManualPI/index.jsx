@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -56,11 +56,17 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'order_number',
-				header: 'Order Number',
-				width: 'w-28',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue().join('\n'),
+				header: 'O/N',
+				enableColumnFilter: true,
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
+					/>
+				),
 			},
+
 			{
 				accessorKey: 'total_value',
 				header: 'Total Value',

@@ -30,6 +30,12 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'index',
+				header: 'Index',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,

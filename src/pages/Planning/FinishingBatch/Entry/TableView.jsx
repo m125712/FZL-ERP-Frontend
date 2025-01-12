@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import ReactTable from '@/components/Table';
-import { DateTime, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime, LinkWithCopy } from '@/ui';
 
 export default function index({ data }) {
 	const columns = useMemo(
@@ -42,12 +42,30 @@ export default function index({ data }) {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+			// {
+			// 	accessorKey: 'recipe_id',
+			// 	header: 'Recipe',
+			// 	enableColumnFilter: false,
+			// 	width: 'w-28',
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
-				accessorKey: 'recipe_id',
+				accessorFn: (row) =>
+					row.order_type == 'slider' ? '--' : row.recipe_id,
+				id: 'recipe_id',
 				header: 'Recipe',
-				enableColumnFilter: false,
-				width: 'w-28',
-				cell: (info) => info.getValue(),
+				enableColumnFilter: true,
+				cell: (info) => {
+					info.getValue();
+
+					if (info.row.original.order_type == 'slider') return '--';
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/lab-dip/recipe/details/${info.row.original.recipe_uuid}`}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'style',

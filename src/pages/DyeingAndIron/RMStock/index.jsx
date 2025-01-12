@@ -1,20 +1,26 @@
-import { Suspense } from '@/components/Feedback';
-import ReactTable from '@/components/Table';
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useDyeingRM } from '@/state/Dyeing';
+import { useOtherRM } from '@/state/Other';
 import { useAccess, useFetchFunc, useFetchFuncForReport } from '@/hooks';
 
-import { useDyeingRM } from '@/state/Dyeing';
-
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
 import { EditDelete, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
+import { getTransactionAreaDyeing } from '@/util/TransactionArea';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const { data, isLoading, url } = useDyeingRM();
+	const { data, isLoading, url } = useOtherRM(
+		'multi-field',
+		`${getTransactionAreaDyeing?.map((item) => item.value).join(',')}`
+	);
 	const info = new PageInfo('Dyeing/RM', url, 'dyeing__dyeing_and_iron_rm');
 	const haveAccess = useAccess(info.getTab());
 
+	console.log(getTransactionAreaDyeing);
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);

@@ -1,11 +1,14 @@
 import { Suspense, useEffect, useMemo, useState } from 'react';
-import { useCommonMultiColorLogTapeReceived, useCommonMultiColorDashboard } from '@/state/Common';
+import {
+	useCommonMultiColorDashboard,
+	useCommonMultiColorLogTapeReceived,
+} from '@/state/Common';
 import { useAccess } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, EditDelete } from '@/ui';
+import { CustomLink, DateTime, EditDelete } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -25,14 +28,26 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				enableColumnFilter: true,
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'item_description',
-				header: 'Item',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				header: 'Item Description',
+				enableColumnFilter: true,
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.row.original.order_number}/${info.row.original.order_description_uuid}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'quantity',
@@ -69,9 +84,10 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden:
-					!(haveAccess.includes('update') ||
-					haveAccess.includes('delete')),
+				hidden: !(
+					haveAccess.includes('update') ||
+					haveAccess.includes('delete')
+				),
 				width: 'w-24',
 				cell: (info) => {
 					return (

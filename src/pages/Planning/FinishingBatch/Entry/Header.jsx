@@ -24,6 +24,7 @@ export default function Header({
 	setOrderType,
 	sliderType = '',
 	setSliderType,
+	setEndType,
 	isUpdate,
 }) {
 	const { batch_uuid } = useParams();
@@ -96,6 +97,7 @@ export default function Header({
 											onChange(e.value);
 											setOrderType(e.order_type);
 											setSliderType(e.slider_provided);
+											setEndType(e.end_type_name);
 										}}
 										isDisabled={batch_uuid != undefined}
 									/>

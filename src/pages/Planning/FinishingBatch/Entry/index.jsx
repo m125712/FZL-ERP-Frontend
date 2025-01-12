@@ -30,6 +30,7 @@ import Header from './Header';
 export default function index() {
 	const [orderType, setOrderType] = useState('');
 	const [sliderType, setSliderType] = useState('');
+	const [endType, setEndType] = useState('');
 	let [searchParams] = useSearchParams();
 	const production_date = searchParams.get('production_date');
 	const { user } = useAuth();
@@ -211,11 +212,19 @@ export default function index() {
 								0
 							);
 
+				let slider_qty = slider_quantity_current + slider_quantity_new;
+
+				if (
+					data.end_type_name === '2 Way - Close End' ||
+					data.end_type_name === '2 Way - Open End'
+				) {
+					slider_qty = slider_qty * 2;
+				}
+
 				await updateData.mutateAsync({
 					url: `/slider/stock/${rest.stock_uuid}`,
 					updatedData: {
-						batch_quantity:
-							slider_quantity_current + slider_quantity_new,
+						batch_quantity: slider_qty,
 						updated_at: GetDateTime(),
 					},
 					isOnCloseNeeded: false,
@@ -293,7 +302,7 @@ export default function index() {
 		if (orderType === 'tape') {
 		} else if (sliderType === 'completely_provided') {
 		} else {
-			const slider_quantity =
+			let slider_quantity =
 				finishingEntry.length === 1
 					? finishingEntry[0].quantity
 					: finishingEntry.reduce(
@@ -301,12 +310,20 @@ export default function index() {
 							0
 						);
 
+			if (
+				endType === '2 Way - Close End' ||
+				endType === '2 Way - Open End'
+			) {
+				slider_quantity = slider_quantity * 2;
+			}
+
 			const slider_info = {
 				uuid: nanoid(),
 				finishing_batch_uuid: finishingData.uuid,
 				batch_quantity: slider_quantity,
 				created_at: GetDateTime(),
 			};
+
 			await postData.mutateAsync({
 				url: '/slider/stock',
 				newData: slider_info,
@@ -404,6 +421,7 @@ export default function index() {
 							setOrderType,
 							sliderType,
 							setSliderType,
+							setEndType,
 							isUpdate,
 						}}
 					/>

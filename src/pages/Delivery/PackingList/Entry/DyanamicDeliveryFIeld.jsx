@@ -155,12 +155,19 @@ const DynamicDeliveryTable = ({
 						)}
 					</td>
 					<td className={`w-32 ${rowClass}`}>
-						<CustomLink
-							label={getValues(
+						{watch('item_for') === 'thread' ||
+						watch('item_for') === 'sample_thread' ? (
+							getValues(
 								`${entryFiledName}[${index}].item_description`
-							)}
-							url={`/order/details/${getValues(`${entryFiledName}[${index}].order_number`)}/${getValues(`${entryFiledName}[${index}].order_description_uuid`)}`}
-						/>
+							)
+						) : (
+							<CustomLink
+								label={getValues(
+									`${entryFiledName}[${index}].item_description`
+								)}
+								url={`/order/details/${getValues(`${entryFiledName}[${index}].order_number`)}/${getValues(`${entryFiledName}[${index}].order_description_uuid`)}`}
+							/>
+						)}
 					</td>
 					<td className={`w-32 ${rowClass}`}>
 						{getValues(`${entryFiledName}[${index}].style`)}

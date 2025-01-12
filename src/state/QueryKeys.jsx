@@ -1445,6 +1445,9 @@ export const otherQK = {
 		'machines-with-slot',
 		param,
 	],
+
+	//* GET RM
+	rm: (field, param) => [...otherQK.all(), 'rm', field, param],
 };
 
 //* Challan

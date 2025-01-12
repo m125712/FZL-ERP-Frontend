@@ -8,6 +8,7 @@ export const useDyeingRM = () =>
 		queryKey: dyeingQK.dyeingRM(),
 		url: `/material/stock/by/single-field/dying_and_iron`,
 	});
+
 export const useDyeingRMByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: dyeingQK.dyeingRM(uuid),

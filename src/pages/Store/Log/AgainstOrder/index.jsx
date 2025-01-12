@@ -1,6 +1,9 @@
 import { lazy, useMemo, useState } from 'react';
 import { useCommonTapeSFG } from '@/state/Common';
-import { useSliderAssemblyStock, useSliderDieCastingStock } from '@/state/Slider';
+import {
+	useSliderAssemblyStock,
+	useSliderDieCastingStock,
+} from '@/state/Slider';
 import {
 	useMaterialInfo,
 	useMaterialTrxAgainstOrderDescription,
@@ -9,7 +12,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete } from '@/ui';
+import { CustomLink, DateTime, EditDelete } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -39,15 +42,27 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'order_number',
-				header: 'Order Number',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				header: 'O/N',
+				enableColumnFilter: true,
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'item_description',
 				header: 'Item Description',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				enableColumnFilter: true,
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.row.original.order_number}/${info.row.original.order_description_uuid}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 
 			{
@@ -197,7 +212,7 @@ export default function Index() {
 						invalidateMaterialInfo,
 						invalidateSliderDieCastingStock,
 						invalidateCommonTapeSFG,
-						invalidateSliderAssemblyStock
+						invalidateSliderAssemblyStock,
 					]}
 				/>
 			</Suspense>

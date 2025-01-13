@@ -18,7 +18,7 @@ const node = [
 ];
 
 export default function Index(orderInfo) {
-	const headerHeight = 160;
+	const headerHeight = 180;
 	let footerHeight = 50;
 	let { order_info_entry } = orderInfo;
 

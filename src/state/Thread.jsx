@@ -33,7 +33,7 @@ export const useThreadOrderInfo = () =>
 		url: `/thread/order-info`,
 	});
 
-export const useThreadOrderInfoByQuery = (query, { enabled = false }) =>
+export const useThreadOrderInfoByQuery = (query, { enabled = false } = {}) =>
 	createGlobalState({
 		queryKey: threadQK.orderInfoByQuery(query),
 		url: `/thread/order-info${query}`,

@@ -17,8 +17,17 @@ import {
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
+import { useAuth } from '@/context/auth';
 
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
+
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return `all=true`;
+};
 
 export default function Index() {
 	const [status, setStatus] = useState('pending');
@@ -30,11 +39,18 @@ export default function Index() {
 		{ value: 'gate_pass', label: 'Gate Pass' },
 	];
 	const navigate = useNavigate();
-	const { data, isLoading, url, deleteData, updateData } = useDeliveryChallan(
-		`type=${status}`
-	);
-	const info = new PageInfo('Challan', url, 'delivery__challan');
+
 	const haveAccess = useAccess('delivery__challan');
+	const { user } = useAuth();
+
+	const { data, isLoading, url, deleteData, updateData } = useDeliveryChallan(
+		getPath(haveAccess, user?.uuid) + `&type=${status}`,
+		{
+			enabled: !!user?.uuid,
+		}
+	);
+
+	const info = new PageInfo('Challan', url, 'delivery__challan');
 
 	useEffect(() => {
 		document.title = info.getTabName();

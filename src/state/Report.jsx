@@ -26,7 +26,8 @@ export const useProductionStatementReport = (
 	to = '',
 	party = '',
 	marketing = '',
-	type = ''
+	type = '',
+	order = ''
 ) =>
 	createGlobalState({
 		queryKey: reportQK.productionReportStatementReport(
@@ -34,9 +35,10 @@ export const useProductionStatementReport = (
 			to,
 			party,
 			marketing,
-			type
+			type,
+			order
 		),
-		url: `/report/delivery-statement-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&type=${type}`,
+		url: `/report/delivery-statement-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&order_info_uuid=${order}&type=${type}&page=production_statement`,
 		enabled: !!from && !!to,
 	});
 

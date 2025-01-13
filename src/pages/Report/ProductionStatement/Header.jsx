@@ -1,5 +1,8 @@
-import { useState } from 'react';
-import { useOtherMarketing, useOtherParty } from '@/state/Other';
+import {
+	useAllZipperThreadOrderList,
+	useOtherMarketing,
+	useOtherParty,
+} from '@/state/Other';
 import { format, set } from 'date-fns';
 
 import { ReactSelect, SectionEntryBody, SimpleDatePicker } from '@/ui';
@@ -15,14 +18,20 @@ export default function Header({
 	setType = () => {},
 	marketing = '',
 	setMarketing = () => {},
+	order = '',
+	setOrder = () => {},
 }) {
 	const { data: marketings } = useOtherMarketing();
 	const { data: parties } = useOtherParty();
+	const { data: orders } = useAllZipperThreadOrderList(
+		`from_date=${from}&to_date=${to}`
+	);
 	const types = [
 		{ label: 'Nylon', value: 'Nylon' },
 		{ label: 'Vislon', value: 'Vislon' },
 		{ label: 'Metal', value: 'Metal' },
 		{ label: 'Thread', value: 'Thread' },
+		{ label: 'Zipper', value: 'Zipper' },
 	];
 
 	return (
@@ -68,6 +77,14 @@ export default function Header({
 					value={types?.find((item) => item.value == type)}
 					onChange={(e) => {
 						setType(e.value);
+					}}
+				/>
+				<ReactSelect
+					placeholder='Select Order'
+					options={orders}
+					value={orders?.find((item) => item.value == order)}
+					onChange={(e) => {
+						setOrder(e.value);
 					}}
 				/>
 			</SectionEntryBody>

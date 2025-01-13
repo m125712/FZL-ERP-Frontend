@@ -118,7 +118,7 @@ export default function Index(data) {
 		// * Main Table
 		content: packing_list_numbers.map((pl, index) => [
 			{
-				text: `PL NO: ${pl.packing_number}`,
+				text: `PL NO: ${pl.packing_number} (${pl.carton_weight ? pl.carton_weight : 0} Kg)`,
 				fontSize: DEFAULT_FONT_SIZE + 2,
 				bold: true,
 				alignment: 'left',

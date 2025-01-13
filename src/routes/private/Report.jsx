@@ -41,10 +41,7 @@ export const ReportRoutes = [
 				page_name: 'report__zipper_production',
 				actions: [
 					'read',
-					'show_all_orders',
 					'show_own_orders',
-					'show_approved_orders',
-					'show_price',
 				],
 			},
 			{
@@ -54,10 +51,7 @@ export const ReportRoutes = [
 				page_name: 'report__thread_production',
 				actions: [
 					'read',
-					'show_all_orders',
 					'show_own_orders',
-					'show_approved_orders',
-					'show_price',
 				],
 			},
 			{
@@ -67,10 +61,7 @@ export const ReportRoutes = [
 				page_name: 'report__daily_challan',
 				actions: [
 					'read',
-					'show_all_orders',
 					'show_own_orders',
-					'show_approved_orders',
-					'show_price',
 				],
 			},
 			{
@@ -80,10 +71,7 @@ export const ReportRoutes = [
 				page_name: 'report__pi_register',
 				actions: [
 					'read',
-					'show_all_orders',
 					'show_own_orders',
-					'show_approved_orders',
-					'show_price',
 				],
 			},
 			{
@@ -93,10 +81,7 @@ export const ReportRoutes = [
 				page_name: 'report__pi_to_be_submitted',
 				actions: [
 					'read',
-					'show_all_orders',
 					'show_own_orders',
-					'show_approved_orders',
-					'show_price',
 				],
 			},
 			{
@@ -106,10 +91,7 @@ export const ReportRoutes = [
 				page_name: 'report__lc_due',
 				actions: [
 					'read',
-					'show_all_orders',
 					'show_own_orders',
-					'show_approved_orders',
-					'show_price',
 				],
 			},
 			{
@@ -126,10 +108,7 @@ export const ReportRoutes = [
 				page_name: 'report__production_report_sm',
 				actions: [
 					'read',
-					'show_all_orders',
 					'show_own_orders',
-					'show_approved_orders',
-					'show_price',
 				],
 			},
 			{
@@ -139,10 +118,7 @@ export const ReportRoutes = [
 				page_name: 'report__delivery_statement',
 				actions: [
 					'read',
-					'show_all_orders',
 					'show_own_orders',
-					'show_approved_orders',
-					'show_price',
 				],
 			},
 			{
@@ -159,10 +135,8 @@ export const ReportRoutes = [
 				page_name: 'report__daily_production',
 				actions: [
 					'read',
-					'show_all_orders',
 					'show_own_orders',
-					'show_approved_orders',
-					'show_price',
+
 				],
 			},
 			{

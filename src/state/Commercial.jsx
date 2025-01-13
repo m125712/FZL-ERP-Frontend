@@ -136,10 +136,11 @@ export const useCommercialPThreadByOrderInfo = (
 	});
 
 // * MANUAL PI * //
-export const useCommercialManualPI = () =>
+export const useCommercialManualPI = (query, { enabled = false } = {}) =>
 	createGlobalState({
-		queryKey: commercialQK.manualPI(),
-		url: '/commercial/manual-pi',
+		queryKey: commercialQK.manualPI(query),
+		url: query ? `/commercial/manual-pi?${query}` : '/commercial/manual-pi',
+		enabled,
 	});
 
 export const useCommercialManualPIDetails = (uuid) =>

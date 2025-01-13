@@ -127,7 +127,11 @@ export const commercialQK = {
 	lcByNumber: (number) => [...commercialQK.all(), 'lc-by-number', number],
 
 	//* MANUAL PI
-	manualPI: () => [...commercialQK.all(), 'manual-pi'],
+	manualPI: (query) => [
+		...commercialQK.all(),
+		'manual-pi',
+		...(query ? [query] : []),
+	],
 	manualPIDetails: (uuid) => [...commercialQK.manualPI(), 'details', uuid],
 };
 
@@ -1581,7 +1585,11 @@ export const marketingQK = {
 	getTeamDetails: (uuid) => [...marketingQK.all(), 'teams', 'details', uuid],
 
 	//* Targets
-	getTargets: () => [...marketingQK.all(), 'targets'],
+	getTargets: (query) => [
+		...marketingQK.all(),
+		'targets',
+		...(query ? [query] : []),
+	],
 	getTargetDetails: (uuid) => [...marketingQK.all(), 'targets', uuid],
 };
 

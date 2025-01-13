@@ -1413,9 +1413,10 @@ export const otherQK = {
 	//* Count Length
 	countLength: () => [...otherQK.all(), 'thread-count-length'],
 	//* All Zipper Thread Order list
-	allZipperThreadOrderList: () => [
+	allZipperThreadOrderList: (query) => [
 		...otherQK.all(),
 		'all-zipper-thread-order-list',
+		...(query ? [query] : []),
 	],
 
 	shadeRecipe: () => [...otherQK.all(), 'shade-recipe'],
@@ -1495,7 +1496,14 @@ export const reportQK = {
 		to,
 		query,
 	],
-	productionReportStatementReport: (from, to, party, marketing, type) => [
+	productionReportStatementReport: (
+		from,
+		to,
+		party,
+		marketing,
+		type,
+		order
+	) => [
 		...reportQK.all(),
 		'production-report',
 		from,
@@ -1503,6 +1511,7 @@ export const reportQK = {
 		party,
 		marketing,
 		type,
+		order,
 	],
 	//* Zipper Production
 	zipperProduction: (query) => [

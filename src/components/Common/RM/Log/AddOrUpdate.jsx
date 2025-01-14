@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useCommonMaterialUsedByUUID } from '@/state/Common';
+import { useOtherRM } from '@/state/Other';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { ShowLocalToast } from '@/components/Toast';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
 import {
@@ -16,15 +16,23 @@ export default function Index({
 	modalId = '',
 	updateDyeingLog = {
 		uuid: null,
+		trxArea: null,
 	},
 	setUpdateDyeingLog,
 }) {
+	const [wastage, setWastage] = useState(0);
 	const { data, url, updateData } = useCommonMaterialUsedByUUID(
 		updateDyeingLog?.uuid
 	);
-	// const { invalidateQuery: invalidateDyeingRM } = useDyeingRM();
+	const { invalidateQuery: invalidateDyeingRM } = useOtherRM(
+		'multi-field',
+		`${updateDyeingLog?.trxArea?.map((item) => item.value).join(',')}`
+	);
 
-	const MAX_QUANTITY = Number(updateDyeingLog?.dying_and_iron);
+	const MAX_QUANTITY = Number(
+		updateDyeingLog[updateDyeingLog?.section] +
+			updateDyeingLog?.used_quantity
+	);
 
 	const {
 		register,
@@ -36,7 +44,17 @@ export default function Index({
 		getValues,
 		context,
 		watch,
-	} = useRHF(RM_MATERIAL_USED_EDIT_SCHEMA, RM_MATERIAL_USED_EDIT_NULL);
+	} = useRHF(
+		{
+			used_quantity: RM_MATERIAL_USED_EDIT_SCHEMA.used_quantity
+				.moreThan(0, 'More Than 0')
+				.max(MAX_QUANTITY, 'Beyond Max Value'),
+			wastage: RM_MATERIAL_USED_EDIT_SCHEMA.wastage
+				.min(0, 'Minimum of 0')
+				.max(wastage, 'Beyond Max Value'),
+		},
+		RM_MATERIAL_USED_EDIT_NULL
+	);
 
 	useEffect(() => {
 		if (data) {
@@ -44,33 +62,23 @@ export default function Index({
 		}
 	}, [data]);
 
-	let MAX_PROD =
-		MAX_QUANTITY +
-		Number(data?.used_quantity) +
-		(Number(data?.wastage) - watch('wastage'));
-	let MAX_WASTAGE =
-		MAX_QUANTITY +
-		Number(data?.wastage) +
-		(Number(data?.used_quantity) - watch('used_quantity'));
+	useEffect(() => {
+		if (updateDyeingLog?.uuid !== null) {
+			setWastage(watch('used_quantity'));
+		}
+	}, [watch('used_quantity')]);
 
 	const onClose = () => {
 		setUpdateDyeingLog((prev) => ({
 			...prev,
 			uuid: null,
+			trxArea: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (formData) => {
-		if (MAX_WASTAGE < watch('wastage')) {
-			ShowLocalToast({
-				type: 'error',
-				message: 'Beyond Stock',
-			});
-			return;
-		}
-		// Update item
 		if (updateDyeingLog?.uuid !== null) {
 			const updatedData = {
 				...formData,
@@ -104,7 +112,7 @@ export default function Index({
 	return (
 		<AddModal
 			id={modalId}
-			title={`Dyeing and Iron RM Log of ${data?.material_name}`}
+			title={`Dyeing & Iron RM Log: ${data?.material_name}`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
@@ -129,13 +137,13 @@ export default function Index({
 			</FormField>
 			<JoinInput
 				label='used_quantity'
-				sub_label={`Max: ${MAX_PROD}`}
+				sub_label={`Max: ${MAX_QUANTITY}`}
 				unit={data?.unit}
 				{...{ register, errors }}
 			/>
 			<JoinInput
 				label='wastage'
-				sub_label={`Max: ${MAX_WASTAGE}`}
+				sub_label={`Max: ${wastage}`}
 				unit={data?.unit}
 				{...{ register, errors }}
 			/>

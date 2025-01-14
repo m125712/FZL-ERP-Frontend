@@ -16,10 +16,10 @@ export const useDyeingRMByUUID = (uuid) =>
 	});
 
 //* RM Log
-export const useDyeingRMLog = () =>
+export const useDyeingRMLog = (query) =>
 	createGlobalState({
-		queryKey: dyeingQK.dyeingRMLog(),
-		url: `/material/used/by/dying_and_iron`,
+		queryKey: dyeingQK.dyeingRMLog(query),
+		url: `/material/used/multi-section/by/${query}`,
 	});
 
 export const useDyeingRMLogByUUID = (uuid) =>

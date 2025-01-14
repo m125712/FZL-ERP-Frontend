@@ -391,7 +391,7 @@ export const dyeingQK = {
 	dyeingRMByUUID: (uuid) => [...dyeingQK.dyeingRM(), uuid],
 
 	//* RM Log
-	dyeingRMLog: () => [...dyeingQK.all(), 'rm-log'],
+	dyeingRMLog: (query) => [...dyeingQK.all(), 'rm-log', query],
 	dyeingRMLogByUUID: (uuid) => [...dyeingQK.dyeingRMLog(), uuid],
 
 	//* swatch

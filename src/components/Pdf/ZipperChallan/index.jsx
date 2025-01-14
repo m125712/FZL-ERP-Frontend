@@ -309,6 +309,18 @@ export default function Index(data) {
 											alignment: 'right',
 											fontSize: DEFAULT_FONT_SIZE + 2,
 										},
+										{
+											text: uniqueCounts(
+												challan_entry?.filter(
+													(item) =>
+														item.packing_number ===
+														pl.packing_number
+												)
+											).poly_quantity,
+											bold: true,
+											alignment: 'right',
+											fontSize: DEFAULT_FONT_SIZE + 2,
+										},
 									],
 					],
 				},

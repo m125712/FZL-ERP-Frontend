@@ -31,15 +31,16 @@ export default function Index(orderInfo) {
 		order_info_entry.forEach((item) => {
 			totalQuantity += parseFloat(item.quantity);
 			uniqueColors.add(item.color);
-			totalExpectedYarn += Number(item['max_weight']) * item['quantity'];
-			item['expected_yarn'] =
-				Number(item['max_weight']) * item['quantity'];
+			totalExpectedYarn += item['max_weight'] * item['quantity'];
+			item['expected_yarn'] = Number(
+				item['max_weight'] * item['quantity']
+			).toFixed(2);
 		});
 
 		return {
-			totalQuantity: totalQuantity.toFixed(4),
+			totalQuantity: totalQuantity,
 			uniqueColorsCount: uniqueColors.size,
-			totalExpectedYarn: totalExpectedYarn.toFixed(2),
+			totalExpectedYarn: Number(totalExpectedYarn).toFixed(2),
 		};
 	};
 	order_info_entry = order_info_entry.map((item) => ({

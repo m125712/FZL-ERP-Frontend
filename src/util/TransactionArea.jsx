@@ -136,7 +136,7 @@ export const getTransactionAreaSliderDieCasting = [
 	{ label: 'Die Casting Section', value: 'die_casting' }, // Slider die casting
 ];
 
-// * slider coloring
+// * slider coloring // done
 export const getTransactionAreaSliderColoring = [
 	{
 		label: 'Slider Coating Section /Epoxy Paint',

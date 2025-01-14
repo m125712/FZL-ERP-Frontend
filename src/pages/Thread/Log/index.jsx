@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import Production from './Production';
-import RMLog from './RMLog';
+import RMLog from './RmLog';
 
 export default function Index() {
 	useEffect(() => {

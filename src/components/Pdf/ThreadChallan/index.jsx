@@ -15,8 +15,6 @@ import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
 export default function Index(data) {
-	const { packing_list_numbers } = data;
-
 	const createNode = (fields) => fields.map((field) => getTable(...field));
 
 	const threadNode = createNode([
@@ -26,7 +24,7 @@ export default function Index(data) {
 		['recipe_name', 'Shade'],
 		['size', 'Length', 'right'],
 		['quantity', 'Qty(cone)', 'right'],
-		['poli_quantity', 'Poly', 'right'],
+		['carton_quantity', 'Carton Qty', 'right'],
 	]);
 
 	const node = threadNode;
@@ -34,6 +32,32 @@ export default function Index(data) {
 	const headerHeight = 220;
 	const footerHeight = 50;
 	const { challan_entry } = data;
+	const challanGroup = [];
+	challan_entry.forEach((item) => {
+		const { item_description, style, color, size, recipe_name } = item;
+		let flag = false;
+		challanGroup.forEach((group) => {
+			if (
+				group.recipe_name === recipe_name &&
+				group.style === style &&
+				group.color === color &&
+				group.item_description === item_description &&
+				group.size === size
+			) {
+				group.quantity += parseInt(item.quantity) || 0;
+				flag = true;
+			}
+		});
+
+		if (!flag) {
+			challanGroup.push(item);
+		}
+	});
+	challanGroup.map((item) => {
+		item['carton_quantity'] = Math.ceil(
+			item['quantity'] / item.cone_per_carton
+		);
+	});
 
 	const uniqueCounts = (challan_entry) =>
 		challan_entry?.reduce(
@@ -42,8 +66,9 @@ export default function Index(data) {
 				acc.styles.add(item.style);
 				acc.colors.add(item.color);
 				acc.sizes.add(item.size);
+				acc.shade.add(item.recipe_name);
 				acc.quantity += parseInt(item.quantity, 10) || 0;
-				acc.poly_quantity += parseInt(item.poli_quantity, 10) || 0;
+				acc.carton_quantity += parseInt(item.carton_quantity, 10) || 0;
 				return acc;
 			},
 			{
@@ -53,11 +78,12 @@ export default function Index(data) {
 				shade: new Set(),
 				sizes: new Set(),
 				quantity: 0,
-				poly_quantity: 0,
+				carton_quantity: 0,
 			}
 		) || {};
 
-	const grandTotalQuantity = uniqueCounts(challan_entry).quantity;
+	const grandTotalQuantity = uniqueCounts(challanGroup).quantity;
+	const grandTotalCartonQuantity = uniqueCounts(challanGroup).carton_quantity;
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_LETTER_PAGE({
@@ -83,92 +109,86 @@ export default function Index(data) {
 		}),
 
 		// * Main Table
-		content: packing_list_numbers.map((pl, index) => [
-			{
-				text: `PL NO: ${pl.packing_number} (${pl.carton_weight ? pl.carton_weight : 0} Kg)`,
-				fontSize: DEFAULT_FONT_SIZE + 2,
-				bold: true,
-				alignment: 'left',
-			},
+		content: [
 			{
 				table: {
 					headerRows: 1,
-					widths: [140, 130, 70, 60, 60, 60, 40],
+					widths: [70, 130, 60, 60, 60, 60, 60],
 					body: [
+						[
+							{
+								text: 'P/L No',
+								bold: true,
+							},
+							{
+								text: data.packing_numbers.join(', '),
+								bold: true,
+
+								colSpan: 6,
+							},
+							{},
+							{},
+							{},
+							{},
+							{},
+						],
 						// * Header
 						TableHeader(node),
 
 						// * Body
-						...challan_entry
-							?.filter(
-								(item) =>
-									item.packing_number === pl.packing_number
-							)
-							.map((item) =>
-								node.map((nodeItem) => {
-									const text =
-										nodeItem.field === 'size'
-											? `${item[nodeItem.field]} mtr`
-											: item[nodeItem.field];
-									return {
-										text,
-										style: nodeItem.cellStyle,
-										alignment: nodeItem.alignment,
-										colSpan: nodeItem.colSpan,
-									};
-								})
-							),
+						...challanGroup.map((item) =>
+							node.map((nodeItem) => {
+								const text =
+									nodeItem.field === 'size'
+										? `${item[nodeItem.field]} mtr`
+										: item[nodeItem.field];
+								return {
+									text,
+									style: nodeItem.cellStyle,
+									alignment: nodeItem.alignment,
+									colSpan: nodeItem.colSpan,
+								};
+							})
+						),
 						[
 							{
 								text: `Total ${
-									uniqueCounts(
-										challan_entry?.filter(
-											(item) =>
-												item.packing_number ===
-												pl.packing_number
-										)
-									).itemDescriptions?.size
-								} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'Count' : 'Desc'}`,
+									uniqueCounts(challanGroup).itemDescriptions
+										?.size
+								} Count`,
 								bold: true,
 								fontSize: DEFAULT_FONT_SIZE + 2,
 							},
 
 							{
-								text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).styles?.size} Style`,
+								text: `${uniqueCounts(challanGroup).styles?.size} Style`,
 								bold: true,
 								fontSize: DEFAULT_FONT_SIZE + 2,
 							},
 							{
-								text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).colors?.size} Color`,
+								text: `${uniqueCounts(challanGroup).colors?.size} Color`,
 								bold: true,
 								fontSize: DEFAULT_FONT_SIZE + 2,
 							},
 							{
-								text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).sizes?.size} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'Length' : 'Size'}`,
+								text: `${uniqueCounts(challanGroup).shade?.size} Shade`,
 								bold: true,
-								alignment: 'right',
 								fontSize: DEFAULT_FONT_SIZE + 2,
 							},
 							{
-								text: uniqueCounts(
-									challan_entry?.filter(
-										(item) =>
-											item.packing_number ===
-											pl.packing_number
-									)
-								).quantity,
+								text: `${uniqueCounts(challanGroup).sizes?.size} Length `,
 								bold: true,
 								alignment: 'right',
 								fontSize: DEFAULT_FONT_SIZE + 2,
 							},
 							{
-								text: uniqueCounts(
-									challan_entry?.filter(
-										(item) =>
-											item.packing_number ===
-											pl.packing_number
-									)
-								).poly_quantity,
+								text: `${grandTotalQuantity} Cones`,
+								bold: true,
+								alignment: 'right',
+								fontSize: DEFAULT_FONT_SIZE + 2,
+							},
+							{
+								text: `${grandTotalCartonQuantity} Pcs`,
 								bold: true,
 								alignment: 'right',
 								fontSize: DEFAULT_FONT_SIZE + 2,
@@ -178,33 +198,12 @@ export default function Index(data) {
 				},
 			},
 			{ text: '\n\n' },
-			index === packing_list_numbers.length - 1
-				? {
-						text: `Grand Total Quantity : ${grandTotalQuantity} ${
-							isThreadChallan
-								? 'cone'
-								: isTapeChallan
-									? 'mtr'
-									: 'pcs'
-						}`,
-						bold: true,
-						fontSize: DEFAULT_FONT_SIZE + 2,
-					}
-				: null,
-			index === packing_list_numbers.length - 1
-				? {
-						text: `Grand Total Quantity (In Words): ${NumToWord(grandTotalQuantity)} ${
-							isThreadChallan
-								? 'Cone'
-								: isTapeChallan
-									? 'Meter'
-									: 'Pcs'
-						} Only`,
-						bold: true,
-						fontSize: DEFAULT_FONT_SIZE + 2,
-					}
-				: null,
-		]),
+			{
+				text: `Grand Total Quantity (In Words): ${NumToWord(grandTotalQuantity)} Cone Only`,
+				bold: true,
+				fontSize: DEFAULT_FONT_SIZE + 2,
+			},
+		],
 	});
 
 	return pdfDocGenerator;

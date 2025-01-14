@@ -27,9 +27,9 @@ export default function Index(data) {
 		['item_description', 'Count'],
 		['style', 'Style'],
 		['color', 'Color'],
+		['recipe_name', 'Shade'],
 		['size', 'Length', 'right'],
 		['quantity', 'Qty(cone)', 'right'],
-		['poli_quantity', 'Poly', 'right'],
 	]);
 
 	const zipperNode = createNode([
@@ -76,6 +76,7 @@ export default function Index(data) {
 				acc.styles.add(item.style);
 				acc.colors.add(item.color);
 				acc.sizes.add(item.size);
+				acc.shade.add(item.recipe_name);
 				acc.quantity += parseInt(item.quantity, 10) || 0;
 				acc.poly_quantity += parseInt(item.poli_quantity, 10) || 0;
 				return acc;
@@ -85,6 +86,7 @@ export default function Index(data) {
 				styles: new Set(),
 				colors: new Set(),
 				sizes: new Set(),
+				shade: new Set(),
 				quantity: 0,
 				poly_quantity: 0,
 			}
@@ -214,62 +216,112 @@ export default function Index(data) {
 										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 								]
-							: [
-									{
-										text: `Total ${
-											uniqueCounts(
+							: isThreadChallan
+								? [
+										{
+											text: `Total ${
+												uniqueCounts(
+													challan_entry?.filter(
+														(item) =>
+															item.packing_number ===
+															pl.packing_number
+													)
+												).itemDescriptions?.size
+											} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'Count' : 'Desc'}`,
+											bold: true,
+											fontSize: DEFAULT_FONT_SIZE + 2,
+										},
+
+										{
+											text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).styles?.size} Style`,
+											bold: true,
+											fontSize: DEFAULT_FONT_SIZE + 2,
+										},
+										{
+											text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).colors?.size} Color`,
+											bold: true,
+											fontSize: DEFAULT_FONT_SIZE + 2,
+										},
+										{
+											text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).shade?.size} Shade`,
+											bold: true,
+											fontSize: DEFAULT_FONT_SIZE + 2,
+										},
+										{
+											text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).sizes?.size} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'Length' : 'Size'}`,
+											bold: true,
+											alignment: 'right',
+											fontSize: DEFAULT_FONT_SIZE + 2,
+										},
+										{
+											text: uniqueCounts(
 												challan_entry?.filter(
 													(item) =>
 														item.packing_number ===
 														pl.packing_number
 												)
-											).itemDescriptions?.size
-										} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'Count' : 'Desc'}`,
-										bold: true,
-										fontSize: DEFAULT_FONT_SIZE + 2,
-									},
+											).quantity,
+											bold: true,
+											alignment: 'right',
+											fontSize: DEFAULT_FONT_SIZE + 2,
+										},
+									]
+								: [
+										{
+											text: `Total ${
+												uniqueCounts(
+													challan_entry?.filter(
+														(item) =>
+															item.packing_number ===
+															pl.packing_number
+													)
+												).itemDescriptions?.size
+											} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'Count' : 'Desc'}`,
+											bold: true,
+											fontSize: DEFAULT_FONT_SIZE + 2,
+										},
 
-									{
-										text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).styles?.size} Style`,
-										bold: true,
-										fontSize: DEFAULT_FONT_SIZE + 2,
-									},
-									{
-										text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).colors?.size} Color`,
-										bold: true,
-										fontSize: DEFAULT_FONT_SIZE + 2,
-									},
-									{
-										text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).sizes?.size} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'Length' : 'Size'}`,
-										bold: true,
-										alignment: 'right',
-										fontSize: DEFAULT_FONT_SIZE + 2,
-									},
-									{
-										text: uniqueCounts(
-											challan_entry?.filter(
-												(item) =>
-													item.packing_number ===
-													pl.packing_number
-											)
-										).quantity,
-										bold: true,
-										alignment: 'right',
-										fontSize: DEFAULT_FONT_SIZE + 2,
-									},
-									{
-										text: uniqueCounts(
-											challan_entry?.filter(
-												(item) =>
-													item.packing_number ===
-													pl.packing_number
-											)
-										).poly_quantity,
-										bold: true,
-										alignment: 'right',
-										fontSize: DEFAULT_FONT_SIZE + 2,
-									},
-								],
+										{
+											text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).styles?.size} Style`,
+											bold: true,
+											fontSize: DEFAULT_FONT_SIZE + 2,
+										},
+										{
+											text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).colors?.size} Color`,
+											bold: true,
+											fontSize: DEFAULT_FONT_SIZE + 2,
+										},
+										{
+											text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).sizes?.size} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'Length' : 'Size'}`,
+											bold: true,
+											alignment: 'right',
+											fontSize: DEFAULT_FONT_SIZE + 2,
+										},
+										{
+											text: uniqueCounts(
+												challan_entry?.filter(
+													(item) =>
+														item.packing_number ===
+														pl.packing_number
+												)
+											).quantity,
+											bold: true,
+											alignment: 'right',
+											fontSize: DEFAULT_FONT_SIZE + 2,
+										},
+										{
+											text: uniqueCounts(
+												challan_entry?.filter(
+													(item) =>
+														item.packing_number ===
+														pl.packing_number
+												)
+											).poly_quantity,
+											bold: true,
+											alignment: 'right',
+											fontSize: DEFAULT_FONT_SIZE + 2,
+										},
+									],
 					],
 				},
 			},

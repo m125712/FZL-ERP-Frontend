@@ -114,8 +114,8 @@ export const Columns = ({
 			id: 'tape_req_kg',
 			header: (
 				<>
-					Tape Req
-					<br /> (Kg)
+					Tape Req <br />
+					(Kg)
 				</>
 			),
 			enableColumnFilter: false,

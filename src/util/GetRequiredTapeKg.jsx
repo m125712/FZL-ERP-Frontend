@@ -26,6 +26,7 @@ export const getRequiredTapeKg = ({
 	} else {
 		const give = input_quantity !== null ? input_quantity : order_quantity;
 		const top_bottom = parseFloat(top) + parseFloat(bottom);
+
 		let total_size = 0;
 
 		if (isInch) {
@@ -35,6 +36,14 @@ export const getRequiredTapeKg = ({
 		}
 
 		total_size_in_mtr = (total_size * parseFloat(give)) / 100;
+		// console.log({
+		// 	top_bottom,
+		// 	size,
+		// 	give,
+		// 	total_size,
+		// 	total_size_in_mtr,
+		// 	res: total_size_in_mtr / parseFloat(mtr_per_kg),
+		// });
 	}
 
 	return total_size_in_mtr / parseFloat(mtr_per_kg);

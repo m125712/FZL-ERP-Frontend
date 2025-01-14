@@ -64,7 +64,7 @@ export default function Index({
 
 	useEffect(() => {
 		if (updateDyeingLog?.uuid !== null) {
-			setWastage(watch('used_quantity'));
+			setWastage(Number(watch('used_quantity')).toFixed(2));
 		}
 	}, [watch('used_quantity')]);
 

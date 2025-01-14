@@ -79,15 +79,24 @@ export const getTransactionAreaDyeing = [
 	{ label: 'Chemicals - Dyeing', value: 'chemicals_dyeing' }, // dyeing & ironing
 ];
 
-// * metal finishing //
+// * metal finishing // done
 export const getTransactionAreaMetalFinishing = [
 	{ label: 'Metal Finishing Section', value: 'metal_finishing' }, // metal finishing
 	{ label: 'Box Pin (Metal section)', value: 'box_pin_metal' }, // metal finishing
 ];
 
-// * metal teeth molding //
+// * metal teeth molding // done
 export const getTransactionAreaMetalTeethMolding = [
 	{ label: 'Metal Teeth Molding Section', value: 'metal_teeth_molding' }, // metal teeth molding
+];
+
+// * metal teeth coloring // done
+export const getTransactionAreaMetalTeethColoring = [
+	{ label: 'Metal Teeth Plating Section', value: 'metal_teeth_plating' }, // metal teeth coloring
+	{
+		label: 'Metal Teeth Electroplating',
+		value: 'metal_teeth_electroplating',
+	}, // metal teeth coloring
 ];
 
 // * tape preparation coil //
@@ -102,14 +111,6 @@ export const getTransactionAreaTapePreparationCoil = [
 // * Slider die casting //
 export const getTransactionAreaSliderDieCasting = [
 	{ label: 'Die Casting Section', value: 'die_casting' }, // Slider die casting
-];
-
-export const getTransactionAreaMetalTeethColoring = [
-	{ label: 'Metal Teeth Plating Section', value: 'metal_teeth_plating' }, // metal teeth coloring
-	{
-		label: 'Metal Teeth Electroplating',
-		value: 'metal_teeth_electroplating',
-	}, // metal teeth coloring
 ];
 
 export const getTransactionAreaMetallicFinishing = [

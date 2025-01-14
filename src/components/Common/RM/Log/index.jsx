@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useDyeingRMLog } from '@/state/Dyeing';
+import { useOtherRM } from '@/state/Other';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -7,15 +8,18 @@ import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { DateTime, EditDelete } from '@/ui';
 
-import RMAddOrUpdate from './AddOrUpdate';
+import AddOrUpdate from './AddOrUpdate';
 
 export default function Index({ trxArea = [], info = {} }) {
 	const { data, isLoading, deleteData } = useDyeingRMLog(
 		`${trxArea?.map((item) => item.value).join(',')}`
 	);
+	const { invalidateQuery } = useOtherRM(
+		'multi-field',
+		`${trxArea?.map((item) => item.value).join(',')}`
+	);
 
 	const haveAccess = useAccess(info.getTab());
-	// const { invalidateQuery: invalidateDyeingRM } = useDyeingRM();
 
 	const columns = useMemo(
 		() => [
@@ -95,7 +99,9 @@ export default function Index({ trxArea = [], info = {} }) {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_rm'),
+				hidden:
+					!haveAccess.includes('delete') ||
+					!haveAccess.includes('update'),
 				width: 'w-24',
 				cell: (info) => {
 					return (
@@ -103,7 +109,8 @@ export default function Index({ trxArea = [], info = {} }) {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('click_delete_rm')}
+							showDelete={haveAccess.includes('delete')}
+							showUpdate={haveAccess.includes('update')}
 						/>
 					);
 				},
@@ -153,7 +160,7 @@ export default function Index({ trxArea = [], info = {} }) {
 		<div>
 			<ReactTable title={info.getTitle()} data={data} columns={columns} />
 			<Suspense>
-				<RMAddOrUpdate
+				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
 						updateDyeingLog,
@@ -171,6 +178,7 @@ export default function Index({ trxArea = [], info = {} }) {
 						url: `/material/used`,
 						deleteData,
 					}}
+					invalidateQuery={invalidateQuery}
 				/>
 			</Suspense>
 		</div>

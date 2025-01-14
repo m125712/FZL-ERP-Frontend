@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useDyeingRMLog } from '@/state/Dyeing';
+import { useOtherRM } from '@/state/Other';
 import * as yup from 'yup';
 import { useRHF } from '@/hooks';
 
@@ -25,6 +26,10 @@ export default function Index({
 	const { postData, invalidateQuery } = useDyeingRMLog(
 		`${updateDyeingStock?.trxArea?.map((item) => item.value).join(',')}`
 	);
+	const { invalidateQuery: invalidateCommonRM } = useOtherRM(
+		'multi-field',
+		`${updateDyeingStock?.trxArea?.map((item) => item.value).join(',')}`
+	);
 
 	const MAX_QUANTITY = updateDyeingStock[updateDyeingStock?.section];
 
@@ -35,7 +40,7 @@ export default function Index({
 		),
 		wastage: RM_MATERIAL_USED_SCHEMA.wastage
 			.min(0, 'Minimum of 0')
-			.max(MAX_QUANTITY - wastage, 'Beyond Max Value'),
+			.max(wastage, 'Beyond Max Value'),
 	};
 
 	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
@@ -45,7 +50,7 @@ export default function Index({
 
 	useEffect(() => {
 		if (updateDyeingStock?.uuid !== null) {
-			setWastage(MAX_QUANTITY - watch('used_quantity'));
+			setWastage(Number(watch('used_quantity')).toFixed(2));
 		}
 	}, [watch('used_quantity')]);
 
@@ -75,6 +80,7 @@ export default function Index({
 			onClose,
 		});
 		invalidateQuery();
+		invalidateCommonRM();
 	};
 
 	return (

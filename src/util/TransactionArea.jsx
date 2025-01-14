@@ -125,14 +125,15 @@ export const getTransactionAreaTapePreparationCoil = [
 	}, // Tape preparation coil
 ];
 
-// * Slider die casting //
-export const getTransactionAreaSliderDieCasting = [
-	{ label: 'Die Casting Section', value: 'die_casting' }, // Slider die casting
-];
-
+// * tape preparation tape // done
 export const getTransactionAreaTapePreparationTape = [
 	{ label: 'Tape Loom Section', value: 'tape_loom' }, // tape preparation tape
-	{ label: 'Tape Making', value: 'tape_making' }, //* can not delete // tape preparation tape
+	{ label: 'Tape Making', value: 'tape_making' }, // tape preparation tape
+];
+
+// * Slider die casting // done
+export const getTransactionAreaSliderDieCasting = [
+	{ label: 'Die Casting Section', value: 'die_casting' }, // Slider die casting
 ];
 
 export const getTransactionAreaSliderColoring = [

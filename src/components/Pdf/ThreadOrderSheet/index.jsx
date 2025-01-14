@@ -32,6 +32,8 @@ export default function Index(orderInfo) {
 			totalQuantity += parseFloat(item.quantity);
 			uniqueColors.add(item.color);
 			totalExpectedYarn += Number(item['max_weight']) * item['quantity'];
+			item['expected_yarn'] =
+				Number(item['max_weight']) * item['quantity'];
 		});
 
 		return {
@@ -85,10 +87,7 @@ export default function Index(orderInfo) {
 						// * Body
 						...order_info_entry?.map((item) =>
 							node.map((nodeItem) => ({
-								text:
-									nodeItem.field == 'expected_yarn'
-										? item['max_weight'] * item['quantity']
-										: item[nodeItem.field],
+								text: item[nodeItem.field],
 								style: nodeItem.cellStyle,
 								alignment: nodeItem.alignment,
 							}))

@@ -99,6 +99,12 @@ export const getTransactionAreaMetalTeethColoring = [
 	}, // metal teeth coloring
 ];
 
+// * nylon metalic finishing // done
+export const getTransactionAreaMetallicFinishing = [
+	{ label: 'Nylon Finishing Section', value: 'nylon_finishing' }, // nylon metalic finishing
+	{ label: 'Invisible section', value: 'invisible' }, // nylon metalic finishing
+];
+
 // * tape preparation coil //
 export const getTransactionAreaTapePreparationCoil = [
 	{ label: 'Coil Forming/Sewing', value: 'coil_forming_sewing' }, // Tape preparation coil
@@ -111,11 +117,6 @@ export const getTransactionAreaTapePreparationCoil = [
 // * Slider die casting //
 export const getTransactionAreaSliderDieCasting = [
 	{ label: 'Die Casting Section', value: 'die_casting' }, // Slider die casting
-];
-
-export const getTransactionAreaMetallicFinishing = [
-	{ label: 'Nylon Finishing Section', value: 'nylon_finishing' }, // nylon metalic finishing
-	{ label: 'Invisible section', value: 'invisible' }, // nylon metalic finishing
 ];
 
 export const getTransactionAreaVislonFinishing = [

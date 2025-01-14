@@ -464,7 +464,7 @@ export default function Index(data, from, to) {
 						},
 						order_number: {
 							text:
-								orderItem.order_number +
+								orderItem.order_number_with_cash +
 								' (' +
 								orderItem.total_quantity +
 								')',

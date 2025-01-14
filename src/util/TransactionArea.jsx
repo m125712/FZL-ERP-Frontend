@@ -105,6 +105,17 @@ export const getTransactionAreaMetallicFinishing = [
 	{ label: 'Invisible section', value: 'invisible' }, // nylon metalic finishing
 ];
 
+// * vislon finishing // done
+export const getTransactionAreaVislonFinishing = [
+	{
+		label: 'Vislon Open Injection Section',
+		value: 'vislon_open_injection',
+	}, // vislon finishing
+	{ label: 'Vislon Finishing Section', value: 'vislon_finishing' }, // vislon finishing
+	{ label: 'Vislon Gapping', value: 'vislon_gapping' }, // vislon finishing
+	{ label: 'Vislon Injection', value: 'vislon_injection' }, // vislon finishing
+];
+
 // * tape preparation coil //
 export const getTransactionAreaTapePreparationCoil = [
 	{ label: 'Coil Forming/Sewing', value: 'coil_forming_sewing' }, // Tape preparation coil
@@ -117,16 +128,6 @@ export const getTransactionAreaTapePreparationCoil = [
 // * Slider die casting //
 export const getTransactionAreaSliderDieCasting = [
 	{ label: 'Die Casting Section', value: 'die_casting' }, // Slider die casting
-];
-
-export const getTransactionAreaVislonFinishing = [
-	{
-		label: 'Vislon Open Injection Section',
-		value: 'vislon_open_injection',
-	}, // vislon finishing
-	{ label: 'Vislon Finishing Section', value: 'vislon_finishing' }, // vislon finishing
-	{ label: 'Vislon Gapping', value: 'vislon_gapping' }, // vislon finishing
-	{ label: 'Vislon Injection', value: 'vislon_injection' }, // vislon finishing
 ];
 
 export const getTransactionAreaTapePreparationTape = [

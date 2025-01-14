@@ -115,6 +115,23 @@ export default function Index(data) {
 					headerRows: 1,
 					widths: [70, 130, 60, 60, 60, 60, 60],
 					body: [
+						[
+							{
+								text: 'P/L No',
+								bold: true,
+							},
+							{
+								text: data.packing_numbers.join(', '),
+								bold: true,
+
+								colSpan: 6,
+							},
+							{},
+							{},
+							{},
+							{},
+							{},
+						],
 						// * Header
 						TableHeader(node),
 
@@ -181,11 +198,6 @@ export default function Index(data) {
 				},
 			},
 			{ text: '\n\n' },
-			{
-				text: `Grand Total Quantity : ${grandTotalQuantity} Cones `,
-				bold: true,
-				fontSize: DEFAULT_FONT_SIZE + 2,
-			},
 			{
 				text: `Grand Total Quantity (In Words): ${NumToWord(grandTotalQuantity)} Cone Only`,
 				bold: true,

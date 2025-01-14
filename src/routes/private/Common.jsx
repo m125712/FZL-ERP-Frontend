@@ -190,6 +190,8 @@ export const CommonRoutes = [
 						page_name: 'common__coil_log',
 						actions: [
 							'read',
+							'update',
+							'delete',
 							'click_update_sfg',
 							'click_delete_sfg',
 							'click_update_rm',

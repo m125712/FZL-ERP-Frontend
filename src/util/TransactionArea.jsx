@@ -116,7 +116,7 @@ export const getTransactionAreaVislonFinishing = [
 	{ label: 'Vislon Injection', value: 'vislon_injection' }, // vislon finishing
 ];
 
-// * tape preparation coil //
+// * tape preparation coil // done
 export const getTransactionAreaTapePreparationCoil = [
 	{ label: 'Coil Forming/Sewing', value: 'coil_forming_sewing' }, // Tape preparation coil
 	{

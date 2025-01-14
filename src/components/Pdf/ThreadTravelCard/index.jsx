@@ -31,7 +31,9 @@ export default function Index(batch, shade_recipes_entries, programs) {
 	let footerHeight = 50;
 	const { batch_entry } = batch;
 	batch_entry?.forEach((item) => {
-		const expected_weight = item?.quantity * item?.max_weight;
+		const expected_weight = Number(
+			item?.quantity * item?.max_weight
+		).toFixed(3);
 		item['expected_weight'] = expected_weight;
 	});
 

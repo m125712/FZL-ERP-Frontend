@@ -8,13 +8,24 @@ const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 
 const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 
+const TitleValue = (title = '', value = '', extraFontSize = 2) => [
+	{
+		text: title,
+		fontSize: DEFAULT_FONT_SIZE + extraFontSize,
+		bold: true,
+		color: PRIMARY_COLOR,
+	},
+	{ text: value, fontSize: DEFAULT_FONT_SIZE + extraFontSize },
+];
+
 export const getPageHeader = (data) => {
-	const created_at = getDateFormate(data?.created_at);
+	const created_at = getDateFormate(data?.delivery_date);
 	const updated_at = data?.updated_at ? getDateFormate(data?.updated_at) : '';
+
 
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
-		widths: [70, '*', 70, '*'],
+		widths: [70, '*', 100, '*'],
 		body: [
 			[
 				{
@@ -24,7 +35,12 @@ export const getPageHeader = (data) => {
 					alignment: 'left',
 				},
 				{
-					text: [`${company.address}\n`, `${company.phone}\n`],
+					text: [
+						`${company.address}\n`,
+						`${company.email}\n`,
+						`${company.challan_phone}\n`,
+						`${company.bin}, ${company.tax}\n`,
+					],
 					alignment: 'left',
 				},
 				{
@@ -35,8 +51,11 @@ export const getPageHeader = (data) => {
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
-						`Challan Number: ${data?.order_number}\n`,
-						`Date: ${created_at}\n`,
+						{
+							text: `${created_at}\n`,
+							fontSize: DEFAULT_FONT_SIZE + 4,
+							bold: true,
+						},
 					],
 					alignment: 'right',
 				},
@@ -46,39 +65,52 @@ export const getPageHeader = (data) => {
 
 			// * Start of table
 			[
-				{ text: 'Order Number', bold: true, color: PRIMARY_COLOR },
-				data?.order_number,
-				{ text: 'Party', bold: true, color: PRIMARY_COLOR },
-				data?.party_name,
+				...TitleValue('O/N', data?.order_number),
+				...TitleValue('Marketing', data?.marketing_name),
 			],
 			[
-				{ text: 'Carton QTY', bold: true, color: PRIMARY_COLOR },
-				data?.carton_quantity,
-
-				{ text: 'Buyer', bold: true, color: PRIMARY_COLOR },
-				data?.buyer_name,
+				...TitleValue('PI No', data?.pi_cash_numbers?.join(', ')),
+				...TitleValue('Buyer', data?.buyer_name),
 			],
 			[
-				{ text: 'Factory', bold: true, color: PRIMARY_COLOR },
-				data?.factory_name,
-				{ text: 'Merchandiser', bold: true, color: PRIMARY_COLOR },
-				data?.merchandiser_name,
+				...TitleValue('Party', data?.party_name),
+				...TitleValue('Merchandiser', data?.merchandiser_name),
+			],
+			[
+				...TitleValue('Factory', data?.factory_name),
+				...TitleValue(
+					'Carton Quantity',
+					`${data?.total_carton_quantity} pcs`
+				),
 			],
 			[
 				{
 					text: 'Address',
 					bold: true,
 					color: PRIMARY_COLOR,
+					fontSize: DEFAULT_FONT_SIZE + 2,
 				},
 				{
 					colSpan: 3,
-					text: [
-						{
-							text: data?.factory_address,
-						},
-					],
+					text: data?.factory_address,
 					alignment: 'left',
+					fontSize: DEFAULT_FONT_SIZE + 2,
 				},
+				'',
+				'',
+			],
+			PAGE_HEADER_EMPTY_ROW,
+			PAGE_HEADER_EMPTY_ROW,
+			[
+				{
+					colSpan: 4,
+					text: `Challan: ${data?.challan_number}\n`,
+					fontSize: DEFAULT_FONT_SIZE + 4,
+					bold: true,
+					alignment: 'center',
+					color: PRIMARY_COLOR,
+				},
+				'',
 				'',
 				'',
 			],
@@ -86,19 +118,50 @@ export const getPageHeader = (data) => {
 	};
 };
 
-const EMPTY_COLUMN = getEmptyColumn(4);
-
-export const getPageFooter = ({ currentPage, pageCount }) => ({
-	body: [
-		[
-			{
-				colSpan: 4,
-				text: `Page ${currentPage} / ${pageCount}`,
-				alignment: 'center',
-				border: [false, false, false, false],
-				// color,
-			},
-			...EMPTY_COLUMN,
+export const getPageFooter = ({ currentPage, pageCount }) => {
+	return {
+		widths: ['*', '*', '*', '*', '*'],
+		body: [
+			[
+				{
+					text: 'Received By',
+					fontSize: DEFAULT_FONT_SIZE + 3,
+					alignment: 'center',
+					border: [false, true, false, false],
+				},
+				{
+					text: '',
+					alignment: 'center',
+					border: [false, false, false, false],
+				},
+				{
+					text: 'Checked By',
+					fontSize: DEFAULT_FONT_SIZE + 3,
+					alignment: 'center',
+					border: [false, true, false, false],
+				},
+				{
+					text: '',
+					alignment: 'center',
+					border: [false, false, false, false],
+				},
+				{
+					text: 'Prepared By',
+					fontSize: DEFAULT_FONT_SIZE + 3,
+					alignment: 'center',
+					border: [false, true, false, false],
+				},
+			],
+			[
+				{
+					colSpan: 5,
+					text: `Page ${currentPage} / ${pageCount}`,
+					alignment: 'left',
+					border: [false, false, false, false],
+					// color,
+				},
+				...getEmptyColumn(5),
+			],
 		],
-	],
-});
+	};
+};

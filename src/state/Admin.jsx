@@ -1,4 +1,5 @@
 import createGlobalState from '@/state';
+
 import { adminQK } from './QueryKeys';
 
 // * User
@@ -32,4 +33,11 @@ export const useAdminDepartmentsByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: adminQK.department(uuid),
 		url: `/hr/department/${uuid}`,
+	});
+
+//* Permission
+export const useAdminPermissions = () =>
+	createGlobalState({
+		queryKey: adminQK.permissions(),
+		url: '/hr/user-all-can-access',
 	});

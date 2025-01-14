@@ -3,30 +3,64 @@ import {
 	tableLayoutStyle,
 	xMargin,
 } from '@/components/Pdf/ui';
-import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
+import {
+	DEFAULT_LETTER_PAGE,
+	getTable,
+	TableHeader,
+} from '@/components/Pdf/utils';
+
+import { NumToWord } from '@/lib/NumToWord';
 
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
-const node = [
-	getTable('style', 'Style'),
-	getTable('color', 'Color'),
-	getTable('count', 'Count', 'right'),
-	getTable('length', 'Length (mtr)', 'right'),
-	getTable('quantity', 'Qty (cone)', 'right'),
-];
-
 export default function Index(data) {
-	const headerHeight = 150;
-	let footerHeight = 50;
-	let { challan_entry } = data;
-	let totalQuantity = challan_entry?.reduce((acc, item) => {
-		const quantity = parseInt(item.quantity, 10) || 0;
-		return acc + quantity;
-	}, 0);
+	const { packing_list_numbers } = data;
+
+	const createNode = (fields) => fields.map((field) => getTable(...field));
+
+	const threadNode = createNode([
+		['item_description', 'Count'],
+		['style', 'Style'],
+		['color', 'Color'],
+		['recipe_name', 'Shade'],
+		['size', 'Length', 'right'],
+		['quantity', 'Qty(cone)', 'right'],
+		['poli_quantity', 'Poly', 'right'],
+	]);
+
+	const node = threadNode;
+
+	const headerHeight = 220;
+	const footerHeight = 50;
+	const { challan_entry } = data;
+
+	const uniqueCounts = (challan_entry) =>
+		challan_entry?.reduce(
+			(acc, item) => {
+				acc.itemDescriptions.add(item.item_description);
+				acc.styles.add(item.style);
+				acc.colors.add(item.color);
+				acc.sizes.add(item.size);
+				acc.quantity += parseInt(item.quantity, 10) || 0;
+				acc.poly_quantity += parseInt(item.poli_quantity, 10) || 0;
+				return acc;
+			},
+			{
+				itemDescriptions: new Set(),
+				styles: new Set(),
+				colors: new Set(),
+				shade: new Set(),
+				sizes: new Set(),
+				quantity: 0,
+				poly_quantity: 0,
+			}
+		) || {};
+
+	const grandTotalQuantity = uniqueCounts(challan_entry).quantity;
 
 	const pdfDocGenerator = pdfMake.createPdf({
-		...DEFAULT_A4_PAGE({
+		...DEFAULT_LETTER_PAGE({
 			xMargin,
 			headerHeight,
 			footerHeight,
@@ -49,45 +83,128 @@ export default function Index(data) {
 		}),
 
 		// * Main Table
-		content: [
+		content: packing_list_numbers.map((pl, index) => [
+			{
+				text: `PL NO: ${pl.packing_number} (${pl.carton_weight ? pl.carton_weight : 0} Kg)`,
+				fontSize: DEFAULT_FONT_SIZE + 2,
+				bold: true,
+				alignment: 'left',
+			},
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', 50, 50, 80],
+					widths: [140, 130, 70, 60, 60, 60, 40],
 					body: [
 						// * Header
 						TableHeader(node),
 
 						// * Body
-						...challan_entry?.map((item) =>
-							node.map((nodeItem) => ({
-								text: item[nodeItem.field],
-								style: nodeItem.cellStyle,
-								alignment: nodeItem.alignment,
-							}))
-						),
+						...challan_entry
+							?.filter(
+								(item) =>
+									item.packing_number === pl.packing_number
+							)
+							.map((item) =>
+								node.map((nodeItem) => {
+									const text =
+										nodeItem.field === 'size'
+											? `${item[nodeItem.field]} mtr`
+											: item[nodeItem.field];
+									return {
+										text,
+										style: nodeItem.cellStyle,
+										alignment: nodeItem.alignment,
+										colSpan: nodeItem.colSpan,
+									};
+								})
+							),
 						[
 							{
-								text: 'Total',
+								text: `Total ${
+									uniqueCounts(
+										challan_entry?.filter(
+											(item) =>
+												item.packing_number ===
+												pl.packing_number
+										)
+									).itemDescriptions?.size
+								} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'Count' : 'Desc'}`,
 								bold: true,
-								colSpan: 4,
-								alignment: 'right',
+								fontSize: DEFAULT_FONT_SIZE + 2,
 							},
-							{},
-							{},
-							{},
+
 							{
-								text: `${totalQuantity}`,
+								text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).styles?.size} Style`,
+								bold: true,
+								fontSize: DEFAULT_FONT_SIZE + 2,
+							},
+							{
+								text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).colors?.size} Color`,
+								bold: true,
+								fontSize: DEFAULT_FONT_SIZE + 2,
+							},
+							{
+								text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).sizes?.size} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'Length' : 'Size'}`,
 								bold: true,
 								alignment: 'right',
+								fontSize: DEFAULT_FONT_SIZE + 2,
+							},
+							{
+								text: uniqueCounts(
+									challan_entry?.filter(
+										(item) =>
+											item.packing_number ===
+											pl.packing_number
+									)
+								).quantity,
+								bold: true,
+								alignment: 'right',
+								fontSize: DEFAULT_FONT_SIZE + 2,
+							},
+							{
+								text: uniqueCounts(
+									challan_entry?.filter(
+										(item) =>
+											item.packing_number ===
+											pl.packing_number
+									)
+								).poly_quantity,
+								bold: true,
+								alignment: 'right',
+								fontSize: DEFAULT_FONT_SIZE + 2,
 							},
 						],
 					],
 				},
-				// layout: 'lightHorizontalLines',
-				layout: tableLayoutStyle,
 			},
-		],
+			{ text: '\n\n' },
+			index === packing_list_numbers.length - 1
+				? {
+						text: `Grand Total Quantity : ${grandTotalQuantity} ${
+							isThreadChallan
+								? 'cone'
+								: isTapeChallan
+									? 'mtr'
+									: 'pcs'
+						}`,
+						bold: true,
+						fontSize: DEFAULT_FONT_SIZE + 2,
+					}
+				: null,
+			index === packing_list_numbers.length - 1
+				? {
+						text: `Grand Total Quantity (In Words): ${NumToWord(grandTotalQuantity)} ${
+							isThreadChallan
+								? 'Cone'
+								: isTapeChallan
+									? 'Meter'
+									: 'Pcs'
+						} Only`,
+						bold: true,
+						fontSize: DEFAULT_FONT_SIZE + 2,
+					}
+				: null,
+		]),
 	});
 
 	return pdfDocGenerator;

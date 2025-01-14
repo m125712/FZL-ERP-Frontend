@@ -127,6 +127,7 @@ export default function Index(data, from, to) {
 					orderTotal.current.close_end_quantity += totalCloseEnd;
 					partyTotal.current.close_end_quantity += totalCloseEnd;
 					grandTotal.current.close_end_quantity += totalCloseEnd;
+
 					const totalOpenEnd = packingList.other?.reduce(
 						(total, item) => {
 							return (
@@ -223,49 +224,25 @@ export default function Index(data, from, to) {
 					grandTotal.closing.quantity += CloseTotalQuantity;
 					const totalValue = packingList.other?.reduce(
 						(total, item) => {
-							return (
-								total +
-								(packingList.other?.reduce((total, item) => {
-									return (
-										total + (item.running_total_value || 0)
-									);
-								}, 0) || 0)
-							);
+							return total + (item.running_total_value || 0);
 						},
 						0
 					);
 					orderTotal.current.value += totalValue;
 					partyTotal.current.value += totalValue;
 					grandTotal.current.value += totalValue;
-					const OpeningTotalValue = packingList.other?.reduce(
-						(total, item) => {
-							return (
-								total +
-								(packingList.other?.reduce((total, item) => {
-									return (
-										total + (item.opening_total_value || 0)
-									);
-								}, 0) || 0)
-							);
-						},
-						0
-					);
+					const OpeningTotalValue =
+						packingList.other.reduce((total, item) => {
+							return total + (item.opening_total_value || 0);
+						}, 0) || 0;
 					orderTotal.opening.value += OpeningTotalValue;
 					partyTotal.opening.value += OpeningTotalValue;
 					grandTotal.opening.value += OpeningTotalValue;
-					const ClosingTotalValue = packingList.other?.reduce(
-						(total, item) => {
-							return (
-								total +
-								(packingList.other?.reduce((total, item) => {
-									return (
-										total + (item.closing_total_value || 0)
-									);
-								}, 0) || 0)
-							);
-						},
-						0
-					);
+					const ClosingTotalValue =
+						packingList.other?.reduce((total, item) => {
+							return total + (item.closing_total_value || 0);
+						}, 0) || 0;
+
 					orderTotal.closing.value += ClosingTotalValue;
 					partyTotal.closing.value += ClosingTotalValue;
 					grandTotal.closing.value += ClosingTotalValue;
@@ -392,6 +369,11 @@ export default function Index(data, from, to) {
 								partyTotal.closing.value_bdt,
 						});
 					}
+					if (
+						orderItem.order_number_with_cash.includes('STS24-0014')
+					) {
+						console.log('order total', orderTotal);
+					}
 				});
 			});
 		});
@@ -464,7 +446,7 @@ export default function Index(data, from, to) {
 						},
 						order_number: {
 							text:
-								orderItem.order_number +
+								orderItem.order_number_with_cash +
 								' (' +
 								orderItem.total_quantity +
 								')',

@@ -33,6 +33,7 @@ export default function Index() {
 	const shade_recipes_entries = useMemo(() => {
 		return shade_recipe?.recipe_entry?.map((item) => ({
 			...item,
+			quantity: Number(item?.quantity).toFixed(3),
 			bulk: Number((volume * item?.quantity).toFixed(3)),
 		}));
 	}, [shade_recipe, volume]);
@@ -40,6 +41,7 @@ export default function Index() {
 	const programs = useMemo(() => {
 		return shade_recipe?.programs?.map((item) => ({
 			...item,
+			quantity: Number(item?.quantity).toFixed(3),
 			bulk: Number((volume * parseFloat(item?.quantity)).toFixed(3)),
 		}));
 	}, [shade_recipe, volume]);

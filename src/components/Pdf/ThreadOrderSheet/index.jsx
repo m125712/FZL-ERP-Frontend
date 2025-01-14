@@ -14,26 +14,33 @@ const node = [
 	getTable('count_length_name', 'Count Length'),
 	getTable('bleaching', 'Bleaching'),
 	getTable('quantity', 'Quantity (cone)', 'right'),
+	getTable('expected_yarn', 'Yarn Req.', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
 
 export default function Index(orderInfo) {
-	const headerHeight = 160;
+	const headerHeight = 180;
 	let footerHeight = 50;
 	let { order_info_entry } = orderInfo;
 
 	const calculateSummary = (order_info_entry) => {
 		let totalQuantity = 0;
 		const uniqueColors = new Set();
+		let totalExpectedYarn = 0;
 
 		order_info_entry.forEach((item) => {
 			totalQuantity += parseFloat(item.quantity);
 			uniqueColors.add(item.color);
+			totalExpectedYarn += item['max_weight'] * item['quantity'];
+			item['expected_yarn'] = Number(
+				item['max_weight'] * item['quantity']
+			).toFixed(2);
 		});
 
 		return {
-			totalQuantity: totalQuantity.toFixed(4),
+			totalQuantity: totalQuantity,
 			uniqueColorsCount: uniqueColors.size,
+			totalExpectedYarn: Number(totalExpectedYarn).toFixed(2),
 		};
 	};
 	order_info_entry = order_info_entry.map((item) => ({
@@ -42,7 +49,7 @@ export default function Index(orderInfo) {
 		quantity: Number(item.quantity) || 0,
 	}));
 
-	const { totalQuantity, uniqueColorsCount } =
+	const { totalQuantity, uniqueColorsCount, totalExpectedYarn } =
 		calculateSummary(order_info_entry);
 
 	const pdfDocGenerator = pdfMake.createPdf({
@@ -73,7 +80,7 @@ export default function Index(orderInfo) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', 70, 50, '*', '*'],
+					widths: ['*', '*', 70, 50, '*', '*', '*'],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -101,6 +108,11 @@ export default function Index(orderInfo) {
 								colSpan: 2,
 							},
 							{},
+							{
+								text: `Total Y.Req.: ${Number(totalExpectedYarn)}`,
+								alignment: 'right',
+								bold: true,
+							},
 							{},
 						],
 					],

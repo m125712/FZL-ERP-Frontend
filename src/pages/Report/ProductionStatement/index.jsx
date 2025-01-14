@@ -21,12 +21,14 @@ export default function index() {
 	const [marketing, setMarketing] = useState();
 	const [type, setType] = useState();
 	const [party, setParty] = useState();
+	const [order, setOrder] = useState('');
 	const { data, isLoading } = useProductionStatementReport(
 		from,
 		to,
 		party,
 		marketing,
-		type
+		type,
+		order
 	);
 
 	const columns = useMemo(
@@ -97,6 +99,8 @@ export default function index() {
 						setMarketing,
 						type,
 						setType,
+						order,
+						setOrder,
 					}}
 				/>
 				<button

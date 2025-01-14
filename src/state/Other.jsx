@@ -472,10 +472,12 @@ export const useOtherCountLength = () =>
 	});
 
 //*GET ALl Zipper-Thread Order List
-export const useAllZipperThreadOrderList = () =>
+export const useAllZipperThreadOrderList = (query) =>
 	createGlobalState({
-		queryKey: otherQK.allZipperThreadOrderList(),
-		url: `/other/order/zipper-thread/value/label`,
+		queryKey: otherQK.allZipperThreadOrderList(query),
+		url: query
+			? `/other/order/zipper-thread/value/label?${query}`
+			: `/other/order/zipper-thread/value/label`,
 	});
 //* GET SHADE RECIPE
 export const useOtherShadeRecipe = () =>

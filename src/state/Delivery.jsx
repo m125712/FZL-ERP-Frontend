@@ -30,10 +30,11 @@ export const useDeliveryThreadDashboardByUUID = (uuid) =>
 	});
 
 // * Challan
-export const useDeliveryChallan = (query = '') =>
+export const useDeliveryChallan = (query = '', { enabled = false } = {}) =>
 	createGlobalState({
 		queryKey: challanQK.deliveryChallan(query),
 		url: query ? `/delivery/challan?${query}` : `/delivery/challan`,
+		enabled: enabled,
 	});
 
 export const useDeliveryChallanByUUID = (uuid) =>

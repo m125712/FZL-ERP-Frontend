@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommercialManualPI } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
@@ -8,10 +9,24 @@ import { CustomLink, DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return `all=true`;
+};
+
 export default function Index() {
 	const navigate = useNavigate();
 	const haveAccess = useAccess('commercial__manual_pi');
-	const { data, isLoading, url } = useCommercialManualPI();
+	const { user } = useAuth();
+	const { data, isLoading, url } = useCommercialManualPI(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
 	const info = new PageInfo('Manual PI', url, 'commercial__manual_pi');
 
 	useEffect(() => {

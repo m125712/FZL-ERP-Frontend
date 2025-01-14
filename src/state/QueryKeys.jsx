@@ -131,7 +131,11 @@ export const commercialQK = {
 	lcByNumber: (number) => [...commercialQK.all(), 'lc-by-number', number],
 
 	//* MANUAL PI
-	manualPI: () => [...commercialQK.all(), 'manual-pi'],
+	manualPI: (query) => [
+		...commercialQK.all(),
+		'manual-pi',
+		...(query ? [query] : []),
+	],
 	manualPIDetails: (uuid) => [...commercialQK.manualPI(), 'details', uuid],
 };
 
@@ -1417,9 +1421,10 @@ export const otherQK = {
 	//* Count Length
 	countLength: () => [...otherQK.all(), 'thread-count-length'],
 	//* All Zipper Thread Order list
-	allZipperThreadOrderList: () => [
+	allZipperThreadOrderList: (query) => [
 		...otherQK.all(),
 		'all-zipper-thread-order-list',
+		...(query ? [query] : []),
 	],
 
 	shadeRecipe: () => [...otherQK.all(), 'shade-recipe'],
@@ -1499,7 +1504,14 @@ export const reportQK = {
 		to,
 		query,
 	],
-	productionReportStatementReport: (from, to, party, marketing, type) => [
+	productionReportStatementReport: (
+		from,
+		to,
+		party,
+		marketing,
+		type,
+		order
+	) => [
 		...reportQK.all(),
 		'production-report',
 		from,
@@ -1507,6 +1519,7 @@ export const reportQK = {
 		party,
 		marketing,
 		type,
+		order,
 	],
 	//* Zipper Production
 	zipperProduction: (query) => [
@@ -1576,7 +1589,11 @@ export const marketingQK = {
 	getTeamDetails: (uuid) => [...marketingQK.all(), 'teams', 'details', uuid],
 
 	//* Targets
-	getTargets: () => [...marketingQK.all(), 'targets'],
+	getTargets: (query) => [
+		...marketingQK.all(),
+		'targets',
+		...(query ? [query] : []),
+	],
 	getTargetDetails: (uuid) => [...marketingQK.all(), 'targets', uuid],
 };
 

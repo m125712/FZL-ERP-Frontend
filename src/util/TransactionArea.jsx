@@ -136,6 +136,7 @@ export const getTransactionAreaSliderDieCasting = [
 	{ label: 'Die Casting Section', value: 'die_casting' }, // Slider die casting
 ];
 
+// * slider coloring
 export const getTransactionAreaSliderColoring = [
 	{
 		label: 'Slider Coating Section /Epoxy Paint',
@@ -147,6 +148,7 @@ export const getTransactionAreaSliderColoring = [
 	}, // slider coloring
 ];
 
+// * thread conning
 export const getTransactionAreaThreadConning = [
 	{ label: 'Sewing Thread Finishing', value: 'sewing_thread_finishing' }, // thread conning
 ];

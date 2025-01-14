@@ -3,6 +3,7 @@ import { lazy } from 'react';
 const Department = lazy(() => import('@/pages/Admin/Department'));
 const Designation = lazy(() => import('@/pages/Admin/Designation'));
 const User = lazy(() => import('@/pages/Admin/User'));
+const Permissions = lazy(() => import('@/pages/Admin/Permissions'));
 
 export const HrRoutes = [
 	{
@@ -36,6 +37,13 @@ export const HrRoutes = [
 				path: '/hr/department',
 				element: <Department />,
 				page_name: 'admin__user_department',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Permissions',
+				path: '/hr/permissions',
+				element: <Permissions />,
+				page_name: 'admin__user_permissions',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
 		],

@@ -12,7 +12,7 @@ export const useLayout = () => {
 };
 
 const LayoutProvider = ({ children }) => {
-	const [sidebarOpen, setSidebarOpen] = useState(true);
+	const [sidebarOpen, setSidebarOpen] = useState(false);
 	const [isCollapsed, setIsCollapsed] = useState(false);
 
 	return (

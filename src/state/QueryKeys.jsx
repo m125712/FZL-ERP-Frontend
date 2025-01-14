@@ -79,6 +79,10 @@ export const adminQK = {
 	//* users
 	users: () => [...adminQK.all(), 'users'],
 	user: (uuid) => [...adminQK.users(), uuid],
+
+	//* permissions
+	permissions: () => [...adminQK.all(), 'permissions'],
+	permission: (uuid) => [...adminQK.permissions(), uuid],
 };
 
 export const commercialQK = {

@@ -17,7 +17,7 @@ const node = [
 	getTable('count', 'Count'),
 	getTable('length', 'Length'),
 	getTable('style', 'Style'),
-	getTable('yarn_quantity', 'Yarn'),
+	getTable('expected_weight', 'Yarn'),
 	getTable('quantity', 'Tube'),
 	getTable('quantity', 'Stiker'),
 	getTable('quantity', 'Poly'),
@@ -30,6 +30,10 @@ export default function Index(batch, shade_recipes_entries, programs) {
 	const headerHeight = 200;
 	let footerHeight = 50;
 	const { batch_entry } = batch;
+	batch_entry?.forEach((item) => {
+		const expected_weight = item?.quantity * item?.max_weight;
+		item['expected_weight'] = expected_weight;
+	});
 
 	const entry = {
 		...batch_entry,

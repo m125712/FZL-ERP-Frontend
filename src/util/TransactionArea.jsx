@@ -1,6 +1,6 @@
 const getTransactionArea = () => {
 	return [
-		{ label: 'Box Pin (Metal section)', value: 'box_pin_metal' }, // Metal Finishing
+		{ label: 'Box Pin (Metal section)', value: 'box_pin_metal' }, // metal finishing
 		{ label: 'Chemicals - Dyeing', value: 'chemicals_dyeing' }, // dyeing & ironing
 		{ label: 'Chemicals:Coating', value: 'chemicals_coating' },
 		{
@@ -12,7 +12,7 @@ const getTransactionArea = () => {
 			label: 'Coil Forming/Sewing Forming',
 			value: 'coil_forming_sewing_forming',
 		}, // Tape preparation coil
-		{ label: 'Die Casting Section', value: 'die_casting' }, // Slider diecasting
+		{ label: 'Die Casting Section', value: 'die_casting' }, // Slider die casting
 		{ label: 'Dyeing Section', value: 'dyeing' }, // dyeing and ironing
 		{ label: 'Elastic Section', value: 'elastic' },
 		{ label: 'Electroplating Section', value: 'electroplating' },
@@ -30,7 +30,7 @@ const getTransactionArea = () => {
 		{
 			label: 'Metal Teeth Electroplating',
 			value: 'metal_teeth_electroplating',
-		}, // Metal teeth coloring
+		}, // metal teeth coloring
 		{ label: 'Metal Teeth Molding Section', value: 'metal_teeth_molding' }, // metal teeth molding
 		{ label: 'Metal Teeth Plating Section', value: 'metal_teeth_plating' }, // metal teeth coloring
 		{ label: 'Nylon', value: 'nylon' },
@@ -70,6 +70,7 @@ const getTransactionArea = () => {
 
 export default getTransactionArea;
 
+// * dyeing and ironing // done
 export const getTransactionAreaDyeing = [
 	{ label: 'Zipper Dying', value: 'zipper_dying' }, // dyeing and ironing
 	{ label: 'Thread Dying', value: 'thread_dying' }, // dyeing and ironing
@@ -78,6 +79,33 @@ export const getTransactionAreaDyeing = [
 	{ label: 'Chemicals - Dyeing', value: 'chemicals_dyeing' }, // dyeing & ironing
 ];
 
+// * metal finishing // done
+export const getTransactionAreaMetalFinishing = [
+	{ label: 'Metal Finishing Section', value: 'metal_finishing' }, // metal finishing
+	{ label: 'Box Pin (Metal section)', value: 'box_pin_metal' }, // metal finishing
+];
+
+// * metal teeth molding // done
+export const getTransactionAreaMetalTeethMolding = [
+	{ label: 'Metal Teeth Molding Section', value: 'metal_teeth_molding' }, // metal teeth molding
+];
+
+// * metal teeth coloring // done
+export const getTransactionAreaMetalTeethColoring = [
+	{ label: 'Metal Teeth Plating Section', value: 'metal_teeth_plating' }, // metal teeth coloring
+	{
+		label: 'Metal Teeth Electroplating',
+		value: 'metal_teeth_electroplating',
+	}, // metal teeth coloring
+];
+
+// * nylon metalic finishing // done
+export const getTransactionAreaMetallicFinishing = [
+	{ label: 'Nylon Finishing Section', value: 'nylon_finishing' }, // nylon metalic finishing
+	{ label: 'Invisible section', value: 'invisible' }, // nylon metalic finishing
+];
+
+// * vislon finishing // done
 export const getTransactionAreaVislonFinishing = [
 	{
 		label: 'Vislon Open Injection Section',
@@ -86,6 +114,43 @@ export const getTransactionAreaVislonFinishing = [
 	{ label: 'Vislon Finishing Section', value: 'vislon_finishing' }, // vislon finishing
 	{ label: 'Vislon Gapping', value: 'vislon_gapping' }, // vislon finishing
 	{ label: 'Vislon Injection', value: 'vislon_injection' }, // vislon finishing
+];
+
+// * tape preparation coil // done
+export const getTransactionAreaTapePreparationCoil = [
+	{ label: 'Coil Forming/Sewing', value: 'coil_forming_sewing' }, // Tape preparation coil
+	{
+		label: 'Coil Forming/Sewing Forming',
+		value: 'coil_forming_sewing_forming',
+	}, // Tape preparation coil
+];
+
+// * tape preparation tape // done
+export const getTransactionAreaTapePreparationTape = [
+	{ label: 'Tape Loom Section', value: 'tape_loom' }, // tape preparation tape
+	{ label: 'Tape Making', value: 'tape_making' }, // tape preparation tape
+];
+
+// * Slider die casting // done
+export const getTransactionAreaSliderDieCasting = [
+	{ label: 'Die Casting Section', value: 'die_casting' }, // Slider die casting
+];
+
+// * slider coloring // done
+export const getTransactionAreaSliderColoring = [
+	{
+		label: 'Slider Coating Section /Epoxy Paint',
+		value: 'slider_coating_epoxy_paint',
+	}, // slider coloring
+	{
+		label: 'Slider Electroplating Section',
+		value: 'slider_electroplating',
+	}, // slider coloring
+];
+
+// * thread conning
+export const getTransactionAreaThreadConning = [
+	{ label: 'Sewing Thread Finishing', value: 'sewing_thread_finishing' }, // thread conning
 ];
 
 export const getTransferArea = [

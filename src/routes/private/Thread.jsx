@@ -8,6 +8,7 @@ const Log = lazy(() => import('@pages/Thread/Log'));
 const OrderInfo = lazy(() => import('@pages/Thread/Order'));
 const IndOrderInfo = lazy(() => import('@pages/Thread/Order/Details'));
 const OrderInfoEntry = lazy(() => import('@pages/Thread/Order/Entry'));
+const ThreadRM = lazy(() => import('@/pages/Thread/RM'));
 
 export const ThreadRoutes = [
 	{
@@ -93,6 +94,13 @@ export const ThreadRoutes = [
 					'click_production',
 					'click_transaction',
 				],
+			},
+			{
+				name: 'RM',
+				path: '/thread/rm',
+				element: <ThreadRM />,
+				page_name: 'thread__rm',
+				actions: ['create', 'read', 'update', 'delete'],
 			},
 
 			{

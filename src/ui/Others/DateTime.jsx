@@ -25,11 +25,6 @@ function DateTime({
 
 	const customizedDate = format(new Date(date), customizedDateFormate);
 	const customizedTime = format(new Date(date), customizedTimeFormate);
-	// console.log({
-	// 	date,
-	// 	lol: new Date(date),
-	// 	customizedDate,
-	// });
 
 	return (
 		<div className='flex flex-col'>

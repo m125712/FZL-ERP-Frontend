@@ -85,6 +85,8 @@ export const CommonRoutes = [
 						page_name: 'common__tape_log',
 						actions: [
 							'read',
+							'update',
+							'delete',
 							'click_update_tape_to_coil',
 							'click_delete_tape_to_coil',
 							'click_update_tape_to_dying',
@@ -190,6 +192,8 @@ export const CommonRoutes = [
 						page_name: 'common__coil_log',
 						actions: [
 							'read',
+							'update',
+							'delete',
 							'click_update_sfg',
 							'click_delete_sfg',
 							'click_update_rm',

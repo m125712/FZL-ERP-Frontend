@@ -14,6 +14,7 @@ const node = [
 	getTable('count_length_name', 'Count Length'),
 	getTable('bleaching', 'Bleaching'),
 	getTable('quantity', 'Quantity (cone)', 'right'),
+	getTable('expected_yarn', 'Yarn Req.', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
 
@@ -25,15 +26,18 @@ export default function Index(orderInfo) {
 	const calculateSummary = (order_info_entry) => {
 		let totalQuantity = 0;
 		const uniqueColors = new Set();
+		let totalExpectedYarn = 0;
 
 		order_info_entry.forEach((item) => {
 			totalQuantity += parseFloat(item.quantity);
 			uniqueColors.add(item.color);
+			totalExpectedYarn += Number(item['max_weight']) * item['quantity'];
 		});
 
 		return {
 			totalQuantity: totalQuantity.toFixed(4),
 			uniqueColorsCount: uniqueColors.size,
+			totalExpectedYarn: totalExpectedYarn.toFixed(2),
 		};
 	};
 	order_info_entry = order_info_entry.map((item) => ({
@@ -42,7 +46,7 @@ export default function Index(orderInfo) {
 		quantity: Number(item.quantity) || 0,
 	}));
 
-	const { totalQuantity, uniqueColorsCount } =
+	const { totalQuantity, uniqueColorsCount, totalExpectedYarn } =
 		calculateSummary(order_info_entry);
 
 	const pdfDocGenerator = pdfMake.createPdf({
@@ -73,7 +77,7 @@ export default function Index(orderInfo) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', 70, 50, '*', '*'],
+					widths: ['*', '*', 70, 50, '*', '*', '*'],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -81,7 +85,10 @@ export default function Index(orderInfo) {
 						// * Body
 						...order_info_entry?.map((item) =>
 							node.map((nodeItem) => ({
-								text: item[nodeItem.field],
+								text:
+									nodeItem.field == 'expected_yarn'
+										? item['max_weight'] * item['quantity']
+										: item[nodeItem.field],
 								style: nodeItem.cellStyle,
 								alignment: nodeItem.alignment,
 							}))
@@ -101,6 +108,11 @@ export default function Index(orderInfo) {
 								colSpan: 2,
 							},
 							{},
+							{
+								text: `Total Y.Req.: ${Number(totalExpectedYarn)}`,
+								alignment: 'right',
+								bold: true,
+							},
 							{},
 						],
 					],

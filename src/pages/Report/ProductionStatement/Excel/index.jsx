@@ -226,14 +226,7 @@ export default function Index(data, from, to) {
 					grandTotal.current.value += totalValue;
 					const OpeningTotalValue = packingList.other?.reduce(
 						(total, item) => {
-							return (
-								total +
-								(packingList.other?.reduce((total, item) => {
-									return (
-										total + (item.opening_total_value || 0)
-									);
-								}, 0) || 0)
-							);
+							return total + (item.opening_total_value || 0);
 						},
 						0
 					);
@@ -242,14 +235,7 @@ export default function Index(data, from, to) {
 					grandTotal.opening.value += OpeningTotalValue;
 					const ClosingTotalValue = packingList.other?.reduce(
 						(total, item) => {
-							return (
-								total +
-								(packingList.other?.reduce((total, item) => {
-									return (
-										total + (item.closing_total_value || 0)
-									);
-								}, 0) || 0)
-							);
+							return total + (item.closing_total_value || 0);
 						},
 						0
 					);

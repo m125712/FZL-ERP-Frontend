@@ -12,7 +12,7 @@ import {
 	useOrderAgainstMetalTMRMLog,
 } from '@/state/Metal';
 import { useOrderAgainstNylonMetallicFinishingRMLog } from '@/state/Nylon';
-import { useOtherOrderDescription } from '@/state/Other';
+import { useOtherOrderStore } from '@/state/Other';
 import {
 	useOrderAgainstDieCastingRMLog,
 	useOrderAgainstSliderAssemblyRMLog,
@@ -92,7 +92,7 @@ export default function Index({
 			.max(Number(updateMaterialDetails?.stock).toFixed(3)),
 		weight: MATERIAL_TRX_AGAINST_ORDER_SCHEMA.weight.required('required'),
 	};
-	const { data: order } = useOtherOrderDescription();
+	const { data: order } = useOtherOrderStore();
 
 	const {
 		register,

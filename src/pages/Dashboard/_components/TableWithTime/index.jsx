@@ -15,7 +15,6 @@ const daysMap = {
 export function TableWithTime(props) {
 	const [time, setTime] = useState('yesterday');
 	const [dateRange, setDateRange] = useState({ from: '', to: '' });
-	const [status, setStatus] = useState(false);
 
 	useEffect(() => {
 		const to = format(addDays(new Date(), -1), 'yyyy-MM-dd');

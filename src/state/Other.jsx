@@ -112,6 +112,14 @@ export const useOtherOrderDescription = (params) =>
 			: '/other/order/description/value/label',
 	});
 
+export const useOtherOrderStore = (params) =>
+	createGlobalState({
+		queryKey: otherQK.orderStore(params),
+		url: params
+			? `/other/order/order-description-store/value/label?${params}`
+			: '/other/order/order-description-store/value/label',
+	});
+
 export const useOtherOrderBatchDescription = (params) =>
 	createGlobalState({
 		queryKey: otherQK.orderBatchDescription(params),

@@ -1163,6 +1163,11 @@ export const otherQK = {
 		'order-description',
 		...(params ? [params] : []),
 	],
+	orderStore: (params) => [
+		...otherQK.all(),
+		'order-store',
+		...(params ? [params] : []),
+	],
 	orderBatchDescription: (params) => [
 		...otherQK.all(),
 		'order-batch-description',

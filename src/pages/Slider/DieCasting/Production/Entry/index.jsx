@@ -63,6 +63,7 @@ export default function Index() {
 		Controller,
 		useFieldArray,
 		getValues,
+		watch,
 		context: form,
 	} = useRHF(SLIDER_DIE_CASTING_SCHEMA, SLIDER_DIE_CASTING_NULL);
 
@@ -204,6 +205,7 @@ export default function Index() {
 						'Cavity Goods',
 						'Cavity Defect',
 						'Push',
+						'Qty',
 						'Weight',
 						'Remarks',
 					].map((item) => (
@@ -352,7 +354,14 @@ export default function Index() {
 										}
 									/>
 								</td>
-
+								<td
+									className={cn(
+										'w-24 text-center font-semibold text-slate-800',
+										tdClass
+									)}>
+									{watch(`array[${index}].push`) *
+										watch(`array[${index}].cavity_goods`)}
+								</td>
 								{/* WEIGHT */}
 								<td className={cn('w-40', tdClass)}>
 									<JoinInput

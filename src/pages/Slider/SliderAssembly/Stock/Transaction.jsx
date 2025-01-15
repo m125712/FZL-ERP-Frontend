@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
 import { useOtherSliderStockWithDescription } from '@/state/Other';
 import {
@@ -5,6 +6,7 @@ import {
 	useSliderAssemblyStockTransaction,
 	useSliderColoringProduction,
 } from '@/state/Slider';
+import { Watch } from 'lucide';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -50,6 +52,8 @@ export default function Index({
 		errors,
 		reset,
 		getValues,
+		setValue,
+		watch,
 		control,
 		context,
 		Controller,
@@ -105,6 +109,20 @@ export default function Index({
 		invalidateAssemblyStockTransaction();
 		invalidateSliderColoringProduction();
 	};
+
+	const currentWeight = () => {
+		if (updateSliderTrx?.weight) {
+			return (
+				watch('trx_quantity') *
+				(updateSliderTrx?.weight / updateSliderTrx?.quantity)
+			);
+		}
+		return 0;
+	};
+
+	useEffect(() => {
+		setValue('weight', currentWeight().toFixed(2));
+	}, [watch('trx_quantity')]);
 
 	return (
 		<AddModal

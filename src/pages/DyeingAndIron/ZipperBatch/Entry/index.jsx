@@ -52,7 +52,7 @@ export default function Index() {
 		postData,
 		deleteData,
 		invalidateQuery: invalidateDyeingZipperBatch,
-	} = useDyeingBatch();
+	} = useDyeingBatch(`type=pending`);
 
 	const { batch_uuid } = useParams();
 

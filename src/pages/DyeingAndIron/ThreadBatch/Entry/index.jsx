@@ -46,7 +46,7 @@ export default function Index() {
 		postData,
 		deleteData,
 		invalidateQuery: invalidateDyeingThreadBatch,
-	} = useDyeingThreadBatch();
+	} = useDyeingThreadBatch(`type=pending`);
 
 	const { batch_uuid } = useParams();
 	const { user } = useAuth();

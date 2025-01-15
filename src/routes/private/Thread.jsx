@@ -30,6 +30,7 @@ export const ThreadRoutes = [
 					'show_own_orders',
 					'show_approved_orders',
 					'show_price',
+					'show_cash_bill_lc',
 				],
 			},
 			{
@@ -61,7 +62,14 @@ export const ThreadRoutes = [
 				path: '/thread/order-info/:order_info_uuid',
 				element: <IndOrderInfo />,
 				page_name: 'thread__order_info_in_details',
-				actions: ['create', 'read', 'update', 'delete', 'show_price'],
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'show_price',
+					'show_cash_bill_lc',
+				],
 				hidden: true,
 			},
 

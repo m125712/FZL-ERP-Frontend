@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useMetalFProduction, useMetalTMProduction } from '@/state/Metal';
 import {
@@ -77,6 +77,8 @@ export default function Index({
 		reset,
 		control,
 		context,
+		setValue,
+		watch,
 		Controller,
 		getValues,
 	} = useRHF(
@@ -166,6 +168,20 @@ export default function Index({
 		given_quantity: item.given_quantity,
 		left_quantity: item.left_quantity,
 	}));
+
+	const currentWeight = () => {
+		if (updateSliderTrx?.coloring_prod_weight) {
+			return (
+				watch('trx_quantity') *
+				(updateSliderTrx?.coloring_prod_weight / updateSliderTrx?.coloring_prod)
+			);
+		}
+		return 0;
+	};
+
+	useEffect(() => {
+		setValue('weight', currentWeight().toFixed(2));
+	}, [watch('trx_quantity')]);
 
 	return (
 		<AddModal

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { PDF } from '@/assets/icons';
 import { useOrderDescription } from '@/state/Order';
 import { format } from 'date-fns';
+import { useAccess } from '@/hooks';
 
 import SectionContainer from '@/ui/Others/SectionContainer';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
@@ -97,6 +98,7 @@ export function OrderInformation({
 		revision_no,
 	} = order;
 
+	const haveAccess = useAccess('order__details');
 	const { updateData } = useOrderDescription();
 
 	const renderItems = () => {
@@ -117,13 +119,14 @@ export function OrderInformation({
 			},
 			{
 				label: 'Cash / LC',
-				value: renderCashOrLC(
+				value: haveAccess.includes('show_cash_bill_lc') ? renderCashOrLC(
 					order?.is_cash,
 					order?.is_sample,
 					order?.is_bill,
 					true
-				),
+				) : '--',
 			},
+
 			{
 				label: 'PI No.',
 				value: pi_numbers?.join(', '),

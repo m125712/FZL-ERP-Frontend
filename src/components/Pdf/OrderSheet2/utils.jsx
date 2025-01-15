@@ -1,5 +1,6 @@
 import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
+import { useAccess } from '@/hooks';
 
 import { DEFAULT_FONT_SIZE } from '../ui';
 import { company } from '../utils';
@@ -19,6 +20,7 @@ const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
 };
 
 export const getPageHeader = (order_info) => {
+	const haveAccess = useAccess('order__details');
 	const order_number =
 		order_info.is_sample === 1
 			? order_info.order_number + ' (S)'
@@ -72,7 +74,9 @@ export const getPageHeader = (order_info) => {
 		],
 		[
 			{ text: 'LC/Cash', bold: true },
-			lc_or_cash,
+			...(haveAccess.includes('show_cash_bill_lc')
+				? [lc_or_cash]
+				: ['- / -']),
 			{ text: 'Buyer', bold: true },
 			order_info.buyer_name,
 		],

@@ -48,6 +48,7 @@ export const OrderRoutes = [
 					'show_own_orders',
 					'show_approved_orders',
 					'show_price',
+					'show_cash_bill_lc'
 				],
 			},
 			{

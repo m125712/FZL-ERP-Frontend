@@ -27,6 +27,18 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'batch_number',
+				header: 'Batch No.',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/planning/finishing-batch/${info.row.original.finishing_batch_uuid}`}
+						openInNewTab={true}
+					/>
+				),
+			},
+			{
 				accessorKey: 'order_number',
 				header: 'O/N',
 				cell: (info) => (

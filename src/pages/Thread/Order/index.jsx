@@ -68,7 +68,10 @@ export default function Index() {
 		() => [
 			{
 				accessorKey: 'is_sample',
-				header: 'Sample/Bill/Cash',
+				header: () =>
+					haveAccess.includes('show_cash_bill_lc')
+						? 'Sample/Bill/Cash'
+						: 'Sample',
 				enableColumnFilter: false,
 				width: 'w-28',
 				cell: (info) => {
@@ -76,8 +79,18 @@ export default function Index() {
 					return (
 						<div className='flex gap-6'>
 							<StatusButton size='btn-xs' value={is_sample} />
-							<StatusButton size='btn-xs' value={is_bill} />
-							<StatusButton size='btn-xs' value={is_cash} />
+							{haveAccess.includes('show_cash_bill_lc') && (
+								<>
+									<StatusButton
+										size='btn-xs'
+										value={is_bill}
+									/>
+									<StatusButton
+										size='btn-xs'
+										value={is_cash}
+									/>
+								</>
+							)}
 						</div>
 					);
 				},

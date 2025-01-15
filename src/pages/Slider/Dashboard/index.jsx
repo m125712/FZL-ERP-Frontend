@@ -187,6 +187,14 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorFn: (row) => row.color.join(', '),
+				id: 'color',
+				header: 'Tape Color',
+				width: 'w-44',
+				enableColumnFilter: false,
+				// cell: (info) => info.getValue()?.join(', '),
+			},
+			{
 				accessorKey: 'puller_type_name',
 				header: 'Puller',
 				enableColumnFilter: false,

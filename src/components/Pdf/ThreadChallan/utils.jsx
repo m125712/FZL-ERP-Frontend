@@ -8,20 +8,23 @@ const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 
 const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 
-const TitleValue = (title = '', value = '', extraFontSize = 2) => [
+const TitleValue = (title = '', value = '', extraFontSize = 2, colSpan) => [
 	{
 		text: title,
 		fontSize: DEFAULT_FONT_SIZE + extraFontSize,
 		bold: true,
 		color: PRIMARY_COLOR,
 	},
-	{ text: value, fontSize: DEFAULT_FONT_SIZE + extraFontSize },
+	{
+		text: value,
+		fontSize: DEFAULT_FONT_SIZE + extraFontSize,
+		colSpan: colSpan,
+	},
 ];
 
 export const getPageHeader = (data) => {
 	const created_at = getDateFormate(data?.delivery_date);
 	const updated_at = data?.updated_at ? getDateFormate(data?.updated_at) : '';
-
 
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
@@ -77,11 +80,13 @@ export const getPageHeader = (data) => {
 				...TitleValue('Merchandiser', data?.merchandiser_name),
 			],
 			[
-				...TitleValue('Factory', data?.factory_name),
-				...TitleValue(
-					'Carton Quantity',
-					`${data?.total_carton_quantity} pcs`
-				),
+				...TitleValue('Factory', data?.factory_name, 2, 3),
+				// ...TitleValue(
+				// 	'Carton Quantity',
+				// 	`${data?.total_carton_quantity} pcs`
+				// ),
+				{},
+				{},
 			],
 			[
 				{

@@ -111,11 +111,12 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'color',
+				accessorFn: (row) => row.color.join(', '),
+				id: 'color',
 				header: 'Tape Color',
 				width: 'w-44',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue()?.join(', '),
+				// cell: (info) => info.getValue()?.join(', '),
 			},
 			{
 				accessorKey: 'teeth_color_name',

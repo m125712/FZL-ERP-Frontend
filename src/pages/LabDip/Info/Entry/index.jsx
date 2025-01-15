@@ -1,6 +1,8 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
+import { useDyeingSwatch } from '@/state/Dyeing';
 import { useLabDipInfo, UseLabDipInfoByDetails } from '@/state/LabDip';
 import { useOtherRecipe } from '@/state/Other';
+import { useThreadSwatch } from '@/state/Thread';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -29,6 +31,10 @@ export default function Index() {
 	const { info_number, info_uuid } = useParams();
 	const { invalidateQuery: invalidateQueryLabDipInfoByDetails } =
 		UseLabDipInfoByDetails(info_uuid);
+	const { invalidateQuery: invalidateQueryDyeingSwatch } =
+		useDyeingSwatch(`type=all`);
+	const { invalidateQuery: invalidateQueryThreadSwatch } =
+		useThreadSwatch(`type=all`);
 
 	const { user } = useAuth();
 	const navigate = useNavigate();
@@ -161,6 +167,8 @@ export default function Index() {
 				.then(() => {
 					//invalidateQueryLabDipInfo();
 					invalidateQueryLabDipInfoByDetails();
+					invalidateQueryDyeingSwatch();
+					invalidateQueryThreadSwatch();
 					navigate(`/lab-dip/info/details/${data?.uuid}`);
 				})
 				.catch((err) => console.log(err));
@@ -216,6 +224,8 @@ export default function Index() {
 			.then(() => reset(LAB_INFO_NULL))
 			.then(() => {
 				invalidateQueryLabDipInfoByDetails();
+				invalidateQueryDyeingSwatch();
+				invalidateQueryThreadSwatch();
 				navigate(`/lab-dip/info/details/${lab_dip_info_uuid}`);
 			})
 

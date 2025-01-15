@@ -49,7 +49,7 @@ export default function index() {
 	const { invalidateQuery: invalidateDetails } =
 		useDyeingFinishingBatchByUUID(batch_uuid);
 
-	const { invalidateQuery } = useDyeingFinishingBatch();
+	const { invalidateQuery } = useDyeingFinishingBatch(`type=pending`);
 	const { invalidateQuery: invalidateSliderAssembly } =
 		useSliderAssemblyProduction();
 

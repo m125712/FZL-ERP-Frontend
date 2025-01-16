@@ -93,6 +93,42 @@ export default function Index({ recipe, order_info_uuid }) {
 				},
 			},
 			{
+				accessorKey: 'marketing_approved',
+				header: 'Marketing Approved',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const access = haveAccess.includes('click_approve');
+					const overrideAccess = haveAccess.includes(
+						'click_approve_override'
+					);
+					return (
+						<SwitchToggle
+							disabled={
+								!order_info_uuid ||
+								(!overrideAccess &&
+									(!access || Number(info.getValue()) === 1))
+							}
+							onChange={() =>
+								handelMarketingApprovedStatusChange(
+									info.row.index
+								)
+							}
+							checked={Number(info.getValue()) === 1}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'marketing_approved_date',
+				header: 'Marketing Approved Date',
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
 				accessorKey: 'recipe_created_at',
 				header: 'Created',
 				filterFn: 'isWithinRange',
@@ -126,6 +162,23 @@ export default function Index({ recipe, order_info_uuid }) {
 		});
 		invalidateQueryLabDipInfo();
 	};
+
+	const handelMarketingApprovedStatusChange = async (idx) => {
+		await updateData.mutateAsync({
+			url: `/lab-dip/info-entry/${recipe[idx]?.info_entry_uuid}`,
+			updatedData: {
+				marketing_approved:
+					recipe[idx]?.marketing_approved === 1 ? 0 : 1,
+				marketing_approved_date:
+					recipe[idx]?.marketing_approved === 1
+						? null
+						: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
+		invalidateQueryLabDipInfo();
+	};
+
 	const handelStatusChange = async (idx) => {
 		await updateData.mutateAsync({
 			url: `${url}/${recipe[idx]?.recipe_uuid}`,

@@ -11,7 +11,7 @@ import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const [status, setStatus] = useState('all');
+	const [status, setStatus] = useState('pending');
 	const options = [
 		{ value: 'all', label: 'All' },
 		{ value: 'pending', label: 'Pending' },

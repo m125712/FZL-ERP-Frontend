@@ -141,6 +141,19 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}>
 			<div className='flex justify-end gap-2 text-sm'>
+				{updateOrderInfo?.uuid && (
+					<div className='rounded-md border-2 border-dashed border-red-300 px-1 text-gray-600'>
+						<CheckBox
+							label='is_canceled'
+							title='Canceled'
+							onChange={(e) =>
+								setValue('is_canceled', e.target.checked)
+							}
+							{...{ register, errors }}
+						/>
+					</div>
+				)}
+
 				<div className='rounded-md bg-primary px-1'>
 					<CheckBox
 						label='is_sample'

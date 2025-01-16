@@ -1,6 +1,6 @@
 import { formatDistanceStrict } from 'date-fns';
 
-import { DateTime } from '@/ui';
+import { CustomLink, DateTime } from '@/ui';
 
 const getSLicedValue = (value, length = 7) => {
 	if (value.length < length) return value;
@@ -12,7 +12,13 @@ export const sample_lead_time_columns = [
 		accessorKey: 'sample_order_no',
 		header: 'Sample O/N',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
+		cell: (info) => (
+			<CustomLink
+				label={info.getValue()}
+				url={`/order/details/${info.getValue()}`}
+				openInNewTab={true}
+			/>
+		),
 	},
 	{
 		accessorFn: (row) => {
@@ -65,7 +71,13 @@ export const order_entry_feed_columns = [
 		accessorKey: 'order_no',
 		header: 'O/N',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
+		cell: (info) => (
+			<CustomLink
+				label={info.getValue()}
+				url={`/order/details/${info.getValue()}`}
+				openInNewTab={true}
+			/>
+		),
 	},
 	{
 		accessorKey: 'party_name',
@@ -98,7 +110,13 @@ export const pi_register_columns = [
 		accessorKey: 'pi_cash_number',
 		header: 'PI Number',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
+		cell: (info) => (
+			<CustomLink
+				label={info.getValue()}
+				url={`/commercial/pi/${info.getValue()}`}
+				openInNewTab={true}
+			/>
+		),
 	},
 	{
 		accessorKey: 'party_name',

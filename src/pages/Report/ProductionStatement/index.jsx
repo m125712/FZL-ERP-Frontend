@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useProductionStatementReport } from '@/state/Report';
 import { format } from 'date-fns';
 
@@ -31,53 +31,6 @@ export default function index() {
 		order
 	);
 
-	const columns = useMemo(
-		() => [
-			{
-				accessorKey: 'material_section_name',
-				header: 'Section',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'material_name',
-				header: 'Material',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'material_unit',
-				header: 'Unit',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'opening_quantity',
-				header: 'Opening',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'purchase_quantity',
-				header: 'Purchase',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'consumption_quantity',
-				header: 'Consumption',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'closing_quantity',
-				header: 'Closing',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-		],
-		[data]
-	);
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
@@ -85,45 +38,37 @@ export default function index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<>
-			<div className='flex flex-col gap-8'>
-				<Header
-					{...{
-						from,
-						setFrom,
-						to,
-						setTo,
-						party,
-						setParty,
-						marketing,
-						setMarketing,
-						type,
-						setType,
-						order,
-						setOrder,
-					}}
-				/>
+		<div className='flex flex-col gap-8'>
+			<Header
+				{...{
+					from,
+					setFrom,
+					to,
+					setTo,
+					party,
+					setParty,
+					marketing,
+					setMarketing,
+					type,
+					setType,
+					order,
+					setOrder,
+				}}
+			/>
+			<div className='flex gap-2'>
 				<button
 					type='button'
-					target='_blank'
-					onClick={() => {
-						Pdf(data, from, to)?.print(
-							{},
-							window.open('', '_blank')
-						);
-					}}
-					className='btn btn-primary'>
-					Generate PDF
+					onClick={() => Pdf(data, from, to)?.open()}
+					className='btn btn-primary flex-1'>
+					PDF
 				</button>
 				<button
 					type='button'
-					onClick={() => {
-						Excel(data, from, to);
-					}}
-					className='btn btn-primary'>
-					Generate Excel
+					onClick={() => Excel(data, from, to)}
+					className='btn btn-secondary flex-1'>
+					Excel
 				</button>
 			</div>
-		</>
+		</div>
 	);
 }

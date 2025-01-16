@@ -1,8 +1,4 @@
-import {
-	DEFAULT_FONT_SIZE,
-	tableLayoutStyle,
-	xMargin,
-} from '@/components/Pdf/ui';
+import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
 import {
 	DEFAULT_LETTER_PAGE,
 	getTable,
@@ -14,60 +10,44 @@ import { NumToWord } from '@/lib/NumToWord';
 import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
+const createNode = (fields) => fields.map((field) => getTable(...field));
+
+const zipperNode = createNode([
+	['item_description', 'Item Description'],
+	['style', 'Style'],
+	['color', 'Color'],
+	['size', 'Size', 'right'],
+	['quantity', 'Qty (pcs)', 'right'],
+	['poli_quantity', 'Poly', 'right'],
+]);
+
+const tapeNode = createNode([
+	['item_description', 'Item Description'],
+	['style', 'Style'],
+	['color', 'Color'],
+	['size', 'Size', 'right'],
+	['quantity', 'Qty (mtr)', 'right'],
+	['poli_quantity', 'Poly', 'right'],
+]);
+
+const sliderNode = createNode([
+	['item_description', 'Item Description'],
+	['style', 'Style'],
+	['quantity', 'Qty (pcs)', 'right'],
+	['poli_quantity', 'Poly', 'right'],
+]);
+
 export default function Index(data) {
-	const isThreadChallan =
-		data?.item_for === 'thread' || data?.item_for === 'sample_thread';
-	const isTapeChallan = data?.item_for === 'tape';
-	const isSliderChallan = data?.item_for === 'slider';
-	const { packing_list_numbers } = data;
-
-	const createNode = (fields) => fields.map((field) => getTable(...field));
-
-	const threadNode = createNode([
-		['item_description', 'Count'],
-		['style', 'Style'],
-		['color', 'Color'],
-		['recipe_name', 'Shade'],
-		['size', 'Length', 'right'],
-		['quantity', 'Qty(cone)', 'right'],
-	]);
-
-	const zipperNode = createNode([
-		['item_description', 'Item Description'],
-		['style', 'Style'],
-		['color', 'Color'],
-		['size', 'Size', 'right'],
-		['quantity', 'Qty(pcs)', 'right'],
-		['poli_quantity', 'Poly', 'right'],
-	]);
-
-	const tapeNode = createNode([
-		['item_description', 'Item Description'],
-		['style', 'Style'],
-		['color', 'Color'],
-		['size', 'Size', 'right'],
-		['quantity', 'Qty(mtr)', 'right'],
-		['poli_quantity', 'Poly', 'right'],
-	]);
-
-	const sliderNode = createNode([
-		['item_description', 'Item Description'],
-		['style', 'Style'],
-		['quantity', 'Qty(pcs)', 'right'],
-		['poli_quantity', 'Poly', 'right'],
-	]);
-
-	const node = isThreadChallan
-		? threadNode
-		: isTapeChallan
-			? tapeNode
-			: isSliderChallan
-				? sliderNode
-				: zipperNode;
-
 	const headerHeight = 220;
 	const footerHeight = 50;
-	const { challan_entry } = data;
+	const isTapeChallan = data?.item_for === 'tape';
+	const isSliderChallan = data?.item_for === 'slider';
+	const isSampleZipper = data?.item_for === 'sample_zipper';
+	const { packing_list_numbers, challan_entry } = data;
+
+	let node = zipperNode;
+	if (isTapeChallan) node = tapeNode;
+	if (isSliderChallan) node = sliderNode;
 
 	const uniqueCounts = (challan_entry) =>
 		challan_entry?.reduce(
@@ -120,7 +100,11 @@ export default function Index(data) {
 		// * Main Table
 		content: packing_list_numbers.map((pl, index) => [
 			{
-				text: `PL NO: ${pl.packing_number} (${pl.carton_weight ? pl.carton_weight : 0} Kg)`,
+				text: `PL NO: ${pl.packing_number} ${
+					isSampleZipper
+						? ''
+						: `(${pl.carton_weight ? pl.carton_weight : 0} Kg)`
+				}`,
 				fontSize: DEFAULT_FONT_SIZE + 2,
 				bold: true,
 				alignment: 'left',
@@ -146,7 +130,6 @@ export default function Index(data) {
 									const text =
 										nodeItem.field === 'size'
 											? `${item[nodeItem.field]} ${
-													isThreadChallan ||
 													isTapeChallan
 														? 'mtr'
 														: item.is_inch === 1
@@ -216,124 +199,70 @@ export default function Index(data) {
 										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
 								]
-							: isThreadChallan
-								? [
-										{
-											text: `Total ${
-												uniqueCounts(
-													challan_entry?.filter(
-														(item) =>
-															item.packing_number ===
-															pl.packing_number
-													)
-												).itemDescriptions?.size
-											} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'Count' : 'Desc'}`,
-											bold: true,
-											fontSize: DEFAULT_FONT_SIZE + 2,
-										},
+							: [
+									{
+										text: `Total ${
+											uniqueCounts(
+												challan_entry?.filter(
+													(item) =>
+														item.packing_number ===
+														pl.packing_number
+												)
+											).itemDescriptions?.size
+										} Desc`,
+										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
 
-										{
-											text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).styles?.size} Style`,
-											bold: true,
-											fontSize: DEFAULT_FONT_SIZE + 2,
-										},
-										{
-											text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).colors?.size} Color`,
-											bold: true,
-											fontSize: DEFAULT_FONT_SIZE + 2,
-										},
-										{
-											text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).shade?.size} Shade`,
-											bold: true,
-											fontSize: DEFAULT_FONT_SIZE + 2,
-										},
-										{
-											text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).sizes?.size} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'Length' : 'Size'}`,
-											bold: true,
-											alignment: 'right',
-											fontSize: DEFAULT_FONT_SIZE + 2,
-										},
-										{
-											text: uniqueCounts(
-												challan_entry?.filter(
-													(item) =>
-														item.packing_number ===
-														pl.packing_number
-												)
-											).quantity,
-											bold: true,
-											alignment: 'right',
-											fontSize: DEFAULT_FONT_SIZE + 2,
-										},
-									]
-								: [
-										{
-											text: `Total ${
-												uniqueCounts(
-													challan_entry?.filter(
-														(item) =>
-															item.packing_number ===
-															pl.packing_number
-													)
-												).itemDescriptions?.size
-											} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'Count' : 'Desc'}`,
-											bold: true,
-											fontSize: DEFAULT_FONT_SIZE + 2,
-										},
-
-										{
-											text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).styles?.size} Style`,
-											bold: true,
-											fontSize: DEFAULT_FONT_SIZE + 2,
-										},
-										{
-											text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).colors?.size} Color`,
-											bold: true,
-											fontSize: DEFAULT_FONT_SIZE + 2,
-										},
-										{
-											text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).sizes?.size} ${data?.item_for === 'thread' || data?.item_for === 'sample_thread' ? 'Length' : 'Size'}`,
-											bold: true,
-											alignment: 'right',
-											fontSize: DEFAULT_FONT_SIZE + 2,
-										},
-										{
-											text: uniqueCounts(
-												challan_entry?.filter(
-													(item) =>
-														item.packing_number ===
-														pl.packing_number
-												)
-											).quantity,
-											bold: true,
-											alignment: 'right',
-											fontSize: DEFAULT_FONT_SIZE + 2,
-										},
-										{
-											text: uniqueCounts(
-												challan_entry?.filter(
-													(item) =>
-														item.packing_number ===
-														pl.packing_number
-												)
-											).poly_quantity,
-											bold: true,
-											alignment: 'right',
-											fontSize: DEFAULT_FONT_SIZE + 2,
-										},
-									],
+									{
+										text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).styles?.size} Style`,
+										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
+									{
+										text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).colors?.size} Color`,
+										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
+									{
+										text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).sizes?.size} Size`,
+										bold: true,
+										alignment: 'right',
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
+									{
+										text: uniqueCounts(
+											challan_entry?.filter(
+												(item) =>
+													item.packing_number ===
+													pl.packing_number
+											)
+										).quantity,
+										bold: true,
+										alignment: 'right',
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
+									{
+										text: uniqueCounts(
+											challan_entry?.filter(
+												(item) =>
+													item.packing_number ===
+													pl.packing_number
+											)
+										).poly_quantity,
+										bold: true,
+										alignment: 'right',
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
+								],
 					],
 				},
 			},
-			{ text: '\n\n' },
+			{ text: '\n' },
 			index === packing_list_numbers.length - 1
 				? {
-						text: `Grand Total Quantity : ${grandTotalQuantity} ${
-							isThreadChallan
-								? 'cone'
-								: isTapeChallan
-									? 'mtr'
-									: 'pcs'
+						text: `Grand Total: ${grandTotalQuantity} ${
+							isTapeChallan ? 'mtr' : 'pcs'
 						}`,
 						bold: true,
 						fontSize: DEFAULT_FONT_SIZE + 2,
@@ -341,12 +270,8 @@ export default function Index(data) {
 				: null,
 			index === packing_list_numbers.length - 1
 				? {
-						text: `Grand Total Quantity (In Words): ${NumToWord(grandTotalQuantity)} ${
-							isThreadChallan
-								? 'Cone'
-								: isTapeChallan
-									? 'Meter'
-									: 'Pcs'
+						text: `Grand Total (In Words): ${NumToWord(grandTotalQuantity)} ${
+							isTapeChallan ? 'Meter' : 'Pcs'
 						} Only`,
 						bold: true,
 						fontSize: DEFAULT_FONT_SIZE + 2,

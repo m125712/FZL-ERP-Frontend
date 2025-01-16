@@ -21,11 +21,14 @@ export default function Index() {
 	const [data2, setData] = useState('');
 
 	useEffect(() => {
-		if (data && data?.challan_entry && data?.item_for !== 'thread') {
+		const hasData = data && data?.challan_entry;
+		const isThread =
+			data?.item_for === 'thread' || data?.item_for === 'sample_thread';
+		if (hasData && !isThread) {
 			Pdf(data)?.getDataUrl((dataUrl) => {
 				setData(dataUrl);
 			});
-		} else if (data && data?.challan_entry && data?.item_for === 'thread') {
+		} else if (hasData && isThread) {
 			ThreadPdf(data)?.getDataUrl((dataUrl) => {
 				setData(dataUrl);
 			});

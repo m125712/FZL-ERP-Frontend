@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
-import { CalenderIcon } from '@/assets/icons';
 import { format } from 'date-fns';
+import { Calendar } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 
 import {
@@ -11,7 +11,7 @@ import {
 import cn from '@lib/cn';
 
 const SimpleDatePicker = ({
-	className,
+	className = '',
 	selected,
 	placeholder = '',
 	onChange = () => {},
@@ -25,13 +25,12 @@ const SimpleDatePicker = ({
 				'input input-secondary flex w-full items-center justify-between rounded border-secondary/30 bg-base-100 px-2 text-left text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-secondary/50',
 				disabled
 					? 'input-disabled cursor-not-allowed border-error'
-					: 'cursor-pointer',
-				className
+					: 'cursor-pointer'
 			)}
 			onClick={onClick}
 			ref={ref}>
 			{value ? value : placeholder ? placeholder : 'Select Date'}
-			<CalenderIcon className='w-4' />
+			<Calendar className='mb-0.5 ml-1 w-4' />
 		</button>
 	));
 	return (

@@ -2,6 +2,11 @@ import { formatDistanceStrict } from 'date-fns';
 
 import { DateTime } from '@/ui';
 
+const getSLicedValue = (value, length = 7) => {
+	if (value.length < length) return value;
+	return value.slice(0, length) + '...';
+};
+
 export const sample_lead_time_columns = [
 	{
 		accessorKey: 'sample_order_no',
@@ -41,12 +46,12 @@ export const sample_lead_time_columns = [
 	// 			'N/A'
 	// 		),
 	// },
-	{
-		accessorKey: 'status',
-		header: 'Status',
-		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
-	},
+	// {
+	// 	accessorKey: 'status',
+	// 	header: 'Status',
+	// 	enableColumnFilter: false,
+	// 	cell: (info) => info.getValue(),
+	// },
 	{
 		accessorKey: 'delivery_order_quantity',
 		header: 'Delivery Qty',
@@ -66,23 +71,23 @@ export const order_entry_feed_columns = [
 		accessorKey: 'party_name',
 		header: 'Party Name',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
+		cell: (info) => getSLicedValue(info.getValue()),
 	},
 	{
 		accessorKey: 'marketing_name',
 		header: 'S & M',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
+		cell: (info) => getSLicedValue(info.getValue()),
 	},
 	{
 		accessorKey: 'item',
 		header: 'Item',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
+		cell: (info) => getSLicedValue(info.getValue(), 10),
 	},
 	{
 		accessorKey: 'quantity',
-		header: 'Total Quantity',
+		header: 'Total',
 		enableColumnFilter: false,
 		cell: (info) => info.getValue(),
 	},
@@ -99,14 +104,14 @@ export const pi_register_columns = [
 		accessorKey: 'party_name',
 		header: 'Party Name',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
+		cell: (info) => getSLicedValue(info.getValue()),
 	},
-	{
-		accessorKey: 'bank_name',
-		header: 'Bank',
-		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
-	},
+	// {
+	// 	accessorKey: 'bank_name',
+	// 	header: 'Bank',
+	// 	enableColumnFilter: false,
+	// 	cell: (info) => info.getValue(),
+	// },
 	{
 		accessorKey: 'total_pi_value',
 		header: 'PI Value(USD)',

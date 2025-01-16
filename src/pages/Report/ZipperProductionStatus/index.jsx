@@ -7,6 +7,7 @@ import { useAccess } from '@/hooks';
 import ReactTable from '@/components/Table';
 import { CustomLink, DateTime, StatusButton } from '@/ui';
 
+import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
 
 import { ProductionStatus } from '../utils';
@@ -178,6 +179,104 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+			{
+				accessorFn: (row) =>
+					row.total_quantity - row.total_packing_list_quantity,
+				id: 'prod_balance_quantity',
+				header: 'Balance QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
+			{
+				accessorFn: (row) => {
+					return row.dyeing_batch
+						?.map((item) => item.dyeing_batch_number)
+						.join(', ');
+				},
+				id: 'dyeing_batch',
+				header: 'Dyeing Batch',
+				enableColumnFilter: false,
+				cell: ({ row }) => {
+					const { dyeing_batch } = row.original;
+
+					if (!dyeing_batch?.length) return '--';
+
+					return dyeing_batch?.map((item) => {
+						return (
+							<div
+								key={item.dyeing_batch_number}
+								className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'>
+								<CustomLink
+									label={item.dyeing_batch_number}
+									url={`/dyeing-and-iron/zipper-batch/${item.dyeing_batch_uuid}`}
+									openInNewTab={true}
+								/>
+								<div className='flex items-center gap-2'>
+									<DateTime
+										date={item.dyeing_batch_date}
+										customizedDateFormate='dd MMM, yy'
+										isTime={false}
+									/>
+									<span
+										className={cn(
+											'badge badge-error badge-xs',
+											item.received && 'bg-success'
+										)}
+									/>
+								</div>
+							</div>
+						);
+					});
+				},
+			},
+			{
+				accessorFn: (row) => {
+					return row.finishing_batch
+						?.map((item) => item.finishing_batch_number)
+						.join(', ');
+				},
+				id: 'finishing_batch',
+				header: 'Finishing Batch',
+				enableColumnFilter: false,
+				cell: ({ row }) => {
+					const { finishing_batch } = row.original;
+
+					if (!finishing_batch?.length) return '--';
+
+					return finishing_batch?.map((item) => {
+						const accomplishedPercentage =
+							Math.round(
+								((item.finishing_batch_quantity -
+									item.balance_quantity) /
+									item.finishing_batch_quantity) *
+									100
+							) || 0;
+						return (
+							<div
+								key={item.finishing_batch_number}
+								className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'>
+								<CustomLink
+									label={item.finishing_batch_number}
+									url={`/planning/finishing-batch/${item.finishing_batch_uuid}`}
+									openInNewTab={true}
+								/>
+								<div className='flex items-center gap-2'>
+									<DateTime
+										date={item.finishing_batch_date}
+										customizedDateFormate='dd MMM, yy'
+										isTime={false}
+									/>
+									<span className='badge badge-secondary badge-xs'>
+										{accomplishedPercentage}%
+									</span>
+								</div>
+							</div>
+						);
+					});
+				},
+			},
+
 			{
 				accessorKey: 'assembly_production_quantity',
 				header: (

@@ -57,7 +57,7 @@ export default function Index(data, date, item) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', '*', '*', '*', '*', 50, 20, 55, 60, 70],
+					widths: ['*', 40, 45, '*', 50, 50, 35, 20, 55, 60, 70],
 					body: [
 						// * Header
 						TableHeader(node),

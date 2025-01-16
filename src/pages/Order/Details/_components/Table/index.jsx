@@ -36,6 +36,16 @@ export default function Index({
 		[order_entry]
 	);
 
+	let colspan = 1; // * colspan for delivery quantity
+
+	if (!is_sample) {
+		colspan += 3;
+
+		if (item_name?.toLowerCase() === 'vislon') colspan += 1;
+		if (item_name?.toLowerCase() === 'metal') colspan += 2;
+	}
+
+	console.log(colspan);
 	return (
 		<ReactTable title='Details' data={order_entry} columns={columns}>
 			<tr className='bg-slate-200 text-lg font-bold'>
@@ -46,7 +56,7 @@ export default function Index({
 				<td className='px-3 py-1'>{total.piQuantity}</td>
 				<td className='px-3 py-1'>{total.rejectQuantity}</td>
 				<td className='px-3 py-1'>{total.shortQuantity}</td>
-				<td></td>
+				<td colSpan={colspan}></td>
 				<td className='px-3 py-1'>{total.deliveryQuantity}</td>
 				<td></td>
 			</tr>

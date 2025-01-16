@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, StatusButton } from '@/ui';
+import { CustomLink, DateTime, SimpleDatePicker, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -23,9 +23,11 @@ export default function Index() {
 	const haveAccess = useAccess('report__thread_production');
 	const { user } = useAuth();
 
+	const [from, setFrom] = useState('');
+	const [to, setTo] = useState('');
 	const [status, setStatus] = useState('pending');
 	const { data, isLoading, url } = useThreadProduction(
-		`status=${status}&${getPath(haveAccess, user?.uuid)}`,
+		`status=${status}&from=${from}&to=${to}&${getPath(haveAccess, user?.uuid)}`,
 		{
 			enabled: !!user?.uuid,
 		}
@@ -69,7 +71,13 @@ export default function Index() {
 					/>
 				),
 			},
-
+			{
+				accessorKey: 'machine_number',
+				header: 'Machine No.',
+				width: 'w-24',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
@@ -259,12 +267,32 @@ export default function Index() {
 				columns={columns}
 				extraClass={'py-0.5'}
 				extraButton={
-					<ProductionStatus
-						className='w-44'
-						status={status}
-						setStatus={setStatus}
-						page='report__thread_production'
-					/>
+					<div className='flex items-center gap-2'>
+						<SimpleDatePicker
+							className='h-9 w-32'
+							key={'from'}
+							value={from}
+							placeholder='From'
+							onChange={(data) => {
+								setFrom(format(data, 'yyyy-MM-dd'));
+							}}
+						/>
+						<SimpleDatePicker
+							className='h-9 w-32'
+							key={'to'}
+							value={to}
+							placeholder='To'
+							onChange={(data) => {
+								setTo(format(data, 'yyyy-MM-dd'));
+							}}
+						/>
+						<ProductionStatus
+							className='w-44'
+							status={status}
+							setStatus={setStatus}
+							page='report__thread_production'
+						/>
+					</div>
 				}
 			/>
 		</>

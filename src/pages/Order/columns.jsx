@@ -342,6 +342,14 @@ export const InfoColumns = ({
 				},
 			},
 			{
+				accessorKey: 'is_canceled',
+				header: 'Canceled',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
+			},
+			{
 				accessorKey: 'status',
 				header: 'Status',
 				enableColumnFilter: false,

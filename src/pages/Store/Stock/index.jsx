@@ -4,7 +4,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, Transfer } from '@/ui';
+import { DateTime, EditDelete, StatusButton, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -75,6 +75,15 @@ export default function Index() {
 				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_priority_material',
+				header: 'Priority',
+				enableColumnFilter: true,
+				width: 'w-24',
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
 			},
 			{
 				accessorKey: 'action_trx',

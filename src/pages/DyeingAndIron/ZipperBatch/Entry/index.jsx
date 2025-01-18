@@ -159,11 +159,12 @@ export default function Index() {
 			const rawMtrPerKg = parseFloat(item.raw_mtr_per_kg) || 1;
 
 			// * for tape order we calculate with size as quantity
-			const itemTotal = getRequiredTapeKg({
-				row: item,
-				type: 'raw',
-				input_quantity: quantity,
-			});
+			const itemTotal =
+				getRequiredTapeKg({
+					row: item,
+					type: 'raw',
+					input_quantity: quantity,
+				}) || 0;
 			return acc + itemTotal;
 		}, 0);
 	}, []);

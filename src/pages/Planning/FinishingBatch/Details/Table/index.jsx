@@ -21,14 +21,26 @@ export default function Table({ entries }) {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'bleaching',
+				header: 'Bleaching',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'size',
 				header: 'Size',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'order_quantity',
-				header: 'Order QTY',
+				accessorKey: 'unit',
+				header: 'Unit',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'batch_quantity',
+				header: 'Batch QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -39,12 +51,11 @@ export default function Table({ entries }) {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'bleaching',
-				header: 'Bleaching',
+				accessorKey: 'balance_quantity',
+				header: 'Balance',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',

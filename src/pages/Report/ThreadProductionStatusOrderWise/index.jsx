@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import { useThreadProductionBatchWise } from '@/state/Report';
+import { useThreadProductionOrderWise } from '@/state/Report';
 import { format, startOfMonth, subMonths } from 'date-fns';
 import { useAccess } from '@/hooks';
 
@@ -13,14 +13,14 @@ import { ProductionStatus } from '../utils';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
-		return `own_uuid=${userUUID}`;
+		return `&own_uuid=${userUUID}`;
 	}
 
-	return `all=true`;
+	return ``;
 };
 
 export default function Index() {
-	const haveAccess = useAccess('report__thread_production');
+	const haveAccess = useAccess('report__thread_production_order_wise');
 	const { user } = useAuth();
 
 	const [from, setFrom] = useState(
@@ -28,16 +28,17 @@ export default function Index() {
 	);
 	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
 	const [status, setStatus] = useState('pending');
-	const { data, isLoading, url } = useThreadProductionBatchWise(
-		`status=${status}&from=${from}&to=${to}&${getPath(haveAccess, user?.uuid)}`,
+	const { data, isLoading, url } = useThreadProductionOrderWise(
+		`status=${status}&from=${from}&to=${to}${getPath(haveAccess, user?.uuid)}`,
 		{
 			enabled: !!user?.uuid,
 		}
 	);
+
 	const info = new PageInfo(
-		'Thread Production Status (Batch wise)',
+		'Thread Production Status (Order wise)',
 		url,
-		'report__thread_production'
+		'report__thread_production_order_wise'
 	);
 
 	useEffect(() => {
@@ -46,40 +47,6 @@ export default function Index() {
 
 	const columns = useMemo(
 		() => [
-			{
-				accessorKey: 'batch_number',
-				header: 'Batch',
-				enableColumnFilter: true,
-				cell: (info) => {
-					const { uuid } = info.row.original;
-					return (
-						<CustomLink
-							label={info.getValue()}
-							url={`/dyeing-and-iron/thread-batch/${uuid}`}
-							openInNewTab={true}
-						/>
-					);
-				},
-			},
-			{
-				accessorFn: (row) => format(row.batch_created_at, 'dd/MM/yy'),
-				id: 'batch_created_at',
-				header: 'Created At',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime
-						date={info.row.original.batch_created_at}
-						isTime={false}
-					/>
-				),
-			},
-			{
-				accessorKey: 'machine_number',
-				header: 'Machine No.',
-				width: 'w-24',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
@@ -137,54 +104,88 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'style',
+				accessorFn: (row) => row.style?.join(', '),
+				id: 'style',
 				header: 'Style',
 				enableColumnFilter: false,
 				width: 'w-24',
-				cell: (info) => info.getValue(),
+		
 			},
 			{
-				accessorKey: 'color',
+				accessorFn: (row) => row.color?.join(', '),
+				id: 'color',
 				header: 'Color',
 				width: 'w-24',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+			
 			},
 			{
-				accessorKey: 'recipe_name',
-				header: 'Shade',
-				width: 'w-24',
+				accessorFn: (row) => {
+					return row.thread_batch
+						?.map((item) => item.finishing_batch_number)
+						.join(', ');
+				},
+				id: 'thread_batch',
+				header: 'Thread Batch',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: ({ row }) => {
+					const { thread_batch } = row.original;
+
+					if (!thread_batch?.length) return '--';
+
+					return thread_batch?.map((item) => {
+						const accomplishedPercentage =
+							Math.round(
+								((item.batch_quantity - item.balance_quantity) /
+									item.batch_quantity) *
+									100
+							) || 0;
+						return (
+							<div
+								key={item.batch_number}
+								className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'>
+								<CustomLink
+									label={item.batch_number}
+									url={`/planning/finishing-batch/${item.batch_uuid}`}
+									openInNewTab={true}
+								/>
+								<div className='flex items-center gap-2'>
+									<DateTime
+										date={item.batch_date}
+										customizedDateFormate='dd MMM, yy'
+										isTime={false}
+									/>
+									<span className='badge badge-secondary badge-xs'>
+										{accomplishedPercentage}%
+									</span>
+								</div>
+							</div>
+						);
+					});
+				},
 			},
+			// {
+			// 	accessorFn: (row) =>
+			// 		format(row.swatch_approval_date, 'dd/MM/yy'),
+			// 	id: 'swatch_approval_date',
+			// 	header: 'Swatch',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<DateTime
+			// 			date={info.row.original.swatch_approval_date}
+			// 			isTime={false}
+			// 		/>
+			// 	),
+			// },
 			{
-				accessorFn: (row) =>
-					format(row.swatch_approval_date, 'dd/MM/yy'),
-				id: 'swatch_approval_date',
-				header: 'Swatch',
+				accessorFn: (row) => row.count_length_name?.join(', '),
+				id: 'count',
+				header: 'Count/Length',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime
-						date={info.row.original.swatch_approval_date}
-						isTime={false}
-					/>
-				),
-			},
-			{
-				accessorKey: 'count',
-				header: 'Count',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'length',
-				header: 'Length',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_quantity',
-				header: 'Batch QTY',
+				header: 'Order QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -200,25 +201,17 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'is_drying_complete',
-				header: 'Drying',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
-				),
-			},
-			{
 				accessorKey: 'total_coning_production_quantity',
 				header: 'Coning',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'total_packing_list_quantity',
-				header: 'Packing List',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'total_packing_list_quantity',
+			// 	header: 'Packing List',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorFn: (row) =>
 					row.total_delivery_delivered_quantity +

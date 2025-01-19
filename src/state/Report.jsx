@@ -49,12 +49,19 @@ export const useZipperProduction = (query, { enabled = false } = {}) =>
 		enabled,
 	});
 
-export const useThreadProduction = (query, { enabled = false } = {}) =>
+export const useThreadProductionBatchWise = (query, { enabled = false } = {}) =>
 	createGlobalState({
-		queryKey: reportQK.threadProduction(query),
+		queryKey: reportQK.threadProductionBatchWise(query),
 		url: '/report/thread-production-batch-wise-report?' + query,
 		enabled,
 	});
+
+	export const useThreadProductionOrderWise = (query, { enabled = false } = {}) =>
+		createGlobalState({
+			queryKey: reportQK.threadProductionOrderWise(query),
+			url: '/report/thread-production-status-order-wise?' + query,
+			enabled,
+		});
 
 export const useDailyChallan = (query, { enabled = false } = {}) =>
 	createGlobalState({

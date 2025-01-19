@@ -20,6 +20,9 @@ const ProductionReportSM = lazy(
 const ThreadProduction = lazy(
 	() => import('@/pages/Report/ThreadProductionStatus')
 );
+const ThreadProductionOrderWise = lazy(
+	() => import('@/pages/Report/ThreadProductionStatusOrderWise')
+)
 const ZipperProduction = lazy(
 	() => import('@/pages/Report/ZipperProductionStatus')
 );
@@ -45,10 +48,20 @@ export const ReportRoutes = [
 				],
 			},
 			{
-				name: 'Thread Production',
+				name: 'Thread Production (BW)',
 				path: '/report/thread-production',
 				element: <ThreadProduction />,
 				page_name: 'report__thread_production',
+				actions: [
+					'read',
+					'show_own_orders',
+				],
+			},
+			{
+				name: 'Thread Production (OW)',
+				path: '/report/thread-production_order_wise',
+				element: <ThreadProductionOrderWise />,
+				page_name: 'report__thread_production_order_wise',
 				actions: [
 					'read',
 					'show_own_orders',

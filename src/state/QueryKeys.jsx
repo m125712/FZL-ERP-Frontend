@@ -1534,9 +1534,15 @@ export const reportQK = {
 	],
 
 	//* Thread Production
-	threadProduction: (query) => [
+	threadProductionBatchWise: (query) => [
 		...reportQK.all(),
-		'thread-production',
+		'thread-production-batch-wise',
+		query,
+	],
+
+	threadProductionOrderWise: (query) => [
+		...reportQK.all(),
+		'thread-production-order-wise',
 		query,
 	],
 

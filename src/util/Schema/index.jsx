@@ -239,6 +239,7 @@ export const MATERIAL_STOCK_NULL = {
 };
 
 export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
+	purpose: STRING_REQUIRED.default('general'),
 	order_description_uuid: STRING_REQUIRED,
 	trx_to: STRING_REQUIRED,
 	trx_quantity: NUMBER_DOUBLE_REQUIRED,
@@ -248,6 +249,7 @@ export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
 
 export const MATERIAL_TRX_AGAINST_ORDER_NULL = {
 	uuid: null,
+	purpose: 'general',
 	material_uuid: null,
 	order_description_uuid: null,
 	trx_to: '',

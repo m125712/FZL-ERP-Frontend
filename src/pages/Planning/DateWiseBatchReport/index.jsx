@@ -44,8 +44,8 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'item_description',
-				header: 'Item Description',
+				accessorKey: 'batch_number',
+				header: 'B/N',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -56,14 +56,14 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'batch_number',
-				header: 'B/N',
+				accessorKey: 'party_name',
+				header: 'Party',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'party_name',
-				header: 'Party',
+				accessorKey: 'item_description',
+				header: 'Item Description',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

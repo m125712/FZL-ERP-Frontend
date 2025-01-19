@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-import { DateTime, LinkOnly } from '@/ui';
+import { CustomLink, DateTime } from '@/ui';
 
 import QuantityCard from './quantity-card';
 
@@ -32,33 +32,29 @@ export default function Content({ data }) {
 					<tbody>
 						{data?.map((item, index) => {
 							const production_date = item.production_date;
+							const urlDate = format(
+								new Date(production_date),
+								'yyyy-MM-dd'
+							);
 
 							return (
 								<tr key={index} className='border'>
 									<td className='border text-left font-medium'>
-										<LinkOnly
-											title={
+										<CustomLink
+											label={
 												<DateTime
 													date={production_date}
-													customizedDateFormate='dd MMM, yy'
+													customizedDateFormate='ccc dd, MMM yy'
 													isTime={false}
 												/>
 											}
-											id={format(
-												new Date(production_date),
-												'yyyy-MM-dd'
-											)}
-											uri='/planning/finishing-dashboard/batch-report'
+											url={`/planning/finishing-dashboard/batch-report/${urlDate}`}
+											openInNewTab
 										/>
-
-										{format(
-											production_date,
-											'ccc'
-										).toLocaleUpperCase()}
 									</td>
 
 									{item.data?.map((data, index) => (
-										<td>
+										<td key={index}>
 											<QuantityCard
 												data={data}
 												production_date={

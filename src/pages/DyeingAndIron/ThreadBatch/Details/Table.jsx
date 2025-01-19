@@ -52,7 +52,7 @@ export default function Index({ batch_entry }) {
 			},
 			{
 				accessorKey: 'bleaching',
-				header: 'Bleaching     ',
+				header: 'Bleaching',
 				enableColumnFilter: false,
 			},
 			{

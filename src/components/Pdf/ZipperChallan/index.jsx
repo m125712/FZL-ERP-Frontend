@@ -14,6 +14,7 @@ const createNode = (fields) => fields.map((field) => getTable(...field));
 
 const zipperNode = createNode([
 	['item_description', 'Item Description'],
+	['specification', 'Specification'],
 	['style', 'Style'],
 	['color', 'Color'],
 	['size', 'Size', 'right'],
@@ -23,6 +24,7 @@ const zipperNode = createNode([
 
 const tapeNode = createNode([
 	['item_description', 'Item Description'],
+	['specification', 'Specification'],
 	['style', 'Style'],
 	['color', 'Color'],
 	['size', 'Size', 'right'],
@@ -32,6 +34,7 @@ const tapeNode = createNode([
 
 const sliderNode = createNode([
 	['item_description', 'Item Description'],
+	['specification', 'Specification'],
 	['style', 'Style'],
 	['quantity', 'Qty (pcs)', 'right'],
 	['poli_quantity', 'Poly', 'right'],
@@ -53,6 +56,7 @@ export default function Index(data) {
 		challan_entry?.reduce(
 			(acc, item) => {
 				acc.itemDescriptions.add(item.item_description);
+				acc.specifications.add(item.specification);
 				acc.styles.add(item.style);
 				acc.colors.add(item.color);
 				acc.sizes.add(item.size);
@@ -63,6 +67,7 @@ export default function Index(data) {
 			},
 			{
 				itemDescriptions: new Set(),
+				specifications: new Set(),
 				styles: new Set(),
 				colors: new Set(),
 				sizes: new Set(),
@@ -113,8 +118,8 @@ export default function Index(data) {
 				table: {
 					headerRows: 1,
 					widths: isSliderChallan
-						? [150, 150, 80, 80]
-						: [140, 130, 70, 60, 60, 40],
+						? [70, 110, 90, 80, 80]
+						: [70, 110, 90, 70, 60, 60, 40],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -148,6 +153,19 @@ export default function Index(data) {
 
 						isSliderChallan
 							? [
+									{
+										text: `Total ${
+											uniqueCounts(
+												challan_entry?.filter(
+													(item) =>
+														item.packing_number ===
+														pl.packing_number
+												)
+											).itemDescriptions?.size
+										} Desc`,
+										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
 									{
 										text: `Total ${
 											uniqueCounts(
@@ -213,7 +231,19 @@ export default function Index(data) {
 										bold: true,
 										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
-
+									{
+										text: `Total ${
+											uniqueCounts(
+												challan_entry?.filter(
+													(item) =>
+														item.packing_number ===
+														pl.packing_number
+												)
+											).itemDescriptions?.size
+										} Specification`,
+										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
 									{
 										text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).styles?.size} Style`,
 										bold: true,

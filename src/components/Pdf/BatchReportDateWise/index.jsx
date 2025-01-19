@@ -11,10 +11,10 @@ import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
-	getTable('item_description', 'Item Description'),
 	getTable('order_number', 'O/N'),
 	getTable('batch_number', 'B/N'),
 	getTable('party_name', 'Party'),
+	getTable('item_description', 'Item Description'),
 	getTable('style', 'Style'),
 	getTable('color', 'Color'),
 	getTable('size', 'Size'),
@@ -57,7 +57,7 @@ export default function Index(data, date, item) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', 40, 45, '*', 50, 50, 35, 20, 55, 60, 70],
+					widths: [60, 60, '*', '*', 50, 50, 35, 20, 55, 60, 70],
 					body: [
 						// * Header
 						TableHeader(node),

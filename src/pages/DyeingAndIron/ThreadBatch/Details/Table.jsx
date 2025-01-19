@@ -51,13 +51,13 @@ export default function Index({ batch_entry }) {
 				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'count_length',
-				header: 'Count Length',
+				accessorKey: 'bleaching',
+				header: 'Bleaching     ',
 				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'bleaching',
-				header: 'Bleaching     ',
+				accessorKey: 'count_length',
+				header: 'Count Length',
 				enableColumnFilter: false,
 			},
 			{

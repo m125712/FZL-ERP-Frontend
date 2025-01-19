@@ -6,7 +6,6 @@ import { DateTime, LinkWithCopy } from '@/ui';
 export default function Table({ entries }) {
 	const total_qty = entries.reduce(
 		(a, b) => {
-			a.Qty += b.quantity;
 			a.batchQty += b.batch_quantity;
 			a.balanceQty += b.balance_quantity;
 
@@ -14,7 +13,6 @@ export default function Table({ entries }) {
 		},
 		{
 			batchQty: 0,
-			Qty: 0,
 			balanceQty: 0,
 		}
 	);
@@ -54,12 +52,6 @@ export default function Table({ entries }) {
 			{
 				accessorKey: 'batch_quantity',
 				header: 'Batch QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'quantity',
-				header: 'Quantity',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -110,10 +102,7 @@ export default function Table({ entries }) {
 						colSpan={5}>
 						Total:
 					</td>
-					<td className='px-3 py-2 text-sm'>
-						{total_qty.batchQty}
-					</td>
-					<td className='px-3 py-2 text-sm'>{total_qty.Qty}</td>
+					<td className='px-3 py-2 text-sm'>{total_qty.batchQty}</td>
 					<td className='px-3 py-2 text-sm'>
 						{total_qty.balanceQty}
 					</td>

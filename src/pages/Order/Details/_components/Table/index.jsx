@@ -36,19 +36,18 @@ export default function Index({
 		[order_entry]
 	);
 
-	let colspan = 1; // * colspan for delivery quantity
+	let colspan = 0; // * colspan for delivery quantity
 
 	if (!is_sample) {
-		colspan += 3;
+		colspan += 1;
 
-		if (item_name?.toLowerCase() === 'vislon') colspan += 1;
-		if (item_name?.toLowerCase() === 'metal') colspan += 2;
+		// if (item_name?.toLowerCase() === 'vislon') colspan += 1;
+		// if (item_name?.toLowerCase() === 'metal') colspan += 2;
 	}
 
-	console.log(colspan);
 	return (
 		<ReactTable title='Details' data={order_entry} columns={columns}>
-			<tr className='bg-slate-200 text-lg font-bold'>
+			<tr className='bg-slate-200 font-bold'>
 				<td colSpan={6} className='text-right'>
 					Total:
 				</td>
@@ -56,7 +55,20 @@ export default function Index({
 				<td className='px-3 py-1'>{total.piQuantity}</td>
 				<td className='px-3 py-1'>{total.rejectQuantity}</td>
 				<td className='px-3 py-1'>{total.shortQuantity}</td>
-				<td colSpan={colspan}></td>
+				{!is_sample && (
+					<td className='px-3 py-1'>{total.tapeQuantity}</td>
+				)}
+				{!is_sample && item_name?.toLowerCase() !== 'nylon' && (
+					<td className='px-3 py-1'></td>
+				)}
+				{!is_sample && item_name?.toLowerCase() === 'metal' && (
+					<td className='px-3 py-1'></td>
+				)}
+				{!is_sample && (
+					<td className='px-3 py-1'>{total.sliderQuantity}</td>
+				)}
+				{!is_sample && <td colSpan={colspan}></td>}
+				<td className='px-3 py-1'>{total.warehouseQuantity}</td>
 				<td className='px-3 py-1'>{total.deliveryQuantity}</td>
 				<td></td>
 			</tr>

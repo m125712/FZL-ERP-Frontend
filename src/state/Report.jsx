@@ -49,12 +49,19 @@ export const useZipperProduction = (query, { enabled = false } = {}) =>
 		enabled,
 	});
 
-export const useThreadProduction = (query, { enabled = false } = {}) =>
+export const useThreadProductionBatchWise = (query, { enabled = false } = {}) =>
 	createGlobalState({
-		queryKey: reportQK.threadProduction(query),
+		queryKey: reportQK.threadProductionBatchWise(query),
 		url: '/report/thread-production-batch-wise-report?' + query,
 		enabled,
 	});
+
+	export const useThreadProductionOrderWise = (query, { enabled = false } = {}) =>
+		createGlobalState({
+			queryKey: reportQK.threadProductionOrderWise(query),
+			url: '/report/thread-production-status-order-wise?' + query,
+			enabled,
+		});
 
 export const useDailyChallan = (query, { enabled = false } = {}) =>
 	createGlobalState({
@@ -114,10 +121,10 @@ export const useProductionReportThreadPartyWise = (
 		enabled,
 	});
 
-export const useSample = (date, is_sample = 1) =>
+export const useSample = (date, toDate, is_sample = 1) =>
 	createGlobalState({
-		queryKey: reportQK.sample(date, is_sample),
-		url: `/report/sample-report-by-date?date=${date}&is_sample=${is_sample}`,
+		queryKey: reportQK.sample(date, toDate, is_sample),
+		url: `/report/sample-report-by-date?date=${date}&to_date=${toDate}&is_sample=${is_sample}`,
 	});
 export const useSampleCombined = (date, is_sample = 1) =>
 	createGlobalState({

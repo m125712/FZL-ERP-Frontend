@@ -1534,9 +1534,15 @@ export const reportQK = {
 	],
 
 	//* Thread Production
-	threadProduction: (query) => [
+	threadProductionBatchWise: (query) => [
 		...reportQK.all(),
-		'thread-production',
+		'thread-production-batch-wise',
+		query,
+	],
+
+	threadProductionOrderWise: (query) => [
+		...reportQK.all(),
+		'thread-production-order-wise',
 		query,
 	],
 
@@ -1569,10 +1575,11 @@ export const reportQK = {
 	],
 
 	// * Sample Report
-	sample: (date, is_sample) => [
+	sample: (date, toDate, is_sample) => [
 		...reportQK.all(),
 		'sample-report-by-date',
 		date,
+		toDate,
 		is_sample,
 	],
 	sampleCombined: (date, is_sample) => [

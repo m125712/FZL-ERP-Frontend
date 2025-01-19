@@ -156,6 +156,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'warehouse',
+				header: 'Warehouse',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'delivered',
 				header: 'Delivered',
 				enableColumnFilter: false,

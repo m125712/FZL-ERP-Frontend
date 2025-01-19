@@ -22,7 +22,7 @@ const ThreadProduction = lazy(
 );
 const ThreadProductionOrderWise = lazy(
 	() => import('@/pages/Report/ThreadProductionStatusOrderWise')
-)
+);
 const ZipperProduction = lazy(
 	() => import('@/pages/Report/ZipperProductionStatus')
 );
@@ -42,70 +42,49 @@ export const ReportRoutes = [
 				path: '/report/zipper-production',
 				element: <ZipperProduction />,
 				page_name: 'report__zipper_production',
-				actions: [
-					'read',
-					'show_own_orders',
-				],
+				actions: ['read', 'show_own_orders'],
 			},
 			{
 				name: 'Thread Production (BW)',
-				path: '/report/thread-production',
+				path: '/report/thread-production-batch-wise',
 				element: <ThreadProduction />,
-				page_name: 'report__thread_production',
-				actions: [
-					'read',
-					'show_own_orders',
-				],
+				page_name: 'report__thread_production_batch_wise',
+				actions: ['read', 'show_own_orders'],
 			},
 			{
 				name: 'Thread Production (OW)',
-				path: '/report/thread-production_order_wise',
+				path: '/report/thread-production-order-wise',
 				element: <ThreadProductionOrderWise />,
 				page_name: 'report__thread_production_order_wise',
-				actions: [
-					'read',
-					'show_own_orders',
-				],
+				actions: ['read', 'show_own_orders'],
 			},
 			{
 				name: 'Daily Challan',
 				path: '/report/daily-challan',
 				element: <DailyChallan />,
 				page_name: 'report__daily_challan',
-				actions: [
-					'read',
-					'show_own_orders',
-				],
+				actions: ['read', 'show_own_orders'],
 			},
 			{
 				name: 'PI Register',
 				path: '/report/pi-register',
 				element: <PIRegister />,
 				page_name: 'report__pi_register',
-				actions: [
-					'read',
-					'show_own_orders',
-				],
+				actions: ['read', 'show_own_orders'],
 			},
 			{
 				name: 'PI To Be Submitted',
 				path: '/report/pi-to-be-submitted',
 				element: <PIToBeSubmit />,
 				page_name: 'report__pi_to_be_submitted',
-				actions: [
-					'read',
-					'show_own_orders',
-				],
+				actions: ['read', 'show_own_orders'],
 			},
 			{
 				name: 'LC Due',
 				path: '/report/lc-due',
 				element: <LCDue />,
 				page_name: 'report__lc_due',
-				actions: [
-					'read',
-					'show_own_orders',
-				],
+				actions: ['read', 'show_own_orders'],
 			},
 			{
 				name: 'Production Report (Director)',
@@ -119,20 +98,14 @@ export const ReportRoutes = [
 				path: '/report/production-report/sm',
 				element: <ProductionReportSM />,
 				page_name: 'report__production_report_sm',
-				actions: [
-					'read',
-					'show_own_orders',
-				],
+				actions: ['read', 'show_own_orders'],
 			},
 			{
 				name: 'Delivery Statement',
 				path: '/report/delivery-statement',
 				element: <DeliveryStatement />,
 				page_name: 'report__delivery_statement',
-				actions: [
-					'read',
-					'show_own_orders',
-				],
+				actions: ['read', 'show_own_orders'],
 			},
 			{
 				name: 'Store',
@@ -146,11 +119,7 @@ export const ReportRoutes = [
 				path: '/report/daily-production',
 				element: <DailyProduction />,
 				page_name: 'report__daily_production',
-				actions: [
-					'read',
-					'show_own_orders',
-
-				],
+				actions: ['read', 'show_own_orders'],
 			},
 			{
 				name: 'Production Statement',

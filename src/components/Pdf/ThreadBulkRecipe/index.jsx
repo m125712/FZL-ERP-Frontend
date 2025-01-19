@@ -85,6 +85,13 @@ export default function Index(batch, shade_recipes_entries, programs) {
 	const headerHeight = 200;
 	let footerHeight = 50;
 	const { batch_entry } = batch;
+	shade_recipes_entries?.forEach((item) => {
+		item.bulk = Number(item.bulk).toFixed(3);
+	});
+	programs?.forEach((item) => {
+		item.bulk = Number(item.bulk).toFixed(3);
+	});
+
 	const processDyePrograms = (programs) => {
 		if (!programs?.length) return [];
 
@@ -107,6 +114,7 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			!e?.material_name.toLowerCase().includes('yellow')
 	);
 	const shade = yellow?.concat(red)?.concat(other);
+
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
 			xMargin,

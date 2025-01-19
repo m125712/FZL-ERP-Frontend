@@ -42,10 +42,11 @@ export default function Index() {
 		return shade_recipe?.programs?.map((item) => ({
 			...item,
 			quantity: Number(item?.quantity).toFixed(3),
-			bulk: Number((volume * parseFloat(item?.quantity)).toFixed(3)),
+			bulk: Number((volume * item?.quantity).toFixed(3)),
 		}));
 	}, [shade_recipe, volume]);
-
+	console.log(programs, 'programs');
+	console.log(shade_recipes_entries, 'shade_recipes_entries');
 	// ! FOR TESTING
 	const [data, setData] = useState('');
 

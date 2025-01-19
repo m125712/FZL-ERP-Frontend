@@ -113,7 +113,7 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [70, 130, 60, 60, 60, 60, 60],
+					widths: [70, 130, 60, 60, 60, 50, 50],
 					body: [
 						[
 							{

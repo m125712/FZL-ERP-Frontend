@@ -102,17 +102,25 @@ export default function Index({ initial_order, idx }) {
 			totals.piQuantity += parseFloat(item.total_pi_quantity) || 0;
 			totals.deliveryQuantity +=
 				parseFloat(item.total_delivery_quantity) || 0;
+			totals.warehouseQuantity +=
+				parseFloat(item.total_warehouse_quantity) || 0;
 			totals.rejectQuantity +=
 				parseFloat(item.total_reject_quantity) || 0;
 			totals.shortQuantity += parseFloat(item.total_short_quantity) || 0;
+			totals.tapeQuantity += parseFloat(item.dying_and_iron_prod) || 0;
+			totals.sliderQuantity += parseFloat(item.coloring_prod) || 0;
+
 			return totals;
 		},
 		{
 			Quantity: 0,
 			piQuantity: 0,
 			deliveryQuantity: 0,
+			warehouseQuantity: 0,
 			rejectQuantity: 0,
 			shortQuantity: 0,
+			tapeQuantity: 0,
+			sliderQuantity: 0,
 		}
 	);
 

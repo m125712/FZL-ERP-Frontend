@@ -44,14 +44,14 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'batch_number',
-				header: 'B/N',
+				accessorKey: 'order_number',
+				header: 'O/N',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'order_number',
-				header: 'O/N',
+				accessorKey: 'batch_number',
+				header: 'B/N',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

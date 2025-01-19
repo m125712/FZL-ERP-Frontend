@@ -4,7 +4,20 @@ import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, LinkWithCopy } from '@/ui';
 
 export default function Table({ entries }) {
-	const total_qty = entries.reduce((a, b) => a + b.quantity, 0);
+	const total_qty = entries.reduce(
+		(a, b) => {
+			a.Qty += b.quantity;
+			a.batchQty += b.batch_quantity;
+			a.balanceQty += b.balance_quantity;
+
+			return a;
+		},
+		{
+			batchQty: 0,
+			Qty: 0,
+			balanceQty: 0,
+		}
+	);
 
 	const columns = useMemo(
 		() => [
@@ -91,15 +104,22 @@ export default function Table({ entries }) {
 				title='Finishing Batch Details'
 				data={entries}
 				columns={columns}>
-				<tr className='bg-slate-200'>
+				<tr className='bg-slate-200 font-semibold'>
 					<td
 						className='px-4 py-2 text-right text-sm font-semibold'
-						colSpan={4}>
+						colSpan={5}>
 						Total:
 					</td>
-					<td className='px-3 py-2 text-sm' colSpan={5}>
-						{total_qty}
+					<td className='px-3 py-2 text-sm'>
+						{total_qty.batchQty}
 					</td>
+					<td className='px-3 py-2 text-sm'>{total_qty.Qty}</td>
+					<td className='px-3 py-2 text-sm'>
+						{total_qty.balanceQty}
+					</td>
+					<td></td>
+					<td></td>
+					<td></td>
 				</tr>
 			</ReactTableTitleOnly>
 		</div>

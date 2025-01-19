@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useThreadProduction } from '@/state/Report';
-import { format } from 'date-fns';
+import { format, startOfMonth, subMonths } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
@@ -23,8 +23,10 @@ export default function Index() {
 	const haveAccess = useAccess('report__thread_production');
 	const { user } = useAuth();
 
-	const [from, setFrom] = useState('');
-	const [to, setTo] = useState('');
+	const [from, setFrom] = useState(
+		format(startOfMonth(subMonths(new Date(), 2)), 'yyyy-MM-dd')
+	);
+	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
 	const [status, setStatus] = useState('pending');
 	const { data, isLoading, url } = useThreadProduction(
 		`status=${status}&from=${from}&to=${to}&${getPath(haveAccess, user?.uuid)}`,
@@ -269,7 +271,7 @@ export default function Index() {
 				extraButton={
 					<div className='flex items-center gap-2'>
 						<SimpleDatePicker
-							className='h-9 w-32'
+							className='h-[2.34rem] w-32'
 							key={'from'}
 							value={from}
 							placeholder='From'
@@ -278,7 +280,7 @@ export default function Index() {
 							}}
 						/>
 						<SimpleDatePicker
-							className='h-9 w-32'
+							className='h-[2.34rem] w-32'
 							key={'to'}
 							value={to}
 							placeholder='To'

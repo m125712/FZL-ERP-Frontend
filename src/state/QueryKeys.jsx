@@ -1569,10 +1569,11 @@ export const reportQK = {
 	],
 
 	// * Sample Report
-	sample: (date, is_sample) => [
+	sample: (date, toDate, is_sample) => [
 		...reportQK.all(),
 		'sample-report-by-date',
 		date,
+		toDate,
 		is_sample,
 	],
 	sampleCombined: (date, is_sample) => [

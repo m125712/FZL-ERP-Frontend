@@ -18,8 +18,8 @@ export default function Content({ data }) {
 				Item Production Quantity
 			</span>
 
-			<div className='overflow-x-auto'>
-				<table className='table table-xs w-full'>
+			<div className='h-96 overflow-x-auto'>
+				<table className='table table-pin-rows table-xs w-full'>
 					<thead>
 						<tr className='bg-primary text-left text-lg font-semibold capitalize text-primary-content'>
 							{header?.map((item, index) => (

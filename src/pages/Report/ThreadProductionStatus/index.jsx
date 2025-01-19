@@ -285,6 +285,7 @@ export default function Index() {
 							onChange={(data) => {
 								setTo(format(data, 'yyyy-MM-dd'));
 							}}
+							dateFormat='yy/MM/dd'
 						/>
 						<ProductionStatus
 							className='w-44'

@@ -3,11 +3,9 @@ import { useSample } from '@/state/Report';
 import { format } from 'date-fns';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
-
-import Header from './Header';
 
 export default function Index() {
 	const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
@@ -154,15 +152,22 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<>
-			<Header date={date} setDate={setDate} />
-			<ReactTable
-				title={info.getTitle()}
-				accessor={false}
-				data={data}
-				columns={columns}
-				extraClass={'py-0.5'}
-			/>
-		</>
+		<ReactTable
+			title={info.getTitle()}
+			accessor={false}
+			data={data}
+			columns={columns}
+			extraClass={'py-0.5'}
+			extraButton={
+				<SimpleDatePicker
+					className='h-9 w-32'
+					value={date}
+					placeholder='Select Date'
+					onChange={(data) => {
+						setDate(format(data, 'yyyy-MM-dd'));
+					}}
+				/>
+			}
+		/>
 	);
 }

@@ -62,12 +62,7 @@ export function BarChartHorizontal2(props) {
 					config={chartConfig}>
 					<BarChart data={chartData} layout='vertical'>
 						<CartesianGrid />
-						<YAxis
-							dataKey='item_name'
-							type='category'
-							axisLine={true}
-							width={120}
-						/>
+						<YAxis dataKey='item_name' type='category' />
 						<XAxis
 							dataKey='total'
 							type='number'

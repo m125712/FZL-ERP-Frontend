@@ -160,7 +160,9 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text: batch?.total_yarn_quantity + ' (KG)',
+									text:
+										batch?.total_yarn_quantity.toFixed(3) +
+										' (KG)',
 									// text:
 									// 	batch?.total_yarn_quantity +
 									// 	'/' +
@@ -180,9 +182,10 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text:
+									text: Number(
 										batch?.water_capacity *
-										batch?.total_yarn_quantity,
+											batch?.total_yarn_quantity
+									).toFixed(3),
 								},
 							],
 							[

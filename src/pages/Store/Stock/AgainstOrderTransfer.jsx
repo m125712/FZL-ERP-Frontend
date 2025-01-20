@@ -165,7 +165,7 @@ export default function Index({
 		},
 		{
 			value: 'tape',
-			label: 'Tape Making',
+			label: 'Tape Loom',
 		},
 		{
 			value: 'finishing_floor',

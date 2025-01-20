@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { useDyeingBatchDetailsByUUID } from '@/state/Dyeing';
 import { useParams } from 'react-router-dom';
 import { useAccess } from '@/hooks';
-import  Pdf from '@/components/Pdf/ZipperTravelCard';
+
+import Pdf from '@/components/Pdf/ZipperTravelCard';
+
 import Information from './Information';
 import Table from './Table';
 

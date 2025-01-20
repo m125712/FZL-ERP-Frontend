@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 import { useDyeingBatchDetailsByUUID } from '@/state/Dyeing';
 import { useParams } from 'react-router-dom';
 import { useAccess } from '@/hooks';
-import  Pdf from '@/components/Pdf/ZipperTravelCard';
+
+import secondPdf from '@/components/Pdf/ZipperBulkRecipe';
+import Pdf from '@/components/Pdf/ZipperTravelCard';
+
 import Information from './Information';
 import Table from './Table';
 
@@ -18,10 +21,18 @@ export default function Index() {
 
 	// if (!planningSNO) return <Navigate to='/not-found' />;
 	const [data, setData] = useState('');
+	const [secondData, setSecondData] = useState('');
 
 	useEffect(() => {
 		if (batch && batch?.dyeing_batch_entry) {
 			Pdf(batch)?.getDataUrl((dataUrl) => {
+				setData(dataUrl);
+			});
+		}
+	}, [batch]);
+	useEffect(() => {
+		if (batch && batch?.dyeing_batch_entry) {
+			secondPdf(batch)?.getDataUrl((dataUrl) => {
 				setData(dataUrl);
 			});
 		}
@@ -33,6 +44,10 @@ export default function Index() {
 		<div className='space-y-2'>
 			<iframe
 				src={data}
+				className='h-[40rem] w-full rounded-md border-none'
+			/>
+			<iframe
+				src={secondData}
 				className='h-[40rem] w-full rounded-md border-none'
 			/>
 			<Information batch={batch} />

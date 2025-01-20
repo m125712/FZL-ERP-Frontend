@@ -318,7 +318,8 @@ export default function Index() {
 						handelDelete={handelDelete}
 						showDelete={
 							haveAccess.includes('delete') &&
-							info.row.original?.packing_numbers?.length < 2
+							info.row.original?.packing_numbers?.length < 2 &&
+							info.row.original?.gate_pass == 0
 						}
 						showUpdate={haveAccess.includes('update')}
 					/>
@@ -400,7 +401,7 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					url='/delivery/challan/delete-challan-packing-list-ref'
+					url={`/delivery/challan/delete-challan-packing-list-ref/${deleteItem.itemName}`}
 					{...{
 						deleteItem,
 						setDeleteItem,

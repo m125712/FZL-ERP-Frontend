@@ -186,6 +186,9 @@ export default function Index(data) {
 
 		// * Main Table
 		content: packingListTable.map((pl, index) => [
+			index > 0 && index % 4 === 0
+				? { text: '', pageBreak: 'before' }
+				: null,
 			{
 				text: `PL NO: ${pl.packing_number} ${
 					isSampleZipper

@@ -14,6 +14,7 @@ const createNode = (fields) => fields.map((field) => getTable(...field));
 
 const zipperNode = createNode([
 	['item_description', 'Item Description'],
+	['specification', 'Specification'],
 	['style', 'Style'],
 	['color', 'Color'],
 	['size', 'Size', 'right'],
@@ -23,6 +24,7 @@ const zipperNode = createNode([
 
 const tapeNode = createNode([
 	['item_description', 'Item Description'],
+	['specification', 'Specification'],
 	['style', 'Style'],
 	['color', 'Color'],
 	['size', 'Size', 'right'],
@@ -32,6 +34,7 @@ const tapeNode = createNode([
 
 const sliderNode = createNode([
 	['item_description', 'Item Description'],
+	['specification', 'Specification'],
 	['style', 'Style'],
 	['quantity', 'Qty (pcs)', 'right'],
 	['poli_quantity', 'Poly', 'right'],
@@ -43,6 +46,7 @@ export default function Index(data) {
 	const isTapeChallan = data?.item_for === 'tape';
 	const isSliderChallan = data?.item_for === 'slider';
 	const isSampleZipper = data?.item_for === 'sample_zipper';
+	const packingListTable = [];
 	const { packing_list_numbers, challan_entry } = data;
 
 	let node = zipperNode;
@@ -53,6 +57,7 @@ export default function Index(data) {
 		challan_entry?.reduce(
 			(acc, item) => {
 				acc.itemDescriptions.add(item.item_description);
+				acc.specifications.add(item.specification);
 				acc.styles.add(item.style);
 				acc.colors.add(item.color);
 				acc.sizes.add(item.size);
@@ -63,6 +68,7 @@ export default function Index(data) {
 			},
 			{
 				itemDescriptions: new Set(),
+				specifications: new Set(),
 				styles: new Set(),
 				colors: new Set(),
 				sizes: new Set(),
@@ -71,6 +77,87 @@ export default function Index(data) {
 				poly_quantity: 0,
 			}
 		) || {};
+
+	packing_list_numbers.forEach((pl) => {
+		const packingListDetails = [];
+		const packingListRowSpan = [];
+		challan_entry.forEach((item) => {
+			if (pl.packing_list_uuid === item.packing_list_uuid) {
+				packingListDetails.push({
+					item_description: item.item_description,
+					specification: item.specification,
+					style: item.style,
+					color: item.color,
+					size: item.size,
+					quantity: challan_entry
+						.filter(
+							(i) =>
+								(item.packing_list_uuid ===
+									i.packing_list_uuid &&
+									i.item_description) ===
+									item.item_description &&
+								i.style === item.style &&
+								i.color === item.color &&
+								i.size === item.size
+						)
+						.reduce((acc, item) => acc + item.quantity, 0),
+					poli_quantity: challan_entry
+						.filter(
+							(i) =>
+								(item.packing_list_uuid ===
+									i.packing_list_uuid &&
+									i.item_description) ===
+									item.item_description &&
+								i.style === item.style &&
+								i.color === item.color &&
+								i.size === item.size
+						)
+						.reduce((acc, item) => acc + item.poli_quantity, 0),
+				});
+				packingListRowSpan.push({
+					item_description: challan_entry.filter(
+						(i) =>
+							item.packing_list_uuid === i.packing_list_uuid &&
+							i.item_description === item.item_description
+					).length,
+					specification: challan_entry.filter(
+						(i) =>
+							item.packing_list_uuid === i.packing_list_uuid &&
+							i.item_description === item.item_description
+					).length,
+					style: challan_entry.filter(
+						(i) =>
+							(item.packing_list_uuid === i.packing_list_uuid &&
+								i.item_description) === item.item_description &&
+							i.style === item.style
+					).length,
+					color: challan_entry.filter(
+						(i) =>
+							(item.packing_list_uuid === i.packing_list_uuid &&
+								i.item_description) === item.item_description &&
+							i.style === item.style &&
+							i.color === item.color
+					).length,
+					size: challan_entry.filter(
+						(i) =>
+							(item.packing_list_uuid === i.packing_list_uuid &&
+								i.item_description) === item.item_description &&
+							i.style === item.style &&
+							i.color === item.color &&
+							i.size === item.size
+					).length,
+					quantity: 1,
+					poli_quantity: 1,
+				});
+			}
+		});
+		packingListTable.push({
+			packing_number: pl.packing_number,
+			carton_weight: pl.carton_weight,
+			packingListDetails,
+			packingListRowSpan,
+		});
+	});
 
 	const grandTotalQuantity = uniqueCounts(challan_entry).quantity;
 
@@ -98,7 +185,10 @@ export default function Index(data) {
 		}),
 
 		// * Main Table
-		content: packing_list_numbers.map((pl, index) => [
+		content: packingListTable.map((pl, index) => [
+			index > 0 && index % 4 === 0
+				? { text: '', pageBreak: 'before' }
+				: null,
 			{
 				text: `PL NO: ${pl.packing_number} ${
 					isSampleZipper
@@ -113,41 +203,52 @@ export default function Index(data) {
 				table: {
 					headerRows: 1,
 					widths: isSliderChallan
-						? [150, 150, 80, 80]
-						: [140, 130, 70, 60, 60, 40],
+						? [70, 110, 90, 80, 80]
+						: [70, 110, 90, 70, 60, 50, 30],
 					body: [
 						// * Header
 						TableHeader(node),
 
 						// * Body
-						...challan_entry
-							?.filter(
-								(item) =>
-									item.packing_number === pl.packing_number
-							)
-							.map((item) =>
-								node.map((nodeItem) => {
-									const text =
-										nodeItem.field === 'size'
-											? `${item[nodeItem.field]} ${
-													isTapeChallan
-														? 'mtr'
-														: item.is_inch === 1
-															? 'inch'
-															: 'cm' || ''
-												}`
-											: item[nodeItem.field];
-									return {
-										text,
-										style: nodeItem.cellStyle,
-										alignment: nodeItem.alignment,
-										colSpan: nodeItem.colSpan,
-									};
-								})
-							),
+						...pl.packingListDetails?.map((item, idx) =>
+							node.map((nodeItem) => {
+								const text =
+									nodeItem.field === 'size'
+										? `${item[nodeItem.field]} ${
+												isTapeChallan
+													? 'mtr'
+													: item.is_inch === 1
+														? 'inch'
+														: 'cm' || ''
+											}`
+										: item[nodeItem.field];
+								return {
+									text,
+									style: nodeItem.cellStyle,
+									alignment: nodeItem.alignment,
+									rowSpan:
+										pl.packingListRowSpan[idx][
+											nodeItem.field
+										],
+								};
+							})
+						),
 
 						isSliderChallan
 							? [
+									{
+										text: `Total ${
+											uniqueCounts(
+												challan_entry?.filter(
+													(item) =>
+														item.packing_number ===
+														pl.packing_number
+												)
+											).itemDescriptions?.size
+										} Desc`,
+										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
 									{
 										text: `Total ${
 											uniqueCounts(
@@ -213,7 +314,19 @@ export default function Index(data) {
 										bold: true,
 										fontSize: DEFAULT_FONT_SIZE + 2,
 									},
-
+									{
+										text: `Total ${
+											uniqueCounts(
+												challan_entry?.filter(
+													(item) =>
+														item.packing_number ===
+														pl.packing_number
+												)
+											).itemDescriptions?.size
+										} Specification`,
+										bold: true,
+										fontSize: DEFAULT_FONT_SIZE + 2,
+									},
 									{
 										text: `${uniqueCounts(challan_entry?.filter((item) => item.packing_number === pl.packing_number)).styles?.size} Style`,
 										bold: true,

@@ -158,7 +158,7 @@ export default function Index(data) {
 			packingListRowSpan,
 		});
 	});
-	console.log('packingListTable', packingListTable);
+
 	const grandTotalQuantity = uniqueCounts(challan_entry).quantity;
 
 	const pdfDocGenerator = pdfMake.createPdf({
@@ -201,7 +201,7 @@ export default function Index(data) {
 					headerRows: 1,
 					widths: isSliderChallan
 						? [70, 110, 90, 80, 80]
-						: [70, 110, 90, 70, 60, 60, 40],
+						: [70, 110, 90, 70, 60, 50, 30],
 					body: [
 						// * Header
 						TableHeader(node),

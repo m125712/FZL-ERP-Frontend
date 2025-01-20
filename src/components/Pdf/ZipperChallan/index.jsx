@@ -46,6 +46,8 @@ export default function Index(data) {
 	const isTapeChallan = data?.item_for === 'tape';
 	const isSliderChallan = data?.item_for === 'slider';
 	const isSampleZipper = data?.item_for === 'sample_zipper';
+	const packingListTable = [];
+	const packingListRowSpan = [];
 	const { packing_list_numbers, challan_entry } = data;
 
 	let node = zipperNode;
@@ -76,6 +78,28 @@ export default function Index(data) {
 				poly_quantity: 0,
 			}
 		) || {};
+
+	packing_list_numbers.forEach((pl) => {
+		const packingListDetails = [];
+		challan_entry.forEach((item) => {
+			if (pl.packing_list_uuid === item.packing_list_uuid) {
+				packingListDetails.push({
+					item_description: item.item_description,
+					specification: item.specification,
+					style: item.style,
+					color: item.color,
+					size: item.size,
+					quantity: item.quantity,
+					poli_quantity: item.poli_quantity,
+				});
+			}
+		});
+		packingListTable.push({
+			packing_number: pl.packing_number,
+			carton_weight: pl.carton_weight,
+			packingListDetails,
+		});
+	});
 
 	const grandTotalQuantity = uniqueCounts(challan_entry).quantity;
 

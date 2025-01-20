@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
+import { cn } from '@/lib/utils';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
@@ -93,6 +94,54 @@ export default function Index() {
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) => {
+					return row.recipe_array
+						?.map((item) => item.recipe_name)
+						.join(', ');
+				},
+				id: 'recipe_array',
+				header: 'Recipe',
+				enableColumnFilter: false,
+				cell: ({ row }) => {
+					const { recipe_array } = row.original;
+
+					if (!recipe_array?.length) return '--';
+
+					return recipe_array?.map((item) => {
+						return (
+							<div
+								key={item.recipe_name}
+								className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'>
+								<CustomLink
+									label={item.recipe_name}
+									url={`/lab-dip/recipe/details/${item.recipe_uuid}`}
+									openInNewTab={true}
+								/>
+								<div className='flex items-center gap-2'>
+									Approved
+									<span
+										className={cn(
+											'badge badge-error badge-xs',
+											item.approved === 1 && 'bg-success'
+										)}
+									/>
+								</div>
+								<div className='flex items-center gap-2'>
+									Marketing Approved
+									<span
+										className={cn(
+											'badge badge-error badge-xs',
+											item.marketing_approved === 1 &&
+												'bg-success'
+										)}
+									/>
+								</div>
+							</div>
+						);
+					});
+				},
 			},
 			{
 				accessorKey: 'created_by_name',

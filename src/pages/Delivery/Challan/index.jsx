@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useDeliveryChallan } from '@/state/Delivery';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +18,6 @@ import {
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
-import { useAuth } from '@/context/auth';
 
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
@@ -206,8 +206,8 @@ export default function Index() {
 				//* joining packing list numbers
 				accessorFn: (row) =>
 					row.packing_list_numbers
-						.map((item) => item.packing_number)
-						.join(', '),
+						?.map((item) => item.packing_number)
+						?.join(', '),
 				id: 'packing_list_numbers',
 				header: 'Packing List',
 				width: 'w-28',
@@ -316,7 +316,10 @@ export default function Index() {
 						idx={info.row.index}
 						handelUpdate={handelUpdate}
 						handelDelete={handelDelete}
-						showDelete={haveAccess.includes('delete')}
+						showDelete={
+							haveAccess.includes('delete') &&
+							info.row.original?.packing_numbers?.length < 2
+						}
 						showUpdate={haveAccess.includes('update')}
 					/>
 				),
@@ -367,7 +370,7 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].name,
+			itemName: data[idx].challan_number,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -397,10 +400,10 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					url='/delivery/challan/delete-challan-packing-list-ref'
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
 						deleteData,
 					}}
 				/>

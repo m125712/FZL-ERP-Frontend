@@ -1918,7 +1918,7 @@ export const PI_CASH_SCHEMA = {
 	thread_order_info_uuids: JSON_STRING.optional(),
 	new_order_info_uuids: JSON_STRING.optional(),
 	new_order_info_thread_uuids: JSON_STRING.optional(),
-	merchandiser_uuid: STRING_REQUIRED,
+	merchandiser_uuid: STRING.nullable(),
 	factory_uuid: STRING_REQUIRED,
 	conversion_rate: NUMBER_DOUBLE_REQUIRED,
 	receive_amount: NUMBER_DOUBLE,

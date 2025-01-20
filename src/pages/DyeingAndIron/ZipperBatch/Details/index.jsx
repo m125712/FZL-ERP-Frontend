@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDyeingBatchDetailsByUUID } from '@/state/Dyeing';
+import { useLabDipRecipeDetailsByUUID } from '@/state/LabDip';
 import { useParams } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
@@ -22,6 +23,26 @@ export default function Index() {
 	// if (!planningSNO) return <Navigate to='/not-found' />;
 	const [data, setData] = useState('');
 	const [secondData, setSecondData] = useState('');
+	const shade_recipe_uuids = batch?.batch_entry[0]?.recipe_uuid;
+
+	const volume = 1;
+	const { data: shade_recipe } =
+		useLabDipRecipeDetailsByUUID(shade_recipe_uuids);
+	const shade_recipes_entries = useMemo(() => {
+		return shade_recipe?.recipe_entry?.map((item) => ({
+			...item,
+			quantity: Number(item?.quantity).toFixed(3),
+			bulk: Number((volume * item?.quantity).toFixed(3)),
+		}));
+	}, [shade_recipe, volume]);
+
+	const programs = useMemo(() => {
+		return shade_recipe?.programs?.map((item) => ({
+			...item,
+			quantity: Number(item?.quantity).toFixed(3),
+			bulk: Number((volume * item?.quantity).toFixed(3)),
+		}));
+	}, [shade_recipe, volume]);
 
 	useEffect(() => {
 		if (batch && batch?.dyeing_batch_entry) {
@@ -37,6 +58,7 @@ export default function Index() {
 			});
 		}
 	}, [batch]);
+
 	if (loading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 

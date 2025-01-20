@@ -1,17 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSample } from '@/state/Report';
-import { format } from 'date-fns';
+import { format, startOfMonth, subMonths } from 'date-fns';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
-import Header from './Header';
-
 export default function Index() {
-	const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
-	const { data, isLoading, url } = useSample(date, 0);
+	const [date, setDate] = useState(
+		format(startOfMonth(subMonths(new Date(), 2)), 'yyyy-MM-dd')
+	);
+	const [toDate, setToDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+	const { data, isLoading, url } = useSample(date, toDate, 0);
 	const info = new PageInfo('Bulk', url, 'report__bulk');
 
 	useEffect(() => {
@@ -143,6 +144,30 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'party_price',
+				header: 'Party Price',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'pi',
+				header: 'PI',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'warehouse',
+				header: 'Warehouse',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'delivered',
+				header: 'Delivered',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
 				enableColumnFilter: false,
@@ -156,15 +181,34 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<>
-			<Header date={date} setDate={setDate} />
-			<ReactTable
-				title={info.getTitle()}
-				accessor={false}
-				data={data}
-				columns={columns}
-				extraClass={'py-0.5'}
-			/>
-		</>
+		<ReactTable
+			title={info.getTitle()}
+			accessor={false}
+			data={data}
+			columns={columns}
+			extraClass={'py-0.5'}
+			extraButton={
+				<div className='flex items-center gap-2'>
+					<SimpleDatePicker
+						className='h-[2.34rem] w-32'
+						key={'Date'}
+						value={date}
+						placeholder='Date'
+						onChange={(data) => {
+							setDate(format(data, 'yyyy-MM-dd'));
+						}}
+					/>
+					<SimpleDatePicker
+						className='h-[2.34rem] w-32'
+						key={'toDate'}
+						value={toDate}
+						placeholder='To'
+						onChange={(data) => {
+							setToDate(format(data, 'yyyy-MM-dd'));
+						}}
+					/>
+				</div>
+			}
+		/>
 	);
 }

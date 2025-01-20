@@ -8,7 +8,7 @@ import {
 	DatePickerDefaultConfig,
 } from '@/ui/Core/base';
 
-import cn from '@lib/cn';
+import cn from '@/lib/cn';
 
 const SimpleDatePicker = ({
 	className = '',
@@ -25,7 +25,8 @@ const SimpleDatePicker = ({
 				'input input-secondary flex w-full items-center justify-between rounded border-secondary/30 bg-base-100 px-2 text-left text-sm text-primary transition-all duration-100 ease-in-out placeholder:text-sm placeholder:text-secondary/50',
 				disabled
 					? 'input-disabled cursor-not-allowed border-error'
-					: 'cursor-pointer'
+					: 'cursor-pointer',
+				className
 			)}
 			onClick={onClick}
 			ref={ref}>
@@ -33,6 +34,7 @@ const SimpleDatePicker = ({
 			<Calendar className='mb-0.5 ml-1 w-4' />
 		</button>
 	));
+
 	return (
 		<DatePicker
 			{...props}

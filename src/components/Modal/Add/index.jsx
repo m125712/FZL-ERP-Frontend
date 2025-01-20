@@ -1,6 +1,8 @@
-import cn from '@lib/cn';
-import { Footer, Header } from '../ui';
 import { FormProvider } from 'react-hook-form';
+
+import cn from '@/lib/cn';
+
+import { Footer, Header } from '../ui';
 
 function AddModal({
 	id,

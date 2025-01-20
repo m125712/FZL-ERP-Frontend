@@ -3,7 +3,7 @@ import { CalenderIcon } from '@/assets/icons';
 import { format } from 'date-fns';
 import DatePicker from 'react-datepicker';
 
-import cn from '@lib/cn';
+import cn from '@/lib/cn';
 
 import 'react-datepicker/dist/react-datepicker.css';
 

@@ -25,6 +25,7 @@ const chartConfig = {
 		color: '#00ADB5',
 	},
 };
+
 export function BarChartOverall(
 	{ data } = {
 		data: [],
@@ -93,9 +94,18 @@ export function BarChartOverall(
 								<ChartTooltipContent
 									className='w-[150px]'
 									nameKey='views'
-									labelFormatter={(value) =>
-										format(new Date(value), 'dd MMM, yy')
-									}
+									labelFormatter={(value) => {
+										if (
+											value === 'Zipper' ||
+											value === 'Thread'
+										)
+											return;
+
+										return format(
+											new Date(value),
+											'dd MMM, yy'
+										);
+									}}
 									formatter={(value, name) => (
 										<div className='flex min-w-[130px] items-center text-xs text-muted-foreground'>
 											{chartConfig[name]?.label || name}

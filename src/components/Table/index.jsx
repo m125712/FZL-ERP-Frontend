@@ -58,6 +58,7 @@ function Table({
 	const [globalFilter, setGlobalFilter] = useState(searchData);
 	const [columnVisibility, setColumnVisibility] = useState(
 		columns?.reduce((acc, { accessorKey, hidden }) => {
+			if (!accessorKey) return acc;
 			acc[accessorKey] = !hidden;
 			return acc;
 		}, {})

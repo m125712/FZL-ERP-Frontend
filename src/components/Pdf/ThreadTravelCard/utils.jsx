@@ -221,10 +221,9 @@ export const getPageHeader = (batch) => {
 								},
 								{
 									// text: batch?.total_yarn_quantity + ' (KG)',
-									text:
-										batch?.total_yarn_quantity.toFixed(3) +
-										'/' +
-										batch?.total_expected_weight.toFixed(3),
+									text: batch?.total_expected_weight.toFixed(
+										3
+									),
 								},
 							],
 							[

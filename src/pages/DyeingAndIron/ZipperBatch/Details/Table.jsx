@@ -65,8 +65,19 @@ export default function Index({ dyeing_batch_entry }) {
 				enableColumnFilter: false,
 			},
 			{
+				accessorKey: 'bleaching',
+				header: 'Bleaching',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'size',
-				header: 'Size (CM)',
+				header: 'Size',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 			},
 			{
@@ -146,7 +157,7 @@ export default function Index({ dyeing_batch_entry }) {
 			data={dyeing_batch_entry}
 			columns={columns}>
 			<tr className='text-lg font-bold'>
-				<th className='pe-4 text-right' colSpan={5}>
+				<th className='pe-4 text-right' colSpan={7}>
 					Total
 				</th>
 				<td className='ps-3'>{total?.quantity}</td>

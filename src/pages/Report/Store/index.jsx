@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useReportStock } from '@/state/Report';
-import { format } from 'date-fns';
+import { format, startOfMonth, subMonths } from 'date-fns';
 
 import ReactTable from '@/components/Table';
+import { SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
-
-import Header from './Header';
 
 export default function index() {
 	const info = new PageInfo('Store', null, 'report__store');
@@ -74,13 +73,34 @@ export default function index() {
 
 	return (
 		<div className='flex flex-col gap-8'>
-			<Header {...{ from, setFrom, to, setTo }} />
 			<ReactTable
 				title={info.getTitle()}
 				accessor={false}
 				data={data}
 				columns={columns}
-				extraClass={'py-0.5'}
+				extraButton={
+					<div className='flex items-center gap-2'>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'from'}
+							value={from}
+							placeholder='From'
+							onChange={(data) => {
+								setFrom(format(data, 'yyyy-MM-dd'));
+							}}
+						/>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'to'}
+							value={to}
+							placeholder='To'
+							onChange={(data) => {
+								setTo(format(data, 'yyyy-MM-dd'));
+							}}
+						/>
+					</div>
+				}
+				// extraClass={'py-0.5'}
 			/>
 		</div>
 	);

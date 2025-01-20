@@ -154,6 +154,25 @@ export default function Index({
 		}
 	};
 
+	const purposes = [
+		{
+			value: 'general',
+			label: 'General',
+		},
+		{
+			value: 'slider',
+			label: 'Slider',
+		},
+		{
+			value: 'tape',
+			label: 'Tape Making',
+		},
+		{
+			value: 'finishing_floor',
+			label: 'Finishing Floor',
+		},
+	];
+
 	return (
 		<AddModal
 			id={modalId}
@@ -162,6 +181,28 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
+			<FormField label='purpose' title='Purpose' errors={errors}>
+				<Controller
+					name={'purpose'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<ReactSelect
+								placeholder='Select purpose'
+								options={purposes}
+								value={
+									purposes?.filter(
+										(item) =>
+											item.value === getValues('purpose')
+									) || null
+								}
+								onChange={(e) => onChange(e.value)}
+							/>
+						);
+					}}
+				/>
+			</FormField>
+
 			<FormField
 				label='order_description_uuid'
 				title='Order'

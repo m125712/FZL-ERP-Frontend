@@ -33,7 +33,6 @@ export const sample_lead_time_columns = [
 		id: 'day_passed',
 		header: 'Day Passed',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
 	},
 	// {
 	// 	accessorKey: 'issue_date',
@@ -56,13 +55,12 @@ export const sample_lead_time_columns = [
 	// 	accessorKey: 'status',
 	// 	header: 'Status',
 	// 	enableColumnFilter: false,
-	// 	cell: (info) => info.getValue(),
+	//
 	// },
 	{
 		accessorKey: 'delivery_order_quantity',
 		header: 'Delivery Qty',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
 	},
 ];
 
@@ -101,7 +99,6 @@ export const order_entry_feed_columns = [
 		accessorKey: 'quantity',
 		header: 'Total',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
 	},
 ];
 
@@ -128,13 +125,12 @@ export const pi_register_columns = [
 	// 	accessorKey: 'bank_name',
 	// 	header: 'Bank',
 	// 	enableColumnFilter: false,
-	// 	cell: (info) => info.getValue(),
+	//
 	// },
 	{
 		accessorKey: 'total_pi_value',
 		header: 'PI Value(USD)',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
 	},
 	{
 		accessorKey: 'lc_date',
@@ -149,19 +145,16 @@ export const doc_rcv_columns = [
 		accessorKey: 'file_number',
 		header: 'Doc. Rcv. No.',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
 	},
 	{
 		accessorKey: 'party_name',
 		header: 'Party Name',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
 	},
 	{
 		accessorKey: 'marketing_name',
 		header: 'S & M',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
 	},
 	{
 		accessorKey: 'lc_value',
@@ -181,37 +174,45 @@ export const stock_status_columns = [
 		accessorKey: 'name',
 		header: 'Name',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
+		cell: (info) => getSLicedValue(info.getValue(), 15),
 	},
 	{
 		accessorKey: 'threshold',
 		header: 'Threshold',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
 	},
 	{
 		accessorKey: 'stock',
 		header: 'Stock',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
+		cell: ({ row }) => {
+			const { stock, threshold } = row.original;
+
+			return (
+				<span
+					className={
+						stock < threshold ? 'text-error' : 'text-success'
+					}>
+					{stock}
+				</span>
+			);
+		},
 	},
 	{
 		accessorKey: 'unit',
 		header: 'Unit',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
 	},
 	{
 		accessorKey: 'last_purchase_date',
-		header: 'Purchase Date',
+		header: 'Purchased',
 		enableColumnFilter: false,
 		cell: (info) => <DateTime date={info.getValue()} isTime={false} />,
 	},
 	{
 		accessorKey: 'lead_time',
-		header: 'Lead Time(days)',
+		header: 'Lead Time',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
 	},
 ];
 export const pi_to_be_submitted_columns = [
@@ -219,30 +220,25 @@ export const pi_to_be_submitted_columns = [
 		accessorKey: 'name',
 		header: 'Party Name',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
 	},
 	{
 		accessorKey: 'total_quantity',
 		header: 'Order Qty',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
 	},
 	{
 		accessorKey: 'total_delivered',
 		header: 'Delivered',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
 	},
 	{
 		accessorKey: 'total_undelivered_balance_quantity',
 		header: 'Undelivered',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
 	},
 	{
 		accessorKey: 'total_balance_pi_value',
 		header: 'PI Value(USD)',
 		enableColumnFilter: false,
-		cell: (info) => info.getValue(),
 	},
 ];

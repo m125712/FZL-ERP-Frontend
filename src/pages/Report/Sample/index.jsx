@@ -9,7 +9,7 @@ import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
 	const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
-	const { data, isLoading, url } = useSample(date);
+	const { data, isLoading, url } = useSample(date, date);
 	const info = new PageInfo('Sample', url, 'report__sample');
 
 	useEffect(() => {

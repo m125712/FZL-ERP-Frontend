@@ -42,9 +42,8 @@ export default function Index({
 		useSliderColoringProduction();
 	const { user } = useAuth();
 
-	const { data: stock } = useOtherSliderStockWithDescription(
-		'section=assembly_stock'
-	);
+	const { data: stock, invalidateQuery: invalidateStock } =
+		useOtherSliderStockWithDescription('section=assembly_stock');
 
 	const {
 		register,
@@ -108,6 +107,7 @@ export default function Index({
 		invalidateAssemblyStock();
 		invalidateAssemblyStockTransaction();
 		invalidateSliderColoringProduction();
+		invalidateStock();
 	};
 
 	const currentWeight = () => {
@@ -124,7 +124,6 @@ export default function Index({
 		setValue('weight', currentWeight().toFixed(2));
 	}, [watch('trx_quantity')]);
 
-	console.log(updateSliderTrx);
 	return (
 		<AddModal
 			id={modalId}

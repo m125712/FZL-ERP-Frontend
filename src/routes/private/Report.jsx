@@ -140,7 +140,7 @@ export const ReportRoutes = [
 				path: '/report/bulk',
 				element: <Bulk />,
 				page_name: 'report__bulk',
-				actions: ['read'],
+				actions: ['read', 'show_price_pi'],
 			},
 			{
 				name: 'Orders',

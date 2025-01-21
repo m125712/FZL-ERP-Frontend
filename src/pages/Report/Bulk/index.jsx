@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSample } from '@/state/Report';
 import { format, startOfMonth, subMonths } from 'date-fns';
+import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
@@ -14,6 +15,8 @@ export default function Index() {
 	const [toDate, setToDate] = useState(format(new Date(), 'yyyy-MM-dd'));
 	const { data, isLoading, url } = useSample(date, toDate, 0);
 	const info = new PageInfo('Bulk', url, 'report__bulk');
+
+	const haveAccess = useAccess('report__bulk');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -147,11 +150,26 @@ export default function Index() {
 				accessorKey: 'party_price',
 				header: 'Party Price',
 				enableColumnFilter: false,
+				hidden: !haveAccess.includes('show_price_pi'),
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'pi',
 				header: 'PI',
+				enableColumnFilter: false,
+				hidden: !haveAccess.includes('show_price_pi'),
+				cell: (info) => info.getValue(),
+			},
+
+			{
+				accessorKey: 'finishing_prod',
+				header: 'Finishing',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'balance',
+				header: 'Balance',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

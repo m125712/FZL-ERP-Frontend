@@ -120,7 +120,7 @@ export function OrderInformation({
 			{
 				label: 'Cash / LC',
 				value: haveAccess.includes('show_cash_bill_lc') ? renderCashOrLC(
-					order?.is_cash,
+					0,
 					order?.is_sample,
 					order?.is_bill,
 					true

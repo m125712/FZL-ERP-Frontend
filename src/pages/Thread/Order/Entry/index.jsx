@@ -324,6 +324,7 @@ export default function Index() {
 						getValues,
 						Controller,
 						watch,
+						setValue,
 					}}
 				/>
 

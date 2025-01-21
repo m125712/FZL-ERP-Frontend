@@ -144,10 +144,10 @@ export default function Index({
 				{updateOrderInfo?.uuid && (
 					<div className='rounded-md border-2 border-dashed border-red-300 px-1 text-gray-600'>
 						<CheckBox
-							label='is_canceled'
-							title='Canceled'
+							label='is_cancelled'
+							title='Cancelled'
 							onChange={(e) =>
-								setValue('is_canceled', e.target.checked)
+								setValue('is_cancelled', e.target.checked)
 							}
 							{...{ register, errors }}
 						/>

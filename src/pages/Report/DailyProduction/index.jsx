@@ -61,7 +61,7 @@ export default function index() {
 							);
 						}}
 						className='btn btn-primary flex-1'>
-						Generate PDF
+						PDF
 					</button>
 					<button
 						type='button'
@@ -69,7 +69,7 @@ export default function index() {
 							Excel(data, from);
 						}}
 						className='btn btn-secondary flex-1'>
-						Generate Excel
+						Excel
 					</button>
 				</div>
 			</div>

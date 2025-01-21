@@ -43,7 +43,7 @@ export default function Index({
 	const { user } = useAuth();
 
 	const { data: stock } = useOtherSliderStockWithDescription(
-		'/other/slider/stock-with-order-description/value/label?section=assembly_stock'
+		'section=assembly_stock'
 	);
 
 	const {
@@ -124,14 +124,13 @@ export default function Index({
 		setValue('weight', currentWeight().toFixed(2));
 	}, [watch('trx_quantity')]);
 
+	console.log(updateSliderTrx);
 	return (
 		<AddModal
 			id={modalId}
 			title='Slider Assembly Prod ⇾ Coloring Stock'
 			subTitle={`
-				${updateSliderTrx.order_number} -> 
-				${updateSliderTrx.item_description} -> 
-				${updateSliderTrx.item_name} 
+				${updateSliderTrx.name} 
 				`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}

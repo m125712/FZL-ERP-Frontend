@@ -269,10 +269,10 @@ export const useOtherSliderDieCastingType = (param) =>
 	});
 
 // GET OTHER SLIDER STOCK
-export const useOtherSliderStockWithDescription = () =>
+export const useOtherSliderStockWithDescription = (query) =>
 	createGlobalState({
-		queryKey: otherQK.sliderStockWithDescription(),
-		url: `/other/slider/stock-with-order-description/value/label`,
+		queryKey: otherQK.sliderStockWithDescription(query),
+		url: query? `/other/slider/stock-with-order-description/value/label?${query}` : `/other/slider/stock-with-order-description/value/label`,
 	});
 // GET OTHER Packing List
 export const useOtherPackingListByOrderInfoUUID = (uuid) =>

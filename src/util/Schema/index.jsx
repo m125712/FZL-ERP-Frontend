@@ -2490,6 +2490,7 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 	is_sample: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	is_bill: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	is_cash: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+	is_cancelled: BOOLEAN.default(false),
 	delivery_date: yup.date().nullable(),
 	remarks: STRING.nullable(),
 	order_info_entry: yup.array().of(
@@ -2523,6 +2524,7 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 	is_sample: false,
 	is_bill: false,
 	is_cash: false,
+	is_cancelled: false,
 	issued_by: null,
 	remarks: '',
 	delivery_date: null,

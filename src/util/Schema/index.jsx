@@ -1299,7 +1299,7 @@ export const SLIDER_DIE_CASTING_SCHEMA = {
 		yup.object().shape({
 			mc_no: NUMBER_REQUIRED,
 			die_casting_uuid: STRING_REQUIRED,
-			finishing_batch_uuid: STRING.nullable(),
+			order_description_uuid: STRING.nullable(),
 			cavity_goods: NUMBER_REQUIRED.moreThan(0, 'Must be more than 0'),
 			cavity_defect: NUMBER_REQUIRED,
 			push: NUMBER_REQUIRED.moreThan(0, 'Must be more than 0'),
@@ -1314,7 +1314,7 @@ export const SLIDER_DIE_CASTING_NULL = {
 		{
 			mc_no: '',
 			die_casting_uuid: '',
-			finishing_batch_uuid: null,
+			order_description_uuid: null,
 			cavity_goods: '',
 			cavity_defect: '',
 			push: '',

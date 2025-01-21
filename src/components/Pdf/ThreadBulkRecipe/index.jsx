@@ -14,7 +14,7 @@ import { getPageFooter, getPageHeader } from './utils';
 const node = [
 	getTable('style', 'Style'),
 	getTable('count_length', 'Count Length'),
-	getTable('quantity', 'Quantity', 'right'),
+	getTable('quantity', 'Batch QTY', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
 const node2 = [
@@ -147,7 +147,7 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', 40, '*'],
+					widths: ['*', '*', 60, '*'],
 					body: [
 						// * Header
 						TableHeader(node),

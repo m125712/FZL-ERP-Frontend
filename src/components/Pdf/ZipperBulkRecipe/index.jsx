@@ -15,7 +15,7 @@ const node = [
 	getTable('item_description', 'Item'),
 	getTable('style', 'Style'),
 	getTable('size', 'Size'),
-	getTable('quantity', 'Quantity', 'right'),
+	getTable('quantity', 'Batch QTY', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
 const node2 = [

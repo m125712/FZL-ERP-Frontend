@@ -224,23 +224,7 @@ export const getPageHeader = (batch) => {
 									text: 'Slot ' + batch?.slot,
 								},
 								{
-									text: 'Delv Dt',
-									bold: true,
-								},
-								{
-									text: `${Array.from(delivery_date).join(', ')}`,
-								},
-							],
-							[
-								{
 									text: 'Light Source',
-									bold: true,
-								},
-								{
-									text: '',
-								},
-								{
-									text: 'Fiber Type',
 									bold: true,
 								},
 								{

@@ -12,7 +12,6 @@ import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
-	getTable('recipe_name', 'Recipe Name'),
 	getTable('style', 'Style'),
 	getTable('count_length', 'Count Length'),
 	getTable('quantity', 'Quantity', 'right'),
@@ -148,7 +147,7 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', '*', 40, '*'],
+					widths: ['*', '*', 40, '*'],
 					body: [
 						// * Header
 						TableHeader(node),

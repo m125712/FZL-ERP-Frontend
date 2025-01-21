@@ -102,14 +102,16 @@ export default function Index() {
 
 	return (
 		<div className='space-y-2'>
-			<iframe
-				src={data}
-				className='h-[40rem] w-full rounded-md border-none'
-			/>
-			<iframe
-				src={secondData}
-				className='h-[40rem] w-full rounded-md border-none'
-			/>
+			<div className='flex gap-2'>
+				<iframe
+					src={data}
+					className='h-[40rem] w-full rounded-md border-none'
+				/>
+				<iframe
+					src={secondData}
+					className='h-[40rem] w-full rounded-md border-none'
+				/>
+			</div>
 			<Information batch={batch} />
 			<Table {...batch} />
 		</div>

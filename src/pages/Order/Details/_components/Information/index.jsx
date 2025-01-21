@@ -75,6 +75,13 @@ const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
 	return <TitleValue title='Cash / LC' value={value} />;
 };
 
+const renderOrderStatus = (is_sample, is_bill) => {
+	let value = is_sample == 1 ? 'Sample' : 'Bulk';
+	value = is_bill == 1 ? `${value} (Bill)` : `${value} (No Bill)`;
+
+	return value;
+};
+
 export function OrderInformation({
 	order,
 	handelPdfDownload,
@@ -117,14 +124,20 @@ export function OrderInformation({
 					/>
 				),
 			},
+			// {
+			// 	label: 'Cash / LC',
+			// 	value: haveAccess.includes('show_cash_bill_lc')
+			// 		? renderCashOrLC(
+			// 				order?.is_cash,
+			// 				order?.is_sample,
+			// 				order?.is_bill,
+			// 				true
+			// 			)
+			// 		: '--',
+			// },
 			{
-				label: 'Cash / LC',
-				value: haveAccess.includes('show_cash_bill_lc') ? renderCashOrLC(
-					0,
-					order?.is_sample,
-					order?.is_bill,
-					true
-				) : '--',
+				label: 'Order Status',
+				value: renderOrderStatus(order?.is_sample, order?.is_bill),
 			},
 
 			{

@@ -86,10 +86,10 @@ export default function Index(batch, shade_recipes_entries, programs) {
 	let footerHeight = 50;
 	const { batch_entry } = batch;
 	shade_recipes_entries?.forEach((item) => {
-		item.bulk = Number(item.bulk).toFixed(5);
+		item.bulk = Number(item.bulk).toFixed(3);
 	});
 	programs?.forEach((item) => {
-		item.bulk = Number(item.bulk).toFixed(5);
+		item.bulk = Number(item.bulk).toFixed(3);
 	});
 
 	const processDyePrograms = (programs) => {

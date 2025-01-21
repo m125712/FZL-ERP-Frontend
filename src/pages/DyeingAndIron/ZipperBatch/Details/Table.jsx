@@ -31,8 +31,6 @@ export default function Index({ dyeing_batch_entry }) {
 		}
 	);
 
-	console.log(total);
-
 	const columns = useMemo(
 		() => [
 			{

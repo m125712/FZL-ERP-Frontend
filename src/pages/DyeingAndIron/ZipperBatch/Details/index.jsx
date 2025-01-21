@@ -8,6 +8,8 @@ import { useAccess } from '@/hooks';
 import SecondPdf from '@/components/Pdf/ZipperBulkRecipe';
 import Pdf from '@/components/Pdf/ZipperTravelCard';
 
+import { getRequiredTapeKg } from '@/util/GetRequiredTapeKg';
+
 import Information from './Information';
 import Table from './Table';
 
@@ -25,10 +27,35 @@ export default function Index() {
 	const { data: shade_recipe } =
 		useLabDipRecipeDetailsByUUID(shade_recipe_uuids);
 
-	const volume =
-		parseFloat(batch?.total_yarn_quantity) *
-		parseFloat(batch?.water_capacity);
+	const dyed_tape = batch?.dyeing_batch_entry
+		.reduce((acc, item) => {
+			const quantity = parseFloat(item.quantity) || 0;
 
+			// * for tape order we calculate with size as quantity
+			const itemTotal =
+				getRequiredTapeKg({
+					row: item,
+					type: 'dyed',
+					input_quantity: quantity,
+				}) || 0;
+			return acc + itemTotal;
+		}, 0)
+		.toFixed(3);
+	const raw_tape = batch?.dyeing_batch_entry
+		.reduce((acc, item) => {
+			const quantity = parseFloat(item.quantity) || 0;
+
+			// * for tape order we calculate with size as quantity
+			const itemTotal =
+				getRequiredTapeKg({
+					row: item,
+					type: 'raw',
+					input_quantity: quantity,
+				}) || 0;
+			return acc + itemTotal;
+		}, 0)
+		.toFixed(3);
+	const volume = parseFloat(raw_tape) * parseFloat(batch?.water_capacity);
 	const shade_recipes_entries = useMemo(() => {
 		return shade_recipe?.recipe_entry?.map((item) => ({
 			...item,

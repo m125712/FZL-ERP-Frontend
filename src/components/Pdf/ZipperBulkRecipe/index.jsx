@@ -177,7 +177,7 @@ export default function Index(batch, shade_recipes_entries, programs) {
 		item.style = Array.from(item.style).join(', ');
 		item.color = Array.from(item.color).join(', ');
 	});
-	console.log(new_batch_entry);
+
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
 			xMargin,

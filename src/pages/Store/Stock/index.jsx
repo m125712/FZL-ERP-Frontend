@@ -64,27 +64,14 @@ export default function Index() {
 					);
 				},
 			},
-			{
-				accessorKey: 'booking_quantity',
-				header: 'Booking QTY',
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
-			},
+
 			{
 				accessorKey: 'unit',
 				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'is_priority_material',
-				header: 'Priority',
-				enableColumnFilter: true,
-				width: 'w-24',
-				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
-				),
-			},
+
 			{
 				accessorKey: 'action_trx',
 				header: 'Material Trx',
@@ -146,6 +133,32 @@ export default function Index() {
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'booking_quantity',
+				header: 'Booking QTY',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorFn: (row) => (row.is_priority_material ? 'Yes' : 'No'),
+				id: 'is_priority_material',
+				header: 'Priority',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.row.original.is_priority_material} />
+				),
+			},
+			{
+				accessorFn: (row) => (row.is_below_threshold ? 'Yes' : 'No'),
+				id: 'is_below_threshold',
+				header: 'Below Threshold',
+				enableColumnFilter: false,
+				width: 'w-40',
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.row.original.is_below_threshold} />
+				),
 			},
 			{
 				accessorKey: 'description',

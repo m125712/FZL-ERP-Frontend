@@ -12,12 +12,10 @@ import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
-	getTable('recipe_name', 'Recipe Name'),
+	getTable('item_description', 'Item'),
 	getTable('style', 'Style'),
-	getTable('count_length', 'Count Length'),
-	getTable('order_quantity', 'Order Quantity', 'right'),
-	getTable('balance_quantity', 'Balance Quantity', 'right'),
-	getTable('quantity', 'Quantity', 'right'),
+	getTable('size', 'Size'),
+	getTable('quantity', 'Batch QTY', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
 const node2 = [
@@ -84,7 +82,7 @@ const separateDark = (programs) => {
 export default function Index(batch, shade_recipes_entries, programs) {
 	const headerHeight = 200;
 	let footerHeight = 50;
-	const { batch_entry } = batch;
+	const { dyeing_batch_entry } = batch;
 	shade_recipes_entries?.forEach((item) => {
 		item.bulk = Number(item.bulk).toFixed(3);
 	});
@@ -114,6 +112,70 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			!e?.material_name.toLowerCase().includes('yellow')
 	);
 	const shade = yellow?.concat(red)?.concat(other);
+
+	const grouped =
+		dyeing_batch_entry?.reduce(
+			(acc, item) => {
+				acc.recipe_name?.add(item.recipe_name);
+				acc.unit?.add(item.unit);
+				acc.bleaching?.add(item.bleaching);
+				return acc;
+			},
+			{
+				unit: new Set(),
+				bleaching: new Set(),
+				recipe_name: new Set(),
+			}
+		) || {};
+	const { unit, bleaching, recipe_name } = grouped;
+	const new_batch_entry = [];
+	unit?.forEach((item) => {
+		bleaching?.forEach((bleach) => {
+			recipe_name?.forEach((recipe) => {
+				new_batch_entry.push({
+					unit: item,
+					bleaching: bleach,
+					recipe_name: recipe,
+					max_size: 0,
+					min_size: Infinity,
+					size: '',
+					unit: item,
+					item_description: new Set(),
+					quantity: 0,
+					style: new Set(),
+					color: new Set(),
+				});
+			});
+		});
+	});
+	new_batch_entry.forEach((item) => {
+		batch.dyeing_batch_entry.forEach((entry) => {
+			if (
+				entry.unit === item.unit &&
+				entry.bleaching === item.bleaching &&
+				entry.recipe_name === item.recipe_name
+			) {
+				item.item_description.add(entry.item_description);
+
+				item.quantity += entry.quantity;
+				item.style.add(entry.style);
+				item.color.add(entry.color);
+				item.unit = entry.unit;
+				item.max_size = Math.max(item.max_size, Number(entry.size));
+				item.min_size = Math.min(item.min_size, Number(entry.size));
+				item.size =
+					`${item.min_size === item.max_size ? item.min_size : `(${item.min_size} - ${item.max_size})`}` +
+					' ' +
+					entry.unit;
+			}
+		});
+	});
+
+	new_batch_entry.forEach((item) => {
+		item.item_description = Array.from(item.item_description).join(', ');
+		item.style = Array.from(item.style).join(', ');
+		item.color = Array.from(item.color).join(', ');
+	});
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
@@ -150,13 +212,13 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', 40, '*', 50, 40, 40, '*'],
+					widths: ['*', '*', 60, 60, '*'],
 					body: [
 						// * Header
 						TableHeader(node),
 
 						// * Body
-						...batch_entry?.map((item) =>
+						...new_batch_entry?.map((item) =>
 							node.map((nodeItem) => ({
 								text: item[nodeItem.field],
 								style: nodeItem.cellStyle,

@@ -1,15 +1,23 @@
+import { useOtherMachines } from '@/state/Other';
 import { useMediaQuery } from '@uidotdev/usehooks';
 import { format } from 'date-fns';
 
 import MultiCalendar from '@/ui/Others/DatePicker/MultiCalendar';
-import { SectionEntryBody, SimpleDatePicker } from '@/ui';
+import { ReactSelect, SectionEntryBody, SimpleDatePicker } from '@/ui';
 
-export default function Header({ dyeingDate = '', setDyeingDate = () => {} }) {
+export default function Header({
+	dyeingDate = '',
+	setDyeingDate = () => {},
+	machines,
+	setMachines,
+}) {
 	const isSmallDevice = useMediaQuery('only screen and (max-width : 768px)');
+
+	const { data: machineOptions } = useOtherMachines();
 	return (
 		<div>
 			<SectionEntryBody title={'Dyeing Dashboard'}>
-				{isSmallDevice ? (
+				<div className='flex gap-4'>
 					<SimpleDatePicker
 						inline
 						value={dyeingDate}
@@ -17,15 +25,17 @@ export default function Header({ dyeingDate = '', setDyeingDate = () => {} }) {
 							setDyeingDate(format(data, 'yyyy-MM-dd'));
 						}}
 					/>
-				) : (
-					<MultiCalendar
-						selected={dyeingDate}
-						onChange={(data) => {
-							setDyeingDate(format(data, 'yyyy-MM-dd'));
+					<ReactSelect
+						placeholder='Select Machines'
+						options={machineOptions}
+						value={machines}
+						className='w-full'
+						onChange={(e) => {
+							setMachines(e);
 						}}
-						monthsShown={4}
+						isMulti={true}
 					/>
-				)}
+				</div>
 			</SectionEntryBody>
 		</div>
 	);

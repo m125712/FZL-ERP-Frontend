@@ -24,6 +24,7 @@ export default function Header({
 	getValues,
 	Controller,
 	control,
+	setValue,
 }) {
 	const { order_info_uuid } = useParams();
 	const isUpdate = order_info_uuid !== undefined;
@@ -62,7 +63,23 @@ export default function Header({
 				title='Order'
 				header={
 					<div className='flex justify-end gap-2 p-2 text-sm'>
-						<div className='rounded-md border border-accent/50 bg-primary px-1'>
+						{isUpdate && (
+							<div className='rounded-md border-2 border-dashed border-red-600 px-1 text-gray-600 flex items-center'>
+								<CheckBox
+									label='is_cancelled'
+									title='Cancelled'
+									text='text-primary-content'
+									onChange={(e) =>
+										setValue(
+											'is_cancelled',
+											e.target.checked
+										)
+									}
+									{...{ register, errors }}
+								/>
+							</div>
+						)}
+						<div className='rounded-md border border-accent/50 bg-primary px-1 flex items-center'>
 							<CheckBox
 								label='is_sample'
 								title='Sample'
@@ -72,7 +89,7 @@ export default function Header({
 								{...{ register, errors }}
 							/>
 						</div>
-						<div className='rounded-md border border-accent/50 bg-primary px-1'>
+						<div className='rounded-md border border-accent/50 bg-primary px-1 flex items-center'>
 							<CheckBox
 								title='Bill'
 								label='is_bill'
@@ -82,7 +99,7 @@ export default function Header({
 								{...{ register, errors }}
 							/>
 						</div>
-						<div className='rounded-md border border-accent/50 bg-primary px-1'>
+						<div className='rounded-md border border-accent/50 bg-primary px-1 flex items-center'>
 							<CheckBox
 								title='Cash'
 								label='is_cash'

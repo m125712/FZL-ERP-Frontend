@@ -1,6 +1,7 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
 import {
 	useOtherOrderBatchDescription,
+	useOtherOrderStore,
 	useOtherSliderItem,
 } from '@/state/Other';
 import {
@@ -75,6 +76,7 @@ export default function Index() {
 
 	const { data: slider_item_name } = useOtherSliderItem();
 	const { data: orders } = useOtherOrderBatchDescription();
+	const { data: order } = useOtherOrderStore();
 
 	const {
 		fields,
@@ -278,15 +280,15 @@ export default function Index() {
 								{/* ORDER NO */}
 								<td className={cn(tdClass)}>
 									<FormField
-										label={`array[${index}].finishing_batch_uuid`}
+										label={`array[${index}].order_description_uuid`}
 										is_title_needed='false'
 										register={register}
 										dynamicerror={
 											errors?.array?.[index]
-												?.finishing_batch_uuid
+												?.order_description_uuid
 										}>
 										<Controller
-											name={`array[${index}].finishing_batch_uuid`}
+											name={`array[${index}].order_description_uuid`}
 											control={control}
 											render={({
 												field: { onChange },
@@ -294,12 +296,12 @@ export default function Index() {
 												return (
 													<ReactSelect
 														placeholder='Select Order'
-														options={orders}
-														value={orders?.find(
+														options={order}
+														value={order?.find(
 															(inItem) =>
 																inItem.value ==
 																getValues(
-																	`array[${index}].finishing_batch_uuid`
+																	`array[${index}].order_description_uuid`
 																)
 														)}
 														onChange={(e) => {

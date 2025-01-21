@@ -2,6 +2,8 @@ import { FZL_LOGO } from '@/assets/img/base64';
 import { layouts } from 'chart.js';
 import { format, sub } from 'date-fns';
 
+import { getRequiredTapeKg } from '@/util/GetRequiredTapeKg';
+
 import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../ui';
 import { company, getEmptyColumn } from '../utils';
 
@@ -44,7 +46,35 @@ export const getPageHeader = (batch) => {
 	const orderCreatedDate = new Set();
 	const bleach = new Set();
 	const party = new Set();
-	batch?.batch_entry?.forEach((item) => {
+	const dyed_tape = batch?.dyeing_batch_entry
+		.reduce((acc, item) => {
+			const quantity = parseFloat(item.quantity) || 0;
+
+			// * for tape order we calculate with size as quantity
+			const itemTotal =
+				getRequiredTapeKg({
+					row: item,
+					type: 'dyed',
+					input_quantity: quantity,
+				}) || 0;
+			return acc + itemTotal;
+		}, 0)
+		.toFixed(3);
+	const raw_tape = batch?.dyeing_batch_entry
+		.reduce((acc, item) => {
+			const quantity = parseFloat(item.quantity) || 0;
+
+			// * for tape order we calculate with size as quantity
+			const itemTotal =
+				getRequiredTapeKg({
+					row: item,
+					type: 'raw',
+					input_quantity: quantity,
+				}) || 0;
+			return acc + itemTotal;
+		}, 0)
+		.toFixed(3);
+	batch?.dyeing_batch_entry?.forEach((item) => {
 		party.add(item.party_name);
 		buyer.add(item.buyer_name);
 		order_ref_no.add(item.order_number);
@@ -55,7 +85,7 @@ export const getPageHeader = (batch) => {
 		delivery_date.add(
 			item.delivery_date ? getDateFormate(item.delivery_date) : ''
 		);
-		orderCreatedDate.add(getDateFormate(item.order_created_at));
+		orderCreatedDate.add(getDateFormate(item.created_at));
 		bleach.add(item.bleaching);
 	});
 
@@ -160,9 +190,7 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text:
-										batch?.total_yarn_quantity?.toFixed(3) +
-										' (KG)',
+									text: dyed_tape + ' (KG)',
 									// text:
 									// 	batch?.total_yarn_quantity +
 									// 	'/' +
@@ -183,8 +211,7 @@ export const getPageHeader = (batch) => {
 								},
 								{
 									text: Number(
-										batch?.water_capacity *
-											batch?.total_yarn_quantity
+										batch?.water_capacity * raw_tape
 									)?.toFixed(3),
 								},
 							],
@@ -197,23 +224,7 @@ export const getPageHeader = (batch) => {
 									text: 'Slot ' + batch?.slot,
 								},
 								{
-									text: 'Delv Dt',
-									bold: true,
-								},
-								{
-									text: `${Array.from(delivery_date).join(', ')}`,
-								},
-							],
-							[
-								{
 									text: 'Light Source',
-									bold: true,
-								},
-								{
-									text: '',
-								},
-								{
-									text: 'Fiber Type',
 									bold: true,
 								},
 								{

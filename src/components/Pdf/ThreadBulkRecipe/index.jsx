@@ -12,12 +12,9 @@ import pdfMake from '..';
 import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
-	getTable('recipe_name', 'Recipe Name'),
 	getTable('style', 'Style'),
 	getTable('count_length', 'Count Length'),
-	getTable('order_quantity', 'Order Quantity', 'right'),
-	getTable('balance_quantity', 'Balance Quantity', 'right'),
-	getTable('quantity', 'Quantity', 'right'),
+	getTable('quantity', 'Batch QTY', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
 const node2 = [
@@ -86,10 +83,10 @@ export default function Index(batch, shade_recipes_entries, programs) {
 	let footerHeight = 50;
 	const { batch_entry } = batch;
 	shade_recipes_entries?.forEach((item) => {
-		item.bulk = Number(item.bulk).toFixed(5);
+		item.bulk = Number(item.bulk).toFixed(3);
 	});
 	programs?.forEach((item) => {
-		item.bulk = Number(item.bulk).toFixed(5);
+		item.bulk = Number(item.bulk).toFixed(3);
 	});
 
 	const processDyePrograms = (programs) => {
@@ -150,7 +147,7 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', 40, '*', 50, 40, 40, '*'],
+					widths: ['*', '*', 60, '*'],
 					body: [
 						// * Header
 						TableHeader(node),

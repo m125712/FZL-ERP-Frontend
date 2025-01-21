@@ -41,53 +41,6 @@ export default function index() {
 		}
 	);
 
-	const columns = useMemo(
-		() => [
-			{
-				accessorKey: 'material_section_name',
-				header: 'Section',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'material_name',
-				header: 'Material',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'material_unit',
-				header: 'Unit',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'opening_quantity',
-				header: 'Opening',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'purchase_quantity',
-				header: 'Purchase',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'consumption_quantity',
-				header: 'Consumption',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'closing_quantity',
-				header: 'Closing',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-		],
-		[data]
-	);
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
@@ -98,22 +51,27 @@ export default function index() {
 		<>
 			<div className='flex flex-col gap-8'>
 				<Header {...{ from, setFrom }} />
-				<button
-					type='button'
-					onClick={() => {
-						Pdf(data, from)?.print({}, window.open('', '_blank'));
-					}}
-					className='btn btn-primary'>
-					Generate PDF
-				</button>
-				<button
-					type='button'
-					onClick={() => {
-						Excel(data, from);
-					}}
-					className='btn btn-primary'>
-					Generate Excel
-				</button>
+				<div className='flex gap-2'>
+					<button
+						type='button'
+						onClick={() => {
+							Pdf(data, from)?.print(
+								{},
+								window.open('', '_blank')
+							);
+						}}
+						className='btn btn-primary flex-1'>
+						Generate PDF
+					</button>
+					<button
+						type='button'
+						onClick={() => {
+							Excel(data, from);
+						}}
+						className='btn btn-secondary flex-1'>
+						Generate Excel
+					</button>
+				</div>
 			</div>
 		</>
 	);

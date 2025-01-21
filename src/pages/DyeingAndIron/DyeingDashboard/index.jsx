@@ -11,6 +11,8 @@ import Content from './Content/Content';
 import Header from './Header';
 
 export default function index() {
+	const [machines, setMachines] = useState([]);
+
 	const haveAccess = useAccess('dyeing__dyeing_dashboard');
 
 	const info = new PageInfo(
@@ -18,6 +20,7 @@ export default function index() {
 		'/dyeing-and-iron/dyeing-dashboard',
 		'dyeing__dyeing_dashboard'
 	);
+
 	const [dyeingDate, setDyeingDate] = useState('');
 	const { data } = useDyeingDashboard(dyeingDate);
 
@@ -29,11 +32,20 @@ export default function index() {
 
 	useEffect(() => {
 		if (data) {
-			Pdf(data, dyeingDate)?.getDataUrl((dataUrl) => {
+			let filters =
+				machines.length > 0
+					? data?.filter((item) =>
+							machines
+								.map((machine) => machine.value)
+								?.includes(item.machine_uuid)
+						)
+					: data;
+
+			Pdf(filters, dyeingDate)?.getDataUrl((dataUrl) => {
 				setData(dataUrl);
 			});
 		}
-	}, [data]);
+	}, [data, machines]);
 	// ! FOR TESTING
 
 	return (
@@ -42,7 +54,7 @@ export default function index() {
 				src={data2}
 				className='h-[40rem] w-full rounded-md border-none'
 			/>
-			<Header {...{ dyeingDate, setDyeingDate }} />
+			<Header {...{ dyeingDate, setDyeingDate, machines, setMachines }} />
 			<Content data={data} dyeingDate={dyeingDate} />
 		</div>
 	);

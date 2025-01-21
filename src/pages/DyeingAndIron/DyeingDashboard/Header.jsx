@@ -1,14 +1,36 @@
+import { useOtherMachines } from '@/state/Other';
 import { useMediaQuery } from '@uidotdev/usehooks';
 import { format } from 'date-fns';
 
 import MultiCalendar from '@/ui/Others/DatePicker/MultiCalendar';
-import { SectionEntryBody, SimpleDatePicker } from '@/ui';
+import { ReactSelect, SectionEntryBody, SimpleDatePicker } from '@/ui';
 
-export default function Header({ dyeingDate = '', setDyeingDate = () => {} }) {
+export default function Header({
+	dyeingDate = '',
+	setDyeingDate = () => {},
+	machines,
+	setMachines,
+}) {
 	const isSmallDevice = useMediaQuery('only screen and (max-width : 768px)');
+
+	const { data: machineOptions } = useOtherMachines();
 	return (
 		<div>
-			<SectionEntryBody title={'Dyeing Dashboard'}>
+			<SectionEntryBody
+				title={'Dyeing Dashboard'}
+				header={
+					<div className='min-w-60'>
+						<ReactSelect
+							placeholder='Select Machines'
+							options={machineOptions}
+							value={machines}
+							onChange={(e) => {
+								setMachines(e);
+							}}
+							isMulti={true}
+						/>
+					</div>
+				}>
 				{isSmallDevice ? (
 					<SimpleDatePicker
 						inline

@@ -15,8 +15,6 @@ const node = [
 	getTable('recipe_name', 'Recipe Name'),
 	getTable('style', 'Style'),
 	getTable('count_length', 'Count Length'),
-	getTable('order_quantity', 'Order Quantity', 'right'),
-	getTable('balance_quantity', 'Balance Quantity', 'right'),
 	getTable('quantity', 'Quantity', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
@@ -150,7 +148,7 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', 40, '*', 50, 40, 40, '*'],
+					widths: ['*', '*', '*', 40, '*'],
 					body: [
 						// * Header
 						TableHeader(node),

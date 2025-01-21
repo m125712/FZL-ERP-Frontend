@@ -16,22 +16,8 @@ export default function Header({
 	const { data: machineOptions } = useOtherMachines();
 	return (
 		<div>
-			<SectionEntryBody
-				title={'Dyeing Dashboard'}
-				header={
-					<div className='min-w-60'>
-						<ReactSelect
-							placeholder='Select Machines'
-							options={machineOptions}
-							value={machines}
-							onChange={(e) => {
-								setMachines(e);
-							}}
-							isMulti={true}
-						/>
-					</div>
-				}>
-				{isSmallDevice ? (
+			<SectionEntryBody title={'Dyeing Dashboard'}>
+				<div className='flex gap-4'>
 					<SimpleDatePicker
 						inline
 						value={dyeingDate}
@@ -39,15 +25,17 @@ export default function Header({
 							setDyeingDate(format(data, 'yyyy-MM-dd'));
 						}}
 					/>
-				) : (
-					<MultiCalendar
-						selected={dyeingDate}
-						onChange={(data) => {
-							setDyeingDate(format(data, 'yyyy-MM-dd'));
+					<ReactSelect
+						placeholder='Select Machines'
+						options={machineOptions}
+						value={machines}
+						className='w-full'
+						onChange={(e) => {
+							setMachines(e);
 						}}
-						monthsShown={4}
+						isMulti={true}
 					/>
-				)}
+				</div>
 			</SectionEntryBody>
 		</div>
 	);

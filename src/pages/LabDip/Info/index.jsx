@@ -68,34 +68,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'buyer_name',
-				header: 'Buyer',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'party_name',
-				header: 'Party',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'marketing_name',
-				header: 'Marketing',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'merchandiser_name',
-				header: 'Merchandiser',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorFn: (row) => {
 					return row.recipe_array
 						?.map((item) => item.recipe_name)
@@ -129,7 +101,7 @@ export default function Index() {
 									/>
 								</div>
 								<div className='flex items-center gap-2'>
-									Marketing Approved
+									Mkt Approved
 									<span
 										className={cn(
 											'badge badge-error badge-xs',
@@ -143,6 +115,35 @@ export default function Index() {
 					});
 				},
 			},
+			{
+				accessorKey: 'buyer_name',
+				header: 'Buyer',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'marketing_name',
+				header: 'Marketing',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'merchandiser_name',
+				header: 'Merchandiser',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',

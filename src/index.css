@@ -207,11 +207,11 @@ body {
 @layer base {
 	:root:has(
 			:is(
-					.modal-open,
-					.modal:target,
-					.modal-toggle:checked + .modal,
-					.modal[open]
-				)
+				.modal-open,
+				.modal:target,
+				.modal-toggle:checked + .modal,
+				.modal[open]
+			)
 		) {
 		scrollbar-gutter: revert !important;
 	}
@@ -386,12 +386,6 @@ body {
 }
 
 @layer base {
-	* {
-		@apply border-border;
-	}
-	body {
-		@apply bg-background text-foreground;
-	}
 }
 
 .live-indicator {
@@ -425,4 +419,8 @@ body {
 	100% {
 		opacity: 0;
 	}
+}
+
+.table :where(th, td) {
+	vertical-align: top;
 }

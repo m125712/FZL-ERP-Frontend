@@ -13,6 +13,7 @@ export const getRequiredTapeKg = ({
 		order_type,
 		unit,
 	} = row;
+	console.log(row);
 
 	const isInch = unit?.toLowerCase() === 'inch';
 	const mtr_per_kg = type === 'raw' ? raw_mtr_per_kg : dyed_mtr_per_kg;

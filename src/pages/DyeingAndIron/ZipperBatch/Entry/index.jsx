@@ -1,11 +1,4 @@
-import {
-	Suspense,
-	use,
-	useCallback,
-	useEffect,
-	useMemo,
-	useState,
-} from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import {
 	useDyeingBatch,
 	useDyeingBatchDetailsByUUID,
@@ -145,18 +138,13 @@ export default function Index() {
 		[watch()]
 	);
 
-	const isReceived = getValues('received') === 1;
 	const getTotalCalTape = useCallback((dyeing_batch_entry) => {
 		if (!dyeing_batch_entry || !Array.isArray(dyeing_batch_entry)) {
 			return 0;
 		}
 
 		return dyeing_batch_entry.reduce((acc, item) => {
-			const top = parseFloat(item.top) || 0;
-			const bottom = parseFloat(item.bottom) || 0;
-			const size = parseFloat(item.size) || 0;
 			const quantity = parseFloat(item.quantity) || 0;
-			const rawMtrPerKg = parseFloat(item.raw_mtr_per_kg) || 1;
 
 			// * for tape order we calculate with size as quantity
 			const itemTotal =

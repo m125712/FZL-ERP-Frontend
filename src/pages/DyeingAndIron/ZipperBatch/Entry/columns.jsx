@@ -58,6 +58,7 @@ export const Columns = ({
 			accessorKey: 'item_description',
 			header: 'Item Description',
 			enableColumnFilter: true,
+			width: 'w-36',
 			enableSorting: true,
 		},
 		{

@@ -37,7 +37,7 @@ import {
 	NUMBER_DOUBLE_REQUIRED,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-import getTransactionArea from '@/util/TransactionArea';
+import getTransactionArea, { getPurposes } from '@/util/TransactionArea';
 
 export default function Index({
 	modalId = '',
@@ -154,25 +154,8 @@ export default function Index({
 		}
 	};
 
-	const purposes = [
-		{
-			value: 'general',
-			label: 'General',
-		},
-		{
-			value: 'slider',
-			label: 'Slider',
-		},
-		{
-			value: 'tape',
-			label: 'Tape Loom',
-		},
-		{
-			value: 'finishing_floor',
-			label: 'Finishing Floor',
-		},
-	];
-
+	const purposes = getPurposes;
+	
 	return (
 		<AddModal
 			id={modalId}

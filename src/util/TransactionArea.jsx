@@ -159,3 +159,23 @@ export const getTransferArea = [
 	{ label: 'Vislon Teeth Molding', value: 'vislon_teeth_molding' },
 	{ label: 'Metal Teeth Molding', value: 'metal_teeth_molding' },
 ];
+
+
+export const getPurposes = [
+	{
+		value: 'general',
+		label: 'General',
+	},
+	{
+		value: 'slider',
+		label: 'Slider',
+	},
+	{
+		value: 'tape',
+		label: 'Tape Loom',
+	},
+	{
+		value: 'finishing_floor',
+		label: 'Finishing Floor',
+	},
+];

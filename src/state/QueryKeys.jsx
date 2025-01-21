@@ -1237,9 +1237,10 @@ export const otherQK = {
 	],
 
 	//Slider Stock
-	sliderStockWithDescription: () => [
+	sliderStockWithDescription: (query) => [
 		...otherQK.all(),
 		'slider-stock-with-description',
+		...(query ? [query] : []),
 	],
 
 	//LC

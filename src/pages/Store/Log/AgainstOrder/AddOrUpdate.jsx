@@ -40,7 +40,7 @@ import {
 	MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-import getTransactionArea from '@/util/TransactionArea';
+import getTransactionArea, { getPurposes } from '@/util/TransactionArea';
 
 export default function Index({
 	modalId = '',
@@ -174,6 +174,9 @@ export default function Index({
 	};
 
 	const transactionArea = getTransactionArea();
+
+	const purposes = getPurposes;
+
 	return (
 		<AddModal
 			id={modalId}
@@ -182,7 +185,29 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}>
-
+			
+			<FormField label='purpose' title='Purpose' errors={errors}>
+				<Controller
+					name={'purpose'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<ReactSelect
+								placeholder='Select purpose'
+								options={purposes}
+								value={
+									purposes?.filter(
+										(item) =>
+											item.value === getValues('purpose')
+									) || null
+								}
+								onChange={(e) => onChange(e.value)}
+								isDisabled={true}
+							/>
+						);
+					}}
+				/>
+			</FormField>
 			<FormField label='trx_to' title='Trx to' errors={errors}>
 				<Controller
 					name={'trx_to'}

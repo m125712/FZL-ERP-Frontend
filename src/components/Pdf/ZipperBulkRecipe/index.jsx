@@ -14,9 +14,7 @@ import { getPageFooter, getPageHeader } from './utils';
 const node = [
 	getTable('recipe_name', 'Recipe Name'),
 	getTable('style', 'Style'),
-	getTable('count_length', 'Count Length'),
-	getTable('order_quantity', 'Order Quantity', 'right'),
-	getTable('balance_quantity', 'Balance Quantity', 'right'),
+	getTable('item_description', 'Item'),
 	getTable('quantity', 'Quantity', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
@@ -84,7 +82,7 @@ const separateDark = (programs) => {
 export default function Index(batch, shade_recipes_entries, programs) {
 	const headerHeight = 200;
 	let footerHeight = 50;
-	const { batch_entry } = batch;
+	const { dyeing_batch_entry } = batch;
 	shade_recipes_entries?.forEach((item) => {
 		item.bulk = Number(item.bulk).toFixed(3);
 	});
@@ -115,6 +113,29 @@ export default function Index(batch, shade_recipes_entries, programs) {
 	);
 	const shade = yellow?.concat(red)?.concat(other);
 
+	const grouped =
+		dyeing_batch_entry?.reduce(
+			(acc, item) => {
+				acc.recipe_name?.add(item.recipe_name);
+				acc.unit?.add(item.unit);
+				acc.bleaching?.add(item.bleaching);
+				return acc;
+			},
+			{
+				unit: new Set(),
+				bleaching: new Set(),
+				recipe_name: new Set(),
+			}
+		) || {};
+	const { unit, bleaching, recipe_name } = grouped;
+	unit?.forEach((item) => {
+		unit.
+		bleaching?.forEach((bleach) => {
+			recipe_name?.forEach((recipe) => {
+
+			});
+		});
+	});
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
 			xMargin,
@@ -150,13 +171,13 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', 40, '*', 50, 40, 40, '*'],
+					widths: ['*', 40, '*', 40, '*'],
 					body: [
 						// * Header
 						TableHeader(node),
 
 						// * Body
-						...batch_entry?.map((item) =>
+						...dyeing_batch_entry?.map((item) =>
 							node.map((nodeItem) => ({
 								text: item[nodeItem.field],
 								style: nodeItem.cellStyle,

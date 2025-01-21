@@ -203,7 +203,6 @@ export const Columns = ({
 					const quantity = parseFloat(
 						watch(`dyeing_batch_entry[${index}].quantity`) || 0
 					);
-
 					return getRequiredTapeKg({
 						row: row.original,
 						type: 'raw',

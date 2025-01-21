@@ -69,7 +69,7 @@ export default function Index() {
 				}
 			);
 		}
-	}, [batch]);
+	}, [batch, shade_recipes_entries, programs]);
 	if (loading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 

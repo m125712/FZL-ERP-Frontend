@@ -13,8 +13,9 @@ import { getPageFooter, getPageHeader } from './utils';
 
 const node = [
 	getTable('recipe_name', 'Recipe Name'),
-	getTable('style', 'Style'),
 	getTable('item_description', 'Item'),
+	getTable('style', 'Style'),
+	getTable('size', 'Size'),
 	getTable('quantity', 'Quantity', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
@@ -128,14 +129,55 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			}
 		) || {};
 	const { unit, bleaching, recipe_name } = grouped;
+	const new_batch_entry = [];
 	unit?.forEach((item) => {
-		unit.
 		bleaching?.forEach((bleach) => {
 			recipe_name?.forEach((recipe) => {
-
+				new_batch_entry.push({
+					unit: item,
+					bleaching: bleach,
+					recipe_name: recipe,
+					max_size: 0,
+					min_size: Infinity,
+					size: '',
+					unit: item,
+					item_description: new Set(),
+					quantity: 0,
+					style: new Set(),
+					color: new Set(),
+				});
 			});
 		});
 	});
+	new_batch_entry.forEach((item) => {
+		batch.dyeing_batch_entry.forEach((entry) => {
+			if (
+				entry.unit === item.unit &&
+				entry.bleaching === item.bleaching &&
+				entry.recipe_name === item.recipe_name
+			) {
+				item.item_description.add(entry.item_description);
+
+				item.quantity += entry.quantity;
+				item.style.add(entry.style);
+				item.color.add(entry.color);
+				item.unit = entry.unit;
+				item.max_size = Math.max(item.max_size, Number(entry.size));
+				item.min_size = Math.min(item.min_size, Number(entry.size));
+				item.size =
+					`${item.min_size === item.max_size ? item.min_size : `(${item.min_size} - ${item.max_size})`}` +
+					' ' +
+					entry.unit;
+			}
+		});
+	});
+
+	new_batch_entry.forEach((item) => {
+		item.item_description = Array.from(item.item_description).join(', ');
+		item.style = Array.from(item.style).join(', ');
+		item.color = Array.from(item.color).join(', ');
+	});
+	console.log(new_batch_entry);
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
 			xMargin,
@@ -171,13 +213,13 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', 40, '*', 40, '*'],
+					widths: [70, 60, '*', 60, 60, '*'],
 					body: [
 						// * Header
 						TableHeader(node),
 
 						// * Body
-						...dyeing_batch_entry?.map((item) =>
+						...new_batch_entry?.map((item) =>
 							node.map((nodeItem) => ({
 								text: item[nodeItem.field],
 								style: nodeItem.cellStyle,

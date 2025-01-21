@@ -46,6 +46,34 @@ export const getPageHeader = (batch) => {
 	const orderCreatedDate = new Set();
 	const bleach = new Set();
 	const party = new Set();
+	const dyed_tape = batch?.dyeing_batch_entry
+		.reduce((acc, item) => {
+			const quantity = parseFloat(item.quantity) || 0;
+
+			// * for tape order we calculate with size as quantity
+			const itemTotal =
+				getRequiredTapeKg({
+					row: item,
+					type: 'dyed',
+					input_quantity: quantity,
+				}) || 0;
+			return acc + itemTotal;
+		}, 0)
+		.toFixed(3);
+	const raw_tape = batch?.dyeing_batch_entry
+		.reduce((acc, item) => {
+			const quantity = parseFloat(item.quantity) || 0;
+
+			// * for tape order we calculate with size as quantity
+			const itemTotal =
+				getRequiredTapeKg({
+					row: item,
+					type: 'raw',
+					input_quantity: quantity,
+				}) || 0;
+			return acc + itemTotal;
+		}, 0)
+		.toFixed(3);
 	batch?.dyeing_batch_entry?.forEach((item) => {
 		party.add(item.party_name);
 		buyer.add(item.buyer_name);
@@ -162,24 +190,7 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text:
-										batch?.dyeing_batch_entry
-											.reduce((acc, item) => {
-												const quantity =
-													parseFloat(item.quantity) ||
-													0;
-
-												// * for tape order we calculate with size as quantity
-												const itemTotal =
-													getRequiredTapeKg({
-														row: item,
-														type: 'raw',
-														input_quantity:
-															quantity,
-													}) || 0;
-												return acc + itemTotal;
-											}, 0)
-											.toFixed(3) + ' (KG)',
+									text: dyed_tape + ' (KG)',
 									// text:
 									// 	batch?.total_yarn_quantity +
 									// 	'/' +
@@ -200,8 +211,7 @@ export const getPageHeader = (batch) => {
 								},
 								{
 									text: Number(
-										batch?.water_capacity *
-											batch?.total_yarn_quantity
+										batch?.water_capacity * raw_tape
 									)?.toFixed(3),
 								},
 							],

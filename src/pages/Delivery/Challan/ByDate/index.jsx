@@ -20,9 +20,10 @@ export default function Index() {
 		: [];
 
 	const { data, isLoading, url, updateData } = useDeliveryChallan(
-		`?delivery_date=${date}&vehicle=${vehicle}`
+		`?delivery_date=${date}&vehicle=${vehicle}`,
+		{ enabled: true }
 	);
-
+ 
 	const info = new PageInfo(`Challan `, url, 'delivery__challan_by_date');
 	const haveAccess = useAccess('delivery__challan_by_date');
 
@@ -190,7 +191,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 		],
-		[data]
+		[data, vehicle, modifiedVehicles]
 	);
 
 	const [data2, setData] = useState('');
@@ -212,6 +213,7 @@ export default function Index() {
 				src={data2}
 				className='h-[40rem] w-full rounded-md border-none'
 			/>
+
 			<ReactTableTitleOnly
 				title={
 					<div className='my-2'>

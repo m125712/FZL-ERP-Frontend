@@ -11,9 +11,9 @@ import { getPageFooter, getPageHeader } from './utils';
 const node = [
 	getTable('color', 'Color'),
 	getTable('style', 'Style'),
-	getTable('count_length_name', 'Count Length'),
+	getTable('count_length_name', 'C/L'),
 	getTable('bleaching', 'Bleaching'),
-	getTable('quantity', 'Quantity (cone)', 'right'),
+	getTable('quantity', 'QTY (cone)', 'right'),
 	getTable('expected_yarn', 'Yarn Req.', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
@@ -80,7 +80,7 @@ export default function Index(orderInfo) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', 70, 50, '*', '*', '*'],
+					widths: [100, 100, 50, 50, 50, 50, 70],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -95,21 +95,21 @@ export default function Index(orderInfo) {
 						),
 						[
 							{
-								text: `Total Color: ${Number(uniqueColorsCount)}`,
+								text: `Total: ${Number(uniqueColorsCount)}`,
 								bold: true,
 								colSpan: 2,
 							},
 							{},
 							{},
 							{
-								text: `Total QTY: ${Number(totalQuantity)}`,
+								text: `${Number(totalQuantity)}`,
 								alignment: 'right',
 								bold: true,
 								colSpan: 2,
 							},
 							{},
 							{
-								text: `Total Y.Req.: ${Number(totalExpectedYarn)}`,
+								text: `${Number(totalExpectedYarn)}`,
 								alignment: 'right',
 								bold: true,
 							},

@@ -12,6 +12,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 	const headerHeight = 130;
 	let footerHeight = 30;
 	const { order_info, orders } = orderByStyle;
+	let grandTotal = 0;
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		pageSize: 'A4',
@@ -45,52 +46,89 @@ export default function OrderSheetByStyle(orderByStyle) {
 
 		content: [
 			...orders?.map((item, idx) => {
+				let total = 0;
 				return {
 					margin: [0, 5],
 					table: {
 						headerRows: 2,
-						widths: ['*', '*', '*', '*', '*', '*', '*', '*'],
+						widths: [25, '*', '*', 50, 30, 30, 30, 35],
 						body: [
 							// Header
 							...TableHeader(item),
 
 							...item.item_description?.flatMap((entry, idx) =>
-								entry.details.map((detail) => [
-									{
-										text: idx,
-										rowSpan: detail.length,
-									},
-									{
-										text: entry.tape,
-										rowSpan: detail.length,
-									},
-									{
-										text: entry.slider,
-										rowSpan: detail.length,
-									},
-									{
-										text: detail.color
-											? detail.color
-											: '---',
-									},
-									{ text: detail.size ? detail.size : '---' },
-									{ text: detail.unit ? detail.unit : '---' },
-									{
-										text: detail.bleaching
-											? detail.bleaching
-											: '---',
-									},
-									{
-										text: detail.quantity
-											? detail.quantity
-											: '---',
-									},
-								])
+								entry.details.map((detail) => {
+									total += detail.quantity;
+									grandTotal += detail.quantity;
+
+									return [
+										{
+											text: idx + 1,
+											rowSpan: entry.details.length,
+										},
+										{
+											text: entry.tape,
+											rowSpan: entry.details.length,
+										},
+										{
+											text: entry.slider,
+											rowSpan: entry.details.length,
+										},
+										{
+											text: detail.color
+												? detail.color
+												: '---',
+										},
+										{
+											text: detail.size
+												? detail.size
+												: '---',
+										},
+										{
+											text: detail.unit
+												? detail.unit
+												: '---',
+										},
+										{
+											text:
+												detail.bleaching ===
+												'non-bleach'
+													? 'No'
+													: 'Yes',
+										},
+										{
+											text: detail.quantity
+												? detail.quantity
+												: '---',
+										},
+									];
+								})
 							),
+							[
+								{
+									text: 'Total',
+									colSpan: 7,
+								},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{},
+								{
+									text: total,
+								},
+							],
 						],
 					},
 				};
 			}),
+
+			{
+				text: 'Grand Total: ' + grandTotal,
+				fontSize: DEFAULT_FONT_SIZE + 3,
+				bold: true,
+			},
 		],
 	});
 

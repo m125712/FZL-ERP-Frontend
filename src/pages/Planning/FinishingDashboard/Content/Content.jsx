@@ -41,7 +41,7 @@ export default function Content({ data }) {
 							<tr
 								key={index}
 								className='border-b-2 border-primary/30'>
-								<th className='z-10 flex flex-col gap-4'>
+								<th className='z-10 flex flex-col items-stretch gap-4 bg-error'>
 									<CustomLink
 										label={
 											<DateTime
@@ -51,8 +51,10 @@ export default function Content({ data }) {
 											/>
 										}
 										url={`/planning/finishing-dashboard/batch-report/${urlDate}`}
+										showCopyButton={false}
 										openInNewTab
 									/>
+
 									<button
 										onClick={() =>
 											navigate(

@@ -8,10 +8,10 @@ import { useAccess } from '@/hooks';
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import {
+	CustomLink,
 	DateTime,
 	EditDelete,
 	LinkOnly,
-	LinkWithCopy,
 	StatusButton,
 	StatusSelect,
 } from '@/ui';
@@ -151,13 +151,14 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => {
 					const { delivery_date } = info.row.original;
+					const date = format(new Date(delivery_date), 'yyyy-MM-dd');
 					return (
-						<LinkOnly
-							title={
+						<CustomLink
+							label={
 								<DateTime date={delivery_date} isTime={false} />
 							}
-							id={format(new Date(delivery_date), 'yyyy-MM-dd')}
-							uri='/delivery/challan-by-date'
+							url={`/delivery/challan-by-date/${date}`}
+							openInNewTab
 						/>
 					);
 				},
@@ -169,10 +170,10 @@ export default function Index() {
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={uuid}
-							uri='/delivery/challan'
+						<CustomLink
+							label={info.getValue()}
+							url={`/delivery/challan/${uuid}`}
+							openInNewTab
 						/>
 					);
 				},
@@ -183,21 +184,16 @@ export default function Index() {
 				width: 'w-40',
 				cell: (info) => {
 					const { order_info_uuid, item_for } = info.row.original;
+					const url =
+						item_for === 'thread' || item_for === 'sample_thread'
+							? `/thread/order-info/${order_info_uuid}`
+							: `/order/details/${info.getValue()}`;
 
-					if (item_for === 'thread' || item_for === 'sample_thread') {
-						return (
-							<LinkWithCopy
-								title={info.getValue()}
-								id={order_info_uuid}
-								uri='/thread/order-info'
-							/>
-						);
-					}
 					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={info.getValue()}
-							uri='/order/details'
+						<CustomLink
+							label={info.getValue()}
+							url={url}
+							openInNewTab
 						/>
 					);
 				},
@@ -218,11 +214,11 @@ export default function Index() {
 					return packing_list_numbers?.map((packingList) => {
 						if (packingList === 'PL-') return '-';
 						return (
-							<LinkWithCopy
+							<CustomLink
 								key={packingList.packing_number}
-								title={packingList.packing_number}
-								id={packingList.packing_list_uuid}
-								uri='/delivery/packing-list'
+								label={packingList.packing_number}
+								url={`/delivery/packing-list/${packingList.packing_list_uuid}`}
+								openInNewTab
 							/>
 						);
 					});

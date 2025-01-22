@@ -1,14 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-	useDeliveryPackingList,
-	useDeliveryPackingListByUUID,
-} from '@/state/Delivery';
-import { useOtherOrderPackingList, useOtherPackingList } from '@/state/Other';
-import { QueryCache } from '@tanstack/react-query';
+import { useDeliveryPackingList } from '@/state/Delivery';
+import { useOtherPackingList } from '@/state/Other';
 import { useSymbologyScanner } from '@use-symbology-scanner/react';
-import { set } from 'date-fns';
 import { FormProvider } from 'react-hook-form';
-import { configure, HotKeys } from 'react-hotkeys';
 import { useNavigate } from 'react-router-dom';
 import { useAccess, useFetch, useRHF } from '@/hooks';
 
@@ -23,6 +17,7 @@ import {
 	SectionEntryBody,
 } from '@/ui';
 
+import { cn } from '@/lib/utils';
 import { exclude } from '@/util/Exclude';
 import GetDateTime from '@/util/GetDateTime';
 import {
@@ -31,17 +26,15 @@ import {
 } from '@/util/Schema';
 
 export default function Index() {
+	const navigate = useNavigate();
 	const containerRef = useRef(null);
-	const [symbol, setScanUUID] = useState(null);
+
+	const [symbol, setSymbol] = useState(null);
 	const [scannerActive, setScannerActive] = useState(true);
 	const [onFocus, setOnFocus] = useState(true);
-	const navigate = useNavigate();
-	const haveAccess = useAccess('delivery__warehouse_recv');
 	const [status, setStatus] = useState(false);
 
-	const scan_option = [
-		{ value: 'warehouse_receive', label: 'Warehouse Receive' },
-	];
+	const haveAccess = useAccess('delivery__warehouse_recv');
 
 	const {
 		handleSubmit,
@@ -69,6 +62,7 @@ export default function Index() {
 		loading: isLoading,
 		error,
 	} = useFetch(`/delivery/packing-list/${symbol}`, [status]);
+
 	const { data: packetList, updateData } = useOtherPackingList();
 	const { invalidateQuery: invalidateDeliveryPackingList } =
 		useDeliveryPackingList();
@@ -82,7 +76,7 @@ export default function Index() {
 	const handleSymbol = useCallback(
 		async (scannedSymbol) => {
 			if (!scannedSymbol || !onFocus || scannedSymbol.length < 2) return;
-			setScanUUID(scannedSymbol);
+			setSymbol(scannedSymbol);
 			setStatus(!status);
 		},
 		[status]
@@ -206,59 +200,26 @@ export default function Index() {
 	return (
 		<FormProvider {...form}>
 			<div
-				ref={containerRef}
+				className='outline-none'
 				tabIndex={0}
 				onBlur={() => setScannerActive(false)}
 				onFocus={() => setScannerActive(true)}
-				className='min-h-screen p-4 outline-none'>
-				<div className='mb-4 flex items-center gap-4'>
-					<div
-						className={`flex items-center gap-2 ${scannerActive ? 'text-success' : 'text-error'}`}>
-						<div
-							className={`h-3 w-3 rounded-full ${scannerActive ? 'bg-success' : 'bg-error'}`}></div>
-						<span className='text-sm font-medium'>
-							Scanner{' '}
-							{scannerActive
-								? 'Active'
-								: 'Inactive (Click this dot to active)'}
-						</span>
-					</div>
-				</div>
-
+				ref={containerRef}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
-					className='mt-4 flex flex-col gap-4'>
-					<SectionEntryBody title='Details'>
-						<FormField
-							label='option'
-							title='Select Option'
-							errors={errors}>
-							<Controller
-								name='option'
-								control={control}
-								render={({ field: { onChange } }) => (
-									<ReactSelect
-										placeholder='Select Option'
-										options={scan_option}
-										value={scan_option?.find(
-											(item) =>
-												item.value ==
-												getValues('option')
-										)}
-										// onFocus={() => {
-										// 	setOnFocus(false);
-										// }}
-										onChange={(e) => {
-											const value = e.value;
-											onChange(value);
-											setOnFocus(true);
-											containerRef.current.focus();
-										}}
-									/>
-								)}
-							/>
-						</FormField>
+					className='flex flex-col gap-4'>
+					<SectionEntryBody
+						title='Details'
+						header={
+							<span
+								className={cn(
+									'btn btn-sm',
+									scannerActive ? 'btn-success' : 'btn-error'
+								)}>
+								Scanner: {scannerActive ? 'ON' : 'OFF'}
+							</span>
+						}>
 						<FormField
 							label='packet_list_uuid'
 							title='Packet List'
@@ -287,7 +248,7 @@ export default function Index() {
 										// }}
 										onChange={(e) => {
 											const value = e.value;
-											setScanUUID(value);
+											setSymbol(value);
 											setStatus(!status);
 											setValue('packet_list_uuid', null);
 											onChange(null);
@@ -385,18 +346,6 @@ export default function Index() {
 					</DynamicField>
 
 					<Footer buttonClassName='!btn-primary' />
-					{/* <div className='modal-action'>
-						<button
-							type='submit'
-							disabled={
-								getValues('entry').length < 1 ||
-								isLoading ||
-								watch('option') === 'warehouse_return'
-							}
-							className='text-md btn btn-primary btn-block'>
-							Save
-						</button>
-					</div> */}
 				</form>
 			</div>
 		</FormProvider>

@@ -6,15 +6,8 @@ import { useAccess } from '@/hooks';
 
 import Pdf from '@/components/Pdf/ChallanByDate';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-import {
-	DateTime,
-	LinkWithCopy,
-	ReactSelect,
-	SectionEntryBody,
-	StatusButton,
-} from '@/ui';
+import { DateTime, LinkWithCopy, ReactSelect, StatusButton } from '@/ui';
 
-import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {

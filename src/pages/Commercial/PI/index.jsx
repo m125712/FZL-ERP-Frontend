@@ -5,13 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import {
-	CustomLink,
-	DateTime,
-	EditDelete,
-	LinkWithCopy,
-	StatusSelect,
-} from '@/ui';
+import { CustomLink, DateTime, EditDelete, StatusSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -28,7 +22,7 @@ const getPath = (haveAccess, userUUID) => {
 };
 
 export default function Index() {
-	const [status, setStatus] = useState('all');
+	const [status, setStatus] = useState('pending');
 	const options = [
 		{ value: 'all', label: 'All' },
 		{ value: 'pending', label: 'Pending' },

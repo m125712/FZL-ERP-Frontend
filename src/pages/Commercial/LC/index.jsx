@@ -5,13 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import {
-	CustomLink,
-	DateTime,
-	EditDelete,
-	LinkWithCopy,
-	StatusButton,
-} from '@/ui';
+import { CustomLink, DateTime, EditDelete, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 

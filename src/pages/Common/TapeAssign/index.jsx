@@ -4,7 +4,7 @@ import { useOtherTapeCoil } from '@/state/Other';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { LinkWithCopy, ReactSelect, StatusButton, StatusSelect } from '@/ui';
+import { CustomLink, ReactSelect, StatusButton, StatusSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -49,10 +49,9 @@ export default function Index() {
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={order_number}
-							uri='/order/details'
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${order_number}`}
 						/>
 					);
 				},
@@ -65,10 +64,10 @@ export default function Index() {
 					const { order_description_uuid, order_number } =
 						info.row.original;
 					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={order_description_uuid}
-							uri={`/order/details/${order_number}`}
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${order_number}/${order_description_uuid}`}
+							openInNewTab={true}
 						/>
 					);
 				},

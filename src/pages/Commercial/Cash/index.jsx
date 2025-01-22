@@ -6,8 +6,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-
-import { CustomLink, DateTime, EditDelete, LinkWithCopy, Transfer, StatusSelect } from '@/ui';
+import { CustomLink, DateTime, EditDelete, StatusSelect, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -26,7 +25,7 @@ const getPath = (haveAccess, userUUID) => {
 };
 
 export default function Index() {
-	const [status, setStatus] = useState('all');
+	const [status, setStatus] = useState('pending');
 	const options = [
 		{ value: 'all', label: 'All' },
 		{ value: 'pending', label: 'Pending' },
@@ -98,7 +97,7 @@ export default function Index() {
 					</>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => info.getValue().toLocaleString(),
 			},
 			{
 				accessorFn: (row) => {

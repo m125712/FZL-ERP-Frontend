@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime, EditDelete } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -43,10 +43,10 @@ export default function Index() {
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={uuid}
-							uri={`/commercial/manual-pi`}
+						<CustomLink
+							label={info.getValue()}
+							url={`/commercial/manual-pi/${uuid}`}
+							openInNewTab={true}
 						/>
 					);
 				},
@@ -59,11 +59,11 @@ export default function Index() {
 				cell: (info) => {
 					return info?.getValue()?.map((pi_number) => {
 						return (
-							<LinkWithCopy
+							<CustomLink
 								key={pi_number}
-								title={pi_number}
-								id={pi_number}
-								uri='/commercial/pi'
+								label={pi_number}
+								url={`/commercial/pi/${pi_number}`}
+								openInNewTab={true}
 							/>
 						);
 					});

@@ -176,30 +176,28 @@ export default function Information({ batch, water_capacity }) {
 
 	return (
 		<SectionContainer title={'Information'}>
-			<div>
-				<div className='grid grid-cols-1 border-secondary/30 lg:grid-cols-4'>
-					<RenderTable
-						className={'border-secondary/30 lg:border-r'}
-						title={'Conneing'}
-						items={renderItems().conneing}
-					/>
-					<RenderTable
-						className={'border-secondary/30 lg:border-r'}
-						title={'Yarn Issues'}
-						items={renderItems().yarn_issues}
-					/>
+			<div className='grid grid-cols-1 border-secondary/30 lg:grid-cols-4'>
+				<RenderTable
+					className={'border-secondary/30 lg:border-r'}
+					title={'Conneing'}
+					items={renderItems().conneing}
+				/>
+				<RenderTable
+					className={'border-secondary/30 lg:border-r'}
+					title={'Yarn Issues'}
+					items={renderItems().yarn_issues}
+				/>
 
-					<RenderTable
-						className={'border-secondary/30 lg:border-r'}
-						title={'Dyeing'}
-						items={renderItems().dying}
-					/>
-					<RenderTable
-						className={'border-secondary/30'}
-						title={'Others'}
-						items={renderItems().others}
-					/>
-				</div>
+				<RenderTable
+					className={'border-secondary/30 lg:border-r'}
+					title={'Dyeing'}
+					items={renderItems().dying}
+				/>
+				<RenderTable
+					className={'border-secondary/30'}
+					title={'Others'}
+					items={renderItems().others}
+				/>
 			</div>
 		</SectionContainer>
 	);

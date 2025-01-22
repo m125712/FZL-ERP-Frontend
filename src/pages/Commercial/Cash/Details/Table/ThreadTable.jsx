@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-import { DateTime, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime } from '@/ui';
 
 export default function ThreadTable({ pi_cash_entry_thread, conventionRate }) {
 	const columns = useMemo(
@@ -13,10 +13,10 @@ export default function ThreadTable({ pi_cash_entry_thread, conventionRate }) {
 				cell: (info) => {
 					const { order_number } = info.row.original;
 					return (
-						<LinkWithCopy
-							title={order_number}
-							id={info.getValue()}
-							uri='/thread/order-info'
+						<CustomLink
+							label={order_number}
+							url={`/thread/order-info/${info.getValue()}`}
+							openInNewTab={true}
 						/>
 					);
 				},
@@ -62,7 +62,7 @@ export default function ThreadTable({ pi_cash_entry_thread, conventionRate }) {
 				accessorKey: 'value',
 				header: 'Value ($)',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue() ,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'remarks',

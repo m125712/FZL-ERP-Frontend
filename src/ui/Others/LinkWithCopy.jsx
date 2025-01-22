@@ -67,11 +67,12 @@ const CustomLink = ({
 	url = null,
 	showCopyButton = true,
 	openInNewTab = false,
+	className = '',
 }) => {
 	if (!label) return '--';
 
 	return (
-		<div className='flex items-center gap-2'>
+		<div className={cn('flex items-center gap-2', className)}>
 			{showCopyButton && (
 				<CopyButton
 					id={label}

@@ -3,7 +3,7 @@ import { useCommercialDashboard } from '@/state/Commercial';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, LinkWithCopy } from '@/ui';
+import { CustomLink } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 

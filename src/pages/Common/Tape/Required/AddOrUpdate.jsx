@@ -1,9 +1,5 @@
-import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import {
-	useCommonTapeRequired,
-	useCommonTapeRequiredByUUID,
-} from '@/state/Common';
+import { useCommonTapeRequired } from '@/state/Common';
 import {
 	useOtherOrderPropertiesByEndType,
 	useOtherOrderPropertiesByItem,
@@ -27,8 +23,7 @@ export default function Index({
 	},
 	setUpdateTapeRequired,
 }) {
-	const { data, isLoading, url, deleteData, postData, updateData } =
-		useCommonTapeRequired();
+	const { url, postData, updateData } = useCommonTapeRequired();
 	const { user } = useAuth();
 	const {
 		register,
@@ -206,6 +201,10 @@ export default function Index({
 			<div className='flex gap-1'>
 				<Input label='top' {...{ register, errors }} />
 				<Input label='bottom' {...{ register, errors }} />
+			</div>
+			<div className='flex gap-1'>
+				<Input label='raw_mtr_per_kg' {...{ register, errors }} />
+				<Input label='dyed_mtr_per_kg' {...{ register, errors }} />
 			</div>
 
 			<Textarea label='remarks' {...{ register, errors }} />

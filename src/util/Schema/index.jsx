@@ -1091,8 +1091,8 @@ export const TAPE_REQUIRED_SCHEMA = {
 	zipper_number_uuid: UUID_REQUIRED,
 	top: NUMBER_DOUBLE_REQUIRED,
 	bottom: NUMBER_DOUBLE_REQUIRED,
-	raw_mtr_per_kg: NUMBER_DOUBLE,
-	dyed_mtr_per_kg: NUMBER_DOUBLE,
+	raw_mtr_per_kg: NUMBER_DOUBLE.moreThan(0, 'More than 0'),
+	dyed_mtr_per_kg: NUMBER_DOUBLE.moreThan(0, 'More than 0'),
 	remarks: STRING.nullable(),
 };
 

@@ -266,6 +266,18 @@ export const InfoColumns = ({
 	return useMemo(
 		() => [
 			{
+				accessorFn: (row) => (row.is_canceled ? 'YES' : 'NO'),
+				id: 'is_canceled',
+				header: 'Canceled',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton
+						size='btn-xs'
+						value={info.row.original.is_canceled}
+					/>
+				),
+			},
+			{
 				accessorKey: 'id',
 				header: 'Sample/Bill/Cash',
 				enableColumnFilter: false,
@@ -341,22 +353,15 @@ export const InfoColumns = ({
 					return `${marketing_priority}/${factory_priority}`;
 				},
 			},
-			{
-				accessorKey: 'is_canceled',
-				header: 'Canceled',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
-				),
-			},
-			{
-				accessorKey: 'status',
-				header: 'Status',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
-				),
-			},
+
+			// {
+			// 	accessorKey: 'status',
+			// 	header: 'Status',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<StatusButton size='btn-xs' value={info.getValue()} />
+			// 	),
+			// },
 
 			...DEFAULT_COLUMNS({ handelUpdate, handelDelete, haveAccess }),
 		],
@@ -409,6 +414,7 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				accessorKey: 'item_description',
 				header: 'Item',
 				enableColumnFilter: true,
+				width: 'w-36',
 				cell: (info) => {
 					const { order_description_uuid, order_number } =
 						info.row.original;

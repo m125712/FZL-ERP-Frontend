@@ -1,4 +1,5 @@
 import React, { Suspense, useEffect, useState } from 'react';
+import { useDyeingSwatch } from '@/state/Dyeing';
 import { useOrderDescription, useOrderDetailsByQuery } from '@/state/Order';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
@@ -44,6 +45,8 @@ export default function Index() {
 		getPath(haveAccess, user?.uuid),
 		{ enabled: !!user?.uuid }
 	);
+	const { invalidateQuery: swatchInvalidate } =
+		useDyeingSwatch(`type=pending`);
 
 	const isUpdate =
 		order_description_uuid !== undefined && order_number !== undefined;
@@ -308,6 +311,7 @@ export default function Index() {
 				}),
 			];
 
+			swatchInvalidate();
 			navigate(
 				`/order/details/${order_number}/${order_description_uuid}`
 			);
@@ -374,6 +378,7 @@ export default function Index() {
 			.then(() => reset(Object.assign({}, ORDER_NULL)))
 			.then(async () => {
 				await indexPageInvalidate();
+				await swatchInvalidate();
 				navigate(`/order/details/${orderNo}/${order_description.uuid}`);
 			})
 			.catch((err) => console.log(err));

@@ -196,6 +196,7 @@ export default function Index({
 				/>
 			</div>
 			<div className='mb-4 flex flex-col gap-2 rounded bg-base-200 p-2 md:flex-row'>
+				<Input label='index' {...{ register, errors }} />
 				<Input label='remarks' {...{ register, errors }} />
 				<Textarea label='description' {...{ register, errors }} />
 			</div>

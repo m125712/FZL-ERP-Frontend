@@ -197,6 +197,7 @@ export const MARKETING_NULL = {
 
 // Material
 export const MATERIAL_SCHEMA = {
+	index: NUMBER_REQUIRED.default(0).min(0, 'Minimum of 0'),
 	section_uuid: STRING_REQUIRED,
 	type_uuid: STRING_REQUIRED,
 	name: STRING_REQUIRED,
@@ -210,6 +211,7 @@ export const MATERIAL_SCHEMA = {
 };
 
 export const MATERIAL_NULL = {
+	index: 0,
 	uuid: null,
 	name: '',
 	short_name: '',

@@ -15,6 +15,7 @@ export const orderQK = {
 	//* details
 	details: () => [...orderQK.all(), 'details'],
 	detailsByQuery: (query) => [...orderQK.all(), 'detailsByQuery', query],
+	detailByStyleForPDF: (uuid) => [...orderQK.details(), uuid, 'pdf'],
 	detail: (uuid) => [...orderQK.details(), uuid],
 	detailByOrderNumber: (orderNumber) => [...orderQK.details(), orderNumber],
 	detailsByOrderDescription: (orderNumber, uuid) => [

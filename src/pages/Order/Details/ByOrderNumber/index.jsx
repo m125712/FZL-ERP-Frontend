@@ -1,11 +1,13 @@
 import { lazy, useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
+import { useOrderDetailsByStyleForPDF } from '@/state/Order';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAccess, useFetchFunc } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import OrderSheetPdf from '@/components/Pdf/OrderSheet';
 import OrderSheetPdf2 from '@/components/Pdf/OrderSheet2';
+import OrderSheetByStyle from '@/components/Pdf/OrderSheetByStyle';
 
 import { OrderInformation } from '../_components/Information';
 
@@ -40,6 +42,7 @@ const createPDF = (pdfdata, setData, setGetPdfData, OrderSheetPdf) => {
 export default function Index() {
 	const { user } = useAuth();
 	const { order_number } = useParams();
+	const { data: orderbystyle } = useOrderDetailsByStyleForPDF(order_number);
 	const haveAccess = useAccess('order__details');
 
 	const [orders, setOrders] = useState([]);
@@ -108,8 +111,21 @@ export default function Index() {
 				sr,
 			};
 
+			const orderByStyle = {
+				order_info,
+				sr,
+				garments,
+				orders: orderbystyle,
+			};
+
 			createPDF(order_sheet, setData, setGetPdfData, OrderSheetPdf);
-			createPDF(order_sheet, setData2, setGetPdfData2, OrderSheetPdf2);
+			createPDF(
+				orderByStyle,
+				setData2,
+				setGetPdfData2,
+				OrderSheetByStyle
+			);
+			// OrderSheetByStyle(order_sheet);
 			// getPdfData.download();
 		}
 	}, [orders, garments, sr]);

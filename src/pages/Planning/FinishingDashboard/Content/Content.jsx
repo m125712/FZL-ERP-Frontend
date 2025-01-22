@@ -41,7 +41,7 @@ export default function Content({ data }) {
 							<tr
 								key={index}
 								className='border-b-2 border-primary/30'>
-								<th className='z-10 flex flex-col items-stretch gap-4 bg-error'>
+								<th className='z-10 flex flex-col items-stretch gap-4'>
 									<CustomLink
 										label={
 											<DateTime

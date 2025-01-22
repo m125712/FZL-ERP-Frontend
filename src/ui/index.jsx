@@ -25,6 +25,7 @@ import {
 import {
 	BadgeCheckbox,
 	BatchType,
+	Collapse,
 	CustomLink,
 	DateTime,
 	DepartmentShow,
@@ -91,4 +92,5 @@ export {
 	BatchType,
 	StatusSelect,
 	CustomLink,
+	Collapse,
 };

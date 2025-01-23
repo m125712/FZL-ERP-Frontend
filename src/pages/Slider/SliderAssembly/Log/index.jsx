@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import ProductionLog from './ProductionLog';
 import RMTransferLog from './RMTransferLog';
 import StockTransactionLog from './StockTransactionLog';
+import StoreIssued from './StoreIssued';
 import TransactionLog from './TransactionLog';
 
 export default function Index() {
@@ -18,6 +19,8 @@ export default function Index() {
 			<StockTransactionLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<RMTransferLog />
+			<hr className='my-6 border-2 border-dashed border-secondary-content' />
+			<StoreIssued />
 		</div>
 	);
 }

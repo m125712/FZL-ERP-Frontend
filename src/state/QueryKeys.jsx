@@ -924,6 +924,11 @@ export const sliderQK = {
 		'assembly-joined-log-production',
 	],
 
+	sliderAssemblyStoreIssued: () => [
+		...sliderQK.all(),
+		'assembly-store-issued',
+	],
+
 	//* Slider Assembly Log Production
 	sliderAssemblyLogProduction: () => [
 		...sliderQK.all(),

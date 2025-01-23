@@ -249,6 +249,12 @@ export const useSliderAssemblyLogJoinedProduction = () =>
 		url: '/slider/assembly-production-log',
 	});
 
+export const useSliderAssemblyStoreIssued = () =>
+	createGlobalState({
+		queryKey: sliderQK.sliderAssemblyStoreIssued(),
+		url: '/zipper/material-trx-against-order?trx_to=slider_assembly&purpose=slider ',
+})
+
 // * Slider Assembly Log Prduction
 export const useSliderAssemblyLogProduction = () =>
 	createGlobalState({

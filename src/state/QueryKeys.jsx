@@ -924,6 +924,11 @@ export const sliderQK = {
 		'assembly-joined-log-production',
 	],
 
+	sliderAssemblyStoreIssued: () => [
+		...sliderQK.all(),
+		'assembly-store-issued',
+	],
+
 	//* Slider Assembly Log Production
 	sliderAssemblyLogProduction: () => [
 		...sliderQK.all(),
@@ -1503,6 +1508,7 @@ export const reportQK = {
 
 	//* Stock
 	stock: (from, to) => [...reportQK.all(), 'stock', from, to],
+	storeApproved: () => [...reportQK.all(), 'store-approved'],
 	//*Production Report DateWise
 	productionReportDateWise: (from, to, query) => [
 		...reportQK.all(),

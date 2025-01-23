@@ -8,6 +8,7 @@ import { Suspense } from '@/components/Feedback';
 import OrderSheetPdf from '@/components/Pdf/OrderSheet';
 import OrderSheetPdf2 from '@/components/Pdf/OrderSheet2';
 import OrderSheetByStyle from '@/components/Pdf/OrderSheetByStyle';
+import OrderSheetByStyleV2 from '@/components/Pdf/OrderSheetByStyleV2';
 
 import { OrderInformation } from '../_components/Information';
 
@@ -123,7 +124,7 @@ export default function Index() {
 				orderByStyle,
 				setData2,
 				setGetPdfData2,
-				OrderSheetByStyle
+				OrderSheetByStyleV2
 			);
 			// OrderSheetByStyle(order_sheet);
 			// getPdfData.download();

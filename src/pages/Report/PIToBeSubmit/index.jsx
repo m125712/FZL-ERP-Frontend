@@ -46,10 +46,9 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) => {
-					const { order_object } = row;
-					return order_object.map((order) => {
-						return order.label;
-					});
+					return row.order_object
+						.map((order) => order.label)
+						.join(', ');
 				},
 				id: 'order_object',
 				header: 'O/N',

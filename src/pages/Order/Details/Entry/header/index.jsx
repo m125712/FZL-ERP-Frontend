@@ -57,10 +57,15 @@ export default function Header({
 	setType,
 }) {
 	const { order_number, order_description_uuid } = useParams();
+
 	const isUpdate =
 		order_description_uuid !== undefined && order_number !== undefined;
 
 	const [orderDesc, setOrderDesc] = useState('');
+	const [refOrder, setRefOrder] = useState({
+		value: '',
+		label: '',
+	});
 
 	const { data: order } = useOtherOrderInfoValueLabel();
 	const { data: item } = useOtherOrderPropertiesByItem();
@@ -95,8 +100,9 @@ export default function Header({
 	const { data: teeth_type } = useOtherOrderPropertiesByTeethType();
 
 	// * get order details
-	const { data: orderDescription } =
-		useOtherOrderDescriptionByOrderNumber(orderNo);
+	const { data: orderDescription } = useOtherOrderDescriptionByOrderNumber(
+		refOrder.label
+	);
 
 	const [isLogoBody, setIsLogoBody] = useState(
 		typeof is_logo_body !== 'boolean' && is_logo_body === 1 ? true : false
@@ -158,7 +164,18 @@ export default function Header({
 								: 'flex w-full justify-between'
 						}>
 						{!order_number && (
-							<div className='flex items-center'>
+							<div className='flex items-center gap-4'>
+								<ReactSelect
+									className='w-40'
+									placeholder='Select Description'
+									options={order}
+									value={order?.filter(
+										(item) => item.value == refOrder.value
+									)}
+									onChange={(e) => {
+										setRefOrder(e);
+									}}
+								/>
 								<ReactSelect
 									className='w-80'
 									placeholder='Select Description'

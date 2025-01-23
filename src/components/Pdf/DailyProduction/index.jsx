@@ -67,7 +67,12 @@ export default function Index(data, from) {
 					totalTypeWiseCloseEnd += totalCloseEnd;
 					totalTypeWiseOpenEnd += totalOpenEnd;
 					totalTypeWiseTotalQuantity += totalQuantity;
-					if (itemIndex === orderItem.items.length - 1) {
+					if (
+						itemIndex === orderItem.items.length - 1 &&
+						!itemItem.other?.find(
+							(otherItem) => otherItem.size === 'Order Wise Total'
+						)
+					) {
 						itemItem.other?.push({
 							size: 'Order Wise Total',
 							running_total_close_end_quantity:

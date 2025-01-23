@@ -434,6 +434,7 @@ export default function Index() {
 						Controller,
 						watch,
 						reset,
+						orderNo,
 						setOrderNo,
 						is_logo_body: getValues('is_logo_body'),
 						is_logo_puller: getValues('is_logo_puller'),

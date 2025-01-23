@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
+	useOtherOrderDescriptionByOrderNumber,
 	useOtherOrderInfoValueLabel,
 	useOtherOrderPropertiesByBottomStopper,
 	useOtherOrderPropertiesByColor,
@@ -48,6 +49,7 @@ export default function Header({
 	getValues,
 	watch,
 	reset,
+	orderNo,
 	setOrderNo,
 	Controller,
 	is_logo_body,
@@ -58,7 +60,7 @@ export default function Header({
 	const isUpdate =
 		order_description_uuid !== undefined && order_number !== undefined;
 
-	const [endLabel, setEndLabel] = useState('');
+	const [orderDesc, setOrderDesc] = useState('');
 
 	const { data: order } = useOtherOrderInfoValueLabel();
 	const { data: item } = useOtherOrderPropertiesByItem();
@@ -91,6 +93,10 @@ export default function Header({
 	const { data: bottom_stopper } = useOtherOrderPropertiesByBottomStopper();
 	const { data: logo_type } = useOtherOrderPropertiesByLogoType();
 	const { data: teeth_type } = useOtherOrderPropertiesByTeethType();
+
+	// * get order details
+	const { data: orderDescription } =
+		useOtherOrderDescriptionByOrderNumber(orderNo);
 
 	const [isLogoBody, setIsLogoBody] = useState(
 		typeof is_logo_body !== 'boolean' && is_logo_body === 1 ? true : false
@@ -132,115 +138,162 @@ export default function Header({
 		setIsLogoPuller(is_logo_puller === 1 ? true : false);
 	}, [getValues('special_requirement'), is_logo_body, is_logo_puller]);
 
+	let order_Descriptions = orderDescription?.map((item) => {
+		return {
+			label: item.item_description + ' -> ' + item.order_type,
+			value: item.order_description_uuid,
+			item,
+		};
+	});
+
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody
 				title='Item'
 				header={
-					<div className='flex items-center gap-4'>
-						{watch('order_type') !== 'slider' && (
-							<div className='my-2 h-8 rounded-md bg-secondary px-1'>
-								<CheckBox
-									text='text-secondary-content'
-									label='is_multi_color'
-									title='Multi-Color'
-									{...{ register, errors }}
+					<div
+						className={
+							isUpdate
+								? 'flex w-full justify-end'
+								: 'flex w-full justify-between'
+						}>
+						{!order_number && (
+							<div className='flex items-center'>
+								<ReactSelect
+									className='w-80'
+									placeholder='Select Description'
+									options={order_Descriptions}
+									value={order_Descriptions?.filter(
+										(item) => item.value == orderDesc
+									)}
+									onChange={(e) => {
+										setOrderDesc(e.value);
+
+										reset({
+											order_entry: [],
+											...e.item,
+										});
+										console.log(e.item);
+									}}
 								/>
 							</div>
 						)}
 
-						{watch('order_type') !== 'slider' &&
-							item
-								?.find((item) => item.value === watch('item'))
-								?.label?.toLowerCase() === 'nylon' && (
+						<div className='flex items-center gap-4'>
+							{watch('order_type') !== 'slider' && (
 								<div className='my-2 h-8 rounded-md bg-secondary px-1'>
 									<CheckBox
 										text='text-secondary-content'
-										label='is_waterproof'
-										title='Waterproof'
+										label='is_multi_color'
+										title='Multi-Color'
 										{...{ register, errors }}
 									/>
 								</div>
 							)}
 
-						<div className='my-2 w-28'>
-							<FormField
-								label='order_type'
-								title='Order Type'
-								is_title_needed='false'
-								errors={errors}>
-								<Controller
-									name={'order_type'}
-									control={control}
-									render={({ field: { onChange } }) => {
-										return (
-											<ReactSelect
-												placeholder='Select Type'
-												options={types}
-												value={types?.filter(
-													(item) =>
-														item.value ==
-														getValues('order_type')
-												)}
-												onChange={(e) => {
-													onChange(e.value);
-													setType(e.value);
-													reset({
-														...ORDER_NULL,
-														order_type:
-															watch('order_type'),
-														order_info_uuid:
-															watch(
-																'order_info_uuid'
-															),
-														item: watch('item'),
-														nylon_stopper:
-															watch(
-																'nylon_stopper'
-															),
-														zipper_number:
-															watch(
-																'zipper_number'
-															),
-														lock_type:
-															watch('lock_type'),
-													});
-												}}
-												isDisabled={isUpdate}
-											/>
-										);
-									}}
-								/>
-							</FormField>
-						</div>
-						<div className='my-2 w-28'>
-							<FormField
-								label='revision_no'
-								title='Revision No'
-								is_title_needed='false'
-								errors={errors}>
-								<Controller
-									name={'revision_no'}
-									control={control}
-									render={({ field: { onChange } }) => {
-										return (
-											<ReactSelect
-												placeholder='Select Type'
-												options={revisions}
-												value={revisions?.filter(
-													(item) =>
-														item.value ==
-														getValues('revision_no')
-												)}
-												onChange={(e) => {
-													onChange(e.value);
-												}}
-												isDisabled={!isUpdate}
-											/>
-										);
-									}}
-								/>
-							</FormField>
+							{watch('order_type') !== 'slider' &&
+								item
+									?.find(
+										(item) => item.value === watch('item')
+									)
+									?.label?.toLowerCase() === 'nylon' && (
+									<div className='my-2 h-8 rounded-md bg-secondary px-1'>
+										<CheckBox
+											text='text-secondary-content'
+											label='is_waterproof'
+											title='Waterproof'
+											{...{ register, errors }}
+										/>
+									</div>
+								)}
+
+							<div className='my-2 w-28'>
+								<FormField
+									label='order_type'
+									title='Order Type'
+									is_title_needed='false'
+									errors={errors}>
+									<Controller
+										name={'order_type'}
+										control={control}
+										render={({ field: { onChange } }) => {
+											return (
+												<ReactSelect
+													placeholder='Select Type'
+													options={types}
+													value={types?.filter(
+														(item) =>
+															item.value ==
+															getValues(
+																'order_type'
+															)
+													)}
+													onChange={(e) => {
+														onChange(e.value);
+														setType(e.value);
+														reset({
+															...ORDER_NULL,
+															order_type:
+																watch(
+																	'order_type'
+																),
+															order_info_uuid:
+																watch(
+																	'order_info_uuid'
+																),
+															item: watch('item'),
+															nylon_stopper:
+																watch(
+																	'nylon_stopper'
+																),
+															zipper_number:
+																watch(
+																	'zipper_number'
+																),
+															lock_type:
+																watch(
+																	'lock_type'
+																),
+														});
+													}}
+													isDisabled={isUpdate}
+												/>
+											);
+										}}
+									/>
+								</FormField>
+							</div>
+							<div className='my-2 w-28'>
+								<FormField
+									label='revision_no'
+									title='Revision No'
+									is_title_needed='false'
+									errors={errors}>
+									<Controller
+										name={'revision_no'}
+										control={control}
+										render={({ field: { onChange } }) => {
+											return (
+												<ReactSelect
+													placeholder='Select Type'
+													options={revisions}
+													value={revisions?.filter(
+														(item) =>
+															item.value ==
+															getValues(
+																'revision_no'
+															)
+													)}
+													onChange={(e) => {
+														onChange(e.value);
+													}}
+													isDisabled={!isUpdate}
+												/>
+											);
+										}}
+									/>
+								</FormField>
+							</div>
 						</div>
 					</div>
 				}>

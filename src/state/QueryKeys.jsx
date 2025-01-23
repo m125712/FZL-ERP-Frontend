@@ -1503,6 +1503,7 @@ export const reportQK = {
 
 	//* Stock
 	stock: (from, to) => [...reportQK.all(), 'stock', from, to],
+	storeApproved: () => [...reportQK.all(), 'store-approved'],
 	//*Production Report DateWise
 	productionReportDateWise: (from, to, query) => [
 		...reportQK.all(),

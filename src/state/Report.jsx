@@ -8,6 +8,13 @@ export const useReportStock = (from, to, { enabled = false }) =>
 		url: `/report/material-stock-report?from_date=${from}&to_date=${to}`,
 		enabled,
 	});
+
+export const useReportStoreApproved = () =>
+	createGlobalState({
+		queryKey: reportQK.storeApproved(),
+		url: `/report/item-zipper-number-end-wise-approved`,
+	});
+
 export const useProductionReportDateWise = (
 	from = '',
 	to = '',
@@ -56,12 +63,12 @@ export const useThreadProductionBatchWise = (query, { enabled = false } = {}) =>
 		enabled,
 	});
 
-	export const useThreadProductionOrderWise = (query, { enabled = false } = {}) =>
-		createGlobalState({
-			queryKey: reportQK.threadProductionOrderWise(query),
-			url: '/report/thread-production-status-order-wise?' + query,
-			enabled,
-		});
+export const useThreadProductionOrderWise = (query, { enabled = false } = {}) =>
+	createGlobalState({
+		queryKey: reportQK.threadProductionOrderWise(query),
+		url: '/report/thread-production-status-order-wise?' + query,
+		enabled,
+	});
 
 export const useDailyChallan = (query, { enabled = false } = {}) =>
 	createGlobalState({

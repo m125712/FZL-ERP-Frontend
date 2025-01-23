@@ -22,6 +22,12 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'index',
+				header: 'Index',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
@@ -147,7 +153,10 @@ export default function Index() {
 				enableColumnFilter: false,
 				width: 'w-24',
 				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.row.original.is_priority_material} />
+					<StatusButton
+						size='btn-xs'
+						value={info.row.original.is_priority_material}
+					/>
 				),
 			},
 			{
@@ -157,7 +166,10 @@ export default function Index() {
 				enableColumnFilter: false,
 				width: 'w-40',
 				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.row.original.is_below_threshold} />
+					<StatusButton
+						size='btn-xs'
+						value={info.row.original.is_below_threshold}
+					/>
 				),
 			},
 			{

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useDyeingDashboard } from '@/state/Dyeing';
-import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import Pdf from '@/components/Pdf/DyeingDashboard';
+import { Collapse } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -21,7 +22,9 @@ export default function index() {
 		'dyeing__dyeing_dashboard'
 	);
 
-	const [dyeingDate, setDyeingDate] = useState('');
+	const [dyeingDate, setDyeingDate] = useState(
+		format(new Date(), 'yyyy-MM-dd')
+	);
 	const { data } = useDyeingDashboard(dyeingDate);
 
 	useEffect(() => {
@@ -50,10 +53,13 @@ export default function index() {
 
 	return (
 		<div className='flex flex-col gap-8'>
-			<iframe
-				src={data2}
-				className='h-[40rem] w-full rounded-md border-none'
-			/>
+			<Collapse title='See PDF'>
+				<iframe
+					src={data2}
+					className='h-[40rem] w-full rounded-md border-none'
+				/>
+			</Collapse>
+
 			<Header {...{ dyeingDate, setDyeingDate, machines, setMachines }} />
 			<Content data={data} dyeingDate={dyeingDate} />
 		</div>

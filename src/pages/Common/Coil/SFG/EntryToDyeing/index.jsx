@@ -2,6 +2,7 @@ import { Suspense, useCallback, useEffect, useState } from 'react';
 import {
 	useCommonCoilSFG,
 	useCommonCoilToDyeing,
+	useCommonMultiColorLog,
 	useCommonTapeSFG,
 	useCommonTapeToDyeing,
 } from '@/state/Common';
@@ -44,6 +45,8 @@ export default function Index() {
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 	const { invalidateQuery: invalidateDyeingOrderBatch } =
 		useDyeingOrderBatch();
+	const { invalidateQuery: invalidateCommonMultiColorLog } =
+		useCommonMultiColorLog();
 
 	const location = useLocation();
 	const [status, setStatus] = useState(false);
@@ -194,6 +197,7 @@ export default function Index() {
 				invalidateCommonCoilSFG();
 				invalidateCommonTapeSFG();
 				invalidateDyeingOrderBatch();
+				invalidateCommonMultiColorLog();
 
 				navigate(
 					secondElement === 'coil'

@@ -1,8 +1,6 @@
 import { useOtherMachines } from '@/state/Other';
-import { useMediaQuery } from '@uidotdev/usehooks';
 import { format } from 'date-fns';
 
-import MultiCalendar from '@/ui/Others/DatePicker/MultiCalendar';
 import { ReactSelect, SectionEntryBody, SimpleDatePicker } from '@/ui';
 
 export default function Header({
@@ -11,13 +9,11 @@ export default function Header({
 	machines,
 	setMachines,
 }) {
-	const isSmallDevice = useMediaQuery('only screen and (max-width : 768px)');
-
 	const { data: machineOptions } = useOtherMachines();
 	return (
 		<div>
 			<SectionEntryBody title={'Dyeing Dashboard'}>
-				<div className='flex gap-4'>
+				<div className='flex flex-col gap-4 md:flex-row'>
 					<SimpleDatePicker
 						inline
 						value={dyeingDate}
@@ -26,14 +22,15 @@ export default function Header({
 						}}
 					/>
 					<ReactSelect
+						className='md:min-w-96'
 						placeholder='Select Machines'
 						options={machineOptions}
 						value={machines}
-						className='w-full'
 						onChange={(e) => {
 							setMachines(e);
 						}}
 						isMulti={true}
+						menuPortalTarget={document.body}
 					/>
 				</div>
 			</SectionEntryBody>

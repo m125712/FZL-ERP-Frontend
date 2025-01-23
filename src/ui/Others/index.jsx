@@ -7,6 +7,7 @@ import {
 	StatusButton,
 	Transfer,
 } from './Button';
+import Collapse from './Collapse';
 import SimpleDatePicker from './DatePicker';
 import { DateTime } from './DateTime';
 import { DepartmentShow, UserName } from './DepartmentShow';
@@ -48,4 +49,5 @@ export {
 	BatchType,
 	StatusSelect,
 	CustomLink,
+	Collapse,
 };

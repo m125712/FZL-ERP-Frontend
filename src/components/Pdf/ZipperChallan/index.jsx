@@ -64,6 +64,7 @@ export default function Index(data) {
 				acc.shade.add(item.recipe_name);
 				acc.quantity += parseInt(item.quantity, 10) || 0;
 				acc.poly_quantity += parseInt(item.poli_quantity, 10) || 0;
+				acc.is_inch = item.is_inch;
 				return acc;
 			},
 			{
@@ -75,6 +76,7 @@ export default function Index(data) {
 				shade: new Set(),
 				quantity: 0,
 				poly_quantity: 0,
+				is_inch: 0,
 			}
 		) || {};
 
@@ -113,6 +115,7 @@ export default function Index(data) {
 								i.size === item.size
 						)
 						.reduce((acc, item) => acc + item.poli_quantity, 0),
+					is_inch: item.is_inch,
 				});
 				packingListRowSpan.push({
 					item_description: challan_entry.filter(
@@ -148,6 +151,7 @@ export default function Index(data) {
 					).length,
 					quantity: 1,
 					poli_quantity: 1,
+					is_inch: 1,
 				});
 			}
 		});
@@ -212,6 +216,7 @@ export default function Index(data) {
 						// * Body
 						...pl.packingListDetails?.map((item, idx) =>
 							node.map((nodeItem) => {
+								console.log('item', item);
 								const text =
 									nodeItem.field === 'size'
 										? `${item[nodeItem.field]} ${

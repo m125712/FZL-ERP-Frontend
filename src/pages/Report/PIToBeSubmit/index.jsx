@@ -60,7 +60,7 @@ export default function Index() {
 						if (orderNumber === null) return;
 						const isThreadOrder = orderNumber.label?.includes('ST');
 						const number = orderNumber.label;
-						const uuid = orderNumber.uuid;
+						const uuid = orderNumber.value;
 						return (
 							<CustomLink
 								label={number}

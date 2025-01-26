@@ -10,6 +10,7 @@ import { useRHF } from '@/hooks';
 
 import { DeleteModal, UpdateModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { ActionButtons, DynamicField, FormField, ReactSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
@@ -201,6 +202,7 @@ export default function Index() {
 			uuid: nanoid(),
 			lab_dip_info_uuid,
 			approved: item.approved ? 1 : 0,
+			marketing_approved: item.marketing_approved ? 1 : 0,
 			created_by: user?.uuid,
 			approved_date: item.approved ? GetDateTime() : null,
 			created_at,
@@ -261,6 +263,11 @@ export default function Index() {
 		{ label: 'Approved', value: 1 },
 	];
 
+	const marketingApproved = [
+		{ label: 'Pending', value: 0 },
+		{ label: 'Approved', value: 1 },
+	];
+
 	let excludeItem = exclude(watch, rec_uuid, 'recipe', 'recipe_uuid', Status);
 
 	return (
@@ -275,6 +282,7 @@ export default function Index() {
 						errors,
 						control,
 						getValues,
+						watch,
 						Controller,
 						watch,
 						lab_status: getValues('lab_status'),
@@ -288,6 +296,7 @@ export default function Index() {
 						'Recipe',
 						//'Status',
 						'Approved',
+						'Marketing Approved',
 						'Action',
 					].map((item) => (
 						<th
@@ -397,6 +406,46 @@ export default function Index() {
 									/>
 								</FormField>
 							</td>
+							{/* Marketing Approved */}
+							<FormField
+								label={`recipe[${index}].marketing_approved`}
+								title='Marketing Approved'
+								dynamicerror={
+									errors?.recipe?.[index]?.marketing_approved
+								}
+								is_title_needed='false'>
+								<Controller
+									name={`recipe[${index}].marketing_approved`}
+									control={control}
+									render={({ field: { onChange } }) => {
+										return (
+											<ReactSelect
+												placeholder='Select marketing_approved'
+												options={marketingApproved}
+												value={marketingApproved?.find(
+													(item) =>
+														item.value ==
+														getValues(
+															`recipe[${index}].marketing_approved`
+														)
+												)}
+												onChange={(e) => {
+													onChange(e.value);
+													setValue(
+														`recipe[${index}].marketing_approved`,
+														e.value
+													);
+												}}
+												isDisabled={
+													rec_uuid == undefined ||
+													!watch(`order_info_uuid`)
+												}
+												menuPortalTarget={document.body}
+											/>
+										);
+									}}
+								/>
+							</FormField>
 							<td
 								className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
 								<ActionButtons

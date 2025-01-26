@@ -748,6 +748,7 @@ export const LAB_INFO_SCHEMA = {
 				false
 			),
 			recipe_uuid: STRING_REQUIRED,
+			marketing_approved: BOOLEAN_DEFAULT_VALUE(0),
 			remarks: STRING.nullable(),
 		})
 	),
@@ -761,6 +762,7 @@ export const LAB_INFO_NULL = {
 		{
 			approved: false,
 			recipe_uuid: null,
+			marketing_approved: 0,
 			remarks: '',
 		},
 	],

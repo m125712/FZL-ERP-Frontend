@@ -15,11 +15,13 @@ export const useOrderDetailsByQuery = (query, { enabled = false }) =>
 		enabled: enabled,
 	});
 
-export const useOrderDetailsByStyleForPDF = (uuid) =>
+export const useOrderDetailsByStyleForPDF = (uuid, param) =>
 	createGlobalState({
-		queryKey: orderQK.detailByStyleForPDF(uuid),
-		url: `/zipper/order-all-info/by/${uuid}`,
-})
+		queryKey: orderQK.detailByStyleForPDF(uuid, param),
+		url: param
+			? `/zipper/order-all-info/by/${uuid}?order_description_uuid=${param}`
+			: `/zipper/order-all-info/by/${uuid}`,
+	});
 
 export const useOrderDetailsByUUID = (uuid) =>
 	createGlobalState({

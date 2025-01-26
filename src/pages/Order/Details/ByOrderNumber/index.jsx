@@ -116,7 +116,7 @@ export default function Index() {
 				order_info,
 				sr,
 				garments,
-				orders: orderbystyle,
+				orders: orderbystyle.pageData,
 			};
 
 			createPDF(order_sheet, setData, setGetPdfData, OrderSheetPdf);
@@ -124,7 +124,7 @@ export default function Index() {
 				orderByStyle,
 				setData2,
 				setGetPdfData2,
-				OrderSheetByStyleV2
+				OrderSheetByStyle
 			);
 			// OrderSheetByStyle(order_sheet);
 			// getPdfData.download();

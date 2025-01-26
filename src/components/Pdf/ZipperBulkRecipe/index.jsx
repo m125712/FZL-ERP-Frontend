@@ -133,7 +133,6 @@ export default function Index(batch, shade_recipes_entries, programs) {
 		bleaching?.forEach((bleach) => {
 			recipe_name?.forEach((recipe) => {
 				new_batch_entry.push({
-					unit: item,
 					bleaching: bleach,
 					recipe_name: recipe,
 					max_size: 0,

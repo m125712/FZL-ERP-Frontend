@@ -99,7 +99,7 @@ export default function Index() {
 				accessorKey: 'production_date',
 				header: (
 					<div className='flex flex-col'>
-						<span>Production</span>
+						<span>Production </span>
 						<span>Date</span>
 					</div>
 				),
@@ -116,14 +116,16 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'color',
+				accessorFn: (row) => row.color.join(', '),
+				id: 'color',
 				header: 'Color',
 				enableColumnFilter: false,
 				width: 'w-24',
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'recipe_name',
+				accessorFn: (row) => row.recipe_name.join(', '),
+				id: 'recipe_name',
 				header: 'Shade',
 				width: 'w-24',
 				enableColumnFilter: false,

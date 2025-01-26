@@ -29,7 +29,7 @@ export default function Header({
 	const { data: marketings } = useOtherMarketing();
 	const { data: parties } = useOtherParty();
 	const { data: orders } = useAllZipperThreadOrderList(
-		`from_date=${from}&to_date=${to}`
+		`from_date=${from}&to_date=${to}&page=production_statement`
 	);
 
 	const types = [

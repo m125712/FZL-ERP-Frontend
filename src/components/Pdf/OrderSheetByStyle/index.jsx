@@ -53,6 +53,16 @@ export default function OrderSheetByStyle(orderByStyle) {
 		content: [
 			...orders?.map((item, idx) => {
 				let total = 0;
+
+				console.log(
+					item.style,
+					item.item_description?.flatMap((entry, idx) =>
+						entry.details.flatMap((detail) =>
+							detail.sizes.map((size) => size.size)
+						)
+					)
+				);
+
 				return {
 					margin: [0, 5],
 					table: {
@@ -62,98 +72,214 @@ export default function OrderSheetByStyle(orderByStyle) {
 							// Header
 							...TableHeader(item),
 
-							...item.item_description?.flatMap((entry, idx) =>
-								entry.details.map((detail) => {
-									total += detail.quantity;
-									grandTotal += detail.quantity;
+							...item.item_description?.flatMap((entry, idx) => {
+								const special_req = getSpecialReqInfo(
+									entry,
+									sr
+								);
+								const garments_info = getGarmentInfo(
+									entry,
+									garments
+								);
 
-									const special_req = getSpecialReqInfo(
-										entry,
-										sr
-									);
-									const garments_info = getGarmentInfo(
-										entry,
-										garments
-									);
+								console.log(
+									entry.details
+										.map((detail) => detail.sizes.length)
+										.reduce((acc, item) => acc + item, 0)
+								);
+								return entry.details.flatMap((detail) =>
+									detail.sizes.map((size) => {
+										total += size.quantity;
+										grandTotal += size.quantity;
 
-									return [
-										{
-											text: [
-												{ text: 'Tape: ', bold: true },
-												entry.tape,
-												'\n',
-												{
-													text: 'Slider: ',
-													bold: true,
-												},
-												entry.slider,
+										return [
+											{
+												text: [
+													{
+														text: 'Tape: ',
+														bold: true,
+													},
+													entry.tape,
+													'\n',
+													{
+														text: 'Slider: ',
+														bold: true,
+													},
+													entry.slider,
 
-												...(special_req?.length > 0
-													? [
-															'\n',
-															{
-																text: 'Special Req: ',
-																bold: true,
-															},
-															special_req?.join(
-																', '
-															),
-														]
-													: []),
+													...(special_req?.length > 0
+														? [
+																'\n',
+																{
+																	text: 'Special Req: ',
+																	bold: true,
+																},
+																special_req?.join(
+																	', '
+																),
+															]
+														: []),
 
-												...(garments_info?.length > 0
-													? [
-															'\n',
-															{
-																text: 'Garments: ',
-																bold: true,
-															},
-															garments_info?.join(
-																', '
-															),
-														]
-													: []),
-												...(entry.remarks
-													? [
-															'\n',
-															{
-																text: 'Remarks: ',
-																bold: true,
-															},
-															entry.remarks,
-														]
-													: []),
-											],
-											rowSpan: entry.details.length,
-										},
-										{
-											text: detail.color
-												? detail.color
-												: '---',
-										},
-										{
-											text: detail.size
-												? detail.size
-												: '---',
-											alignment: 'right',
-										},
-										{
-											text: detail.unit
-												? detail.unit
-												: '---',
-										},
-										{
-											text: detail.quantity
-												? detail.bleaching ===
-													'non-bleach'
-													? detail.quantity
-													: 'B - ' + detail.quantity
-												: '---',
-											alignment: 'right',
-										},
-									];
-								})
-							),
+													...(garments_info?.length >
+													0
+														? [
+																'\n',
+																{
+																	text: 'Garments: ',
+																	bold: true,
+																},
+																garments_info?.join(
+																	', '
+																),
+															]
+														: []),
+													...(entry.remarks
+														? [
+																'\n',
+																{
+																	text: 'Remarks: ',
+																	bold: true,
+																},
+																entry.remarks,
+															]
+														: []),
+												],
+												rowSpan: entry.details
+													.map(
+														(detail) =>
+															detail.sizes.length
+													)
+													.reduce(
+														(acc, item) =>
+															acc + item,
+														0
+													),
+											},
+											{
+												text: detail.color
+													? detail.color
+													: '---',
+												rowSpan: detail.sizes.length,
+											},
+											{
+												text: size.size
+													? size.size
+													: '---',
+												alignment: 'right',
+											},
+											{
+												text: size.unit
+													? size.unit
+													: '---',
+											},
+											{
+												text: size.quantity
+													? size.bleaching ===
+														'non-bleach'
+														? size.quantity
+														: 'B - ' + size.quantity
+													: '---',
+												alignment: 'right',
+											},
+										];
+									})
+								);
+							}),
+
+							// ...item.item_description?.flatMap((entry, idx) =>
+							// 	entry.details.map((detail) => {
+							// 		total += detail.quantity;
+							// 		grandTotal += detail.quantity;
+
+							// 		const special_req = getSpecialReqInfo(
+							// 			entry,
+							// 			sr
+							// 		);
+							// 		const garments_info = getGarmentInfo(
+							// 			entry,
+							// 			garments
+							// 		);
+
+							// 		return [
+							// 			{
+							// 				text: [
+							// 					{ text: 'Tape: ', bold: true },
+							// 					entry.tape,
+							// 					'\n',
+							// 					{
+							// 						text: 'Slider: ',
+							// 						bold: true,
+							// 					},
+							// 					entry.slider,
+
+							// 					...(special_req?.length > 0
+							// 						? [
+							// 								'\n',
+							// 								{
+							// 									text: 'Special Req: ',
+							// 									bold: true,
+							// 								},
+							// 								special_req?.join(
+							// 									', '
+							// 								),
+							// 							]
+							// 						: []),
+
+							// 					...(garments_info?.length > 0
+							// 						? [
+							// 								'\n',
+							// 								{
+							// 									text: 'Garments: ',
+							// 									bold: true,
+							// 								},
+							// 								garments_info?.join(
+							// 									', '
+							// 								),
+							// 							]
+							// 						: []),
+							// 					...(entry.remarks
+							// 						? [
+							// 								'\n',
+							// 								{
+							// 									text: 'Remarks: ',
+							// 									bold: true,
+							// 								},
+							// 								entry.remarks,
+							// 							]
+							// 						: []),
+							// 				],
+							// 				// rowSpan: entry.details.length,
+							// 			},
+							// 			{
+							// 				text: detail.color
+							// 					? detail.color
+							// 					: '---',
+							// 			},
+							// 			{
+							// 				text: detail.size
+							// 					? detail.size
+							// 					: '---',
+							// 				alignment: 'right',
+							// 			},
+							// 			{
+							// 				text: detail.unit
+							// 					? detail.unit
+							// 					: '---',
+							// 			},
+							// 			{
+							// 				text: detail.quantity
+							// 					? detail.bleaching ===
+							// 						'non-bleach'
+							// 						? detail.quantity
+							// 						: 'B - ' + detail.quantity
+							// 					: '---',
+							// 				alignment: 'right',
+							// 			},
+							// 		];
+							// 	})
+							// ),
+
+							//* Total
 							[
 								{
 									text: 'Total',

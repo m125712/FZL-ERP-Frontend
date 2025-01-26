@@ -1,4 +1,5 @@
 import { lazy, useEffect, useState } from 'react';
+import { useOrderDetailsByStyleForPDF } from '@/state/Order';
 import {
 	useOtherOrderPropertiesByGarmentsWash,
 	useOtherOrderPropertiesBySpecialRequirement,
@@ -11,6 +12,7 @@ import OrderSheetPdf from '@/components/Pdf/OrderSheet';
 import OrderSheetPdf2 from '@/components/Pdf/OrderSheet2';
 
 import InformationSkeleton from '../_components/Information/skeleton';
+import OrderSheetByStyle from '@/components/Pdf/OrderSheetByStyle';
 
 const SingleInformation = lazy(() => import('../_components/Information'));
 const Table = lazy(() => import('../_components/Table'));
@@ -32,7 +34,10 @@ export default function Index({ initial_order, idx }) {
 	const { data: garments } = useOtherOrderPropertiesByGarmentsWash({
 		enabled: isEnabled,
 	});
-
+	const { data: orderbystyle } = useOrderDetailsByStyleForPDF(
+		order_number,
+		order_description_uuid
+	);
 	const { data: sr } = useOtherOrderPropertiesBySpecialRequirement({
 		enabled: isEnabled,
 	});
@@ -91,8 +96,16 @@ export default function Index({ initial_order, idx }) {
 				sr,
 			};
 
+			const orderByStyle = {
+				order_info,
+				sr,
+				garments,
+				orders: orderbystyle.pageData,
+			};
+
+
 			createPDF(order_sheet, setGetPdfData, OrderSheetPdf);
-			createPDF(order_sheet, setGetPdfData2, OrderSheetPdf2);
+			createPDF(orderByStyle, setGetPdfData2, OrderSheetByStyle);
 		}
 	}, [order, garments, sr, order_description_uuid]);
 

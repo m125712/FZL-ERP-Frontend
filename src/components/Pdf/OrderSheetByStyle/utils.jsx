@@ -125,9 +125,41 @@ export const TableHeader = (item, idx) => {
 		[
 			{ text: 'Details', style: 'tableHeader' },
 			{ text: 'Color', style: 'tableHeader' },
-			{ text: 'Size', style: 'tableHeader' },
+			{ text: 'Size', style: 'tableHeader', alignment: 'right' },
 			{ text: 'Unit', style: 'tableHeader' },
-			{ text: 'Quantity', style: 'tableHeader' },
+			{ text: 'Quantity', style: 'tableHeader', alignment: 'right' },
 		],
 	];
+};
+
+export const getSpecialReqInfo = (order_description, sr) => {
+	if (order_description?.special_requirement) {
+		const parsedObject =
+			typeof order_description?.special_requirement === 'string'
+				? JSON.parse(order_description?.special_requirement)
+				: order_description?.special_requirement;
+
+		const matchingLabels = sr
+			?.filter((item) => parsedObject.values.includes(item.value)) // Filter by matching value
+			.map((item) => item.label);
+		return matchingLabels;
+	} else {
+		return [];
+	}
+};
+
+export const getGarmentInfo = (order_description, garments) => {
+	if (order_description?.garments_wash) {
+		const parsedObject =
+			typeof order_description?.garments_wash === 'string'
+				? JSON.parse(order_description?.garments_wash)
+				: order_description?.garments_wash;
+
+		const matchingLabels = garments
+			?.filter((item) => parsedObject.values.includes(item.value)) // Filter by matching value
+			.map((item) => item.label);
+		return matchingLabels;
+	} else {
+		return [];
+	}
 };

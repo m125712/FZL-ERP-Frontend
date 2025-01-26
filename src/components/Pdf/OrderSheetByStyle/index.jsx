@@ -6,12 +6,18 @@ import {
 	xMargin,
 } from '@/components/Pdf/ui';
 
-import { getPageFooter, getPageHeader, TableHeader } from './utils';
+import {
+	getGarmentInfo,
+	getPageFooter,
+	getPageHeader,
+	getSpecialReqInfo,
+	TableHeader,
+} from './utils';
 
 export default function OrderSheetByStyle(orderByStyle) {
 	const headerHeight = 130;
 	let footerHeight = 30;
-	const { order_info, orders } = orderByStyle;
+	const { order_info, orders, sr, garments } = orderByStyle;
 	let grandTotal = 0;
 
 	const pdfDocGenerator = pdfMake.createPdf({
@@ -51,7 +57,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 					margin: [0, 5],
 					table: {
 						headerRows: 2,
-						widths: ['*', 50, 30, 30, 35],
+						widths: ['*', 80, 30, 20, 35],
 						body: [
 							// Header
 							...TableHeader(item),
@@ -61,17 +67,62 @@ export default function OrderSheetByStyle(orderByStyle) {
 									total += detail.quantity;
 									grandTotal += detail.quantity;
 
+									const special_req = getSpecialReqInfo(
+										entry,
+										sr
+									);
+									const garments_info = getGarmentInfo(
+										entry,
+										garments
+									);
+
 									return [
 										{
 											text: [
 												{ text: 'Tape: ', bold: true },
 												entry.tape,
-												'\n\n',
+												'\n',
 												{
 													text: 'Slider: ',
 													bold: true,
 												},
 												entry.slider,
+
+												...(special_req?.length > 0
+													? [
+															'\n',
+															{
+																text: 'Special Req: ',
+																bold: true,
+															},
+															special_req?.join(
+																', '
+															),
+														]
+													: []),
+
+												...(garments_info?.length > 0
+													? [
+															'\n',
+															{
+																text: 'Garments: ',
+																bold: true,
+															},
+															garments_info?.join(
+																', '
+															),
+														]
+													: []),
+												...(entry.remarks
+													? [
+															'\n',
+															{
+																text: 'Remarks: ',
+																bold: true,
+															},
+															entry.remarks,
+														]
+													: []),
 											],
 											rowSpan: entry.details.length,
 										},
@@ -84,6 +135,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 											text: detail.size
 												? detail.size
 												: '---',
+											alignment: 'right',
 										},
 										{
 											text: detail.unit
@@ -95,8 +147,9 @@ export default function OrderSheetByStyle(orderByStyle) {
 												? detail.bleaching ===
 													'non-bleach'
 													? detail.quantity
-													: 'B-' + detail.quantity
+													: 'B - ' + detail.quantity
 												: '---',
+											alignment: 'right',
 										},
 									];
 								})
@@ -111,6 +164,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 								{},
 								{
 									text: total,
+									alignment: 'right',
 								},
 							],
 						],

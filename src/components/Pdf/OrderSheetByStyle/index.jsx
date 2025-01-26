@@ -51,7 +51,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 					margin: [0, 5],
 					table: {
 						headerRows: 2,
-						widths: ['*', 50, 30, 30, 30, 35],
+						widths: ['*', 50, 30, 30, 35],
 						body: [
 							// Header
 							...TableHeader(item),
@@ -67,7 +67,10 @@ export default function OrderSheetByStyle(orderByStyle) {
 												{ text: 'Tape: ', bold: true },
 												entry.tape,
 												'\n\n',
-												{ text: 'Slider: ', bold: true },
+												{
+													text: 'Slider: ',
+													bold: true,
+												},
 												entry.slider,
 											],
 											rowSpan: entry.details.length,
@@ -88,15 +91,11 @@ export default function OrderSheetByStyle(orderByStyle) {
 												: '---',
 										},
 										{
-											text:
-												detail.bleaching ===
-												'non-bleach'
-													? 'No'
-													: 'Yes',
-										},
-										{
 											text: detail.quantity
-												? detail.quantity
+												? detail.bleaching ===
+													'non-bleach'
+													? detail.quantity
+													: 'B-' + detail.quantity
 												: '---',
 										},
 									];
@@ -105,9 +104,8 @@ export default function OrderSheetByStyle(orderByStyle) {
 							[
 								{
 									text: 'Total',
-									colSpan: 5,
+									colSpan: 4,
 								},
-								{},
 								{},
 								{},
 								{},

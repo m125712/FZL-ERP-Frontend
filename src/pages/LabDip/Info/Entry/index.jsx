@@ -284,7 +284,6 @@ export default function Index() {
 						getValues,
 						watch,
 						Controller,
-						watch,
 						lab_status: getValues('lab_status'),
 						isUpdate,
 					}}

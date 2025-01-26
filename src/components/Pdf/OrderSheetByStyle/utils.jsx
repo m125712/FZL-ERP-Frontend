@@ -113,11 +113,6 @@ export const TableHeader = (item, idx) => {
 	return [
 		[
 			{
-				text: 'Style',
-				style: 'tableHeader',
-			},
-
-			{
 				text: item.style,
 				style: 'tableHeader',
 				colSpan: 7,
@@ -130,7 +125,6 @@ export const TableHeader = (item, idx) => {
 			{},
 		],
 		[
-			{ text: 'Serial', style: 'tableHeader' },
 			{ text: 'Tape', style: 'tableHeader' },
 			{ text: 'Slider', style: 'tableHeader' },
 			{ text: 'Color', style: 'tableHeader' },

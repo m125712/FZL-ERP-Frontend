@@ -124,7 +124,7 @@ export default function Index() {
 				orderByStyle,
 				setData2,
 				setGetPdfData2,
-				OrderSheetByStyleV2
+				OrderSheetByStyle
 			);
 			// OrderSheetByStyle(order_sheet);
 			// getPdfData.download();

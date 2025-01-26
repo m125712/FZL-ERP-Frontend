@@ -51,7 +51,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 					margin: [0, 5],
 					table: {
 						headerRows: 2,
-						widths: [25, '*', '*', 50, 30, 30, 30, 35],
+						widths: ['*', '*', 50, 30, 30, 30, 35],
 						body: [
 							// Header
 							...TableHeader(item),
@@ -62,10 +62,6 @@ export default function OrderSheetByStyle(orderByStyle) {
 									grandTotal += detail.quantity;
 
 									return [
-										{
-											text: idx + 1,
-											rowSpan: entry.details.length,
-										},
 										{
 											text: entry.tape,
 											rowSpan: entry.details.length,
@@ -107,9 +103,9 @@ export default function OrderSheetByStyle(orderByStyle) {
 							[
 								{
 									text: 'Total',
-									colSpan: 7,
+									colSpan: 6,
 								},
-								{},
+
 								{},
 								{},
 								{},

@@ -51,7 +51,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 					margin: [0, 5],
 					table: {
 						headerRows: 2,
-						widths: ['*', '*', 50, 30, 30, 30, 35],
+						widths: ['*', 50, 30, 30, 30, 35],
 						body: [
 							// Header
 							...TableHeader(item),
@@ -63,11 +63,13 @@ export default function OrderSheetByStyle(orderByStyle) {
 
 									return [
 										{
-											text: entry.tape,
-											rowSpan: entry.details.length,
-										},
-										{
-											text: entry.slider,
+											text: [
+												{ text: 'Tape: ', bold: true },
+												entry.tape,
+												'\n\n',
+												{ text: 'Slider: ', bold: true },
+												entry.slider,
+											],
 											rowSpan: entry.details.length,
 										},
 										{
@@ -103,10 +105,8 @@ export default function OrderSheetByStyle(orderByStyle) {
 							[
 								{
 									text: 'Total',
-									colSpan: 6,
+									colSpan: 5,
 								},
-
-								{},
 								{},
 								{},
 								{},

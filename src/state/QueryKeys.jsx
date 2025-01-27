@@ -1539,6 +1539,12 @@ export const reportQK = {
 		type,
 		order,
 	],
+
+	orderStatementReport: (query) => [
+		...reportQK.all(),
+		'order-statement-report',
+		query,
+	],
 	//* Zipper Production
 	zipperProduction: (query) => [
 		...reportQK.all(),

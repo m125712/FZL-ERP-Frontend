@@ -49,6 +49,12 @@ export const useProductionStatementReport = (
 		enabled: !!from && !!to,
 	});
 
+export const useOrderStatementReport = (query) =>
+	createGlobalState({
+		queryKey: reportQK.orderStatementReport(query),
+		url: '/report/order-sheet-pdf-report?date=' + query,
+	});
+
 export const useZipperProduction = (query, { enabled = false } = {}) =>
 	createGlobalState({
 		queryKey: reportQK.zipperProduction(query),

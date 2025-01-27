@@ -199,11 +199,11 @@ export default function Index() {
 				invalidateDyeingOrderBatch();
 				invalidateCommonMultiColorLog();
 
-				navigate(
-					secondElement === 'coil'
-						? '/common/coil/log'
-						: `/common/tape/log`
-				);
+				// navigate(
+				// 	secondElement === 'coil'
+				// 		? '/common/coil/log'
+				// 		: `/common/tape/log`
+				// );
 			})
 			.catch((err) => console.log(err));
 	};

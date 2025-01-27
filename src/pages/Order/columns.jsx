@@ -267,8 +267,8 @@ export const InfoColumns = ({
 		() => [
 			{
 				accessorFn: (row) => (row.is_canceled ? 'YES' : 'NO'),
-				id: 'is_canceled',
-				header: 'Canceled',
+				id: 'is_cancelled',
+				header: 'Cancelled',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<StatusButton

@@ -7,6 +7,7 @@ const DeliveryStatement = lazy(
 const ProductionStatement = lazy(
 	() => import('@/pages/Report/ProductionStatement')
 );
+const OrderStatement = lazy(() => import('@/pages/Report/OrderStatement'));
 const LCDue = lazy(() => import('@/pages/Report/LC'));
 const PIRegister = lazy(() => import('@/pages/Report/PIRegister'));
 const PIToBeSubmit = lazy(() => import('@/pages/Report/PIToBeSubmit'));
@@ -126,6 +127,13 @@ export const ReportRoutes = [
 				path: '/report/production-statement',
 				element: <ProductionStatement />,
 				page_name: 'report__production_statement',
+				actions: ['read'],
+			},
+			{
+				name: 'Order Statement',
+				path: '/report/order-statement',
+				element: <OrderStatement />,
+				page_name: 'report__order_statement',
 				actions: ['read'],
 			},
 			{

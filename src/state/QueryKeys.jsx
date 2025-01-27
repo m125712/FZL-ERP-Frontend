@@ -1528,7 +1528,8 @@ export const reportQK = {
 		party,
 		marketing,
 		type,
-		order
+		order,
+		reportFor
 	) => [
 		...reportQK.all(),
 		'production-report',
@@ -1538,6 +1539,7 @@ export const reportQK = {
 		marketing,
 		type,
 		order,
+		reportFor,
 	],
 	//* Zipper Production
 	zipperProduction: (query) => [

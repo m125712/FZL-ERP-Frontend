@@ -25,12 +25,18 @@ export default function Header({
 	setMarketing = () => {},
 	order = '',
 	setOrder = () => {},
+	reportFor = '',
+	setReportFor = () => {},
 }) {
 	const { data: marketings } = useOtherMarketing();
 	const { data: parties } = useOtherParty();
 	const { data: orders } = useAllZipperThreadOrderList(
-		`from_date=${from}&to_date=${to}&page=production_statement`
+		`from_date=${from}&to_date=${to}&page=production_statement${reportFor === 'accounts' ? '_accounts' : ''}`
 	);
+	const reportForOptions = [
+		{ label: 'SNO', value: '' },
+		{ label: 'Accounts', value: 'accounts' },
+	];
 
 	const types = [
 		{ label: 'Nylon', value: 'Nylon' },
@@ -90,6 +96,18 @@ export default function Header({
 					</FormField>
 				</div>
 				<div className='flex gap-2'>
+					<FormField label='' title='Report For'>
+						<ReactSelect
+							placeholder='Select Report'
+							options={reportForOptions}
+							value={reportForOptions?.find(
+								(item) => item.value == reportFor
+							)}
+							onChange={(e) => {
+								setReportFor(e.value);
+							}}
+						/>
+					</FormField>
 					<FormField label='' title='Type'>
 						<ReactSelect
 							placeholder='Select Type'

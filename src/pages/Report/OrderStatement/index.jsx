@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useProductionStatementReport } from '@/state/Report';
+import { useOrderStatementReport } from '@/state/Report';
 import { format } from 'date-fns';
 
 import Pdf from '@/components/Pdf/ProductionStatement';
@@ -17,7 +17,7 @@ export default function index() {
 	);
 
 	const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
-	const { data, isLoading } = useProductionStatementReport(date);
+	const { data, isLoading } = useOrderStatementReport(date);
 
 	useEffect(() => {
 		document.title = info.getTabName();

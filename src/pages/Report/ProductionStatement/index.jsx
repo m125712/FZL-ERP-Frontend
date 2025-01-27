@@ -22,13 +22,15 @@ export default function index() {
 	const [type, setType] = useState();
 	const [party, setParty] = useState();
 	const [order, setOrder] = useState('');
+	const [reportFor, setReportFor] = useState('');
 	const { data, isLoading } = useProductionStatementReport(
 		from,
 		to,
 		party,
 		marketing,
 		type,
-		order
+		order,
+		reportFor
 	);
 
 	useEffect(() => {
@@ -53,6 +55,8 @@ export default function index() {
 					setType,
 					order,
 					setOrder,
+					reportFor,
+					setReportFor,
 				}}
 			/>
 			<div className='flex gap-2'>

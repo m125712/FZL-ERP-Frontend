@@ -100,9 +100,8 @@ export default function Index({ initial_order, idx }) {
 				order_info,
 				sr,
 				garments,
-				orders: orderbystyle.pageData,
+				orders: orderbystyle?.pageData,
 			};
-
 
 			createPDF(order_sheet, setGetPdfData, OrderSheetPdf);
 			createPDF(orderByStyle, setGetPdfData2, OrderSheetByStyle);

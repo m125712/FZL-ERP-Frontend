@@ -419,7 +419,7 @@ export default function Index() {
 									render={({ field: { onChange } }) => {
 										return (
 											<ReactSelect
-												placeholder='Select marketing_approved'
+												placeholder='Select marketing approved'
 												options={marketingApproved}
 												value={marketingApproved?.find(
 													(item) =>

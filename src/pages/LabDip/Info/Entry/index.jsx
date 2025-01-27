@@ -133,7 +133,9 @@ export default function Index() {
 				...item,
 				lab_dip_info_uuid: data?.uuid,
 				approved: item.approved ? 1 : 0,
+				is_pps_req: item.is_pps_req ? 1 : 0,
 				approved_date: item.approved ? GetDateTime() : null,
+				is_pps_req_date: item.is_pps_req ? GetDateTime() : null,
 			}));
 
 			//* Post new entry */ //
@@ -202,9 +204,10 @@ export default function Index() {
 			uuid: nanoid(),
 			lab_dip_info_uuid,
 			approved: item.approved ? 1 : 0,
-			marketing_approved: item.marketing_approved ? 1 : 0,
+			is_pps_req: item.is_pps_req ? 1 : 0,
 			created_by: user?.uuid,
 			approved_date: item.approved ? GetDateTime() : null,
+			is_pps_req_date: item.is_pps_req ? GetDateTime() : null,
 			created_at,
 		}));
 
@@ -263,9 +266,9 @@ export default function Index() {
 		{ label: 'Approved', value: 1 },
 	];
 
-	const marketingApproved = [
-		{ label: 'Pending', value: 0 },
-		{ label: 'Approved', value: 1 },
+	const PPsRequired = [
+		{ label: 'No', value: 0 },
+		{ label: 'Yes', value: 1 },
 	];
 
 	let excludeItem = exclude(watch, rec_uuid, 'recipe', 'recipe_uuid', Status);
@@ -294,8 +297,9 @@ export default function Index() {
 					tableHead={[
 						'Recipe',
 						//'Status',
+						'PP Sample Required?',
 						'Approved',
-						'Marketing Approved',
+
 						'Action',
 					].map((item) => (
 						<th
@@ -359,6 +363,52 @@ export default function Index() {
 									/>
 								</FormField>
 							</td>
+							{/* PP Sample Required? */}
+							<td className={rowClass}>
+								<FormField
+									label={`recipe[${index}].is_pps_req`}
+									title='PP Sample Required?'
+									dynamicerror={
+										errors?.recipe?.[index]?.is_pps_req
+									}
+									is_title_needed='false'>
+									<Controller
+										name={`recipe[${index}].is_pps_req`}
+										control={control}
+										render={({ field: { onChange } }) => {
+											return (
+												<ReactSelect
+													placeholder='Select PPs'
+													options={PPsRequired}
+													value={PPsRequired?.find(
+														(item) =>
+															item.value ==
+															getValues(
+																`recipe[${index}].is_pps_req`
+															)
+													)}
+													onChange={(e) => {
+														onChange(e.value);
+														setValue(
+															`recipe[${index}].is_pps_req`,
+															e.value
+														);
+													}}
+													isDisabled={
+														rec_uuid == undefined ||
+														!watch(
+															`order_info_uuid`
+														)
+													}
+													menuPortalTarget={
+														document.body
+													}
+												/>
+											);
+										}}
+									/>
+								</FormField>
+							</td>
 							{/* approved */}
 							<td className={rowClass}>
 								<FormField
@@ -405,46 +455,7 @@ export default function Index() {
 									/>
 								</FormField>
 							</td>
-							{/* Marketing Approved */}
-							<FormField
-								label={`recipe[${index}].marketing_approved`}
-								title='Marketing Approved'
-								dynamicerror={
-									errors?.recipe?.[index]?.marketing_approved
-								}
-								is_title_needed='false'>
-								<Controller
-									name={`recipe[${index}].marketing_approved`}
-									control={control}
-									render={({ field: { onChange } }) => {
-										return (
-											<ReactSelect
-												placeholder='Select marketing approved'
-												options={marketingApproved}
-												value={marketingApproved?.find(
-													(item) =>
-														item.value ==
-														getValues(
-															`recipe[${index}].marketing_approved`
-														)
-												)}
-												onChange={(e) => {
-													onChange(e.value);
-													setValue(
-														`recipe[${index}].marketing_approved`,
-														e.value
-													);
-												}}
-												isDisabled={
-													rec_uuid == undefined ||
-													!watch(`order_info_uuid`)
-												}
-												menuPortalTarget={document.body}
-											/>
-										);
-									}}
-								/>
-							</FormField>
+
 							<td
 								className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
 								<ActionButtons

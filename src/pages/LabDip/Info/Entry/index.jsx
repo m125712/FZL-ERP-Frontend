@@ -133,7 +133,9 @@ export default function Index() {
 				...item,
 				lab_dip_info_uuid: data?.uuid,
 				approved: item.approved ? 1 : 0,
+				is_pps_req: item.is_pps_req ? 1 : 0,
 				approved_date: item.approved ? GetDateTime() : null,
+				is_pps_req_date: item.is_pps_req ? GetDateTime() : null,
 			}));
 
 			//* Post new entry */ //
@@ -205,6 +207,7 @@ export default function Index() {
 			is_pps_req: item.is_pps_req ? 1 : 0,
 			created_by: user?.uuid,
 			approved_date: item.approved ? GetDateTime() : null,
+			is_pps_req_date: item.is_pps_req ? GetDateTime() : null,
 			created_at,
 		}));
 

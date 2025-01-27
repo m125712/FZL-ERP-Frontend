@@ -748,9 +748,7 @@ export const LAB_INFO_SCHEMA = {
 				false
 			),
 			recipe_uuid: STRING_REQUIRED,
-			marketing_approved: BOOLEAN.transform(
-				handelNumberDefaultValue
-			).default(false),
+			is_pps_req: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 			remarks: STRING.nullable(),
 		})
 	),
@@ -764,7 +762,7 @@ export const LAB_INFO_NULL = {
 		{
 			approved: false,
 			recipe_uuid: null,
-			marketing_approved: false,
+			is_pps_req: false,
 			remarks: '',
 		},
 	],

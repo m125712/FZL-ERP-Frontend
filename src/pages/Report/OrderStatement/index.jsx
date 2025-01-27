@@ -8,6 +8,7 @@ import PageInfo from '@/util/PageInfo';
 
 import Excel from './Excel';
 import Header from './Header';
+import OrderSheetPdf from '@/components/Pdf/OrderSheet';
 
 export default function index() {
 	const info = new PageInfo(
@@ -36,7 +37,7 @@ export default function index() {
 			<div className='flex gap-2'>
 				<button
 					type='button'
-					onClick={() => Pdf(data, from, to)?.open()}
+					onClick={() => OrderSheetPdf(data?.[0])?.open()}
 					className='btn btn-primary flex-1'>
 					PDF
 				</button>

@@ -93,8 +93,8 @@ export default function Index({ recipe, order_info_uuid }) {
 				},
 			},
 			{
-				accessorKey: 'marketing_approved',
-				header: 'Marketing Approved',
+				accessorKey: 'is_pps_req',
+				header: 'PP Sample Required?',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const access = haveAccess.includes('click_approve');
@@ -109,7 +109,7 @@ export default function Index({ recipe, order_info_uuid }) {
 									(!access || Number(info.getValue()) === 1))
 							}
 							onChange={() =>
-								handelMarketingApprovedStatusChange(
+								handelPPsRequiredStatusChange(
 									info.row.index
 								)
 							}
@@ -119,8 +119,8 @@ export default function Index({ recipe, order_info_uuid }) {
 				},
 			},
 			{
-				accessorKey: 'marketing_approved_date',
-				header: 'Marketing Approved Date',
+				accessorKey: 'is_pps_req_date',
+				header: 'PP Required Date',
 				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
 				width: 'w-24',
@@ -163,14 +163,14 @@ export default function Index({ recipe, order_info_uuid }) {
 		invalidateQueryLabDipInfo();
 	};
 
-	const handelMarketingApprovedStatusChange = async (idx) => {
+	const handelPPsRequiredStatusChange = async (idx) => {
 		await updateData.mutateAsync({
 			url: `/lab-dip/info-entry/${recipe[idx]?.info_entry_uuid}`,
 			updatedData: {
-				marketing_approved:
-					recipe[idx]?.marketing_approved === 1 ? 0 : 1,
-				marketing_approved_date:
-					recipe[idx]?.marketing_approved === 1
+				is_pps_req:
+					recipe[idx]?.is_pps_req === 1 ? 0 : 1,
+					is_pps_req_date:
+					recipe[idx]?.is_pps_req === 1
 						? null
 						: GetDateTime(),
 			},

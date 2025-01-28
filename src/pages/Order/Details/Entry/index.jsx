@@ -135,6 +135,7 @@ export default function Index() {
 		ORDER_NULL
 	);
 
+	console.log(errors);
 	useEffect(() => {
 		order_number !== undefined
 			? (document.title = `Order: Update ${order_number}`)

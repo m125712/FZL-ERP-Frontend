@@ -9,6 +9,11 @@ export const useAdminUsers = () =>
 		url: '/hr/user',
 	});
 
+export const useGetUserAccessByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: adminQK.userAccessByUUID(uuid),
+		url: `/hr/user/can-access/${uuid}`,
+	});
 // * Department
 export const useAdminDepartments = () =>
 	createGlobalState({

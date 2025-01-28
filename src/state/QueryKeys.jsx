@@ -85,6 +85,7 @@ export const adminQK = {
 	//* users
 	users: () => [...adminQK.all(), 'users'],
 	user: (uuid) => [...adminQK.users(), uuid],
+	userAccessByUUID: (uuid) => [...adminQK.users(), 'userAccessByUUID', uuid],
 
 	//* permissions
 	permissions: () => [...adminQK.all(), 'permissions'],

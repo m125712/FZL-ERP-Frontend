@@ -9,6 +9,7 @@ import { useAccess, useFetchForOrderReset, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
+import { ShowLocalToast } from '@/components/Toast';
 import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet'; //! why it is must??
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { CheckBox } from '@/ui';
@@ -86,6 +87,7 @@ export default function Index() {
 
 			order_entry: yup.array().of(
 				yup.object().shape({
+					index: NUMBER,
 					style: STRING_REQUIRED,
 					color: STRING.when({
 						is: () => type.toLowerCase() === 'slider',
@@ -247,6 +249,14 @@ export default function Index() {
 
 		// * separate the order_entry
 		const { order_entry, ...rest } = data;
+		if (!order_entry.length > 0) {
+			ShowLocalToast({
+				type: 'warning',
+				message: 'Add at least one Entry',
+			});
+
+			return;
+		}
 
 		// * Update data * //
 		if (isUpdate) {

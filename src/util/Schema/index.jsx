@@ -545,7 +545,12 @@ export const ORDER_SCHEMA = {
 	order_info_uuid: UUID_REQUIRED,
 	item: UUID_REQUIRED,
 	zipper_number: UUID_REQUIRED,
-	lock_type: UUID_REQUIRED,
+	lock_type: UUID.when(['order_type', 'slider_provided'], {
+		is: (orderType, sliderProvided) =>
+			orderType === 'tape' || sliderProvided !== 'not_provided',
+		then: (schema) => schema,
+		otherwise: (schema) => schema.required('Required'),
+	}),
 
 	end_type: UUID.when('order_type', {
 		is: (value) => value === 'full',
@@ -748,7 +753,9 @@ export const LAB_INFO_SCHEMA = {
 				false
 			),
 			recipe_uuid: STRING_REQUIRED,
-			is_pps_req: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+			is_pps_req: BOOLEAN.transform(handelNumberDefaultValue).default(
+				false
+			),
 			remarks: STRING.nullable(),
 		})
 	),

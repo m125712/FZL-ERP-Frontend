@@ -67,7 +67,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 					margin: [0, 5],
 					table: {
 						headerRows: 2,
-						widths: ['*', 80, 30, 20, 35],
+						widths: ['*', 80, 30, 25, 35],
 						body: [
 							// Header
 							...TableHeader(item),

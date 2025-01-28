@@ -649,9 +649,9 @@ export const ORDER_SCHEMA = {
 		yup.object().shape({
 			index: NUMBER_REQUIRED,
 			style: STRING_REQUIRED,
-			color: STRING_REQUIRED,
-			size: NUMBER_DOUBLE_REQUIRED,
-			quantity: NUMBER_REQUIRED,
+			color: STRING,
+			size: NUMBER_DOUBLE,
+			quantity: STRING,
 			company_price: NUMBER_DOUBLE_REQUIRED.transform(
 				handelNumberDefaultValue
 			).default(0),

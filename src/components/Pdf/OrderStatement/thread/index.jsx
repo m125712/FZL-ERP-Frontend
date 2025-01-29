@@ -52,6 +52,57 @@ export default function Index(orderInfo) {
 	const { totalQuantity, uniqueColorsCount, totalExpectedYarn } =
 		calculateSummary(order_info_entry);
 
+	return [
+		{
+			table: getPageHeader(orderInfo),
+			margin: [0, 40, 0, 0],
+			layout: 'noBorders',
+		},
+		{
+			table: {
+				headerRows: 1,
+				widths: [100, 100, 50, 50, 50, 50, 70],
+				body: [
+					// * Header
+					TableHeader(node),
+
+					// * Body
+					...order_info_entry?.map((item) =>
+						node.map((nodeItem) => ({
+							text: item[nodeItem.field],
+							style: nodeItem.cellStyle,
+							alignment: nodeItem.alignment,
+						}))
+					),
+					[
+						{
+							text: `Total: ${Number(uniqueColorsCount)}`,
+							bold: true,
+							colSpan: 2,
+						},
+						{},
+						{},
+						{
+							text: `${Number(totalQuantity)}`,
+							alignment: 'right',
+							bold: true,
+							colSpan: 2,
+						},
+						{},
+						{
+							text: `${Number(totalExpectedYarn)}`,
+							alignment: 'right',
+							bold: true,
+						},
+						{},
+					],
+				],
+			},
+			// layout: 'lightHorizontalLines',
+			layout: tableLayoutStyle,
+		},
+	];
+
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
 			xMargin,
@@ -60,20 +111,20 @@ export default function Index(orderInfo) {
 		}),
 
 		// * Page Header
-		header: {
-			table: getPageHeader(orderInfo),
-			layout: 'noBorders',
-			margin: [xMargin, 30, xMargin, 0],
-		},
+		// header: {
+		// 	table: getPageHeader(orderInfo),
+		// 	layout: 'noBorders',
+		// 	margin: [xMargin, 30, xMargin, 0],
+		// },
 		// * Page Footer
-		footer: (currentPage, pageCount) => ({
-			table: getPageFooter({
-				currentPage,
-				pageCount,
-			}),
-			margin: [xMargin, 2],
-			fontSize: DEFAULT_FONT_SIZE - 2,
-		}),
+		// footer: (currentPage, pageCount) => ({
+		// 	table: getPageFooter({
+		// 		currentPage,
+		// 		pageCount,
+		// 	}),
+		// 	margin: [xMargin, 2],
+		// 	fontSize: DEFAULT_FONT_SIZE - 2,
+		// }),
 
 		// * Main Table
 		content: [

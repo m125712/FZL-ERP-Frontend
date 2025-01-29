@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
-import {
-	useOtherOrderPropertiesByGarmentsWash,
-	useOtherOrderPropertiesBySpecialRequirement,
-} from '@/state/Other';
-import { useOrderStatementReport } from '@/state/Report';
+import { useProductionStatementReport } from '@/state/Report';
 import { format } from 'date-fns';
 
-import OrderSheetPdf from '@/components/Pdf/OrderStatement';
 import Pdf from '@/components/Pdf/ProductionStatement';
 
 import PageInfo from '@/util/PageInfo';
@@ -16,20 +11,27 @@ import Header from './Header';
 
 export default function index() {
 	const info = new PageInfo(
-		'Order Statement',
-		'/report/order-statement',
-		'report__order_statement'
+		'Daily Production',
+		null,
+		'report__daily_production'
 	);
 
 	const [from, setFrom] = useState(format(new Date(), 'yyyy-MM-dd'));
 	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
-	const [marketing, setMarketing] = useState('');
-	const [type, setType] = useState('');
-	const [party, setParty] = useState('');
-
-	const { data, isLoading } = useOrderStatementReport(from, to, party, marketing, type);
-	const { data: garments } = useOtherOrderPropertiesByGarmentsWash();
-	const { data: sr } = useOtherOrderPropertiesBySpecialRequirement();
+	const [marketing, setMarketing] = useState();
+	const [type, setType] = useState();
+	const [party, setParty] = useState();
+	const [order, setOrder] = useState('');
+	const [reportFor, setReportFor] = useState('');
+	const { data, isLoading } = useProductionStatementReport(
+		from,
+		to,
+		party,
+		marketing,
+		type,
+		order,
+		reportFor
+	);
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -45,20 +47,22 @@ export default function index() {
 					setFrom,
 					to,
 					setTo,
+					party,
+					setParty,
 					marketing,
 					setMarketing,
 					type,
 					setType,
-					party,
-					setParty,
+					order,
+					setOrder,
+					reportFor,
+					setReportFor,
 				}}
 			/>
 			<div className='flex gap-2'>
 				<button
 					type='button'
-					onClick={() =>
-						OrderSheetPdf(data, garments, sr, from, to)?.open()
-					}
+					onClick={() => Pdf(data, from, to)?.open()}
 					className='btn btn-primary flex-1'>
 					PDF
 				</button>

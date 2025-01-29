@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import Order from '@/pages/Report/ProductionStatement/Order';
-import Production from '@/pages/Report/ProductionStatement/Production';
+import Order from '@/pages/Report/ProductionStatement/order';
+import Production from '@/pages/Report/ProductionStatement/production';
 
 import PageInfo from '@/util/PageInfo';
 

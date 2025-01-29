@@ -1,7 +1,7 @@
 import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
 
-import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../../ui';
+import { DEFAULT_FONT_SIZE, PRIMARY_COLOR, styles } from '../../ui';
 import { company, getEmptyColumn } from '../../utils';
 
 const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
@@ -18,36 +18,28 @@ export const getPageHeader = (orderInfo) => {
 		heights: ['auto', 2, 'auto', 'auto'],
 		widths: [70, '*', 70, '*'],
 		body: [
+			// * Start of table
 			[
 				{
-					image: FZL_LOGO.src,
-					width: 70,
-					height: 40,
-					alignment: 'left',
+					text: 'THREAD ORDER SHEET',
+					bold: true,
+					color: PRIMARY_COLOR,
+					colSpan: 4,
+					alignment: 'center',
+					style: 'tableHeader',
+					...(orderInfo.pageBreak ? { pageBreak: 'before' } : {}),
 				},
-				{
-					text: [`${company.address}\n`, `${company.phone}\n`],
-					alignment: 'left',
-				},
-				{
-					colSpan: 2,
-					text: [
-						{
-							text: 'Thread Order Sheet\n',
-							fontSize: DEFAULT_FONT_SIZE + 4,
-							bold: true,
-						},
-						`O/N: ${orderInfo?.order_number}  ${orderInfo?.revision_no > 0 ? `Rev: ${orderInfo?.revision_no}` : ''}\n`,
-						`Date: ${created_at}\n`,
-						`PI Number: ${pi_number ? pi_number.join(', ') : '---'}\n`,
-					],
-					alignment: 'right',
-				},
-				'',
+				{},
+				{},
+				{},
 			],
-			PAGE_HEADER_EMPTY_ROW,
+			[
+				{ text: 'O/N', bold: true, color: PRIMARY_COLOR },
+				`${orderInfo?.order_number}  ${orderInfo?.revision_no > 0 ? `Rev: ${orderInfo?.revision_no}` : ''}\n`,
+				{ text: 'Date', bold: true, color: PRIMARY_COLOR },
+				created_at,
+			],
 
-			// * Start of table
 			[
 				{ text: 'Buyer', bold: true, color: PRIMARY_COLOR },
 				orderInfo?.buyer_name,
@@ -63,8 +55,8 @@ export const getPageHeader = (orderInfo) => {
 			[
 				{ text: 'Factory', bold: true, color: PRIMARY_COLOR },
 				{ text: orderInfo?.factory_name, colSpan: 3 },
-				{},
-				{},
+				{ text: 'PI', bold: true, color: PRIMARY_COLOR },
+				`${pi_number ? pi_number.join(', ') : '---'}\n`,
 			],
 			[
 				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
@@ -87,6 +79,7 @@ export const getPageHeader = (orderInfo) => {
 				'',
 			],
 		],
+	
 	};
 };
 

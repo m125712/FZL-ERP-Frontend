@@ -54,14 +54,6 @@ export default function OrderSheetByStyle(orderByStyle) {
 			...orders?.map((item, idx) => {
 				let total = 0;
 
-				console.log(
-					item.style,
-					item.item_description?.flatMap((entry, idx) =>
-						entry.details.flatMap((detail) =>
-							detail.sizes.map((size) => size.size)
-						)
-					)
-				);
 
 				return {
 					margin: [0, 5],

@@ -1,21 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useProductionStatementReport } from '@/state/Report';
 import { format } from 'date-fns';
 
 import Pdf from '@/components/Pdf/ProductionStatement';
 
-import PageInfo from '@/util/PageInfo';
-
 import Excel from './Excel';
 import Header from './Header';
 
 export default function index() {
-	const info = new PageInfo(
-		'Daily Production',
-		null,
-		'report__daily_production'
-	);
-
 	const [from, setFrom] = useState(format(new Date(), 'yyyy-MM-dd'));
 	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
 	const [marketing, setMarketing] = useState();
@@ -33,9 +25,6 @@ export default function index() {
 		reportFor
 	);
 
-	useEffect(() => {
-		document.title = info.getTabName();
-	}, []);
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 

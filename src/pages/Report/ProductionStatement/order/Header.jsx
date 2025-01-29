@@ -18,11 +18,11 @@ export default function Header({
 	const { data: marketings } = useOtherMarketing();
 	const { data: parties } = useOtherParty();
 	const types = [
-		{ label: 'Nylon', value: 'Nylon' },
-		{ label: 'Vislon', value: 'Vislon' },
-		{ label: 'Metal', value: 'Metal' },
-		{ label: 'Thread', value: 'Thread' },
-		{ label: 'Zipper', value: 'Zipper' },
+		{ label: 'Nylon', value: 'nylon' },
+		{ label: 'Vislon', value: 'vislon' },
+		{ label: 'Metal', value: 'metal' },
+		{ label: 'Thread', value: 'thread' },
+		{ label: 'Zipper', value: 'zipper' },
 	];
 
 	return (

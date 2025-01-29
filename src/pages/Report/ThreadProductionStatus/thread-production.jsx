@@ -27,7 +27,7 @@ export default function Index() {
 	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
 	const [status, setStatus] = useState('pending');
 	const { data, isLoading } = useThreadProductionBatchWise(
-		`status=${status}&from=${from}&to=${to}${getPath(haveAccess, user?.uuid)}`,
+		`status=${status}&time_from=${from}&time_to=${to}${getPath(haveAccess, user?.uuid)}`,
 		{
 			enabled: !!user?.uuid,
 		}
@@ -260,22 +260,24 @@ export default function Index() {
 				extraButton={
 					<div className='flex items-center gap-2'>
 						<SimpleDatePicker
-							className='h-[2.34rem] w-32'
+							className='m-w-32 h-[2.34rem]'
 							key={'from'}
 							value={from}
 							placeholder='From'
 							onChange={(data) => {
-								setFrom(format(data, 'yyyy-MM-dd'));
+								setFrom(format(data, 'yyyy-MM-dd hh:mm:ss'));
 							}}
+							showTime={true}
 						/>
 						<SimpleDatePicker
-							className='h-[2.34rem] w-32'
+							className='m-w-32 h-[2.34rem]'
 							key={'to'}
 							value={to}
 							placeholder='To'
 							onChange={(data) => {
-								setTo(format(data, 'yyyy-MM-dd'));
+								setTo(format(data, 'yyyy-MM-dd hh:mm:ss'));
 							}}
+							showTime={true}
 						/>
 						<ProductionStatus
 							className='w-44'

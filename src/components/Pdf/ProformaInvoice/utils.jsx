@@ -20,80 +20,147 @@ export const getPageHeader = (data) => {
 
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
-		widths: [70, '*', 70, '*'],
+		widths: [60, '*', 60, '*'],
 		body: [
 			[
 				{
-					image: FZL_LOGO.src,
-					width: 70,
-					height: 40,
-					alignment: 'left',
+					table: {
+						widths: ['auto', '*', 'auto'],
+						body: [
+							[
+								{
+									image: FZL_LOGO.src,
+									width: 70,
+									height: 40,
+									alignment: 'left',
+								},
+								{
+									text: [
+										`${company.address}\n`,
+										`${company.phone}\n`,
+										`${company.bin}\n`,
+										`${company.tax}\n`,
+									],
+									alignment: 'left',
+								},
+								{
+									text: [
+										{
+											text: 'PROFORMA INVOICE\n',
+											fontSize: DEFAULT_FONT_SIZE + 4,
+											bold: true,
+										},
+										`PI No: ${data?.id}\n`,
+										`Date: ${created_at}\n`,
+									],
+									alignment: 'right',
+								},
+							],
+						],
+					},
+					colSpan: 4,
+					layout: 'noBorders',
 				},
-				{
-					colspan: 2,
-					text: [
-						`${company.address}\n`,
-						`${company.phone}\n`,
-						`${company.bin}\n`,
-						`${company.tax}\n`,
-					],
-					alignment: 'left',
-				},
-
-				{
-					colSpan: 2,
-					text: [
-						{
-							text: 'PROFORMA INVOICE\n',
-							fontSize: DEFAULT_FONT_SIZE + 4,
-							bold: true,
-						},
-						`PI No: ${data?.id}\n`,
-						`Date: ${created_at}\n`,
-					],
-					alignment: 'right',
-				},
-				'',
+				{},
+				{},
+				{},
 			],
-			PAGE_HEADER_EMPTY_ROW,
 
 			// * Start of table
 			[
-				{ text: 'Proforma For', bold: true, color: PRIMARY_COLOR },
-				data?.factory_name,
-				{ text: 'Advising Bank', bold: true, color: PRIMARY_COLOR },
-				data?.bank_name,
-			],
-			[
-				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
-				{ text: data?.factory_address },
-
-				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
-				{ text: data?.bank_address },
-			],
-			[
-				{ text: 'Buyer', bold: true, color: PRIMARY_COLOR },
-				{ text: [...buyer].join(', ') },
-				{ text: 'Account No', bold: true, color: PRIMARY_COLOR },
-				data?.bank_account_no,
-			],
-
-			[
-				{ text: 'Attention', bold: true, color: PRIMARY_COLOR },
-				data?.merchandiser_name,
-				{ text: 'SWIFT', bold: true, color: PRIMARY_COLOR },
-				data?.bank_swift_code,
-			],
-
-			[
 				{
-					text: Number(data?.weight) > 0 ? 'Weight' : '',
-					bold: true,
-					color: PRIMARY_COLOR,
+					table: {
+						widths: [55, '*', 60, '*'],
+						body: [
+							[
+								{
+									text: 'Proforma For',
+									bold: true,
+									color: PRIMARY_COLOR,
+								},
+								data?.factory_name,
+								{
+									text: 'Advising Bank',
+									bold: true,
+									color: PRIMARY_COLOR,
+								},
+								data?.bank_name,
+							],
+							[
+								{
+									text: 'Address',
+									bold: true,
+									color: PRIMARY_COLOR,
+								},
+								{ text: data?.factory_address },
+
+								{
+									text: 'Address',
+									bold: true,
+									color: PRIMARY_COLOR,
+								},
+								{ text: data?.bank_address },
+							],
+							[
+								{
+									text: 'Buyer',
+									bold: true,
+									color: PRIMARY_COLOR,
+								},
+								{ text: [...buyer].join(', ') },
+								{
+									text: 'Account No',
+									bold: true,
+									color: PRIMARY_COLOR,
+								},
+								data?.bank_account_no,
+							],
+
+							[
+								{
+									text: 'Attention',
+									bold: true,
+									color: PRIMARY_COLOR,
+								},
+								data?.merchandiser_name,
+								{
+									text: 'SWIFT',
+									bold: true,
+									color: PRIMARY_COLOR,
+								},
+								data?.bank_swift_code,
+							],
+
+							[
+								{
+									text:
+										Number(data?.weight) > 0
+											? 'Weight'
+											: '',
+									bold: true,
+									color: PRIMARY_COLOR,
+								},
+								{
+									text:
+										Number(data?.weight) > 0
+											? data?.weight + ' Kg'
+											: '',
+								},
+								{
+									text: 'Routing No',
+									bold: true,
+									color: PRIMARY_COLOR,
+								},
+								data?.bank_routing_no,
+							],
+						],
+					},
+					layout: 'noBorders',
+					colSpan: 4,
 				},
-				{ text: Number(data?.weight) > 0 ? data?.weight + ' Kg' : '' },
-				{ text: 'Routing No', bold: true, color: PRIMARY_COLOR },
-				data?.bank_routing_no,
+				{},
+				{},
+				{},
 			],
 		],
 	};

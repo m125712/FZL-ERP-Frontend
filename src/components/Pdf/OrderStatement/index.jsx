@@ -1,3 +1,6 @@
+import threadPDF from '@components/Pdf/OrderStatement/thread';
+import zipperPDF from '@components/Pdf/OrderStatement/zipper';
+
 import pdfMake from '@/components/Pdf/pdfMake';
 import {
 	DEFAULT_FONT_SIZE,
@@ -11,15 +14,19 @@ import {
 	getGarmentInfo,
 	getPageFooter,
 	getPageHeader,
+	getPdfHeader,
 	getSpecialReqInfo,
 	grandTotal,
 	TableHeader,
 } from './utils';
 
-export default function OrderSheetPdf(order_sheet) {
-	const headerHeight = 130;
-	let footerHeight = 40;
-	const { order_info, order_entry, garments, sr } = order_sheet;
+export default function OrderSheetPdf(data, garments, sr, from, to) {
+	const headerHeight = 60;
+	let footerHeight = 30;
+
+	// * for page break
+	let prevOrderZipper = null;
+	let prevOrderThread = null;
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		pageSize: 'A4',
@@ -28,17 +35,15 @@ export default function OrderSheetPdf(order_sheet) {
 		defaultStyle,
 		styles,
 
-		// * Page Header
 		header: {
 			table: {
 				widths: [35, '*', 50, '*'],
-				body: getPageHeader(order_info),
+				body: getPdfHeader(from, to),
 			},
 			layout: 'noBorders',
 			margin: [xMargin, 10, xMargin, 0],
 		},
 
-		// * Page Footer
 		footer: function (currentPage, pageCount) {
 			return {
 				table: getPageFooter({
@@ -51,470 +56,80 @@ export default function OrderSheetPdf(order_sheet) {
 			};
 		},
 
-		// * Page Layout
 		content: [
-			...order_entry.map((entry, i) => {
-				// * special requirement info
-				const special_req_info = getSpecialReqInfo(entry, sr);
-				const { order_entry } = entry;
-				const uniqueSizes = [
-					...new Set(
-						order_entry.map((item) => Number(item.size)).sort()
-					),
-				].sort((a, b) => a - b);
-				const res = order_entry.reduce((acc, item) => {
-					const key = item.style;
-					const color = item.color;
-					const size = Number(item.size);
-					const quantity = Number(item.quantity);
-					const bleach = item.bleaching;
+			{
+				text: 'ZIPPER ORDER SECTION',
+				fontSize: 50,
+				bold: true,
+				alignment: 'center',
+			},
 
-					if (!acc[key]) {
-						acc[key] = [];
-					}
+			...data?.zipper?.flatMap((item) => {
+				let pageBreak = false;
 
-					const colorIndex = acc[key].findIndex(
-						(i) => i[color] !== undefined
-					);
+				if (
+					item?.order_number !== prevOrderZipper &&
+					prevOrderZipper !== null
+				)
+					pageBreak = true;
 
-					if (colorIndex === -1) {
-						acc[key].push({
-							[color]: uniqueSizes.map((sizeItem) =>
-								sizeItem === size ? quantity : 0
-							),
-							bleach: uniqueSizes.map((sizeItem) =>
-								sizeItem === size ? bleach : ''
-							),
-						});
-					} else {
-						const colorKey = Object.keys(acc[key][colorIndex])[0];
-						acc[key][colorIndex][colorKey] = acc[key][colorIndex][
-							colorKey
-						].map((qty, index) => {
-							return uniqueSizes[index] === size
-								? Number(qty) + Number(quantity)
-								: qty;
-						});
-					}
+				const order_info = {
+					id: item?.id,
+					pi_numbers: item?.pi_numbers,
+					is_bill: item?.is_bill,
+					is_cash: item?.is_cash,
+					is_sample: item?.is_sample,
+					is_inch: item?.is_inch,
+					order_status: item?.order_status,
+					order_number: item?.order_number,
+					party_name: item?.party_name,
+					buyer_name: item?.buyer_name,
+					marketing_name: item?.marketing_name,
+					merchandiser_name: item?.merchandiser_name,
+					factory_name: item?.factory_name,
+					factory_address: item?.factory_address,
+					user_name: item?.user_name,
+					marketing_priority: item?.marketing_priority,
+					factory_priority: item?.factory_priority,
+					// date: format(new Date(item?.created_at), 'dd/MM/yyyy'),
+					revisions: item.revision_no,
+					updated_at: item?.updated_at,
+					created_at: item?.created_at,
+					pageBreak,
+				};
+				const order_sheet = {
+					order_info,
+					order_entry: [item],
+					garments,
+					sr,
+				};
 
-					return acc;
-				}, {});
+				prevOrderZipper = item?.order_number;
 
-				//todo: order_type condition will start from here
-				if (entry.order_type !== 'slider') {
-					// * garments info
-					const garments_info = getGarmentInfo(entry, garments);
-
-					const uniqueColor = () => {
-						const uniqueColors = new Set();
-						order_entry.forEach((item) => {
-							uniqueColors.add(item.color);
-						});
-
-						return uniqueColors.size;
-					};
-
-					const chunkSize = 7;
-					const chunkedArray = chunkArray(uniqueSizes, chunkSize);
-					let TotalChunkQTY = 0;
-					return [
-						chunkedArray.map((chunk, index) => {
-							let chunkTotal = 0;
-							return {
-								table: {
-									widths: [
-										50,
-										67,
-										...chunkedArray[0].map(() => '*'),
-										// * ...uniqueSizes.map(() => 20),
-										'*',
-									],
-									body: [
-										// * Table Header
-										...TableHeader({
-											entry,
-											special_req_info,
-											uniqueSizes: chunk,
-											i,
-										}),
-
-										// * Table Body
-										...Object.keys(res)
-											.map((style) =>
-												res[style].map((color) => {
-													const colorName =
-														Object.keys(color)[0];
-													const quantities =
-														color[colorName];
-
-													// * the bleaching status for each quantity
-													const bleaching =
-														color.bleach;
-
-													// * Slicing the quantities array for each chunk
-													const slicedQuantities =
-														quantities.slice(
-															index * chunkSize,
-															index * chunkSize +
-																chunk.length
-														);
-
-													// * Slicing the bleaching array for each chunk
-													const slicedBleaching =
-														bleaching.slice(
-															index * chunkSize,
-															index * chunkSize +
-																chunk.length
-														);
-
-													// * check if the chunk is not the 1st chunk (this might not be required because the 1st chunk length might be less than the chunk size)
-													// * and if the sliced quantities length is less than the chunk size
-													if (
-														// * index > 0 &&   // * 1st chunk length might be less than the chunk size so this condition is not required
-														slicedQuantities.length <
-														chunkSize
-													) {
-														const missingItems =
-															chunkSize -
-															slicedQuantities.length;
-														slicedQuantities.push(
-															...Array(
-																missingItems
-															).fill(0)
-														);
-													}
-
-													return [
-														{
-															rowSpan:
-																res[style]
-																	.length,
-															text: style,
-														},
-														{
-															text: colorName,
-														},
-														...slicedQuantities.map(
-															(qty, i) => ({
-																text:
-																	qty === 0
-																		? '-'
-																		: slicedBleaching[
-																					i
-																			  ] ===
-																			  'bleach'
-																			? 'B -' +
-																				qty
-																			: qty,
-																alignment:
-																	'right',
-															})
-														),
-														{
-															text: slicedQuantities.reduce(
-																(acc, qty) =>
-																	Number(
-																		acc
-																	) +
-																	Number(qty),
-																0
-															),
-															alignment: 'right',
-														},
-													];
-												})
-											)
-											.flat(),
-
-										//* Total Color
-										[
-											{
-												text: 'Total Color',
-												alignment: 'Center',
-											},
-											{
-												text: uniqueColor(),
-												alignment: 'right',
-											},
-											...chunk.map((size) => {
-												return {
-													text: (() => {
-														let total =
-															order_entry.reduce(
-																(acc, item) =>
-																	Number(
-																		item.size
-																	) === size
-																		? Number(
-																				acc
-																			) +
-																			Number(
-																				item.quantity
-																			)
-																		: acc,
-																0
-															);
-
-														chunkTotal += total;
-														TotalChunkQTY += total;
-
-														return total;
-													})(), // * Immediately invoke the function
-													alignment: 'right',
-												};
-											}),
-											{
-												text: chunkTotal,
-												alignment: 'right',
-											},
-										],
-
-										// * Garments
-										...(garments_info.length > 0 ||
-										entry?.garment ||
-										entry?.light_preference_name ||
-										entry?.end_user_short_name
-											? [
-													[
-														{
-															text: 'Garments',
-															style: 'tableHeader',
-															alignment: 'Center',
-														},
-														{
-															colSpan:
-																chunk.length +
-																2,
-															text: [
-																entry?.garment
-																	? entry?.garment
-																	: '', // * Include garments if it exists
-																garments &&
-																(garments_info.length >
-																	0 ||
-																	entry?.light_preference_name ||
-																	entry?.end_user_short_name)
-																	? ' / '
-																	: '', // * Show separator if garments and at least one other value exists
-																garments_info.length >
-																0
-																	? `(${garments_info?.join(', ')})`
-																	: '',
-																garments_info.length >
-																	0 &&
-																(entry?.light_preference_name ||
-																	entry?.end_user_short_name)
-																	? ' / '
-																	: '', // * Show separator if either light preference or end user exists after garments_info
-																entry?.light_preference_name
-																	? entry?.light_preference_name
-																	: '',
-																entry?.light_preference_name &&
-																entry?.end_user_short_name
-																	? ' / '
-																	: '', // * Show separator if both light preference and end user exist
-																entry?.end_user_short_name
-																	? entry?.end_user_short_name
-																	: '',
-															],
-															style: 'tableHeader',
-															alignment: 'left',
-														},
-													],
-												]
-											: []),
-
-										// * remarks
-										...(entry?.remarks?.length > 0
-											? [
-													[
-														{
-															text: 'Remarks',
-															alignment: 'Center',
-														},
-														{
-															colSpan:
-																chunk.length +
-																2,
-															text: entry?.remarks,
-															alignment: 'left',
-														},
-													],
-												]
-											: []),
-									],
-								},
-
-								margin: [0, 5],
-							};
-						}),
-
-						// * Chunk total
-						{
-							margin: [0, 5],
-							table: {
-								widths: ['*', 'auto'],
-								body: [
-									[
-										{
-											text: `#${i + 1} Total`,
-											style: 'tableFooter',
-											alignment: 'right',
-										},
-										{
-											text: TotalChunkQTY,
-											style: 'tableFooter',
-											alignment: 'Center',
-										},
-									],
-								],
-							},
-						},
-					];
-				} else {
-					let SliderTotal = 0;
-					return [
-						{
-							margin: [0, 5],
-							table: {
-								widths: [50, '*', '*'],
-								body: [
-									...TableHeader({
-										entry,
-										special_req_info,
-										uniqueSizes: [],
-										i,
-									}),
-
-									// * Table Body
-									...Object.keys(res)
-										.map((style) =>
-											res[style].map((color) => {
-												const colorName =
-													Object.keys(color)[0];
-												const quantities =
-													color[colorName];
-
-												return [
-													{
-														rowSpan:
-															res[style].length,
-														text: style,
-													},
-													...quantities.map((qty) => {
-														SliderTotal += qty;
-														return {
-															text:
-																qty === 0
-																	? '-'
-																	: qty,
-															alignment: 'right',
-														};
-													}),
-													{
-														text: quantities.reduce(
-															(acc, qty) =>
-																Number(acc) +
-																Number(qty),
-															0
-														),
-														alignment: 'right',
-													},
-												];
-											})
-										)
-										.flat(),
-
-									// * Total
-									[
-										{
-											text: 'Total',
-											style: 'tableFooter',
-											alignment: 'Center',
-										},
-										{
-											text: SliderTotal,
-											style: 'tableFooter',
-											alignment: 'right',
-											colSpan: 2,
-										},
-									],
-									// * remarks
-									...(entry?.remarks?.length > 0
-										? [
-												[
-													{
-														text: 'Remarks',
-														alignment: 'Center',
-													},
-													{
-														colSpan: 2,
-														text: entry?.remarks,
-														alignment: 'left',
-													},
-												],
-											]
-										: []),
-								],
-							},
-						},
-
-						// * slider section total
-						{
-							margin: [0, 5],
-							table: {
-								widths: ['*', 'auto'],
-								body: [
-									[
-										{
-											text: `#${i + 1} Slider Total`,
-											style: 'tableFooter',
-											alignment: 'right',
-										},
-										{
-											text: SliderTotal,
-											style: 'tableFooter',
-											alignment: 'Center',
-										},
-									],
-								],
-							},
-						},
-					];
-				}
+				return zipperPDF(order_sheet);
 			}),
 
-			// * Grand total
 			{
-				margin: [0, 5],
-				table: {
-					widths: ['*', 'auto'],
-					body: [
-						[
-							{
-								text: 'Grand Total',
-								style: 'tableFooter',
-								alignment: 'right',
-							},
-							{
-								text: grandTotal(order_entry),
-								style: 'tableFooter',
-								alignment: 'Center',
-							},
-						],
-					],
-				},
+				text: 'THREAD ORDER SECTION',
+				pageBreak: 'before',
+				fontSize: 50,
+				bold: true,
+				alignment: 'center',
 			},
+			...data?.thread?.flatMap((item) => {
+				let pageBreak = false;
+
+				if (
+					item?.order_number !== prevOrderThread &&
+					prevOrderThread !== null
+				)
+					pageBreak = true;
+
+				prevOrderThread = item?.order_number;
+				return threadPDF({ ...item, pageBreak });
+			}),
 		],
 	});
-
-	// * test
-	// * return new Promise((resolve) => {
-	// * 	pdfDocGenerator.getDataUrl((dataUrl) => {
-	// * 		resolve(dataUrl);
-	// * 	});
-	// * });
-	// * return pdfDocGenerator.download();
 
 	return pdfDocGenerator;
 }

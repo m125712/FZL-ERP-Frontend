@@ -2,8 +2,8 @@ import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
-import { DEFAULT_FONT_SIZE } from '../ui';
-import { company } from '../utils';
+import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../../ui';
+import { company } from '../../utils';
 
 const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
 	let value = is_cash == 1 ? 'Cash' : 'LC';
@@ -17,45 +17,6 @@ const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
 	if (is_only_value) return value;
 
 	return value;
-};
-
-export const getPdfHeader = (from, to) => {
-	return [
-		[
-			{
-				image: FZL_LOGO.src,
-				width: 70,
-				height: 40,
-				alignment: 'left',
-			},
-			{
-				text: [
-					`${company.address}\n`,
-					`${company.email}\n`,
-					`${company.phone}\n`,
-					`${company.bin}, ${company.tax}\n`,
-				],
-				alignment: 'left',
-				margin: [40, 0, 0, 0],
-			},
-			{
-				colSpan: 2,
-				text: [
-					{
-						text: 'Combined Order Sheet\n',
-						fontSize: DEFAULT_FONT_SIZE + 4,
-						bold: true,
-					},
-
-					`From: ${format(new Date(from), 'dd-MM-yyyy')} \n`,
-					`To: ${format(new Date(to), 'dd-MM-yyyy')}`,
-					``,
-				],
-				alignment: 'right',
-			},
-			'',
-		],
-	];
 };
 
 export const getPageHeader = (order_info) => {
@@ -78,39 +39,29 @@ export const getPageHeader = (order_info) => {
 		true
 	);
 	return [
-		// CompanyAndORDER
 		[
 			{
-				image: FZL_LOGO.src,
-				width: 70,
-				height: 40,
-				alignment: 'left',
+				text: 'ZIPPER ORDER SHEET',
+				bold: true,
+				color: PRIMARY_COLOR,
+				colSpan: 4,
+				alignment: 'center',
+				style: 'tableHeader',
+				...(order_info.pageBreak ? { pageBreak: 'before' } : {}),
 			},
+			{},
+			{},
+			{},
+		],
+		[
 			{
-				text: [
-					`${company.address}\n`,
-					`${company.email}\n`,
-					`${company.phone}\n`,
-					`${company.bin}, ${company.tax}\n`,
-				],
-				alignment: 'left',
-				margin: [40, 0, 0, 0],
+				text: 'O/N',
 			},
+			`${order_number} ${order_info.revisions > 0 ? `Rev ${order_info.revisions}` : ''} \n`,
 			{
-				colSpan: 2,
-				text: [
-					{
-						text: 'Order Sheet\n',
-						fontSize: DEFAULT_FONT_SIZE + 4,
-						bold: true,
-					},
-					`O/N: ${order_number} ${order_info.revisions > 0 ? `Rev ${order_info.revisions}` : ''} \n`,
-					`Date: ${order_info?.created_at ? format(new Date(order_info?.created_at), 'dd-MM-yyyy') : ''}\n`,
-					`PI No.: ${order_info?.pi_numbers ? order_info?.pi_numbers.join(', ') : '---'}\n`,
-				],
-				alignment: 'right',
+				text: 'Date',
 			},
-			'',
+			`${order_info?.created_at ? format(new Date(order_info?.created_at), 'dd-MM-yyyy') : ''}\n`,
 		],
 		[
 			// { text: 'LC/Cash', bold: true },
@@ -131,7 +82,14 @@ export const getPageHeader = (order_info) => {
 				(order_info.factory_priority || '-'),
 		],
 
-		[{ text: 'Factory', bold: true }, order_info.factory_name, '', ''],
+		[
+			{ text: 'Factory', bold: true },
+			order_info.factory_name,
+			{
+				text: 'PI No.',
+			},
+			`${order_info?.pi_numbers ? order_info?.pi_numbers.join(', ') : '---'}\n`,
+		],
 		[
 			{ text: 'Address', bold: true },
 			{ colSpan: 3, text: order_info.factory_address },

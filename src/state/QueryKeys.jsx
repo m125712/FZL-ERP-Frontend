@@ -85,6 +85,7 @@ export const adminQK = {
 	//* users
 	users: () => [...adminQK.all(), 'users'],
 	user: (uuid) => [...adminQK.users(), uuid],
+	userAccessByUUID: (uuid) => [...adminQK.users(), 'userAccessByUUID', uuid],
 
 	//* permissions
 	permissions: () => [...adminQK.all(), 'permissions'],
@@ -1542,10 +1543,15 @@ export const reportQK = {
 		reportFor,
 	],
 
-	orderStatementReport: (query) => [
+	orderStatementReport: (from, to, party, marketing, type, query) => [
 		...reportQK.all(),
 		'order-statement-report',
-		query,
+		from,
+		to,
+		party,
+		marketing,
+		type,
+		query || '',
 	],
 	//* Zipper Production
 	zipperProduction: (query) => [

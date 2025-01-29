@@ -16,6 +16,8 @@ const SimpleDatePicker = ({
 	placeholder = '',
 	onChange = () => {},
 	disabled = false,
+	showTime = false,
+	timeIntervals = 30,
 	...props
 }) => {
 	const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
@@ -46,6 +48,10 @@ const SimpleDatePicker = ({
 			}}
 			renderCustomHeader={DatePickerCustomHeader}
 			{...DatePickerDefaultConfig}
+			showTimeSelect={showTime}
+			timeFormat='HH:mm'
+			timeIntervals={timeIntervals}
+			// dateFormat={showTime ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'} // ✅ Adjust format accordingly
 		/>
 	);
 };

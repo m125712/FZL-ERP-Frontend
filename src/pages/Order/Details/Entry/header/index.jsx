@@ -185,12 +185,21 @@ export default function Header({
 									)}
 									onChange={(e) => {
 										setOrderDesc(e.value);
-
+										setType(e.item.order_type)
+										setOrderNo(e.item.order_number)
 										reset({
-											order_entry: [],
+											order_entry: [{
+												"index": null,
+												"style": "",
+												"color": "",
+												"size": "",
+												"quantity": "",
+												"company_price": 0,
+												"party_price": 0,
+												"bleaching": "non-bleach"
+											}],
 											...e.item,
 										});
-										console.log(e.item);
 									}}
 								/>
 							</div>

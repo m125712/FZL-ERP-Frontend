@@ -41,6 +41,7 @@ import {
 	SectionEntryBody,
 	SectionName,
 	SimpleDatePicker,
+	Status,
 	StatusButton,
 	StatusSelect,
 	TitleList,
@@ -93,4 +94,5 @@ export {
 	StatusSelect,
 	CustomLink,
 	Collapse,
+	Status,
 };

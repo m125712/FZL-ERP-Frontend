@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, StatusButton } from '@/ui';
+import { CustomLink, DateTime, Status, StatusButton } from '@/ui';
 
 import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
@@ -36,8 +36,6 @@ export default function Index() {
 		url,
 		'report__zipper_production'
 	);
-
-	console.log(data);
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -218,64 +216,14 @@ export default function Index() {
 										customizedDateFormate='dd MMM, yy'
 										isTime={false}
 									/>
-									<span
-										className={cn(
-											'badge badge-error badge-xs',
-											item.received && 'bg-success'
-										)}
-									/>
+
+									<Status status={item.received} />
 								</div>
 							</div>
 						);
 					});
 				},
 			},
-			// {
-			// 	accessorFn: (row) => {
-			// 		return row.finishing_batch
-			// 			?.map((item) => item.finishing_batch_number)
-			// 			.join(', ');
-			// 	},
-			// 	id: 'finishing_batch',
-			// 	header: 'Finishing Batch',
-			// 	enableColumnFilter: false,
-			// 	cell: ({ row }) => {
-			// 		const { finishing_batch } = row.original;
-
-			// 		if (!finishing_batch?.length) return '--';
-
-			// 		return finishing_batch?.map((item) => {
-			// 			const accomplishedPercentage =
-			// 				Math.round(
-			// 					((item.finishing_batch_quantity -
-			// 						item.balance_quantity) /
-			// 						item.finishing_batch_quantity) *
-			// 						100
-			// 				) || 0;
-			// 			return (
-			// 				<div
-			// 					key={item.finishing_batch_number}
-			// 					className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'>
-			// 					<CustomLink
-			// 						label={item.finishing_batch_number}
-			// 						url={`/planning/finishing-batch/${item.finishing_batch_uuid}`}
-			// 						openInNewTab={true}
-			// 					/>
-			// 					<div className='flex items-center gap-2'>
-			// 						<DateTime
-			// 							date={item.finishing_batch_date}
-			// 							customizedDateFormate='dd MMM, yy'
-			// 							isTime={false}
-			// 						/>
-			// 						<span className='badge badge-secondary badge-xs'>
-			// 							{accomplishedPercentage}%
-			// 						</span>
-			// 					</div>
-			// 				</div>
-			// 			);
-			// 		});
-			// 	},
-			// },
 			{
 				accessorFn: (row) => {
 					return row.finishing_batch
@@ -313,7 +261,7 @@ export default function Index() {
 											/>
 											<DateTime
 												date={item.finishing_batch_date}
-												customizedDateFormate='ccc dd, MMM yy'
+												customizedDateFormate='dd MMM, yy'
 												isTime={false}
 											/>
 										</td>
@@ -321,7 +269,8 @@ export default function Index() {
 											{item.finishing_batch_quantity}
 										</td>
 										<td className={cn(rowStyle)}>
-											{item.finishing_batch_quantity - item.balance_quantity}
+											{item.finishing_batch_quantity -
+												item.balance_quantity}
 										</td>
 										<td className={cn(rowStyle)}>
 											{item.balance_quantity}

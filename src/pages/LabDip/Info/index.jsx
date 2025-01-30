@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime, EditDelete, LinkWithCopy, Status } from '@/ui';
 
 import { cn } from '@/lib/utils';
 import GetDateTime from '@/util/GetDateTime';
@@ -130,11 +130,11 @@ export default function Index() {
 					if (!recipe_array?.length) return '--';
 
 					return (
-						<table className='border-2 border-gray-300'>
+						<table className='table table-xs border-0 align-top'>
 							<thead>
 								<tr className='text-xs text-gray-600'>
 									<th className={cn(rowStyle)}>RC/N</th>
-									<th className={cn(rowStyle)}>PPS</th>
+									<th className={cn(rowStyle)}>PP</th>
 									<th className={cn(rowStyle)}>APP</th>
 								</tr>
 							</thead>
@@ -150,21 +150,13 @@ export default function Index() {
 											/>
 										</td>
 										<td className={cn(rowStyle)}>
-											<span
-												className={cn(
-													'badge badge-error badge-xs',
-													item.is_pps_req === 1 &&
-														'bg-success'
-												)}
+											<Status
+												status={item.is_pps_req === 1}
 											/>
 										</td>
 										<td className={cn(rowStyle)}>
-										<span
-												className={cn(
-													'badge badge-error badge-xs',
-													item.approved === 1 &&
-														'bg-success'
-												)}
+											<Status
+												status={item.approved === 1}
 											/>
 										</td>
 									</tr>

@@ -54,7 +54,6 @@ export default function OrderSheetByStyle(orderByStyle) {
 			...orders?.map((item, idx) => {
 				let total = 0;
 
-
 				return {
 					margin: [0, 5],
 					table: {
@@ -74,11 +73,6 @@ export default function OrderSheetByStyle(orderByStyle) {
 									garments
 								);
 
-								console.log(
-									entry.details
-										.map((detail) => detail.sizes.length)
-										.reduce((acc, item) => acc + item, 0)
-								);
 								return entry.details.flatMap((detail) =>
 									detail.sizes.map((size) => {
 										total += size.quantity;
@@ -123,6 +117,16 @@ export default function OrderSheetByStyle(orderByStyle) {
 																garments_info?.join(
 																	', '
 																),
+															]
+														: []),
+													...(entry.description
+														? [
+																'\n',
+																{
+																	text: 'Description: ',
+																	bold: true,
+																},
+																entry.description,
 															]
 														: []),
 													...(entry.remarks

@@ -51,12 +51,12 @@ export default function index() {
 					className='btn btn-primary flex-1'>
 					PDF
 				</button>
-				<button
+				{/* <button
 					type='button'
 					onClick={() => Excel(data, from, to)}
 					className='btn btn-secondary flex-1'>
 					Excel
-				</button>
+				</button> */}
 			</div>
 		</div>
 	);

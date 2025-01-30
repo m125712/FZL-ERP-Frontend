@@ -22,9 +22,9 @@ export default function Index() {
 	const { user } = useAuth();
 
 	const [from, setFrom] = useState(
-		format(startOfMonth(subMonths(new Date(), 2)), 'yyyy-MM-dd')
+		format(startOfMonth(subMonths(new Date(), 2)), 'yyyy-MM-dd hh:mm:ss')
 	);
-	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
+	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd hh:mm:ss'));
 	const [status, setStatus] = useState('pending');
 	const { data, isLoading } = useThreadProductionBatchWise(
 		`status=${status}&time_from=${from}&time_to=${to}${getPath(haveAccess, user?.uuid)}`,

@@ -185,19 +185,21 @@ export default function Header({
 									)}
 									onChange={(e) => {
 										setOrderDesc(e.value);
-										setType(e.item.order_type)
-										setOrderNo(e.item.order_number)
+										setType(e.item.order_type);
+										setOrderNo(e.item.order_number);
 										reset({
-											order_entry: [{
-												"index": null,
-												"style": "",
-												"color": "",
-												"size": "",
-												"quantity": "",
-												"company_price": 0,
-												"party_price": 0,
-												"bleaching": "non-bleach"
-											}],
+											order_entry: [
+												{
+													index: null,
+													style: '',
+													color: '',
+													size: '',
+													quantity: '',
+													company_price: 0,
+													party_price: 0,
+													bleaching: 'non-bleach',
+												},
+											],
 											...e.item,
 										});
 									}}
@@ -840,7 +842,7 @@ export default function Header({
 								</FormField>
 							</div>
 
-							<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
+							<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-3'>
 								{watch('order_type') === 'full' && (
 									<>
 										<FormField
@@ -940,7 +942,8 @@ export default function Header({
 										}}
 									/>
 								</FormField>
-
+							</div>
+							<div className='grid grid-cols-3 gap-4'>
 								<FormField
 									label='logo_type'
 									title='Logo Type'
@@ -969,17 +972,20 @@ export default function Header({
 									/>
 								</FormField>
 
-								<CheckBox
-									label='is_logo_body'
-									title='Body Logo'
-									{...{ register, errors }}
-								/>
-
-								<CheckBox
-									label='is_logo_puller'
-									title='Puller Logo'
-									{...{ register, errors }}
-								/>
+								<div className='flex items-center'>
+									<CheckBox
+										label='is_logo_body'
+										title='Body Logo'
+										{...{ register, errors }}
+									/>
+								</div>
+								<div className='flex items-center'>
+									<CheckBox
+										label='is_logo_puller'
+										title='Puller Logo'
+										{...{ register, errors }}
+									/>
+								</div>
 							</div>
 						</>
 					)}

@@ -3,10 +3,10 @@ import { challanQK, deliveryQk } from './QueryKeys';
 
 //*Dashboard
 //* Zipper
-export const useDeliveryZipperDashboard = () =>
+export const useDeliveryZipperDashboard = (query) =>
 	createGlobalState({
-		queryKey: deliveryQk.deliveryZipperDashboard(),
-		url: '/delivery/dashboard',
+		queryKey: deliveryQk.deliveryZipperDashboard(query),
+		url: query ? `/delivery/dashboard?${query}` : '/delivery/dashboard',
 	});
 
 export const useDeliveryZipperDashboardByUUID = (uuid) =>
@@ -16,10 +16,12 @@ export const useDeliveryZipperDashboardByUUID = (uuid) =>
 		enabled: !!uuid,
 	});
 //* Thread
-export const useDeliveryThreadDashboard = () =>
+export const useDeliveryThreadDashboard = (query) =>
 	createGlobalState({
 		queryKey: deliveryQk.deliveryThreadDashboard(),
-		url: '/delivery/dashboard-thread',
+		url: query
+			? `/delivery/dashboard-thread?${query}`
+			: '/delivery/dashboard-thread',
 	});
 
 export const useDeliveryThreadDashboardByUUID = (uuid) =>

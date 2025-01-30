@@ -54,7 +54,6 @@ export default function OrderSheetByStyle(orderByStyle) {
 			...orders?.map((item, idx) => {
 				let total = 0;
 
-
 				return {
 					margin: [0, 5],
 					table: {
@@ -120,16 +119,16 @@ export default function OrderSheetByStyle(orderByStyle) {
 																),
 															]
 														: []),
-														...(entry.description
-															? [
-																	'\n',
-																	{
-																		text: 'Description: ',
-																		bold: true,
-																	},
-																	entry.description,
-																]
-															: []),
+													...(entry.description
+														? [
+																'\n',
+																{
+																	text: 'Description: ',
+																	bold: true,
+																},
+																entry.description,
+															]
+														: []),
 													...(entry.remarks
 														? [
 																'\n',

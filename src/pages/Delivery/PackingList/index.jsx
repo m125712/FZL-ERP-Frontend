@@ -190,7 +190,12 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'gate_pass',
-				header: 'Gate Pass',
+				header: (
+					<span>
+						Warehouse <br />
+						Out
+					</span>
+				),
 				enableColumnFilter: false,
 				cell: (info) => {
 					const access = haveAccess.includes('click_gate_pass');

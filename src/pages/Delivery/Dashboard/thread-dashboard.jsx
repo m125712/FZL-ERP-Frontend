@@ -1,14 +1,24 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDeliveryThreadDashboard } from '@/state/Delivery';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, LinkWithCopy } from '@/ui';
+import { DateTime, LinkWithCopy, StatusSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const { data, isLoading, url } = useDeliveryThreadDashboard();
+	const [status, setStatus] = useState('in_warehouse');
+	const { data, isLoading, url } = useDeliveryThreadDashboard(
+		`type=${status}`
+	);
+
+	const options = [
+		{ value: 'delivered', label: 'Delivered' },
+		{ value: 'in_warehouse', label: 'In Warehouse' },
+		{ value: 'in_vehicle', label: 'In Vehicle' },
+		{ value: 'in_floor', label: 'In Floor' },
+	];
 
 	const info = new PageInfo(
 		'Deliver/Thread Dashboard',
@@ -110,7 +120,18 @@ export default function Index() {
 
 	return (
 		<div>
-			<ReactTable title={info.getTitle()} data={data} columns={columns} />
+			<ReactTable
+				title={info.getTitle()}
+				data={data}
+				columns={columns}
+				extraButton={
+					<StatusSelect
+						status={status}
+						setStatus={setStatus}
+						options={options}
+					/>
+				}
+			/>
 		</div>
 	);
 }

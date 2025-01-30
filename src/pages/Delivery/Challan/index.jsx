@@ -75,8 +75,8 @@ export default function Index() {
 				accessorKey: 'gate_pass',
 				header: (
 					<span>
-						Gate <br />
-						Pass
+						Warehouse <br />
+						Out
 					</span>
 				),
 				enableColumnFilter: false,

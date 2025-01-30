@@ -230,6 +230,52 @@ export default function Index() {
 					});
 				},
 			},
+			// {
+			// 	accessorFn: (row) => {
+			// 		return row.finishing_batch
+			// 			?.map((item) => item.finishing_batch_number)
+			// 			.join(', ');
+			// 	},
+			// 	id: 'finishing_batch',
+			// 	header: 'Finishing Batch',
+			// 	enableColumnFilter: false,
+			// 	cell: ({ row }) => {
+			// 		const { finishing_batch } = row.original;
+
+			// 		if (!finishing_batch?.length) return '--';
+
+			// 		return finishing_batch?.map((item) => {
+			// 			const accomplishedPercentage =
+			// 				Math.round(
+			// 					((item.finishing_batch_quantity -
+			// 						item.balance_quantity) /
+			// 						item.finishing_batch_quantity) *
+			// 						100
+			// 				) || 0;
+			// 			return (
+			// 				<div
+			// 					key={item.finishing_batch_number}
+			// 					className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'>
+			// 					<CustomLink
+			// 						label={item.finishing_batch_number}
+			// 						url={`/planning/finishing-batch/${item.finishing_batch_uuid}`}
+			// 						openInNewTab={true}
+			// 					/>
+			// 					<div className='flex items-center gap-2'>
+			// 						<DateTime
+			// 							date={item.finishing_batch_date}
+			// 							customizedDateFormate='dd MMM, yy'
+			// 							isTime={false}
+			// 						/>
+			// 						<span className='badge badge-secondary badge-xs'>
+			// 							{accomplishedPercentage}%
+			// 						</span>
+			// 					</div>
+			// 				</div>
+			// 			);
+			// 		});
+			// 	},
+			// },
 			{
 				accessorFn: (row) => {
 					return row.finishing_batch
@@ -241,42 +287,52 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: ({ row }) => {
 					const { finishing_batch } = row.original;
-
 					if (!finishing_batch?.length) return '--';
 
-					return finishing_batch?.map((item) => {
-						const accomplishedPercentage =
-							Math.round(
-								((item.finishing_batch_quantity -
-									item.balance_quantity) /
-									item.finishing_batch_quantity) *
-									100
-							) || 0;
-						return (
-							<div
-								key={item.finishing_batch_number}
-								className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'>
-								<CustomLink
-									label={item.finishing_batch_number}
-									url={`/planning/finishing-batch/${item.finishing_batch_uuid}`}
-									openInNewTab={true}
-								/>
-								<div className='flex items-center gap-2'>
-									<DateTime
-										date={item.finishing_batch_date}
-										customizedDateFormate='dd MMM, yy'
-										isTime={false}
-									/>
-									<span className='badge badge-secondary badge-xs'>
-										{accomplishedPercentage}%
-									</span>
-								</div>
-							</div>
-						);
-					});
+					return (
+						<table className='border-2 border-gray-300'>
+							<thead>
+								<tr className='text-xs text-gray-600'>
+									<th className={cn(rowStyle)}>BA/N</th>
+									<th className={cn(rowStyle)}>BA/Q</th>
+									<th className={cn(rowStyle)}>P/Q</th>
+									<th className={cn(rowStyle)}>BL/Q</th>
+								</tr>
+							</thead>
+							<tbody>
+								{finishing_batch?.map((item) => (
+									<tr>
+										<td className={cn(rowStyle)}>
+											<CustomLink
+												label={
+													item.finishing_batch_number
+												}
+												url={`/planning/finishing-dashboard/batch-report/${item.finishing_batch_uuid}`}
+												showCopyButton={false}
+												openInNewTab
+											/>
+											<DateTime
+												date={item.finishing_batch_date}
+												customizedDateFormate='ccc dd, MMM yy'
+												isTime={false}
+											/>
+										</td>
+										<td className={cn(rowStyle)}>
+											{item.finishing_batch_quantity}
+										</td>
+										<td className={cn(rowStyle)}>
+											{item.finishing_batch_quantity - item.balance_quantity}
+										</td>
+										<td className={cn(rowStyle)}>
+											{item.balance_quantity}
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					);
 				},
 			},
-
 			{
 				accessorKey: 'assembly_production_quantity',
 				header: (
@@ -398,6 +454,7 @@ export default function Index() {
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
+	let rowStyle = 'border border-gray-300 px-2 py-1';
 	return (
 		<ReactTable
 			title={info.getTitle()}

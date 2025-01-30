@@ -999,13 +999,21 @@ export const deliveryQk = {
 	all: () => ['delivery'],
 	//* Dashboard
 	//* Zipper
-	deliveryZipperDashboard: () => [...deliveryQk.all(), 'dashboard-zipper'],
+	deliveryZipperDashboard: (query) => [
+		...deliveryQk.all(),
+		'dashboard-zipper',
+		...(query ? [query] : []),
+	],
 	deliveryZipperDashboardByUUID: (uuid) => [
 		...deliveryQk.deliveryDashboard(),
 		uuid,
 	],
 	//* Thread
-	deliveryThreadDashboard: () => [...deliveryQk.all(), 'dashboard-thread'],
+	deliveryThreadDashboard: (query) => [
+		...deliveryQk.all(),
+		'dashboard-thread',
+		...(query ? [query] : []),
+	],
 	deliveryThreadDashboardByUUID: (uuid) => [
 		...deliveryQk.deliveryThreadDashboard(),
 		uuid,

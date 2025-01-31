@@ -17,6 +17,7 @@ const Layout = () => {
 				<Sidebar />
 				<main className='flex size-full flex-1 flex-col overflow-hidden'>
 					<Navbar />
+
 					<div className='flex size-full flex-1 flex-col overflow-hidden'>
 						<div
 							className={cn(

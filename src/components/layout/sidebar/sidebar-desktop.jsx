@@ -5,6 +5,7 @@ import SidebarContent from './sidebar-content';
 
 const SidebarDesktop = () => {
 	const { isCollapsed } = useLayout();
+
 	return (
 		<motion.div
 			initial='open'

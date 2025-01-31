@@ -1,7 +1,6 @@
-import clsx from 'clsx';
 import { Slide, toast, ToastContainer } from 'react-toastify';
 
-import 'react-toastify/dist/ReactToastify.min.css';
+import { cn } from '@/lib/utils';
 
 const Icon = ({ type = 'default' }) => {
 	const paths = {
@@ -55,7 +54,7 @@ const ToastBody = ({ type = 'default', text }) => {
 	return (
 		<div className='flex w-full max-w-sm overflow-hidden rounded-lg bg-white'>
 			<div
-				className={clsx(
+				className={cn(
 					'flex w-12 items-center justify-center',
 					bgColor
 				)}>
@@ -63,7 +62,7 @@ const ToastBody = ({ type = 'default', text }) => {
 			</div>
 			<div className='-mx-3 px-4 py-2'>
 				<div className='mx-3'>
-					<span className={clsx('font-semibold', textColor)}>
+					<span className={cn('font-semibold', textColor)}>
 						{name}
 					</span>
 					<p className='text-sm text-gray-600'>{text}</p>

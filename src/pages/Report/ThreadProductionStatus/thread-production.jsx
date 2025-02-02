@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useThreadProductionBatchWise } from '@/state/Report';
-import { format, startOfMonth, subMonths } from 'date-fns';
+import { format, parse, startOfMonth, subMonths } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
@@ -22,12 +22,19 @@ export default function Index() {
 	const { user } = useAuth();
 
 	const [from, setFrom] = useState(
-		format(startOfMonth(subMonths(new Date(), 2)), 'yyyy-MM-dd hh:mm:ss')
+		parse(
+			format(
+				startOfMonth(subMonths(new Date(), 2)),
+				'yyyy-MM-dd hh:mm:ss'
+			),
+			'yyyy-MM-dd HH:mm:ss',
+			new Date()
+		)
 	);
-	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd hh:mm:ss'));
+	const [to, setTo] = useState(new Date());
 	const [status, setStatus] = useState('pending');
 	const { data, isLoading } = useThreadProductionBatchWise(
-		`status=${status}&time_from=${from}&time_to=${to}${getPath(haveAccess, user?.uuid)}`,
+		`status=${status}&time_from=${format(from, 'yyyy-MM-dd hh:mm:ss')}&time_to=${format(to, 'yyyy-MM-dd hh:mm:ss')}${getPath(haveAccess, user?.uuid)}`,
 		{
 			enabled: !!user?.uuid,
 		}
@@ -249,6 +256,7 @@ export default function Index() {
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
+	console.log(format(from, 'yyyy-MM-dd hh:mm:ss'));
 	return (
 		<>
 			<ReactTable
@@ -264,8 +272,9 @@ export default function Index() {
 							key={'from'}
 							value={from}
 							placeholder='From'
-							onChange={(data) => {
-								setFrom(format(data, 'yyyy-MM-dd hh:mm:ss'));
+							selected={from}
+							onChangeForTime={(data) => {
+								setFrom(data);
 							}}
 							showTime={true}
 						/>
@@ -274,8 +283,9 @@ export default function Index() {
 							key={'to'}
 							value={to}
 							placeholder='To'
-							onChange={(data) => {
-								setTo(format(data, 'yyyy-MM-dd hh:mm:ss'));
+							selected={to}
+							onChangeForTime={(data) => {
+								setTo(data);
 							}}
 							showTime={true}
 						/>

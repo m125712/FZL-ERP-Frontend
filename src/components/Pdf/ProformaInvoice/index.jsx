@@ -407,7 +407,7 @@ export default function Index(data) {
 				? {
 						table: {
 							headerRows: 1,
-							widths: [40, 60, 50, '*', 40, 35, 35, 35],
+							widths: [40, '*', 50, 70, 40, 35, 35, 35],
 							body: [
 								[
 									{
@@ -544,6 +544,28 @@ export default function Index(data) {
 									},
 									{},
 								],
+								...(isThreadOrderExist && isZipperOrderExist
+									? [
+											[
+												{
+													text: `Total: `,
+													alignment: 'right',
+													bold: true,
+													colSpan: 4,
+												},
+												{},
+												{},
+												{},
+												{
+													text: `U.S.$: ${Number(grandTotal || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+													alignment: 'right',
+													bold: true,
+													colSpan: 2,
+												},
+												{},
+											],
+										]
+									: []),
 							],
 						},
 					}

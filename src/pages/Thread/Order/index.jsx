@@ -175,6 +175,22 @@ export default function Index() {
 				enableColumnFilter: false,
 			},
 			{
+				accessorFn: (row) => (row.is_bleached ? 'Yes' : 'No'),
+				id: 'is_bleached',
+				header: 'Bleached',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<div className='flex space-x-1'>
+							<StatusButton
+								size='btn-xs'
+								value={info.getValue() === 'Yes' ? 1 : 0}
+							/>
+						</div>
+					);
+				},
+			},
+			{
 				accessorKey: 'delivery_date',
 				header: 'Delivery Date',
 				enableColumnFilter: false,

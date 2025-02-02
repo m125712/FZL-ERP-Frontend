@@ -65,7 +65,7 @@ export default function Index() {
 				cell: (info) => (
 					<DateTime
 						date={info.row.original.batch_created_at}
-						isTime={false}
+						isTime={true}
 					/>
 				),
 			},
@@ -99,7 +99,7 @@ export default function Index() {
 				cell: (info) => (
 					<DateTime
 						date={info.row.original.order_created_at}
-						isTime={false}
+						isTime={true}
 					/>
 				),
 			},
@@ -114,7 +114,7 @@ export default function Index() {
 				cell: (info) => (
 					<DateTime
 						date={info.row.original.order_updated_at}
-						isTime={false}
+						isTime={true}
 					/>
 				),
 			},
@@ -162,7 +162,7 @@ export default function Index() {
 				cell: (info) => (
 					<DateTime
 						date={info.row.original.swatch_approval_date}
-						isTime={false}
+						isTime={true}
 					/>
 				),
 			},

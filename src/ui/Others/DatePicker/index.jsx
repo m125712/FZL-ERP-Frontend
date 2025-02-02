@@ -15,6 +15,7 @@ const SimpleDatePicker = ({
 	selected,
 	placeholder = '',
 	onChange = () => {},
+	onChangeForTime = () => {},
 	disabled = false,
 	showTime = false,
 	timeIntervals = 30,
@@ -45,6 +46,7 @@ const SimpleDatePicker = ({
 			selected={selected}
 			onChange={(date) => {
 				onChange(format(date, 'yyyy-MM-dd HH:mm:ss'));
+				onChangeForTime(date);
 			}}
 			renderCustomHeader={DatePickerCustomHeader}
 			{...DatePickerDefaultConfig}

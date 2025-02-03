@@ -16,7 +16,7 @@ const ProductionReportDirector = lazy(
 const ProductionReportSM = lazy(
 	() => import('@/pages/Report/ProductionReportS&M')
 );
-
+const OrderStatus = lazy(() => import('@/pages/Report/OrderStatus'));
 const ThreadProduction = lazy(
 	() => import('@/pages/Report/ThreadProductionStatus')
 );
@@ -148,6 +148,13 @@ export const ReportRoutes = [
 				element: <Orders />,
 				page_name: 'report__orders',
 				actions: ['read'],
+			},
+			{
+				name: 'Order Status',
+				path: '/report/order-status',
+				element: <OrderStatus />,
+				page_name: 'report__order_status',
+				actions: ['read', 'show_own_orders'],
 			},
 			// {
 			// 	name: 'Production Report (Thread)',

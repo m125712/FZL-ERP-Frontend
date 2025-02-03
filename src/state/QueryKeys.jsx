@@ -1584,6 +1584,24 @@ export const reportQK = {
 	//* Daily Challan
 	dailyChallan: (query) => [...reportQK.all(), 'daily-challan', query],
 
+	// * Thread Status
+	threadStatus: (query, from, to) => [
+		...reportQK.all(),
+		'thread-statement',
+		query,
+		from,
+		to,
+	],
+
+	// * Zipper Status
+	zipperStatus: (query, from, to) => [
+		...reportQK.all(),
+		'zipper-statement',
+		query,
+		from,
+		to,
+	],
+
 	//* PI Register
 	piRegister: (query) => [...reportQK.all(), 'pi-register', query],
 

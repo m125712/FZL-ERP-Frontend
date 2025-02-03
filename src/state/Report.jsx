@@ -101,6 +101,24 @@ export const useDailyChallan = (query, { enabled = false } = {}) =>
 		enabled,
 	});
 
+export const useThreadStatus = (from, to, query, { enabled = false } = {}) =>
+	createGlobalState({
+		queryKey: reportQK.threadStatus(query, from, to),
+		url:
+			`/report/production-report-thread-sales-marketing?from=${from}&to=${to}&` +
+			query,
+		enabled,
+	});
+
+export const useZipperStatus = (from, to, query, { enabled = false } = {}) =>
+	createGlobalState({
+		queryKey: reportQK.zipperStatus(query, from, to),
+		url:
+			`/report/production-report-sales-marketing?from=${from}&to=${to}&` +
+			query,
+		enabled,
+	});
+
 export const usePIRegister = (
 	query,
 	{ enabled = false } = { enabled: false }

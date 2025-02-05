@@ -186,6 +186,7 @@ export default function Index() {
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
+				width: 'w-36',
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),

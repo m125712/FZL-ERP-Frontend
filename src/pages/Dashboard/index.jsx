@@ -40,7 +40,7 @@ export default function Dashboard() {
 				setDataPreview={setDataPreview}
 				handleRefresh={refreshAll}
 			/>
-			<div className='space-y-6 px-4 py-2 lg:px-8'>
+			<div className='space-y-2 px-4 py-2 lg:px-8'>
 				{/* Order Received */}
 				<BarChartOverall
 					data={

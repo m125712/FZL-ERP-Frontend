@@ -1,13 +1,9 @@
-import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import {
-	useCommonCoilSFG,
-	useCommonTapeSFG,
-	useCommonTapeSFGByUUID,
-} from '@/state/Common';
+import { useCommonCoilSFG, useCommonTapeSFG } from '@/state/Common';
 import {
 	useOtherMaterial,
 	useOtherOrderPropertiesByItem,
+	useOtherOrderPropertiesByNylonStopper,
 	useOtherOrderPropertiesByZipperNumber,
 	useOtherTapeCoil,
 } from '@/state/Other';
@@ -30,7 +26,11 @@ export default function Index({
 }) {
 	const { user } = useAuth();
 
-	const { data, url, updateData, postData } = useCommonTapeSFG();
+	const { url, updateData, postData } = useCommonTapeSFG();
+	const { data: item } = useOtherOrderPropertiesByItem();
+	const { data: nylon_stopper } = useOtherOrderPropertiesByNylonStopper();
+	const { data: zipper_number } = useOtherOrderPropertiesByZipperNumber();
+	const { data: materials } = useOtherMaterial();
 	const { invalidateQuery: invalidateOtherTapeCoil } = useOtherTapeCoil();
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
@@ -51,23 +51,9 @@ export default function Index({
 		reset
 	);
 
-	const { data: item } = useOtherOrderPropertiesByItem();
-
-	const { data: zipper_number } = useOtherOrderPropertiesByZipperNumber(
-		`/other/order-properties/by/zipper_number`
-	);
-
-	const { data: materials } = useOtherMaterial();
-
 	const isImportOption = [
-		{
-			label: 'Import ',
-			value: 1,
-		},
-		{
-			label: 'Local ',
-			value: 0,
-		},
+		{ label: 'Import ', value: 1 },
+		{ label: 'Local ', value: 0 },
 	];
 	const isReverseOption = [
 		{ label: 'Reverse', value: 'reverse' },
@@ -176,6 +162,30 @@ export default function Index({
 									value={item?.filter(
 										(item) =>
 											item.value == getValues('item_uuid')
+									)}
+									onChange={(e) => onChange(e.value)}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+				<FormField
+					label='nylon_stopper_uuid'
+					title='Nylon Stopper'
+					errors={errors}
+				>
+					<Controller
+						name={'nylon_stopper_uuid'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Item'
+									options={nylon_stopper}
+									value={nylon_stopper?.filter(
+										(item) =>
+											item.value ==
+											getValues('nylon_stopper_uuid')
 									)}
 									onChange={(e) => onChange(e.value)}
 								/>

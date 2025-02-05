@@ -25,12 +25,11 @@ const GlobalBreadcrumbs = () => {
 	const breadcrumbs = useBreadcrumbs();
 
 	const items = breadcrumbs.map((e) => {
-		if (e.match?.pathname === '/') {
+		if (e.match?.pathname === '/')
 			return {
 				label: <House className='size-5' />,
 				href: '/',
 			};
-		}
 
 		return {
 			label: e.breadcrumb,
@@ -43,13 +42,8 @@ const GlobalBreadcrumbs = () => {
 			<ul>
 				{items?.length > 0 &&
 					items.slice(0, -1).map((item, index) => (
-						<motion.li
-							key={index}
-							variants={variants}
-							initial='initial'
-							animate='animate'
-						>
-							{item.href ? (
+						<li key={index}>
+							{item.href && index !== 1 ? (
 								<Link
 									to={item.href}
 									className={cn('text-secondary')}
@@ -61,16 +55,16 @@ const GlobalBreadcrumbs = () => {
 									{item.label}
 								</span>
 							)}
-						</motion.li>
+						</li>
 					))}
 
 				{items?.length > 0 && (
 					<motion.li
 						key={items.length - 1}
+						className='font-medium text-primary underline underline-offset-2'
 						variants={variants}
 						initial='initial'
 						animate='animate'
-						className='font-medium text-primary'
 					>
 						{items[items.length - 1].label}
 					</motion.li>

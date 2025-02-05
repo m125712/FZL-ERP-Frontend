@@ -26,16 +26,13 @@ export default function Order() {
 				accessorKey: 'status',
 				header: 'Status',
 				enableColumnFilter: false,
-				width: 'w-8',
 				hidden: !haveAccess.includes('click_status'),
-				cell: (info) => {
-					return (
-						<SwitchToggle
-							onChange={() => handelStatus(info.row.index)}
-							checked={Number(info.getValue()) === 1}
-						/>
-					);
-				},
+				cell: (info) => (
+					<SwitchToggle
+						onChange={() => handelStatus(info.row.index)}
+						checked={Number(info.getValue()) === 1}
+					/>
+				),
 			},
 			{
 				accessorKey: 'name',
@@ -49,10 +46,15 @@ export default function Order() {
 				accessorKey: 'email',
 				header: 'Email',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'department',
+				accessorFn: (row) => {
+					const { department, designation } = row;
+					return `${department} - ${designation}`;
+				},
+				id: 'department',
 				header: 'Department',
 				enableColumnFilter: false,
 				cell: (info) => {
@@ -78,15 +80,13 @@ export default function Order() {
 			{
 				accessorKey: 'reset_pass_actions',
 				header: (
-					<span>
-						Reset
-						<br />
+					<>
+						Reset <br />
 						Password
-					</span>
+					</>
 				),
 				enableColumnFilter: false,
 				enableSorting: false,
-				width: 'w-24',
 				hidden: !haveAccess.includes('click_reset_password'),
 				cell: (info) => (
 					<ResetPassword
@@ -97,15 +97,13 @@ export default function Order() {
 			{
 				accessorKey: 'page_assign_actions',
 				header: (
-					<span>
-						Page
-						<br />
+					<>
+						Page <br />
 						Assign
-					</span>
+					</>
 				),
 				enableColumnFilter: false,
 				enableSorting: false,
-				width: 'w-24',
 				hidden: !haveAccess.includes('click_page_assign'),
 				cell: (info) => (
 					<ResetPassword
@@ -118,7 +116,6 @@ export default function Order() {
 				header: 'Created',
 				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
-				width: 'w-24',
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
@@ -127,7 +124,6 @@ export default function Order() {
 				accessorKey: 'updated_at',
 				header: 'Updated',
 				enableColumnFilter: false,
-				width: 'w-24',
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
@@ -137,18 +133,15 @@ export default function Order() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				width: 'w-24',
 				hidden: !haveAccess.includes('update'),
-				cell: (info) => {
-					return (
-						<EditDelete
-							idx={info.row.index}
-							handelUpdate={handelUpdate}
-							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('delete')}
-						/>
-					);
-				},
+				cell: (info) => (
+					<EditDelete
+						idx={info.row.index}
+						handelUpdate={handelUpdate}
+						handelDelete={handelDelete}
+						showDelete={haveAccess.includes('delete')}
+					/>
+				),
 			},
 		],
 		[data]

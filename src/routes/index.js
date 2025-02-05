@@ -21,5 +21,5 @@ export const sidebarRoutes = filterSidebarRoutes(filteredRoutes);
 
 // first route
 export const firstRoute = flatRoutes[0]?.children
-	? flatRoutes[0].children[0]
+	? flatRoutes[0]?.children[0]
 	: flatRoutes[0];

@@ -9,14 +9,14 @@ const SidebarLogout = () => {
 	const navigate = useNavigate();
 	const { Logout } = useAuth();
 
-	const handleLogout = () => {
-		Logout();
+	const handleLogout = async () => {
+		await Logout();
 		navigate('/login', { replace: true });
 	};
 
 	return (
 		<motion.button
-			className='flex w-full items-center gap-3 rounded-md bg-gradient-to-r from-accent/10 to-accent/30 px-5 py-2 text-left text-sm font-normal text-primary-content'
+			className='flex w-full items-center gap-2 rounded-md bg-gradient-to-r from-error/50 to-error/70 px-4 py-2 text-left font-normal text-primary-content'
 			whileTap={{ scale: 0.95 }}
 			onClick={() => handleLogout()}
 		>

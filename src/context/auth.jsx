@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 import { firstRoute } from '@/routes';
 import { useCookie, useLocalStorage } from '@/hooks';
 
@@ -18,22 +24,6 @@ const AuthProvider = ({ children }) => {
 	const [userCanAccess, updateUserCanAccess, removeUserCanAccess] =
 		useLocalStorage('can_access', '');
 
-	useEffect(() => {
-		async function loadCookieData() {
-			if (
-				authCookie !== null &&
-				userCookie !== null &&
-				userCanAccess !== null
-			) {
-				setUser(() => JSON.parse(userCookie || user));
-				setCanAccess(() => JSON.parse(userCanAccess || canAccess));
-			}
-			setLoading(false);
-		}
-
-		loadCookieData();
-	}, [authCookie, userCookie, userCanAccess]);
-
 	const Login = async (data) => {
 		try {
 			const res = await api.post('/hr/user/login', data);
@@ -43,19 +33,20 @@ const AuthProvider = ({ children }) => {
 
 			const userData = JSON.stringify(loginUser);
 
-			setUser(() => userData);
-			setCanAccess(() => can_access);
+			setUser(userData);
+			setCanAccess(can_access);
 
 			updateUserCookie(userData || '');
 			updateUserCanAccess(can_access || '');
 
-			const path = firstRoute?.path;
+			const path = firstRoute?.path || '/login';
+			window.location.href = path;
 
 			// ! it is the main point where the user will be redirected to its first page after login
 			// ! but because of path = undefined, the user is redirected undefined route
 			// ! need to check this
-			if (token && userData && can_access)
-				return (window.location.href = path);
+			// if (token && userData && can_access)
+			// 	return (window.location.href = path);
 
 			ShowToast({
 				type: res?.data?.type,
@@ -66,22 +57,55 @@ const AuthProvider = ({ children }) => {
 		}
 	};
 
-	const Logout = () => {
-		removeAuthCookie();
-		removeUserCookie();
-		removeUserCanAccess();
+	const Logout = useCallback(async () => {
+		await removeAuthCookie();
+		await removeUserCookie();
+		await removeUserCanAccess();
 		setUser(null);
-	};
+		setCanAccess(null);
+	}, [removeAuthCookie, removeUserCanAccess, removeUserCookie]);
+
+	useEffect(() => {
+		async function loadCookieData() {
+			try {
+				let parsedUser = null;
+				let parsedCanAccess = null;
+
+				if (userCookie) {
+					parsedUser = JSON.parse(userCookie);
+				}
+				if (userCanAccess) {
+					parsedCanAccess = JSON.parse(userCanAccess);
+				}
+
+				setUser(parsedUser);
+				setCanAccess(parsedCanAccess);
+			} catch (error) {
+				console.error('Error parsing stored data:', error);
+				// Clear invalid credentials
+				await removeAuthCookie();
+				await removeUserCookie();
+				await removeUserCanAccess();
+				setUser(null);
+				setCanAccess(null);
+			} finally {
+				setLoading(false);
+			}
+		}
+
+		loadCookieData();
+	}, [userCookie, userCanAccess]);
 
 	const value = {
 		signed: !!user,
 		user,
+		userCanAccess,
+		userCookie,
 		can_access: canAccess,
 		loading,
 		Login,
 		Logout,
 	};
-	// const value = { signed: true, user, canAccess, loading, Login, Logout };
 
 	return (
 		<AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -3,7 +3,7 @@ import { allFlatRoutes } from '@/routes';
 import { useAdminUsers, useGetUserAccessByUUID } from '@/state/Admin';
 import { useOtherHRUserByDesignation } from '@/state/Other';
 import { Link } from 'react-router-dom';
-import { useFetchForRhfResetForUserAccess, useRHF } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { DebouncedInput } from '@/components/Table/utils';
@@ -51,7 +51,7 @@ export default function Index({
 	setPageAssign,
 }) {
 	const { data: users } = useOtherHRUserByDesignation();
-	const { data } = useGetUserAccessByUUID(pageAssign?.uuid);
+	const { data: userAccess } = useGetUserAccessByUUID(pageAssign?.uuid);
 	const { url, updateData } = useAdminUsers();
 	const ALL_PAGE_ACTIONS = allFlatRoutes.filter(
 		(item) => item.actions !== undefined
@@ -98,23 +98,25 @@ export default function Index({
 		setValue,
 	} = useRHF(PAGE_ACTIONS_SCHEMA);
 
-	// * previous data fetch and reset form
-	// useFetchForRhfResetForUserAccess(
-	// 	`${url}/can-access/${pageAssign?.uuid}`,
-	// 	pageAssign?.uuid,
-	// 	reset
-	// );
-
 	useEffect(() => {
-		if (data && data?.can_access) {
-			// * here we are setting the form values manually because the form data is to big to reset() function to handle
-			Object.entries(parsedObject(data?.can_access)).forEach(
+		if (userAccess && userAccess?.can_access) {
+			Object.entries(parsedObject(userAccess?.can_access)).forEach(
 				([key, value]) => {
 					setValue(key, value);
 				}
 			);
 		}
-	}, [data, reset]);
+	}, [userAccess, reset]);
+
+	useEffect(() => {
+		if (user?.can_access) {
+			Object.entries(parsedObject(user?.can_access)).forEach(
+				([key, value]) => {
+					setValue(key, value);
+				}
+			);
+		}
+	}, [user, reset]);
 
 	const onClose = () => {
 		setPageAssign((prev) => ({
@@ -155,17 +157,6 @@ export default function Index({
 		return;
 	};
 
-	useEffect(() => {
-		if (user?.can_access) {
-			// * here we are setting the form values manually because the form data is to big to reset() function to handle
-			Object.entries(parsedObject(user?.can_access)).forEach(
-				([key, value]) => {
-					setValue(key, value);
-				}
-			);
-		}
-	}, [user, reset]);
-
 	return (
 		<AddModal
 			id={modalId}
@@ -178,7 +169,13 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 		>
-			<div className='flex justify-end'>
+			<div className='flex gap-2 px-2'>
+				<DebouncedInput
+					width='h-12 w-full'
+					placeholder='Search Page Name...'
+					value={searchPageName ?? ''}
+					onChange={(val) => setSearchPageName(val)}
+				/>
 				<ReactSelect
 					className='min-w-64'
 					placeholder='Select user'
@@ -190,62 +187,48 @@ export default function Index({
 				/>
 			</div>
 
-			<DebouncedInput
-				width='mb-4'
-				placeholder='Search Page Name...'
-				value={searchPageName ?? ''}
-				onChange={(val) => setSearchPageName(val)}
-			/>
-
 			<div className='h-80 overflow-auto rounded-md p-2 shadow-xl'>
 				{filteredPageActions.length === 0 ? (
 					<div className='flex h-full animate-pulse items-center justify-center py-6 text-center text-2xl font-semibold text-error'>
 						No page found
 					</div>
 				) : (
-					filteredPageActions.map(({ page_name, actions, path }) => {
-						return (
-							<div
-								key={page_name}
-								className='flex flex-col gap-1 rounded-md border border-primary/30 p-2 transition-colors duration-300 ease-in-out hover:bg-primary/10'
+					filteredPageActions.map(({ page_name, actions, path }) => (
+						<div
+							key={page_name}
+							className='flex flex-col gap-1 rounded-md border border-primary/30 p-2 transition-colors duration-300 ease-in-out hover:bg-primary/10'
+						>
+							<Link
+								to={path}
+								className='link-hover link link-primary font-semibold capitalize peer-hover:underline'
+								target='_blank'
 							>
-								<Link
-									to={path}
-									className='link-hover link link-primary font-semibold capitalize peer-hover:underline'
-									target='_blank'
-								>
-									{page_name
-										.replace(/__/, ': ')
-										.replace(/_/g, ' ')}
-								</Link>
-								<div className='flex flex-wrap gap-1'>
-									{actions.map((action) => (
-										<div
+								{page_name
+									.replace(/__/, ': ')
+									.replace(/_/g, ' ')}
+							</Link>
+							<div className='flex flex-wrap gap-1'>
+								{actions.map((action) => (
+									<div
+										key={page_name + '___' + action}
+										className='space-x-2 rounded-md border border-primary'
+									>
+										<CheckBox
 											key={page_name + '___' + action}
-											className='rounded-md border border-primary px-1'
-										>
-											<CheckBox
-												key={page_name + '___' + action}
-												label={
-													page_name + '___' + action
-												}
-												title={action.replace(
-													/_/g,
-													' '
-												)}
-												type='peer checkbox-primary'
-												text='rounded-full text-sm text-primary transition-colors duration-300 ease-in-out'
-												defaultChecked={getValues?.(
-													`${page_name}___${action}`
-												)}
-												{...{ register, errors }}
-											/>
-										</div>
-									))}
-								</div>
+											label={page_name + '___' + action}
+											title={action.replace(/_/g, ' ')}
+											type='peer checkbox-primary'
+											text='rounded-full text-sm text-primary transition-colors duration-300 ease-in-out'
+											defaultChecked={getValues?.(
+												`${page_name}___${action}`
+											)}
+											{...{ register, errors }}
+										/>
+									</div>
+								))}
 							</div>
-						);
-					})
+						</div>
+					))
 				)}
 			</div>
 		</AddModal>

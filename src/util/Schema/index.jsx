@@ -1,7 +1,5 @@
-import { startOfDay } from 'date-fns';
 import * as yup from 'yup';
 
-import GetDateTime from '../GetDateTime';
 import {
 	BOOLEAN, // default
 	BOOLEAN_DEFAULT_VALUE, // default
@@ -10,8 +8,7 @@ import {
 	EMAIL_REQUIRED, // default
 	FORTUNE_ZIP_EMAIL_PATTERN, // default
 	JSON_STRING, // default
-	JSON_STRING_REQUIRED, // default
-	NAME,
+	JSON_STRING_REQUIRED,
 	NAME_REQUIRED, // default
 	NUMBER, // default
 	NUMBER_DOUBLE, // default
@@ -24,11 +21,9 @@ import {
 	PHONE_NUMBER_REQUIRED, // default
 	STRING, // default
 	STRING_REQUIRED, // default
-	URL, // default
 	URL_REQUIRED, // default
 	UUID, // default
 	UUID_FK, // default
-	UUID_PK, // default
 	UUID_REQUIRED,
 } from './utils';
 
@@ -971,6 +966,7 @@ export const TAPE_STOCK_ADD_SCHEMA = {
 	name: STRING_REQUIRED,
 	material_uuid: STRING.nullable(),
 	item_uuid: STRING_REQUIRED,
+	nylon_stopper_uuid: STRING.nullable(),
 	zipper_number_uuid: STRING_REQUIRED,
 	is_import: NUMBER.nullable(),
 	is_reverse: STRING.nullable(),

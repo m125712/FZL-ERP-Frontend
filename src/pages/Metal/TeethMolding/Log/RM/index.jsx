@@ -4,7 +4,6 @@ import PageInfo from '@/util/PageInfo';
 import { getTransactionAreaMetalTeethMolding } from '@/util/TransactionArea';
 
 export default function Index() {
-
 	const info = new PageInfo(
 		'Teeth Molding RM Used Log',
 		'metal/teeth-coloring/log',

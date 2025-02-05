@@ -1,5 +1,6 @@
-import cn from '@/lib/cn';
 import { Trash2 } from 'lucide-react';
+
+import cn from '@/lib/cn';
 
 export default function RemoveButton({ showButton, onClick, className }) {
 	if (!showButton) return null;

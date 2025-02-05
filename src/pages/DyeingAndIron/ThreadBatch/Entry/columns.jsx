@@ -226,7 +226,8 @@ export const Columns = ({
 											shouldDirty: true,
 										}
 									)
-								}>
+								}
+							>
 								Copy
 							</label>
 							{info.getValue()}

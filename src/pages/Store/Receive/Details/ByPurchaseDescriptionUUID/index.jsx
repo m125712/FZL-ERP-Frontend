@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
+import { usePurchaseDetailsByUUID } from '@/state/Store';
 import { useParams } from 'react-router-dom';
+
 import Information from './Information';
 import Table from './Table';
-import { usePurchaseDetailsByUUID } from '@/state/Store';
 
 export default function Index() {
 	const { purchase_description_uuid } = useParams();

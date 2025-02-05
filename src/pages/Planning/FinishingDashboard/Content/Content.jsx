@@ -23,7 +23,8 @@ export default function Content({ data }) {
 						{header?.map((item, index) => (
 							<th
 								key={index}
-								className='min-w-28 bg-primary text-lg font-semibold text-primary-content'>
+								className='min-w-28 bg-primary text-lg font-semibold text-primary-content'
+							>
 								{item}
 							</th>
 						))}
@@ -40,7 +41,8 @@ export default function Content({ data }) {
 						return (
 							<tr
 								key={index}
-								className='border-b-2 border-primary/30'>
+								className='border-b-2 border-primary/30'
+							>
 								<th className='z-10 flex flex-col items-stretch gap-4'>
 									<CustomLink
 										label={
@@ -61,7 +63,8 @@ export default function Content({ data }) {
 												`/planning/finishing-batch/entry?production_date=${production_date}`
 											)
 										}
-										className='btn btn-primary btn-xs min-h-8 w-full gap-1'>
+										className='btn btn-primary btn-xs min-h-8 w-full gap-1'
+									>
 										<Plus className='size-4' />
 									</button>
 								</th>

@@ -145,7 +145,8 @@ export default function Index() {
 						<button
 							type='button'
 							className='btn btn-accent btn-sm font-semibold text-white shadow-md'
-							onClick={() => handleUpdate(info.row.index)}>
+							onClick={() => handleUpdate(info.row.index)}
+						>
 							<BookOpen />
 						</button>
 					);

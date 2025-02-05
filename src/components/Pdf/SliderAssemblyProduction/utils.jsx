@@ -1,10 +1,10 @@
+import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
 
 import GetDateTime from '@/util/GetDateTime';
 
 import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../ui';
 import { company, getEmptyColumn } from '../utils';
-import { FZL_LOGO } from '@/assets/img/base64';
 
 const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 

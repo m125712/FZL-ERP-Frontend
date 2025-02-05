@@ -108,7 +108,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<Input label='name' {...{ register, errors }} />
 			<div className='m-2 flex items-center gap-1 text-sm'>
 				<label className='text-sm text-primary'>Used For</label>

@@ -114,7 +114,8 @@ export default function Index({
 				${updateSliderProd.item_name} 
 				`}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<JoinInput
 				label='production_quantity'
 				unit='PCS'

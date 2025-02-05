@@ -99,7 +99,8 @@ export default function SlotCard({ data }) {
 						: batch_status === 'pending'
 							? 'bg-warning/10'
 							: 'bg-error/10'
-				)}>
+				)}
+			>
 				<div className='overflow-x-auto'>
 					<table className='table table-xs'>
 						<tbody>

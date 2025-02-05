@@ -79,7 +79,7 @@ export default function Index({
 		reset(MATERIAL_STOCK_NULL);
 		window[modalId].close();
 	};
-	
+
 	const onSubmit = async (data) => {
 		// Create Item
 		if (updateMaterialDetails?.uuid !== null) {
@@ -126,7 +126,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField label='trx_to' title='Transfer To' errors={errors}>
 				<Controller
 					name={'trx_to'}

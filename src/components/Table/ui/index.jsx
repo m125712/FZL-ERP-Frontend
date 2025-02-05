@@ -27,7 +27,8 @@ const PaginationButton = ({ onClick, disabled, children }) => {
 			type='button'
 			className='btn-filter-outline group h-8 gap-0.5 px-2.5 py-1 text-xs disabled:bg-base-100'
 			onClick={onClick}
-			disabled={disabled}>
+			disabled={disabled}
+		>
 			{children}
 		</button>
 	);

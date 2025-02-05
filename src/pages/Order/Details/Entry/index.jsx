@@ -431,7 +431,8 @@ export default function Index() {
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				noValidate
-				className='flex flex-col gap-4'>
+				className='flex flex-col gap-4'
+			>
 				<Header
 					{...{
 						endType,

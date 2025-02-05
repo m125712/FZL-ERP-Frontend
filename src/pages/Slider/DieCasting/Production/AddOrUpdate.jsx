@@ -89,12 +89,14 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			formContext={context}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField
 				title='Item'
 				label={`die_casting_uuid`}
 				register={register}
-				dynamicerror={errors?.die_casting_uuid}>
+				dynamicerror={errors?.die_casting_uuid}
+			>
 				<Controller
 					name={`die_casting_uuid`}
 					control={control}
@@ -123,7 +125,8 @@ export default function Index({
 				title='Finishing Batch'
 				label={`finishing_batch_uuid`}
 				register={register}
-				dynamicerror={errors?.finishing_batch_uuid}>
+				dynamicerror={errors?.finishing_batch_uuid}
+			>
 				<Controller
 					name={`finishing_batch_uuid`}
 					control={control}

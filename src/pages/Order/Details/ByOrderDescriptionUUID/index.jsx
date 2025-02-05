@@ -10,9 +10,9 @@ import { useFetchFunc } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import OrderSheetPdf from '@/components/Pdf/OrderSheet';
 import OrderSheetPdf2 from '@/components/Pdf/OrderSheet2';
+import OrderSheetByStyle from '@/components/Pdf/OrderSheetByStyle';
 
 import InformationSkeleton from '../_components/Information/skeleton';
-import OrderSheetByStyle from '@/components/Pdf/OrderSheetByStyle';
 
 const SingleInformation = lazy(() => import('../_components/Information'));
 const Table = lazy(() => import('../_components/Table'));

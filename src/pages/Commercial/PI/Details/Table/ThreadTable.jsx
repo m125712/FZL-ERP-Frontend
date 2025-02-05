@@ -107,7 +107,8 @@ export default function ThreadTable({ pi_cash_entry_thread }) {
 		<ReactTableTitleOnly
 			title='Thread Details'
 			data={pi_cash_entry_thread}
-			columns={columns}>
+			columns={columns}
+		>
 			<tr className='text-sm'>
 				<td colSpan='4' className='py-2 text-right'>
 					Total QTY

@@ -155,7 +155,7 @@ export default function Index({
 	};
 
 	const purposes = getPurposes;
-	
+
 	return (
 		<AddModal
 			id={modalId}
@@ -163,7 +163,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField label='purpose' title='Purpose' errors={errors}>
 				<Controller
 					name={'purpose'}
@@ -189,7 +190,8 @@ export default function Index({
 			<FormField
 				label='order_description_uuid'
 				title='Order'
-				errors={errors}>
+				errors={errors}
+			>
 				<Controller
 					name={'order_description_uuid'}
 					control={control}

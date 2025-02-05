@@ -24,14 +24,13 @@ const renderLogo = (logo_type_name, is_logo_body, is_logo_puller) => {
 	};
 };
 
-export default function SliderDescription({
-	order_description,
-	className,
-}) {
-
-	const sliderQuantity = order_description?.order_entry.reduce((sum, item) => {
-		return sum + parseFloat(item.quantity);
-	}, 0);
+export default function SliderDescription({ order_description, className }) {
+	const sliderQuantity = order_description?.order_entry.reduce(
+		(sum, item) => {
+			return sum + parseFloat(item.quantity);
+		},
+		0
+	);
 
 	const renderItems = () => {
 		const {

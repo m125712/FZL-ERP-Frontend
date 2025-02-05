@@ -203,7 +203,8 @@ export function OrderInformation({
 				key='pdf'
 				type='button'
 				className='btn btn-accent btn-sm rounded-badge'
-				onClick={handelPdfDownload}>
+				onClick={handelPdfDownload}
+			>
 				<PDF className='w-4' /> PDF
 			</button>,
 			<div className='flex items-center gap-2'>
@@ -233,7 +234,8 @@ export function OrderInformation({
 			title='Order Information'
 			buttons={renderButtons()}
 			// selector={renderSelector()}
-			className={'mb-8'}>
+			className={'mb-8'}
+		>
 			<div className='grid grid-cols-1 bg-base-100 md:grid-cols-2 md:gap-8'>
 				<RenderTable
 					className={

@@ -1,4 +1,7 @@
-import { DeleteModal } from '@/components/Modal';
+import { Suspense, useEffect, useRef, useState } from 'react';
+import { NotFound } from '@/pages/Public/NoEntry';
+import { useAuth } from '@context/auth';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
 	useAccess,
 	useFetch,
@@ -7,8 +10,8 @@ import {
 	useRHF,
 	useUpdateFunc,
 } from '@/hooks';
-import nanoid from '@/lib/nanoid';
-import { NotFound } from '@/pages/Public/NoEntry';
+
+import { DeleteModal } from '@/components/Modal';
 import {
 	DynamicField,
 	FormField,
@@ -17,14 +20,13 @@ import {
 	ReactSelect,
 	RemoveButton,
 } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import { useAuth } from '@context/auth';
+
+import nanoid from '@/lib/nanoid';
 import {
 	SLIDER_SLIDER_ASSEMBLY_NULL,
 	SLIDER_SLIDER_ASSEMBLY_SCHEMA,
 } from '@util/Schema';
-import { Suspense, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import GetDateTime from '@/util/GetDateTime';
 
 // UPDATE IS NOT WORKING
 export default function Index() {
@@ -196,7 +198,8 @@ export default function Index() {
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				noValidate
-				className='flex flex-col gap-4'>
+				className='flex flex-col gap-4'
+			>
 				<DynamicField
 					title={
 						slider_slider_assembly_uuid == null
@@ -215,7 +218,8 @@ export default function Index() {
 						<th key={item} scope='col'>
 							{item}
 						</th>
-					))}>
+					))}
+				>
 					{sliderSliderAssemblyEntryField.map((item, index) => (
 						<tr key={item.id}>
 							<td>
@@ -250,7 +254,8 @@ export default function Index() {
 									dynamicerror={
 										errors?.slider_slider_assembly_details
 											?.slider_item_id
-									}>
+									}
+								>
 									<Controller
 										name={`slider_slider_assembly_details[${index}].slider_item_id`}
 										control={control}

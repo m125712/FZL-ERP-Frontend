@@ -1,6 +1,6 @@
+import { useMemo } from 'react';
 import { addDays, format, isAfter, isBefore } from 'date-fns';
 import Cookies from 'js-cookie';
-import { useMemo } from 'react';
 
 export const DateFormate = (date) => format(date, 'yyyy-MM-dd') + ' 23:59:59';
 
@@ -19,7 +19,8 @@ export const Button = ({ onClick, disabled, children }) => (
 	<button
 		className='btn btn-circle btn-primary btn-sm rounded-full'
 		onClick={onClick}
-		disabled={disabled}>
+		disabled={disabled}
+	>
 		{children}
 	</button>
 );
@@ -29,7 +30,8 @@ export const Select = ({ value, onChange, options }) => (
 	<select
 		className='text-md select select-primary select-sm flex flex-1 items-center justify-between rounded-md font-semibold text-primary shadow-md transition-all duration-100 ease-in-out'
 		value={value}
-		onChange={onChange}>
+		onChange={onChange}
+	>
 		{options?.map((option) => (
 			<option key={option} value={option}>
 				{option}

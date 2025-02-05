@@ -54,7 +54,8 @@ export default function Header({
 					<FormField
 						label='order_info_uuid'
 						title='order info'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'order_info_uuid'}
 							control={control}
@@ -86,10 +87,7 @@ export default function Header({
 						/>
 					</FormField>
 					{watch('order_info_uuid') ? (
-						<FormField
-							label='name'
-							title='name'
-							errors={errors}>
+						<FormField label='name' title='name' errors={errors}>
 							<Controller
 								name={'name'}
 								control={control}

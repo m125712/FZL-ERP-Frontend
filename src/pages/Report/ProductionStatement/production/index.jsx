@@ -52,13 +52,15 @@ export default function index() {
 				<button
 					type='button'
 					onClick={() => Pdf(data, from, to)?.open()}
-					className='btn btn-primary flex-1'>
+					className='btn btn-primary flex-1'
+				>
 					PDF
 				</button>
 				<button
 					type='button'
 					onClick={() => Excel(data, from, to)}
-					className='btn btn-secondary flex-1'>
+					className='btn btn-secondary flex-1'
+				>
 					Excel
 				</button>
 			</div>

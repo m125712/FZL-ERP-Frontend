@@ -204,7 +204,8 @@ export default function Index() {
 						return (
 							<div
 								key={item.dyeing_batch_number}
-								className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'>
+								className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'
+							>
 								<CustomLink
 									label={item.dyeing_batch_number}
 									url={`/dyeing-and-iron/zipper-batch/${item.dyeing_batch_uuid}`}

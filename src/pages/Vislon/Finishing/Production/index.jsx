@@ -216,7 +216,8 @@ export default function Index() {
 						<button
 							type='button'
 							className='btn btn-accent btn-sm font-semibold text-white shadow-md'
-							onClick={() => handleUpdateSticker(info.row.index)}>
+							onClick={() => handleUpdateSticker(info.row.index)}
+						>
 							<BookOpen />
 						</button>
 					);

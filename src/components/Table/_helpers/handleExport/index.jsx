@@ -34,7 +34,8 @@ const HandleExport = ({ getAllLeafColumns, filteredRows, title }) => {
 			type='button'
 			className='btn-filter'
 			data={csvData} // * Pass precomputed data
-			filename={filename}>
+			filename={filename}
+		>
 			<FileSpreadsheet className='size-4' />
 			<span className='hidden lg:block'>Excel</span>
 		</CSVLink>

@@ -102,7 +102,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<CheckBox
 				label='active'
 				title='Active'

@@ -133,7 +133,8 @@ export default function Index() {
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}
-				noValidate>
+				noValidate
+			>
 				<Header
 					{...{
 						register,
@@ -162,14 +163,17 @@ export default function Index() {
 						<th
 							key={item}
 							scope='col'
-							className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
+							className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'
+						>
 							{item}
 						</th>
-					))}>
+					))}
+				>
 					{orderEntryField.map((item, index) => (
 						<tr
 							key={item.id}
-							className='relative cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30'>
+							className='relative cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30'
+						>
 							<td className={`${rowClass}`}>
 								{
 									<CustomLink
@@ -225,7 +229,8 @@ export default function Index() {
 					<tr
 						className={cn(
 							'relative cursor-pointer transition-colors duration-300 ease-in even:bg-primary/10 hover:bg-primary/30 focus:bg-primary/30'
-						)}>
+						)}
+					>
 						{/* Span all columns up to "Expected Weight" */}
 
 						<td className='text-right font-semibold' colSpan={6}>
@@ -252,7 +257,8 @@ export default function Index() {
 				<div className='modal-action'>
 					<button
 						type='submit'
-						className='text-md btn btn-primary btn-block'>
+						className='text-md btn btn-primary btn-block'
+					>
 						Save
 					</button>
 				</div>

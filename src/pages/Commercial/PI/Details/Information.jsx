@@ -97,7 +97,8 @@ export default function Information({ pi }) {
 							.map((e) => (
 								<span
 									key={e}
-									className='badge badge-secondary badge-sm h-5'>
+									className='badge badge-secondary badge-sm h-5'
+								>
 									{e}
 								</span>
 							))}
@@ -108,7 +109,8 @@ export default function Information({ pi }) {
 							.map((e) => (
 								<span
 									key={e}
-									className='badge badge-secondary badge-sm h-5'>
+									className='badge badge-secondary badge-sm h-5'
+								>
 									{e}
 								</span>
 							))}
@@ -126,7 +128,8 @@ export default function Information({ pi }) {
 							.map((e) => (
 								<span
 									key={e}
-									className='badge badge-secondary badge-sm h-5'>
+									className='badge badge-secondary badge-sm h-5'
+								>
 									{e}
 								</span>
 							))}
@@ -137,7 +140,8 @@ export default function Information({ pi }) {
 							.map((e) => (
 								<span
 									key={e}
-									className='badge badge-secondary badge-sm h-5'>
+									className='badge badge-secondary badge-sm h-5'
+								>
 									{e}
 								</span>
 							))}
@@ -154,7 +158,8 @@ export default function Information({ pi }) {
 							.map((e) => (
 								<span
 									key={e}
-									className='badge badge-secondary badge-sm h-5'>
+									className='badge badge-secondary badge-sm h-5'
+								>
 									{e}
 								</span>
 							))}
@@ -263,7 +268,8 @@ export default function Information({ pi }) {
 				key='pdf'
 				type='button'
 				className='btn btn-accent btn-sm rounded-badge'
-				onClick={() => PiPdf(pi_info).download(pi_info.pi_number)}>
+				onClick={() => PiPdf(pi_info).download(pi_info.pi_number)}
+			>
 				<PDF className='w-4' /> PDF
 			</button>,
 		];

@@ -16,7 +16,8 @@ const CheckboxButtons = () => (
 				/>
 				<label
 					htmlFor={option.id}
-					className='badge badge-sm cursor-pointer select-none border border-primary transition-colors duration-300 ease-in-out peer-checked:badge-primary hover:bg-primary/30'>
+					className='badge badge-sm cursor-pointer select-none border border-primary transition-colors duration-300 ease-in-out peer-checked:badge-primary hover:bg-primary/30'
+				>
 					<div className='flex w-full items-center justify-center'>
 						<div className='text-brand-black text-sm'>
 							{option.name}

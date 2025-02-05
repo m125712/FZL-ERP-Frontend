@@ -24,7 +24,8 @@ export default function Content({ data, dyeingDate }) {
 						{header?.map((item, index) => (
 							<th
 								key={index}
-								className='w-32 bg-base-200 px-4 py-2 text-left text-sm font-semibold capitalize leading-tight text-primary'>
+								className='w-32 bg-base-200 px-4 py-2 text-left text-sm font-semibold capitalize leading-tight text-primary'
+							>
 								{item}
 							</th>
 						))}

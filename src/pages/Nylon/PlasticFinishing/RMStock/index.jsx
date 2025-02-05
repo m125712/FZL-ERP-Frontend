@@ -1,10 +1,12 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useNylonMetallicFinishingRM } from '@/state/Nylon';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useNylonMetallicFinishingRM } from '@/state/Nylon';
 import { EditDelete, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 

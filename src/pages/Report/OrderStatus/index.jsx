@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import PageInfo from '@/util/PageInfo';
 
 import Thread from './Thread';
-import Zipper from './Zipper'
+import Zipper from './Zipper';
 
 export default function Index() {
 	const info = new PageInfo(

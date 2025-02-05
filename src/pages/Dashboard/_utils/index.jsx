@@ -1,4 +1,5 @@
 import { useFetch } from '@/hooks';
+
 export const primaryColor = '#27374D';
 export const errorColor = '#f31260';
 

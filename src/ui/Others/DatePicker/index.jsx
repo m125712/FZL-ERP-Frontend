@@ -32,7 +32,8 @@ const SimpleDatePicker = ({
 				className
 			)}
 			onClick={onClick}
-			ref={ref}>
+			ref={ref}
+		>
 			{value ? value : placeholder ? placeholder : 'Select Date'}
 			<Calendar className='mb-0.5 ml-1 w-4' />
 		</button>

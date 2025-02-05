@@ -4,6 +4,7 @@ import { RmIndex } from '@/components/Common';
 
 import PageInfo from '@/util/PageInfo';
 import { getTransactionAreaMetalTeethColoring } from '@/util/TransactionArea';
+
 export default function Index() {
 	const info = new PageInfo(
 		'Metal Teeth Coloring RM Stock',

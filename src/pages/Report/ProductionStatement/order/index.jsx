@@ -12,14 +12,19 @@ import Excel from './Excel';
 import Header from './Header';
 
 export default function index() {
-
 	const [from, setFrom] = useState(format(new Date(), 'yyyy-MM-dd'));
 	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
 	const [marketing, setMarketing] = useState('');
 	const [type, setType] = useState('');
 	const [party, setParty] = useState('');
 
-	const { data, isLoading } = useOrderStatementReport(from, to, party, marketing, type);
+	const { data, isLoading } = useOrderStatementReport(
+		from,
+		to,
+		party,
+		marketing,
+		type
+	);
 	const { data: garments } = useOtherOrderPropertiesByGarmentsWash();
 	const { data: sr } = useOtherOrderPropertiesBySpecialRequirement();
 
@@ -48,7 +53,8 @@ export default function index() {
 					onClick={() =>
 						OrderSheetPdf(data, garments, sr, from, to)?.open()
 					}
-					className='btn btn-primary flex-1'>
+					className='btn btn-primary flex-1'
+				>
 					PDF
 				</button>
 				{/* <button

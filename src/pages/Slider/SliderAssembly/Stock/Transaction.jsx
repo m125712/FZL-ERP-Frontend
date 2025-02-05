@@ -134,7 +134,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField label='stock_uuid' title='Stock' errors={errors}>
 				<Controller
 					name={'stock_uuid'}

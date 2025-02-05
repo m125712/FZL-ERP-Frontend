@@ -77,7 +77,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<Input label='transfer_quantity' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>

@@ -1,12 +1,14 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useVislonTMRM, useVislonTMRMLog } from '@/state/Vislon';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-
-import { useVislonTMRM, useVislonTMRMLog } from '@/state/Vislon';
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState } from 'react';
+
 import RMAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
@@ -96,7 +98,9 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('click_update_rm')&&!haveAccess.includes('click_delete_rm'),
+				hidden:
+					!haveAccess.includes('click_update_rm') &&
+					!haveAccess.includes('click_delete_rm'),
 				width: 'w-24',
 				cell: (info) => {
 					return (

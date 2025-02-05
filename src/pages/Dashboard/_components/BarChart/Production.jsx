@@ -1,7 +1,9 @@
-import { BarChart } from '@/components/Chart';
-import { useFetch } from '@/hooks';
-import { addDays, format } from 'date-fns';
 import { useState } from 'react';
+import { addDays, format } from 'date-fns';
+import { useFetch } from '@/hooks';
+
+import { BarChart } from '@/components/Chart';
+
 import { primaryColor } from '../../_utils';
 
 const daysMap = {
@@ -54,7 +56,8 @@ export default function StatusBarChart() {
 				name='time'
 				className='select select-secondary h-8 min-h-0 border-secondary/30 bg-base-200 transition-all duration-100 ease-in-out'
 				value={time}
-				onChange={(e) => setTime(e.target.value)}>
+				onChange={(e) => setTime(e.target.value)}
+			>
 				<option value='yesterday'>Yesterday</option>
 				<option value='last_seven_days'>7 Days</option>
 				<option value='last_fifteen_days'>15 Days</option>

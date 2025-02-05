@@ -61,10 +61,12 @@ export default function index({
 					<th
 						key={item}
 						scope='col'
-						className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+						className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'
+					>
 						{item}
 					</th>
-				))}>
+				))}
+			>
 				{udField.map((item, index) => (
 					<tr key={item.id}>
 						<td className={`${rowClass}`}>
@@ -101,7 +103,8 @@ export default function index({
 							/>
 						</td>
 						<td
-							className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
+							className={`w-16 ${rowClass} border-l-4 border-l-primary`}
+						>
 							<ActionButtons
 								duplicateClick={() =>
 									handelDuplicateDynamicField(index)

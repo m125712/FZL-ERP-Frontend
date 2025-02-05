@@ -127,7 +127,8 @@ export default function Index({
 				${updateSliderTrx.item_name} 
 				`}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			{updateSliderTrx?.order_type === 'slider' && (
 				<FormField label='sfg_uuid' title='Style' errors={errors}>
 					<Controller

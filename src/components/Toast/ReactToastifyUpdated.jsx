@@ -17,7 +17,8 @@ const Icon = ({ type = 'default' }) => {
 		<svg
 			className='h-6 w-6 fill-current text-white'
 			viewBox='0 0 40 40'
-			xmlns='http://www.w3.org/2000/svg'>
+			xmlns='http://www.w3.org/2000/svg'
+		>
 			<path d={paths[type]} />
 		</svg>
 	);
@@ -54,10 +55,8 @@ const ToastBody = ({ type = 'default', text }) => {
 	return (
 		<div className='flex w-full max-w-sm overflow-hidden rounded-lg bg-white'>
 			<div
-				className={cn(
-					'flex w-12 items-center justify-center',
-					bgColor
-				)}>
+				className={cn('flex w-12 items-center justify-center', bgColor)}
+			>
 				<Icon type={type} />
 			</div>
 			<div className='-mx-3 px-4 py-2'>

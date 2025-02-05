@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import RMTransferLog from './RMTransferLog';
+
 import RMOrderAgainstLog from './RMOrderAgainstLog';
+import RMTransferLog from './RMTransferLog';
 
 export default function Index() {
 	useEffect(() => {
@@ -9,7 +10,7 @@ export default function Index() {
 	return (
 		<div>
 			<RMTransferLog />
-			<hr className='border-secondary-content my-6 border-2 border-dashed' />
+			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			{/* <RMOrderAgainstLog /> */}
 		</div>
 	);

@@ -24,7 +24,8 @@ const FilterStatus = ({ columnName, column, isFullFilter }) => {
 			<select
 				className={selectClass}
 				defaultValue={-1}
-				onChange={handleStatusChange}>
+				onChange={handleStatusChange}
+			>
 				<option value='-1'>All</option>
 				<option value='0'>Inactive</option>
 				<option value='1'>Active</option>
@@ -35,11 +36,13 @@ const FilterStatus = ({ columnName, column, isFullFilter }) => {
 	return (
 		<Template
 			columnName={columnName}
-			onClick={() => setFilterValue(undefined)}>
+			onClick={() => setFilterValue(undefined)}
+		>
 			<select
 				className={selectClass}
 				defaultValue={-1}
-				onChange={handleStatusChange}>
+				onChange={handleStatusChange}
+			>
 				<option value='-1'>All</option>
 				<option value='0'>Inactive</option>
 				<option value='1'>Active</option>

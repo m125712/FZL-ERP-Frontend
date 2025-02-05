@@ -119,11 +119,13 @@ export default function Index({
 			}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField
 				label='order_description_uuid'
 				title='Order Entry ID'
-				errors={errors}>
+				errors={errors}
+			>
 				<Controller
 					name='order_description_uuid'
 					control={control}
@@ -151,7 +153,8 @@ export default function Index({
 					<FormField
 						label='sfg_uuid'
 						title='Style-Color'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name='sfg_uuid'
 							control={control}

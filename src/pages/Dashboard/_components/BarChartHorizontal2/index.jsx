@@ -59,7 +59,8 @@ export function BarChartHorizontal2(props) {
 			<CardContent>
 				<ChartContainer
 					className='aspect-auto h-[300px] w-full'
-					config={chartConfig}>
+					config={chartConfig}
+				>
 					<BarChart data={chartData} layout='vertical'>
 						<CartesianGrid />
 						<YAxis dataKey='item_name' type='category' />
@@ -115,7 +116,8 @@ export function BarChartHorizontal2(props) {
 							dataKey='approved'
 							stackId='a'
 							fill='var(--color-approved)'
-							radius={[0, 0, 0, 0]}>
+							radius={[0, 0, 0, 0]}
+						>
 							<LabelList
 								dataKey='approved'
 								position='center'
@@ -127,7 +129,8 @@ export function BarChartHorizontal2(props) {
 							dataKey='not_approved'
 							stackId='a'
 							fill='var(--color-not_approved)'
-							radius={[0, 4, 4, 0]}>
+							radius={[0, 4, 4, 0]}
+						>
 							<LabelList
 								dataKey='not_approved'
 								position='center'

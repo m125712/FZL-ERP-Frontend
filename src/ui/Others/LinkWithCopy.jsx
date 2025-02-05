@@ -19,7 +19,8 @@ const CopyButton = ({ id, className }) => {
 		<div
 			type='button'
 			onClick={() => handleOnClick()}
-			aria-label='Copy ID to clipboard'>
+			aria-label='Copy ID to clipboard'
+		>
 			<Clipboard
 				className={cn(
 					'h-4 w-4 transition-transform duration-200 hover:scale-110',
@@ -91,7 +92,8 @@ const CustomLink = ({
 							? 'cursor-pointer'
 							: 'pointer-events-none cursor-not-allowed'
 					)}
-					target={openInNewTab ? '_blank' : '_self'}>
+					target={openInNewTab ? '_blank' : '_self'}
+				>
 					{label}
 				</Link>
 			)}

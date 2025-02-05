@@ -22,7 +22,8 @@ const LayoutProvider = ({ children }) => {
 				setIsCollapsed,
 				sidebarOpen,
 				setSidebarOpen,
-			}}>
+			}}
+		>
 			{children}
 		</LayoutContext.Provider>
 	);

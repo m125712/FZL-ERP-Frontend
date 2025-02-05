@@ -1,5 +1,5 @@
-import { LinkWithCopy, TitleValue } from '@/ui';
 import RenderTable from '@/ui/Others/Table/RenderTable';
+import { LinkWithCopy, TitleValue } from '@/ui';
 
 const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
 	let value = is_cash == 1 ? 'Cash' : 'LC';

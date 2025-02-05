@@ -235,7 +235,8 @@ export default function Index() {
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				noValidate
-				className='flex flex-col gap-4'>
+				className='flex flex-col gap-4'
+			>
 				<DynamicField
 					title={`${data?.name} (Mtr/Kg): ${data?.raw_per_kg_meter}, 
 								Remaining: ${MAX_TAPE_TRX_QTY.toFixed(2)} KG`}
@@ -253,10 +254,12 @@ export default function Index() {
 						<th
 							key={item}
 							scope='col'
-							className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+							className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'
+						>
 							{item}
 						</th>
-					))}>
+					))}
+				>
 					{EntryField.map((item, index) => {
 						const selectedValue = order_id?.find(
 							(item) =>
@@ -297,7 +300,8 @@ export default function Index() {
 											errors?.coil_to_dyeing_entry?.[
 												index
 											]?.order_id
-										}>
+										}
+									>
 										<Controller
 											name={`coil_to_dyeing_entry[${index}].order_id`}
 											control={control}
@@ -369,7 +373,8 @@ export default function Index() {
 								</td>
 
 								<td
-									className={`w-20 ${rowClass} border-l-4 border-l-primary`}>
+									className={`w-20 ${rowClass} border-l-4 border-l-primary`}
+								>
 									<ActionButtons
 										duplicateClick={() =>
 											handelDuplicateDynamicField(index)
@@ -386,7 +391,8 @@ export default function Index() {
 					<tr className='border-t border-primary/30'>
 						<td
 							className='py-4 text-left font-bold'
-							colSpan='4'></td>
+							colSpan='4'
+						></td>
 						<td className='py-4 text-right font-bold'>
 							Total Quantity:
 						</td>

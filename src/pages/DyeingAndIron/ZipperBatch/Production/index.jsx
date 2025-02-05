@@ -328,7 +328,8 @@ export default function Index() {
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}
-				noValidate>
+				noValidate
+			>
 				<Header
 					{...{
 						register,
@@ -356,7 +357,8 @@ export default function Index() {
 					<tr
 						className={cn(
 							'relative cursor-pointer even:bg-primary/10 focus:bg-primary/30'
-						)}>
+						)}
+					>
 						{/* Span all columns up to "Expected Weight" */}
 						<td className='text-right font-semibold' colSpan={7}>
 							Total Weight:
@@ -384,7 +386,8 @@ export default function Index() {
 					<button
 						type='submit'
 						disabled={isReceived}
-						className='text-md btn btn-primary btn-block'>
+						className='text-md btn btn-primary btn-block'
+					>
 						Save
 					</button>
 				</div>

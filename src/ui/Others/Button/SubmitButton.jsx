@@ -4,7 +4,8 @@ const SubmitButton = ({ className, text = 'Save' }) => {
 	return (
 		<button
 			type='submit'
-			className={cn('text-md btn btn-primary btn-block', className)}>
+			className={cn('text-md btn btn-primary btn-block', className)}
+		>
 			{text}
 		</button>
 	);

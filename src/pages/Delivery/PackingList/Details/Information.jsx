@@ -67,7 +67,8 @@ export default function Information({ packing_list }) {
 			<button
 				key='pdf'
 				type='button'
-				className='btn btn-accent btn-sm rounded-badge'>
+				className='btn btn-accent btn-sm rounded-badge'
+			>
 				<PDF className='w-4' /> PDF
 			</button>,
 		];

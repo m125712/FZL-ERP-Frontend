@@ -322,7 +322,8 @@ export default function ItemDescription({ order_description, className }) {
 			className={cn(
 				'grid h-full grid-cols-1 md:grid-cols-2 lg:grid-cols-5',
 				className
-			)}>
+			)}
+		>
 			<RenderTable
 				className={
 					'border-b border-secondary/30 md:border-b-0 md:border-r'

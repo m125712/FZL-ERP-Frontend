@@ -71,7 +71,8 @@ const Index = () => {
 							{item.actions.map((action, colIndex) => (
 								<td
 									key={colIndex}
-									className='border text-left font-medium'>
+									className='border text-left font-medium'
+								>
 									{action.users}
 								</td>
 							))}

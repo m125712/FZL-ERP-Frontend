@@ -56,7 +56,8 @@ const FilterString = ({ columnName, column, firstValue, isFullFilter }) => {
 			key={id}
 			columnName={columnName}
 			onClick={() => setFilterValue(undefined)}
-			showResetButton={getFilterValue()}>
+			showResetButton={getFilterValue()}
+		>
 			<DebouncedInput
 				type='text'
 				list={id + 'list'}

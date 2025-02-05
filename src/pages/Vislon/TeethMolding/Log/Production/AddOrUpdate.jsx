@@ -31,8 +31,8 @@ export default function Index({
 	const { invalidateQuery } = useVislonTMP();
 
 	const MAX_DYED_TAPE_KG =
-	Number(updateTeethMoldingLog.dyed_tape_used_in_kg) +
-	Number(updateTeethMoldingLog.tape_stock);
+		Number(updateTeethMoldingLog.dyed_tape_used_in_kg) +
+		Number(updateTeethMoldingLog.tape_stock);
 
 	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
 		{
@@ -42,9 +42,8 @@ export default function Index({
 				'More than 0'
 			).max(MAX_DYED_TAPE_KG, 'Beyond Max Quantity'),
 		},
-		{SFG_PRODUCTION_SCHEMA_IN_KG_NULL, dyed_tape_used_in_kg: null}
+		{ SFG_PRODUCTION_SCHEMA_IN_KG_NULL, dyed_tape_used_in_kg: null }
 	);
-
 
 	// * To reset the form with the fetched data
 	useEffect(() => {
@@ -64,7 +63,7 @@ export default function Index({
 			wastage: null,
 			remarks: '',
 		}));
-		reset({SFG_PRODUCTION_SCHEMA_IN_KG_NULL, dyed_tape_used_in_kg: null});
+		reset({ SFG_PRODUCTION_SCHEMA_IN_KG_NULL, dyed_tape_used_in_kg: null });
 		window[modalId].close();
 	};
 
@@ -103,7 +102,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<JoinInput
 				label='production_quantity_in_kg'
 				unit='KG'

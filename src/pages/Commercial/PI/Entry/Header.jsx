@@ -53,7 +53,8 @@ export default function Header({
 						{...{ register, errors }}
 					/>
 				</div>
-			}>
+			}
+		>
 			<div className='grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4'>
 				<FormField label='lc_id' title='LC' errors={errors}>
 					<Controller
@@ -80,7 +81,8 @@ export default function Header({
 				<FormField
 					label='marketing_uuid'
 					title='Marketing'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name='marketing_uuid'
 						control={control}

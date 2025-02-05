@@ -109,7 +109,6 @@ export default function Index() {
 				header: 'Style',
 				enableColumnFilter: false,
 				width: 'w-24',
-		
 			},
 			{
 				accessorFn: (row) => row.color?.join(', '),
@@ -117,7 +116,6 @@ export default function Index() {
 				header: 'Color',
 				width: 'w-24',
 				enableColumnFilter: false,
-			
 			},
 			{
 				accessorFn: (row) => {
@@ -143,7 +141,8 @@ export default function Index() {
 						return (
 							<div
 								key={item.batch_number}
-								className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'>
+								className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'
+							>
 								<CustomLink
 									label={item.batch_number}
 									url={`/planning/finishing-batch/${item.batch_uuid}`}

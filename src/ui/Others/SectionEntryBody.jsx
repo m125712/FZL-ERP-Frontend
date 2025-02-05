@@ -13,7 +13,8 @@ export default function BodyTemplate({ title, header, className, children }) {
 				className={cn(
 					'flex flex-col gap-1.5 border border-t-0 border-secondary/30 bg-base-100 p-3 text-secondary-content',
 					className
-				)}>
+				)}
+			>
 				{children}
 			</div>
 		</div>

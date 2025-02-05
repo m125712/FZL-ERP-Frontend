@@ -382,7 +382,8 @@ const Index = () => {
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
-					className='flex flex-col gap-6'>
+					className='flex flex-col gap-6'
+				>
 					<Header
 						{...{
 							register,

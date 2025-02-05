@@ -144,7 +144,8 @@ export default function Index({
 			title={updateStock?.uuid !== null ? 'Update Stock' : 'Create Stock'}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
-			onClose={onClose}>
+			onClose={onClose}
+		>
 			{/* IS BODY, IS PULLER, IS CAP, IS LINK */}
 			<div className='flex gap-2'>
 				<FormField label='type' title='Type' errors={errors}>
@@ -199,7 +200,8 @@ export default function Index({
 				<FormField
 					label='zipper_number'
 					title='Zipper Number'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'zipper_number'}
 						control={control}
@@ -272,7 +274,8 @@ export default function Index({
 				<FormField
 					label='slider_link'
 					title='Slider Link'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'slider_link'}
 						control={control}
@@ -299,7 +302,8 @@ export default function Index({
 				<FormField
 					label='slider_body_shape'
 					title='Body Shape'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'slider_body_shape'}
 						control={control}

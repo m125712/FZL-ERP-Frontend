@@ -1,6 +1,7 @@
-import { useFetchFunc } from '@/hooks';
-import { TitleValue } from '@/ui';
 import { useEffect, useState } from 'react';
+import { useFetchFunc } from '@/hooks';
+
+import { TitleValue } from '@/ui';
 
 export default function Information({ material_id }) {
 	const [material, setMaterial] = useState([]);
@@ -22,10 +23,10 @@ export default function Information({ material_id }) {
 	return (
 		<div className='mb-4 flex flex-col gap-4 md:mx-4 md:flex-row'>
 			<div className='flex flex-1 columns-2 flex-col rounded-md p-2 shadow-md'>
-				<span className='text-secondary-content text-2xl font-semibold'>
+				<span className='text-2xl font-semibold text-secondary-content'>
 					{material[0]?.name} ({material[0]?.short_name})
 				</span>
-				<hr className='border-secondary-content my-2 border-1' />
+				<hr className='border-1 my-2 border-secondary-content' />
 				<div className='mx-2 flex flex-col justify-between md:flex-row'>
 					<div className='flex flex-col gap-2'>
 						<TitleValue

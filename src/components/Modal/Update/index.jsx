@@ -35,7 +35,7 @@ export default function Index({
 			updatedData: updateItem,
 			onClose: handelClose,
 		});
-		
+
 		invalidateQuery();
 
 		// Invalidate an array of queries
@@ -52,7 +52,8 @@ export default function Index({
 				onSubmit={onSubmit}
 				noValidate
 				method='dialog'
-				className='modal-box bg-warning text-secondary-content'>
+				className='modal-box bg-warning text-secondary-content'
+			>
 				<Header title={`Update ${title}`} onClose={handelCancelClick} />
 				<Body item={updateItem?.itemName} />
 				<DeleteFooter {...{ handelCancelClick }} />

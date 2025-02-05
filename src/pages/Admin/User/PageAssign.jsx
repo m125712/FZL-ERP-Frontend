@@ -176,7 +176,8 @@ export default function Index({
 			}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
-			onClose={onClose}>
+			onClose={onClose}
+		>
 			<div className='flex justify-end'>
 				<ReactSelect
 					className='min-w-64'
@@ -206,11 +207,13 @@ export default function Index({
 						return (
 							<div
 								key={page_name}
-								className='flex flex-col gap-1 rounded-md border border-primary/30 p-2 transition-colors duration-300 ease-in-out hover:bg-primary/10'>
+								className='flex flex-col gap-1 rounded-md border border-primary/30 p-2 transition-colors duration-300 ease-in-out hover:bg-primary/10'
+							>
 								<Link
 									to={path}
 									className='link-hover link link-primary font-semibold capitalize peer-hover:underline'
-									target='_blank'>
+									target='_blank'
+								>
 									{page_name
 										.replace(/__/, ': ')
 										.replace(/_/g, ' ')}
@@ -219,7 +222,8 @@ export default function Index({
 									{actions.map((action) => (
 										<div
 											key={page_name + '___' + action}
-											className='rounded-md border border-primary px-1'>
+											className='rounded-md border border-primary px-1'
+										>
 											<CheckBox
 												key={page_name + '___' + action}
 												label={

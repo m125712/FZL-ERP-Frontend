@@ -99,11 +99,13 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField
 				label='dyes_category_uuid'
 				title='Dyes Category'
-				errors={errors}>
+				errors={errors}
+			>
 				<Controller
 					name={'dyes_category_uuid'}
 					control={control}

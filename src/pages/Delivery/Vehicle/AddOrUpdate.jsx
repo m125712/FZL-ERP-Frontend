@@ -104,7 +104,8 @@ export default function VehicleForm({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<CheckBox
 				label='active'
 				title='Active'

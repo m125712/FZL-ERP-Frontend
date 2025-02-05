@@ -97,13 +97,15 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			{getValues('order_type') === 'tape' && (
 				<>
 					<FormField
 						label={`sfg_uuid`}
 						title='Style-Color'
-						is_title_needed='false'>
+						is_title_needed='false'
+					>
 						<Controller
 							name={`sfg_uuid`}
 							control={control}

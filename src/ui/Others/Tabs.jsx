@@ -1,5 +1,6 @@
-import cn from '@/lib/cn';
 import { useState } from 'react';
+
+import cn from '@/lib/cn';
 
 function Tabs(
 	props = {
@@ -37,12 +38,14 @@ function Tabs(
 							? 'ml-auto'
 							: '',
 					className
-				)}>
+				)}
+			>
 				<div
 					role='tablist'
 					className={cn(
 						`tabs-boxed tabs bg-primary/10 tabs-${tabSize}`
-					)}>
+					)}
+				>
 					{tabs?.map((tab, index) => (
 						<a
 							role='tab'
@@ -51,7 +54,8 @@ function Tabs(
 								'tab',
 								index === activeTab && 'tab-active'
 							)}
-							onClick={() => setActiveTab(index)}>
+							onClick={() => setActiveTab(index)}
+						>
 							{tab.label}
 						</a>
 					))}

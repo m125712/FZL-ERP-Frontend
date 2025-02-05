@@ -108,7 +108,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<JoinInput
 				label='production_quantity'
 				sub_label={`Max: ${Number(MAX_PRODUCTION_QTY)}`}

@@ -1,11 +1,12 @@
-import { Suspense } from '@/components/Feedback';
-import ReactTable from '@/components/Table';
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useVislonTMRM } from '@/state/Vislon';
 import { useAccess } from '@/hooks';
 
-import { useVislonTMRM } from '@/state/Vislon';
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
 import { EditDelete, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 

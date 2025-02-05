@@ -81,7 +81,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<JoinInput
 				label='trx_quantity'
 				title='Transfer Quantity'

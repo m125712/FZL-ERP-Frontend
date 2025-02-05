@@ -1,9 +1,6 @@
 import { useAuth } from '@/context/auth';
 import { useOrderMerchandiser } from '@/state/Order';
-import {
-	useOtherMerchandiserByPartyUUID,
-	useOtherParty,
-} from '@/state/Other';
+import { useOtherMerchandiserByPartyUUID, useOtherParty } from '@/state/Other';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -104,7 +101,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField label='party_uuid' title='Party' errors={errors}>
 				<Controller
 					name={'party_uuid'}

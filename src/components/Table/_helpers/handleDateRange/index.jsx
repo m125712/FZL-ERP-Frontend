@@ -76,7 +76,8 @@ export default function DateRange({ getHeaderGroups }) {
 			<div className='flex w-full flex-row items-center justify-around gap-4 rounded-t-md bg-base-200 px-4 py-3.5 shadow-md transition-all duration-100 ease-in-out'>
 				<Button
 					onClick={decreaseMonth}
-					disabled={prevMonthButtonDisabled}>
+					disabled={prevMonthButtonDisabled}
+				>
 					{'<'}
 				</Button>
 				<Select
@@ -95,7 +96,8 @@ export default function DateRange({ getHeaderGroups }) {
 				/>
 				<Button
 					onClick={increaseMonth}
-					disabled={nextMonthButtonDisabled}>
+					disabled={nextMonthButtonDisabled}
+				>
 					{'>'}
 				</Button>
 			</div>

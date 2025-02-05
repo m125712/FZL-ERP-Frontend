@@ -108,7 +108,8 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			formContext={context}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'

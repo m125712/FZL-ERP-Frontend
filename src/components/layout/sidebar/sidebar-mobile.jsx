@@ -31,7 +31,8 @@ const SidebarMobile = () => {
 		<motion.div
 			variants={variants}
 			animate={sidebarOpen ? 'open' : 'closed'}
-			className='fixed right-0 top-0 z-[99999] h-screen'>
+			className='fixed right-0 top-0 z-[99999] h-screen'
+		>
 			<SidebarContent />
 		</motion.div>
 	);

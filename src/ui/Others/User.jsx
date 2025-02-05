@@ -1,6 +1,7 @@
 import { useAuth } from '@/context/auth';
-import cn from '@/lib/cn';
 import { useNetworkState } from '@uidotdev/usehooks';
+
+import cn from '@/lib/cn';
 
 const User = ({ avatar = false }) => {
 	const { user } = useAuth();

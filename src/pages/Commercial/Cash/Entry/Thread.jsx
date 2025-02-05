@@ -206,7 +206,8 @@ const Thread = ({
 					<FormField
 						label='thread_order_info_uuids'
 						title='Order Numbers (Thread)'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name='thread_order_info_uuids'
 							control={control}
@@ -244,7 +245,8 @@ const Thread = ({
 						<FormField
 							label='new_order_info_thread_uuids'
 							title='New Order Numbers (Thread)'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name='new_order_info_thread_uuids'
 								control={control}
@@ -295,7 +297,8 @@ const Thread = ({
 								<th
 									key='is_all_checked_thread'
 									scope='col'
-									className='group w-20 cursor-pointer px-3 py-2'>
+									className='group w-20 cursor-pointer px-3 py-2'
+								>
 									<CheckBoxWithoutLabel
 										label='is_all_checked_thread'
 										checked={isAllChecked}
@@ -320,7 +323,8 @@ const Thread = ({
 								<th
 									key={item}
 									scope='col'
-									className='group cursor-pointer px-3 py-2 transition duration-300'>
+									className='group cursor-pointer px-3 py-2 transition duration-300'
+								>
 									{item}
 								</th>
 							))}
@@ -329,12 +333,14 @@ const Thread = ({
 								<th
 									key='action'
 									scope='col'
-									className='group cursor-pointer px-3 py-2 transition duration-300'>
+									className='group cursor-pointer px-3 py-2 transition duration-300'
+								>
 									Delete
 								</th>
 							)}
 						</>
-					}>
+					}
+				>
 					{threadEntryField.map((item, index) => (
 						<tr
 							key={item.id}
@@ -345,7 +351,8 @@ const Thread = ({
 										`pi_cash_entry_thread[${index}].isDeletable`
 									) &&
 									'bg-error/10 text-error hover:bg-error/20 hover:text-error'
-							)}>
+							)}
+						>
 							{!isUpdate && (
 								<td className={cn(`w-8 ${rowClass}`)}>
 									<CheckBoxWithoutLabel
@@ -452,7 +459,8 @@ const Thread = ({
 								<th
 									key='is_all_checked_thread'
 									scope='col'
-									className='group w-20 cursor-pointer px-3 py-2'>
+									className='group w-20 cursor-pointer px-3 py-2'
+								>
 									<CheckBoxWithoutLabel
 										label='is_all_new_checked_thread'
 										checked={isAllNewChecked}
@@ -481,18 +489,21 @@ const Thread = ({
 									<th
 										key={item}
 										scope='col'
-										className='group cursor-pointer px-3 py-2 transition duration-300'>
+										className='group cursor-pointer px-3 py-2 transition duration-300'
+									>
 										{item}
 									</th>
 								))}
 							</>
-						}>
+						}
+					>
 						{newThreadEntryField.map((item, index) => (
 							<tr
 								key={item.id}
 								className={cn(
 									'relative cursor-pointer bg-base-100 text-primary transition-colors duration-200 ease-in'
-								)}>
+								)}
+							>
 								<td className={cn(`w-8 ${rowClass}`)}>
 									<CheckBoxWithoutLabel
 										label={`new_pi_cash_entry_thread[${index}].is_checked`}
@@ -586,7 +597,8 @@ const Thread = ({
 				<tr
 					className={cn(
 						'relative cursor-pointer transition-colors duration-300 ease-in'
-					)}>
+					)}
+				>
 					<td className='font-semibold text-primary' colSpan={11}>
 						Total Value:{' '}
 						{Number(
@@ -601,7 +613,8 @@ const Thread = ({
 				<tr
 					className={cn(
 						'relative cursor-pointer transition-colors duration-300 ease-in'
-					)}>
+					)}
+				>
 					<td className='font-semibold text-primary' colSpan={11}>
 						Total Value:{' '}
 						{getTotalValue(watch('pi_cash_entry_thread')) +

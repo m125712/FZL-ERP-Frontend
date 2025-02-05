@@ -199,7 +199,8 @@ const Zipper = ({
 					<FormField
 						label='order_info_uuids'
 						title='Order Numbers (Zipper)'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name='order_info_uuids'
 							control={control}
@@ -237,7 +238,8 @@ const Zipper = ({
 						<FormField
 							label='new_order_info_uuids'
 							title='New Order Numbers (Zipper)'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name='new_order_info_uuids'
 								control={control}
@@ -288,7 +290,8 @@ const Zipper = ({
 								<th
 									key='is_all_checked'
 									scope='col'
-									className='group w-20 cursor-pointer px-3 py-2'>
+									className='group w-20 cursor-pointer px-3 py-2'
+								>
 									<CheckBoxWithoutLabel
 										label='is_all_checked'
 										checked={isAllChecked}
@@ -317,7 +320,8 @@ const Zipper = ({
 								<th
 									key={item}
 									scope='col'
-									className='group cursor-pointer px-3 py-2 transition duration-300'>
+									className='group cursor-pointer px-3 py-2 transition duration-300'
+								>
 									{item}
 								</th>
 							))}
@@ -326,12 +330,14 @@ const Zipper = ({
 								<th
 									key='action'
 									scope='col'
-									className='group cursor-pointer px-3 py-2 transition duration-300'>
+									className='group cursor-pointer px-3 py-2 transition duration-300'
+								>
 									Delete
 								</th>
 							)}
 						</>
-					}>
+					}
+				>
 					{orderEntryField.map((item, index) => (
 						<tr
 							key={item.id}
@@ -342,7 +348,8 @@ const Zipper = ({
 										`pi_cash_entry[${index}].isDeletable`
 									) &&
 									'bg-error/10 text-error hover:bg-error/20 hover:text-error'
-							)}>
+							)}
+						>
 							{!isUpdate && (
 								<td className={cn(`w-8 ${rowClass}`)}>
 									<CheckBoxWithoutLabel
@@ -469,7 +476,8 @@ const Zipper = ({
 								<th
 									key='is_all_checked'
 									scope='col'
-									className='group w-20 cursor-pointer px-3 py-2'>
+									className='group w-20 cursor-pointer px-3 py-2'
+								>
 									<CheckBoxWithoutLabel
 										label='is_all_new_checked'
 										checked={isAllNewChecked}
@@ -501,18 +509,21 @@ const Zipper = ({
 									<th
 										key={item}
 										scope='col'
-										className='group cursor-pointer px-3 py-2 transition duration-300'>
+										className='group cursor-pointer px-3 py-2 transition duration-300'
+									>
 										{item}
 									</th>
 								))}
 							</>
-						}>
+						}
+					>
 						{newOrderEntryField.map((item, index) => (
 							<tr
 								key={item.id}
 								className={cn(
 									'relative cursor-pointer bg-base-100 text-primary transition-colors duration-200 ease-in'
-								)}>
+								)}
+							>
 								<td className={cn(`w-8 ${rowClass}`)}>
 									<CheckBoxWithoutLabel
 										label={`new_pi_cash_entry[${index}].is_checked`}

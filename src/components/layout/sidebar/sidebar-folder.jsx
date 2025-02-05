@@ -104,14 +104,16 @@ const SidebarFolder = (props) => {
 			variants={variants}
 			initial='initial'
 			animate='animate'
-			className={''}>
+			className={''}
+		>
 			{/* Render the folder link if it has a path */}
 			{path && (
 				<Link
 					key={name}
 					onClick={handleClick}
 					className={folderClassName}
-					to={path}>
+					to={path}
+				>
 					<span className='truncate'>{name}</span>
 					<ChevronRight
 						className={cn(
@@ -133,7 +135,8 @@ const SidebarFolder = (props) => {
 						// }
 						handleClick();
 					}}
-					className={folderClassName}>
+					className={folderClassName}
+				>
 					<span className='truncate'>{name}</span>
 					<ChevronRight
 						className={cn(
@@ -148,7 +151,8 @@ const SidebarFolder = (props) => {
 			<motion.ul
 				variants={childVariants}
 				animate={isOpen ? 'open' : 'closed'}
-				className='space-y-1 border-l-[1px] border-secondary/40 pl-3 pt-1'>
+				className='space-y-1 border-l-[1px] border-secondary/40 pl-3 pt-1'
+			>
 				{children?.map((child, index) => {
 					if (child?.children) {
 						return <SidebarFolder key={index} {...child} />;

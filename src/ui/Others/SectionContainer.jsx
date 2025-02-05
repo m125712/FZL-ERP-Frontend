@@ -19,7 +19,6 @@ const SectionContainer = ({
 							{buttons.map((e) => e)}
 						</div>
 					)}
-
 				</div>
 				<div className='w-32'>{selector}</div>
 			</div>
@@ -27,7 +26,8 @@ const SectionContainer = ({
 				className={cn(
 					'overflow-hidden rounded-md rounded-t-none border border-secondary/30',
 					contentClassName
-				)}>
+				)}
+			>
 				{children}
 			</div>
 		</div>

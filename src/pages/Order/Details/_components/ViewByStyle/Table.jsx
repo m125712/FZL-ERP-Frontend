@@ -25,7 +25,7 @@ export default function Table({ order_entry, total }) {
 
 	return (
 		<ReactTable title='Details' data={order_entry} columns={columns}>
-			<tr className='bg-slate-200 text font-bold text-primary'>
+			<tr className='text bg-slate-200 font-bold text-primary'>
 				<td colSpan={10} className='text-right'>
 					Total:
 				</td>

@@ -1,6 +1,7 @@
-import { useFetch } from '@/hooks';
 import { useEffect } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
+import { useFetch } from '@/hooks';
+
 import Information from './Information';
 import Table from './Table';
 

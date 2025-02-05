@@ -153,7 +153,8 @@ export default function Index({ dyeing_batch_entry }) {
 		<ReactTableTitleOnly
 			title='Details'
 			data={dyeing_batch_entry}
-			columns={columns}>
+			columns={columns}
+		>
 			<tr className='text-lg font-bold'>
 				<th className='pe-4 text-right' colSpan={7}>
 					Total

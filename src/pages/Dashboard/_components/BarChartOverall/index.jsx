@@ -56,7 +56,8 @@ export function BarChartOverall(
 								key={chart}
 								data-active={activeChart === chart}
 								className='relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-primary/10 sm:border-l sm:border-t-0 sm:px-8 sm:py-6'
-								onClick={() => setActiveChart(chart)}>
+								onClick={() => setActiveChart(chart)}
+							>
 								<span className='text-xs text-primary'>
 									{chartConfig[chart].label}
 								</span>
@@ -71,13 +72,15 @@ export function BarChartOverall(
 			<CardContent className='px-2 sm:p-6'>
 				<ChartContainer
 					config={chartConfig}
-					className='aspect-auto h-[250px] w-full'>
+					className='aspect-auto h-[250px] w-full'
+				>
 					<BarChart
 						data={data}
 						margin={{
 							left: 12,
 							right: 12,
-						}}>
+						}}
+					>
 						<CartesianGrid vertical={false} />
 						<XAxis
 							dataKey='date'

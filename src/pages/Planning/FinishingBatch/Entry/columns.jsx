@@ -123,7 +123,8 @@ export const Columns = ({
 											shouldDirty: true,
 										}
 									)
-								}>
+								}
+							>
 								Copy
 							</label>
 						)}
@@ -221,7 +222,8 @@ export const Columns = ({
 										shouldDirty: true,
 									}
 								)
-							}>
+							}
+						>
 							Copy
 						</label>
 						{info.getValue()}

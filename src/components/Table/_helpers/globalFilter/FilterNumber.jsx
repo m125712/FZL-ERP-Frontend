@@ -48,7 +48,8 @@ const FilterNumber = ({ columnName, column, isFullFilter }) => {
 		<Template
 			columnName={columnName}
 			onClick={() => setFilterValue(undefined)}
-			showResetButton={getFilterValue()?.[0] || getFilterValue()?.[1]}>
+			showResetButton={getFilterValue()?.[0] || getFilterValue()?.[1]}
+		>
 			<div className='flex flex-col justify-between gap-1 md:flex-row'>
 				{/* <DebouncedInput
 					placeholder={`Min: ${min}`}

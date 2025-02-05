@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useFetch } from '@/hooks';
+
 import {
 	FormField,
 	Input,
@@ -7,9 +10,8 @@ import {
 	SectionEntryBody,
 	Textarea,
 } from '@/ui';
+
 import isJSON from '@/util/isJson';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 export default function Header({ errors, control, getValues, Controller }) {
 	const { value: batch_number } = useFetch(`/other/thread/batch/value/label`);
@@ -50,7 +52,8 @@ export default function Header({ errors, control, getValues, Controller }) {
 					<FormField
 						label='coning_operator'
 						title='Operator'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name='coning_operator'
 							control={control}
@@ -77,7 +80,8 @@ export default function Header({ errors, control, getValues, Controller }) {
 					<FormField
 						label='coning_supervisor'
 						title='Supervisor'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name='coning_supervisor'
 							control={control}
@@ -103,7 +107,8 @@ export default function Header({ errors, control, getValues, Controller }) {
 					<FormField
 						label='coning_machines'
 						title='Machine Speed'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name='coning_machines'
 							control={control}

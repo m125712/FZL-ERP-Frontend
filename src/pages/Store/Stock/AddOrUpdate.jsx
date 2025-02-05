@@ -124,7 +124,8 @@ export default function Index({
 			}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
-			onClose={onClose}>
+			onClose={onClose}
+		>
 			<div className='mb-4 flex flex-col gap-2 rounded bg-base-200 p-2 md:flex-row'>
 				<FormField label='section_uuid' title='Section' errors={errors}>
 					<Controller

@@ -196,7 +196,8 @@ export default function Index() {
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				noValidate
-				className='flex flex-col gap-4'>
+				className='flex flex-col gap-4'
+			>
 				<DynamicField
 					title={uuid == null ? `Entry Details` : 'Update Details'}
 					handelAppend={handleSliderDieCastingAppend}
@@ -214,7 +215,8 @@ export default function Index() {
 						<th key={item} scope='col' className='px-1 py-2'>
 							{item}
 						</th>
-					))}>
+					))}
+				>
 					{isUpdate && fields.length === 0 && (
 						<TableNoData colSpan={8} />
 					)}
@@ -244,7 +246,8 @@ export default function Index() {
 										dynamicerror={
 											errors?.array?.[index]
 												?.die_casting_uuid
-										}>
+										}
+									>
 										<Controller
 											name={`array[${index}].die_casting_uuid`}
 											control={control}
@@ -286,7 +289,8 @@ export default function Index() {
 										dynamicerror={
 											errors?.array?.[index]
 												?.order_description_uuid
-										}>
+										}
+									>
 										<Controller
 											name={`array[${index}].order_description_uuid`}
 											control={control}
@@ -360,7 +364,8 @@ export default function Index() {
 									className={cn(
 										'w-24 text-center font-semibold text-slate-800',
 										tdClass
-									)}>
+									)}
+								>
 									{watch(`array[${index}].push`) *
 										watch(`array[${index}].cavity_goods`)}
 								</td>

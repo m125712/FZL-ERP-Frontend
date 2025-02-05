@@ -27,7 +27,8 @@ export default function Index({ modalId = '', setProceed, text = '' }) {
 				onSubmit={onSubmit}
 				noValidate
 				method='dialog'
-				className='modal-box bg-gray-50 text-error'>
+				className='modal-box bg-gray-50 text-error'
+			>
 				<Body text={text} />
 				<ProceedFooter {...{ handelCancelClick }} />
 			</form>

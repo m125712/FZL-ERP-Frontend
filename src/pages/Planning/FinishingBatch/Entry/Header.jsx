@@ -64,7 +64,8 @@ export default function Header({
 							{qty?.total_production_capacity}
 						</span>
 					</div>
-				}>
+				}
+			>
 				<div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
 					<DateInput
 						label='production_date'
@@ -77,7 +78,8 @@ export default function Header({
 					<FormField
 						label='order_description_uuid'
 						title='Order No'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name='order_description_uuid'
 							control={control}

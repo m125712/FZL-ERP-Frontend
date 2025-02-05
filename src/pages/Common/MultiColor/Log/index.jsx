@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 
-import TapeReceived from './TapeReceived';
-import TapeToDyeing from './TapeToDyeing';
 import PageInfo from '@/util/PageInfo';
 
-export default function index() {
+import TapeReceived from './TapeReceived';
+import TapeToDyeing from './TapeToDyeing';
 
+export default function index() {
 	useEffect(() => {
 		document.title = 'Log';
 	}, []);

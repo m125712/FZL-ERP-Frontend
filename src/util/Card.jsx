@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+
 const items = [
 	{
 		title: 'Lossless Youths',
@@ -44,7 +45,8 @@ export default function Card() {
 					<li
 						key={index}
 						className='item'
-						style={{ backgroundImage: `url('${item.image}')` }}>
+						style={{ backgroundImage: `url('${item.image}')` }}
+					>
 						<div className='content'>
 							<h2 className='title'>{item.title}</h2>
 							<p className='description'>{item.description}</p>
@@ -56,10 +58,12 @@ export default function Card() {
 			<nav className='nav'>
 				<ion-icon
 					className='prev btn'
-					name='arrow-back-outline'></ion-icon>
+					name='arrow-back-outline'
+				></ion-icon>
 				<ion-icon
 					className='next btn'
-					name='arrow-forward-outline'></ion-icon>
+					name='arrow-forward-outline'
+				></ion-icon>
 			</nav>
 		</main>
 	);

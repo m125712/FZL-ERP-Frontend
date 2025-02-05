@@ -126,12 +126,7 @@ export const MetalRoutes = [
 						path: '/metal/finishing/log',
 						element: <MetalFinishingTrxLog />,
 						page_name: 'metal__finishing_log',
-						actions: [
-							'read',
-							'create',
-							'delete',
-							'update',
-						],
+						actions: ['read', 'create', 'delete', 'update'],
 					},
 				],
 			},

@@ -272,7 +272,8 @@ export default function Index() {
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
-					className='flex flex-col'>
+					className='flex flex-col'
+				>
 					<div className='space-y-6'>
 						<Header
 							{...{
@@ -298,10 +299,12 @@ export default function Index() {
 								<th
 									key={item}
 									scope='col'
-									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-4 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
+									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-4 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'
+								>
 									{item}
 								</th>
-							))}>
+							))}
+						>
 							{purchaseField.map((item, index) => (
 								<tr key={item.id} className=''>
 									<td className={`${rowClass}`}>
@@ -309,7 +312,8 @@ export default function Index() {
 											label={`purchase[${index}].material_uuid`}
 											title='Material'
 											is_title_needed='false'
-											errors={errors}>
+											errors={errors}
+										>
 											<Controller
 												name={`purchase[${index}].material_uuid`}
 												control={control}
@@ -422,7 +426,8 @@ export default function Index() {
 							<tr className='border-t border-primary/30'>
 								<td
 									className='py-4 text-right font-bold'
-									colSpan='2'>
+									colSpan='2'
+								>
 									Total Price:
 								</td>
 								<td className='py-4 font-bold'>

@@ -1,17 +1,17 @@
-import styles from "./index.module.css";
+import styles from './index.module.css';
 
 const Example = () => {
 	return (
-		<div className="grid h-screen place-content-center bg-black">
+		<div className='grid h-screen place-content-center bg-black'>
 			<BubbleText />
 		</div>
 	);
 };
 
-const BubbleText = ({ text = "FZL" }) => {
+const BubbleText = ({ text = 'FZL' }) => {
 	return (
-		<h2 className="text-center text-5xl font-medium text-primary-content">
-			{text.split("").map((child, idx) => (
+		<h2 className='text-center text-5xl font-medium text-primary-content'>
+			{text.split('').map((child, idx) => (
 				<span className={styles.hoverText} key={idx}>
 					{child}
 				</span>

@@ -1,8 +1,8 @@
 import { useDyeingFinishingBatchByUUID } from '@/state/Dyeing';
+import { useParams } from 'react-router-dom';
 
 import Information from './Information';
 import Table from './Table';
-import { useParams } from 'react-router-dom';
 
 export default function Details() {
 	const { batch_uuid } = useParams();

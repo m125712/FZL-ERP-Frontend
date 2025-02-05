@@ -33,7 +33,6 @@ export default function Index({
 	// 	useCommonTapeToCoil();
 	const schema = {
 		...DYEING_AGAINST_STOCK_SCHEMA,
-		
 	};
 
 	const { register, handleSubmit, errors, reset, context } = useRHF(
@@ -78,7 +77,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<JoinInput
 				label='trx_quantity'
 				title='Transfer Quantity'

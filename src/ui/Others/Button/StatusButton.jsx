@@ -27,7 +27,8 @@ export default function StatusButton({
 				props.size,
 				className
 			)}
-			{...props}>
+			{...props}
+		>
 			{showIdx ? props.idx : <Icon className='size-5' />}
 		</button>
 	);

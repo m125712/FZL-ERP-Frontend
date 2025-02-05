@@ -23,7 +23,7 @@ export default function Index() {
 		`?delivery_date=${date}&vehicle=${vehicle}`,
 		{ enabled: true }
 	);
- 
+
 	const info = new PageInfo(`Challan `, url, 'delivery__challan_by_date');
 	const haveAccess = useAccess('delivery__challan_by_date');
 

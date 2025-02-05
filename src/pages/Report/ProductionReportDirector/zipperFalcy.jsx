@@ -63,12 +63,14 @@ export default function Index() {
 							<th
 								key={index}
 								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'>
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-3 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'
+							>
 								{item}
 							</th>
 						))}
 					</>
-				}>
+				}
+			>
 				{data.map((item, i) => (
 					<React.Fragment key={i}>
 						{item.parties.map((party, j) => (
@@ -87,7 +89,8 @@ export default function Index() {
 																Type_header[i]
 																	.descriptions
 																	.length
-															}>
+															}
+														>
 															{item.item_name}
 														</td>
 													)}
@@ -101,7 +104,8 @@ export default function Index() {
 																.party[j]
 																.parties_header
 																.length
-														}>
+														}
+													>
 														{party.party_name}
 													</td>
 												)}
@@ -113,30 +117,35 @@ export default function Index() {
 														rowSpan={
 															order.descriptions
 																.length
-														}>
+														}
+													>
 														{order.order_number}
 													</td>
 												)}
 
 												{/* Render Item Description and Quantities */}
 												<td
-													className={`w-32 ${rowClass}`}>
+													className={`w-32 ${rowClass}`}
+												>
 													{desc.item_description}
 												</td>
 												<td
-													className={`w-32 ${rowClass}`}>
+													className={`w-32 ${rowClass}`}
+												>
 													{
 														desc.total_close_end_quantity
 													}
 												</td>
 												<td
-													className={`w-32 ${rowClass}`}>
+													className={`w-32 ${rowClass}`}
+												>
 													{
 														desc.total_open_end_quantity
 													}
 												</td>
 												<td
-													className={`w-32 ${rowClass}`}>
+													className={`w-32 ${rowClass}`}
+												>
 													{desc.total_quantity}
 												</td>
 											</tr>

@@ -32,7 +32,7 @@ export default function index() {
 				accessorKey: 'trx_to',
 				header: 'Trx to',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue().replace(/_/g, " "),
+				cell: (info) => info.getValue().replace(/_/g, ' '),
 			},
 			{
 				accessorKey: 'trx_quantity',

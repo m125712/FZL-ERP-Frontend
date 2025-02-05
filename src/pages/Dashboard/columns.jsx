@@ -192,7 +192,8 @@ export const stock_status_columns = [
 				<span
 					className={
 						stock < threshold ? 'text-error' : 'text-success'
-					}>
+					}
+				>
 					{stock}
 				</span>
 			);

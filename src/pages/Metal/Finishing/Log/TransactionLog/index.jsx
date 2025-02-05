@@ -1,13 +1,15 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useMetalFinishingTrxLog } from '@/state/Metal';
+import { useAccess, useFetchFunc } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
-
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
+
 import SFGAddOrUpdate from './AddOrUpdate';
-import { useMetalFinishingTrxLog } from '@/state/Metal';
 
 export default function Index() {
 	const { data, isLoading, deleteData } = useMetalFinishingTrxLog();

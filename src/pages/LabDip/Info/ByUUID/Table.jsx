@@ -109,9 +109,7 @@ export default function Index({ recipe, order_info_uuid }) {
 									(!access || Number(info.getValue()) === 1))
 							}
 							onChange={() =>
-								handelPPsRequiredStatusChange(
-									info.row.index
-								)
+								handelPPsRequiredStatusChange(info.row.index)
 							}
 							checked={Number(info.getValue()) === 1}
 						/>
@@ -167,12 +165,9 @@ export default function Index({ recipe, order_info_uuid }) {
 		await updateData.mutateAsync({
 			url: `/lab-dip/info-entry/${recipe[idx]?.info_entry_uuid}`,
 			updatedData: {
-				is_pps_req:
-					recipe[idx]?.is_pps_req === 1 ? 0 : 1,
-					is_pps_req_date:
-					recipe[idx]?.is_pps_req === 1
-						? null
-						: GetDateTime(),
+				is_pps_req: recipe[idx]?.is_pps_req === 1 ? 0 : 1,
+				is_pps_req_date:
+					recipe[idx]?.is_pps_req === 1 ? null : GetDateTime(),
 			},
 			isOnCloseNeeded: false,
 		});

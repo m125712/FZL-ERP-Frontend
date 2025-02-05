@@ -37,7 +37,8 @@ const DashboardHeader = ({ handleRefresh, dataPreview, setDataPreview }) => {
 
 					<button
 						onClick={handleRefresh}
-						className='btn btn-accent btn-sm'>
+						className='btn btn-accent btn-sm'
+					>
 						Refresh
 						<RefreshCw className='size-4' />
 					</button>

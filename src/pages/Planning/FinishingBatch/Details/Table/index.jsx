@@ -95,11 +95,13 @@ export default function Table({ entries }) {
 			<ReactTableTitleOnly
 				title='Finishing Batch Details'
 				data={entries}
-				columns={columns}>
+				columns={columns}
+			>
 				<tr className='bg-slate-200 font-semibold'>
 					<td
 						className='px-4 py-2 text-right text-sm font-semibold'
-						colSpan={5}>
+						colSpan={5}
+					>
 						Total:
 					</td>
 					<td className='px-3 py-2 text-sm'>{total_qty.batchQty}</td>

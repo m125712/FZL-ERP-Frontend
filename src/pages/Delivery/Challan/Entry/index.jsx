@@ -373,7 +373,8 @@ export default function Index() {
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}
-				noValidate>
+				noValidate
+			>
 				<Header
 					{...{
 						register,
@@ -396,12 +397,14 @@ export default function Index() {
 								<th
 									key={item}
 									scope='col'
-									className='group cursor-pointer px-3 py-2 transition duration-300'>
+									className='group cursor-pointer px-3 py-2 transition duration-300'
+								>
 									{item}
 								</th>
 							))}
 						</>
-					}>
+					}
+				>
 					{challanEntryField.map((item, index) => {
 						return (
 							<tr
@@ -413,7 +416,8 @@ export default function Index() {
 											`challan_entry[${index}].isDeletable`
 										) &&
 										'bg-error/10 text-error hover:bg-error/20 hover:text-error'
-								)}>
+								)}
+							>
 								<td className={`w-32 ${rowClass}`}>
 									<CustomLink
 										label={getValues(
@@ -554,12 +558,14 @@ export default function Index() {
 									<th
 										key={item}
 										scope='col'
-										className='group cursor-pointer px-3 py-2 transition duration-300'>
+										className='group cursor-pointer px-3 py-2 transition duration-300'
+									>
 										{item}
 									</th>
 								))}
 							</>
-						}>
+						}
+					>
 						{newChallanEntryField.map((item, index) => {
 							return (
 								<tr
@@ -571,7 +577,8 @@ export default function Index() {
 												`new_challan_entry[${index}].isDeletable`
 											) &&
 											'bg-error/10 text-error hover:bg-error/20 hover:text-error'
-									)}>
+									)}
+								>
 									<td className={`w-32 ${rowClass}`}>
 										<CustomLink
 											label={getValues(
@@ -672,9 +679,8 @@ export default function Index() {
 
 						<tr className='bg-slate-200 text-sm font-semibold text-primary'>
 							<td
-								colSpan={
-									watch('item_for') === 'slider' ? 3 : 6
-								}>
+								colSpan={watch('item_for') === 'slider' ? 3 : 6}
+							>
 								<div className='flex justify-end py-2'>
 									Total Quantity:
 								</div>

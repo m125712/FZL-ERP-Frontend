@@ -39,7 +39,8 @@ const SidebarFile = ({ path, name }) => {
 							? 'bg-gradient-to-r from-accent/10 to-accent/30 font-medium text-primary-content'
 							: 'text-primary-content/70 hover:bg-secondary/20 hover:text-primary-content'
 					)
-				}>
+				}
+			>
 				<span className='block w-full truncate'>{name}</span>
 
 				{matchUrl(path, pathname) ? (

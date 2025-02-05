@@ -101,7 +101,8 @@ const DynamicDeliveryTable = ({
 						<th
 							key={item}
 							scope='col'
-							className='group cursor-pointer px-3 py-2 transition duration-300'>
+							className='group cursor-pointer px-3 py-2 transition duration-300'
+						>
 							{item}
 						</th>
 					))}
@@ -110,12 +111,14 @@ const DynamicDeliveryTable = ({
 						<th
 							key='action'
 							scope='col'
-							className='group cursor-pointer px-3 py-2 transition duration-300'>
+							className='group cursor-pointer px-3 py-2 transition duration-300'
+						>
 							Delete
 						</th>
 					)}
 				</>
-			}>
+			}
+		>
 			{packingListEntryField.map((item, index) => (
 				<tr
 					key={item.id}
@@ -124,7 +127,8 @@ const DynamicDeliveryTable = ({
 						isUpdate &&
 							watch(`${entryFiledName}[${index}].isDeletable`) &&
 							'bg-error/10 text-error hover:bg-error/20'
-					)}>
+					)}
+				>
 					<td className={`w-32 ${rowClass}`}>
 						{/* <CustomLink
 							label={getValues(
@@ -296,7 +300,8 @@ const DynamicDeliveryTable = ({
 							className={cn(
 								rowClass,
 								'min-w-20 border-l-2 border-base-200'
-							)}>
+							)}
+						>
 							<RemoveButton
 								showButton
 								onClick={() =>

@@ -160,7 +160,6 @@ export const getTransferArea = [
 	{ label: 'Metal Teeth Molding', value: 'metal_teeth_molding' },
 ];
 
-
 export const getPurposes = [
 	{
 		value: 'general',

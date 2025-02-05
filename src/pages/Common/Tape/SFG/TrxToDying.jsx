@@ -143,11 +143,13 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField
 				label='order_entry_id'
 				title='Order Entry ID'
-				errors={errors}>
+				errors={errors}
+			>
 				<Controller
 					name={'order_entry_id'}
 					control={control}

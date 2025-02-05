@@ -4,21 +4,16 @@ import { useMetalFinishingRM } from '@/state/Metal';
 import { useOtherMaterial } from '@/state/Other';
 import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 
-
-
 import { AddModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
 
-
-
-import { RM_MATERIAL_USED_EDIT_NULL, RM_MATERIAL_USED_EDIT_SCHEMA } from '@util/Schema';
+import {
+	RM_MATERIAL_USED_EDIT_NULL,
+	RM_MATERIAL_USED_EDIT_SCHEMA,
+} from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
-
-
-
-
 
 export default function Index({
 	modalId = '',
@@ -132,7 +127,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField label='section' title='Section' errors={errors}>
 				<Controller
 					name={'section'}

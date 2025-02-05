@@ -39,7 +39,8 @@ export const Template = ({
 				<button
 					type='button'
 					className='group/btn btn btn-circle btn-ghost btn-error btn-xs'
-					onClick={onClick}>
+					onClick={onClick}
+				>
 					<Close className='h-4 w-4 text-error group-hover/btn:text-primary-content' />
 				</button>
 			)}

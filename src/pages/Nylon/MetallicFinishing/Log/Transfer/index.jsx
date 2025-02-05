@@ -1,17 +1,20 @@
-import { Suspense } from '@/components/Feedback';
-import { DeleteModal } from '@/components/Modal';
-import ReactTable from '@/components/Table';
-import { useAccess, useFetchFunc } from '@/hooks';
+import { lazy, useEffect, useMemo, useState } from 'react';
 import { useDyeingTransfer } from '@/state/Dyeing';
 import { useMetalTMTapeLog } from '@/state/Metal';
 import {
 	useNylonMetallicFinishingTapeLog,
 	useNylonPlasticFinishingTapeLog,
 } from '@/state/Nylon';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
-import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAccess, useFetchFunc } from '@/hooks';
+
+import { Suspense } from '@/components/Feedback';
+import { DeleteModal } from '@/components/Modal';
+import ReactTable from '@/components/Table';
+import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
+import PageInfo from '@/util/PageInfo';
+
 const Update = lazy(() => import('./Update'));
 
 export default function Index() {

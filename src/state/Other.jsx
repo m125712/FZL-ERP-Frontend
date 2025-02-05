@@ -272,7 +272,9 @@ export const useOtherSliderDieCastingType = (param) =>
 export const useOtherSliderStockWithDescription = (query) =>
 	createGlobalState({
 		queryKey: otherQK.sliderStockWithDescription(query),
-		url: query? `/other/slider/stock-with-order-description/value/label?${query}` : `/other/slider/stock-with-order-description/value/label`,
+		url: query
+			? `/other/slider/stock-with-order-description/value/label?${query}`
+			: `/other/slider/stock-with-order-description/value/label`,
 	});
 // GET OTHER Packing List
 export const useOtherPackingListByOrderInfoUUID = (uuid) =>

@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 
-import PageInfo from '@/util/PageInfo';
 import { RmIndex } from '@/components/Common';
+
+import PageInfo from '@/util/PageInfo';
 import { getTransactionAreaSliderColoring } from '@/util/TransactionArea';
 
 export default function Index() {

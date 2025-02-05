@@ -1,10 +1,12 @@
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useAdminDepartments } from '@/state/Admin';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useAdminDepartments } from '@/state/Admin';
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));

@@ -103,7 +103,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<div className='flex gap-1'>
 				<FormField label='item_uuid' title='Item' errors={errors}>
 					<Controller
@@ -128,7 +129,8 @@ export default function Index({
 				<FormField
 					label='nylon_stopper_uuid'
 					title='Nylon Stopper'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'nylon_stopper_uuid'}
 						control={control}
@@ -153,7 +155,8 @@ export default function Index({
 				<FormField
 					label='zipper_number_uuid'
 					title='Zipper Number'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'zipper_number_uuid'}
 						control={control}
@@ -176,7 +179,8 @@ export default function Index({
 				<FormField
 					label='end_type_uuid'
 					title='End_type'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'end_type_uuid'}
 						control={control}

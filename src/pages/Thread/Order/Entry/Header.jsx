@@ -64,7 +64,7 @@ export default function Header({
 				header={
 					<div className='flex justify-end gap-2 p-2 text-sm'>
 						{isUpdate && (
-							<div className='rounded-md border-2 border-dashed border-red-600 px-1 text-gray-600 flex items-center'>
+							<div className='flex items-center rounded-md border-2 border-dashed border-red-600 px-1 text-gray-600'>
 								<CheckBox
 									label='is_cancelled'
 									title='Cancelled'
@@ -79,7 +79,7 @@ export default function Header({
 								/>
 							</div>
 						)}
-						<div className='rounded-md border border-accent/50 bg-primary px-1 flex items-center'>
+						<div className='flex items-center rounded-md border border-accent/50 bg-primary px-1'>
 							<CheckBox
 								label='is_sample'
 								title='Sample'
@@ -89,7 +89,7 @@ export default function Header({
 								{...{ register, errors }}
 							/>
 						</div>
-						<div className='rounded-md border border-accent/50 bg-primary px-1 flex items-center'>
+						<div className='flex items-center rounded-md border border-accent/50 bg-primary px-1'>
 							<CheckBox
 								title='Bill'
 								label='is_bill'
@@ -99,7 +99,7 @@ export default function Header({
 								{...{ register, errors }}
 							/>
 						</div>
-						<div className='rounded-md border border-accent/50 bg-primary px-1 flex items-center'>
+						<div className='flex items-center rounded-md border border-accent/50 bg-primary px-1'>
 							<CheckBox
 								title='Cash'
 								label='is_cash'
@@ -114,7 +114,8 @@ export default function Header({
 								label='revision_no'
 								title='Revision No'
 								is_title_needed='false'
-								errors={errors}>
+								errors={errors}
+							>
 								<Controller
 									name={'revision_no'}
 									control={control}
@@ -139,12 +140,14 @@ export default function Header({
 							</FormField>
 						</div>
 					</div>
-				}>
+				}
+			>
 				<div className='flex flex-col gap-1 md:flex-row'>
 					<FormField
 						label='marketing_uuid'
 						title='Marketing'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'marketing_uuid'}
 							control={control}
@@ -212,7 +215,8 @@ export default function Header({
 					<FormField
 						label='merchandiser_uuid'
 						title='Merchandiser'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'merchandiser_uuid'}
 							control={control}
@@ -237,7 +241,8 @@ export default function Header({
 					<FormField
 						label='factory_uuid'
 						title='Factory'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'factory_uuid'}
 							control={control}
@@ -262,7 +267,8 @@ export default function Header({
 					<FormField
 						label='delivery_date'
 						title='Delivery Date'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'delivery_date'}
 							control={control}

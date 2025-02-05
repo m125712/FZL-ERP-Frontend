@@ -14,7 +14,8 @@ const EmptySlotCard = ({ dyeingDate, machine_uuid, slot_no }) => {
 			<div className='flex size-full items-center justify-center transition-colors hover:cursor-pointer hover:bg-primary/5'>
 				<button
 					onClick={() => navigate(url.zipper)}
-					className='btn btn-primary btn-xs gap-0.5'>
+					className='btn btn-primary btn-xs gap-0.5'
+				>
 					<Plus className='size-4' />
 					Zipper
 				</button>
@@ -22,7 +23,8 @@ const EmptySlotCard = ({ dyeingDate, machine_uuid, slot_no }) => {
 			<div className='flex size-full items-center justify-center transition-colors hover:cursor-pointer hover:bg-primary/5'>
 				<button
 					onClick={() => navigate(url.thread)}
-					className='btn btn-secondary btn-xs gap-0.5'>
+					className='btn btn-secondary btn-xs gap-0.5'
+				>
 					<Plus className='size-4' />
 					Thread
 				</button>

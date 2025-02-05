@@ -6,7 +6,8 @@ const Copy = ({ ...props }) => {
 			viewBox='0 0 24 24'
 			strokeWidth={1.9}
 			stroke='currentColor'
-			{...props}>
+			{...props}
+		>
 			<path
 				strokeLinecap='round'
 				strokeLinejoin='round'
@@ -29,7 +30,8 @@ const Plus = ({ ...props }) => {
 			strokeLinecap='round'
 			strokeLinejoin='round'
 			className='lucide lucide-plus'
-			{...props}>
+			{...props}
+		>
 			<path d='M5 12h14' />
 			<path d='M12 5v14' />
 		</svg>
@@ -47,7 +49,8 @@ const Send = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M10 14l11 -11' />
 			<path d='M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5' />
@@ -67,7 +70,8 @@ const Receive = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M10 14l11 -11' />
 			<path d='M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5' />
@@ -87,7 +91,8 @@ const Edit = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4' />
 			<path d='M13.5 6.5l4 4' />
@@ -107,7 +112,8 @@ const Trash = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M4 7l16 0' />
 			<path d='M10 11l0 6' />
@@ -130,7 +136,8 @@ const Add = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M12 5l0 14' />
 			<path d='M5 12l14 0' />
@@ -150,7 +157,8 @@ const ListPlus = ({ ...props }) => {
 			strokeLinecap='round'
 			strokeLinejoin='round'
 			className='lucide lucide-list-plus'
-			{...props}>
+			{...props}
+		>
 			<path d='M11 12H3' />
 			<path d='M16 6H3' />
 			<path d='M16 18H3' />
@@ -168,7 +176,8 @@ const Close = ({ ...props }) => {
 			fill='none'
 			viewBox='0 0 24 24'
 			stroke='currentColor'
-			{...props}>
+			{...props}
+		>
 			<path
 				strokeLinecap='round'
 				strokeLinejoin='round'
@@ -191,7 +200,8 @@ const DropDown = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M7 7l5 5l5 -5' />
 			<path d='M7 13l5 5l5 -5' />
@@ -207,7 +217,8 @@ const Menu = ({ ...props }) => {
 			fill='none'
 			viewBox='0 0 24 24'
 			stroke='currentColor'
-			{...props}>
+			{...props}
+		>
 			<path
 				strokeLinecap='round'
 				strokeLinejoin='round'
@@ -226,7 +237,8 @@ const Bell = ({ ...props }) => {
 			fill='none'
 			viewBox='0 0 24 24'
 			stroke='currentColor'
-			{...props}>
+			{...props}
+		>
 			<path
 				strokeLinecap='round'
 				strokeLinejoin='round'
@@ -245,7 +257,8 @@ const Search = ({ ...props }) => {
 			fill='none'
 			viewBox='0 0 24 24'
 			stroke='currentColor'
-			{...props}>
+			{...props}
+		>
 			<path
 				strokeLinecap='round'
 				strokeLinejoin='round'
@@ -268,7 +281,8 @@ const Up = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M12 5l0 14' />
 			<path d='M16 9l-4 -4' />
@@ -289,7 +303,8 @@ const Down = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M12 5l0 14' />
 			<path d='M16 15l-4 4' />
@@ -310,7 +325,8 @@ const Check = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M5 12l5 5l10 -10' />
 		</svg>
@@ -329,7 +345,8 @@ const ArrowBack = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M9 14l-4 -4l4 -4' />
 			<path d='M5 10h11a4 4 0 1 1 0 8h-1' />
@@ -348,7 +365,8 @@ const Kitchen = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M4 3h8l-1 9h-6z' />
 			<path d='M7 18h2v3h-2z' />
@@ -366,7 +384,8 @@ const Background = ({ ...props }) => {
 			height='47'
 			viewBox='0 0 53 47'
 			fill='none'
-			xmlns='http://www.w3.org/2000/svg'>
+			xmlns='http://www.w3.org/2000/svg'
+		>
 			<rect width='53' height='47' fill='none' />
 			<path
 				d='M10.0064 29.3777L18.3714 20.9999'
@@ -426,7 +445,8 @@ const Update = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M9 4.55a8 8 0 0 1 6 14.9m0 -4.45v5h5' />
 			<path d='M5.63 7.16l0 .01' />
@@ -450,7 +470,8 @@ const TransferIn = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M4 18v3h16v-14l-8 -4l-8 4v3' />
 			<path d='M4 14h9' />
@@ -471,7 +492,8 @@ const Chef = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M12 3c1.918 0 3.52 1.35 3.91 3.151a4 4 0 0 1 2.09 7.723l0 7.126h-12v-7.126a4 4 0 1 1 2.092 -7.723a4 4 0 0 1 3.908 -3.151z' />
 			<path d='M6.161 17.009l11.839 -.009' />
@@ -491,7 +513,8 @@ const ShoppingCart = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0' />
 			<path d='M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0' />
@@ -514,7 +537,8 @@ const UserShield = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M6 21v-2a4 4 0 0 1 4 -4h2' />
 			<path d='M22 16c0 4 -2.5 6 -3.5 6s-3.5 -2 -3.5 -6c1 0 2.5 -.5 3.5 -1.5c1 1 2.5 1.5 3.5 1.5z' />
@@ -535,7 +559,8 @@ const Branch = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M19.258 10.258l-7.258 -7.258l-9 9h2v7a2 2 0 0 0 2 2h4' />
 			<path d='M9 21v-6a2 2 0 0 1 2 -2h1.5' />
@@ -556,7 +581,8 @@ const TrashCross = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path
 				d='M20 6a1 1 0 0 1 .117 1.993l-.117 .007h-.081l-.919 11a3 3 0 0 1 -2.824 2.995l-.176 .005h-8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-.005 -.167l-.923 -11.083h-.08a1 1 0 0 1 -.117 -1.993l.117 -.007h16zm-9.489 5.14a1 1 0 0 0 -1.218 1.567l1.292 1.293l-1.292 1.293l-.083 .094a1 1 0 0 0 1.497 1.32l1.293 -1.292l1.293 1.292l.094 .083a1 1 0 0 0 1.32 -1.497l-1.292 -1.293l1.292 -1.293l.083 -.094a1 1 0 0 0 -1.497 -1.32l-1.293 1.292l-1.293 -1.292l-.094 -.083z'
@@ -584,7 +610,8 @@ const ArrowUpDown = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M7 3l0 18' />
 			<path d='M10 6l-3 -3l-3 3' />
@@ -602,7 +629,8 @@ const Reload = ({ ...props }) => {
 			strokeWidth={2}
 			stroke='currentColor'
 			className='size-6'
-			{...props}>
+			{...props}
+		>
 			<path
 				strokeLinecap='round'
 				strokeLinejoin='round'
@@ -624,7 +652,8 @@ const Viewer = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0' />
 			<path d='M6 21v-2a4 4 0 0 1 4 -4h1.5' />
@@ -647,7 +676,8 @@ const Download = ({ ...props }) => {
 			strokeLinecap='round'
 			strokeLinejoin='round'
 			className='lucide lucide-download'
-			{...props}>
+			{...props}
+		>
 			<path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4' />
 			<polyline points='7 10 12 15 17 10' />
 			<line x1='12' x2='12' y1='15' y2='3' />
@@ -667,7 +697,8 @@ const Filter = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path
 				d='M6 3a1 1 0 0 1 .993 .883l.007 .117v3.171a3.001 3.001 0 0 1 0 5.658v7.171a1 1 0 0 1 -1.993 .117l-.007 -.117v-7.17a3.002 3.002 0 0 1 -1.995 -2.654l-.005 -.176l.005 -.176a3.002 3.002 0 0 1 1.995 -2.654v-3.17a1 1 0 0 1 1 -1z'
@@ -700,7 +731,8 @@ const PDF = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none'></path>
 			<path d='M14 3v4a1 1 0 0 0 1 1h4'></path>
 			<path d='M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4'></path>
@@ -724,7 +756,8 @@ const From = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none'></path>
 			<path d='M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0'></path>
 			<path d='M12.02 21.485a1.996 1.996 0 0 1 -1.433 -.585l-4.244 -4.243a8 8 0 1 1 13.403 -3.651'></path>
@@ -741,7 +774,8 @@ const LeftArrow = ({ ...props }) => {
 			viewBox='0 0 20 20'
 			fill='currentColor'
 			aria-hidden='true'
-			className='w-5'>
+			className='w-5'
+		>
 			<path
 				fillRule='evenodd'
 				d='M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z'
@@ -758,7 +792,8 @@ const RightArrow = ({ ...props }) => {
 			viewBox='0 0 20 20'
 			fill='currentColor'
 			aria-hidden='true'
-			className='w-5'>
+			className='w-5'
+		>
 			<path
 				fillRule='evenodd'
 				d='M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z'
@@ -779,12 +814,14 @@ const To = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none'></path>
 			<path
 				d='M18.364 4.636a9 9 0 0 1 .203 12.519l-.203 .21l-4.243 4.242a3 3 0 0 1 -4.097 .135l-.144 -.135l-4.244 -4.243a9 9 0 0 1 12.728 -12.728zm-6.364 3.364a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z'
 				strokeWidth={0}
-				fill='currentColor'></path>
+				fill='currentColor'
+			></path>
 		</svg>
 	);
 };
@@ -801,7 +838,8 @@ const Voucher = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M3 5m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z' />
 			<path d='M7 16l3 -3l3 3' />
@@ -816,7 +854,8 @@ const MenuDown = ({ ...props }) => {
 			xmlns='http://www.w3.org/2000/svg'
 			viewBox='0 0 20 20'
 			fill='currentColor'
-			{...props}>
+			{...props}
+		>
 			<path
 				fillRule='evenodd'
 				d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z'
@@ -834,7 +873,8 @@ const LogoutIcon = ({ ...props }) => {
 			viewBox='0 0 24 24'
 			strokeWidth={1.5}
 			stroke='currentColor'
-			{...props}>
+			{...props}
+		>
 			<path
 				strokeLinecap='round'
 				strokeLinejoin='round'
@@ -853,7 +893,8 @@ const MenuOpenClose = ({ id1, id2, className }) => {
 				xmlns='http://www.w3.org/2000/svg'
 				fill='none'
 				viewBox='0 0 24 24'
-				stroke='currentColor'>
+				stroke='currentColor'
+			>
 				<path
 					strokeLinecap='round'
 					strokeLinejoin='round'
@@ -867,7 +908,8 @@ const MenuOpenClose = ({ id1, id2, className }) => {
 				xmlns='http://www.w3.org/2000/svg'
 				fill='none'
 				viewBox='0 0 24 24'
-				stroke='currentColor'>
+				stroke='currentColor'
+			>
 				<path
 					strokeLinecap='round'
 					strokeLinejoin='round'
@@ -891,7 +933,8 @@ const Eye = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none'></path>
 			<path d='M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0'></path>
 			<path d='M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6'></path>
@@ -911,7 +954,8 @@ const Excel = ({ ...props }) => {
 			strokeWidth='2'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<ellipse cx='12' cy='5' rx='9' ry='3' />
 			<path d='M3 5V19A9 3 0 0 0 21 19V5' />
 			<path d='M3 12A9 3 0 0 0 21 12' />
@@ -931,7 +975,8 @@ const Store = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none'></path>
 			<path d='M3 21l18 0'></path>
 			<path d='M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4'></path>
@@ -951,7 +996,8 @@ const Column = ({ ...props }) => {
 			strokeWidth={2}
 			stroke='currentColor'
 			className='size-6'
-			{...props}>
+			{...props}
+		>
 			<path
 				strokeLinecap='round'
 				strokeLinejoin='round'
@@ -973,7 +1019,8 @@ const PPCUser = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none'></path>
 			<path d='M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0'></path>
 			<path d='M6 21v-2a4 4 0 0 1 4 -4h2.5'></path>
@@ -1000,7 +1047,8 @@ const ProcurementUser = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none'></path>
 			<path d='M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0'></path>
 			<path d='M6 21v-2a4 4 0 0 1 4 -4h3'></path>
@@ -1022,7 +1070,8 @@ const ManagerUser = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none'></path>
 			<path d='M12 13a3 3 0 1 0 0 -6a3 3 0 0 0 0 6z'></path>
 			<path d='M6.201 18.744a4 4 0 0 1 3.799 -2.744h4a4 4 0 0 1 3.798 2.741'></path>
@@ -1043,7 +1092,8 @@ const SparePartsUser = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none'></path>
 			<path d='M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0'></path>
 			<path d='M6 21v-2a4 4 0 0 1 4 -4h3'></path>
@@ -1065,7 +1115,8 @@ const MarketingUser = ({ ...props }) => {
 			fill='none'
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path
 				d='M20.332,30.601c-0.384,0-0.769-0.146-1.061-0.438L5.643,16.533c-0.482-0.482-0.842-1.395-0.819-2.076    l0.285-8.255c0.027-0.808,0.708-1.488,1.517-1.516l1.773-0.053C8.663,4.633,8.906,4.84,8.916,5.116    c0.009,0.276-0.207,0.508-0.482,0.518L6.659,5.687c-0.284,0.01-0.541,0.267-0.551,0.55l-0.285,8.255    C5.81,14.9,6.061,15.537,6.35,15.826l13.629,13.629c0.195,0.195,0.512,0.195,0.707,0l9.192-9.193    c0.094-0.094,0.146-0.219,0.146-0.354s-0.052-0.26-0.146-0.354L16.25,5.928c-0.289-0.289-0.907-0.571-1.336-0.526l-3.938,0.136    c-0.292-0.017-0.508-0.207-0.518-0.482c-0.009-0.276,0.207-0.508,0.482-0.518l3.939-0.136c0.695,0.002,1.595,0.337,2.077,0.819    l13.628,13.627c0.282,0.282,0.438,0.659,0.438,1.061s-0.156,0.778-0.438,1.061l-9.192,9.193    C21.101,30.454,20.716,30.601,20.332,30.601z'
 				fill='#263238'
@@ -1113,7 +1164,8 @@ const FilterIcon = ({ ...props }) => {
 			strokeWidth='1.5'
 			stroke='currentColor'
 			className='size-6'
-			{...props}>
+			{...props}
+		>
 			<path
 				strokeLinecap='round'
 				strokeLinejoin='round'
@@ -1135,7 +1187,8 @@ const IconKey = ({ ...props }) => {
 			strokeWidth={2}
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z' />
 			<path d='M15 9h.01' />
@@ -1154,7 +1207,8 @@ const IconKeyOff = ({ ...props }) => {
 			strokeWidth={2}
 			strokeLinecap='round'
 			strokeLinejoin='round'
-			{...props}>
+			{...props}
+		>
 			<path stroke='none' d='M0 0h24v24H0z' fill='none' />
 			<path d='M10.17 6.159l2.316 -2.316a2.877 2.877 0 0 1 4.069 0l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.33 2.33' />
 			<path d='M14.931 14.948a2.863 2.863 0 0 1 -1.486 -.79l-.301 -.302l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.863 2.863 0 0 1 -.794 -1.504' />
@@ -1177,7 +1231,8 @@ const CalenderIcon = ({ ...props }) => {
 			strokeLinecap='round'
 			strokeLinejoin='round'
 			className='lucide lucide-calendar'
-			{...props}>
+			{...props}
+		>
 			<path d='M8 2v4' />
 			<path d='M16 2v4' />
 			<rect width='18' height='18' x='3' y='4' rx='2' />

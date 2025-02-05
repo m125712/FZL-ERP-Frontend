@@ -27,7 +27,8 @@ export default function QuantityCard({
 			className={cn(
 				'table table-xs rounded-md border-2 border-primary/20 align-top',
 				hasExceededDailyProduction ? 'border-error/80' : ''
-			)}>
+			)}
+		>
 			<thead>
 				<tr>
 					{/* <th>Item</th> */}

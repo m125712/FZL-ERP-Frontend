@@ -100,7 +100,8 @@ const SpreadSheet = (
 						<HotColumn
 							key={field.accessorKey}
 							data={field.accessorKey}
-							readOnly={field.type === 'custom'}>
+							readOnly={field.type === 'custom'}
+						>
 							<CustomEditor hot-editor field={field} />
 							<CustomRenderer
 								hot-renderer

@@ -1,7 +1,12 @@
 import { useOtherMarketing, useOtherParty } from '@/state/Other';
 import { format } from 'date-fns';
 
-import { FormField, ReactSelect, SectionEntryBody, SimpleDatePicker } from '@/ui';
+import {
+	FormField,
+	ReactSelect,
+	SectionEntryBody,
+	SimpleDatePicker,
+} from '@/ui';
 
 export default function Header({
 	from = '',

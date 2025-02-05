@@ -60,7 +60,8 @@ export default function index() {
 								window.open('', '_blank')
 							);
 						}}
-						className='btn btn-primary flex-1'>
+						className='btn btn-primary flex-1'
+					>
 						PDF
 					</button>
 					<button
@@ -68,7 +69,8 @@ export default function index() {
 						onClick={() => {
 							Excel(data, from);
 						}}
-						className='btn btn-secondary flex-1'>
+						className='btn btn-secondary flex-1'
+					>
 						Excel
 					</button>
 				</div>

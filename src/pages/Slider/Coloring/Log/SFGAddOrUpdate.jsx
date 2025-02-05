@@ -1,12 +1,14 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from "@/hooks";
-import { FormField, Input, JoinInput, ReactSelect } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { SFG_TRANSFER_LOG_NULL, SFG_TRANSFER_LOG_SCHEMA } from "@util/Schema";
+import { useAuth } from '@/context/auth';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
+import { SFG_TRANSFER_LOG_NULL, SFG_TRANSFER_LOG_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setColoring,
 	updateColoring = {
 		id: null,
@@ -34,7 +36,7 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		context
+		context,
 	} = useRHF(schema, SFG_TRANSFER_LOG_NULL);
 
 	useFetchForRhfReset(
@@ -82,12 +84,12 @@ export default function Index({
 	};
 
 	const transactionArea = [
-		{ label: "Dying and Iron", value: "dying_and_iron_stock" },
-		{ label: "Teeth Molding", value: "teeth_molding_stock" },
-		{ label: "Teeth Cleaning", value: "teeth_cleaning_stock" },
-		{ label: "Finishing", value: "finishing_stock" },
-		{ label: "Slider Assembly", value: "slider_assembly_stock" },
-		{ label: "Coloring", value: "coloring_stock" },
+		{ label: 'Dying and Iron', value: 'dying_and_iron_stock' },
+		{ label: 'Teeth Molding', value: 'teeth_molding_stock' },
+		{ label: 'Teeth Cleaning', value: 'teeth_cleaning_stock' },
+		{ label: 'Finishing', value: 'finishing_stock' },
+		{ label: 'Slider Assembly', value: 'slider_assembly_stock' },
+		{ label: 'Coloring', value: 'coloring_stock' },
 	];
 
 	return (
@@ -99,17 +101,17 @@ export default function Index({
 			onClose={onClose}
 			isSmall={true}
 		>
-			<FormField label="trx_to" title="Trx to" errors={errors}>
+			<FormField label='trx_to' title='Trx to' errors={errors}>
 				<Controller
-					name={"trx_to"}
+					name={'trx_to'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder="Select Transaction Area"
+								placeholder='Select Transaction Area'
 								options={transactionArea}
 								value={transactionArea?.find(
-									(item) => item.value == getValues("trx_to")
+									(item) => item.value == getValues('trx_to')
 								)}
 								onChange={(e) => onChange(e.value)}
 								isDisabled={updateColoring?.id !== null}
@@ -119,12 +121,12 @@ export default function Index({
 				/>
 			</FormField>
 			<JoinInput
-				label="trx_quantity"
+				label='trx_quantity'
 				sub_label={`Max: ${MAX_QUANTITY}`}
-				unit="PCS"
+				unit='PCS'
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

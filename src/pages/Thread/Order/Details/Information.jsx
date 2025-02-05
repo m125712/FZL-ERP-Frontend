@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
+import { useAccess } from '@/hooks';
 
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
 import { DateTime, StatusButton, TitleValue } from '@/ui';
-import { useAccess } from '@/hooks';
 
 export default function Information({ orderInfo }) {
 	const haveAccess = useAccess('thread__order_info_in_details');

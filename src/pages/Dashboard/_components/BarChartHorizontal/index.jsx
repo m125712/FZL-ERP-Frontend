@@ -77,7 +77,8 @@ export function BarChartHorizontal(props) {
 								name='time'
 								className='select select-secondary h-8 min-h-0 border-secondary/30 bg-base-200 transition-all duration-100 ease-in-out'
 								value={time}
-								onChange={(e) => setTime(e.target.value)}>
+								onChange={(e) => setTime(e.target.value)}
+							>
 								<option value='yesterday'>Yesterday</option>
 								<option value='last_seven_days'>7 Days</option>
 								<option value='last_fifteen_days'>
@@ -104,7 +105,8 @@ export function BarChartHorizontal(props) {
 						layout='vertical'
 						margin={{
 							right: 16,
-						}}>
+						}}
+					>
 						<CartesianGrid horizontal={false} />
 						<YAxis
 							dataKey='item_name'
@@ -123,7 +125,8 @@ export function BarChartHorizontal(props) {
 						<Bar
 							dataKey={props.label2}
 							fill={chartConfig[props.label2].color}
-							radius={[4, 0, 0, 4]}>
+							radius={[4, 0, 0, 4]}
+						>
 							<LabelList
 								dataKey={props.label2}
 								position='right'
@@ -134,7 +137,8 @@ export function BarChartHorizontal(props) {
 						<Bar
 							dataKey={props.label1}
 							fill={chartConfig[props.label1].color}
-							radius={[0, 4, 4, 0]}>
+							radius={[0, 4, 4, 0]}
+						>
 							<LabelList
 								dataKey={props.label1}
 								position='right'

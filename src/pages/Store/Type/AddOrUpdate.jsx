@@ -1,13 +1,15 @@
-import { AddModal } from '@/components/Modal';
+import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-import nanoid from '@/lib/nanoid';
 import { useOtherMaterialType } from '@/state/Other';
 import { useMaterialType, useMaterialTypeByUUID } from '@/state/Store';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { Input } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
+import nanoid from '@/lib/nanoid';
 import { SECTION_NULL, SECTION_SCHEMA } from '@util/Schema';
-import { useEffect } from 'react';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -17,7 +19,7 @@ export default function Index({
 	setUpdateMaterialType,
 }) {
 	const { user } = useAuth();
-	const { invalidateQuery: invalidateMaterialType } = useOtherMaterialType()
+	const { invalidateQuery: invalidateMaterialType } = useOtherMaterialType();
 	const { url, updateData, postData } = useMaterialType();
 	const { data } = useMaterialTypeByUUID(updateMaterialType?.uuid);
 
@@ -87,7 +89,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<Input label='name' {...{ register, errors }} />
 			<Input label='short_name' {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />

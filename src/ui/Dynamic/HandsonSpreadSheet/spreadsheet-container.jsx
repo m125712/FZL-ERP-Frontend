@@ -23,7 +23,8 @@ const SpreadSheetContainer = (
 							onClick={handleAdd}
 							type='button'
 							size={'xs'}
-							className='btn btn-accent btn-xs gap-1 rounded'>
+							className='btn btn-accent btn-xs gap-1 rounded'
+						>
 							<Plus className='size-4' />
 							New
 						</button>

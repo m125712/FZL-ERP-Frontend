@@ -1,7 +1,7 @@
-import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-
-import { DateTime } from '@/ui';
 import { useMemo } from 'react';
+
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
+import { DateTime } from '@/ui';
 
 export default function Index({ shade_recipe_entry }) {
 	const columns = useMemo(
@@ -30,7 +30,6 @@ export default function Index({ shade_recipe_entry }) {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			
 		],
 		[shade_recipe_entry]
 	);

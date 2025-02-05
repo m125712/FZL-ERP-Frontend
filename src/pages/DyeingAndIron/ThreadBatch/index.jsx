@@ -201,7 +201,8 @@ export default function Index() {
 							className={cn(
 								'badge badge-sm uppercase',
 								res[info.getValue()]
-							)}>
+							)}
+						>
 							{info.getValue()}
 						</span>
 					);

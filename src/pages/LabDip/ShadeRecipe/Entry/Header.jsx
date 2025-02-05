@@ -48,13 +48,15 @@ export default function Header({
 						onChange={(e) => setIsStatus(e.target.checked)}
 					/>
 				</div>
-			}>
+			}
+		>
 			<div className='flex flex-col items-end gap-6 px-2 text-secondary-content md:flex-row'>
 				<Input label='name' {...{ register, errors }} />
 				<FormField
 					label='sub_streat'
 					title='Sub Streat'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'sub_streat'}
 						control={control}

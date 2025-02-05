@@ -16,7 +16,8 @@ const BrandLogo = ({ className, ...props }) => {
 				className
 			)}
 			to={route?.path}
-			{...props}>
+			{...props}
+		>
 			FZL
 			{!isProduction ? (
 				<span className='text-error'>({HOSTED_SERVER})</span>

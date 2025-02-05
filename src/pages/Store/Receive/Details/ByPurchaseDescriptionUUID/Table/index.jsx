@@ -1,7 +1,7 @@
-import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-
-import { DateTime } from '@/ui';
 import { useMemo } from 'react';
+
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
+import { DateTime } from '@/ui';
 
 export default function Index({ purchase }) {
 	const columns = useMemo(

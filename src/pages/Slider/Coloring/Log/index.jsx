@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
-import RMTransferLog from './RMTransferLog';
-import RMOrderAgainstLog from './RMOrderAgainstLog';
+
 import ProductionLog from './ProductionLog';
+import RMOrderAgainstLog from './RMOrderAgainstLog';
+import RMTransferLog from './RMTransferLog';
 import TransactionLog from './TransactionLog';
+
 export default function Index() {
 	useEffect(() => {
 		document.title = 'Coloring Log';
@@ -11,7 +13,7 @@ export default function Index() {
 		<div>
 			<ProductionLog />
 			<hr className='border-2 border-dashed border-secondary-content' />
-			<TransactionLog /> 
+			<TransactionLog />
 			<hr className='border-2 border-dashed border-secondary-content' />
 			<RMTransferLog />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />

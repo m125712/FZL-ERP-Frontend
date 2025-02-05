@@ -429,16 +429,19 @@ export default function index() {
 					<ReactTable
 						title={'Batch Orders'}
 						data={BatchOrdersField}
-						columns={currentColumns}>
+						columns={currentColumns}
+					>
 						<tr className='bg-slate-100'>
 							<td
 								colSpan={6}
-								className='p-2 text-right font-semibold'>
+								className='p-2 text-right font-semibold'
+							>
 								Total:
 							</td>
 							<td
 								colSpan={isUpdate ? 3 : 2}
-								className='px-4 py-1'>
+								className='px-4 py-1'
+							>
 								{getTotal().batch_total}
 							</td>
 						</tr>
@@ -448,11 +451,13 @@ export default function index() {
 						<ReactTable
 							title={'Add New Batch Orders'}
 							data={NewBatchOrdersField}
-							columns={NewColumns}>
+							columns={NewColumns}
+						>
 							<tr className='bg-slate-100'>
 								<td
 									colSpan={6}
-									className='p-2 text-right font-semibold'>
+									className='p-2 text-right font-semibold'
+								>
 									Total:
 								</td>
 								<td colSpan={2} className='px-4 py-1'>

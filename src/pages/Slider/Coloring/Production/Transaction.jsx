@@ -173,7 +173,8 @@ export default function Index({
 		if (updateSliderTrx?.coloring_prod_weight) {
 			return (
 				watch('trx_quantity') *
-				(updateSliderTrx?.coloring_prod_weight / updateSliderTrx?.coloring_prod)
+				(updateSliderTrx?.coloring_prod_weight /
+					updateSliderTrx?.coloring_prod)
 			);
 		}
 		return 0;
@@ -195,12 +196,14 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			{updateSliderTrx?.order_type === 'slider' && (
 				<FormField
 					label='finishing_batch_entry_uuid'
 					title='Style'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name='finishing_batch_entry_uuid'
 						control={control}

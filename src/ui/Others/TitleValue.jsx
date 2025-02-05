@@ -6,7 +6,8 @@ const TitleValue = ({ title, value, className }) => {
 			className={cn(
 				'grid grid-cols-3 gap-1 p-0.5 text-[0.8rem] sm:grid-cols-5 sm:gap-4 md:p-1',
 				className
-			)}>
+			)}
+		>
 			<dt className='font-bold capitalize text-primary sm:col-span-2'>
 				{title}
 			</dt>

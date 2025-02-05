@@ -1,18 +1,20 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
+import { useAuth } from '@/context/auth';
 import {
 	useFetch,
 	useFetchForRhfReset,
 	usePostFunc,
 	useRHF,
 	useUpdateFunc,
-} from "@/hooks";
-import { FormField, Input, ReactSelect } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { ORDER_ISSUE_NULL, ORDER_ISSUE_SCHEMA } from "@util/Schema";
+} from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, ReactSelect } from '@/ui';
+
+import { ORDER_ISSUE_NULL, ORDER_ISSUE_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setOrder,
 	updateOrder = {
 		id: null,
@@ -23,13 +25,20 @@ export default function Index({
 	setUpdateOrder,
 }) {
 	const { user } = useAuth();
-	const { register, handleSubmit, errors, reset, Controller, control ,context} =
-		useRHF(ORDER_ISSUE_SCHEMA, ORDER_ISSUE_NULL);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		Controller,
+		control,
+		context,
+	} = useRHF(ORDER_ISSUE_SCHEMA, ORDER_ISSUE_NULL);
 
 	useFetchForRhfReset(`/issue/${updateOrder?.id}`, updateOrder?.id, reset);
 
-	const { value: order } = useFetch("/order/description/value/label");
-	const { value: material } = useFetch("/material/value/label");
+	const { value: order } = useFetch('/order/description/value/label');
+	const { value: material } = useFetch('/material/value/label');
 
 	const onClose = () => {
 		setUpdateOrder((prev) => ({
@@ -71,36 +80,36 @@ export default function Index({
 		};
 
 		await usePostFunc({
-			uri: "/issue",
+			uri: '/issue',
 			data: updatedData,
 			setItems: setOrder,
 			onClose: onClose,
 		});
 	};
 	const wastageOptions = [
-		{ label: "NO", value: "0" },
-		{ label: "YES", value: "1" },
+		{ label: 'NO', value: '0' },
+		{ label: 'YES', value: '1' },
 	];
 
 	return (
 		<AddModal
 			id={modalId}
 			title={
-				updateOrder?.id !== null ? "Update Issue Order" : "Issue Order"
+				updateOrder?.id !== null ? 'Update Issue Order' : 'Issue Order'
 			}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}
 		>
-			<FormField label="order_uuid" title="Order Number" errors={errors}>
+			<FormField label='order_uuid' title='Order Number' errors={errors}>
 				<Controller
-					name={"order_uuid"}
+					name={'order_uuid'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder="Select Order Number"
+								placeholder='Select Order Number'
 								options={order}
 								value={order?.find(
 									(item) =>
@@ -115,14 +124,14 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<FormField label="material_id" title="Material" errors={errors}>
+			<FormField label='material_id' title='Material' errors={errors}>
 				<Controller
-					name={"material_id"}
+					name={'material_id'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder="Select Material"
+								placeholder='Select Material'
 								options={material}
 								value={material?.find(
 									(item) =>
@@ -137,15 +146,15 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<Input label="quantity" {...{ register, errors }} />
-			<FormField label="isWastage" title="Wastage" errors={errors}>
+			<Input label='quantity' {...{ register, errors }} />
+			<FormField label='isWastage' title='Wastage' errors={errors}>
 				<Controller
-					name={"isWastage"}
+					name={'isWastage'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								label="isWastage"
+								label='isWastage'
 								options={wastageOptions}
 								value={wastageOptions?.find(
 									(item) =>

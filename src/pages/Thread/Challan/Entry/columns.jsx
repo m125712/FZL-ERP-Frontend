@@ -85,7 +85,8 @@ export default function columns({
 					Balance QTY
 					<label
 						className='btn btn-primary btn-xs'
-						onClick={() => setAllQty()}>
+						onClick={() => setAllQty()}
+					>
 						Copy All
 					</label>
 				</div>
@@ -103,7 +104,8 @@ export default function columns({
 									`batch_entry[${idx}].quantity`,
 									info.getValue()
 								)
-							}>
+							}
+						>
 							Copy
 						</label>
 						{info.getValue()}
@@ -211,7 +213,8 @@ export default function columns({
 					Balance QTY
 					<label
 						className='btn btn-primary btn-xs'
-						onClick={() => setAllQty()}>
+						onClick={() => setAllQty()}
+					>
 						Copy All
 					</label>
 				</div>
@@ -229,7 +232,8 @@ export default function columns({
 									`new_batch_entry[${idx}].quantity`,
 									info.getValue()
 								)
-							}>
+							}
+						>
 							Copy
 						</label>
 						{info.getValue()}

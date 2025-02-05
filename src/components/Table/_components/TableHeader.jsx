@@ -10,7 +10,6 @@ import {
 	HandleReload,
 	SearchBox,
 } from '../_helpers';
-// import DateRange from '../components/DateRange';
 import { dateRangeColumnId } from '../utils';
 import TableTitle from './TableTitle';
 
@@ -25,7 +24,7 @@ const TableHeader = (props) => {
 
 	return (
 		<div key={props.title} className='mb-4 flex flex-col'>
-			<div className='mb-4 flex w-full flex-col justify-between gap-2 border-b pb-4 lg:flex-row lg:items-end'>
+			<div className='mb-2 flex w-full flex-col justify-between gap-2 lg:flex-row lg:items-end'>
 				<TableTitle
 					{...{
 						title: props.title,

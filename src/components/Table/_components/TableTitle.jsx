@@ -5,9 +5,11 @@ const TableTitle = ({ title, subtitle }) => {
 				<h1 className='text-xl font-semibold capitalize leading-tight text-primary md:text-2xl'>
 					{title}
 				</h1>
-				<p className='mt-0.5 text-sm capitalize text-secondary'>
-					{subtitle || 'See all records in one place'}
-				</p>
+				{subtitle && (
+					<p className='mt-0.5 text-sm capitalize text-secondary'>
+						{subtitle}
+					</p>
+				)}
 			</div>
 		</div>
 	);

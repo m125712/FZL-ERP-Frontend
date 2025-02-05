@@ -7,7 +7,7 @@ import { SortingIndicator } from '../ui';
 
 const TableHead = ({ getHeaderGroups, getPreFilteredRowModel }) => {
 	return (
-		<thead className='select-none bg-base-200 text-sm text-primary'>
+		<thead className='select-none border-b-2 border-primary/30 bg-base-200 text-sm text-primary'>
 			<tr>
 				{getHeaderGroups().map(({ headers }) =>
 					headers.map(
@@ -31,14 +31,16 @@ const TableHead = ({ getHeaderGroups, getPreFilteredRowModel }) => {
 									!column.getCanFilter()
 										? column.getToggleSortingHandler()
 										: undefined
-								}>
+								}
+							>
 								{!isPlaceholder && (
 									<div
 										className={cn(
 											'flex place-items-baseline gap-1 place-self-start',
 											column.columnDef.width
 										)}
-										onClick={column.getToggleSortingHandler()}>
+										onClick={column.getToggleSortingHandler()}
+									>
 										{flexRender(
 											column.columnDef.header,
 											getContext()

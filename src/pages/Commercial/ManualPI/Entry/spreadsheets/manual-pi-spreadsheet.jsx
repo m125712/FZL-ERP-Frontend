@@ -93,7 +93,7 @@ const ManualPiSpreadsheet = (
 				columns,
 				colHeaders,
 				data,
-				isIndex: true,
+				isIndex: false,
 				onChange: (newData, setValue, fieldName, row, prop) => {
 					if (prop === 'is_zipper') {
 						setValue(

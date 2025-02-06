@@ -67,15 +67,14 @@ export default function Header({
 								<ReactSelect
 									placeholder='Select PIs'
 									options={pi}
-									// value={pi?.filter((item) =>
-									// 	pis?.includes(item.value)
-									// )}
+									value={pi?.filter((item) =>
+										pis?.includes(item.value)
+									)}
 									onChange={(e) => {
 										setPis((prev) => [
 											...prev,
-											e.map((item) => item.value),
+											...e.map((item) => item.value),
 										]);
-										console.log(e);
 										onChange(e.map((item) => item.value));
 									}}
 									isMulti={true}

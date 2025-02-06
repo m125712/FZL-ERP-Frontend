@@ -1,6 +1,8 @@
 import HotTable from '@handsontable/react';
 import { registerAllModules } from 'handsontable/registry';
 
+import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet';
+
 import SpreadSheetContainer from '../spreadsheet-container';
 
 registerAllModules();
@@ -16,6 +18,7 @@ const TestSpreadSheet = (
 		colHeaders,
 		data,
 		isIndex,
+		onChange,
 	} = {
 		title: '',
 		extraHeader: null,
@@ -26,6 +29,7 @@ const TestSpreadSheet = (
 		colHeaders: [],
 		data: [],
 		isIndex: false,
+		onChange: (newData, setValue, fieldName, row, prop) => {},
 	}
 ) => {
 	data.map((item, index) => {
@@ -68,6 +72,14 @@ const TestSpreadSheet = (
 							shouldTouch: true,
 							shouldValidate: false,
 						});
+						onChange &&
+							onChange(
+								newValue,
+								form.setValue,
+								fieldName,
+								row,
+								prop
+							);
 
 						if (isIndex) {
 							columnsWithIndex(row, form, fieldName);

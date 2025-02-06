@@ -57,6 +57,25 @@ export const toggleBleach = ({ item, setValue, field }) => {
 	return [bleachAll, setBleachAll];
 };
 
+export const toggleZipperAll = ({ item, setValue, field }) => {
+	const [zipperAll, setZipperAll] = useState(null);
+
+	useEffect(() => {
+		if (zipperAll !== null) {
+			item.forEach((_, index) => {
+				const f = field + `[${index}].is_zipper`;
+				setValue(f, zipperAll === true ? true : false, {
+					shouldValidate: true,
+					shouldDirty: true,
+					shouldTouch: true,
+				});
+			});
+		}
+	}, [zipperAll, item]);
+
+	return [zipperAll, setZipperAll];
+};
+
 export const sliderSections = [
 	{ value: 'die_casting', label: 'Die Casting' },
 	{ value: 'slider_assembly', label: 'Assembly' },

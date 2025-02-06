@@ -1,4 +1,5 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
+import { toggleZipperAll } from '@/pages/Order/Details/Entry/utils';
 import {
 	useCommercialManualPI,
 	useCommercialManualPIDetails,
@@ -6,13 +7,11 @@ import {
 import { useThreadOrderInfo } from '@/state/Thread';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
-import { configure, HotKeys } from 'react-hotkeys';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
-import DynamicFormSpreadSheet from '@/ui/Dynamic/DynamicFormSpreadSheet';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 
 import nanoid from '@/lib/nanoid';
@@ -21,6 +20,7 @@ import { MANUAL_PI_NULL, MANUAL_PI_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
+import ManualPiSpreadsheet from './spreadsheets/manual-pi-spreadsheet';
 
 export default function Index() {
 	const { updateData, postData, deleteData } = useThreadOrderInfo();
@@ -77,21 +77,14 @@ export default function Index() {
 		name: 'manual_pi_entry',
 	});
 
-	const [zipperAll, setZipperAll] = useState();
+	const [zipperAll, setZipperAll] = toggleZipperAll({
+		item: threadOrderInfoEntryField,
+		setValue,
+		field: 'manual_pi_entry',
+	});
 
 	useEffect(() => {
-		if (zipperAll !== null) {
-			threadOrderInfoEntryField.forEach((item, index) => {
-				setValue(
-					`manual_pi_entry[${index}].is_zipper`,
-					zipperAll ? true : false
-				);
-			});
-		}
-	}, [zipperAll, threadOrderInfoEntryField]);
-
-	useEffect(() => {
-		const subscription = watch((value, { name, type }) => {
+		const subscription = watch((value) => {
 			const { manual_pi_entry } = value;
 			if (manual_pi_entry?.length > 0) {
 				const allZipper = manual_pi_entry.every(
@@ -142,7 +135,6 @@ export default function Index() {
 			is_zipper: false,
 		});
 	};
-	const onClose = () => reset(MANUAL_PI_NULL);
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -259,43 +251,9 @@ export default function Index() {
 	// Check if uuid is valuuid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 
-	const handelDuplicateDynamicField = useCallback(
-		(index) => {
-			const item = getValues(`manual_pi_entry[${index}]`);
-			threadOrderInfoEntryAppend({ ...item, uuid: undefined });
-		},
-		[getValues, threadOrderInfoEntryAppend]
-	);
-
-	const handleEnter = (event) => {
-		event.preventDefault();
-		if (Object.keys(errors).length > 0) return;
-	};
-
-	const keyMap = {
-		NEW_ROW: 'alt+n',
-		COPY_LAST_ROW: 'alt+c',
-		ENTER: 'enter',
-	};
-
-	const handlers = {
-		NEW_ROW: handleThreadOrderInfoEntryAppend,
-		COPY_LAST_ROW: () =>
-			handelDuplicateDynamicField(threadOrderInfoEntryField.length - 1),
-		ENTER: (event) => handleEnter(event),
-	};
-
-	configure({
-		ignoreTags: ['input', 'select', 'textarea'],
-		ignoreEventsCondition: function () {},
-	});
-
-	const rowClass =
-		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
-
 	const headerButtons = [
 		<div className='flex items-center gap-2'>
-			<label className='text-sm'>Zipper All</label>
+			<label className='text-sm text-white'>Zipper All</label>
 			<SwitchToggle
 				checked={zipperAll}
 				onChange={() => setZipperAll(!zipperAll)}
@@ -303,119 +261,66 @@ export default function Index() {
 		</div>,
 	];
 
+	const handleCopy = (index) => {
+		const field = form.watch('manual_pi_entry')[index];
+
+		// const length = form.watch('manual_pi_entry').length;
+		// let newIndex;
+		// if (length > 0) {
+		// 	// Get the index value of the previous row
+		// 	const previousIndex = form.getValues(
+		// 		`manual_pi_entry.${length - 1}.index`
+		// 	);
+		// 	newIndex = previousIndex ? previousIndex + 1 : length + 1;
+		// } else {
+		// 	// For the first row, set index to 1
+		// 	newIndex = length + 1;
+		// }
+
+		threadOrderInfoEntryAppend({
+			// index: newIndex,
+			order_number: field.order_number,
+			po: field.po,
+			style: field.style,
+			size: field.size,
+			item: field.item,
+			specification: field.specification,
+			quantity: field.quantity,
+			unit_price: field.unit_price,
+			is_zipper: field.is_zipper,
+		});
+	};
+
 	return (
 		<FormProvider {...form}>
-			<HotKeys {...{ keyMap, handlers }}>
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					noValidate
-					className='flex flex-col gap-4'
-				>
-					<Header
-						{...{
-							register,
-							errors,
-							control,
-							getValues,
-							Controller,
-							watch,
-							isUpdate,
-						}}
-					/>
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				noValidate
+				className='flex flex-col gap-4'>
+				<Header
+					{...{
+						register,
+						errors,
+						control,
+						getValues,
+						Controller,
+						watch,
+						isUpdate,
+					}}
+				/>
 
-					<DynamicFormSpreadSheet
-						title='Details'
-						fieldArrayName='manual_pi_entry'
-						handelAppend={handleThreadOrderInfoEntryAppend}
-						handleRemove={handleThreadOrderInfoEntryRemove}
-						headerButtons={headerButtons}
-						columnsDefs={[
-							{
-								header: 'O/N',
-								accessorKey: 'order_number',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Po',
-								accessorKey: 'po',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Style',
-								accessorKey: 'style',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Size',
-								accessorKey: 'size',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Item',
-								accessorKey: 'item',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Specification',
-								accessorKey: 'specification',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Quantity',
-								accessorKey: 'quantity',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Unit Price',
-								accessorKey: 'unit_price',
-								type: 'text',
-								readOnly: false,
-							},
-							{
-								header: 'Zipper',
-								accessorKey: 'is_zipper',
-								type: 'select',
-								options: isZipper,
-								readOnly: false,
-							},
-							// {
-							// 	header: 'Count Length',
-							// 	accessorKey: 'count_length_uuid',
-							// 	type: 'select',
-							// 	options: countLength || [],
-							// 	readOnly: false,
-							// },
-							{
-								header: 'Actions',
-								type: 'action',
-							},
-						]}
-						{...{
-							formContext: {
-								register,
-								watch,
-								setValue,
-								getValues,
-								clearErrors,
-								errors,
-							},
-							fields: threadOrderInfoEntryField,
-							append: threadOrderInfoEntryAppend,
-							remove: threadOrderInfoEntryRemove,
-							update: threadOrderInfoEntryUpdate,
-						}}
-					/>
+				<ManualPiSpreadsheet
+					extraHeader={headerButtons}
+					title='Details'
+					form={form}
+					fieldName='manual_pi_entry'
+					handleCopy={handleCopy}
+					handleAdd={handleThreadOrderInfoEntryAppend}
+					handleRemove={handleThreadOrderInfoEntryRemove}
+				/>
 
-					<Footer buttonClassName='!btn-primary' />
-				</form>
-			</HotKeys>
+				<Footer buttonClassName='!btn-primary' />
+			</form>
 			<Suspense>
 				<DeleteModal
 					modalId={'order_info_entry_delete'}

@@ -16,7 +16,7 @@ function renderActions(handleRemove, handleCopy) {
 				handleCopy
 			),
 		readOnly: true,
-		width: 100,
+		width: 160,
 	};
 }
 

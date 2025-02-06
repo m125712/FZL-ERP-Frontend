@@ -1,6 +1,8 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
+import { useDyeingSwatch } from '@/state/Dyeing';
 import { useLabDipInfo, UseLabDipInfoByDetails } from '@/state/LabDip';
 import { useOtherRecipe } from '@/state/Other';
+import { useThreadSwatch } from '@/state/Thread';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -8,6 +10,7 @@ import { useRHF } from '@/hooks';
 
 import { DeleteModal, UpdateModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { ActionButtons, DynamicField, FormField, ReactSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
@@ -29,6 +32,10 @@ export default function Index() {
 	const { info_number, info_uuid } = useParams();
 	const { invalidateQuery: invalidateQueryLabDipInfoByDetails } =
 		UseLabDipInfoByDetails(info_uuid);
+	const { invalidateQuery: invalidateQueryDyeingSwatch } =
+		useDyeingSwatch(`type=all`);
+	const { invalidateQuery: invalidateQueryThreadSwatch } =
+		useThreadSwatch(`type=all`);
 
 	const { user } = useAuth();
 	const navigate = useNavigate();
@@ -126,7 +133,9 @@ export default function Index() {
 				...item,
 				lab_dip_info_uuid: data?.uuid,
 				approved: item.approved ? 1 : 0,
+				is_pps_req: item.is_pps_req ? 1 : 0,
 				approved_date: item.approved ? GetDateTime() : null,
+				is_pps_req_date: item.is_pps_req ? GetDateTime() : null,
 			}));
 
 			//* Post new entry */ //
@@ -161,6 +170,8 @@ export default function Index() {
 				.then(() => {
 					//invalidateQueryLabDipInfo();
 					invalidateQueryLabDipInfoByDetails();
+					invalidateQueryDyeingSwatch();
+					invalidateQueryThreadSwatch();
 					navigate(`/lab-dip/info/details/${data?.uuid}`);
 				})
 				.catch((err) => console.log(err));
@@ -193,8 +204,10 @@ export default function Index() {
 			uuid: nanoid(),
 			lab_dip_info_uuid,
 			approved: item.approved ? 1 : 0,
+			is_pps_req: item.is_pps_req ? 1 : 0,
 			created_by: user?.uuid,
 			approved_date: item.approved ? GetDateTime() : null,
+			is_pps_req_date: item.is_pps_req ? GetDateTime() : null,
 			created_at,
 		}));
 
@@ -216,6 +229,8 @@ export default function Index() {
 			.then(() => reset(LAB_INFO_NULL))
 			.then(() => {
 				invalidateQueryLabDipInfoByDetails();
+				invalidateQueryDyeingSwatch();
+				invalidateQueryThreadSwatch();
 				navigate(`/lab-dip/info/details/${lab_dip_info_uuid}`);
 			})
 
@@ -251,6 +266,11 @@ export default function Index() {
 		{ label: 'Approved', value: 1 },
 	];
 
+	const PPsRequired = [
+		{ label: 'No', value: 0 },
+		{ label: 'Yes', value: 1 },
+	];
+
 	let excludeItem = exclude(watch, rec_uuid, 'recipe', 'recipe_uuid', Status);
 
 	return (
@@ -258,15 +278,16 @@ export default function Index() {
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				noValidate
-				className='flex flex-col gap-4'>
+				className='flex flex-col gap-4'
+			>
 				<Header
 					{...{
 						register,
 						errors,
 						control,
 						getValues,
-						Controller,
 						watch,
+						Controller,
 						lab_status: getValues('lab_status'),
 						isUpdate,
 					}}
@@ -277,16 +298,20 @@ export default function Index() {
 					tableHead={[
 						'Recipe',
 						//'Status',
+						'PP Sample Required?',
 						'Approved',
+
 						'Action',
 					].map((item) => (
 						<th
 							key={item}
 							scope='col'
-							className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+							className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'
+						>
 							{item}
 						</th>
-					))}>
+					))}
+				>
 					{recipeField.map((item, index) => (
 						<tr key={item.id}>
 							{/* Recipe */}
@@ -297,7 +322,8 @@ export default function Index() {
 									dynamicerror={
 										errors?.recipe?.[index]?.recipe_uuid
 									}
-									is_title_needed='false'>
+									is_title_needed='false'
+								>
 									<Controller
 										name={`recipe[${index}].recipe_uuid`}
 										control={control}
@@ -341,6 +367,53 @@ export default function Index() {
 									/>
 								</FormField>
 							</td>
+							{/* PP Sample Required? */}
+							<td className={rowClass}>
+								<FormField
+									label={`recipe[${index}].is_pps_req`}
+									title='PP Sample Required?'
+									dynamicerror={
+										errors?.recipe?.[index]?.is_pps_req
+									}
+									is_title_needed='false'
+								>
+									<Controller
+										name={`recipe[${index}].is_pps_req`}
+										control={control}
+										render={({ field: { onChange } }) => {
+											return (
+												<ReactSelect
+													placeholder='Select PPs'
+													options={PPsRequired}
+													value={PPsRequired?.find(
+														(item) =>
+															item.value ==
+															getValues(
+																`recipe[${index}].is_pps_req`
+															)
+													)}
+													onChange={(e) => {
+														onChange(e.value);
+														setValue(
+															`recipe[${index}].is_pps_req`,
+															e.value
+														);
+													}}
+													isDisabled={
+														rec_uuid == undefined ||
+														!watch(
+															`order_info_uuid`
+														)
+													}
+													menuPortalTarget={
+														document.body
+													}
+												/>
+											);
+										}}
+									/>
+								</FormField>
+							</td>
 							{/* approved */}
 							<td className={rowClass}>
 								<FormField
@@ -349,7 +422,8 @@ export default function Index() {
 									dynamicerror={
 										errors?.recipe?.[index]?.approved
 									}
-									is_title_needed='false'>
+									is_title_needed='false'
+								>
 									<Controller
 										name={`recipe[${index}].approved`}
 										control={control}
@@ -387,8 +461,10 @@ export default function Index() {
 									/>
 								</FormField>
 							</td>
+
 							<td
-								className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
+								className={`w-16 ${rowClass} border-l-4 border-l-primary`}
+							>
 								<ActionButtons
 									duplicateClick={() =>
 										handelDuplicateDynamicField(index)

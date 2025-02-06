@@ -1,9 +1,8 @@
-import { Slide, ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
+import { Slide, toast, ToastContainer } from 'react-toastify';
 
 const ToastBody = ({ text }) => (
-	<div className="flex items-center">
-		<p className="text-sm font-medium text-gray-900">{text}</p>
+	<div className='flex items-center'>
+		<p className='text-sm font-medium text-gray-900'>{text}</p>
 	</div>
 );
 
@@ -13,15 +12,15 @@ const ErrorToast = (text) => toast.error(<ToastBody {...{ text }} />);
 
 const ShowLocalToast = ({ type, message }) => {
 	switch (type) {
-		case "create":
-		case "update":
+		case 'create':
+		case 'update':
 			SuccessToast(message);
 			break;
-		case "delete":
-		case "error":
+		case 'delete':
+		case 'error':
 			ErrorToast(message);
 			break;
-		case "warning":
+		case 'warning':
 			WarningToast(message);
 			break;
 		default:
@@ -36,7 +35,7 @@ const ShowToast = (toast) => {
 };
 
 const DefaultConfig = {
-	position: "top-right",
+	position: 'top-right',
 	autoClose: 5000,
 	hideProgressBar: false,
 	closeOnClick: true,
@@ -49,7 +48,7 @@ const DefaultConfig = {
 const Toast = () => {
 	return (
 		<ToastContainer
-			style={{ width: "auto" }}
+			style={{ width: 'auto' }}
 			transition={Slide}
 			{...DefaultConfig}
 		/>

@@ -30,6 +30,13 @@ export default function Index({ challan, item_for }) {
 				enableColumnFilter: false,
 			},
 			{
+				accessorKey: 'specification',
+				header: 'Specifications',
+				width: 'w-44',
+				cell: (info) => info.getValue(),
+				enableColumnFilter: false,
+			},
+			{
 				accessorKey: 'style',
 				header: 'Style',
 				cell: (info) => info.getValue(),

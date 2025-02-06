@@ -5,33 +5,18 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, StatusButton } from '@/ui';
+import { CustomLink, DateTime, LinkWithCopy, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 import { ProductionStatus } from '../utils';
 
 const getPath = (haveAccess, userUUID) => {
-	if (haveAccess.includes('show_all_orders')) {
-		return `all=true`;
-	}
-	if (
-		haveAccess.includes('show_approved_orders') &&
-		haveAccess.includes('show_own_orders') &&
-		userUUID
-	) {
-		return `own_uuid=${userUUID}&approved=true`;
-	}
-
-	if (haveAccess.includes('show_approved_orders')) {
-		return 'all=false&approved=true';
-	}
-
 	if (haveAccess.includes('show_own_orders') && userUUID) {
 		return `own_uuid=${userUUID}`;
 	}
 
-	return `all=false`;
+	return `all=true`;
 };
 
 export default function Index() {
@@ -72,14 +57,31 @@ export default function Index() {
 			{
 				accessorKey: 'challan_id',
 				header: 'Challan No.',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				enableColumnFilter: true,
+				cell: (info) => {
+					const { uuid } = info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/delivery/challan/${uuid}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				enableColumnFilter: true,
+				cell: (info) => {
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${info.getValue()}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'product',

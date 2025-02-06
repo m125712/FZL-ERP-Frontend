@@ -8,7 +8,7 @@ import { useAccess } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -27,18 +27,27 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'batch_number',
+				header: 'Batch No.',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/planning/finishing-batch/${info.row.original.finishing_batch_uuid}`}
+						openInNewTab={true}
+					/>
+				),
+			},
+			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				cell: (info) => {
-					const { order_number } = info.row.original;
-					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={order_number}
-							uri='/order/details'
-						/>
-					);
-				},
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'assembly_stock_name',

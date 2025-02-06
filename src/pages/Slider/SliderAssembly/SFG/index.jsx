@@ -1,10 +1,11 @@
-import { Suspense } from '@/components/Feedback';
-import ReactTable from '@/components/Table';
+import { lazy, useEffect, useMemo, useState } from 'react';
 import { useAccess, useFetchFunc } from '@/hooks';
 
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
 import { LinkWithCopy, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const Production = lazy(() => import('./Production'));
 const Transaction = lazy(() => import('./Transaction'));

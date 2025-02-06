@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
-import { DebouncedInput } from '../../components';
-import { Template } from '../../components/Filter/_components';
+
+import { Template } from '../../ui';
+import { DebouncedInput } from '../../utils';
 
 const FilterNumber = ({ columnName, column, isFullFilter }) => {
 	const { getFilterValue, setFilterValue, getFacetedMinMaxValues } = column;
@@ -47,9 +48,10 @@ const FilterNumber = ({ columnName, column, isFullFilter }) => {
 		<Template
 			columnName={columnName}
 			onClick={() => setFilterValue(undefined)}
-			showResetButton={getFilterValue()?.[0] || getFilterValue()?.[1]}>
+			showResetButton={getFilterValue()?.[0] || getFilterValue()?.[1]}
+		>
 			<div className='flex flex-col justify-between gap-1 md:flex-row'>
-				<DebouncedInput
+				{/* <DebouncedInput
 					placeholder={`Min: ${min}`}
 					value={getFilterValue()?.[0] ?? ''}
 					onChange={handleMinValueChange}
@@ -61,7 +63,7 @@ const FilterNumber = ({ columnName, column, isFullFilter }) => {
 					value={getFilterValue()?.[1] ?? ''}
 					onChange={handleMaxValueChange}
 					{...DefaultInputProps}
-				/>
+				/> */}
 			</div>
 		</Template>
 	);

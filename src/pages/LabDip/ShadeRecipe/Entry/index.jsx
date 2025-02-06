@@ -269,7 +269,8 @@ export default function Index() {
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
-					className='flex flex-col'>
+					className='flex flex-col'
+				>
 					<div className='space-y-6'>
 						<Header
 							{...{
@@ -295,10 +296,12 @@ export default function Index() {
 								<th
 									key={item}
 									scope='col'
-									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-4 py-2 text-left font-semibold tracking-wide text-primary-content transition duration-300'>
+									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-4 py-2 text-left font-semibold tracking-wide text-primary-content transition duration-300'
+								>
 									{item}
 								</th>
-							))}>
+							))}
+						>
 							{shadeRecipeField.map((item, index) => (
 								<tr key={item.id} className=''>
 									<td className={`${rowClass}`}>
@@ -310,7 +313,8 @@ export default function Index() {
 												errors?.shade_recipe_entry?.[
 													index
 												]?.material_uuid
-											}>
+											}
+										>
 											<Controller
 												name={`shade_recipe_entry[${index}].material_uuid`}
 												control={control}
@@ -375,7 +379,8 @@ export default function Index() {
 										/>
 									</td>
 									<td
-										className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
+										className={`w-16 ${rowClass} border-l-4 border-l-primary`}
+									>
 										<ActionButtons
 											duplicateClick={() =>
 												handelDuplicateDynamicField(
@@ -398,7 +403,8 @@ export default function Index() {
 					<div className='modal-action'>
 						<button
 							type='submit'
-							className='text-md btn btn-primary btn-block rounded'>
+							className='text-md btn btn-primary btn-block rounded'
+						>
 							Save
 						</button>
 					</div>

@@ -12,6 +12,7 @@ export const Columns = ({
 	register,
 	errors,
 	watch = () => {},
+	status = '',
 	is_new = false,
 }) => {
 	const haveAccess = useAccess('dyeing__thread_batch_entry_update');
@@ -225,7 +226,8 @@ export const Columns = ({
 											shouldDirty: true,
 										}
 									)
-								}>
+								}
+							>
 								Copy
 							</label>
 							{info.getValue()}
@@ -291,7 +293,7 @@ export const Columns = ({
 				),
 			},
 		],
-		[NewBatchOrdersField, register, errors]
+		[NewBatchOrdersField, register, errors, status]
 	);
 
 	const columns = useMemo(

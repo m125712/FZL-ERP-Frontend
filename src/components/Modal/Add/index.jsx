@@ -1,6 +1,8 @@
-import cn from '@lib/cn';
-import { Footer, Header } from '../ui';
 import { FormProvider } from 'react-hook-form';
+
+import cn from '@/lib/cn';
+
+import { Footer, Header } from '../ui';
 
 function AddModal({
 	id,
@@ -16,7 +18,8 @@ function AddModal({
 	return (
 		<dialog
 			id={id}
-			className='modal modal-bottom max-h-screen overflow-hidden sm:modal-middle'>
+			className='modal modal-bottom max-h-screen overflow-hidden sm:modal-middle'
+		>
 			<FormProvider {...formContext}>
 				<form
 					onSubmit={onSubmit}
@@ -26,7 +29,8 @@ function AddModal({
 						'modal-box flex w-full flex-col justify-between bg-base-100 p-6 text-secondary-content',
 						!isSmall && 'sm:max-w-5xl',
 						formClassName
-					)}>
+					)}
+				>
 					<Header
 						title={title}
 						subTitle={subTitle}

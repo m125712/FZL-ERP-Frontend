@@ -112,6 +112,14 @@ export const useOtherOrderDescription = (params) =>
 			: '/other/order/description/value/label',
 	});
 
+export const useOtherOrderStore = (params) =>
+	createGlobalState({
+		queryKey: otherQK.orderStore(params),
+		url: params
+			? `/other/order/order-description-store/value/label?${params}`
+			: '/other/order/order-description-store/value/label',
+	});
+
 export const useOtherOrderBatchDescription = (params) =>
 	createGlobalState({
 		queryKey: otherQK.orderBatchDescription(params),
@@ -261,10 +269,12 @@ export const useOtherSliderDieCastingType = (param) =>
 	});
 
 // GET OTHER SLIDER STOCK
-export const useOtherSliderStockWithDescription = () =>
+export const useOtherSliderStockWithDescription = (query) =>
 	createGlobalState({
-		queryKey: otherQK.sliderStockWithDescription(),
-		url: `/other/slider/stock-with-order-description/value/label`,
+		queryKey: otherQK.sliderStockWithDescription(query),
+		url: query
+			? `/other/slider/stock-with-order-description/value/label?${query}`
+			: `/other/slider/stock-with-order-description/value/label`,
 	});
 // GET OTHER Packing List
 export const useOtherPackingListByOrderInfoUUID = (uuid) =>
@@ -472,10 +482,12 @@ export const useOtherCountLength = () =>
 	});
 
 //*GET ALl Zipper-Thread Order List
-export const useAllZipperThreadOrderList = () =>
+export const useAllZipperThreadOrderList = (query) =>
 	createGlobalState({
-		queryKey: otherQK.allZipperThreadOrderList(),
-		url: `/other/order/zipper-thread/value/label`,
+		queryKey: otherQK.allZipperThreadOrderList(query),
+		url: query
+			? `/other/order/zipper-thread/value/label?${query}`
+			: `/other/order/zipper-thread/value/label`,
 	});
 //* GET SHADE RECIPE
 export const useOtherShadeRecipe = () =>
@@ -527,4 +539,11 @@ export const useOtherMachinesWithSlot = (param) =>
 		queryKey: otherQK.machinesWithSlot(param),
 		url: `/other/machine-with-slot/value/label?production_date=${param}`,
 		enabled: param ? true : false,
+	});
+
+// * GET RM
+export const useOtherRM = (field = 'single-field', param) =>
+	createGlobalState({
+		queryKey: otherQK.rm(field, param),
+		url: `/material/stock/by/${field}/${param}`,
 	});

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import EmptySlotCard from './empty-slot-card';
 import SlotCard from './slot-card';
 
@@ -14,10 +12,6 @@ export default function Content({ data, dyeingDate }) {
 		'Slot 6',
 	];
 
-	// console.log({
-	// 	data,
-	// });
-
 	return (
 		<div className='overflow-x-auto rounded-t-md border'>
 			<span className='flex items-center gap-4 bg-primary px-4 py-3 text-lg font-semibold capitalize text-primary-content'>
@@ -30,7 +24,8 @@ export default function Content({ data, dyeingDate }) {
 						{header?.map((item, index) => (
 							<th
 								key={index}
-								className='w-32 bg-base-200 px-4 py-2 text-left text-sm font-semibold capitalize leading-tight text-primary'>
+								className='w-32 bg-base-200 px-4 py-2 text-left text-sm font-semibold capitalize leading-tight text-primary'
+							>
 								{item}
 							</th>
 						))}

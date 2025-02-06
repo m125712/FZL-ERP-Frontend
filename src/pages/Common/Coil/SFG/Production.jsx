@@ -37,13 +37,16 @@ export default function Index({
 		useCommonCoilProduction();
 
 	const { invalidateQuery: invalidateOtherTapeCoil } = useOtherTapeCoil();
-	
+
 	const MAX_PRODUCTION_QTY = updateCoilProd?.trx_quantity_in_coil;
 
 	const schema = {
 		...COIL_PROD_SCHEMA,
-		production_quantity: NUMBER_DOUBLE_REQUIRED.max(MAX_PRODUCTION_QTY),
-		wastage: NUMBER_DOUBLE_REQUIRED.max(MAX_PRODUCTION_QTY),
+		production_quantity: NUMBER_DOUBLE_REQUIRED.moreThan(
+			0,
+			'Must be greater than 0'
+		),
+		wastage: NUMBER_DOUBLE_REQUIRED.min(0, 'Can not be negative'),
 	};
 
 	const { register, handleSubmit, errors, reset, watch, context } = useRHF(
@@ -68,13 +71,13 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
-		if (MAX_WASTAGE < watch('wastage')) {
-			ShowLocalToast({
-				type: 'error',
-				message: 'Beyond Stock',
-			});
-			return;
-		}
+		// if (MAX_WASTAGE < watch('wastage')) {
+		// 	ShowLocalToast({
+		// 		type: 'error',
+		// 		message: 'Beyond Stock',
+		// 	});
+		// 	return;
+		// }
 		const section = 'coil';
 		// Update item
 		const updatedData = {
@@ -105,7 +108,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<JoinInput
 				label='production_quantity'
 				sub_label={`Max: ${Number(MAX_PRODUCTION_QTY)}`}

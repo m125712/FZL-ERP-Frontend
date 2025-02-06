@@ -1,11 +1,17 @@
+import { useMemo, useState } from 'react';
+import {
+	useVislonFinishingProd,
+	useVislonFinishingTrxLog,
+} from '@/state/Vislon';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useVislonFinishingTrxLog, useVislonFinishingProd } from '@/state/Vislon';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useMemo, useState } from 'react';
+
 import SFGAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {

@@ -96,7 +96,8 @@ export default function Index({ packing_list_entry, data }) {
 						<button
 							type='button'
 							className='btn btn-accent btn-sm font-semibold text-white shadow-md'
-							onClick={() => handleUpdate(info.row.index)}>
+							onClick={() => handleUpdate(info.row.index)}
+						>
 							<BookOpen />
 						</button>
 					);
@@ -173,7 +174,8 @@ export default function Index({ packing_list_entry, data }) {
 			<ReactTableTitleOnly
 				title='Details'
 				data={packing_list_entry}
-				columns={columns}>
+				columns={columns}
+			>
 				<tr className='text-sm'>
 					<td colSpan='6' className='py-2 text-right'>
 						Total QTY

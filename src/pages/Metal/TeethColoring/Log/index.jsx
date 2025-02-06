@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
+import Production from './Production';
 import RMTransferLog from './RMTransferLog';
 import Transfer from './Transfer';
-import Production from './Production';
 
 export default function Index() {
 	useEffect(() => {

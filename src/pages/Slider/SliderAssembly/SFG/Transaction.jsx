@@ -1,23 +1,25 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from "@/hooks";
-import { Input, JoinInput } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { SFG_TRX_NULL, SFG_TRX_SCHEMA } from "@util/Schema";
+import { useAuth } from '@/context/auth';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, JoinInput } from '@/ui';
+
+import { SFG_TRX_NULL, SFG_TRX_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setSliderAssemblyProd,
 	updateSliderAssemblyProd = {
 		id: null,
-		name: "",
+		name: '',
 		slider_assembly_stock: null,
 		slider_assembly_prod: null,
 		order_entry_id: null,
-		end_type_name: "",
+		end_type_name: '',
 		order_number: null,
-		item_description: "",
-		order_description: "",
+		item_description: '',
+		order_description: '',
 	},
 	setUpdateSliderAssemblyProd,
 }) {
@@ -36,15 +38,15 @@ export default function Index({
 		setUpdateSliderAssemblyProd((prev) => ({
 			...prev,
 			id: null,
-			name: "",
+			name: '',
 			slider_assembly_stock: null,
 			slider_assembly_prod: null,
 			order_entry_id: null,
 			total_trx_quantity: null,
-			end_type_name: "",
+			end_type_name: '',
 			order_number: null,
-			item_description: "",
-			order_description: "",
+			item_description: '',
+			order_description: '',
 		}));
 		reset(SFG_TRX_NULL);
 		window[modalId].close();
@@ -67,8 +69,8 @@ export default function Index({
 				updateSliderAssemblyProd?.total_trx_quantity +
 				data.trx_quantity,
 			end_type_name: updateSliderAssemblyProd?.end_type_name,
-			trx_from: "slider_assembly_prod",
-			trx_to: "coloring_stock",
+			trx_from: 'slider_assembly_prod',
+			trx_to: 'coloring_stock',
 			name: updateSliderAssemblyProd?.name,
 			issued_by: user?.id,
 			issued_by_name: user?.name,
@@ -85,7 +87,7 @@ export default function Index({
 			});
 		} else {
 			alert(
-				"Remaining trx_quantity should be less than stock trx_quantity"
+				'Remaining trx_quantity should be less than stock trx_quantity'
 			);
 			return;
 		}
@@ -93,7 +95,7 @@ export default function Index({
 
 	return (
 		<AddModal
-			id="SliderAssemblyTrxModal"
+			id='SliderAssemblyTrxModal'
 			title={`Assembly ⇾ Coloring`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
@@ -101,13 +103,13 @@ export default function Index({
 			isSmall={true}
 		>
 			<JoinInput
-				label="trx_quantity"
-				unit="PCS"
+				label='trx_quantity'
+				unit='PCS'
 				max={updateSliderAssemblyProd?.slider_assembly_prod}
 				placeholder={`Max: ${updateSliderAssemblyProd?.slider_assembly_prod}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

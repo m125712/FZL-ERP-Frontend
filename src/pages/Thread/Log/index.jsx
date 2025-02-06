@@ -1,10 +1,16 @@
 import { useEffect } from 'react';
 
 import Production from './Production';
+import RMLog from './RmLog';
 
 export default function Index() {
 	useEffect(() => {
 		document.title = 'Thread: Log';
 	}, []);
-	return <Production />;
+	return (
+		<div className='flex flex-col gap-8'>
+			<Production />
+			<RMLog />
+		</div>
+	);
 }

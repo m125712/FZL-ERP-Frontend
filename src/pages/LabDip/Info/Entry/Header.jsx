@@ -14,10 +14,12 @@ export default function Header({
 	errors,
 	control,
 	getValues,
+	watch,
 	Controller,
 	lab_status,
 	isUpdate,
 }) {
+	const [colors, setColors] = useState([]);
 	// * state for lab status field *//
 	const [labStatus, setLabStatus] = useState(
 		typeof lab_status !== 'boolean' && Number(lab_status) === 1
@@ -52,7 +54,8 @@ export default function Header({
 					<FormField
 						label='order_info_uuid'
 						title='order info'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'order_info_uuid'}
 							control={control}
@@ -66,7 +69,15 @@ export default function Header({
 												item.value ==
 												getValues('order_info_uuid')
 										)}
-										onChange={(e) => onChange(e.value)}
+										onChange={(e) => {
+											onChange(e.value);
+											setColors(
+												e.colors.map((item) => ({
+													value: item,
+													label: item,
+												}))
+											);
+										}}
 										isDisabled={
 											order_info_uuid == undefined
 										}
@@ -75,8 +86,33 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-
-					<Input label={`name`} {...{ register, errors }} />
+					{watch('order_info_uuid') ? (
+						<FormField label='name' title='name' errors={errors}>
+							<Controller
+								name={'name'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select order info uuid'
+											options={colors}
+											value={colors?.find(
+												(item) =>
+													item.value ==
+													getValues('name')
+											)}
+											onChange={(e) => onChange(e.value)}
+											isDisabled={
+												order_info_uuid == undefined
+											}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+					) : (
+						<Input label={`name`} {...{ register, errors }} />
+					)}
 				</div>
 
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>

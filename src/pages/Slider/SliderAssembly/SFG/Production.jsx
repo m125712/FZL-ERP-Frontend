@@ -1,33 +1,35 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
+import { useAuth } from '@/context/auth';
 import {
 	useFetchForRhfReset,
 	usePostFunc,
 	useRHF,
 	useUpdateFunc,
-} from "@/hooks";
-import { Input, JoinInput } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
+} from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input, JoinInput } from '@/ui';
+
 import {
 	NUMBER_DOUBLE_REQUIRED,
 	SFG_PRODUCTION_NULL,
 	SFG_PRODUCTION_SCHEMA,
-} from "@util/Schema";
+} from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setSliderAssemblyProd,
 	updateSliderAssemblyProd = {
 		id: null,
-		name: "",
+		name: '',
 		slider_assembly_stock: null,
 		slider_assembly_prod: null,
 		order_entry_id: null,
 		total_trx_quantity: null,
 		quantity: null,
 		order_number: null,
-		item_description: "",
-		order_description: "",
+		item_description: '',
+		order_description: '',
 	},
 	setUpdateSliderAssemblyProd,
 }) {
@@ -46,14 +48,14 @@ export default function Index({
 		setUpdateSliderAssemblyProd((prev) => ({
 			...prev,
 			id: null,
-			name: "",
+			name: '',
 			slider_assembly_stock: null,
 			slider_assembly_prod: null,
 			order_entry_id: null,
 			total_trx_quantity: null,
 			order_number: null,
-			item_description: "",
-			order_description: "",
+			item_description: '',
+			order_description: '',
 		}));
 		reset(SFG_PRODUCTION_NULL);
 		window[modalId].close();
@@ -75,7 +77,7 @@ export default function Index({
 				data.production_quantity,
 			total_trx_quantity: updateSliderAssemblyProd?.total_trx_quantity,
 			used_quantity: 0,
-			section: "slider_assembly",
+			section: 'slider_assembly',
 			issued_by: user?.id,
 			created_at: GetDateTime(),
 		};
@@ -90,33 +92,33 @@ export default function Index({
 				onClose: onClose,
 			});
 		} else {
-			alert("Quantity should be less than stock quantity");
+			alert('Quantity should be less than stock quantity');
 			return;
 		}
 	};
 
 	return (
 		<AddModal
-			id="SliderAssemblyProdModal"
-			title={"Assembly Production"}
+			id='SliderAssemblyProdModal'
+			title={'Assembly Production'}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}
 		>
 			<JoinInput
-				label="production_quantity"
-				unit="PCS"
+				label='production_quantity'
+				unit='PCS'
 				placeholder={`Max: ${updateSliderAssemblyProd?.slider_assembly_stock}`}
 				{...{ register, errors }}
 			/>
 			<JoinInput
-				label="wastage"
-				unit="PCS"
-				placeholder={`Max: ${updateSliderAssemblyProd?.slider_assembly_stock - watch("production_quantity")}`}
+				label='wastage'
+				unit='PCS'
+				placeholder={`Max: ${updateSliderAssemblyProd?.slider_assembly_stock - watch('production_quantity')}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

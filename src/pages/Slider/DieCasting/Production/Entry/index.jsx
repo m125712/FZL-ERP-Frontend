@@ -1,6 +1,7 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
 import {
 	useOtherOrderBatchDescription,
+	useOtherOrderStore,
 	useOtherSliderItem,
 } from '@/state/Other';
 import {
@@ -63,6 +64,7 @@ export default function Index() {
 		Controller,
 		useFieldArray,
 		getValues,
+		watch,
 		context: form,
 	} = useRHF(SLIDER_DIE_CASTING_SCHEMA, SLIDER_DIE_CASTING_NULL);
 
@@ -74,6 +76,7 @@ export default function Index() {
 
 	const { data: slider_item_name } = useOtherSliderItem();
 	const { data: orders } = useOtherOrderBatchDescription();
+	const { data: order } = useOtherOrderStore();
 
 	const {
 		fields,
@@ -193,7 +196,8 @@ export default function Index() {
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				noValidate
-				className='flex flex-col gap-4'>
+				className='flex flex-col gap-4'
+			>
 				<DynamicField
 					title={uuid == null ? `Entry Details` : 'Update Details'}
 					handelAppend={handleSliderDieCastingAppend}
@@ -204,13 +208,15 @@ export default function Index() {
 						'Cavity Goods',
 						'Cavity Defect',
 						'Push',
+						'Qty',
 						'Weight',
 						'Remarks',
 					].map((item) => (
 						<th key={item} scope='col' className='px-1 py-2'>
 							{item}
 						</th>
-					))}>
+					))}
+				>
 					{isUpdate && fields.length === 0 && (
 						<TableNoData colSpan={8} />
 					)}
@@ -240,7 +246,8 @@ export default function Index() {
 										dynamicerror={
 											errors?.array?.[index]
 												?.die_casting_uuid
-										}>
+										}
+									>
 										<Controller
 											name={`array[${index}].die_casting_uuid`}
 											control={control}
@@ -276,15 +283,16 @@ export default function Index() {
 								{/* ORDER NO */}
 								<td className={cn(tdClass)}>
 									<FormField
-										label={`array[${index}].finishing_batch_uuid`}
+										label={`array[${index}].order_description_uuid`}
 										is_title_needed='false'
 										register={register}
 										dynamicerror={
 											errors?.array?.[index]
-												?.finishing_batch_uuid
-										}>
+												?.order_description_uuid
+										}
+									>
 										<Controller
-											name={`array[${index}].finishing_batch_uuid`}
+											name={`array[${index}].order_description_uuid`}
 											control={control}
 											render={({
 												field: { onChange },
@@ -292,12 +300,12 @@ export default function Index() {
 												return (
 													<ReactSelect
 														placeholder='Select Order'
-														options={orders}
-														value={orders?.find(
+														options={order}
+														value={order?.find(
 															(inItem) =>
 																inItem.value ==
 																getValues(
-																	`array[${index}].finishing_batch_uuid`
+																	`array[${index}].order_description_uuid`
 																)
 														)}
 														onChange={(e) => {
@@ -352,7 +360,15 @@ export default function Index() {
 										}
 									/>
 								</td>
-
+								<td
+									className={cn(
+										'w-24 text-center font-semibold text-slate-800',
+										tdClass
+									)}
+								>
+									{watch(`array[${index}].push`) *
+										watch(`array[${index}].cavity_goods`)}
+								</td>
 								{/* WEIGHT */}
 								<td className={cn('w-40', tdClass)}>
 									<JoinInput

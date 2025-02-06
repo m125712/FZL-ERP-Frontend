@@ -1,18 +1,21 @@
-import { AddModal } from '@/components/Modal';
 import { useAuth } from '@/context/auth';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
 import { useCommonMaterialTrx } from '@/state/Common';
 import {
 	useMaterialInfo,
 	useMaterialTrxAgainstOrderDescription,
 } from '@/state/Store';
+import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
-import getTransactionArea from '@/util/TransactionArea';
+
 import {
 	RM_MATERIAL_ORDER_AGAINST_EDIT_NULL,
 	RM_MATERIAL_ORDER_AGAINST_EDIT_SCHEMA,
 } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
+import getTransactionArea from '@/util/TransactionArea';
+
 export default function Index({
 	modalId = '',
 	updateLog = {
@@ -46,7 +49,7 @@ export default function Index({
 		Controller,
 		reset,
 		getValues,
-		context
+		context,
 	} = useRHF(schema, RM_MATERIAL_ORDER_AGAINST_EDIT_NULL);
 
 	useFetchForRhfReset(`${url}/${updateLog?.uuid}`, updateLog?.uuid, reset);
@@ -93,7 +96,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField label='trx_to' title='trx_to' errors={errors}>
 				<Controller
 					name={'trx_to'}

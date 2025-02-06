@@ -182,7 +182,8 @@ export default function Index({ order_info_entry }) {
 		<ReactTableTitleOnly
 			title='Details'
 			data={order_info_entry}
-			columns={columns}>
+			columns={columns}
+		>
 			<tr className='text-sm'>
 				<td colSpan='6' className='py-2 text-right'>
 					Total QTY

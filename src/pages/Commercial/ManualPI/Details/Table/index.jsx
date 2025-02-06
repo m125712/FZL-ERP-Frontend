@@ -55,7 +55,7 @@ export default function Index({ entries }) {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row)=> row.is_zipper ? 'Yes' : 'No',
+				accessorFn: (row) => (row.is_zipper ? 'Yes' : 'No'),
 				header: 'Zipper',
 				id: 'is_zipper',
 				enableColumnFilter: false,

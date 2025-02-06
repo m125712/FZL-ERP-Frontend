@@ -6,7 +6,14 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkOnly, StatusButton } from '@/ui';
+import {
+	CustomLink,
+	DateTime,
+	EditDelete,
+	LinkOnly,
+	StatusButton,
+	StatusSelect,
+} from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -36,12 +43,20 @@ const getPath = (haveAccess, userUUID) => {
 };
 
 export default function Index() {
+	const [status, setStatus] = useState('all');
+	// * options for extra select in table
+	const options = [
+		{ value: 'bulk', label: 'Bulk' },
+		{ value: 'sample', label: 'Sample' },
+		{ value: 'all', label: 'All' },
+	];
+
 	const navigate = useNavigate();
 	const haveAccess = useAccess('thread__order_info_details');
 	const { user } = useAuth();
 
 	const { data, isLoading, url, deleteData } = useThreadOrderInfoByQuery(
-		getPath(haveAccess, user?.uuid),
+		getPath(haveAccess, user?.uuid) + `&type=${status}`,
 		{
 			enabled: !!user?.uuid,
 		}
@@ -53,7 +68,10 @@ export default function Index() {
 		() => [
 			{
 				accessorKey: 'is_sample',
-				header: 'Sample/Bill/Cash',
+				header: () =>
+					haveAccess.includes('show_cash_bill_lc')
+						? 'Sample/Bill/Cash'
+						: 'Sample',
 				enableColumnFilter: false,
 				width: 'w-28',
 				cell: (info) => {
@@ -61,23 +79,33 @@ export default function Index() {
 					return (
 						<div className='flex gap-6'>
 							<StatusButton size='btn-xs' value={is_sample} />
-							<StatusButton size='btn-xs' value={is_bill} />
-							<StatusButton size='btn-xs' value={is_cash} />
+							{haveAccess.includes('show_cash_bill_lc') && (
+								<>
+									<StatusButton
+										size='btn-xs'
+										value={is_bill}
+									/>
+									<StatusButton
+										size='btn-xs'
+										value={is_cash}
+									/>
+								</>
+							)}
 						</div>
 					);
 				},
 			},
 			{
 				accessorKey: 'order_number',
-				header: 'ID',
-				width: 'w-36',
+				header: 'O/N',
+				enableColumnFilter: true,
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
-						<LinkOnly
-							uri='/thread/order-info'
-							id={uuid}
-							title={info.getValue()}
+						<CustomLink
+							label={info.getValue()}
+							url={`/thread/order-info/${uuid}`}
+							openInNewTab={true}
 						/>
 					);
 				},
@@ -145,6 +173,22 @@ export default function Index() {
 				id: 'price_approval_count',
 				header: 'Price App',
 				enableColumnFilter: false,
+			},
+			{
+				accessorFn: (row) => (row.is_bleached ? 'Yes' : 'No'),
+				id: 'is_bleached',
+				header: 'Bleached',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return (
+						<div className='flex space-x-1'>
+							<StatusButton
+								size='btn-xs'
+								value={info.getValue() === 'Yes' ? 1 : 0}
+							/>
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'delivery_date',
@@ -235,6 +279,13 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				data={data}
 				columns={columns}
+				extraButton={
+					<StatusSelect
+						status={status}
+						setStatus={setStatus}
+						options={options}
+					/>
+				}
 			/>
 
 			<Suspense>

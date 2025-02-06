@@ -6,7 +6,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
+import { CustomLink, DateTime, EditDelete, StatusSelect, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -25,12 +25,19 @@ const getPath = (haveAccess, userUUID) => {
 };
 
 export default function Index() {
+	const [status, setStatus] = useState('pending');
+	const options = [
+		{ value: 'all', label: 'All' },
+		{ value: 'pending', label: 'Pending' },
+		{ value: 'completed', label: 'Completed' },
+	];
+
 	const navigate = useNavigate();
 	const haveAccess = useAccess('commercial__pi-cash');
 	const { user } = useAuth();
 
 	const { data, isLoading, url } = useCommercialPIByQuery(
-		getPath(haveAccess, user?.uuid),
+		getPath(haveAccess, user?.uuid) + `&type=${status}`,
 		{
 			enabled: !!user?.uuid,
 		}
@@ -44,15 +51,15 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'id',
-				header: 'CI ID',
+				accessorFn: (row) => row.id,
+				id: 'cash_invoice_id',
+				header: 'C/I',
 				enableColumnFilter: true,
 				width: 'w-36',
-				cell: (info) => (
-					<LinkWithCopy
-						title={info.getValue()}
-						id={info.getValue()}
-						uri={`/commercial/pi-cash`}
+				cell: ({ row }) => (
+					<CustomLink
+						label={row.original.id}
+						url={`/commercial/pi-cash/${row.original.id}`}
 					/>
 				),
 			},
@@ -83,7 +90,6 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'receive_amount',
-				header: 'Receive Amount',
 				header: (
 					<>
 						Received <br />
@@ -91,53 +97,70 @@ export default function Index() {
 					</>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => info.getValue().toLocaleString(),
 			},
 			{
 				accessorFn: (row) => {
 					const { order_numbers, thread_order_numbers } = row;
-					return [...order_numbers, ...thread_order_numbers];
+					const zipper =
+						order_numbers
+							.map((order) => order.order_number)
+							.join(', ') || '';
+					const thread =
+						thread_order_numbers
+							.map((order) => order.thread_order_number)
+							.join(', ') || '';
+
+					if (zipper.length > 0 && thread.length > 0)
+						return `${zipper}, ${thread}`;
+
+					if (zipper.length > 0) return zipper;
+
+					if (thread.length > 0) return thread;
+
+					return '--';
 				},
 				id: 'order_numbers',
 				header: 'O/N',
-				width: 'w-28',
 				enableColumnFilter: false,
-				cell: (info) => {
-					const orderNumbers = info.getValue();
-					return orderNumbers?.map((orderNumber) => {
-						if (
-							orderNumber.thread_order_info_uuid === null ||
-							orderNumber.order_info_uuid === null
-						)
-							return;
-						const isThreadOrder =
-							orderNumber.thread_order_number?.includes('ST');
-						const number = isThreadOrder
-							? orderNumber.thread_order_number
-							: orderNumber.order_number;
-						const uuid = isThreadOrder
-							? orderNumber.thread_order_info_uuid
-							: orderNumber.order_info_uuid;
-						return (
-							<LinkWithCopy
-								key={number}
-								title={number}
-								id={isThreadOrder ? uuid : number}
-								uri={
-									isThreadOrder
-										? '/thread/order-info'
-										: '/order/details'
-								}
-							/>
-						);
-					});
+				cell: ({ row }) => {
+					const { order_numbers, thread_order_numbers } =
+						row.original;
+
+					let links = [];
+
+					order_numbers
+						.filter((order) => order.order_info_uuid)
+						.forEach((order) => {
+							links.push({
+								label: order.order_number,
+								url: `/order/details/${order.order_number}`,
+							});
+						});
+
+					thread_order_numbers
+						.filter((order) => order.thread_order_info_uuid)
+						.forEach((order) => {
+							links.push({
+								label: order.thread_order_number,
+								url: `/thread/order-info/${order.thread_order_info_uuid}`,
+							});
+						});
+
+					return links.map((link, index) => (
+						<CustomLink
+							key={index}
+							label={link.label}
+							url={link.url}
+						/>
+					));
 				},
 			},
 			{
-				accessorKey: 'order_type',
+				accessorFn: (row) => row.order_type.join(', ') || '--',
+				id: 'order_type',
 				header: 'Type',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue()?.join(', '),
 			},
 			{
 				accessorKey: 'marketing_name',
@@ -248,6 +271,13 @@ export default function Index() {
 				columns={columns}
 				accessor={haveAccess.includes('create')}
 				handelAdd={handelAdd}
+				extraButton={
+					<StatusSelect
+						options={options}
+						status={status}
+						setStatus={setStatus}
+					/>
+				}
 			/>
 			<Suspense>
 				<ReceiveAmount

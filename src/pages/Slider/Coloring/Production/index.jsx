@@ -5,7 +5,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { LinkWithCopy, StatusButton, Transfer } from '@/ui';
+import { CustomLink, LinkWithCopy, StatusButton, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -51,38 +51,37 @@ export default function Index() {
 				accessorKey: 'batch_number',
 				header: 'Batch No.',
 				enableColumnFilter: false,
-				cell: (info) => {
-					const { finishing_batch_uuid } = info.row.original;
-
-					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={finishing_batch_uuid}
-							uri={`/planning/finishing-batch`}
-						/>
-					);
-				},
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/planning/finishing-batch/${info.row.original.finishing_batch_uuid}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
-				cell: (info) => {
-					const { order_number } = info.row.original;
-					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={order_number}
-							uri='/order/details'
-						/>
-					);
-				},
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'item_description',
 				header: 'Item Dsc',
 				enableColumnFilter: true,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.row.original.order_number}/${info.row.original.order_description_uuid}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'item_name',
@@ -110,6 +109,20 @@ export default function Index() {
 				cell: (info) => (
 					<StatusButton size='btn-sm' value={info.getValue()} />
 				),
+			},
+			{
+				accessorFn: (row) => row.color.join(', '),
+				id: 'color',
+				header: 'Tape Color',
+				width: 'w-44',
+				enableColumnFilter: false,
+				// cell: (info) => info.getValue()?.join(', '),
+			},
+			{
+				accessorKey: 'teeth_color_name',
+				header: 'Teeth Color',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'end_type_name',
@@ -271,21 +284,22 @@ export default function Index() {
 					return (
 						<Transfer
 							onClick={() => handelProduction(info.row.index)}
-							disabled={
-								(order_type === 'slider'
-									? coloring_stock
-									: Math.floor(
-											Math.min(
-												Number(u_top_quantity) / 2,
-												coloring_stock,
-												end_type_name === 'Close End'
-													? h_bottom_quantity
-													: box_pin_quantity
-											)
-										)) <= 0
-									? true
-									: false
-							}
+							// disabled={
+							// 	(order_type === 'slider'
+							// 		? coloring_stock
+							// 		: Math.floor(
+							// 				Math.min(
+							// 					Number(u_top_quantity) / 2,
+							// 					coloring_stock,
+							// 					end_type_name === 'Close End'
+							// 						? h_bottom_quantity
+							// 						: box_pin_quantity
+							// 				)
+							// 			)) <= 0
+							// 		? true
+							// 		: false
+							// }
+							disabled={coloring_stock <= 0 ? true : false}
 						/>
 					);
 				},

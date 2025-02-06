@@ -84,7 +84,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<Input
 				label='trx_quantity'
 				sub_label={`Max: ${

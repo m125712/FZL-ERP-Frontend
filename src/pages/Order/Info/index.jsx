@@ -13,7 +13,8 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useOrderInfo();
+	const { data, isLoading, url, deleteData, invalidateQuery } =
+		useOrderInfo();
 	const info = new PageInfo(
 		'Party Description',
 		url,
@@ -101,6 +102,7 @@ export default function Index() {
 						url,
 						deleteData,
 					}}
+					invalidateQuery={invalidateQuery}
 				/>
 			</Suspense>
 		</div>

@@ -9,9 +9,17 @@ export default function Index({ dyeing_batch_entry }) {
 	const total = dyeing_batch_entry?.reduce(
 		(acc, item) => {
 			acc.quantity += item?.quantity;
-			acc.raw_tape += getRequiredTapeKg({ row: item, type: 'raw' });
+			acc.raw_tape += getRequiredTapeKg({
+				row: item,
+				type: 'raw',
+				input_quantity: item.quantity,
+			});
 			acc.actual += item?.given_production_quantity_in_kg;
-			acc.dyed_tape += getRequiredTapeKg({ row: item, type: 'dyed' });
+			acc.dyed_tape += getRequiredTapeKg({
+				row: item,
+				type: 'dyed',
+				input_quantity: item.quantity,
+			});
 
 			return acc;
 		},
@@ -22,8 +30,6 @@ export default function Index({ dyeing_batch_entry }) {
 			dyed_tape: 0,
 		}
 	);
-
-	console.log(total);
 
 	const columns = useMemo(
 		() => [
@@ -57,8 +63,19 @@ export default function Index({ dyeing_batch_entry }) {
 				enableColumnFilter: false,
 			},
 			{
+				accessorKey: 'bleaching',
+				header: 'Bleaching',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'size',
-				header: 'Size (CM)',
+				header: 'Size',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'unit',
+				header: 'Unit',
 				enableColumnFilter: false,
 			},
 			{
@@ -136,9 +153,10 @@ export default function Index({ dyeing_batch_entry }) {
 		<ReactTableTitleOnly
 			title='Details'
 			data={dyeing_batch_entry}
-			columns={columns}>
+			columns={columns}
+		>
 			<tr className='text-lg font-bold'>
-				<th className='pe-4 text-right' colSpan={5}>
+				<th className='pe-4 text-right' colSpan={7}>
 					Total
 				</th>
 				<td className='ps-3'>{total?.quantity}</td>

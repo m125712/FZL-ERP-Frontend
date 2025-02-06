@@ -1,9 +1,5 @@
-import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import {
-	useCommonTapeRequired,
-	useCommonTapeRequiredByUUID,
-} from '@/state/Common';
+import { useCommonTapeRequired } from '@/state/Common';
 import {
 	useOtherOrderPropertiesByEndType,
 	useOtherOrderPropertiesByItem,
@@ -27,8 +23,7 @@ export default function Index({
 	},
 	setUpdateTapeRequired,
 }) {
-	const { data, isLoading, url, deleteData, postData, updateData } =
-		useCommonTapeRequired();
+	const { url, postData, updateData } = useCommonTapeRequired();
 	const { user } = useAuth();
 	const {
 		register,
@@ -108,7 +103,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<div className='flex gap-1'>
 				<FormField label='item_uuid' title='Item' errors={errors}>
 					<Controller
@@ -133,7 +129,8 @@ export default function Index({
 				<FormField
 					label='nylon_stopper_uuid'
 					title='Nylon Stopper'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'nylon_stopper_uuid'}
 						control={control}
@@ -158,7 +155,8 @@ export default function Index({
 				<FormField
 					label='zipper_number_uuid'
 					title='Zipper Number'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'zipper_number_uuid'}
 						control={control}
@@ -181,7 +179,8 @@ export default function Index({
 				<FormField
 					label='end_type_uuid'
 					title='End_type'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'end_type_uuid'}
 						control={control}
@@ -206,6 +205,10 @@ export default function Index({
 			<div className='flex gap-1'>
 				<Input label='top' {...{ register, errors }} />
 				<Input label='bottom' {...{ register, errors }} />
+			</div>
+			<div className='flex gap-1'>
+				<Input label='raw_mtr_per_kg' {...{ register, errors }} />
+				<Input label='dyed_mtr_per_kg' {...{ register, errors }} />
 			</div>
 
 			<Textarea label='remarks' {...{ register, errors }} />

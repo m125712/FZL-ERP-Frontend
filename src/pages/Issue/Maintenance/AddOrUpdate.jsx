@@ -1,5 +1,6 @@
-import { AddModal } from '@/components/Modal';
+import { useState } from 'react';
 import { useAuth } from '@/context/auth';
+import * as yup from 'yup';
 import {
 	useFetch,
 	useFetchForRhfReset,
@@ -7,11 +8,12 @@ import {
 	useRHF,
 	useUpdateFunc,
 } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
 import { MAINTENANCE_NULL } from '@util/Schema';
-import { useState } from 'react';
-import * as yup from 'yup';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -129,7 +131,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField label='material_id' title='Material' errors={errors}>
 				<Controller
 					name={'material_id'}

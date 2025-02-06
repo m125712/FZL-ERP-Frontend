@@ -8,7 +8,8 @@ const SidebarCollapse = () => {
 	return (
 		<motion.button
 			whileTap={{ scale: 0.9 }}
-			className='size-fit text-secondary'>
+			className='size-fit text-secondary'
+		>
 			{isCollapsed ? (
 				<PanelLeftOpenIcon className='size-6' />
 			) : (

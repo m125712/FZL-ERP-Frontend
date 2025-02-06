@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { PDF } from '@/assets/icons';
 import { useOrderDescription } from '@/state/Order';
 import { format } from 'date-fns';
+import { useAccess } from '@/hooks';
 
 import SectionContainer from '@/ui/Others/SectionContainer';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
@@ -74,6 +75,13 @@ const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
 	return <TitleValue title='Cash / LC' value={value} />;
 };
 
+const renderOrderStatus = (is_sample, is_bill) => {
+	let value = is_sample == 1 ? 'Sample' : 'Bulk';
+	value = is_bill == 1 ? `${value} (Bill)` : `${value} (No Bill)`;
+
+	return value;
+};
+
 export function OrderInformation({
 	order,
 	handelPdfDownload,
@@ -94,8 +102,10 @@ export function OrderInformation({
 		factory_name,
 		factory_address,
 		pi_numbers,
+		revision_no,
 	} = order;
 
+	const haveAccess = useAccess('order__details');
 	const { updateData } = useOrderDescription();
 
 	const renderItems = () => {
@@ -114,15 +124,22 @@ export function OrderInformation({
 					/>
 				),
 			},
+			// {
+			// 	label: 'Cash / LC',
+			// 	value: haveAccess.includes('show_cash_bill_lc')
+			// 		? renderCashOrLC(
+			// 				order?.is_cash,
+			// 				order?.is_sample,
+			// 				order?.is_bill,
+			// 				true
+			// 			)
+			// 		: '--',
+			// },
 			{
-				label: 'Cash / LC',
-				value: renderCashOrLC(
-					order?.is_cash,
-					order?.is_sample,
-					order?.is_bill,
-					true
-				),
+				label: 'Order Status',
+				value: renderOrderStatus(order?.is_sample, order?.is_bill),
 			},
+
 			{
 				label: 'PI No.',
 				value: pi_numbers?.join(', '),
@@ -186,7 +203,8 @@ export function OrderInformation({
 				key='pdf'
 				type='button'
 				className='btn btn-accent btn-sm rounded-badge'
-				onClick={handelPdfDownload}>
+				onClick={handelPdfDownload}
+			>
 				<PDF className='w-4' /> PDF
 			</button>,
 			<div className='flex items-center gap-2'>
@@ -216,7 +234,8 @@ export function OrderInformation({
 			title='Order Information'
 			buttons={renderButtons()}
 			// selector={renderSelector()}
-			className={'mb-8'}>
+			className={'mb-8'}
+		>
 			<div className='grid grid-cols-1 bg-base-100 md:grid-cols-2 md:gap-8'>
 				<RenderTable
 					className={

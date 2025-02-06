@@ -1,13 +1,14 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
+import { useNavigate } from 'react-router-dom';
+import { useAccess, useFetchFunc } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAuth } from '@/context/auth';
-import { useAccess, useFetchFunc } from '@/hooks';
-
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export default function Index() {
 	const navigate = useNavigate();

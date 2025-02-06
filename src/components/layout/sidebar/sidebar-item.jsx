@@ -6,7 +6,8 @@ const SidebarItem = ({ path, name, children, disableCollapse }) => {
 		<SidebarFolder
 			path={path}
 			name={name}
-			disableCollapse={disableCollapse}>
+			disableCollapse={disableCollapse}
+		>
 			{children}
 		</SidebarFolder>
 	) : (

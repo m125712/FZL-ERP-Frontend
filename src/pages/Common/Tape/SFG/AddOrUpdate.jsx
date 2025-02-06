@@ -133,13 +133,15 @@ export default function Index({
 			title={`${updateTapeProd?.uuid ? 'Tape Update' : 'Tape Add'}`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
-			onClose={onClose}>
+			onClose={onClose}
+		>
 			<div className='flex gap-2'>
 				<Textarea label='name' title='Name' {...{ register, errors }} />
 				<FormField
 					label='material_uuid'
 					title='Material'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'material_uuid'}
 						control={control}
@@ -184,7 +186,8 @@ export default function Index({
 				<FormField
 					label='zipper_number_uuid'
 					title='Zipper Number'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'zipper_number_uuid'}
 						control={control}
@@ -226,7 +229,8 @@ export default function Index({
 				<FormField
 					label='is_reverse'
 					title='Is Reverse'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'is_reverse'}
 						control={control}

@@ -83,7 +83,8 @@ class CustomEditor extends BaseEditorComponent {
 					}}
 					ref={this.mainElementRef}
 					onMouseDown={this.stopMousedownPropagation}
-					id='editorElement'>
+					id='editorElement'
+				>
 					<ReactSelect
 						extraControlClassName='!rounded-none'
 						openMenuOnFocus
@@ -122,7 +123,8 @@ class CustomEditor extends BaseEditorComponent {
 					}}
 					ref={this.mainElementRef}
 					onMouseDown={this.stopMousedownPropagation}
-					id='editorElement'>
+					id='editorElement'
+				>
 					<input
 						ref={this.inputElementRef}
 						className='h-full w-full rounded-none border-none p-2 focus:border-none'

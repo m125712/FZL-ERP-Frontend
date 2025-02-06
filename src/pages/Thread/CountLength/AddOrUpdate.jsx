@@ -94,7 +94,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<Input label='count' {...{ register, errors }} />
 			<Input label='length' {...{ register, errors }} />
 			<Input label='min_weight' {...{ register, errors }} />

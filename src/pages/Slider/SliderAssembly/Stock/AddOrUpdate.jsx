@@ -102,7 +102,8 @@ export default function Index({
 			title={updateStock?.uuid !== null ? 'Update Stock' : 'Create Stock'}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
-			onClose={onClose}>
+			onClose={onClose}
+		>
 			{/* NAME , ITEM , ZIPPER NUMBER */}
 			<div className='flex gap-4'>
 				<Input
@@ -113,7 +114,8 @@ export default function Index({
 				<FormField
 					label='material_uuid'
 					title='Material'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'material_uuid'}
 						control={control}
@@ -140,7 +142,8 @@ export default function Index({
 				<FormField
 					label='die_casting_body_uuid'
 					title='Body'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'die_casting_body_uuid'}
 						control={control}
@@ -166,7 +169,8 @@ export default function Index({
 				<FormField
 					label='die_casting_puller_uuid'
 					title='Puller'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'die_casting_puller_uuid'}
 						control={control}
@@ -193,7 +197,8 @@ export default function Index({
 				<FormField
 					label='die_casting_cap_uuid'
 					title='Cap'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'die_casting_cap_uuid'}
 						control={control}
@@ -221,7 +226,8 @@ export default function Index({
 				<FormField
 					label='die_casting_link_uuid'
 					title='Link'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'die_casting_link_uuid'}
 						control={control}

@@ -1,17 +1,32 @@
 import { useEffect, useMemo } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommercialManualPI } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime, EditDelete } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
+
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return `all=true`;
+};
 
 export default function Index() {
 	const navigate = useNavigate();
 	const haveAccess = useAccess('commercial__manual_pi');
-	const { data, isLoading, url } = useCommercialManualPI();
+	const { user } = useAuth();
+	const { data, isLoading, url } = useCommercialManualPI(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
 	const info = new PageInfo('Manual PI', url, 'commercial__manual_pi');
 
 	useEffect(() => {
@@ -28,10 +43,10 @@ export default function Index() {
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={uuid}
-							uri={`/commercial/manual-pi`}
+						<CustomLink
+							label={info.getValue()}
+							url={`/commercial/manual-pi/${uuid}`}
+							openInNewTab={true}
 						/>
 					);
 				},
@@ -44,11 +59,11 @@ export default function Index() {
 				cell: (info) => {
 					return info?.getValue()?.map((pi_number) => {
 						return (
-							<LinkWithCopy
+							<CustomLink
 								key={pi_number}
-								title={pi_number}
-								id={pi_number}
-								uri='/commercial/pi'
+								label={pi_number}
+								url={`/commercial/pi/${pi_number}`}
+								openInNewTab={true}
 							/>
 						);
 					});
@@ -56,11 +71,17 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'order_number',
-				header: 'Order Number',
-				width: 'w-28',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue().join('\n'),
+				header: 'O/N',
+				enableColumnFilter: true,
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
+					/>
+				),
 			},
+
 			{
 				accessorKey: 'total_value',
 				header: 'Total Value',

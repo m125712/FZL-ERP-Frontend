@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
-import { CalenderIcon } from '@/assets/icons';
 import { format } from 'date-fns';
+import { Calendar } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 
 import {
@@ -8,14 +8,17 @@ import {
 	DatePickerDefaultConfig,
 } from '@/ui/Core/base';
 
-import cn from '@lib/cn';
+import cn from '@/lib/cn';
 
 const SimpleDatePicker = ({
-	className,
+	className = '',
 	selected,
 	placeholder = '',
 	onChange = () => {},
+	onChangeForTime = () => {},
 	disabled = false,
+	showTime = false,
+	timeIntervals = 30,
 	...props
 }) => {
 	const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
@@ -29,11 +32,13 @@ const SimpleDatePicker = ({
 				className
 			)}
 			onClick={onClick}
-			ref={ref}>
+			ref={ref}
+		>
 			{value ? value : placeholder ? placeholder : 'Select Date'}
-			<CalenderIcon className='w-4' />
+			<Calendar className='mb-0.5 ml-1 w-4' />
 		</button>
 	));
+
 	return (
 		<DatePicker
 			{...props}
@@ -42,9 +47,14 @@ const SimpleDatePicker = ({
 			selected={selected}
 			onChange={(date) => {
 				onChange(format(date, 'yyyy-MM-dd HH:mm:ss'));
+				onChangeForTime(date);
 			}}
 			renderCustomHeader={DatePickerCustomHeader}
 			{...DatePickerDefaultConfig}
+			showTimeSelect={showTime}
+			timeFormat='HH:mm'
+			timeIntervals={timeIntervals}
+			// dateFormat={showTime ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'} // ✅ Adjust format accordingly
 		/>
 	);
 };

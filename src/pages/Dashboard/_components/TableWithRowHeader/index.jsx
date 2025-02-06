@@ -43,7 +43,8 @@ export function TableWithRowHeader(props) {
 						<tr className='bg-gray-800 text-white'>
 							<th
 								className='p-3 text-left text-lg font-bold'
-								colSpan={2}>
+								colSpan={2}
+							>
 								<div className='flex items-center justify-between'>
 									<span>{props.title}</span>
 									{/* <button
@@ -63,7 +64,8 @@ export function TableWithRowHeader(props) {
 								key={row.id}
 								className={
 									index % 2 === 0 ? 'bg-white' : 'bg-gray-100'
-								}>
+								}
+							>
 								{row.getVisibleCells().map((cell) => (
 									<td
 										key={cell.id}
@@ -71,7 +73,8 @@ export function TableWithRowHeader(props) {
 											cell.column.id === 'value'
 												? 'text-right sm:text-left'
 												: 'text-left'
-										}`}>
+										}`}
+									>
 										{flexRender(
 											cell.column.columnDef.cell,
 											cell.getContext()

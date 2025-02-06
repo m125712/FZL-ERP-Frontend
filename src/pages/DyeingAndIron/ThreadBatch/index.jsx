@@ -8,14 +8,28 @@ import { useAccess } from '@/hooks';
 import ReactTable from '@/components/Table';
 import BatchType from '@/ui/Others/BatchType';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
+import {
+	DateTime,
+	EditDelete,
+	LinkWithCopy,
+	StatusSelect,
+	Transfer,
+} from '@/ui';
 
 import { cn } from '@/lib/utils';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const { data, url, updateData, isLoading } = useDyeingThreadBatch();
+	const [currentStatus, setCurrentStatus] = useState('pending');
+	const options = [
+		{ value: 'all', label: 'All' },
+		{ value: 'pending', label: 'Pending' },
+		{ value: 'completed', label: 'Completed' },
+	];
+	const { data, url, updateData, isLoading } = useDyeingThreadBatch(
+		`type=${currentStatus}`
+	);
 	const { invalidateQuery } = useDyeingCone();
 	const info = new PageInfo('Thread Batch', url, 'dyeing__thread_batch');
 	const { user } = useAuth();
@@ -85,7 +99,7 @@ export default function Index() {
 				accessorKey: 'production_date',
 				header: (
 					<div className='flex flex-col'>
-						<span>Production</span>
+						<span>Production </span>
 						<span>Date</span>
 					</div>
 				),
@@ -102,13 +116,16 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'color',
+				accessorFn: (row) => row.color.join(', '),
+				id: 'color',
 				header: 'Color',
 				enableColumnFilter: false,
+				width: 'w-24',
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'recipe_name',
+				accessorFn: (row) => row.recipe_name.join(', '),
+				id: 'recipe_name',
 				header: 'Shade',
 				width: 'w-24',
 				enableColumnFilter: false,
@@ -184,7 +201,8 @@ export default function Index() {
 							className={cn(
 								'badge badge-sm uppercase',
 								res[info.getValue()]
-							)}>
+							)}
+						>
 							{info.getValue()}
 						</span>
 					);
@@ -256,7 +274,6 @@ export default function Index() {
 			{
 				accessorKey: 'created_at',
 				header: 'Created at',
-				width: 'w-40',
 				enableColumnFilter: false,
 				filterFn: 'isWithinRange',
 				cell: (info) => {
@@ -267,7 +284,6 @@ export default function Index() {
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated at',
-				width: 'w-24',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
@@ -307,9 +323,10 @@ export default function Index() {
 
 	//Drying Completed
 	const handelDryingComplete = async (idx) => {
-		if (data[idx]?.is_drying_complete === null) {
+		const { uuid, is_drying_complete } = data[idx];
+		if (is_drying_complete === null) {
 			await updateData.mutateAsync({
-				url: `${url}/${data[idx]?.uuid}`,
+				url: `/thread/batch/${uuid}`,
 				updatedData: {
 					is_drying_complete: true,
 					drying_created_at: GetDateTime(),
@@ -320,38 +337,15 @@ export default function Index() {
 			invalidateQuery();
 		} else {
 			await updateData.mutateAsync({
-				url: `${url}/${data[idx]?.uuid}`,
+				url: `/thread/batch/${uuid}`,
 				updatedData: {
 					is_drying_complete:
-						data[idx]?.is_drying_complete === 'true' ? false : true,
+						is_drying_complete === 'true' ? false : true,
 					drying_updated_at: GetDateTime(),
 				},
 				isOnCloseNeeded: false,
 			});
 			invalidateQuery();
-		}
-	};
-	// Machine
-	const handleMachine = async (e, idx) => {
-		if (data[idx]?.machine_uuid === null) {
-			await updateData.mutateAsync({
-				url: `${url}/${data[idx]?.uuid}`,
-				updatedData: {
-					machine_uuid: e.value,
-					lab_created_by: user?.uuid,
-					lab_created_at: GetDateTime(),
-				},
-				isOnCloseNeeded: false,
-			});
-		} else {
-			await updateData.mutateAsync({
-				url: `${url}/${data[idx]?.uuid}`,
-				updatedData: {
-					machine_uuid: e.value,
-					lab_updated_at: GetDateTime(),
-				},
-				isOnCloseNeeded: false,
-			});
 		}
 	};
 
@@ -365,7 +359,6 @@ export default function Index() {
 		navigate(`/dyeing-and-iron/thread-batch/${uuid}/update`);
 	};
 
-	// get tabname
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
@@ -382,6 +375,13 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				accessor={haveAccess.includes('create')}
+				extraButton={
+					<StatusSelect
+						status={currentStatus}
+						setStatus={setCurrentStatus}
+						options={options}
+					/>
+				}
 			/>
 		</div>
 	);

@@ -83,7 +83,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<JoinInput
 				label='trx_quantity'
 				sub_label={`Max: ${updateTapeProd?.quantity}`}

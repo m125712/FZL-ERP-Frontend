@@ -9,7 +9,8 @@ const ResetPassword = ({ onClick }) => {
 		<button
 			type='button'
 			className='btn btn-circle btn-accent btn-xs font-semibold'
-			onClick={onClick}>
+			onClick={onClick}
+		>
 			<ArrowBack className='w-4' />
 		</button>
 	);
@@ -19,7 +20,8 @@ function Pdf({ props }) {
 	return (
 		<button
 			className='btn btn-xs rounded-full bg-secondary text-secondary-content'
-			{...props}>
+			{...props}
+		>
 			PDF
 			<PDF className='h-4 w-4' />
 		</button>
@@ -32,7 +34,8 @@ const Transfer = ({ onClick, disabled = false }) => {
 			disabled={disabled}
 			type='button'
 			className='btn btn-circle btn-accent btn-sm font-semibold text-white shadow-md'
-			onClick={onClick}>
+			onClick={onClick}
+		>
 			<TransferIn className='w-4' />
 		</button>
 	);

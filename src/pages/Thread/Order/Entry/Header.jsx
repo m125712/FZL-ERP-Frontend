@@ -7,6 +7,7 @@ import {
 	useOtherParty,
 } from '@/state/Other';
 import DatePicker from 'react-datepicker';
+import { useParams } from 'react-router-dom';
 
 import { Textarea } from '@/ui/Core';
 import { CheckBox, FormField, ReactSelect, SectionEntryBody } from '@/ui';
@@ -23,7 +24,11 @@ export default function Header({
 	getValues,
 	Controller,
 	control,
+	setValue,
 }) {
+	const { order_info_uuid } = useParams();
+	const isUpdate = order_info_uuid !== undefined;
+
 	const [isSample, setIsSample] = useState(
 		getBoolean({ field: 'is_sample', getValues })
 	);
@@ -39,6 +44,14 @@ export default function Header({
 	const { data: factory } = useOtherFactoryByPartyUUID(partyId);
 	const { data: buyer } = useOtherBuyer();
 	const { data: marketing } = useOtherMarketing();
+	const revisions = [
+		{ value: 0, label: 'Revision 0' },
+		{ value: 1, label: 'Revision 1' },
+		{ value: 2, label: 'Revision 2' },
+		{ value: 3, label: 'Revision 3' },
+		{ value: 4, label: 'Revision 4' },
+		{ value: 5, label: 'Revision 5' },
+	];
 
 	useEffect(() => {
 		setPartyId(getValues('party_uuid'));
@@ -50,7 +63,23 @@ export default function Header({
 				title='Order'
 				header={
 					<div className='flex justify-end gap-2 p-2 text-sm'>
-						<div className='rounded-md border border-accent/50 bg-primary px-1'>
+						{isUpdate && (
+							<div className='flex items-center rounded-md border-2 border-dashed border-red-600 px-1 text-gray-600'>
+								<CheckBox
+									label='is_cancelled'
+									title='Cancelled'
+									text='text-primary-content'
+									onChange={(e) =>
+										setValue(
+											'is_cancelled',
+											e.target.checked
+										)
+									}
+									{...{ register, errors }}
+								/>
+							</div>
+						)}
+						<div className='flex items-center rounded-md border border-accent/50 bg-primary px-1'>
 							<CheckBox
 								label='is_sample'
 								title='Sample'
@@ -60,7 +89,7 @@ export default function Header({
 								{...{ register, errors }}
 							/>
 						</div>
-						<div className='rounded-md border border-accent/50 bg-primary px-1'>
+						<div className='flex items-center rounded-md border border-accent/50 bg-primary px-1'>
 							<CheckBox
 								title='Bill'
 								label='is_bill'
@@ -70,7 +99,7 @@ export default function Header({
 								{...{ register, errors }}
 							/>
 						</div>
-						<div className='rounded-md border border-accent/50 bg-primary px-1'>
+						<div className='flex items-center rounded-md border border-accent/50 bg-primary px-1'>
 							<CheckBox
 								title='Cash'
 								label='is_cash'
@@ -80,13 +109,45 @@ export default function Header({
 								{...{ register, errors }}
 							/>
 						</div>
+						<div className='w-28'>
+							<FormField
+								label='revision_no'
+								title='Revision No'
+								is_title_needed='false'
+								errors={errors}
+							>
+								<Controller
+									name={'revision_no'}
+									control={control}
+									render={({ field: { onChange } }) => {
+										return (
+											<ReactSelect
+												placeholder='Select Type'
+												options={revisions}
+												value={revisions?.filter(
+													(item) =>
+														item.value ==
+														getValues('revision_no')
+												)}
+												onChange={(e) => {
+													onChange(e.value);
+												}}
+												isDisabled={!isUpdate}
+											/>
+										);
+									}}
+								/>
+							</FormField>
+						</div>
 					</div>
-				}>
+				}
+			>
 				<div className='flex flex-col gap-1 md:flex-row'>
 					<FormField
 						label='marketing_uuid'
 						title='Marketing'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'marketing_uuid'}
 							control={control}
@@ -154,7 +215,8 @@ export default function Header({
 					<FormField
 						label='merchandiser_uuid'
 						title='Merchandiser'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'merchandiser_uuid'}
 							control={control}
@@ -179,7 +241,8 @@ export default function Header({
 					<FormField
 						label='factory_uuid'
 						title='Factory'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'factory_uuid'}
 							control={control}
@@ -204,7 +267,8 @@ export default function Header({
 					<FormField
 						label='delivery_date'
 						title='Delivery Date'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'delivery_date'}
 							control={control}

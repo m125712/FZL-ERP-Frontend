@@ -93,6 +93,40 @@ export default function Index({ recipe, order_info_uuid }) {
 				},
 			},
 			{
+				accessorKey: 'is_pps_req',
+				header: 'PP Sample Required?',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const access = haveAccess.includes('click_approve');
+					const overrideAccess = haveAccess.includes(
+						'click_approve_override'
+					);
+					return (
+						<SwitchToggle
+							disabled={
+								!order_info_uuid ||
+								(!overrideAccess &&
+									(!access || Number(info.getValue()) === 1))
+							}
+							onChange={() =>
+								handelPPsRequiredStatusChange(info.row.index)
+							}
+							checked={Number(info.getValue()) === 1}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'is_pps_req_date',
+				header: 'PP Required Date',
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
 				accessorKey: 'recipe_created_at',
 				header: 'Created',
 				filterFn: 'isWithinRange',
@@ -126,6 +160,20 @@ export default function Index({ recipe, order_info_uuid }) {
 		});
 		invalidateQueryLabDipInfo();
 	};
+
+	const handelPPsRequiredStatusChange = async (idx) => {
+		await updateData.mutateAsync({
+			url: `/lab-dip/info-entry/${recipe[idx]?.info_entry_uuid}`,
+			updatedData: {
+				is_pps_req: recipe[idx]?.is_pps_req === 1 ? 0 : 1,
+				is_pps_req_date:
+					recipe[idx]?.is_pps_req === 1 ? null : GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
+		invalidateQueryLabDipInfo();
+	};
+
 	const handelStatusChange = async (idx) => {
 		await updateData.mutateAsync({
 			url: `${url}/${recipe[idx]?.recipe_uuid}`,

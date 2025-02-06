@@ -9,7 +9,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -41,33 +41,26 @@ const Index = () => {
 				accessorKey: 'batch_number',
 				header: 'Batch No.',
 				enableColumnFilter: false,
-				cell: (info) => {
-					const { finishing_batch_uuid } = info.row.original;
-
-					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={finishing_batch_uuid}
-							uri={`/planning/finishing-batch`}
-						/>
-					);
-				},
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/planning/finishing-batch/${info.row.original.finishing_batch_uuid}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: false,
-				cell: (info) =>
-					info.getValue() ? (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={info.getValue()}
-							uri='/order/details'
-						/>
-					) : (
-						'Stock'
-					),
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'quantity',
@@ -90,6 +83,12 @@ const Index = () => {
 						(KG)
 					</>
 				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'teeth_color_name',
+				header: 'Teeth Color',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

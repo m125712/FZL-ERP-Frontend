@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
+import { useAccess } from '@/hooks';
 
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
 import { DateTime, StatusButton, TitleValue } from '@/ui';
 
 export default function Information({ orderInfo }) {
+	const haveAccess = useAccess('thread__order_info_in_details');
 	const [check, setCheck] = useState(true);
 	const [checkSwatch, setCheckSwatch] = useState(true);
 
@@ -43,6 +45,7 @@ export default function Information({ orderInfo }) {
 		pi_numbers,
 		created_by_name,
 		remarks,
+		revision_no,
 		created_at,
 		updated_at,
 	} = orderInfo;
@@ -65,27 +68,35 @@ export default function Information({ orderInfo }) {
 			},
 			{
 				label: 'Is Bill',
-				value: (
+				value: haveAccess.includes('show_cash_bill_lc') ? (
 					<StatusButton
 						className={'border-0'}
 						size='btn-xs'
 						value={is_bill}
 					/>
+				) : (
+					'--'
 				),
 			},
 			{
 				label: 'Is Cash',
-				value: (
+				value: haveAccess.includes('show_cash_bill_lc') ? (
 					<StatusButton
 						className={'border-0'}
 						size='btn-xs'
 						value={is_cash}
 					/>
+				) : (
+					'--'
 				),
 			},
 			{
 				label: 'PI No.',
 				value: pi_numbers?.join(', '),
+			},
+			{
+				label: 'Revision No.',
+				value: revision_no,
 			},
 			{
 				label: 'Delivery Date',

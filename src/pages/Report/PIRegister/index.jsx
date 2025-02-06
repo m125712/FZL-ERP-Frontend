@@ -5,31 +5,16 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime } from '@/ui';
+import { CustomLink, DateTime } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 const getPath = (haveAccess, userUUID) => {
-	if (haveAccess.includes('show_all_orders')) {
-		return `all=true`;
-	}
-	if (
-		haveAccess.includes('show_approved_orders') &&
-		haveAccess.includes('show_own_orders') &&
-		userUUID
-	) {
-		return `own_uuid=${userUUID}&approved=true`;
-	}
-
-	if (haveAccess.includes('show_approved_orders')) {
-		return 'all=false&approved=true';
-	}
-
 	if (haveAccess.includes('show_own_orders') && userUUID) {
 		return `own_uuid=${userUUID}`;
 	}
 
-	return `all=false`;
+	return `all=true`;
 };
 
 export default function Index() {
@@ -67,31 +52,41 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) => {
-					return [
-						...row.order_numbers,
-						...row.thread_order_numbers,
-					].join(', ');
+					const { order_object } = row;
+					const { thread_order_object } = row;
+					order_object.push(...thread_order_object);
+					return order_object
+						.filter((order) => order.value !== null)
+						.map((order) => {
+							return order.label;
+						});
 				},
-				id: 'orders',
+				id: 'order_object',
 				header: 'O/N',
+				width: 'w-40',
 				enableColumnFilter: false,
-				width: 'w-52',
 				cell: (info) => {
-					const { order_numbers, thread_order_numbers } =
-						info.row.original;
-					const orders = [...order_numbers, ...thread_order_numbers];
-
-					return (
-						<div className='flex flex-wrap'>
-							{orders.map((order, index) => (
-								<span
-									key={index}
-									className='mr-2 rounded-full border bg-slate-300 px-2'>
-									{order}
-								</span>
-							))}
-						</div>
-					);
+					const orderNumbers = info.row.original.order_object;
+					return orderNumbers
+						.filter((orderNumber) => orderNumber.value !== null)
+						?.map((orderNumber) => {
+							if (orderNumber === null) return;
+							const isThreadOrder =
+								orderNumber.label?.includes('ST');
+							const number = orderNumber.label;
+							const uuid = orderNumber.value;
+							return (
+								<CustomLink
+									label={number}
+									url={
+										isThreadOrder
+											? `/thread/order-info/${uuid}`
+											: `/order/details/${number}`
+									}
+									openInNewTab={true}
+								/>
+							);
+						});
 				},
 			},
 			{

@@ -46,7 +46,8 @@ export default function Index() {
 							onSubmit={handleSubmit(onSubmit)}
 							noValidate
 							method='dialog'
-							className='mx-auto mt-6 flex max-w-md flex-col space-y-6 sm:mt-10 sm:space-y-8'>
+							className='mx-auto mt-6 flex max-w-md flex-col space-y-6 sm:mt-10 sm:space-y-8'
+						>
 							<Input
 								label='email'
 								type='email'
@@ -67,7 +68,8 @@ export default function Index() {
 							<div className='modal-action'>
 								<button
 									type='submit'
-									className='btn btn-primary btn-block'>
+									className='btn btn-primary btn-block'
+								>
 									Login
 								</button>
 							</div>

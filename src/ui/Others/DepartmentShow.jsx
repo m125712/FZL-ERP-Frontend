@@ -78,7 +78,8 @@ const Base = ({ department, children }) => {
 				'flex w-fit items-center gap-1 rounded-md bg-opacity-30 px-1 text-xs font-medium uppercase tracking-wider',
 				text,
 				bg
-			)}>
+			)}
+		>
 			{children}
 		</span>
 	);

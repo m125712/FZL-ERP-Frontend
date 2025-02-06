@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
 import { useOtherSliderStockWithDescription } from '@/state/Other';
 import {
@@ -5,6 +6,7 @@ import {
 	useSliderAssemblyStockTransaction,
 	useSliderColoringProduction,
 } from '@/state/Slider';
+import { Watch } from 'lucide';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -40,9 +42,8 @@ export default function Index({
 		useSliderColoringProduction();
 	const { user } = useAuth();
 
-	const { data: stock } = useOtherSliderStockWithDescription(
-		'/other/slider/stock-with-order-description/value/label'
-	);
+	const { data: stock, invalidateQuery: invalidateStock } =
+		useOtherSliderStockWithDescription('section=assembly_stock');
 
 	const {
 		register,
@@ -50,6 +51,8 @@ export default function Index({
 		errors,
 		reset,
 		getValues,
+		setValue,
+		watch,
 		control,
 		context,
 		Controller,
@@ -104,21 +107,35 @@ export default function Index({
 		invalidateAssemblyStock();
 		invalidateAssemblyStockTransaction();
 		invalidateSliderColoringProduction();
+		invalidateStock();
 	};
+
+	const currentWeight = () => {
+		if (updateSliderTrx?.weight) {
+			return (
+				watch('trx_quantity') *
+				(updateSliderTrx?.weight / updateSliderTrx?.quantity)
+			);
+		}
+		return 0;
+	};
+
+	useEffect(() => {
+		setValue('weight', currentWeight().toFixed(2));
+	}, [watch('trx_quantity')]);
 
 	return (
 		<AddModal
 			id={modalId}
 			title='Slider Assembly Prod ⇾ Coloring Stock'
 			subTitle={`
-				${updateSliderTrx.order_number} -> 
-				${updateSliderTrx.item_description} -> 
-				${updateSliderTrx.item_name} 
+				${updateSliderTrx.name} 
 				`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField label='stock_uuid' title='Stock' errors={errors}>
 				<Controller
 					name={'stock_uuid'}

@@ -74,7 +74,8 @@ function CustomRenderer(props) {
 				<select
 					value={props.value}
 					disabled
-					className='bg-transparent disabled:text-primary'>
+					className='bg-transparent disabled:text-primary'
+				>
 					{props.field.options.map((option) => (
 						<option value={option}>{option}</option>
 					))}
@@ -151,13 +152,15 @@ const Test = () => {
 						<button
 							type='button'
 							className='btn btn-circle btn-ghost btn-sm'
-							onClick={() => alert('Hello World!')}>
+							onClick={() => alert('Hello World!')}
+						>
 							<Copy className='size-4' />
 						</button>
 						<button
 							type='button'
 							className='btn btn-circle btn-ghost btn-sm text-error hover:bg-error/10'
-							onClick={() => alert('Hello World!')}>
+							onClick={() => alert('Hello World!')}
+						>
 							<Trash2 className='size-4' />
 						</button>
 					</div>
@@ -191,7 +194,8 @@ const Test = () => {
 				<button
 					type='button'
 					onClick={handleAdd}
-					className='btn btn-primary btn-sm'>
+					className='btn btn-primary btn-sm'
+				>
 					Add new
 				</button>
 				<HotTable
@@ -225,7 +229,8 @@ const Test = () => {
 							data={field.accessorKey}
 							readOnly={field.readOnly}
 							type={field.type}
-							selectOptions={field.options}>
+							selectOptions={field.options}
+						>
 							<CustomRenderer
 								hot-renderer
 								field={field}

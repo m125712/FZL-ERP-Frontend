@@ -4,31 +4,16 @@ import { useDeliveryStatement } from '@/state/Report';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, StatusButton } from '@/ui';
+import { CustomLink, DateTime, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 const getPath = (haveAccess, userUUID) => {
-	if (haveAccess.includes('show_all_orders')) {
-		return `all=true`;
-	}
-	if (
-		haveAccess.includes('show_approved_orders') &&
-		haveAccess.includes('show_own_orders') &&
-		userUUID
-	) {
-		return `own_uuid=${userUUID}&approved=true`;
-	}
-
-	if (haveAccess.includes('show_approved_orders')) {
-		return 'all=false&approved=true';
-	}
-
 	if (haveAccess.includes('show_own_orders') && userUUID) {
 		return `own_uuid=${userUUID}`;
 	}
 
-	return `all=false`;
+	return `all=true`;
 };
 
 export default function Index() {
@@ -58,15 +43,32 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				enableColumnFilter: true,
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'item_description',
-				header: 'item',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				header: 'Item',
+				enableColumnFilter: true,
+				cell: (info) => {
+					const { order_description_uuid, order_number } =
+						info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${order_number}/${order_description_uuid}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
+			,
 			{
 				accessorKey: 'size',
 				header: 'Size (cm)',

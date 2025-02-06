@@ -160,7 +160,9 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text: batch?.total_yarn_quantity + ' (KG)',
+									text:
+										batch?.total_yarn_quantity.toFixed(3) +
+										' (KG)',
 									// text:
 									// 	batch?.total_yarn_quantity +
 									// 	'/' +
@@ -180,9 +182,10 @@ export const getPageHeader = (batch) => {
 									bold: true,
 								},
 								{
-									text:
+									text: Number(
 										batch?.water_capacity *
-										batch?.total_yarn_quantity,
+											batch?.total_yarn_quantity
+									).toFixed(3),
 								},
 							],
 							[
@@ -194,23 +197,7 @@ export const getPageHeader = (batch) => {
 									text: 'Slot ' + batch?.slot,
 								},
 								{
-									text: 'Delv Dt',
-									bold: true,
-								},
-								{
-									text: `${Array.from(delivery_date).join(', ')}`,
-								},
-							],
-							[
-								{
 									text: 'Light Source',
-									bold: true,
-								},
-								{
-									text: '',
-								},
-								{
-									text: 'Fiber Type',
 									bold: true,
 								},
 								{

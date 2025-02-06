@@ -5,6 +5,7 @@ import SidebarContent from './sidebar-content';
 
 const SidebarDesktop = () => {
 	const { isCollapsed } = useLayout();
+
 	return (
 		<motion.div
 			initial='open'
@@ -12,7 +13,8 @@ const SidebarDesktop = () => {
 				open: { opacity: 1, width: '18rem' },
 				closed: { opacity: 1, width: 0, overflow: 'hidden' },
 			}}
-			animate={isCollapsed ? 'closed' : 'open'}>
+			animate={isCollapsed ? 'closed' : 'open'}
+		>
 			<SidebarContent />
 		</motion.div>
 	);

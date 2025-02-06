@@ -48,7 +48,8 @@ export function PieChartDashboard({ amount_percentage, no_of_doc }) {
 				<div className='flex flex-col items-center justify-between gap-4 md:flex-row'>
 					<ChartContainer
 						config={chartConfig}
-						className='aspect-square max-h-[300px] w-full md:w-2/3'>
+						className='aspect-square max-h-[300px] w-full md:w-2/3'
+					>
 						<ResponsiveContainer width='100%' height='100%'>
 							<PieChart>
 								<ChartTooltip
@@ -92,7 +93,8 @@ export function PieChartDashboard({ amount_percentage, no_of_doc }) {
 													x > cx ? 'start' : 'end'
 												}
 												dominantBaseline='central'
-												className='text-xs font-medium'>
+												className='text-xs font-medium'
+											>
 												{value.toFixed(1)}
 											</text>
 										);
@@ -109,7 +111,8 @@ export function PieChartDashboard({ amount_percentage, no_of_doc }) {
 					</ChartContainer>
 					<ChartContainer
 						config={chartConfig}
-						className='aspect-square max-h-[200px] w-full md:w-1/3'>
+						className='aspect-square max-h-[200px] w-full md:w-1/3'
+					>
 						<ResponsiveContainer width='100%' height='100%'>
 							<PieChart>
 								<ChartTooltip
@@ -153,7 +156,8 @@ export function PieChartDashboard({ amount_percentage, no_of_doc }) {
 													x > cx ? 'start' : 'end'
 												}
 												dominantBaseline='central'
-												className='text-[10px] font-medium'>
+												className='text-[10px] font-medium'
+											>
 												{value}
 											</text>
 										);

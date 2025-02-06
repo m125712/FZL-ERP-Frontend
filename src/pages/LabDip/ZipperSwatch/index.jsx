@@ -1,17 +1,23 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDyeingDummy, useDyeingSwatch } from '@/state/Dyeing';
 import { useOtherRecipe } from '@/state/Other';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, LinkWithCopy, ReactSelect } from '@/ui';
+import { DateTime, LinkWithCopy, ReactSelect, StatusSelect } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const { data, isLoading } = useDyeingSwatch();
+	const [status, setStatus] = useState('pending');
+	const options = [
+		{ value: 'all', label: 'All' },
+		{ value: 'pending', label: 'Pending' },
+		{ value: 'completed', label: 'Completed' },
+	];
+	const { data, isLoading } = useDyeingSwatch(`type=${status}`);
 	const { updateData } = useDyeingDummy();
 	const info = new PageInfo(
 		'LabDip/ZipperSwatch',
@@ -201,7 +207,18 @@ export default function Index() {
 
 	return (
 		<div>
-			<ReactTable title={info.getTitle()} data={data} columns={columns} />
+			<ReactTable
+				title={info.getTitle()}
+				data={data}
+				columns={columns}
+				extraButton={
+					<StatusSelect
+						options={options}
+						status={status}
+						setStatus={setStatus}
+					/>
+				}
+			/>
 		</div>
 	);
 }

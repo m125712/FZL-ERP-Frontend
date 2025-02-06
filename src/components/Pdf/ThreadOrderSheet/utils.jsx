@@ -37,7 +37,7 @@ export const getPageHeader = (orderInfo) => {
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
-						`O/N: ${orderInfo?.order_number}\n`,
+						`O/N: ${orderInfo?.order_number}  ${orderInfo?.revision_no > 0 ? `Rev: ${orderInfo?.revision_no}` : ''}\n`,
 						`Date: ${created_at}\n`,
 						`PI Number: ${pi_number ? pi_number.join(', ') : '---'}\n`,
 					],
@@ -49,23 +49,28 @@ export const getPageHeader = (orderInfo) => {
 
 			// * Start of table
 			[
-				{ text: 'Party', bold: true, color: PRIMARY_COLOR },
-				orderInfo?.party_name,
+				{ text: 'Buyer', bold: true, color: PRIMARY_COLOR },
+				orderInfo?.buyer_name,
 				{ text: 'Marketing', bold: true, color: PRIMARY_COLOR },
 				orderInfo?.marketing_name,
 			],
 			[
-				{ text: 'Factory', bold: true, color: PRIMARY_COLOR },
-				orderInfo?.factory_name,
-
+				{ text: 'Party', bold: true, color: PRIMARY_COLOR },
+				orderInfo?.party_name,
 				{ text: 'Merchandiser', bold: true, color: PRIMARY_COLOR },
 				orderInfo?.merchandiser_name,
 			],
 			[
+				{ text: 'Factory', bold: true, color: PRIMARY_COLOR },
+				{ text: orderInfo?.factory_name, colSpan: 3 },
+				{},
+				{},
+			],
+			[
 				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
-				orderInfo?.factory_address,
-				{ text: 'Buyer', bold: true, color: PRIMARY_COLOR },
-				orderInfo?.buyer_name,
+				{ text: orderInfo?.factory_address, colSpan: 3 },
+				{},
+				{},
 			],
 			[
 				{

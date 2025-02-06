@@ -66,18 +66,21 @@ export default function Header({
 									totalCalTape < parseFloat(res?.min_capacity)
 									? 'text-error'
 									: ''
-							)}>{`Batch Quantity (KG): ${Number(totalCalTape).toFixed(3)}`}</span>
+							)}
+						>{`Batch Quantity (KG): ${Number(totalCalTape).toFixed(3)}`}</span>
 						<br />
 						<span
 							className={cn(
 								totalProduction > totalCalTape
 									? 'text-error'
 									: ''
-							)}>{`Production Quantity (KG): ${Number(totalProduction).toFixed(3)}`}</span>
+							)}
+						>{`Production Quantity (KG): ${Number(totalProduction).toFixed(3)}`}</span>
 						<br />
 						<span>{`Batch Quantity (PCS): ${totalQuantity}`}</span>
 					</div>
-				}>
+				}
+			>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<DateInput
 						label='production_date'
@@ -90,7 +93,8 @@ export default function Header({
 					<FormField
 						label='machine_uuid'
 						title='Machine'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name='machine_uuid'
 							control={control}
@@ -148,7 +152,8 @@ export default function Header({
 					<FormField
 						label='Batch Status'
 						title='Batch Status'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'batch_status'}
 							control={control}

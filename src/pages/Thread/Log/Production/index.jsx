@@ -5,7 +5,7 @@ import { useAccess } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkOnly } from '@/ui';
+import { CustomLink, DateTime, EditDelete, LinkOnly } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -24,27 +24,29 @@ export default function Index() {
 				accessorKey: 'batch_number',
 				header: 'Batch ID',
 				enableColumnFilter: true,
-				width: 'w-36',
-				cell: (info) => (
-					<LinkOnly
-						title={info.getValue()}
-						id={info.row.original.batch_uuid}
-						uri='/dyeing-and-iron/thread-batch'
-					/>
-				),
+				cell: (info) => {
+					const { batch_uuid } = info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/dyeing-and-iron/thread-batch/${batch_uuid}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 
 			{
 				accessorKey: 'order_number',
-				header: 'ID',
-				width: 'w-36',
+				header: 'O/N',
+				enableColumnFilter: true,
 				cell: (info) => {
 					const { order_info_uuid } = info.row.original;
 					return (
-						<LinkOnly
-							uri='/thread/order-info'
-							id={order_info_uuid}
-							title={info.getValue()}
+						<CustomLink
+							label={info.getValue()}
+							url={`/thread/order-info/${order_info_uuid}`}
+							openInNewTab={true}
 						/>
 					);
 				},

@@ -15,7 +15,6 @@ const daysMap = {
 export function TableWithTime(props) {
 	const [time, setTime] = useState('yesterday');
 	const [dateRange, setDateRange] = useState({ from: '', to: '' });
-	const [status, setStatus] = useState(false);
 
 	useEffect(() => {
 		const to = format(addDays(new Date(), -1), 'yyyy-MM-dd');
@@ -60,7 +59,8 @@ export function TableWithTime(props) {
 								name='time'
 								className='select select-secondary h-8 min-h-0 border-secondary/30 bg-base-200 transition-all duration-100 ease-in-out'
 								value={time}
-								onChange={handleTimeChange}>
+								onChange={handleTimeChange}
+							>
 								<option value='yesterday'>Yesterday</option>
 								<option value='last_seven_days'>7 Days</option>
 								<option value='last_fifteen_days'>

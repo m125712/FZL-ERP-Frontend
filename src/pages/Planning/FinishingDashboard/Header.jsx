@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-import { SectionEntryBody, SimpleDatePicker } from '@/ui';
+import { FormField, SectionEntryBody, SimpleDatePicker } from '@/ui';
 
 export default function Header({
 	from = '',
@@ -10,22 +10,28 @@ export default function Header({
 }) {
 	return (
 		<SectionEntryBody title={'Finishing Dashboard'}>
-			<SimpleDatePicker
-				value={from}
-				placeholder='From'
-				onChange={(data) => {
-					setFrom(format(data, 'yyyy-MM-dd'));
-				}}
-			/>
-			<SimpleDatePicker
-				value={to}
-				placeholder='To'
-				minDate={from}
-				disabled={from ? false : true}
-				onChange={(data) => {
-					setTo(format(data, 'yyyy-MM-dd'));
-				}}
-			/>
+			<div className='flex gap-2'>
+				<FormField label='' title='From'>
+					<SimpleDatePicker
+						key={'from'}
+						value={from}
+						placeholder='From'
+						onChange={(data) => {
+							setFrom(format(data, 'yyyy-MM-dd'));
+						}}
+					/>
+				</FormField>
+				<FormField label='' title='To'>
+					<SimpleDatePicker
+						key={'to'}
+						value={to}
+						placeholder='To'
+						onChange={(data) => {
+							setTo(format(data, 'yyyy-MM-dd'));
+						}}
+					/>
+				</FormField>
+			</div>
 		</SectionEntryBody>
 	);
 }

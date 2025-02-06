@@ -1,7 +1,8 @@
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+
 import { PaginationButton } from '../../ui';
 import Paginated from './Paginated';
 import PaginatedButton from './PaginatedButton';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const TablePagination = ({
 	getState,
@@ -28,7 +29,8 @@ const TablePagination = ({
 							value={pageSize}
 							onChange={(e) =>
 								setPageSize(Number(e.target.value))
-							}>
+							}
+						>
 							{[10, 20, 50, 100].map((pageSize) => (
 								<option key={pageSize} value={pageSize}>
 									{pageSize}
@@ -50,14 +52,16 @@ const TablePagination = ({
 				<div className='flex gap-4'>
 					<PaginatedButton
 						onClick={() => previousPage()}
-						disabled={!getCanPreviousPage()}>
+						disabled={!getCanPreviousPage()}
+					>
 						<ChevronLeft className='size-4' />
 						<span>Previous</span>
 					</PaginatedButton>
 
 					<PaginationButton
 						onClick={() => nextPage()}
-						disabled={!getCanNextPage()}>
+						disabled={!getCanNextPage()}
+					>
 						<span>Next</span>
 						<ChevronRight className='size-4' />
 					</PaginationButton>

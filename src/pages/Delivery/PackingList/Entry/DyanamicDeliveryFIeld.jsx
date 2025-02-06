@@ -1,8 +1,7 @@
 // DynamicDeliveryTable.jsx
 import React from 'react';
-import { get, useForm } from 'react-hook-form';
 
-import { DynamicDeliveryField, Input, RemoveButton } from '@/ui';
+import { CustomLink, DynamicDeliveryField, Input, RemoveButton } from '@/ui';
 
 import cn from '@/lib/cn';
 
@@ -16,6 +15,7 @@ const DynamicDeliveryTable = ({
 	getValues,
 	errors,
 	entryFiledName,
+	totalQuantity = () => {},
 }) => {
 	const rowClass =
 		'group px-3 py-2 whitespace-nowrap text-left text-sm font-normal tracking-wide';
@@ -35,6 +35,7 @@ const DynamicDeliveryTable = ({
 		'Reject QTY',
 		'Remarks',
 	];
+
 	if (watch('item_for') === 'slider') {
 		tableHead = [
 			'O/N',
@@ -89,6 +90,8 @@ const DynamicDeliveryTable = ({
 		];
 	}
 
+	const total = totalQuantity(watch(entryFiledName));
+
 	return (
 		<DynamicDeliveryField
 			title={title}
@@ -98,7 +101,8 @@ const DynamicDeliveryTable = ({
 						<th
 							key={item}
 							scope='col'
-							className='group cursor-pointer px-3 py-2 transition duration-300'>
+							className='group cursor-pointer px-3 py-2 transition duration-300'
+						>
 							{item}
 						</th>
 					))}
@@ -107,12 +111,14 @@ const DynamicDeliveryTable = ({
 						<th
 							key='action'
 							scope='col'
-							className='group cursor-pointer px-3 py-2 transition duration-300'>
+							className='group cursor-pointer px-3 py-2 transition duration-300'
+						>
 							Delete
 						</th>
 					)}
 				</>
-			}>
+			}
+		>
 			{packingListEntryField.map((item, index) => (
 				<tr
 					key={item.id}
@@ -121,13 +127,50 @@ const DynamicDeliveryTable = ({
 						isUpdate &&
 							watch(`${entryFiledName}[${index}].isDeletable`) &&
 							'bg-error/10 text-error hover:bg-error/20'
-					)}>
+					)}
+				>
 					<td className={`w-32 ${rowClass}`}>
-						{getValues(`${entryFiledName}[${index}].order_number`)}
+						{/* <CustomLink
+							label={getValues(
+								`${entryFiledName}[${index}].order_number`
+							)}
+							url={`/order/details/${getValues(`${entryFiledName}[${index}].order_number`)}`}
+						/> */}
+
+						{getValues(`${entryFiledName}[${index}].item_for`) ===
+							'thread' ||
+						getValues(`${entryFiledName}[${index}].item_for`) ===
+							'sample_thread' ? (
+							<CustomLink
+								label={getValues(
+									`${entryFiledName}[${index}].order_number`
+								)}
+								url={`/thread/order-info/${getValues(`${entryFiledName}[${index}].order_info_uuid`)}`}
+							/>
+						) : (
+							<CustomLink
+								label={getValues(
+									`${entryFiledName}[${index}].order_number`
+								)}
+								url={`/order/details/${getValues(
+									`${entryFiledName}[${index}].order_number`
+								)}`}
+							/>
+						)}
 					</td>
 					<td className={`w-32 ${rowClass}`}>
-						{getValues(
-							`${entryFiledName}[${index}].item_description`
+						{watch('item_for') === 'thread' ||
+						watch('item_for') === 'sample_thread' ? (
+							getValues(
+								`${entryFiledName}[${index}].item_description`
+							)
+						) : (
+							<CustomLink
+								label={getValues(
+									`${entryFiledName}[${index}].item_description`
+								)}
+								url={`/order/details/${getValues(`${entryFiledName}[${index}].order_number`)}/${getValues(`${entryFiledName}[${index}].order_description_uuid`)}`}
+							/>
 						)}
 					</td>
 					<td className={`w-32 ${rowClass}`}>
@@ -257,7 +300,8 @@ const DynamicDeliveryTable = ({
 							className={cn(
 								rowClass,
 								'min-w-20 border-l-2 border-base-200'
-							)}>
+							)}
+						>
 							<RemoveButton
 								showButton
 								onClick={() =>
@@ -268,6 +312,27 @@ const DynamicDeliveryTable = ({
 					)}
 				</tr>
 			))}
+			<tr className='bg-slate-200 text-primary'>
+				<td colSpan={8}>
+					<div className='flex justify-end py-2'>Total Quantity:</div>
+				</td>
+				<td>
+					<div className='px-5'>{total?.totalQty}</div>
+				</td>
+				<td>
+					<div className='px-5'>{total?.totalPolyQty}</div>
+				</td>
+				<td>
+					<div className='px-5'>{total?.totalShortQty}</div>
+				</td>
+				<td>
+					<div className='px-5'>{total?.totalRejectQty}</div>
+				</td>
+				<td></td>
+				{isUpdate && entryFiledName === 'packing_list_entry' && (
+					<td></td>
+				)}
+			</tr>
 		</DynamicDeliveryField>
 	);
 };

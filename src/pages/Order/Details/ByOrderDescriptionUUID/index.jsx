@@ -1,4 +1,5 @@
 import { lazy, useEffect, useState } from 'react';
+import { useOrderDetailsByStyleForPDF } from '@/state/Order';
 import {
 	useOtherOrderPropertiesByGarmentsWash,
 	useOtherOrderPropertiesBySpecialRequirement,
@@ -9,6 +10,7 @@ import { useFetchFunc } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import OrderSheetPdf from '@/components/Pdf/OrderSheet';
 import OrderSheetPdf2 from '@/components/Pdf/OrderSheet2';
+import OrderSheetByStyle from '@/components/Pdf/OrderSheetByStyle';
 
 import InformationSkeleton from '../_components/Information/skeleton';
 
@@ -32,7 +34,10 @@ export default function Index({ initial_order, idx }) {
 	const { data: garments } = useOtherOrderPropertiesByGarmentsWash({
 		enabled: isEnabled,
 	});
-
+	const { data: orderbystyle } = useOrderDetailsByStyleForPDF(
+		order_number,
+		order_description_uuid
+	);
 	const { data: sr } = useOtherOrderPropertiesBySpecialRequirement({
 		enabled: isEnabled,
 	});
@@ -43,8 +48,7 @@ export default function Index({ initial_order, idx }) {
 	const [order, setOrder] = useState(initial_order || []);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const hasInitialOrder =
-		Object.keys(initial_order || []).length > 0;
+	const hasInitialOrder = Object.keys(initial_order || []).length > 0;
 
 	useEffect(() => {
 		document.title = order_number;
@@ -80,6 +84,7 @@ export default function Index({ initial_order, idx }) {
 				user_name: order?.user_name,
 				marketing_priority: order?.marketing_priority,
 				factory_priority: order?.factory_priority,
+				revisions: order?.revision_no,
 				updated_at: order?.updated_at,
 				created_at: order?.created_at,
 			};
@@ -91,8 +96,15 @@ export default function Index({ initial_order, idx }) {
 				sr,
 			};
 
+			const orderByStyle = {
+				order_info,
+				sr,
+				garments,
+				orders: orderbystyle?.pageData,
+			};
+
 			createPDF(order_sheet, setGetPdfData, OrderSheetPdf);
-			createPDF(order_sheet, setGetPdfData2, OrderSheetPdf2);
+			createPDF(orderByStyle, setGetPdfData2, OrderSheetByStyle);
 		}
 	}, [order, garments, sr, order_description_uuid]);
 
@@ -102,17 +114,25 @@ export default function Index({ initial_order, idx }) {
 			totals.piQuantity += parseFloat(item.total_pi_quantity) || 0;
 			totals.deliveryQuantity +=
 				parseFloat(item.total_delivery_quantity) || 0;
+			totals.warehouseQuantity +=
+				parseFloat(item.total_warehouse_quantity) || 0;
 			totals.rejectQuantity +=
 				parseFloat(item.total_reject_quantity) || 0;
 			totals.shortQuantity += parseFloat(item.total_short_quantity) || 0;
+			totals.tapeQuantity += parseFloat(item.dying_and_iron_prod) || 0;
+			totals.sliderQuantity += parseFloat(item.coloring_prod) || 0;
+
 			return totals;
 		},
 		{
 			Quantity: 0,
 			piQuantity: 0,
 			deliveryQuantity: 0,
+			warehouseQuantity: 0,
 			rejectQuantity: 0,
 			shortQuantity: 0,
+			tapeQuantity: 0,
+			sliderQuantity: 0,
 		}
 	);
 

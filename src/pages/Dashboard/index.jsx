@@ -40,12 +40,18 @@ export default function Dashboard() {
 				setDataPreview={setDataPreview}
 				handleRefresh={refreshAll}
 			/>
-			<div className='space-y-6 p-6 px-4 lg:px-8'>
+			<div className='space-y-6 px-4 py-2 lg:px-8'>
+				{/* Order Received */}
 				<BarChartOverall
 					data={
 						dataPreview === 'demo' ? fake_order_entry : order_entry
 					}
 				/>
+				{/* Production: Demand */}
+				<div className='flex flex-col gap-4 md:flex-row'>
+					<BarChartHorizontal2 />
+				</div>
+				{/* Amounts */}
 				<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
 					<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
 						<DashboardCard
@@ -87,7 +93,7 @@ export default function Dashboard() {
 						no_of_doc={no_of_doc}
 					/>
 				</div>
-
+				{/* Challan  */}
 				<div className='flex flex-col gap-4 md:flex-row'>
 					<BarChartHorizontal
 						title='Challan: Issued'
@@ -108,6 +114,7 @@ export default function Dashboard() {
 						label2='number_of_challan'
 					/>
 				</div>
+				{/* Warehouse  */}
 				<div className='flex flex-col gap-4 md:flex-row'>
 					<BarChartHorizontal
 						title='Warehouse: Status'
@@ -119,8 +126,9 @@ export default function Dashboard() {
 						label2='number_of_carton'
 					/>
 					<BarChartVertical />
-					<BarChartHorizontal2 />
 				</div>
+
+				{/* Sample */}
 				<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
 					<TableWithTime
 						title='Sample: Status'
@@ -130,11 +138,13 @@ export default function Dashboard() {
 						columns={sample_lead_time_columns}
 					/>
 					<TableWithTime
-						title='Order Entry Feed with number of count'
+						title='Order Entry Feed'
 						url='/dashboard/order-entry-feed'
 						columns={order_entry_feed_columns}
 					/>
 				</div>
+
+				{/* PI */}
 				<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
 					<TableWithTime
 						title='PI: Issued'

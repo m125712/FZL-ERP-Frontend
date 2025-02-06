@@ -1,4 +1,5 @@
 import React, { Suspense, useEffect, useState } from 'react';
+import { useDyeingSwatch } from '@/state/Dyeing';
 import { useOrderDescription, useOrderDetailsByQuery } from '@/state/Order';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
@@ -8,6 +9,7 @@ import { useAccess, useFetchForOrderReset, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
+import { ShowLocalToast } from '@/components/Toast';
 import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet'; //! why it is must??
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { CheckBox } from '@/ui';
@@ -44,6 +46,8 @@ export default function Index() {
 		getPath(haveAccess, user?.uuid),
 		{ enabled: !!user?.uuid }
 	);
+	const { invalidateQuery: swatchInvalidate } =
+		useDyeingSwatch(`type=pending`);
 
 	const isUpdate =
 		order_description_uuid !== undefined && order_number !== undefined;
@@ -83,6 +87,7 @@ export default function Index() {
 
 			order_entry: yup.array().of(
 				yup.object().shape({
+					index: NUMBER,
 					style: STRING_REQUIRED,
 					color: STRING.when({
 						is: () => type.toLowerCase() === 'slider',
@@ -132,6 +137,7 @@ export default function Index() {
 		ORDER_NULL
 	);
 
+	console.log(errors);
 	useEffect(() => {
 		order_number !== undefined
 			? (document.title = `Order: Update ${order_number}`)
@@ -243,6 +249,14 @@ export default function Index() {
 
 		// * separate the order_entry
 		const { order_entry, ...rest } = data;
+		if (!order_entry.length > 0) {
+			ShowLocalToast({
+				type: 'warning',
+				message: 'Add at least one Entry',
+			});
+
+			return;
+		}
 
 		// * Update data * //
 		if (isUpdate) {
@@ -308,6 +322,7 @@ export default function Index() {
 				}),
 			];
 
+			swatchInvalidate();
 			navigate(
 				`/order/details/${order_number}/${order_description_uuid}`
 			);
@@ -374,6 +389,7 @@ export default function Index() {
 			.then(() => reset(Object.assign({}, ORDER_NULL)))
 			.then(async () => {
 				await indexPageInvalidate();
+				await swatchInvalidate();
 				navigate(`/order/details/${orderNo}/${order_description.uuid}`);
 			})
 			.catch((err) => console.log(err));
@@ -415,7 +431,8 @@ export default function Index() {
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				noValidate
-				className='flex flex-col gap-4'>
+				className='flex flex-col gap-4'
+			>
 				<Header
 					{...{
 						endType,
@@ -429,6 +446,7 @@ export default function Index() {
 						Controller,
 						watch,
 						reset,
+						orderNo,
 						setOrderNo,
 						is_logo_body: getValues('is_logo_body'),
 						is_logo_puller: getValues('is_logo_puller'),

@@ -1,12 +1,14 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useSliderAssemblyRM, useSliderAssemblyRMLog } from '@/state/Slider';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-
-import { useSliderAssemblyRM, useSliderAssemblyRMLog } from '@/state/Slider';
 import { DateTime, EditDelete } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useEffect, useMemo, useState } from 'react';
+
 import RMAddOrUpdate from './RMAddOrUpdate';
 
 export default function Index() {

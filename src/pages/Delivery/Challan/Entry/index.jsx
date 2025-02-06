@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import {
 	useDeliveryChallan,
 	useDeliveryChallanDetailsByUUID,
@@ -11,14 +11,13 @@ import {
 	useOtherPackingListByOrderInfoUUIDAndChallanUUID,
 } from '@/state/Other';
 import { useAuth } from '@context/auth';
-import { FormProvider, get } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
-import { DeleteModal, UpdateModal } from '@/components/Modal';
+import { UpdateModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
-import SubmitButton from '@/ui/Others/Button/SubmitButton';
-import { DynamicDeliveryField, LinkWithCopy } from '@/ui';
+import { CustomLink, DynamicDeliveryField, LinkWithCopy } from '@/ui';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
@@ -290,6 +289,34 @@ export default function Index() {
 		}
 	};
 
+	const totalQuantity = useCallback(
+		(entryFiled) =>
+			entryFiled?.reduce(
+				(acc, item) => {
+					return {
+						totalQty: acc.totalQty + Number(item.quantity),
+						totalPolyQty:
+							acc.totalPolyQty + Number(item.poli_quantity),
+						totalShortQty:
+							acc.totalShortQty + Number(item.short_quantity),
+						totalRejectQty:
+							acc.totalRejectQty + Number(item.reject_quantity),
+					};
+				},
+				{
+					totalQty: 0,
+					totalPolyQty: 0,
+					totalShortQty: 0,
+					totalRejectQty: 0,
+				}
+			),
+		[watch()]
+	);
+
+	const total = totalQuantity(watch('challan_entry'));
+
+	const newTotal = totalQuantity(watch('new_challan_entry'));
+
 	// Check if order_number is valid
 	// if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 	const rowClass =
@@ -346,7 +373,8 @@ export default function Index() {
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}
-				noValidate>
+				noValidate
+			>
 				<Header
 					{...{
 						register,
@@ -369,12 +397,14 @@ export default function Index() {
 								<th
 									key={item}
 									scope='col'
-									className='group cursor-pointer px-3 py-2 transition duration-300'>
+									className='group cursor-pointer px-3 py-2 transition duration-300'
+								>
 									{item}
 								</th>
 							))}
 						</>
-					}>
+					}
+				>
 					{challanEntryField.map((item, index) => {
 						return (
 							<tr
@@ -386,21 +416,32 @@ export default function Index() {
 											`challan_entry[${index}].isDeletable`
 										) &&
 										'bg-error/10 text-error hover:bg-error/20 hover:text-error'
-								)}>
+								)}
+							>
 								<td className={`w-32 ${rowClass}`}>
-									<LinkWithCopy
-										title={getValues(
+									<CustomLink
+										label={getValues(
 											`challan_entry[${index}].packing_number`
 										)}
-										id={getValues(
-											`packing_list_uuids[${index}]`
-										)}
-										uri='/delivery/packing-list'
+										url={`/delivery/packing-list/${getValues(
+											`challan_entry[${index}].packing_list_uuid`
+										)}`}
+										openInNewTab={true}
 									/>
 								</td>
 								<td className={`w-32 ${rowClass}`}>
-									{getValues(
-										`challan_entry[${index}].item_description`
+									{watch('item_for') === 'thread' ||
+									watch('item_for') === 'sample_thread' ? (
+										getValues(
+											`challan_entry[${index}].item_description`
+										)
+									) : (
+										<CustomLink
+											label={getValues(
+												`challan_entry[${index}].item_description`
+											)}
+											url={`/order/details/${getValues(`challan_entry[${index}].order_number`)}/${getValues(`challan_entry[${index}].order_description_uuid`)}`}
+										/>
 									)}
 								</td>
 								<td className={`w-32 ${rowClass}`}>
@@ -485,6 +526,27 @@ export default function Index() {
 							</tr>
 						);
 					})}
+
+					<tr className='bg-slate-200 text-sm font-semibold text-primary'>
+						<td colSpan={watch('item_for') === 'slider' ? 3 : 6}>
+							<div className='flex justify-end py-2'>
+								Total Quantity:
+							</div>
+						</td>
+						<td>
+							<div className='px-3'>{total?.totalQty}</div>
+						</td>
+						<td>
+							<div className='px-3'>{total?.totalPolyQty}</div>
+						</td>
+						<td>
+							<div className='px-3'>{total?.totalShortQty}</div>
+						</td>
+						<td>
+							<div className='px-3'>{total?.totalRejectQty}</div>
+						</td>
+						<td></td>
+					</tr>
 				</DynamicDeliveryField>
 
 				{isUpdate && (
@@ -496,12 +558,14 @@ export default function Index() {
 									<th
 										key={item}
 										scope='col'
-										className='group cursor-pointer px-3 py-2 transition duration-300'>
+										className='group cursor-pointer px-3 py-2 transition duration-300'
+									>
 										{item}
 									</th>
 								))}
 							</>
-						}>
+						}
+					>
 						{newChallanEntryField.map((item, index) => {
 							return (
 								<tr
@@ -513,21 +577,33 @@ export default function Index() {
 												`new_challan_entry[${index}].isDeletable`
 											) &&
 											'bg-error/10 text-error hover:bg-error/20 hover:text-error'
-									)}>
+									)}
+								>
 									<td className={`w-32 ${rowClass}`}>
-										<LinkWithCopy
-											title={getValues(
+										<CustomLink
+											label={getValues(
 												`new_challan_entry[${index}].packing_number`
 											)}
-											id={getValues(
+											url={`/delivery/packing-list/${getValues(
 												`new_challan_entry[${index}].packing_list_uuid`
-											)}
-											uri='/delivery/packing-list'
+											)}`}
+											openInNewTab={true}
 										/>
 									</td>
 									<td className={`w-32 ${rowClass}`}>
-										{getValues(
-											`new_challan_entry[${index}].item_description`
+										{watch('item_for') === 'thread' ||
+										watch('item_for') ===
+											'sample_thread' ? (
+											getValues(
+												`new_challan_entry[${index}].item_description`
+											)
+										) : (
+											<CustomLink
+												label={getValues(
+													`new_challan_entry[${index}].item_description`
+												)}
+												url={`/order/details/${getValues(`new_challan_entry[${index}].order_number`)}/${getValues(`new_challan_entry[${index}].order_description_uuid`)}`}
+											/>
 										)}
 									</td>
 									<td className={`w-32 ${rowClass}`}>
@@ -600,6 +676,35 @@ export default function Index() {
 								</tr>
 							);
 						})}
+
+						<tr className='bg-slate-200 text-sm font-semibold text-primary'>
+							<td
+								colSpan={watch('item_for') === 'slider' ? 3 : 6}
+							>
+								<div className='flex justify-end py-2'>
+									Total Quantity:
+								</div>
+							</td>
+							<td>
+								<div className='px-3'>{newTotal?.totalQty}</div>
+							</td>
+							<td>
+								<div className='px-3'>
+									{newTotal?.totalPolyQty}
+								</div>
+							</td>
+							<td>
+								<div className='px-3'>
+									{newTotal?.totalShortQty}
+								</div>
+							</td>
+							<td>
+								<div className='px-3'>
+									{newTotal?.totalRejectQty}
+								</div>
+							</td>
+							<td></td>
+						</tr>
 					</DynamicDeliveryField>
 				)}
 

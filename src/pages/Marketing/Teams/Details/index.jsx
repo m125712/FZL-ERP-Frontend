@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
+import { useMarketingTeamDetails } from '@/state/Marketing';
 import { useParams } from 'react-router-dom';
-
 
 import Information from './Information';
 import Table from './Table';
-import { useMarketingTeamDetails } from '@/state/Marketing';
 
 export default function Index() {
 	const { team_uuid } = useParams();
@@ -16,7 +15,6 @@ export default function Index() {
 		invalidateQuery();
 		document.title = `Marketing Team: ${team_uuid}`;
 	}, [team_uuid]);
-
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

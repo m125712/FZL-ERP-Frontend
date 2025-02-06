@@ -1,14 +1,16 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
+import { useEffect } from 'react';
 import {
 	useMetalTCProduction,
 	useMetalTCTrxLog,
 	useMetalTCTrxLogByUUID,
 } from '@/state/Metal';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
 import { SFG_TRANSFER_LOG_NULL, SFG_TRANSFER_LOG_SCHEMA } from '@util/Schema';
-import { useEffect } from 'react';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -38,7 +40,9 @@ export default function Index({
 		Number(updateTeethColoringLog?.trx_quantity);
 	const schema = {
 		...SFG_TRANSFER_LOG_SCHEMA,
-		trx_quantity: SFG_TRANSFER_LOG_SCHEMA.trx_quantity.moreThan(0, 'More than 0').max(MAX_QUANTITY),
+		trx_quantity: SFG_TRANSFER_LOG_SCHEMA.trx_quantity
+			.moreThan(0, 'More than 0')
+			.max(MAX_QUANTITY),
 	};
 	const {
 		register,
@@ -111,7 +115,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField label='trx_to' title='Trx to' errors={errors}>
 				<Controller
 					name={'trx_to'}

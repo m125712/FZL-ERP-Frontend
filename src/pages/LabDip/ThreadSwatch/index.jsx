@@ -1,17 +1,24 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useOtherShadeRecipe } from '@/state/Other';
 import { useThreadSwatch } from '@/state/Thread';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, LinkWithCopy, ReactSelect } from '@/ui';
+import { DateTime, LinkWithCopy, ReactSelect, StatusSelect } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const { data, updateData, isLoading } = useThreadSwatch();
+	const [status, setStatus] = useState('pending');
+	const options = [
+		{ value: 'all', label: 'All' },
+		{ value: 'pending', label: 'Pending' },
+		{ value: 'completed', label: 'Completed' },
+	];
+
+	const { data, updateData, isLoading } = useThreadSwatch(`type=${status}`);
 	const info = new PageInfo(
 		'LabDip/Thread Swatch',
 		'order/swatch',
@@ -174,7 +181,18 @@ export default function Index() {
 
 	return (
 		<div>
-			<ReactTable title={info.getTitle()} data={data} columns={columns} />
+			<ReactTable
+				title={info.getTitle()}
+				data={data}
+				columns={columns}
+				extraButton={
+					<StatusSelect
+						options={options}
+						status={status}
+						setStatus={setStatus}
+					/>
+				}
+			/>
 		</div>
 	);
 }

@@ -59,7 +59,11 @@ export const getPageHeader = (data) => {
 			],
 			[
 				{ text: 'Buyer', bold: true, color: PRIMARY_COLOR },
-				{ text: [...buyer].join(', ') },
+				{
+					text: [...buyer]
+						.filter((item) => item !== null && item !== '---')
+						.join(', '),
+				},
 				{ text: 'Attention', bold: true, color: PRIMARY_COLOR },
 				data?.merchandiser_name,
 			],

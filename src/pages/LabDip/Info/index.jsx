@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime, EditDelete, LinkWithCopy, Status } from '@/ui';
 
+import { cn } from '@/lib/utils';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
@@ -66,6 +67,105 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
+			// {
+			// 	accessorFn: (row) => {
+			// 		return row.recipe_array
+			// 			?.map((item) => item.recipe_name)
+			// 			.join(', ');
+			// 	},
+			// 	id: 'recipe_array',
+			// 	header: 'Recipe',
+			// 	enableColumnFilter: false,
+			// 	cell: ({ row }) => {
+			// 		const { recipe_array } = row.original;
+
+			// 		if (!recipe_array?.length) return '--';
+
+			// 		return recipe_array?.map((item) => {
+			// 			return (
+			// 				<div
+			// 					key={item.recipe_name}
+			// 					className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'>
+			// 					<CustomLink
+			// 						label={item.recipe_name}
+			// 						url={`/lab-dip/recipe/details/${item.recipe_uuid}`}
+			// 						openInNewTab={true}
+			// 					/>
+			// 					<div className='flex items-center gap-2'>
+			// 						Approved
+			// 						<span
+			// 							className={cn(
+			// 								'badge badge-error badge-xs',
+			// 								item.approved === 1 && 'bg-success'
+			// 							)}
+			// 						/>
+			// 					</div>
+			// 					<div className='flex items-center gap-2'>
+			// 						Mkt Approved
+			// 						<span
+			// 							className={cn(
+			// 								'badge badge-error badge-xs',
+			// 								item.marketing_approved === 1 &&
+			// 									'bg-success'
+			// 							)}
+			// 						/>
+			// 					</div>
+			// 				</div>
+			// 			);
+			// 		});
+			// 	},
+			// },
+			{
+				accessorFn: (row) => {
+					return row.recipe_array
+						?.map((item) => item.recipe_name)
+						.join(', ');
+				},
+				id: 'recipe_array',
+				header: 'Recipe',
+				enableColumnFilter: false,
+				cell: ({ row }) => {
+					const { recipe_array } = row.original;
+
+					if (!recipe_array?.length) return '--';
+
+					return (
+						<table className='table table-xs border-0 align-top'>
+							<thead>
+								<tr className='text-xs text-gray-600'>
+									<th className={cn(rowStyle)}>RC/N</th>
+									<th className={cn(rowStyle)}>PP</th>
+									<th className={cn(rowStyle)}>APP</th>
+								</tr>
+							</thead>
+							<tbody>
+								{recipe_array?.map((item) => (
+									<tr>
+										<td className={cn(rowStyle)}>
+											<CustomLink
+												label={item.recipe_name}
+												url={`/lab-dip/recipe/details/${item.recipe_uuid}`}
+												showCopyButton={false}
+												openInNewTab
+											/>
+										</td>
+										<td className={cn(rowStyle)}>
+											<Status
+												status={item.is_pps_req === 1}
+											/>
+										</td>
+										<td className={cn(rowStyle)}>
+											<Status
+												status={item.approved === 1}
+											/>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					);
+				},
+			},
 			{
 				accessorKey: 'buyer_name',
 				header: 'Buyer',
@@ -94,6 +194,7 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
+
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
@@ -167,6 +268,8 @@ export default function Index() {
 	};
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
+
+	let rowStyle = 'border border-gray-300 px-2 py-1';
 
 	return (
 		<div>

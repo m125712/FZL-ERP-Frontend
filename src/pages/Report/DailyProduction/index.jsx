@@ -10,29 +10,15 @@ import ReactTable from '@/components/Table';
 
 import PageInfo from '@/util/PageInfo';
 
+import Excel from './Excel';
 import Header from './Header';
 
 const getPath = (haveAccess, userUUID) => {
-	if (haveAccess.includes('show_all_orders')) {
-		return `all=true`;
-	}
-	if (
-		haveAccess.includes('show_approved_orders') &&
-		haveAccess.includes('show_own_orders') &&
-		userUUID
-	) {
-		return `own_uuid=${userUUID}&approved=true`;
-	}
-
-	if (haveAccess.includes('show_approved_orders')) {
-		return 'all=false&approved=true';
-	}
-
 	if (haveAccess.includes('show_own_orders') && userUUID) {
 		return `own_uuid=${userUUID}`;
 	}
 
-	return `all=false`;
+	return `all=true`;
 };
 
 export default function index() {
@@ -55,53 +41,6 @@ export default function index() {
 		}
 	);
 
-	const columns = useMemo(
-		() => [
-			{
-				accessorKey: 'material_section_name',
-				header: 'Section',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'material_name',
-				header: 'Material',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'material_unit',
-				header: 'Unit',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'opening_quantity',
-				header: 'Opening',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'purchase_quantity',
-				header: 'Purchase',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'consumption_quantity',
-				header: 'Consumption',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'closing_quantity',
-				header: 'Closing',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-		],
-		[data]
-	);
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
@@ -112,14 +51,29 @@ export default function index() {
 		<>
 			<div className='flex flex-col gap-8'>
 				<Header {...{ from, setFrom }} />
-				<button
-					type='button'
-					onClick={() => {
-						Pdf(data, from)?.print({}, window);
-					}}
-					className='btn btn-primary'>
-					Generate PDF
-				</button>
+				<div className='flex gap-2'>
+					<button
+						type='button'
+						onClick={() => {
+							Pdf(data, from)?.print(
+								{},
+								window.open('', '_blank')
+							);
+						}}
+						className='btn btn-primary flex-1'
+					>
+						PDF
+					</button>
+					<button
+						type='button'
+						onClick={() => {
+							Excel(data, from);
+						}}
+						className='btn btn-secondary flex-1'
+					>
+						Excel
+					</button>
+				</div>
 			</div>
 		</>
 	);

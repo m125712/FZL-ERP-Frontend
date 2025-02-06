@@ -25,7 +25,7 @@ export default function index() {
 	}, []);
 
 	return (
-		<div className='flex flex-col gap-8'>
+		<div className='flex flex-col gap-2'>
 			<Header {...{ from, setFrom, to, setTo }} />
 			<Content data={data} />
 		</div>

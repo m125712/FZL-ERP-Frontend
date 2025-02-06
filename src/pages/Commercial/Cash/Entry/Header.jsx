@@ -41,7 +41,8 @@ export default function Header({
 				<FormField
 					label='marketing_uuid'
 					title='Marketing'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name='marketing_uuid'
 						control={control}
@@ -99,7 +100,8 @@ export default function Header({
 				<FormField
 					label='merchandiser_uuid'
 					title='Merchandiser'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name='merchandiser_uuid'
 						control={control}
@@ -116,7 +118,7 @@ export default function Header({
 										) || null
 									}
 									onChange={(e) => onChange(e.value)}
-									isDisabled={pi_uuid != undefined}
+									// isDisabled={pi_uuid != undefined}
 								/>
 							);
 						}}
@@ -139,7 +141,7 @@ export default function Header({
 										) || null
 									}
 									onChange={(e) => onChange(e.value)}
-									isDisabled={pi_uuid != undefined}
+									// isDisabled={pi_uuid != undefined}
 								/>
 							);
 						}}

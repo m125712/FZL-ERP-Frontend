@@ -1,19 +1,32 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDyeingFinishingBatch } from '@/state/Dyeing';
 import { differenceInDays, format, subDays } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkOnly, LinkWithCopy } from '@/ui';
+import {
+	DateTime,
+	EditDelete,
+	LinkOnly,
+	LinkWithCopy,
+	StatusSelect,
+} from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 export default function index() {
+	const [status, setStatus] = useState('pending');
+	const options = [
+		{ value: 'all', label: 'All' },
+		{ value: 'pending', label: 'Pending' },
+		{ value: 'completed', label: 'Completed' },
+	];
+
 	const navigate = useNavigate();
 	const haveAccess = useAccess('planning__finishing_batch');
 
-	const { data, isLoading, url } = useDyeingFinishingBatch();
+	const { data, isLoading, url } = useDyeingFinishingBatch(`type=${status}`);
 
 	const info = new PageInfo('Batch', url, 'planning__finishing_batch');
 
@@ -68,7 +81,12 @@ export default function index() {
 					);
 				},
 			},
-
+			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'order_type',
 				header: 'Type',
@@ -80,7 +98,7 @@ export default function index() {
 				header: 'Colors',
 				enableColumnFilter: false,
 				width: 'w-24',
-				cell: (info) => info.getValue().join(', '),
+				// cell: (info) => info.getValue().join(', '),
 			},
 			{
 				accessorKey: 'total_batch_quantity',
@@ -284,6 +302,13 @@ export default function index() {
 				columns={columns}
 				accessor={haveAccess.includes('create')}
 				handelAdd={handelAdd}
+				extraButton={
+					<StatusSelect
+						options={options}
+						status={status}
+						setStatus={setStatus}
+					/>
+				}
 			/>
 		</div>
 	);

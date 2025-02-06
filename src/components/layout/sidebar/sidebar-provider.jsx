@@ -24,7 +24,8 @@ const SidebarProvider = ({ children }) => {
 				path,
 				isCloseAll,
 				setIsCloseAll,
-			}}>
+			}}
+		>
 			{children}
 		</SidebarContext.Provider>
 	);

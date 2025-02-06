@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDeliveryChallanDetailsByUUID } from '@/state/Delivery';
 import { Navigate, useParams } from 'react-router-dom';
 
+import ThreadPdf from '@/components/Pdf/ThreadChallan';
 import Pdf from '@/components/Pdf/ZipperChallan';
 
 import Information from './Information';
@@ -20,8 +21,15 @@ export default function Index() {
 	const [data2, setData] = useState('');
 
 	useEffect(() => {
-		if (data && data?.challan_entry) {
+		const hasData = data && data?.challan_entry;
+		const isThread =
+			data?.item_for === 'thread' || data?.item_for === 'sample_thread';
+		if (hasData && !isThread) {
 			Pdf(data)?.getDataUrl((dataUrl) => {
+				setData(dataUrl);
+			});
+		} else if (hasData && isThread) {
+			ThreadPdf(data)?.getDataUrl((dataUrl) => {
 				setData(dataUrl);
 			});
 		}

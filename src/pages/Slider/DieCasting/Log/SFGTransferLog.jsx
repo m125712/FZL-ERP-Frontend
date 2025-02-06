@@ -1,10 +1,11 @@
-import { Suspense } from '@/components/Feedback';
-import ReactTable from '@/components/Table';
+import { lazy, useEffect, useMemo, useState } from 'react';
 import { useFetchFunc } from '@/hooks';
 
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 export default function Index() {
 	const info = new PageInfo(

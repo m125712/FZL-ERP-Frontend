@@ -1,16 +1,18 @@
-import { AddModal } from "@/components/Modal";
 import {
 	useFetchForRhfReset,
 	usePostFunc,
 	useRHF,
 	useUpdateFunc,
-} from "@/hooks";
-import { Input } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { ITEM_LIBRARY_NULL, ITEM_LIBRARY_SCHEMA } from "@util/Schema";
+} from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input } from '@/ui';
+
+import { ITEM_LIBRARY_NULL, ITEM_LIBRARY_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setItemLibrary,
 	updateItemLibrary = {
 		id: null,
@@ -57,12 +59,12 @@ export default function Index({
 		}
 		const updatedData = {
 			...data,
-			section: "slider_assembly",
+			section: 'slider_assembly',
 			created_at: GetDateTime(),
 		};
 
 		usePostFunc({
-			uri: "/item-library",
+			uri: '/item-library',
 			data: updatedData,
 			setItems: setItemLibrary,
 			onClose: onClose,
@@ -74,17 +76,17 @@ export default function Index({
 			id={modalId}
 			title={
 				updateItemLibrary?.id !== null
-					? "Update Item Library"
-					: "Item Library"
+					? 'Update Item Library'
+					: 'Item Library'
 			}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}
 		>
-			<Input label="name" {...{ register, errors }} />
-			<Input label="short_name" {...{ register, errors }} />
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='name' {...{ register, errors }} />
+			<Input label='short_name' {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

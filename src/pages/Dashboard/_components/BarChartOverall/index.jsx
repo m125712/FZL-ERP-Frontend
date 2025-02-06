@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react';
+import { format } from 'date-fns';
+import numeral from 'numeral';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,7 +14,7 @@ export const description = 'An interactive bar chart';
 
 const chartConfig = {
 	views: {
-		label: 'Quantity',
+		label: 'Qty',
 	},
 	zipper: {
 		label: 'Zipper',
@@ -23,11 +25,13 @@ const chartConfig = {
 		color: '#00ADB5',
 	},
 };
+
 export function BarChartOverall(
 	{ data } = {
 		data: [],
 	}
 ) {
+	// var numeral = numeral();
 	const [activeChart, setActiveChart] = useState('zipper');
 
 	const total = useMemo(
@@ -52,12 +56,13 @@ export function BarChartOverall(
 								key={chart}
 								data-active={activeChart === chart}
 								className='relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-primary/10 sm:border-l sm:border-t-0 sm:px-8 sm:py-6'
-								onClick={() => setActiveChart(chart)}>
+								onClick={() => setActiveChart(chart)}
+							>
 								<span className='text-xs text-primary'>
 									{chartConfig[chart].label}
 								</span>
 								<span className='text-lg font-bold leading-none sm:text-3xl'>
-									{total[key]?.toLocaleString()}
+									{numeral(total[key]).format('0.000a')}
 								</span>
 							</button>
 						);
@@ -67,13 +72,15 @@ export function BarChartOverall(
 			<CardContent className='px-2 sm:p-6'>
 				<ChartContainer
 					config={chartConfig}
-					className='aspect-auto h-[250px] w-full'>
+					className='aspect-auto h-[250px] w-full'
+				>
 					<BarChart
 						data={data}
 						margin={{
 							left: 12,
 							right: 12,
-						}}>
+						}}
+					>
 						<CartesianGrid vertical={false} />
 						<XAxis
 							dataKey='date'
@@ -81,13 +88,9 @@ export function BarChartOverall(
 							axisLine={false}
 							tickMargin={8}
 							minTickGap={32}
-							tickFormatter={(value) => {
-								const date = new Date(value);
-								return date?.toLocaleDateString('en-US', {
-									month: 'short',
-									day: 'numeric',
-								});
-							}}
+							tickFormatter={(value) =>
+								format(new Date(value), 'dd MMM')
+							}
 						/>
 						<ChartTooltip
 							content={
@@ -95,14 +98,25 @@ export function BarChartOverall(
 									className='w-[150px]'
 									nameKey='views'
 									labelFormatter={(value) => {
-										return new Date(
-											value
-										).toLocaleDateString('en-US', {
-											month: 'short',
-											day: 'numeric',
-											year: 'numeric',
-										});
+										if (
+											value === 'Zipper' ||
+											value === 'Thread'
+										)
+											return;
+
+										return format(
+											new Date(value),
+											'dd MMM, yy'
+										);
 									}}
+									formatter={(value, name) => (
+										<div className='flex min-w-[130px] items-center text-xs text-muted-foreground'>
+											{chartConfig[name]?.label || name}
+											<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
+												{numeral(value).format('0a')}
+											</div>
+										</div>
+									)}
 								/>
 							}
 						/>

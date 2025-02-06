@@ -1,4 +1,6 @@
 import { useOtherVendor } from '@/state/Other';
+import { useParams } from 'react-router-dom';
+
 import {
 	FormField,
 	Input,
@@ -6,7 +8,6 @@ import {
 	SectionEntryBody,
 	Textarea,
 } from '@/ui';
-import { useParams } from 'react-router-dom';
 
 export default function Header({
 	register,
@@ -53,7 +54,8 @@ export default function Header({
 				<FormField
 					label='is_local'
 					title='Import / Local'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'is_local'}
 						control={control}

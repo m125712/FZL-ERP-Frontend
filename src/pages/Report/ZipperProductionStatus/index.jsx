@@ -5,33 +5,19 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, StatusButton } from '@/ui';
+import { CustomLink, DateTime, Status, StatusButton } from '@/ui';
 
+import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
 
 import { ProductionStatus } from '../utils';
 
 const getPath = (haveAccess, userUUID) => {
-	if (haveAccess.includes('show_all_orders')) {
-		return `all=true`;
-	}
-	if (
-		haveAccess.includes('show_approved_orders') &&
-		haveAccess.includes('show_own_orders') &&
-		userUUID
-	) {
-		return `own_uuid=${userUUID}&approved=true`;
-	}
-
-	if (haveAccess.includes('show_approved_orders')) {
-		return 'all=false&approved=true';
-	}
-
 	if (haveAccess.includes('show_own_orders') && userUUID) {
 		return `own_uuid=${userUUID}`;
 	}
 
-	return `all=false`;
+	return `all=true`;
 };
 
 export default function Index() {
@@ -77,8 +63,13 @@ export default function Index() {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
-				width: 'w-40',
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorFn: (row) => format(row.order_created_at, 'dd/MM/yy'),
@@ -120,12 +111,22 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
-
 			{
 				accessorKey: 'item_description',
-				header: 'Item Description',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				header: 'Item',
+				enableColumnFilter: true,
+				width: 'w-32',
+				cell: (info) => {
+					const { order_description_uuid, order_number } =
+						info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${order_number}/${order_description_uuid}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'colors',
@@ -175,6 +176,112 @@ export default function Index() {
 				header: 'Order QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) =>
+					row.total_quantity - row.total_packing_list_quantity,
+				id: 'prod_balance_quantity',
+				header: 'Balance QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
+			{
+				accessorFn: (row) => {
+					return row.dyeing_batch
+						?.map((item) => item.dyeing_batch_number)
+						.join(', ');
+				},
+				id: 'dyeing_batch',
+				header: 'Dyeing Batch',
+				enableColumnFilter: false,
+				cell: ({ row }) => {
+					const { dyeing_batch } = row.original;
+
+					if (!dyeing_batch?.length) return '--';
+
+					return dyeing_batch?.map((item) => {
+						return (
+							<div
+								key={item.dyeing_batch_number}
+								className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'
+							>
+								<CustomLink
+									label={item.dyeing_batch_number}
+									url={`/dyeing-and-iron/zipper-batch/${item.dyeing_batch_uuid}`}
+									openInNewTab={true}
+								/>
+								<div className='flex items-center gap-2'>
+									<DateTime
+										date={item.dyeing_batch_date}
+										customizedDateFormate='dd MMM, yy'
+										isTime={false}
+									/>
+
+									<Status status={item.received} />
+								</div>
+							</div>
+						);
+					});
+				},
+			},
+			{
+				accessorFn: (row) => {
+					return row.finishing_batch
+						?.map((item) => item.finishing_batch_number)
+						.join(', ');
+				},
+				id: 'finishing_batch',
+				header: 'Finishing Batch',
+				enableColumnFilter: false,
+				cell: ({ row }) => {
+					const { finishing_batch } = row.original;
+					if (!finishing_batch?.length) return '--';
+
+					return (
+						<table className='border-2 border-gray-300'>
+							<thead>
+								<tr className='text-xs text-gray-600'>
+									<th className={cn(rowStyle)}>BA/N</th>
+									<th className={cn(rowStyle)}>BA/Q</th>
+									<th className={cn(rowStyle)}>P/Q</th>
+									<th className={cn(rowStyle)}>BL/Q</th>
+								</tr>
+							</thead>
+							<tbody>
+								{finishing_batch?.map((item) => (
+									<tr>
+										<td className={cn(rowStyle)}>
+											<CustomLink
+												label={
+													item.finishing_batch_number
+												}
+												url={`/planning/finishing-dashboard/batch-report/${item.finishing_batch_uuid}`}
+												showCopyButton={false}
+												openInNewTab
+											/>
+											<DateTime
+												date={item.finishing_batch_date}
+												customizedDateFormate='dd MMM, yy'
+												isTime={false}
+											/>
+										</td>
+										<td className={cn(rowStyle)}>
+											{item.finishing_batch_quantity}
+										</td>
+										<td className={cn(rowStyle)}>
+											{item.finishing_batch_quantity -
+												item.balance_quantity}
+										</td>
+										<td className={cn(rowStyle)}>
+											{item.balance_quantity}
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					);
+				},
 			},
 			{
 				accessorKey: 'assembly_production_quantity',
@@ -297,6 +404,7 @@ export default function Index() {
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
+	let rowStyle = 'border border-gray-300 px-2 py-1';
 	return (
 		<ReactTable
 			title={info.getTitle()}

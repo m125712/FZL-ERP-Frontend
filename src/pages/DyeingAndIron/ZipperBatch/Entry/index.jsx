@@ -1,11 +1,4 @@
-import {
-	Suspense,
-	use,
-	useCallback,
-	useEffect,
-	useMemo,
-	useState,
-} from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import {
 	useDyeingBatch,
 	useDyeingBatchDetailsByUUID,
@@ -25,6 +18,7 @@ import { DeleteModal, ProceedModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
 import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
+import { StatusSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
@@ -34,6 +28,7 @@ import {
 	DYEING_BATCH_SCHEMA_UPDATE,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
+import { getRequiredTapeKg } from '@/util/GetRequiredTapeKg';
 
 import { Columns } from './columns';
 import Header from './Header';
@@ -50,7 +45,7 @@ export default function Index() {
 		postData,
 		deleteData,
 		invalidateQuery: invalidateDyeingZipperBatch,
-	} = useDyeingBatch();
+	} = useDyeingBatch(`type=pending`);
 
 	const { batch_uuid } = useParams();
 
@@ -63,6 +58,12 @@ export default function Index() {
 	const [batchData, setBatchData] = useState(null);
 	const [batchEntry, setBatchEntry] = useState(null);
 	const [patchBatchEntry, setPatchBatchEntry] = useState(null);
+	const [status, setStatus] = useState('bulk'); // * options for extra select in table
+	const options = [
+		{ value: 'bulk', label: 'Bulk' },
+		{ value: 'sample', label: 'Sample' },
+		{ value: 'all', label: 'All' },
+	];
 
 	const {
 		register,
@@ -96,12 +97,15 @@ export default function Index() {
 
 	const { data, invalidateQuery: invalidateNewDyeingZipperBatchEntry } =
 		isUpdate
-			? useDyeingBatchDetailsByUUID(batch_uuid, '?is_update=true')
+			? useDyeingBatchDetailsByUUID(
+					batch_uuid,
+					`?is_update=true&type=${status}`
+				)
 			: watch('batch_type') === 'extra' && watch('order_info_uuid')
 				? useDyeingOrderBatch(
-						`batch_type=extra&order_info_uuid=${watch('order_info_uuid')}`
+						`batch_type=extra&order_info_uuid=${watch('order_info_uuid')}&type=${status}`
 					)
-				: useDyeingOrderBatch();
+				: useDyeingOrderBatch(`type=${status}`);
 
 	useEffect(() => {
 		if (isUpdate) {
@@ -120,7 +124,7 @@ export default function Index() {
 			setValue('dyeing_batch_entry', data?.dyeing_batch_entry);
 			setValue('new_dyeing_batch_entry', data?.new_dyeing_batch_entry);
 		}
-	}, [data]);
+	}, [data, status]);
 
 	const getTotalQty = useCallback(
 		(dyeing_batch_entry) => {
@@ -133,24 +137,22 @@ export default function Index() {
 		},
 		[watch()]
 	);
-	const isReceived = getValues('received') === 1;
+
 	const getTotalCalTape = useCallback((dyeing_batch_entry) => {
 		if (!dyeing_batch_entry || !Array.isArray(dyeing_batch_entry)) {
 			return 0;
 		}
 
 		return dyeing_batch_entry.reduce((acc, item) => {
-			const top = parseFloat(item.top) || 0;
-			const bottom = parseFloat(item.bottom) || 0;
-			const size = parseFloat(item.size) || 0;
 			const quantity = parseFloat(item.quantity) || 0;
-			const rawMtrPerKg = parseFloat(item.raw_mtr_per_kg) || 1;
 
 			// * for tape order we calculate with size as quantity
 			const itemTotal =
-				item.order_type === 'tape'
-					? ((top + bottom + quantity) * 1) / 100 / rawMtrPerKg
-					: ((top + bottom + size) * quantity) / 100 / rawMtrPerKg;
+				getRequiredTapeKg({
+					row: item,
+					type: 'raw',
+					input_quantity: quantity,
+				}) || 0;
 			return acc + itemTotal;
 		}, 0);
 	}, []);
@@ -474,6 +476,7 @@ export default function Index() {
 		errors,
 		watch,
 		isUpdate,
+		status: status,
 	});
 
 	// * table columns for adding new finishing field on update
@@ -483,14 +486,17 @@ export default function Index() {
 		register,
 		errors,
 		watch,
+		status: status,
 		is_new: true,
 	});
+
 	return (
 		<FormProvider {...form}>
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}
-				noValidate>
+				noValidate
+			>
 				<Header
 					{...{
 						Controller,
@@ -518,6 +524,15 @@ export default function Index() {
 					title={'Batch Orders'}
 					data={BatchOrdersField}
 					columns={currentColumns}
+					extraButton={
+						!isUpdate && (
+							<StatusSelect
+								status={status}
+								setStatus={setStatus}
+								options={options}
+							/>
+						)
+					}
 				/>
 
 				{isUpdate && (
@@ -525,6 +540,13 @@ export default function Index() {
 						title={'Add New Batch'}
 						data={NewBatchOrdersField}
 						columns={NewColumns}
+						extraButton={
+							<StatusSelect
+								status={status}
+								setStatus={setStatus}
+								options={options}
+							/>
+						}
 					/>
 				)}
 

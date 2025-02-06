@@ -1,15 +1,17 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
+import { useEffect } from 'react';
 import { useVislonTMTEntryByUUID } from '@/state/Vislon';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
 import {
 	NUMBER,
 	NUMBER_REQUIRED,
 	VISLON_TRANSACTION_SCHEMA,
 	VISLON_TRANSACTION_SCHEMA_NULL,
 } from '@util/Schema';
-import { useEffect } from 'react';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -111,7 +113,8 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			subTitle='Finishing -> Warehouse'
-			isSmall={true}>
+			isSmall={true}
+		>
 			<JoinInput
 				label='trx_quantity'
 				unit='PCS'

@@ -3,15 +3,13 @@ import { useSample } from '@/state/Report';
 import { format } from 'date-fns';
 
 import ReactTable from '@/components/Table';
-import { DateTime, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
-import Header from './Header';
-
 export default function Index() {
 	const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
-	const { data, isLoading, url } = useSample(date);
+	const { data, isLoading, url } = useSample(date, date);
 	const info = new PageInfo('Sample', url, 'report__sample');
 
 	useEffect(() => {
@@ -38,27 +36,33 @@ export default function Index() {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
-				cell: (info) => (
-					<LinkWithCopy
-						title={info.getValue()}
-						id={info.getValue()}
-						uri='/order/details'
-					/>
-				),
+				cell: (info) => {
+					const order_uuid = info.row.original.order_info_uuid;
+					const link = info.getValue().includes('ST')
+						? `/thread/order-info/${order_uuid}`
+						: `/order/details/${info.getValue()}`;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={link}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'item_description',
-				header: 'Product',
-				enableColumnFilter: false,
+				header: 'Item',
+				enableColumnFilter: true,
 				width: 'w-32',
-				cell: ({ row }) => {
+				cell: (info) => {
 					const { order_description_uuid, order_number } =
-						row.original;
+						info.row.original;
 					return (
-						<LinkWithCopy
-							title={row.getValue('item_description')}
-							id={order_description_uuid}
-							uri={`/order/details/${order_number}`}
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${order_number}/${order_description_uuid}`}
+							openInNewTab={true}
 						/>
 					);
 				},
@@ -148,15 +152,22 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<>
-			<Header date={date} setDate={setDate} />
-			<ReactTable
-				title={info.getTitle()}
-				accessor={false}
-				data={data}
-				columns={columns}
-				extraClass={'py-0.5'}
-			/>
-		</>
+		<ReactTable
+			title={info.getTitle()}
+			accessor={false}
+			data={data}
+			columns={columns}
+			extraClass={'py-0.5'}
+			extraButton={
+				<SimpleDatePicker
+					className='h-9 w-32'
+					value={date}
+					placeholder='Select Date'
+					onChange={(data) => {
+						setDate(format(data, 'yyyy-MM-dd'));
+					}}
+				/>
+			}
+		/>
 	);
 }

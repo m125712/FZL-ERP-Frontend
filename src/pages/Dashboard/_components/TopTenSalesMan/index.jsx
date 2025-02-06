@@ -4,7 +4,10 @@ import { useFetch } from '@/hooks';
 
 export function TopTenSalesMan(props) {
 	const [status, setStatus] = useState(false);
-	const { value: data, loading } = useFetch(props?.url, [props?.url, props.status]);
+	const { value: data, loading } = useFetch(props?.url, [
+		props?.url,
+		props.status,
+	]);
 
 	if (loading)
 		return <span className='loading loading-dots loading-lg z-50' />;

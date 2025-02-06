@@ -1,11 +1,12 @@
-import { Suspense } from '@/components/Feedback';
-import ReactTable from '@/components/Table';
+import { lazy, useEffect, useMemo, useState } from 'react';
+import { useLabDipRM } from '@/state/LabDip';
 import { useAccess } from '@/hooks';
 
-import { useLabDipRM } from '@/state/LabDip';
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
 import { EditDelete, Transfer } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 

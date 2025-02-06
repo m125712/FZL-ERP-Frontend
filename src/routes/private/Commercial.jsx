@@ -132,7 +132,13 @@ export const CommercialRoutes = [
 				path: '/commercial/manual-pi',
 				element: <ManualPI />,
 				page_name: 'commercial__manual_pi',
-				actions: ['create', 'read', 'update', 'delete'],
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'show_own_orders',
+				],
 				disableCollapse: true,
 				children: [
 					{

@@ -6,15 +6,8 @@ import { useAccess } from '@/hooks';
 
 import Pdf from '@/components/Pdf/ChallanByDate';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-import {
-	DateTime,
-	LinkWithCopy,
-	ReactSelect,
-	SectionEntryBody,
-	StatusButton,
-} from '@/ui';
+import { DateTime, LinkWithCopy, ReactSelect, StatusButton } from '@/ui';
 
-import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
@@ -27,7 +20,8 @@ export default function Index() {
 		: [];
 
 	const { data, isLoading, url, updateData } = useDeliveryChallan(
-		`?delivery_date=${date}&vehicle=${vehicle}`
+		`?delivery_date=${date}&vehicle=${vehicle}`,
+		{ enabled: true }
 	);
 
 	const info = new PageInfo(`Challan `, url, 'delivery__challan_by_date');
@@ -197,7 +191,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 		],
-		[data]
+		[data, vehicle, modifiedVehicles]
 	);
 
 	const [data2, setData] = useState('');
@@ -219,6 +213,7 @@ export default function Index() {
 				src={data2}
 				className='h-[40rem] w-full rounded-md border-none'
 			/>
+
 			<ReactTableTitleOnly
 				title={
 					<div className='my-2'>

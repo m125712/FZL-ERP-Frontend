@@ -40,7 +40,8 @@ export const FormField = ({
 						className={cn(
 							'label-text font-semibold capitalize text-secondary',
 							labelClassName
-						)}>
+						)}
+					>
 						{title ? capitalize(title) : capitalize(label)}
 					</span>
 					{renderSubLabel(sub_label)}
@@ -66,7 +67,8 @@ export const DatePickerChangeButton = ({ onClick, disabled, children }) => (
 		type='button'
 		className='btn btn-circle btn-primary btn-xs rounded-full'
 		onClick={onClick}
-		disabled={disabled}>
+		disabled={disabled}
+	>
 		{children}
 	</button>
 );
@@ -76,7 +78,8 @@ const DatePickerSelect = ({ value, onChange, options }) => (
 	<select
 		className='select select-primary select-xs flex w-auto items-center justify-between rounded-full font-semibold text-primary shadow-md transition-all duration-100 ease-in-out'
 		value={value}
-		onChange={onChange}>
+		onChange={onChange}
+	>
 		{options?.map((option) => (
 			<option key={option} value={option}>
 				{option}
@@ -115,7 +118,8 @@ export function DatePickerCustomHeader({
 		<div className='flex w-full flex-row items-center justify-around gap-1 rounded-t-md bg-secondary py-1.5 shadow-md transition-all duration-100 ease-in-out'>
 			<DatePickerChangeButton
 				onClick={decreaseMonth}
-				disabled={prevMonthButtonDisabled}>
+				disabled={prevMonthButtonDisabled}
+			>
 				{'<'}
 			</DatePickerChangeButton>
 			<DatePickerSelect
@@ -132,7 +136,8 @@ export function DatePickerCustomHeader({
 			/>
 			<DatePickerChangeButton
 				onClick={increaseMonth}
-				disabled={nextMonthButtonDisabled}>
+				disabled={nextMonthButtonDisabled}
+			>
 				{'>'}
 			</DatePickerChangeButton>
 		</div>

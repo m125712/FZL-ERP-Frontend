@@ -105,7 +105,8 @@ export default function Header({
 											parseFloat(res?.min_capacity)
 										? 'text-error'
 										: ''
-								)}>{`Batch Quantity (KG): ${Number(totalCalTape).toFixed(3)}`}</span>
+								)}
+							>{`Batch Quantity (KG): ${Number(totalCalTape).toFixed(3)}`}</span>
 							<br />
 							<span>{`Batch Quantity (PCS): ${totalQuantity}`}</span>
 						</div>
@@ -114,7 +115,8 @@ export default function Header({
 								labelClassName={'text-white'}
 								label='batch_type'
 								title='Batch Type'
-								errors={errors}>
+								errors={errors}
+							>
 								<Controller
 									name='batch_type'
 									control={control}
@@ -148,7 +150,8 @@ export default function Header({
 								label='order_info_uuid'
 								title='O/N'
 								labelClassName={'text-white'}
-								errors={errors}>
+								errors={errors}
+							>
 								<Controller
 									name='order_info_uuid'
 									control={control}
@@ -180,7 +183,8 @@ export default function Header({
 							</FormField>
 						</div>
 					</div>
-				}>
+				}
+			>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<DateInput
 						label='production_date'
@@ -196,7 +200,8 @@ export default function Header({
 					<FormField
 						label='machine_uuid'
 						title='Machine'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name='machine_uuid'
 							control={control}

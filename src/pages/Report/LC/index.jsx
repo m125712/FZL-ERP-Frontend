@@ -11,26 +11,11 @@ import PageInfo from '@/util/PageInfo';
 import Header from './Header';
 
 const getPath = (haveAccess, userUUID) => {
-	if (haveAccess.includes('show_all_orders')) {
-		return `all=true`;
-	}
-	if (
-		haveAccess.includes('show_approved_orders') &&
-		haveAccess.includes('show_own_orders') &&
-		userUUID
-	) {
-		return `own_uuid=${userUUID}&approved=true`;
-	}
-
-	if (haveAccess.includes('show_approved_orders')) {
-		return 'all=false&approved=true';
-	}
-
 	if (haveAccess.includes('show_own_orders') && userUUID) {
 		return `own_uuid=${userUUID}`;
 	}
 
-	return `all=false`;
+	return `all=true`;
 };
 
 export default function Index() {
@@ -61,9 +46,18 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'lc_number',
-				header: 'LC No.',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				header: 'LC No',
+				enableColumnFilter: true,
+				cell: (info) => {
+					const { uuid } = info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/commercial/lc/details/${uuid}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'lc_date',

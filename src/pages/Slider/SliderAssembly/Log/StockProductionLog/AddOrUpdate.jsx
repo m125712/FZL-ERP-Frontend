@@ -123,7 +123,8 @@ export default function Index({
 				${updateSliderProd.item_name} 
 				`}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField label='with_link' title='Link' errors={errors}>
 				<Controller
 					name={'with_link'}

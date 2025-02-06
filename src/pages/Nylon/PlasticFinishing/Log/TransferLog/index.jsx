@@ -1,17 +1,23 @@
+import { useMemo, useState } from 'react';
+import {
+	useNylonPlasticFinishingProduction,
+	useNylonPlasticFinishingTrxLog,
+} from '@/state/Nylon';
+import { useAccess } from '@/hooks';
+
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { useAccess } from '@/hooks';
-import { useNylonPlasticFinishingTrxLog, useNylonPlasticFinishingProduction } from '@/state/Nylon';
 import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { useMemo, useState } from 'react';
+
 import SFGAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, deleteData, url } =
 		useNylonPlasticFinishingTrxLog();
-		const {invalidateQuery} = useNylonPlasticFinishingProduction();
+	const { invalidateQuery } = useNylonPlasticFinishingProduction();
 	const info = new PageInfo('Transfer Log', url);
 	const haveAccess = useAccess('nylon__plastic_finishing_log');
 

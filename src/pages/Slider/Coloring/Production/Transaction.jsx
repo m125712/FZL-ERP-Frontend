@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useMetalFProduction, useMetalTMProduction } from '@/state/Metal';
 import {
@@ -77,6 +77,8 @@ export default function Index({
 		reset,
 		control,
 		context,
+		setValue,
+		watch,
 		Controller,
 		getValues,
 	} = useRHF(
@@ -167,6 +169,21 @@ export default function Index({
 		left_quantity: item.left_quantity,
 	}));
 
+	const currentWeight = () => {
+		if (updateSliderTrx?.coloring_prod_weight) {
+			return (
+				watch('trx_quantity') *
+				(updateSliderTrx?.coloring_prod_weight /
+					updateSliderTrx?.coloring_prod)
+			);
+		}
+		return 0;
+	};
+
+	useEffect(() => {
+		setValue('weight', currentWeight().toFixed(2));
+	}, [watch('trx_quantity')]);
+
 	return (
 		<AddModal
 			id='TeethMoldingTrxModal'
@@ -179,12 +196,14 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			{updateSliderTrx?.order_type === 'slider' && (
 				<FormField
 					label='finishing_batch_entry_uuid'
 					title='Style'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name='finishing_batch_entry_uuid'
 						control={control}

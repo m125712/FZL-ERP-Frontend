@@ -1,26 +1,28 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useFetch,
 	useFetchForRhfReset,
 	usePostFunc,
 	useRHF,
 	useUpdateFunc,
-} from "@/hooks";
-import { FormField, Input, JoinInput, ReactSelect } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
+} from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
 import {
 	SLIDER_ITEM_TRANSACTION_NULL,
 	SLIDER_ITEM_TRANSACTION_SCHEMA,
-} from "@util/Schema";
-import { useEffect, useState } from "react";
+} from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setItemLibrary,
 	updateItemLibrary = {
 		id: null,
-		name: "",
+		name: '',
 		stock: null,
 	},
 	setUpdateItemLibrary,
@@ -38,8 +40,15 @@ export default function Index({
 			.max(MAX_QUANTITY),
 	};
 
-	const { register, handleSubmit, errors, reset, Controller, control, context } =
-		useRHF(schema, SLIDER_ITEM_TRANSACTION_NULL);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		Controller,
+		control,
+		context,
+	} = useRHF(schema, SLIDER_ITEM_TRANSACTION_NULL);
 
 	const { value: order } = useFetch(`/order/entry/value/label`);
 
@@ -53,7 +62,7 @@ export default function Index({
 		setUpdateItemLibrary((prev) => ({
 			...prev,
 			id: null,
-			name: "",
+			name: '',
 			stock: null,
 		}));
 		reset(SLIDER_ITEM_TRANSACTION_NULL);
@@ -64,8 +73,8 @@ export default function Index({
 		const updatedData = {
 			...data,
 			order_entry_id: data?.order_entry_id,
-			trx_from: "slider_assembly_prod",
-			trx_to: "coloring_stock",
+			trx_from: 'slider_assembly_prod',
+			trx_to: 'coloring_stock',
 			stock: updateItemLibrary?.stock - data?.trx_quantity,
 			name: order?.find((e) => e.value === data?.order_entry_id)?.label,
 			slider_item_id: updateItemLibrary?.id,
@@ -74,7 +83,7 @@ export default function Index({
 		};
 
 		useUpdateFunc({
-			uri: "/sfg/trx",
+			uri: '/sfg/trx',
 			itemId: updateItemLibrary.id,
 			data: data,
 			updatedData: updatedData,
@@ -85,21 +94,21 @@ export default function Index({
 
 	return (
 		<AddModal
-			id={"SliderAssemblyTransfer"}
+			id={'SliderAssemblyTransfer'}
 			title={`Slider Assembly ⇾ Coloring`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}
 		>
-			<FormField label="order_entry_id" title="Order" errors={errors}>
+			<FormField label='order_entry_id' title='Order' errors={errors}>
 				<Controller
-					name={"order_entry_id"}
+					name={'order_entry_id'}
 					control={control}
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder="Select Order"
+								placeholder='Select Order'
 								options={order}
 								onChange={(e) => {
 									onChange(parseInt(e.value));
@@ -111,13 +120,13 @@ export default function Index({
 				/>
 			</FormField>
 			<JoinInput
-				label="trx_quantity"
-				unit="PCS"
+				label='trx_quantity'
+				unit='PCS'
 				sub_label={`Stock: ${updateItemLibrary?.stock}, Order QTY: ${qty?.quantity || 0}, Can TRF: ${MAX_QUANTITY}`}
 				placeholder={`Max: ${MAX_QUANTITY}`}
 				{...{ register, errors }}
 			/>
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

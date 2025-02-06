@@ -80,7 +80,8 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			formContext={context}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<JoinInput
 				label='used_quantity'
 				sub_label={`Max: ${Number(updateLabDipStock?.lab_dip)}`}

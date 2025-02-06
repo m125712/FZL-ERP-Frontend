@@ -95,12 +95,14 @@ export default function Index({
 			title={updateUser?.uuid !== null ? 'Update User' : 'New User'}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
-			onClose={onClose}>
+			onClose={onClose}
+		>
 			<div className='flex flex-col gap-2 md:flex-row'>
 				<FormField
 					label='department_uuid'
 					title='Department'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'department_uuid'}
 						control={control}
@@ -121,7 +123,8 @@ export default function Index({
 				<FormField
 					label='designation_uuid'
 					title='Designation'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'designation_uuid'}
 						control={control}

@@ -17,9 +17,15 @@ export default function Table({ order_entry, total }) {
 		[order_entry]
 	);
 
+	// let colspan = 1; // * colspan for delivery quantity
+
+	// if (!order_entry?.[0]?.is_sample) {
+	// 	colspan += 5;
+	// }
+
 	return (
 		<ReactTable title='Details' data={order_entry} columns={columns}>
-			<tr className='bg-slate-200 text-lg font-bold text-primary'>
+			<tr className='text bg-slate-200 font-bold text-primary'>
 				<td colSpan={10} className='text-right'>
 					Total:
 				</td>
@@ -27,7 +33,12 @@ export default function Table({ order_entry, total }) {
 				<td className='px-3 py-1'>{total.piQuantity}</td>
 				<td className='px-3 py-1'>{total.rejectQuantity}</td>
 				<td className='px-3 py-1'>{total.shortQuantity}</td>
-				<td></td>
+				<td className='px-3 py-1'>{total.tapeQuantity}</td>
+				<td className='px-3 py-1'></td>
+				<td className='px-3 py-1'></td>
+				<td className='px-3 py-1'>{total.sliderQuantity}</td>
+				<td className='px-3 py-1'></td>
+				<td className='px-3 py-1'>{total.warehouseQuantity}</td>
 				<td className='px-3 py-1'>{total.deliveryQuantity}</td>
 				<td></td>
 			</tr>

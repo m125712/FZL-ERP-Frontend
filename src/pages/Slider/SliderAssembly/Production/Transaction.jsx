@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
 import {
 	useSliderAssemblyProduction,
@@ -37,21 +38,29 @@ export default function Index({
 		useSliderColoringProduction();
 	const { user } = useAuth();
 
-	const { register, handleSubmit, errors, reset, watch, control, context } =
-		useRHF(
-			{
-				...SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
-				trx_quantity: NUMBER_REQUIRED.max(
-					updateSliderTrx?.sa_prod,
-					'Beyond Max Quantity'
-				),
-				weight: NUMBER_DOUBLE_REQUIRED.max(
-					updateSliderTrx?.sa_prod_weight,
-					'Beyond Max Quantity'
-				),
-			},
-			SLIDER_ASSEMBLY_TRANSACTION_NULL
-		);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		setValue,
+		watch,
+		control,
+		context,
+	} = useRHF(
+		{
+			...SLIDER_ASSEMBLY_TRANSACTION_SCHEMA,
+			trx_quantity: NUMBER_REQUIRED.max(
+				updateSliderTrx?.sa_prod,
+				'Beyond Max Quantity'
+			),
+			weight: NUMBER_DOUBLE_REQUIRED.max(
+				updateSliderTrx?.sa_prod_weight,
+				'Beyond Max Quantity'
+			),
+		},
+		SLIDER_ASSEMBLY_TRANSACTION_NULL
+	);
 
 	const onClose = () => {
 		setUpdateSliderTrx((prev) => ({
@@ -89,6 +98,20 @@ export default function Index({
 		invalidateVislonFinishingProdLog();
 	};
 
+	const currentWeight = () => {
+		if (updateSliderTrx?.sa_prod_weight) {
+			return (
+				watch('trx_quantity') *
+				(updateSliderTrx?.sa_prod_weight / updateSliderTrx?.sa_prod)
+			);
+		}
+		return 0;
+	};
+
+	useEffect(() => {
+		setValue('weight', currentWeight().toFixed(2));
+	}, [watch('trx_quantity')]);
+
 	return (
 		<AddModal
 			id='TeethMoldingTrxModal'
@@ -101,7 +124,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<JoinInput
 				title='Transaction Quantity'
 				label='trx_quantity'

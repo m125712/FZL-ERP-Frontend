@@ -1,5 +1,6 @@
 import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
+import { useAccess } from '@/hooks';
 
 import { DEFAULT_FONT_SIZE } from '../ui';
 import { company } from '../utils';
@@ -19,6 +20,7 @@ const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
 };
 
 export const getPageHeader = (order_info) => {
+	const haveAccess = useAccess('order__details');
 	const order_number =
 		order_info.is_sample === 1
 			? order_info.order_number + ' (S)'
@@ -62,7 +64,7 @@ export const getPageHeader = (order_info) => {
 						fontSize: DEFAULT_FONT_SIZE + 4,
 						bold: true,
 					},
-					`O/N: ${order_number}\n`,
+					`O/N: ${order_number} ${order_info.revisions > 0 ? `Rev ${order_info.revisions}` : ''} \n`,
 					`Date: ${order_info?.created_at ? format(new Date(order_info?.created_at), 'dd-MM-yyyy') : ''}\n`,
 					`PI No.: ${order_info?.pi_numbers ? order_info?.pi_numbers.join(', ') : '---'}\n`,
 				],
@@ -71,26 +73,25 @@ export const getPageHeader = (order_info) => {
 			'',
 		],
 		[
-			{ text: 'LC/Cash', bold: true },
-			lc_or_cash,
+			// { text: 'LC/Cash', bold: true },
+			// ...(haveAccess.includes('show_cash_bill_lc')
+			// 	? [lc_or_cash]
+			// 	: ['- / -']),
 			{ text: 'Buyer', bold: true },
 			order_info.buyer_name,
+			{ text: 'Marketing', bold: true },
+			order_info.marketing_name,
 		],
 		[
 			{ text: 'Party', bold: true },
 			order_info.party_name,
-			{ text: 'Marketing', bold: true },
-			order_info.marketing_name,
-		],
-
-		[
-			{ text: 'Factory', bold: true },
-			order_info.factory_name,
 			{ text: 'Priority', bold: true },
 			(order_info.marketing_priority || '-') +
 				' / ' +
 				(order_info.factory_priority || '-'),
 		],
+
+		[{ text: 'Factory', bold: true }, order_info.factory_name, '', ''],
 		[
 			{ text: 'Address', bold: true },
 			{ colSpan: 3, text: order_info.factory_address },
@@ -204,6 +205,7 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 		is_multi_color,
 
 		order_type,
+		slider_provided,
 
 		description,
 	} = entry;
@@ -241,6 +243,10 @@ export const TableHeader = ({ entry, uniqueSizes, special_req_info, i }) => {
 			: '',
 		top_stopper_name ? `Top Stopper: ${top_stopper_name}` : '',
 		bottom_stopper_name ? `Bottom Stopper: ${bottom_stopper_name}` : '',
+		slider_provided
+			.split('_')
+			.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+			.join(' '),
 	];
 
 	return [

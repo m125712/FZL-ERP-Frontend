@@ -45,24 +45,24 @@ export default function Header({
 	//* Orders Fetch
 	const { data: ordersZipper } = isUpdate
 		? useOtherOrder()
-		: useOtherOrder('page=challan&item_for=zipper');
+		: useOtherOrder('page=challan&item_for=zipper&party_name=true');
 	const { data: ordersSlider } = isUpdate
 		? useOtherOrder()
-		: useOtherOrder('page=challan&item_for=slider');
+		: useOtherOrder('page=challan&item_for=slider&party_name=true');
 	const { data: ordersTape } = isUpdate
 		? useOtherOrder()
-		: useOtherOrder('page=challan&item_for=tape');
+		: useOtherOrder('page=challan&item_for=tape&party_name=true');
 	const { data: ordersThread } = isUpdate
 		? useThreadOrder()
-		: useThreadOrder('page=challan&item_for=thread');
+		: useThreadOrder('page=challan&item_for=thread&party_name=true');
 
 	const { data: ordersZipperSample } = isUpdate
-		? useOtherOrder('is_sample=true')
-		: useOtherOrder('page=challan&is_sample=true');
+		? useOtherOrder('is_sample=true&party_name=true')
+		: useOtherOrder('page=challan&is_sample=true&party_name=true');
 
 	const { data: ordersThreadSample } = isUpdate
-		? useThreadOrder('is_sample=true')
-		: useThreadOrder('page=challan&is_sample=true');
+		? useThreadOrder('is_sample=true&party_name=true')
+		: useThreadOrder('page=challan&is_sample=true&party_name=true');
 
 	const itemFor = {
 		zipper: ordersZipper,
@@ -155,7 +155,8 @@ export default function Header({
 								label='delivery_type'
 								title='Delivery Type'
 								is_title_needed='false'
-								errors={errors}>
+								errors={errors}
+							>
 								<Controller
 									name={'delivery_type'}
 									control={control}
@@ -185,12 +186,14 @@ export default function Header({
 							</FormField>
 						</div>
 					</div>
-				}>
+				}
+			>
 				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 md:grid-cols-3'>
 					<FormField
 						label='item_for'
 						title='Item For'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'item_for'}
 							control={control}
@@ -213,7 +216,8 @@ export default function Header({
 					<FormField
 						label='order_info_uuid'
 						title='Order Number'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name='order_info_uuid'
 							control={control}
@@ -238,7 +242,8 @@ export default function Header({
 						<FormField
 							label='packing_list_uuids'
 							title='Packing List Number'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name='packing_list_uuids'
 								control={control}
@@ -341,7 +346,8 @@ export default function Header({
 													.length < 2
 											}
 											type={'button'}
-											className='btn btn-outline btn-error btn-sm'>
+											className='btn btn-outline btn-error btn-sm'
+										>
 											{item.label}
 											<Trash2 className='size-4' />
 										</button>
@@ -354,7 +360,8 @@ export default function Header({
 						<FormField
 							label='new_packing_list_uuids'
 							title='New Packing List Number'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name='new_packing_list_uuids'
 								control={control}
@@ -413,7 +420,8 @@ export default function Header({
 						<FormField
 							label='vehicle_uuid'
 							title='Assign To'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name='vehicle_uuid'
 								control={control}

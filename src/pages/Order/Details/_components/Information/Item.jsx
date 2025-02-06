@@ -65,6 +65,7 @@ export default function ItemDescription({ order_description, className }) {
 			is_inch,
 			is_meter,
 			is_cm,
+			revision_no,
 			remarks,
 
 			// slider
@@ -169,6 +170,10 @@ export default function ItemDescription({ order_description, className }) {
 			{
 				label: 'order type',
 				value: order_type,
+			},
+			{
+				label: 'Revision No.',
+				value: revision_no,
 			},
 			{
 				label: 'remarks',
@@ -317,7 +322,8 @@ export default function ItemDescription({ order_description, className }) {
 			className={cn(
 				'grid h-full grid-cols-1 md:grid-cols-2 lg:grid-cols-5',
 				className
-			)}>
+			)}
+		>
 			<RenderTable
 				className={
 					'border-b border-secondary/30 md:border-b-0 md:border-r'

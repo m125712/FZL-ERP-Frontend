@@ -29,7 +29,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'marketing_name',
-				header: 'Order Number',
+				header: 'Marketing',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

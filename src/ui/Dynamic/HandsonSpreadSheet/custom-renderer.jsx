@@ -43,7 +43,8 @@ const CustomRenderer = (props) => {
 				<div
 					className={cn(
 						'bg-gradient block h-full min-h-6 w-full px-3 py-2 text-sm font-normal text-foreground'
-					)}>
+					)}
+				>
 					{watch(
 						`${props.fieldName}.${props.row}.${props.field.accessorKey}`
 					)}

@@ -13,11 +13,11 @@ import {
 const DashboardHeader = ({ handleRefresh, dataPreview, setDataPreview }) => {
 	const { user } = useAuth();
 	return (
-		<div className='sticky top-0 z-50 border-b bg-base/50 px-4 py-4 shadow-sm backdrop-blur-xl lg:px-8'>
+		<div className='sticky top-0 z-50 border-b bg-base/50 px-4 py-1 shadow-sm backdrop-blur-xl lg:px-8'>
 			<div className='flex items-center justify-between'>
 				<div className='flex flex-col'>
 					<h2 className='text-2xl font-medium capitalize text-primary'>
-						Welcome Back, {user?.name}!
+						Welcome Back, {user?.name}
 					</h2>
 					<p className='text-sm text-secondary'>
 						{format(new Date(), 'EEEE, dd MMM yyyy')}
@@ -37,7 +37,8 @@ const DashboardHeader = ({ handleRefresh, dataPreview, setDataPreview }) => {
 
 					<button
 						onClick={handleRefresh}
-						className='btn btn-accent btn-sm'>
+						className='btn btn-accent btn-sm'
+					>
 						Refresh
 						<RefreshCw className='size-4' />
 					</button>

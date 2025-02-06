@@ -1,4 +1,3 @@
-import { AddModal } from '@/components/Modal';
 import {
 	useFetch,
 	useFetchForRhfReset,
@@ -6,9 +5,12 @@ import {
 	useRHF,
 	useUpdateFunc,
 } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
-import GetDateTime from '@/util/GetDateTime';
+
 import { WASTAGE_NULL, WASTAGE_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -103,7 +105,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField label='order_uuid' title='Order Number' errors={errors}>
 				<Controller
 					name={'order_uuid'}

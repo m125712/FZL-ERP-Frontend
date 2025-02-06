@@ -3,7 +3,7 @@ import { useSliderDashboardInfo } from '@/state/Slider';
 import { differenceInDays, subDays } from 'date-fns';
 
 import ReactTable from '@/components/Table';
-import { DateTime, StatusButton } from '@/ui';
+import { CustomLink, DateTime, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -21,19 +21,37 @@ export default function Index() {
 				accessorKey: 'batch_number',
 				header: 'Batch No.',
 				enableColumnFilter: true,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/planning/finishing-batch/${info.row.original.finishing_batch_uuid}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'item_description',
 				header: 'Item Description',
 				enableColumnFilter: true,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.row.original.order_number}/${info.row.original.order_description_uuid}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'order_type',
@@ -52,10 +70,10 @@ export default function Index() {
 			{
 				accessorKey: 'production_date',
 				header: (
-					<div className='flex flex-col'>
-						<span>Production</span>
-						<span>Date</span>
-					</div>
+					<>
+						Production <br />
+						Date
+					</>
 				),
 				enableColumnFilter: false,
 
@@ -75,16 +93,50 @@ export default function Index() {
 			//
 			// 	cell: (info) => info.getValue(),
 			// },
+			// {
+			// 	accessorFn: (row) => {
+			// 		const { production_date, slider_lead_time } = row;
+			// 		const slider_day = subDays(
+			// 			production_date,
+			// 			Number(slider_lead_time)
+			// 		);
+			// 		const remainingDays = differenceInDays(
+			// 			slider_day,
+			// 			new Date()
+			// 		);
+
+			// 		return remainingDays < 0 ? 0 : remainingDays;
+			// 	},
+			// 	id: 'remaining_slider_lead_time',
+			// 	header: <>Remaining Date</>,
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => {
+			// 		const { production_date, slider_lead_time } =
+			// 			info.row.original;
+			// 		const slider_day = subDays(
+			// 			production_date,
+			// 			Number(slider_lead_time)
+			// 		);
+
+			// 		return (
+			// 			<div>
+			// 				<span className='text-sm font-bold text-gray-600'>
+			// 					{info.getValue()} days
+			// 				</span>
+			// 				<DateTime date={slider_day} isTime={false} />
+			// 			</div>
+			// 		);
+			// 	},
+			// },
 			{
 				accessorKey: 'remaining_slider_lead_time',
 				header: (
-					<div>
+					<>
 						Remaining Date <br />
 						Slider
-					</div>
+					</>
 				),
 				enableColumnFilter: false,
-
 				cell: (info) => {
 					const { production_date, slider_lead_time } =
 						info.row.original;
@@ -98,10 +150,14 @@ export default function Index() {
 					);
 					return (
 						<div>
-							<span className='text-xs font-bold text-gray-600'>
+							<span className='font-bold text-gray-600'>
 								{remainingDays < 0 ? 0 : remainingDays} days
 							</span>
-							<DateTime date={slider_day} isTime={false} />
+							<DateTime
+								date={slider_day}
+								customizedDateFormate='dd MMM, yy'
+								isTime={false}
+							/>
 						</div>
 					);
 				},
@@ -131,15 +187,28 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorFn: (row) => row.color.join(', '),
+				id: 'color',
+				header: 'Tape Color',
+				width: 'w-44',
+				enableColumnFilter: false,
+				// cell: (info) => info.getValue()?.join(', '),
+			},
+			{
 				accessorKey: 'puller_type_name',
 				header: 'Puller',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
 			{
 				accessorKey: 'puller_color_name',
 				header: 'Color',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'teeth_color_name',
+				header: 'Teeth Color',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -196,7 +265,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'batch_quantity',
-				header: 'Batch QTY',
+				header: 'Batch',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -212,25 +281,25 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'body_quantity',
-				header: 'Body QTY',
+				header: 'Body',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'cap_quantity',
-				header: 'Cap QTY',
+				header: 'Cap',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'puller_quantity',
-				header: 'Puller QTY',
+				header: 'Puller',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'link_quantity',
-				header: 'Link QTY',
+				header: 'Link',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -242,43 +311,53 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'coloring_stock',
-				header: 'Coloring Stock',
+				header: (
+					<>
+						Coloring <br />
+						Stock
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'coloring_prod',
-				header: 'Coloring Prod',
+				header: (
+					<>
+						Coloring <br />
+						Prod
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'trx_to_finishing',
-				header: 'Trx To Finishing',
+				header: 'Finishing',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'u_top_quantity',
-				header: 'U Top Quantity',
+				header: 'U Top',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'h_bottom_quantity',
-				header: 'H Bottom Quantity',
+				header: 'H Bottom',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'box_pin_quantity',
-				header: 'Box Pin Quantity',
+				header: 'Box Pin',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'two_way_pin_quantity',
-				header: 'Two Way Pin Quantity',
+				header: '2-Way Pin',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

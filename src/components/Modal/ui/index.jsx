@@ -38,7 +38,8 @@ const Header = ({ title, subTitle, onClose }) => {
 				disabled={isSubmitting || isMutating}
 				type='button'
 				onClick={onClose}
-				className='group btn btn-circle btn-outline btn-error btn-sm'>
+				className='group btn btn-circle btn-outline btn-error btn-sm'
+			>
 				<X className='size-5 text-error group-hover:text-primary-content' />
 			</button>
 		</div>
@@ -58,7 +59,8 @@ const Footer = (
 				className={cn(
 					'text-md btn btn-accent btn-block',
 					buttonClassName
-				)}>
+				)}
+			>
 				Save
 			</button>
 		</div>
@@ -70,14 +72,16 @@ const DeleteFooter = ({ handelCancelClick, onSubmit }) => (
 		<button
 			type='button'
 			onClick={handelCancelClick}
-			className='btn btn-outline btn-primary'>
+			className='btn btn-outline btn-primary'
+		>
 			Cancel
 		</button>
 
 		<button
 			type='submit'
 			className='btn bg-error text-white'
-			onClick={onSubmit}>
+			onClick={onSubmit}
+		>
 			Delete
 		</button>
 	</div>
@@ -88,7 +92,8 @@ const ProceedFooter = ({ handelCancelClick }) => (
 		<button
 			type='button'
 			onClick={handelCancelClick}
-			className='btn btn-outline border-primary text-primary hover:bg-primary'>
+			className='btn btn-outline border-primary text-primary hover:bg-primary'
+		>
 			Cancel
 		</button>
 

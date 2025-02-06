@@ -1,5 +1,6 @@
 import createGlobalState from '.';
 import { libraryQK } from './QueryKeys';
+
 // * User * //
 export const useLibraryUser = () =>
 	createGlobalState({

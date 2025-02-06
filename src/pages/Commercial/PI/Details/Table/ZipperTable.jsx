@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-import { DateTime, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime } from '@/ui';
 
 export default function ZipperTable({ pi }) {
 	const columns = useMemo(
@@ -11,10 +11,10 @@ export default function ZipperTable({ pi }) {
 				header: 'O/N',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<LinkWithCopy
-						title={info.getValue()}
-						id={info.getValue()}
-						uri='/order/details'
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
 					/>
 				),
 			},
@@ -26,10 +26,10 @@ export default function ZipperTable({ pi }) {
 					const { order_description_uuid, order_number } =
 						info.row.original;
 					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={order_description_uuid}
-							uri={`/order/details/${order_number}`}
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${order_number}/${order_description_uuid}`}
+							openInNewTab={true}
 						/>
 					);
 				},

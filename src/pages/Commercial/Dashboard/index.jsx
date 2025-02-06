@@ -3,7 +3,7 @@ import { useCommercialDashboard } from '@/state/Commercial';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { LinkWithCopy } from '@/ui';
+import { CustomLink } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -19,12 +19,14 @@ export default function Index() {
 			{
 				accessorKey: 'id',
 				header: 'Cash Invoice ID',
+				enableColumnFilter: true,
 				cell: (info) => {
+					const { order_info_uuid } = info.row.original;
 					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={info.getValue()}
-							uri='/commercial/pi-cash'
+						<CustomLink
+							label={info.getValue()}
+							url={`/commercial/pi-cash/${info.getValue()}`}
+							openInNewTab={true}
 						/>
 					);
 				},
@@ -54,15 +56,14 @@ export default function Index() {
 							? orderNumber.thread_order_info_uuid
 							: orderNumber.order_info_uuid;
 						return (
-							<LinkWithCopy
-								key={number}
-								title={number}
-								id={isThreadOrder ? uuid : number}
-								uri={
+							<CustomLink
+								label={number}
+								url={
 									isThreadOrder
-										? '/thread/order-info'
-										: '/order/details'
+										? `/thread/order-info/${uuid}`
+										: `/order/details/${number}`
 								}
+								openInNewTab={true}
 							/>
 						);
 					});

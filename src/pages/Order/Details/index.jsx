@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import { useOrderDetails, useOrderDetailsByQuery } from '@/state/Order';
+import { useOrderDetailsByQuery } from '@/state/Order';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
+import { StatusSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -19,7 +20,7 @@ const getPath = (haveAccess, userUUID) => {
 		haveAccess.includes('show_own_orders') &&
 		userUUID
 	) {
-		return `/by/${userUUID}?approved=true`;
+		return `?own_uuid=${userUUID}&approved=true`;
 	}
 
 	if (haveAccess.includes('show_approved_orders')) {
@@ -27,7 +28,7 @@ const getPath = (haveAccess, userUUID) => {
 	}
 
 	if (haveAccess.includes('show_own_orders') && userUUID) {
-		return `/by/${userUUID}`;
+		return `?own_uuid=${userUUID}`;
 	}
 
 	return `?all=false`;
@@ -35,11 +36,19 @@ const getPath = (haveAccess, userUUID) => {
 
 export default function Index() {
 	// const [path, setPath] = useState(null);
+	const [status, setStatus] = useState('all');
+	// * options for extra select in table
+	const options = [
+		{ value: 'bulk', label: 'Bulk' },
+		{ value: 'sample', label: 'Sample' },
+		{ value: 'all', label: 'All' },
+	];
+
 	const haveAccess = useAccess('order__details');
 	const { user } = useAuth();
 
 	const { data, isLoading, url } = useOrderDetailsByQuery(
-		getPath(haveAccess, user?.uuid),
+		getPath(haveAccess, user?.uuid) + `&type=${status}`,
 		{
 			enabled: !!user?.uuid,
 		}
@@ -79,6 +88,13 @@ export default function Index() {
 			data={data}
 			columns={columns}
 			handelAdd={handelAdd}
+			extraButton={
+				<StatusSelect
+					status={status}
+					setStatus={setStatus}
+					options={options}
+				/>
+			}
 		/>
 	);
 }

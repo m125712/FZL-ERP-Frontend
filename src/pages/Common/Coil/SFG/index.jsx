@@ -72,11 +72,7 @@ export default function Index() {
 				accessorKey: 'is_reverse',
 				header: 'Reverse?',
 				enableColumnFilter: false,
-				cell: (info) => {
-					return Number(info.getValue()) === 1
-						? ' Reverse'
-						: 'Forward';
-				},
+				cell: (info) => info.getValue(),
 			},
 
 			{

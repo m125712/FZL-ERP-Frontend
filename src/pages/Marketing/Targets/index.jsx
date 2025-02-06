@@ -1,4 +1,5 @@
 import { Suspense, useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useMarketingTargets } from '@/state/Marketing';
 import { useAccess } from '@/hooks';
 
@@ -10,9 +11,23 @@ import PageInfo from '@/util/PageInfo';
 
 import AddUpdate from './AddUpdate';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return `all=true`;
+};
+
 export default function Index() {
 	const haveAccess = useAccess('marketing__targets');
-	const { data, isLoading, url, deleteData } = useMarketingTargets();
+	const { user } = useAuth();
+	const { data, isLoading, url, deleteData } = useMarketingTargets(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
 	const info = new PageInfo('Marketing Targets', url, 'marketing__targets');
 
 	useEffect(() => {

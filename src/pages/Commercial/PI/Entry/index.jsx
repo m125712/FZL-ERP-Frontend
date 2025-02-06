@@ -215,6 +215,8 @@ export default function Index() {
 			const commercialPiData = {
 				order_info_uuids: updated_order_info_uuids,
 				thread_order_info_uuids: updated_order_info_thread_uuids,
+				merchandiser_uuid: rest?.merchandiser_uuid,
+				factory_uuid: rest?.factory_uuid,
 				bank_uuid: rest?.bank_uuid,
 				validity: rest?.validity,
 				payment: rest?.payment,
@@ -483,7 +485,8 @@ export default function Index() {
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}
-				noValidate>
+				noValidate
+			>
 				<Header
 					{...{
 						register,

@@ -8,7 +8,8 @@ const Body = ({ value, className = '' }) => {
 			className={cn(
 				'text-[0.7rem] font-semibold capitalize text-primary',
 				className
-			)}>
+			)}
+		>
 			{value}
 		</span>
 	);

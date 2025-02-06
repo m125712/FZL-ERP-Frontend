@@ -129,7 +129,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={false}>
+			isSmall={false}
+		>
 			<div className='grid grid-cols-2 gap-4'>
 				<FormField label='product' title='Product' errors={errors}>
 					<Controller
@@ -180,7 +181,8 @@ export default function Index({
 					<FormField
 						label='nylon_stopper'
 						title='Nylon Stopper'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'nylon_stopper'}
 							control={control}
@@ -206,7 +208,8 @@ export default function Index({
 				<FormField
 					label='zipper_number'
 					title='Zipper No.'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'zipper_number'}
 						control={control}

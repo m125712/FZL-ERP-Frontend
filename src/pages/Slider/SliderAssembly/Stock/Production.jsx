@@ -133,7 +133,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField label='with_link' title='Link' errors={errors}>
 				<Controller
 					name={'with_link'}

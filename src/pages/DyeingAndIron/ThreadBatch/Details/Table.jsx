@@ -51,13 +51,13 @@ export default function Index({ batch_entry }) {
 				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'count_length',
-				header: 'Count Length',
+				accessorKey: 'bleaching',
+				header: 'Bleaching',
 				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'bleaching',
-				header: 'Bleaching     ',
+				accessorKey: 'count_length',
+				header: 'Count Length',
 				enableColumnFilter: false,
 			},
 			{
@@ -118,7 +118,8 @@ export default function Index({ batch_entry }) {
 		<ReactTableTitleOnly
 			title='Details'
 			data={batch_entry}
-			columns={columns}>
+			columns={columns}
+		>
 			<tr className='text-lg font-bold'>
 				<th className='pe-4 text-right' colSpan={6}>
 					Total

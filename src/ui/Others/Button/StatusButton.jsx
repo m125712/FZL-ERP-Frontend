@@ -1,6 +1,6 @@
 import { Check, X } from 'lucide-react';
 
-import cn from '@lib/cn';
+import cn from '@/lib/cn';
 
 export default function StatusButton({
 	value = 0,
@@ -27,7 +27,8 @@ export default function StatusButton({
 				props.size,
 				className
 			)}
-			{...props}>
+			{...props}
+		>
 			{showIdx ? props.idx : <Icon className='size-5' />}
 		</button>
 	);

@@ -5,7 +5,7 @@ import { useAccess } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete } from '@/ui';
+import { CustomLink, DateTime, EditDelete } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -47,17 +47,25 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => (
-					<span className='capitalize'>{info.getValue()}</span>
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
+					/>
 				),
 			},
 			{
 				accessorKey: 'item_description',
 				header: 'Item Description',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => (
-					<span className='capitalize'>{info.getValue()}</span>
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.row.original.order_number}/${info.row.original.order_description_uuid}`}
+						openInNewTab={true}
+					/>
 				),
 			},
 

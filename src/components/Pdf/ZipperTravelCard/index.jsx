@@ -25,6 +25,7 @@ export default function Index(batch) {
 			acc.total_expected_production += getRequiredTapeKg({
 				row: item,
 				type: 'dyed',
+				input_quantity: item.quantity,
 			});
 			acc.total_actual_production += item.production_quantity_in_kg;
 			return acc;
@@ -97,6 +98,7 @@ export default function Index(batch) {
 								text: getRequiredTapeKg({
 									row: item,
 									type: 'dyed',
+									input_quantity: item.quantity,
 								}).toFixed(3),
 								alignment: 'right',
 							},

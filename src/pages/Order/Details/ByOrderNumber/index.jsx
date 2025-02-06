@@ -1,11 +1,14 @@
 import { lazy, useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
+import { useOrderDetailsByStyleForPDF } from '@/state/Order';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAccess, useFetchFunc } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import OrderSheetPdf from '@/components/Pdf/OrderSheet';
 import OrderSheetPdf2 from '@/components/Pdf/OrderSheet2';
+import OrderSheetByStyle from '@/components/Pdf/OrderSheetByStyle';
+import OrderSheetByStyleV2 from '@/components/Pdf/OrderSheetByStyleV2';
 
 import { OrderInformation } from '../_components/Information';
 
@@ -40,6 +43,7 @@ const createPDF = (pdfdata, setData, setGetPdfData, OrderSheetPdf) => {
 export default function Index() {
 	const { user } = useAuth();
 	const { order_number } = useParams();
+	const { data: orderbystyle } = useOrderDetailsByStyleForPDF(order_number);
 	const haveAccess = useAccess('order__details');
 
 	const [orders, setOrders] = useState([]);
@@ -93,6 +97,10 @@ export default function Index() {
 				marketing_priority: orders[0]?.marketing_priority,
 				factory_priority: orders[0]?.factory_priority,
 				// date: format(new Date(orders[0]?.created_at), 'dd/MM/yyyy'),
+				revisions: orders.reduce(
+					(acc, curr) => acc + curr.revision_no,
+					0
+				),
 				updated_at: orders[0]?.updated_at,
 				created_at: orders[0]?.created_at,
 			};
@@ -104,8 +112,21 @@ export default function Index() {
 				sr,
 			};
 
+			const orderByStyle = {
+				order_info,
+				sr,
+				garments,
+				orders: orderbystyle?.pageData,
+			};
+
 			createPDF(order_sheet, setData, setGetPdfData, OrderSheetPdf);
-			createPDF(order_sheet, setData2, setGetPdfData2, OrderSheetPdf2);
+			createPDF(
+				orderByStyle,
+				setData2,
+				setGetPdfData2,
+				OrderSheetByStyle
+			);
+			// OrderSheetByStyle(order_sheet);
 			// getPdfData.download();
 		}
 	}, [orders, garments, sr]);
@@ -136,10 +157,10 @@ export default function Index() {
 		created_by_name: orders[0]?.created_by_name,
 		order_info_uuid: orders[0]?.order_info_uuid,
 		reference_order: orders[0]?.reference_order,
+		revision_no: orders[0]?.revision_no,
 		print_in: orders[0]?.print_in,
 	};
-	
-	console.log(orders);
+
 	// if (!orders) return <Navigate to='/not-found' />;
 	// if (orders?.length === 0)
 	// 	return (

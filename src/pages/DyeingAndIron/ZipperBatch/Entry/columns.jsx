@@ -14,6 +14,7 @@ export const Columns = ({
 	register,
 	errors,
 	watch = () => {},
+	status = '',
 	is_new = false,
 }) => {
 	const haveAccess = useAccess('dyeing__zipper_batch_entry_update');
@@ -57,6 +58,7 @@ export const Columns = ({
 			accessorKey: 'item_description',
 			header: 'Item Description',
 			enableColumnFilter: true,
+			width: 'w-36',
 			enableSorting: true,
 		},
 		{
@@ -113,8 +115,8 @@ export const Columns = ({
 			id: 'tape_req_kg',
 			header: (
 				<>
-					Tape Req
-					<br /> (Kg)
+					Tape Req <br />
+					(Kg)
 				</>
 			),
 			enableColumnFilter: false,
@@ -202,7 +204,6 @@ export const Columns = ({
 					const quantity = parseFloat(
 						watch(`dyeing_batch_entry[${index}].quantity`) || 0
 					);
-
 					return getRequiredTapeKg({
 						row: row.original,
 						type: 'raw',
@@ -277,7 +278,8 @@ export const Columns = ({
 											shouldDirty: true,
 										}
 									)
-								}>
+								}
+							>
 								Copy
 							</label>
 							{info.getValue()}
@@ -347,7 +349,7 @@ export const Columns = ({
 				),
 			},
 		],
-		[NewBatchOrdersField, register, errors]
+		[NewBatchOrdersField, register, errors, status]
 	);
 
 	const columns = useMemo(

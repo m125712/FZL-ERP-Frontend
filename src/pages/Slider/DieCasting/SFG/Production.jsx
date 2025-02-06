@@ -1,30 +1,32 @@
-import { AddModal } from "@/components/Modal";
-import { useAuth } from "@/context/auth";
+import { useAuth } from '@/context/auth';
 import {
 	useFetchForRhfReset,
 	usePostFunc,
 	useRHF,
 	useUpdateFunc,
-} from "@/hooks";
-import { Input } from "@/ui";
-import GetDateTime from "@/util/GetDateTime";
-import { SFG_PRODUCTION_NULL, SFG_PRODUCTION_SCHEMA } from "@util/Schema";
+} from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { Input } from '@/ui';
+
+import { SFG_PRODUCTION_NULL, SFG_PRODUCTION_SCHEMA } from '@util/Schema';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
-	modalId = "",
+	modalId = '',
 	setDieCastingProd,
 	updateDieCastingProd = {
 		id: null,
-		name: "",
+		name: '',
 		die_casting_prod: null,
 		order_entry_id: null,
 		total_trx_quantity: null,
-		end_type_name: "",
-		stopper_type_name: "",
+		end_type_name: '',
+		stopper_type_name: '',
 		quantity: null,
 		order_number: null,
-		item_description: "",
-		order_description: "",
+		item_description: '',
+		order_description: '',
 	},
 	setUpdateDieCastingProd,
 }) {
@@ -45,16 +47,16 @@ export default function Index({
 		setUpdateDieCastingProd((prev) => ({
 			...prev,
 			id: null,
-			name: "",
+			name: '',
 			die_casting_prod: null,
 			order_entry_id: null,
 			total_trx_quantity: null,
-			end_type_name: "",
-			stopper_type_name: "",
+			end_type_name: '',
+			stopper_type_name: '',
 			quantity: null,
 			order_number: null,
-			item_description: "",
-			order_description: "",
+			item_description: '',
+			order_description: '',
 		}));
 		reset(SFG_PRODUCTION_NULL);
 		window[modalId].close();
@@ -76,7 +78,7 @@ export default function Index({
 			end_type_name: updateDieCastingProd?.end_type_name,
 			stopper_type_name: updateDieCastingProd?.stopper_type_name,
 			used_quantity: 0,
-			section: "die_casting",
+			section: 'die_casting',
 			issued_by: user?.id,
 			created_at: GetDateTime(),
 		};
@@ -91,30 +93,30 @@ export default function Index({
 				onClose: onClose,
 			});
 		} else {
-			alert("Quantity should be less than stock quantity");
+			alert('Quantity should be less than stock quantity');
 			return;
 		}
 	};
 
 	return (
 		<AddModal
-			id="DieCastingProdModal"
-			title={"Die Casting Production"}
+			id='DieCastingProdModal'
+			title={'Die Casting Production'}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}
 		>
 			<Input
-				label="production_quantity"
+				label='production_quantity'
 				placeholder={`Max: ${
 					updateDieCastingProd?.quantity -
 					updateDieCastingProd?.die_casting_prod
 				}`}
 				{...{ register, errors }}
 			/>
-			<Input label="wastage" {...{ register, errors }} />
-			<Input label="remarks" {...{ register, errors }} />
+			<Input label='wastage' {...{ register, errors }} />
+			<Input label='remarks' {...{ register, errors }} />
 		</AddModal>
 	);
 }

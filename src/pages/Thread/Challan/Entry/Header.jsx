@@ -88,13 +88,15 @@ export default function Header({
 							/>
 						</div>
 					</div>
-				}>
+				}
+			>
 				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 md:grid-cols-3'>
 					{!watch('is_hand_delivery') && (
 						<FormField
 							label='vehicle_uuid'
 							title='Assign To'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name='vehicle_uuid'
 								control={control}
@@ -130,7 +132,8 @@ export default function Header({
 					<FormField
 						label='order_info_uuid'
 						title='Order Number'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name='order_info_uuid'
 							control={control}

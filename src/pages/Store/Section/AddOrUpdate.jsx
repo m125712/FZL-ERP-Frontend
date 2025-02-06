@@ -90,7 +90,9 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
+			<Input label='index' {...{ register, errors }} />
 			<Input label='name' {...{ register, errors }} />
 			<Input label='short_name' {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />

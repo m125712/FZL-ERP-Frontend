@@ -7,7 +7,8 @@ const ReactTableTitleOnly = ({ title, data, columns, children }) => {
 			containerClassName='mb-0 rounded-t-none'
 			data={data}
 			columns={columns}
-			showTitleOnly>
+			showTitleOnly
+		>
 			{children}
 		</ReactTable>
 	);

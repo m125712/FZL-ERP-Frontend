@@ -13,7 +13,7 @@ import Pdf2 from '@/components/Pdf/PackingListSticker';
 import Pdf from '@/components/Pdf/ThreadPackeListSticker';
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy, StatusSelect } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
@@ -21,6 +21,13 @@ import PageInfo from '@/util/PageInfo';
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
+	const [status, setStatus] = useState('pending');
+	const options = [
+		{ value: 'all', label: 'All' },
+		{ value: 'pending', label: 'Pending' },
+		{ value: 'challan', label: 'Challan' },
+		{ value: 'gate_pass', label: 'Gate Pass' },
+	];
 	const navigate = useNavigate();
 	const haveAccess = useAccess('delivery__packing_list');
 	const access = haveAccess?.filter(
@@ -31,7 +38,7 @@ export default function Index() {
 			item == 'all'
 	);
 	const { data, isLoading, url, deleteData, updateData } =
-		useDeliveryPackingList(`?can_show=${access.join(',')}`);
+		useDeliveryPackingList(`?can_show=${access.join(',')}&type=${status}`);
 	const info = new PageInfo('Packing List', url, 'delivery__packing_list');
 
 	const { invalidateQuery: invalidateDeliveryChallan } = useDeliveryChallan();
@@ -92,7 +99,8 @@ export default function Index() {
 							type='button'
 							className='btn btn-accent btn-sm font-semibold text-white shadow-md'
 							disabled={pdfLoading}
-							onClick={() => handlePdf(info.row.index)}>
+							onClick={() => handlePdf(info.row.index)}
+						>
 							<BookOpen />
 						</button>
 					);
@@ -183,7 +191,12 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'gate_pass',
-				header: 'Gate Pass',
+				header: (
+					<span>
+						Warehouse <br />
+						Out
+					</span>
+				),
 				enableColumnFilter: false,
 				cell: (info) => {
 					const access = haveAccess.includes('click_gate_pass');
@@ -377,6 +390,13 @@ export default function Index() {
 				columns={columns}
 				accessor={haveAccess.includes('create')}
 				handelAdd={handelAdd}
+				extraButton={
+					<StatusSelect
+						options={options}
+						status={status}
+						setStatus={setStatus}
+					/>
+				}
 			/>
 
 			<Suspense>

@@ -5,6 +5,7 @@ import Maintenance from '@pages/Issue/Maintenance';
 import SpareParts from '@pages/Issue/SpareParts';
 import Wastage from '@pages/Issue/Wastage';
 import { useParams } from 'react-router-dom';
+
 import Information from './Information';
 
 export default function Index() {

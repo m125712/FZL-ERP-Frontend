@@ -22,10 +22,13 @@ export const useMarketingTeamDetails = (uuid) =>
 	});
 
 // * Marketing Targets* //
-export const useMarketingTargets = () =>
+export const useMarketingTargets = (query, { enabled = false } = {}) =>
 	createGlobalState({
-		queryKey: marketingQK.getTargets(),
-		url: '/public/marketing-team-member-target',
+		queryKey: marketingQK.getTargets(query),
+		url: query
+			? `/public/marketing-team-member-target?${query}`
+			: '/public/marketing-team-member-target',
+		enabled: enabled,
 	});
 
 export const useMarketingTargetDetails = (uuid) =>

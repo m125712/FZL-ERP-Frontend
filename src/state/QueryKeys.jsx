@@ -15,6 +15,12 @@ export const orderQK = {
 	//* details
 	details: () => [...orderQK.all(), 'details'],
 	detailsByQuery: (query) => [...orderQK.all(), 'detailsByQuery', query],
+	detailByStyleForPDF: (uuid, param) => [
+		...orderQK.details(),
+		uuid,
+		'pdf',
+		param ? param : '',
+	],
 	detail: (uuid) => [...orderQK.details(), uuid],
 	detailByOrderNumber: (orderNumber) => [...orderQK.details(), orderNumber],
 	detailsByOrderDescription: (orderNumber, uuid) => [
@@ -79,6 +85,11 @@ export const adminQK = {
 	//* users
 	users: () => [...adminQK.all(), 'users'],
 	user: (uuid) => [...adminQK.users(), uuid],
+	userAccessByUUID: (uuid) => [...adminQK.users(), 'userAccessByUUID', uuid],
+
+	//* permissions
+	permissions: () => [...adminQK.all(), 'permissions'],
+	permission: (uuid) => [...adminQK.permissions(), uuid],
 };
 
 export const commercialQK = {
@@ -127,7 +138,11 @@ export const commercialQK = {
 	lcByNumber: (number) => [...commercialQK.all(), 'lc-by-number', number],
 
 	//* MANUAL PI
-	manualPI: () => [...commercialQK.all(), 'manual-pi'],
+	manualPI: (query) => [
+		...commercialQK.all(),
+		'manual-pi',
+		...(query ? [query] : []),
+	],
 	manualPIDetails: (uuid) => [...commercialQK.manualPI(), 'details', uuid],
 };
 
@@ -319,7 +334,11 @@ export const commonQK = {
 		uuid,
 	],
 	//* Tape Assign
-	tapeAssign: () => [...commonQK.all(), 'tape/assign'],
+	tapeAssign: (query) => [
+		...commonQK.all(),
+		'tape/assign',
+		...(query ? [query] : []),
+	],
 	tapeAssignByUUID: (uuid) => [...commonQK.tapeAssign(), uuid],
 };
 
@@ -383,11 +402,11 @@ export const dyeingQK = {
 	dyeingRMByUUID: (uuid) => [...dyeingQK.dyeingRM(), uuid],
 
 	//* RM Log
-	dyeingRMLog: () => [...dyeingQK.all(), 'rm-log'],
+	dyeingRMLog: (query) => [...dyeingQK.all(), 'rm-log', query],
 	dyeingRMLogByUUID: (uuid) => [...dyeingQK.dyeingRMLog(), uuid],
 
 	//* swatch
-	swatch: () => [...dyeingQK.all(), 'swatch'],
+	swatch: (query) => [...dyeingQK.all(), 'swatch', ...(query ? [query] : [])],
 	swatchByUUID: (uuid) => [...dyeingQK.swatch(), uuid],
 
 	//* dummy query for updating swatches
@@ -398,7 +417,7 @@ export const dyeingQK = {
 	planningByUUID: (uuid) => [...dyeingQK.planning(), uuid],
 
 	//*  batch
-	batch: () => [...dyeingQK.all(), 'batch'],
+	batch: (query) => [...dyeingQK.all(), 'batch', ...(query ? [query] : [])],
 	batchByUUID: (uuid) => [...dyeingQK.batch(), uuid],
 	//* Order batch
 	orderBatch: (params) => [...dyeingQK.all(), 'order-batch', params],
@@ -412,7 +431,11 @@ export const dyeingQK = {
 	],
 
 	//* Thread Batch
-	threadBatch: () => [...dyeingQK.all(), 'thread-batch'],
+	threadBatch: (query) => [
+		...dyeingQK.all(),
+		'thread-batch',
+		...(query ? [query] : []),
+	],
 	threadBatchByUUID: (uuid) => [...dyeingQK.threadBatch(), uuid],
 	//* Thread Batch Entry
 	threadBatchEntry: () => [...dyeingQK.all(), 'thread-batch-entry'],
@@ -445,7 +468,11 @@ export const dyeingQK = {
 	dyeingTransferByUUID: (uuid) => [...dyeingQK.dyeingTransfer(), uuid],
 
 	//* ? Finishing Batch
-	finishingBatch: () => [...dyeingQK.all(), 'finishing-batch'],
+	finishingBatch: (query) => [
+		...dyeingQK.all(),
+		'finishing-batch',
+		...(query ? [query] : []),
+	],
 	finishingBatchByUUID: (uuid, params) => [
 		...dyeingQK.finishingBatch(),
 		uuid,
@@ -903,6 +930,11 @@ export const sliderQK = {
 		'assembly-joined-log-production',
 	],
 
+	sliderAssemblyStoreIssued: () => [
+		...sliderQK.all(),
+		'assembly-store-issued',
+	],
+
 	//* Slider Assembly Log Production
 	sliderAssemblyLogProduction: () => [
 		...sliderQK.all(),
@@ -967,13 +999,21 @@ export const deliveryQk = {
 	all: () => ['delivery'],
 	//* Dashboard
 	//* Zipper
-	deliveryZipperDashboard: () => [...deliveryQk.all(), 'dashboard-zipper'],
+	deliveryZipperDashboard: (query) => [
+		...deliveryQk.all(),
+		'dashboard-zipper',
+		...(query ? [query] : []),
+	],
 	deliveryZipperDashboardByUUID: (uuid) => [
 		...deliveryQk.deliveryDashboard(),
 		uuid,
 	],
 	//* Thread
-	deliveryThreadDashboard: () => [...deliveryQk.all(), 'dashboard-thread'],
+	deliveryThreadDashboard: (query) => [
+		...deliveryQk.all(),
+		'dashboard-thread',
+		...(query ? [query] : []),
+	],
 	deliveryThreadDashboardByUUID: (uuid) => [
 		...deliveryQk.deliveryThreadDashboard(),
 		uuid,
@@ -1074,7 +1114,7 @@ export const threadQK = {
 	orderInfoEntryByUUID: (uuid) => [...threadQK.orderInfoEntry(), uuid],
 
 	//Swatch
-	swatch: () => [...threadQK.all(), 'swatch'],
+	swatch: (query) => [...threadQK.all(), 'swatch', ...(query ? [query] : [])],
 	swatchByUUID: (uuid) => [...threadQK.swatch(), uuid],
 
 	//DyesCategory
@@ -1141,6 +1181,11 @@ export const otherQK = {
 	orderDescription: (params) => [
 		...otherQK.all(),
 		'order-description',
+		...(params ? [params] : []),
+	],
+	orderStore: (params) => [
+		...otherQK.all(),
+		'order-store',
 		...(params ? [params] : []),
 	],
 	orderBatchDescription: (params) => [
@@ -1212,9 +1257,10 @@ export const otherQK = {
 	],
 
 	//Slider Stock
-	sliderStockWithDescription: () => [
+	sliderStockWithDescription: (query) => [
 		...otherQK.all(),
 		'slider-stock-with-description',
+		...(query ? [query] : []),
 	],
 
 	//LC
@@ -1401,9 +1447,10 @@ export const otherQK = {
 	//* Count Length
 	countLength: () => [...otherQK.all(), 'thread-count-length'],
 	//* All Zipper Thread Order list
-	allZipperThreadOrderList: () => [
+	allZipperThreadOrderList: (query) => [
 		...otherQK.all(),
 		'all-zipper-thread-order-list',
+		...(query ? [query] : []),
 	],
 
 	shadeRecipe: () => [...otherQK.all(), 'shade-recipe'],
@@ -1415,7 +1462,11 @@ export const otherQK = {
 	challan: () => [...otherQK.all(), 'challan'],
 
 	//* TAPE-COIL
-	tapeCoil: () => [...otherQK.all(), 'tape-coil'],
+	tapeCoil: (query) => [
+		...otherQK.all(),
+		'tape-coil',
+		...(query ? [query] : []),
+	],
 
 	//* GET GIVEN URL DATA
 	getURLData: (url) => [...otherQK.all(), 'get-url-data', url],
@@ -1429,6 +1480,9 @@ export const otherQK = {
 		'machines-with-slot',
 		param,
 	],
+
+	//* GET RM
+	rm: (field, param) => [...otherQK.all(), 'rm', field, param],
 };
 
 //* Challan
@@ -1436,7 +1490,11 @@ export const challanQK = {
 	all: () => ['challan'],
 
 	//Challan
-	deliveryChallan: (query) => [...challanQK.all(), 'delivery-challan', query],
+	deliveryChallan: (query) => [
+		...challanQK.all(),
+		'delivery-challan',
+		...(query ? [query] : []),
+	],
 	deliveryChallanByUUID: (uuid) => [...challanQK.deliveryChallan(), uuid],
 	deliveryChallanDetailsByUUID: (uuid) => [
 		...challanQK.all(),
@@ -1464,6 +1522,7 @@ export const reportQK = {
 
 	//* Stock
 	stock: (from, to) => [...reportQK.all(), 'stock', from, to],
+	storeApproved: () => [...reportQK.all(), 'store-approved'],
 	//*Production Report DateWise
 	productionReportDateWise: (from, to, query) => [
 		...reportQK.all(),
@@ -1472,11 +1531,35 @@ export const reportQK = {
 		to,
 		query,
 	],
-	productionReportStatementReport: (from, to) => [
+	productionReportStatementReport: (
+		from,
+		to,
+		party,
+		marketing,
+		type,
+		order,
+		reportFor
+	) => [
 		...reportQK.all(),
 		'production-report',
 		from,
 		to,
+		party,
+		marketing,
+		type,
+		order,
+		reportFor,
+	],
+
+	orderStatementReport: (from, to, party, marketing, type, query) => [
+		...reportQK.all(),
+		'order-statement-report',
+		from,
+		to,
+		party,
+		marketing,
+		type,
+		query || '',
 	],
 	//* Zipper Production
 	zipperProduction: (query) => [
@@ -1486,14 +1569,38 @@ export const reportQK = {
 	],
 
 	//* Thread Production
-	threadProduction: (query) => [
+	threadProductionBatchWise: (query) => [
 		...reportQK.all(),
-		'thread-production',
+		'thread-production-batch-wise',
+		query,
+	],
+
+	threadProductionOrderWise: (query) => [
+		...reportQK.all(),
+		'thread-production-order-wise',
 		query,
 	],
 
 	//* Daily Challan
 	dailyChallan: (query) => [...reportQK.all(), 'daily-challan', query],
+
+	// * Thread Status
+	threadStatus: (query, from, to) => [
+		...reportQK.all(),
+		'thread-statement',
+		query,
+		from,
+		to,
+	],
+
+	// * Zipper Status
+	zipperStatus: (query, from, to) => [
+		...reportQK.all(),
+		'zipper-statement',
+		query,
+		from,
+		to,
+	],
 
 	//* PI Register
 	piRegister: (query) => [...reportQK.all(), 'pi-register', query],
@@ -1521,9 +1628,16 @@ export const reportQK = {
 	],
 
 	// * Sample Report
-	sample: (date, is_sample) => [
+	sample: (date, toDate, is_sample) => [
 		...reportQK.all(),
 		'sample-report-by-date',
+		date,
+		toDate,
+		is_sample,
+	],
+	sampleCombined: (date, is_sample) => [
+		...reportQK.all(),
+		'sample-report-by-date-combined',
 		date,
 		is_sample,
 	],
@@ -1540,7 +1654,11 @@ export const marketingQK = {
 	getTeamDetails: (uuid) => [...marketingQK.all(), 'teams', 'details', uuid],
 
 	//* Targets
-	getTargets: () => [...marketingQK.all(), 'targets'],
+	getTargets: (query) => [
+		...marketingQK.all(),
+		'targets',
+		...(query ? [query] : []),
+	],
 	getTargetDetails: (uuid) => [...marketingQK.all(), 'targets', uuid],
 };
 

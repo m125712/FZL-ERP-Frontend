@@ -1,16 +1,17 @@
-import pdfMake from "@/components/Pdf/pdfMake";
+import pdfMake from '@/components/Pdf/pdfMake';
 import {
 	DEFAULT_FONT_SIZE,
 	defaultStyle,
 	styles,
 	xMargin,
-} from "@/components/Pdf/ui";
+} from '@/components/Pdf/ui';
+
 import {
-	TableFooter,
-	TableHeader,
 	getPageFooter,
 	getPageHeader,
-} from "./utils";
+	TableFooter,
+	TableHeader,
+} from './utils';
 
 export default function ChallanPdf(challan) {
 	const headerHeight = 120;
@@ -20,8 +21,8 @@ export default function ChallanPdf(challan) {
 	// console.log(challan_info, challan_entry);
 
 	const pdfDocGenerator = pdfMake.createPdf({
-		pageSize: "A4",
-		pageOrientation: "portrait",
+		pageSize: 'A4',
+		pageOrientation: 'portrait',
 		pageMargins: [xMargin, headerHeight, xMargin, footerHeight],
 		defaultStyle,
 		styles,
@@ -29,10 +30,10 @@ export default function ChallanPdf(challan) {
 		// Page Header
 		header: {
 			table: {
-				widths: [35, "*", 60, "*"],
+				widths: [35, '*', 60, '*'],
 				body: getPageHeader(challan_info),
 			},
-			layout: "noBorders",
+			layout: 'noBorders',
 			margin: [xMargin, 10, xMargin, 0],
 		},
 		// Page Footer
@@ -53,7 +54,7 @@ export default function ChallanPdf(challan) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ["*", "*", "*", "*", "*"],
+					widths: ['*', '*', '*', '*', '*'],
 					// dontBreakRows: true,
 					body: [
 						// Header
@@ -68,7 +69,7 @@ export default function ChallanPdf(challan) {
 										item.item_description
 								).length,
 								text: item.item_description,
-								style: "tableCell",
+								style: 'tableCell',
 							},
 							{
 								rowSpan: challan_entry.filter(
@@ -78,7 +79,7 @@ export default function ChallanPdf(challan) {
 										i.style === item.style
 								).length,
 								text: item.style,
-								style: "tableCell",
+								style: 'tableCell',
 							},
 							{
 								rowSpan: challan_entry.filter(
@@ -89,15 +90,15 @@ export default function ChallanPdf(challan) {
 										i.color === item.color
 								).length,
 								text: item.color,
-								style: "tableCell",
+								style: 'tableCell',
 							},
 							{
 								text: item.size,
-								alignment: "right",
+								alignment: 'right',
 							},
 							{
 								text: item.delivery_quantity,
-								alignment: "right",
+								alignment: 'right',
 							},
 						]),
 

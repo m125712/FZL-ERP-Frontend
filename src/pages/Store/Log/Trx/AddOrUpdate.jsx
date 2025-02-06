@@ -1,5 +1,4 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF } from '@/hooks';
+import { useEffect } from 'react';
 import { useCommonCoilRM, useCommonTapeRM } from '@/state/Common';
 import { useDeliveryRM } from '@/state/Delivery';
 import { useDyeingRM } from '@/state/Dyeing';
@@ -18,11 +17,14 @@ import {
 	useMaterialTrxByUUID,
 } from '@/state/Store';
 import { useVislonFinishingRM, useVislonTMRM } from '@/state/Vislon';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+
+import { MATERIAL_STOCK_NULL, MATERIAL_STOCK_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 import getTransactionArea from '@/util/TransactionArea';
-import { MATERIAL_STOCK_NULL, MATERIAL_STOCK_SCHEMA } from '@util/Schema';
-import { useEffect } from 'react';
 
 export default function Index({
 	modalId = '',
@@ -141,7 +143,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField label='trx_to' title='Trx to' errors={errors}>
 				<Controller
 					name={'trx_to'}

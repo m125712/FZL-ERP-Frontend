@@ -102,7 +102,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={false}>
+			isSmall={false}
+		>
 			<JoinInput
 				title='Expected Tape QTY'
 				label='expected_tape_quantity'

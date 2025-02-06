@@ -17,6 +17,7 @@ import { ShowLocalToast } from '@/components/Toast';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DynamicField, FormField, ReactSelect, SectionEntryBody } from '@/ui';
 
+import { cn } from '@/lib/utils';
 import GetDateTime from '@/util/GetDateTime';
 import { GATE_PASS_NULL, GATE_PASS_SCHEMA } from '@/util/Schema';
 
@@ -233,36 +234,38 @@ export default function Index() {
 				tabIndex={0}
 				onBlur={() => setScannerActive(false)}
 				onFocus={() => setScannerActive(true)}
-				className='min-h-screen p-4 outline-none'>
+				className='outline-none'
+			>
 				{isLoading && (
-					<div className='flex h-screen items-center justify-center'>
-						<span className='loading loading-dots loading-lg z-50' />
-					</div>
+					<span className='loading loading-dots loading-lg z-50' />
 				)}
-				<div className='mb-4 flex items-center gap-4'>
-					<div
-						className={`flex items-center gap-2 ${scannerActive ? 'text-success' : 'text-error'}`}>
-						<div
-							className={`h-3 w-3 rounded-full ${scannerActive ? 'bg-success' : 'bg-error'}`}></div>
-						<span className='text-sm font-medium'>
-							Scanner{' '}
-							{scannerActive
-								? 'Active'
-								: 'Inactive(Click this page to activate)'}
-						</span>
-					</div>
-				</div>
 
 				<HotKeys {...{ keyMap, handlers }}>
 					<form
 						onSubmit={handleSubmit(onSubmit)}
 						noValidate
-						className='mt-4 flex flex-col gap-4'>
-						<SectionEntryBody title={`Details `}>
+						className='flex flex-col gap-4'
+					>
+						<SectionEntryBody
+							title={`Details `}
+							header={
+								<span
+									className={cn(
+										'btn btn-sm',
+										scannerActive
+											? 'btn-success'
+											: 'btn-error'
+									)}
+								>
+									Scanner: {scannerActive ? 'ON' : 'OFF'}
+								</span>
+							}
+						>
 							<FormField
 								label='challan_uuid'
 								title='Challan'
-								errors={errors}>
+								errors={errors}
+							>
 								<Controller
 									name='challan_uuid'
 									control={control}
@@ -305,10 +308,12 @@ export default function Index() {
 								<th
 									key={item}
 									scope='col'
-									className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+									className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'
+								>
 									{item}
 								</th>
-							))}>
+							))}
+						>
 							{EntryField.map((item, index) => (
 								<tr key={item.id}>
 									<td className={`w-80 ${rowClass}`}>

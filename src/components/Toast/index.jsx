@@ -1,5 +1,4 @@
-import { Slide, ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
+import { Slide, toast, ToastContainer } from 'react-toastify';
 
 const ToastBody = ({ text }) => (
 	<div className='flex items-center'>

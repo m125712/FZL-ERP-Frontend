@@ -25,7 +25,8 @@ export default function DynamicField({
 						<button
 							type='button'
 							className='btn btn-accent btn-xs rounded'
-							onClick={handelAppend}>
+							onClick={handelAppend}
+						>
 							<Plus className='w-5' /> NEW
 						</button>
 					)}
@@ -38,7 +39,8 @@ export default function DynamicField({
 						className={cn(
 							'select-none text-sm text-primary-content',
 							tableHeadClass
-						)}>
+						)}
+					>
 						<tr className='rounded-md capitalize text-primary'>
 							{tableHead}
 						</tr>
@@ -66,7 +68,8 @@ export function DynamicDeliveryField({
 					<button
 						type='button'
 						className='btn btn-secondary btn-xs border border-white bg-secondary'
-						onClick={handelAppend}>
+						onClick={handelAppend}
+					>
 						<Plus className='w-4 text-primary' /> NEW
 					</button>
 				)}

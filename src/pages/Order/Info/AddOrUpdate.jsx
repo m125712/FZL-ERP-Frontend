@@ -139,8 +139,22 @@ export default function Index({
 			}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
-			onClose={onClose}>
+			onClose={onClose}
+		>
 			<div className='flex justify-end gap-2 text-sm'>
+				{updateOrderInfo?.uuid && (
+					<div className='rounded-md border-2 border-dashed border-red-300 px-1 text-gray-600'>
+						<CheckBox
+							label='is_cancelled'
+							title='Cancelled'
+							onChange={(e) =>
+								setValue('is_cancelled', e.target.checked)
+							}
+							{...{ register, errors }}
+						/>
+					</div>
+				)}
+
 				<div className='rounded-md bg-primary px-1'>
 					<CheckBox
 						label='is_sample'
@@ -193,7 +207,8 @@ export default function Index({
 				<FormField
 					label='reference_order_info_uuid'
 					title='Ref. Order'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'reference_order_info_uuid'}
 						control={control}
@@ -218,7 +233,8 @@ export default function Index({
 				<FormField
 					label='marketing_uuid'
 					title='Marketing'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'marketing_uuid'}
 						control={control}
@@ -286,7 +302,8 @@ export default function Index({
 				<FormField
 					label='merchandiser_uuid'
 					title='Merchandiser'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'merchandiser_uuid'}
 						control={control}
@@ -355,7 +372,8 @@ export default function Index({
 				<FormField
 					label='marketing_priority'
 					title='S&M Priority'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'marketing_priority'}
 						control={control}
@@ -379,7 +397,8 @@ export default function Index({
 				<FormField
 					label='factory_priority'
 					title='Factory Priority'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'factory_priority'}
 						control={control}

@@ -1,17 +1,32 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDyeingBatch } from '@/state/Dyeing';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { BatchType, DateTime, EditDelete, LinkWithCopy, Transfer } from '@/ui';
+import {
+	BatchType,
+	CustomLink,
+	DateTime,
+	EditDelete,
+	StatusSelect,
+	Transfer,
+} from '@/ui';
 
 import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const { data, url, isLoading, updateData } = useDyeingBatch();
+	const options = [
+		{ value: 'all', label: 'All' },
+		{ value: 'pending', label: 'Pending' },
+		{ value: 'completed', label: 'Completed' },
+	];
+	const [status, setStatus] = useState('pending');
+	const { data, url, isLoading, updateData } = useDyeingBatch(
+		`type=${status}`
+	);
 	const info = new PageInfo('Batch', url, 'dyeing__zipper_batch');
 	const haveAccess = useAccess('dyeing__zipper_batch');
 	const navigate = useNavigate();
@@ -23,10 +38,10 @@ export default function Index() {
 				header: 'Batch ID',
 				// enableColumnFilter: false,
 				cell: (info) => (
-					<LinkWithCopy
-						title={info.getValue()}
+					<CustomLink
+						label={info.getValue()}
 						id={info.row.original.uuid}
-						uri='/dyeing-and-iron/zipper-batch'
+						url={`/dyeing-and-iron/zipper-batch/${info.row.original.uuid}`}
 					/>
 				),
 			},
@@ -41,14 +56,14 @@ export default function Index() {
 				width: 'w-28',
 				// enableColumnFilter: false,
 				cell: (info) => {
+					const idx = info.row.index;
 					return info?.row?.original?.order_numbers?.map(
-						(order_number) => {
+						(order_number, index) => {
 							return (
-								<LinkWithCopy
-									key={order_number}
-									title={order_number}
-									id={order_number}
-									uri='/order/details'
+								<CustomLink
+									key={order_number + index + idx}
+									label={order_number}
+									url={`/order/details/${order_number}`}
 								/>
 							);
 						}
@@ -64,10 +79,10 @@ export default function Index() {
 			{
 				accessorKey: 'production_date',
 				header: (
-					<div className='flex flex-col'>
-						<span>Production</span>
-						<span>Date</span>
-					</div>
+					<>
+						Production <br />
+						Date
+					</>
 				),
 				enableColumnFilter: false,
 				cell: (info) => (
@@ -91,10 +106,10 @@ export default function Index() {
 			{
 				accessorKey: 'total_quantity',
 				header: (
-					<div className='flex flex-col'>
-						<span>Total</span>
-						<span>Qty(Pcs)</span>
-					</div>
+					<>
+						Total Qty <br />
+						(Pcs)
+					</>
 				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -159,7 +174,8 @@ export default function Index() {
 							className={cn(
 								'badge badge-sm uppercase',
 								res[info.getValue()]
-							)}>
+							)}
+						>
 							{info.getValue()}
 						</span>
 					);
@@ -273,7 +289,7 @@ export default function Index() {
 				),
 			},
 		],
-		[data]
+		[data, status]
 	);
 
 	// Add
@@ -288,7 +304,7 @@ export default function Index() {
 	// Received
 	const handelReceived = async (idx) => {
 		await updateData.mutateAsync({
-			url: `${url}/${data[idx]?.uuid}`,
+			url: `zipper/dyeing-batch/${data[idx]?.uuid}`,
 			updatedData: {
 				received: data[idx]?.received === 1 ? 0 : 1,
 			},
@@ -296,7 +312,6 @@ export default function Index() {
 		});
 	};
 
-	// get tabname
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
@@ -312,6 +327,13 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				accessor={haveAccess.includes('create')}
+				extraButton={
+					<StatusSelect
+						options={options}
+						status={status}
+						setStatus={setStatus}
+					/>
+				}
 			/>
 		</div>
 	);

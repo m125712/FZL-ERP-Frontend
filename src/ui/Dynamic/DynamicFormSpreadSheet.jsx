@@ -170,11 +170,13 @@ const DynamicFormSpreadSheet = (
 										}}
 										{...register(
 											`${fieldArrayName}.${fieldIndex}.${column.accessorKey}`
-										)}>
+										)}
+									>
 										{column?.options?.map((option) => (
 											<option
 												key={option?.value}
-												value={option?.value}>
+												value={option?.value}
+											>
 												{option?.label}
 											</option>
 										))}
@@ -255,7 +257,8 @@ const DynamicFormSpreadSheet = (
 												append({
 													...newRow,
 												});
-											}}>
+											}}
+										>
 											<Copy className='size-5' />
 										</button>
 										<button
@@ -263,7 +266,8 @@ const DynamicFormSpreadSheet = (
 											className='btn btn-square btn-sm border-none bg-transparent text-error'
 											onClick={() => {
 												handleRemove(fieldIndex);
-											}}>
+											}}
+										>
 											<Trash2 className='size-5' />
 										</button>
 									</div>
@@ -316,7 +320,8 @@ const DynamicFormSpreadSheet = (
 						<button
 							type='button'
 							className='btn btn-accent btn-xs rounded'
-							onClick={handelAppend}>
+							onClick={handelAppend}
+						>
 							<Plus className='w-5' /> NEW
 						</button>
 					)}
@@ -339,7 +344,8 @@ const DynamicFormSpreadSheet = (
 						<th
 							className={cn(
 								'border-r bg-secondary p-2 text-left text-sm text-secondary-content last:border-none'
-							)}>
+							)}
+						>
 							{e.label}
 						</th>
 					);

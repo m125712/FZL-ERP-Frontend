@@ -1,6 +1,9 @@
-import { capitalize } from '@/ui/Core/utils';
-import { getMeasurement } from '@/util/Need';
 import clsx from 'clsx';
+
+import { capitalize } from '@/ui/Core/utils';
+
+import { getMeasurement } from '@/util/Need';
+
 import { getPercent, getTotals } from './utils';
 
 const timelines = {
@@ -35,7 +38,8 @@ const Timeline = ({ type, props }) => {
 						className={clsx(
 							'btn btn-circle btn-primary timeline-middle',
 							item === 'finishing' && 'bg-success'
-						)}>
+						)}
+					>
 						{getActualValue(props, item)}
 					</div>
 					<div className='badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50'>

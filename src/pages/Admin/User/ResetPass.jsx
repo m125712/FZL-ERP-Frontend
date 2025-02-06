@@ -1,7 +1,9 @@
-import { AddModal } from '@/components/Modal';
-import { useRHF, useUpdateFunc } from '@/hooks';
 import { useAdminUsers } from '@/state/Admin';
+import { useRHF, useUpdateFunc } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
 import { PasswordInput } from '@/ui';
+
 import GetDateTime from '@/util/GetDateTime';
 import { RESET_PASSWORD_NULL, RESET_PASSWORD_SCHEMA } from '@/util/Schema';
 
@@ -12,7 +14,7 @@ export default function Index({
 }) {
 	const { updateData } = useAdminUsers();
 
-	const { register, handleSubmit, errors,context } = useRHF(
+	const { register, handleSubmit, errors, context } = useRHF(
 		RESET_PASSWORD_SCHEMA,
 		RESET_PASSWORD_NULL
 	);
@@ -56,7 +58,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<PasswordInput
 				title='Reset Password'
 				label='pass'

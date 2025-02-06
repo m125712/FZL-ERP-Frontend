@@ -4,7 +4,7 @@ import {
 	useDyeingThreadBatchDetailsByUUID,
 	useDyeingThreadOrderBatch,
 } from '@/state/Dyeing';
-import { useGetURLData, useOtherMachines } from '@/state/Other';
+import { useOtherMachines } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
 import {
@@ -19,6 +19,7 @@ import { DeleteModal, ProceedModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
 import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
+import { StatusSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
@@ -45,7 +46,7 @@ export default function Index() {
 		postData,
 		deleteData,
 		invalidateQuery: invalidateDyeingThreadBatch,
-	} = useDyeingThreadBatch();
+	} = useDyeingThreadBatch(`type=pending`);
 
 	const { batch_uuid } = useParams();
 	const { user } = useAuth();
@@ -56,6 +57,14 @@ export default function Index() {
 	const [batchData, setBatchData] = useState(null);
 	const [batchEntry, setBatchEntry] = useState(null);
 	const [patchEntry, setPatchBatchEntry] = useState(null);
+	const [status, setStatus] = useState('bulk');
+
+	// * options for extra select in table
+	const options = [
+		{ value: 'bulk', label: 'Bulk' },
+		{ value: 'sample', label: 'Sample' },
+		{ value: 'all', label: 'All' },
+	];
 
 	const {
 		register,
@@ -83,12 +92,15 @@ export default function Index() {
 
 	const { data: batch, invalidateQuery: invalidateDyeingThreadBatchDetails } =
 		isUpdate
-			? useDyeingThreadBatchDetailsByUUID(batch_uuid, '?is_update=true')
+			? useDyeingThreadBatchDetailsByUUID(
+					batch_uuid,
+					`?is_update=true&type=${status}`
+				)
 			: watch('batch_type') === 'extra' && watch('order_info_uuid')
 				? useDyeingThreadOrderBatch(
-						`batch_type=extra&order_info_uuid=${watch('order_info_uuid')}`
+						`batch_type=extra&order_info_uuid=${watch('order_info_uuid')}&type=${status}`
 					)
-				: useDyeingThreadOrderBatch();
+				: useDyeingThreadOrderBatch(`type=${status}`);
 
 	// batch_entry
 	const [deleteEntry, setDeleteEntry] = useState({
@@ -130,7 +142,7 @@ export default function Index() {
 			setValue('batch_entry', batch?.batch_entry);
 			setValue('new_batch_entry', batch?.new_batch_entry);
 		}
-	}, [batch]);
+	}, [batch, status]);
 
 	useEffect(() => {
 		if (isUpdate) {
@@ -480,6 +492,7 @@ export default function Index() {
 		register,
 		errors,
 		watch,
+		status: status,
 	});
 
 	// * table columns for adding new finishing field on update
@@ -489,6 +502,7 @@ export default function Index() {
 		register,
 		errors,
 		watch,
+		status: status,
 		is_new: true,
 	});
 	return (
@@ -496,7 +510,8 @@ export default function Index() {
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}
-				noValidate>
+				noValidate
+			>
 				<Header
 					{...{
 						register,
@@ -525,6 +540,15 @@ export default function Index() {
 					title={'Batch Orders'}
 					data={BatchOrdersField}
 					columns={currentColumns}
+					extraButton={
+						!isUpdate && (
+							<StatusSelect
+								status={status}
+								setStatus={setStatus}
+								options={options}
+							/>
+						)
+					}
 				/>
 
 				{isUpdate && (
@@ -532,6 +556,13 @@ export default function Index() {
 						title={'Add New Batch'}
 						data={NewBatchOrdersField}
 						columns={NewColumns}
+						extraButton={
+							<StatusSelect
+								status={status}
+								setStatus={setStatus}
+								options={options}
+							/>
+						}
 					/>
 				)}
 

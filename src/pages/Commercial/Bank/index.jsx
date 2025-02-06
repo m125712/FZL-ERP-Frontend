@@ -27,6 +27,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'account_no',
+				header: 'Account No',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'swift_code',
 				header: 'Swift Code',
 				enableColumnFilter: false,

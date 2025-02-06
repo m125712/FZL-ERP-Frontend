@@ -1,27 +1,64 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { allFlatRoutes } from '@/routes';
-import { useAdminUsers } from '@/state/Admin';
+import { useAdminUsers, useGetUserAccessByUUID } from '@/state/Admin';
+import { useOtherHRUserByDesignation } from '@/state/Other';
 import { Link } from 'react-router-dom';
 import { useFetchForRhfResetForUserAccess, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { DebouncedInput } from '@/components/Table/components';
-import { CheckBox } from '@/ui';
+import { DebouncedInput } from '@/components/Table/utils';
+import { CheckBox, ReactSelect } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import { BOOLEAN } from '@/util/Schema';
+
+const parsedObject = (userAccess) => {
+	if (userAccess) {
+		const result = {};
+		const val = JSON.parse(userAccess);
+		Object.entries(val).forEach(([k, v]) => {
+			v.forEach((item) => {
+				const obj_key = k + '___' + item;
+				result[obj_key] = true;
+			});
+		});
+
+		const filterRoutes = allFlatRoutes?.filter(
+			(item) => item.actions !== undefined
+		);
+
+		const PAGE_ACTIONS = filterRoutes?.reduce(
+			(acc, { page_name, actions }) => {
+				actions.forEach((action) => {
+					const key = page_name + '___' + action;
+
+					acc[key] = result?.[key] === true ? true : false;
+				});
+				return acc;
+			},
+			{}
+		);
+
+		return PAGE_ACTIONS;
+	}
+
+	return {};
+};
 
 export default function Index({
 	modalId = '',
 	pageAssign = { uuid: null, name: null },
 	setPageAssign,
 }) {
+	const { data: users } = useOtherHRUserByDesignation();
+	const { data } = useGetUserAccessByUUID(pageAssign?.uuid);
 	const { url, updateData } = useAdminUsers();
 	const ALL_PAGE_ACTIONS = allFlatRoutes.filter(
 		(item) => item.actions !== undefined
 	);
 
 	const [searchPageName, setSearchPageName] = useState('');
+	const [user, setUser] = useState({});
 	const filteredPageActions = ALL_PAGE_ACTIONS.filter(({ page_name }) =>
 		page_name.toLowerCase().includes(searchPageName.toLowerCase())
 	);
@@ -51,16 +88,33 @@ export default function Index({
 		PAGE_ACTIONS_NULL[key] = value.null;
 	});
 
-	const { register, handleSubmit, errors, reset, getValues, context } =
-		useRHF(PAGE_ACTIONS_SCHEMA);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		getValues,
+		context,
+		setValue,
+	} = useRHF(PAGE_ACTIONS_SCHEMA);
 
-	useFetchForRhfResetForUserAccess(
-		`${url}/can-access/${pageAssign?.uuid}`,
-		pageAssign?.uuid,
-		reset
-	);
+	// * previous data fetch and reset form
+	// useFetchForRhfResetForUserAccess(
+	// 	`${url}/can-access/${pageAssign?.uuid}`,
+	// 	pageAssign?.uuid,
+	// 	reset
+	// );
 
-	// console.log(getValues());
+	useEffect(() => {
+		if (data && data?.can_access) {
+			// * here we are setting the form values manually because the form data is to big to reset() function to handle
+			Object.entries(parsedObject(data?.can_access)).forEach(
+				([key, value]) => {
+					setValue(key, value);
+				}
+			);
+		}
+	}, [data, reset]);
 
 	const onClose = () => {
 		setPageAssign((prev) => ({
@@ -68,11 +122,10 @@ export default function Index({
 			uuid: null,
 			name: null,
 		}));
+		setUser({});
 		reset(PAGE_ACTIONS_NULL);
 		window[modalId].close();
 	};
-
-	// console.log(getValues());
 
 	const onSubmit = async (data) => {
 		const result = {};
@@ -102,6 +155,17 @@ export default function Index({
 		return;
 	};
 
+	useEffect(() => {
+		if (user?.can_access) {
+			// * here we are setting the form values manually because the form data is to big to reset() function to handle
+			Object.entries(parsedObject(user?.can_access)).forEach(
+				([key, value]) => {
+					setValue(key, value);
+				}
+			);
+		}
+	}, [user, reset]);
+
 	return (
 		<AddModal
 			id={modalId}
@@ -112,7 +176,20 @@ export default function Index({
 			}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
-			onClose={onClose}>
+			onClose={onClose}
+		>
+			<div className='flex justify-end'>
+				<ReactSelect
+					className='min-w-64'
+					placeholder='Select user'
+					options={users}
+					value={users?.filter((item) => item.value == user.value)}
+					onChange={(e) => {
+						setUser(e);
+					}}
+				/>
+			</div>
+
 			<DebouncedInput
 				width='mb-4'
 				placeholder='Search Page Name...'
@@ -130,11 +207,13 @@ export default function Index({
 						return (
 							<div
 								key={page_name}
-								className='flex flex-col gap-1 rounded-md border border-primary/30 p-2 transition-colors duration-300 ease-in-out hover:bg-primary/10'>
+								className='flex flex-col gap-1 rounded-md border border-primary/30 p-2 transition-colors duration-300 ease-in-out hover:bg-primary/10'
+							>
 								<Link
 									to={path}
 									className='link-hover link link-primary font-semibold capitalize peer-hover:underline'
-									target='_blank'>
+									target='_blank'
+								>
 									{page_name
 										.replace(/__/, ': ')
 										.replace(/_/g, ' ')}
@@ -143,7 +222,8 @@ export default function Index({
 									{actions.map((action) => (
 										<div
 											key={page_name + '___' + action}
-											className='rounded-md border border-primary px-1'>
+											className='rounded-md border border-primary px-1'
+										>
 											<CheckBox
 												key={page_name + '___' + action}
 												label={

@@ -94,11 +94,13 @@ export const POLICY_NULL = {
 
 // Section
 export const SECTION_SCHEMA = {
+	index: NUMBER_REQUIRED.default(0).min(0, 'Minimum of 0'),
 	name: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
 export const SECTION_NULL = {
+	index: 0,
 	uuid: null,
 	name: '',
 	short_name: '',
@@ -195,6 +197,7 @@ export const MARKETING_NULL = {
 
 // Material
 export const MATERIAL_SCHEMA = {
+	index: NUMBER_REQUIRED.default(0).min(0, 'Minimum of 0'),
 	section_uuid: STRING_REQUIRED,
 	type_uuid: STRING_REQUIRED,
 	name: STRING_REQUIRED,
@@ -208,6 +211,7 @@ export const MATERIAL_SCHEMA = {
 };
 
 export const MATERIAL_NULL = {
+	index: 0,
 	uuid: null,
 	name: '',
 	short_name: '',
@@ -237,6 +241,7 @@ export const MATERIAL_STOCK_NULL = {
 };
 
 export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
+	purpose: STRING_REQUIRED.default('general'),
 	order_description_uuid: STRING_REQUIRED,
 	trx_to: STRING_REQUIRED,
 	trx_quantity: NUMBER_DOUBLE_REQUIRED,
@@ -246,6 +251,7 @@ export const MATERIAL_TRX_AGAINST_ORDER_SCHEMA = {
 
 export const MATERIAL_TRX_AGAINST_ORDER_NULL = {
 	uuid: null,
+	purpose: 'general',
 	material_uuid: null,
 	order_description_uuid: null,
 	trx_to: '',
@@ -496,6 +502,7 @@ export const ORDER_INFO_SCHEMA = {
 	is_sample: BOOLEAN_REQUIRED.default(false),
 	is_bill: BOOLEAN.default(true),
 	is_cash: BOOLEAN_REQUIRED,
+	is_cancelled: BOOLEAN_REQUIRED.default(false),
 	conversion_rate: NUMBER_DOUBLE.nullable().default(80),
 	status: BOOLEAN_REQUIRED.default(false),
 	marketing_uuid: STRING_REQUIRED,
@@ -514,6 +521,7 @@ export const ORDER_INFO_NULL = {
 	is_sample: false,
 	is_bill: true,
 	is_cash: false,
+	is_cancelled: false,
 	conversion_rate: 80,
 	status: false,
 	marketing_uuid: null,
@@ -528,6 +536,7 @@ export const ORDER_INFO_NULL = {
 
 export const ORDER_SCHEMA = {
 	// * order type
+	revision_no: NUMBER_REQUIRED.default(0),
 	is_multi_color: BOOLEAN.default(false),
 	is_waterproof: BOOLEAN.default(false),
 	order_type: STRING_REQUIRED.default('full'),
@@ -536,7 +545,12 @@ export const ORDER_SCHEMA = {
 	order_info_uuid: UUID_REQUIRED,
 	item: UUID_REQUIRED,
 	zipper_number: UUID_REQUIRED,
-	lock_type: UUID_REQUIRED,
+	lock_type: UUID.when(['order_type', 'slider_provided'], {
+		is: (orderType, sliderProvided) =>
+			orderType === 'tape' || sliderProvided !== 'not_provided',
+		then: (schema) => schema,
+		otherwise: (schema) => schema.required('Required'),
+	}),
 
 	end_type: UUID.when('order_type', {
 		is: (value) => value === 'full',
@@ -635,9 +649,9 @@ export const ORDER_SCHEMA = {
 		yup.object().shape({
 			index: NUMBER_REQUIRED,
 			style: STRING_REQUIRED,
-			color: STRING_REQUIRED,
-			size: NUMBER_DOUBLE_REQUIRED,
-			quantity: NUMBER_REQUIRED,
+			color: STRING,
+			size: NUMBER_DOUBLE,
+			quantity: STRING,
 			company_price: NUMBER_DOUBLE_REQUIRED.transform(
 				handelNumberDefaultValue
 			).default(0),
@@ -650,6 +664,7 @@ export const ORDER_SCHEMA = {
 };
 
 export const ORDER_NULL = {
+	revision_no: 0,
 	is_multi_color: false,
 	is_waterproof: false,
 	order_type: 'full',
@@ -697,7 +712,7 @@ export const LAB_RECIPE_SCHEMA = {
 	lab_dip_info_uuid: null,
 	name: STRING_REQUIRED,
 	bleaching: STRING_REQUIRED,
-	sub_streat: STRING.nullable(),
+	sub_streat: STRING_REQUIRED,
 	approved: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	status: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	remarks: STRING.nullable(),
@@ -738,6 +753,9 @@ export const LAB_INFO_SCHEMA = {
 				false
 			),
 			recipe_uuid: STRING_REQUIRED,
+			is_pps_req: BOOLEAN.transform(handelNumberDefaultValue).default(
+				false
+			),
 			remarks: STRING.nullable(),
 		})
 	),
@@ -751,6 +769,7 @@ export const LAB_INFO_NULL = {
 		{
 			approved: false,
 			recipe_uuid: null,
+			is_pps_req: false,
 			remarks: '',
 		},
 	],
@@ -1083,8 +1102,8 @@ export const TAPE_REQUIRED_SCHEMA = {
 	zipper_number_uuid: UUID_REQUIRED,
 	top: NUMBER_DOUBLE_REQUIRED,
 	bottom: NUMBER_DOUBLE_REQUIRED,
-	raw_mtr_per_kg: NUMBER_DOUBLE,
-	dyed_mtr_per_kg: NUMBER_DOUBLE,
+	raw_mtr_per_kg: NUMBER_DOUBLE.moreThan(0, 'More than 0'),
+	dyed_mtr_per_kg: NUMBER_DOUBLE.moreThan(0, 'More than 0'),
 	remarks: STRING.nullable(),
 };
 
@@ -1291,7 +1310,7 @@ export const SLIDER_DIE_CASTING_SCHEMA = {
 		yup.object().shape({
 			mc_no: NUMBER_REQUIRED,
 			die_casting_uuid: STRING_REQUIRED,
-			finishing_batch_uuid: STRING.nullable(),
+			order_description_uuid: STRING.nullable(),
 			cavity_goods: NUMBER_REQUIRED.moreThan(0, 'Must be more than 0'),
 			cavity_defect: NUMBER_REQUIRED,
 			push: NUMBER_REQUIRED.moreThan(0, 'Must be more than 0'),
@@ -1306,7 +1325,7 @@ export const SLIDER_DIE_CASTING_NULL = {
 		{
 			mc_no: '',
 			die_casting_uuid: '',
-			finishing_batch_uuid: null,
+			order_description_uuid: null,
 			cavity_goods: '',
 			cavity_defect: '',
 			push: '',
@@ -1910,7 +1929,7 @@ export const PI_CASH_SCHEMA = {
 	thread_order_info_uuids: JSON_STRING.optional(),
 	new_order_info_uuids: JSON_STRING.optional(),
 	new_order_info_thread_uuids: JSON_STRING.optional(),
-	merchandiser_uuid: STRING_REQUIRED,
+	merchandiser_uuid: STRING.nullable(),
 	factory_uuid: STRING_REQUIRED,
 	conversion_rate: NUMBER_DOUBLE_REQUIRED,
 	receive_amount: NUMBER_DOUBLE,
@@ -2042,6 +2061,7 @@ export const PI_CASH_RECEIVE_NULL = {
 
 export const BANK_SCHEMA = {
 	name: STRING_REQUIRED,
+	account_no: STRING.nullable(),
 	swift_code: STRING_REQUIRED,
 	routing_no: STRING.nullable(),
 	address: STRING_REQUIRED,
@@ -2052,6 +2072,7 @@ export const BANK_SCHEMA = {
 export const BANK_NULL = {
 	uuid: null,
 	name: '',
+	account_no: '',
 	swift_code: '',
 	routing_no: '',
 	address: '',
@@ -2471,6 +2492,7 @@ export const THREAD_SHADE_RECIPE_NULL = {
 
 // Order Info Entry
 export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
+	revision_no: NUMBER_REQUIRED.default(0),
 	party_uuid: STRING_REQUIRED,
 	marketing_uuid: STRING_REQUIRED,
 	factory_uuid: STRING_REQUIRED,
@@ -2479,6 +2501,7 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 	is_sample: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	is_bill: BOOLEAN.transform(handelNumberDefaultValue).default(false),
 	is_cash: BOOLEAN.transform(handelNumberDefaultValue).default(false),
+	is_cancelled: BOOLEAN.default(false),
 	delivery_date: yup.date().nullable(),
 	remarks: STRING.nullable(),
 	order_info_entry: yup.array().of(
@@ -2502,6 +2525,7 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 };
 
 export const THREAD_ORDER_INFO_ENTRY_NULL = {
+	revision_no: 0,
 	uuid: null,
 	party_uuid: null,
 	marketing_uuid: null,
@@ -2511,6 +2535,7 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 	is_sample: false,
 	is_bill: false,
 	is_cash: false,
+	is_cancelled: false,
 	issued_by: null,
 	remarks: '',
 	delivery_date: null,

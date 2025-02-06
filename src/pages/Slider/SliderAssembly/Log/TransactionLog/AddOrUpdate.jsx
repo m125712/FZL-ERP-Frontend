@@ -117,7 +117,8 @@ export default function Index({
 				${updateSliderTrx.item_name} 
 				`}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<JoinInput
 				label='trx_quantity'
 				unit='PCS'

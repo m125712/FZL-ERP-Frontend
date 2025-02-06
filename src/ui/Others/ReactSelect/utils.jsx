@@ -1,4 +1,4 @@
-import cn from '@lib/cn';
+import cn from '@/lib/cn';
 
 const controlStyles = {
 	base: 'bg-base-100 input input-primary w-full  rounded-md px-2 text-sm transition-all duration-200 ease-in-out text-primary',

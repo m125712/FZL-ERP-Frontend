@@ -233,7 +233,8 @@ export default function Index() {
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				noValidate
-				className='flex flex-col gap-4'>
+				className='flex flex-col gap-4'
+			>
 				<DynamicField
 					title='Transfer Details'
 					handelAppend={handelEntryAppend}
@@ -251,10 +252,12 @@ export default function Index() {
 						<th
 							key={item}
 							scope='col'
-							className='group cursor-pointer select-none gap-2 whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+							className='group cursor-pointer select-none gap-2 whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'
+						>
 							{item}
 						</th>
-					))}>
+					))}
+				>
 					{EntryField.map((item, index) => {
 						const selectedValue = order_id?.find(
 							(item) =>
@@ -291,7 +294,8 @@ export default function Index() {
 											errors?.dyeing_transfer_entry?.[
 												index
 											].order_description_uuid
-										}>
+										}
+									>
 										<Controller
 											name={`dyeing_transfer_entry[${index}].order_description_uuid`}
 											control={control}
@@ -391,7 +395,8 @@ export default function Index() {
 
 								{/* Action*/}
 								<td
-									className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
+									className={`w-16 ${rowClass} border-l-4 border-l-primary`}
+								>
 									<ActionButtons
 										duplicateClick={() =>
 											handelDuplicateDynamicField(index)

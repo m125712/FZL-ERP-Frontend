@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
-import { DateTime, LinkWithCopy, TitleValue } from '@/ui';
+import { CustomLink, DateTime, TitleValue } from '@/ui';
 
 const LCInfo = (lc) => {
 	return (
@@ -12,11 +12,11 @@ const LCInfo = (lc) => {
 			<TitleValue
 				title='PI ID'
 				value={lc?.pi_ids.map((piId) => (
-					<LinkWithCopy
+					<CustomLink
 						key={piId}
-						title={piId}
-						id={piId}
-						uri='/commercial/pi/details'
+						label={piId}
+						url={`/commercial/pi/${piId}`}
+						openInNewTab={true}
 					/>
 				))}
 			/>
@@ -116,11 +116,11 @@ export default function Information({ data }) {
 						{pi
 							?.filter((pi) => pi_uuids?.includes(pi?.value))
 							?.map((piId) => (
-								<LinkWithCopy
+								<CustomLink
 									key={piId.value}
-									title={piId.label}
-									id={piId.value}
-									uri='/commercial/pi/details'
+									label={piId.value}
+									url={`/commercial/pi/details/${piId.value}`}
+									openInNewTab={true}
 								/>
 							))}
 					</div>

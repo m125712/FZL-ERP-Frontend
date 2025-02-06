@@ -7,7 +7,7 @@ import { useAccess } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime, EditDelete, LinkWithCopy } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -55,29 +55,37 @@ export default function Index() {
 				accessorKey: 'batch_number',
 				header: 'Batch No.',
 				enableColumnFilter: false,
-				cell: (info) => {
-					const { finishing_batch_uuid } = info.row.original;
-
-					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={finishing_batch_uuid}
-							uri={`/planning/finishing-batch`}
-						/>
-					);
-				},
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/planning/finishing-batch/${info.row.original.finishing_batch_uuid}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
 				width: 'w-40',
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'item_description',
 				header: 'Item Dsc',
 				width: 'w-40',
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.row.original.order_number}/${info.row.original.order_description_uuid}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorKey: 'mc_no',
@@ -89,6 +97,12 @@ export default function Index() {
 				accessorKey: 'die_casting_name',
 				header: 'Item',
 				width: 'w-40',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'teeth_color_name',
+				header: 'Teeth Color',
+				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{

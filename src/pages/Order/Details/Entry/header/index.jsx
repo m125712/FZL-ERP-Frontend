@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
+	useOtherOrderDescriptionByOrderNumber,
 	useOtherOrderInfoValueLabel,
 	useOtherOrderPropertiesByBottomStopper,
 	useOtherOrderPropertiesByColor,
@@ -48,6 +49,7 @@ export default function Header({
 	getValues,
 	watch,
 	reset,
+	orderNo,
 	setOrderNo,
 	Controller,
 	is_logo_body,
@@ -55,10 +57,15 @@ export default function Header({
 	setType,
 }) {
 	const { order_number, order_description_uuid } = useParams();
+
 	const isUpdate =
 		order_description_uuid !== undefined && order_number !== undefined;
 
-	const [endLabel, setEndLabel] = useState('');
+	const [orderDesc, setOrderDesc] = useState('');
+	const [refOrder, setRefOrder] = useState({
+		value: '',
+		label: '',
+	});
 
 	const { data: order } = useOtherOrderInfoValueLabel();
 	const { data: item } = useOtherOrderPropertiesByItem();
@@ -92,6 +99,11 @@ export default function Header({
 	const { data: logo_type } = useOtherOrderPropertiesByLogoType();
 	const { data: teeth_type } = useOtherOrderPropertiesByTeethType();
 
+	// * get order details
+	const { data: orderDescription } = useOtherOrderDescriptionByOrderNumber(
+		refOrder.label
+	);
+
 	const [isLogoBody, setIsLogoBody] = useState(
 		typeof is_logo_body !== 'boolean' && is_logo_body === 1 ? true : false
 	);
@@ -103,6 +115,15 @@ export default function Header({
 
 	const [sp_req, setSpReq] = useState({});
 	const [garmentsWash, setGramentsWash] = useState({});
+
+	const revisions = [
+		{ value: 0, label: 'Revision 0' },
+		{ value: 1, label: 'Revision 1' },
+		{ value: 2, label: 'Revision 2' },
+		{ value: 3, label: 'Revision 3' },
+		{ value: 4, label: 'Revision 4' },
+		{ value: 5, label: 'Revision 5' },
+	];
 
 	useEffect(() => {
 		if (order_description_uuid !== undefined) {
@@ -123,94 +144,197 @@ export default function Header({
 		setIsLogoPuller(is_logo_puller === 1 ? true : false);
 	}, [getValues('special_requirement'), is_logo_body, is_logo_puller]);
 
+	let order_Descriptions = orderDescription?.map((item) => {
+		return {
+			label: item.item_description + ' -> ' + item.order_type,
+			value: item.order_description_uuid,
+			item,
+		};
+	});
+
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody
 				title='Item'
 				header={
-					<div className='flex items-center gap-4'>
-						{watch('order_type') !== 'slider' && (
-							<div className='my-2 h-8 rounded-md bg-secondary px-1'>
-								<CheckBox
-									text='text-secondary-content'
-									label='is_multi_color'
-									title='Multi-Color'
-									{...{ register, errors }}
+					<div
+						className={
+							isUpdate
+								? 'flex w-full justify-end'
+								: 'flex w-full justify-between'
+						}
+					>
+						{!order_number && (
+							<div className='flex items-center gap-4'>
+								<ReactSelect
+									className='w-40'
+									placeholder='Select Description'
+									options={order}
+									value={order?.filter(
+										(item) => item.value == refOrder.value
+									)}
+									onChange={(e) => {
+										setRefOrder(e);
+									}}
+								/>
+								<ReactSelect
+									className='w-80'
+									placeholder='Select Description'
+									options={order_Descriptions}
+									value={order_Descriptions?.filter(
+										(item) => item.value == orderDesc
+									)}
+									onChange={(e) => {
+										setOrderDesc(e.value);
+										setType(e.item.order_type);
+										setOrderNo(e.item.order_number);
+										reset({
+											order_entry: [
+												{
+													index: null,
+													style: '',
+													color: '',
+													size: '',
+													quantity: '',
+													company_price: 0,
+													party_price: 0,
+													bleaching: 'non-bleach',
+												},
+											],
+											...e.item,
+										});
+									}}
 								/>
 							</div>
 						)}
 
-						{watch('order_type') !== 'slider' &&
-							item
-								?.find((item) => item.value === watch('item'))
-								?.label?.toLowerCase() === 'nylon' && (
+						<div className='flex items-center gap-4'>
+							{watch('order_type') !== 'slider' && (
 								<div className='my-2 h-8 rounded-md bg-secondary px-1'>
 									<CheckBox
 										text='text-secondary-content'
-										label='is_waterproof'
-										title='Waterproof'
+										label='is_multi_color'
+										title='Multi-Color'
 										{...{ register, errors }}
 									/>
 								</div>
 							)}
 
-						<div className='my-2 w-28'>
-							<FormField
-								label='order_type'
-								title='Order Type'
-								is_title_needed='false'
-								errors={errors}>
-								<Controller
-									name={'order_type'}
-									control={control}
-									render={({ field: { onChange } }) => {
-										return (
-											<ReactSelect
-												placeholder='Select Type'
-												options={types}
-												value={types?.filter(
-													(item) =>
-														item.value ==
-														getValues('order_type')
-												)}
-												onChange={(e) => {
-													onChange(e.value);
-													setType(e.value);
-													reset({
-														...ORDER_NULL,
-														order_type:
-															watch('order_type'),
-														order_info_uuid:
-															watch(
-																'order_info_uuid'
-															),
-														item: watch('item'),
-														nylon_stopper:
-															watch(
-																'nylon_stopper'
-															),
-														zipper_number:
-															watch(
-																'zipper_number'
-															),
-														lock_type:
-															watch('lock_type'),
-													});
-												}}
-												isDisabled={isUpdate}
-											/>
-										);
-									}}
-								/>
-							</FormField>
+							{watch('order_type') !== 'slider' &&
+								item
+									?.find(
+										(item) => item.value === watch('item')
+									)
+									?.label?.toLowerCase() === 'nylon' && (
+									<div className='my-2 h-8 rounded-md bg-secondary px-1'>
+										<CheckBox
+											text='text-secondary-content'
+											label='is_waterproof'
+											title='Waterproof'
+											{...{ register, errors }}
+										/>
+									</div>
+								)}
+
+							<div className='my-2 w-28'>
+								<FormField
+									label='order_type'
+									title='Order Type'
+									is_title_needed='false'
+									errors={errors}
+								>
+									<Controller
+										name={'order_type'}
+										control={control}
+										render={({ field: { onChange } }) => {
+											return (
+												<ReactSelect
+													placeholder='Select Type'
+													options={types}
+													value={types?.filter(
+														(item) =>
+															item.value ==
+															getValues(
+																'order_type'
+															)
+													)}
+													onChange={(e) => {
+														onChange(e.value);
+														setType(e.value);
+														reset({
+															...ORDER_NULL,
+															order_type:
+																watch(
+																	'order_type'
+																),
+															order_info_uuid:
+																watch(
+																	'order_info_uuid'
+																),
+															item: watch('item'),
+															nylon_stopper:
+																watch(
+																	'nylon_stopper'
+																),
+															zipper_number:
+																watch(
+																	'zipper_number'
+																),
+															lock_type:
+																watch(
+																	'lock_type'
+																),
+														});
+													}}
+													isDisabled={isUpdate}
+												/>
+											);
+										}}
+									/>
+								</FormField>
+							</div>
+							<div className='my-2 w-28'>
+								<FormField
+									label='revision_no'
+									title='Revision No'
+									is_title_needed='false'
+									errors={errors}
+								>
+									<Controller
+										name={'revision_no'}
+										control={control}
+										render={({ field: { onChange } }) => {
+											return (
+												<ReactSelect
+													placeholder='Select Type'
+													options={revisions}
+													value={revisions?.filter(
+														(item) =>
+															item.value ==
+															getValues(
+																'revision_no'
+															)
+													)}
+													onChange={(e) => {
+														onChange(e.value);
+													}}
+													isDisabled={!isUpdate}
+												/>
+											);
+										}}
+									/>
+								</FormField>
+							</div>
 						</div>
 					</div>
-				}>
+				}
+			>
 				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
 					<FormField
 						label='order_info_uuid'
 						title='O/N'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'order_info_uuid'}
 							control={control}
@@ -262,7 +386,8 @@ export default function Header({
 						<FormField
 							label='nylon_stopper'
 							title='nylon_stopper'
-							errors={errors}>
+							errors={errors}
+						>
 							{' '}
 							<Controller
 								name={'nylon_stopper'}
@@ -287,7 +412,8 @@ export default function Header({
 					<FormField
 						label='zipper_number'
 						title='Zipper Number'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'zipper_number'}
 							control={control}
@@ -314,7 +440,8 @@ export default function Header({
 							<FormField
 								label='end_type'
 								title='End Type'
-								errors={errors}>
+								errors={errors}
+							>
 								<Controller
 									name={'end_type'}
 									control={control}
@@ -348,7 +475,8 @@ export default function Header({
 								<FormField
 									label='hand'
 									title='Hand'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'hand'}
 										control={control}
@@ -376,36 +504,14 @@ export default function Header({
 				</div>
 
 				{/* conditional rendering: checking if order type is full */}
-				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
-					<FormField
-						label='lock_type'
-						title='Lock Type'
-						errors={errors}>
-						<Controller
-							name={'lock_type'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Lock Type'
-										options={lock_type}
-										value={lock_type?.filter(
-											(lock_type) =>
-												lock_type.value ==
-												getValues('lock_type')
-										)}
-										onChange={(e) => onChange(e.value)}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					{watch('order_type') === 'full' && (
-						<>
+				{watch('order_type') === 'full' && (
+					<>
+						<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
 							<FormField
 								label='teeth_type'
 								title='Teeth Type'
-								errors={errors}>
+								errors={errors}
+							>
 								<Controller
 									name={'teeth_type'}
 									control={control}
@@ -430,7 +536,8 @@ export default function Header({
 							<FormField
 								label='teeth_color'
 								title='Teeth Color'
-								errors={errors}>
+								errors={errors}
+							>
 								<Controller
 									name={'teeth_color'}
 									control={control}
@@ -452,49 +559,49 @@ export default function Header({
 									}}
 								/>
 							</FormField>
-							<FormField
-								label='special_requirement'
-								title='Special Req'
-								errors={errors}>
-								<Controller
-									name={'special_requirement'}
-									control={control}
-									render={({ field: { onChange } }) => {
-										return (
-											<ReactSelect
-												placeholder='Select Multi Requirement'
-												options={special_requirement}
-												value={special_requirement?.filter(
-													(item) =>
-														sp_req?.special_req?.includes(
-															item.value
-														)
-												)}
-												onChange={(e) => {
-													setSpReq((prev) => ({
-														...prev,
-														special_req: e.map(
+						</div>
+						<FormField
+							label='special_requirement'
+							title='Special Req'
+							errors={errors}
+						>
+							<Controller
+								name={'special_requirement'}
+								control={control}
+								render={({ field: { onChange } }) => {
+									return (
+										<ReactSelect
+											placeholder='Select Multi Requirement'
+											options={special_requirement}
+											value={special_requirement?.filter(
+												(item) =>
+													sp_req?.special_req?.includes(
+														item.value
+													)
+											)}
+											onChange={(e) => {
+												setSpReq((prev) => ({
+													...prev,
+													special_req: e.map(
+														(item) => item.value
+													),
+												}));
+												onChange(
+													JSON.stringify({
+														values: e.map(
 															(item) => item.value
 														),
-													}));
-													onChange(
-														JSON.stringify({
-															values: e.map(
-																(item) =>
-																	item.value
-															),
-														})
-													);
-												}}
-												isMulti={true}
-											/>
-										);
-									}}
-								/>
-							</FormField>
-						</>
-					)}
-				</div>
+													})
+												);
+											}}
+											isMulti={true}
+										/>
+									);
+								}}
+							/>
+						</FormField>
+					</>
+				)}
 
 				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2'>
 					<Textarea
@@ -522,7 +629,8 @@ export default function Header({
 										label='slider_provided'
 										title='Provided'
 										is_title_needed={false}
-										errors={errors}>
+										errors={errors}
+									>
 										<Controller
 											name={'slider_provided'}
 											control={control}
@@ -551,14 +659,16 @@ export default function Header({
 								</div>
 							</div>
 						)
-					}>
+					}
+				>
 					{watch('slider_provided') !== 'completely_provided' && (
 						<>
 							<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
 								<FormField
 									label='puller_type'
 									title='Puller Type'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'puller_type'}
 										control={control}
@@ -585,7 +695,8 @@ export default function Header({
 								<FormField
 									label='puller_color'
 									title='Slider Color'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'puller_color'}
 										control={control}
@@ -612,7 +723,8 @@ export default function Header({
 								<FormField
 									label='coloring_type'
 									title='Coloring Type'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'coloring_type'}
 										control={control}
@@ -637,9 +749,41 @@ export default function Header({
 									/>
 								</FormField>
 								<FormField
+									label='lock_type'
+									title='Lock Type'
+									errors={errors}
+								>
+									<Controller
+										name={'lock_type'}
+										control={control}
+										render={({ field: { onChange } }) => {
+											return (
+												<ReactSelect
+													placeholder='Select Lock Type'
+													options={lock_type}
+													value={lock_type?.filter(
+														(lock_type) =>
+															lock_type.value ==
+															getValues(
+																'lock_type'
+															)
+													)}
+													onChange={(e) =>
+														onChange(e.value)
+													}
+												/>
+											);
+										}}
+									/>
+								</FormField>
+							</div>
+
+							<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 md:grid-cols-3'>
+								<FormField
 									label='slider'
 									title='Slider Material'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'slider'}
 										control={control}
@@ -661,13 +805,11 @@ export default function Header({
 										}}
 									/>
 								</FormField>
-							</div>
-
-							<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2'>
 								<FormField
 									label='slider_body_shape'
 									title='Slider Body Shape'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'slider_body_shape'}
 										control={control}
@@ -694,7 +836,8 @@ export default function Header({
 								<FormField
 									label='slider_link'
 									title='Slider Link'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'slider_link'}
 										control={control}
@@ -720,13 +863,14 @@ export default function Header({
 								</FormField>
 							</div>
 
-							<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
+							<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-3'>
 								{watch('order_type') === 'full' && (
 									<>
 										<FormField
 											label='top_stopper'
 											title='Top Stopper'
-											errors={errors}>
+											errors={errors}
+										>
 											<Controller
 												name={'top_stopper'}
 												control={control}
@@ -759,7 +903,8 @@ export default function Header({
 										<FormField
 											label='bottom_stopper'
 											title='Bottom Stopper'
-											errors={errors}>
+											errors={errors}
+										>
 											<Controller
 												name={'bottom_stopper'}
 												control={control}
@@ -796,7 +941,8 @@ export default function Header({
 								<FormField
 									label='slider_starting_section'
 									title='Starting Section'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'slider_starting_section'}
 										control={control}
@@ -820,11 +966,13 @@ export default function Header({
 										}}
 									/>
 								</FormField>
-
+							</div>
+							<div className='grid grid-cols-3 gap-4'>
 								<FormField
 									label='logo_type'
 									title='Logo Type'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'logo_type'}
 										control={control}
@@ -849,17 +997,20 @@ export default function Header({
 									/>
 								</FormField>
 
-								<CheckBox
-									label='is_logo_body'
-									title='Body Logo'
-									{...{ register, errors }}
-								/>
-
-								<CheckBox
-									label='is_logo_puller'
-									title='Puller Logo'
-									{...{ register, errors }}
-								/>
+								<div className='flex items-center'>
+									<CheckBox
+										label='is_logo_body'
+										title='Body Logo'
+										{...{ register, errors }}
+									/>
+								</div>
+								<div className='flex items-center'>
+									<CheckBox
+										label='is_logo_puller'
+										title='Puller Logo'
+										{...{ register, errors }}
+									/>
+								</div>
 							</div>
 						</>
 					)}
@@ -873,7 +1024,8 @@ export default function Header({
 						<FormField
 							label='garments_wash'
 							title='Garments Wash'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name={'garments_wash'}
 								control={control}
@@ -913,7 +1065,8 @@ export default function Header({
 						<FormField
 							label='light_preference'
 							title='Light Preference'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name={'light_preference'}
 								control={control}
@@ -939,7 +1092,8 @@ export default function Header({
 						<FormField
 							label='end_user'
 							title='End User'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name={'end_user'}
 								control={control}

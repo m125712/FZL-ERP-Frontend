@@ -1,4 +1,4 @@
-import { getTapeRequired } from "@/util/Need";
+import { getTapeRequired } from '@/util/Need';
 
 const getPercent = (total, req) => ((total / req) * 100).toFixed(0);
 
@@ -48,51 +48,51 @@ export { getPercent, getTotals };
 
 const VislonTimeline = (props) => {
 	return (
-		<ul className="timeline flex justify-start overflow-x-auto text-xs md:justify-center">
+		<ul className='timeline flex justify-start overflow-x-auto text-xs md:justify-center'>
 			<li>
-				<div className="btn btn-circle btn-primary timeline-middle">
+				<div className='btn btn-circle btn-primary timeline-middle'>
 					{getPercent(
 						props.total_dying_and_iron,
 						props.req_dying_and_iron
 					)}
 					%
 				</div>
-				<div className="badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50">
-					{capitalize("dying_and_iron")}
+				<div className='badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50'>
+					{capitalize('dying_and_iron')}
 				</div>
 				<hr />
 			</li>
 			<li>
 				<hr />
-				<div className="btn btn-circle btn-primary timeline-middle">
+				<div className='btn btn-circle btn-primary timeline-middle'>
 					{getPercent(
 						props.total_teeth_molding,
 						props.total_quantity
 					)}
 					%
 				</div>
-				<div className="badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50">
-					{capitalize("teeth_molding")}
+				<div className='badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50'>
+					{capitalize('teeth_molding')}
 				</div>
 				<hr />
 			</li>
 			<li>
 				<hr />
-				<div className="btn btn-circle btn-success timeline-middle bg-success">
+				<div className='btn btn-circle btn-success timeline-middle bg-success'>
 					{getPercent(props.total_finishing, props.total_quantity)}%
 				</div>
-				<div className="badge timeline-end badge-success badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50">
-					{capitalize("finishing")}
+				<div className='badge timeline-end badge-success badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50'>
+					{capitalize('finishing')}
 				</div>
 				<hr />
 			</li>
 			<li>
 				<hr />
-				<div className="btn btn-circle btn-primary timeline-middle">
+				<div className='btn btn-circle btn-primary timeline-middle'>
 					{getPercent(props.total_coloring, props.total_quantity)}%
 				</div>
-				<div className="badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50">
-					{capitalize("coloring")}
+				<div className='badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50'>
+					{capitalize('coloring')}
 				</div>
 			</li>
 		</ul>
@@ -101,65 +101,65 @@ const VislonTimeline = (props) => {
 
 const MetalTimeline = (props) => {
 	return (
-		<ul className="timeline flex justify-start overflow-x-auto text-xs md:justify-center">
+		<ul className='timeline flex justify-start overflow-x-auto text-xs md:justify-center'>
 			<li>
-				<div className="btn btn-circle btn-primary timeline-middle">
+				<div className='btn btn-circle btn-primary timeline-middle'>
 					{getPercent(
 						props.total_dying_and_iron,
 						props.req_dying_and_iron
 					)}
 					%
 				</div>
-				<div className="badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50">
-					{capitalize("dying_and_iron")}
+				<div className='badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50'>
+					{capitalize('dying_and_iron')}
 				</div>
 				<hr />
 			</li>
 			<li>
 				<hr />
-				<div className="btn btn-circle btn-primary timeline-middle">
+				<div className='btn btn-circle btn-primary timeline-middle'>
 					{getPercent(
 						props.total_teeth_molding,
 						props.total_quantity
 					)}
 					%
 				</div>
-				<div className="badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50">
-					{capitalize("teeth_molding")}
+				<div className='badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50'>
+					{capitalize('teeth_molding')}
 				</div>
 				<hr />
 			</li>
 			<li>
 				<hr />
-				<div className="btn btn-circle btn-primary timeline-middle">
+				<div className='btn btn-circle btn-primary timeline-middle'>
 					{getPercent(
 						props.total_teeth_coloring,
 						props.total_quantity
 					)}
 					%
 				</div>
-				<div className="badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50">
-					{capitalize("teeth_coloring")}
+				<div className='badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50'>
+					{capitalize('teeth_coloring')}
 				</div>
 				<hr />
 			</li>
 			<li>
 				<hr />
-				<div className="btn btn-circle btn-success timeline-middle bg-success">
+				<div className='btn btn-circle btn-success timeline-middle bg-success'>
 					{getPercent(props.total_finishing, props.total_quantity)}%
 				</div>
-				<div className="badge timeline-end badge-success badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50">
-					{capitalize("finishing")}
+				<div className='badge timeline-end badge-success badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50'>
+					{capitalize('finishing')}
 				</div>
 				<hr />
 			</li>
 			<li>
 				<hr />
-				<div className="btn btn-circle btn-primary timeline-middle">
+				<div className='btn btn-circle btn-primary timeline-middle'>
 					{getPercent(props.total_coloring, props.total_quantity)}%
 				</div>
-				<div className="badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50">
-					{capitalize("coloring")}
+				<div className='badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50'>
+					{capitalize('coloring')}
 				</div>
 			</li>
 		</ul>
@@ -168,38 +168,38 @@ const MetalTimeline = (props) => {
 
 const NylonTimeline = (props) => {
 	return (
-		<ul className="timeline flex justify-start overflow-x-auto text-xs md:justify-center">
+		<ul className='timeline flex justify-start overflow-x-auto text-xs md:justify-center'>
 			<li>
-				<div className="btn btn-circle btn-primary timeline-middle">
+				<div className='btn btn-circle btn-primary timeline-middle'>
 					{getPercent(
 						props.total_dying_and_iron,
 						props.req_dying_and_iron
 					)}
 					%
 				</div>
-				<div className="badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50">
-					{capitalize("dying_and_iron")}
+				<div className='badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50'>
+					{capitalize('dying_and_iron')}
 				</div>
 				<hr />
 			</li>
 
 			<li>
 				<hr />
-				<div className="btn btn-circle btn-success timeline-middle bg-success">
+				<div className='btn btn-circle btn-success timeline-middle bg-success'>
 					{getPercent(props.total_finishing, props.total_quantity)}%
 				</div>
-				<div className="badge timeline-end badge-success badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50">
-					{capitalize("finishing")}
+				<div className='badge timeline-end badge-success badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50'>
+					{capitalize('finishing')}
 				</div>
 				<hr />
 			</li>
 			<li>
 				<hr />
-				<div className="btn btn-circle btn-primary timeline-middle">
+				<div className='btn btn-circle btn-primary timeline-middle'>
 					{getPercent(props.total_coloring, props.total_quantity)}%
 				</div>
-				<div className="badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50">
-					{capitalize("coloring")}
+				<div className='badge timeline-end badge-primary badge-outline select-none border shadow-md transition-colors duration-300 hover:bg-secondary/50'>
+					{capitalize('coloring')}
 				</div>
 			</li>
 		</ul>

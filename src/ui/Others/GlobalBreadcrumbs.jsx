@@ -47,11 +47,13 @@ const GlobalBreadcrumbs = () => {
 							key={index}
 							variants={variants}
 							initial='initial'
-							animate='animate'>
+							animate='animate'
+						>
 							{item.href ? (
 								<Link
 									to={item.href}
-									className={cn('text-secondary')}>
+									className={cn('text-secondary')}
+								>
 									{item.label}
 								</Link>
 							) : (
@@ -68,7 +70,8 @@ const GlobalBreadcrumbs = () => {
 						variants={variants}
 						initial='initial'
 						animate='animate'
-						className='font-medium text-primary'>
+						className='font-medium text-primary'
+					>
 						{items[items.length - 1].label}
 					</motion.li>
 				)}

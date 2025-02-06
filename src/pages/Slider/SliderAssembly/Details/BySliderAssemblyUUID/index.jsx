@@ -1,10 +1,10 @@
-import ReactTable from '@/components/Table';
-import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-import { useFetchFunc } from '@/hooks';
-
-import { DateTime } from '@/ui';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useFetchFunc } from '@/hooks';
+
+import ReactTable from '@/components/Table';
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
+import { DateTime } from '@/ui';
 
 export default function Index() {
 	const { slider_slider_assembly_uuid } = useParams();

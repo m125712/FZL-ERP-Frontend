@@ -1,6 +1,7 @@
+import { format } from 'date-fns';
+
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
-import { format } from 'date-fns';
 
 export default function Information({
 	purchase = {
@@ -53,7 +54,8 @@ export default function Information({
 				label: 'LC/Local',
 				value: is_local == 1 ? 'Local' : 'LC',
 			},
-
+		];
+		const create = [
 			{
 				label: 'Created By',
 				value: created_by_name,
@@ -71,12 +73,27 @@ export default function Information({
 				value: remarks,
 			},
 		];
-		return items;
+
+		return {
+			items,
+			create,
+		};
 	};
 
 	return (
 		<SectionContainer title={'Information'}>
-			<RenderTable items={renderItems()} />
+			<div className='grid grid-cols-1 border-secondary/30 lg:grid-cols-2'>
+				<RenderTable
+					className={'border-secondary/30 lg:border-r'}
+					title={'Invoice'}
+					items={renderItems().items}
+				/>
+				<RenderTable
+					className={'border-secondary/30 lg:border-r'}
+					title={'Created'}
+					items={renderItems().create}
+				/>
+			</div>
 		</SectionContainer>
 	);
 }

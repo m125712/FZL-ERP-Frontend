@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useDeliveryChallan } from '@/state/Delivery';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
@@ -7,11 +8,12 @@ import { useAccess } from '@/hooks';
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import {
+	CustomLink,
 	DateTime,
 	EditDelete,
 	LinkOnly,
-	LinkWithCopy,
 	StatusButton,
+	StatusSelect,
 } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
@@ -19,12 +21,36 @@ import PageInfo from '@/util/PageInfo';
 
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return `all=true`;
+};
+
 export default function Index() {
+	const [status, setStatus] = useState('pending');
+	const options = [
+		{ value: 'all', label: 'All' },
+		{ value: 'pending', label: 'Pending' },
+		{ value: 'delivered', label: 'Delivered' },
+		{ value: 'received', label: 'Received' },
+		{ value: 'gate_pass', label: 'Gate Pass' },
+	];
 	const navigate = useNavigate();
-	const { data, isLoading, url, deleteData, updateData } =
-		useDeliveryChallan();
-	const info = new PageInfo('Challan', url, 'delivery__challan');
+
 	const haveAccess = useAccess('delivery__challan');
+	const { user } = useAuth();
+
+	const { data, isLoading, url, deleteData, updateData } = useDeliveryChallan(
+		getPath(haveAccess, user?.uuid) + `&type=${status}`,
+		{
+			enabled: !!user?.uuid,
+		}
+	);
+
+	const info = new PageInfo('Challan', url, 'delivery__challan');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -49,8 +75,8 @@ export default function Index() {
 				accessorKey: 'gate_pass',
 				header: (
 					<span>
-						Gate <br />
-						Pass
+						Warehouse <br />
+						Out
 					</span>
 				),
 				enableColumnFilter: false,
@@ -125,13 +151,14 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => {
 					const { delivery_date } = info.row.original;
+					const date = format(new Date(delivery_date), 'yyyy-MM-dd');
 					return (
-						<LinkOnly
-							title={
+						<CustomLink
+							label={
 								<DateTime date={delivery_date} isTime={false} />
 							}
-							id={format(new Date(delivery_date), 'yyyy-MM-dd')}
-							uri='/delivery/challan-by-date'
+							url={`/delivery/challan-by-date/${date}`}
+							openInNewTab
 						/>
 					);
 				},
@@ -143,10 +170,10 @@ export default function Index() {
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={uuid}
-							uri='/delivery/challan'
+						<CustomLink
+							label={info.getValue()}
+							url={`/delivery/challan/${uuid}`}
+							openInNewTab
 						/>
 					);
 				},
@@ -157,21 +184,16 @@ export default function Index() {
 				width: 'w-40',
 				cell: (info) => {
 					const { order_info_uuid, item_for } = info.row.original;
+					const url =
+						item_for === 'thread' || item_for === 'sample_thread'
+							? `/thread/order-info/${order_info_uuid}`
+							: `/order/details/${info.getValue()}`;
 
-					if (item_for === 'thread' || item_for === 'sample_thread') {
-						return (
-							<LinkWithCopy
-								title={info.getValue()}
-								id={order_info_uuid}
-								uri='/thread/order-info'
-							/>
-						);
-					}
 					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={info.getValue()}
-							uri='/order/details'
+						<CustomLink
+							label={info.getValue()}
+							url={url}
+							openInNewTab
 						/>
 					);
 				},
@@ -180,8 +202,8 @@ export default function Index() {
 				//* joining packing list numbers
 				accessorFn: (row) =>
 					row.packing_list_numbers
-						.map((item) => item.packing_number)
-						.join(', '),
+						?.map((item) => item.packing_number)
+						?.join(', '),
 				id: 'packing_list_numbers',
 				header: 'Packing List',
 				width: 'w-28',
@@ -192,11 +214,11 @@ export default function Index() {
 					return packing_list_numbers?.map((packingList) => {
 						if (packingList === 'PL-') return '-';
 						return (
-							<LinkWithCopy
+							<CustomLink
 								key={packingList.packing_number}
-								title={packingList.packing_number}
-								id={packingList.packing_list_uuid}
-								uri='/delivery/packing-list'
+								label={packingList.packing_number}
+								url={`/delivery/packing-list/${packingList.packing_list_uuid}`}
+								openInNewTab
 							/>
 						);
 					});
@@ -290,7 +312,11 @@ export default function Index() {
 						idx={info.row.index}
 						handelUpdate={handelUpdate}
 						handelDelete={handelDelete}
-						showDelete={haveAccess.includes('delete')}
+						showDelete={
+							haveAccess.includes('delete') &&
+							info.row.original?.packing_numbers?.length < 2 &&
+							info.row.original?.gate_pass == 0
+						}
 						showUpdate={haveAccess.includes('update')}
 					/>
 				),
@@ -341,7 +367,7 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].name,
+			itemName: data[idx].challan_number,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -358,16 +384,23 @@ export default function Index() {
 				columns={columns}
 				accessor={haveAccess.includes('create')}
 				handelAdd={handelAdd}
+				extraButton={
+					<StatusSelect
+						status={status}
+						setStatus={setStatus}
+						options={options}
+					/>
+				}
 			/>
 
 			<Suspense>
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
+					url={`/delivery/challan/delete-challan-packing-list-ref/${deleteItem.itemName}`}
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
 						deleteData,
 					}}
 				/>

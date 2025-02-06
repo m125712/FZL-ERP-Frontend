@@ -51,13 +51,15 @@ export default function Header({
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody
-				title={`${isUpdate ? `Update Recipe: ${getValues('recipe_id')}` : 'Recipe'}`}>
+				title={`${isUpdate ? `Update Recipe: ${getValues('recipe_id')}` : 'Recipe'}`}
+			>
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
 					<Input label={`name`} {...{ register, errors }} />
 					<FormField
 						label='sub_streat'
 						title='Sub Streat'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'sub_streat'}
 							control={control}
@@ -80,7 +82,8 @@ export default function Header({
 					<FormField
 						label='bleaching'
 						title='Bleaching'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'bleaching'}
 							control={control}

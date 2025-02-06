@@ -30,6 +30,9 @@ export default function Index(data, from) {
 			let totalPartyWiseOpenEnd = 0;
 			let totalPartyWiseTotalQuantity = 0;
 			partyItem.orders?.forEach((orderItem, orderIndex) => {
+				let totalOrderWiseCloseEnd = 0;
+				let totalOrderWiseOpenEnd = 0;
+				let totalOrderWiseTotalQuantity = 0;
 				orderItem.items?.forEach((itemItem, itemIndex) => {
 					const totalCloseEnd = itemItem.other?.reduce(
 						(total, item) => {
@@ -55,6 +58,9 @@ export default function Index(data, from) {
 						},
 						0
 					);
+					totalOrderWiseCloseEnd += totalCloseEnd;
+					totalOrderWiseOpenEnd += totalOpenEnd;
+					totalOrderWiseTotalQuantity += totalQuantity;
 					totalPartyWiseCloseEnd += totalCloseEnd;
 					totalPartyWiseOpenEnd += totalOpenEnd;
 					totalPartyWiseTotalQuantity += totalQuantity;
@@ -62,15 +68,18 @@ export default function Index(data, from) {
 					totalTypeWiseOpenEnd += totalOpenEnd;
 					totalTypeWiseTotalQuantity += totalQuantity;
 					if (
+						itemIndex === orderItem.items.length - 1 &&
 						!itemItem.other?.find(
 							(otherItem) => otherItem.size === 'Order Wise Total'
 						)
 					) {
 						itemItem.other?.push({
 							size: 'Order Wise Total',
-							running_total_close_end_quantity: totalCloseEnd,
-							running_total_open_end_quantity: totalOpenEnd,
-							running_total_quantity: totalQuantity,
+							running_total_close_end_quantity:
+								totalOrderWiseCloseEnd,
+							running_total_open_end_quantity:
+								totalOrderWiseOpenEnd,
+							running_total_quantity: totalOrderWiseTotalQuantity,
 						});
 					}
 					if (
@@ -193,14 +202,17 @@ export default function Index(data, from) {
 		});
 	});
 	const grandTotalCloseEnd = tableData.reduce((total, item) => {
+		if (title.includes(item.size.text)) return total;
 		return total + (item.running_total_close_end_quantity?.text || 0);
 	}, 0);
 
 	const grandTotalOpenEnd = tableData.reduce((total, item) => {
+		if (title.includes(item.size.text)) return total;
 		return total + (item.running_total_open_end_quantity?.text || 0);
 	}, 0);
 
 	const grandTotalQuantity = tableData.reduce((total, item) => {
+		if (title.includes(item.size.text)) return total;
 		return total + (item.running_total_quantity?.text || 0);
 	}, 0);
 

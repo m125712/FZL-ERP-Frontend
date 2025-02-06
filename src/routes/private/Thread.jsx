@@ -8,6 +8,7 @@ const Log = lazy(() => import('@pages/Thread/Log'));
 const OrderInfo = lazy(() => import('@pages/Thread/Order'));
 const IndOrderInfo = lazy(() => import('@pages/Thread/Order/Details'));
 const OrderInfoEntry = lazy(() => import('@pages/Thread/Order/Entry'));
+const ThreadRM = lazy(() => import('@/pages/Thread/RM'));
 
 export const ThreadRoutes = [
 	{
@@ -29,6 +30,7 @@ export const ThreadRoutes = [
 					'show_own_orders',
 					'show_approved_orders',
 					'show_price',
+					'show_cash_bill_lc',
 				],
 			},
 			{
@@ -60,7 +62,14 @@ export const ThreadRoutes = [
 				path: '/thread/order-info/:order_info_uuid',
 				element: <IndOrderInfo />,
 				page_name: 'thread__order_info_in_details',
-				actions: ['create', 'read', 'update', 'delete', 'show_price'],
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'show_price',
+					'show_cash_bill_lc',
+				],
 				hidden: true,
 			},
 
@@ -93,6 +102,13 @@ export const ThreadRoutes = [
 					'click_production',
 					'click_transaction',
 				],
+			},
+			{
+				name: 'RM',
+				path: '/thread/rm',
+				element: <ThreadRM />,
+				page_name: 'thread__rm',
+				actions: ['create', 'read', 'update', 'delete'],
 			},
 
 			{

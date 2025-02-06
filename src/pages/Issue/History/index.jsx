@@ -1,10 +1,11 @@
-import { Suspense } from '@/components/Feedback';
-import ReactTable from '@/components/Table';
+import { lazy, useEffect, useMemo, useState } from 'react';
 import { useFetchFunc } from '@/hooks';
 
+import { Suspense } from '@/components/Feedback';
+import ReactTable from '@/components/Table';
 import { DateTime, EditDelete, LinkOnly, LinkWithCopy, UserName } from '@/ui';
+
 import PageInfo from '@/util/PageInfo';
-import { lazy, useEffect, useMemo, useState } from 'react';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
@@ -79,7 +80,8 @@ export default function Index({ material_id = null }) {
 						: 'bg-red-200 text-red-600';
 					return (
 						<span
-							className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium uppercase ${color}`}>
+							className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium uppercase ${color}`}
+						>
 							{info.getValue() ? 'Yes' : 'No'}
 						</span>
 					);

@@ -58,6 +58,7 @@ function Table({
 	const [globalFilter, setGlobalFilter] = useState(searchData);
 	const [columnVisibility, setColumnVisibility] = useState(
 		columns?.reduce((acc, { accessorKey, hidden }) => {
+			if (!accessorKey) return acc;
 			acc[accessorKey] = !hidden;
 			return acc;
 		}, {})
@@ -164,7 +165,8 @@ function Table({
 						showTitleOnly && 'mb-6',
 						containerClassName,
 						table.getPageCount() <= 1 && 'rounded-b-md'
-					)}>
+					)}
+				>
 					<table className='w-full'>
 						<TableHead
 							{...{ getHeaderGroups, getPreFilteredRowModel }}

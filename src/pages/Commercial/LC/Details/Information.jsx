@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
-import { DateTime, LinkWithCopy, StatusButton, TitleValue } from '@/ui';
+import { CustomLink, DateTime, StatusButton, TitleValue } from '@/ui';
 
 const LCInfo = (lc) => {
 	return (
@@ -11,11 +11,10 @@ const LCInfo = (lc) => {
 			<TitleValue
 				title='PI ID'
 				value={lc?.pi_ids.map((piId) => (
-					<LinkWithCopy
-						key={piId}
-						title={piId}
-						id={piId}
-						uri='/commercial/pi'
+					<CustomLink
+						label={piId}
+						url={`/commercial/pi/${piId}`}
+						openInNewTab={true}
 					/>
 				))}
 			/>
@@ -115,11 +114,11 @@ export default function Information({ lc }) {
 				value: pi_ids && (
 					<div className='flex flex-wrap gap-2'>
 						{pi_ids?.map((piId) => (
-							<LinkWithCopy
+							<CustomLink
 								key={piId}
-								title={piId}
-								id={piId}
-								uri='/commercial/pi'
+								label={piId}
+								url={`/commercial/pi/${piId}`}
+								openInNewTab={true}
 							/>
 						))}
 					</div>

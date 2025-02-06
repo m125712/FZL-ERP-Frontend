@@ -156,7 +156,8 @@ export default function Header({
 								label='order_type'
 								title='Order Type'
 								is_title_needed='false'
-								errors={errors}>
+								errors={errors}
+							>
 								<Controller
 									name={'order_type'}
 									control={control}
@@ -186,12 +187,14 @@ export default function Header({
 							</FormField>
 						</div>
 					</div>
-				}>
+				}
+			>
 				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
 					<FormField
 						label='order_info_uuid'
 						title='O/N'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'order_info_uuid'}
 							control={control}
@@ -240,7 +243,8 @@ export default function Header({
 						<FormField
 							label='nylon_stopper'
 							title='nylon_stopper'
-							errors={errors}>
+							errors={errors}
+						>
 							{' '}
 							<Controller
 								name={'nylon_stopper'}
@@ -265,7 +269,8 @@ export default function Header({
 					<FormField
 						label='zipper_number'
 						title='Zipper Number'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'zipper_number'}
 							control={control}
@@ -292,7 +297,8 @@ export default function Header({
 							<FormField
 								label='end_type'
 								title='End Type'
-								errors={errors}>
+								errors={errors}
+							>
 								<Controller
 									name={'end_type'}
 									control={control}
@@ -324,7 +330,8 @@ export default function Header({
 								<FormField
 									label='hand'
 									title='Hand'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'hand'}
 										control={control}
@@ -356,7 +363,8 @@ export default function Header({
 					<FormField
 						label='lock_type'
 						title='Lock Type'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'lock_type'}
 							control={control}
@@ -381,7 +389,8 @@ export default function Header({
 							<FormField
 								label='teeth_type'
 								title='Teeth Type'
-								errors={errors}>
+								errors={errors}
+							>
 								<Controller
 									name={'teeth_type'}
 									control={control}
@@ -406,7 +415,8 @@ export default function Header({
 							<FormField
 								label='teeth_color'
 								title='Teeth Color'
-								errors={errors}>
+								errors={errors}
+							>
 								<Controller
 									name={'teeth_color'}
 									control={control}
@@ -431,7 +441,8 @@ export default function Header({
 							<FormField
 								label='special_requirement'
 								title='Special Req'
-								errors={errors}>
+								errors={errors}
+							>
 								<Controller
 									name={'special_requirement'}
 									control={control}
@@ -498,7 +509,8 @@ export default function Header({
 										label='slider_provided'
 										title='Provided'
 										is_title_needed={false}
-										errors={errors}>
+										errors={errors}
+									>
 										<Controller
 											name={'slider_provided'}
 											control={control}
@@ -527,14 +539,16 @@ export default function Header({
 								</div>
 							</div>
 						)
-					}>
+					}
+				>
 					{watch('slider_provided') !== 'completely_provided' && (
 						<>
 							<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
 								<FormField
 									label='puller_type'
 									title='Puller Type'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'puller_type'}
 										control={control}
@@ -561,7 +575,8 @@ export default function Header({
 								<FormField
 									label='puller_color'
 									title='Slider Color'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'puller_color'}
 										control={control}
@@ -588,7 +603,8 @@ export default function Header({
 								<FormField
 									label='coloring_type'
 									title='Coloring Type'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'coloring_type'}
 										control={control}
@@ -615,7 +631,8 @@ export default function Header({
 								<FormField
 									label='slider'
 									title='Slider Material'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'slider'}
 										control={control}
@@ -643,7 +660,8 @@ export default function Header({
 								<FormField
 									label='slider_body_shape'
 									title='Slider Body Shape'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'slider_body_shape'}
 										control={control}
@@ -670,7 +688,8 @@ export default function Header({
 								<FormField
 									label='slider_link'
 									title='Slider Link'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'slider_link'}
 										control={control}
@@ -702,7 +721,8 @@ export default function Header({
 										<FormField
 											label='top_stopper'
 											title='Top Stopper'
-											errors={errors}>
+											errors={errors}
+										>
 											<Controller
 												name={'top_stopper'}
 												control={control}
@@ -735,7 +755,8 @@ export default function Header({
 										<FormField
 											label='bottom_stopper'
 											title='Bottom Stopper'
-											errors={errors}>
+											errors={errors}
+										>
 											<Controller
 												name={'bottom_stopper'}
 												control={control}
@@ -772,7 +793,8 @@ export default function Header({
 								<FormField
 									label='slider_starting_section'
 									title='Starting Section'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'slider_starting_section'}
 										control={control}
@@ -800,7 +822,8 @@ export default function Header({
 								<FormField
 									label='logo_type'
 									title='Logo Type'
-									errors={errors}>
+									errors={errors}
+								>
 									<Controller
 										name={'logo_type'}
 										control={control}
@@ -849,7 +872,8 @@ export default function Header({
 						<FormField
 							label='garments_wash'
 							title='Garments Wash'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name={'garments_wash'}
 								control={control}
@@ -889,7 +913,8 @@ export default function Header({
 						<FormField
 							label='light_preference'
 							title='Light Preference'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name={'light_preference'}
 								control={control}
@@ -915,7 +940,8 @@ export default function Header({
 						<FormField
 							label='end_user'
 							title='End User'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name={'end_user'}
 								control={control}

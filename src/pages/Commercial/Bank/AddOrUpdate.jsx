@@ -81,8 +81,10 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<Input label='name' {...{ register, errors }} />
+			<Input label='account_no' {...{ register, errors }} />
 			<Input label='swift_code' {...{ register, errors }} />
 			<Input label='routing_no' {...{ register, errors }} />
 			<Textarea label='address' rows='2' {...{ register, errors }} />

@@ -8,6 +8,13 @@ export const useReportStock = (from, to, { enabled = false }) =>
 		url: `/report/material-stock-report?from_date=${from}&to_date=${to}`,
 		enabled,
 	});
+
+export const useReportStoreApproved = () =>
+	createGlobalState({
+		queryKey: reportQK.storeApproved(),
+		url: `/report/item-zipper-number-end-wise-approved`,
+	});
+
 export const useProductionReportDateWise = (
 	from = '',
 	to = '',
@@ -21,11 +28,49 @@ export const useProductionReportDateWise = (
 			query,
 		enabled: !!from && !!to && enabled,
 	});
-export const useProductionStatementReport = (from = '', to = '') =>
+export const useProductionStatementReport = (
+	from = '',
+	to = '',
+	party = '',
+	marketing = '',
+	type = '',
+	order = '',
+	reportFor = ''
+) =>
 	createGlobalState({
-		queryKey: reportQK.productionReportStatementReport(from, to),
-		url: `/report/delivery-statement-report?from_date=${from}&to_date=${to}`,
+		queryKey: reportQK.productionReportStatementReport(
+			from,
+			to,
+			party,
+			marketing,
+			type,
+			order,
+			reportFor
+		),
+		url: `/report/delivery-statement-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&order_info_uuid=${order}&type=${type}&report_for=${reportFor}`,
 		enabled: !!from && !!to,
+	});
+
+export const useOrderStatementReport = (
+	from = '',
+	to = '',
+	party = '',
+	marketing = '',
+	type = '',
+	query = ''
+) =>
+	createGlobalState({
+		queryKey: reportQK.orderStatementReport(
+			from,
+			to,
+			party,
+			marketing,
+			type,
+			query
+		),
+		url: query
+			? `/report/order-sheet-pdf-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&type=${type}&${query}`
+			: `/report/order-sheet-pdf-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&type=${type}`,
 	});
 
 export const useZipperProduction = (query, { enabled = false } = {}) =>
@@ -35,10 +80,17 @@ export const useZipperProduction = (query, { enabled = false } = {}) =>
 		enabled,
 	});
 
-export const useThreadProduction = (query, { enabled = false } = {}) =>
+export const useThreadProductionBatchWise = (query, { enabled = false } = {}) =>
 	createGlobalState({
-		queryKey: reportQK.threadProduction(query),
+		queryKey: reportQK.threadProductionBatchWise(query),
 		url: '/report/thread-production-batch-wise-report?' + query,
+		enabled,
+	});
+
+export const useThreadProductionOrderWise = (query, { enabled = false } = {}) =>
+	createGlobalState({
+		queryKey: reportQK.threadProductionOrderWise(query),
+		url: '/report/thread-production-status-order-wise?' + query,
 		enabled,
 	});
 
@@ -46,6 +98,24 @@ export const useDailyChallan = (query, { enabled = false } = {}) =>
 	createGlobalState({
 		queryKey: reportQK.dailyChallan(query),
 		url: '/report/daily-challan-report?' + query,
+		enabled,
+	});
+
+export const useThreadStatus = (from, to, query, { enabled = false } = {}) =>
+	createGlobalState({
+		queryKey: reportQK.threadStatus(query, from, to),
+		url:
+			`/report/production-report-thread-sales-marketing?from=${from}&to=${to}&` +
+			query,
+		enabled,
+	});
+
+export const useZipperStatus = (from, to, query, { enabled = false } = {}) =>
+	createGlobalState({
+		queryKey: reportQK.zipperStatus(query, from, to),
+		url:
+			`/report/production-report-sales-marketing?from=${from}&to=${to}&` +
+			query,
 		enabled,
 	});
 
@@ -100,8 +170,13 @@ export const useProductionReportThreadPartyWise = (
 		enabled,
 	});
 
-export const useSample = (date, is_sample = 1) =>
+export const useSample = (date, toDate, is_sample = 1) =>
 	createGlobalState({
-		queryKey: reportQK.sample(date, is_sample),
-		url: `/report/sample-report-by-date?date=${date}&is_sample=${is_sample}`,
+		queryKey: reportQK.sample(date, toDate, is_sample),
+		url: `/report/sample-report-by-date?date=${date}&to_date=${toDate}&is_sample=${is_sample}`,
+	});
+export const useSampleCombined = (date, is_sample = 1) =>
+	createGlobalState({
+		queryKey: reportQK.sampleCombined(date, is_sample),
+		url: `/report/sample-report-by-date-combined?date=${date}&is_sample=${is_sample}`,
 	});

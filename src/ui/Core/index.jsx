@@ -3,7 +3,7 @@ import { CalenderIcon } from '@/assets/icons';
 import { format } from 'date-fns';
 import DatePicker from 'react-datepicker';
 
-import cn from '@lib/cn';
+import cn from '@/lib/cn';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -52,7 +52,8 @@ export const DateInput = ({
 					: 'cursor-pointer'
 			)}
 			onClick={onClick}
-			ref={ref}>
+			ref={ref}
+		>
 			{value || 'Select Date'}
 			<CalenderIcon className='w-4' />
 		</button>
@@ -98,7 +99,8 @@ export const PasswordInput = ({ register, ...props }) => {
 				<button
 					type='button'
 					className='btn btn-ghost btn-xs'
-					onClick={() => setShow(!show)}>
+					onClick={() => setShow(!show)}
+				>
 					{show ? (
 						<Eye className='size-4' />
 					) : (
@@ -137,7 +139,8 @@ export const CheckBox = ({
 			className={cn(
 				'label flex cursor-pointer justify-start gap-2',
 				props.height ? props.height : 'h-8'
-			)}>
+			)}
+		>
 			<input
 				type='checkbox'
 				className={cn(
@@ -148,7 +151,8 @@ export const CheckBox = ({
 				{...props}
 			/>
 			<span
-				className={cn('w-full text-sm font-semibold capitalize', text)}>
+				className={cn('w-full text-sm font-semibold capitalize', text)}
+			>
 				{isTitleNeeded === true
 					? props.title
 						? capitalize(props.title)
@@ -170,7 +174,8 @@ export const CheckBoxWithoutLabel = ({
 			className={cn(
 				'label cursor-pointer',
 				props.height ? props.height : 'h-8'
-			)}>
+			)}
+		>
 			<input
 				type='checkbox'
 				className={cn(`checkbox checkbox-sm`, className)}
@@ -213,7 +218,8 @@ export const Select = ({ register, ...props }) => (
 	<FormField {...props}>
 		<select
 			className='select select-bordered select-primary w-full bg-primary/5'
-			{...register(props.label)}>
+			{...register(props.label)}
+		>
 			{props.option?.map((item, index) => (
 				<option key={index} value={item.value}>
 					{item.label}
@@ -229,7 +235,8 @@ export const Radio = ({ register, checker = 0, value, rest, ...props }) => (
 			{props.option?.map((item) => (
 				<label
 					key={item.value}
-					className='flex cursor-pointer items-center gap-2'>
+					className='flex cursor-pointer items-center gap-2'
+				>
 					<input
 						type='radio'
 						className='radio checked:bg-primary'
@@ -295,12 +302,14 @@ export const JoinInputSelect = ({ register, ...props }) => (
 
 			<select
 				className='join-item select select-accent border-0 bg-accent text-white'
-				{...register(props.join)}>
+				{...register(props.join)}
+			>
 				{props.option?.map((item, index) => (
 					<option
 						className='bg-base-100 text-primary focus:bg-secondary'
 						key={index}
-						value={item.value}>
+						value={item.value}
+					>
 						{item.label}
 					</option>
 				))}

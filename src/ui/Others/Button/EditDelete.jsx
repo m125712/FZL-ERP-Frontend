@@ -5,7 +5,8 @@ const ActionButton = ({ children, className = '', ...rest }) => {
 		<button
 			className='btn btn-circle btn-ghost btn-sm transition-all duration-300'
 			type='button'
-			{...rest}>
+			{...rest}
+		>
 			{children}
 		</button>
 	);

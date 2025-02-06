@@ -77,13 +77,16 @@ export const getPageHeader = (data) => {
 				...TitleValue('Party', data?.party_name),
 				...TitleValue('Merchandiser', data?.merchandiser_name),
 			],
-			[
-				...TitleValue('Factory', data?.factory_name),
-				...TitleValue(
-					'Carton Quantity',
-					`${data?.total_carton_quantity} pcs`
-				),
-			],
+			!isThreadChallan
+				? [
+						...TitleValue('Factory', data?.factory_name),
+						...TitleValue(
+							'Carton Quantity',
+							`${data?.total_carton_quantity} pcs`
+						),
+					]
+				: [...TitleValue('Factory', data?.factory_name, 2, 3), {}, {}],
+
 			[
 				{
 					text: 'Address',

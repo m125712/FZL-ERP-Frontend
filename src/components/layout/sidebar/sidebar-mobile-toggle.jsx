@@ -11,7 +11,8 @@ const SidebarMobileToggle = () => {
 			className='size-fit text-secondary'
 			onClick={() => {
 				setSidebarOpen((prev) => !prev);
-			}}>
+			}}
+		>
 			<Menu />
 		</motion.button>
 	);

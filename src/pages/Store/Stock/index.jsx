@@ -4,7 +4,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, Transfer } from '@/ui';
+import { DateTime, EditDelete, StatusButton, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -21,6 +21,12 @@ export default function Index() {
 
 	const columns = useMemo(
 		() => [
+			{
+				accessorKey: 'index',
+				header: 'Index',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'name',
 				header: 'Name',
@@ -64,18 +70,14 @@ export default function Index() {
 					);
 				},
 			},
-			{
-				accessorKey: 'booking_quantity',
-				header: 'Booking QTY',
-				enableColumnFilter: false,
-				cell: (info) => Number(info.getValue()),
-			},
+
 			{
 				accessorKey: 'unit',
 				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
 			{
 				accessorKey: 'action_trx',
 				header: 'Material Trx',
@@ -137,6 +139,38 @@ export default function Index() {
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'booking_quantity',
+				header: 'Booking QTY',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()),
+			},
+			{
+				accessorFn: (row) => (row.is_priority_material ? 'Yes' : 'No'),
+				id: 'is_priority_material',
+				header: 'Priority',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => (
+					<StatusButton
+						size='btn-xs'
+						value={info.row.original.is_priority_material}
+					/>
+				),
+			},
+			{
+				accessorFn: (row) => (row.is_below_threshold ? 'Yes' : 'No'),
+				id: 'is_below_threshold',
+				header: 'Below Threshold',
+				enableColumnFilter: false,
+				width: 'w-40',
+				cell: (info) => (
+					<StatusButton
+						size='btn-xs'
+						value={info.row.original.is_below_threshold}
+					/>
+				),
 			},
 			{
 				accessorKey: 'description',

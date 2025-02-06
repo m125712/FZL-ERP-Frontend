@@ -112,7 +112,8 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			subTitle='Finishing -> Warehouse'
-			isSmall={true}>
+			isSmall={true}
+		>
 			{/* <FormField label='trx_to' title='Trx to' errors={errors}>
 				<Controller
 					name={'trx_to'}

@@ -16,13 +16,14 @@ const Layout = () => {
 			<div className='relative flex h-screen w-screen overflow-hidden'>
 				<Sidebar />
 				<main className='flex size-full flex-1 flex-col overflow-hidden'>
-					<Navbar />
+					{pathname !== '/' && <Navbar />}
 					<div className='flex size-full flex-1 flex-col overflow-hidden'>
 						<div
 							className={cn(
 								'size-full flex-1 overflow-auto',
-								pathname !== '/' && 'px-4 py-6 lg:px-8'
-							)}>
+								pathname !== '/' && 'px-1 py-2 lg:px-4'
+							)}
+						>
 							<Suspense fallback={<Loader />}>
 								<Outlet />
 							</Suspense>

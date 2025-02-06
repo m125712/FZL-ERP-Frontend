@@ -269,7 +269,8 @@ export default function Index() {
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
-					className='flex flex-col gap-4'>
+					className='flex flex-col gap-4'
+				>
 					<Header
 						{...{
 							register,
@@ -295,10 +296,12 @@ export default function Index() {
 							<th
 								key={item}
 								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'
+							>
 								{item}
 							</th>
-						))}>
+						))}
+					>
 						{recipeEntryField.map((item, index) => (
 							<tr key={item.id}>
 								<td className={`${rowClass}`}>
@@ -309,7 +312,8 @@ export default function Index() {
 										dynamicerror={
 											errors?.recipe_entry?.[index]
 												?.material_uuid
-										}>
+										}
+									>
 										<Controller
 											name={`recipe_entry[${index}].material_uuid`}
 											control={control}
@@ -380,7 +384,8 @@ export default function Index() {
 									/>
 								</td>
 								<td
-									className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
+									className={`w-16 ${rowClass} border-l-4 border-l-primary`}
+								>
 									<ActionButtons
 										duplicateClick={() =>
 											handelDuplicateDynamicField(index)

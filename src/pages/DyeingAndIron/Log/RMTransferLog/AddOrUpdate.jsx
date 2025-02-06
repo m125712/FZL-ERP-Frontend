@@ -1,7 +1,5 @@
 import { useEffect } from 'react';
 import { useCommonMaterialUsedByUUID } from '@/state/Common';
-import { useDyeingRM } from '@/state/Dyeing';
-import { useOtherMaterial } from '@/state/Other';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -13,23 +11,19 @@ import {
 	RM_MATERIAL_USED_EDIT_SCHEMA,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-import getTransactionArea from '@/util/TransactionArea';
 
 export default function Index({
 	modalId = '',
 	updateDyeingLog = {
 		uuid: null,
-		section: null,
-		used_quantity: null,
-		dying_and_iron: null,
 	},
 	setUpdateDyeingLog,
 }) {
 	const { data, url, updateData } = useCommonMaterialUsedByUUID(
 		updateDyeingLog?.uuid
 	);
-	const { invalidateQuery: invalidateDyeingRM } = useDyeingRM();
-	const { data: material } = useOtherMaterial();
+	// const { invalidateQuery: invalidateDyeingRM } = useDyeingRM();
+
 	const MAX_QUANTITY = Number(updateDyeingLog?.dying_and_iron);
 
 	const {
@@ -52,27 +46,23 @@ export default function Index({
 
 	let MAX_PROD =
 		MAX_QUANTITY +
-		Number(updateDyeingLog?.used_quantity) +
-		(Number(updateDyeingLog?.wastage) - watch('wastage'));
+		Number(data?.used_quantity) +
+		(Number(data?.wastage) - watch('wastage'));
 	let MAX_WASTAGE =
 		MAX_QUANTITY +
-		Number(updateDyeingLog?.wastage) +
-		(Number(updateDyeingLog?.used_quantity) - watch('used_quantity'));
+		Number(data?.wastage) +
+		(Number(data?.used_quantity) - watch('used_quantity'));
 
 	const onClose = () => {
 		setUpdateDyeingLog((prev) => ({
 			...prev,
 			uuid: null,
-			section: null,
-			used_quantity: null,
-			dying_and_iron: null,
-			wastage: null,
 		}));
 		reset(RM_MATERIAL_USED_EDIT_NULL);
 		window[modalId].close();
 	};
 
-	const onSubmit = async (data) => {
+	const onSubmit = async (formData) => {
 		if (MAX_WASTAGE < watch('wastage')) {
 			ShowLocalToast({
 				type: 'error',
@@ -83,8 +73,8 @@ export default function Index({
 		// Update item
 		if (updateDyeingLog?.uuid !== null) {
 			const updatedData = {
-				...data,
-				material_name: updateDyeingLog?.material_name,
+				...formData,
+				material_name: data?.material_name,
 				updated_at: GetDateTime(),
 			};
 
@@ -100,16 +90,26 @@ export default function Index({
 		}
 	};
 
-	const transactionArea = getTransactionArea();
+	const sections = [
+		{
+			value: data?.section,
+			label: data?.section
+				?.replace(/_|n_/g, ' ')
+				.split(' ') // Split the string into words
+				.map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+				.join(' '), // Join the words back into a single string,
+		},
+	];
 
 	return (
 		<AddModal
 			id={modalId}
-			title={`Dyeing and Iron RM Log of ${updateDyeingLog?.material_name}`}
+			title={`Dyeing and Iron RM Log of ${data?.material_name}`}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField label='section' title='Section' errors={errors}>
 				<Controller
 					name={'section'}
@@ -118,11 +118,10 @@ export default function Index({
 						return (
 							<ReactSelect
 								placeholder='Select Section'
-								options={transactionArea}
-								value={transactionArea?.find(
+								options={sections}
+								value={sections?.find(
 									(item) => item.value == getValues('section')
 								)}
-								onChange={(e) => onChange(e.value)}
 								isDisabled='1'
 							/>
 						);
@@ -132,21 +131,13 @@ export default function Index({
 			<JoinInput
 				label='used_quantity'
 				sub_label={`Max: ${MAX_PROD}`}
-				unit={
-					material?.find(
-						(inItem) => inItem.value == getValues(`material_uuid`)
-					)?.unit
-				}
+				unit={data?.unit}
 				{...{ register, errors }}
 			/>
 			<JoinInput
 				label='wastage'
 				sub_label={`Max: ${MAX_WASTAGE}`}
-				unit={
-					material?.find(
-						(inItem) => inItem.value == getValues(`material_uuid`)
-					)?.unit
-				}
+				unit={data?.unit}
 				{...{ register, errors }}
 			/>
 			<Input label='remarks' {...{ register, errors }} />

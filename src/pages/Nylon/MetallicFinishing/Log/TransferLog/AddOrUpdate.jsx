@@ -33,8 +33,7 @@ export default function Index({
 		enabled: updateLog.uuid !== null,
 	});
 	const MAX_QUANTITY =
-		Number(updateLog?.finishing_prod) +
-		Number(updateLog?.trx_quantity);
+		Number(updateLog?.finishing_prod) + Number(updateLog?.trx_quantity);
 
 	const schema = {
 		...SFG_TRANSFER_LOG_SCHEMA,
@@ -114,7 +113,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField label='trx_to' title='Trx to' errors={errors}>
 				<Controller
 					name={'trx_to'}

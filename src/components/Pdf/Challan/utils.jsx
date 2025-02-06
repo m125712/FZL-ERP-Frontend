@@ -1,11 +1,11 @@
-import { DEFAULT_FONT_SIZE, TitleAndValue } from "../ui";
+import { DEFAULT_FONT_SIZE, TitleAndValue } from '../ui';
 
 export const company = {
-	name: "Fortune Zipper LTD.",
-	address: "Aukpara, Ashulia, Savar, DHK-1340",
-	contact: "Email: info@fortunezip.com, Phone: 01521533595",
+	name: 'Fortune Zipper LTD.',
+	address: 'Aukpara, Ashulia, Savar, DHK-1340',
+	contact: 'Email: info@fortunezip.com, Phone: 01521533595',
 	bin_tax_hscode:
-		"BIN: 000537296-0403, VAT: 17141000815, HS-CODE: 9607.11.00",
+		'BIN: 000537296-0403, VAT: 17141000815, HS-CODE: 9607.11.00',
 };
 
 export const getPageHeader = (challan_info) => {
@@ -24,15 +24,15 @@ export const getPageHeader = (challan_info) => {
 					`${company.contact}\n`,
 					`${company.bin_tax_hscode}\n`,
 				],
-				alignment: "left",
+				alignment: 'left',
 				fontSize: DEFAULT_FONT_SIZE - 1,
 			},
-			"",
+			'',
 			{
 				colSpan: 2,
 				text: [
 					{
-						text: "Delivery Challan\n",
+						text: 'Delivery Challan\n',
 						fontSize: DEFAULT_FONT_SIZE + 4,
 						bold: true,
 					},
@@ -40,26 +40,26 @@ export const getPageHeader = (challan_info) => {
 					`O/N: ${challan_info.order_number}\n`,
 					`Date: ${challan_info.date}`,
 				],
-				alignment: "right",
+				alignment: 'right',
 			},
-			"",
+			'',
 		],
 		[
-			{ text: "Party", bold: true },
+			{ text: 'Party', bold: true },
 			challan_info.party_name,
-			{ text: "Marketing", bold: true },
+			{ text: 'Marketing', bold: true },
 			challan_info.marketing_name,
 		],
 		[
-			{ text: "Factory", bold: true },
+			{ text: 'Factory', bold: true },
 			challan_info.factory_name,
-			{ text: "Merchandiser", bold: true },
+			{ text: 'Merchandiser', bold: true },
 			challan_info.merchandiser_name,
 		],
 		[
-			{ text: "Address", bold: true },
+			{ text: 'Address', bold: true },
 			challan_info.factory_address,
-			{ text: "Buyer", bold: true },
+			{ text: 'Buyer', bold: true },
 			challan_info.buyer_name,
 		],
 	];
@@ -67,32 +67,32 @@ export const getPageHeader = (challan_info) => {
 
 export const getPageFooter = ({ currentPage, pageCount }) => {
 	return {
-		widths: ["*", "*", "*", "*", "*"],
+		widths: ['*', '*', '*', '*', '*'],
 		body: [
 			[
 				{
-					text: "Prepared By",
-					alignment: "center",
+					text: 'Prepared By',
+					alignment: 'center',
 					border: [false, true, false, false],
 				},
 				{
-					text: "",
-					alignment: "center",
+					text: '',
+					alignment: 'center',
 					border: [false, false, false, false],
 				},
 				{
-					text: "Checked By",
-					alignment: "center",
+					text: 'Checked By',
+					alignment: 'center',
 					border: [false, true, false, false],
 				},
 				{
-					text: "",
-					alignment: "center",
+					text: '',
+					alignment: 'center',
 					border: [false, false, false, false],
 				},
 				{
-					text: "FZL Signature",
-					alignment: "center",
+					text: 'FZL Signature',
+					alignment: 'center',
 					border: [false, true, false, false],
 				},
 			],
@@ -100,13 +100,13 @@ export const getPageFooter = ({ currentPage, pageCount }) => {
 				{
 					colSpan: 5,
 					text: `Page ${currentPage} of ${pageCount}`,
-					alignment: "center",
+					alignment: 'center',
 					border: [false, false, false, false],
 				},
-				"",
-				"",
-				"",
-				"",
+				'',
+				'',
+				'',
+				'',
 			],
 		],
 	};
@@ -116,26 +116,26 @@ export const TableHeader = () => {
 	return [
 		[
 			{
-				text: "Item Description",
-				style: "tableHeader",
+				text: 'Item Description',
+				style: 'tableHeader',
 			},
 			{
-				text: "Style",
-				style: "tableHeader",
+				text: 'Style',
+				style: 'tableHeader',
 			},
 			{
-				text: "Color",
-				style: "tableHeader",
+				text: 'Color',
+				style: 'tableHeader',
 			},
 			{
-				text: "Size(CM)",
-				style: "tableHeader",
-				alignment: "right",
+				text: 'Size(CM)',
+				style: 'tableHeader',
+				alignment: 'right',
 			},
 			{
-				text: "Quantity(PCS)",
-				style: "tableHeader",
-				alignment: "right",
+				text: 'Quantity(PCS)',
+				style: 'tableHeader',
+				alignment: 'right',
 			},
 		],
 	];
@@ -149,18 +149,18 @@ export const TableFooter = ({
 	{
 		colSpan: 2,
 		text: `Carton QTY: ${carton_quantity}`,
-		style: "tableFooter",
+		style: 'tableFooter',
 	},
-	"",
+	'',
 	{
 		text: `Total Color: ${total_unique_colors}`,
-		style: "tableFooter",
+		style: 'tableFooter',
 	},
 	{
 		colSpan: 2,
 		text: `Total ${total_delivery_quantity}`,
-		style: "tableFooter",
-		alignment: "right",
+		style: 'tableFooter',
+		alignment: 'right',
 	},
-	"",
+	'',
 ];

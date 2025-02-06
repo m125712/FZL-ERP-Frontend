@@ -110,18 +110,21 @@ export default function Header({
 									totalWeight < parseFloat(res?.min_capacity)
 									? 'text-error'
 									: ''
-							)}>{`Batch QTY (KG): ${Number(totalWeight).toFixed(3)}`}</span>
+							)}
+						>{`Batch QTY (KG): ${Number(totalWeight).toFixed(3)}`}</span>
 						<br />
 						<span>{`Batch QTY (Cone): ${totalQuantity}`}</span>
 						<br />
 					</div>
-				}>
+				}
+			>
 				<div className='flex gap-4'>
 					<div className='flex flex-1 flex-col gap-2'>
 						<FormField
 							label='uuid'
 							title='Batch No'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name='uuid'
 								control={control}
@@ -156,7 +159,8 @@ export default function Header({
 						<FormField
 							label='machine_uuid'
 							title='Machine'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name='machine_uuid'
 								control={control}
@@ -215,7 +219,8 @@ export default function Header({
 						<FormField
 							label='reason'
 							title='Reason'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name={'reason'}
 								control={control}
@@ -241,7 +246,8 @@ export default function Header({
 						<FormField
 							label='dyeing_operator'
 							title='Operator'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name={'dyeing_operator'}
 								control={control}
@@ -266,7 +272,8 @@ export default function Header({
 						<FormField
 							label='status'
 							title='Status'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name={'status'}
 								control={control}
@@ -293,7 +300,8 @@ export default function Header({
 						<FormField
 							label='category'
 							title='Category'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name={'category'}
 								control={control}
@@ -318,7 +326,8 @@ export default function Header({
 						<FormField
 							label='pass_by'
 							title='Pass By'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name={'pass_by'}
 								control={control}
@@ -365,7 +374,8 @@ export default function Header({
 						<FormField
 							label='dyeing_supervisor'
 							title='Supervisor'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name={'dyeing_supervisor'}
 								control={control}

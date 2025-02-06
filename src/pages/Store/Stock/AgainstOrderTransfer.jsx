@@ -12,7 +12,7 @@ import {
 	useOrderAgainstMetalTMRMLog,
 } from '@/state/Metal';
 import { useOrderAgainstNylonMetallicFinishingRMLog } from '@/state/Nylon';
-import { useOtherOrderDescription } from '@/state/Other';
+import { useOtherOrderStore } from '@/state/Other';
 import {
 	useOrderAgainstDieCastingRMLog,
 	useOrderAgainstSliderAssemblyRMLog,
@@ -37,7 +37,7 @@ import {
 	NUMBER_DOUBLE_REQUIRED,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-import getTransactionArea from '@/util/TransactionArea';
+import getTransactionArea, { getPurposes } from '@/util/TransactionArea';
 
 export default function Index({
 	modalId = '',
@@ -92,7 +92,7 @@ export default function Index({
 			.max(Number(updateMaterialDetails?.stock).toFixed(3)),
 		weight: MATERIAL_TRX_AGAINST_ORDER_SCHEMA.weight.required('required'),
 	};
-	const { data: order } = useOtherOrderDescription();
+	const { data: order } = useOtherOrderStore();
 
 	const {
 		register,
@@ -154,6 +154,8 @@ export default function Index({
 		}
 	};
 
+	const purposes = getPurposes;
+
 	return (
 		<AddModal
 			id={modalId}
@@ -161,11 +163,35 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
+			<FormField label='purpose' title='Purpose' errors={errors}>
+				<Controller
+					name={'purpose'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<ReactSelect
+								placeholder='Select purpose'
+								options={purposes}
+								value={
+									purposes?.filter(
+										(item) =>
+											item.value === getValues('purpose')
+									) || null
+								}
+								onChange={(e) => onChange(e.value)}
+							/>
+						);
+					}}
+				/>
+			</FormField>
+
 			<FormField
 				label='order_description_uuid'
 				title='Order'
-				errors={errors}>
+				errors={errors}
+			>
 				<Controller
 					name={'order_description_uuid'}
 					control={control}

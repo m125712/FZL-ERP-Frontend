@@ -23,7 +23,8 @@ export default function Index({
 	setUpdateTapeProd,
 }) {
 	const { user } = useAuth();
-	const { postData, invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
+	const { postData, invalidateQuery: invalidateCommonTapeSFG } =
+		useCommonTapeSFG();
 	const { invalidateQuery: invalidateCommonTapeToCoil } =
 		useCommonTapeToCoil();
 	const schema = {
@@ -65,7 +66,7 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
-		 invalidateCommonTapeToCoil();
+		invalidateCommonTapeToCoil();
 		invalidateCommonTapeSFG();
 	};
 
@@ -76,7 +77,8 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<JoinInput
 				label='trx_quantity'
 				title='Transfer Quantity'

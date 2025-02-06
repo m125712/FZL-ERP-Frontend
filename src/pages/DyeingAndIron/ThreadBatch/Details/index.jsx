@@ -33,6 +33,7 @@ export default function Index() {
 	const shade_recipes_entries = useMemo(() => {
 		return shade_recipe?.recipe_entry?.map((item) => ({
 			...item,
+			quantity: Number(item?.quantity).toFixed(5),
 			bulk: Number((volume * item?.quantity).toFixed(3)),
 		}));
 	}, [shade_recipe, volume]);
@@ -40,7 +41,8 @@ export default function Index() {
 	const programs = useMemo(() => {
 		return shade_recipe?.programs?.map((item) => ({
 			...item,
-			bulk: Number((volume * parseFloat(item?.quantity)).toFixed(3)),
+			quantity: Number(item?.quantity).toFixed(5),
+			bulk: Number((volume * item?.quantity).toFixed(3)),
 		}));
 	}, [shade_recipe, volume]);
 
@@ -69,7 +71,7 @@ export default function Index() {
 	// ! FOR TESTING
 
 	useEffect(() => {
-		document.title = 'Planning Batch Details';
+		document.title = 'Thread Batch Details';
 	}, []);
 
 	// if (!planningSNO) return <Navigate to='/not-found' />;

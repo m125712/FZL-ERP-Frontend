@@ -257,7 +257,8 @@ export default function Header({
 					<FormField
 						label='at_sight'
 						title='Payment Rec.'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name='at_sight'
 							control={control}

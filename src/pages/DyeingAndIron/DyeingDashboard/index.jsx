@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDyeingDashboard } from '@/state/Dyeing';
-import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import Pdf from '@/components/Pdf/DyeingDashboard';
-import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { Collapse } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -13,7 +12,8 @@ import Content from './Content/Content';
 import Header from './Header';
 
 export default function index() {
-	const navigate = useNavigate();
+	const [machines, setMachines] = useState([]);
+
 	const haveAccess = useAccess('dyeing__dyeing_dashboard');
 
 	const info = new PageInfo(
@@ -21,7 +21,10 @@ export default function index() {
 		'/dyeing-and-iron/dyeing-dashboard',
 		'dyeing__dyeing_dashboard'
 	);
-	const [dyeingDate, setDyeingDate] = useState('');
+
+	const [dyeingDate, setDyeingDate] = useState(
+		format(new Date(), 'yyyy-MM-dd')
+	);
 	const { data } = useDyeingDashboard(dyeingDate);
 
 	useEffect(() => {
@@ -32,20 +35,32 @@ export default function index() {
 
 	useEffect(() => {
 		if (data) {
-			Pdf(data, dyeingDate)?.getDataUrl((dataUrl) => {
+			let filters =
+				machines.length > 0
+					? data?.filter((item) =>
+							machines
+								.map((machine) => machine.value)
+								?.includes(item.machine_uuid)
+						)
+					: data;
+
+			Pdf(filters, dyeingDate)?.getDataUrl((dataUrl) => {
 				setData(dataUrl);
 			});
 		}
-	}, [data]);
+	}, [data, machines]);
 	// ! FOR TESTING
 
 	return (
 		<div className='flex flex-col gap-8'>
-			<iframe
-				src={data2}
-				className='h-[40rem] w-full rounded-md border-none'
-			/>
-			<Header {...{ dyeingDate, setDyeingDate }} />
+			<Collapse title='See PDF'>
+				<iframe
+					src={data2}
+					className='h-[40rem] w-full rounded-md border-none'
+				/>
+			</Collapse>
+
+			<Header {...{ dyeingDate, setDyeingDate, machines, setMachines }} />
 			<Content data={data} dyeingDate={dyeingDate} />
 		</div>
 	);

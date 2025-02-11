@@ -403,14 +403,6 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) =>
-					`${row.order_number_wise_rank || 0}/${row.order_number_wise_count || 0}`,
-				id: 'order_number_wise_rank',
-				header: 'Count',
-				enableColumnFilter: false,
-				width: 'w-12',
-			},
-			{
 				accessorKey: 'item_description',
 				header: 'Item',
 				enableColumnFilter: true,
@@ -479,6 +471,14 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				id: 'price_approval_count',
 				header: 'Price App',
 				enableColumnFilter: false,
+			},
+			{
+				accessorFn: (row) =>
+					`${row.order_number_wise_rank || 0}/${row.order_number_wise_count || 0}`,
+				id: 'order_number_wise_rank',
+				header: 'Count',
+				enableColumnFilter: false,
+				width: 'w-12',
 			},
 			{
 				accessorKey: 'is_swatch_approved',

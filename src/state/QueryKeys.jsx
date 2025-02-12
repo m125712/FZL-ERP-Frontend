@@ -1538,7 +1538,8 @@ export const reportQK = {
 		marketing,
 		type,
 		order,
-		reportFor
+		reportFor,
+		query
 	) => [
 		...reportQK.all(),
 		'production-report',
@@ -1549,6 +1550,7 @@ export const reportQK = {
 		type,
 		order,
 		reportFor,
+		...(query ? [query] : []),
 	],
 
 	orderStatementReport: (from, to, party, marketing, type, query) => [

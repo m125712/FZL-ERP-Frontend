@@ -126,7 +126,7 @@ export const ReportRoutes = [
 				path: '/report/production-statement',
 				element: <ProductionStatement />,
 				page_name: 'report__production_statement',
-				actions: ['read'],
+				actions: ['read', 'show_own_orders'],
 			},
 			{
 				name: 'Sample',

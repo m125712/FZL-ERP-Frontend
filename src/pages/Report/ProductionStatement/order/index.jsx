@@ -1,17 +1,30 @@
 import { useState } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useOtherOrderPropertiesByGarmentsWash,
 	useOtherOrderPropertiesBySpecialRequirement,
 } from '@/state/Other';
 import { useOrderStatementReport } from '@/state/Report';
 import { format } from 'date-fns';
+import { useAccess } from '@/hooks';
 
 import OrderSheetPdf from '@/components/Pdf/OrderStatement';
 
 import Excel from './Excel';
 import Header from './Header';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return ``;
+};
+
 export default function index() {
+	const haveAccess = useAccess('report__production_statement');
+	const { user } = useAuth();
+
 	const [from, setFrom] = useState(format(new Date(), 'yyyy-MM-dd'));
 	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
 	const [marketing, setMarketing] = useState('');
@@ -23,7 +36,11 @@ export default function index() {
 		to,
 		party,
 		marketing,
-		type
+		type,
+		getPath(haveAccess, user?.uuid),
+		{
+			isEnabled: !!user?.uuid,
+		}
 	);
 	const { data: garments } = useOtherOrderPropertiesByGarmentsWash();
 	const { data: sr } = useOtherOrderPropertiesBySpecialRequirement();

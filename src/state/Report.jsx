@@ -35,7 +35,9 @@ export const useProductionStatementReport = (
 	marketing = '',
 	type = '',
 	order = '',
-	reportFor = ''
+	reportFor = '',
+	query,
+	{ isEnabled = false } = {}
 ) =>
 	createGlobalState({
 		queryKey: reportQK.productionReportStatementReport(
@@ -45,10 +47,13 @@ export const useProductionStatementReport = (
 			marketing,
 			type,
 			order,
-			reportFor
+			reportFor,
+			query
 		),
-		url: `/report/delivery-statement-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&order_info_uuid=${order}&type=${type}&report_for=${reportFor}`,
-		enabled: !!from && !!to,
+		url: query
+			? `/report/delivery-statement-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&order_info_uuid=${order}&type=${type}&report_for=${reportFor}&${query}`
+			: `/report/delivery-statement-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&order_info_uuid=${order}&type=${type}&report_for=${reportFor}`,
+		enabled: !!from && !!to && isEnabled,
 	});
 
 export const useOrderStatementReport = (
@@ -57,7 +62,8 @@ export const useOrderStatementReport = (
 	party = '',
 	marketing = '',
 	type = '',
-	query = ''
+	query = '',
+	{ isEnabled = false } = {}
 ) =>
 	createGlobalState({
 		queryKey: reportQK.orderStatementReport(
@@ -71,6 +77,7 @@ export const useOrderStatementReport = (
 		url: query
 			? `/report/order-sheet-pdf-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&type=${type}&${query}`
 			: `/report/order-sheet-pdf-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&type=${type}`,
+		enabled: !!from && !!to && isEnabled,
 	});
 
 export const useZipperProduction = (query, { enabled = false } = {}) =>

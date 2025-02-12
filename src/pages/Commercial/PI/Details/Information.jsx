@@ -279,11 +279,11 @@ export default function Information({ pi }) {
 		const price_details = [
 			{
 				label: 'Total Company Price',
-				value: total_zipper.company + total_thread.company,
+				value: (total_zipper.company + total_thread.company).toFixed(2),
 			},
 			{
 				label: 'Total Party price',
-				value: total_zipper.party + total_thread.party,
+				value: (total_zipper.party + total_thread.party).toFixed(2),
 			},
 			{
 				label: 'Total Over Price',

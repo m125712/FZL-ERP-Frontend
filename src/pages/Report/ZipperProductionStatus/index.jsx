@@ -256,7 +256,7 @@ export default function Index() {
 												label={
 													item.finishing_batch_number
 												}
-												url={`/planning/finishing-dashboard/batch-report/${item.finishing_batch_uuid}`}
+												url={`/planning/finishing-batch/${item.finishing_batch_uuid}`}
 												showCopyButton={false}
 												openInNewTab
 											/>

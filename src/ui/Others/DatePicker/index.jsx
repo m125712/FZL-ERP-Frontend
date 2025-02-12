@@ -19,7 +19,7 @@ const SimpleDatePicker = ({
 	disabled = false,
 	showTime = false,
 	timeIntervals = 30,
-	...props
+	props,
 }) => {
 	const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
 		<button

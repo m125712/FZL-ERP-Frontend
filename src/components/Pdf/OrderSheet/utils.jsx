@@ -84,16 +84,15 @@ export const getPageHeader = (order_info) => {
 		[
 			{ text: 'Factory', bold: true },
 			order_info.factory_name,
-			{ text: 'Priority', bold: true },
-			(order_info.marketing_priority || '-') +
-				' / ' +
-				(order_info.factory_priority || '-'),
+
+			{ text: 'Marketing', bold: true },
+			order_info.marketing_name,
 		],
 		[
 			{ text: 'Address', bold: true },
-			{ text: order_info.factory_address },
-			{ text: 'Marketing', bold: true },
-			order_info.marketing_name,
+			{ calSpan: 3, text: order_info.factory_address },
+			'',
+			'',
 		],
 	];
 };

@@ -99,7 +99,7 @@ export default function Information({ pi }) {
 				party: 0,
 			}
 		);
-
+		console.log(stylesZipper);
 		const basicInfo = [
 			{
 				label: 'PI No',
@@ -144,29 +144,7 @@ export default function Information({ pi }) {
 				label: 'Styles',
 				value: (
 					<div className='flex flex-wrap gap-2'>
-						{stylesZipper
-							.split(',')
-							.filter(Boolean)
-							.map((e) => (
-								<span
-									key={e}
-									className='badge badge-secondary badge-sm h-5'
-								>
-									{e}
-								</span>
-							))}
-
-						{stylesThread
-							.split(',')
-							.filter(Boolean)
-							.map((e) => (
-								<span
-									key={e}
-									className='badge badge-secondary badge-sm h-5'
-								>
-									{e}
-								</span>
-							))}
+						{stylesZipper}, {stylesThread}
 					</div>
 				),
 			},
@@ -174,23 +152,13 @@ export default function Information({ pi }) {
 				label: 'Count Length',
 				value: (
 					<div className='flex flex-wrap gap-2'>
-						{countLengthThreads
-							.split(',')
-							.filter(Boolean)
-							.map((e) => (
-								<span
-									key={e}
-									className='badge badge-secondary badge-sm h-5'
-								>
-									{e}
-								</span>
-							))}
+						{countLengthThreads}
 					</div>
 				),
 			},
 			{
 				label: 'Value ($)',
-				value:
+				value: (
 					pi_cash_entry.reduce(
 						(a, b) => Number(a) + Number(b.value),
 						0
@@ -198,7 +166,8 @@ export default function Information({ pi }) {
 					pi_cash_entry_thread.reduce(
 						(a, b) => Number(a) + Number(b.value),
 						0
-					),
+					)
+				).toFixed(2),
 			},
 			{
 				label: 'Payment',
@@ -278,12 +247,12 @@ export default function Information({ pi }) {
 
 		const price_details = [
 			{
-				label: 'Total Company Price',
-				value: (total_zipper.company + total_thread.company).toFixed(2),
-			},
-			{
 				label: 'Total Party price',
 				value: (total_zipper.party + total_thread.party).toFixed(2),
+			},
+			{
+				label: 'Total Company Price',
+				value: (total_zipper.company + total_thread.company).toFixed(2),
 			},
 			{
 				label: 'Total Over Price',

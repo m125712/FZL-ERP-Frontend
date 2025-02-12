@@ -73,31 +73,27 @@ export const getPageHeader = (order_info) => {
 			},
 			'',
 		],
-		[
-			// { text: 'LC/Cash', bold: true },
-			// ...(haveAccess.includes('show_cash_bill_lc')
-			// 	? [lc_or_cash]
-			// 	: ['- / -']),
-			{ text: 'Buyer', bold: true },
-			order_info.buyer_name,
-			{ text: 'Marketing', bold: true },
-			order_info.marketing_name,
-		],
+
 		[
 			{ text: 'Party', bold: true },
 			order_info.party_name,
+			{ text: 'Buyer', bold: true },
+			order_info.buyer_name,
+		],
+
+		[
+			{ text: 'Factory', bold: true },
+			order_info.factory_name,
 			{ text: 'Priority', bold: true },
 			(order_info.marketing_priority || '-') +
 				' / ' +
 				(order_info.factory_priority || '-'),
 		],
-
-		[{ text: 'Factory', bold: true }, order_info.factory_name, '', ''],
 		[
 			{ text: 'Address', bold: true },
-			{ colSpan: 3, text: order_info.factory_address },
-			'',
-			'',
+			{ text: order_info.factory_address },
+			{ text: 'Marketing', bold: true },
+			order_info.marketing_name,
 		],
 	];
 };

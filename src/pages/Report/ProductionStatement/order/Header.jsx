@@ -1,5 +1,6 @@
 import { useOtherMarketing, useOtherParty } from '@/state/Other';
 import { format } from 'date-fns';
+import { useAccess } from '@/hooks';
 
 import {
 	FormField,
@@ -20,6 +21,7 @@ export default function Header({
 	setMarketing = () => {},
 	setType = () => {},
 }) {
+	const haveAccess = useAccess('report__production_statement');
 	const { data: marketings } = useOtherMarketing();
 	const { data: parties } = useOtherParty();
 	const types = [
@@ -66,18 +68,21 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<FormField label='' title='Marketing'>
-						<ReactSelect
-							placeholder='Select Marketing'
-							options={marketings}
-							value={marketings?.find(
-								(item) => item.value == marketing
-							)}
-							onChange={(e) => {
-								setMarketing(e.value);
-							}}
-						/>
-					</FormField>
+					{!haveAccess.includes('show_own_orders') && (
+						<FormField label='' title='Marketing'>
+							<ReactSelect
+								placeholder='Select Marketing'
+								options={marketings}
+								value={marketings?.find(
+									(item) => item.value == marketing
+								)}
+								onChange={(e) => {
+									setMarketing(e.value);
+								}}
+							/>
+						</FormField>
+					)}
+
 					<FormField label='' title='Type'>
 						<ReactSelect
 							placeholder='Select Type'

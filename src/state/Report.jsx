@@ -35,7 +35,9 @@ export const useProductionStatementReport = (
 	marketing = '',
 	type = '',
 	order = '',
-	reportFor = ''
+	reportFor = '',
+	query,
+	{ isEnabled = false } = {}
 ) =>
 	createGlobalState({
 		queryKey: reportQK.productionReportStatementReport(
@@ -45,10 +47,13 @@ export const useProductionStatementReport = (
 			marketing,
 			type,
 			order,
-			reportFor
+			reportFor,
+			query
 		),
-		url: `/report/delivery-statement-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&order_info_uuid=${order}&type=${type}&report_for=${reportFor}`,
-		enabled: !!from && !!to,
+		url: query
+			? `/report/delivery-statement-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&order_info_uuid=${order}&type=${type}&report_for=${reportFor}&${query}`
+			: `/report/delivery-statement-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&order_info_uuid=${order}&type=${type}&report_for=${reportFor}`,
+		enabled: !!from && !!to && isEnabled,
 	});
 
 export const useOrderStatementReport = (
@@ -57,7 +62,8 @@ export const useOrderStatementReport = (
 	party = '',
 	marketing = '',
 	type = '',
-	query = ''
+	query = '',
+	{ isEnabled = false } = {}
 ) =>
 	createGlobalState({
 		queryKey: reportQK.orderStatementReport(
@@ -71,6 +77,7 @@ export const useOrderStatementReport = (
 		url: query
 			? `/report/order-sheet-pdf-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&type=${type}&${query}`
 			: `/report/order-sheet-pdf-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&type=${type}`,
+		enabled: !!from && !!to && isEnabled,
 	});
 
 export const useZipperProduction = (query, { enabled = false } = {}) =>
@@ -170,13 +177,33 @@ export const useProductionReportThreadPartyWise = (
 		enabled,
 	});
 
-export const useSample = (date, toDate, is_sample = 1) =>
+export const useSample = (
+	date,
+	toDate,
+	is_sample = 1,
+	query,
+	{ enabled = false } = {}
+) =>
 	createGlobalState({
-		queryKey: reportQK.sample(date, toDate, is_sample),
-		url: `/report/sample-report-by-date?date=${date}&to_date=${toDate}&is_sample=${is_sample}`,
+		queryKey: reportQK.sample(date, toDate, is_sample, query),
+		url: query
+			? `/report/sample-report-by-date?date=${date}&to_date=${toDate}&is_sample=${is_sample}` +
+				query
+			: `/report/sample-report-by-date?date=${date}&to_date=${toDate}&is_sample=${is_sample}`,
+		enabled,
 	});
-export const useSampleCombined = (date, is_sample = 1) =>
+
+export const useSampleCombined = (
+	date,
+	is_sample = 1,
+	query,
+	{ enabled = false } = {}
+) =>
 	createGlobalState({
-		queryKey: reportQK.sampleCombined(date, is_sample),
-		url: `/report/sample-report-by-date-combined?date=${date}&is_sample=${is_sample}`,
+		queryKey: reportQK.sampleCombined(date, is_sample, query),
+		url: query
+			? `/report/sample-report-by-date-combined?date=${date}&is_sample=${is_sample}` +
+				query
+			: `/report/sample-report-by-date-combined?date=${date}&is_sample=${is_sample}`,
+		enabled,
 	});

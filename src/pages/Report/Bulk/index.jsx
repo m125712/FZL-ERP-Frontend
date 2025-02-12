@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useSample } from '@/state/Report';
 import { format, startOfMonth, subMonths } from 'date-fns';
 import { useAccess } from '@/hooks';
@@ -8,15 +9,32 @@ import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `&own_uuid=${userUUID}`;
+	}
+
+	return ``;
+};
+
 export default function Index() {
+	const haveAccess = useAccess('report__bulk');
+	const { user } = useAuth();
+
 	const [date, setDate] = useState(
 		format(startOfMonth(subMonths(new Date(), 2)), 'yyyy-MM-dd')
 	);
 	const [toDate, setToDate] = useState(format(new Date(), 'yyyy-MM-dd'));
-	const { data, isLoading, url } = useSample(date, toDate, 0);
+	const { data, isLoading, url } = useSample(
+		date,
+		toDate,
+		0,
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
 	const info = new PageInfo('Bulk', url, 'report__bulk');
-
-	const haveAccess = useAccess('report__bulk');
 
 	useEffect(() => {
 		document.title = info.getTabName();

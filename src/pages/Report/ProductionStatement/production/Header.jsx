@@ -4,6 +4,7 @@ import {
 	useOtherParty,
 } from '@/state/Other';
 import { format, set } from 'date-fns';
+import { useAccess } from '@/hooks';
 
 import {
 	FormField,
@@ -28,6 +29,7 @@ export default function Header({
 	reportFor = '',
 	setReportFor = () => {},
 }) {
+	const haveAccess = useAccess('report__production_statement');
 	const { data: marketings } = useOtherMarketing();
 	const { data: parties } = useOtherParty();
 	const { data: orders } = useAllZipperThreadOrderList(
@@ -82,18 +84,20 @@ export default function Header({
 							}}
 						/>
 					</FormField>
-					<FormField label='' title='Marketing'>
-						<ReactSelect
-							placeholder='Select Marketing'
-							options={marketings}
-							value={marketings?.find(
-								(item) => item.value == marketing
-							)}
-							onChange={(e) => {
-								setMarketing(e.value);
-							}}
-						/>
-					</FormField>
+					{!haveAccess.includes('show_own_orders') && (
+						<FormField label='' title='Marketing'>
+							<ReactSelect
+								placeholder='Select Marketing'
+								options={marketings}
+								value={marketings?.find(
+									(item) => item.value == marketing
+								)}
+								onChange={(e) => {
+									setMarketing(e.value);
+								}}
+							/>
+						</FormField>
+					)}
 				</div>
 				<div className='flex gap-2'>
 					<FormField label='' title='Report For'>

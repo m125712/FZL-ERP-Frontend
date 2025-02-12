@@ -78,6 +78,28 @@ export default function Information({ pi }) {
 	}, [pi]);
 
 	const renderItems = () => {
+		const total_zipper = pi_cash_entry.reduce(
+			(a, b) => ({
+				company: a.company + Number(b.company_value),
+				party: a.party + Number(b.value),
+			}),
+			{
+				company: 0,
+				party: 0,
+			}
+		);
+
+		const total_thread = pi_cash_entry_thread.reduce(
+			(a, b) => ({
+				company: a.company + Number(b.company_value),
+				party: a.party + Number(b.value),
+			}),
+			{
+				company: 0,
+				party: 0,
+			}
+		);
+
 		const basicInfo = [
 			{
 				label: 'PI No',
@@ -254,11 +276,31 @@ export default function Information({ pi }) {
 			},
 		];
 
+		const price_details = [
+			{
+				label: 'Total Company Price',
+				value: total_zipper.company + total_thread.company,
+			},
+			{
+				label: 'Total Party price',
+				value: total_zipper.party + total_thread.party,
+			},
+			{
+				label: 'Total Over Price',
+				value: Math.abs(
+					total_zipper.company +
+						total_thread.company -
+						(total_zipper.party + total_thread.party)
+				).toFixed(2),
+			},
+		];
+
 		return {
 			basicInfo,
 			bankDetails,
 			otherInfo,
 			created_details,
+			price_details,
 		};
 	};
 
@@ -277,7 +319,7 @@ export default function Information({ pi }) {
 
 	return (
 		<SectionContainer buttons={renderButtons()} title={'Information'}>
-			<div className='grid grid-cols-1 lg:grid-cols-4'>
+			<div className='grid grid-cols-1 lg:grid-cols-5'>
 				<RenderTable
 					className={'border-secondary/30 lg:border-r'}
 					title={'Basic Info'}
@@ -294,9 +336,14 @@ export default function Information({ pi }) {
 					items={renderItems().bankDetails}
 				/>
 				<RenderTable
-					className={'border-secondary/30'}
+					className={'border-secondary/30 lg:border-r'}
 					title={'Created Details'}
 					items={renderItems().created_details}
+				/>
+				<RenderTable
+					className={'border-secondary/30'}
+					title={'Price Details'}
+					items={renderItems().price_details}
 				/>
 			</div>
 		</SectionContainer>

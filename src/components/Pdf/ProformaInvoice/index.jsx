@@ -548,7 +548,7 @@ export default function Index(data) {
 									? [
 											[
 												{
-													text: `Total: `,
+													text: `Grand Total: `,
 													alignment: 'right',
 													bold: true,
 													colSpan: 4,
@@ -573,19 +573,19 @@ export default function Index(data) {
 			{
 				text: '\n',
 			},
-			isThreadOrderExist && isZipperOrderExist
-				? {
-						text:
-							'Grand Total (USD): ' +
-							(
-								grand_total_zipper_value +
-								grand_total_thread_value
-							).toLocaleString() +
-							'',
+			// isThreadOrderExist && isZipperOrderExist
+			// 	? {
+			// 			text:
+			// 				'Grand Total (USD): ' +
+			// 				(
+			// 					grand_total_zipper_value +
+			// 					grand_total_thread_value
+			// 				).toLocaleString() +
+			// 				'',
 
-						bold: true,
-					}
-				: {},
+			// 			bold: true,
+			// 		}
+			// 	: {},
 			isThreadOrderExist && isZipperOrderExist
 				? {
 						text: '\n',

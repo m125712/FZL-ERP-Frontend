@@ -1628,18 +1628,20 @@ export const reportQK = {
 	],
 
 	// * Sample Report
-	sample: (date, toDate, is_sample) => [
+	sample: (date, toDate, is_sample, query) => [
 		...reportQK.all(),
 		'sample-report-by-date',
 		date,
 		toDate,
 		is_sample,
+		...(query ? [query] : []),
 	],
-	sampleCombined: (date, is_sample) => [
+	sampleCombined: (date, is_sample, query) => [
 		...reportQK.all(),
 		'sample-report-by-date-combined',
 		date,
 		is_sample,
+		...(query ? [query] : []),
 	],
 };
 

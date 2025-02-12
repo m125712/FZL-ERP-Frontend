@@ -170,13 +170,33 @@ export const useProductionReportThreadPartyWise = (
 		enabled,
 	});
 
-export const useSample = (date, toDate, is_sample = 1) =>
+export const useSample = (
+	date,
+	toDate,
+	is_sample = 1,
+	query,
+	{ enabled = false } = {}
+) =>
 	createGlobalState({
-		queryKey: reportQK.sample(date, toDate, is_sample),
-		url: `/report/sample-report-by-date?date=${date}&to_date=${toDate}&is_sample=${is_sample}`,
+		queryKey: reportQK.sample(date, toDate, is_sample, query),
+		url: query
+			? `/report/sample-report-by-date?date=${date}&to_date=${toDate}&is_sample=${is_sample}` +
+				query
+			: `/report/sample-report-by-date?date=${date}&to_date=${toDate}&is_sample=${is_sample}`,
+		enabled,
 	});
-export const useSampleCombined = (date, is_sample = 1) =>
+
+export const useSampleCombined = (
+	date,
+	is_sample = 1,
+	query,
+	{ enabled = false } = {}
+) =>
 	createGlobalState({
-		queryKey: reportQK.sampleCombined(date, is_sample),
-		url: `/report/sample-report-by-date-combined?date=${date}&is_sample=${is_sample}`,
+		queryKey: reportQK.sampleCombined(date, is_sample, query),
+		url: query
+			? `/report/sample-report-by-date-combined?date=${date}&is_sample=${is_sample}` +
+				query
+			: `/report/sample-report-by-date-combined?date=${date}&is_sample=${is_sample}`,
+		enabled,
 	});

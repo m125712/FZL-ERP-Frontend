@@ -1,16 +1,36 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useSampleCombined } from '@/state/Report';
 import { format } from 'date-fns';
+import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import { CustomLink, DateTime, ReactSelect, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `&own_uuid=${userUUID}`;
+	}
+
+	return ``;
+};
+
 export default function Index() {
+	const haveAccess = useAccess('report__orders');
+	const { user } = useAuth();
+
 	const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
 	const [option, setOption] = useState(0);
-	const { data, isLoading, url } = useSampleCombined(date, option);
+	const { data, isLoading, url } = useSampleCombined(
+		date,
+		option,
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
 	const info = new PageInfo('Orders', url, 'report__orders');
 	const options = [
 		{ value: 1, label: 'Sample' },

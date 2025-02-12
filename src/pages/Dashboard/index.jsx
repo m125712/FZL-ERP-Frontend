@@ -40,7 +40,7 @@ export default function Dashboard() {
 				setDataPreview={setDataPreview}
 				handleRefresh={refreshAll}
 			/>
-			<div className='space-y-2 px-4 py-2 lg:px-8'>
+			<div className='space-y-2 px-2 py-2 lg:px-2'>
 				{/* Order Received */}
 				<BarChartOverall
 					data={
@@ -48,12 +48,12 @@ export default function Dashboard() {
 					}
 				/>
 				{/* Production: Demand */}
-				<div className='flex flex-col gap-4 md:flex-row'>
+				<div className='flex flex-col gap-2 md:flex-row'>
 					<BarChartHorizontal2 />
 				</div>
 				{/* Amounts */}
-				<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
-					<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
+				<div className='grid grid-cols-1 gap-2 lg:grid-cols-2'>
+					<div className='grid grid-cols-1 gap-2 lg:grid-cols-2'>
 						<DashboardCard
 							title='Payment Due'
 							subtitle='# Pending'
@@ -94,7 +94,7 @@ export default function Dashboard() {
 					/>
 				</div>
 				{/* Challan  */}
-				<div className='flex flex-col gap-4 md:flex-row'>
+				<div className='flex flex-col gap-2 md:flex-row'>
 					<BarChartHorizontal
 						title='Challan: Issued'
 						url='/dashboard/challan-register'
@@ -115,7 +115,7 @@ export default function Dashboard() {
 					/>
 				</div>
 				{/* Warehouse  */}
-				<div className='flex flex-col gap-4 md:flex-row'>
+				<div className='flex flex-col gap-2 md:flex-row'>
 					<BarChartHorizontal
 						title='Warehouse: Status'
 						url='/dashboard/goods-in-warehouse'
@@ -129,7 +129,7 @@ export default function Dashboard() {
 				</div>
 
 				{/* Sample */}
-				<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
+				<div className='grid grid-cols-1 gap-2 lg:grid-cols-2'>
 					<TableWithTime
 						title='Sample: Status'
 						url='/dashboard/sample-lead-time'
@@ -145,7 +145,7 @@ export default function Dashboard() {
 				</div>
 
 				{/* PI */}
-				<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
+				<div className='grid grid-cols-1 gap-2 lg:grid-cols-2'>
 					<TableWithTime
 						title='PI: Issued'
 						url='/dashboard/pi-register'
@@ -163,7 +163,7 @@ export default function Dashboard() {
 						columns={doc_rcv_columns}
 					/>
 				</div>
-				<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
+				<div className='grid grid-cols-1 gap-2 lg:grid-cols-2'>
 					<TableWithTime
 						title='LC Feed with number of count'
 						url='/dashboard/lc-feed'

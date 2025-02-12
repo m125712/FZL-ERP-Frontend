@@ -141,8 +141,7 @@ export default function Index() {
 						return (
 							<div
 								key={item.batch_number}
-								className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'
-							>
+								className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'>
 								<CustomLink
 									label={item.batch_number}
 									url={`/planning/finishing-batch/${item.batch_uuid}`}
@@ -205,12 +204,12 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'total_packing_list_quantity',
-			// 	header: 'Packing List',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
+			{
+				accessorKey: 'warehouse',
+				header: 'Warehouse',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorFn: (row) =>
 					row.total_delivery_delivered_quantity +

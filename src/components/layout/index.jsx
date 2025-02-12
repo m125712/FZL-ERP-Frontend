@@ -16,7 +16,7 @@ const Layout = () => {
 			<div className='relative flex h-screen w-screen overflow-hidden'>
 				<Sidebar />
 				<main className='flex size-full flex-1 flex-col overflow-hidden'>
-					{pathname !== '/' && <Navbar />}
+					<Navbar />
 					<div className='flex size-full flex-1 flex-col overflow-hidden'>
 						<div
 							className={cn(

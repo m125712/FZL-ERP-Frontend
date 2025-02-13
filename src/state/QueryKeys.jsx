@@ -1649,6 +1649,10 @@ export const reportQK = {
 		is_sample,
 		...(query ? [query] : []),
 	],
+	approvedOrdersPartyWise: () => [
+		...reportQK.all(),
+		'approved-orders-party-wise',
+	],
 };
 
 export const marketingQK = {

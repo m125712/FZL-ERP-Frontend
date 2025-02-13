@@ -207,3 +207,9 @@ export const useSampleCombined = (
 			: `/report/sample-report-by-date-combined?date=${date}&is_sample=${is_sample}`,
 		enabled,
 	});
+
+export const useApprovedOrdersPartyWise = () =>
+	createGlobalState({
+		queryKey: reportQK.approvedOrdersPartyWise(),
+		url: `/report/party-wise-approved-quantity`,
+	});

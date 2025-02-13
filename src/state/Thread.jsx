@@ -118,10 +118,12 @@ export const useConeTrxByUUID = (uuid) =>
 	});
 
 //* log
-export const useConningProdLog = () =>
+export const useConningProdLog = (query) =>
 	createGlobalState({
-		queryKey: threadQK.ConningProdlog(),
-		url: '/thread/batch-entry-production-details',
+		queryKey: threadQK.ConningProdlog(query),
+		url: query
+			? `/thread/batch-entry-production-details?${query}`
+			: '/thread/batch-entry-production-details',
 	});
 
 export const useConningTrxLog = () =>

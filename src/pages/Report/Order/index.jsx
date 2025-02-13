@@ -200,6 +200,7 @@ export default function Index() {
 						onChange={(data) => {
 							setDate(format(data, 'yyyy-MM-dd'));
 						}}
+						selected={date}
 					/>
 					<ReactSelect
 						className='h-4 w-24 text-sm'

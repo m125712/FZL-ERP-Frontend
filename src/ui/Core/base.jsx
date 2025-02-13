@@ -55,7 +55,7 @@ export const FormField = ({
 };
 
 export const DatePickerDefaultConfig = {
-	dateFormat: 'dd/MM/yy',
+	dateFormat: 'dd MMM, yy',
 	closeOnScroll: true,
 	weekDayClassName: () => 'font-semibold text-primary',
 	peekNextMonth: true,

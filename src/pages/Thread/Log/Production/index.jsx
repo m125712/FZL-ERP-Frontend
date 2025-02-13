@@ -1,18 +1,39 @@
 import { useMemo, useState } from 'react';
 import { useConningProdLog, useDyeingCone } from '@/state/Thread';
+import { format, parse, subWeeks } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, EditDelete, LinkOnly } from '@/ui';
+import {
+	CustomLink,
+	DateTime,
+	EditDelete,
+	LinkOnly,
+	SimpleDatePicker,
+} from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 import SFGAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
-	const { data, isLoading, deleteData } = useConningProdLog();
+	const [from, setFrom] = useState(
+		parse(
+			format(
+				subWeeks(new Date(), 1), // Subtract 1 week from current time
+				'yyyy-MM-dd HH:mm:ss'
+			),
+			'yyyy-MM-dd HH:mm:ss',
+			new Date()
+		)
+	);
+	const [to, setTo] = useState(new Date());
+
+	const { data, isLoading, deleteData } = useConningProdLog(
+		`from=${format(from, 'yyyy-MM-dd hh:mm:ss')}&to=${format(to, 'yyyy-MM-dd hh:mm:ss')}`
+	);
 	const { invalidateQuery } = useDyeingCone();
 	const info = new PageInfo('Production Log', '/thread/log', 'thread__log');
 
@@ -216,6 +237,33 @@ export default function Index() {
 				// accessor={haveAccess.includes('click_update_sfg')}
 				data={data}
 				columns={columns}
+				showDateRange={false}
+				extraButton={
+					<div className='flex items-center gap-2'>
+						<SimpleDatePicker
+							className='m-w-32 h-[2.34rem]'
+							key={'from'}
+							value={from}
+							placeholder='From'
+							selected={from}
+							onChangeForTime={(data) => {
+								setFrom(data);
+							}}
+							showTime={true}
+						/>
+						<SimpleDatePicker
+							className='m-w-32 h-[2.34rem]'
+							key={'to'}
+							value={to}
+							placeholder='To'
+							selected={to}
+							onChangeForTime={(data) => {
+								setTo(data);
+							}}
+							showTime={true}
+						/>
+					</div>
+				}
 			/>
 			<Suspense>
 				<SFGAddOrUpdate

@@ -32,6 +32,7 @@ const ApprovedOrders = lazy(() => import('@/pages/Report/ApprovedOrders'));
 const Sample = lazy(() => import('@/pages/Report/Sample'));
 const Bulk = lazy(() => import('@/pages/Report/Bulk'));
 const Orders = lazy(() => import('@/pages/Report/Order'));
+const ChallanStatus = lazy(() => import('@/pages/Report/ChallanStatus'));
 
 export const ReportRoutes = [
 	{
@@ -161,6 +162,13 @@ export const ReportRoutes = [
 				path: '/report/approved-orders',
 				element: <ApprovedOrders />,
 				page_name: 'report__approved_orders',
+				actions: ['read', 'show_own_orders'],
+			},
+			{
+				name: 'Challan Status',
+				path: '/report/challan-status',
+				element: <ChallanStatus />,
+				page_name: 'report__challan_status',
 				actions: ['read', 'show_own_orders'],
 			},
 			// {

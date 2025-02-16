@@ -213,3 +213,12 @@ export const useApprovedOrdersPartyWise = () =>
 		queryKey: reportQK.approvedOrdersPartyWise(),
 		url: `/report/party-wise-approved-quantity`,
 	});
+
+export const useChallanStatusReport = (uuid, query) =>
+	createGlobalState({
+		queryKey: reportQK.challanStatusReport(uuid, query),
+		url: query
+			? `/report/challan-pdf-report/${uuid}?${query}`
+			: `/report/challan-pdf-report/${uuid}`,
+		enabled: !!uuid,
+	});

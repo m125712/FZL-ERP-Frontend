@@ -210,6 +210,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'balance_quantity',
+				header: 'Balance',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorFn: (row) =>
 					row.total_delivery_delivered_quantity +
 					row.total_delivery_balance_quantity,

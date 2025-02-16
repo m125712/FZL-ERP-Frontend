@@ -1653,6 +1653,14 @@ export const reportQK = {
 		...reportQK.all(),
 		'approved-orders-party-wise',
 	],
+
+	// * Challan status report
+	challanStatusReport: (uuid, query) => [
+		...reportQK.all(),
+		'challan-status-report',
+		uuid,
+		query || '',
+	],
 };
 
 export const marketingQK = {

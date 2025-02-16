@@ -73,8 +73,13 @@ export default function OrderSheetByStyle(orderByStyle) {
 									garments
 								);
 
-								return entry.details.flatMap((detail) =>
-									detail.sizes.map((size) => {
+								return entry.details.flatMap((detail) => {
+									let TotalColorQty = detail.sizes.reduce(
+										(acc, item) => acc + item.quantity,
+										0
+									);
+
+									return detail.sizes.map((size) => {
 										total += size.quantity;
 										grandTotal += size.quantity;
 
@@ -152,9 +157,22 @@ export default function OrderSheetByStyle(orderByStyle) {
 													),
 											},
 											{
-												text: detail.color
-													? detail.color
-													: '---',
+												// text: detail.color
+												// 	? detail.color + '\n' + TotalColorQty
+												// 	: '---',
+												text: [
+													{
+														text: detail.color
+															? detail.color
+															: '---',
+													},
+													...(detail.sizes.length > 1
+														? [
+																'\n' +
+																	`(Total: ${TotalColorQty})`,
+															]
+														: ['']),
+												],
 												rowSpan: detail.sizes.length,
 											},
 											{
@@ -178,8 +196,8 @@ export default function OrderSheetByStyle(orderByStyle) {
 												alignment: 'right',
 											},
 										];
-									})
-								);
+									});
+								});
 							}),
 
 							// ...item.item_description?.flatMap((entry, idx) =>

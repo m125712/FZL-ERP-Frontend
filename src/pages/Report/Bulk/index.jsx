@@ -21,13 +21,11 @@ export default function Index() {
 	const haveAccess = useAccess('report__bulk');
 	const { user } = useAuth();
 
-	const [date, setDate] = useState(
-		format(startOfMonth(subMonths(new Date(), 2)), 'yyyy-MM-dd')
-	);
-	const [toDate, setToDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+	const [date, setDate] = useState(new Date());
+	const [toDate, setToDate] = useState(new Date());
 	const { data, isLoading, url } = useSample(
-		date,
-		toDate,
+		format(date, 'yyyy-MM-dd'),
+		format(toDate, 'yyyy-MM-dd'),
 		0,
 		getPath(haveAccess, user?.uuid),
 		{
@@ -231,7 +229,7 @@ export default function Index() {
 						value={date}
 						placeholder='Date'
 						onChange={(data) => {
-							setDate(format(data, 'yyyy-MM-dd'));
+							setDate(data);
 						}}
 						selected={date}
 					/>
@@ -241,7 +239,7 @@ export default function Index() {
 						value={toDate}
 						placeholder='To'
 						onChange={(data) => {
-							setToDate(format(data, 'yyyy-MM-dd'));
+							setToDate(data);
 						}}
 						selected={toDate}
 					/>

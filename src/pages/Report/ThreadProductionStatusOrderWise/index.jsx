@@ -23,13 +23,11 @@ export default function Index() {
 	const haveAccess = useAccess('report__thread_production_order_wise');
 	const { user } = useAuth();
 
-	const [from, setFrom] = useState(
-		format(startOfMonth(subMonths(new Date(), 2)), 'yyyy-MM-dd')
-	);
-	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
+	const [from, setFrom] = useState(new Date());
+	const [to, setTo] = useState(new Date());
 	const [status, setStatus] = useState('pending');
 	const { data, isLoading, url } = useThreadProductionOrderWise(
-		`status=${status}&from=${from}&to=${to}${getPath(haveAccess, user?.uuid)}`,
+		`status=${status}&from=${format(from, 'yyyy-MM-dd')}&to=${format(to, 'yyyy-MM-dd')}${getPath(haveAccess, user?.uuid)}`,
 		{
 			enabled: !!user?.uuid,
 		}
@@ -141,7 +139,8 @@ export default function Index() {
 						return (
 							<div
 								key={item.batch_number}
-								className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'>
+								className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'
+							>
 								<CustomLink
 									label={item.batch_number}
 									url={`/planning/finishing-batch/${item.batch_uuid}`}
@@ -211,6 +210,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'balance_quantity',
+				header: 'Balance',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorFn: (row) =>
 					row.total_delivery_delivered_quantity +
 					row.total_delivery_balance_quantity,
@@ -265,18 +270,20 @@ export default function Index() {
 							className='h-[2.34rem] w-32'
 							key={'from'}
 							value={from}
+							selected={from}
 							placeholder='From'
 							onChange={(data) => {
-								setFrom(format(data, 'yyyy-MM-dd'));
+								setFrom(data);
 							}}
 						/>
 						<SimpleDatePicker
 							className='h-[2.34rem] w-32'
 							key={'to'}
 							value={to}
+							selected={to}
 							placeholder='To'
 							onChange={(data) => {
-								setTo(format(data, 'yyyy-MM-dd'));
+								setTo(data);
 							}}
 						/>
 						<ProductionStatus

@@ -4,6 +4,7 @@ import { useAccess } from '@/hooks';
 
 import PageInfo from '@/util/PageInfo';
 
+import Approved from './Approved';
 import PartyWise from './partyWise';
 
 export default function Index() {
@@ -21,8 +22,9 @@ export default function Index() {
 	}, []);
 
 	return (
-		<div>
+		<div className='flex flex-col gap-8'>
 			<PartyWise />
+			<Approved />
 		</div>
 	);
 }

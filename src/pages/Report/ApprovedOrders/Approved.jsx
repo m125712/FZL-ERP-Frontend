@@ -1,9 +1,7 @@
-import { useMemo, useState } from 'react';
-import { useReportStock, useReportStoreApproved } from '@/state/Report';
-import { format } from 'date-fns';
+import { useMemo } from 'react';
+import { useReportStoreApproved } from '@/state/Report';
 
 import ReactTable from '@/components/Table';
-import { SimpleDatePicker } from '@/ui';
 
 export default function index() {
 	const { data, isLoading } = useReportStoreApproved();

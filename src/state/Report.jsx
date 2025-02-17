@@ -9,10 +9,13 @@ export const useReportStock = (from, to, { enabled = false }) =>
 		enabled,
 	});
 
-export const useReportStoreApproved = () =>
+export const useReportStoreApproved = (query, { enabled = false }) =>
 	createGlobalState({
-		queryKey: reportQK.storeApproved(),
-		url: `/report/item-zipper-number-end-wise-approved`,
+		queryKey: reportQK.storeApproved(query),
+		url: query
+			? `/report/item-zipper-number-end-wise-approved?${query}`
+			: `/report/item-zipper-number-end-wise-approved`,
+		enabled,
 	});
 
 export const useProductionReportDateWise = (
@@ -37,6 +40,7 @@ export const useProductionStatementReport = (
 	type = '',
 	order = '',
 	reportFor = '',
+	priceFor,
 	query,
 	{ isEnabled = false } = {}
 ) =>
@@ -49,11 +53,12 @@ export const useProductionStatementReport = (
 			type,
 			order,
 			reportFor,
+			priceFor,
 			query
 		),
 		url: query
-			? `/report/delivery-statement-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&order_info_uuid=${order}&type=${type}&report_for=${reportFor}&${query}`
-			: `/report/delivery-statement-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&order_info_uuid=${order}&type=${type}&report_for=${reportFor}`,
+			? `/report/delivery-statement-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&order_info_uuid=${order}&type=${type}&report_for=${reportFor}&price_for=${priceFor}&${query}`
+			: `/report/delivery-statement-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&order_info_uuid=${order}&type=${type}&report_for=${reportFor}&price_for=${priceFor}`,
 		enabled: !!from && !!to && isEnabled,
 	});
 
@@ -209,10 +214,13 @@ export const useSampleCombined = (
 		enabled,
 	});
 
-export const useApprovedOrdersPartyWise = () =>
+export const useApprovedOrdersPartyWise = (query, { enabled = false } = {}) =>
 	createGlobalState({
-		queryKey: reportQK.approvedOrdersPartyWise(),
-		url: `/report/party-wise-approved-quantity`,
+		queryKey: reportQK.approvedOrdersPartyWise(query),
+		url: query
+			? `/report/party-wise-approved-quantity?${query}`
+			: `/report/party-wise-approved-quantity`,
+		enabled,
 	});
 
 export const useChallanStatusReport = (uuid, query) =>

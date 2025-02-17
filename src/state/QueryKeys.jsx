@@ -1526,7 +1526,11 @@ export const reportQK = {
 
 	//* Stock
 	stock: (from, to) => [...reportQK.all(), 'stock', from, to],
-	storeApproved: () => [...reportQK.all(), 'store-approved'],
+	storeApproved: (query) => [
+		...reportQK.all(),
+		'store-approved',
+		query || '',
+	],
 	//*Production Report DateWise
 	productionReportDateWise: (from, to, type, query) => [
 		...reportQK.all(),
@@ -1544,6 +1548,7 @@ export const reportQK = {
 		type,
 		order,
 		reportFor,
+		priceFor,
 		query
 	) => [
 		...reportQK.all(),
@@ -1555,6 +1560,7 @@ export const reportQK = {
 		type,
 		order,
 		reportFor,
+		priceFor,
 		...(query ? [query] : []),
 	],
 
@@ -1650,9 +1656,10 @@ export const reportQK = {
 		is_sample,
 		...(query ? [query] : []),
 	],
-	approvedOrdersPartyWise: () => [
+	approvedOrdersPartyWise: (query) => [
 		...reportQK.all(),
 		'approved-orders-party-wise',
+		query || '',
 	],
 
 	// * Challan status report

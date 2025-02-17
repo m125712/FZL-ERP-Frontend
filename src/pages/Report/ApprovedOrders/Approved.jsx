@@ -1,10 +1,28 @@
 import { useMemo } from 'react';
+import { useAuth } from '@/context/auth';
 import { useReportStoreApproved } from '@/state/Report';
+import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return ``;
+};
+
 export default function index() {
-	const { data, isLoading } = useReportStoreApproved();
+	const haveAccess = useAccess('report__approved_orders');
+	const { user } = useAuth();
+
+	const { data, isLoading } = useReportStoreApproved(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
 
 	const columns = useMemo(
 		() => [

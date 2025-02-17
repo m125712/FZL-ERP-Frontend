@@ -1,20 +1,29 @@
 import { useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useApprovedOrdersPartyWise } from '@/state/Report';
-import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, Status, StatusButton } from '@/ui';
 
-import { cn } from '@/lib/utils';
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return ``;
+};
 
 export default function Index() {
-	const haveAccess = useAccess('report__zipper_production');
+	const haveAccess = useAccess('report__approved_orders');
 	const { user } = useAuth();
 
 	const [status, setStatus] = useState('pending');
-	const { data, isLoading } = useApprovedOrdersPartyWise();
+	const { data, isLoading } = useApprovedOrdersPartyWise(
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
 
 	const columns = useMemo(
 		() => [

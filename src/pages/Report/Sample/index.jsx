@@ -1,15 +1,38 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useSample } from '@/state/Report';
 import { format } from 'date-fns';
+import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `&own_uuid=${userUUID}`;
+	}
+
+	return ``;
+};
+
 export default function Index() {
-	const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
-	const { data, isLoading, url } = useSample(date, date);
+	const haveAccess = useAccess('report__sample');
+	const { user } = useAuth();
+
+	const [date, setDate] = useState(new Date());
+
+	const { data, isLoading, url } = useSample(
+		format(date, 'yyyy-MM-dd'),
+		format(date, 'yyyy-MM-dd'),
+		1,
+		getPath(haveAccess, user?.uuid),
+		{
+			enabled: !!user?.uuid,
+		}
+	);
+
 	const info = new PageInfo('Sample', url, 'report__sample');
 
 	useEffect(() => {
@@ -148,6 +171,8 @@ export default function Index() {
 		[data]
 	);
 
+	console.log(data);
+
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
@@ -159,15 +184,18 @@ export default function Index() {
 			columns={columns}
 			extraClass={'py-0.5'}
 			extraButton={
-				<SimpleDatePicker
-					className='h-9 w-32'
-					value={date}
-					placeholder='Select Date'
-					onChange={(data) => {
-						setDate(format(data, 'yyyy-MM-dd'));
-					}}
-					selected={date}
-				/>
+				<div className='flex items-center gap-2'>
+					<SimpleDatePicker
+						className='h-[2.34rem] w-32'
+						key={'Date'}
+						value={date}
+						placeholder='Date'
+						onChange={(data) => {
+							setDate(data);
+						}}
+						selected={date}
+					/>
+				</div>
 			}
 		/>
 	);

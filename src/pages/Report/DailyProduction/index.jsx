@@ -31,10 +31,11 @@ export default function index() {
 		'report__daily_production'
 	);
 
-	const [from, setFrom] = useState(format(new Date(), 'yyyy-MM-dd'));
+	const [from, setFrom] = useState(new Date());
+	const [to, setTo] = useState(new Date());
 	const { data, isLoading } = useProductionReportDateWise(
-		from,
-		from,
+		format(from, 'yyyy-MM-dd'),
+		format(to, 'yyyy-MM-dd'),
 		getPath(haveAccess, user?.uuid),
 		{
 			enabled: !!user?.uuid,
@@ -50,7 +51,7 @@ export default function index() {
 	return (
 		<>
 			<div className='flex flex-col gap-8'>
-				<Header {...{ from, setFrom }} />
+				<Header {...{ from, setFrom, to, setTo }} />
 				<div className='flex gap-2'>
 					<button
 						type='button'

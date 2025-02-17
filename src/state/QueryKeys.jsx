@@ -1129,7 +1129,11 @@ export const threadQK = {
 	coning: () => [...threadQK.all(), 'coning'],
 
 	//* log
-	ConningProdlog: () => [...threadQK.all(), 'conning/prodlog'],
+	ConningProdlog: (query) => [
+		...threadQK.all(),
+		'conning/prodlog',
+		query || '',
+	],
 	ConningTrxlog: () => [...threadQK.all(), 'conning/trxlog'],
 
 	//* prod entry
@@ -1644,6 +1648,18 @@ export const reportQK = {
 		date,
 		is_sample,
 		...(query ? [query] : []),
+	],
+	approvedOrdersPartyWise: () => [
+		...reportQK.all(),
+		'approved-orders-party-wise',
+	],
+
+	// * Challan status report
+	challanStatusReport: (uuid, query) => [
+		...reportQK.all(),
+		'challan-status-report',
+		uuid,
+		query || '',
 	],
 };
 

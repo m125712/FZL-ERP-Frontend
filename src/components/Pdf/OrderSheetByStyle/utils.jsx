@@ -61,7 +61,7 @@ export const getPageHeader = (order_info) => {
 		],
 		[
 			{ text: 'Address', bold: true },
-			{ calSpan: 3, text: order_info.factory_address },
+			{ colSpan: 3, text: order_info.factory_address },
 			'',
 			'',
 		],

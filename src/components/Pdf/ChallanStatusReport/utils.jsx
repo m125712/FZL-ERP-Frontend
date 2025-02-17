@@ -19,6 +19,43 @@ const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
 	return value;
 };
 
+export const getPdfHeader = (data) => {
+	return [
+		[
+			{
+				image: FZL_LOGO.src,
+				width: 70,
+				height: 40,
+				alignment: 'left',
+			},
+			{
+				text: [
+					`${company.address}\n`,
+					`${company.email}\n`,
+					`${company.phone}\n`,
+					`${company.bin}, ${company.tax}\n`,
+				],
+				alignment: 'left',
+				margin: [40, 0, 0, 0],
+			},
+			{
+				colSpan: 2,
+				text: [
+					{
+						text: 'Challan Status Report\n',
+						fontSize: DEFAULT_FONT_SIZE + 4,
+						bold: true,
+					},
+
+					`Order No.: ${data[0].order_number} \n`,
+				],
+				alignment: 'right',
+			},
+			'',
+		],
+	];
+};
+
 export const getPageHeader = (order_info) => {
 	const haveAccess = useAccess('order__details');
 
@@ -73,21 +110,26 @@ export const getPageHeader = (order_info) => {
 			},
 			'',
 		],
-
 		[
-			{ text: 'Party', bold: true },
-			order_info.party_name,
+			// { text: 'LC/Cash', bold: true },
+			// ...(haveAccess.includes('show_cash_bill_lc')
+			// 	? [lc_or_cash]
+			// 	: ['- / -']),
 			{ text: 'Buyer', bold: true },
 			order_info.buyer_name,
-		],
-
-		[
-			{ text: 'Factory', bold: true },
-			order_info.factory_name,
-
 			{ text: 'Marketing', bold: true },
 			order_info.marketing_name,
 		],
+		[
+			{ text: 'Party', bold: true },
+			order_info.party_name,
+			{ text: 'Priority', bold: true },
+			(order_info.marketing_priority || '-') +
+				' / ' +
+				(order_info.factory_priority || '-'),
+		],
+
+		[{ text: 'Factory', bold: true }, order_info.factory_name, '', ''],
 		[
 			{ text: 'Address', bold: true },
 			{ colSpan: 3, text: order_info.factory_address },

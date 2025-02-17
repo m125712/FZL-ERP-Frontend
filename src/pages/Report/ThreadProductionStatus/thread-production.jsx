@@ -21,16 +21,17 @@ export default function Index() {
 	const haveAccess = useAccess('report__thread_production_batch_wise');
 	const { user } = useAuth();
 
-	const [from, setFrom] = useState(
-		parse(
-			format(
-				startOfMonth(subMonths(new Date(), 2)),
-				'yyyy-MM-dd hh:mm:ss'
-			),
-			'yyyy-MM-dd HH:mm:ss',
-			new Date()
-		)
-	);
+	// const [from, setFrom] = useState(
+	// 	parse(
+	// 		format(
+	// 			startOfMonth(subMonths(new Date(), 2)),
+	// 			'yyyy-MM-dd hh:mm:ss'
+	// 		),
+	// 		'yyyy-MM-dd HH:mm:ss',
+	// 		new Date()
+	// 	)
+	// );
+	const [from, setFrom] = useState(new Date());
 	const [to, setTo] = useState(new Date());
 	const [status, setStatus] = useState('pending');
 	const { data, isLoading } = useThreadProductionBatchWise(

@@ -210,6 +210,7 @@ const Zipper = ({
 									<ReactSelect
 										isDisabled={pi_uuid}
 										isMulti
+										className={'h-full'}
 										placeholder='Select Order Numbers'
 										options={order_number_for_zippers}
 										value={order_number_for_zippers?.filter(
@@ -248,6 +249,7 @@ const Zipper = ({
 									return (
 										<ReactSelect
 											isMulti
+											className={'h-full'}
 											placeholder='Select Order Numbers'
 											options={
 												new_order_number_for_zippers

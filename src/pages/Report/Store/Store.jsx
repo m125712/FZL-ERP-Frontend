@@ -8,11 +8,15 @@ import { SimpleDatePicker } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 
 export default function index() {
-	const [from, setFrom] = useState(format(new Date(), 'yyyy-MM-dd'));
-	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
-	const { data, isLoading } = useReportStock(from, to, {
-		enabled: !!(from && to),
-	});
+	const [from, setFrom] = useState(new Date());
+	const [to, setTo] = useState(new Date());
+	const { data, isLoading } = useReportStock(
+		format(from, 'yyyy-MM-dd'),
+		format(to, 'yyyy-MM-dd'),
+		{
+			enabled: !!(from && to),
+		}
+	);
 
 	const columns = useMemo(
 		() => [
@@ -79,8 +83,9 @@ export default function index() {
 							key={'from'}
 							value={from}
 							placeholder='From'
+							selected={from}
 							onChange={(data) => {
-								setFrom(format(data, 'yyyy-MM-dd'));
+								setFrom(data);
 							}}
 							selected={from}
 						/>
@@ -89,8 +94,9 @@ export default function index() {
 							key={'to'}
 							value={to}
 							placeholder='To'
+							selected={to}
 							onChange={(data) => {
-								setTo(format(data, 'yyyy-MM-dd'));
+								setTo(data);
 							}}
 							selected={to}
 						/>

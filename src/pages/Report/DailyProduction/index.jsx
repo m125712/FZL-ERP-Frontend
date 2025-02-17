@@ -15,10 +15,10 @@ import Header from './Header';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
-		return `own_uuid=${userUUID}`;
+		return `&own_uuid=${userUUID}`;
 	}
 
-	return `all=true`;
+	return ``;
 };
 
 export default function index() {
@@ -33,9 +33,11 @@ export default function index() {
 
 	const [from, setFrom] = useState(new Date());
 	const [to, setTo] = useState(new Date());
+	const [type, setType] = useState('all');
 	const { data, isLoading } = useProductionReportDateWise(
 		format(from, 'yyyy-MM-dd'),
 		format(to, 'yyyy-MM-dd'),
+		type,
 		getPath(haveAccess, user?.uuid),
 		{
 			enabled: !!user?.uuid,
@@ -51,7 +53,7 @@ export default function index() {
 	return (
 		<>
 			<div className='flex flex-col gap-8'>
-				<Header {...{ from, setFrom, to, setTo }} />
+				<Header {...{ from, setFrom, to, setTo, type, setType }} />
 				<div className='flex gap-2'>
 					<button
 						type='button'
@@ -68,7 +70,7 @@ export default function index() {
 					<button
 						type='button'
 						onClick={() => {
-							Excel(data, from);
+							Excel(data, from, to);
 						}}
 						className='btn btn-secondary flex-1'
 					>

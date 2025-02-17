@@ -18,13 +18,14 @@ export const useReportStoreApproved = () =>
 export const useProductionReportDateWise = (
 	from = '',
 	to = '',
+	type = '',
 	query,
 	{ enabled = false } = {}
 ) =>
 	createGlobalState({
-		queryKey: reportQK.productionReportDateWise(from, to, query),
+		queryKey: reportQK.productionReportDateWise(from, to, type, query),
 		url:
-			`/report/daily-production-report?from_date=${from}&to_date=${to}&` +
+			`/report/daily-production-report?from_date=${from}&to_date=${to}&type=${type}` +
 			query,
 		enabled: !!from && !!to && enabled,
 	});

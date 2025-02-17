@@ -181,7 +181,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: '/public/marketing-team-member-target',
 						deleteData,
 					}}
 				/>

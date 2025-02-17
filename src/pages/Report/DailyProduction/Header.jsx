@@ -1,13 +1,21 @@
 import { format } from 'date-fns';
 
-import { SectionEntryBody, SimpleDatePicker } from '@/ui';
+import { ReactSelect, SectionEntryBody, SimpleDatePicker } from '@/ui';
 
 export default function Header({
 	from = '',
 	setFrom = () => {},
 	to = '',
 	setTo = () => {},
+	type = '',
+	setType = () => {},
 }) {
+	const types = [
+		{ label: 'All', value: 'all' },
+		{ label: 'Bulk', value: 'nulk' },
+		{ label: 'Sample', value: 'sample' },
+	];
+
 	return (
 		<div>
 			<SectionEntryBody title={'Daily Production Report'}>
@@ -28,6 +36,14 @@ export default function Header({
 						setTo(data);
 					}}
 					selected={to}
+				/>
+				<ReactSelect
+					placeholder='Select Type'
+					options={types}
+					value={types?.find((item) => item.value == type)}
+					onChange={(e) => {
+						setType(e.value);
+					}}
 				/>
 			</SectionEntryBody>
 		</div>

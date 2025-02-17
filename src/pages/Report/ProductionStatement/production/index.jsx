@@ -21,21 +21,23 @@ export default function index() {
 	const haveAccess = useAccess('report__production_statement');
 	const { user } = useAuth();
 
-	const [from, setFrom] = useState(format(new Date(), 'yyyy-MM-dd'));
-	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
+	const [from, setFrom] = useState(new Date());
+	const [to, setTo] = useState(new Date());
 	const [marketing, setMarketing] = useState();
 	const [type, setType] = useState();
+	const [priceFor, setPriceFor] = useState('company');
 	const [party, setParty] = useState();
 	const [order, setOrder] = useState('');
 	const [reportFor, setReportFor] = useState('');
 	const { data, isLoading } = useProductionStatementReport(
-		from,
-		to,
+		format(from, 'yyyy-MM-dd'),
+		format(to, 'yyyy-MM-dd'),
 		party,
 		marketing,
 		type,
 		order,
 		reportFor,
+		priceFor,
 		getPath(haveAccess, user?.uuid),
 		{
 			isEnabled: !!user?.uuid,
@@ -63,6 +65,8 @@ export default function index() {
 					setOrder,
 					reportFor,
 					setReportFor,
+					priceFor,
+					setPriceFor,
 				}}
 			/>
 			<div className='flex gap-2'>

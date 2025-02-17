@@ -1,6 +1,6 @@
 import { ExcelConverter } from 'pdfmake-to-excel';
 
-export default function Index(data, from) {
+export default function Index(data, from, to) {
 	const pdfData = data || [];
 
 	pdfData.forEach((item, index) => {
@@ -236,7 +236,7 @@ export default function Index(data, from) {
 
 	function downloadFile() {
 		const exporter = new ExcelConverter(
-			`Daily Production Report-${from}`,
+			`Daily Production Report-${from}-${to}`,
 			content,
 			{
 				defaultOptions: { defaultColWidth: 20 },

@@ -9,6 +9,7 @@ const node = [
 	getTable('party_name', 'Party'),
 	getTable('order_number', 'O/N'),
 	getTable('item_description', 'Item'),
+	getTable('color', 'Color'),
 	getTable('size', 'Size'),
 	getTable('running_total_close_end_quantity', 'C/E'),
 	getTable('running_total_open_end_quantity', 'O/E'),
@@ -175,6 +176,10 @@ export default function Index(data, from) {
 							text: itemItem.item_description,
 							rowSpan: itemRowSpan,
 						},
+						color: {
+							text: otherItem.color,
+							rowSpan: 1,
+						},
 						size: {
 							text: otherItem.size,
 							rowSpan: 1,
@@ -219,7 +224,7 @@ export default function Index(data, from) {
 	tableData.push({
 		type: {
 			text: 'Grand Total',
-			colSpan: 5,
+			colSpan: 6,
 			bold: true,
 		},
 		party_name: { text: '', rowSpan: 1 },
@@ -266,7 +271,7 @@ export default function Index(data, from) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [40, 100, 50, 60, 70, 45, 45, 45],
+					widths: [40, 100, 50, 60, 40, 70, 30, 20, 40],
 					body: [
 						TableHeader(node),
 

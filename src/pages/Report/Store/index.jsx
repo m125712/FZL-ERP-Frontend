@@ -1,13 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useReportStock } from '@/state/Report';
-import { format, startOfMonth, subMonths } from 'date-fns';
-
-import ReactTable from '@/components/Table';
-import { SimpleDatePicker } from '@/ui';
+import { useEffect } from 'react';
 
 import PageInfo from '@/util/PageInfo';
 
-import Approved from './Approved';
 import Store from './Store';
 
 export default function index() {
@@ -20,7 +14,6 @@ export default function index() {
 	return (
 		<div className='flex flex-col gap-8'>
 			<Store />
-			<Approved />
 		</div>
 	);
 }

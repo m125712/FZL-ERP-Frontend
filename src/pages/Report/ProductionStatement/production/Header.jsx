@@ -1,3 +1,4 @@
+import { useAuth } from '@/context/auth';
 import {
 	useAllZipperThreadOrderList,
 	useOtherMarketing,
@@ -12,6 +13,14 @@ import {
 	SectionEntryBody,
 	SimpleDatePicker,
 } from '@/ui';
+
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return ``;
+};
 
 export default function Header({
 	from = '',
@@ -28,12 +37,16 @@ export default function Header({
 	setOrder = () => {},
 	reportFor = '',
 	setReportFor = () => {},
+	priceFor = '',
+	setPriceFor = () => {},
 }) {
 	const haveAccess = useAccess('report__production_statement');
+	const { user } = useAuth();
+
 	const { data: marketings } = useOtherMarketing();
 	const { data: parties } = useOtherParty();
 	const { data: orders } = useAllZipperThreadOrderList(
-		`from_date=${from}&to_date=${to}&page=production_statement${reportFor === 'accounts' ? '_accounts' : ''}`
+		`from_date=${format(from, 'yyyy-MM-dd')}&to_date=${format(to, 'yyyy-MM-dd')}&page=production_statement${reportFor === 'accounts' ? '_accounts' : ''}${getPath(haveAccess, user?.uuid) ? `&${getPath(haveAccess, user?.uuid)}` : ''}`
 	);
 	const reportForOptions = [
 		{ label: 'SNO', value: '' },
@@ -48,6 +61,11 @@ export default function Header({
 		{ label: 'Zipper', value: 'Zipper' },
 	];
 
+	const priceForOptions = [
+		{ label: 'Party', value: 'party' },
+		{ label: 'Company ', value: 'company' },
+	];
+
 	return (
 		<div>
 			<SectionEntryBody title={'Production Statement Report'}>
@@ -58,7 +76,7 @@ export default function Header({
 							value={from}
 							placeholder='From'
 							onChange={(data) => {
-								setFrom(format(data, 'yyyy-MM-dd'));
+								setFrom(data);
 							}}
 							selected={from}
 						/>
@@ -69,7 +87,7 @@ export default function Header({
 							value={to}
 							placeholder='To'
 							onChange={(data) => {
-								setTo(format(data, 'yyyy-MM-dd'));
+								setTo(data);
 							}}
 							selected={to}
 						/>
@@ -83,6 +101,18 @@ export default function Header({
 							value={parties?.find((item) => item.value == party)}
 							onChange={(e) => {
 								setParty(e.value);
+							}}
+						/>
+					</FormField>
+					<FormField label='' title='Price For'>
+						<ReactSelect
+							placeholder='Select Price For'
+							options={priceForOptions}
+							value={priceForOptions?.find(
+								(item) => item.value == priceFor
+							)}
+							onChange={(e) => {
+								setPriceFor(e.value);
 							}}
 						/>
 					</FormField>

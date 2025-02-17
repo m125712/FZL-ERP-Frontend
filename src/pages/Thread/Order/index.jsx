@@ -230,11 +230,11 @@ export default function Index() {
 	);
 
 	// Add
-	const handelAdd = () => navigate('/thread/order-info/entry');
+	const handelAdd = () => window.open('/thread/order-info/entry', '_blank');
 
 	const handelUpdate = (idx) => {
 		const { uuid } = data[idx];
-		navigate(`/thread/order-info/${uuid}/update`);
+		window.open(`/thread/order-info/${uuid}/update`, '_blank');
 	};
 
 	// Delete

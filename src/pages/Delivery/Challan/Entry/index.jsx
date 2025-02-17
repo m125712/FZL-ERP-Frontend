@@ -161,6 +161,7 @@ export default function Index() {
 			const updatableChallanEntryPromises = data.new_challan_entry.map(
 				async (item) => {
 					const updatedData = {
+						item_for: data?.item_for,
 						challan_uuid: data?.uuid,
 					};
 
@@ -234,6 +235,7 @@ export default function Index() {
 		const challanEntryData = [...data.challan_entry].map((item) => ({
 			...item,
 			uuid: nanoid(),
+			item_for: data?.item_for,
 			challan_uuid: new_uuid,
 			quantity: item?.quantity,
 			created_at,
@@ -261,6 +263,7 @@ export default function Index() {
 			const challanEntryPromises = data.challan_entry.map(
 				async (item) => {
 					const updatedData = {
+						item_for: data?.item_for,
 						challan_uuid: challanData.uuid,
 					};
 

@@ -213,7 +213,6 @@ export default function Index(data, isPageBrake) {
 									text,
 									style: nodeItem.cellStyle,
 									alignment: nodeItem.alignment,
-									// !! rowSpan problem in report/challan-status
 									rowSpan:
 										pl.packingListRowSpan[idx][
 											nodeItem.field

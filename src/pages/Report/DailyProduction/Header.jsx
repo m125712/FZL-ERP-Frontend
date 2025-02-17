@@ -16,8 +16,18 @@ export default function Header({
 					value={from}
 					placeholder='From'
 					onChange={(data) => {
-						setFrom(format(data, 'yyyy-MM-dd'));
+						setFrom(data);
 					}}
+					selected={from}
+				/>
+				<SimpleDatePicker
+					key={'to'}
+					value={to}
+					placeholder='To'
+					onChange={(data) => {
+						setTo(data);
+					}}
+					selected={to}
 				/>
 			</SectionEntryBody>
 		</div>

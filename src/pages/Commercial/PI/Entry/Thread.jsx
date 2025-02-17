@@ -216,6 +216,7 @@ const Thread = ({
 									<ReactSelect
 										isDisabled={pi_uuid}
 										isMulti
+										className={'h-full'}
 										placeholder='Select Order Numbers'
 										options={order_number_for_thread}
 										value={order_number_for_thread?.filter(
@@ -261,6 +262,7 @@ const Thread = ({
 											// 			'thread_order_info_uuids'
 											// 		)?.includes(item.value)
 											// )}
+											className={'h-full'}
 											options={
 												new_order_number_for_thread
 											}

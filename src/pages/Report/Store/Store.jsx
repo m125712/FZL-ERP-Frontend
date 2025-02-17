@@ -82,6 +82,7 @@ export default function index() {
 							onChange={(data) => {
 								setFrom(format(data, 'yyyy-MM-dd'));
 							}}
+							selected={from}
 						/>
 						<SimpleDatePicker
 							className='h-[2.34rem] w-32'
@@ -91,6 +92,7 @@ export default function index() {
 							onChange={(data) => {
 								setTo(format(data, 'yyyy-MM-dd'));
 							}}
+							selected={to}
 						/>
 					</div>
 				}

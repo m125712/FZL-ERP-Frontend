@@ -20,6 +20,7 @@ export default function Header({
 						onChange={(data) => {
 							setDyeingDate(format(data, 'yyyy-MM-dd'));
 						}}
+						selected={dyeingDate}
 					/>
 					<ReactSelect
 						className='md:min-w-96'

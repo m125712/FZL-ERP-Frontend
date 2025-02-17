@@ -18,6 +18,7 @@ export default function Header({
 					onChange={(data) => {
 						setFrom(format(data, 'yyyy-MM-dd'));
 					}}
+					selected={from}
 				/>
 			</SectionEntryBody>
 		</div>

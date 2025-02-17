@@ -11,7 +11,6 @@ import {
 	CustomLink,
 	DateTime,
 	EditDelete,
-	LinkOnly,
 	StatusButton,
 	StatusSelect,
 } from '@/ui';
@@ -36,7 +35,7 @@ export default function Index() {
 		{ value: 'pending', label: 'Pending' },
 		{ value: 'delivered', label: 'Delivered' },
 		{ value: 'received', label: 'Received' },
-		{ value: 'gate_pass', label: 'Gate Pass' },
+		{ value: 'gate_pass', label: 'W/H Out' },
 	];
 	const navigate = useNavigate();
 

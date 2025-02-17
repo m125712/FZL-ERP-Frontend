@@ -26,7 +26,7 @@ export default function Index() {
 		{ value: 'all', label: 'All' },
 		{ value: 'pending', label: 'Pending' },
 		{ value: 'challan', label: 'Challan' },
-		{ value: 'gate_pass', label: 'Gate Pass' },
+		{ value: 'gate_pass', label: 'W/H Out' },
 	];
 	const navigate = useNavigate();
 	const haveAccess = useAccess('delivery__packing_list');
@@ -121,21 +121,7 @@ export default function Index() {
 					);
 				},
 			},
-			{
-				accessorKey: 'challan_number',
-				header: 'Challan',
-				width: 'w-36',
-				cell: (info) => {
-					const { challan_number, challan_uuid } = info.row.original;
-					return (
-						<LinkWithCopy
-							title={challan_number}
-							id={challan_uuid}
-							uri='/delivery/challan'
-						/>
-					);
-				},
-			},
+
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
@@ -185,6 +171,21 @@ export default function Index() {
 								handelReceivedStatus(info.row.index);
 							}}
 							checked={info.getValue() === true}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'challan_number',
+				header: 'Challan',
+				width: 'w-36',
+				cell: (info) => {
+					const { challan_number, challan_uuid } = info.row.original;
+					return (
+						<LinkWithCopy
+							title={challan_number}
+							id={challan_uuid}
+							uri='/delivery/challan'
 						/>
 					);
 				},

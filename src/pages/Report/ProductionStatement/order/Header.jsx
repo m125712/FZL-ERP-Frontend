@@ -44,6 +44,7 @@ export default function Header({
 							onChange={(data) => {
 								setFrom(format(data, 'yyyy-MM-dd'));
 							}}
+							selected={from}
 						/>
 					</FormField>
 					<FormField label='' title='To'>
@@ -54,6 +55,7 @@ export default function Header({
 							onChange={(data) => {
 								setTo(format(data, 'yyyy-MM-dd'));
 							}}
+							selected={to}
 						/>
 					</FormField>
 				</div>

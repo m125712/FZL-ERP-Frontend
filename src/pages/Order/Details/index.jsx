@@ -63,13 +63,17 @@ export default function Index() {
 	}, []);
 
 	// Add
-	const handelAdd = () => navigate('/order/entry');
+	const handelAdd = () => window.open('/order/entry', '_blank');
 
 	// Update
 	const handelUpdate = (idx) => {
 		const { order_description_uuid, order_number } = data[idx];
 
-		navigate(`/order/${order_number}/${order_description_uuid}/update`);
+		window.open(
+			`/order/${order_number}/${order_description_uuid}/update`,
+			'_blank'
+		);
+		// navigate(`/order/${order_number}/${order_description_uuid}/update`);
 	};
 
 	const columns = DetailsColumns({

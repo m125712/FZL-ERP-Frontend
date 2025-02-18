@@ -1752,6 +1752,7 @@ export const PI_SCHEMA = {
 	payment: NUMBER_REQUIRED,
 	remarks: STRING.nullable(),
 	weight: NUMBER_DOUBLE.optional(),
+	cross_weight: NUMBER_DOUBLE.optional(),
 	is_rtgs: BOOLEAN_REQUIRED,
 
 	pi_cash_entry: yup.array().of(
@@ -1874,6 +1875,7 @@ export const PI_NULL = {
 	payment: '',
 	remarks: '',
 	weight: 0,
+	cross_weight: 0,
 	is_rtgs: false,
 
 	pi_cash_entry: [

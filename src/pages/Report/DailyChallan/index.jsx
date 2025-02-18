@@ -74,10 +74,15 @@ export default function Index() {
 				header: 'O/N',
 				enableColumnFilter: true,
 				cell: (info) => {
+					const { product, order_info_uuid } = info.row.original;
 					return (
 						<CustomLink
 							label={info.getValue()}
-							url={`/order/details/${info.getValue()}`}
+							url={
+								product === 'thread'
+									? `/thread/order-info/${order_info_uuid}`
+									: `/order/details/${info.getValue()}`
+							}
 							openInNewTab={true}
 						/>
 					);

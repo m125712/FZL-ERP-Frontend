@@ -103,6 +103,7 @@ export default function Index() {
 		}
 	}, [pi_details_by_uuid, isUpdate]);
 
+	// * getting the deletable pi_cash_entry zipper
 	useEffect(() => {
 		if (!isUpdate) return;
 		if (watch('order_info_uuids') === null) return;
@@ -120,6 +121,31 @@ export default function Index() {
 
 		setValue('pi_cash_entry', updatedPiEntries);
 	}, [isUpdate, watch('order_info_uuids')]);
+
+	// * getting the deletable pi_cash_entry thread
+	useEffect(() => {
+		if (!isUpdate) return;
+		if (watch('thread_order_info_uuids') === null) return;
+
+		const updatedPiEntries = getValues('pi_cash_entry_thread').map(
+			(item) => {
+				if (
+					!watch('thread_order_info_uuids').includes(
+						item.order_info_uuid
+					)
+				) {
+					return {
+						...item,
+						isDeletable: true,
+					};
+				}
+
+				return item;
+			}
+		);
+
+		setValue('pi_cash_entry_thread', updatedPiEntries);
+	}, [isUpdate, watch('thread_order_info_uuids')]);
 
 	//* Fetch zipper entries by order info ids
 	const { data: pi_cash_entry_by_order_info } = useCommercialPIByOrderInfo(
@@ -222,6 +248,7 @@ export default function Index() {
 				payment: rest?.payment,
 				remarks: rest?.remarks,
 				weight: rest?.weight,
+				cross_weight: rest?.cross_weight,
 				is_rtgs: rest?.is_rtgs,
 				updated_at: GetDateTime(),
 			};

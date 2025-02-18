@@ -55,7 +55,7 @@ export default function Header({
 				</div>
 			}
 		>
-			<div className='grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4'>
+			<div className='grid grid-cols-1 gap-2 sm:grid-cols-4 sm:gap-4'>
 				<FormField label='lc_id' title='LC' errors={errors}>
 					<Controller
 						name='lc_uuid'
@@ -136,9 +136,6 @@ export default function Header({
 						}}
 					/>
 				</FormField>
-			</div>
-
-			<div className='grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4 xl:grid-cols-6'>
 				<FormField label='cc' title='Merchandiser' errors={errors}>
 					<Controller
 						name='merchandiser_uuid'
@@ -162,6 +159,9 @@ export default function Header({
 						}}
 					/>
 				</FormField>
+			</div>
+
+			<div className='grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4 xl:grid-cols-6'>
 				<FormField label='factory_uuid' title='Factory' errors={errors}>
 					<Controller
 						name='factory_uuid'
@@ -214,7 +214,17 @@ export default function Header({
 					unit='DAYS'
 					{...{ register, errors }}
 				/>
-				<JoinInput label='weight' unit='KG' {...{ register, errors }} />
+				<JoinInput
+					title='Net weight'
+					label='weight'
+					unit='KG'
+					{...{ register, errors }}
+				/>
+				<JoinInput
+					label='cross_weight'
+					unit='KG'
+					{...{ register, errors }}
+				/>
 			</div>
 
 			<Textarea label='remarks' {...{ register, errors }} />

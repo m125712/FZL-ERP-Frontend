@@ -1625,6 +1625,13 @@ export const reportQK = {
 		query,
 	],
 
+	//* PI To Be Submitted By Marketing
+	piToBeSubmittedByMarketing: (query) => [
+		...reportQK.all(),
+		'pi-to-be-submitted-marketing-wise',
+		query,
+	],
+
 	//* Lc
 	lc: (url) => [...reportQK.all(), 'lc' + url],
 

@@ -152,6 +152,16 @@ export const usePIToBeSubmitted = (
 		enabled,
 	});
 
+export const usePIToBeSubmittedByMarketing = (
+	query,
+	{ enabled = false } = { enabled: false }
+) =>
+	createGlobalState({
+		queryKey: reportQK.piToBeSubmittedByMarketing(query),
+		url: '/report/pi-to-be-register-report-marketing-wise?' + query,
+		enabled,
+	});
+
 export const useLC = (url, { enabled = false } = {}) => {
 	return createGlobalState({
 		queryKey: reportQK.lc(url),

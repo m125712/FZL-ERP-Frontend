@@ -214,7 +214,7 @@ const Thread = ({
 							render={({ field: { onChange } }) => {
 								return (
 									<ReactSelect
-										isDisabled={pi_uuid}
+										// isDisabled={pi_uuid}
 										isMulti
 										className={'h-full'}
 										placeholder='Select Order Numbers'

@@ -32,7 +32,7 @@ export default function Index() {
 	const [to, setTo] = useState(new Date());
 
 	const { data, isLoading, deleteData } = useConningProdLog(
-		`from=${format(from, 'yyyy-MM-dd hh:mm:ss')}&to=${format(to, 'yyyy-MM-dd hh:mm:ss')}`
+		`from=${format(from, 'yyyy-MM-dd HH:mm:ss')}&to=${format(to, 'yyyy-MM-dd HH:mm:ss')}`
 	);
 	const { invalidateQuery } = useDyeingCone();
 	const info = new PageInfo('Production Log', '/thread/log', 'thread__log');

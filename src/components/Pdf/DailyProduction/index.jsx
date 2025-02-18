@@ -71,11 +71,13 @@ export default function Index(data, from) {
 					if (
 						itemIndex === orderItem.items.length - 1 &&
 						!itemItem.other?.find(
-							(otherItem) => otherItem.size === 'Order Wise Total'
+							(otherItem) =>
+								otherItem.color === 'Order Wise Total'
 						)
 					) {
 						itemItem.other?.push({
-							size: 'Order Wise Total',
+							color: 'Order Wise Total',
+							size: '',
 							running_total_close_end_quantity:
 								totalOrderWiseCloseEnd,
 							running_total_open_end_quantity:
@@ -85,13 +87,15 @@ export default function Index(data, from) {
 					}
 					if (
 						!itemItem.other?.find(
-							(otherItem) => otherItem.size === 'Party Wise Total'
+							(otherItem) =>
+								otherItem.color === 'Party Wise Total'
 						) &&
 						itemIndex === orderItem.items.length - 1 &&
 						orderIndex === partyItem.orders.length - 1
 					) {
 						itemItem.other?.push({
-							size: 'Party Wise Total',
+							color: 'Party Wise Total',
+							size: '',
 							running_total_close_end_quantity:
 								totalPartyWiseCloseEnd,
 							running_total_open_end_quantity:
@@ -101,14 +105,15 @@ export default function Index(data, from) {
 					}
 					if (
 						!itemItem.other?.find(
-							(otherItem) => otherItem.size === 'Type Wise Total'
+							(otherItem) => otherItem.color === 'Type Wise Total'
 						) &&
 						itemIndex === orderItem.items.length - 1 &&
 						orderIndex === partyItem.orders.length - 1 &&
 						partyIndex === item.parties.length - 1
 					) {
 						itemItem.other?.push({
-							size: 'Type Wise Total',
+							color: 'Type Wise Total',
+							size: '',
 							running_total_close_end_quantity:
 								totalTypeWiseCloseEnd,
 							running_total_open_end_quantity:
@@ -179,27 +184,39 @@ export default function Index(data, from) {
 						color: {
 							text: otherItem.color,
 							rowSpan: 1,
+							bold: title.includes(otherItem.color)
+								? true
+								: false,
+							colSpan: title.includes(otherItem.color) ? 2 : 1,
 						},
 						size: {
 							text: otherItem.size,
 							rowSpan: 1,
-							bold: title.includes(otherItem.size) ? true : false,
+							bold: title.includes(otherItem.color)
+								? true
+								: false,
 						},
 						running_total_close_end_quantity: {
 							text: otherItem.running_total_close_end_quantity,
 							rowSpan: 1,
-							bold: title.includes(otherItem.size) ? true : false,
+							bold: title.includes(otherItem.color)
+								? true
+								: false,
 						},
 						running_total_open_end_quantity: {
 							text: otherItem.running_total_open_end_quantity,
 							rowSpan: 1,
-							bold: title.includes(otherItem.size) ? true : false,
+							bold: title.includes(otherItem.color)
+								? true
+								: false,
 						},
 						running_total_quantity: {
 							text: otherItem.running_total_quantity,
 							rowSpan: 1,
 
-							bold: title.includes(otherItem.size) ? true : false,
+							bold: title.includes(otherItem.color)
+								? true
+								: false,
 						},
 					}));
 				});

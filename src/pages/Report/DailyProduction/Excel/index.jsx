@@ -150,7 +150,9 @@ export default function Index(data, from, to) {
 							{
 								text: itemItem.item_description,
 							},
-
+							{
+								text: otherItem.color,
+							},
 							{
 								text: otherItem.size,
 							},
@@ -170,15 +172,15 @@ export default function Index(data, from, to) {
 		});
 	});
 	const grandTotalCloseEnd = tableData.reduce((total, item) => {
-		return total + (item[5]?.text || 0);
+		return total + (Number(item[6]?.text) || 0);
 	}, 0);
 
 	const grandTotalOpenEnd = tableData.reduce((total, item) => {
-		return total + (item[6]?.text || 0);
+		return total + (Number(item[7]?.text) || 0);
 	}, 0);
 
 	const grandTotalQuantity = tableData.reduce((total, item) => {
-		return total + (item[7]?.text || 0);
+		return total + (Number(item[8]?.text) || 0);
 	}, 0);
 
 	tableData.push([
@@ -190,16 +192,17 @@ export default function Index(data, from, to) {
 		{ text: '' },
 		{ text: '' },
 		{ text: '' },
+		{ text: '' },
 		{
-			text: grandTotalCloseEnd,
+			text: grandTotalCloseEnd.toFixed(2),
 			rowSpan: 1,
 		},
 		{
-			text: grandTotalOpenEnd,
+			text: grandTotalOpenEnd.toFixed(2),
 			rowSpan: 1,
 		},
 		{
-			text: grandTotalQuantity,
+			text: grandTotalQuantity.toFixed(2),
 			rowSpan: 1,
 		},
 	]);
@@ -215,6 +218,9 @@ export default function Index(data, from, to) {
 		},
 		{
 			text: 'Item',
+		},
+		{
+			text: 'Color',
 		},
 		{
 			text: 'Size',

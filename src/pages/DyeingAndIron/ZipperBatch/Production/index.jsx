@@ -1,10 +1,12 @@
 import { Suspense, useCallback, useEffect, useMemo } from 'react';
 import { useDyeingBatch, useDyeingBatchDetailsByUUID } from '@/state/Dyeing';
 import { useAuth } from '@context/auth';
+import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
 import { ProceedModal } from '@/components/Modal';
+import { Footer } from '@/components/Modal/ui';
 import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
 import { Input, LinkWithCopy, Textarea } from '@/ui';
@@ -44,6 +46,7 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
+		context: form,
 	} = useRHF(DYEING_BATCH_PRODUCTION_SCHEMA, DYEING_BATCH_PRODUCTION_NULL);
 
 	// dyeing_batch_entry
@@ -63,6 +66,19 @@ export default function Index() {
 	// TODO: Submit
 	const onSubmit = async (data) => {
 		const created_at = GetDateTime();
+
+		const invalidEntries = data?.dyeing_batch_entry.filter(
+			(item) => item.production_quantity_in_kg <= 0
+		);
+
+		if (invalidEntries.length > 0) {
+			ShowLocalToast({
+				type: 'warning',
+				message:
+					'There should one or more item quantity greater than zero to proceed.',
+			});
+			return;
+		}
 
 		const dyeing_batch_entry = [...data?.dyeing_batch_entry]
 			.filter((item) => item.production_quantity_in_kg > 0)
@@ -324,7 +340,7 @@ export default function Index() {
 	);
 
 	return (
-		<div>
+		<FormProvider {...form}>
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}
@@ -382,21 +398,16 @@ export default function Index() {
 					</tr>
 				</ReactTable>
 
-				<div className='modal-action'>
-					<button
-						type='submit'
-						disabled={isReceived}
-						className='text-md btn btn-primary btn-block'
-					>
-						Save
-					</button>
-				</div>
+				<Footer
+					buttonClassName='!btn-primary'
+					//  disabled={isReceived} // ? Used to disable the button after a production is received. but no longer required since we are disabling it from index page
+				/>
 			</form>
 
 			<Suspense>
 				<ProceedModal modalId={'proceed_modal'} />
 			</Suspense>
 			<DevTool control={control} placement='top-left' />
-		</div>
+		</FormProvider>
 	);
 }

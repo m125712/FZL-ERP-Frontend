@@ -137,7 +137,6 @@ export default function Index() {
 		ORDER_NULL
 	);
 
-	console.log(errors);
 	useEffect(() => {
 		order_number !== undefined
 			? (document.title = `Order: Update ${order_number}`)
@@ -355,7 +354,7 @@ export default function Index() {
 		};
 
 		//* Post new order description */ //
-		await postData.mutateAsync({
+		const orderPromise = await postData.mutateAsync({
 			url,
 			newData: order_description,
 			isOnCloseNeeded: false,
@@ -385,7 +384,7 @@ export default function Index() {
 		];
 
 		// * All promises
-		await Promise.all(order_entry_promises)
+		await Promise.all([orderPromise, ...order_entry_promises])
 			.then(() => reset(Object.assign({}, ORDER_NULL)))
 			.then(async () => {
 				await indexPageInvalidate();

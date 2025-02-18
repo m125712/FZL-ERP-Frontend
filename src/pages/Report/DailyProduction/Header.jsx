@@ -12,7 +12,7 @@ export default function Header({
 }) {
 	const types = [
 		{ label: 'All', value: 'all' },
-		{ label: 'Bulk', value: 'nulk' },
+		{ label: 'Bulk', value: 'bulk' },
 		{ label: 'Sample', value: 'sample' },
 	];
 

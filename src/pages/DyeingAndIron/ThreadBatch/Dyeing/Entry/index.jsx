@@ -155,9 +155,9 @@ export default function Index() {
 						'Style',
 						'Count Length',
 						'Recipe',
-						'Batch Quantity',
-						'Expected Weight (KG)',
-						'Yarn Quantity (KG)',
+						'Batch QTY',
+						'Exp. (KG)',
+						'Yarn QTY (KG)',
 						'Remarks',
 					].map((item) => (
 						<th
@@ -191,9 +191,7 @@ export default function Index() {
 								{item.recipe_name}
 							</td>
 
-							<td className={`${rowClass}`}>
-								{item.total_quantity}
-							</td>
+							<td className={`${rowClass}`}>{item.quantity}</td>
 
 							<td className={`${rowClass}`}>
 								{Number(

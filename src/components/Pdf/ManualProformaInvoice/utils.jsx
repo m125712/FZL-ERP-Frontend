@@ -27,7 +27,12 @@ export const getPageHeader = (data) => {
 				},
 				{
 					colspan: 2,
-					text: [`${company.address}\n`, `${company.phone}\n`],
+					text: [
+						`${company.name}\n`,
+						`${company.address}\n`,
+						`${company.bin}\n`,
+						`${company.tax}\n`,
+					],
 					alignment: 'left',
 				},
 

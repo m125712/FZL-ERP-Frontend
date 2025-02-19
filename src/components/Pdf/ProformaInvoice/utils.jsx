@@ -36,8 +36,8 @@ export const getPageHeader = (data) => {
 								},
 								{
 									text: [
+										`${company.name}\n`,
 										`${company.address}\n`,
-										`${company.phone}\n`,
 										`${company.bin}\n`,
 										`${company.tax}\n`,
 									],

@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 
 export default function BodyTemplate({ title, header, className, children }) {
 	return (
-		<div className='z-10 rounded-md bg-primary text-primary-content'>
+		<div className='rounded-md bg-primary text-primary-content'>
 			<div className='mr-2 flex items-center justify-between'>
 				<span className='flex items-center gap-4 px-4 py-3 text-lg font-semibold capitalize text-primary-content'>
 					{title}

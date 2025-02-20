@@ -1669,6 +1669,15 @@ export const reportQK = {
 		query || '',
 	],
 
+	// * Order Tracking
+	orderTracking: (date, toDate, query) => [
+		...reportQK.all(),
+		'report-for-ed',
+		date,
+		toDate,
+		...(query ? [query] : []),
+	],
+
 	// * Challan status report
 	challanStatusReport: (uuid, query) => [
 		...reportQK.all(),

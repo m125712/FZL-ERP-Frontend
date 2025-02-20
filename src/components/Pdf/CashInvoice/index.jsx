@@ -1,3 +1,5 @@
+import { PI_MD_SIGN } from '@/assets/img/base64';
+
 import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
@@ -574,6 +576,13 @@ export default function Index(data) {
 			},
 			{
 				text: '\n',
+			},
+			{
+				image: PI_MD_SIGN.src,
+				width: 80,
+				height: 90,
+				alignment: 'right',
+				margin: [0, -28, 0, 0],
 			},
 		],
 	});

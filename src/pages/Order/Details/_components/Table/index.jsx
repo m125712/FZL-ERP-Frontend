@@ -70,6 +70,10 @@ export default function Index({
 				{!is_sample && <td colSpan={colspan}></td>}
 				<td className='px-3 py-1'>{total.warehouseQuantity}</td>
 				<td className='px-3 py-1'>{total.deliveryQuantity}</td>
+				<td className='px-3 py-1'>
+					{total.companyPrice.toFixed(2)}/
+					{total.partyPrice.toFixed(2)}
+				</td>
 				<td></td>
 			</tr>
 		</ReactTable>

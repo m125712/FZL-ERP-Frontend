@@ -11,6 +11,7 @@ import { Suspense } from '@/components/Feedback';
 import OrderSheetPdf from '@/components/Pdf/OrderSheet';
 import OrderSheetPdf2 from '@/components/Pdf/OrderSheet2';
 import OrderSheetByStyle from '@/components/Pdf/OrderSheetByStyle';
+import { company } from '@/components/Pdf/utils';
 
 import InformationSkeleton from '../_components/Information/skeleton';
 
@@ -121,6 +122,20 @@ export default function Index({ initial_order, idx }) {
 			totals.shortQuantity += parseFloat(item.total_short_quantity) || 0;
 			totals.tapeQuantity += parseFloat(item.dying_and_iron_prod) || 0;
 			totals.sliderQuantity += parseFloat(item.coloring_prod) || 0;
+			totals.companyPrice +=
+				parseFloat(
+					item.quantity *
+						(order?.order_type !== 'tape'
+							? item.company_price / 12
+							: item.company_price)
+				) || 0;
+			totals.partyPrice +=
+				parseFloat(
+					item.quantity *
+						(order?.order_type !== 'tape'
+							? item.party_price / 12
+							: item.party_price)
+				) || 0;
 
 			return totals;
 		},
@@ -133,6 +148,8 @@ export default function Index({ initial_order, idx }) {
 			shortQuantity: 0,
 			tapeQuantity: 0,
 			sliderQuantity: 0,
+			companyPrice: 0,
+			partyPrice: 0,
 		}
 	);
 

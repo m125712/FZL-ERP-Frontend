@@ -336,7 +336,15 @@ export default function Index() {
 				accessorKey: 'pi_number',
 				header: 'PI No.',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/commercial/pi/${info.getValue()}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'pi',

@@ -389,7 +389,7 @@ export default function Index(data) {
 		header: {
 			table: getPageHeader(data),
 			layout: 'noBorders',
-			margin: [xMargin, 30, xMargin, 0],
+			margin: [xMargin, 10, xMargin, 0],
 		},
 		// * Page Footer
 		footer: (currentPage, pageCount) => ({

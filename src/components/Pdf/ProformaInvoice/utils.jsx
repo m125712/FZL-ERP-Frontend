@@ -135,7 +135,7 @@ export const getPageHeader = (data) => {
 								{
 									text:
 										Number(data?.weight) > 0
-											? 'Weight'
+											? 'Net Weight'
 											: '',
 									bold: true,
 									color: PRIMARY_COLOR,
@@ -152,6 +152,24 @@ export const getPageHeader = (data) => {
 									color: PRIMARY_COLOR,
 								},
 								data?.bank_routing_no,
+							],
+							[
+								{
+									text:
+										Number(data?.cross_weight) > 0
+											? 'Gross Weight'
+											: '',
+									bold: true,
+									color: PRIMARY_COLOR,
+								},
+								{
+									text:
+										Number(data?.cross_weight) > 0
+											? data?.cross_weight + ' Kg'
+											: '',
+								},
+								'',
+								'',
 							],
 						],
 					},

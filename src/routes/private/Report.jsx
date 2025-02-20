@@ -33,6 +33,7 @@ const Sample = lazy(() => import('@/pages/Report/Sample'));
 const Bulk = lazy(() => import('@/pages/Report/Bulk'));
 const Orders = lazy(() => import('@/pages/Report/Order'));
 const ChallanStatus = lazy(() => import('@/pages/Report/ChallanStatus'));
+const OrderTracking = lazy(() => import('@/pages/Report/OrderTracking'));
 
 export const ReportRoutes = [
 	{
@@ -170,6 +171,13 @@ export const ReportRoutes = [
 				element: <ChallanStatus />,
 				page_name: 'report__challan_status',
 				actions: ['read', 'show_own_orders'],
+			},
+			{
+				name: 'Order Tracking',
+				path: '/report/order-tracking',
+				element: <OrderTracking />,
+				page_name: 'report__order_tracking',
+				actions: ['read'],
 			},
 			// {
 			// 	name: 'Production Report (Thread)',

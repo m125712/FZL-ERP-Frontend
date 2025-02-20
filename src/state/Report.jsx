@@ -209,6 +209,14 @@ export const useSample = (
 		enabled,
 	});
 
+export const useOrderTracing = (date, toDate, query) =>
+	createGlobalState({
+		queryKey: reportQK.orderTracking(date, toDate, query),
+		url: query
+			? `/report/report-for-ed?from=${date}&to=${toDate}` + query
+			: `/report/report-for-ed?from=${date}&to=${toDate}`,
+	});
+
 export const useSampleCombined = (
 	date,
 	is_sample = 1,

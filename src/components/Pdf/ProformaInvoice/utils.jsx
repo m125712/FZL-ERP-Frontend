@@ -153,6 +153,24 @@ export const getPageHeader = (data) => {
 								},
 								data?.bank_routing_no,
 							],
+							[
+								{
+									text:
+										Number(data?.cross_weight) > 0
+											? 'Cross Weight'
+											: '',
+									bold: true,
+									color: PRIMARY_COLOR,
+								},
+								{
+									text:
+										Number(data?.cross_weight) > 0
+											? data?.cross_weight + ' Kg'
+											: '',
+								},
+								'',
+								'',
+							],
 						],
 					},
 					layout: 'noBorders',

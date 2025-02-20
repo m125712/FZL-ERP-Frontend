@@ -221,6 +221,7 @@ export default function Header({
 					{...{ register, errors }}
 				/>
 				<JoinInput
+					title='Gross weight'
 					label='cross_weight'
 					unit='KG'
 					{...{ register, errors }}

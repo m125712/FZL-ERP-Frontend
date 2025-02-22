@@ -103,7 +103,7 @@ export const CUSTOM_PAGE_CONE_STICKER = ({
 
 export const company = {
 	logo: FZL_LOGO.src,
-	name: 'Fortune Zipper LTD.',
+	name: 'Fortune Zipper Limited.',
 	address: 'Aukpara, Ashulia, Savar, DHK-1340',
 	email: 'Email: info@fortunezip.com',
 	phone: 'Phone: 01810001301',

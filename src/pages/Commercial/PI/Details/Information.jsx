@@ -31,6 +31,8 @@ export default function Information({ pi }) {
 		factory_address,
 		validity,
 		payment,
+		weight,
+		cross_weight,
 		created_by,
 		created_by_name,
 		created_at,
@@ -176,6 +178,14 @@ export default function Information({ pi }) {
 			{
 				label: 'Validity',
 				value: validity + ' Days',
+			},
+			{
+				label: 'Net Weight',
+				value: weight + ' Kg',
+			},
+			{
+				label: 'Gross Weight',
+				value: cross_weight + ' Kg',
 			},
 		];
 

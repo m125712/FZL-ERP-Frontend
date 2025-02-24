@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useAuth } from '@/context/auth';
 import { useOrderTracing } from '@/state/Report';
 import { format } from 'date-fns';
+import { Bus, CircleUserRound, Phone } from 'lucide-react';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
@@ -77,8 +77,6 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
-
-			// ? challan
 			{
 				accessorKey: 'challan_number',
 				header: 'Challan',
@@ -96,18 +94,32 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'challan_date',
-				header: 'Challan Date',
+				accessorFn: (row) => format(row.challan_date, 'dd/MM/yy'),
+				id: 'challan_date',
+				header: (
+					<>
+						Challan <br />
+						Date
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
+					<DateTime
+						date={info.row.original.challan_date}
+						isTime={false}
+					/>
 				),
 			},
 			{
 				accessorKey: 'challan_created_by_name',
-				header: 'Challan Created By',
+				header: (
+					<>
+						Challan <br />
+						Cre. By
+					</>
+				),
 				enableColumnFilter: false,
-				width: 'w-32',
+				width: 'w-15',
 				cell: (info) => info.getValue(),
 			},
 
@@ -116,30 +128,46 @@ export default function Index() {
 				accessorKey: 'vehicle_name',
 				header: 'Vehicle',
 				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'vehicle_number',
-				header: 'Vehicle No.',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'driver_name',
-				header: 'Driver',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
+				width: 'w-36',
+				cell: (info) => {
+					const { vehicle_name, vehicle_number, driver_name } =
+						info.row.original;
+					if (!vehicle_name) return '--';
+					return (
+						<div className='flex flex-col gap-2'>
+							<div className='flex items-center gap-1'>
+								<Bus className='size-6' />
+								<span>{vehicle_name}</span>
+							</div>
+							<div className='flex items-center gap-1'>
+								<CircleUserRound className='size-6' />
+								<span>{driver_name}</span>
+							</div>
+							<div className='flex items-center gap-1'>
+								<Phone className='size-6' />
+								<span>{vehicle_number}</span>
+							</div>
+						</div>
+					);
+				},
 			},
 
 			{
-				accessorKey: 'swatch_approval_date',
-				header: 'Swatch Approval Date',
+				accessorFn: (row) =>
+					format(row.swatch_approval_date, 'dd/MM/yy'),
+				id: 'swatch_approval_date',
+				header: (
+					<>
+						Swatch <br />
+						App. Date
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
+					<DateTime
+						date={info.row.original.swatch_approval_date}
+						isTime={false}
+					/>
 				),
 			},
 
@@ -166,8 +194,8 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) => {
-					if (row.order_type === 'tape') return 'Meter';
-					return row.is_inch ? 'Inch' : 'Cm';
+					if (row.order_type === 'tape') return 'MTR';
+					return row.is_inch ? 'IN' : 'CM';
 				},
 				id: 'unit',
 				header: 'Unit',
@@ -184,13 +212,13 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'approved_quantity',
-				header: 'Approved QTY',
+				header: 'App. QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'not_approved_quantity',
-				header: 'Not Approved QTY',
+				header: 'Not App. QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -208,29 +236,10 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_batch_quantity',
-				header: 'Total Batch QTY',
+				header: 'Total B/Q',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'teeth_molding_prod',
-				header: 'Teeth Molding Prod',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'total_finished_quantity',
-				header: 'Total Finishing QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'slider_finishing_stock',
-				header: 'Slider Finishing Stock',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-
 			{
 				accessorFn: (row) => {
 					return row.dyeing_batch
@@ -330,6 +339,46 @@ export default function Index() {
 					);
 				},
 			},
+			{
+				accessorKey: 'teeth_molding_prod',
+				header: (
+					<>
+						Teeth Molding <br />
+						Prod.
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'slider_finishing_stock',
+				header: 'Slider QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_finished_quantity',
+				header: (
+					<>
+						Total Finishing <br />
+						QTY.
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'warehouse',
+				header: 'Warehouse',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'delivered',
+				header: 'Delivered',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 
 			// ? PI
 			{
@@ -348,7 +397,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'pi',
-				header: 'PI',
+				header: 'PI QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -369,19 +418,6 @@ export default function Index() {
 			{
 				accessorKey: 'lc_value',
 				header: 'LC Value',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-
-			{
-				accessorKey: 'warehouse',
-				header: 'Warehouse',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'delivered',
-				header: 'Delivered',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

@@ -15,7 +15,8 @@ const zipperNode = [
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
 	getTable('quantity', 'Quantity', 'right'),
-	getTable('unit_price', 'Price($)', 'right'),
+	getTable('unit_price', 'Price/dzn($)', 'right'),
+	getTable('unit_price_per_pcs', 'Price/pcs($)', 'right'),
 	getTable('value', 'Value($)', 'right'),
 ];
 const threadNode = [
@@ -255,7 +256,8 @@ export default function Index(data) {
 						TotalQuantity[index][priceIndex].toLocaleString() +
 						`${order_types[index] === 'tape' ? ' mtr' : ' pcs'}`,
 					// unit_price: unitPrice + '/dzn',
-					unit_price: `${unitPrice.toLocaleString()} /${order_types[index] === 'tape' ? 'mtr' : 'dzn'}`,
+					unit_price: `${unitPrice.toLocaleString()} ${order_types[index] === 'tape' ? '/ mtr' : ''}`,
+					unit_price_per_pcs: `${order_types[index] === 'tape' ? '---' : Number(unitPrice / 12).toFixed(2)}`,
 					value: Number(TotalValue[index][priceIndex]).toLocaleString(
 						undefined,
 						{ minimumFractionDigits: 2, maximumFractionDigits: 2 }
@@ -407,7 +409,7 @@ export default function Index(data) {
 				? {
 						table: {
 							headerRows: 1,
-							widths: [40, '*', 50, 70, 40, 35, 35, 35],
+							widths: [40, '*', 50, 70, 40, 35, 35, 35, 35],
 							body: [
 								[
 									{
@@ -415,8 +417,9 @@ export default function Index(data) {
 									},
 									{
 										text: '9607.11.00',
-										colSpan: 7,
+										colSpan: 8,
 									},
+									{},
 									{},
 									{},
 									{},
@@ -431,6 +434,8 @@ export default function Index(data) {
 								...order_info_entry.map((item) =>
 									zipperNode.map((nodeItem) => {
 										const cellData = item[nodeItem.field];
+
+										console.log(item);
 										return {
 											text: cellData.text || cellData,
 											style: nodeItem.cellStyle,
@@ -476,8 +481,9 @@ export default function Index(data) {
 										text: `U.S.$: ${Number(grand_total_zipper_value || 0).toFixed(2)}`,
 										alignment: 'right',
 										bold: true,
-										colSpan: 2,
+										colSpan: 3,
 									},
+									{},
 									{},
 								],
 							],

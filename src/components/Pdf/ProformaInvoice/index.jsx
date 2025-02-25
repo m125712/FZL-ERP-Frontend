@@ -15,7 +15,7 @@ const zipperNode = [
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
 	getTable('quantity', 'Quantity', 'right'),
-	getTable('unit_price', 'Price/dzn($)', 'right'),
+	getTable('unit_price', 'Price($)', 'right'),
 	getTable('unit_price_per_pcs', 'Price/pcs($)', 'right'),
 	getTable('value', 'Value($)', 'right'),
 ];
@@ -256,7 +256,7 @@ export default function Index(data) {
 						TotalQuantity[index][priceIndex].toLocaleString() +
 						`${order_types[index] === 'tape' ? ' mtr' : ' pcs'}`,
 					// unit_price: unitPrice + '/dzn',
-					unit_price: `${unitPrice.toLocaleString()} ${order_types[index] === 'tape' ? '/ mtr' : ''}`,
+					unit_price: `${unitPrice.toLocaleString()} ${order_types[index] === 'tape' ? '/ mtr' : '/ dzn'}`,
 					unit_price_per_pcs: `${order_types[index] === 'tape' ? '---' : Number(unitPrice / 12).toFixed(2)}`,
 					value: Number(TotalValue[index][priceIndex]).toLocaleString(
 						undefined,

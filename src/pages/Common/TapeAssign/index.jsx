@@ -119,8 +119,10 @@ export default function Index() {
 								(tapeItem) =>
 									tapeItem.item === item &&
 									(tapeItem.zipper_number === zipper_number ||
-										tapeItem.zipper_number ===
-											'6Vs8xVrvoEcfnWg') //* 6Vs8xVrvoEcfnWg is for 4.5
+										Number(tapeItem.zipper_number_name) ===
+											4.5 ||
+										Number(tapeItem.zipper_number_name) ===
+											3)
 							)}
 							value={tape?.find(
 								(item) => item.value == tape_coil_uuid

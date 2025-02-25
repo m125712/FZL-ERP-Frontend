@@ -264,3 +264,11 @@ export const useCommonTapeAssignByUUID = (uuid) =>
 		queryKey: commonQK.tapeAssignByUUID(uuid),
 		url: `/zipper/tape-assigned/${uuid}`,
 	});
+
+export const useCommonTapeCoilDashboard = (query) =>
+	createGlobalState({
+		queryKey: commonQK.tapeCoilDashboard(),
+		url: query
+			? `/zipper/tape-coil-dashboard?${query}`
+			: `/zipper/tape-coil-dashboard`,
+	});

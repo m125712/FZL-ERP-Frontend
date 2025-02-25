@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useCommonTapeAssign } from '@/state/Common';
+import { useCommonTapeCoilDashboard } from '@/state/Common';
 import { useOtherTapeCoil } from '@/state/Other';
 import { useAccess } from '@/hooks';
 
@@ -20,29 +20,20 @@ export default function Index() {
 		{ value: 'sample_all', label: 'Sample All' },
 	];
 
-	const { data, updateData, isLoading } = useCommonTapeAssign(
+	const { data, updateData, isLoading } = useCommonTapeCoilDashboard(
 		`type=${status}`
 	);
 
 	const info = new PageInfo(
-		'Common/Tape Assign',
-		'common/tape_assign',
-		'common__tape_assign'
+		'Common/Dashboard',
+		'common/dashboard',
+		'common__dashboard'
 	);
 
-	const haveAccess = useAccess('common__tape_assign');
-	const { data: tape } = useOtherTapeCoil();
+	const haveAccess = useAccess('common__dashboard');
 
 	const columns = useMemo(
 		() => [
-			{
-				accessorKey: 'is_sample',
-				header: 'Sample',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-sm' value={info.getValue()} />
-				),
-			},
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
@@ -73,78 +64,60 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'description',
-				header: 'Description',
+				accessorKey: 'item_name',
+				header: 'Item',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'zipper_number_name',
+				header: 'Zipper No.',
+				enableColumnFilter: false,
+
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'tape_coil_name',
+				header: 'Tape Coil Name',
 				enableColumnFilter: false,
 				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) =>
-					`${row.order_number_wise_rank || 0}/${row.order_number_wise_count || 0}`,
-				id: 'order_number_wise_rank',
-				header: 'O/N count',
-				enableColumnFilter: false,
-			},
-			{
-				accessorKey: 'party_name',
-				header: 'Party',
-				width: 'w-40',
+				accessorKey: 'total_trx_to_dyeing_quantity',
+				header: (
+					<div>
+						Total Trx <br />
+						to Dyeing
+					</div>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
 			{
-				accessorFn: (row) => row.tape_coil_uuid,
-				id: 'tape_assign',
-				header: 'Tape Assign',
+				accessorKey: 'tape_received',
+				header: (
+					<div>
+						Tape <br />
+						Received
+					</div>
+				),
 				enableColumnFilter: false,
-				width: 'w-60',
-				hidden: !haveAccess.includes('update'),
-				cell: (info) => {
-					const { tape_coil_uuid, item, zipper_number } =
-						info.row.original;
-
-					const swatchAccess =
-						haveAccess.includes('click_tape_assign');
-					const swatchAccessOverride = haveAccess.includes(
-						'click_tape_assign_override'
-					);
-
-					return (
-						<ReactSelect
-							key={tape_coil_uuid}
-							placeholder='Select Tape'
-							options={tape?.filter(
-								(tapeItem) =>
-									tapeItem.item === item &&
-									(tapeItem.zipper_number === zipper_number ||
-										Number(tapeItem.zipper_number_name) ===
-											4.5 ||
-										Number(tapeItem.zipper_number_name) ===
-											3)
-							)}
-							value={tape?.find(
-								(item) => item.value == tape_coil_uuid
-							)}
-							filterOption={null}
-							onChange={(e) =>
-								handleSwatchStatus(e, info.row.index)
-							}
-							isDisabled={
-								swatchAccessOverride
-									? false
-									: tape_coil_uuid === null && swatchAccess
-										? false
-										: true
-							}
-							menuPortalTarget={document.body}
-						/>
-					);
-				},
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'tape_transferred',
+				header: (
+					<div>
+						Tape <br />
+						Transferred
+					</div>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 		],
-		[data, tape, status]
+		[data, status]
 	);
 
 	const handleSwatchStatus = async (e, idx) => {

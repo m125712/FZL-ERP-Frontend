@@ -15,6 +15,7 @@ import {
 } from '@/ui';
 
 import { cn } from '@/lib/utils';
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
@@ -217,6 +218,19 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'received_date',
+				header: (
+					<div>
+						Stock Received <br />
+						Date
+					</div>
+				),
+				enableColumnFilter: false,
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
 				accessorKey: 'machine_name',
 				header: 'Machine',
 				enableColumnFilter: false,
@@ -307,6 +321,7 @@ export default function Index() {
 			url: `zipper/dyeing-batch/${data[idx]?.uuid}`,
 			updatedData: {
 				received: data[idx]?.received === 1 ? 0 : 1,
+				received_date: data[idx]?.received === 1 ? null : GetDateTime(),
 			},
 			isOnCloseNeeded: false,
 		});

@@ -340,6 +340,11 @@ export const commonQK = {
 		...(query ? [query] : []),
 	],
 	tapeAssignByUUID: (uuid) => [...commonQK.tapeAssign(), uuid],
+	tapeCoilDashboard: (query) => [
+		...commonQK.all(),
+		'tape-assigned-dashboard',
+		...(query ? [query] : []),
+	],
 };
 
 //* LabDip

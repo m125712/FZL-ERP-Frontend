@@ -25,11 +25,18 @@ const DyeingTransfer = lazy(() => import('@/pages/Common/Transfer'));
 const DyeingTransferEntry = lazy(
 	() => import('@/pages/Common/Transfer/EntryUpdate')
 );
-
+const Dashboard = lazy(() => import('@/pages/Common/Dashboard'));
 export const CommonRoutes = [
 	{
 		name: 'Tape Preparation',
 		children: [
+			{
+				name: 'Dashboard',
+				path: '/common/dashboard',
+				element: <Dashboard />,
+				page_name: 'common__dashboard',
+				actions: ['read'],
+			},
 			{
 				name: 'Tape Assign',
 				path: '/common/tape-assign',

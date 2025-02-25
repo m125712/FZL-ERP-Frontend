@@ -67,14 +67,13 @@ export default function Index() {
 				accessorKey: 'item_name',
 				header: 'Item',
 				enableColumnFilter: false,
-				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'zipper_number_name',
 				header: 'Zipper No.',
 				enableColumnFilter: false,
-				width: 'w-40',
+
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -86,23 +85,35 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_trx_to_dyeing_quantity',
-				header: 'Total Trx to Dyeing Qty',
+				header: (
+					<div>
+						Total Trx <br />
+						to Dyeing
+					</div>
+				),
 				enableColumnFilter: false,
-				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'tape_received',
-				header: 'Tape Received',
+				header: (
+					<div>
+						Tape <br />
+						Received
+					</div>
+				),
 				enableColumnFilter: false,
-				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'tape_transferred',
-				header: 'Tape Transferred',
+				header: (
+					<div>
+						Tape <br />
+						Transferred
+					</div>
+				),
 				enableColumnFilter: false,
-				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
 		],

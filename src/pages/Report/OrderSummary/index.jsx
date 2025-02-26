@@ -84,8 +84,7 @@ export default function index() {
 				accessorFn: (row) => {
 					let total = 0;
 					uniqueChallanNumbers.reduce((acc, curr) => {
-						console.log(row[curr]);
-						return (total += row[curr] || 0);
+						total += row[curr] || 0;
 					}, 0);
 
 					return total;
@@ -98,9 +97,8 @@ export default function index() {
 			{
 				accessorFn: (row) => {
 					let total = 0;
-					uniqueChallanNumbers.reduce((acc, curr) => {
-						console.log(row[curr]);
-						return (total += row[curr] || 0);
+					uniqueChallanNumbers?.reduce((acc, curr) => {
+						total += row[curr] || 0;
 					}, 0);
 
 					return row.order_quantity - total;
@@ -145,8 +143,8 @@ export default function index() {
 
 					{uniqueChallanNumbers.map((cn) => {
 						let total = 0;
-						transformedData?.reduce((acc, curr) => {
-							total += curr[cn] || 0;
+						transformedData?.map((challan) => {
+							total += challan?.[cn] || 0;
 						});
 						return (
 							<td key={cn} className='ps-2.5'>
@@ -158,11 +156,12 @@ export default function index() {
 						{transformedData?.reduce(
 							(acc, curr) =>
 								acc +
-									curr?.challan_array?.reduce(
-										(acc, curr) =>
-											acc + curr?.quantity || 0,
-										0
-									) || 0,
+								uniqueChallanNumbers?.reduce(
+									(acc, cn) =>
+										acc +
+										(curr?.[cn] ? parseInt(curr?.[cn]) : 0),
+									0
+								),
 							0
 						)}
 					</td>
@@ -170,12 +169,13 @@ export default function index() {
 						{transformedData?.reduce(
 							(acc, curr) =>
 								acc +
-									curr?.order_quantity -
-									curr?.challan_array?.reduce(
-										(acc, curr) =>
-											acc + curr?.quantity || 0,
-										0
-									) || 0,
+								curr?.order_quantity -
+								uniqueChallanNumbers?.reduce(
+									(acc, cn) =>
+										acc +
+										(curr?.[cn] ? parseInt(curr?.[cn]) : 0),
+									0
+								),
 							0
 						)}
 					</td>

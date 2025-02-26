@@ -23,7 +23,7 @@ export default function Index() {
 		() => [
 			{
 				accessorKey: 'index',
-				header: 'Index',
+				header: 'ID',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

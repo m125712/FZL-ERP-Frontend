@@ -1,16 +1,14 @@
 import { useMemo, useState } from 'react';
 import { useCommonTapeCoilDashboard } from '@/state/Common';
-import { useOtherTapeCoil } from '@/state/Other';
-import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, ReactSelect, StatusButton, StatusSelect } from '@/ui';
+import { CustomLink, StatusSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
 	const [status, setStatus] = useState('bulk_pending');
-	// options for extra table select
+
 	const options = [
 		{ value: 'bulk_pending', label: 'Bulk Pending' },
 		{ value: 'bulk_completed', label: 'Bulk Completed' },
@@ -20,17 +18,13 @@ export default function Index() {
 		{ value: 'sample_all', label: 'Sample All' },
 	];
 
-	const { data, updateData, isLoading } = useCommonTapeCoilDashboard(
-		`type=${status}`
-	);
+	const { data, isLoading } = useCommonTapeCoilDashboard(`type=${status}`);
 
 	const info = new PageInfo(
 		'Common/Dashboard',
 		'common/dashboard',
 		'common__dashboard'
 	);
-
-	const haveAccess = useAccess('common__dashboard');
 
 	const columns = useMemo(
 		() => [
@@ -73,7 +67,6 @@ export default function Index() {
 				accessorKey: 'zipper_number_name',
 				header: 'Zipper No.',
 				enableColumnFilter: false,
-
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -84,10 +77,10 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'total_trx_to_dyeing_quantity',
+				accessorKey: 'tape_received',
 				header: (
 					<div>
-						Total Trx <br />
+						Tape <br />
 						to Dyeing
 					</div>
 				),
@@ -95,16 +88,17 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'tape_received',
+				accessorKey: 'total_tape_production',
 				header: (
 					<div>
 						Tape <br />
-						Received
+						Production
 					</div>
 				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
 			{
 				accessorKey: 'tape_transferred',
 				header: (
@@ -119,16 +113,6 @@ export default function Index() {
 		],
 		[data, status]
 	);
-
-	const handleSwatchStatus = async (e, idx) => {
-		await updateData.mutateAsync({
-			url: `/zipper/order/description/update/by/${e.value}`,
-			updatedData: {
-				order_description_uuid: data[idx].order_description_uuid,
-			},
-			isOnCloseNeeded: false,
-		});
-	};
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

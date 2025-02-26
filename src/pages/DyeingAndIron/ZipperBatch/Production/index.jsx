@@ -255,11 +255,30 @@ export default function Index() {
 				cell: ({ row }) => {
 					const quantity = parseFloat(row.original.quantity);
 
-					return getRequiredTapeKg({
+					const req = getRequiredTapeKg({
 						row: row.original,
 						type: 'dyed',
 						input_quantity: quantity,
 					}).toFixed(3);
+
+					return (
+						<div className='flex items-center gap-1'>
+							<input
+								type='button'
+								className='btn btn-primary btn-xs'
+								disabled={isUpdate}
+								value={'Copy'}
+								onClick={() =>
+									setValue(
+										`dyeing_batch_entry[${row.index}].production_quantity_in_kg`,
+										req,
+										{ shouldDirty: true }
+									)
+								}
+							/>
+							{req}
+						</div>
+					);
 				},
 			},
 			{

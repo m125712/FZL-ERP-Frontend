@@ -1690,6 +1690,13 @@ export const reportQK = {
 		uuid,
 		query || '',
 	],
+
+	// * order summary
+	orderSummaryReport: (uuid) => [
+		...reportQK.all(),
+		'order-summary-report',
+		uuid,
+	],
 };
 
 export const marketingQK = {

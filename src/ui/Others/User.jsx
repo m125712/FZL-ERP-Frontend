@@ -31,7 +31,7 @@ const User = ({ avatar = false }) => {
 
 			<div className='flex flex-col items-start'>
 				{userInfos.map(({ label, className }) => (
-					<span key={label} className={className}>
+					<span key={className} className={className}>
 						{label}
 					</span>
 				))}

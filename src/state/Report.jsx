@@ -249,3 +249,10 @@ export const useChallanStatusReport = (uuid, query) =>
 			: `/report/challan-pdf-report/${uuid}`,
 		enabled: !!uuid,
 	});
+
+export const useOrderSummary = (uuid) =>
+	createGlobalState({
+		queryKey: reportQK.orderSummaryReport(uuid),
+		url: `/report/order-register-report/${uuid}`,
+		enabled: !!uuid,
+	});

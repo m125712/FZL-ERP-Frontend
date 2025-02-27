@@ -13,7 +13,7 @@ export default function index() {
 
 	const uniqueChallanNumbers = Array.from(
 		new Set(
-			data?.order_entry.flatMap((entry) =>
+			data?.order_entry?.flatMap((entry) =>
 				entry.challan_array.map((challan) => ({
 					challan_number: challan?.challan_number,
 					challan_date: challan?.challan_date,
@@ -22,9 +22,7 @@ export default function index() {
 		)
 	).filter(Boolean);
 
-	console.log(uniqueChallanNumbers);
-
-	const transformedData = data?.order_entry.map((entry) => {
+	const transformedData = data?.order_entry?.map((entry) => {
 		const challanData = entry.challan_array.reduce((acc, challan) => {
 			if (challan?.challan_number) {
 				acc[challan?.challan_number] = challan?.quantity || 0;
@@ -155,8 +153,7 @@ export default function index() {
 				title={'Summary'}
 				data={transformedData}
 				columns={columns}
-				extraClass={'py-2'}
-			>
+				extraClass={'py-2'}>
 				<tr>
 					<td colSpan={5} className='text-right font-bold'>
 						Total

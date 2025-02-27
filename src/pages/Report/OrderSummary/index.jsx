@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useOrderSummary } from '@/state/Report';
 
 import ReactTable from '@/components/Table';
+import { CustomLink, DateTime } from '@/ui';
 
 import Header from './Header';
 import Information from './Information';
@@ -13,10 +14,15 @@ export default function index() {
 	const uniqueChallanNumbers = Array.from(
 		new Set(
 			data?.order_entry.flatMap((entry) =>
-				entry.challan_array.map((challan) => challan?.challan_number)
+				entry.challan_array.map((challan) => ({
+					challan_number: challan?.challan_number,
+					challan_date: challan?.challan_date,
+				}))
 			)
 		)
 	).filter(Boolean);
+
+	console.log(uniqueChallanNumbers);
 
 	const transformedData = data?.order_entry.map((entry) => {
 		const challanData = entry.challan_array.reduce((acc, challan) => {
@@ -40,7 +46,17 @@ export default function index() {
 				header: 'Desc',
 				enableColumnFilter: false,
 				width: 'w-32',
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { order_description_uuid, order_number } =
+						info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${order_number}/${order_description_uuid}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'style',
@@ -74,9 +90,20 @@ export default function index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			...uniqueChallanNumbers.map((challanNumber) => ({
-				accessorKey: challanNumber,
-				header: challanNumber,
+			...uniqueChallanNumbers.map((challan) => ({
+				accessorKey: challan?.challan_number,
+				header: (
+					<div className='flex flex-col items-center justify-center'>
+						<div className='rounded-full border bg-slate-400 px-2'>
+							{challan?.challan_number}
+						</div>
+						<DateTime
+							date={challan?.challan_date}
+							customizedDateFormate='dd MMM, yy'
+							isTime={false}
+						/>
+					</div>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue() || '--',
 			})),

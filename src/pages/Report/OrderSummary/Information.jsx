@@ -1,6 +1,6 @@
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
-import { DateTime } from '@/ui';
+import { CustomLink, DateTime } from '@/ui';
 
 export default function Information({ data }) {
 	// order_info_uuid: 'wRqHljudFWJesak';
@@ -9,7 +9,13 @@ export default function Information({ data }) {
 		const col1 = [
 			{
 				label: 'Order No.',
-				value: data?.order_number,
+				value: (
+					<CustomLink
+						label={data?.order_number}
+						url={`/order/details/${data?.order_number}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				label: 'Party',
@@ -28,11 +34,23 @@ export default function Information({ data }) {
 		const col2 = [
 			{
 				label: 'PI',
-				value: data?.pi_numbers,
+				value: (
+					<CustomLink
+						label={data?.pi_numbers}
+						url={`/commercial/pi/${data?.pi_numbers}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				label: 'LC',
-				value: data?.lc_numbers,
+				value: (
+					<CustomLink
+						label={data?.lc_numbers}
+						url={`/commercial/lc/details/${data?.lc_numbers}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				label: 'Marketing',

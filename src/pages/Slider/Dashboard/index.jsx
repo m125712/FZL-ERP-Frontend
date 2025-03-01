@@ -271,9 +271,9 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) => {
-					const { swatch_approved_quantity, trx_to_finishing } = row;
+					const { batch_quantity, trx_to_finishing } = row;
 
-					return swatch_approved_quantity - trx_to_finishing;
+					return batch_quantity - trx_to_finishing;
 				},
 				header: 'Balance',
 				id: 'balance',

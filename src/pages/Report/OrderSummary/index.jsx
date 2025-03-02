@@ -82,7 +82,7 @@ export default function index() {
 				accessorKey: 'size',
 				header: 'size',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => info.getValue() || '--',
 			},
 			{
 				accessorKey: 'unit',

@@ -11,18 +11,25 @@ export default function index() {
 	const [order, setOrder] = useState('');
 	const { data, isLoading } = useOrderSummary(order);
 
-	const uniqueChallanNumbers = Array.from(
-		new Set(
-			data?.order_entry.flatMap((entry) =>
-				entry.challan_array.map((challan) => ({
-					challan_number: challan?.challan_number,
-					challan_date: challan?.challan_date,
-				}))
-			)
-		)
-	).filter(Boolean);
-
-	console.log(uniqueChallanNumbers);
+	const uniqueChallanNumbers =
+		Array.from(
+			new Map(
+				data?.order_entry
+					?.flatMap((entry) => entry.challan_array ?? []) // Flatten all challans
+					?.map((challan) => {
+						const key = `${challan?.challan_number}|${challan?.challan_date}`;
+						return [
+							key,
+							{
+								challan_number: challan?.challan_number,
+								challan_date: challan?.challan_date,
+								challan_uuid: challan?.challan_uuid,
+							},
+						];
+					})
+					?.filter(([key]) => key !== '|') // Remove entries with missing data
+			).values()
+		) ?? [];
 
 	const transformedData = data?.order_entry.map((entry) => {
 		const challanData = entry.challan_array.reduce((acc, challan) => {
@@ -94,9 +101,11 @@ export default function index() {
 				accessorKey: challan?.challan_number,
 				header: (
 					<div className='flex flex-col items-center justify-center'>
-						<div className='rounded-full border bg-slate-400 px-2'>
-							{challan?.challan_number}
-						</div>
+						<CustomLink
+							label={challan?.challan_number}
+							url={`/delivery/challan/${challan?.challan_uuid}`}
+							openInNewTab
+						/>
 						<DateTime
 							date={challan?.challan_date}
 							customizedDateFormate='dd MMM, yy'
@@ -111,7 +120,7 @@ export default function index() {
 				accessorFn: (row) => {
 					let total = 0;
 					uniqueChallanNumbers.reduce((acc, curr) => {
-						total += row[curr] || 0;
+						total += row[curr.challan_number] || 0;
 					}, 0);
 
 					return total;
@@ -125,7 +134,7 @@ export default function index() {
 				accessorFn: (row) => {
 					let total = 0;
 					uniqueChallanNumbers?.reduce((acc, curr) => {
-						total += row[curr] || 0;
+						total += row[curr.challan_number] || 0;
 					}, 0);
 
 					return row.order_quantity - total;
@@ -171,10 +180,10 @@ export default function index() {
 					{uniqueChallanNumbers.map((cn) => {
 						let total = 0;
 						transformedData?.map((challan) => {
-							total += challan?.[cn] || 0;
+							total += challan?.[cn.challan_number] || 0;
 						});
 						return (
-							<td key={cn} className='ps-2.5'>
+							<td key={cn.challan_number} className='ps-2.5'>
 								{total}
 							</td>
 						);
@@ -186,7 +195,11 @@ export default function index() {
 								uniqueChallanNumbers?.reduce(
 									(acc, cn) =>
 										acc +
-										(curr?.[cn] ? parseInt(curr?.[cn]) : 0),
+										(curr?.[cn.challan_number]
+											? parseInt(
+													curr?.[cn.challan_number]
+												)
+											: 0),
 									0
 								),
 							0
@@ -200,7 +213,11 @@ export default function index() {
 								uniqueChallanNumbers?.reduce(
 									(acc, cn) =>
 										acc +
-										(curr?.[cn] ? parseInt(curr?.[cn]) : 0),
+										(curr?.[cn.challan_number]
+											? parseInt(
+													curr?.[cn.challan_number]
+												)
+											: 0),
 									0
 								),
 							0

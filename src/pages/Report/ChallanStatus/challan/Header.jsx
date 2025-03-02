@@ -13,7 +13,7 @@ const getPath = (haveAccess, userUUID) => {
 };
 
 export default function Header({ order = '', setOrder = () => {} }) {
-	const haveAccess = useAccess('report__production_statement');
+	const haveAccess = useAccess('report__challan_status');
 	const { user } = useAuth();
 	const { data: orders } = useAllZipperThreadOrderList(
 		`page=challan_pdf${getPath(haveAccess, user?.uuid)}`

@@ -407,7 +407,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: `/delivery/packing-list`,
 						deleteData,
 					}}
 				/>

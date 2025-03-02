@@ -54,12 +54,11 @@ export default function index() {
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => {
-					const { order_description_uuid, order_number } =
-						info.row.original;
+					const { order_description_uuid } = info.row.original;
 					return (
 						<CustomLink
 							label={info.getValue()}
-							url={`/order/details/${order_number}/${order_description_uuid}`}
+							url={`/order/details/${data?.order_number}/${order_description_uuid}`}
 							openInNewTab={true}
 						/>
 					);

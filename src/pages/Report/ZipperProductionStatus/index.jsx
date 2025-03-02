@@ -129,14 +129,13 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'colors',
+				accessorFn: (row) => row.colors.join(', '),
+				id: 'colors',
 				header: 'Colors',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => (
-					<div className='flex-wrap'>
-						{info.getValue().join(', ')}
-					</div>
+					<div className='flex-wrap'>{info.getValue()}</div>
 				),
 			},
 			{
@@ -146,14 +145,13 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'styles',
+				accessorFn: (row) => row.styles.join(', '),
+				id: 'styles',
 				header: 'Styles',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => (
-					<div className='flex-wrap'>
-						{info.getValue().join(', ')}
-					</div>
+					<div className='flex-wrap'>{info.getValue()}</div>
 				),
 			},
 			{

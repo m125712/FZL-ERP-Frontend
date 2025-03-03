@@ -11,6 +11,7 @@ import {
 	useOtherPackingListByOrderInfoUUIDAndChallanUUID,
 } from '@/state/Other';
 import { useAuth } from '@context/auth';
+import { format } from 'date-fns';
 import { FormProvider } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
@@ -132,6 +133,16 @@ export default function Index() {
 
 	// Submit
 	const onSubmit = async (data) => {
+		// convert the delivery_date to the correct format
+
+		if (data.delivery_date) {
+			const deliveryDate = format(
+				data.delivery_date,
+				'yyyy-MM-dd HH:mm:ss'
+			);
+
+			data.delivery_date = deliveryDate;
+		}
 		// Update item
 
 		if (isUpdate) {

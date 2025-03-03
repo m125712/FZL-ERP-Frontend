@@ -67,6 +67,22 @@ export const getPageHeader = (data) => {
 				'',
 				'',
 			],
+			[
+				{
+					text: 'Delivery Date',
+					bold: true,
+					color: PRIMARY_COLOR,
+					fontSize: DEFAULT_FONT_SIZE + 2,
+				},
+				{
+					text: format(new Date(data.delivery_date), 'dd MMM, yyyy'),
+					colSpan: 3,
+					alignment: 'left',
+					fontSize: DEFAULT_FONT_SIZE + 2,
+				},
+				'',
+				'',
+			],
 			PAGE_HEADER_EMPTY_ROW,
 			PAGE_HEADER_EMPTY_ROW,
 			[

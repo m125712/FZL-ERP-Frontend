@@ -53,14 +53,14 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					format(row.pi_cash_created_date, 'dd/MM/yy'),
+					format(row.pi_cash_created_date, 'dd MMM, yyyy'),
 				id: 'pi_cash_created_date',
 				header: 'PI Date',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime
 						date={info.row.original.pi_cash_created_date}
-						customizedDateFormate='d MMM yyyy'
+						customizedDateFormate='dd MMM, yyyy'
 						isTime={false}
 					/>
 				),

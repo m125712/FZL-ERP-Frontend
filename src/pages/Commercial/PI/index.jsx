@@ -156,7 +156,7 @@ export default function Index() {
 					</>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue().toLocaleString(),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'marketing_name',

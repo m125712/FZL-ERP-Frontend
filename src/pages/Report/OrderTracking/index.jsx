@@ -47,6 +47,23 @@ export default function Index() {
 				},
 			},
 			{
+				accessorFn: (row) => format(row.order_created_at, 'dd/MM/yy'),
+				id: 'order_created_at',
+				header: (
+					<>
+						Order <br />
+						Cre. Date
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.order_created_at}
+						isTime={false}
+					/>
+				),
+			},
+			{
 				accessorKey: 'item_description',
 				header: 'Item',
 				enableColumnFilter: true,
@@ -99,13 +116,31 @@ export default function Index() {
 				header: (
 					<>
 						Challan <br />
-						Date
+						Cre. Date
 					</>
 				),
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime
 						date={info.row.original.challan_date}
+						isTime={false}
+					/>
+				),
+			},
+			{
+				accessorFn: (row) =>
+					format(row.challan_delivered_date, 'dd/MM/yy'),
+				id: 'challan_delivered_date ',
+				header: (
+					<>
+						Challan <br />
+						Deli. Date
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.challan_delivered_date}
 						isTime={false}
 					/>
 				),
@@ -223,8 +258,8 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'quantity',
-				header: 'QTY',
+				accessorKey: 'challan_quantity',
+				header: 'Challan QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

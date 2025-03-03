@@ -1621,7 +1621,13 @@ export const reportQK = {
 	],
 
 	//* PI Register
-	piRegister: (query) => [...reportQK.all(), 'pi-register', query],
+	piRegister: (from, to, query) => [
+		...reportQK.all(),
+		'pi-register',
+		from,
+		to,
+		query,
+	],
 
 	//* PI To Be Submitted
 	piToBeSubmitted: (query) => [

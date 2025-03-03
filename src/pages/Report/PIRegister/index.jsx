@@ -1,26 +1,31 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { usePIRegister } from '@/state/Report';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime } from '@/ui';
+import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
-		return `own_uuid=${userUUID}`;
+		return `&own_uuid=${userUUID}`;
 	}
 
-	return `all=true`;
+	return ``;
 };
 
 export default function Index() {
+	const [from, setFrom] = useState(new Date());
+	const [to, setTo] = useState(new Date());
+
 	const haveAccess = useAccess('report__pi_register');
 	const { user } = useAuth();
 	const { data, isLoading, url } = usePIRegister(
+		format(from, 'yyyy-MM-dd'),
+		format(to, 'yyyy-MM-dd'),
 		getPath(haveAccess, user?.uuid),
 		{
 			enabled: !!user?.uuid,
@@ -38,16 +43,26 @@ export default function Index() {
 				accessorKey: 'pi_cash_number',
 				header: 'PI No.',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/commercial/pi/${info.getValue()}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorFn: (row) =>
-					format(row.pi_cash_created_date, 'dd/MM/yy'),
+					format(row.pi_cash_created_date, 'dd MMM, yyyy'),
 				id: 'pi_cash_created_date',
 				header: 'PI Date',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<DateTime date={info.row.original.pi_cash_created_date} />
+					<DateTime
+						date={info.row.original.pi_cash_created_date}
+						customizedDateFormate='dd MMM, yyyy'
+						isTime={false}
+					/>
 				),
 			},
 			{
@@ -92,6 +107,12 @@ export default function Index() {
 			{
 				accessorKey: 'party_name',
 				header: 'Party',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'marketing_name',
+				header: 'Marketing',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -151,6 +172,30 @@ export default function Index() {
 			data={data}
 			columns={columns}
 			extraClass={'py-0.5'}
+			extraButton={
+				<div className='flex items-center gap-2'>
+					<SimpleDatePicker
+						className='h-[2.34rem] w-32'
+						key={'from'}
+						value={from}
+						placeholder='From'
+						onChange={(data) => {
+							setFrom(data);
+						}}
+						selected={from}
+					/>
+					<SimpleDatePicker
+						className='h-[2.34rem] w-32'
+						key={'to'}
+						value={to}
+						placeholder='To'
+						onChange={(data) => {
+							setTo(data);
+						}}
+						selected={to}
+					/>
+				</div>
+			}
 		/>
 	);
 }

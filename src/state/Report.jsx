@@ -133,12 +133,14 @@ export const useZipperStatus = (from, to, query, { enabled = false } = {}) =>
 	});
 
 export const usePIRegister = (
+	from,
+	to,
 	query,
 	{ enabled = false } = { enabled: false }
 ) =>
 	createGlobalState({
-		queryKey: reportQK.piRegister(query),
-		url: '/report/pi-register-report?' + query,
+		queryKey: reportQK.piRegister(from, to, query),
+		url: `/report/pi-register-report?from=${from}&to=${to}` + query,
 		enabled,
 	});
 

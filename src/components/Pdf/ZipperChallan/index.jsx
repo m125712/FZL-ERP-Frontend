@@ -91,30 +91,32 @@ export default function Index(data) {
 					style: item.style,
 					color: item.color,
 					size: item.size,
-					quantity: challan_entry
-						.filter(
-							(i) =>
-								(item.packing_list_uuid ===
-									i.packing_list_uuid &&
-									i.item_description) ===
-									item.item_description &&
-								i.style === item.style &&
-								i.color === item.color &&
-								i.size === item.size
-						)
-						.reduce((acc, item) => acc + item.quantity, 0),
-					poli_quantity: challan_entry
-						.filter(
-							(i) =>
-								(item.packing_list_uuid ===
-									i.packing_list_uuid &&
-									i.item_description) ===
-									item.item_description &&
-								i.style === item.style &&
-								i.color === item.color &&
-								i.size === item.size
-						)
-						.reduce((acc, item) => acc + item.poli_quantity, 0),
+					quantity: item.quantity,
+					poli_quantity: item.poli_quantity,
+					// quantity: challan_entry
+					// 	.filter(
+					// 		(i) =>
+					// 			(item.packing_list_uuid ===
+					// 				i.packing_list_uuid &&
+					// 				i.item_description) ===
+					// 				item.item_description &&
+					// 			i.style === item.style &&
+					// 			i.color === item.color &&
+					// 			i.size === item.size
+					// 	)
+					// 	.reduce((acc, item) => acc + item.quantity, 0),
+					// poli_quantity: challan_entry
+					// 	.filter(
+					// 		(i) =>
+					// 			(item.packing_list_uuid ===
+					// 				i.packing_list_uuid &&
+					// 				i.item_description) ===
+					// 				item.item_description &&
+					// 			i.style === item.style &&
+					// 			i.color === item.color &&
+					// 			i.size === item.size
+					// 	)
+					// 	.reduce((acc, item) => acc + item.poli_quantity, 0),
 					is_inch: item.is_inch,
 				});
 				packingListRowSpan.push({
@@ -141,14 +143,15 @@ export default function Index(data) {
 							i.style === item.style &&
 							i.color === item.color
 					).length,
-					size: challan_entry.filter(
-						(i) =>
-							(item.packing_list_uuid === i.packing_list_uuid &&
-								i.item_description) === item.item_description &&
-							i.style === item.style &&
-							i.color === item.color &&
-							i.size === item.size
-					).length,
+					size: 1,
+					// size: challan_entry.filter(
+					// 	(i) =>
+					// 		(item.packing_list_uuid === i.packing_list_uuid &&
+					// 			i.item_description) === item.item_description &&
+					// 		i.style === item.style &&
+					// 		i.color === item.color &&
+					// 		i.size === item.size
+					// ).length,
 					quantity: 1,
 					poli_quantity: 1,
 					is_inch: 1,

@@ -70,6 +70,22 @@ export default function Index() {
 				},
 			},
 			{
+				accessorFn: (row) => row.pi_numbers.join(', '),
+				id: 'pi_numbers',
+				header: 'PI',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) => row.lc_numbers.join(', '),
+				id: 'lc_numbers',
+				header: 'LC',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'marketing_name',
 				header: 'Marketing',
 				enableColumnFilter: false,
@@ -128,6 +144,24 @@ export default function Index() {
 			{
 				accessorKey: 'approved_quantity',
 				header: 'Approved QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_dyeing_quantity',
+				header: 'Dyeing QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_coloring_quantity',
+				header: 'Slider QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_finishing_quantity',
+				header: 'Finishing QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

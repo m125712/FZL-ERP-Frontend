@@ -171,7 +171,7 @@ export default function Index() {
 			accessor={false}
 			data={data}
 			columns={columns}
-			extraClass={'py-0.5'}
+			extraClass={'py-2'}
 			extraButton={
 				<div className='flex items-center gap-2'>
 					<SimpleDatePicker

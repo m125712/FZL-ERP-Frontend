@@ -1,6 +1,11 @@
 import { format } from 'date-fns';
 
-import { ReactSelect, SectionEntryBody, SimpleDatePicker } from '@/ui';
+import {
+	FormField,
+	ReactSelect,
+	SectionEntryBody,
+	SimpleDatePicker,
+} from '@/ui';
 
 export default function Header({
 	from = '',
@@ -19,32 +24,40 @@ export default function Header({
 	return (
 		<div>
 			<SectionEntryBody title={'Daily Production Report'}>
-				<SimpleDatePicker
-					key={'from'}
-					value={from}
-					placeholder='From'
-					onChange={(data) => {
-						setFrom(data);
-					}}
-					selected={from}
-				/>
-				<SimpleDatePicker
-					key={'to'}
-					value={to}
-					placeholder='To'
-					onChange={(data) => {
-						setTo(data);
-					}}
-					selected={to}
-				/>
-				<ReactSelect
-					placeholder='Select Type'
-					options={types}
-					value={types?.find((item) => item.value == type)}
-					onChange={(e) => {
-						setType(e.value);
-					}}
-				/>
+				<div className='flex gap-2'>
+					<FormField label='' title='From'>
+						<SimpleDatePicker
+							key={'from'}
+							value={from}
+							placeholder='From'
+							onChange={(data) => {
+								setFrom(data);
+							}}
+							selected={from}
+						/>
+					</FormField>
+					<FormField label='' title='To'>
+						<SimpleDatePicker
+							key={'to'}
+							value={to}
+							placeholder='To'
+							onChange={(data) => {
+								setTo(data);
+							}}
+							selected={to}
+						/>
+					</FormField>
+					<FormField label='' title='Type'>
+						<ReactSelect
+							placeholder='Select Type'
+							options={types}
+							value={types?.find((item) => item.value == type)}
+							onChange={(e) => {
+								setType(e.value);
+							}}
+						/>
+					</FormField>
+				</div>
 			</SectionEntryBody>
 		</div>
 	);

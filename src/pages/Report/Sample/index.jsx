@@ -22,15 +22,13 @@ export default function Index() {
 	const { user } = useAuth();
 
 	const [date, setDate] = useState(new Date());
-
+	const [toDate, setToDate] = useState(new Date());
 	const { data, isLoading, url } = useSample(
 		format(date, 'yyyy-MM-dd'),
-		format(date, 'yyyy-MM-dd'),
+		format(toDate, 'yyyy-MM-dd'),
 		1,
 		getPath(haveAccess, user?.uuid),
-		{
-			enabled: !!user?.uuid,
-		}
+		{ enabled: !!user?.uuid }
 	);
 
 	const info = new PageInfo('Sample', url, 'report__sample');
@@ -171,8 +169,6 @@ export default function Index() {
 		[data]
 	);
 
-	console.log(data);
-
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
@@ -194,6 +190,16 @@ export default function Index() {
 							setDate(data);
 						}}
 						selected={date}
+					/>
+					<SimpleDatePicker
+						className='h-[2.34rem] w-32'
+						key={'toDate'}
+						value={toDate}
+						placeholder='To'
+						onChange={(data) => {
+							setToDate(data);
+						}}
+						selected={toDate}
 					/>
 				</div>
 			}

@@ -1703,6 +1703,21 @@ export const reportQK = {
 		'order-summary-report',
 		uuid,
 	],
+	//* Delivery Report
+	deliveryReportZipper: (from, to, query) => [
+		...reportQK.all(),
+		'delivery-report-zipper',
+		from,
+		to,
+		query,
+	],
+	deliveryReportThread: (from, to, query) => [
+		...reportQK.all(),
+		'delivery-report-thread',
+		from,
+		to,
+		query,
+	],
 };
 
 export const marketingQK = {

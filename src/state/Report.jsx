@@ -258,3 +258,26 @@ export const useOrderSummary = (uuid) =>
 		url: `/report/order-register-report/${uuid}`,
 		enabled: !!uuid,
 	});
+//* Delivery Report
+export const useDeliveryReportZipper = (
+	from,
+	to,
+	query,
+	{ enabled = false } = {}
+) =>
+	createGlobalState({
+		queryKey: reportQK.deliveryReportZipper(from, to, query),
+		url: `/report/delivery-report?${query}&from=${from}&to=${to}`,
+		enabled,
+	});
+export const useDeliveryReportThread = (
+	from,
+	to,
+	query,
+	{ enabled = false } = {}
+) =>
+	createGlobalState({
+		queryKey: reportQK.deliveryReportThread(from, to, query),
+		url: `/report/delivery-report-thread?${query}&from=${from}&to=${to}`,
+		enabled,
+	});

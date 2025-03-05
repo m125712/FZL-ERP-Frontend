@@ -1,5 +1,9 @@
 import { lazy } from 'react';
 
+
+
+
+
 const DailyChallan = lazy(() => import('@/pages/Report/DailyChallan'));
 const DeliveryStatement = lazy(
 	() => import('@/pages/Report/DeliveryStatement')
@@ -35,6 +39,7 @@ const Orders = lazy(() => import('@/pages/Report/Order'));
 const ChallanStatus = lazy(() => import('@/pages/Report/ChallanStatus'));
 const OrderTracking = lazy(() => import('@/pages/Report/OrderTracking'));
 const OrderSummary = lazy(() => import('@/pages/Report/OrderSummary'));
+const DeliveryReport = lazy(() => import('@/pages/Report/DeliveryReport'));
 
 export const ReportRoutes = [
 	{
@@ -187,6 +192,14 @@ export const ReportRoutes = [
 				page_name: 'report__order_summary',
 				actions: ['read', 'show_own_orders'],
 			},
+			{
+				name: 'Delivery Report',
+				path: '/report/delivery-report',
+				element: <DeliveryReport />,
+				page_name: 'report__delivery_report',
+				actions: ['read', 'show_own_orders'],
+			},
+
 			// {
 			// 	name: 'Production Report (Thread)',
 			// 	path: '/report/production-report-thread-party-wise',

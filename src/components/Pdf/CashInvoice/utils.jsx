@@ -52,8 +52,8 @@ export const getPageHeader = (data) => {
 
 			// * Start of table
 			[
-				{ text: 'Party', bold: true, color: PRIMARY_COLOR },
-				data?.party_name,
+				{ text: 'Invoice For', bold: true, color: PRIMARY_COLOR },
+				data?.factory_name,
 				{ text: 'Conversion Rate', bold: true, color: PRIMARY_COLOR },
 				`${Number(data?.conversion_rate).toFixed(2)} BDT`,
 			],

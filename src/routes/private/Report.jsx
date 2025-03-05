@@ -1,9 +1,5 @@
 import { lazy } from 'react';
 
-
-
-
-
 const DailyChallan = lazy(() => import('@/pages/Report/DailyChallan'));
 const DeliveryStatement = lazy(
 	() => import('@/pages/Report/DeliveryStatement')
@@ -197,7 +193,7 @@ export const ReportRoutes = [
 				path: '/report/delivery-report',
 				element: <DeliveryReport />,
 				page_name: 'report__delivery_report',
-				actions: ['read', 'show_own_orders'],
+				actions: ['read', 'show_price', 'show_own_orders'],
 			},
 
 			// {

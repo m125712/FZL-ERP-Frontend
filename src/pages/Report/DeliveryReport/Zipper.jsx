@@ -112,7 +112,17 @@ export default function Index() {
 				header: 'Description',
 				enableColumnFilter: false,
 				width: 'w-32',
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { order_description_uuid, order_number } =
+						info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${order_number}/${order_description_uuid}`}
+							openInNewTab={true}
+						/>
+					);
+				},
 			},
 
 			{
@@ -133,7 +143,12 @@ export default function Index() {
 				accessorKey: 'size',
 				header: 'Size',
 				enableColumnFilter: false,
-				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'unit',
+				header: 'Unit',
+				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 
@@ -157,19 +172,19 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'rate_per_dzn',
-				header: 'Rate Per Dzn',
+				header: 'Rate/DZN',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'rate_per_piece',
-				header: 'Rate Per Piece',
+				header: 'Rate/PCS',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'commission',
-				header: 'Commission',
+				header: 'Comm.',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -181,7 +196,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_commission',
-				header: 'Total Commission',
+				header: 'Total Comm.',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

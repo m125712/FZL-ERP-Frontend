@@ -137,26 +137,34 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'unit',
+				header: 'Unit',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'delivered_quantity',
 				header: 'Delivered QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
 			{
 				accessorKey: 'reject_quantity',
 				header: 'Return QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
 			{
 				accessorKey: 'rate_per_piece',
-				header: 'Rate Per Piece',
+				header: 'Rate/PCS',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'commission',
-				header: 'Commission',
+				header: 'Comm.',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -168,7 +176,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_commission',
-				header: 'Total Commission',
+				header: 'Total Comm.',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

@@ -4,8 +4,14 @@ import { useDeliveryReportThread } from '@/state/Report';
 import { format, startOfMonth, subMonths } from 'date-fns';
 import { useAccess } from '@/hooks';
 
+
+
 import ReactTable from '@/components/Table';
 import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
+
+
+
+
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
@@ -160,30 +166,35 @@ export default function Index() {
 				accessorKey: 'rate_per_piece',
 				header: 'Rate/PCS',
 				enableColumnFilter: false,
+				hidden: !haveAccess.includes('show_price'),
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'commission',
 				header: 'Comm.',
 				enableColumnFilter: false,
+				hidden: !haveAccess.includes('show_price'),
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_value',
 				header: 'Total Value',
 				enableColumnFilter: false,
+				hidden: !haveAccess.includes('show_price'),
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_commission',
 				header: 'Total Comm.',
 				enableColumnFilter: false,
+				hidden: !haveAccess.includes('show_price'),
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_value_company',
 				header: 'Net Sales',
 				enableColumnFilter: false,
+				hidden: !haveAccess.includes('show_price'),
 				cell: (info) => info.getValue(),
 			},
 		],

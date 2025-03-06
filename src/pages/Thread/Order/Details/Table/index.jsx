@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, StatusButton } from '@/ui';
 
 export default function Index({ order_info_entry }) {
@@ -121,7 +120,12 @@ export default function Index({ order_info_entry }) {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
+			{
+				accessorKey: 'warehouse',
+				header: 'Warehouse',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'delivered',
 				header: 'Delivered',
@@ -129,12 +133,6 @@ export default function Index({ order_info_entry }) {
 				cell: (info) => info.getValue(),
 			},
 
-			{
-				accessorKey: 'warehouse',
-				header: 'Warehouse',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
 			{
 				accessorFn: (row) =>
 					`${row.company_price || 0}/${row.party_price || 0}`,
@@ -179,8 +177,18 @@ export default function Index({ order_info_entry }) {
 	);
 
 	return (
-		<ReactTableTitleOnly
+		<ReactTable
 			title='Details'
+			subtitle={
+				<div className='flex flex-col'>
+					<span>
+						warehouse = when the packing list is warehouse received
+					</span>
+					<span>
+						delivered = when the packing list is warehouse out
+					</span>
+				</div>
+			}
 			data={order_info_entry}
 			columns={columns}
 		>
@@ -197,6 +205,6 @@ export default function Index({ order_info_entry }) {
 					</span>
 				</td>
 			</tr>
-		</ReactTableTitleOnly>
+		</ReactTable>
 	);
 }

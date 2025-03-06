@@ -170,8 +170,17 @@ export default function Index() {
 
 	return (
 		<ReactTable
+			key='Thread Status'
 			showDateRange={false}
 			title={'Thread Status'}
+			subtitle={
+				<div className='flex flex-col'>
+					<span>
+						delivered = when the packing list is warehouse out
+					</span>
+					<span>balance = order qty - delivered</span>
+				</div>
+			}
 			accessor={false}
 			data={data}
 			columns={columns}

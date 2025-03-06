@@ -158,7 +158,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'quantity',
-				header: 'QTY',
+				header: 'Order QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -216,7 +216,19 @@ export default function Index() {
 
 	return (
 		<ReactTable
+			key='bulk'
 			title={info.getTitle()}
+			subtitle={
+				<div className='flex flex-col'>
+					<span>
+						warehouse = when the packing list is warehouse received
+					</span>
+					<span>
+						delivered = when the packing list is warehouse out
+					</span>
+					<span>balance = order qty - (warehouse + delivered)</span>
+				</div>
+			}
 			accessor={false}
 			data={data}
 			columns={columns}

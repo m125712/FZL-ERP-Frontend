@@ -46,7 +46,21 @@ export default function Index({
 	}
 
 	return (
-		<ReactTable title='Details' data={order_entry} columns={columns}>
+		<ReactTable
+			title='Details'
+			subtitle={
+				<div className='flex flex-col'>
+					<span>
+						warehouse = when the packing list is warehouse received
+					</span>
+					<span>
+						delivered = when the packing list is warehouse out
+					</span>
+				</div>
+			}
+			data={order_entry}
+			columns={columns}
+		>
 			<tr className='bg-slate-200 font-bold'>
 				<td colSpan={6} className='text-right'>
 					Total:

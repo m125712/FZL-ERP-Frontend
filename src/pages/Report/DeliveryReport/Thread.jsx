@@ -4,14 +4,8 @@ import { useDeliveryReportThread } from '@/state/Report';
 import { format, startOfMonth, subMonths } from 'date-fns';
 import { useAccess } from '@/hooks';
 
-
-
 import ReactTable from '@/components/Table';
 import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
-
-
-
-
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
@@ -32,9 +26,7 @@ export default function Index() {
 		format(date, 'yyyy-MM-dd'),
 		format(toDate, 'yyyy-MM-dd'),
 		getPath(haveAccess, user?.uuid),
-		{
-			enabled: !!user?.uuid,
-		}
+		{ enabled: !!user?.uuid }
 	);
 
 	const columns = useMemo(
@@ -208,6 +200,14 @@ export default function Index() {
 		<ReactTable
 			showDateRange={false}
 			title={'Thread Delivery Report'}
+			subtitle={
+				<div className='flex flex-col'>
+					<span>
+						delivered = when the packing list is entered in a
+						CHALLAN, but it is not necessary to be delivered or not.
+					</span>
+				</div>
+			}
 			accessor={false}
 			data={data}
 			columns={columns}

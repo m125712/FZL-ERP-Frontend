@@ -16,6 +16,7 @@ export default function index() {
 			new Map(
 				data?.order_entry
 					?.flatMap((entry) => entry.challan_array ?? []) // Flatten all challans
+					?.filter((challan) => challan !== null)
 					?.map((challan) => {
 						const key = `${challan?.challan_number}|${challan?.challan_date}`;
 						return [
@@ -45,6 +46,7 @@ export default function index() {
 			...challanData,
 		};
 	});
+	console.log(transformedData);
 
 	const columns = useMemo(
 		() => [
@@ -96,10 +98,14 @@ export default function index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			...uniqueChallanNumbers.map((challan) => ({
-				accessorKey: challan?.challan_number,
+			...uniqueChallanNumbers?.map((challan, index) => ({
+				accessorFn: (row) => row[challan?.challan_number] || '--',
+				id: 'challan-number-' + index,
 				header: (
-					<div className='flex flex-col items-center justify-center'>
+					<div
+						key={challan?.challan_number}
+						className='flex flex-col items-center justify-center'
+					>
 						<CustomLink
 							label={challan?.challan_number}
 							url={`/delivery/challan/${challan?.challan_uuid}`}
@@ -113,7 +119,7 @@ export default function index() {
 					</div>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue() || '--',
+				cell: (info) => info.getValue(),
 			})),
 			{
 				accessorFn: (row) => {

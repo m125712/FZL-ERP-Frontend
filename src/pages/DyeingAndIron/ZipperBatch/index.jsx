@@ -98,11 +98,22 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'color',
+				accessorFn: (row) =>
+					row.style?.map((style) => style)?.join(', '),
+				id: 'style',
+				header: 'Style',
+				width: 'w-24',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) =>
+					row.color?.map((color) => color)?.join(', '),
+				id: 'color',
 				header: 'Color',
 				width: 'w-24',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue()?.join(', '),
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_quantity',

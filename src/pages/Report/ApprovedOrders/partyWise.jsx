@@ -52,7 +52,6 @@ export default function Index() {
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
-	let rowStyle = 'border border-gray-300 px-2 py-1';
 	return (
 		<ReactTable
 			title={'Party Wise'}

@@ -9,9 +9,7 @@ import { useFetchFunc } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import OrderSheetPdf from '@/components/Pdf/OrderSheet';
-import OrderSheetPdf2 from '@/components/Pdf/OrderSheet2';
 import OrderSheetByStyle from '@/components/Pdf/OrderSheetByStyle';
-import { company } from '@/components/Pdf/utils';
 
 import InformationSkeleton from '../_components/Information/skeleton';
 

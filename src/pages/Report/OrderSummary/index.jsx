@@ -46,7 +46,6 @@ export default function index() {
 			...challanData,
 		};
 	});
-	console.log(transformedData);
 
 	const columns = useMemo(
 		() => [

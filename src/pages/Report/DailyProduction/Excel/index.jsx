@@ -172,15 +172,30 @@ export default function Index(data, from, to) {
 		});
 	});
 	const grandTotalCloseEnd = tableData.reduce((total, item) => {
-		return total + (Number(item[6]?.text) || 0);
+		return (
+			total +
+			(item[5]?.text === 'Type Wise Total'
+				? Number(item[6]?.text) || 0
+				: 0)
+		);
 	}, 0);
 
 	const grandTotalOpenEnd = tableData.reduce((total, item) => {
-		return total + (Number(item[7]?.text) || 0);
+		return (
+			total +
+			(item[5]?.text === 'Type Wise Total'
+				? Number(item[7]?.text) || 0
+				: 0)
+		);
 	}, 0);
 
 	const grandTotalQuantity = tableData.reduce((total, item) => {
-		return total + (Number(item[8]?.text) || 0);
+		return (
+			total +
+			(item[5]?.text === 'Type Wise Total'
+				? Number(item[8]?.text) || 0
+				: 0)
+		);
 	}, 0);
 
 	tableData.push([

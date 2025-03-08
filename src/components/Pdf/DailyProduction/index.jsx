@@ -224,17 +224,20 @@ export default function Index(data, from) {
 		});
 	});
 	const grandTotalCloseEnd = tableData.reduce((total, item) => {
-		if (title.includes(item.size.text)) return total;
+		if (title.includes(item.size.text) || item.size.text === '')
+			return total;
 		return total + (item.running_total_close_end_quantity?.text || 0);
 	}, 0);
 
 	const grandTotalOpenEnd = tableData.reduce((total, item) => {
-		if (title.includes(item.size.text)) return total;
+		if (title.includes(item.size.text) || item.size.text === '')
+			return total;
 		return total + (item.running_total_open_end_quantity?.text || 0);
 	}, 0);
 
 	const grandTotalQuantity = tableData.reduce((total, item) => {
-		if (title.includes(item.size.text)) return total;
+		if (title.includes(item.size.text) || item.size.text === '')
+			return total;
 		return total + (item.running_total_quantity?.text || 0);
 	}, 0);
 

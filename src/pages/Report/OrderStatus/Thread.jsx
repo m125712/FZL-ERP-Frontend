@@ -146,6 +146,20 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'party_price',
+				header: 'Party Price',
+				enableColumnFilter: false,
+				hidden: !haveAccess.includes('show_price'),
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'company_price',
+				header: 'Company Price',
+				enableColumnFilter: false,
+				hidden: !haveAccess.includes('show_price'),
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'created_at',
 				header: 'Created',
 				enableColumnFilter: false,

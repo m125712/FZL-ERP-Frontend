@@ -223,6 +223,7 @@ export default function Index(data, from) {
 			});
 		});
 	});
+	console.log(tableData);
 	const grandTotalCloseEnd = tableData.reduce((total, item) => {
 		if (title.includes(item.size.text) || item.size.text === '')
 			return total;
@@ -240,7 +241,126 @@ export default function Index(data, from) {
 			return total;
 		return total + (item.running_total_quantity?.text || 0);
 	}, 0);
+	const grandZipperTotalCloseEnd = tableData.reduce((total, item) => {
+		if (
+			title.includes(item.size.text) ||
+			item.size.text === '' ||
+			item.type.text === 'Thread'
+		)
+			return total;
 
+		return total + (item.running_total_close_end_quantity?.text || 0);
+	}, 0);
+
+	const grandZipperTotalOpenEnd = tableData.reduce((total, item) => {
+		if (
+			title.includes(item.size.text) ||
+			item.size.text === '' ||
+			item.type.text === 'Thread'
+		)
+			return total;
+
+		return total + (item.running_total_open_end_quantity?.text || 0);
+	}, 0);
+
+	const grandZipperTotalQuantity = tableData.reduce((total, item) => {
+		if (
+			title.includes(item.size.text) ||
+			item.size.text === '' ||
+			item.type.text === 'Thread'
+		)
+			return total;
+
+		return total + (Number(item.running_total_quantity?.text) || 0);
+	}, 0);
+	const grandThreadTotalCloseEnd = tableData.reduce((total, item) => {
+		if (
+			title.includes(item.size.text) ||
+			item.size.text === '' ||
+			item.type.text !== 'Thread'
+		)
+			return total;
+
+		return total + (item.running_total_close_end_quantity?.text || 0);
+	}, 0);
+
+	const grandThreadTotalOpenEnd = tableData.reduce((total, item) => {
+		if (
+			title.includes(item.size.text) ||
+			item.size.text === '' ||
+			item.type.text !== 'Thread'
+		)
+			return total;
+
+		return total + (item.running_total_open_end_quantity?.text || 0);
+	}, 0);
+
+	const grandThreadTotalQuantity = tableData.reduce((total, item) => {
+		if (
+			title.includes(item.size.text) ||
+			item.size.text === '' ||
+			item.type.text !== 'Thread'
+		)
+			return total;
+
+		return total + (Number(item.running_total_quantity?.text) || 0);
+	}, 0);
+	const threadIndex = tableData.findIndex(
+		(item) => item.type.text === 'Thread'
+	);
+	tableData.splice(threadIndex, 0, {
+		type: {
+			text: 'Grand Total Zipper',
+			colSpan: 6,
+			bold: true,
+		},
+		party_name: { text: '', rowSpan: 1 },
+		order_number: { text: '', rowSpan: 1 },
+		item_description: { text: '', rowSpan: 1 },
+		size: { text: '', rowSpan: 1 },
+		running_total_close_end_quantity: {
+			text: grandZipperTotalCloseEnd,
+			rowSpan: 1,
+			bold: true,
+		},
+		running_total_open_end_quantity: {
+			text: grandZipperTotalOpenEnd,
+			rowSpan: 1,
+			bold: true,
+		},
+		running_total_quantity: {
+			text: grandZipperTotalQuantity,
+			rowSpan: 1,
+			bold: true,
+		},
+	});
+
+	tableData.push({
+		type: {
+			text: 'Grand Thread Total',
+			colSpan: 6,
+			bold: true,
+		},
+		party_name: { text: '', rowSpan: 1 },
+		order_number: { text: '', rowSpan: 1 },
+		item_description: { text: '', rowSpan: 1 },
+		size: { text: '', rowSpan: 1 },
+		running_total_close_end_quantity: {
+			text: grandThreadTotalCloseEnd,
+			rowSpan: 1,
+			bold: true,
+		},
+		running_total_open_end_quantity: {
+			text: grandThreadTotalOpenEnd,
+			rowSpan: 1,
+			bold: true,
+		},
+		running_total_quantity: {
+			text: grandThreadTotalQuantity,
+			rowSpan: 1,
+			bold: true,
+		},
+	});
 	tableData.push({
 		type: {
 			text: 'Grand Total',
@@ -291,7 +411,7 @@ export default function Index(data, from) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [40, 100, 50, 60, 40, 70, 30, 20, 40],
+					widths: [40, 100, 50, 60, 60, 40, 40, 40, 40],
 					body: [
 						TableHeader(node),
 

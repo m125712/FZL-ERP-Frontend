@@ -283,90 +283,90 @@ export default function Index(data, from, to) {
 					partyTotal.closing.value_bdt += ClosingTotalValueBDT;
 					grandTotal.closing.value_bdt += ClosingTotalValueBDT;
 
-					if (
-						packingIndex + 1 === itemItem.packing_lists.length &&
-						itemIndex + 1 === orderItem.items.length
-					) {
-						packingList.other.push({
-							size: 'Current Total',
-							running_total_close_end_quantity:
-								orderTotal.current.close_end_quantity,
-							running_total_open_end_quantity:
-								orderTotal.current.open_end_quantity,
-							running_total_quantity: orderTotal.current.quantity,
-							company_price_pcs: 1,
-							running_total_value: orderTotal.current.value,
-							running_total_value_bdt:
-								orderTotal.current.value_bdt,
-						});
-						packingList.other.push({
-							size: 'Opening Bal.',
-							running_total_close_end_quantity:
-								orderTotal.opening.close_end_quantity,
-							running_total_open_end_quantity:
-								orderTotal.opening.open_end_quantity,
-							running_total_quantity: orderTotal.opening.quantity,
-							company_price_pcs: 1,
-							running_total_value: orderTotal.opening.value,
-							running_total_value_bdt:
-								orderTotal.opening.value_bdt,
-						});
-						packingList.other.push({
-							size: 'Closing Bal.',
-							running_total_close_end_quantity:
-								orderTotal.closing.close_end_quantity,
-							running_total_open_end_quantity:
-								orderTotal.closing.open_end_quantity,
-							running_total_quantity: orderTotal.closing.quantity,
-							company_price_pcs: 1,
-							running_total_value: orderTotal.closing.value,
-							running_total_value_bdt:
-								orderTotal.closing.value_bdt,
-						});
-					}
-					if (
-						item.orders.length === orderIndex + 1 &&
-						itemIndex + 1 === orderItem.items.length &&
-						packingIndex + 1 === itemItem.packing_lists.length
-					) {
-						packingList.other.push({
-							size: 'P.Current Total',
-							running_total_close_end_quantity:
-								partyTotal.current.close_end_quantity,
-							running_total_open_end_quantity:
-								partyTotal.current.open_end_quantity,
-							running_total_quantity: partyTotal.current.quantity,
-							company_price_pcs: 1,
-							running_total_value: partyTotal.current.value,
-							running_total_value_bdt:
-								partyTotal.current.value_bdt,
-						});
+					// if (
+					// 	packingIndex + 1 === itemItem.packing_lists.length &&
+					// 	itemIndex + 1 === orderItem.items.length
+					// ) {
+					// 	packingList.other.push({
+					// 		size: 'Current Total',
+					// 		running_total_close_end_quantity:
+					// 			orderTotal.current.close_end_quantity,
+					// 		running_total_open_end_quantity:
+					// 			orderTotal.current.open_end_quantity,
+					// 		running_total_quantity: orderTotal.current.quantity,
+					// 		company_price_pcs: 1,
+					// 		running_total_value: orderTotal.current.value,
+					// 		running_total_value_bdt:
+					// 			orderTotal.current.value_bdt,
+					// 	});
+					// 	packingList.other.push({
+					// 		size: 'Opening Bal.',
+					// 		running_total_close_end_quantity:
+					// 			orderTotal.opening.close_end_quantity,
+					// 		running_total_open_end_quantity:
+					// 			orderTotal.opening.open_end_quantity,
+					// 		running_total_quantity: orderTotal.opening.quantity,
+					// 		company_price_pcs: 1,
+					// 		running_total_value: orderTotal.opening.value,
+					// 		running_total_value_bdt:
+					// 			orderTotal.opening.value_bdt,
+					// 	});
+					// 	packingList.other.push({
+					// 		size: 'Closing Bal.',
+					// 		running_total_close_end_quantity:
+					// 			orderTotal.closing.close_end_quantity,
+					// 		running_total_open_end_quantity:
+					// 			orderTotal.closing.open_end_quantity,
+					// 		running_total_quantity: orderTotal.closing.quantity,
+					// 		company_price_pcs: 1,
+					// 		running_total_value: orderTotal.closing.value,
+					// 		running_total_value_bdt:
+					// 			orderTotal.closing.value_bdt,
+					// 	});
+					// }
+					// if (
+					// 	item.orders.length === orderIndex + 1 &&
+					// 	itemIndex + 1 === orderItem.items.length &&
+					// 	packingIndex + 1 === itemItem.packing_lists.length
+					// ) {
+					// 	packingList.other.push({
+					// 		size: 'P.Current Total',
+					// 		running_total_close_end_quantity:
+					// 			partyTotal.current.close_end_quantity,
+					// 		running_total_open_end_quantity:
+					// 			partyTotal.current.open_end_quantity,
+					// 		running_total_quantity: partyTotal.current.quantity,
+					// 		company_price_pcs: 1,
+					// 		running_total_value: partyTotal.current.value,
+					// 		running_total_value_bdt:
+					// 			partyTotal.current.value_bdt,
+					// 	});
 
-						packingList.other.push({
-							size: 'P.Opening Bal.',
-							running_total_close_end_quantity:
-								partyTotal.opening.close_end_quantity,
-							running_total_open_end_quantity:
-								partyTotal.opening.open_end_quantity,
-							running_total_quantity: partyTotal.opening.quantity,
-							company_price_pcs: 1,
-							running_total_value: partyTotal.opening.value,
-							running_total_value_bdt:
-								partyTotal.opening.value_bdt,
-						});
-						packingList.other.push({
-							size: 'P.Closing Bal.',
-							running_total_close_end_quantity:
-								partyTotal.closing.close_end_quantity,
-							running_total_open_end_quantity:
-								partyTotal.closing.open_end_quantity,
-							running_total_quantity: partyTotal.closing.quantity,
-							company_price_pcs: 1,
-							running_total_value: partyTotal.closing.value,
-							running_total_value_bdt:
-								partyTotal.closing.value_bdt,
-						});
-					}
+					// 	packingList.other.push({
+					// 		size: 'P.Opening Bal.',
+					// 		running_total_close_end_quantity:
+					// 			partyTotal.opening.close_end_quantity,
+					// 		running_total_open_end_quantity:
+					// 			partyTotal.opening.open_end_quantity,
+					// 		running_total_quantity: partyTotal.opening.quantity,
+					// 		company_price_pcs: 1,
+					// 		running_total_value: partyTotal.opening.value,
+					// 		running_total_value_bdt:
+					// 			partyTotal.opening.value_bdt,
+					// 	});
+					// 	packingList.other.push({
+					// 		size: 'P.Closing Bal.',
+					// 		running_total_close_end_quantity:
+					// 			partyTotal.closing.close_end_quantity,
+					// 		running_total_open_end_quantity:
+					// 			partyTotal.closing.open_end_quantity,
+					// 		running_total_quantity: partyTotal.closing.quantity,
+					// 		company_price_pcs: 1,
+					// 		running_total_value: partyTotal.closing.value,
+					// 		running_total_value_bdt:
+					// 			partyTotal.closing.value_bdt,
+					// 	});
+					// }
 				});
 			});
 		});

@@ -131,7 +131,7 @@ export const ReportRoutes = [
 				path: '/report/order-status',
 				element: <OrderStatus />,
 				page_name: 'report__order_status',
-				actions: ['read', 'show_own_orders'],
+				actions: ['read', 'show_own_orders','show_price'],
 			},
 			{
 				name: 'Approved Orders',

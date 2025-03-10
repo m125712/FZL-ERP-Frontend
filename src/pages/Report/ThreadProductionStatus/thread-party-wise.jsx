@@ -68,7 +68,6 @@ export default function Index() {
 							onChange={(data) => {
 								setFrom(data);
 							}}
-							selected={from}
 						/>
 						<SimpleDatePicker
 							className='h-[2.34rem] w-32'
@@ -79,7 +78,6 @@ export default function Index() {
 							onChange={(data) => {
 								setTo(data);
 							}}
-							selected={to}
 						/>
 					</div>
 				}

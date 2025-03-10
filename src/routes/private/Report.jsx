@@ -1,21 +1,14 @@
 import { lazy } from 'react';
 
 const DailyChallan = lazy(() => import('@/pages/Report/DailyChallan'));
-const DeliveryStatement = lazy(
-	() => import('@/pages/Report/DeliveryStatement')
-);
+
 const ProductionStatement = lazy(
 	() => import('@/pages/Report/ProductionStatement')
 );
 const LCDue = lazy(() => import('@/pages/Report/LC'));
 const PIRegister = lazy(() => import('@/pages/Report/PIRegister'));
 const PIToBeSubmit = lazy(() => import('@/pages/Report/PIToBeSubmit'));
-const ProductionReportDirector = lazy(
-	() => import('@/pages/Report/ProductionReportDirector')
-);
-const ProductionReportSM = lazy(
-	() => import('@/pages/Report/ProductionReportS&M')
-);
+
 const OrderStatus = lazy(() => import('@/pages/Report/OrderStatus'));
 const ThreadProduction = lazy(
 	() => import('@/pages/Report/ThreadProductionStatus')
@@ -90,27 +83,7 @@ export const ReportRoutes = [
 				page_name: 'report__lc_due',
 				actions: ['read', 'show_own_orders'],
 			},
-			{
-				name: 'Production Report (Director)',
-				path: '/report/production-report/director',
-				element: <ProductionReportDirector />,
-				page_name: 'report__production_report_director',
-				actions: ['read'],
-			},
-			{
-				name: 'Production Report (S&M)',
-				path: '/report/production-report/sm',
-				element: <ProductionReportSM />,
-				page_name: 'report__production_report_sm',
-				actions: ['read', 'show_own_orders'],
-			},
-			{
-				name: 'Delivery Statement',
-				path: '/report/delivery-statement',
-				element: <DeliveryStatement />,
-				page_name: 'report__delivery_statement',
-				actions: ['read', 'show_own_orders'],
-			},
+
 			{
 				name: 'Store',
 				path: '/report/store',
@@ -195,14 +168,6 @@ export const ReportRoutes = [
 				page_name: 'report__delivery_report',
 				actions: ['read', 'show_price', 'show_own_orders'],
 			},
-
-			// {
-			// 	name: 'Production Report (Thread)',
-			// 	path: '/report/production-report-thread-party-wise',
-			// 	element: <ProductionReportThreadPartyWise />,
-			// 	page_name: 'report__production_report_thread_party_wise',
-			// 	actions: ['read'],
-			// },
 		],
 	},
 ];

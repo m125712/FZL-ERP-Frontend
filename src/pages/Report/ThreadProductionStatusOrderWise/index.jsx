@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useThreadProductionOrderWise } from '@/state/Report';
-import { format, startOfMonth, subMonths } from 'date-fns';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
@@ -283,7 +283,6 @@ export default function Index() {
 							onChange={(data) => {
 								setFrom(data);
 							}}
-							selected={from}
 						/>
 						<SimpleDatePicker
 							className='h-[2.34rem] w-32'
@@ -294,7 +293,6 @@ export default function Index() {
 							onChange={(data) => {
 								setTo(data);
 							}}
-							selected={to}
 						/>
 						<ProductionStatus
 							className='w-44'

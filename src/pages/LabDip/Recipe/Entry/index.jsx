@@ -135,10 +135,13 @@ export default function Index() {
 			});
 
 			// * updated order entry * //
-			const recipe_entry_updated = [...data.recipe_entry].map((item) => ({
-				...item,
-				updated_at: GetDateTime(),
-			}));
+			const recipe_entry_updated = [...data.recipe_entry].map(
+				(item, index) => ({
+					...item,
+					index: index,
+					updated_at: GetDateTime(),
+				})
+			);
 
 			//* Post new entry */ //
 			let order_entry_updated_promises = [
@@ -198,9 +201,10 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 
-		const recipe_entry = [...data.recipe_entry].map((item) => ({
+		const recipe_entry = [...data.recipe_entry].map((item, index) => ({
 			...item,
 			uuid: nanoid(),
+			index: index,
 			recipe_uuid,
 			created_at,
 		}));
@@ -269,8 +273,7 @@ export default function Index() {
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
-					className='flex flex-col gap-4'
-				>
+					className='flex flex-col gap-4'>
 					<Header
 						{...{
 							register,
@@ -288,6 +291,7 @@ export default function Index() {
 						title='Recipe Entry'
 						handelAppend={handelRecipeEntryAppend}
 						tableHead={[
+							'Index',
 							'Dyes',
 							'quantity(Solution %)',
 							'remarks',
@@ -296,14 +300,23 @@ export default function Index() {
 							<th
 								key={item}
 								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'
-							>
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
 								{item}
 							</th>
-						))}
-					>
+						))}>
 						{recipeEntryField.map((item, index) => (
 							<tr key={item.id}>
+								<td>
+									<span className='mx-2'>
+										{getValues(
+											`recipe_entry[${index}].index`
+										)
+											? getValues(
+													`recipe_entry[${index}].index`
+												) + 1
+											: index + 1}
+									</span>
+								</td>
 								<td className={`${rowClass}`}>
 									<FormField
 										label={`recipe_entry[${index}].material_uuid`}
@@ -312,8 +325,7 @@ export default function Index() {
 										dynamicerror={
 											errors?.recipe_entry?.[index]
 												?.material_uuid
-										}
-									>
+										}>
 										<Controller
 											name={`recipe_entry[${index}].material_uuid`}
 											control={control}
@@ -384,8 +396,7 @@ export default function Index() {
 									/>
 								</td>
 								<td
-									className={`w-16 ${rowClass} border-l-4 border-l-primary`}
-								>
+									className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
 									<ActionButtons
 										duplicateClick={() =>
 											handelDuplicateDynamicField(index)

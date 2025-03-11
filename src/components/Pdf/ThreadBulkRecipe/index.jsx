@@ -17,6 +17,15 @@ const node = [
 	getTable('quantity', 'Batch QTY', 'right'),
 	getTable('remarks', 'Remarks'),
 ];
+const recipe = [
+	getTable('material_name', 'Dyes Name'),
+	getTable('quantity', 'Lab'),
+	getTable('bulk', 'Bulk'),
+	getTable('first', '1st'),
+	getTable('second', '2nd'),
+	getTable('third', '3rd'),
+	getTable('lot', 'Lot'),
+];
 const node2 = [
 	getTable('material_name', 'Dyes Name'),
 	getTable('quantity', 'Lab'),
@@ -79,6 +88,7 @@ const separateDark = (programs) => {
 	return { chemicalDark, chemicalHydrosa, neutralizer };
 };
 export default function Index(batch, shade_recipes_entries, programs) {
+	console.log('shade_recipe', shade_recipes_entries);
 	const headerHeight = 200;
 	let footerHeight = 50;
 	const { batch_entry } = batch;
@@ -99,18 +109,18 @@ export default function Index(batch, shade_recipes_entries, programs) {
 
 	programs = processDyePrograms(programs);
 
-	const yellow = shade_recipes_entries?.filter((e) =>
-		e?.material_name.toLowerCase().includes('yellow')
-	);
-	const red = shade_recipes_entries?.filter((e) =>
-		e?.material_name.toLowerCase().includes('red')
-	);
-	const other = shade_recipes_entries?.filter(
-		(e) =>
-			!e?.material_name.toLowerCase().includes('red') &&
-			!e?.material_name.toLowerCase().includes('yellow')
-	);
-	const shade = yellow?.concat(red)?.concat(other);
+	// const yellow = shade_recipes_entries?.filter((e) =>
+	// 	e?.material_name.toLowerCase().includes('yellow')
+	// );
+	// const red = shade_recipes_entries?.filter((e) =>
+	// 	e?.material_name.toLowerCase().includes('red')
+	// );
+	// const other = shade_recipes_entries?.filter(
+	// 	(e) =>
+	// 		!e?.material_name.toLowerCase().includes('red') &&
+	// 		!e?.material_name.toLowerCase().includes('yellow')
+	// );
+	// const shade = yellow?.concat(red)?.concat(other);
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
@@ -178,12 +188,12 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', '*', 30, 30, 30, '*'],
+					widths: ['*', '*', 100, 30, 30, 30, '*'],
 					body: [
-						TableHeader(node2),
-						...(Array.isArray(shade)
-							? shade.map((item) =>
-									node2.map((nodeItem) => ({
+						TableHeader(recipe),
+						...(Array.isArray(shade_recipes_entries)
+							? shade_recipes_entries.map((item) =>
+									recipe.map((nodeItem) => ({
 										text: item[nodeItem.field] || '',
 										style: nodeItem.cellStyle,
 										alignment: nodeItem.alignment,

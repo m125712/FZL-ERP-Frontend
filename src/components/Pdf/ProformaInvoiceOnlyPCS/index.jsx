@@ -15,7 +15,6 @@ const zipperNode = [
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
 	getTable('quantity', 'Quantity', 'right'),
-	getTable('unit_price', 'Price($)', 'right'),
 	getTable('unit_price_per_pcs', 'Price/pcs($)', 'right'),
 	getTable('value', 'Value($)', 'right'),
 ];
@@ -409,7 +408,7 @@ export default function Index(data) {
 				? {
 						table: {
 							headerRows: 1,
-							widths: [40, '*', 50, 70, 40, 35, 35, 35, 35],
+							widths: [40, '*', 50, 70, 40, 35, 35, 35],
 							body: [
 								[
 									{
@@ -417,9 +416,8 @@ export default function Index(data) {
 									},
 									{
 										text: '9607.11.00',
-										colSpan: 8,
+										colSpan: 7,
 									},
-									{},
 									{},
 									{},
 									{},
@@ -479,9 +477,8 @@ export default function Index(data) {
 										text: `U.S.$: ${Number(grand_total_zipper_value || 0).toFixed(2)}`,
 										alignment: 'right',
 										bold: true,
-										colSpan: 3,
+										colSpan: 2,
 									},
-									{},
 									{},
 								],
 							],

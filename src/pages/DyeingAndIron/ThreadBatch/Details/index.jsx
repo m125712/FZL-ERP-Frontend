@@ -33,6 +33,7 @@ export default function Index() {
 	const shade_recipes_entries = useMemo(() => {
 		return shade_recipe?.recipe_entry?.map((item) => ({
 			...item,
+			index: String(item?.index),
 			quantity: Number(item?.quantity).toFixed(5),
 			bulk: Number((volume * item?.quantity).toFixed(3)),
 		}));

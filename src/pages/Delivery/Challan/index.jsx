@@ -232,6 +232,17 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorFn(row) {
+					const { color } = row;
+					return color?.join(', ') || '--';
+				},
+				id: 'color',
+				header: 'Colors',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'total_carton_quantity',
 				header: 'Carton QTY',
 				enableColumnFilter: false,

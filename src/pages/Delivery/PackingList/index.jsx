@@ -99,8 +99,7 @@ export default function Index() {
 							type='button'
 							className='btn btn-accent btn-sm font-semibold text-white shadow-md'
 							disabled={pdfLoading}
-							onClick={() => handlePdf(info.row.index)}
-						>
+							onClick={() => handlePdf(info.row.index)}>
 							<BookOpen />
 						</button>
 					);
@@ -225,6 +224,17 @@ export default function Index() {
 			{
 				accessorKey: 'party_name',
 				header: 'Party',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn(row) {
+					const { color } = row;
+					return color?.join(', ')|| '--';
+				},
+				id: 'color',
+				header: 'Colors',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),

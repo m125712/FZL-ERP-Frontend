@@ -32,17 +32,17 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'sum',
-				header: 'Sum',
+				accessorKey: 'concat',
+				header: 'Count',
 				enableColumnFilter: false,
-				width: 'w-24',
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'concat',
-				header: 'Concat',
+				accessorKey: 'sum',
+				header: 'Quantity',
 				enableColumnFilter: false,
-				width: 'w-32',
+				width: 'w-24',
 				cell: (info) => info.getValue(),
 			},
 		],
@@ -52,6 +52,7 @@ export default function Index() {
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
+	const total = data.reduce((acc, curr) => acc + curr.sum, 0);
 	return (
 		<ReactTable
 			key='bulk'
@@ -84,6 +85,11 @@ export default function Index() {
 					/>
 				</div>
 			}
-		/>
+		>
+			<tr>
+				<td className='text-right font-semibold'>Total:</td>
+				<td className='px-3 py-2'>{total}</td>
+			</tr>
+		</ReactTable>
 	);
 }

@@ -29,6 +29,9 @@ export const orderQK = {
 		uuid,
 	],
 
+	// History
+	orderEntryHistory: (uuid) => [...orderQK.all(), 'history', uuid],
+
 	//* Description
 	descriptions: () => [...orderQK.all(), 'description'],
 	description: (uuid) => [...orderQK.descriptions(), uuid],
@@ -1191,6 +1194,12 @@ export const otherQK = {
 		...otherQK.all(),
 		'order-description',
 		...(params ? [params] : []),
+	],
+	planningBatchByDate: (date, uuid) => [
+		...otherQK.all(),
+		'planning-batch-by-date',
+		date,
+		uuid,
 	],
 	orderStore: (params) => [
 		...otherQK.all(),

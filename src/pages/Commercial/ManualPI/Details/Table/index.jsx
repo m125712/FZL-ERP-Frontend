@@ -34,12 +34,14 @@ export default function Index({ entries, title }) {
 				accessorKey: 'item',
 				header: 'Item',
 				enableColumnFilter: false,
+				hidden: title === 'Thread Details',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'specification',
 				header: 'Specification',
 				enableColumnFilter: false,
+				hidden: title === 'Thread Details',
 				cell: (info) => info.getValue(),
 			},
 			{

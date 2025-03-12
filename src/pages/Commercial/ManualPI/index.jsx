@@ -70,16 +70,15 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'order_number',
+				accessorFn: (row) => row?.original?.order_number ?? [],
+				id: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: true,
-				cell: (info) => (
-					<CustomLink
-						label={info.getValue()}
-						url={`/order/details/${info.getValue()}`}
-						openInNewTab={true}
-					/>
-				),
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: ({ row }) => {
+					const orderNumbers = row?.original?.order_number ?? [];
+					return orderNumbers.join(', ');
+				},
 			},
 
 			{
@@ -87,7 +86,7 @@ export default function Index() {
 				header: 'Total Value',
 				enableColumnFilter: false,
 				width: 'w-32',
-				cell: (info) => info.getValue().toLocaleString(),
+				cell: (info) => info.getValue()?.toLocaleString(),
 			},
 			{
 				accessorKey: 'marketing_name',

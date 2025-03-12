@@ -32,7 +32,7 @@ const TestSpreadSheet = (
 		onChange: (newData, setValue, fieldName, row, prop) => {},
 	}
 ) => {
-	data.map((item, index) => {
+	data?.map((item, index) => {
 		Object.keys(item).map((key) => {
 			form.register(`${fieldName}.${index}.${key}`);
 		});

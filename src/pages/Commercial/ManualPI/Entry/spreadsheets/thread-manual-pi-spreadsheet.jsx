@@ -36,12 +36,6 @@ const ManualPiSpreadsheet = (
 			data: 'size',
 		},
 		{
-			data: 'item',
-		},
-		{
-			data: 'specification',
-		},
-		{
 			data: 'quantity',
 		},
 		{
@@ -68,8 +62,6 @@ const ManualPiSpreadsheet = (
 		'Po',
 		'Style',
 		'Size',
-		'Item',
-		'Specification',
 		'Quantity',
 		'Unit Price',
 		'Actions',

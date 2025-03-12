@@ -1,10 +1,8 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
-import { toggleZipperAll } from '@/pages/Order/Details/Entry/utils';
 import {
 	useCommercialManualPI,
 	useCommercialManualPIDetails,
 } from '@/state/Commercial';
-import { useThreadOrderInfo } from '@/state/Thread';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -21,14 +19,14 @@ import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
 import ManualPiSpreadsheet from './spreadsheets/manual-pi-spreadsheet';
+import ThreadManualPiSpreadsheet from './spreadsheets/thread-manual-pi-spreadsheet';
 
 export default function Index() {
-	const { updateData, postData, deleteData } = useThreadOrderInfo();
-
 	const { invalidateQuery: invalidateCommercialManualPI } =
 		useCommercialManualPI();
 	const { manual_pi_uuid } = useParams();
-	const { data } = useCommercialManualPIDetails(manual_pi_uuid);
+	const { data, updateData, postData, deleteData } =
+		useCommercialManualPIDetails(manual_pi_uuid);
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const isUpdate = manual_pi_uuid !== undefined;
@@ -45,14 +43,15 @@ export default function Index() {
 		watch,
 		setValue,
 		trigger,
+		formState,
 		clearErrors,
 		context: form,
 	} = useRHF(MANUAL_PI_SCHEMA, MANUAL_PI_NULL);
 
 	useEffect(() => {
 		manual_pi_uuid !== undefined
-			? (document.title = `Thread Shade Recipe: Update ${manual_pi_uuid}`)
-			: (document.title = 'Thread Shade Recipe: Entry');
+			? (document.title = `Manual PI: Update ${manual_pi_uuid}`)
+			: (document.title = 'Manual PI: Entry');
 	}, []);
 
 	const isZipper = [
@@ -68,62 +67,42 @@ export default function Index() {
 
 	// manual_pi_entry
 	const {
-		fields: threadOrderInfoEntryField,
-		append: threadOrderInfoEntryAppend,
-		remove: threadOrderInfoEntryRemove,
-		update: threadOrderInfoEntryUpdate,
+		fields: zipperEntryField,
+		append: zipperEntryAppend,
+		remove: zipperEntryRemove,
+		update: zipperEntryUpdate,
 	} = useFieldArray({
 		control,
-		name: 'manual_pi_entry',
+		name: 'manual_zipper_pi_entry',
 	});
-
-	const [zipperAll, setZipperAll] = toggleZipperAll({
-		item: threadOrderInfoEntryField,
-		setValue,
-		field: 'manual_pi_entry',
+	const {
+		fields: threadEntryField,
+		append: threadEntryAppend,
+		remove: threadEntryRemove,
+		update: threadEntryUpdate,
+	} = useFieldArray({
+		control,
+		name: 'manual_thread_pi_entry',
 	});
-
-	useEffect(() => {
-		const subscription = watch((value) => {
-			const { manual_pi_entry } = value;
-			if (manual_pi_entry?.length > 0) {
-				const allZipper = manual_pi_entry.every(
-					(item) => item.is_zipper === true
-				);
-				const allNonZipper = manual_pi_entry.every(
-					(item) => item.is_zipper === false
-				);
-
-				if (allZipper) {
-					setZipperAll(true);
-				} else if (allNonZipper) {
-					setZipperAll(false);
-				} else {
-					setZipperAll(null);
-				}
-			}
-		});
-		return () => subscription.unsubscribe();
-	}, [watch]);
 
 	const [deleteItem, setDeleteItem] = useState({
 		itemId: null,
 		itemName: null,
 	});
 
-	const handleThreadOrderInfoEntryRemove = (index) => {
-		if (getValues(`manual_pi_entry[${index}].uuid`) !== undefined) {
+	const handleZipperEntryRemove = (index) => {
+		if (getValues(`manual_zipper_pi_entry[${index}].uuid`) !== undefined) {
 			setDeleteItem({
-				itemId: getValues(`manual_pi_entry[${index}].uuid`),
-				itemName: getValues(`manual_pi_entry[${index}].uuid`),
+				itemId: getValues(`manual_zipper_pi_entry[${index}].uuid`),
+				itemName: getValues(`manual_zipper_pi_entry[${index}].uuid`),
 			});
 			window['order_info_entry_delete'].showModal();
 		}
-		threadOrderInfoEntryRemove(index);
+		zipperEntryRemove(index);
 	};
 
-	const handleThreadOrderInfoEntryAppend = () => {
-		threadOrderInfoEntryAppend({
+	const handleZipperEntryAppend = () => {
+		zipperEntryAppend({
 			order_number: '',
 			po: '',
 			style: '',
@@ -132,12 +111,37 @@ export default function Index() {
 			specification: '',
 			quantity: 0,
 			unit_price: 0,
-			is_zipper: false,
+		});
+	};
+	const handleThreadEntryRemove = (index) => {
+		if (getValues(`manual_thread_pi_entry[${index}].uuid`) !== undefined) {
+			setDeleteItem({
+				itemId: getValues(`manual_thread_pi_entry[${index}].uuid`),
+				itemName: getValues(`manual_thread_pi_entry[${index}].uuid`),
+			});
+			window['order_info_entry_delete'].showModal();
+		}
+		threadEntryRemove(index);
+	};
+
+	const handleThreadEntryAppend = () => {
+		threadEntryAppend({
+			order_number: '',
+			po: '',
+			style: '',
+			size: '',
+			item: '',
+			specification: '',
+			quantity: 0,
+			unit_price: 0,
 		});
 	};
 
 	// Submit
 	const onSubmit = async (data) => {
+		const manual_pi_entry = data?.manual_zipper_pi_entry.concat(
+			data?.manual_thread_pi_entry
+		);
 		// Update
 		if (isUpdate) {
 			const manual_pi_updated_data = {
@@ -151,7 +155,7 @@ export default function Index() {
 				isOnCloseNeeded: false,
 			});
 
-			const manual_pi_entries_updated_promise = data.manual_pi_entry.map(
+			const manual_pi_entries_updated_promise = manual_pi_entry.map(
 				async (item) => {
 					if (item.uuid === undefined) {
 						item.manual_pi_uuid = manual_pi_uuid;
@@ -217,7 +221,7 @@ export default function Index() {
 		});
 
 		// Create Shade Recipe entries
-		const order_info_entries = [...data.manual_pi_entry].map((item) => ({
+		const order_info_entries = manual_pi_entry.map((item) => ({
 			...item,
 			manual_pi_uuid: new_manual_pi_uuid,
 			uuid: nanoid(),
@@ -251,18 +255,8 @@ export default function Index() {
 	// Check if uuid is valuuid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
 
-	const headerButtons = [
-		<div className='flex items-center gap-2'>
-			<label className='text-sm text-white'>Zipper All</label>
-			<SwitchToggle
-				checked={zipperAll}
-				onChange={() => setZipperAll(!zipperAll)}
-			/>
-		</div>,
-	];
-
-	const handleCopy = (index) => {
-		const field = form.watch('manual_pi_entry')[index];
+	const handleZipperCopy = (index) => {
+		const field = form.watch('manual_zipper_pi_entry')[index];
 
 		// const length = form.watch('manual_pi_entry').length;
 		// let newIndex;
@@ -277,7 +271,36 @@ export default function Index() {
 		// 	newIndex = length + 1;
 		// }
 
-		threadOrderInfoEntryAppend({
+		zipperEntryAppend({
+			// index: newIndex,
+			order_number: field.order_number,
+			po: field.po,
+			style: field.style,
+			size: field.size,
+			item: field.item,
+			specification: field.specification,
+			quantity: field.quantity,
+			unit_price: field.unit_price,
+			is_zipper: field.is_zipper,
+		});
+	};
+	const handleThreadCopy = (index) => {
+		const field = form.watch('manual_thread_pi_entry')[index];
+
+		// const length = form.watch('manual_pi_entry').length;
+		// let newIndex;
+		// if (length > 0) {
+		// 	// Get the index value of the previous row
+		// 	const previousIndex = form.getValues(
+		// 		`manual_pi_entry.${length - 1}.index`
+		// 	);
+		// 	newIndex = previousIndex ? previousIndex + 1 : length + 1;
+		// } else {
+		// 	// For the first row, set index to 1
+		// 	newIndex = length + 1;
+		// }
+
+		threadEntryAppend({
 			// index: newIndex,
 			order_number: field.order_number,
 			po: field.po,
@@ -310,13 +333,20 @@ export default function Index() {
 				/>
 
 				<ManualPiSpreadsheet
-					extraHeader={headerButtons}
-					title='Details'
+					title='Zipper Details'
 					form={form}
-					fieldName='manual_pi_entry'
-					handleCopy={handleCopy}
-					handleAdd={handleThreadOrderInfoEntryAppend}
-					handleRemove={handleThreadOrderInfoEntryRemove}
+					fieldName='manual_zipper_pi_entry'
+					handleCopy={handleZipperCopy}
+					handleAdd={handleZipperEntryAppend}
+					handleRemove={handleZipperEntryRemove}
+				/>
+				<ThreadManualPiSpreadsheet
+					title='Thread Details'
+					form={form}
+					fieldName='manual_thread_pi_entry'
+					handleCopy={handleThreadCopy}
+					handleAdd={handleThreadEntryAppend}
+					handleRemove={handleThreadEntryRemove}
 				/>
 
 				<Footer buttonClassName='!btn-primary' />
@@ -327,7 +357,7 @@ export default function Index() {
 					title={'Order info Entry'}
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
-					setItems={threadOrderInfoEntryField}
+					setItems={zipperEntryField}
 					url={'/commercial/manual-pi-entry'}
 					deleteData={deleteData}
 				/>

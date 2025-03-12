@@ -70,39 +70,14 @@ export default function Index() {
 				},
 			},
 			{
-				accessorFn: (row) => {
-					const { order_number } = row;
-					const orders_number = order_number?.filter(
-						(order) => order.order_number
-					);
-					return orders_number;
-				},
+				accessorFn: (row) => row?.original?.order_number ?? [],
 				id: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: false,
+				width: 'w-32',
 				cell: ({ row }) => {
-					const { order_number } = row.original;
-					const links = order_number?.map((order) => {
-						if (order.order_number.includes('ST')) {
-							return {
-								label: order.order_number,
-								url: `/order/details/${order.order_number}`,
-							};
-						} else {
-							return {
-								label: order.order_number,
-								url: `/commercial/order/${order.uuid}`,
-							};
-						}
-					});
-
-					return links?.map((link, index) => (
-						<CustomLink
-							key={index}
-							label={link.label}
-							url={link.url}
-						/>
-					));
+					const orderNumbers = row?.original?.order_number ?? [];
+					return orderNumbers.join(', ');
 				},
 			},
 

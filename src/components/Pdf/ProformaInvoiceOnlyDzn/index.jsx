@@ -155,7 +155,7 @@ export default function Index(data) {
 			grand_total_quantity +=
 				!isTapeOrder && !isSliderOrder ? quantity : 0;
 			grand_total_quantity_mtr += isTapeOrder ? quantity : 0;
-			total_value.push(Number(value).toFixed(2));
+			total_value.push(value);
 			grand_total_zipper_value += value;
 		});
 
@@ -260,7 +260,7 @@ export default function Index(data) {
 					unit_price_per_pcs: `${order_types[index] === 'tape' ? '---' : Number(unitPrice / 12).toFixed(2)}`,
 					value: Number(TotalValue[index][priceIndex]).toLocaleString(
 						undefined,
-						{ minimumFractionDigits: 2, maximumFractionDigits: 2 }
+						{ minimumFractionDigits: 2, maximumFractionDigits: 3 }
 					),
 				};
 			});
@@ -371,7 +371,7 @@ export default function Index(data) {
 								]
 							).toLocaleString(undefined, {
 								minimumFractionDigits: 2,
-								maximumFractionDigits: 2,
+								maximumFractionDigits: 3,
 							}),
 						});
 					}
@@ -433,8 +433,6 @@ export default function Index(data) {
 								...order_info_entry.map((item) =>
 									zipperNode.map((nodeItem) => {
 										const cellData = item[nodeItem.field];
-
-										console.log(item);
 										return {
 											text: cellData.text || cellData,
 											style: nodeItem.cellStyle,

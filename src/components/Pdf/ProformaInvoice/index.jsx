@@ -130,14 +130,14 @@ export default function Index(data) {
 					item2.unit_price === item3 &&
 					item2.order_type === 'full'
 				) {
-					value += parseFloat(item2.value);
+					value += item2.value
 					quantity += parseFloat(item2.pi_cash_quantity);
 				} else if (
 					item2.pi_item_description === item &&
 					item2.unit_price === item3 &&
 					item2.order_type === 'tape'
 				) {
-					value += parseFloat(item2.value);
+					value += item2.value
 					quantity += parseFloat(item2.size);
 					isTapeOrder = true;
 				} else if (
@@ -145,7 +145,7 @@ export default function Index(data) {
 					item2.unit_price === item3 &&
 					item2.order_type === 'slider'
 				) {
-					value += parseFloat(item2.value);
+					value += item2.value
 					quantity += parseFloat(item2.pi_cash_quantity);
 					grand_total_slider += parseFloat(item2.pi_cash_quantity);
 					isSliderOrder = true;
@@ -155,7 +155,8 @@ export default function Index(data) {
 			grand_total_quantity +=
 				!isTapeOrder && !isSliderOrder ? quantity : 0;
 			grand_total_quantity_mtr += isTapeOrder ? quantity : 0;
-			total_value.push(Number(value).toFixed(2));
+
+			total_value.push(value);
 			grand_total_zipper_value += value;
 		});
 
@@ -260,7 +261,7 @@ export default function Index(data) {
 					unit_price_per_pcs: `${order_types[index] === 'tape' ? '---' : Number(unitPrice / 12).toFixed(3)}`,
 					value: Number(TotalValue[index][priceIndex]).toLocaleString(
 						undefined,
-						{ minimumFractionDigits: 2, maximumFractionDigits: 2 }
+						{ minimumFractionDigits: 2, maximumFractionDigits: 3 }
 					),
 				};
 			});
@@ -312,7 +313,7 @@ export default function Index(data) {
 					}
 				});
 				total_quantity_thread.push(quantity);
-				total_value_thread.push(Number(value).toFixed(2));
+				total_value_thread.push(value);
 				grand_total_thread_value += value;
 				grand_thread_total_quantity += quantity;
 			});
@@ -371,7 +372,7 @@ export default function Index(data) {
 								]
 							).toLocaleString(undefined, {
 								minimumFractionDigits: 2,
-								maximumFractionDigits: 2,
+								maximumFractionDigits: 3,
 							}),
 						});
 					}
@@ -409,7 +410,7 @@ export default function Index(data) {
 				? {
 						table: {
 							headerRows: 1,
-							widths: [40, '*', 50, 70, 40, 35, 35, 35, 35],
+							widths: [40, '*', 50, 70, 40, 35, 35, 35, 45],
 							body: [
 								[
 									{

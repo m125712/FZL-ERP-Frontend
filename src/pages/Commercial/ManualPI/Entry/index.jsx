@@ -91,10 +91,10 @@ export default function Index() {
 	});
 
 	const handleZipperEntryRemove = (index) => {
-		if (getValues(`manual_pi_entry[${index}].uuid`) !== undefined) {
+		if (getValues(`manual_zipper_pi_entry[${index}].uuid`) !== undefined) {
 			setDeleteItem({
-				itemId: getValues(`manual_pi_entry[${index}].uuid`),
-				itemName: getValues(`manual_pi_entry[${index}].uuid`),
+				itemId: getValues(`manual_zipper_pi_entry[${index}].uuid`),
+				itemName: getValues(`manual_zipper_pi_entry[${index}].uuid`),
 			});
 			window['order_info_entry_delete'].showModal();
 		}
@@ -114,10 +114,10 @@ export default function Index() {
 		});
 	};
 	const handleThreadEntryRemove = (index) => {
-		if (getValues(`manual_pi_entry[${index}].uuid`) !== undefined) {
+		if (getValues(`manual_thread_pi_entry[${index}].uuid`) !== undefined) {
 			setDeleteItem({
-				itemId: getValues(`manual_pi_entry[${index}].uuid`),
-				itemName: getValues(`manual_pi_entry[${index}].uuid`),
+				itemId: getValues(`manual_thread_pi_entry[${index}].uuid`),
+				itemName: getValues(`manual_thread_pi_entry[${index}].uuid`),
 			});
 			window['order_info_entry_delete'].showModal();
 		}

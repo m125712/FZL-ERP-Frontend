@@ -88,7 +88,6 @@ export default function Index(data) {
 		a.item.localeCompare(b.item);
 	});
 
-
 	const sortedThreadData = manual_thread_pi_entry.sort((a, b) => {
 		return a.order_number.localeCompare(b.order_number);
 	});
@@ -124,7 +123,7 @@ export default function Index(data) {
 			quantity: item.quantity,
 			unit_price: item.unit_price,
 			unit_price_per_pcs: item.unit_price_per_pcs,
-			value: item.value,
+			value: item.value.toLocaleString(),
 		};
 	});
 
@@ -174,7 +173,6 @@ export default function Index(data) {
 									{},
 									{},
 									{},
-									
 								],
 								// Header
 								TableHeader(zipperNode),
@@ -230,7 +228,7 @@ export default function Index(data) {
 										bold: true,
 										colSpan: 2,
 									},
-									
+
 									{},
 								],
 							],

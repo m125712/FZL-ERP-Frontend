@@ -14,14 +14,17 @@ export default function Index() {
 
 	useEffect(() => {
 		invalidateQuery();
-		document.title = `LC: ${manual_pi_uuid}`;
+		document.title = `MPI: ${manual_pi_uuid}`;
 	}, [manual_pi_uuid]);
 
 	// ! FOR TESTING
 	const [data2, setData] = useState('');
 
 	useEffect(() => {
-		if (data && data?.manual_pi_entry) {
+		if (
+			data &&
+			(data?.manual_zipper_pi_entry || data?.manual_thread_pi_entry)
+		) {
 			PiPdfSheet(data)?.getDataUrl((dataUrl) => {
 				setData(dataUrl);
 			});
@@ -39,7 +42,14 @@ export default function Index() {
 				className='h-[40rem] w-full rounded-md border-none'
 			/>
 			<Information data={data} />
-			<Table entries={data?.manual_pi_entry} />
+			<Table
+				entries={data?.manual_zipper_pi_entry}
+				title='Zipper Details'
+			/>
+			<Table
+				entries={data?.manual_thread_pi_entry}
+				title='Thread Details'
+			/>
 		</div>
 	);
 }

@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime } from '@/ui';
 
-export default function Index({ entries }) {
+export default function Index({ entries, title }) {
 	const columns = useMemo(
 		() => [
 			{
@@ -55,14 +55,6 @@ export default function Index({ entries }) {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => (row.is_zipper ? 'Yes' : 'No'),
-				header: 'Zipper',
-				id: 'is_zipper',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-
-			{
 				accessorKey: 'created_at',
 				header: 'Created',
 				enableColumnFilter: false,
@@ -86,6 +78,6 @@ export default function Index({ entries }) {
 	);
 
 	return (
-		<ReactTableTitleOnly title='Details' data={entries} columns={columns} />
+		<ReactTableTitleOnly title={title} data={entries} columns={columns} />
 	);
 }

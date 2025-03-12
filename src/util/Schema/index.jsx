@@ -2251,19 +2251,36 @@ export const MANUAL_PI_SCHEMA = {
 	pi_number: STRING_REQUIRED,
 	remarks: STRING.nullable(),
 
-	manual_pi_entry: yup.array().of(
-		yup.object().shape({
-			order_number: STRING_REQUIRED,
-			po: STRING.nullable(),
-			style: STRING.nullable(),
-			size: STRING.nullable(),
-			item: STRING.nullable(),
-			specification: STRING_REQUIRED,
-			quantity: NUMBER_REQUIRED,
-			unit_price: NUMBER_DOUBLE_REQUIRED,
-			is_zipper: BOOLEAN_DEFAULT_VALUE(false),
-		})
-	),
+	manual_zipper_pi_entry: yup
+		.array()
+		.of(
+			yup.object().shape({
+				order_number: STRING_REQUIRED,
+				po: STRING.nullable(),
+				style: STRING.nullable(),
+				size: STRING.nullable(),
+				item: STRING.nullable(),
+				specification: STRING_REQUIRED,
+				quantity: NUMBER_REQUIRED,
+				unit_price: NUMBER_DOUBLE_REQUIRED,
+				is_zipper: BOOLEAN_DEFAULT_VALUE(true),
+			})
+		)
+		.optional(),
+	manual_thread_pi_entry: yup
+		.array()
+		.of(
+			yup.object().shape({
+				order_number: STRING_REQUIRED,
+				po: STRING.nullable(),
+				style: STRING.nullable(),
+				size: STRING.nullable(),
+				quantity: NUMBER_REQUIRED,
+				unit_price: NUMBER_DOUBLE_REQUIRED,
+				is_zipper: BOOLEAN_DEFAULT_VALUE(false),
+			})
+		)
+		.optional(),
 };
 
 export const MANUAL_PI_NULL = {
@@ -2282,19 +2299,8 @@ export const MANUAL_PI_NULL = {
 	pi_number: null,
 	remarks: null,
 
-	manual_pi_entry: [
-		{
-			order_number: '',
-			po: '',
-			style: '',
-			size: '',
-			item: '',
-			specification: '',
-			quantity: 0,
-			unit_price: 0,
-			is_zipper: false,
-		},
-	],
+	manual_zipper_pi_entry: [],
+	manual_thread_pi_entry: [],
 };
 // Thread
 // Count Length

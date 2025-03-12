@@ -112,6 +112,13 @@ export const useOtherOrderDescription = (params) =>
 			: '/other/order/description/value/label',
 	});
 
+export const useOtherPlanningBatchByDate = (date, uuid, enabled = false) =>
+	createGlobalState({
+		queryKey: otherQK.planningBatchByDate(date, uuid),
+		url: `/zipper/finishing-batch-planning-info?date=${date}&order_description_uuid=${uuid}`,
+		enabled,
+	});
+
 export const useOtherOrderStore = (params) =>
 	createGlobalState({
 		queryKey: otherQK.orderStore(params),

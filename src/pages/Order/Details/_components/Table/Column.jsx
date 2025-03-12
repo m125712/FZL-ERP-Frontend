@@ -1,3 +1,6 @@
+import { useAccess } from '@/hooks';
+
+import { EyeBtn } from '@/ui/Others/Button';
 import { StatusButton } from '@/ui';
 
 const createColumn = (props) => ({
@@ -54,7 +57,10 @@ const getColumn = ({
 	sizes,
 	order_type,
 	is_sample,
+	handelHistory,
 }) => {
+	const haveAccess = useAccess('order__details');
+	let column = [];
 	// default columns
 	const DefaultStartColumn = [
 		createColumn({
@@ -195,10 +201,10 @@ const getColumn = ({
 
 	// return columns based on item_name
 	if (item_name === 'nylon') {
-		return [...DefaultStartColumn, ...DefaultEndColumn];
+		column = [...DefaultStartColumn, ...DefaultEndColumn];
 	}
 	if (item_name === 'vislon') {
-		return [
+		column = [
 			...DefaultStartColumn,
 
 			...(!is_sample
@@ -218,7 +224,7 @@ const getColumn = ({
 		];
 	}
 	if (item_name === 'metal') {
-		return [
+		column = [
 			...DefaultStartColumn,
 
 			...(!is_sample
@@ -245,6 +251,19 @@ const getColumn = ({
 			...DefaultEndColumn,
 		];
 	}
+
+	return [
+		...column,
+		createColumn({
+			accessorKey: 'history',
+			header: 'History',
+			enableColumnFilter: false,
+			hidden: !haveAccess.includes('show_history'),
+			cell: (info) => (
+				<EyeBtn onClick={() => handelHistory(info.row.index)} />
+			),
+		}),
+	];
 };
 
 export default getColumn;

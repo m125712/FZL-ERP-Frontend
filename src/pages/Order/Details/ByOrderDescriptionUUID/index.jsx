@@ -155,7 +155,6 @@ export default function Index({ initial_order, idx }) {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	if (!order) return <Navigate to='/not-found' />;
-
 	return (
 		<div className='space-y-4'>
 			{order_description_uuid && (
@@ -183,7 +182,7 @@ export default function Index({ initial_order, idx }) {
 
 			<Suspense>
 				<Timeline {...order} />
-				<Table {...order} total={total} />
+				<Table {...order} index={idx} total={total} />
 			</Suspense>
 		</div>
 	);

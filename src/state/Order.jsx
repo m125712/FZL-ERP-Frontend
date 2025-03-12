@@ -15,6 +15,13 @@ export const useOrderDetailsByQuery = (query, { enabled = false }) =>
 		enabled: enabled,
 	});
 
+export const useOrderEntryHistory = (uuid) =>
+	createGlobalState({
+		queryKey: orderQK.orderEntryHistory(uuid),
+		url: `/zipper/order-entry-log?order_entry_uuid=${uuid}`,
+		enabled: uuid ? true : false,
+	});
+
 export const useOrderDetailsByStyleForPDF = (uuid, param) =>
 	createGlobalState({
 		queryKey: orderQK.detailByStyleForPDF(uuid, param),

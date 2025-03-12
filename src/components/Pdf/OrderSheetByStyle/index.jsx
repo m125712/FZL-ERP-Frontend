@@ -312,10 +312,26 @@ export default function OrderSheetByStyle(orderByStyle) {
 				};
 			}),
 
+			// * Grand total
 			{
-				text: 'Grand Total: ' + grandTotal,
-				fontSize: DEFAULT_FONT_SIZE + 3,
-				bold: true,
+				margin: [0, 5],
+				table: {
+					widths: ['*', 'auto'],
+					body: [
+						[
+							{
+								text: 'Grand Total',
+								style: 'tableFooter',
+								alignment: 'right',
+							},
+							{
+								text: grandTotal,
+								style: 'tableFooter',
+								alignment: 'Center',
+							},
+						],
+					],
+				},
 			},
 		],
 	});

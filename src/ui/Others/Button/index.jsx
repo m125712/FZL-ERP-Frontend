@@ -1,4 +1,5 @@
 import { ArrowBack, PDF, TransferIn } from '@/assets/icons';
+import { Eye } from 'lucide-react';
 
 import BadgeCheckbox from './BadgeCheckbox';
 import { EditDelete } from './EditDelete';
@@ -40,6 +41,18 @@ const Transfer = ({ onClick, disabled = false }) => {
 		</button>
 	);
 };
+const EyeBtn = ({ onClick, disabled = false }) => {
+	return (
+		<button
+			disabled={disabled}
+			type='button'
+			className='btn btn-circle btn-accent btn-sm font-semibold text-white shadow-md'
+			onClick={onClick}
+		>
+			<Eye className='w-4' />
+		</button>
+	);
+};
 
 export {
 	BadgeCheckbox,
@@ -48,4 +61,5 @@ export {
 	ResetPassword,
 	StatusButton,
 	Transfer,
+	EyeBtn,
 };

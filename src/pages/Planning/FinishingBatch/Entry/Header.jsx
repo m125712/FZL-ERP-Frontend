@@ -1,4 +1,8 @@
-import { useGetURLData, useOtherOrderDescription } from '@/state/Other';
+import {
+	useGetURLData,
+	useOtherOrderDescription,
+	useOtherPlanningBatchByDate,
+} from '@/state/Other';
 import { format } from 'date-fns';
 import { useParams } from 'react-router-dom';
 
@@ -11,6 +15,9 @@ import {
 	Textarea,
 } from '@/ui';
 
+import { cn } from '@/lib/utils';
+
+import QuantityCard from './quantity-card';
 import TableView from './TableView';
 
 export default function Header({
@@ -37,6 +44,14 @@ export default function Header({
 		{ value: 'hold', label: 'Hold' },
 		{ value: 'rejected ', label: 'Rejected ' },
 	];
+
+	const { data: batches } = useOtherPlanningBatchByDate(
+		watch('production_date')
+			? format(watch('production_date'), 'yyyy-MM-dd')
+			: '',
+		watch('order_description_uuid'),
+		!!(watch('order_description_uuid') && watch('production_date'))
+	);
 
 	const { data: qty } = useGetURLData(
 		`/zipper/finishing-batch-entry/production-quantity/max/${watch('order_description_uuid')}?production_date=${watch('production_date') ? format(watch('production_date'), 'yyyy-MM-dd') : ''}`,
@@ -65,8 +80,14 @@ export default function Header({
 						</span>
 					</div>
 				}
+				className='grid grid-cols-3 gap-4'
 			>
-				<div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
+				<div
+					className={cn(
+						'col-span-3 grid grid-cols-1 gap-4 md:grid-cols-3',
+						batches?.batch_numbers?.length > 0 && 'col-span-2'
+					)}
+				>
 					<DateInput
 						label='production_date'
 						Controller={Controller}
@@ -150,6 +171,7 @@ export default function Header({
 					)}
 					<Textarea label='remarks' {...{ register, errors }} />
 				</div>
+				<QuantityCard batch_numbers={batches?.batch_numbers} />
 			</SectionEntryBody>
 		</div>
 	);

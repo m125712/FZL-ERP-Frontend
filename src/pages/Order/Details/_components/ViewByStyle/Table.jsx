@@ -7,12 +7,13 @@ import getColumn from './Column';
 
 export default function Table({ order_entry, total }) {
 	const haveAccess = useAccess('order__details');
+	const is_sample = order_entry?.[0]?.is_sample;
 
 	const columns = useMemo(
 		() =>
 			getColumn({
 				show_price: haveAccess?.includes('show_price'),
-				is_sample: order_entry?.[0]?.is_sample,
+				is_sample: is_sample,
 			}),
 		[order_entry]
 	);
@@ -26,21 +27,25 @@ export default function Table({ order_entry, total }) {
 	return (
 		<ReactTable title='Details' data={order_entry} columns={columns}>
 			<tr className='text bg-slate-200 font-bold text-primary'>
-				<td colSpan={10} className='text-right'>
+				<td colSpan={11} className='text-right'>
 					Total:
 				</td>
 				<td className='px-3 py-1'>{total.Quantity}</td>
 				<td className='px-3 py-1'>{total.piQuantity}</td>
 				<td className='px-3 py-1'>{total.rejectQuantity}</td>
 				<td className='px-3 py-1'>{total.shortQuantity}</td>
-				<td className='px-3 py-1'>{total.tapeQuantity}</td>
-				<td className='px-3 py-1'></td>
-				<td className='px-3 py-1'></td>
-				<td className='px-3 py-1'>{total.sliderQuantity}</td>
-				<td className='px-3 py-1'></td>
+				{!is_sample && (
+					<td className='px-3 py-1'>{total.tapeQuantity}</td>
+				)}
+				{!is_sample && <td className='px-3 py-1'></td>}
+				{!is_sample && <td className='px-3 py-1'></td>}
+				{!is_sample && (
+					<td className='px-3 py-1'>{total.sliderQuantity}</td>
+				)}
+				{!is_sample && <td className='px-3 py-1'></td>}
 				<td className='px-3 py-1'>{total.warehouseQuantity}</td>
 				<td className='px-3 py-1'>{total.deliveryQuantity}</td>
-				<td></td>
+				<td className='px-3 py-1'></td>
 			</tr>
 		</ReactTable>
 	);

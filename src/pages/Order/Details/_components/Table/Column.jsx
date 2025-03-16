@@ -169,6 +169,16 @@ const getColumn = ({
 			: []),
 
 		createColumn({
+			accessorKey: 'finishing_balance',
+			header: (
+				<div>
+					Finishing <br /> Balance
+				</div>
+			),
+			enableColumnFilter: false,
+			cell: (info) => info.getValue(),
+		}),
+		createColumn({
 			accessorKey: 'total_warehouse_quantity',
 			header: 'Warehouse',
 			enableColumnFilter: false,

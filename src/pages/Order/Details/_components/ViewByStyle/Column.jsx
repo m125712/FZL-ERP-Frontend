@@ -128,6 +128,16 @@ const getColumn = ({ show_price, is_sample }) => {
 			header: `Size (MTR)`,
 			enableColumnFilter: true,
 		}),
+		createColumn({
+			accessorKey: 'finishing_balance',
+			header: (
+				<div>
+					Finishing <br /> Balance
+				</div>
+			),
+			enableColumnFilter: false,
+			cell: (info) => info.getValue(),
+		}),
 
 		createColumn({
 			accessorKey: 'quantity',

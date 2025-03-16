@@ -211,6 +211,13 @@ export const useSample = (
 		enabled,
 	});
 
+export const useBulk = (query, enabled = false) =>
+	createGlobalState({
+		queryKey: reportQK.bulk(query),
+		url: `/report/sample-report-by-date?is_sample=0` + query,
+		enabled,
+	});
+
 export const useThreadDelivery = (date, toDate, query) =>
 	createGlobalState({
 		queryKey: reportQK.threadDelivery(date, toDate, query),

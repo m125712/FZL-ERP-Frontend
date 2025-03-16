@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import { useSample } from '@/state/Report';
+import { useBulk } from '@/state/Report';
 import { format, startOfMonth, subMonths } from 'date-fns';
 import { useAccess } from '@/hooks';
 
@@ -10,27 +10,27 @@ import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 
 const getPath = (haveAccess, userUUID) => {
-	if (haveAccess.includes('show_own_orders') && userUUID) {
-		return `&own_uuid=${userUUID}`;
+	if (
+		haveAccess.includes('show_own_orders') &&
+		haveAccess.includes('show_zero_balance') &&
+		userUUID
+	) {
+		return `&own_uuid=${userUUID}&show_zero_balance=1`;
+	} else if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `&own_uuid=${userUUID}&show_zero_balance=0`;
+	} else if (haveAccess.includes('show_zero_balance') && userUUID) {
+		return `&show_zero_balance=1`;
 	}
 
-	return ``;
+	return `&show_zero_balance=0`;
 };
 
 export default function Index() {
 	const haveAccess = useAccess('report__bulk');
 	const { user } = useAuth();
-
-	const [date, setDate] = useState(new Date());
-	const [toDate, setToDate] = useState(new Date());
-	const { data, isLoading, url } = useSample(
-		format(date, 'yyyy-MM-dd'),
-		format(toDate, 'yyyy-MM-dd'),
-		0,
+	const { data, isLoading, url } = useBulk(
 		getPath(haveAccess, user?.uuid),
-		{
-			enabled: !!user?.uuid,
-		}
+		!!user?.uuid
 	);
 	const info = new PageInfo('Bulk', url, 'report__bulk');
 
@@ -50,7 +50,7 @@ export default function Index() {
 			{
 				accessorKey: 'party_name',
 				header: 'Party',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
@@ -196,6 +196,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'delivered_balance',
+				header: 'Delivered Balance',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'delivered',
 				header: 'Delivered',
 				enableColumnFilter: false,
@@ -233,30 +239,6 @@ export default function Index() {
 			data={data}
 			columns={columns}
 			extraClass={'py-0.5'}
-			extraButton={
-				<div className='flex items-center gap-2'>
-					<SimpleDatePicker
-						className='h-[2.34rem] w-32'
-						key={'Date'}
-						value={date}
-						placeholder='Date'
-						onChange={(data) => {
-							setDate(data);
-						}}
-						selected={date}
-					/>
-					<SimpleDatePicker
-						className='h-[2.34rem] w-32'
-						key={'toDate'}
-						value={toDate}
-						placeholder='To'
-						onChange={(data) => {
-							setToDate(data);
-						}}
-						selected={toDate}
-					/>
-				</div>
-			}
 		/>
 	);
 }

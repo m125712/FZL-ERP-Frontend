@@ -1677,6 +1677,8 @@ export const reportQK = {
 		...(query ? [query] : []),
 	],
 
+	// * Bulk Report
+	bulk: (query) => [...reportQK.all(), 'bulk-report', query],
 	// * Thread delivery
 	threadDelivery: (date, toDate, query) => [
 		...reportQK.all(),

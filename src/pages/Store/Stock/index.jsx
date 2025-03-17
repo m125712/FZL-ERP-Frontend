@@ -77,6 +77,12 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+			{
+				accessorKey: 'avg_price',
+				header: 'Avg. Price',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue().toFixed(2),
+			},
 
 			{
 				accessorKey: 'action_trx',

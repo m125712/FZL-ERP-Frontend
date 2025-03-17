@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, LinkWithCopy } from '@/ui';
+import { CustomLink, DateTime, LinkWithCopy, StatusButton } from '@/ui';
 
 export default function index({ data }) {
 	const columns = useMemo(
@@ -92,6 +92,22 @@ export default function index({ data }) {
 				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'approved',
+				header: 'Bulk Approved',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
+			},
+			{
+				accessorKey: 'is_pps_req',
+				header: 'PP Approved',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
 			},
 			{
 				accessorKey: 'order_quantity',

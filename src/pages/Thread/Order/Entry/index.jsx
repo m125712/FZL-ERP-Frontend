@@ -1,11 +1,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import { toggleBleach } from '@/pages/Order/Details/Entry/utils';
 import { useAllZipperThreadOrderList } from '@/state/Other';
-import {
-	useThreadDetailsByUUID,
-	useThreadOrderInfo,
-	useThreadOrderInfoEntry,
-} from '@/state/Thread';
+import { useThreadDetailsByUUID, useThreadOrderInfo } from '@/state/Thread';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -38,7 +34,8 @@ export default function Index() {
 		postData,
 		deleteData,
 	} = useThreadOrderInfo();
-	const { url: threadOrderEntryUrl } = useThreadOrderInfoEntry();
+
+	const threadOrderEntryUrl = '/thread/order-entry';
 	const { uuid, order_info_uuid } = useParams();
 
 	const navigate = useNavigate();
@@ -70,7 +67,6 @@ export default function Index() {
 		fields: threadOrderInfoEntryField,
 		append: threadOrderInfoEntryAppend,
 		remove: threadOrderInfoEntryRemove,
-		update: threadOrderInfoEntryUpdate,
 	} = useFieldArray({
 		control,
 		name: 'order_info_entry',

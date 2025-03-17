@@ -11,7 +11,6 @@ import { useOrderDescription } from '@/state/Order';
 import { useGetURLData } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
-import { configure, HotKeys } from 'react-hotkeys';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
@@ -22,7 +21,6 @@ import {
 	ActionButtons,
 	DynamicField,
 	FormField,
-	Input,
 	JoinInput,
 	ReactSelect,
 	Textarea,

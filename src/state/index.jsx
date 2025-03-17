@@ -5,7 +5,12 @@ import { ShowToast } from '@/components/Toast';
 
 import { api } from '@/lib/api';
 
-export default function createGlobalState({ queryKey, url, enabled = true }) {
+export default function createGlobalState({
+	queryKey,
+	url,
+	refetchOnWindowFocus = true,
+	enabled = true,
+}) {
 	const queryClient = useQueryClient();
 
 	const { data, isError, isLoading, isPending, refetch, isFetching, status } =
@@ -14,9 +19,9 @@ export default function createGlobalState({ queryKey, url, enabled = true }) {
 			queryFn: () => defaultFetch(url),
 			refetchInterval: false,
 			refetchOnMount: false,
-			refetchOnWindowFocus: true,
 			refetchOnReconnect: false,
 			refetchIntervalInBackground: false,
+			refetchOnWindowFocus,
 			enabled,
 		});
 

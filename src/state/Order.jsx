@@ -12,7 +12,8 @@ export const useOrderDetailsByQuery = (query, { enabled = false }) =>
 	createGlobalState({
 		queryKey: orderQK.detailsByQuery(query),
 		url: `/zipper/order/details${query}`,
-		enabled: enabled,
+		enabled,
+		refetchOnWindowFocus: false,
 	});
 
 export const useOrderEntryHistory = (uuid) =>
@@ -28,6 +29,7 @@ export const useOrderDetailsByStyleForPDF = (uuid, param) =>
 		url: param
 			? `/zipper/order-all-info/by/${uuid}?order_description_uuid=${param}`
 			: `/zipper/order-all-info/by/${uuid}`,
+		refetchOnWindowFocus: false,
 	});
 
 export const useOrderDetailsByUUID = (uuid) =>

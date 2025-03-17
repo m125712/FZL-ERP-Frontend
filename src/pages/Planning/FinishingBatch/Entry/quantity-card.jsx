@@ -2,10 +2,23 @@ import { CustomLink } from '@/ui';
 
 import { cn } from '@/lib/utils';
 
-export default function QuantityCard({ batch_numbers }) {
-	if (!batch_numbers?.length) return '--';
+export default function QuantityCard({
+	batch_numbers,
+	production_capacity_quantity,
+}) {
+	if (!batch_numbers?.length)
+		return (
+			<div
+				className={cn(
+					'flex items-center justify-center border-2 border-primary/20 align-top text-primary'
+				)}
+			>
+				<div className='text-center text-2xl font-semibold text-error'>
+					No Data
+				</div>
+			</div>
+		);
 
-	console.log(batch_numbers);
 	const totals = batch_numbers?.reduce(
 		(acc, item) => ({
 			batch_quantity: acc.batch_quantity + item.batch_quantity,
@@ -16,10 +29,14 @@ export default function QuantityCard({ batch_numbers }) {
 		{ batch_quantity: 0, production_quantity: 0, balance_quantity: 0 }
 	);
 
+	const hasExceededDailyProduction =
+		totals.batch_quantity > production_capacity_quantity;
+
 	return (
 		<table
 			className={cn(
-				'table table-xs rounded-md border-2 border-primary/20 align-top text-primary'
+				'table table-xs rounded-md border-2 border-primary/20 align-top text-primary',
+				hasExceededDailyProduction ? 'border-error/80' : ''
 			)}
 		>
 			<thead>

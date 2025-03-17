@@ -218,6 +218,13 @@ export const useBulk = (query, enabled = false) =>
 		enabled,
 	});
 
+export const usePackingList = (query) =>
+	createGlobalState({
+		queryKey: reportQK.packingList(query),
+		url: query
+			? `/report/packing-list-report?` + query
+			: `/report/packing-list-report`,
+	});
 export const useThreadDelivery = (date, toDate, query) =>
 	createGlobalState({
 		queryKey: reportQK.threadDelivery(date, toDate, query),

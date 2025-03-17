@@ -30,6 +30,7 @@ const OrderTracking = lazy(() => import('@/pages/Report/OrderTracking'));
 const OrderSummary = lazy(() => import('@/pages/Report/OrderSummary'));
 const DeliveryReport = lazy(() => import('@/pages/Report/DeliveryReport'));
 const ThreadDelivery = lazy(() => import('@/pages/Report/ThreadDelivery'));
+const PackingList = lazy(() => import('@/pages/Report/PackingList'));
 
 export const ReportRoutes = [
 	{
@@ -180,6 +181,13 @@ export const ReportRoutes = [
 				element: <ThreadDelivery />,
 				page_name: 'report__thread_delivery',
 				actions: ['read', 'show_own_orders'],
+			},
+			{
+				name: 'Packing List',
+				path: '/report/packing-list',
+				element: <PackingList />,
+				page_name: 'report__packing_list',
+				actions: ['read'],
 			},
 		],
 	},

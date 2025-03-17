@@ -76,7 +76,7 @@ export default function Header({
 
 						<span className='text-sm'>
 							Total Production Capacity:{' '}
-							{qty?.total_production_capacity}
+							{batches?.production_capacity_quantity}
 						</span>
 					</div>
 				}
@@ -84,8 +84,7 @@ export default function Header({
 			>
 				<div
 					className={cn(
-						'col-span-3 grid grid-cols-1 gap-4 md:grid-cols-3',
-						batches?.batch_numbers?.length > 0 && 'col-span-2'
+						'col-span-2 grid grid-cols-1 gap-4 md:grid-cols-3'
 					)}
 				>
 					<DateInput
@@ -100,6 +99,7 @@ export default function Header({
 						label='order_description_uuid'
 						title='Order No'
 						errors={errors}
+						className={'col-span-2'}
 					>
 						<Controller
 							name='order_description_uuid'
@@ -169,9 +169,17 @@ export default function Header({
 							{...{ register, errors }}
 						/>
 					)}
-					<Textarea label='remarks' {...{ register, errors }} />
+
+					<div className='col-span-3'>
+						<Textarea label='remarks' {...{ register, errors }} />
+					</div>
 				</div>
-				<QuantityCard batch_numbers={batches?.batch_numbers} />
+				<QuantityCard
+					batch_numbers={batches?.batch_numbers}
+					production_capacity_quantity={
+						batches?.production_capacity_quantity
+					}
+				/>
 			</SectionEntryBody>
 		</div>
 	);

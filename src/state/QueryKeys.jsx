@@ -1688,6 +1688,12 @@ export const reportQK = {
 		...(query ? [query] : []),
 	],
 
+	packingList: (query) => [
+		...reportQK.all(),
+		'packing-list',
+		...(query ? [query] : []),
+	],
+
 	sampleCombined: (date, is_sample, query) => [
 		...reportQK.all(),
 		'sample-report-by-date-combined',

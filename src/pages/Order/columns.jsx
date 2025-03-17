@@ -373,6 +373,21 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 	return useMemo(
 		() => [
 			{
+				accessorKey: 'actions',
+				header: 'Actions',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('update'),
+				cell: (info) => (
+					<EditDelete
+						idx={info.row.index}
+						handelUpdate={handelUpdate}
+						showUpdate={haveAccess.includes('update')}
+						showDelete={false}
+					/>
+				),
+			},
+			{
 				accessorKey: 'is_sample',
 				header: 'Sample',
 				enableColumnFilter: false,
@@ -429,7 +444,12 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 			},
 			{
 				accessorKey: 'is_multi_color',
-				header: 'Multi Color',
+				header: (
+					<>
+						Multi <br />
+						Color
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => (
 					<StatusButton size='btn-xs' value={info.getValue()} />
@@ -469,7 +489,12 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				accessorFn: (row) =>
 					`${row.price_approval_count || 0}/${row.order_entry_count || 0}`,
 				id: 'price_approval_count',
-				header: 'Price App',
+				header: (
+					<>
+						Price <br />
+						App.
+					</>
+				),
 				enableColumnFilter: false,
 			},
 			{
@@ -480,14 +505,14 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				enableColumnFilter: false,
 				width: 'w-12',
 			},
-			{
-				accessorKey: 'is_swatch_approved',
-				header: 'Status',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
-				),
-			},
+			// {
+			// 	accessorKey: 'is_swatch_approved',
+			// 	header: 'Status',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<StatusButton size='btn-xs' value={info.getValue()} />
+			// 	),
+			// },
 			// * for order_details the created_at needs to be order_description_created at
 			{
 				accessorKey: 'remarks',
@@ -516,22 +541,7 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
-			{
-				accessorKey: 'actions',
-				header: 'Actions',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
-				width: 'w-24',
-				cell: (info) => (
-					<EditDelete
-						idx={info.row.index}
-						handelUpdate={handelUpdate}
-						showUpdate={haveAccess.includes('update')}
-						showDelete={false}
-					/>
-				),
-			},
+
 			// ...DEFAULT_COLUMNS({ handelUpdate, haveAccess }),
 		],
 		[data]

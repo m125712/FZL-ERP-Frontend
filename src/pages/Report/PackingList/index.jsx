@@ -123,13 +123,13 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'ctn_qty',
-				header: 'CTN. Qty.',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'ctn_qty',
+			// 	header: 'CTN. Qty.',
+			// 	enableColumnFilter: false,
+			// 	width: 'w-32',
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorKey: 'party_name',
 				header: 'Party',

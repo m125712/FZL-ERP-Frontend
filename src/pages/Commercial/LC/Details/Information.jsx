@@ -105,6 +105,12 @@ export default function Information({ lc }) {
 		updated_at,
 		remarks,
 		lc_entry_others,
+
+		export_lc_number,
+		export_lc_date,
+		export_lc_expire_date,
+		up_date,
+		up_number,
 	} = lc;
 
 	const renderItems = () => {
@@ -172,6 +178,33 @@ export default function Information({ lc }) {
 			{
 				label: 'LC Date',
 				value: lc_date ? format(new Date(lc_date), 'dd/MM/yyyy') : '',
+			},
+		];
+
+		const ExportDetails = [
+			{
+				label: 'Export LC No.',
+				value: export_lc_number,
+			},
+			{
+				label: 'Export LC Date',
+				value: export_lc_date
+					? format(new Date(export_lc_date), 'dd/MM/yyyy')
+					: '',
+			},
+			{
+				label: 'Export Expire LC Date',
+				value: export_lc_expire_date
+					? format(new Date(export_lc_expire_date), 'dd/MM/yyyy')
+					: '',
+			},
+			{
+				label: 'Up Date',
+				value: up_date ? format(new Date(up_date), 'dd/MM/yyyy') : '',
+			},
+			{
+				label: 'Up No.',
+				value: up_number,
 			},
 		];
 
@@ -262,12 +295,13 @@ export default function Information({ lc }) {
 			commercialDetails,
 			others,
 			createdDetails,
+			ExportDetails,
 		};
 	};
 
 	return (
 		<SectionContainer title={'Information'} contentClassName={'space-y-0'}>
-			<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5'>
+			<div className='grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6'>
 				<RenderTable
 					className={'border-secondary/30 sm:border-r'}
 					title={'Basic Info'}
@@ -278,6 +312,11 @@ export default function Information({ lc }) {
 					className={'border-secondary/30 lg:border-r'}
 					title={'File Details'}
 					items={renderItems().fileDetails}
+				/>
+				<RenderTable
+					className={'border-secondary/30 lg:border-r'}
+					title={'Export Details'}
+					items={renderItems().ExportDetails}
 				/>
 				<RenderTable
 					className={'border-secondary/30 sm:border-r'}

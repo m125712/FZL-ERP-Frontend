@@ -3,6 +3,8 @@ import { useMemo } from 'react';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime } from '@/ui';
 
+import { dateType } from '../utils';
+
 export default function Index({ entries }) {
 	const columns = useMemo(
 		() => [
@@ -17,7 +19,11 @@ export default function Index({ entries }) {
 				header: 'Receive',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
+					<DateTime
+						date={info.getValue()}
+						customizedDateFormate={dateType}
+						isTime={false}
+					/>
 				),
 			},
 			{
@@ -25,7 +31,11 @@ export default function Index({ entries }) {
 				header: 'Hand Over',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
+					<DateTime
+						date={info.getValue()}
+						customizedDateFormate={dateType}
+						isTime={false}
+					/>
 				),
 			},
 			{
@@ -33,7 +43,11 @@ export default function Index({ entries }) {
 				header: 'Doc Submit',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
+					<DateTime
+						date={info.getValue()}
+						customizedDateFormate={dateType}
+						isTime={false}
+					/>
 				),
 			},
 			{
@@ -41,7 +55,11 @@ export default function Index({ entries }) {
 				header: 'Doc Receive',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
+					<DateTime
+						date={info.getValue()}
+						customizedDateFormate={dateType}
+						isTime={false}
+					/>
 				),
 			},
 			{
@@ -49,7 +67,11 @@ export default function Index({ entries }) {
 				header: 'Bank Forward',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
+					<DateTime
+						date={info.getValue()}
+						customizedDateFormate={dateType}
+						isTime={false}
+					/>
 				),
 			},
 			{
@@ -57,7 +79,11 @@ export default function Index({ entries }) {
 				header: 'Acceptance',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
+					<DateTime
+						date={info.getValue()}
+						customizedDateFormate={dateType}
+						isTime={false}
+					/>
 				),
 			},
 			{
@@ -65,7 +91,11 @@ export default function Index({ entries }) {
 				header: 'Maturity',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
+					<DateTime
+						date={info.getValue()}
+						customizedDateFormate={dateType}
+						isTime={false}
+					/>
 				),
 			},
 			{
@@ -73,7 +103,11 @@ export default function Index({ entries }) {
 				header: 'Payment',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
+					<DateTime
+						date={info.getValue()}
+						customizedDateFormate={dateType}
+						isTime={false}
+					/>
 				),
 			},
 			{

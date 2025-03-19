@@ -1,3 +1,4 @@
+import { useOtherOrderPropertiesBySpecialRequirement } from '@/state/Other';
 import { useFetch } from '@/hooks';
 
 import RenderTable from '@/ui/Others/Table/RenderTable';
@@ -17,6 +18,27 @@ const getGarmentInfo = (order_description) => {
 				: order_description?.garments_wash;
 
 		const matchingLabels = garments
+			?.filter((item) => parsedObject.values.includes(item.value)) // Filter by matching value
+			.map((item) => item.label);
+		return matchingLabels;
+	} else {
+		return [];
+	}
+};
+
+// * function to get similar Special Requirement
+export const getSpecialReqInfo = (order_description) => {
+	const { data: sr } = useOtherOrderPropertiesBySpecialRequirement({
+		enabled: true,
+	});
+
+	if (order_description?.special_requirement) {
+		const parsedObject =
+			typeof order_description?.special_requirement === 'string'
+				? JSON.parse(order_description?.special_requirement)
+				: order_description?.special_requirement;
+
+		const matchingLabels = sr
 			?.filter((item) => parsedObject.values.includes(item.value)) // Filter by matching value
 			.map((item) => item.label);
 		return matchingLabels;
@@ -50,6 +72,7 @@ export default function ItemDescription({ order_description, className }) {
 
 	// * garments info
 	const garments_info = getGarmentInfo(order_description);
+	const special_req_info = getSpecialReqInfo(order_description);
 
 	const renderItems = () => {
 		const {
@@ -178,6 +201,10 @@ export default function ItemDescription({ order_description, className }) {
 			{
 				label: 'remarks',
 				value: remarks,
+			},
+			{
+				label: 'Special Req.',
+				value: special_req_info?.join(', '),
 			},
 		];
 

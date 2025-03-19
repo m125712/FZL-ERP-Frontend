@@ -52,8 +52,11 @@ export default function index({
 				tableHead={[
 					'Amount',
 					'LDBC/FDBC',
+					'Receive Date',
 					'Handover Date',
+					'Doc Sub Date',
 					'Doc Receive Date',
+					'Bank Forward Date',
 					'Acceptance Date',
 					'Maturity Date',
 					'Payment Date',
@@ -88,6 +91,18 @@ export default function index({
 						</td>
 						<td className={`w-44 ${rowClass}`}>
 							<DateInput
+								label={`lc_entry[${index}].receive_date`}
+								is_title_needed='false'
+								Controller={Controller}
+								control={control}
+								selected={watch(
+									`lc_entry[${index}].receive_date`
+								)}
+								{...{ register, errors }}
+							/>
+						</td>
+						<td className={`w-44 ${rowClass}`}>
+							<DateInput
 								label={`lc_entry[${index}].handover_date`}
 								is_title_needed='false'
 								Controller={Controller}
@@ -95,6 +110,28 @@ export default function index({
 								selected={watch(
 									`lc_entry[${index}].handover_date`
 								)}
+								disabled={
+									watch(`lc_entry[${index}].receive_date`)
+										? false
+										: true
+								}
+								{...{ register, errors }}
+							/>
+						</td>
+						<td className={`w-44 ${rowClass}`}>
+							<DateInput
+								label={`lc_entry[${index}].document_submission_date`}
+								is_title_needed='false'
+								Controller={Controller}
+								control={control}
+								selected={watch(
+									`lc_entry[${index}].document_submission_date`
+								)}
+								disabled={
+									watch(`lc_entry[${index}].handover_date`)
+										? false
+										: true
+								}
 								{...{ register, errors }}
 							/>
 						</td>
@@ -108,7 +145,28 @@ export default function index({
 									`lc_entry[${index}].document_receive_date`
 								)}
 								disabled={
-									watch(`lc_entry[${index}].handover_date`)
+									watch(
+										`lc_entry[${index}].document_submission_date`
+									)
+										? false
+										: true
+								}
+								{...{ register, errors }}
+							/>
+						</td>
+						<td className={`w-44 ${rowClass}`}>
+							<DateInput
+								label={`lc_entry[${index}].bank_forward_date`}
+								is_title_needed='false'
+								Controller={Controller}
+								control={control}
+								selected={watch(
+									`lc_entry[${index}].bank_forward_date`
+								)}
+								disabled={
+									watch(
+										`lc_entry[${index}].document_receive_date`
+									)
 										? false
 										: true
 								}
@@ -126,7 +184,7 @@ export default function index({
 								)}
 								disabled={
 									watch(
-										`lc_entry[${index}].document_receive_date`
+										`lc_entry[${index}].bank_forward_date`
 									)
 										? false
 										: true

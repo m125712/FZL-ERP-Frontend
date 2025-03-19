@@ -2093,6 +2093,13 @@ export const LC_SCHEMA = {
 	is_rtgs: BOOLEAN_REQUIRED,
 	is_old_pi: BOOLEAN_REQUIRED,
 
+	// export
+	export_lc_number: STRING_REQUIRED,
+	export_lc_date: STRING_REQUIRED,
+	export_lc_expire_date: STRING_REQUIRED,
+	up_date: STRING_REQUIRED,
+	up_number: STRING_REQUIRED,
+
 	// if is_old_pi = true
 	pi_number: STRING.when('is_old_pi', {
 		is: true,
@@ -2128,6 +2135,17 @@ export const LC_SCHEMA = {
 				String(originalValue).trim() === '' ? 0 : value
 			),
 			ldbc_fdbc: STRING.nullable(),
+			receive_date: STRING.nullable().transform((value, originalValue) =>
+				String(originalValue).trim() === '' ? null : value
+			),
+			document_submission_date: STRING.nullable().transform(
+				(value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+			),
+			bank_forward_date: STRING.nullable().transform(
+				(value, originalValue) =>
+					String(originalValue).trim() === '' ? null : value
+			),
 			handover_date: STRING.nullable().transform(
 				(value, originalValue) =>
 					String(originalValue).trim() === '' ? null : value
@@ -2194,6 +2212,12 @@ export const LC_NULL = {
 	production_complete: false,
 	lc_cancel: false,
 
+	export_lc_number: null,
+	export_lc_date: null,
+	export_lc_expire_date: null,
+	up_date: null,
+	up_number: null,
+
 	shipment_date: null,
 	expiry_date: null,
 	at_sight: null,
@@ -2215,6 +2239,10 @@ export const LC_NULL = {
 			maturity_date: null,
 			payment_date: null,
 			payment_value: 0,
+
+			receive_date: null,
+			document_submission_date: null,
+			bank_forward_date: null,
 		},
 	],
 

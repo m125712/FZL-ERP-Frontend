@@ -13,6 +13,14 @@ export default function Index({ entries }) {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'receive_date',
+				header: 'Receive',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
+			},
+			{
 				accessorKey: 'handover_date',
 				header: 'Hand Over',
 				enableColumnFilter: false,
@@ -21,8 +29,24 @@ export default function Index({ entries }) {
 				),
 			},
 			{
+				accessorKey: 'document_submission_date',
+				header: 'Doc Submit',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
+			},
+			{
 				accessorKey: 'document_receive_date',
 				header: 'Doc Receive',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
+			},
+			{
+				accessorKey: 'bank_forward_date',
+				header: 'Bank Forward',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime date={info.getValue()} isTime={false} />

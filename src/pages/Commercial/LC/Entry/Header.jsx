@@ -153,6 +153,31 @@ export default function Header({
 						</>
 					)}
 				</Section>
+				<Section title='Export'>
+					<Input label='export_lc_number' {...{ register, errors }} />
+					<DateInput
+						label='export_lc_date'
+						Controller={Controller}
+						control={control}
+						selected={watch('export_lc_date')}
+						{...{ register, errors }}
+					/>
+					<DateInput
+						label='export_lc_expire_date'
+						Controller={Controller}
+						control={control}
+						selected={watch('export_lc_expire_date')}
+						{...{ register, errors }}
+					/>
+					<DateInput
+						label='up_date'
+						Controller={Controller}
+						control={control}
+						selected={watch('up_date')}
+						{...{ register, errors }}
+					/>
+					<Input label='up_number' {...{ register, errors }} />
+				</Section>
 				<Section title='Commercial Details'>
 					<Input
 						label='commercial_executive'

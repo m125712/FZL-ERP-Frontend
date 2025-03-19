@@ -4,6 +4,8 @@ import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
 import { CustomLink, DateTime, StatusButton, TitleValue } from '@/ui';
 
+import { dateType } from './utils';
+
 const LCInfo = (lc) => {
 	return (
 		<div className=''>
@@ -177,7 +179,7 @@ export default function Information({ lc }) {
 			},
 			{
 				label: 'LC Date',
-				value: lc_date ? format(new Date(lc_date), 'dd/MM/yyyy') : '',
+				value: lc_date ? format(new Date(lc_date), dateType) : '',
 			},
 		];
 
@@ -189,18 +191,18 @@ export default function Information({ lc }) {
 			{
 				label: 'Export LC Date',
 				value: export_lc_date
-					? format(new Date(export_lc_date), 'dd/MM/yyyy')
+					? format(new Date(export_lc_date), dateType)
 					: '',
 			},
 			{
 				label: 'Export Expire LC Date',
 				value: export_lc_expire_date
-					? format(new Date(export_lc_expire_date), 'dd/MM/yyyy')
+					? format(new Date(export_lc_expire_date), dateType)
 					: '',
 			},
 			{
 				label: 'Up Date',
-				value: up_date ? format(new Date(up_date), 'dd/MM/yyyy') : '',
+				value: up_date ? format(new Date(up_date), dateType) : '',
 			},
 			{
 				label: 'Up No.',
@@ -220,12 +222,14 @@ export default function Information({ lc }) {
 			{
 				label: 'Shipment Date',
 				value: shipment_date
-					? format(new Date(shipment_date), 'dd/MM/yyyy')
+					? format(new Date(shipment_date), dateType)
 					: '',
 			},
 			{
 				label: 'Expiry Date',
-				value: format(new Date(expiry_date), 'dd/MM/yyyy'),
+				value: expiry_date
+					? format(new Date(expiry_date), dateType)
+					: '---',
 			},
 		];
 
@@ -238,7 +242,7 @@ export default function Information({ lc }) {
 				label: 'UD Received',
 				value: lc_entry_others
 					.map(({ ud_received }) =>
-						format(new Date(ud_received), 'dd/MM/yyyy')
+						format(new Date(ud_received), dateType)
 					)
 					.join(', '),
 			},
@@ -252,7 +256,7 @@ export default function Information({ lc }) {
 				label: 'UP Number Received',
 				value: lc_entry_others
 					.map(({ up_number_updated_at }) =>
-						format(new Date(up_number_updated_at), 'dd/MM/yyyy')
+						format(new Date(up_number_updated_at), dateType)
 					)
 					.join(', '),
 			},
@@ -262,7 +266,7 @@ export default function Information({ lc }) {
 			},
 			{
 				label: 'AMD Date',
-				value: format(new Date(amd_date), 'dd/MM/yyyy'),
+				value: amd_date ? format(new Date(amd_date), dateType) : '---',
 			},
 			{
 				label: 'AMD Count',
@@ -277,11 +281,11 @@ export default function Information({ lc }) {
 			},
 			{
 				label: 'Created At',
-				value: format(new Date(created_at), 'dd/MM/yyyy'),
+				value: format(new Date(created_at), dateType),
 			},
 			{
 				label: 'Updated At',
-				value: format(new Date(updated_at), 'dd/MM/yyyy'),
+				value: format(new Date(updated_at), dateType),
 			},
 			{
 				label: 'Remarks',

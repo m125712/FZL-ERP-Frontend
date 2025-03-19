@@ -27,10 +27,8 @@ export default function Header({
 	const { data: party } = useOtherParty();
 	const { data: factory } = useOtherFactoryByPartyUUID(partyId);
 	const { data: merchandiser } = useOtherMerchandiserByPartyUUID(partyId);
-	const { data: buyer } = useOtherBuyer('/other/buyer/value/label');
-	const { data: marketing } = useOtherMarketing(
-		'/other/marketing/value/label'
-	);
+	const { data: buyer } = useOtherBuyer();
+	const { data: marketing } = useOtherMarketing();
 	const { data: bank } = useOtherBank('/other/bank/value/label');
 	const { data: pi } = useOtherPiValues(
 		isUpdate
@@ -88,7 +86,8 @@ export default function Header({
 					<FormField
 						label='marketing_uuid'
 						title='Marketing'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'marketing_uuid'}
 							control={control}
@@ -168,7 +167,8 @@ export default function Header({
 					<FormField
 						label='merchandiser_uuid'
 						title='Merchandiser'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'merchandiser_uuid'}
 							control={control}
@@ -197,7 +197,8 @@ export default function Header({
 					<FormField
 						label='factory_uuid'
 						title='Factory'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name={'factory_uuid'}
 							control={control}

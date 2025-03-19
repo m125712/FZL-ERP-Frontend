@@ -8,9 +8,8 @@ import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRHF } from '@/hooks';
 
-import { DeleteModal, UpdateModal } from '@/components/Modal';
+import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
-import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { ActionButtons, DynamicField, FormField, ReactSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';

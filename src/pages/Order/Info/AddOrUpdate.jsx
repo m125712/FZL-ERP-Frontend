@@ -7,7 +7,7 @@ import {
 	useOtherFactoryByPartyUUID,
 	useOtherMarketing,
 	useOtherMerchandiserByPartyUUID,
-	useOtherOrderInfoValueLabel,
+	useOtherOrder,
 	useOtherParty,
 } from '@/state/Other';
 import { useRHF } from '@/hooks';
@@ -47,14 +47,13 @@ export default function Index({
 	} = useRHF(ORDER_INFO_SCHEMA, ORDER_INFO_NULL);
 
 	const [partyId, setPartyId] = useState(getValues('party_uuid'));
-	const { data: ref_order } = useOtherOrderInfoValueLabel();
+	const { data: ref_order, invalidateQuery: invalidateOrderInfoValueLabel } =
+		useOtherOrder();
 	const { data: party } = useOtherParty();
 	const { data: buyer } = useOtherBuyer();
 	const { data: marketing } = useOtherMarketing();
 	const { data: merchandiser } = useOtherMerchandiserByPartyUUID(partyId);
 	const { data: factory } = useOtherFactoryByPartyUUID(partyId);
-	const { invalidateQuery: invalidateOrderInfoValueLabel } =
-		useOtherOrderInfoValueLabel();
 	const { invalidateQuery: invalidateOtherZipperThreadOrderList } =
 		useAllZipperThreadOrderList();
 

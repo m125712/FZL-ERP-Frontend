@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-	useOtherMachinesWithSlot,
-	useOtherOrderInfoValueLabel,
-} from '@/state/Other';
+import { useOtherMachinesWithSlot, useOtherOrder } from '@/state/Other';
 import { format } from 'date-fns';
 
 import { DateInput } from '@/ui/Core';
@@ -32,7 +29,7 @@ export default function Header({
 			: ''
 	);
 
-	const { data: orders } = useOtherOrderInfoValueLabel('page=dyeing_batch');
+	const { data: orders } = useOtherOrder('page=dyeing_batch');
 
 	const res = machine?.find(
 		(item) => item.value == getValues('machine_uuid')

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { PDF } from '@/assets/icons';
-import { useOrderDescription } from '@/state/Order';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
@@ -106,7 +105,6 @@ export function OrderInformation({
 	} = order;
 
 	const haveAccess = useAccess('order__details');
-	const { updateData } = useOrderDescription();
 
 	const renderItems = () => {
 		const order_details = [
@@ -217,16 +215,6 @@ export function OrderInformation({
 				</span>
 			</div>,
 		];
-	};
-
-	const onChangePrint = async (select) => {
-		await updateData.mutateAsync({
-			url: `/zipper/order-info/print-in/update/by/${order?.order_info_uuid}`,
-			updatedData: {
-				print_in: select,
-			},
-			isOnCloseNeeded: false,
-		});
 	};
 
 	return (

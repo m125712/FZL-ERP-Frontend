@@ -49,9 +49,7 @@ export default function Index() {
 
 	const { data, isLoading, url } = useOrderDetailsByQuery(
 		getPath(haveAccess, user?.uuid) + `&type=${status}`,
-		{
-			enabled: !!user?.uuid,
-		}
+		{ enabled: !!user?.uuid }
 	);
 
 	const navigate = useNavigate();

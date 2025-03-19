@@ -67,6 +67,22 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'action',
+				header: 'Action',
+				enableColumnFilter: false,
+				hidden: !haveAccess.includes('update'),
+				cell: (info) => {
+					return (
+						<EditDelete
+							idx={info.row.index}
+							handelUpdate={handelUpdate}
+							showUpdate={haveAccess.includes('update')}
+							showDelete={false}
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'is_sample',
 				header: () =>
 					haveAccess.includes('show_cash_bill_lc')
@@ -181,6 +197,13 @@ export default function Index() {
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+				width: 'max-w-40',
+			},
+			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
 				enableColumnFilter: false,
@@ -199,31 +222,6 @@ export default function Index() {
 				header: 'Updated',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
-			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-				width: 'max-w-40',
-			},
-			{
-				accessorKey: 'action',
-				header: 'Action',
-				enableColumnFilter: false,
-				hidden:
-					!haveAccess.includes('update') &&
-					!haveAccess.includes('delete'),
-				cell: (info) => {
-					return (
-						<EditDelete
-							idx={info.row.index}
-							handelUpdate={handelUpdate}
-							showDelete={haveAccess.includes('delete')}
-							showUpdate={haveAccess.includes('update')}
-						/>
-					);
-				},
 			},
 		],
 		[data]

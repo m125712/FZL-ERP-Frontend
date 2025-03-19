@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
-	useOtherOrderInfoValueLabel,
+	useOtherOrder,
 	useOtherOrderPropertiesByBottomStopper,
 	useOtherOrderPropertiesByColor,
 	useOtherOrderPropertiesByColoringType,
@@ -57,7 +57,7 @@ export default function Header({
 	const isUpdate =
 		order_description_uuid !== undefined && order_number !== undefined;
 
-	const { data: order } = useOtherOrderInfoValueLabel();
+	const { data: order } = useOtherOrder();
 	const { data: item } = useOtherOrderPropertiesByItem();
 	const { data: zipper_number } = useOtherOrderPropertiesByZipperNumber();
 	const { data: end_type } = useOtherOrderPropertiesByEndType();

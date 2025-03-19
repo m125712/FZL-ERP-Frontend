@@ -1,7 +1,6 @@
 import { useAuth } from '@/context/auth';
 import { useOrderProperties } from '@/state/Order';
 import {
-	useOtherOrderInfoValueLabel,
 	useOtherOrderPropertiesByBottomStopper,
 	useOtherOrderPropertiesByColor,
 	useOtherOrderPropertiesByColoringType,

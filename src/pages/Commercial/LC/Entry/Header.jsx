@@ -14,6 +14,25 @@ import {
 import DynamicProgression from './DynamicProgression';
 import DynamicUD from './DynamicUD';
 
+const atSight = [
+	{ value: 0, label: 'At Sight / 0 Day' },
+	{ value: 30, label: '30' },
+	{ value: 60, label: '60' },
+	{ value: 90, label: '90' },
+	{ value: 120, label: '120' },
+	{ value: 150, label: '150' },
+	{ value: 180, label: '180' },
+];
+
+const Section = ({ title, children }) => (
+	<div className='flex flex-col gap-1 rounded-md bg-base-200/50 p-3'>
+		<span className='ml-1 text-xl font-bold text-primary'>{title}</span>
+		<div className='flex flex-col gap-1 text-secondary-content md:flex-row'>
+			{children}
+		</div>
+	</div>
+);
+
 export default function Header({
 	register,
 	errors,
@@ -35,25 +54,6 @@ export default function Header({
 }) {
 	const { lc_uuid } = useParams();
 	const { data: party } = useOtherParty();
-
-	const atSight = [
-		{ value: 0, label: 'At Sight / 0 Day' },
-		{ value: 30, label: '30' },
-		{ value: 60, label: '60' },
-		{ value: 90, label: '90' },
-		{ value: 120, label: '120' },
-		{ value: 150, label: '150' },
-		{ value: 180, label: '180' },
-	];
-
-	const Section = ({ title, children }) => (
-		<div className='flex flex-col gap-1 rounded-md bg-base-200/50 p-3'>
-			<span className='ml-1 text-xl font-bold text-primary'>{title}</span>
-			<div className='flex flex-col gap-1 text-secondary-content md:flex-row'>
-				{children}
-			</div>
-		</div>
-	);
 
 	return (
 		<SectionEntryBody title='LC Information'>
@@ -143,7 +143,7 @@ export default function Header({
 						{...{ register, errors }}
 					/>
 
-					{watch('is_old_pi') && (
+					{getValues('is_old_pi') && (
 						<>
 							<Input label='lc_value' {...{ register, errors }} />
 							<Textarea
@@ -282,8 +282,7 @@ export default function Header({
 					<FormField
 						label='at_sight'
 						title='Payment Rec.'
-						errors={errors}
-					>
+						errors={errors}>
 						<Controller
 							name='at_sight'
 							control={control}
@@ -310,7 +309,7 @@ export default function Header({
 						label='amd_date'
 						Controller={Controller}
 						control={control}
-						selected={watch('amd_date')}
+						selected={getValues('amd_date')}
 						{...{ register, errors }}
 					/>
 					<Input label='amd_count' {...{ register, errors }} />

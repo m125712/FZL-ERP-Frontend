@@ -175,6 +175,15 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'warehouse_received_date',
+				header: 'Received Date',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
 				accessorKey: 'challan_number',
 				header: 'Challan',
 				width: 'w-36',
@@ -222,6 +231,21 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'gate_pass_date',
+				header: (
+					<span>
+						Warehouse <br />
+						Out Date
+					</span>
+				),
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+
+			{
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
@@ -231,7 +255,7 @@ export default function Index() {
 			{
 				accessorFn(row) {
 					const { color } = row;
-					return color?.join(', ')|| '--';
+					return color?.join(', ') || '--';
 				},
 				id: 'color',
 				header: 'Colors',
@@ -345,6 +369,10 @@ export default function Index() {
 			updatedData: {
 				is_warehouse_received:
 					data[idx]?.is_warehouse_received === true ? false : true,
+				warehouse_received_date:
+					data[idx]?.is_warehouse_received === true
+						? null
+						: GetDateTime(),
 				updated_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,
@@ -361,6 +389,8 @@ export default function Index() {
 			url: `/delivery/packing-list/${data[idx]?.uuid}`,
 			updatedData: {
 				gate_pass: data[idx]?.gate_pass === 1 ? 0 : 1,
+				gate_pass_date:
+					data[idx]?.gate_pass === 1 ? null : GetDateTime(),
 				updated_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,

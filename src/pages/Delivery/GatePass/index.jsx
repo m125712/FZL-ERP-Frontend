@@ -7,6 +7,7 @@ import {
 } from '@/state/Delivery';
 import { useOtherChallan } from '@/state/Other';
 import { useSymbologyScanner } from '@use-symbology-scanner/react';
+import { set } from 'date-fns';
 import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +16,13 @@ import { useAccess, useRHF } from '@/hooks';
 import { Footer } from '@/components/Modal/ui';
 import { ShowLocalToast } from '@/components/Toast';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DynamicField, FormField, ReactSelect, SectionEntryBody } from '@/ui';
+import {
+	DateTime,
+	DynamicField,
+	FormField,
+	ReactSelect,
+	SectionEntryBody,
+} from '@/ui';
 
 import { cn } from '@/lib/utils';
 import GetDateTime from '@/util/GetDateTime';
@@ -148,6 +155,10 @@ export default function Index() {
 				getValues('entry').find((entry, index) => {
 					if (entry.uuid === data.uuid) {
 						setValue(`entry.${index}.gate_pass`, 1);
+						setValue(
+							`entry.${index}.gate_pass_date`,
+							GetDateTime()
+						);
 					}
 				});
 			})
@@ -175,6 +186,7 @@ export default function Index() {
 				async (item) => {
 					if (item.uuid) {
 						const updatedData = {
+							gate_pass_date: item.gate_pass_date,
 							gate_pass: 1,
 							updated_at: GetDateTime(),
 						};
@@ -234,8 +246,7 @@ export default function Index() {
 				tabIndex={0}
 				onBlur={() => setScannerActive(false)}
 				onFocus={() => setScannerActive(true)}
-				className='outline-none'
-			>
+				className='outline-none'>
 				{isLoading && (
 					<span className='loading loading-dots loading-lg z-50' />
 				)}
@@ -244,8 +255,7 @@ export default function Index() {
 					<form
 						onSubmit={handleSubmit(onSubmit)}
 						noValidate
-						className='flex flex-col gap-4'
-					>
+						className='flex flex-col gap-4'>
 						<SectionEntryBody
 							title={`Details `}
 							header={
@@ -255,17 +265,14 @@ export default function Index() {
 										scannerActive
 											? 'btn-success'
 											: 'btn-error'
-									)}
-								>
+									)}>
 									Scanner: {scannerActive ? 'ON' : 'OFF'}
 								</span>
-							}
-						>
+							}>
 							<FormField
 								label='challan_uuid'
 								title='Challan'
-								errors={errors}
-							>
+								errors={errors}>
 								<Controller
 									name='challan_uuid'
 									control={control}
@@ -303,17 +310,16 @@ export default function Index() {
 								'Total Poly Quantity',
 								'Total Quantity',
 								'Gate Pass',
+								'Gate Pass Date',
 								// 'Action',
 							].map((item) => (
 								<th
 									key={item}
 									scope='col'
-									className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'
-								>
+									className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
 									{item}
 								</th>
-							))}
-						>
+							))}>
 							{EntryField.map((item, index) => (
 								<tr key={item.id}>
 									<td className={`w-80 ${rowClass}`}>
@@ -346,6 +352,7 @@ export default function Index() {
 											`entry[${index}].total_quantity`
 										)}
 									</td>
+
 									{/* <td
 									className={`w-80 px-4 py-2 transition-colors duration-300 ${
 										getValues(
@@ -388,6 +395,21 @@ export default function Index() {
 														? 0
 														: 1
 												);
+												if (
+													getValues(
+														`entry[${index}].gate_pass`
+													) === 1
+												) {
+													setValue(
+														`entry[${index}].gate_pass_date`,
+														GetDateTime()
+													);
+												} else {
+													setValue(
+														`entry[${index}].gate_pass_date`,
+														null
+													);
+												}
 												setOnFocus(true);
 												containerRef.current.focus();
 											}}
@@ -409,6 +431,13 @@ export default function Index() {
 													)
 												) === 1
 											}
+										/>
+									</td>
+									<td className={`w-80 ${rowClass}`}>
+										<DateTime
+											date={getValues(
+												`entry[${index}].gate_pass_date`
+											)}
 										/>
 									</td>
 									{/* <td

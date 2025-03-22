@@ -2096,9 +2096,9 @@ export const LC_SCHEMA = {
 	// export
 	export_lc_number: STRING_REQUIRED,
 	export_lc_date: STRING_REQUIRED,
-	export_lc_expire_date: STRING_REQUIRED,
-	up_date: STRING_REQUIRED,
-	up_number: STRING_REQUIRED,
+	export_lc_expire_date: STRING.nullable(),
+	up_date: STRING.nullable(),
+	up_number: STRING.nullable(),
 
 	// if is_old_pi = true
 	pi_number: STRING.when('is_old_pi', {

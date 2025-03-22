@@ -110,7 +110,7 @@ export default function Information({ lc }) {
 
 		export_lc_number,
 		export_lc_date,
-		export_lc_expire_date,
+		// export_lc_expire_date,
 		up_date,
 		up_number,
 	} = lc;
@@ -194,12 +194,12 @@ export default function Information({ lc }) {
 					? format(new Date(export_lc_date), dateType)
 					: '',
 			},
-			{
-				label: 'Export Expire LC Date',
-				value: export_lc_expire_date
-					? format(new Date(export_lc_expire_date), dateType)
-					: '',
-			},
+			// {
+			// 	label: 'Export Expire LC Date',
+			// 	value: export_lc_expire_date
+			// 		? format(new Date(export_lc_expire_date), dateType)
+			// 		: '',
+			// },
 			{
 				label: 'Up Date',
 				value: up_date ? format(new Date(up_date), dateType) : '',

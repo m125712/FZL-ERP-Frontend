@@ -53,7 +53,7 @@ export default function Header({
 	setDeleteLCEntryUD,
 }) {
 	const { lc_uuid } = useParams();
-	const { data: party } = useOtherParty();
+	const { data: party } = useOtherParty('&is_cash=false');
 
 	return (
 		<SectionEntryBody title='LC Information'>
@@ -162,13 +162,13 @@ export default function Header({
 						selected={watch('export_lc_date')}
 						{...{ register, errors }}
 					/>
-					<DateInput
+					{/* <DateInput
 						label='export_lc_expire_date'
 						Controller={Controller}
 						control={control}
 						selected={watch('export_lc_expire_date')}
 						{...{ register, errors }}
-					/>
+					/> */}
 					<DateInput
 						label='up_date'
 						Controller={Controller}
@@ -282,7 +282,8 @@ export default function Header({
 					<FormField
 						label='at_sight'
 						title='Payment Rec.'
-						errors={errors}>
+						errors={errors}
+					>
 						<Controller
 							name='at_sight'
 							control={control}

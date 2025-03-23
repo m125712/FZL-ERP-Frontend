@@ -1097,6 +1097,19 @@ export const deliveryQk = {
 		...deliveryQk.orderAgainstDeliveryRMLog(),
 		uuid,
 	],
+	//* Warehouse Rcv Log
+	warehouseRcvLog: (from, to) => [
+		...deliveryQk.all(),
+		'warehouse-rcv-log',
+		from,
+		to,
+	],
+	warehouseOutLog: (from, to) => [
+		...deliveryQk.all(),
+		'warehouse-out-log',
+		from,
+		to,
+	],
 };
 
 //Thread

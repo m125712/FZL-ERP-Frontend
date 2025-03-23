@@ -197,3 +197,27 @@ export const useOrderAgainstDeliveryRMLogByUUID = (uuid) =>
 		queryKey: deliveryQk.orderAgainstDeliveryRMLogByUUID(uuid),
 		url: '/zipper/material-trx-against-order/multiple/by/m_qc_and_packing,n_qc_and_packing,v_qc_and_packing,s_qc_and_packing',
 	});
+
+//* Warehouse Rcv Log
+export const useWarehouseRcvLog = (
+	from,
+	to,
+	{ enabled = false } = { enabled: false }
+) =>
+	createGlobalState({
+		queryKey: deliveryQk.warehouseRcvLog(from, to),
+		url: `/delivery/packing-list-received-log?from=${from}&to=${to}`,
+		enabled,
+	});
+
+//* Warehouse Rcv Log
+export const useWarehouseOutLog = (
+	from,
+	to,
+	{ enabled = false } = { enabled: false }
+) =>
+	createGlobalState({
+		queryKey: deliveryQk.warehouseOutLog(from, to),
+		url: `/delivery/packing-list-warehouse-out-log?from=${from}&to=${to}`,
+		enabled,
+	});

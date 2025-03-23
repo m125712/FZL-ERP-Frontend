@@ -51,7 +51,8 @@ export default function Index({
 	const { postData } = useMaterialInfo();
 	const { invalidateQuery: invalidateMaterialStockToSFG } =
 		useMaterialStockToSFG();
-	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { invalidateQuery: invalidateMaterialInfo } =
+		useMaterialInfo('accessories');
 	const { invalidateQuery: invalidateOrderAgainstDeliveryRMLog } =
 		useOrderAgainstDeliveryRMLog();
 	const { invalidateQuery: invalidateOrderAgainstDieCastingRMLog } =

@@ -15,9 +15,14 @@ const AgainstOrderTransfer = lazy(() => import('./AgainstOrderTransfer'));
 const MaterialTrx = lazy(() => import('./MaterialTrx'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData, refetch } = useMaterialInfo();
-	const info = new PageInfo('Store / Stock', url, 'store__stock');
-	const haveAccess = useAccess('store__stock');
+	const { data, isLoading, url, deleteData, refetch } =
+		useMaterialInfo('accessories');
+	const info = new PageInfo(
+		'Store / Stock Accessories',
+		url,
+		'store__stock_accessories'
+	);
+	const haveAccess = useAccess('store__stock_accessories');
 
 	const columns = useMemo(
 		() => [

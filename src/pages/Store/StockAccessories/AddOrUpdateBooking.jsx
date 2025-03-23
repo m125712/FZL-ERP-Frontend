@@ -26,7 +26,8 @@ export default function Index({
 		postData,
 		invalidateQuery: invalidateMaterialbooking,
 	} = useMaterialBooking();
-	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { invalidateQuery: invalidateMaterialInfo } =
+		useMaterialInfo('accessories');
 	const { data: marketing } = useOtherMarketing();
 
 	const {

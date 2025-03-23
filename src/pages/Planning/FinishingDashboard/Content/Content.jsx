@@ -16,7 +16,7 @@ export default function Content({ data }) {
 	];
 
 	return (
-		<div className='h-96 overflow-x-auto rounded-t-md border'>
+		<div className='h-[74vh] overflow-x-auto rounded-t-md border'>
 			<table className='table table-pin-rows table-pin-cols table-xs w-full align-top'>
 				<thead>
 					<tr className='z-10'>

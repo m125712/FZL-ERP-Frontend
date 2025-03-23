@@ -24,9 +24,7 @@ export default function Index() {
 
 	const { data, isLoading, url } = useCommercialLCByQuery(
 		getPath(haveAccess, user?.uuid),
-		{
-			enabled: !!user?.uuid,
-		}
+		{ enabled: !!user?.uuid }
 	);
 
 	const info = new PageInfo('LC', url, 'commercial__lc');
@@ -67,10 +65,11 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { uuid } = info.row.original;
+					const url = `/commercial/lc/details/${uuid}`;
 					return (
 						<CustomLink
 							label={info.getValue()}
-							url={`/commercial/lc/details/${uuid}`}
+							url={url}
 							openInNewTab={true}
 						/>
 					);
@@ -83,18 +82,18 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => {
 					return info?.getValue()?.map((piId) => {
-						if (piId === 'PI-') return '-';
+						if (piId === 'PI-') return '--';
+						const url = `/commercial/pi/${piId}`;
 						return (
 							<CustomLink
 								label={piId}
-								url={`/commercial/pi/${piId}`}
+								url={url}
 								openInNewTab={true}
 							/>
 						);
 					});
 				},
 			},
-			// todo: this is making the table not render
 			{
 				accessorKey: 'total_value',
 				header: 'Value ($)',
@@ -137,7 +136,12 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'acceptance_date',
-				header: 'Acceptance Date',
+				header: (
+					<>
+						Acceptance <br />
+						Date
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime date={info.getValue()} isTime={false} />
@@ -145,7 +149,12 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'maturity_date',
-				header: 'Maturity Date',
+				header: (
+					<>
+						Maturity <br />
+						Date
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime date={info.getValue()} isTime={false} />
@@ -165,31 +174,56 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'commercial_executive',
-				header: 'Commercial Executive',
+				header: (
+					<>
+						Commercial <br />
+						Executive
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'party_bank',
-				header: 'Party Bank',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'party_bank',
+			// 	header: 'Party Bank',
+			// 	enableColumnFilter: false,
+			// 	width: 'w-32',
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorKey: 'production_complete',
-				header: 'Production Complete',
+				header: (
+					<>
+						Production <br />
+						Complete
+					</>
+				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
 			},
 			{
 				accessorKey: 'lc_cancel',
-				header: 'LC Cancel',
+				header: (
+					<>
+						LC <br />
+						Canceled
+					</>
+				),
 				enableColumnFilter: false,
-				cell: (info) => (info.getValue() ? 'Yes' : 'No'),
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
 			},
 			{
 				accessorKey: 'handover_date',
-				header: 'Handover Date',
+				header: (
+					<>
+						Handover <br />
+						Date
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime date={info.getValue()} isTime={false} />
@@ -197,7 +231,12 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'shipment_date',
-				header: 'Shipment Date',
+				header: (
+					<>
+						Shipment <br />
+						Date
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime date={info.getValue()} isTime={false} />
@@ -205,7 +244,12 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'expiry_date',
-				header: 'Expiry Date',
+				header: (
+					<>
+						Expiry <br />
+						Date
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime date={info.getValue()} isTime={false} />
@@ -231,7 +275,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'amd_date',
-				header: 'Amendment Date',
+				header: 'AMD Date',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime date={info.getValue()} isTime={false} />
@@ -239,7 +283,11 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'amd_count',
-				header: 'Amendment Count',
+				header: (
+					<>
+						AMD <br /> Count
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -247,13 +295,17 @@ export default function Index() {
 				accessorKey: 'problematical',
 				header: 'Problematic',
 				enableColumnFilter: false,
-				cell: (info) => (info.getValue() ? 'Yes' : 'No'),
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
 			},
 			{
 				accessorKey: 'epz',
 				header: 'EPZ',
 				enableColumnFilter: false,
-				cell: (info) => (info.getValue() ? 'Yes' : 'No'),
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
 			},
 			{
 				accessorKey: 'created_by_name',

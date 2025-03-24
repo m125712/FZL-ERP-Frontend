@@ -34,9 +34,9 @@ function Title({ title, subtitle }) {
 					{title}
 				</h1>
 				{subtitle && (
-					<p className='mt-0.5 text-sm capitalize text-secondary'>
+					<div className='mt-0.5 text-sm capitalize text-secondary'>
 						{subtitle}
-					</p>
+					</div>
 				)}
 			</div>
 		</div>

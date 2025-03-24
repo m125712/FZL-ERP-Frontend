@@ -117,7 +117,7 @@ export default function Index({
 					<td></td>
 				</tr>
 			</ReactTable>
-			<Suspense>
+			{/* <Suspense>
 				<History
 					modalId={title}
 					{...{
@@ -125,7 +125,7 @@ export default function Index({
 						setHistory,
 					}}
 				/>
-			</Suspense>
+			</Suspense> */}
 		</div>
 	);
 }

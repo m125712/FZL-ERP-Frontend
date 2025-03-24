@@ -50,7 +50,7 @@ export default function SingleInformation({ order, idx, hasInitialOrder }) {
 		title += ` #${idx + 1}`;
 	}
 	return (
-		<SectionContainer title={title} buttons={renderButtons()}>
+		<SectionContainer key={title} title={title} buttons={renderButtons()}>
 			{!hasInitialOrder && <OrderDescription order={order} />}
 			<ItemDescription
 				className={'border-secondary/30 md:border-b 2xl:border-b-0'}

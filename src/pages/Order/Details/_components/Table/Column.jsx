@@ -269,9 +269,12 @@ const getColumn = ({
 			header: 'History',
 			enableColumnFilter: false,
 			hidden: !haveAccess.includes('show_history'),
-			cell: (info) => (
-				<EyeBtn onClick={() => handelHistory(info.row.index)} />
-			),
+			cell: (info) =>
+				info.row.original.history.length > 0 ? (
+					<EyeBtn onClick={() => handelHistory(info.row.index)} />
+				) : (
+					'---'
+				),
 		}),
 	];
 };

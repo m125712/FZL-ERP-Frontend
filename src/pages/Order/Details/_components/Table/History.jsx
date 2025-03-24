@@ -1,20 +1,10 @@
 import { useMemo } from 'react';
-import { useOrderEntryHistory } from '@/state/Order';
 
 import { HistoryModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { DateTime } from '@/ui';
 
-export default function Index({
-	modalId = '',
-	history = {
-		uuid: null,
-		order_entry_uuid: null,
-	},
-	setHistory,
-}) {
-	const { data, isLoading } = useOrderEntryHistory(history?.order_entry_uuid);
-
+export default function Index({ modalId = '', history = {}, setHistory }) {
 	const onClose = () => {
 		// document.getElementById(modalId).close();
 		window[modalId].close();
@@ -78,11 +68,8 @@ export default function Index({
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 		],
-		[data]
+		[history?.history?.length]
 	);
-
-	if (isLoading)
-		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
 		<HistoryModal
@@ -90,7 +77,11 @@ export default function Index({
 			title={modalId + ': History'}
 			onClose={onClose}
 		>
-			<ReactTable showTitleOnly={true} data={data} columns={columns} />
+			<ReactTable
+				showTitleOnly={true}
+				data={history?.history ?? []}
+				columns={columns}
+			/>
 		</HistoryModal>
 	);
 }

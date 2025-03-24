@@ -6,6 +6,20 @@ const PurchaseInd = lazy(
 	() => import('@/pages/Store/Receive/Details/ByPurchaseDescriptionUUID')
 );
 const PurchaseEntry = lazy(() => import('@/pages/Store/Receive/Entry'));
+
+const PurchaseAccessories = lazy(
+	() => import('@/pages/Store/ReceiveAccessories')
+);
+const PurchaseIndAccessories = lazy(
+	() =>
+		import(
+			'@/pages/Store/ReceiveAccessories/Details/ByPurchaseDescriptionUUID'
+		)
+);
+const PurchaseEntryAccessories = lazy(
+	() => import('@/pages/Store/ReceiveAccessories/Entry')
+);
+
 const Section = lazy(() => import('@/pages/Store/Section'));
 const StockRm = lazy(() => import('@/pages/Store/StockRm'));
 const StockAccessories = lazy(() => import('@/pages/Store/StockAccessories'));
@@ -19,7 +33,7 @@ export const StoreRoutes = [
 		name: 'Store',
 		children: [
 			{
-				name: 'Stock RM',
+				name: 'Stock (RM)',
 				path: '/store/stock-rm',
 				element: <StockRm />,
 				page_name: 'store__stock_rm',
@@ -34,7 +48,7 @@ export const StoreRoutes = [
 				],
 			},
 			{
-				name: 'Stock Accessories',
+				name: 'Stock (Accessories)',
 				path: '/store/stock-accessories',
 				element: <StockAccessories />,
 				page_name: 'store__stock_accessories',
@@ -49,7 +63,7 @@ export const StoreRoutes = [
 				],
 			},
 			{
-				name: 'Receive',
+				name: 'Receive (RM)',
 				path: '/store/receive',
 				element: <Purchase />,
 				page_name: 'store__receive',
@@ -78,6 +92,40 @@ export const StoreRoutes = [
 						element: <PurchaseEntry />,
 						hidden: true,
 						page_name: 'store__receive_update',
+						actions: ['create', 'read', 'update'],
+					},
+				],
+			},
+			{
+				name: 'Receive (Accessories)',
+				path: '/store/receive-accessories',
+				element: <PurchaseAccessories />,
+				page_name: 'store__receive_accessories',
+				actions: ['create', 'read', 'update'],
+				disableCollapse: true,
+				children: [
+					{
+						name: 'Details',
+						path: '/store/receive-accessories/:purchase_description_uuid',
+						element: <PurchaseIndAccessories />,
+						hidden: true,
+						page_name: 'store__receive_accessories_by_uuid',
+						actions: ['create', 'read', 'update'],
+					},
+					{
+						name: 'Entry',
+						path: '/store/receive-accessories/entry',
+						element: <PurchaseEntryAccessories />,
+						hidden: true,
+						page_name: 'store__receive_accessories_entry',
+						actions: ['create', 'read', 'update'],
+					},
+					{
+						name: 'Entry',
+						path: '/store/receive-accessories/:purchase_description_uuid/update',
+						element: <PurchaseEntryAccessories />,
+						hidden: true,
+						page_name: 'store__receive_accessories_update',
 						actions: ['create', 'read', 'update'],
 					},
 				],

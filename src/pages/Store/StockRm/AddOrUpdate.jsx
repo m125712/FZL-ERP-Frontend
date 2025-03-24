@@ -91,6 +91,7 @@ export default function Index({
 			...data,
 			is_priority_material: data.is_priority_material ? 1 : 0,
 			uuid: nanoid(),
+			store_type: 'rm',
 			created_at: GetDateTime(),
 			created_by: user?.uuid,
 		};

@@ -201,7 +201,11 @@ export const purchaseQK = {
 	vendorByUUID: (uuid) => [...purchaseQK.vendor(), uuid],
 
 	//* description
-	description: () => [...purchaseQK.all(), 'description'],
+	description: (type) => [
+		...purchaseQK.all(),
+		'description',
+		...(type ? [type] : []),
+	],
 	descriptionByUUID: (uuid) => [...purchaseQK.description(), uuid],
 
 	//* entry

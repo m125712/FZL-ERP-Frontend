@@ -48,21 +48,6 @@ export const StoreRoutes = [
 				],
 			},
 			{
-				name: 'Stock (Accessories)',
-				path: '/store/stock-accessories',
-				element: <StockAccessories />,
-				page_name: 'store__stock_accessories',
-				actions: [
-					'create',
-					'read',
-					'update',
-					'delete',
-					'click_trx_against_order',
-					'click_action',
-					'click_booking',
-				],
-			},
-			{
 				name: 'Receive (RM)',
 				path: '/store/receive',
 				element: <Purchase />,
@@ -96,6 +81,22 @@ export const StoreRoutes = [
 					},
 				],
 			},
+			{
+				name: 'Stock (Accessories)',
+				path: '/store/stock-accessories',
+				element: <StockAccessories />,
+				page_name: 'store__stock_accessories',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_trx_against_order',
+					'click_action',
+					'click_booking',
+				],
+			},
+
 			{
 				name: 'Receive (Accessories)',
 				path: '/store/receive-accessories',

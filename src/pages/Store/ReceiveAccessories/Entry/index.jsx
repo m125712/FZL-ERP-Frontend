@@ -172,7 +172,9 @@ export default function Index() {
 					.then(() => {
 						invalidateMaterialInfo();
 						invalidatePurchaseLog();
-						navigate(`/store/receive/${purchase_description_uuid}`);
+						navigate(
+							`/store/receive-accessories/${purchase_description_uuid}`
+						);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -190,7 +192,7 @@ export default function Index() {
 		const purchase_description_data = {
 			...data,
 			uuid: new_purchase_description_uuid,
-			store_type: 'rm',
+			store_type: 'accessories',
 			created_at,
 			created_by,
 		};
@@ -232,7 +234,9 @@ export default function Index() {
 				.then(() => reset(PURCHASE_RECEIVE_NULL))
 				.then(() => {
 					invalidateMaterialInfo();
-					navigate(`/store/receive/${new_purchase_description_uuid}`);
+					navigate(
+						`/store/receive-accessories/${new_purchase_description_uuid}`
+					);
 				});
 		} catch (err) {
 			console.error(`Error with Promise.all: ${err}`);

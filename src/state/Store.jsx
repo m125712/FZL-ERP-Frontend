@@ -100,10 +100,12 @@ export const usePurchaseVendorByUUID = (uuid) =>
 	});
 
 // * Purchase Description * //
-export const usePurchaseDescription = () =>
+export const usePurchaseDescription = (type) =>
 	createGlobalState({
-		queryKey: purchaseQK.description(),
-		url: '/purchase/description',
+		queryKey: purchaseQK.description(type),
+		url: type
+			? `/purchase/description?s_type=${type}`
+			: '/purchase/description',
 	});
 
 export const usePurchaseDescriptionByUUID = (uuid) =>

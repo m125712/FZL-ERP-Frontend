@@ -7,7 +7,8 @@ const PurchaseInd = lazy(
 );
 const PurchaseEntry = lazy(() => import('@/pages/Store/Receive/Entry'));
 const Section = lazy(() => import('@/pages/Store/Section'));
-const Stock = lazy(() => import('@/pages/Store/Stock'));
+const StockRm = lazy(() => import('@/pages/Store/StockRm'));
+const StockAccessories = lazy(() => import('@/pages/Store/StockAccessories'));
 const Test = lazy(() => import('@/pages/Store/Test'));
 const MaterialType = lazy(() => import('@/pages/Store/Type'));
 // * Purchase
@@ -18,10 +19,25 @@ export const StoreRoutes = [
 		name: 'Store',
 		children: [
 			{
-				name: 'Stock',
-				path: '/store/stock',
-				element: <Stock />,
-				page_name: 'store__stock',
+				name: 'Stock RM',
+				path: '/store/stock-rm',
+				element: <StockRm />,
+				page_name: 'store__stock_rm',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_trx_against_order',
+					'click_action',
+					'click_booking',
+				],
+			},
+			{
+				name: 'Stock Accessories',
+				path: '/store/stock-accessories',
+				element: <StockAccessories />,
+				page_name: 'store__stock_accessories',
 				actions: [
 					'create',
 					'read',

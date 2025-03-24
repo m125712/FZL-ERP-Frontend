@@ -166,7 +166,7 @@ export const materialQK = {
 	typeByUUID: (uuid) => [...materialQK.type(), uuid],
 
 	//* infos
-	info: () => [...materialQK.all(), 'info'],
+	info: (type) => [...materialQK.all(), 'info', ...(type ? [type] : [])],
 	infoByUUID: (uuid) => [...materialQK.info(), uuid],
 
 	//* trx

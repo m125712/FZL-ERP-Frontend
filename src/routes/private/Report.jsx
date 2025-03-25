@@ -31,7 +31,9 @@ const OrderSummary = lazy(() => import('@/pages/Report/OrderSummary'));
 const DeliveryReport = lazy(() => import('@/pages/Report/DeliveryReport'));
 const ThreadDelivery = lazy(() => import('@/pages/Report/ThreadDelivery'));
 const PackingList = lazy(() => import('@/pages/Report/PackingList'));
-
+const ProductionSummary = lazy(
+	() => import('@/pages/Report/ProductionSummary')
+);
 export const ReportRoutes = [
 	{
 		name: 'Report',
@@ -189,6 +191,13 @@ export const ReportRoutes = [
 				element: <PackingList />,
 				page_name: 'report__packing_list',
 				actions: ['read'],
+			},
+			{
+				name: 'Production Summary',
+				path: '/report/production-summary',
+				element: <ProductionSummary />,
+				page_name: 'report__production_summary',
+				actions: ['read', 'show_own_orders'],
 			},
 		],
 	},

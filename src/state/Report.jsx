@@ -132,6 +132,28 @@ export const useZipperStatus = (from, to, query, { enabled = false } = {}) =>
 		enabled,
 	});
 
+export const useItemWise = (from, to, query, { enabled = false } = {}) =>
+	createGlobalState({
+		queryKey: reportQK.itemWise(from, to, query),
+		url:
+			`/report/item-wise-production-report?from=${from}&to=${to}` + query,
+		enabled,
+	});
+
+export const useItemZipperEndWise = (
+	from,
+	to,
+	query,
+	{ enabled = false } = {}
+) =>
+	createGlobalState({
+		queryKey: reportQK.itemZipperEndWise(from, to, query),
+		url:
+			`/report/item-zipper-end-wise-production-report?from=${from}&to=${to}` +
+			query,
+		enabled,
+	});
+
 export const usePIRegister = (
 	from,
 	to,

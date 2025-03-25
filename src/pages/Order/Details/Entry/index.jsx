@@ -301,7 +301,11 @@ export default function Index() {
 					if (item.order_entry_uuid) {
 						await updateData.mutateAsync({
 							url: `/zipper/order-entry/${item.order_entry_uuid}`,
-							updatedData: { ...item, updated_at: GetDateTime() },
+							updatedData: {
+								...item,
+								updated_at: GetDateTime(),
+								created_by: user?.uuid,
+							},
 							isOnCloseNeeded: false,
 						});
 					} else {
@@ -313,6 +317,7 @@ export default function Index() {
 								order_description_uuid:
 									rest?.order_description_uuid,
 								created_at: GetDateTime(),
+								created_by: user?.uuid,
 							},
 							isOnCloseNeeded: false,
 						});

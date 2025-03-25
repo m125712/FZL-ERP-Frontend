@@ -170,11 +170,15 @@ export const materialQK = {
 	infoByUUID: (uuid) => [...materialQK.info(), uuid],
 
 	//* trx
-	trx: () => [...materialQK.all(), 'trx'],
+	trx: (type) => [...materialQK.all(), 'trx', ...(type ? [type] : [])],
 	trxByUUID: (uuid) => [...materialQK.trx(), uuid],
 
 	//* booking
-	booking: () => [...materialQK.all(), 'booking'],
+	booking: (type) => [
+		...materialQK.all(),
+		'booking',
+		...(type ? [type] : []),
+	],
 	bookingByUUID: (uuid) => [...materialQK.booking(), uuid],
 
 	//* stock to sfg
@@ -182,9 +186,10 @@ export const materialQK = {
 	stockToSFGByUUID: (uuid) => [...materialQK.stockToSGF(), uuid],
 
 	//* TrxAgainstOrderDescription//
-	trxAgainstOrderDescription: () => [
+	trxAgainstOrderDescription: (type) => [
 		...materialQK.all(),
 		'trx-against-order-description',
+		...(type ? [type] : []),
 	],
 	trxAgainstOrderDescriptionByUUID: (uuid) => [
 		...materialQK.trxAgainstOrderDescription(),
@@ -217,7 +222,7 @@ export const purchaseQK = {
 	detailsByUUID: (uuid) => [...purchaseQK.details(), uuid],
 
 	//* log
-	log: () => [...purchaseQK.all(), 'log'],
+	log: (type) => [...purchaseQK.all(), 'log', ...(type ? [type] : [])],
 };
 
 //Library

@@ -1,6 +1,9 @@
 import { lazy } from 'react';
 
 const MaterialLog = lazy(() => import('@/pages/Store/Log'));
+const MaterialLogAccessories = lazy(
+	() => import('@/pages/Store/LogAccessories')
+);
 const Purchase = lazy(() => import('@/pages/Store/Receive'));
 const PurchaseInd = lazy(
 	() => import('@/pages/Store/Receive/Details/ByPurchaseDescriptionUUID')
@@ -207,7 +210,7 @@ export const StoreRoutes = [
 			{
 				name: 'Log',
 				path: '/store-accessories/log',
-				element: <MaterialLog />,
+				element: <MaterialLogAccessories />,
 				page_name: 'store__log',
 				actions: [
 					'read',

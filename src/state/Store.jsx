@@ -44,10 +44,10 @@ export const useMaterialInfoByUUID = (uuid) =>
 	});
 
 // * Material Trx * //
-export const useMaterialTrx = () =>
+export const useMaterialTrx = (type) =>
 	createGlobalState({
-		queryKey: materialQK.trx(),
-		url: '/material/trx',
+		queryKey: materialQK.trx(type),
+		url: type ? `/material/trx?s_type=${type}` : '/material/trx',
 	});
 
 export const useMaterialTrxByUUID = (uuid) =>
@@ -58,10 +58,10 @@ export const useMaterialTrxByUUID = (uuid) =>
 	});
 
 // * Material Booking * //
-export const useMaterialBooking = () =>
+export const useMaterialBooking = (type) =>
 	createGlobalState({
-		queryKey: materialQK.booking(),
-		url: '/material/booking',
+		queryKey: materialQK.booking(type),
+		url: type ? `/material/booking?s_type=${type}` : '/material/booking',
 	});
 
 export const useMaterialBookingByUUID = (uuid) =>
@@ -138,17 +138,21 @@ export const usePurchaseDetailsByUUID = (uuid) =>
 	});
 
 // * Purchase Log * //
-export const usePurchaseLog = () =>
+export const usePurchaseLog = (type) =>
 	createGlobalState({
-		queryKey: purchaseQK.log(),
-		url: `/purchase/purchase-log`,
+		queryKey: purchaseQK.log(type),
+		url: type
+			? `/purchase/purchase-log?s_type=${type}`
+			: `/purchase/purchase-log`,
 	});
 
 // * Material_trx_against_order_description *//
-export const useMaterialTrxAgainstOrderDescription = () =>
+export const useMaterialTrxAgainstOrderDescription = (type) =>
 	createGlobalState({
-		queryKey: materialQK.trxAgainstOrderDescription(),
-		url: '/zipper/material-trx-against-order',
+		queryKey: materialQK.trxAgainstOrderDescription(type),
+		url: type
+			? `/zipper/material-trx-against-order?s_type=${type}`
+			: '/zipper/material-trx-against-order',
 	});
 
 export const useMaterialTrxAgainstOrderDescriptionByUUID = (uuid) =>

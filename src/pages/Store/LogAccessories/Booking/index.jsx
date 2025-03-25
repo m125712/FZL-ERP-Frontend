@@ -14,7 +14,8 @@ const AgainstOrderTransfer = lazy(() => import('./AgainstOrderTransfer'));
 const MaterialTrx = lazy(() => import('./MaterialTrx'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useMaterialBooking('rm');
+	const { data, isLoading, url, deleteData } =
+		useMaterialBooking('accessories');
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const info = new PageInfo('Store / Booking', url);
 	const haveAccess = useAccess('store__log');

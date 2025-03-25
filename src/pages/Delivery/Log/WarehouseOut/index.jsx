@@ -79,7 +79,18 @@ export default function Index() {
 					);
 				},
 			},
-
+			{
+				accessorKey: 'item_description',
+				header: 'Item Description',
+				enableColumnFilter: true,
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.row.original.order_number}/${info.row.original.order_description_uuid}`}
+						openInNewTab={true}
+					/>
+				),
+			},
 			{
 				accessorKey: 'warehouse_received_date',
 				header: 'Received Date',

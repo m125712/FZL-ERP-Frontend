@@ -15,20 +15,26 @@ const getPath = (haveAccess, userUUID) => {
 		haveAccess.includes('show_zero_balance') &&
 		userUUID
 	) {
-		return `&own_uuid=${userUUID}&show_zero_balance=1`;
+		return `own_uuid=${userUUID}&show_zero_balance=1`;
 	} else if (haveAccess.includes('show_own_orders') && userUUID) {
-		return `&own_uuid=${userUUID}&show_zero_balance=0`;
+		return `own_uuid=${userUUID}&show_zero_balance=0`;
 	} else if (haveAccess.includes('show_zero_balance') && userUUID) {
-		return `&show_zero_balance=1`;
+		return `show_zero_balance=1`;
 	}
 
-	return `&show_zero_balance=0`;
+	return `show_zero_balance=0`;
 };
 
 export default function Index() {
 	const haveAccess = useAccess('report__bulk');
+	const haveDateAccess = haveAccess.includes('show_date_range');
 	const { user } = useAuth();
+	const [date, setDate] = useState(new Date());
+	const [toDate, setToDate] = useState(new Date());
 	const { data, isLoading, url } = useBulk(
+		haveDateAccess,
+		format(date, 'yyyy-MM-dd'),
+		format(toDate, 'yyyy-MM-dd'),
 		getPath(haveAccess, user?.uuid),
 		!!user?.uuid
 	);
@@ -239,6 +245,32 @@ export default function Index() {
 			data={data}
 			columns={columns}
 			extraClass={'py-0.5'}
+			extraButton={
+				haveDateAccess && (
+					<div className='flex items-center gap-2'>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'Date'}
+							value={date}
+							placeholder='Date'
+							onChange={(data) => {
+								setDate(data);
+							}}
+							selected={date}
+						/>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'toDate'}
+							value={toDate}
+							placeholder='To'
+							onChange={(data) => {
+								setToDate(data);
+							}}
+							selected={toDate}
+						/>
+					</div>
+				)
+			}
 		/>
 	);
 }

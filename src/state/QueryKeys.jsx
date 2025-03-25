@@ -1700,7 +1700,13 @@ export const reportQK = {
 	],
 
 	// * Bulk Report
-	bulk: (query) => [...reportQK.all(), 'bulk-report', query],
+	bulk: (dateAccess, date, toDate, query) => [
+		...reportQK.all(),
+		'bulk-report',
+		query,
+		...(date && dateAccess ? [date] : []),
+		...(toDate && dateAccess ? [toDate] : []),
+	],
 	// * Thread delivery
 	threadDelivery: (date, toDate, query) => [
 		...reportQK.all(),

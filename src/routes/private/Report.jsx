@@ -124,6 +124,7 @@ export const ReportRoutes = [
 					'show_price_pi',
 					'show_own_orders',
 					'show_zero_balance',
+					'show_date_range',
 				],
 			},
 			{

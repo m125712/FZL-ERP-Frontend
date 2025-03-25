@@ -1651,6 +1651,24 @@ export const reportQK = {
 		to,
 	],
 
+	// * Item Wise
+	itemWise: (from, to, query) => [
+		...reportQK.all(),
+		'item-wise-report',
+		from,
+		to,
+		query,
+	],
+
+	// * Item Zipper End Wise
+	itemZipperEndWise: (from, to, query) => [
+		...reportQK.all(),
+		'item-wise-zipper-end-report',
+		from,
+		to,
+		query,
+	],
+
 	//* PI Register
 	piRegister: (from, to, query) => [
 		...reportQK.all(),

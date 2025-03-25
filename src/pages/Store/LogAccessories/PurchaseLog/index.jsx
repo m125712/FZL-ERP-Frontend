@@ -1,10 +1,10 @@
 import { lazy, useMemo, useState } from 'react';
-import { useMaterialTrx } from '@/state/Store';
+import { usePurchaseLog } from '@/state/Store';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete } from '@/ui';
+import { DateTime, EditDelete, LinkOnly } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -12,33 +12,68 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useMaterialTrx('rm');
-	const info = new PageInfo('Store / Transfer', url);
+	const { data, isLoading, url, deleteData } = usePurchaseLog('accessories');
+	const info = new PageInfo('Store / Purchase', url);
 	const haveAccess = useAccess('store__log');
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'material_name',
-				header: 'Name',
+				accessorKey: 'purchase_id',
+				header: 'Receive ID',
 				enableColumnFilter: false,
-				width: 'w-20',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorFn: (row) => {
-					return row?.trx_to
-						.replace(/_/g, ' ')
-						.replace(/^\w/, (c) => c.toUpperCase());
+				cell: (info) => {
+					const { uuid } = info.row.original;
+					return (
+						<LinkOnly
+							uri='/store/receive'
+							id={uuid}
+							title={info.getValue()}
+						/>
+					);
 				},
-				id: 'trx_to',
-				header: 'Section',
+			},
+			{
+				accessorKey: 'vendor_name',
+				header: 'Vendor',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'trx_quantity',
+				accessorKey: 'is_local',
+				header: 'Local/LC',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return info.getValue() == 1 ? 'Local' : 'LC';
+				},
+			},
+			{
+				accessorKey: 'lc_number',
+				header: 'LC No',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'challan_number',
+				header: 'Challan No',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'material_name',
+				header: 'Material',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'quantity',
 				header: 'Quantity',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'price',
+				header: 'Price',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -49,35 +84,31 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'entry_remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
 			{
 				accessorKey: 'created_at',
 				header: 'Created At',
-				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				filterFn: 'isWithinRange',
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated At',
 				enableColumnFilter: false,
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+
 			{
 				accessorKey: 'actions',
 				header: 'Actions',
@@ -91,7 +122,7 @@ export default function Index() {
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('delete_log')}
+							// showDelete={false}
 						/>
 					);
 				},
@@ -101,22 +132,16 @@ export default function Index() {
 	);
 
 	// Update
-	const [updateMaterialTrx, setUpdateMaterialTrx] = useState({
-		uuid: null,
+	const [updatePurchaseLog, setUpdatePurchaseLog] = useState({
+		entry_uuid: null,
 		material_name: null,
-		stock: null,
-		trx_quantity: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateMaterialTrx((prev) => ({
+		setUpdatePurchaseLog((prev) => ({
 			...prev,
-			uuid: data[idx]?.uuid,
-			material_name: data[idx]?.material_name
-				.replace(/#/g, '')
-				.replace(/\//g, '-'),
-			stock: data[idx]?.stock,
-			trx_quantity: data[idx]?.trx_quantity,
+			entry_uuid: data[idx]?.purchase_entry_uuid,
+			material_name: data[idx]?.material_name,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
@@ -129,7 +154,7 @@ export default function Index() {
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: data[idx].uuid,
+			itemId: data[idx].purchase_entry_uuid,
 			itemName: data[idx].material_name
 				.replace(/#/g, '')
 				.replace(/\//g, '-'),
@@ -137,7 +162,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
-	//invalidateMaterialInfo();
+	//invalidateMaterial();
 
 	if (isLoading)
 		return (
@@ -157,17 +182,18 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateMaterialTrx,
-						setUpdateMaterialTrx,
+						updatePurchaseLog,
+						setUpdatePurchaseLog,
 					}}
 				/>
+
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: '/purchase/entry',
 						deleteData,
 					}}
 				/>

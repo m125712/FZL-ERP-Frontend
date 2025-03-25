@@ -1,22 +1,35 @@
 import { lazy, useMemo, useState } from 'react';
-import { useMaterialBooking, useMaterialInfo } from '@/state/Store';
+import { useCommonTapeSFG } from '@/state/Common';
+import {
+	useSliderAssemblyStock,
+	useSliderDieCastingStock,
+} from '@/state/Slider';
+import {
+	useMaterialInfo,
+	useMaterialTrxAgainstOrderDescription,
+} from '@/state/Store';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, Transfer } from '@/ui';
+import { CustomLink, DateTime, EditDelete } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
-const AgainstOrderTransfer = lazy(() => import('./AgainstOrderTransfer'));
-const MaterialTrx = lazy(() => import('./MaterialTrx'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useMaterialBooking('rm');
+	const { data, isLoading, url, deleteData } =
+		useMaterialTrxAgainstOrderDescription('accessories');
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-	const info = new PageInfo('Store / Booking', url);
+	const { invalidateQuery: invalidateSliderDieCastingStock } =
+		useSliderDieCastingStock();
+	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
+	const { invalidateQuery: invalidateSliderAssemblyStock } =
+		useSliderAssemblyStock();
+
+	const info = new PageInfo('Store / Transfer Against Order', url);
 	const haveAccess = useAccess('store__log');
 
 	const columns = useMemo(
@@ -28,14 +41,44 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'marketing_name',
-				header: 'Marketing',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				accessorKey: 'order_number',
+				header: 'O/N',
+				enableColumnFilter: true,
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.getValue()}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
-				accessorKey: 'quantity',
-				header: 'Quantity',
+				accessorKey: 'item_description',
+				header: 'Item Description',
+				enableColumnFilter: true,
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/order/details/${info.row.original.order_number}/${info.row.original.order_description_uuid}`}
+						openInNewTab={true}
+					/>
+				),
+			},
+
+			{
+				accessorKey: 'trx_to',
+				header: 'Section',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<span className='capitalize'>
+						{/* replace _ with space */}
+						{info.getValue().replace(/_/g, ' ')}
+					</span>
+				),
+			},
+			{
+				accessorKey: 'trx_quantity',
+				header: 'Transferred QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -46,41 +89,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'trx_quantity',
-				header: 'Transaction QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'action_trx',
-				header: 'Material Trx',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: haveAccess.includes('click_action'),
-				width: 'w-24',
-				cell: (info) => (
-					<Transfer onClick={() => handleTrx(info.row.index)} />
-				),
-			},
-			{
-				accessorKey: 'action_trx_against_order',
-				header: 'Trx Against Order',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: haveAccess.includes('click_trx_against_order'),
-				width: 'w-32',
-				cell: (info) => (
-					<Transfer
-						onClick={() => handleTrxAgainstOrder(info.row.index)}
-					/>
-				),
-			},
-			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
 			{
 				accessorKey: 'created_at',
 				header: 'Created At',
@@ -104,6 +118,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
 			{
 				accessorKey: 'actions',
 				header: 'Actions',
@@ -112,17 +127,14 @@ export default function Index() {
 				hidden: !haveAccess.includes('update_log_against_order'),
 				width: 'w-24',
 				cell: (info) => {
-					const { trx_quantity } = info.row.original;
 					return (
 						<EditDelete
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
-							showUpdate={haveAccess.includes('update_booking')}
-							showDelete={
-								haveAccess.includes('delete_booking') &&
-								!trx_quantity > 0
-							}
+							showDelete={haveAccess.includes(
+								'delete_log_against_order'
+							)}
 						/>
 					);
 				},
@@ -132,39 +144,24 @@ export default function Index() {
 	);
 
 	// Update
-	const [updateMaterialDetails, setUpdateMaterialDetails] = useState({
+	const [updateMaterialTrxToOrder, setUpdateMaterialTrxToOrder] = useState({
 		uuid: null,
+		material_name: null,
+		trx_quantity: null,
+		stock: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateMaterialDetails((prev) => ({
+		setUpdateMaterialTrxToOrder((prev) => ({
 			...prev,
-			...data[idx],
 			uuid: data[idx]?.uuid,
+			material_name: data[idx]?.material_name
+				.replace(/#/g, '')
+				.replace(/\//g, '-'),
+			trx_quantity: data[idx]?.trx_quantity,
+			stock: data[idx]?.stock,
 		}));
 		window[info.getAddOrUpdateModalId()].showModal();
-	};
-
-	const handleTrx = (idx) => {
-		setUpdateMaterialDetails((prev) => ({
-			...prev,
-			...data[idx],
-			uuid: data[idx].uuid,
-			stock: data[idx].stock,
-			name: data[idx].material_name,
-		}));
-		window['MaterialTrx'].showModal();
-	};
-
-	const handleTrxAgainstOrder = (idx) => {
-		setUpdateMaterialDetails((prev) => ({
-			...prev,
-			...data[idx],
-			uuid: data[idx].uuid,
-			stock: data[idx].stock,
-			name: data[idx].material_name,
-		}));
-		window['MaterialTrxAgainstOrder'].showModal();
 	};
 
 	// Delete
@@ -184,6 +181,7 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
+	//invalidateMaterialInfo();
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
@@ -196,20 +194,11 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateMaterialDetails,
-						setUpdateMaterialDetails,
+						updateMaterialTrxToOrder,
+						setUpdateMaterialTrxToOrder,
 					}}
 				/>
-				<MaterialTrx
-					modalId={'MaterialTrx'}
-					updateMaterialDetails={updateMaterialDetails}
-					setUpdateMaterialDetails={setUpdateMaterialDetails}
-				/>
-				<AgainstOrderTransfer
-					modalId={'MaterialTrxAgainstOrder'}
-					updateMaterialDetails={updateMaterialDetails}
-					setUpdateMaterialDetails={setUpdateMaterialDetails}
-				/>
+
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
@@ -219,7 +208,12 @@ export default function Index() {
 						url,
 						deleteData,
 					}}
-					invalidateQuery={invalidateMaterialInfo}
+					invalidateQueryArray={[
+						invalidateMaterialInfo,
+						invalidateSliderDieCastingStock,
+						invalidateCommonTapeSFG,
+						invalidateSliderAssemblyStock,
+					]}
 				/>
 			</Suspense>
 		</div>

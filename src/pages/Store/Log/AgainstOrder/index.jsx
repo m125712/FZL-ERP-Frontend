@@ -21,7 +21,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } =
-		useMaterialTrxAgainstOrderDescription();
+		useMaterialTrxAgainstOrderDescription('rm');
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { invalidateQuery: invalidateSliderDieCastingStock } =
 		useSliderDieCastingStock();

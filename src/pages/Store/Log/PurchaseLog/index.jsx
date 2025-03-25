@@ -12,7 +12,7 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = usePurchaseLog();
+	const { data, isLoading, url, deleteData } = usePurchaseLog('rm');
 	const info = new PageInfo('Store / Purchase', url);
 	const haveAccess = useAccess('store__log');
 

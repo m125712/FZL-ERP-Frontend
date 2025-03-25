@@ -1,6 +1,9 @@
 import { lazy } from 'react';
 
 const MaterialLog = lazy(() => import('@/pages/Store/Log'));
+const MaterialLogAccessories = lazy(
+	() => import('@/pages/Store/LogAccessories')
+);
 const Purchase = lazy(() => import('@/pages/Store/Receive'));
 const PurchaseInd = lazy(
 	() => import('@/pages/Store/Receive/Details/ByPurchaseDescriptionUUID')
@@ -30,7 +33,7 @@ const Vendor = lazy(() => import('@/pages/Store/Vendor'));
 
 export const StoreRoutes = [
 	{
-		name: 'Store',
+		name: 'Store (RM)',
 		children: [
 			{
 				name: 'Stock (RM)',
@@ -81,6 +84,57 @@ export const StoreRoutes = [
 					},
 				],
 			},
+			{
+				name: 'Section',
+				path: '/store-rm/section',
+				element: <Section />,
+				page_name: 'store__section',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Material Type',
+				path: '/store-rm/type',
+				element: <MaterialType />,
+				page_name: 'store__type',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Vendor',
+				path: '/store-rm/vendor',
+				element: <Vendor />,
+				page_name: 'store__vendor',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+
+			{
+				name: 'Log',
+				path: '/store-rm/log',
+				element: <MaterialLog />,
+				page_name: 'store__log',
+				actions: [
+					'read',
+					'update_log',
+					'delete_log',
+					'update_log_against_order',
+					'delete_log_against_order',
+					'update_booking',
+					'delete_booking',
+					'click_trx_against_order',
+					'click_action',
+				],
+			},
+			{
+				name: 'Test',
+				path: '/store-rm/test',
+				element: <Test />,
+				page_name: 'store__test',
+				actions: ['read'],
+			},
+		],
+	},
+	{
+		name: 'Store (Accessories)',
+		children: [
 			{
 				name: 'Stock (Accessories)',
 				path: '/store/stock-accessories',
@@ -133,21 +187,21 @@ export const StoreRoutes = [
 			},
 			{
 				name: 'Section',
-				path: '/store/section',
+				path: '/store-accessories/section',
 				element: <Section />,
 				page_name: 'store__section',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
 			{
 				name: 'Material Type',
-				path: '/store/type',
+				path: '/store-accessories/type',
 				element: <MaterialType />,
 				page_name: 'store__type',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
 			{
 				name: 'Vendor',
-				path: '/store/vendor',
+				path: '/store-accessories/vendor',
 				element: <Vendor />,
 				page_name: 'store__vendor',
 				actions: ['create', 'read', 'update', 'delete'],
@@ -155,8 +209,8 @@ export const StoreRoutes = [
 
 			{
 				name: 'Log',
-				path: '/store/log',
-				element: <MaterialLog />,
+				path: '/store-accessories/log',
+				element: <MaterialLogAccessories />,
 				page_name: 'store__log',
 				actions: [
 					'read',
@@ -172,7 +226,7 @@ export const StoreRoutes = [
 			},
 			{
 				name: 'Test',
-				path: '/store/test',
+				path: '/store-accessories/test',
 				element: <Test />,
 				page_name: 'store__test',
 				actions: ['read'],

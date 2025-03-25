@@ -211,10 +211,19 @@ export const useSample = (
 		enabled,
 	});
 
-export const useBulk = (query, enabled = false) =>
+export const useBulk = (
+	dateAccess = false,
+	date,
+	toDate,
+	query,
+	enabled = false
+) =>
 	createGlobalState({
-		queryKey: reportQK.bulk(query),
-		url: `/report/sample-report-by-date?is_sample=0` + query,
+		queryKey: reportQK.bulk(dateAccess, date, toDate, query),
+		url: dateAccess
+			? `/report/sample-report-by-date?is_sample=0&date=${date}&to_date=${toDate}&` +
+				query
+			: `/report/sample-report-by-date?is_sample=0&` + query,
 		enabled,
 	});
 

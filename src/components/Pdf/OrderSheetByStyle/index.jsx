@@ -73,6 +73,17 @@ export default function OrderSheetByStyle(orderByStyle) {
 									garments
 								);
 
+								//* Total for each description
+								let TotalDescQty = entry.details.reduce(
+									(acc, item) =>
+										acc +
+										item.sizes.reduce(
+											(acc, item) => acc + item.quantity,
+											0
+										),
+									0
+								);
+
 								return entry.details.flatMap((detail) => {
 									let TotalColorQty = detail.sizes.reduce(
 										(acc, item) => acc + item.quantity,
@@ -144,6 +155,11 @@ export default function OrderSheetByStyle(orderByStyle) {
 																entry.remarks,
 															]
 														: []),
+
+													{
+														text: `\n(Total: ${TotalDescQty})`,
+														alignment: 'left',
+													},
 												],
 												rowSpan: entry.details
 													.map(

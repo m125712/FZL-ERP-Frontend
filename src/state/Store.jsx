@@ -44,10 +44,12 @@ export const useMaterialInfoByUUID = (uuid) =>
 	});
 
 // * Material Trx * //
-export const useMaterialTrx = (type) =>
+export const useMaterialTrx = (type, from, to) =>
 	createGlobalState({
-		queryKey: materialQK.trx(type),
-		url: type ? `/material/trx?s_type=${type}` : '/material/trx',
+		queryKey: materialQK.trx(type, from, to),
+		url: type
+			? `/material/trx?s_type=${type}&from_date=${from}&to_date=${to}`
+			: `/material/trx?from_date=${from}&to_date=${to}`,
 	});
 
 export const useMaterialTrxByUUID = (uuid) =>
@@ -58,10 +60,12 @@ export const useMaterialTrxByUUID = (uuid) =>
 	});
 
 // * Material Booking * //
-export const useMaterialBooking = (type) =>
+export const useMaterialBooking = (type, from, to) =>
 	createGlobalState({
-		queryKey: materialQK.booking(type),
-		url: type ? `/material/booking?s_type=${type}` : '/material/booking',
+		queryKey: materialQK.booking(type, from, to),
+		url: type
+			? `/material/booking?s_type=${type}&from_date=${from}&to_date=${to}`
+			: `/material/booking?from_date=${from}&to_date=${to}`,
 	});
 
 export const useMaterialBookingByUUID = (uuid) =>
@@ -138,21 +142,21 @@ export const usePurchaseDetailsByUUID = (uuid) =>
 	});
 
 // * Purchase Log * //
-export const usePurchaseLog = (type) =>
+export const usePurchaseLog = (type, from, to) =>
 	createGlobalState({
-		queryKey: purchaseQK.log(type),
+		queryKey: purchaseQK.log(type, from, to),
 		url: type
-			? `/purchase/purchase-log?s_type=${type}`
-			: `/purchase/purchase-log`,
+			? `/purchase/purchase-log?s_type=${type}&from_date=${from}&to_date=${to}`
+			: `/purchase/purchase-log?from_date=${from}&to_date=${to}`,
 	});
 
 // * Material_trx_against_order_description *//
-export const useMaterialTrxAgainstOrderDescription = (type) =>
+export const useMaterialTrxAgainstOrderDescription = (type, from, to) =>
 	createGlobalState({
-		queryKey: materialQK.trxAgainstOrderDescription(type),
+		queryKey: materialQK.trxAgainstOrderDescription(type, from, to),
 		url: type
-			? `/zipper/material-trx-against-order?s_type=${type}`
-			: '/zipper/material-trx-against-order',
+			? `/zipper/material-trx-against-order?s_type=${type}&from_date=${from}&to_date=${to}`
+			: `/zipper/material-trx-against-order?from_date=${from}&to_date=${to}`,
 	});
 
 export const useMaterialTrxAgainstOrderDescriptionByUUID = (uuid) =>

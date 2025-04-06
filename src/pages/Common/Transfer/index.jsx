@@ -1,20 +1,26 @@
 import { lazy, useMemo, useState } from 'react';
 import { useDyeingTransfer } from '@/state/Dyeing';
 import { useOtherOrderDescription } from '@/state/Other';
+import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, EditDelete } from '@/ui';
+import { CustomLink, DateTime, EditDelete, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 const Update = lazy(() => import('./EntryUpdate/Update'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useDyeingTransfer();
+	const [date, setDate] = useState(new Date());
+	const [toDate, setToDate] = useState(new Date());
+	const { data, isLoading, url, deleteData } = useDyeingTransfer(
+		format(date, 'yyyy-MM-dd'),
+		format(toDate, 'yyyy-MM-dd')
+	);
 	const { invalidateQuery: invalidateOrderDescription } =
 		useOtherOrderDescription();
 	const info = new PageInfo('Dyeing Store', url, 'common__dyeing_transfer');
@@ -223,6 +229,30 @@ export default function Index() {
 				title={info.getTitle()}
 				data={data}
 				columns={columns}
+				extraButton={
+					<div className='flex items-center gap-2'>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'Date'}
+							value={date}
+							placeholder='Date'
+							onChange={(data) => {
+								setDate(data);
+							}}
+							selected={date}
+						/>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'toDate'}
+							value={toDate}
+							placeholder='To'
+							onChange={(data) => {
+								setToDate(data);
+							}}
+							selected={toDate}
+						/>
+					</div>
+				}
 			/>
 			<Suspense>
 				<Suspense>

@@ -152,10 +152,10 @@ export const useOrderAgainstDyeingRMLogByUUID = (uuid) =>
 	});
 
 //Dyeing Transfer
-export const useDyeingTransfer = () =>
+export const useDyeingTransfer = (from, to) =>
 	createGlobalState({
-		queryKey: dyeingQK.dyeingTransfer(),
-		url: '/zipper/dyed-tape-transaction',
+		queryKey: dyeingQK.dyeingTransfer(from, to),
+		url: `/zipper/dyed-tape-transaction?from_date=${from}&to_date=${to}`,
 	});
 export const useDyeingTransferByUUID = (uuid) =>
 	createGlobalState({

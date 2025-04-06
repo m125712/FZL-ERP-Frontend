@@ -170,13 +170,21 @@ export const materialQK = {
 	infoByUUID: (uuid) => [...materialQK.info(), uuid],
 
 	//* trx
-	trx: (type) => [...materialQK.all(), 'trx', ...(type ? [type] : [])],
+	trx: (type, from, to) => [
+		...materialQK.all(),
+		'trx',
+		from,
+		to,
+		...(type ? [type] : []),
+	],
 	trxByUUID: (uuid) => [...materialQK.trx(), uuid],
 
 	//* booking
-	booking: (type) => [
+	booking: (type, from, to) => [
 		...materialQK.all(),
 		'booking',
+		from,
+		to,
 		...(type ? [type] : []),
 	],
 	bookingByUUID: (uuid) => [...materialQK.booking(), uuid],
@@ -186,9 +194,11 @@ export const materialQK = {
 	stockToSFGByUUID: (uuid) => [...materialQK.stockToSGF(), uuid],
 
 	//* TrxAgainstOrderDescription//
-	trxAgainstOrderDescription: (type) => [
+	trxAgainstOrderDescription: (type, from, to) => [
 		...materialQK.all(),
 		'trx-against-order-description',
+		from,
+		to,
 		...(type ? [type] : []),
 	],
 	trxAgainstOrderDescriptionByUUID: (uuid) => [
@@ -222,7 +232,13 @@ export const purchaseQK = {
 	detailsByUUID: (uuid) => [...purchaseQK.details(), uuid],
 
 	//* log
-	log: (type) => [...purchaseQK.all(), 'log', ...(type ? [type] : [])],
+	log: (type, from, to) => [
+		...purchaseQK.all(),
+		'log',
+		from,
+		to,
+		...(type ? [type] : []),
+	],
 };
 
 //Library
@@ -481,7 +497,12 @@ export const dyeingQK = {
 		uuid,
 	],
 	//* Dyeing Transfer
-	dyeingTransfer: () => [...dyeingQK.all(), 'dyeing-transfer'],
+	dyeingTransfer: (from, to) => [
+		...dyeingQK.all(),
+		'dyeing-transfer',
+		from,
+		to,
+	],
 	dyeingTransferByUUID: (uuid) => [...dyeingQK.dyeingTransfer(), uuid],
 
 	//* ? Finishing Batch

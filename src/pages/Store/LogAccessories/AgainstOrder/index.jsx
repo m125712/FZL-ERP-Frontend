@@ -8,11 +8,12 @@ import {
 	useMaterialInfo,
 	useMaterialTrxAgainstOrderDescription,
 } from '@/state/Store';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, EditDelete } from '@/ui';
+import { CustomLink, DateTime, EditDelete, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -20,8 +21,14 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
+	const [date, setDate] = useState(new Date());
+	const [toDate, setToDate] = useState(new Date());
 	const { data, isLoading, url, deleteData } =
-		useMaterialTrxAgainstOrderDescription('accessories');
+		useMaterialTrxAgainstOrderDescription(
+			'accessories',
+			format(date, 'yyyy-MM-dd'),
+			format(toDate, 'yyyy-MM-dd')
+		);
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { invalidateQuery: invalidateSliderDieCastingStock } =
 		useSliderDieCastingStock();
@@ -188,7 +195,35 @@ export default function Index() {
 
 	return (
 		<div>
-			<ReactTable title={info.getTitle()} data={data} columns={columns} />
+			<ReactTable
+				title={info.getTitle()}
+				data={data}
+				columns={columns}
+				extraButton={
+					<div className='flex items-center gap-2'>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'Date'}
+							value={date}
+							placeholder='Date'
+							onChange={(data) => {
+								setDate(data);
+							}}
+							selected={date}
+						/>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'toDate'}
+							value={toDate}
+							placeholder='To'
+							onChange={(data) => {
+								setToDate(data);
+							}}
+							selected={toDate}
+						/>
+					</div>
+				}
+			/>
 
 			<Suspense>
 				<AddOrUpdate

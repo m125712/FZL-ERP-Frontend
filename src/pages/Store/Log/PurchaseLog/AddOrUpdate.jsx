@@ -22,10 +22,11 @@ export default function Index({
 	},
 	setUpdatePurchaseLog,
 }) {
-	const { updateData } = usePurchaseLog();
 	const { data: material } = useOtherMaterial();
 	const { invalidateQuery: invalidateMaterial } = useMaterialInfo();
-	const { data } = usePurchaseEntryByUUID(updatePurchaseLog?.entry_uuid);
+	const { data, updateData } = usePurchaseEntryByUUID(
+		updatePurchaseLog?.entry_uuid
+	);
 	const {
 		register,
 		handleSubmit,

@@ -21,8 +21,9 @@ export default function Index({
 	},
 	setUpdateMaterialDetails,
 }) {
-	const { url, updateData } = useMaterialBooking();
-	const { data } = useMaterialBookingByUUID(updateMaterialDetails?.uuid);
+	const { data, updateData } = useMaterialBookingByUUID(
+		updateMaterialDetails?.uuid
+	);
 	const { data: marketing } = useOtherMarketing();
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 
@@ -70,7 +71,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateMaterialDetails?.uuid}`,
+				url: `/material/booking/${updateMaterialDetails?.uuid}`,
 				uuid: updateMaterialDetails?.uuid,
 				updatedData,
 				onClose,

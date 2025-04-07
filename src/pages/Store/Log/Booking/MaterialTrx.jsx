@@ -33,24 +33,10 @@ export default function Index({
 	const { user } = useAuth();
 	const { postData } = useMaterialInfo();
 	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
-	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
 	const { invalidateQuery: invalidateLabDipRM } = useLabDipRM();
-	const { invalidateQuery: invalidateDyeingRM } = useDyeingRM();
-	const { invalidateQuery: invalidateFinishingRM } = useMetalFinishingRM();
-	const { invalidateQuery: invalidateMetalTCRM } = useMetalTCRM();
-	const { invalidateQuery: invalidateMetalTMRM } = useMetalTMRM();
-	const { invalidateQuery: invalidateNylonMetallicFinishingRM } =
-		useNylonMetallicFinishingRM();
-	const { invalidateQuery: invalidateVislonFinishingRM } =
-		useVislonFinishingRM();
-	const { invalidateQuery: invalidateVislonTMRM } = useVislonTMRM();
 	const { invalidateQuery: invalidateSliderAssemblyRM } =
 		useSliderAssemblyRM();
-	const { invalidateQuery: invalidateSliderColoringRM } =
-		useSliderColoringRM();
 	const { invalidateQuery: invalidateDieCastingRM } = useSliderDieCastingRM();
-	const { invalidateQuery: invalidateDeliveryRM } = useDeliveryRM();
-	const { invalidateQuery: invalidateMaterialTrx } = useMaterialTrx();
 
 	const schema = {
 		...MATERIAL_STOCK_SCHEMA,
@@ -98,20 +84,9 @@ export default function Index({
 				onClose,
 			});
 			invalidateCommonTapeRM();
-			invalidateCommonCoilRM();
 			invalidateLabDipRM();
-			invalidateDyeingRM();
-			invalidateFinishingRM();
-			invalidateMetalTCRM();
-			invalidateMetalTMRM();
-			invalidateNylonMetallicFinishingRM();
-			invalidateVislonFinishingRM();
-			invalidateVislonTMRM();
 			invalidateSliderAssemblyRM();
-			invalidateSliderColoringRM();
 			invalidateDieCastingRM();
-			invalidateDeliveryRM();
-			invalidateMaterialTrx();
 
 			return;
 		}

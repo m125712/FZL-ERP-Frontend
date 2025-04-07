@@ -52,28 +52,19 @@ export default function Index({
 	const { invalidateQuery: invalidateMaterialStockToSFG } =
 		useMaterialStockToSFG();
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-	const { invalidateQuery: invalidateOrderAgainstDeliveryRMLog } =
-		useOrderAgainstDeliveryRMLog();
 	const { invalidateQuery: invalidateOrderAgainstDieCastingRMLog } =
 		useOrderAgainstDieCastingRMLog();
 	const { invalidateQuery: invalidateOrderAgainstLabDipRMLog } =
 		useOrderAgainstLabDipRMLog();
-	const { invalidateQuery: invalidateOrderAgainstMetaFinishingRMLog } =
-		useOrderAgainstMetalFinishingRMLog();
 	const { invalidateQuery: invalidateOrderAgainstMetalTCRMLog } =
 		useOrderAgainstMetalTCRMLog();
 	const { invalidateQuery: invalidateOrderAgainstMetalTMRMLog } =
 		useOrderAgainstMetalTMRMLog();
-	const { invalidateQuery: invalidateOrderAgainstDyeingRMLog } =
-		useOrderAgainstDyeingRMLog();
 	const { invalidateQuery: invalidateOrderAgainstCoilRMLog } =
 		useCommonOrderAgainstCoilRMLog();
 	const { invalidateQuery: invalidateOrderAgainstTapeRMLog } =
 		useCommonOrderAgainstTapeRMLog();
-	const { invalidateQuery: invalidateOrderAgainstMetallicFinishingRMLog } =
-		useOrderAgainstNylonMetallicFinishingRMLog();
-	const { invalidateQuery: invalidateOrderAgainstVislonFinishingRMLog } =
-		useOrderAgainstVislonFinishingRMLog();
+
 	const { invalidateQuery: invalidateOrderAgainstTMRMLog } =
 		useOrderAgainstVislonTMRMLog();
 	const { invalidateQuery: invalidateOrderAgainstSliderAssemblyRMLog } =
@@ -138,17 +129,12 @@ export default function Index({
 
 			invalidateMaterialStockToSFG();
 			invalidateMaterialInfo();
-			invalidateOrderAgainstDeliveryRMLog();
 			invalidateOrderAgainstDieCastingRMLog();
 			invalidateOrderAgainstLabDipRMLog();
-			invalidateOrderAgainstMetaFinishingRMLog();
 			invalidateOrderAgainstMetalTCRMLog();
 			invalidateOrderAgainstMetalTMRMLog();
-			invalidateOrderAgainstDyeingRMLog();
 			invalidateOrderAgainstCoilRMLog();
 			invalidateOrderAgainstTapeRMLog();
-			invalidateOrderAgainstMetallicFinishingRMLog();
-			invalidateOrderAgainstVislonFinishingRMLog();
 			invalidateOrderAgainstTMRMLog();
 			invalidateOrderAgainstSliderAssemblyRMLog();
 			invalidateOrderAgainstSliderColorRMLog();

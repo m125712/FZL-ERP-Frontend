@@ -52,8 +52,7 @@ export default function Index({
 	},
 	setUpdateMaterialTrxToOrder,
 }) {
-	const { url, updateData } = useMaterialTrxAgainstOrderDescription();
-	const { data } = useMaterialTrxAgainstOrderDescriptionByUUID(
+	const { data, updateData } = useMaterialTrxAgainstOrderDescriptionByUUID(
 		updateMaterialTrxToOrder?.uuid
 	);
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
@@ -144,7 +143,7 @@ export default function Index({
 				updated_at: GetDateTime(),
 			};
 			await updateData.mutateAsync({
-				url: `${url}/${updateMaterialTrxToOrder?.uuid}`,
+				url: `/zipper/material-trx-against-order/${updateMaterialTrxToOrder?.uuid}`,
 				uuid: updateMaterialTrxToOrder?.uuid,
 				updatedData,
 				onClose,

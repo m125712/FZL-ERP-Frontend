@@ -89,6 +89,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 									{
 										text: 'Description Total',
 										colSpan: 4,
+										bold: true,
 									},
 									{},
 									{},
@@ -110,6 +111,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 											{
 												text: 'Color Total',
 												colSpan: 3,
+												bold: true,
 											},
 											{},
 											{},
@@ -329,6 +331,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 																: 'B - ' +
 																	size.quantity
 															: '---',
+														alignment: 'right',
 													},
 												];
 											}
@@ -348,8 +351,9 @@ export default function OrderSheetByStyle(orderByStyle) {
 							//* Total
 							[
 								{
-									text: 'Total',
+									text: 'Style Total',
 									colSpan: 4,
+									bold: true,
 								},
 								{},
 								{},

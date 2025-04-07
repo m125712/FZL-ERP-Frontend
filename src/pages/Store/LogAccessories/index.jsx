@@ -13,10 +13,8 @@ export default function Index() {
 	return (
 		<div className='flex flex-col gap-6'>
 			<Trx key='TrxLog' />
-			{/* <hr className='my-6 border-2 border-dashed border-secondary/30' /> */}
 			<Booking />
 			<AgainstOrder key='OrderTrxLog' />
-			{/* <hr className='my-6 border-2 border-dashed border-secondary/30' /> */}
 			<PurchaseLog key='PurchaseLog' />
 		</div>
 	);

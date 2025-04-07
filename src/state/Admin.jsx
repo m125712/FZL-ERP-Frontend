@@ -8,6 +8,12 @@ export const useAdminUsers = () =>
 		queryKey: adminQK.users(),
 		url: '/hr/user',
 	});
+export const useAdminUsersByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: adminQK.userByUUID(uuid),
+		url: `/hr/user/${uuid}`,
+		
+	});
 
 export const useGetUserAccessByUUID = (uuid) =>
 	createGlobalState({

@@ -12,6 +12,7 @@ import { MetalRoutes } from './Metal';
 import { NylonRoutes } from './Nylon';
 import { OrderRoutes } from './Order';
 import { PlanningRoutes } from './Planning';
+import { ProfileRoutes } from './Profile';
 import { ReportRoutes } from './Report';
 import { SliderRoutes } from './Slider';
 import { StoreRoutes } from './Store';
@@ -38,6 +39,7 @@ const privateRoutes = [
 	...LibraryRoutes,
 	...IssueRoutes,
 	...MarketingRoutes,
+	...ProfileRoutes,
 ];
 
 export default privateRoutes;

@@ -8,6 +8,7 @@ import {
 
 import {
 	getGarmentInfo,
+	getInnerTable,
 	getPageFooter,
 	getPageHeader,
 	getSpecialReqInfo,
@@ -84,236 +85,280 @@ export default function OrderSheetByStyle(orderByStyle) {
 									0
 								);
 
-								return entry.details.flatMap((detail) => {
-									let TotalColorQty = detail.sizes.reduce(
-										(acc, item) => acc + item.quantity,
-										0
-									);
+								const TotalDescQtyRow = [
+									{
+										text: 'Description Total',
+										colSpan: 4,
+										bold: true,
+										color: 'blue',
+									},
+									{},
+									{},
+									{},
+									{
+										text: TotalDescQty,
+										alignment: 'right',
+										bold: true,
+										color: 'blue',
+									},
+								];
+								const entireRow = entry.details.flatMap(
+									(detail) => {
+										let TotalColorQty = detail.sizes.reduce(
+											(acc, item) => acc + item.quantity,
+											0
+										);
 
-									return detail.sizes.map((size) => {
-										total += size.quantity;
-										grandTotal += size.quantity;
-
-										return [
+										const TotalColorQtyRow = [
+											{},
 											{
-												text: [
-													{
-														text: 'Tape: ',
-														bold: true,
-													},
-													entry.tape,
-													'\n',
-													{
-														text: 'Slider: ',
-														bold: true,
-													},
-													entry.slider,
-
-													...(special_req?.length > 0
-														? [
-																'\n',
-																{
-																	text: 'Special Req: ',
-																	bold: true,
-																},
-																special_req?.join(
-																	', '
-																),
-															]
-														: []),
-
-													...(garments_info?.length >
-													0
-														? [
-																'\n',
-																{
-																	text: 'Garments: ',
-																	bold: true,
-																},
-																garments_info?.join(
-																	', '
-																),
-															]
-														: []),
-													...(entry.description
-														? [
-																'\n',
-																{
-																	text: 'Description: ',
-																	bold: true,
-																},
-																entry.description,
-															]
-														: []),
-													...(entry.remarks
-														? [
-																'\n',
-																{
-																	text: 'Remarks: ',
-																	bold: true,
-																},
-																entry.remarks,
-															]
-														: []),
-
-													{
-														text: `\n(Total: ${TotalDescQty})`,
-														alignment: 'left',
-													},
-												],
-												rowSpan: entry.details
-													.map(
-														(detail) =>
-															detail.sizes.length
-													)
-													.reduce(
-														(acc, item) =>
-															acc + item,
-														0
-													),
+												text: 'Color Total',
+												colSpan: 3,
+												bold: true,
 											},
+											{},
+											{},
 											{
-												// text: detail.color
-												// 	? detail.color + '\n' + TotalColorQty
-												// 	: '---',
-												text: [
-													{
-														text: detail.color
-															? detail.color
-															: '---',
-													},
-													...(detail.sizes.length > 1
-														? [
-																'\n' +
-																	`(Total: ${TotalColorQty})`,
-															]
-														: ['']),
-												],
-												rowSpan: detail.sizes.length,
-											},
-											{
-												text: size.size
-													? size.size
-													: '---',
+												text: TotalColorQty,
 												alignment: 'right',
-											},
-											{
-												text: size.unit
-													? size.unit
-													: '---',
-											},
-											{
-												text: size.quantity
-													? size.bleaching ===
-														'non-bleach'
-														? size.quantity
-														: 'B - ' + size.quantity
-													: '---',
-												alignment: 'right',
+												bold: true,
 											},
 										];
-									});
-								});
+										const detailsRow = detail.sizes.map(
+											(size) => {
+												total += size.quantity;
+												grandTotal += size.quantity;
+
+												return [
+													{
+														// * might need it later
+														text: [
+															{
+																text: 'Tape: ',
+																bold: true,
+															},
+															{
+																text:
+																	entry.tape +
+																	'\n\n',
+																marginLeft: 5,
+																marginTop: 2,
+																marginRight: 10,
+																marginBottom: 2,
+															},
+															{
+																text: 'Slider: ',
+																bold: true,
+																margin: [
+																	0, 0, 0, 10,
+																],
+															},
+															{
+																text:
+																	entry.slider +
+																	'\n\n',
+																margin: [
+																	0, 0, 0, 10,
+																],
+															},
+
+															...(special_req?.length >
+															0
+																? [
+																		{
+																			text: 'Special Req: ',
+																			bold: true,
+																			margin: [
+																				0,
+																				0,
+																				0,
+																				2,
+																			],
+																		},
+																		{
+																			text:
+																				special_req.join(
+																					', '
+																				) +
+																				'\n\n',
+																			margin: [
+																				0,
+																				0,
+																				0,
+																				4,
+																			],
+																		},
+																	]
+																: []),
+
+															...(garments_info?.length >
+															0
+																? [
+																		{
+																			text: 'Garments: ',
+																			bold: true,
+																			margin: [
+																				0,
+																				0,
+																				0,
+																				2,
+																			],
+																		},
+																		{
+																			text:
+																				garments_info.join(
+																					', '
+																				) +
+																				'\n\n',
+																			margin: [
+																				0,
+																				0,
+																				0,
+																				4,
+																			],
+																		},
+																	]
+																: []),
+
+															...(entry.description
+																? [
+																		{
+																			text: 'Description: ',
+																			bold: true,
+																			margin: [
+																				0,
+																				0,
+																				0,
+																				2,
+																			],
+																		},
+																		{
+																			text:
+																				entry.description +
+																				'\n\n',
+																			margin: [
+																				0,
+																				0,
+																				0,
+																				4,
+																			],
+																		},
+																	]
+																: []),
+
+															...(entry.remarks
+																? [
+																		{
+																			text: 'Remarks: ',
+																			bold: true,
+																			margin: [
+																				0,
+																				0,
+																				0,
+																				2,
+																			],
+																		},
+																		{
+																			text:
+																				entry.remarks +
+																				'\n',
+																			margin: [
+																				0,
+																				0,
+																				0,
+																				4,
+																			],
+																		},
+																	]
+																: []),
+														],
+														// table: {
+														// 	widths: ['*'],
+														// 	body: getInnerTable(
+														// 		entry,
+														// 		special_req,
+														// 		garments_info,
+														// 		TotalDescQty
+														// 	),
+														// },
+														// customPadding: {
+														// 	left: 0,
+														// 	top: 3,
+														// 	right: 0,
+														// 	bottom: 3,
+														// },
+														rowSpan:
+															1 +
+															entry.details
+																.map(
+																	(detail) =>
+																		detail
+																			.sizes
+																			.length
+																)
+																.reduce(
+																	(
+																		acc,
+																		item
+																	) =>
+																		acc +
+																		item,
+																	0
+																),
+													},
+													{
+														text: [
+															{
+																text: detail.color
+																	? detail.color
+																	: '---',
+															},
+														],
+														rowSpan:
+															detail.sizes.length,
+													},
+													{
+														text: size.size
+															? size.size
+															: '---',
+													},
+													{
+														text: size.unit
+															? size.unit
+															: '---',
+													},
+													{
+														text: size.quantity
+															? size.bleaching ===
+																'non-bleach'
+																? size.quantity
+																: 'B - ' +
+																	size.quantity
+															: '---',
+														alignment: 'right',
+													},
+												];
+											}
+										);
+
+										// console.log([...detailsRow]);
+										return [
+											...detailsRow,
+											TotalColorQtyRow,
+										];
+									}
+								);
+
+								return [...entireRow, TotalDescQtyRow];
 							}),
-
-							// ...item.item_description?.flatMap((entry, idx) =>
-							// 	entry.details.map((detail) => {
-							// 		total += detail.quantity;
-							// 		grandTotal += detail.quantity;
-
-							// 		const special_req = getSpecialReqInfo(
-							// 			entry,
-							// 			sr
-							// 		);
-							// 		const garments_info = getGarmentInfo(
-							// 			entry,
-							// 			garments
-							// 		);
-
-							// 		return [
-							// 			{
-							// 				text: [
-							// 					{ text: 'Tape: ', bold: true },
-							// 					entry.tape,
-							// 					'\n',
-							// 					{
-							// 						text: 'Slider: ',
-							// 						bold: true,
-							// 					},
-							// 					entry.slider,
-
-							// 					...(special_req?.length > 0
-							// 						? [
-							// 								'\n',
-							// 								{
-							// 									text: 'Special Req: ',
-							// 									bold: true,
-							// 								},
-							// 								special_req?.join(
-							// 									', '
-							// 								),
-							// 							]
-							// 						: []),
-
-							// 					...(garments_info?.length > 0
-							// 						? [
-							// 								'\n',
-							// 								{
-							// 									text: 'Garments: ',
-							// 									bold: true,
-							// 								},
-							// 								garments_info?.join(
-							// 									', '
-							// 								),
-							// 							]
-							// 						: []),
-							// 					...(entry.remarks
-							// 						? [
-							// 								'\n',
-							// 								{
-							// 									text: 'Remarks: ',
-							// 									bold: true,
-							// 								},
-							// 								entry.remarks,
-							// 							]
-							// 						: []),
-							// 				],
-							// 				// rowSpan: entry.details.length,
-							// 			},
-							// 			{
-							// 				text: detail.color
-							// 					? detail.color
-							// 					: '---',
-							// 			},
-							// 			{
-							// 				text: detail.size
-							// 					? detail.size
-							// 					: '---',
-							// 				alignment: 'right',
-							// 			},
-							// 			{
-							// 				text: detail.unit
-							// 					? detail.unit
-							// 					: '---',
-							// 			},
-							// 			{
-							// 				text: detail.quantity
-							// 					? detail.bleaching ===
-							// 						'non-bleach'
-							// 						? detail.quantity
-							// 						: 'B - ' + detail.quantity
-							// 					: '---',
-							// 				alignment: 'right',
-							// 			},
-							// 		];
-							// 	})
-							// ),
 
 							//* Total
 							[
 								{
-									text: 'Total',
+									text: 'Style Total',
 									colSpan: 4,
+									bold: true,
+									color: 'red',
 								},
 								{},
 								{},
@@ -321,10 +366,43 @@ export default function OrderSheetByStyle(orderByStyle) {
 								{
 									text: total,
 									alignment: 'right',
+									bold: true,
+									color: 'red',
 								},
 							],
 						],
 					},
+					// layout: {
+					// 	paddingLeft: function (rowIndex, node) {
+					// 		// var cell = node.table.body[2][0]; // fixed column 0
+					// 		// console.log(cell);
+					// 		// return cell.customPadding.left
+					// 	console.log(node.table.body[7][0].customPadding);
+					// 		if (node.table.body[2][0].customPadding) return 0;
+					// 		else return 3;
+					// 	},
+					// 	paddingRight: function (rowIndex, node) {
+					// 		var cell = node.table.body[0][0];
+					// 		return cell.customPadding &&
+					// 			cell.customPadding.right !== undefined
+					// 			? cell.customPadding.right
+					// 			: 3;
+					// 	},
+					// 	paddingTop: function (rowIndex, node) {
+					// 		var cell = node.table.body[0][0];
+					// 		return cell.customPadding &&
+					// 			cell.customPadding.top !== undefined
+					// 			? cell.customPadding.top
+					// 			: 3;
+					// 	},
+					// 	paddingBottom: function (rowIndex, node) {
+					// 		var cell = node.table.body[0][0];
+					// 		return cell.customPadding &&
+					// 			cell.customPadding.bottom !== undefined
+					// 			? cell.customPadding.bottom
+					// 			: 3;
+					// 	},
+					// },
 				};
 			}),
 

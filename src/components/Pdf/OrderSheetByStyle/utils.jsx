@@ -157,3 +157,86 @@ export const getGarmentInfo = (order_description, garments) => {
 		return [];
 	}
 };
+
+export const getInnerTable = (
+	entry,
+	special_req,
+	garments_info,
+	TotalDescQty
+) => {
+	var body = [];
+
+	// Tape row
+	body.push([
+		{
+			text: 'Tape: ' + entry.tape,
+			border: [false, false, false, true], // Only bottom border
+			margin: [0, 0, 0, 2], // Optional: adds spacing below the text
+		},
+	]);
+
+	// Slider row
+	body.push([
+		{
+			text: 'Slider: ' + entry.slider,
+			border: [false, false, false, true],
+			margin: [0, 0, 0, 2],
+		},
+	]);
+
+	// Special Request row (if available)
+	if (special_req && special_req.length > 0) {
+		body.push([
+			{
+				text: 'Special Req: ' + special_req.join(', '),
+				border: [false, false, false, true],
+				margin: [0, 0, 0, 2],
+			},
+		]);
+	}
+
+	// Garments row (if available)
+	if (garments_info && garments_info.length > 0) {
+		body.push([
+			{
+				text: 'Garments: ' + garments_info.join(', '),
+				border: [false, false, false, true],
+				margin: [0, 0, 0, 2],
+			},
+		]);
+	}
+
+	// Description row (if available)
+	if (entry.description) {
+		body.push([
+			{
+				text: 'Description: ' + entry.description,
+				border: [false, false, false, true],
+				margin: [0, 0, 0, 2],
+			},
+		]);
+	}
+
+	// Remarks row (if available)
+	if (entry.remarks) {
+		body.push([
+			{
+				text: 'Remarks: ' + entry.remarks,
+				border: [false, false, false, true],
+				margin: [0, 0, 0, 2],
+			},
+		]);
+	}
+
+	// Total row
+	body.push([
+		{
+			text: '(Total: ' + TotalDescQty + ')',
+			alignment: 'left',
+			border: [false, false, false, false],
+			margin: [0, 0, 0, 2],
+		},
+	]);
+
+	return body;
+};

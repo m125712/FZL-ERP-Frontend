@@ -36,27 +36,14 @@ export default function Index({
 	},
 	setUpdateMaterialTrx,
 }) {
-	const { url, updateData } = useMaterialTrx();
-	const { data } = useMaterialTrxByUUID(updateMaterialTrx?.uuid);
+	const { data, updateData } = useMaterialTrxByUUID(updateMaterialTrx?.uuid);
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
-	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
 	const { invalidateQuery: invalidateLabDipRM } = useLabDipRM();
-	const { invalidateQuery: invalidateDyeingRM } = useDyeingRM();
-	const { invalidateQuery: invalidateFinishingRM } = useMetalFinishingRM();
-	const { invalidateQuery: invalidateMetalTCRM } = useMetalTCRM();
-	const { invalidateQuery: invalidateMetalTMRM } = useMetalTMRM();
-	const { invalidateQuery: invalidateNylonMetallicFinishingRM } =
-		useNylonMetallicFinishingRM();
-	const { invalidateQuery: invalidateVislonFinishingRM } =
-		useVislonFinishingRM();
-	const { invalidateQuery: invalidateVislonTMRM } = useVislonTMRM();
 	const { invalidateQuery: invalidateSliderAssemblyRM } =
 		useSliderAssemblyRM();
-	const { invalidateQuery: invalidateSliderColoringRM } =
-		useSliderColoringRM();
 	const { invalidateQuery: invalidateDieCastingRM } = useSliderDieCastingRM();
-	const { invalidateQuery: invalidateDeliveryRM } = useDeliveryRM();
+
 	const { data: material } = useOtherMaterial();
 
 	const MAX_QUANTITY =
@@ -108,7 +95,7 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateMaterialTrx?.uuid}`,
+				url: `/material/trx/${updateMaterialTrx?.uuid}`,
 				uuid: updateMaterialTrx?.uuid,
 				updatedData,
 				onClose,
@@ -116,19 +103,9 @@ export default function Index({
 
 			invalidateMaterialInfo();
 			invalidateCommonTapeRM();
-			invalidateCommonCoilRM();
 			invalidateLabDipRM();
-			invalidateDyeingRM();
-			invalidateFinishingRM();
-			invalidateMetalTCRM();
-			invalidateMetalTMRM();
-			invalidateNylonMetallicFinishingRM();
-			invalidateVislonFinishingRM();
-			invalidateVislonTMRM();
 			invalidateSliderAssemblyRM();
-			invalidateSliderColoringRM();
 			invalidateDieCastingRM();
-			invalidateDeliveryRM();
 
 			return;
 		}

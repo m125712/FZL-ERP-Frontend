@@ -374,6 +374,12 @@ export default function Header({
 										onChange={(e) => {
 											onChange(e.value);
 											setItemType(e.label);
+											if (e.value !== 'nylon') {
+												reset({
+													...watch(),
+													nylon_stopper: null,
+												});
+											}
 										}}
 									/>
 								);

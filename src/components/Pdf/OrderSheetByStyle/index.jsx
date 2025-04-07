@@ -90,6 +90,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 										text: 'Description Total',
 										colSpan: 4,
 										bold: true,
+										color: 'blue',
 									},
 									{},
 									{},
@@ -97,6 +98,8 @@ export default function OrderSheetByStyle(orderByStyle) {
 									{
 										text: TotalDescQty,
 										alignment: 'right',
+										bold: true,
+										color: 'blue',
 									},
 								];
 								const entireRow = entry.details.flatMap(
@@ -118,6 +121,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 											{
 												text: TotalColorQty,
 												alignment: 'right',
+												bold: true,
 											},
 										];
 										const detailsRow = detail.sizes.map(
@@ -354,6 +358,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 									text: 'Style Total',
 									colSpan: 4,
 									bold: true,
+									color: 'red',
 								},
 								{},
 								{},
@@ -361,6 +366,8 @@ export default function OrderSheetByStyle(orderByStyle) {
 								{
 									text: total,
 									alignment: 'right',
+									bold: true,
+									color: 'red',
 								},
 							],
 						],

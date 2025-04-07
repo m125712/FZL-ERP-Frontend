@@ -218,6 +218,7 @@ export default function Index() {
 				title={info.getTitle()}
 				data={data}
 				columns={columns}
+				showDateRange={false}
 				extraButton={
 					<div className='flex items-center gap-2'>
 						<SimpleDatePicker

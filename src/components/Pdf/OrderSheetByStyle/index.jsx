@@ -85,210 +85,264 @@ export default function OrderSheetByStyle(orderByStyle) {
 									0
 								);
 
-								return entry.details.flatMap((detail) => {
-									let TotalColorQty = detail.sizes.reduce(
-										(acc, item) => acc + item.quantity,
-										0
-									);
+								const TotalDescQtyRow = [
+									{
+										text: 'Description Total',
+										colSpan: 4,
+									},
+									{},
+									{},
+									{},
+									{
+										text: TotalDescQty,
+										alignment: 'right',
+									},
+								];
+								const entireRow = entry.details.flatMap(
+									(detail) => {
+										let TotalColorQty = detail.sizes.reduce(
+											(acc, item) => acc + item.quantity,
+											0
+										);
 
-									return detail.sizes.map((size) => {
-										total += size.quantity;
-										grandTotal += size.quantity;
-
-										return [
+										const TotalColorQtyRow = [
+											{},
 											{
-												// * might need it later
-												text: [
-													{
-														text: 'Tape: ',
-														bold: true,
-													},
-													{
-														text:
-															entry.tape + '\n\n',
-														marginLeft: 5,
-														marginTop: 2,
-														marginRight: 10,
-														marginBottom: 2,
-													},
-													{
-														text: 'Slider: ',
-														bold: true,
-														margin: [0, 0, 0, 10],
-													},
-													{
-														text:
-															entry.slider +
-															'\n\n',
-														margin: [0, 0, 0, 10],
-													},
-
-													...(special_req?.length > 0
-														? [
-																{
-																	text: 'Special Req: ',
-																	bold: true,
-																	margin: [
-																		0, 0, 0,
-																		2,
-																	],
-																},
-																{
-																	text:
-																		special_req.join(
-																			', '
-																		) +
-																		'\n\n',
-																	margin: [
-																		0, 0, 0,
-																		4,
-																	],
-																},
-															]
-														: []),
-
-													...(garments_info?.length >
-													0
-														? [
-																{
-																	text: 'Garments: ',
-																	bold: true,
-																	margin: [
-																		0, 0, 0,
-																		2,
-																	],
-																},
-																{
-																	text:
-																		garments_info.join(
-																			', '
-																		) +
-																		'\n\n',
-																	margin: [
-																		0, 0, 0,
-																		4,
-																	],
-																},
-															]
-														: []),
-
-													...(entry.description
-														? [
-																{
-																	text: 'Description: ',
-																	bold: true,
-																	margin: [
-																		0, 0, 0,
-																		2,
-																	],
-																},
-																{
-																	text:
-																		entry.description +
-																		'\n\n',
-																	margin: [
-																		0, 0, 0,
-																		4,
-																	],
-																},
-															]
-														: []),
-
-													...(entry.remarks
-														? [
-																{
-																	text: 'Remarks: ',
-																	bold: true,
-																	margin: [
-																		0, 0, 0,
-																		2,
-																	],
-																},
-																{
-																	text:
-																		entry.remarks +
-																		'\n',
-																	margin: [
-																		0, 0, 0,
-																		4,
-																	],
-																},
-															]
-														: []),
-
-													{
-														text: `Total: ${TotalDescQty}`,
-														alignment: 'right',
-														margin: [0, 0, 0, 4],
-														bold: true,
-													},
-												],
-												// table: {
-												// 	widths: ['*'],
-												// 	body: getInnerTable(
-												// 		entry,
-												// 		special_req,
-												// 		garments_info,
-												// 		TotalDescQty
-												// 	),
-												// },
-												// customPadding: {
-												// 	left: 0,
-												// 	top: 3,
-												// 	right: 0,
-												// 	bottom: 3,
-												// },
-												rowSpan: entry.details
-													.map(
-														(detail) =>
-															detail.sizes.length
-													)
-													.reduce(
-														(acc, item) =>
-															acc + item,
-														0
-													),
+												text: 'Color Total',
+												colSpan: 3,
 											},
+											{},
+											{},
 											{
-												// text: detail.color
-												// 	? detail.color + '\n' + TotalColorQty
-												// 	: '---',
-												text: [
-													{
-														text: detail.color
-															? detail.color
-															: '---',
-													},
-													...(detail.sizes.length > 1
-														? [
-																'\n' +
-																	`(Total: ${TotalColorQty})`,
-															]
-														: ['']),
-												],
-												rowSpan: detail.sizes.length,
-											},
-											{
-												text: size.size
-													? size.size
-													: '---',
-											},
-											{
-												text: size.unit
-													? size.unit
-													: '---',
-											},
-											{
-												text: size.quantity
-													? size.bleaching ===
-														'non-bleach'
-														? size.quantity
-														: 'B - ' + size.quantity
-													: '---',
+												text: TotalColorQty,
+												alignment: 'right',
 											},
 										];
-									});
-								});
+										const detailsRow = detail.sizes.map(
+											(size) => {
+												total += size.quantity;
+												grandTotal += size.quantity;
+
+												return [
+													{
+														// * might need it later
+														text: [
+															{
+																text: 'Tape: ',
+																bold: true,
+															},
+															{
+																text:
+																	entry.tape +
+																	'\n\n',
+																marginLeft: 5,
+																marginTop: 2,
+																marginRight: 10,
+																marginBottom: 2,
+															},
+															{
+																text: 'Slider: ',
+																bold: true,
+																margin: [
+																	0, 0, 0, 10,
+																],
+															},
+															{
+																text:
+																	entry.slider +
+																	'\n\n',
+																margin: [
+																	0, 0, 0, 10,
+																],
+															},
+
+															...(special_req?.length >
+															0
+																? [
+																		{
+																			text: 'Special Req: ',
+																			bold: true,
+																			margin: [
+																				0,
+																				0,
+																				0,
+																				2,
+																			],
+																		},
+																		{
+																			text:
+																				special_req.join(
+																					', '
+																				) +
+																				'\n\n',
+																			margin: [
+																				0,
+																				0,
+																				0,
+																				4,
+																			],
+																		},
+																	]
+																: []),
+
+															...(garments_info?.length >
+															0
+																? [
+																		{
+																			text: 'Garments: ',
+																			bold: true,
+																			margin: [
+																				0,
+																				0,
+																				0,
+																				2,
+																			],
+																		},
+																		{
+																			text:
+																				garments_info.join(
+																					', '
+																				) +
+																				'\n\n',
+																			margin: [
+																				0,
+																				0,
+																				0,
+																				4,
+																			],
+																		},
+																	]
+																: []),
+
+															...(entry.description
+																? [
+																		{
+																			text: 'Description: ',
+																			bold: true,
+																			margin: [
+																				0,
+																				0,
+																				0,
+																				2,
+																			],
+																		},
+																		{
+																			text:
+																				entry.description +
+																				'\n\n',
+																			margin: [
+																				0,
+																				0,
+																				0,
+																				4,
+																			],
+																		},
+																	]
+																: []),
+
+															...(entry.remarks
+																? [
+																		{
+																			text: 'Remarks: ',
+																			bold: true,
+																			margin: [
+																				0,
+																				0,
+																				0,
+																				2,
+																			],
+																		},
+																		{
+																			text:
+																				entry.remarks +
+																				'\n',
+																			margin: [
+																				0,
+																				0,
+																				0,
+																				4,
+																			],
+																		},
+																	]
+																: []),
+														],
+														// table: {
+														// 	widths: ['*'],
+														// 	body: getInnerTable(
+														// 		entry,
+														// 		special_req,
+														// 		garments_info,
+														// 		TotalDescQty
+														// 	),
+														// },
+														// customPadding: {
+														// 	left: 0,
+														// 	top: 3,
+														// 	right: 0,
+														// 	bottom: 3,
+														// },
+														rowSpan:
+															1 +
+															entry.details
+																.map(
+																	(detail) =>
+																		detail
+																			.sizes
+																			.length
+																)
+																.reduce(
+																	(
+																		acc,
+																		item
+																	) =>
+																		acc +
+																		item,
+																	0
+																),
+													},
+													{
+														text: [
+															{
+																text: detail.color
+																	? detail.color
+																	: '---',
+															},
+														],
+														rowSpan:
+															detail.sizes.length,
+													},
+													{
+														text: size.size
+															? size.size
+															: '---',
+													},
+													{
+														text: size.unit
+															? size.unit
+															: '---',
+													},
+													{
+														text: size.quantity
+															? size.bleaching ===
+																'non-bleach'
+																? size.quantity
+																: 'B - ' +
+																	size.quantity
+															: '---',
+													},
+												];
+											}
+										);
+
+										// console.log([...detailsRow]);
+										return [
+											...detailsRow,
+											TotalColorQtyRow,
+										];
+									}
+								);
+
+								return [...entireRow, TotalDescQtyRow];
 							}),
 
 							//* Total

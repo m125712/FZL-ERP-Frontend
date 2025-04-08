@@ -5,7 +5,13 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, LinkWithCopy, ReactSelect, StatusSelect } from '@/ui';
+import {
+	DateTime,
+	LinkWithCopy,
+	ReactSelect,
+	StatusButton,
+	StatusSelect,
+} from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
@@ -132,6 +138,26 @@ export default function Index() {
 				width: 'w-24',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) => {
+					const { is_batch_created } = row;
+					if (is_batch_created) {
+						return 'Yes';
+					}
+					if (!is_batch_created) {
+						return 'No';
+					}
+				},
+				id: 'is_dyeing_batch_entry',
+				header: 'Dyeing Batch Created',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton
+						className={'btn-xs'}
+						value={info.row.original.is_batch_created}
+					/>
+				),
 			},
 			{
 				accessorKey: 'recipe_name',

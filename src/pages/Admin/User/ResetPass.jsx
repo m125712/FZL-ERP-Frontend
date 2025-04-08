@@ -1,5 +1,5 @@
 import { useAdminUsers } from '@/state/Admin';
-import { useRHF, useUpdateFunc } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { PasswordInput } from '@/ui';

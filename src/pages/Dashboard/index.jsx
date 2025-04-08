@@ -42,11 +42,7 @@ export default function Dashboard() {
 			/>
 			<div className='space-y-2 px-2 py-2 lg:px-2'>
 				{/* Order Received */}
-				<BarChartOverall
-					data={
-						dataPreview === 'demo' ? fake_order_entry : order_entry
-					}
-				/>
+				<BarChartOverall data={order_entry} />
 				{/* Production: Demand */}
 				<div className='flex flex-col gap-2 md:flex-row'>
 					<BarChartHorizontal2 />

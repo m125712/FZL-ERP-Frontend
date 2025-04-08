@@ -28,7 +28,7 @@ const DashboardHeader = ({ handleRefresh, dataPreview, setDataPreview }) => {
 				</div>
 
 				<div className='flex items-center gap-2'>
-					<Select value={dataPreview} onValueChange={setDataPreview}>
+					{/* <Select value={dataPreview} onValueChange={setDataPreview}>
 						<SelectTrigger className='h-9 w-[180px]'>
 							<SelectValue placeholder='Data Preview' />
 						</SelectTrigger>
@@ -36,7 +36,7 @@ const DashboardHeader = ({ handleRefresh, dataPreview, setDataPreview }) => {
 							<SelectItem value='real'>Real</SelectItem>
 							<SelectItem value='demo'>Demo</SelectItem>
 						</SelectContent>
-					</Select>
+					</Select> */}
 
 					<button
 						onClick={handleRefresh}

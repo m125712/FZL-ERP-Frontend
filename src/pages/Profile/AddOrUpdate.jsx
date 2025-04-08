@@ -1,9 +1,9 @@
 import { useAdminUsers } from '@/state/Admin';
 import * as yup from 'yup';
-import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { FormField, Input, PasswordInput, ReactSelect, Textarea } from '@/ui';
+import { Input, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { PASSWORD, USER_NULL, USER_SCHEMA } from '@util/Schema';
@@ -27,13 +27,10 @@ export default function Index({
 			),
 		};
 	}
-	const {
-		register,
-		handleSubmit,
-		errors,
-		reset,
-		context,
-	} = useRHF(schema, USER_NULL);
+	const { register, handleSubmit, errors, reset, context } = useRHF(
+		schema,
+		USER_NULL
+	);
 
 	useFetchForRhfReset(
 		`/hr/user/${updateUser?.uuid}`,

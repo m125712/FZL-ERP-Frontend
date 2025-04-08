@@ -6,6 +6,7 @@ export const ProfileRoutes = [
 		path: '/profile',
 		element: <Profile />,
 		page_name: 'profile',
-		actions: ['read', 'update', 'reset_password'],
+		isPublic: true,
+		// actions: ['read', 'update', 'reset_password'],
 	},
 ];

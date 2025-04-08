@@ -8,8 +8,9 @@ function filterRoutes(routes) {
 	//* Helper function to check if a route has read access
 	function hasReadAccess(route) {
 		return (
-			userAccess[route.page_name] &&
-			userAccess[route.page_name].includes('read')
+			(userAccess[route.page_name] &&
+				userAccess[route.page_name].includes('read')) ||
+			route?.isPublic
 		);
 	}
 

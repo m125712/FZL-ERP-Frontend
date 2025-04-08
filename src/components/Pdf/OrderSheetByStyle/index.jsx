@@ -129,6 +129,33 @@ export default function OrderSheetByStyle(orderByStyle) {
 												total += size.quantity;
 												grandTotal += size.quantity;
 
+												const DetailsRowSpan =
+													entry.details
+														.map(
+															(detail) =>
+																detail.sizes
+																	.length
+														)
+														.reduce(
+															(acc, item) =>
+																acc + item,
+															0
+														);
+
+												const sizeRowSpan =
+													entry.details.reduce(
+														(acc, item) => {
+															if (
+																item.sizes
+																	.length > 1
+															) {
+																return acc + 1;
+															}
+															return acc;
+														},
+														0
+													);
+
 												return [
 													{
 														// * might need it later
@@ -288,24 +315,8 @@ export default function OrderSheetByStyle(orderByStyle) {
 														// 	bottom: 3,
 														// },
 														rowSpan:
-															entry.details
-																.length +
-															entry.details
-																.map(
-																	(detail) =>
-																		detail
-																			.sizes
-																			.length
-																)
-																.reduce(
-																	(
-																		acc,
-																		item
-																	) =>
-																		acc +
-																		item,
-																	0
-																),
+															sizeRowSpan +
+															DetailsRowSpan,
 													},
 													{
 														text: [
@@ -322,6 +333,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 														text: size.size
 															? size.size
 															: '---',
+														alignment: 'right',
 													},
 													{
 														text: size.unit
@@ -342,10 +354,11 @@ export default function OrderSheetByStyle(orderByStyle) {
 											}
 										);
 
-										// console.log([...detailsRow]);
 										return [
 											...detailsRow,
-											TotalColorQtyRow,
+											...(detail.sizes.length > 1
+												? [TotalColorQtyRow]
+												: []),
 										];
 									}
 								);

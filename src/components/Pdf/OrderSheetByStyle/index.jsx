@@ -333,6 +333,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 														text: size.size
 															? size.size
 															: '---',
+														alignment: 'right',
 													},
 													{
 														text: size.unit

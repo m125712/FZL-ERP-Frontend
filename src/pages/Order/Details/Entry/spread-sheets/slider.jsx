@@ -33,6 +33,9 @@ const Slider = (
 			data: 'quantity',
 		},
 		{
+			data: 'planning_batch_quantity',
+		},
+		{
 			data: 'company_price',
 		},
 		{
@@ -45,6 +48,7 @@ const Slider = (
 			index: item.index,
 			style: item.style,
 			quantity: item.quantity,
+			planning_batch_quantity: item.planning_batch_quantity,
 			company_price: item.company_price,
 			party_price: item.party_price,
 		};
@@ -54,6 +58,7 @@ const Slider = (
 		'Id',
 		'Style',
 		'Quantity',
+		'P.Batch',
 		'Company (USD/DZN)',
 		'Party (USD/DZN)',
 		'Actions',
@@ -69,6 +74,7 @@ const Slider = (
 				columns,
 				colHeaders,
 				data,
+				readOnlyIndex: [3],
 				isIndex: true,
 			}}
 		/>

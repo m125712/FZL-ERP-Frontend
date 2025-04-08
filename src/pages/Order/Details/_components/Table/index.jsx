@@ -1,9 +1,14 @@
 import { lazy, Suspense, useMemo, useState } from 'react';
 import { useAccess } from '@/hooks';
 
+
+
 import ReactTable from '@/components/Table';
 
+
+
 import getColumn from './Column';
+
 
 const History = lazy(() => import('./History'));
 
@@ -84,13 +89,13 @@ export default function Index({
 					</div>
 				}
 				data={order_entry}
-				columns={columns}
-			>
+				columns={columns}>
 				<tr className='bg-slate-200 font-bold'>
 					<td colSpan={6} className='text-right'>
 						Total:
 					</td>
 					<td className='px-3 py-1'>{total.Quantity}</td>
+					<td className='px-3 py-1'>{total.PlanningBatch}</td>
 					<td className='px-3 py-1'>{total.piQuantity}</td>
 					<td className='px-3 py-1'>{total.rejectQuantity}</td>
 					<td className='px-3 py-1'>{total.shortQuantity}</td>

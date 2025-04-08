@@ -75,6 +75,9 @@ const OrderEntrySpreadsheet = (
 			data: 'quantity',
 		},
 		{
+			data: 'batch_quantity',
+		},
+		{
 			data: 'company_price',
 		},
 		{
@@ -93,6 +96,7 @@ const OrderEntrySpreadsheet = (
 			count_length_uuid: item.count_length_uuid,
 			bleaching: item.bleaching,
 			quantity: item.quantity,
+			batch_quantity: item.batch_quantity,
 			company_price: item.company_price,
 			party_price: item.party_price,
 			remarks: item.remarks,
@@ -106,6 +110,7 @@ const OrderEntrySpreadsheet = (
 		'Count Length',
 		'Bleaching',
 		'Quantity',
+		'Batch',
 		'Company (USD/CONE)',
 		'Party (USD/CONE)',
 		'Remarks',
@@ -121,6 +126,7 @@ const OrderEntrySpreadsheet = (
 				handleAdd,
 				columns,
 				colHeaders,
+				readOnlyIndex: [6],
 				data,
 				isIndex: true,
 			}}

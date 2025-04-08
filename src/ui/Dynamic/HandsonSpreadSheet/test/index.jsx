@@ -18,6 +18,7 @@ const TestSpreadSheet = (
 		colHeaders,
 		data,
 		isIndex,
+		readOnlyIndex=[],
 		onChange,
 	} = {
 		title: '',
@@ -91,6 +92,12 @@ const TestSpreadSheet = (
 					if (col === 0 && isIndex) {
 						cellProperties.readOnly = true; // Make the index column read-only
 					}
+					for (const index of readOnlyIndex) {
+						if (col === index) {
+							cellProperties.readOnly = true; // Make the specified column read-only
+						}
+					}
+					
 					return cellProperties;
 				}}
 				data={data}

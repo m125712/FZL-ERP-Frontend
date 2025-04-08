@@ -1,7 +1,13 @@
 import React from 'react';
 
+
+
 import renderActions from '@/ui/Dynamic/HandsonSpreadSheet/_actions/render-actions';
 import TestSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet/test';
+
+
+
+
 
 const Tape = (
 	{
@@ -42,6 +48,9 @@ const Tape = (
 			data: 'size',
 		},
 		{
+			data: 'planning_batch_quantity',
+		},
+		{
 			data: 'company_price',
 		},
 		{
@@ -56,6 +65,7 @@ const Tape = (
 			color: item.color,
 			bleaching: item.bleaching,
 			size: item.size,
+			planning_batch_quantity: item.planning_batch_quantity,
 			company_price: item.company_price,
 			party_price: item.party_price,
 		};
@@ -67,6 +77,7 @@ const Tape = (
 		'Color',
 		'Bleaching',
 		'Size (MTR)',
+		'P.Batch',
 		'Company (USD/MTR)',
 		'Party (USD/MTR)',
 		'Actions',
@@ -83,6 +94,7 @@ const Tape = (
 				colHeaders,
 				data,
 				isIndex: true,
+				readOnlyIndex:[5],
 			}}
 		/>
 	);

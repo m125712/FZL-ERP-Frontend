@@ -97,6 +97,12 @@ export default function Index({ order_info_entry }) {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'batch_quantity',
+				header: 'Batch',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'short_quantity',
 				header: 'Short',
 				enableColumnFilter: false,
@@ -190,8 +196,7 @@ export default function Index({ order_info_entry }) {
 				</div>
 			}
 			data={order_info_entry}
-			columns={columns}
-		>
+			columns={columns}>
 			<tr className='text-sm'>
 				<td colSpan='6' className='py-2 text-right'>
 					Total QTY

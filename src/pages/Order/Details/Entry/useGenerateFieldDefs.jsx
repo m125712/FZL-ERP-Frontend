@@ -85,6 +85,7 @@ const useGenerateFieldDefs = ({ copy, remove, watch }) => {
 				accessorKey: 'quantity',
 				type: 'text',
 			},
+
 			{
 				header:
 					watch('order_type') === 'tape'
@@ -147,6 +148,7 @@ const useGenerateFieldDefs = ({ copy, remove, watch }) => {
 			accessorKey: 'quantity',
 			type: 'text',
 		},
+		
 		{
 			header:
 				watch('order_type') === 'tape'

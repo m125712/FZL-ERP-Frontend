@@ -91,10 +91,7 @@ export default function Information({ data }) {
 			{
 				label: 'Edit',
 				value: (
-					<button
-						className='btn bg-black/10'
-						disabled={!updateAccess}
-						onClick={handelUpdate}>
+					<button className='btn bg-black/10' onClick={handelUpdate}>
 						Edit
 					</button>
 				),
@@ -105,7 +102,7 @@ export default function Information({ data }) {
 					<button
 						className='btn bg-black/10'
 						onClick={handelResetPass}
-						disabled={!resetAccess}>
+					>
 						Reset Password
 					</button>
 				),

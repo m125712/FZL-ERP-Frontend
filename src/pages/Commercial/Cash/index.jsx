@@ -9,6 +9,7 @@ import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { CustomLink, DateTime, EditDelete, StatusSelect, Transfer } from '@/ui';
 
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 const ReceiveAmount = lazy(() => import('./ReceiveAmount'));
@@ -54,6 +55,7 @@ export default function Index() {
 			url: `/commercial/pi-cash-update-is-completed/${data[idx]?.uuid}`,
 			updatedData: {
 				is_completed: data[idx]?.is_completed === true ? false : true,
+				updated_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,
 		});

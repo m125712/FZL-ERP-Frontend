@@ -4,15 +4,17 @@ import { useConningProdLog, useDyeingCone } from '@/state/Thread';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { JoinInput, Textarea } from '@/ui';
+import { FormField, JoinInput, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
 import {
+	NUMBER,
 	NUMBER_DOUBLE,
 	NUMBER_DOUBLE_REQUIRED,
 	NUMBER_REQUIRED,
 	STRING,
+	STRING_REQUIRED,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
@@ -33,31 +35,44 @@ export default function Index({
 	const { user } = useAuth();
 	const [qty, setQty] = useState();
 
+	const type = [
+		{ value: 'normal', label: 'Normal' },
+		{ value: 'damage', label: 'Damage' },
+	];
 	const MAX_PROD = Number(coningProd.balance_quantity);
 	const MAX_CARTON = Math.ceil(
 		Number(qty) / Number(coningProd.cone_per_carton)
 	);
 
-	const { register, handleSubmit, errors, reset, watch, control, context } =
-		useRHF(
-			{
-				production_quantity: NUMBER_REQUIRED.moreThan(
-					0,
-					'More than 0'
-				).max(MAX_PROD, 'Beyond max value'),
-				coning_carton_quantity: NUMBER_REQUIRED.moreThan(
-					0,
-					'More than 0'
-				),
-				remarks: STRING.nullable(),
-			},
-			{
-				production_quantity: '',
-				coning_carton_quantity: '',
-				wastage: '',
-				remarks: '',
-			}
-		);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		watch,
+		getValues,
+		control,
+		Controller,
+		context,
+	} = useRHF(
+		{
+			type: STRING_REQUIRED,
+			production_quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0').max(
+				MAX_PROD,
+				'Beyond max value'
+			),
+
+			coning_carton_quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0'),
+			remarks: STRING.nullable(),
+		},
+		{
+			production_quantity: '',
+			type: 'normal',
+			coning_carton_quantity: '',
+			wastage: '',
+			remarks: '',
+		}
+	);
 
 	const onClose = () => {
 		setConingProd((prev) => ({
@@ -113,6 +128,31 @@ export default function Index({
 			onClose={onClose}
 			isSmall={true}
 		>
+			<FormField
+				label='type'
+				title='Type'
+				is_title_needed='false'
+				errors={errors}
+			>
+				<Controller
+					name={'type'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<ReactSelect
+								placeholder='Select Type'
+								options={type}
+								value={type?.filter(
+									(item) => item.value == getValues('type')
+								)}
+								onChange={(e) => {
+									onChange(e.value);
+								}}
+							/>
+						);
+					}}
+				/>
+			</FormField>
 			<JoinInput
 				title='Production Quantity'
 				label='production_quantity'

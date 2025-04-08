@@ -92,6 +92,13 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'type',
+				header: 'Type',
+				width: 'w-32',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'count_length',
 				header: 'Count Length',
 				enableColumnFilter: false,

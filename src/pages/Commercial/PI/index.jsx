@@ -79,7 +79,7 @@ export default function Index() {
 									? null
 									: info.getValue()
 							}
-							uri={`/commercial/lc/details/${lc_uuid}`}
+							url={`/commercial/lc/details/${lc_uuid}`}
 						/>
 					);
 				},

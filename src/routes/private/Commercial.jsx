@@ -180,6 +180,7 @@ export const CommercialRoutes = [
 					'click_receive_status',
 					'show_own_orders',
 					'click_receive_amount',
+					'click_status_complete',
 				],
 				disableCollapse: true,
 				children: [

@@ -6,6 +6,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { CustomLink, DateTime, EditDelete, StatusSelect, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
@@ -36,7 +37,7 @@ export default function Index() {
 	const haveAccess = useAccess('commercial__pi-cash');
 	const { user } = useAuth();
 
-	const { data, isLoading, url } = useCommercialPIByQuery(
+	const { data, isLoading, url, updateData } = useCommercialPIByQuery(
 		getPath(haveAccess, user?.uuid) + `&type=${status}`,
 		{
 			enabled: !!user?.uuid,
@@ -47,6 +48,16 @@ export default function Index() {
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
+
+	const handelCompleteStatus = async (idx) => {
+		await updateData.mutateAsync({
+			url: `/commercial/pi-cash-update-is-completed/${data[idx]?.uuid}`,
+			updatedData: {
+				is_completed: data[idx]?.is_completed === true ? false : true,
+			},
+			isOnCloseNeeded: false,
+		});
+	};
 
 	const columns = useMemo(
 		() => [
@@ -161,6 +172,26 @@ export default function Index() {
 				id: 'order_type',
 				header: 'Type',
 				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'is_completed',
+				header: 'Completed',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_complete'
+					);
+
+					return (
+						<SwitchToggle
+							disabled={!permission}
+							onChange={() => {
+								handelCompleteStatus(info.row.index);
+							}}
+							checked={info.getValue() === true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'marketing_name',

@@ -62,7 +62,7 @@ export default function Index() {
 		value: packetListData,
 		loading: isLoading,
 		error,
-	} = useFetch(`delivery/packing-list/${symbol}`, [status]);
+	} = useFetch(`/delivery/packing-list/${symbol}`, [status]);
 
 	const { data: packetList, updateData } = useOtherPackingList();
 	const { invalidateQuery: invalidateDeliveryPackingList } =
@@ -210,11 +210,13 @@ export default function Index() {
 				tabIndex={0}
 				onBlur={() => setScannerActive(false)}
 				onFocus={() => setScannerActive(true)}
-				ref={containerRef}>
+				ref={containerRef}
+			>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
-					className='flex flex-col gap-4'>
+					className='flex flex-col gap-4'
+				>
 					<SectionEntryBody
 						title='Details'
 						header={
@@ -222,14 +224,17 @@ export default function Index() {
 								className={cn(
 									'btn btn-sm',
 									scannerActive ? 'btn-success' : 'btn-error'
-								)}>
+								)}
+							>
 								Scanner: {scannerActive ? 'ON' : 'OFF'}
 							</span>
-						}>
+						}
+					>
 						<FormField
 							label='packet_list_uuid'
 							title='Packet List'
-							errors={errors}>
+							errors={errors}
+						>
 							<Controller
 								name='packet_list_uuid'
 								control={control}
@@ -284,10 +289,12 @@ export default function Index() {
 							<th
 								key={item}
 								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'
+							>
 								{item}
 							</th>
-						))}>
+						))}
+					>
 						{EntryField.map((item, index) => (
 							<tr key={item.id}>
 								<td className={`w-80 ${rowClass}`}>
@@ -346,7 +353,8 @@ export default function Index() {
 									/>
 								</td>
 								<td
-									className={`w-20 ${rowClass} border-l-4 border-l-primary`}>
+									className={`w-20 ${rowClass} border-l-4 border-l-primary`}
+								>
 									<ActionButtons
 										removeClick={() =>
 											handleEntryRemove(index)

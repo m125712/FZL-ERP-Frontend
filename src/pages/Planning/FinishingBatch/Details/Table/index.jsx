@@ -7,12 +7,20 @@ export default function Table({ entries }) {
 	const total_qty = entries.reduce(
 		(a, b) => {
 			a.batchQty += b.batch_quantity;
-			a.balanceQty += b.balance_quantity;
+			a.teethMolding += b.teeth_molding_prod;
+			a.teethColoring += b.teeth_coloring_stock;
+			a.finishingStock += b.finishing_stock;
+			a.finishingProd += b.finishing_prod;
+			a.balanceQty += b.batch_quantity - b.finishing_prod;
 
 			return a;
 		},
 		{
 			batchQty: 0,
+			teethMolding: 0,
+			teethColoring: 0,
+			finishingStock: 0,
+			finishingProd: 0,
 			balanceQty: 0,
 		}
 	);
@@ -55,11 +63,57 @@ export default function Table({ entries }) {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+			// {
+			// 	accessorKey: 'balance_quantity',
+			// 	header: 'Balance',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
-				accessorKey: 'balance_quantity',
-				header: 'Balance',
+				accessorKey: 'teeth_molding_prod',
+				header: (
+					<>
+						Teeth <br /> Molding
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'teeth_coloring_stock',
+				header: (
+					<>
+						Teeth <br /> Coloring
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'finishing_stock',
+				header: (
+					<>
+						Finishing <br /> Stock
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'finishing_prod',
+				header: (
+					<>
+						Finishing <br /> Prod
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) => row.batch_quantity - row.finishing_prod,
+				id: 'balance',
+				header: 'Balance',
+				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'remarks',
@@ -105,6 +159,18 @@ export default function Table({ entries }) {
 						Total:
 					</td>
 					<td className='px-3 py-2 text-sm'>{total_qty.batchQty}</td>
+					<td className='px-3 py-2 text-sm'>
+						{total_qty.teethMolding}
+					</td>
+					<td className='px-3 py-2 text-sm'>
+						{total_qty.teethColoring}
+					</td>
+					<td className='px-3 py-2 text-sm'>
+						{total_qty.finishingStock}
+					</td>
+					<td className='px-3 py-2 text-sm'>
+						{total_qty.finishingProd}
+					</td>
 					<td className='px-3 py-2 text-sm'>
 						{total_qty.balanceQty}
 					</td>

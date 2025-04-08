@@ -99,7 +99,8 @@ export default function Index() {
 							type='button'
 							className='btn btn-accent btn-sm font-semibold text-white shadow-md'
 							disabled={pdfLoading}
-							onClick={() => handlePdf(info.row.index)}>
+							onClick={() => handlePdf(info.row.index)}
+						>
 							<BookOpen />
 						</button>
 					);
@@ -145,6 +146,13 @@ export default function Index() {
 						/>
 					);
 				},
+			},
+			{
+				accessorKey: 'item_name',
+				header: 'Item',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'is_warehouse_received',

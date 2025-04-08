@@ -288,7 +288,8 @@ export default function OrderSheetByStyle(orderByStyle) {
 														// 	bottom: 3,
 														// },
 														rowSpan:
-															1 +
+															entry.details
+																.length +
 															entry.details
 																.map(
 																	(detail) =>

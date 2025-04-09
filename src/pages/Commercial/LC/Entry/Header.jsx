@@ -53,7 +53,7 @@ export default function Header({
 	setDeleteLCEntryUD,
 }) {
 	const { lc_uuid } = useParams();
-	const { data: party } = useOtherParty('&is_cash=false');
+	const { data: party } = useOtherParty('&is_cash=false&is_pi=true');
 
 	return (
 		<SectionEntryBody title='LC Information'>
@@ -282,8 +282,7 @@ export default function Header({
 					<FormField
 						label='at_sight'
 						title='Payment Rec.'
-						errors={errors}
-					>
+						errors={errors}>
 						<Controller
 							name='at_sight'
 							control={control}

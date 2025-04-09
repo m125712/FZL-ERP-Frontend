@@ -110,6 +110,8 @@ export default function Index({ initial_order, idx }) {
 	const total = order?.order_entry?.reduce(
 		(totals, item) => {
 			totals.Quantity += parseFloat(item.quantity) || 0;
+			totals.PlanningBatch +=
+				parseFloat(item.planning_batch_quantity) || 0;
 			totals.piQuantity += parseFloat(item.total_pi_quantity) || 0;
 			totals.deliveryQuantity +=
 				parseFloat(item.total_delivery_quantity) || 0;
@@ -139,6 +141,7 @@ export default function Index({ initial_order, idx }) {
 		},
 		{
 			Quantity: 0,
+			PlanningBatch: 0,
 			piQuantity: 0,
 			deliveryQuantity: 0,
 			warehouseQuantity: 0,

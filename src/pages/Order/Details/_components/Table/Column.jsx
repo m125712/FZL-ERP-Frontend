@@ -116,6 +116,12 @@ const getColumn = ({
 			cell: (info) => info.getValue(),
 		}),
 		createColumn({
+			accessorKey: 'planning_batch_quantity',
+			header: 'P.Batch',
+			enableColumnFilter: false,
+			cell: (info) => info.getValue(),
+		}),
+		createColumn({
 			accessorKey: 'total_pi_quantity',
 			header: 'PI',
 			enableColumnFilter: false,

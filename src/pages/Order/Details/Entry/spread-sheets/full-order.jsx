@@ -48,6 +48,9 @@ const FullOrder = (
 			data: 'quantity',
 		},
 		{
+			data: 'planning_batch_quantity',
+		},
+		{
 			data: 'company_price',
 		},
 		{
@@ -64,6 +67,7 @@ const FullOrder = (
 			bleaching: item.bleaching,
 			size: item.size,
 			quantity: item.quantity,
+			planning_batch_quantity: item.planning_batch_quantity,
 			company_price: item.company_price,
 			party_price: item.party_price,
 		};
@@ -76,6 +80,7 @@ const FullOrder = (
 		'Bleaching',
 		'Size',
 		'Quantity',
+		'P.Batch',
 		'Company (USD/DZN)',
 		'Party (USD/DZN)',
 		'Actions',
@@ -91,6 +96,7 @@ const FullOrder = (
 				columns,
 				colHeaders,
 				data,
+				readOnlyIndex: [6],
 				isIndex: true,
 			}}
 		/>

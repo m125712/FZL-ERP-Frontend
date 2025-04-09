@@ -47,6 +47,7 @@ export default function Index({
 	const {
 		register,
 		handleSubmit,
+		formState,
 		errors,
 		reset,
 		watch,
@@ -56,23 +57,31 @@ export default function Index({
 		context,
 	} = useRHF(
 		{
-			type: STRING_REQUIRED,
+			type: STRING_REQUIRED.default('normal'), // Ensure default value
 			production_quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0').max(
 				MAX_PROD,
 				'Beyond max value'
 			),
 
-			coning_carton_quantity: NUMBER_REQUIRED.moreThan(0, 'More than 0'),
+			coning_carton_quantity: NUMBER.when('type', {
+				is: (val) => val === 'normal',
+				then: (schema) =>
+					schema.required('Required').moreThan(0, 'More than 0'),
+				otherwise: (schema) => schema.nullable(),
+			}),
 			remarks: STRING.nullable(),
 		},
 		{
 			production_quantity: '',
-			type: 'normal',
-			coning_carton_quantity: '',
+			type: 'normal', // Default value for type
+			coning_carton_quantity: 0,
 			wastage: '',
 			remarks: '',
 		}
 	);
+
+	// Debugging: Log the value of 'type' to ensure it is resolved correctly
+	console.log('Type field value:', watch('type'));
 
 	const onClose = () => {
 		setConingProd((prev) => ({
@@ -87,7 +96,7 @@ export default function Index({
 
 		reset({
 			production_quantity: '',
-			coning_carton_quantity: '',
+			coning_carton_quantity: 0,
 			wastage: '',
 			remarks: '',
 		});
@@ -101,6 +110,7 @@ export default function Index({
 			batch_entry_uuid: coningProd?.batch_entry_uuid,
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
+			onClose,
 		};
 
 		await postData.mutateAsync({
@@ -117,7 +127,7 @@ export default function Index({
 	useEffect(() => {
 		setQty(watch('production_quantity'));
 	}, [watch('production_quantity')]);
-
+	console.log(formState.errors);
 	return (
 		<AddModal
 			id='ConingProdModal'
@@ -126,14 +136,12 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}
-		>
+			isSmall={true}>
 			<FormField
 				label='type'
 				title='Type'
 				is_title_needed='false'
-				errors={errors}
-			>
+				errors={errors}>
 				<Controller
 					name={'type'}
 					control={control}
@@ -153,20 +161,33 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<JoinInput
-				title='Production Quantity'
-				label='production_quantity'
-				unit='PCS'
-				sub_label={`MAX: ${MAX_PROD} pcs`}
-				{...{ register, errors }}
-			/>
-			<JoinInput
-				title='Carton Quantity'
-				label='coning_carton_quantity'
-				unit='PCS'
-				sub_label={`Suggested: ${MAX_CARTON} pcs`}
-				{...{ register, errors }}
-			/>
+			{watch('type') == 'normal' && (
+				<JoinInput
+					title={`ProductionQuantity`}
+					label='production_quantity'
+					unit='PCS'
+					sub_label={`MAX: ${MAX_PROD} pcs`}
+					{...{ register, errors }}
+				/>
+			)}
+			{watch('type') == 'damage' && (
+				<JoinInput
+					title={'Damage Quantity'}
+					label='production_quantity'
+					unit='PCS'
+					sub_label={`MAX: ${MAX_PROD} pcs`}
+					{...{ register, errors }}
+				/>
+			)}
+			{watch('type') == 'normal' && (
+				<JoinInput
+					title='Carton Quantity'
+					label='coning_carton_quantity'
+					unit='PCS'
+					sub_label={`Suggested: ${MAX_CARTON} pcs`}
+					{...{ register, errors }}
+				/>
+			)}
 			<Textarea label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>

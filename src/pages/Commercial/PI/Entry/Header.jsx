@@ -1,21 +1,13 @@
-import {
-	useOtherBank,
-	useOtherFactoryByPartyUUID,
-	useOtherLcByPartyUUID,
-	useOtherMarketing,
-	useOtherMerchandiserByPartyUUID,
-	useOtherParty,
-} from '@/state/Other';
+import { useOtherBank, useOtherFactoryByPartyUUID, useOtherLcByPartyUUID, useOtherMarketing, useOtherMerchandiserByPartyUUID, useOtherParty } from '@/state/Other';
 import { useParams } from 'react-router-dom';
 
-import {
-	CheckBox,
-	FormField,
-	JoinInput,
-	ReactSelect,
-	SectionEntryBody,
-	Textarea,
-} from '@/ui';
+
+
+import { CheckBox, FormField, JoinInput, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
+
+
+
+
 
 export default function Header({
 	register,
@@ -31,7 +23,7 @@ export default function Header({
 
 	const { data: bank } = useOtherBank();
 	const { data: party } = useOtherParty(
-		watch('marketing_uuid') + '&is_cash=false'
+		'marketing=' + watch('marketing_uuid') + '&is_cash=false'
 	);
 	const { data: marketing } = useOtherMarketing();
 

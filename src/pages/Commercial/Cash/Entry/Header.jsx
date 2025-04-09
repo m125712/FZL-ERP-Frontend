@@ -27,7 +27,7 @@ export default function Header({
 	const { pi_uuid } = useParams();
 	const { data: marketing } = useOtherMarketing();
 	const { data: party } = useOtherParty(
-		watch('marketing_uuid') + '&is_cash=true'
+		'marketing=' + watch('marketing_uuid') + '&is_cash=true'
 	);
 
 	const { data: merchandiser } = useOtherMerchandiserByPartyUUID(
@@ -41,8 +41,7 @@ export default function Header({
 				<FormField
 					label='marketing_uuid'
 					title='Marketing'
-					errors={errors}
-				>
+					errors={errors}>
 					<Controller
 						name='marketing_uuid'
 						control={control}
@@ -100,8 +99,7 @@ export default function Header({
 				<FormField
 					label='merchandiser_uuid'
 					title='Merchandiser'
-					errors={errors}
-				>
+					errors={errors}>
 					<Controller
 						name='merchandiser_uuid'
 						control={control}

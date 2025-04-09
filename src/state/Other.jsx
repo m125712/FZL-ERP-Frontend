@@ -22,7 +22,7 @@ export const useOtherParty = (params) =>
 	createGlobalState({
 		queryKey: otherQK.party(params),
 		url: params
-			? `/other/party/value/label?marketing=${params}`
+			? `/other/party/value/label?${params}`
 			: '/other/party/value/label',
 		refetchOnWindowFocus: false,
 	});

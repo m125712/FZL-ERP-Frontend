@@ -85,7 +85,8 @@ export default function Index() {
 					</>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue().toLocaleString(),
+				cell: (info) =>
+					info.getValue() ? info.getValue().toLocaleString() : 0,
 			},
 			{
 				accessorKey: 'actions1',
@@ -110,7 +111,8 @@ export default function Index() {
 					</>
 				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue().toLocaleString(),
+				cell: (info) =>
+					info.getValue() ? info.getValue().toLocaleString() : 0,
 			},
 			{
 				accessorFn: (row) => {

@@ -67,17 +67,18 @@ export default function SingleInformation({
 				size='btn-xs md:btn-sm'
 				value={checkSwatch}
 			/>,
-			<div className='flex items-center gap-2'>
-				<SwitchToggle
-					onChange={() => {
-						handelMarketingChecked();
-						setMarketingCheckedStatus(!marketingCheckedStatus);
-					}}
-					checked={marketingCheckedStatus}
-					disabled={!permission}
-				/>
-				<span className='text-sm'>Marketing Checked</span>
-			</div>,
+			//? Need to add marketing checked?
+			// <div className='flex items-center gap-2'>
+			// 	<SwitchToggle
+			// 		onChange={() => {
+			// 			handelMarketingChecked();
+			// 			setMarketingCheckedStatus(!marketingCheckedStatus);
+			// 		}}
+			// 		checked={marketingCheckedStatus}
+			// 		disabled={!permission}
+			// 	/>
+			// 	<span className='text-sm'>Marketing Checked</span>
+			// </div>,
 		];
 	};
 	let title = order?.item_description;

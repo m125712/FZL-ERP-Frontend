@@ -477,26 +477,27 @@ export const DetailsColumns = ({
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'is_marketing_checked',
-				header: 'Marketing Checked',
-				enableColumnFilter: false,
-				cell: (info) => {
-					const permission = haveAccess.includes(
-						'click_status_marketing_checked'
-					);
+			//? Need to add marketing checked?
+			// {
+			// 	accessorKey: 'is_marketing_checked',
+			// 	header: 'Marketing Checked',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => {
+			// 		const permission = haveAccess.includes(
+			// 			'click_status_marketing_checked'
+			// 		);
 
-					return (
-						<SwitchToggle
-							disabled={!permission}
-							onChange={() => {
-								handelMarketingCheckedStatus(info.row.index);
-							}}
-							checked={info.getValue() === true}
-						/>
-					);
-				},
-			},
+			// 		return (
+			// 			<SwitchToggle
+			// 				disabled={!permission}
+			// 				onChange={() => {
+			// 					handelMarketingCheckedStatus(info.row.index);
+			// 				}}
+			// 				checked={info.getValue() === true}
+			// 			/>
+			// 		);
+			// 	},
+			// },
 			{
 				accessorKey: 'buyer_name',
 				header: 'Buyer',

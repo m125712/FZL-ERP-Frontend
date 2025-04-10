@@ -46,7 +46,13 @@ export const PlanningRoutes = [
 				path: '/planning/finishing-batch',
 				element: <FinishingBatch />,
 				page_name: 'planning__finishing_batch',
-				actions: ['create', 'read', 'update', 'delete'],
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_status_complete',
+				],
 			},
 			{
 				name: 'Finishing Batch Entry',

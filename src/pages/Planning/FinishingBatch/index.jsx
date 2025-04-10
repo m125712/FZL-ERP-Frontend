@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import {
 	DateTime,
 	EditDelete,
@@ -13,6 +14,7 @@ import {
 	StatusSelect,
 } from '@/ui';
 
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function index() {
@@ -26,13 +28,25 @@ export default function index() {
 	const navigate = useNavigate();
 	const haveAccess = useAccess('planning__finishing_batch');
 
-	const { data, isLoading, url } = useDyeingFinishingBatch(`type=${status}`);
+	const { data, isLoading, url, updateData } = useDyeingFinishingBatch(
+		`type=${status}`
+	);
 
 	const info = new PageInfo('Batch', url, 'planning__finishing_batch');
 
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
+	const handelCompleteStatus = async (idx) => {
+		await updateData.mutateAsync({
+			url: `/zipper/finishing-batch/update-is-completed/by/${data[idx]?.uuid}`,
+			updatedData: {
+				is_completed: data[idx]?.is_completed === true ? false : true,
+				updated_at: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
+	};
 
 	const columns = useMemo(
 		() => [
@@ -99,6 +113,26 @@ export default function index() {
 				enableColumnFilter: false,
 				width: 'w-24',
 				// cell: (info) => info.getValue().join(', '),
+			},
+			{
+				accessorKey: 'is_completed',
+				header: 'Completed',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_complete'
+					);
+
+					return (
+						<SwitchToggle
+							disabled={!permission}
+							onChange={() => {
+								handelCompleteStatus(info.row.index);
+							}}
+							checked={info.getValue() === true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'total_batch_quantity',

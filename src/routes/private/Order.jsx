@@ -50,6 +50,7 @@ export const OrderRoutes = [
 					'show_price',
 					'show_cash_bill_lc',
 					'show_history',
+					'click_status_marketing_checked',
 				],
 			},
 			{

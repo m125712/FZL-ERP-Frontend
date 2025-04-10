@@ -43,7 +43,8 @@ const createPDF = (pdfdata, setData, setGetPdfData, OrderSheetPdf) => {
 export default function Index() {
 	const { user } = useAuth();
 	const { order_number } = useParams();
-	const { data: orderbystyle } = useOrderDetailsByStyleForPDF(order_number);
+	const { data: orderbystyle, updateData } =
+		useOrderDetailsByStyleForPDF(order_number);
 	const haveAccess = useAccess('order__details');
 
 	const [orders, setOrders] = useState([]);
@@ -191,6 +192,7 @@ export default function Index() {
 				// }
 				handleViewChange={() => setUpdateView(!updateView)}
 				updateView={updateView}
+				
 			/>
 
 			{updateView ? (

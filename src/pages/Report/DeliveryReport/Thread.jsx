@@ -32,12 +32,17 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'delivery_date',
+				accessorFn: (row) => format(row.delivery_date, 'dd MMM,yyyy'),
+				id: 'delivery_date',
 				header: 'Delivery Date',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
+					<DateTime
+						date={info.getValue()}
+						isTime={false}
+						customizedDateFormate='dd MMM,yyyy'
+					/>
 				),
 			},
 			{

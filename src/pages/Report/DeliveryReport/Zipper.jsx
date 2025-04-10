@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
+import { CustomLink, DateTime, SimpleDatePicker, StatusButton } from '@/ui';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
@@ -31,6 +31,19 @@ export default function Index() {
 
 	const columns = useMemo(
 		() => [
+			{
+				accessorFn: (row) => (row.receive_status ? 'Y' : 'N'),
+				id: 'receive_status',
+				header: 'Received',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => (
+					<StatusButton
+						size='btn-xs'
+						value={info.row.original.receive_status}
+					/>
+				),
+			},
 			{
 				accessorFn: (row) => format(row.delivery_date, 'dd MMM,yyyy'),
 				id: 'delivery_date',

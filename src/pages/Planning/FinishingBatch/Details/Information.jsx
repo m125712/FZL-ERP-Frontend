@@ -120,6 +120,7 @@ export default function Information({ data, updateData }) {
 					checked={completedStatus}
 					disabled={!permission}
 				/>
+				<span className='text-sm'>Completed</span>
 			</div>,
 		];
 	};

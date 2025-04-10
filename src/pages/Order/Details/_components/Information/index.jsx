@@ -8,13 +8,34 @@ import SwitchToggle from '@/ui/Others/SwitchToggle';
 import RenderTable from '@/ui/Others/Table/RenderTable';
 import { LinkWithCopy, StatusButton, TitleValue } from '@/ui';
 
+import GetDateTime from '@/util/GetDateTime';
+
 import ItemDescription from './Item';
 import OrderDescription from './Order';
 
-export default function SingleInformation({ order, idx, hasInitialOrder }) {
+export default function SingleInformation({
+	order,
+	idx,
+	hasInitialOrder,
+	updateData,
+}) {
 	const [check, setCheck] = useState(true);
 	const [checkSwatch, setCheckSwatch] = useState(true);
-
+	const haveAccess = useAccess('order__details');
+	const [marketingCheckedStatus, setMarketingCheckedStatus] = useState(
+		order.is_marketing_checked
+	);
+	const handelMarketingChecked = async () => {
+		await updateData.mutateAsync({
+			url: `/zipper/order/description/update-is-marketing-checked/by/${order?.order_description_uuid}`,
+			updatedData: {
+				is_marketing_checked:
+					marketingCheckedStatus === true ? false : true,
+				updated_at: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
+	};
 	useEffect(() => {
 		order?.order_entry.map((item, i) => {
 			if (
@@ -30,6 +51,9 @@ export default function SingleInformation({ order, idx, hasInitialOrder }) {
 	}, [order]);
 
 	const renderButtons = () => {
+		const permission = haveAccess.includes(
+			'click_status_marketing_checked'
+		);
 		return [
 			<StatusButton
 				className={'border-0'}
@@ -43,6 +67,17 @@ export default function SingleInformation({ order, idx, hasInitialOrder }) {
 				size='btn-xs md:btn-sm'
 				value={checkSwatch}
 			/>,
+			<div className='flex items-center gap-2'>
+				<SwitchToggle
+					onChange={() => {
+						handelMarketingChecked();
+						setMarketingCheckedStatus(!marketingCheckedStatus);
+					}}
+					checked={marketingCheckedStatus}
+					disabled={!permission}
+				/>
+				<span className='text-sm'>Marketing Checked</span>
+			</div>,
 		];
 	};
 	let title = order?.item_description;
@@ -201,8 +236,7 @@ export function OrderInformation({
 				key='pdf'
 				type='button'
 				className='btn btn-accent btn-sm rounded-badge'
-				onClick={handelPdfDownload}
-			>
+				onClick={handelPdfDownload}>
 				<PDF className='w-4' /> PDF
 			</button>,
 			<div className='flex items-center gap-2'>
@@ -222,8 +256,7 @@ export function OrderInformation({
 			title='Order Information'
 			buttons={renderButtons()}
 			// selector={renderSelector()}
-			className={'mb-8'}
-		>
+			className={'mb-8'}>
 			<div className='grid grid-cols-1 bg-base-100 md:grid-cols-2 md:gap-8'>
 				<RenderTable
 					className={

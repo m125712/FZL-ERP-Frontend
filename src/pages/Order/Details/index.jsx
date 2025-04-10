@@ -7,6 +7,7 @@ import { useAccess } from '@/hooks';
 import ReactTable from '@/components/Table';
 import { StatusSelect } from '@/ui';
 
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 import { DetailsColumns } from '../columns';
@@ -47,7 +48,7 @@ export default function Index() {
 	const haveAccess = useAccess('order__details');
 	const { user } = useAuth();
 
-	const { data, isLoading, url } = useOrderDetailsByQuery(
+	const { data, isLoading, url, updateData } = useOrderDetailsByQuery(
 		getPath(haveAccess, user?.uuid) + `&type=${status}`,
 		{ enabled: !!user?.uuid }
 	);
@@ -73,11 +74,23 @@ export default function Index() {
 		);
 		// navigate(`/order/${order_number}/${order_description_uuid}/update`);
 	};
+	const handelMarketingCheckedStatus = async (idx) => {
+		await updateData.mutateAsync({
+			url: `/zipper/order/description/update-is-marketing-checked/by/${data[idx]?.order_description_uuid}`,
+			updatedData: {
+				is_marketing_checked:
+					data[idx]?.is_marketing_checked === true ? false : true,
+				updated_at: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
+	};
 
 	const columns = DetailsColumns({
 		handelUpdate,
 		haveAccess,
 		data,
+		handelMarketingCheckedStatus,
 	});
 
 	if (isLoading)

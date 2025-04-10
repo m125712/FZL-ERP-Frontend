@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import {
 	CustomLink,
 	DateTime,
@@ -369,7 +370,12 @@ export const InfoColumns = ({
 	);
 };
 
-export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
+export const DetailsColumns = ({
+	handelUpdate,
+	haveAccess,
+	data,
+	handelMarketingCheckedStatus,
+}) => {
 	return useMemo(
 		() => [
 			{
@@ -470,6 +476,26 @@ export const DetailsColumns = ({ handelUpdate, haveAccess, data }) => {
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_marketing_checked',
+				header: 'Marketing Checked',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_marketing_checked'
+					);
+
+					return (
+						<SwitchToggle
+							disabled={!permission}
+							onChange={() => {
+								handelMarketingCheckedStatus(info.row.index);
+							}}
+							checked={info.getValue() === true}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'buyer_name',

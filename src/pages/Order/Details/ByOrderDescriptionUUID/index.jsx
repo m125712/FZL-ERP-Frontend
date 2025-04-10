@@ -30,9 +30,10 @@ export default function Index({ initial_order, idx }) {
 	const isEnabled =
 		order_description_uuid !== null && order_description_uuid !== undefined;
 
-	const { data: garments } = useOtherOrderPropertiesByGarmentsWash({
-		enabled: isEnabled,
-	});
+	const { data: garments, updateData } =
+		useOtherOrderPropertiesByGarmentsWash({
+			enabled: isEnabled,
+		});
 	const { data: orderbystyle } = useOrderDetailsByStyleForPDF(
 		order_number,
 		order_description_uuid
@@ -179,6 +180,7 @@ export default function Index({ initial_order, idx }) {
 				<SingleInformation
 					idx={idx}
 					order={order}
+					updateData={updateData}
 					hasInitialOrder={hasInitialOrder}
 				/>
 			</Suspense>

@@ -44,7 +44,9 @@ export default function Header({
 	const { user } = useAuth();
 
 	const { data: marketings } = useOtherMarketing();
-	const { data: parties } = useOtherParty();
+	const { data: parties } = useOtherParty(
+		`${getPath(haveAccess, user?.uuid) ? `${getPath(haveAccess, user?.uuid)}` : ''}`
+	);
 	const { data: orders } = useAllZipperThreadOrderList(
 		`from_date=${format(from, 'yyyy-MM-dd')}&to_date=${format(to, 'yyyy-MM-dd')}&page=production_statement${reportFor === 'accounts' ? '_accounts' : ''}${getPath(haveAccess, user?.uuid) ? `&${getPath(haveAccess, user?.uuid)}` : ''}`
 	);

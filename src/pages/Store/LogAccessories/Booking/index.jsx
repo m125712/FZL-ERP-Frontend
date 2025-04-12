@@ -252,7 +252,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: '/material/booking',
 						deleteData,
 					}}
 					invalidateQuery={invalidateMaterialInfo}

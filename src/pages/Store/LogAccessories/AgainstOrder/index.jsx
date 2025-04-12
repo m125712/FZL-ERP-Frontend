@@ -241,7 +241,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: '/zipper/material-trx-against-order',
 						deleteData,
 					}}
 					invalidateQueryArray={[

@@ -1,3 +1,4 @@
+import { useAuth } from '@/context/auth';
 import { useOtherMarketing, useOtherParty } from '@/state/Other';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
@@ -8,6 +9,14 @@ import {
 	SectionEntryBody,
 	SimpleDatePicker,
 } from '@/ui';
+
+const getPath = (haveAccess, userUUID) => {
+	if (haveAccess.includes('show_own_orders') && userUUID) {
+		return `own_uuid=${userUUID}`;
+	}
+
+	return ``;
+};
 
 export default function Header({
 	from = '',
@@ -22,8 +31,11 @@ export default function Header({
 	setType = () => {},
 }) {
 	const haveAccess = useAccess('report__production_statement');
+	const { user } = useAuth();
 	const { data: marketings } = useOtherMarketing();
-	const { data: parties } = useOtherParty();
+	const { data: parties } = useOtherParty(
+		`${getPath(haveAccess, user?.uuid) ? `${getPath(haveAccess, user?.uuid)}` : ''}`
+	);
 	const types = [
 		{ label: 'Nylon', value: 'nylon' },
 		{ label: 'Vislon', value: 'vislon' },

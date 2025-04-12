@@ -203,7 +203,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: '/material/trx',
 						deleteData,
 					}}
 				/>

@@ -249,6 +249,15 @@ export const useBulk = (
 		enabled,
 	});
 
+export const useConsumption = (date, toDate, type, query, enabled = false) =>
+	createGlobalState({
+		queryKey: reportQK.consumption(date, toDate, type, query),
+		url:
+			`/report/product-wise-consumption-report?date=${date}&to_date=${toDate}&type=${type}` +
+			query,
+		enabled,
+	});
+
 export const usePackingList = (query) =>
 	createGlobalState({
 		queryKey: reportQK.packingList(query),

@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import Order from '@/pages/Report/ProductionStatement/order';
+import OrderV2 from '@/pages/Report/ProductionStatement/orderV2';
 import Production from '@/pages/Report/ProductionStatement/production';
+import ProductionV2 from '@/pages/Report/ProductionStatement/productionV2';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -18,7 +20,9 @@ export default function index() {
 	return (
 		<div className='flex flex-col gap-8'>
 			<Production />
+			<ProductionV2 />
 			<Order />
+			<OrderV2 />
 		</div>
 	);
 }

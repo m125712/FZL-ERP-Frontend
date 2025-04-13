@@ -35,6 +35,23 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorFn: (row) => format(row.created_at, 'dd MMM,yyyy'),
+				id: 'created_at',
+				header: (
+					<>
+						Packing <br /> List Date
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.getValue()}
+						isTime={false}
+						customizedDateFormate='dd MMM,yyyy'
+					/>
+				),
+			},
+			{
 				accessorKey: 'packing_number',
 				header: 'Packing List',
 				enableColumnFilter: true,
@@ -67,6 +84,26 @@ export default function Index() {
 						/>
 					);
 				},
+			},
+			{
+				accessorFn: (row) =>
+					row.challan_created_at
+						? format(row.challan_created_at, 'dd MMM,yyyy')
+						: '',
+				id: 'challan_created_at',
+				header: (
+					<>
+						Challan <br /> Date
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.getValue()}
+						isTime={false}
+						customizedDateFormate='dd MMM,yyyy'
+					/>
+				),
 			},
 			{
 				accessorKey: 'challan_number',
@@ -131,18 +168,40 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'ctn_qty',
-			// 	header: 'CTN. Qty.',
-			// 	enableColumnFilter: false,
-			// 	width: 'w-32',
-			// 	cell: (info) => info.getValue(),
-			// },
+			{
+				accessorFn: (row) => row.pi_numbers?.join(', '),
+				id: 'pi_numbers',
+				header: <>Pi No.</>,
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
 				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'marketing_name',
+				header: 'Marketing',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'buyer_name',
+				header: 'Buyer',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) => row.item_description?.join(', '),
+				id: 'item_description',
+				header: <>Item Description</>,
+				enableColumnFilter: false,
+				width: 'w-64',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -160,10 +219,75 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'company_price',
+				header: 'Company Price',
+				enableColumnFilter: false,
+				width: 'w-32',
+				hidden: !haveAccess.includes('show_price'),
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'party_price',
+				header: 'Party Price',
+				enableColumnFilter: false,
+				width: 'w-32',
+				hidden: !haveAccess.includes('show_price'),
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_amount_without_commission',
+				header: (
+					<>
+						Total w/o <br /> com.
+					</>
+				),
+				enableColumnFilter: false,
+
+				hidden: !haveAccess.includes('show_price'),
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_amount_with_commission',
+				header: (
+					<>
+						Total with
+						<br /> com.
+					</>
+				),
+				enableColumnFilter: false,
+
+				hidden: !haveAccess.includes('show_price'),
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'challan_total_amount_without_commission',
+				header: (
+					<>
+						Challan Total <br /> w/o com.
+					</>
+				),
+				enableColumnFilter: false,
+
+				hidden: !haveAccess.includes('show_price'),
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'challan_total_amount_with_commission',
+				header: (
+					<>
+						Challan Total <br /> with com.
+					</>
+				),
+				enableColumnFilter: false,
+
+				hidden: !haveAccess.includes('show_price'),
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'carton_size',
 				header: 'Carton Size',
 				enableColumnFilter: false,
-				width: 'w-32',
+
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -192,19 +316,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
-			},
-			{
-				accessorFn: (row) => format(row.created_at, 'dd MMM,yyyy'),
-				id: 'created_at',
-				header: 'Created',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime
-						date={info.getValue()}
-						isTime={false}
-						customizedDateFormate='dd MMM,yyyy'
-					/>
-				),
 			},
 			{
 				accessorFn: (row) =>

@@ -61,3 +61,11 @@ export const ProductionStatus = ({ className, status, setStatus, page }) => {
 		/>
 	);
 };
+
+export const consumptionTypes = [
+	{ value: 'nylon_plastic', label: 'Nylon Plastic' },
+	{ value: 'nylon', label: 'Nylon' },
+	{ value: 'vislon', label: 'Vislon' },
+	{ value: 'metal', label: 'Metal' },
+	{ value: 'all', label: 'All' },
+];

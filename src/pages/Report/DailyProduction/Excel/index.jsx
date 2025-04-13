@@ -49,49 +49,6 @@ export default function Index(data, from, to) {
 					totalTypeWiseCloseEnd += totalCloseEnd;
 					totalTypeWiseOpenEnd += totalOpenEnd;
 					totalTypeWiseTotalQuantity += totalQuantity;
-					if (itemIndex === orderItem.items.length - 1) {
-						itemItem.other?.push({
-							size: 'Order Wise Total',
-							running_total_close_end_quantity:
-								totalOrderWiseCloseEnd,
-							running_total_open_end_quantity:
-								totalOrderWiseOpenEnd,
-							running_total_quantity: totalOrderWiseTotalQuantity,
-						});
-					}
-					if (
-						!itemItem.other?.find(
-							(otherItem) => otherItem.size === 'Party Wise Total'
-						) &&
-						itemIndex === orderItem.items.length - 1 &&
-						orderIndex === partyItem.orders.length - 1
-					) {
-						itemItem.other?.push({
-							size: 'Party Wise Total',
-							running_total_close_end_quantity:
-								totalPartyWiseCloseEnd,
-							running_total_open_end_quantity:
-								totalPartyWiseOpenEnd,
-							running_total_quantity: totalPartyWiseTotalQuantity,
-						});
-					}
-					if (
-						!itemItem.other?.find(
-							(otherItem) => otherItem.size === 'Type Wise Total'
-						) &&
-						itemIndex === orderItem.items.length - 1 &&
-						orderIndex === partyItem.orders.length - 1 &&
-						partyIndex === item.parties.length - 1
-					) {
-						itemItem.other?.push({
-							size: 'Type Wise Total',
-							running_total_close_end_quantity:
-								totalTypeWiseCloseEnd,
-							running_total_open_end_quantity:
-								totalTypeWiseOpenEnd,
-							running_total_quantity: totalTypeWiseTotalQuantity,
-						});
-					}
 				});
 			});
 		});

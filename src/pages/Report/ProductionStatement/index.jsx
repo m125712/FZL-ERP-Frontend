@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import Order from '@/pages/Report/ProductionStatement/order';
-import OrderV2 from '@/pages/Report/ProductionStatement/orderV2';
+import OrderV2 from '@/pages/Report/ProductionStatement/order-v2';
 import Production from '@/pages/Report/ProductionStatement/production';
-import ProductionV2 from '@/pages/Report/ProductionStatement/productionV2';
+import ProductionV2 from '@/pages/Report/ProductionStatement/production-v2';
 
 import PageInfo from '@/util/PageInfo';
 

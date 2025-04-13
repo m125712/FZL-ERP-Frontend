@@ -27,6 +27,7 @@ export default function OrderSheetPdf(data, garments, sr, from, to) {
 	// * for page break
 	let prevOrderZipper = null;
 	let prevOrderThread = null;
+	const total = { zipper: 0, tape: 0, slider: 0, thread: 0 };
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		pageSize: 'A4',
@@ -103,6 +104,24 @@ export default function OrderSheetPdf(data, garments, sr, from, to) {
 					garments,
 					sr,
 				};
+				if (item?.order_type === 'full') {
+					total.zipper += item?.order_entry.reduce(
+						(acc, item) => acc + item.quantity,
+						0
+					);
+				}
+				if (item?.order_type === 'tape') {
+					total.tape += item?.order_entry?.reduce(
+						(acc, item) => acc + item.size,
+						0
+					);
+				}
+				if (item?.order_type === 'slider') {
+					total.slider += item?.order_entry.reduce(
+						(acc, item) => acc + item.quantity,
+						0
+					);
+				}
 
 				prevOrderZipper = item?.order_number;
 
@@ -126,8 +145,42 @@ export default function OrderSheetPdf(data, garments, sr, from, to) {
 					pageBreak = true;
 
 				prevOrderThread = item?.order_number;
+
+				total.thread +=
+					item?.order_info_entry?.length > 0
+						? item?.order_info_entry?.reduce(
+								(acc, item) => acc + (item.quantity || 0),
+								0
+							)
+						: 0;
+
 				return threadPDF({ ...item, pageBreak });
 			}),
+			{
+				text: 'TOTAL ZIPPER ORDER QTY: ' + total.zipper + ' PCS',
+				pageBreak: 'before',
+				fontSize: 20,
+				bold: true,
+				alignment: 'center',
+			},
+			{
+				text: 'TOTAL TAPE ORDER QTY: ' + total.tape + ' MTR',
+				fontSize: 20,
+				bold: true,
+				alignment: 'center',
+			},
+			{
+				text: 'TOTAL SLIDER ORDER QTY: ' + total.slider + ' PCS',
+				fontSize: 20,
+				bold: true,
+				alignment: 'center',
+			},
+			{
+				text: 'TOTAL THREAD ORDER QTY: ' + total.thread + ' CONES',
+				fontSize: 20,
+				bold: true,
+				alignment: 'center',
+			},
 		],
 	});
 

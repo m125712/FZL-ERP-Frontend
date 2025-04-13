@@ -444,7 +444,7 @@ export const getSpecialReqInfo = (order_description, sr) => {
 export const grandTotal = (total_entries) => {
 	let total = 0;
 	total_entries?.map((item) => {
-		total += item.order_entry.reduce((acc, item) => {
+		total += item?.order_entry?.reduce((acc, item) => {
 			acc += item?.quantity;
 
 			return acc;

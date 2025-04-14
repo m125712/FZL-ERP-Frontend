@@ -24,6 +24,10 @@ const chartConfig = {
 		label: 'Thread',
 		color: '#00ADB5',
 	},
+	metal: {
+		label: 'Metal',
+		color: '#f31260',
+	},
 };
 
 export function BarChartOverall(
@@ -111,14 +115,53 @@ export function BarChartOverall(
 											'dd MMM, yy'
 										);
 									}}
-									formatter={(value, name) => (
-										<div className='flex min-w-[130px] items-center text-xs text-muted-foreground'>
-											{chartConfig[name]?.label || name}
-											<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
-												{numeral(value).format('0a')}
+									formatter={(value, name, item) => {
+										return (
+											<div className='grid min-w-[130px] grid-cols-2 items-center text-xs text-muted-foreground'>
+												<>
+													{chartConfig[name]?.label ||
+														name}
+												</>
+												<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
+													{numeral(value).format(
+														'0a'
+													)}
+												</div>
+												{name === 'zipper' && (
+													<>
+														<div>Nylon</div>
+														<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
+															{numeral(
+																item.payload
+																	.nylon
+															).format('0a')}
+														</div>
+														<div>N-Plastic</div>
+														<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
+															{numeral(
+																item.payload
+																	.nylon_plastic
+															).format('0a')}
+														</div>
+														<div>Metal</div>
+														<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
+															{numeral(
+																item.payload
+																	.metal
+															).format('0a')}
+														</div>
+														<div>Vislon</div>
+														<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
+															{numeral(
+																item.payload
+																	.vislon
+															).format('0a')}
+														</div>
+													</>
+												)}
 											</div>
-										</div>
-									)}
+										);
+									}}
 								/>
 							}
 						/>

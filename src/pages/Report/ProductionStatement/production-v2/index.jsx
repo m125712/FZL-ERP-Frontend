@@ -48,7 +48,7 @@ export default function index() {
 	// 	}
 	// );
 
-	const handlePdf = async (type) => {
+	const handlePdf = async (btnType) => {
 		setIsLoading(true);
 		try {
 			const path = getPath(haveAccess, user?.uuid);
@@ -59,7 +59,7 @@ export default function index() {
 
 			const data = response?.data?.data || [];
 
-			if (type == 'pdf') {
+			if (btnType == 'pdf') {
 				const pdf = Pdf(data, from, to); // should return pdfDoc from pdfmake.createPdf()
 
 				// Wait for PDF to be ready before opening

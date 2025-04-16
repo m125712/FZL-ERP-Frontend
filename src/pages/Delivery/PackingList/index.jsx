@@ -99,8 +99,7 @@ export default function Index() {
 							type='button'
 							className='btn btn-accent btn-sm font-semibold text-white shadow-md'
 							disabled={pdfLoading}
-							onClick={() => handlePdf(info.row.index)}
-						>
+							onClick={() => handlePdf(info.row.index)}>
 							<BookOpen />
 						</button>
 					);
@@ -280,6 +279,21 @@ export default function Index() {
 			{
 				accessorKey: 'total_poly_quantity',
 				header: 'Poly',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn(row) {
+					if (row.item_for === 'thread') {
+						return Math.ceil(
+							row.total_quantity / row.cone_per_carton || 1
+						);
+					} else {
+						return 1;
+					}
+				},
+				id: 'carton_quantity',
+				header: 'Carton Qty',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

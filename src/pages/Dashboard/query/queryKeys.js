@@ -1,7 +1,7 @@
 export const dashboardQK = {
 	all: () => ['dashboard'],
 
-	order_entry: () => [...dashboardQK.all(), 'order-entry'],
+	order_entry: (from, to) => [...dashboardQK.all(), 'order-entry', from, to],
 
 	amount_and_doc: () => [...dashboardQK.all(), 'amount-and-doc'],
 	amount_percentage: () => [...dashboardQK.all(), 'amount-percentage'],

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { BarChartHorizontal } from '@/pages/Dashboard/_components/BarChartHorizontal';
+import { format, subDays } from 'date-fns';
 
 import { BarChartHorizontal2 } from './_components/BarChartHorizontal2';
 import { BarChartOverall } from './_components/BarChartOverall';
@@ -21,13 +22,19 @@ import useDashboardData from './hooks/useDashboardData';
 
 export default function Dashboard() {
 	const [dataPreview, setDataPreview] = useState('real');
+
+	const [from, setFrom] = useState(
+		format(subDays(new Date(), 30), 'yyyy-MM-dd')
+	);
+	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
+
 	const {
 		amount_and_doc,
 		order_entry,
 		amount_percentage,
 		no_of_doc,
 		refreshAll,
-	} = useDashboardData(dataPreview);
+	} = useDashboardData(dataPreview, from, to);
 
 	useEffect(() => {
 		document.title = 'Dashboard';
@@ -42,7 +49,7 @@ export default function Dashboard() {
 			/>
 			<div className='space-y-2 px-2 py-2 lg:px-2'>
 				{/* Order Received */}
-				<BarChartOverall data={order_entry} />
+				<BarChartOverall data={order_entry} {...{ setFrom, setTo }} />
 				{/* Production: Demand */}
 				<div className='flex flex-col gap-2 md:flex-row'>
 					<BarChartHorizontal2 />

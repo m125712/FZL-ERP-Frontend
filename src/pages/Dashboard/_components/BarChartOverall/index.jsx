@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { format } from 'date-fns';
+import { format, subDays, subMonths } from 'date-fns';
 import numeral from 'numeral';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
@@ -9,6 +9,7 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from '@/components/ui/chart';
+import { ReactSelect } from '@/ui';
 
 export const description = 'An interactive bar chart';
 
@@ -31,12 +32,20 @@ const chartConfig = {
 };
 
 export function BarChartOverall(
-	{ data } = {
+	{ data, setFrom, setTo } = {
 		data: [],
+		setFrom: () => {},
+		setTo: () => {},
 	}
 ) {
 	// var numeral = numeral();
 	const [activeChart, setActiveChart] = useState('zipper');
+	const [status, setStatus] = useState('30');
+	const options = [
+		{ value: 'all', label: 'All' },
+		{ value: '30', label: '30 days' },
+		{ value: '12', label: '12 months' },
+	];
 
 	const total = useMemo(
 		() => ({
@@ -50,8 +59,38 @@ export function BarChartOverall(
 		<Card>
 			<CardHeader className='flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row'>
 				<div className='flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6'>
-					<CardTitle className='text-3xl'>
-						Order Received (Last 30 days)
+					<CardTitle className='flex gap-4 text-3xl'>
+						Order Received{' '}
+						<ReactSelect
+							className='h-4 min-w-36 text-sm'
+							placeholder='Select Status'
+							options={options}
+							value={options?.filter(
+								(item) => item.value == status
+							)}
+							onChange={(e) => {
+								setStatus(e.value);
+								setTo(format(new Date(), 'yyyy-MM-dd'));
+								if (e.value === '30') {
+									setFrom(
+										format(
+											subDays(new Date(), 30),
+											'yyyy-MM-dd'
+										)
+									);
+								} else if (e.value === '12') {
+									setFrom(
+										format(
+											subMonths(new Date(), 12),
+											'yyyy-MM-dd'
+										)
+									);
+								} else {
+									setFrom('');
+									setTo('');
+								}
+							}}
+						/>
 					</CardTitle>
 				</div>
 				<div className='flex'>
@@ -118,16 +157,7 @@ export function BarChartOverall(
 									formatter={(value, name, item) => {
 										return (
 											<div className='grid min-w-[130px] grid-cols-2 items-center text-xs text-muted-foreground'>
-												<>
-													{chartConfig[name]?.label ||
-														name}
-												</>
-												<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
-													{numeral(value).format(
-														'0a'
-													)}
-												</div>
-												{name === 'zipper' && (
+												{name === 'zipper' ? (
 													<>
 														<div>Nylon</div>
 														<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
@@ -155,6 +185,24 @@ export function BarChartOverall(
 															{numeral(
 																item.payload
 																	.vislon
+															).format('0a')}
+														</div>
+														<div>Total</div>
+														<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
+															{numeral(
+																value
+															).format('0a')}
+														</div>
+													</>
+												) : (
+													<>
+														<div>
+															{chartConfig[name]
+																?.label || name}
+														</div>
+														<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
+															{numeral(
+																value
 															).format('0a')}
 														</div>
 													</>

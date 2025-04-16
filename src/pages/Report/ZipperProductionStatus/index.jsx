@@ -74,7 +74,7 @@ export default function Index() {
 				),
 			},
 			{
-				accessorFn: (row) => format(row.order_created_at, 'dd MMM, yy'),
+				accessorFn: (row) => format(row.order_created_at, 'dd/MM/yy'),
 				id: 'order_created_at',
 				header: 'Created At',
 				enableColumnFilter: false,
@@ -89,7 +89,7 @@ export default function Index() {
 			{
 				accessorFn: (row) =>
 					row.order_description_updated_at
-						? format(row.order_description_updated_at, 'dd MMM, yy')
+						? format(row.order_description_updated_at, 'dd/MM/yy')
 						: '--',
 				id: 'order_description_updated_at',
 				header: 'Updated At',

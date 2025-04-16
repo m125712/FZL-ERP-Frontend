@@ -6,6 +6,7 @@ import { CustomLink, DateTime } from '@/ui';
 
 import Header from './Header';
 import Information from './Information';
+import TransposedTable from './TransposedTable';
 
 export default function index() {
 	const [order, setOrder] = useState('');
@@ -151,102 +152,6 @@ export default function index() {
 		[transformedData, uniqueChallanNumbers]
 	);
 
-	function transposeChallanData(data) {
-		if (!Array.isArray(data) || data.length === 0) return [];
-
-		const fields = [
-			'style',
-			'color',
-			'size',
-			'unit',
-			'order_quantity',
-			'challan_no',
-		];
-		const challanNumbers = new Set();
-
-		// collect all unique challan numbers
-		data.forEach((item) => {
-			item.challan_array?.forEach((challan) => {
-				challanNumbers.add(challan.challan_number);
-			});
-		});
-
-		const allFields = [...fields, ...challanNumbers];
-
-		const transposed = allFields.map((field) => {
-			const row = { field };
-			let challanTotal = 0;
-
-			data.forEach((item, index) => {
-				const key = item.item_description + index;
-
-				if (field in item) {
-					if (field === 'challan_no') {
-						row[key] = '';
-					} else {
-						row[key] = item[field];
-					}
-
-					if (challanNumbers.has(field)) {
-						const value = item[field] ?? 0;
-						challanTotal += typeof value === 'number' ? value : 0;
-					}
-				} else if (challanNumbers.has(field)) {
-					const value = item[field] ?? 0;
-					row[key] = value;
-					challanTotal += typeof value === 'number' ? value : 0;
-				}
-			});
-
-			// Only add "total" when it's a challan row
-			if (challanNumbers.has(field)) {
-				row.total = challanTotal;
-			}
-
-			return row;
-		});
-
-		return transposed;
-	}
-
-	const transposed = transposeChallanData(transformedData);
-	const transposedTotal = transposed.slice(6).reduce((acc, row) => {
-		Object.entries(row).forEach(([key, value]) => {
-			if (key !== 'field') {
-				acc[key] = (acc[key] || 0) + value;
-			}
-		});
-		return acc;
-	}, {});
-	let balanceTotal = 0;
-
-	const transposedCol = useMemo(
-		() => [
-			{
-				accessorFn: (row) =>
-					row.field
-						.replace(/_/g, ' ')
-						.replace(/\b\w/g, (c) => c.toUpperCase()),
-				id: 'field',
-				header: 'Field',
-				cell: (info) => info.getValue(),
-			},
-			...(Array.isArray(transformedData) ? transformedData : []).map(
-				(item, index) => ({
-					accessorKey: item.item_description + index,
-					header: item.item_description,
-					enableColumnFilter: false,
-				})
-			),
-			{
-				accessorKey: 'total',
-				header: 'Total',
-				enableColumnFilter: false,
-			},
-		],
-		[transposed, transformedData]
-	);
-
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
@@ -325,35 +230,7 @@ export default function index() {
 				</tr>
 			</ReactTable>
 
-			<ReactTable
-				title={'Transposed'}
-				data={transposed}
-				columns={transposedCol}
-				extraClass={'py-2'}
-			>
-				<tr>
-					<td className='py-2 text-center font-bold'>Balance</td>
-					{Object.entries(transposedTotal).map(([key, value]) => {
-						if (key !== 'total')
-							balanceTotal += transposed[4]?.[key] - value;
-						return (
-							<td key={key} className='py-1.5 ps-2.5'>
-								{key == 'total'
-									? balanceTotal
-									: transposed[4]?.[key] - value}
-							</td>
-						);
-					})}
-				</tr>
-				<tr>
-					<td className='py-2 text-center font-bold'>Total</td>
-					{Object.entries(transposedTotal).map(([key, value]) => (
-						<td key={key} className='py-1.5 ps-2.5'>
-							{value}
-						</td>
-					))}
-				</tr>
-			</ReactTable>
+			<TransposedTable data={data} transformedData={transformedData} />
 		</div>
 	);
 }

@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useAuth } from '@/context/auth';
 import { usePackingList } from '@/state/Report';
-import { format, startOfMonth, subMonths } from 'date-fns';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
@@ -15,17 +14,22 @@ import {
 
 import PageInfo from '@/util/PageInfo';
 
+const options = [
+	{ value: 'all', label: 'All' },
+	{ value: 'pending', label: 'Pending' },
+	{ value: 'challan', label: 'Challan' },
+	{ value: 'gate_pass', label: 'W/H Out' },
+];
+
 export default function Index() {
 	const haveAccess = useAccess('report__packing_list');
 	const [status, setStatus] = useState('pending');
-	const options = [
-		{ value: 'all', label: 'All' },
-		{ value: 'pending', label: 'Pending' },
-		{ value: 'challan', label: 'Challan' },
-		{ value: 'gate_pass', label: 'W/H Out' },
-	];
+	const [date, setDate] = useState(new Date());
+	const [toDate, setToDate] = useState(new Date());
 
-	const { data, isLoading, url } = usePackingList(`type=${status}`);
+	const { data, isLoading, url } = usePackingList(
+		`type=${status}&from_date=${format(date, 'yyyy-MM-dd')}&to_date=${format(toDate, 'yyyy-MM-dd')}`
+	);
 	const info = new PageInfo('PackingList', url, 'report__packing_list');
 
 	useEffect(() => {
@@ -39,7 +43,8 @@ export default function Index() {
 				id: 'created_at',
 				header: (
 					<>
-						Packing <br /> List Date
+						Packing <br />
+						List Date
 					</>
 				),
 				enableColumnFilter: false,
@@ -55,7 +60,6 @@ export default function Index() {
 				accessorKey: 'packing_number',
 				header: 'Packing List',
 				enableColumnFilter: true,
-				width: 'w-24',
 				cell: (info) => {
 					return (
 						<CustomLink
@@ -86,29 +90,27 @@ export default function Index() {
 				},
 			},
 			{
-				accessorFn: (row) =>
-					row.challan_created_at
-						? format(row.challan_created_at, 'dd MMM,yyyy')
-						: '',
-				id: 'challan_created_at',
-				header: (
-					<>
-						Challan <br /> Date
-					</>
-				),
+				accessorFn: (row) => (row.is_warehouse_received ? 'Y' : 'N'),
+				id: 'is_warehouse_received',
+				header: 'Recv.',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime
-						date={info.getValue()}
-						isTime={false}
-						customizedDateFormate='dd MMM,yyyy'
-					/>
-				),
+				cell: (info) => {
+					const { warehouse_received_date, is_warehouse_received } =
+						info.row.original;
+					return (
+						<div className='flex items-center gap-1'>
+							<StatusButton
+								size='btn-xs'
+								value={is_warehouse_received}
+							/>
+							<DateTime date={warehouse_received_date} />
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'challan_number',
 				header: 'Challan',
-				width: 'w-36',
 				enableColumnFilter: true,
 				cell: (info) => {
 					const { challan_number, challan_uuid } = info.row.original;
@@ -122,37 +124,60 @@ export default function Index() {
 				},
 			},
 			{
-				accessorFn: (row) => (row.is_warehouse_received ? 'Y' : 'N'),
-				id: 'is_warehouse_received',
-				header: 'Received',
+				accessorFn: (row) =>
+					row.challan_created_at
+						? format(row.challan_created_at, 'dd MMM,yyyy')
+						: '',
+				id: 'challan_created_at',
+				header: (
+					<>
+						Challan <br />
+						Date
+					</>
+				),
 				enableColumnFilter: false,
-				width: 'w-32',
 				cell: (info) => (
-					<StatusButton
-						size='btn-xs'
-						value={info.row.original.is_warehouse_received}
+					<DateTime
+						date={info.getValue()}
+						isTime={false}
+						customizedDateFormate='dd MMM,yyyy'
 					/>
 				),
 			},
 			{
 				accessorFn: (row) => (row.gate_pass ? 'Y' : 'N'),
 				id: 'gate_pass',
-				header: 'Warehouse Out',
+				header: 'W/O',
 				enableColumnFilter: false,
-				width: 'w-32',
 				cell: (info) => (
 					<StatusButton
 						size='btn-xs'
 						value={info.row.original.gate_pass}
 					/>
 				),
+				cell: (info) => {
+					const { gate_pass_date, gate_pass } = info.row.original;
+					return (
+						<div className='flex items-center gap-1'>
+							<StatusButton size='btn-xs' value={gate_pass} />
+							<DateTime date={gate_pass_date} />
+						</div>
+					);
+				},
 			},
 			{
-				accessorKey: 'color',
-				header: 'Color',
+				accessorFn: (row) => {
+					const uniqueItemDescription = new Set(
+						row.item_description?.map((item) => item)
+					);
+
+					return uniqueItemDescription;
+				},
+				id: 'item_description',
+				header: <>Item Description</>,
 				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue().join(', '),
+				width: 'w-64',
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'style',
@@ -162,18 +187,47 @@ export default function Index() {
 				cell: (info) => info.getValue().join(', '),
 			},
 			{
+				accessorKey: 'color',
+				header: 'Color',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue().join(', '),
+			},
+			{
 				accessorKey: 'unit',
 				header: 'Unit',
 				enableColumnFilter: false,
-				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => row.pi_numbers?.join(', '),
+				// {
+				//     "pi_numbers": "PI25-0125",
+				//     "pi_cash_uuid": "HaUGbBIALoZjzIw"
+				// },
+				accessorFn: (row) => {
+					if (row?.pi_numbers == null) return '--';
+
+					const pis = row.pi_numbers?.map((pi) => pi.pi_numbers);
+					return pis.join(', ');
+				},
 				id: 'pi_numbers',
 				header: <>Pi No.</>,
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					if (info.getValue() === '--') return '--';
+
+					const { pi_numbers } = info.row.original;
+					return pi_numbers?.map((pi) => {
+						return (
+							<CustomLink
+								key={pi.pi_numbers}
+								label={pi.pi_numbers}
+								url={`/commercial/pi/${pi.pi_numbers}`}
+								openInNewTab
+							/>
+						);
+					});
+				},
 			},
 			{
 				accessorKey: 'party_name',
@@ -196,41 +250,41 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorFn: (row) => row.item_description?.join(', '),
-				id: 'item_description',
-				header: <>Item Description</>,
-				enableColumnFilter: false,
-				width: 'w-64',
-				cell: (info) => info.getValue(),
-			},
+
 			{
 				accessorKey: 'total_quantity',
-				header: 'Total Qty.',
+				header: 'Total QTY',
 				enableColumnFilter: false,
-				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_poly_quantity',
-				header: 'Poly Qty.',
+				header: 'Poly QTY',
 				enableColumnFilter: false,
-				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'company_price',
-				header: 'Company Price',
+				header: '',
+				header: (
+					<>
+						Com. Price ($) <br />
+						Per DZN
+					</>
+				),
 				enableColumnFilter: false,
-				width: 'w-32',
 				hidden: !haveAccess.includes('show_price'),
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'party_price',
-				header: 'Party Price',
+				header: (
+					<>
+						Party Price ($) <br />
+						Per DZN
+					</>
+				),
 				enableColumnFilter: false,
-				width: 'w-32',
 				hidden: !haveAccess.includes('show_price'),
 				cell: (info) => info.getValue(),
 			},
@@ -238,7 +292,8 @@ export default function Index() {
 				accessorKey: 'total_amount_without_commission',
 				header: (
 					<>
-						Total w/o <br /> com.
+						Total Price ($) <br />
+						Without com.
 					</>
 				),
 				enableColumnFilter: false,
@@ -250,12 +305,11 @@ export default function Index() {
 				accessorKey: 'total_amount_with_commission',
 				header: (
 					<>
-						Total with
-						<br /> com.
+						Total Price ($) <br />
+						with com.
 					</>
 				),
 				enableColumnFilter: false,
-
 				hidden: !haveAccess.includes('show_price'),
 				cell: (info) => info.getValue(),
 			},
@@ -263,7 +317,8 @@ export default function Index() {
 				accessorKey: 'challan_total_amount_without_commission',
 				header: (
 					<>
-						Challan Total <br /> w/o com.
+						Challan Total Price ($) <br />
+						w/o com.
 					</>
 				),
 				enableColumnFilter: false,
@@ -275,7 +330,8 @@ export default function Index() {
 				accessorKey: 'challan_total_amount_with_commission',
 				header: (
 					<>
-						Challan Total <br /> with com.
+						Challan Total Price ($) <br />
+						with com.
 					</>
 				),
 				enableColumnFilter: false,
@@ -294,7 +350,6 @@ export default function Index() {
 				accessorKey: 'carton_weight',
 				header: 'Carton Weight',
 				enableColumnFilter: false,
-				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -351,13 +406,36 @@ export default function Index() {
 			accessor={false}
 			data={data}
 			columns={columns}
+			showDateRange={false}
 			extraClass={'py-0.5'}
 			extraButton={
-				<StatusSelect
-					options={options}
-					status={status}
-					setStatus={setStatus}
-				/>
+				<div className='flex items-center gap-2'>
+					<SimpleDatePicker
+						className='h-[2.34rem] w-32'
+						key={'Date'}
+						value={date}
+						placeholder='Date'
+						onChange={(data) => {
+							setDate(data);
+						}}
+						selected={date}
+					/>
+					<SimpleDatePicker
+						className='h-[2.34rem] w-32'
+						key={'toDate'}
+						value={toDate}
+						placeholder='To'
+						onChange={(data) => {
+							setToDate(data);
+						}}
+						selected={toDate}
+					/>
+					<StatusSelect
+						options={options}
+						status={status}
+						setStatus={setStatus}
+					/>
+				</div>
 			}
 		/>
 	);

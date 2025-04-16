@@ -299,39 +299,49 @@ export default function ItemDescription({ order_description, className }) {
 				label: 'Required (mtr)',
 				value: `${total_tape_in_mtr}`,
 			},
+			// {
+			// 	label: '',
+			// 	value: '',
+			// },
+			// {
+			// 	label: 'Expected received (kg)',
+			// 	value: `${Number(
+			// 		total_tape_in_mtr /
+			// 			Number(order_description?.raw_per_kg_meter)
+			// 	).toFixed(3)}`,
+			// },
+			// {
+			// 	label: 'received (kg)',
+			// 	value: `${tape_received}`,
+			// },
 			{
-				label: '',
-				value: '',
-			},
-			{
-				label: 'Expected received (kg)',
-				value: `${Number(
+				label: 'Tape Recv. (KG)',
+				value: `${tape_received} / ${Number(
 					total_tape_in_mtr /
 						Number(order_description?.raw_per_kg_meter)
 				).toFixed(3)}`,
 			},
+			// {
+			// 	label: '',
+			// 	value: '',
+			// },
+			// {
+			// 	label: 'Expected production (kg)',
+			// 	value: `${Number(
+			// 		total_tape_in_mtr /
+			// 			parseFloat(order_description?.dyed_per_kg_meter)
+			// 	).toFixed(3)}`,
+			// },
+			// {
+			// 	label: 'production (kg)',
+			// 	value: `${Number(tape_production).toFixed(3)}`,
+			// },
 			{
-				label: 'received (kg)',
-				value: `${tape_received}`,
-			},
-			{
-				label: '',
-				value: '',
-			},
-			{
-				label: 'Expected production (kg)',
-				value: `${Number(
+				label: 'Tape Prod. (KG)',
+				value: `${Number(tape_production).toFixed(3)} / ${Number(
 					total_tape_in_mtr /
 						parseFloat(order_description?.dyed_per_kg_meter)
 				).toFixed(3)}`,
-			},
-			{
-				label: 'production (kg)',
-				value: `${Number(tape_production).toFixed(3)}`,
-			},
-			{
-				label: '',
-				value: '',
 			},
 			{
 				label: 'transfer to floor (kg)',

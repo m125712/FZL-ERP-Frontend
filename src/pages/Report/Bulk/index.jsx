@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useBulk } from '@/state/Report';
-import { format, startOfMonth, subMonths } from 'date-fns';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';

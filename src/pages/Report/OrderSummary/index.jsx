@@ -6,6 +6,7 @@ import { CustomLink, DateTime } from '@/ui';
 
 import Header from './Header';
 import Information from './Information';
+import TransposedTable from './TransposedTable';
 
 export default function index() {
 	const [order, setOrder] = useState('');
@@ -56,13 +57,17 @@ export default function index() {
 				width: 'w-32',
 				cell: (info) => {
 					const { order_description_uuid } = info.row.original;
-					return (
-						<CustomLink
-							label={info.getValue()}
-							url={`/order/details/${data?.order_number}/${order_description_uuid}`}
-							openInNewTab={true}
-						/>
-					);
+					console.log(order_description_uuid);
+
+					if (order_description_uuid)
+						return (
+							<CustomLink
+								label={info.getValue()}
+								url={`/order/details/${data?.order_number}/${order_description_uuid}`}
+								openInNewTab={true}
+							/>
+						);
+					else return info.getValue();
 				},
 			},
 			{
@@ -132,7 +137,6 @@ export default function index() {
 				id: 'total',
 				header: 'Total',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 			{
 				accessorFn: (row) => {
@@ -156,7 +160,7 @@ export default function index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div className='flex flex-col gap-2'>
+		<div className='flex flex-col gap-5'>
 			<Header
 				{...{
 					order,
@@ -164,8 +168,11 @@ export default function index() {
 				}}
 			/>
 			<Information data={data} />
+
+			<TransposedTable data={data} transformedData={transformedData} />
+
 			<ReactTable
-				title={'Summary'}
+				title={'Summary V1'}
 				data={transformedData}
 				columns={columns}
 				extraClass={'py-2'}

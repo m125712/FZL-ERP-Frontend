@@ -53,7 +53,7 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					format(row.pi_cash_created_date, 'dd MMM, yyyy'),
+					format(row.pi_cash_created_date, 'dd/MM/yy'),
 				id: 'pi_cash_created_date',
 				header: 'PI Date',
 				enableColumnFilter: false,
@@ -141,10 +141,17 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'lc_date',
+				accessorFn: (row) => format(row.lc_date, 'dd/MM/yy'),
+				id: 'lc_date',
 				header: 'LC Date',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.lc_date}
+						customizedDateFormate='dd MMM, yyyy'
+						isTime={false}
+					/>
+				),
 			},
 			{
 				accessorKey: 'file_number',
@@ -153,10 +160,17 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'lc_created_at',
+				accessorFn: (row) => format(row.lc_created_at, 'dd/MM/yy'),
+				id: 'lc_created_at',
 				header: 'File Date',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.lc_created_at}
+						customizedDateFormate='dd MMM, yyyy'
+						isTime={false}
+					/>
+				),
 			},
 		],
 		[data]

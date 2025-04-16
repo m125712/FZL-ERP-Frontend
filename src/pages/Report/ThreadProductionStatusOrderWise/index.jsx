@@ -61,7 +61,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorFn: (row) => format(row.order_created_at, 'dd MMM, yy'),
+				accessorFn: (row) => format(row.order_created_at, 'dd/MM/yy'),
 				id: 'order_created_at',
 				header: 'Created At',
 				enableColumnFilter: false,
@@ -76,7 +76,7 @@ export default function Index() {
 			{
 				accessorFn: (row) =>
 					row.order_updated_at
-						? format(row.order_updated_at, 'dd MMM, yy')
+						? format(row.order_updated_at, 'dd/MM/yy')
 						: '--',
 				id: 'order_updated_at',
 				header: 'Updated At',
@@ -104,14 +104,14 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => row.style?.join(', '),
+				accessorFn: (row) => row.style,
 				id: 'style',
 				header: 'Style',
 				enableColumnFilter: false,
 				width: 'w-24',
 			},
 			{
-				accessorFn: (row) => row.color?.join(', '),
+				accessorFn: (row) => row.color,
 				id: 'color',
 				header: 'Color',
 				width: 'w-24',
@@ -163,21 +163,8 @@ export default function Index() {
 					});
 				},
 			},
-			// {
-			// 	accessorFn: (row) =>
-			// 		format(row.swatch_approval_date, 'dd/MM/yy'),
-			// 	id: 'swatch_approval_date',
-			// 	header: 'Swatch',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<DateTime
-			// 			date={info.row.original.swatch_approval_date}
-			// 			isTime={false}
-			// 		/>
-			// 	),
-			// },
 			{
-				accessorFn: (row) => row.count_length_name?.join(', '),
+				accessorFn: (row) => row.count_length_name,
 				id: 'count',
 				header: 'Count/Length',
 				width: 'w-24',

@@ -45,14 +45,14 @@ export default function Index() {
 				),
 			},
 			{
-				accessorFn: (row) => format(row.delivery_date, 'dd MMM,yyyy'),
+				accessorFn: (row) => format(row.delivery_date, 'dd/MM/yy'),
 				id: 'delivery_date',
 				header: 'Delivery Date',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => (
 					<DateTime
-						date={info.getValue()}
+						date={info.row.original.delivery_date}
 						isTime={false}
 						customizedDateFormate='dd MMM,yyyy'
 					/>

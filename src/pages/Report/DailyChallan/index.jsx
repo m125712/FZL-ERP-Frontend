@@ -43,7 +43,7 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorFn: (row) => format(row.challan_date, 'dd MMM, yy'),
+				accessorFn: (row) => format(row.challan_date, 'dd/MM/yy'),
 				id: 'challan_date',
 				header: 'Challan Date',
 				enableColumnFilter: false,

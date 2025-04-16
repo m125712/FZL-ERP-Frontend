@@ -48,7 +48,8 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					format(row.order_created_at, 'dd MMM, yyyy'),
+					row.order_created_at &&
+					format(row.order_created_at, 'dd/MM/yy'),
 				id: 'order_created_at',
 				header: (
 					<>
@@ -61,7 +62,7 @@ export default function Index() {
 					<DateTime
 						date={info.row.original.order_created_at}
 						isTime={false}
-						customizedDateFormate='dd MMM, yyyy'
+						customizedDateFormate='dd MMM,yyyy'
 					/>
 				),
 			},
@@ -113,7 +114,8 @@ export default function Index() {
 				},
 			},
 			{
-				accessorFn: (row) => format(row.challan_date, 'dd MMM, yyyy'),
+				accessorFn: (row) =>
+					row.challan_date && format(row.challan_date, 'dd/MM/yy'),
 				id: 'challan_date',
 				header: (
 					<>
@@ -126,13 +128,14 @@ export default function Index() {
 					<DateTime
 						date={info.row.original.challan_date}
 						isTime={false}
-						customizedDateFormate='dd MMM, yyyy'
+						customizedDateFormate='dd MMM,yyyy'
 					/>
 				),
 			},
 			{
 				accessorFn: (row) =>
-					format(row.challan_delivered_date, 'dd MMM, yyyy'),
+					row.challan_delivered_date &&
+					format(row.challan_delivered_date, 'dd/MM/yy'),
 				id: 'challan_delivered_date ',
 				header: (
 					<>
@@ -195,7 +198,8 @@ export default function Index() {
 
 			{
 				accessorFn: (row) =>
-					format(row.swatch_approval_date, 'dd MMM, yyyy'),
+					row.swatch_approval_date &&
+					format(row.swatch_approval_date, 'dd/MM/yy'),
 				id: 'swatch_approval_date',
 				header: (
 					<>
@@ -464,14 +468,13 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) =>
-					format(row.order_created_at, 'dd MMM,yyyy'),
+				accessorFn: (row) => format(row.order_created_at, 'dd/MM/yy'),
 				id: 'order_created_at',
 				header: 'Created',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime
-						date={info.getValue()}
+						date={info.row.original.order_created_at}
 						isTime={false}
 						customizedDateFormate='dd MMM,yyyy'
 					/>
@@ -479,14 +482,13 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					row.updated_at &&
-					format(row.order_updated_at, 'dd MMM,yyyy'),
+					row.updated_at && format(row.order_updated_at, 'dd/MM/yy'),
 				id: 'order_updated_at',
 				header: 'Updated',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime
-						date={info.getValue()}
+						date={info.row.original.order_updated_at}
 						isTime={false}
 						customizedDateFormate='dd MMM,yyyy'
 					/>

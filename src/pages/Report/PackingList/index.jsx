@@ -39,7 +39,7 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorFn: (row) => format(row.created_at, 'dd MMM,yyyy'),
+				accessorFn: (row) => format(row.created_at, 'dd/MM/yy'),
 				id: 'created_at',
 				header: (
 					<>
@@ -50,7 +50,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime
-						date={info.getValue()}
+						date={info.row.original.created_at}
 						isTime={false}
 						customizedDateFormate='dd MMM,yyyy'
 					/>
@@ -126,7 +126,7 @@ export default function Index() {
 			{
 				accessorFn: (row) =>
 					row.challan_created_at
-						? format(row.challan_created_at, 'dd MMM,yyyy')
+						? format(row.challan_created_at, 'dd/MM/yy')
 						: '',
 				id: 'challan_created_at',
 				header: (
@@ -138,7 +138,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime
-						date={info.getValue()}
+						date={info.row.original.challan_created_at}
 						isTime={false}
 						customizedDateFormate='dd MMM,yyyy'
 					/>
@@ -171,7 +171,7 @@ export default function Index() {
 						row.item_description?.map((item) => item)
 					);
 
-					return uniqueItemDescription;
+					return [...uniqueItemDescription].join(', ');
 				},
 				id: 'item_description',
 				header: <>Item Description</>,
@@ -374,13 +374,13 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					row.updated_at && format(row.updated_at, 'dd MMM,yyyy'),
+					row.updated_at && format(row.updated_at, 'dd/MM/yy'),
 				id: 'updated_at',
 				header: 'Updated',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime
-						date={info.getValue()}
+						date={info.row.original.updated_at}
 						isTime={false}
 						customizedDateFormate='dd MMM,yyyy'
 					/>

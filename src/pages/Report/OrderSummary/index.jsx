@@ -57,13 +57,17 @@ export default function index() {
 				width: 'w-32',
 				cell: (info) => {
 					const { order_description_uuid } = info.row.original;
-					return (
-						<CustomLink
-							label={info.getValue()}
-							url={`/order/details/${data?.order_number}/${order_description_uuid}`}
-							openInNewTab={true}
-						/>
-					);
+					console.log(order_description_uuid);
+
+					if (order_description_uuid)
+						return (
+							<CustomLink
+								label={info.getValue()}
+								url={`/order/details/${data?.order_number}/${order_description_uuid}`}
+								openInNewTab={true}
+							/>
+						);
+					else return info.getValue();
 				},
 			},
 			{
@@ -164,8 +168,11 @@ export default function index() {
 				}}
 			/>
 			<Information data={data} />
+
+			<TransposedTable data={data} transformedData={transformedData} />
+
 			<ReactTable
-				title={'Summary'}
+				title={'Summary V1'}
 				data={transformedData}
 				columns={columns}
 				extraClass={'py-2'}
@@ -229,8 +236,6 @@ export default function index() {
 					</td>
 				</tr>
 			</ReactTable>
-
-			<TransposedTable data={data} transformedData={transformedData} />
 		</div>
 	);
 }

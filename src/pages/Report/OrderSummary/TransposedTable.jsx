@@ -164,13 +164,16 @@ export default function TransposedTable({ data, transformedData }) {
 			...(Array.isArray(transformedData) ? transformedData : []).map(
 				(item, index) => ({
 					accessorKey: item.item_description + index,
-					header: () => (
-						<CustomLink
-							label={item?.item_description}
-							url={`/order/details/${item?.order_number}/${item?.order_description_uuid}`}
-							openInNewTab={true}
-						/>
-					),
+					header: () =>
+						item?.order_description_uuid ? (
+							<CustomLink
+								label={item?.item_description}
+								url={`/order/details/${item?.order_number}/${item?.order_description_uuid}`}
+								openInNewTab={true}
+							/>
+						) : (
+							item?.item_description
+						),
 					enableColumnFilter: false,
 				})
 			),
@@ -185,7 +188,7 @@ export default function TransposedTable({ data, transformedData }) {
 
 	return (
 		<ReactTable
-			title={'Transposed'}
+			title={'Summary V2'}
 			data={transposed}
 			columns={transposedCol}
 			extraClass={'py-2'}

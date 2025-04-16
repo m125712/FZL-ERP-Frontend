@@ -23,7 +23,7 @@ export default function Index(data) {
 		['color', 'Color'],
 		['recipe_name', 'Shade'],
 		['size', 'Length', 'right'],
-		['quantity', 'Qty(cone)', 'right'],
+		['qty', 'Qty(cone)', 'right'],
 		['carton_quantity', 'Carton Qty', 'right'],
 	]);
 
@@ -33,9 +33,13 @@ export default function Index(data) {
 	const footerHeight = 50;
 	const { challan_entry } = data;
 	const challanGroup = [];
-	challan_entry.forEach((item) => {
-		const { item_description, style, color, size, recipe_name } = item;
+	const challanEntry = challan_entry;
+
+	challanEntry.forEach((item) => {
+		const { item_description, style, color, size, recipe_name, quantity } =
+			item;
 		let flag = false;
+
 		challanGroup.forEach((group) => {
 			if (
 				group.recipe_name === recipe_name &&
@@ -44,7 +48,6 @@ export default function Index(data) {
 				group.item_description === item_description &&
 				group.size === size
 			) {
-				group.quantity += parseInt(item.quantity) || 0;
 				flag = true;
 			}
 		});
@@ -53,21 +56,37 @@ export default function Index(data) {
 			challanGroup.push(item);
 		}
 	});
+	challanEntry.forEach((item) => {
+		const { item_description, style, color, size, recipe_name, quantity } =
+			item;
+
+		challanGroup.forEach((group) => {
+			if (
+				group.recipe_name === recipe_name &&
+				group.style === style &&
+				group.color === color &&
+				group.item_description === item_description &&
+				group.size === size
+			) {
+				group['qty'] =
+					parseInt(group['qty'] || 0, 10) +
+					parseInt(quantity || 0, 10);
+			}
+		});
+	});
 	challanGroup.map((item) => {
-		item['carton_quantity'] = Math.ceil(
-			item['quantity'] / item.cone_per_carton
-		);
+		item['carton_quantity'] = Math.ceil(item['qty'] / item.cone_per_carton);
 	});
 
-	const uniqueCounts = (challan_entry) =>
-		challan_entry?.reduce(
+	const uniqueCounts = (challanEntry) =>
+		challanEntry?.reduce(
 			(acc, item) => {
 				acc.itemDescriptions.add(item.item_description);
 				acc.styles.add(item.style);
 				acc.colors.add(item.color);
 				acc.sizes.add(item.size);
 				acc.shade.add(item.recipe_name);
-				acc.quantity += parseInt(item.quantity, 10) || 0;
+				acc.quantity += parseInt(item.qty, 10) || 0;
 				acc.carton_quantity += parseInt(item.carton_quantity, 10) || 0;
 				return acc;
 			},

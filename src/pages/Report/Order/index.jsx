@@ -9,6 +9,8 @@ import { CustomLink, DateTime, ReactSelect, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+import { REPORT_DATE_FORMATE } from '../utils';
+
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
 		return `&own_uuid=${userUUID}`;
@@ -116,7 +118,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => format(row.issue_date, 'dd/MM/yy'),
+				accessorFn: (row) => REPORT_DATE_FORMATE(row.issue_date),
 				id: 'issue_date',
 				header: 'Order Date',
 				enableColumnFilter: false,

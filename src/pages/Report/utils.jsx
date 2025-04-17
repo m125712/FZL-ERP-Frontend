@@ -1,4 +1,5 @@
 import React from 'react';
+import { format } from 'date-fns';
 
 import { ReactSelect } from '@/ui';
 
@@ -69,3 +70,5 @@ export const consumptionTypes = [
 	{ value: 'metal', label: 'Metal' },
 	{ value: 'all', label: 'All' },
 ];
+
+export const REPORT_DATE_FORMATE = (date) => format(date, 'MM/dd/yy');

@@ -1749,9 +1749,17 @@ export const reportQK = {
 	],
 
 	// * Consumption
-	consumption: (date, toDate, type, query) => [
+	itemConsumption: (date, toDate, type, query) => [
 		...reportQK.all(),
-		'consumption-report',
+		'item-consumption-report',
+		query,
+		...(date ? [date] : []),
+		...(toDate ? [toDate] : []),
+		type,
+	],
+	descConsumption: (date, toDate, type, query) => [
+		...reportQK.all(),
+		'desc-consumption-report',
 		query,
 		...(date ? [date] : []),
 		...(toDate ? [toDate] : []),

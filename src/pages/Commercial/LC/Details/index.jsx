@@ -25,7 +25,7 @@ export default function Index() {
 			<Information lc={data} />
 			<Table entries={data?.lc_entry} />
 			<UD entries={data?.lc_entry_others} />
-			<PI entries={data?.lc_entry} />
+			<PI entries={data?.pi} />
 		</div>
 	);
 }

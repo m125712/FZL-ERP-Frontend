@@ -25,13 +25,13 @@ export default function Index({ entries }) {
 				},
 			},
 			{
-				accessorKey: 'pi_bank',
+				accessorKey: 'bank_name',
 				header: 'PI Bank',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'pi_value',
+				accessorKey: 'total_amount',
 				header: 'PI Value',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),

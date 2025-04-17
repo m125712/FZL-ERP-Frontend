@@ -395,11 +395,7 @@ export default function Index() {
 			// },
 			{
 				accessorKey: 'lc_entry',
-				header: (
-					<>
-						Progression
-					</>
-				),
+				header: <>Progression</>,
 				enableColumnFilter: false,
 				cell: (info) => {
 					const value = info.getValue();
@@ -412,6 +408,30 @@ export default function Index() {
 								accessorKey: 'amount',
 								header: 'Amount',
 								enableColumnFilter: false,
+							},
+
+							{
+								accessorKey: 'received_date',
+								header: 'Received',
+								enableColumnFilter: false,
+								cell: (info) => (
+									<DateTime
+										date={info.getValue()}
+										isTime={false}
+									/>
+								),
+							},
+
+							{
+								accessorKey: 'handover_date',
+								header: 'Handover',
+								enableColumnFilter: false,
+								cell: (info) => (
+									<DateTime
+										date={info.getValue()}
+										isTime={false}
+									/>
+								),
 							},
 							{
 								accessorKey: 'ldbc_fdbc',
@@ -430,8 +450,8 @@ export default function Index() {
 								),
 							},
 							{
-								accessorKey: 'received_date',
-								header: 'Received Date',
+								accessorKey: 'document_submission_date',
+								header: 'Doc Submit',
 								enableColumnFilter: false,
 								cell: (info) => (
 									<DateTime
@@ -441,8 +461,8 @@ export default function Index() {
 								),
 							},
 							{
-								accessorKey: 'handover_date',
-								header: 'Handover Date',
+								accessorKey: 'document_receive_date',
+								header: 'Doc Receive',
 								enableColumnFilter: false,
 								cell: (info) => (
 									<DateTime
@@ -452,8 +472,8 @@ export default function Index() {
 								),
 							},
 							{
-								accessorKey: 'maturity_date',
-								header: 'Maturity Date',
+								accessorKey: 'bank_forward_date',
+								header: 'Bank Forward Date',
 								enableColumnFilter: false,
 								cell: (info) => (
 									<DateTime
@@ -476,8 +496,8 @@ export default function Index() {
 							},
 
 							{
-								accessorKey: 'bank_forward_date',
-								header: 'Bank Forward Date',
+								accessorKey: 'maturity_date',
+								header: 'Maturity',
 								enableColumnFilter: false,
 								cell: (info) => (
 									<DateTime
@@ -487,20 +507,8 @@ export default function Index() {
 								),
 							},
 							{
-								accessorKey: 'document_receive_date',
-								header: 'Document Receive Date',
-								enableColumnFilter: false,
-								cell: (info) => (
-									<DateTime
-										date={info.getValue()}
-										isTime={false}
-									/>
-								),
-							},
-
-							{
-								accessorKey: 'document_submission_date',
-								header: 'Document Submission Date',
+								accessorKey: 'payment_date',
+								header: 'Payment Date',
 								enableColumnFilter: false,
 								cell: (info) => (
 									<DateTime

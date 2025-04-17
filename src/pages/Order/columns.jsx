@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { WhatsApp } from '@/ui/Others/Button';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import {
 	CustomLink,
@@ -374,6 +375,7 @@ export const DetailsColumns = ({
 	handelUpdate,
 	haveAccess,
 	data,
+	handleWhatsApp,
 	handelMarketingCheckedStatus,
 }) => {
 	return useMemo(
@@ -470,6 +472,24 @@ export const DetailsColumns = ({
 				header: 'Unit',
 				enableColumnFilter: false,
 			},
+			// ? whats app
+			// {
+			// 	accessorKey: 'whatsapp_number',
+			// 	header: '',
+			// 	enableColumnFilter: false,
+			// 	enableSorting: false,
+			// 	// hidden: !haveAccess.includes('click_whatsapp'),
+			// 	width: 'w-8',
+			// 	cell: (info) => {
+			// 		const { marketing_name } = info.row.original;
+			// 		return (
+			// 			<WhatsApp
+			// 				onClick={() => handleWhatsApp(info.row.index)}
+			// 				disabled={marketing_name <= 0 ? true : false}
+			// 			/>
+			// 		);
+			// 	},
+			// },
 			{
 				accessorKey: 'marketing_name',
 				header: 'Marketing',
@@ -478,26 +498,26 @@ export const DetailsColumns = ({
 				cell: (info) => info.getValue(),
 			},
 			//? Need to add marketing checked?
-			// {
-			// 	accessorKey: 'is_marketing_checked',
-			// 	header: 'Marketing Checked',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => {
-			// 		const permission = haveAccess.includes(
-			// 			'click_status_marketing_checked'
-			// 		);
+			{
+				accessorKey: 'is_marketing_checked',
+				header: 'Marketing Checked',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_marketing_checked'
+					);
 
-			// 		return (
-			// 			<SwitchToggle
-			// 				disabled={!permission}
-			// 				onChange={() => {
-			// 					handelMarketingCheckedStatus(info.row.index);
-			// 				}}
-			// 				checked={info.getValue() === true}
-			// 			/>
-			// 		);
-			// 	},
-			// },
+					return (
+						<SwitchToggle
+							disabled={!permission}
+							onChange={() => {
+								handelMarketingCheckedStatus(info.row.index);
+							}}
+							checked={info.getValue() === true}
+						/>
+					);
+				},
+			},
 			{
 				accessorKey: 'buyer_name',
 				header: 'Buyer',

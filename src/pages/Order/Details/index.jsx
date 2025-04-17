@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useOrderDetailsByQuery } from '@/state/Order';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
@@ -54,6 +54,7 @@ export default function Index() {
 	);
 
 	const navigate = useNavigate();
+	const location = useLocation();
 	const info = new PageInfo('Order/Details', url, 'order__details');
 
 	// Fetching data from server
@@ -80,10 +81,23 @@ export default function Index() {
 			updatedData: {
 				is_marketing_checked:
 					data[idx]?.is_marketing_checked === true ? false : true,
-				updated_at: GetDateTime(),
+				marketing_checked_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,
 		});
+	};
+
+	const handleWhatsApp = (idx) => {
+		const val = data[idx];
+
+		const fullUrl = `${window.location.href}/${val.order_number}`;
+		let message = `Hello, please check the order: ${fullUrl}`;
+
+		const whatsappUrl = `https://web.whatsapp.com/send?phone=88${val.marketing_phone}&text=${encodeURIComponent(message)}&app_absent=0`;
+
+		window.open(whatsappUrl, '_blank'); // opens in new tab
+		// OR use this if you want to redirect in the same tab:
+		// window.location.href = whatsappUrl;
 	};
 
 	const columns = DetailsColumns({
@@ -91,6 +105,7 @@ export default function Index() {
 		haveAccess,
 		data,
 		handelMarketingCheckedStatus,
+		handleWhatsApp,
 	});
 
 	if (isLoading)

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 
 import RMOrderAgainstLog from './RMOrderAgainst';
 import RMTransferLog from './RMTransfer';
+import WarehouseNotOut from './WarehouseNotOut';
 import WarehouseOut from './WarehouseOut';
 import WarehouseRcv from './WarehouseRCV';
 
@@ -16,6 +17,8 @@ export default function Index() {
 			<WarehouseRcv />
 			<hr className='my-6 border-2 border-dashed border-secondary-content' />
 			<WarehouseOut />
+			<hr className='my-6 border-2 border-dashed border-secondary-content' />
+			<WarehouseNotOut />
 			{/* <RMOrderAgainstLog /> */}
 		</div>
 	);

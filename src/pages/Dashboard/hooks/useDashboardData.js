@@ -15,11 +15,11 @@ import {
 	useDashboardPaymentDue,
 } from '../query';
 
-const useDashboardData = (dataPreview) => {
+const useDashboardData = (dataPreview, from, to) => {
 	const { data: amount_and_doc, refetch: amountAndDocRefetch } =
 		useDashboardAmountAndDoc();
 	const { data: order_entry, refetch: orderEntryRefetch } =
-		useDashboardOrderEntry();
+		useDashboardOrderEntry(from, to);
 	const { data: payment_due, refetch: paymentDueRefetch } =
 		useDashboardPaymentDue();
 	const { data: acceptance_due, refetch: acceptanceDueRefetch } =

@@ -3,11 +3,13 @@ import createGlobalState from '@/state';
 import { dashboardQK } from './queryKeys';
 
 // Dashboard Order Entry
-export const useDashboardOrderEntry = () =>
-	createGlobalState({
-		queryKey: dashboardQK.order_entry(),
-		url: '/dashboard/order-entry',
+export const useDashboardOrderEntry = (from, to) => {
+	console.log(from, to);
+	return createGlobalState({
+		queryKey: dashboardQK.order_entry(from, to),
+		url: `/dashboard/order-entry?from=${from}&to=${to}`,
 	});
+};
 
 // Dashboard Amount and Doc
 export const useDashboardAmountAndDoc = () =>

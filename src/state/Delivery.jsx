@@ -221,3 +221,16 @@ export const useWarehouseOutLog = (
 		url: `/delivery/packing-list-warehouse-out-log?from=${from}&to=${to}`,
 		enabled,
 	});
+
+// * Warehouse Not Out log
+
+export const useWarehouseNotOutLog = (
+	from,
+	to,
+	{ enabled = false } = { enabled: false }
+) =>
+	createGlobalState({
+		queryKey: deliveryQk.warehouseNotOutLog(from, to),
+		url: `/delivery/packing-list-received-warehouse-notout-log?from=${from}&to=${to}`,
+		enabled,
+	});

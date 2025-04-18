@@ -1141,6 +1141,12 @@ export const deliveryQk = {
 		from,
 		to,
 	],
+	warehouseNotOutLog: (from, to) => [
+		...deliveryQk.all(),
+		'warehouse-not-out-log',
+		from,
+		to,
+	],
 };
 
 //Thread

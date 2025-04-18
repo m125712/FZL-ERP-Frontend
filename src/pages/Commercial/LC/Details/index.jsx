@@ -3,7 +3,9 @@ import { useCommercialLCPIByUUID } from '@/state/Commercial';
 import { useParams } from 'react-router-dom';
 
 import Information from './Information';
+import PI from './PI';
 import Table from './Table';
+import UD from './UD';
 
 export default function Index() {
 	const { lc_number } = useParams();
@@ -22,6 +24,8 @@ export default function Index() {
 		<div className='flex flex-col gap-6'>
 			<Information lc={data} />
 			<Table entries={data?.lc_entry} />
+			<UD entries={data?.lc_entry_others} />
+			<PI entries={data?.pi} />
 		</div>
 	);
 }

@@ -37,6 +37,7 @@ function Table({
 	showSearchBox = true,
 	showPagination = true,
 	showColumns = true,
+	showColumnsHeader = true,
 	showTitleOnly = false,
 	showPdf = false,
 	pdfData = null,
@@ -165,12 +166,13 @@ function Table({
 						showTitleOnly && 'mb-6',
 						containerClassName,
 						table.getPageCount() <= 1 && 'rounded-b-md'
-					)}
-				>
+					)}>
 					<table className='w-full'>
-						<TableHead
-							{...{ getHeaderGroups, getPreFilteredRowModel }}
-						/>
+						{showColumnsHeader && (
+							<TableHead
+								{...{ getHeaderGroups, getPreFilteredRowModel }}
+							/>
+						)}
 
 						<tbody className='divide-y-[1px] divide-secondary/20'>
 							{!isLoading && renderRow(hasAnyRow)}

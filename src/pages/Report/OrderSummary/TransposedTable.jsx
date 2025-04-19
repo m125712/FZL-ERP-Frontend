@@ -168,7 +168,7 @@ export default function TransposedTable({ data, transformedData }) {
 						item?.order_description_uuid ? (
 							<CustomLink
 								label={item?.item_description}
-								url={`/order/details/${item?.order_number}/${item?.order_description_uuid}`}
+								url={`/order/details/${data?.order_number}/${item?.order_description_uuid}`}
 								openInNewTab={true}
 							/>
 						) : (

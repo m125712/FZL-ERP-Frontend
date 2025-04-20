@@ -130,6 +130,13 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'warehouse_received_by_name',
+				header: 'Received By',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'challan_number',
 				header: 'Challan',
 				width: 'w-36',

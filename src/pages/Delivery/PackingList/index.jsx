@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useDeliveryChallan,
 	useDeliveryPackingList,
@@ -21,6 +22,7 @@ import PageInfo from '@/util/PageInfo';
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
+	const { user } = useAuth();
 	const [status, setStatus] = useState('pending');
 	const options = [
 		{ value: 'all', label: 'All' },
@@ -99,7 +101,8 @@ export default function Index() {
 							type='button'
 							className='btn btn-accent btn-sm font-semibold text-white shadow-md'
 							disabled={pdfLoading}
-							onClick={() => handlePdf(info.row.index)}>
+							onClick={() => handlePdf(info.row.index)}
+						>
 							<BookOpen />
 						</button>
 					);
@@ -191,6 +194,13 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'warehouse_received_by_name',
+				header: 'Received By',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'challan_number',
 				header: 'Challan',
 				width: 'w-36',
@@ -251,7 +261,18 @@ export default function Index() {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
-
+			{
+				accessorKey: 'gate_pass_by_name',
+				header: (
+					<span>
+						Warehouse <br />
+						Out By
+					</span>
+				),
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'party_name',
 				header: 'Party',
@@ -395,6 +416,7 @@ export default function Index() {
 					data[idx]?.is_warehouse_received === true
 						? null
 						: GetDateTime(),
+				warehouse_received_by: user.uuid,
 				updated_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,
@@ -413,6 +435,7 @@ export default function Index() {
 				gate_pass: data[idx]?.gate_pass === 1 ? 0 : 1,
 				gate_pass_date:
 					data[idx]?.gate_pass === 1 ? null : GetDateTime(),
+				gate_pass_by: user.uuid,
 				updated_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,

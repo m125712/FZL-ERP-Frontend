@@ -130,6 +130,13 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'warehouse_received_by_name',
+				header: 'Received By',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'challan_number',
 				header: 'Challan',
 				width: 'w-36',
@@ -159,7 +166,18 @@ export default function Index() {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
-
+			{
+				accessorKey: 'gate_pass_by_name',
+				header: (
+					<span>
+						Warehouse <br />
+						Out By
+					</span>
+				),
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'party_name',
 				header: 'Party',

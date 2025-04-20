@@ -2053,7 +2053,7 @@ export const PI_CASH_RECEIVE_SCHEMA = {
 
 export const PI_CASH_RECEIVE_NULL = {
 	uuid: null,
-	amount: 0,
+	amount: null,
 	remarks: '',
 };
 

@@ -7,6 +7,8 @@ import { useAccess } from '@/hooks';
 import ReactTable from '@/components/Table';
 import { CustomLink, DateTime, SimpleDatePicker, StatusButton } from '@/ui';
 
+import { REPORT_DATE_FORMATE } from '../utils';
+
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
 		return `own_uuid=${userUUID}`;
@@ -45,7 +47,7 @@ export default function Index() {
 				),
 			},
 			{
-				accessorFn: (row) => format(row.delivery_date, 'dd/MM/yy'),
+				accessorFn: (row) => REPORT_DATE_FORMATE(row.delivery_date),
 				id: 'delivery_date',
 				header: 'Delivery Date',
 				enableColumnFilter: false,

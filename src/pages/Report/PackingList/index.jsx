@@ -60,15 +60,13 @@ export default function Index() {
 				accessorKey: 'packing_number',
 				header: 'Packing List',
 				enableColumnFilter: true,
-				cell: (info) => {
-					return (
-						<CustomLink
-							label={info.getValue()}
-							url={`/delivery/packing-list/${info.row.original.uuid}`}
-							openInNewTab={false}
-						/>
-					);
-				},
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/delivery/packing-list/${info.row.original.uuid}`}
+						openInNewTab={false}
+					/>
+				),
 			},
 			{
 				accessorKey: 'order_number',

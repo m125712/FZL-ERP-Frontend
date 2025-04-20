@@ -80,16 +80,39 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'item_description',
+				accessorFn: (row) => {
+					const { item_description } = row;
+					const item =
+						item_description
+							.map((item) => item.item_description)
+							.join(', ') || '';
+
+					if (item.length > 0) return item;
+					return '--';
+				},
+				id: 'item_description',
 				header: 'Item Description',
 				enableColumnFilter: true,
-				cell: (info) => (
-					<CustomLink
-						label={info.getValue()}
-						url={`/order/details/${info.row.original.order_number}/${info.row.original.order_description_uuid}`}
-						openInNewTab={true}
-					/>
-				),
+				cell: ({ row }) => {
+					const { order_number, item_description } = row.original;
+
+					let links = [];
+
+					item_description.forEach((item) => {
+						links.push({
+							label: item.item_description,
+							url: `/order/details/${order_number}/${item.order_description_uuid}`,
+						});
+					});
+					return links.map((link, index) => (
+						<CustomLink
+							key={index}
+							label={link.label}
+							url={link.url}
+							showCopyButton={false}
+						/>
+					));
+				},
 			},
 			{
 				accessorKey: 'item_name',

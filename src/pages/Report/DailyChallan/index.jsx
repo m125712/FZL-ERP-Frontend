@@ -9,7 +9,7 @@ import { CustomLink, DateTime, LinkWithCopy, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
-import { ProductionStatus } from '../utils';
+import { ProductionStatus, REPORT_DATE_FORMATE } from '../utils';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
@@ -43,7 +43,7 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorFn: (row) => format(row.challan_date, 'dd/MM/yy'),
+				accessorFn: (row) => REPORT_DATE_FORMATE(row.challan_date),
 				id: 'challan_date',
 				header: 'Challan Date',
 				enableColumnFilter: false,

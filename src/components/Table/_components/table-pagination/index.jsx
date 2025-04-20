@@ -21,9 +21,7 @@ const TablePagination = ({
 			<div className='flex items-center justify-between'>
 				<div>
 					<div className='flex items-center gap-2'>
-						<span className='text-sm text-primary'>
-							Rows per page:
-						</span>
+						<span className='text-sm text-primary'>Rows/Page</span>
 						<select
 							className='max-w-x select select-secondary select-sm border-secondary/30 focus:border-secondary/30 focus:outline-base-300'
 							value={pageSize}

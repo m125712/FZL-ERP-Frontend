@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
+import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { CustomLink, DateTime, EditDelete, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
@@ -60,136 +61,29 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'lc_number',
-				header: 'LC Number',
-				enableColumnFilter: false,
-				cell: (info) => {
-					const { uuid } = info.row.original;
-					const url = `/commercial/lc/details/${uuid}`;
-					return (
-						<CustomLink
-							label={info.getValue()}
-							url={url}
-							openInNewTab={true}
-						/>
-					);
-				},
-			},
-			{
-				accessorKey: 'pi_ids',
-				header: 'PI ID',
-				width: 'w-28',
-				enableColumnFilter: false,
-				cell: (info) => {
-					return info?.getValue()?.map((piId) => {
-						if (piId === 'PI-') return '--';
-						const url = `/commercial/pi/${piId}`;
-						return (
-							<CustomLink
-								label={piId}
-								url={url}
-								openInNewTab={true}
-							/>
-						);
-					});
-				},
-			},
-			{
-				accessorKey: 'total_value',
-				header: 'Value ($)',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue() && info.getValue().toFixed(2),
-			},
-			{
-				accessorKey: 'file_number',
-				header: 'File No',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'lc_date',
-				header: 'LC Date',
+				accessorKey: 'is_rtgs',
+				header: 'RTGS',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
+					<StatusButton size='btn-xs' value={info.getValue()} />
 				),
 			},
 			{
-				accessorKey: 'payment_value',
-				header: 'Payment Value',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'payment_date',
-				header: 'Payment Date',
+				accessorKey: 'problematical',
+				header: 'Problematic',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
+					<StatusButton size='btn-xs' value={info.getValue()} />
 				),
 			},
 			{
-				accessorKey: 'ldbc_fdbc',
-				header: 'LDBC/FDBC',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'acceptance_date',
-				header: (
-					<>
-						Acceptance <br />
-						Date
-					</>
-				),
+				accessorKey: 'epz',
+				header: 'EPZ',
 				enableColumnFilter: false,
 				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
+					<StatusButton size='btn-xs' value={info.getValue()} />
 				),
 			},
-			{
-				accessorKey: 'maturity_date',
-				header: (
-					<>
-						Maturity <br />
-						Date
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
-				),
-			},
-			{
-				accessorKey: 'pi_number',
-				header: 'PI Number',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'lc_value',
-				header: 'LC Value',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'commercial_executive',
-				header: (
-					<>
-						Commercial <br />
-						Executive
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			// {
-			// 	accessorKey: 'party_bank',
-			// 	header: 'Party Bank',
-			// 	enableColumnFilter: false,
-			// 	width: 'w-32',
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'production_complete',
 				header: (
@@ -217,10 +111,85 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'handover_date',
+				accessorKey: 'file_number',
+				header: 'File No',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				width: 'w-32',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'lc_number',
+				header: 'LC Number',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { uuid } = info.row.original;
+					const url = `/commercial/lc/details/${uuid}`;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={url}
+							openInNewTab={true}
+						/>
+					);
+				},
+			},
+
+			{
+				accessorKey: 'lc_date',
+				header: 'LC Date',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
+			},
+			{
+				accessorFn: (row) => {
+					if (row.is_old_pi === 1) {
+						return row.lc_value;
+					} else {
+						return row.total_value;
+					}
+				},
+				header: 'LC Value ($)',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue() && info.getValue().toFixed(2),
+			},
+			{
+				accessorKey: 'pi_ids',
+				header: 'PI ID',
+				width: 'w-28',
+				enableColumnFilter: false,
+				cell: (info) => {
+					return info?.getValue()?.map((piId) => {
+						if (piId === 'PI-') return '--';
+						const url = `/commercial/pi/${piId}`;
+						return (
+							<CustomLink
+								label={piId}
+								url={url}
+								openInNewTab={true}
+							/>
+						);
+					});
+				},
+			},
+			{
+				accessorKey: 'export_lc_number',
+				header: 'Export LC Number',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'export_lc_date',
 				header: (
 					<>
-						Handover <br />
+						Export LC <br />
 						Date
 					</>
 				),
@@ -228,6 +197,39 @@ export default function Index() {
 				cell: (info) => (
 					<DateTime date={info.getValue()} isTime={false} />
 				),
+			},
+
+			{
+				accessorKey: 'up_date',
+				header: (
+					<>
+						Up <br />
+						Date
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
+			},
+			{
+				accessorKey: 'up_number',
+				header: 'Up Number',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'commercial_executive',
+				header: 'Commercial Executive',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'party_bank',
+				header: 'Party Bank',
+				width: 'w-32',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'shipment_date',
@@ -256,18 +258,6 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'ud_no',
-				header: 'UD No',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'ud_received',
-				header: 'UD Received',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'at_sight',
 				header: 'At Sight',
 				enableColumnFilter: false,
@@ -292,21 +282,266 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'problematical',
-				header: 'Problematic',
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
-				),
+				cell: (info) => info.getValue(),
 			},
+
+			// {
+			// 	accessorKey: 'payment_value',
+			// 	header: 'Payment Value',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
+			// {
+			// 	accessorKey: 'payment_date',
+			// 	header: 'Payment Date',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<DateTime date={info.getValue()} isTime={false} />
+			// 	),
+			// },
+			// {
+			// 	accessorKey: 'ldbc_fdbc',
+			// 	header: 'LDBC/FDBC',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
+			// {
+			// 	accessorKey: 'acceptance_date',
+			// 	header: (
+			// 		<>
+			// 			Acceptance <br />
+			// 			Date
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<DateTime date={info.getValue()} isTime={false} />
+			// 	),
+			// },
+			// {
+			// 	accessorKey: 'maturity_date',
+			// 	header: (
+			// 		<>
+			// 			Maturity <br />
+			// 			Date
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<DateTime date={info.getValue()} isTime={false} />
+			// 	),
+			// },
+
+			// {
+			// 	accessorKey: 'pi_number',
+			// 	header: 'PI Number',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
+			// // {
+			// // 	accessorKey: 'lc_value',
+			// // 	header: 'LC Value',
+			// // 	enableColumnFilter: false,
+			// // 	cell: (info) => info.getValue(),
+			// // },
+
+			// // {
+			// // 	accessorKey: 'commercial_executive',
+			// // 	header: (
+			// // 		<>
+			// // 			Commercial <br />
+			// // 			Executive
+			// // 		</>
+			// // 	),
+			// // 	enableColumnFilter: false,
+			// // 	cell: (info) => info.getValue(),
+			// // },
+			// // {
+			// // 	accessorKey: 'party_bank',
+			// // 	header: 'Party Bank',
+			// // 	enableColumnFilter: false,
+			// // 	width: 'w-32',
+			// // 	cell: (info) => info.getValue(),
+			// // },
+
+			// {
+			// 	accessorKey: 'handover_date',
+			// 	header: (
+			// 		<>
+			// 			Handover <br />
+			// 			Date
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<DateTime date={info.getValue()} isTime={false} />
+			// 	),
+			// },
+
+			// {
+			// 	accessorKey: 'ud_no',
+			// 	header: 'UD No',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
+			// {
+			// 	accessorKey: 'ud_received',
+			// 	header: 'UD Received',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
-				accessorKey: 'epz',
-				header: 'EPZ',
+				accessorKey: 'lc_entry',
+				header: <>Progression</>,
 				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
-				),
+				cell: (info) => {
+					const value = info.getValue();
+
+					// Check if value is an object or array
+					if (Array.isArray(value)) {
+						// Define columns for the nested table
+						const nestedColumns = [
+							{
+								accessorKey: 'amount',
+								header: 'Amount',
+								enableColumnFilter: false,
+							},
+
+							{
+								accessorKey: 'received_date',
+								header: 'Received',
+								enableColumnFilter: false,
+								cell: (info) => (
+									<DateTime
+										date={info.getValue()}
+										isTime={false}
+									/>
+								),
+							},
+
+							{
+								accessorKey: 'handover_date',
+								header: 'Handover',
+								enableColumnFilter: false,
+								cell: (info) => (
+									<DateTime
+										date={info.getValue()}
+										isTime={false}
+									/>
+								),
+							},
+							{
+								accessorKey: 'ldbc_fdbc',
+								header: 'Value',
+								enableColumnFilter: false,
+							},
+							{
+								accessorKey: 'payment_date',
+								header: 'Payment Date',
+								enableColumnFilter: false,
+								cell: (info) => (
+									<DateTime
+										date={info.getValue()}
+										isTime={false}
+									/>
+								),
+							},
+							{
+								accessorKey: 'document_submission_date',
+								header: 'Doc Submit',
+								enableColumnFilter: false,
+								cell: (info) => (
+									<DateTime
+										date={info.getValue()}
+										isTime={false}
+									/>
+								),
+							},
+							{
+								accessorKey: 'document_receive_date',
+								header: 'Doc Receive',
+								enableColumnFilter: false,
+								cell: (info) => (
+									<DateTime
+										date={info.getValue()}
+										isTime={false}
+									/>
+								),
+							},
+							{
+								accessorKey: 'bank_forward_date',
+								header: 'Bank Forward Date',
+								enableColumnFilter: false,
+								cell: (info) => (
+									<DateTime
+										date={info.getValue()}
+										isTime={false}
+									/>
+								),
+							},
+
+							{
+								accessorKey: 'acceptance_date',
+								header: 'Acceptance Date',
+								enableColumnFilter: false,
+								cell: (info) => (
+									<DateTime
+										date={info.getValue()}
+										isTime={false}
+									/>
+								),
+							},
+
+							{
+								accessorKey: 'maturity_date',
+								header: 'Maturity',
+								enableColumnFilter: false,
+								cell: (info) => (
+									<DateTime
+										date={info.getValue()}
+										isTime={false}
+									/>
+								),
+							},
+							{
+								accessorKey: 'payment_date',
+								header: 'Payment Date',
+								enableColumnFilter: false,
+								cell: (info) => (
+									<DateTime
+										date={info.getValue()}
+										isTime={false}
+									/>
+								),
+							},
+							{
+								accessorKey: 'payment_value',
+								header: 'Payment Value',
+								enableColumnFilter: false,
+							},
+						];
+
+						return (
+							<div>
+								<ReactTableTitleOnly
+									data={value}
+									columns={nestedColumns}
+									// showColumnsHeader={false}
+								/>
+							</div>
+						);
+					}
+
+					// Handle non-array values
+					return typeof value === 'object' && value !== null
+						? JSON.stringify(value) // Convert object to string for display
+						: value;
+				},
 			},
+
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
@@ -325,12 +560,6 @@ export default function Index() {
 				header: 'Updated At',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
-			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 		],
 		[data]

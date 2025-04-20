@@ -234,32 +234,32 @@ export default function Information({ lc }) {
 		];
 
 		const others = [
-			{
-				label: 'UD No.',
-				value: lc_entry_others.map(({ ud_no }) => ud_no).join(', '),
-			},
-			{
-				label: 'UD Received',
-				value: lc_entry_others
-					.map(({ ud_received }) =>
-						format(new Date(ud_received), dateType)
-					)
-					.join(', '),
-			},
-			{
-				label: 'UP Number',
-				value: lc_entry_others
-					.map(({ up_number }) => up_number)
-					.join(', '),
-			},
-			{
-				label: 'UP Number Received',
-				value: lc_entry_others
-					.map(({ up_number_updated_at }) =>
-						format(new Date(up_number_updated_at), dateType)
-					)
-					.join(', '),
-			},
+			// {
+			// 	label: 'UD No.',
+			// 	value: lc_entry_others.map(({ ud_no }) => ud_no).join(', '),
+			// },
+			// {
+			// 	label: 'UD Received',
+			// 	value: lc_entry_others
+			// 		.map(({ ud_received }) =>
+			// 			format(new Date(ud_received), dateType)
+			// 		)
+			// 		.join(', '),
+			// },
+			// {
+			// 	label: 'UP Number',
+			// 	value: lc_entry_others
+			// 		.map(({ up_number }) => up_number)
+			// 		.join(', '),
+			// },
+			// {
+			// 	label: 'UP Number Received',
+			// 	value: lc_entry_others
+			// 		.map(({ up_number_updated_at }) =>
+			// 			format(new Date(up_number_updated_at), dateType)
+			// 		)
+			// 		.join(', '),
+			// },
 			{
 				label: 'At Sight',
 				value: at_sight,

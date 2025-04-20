@@ -140,6 +140,10 @@ export default function Index({ entries }) {
 	);
 
 	return (
-		<ReactTableTitleOnly title='Details' data={entries} columns={columns} />
+		<ReactTableTitleOnly
+			title='Progression'
+			data={entries}
+			columns={columns}
+		/>
 	);
 }

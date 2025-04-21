@@ -25,17 +25,7 @@ export default function SingleInformation({
 	const [marketingCheckedStatus, setMarketingCheckedStatus] = useState(
 		order.is_marketing_checked
 	);
-	const handelMarketingChecked = async () => {
-		await updateData.mutateAsync({
-			url: `/zipper/order/description/update-is-marketing-checked/by/${order?.order_description_uuid}`,
-			updatedData: {
-				is_marketing_checked:
-					marketingCheckedStatus === true ? false : true,
-				updated_at: GetDateTime(),
-			},
-			isOnCloseNeeded: false,
-		});
-	};
+
 	useEffect(() => {
 		order?.order_entry.map((item, i) => {
 			if (
@@ -54,6 +44,18 @@ export default function SingleInformation({
 		const permission = haveAccess.includes(
 			'click_status_marketing_checked'
 		);
+		const handelMarketingChecked = async () => {
+			await updateData.mutateAsync({
+				url: `/zipper/order/description/update-is-marketing-checked/by/${order?.order_description_uuid}`,
+				updatedData: {
+					is_marketing_checked:
+						marketingCheckedStatus === true ? false : true,
+					marketing_checked_at:
+						marketingCheckedStatus === true ? null : GetDateTime(),
+				},
+				isOnCloseNeeded: false,
+			});
+		};
 		return [
 			<StatusButton
 				className={'border-0'}
@@ -67,12 +69,11 @@ export default function SingleInformation({
 				size='btn-xs md:btn-sm'
 				value={checkSwatch}
 			/>,
-			//? Need to add marketing checked?
 			<div className='flex items-center gap-2'>
 				<SwitchToggle
 					onChange={() => {
 						handelMarketingChecked();
-						setMarketingCheckedStatus(!marketingCheckedStatus);
+						setMarketingCheckedStatus((prevStatus) => !prevStatus);
 					}}
 					checked={marketingCheckedStatus}
 					disabled={!permission}
@@ -237,8 +238,7 @@ export function OrderInformation({
 				key='pdf'
 				type='button'
 				className='btn btn-accent btn-sm rounded-badge'
-				onClick={handelPdfDownload}
-			>
+				onClick={handelPdfDownload}>
 				<PDF className='w-4' /> PDF
 			</button>,
 			<div className='flex items-center gap-2'>
@@ -258,8 +258,7 @@ export function OrderInformation({
 			title='Order Information'
 			buttons={renderButtons()}
 			// selector={renderSelector()}
-			className={'mb-8'}
-		>
+			className={'mb-8'}>
 			<div className='grid grid-cols-1 bg-base-100 md:grid-cols-2 md:gap-8'>
 				<RenderTable
 					className={

@@ -1,17 +1,18 @@
 import { useMemo } from 'react';
 
+
+
 import { WhatsApp } from '@/ui/Others/Button';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import {
-	CustomLink,
-	DateTime,
-	EditDelete,
-	LinkWithCopy,
-	Progress,
-	StatusButton,
-} from '@/ui';
+import { CustomLink, DateTime, EditDelete, LinkWithCopy, Progress, StatusButton } from '@/ui';
+
+
 
 import { DEFAULT_COLUMNS } from '@/util/Table/DefaultColumns';
+
+
+
+
 
 export const BuyerColumns = ({
 	handelUpdate,
@@ -517,6 +518,12 @@ export const DetailsColumns = ({
 						/>
 					);
 				},
+			},
+			{
+				accessorKey: 'marketing_checked_at',
+				header: 'Marketing Checked At',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'buyer_name',

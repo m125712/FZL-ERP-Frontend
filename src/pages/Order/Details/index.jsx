@@ -81,7 +81,7 @@ export default function Index() {
 			updatedData: {
 				is_marketing_checked:
 					data[idx]?.is_marketing_checked === true ? false : true,
-				marketing_checked_at: GetDateTime(),
+				marketing_checked_at:data[idx]?.is_marketing_checked === true ? null : GetDateTime(),
 			},
 			isOnCloseNeeded: false,
 		});

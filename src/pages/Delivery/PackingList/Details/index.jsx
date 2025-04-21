@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 
 import Pdf2 from '@/components/Pdf/PackingListSticker';
 import Pdf from '@/components/Pdf/ThreadPackeListSticker';
+import PdfV2 from '@/components/Pdf/ThreadPackeListStickerV2';
+import PDF from '@/ui/Others/PDF';
 
 import Information from './Information';
 import Table from './Table';
@@ -33,6 +35,7 @@ export default function Index() {
 	// ! FOR TESTING
 	// ! FOR TESTING
 	const [data3, setData2] = useState('');
+	const [data4, setData4] = useState('');
 
 	useEffect(() => {
 		if (data && data?.packing_list_entry) {
@@ -42,6 +45,9 @@ export default function Index() {
 			) {
 				Pdf(data)?.getDataUrl((dataUrl) => {
 					setData2(dataUrl);
+				});
+				PdfV2(data)?.getDataUrl((dataUrl) => {
+					setData4(dataUrl);
 				});
 			} else {
 				Pdf2(data)?.getDataUrl((dataUrl) => {
@@ -61,10 +67,19 @@ export default function Index() {
 				src={data2}
 				className='h-[40rem] w-full rounded-md border-none'
 			/> */}
-			<iframe
-				src={data3}
-				className='h-[40rem] w-full rounded-md border-none'
-			/>
+			<div className='flex'>
+				<iframe
+					src={data3}
+					className='h-[40rem] w-full rounded-md border-none'
+				/>
+				{(data?.item_for === 'thread' ||
+					data?.item_for === 'sample_thread') && (
+					<iframe
+						src={data4}
+						className='h-[40rem] w-full rounded-md border-none'
+					/>
+				)}
+			</div>
 			<Information packing_list={data} />
 			<Table packing_list_entry={data?.packing_list_entry} data={data} />
 		</div>

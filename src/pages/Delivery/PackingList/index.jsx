@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import Pdf2 from '@/components/Pdf/PackingListSticker';
-import Pdf from '@/components/Pdf/ThreadPackeListSticker';
+import Pdf from '@/components/Pdf/ThreadPackeListStickerV2';
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy, StatusSelect } from '@/ui';

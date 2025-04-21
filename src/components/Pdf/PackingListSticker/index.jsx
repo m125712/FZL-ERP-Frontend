@@ -66,6 +66,15 @@ export default function Index(data) {
 				alignment: 'center',
 				colSpan: 6,
 			},
+
+			{
+				// text: `C/N: #${data?.packing_list_wise_rank}, ${data?.packing_number}`,
+				text: `${data?.packing_number}`,
+				bold: true,
+				fontSize: DEFAULT_FONT_SIZE + 32,
+				alignment: 'center',
+				colSpan: 6,
+			},
 			{
 				table: {
 					// headerRows: 1,
@@ -82,11 +91,11 @@ export default function Index(data) {
 							},
 							{},
 							{},
-
 							{
 								text: `C/N: #${data?.packing_list_wise_rank}, ${data?.packing_number}`,
 								bold: true,
 								fontSize: DEFAULT_FONT_SIZE - 2,
+								alignment: 'center',
 								colSpan: 3,
 							},
 							{},

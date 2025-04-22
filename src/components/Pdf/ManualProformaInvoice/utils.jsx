@@ -62,7 +62,7 @@ export const getPageHeader = (data) => {
 			],
 			[
 				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
-				{ text: data?.party_address },
+				{ text: data?.factory_address },
 
 				{ text: 'Address', bold: true, color: PRIMARY_COLOR },
 				{ text: data?.bank_address },

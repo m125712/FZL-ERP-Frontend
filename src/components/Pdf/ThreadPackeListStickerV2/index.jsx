@@ -58,17 +58,20 @@ export default function Index(data) {
 			},
 			{
 				table: {
-					widths: ['*', '*', '*'],
+					widths: [17, 30, 90, 40],
 					body: [
 						[
 							{
 								text: Array.from(subStreat).join(', '),
 								bold: true,
 							},
+
 							{
 								text: Array.from(count).join(', '),
 								bold: true,
+								colSpan: 2,
 							},
+							{},
 							{
 								text: getDateFormate(data?.created_at),
 								bold: true,
@@ -78,24 +81,27 @@ export default function Index(data) {
 							{
 								text: data?.order_number,
 								bold: true,
-							},
-							{
-								text: `${Array.from(color).join(', ')}`,
-								bold: true,
 								colSpan: 2,
 							},
 							{},
-						],
-
-						[
 							{
-								text: Array.from(length).join(', ') + ' M',
+								text: `${Array.from(color).join(', ')}`,
 								bold: true,
 							},
 							{
 								text: `${Array.from(shade).join(', ')}`,
 								bold: true,
 							},
+						],
+
+						[
+							{
+								text: Array.from(length).join(', ') + ' M',
+								bold: true,
+								colSpan: 3,
+							},
+							{},
+							{},
 							{
 								text: `${numberOfCone} Cone`,
 								bold: true,
@@ -106,9 +112,10 @@ export default function Index(data) {
 							{
 								text: `${Array.from(style).join(', ')}`,
 								bold: true,
-								colSpan: 3,
+								colSpan: 4,
 								fontSize: DEFAULT_FONT_SIZE - 1,
 							},
+							{},
 							{},
 							{},
 						],

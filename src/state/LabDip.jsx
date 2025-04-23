@@ -7,10 +7,10 @@ export const useLabDipDashboard = () =>
 		queryKey: labDipQK.dashboard(),
 		url: '/lab-dip/info-recipe-dashboard',
 	});
-export const useLabDipRecipe = () =>
+export const useLabDipRecipe = (status) =>
 	createGlobalState({
-		queryKey: labDipQK.recipe(),
-		url: '/lab-dip/recipe',
+		queryKey: labDipQK.recipe(status),
+		url: `/lab-dip/recipe?type=${status}`,
 	});
 
 export const useLabDipRecipeByUUID = (uuid) =>

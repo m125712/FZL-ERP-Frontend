@@ -382,7 +382,7 @@ export const labDipQK = {
 	//* dashboard
 	dashboard: () => [...labDipQK.all(), 'dashboard'],
 	//* recipe
-	recipe: () => [...labDipQK.all(), 'recipe'],
+	recipe: (status) => [...labDipQK.all(), 'recipe', status],
 	recipeByUUID: (uuid) => [...labDipQK.recipe(), uuid],
 	recipeDetailsByUUID: (uuid) => [...labDipQK.recipe(), 'details', uuid],
 

@@ -109,8 +109,9 @@ export default function Index(data) {
 	});
 	const thread = sortedThreadData.map((item) => {
 		const rowSpan = sortedThreadData.filter(
-			(data) => data.order === item.order
+			(data) => data.order_number === item.order_number
 		).length;
+		console.log('rowSpan', rowSpan);
 		const sizeRowSpan = sortedThreadData.filter(
 			(data) =>
 				data.size === item.size &&

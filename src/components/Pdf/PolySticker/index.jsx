@@ -169,8 +169,9 @@ export default function Index(data) {
 							},
 							{
 								text: val,
-								fontSize: DEFAULT_FONT_SIZE - 1,
+								fontSize: DEFAULT_FONT_SIZE + 1,
 								alignment: 'right',
+								bold: true,
 							},
 							{
 								text: `${data.quantity}`,

@@ -26,10 +26,10 @@ export const useLabDipRecipeDetailsByUUID = (uuid) =>
 	});
 
 // * Info
-export const useLabDipInfo = () =>
+export const useLabDipInfo = (status) =>
 	createGlobalState({
-		queryKey: labDipQK.info(),
-		url: '/lab-dip/info',
+		queryKey: labDipQK.info(status),
+		url: `/lab-dip/info?type=${status}`,
 	});
 
 export const useLabDipInfoByUUID = (uuid) =>

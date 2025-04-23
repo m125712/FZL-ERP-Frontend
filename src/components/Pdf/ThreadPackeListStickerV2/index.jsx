@@ -58,7 +58,7 @@ export default function Index(data) {
 			},
 			{
 				table: {
-					widths: [17, 30, 90, 50],
+					widths: [17, 30, 100, 55],
 					body: [
 						[
 							{
@@ -121,7 +121,14 @@ export default function Index(data) {
 						],
 					],
 				},
-				layout: 'noBorders',
+				layout: {
+					hLineWidth: () => 0,
+					vLineWidth: () => 0,
+					paddingLeft: () => 0,
+					paddingRight: () => 0,
+					paddingTop: () => 2,
+					paddingBottom: () => 2,
+				},
 			}
 		);
 

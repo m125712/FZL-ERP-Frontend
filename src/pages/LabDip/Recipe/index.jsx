@@ -1,16 +1,25 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLabDipRecipe } from '@/state/LabDip';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import { DateTime, EditDelete, LinkWithCopy, StatusSelect } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const { data, isLoading, isError, url, updateData } = useLabDipRecipe();
+	const [status, setStatus] = useState('bulk');
+	const options = [
+		{ label: 'TXP', value: 'txp' },
+		{ label: 'SSP', value: 'ssp' },
+		{ label: 'ZS', value: 'zipper_sample' },
+		{ label: 'Bulk ', value: 'bulk' },
+		{ label: 'Others', value: 'others' },
+	];
+	const { data, isLoading, isError, url, updateData } =
+		useLabDipRecipe(status);
 	const navigate = useNavigate();
 	const info = new PageInfo('Lab Dip/Recipe', url, 'lab_dip__recipe');
 	const haveAccess = useAccess('lab_dip__recipe');
@@ -147,6 +156,13 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				handelAdd={handelAdd}
+				extraButton={
+					<StatusSelect
+						status={status}
+						setStatus={setStatus}
+						options={options}
+					/>
+				}
 			/>
 		</div>
 	);

@@ -387,7 +387,7 @@ export const labDipQK = {
 	recipeDetailsByUUID: (uuid) => [...labDipQK.recipe(), 'details', uuid],
 
 	//* info
-	info: () => [...labDipQK.all(), 'info'],
+	info: (status) => [...labDipQK.all(), 'info', status],
 	infoByUUID: (uuid) => [...labDipQK.info(), uuid],
 	//* info Details
 	infoByDetails: (uuid) => [...labDipQK.info(), 'details', uuid],

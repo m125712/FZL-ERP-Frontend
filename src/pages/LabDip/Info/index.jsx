@@ -1,17 +1,31 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLabDipInfo } from '@/state/LabDip';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, EditDelete, LinkWithCopy, Status } from '@/ui';
+import {
+	CustomLink,
+	DateTime,
+	EditDelete,
+	LinkWithCopy,
+	Status,
+	StatusSelect,
+} from '@/ui';
 
 import { cn } from '@/lib/utils';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const { data, isLoading, url, updateData } = useLabDipInfo();
+	const [status, setStatus] = useState('zipper_sample');
+	const options = [
+		{ value: 'zipper_sample', label: 'Zipper Sample' },
+		{ value: 'zipper_bulk', label: 'Zipper Bulk' },
+		{ value: 'thread_sample', label: 'Thread Sample' },
+		{ value: 'thread_bulk', label: 'Thread Bulk' },
+	];
+	const { data, isLoading, url, updateData } = useLabDipInfo(status);
 	const navigate = useNavigate();
 	const info = new PageInfo('Lab Dip/Card', url, 'lab_dip__info');
 	const haveAccess = useAccess('lab_dip__info');
@@ -279,6 +293,13 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				handelAdd={handelAdd}
+				extraButton={
+					<StatusSelect
+						status={status}
+						setStatus={setStatus}
+						options={options}
+					/>
+				}
 			/>
 		</div>
 	);

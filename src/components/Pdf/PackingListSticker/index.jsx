@@ -78,7 +78,7 @@ export default function Index(data) {
 			{
 				table: {
 					// headerRows: 1,
-					widths: [40, 50, 50, 30, 30, 20],
+					widths: [40, 50, 50, 35, 30, 15],
 					body: [
 						[
 							{
@@ -229,7 +229,11 @@ export default function Index(data) {
 									text,
 									style: nodeItem.cellStyle,
 									alignment: nodeItem.alignment,
-									fontSize: DEFAULT_FONT_SIZE - 2,
+									fontSize:
+										field === 'size'
+											? DEFAULT_FONT_SIZE - 1
+											: DEFAULT_FONT_SIZE - 2,
+									bold: field === 'size' ? true : false,
 								};
 							})
 						),

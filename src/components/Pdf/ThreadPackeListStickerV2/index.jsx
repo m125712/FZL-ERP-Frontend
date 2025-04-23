@@ -124,8 +124,8 @@ export default function Index(data) {
 				layout: {
 					hLineWidth: () => 0,
 					vLineWidth: () => 0,
-					paddingLeft: () => 0,
-					paddingRight: () => 0,
+					paddingLeft: () => 1,
+					paddingRight: () => 1,
 					paddingTop: () => 2,
 					paddingBottom: () => 2,
 				},

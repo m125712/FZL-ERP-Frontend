@@ -147,12 +147,6 @@ export default function Index() {
 				id: 'gate_pass',
 				header: 'W/O',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton
-						size='btn-xs'
-						value={info.row.original.gate_pass}
-					/>
-				),
 				cell: (info) => {
 					const { gate_pass_date, gate_pass } = info.row.original;
 					return (

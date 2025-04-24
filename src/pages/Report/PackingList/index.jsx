@@ -263,7 +263,6 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'company_price',
-				header: '',
 				header: (
 					<>
 						Com. Price ($) <br />

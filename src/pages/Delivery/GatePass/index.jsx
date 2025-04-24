@@ -187,6 +187,7 @@ export default function Index() {
 						const updatedData = {
 							gate_pass_date: item.gate_pass_date,
 							gate_pass: 1,
+							gate_pass_by: user.uuid,
 							updated_at: GetDateTime(),
 						};
 						return await updateData.mutateAsync({
@@ -245,7 +246,8 @@ export default function Index() {
 				tabIndex={0}
 				onBlur={() => setScannerActive(false)}
 				onFocus={() => setScannerActive(true)}
-				className='outline-none'>
+				className='outline-none'
+			>
 				{isLoading && (
 					<span className='loading loading-dots loading-lg z-50' />
 				)}
@@ -254,7 +256,8 @@ export default function Index() {
 					<form
 						onSubmit={handleSubmit(onSubmit)}
 						noValidate
-						className='flex flex-col gap-4'>
+						className='flex flex-col gap-4'
+					>
 						<SectionEntryBody
 							title={`Details `}
 							header={
@@ -264,14 +267,17 @@ export default function Index() {
 										scannerActive
 											? 'btn-success'
 											: 'btn-error'
-									)}>
+									)}
+								>
 									Scanner: {scannerActive ? 'ON' : 'OFF'}
 								</span>
-							}>
+							}
+						>
 							<FormField
 								label='challan_uuid'
 								title='Challan'
-								errors={errors}>
+								errors={errors}
+							>
 								<Controller
 									name='challan_uuid'
 									control={control}
@@ -315,10 +321,12 @@ export default function Index() {
 								<th
 									key={item}
 									scope='col'
-									className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+									className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'
+								>
 									{item}
 								</th>
-							))}>
+							))}
+						>
 							{EntryField.map((item, index) => (
 								<tr key={item.id}>
 									<td className={`w-80 ${rowClass}`}>

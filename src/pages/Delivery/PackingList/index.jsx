@@ -21,15 +21,17 @@ import PageInfo from '@/util/PageInfo';
 
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
+const options = [
+	{ value: 'all', label: 'All' },
+	{ value: 'pending', label: 'Pending' },
+	{ value: 'challan', label: 'Challan' },
+	{ value: 'gate_pass', label: 'W/H Out' },
+];
+
 export default function Index() {
 	const { user } = useAuth();
 	const [status, setStatus] = useState('pending');
-	const options = [
-		{ value: 'all', label: 'All' },
-		{ value: 'pending', label: 'Pending' },
-		{ value: 'challan', label: 'Challan' },
-		{ value: 'gate_pass', label: 'W/H Out' },
-	];
+
 	const navigate = useNavigate();
 	const haveAccess = useAccess('delivery__packing_list');
 	const access = haveAccess?.filter(
@@ -95,18 +97,16 @@ export default function Index() {
 				enableColumnFilter: false,
 				enableSorting: false,
 				width: 'w-8',
-				cell: (info) => {
-					return (
-						<button
-							type='button'
-							className='btn btn-accent btn-sm font-semibold text-white shadow-md'
-							disabled={pdfLoading}
-							onClick={() => handlePdf(info.row.index)}
-						>
-							<BookOpen />
-						</button>
-					);
-				},
+				cell: (info) => (
+					<button
+						type='button'
+						className='btn btn-accent btn-sm font-semibold text-white shadow-md'
+						disabled={pdfLoading}
+						onClick={() => handlePdf(info.row.index)}
+					>
+						<BookOpen />
+					</button>
+				),
 			},
 			{
 				accessorKey: 'packing_number',
@@ -153,7 +153,6 @@ export default function Index() {
 				accessorKey: 'item_name',
 				header: 'Item',
 				enableColumnFilter: false,
-				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -165,8 +164,13 @@ export default function Index() {
 					const overrideAccess = haveAccess.includes(
 						'click_received_override'
 					);
-					const { challan_uuid, is_warehouse_received, gate_pass } =
-						info.row.original;
+					const {
+						challan_uuid,
+						is_warehouse_received,
+						gate_pass,
+						warehouse_received_date,
+						warehouse_received_by_name,
+					} = info.row.original;
 
 					let permission = false;
 					if (challan_uuid === null && !gate_pass) {
@@ -174,32 +178,38 @@ export default function Index() {
 						if (overrideAccess) permission = true;
 					}
 					return (
-						<SwitchToggle
-							disabled={!permission}
-							onChange={() => {
-								handelReceivedStatus(info.row.index);
-							}}
-							checked={info.getValue() === true}
-						/>
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelReceivedStatus(info.row.index);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={warehouse_received_date} />
+							<span className='ml-2'>
+								{warehouse_received_by_name}
+							</span>
+						</div>
 					);
 				},
 			},
-			{
-				accessorKey: 'warehouse_received_date',
-				header: 'Received Date',
-				enableColumnFilter: false,
-				filterFn: 'isWithinRange',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
-				accessorKey: 'warehouse_received_by_name',
-				header: 'Received By',
-				enableColumnFilter: false,
-				filterFn: 'isWithinRange',
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'warehouse_received_date',
+			// 	header: 'Received Date',
+			// 	enableColumnFilter: false,
+			// 	filterFn: 'isWithinRange',
+			// 	cell: (info) => {
+			// 		return <DateTime date={info.getValue()} />;
+			// 	},
+			// },
+			// {
+			// 	accessorKey: 'warehouse_received_by_name',
+			// 	header: 'Received By',
+			// 	enableColumnFilter: false,
+			// 	filterFn: 'isWithinRange',
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorKey: 'challan_number',
 				header: 'Challan',
@@ -229,8 +239,13 @@ export default function Index() {
 					const overrideAccess = haveAccess.includes(
 						'click_gate_pass_override'
 					);
-					const { challan_uuid, is_warehouse_received, gate_pass } =
-						info.row.original;
+					const {
+						challan_uuid,
+						is_warehouse_received,
+						gate_pass,
+						gate_pass_date,
+						gate_pass_by_name,
+					} = info.row.original;
 
 					let permission = false;
 					if (is_warehouse_received && challan_uuid !== null) {
@@ -239,40 +254,44 @@ export default function Index() {
 					}
 
 					return (
-						<SwitchToggle
-							checked={info.getValue() === 1}
-							onChange={() => handelGatePass(info.row.index)}
-							disabled={!permission}
-						/>
+						<div className='flex flex-col'>
+							<SwitchToggle
+								checked={info.getValue() === 1}
+								onChange={() => handelGatePass(info.row.index)}
+								disabled={!permission}
+							/>
+							<DateTime date={gate_pass_date} />
+							<span className='ml-2'>{gate_pass_by_name}</span>
+						</div>
 					);
 				},
 			},
-			{
-				accessorKey: 'gate_pass_date',
-				header: (
-					<span>
-						Warehouse <br />
-						Out Date
-					</span>
-				),
-				enableColumnFilter: false,
-				filterFn: 'isWithinRange',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
-				accessorKey: 'gate_pass_by_name',
-				header: (
-					<span>
-						Warehouse <br />
-						Out By
-					</span>
-				),
-				enableColumnFilter: false,
-				filterFn: 'isWithinRange',
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'gate_pass_date',
+			// 	header: (
+			// 		<span>
+			// 			Warehouse <br />
+			// 			Out Date
+			// 		</span>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	filterFn: 'isWithinRange',
+			// 	cell: (info) => {
+			// 		return <DateTime date={info.getValue()} />;
+			// 	},
+			// },
+			// {
+			// 	accessorKey: 'gate_pass_by_name',
+			// 	header: (
+			// 		<span>
+			// 			Warehouse <br />
+			// 			Out By
+			// 		</span>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	filterFn: 'isWithinRange',
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorKey: 'party_name',
 				header: 'Party',

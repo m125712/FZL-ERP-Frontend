@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useDeliveryPackingList } from '@/state/Delivery';
 import { useOtherPackingList } from '@/state/Other';
 import { useSymbologyScanner } from '@use-symbology-scanner/react';
@@ -27,6 +28,7 @@ import {
 } from '@/util/Schema';
 
 export default function Index() {
+	const user = useAuth();
 	const navigate = useNavigate();
 	const containerRef = useRef(null);
 
@@ -193,7 +195,7 @@ export default function Index() {
 		} catch (err) {
 			ShowLocalToast({
 				type: 'error',
-				message: 'Error updating packing list',
+				message: err.message,
 			});
 			console.error(`Error with Promise.all: ${err}`);
 		}

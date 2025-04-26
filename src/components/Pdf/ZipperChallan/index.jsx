@@ -41,7 +41,7 @@ const sliderNode = createNode([
 ]);
 
 export default function Index(data) {
-	const headerHeight = 220;
+	const headerHeight = 240;
 	const footerHeight = 50;
 	const isTapeChallan = data?.item_for === 'tape';
 	const isSliderChallan = data?.item_for === 'slider';

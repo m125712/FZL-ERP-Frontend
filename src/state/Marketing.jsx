@@ -2,10 +2,10 @@ import createGlobalState from '.';
 import { marketingQK } from './QueryKeys';
 
 // * Marketing Teams * //
-export const useMarketingDashboard = (type) =>
+export const useMarketingDashboard = (year, type) =>
 	createGlobalState({
-		queryKey: marketingQK.getDashboard(type),
-		url: `/dashboard/team-marketing-target-achievement/${type}`,
+		queryKey: marketingQK.getDashboard(year, type),
+		url: `/dashboard/team-marketing-target-achievement/${year}/${type}`,
 	});
 
 // * Marketing Teams * //

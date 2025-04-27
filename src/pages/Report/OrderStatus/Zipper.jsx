@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useZipperStatus } from '@/state/Report';
-import { format, startOfMonth, subMonths } from 'date-fns';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
@@ -119,14 +119,12 @@ export default function Index() {
 				accessorKey: 'size',
 				header: 'Size',
 				enableColumnFilter: false,
-				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'unit',
 				header: 'Unit',
 				enableColumnFilter: false,
-				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -137,13 +135,13 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'not_approved_quantity',
-				header: 'Not Approved QTY',
+				header: 'Not App. QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'approved_quantity',
-				header: 'Approved QTY',
+				header: 'App. QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

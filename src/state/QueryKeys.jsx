@@ -1844,7 +1844,12 @@ export const marketingQK = {
 	all: () => ['marketing'],
 
 	//* Dashboard
-	getDashboard: (type) => [...marketingQK.all(), 'dashboard', type],
+	getDashboard: (year, type) => [
+		...marketingQK.all(),
+		'dashboard',
+		year,
+		type,
+	],
 
 	//* Teams
 	getTeams: () => [...marketingQK.all(), 'teams'],

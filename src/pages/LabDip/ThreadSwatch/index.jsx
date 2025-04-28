@@ -18,13 +18,23 @@ import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
 	const [status, setStatus] = useState('pending');
+	const [status2, setStatus2] = useState('incomplete_order');
 	const options = [
 		{ value: 'all', label: 'All' },
 		{ value: 'pending', label: 'Pending' },
 		{ value: 'completed', label: 'Completed' },
 	];
 
-	const { data, updateData, isLoading } = useThreadSwatch(`type=${status}`);
+	const options2 = [
+		{ value: 'complete_order', label: 'Complete Order' },
+		{ value: 'incomplete_order', label: 'Incomplete Order' },
+	];
+
+	const { data, updateData, isLoading } = useThreadSwatch(
+		status2 === 'complete_order'
+			? `order_type=${status2}`
+			: `type=${status}&order_type=${status2}`
+	);
 	const info = new PageInfo(
 		'LabDip/Thread Swatch',
 		'order/swatch',
@@ -212,11 +222,20 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				extraButton={
-					<StatusSelect
-						options={options}
-						status={status}
-						setStatus={setStatus}
-					/>
+					<>
+						{status2 === 'incomplete_order' && (
+							<StatusSelect
+								options={options}
+								status={status}
+								setStatus={setStatus}
+							/>
+						)}
+						<StatusSelect
+							options={options2}
+							status={status2}
+							setStatus={setStatus2}
+						/>
+					</>
 				}
 			/>
 		</div>

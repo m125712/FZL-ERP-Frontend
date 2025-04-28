@@ -139,17 +139,20 @@ export default function Index({ order_info_entry }) {
 				cell: (info) => info.getValue(),
 			},
 
-			{
-				accessorFn: (row) =>
-					`${row.company_price || 0}/${row.party_price || 0}`,
-				id: 'price',
-				header: 'Price',
-				enableColumnFilter: false,
-				hidden: !useAccess('thread__order_info_in_details').includes(
-					'show_price'
-				),
-				cell: (info) => info.getValue(),
-			},
+			...(useAccess('thread__order_info_details').includes('show_price')
+				? [
+						{
+							accessorFn: (row) =>
+								`${row.company_price || 0}/${row.party_price || 0}`,
+							id: 'price',
+							header: 'Price',
+							enableColumnFilter: false,
+							hidden: true,
+							cell: (info) => info.getValue(),
+						},
+					]
+				: []),
+
 			{
 				accessorKey: 'created_at',
 				header: 'Created',
@@ -196,7 +199,8 @@ export default function Index({ order_info_entry }) {
 				</div>
 			}
 			data={order_info_entry}
-			columns={columns}>
+			columns={columns}
+		>
 			<tr className='text-sm'>
 				<td colSpan='6' className='py-2 text-right'>
 					Total QTY

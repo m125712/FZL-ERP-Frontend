@@ -1,13 +1,22 @@
-import { useOtherBank, useOtherFactoryByPartyUUID, useOtherLcByPartyUUID, useOtherMarketing, useOtherMerchandiserByPartyUUID, useOtherParty } from '@/state/Other';
+import {
+	useOtherBank,
+	useOtherFactoryByPartyUUID,
+	useOtherLcByPartyUUID,
+	useOtherMarketing,
+	useOtherMerchandiserByPartyUUID,
+	useOtherParty,
+} from '@/state/Other';
 import { useParams } from 'react-router-dom';
 
-
-
-import { CheckBox, FormField, JoinInput, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
-
-
-
-
+import { DateInput } from '@/ui/Core';
+import {
+	CheckBox,
+	FormField,
+	JoinInput,
+	ReactSelect,
+	SectionEntryBody,
+	Textarea,
+} from '@/ui';
 
 export default function Header({
 	register,
@@ -47,7 +56,7 @@ export default function Header({
 				</div>
 			}
 		>
-			<div className='grid grid-cols-1 gap-2 sm:grid-cols-4 sm:gap-4'>
+			<div className='grid grid-cols-1 gap-2 sm:grid-cols-5 sm:gap-4'>
 				<FormField label='lc_id' title='LC' errors={errors}>
 					<Controller
 						name='lc_uuid'
@@ -128,7 +137,11 @@ export default function Header({
 						}}
 					/>
 				</FormField>
-				<FormField label='cc' title='Merchandiser' errors={errors}>
+				<FormField
+					label='merchandiser_uuid'
+					title='Merchandiser'
+					errors={errors}
+				>
 					<Controller
 						name='merchandiser_uuid'
 						control={control}
@@ -151,6 +164,13 @@ export default function Header({
 						}}
 					/>
 				</FormField>
+				<DateInput
+					label='pi_date'
+					Controller={Controller}
+					control={control}
+					selected={watch('pi_date')}
+					{...{ register, errors }}
+				/>
 			</div>
 
 			<div className='grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4 xl:grid-cols-6'>

@@ -155,7 +155,7 @@ export default function Index() {
 				await Promise.all(updatedPromises).then(() => {
 					reset(SLIDER_DIE_CASTING_NULL);
 					invalidateQuery();
-					navigate(`/slider/die-casting/production`);
+					navigate(`/slider/making/production_1`);
 				});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -182,7 +182,7 @@ export default function Index() {
 			.then(() => {
 				reset(SLIDER_DIE_CASTING_NULL);
 				invalidateQuery();
-				navigate(`/slider/die-casting/production`);
+				navigate(`/slider/making/production_1`);
 			})
 			.catch((err) => {
 				console.error(`Error with Promise.all: ${err}`);

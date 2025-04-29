@@ -51,7 +51,7 @@ export const getPageHeader = (data) => {
 											bold: true,
 										},
 										`PI No: ${data?.id}\n`,
-										`Date: ${created_at}\n`,
+										`Date: ${data?.pi_date ? getDateFormate(data?.pi_date) : created_at}\n`,
 									],
 									alignment: 'right',
 								},

@@ -5,9 +5,9 @@ import { getTransactionAreaSliderDieCasting } from '@/util/TransactionArea';
 
 export default function Index() {
 	const info = new PageInfo(
-		'RM Die Casting Log',
-		'slider/die-casting/log',
-		'slider__die_casting_log'
+		'RM Making Log 1',
+		'slider/making/log 1',
+		'slider__making_log_1'
 	);
 
 	return (

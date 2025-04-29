@@ -150,6 +150,7 @@ export default function Index() {
 						finishing_stock,
 						slider_finishing_stock,
 						order_type,
+						slider_provided,
 					} = info.row.original;
 
 					const access =
@@ -166,7 +167,7 @@ export default function Index() {
 					return (
 						<Transfer
 							onClick={() => handelProduction(info.row.index)}
-							disabled={access}
+							disabled={access && !slider_provided}
 						/>
 					);
 				},

@@ -13,7 +13,7 @@ import RMAddOrUpdate from './RMAddOrUpdate';
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useSliderAssemblyRMLog();
-	const info = new PageInfo('RM Assembly Log', url, 'slider__assembly_log');
+	const info = new PageInfo('RM Making Log 2', url, 'slider__making_log_2');
 	const haveAccess = useAccess(info.getTab());
 	const { invalidateQuery: invalidateSliderAssemblyRM } =
 		useSliderAssemblyRM();

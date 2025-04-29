@@ -15,8 +15,8 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useSliderDieCastingStock();
 	const { invalidateQuery: invalidateSliderItem } = useOtherSliderItem();
-	const info = new PageInfo('Stock', url, 'slider__die_casting_stock');
-	const haveAccess = useAccess('slider__die_casting_stock');
+	const info = new PageInfo('Stock 1', url, 'slider__making_stock_1');
+	const haveAccess = useAccess('slider__making_stock_1');
 
 	const columns = useMemo(
 		() => [

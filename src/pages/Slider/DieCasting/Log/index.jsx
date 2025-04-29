@@ -6,7 +6,7 @@ import SFGTransferLog from './SFGTransferLog';
 
 export default function Index() {
 	useEffect(() => {
-		document.title = 'Die Casting Log';
+		document.title = 'Making Log 1';
 	}, []);
 	return (
 		<div>

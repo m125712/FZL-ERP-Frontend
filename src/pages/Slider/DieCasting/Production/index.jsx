@@ -18,16 +18,16 @@ export default function Index() {
 		useSliderDieCastingProduction();
 	const navigate = useNavigate();
 	const info = new PageInfo(
-		'Production',
+		'Production 1',
 		url,
-		'slider__die_casting_production'
+		'slider__making_production_1'
 	);
 
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
 
-	const haveAccess = useAccess('slider__die_casting_production');
+	const haveAccess = useAccess('slider__making_production_1');
 	const headers = [
 		'mc_no',
 		'die_casting_name',
@@ -222,7 +222,7 @@ export default function Index() {
 	);
 
 	// Add
-	const handelAdd = () => navigate('/slider/die-casting/production/entry');
+	const handelAdd = () => navigate('/slider/making/production_1/entry');
 
 	// Update
 	const [update, setUpdate] = useState({

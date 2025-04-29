@@ -7,9 +7,9 @@ import { getTransactionAreaSliderDieCasting } from '@/util/TransactionArea';
 
 export default function Index() {
 	const info = new PageInfo(
-		'Die Casting RM Stock',
-		'slider/die-casting/rm',
-		'slider__die_casting_rm'
+		'Making RM 1 Stock',
+		'slider/making/rm_1',
+		'slider__making_rm_1'
 	);
 
 	useEffect(() => {

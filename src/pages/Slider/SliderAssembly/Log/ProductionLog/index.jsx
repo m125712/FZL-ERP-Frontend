@@ -21,8 +21,8 @@ export default function Index() {
 		useSliderAssemblyLogJoinedProduction();
 	const { invalidateQuery } = useSliderAssemblyProduction();
 	const info = new PageInfo(
-		'Production Log',
-		'/slider/slider-assembly/log/production'
+		'Production Log 2',
+		'/slider/making/log_2/production'
 	);
 	const headers = [
 		'order_number',
@@ -48,7 +48,7 @@ export default function Index() {
 		};
 	}, [extraData, Pdf]);
 
-	const haveAccess = useAccess('slider__assembly_log');
+	const haveAccess = useAccess('slider__making_log_2');
 
 	const columns = useMemo(
 		() => [

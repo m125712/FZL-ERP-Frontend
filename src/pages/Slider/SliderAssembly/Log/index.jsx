@@ -8,7 +8,7 @@ import TransactionLog from './TransactionLog';
 
 export default function Index() {
 	useEffect(() => {
-		document.title = 'Assembly Log';
+		document.title = 'Making Log 2';
 	}, []);
 	return (
 		<div>

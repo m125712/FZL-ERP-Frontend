@@ -104,61 +104,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'pi_details',
-				header: 'PI Details',
-				enableColumnFilter: false,
-
-				cell: (info) => {
-					const { challan_info } = info.row.original;
-					return (
-						<table
-							className={cn(
-								'table table-xs rounded-md border-2 border-primary/20 align-top'
-							)}
-						>
-							<thead>
-								<tr>
-									{/* <th>Item</th> */}
-									<th>C/N</th>
-									<th>C/D</th>
-									<th>DEL</th>
-								</tr>
-							</thead>
-							<tbody>
-								{challan_info?.map((item, index) => (
-									<tr key={index}>
-										{/* <td>{item_description_quantity}</td> */}
-										<td>
-											<CustomLink
-												label={item.challan_number}
-												url={`/delivery/challan/${item.challan_uuid}`}
-												showCopyButton={false}
-												openInNewTab
-											/>
-										</td>
-
-										<td>
-											{
-												<DateTime
-													date={item.challan_date}
-													isTime={false}
-													customizedDateFormate='dd MMM,yyyy'
-												/>
-											}
-										</td>
-										<td>
-											<Status
-												status={item.is_delivered}
-											/>
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					);
-				},
-			},
-			{
 				accessorKey: 'other_details',
 				header: 'Other',
 				enableColumnFilter: false,
@@ -219,6 +164,66 @@ export default function Index() {
 				header: 'QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) => {
+					return row.challan_info
+						?.map((item) => item.challan_number)
+						.join(', ');
+				},
+				id: 'challan_info',
+				header: 'Challan Info',
+				enableColumnFilter: false,
+
+				cell: (info) => {
+					const { challan_info } = info.row.original;
+					return (
+						<table
+							className={cn(
+								'table table-xs rounded-md border-2 border-primary/20 align-top'
+							)}
+						>
+							<thead>
+								<tr>
+									{/* <th>Item</th> */}
+									<th>C/N</th>
+									<th>C/D</th>
+									<th>DEL</th>
+								</tr>
+							</thead>
+							<tbody>
+								{challan_info?.map((item, index) => (
+									<tr key={index}>
+										{/* <td>{item_description_quantity}</td> */}
+										<td>
+											<CustomLink
+												label={item.challan_number}
+												url={`/delivery/challan/${item.challan_uuid}`}
+												showCopyButton={false}
+												openInNewTab
+											/>
+										</td>
+
+										<td>
+											{
+												<DateTime
+													date={item.challan_date}
+													isTime={false}
+													customizedDateFormate='dd MMM,yyyy'
+												/>
+											}
+										</td>
+										<td>
+											<Status
+												status={item.is_delivered}
+											/>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					);
+				},
 			},
 			{
 				accessorKey: 'remarks',

@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
+import { CustomLink, DateTime, SimpleDatePicker, Status } from '@/ui';
 
 import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
@@ -107,7 +107,7 @@ export default function Index() {
 				accessorKey: 'pi_details',
 				header: 'PI Details',
 				enableColumnFilter: false,
-				width: 'w-32',
+
 				cell: (info) => {
 					const { challan_info } = info.row.original;
 					return (
@@ -130,32 +130,29 @@ export default function Index() {
 										{/* <td>{item_description_quantity}</td> */}
 										<td>
 											<CustomLink
-												label={item.batch_number}
-												url={`/planning/finishing-batch/${item.batch_uuid}`}
+												label={item.challan_number}
+												url={`/delivery/challan/${item.challan_uuid}`}
 												showCopyButton={false}
 												openInNewTab
 											/>
+										</td>
+
+										<td>
+											{
+												<DateTime
+													date={item.challan_date}
+													isTime={false}
+													customizedDateFormate='dd MMM,yyyy'
+												/>
+											}
 										</td>
 										<td>
-											<CustomLink
-												label={item.order_number}
-												url={`/order/details/${item.order_number}/${item.order_description_uuid}`}
-												showCopyButton={false}
-												openInNewTab
+											<Status
+												status={item.is_delivered}
 											/>
 										</td>
-										<td>{item.batch_quantity || 0}</td>
-										<td>{item.production_quantity || 0}</td>
-										<td>{item.balance_quantity || 0}</td>
 									</tr>
 								))}
-								{/* <tr>
-									<td className='font-bold'>Total</td>
-									<td></td>
-									<td>{totals?.batch_quantity || 0}</td>
-									<td>{totals?.production_quantity || 0}</td>
-									<td>{totals?.balance_quantity || 0}</td>
-								</tr> */}
 							</tbody>
 						</table>
 					);

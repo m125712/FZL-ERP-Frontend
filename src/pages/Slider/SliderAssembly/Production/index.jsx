@@ -14,12 +14,12 @@ const Transaction = lazy(() => import('./Transaction'));
 export default function Index() {
 	const { data, isLoading } = useSliderAssemblyProduction();
 	const info = new PageInfo(
-		'Slider Assembly Production',
-		'/slider/slider-assembly/production',
-		'slider__assembly_production'
+		'Slider Making Production 2',
+		'/slider/making/production_2',
+		'slider__making_production_2'
 	);
 
-	const haveAccess = useAccess('slider__assembly_production');
+	const haveAccess = useAccess('slider__making_production_2');
 
 	// * columns
 	const columns = useMemo(

@@ -1738,6 +1738,7 @@ export const DELIVERY_CARTON_NULL = {
 // PI
 
 export const PI_SCHEMA = {
+	pi_date: STRING_REQUIRED,
 	lc_uuid: STRING.nullable(),
 	marketing_uuid: STRING_REQUIRED,
 	party_uuid: STRING_REQUIRED,
@@ -1861,6 +1862,7 @@ export const PI_SCHEMA = {
 };
 
 export const PI_NULL = {
+	pi_date: '',
 	uuid: null,
 	marketing_uuid: '',
 	party_uuid: '',

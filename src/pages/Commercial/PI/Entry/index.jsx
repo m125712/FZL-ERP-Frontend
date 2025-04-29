@@ -248,6 +248,7 @@ export default function Index() {
 				payment: rest?.payment,
 				remarks: rest?.remarks,
 				weight: rest?.weight,
+				pi_date: rest?.pi_date,
 				cross_weight: rest?.cross_weight,
 				is_rtgs: rest?.is_rtgs,
 				updated_at: GetDateTime(),

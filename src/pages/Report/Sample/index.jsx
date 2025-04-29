@@ -109,7 +109,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => format(row.issue_date, 'dd/MM/yy'),
+				accessorFn: (row) => format(row.issue_date, 'dd-MMM-yyyy'),
 				id: 'issue_date',
 				header: 'Order Date',
 				enableColumnFilter: false,

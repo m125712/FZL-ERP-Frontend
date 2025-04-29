@@ -36,6 +36,7 @@ export default function Information({ pi }) {
 		created_by,
 		created_by_name,
 		created_at,
+		pi_date,
 		updated_at,
 		remarks,
 		pi_cash_entry,
@@ -244,6 +245,10 @@ export default function Information({ pi }) {
 			{
 				label: 'Created At',
 				value: format(new Date(created_at), 'dd/MM/yy'),
+			},
+			{
+				label: 'PI Created At',
+				value: pi_date ? format(new Date(pi_date), 'dd/MM/yy') : '---',
 			},
 			{
 				label: 'Updated At',

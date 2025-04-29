@@ -15,8 +15,8 @@ const Transaction = lazy(() => import('./Transaction'));
 
 export default function Index() {
 	const { data, isLoading, url, deleteData } = useSliderAssemblyStock();
-	const info = new PageInfo('Stock', url, 'slider__assembly_stock');
-	const haveAccess = useAccess('slider__assembly_stock');
+	const info = new PageInfo('Stock 2', url, 'slider__making_stock_2');
+	const haveAccess = useAccess('slider__making_stock_2');
 
 	const columns = useMemo(
 		() => [

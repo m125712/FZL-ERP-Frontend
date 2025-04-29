@@ -18,11 +18,11 @@ export default function Index() {
 	const { data, isLoading, deleteData } = useSliderAssemblyLogTransaction();
 	const { invalidateQuery } = useSliderAssemblyProduction();
 	const info = new PageInfo(
-		'Transaction Log',
-		'/slider/slider-assembly/log/transaction'
+		'Transaction Log 2',
+		'/slider/making/log_2/transaction'
 	);
 
-	const haveAccess = useAccess('slider__assembly_log');
+	const haveAccess = useAccess('slider__making_log_2');
 
 	const columns = useMemo(
 		() => [

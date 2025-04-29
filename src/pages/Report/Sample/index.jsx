@@ -104,8 +104,13 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'pi_details',
-				header: 'PI Details',
+				accessorFn: (row) => {
+					return row.challan_info
+						?.map((item) => item.challan_number)
+						.join(', ');
+				},
+				id: 'challan_info',
+				header: 'Challan Info',
 				enableColumnFilter: false,
 
 				cell: (info) => {

@@ -7,6 +7,7 @@ import { useAccess } from '@/hooks';
 import ReactTable from '@/components/Table';
 import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
 
+import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
 
 const getPath = (haveAccess, userUUID) => {
@@ -101,6 +102,64 @@ export default function Index() {
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'pi_details',
+				header: 'PI Details',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => {
+					const { challan_info } = info.row.original;
+					return (
+						<table
+							className={cn(
+								'table table-xs rounded-md border-2 border-primary/20 align-top'
+							)}
+						>
+							<thead>
+								<tr>
+									{/* <th>Item</th> */}
+									<th>C/N</th>
+									<th>C/D</th>
+									<th>DEL</th>
+								</tr>
+							</thead>
+							<tbody>
+								{challan_info?.map((item, index) => (
+									<tr key={index}>
+										{/* <td>{item_description_quantity}</td> */}
+										<td>
+											<CustomLink
+												label={item.batch_number}
+												url={`/planning/finishing-batch/${item.batch_uuid}`}
+												showCopyButton={false}
+												openInNewTab
+											/>
+										</td>
+										<td>
+											<CustomLink
+												label={item.order_number}
+												url={`/order/details/${item.order_number}/${item.order_description_uuid}`}
+												showCopyButton={false}
+												openInNewTab
+											/>
+										</td>
+										<td>{item.batch_quantity || 0}</td>
+										<td>{item.production_quantity || 0}</td>
+										<td>{item.balance_quantity || 0}</td>
+									</tr>
+								))}
+								{/* <tr>
+									<td className='font-bold'>Total</td>
+									<td></td>
+									<td>{totals?.batch_quantity || 0}</td>
+									<td>{totals?.production_quantity || 0}</td>
+									<td>{totals?.balance_quantity || 0}</td>
+								</tr> */}
+							</tbody>
+						</table>
+					);
+				},
 			},
 			{
 				accessorKey: 'other_details',

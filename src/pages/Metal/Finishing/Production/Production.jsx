@@ -41,7 +41,8 @@ export default function Index({
 	const { user } = useAuth();
 
 	const MAX_PROD_PCS =
-		updateFinishingProd?.order_type === 'tape'
+		updateFinishingProd?.order_type === 'tape' ||
+		updateFinishingProd?.slider_provided
 			? Math.min(
 					Number(updateFinishingProd.balance_quantity),
 					Number(updateFinishingProd.finishing_stock)

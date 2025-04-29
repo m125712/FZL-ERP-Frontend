@@ -5,8 +5,9 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
+import { CustomLink, DateTime, SimpleDatePicker, Status } from '@/ui';
 
+import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
 
 const getPath = (haveAccess, userUUID) => {
@@ -101,6 +102,61 @@ export default function Index() {
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'pi_details',
+				header: 'PI Details',
+				enableColumnFilter: false,
+
+				cell: (info) => {
+					const { challan_info } = info.row.original;
+					return (
+						<table
+							className={cn(
+								'table table-xs rounded-md border-2 border-primary/20 align-top'
+							)}
+						>
+							<thead>
+								<tr>
+									{/* <th>Item</th> */}
+									<th>C/N</th>
+									<th>C/D</th>
+									<th>DEL</th>
+								</tr>
+							</thead>
+							<tbody>
+								{challan_info?.map((item, index) => (
+									<tr key={index}>
+										{/* <td>{item_description_quantity}</td> */}
+										<td>
+											<CustomLink
+												label={item.challan_number}
+												url={`/delivery/challan/${item.challan_uuid}`}
+												showCopyButton={false}
+												openInNewTab
+											/>
+										</td>
+
+										<td>
+											{
+												<DateTime
+													date={item.challan_date}
+													isTime={false}
+													customizedDateFormate='dd MMM,yyyy'
+												/>
+											}
+										</td>
+										<td>
+											<Status
+												status={item.is_delivered}
+											/>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					);
+				},
 			},
 			{
 				accessorKey: 'other_details',

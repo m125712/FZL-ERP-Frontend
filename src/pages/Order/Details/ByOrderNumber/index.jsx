@@ -104,6 +104,8 @@ export default function Index() {
 				),
 				updated_at: orders[0]?.updated_at,
 				created_at: orders[0]?.created_at,
+				order_description_updated_at:
+					orders[0]?.order_description_updated_at,
 			};
 
 			const order_sheet = {
@@ -192,7 +194,6 @@ export default function Index() {
 				// }
 				handleViewChange={() => setUpdateView(!updateView)}
 				updateView={updateView}
-				
 			/>
 
 			{updateView ? (

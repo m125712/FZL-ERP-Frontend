@@ -10,6 +10,15 @@ export const getPageHeader = (order_info) => {
 			? order_info.order_number + ' (S)'
 			: order_info.order_number;
 
+	let formatedDate = '';
+	if (order_info?.order_description_updated_at) {
+		formatedDate = format(
+			new Date(order_info?.order_description_updated_at),
+			'dd-MM-yyyy'
+		);
+	} else if (order_info?.created_at) {
+		formatedDate = format(new Date(order_info?.created_at), 'dd-MM-yyyy');
+	}
 	return [
 		// CompanyAndORDER
 		[
@@ -38,7 +47,7 @@ export const getPageHeader = (order_info) => {
 						bold: true,
 					},
 					`O/N: ${order_number} ${order_info.revisions > 0 ? `Rev ${order_info.revisions}` : ''} \n`,
-					`Date: ${order_info?.created_at ? format(new Date(order_info?.created_at), 'dd-MM-yyyy') : ''}\n`,
+					`Date: ${formatedDate}\n`,
 					`PI No.: ${order_info?.pi_numbers ? order_info?.pi_numbers.join(', ') : '---'}\n`,
 				],
 				alignment: 'right',

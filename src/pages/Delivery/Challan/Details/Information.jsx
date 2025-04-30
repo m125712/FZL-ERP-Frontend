@@ -14,6 +14,7 @@ export default function Information({ challan }) {
 		created_by_name,
 		remarks,
 		gate_pass,
+		is_delivered,
 		order_number,
 		receive_status,
 		is_hand_delivery,
@@ -40,11 +41,17 @@ export default function Information({ challan }) {
 			},
 
 			{
-				label: 'Gate Pass',
+				label: 'Warehouse Out',
 				value: <StatusButton className={'btn-xs'} value={gate_pass} />,
 			},
 			{
-				label: 'Receive Status',
+				label: 'Delivered',
+				value: (
+					<StatusButton className={'btn-xs'} value={is_delivered} />
+				),
+			},
+			{
+				label: 'Challan Received',
 				value: (
 					<StatusButton className={'btn-xs'} value={receive_status} />
 				),

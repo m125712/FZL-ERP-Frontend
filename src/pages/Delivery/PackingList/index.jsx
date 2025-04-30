@@ -252,6 +252,7 @@ export default function Index() {
 						if (!gate_pass && access) permission = true;
 						if (overrideAccess) permission = true;
 					}
+					console.log(gate_pass_by_name);
 
 					return (
 						<div className='flex flex-col'>
@@ -261,7 +262,7 @@ export default function Index() {
 								disabled={!permission}
 							/>
 							<DateTime date={gate_pass_date} />
-							<span className='ml-2'>{gate_pass_by_name}</span>
+							<span>{gate_pass_by_name}</span>
 						</div>
 					);
 				},

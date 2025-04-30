@@ -74,19 +74,17 @@ export default function Index() {
 				accessorKey: 'gate_pass',
 				header: (
 					<span>
-						Warehouse <br />
+						W/H <br />
 						Out
 					</span>
 				),
 				enableColumnFilter: false,
-				cell: (info) => {
-					return (
-						<StatusButton
-							size='btn-sm'
-							value={Number(info.getValue()) === 1}
-						/>
-					);
-				},
+				cell: (info) => (
+					<StatusButton
+						size='btn-sm'
+						value={Number(info.getValue()) === 1}
+					/>
+				),
 			},
 			{
 				accessorKey: 'is_delivered',
@@ -117,6 +115,26 @@ export default function Index() {
 				},
 			},
 			{
+				accessorFn: (row) => format(row.delivery_date, 'dd/MM/yy'),
+				id: 'delivery_date',
+				header: 'Challan Date',
+				enableColumnFilter: true,
+				width: 'w-32',
+				cell: (info) => {
+					const { delivery_date } = info.row.original;
+					const date = format(new Date(delivery_date), 'yyyy-MM-dd');
+					return (
+						<CustomLink
+							label={
+								<DateTime date={delivery_date} isTime={false} />
+							}
+							url={`/delivery/challan-by-date/${date}`}
+							openInNewTab
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'receive_status',
 				header: 'Received',
 				enableColumnFilter: false,
@@ -142,29 +160,10 @@ export default function Index() {
 					);
 				},
 			},
-			{
-				accessorFn: (row) => format(row.delivery_date, 'dd/MM/yy'),
-				id: 'delivery_date',
-				header: 'Delivered On',
-				enableColumnFilter: true,
-				width: 'w-32',
-				cell: (info) => {
-					const { delivery_date } = info.row.original;
-					const date = format(new Date(delivery_date), 'yyyy-MM-dd');
-					return (
-						<CustomLink
-							label={
-								<DateTime date={delivery_date} isTime={false} />
-							}
-							url={`/delivery/challan-by-date/${date}`}
-							openInNewTab
-						/>
-					);
-				},
-			},
+
 			{
 				accessorKey: 'challan_number',
-				header: 'ID',
+				header: 'Challan ID',
 				width: 'w-40',
 				cell: (info) => {
 					const { uuid } = info.row.original;
@@ -205,7 +204,7 @@ export default function Index() {
 						?.join(', '),
 				id: 'packing_list_numbers',
 				header: 'Packing List',
-				width: 'w-28',
+				width: 'w-36',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { packing_list_numbers } = info.row.original;

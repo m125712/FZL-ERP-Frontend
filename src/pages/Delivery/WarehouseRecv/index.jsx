@@ -104,16 +104,11 @@ export default function Index() {
 		try {
 			await waitForLoading();
 
-			if (error) {
-				throw new Error(error);
-			}
-			if (!selectedOption) {
-				throw new Error('Please select an option');
-			}
+			if (error) throw new Error(error);
 
-			if (!packetListData) {
-				throw new Error('No packet list found');
-			}
+			if (!selectedOption) throw new Error('Please select an option');
+
+			if (!packetListData) throw new Error('No packet list found');
 
 			const currentEntries = getValues('entry') || [];
 			const isDuplicate = currentEntries.some(
@@ -121,9 +116,8 @@ export default function Index() {
 					entry.packing_number === packetListData.packing_number
 			);
 
-			if (isDuplicate) {
+			if (isDuplicate)
 				throw new Error('This item has already been scanned');
-			}
 
 			if (selectedOption === 'warehouse_receive') {
 				if (packetListData.is_warehouse_received) {
@@ -132,6 +126,11 @@ export default function Index() {
 			}
 			return packetListData;
 		} catch (error) {
+			ShowLocalToast({
+				type: 'error',
+				message: error.message,
+			});
+			console.error('Error in handlePacketScan:', error);
 			throw error;
 		}
 	};
@@ -165,6 +164,7 @@ export default function Index() {
 	const handleEntryRemove = (index) => {
 		EntryRemove(index);
 	};
+
 	const onSubmit = async (data) => {
 		try {
 			const updatablePackingListEntryPromises = data.entry.map(

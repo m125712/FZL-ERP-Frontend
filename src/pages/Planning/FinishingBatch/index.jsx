@@ -53,7 +53,7 @@ export default function index() {
 			{
 				accessorKey: 'batch_number',
 				header: 'Batch',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => {
 					const { uuid } = info.row.original;
 
@@ -69,7 +69,7 @@ export default function index() {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => (
 					<LinkWithCopy
 						title={info.getValue()}

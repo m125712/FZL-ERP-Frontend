@@ -1,18 +1,17 @@
 import { useMemo } from 'react';
 
-
-
 import { WhatsApp } from '@/ui/Others/Button';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { CustomLink, DateTime, EditDelete, LinkWithCopy, Progress, StatusButton } from '@/ui';
-
-
+import {
+	CustomLink,
+	DateTime,
+	EditDelete,
+	LinkWithCopy,
+	Progress,
+	StatusButton,
+} from '@/ui';
 
 import { DEFAULT_COLUMNS } from '@/util/Table/DefaultColumns';
-
-
-
-
 
 export const BuyerColumns = ({
 	handelUpdate,
@@ -501,29 +500,35 @@ export const DetailsColumns = ({
 			//? Need to add marketing checked?
 			{
 				accessorKey: 'is_marketing_checked',
-				header: 'Marketing Checked',
+				header: (
+					<>
+						Marketing <br />
+						Checked
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => {
 					const permission = haveAccess.includes(
 						'click_status_marketing_checked'
 					);
 
+					const { marketing_checked_at } = info.row.original;
+
 					return (
-						<SwitchToggle
-							disabled={!permission}
-							onChange={() => {
-								handelMarketingCheckedStatus(info.row.index);
-							}}
-							checked={info.getValue() === true}
-						/>
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelMarketingCheckedStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={marketing_checked_at} />
+						</div>
 					);
 				},
-			},
-			{
-				accessorKey: 'marketing_checked_at',
-				header: 'Marketing Checked At',
-				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'buyer_name',

@@ -1,5 +1,5 @@
 import { useAuth } from '@/context/auth';
-import { useCommonTapeSFG } from '@/state/Common';
+import { useCommonCoilSFG, useCommonTapeSFG } from '@/state/Common';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -14,7 +14,7 @@ import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
-	updateTapeProd = {
+	updateCoilProd = {
 		uuid: null,
 		name: null,
 		quantity: null,
@@ -22,9 +22,10 @@ export default function Index({
 		zipper_number: null,
 		type: null,
 	},
-	setUpdateTapeProd,
+	setUpdateCoilProd,
 }) {
 	const { postData } = useCommonTapeSFG();
+	const { invalidateQuery } = useCommonCoilSFG();
 
 	const { user } = useAuth();
 	const schema = {
@@ -32,18 +33,13 @@ export default function Index({
 		remarks: TAPE_STOCK_TRX_TO_DYING_SCHEMA.remarks,
 	};
 
-	const {
-		register,
-		handleSubmit,
-		control,
-		Controller,
-		errors,
-		reset,
-		context,
-	} = useRHF(schema, TAPE_STOCK_TRX_TO_DYING_NULL);
+	const { register, handleSubmit, errors, reset, context } = useRHF(
+		schema,
+		TAPE_STOCK_TRX_TO_DYING_NULL
+	);
 
 	const onClose = () => {
-		setUpdateTapeProd((prev) => ({
+		setUpdateCoilProd((prev) => ({
 			...prev,
 			uuid: null,
 			type: null,
@@ -59,9 +55,9 @@ export default function Index({
 	const onSubmit = async (data) => {
 		const updatedData = {
 			uuid: nanoid(),
-			tape_coil_uuid: updateTapeProd.uuid,
+			tape_coil_uuid: updateCoilProd.uuid,
 			trx_quantity: data.trx_quantity,
-			tape_transfer_type: updateTapeProd.tape_transfer_type,
+			tape_transfer_type: updateCoilProd.tape_transfer_type,
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
 			remarks: data.remarks,
@@ -72,12 +68,13 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+		invalidateQuery();
 	};
 
 	return (
 		<AddModal
 			id={modalId}
-			title={updateTapeProd?.id !== null && 'Tape to Dying'}
+			title={updateCoilProd?.id !== null && 'Tape to Dying'}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}

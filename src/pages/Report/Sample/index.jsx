@@ -189,6 +189,7 @@ export default function Index() {
 									<th>C/N</th>
 									<th>C/D</th>
 									<th>DEL</th>
+									<th>QTY</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -218,12 +219,24 @@ export default function Index() {
 												status={item.is_delivered}
 											/>
 										</td>
+										<td>{item.challan_quantity}</td>
 									</tr>
 								))}
 							</tbody>
 						</table>
 					);
 				},
+			},
+			{
+				accessorFn: (row) =>
+					row.challan_info?.reduce(
+						(acc, curr) => acc + curr.challan_quantity,
+						0
+					),
+				id: 'total_challan',
+				header: 'Total Challan',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'remarks',

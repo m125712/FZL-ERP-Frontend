@@ -63,9 +63,14 @@ export const useMaterialTrxByUUID = (uuid) =>
 export const useMaterialBooking = (type, from, to) =>
 	createGlobalState({
 		queryKey: materialQK.booking(type, from, to),
-		url: type
-			? `/material/booking?s_type=${type}&from_date=${from}&to_date=${to}`
-			: `/material/booking?from_date=${from}&to_date=${to}`,
+		url:
+			type && from && to
+				? `/material/booking?s_type=${type}&from_date=${from}&to_date=${to}`
+				: type
+					? `/material/booking?s_type=${type}`
+					: from && to
+						? `/material/booking?from_date=${from}&to_date=${to}`
+						: '/material/booking',
 	});
 
 export const useMaterialBookingByUUID = (uuid) =>

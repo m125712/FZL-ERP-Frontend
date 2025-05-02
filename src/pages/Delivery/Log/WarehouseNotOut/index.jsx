@@ -5,7 +5,13 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, LinkWithCopy, SimpleDatePicker } from '@/ui';
+import {
+	CustomLink,
+	DateTime,
+	LinkWithCopy,
+	SimpleDatePicker,
+	StatusButton,
+} from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -192,6 +198,14 @@ export default function Index() {
 				header: 'Weight',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_sample',
+				header: 'Sample',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-sm' value={info.getValue()} />
+				),
 			},
 			{
 				accessorKey: 'count',

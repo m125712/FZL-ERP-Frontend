@@ -25,6 +25,8 @@ export default function Index({
 }) {
 	const haveAccess = useAccess('order__details');
 
+	console.log('total', total);
+
 	const [history, setHistory] = useState(null);
 	let title = item_description;
 
@@ -108,7 +110,7 @@ export default function Index({
 						<td className='px-3 py-1'>{total.sliderQuantity}</td>
 					)}
 					{!is_sample && <td colSpan={colspan}></td>}
-					<td></td>
+					<td className='px-3 py-1'>{total.finishingBalance}</td>
 					<td className='px-3 py-1'>{total.warehouseQuantity}</td>
 					<td className='px-3 py-1'>{total.deliveryQuantity}</td>
 

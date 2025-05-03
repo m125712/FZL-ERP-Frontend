@@ -85,6 +85,14 @@ export default function Index() {
 	);
 
 	useEffect(() => {
+		if (isUpdate && details?.is_warehouse_received) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Packing List is already received',
+			});
+			navigate(`/delivery/packing-list/${details?.uuid}`);
+		}
+
 		if (!isUpdate && packingListEntries?.packing_list_entry) {
 			setValue(
 				'packing_list_entry',
@@ -107,6 +115,14 @@ export default function Index() {
 
 	// Submit
 	const onSubmit = async (data) => {
+		if (isUpdate && data?.is_warehouse_received) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Packing List is already received',
+			});
+			return;
+		}
+
 		if (
 			data?.new_packing_list_entry?.some(
 				(item) =>

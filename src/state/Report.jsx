@@ -263,6 +263,7 @@ export const useItemConsumption = (
 			query,
 		enabled,
 	});
+
 export const useDescriptionConsumption = (
 	date,
 	toDate,
@@ -285,6 +286,7 @@ export const usePackingList = (query) =>
 			? `/report/packing-list-report?` + query
 			: `/report/packing-list-report`,
 	});
+
 export const useThreadDelivery = (date, toDate, query) =>
 	createGlobalState({
 		queryKey: reportQK.threadDelivery(date, toDate, query),
@@ -341,6 +343,7 @@ export const useOrderSummary = (uuid) =>
 		url: `/report/order-register-report/${uuid}`,
 		enabled: !!uuid,
 	});
+
 //* Delivery Report
 export const useDeliveryReportZipper = (
 	from,
@@ -353,6 +356,7 @@ export const useDeliveryReportZipper = (
 		url: `/report/delivery-report?${query}&from=${from}&to=${to}`,
 		enabled,
 	});
+
 export const useDeliveryReportThread = (
 	from,
 	to,
@@ -363,4 +367,10 @@ export const useDeliveryReportThread = (
 		queryKey: reportQK.deliveryReportThread(from, to, query),
 		url: `/report/delivery-report-thread?${query}&from=${from}&to=${to}`,
 		enabled,
+	});
+
+export const useThreadBatch = (query) =>
+	createGlobalState({
+		queryKey: reportQK.threadBatch(query),
+		url: `/report/thread-batch-report?${query}`,
 	});

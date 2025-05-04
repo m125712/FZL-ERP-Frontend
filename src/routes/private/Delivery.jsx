@@ -2,12 +2,15 @@ import { lazy } from 'react';
 
 const ChallanEntry = lazy(() => import('@pages/Delivery/Challan/Entry'));
 const Dashboard = lazy(() => import('@pages/Delivery/Dashboard'));
-const PackingLists = lazy(() => import('@pages/Delivery/PackingList'));
+const PackingListsSample = lazy(() => import('@pages/Delivery/PackingList'));
 const PackingListsDetails = lazy(
 	() => import('@pages/Delivery/PackingList/Details')
 );
 const PackingListsEntry = lazy(
 	() => import('@pages/Delivery/PackingList/Entry')
+);
+const PackingListsBulkEntry = lazy(
+	() => import('@pages/Delivery/PackingList-Bulk/Entry')
 );
 const WarehouseRecv = lazy(() => import('@pages/Delivery/WarehouseRecv'));
 const Carton = lazy(() => import('@pages/Delivery/Carton'));
@@ -18,6 +21,7 @@ const GatePass = lazy(() => import('@pages/Delivery/GatePass'));
 const Log = lazy(() => import('@pages/Delivery/Log'));
 const RM = lazy(() => import('@pages/Delivery/RM'));
 const Vehicle = lazy(() => import('@pages/Delivery/Vehicle'));
+const PackingListsBulk = lazy(() => import('@pages/Delivery/PackingList-Bulk'));
 
 export const DeliveryRoutes = [
 	{
@@ -125,10 +129,10 @@ export const DeliveryRoutes = [
 			},
 			// *Packing List
 			{
-				name: 'Packing List',
-				path: '/delivery/packing-list',
-				element: <PackingLists />,
-				page_name: 'delivery__packing_list',
+				name: 'Packing List (Sample)',
+				path: '/delivery/packing-list-sample',
+				element: <PackingListsSample />,
+				page_name: 'delivery__packing_list_sample',
 				actions: [
 					'create',
 					'read',
@@ -146,9 +150,9 @@ export const DeliveryRoutes = [
 			},
 			{
 				name: 'Packing List Entry',
-				path: '/delivery/packing-list/entry',
+				path: '/delivery/packing-list-sample/entry',
 				element: <PackingListsEntry />,
-				page_name: 'delivery__packing_list_entry',
+				page_name: 'delivery__packing_list_sample_entry',
 				actions: [
 					'create',
 					'read',
@@ -173,10 +177,74 @@ export const DeliveryRoutes = [
 				hidden: true,
 			},
 			{
-				name: 'Packing List Update',
-				path: '/delivery/packing-list/:uuid/update',
+				name: 'Packing List Sample Update',
+				path: '/delivery/packing-list-sample/:uuid/update',
 				element: <PackingListsEntry />,
-				page_name: 'delivery__packing_list_update',
+				page_name: 'delivery__packing_list_sample_update',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_receive_status',
+				],
+
+				hidden: true,
+			},
+			// ? Packing List Bulk
+			{
+				name: 'Packing List (Bulk)',
+				path: '/delivery/packing-list-bulk',
+				element: <PackingListsBulk />,
+				page_name: 'delivery__packing_list_bulk',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					//'click_receive_status',
+					'click_received',
+					'click_received_override',
+					'click_gate_pass',
+					'click_gate_pass_override',
+					'zipper',
+					'sample_zipper',
+					'thread',
+				],
+			},
+			{
+				name: 'Packing List Bulk Entry',
+				path: '/delivery/packing-list-bulk/entry',
+				element: <PackingListsBulkEntry />,
+				page_name: 'delivery__packing_list_bulk_entry',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_receive_status',
+				],
+				hidden: true,
+			},
+			{
+				name: 'Packing List Bulk Details',
+				path: '/delivery/packing-list-bulk/:uuid',
+				element: <PackingListsDetails />,
+				page_name: 'delivery__packing_list_bulk_details',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'click_receive_status',
+				],
+				hidden: true,
+			},
+			{
+				name: 'Packing List Bulk Update',
+				path: '/delivery/packing-list-bulk/:uuid/update',
+				element: <PackingListsBulkEntry />,
+				page_name: 'delivery__packing_list_bulk_update',
 				actions: [
 					'create',
 					'read',

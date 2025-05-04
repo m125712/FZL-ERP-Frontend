@@ -1477,18 +1477,6 @@ export const PACKING_LIST_SCHEMA = {
 				.number()
 				.nullable()
 				.max(yup.ref('max_quantity'), 'Beyond Max Quantity'),
-			short_quantity: yup.number().when('quantity', {
-				is: (quantity) => quantity > 0,
-				then: (Schema) =>
-					Schema.typeError('Must be a number').max(
-						yup.ref('order_quantity'),
-						'Beyond Order Quantity'
-					),
-				otherwise: (Schema) =>
-					Schema.nullable().transform((value, originalValue) =>
-						String(originalValue).trim() === '' ? null : value
-					),
-			}),
 			reject_quantity: yup.number().when('quantity', {
 				is: (quantity) => quantity > 0,
 				then: (Schema) =>
@@ -1526,18 +1514,6 @@ export const PACKING_LIST_UPDATE_SCHEMA = {
 				.number()
 				.nullable()
 				.max(yup.ref('max_quantity'), 'Beyond Max Quantity'),
-			short_quantity: yup.number().when('quantity', {
-				is: (quantity) => quantity > 0,
-				then: (Schema) =>
-					Schema.typeError('Must be a number').max(
-						yup.ref('order_quantity'),
-						'Beyond Order Quantity'
-					),
-				otherwise: (Schema) =>
-					Schema.nullable().transform((value, originalValue) =>
-						String(originalValue).trim() === '' ? null : value
-					),
-			}),
 			reject_quantity: yup.number().when('quantity', {
 				is: (quantity) => quantity > 0,
 				then: (Schema) =>
@@ -1588,7 +1564,6 @@ export const PACKING_LIST_NULL = {
 			balance_quantity: null,
 			quantity: 0,
 			poli_quantity: 0,
-			short_quantity: 0,
 			reject_quantity: 0,
 			remarks: '',
 			isDeletable: false,
@@ -1608,7 +1583,6 @@ export const PACKING_LIST_NULL = {
 			balance_quantity: null,
 			quantity: 0,
 			poli_quantity: 0,
-			short_quantity: 0,
 			reject_quantity: 0,
 			remarks: '',
 			isDeletable: false,

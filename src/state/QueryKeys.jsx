@@ -1838,6 +1838,8 @@ export const reportQK = {
 		to,
 		query,
 	],
+
+	threadBatch: (query) => [...reportQK.all(), 'thread-batch', query],
 };
 
 export const marketingQK = {

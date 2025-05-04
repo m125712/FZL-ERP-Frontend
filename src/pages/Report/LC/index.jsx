@@ -4,7 +4,7 @@ import { useLC } from '@/state/Report';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, StatusButton } from '@/ui';
+import { CustomLink, DateTime, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 

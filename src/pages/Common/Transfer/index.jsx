@@ -226,6 +226,7 @@ export default function Index() {
 			<ReactTable
 				handelAdd={handelAdd}
 				accessor={haveAccess.includes('create')}
+				showDateRange={false}
 				title={info.getTitle()}
 				data={data}
 				columns={columns}

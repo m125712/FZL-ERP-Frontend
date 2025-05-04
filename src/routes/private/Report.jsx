@@ -36,6 +36,8 @@ const ProductionSummary = lazy(
 );
 const Consumption = lazy(() => import('@/pages/Report/Consumption'));
 
+const ThreadBatch = lazy(() => import('@/pages/Report/ThreadBatch'));
+
 export const ReportRoutes = [
 	{
 		name: 'Report',
@@ -206,6 +208,13 @@ export const ReportRoutes = [
 				path: '/report/consumption',
 				element: <Consumption />,
 				page_name: 'report__consumption',
+				actions: ['read', 'show_own_orders'],
+			},
+			{
+				name: 'Thread Batch',
+				path: '/report/thread-batch',
+				element: <ThreadBatch />,
+				page_name: 'report__thread_batch',
 				actions: ['read', 'show_own_orders'],
 			},
 		],

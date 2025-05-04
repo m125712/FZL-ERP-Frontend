@@ -287,6 +287,7 @@ export default function Index() {
 				title={info.getTitle()}
 				data={data}
 				columns={columns}
+				showDateRange={false}
 				accessor={haveAccess.includes('create')}
 				extraButton={
 					<div className='flex items-center gap-2'>

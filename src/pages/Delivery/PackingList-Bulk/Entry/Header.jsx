@@ -19,22 +19,32 @@ export default function Header({
 	isUpdate,
 	watch,
 }) {
-	const { data: ordersZipperSample } = isUpdate
+	const { data: ordersZipper } = isUpdate
 		? useOtherOrder('')
-		: useOtherOrder('page=packing_list&is_sample=true');
-	const { data: ordersThreadSample } = isUpdate
+		: useOtherOrder('page=packing_list&item_for=full');
+	const { data: ordersSlider } = isUpdate
+		? useOtherOrder('')
+		: useOtherOrder('page=packing_list&item_for=slider');
+	const { data: ordersTape } = isUpdate
+		? useOtherOrder('')
+		: useOtherOrder('page=packing_list&item_for=tape');
+	const { data: ordersThread } = isUpdate
 		? useThreadOrder('')
-		: useThreadOrder('page=packing_list&is_sample=true');
+		: useThreadOrder('page=packing_list&is_sample=false');
 	const itemFor = {
-		sample_zipper: ordersZipperSample,
-		sample_thread: ordersThreadSample,
+		zipper: ordersZipper,
+		thread: ordersThread,
+		slider: ordersSlider,
+		tape: ordersTape,
 	};
 
 	const orders = itemFor[watch('item_for')] || [];
 	const { data: cartons } = useOtherCarton();
 	const itemOptions = [
-		{ label: 'Zipper Sample', value: 'sample_zipper' },
-		{ label: 'Thread Sample', value: 'sample_thread' },
+		{ label: 'Zipper', value: 'zipper' },
+		{ label: 'Thread', value: 'thread' },
+		{ label: 'Slider', value: 'slider' },
+		{ label: 'Tape', value: 'tape' },
 	];
 	useEffect(() => {
 		if (isUpdate) return;

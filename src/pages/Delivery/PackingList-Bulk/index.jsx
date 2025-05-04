@@ -33,7 +33,7 @@ export default function Index() {
 	const [status, setStatus] = useState('pending');
 
 	const navigate = useNavigate();
-	const haveAccess = useAccess('delivery__packing_list_sample');
+	const haveAccess = useAccess('delivery__packing_list_bulk');
 	const access = haveAccess?.filter(
 		(item) =>
 			item == 'thread' ||
@@ -43,12 +43,12 @@ export default function Index() {
 	);
 	const { data, isLoading, url, deleteData, updateData } =
 		useDeliveryPackingList(
-			`?can_show=${access.join(',')}&type=${status}&order_type=sample`
+			`?can_show=${access.join(',')}&type=${status}&order_type=bulk`
 		);
 	const info = new PageInfo(
-		'Packing List Sample',
+		'Packing List Bulk',
 		url,
-		'delivery__packing_list_sample'
+		'delivery__packing_list_bulk'
 	);
 
 	const { invalidateQuery: invalidateDeliveryChallan } = useDeliveryChallan();
@@ -426,11 +426,11 @@ export default function Index() {
 		[data]
 	);
 
-	const handelAdd = () => navigate('/delivery/packing-list-sample/entry');
+	const handelAdd = () => navigate('/delivery/packing-list-bulk/entry');
 
 	const handelUpdate = (idx) => {
 		const uuid = data[idx]?.uuid;
-		navigate(`/delivery/packing-list-sample/${uuid}/update`);
+		navigate(`/delivery/packing-list-bulk/${uuid}/update`);
 	};
 	const handelReceivedStatus = async (idx) => {
 		await updateData.mutateAsync({

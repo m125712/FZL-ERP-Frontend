@@ -257,7 +257,6 @@ const DynamicDeliveryTable = ({
 							/>
 						</td>
 					)}
-
 					<td className={`w-32 ${rowClass}`}>
 						<Input
 							label={`${entryFiledName}[${index}].reject_quantity`}

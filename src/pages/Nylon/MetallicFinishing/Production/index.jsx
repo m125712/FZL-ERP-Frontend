@@ -127,12 +127,18 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
 			{
-				accessorKey: 'slider_finishing_stock',
-				header: <span>Slider (PCS)</span>,
+				accessorFn: (row) => row.slider_finishing_stock,
+				id: 'slider_finishing_stock',
+				header: 'Slider (PCS)',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { slider_provided } = info.row.original;
+
+					return (
+						info.getValue() + (slider_provided ? ` (Provided)` : '')
+					);
+				},
 			},
 			{
 				accessorKey: 'balance_quantity',
@@ -157,6 +163,7 @@ export default function Index() {
 						balance_quantity,
 						slider_finishing_stock,
 						order_type,
+						slider_provided,
 					} = info.row.original;
 
 					const access =
@@ -170,7 +177,7 @@ export default function Index() {
 					return (
 						<Transfer
 							onClick={() => handelProduction(info.row.index)}
-							disabled={access}
+							disabled={access && !slider_provided}
 						/>
 					);
 				},

@@ -12,6 +12,7 @@ import PageInfo from '@/util/PageInfo';
 const Production = lazy(() => import('./Production'));
 const DyeingAgainstStock = lazy(() => import('./DyeingAgainstStock'));
 const TrxToStock = lazy(() => import('./ToStock'));
+const TrxToDyeing = lazy(() => import('./TrxToDying'));
 
 export default function Index() {
 	const { data, isLoading, url } = useCommonCoilSFG();
@@ -123,7 +124,24 @@ export default function Index() {
 				width: 'w-24',
 				cell: (info) => (
 					<Transfer
-						onClick={() => handleTrxToDying(info.row.index)}
+						onClick={() =>
+							handleTrxToDying(info.row.index, 'to_dyeing')
+						}
+					/>
+				),
+			},
+			{
+				accessorKey: 'action',
+				header: 'To Store',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_to_dyeing'),
+				width: 'w-24',
+				cell: (info) => (
+					<Transfer
+						onClick={() =>
+							handleTrxToDying(info.row.index, 'to_store')
+						}
 					/>
 				),
 			},
@@ -415,8 +433,16 @@ export default function Index() {
 		window[info.getAddOrUpdateModalId()].showModal();
 	};
 
-	const handleTrxToDying = (idx) => {
-		navigate(`/common/coil/sfg/entry-to-dyeing/${data[idx].uuid}`);
+	const handleTrxToDying = (idx, type) => {
+		const selectedProd = data[idx];
+		setUpdateCoilProd((prev) => ({
+			...prev,
+			...selectedProd,
+			tape_transfer_type:
+				type === 'to_dyeing' ? 'coil_to_dyeing' : 'coil_to_store',
+		}));
+		window['TrxToDyingModal'].showModal();
+		// navigate(`/common/coil/sfg/entry-to-dyeing/${data[idx].uuid}`);
 	};
 	const handleTransfer = (idx) => {
 		navigate(`/common/coil/sfg/entry-to-transfer/${data[idx].uuid}`);
@@ -475,6 +501,13 @@ export default function Index() {
 					}}
 				/>
 			</Suspense>
+			<TrxToDyeing
+				modalId={'TrxToDyingModal'}
+				{...{
+					updateCoilProd,
+					setUpdateCoilProd,
+				}}
+			/>
 			<Suspense>
 				<DyeingAgainstStock
 					modalId={'dyeing_against_stock_modal'}

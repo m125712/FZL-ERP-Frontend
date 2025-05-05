@@ -154,7 +154,33 @@ export default function Index() {
 					) {
 						return (
 							<Transfer
-								onClick={() => handleTrxToDying(info.row.index)}
+								onClick={() =>
+									handleTrxToDying(
+										info.row.index,
+										'to_dyeing'
+									)
+								}
+							/>
+						);
+					}
+				},
+			},
+			{
+				accessorKey: 'action',
+				header: 'To Store',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('click_to_dyeing'),
+				width: 'w-24',
+				cell: (info) => {
+					if (
+						info.row.original?.item_name?.toLowerCase() != 'nylon'
+					) {
+						return (
+							<Transfer
+								onClick={() =>
+									handleTrxToDying(info.row.index, 'to_store')
+								}
 							/>
 						);
 					}
@@ -533,19 +559,21 @@ export default function Index() {
 		}));
 		window['trx_to_stock_modal'].showModal();
 	};
-	const handleTrxToDying = (idx) => {
-		// const selectedProd = data[idx];
-		// setUpdateTapeProd((prev) => ({
-		// 	...prev,
-		// 	...selectedProd,
-		// 	item_name: selectedProd.type,
-		// 	tape_or_coil_stock_id: selectedProd.uuid,
-		// 	type_of_zipper:
-		// 		selectedProd.type + ' ' + selectedProd.zipper_number,
-		// }));
-		// window['trx_to_dying_modal'].showModal();
+	const handleTrxToDying = (idx, type) => {
+		const selectedProd = data[idx];
+		setUpdateTapeProd((prev) => ({
+			...prev,
+			...selectedProd,
+			item_name: selectedProd.type,
+			tape_or_coil_stock_id: selectedProd.uuid,
+			type_of_zipper:
+				selectedProd.type + ' ' + selectedProd.zipper_number,
+			tape_transfer_type:
+				type === 'to_dyeing' ? 'tape_to_dyeing' : 'tape_to_store',
+		}));
+		window['trx_to_dying_modal'].showModal();
 
-		navigate(`/common/tape/sfg/entry-to-dyeing/${data[idx].uuid}`);
+		// navigate(`/common/tape/sfg/entry-to-dyeing/${data[idx].uuid}`);
 	};
 	const handleTransfer = (idx) => {
 		navigate(`/common/tape/sfg/entry-to-transfer/${data[idx].uuid}`);

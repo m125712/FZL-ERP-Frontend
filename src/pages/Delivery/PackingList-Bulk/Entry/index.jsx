@@ -304,7 +304,9 @@ export default function Index() {
 					.then(() => {
 						invalidateDeliveryPackingList();
 						invalidateDetails();
-						navigate(`/delivery/packing-list`);
+						navigate(
+							`/delivery/packing-list/${packingListData.uuid}`
+						);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);

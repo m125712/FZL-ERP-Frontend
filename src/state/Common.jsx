@@ -150,6 +150,19 @@ export const useCommonTapeToDyeing = () =>
 		url: `/zipper/tape-coil-to-dyeing/by/type/tape`,
 	});
 
+// * To Dyeing & Store
+export const useCommonToDyeingAndStore = (query) =>
+	createGlobalState({
+		queryKey: commonQK.coilToDyeingAndStore(query),
+		url: `/zipper/tape-transfer-to-dyeing?transfer_type=${query}`,
+	});
+
+export const useCommonToDyeingAndStoreByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: commonQK.coilToDyeingAndStoreByUUID(uuid),
+		url: `/zipper/tape-transfer-to-dyeing/${uuid}`,
+	});
+
 // * PRODUCTION * //
 export const useCommonCoilProduction = () =>
 	createGlobalState({

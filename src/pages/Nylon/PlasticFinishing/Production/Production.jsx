@@ -36,7 +36,7 @@ export default function Index({
 	const { invalidateQuery } = useNylonPlasticFinishingProductionLog();
 	const { user } = useAuth();
 	const MAX_PROD =
-		updatePFProd?.order_type === 'tape'
+		updatePFProd?.order_type === 'tape' || updatePFProd?.slider_provided
 			? updatePFProd?.balance_quantity
 			: Math.min(
 					Number(updatePFProd?.balance_quantity),

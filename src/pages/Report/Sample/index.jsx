@@ -18,9 +18,9 @@ const getPath = (haveAccess, userUUID) => {
 	) {
 		return `&own_uuid=${userUUID}&show_zero_balance=1`;
 	} else if (haveAccess.includes('show_own_orders') && userUUID) {
-		return `own_uuid=${userUUID}&show_zero_balance=0`;
+		return `&own_uuid=${userUUID}&show_zero_balance=0`;
 	} else if (haveAccess.includes('show_zero_balance') && userUUID) {
-		return `show_zero_balance=1`;
+		return `&show_zero_balance=1`;
 	}
 
 	return ``;

@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useCommercialPIByQuery } from '@/state/Commercial';
 import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
+import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { CustomLink, DateTime, EditDelete, StatusSelect } from '@/ui';
 
@@ -33,7 +34,7 @@ export default function Index() {
 	const haveAccess = useAccess('commercial__pi');
 	const { user } = useAuth();
 
-	const { data, isLoading, url } = useCommercialPIByQuery(
+	const { data, isLoading, url, deleteData } = useCommercialPIByQuery(
 		getPath(haveAccess, user?.uuid) + `&type=${status}`,
 		{
 			enabled: !!user?.uuid,
@@ -228,13 +229,17 @@ export default function Index() {
 				header: 'Actions',
 				enableColumnFilter: false,
 				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
+				hidden:
+					!haveAccess.includes('update') ||
+					!haveAccess.includes('delete'),
 				width: 'w-24',
 				cell: (info) => (
 					<EditDelete
 						idx={info.row.index}
 						handelUpdate={handelUpdate}
-						showDelete={false}
+						handelDelete={handelDelete}
+						showDelete={haveAccess.includes('delete')}
+						showUpdate={haveAccess.includes('update')}
 					/>
 				),
 			},
@@ -247,6 +252,22 @@ export default function Index() {
 	const handelUpdate = (idx) => {
 		const uuid = data[idx]?.uuid;
 		navigate(`/commercial/pi/${uuid}/update`);
+	};
+
+	// Delete
+	const [deleteItem, setDeleteItem] = useState({
+		itemId: null,
+		itemName: null,
+	});
+
+	const handelDelete = (idx) => {
+		setDeleteItem((prev) => ({
+			...prev,
+			itemId: data[idx].uuid,
+			itemName: data[idx].id,
+		}));
+
+		window[info.getDeleteModalId()].showModal();
 	};
 
 	if (isLoading)
@@ -268,6 +289,19 @@ export default function Index() {
 					/>
 				}
 			/>
+			<Suspense>
+				<DeleteModal
+					modalId={info.getDeleteModalId()}
+					title={info.getTitle()}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url: '/commercial/pi-cash',
+						deleteData,
+					}}
+					// invalidateQuery={invalidateQuery}
+				/>
+			</Suspense>
 		</div>
 	);
 }

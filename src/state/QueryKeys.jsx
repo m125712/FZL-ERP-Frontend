@@ -343,6 +343,14 @@ export const commonQK = {
 	tapeToDyeing: () => [...commonQK.all(), 'tape/to-dyeing'],
 	tapeToDyeingByUUID: (uuid) => [...commonQK.tapeToDyeing(), uuid],
 
+	//* Tape Dyeing & Store
+	coilToDyeingAndStore: (query) => [
+		...commonQK.all(),
+		'coil/tape-to-dyeing-and-store',
+		query,
+	],
+	coilToDyeingAndStoreByUUID: (uuid) => [...commonQK.all(), uuid],
+
 	//* Multi Color Dashboard
 	multiColorDashboard: () => [...commonQK.all(), 'multi-color-dashboard'],
 	multiColorDashboardByUUID: (uuid) => [

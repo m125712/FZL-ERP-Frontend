@@ -127,10 +127,17 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'slider_finishing_stock',
-				header: <span>Slider (PCS)</span>,
+				accessorFn: (row) => row.slider_finishing_stock,
+				id: 'slider_finishing_stock',
+				header: 'Slider (PCS)',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { slider_provided } = info.row.original;
+
+					return (
+						info.getValue() + (slider_provided ? ` (Provided)` : '')
+					);
+				},
 			},
 			{
 				accessorKey: 'balance_quantity',

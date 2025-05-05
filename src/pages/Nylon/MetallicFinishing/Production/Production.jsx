@@ -35,7 +35,7 @@ export default function Index({
 	const { invalidateQuery } = useNylonMFProductionLog();
 
 	const MAX_PROD =
-		updateMFProd?.order_type === 'tape'
+		updateMFProd?.order_type === 'tape' || updateMFProd?.slider_provided
 			? updateMFProd?.balance_quantity
 			: Math.min(
 					Number(updateMFProd?.balance_quantity),

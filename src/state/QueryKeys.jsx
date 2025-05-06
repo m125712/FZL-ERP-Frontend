@@ -1022,15 +1022,19 @@ export const sliderQK = {
 	],
 
 	//* slider coloring log production
-	sliderColoringLogProduction: () => [
+	sliderColoringLogProduction: (from, to) => [
 		...sliderQK.all(),
 		'coloring-log-production',
+		from,
+		to,
 	],
 
 	//* slider coloring log transaction
-	sliderColoringLogTransaction: () => [
+	sliderColoringLogTransaction: (from, to) => [
 		...sliderQK.all(),
 		'coloring-log-transaction',
+		from,
+		to,
 	],
 
 	//* Slider coloring Production

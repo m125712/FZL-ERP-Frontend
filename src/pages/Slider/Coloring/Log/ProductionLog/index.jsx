@@ -4,6 +4,7 @@ import {
 	useSliderColoringProduction,
 } from '@/state/Slider';
 import Pdf from '@components/Pdf/SliderColoringProduction';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -14,6 +15,7 @@ import {
 	DateTime,
 	EditDelete,
 	LinkWithCopy,
+	SimpleDatePicker,
 	StatusButton,
 } from '@/ui';
 
@@ -22,7 +24,12 @@ import PageInfo from '@/util/PageInfo';
 import AddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
-	const { data, isLoading, deleteData } = useSliderColoringLogProduction();
+	const [date, setDate] = useState(new Date());
+	const [toDate, setToDate] = useState(new Date());
+	const { data, isLoading, deleteData } = useSliderColoringLogProduction(
+		format(date, 'yyyy-MM-dd'),
+		format(toDate, 'yyyy-MM-dd')
+	);
 	const { invalidateQuery } = useSliderColoringProduction();
 
 	const info = new PageInfo(
@@ -319,6 +326,31 @@ export default function Index() {
 				columns={columns}
 				showPdf={true}
 				pdfData={pdfData}
+				showDateRange={false}
+				extraButton={
+					<div className='flex items-center gap-2'>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'Date'}
+							value={date}
+							placeholder='Date'
+							onChange={(data) => {
+								setDate(data);
+							}}
+							selected={date}
+						/>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'toDate'}
+							value={toDate}
+							placeholder='To'
+							onChange={(data) => {
+								setToDate(data);
+							}}
+							selected={toDate}
+						/>
+					</div>
+				}
 			/>
 			<Suspense>
 				<AddOrUpdate

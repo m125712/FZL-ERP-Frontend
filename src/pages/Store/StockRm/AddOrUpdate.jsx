@@ -35,8 +35,8 @@ export default function Index({
 	const { user } = useAuth();
 	const { url, updateData, postData } = useMaterialInfo();
 	const { data } = useMaterialInfoByUUID(updateMaterialDetails?.uuid);
-	const { data: section } = useOtherMaterialSection();
-	const { data: materialType } = useOtherMaterialType();
+	const { data: section } = useOtherMaterialSection('rm');
+	const { data: materialType } = useOtherMaterialType('rm');
 	const { invalidateQuery: invalidateMaterialByDyes } =
 		useOtherMaterialByParams('type=dyes');
 	const {

@@ -66,7 +66,7 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			store_type: 'rm',
+			store_type: 'accessories',
 			created_at: GetDateTime(),
 			created_by: user?.uuid,
 		};

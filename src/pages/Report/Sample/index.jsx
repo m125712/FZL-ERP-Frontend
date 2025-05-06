@@ -236,6 +236,17 @@ export default function Index() {
 				},
 			},
 			{
+				accessorFn: (row) => {
+					return row.challan_info?.map((item) =>
+						format(item.challan_date, 'dd-MMM-yyyy')
+					)[0];
+				},
+				id: 'challan_info_date',
+				header: 'Challan Info Date',
+				enableColumnFilter: false,
+				hidden: true,
+			},
+			{
 				accessorFn: (row) =>
 					row.challan_info?.reduce(
 						(acc, curr) => acc + curr.challan_quantity,

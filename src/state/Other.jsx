@@ -158,31 +158,39 @@ export const useOtherOrderEntry = () =>
 	});
 
 // GET OTHER VENDOR
-export const useOtherVendor = () =>
+export const useOtherVendor = (type) =>
 	createGlobalState({
-		queryKey: otherQK.vendor(),
-		url: `/other/vendor/value/label`,
+		queryKey: otherQK.vendor(type),
+		url: type
+			? `/other/vendor/value/label?store_type=${type}`
+			: `/other/vendor/value/label`,
 	});
 
 // GET OTHER MATERIAL SECTION
-export const useOtherMaterialSection = () =>
+export const useOtherMaterialSection = (type) =>
 	createGlobalState({
-		queryKey: otherQK.materialSection(),
-		url: `/other/material-section/value/label`,
+		queryKey: otherQK.materialSection(type),
+		url: type
+			? `/other/material-section/value/label?store_type=${type}`
+			: `/other/material-section/value/label`,
 	});
 
 // GET OTHER MATERIAL TYPE
-export const useOtherMaterialType = () =>
+export const useOtherMaterialType = (type) =>
 	createGlobalState({
-		queryKey: otherQK.materialType(),
-		url: `/other/material-type/value/label`,
+		queryKey: otherQK.materialType(type),
+		url: type
+			? `/other/material-type/value/label?store_type=${type}`
+			: `/other/material-type/value/label`,
 	});
 
 // GET OTHER MATERIAL
-export const useOtherMaterial = () =>
+export const useOtherMaterial = (type) =>
 	createGlobalState({
-		queryKey: otherQK.material(),
-		url: `/other/material/value/label/unit/quantity`,
+		queryKey: otherQK.material(type),
+		url: type
+			? `/other/material/value/label/unit/quantity?store_type=${type}`
+			: `/other/material/value/label/unit/quantity`,
 	});
 
 //GET OTHER DYES CATEGORY

@@ -45,7 +45,7 @@ export default function Index() {
 		deleteData,
 	} = usePurchaseDescription();
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
-	const { data: material } = useOtherMaterial();
+	const { data: material } = useOtherMaterial('accessories');
 	const { invalidateQuery: invalidatePurchaseLog } = usePurchaseLog();
 	const { data } = usePurchaseDetailsByUUID(purchase_description_uuid);
 
@@ -317,7 +317,10 @@ export default function Index() {
 											label={`purchase[${index}].material_uuid`}
 											title='Material'
 											is_title_needed='false'
-											errors={errors}
+											dynamicerror={
+												errors?.purchase?.[index]
+													?.material_uuid
+											}
 										>
 											<Controller
 												name={`purchase[${index}].material_uuid`}

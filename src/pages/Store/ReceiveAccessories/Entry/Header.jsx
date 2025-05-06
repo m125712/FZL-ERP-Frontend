@@ -17,7 +17,7 @@ export default function Header({
 	Controller,
 }) {
 	const { purchase_description_uuid } = useParams();
-	const { data: vendor } = useOtherVendor();
+	const { data: vendor } = useOtherVendor('accessories');
 
 	const purchaseOptions = [
 		{ label: 'Import', value: 0 },

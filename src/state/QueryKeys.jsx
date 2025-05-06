@@ -1308,16 +1308,20 @@ export const otherQK = {
 	],
 
 	//Vendor
-	vendor: () => [...otherQK.all(), 'vendor'],
+	vendor: (type) => [...otherQK.all(), 'vendor', type || ''],
 
 	//Bank
 	bank: () => [...otherQK.all(), 'bank'],
 
 	//Material
-	material: () => [...otherQK.all(), 'material'],
+	material: (type) => [...otherQK.all(), 'material', type || ''],
 	materialByParams: (params) => [...otherQK.all(), 'material', params],
-	materialSection: () => [...otherQK.all(), 'material-section'],
-	materialType: () => [...otherQK.all(), 'material-type'],
+	materialSection: (type) => [
+		...otherQK.all(),
+		'material-section',
+		type || '',
+	],
+	materialType: (type) => [...otherQK.all(), 'material-type', type || ''],
 
 	//Lab Dip
 	labDip: () => [...otherQK.all(), 'lab-dip'],

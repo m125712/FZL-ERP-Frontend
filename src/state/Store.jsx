@@ -152,7 +152,9 @@ export const usePurchaseLog = (type, from, to) =>
 		queryKey: purchaseQK.log(type, from, to),
 		url: type
 			? `/purchase/purchase-log?s_type=${type}&from_date=${from}&to_date=${to}`
-			: `/purchase/purchase-log?from_date=${from}&to_date=${to}`,
+			: from && to
+				? `/purchase/purchase-log?from_date=${from}&to_date=${to}`
+				: '/purchase/purchase-log',
 	});
 
 // * Material_trx_against_order_description *//

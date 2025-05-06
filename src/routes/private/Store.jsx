@@ -24,12 +24,19 @@ const PurchaseEntryAccessories = lazy(
 );
 
 const Section = lazy(() => import('@/pages/Store/Section'));
+const SectionAccessories = lazy(
+	() => import('@/pages/Store/SectionAccessories')
+);
 const StockRm = lazy(() => import('@/pages/Store/StockRm'));
 const StockAccessories = lazy(() => import('@/pages/Store/StockAccessories'));
 const Test = lazy(() => import('@/pages/Store/Test'));
 const MaterialType = lazy(() => import('@/pages/Store/Type'));
+const MaterialTypeAccessories = lazy(
+	() => import('@/pages/Store/TypeAccessories')
+);
 // * Purchase
 const Vendor = lazy(() => import('@/pages/Store/Vendor'));
+const VendorAccessories = lazy(() => import('@/pages/Store/VendorAccessories'));
 
 export const StoreRoutes = [
 	{
@@ -187,21 +194,21 @@ export const StoreRoutes = [
 			{
 				name: 'Section',
 				path: '/store-accessories/section',
-				element: <Section />,
+				element: <SectionAccessories />,
 				page_name: 'store__accessories_section',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
 			{
 				name: 'Material Type',
 				path: '/store-accessories/type',
-				element: <MaterialType />,
+				element: <MaterialTypeAccessories />,
 				page_name: 'store__accessories_type',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
 			{
 				name: 'Vendor',
 				path: '/store-accessories/vendor',
-				element: <Vendor />,
+				element: <VendorAccessories />,
 				page_name: 'store__accessories_vendor',
 				actions: ['create', 'read', 'update', 'delete'],
 			},

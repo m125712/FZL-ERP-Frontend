@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useOtherMaterialSection } from '@/state/Other';
-import { useMaterialSection, useMaterialSectionByUUID } from '@/state/Store';
+import { useOtherMaterialType } from '@/state/Other';
+import { useMaterialType, useMaterialTypeByUUID } from '@/state/Store';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -13,16 +13,15 @@ import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
-	updateSection = {
+	updateMaterialType = {
 		uuid: null,
 	},
-	setUpdateSection,
+	setUpdateMaterialType,
 }) {
 	const { user } = useAuth();
-	const { invalidateQuery: invalidateMaterialSection } =
-		useOtherMaterialSection();
-	const { url, updateData, postData } = useMaterialSection();
-	const { data } = useMaterialSectionByUUID(updateSection?.uuid);
+	const { invalidateQuery: invalidateMaterialType } = useOtherMaterialType();
+	const { url, updateData, postData } = useMaterialType();
+	const { data } = useMaterialTypeByUUID(updateMaterialType?.uuid);
 
 	const { register, handleSubmit, errors, reset, context } = useRHF(
 		SECTION_SCHEMA,
@@ -36,7 +35,7 @@ export default function Index({
 	}, [data]);
 
 	const onClose = () => {
-		setUpdateSection((prev) => ({
+		setUpdateMaterialType((prev) => ({
 			...prev,
 			uuid: null,
 		}));
@@ -46,15 +45,15 @@ export default function Index({
 
 	const onSubmit = async (data) => {
 		// Update item
-		if (updateSection?.uuid !== null) {
+		if (updateMaterialType?.uuid !== null) {
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateSection?.uuid}`,
-				uuid: updateSection?.uuid,
+				url: `${url}/${updateMaterialType?.uuid}`,
+				uuid: updateMaterialType?.uuid,
 				updatedData,
 				onClose,
 			});
@@ -66,7 +65,7 @@ export default function Index({
 		const updatedData = {
 			...data,
 			uuid: nanoid(),
-			store_type: 'rm',
+			store_type: 'accessories',
 			created_at: GetDateTime(),
 			created_by: user?.uuid,
 		};
@@ -77,23 +76,22 @@ export default function Index({
 			onClose,
 		});
 
-		invalidateMaterialSection();
+		invalidateMaterialType();
 	};
 
 	return (
 		<AddModal
 			id={modalId}
 			title={
-				updateSection?.uuid !== null
-					? 'Update Section'
-					: 'Create Section'
+				updateMaterialType?.uuid !== null
+					? 'Update Material Type'
+					: 'Create Material Type'
 			}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}
 		>
-			<Input label='index' {...{ register, errors }} />
 			<Input label='name' {...{ register, errors }} />
 			<Input label='short_name' {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />

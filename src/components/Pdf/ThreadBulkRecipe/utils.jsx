@@ -140,11 +140,11 @@ export const getPageHeader = (batch) => {
 									text: `${Array.from(shade).join(', ')}`,
 								},
 								{
-									text: 'Substrate',
+									text: 'Yarn Issue',
 									bold: true,
 								},
 								{
-									text: `${Array.from(substrate).join(', ')}`,
+									text: yarn_issue_created_at,
 								},
 							],
 							[
@@ -154,6 +154,22 @@ export const getPageHeader = (batch) => {
 								},
 								{
 									text: `${Array.from(color).join(', ')}`,
+								},
+								{
+									text: 'Substrate',
+									bold: true,
+								},
+								{
+									text: `${Array.from(substrate).join(', ')}`,
+								},
+							],
+							[
+								{
+									text: 'Machine No',
+									bold: true,
+								},
+								{
+									text: batch?.machine_name,
 								},
 								{
 									text: 'Batch Weight',
@@ -171,11 +187,11 @@ export const getPageHeader = (batch) => {
 							],
 							[
 								{
-									text: 'Machine No',
+									text: 'Slot',
 									bold: true,
 								},
 								{
-									text: batch?.machine_name,
+									text: 'Slot ' + batch?.slot,
 								},
 								{
 									text: 'Volume',
@@ -190,19 +206,14 @@ export const getPageHeader = (batch) => {
 							],
 							[
 								{
-									text: 'Slot',
-									bold: true,
-								},
-								{
-									text: 'Slot ' + batch?.slot,
-								},
-								{
 									text: 'Light Source',
 									bold: true,
 								},
 								{
 									text: '',
 								},
+								{},
+								{},
 							],
 						],
 					},

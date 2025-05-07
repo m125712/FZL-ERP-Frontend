@@ -161,13 +161,14 @@ export default function Index() {
 			{
 				accessorFn: (row) => row.sizes + ' (' + row.size_count + ')',
 				id: 'sizes',
-				header: 'Size (cm)',
+				header: 'Size',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const { sizes, size_count } = info.row.original;
+					const { sizes, size_count, unit } = info.row.original;
 					return (
 						<div className='flex flex-col'>
-							<span>{sizes} </span>
+							<span>{sizes}</span>
+							<span>{unit}</span>
 							<span>#{size_count}</span>
 						</div>
 					);
@@ -175,7 +176,23 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_quantity',
-				header: 'Order QTY',
+				header: (
+					<>
+						Order <br />
+						QTY
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_tape_expected_kg',
+				header: (
+					<>
+						Exp. Tape <br />
+						(KG)
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -183,7 +200,12 @@ export default function Index() {
 				accessorFn: (row) =>
 					row.total_quantity - row.total_packing_list_quantity,
 				id: 'prod_balance_quantity',
-				header: 'Balance QTY',
+				header: (
+					<>
+						Bal. <br />
+						QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -202,29 +224,43 @@ export default function Index() {
 
 					if (!dyeing_batch?.length) return '--';
 
-					return dyeing_batch?.map((item) => {
-						return (
-							<div
-								key={item.dyeing_batch_number}
-								className='flex flex-col border-b-2 border-primary/50 p-1 last:border-0'
-							>
-								<CustomLink
-									label={item.dyeing_batch_number}
-									url={`/dyeing-and-iron/zipper-batch/${item.dyeing_batch_uuid}`}
-									openInNewTab={true}
-								/>
-								<div className='flex items-center gap-2'>
-									<DateTime
-										date={item.dyeing_batch_date}
-										customizedDateFormate='dd MMM, yy'
-										isTime={false}
-									/>
-
-									<Status status={item.received} />
-								</div>
-							</div>
-						);
-					});
+					return (
+						<table className='border-2 border-gray-300'>
+							<thead>
+								<tr className='text-xs text-gray-600'>
+									<th className={cn(rowStyle)}>BA/N</th>
+									<th className={cn(rowStyle)}>STA</th>
+									<th className={cn(rowStyle)}>P/Q</th>
+								</tr>
+							</thead>
+							<tbody>
+								{dyeing_batch?.map((item) => (
+									<tr>
+										<td className={cn(rowStyle)}>
+											<CustomLink
+												label={item.dyeing_batch_number}
+												url={`/dyeing-and-iron/zipper-batch/${item.dyeing_batch_uuid}`}
+												openInNewTab={true}
+												showCopyButton={false}
+											/>
+											<DateTime
+												date={item.dyeing_batch_date}
+												customizedDateFormate='dd MMM, yy'
+												isTime={false}
+											/>
+										</td>
+										<td className={cn(rowStyle)}>
+											{/* {item.dyeing_batch_quantity} */}
+											<Status status={item.received} />
+										</td>
+										<td className={cn(rowStyle)}>
+											{item.total_production_quantity}
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					);
 				},
 			},
 			{
@@ -307,17 +343,17 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'total_tape_coil_to_dyeing_quantity',
-				header: (
-					<>
-						Tape Prep <br />
-						(kg)
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'total_tape_coil_to_dyeing_quantity',
+			// 	header: (
+			// 		<>
+			// 			Tape Prep <br />
+			// 			(kg)
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorKey: 'total_dyeing_transaction_quantity',
 				header: (
@@ -410,6 +446,11 @@ export default function Index() {
 	return (
 		<ReactTable
 			title={info.getTitle()}
+			subtitle={
+				<div className='flex flex-col'>
+					<span>balance = order qty - Packing List</span>
+				</div>
+			}
 			accessor={false}
 			data={data}
 			columns={columns}

@@ -207,7 +207,7 @@ const Zipper = ({
 							render={({ field: { onChange } }) => {
 								return (
 									<ReactSelect
-										isDisabled={pi_uuid}
+										// isDisabled={pi_uuid}
 										isMulti
 										placeholder='Select Order Numbers'
 										options={order_number_for_zippers}

@@ -10,6 +10,8 @@ import { CustomLink, DateTime, SimpleDatePicker, Status } from '@/ui';
 import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
 
+import { REPORT_DATE_FORMATE } from '../utils';
+
 const getPath = (haveAccess, userUUID) => {
 	if (
 		haveAccess.includes('show_own_orders') &&
@@ -118,7 +120,8 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => format(row.issue_date, 'dd-MMM-yyyy'),
+				accessorFn: (row) =>
+					row.issue_date && REPORT_DATE_FORMATE(row.issue_date),
 				id: 'issue_date',
 				header: 'Order Date',
 				enableColumnFilter: false,

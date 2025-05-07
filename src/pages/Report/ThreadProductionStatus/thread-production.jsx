@@ -7,7 +7,7 @@ import { useAccess } from '@/hooks';
 import ReactTable from '@/components/Table';
 import { CustomLink, DateTime, SimpleDatePicker, StatusButton } from '@/ui';
 
-import { ProductionStatus } from '../utils';
+import { ProductionStatus, REPORT_DATE_FORMATE } from '../utils';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
@@ -59,7 +59,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorFn: (row) => format(row.batch_created_at, 'dd/MM/yy'),
+				accessorFn: (row) => REPORT_DATE_FORMATE(row.batch_created_at),
 				id: 'batch_created_at',
 				header: 'Created At',
 				enableColumnFilter: false,
@@ -93,7 +93,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorFn: (row) => format(row.order_created_at, 'dd/MM/yy'),
+				accessorFn: (row) => REPORT_DATE_FORMATE(row.order_created_at),
 				id: 'order_created_at',
 				header: 'Created At',
 				enableColumnFilter: false,
@@ -107,7 +107,7 @@ export default function Index() {
 			{
 				accessorFn: (row) =>
 					row.order_updated_at
-						? format(row.order_updated_at, 'dd/MM/yy')
+						? REPORT_DATE_FORMATE(row.order_updated_at)
 						: '--',
 				id: 'order_updated_at',
 				header: 'Updated At',
@@ -156,7 +156,7 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					format(row.swatch_approval_date, 'dd/MM/yy'),
+					REPORT_DATE_FORMATE(row.swatch_approval_date),
 				id: 'swatch_approval_date',
 				header: 'Swatch',
 				enableColumnFilter: false,
@@ -257,7 +257,6 @@ export default function Index() {
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
-	console.log(format(from, 'yyyy-MM-dd hh:mm:ss'));
 	return (
 		<>
 			<ReactTable

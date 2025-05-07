@@ -54,7 +54,7 @@ export default function Index() {
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
-	const Total = data.reduce((acc, curr) => acc + curr.total_production, 0);
+	const Total = data?.reduce((acc, curr) => acc + curr.total_production, 0);
 
 	return (
 		<ReactTable

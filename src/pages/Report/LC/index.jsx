@@ -8,6 +8,7 @@ import { CustomLink, DateTime, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+import { REPORT_DATE_FORMATE } from '../utils';
 import Header from './Header';
 
 const getPath = (haveAccess, userUUID) => {
@@ -60,7 +61,8 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'lc_date',
+				accessorFn: (row) => REPORT_DATE_FORMATE(row.lc_date),
+				id: 'lc_date',
 				header: 'LC Date',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
@@ -85,25 +87,30 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'handover_date',
+				accessorFn: (row) => REPORT_DATE_FORMATE(row.receive_status),
+				id: 'handover_date',
 				header: 'Handover Date',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
-				accessorKey: 'document_receive_date',
+				accessorFn: (row) =>
+					REPORT_DATE_FORMATE(row.document_receive_status),
+				id: 'document_receive_date',
 				header: 'Doc Received Date',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
-				accessorKey: 'maturity_date',
+				accessorFn: (row) => REPORT_DATE_FORMATE(row.maturity_date),
+				id: 'maturity_date',
 				header: 'Maturity Date',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
-				accessorKey: 'payment_date',
+				accessorFn: (row) => REPORT_DATE_FORMATE(row.payment_date),
+				id: 'payment_date',
 				header: 'Payment Date',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,

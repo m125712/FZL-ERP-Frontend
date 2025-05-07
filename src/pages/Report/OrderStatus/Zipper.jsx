@@ -7,6 +7,8 @@ import { useAccess } from '@/hooks';
 import ReactTable from '@/components/Table';
 import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
 
+import { REPORT_DATE_FORMATE } from '../utils';
+
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
 		return `own_uuid=${userUUID}`;
@@ -191,7 +193,7 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					row.created_at && format(row.created_at, 'dd/MM/yy'),
+					row.created_at && REPORT_DATE_FORMATE(row.created_at),
 				id: 'created_at',
 				header: 'Created',
 				enableColumnFilter: false,
@@ -205,7 +207,7 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					row.updated_at && format(row.updated_at, 'dd/MM/yy'),
+					row.updated_at && REPORT_DATE_FORMATE(row.updated_at),
 				id: 'updated_at',
 				header: 'Updated',
 				enableColumnFilter: false,

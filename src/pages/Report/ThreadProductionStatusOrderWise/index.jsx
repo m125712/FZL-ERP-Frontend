@@ -9,7 +9,7 @@ import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
-import { ProductionStatus } from '../utils';
+import { ProductionStatus, REPORT_DATE_FORMATE } from '../utils';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
@@ -61,7 +61,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorFn: (row) => format(row.order_created_at, 'dd/MM/yy'),
+				accessorFn: (row) => REPORT_DATE_FORMATE(row.order_created_at),
 				id: 'order_created_at',
 				header: 'Created At',
 				enableColumnFilter: false,
@@ -76,7 +76,7 @@ export default function Index() {
 			{
 				accessorFn: (row) =>
 					row.order_updated_at
-						? format(row.order_updated_at, 'dd/MM/yy')
+						? REPORT_DATE_FORMATE(row.order_updated_at)
 						: '--',
 				id: 'order_updated_at',
 				header: 'Updated At',

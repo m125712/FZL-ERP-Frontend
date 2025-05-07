@@ -262,14 +262,19 @@ export const commonQK = {
 	tapeSFGByUUID: (uuid) => [...commonQK.tapeSFG(), uuid],
 
 	//* tapeProduction
-	tapeProduction: () => [...commonQK.all(), 'tape/production'],
+	tapeProduction: (from, to) => [
+		...commonQK.all(),
+		'tape/production',
+		from,
+		to,
+	],
 	tapeProductionByUUID: (uuid) => [...commonQK.tapeProduction(), uuid],
 
 	//* tapeToCoil
-	tapeToCoil: () => [...commonQK.all(), 'tape/to-coil'],
+	tapeToCoil: (from, to) => [...commonQK.all(), 'tape/to-coil', from, to],
 	tapeToCoilByUUID: (uuid) => [...commonQK.tapeToCoil(), uuid],
 	//* tapeTransferFromStock
-	tapeTransfer: () => [...commonQK.all(), 'tape/transfer'],
+	tapeTransfer: (from, to) => [...commonQK.all(), 'tape/transfer', from, to],
 	tapeTransferByUUID: (uuid) => [...commonQK.tapeTransfer(), uuid],
 
 	//* tapeRM
@@ -299,7 +304,12 @@ export const commonQK = {
 	coilSFGByUUID: (uuid) => [...commonQK.coilSFG(), uuid],
 
 	//* coilProduction
-	coilProduction: () => [...commonQK.all(), 'coil/production'],
+	coilProduction: (from, to) => [
+		...commonQK.all(),
+		'coil/production',
+		from,
+		to,
+	],
 	coilProductionByUUID: (uuid) => [...commonQK.coilProduction(), uuid],
 
 	//* coilRM
@@ -311,10 +321,20 @@ export const commonQK = {
 	coilRMLogByUUID: (uuid) => [...commonQK.coilRMLog(), uuid],
 
 	//* coilToStockLog
-	coilToStock: () => [...commonQK.all(), 'coil/to-stock'],
+	coilToStock: (from, to) => [
+		...commonQK.all(),
+		'coil/to-stock',
+		from || '',
+		to || '',
+	],
 	coilToStockByUUID: (uuid) => [...commonQK.coilToStock(), uuid],
 	//* coilTransfer
-	coilTransfer: () => [...commonQK.all(), 'coil/transfer'],
+	coilTransfer: (from, to) => [
+		...commonQK.all(),
+		'coil/transfer',
+		from || '',
+		to || '',
+	],
 	coilTransferByUUID: (uuid) => [...commonQK.coilTransfer(), uuid],
 
 	//* materialUsed
@@ -336,18 +356,25 @@ export const commonQK = {
 	materialTrxByUUID: (uuid) => [...commonQK.materialTrx(), uuid],
 
 	//* Coil to Dyeing
-	coilToDyeing: () => [...commonQK.all(), 'coil/to-dyeing'],
+	coilToDyeing: (from, to) => [
+		...commonQK.all(),
+		'coil/to-dyeing',
+		from || '',
+		to || '',
+	],
 	coilToDyeingByUUID: (uuid) => [...commonQK.coilToDyeing(), uuid],
 
 	//* Tape to Dyeing
-	tapeToDyeing: () => [...commonQK.all(), 'tape/to-dyeing'],
+	tapeToDyeing: (from, to) => [...commonQK.all(), 'tape/to-dyeing', from, to],
 	tapeToDyeingByUUID: (uuid) => [...commonQK.tapeToDyeing(), uuid],
 
 	//* Tape Dyeing & Store
-	coilToDyeingAndStore: (query) => [
+	coilToDyeingAndStore: (query, from, to) => [
 		...commonQK.all(),
 		'coil/tape-to-dyeing-and-store',
 		query,
+		from || '',
+		to || '',
 	],
 	coilToDyeingAndStoreByUUID: (uuid) => [...commonQK.all(), uuid],
 

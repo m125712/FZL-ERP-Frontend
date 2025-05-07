@@ -1,18 +1,24 @@
 import { useMemo, useState } from 'react';
 import { useCommonCoilSFG, useCommonCoilToDyeing } from '@/state/Common';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, EditDelete } from '@/ui';
+import { CustomLink, DateTime, EditDelete, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 import AddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
-	const { data, deleteData, isLoading } = useCommonCoilToDyeing();
+	const [date, setDate] = useState(new Date());
+	const [toDate, setToDate] = useState(new Date());
+	const { data, deleteData, isLoading } = useCommonCoilToDyeing(
+		format(date, 'yyyy-MM-dd'),
+		format(toDate, 'yyyy-MM-dd')
+	);
 	const info = new PageInfo('Coil -> Dyeing', '/zipper/tape-coil-to-dyeing');
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
 
@@ -175,7 +181,36 @@ export default function Index() {
 
 	return (
 		<div>
-			<ReactTable title={info.getTitle()} data={data} columns={columns} />
+			<ReactTable
+				title={info.getTitle()}
+				data={data}
+				columns={columns}
+				showDateRange={false}
+				extraButton={
+					<div className='flex items-center gap-2'>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'Date'}
+							value={date}
+							placeholder='Date'
+							onChange={(data) => {
+								setDate(data);
+							}}
+							selected={date}
+						/>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'toDate'}
+							value={toDate}
+							placeholder='To'
+							onChange={(data) => {
+								setToDate(data);
+							}}
+							selected={toDate}
+						/>
+					</div>
+				}
+			/>
 			<Suspense>
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}

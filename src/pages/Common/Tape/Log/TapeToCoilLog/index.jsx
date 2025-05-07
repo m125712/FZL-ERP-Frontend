@@ -1,18 +1,24 @@
 import React, { useMemo, useState } from 'react';
 import { useCommonTapeSFG, useCommonTapeToCoil } from '@/state/Common';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete } from '@/ui';
+import { DateTime, EditDelete, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 import AddOrUpdate from './AddOrUpdate';
 
 export default function TapeToCoil() {
-	const { data, isLoading, url, deleteData } = useCommonTapeToCoil();
+	const [date, setDate] = useState(new Date());
+	const [toDate, setToDate] = useState(new Date());
+	const { data, isLoading, url, deleteData } = useCommonTapeToCoil(
+		format(date, 'yyyy-MM-dd'),
+		format(toDate, 'yyyy-MM-dd')
+	);
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 	const info = new PageInfo('Tape -> Stock/Coil', 'tape-to-coil-trx');
 	const haveAccess = useAccess('common__tape_log');
@@ -172,6 +178,31 @@ export default function TapeToCoil() {
 				data={data}
 				columns={columns}
 				extraClass='py-2'
+				showDateRange={false}
+				extraButton={
+					<div className='flex items-center gap-2'>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'Date'}
+							value={date}
+							placeholder='Date'
+							onChange={(data) => {
+								setDate(data);
+							}}
+							selected={date}
+						/>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'toDate'}
+							value={toDate}
+							placeholder='To'
+							onChange={(data) => {
+								setToDate(data);
+							}}
+							selected={toDate}
+						/>
+					</div>
+				}
 			/>
 
 			<Suspense>

@@ -1,23 +1,29 @@
 import React, { useMemo, useState } from 'react';
 import { useCommonCoilProduction, useCommonCoilSFG } from '@/state/Common';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete } from '@/ui';
+import { DateTime, EditDelete, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 import AddOrUpdate from './AddOrUpdate';
 
 export default function ProductionLog() {
+	const [date, setDate] = useState(new Date());
+	const [toDate, setToDate] = useState(new Date());
 	const info = new PageInfo(
 		'Coil Productions',
 		'tape-or-coil-prod-section/coil'
 	);
 
-	const { data, isLoading, url, deleteData } = useCommonCoilProduction();
+	const { data, isLoading, url, deleteData } = useCommonCoilProduction(
+		format(date, 'yyyy-MM-dd'),
+		format(toDate, 'yyyy-MM-dd')
+	);
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
 	const haveAccess = useAccess('common__coil_log');
 	const columns = useMemo(
@@ -177,7 +183,36 @@ export default function ProductionLog() {
 
 	return (
 		<div>
-			<ReactTable title={info.getTitle()} data={data} columns={columns} />
+			<ReactTable
+				title={info.getTitle()}
+				data={data}
+				columns={columns}
+				showDateRange={false}
+				extraButton={
+					<div className='flex items-center gap-2'>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'Date'}
+							value={date}
+							placeholder='Date'
+							onChange={(data) => {
+								setDate(data);
+							}}
+							selected={date}
+						/>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'toDate'}
+							value={toDate}
+							placeholder='To'
+							onChange={(data) => {
+								setToDate(data);
+							}}
+							selected={toDate}
+						/>
+					</div>
+				}
+			/>
 			<Suspense>
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}

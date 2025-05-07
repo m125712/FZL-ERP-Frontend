@@ -1,23 +1,30 @@
 import { useMemo, useState } from 'react';
 import { useCommonTapeSFG, useCommonToDyeingAndStore } from '@/state/Common';
 import { useOtherOrderDescription } from '@/state/Other';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, EditDelete } from '@/ui';
+import { CustomLink, DateTime, EditDelete, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 import AddOrUpdate from './AddOrUpdate';
 
 export default function Index({ type }) {
+	const [date, setDate] = useState(new Date());
+	const [toDate, setToDate] = useState(new Date());
 	const title = type
 		.split('_')
 		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
 		.join(' ');
-	const { data, deleteData, isLoading } = useCommonToDyeingAndStore(type);
+	const { data, deleteData, isLoading } = useCommonToDyeingAndStore(
+		format(date, 'yyyy-MM-dd'),
+		format(toDate, 'yyyy-MM-dd'),
+		type
+	);
 	const info = new PageInfo(title, '/zipper/tape-coil-to-dyeing');
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 
@@ -143,7 +150,36 @@ export default function Index({ type }) {
 
 	return (
 		<div>
-			<ReactTable title={info.getTitle()} data={data} columns={columns} />
+			<ReactTable
+				title={info.getTitle()}
+				data={data}
+				columns={columns}
+				showDateRange={false}
+				extraButton={
+					<div className='flex items-center gap-2'>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'Date'}
+							value={date}
+							placeholder='Date'
+							onChange={(data) => {
+								setDate(data);
+							}}
+							selected={date}
+						/>
+						<SimpleDatePicker
+							className='h-[2.34rem] w-32'
+							key={'toDate'}
+							value={toDate}
+							placeholder='To'
+							onChange={(data) => {
+								setToDate(data);
+							}}
+							selected={toDate}
+						/>
+					</div>
+				}
+			/>
 			<Suspense>
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}

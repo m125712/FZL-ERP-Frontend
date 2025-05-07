@@ -312,7 +312,7 @@ export const useSliderColoringLogTransaction = (from, to) =>
 		queryKey: sliderQK.sliderColoringLogTransaction(from, to),
 		url:
 			from && to
-				? `/slider/transaction/by/coloring?from=${from}&to=${to}`
+				? `/slider/transaction/by/coloring?from_date=${from}&to_date=${to}`
 				: `/slider/transaction/by/coloring_prod`,
 	});
 

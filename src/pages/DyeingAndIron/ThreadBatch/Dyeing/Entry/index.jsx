@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useDyeingThreadBatch,
 	useDyeingThreadBatchDetailsByUUID,
@@ -20,6 +21,7 @@ import GetDateTime from '@/util/GetDateTime';
 import Header from './Header';
 
 export default function Index() {
+	const { user } = useAuth();
 	const { url: threadBatchEntryUrl } = useDyeingThreadBatchEntry();
 	const { url: threadBatchUrl, updateData } = useDyeingThreadBatch();
 	const navigate = useNavigate();
@@ -91,6 +93,8 @@ export default function Index() {
 			...data,
 			[isCreatedAtNull ? 'dyeing_created_at' : 'dyeing_updated_at']:
 				GetDateTime(),
+			yarn_issue_created_by: user.uuid,
+			yarn_issue_created_at: GetDateTime(),
 		};
 
 		// Update /commercial/pi/{uuid}

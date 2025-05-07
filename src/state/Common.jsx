@@ -15,10 +15,13 @@ export const useCommonTapeSFGByUUID = (uuid) =>
 	});
 
 // * PRODUCTION * //
-export const useCommonTapeProduction = () =>
+export const useCommonTapeProduction = (from, to) =>
 	createGlobalState({
-		queryKey: commonQK.tapeProduction(),
-		url: `/zipper/tape-coil-production/by/tape`,
+		queryKey: commonQK.tapeProduction(from, to),
+		url:
+			from && to
+				? `/zipper/tape-coil-production/by/tape?from=${from}&to=${to}`
+				: `/zipper/tape-coil-production/by/tape`,
 	});
 export const useCommonTapeProductionByUUID = (uuid) =>
 	createGlobalState({
@@ -27,10 +30,13 @@ export const useCommonTapeProductionByUUID = (uuid) =>
 	});
 
 // * TAPE TO COIL * //
-export const useCommonTapeToCoil = () =>
+export const useCommonTapeToCoil = (from, to) =>
 	createGlobalState({
-		queryKey: commonQK.tapeToCoil(),
-		url: `/zipper/tape-trx/by/tape`,
+		queryKey: commonQK.tapeToCoil(from, to),
+		url:
+			from && to
+				? `/zipper/tape-trx/by/tape?from=${from}&to=${to}`
+				: `/zipper/tape-trx/by/tape`,
 	});
 
 export const useCommonTapeToCoilByUUID = (uuid) =>
@@ -39,10 +45,13 @@ export const useCommonTapeToCoilByUUID = (uuid) =>
 		url: `/zipper/tape-trx/${uuid}`,
 	});
 // * Tape Transfer From Stock
-export const useCommonTapeTransfer = () =>
+export const useCommonTapeTransfer = (from, to) =>
 	createGlobalState({
-		queryKey: commonQK.tapeTransfer(),
-		url: `/zipper/dyed-tape-transaction-from-stock`,
+		queryKey: commonQK.tapeTransfer(from, to),
+		url:
+			from && to
+				? `/zipper/dyed-tape-transaction-from-stock?from=${from}&to=${to}`
+				: `/zipper/dyed-tape-transaction-from-stock`,
 	});
 
 export const useCommonTapeTransferByUUID = (uuid) =>
@@ -114,10 +123,13 @@ export const useCommonCoilSFGByUUID = (uuid) =>
 	});
 
 // * Coil to Dyeing
-export const useCommonCoilToDyeing = () =>
+export const useCommonCoilToDyeing = (from, to) =>
 	createGlobalState({
-		queryKey: commonQK.coilToDyeing(),
-		url: `/zipper/tape-coil-to-dyeing/by/type/nylon`,
+		queryKey: commonQK.coilToDyeing(from, to),
+		url:
+			from && to
+				? `/zipper/tape-coil-to-dyeing/by/type/nylon?from=${from}&to=${to}`
+				: `/zipper/tape-coil-to-dyeing/by/type/nylon`,
 	});
 export const useCommonCoilToDyeingByUUID = (uuid) =>
 	createGlobalState({
@@ -125,16 +137,22 @@ export const useCommonCoilToDyeingByUUID = (uuid) =>
 		url: `/zipper/tape-coil-to-dyeing/${uuid}`,
 	});
 // * Coil To Stock Log * //
-export const useCommonCoilToStockLog = () =>
+export const useCommonCoilToStockLog = (from, to) =>
 	createGlobalState({
-		queryKey: commonQK.coilToStock(),
-		url: `/zipper/tape-trx/by/coil`,
+		queryKey: commonQK.coilToStock(from, to),
+		url:
+			from && to
+				? `/zipper/tape-trx/by/coil?from=${from}&to=${to}`
+				: `/zipper/tape-trx/by/coil`,
 	});
 // * Tape Transfer From Stock
-export const useCommonCoilTransfer = () =>
+export const useCommonCoilTransfer = (from, to) =>
 	createGlobalState({
-		queryKey: commonQK.coilTransfer(),
-		url: `/zipper/dyed-tape-transaction-from-stock?item=nylon`,
+		queryKey: commonQK.coilTransfer(from, to),
+		url:
+			from && to
+				? `/zipper/dyed-tape-transaction-from-stock?item=nylon&from=${from}&to=${to}`
+				: `/zipper/dyed-tape-transaction-from-stock?item=nylon`,
 	});
 
 export const useCommonCoilTransferByUUID = (uuid) =>
@@ -144,17 +162,23 @@ export const useCommonCoilTransferByUUID = (uuid) =>
 	});
 
 // * Tape to Dyeing
-export const useCommonTapeToDyeing = () =>
+export const useCommonTapeToDyeing = (from, to) =>
 	createGlobalState({
-		queryKey: commonQK.tapeToDyeing(),
-		url: `/zipper/tape-coil-to-dyeing/by/type/tape`,
+		queryKey: commonQK.tapeToDyeing(from, to),
+		url:
+			from && to
+				? `/zipper/tape-coil-to-dyeing/by/type/tape?from=${from}&to=${to}`
+				: `/zipper/tape-coil-to-dyeing/by/type/tape`,
 	});
 
 // * To Dyeing & Store
-export const useCommonToDyeingAndStore = (query) =>
+export const useCommonToDyeingAndStore = (from, to, query) =>
 	createGlobalState({
-		queryKey: commonQK.coilToDyeingAndStore(query),
-		url: `/zipper/tape-transfer-to-dyeing?transfer_type=${query}`,
+		queryKey: commonQK.coilToDyeingAndStore(query, from, to),
+		url:
+			from && to
+				? `/zipper/tape-transfer-to-dyeing?transfer_type=${query}&from=${from}&to=${to}`
+				: `/zipper/tape-transfer-to-dyeing?transfer_type=${query}`,
 	});
 
 export const useCommonToDyeingAndStoreByUUID = (uuid) =>
@@ -164,10 +188,13 @@ export const useCommonToDyeingAndStoreByUUID = (uuid) =>
 	});
 
 // * PRODUCTION * //
-export const useCommonCoilProduction = () =>
+export const useCommonCoilProduction = (from, to) =>
 	createGlobalState({
-		queryKey: commonQK.coilProduction(),
-		url: `/zipper/tape-coil-production/by/coil`,
+		queryKey: commonQK.coilProduction(from, to),
+		url:
+			from && to
+				? `/zipper/tape-coil-production/by/coil?from=${from}&to=${to}`
+				: `/zipper/tape-coil-production/by/coil`,
 	});
 export const useCommonCoilProductionByUUID = (uuid) =>
 	createGlobalState({

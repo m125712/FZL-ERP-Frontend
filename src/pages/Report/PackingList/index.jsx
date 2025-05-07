@@ -14,6 +14,8 @@ import {
 
 import PageInfo from '@/util/PageInfo';
 
+import { REPORT_DATE_FORMATE } from '../utils';
+
 const options = [
 	{ value: 'all', label: 'All' },
 	{ value: 'pending', label: 'Pending' },
@@ -39,7 +41,7 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorFn: (row) => format(row.created_at, 'dd/MM/yy'),
+				accessorFn: (row) => REPORT_DATE_FORMATE(row.created_at),
 				id: 'created_at',
 				header: (
 					<>
@@ -124,7 +126,7 @@ export default function Index() {
 			{
 				accessorFn: (row) =>
 					row.challan_created_at
-						? format(row.challan_created_at, 'dd/MM/yy')
+						? REPORT_DATE_FORMATE(row.challan_created_at)
 						: '',
 				id: 'challan_created_at',
 				header: (
@@ -365,7 +367,7 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					row.updated_at && format(row.updated_at, 'dd/MM/yy'),
+					row.updated_at && REPORT_DATE_FORMATE(row.updated_at),
 				id: 'updated_at',
 				header: 'Updated',
 				enableColumnFilter: false,

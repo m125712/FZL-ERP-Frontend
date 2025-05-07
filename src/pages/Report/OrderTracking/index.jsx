@@ -10,6 +10,8 @@ import { CustomLink, DateTime, SimpleDatePicker, Status } from '@/ui';
 import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
 
+import { REPORT_DATE_FORMATE } from '../utils';
+
 export default function Index() {
 	const haveAccess = useAccess('report__order_tracking');
 
@@ -49,7 +51,7 @@ export default function Index() {
 			{
 				accessorFn: (row) =>
 					row.order_created_at &&
-					format(row.order_created_at, 'dd/MM/yy'),
+					REPORT_DATE_FORMATE(row.order_created_at),
 				id: 'order_created_at',
 				header: (
 					<>
@@ -115,7 +117,7 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					row.challan_date && format(row.challan_date, 'dd/MM/yy'),
+					row.challan_date && REPORT_DATE_FORMATE(row.challan_date),
 				id: 'challan_date',
 				header: (
 					<>
@@ -135,7 +137,7 @@ export default function Index() {
 			{
 				accessorFn: (row) =>
 					row.challan_delivered_date &&
-					format(row.challan_delivered_date, 'dd/MM/yy'),
+					REPORT_DATE_FORMATE(row.challan_delivered_date),
 				id: 'challan_delivered_date ',
 				header: (
 					<>
@@ -199,7 +201,7 @@ export default function Index() {
 			{
 				accessorFn: (row) =>
 					row.swatch_approval_date &&
-					format(row.swatch_approval_date, 'dd/MM/yy'),
+					REPORT_DATE_FORMATE(row.swatch_approval_date),
 				id: 'swatch_approval_date',
 				header: (
 					<>
@@ -468,7 +470,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => format(row.order_created_at, 'dd/MM/yy'),
+				accessorFn: (row) => REPORT_DATE_FORMATE(row.order_created_at),
 				id: 'order_created_at',
 				header: 'Created',
 				enableColumnFilter: false,
@@ -482,7 +484,7 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					row.updated_at && format(row.order_updated_at, 'dd/MM/yy'),
+					row.updated_at && REPORT_DATE_FORMATE(row.order_updated_at),
 				id: 'order_updated_at',
 				header: 'Updated',
 				enableColumnFilter: false,

@@ -9,6 +9,8 @@ import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
+import { REPORT_DATE_FORMATE } from '../utils';
+
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
 		return `&own_uuid=${userUUID}`;
@@ -53,7 +55,7 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					format(row.pi_cash_created_date, 'dd/MM/yy'),
+					REPORT_DATE_FORMATE(row.pi_cash_created_date),
 				id: 'pi_cash_created_date',
 				header: 'PI Date',
 				enableColumnFilter: false,
@@ -141,7 +143,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => format(row.lc_date, 'dd/MM/yy'),
+				accessorFn: (row) => REPORT_DATE_FORMATE(row.lc_date),
 				id: 'lc_date',
 				header: 'LC Date',
 				enableColumnFilter: false,
@@ -160,7 +162,8 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => format(row.lc_created_at, 'dd/MM/yy'),
+				accessorFn: (row) =>
+					row.lc_created_at && REPORT_DATE_FORMATE(row.lc_created_at),
 				id: 'lc_created_at',
 				header: 'File Date',
 				enableColumnFilter: false,

@@ -21,7 +21,7 @@ export default function Index() {
 	const { data, isLoading } = useCommonTapeCoilDashboard(`type=${status}`);
 
 	const info = new PageInfo(
-		'Common/Dashboard',
+		'Tape Preparation / Dashboard',
 		'common/dashboard',
 		'common__dashboard'
 	);
@@ -76,17 +76,17 @@ export default function Index() {
 				width: 'w-40',
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'tape_received',
-				header: (
-					<div>
-						Tape <br />
-						to Dyeing
-					</div>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'tape_received',
+			// 	header: (
+			// 		<div>
+			// 			Tape <br />
+			// 			to Dyeing
+			// 		</div>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorKey: 'total_tape_production',
 				header: (

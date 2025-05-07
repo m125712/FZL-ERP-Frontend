@@ -11,6 +11,8 @@ import { DateTime, LinkWithCopy, SimpleDatePicker, StatusButton } from '@/ui';
 import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
 
+import { REPORT_DATE_FORMATE } from '../utils';
+
 export default function Index() {
 	const [from, setFrom] = useState(
 		parse(
@@ -92,7 +94,10 @@ export default function Index() {
 				cell: (info) => <BatchType value={info.getValue()} />,
 			},
 			{
-				accessorKey: 'production_date',
+				accessorFn: (row) =>
+					row.production_date &&
+					REPORT_DATE_FORMATE(row.production_date),
+				id: 'production_date',
 				header: (
 					<div className='flex flex-col'>
 						<span>Production </span>
@@ -212,7 +217,10 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'drying_created_at',
+				accessorFn: (row) =>
+					row.drying_created_at &&
+					REPORT_DATE_FORMATE(row.drying_created_at),
+				id: 'drying_created_at',
 				header: 'Drying Created',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
@@ -246,7 +254,9 @@ export default function Index() {
 
 			// * created_at
 			{
-				accessorKey: 'created_at',
+				accessorFn: (row) =>
+					row.created_at && REPORT_DATE_FORMATE(row.created_at),
+				id: 'created_at',
 				header: 'Created at',
 				enableColumnFilter: false,
 				filterFn: 'isWithinRange',
@@ -256,7 +266,9 @@ export default function Index() {
 			},
 			// * updated_at
 			{
-				accessorKey: 'updated_at',
+				accessorFn: (row) =>
+					row.updated_at && REPORT_DATE_FORMATE(row.updated_at),
+				id: 'updated_at',
 				header: 'Updated at',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,

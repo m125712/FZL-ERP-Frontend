@@ -297,17 +297,23 @@ export const useSliderAssemblyStockTransactionByUUID = (uuid) =>
 
 // * Slider Coloring log //
 // * Slider Coloring Log Prduction
-export const useSliderColoringLogProduction = () =>
+export const useSliderColoringLogProduction = (from, to) =>
 	createGlobalState({
-		queryKey: sliderQK.sliderColoringLogProduction(),
-		url: '/slider/production/by/coloring',
+		queryKey: sliderQK.sliderColoringLogProduction(from, to),
+		url:
+			from && to
+				? `/slider/production/by/coloring?from=${from}&to=${to}`
+				: '/slider/production/by/coloring',
 	});
 
 // * slider coloring Log Transaction
-export const useSliderColoringLogTransaction = () =>
+export const useSliderColoringLogTransaction = (from, to) =>
 	createGlobalState({
-		queryKey: sliderQK.sliderColoringLogTransaction(),
-		url: `/slider/transaction/by/coloring_prod`,
+		queryKey: sliderQK.sliderColoringLogTransaction(from, to),
+		url:
+			from && to
+				? `/slider/transaction/by/coloring?from_date=${from}&to_date=${to}`
+				: `/slider/transaction/by/coloring_prod`,
 	});
 
 // * Slider coloring Production (Stock)

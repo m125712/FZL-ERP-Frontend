@@ -8,6 +8,7 @@ import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
 import { CustomLink, DateTime, EditDelete, StatusSelect } from '@/ui';
 
+import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
 
 const getPath = (haveAccess, userUUID) => {
@@ -109,9 +110,9 @@ export default function Index() {
 				id: 'order_numbers',
 				header: 'O/N',
 				enableColumnFilter: false,
-				cell: ({ row }) => {
+				cell: (info) => {
 					const { order_numbers, thread_order_numbers } =
-						row.original;
+						info.row.original;
 
 					let links = [];
 
@@ -119,6 +120,9 @@ export default function Index() {
 						.filter((order) => order.order_info_uuid)
 						.forEach((order) => {
 							links.push({
+								quantity: order.quantity,
+								delivered: order.delivered,
+								packing_list: order.packing_list,
 								label: order.order_number,
 								url: `/order/details/${order.order_number}`,
 							});
@@ -128,18 +132,59 @@ export default function Index() {
 						.filter((order) => order.thread_order_info_uuid)
 						.forEach((order) => {
 							links.push({
+								quantity: order.quantity,
+								delivered: order.delivered,
+								packing_list: order.packing_list,
 								label: order.thread_order_number,
 								url: `/thread/order-info/${order.thread_order_info_uuid}`,
 							});
 						});
 
-					return links.map((link, index) => (
-						<CustomLink
-							key={index}
-							label={link.label}
-							url={link.url}
-						/>
-					));
+					return (
+						<table
+							className={cn(
+								'table table-xs rounded-md border-2 border-primary/20 align-top'
+							)}
+						>
+							<thead>
+								<tr>
+									<th>O/N</th>
+									<th>D/Q</th>
+									<th>P/Q</th>
+								</tr>
+							</thead>
+							<tbody>
+								{links?.map((item, index) => (
+									<tr key={index}>
+										<td>
+											<CustomLink
+												label={item.label}
+												url={item.url}
+												showCopyButton={false}
+												openInNewTab
+											/>
+										</td>
+										<td>
+											{Number(
+												(item.delivered /
+													item.quantity) *
+													100 || 0
+											).toFixed(0)}
+											%
+										</td>
+										<td>
+											{Number(
+												(item.packing_list /
+													item.quantity) *
+													100 || 0
+											).toFixed(0)}
+											%
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					);
 				},
 			},
 			{

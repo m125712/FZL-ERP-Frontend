@@ -169,7 +169,7 @@ export default function Index() {
 												(item.delivered /
 													item.quantity) *
 													100 || 0
-											).toFixed(1)}{' '}
+											).toFixed(0)}
 											%
 										</td>
 										<td>
@@ -177,7 +177,7 @@ export default function Index() {
 												(item.packing_list /
 													item.quantity) *
 													100 || 0
-											).toFixed(1)}{' '}
+											).toFixed(0)}
 											%
 										</td>
 									</tr>

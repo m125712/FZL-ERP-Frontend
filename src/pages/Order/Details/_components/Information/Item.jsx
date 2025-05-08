@@ -52,10 +52,15 @@ export default function ItemDescription({ order_description, className }) {
 		order_description?.order_entry.reduce(
 			([sliderQuantity, total_size, tape_production], item) => {
 				return [
-					sliderQuantity + parseFloat(item.quantity),
-					total_size +
-						parseFloat(item.size) * parseFloat(item.quantity),
-					tape_production + parseFloat(item.dying_and_iron_prod),
+					(sliderQuantity += parseFloat(item.quantity)),
+					(total_size +=
+						item.is_inch === 1
+							? parseFloat(item.size) *
+								2.54 *
+								parseFloat(item.quantity)
+							: parseFloat(item.size) *
+								parseFloat(item.quantity)),
+					(tape_production += parseFloat(item.dying_and_iron_prod)),
 				];
 			},
 			[0, 0, 0]
@@ -69,6 +74,15 @@ export default function ItemDescription({ order_description, className }) {
 	const total_tape_in_mtr = Number(
 		(total_size + total_top_bottom) / 100
 	).toFixed(3);
+
+	// console.log({
+	// 	sliderQuantity,
+	// 	top: order_description?.top,
+	// 	bottom: order_description?.bottom || 0,
+	// 	total_size,
+	// 	total_top_bottom,
+	// 	total_tape_in_mtr,
+	// });
 
 	// * garments info
 	const garments_info = getGarmentInfo(order_description);
@@ -299,21 +313,6 @@ export default function ItemDescription({ order_description, className }) {
 				label: 'Required (mtr)',
 				value: `${total_tape_in_mtr}`,
 			},
-			// {
-			// 	label: '',
-			// 	value: '',
-			// },
-			// {
-			// 	label: 'Expected received (kg)',
-			// 	value: `${Number(
-			// 		total_tape_in_mtr /
-			// 			Number(order_description?.raw_per_kg_meter)
-			// 	).toFixed(3)}`,
-			// },
-			// {
-			// 	label: 'received (kg)',
-			// 	value: `${tape_received}`,
-			// },
 			{
 				label: 'Tape Recv. (KG)',
 				value: `${tape_received} / ${Number(
@@ -321,21 +320,7 @@ export default function ItemDescription({ order_description, className }) {
 						Number(order_description?.raw_per_kg_meter)
 				).toFixed(3)}`,
 			},
-			// {
-			// 	label: '',
-			// 	value: '',
-			// },
-			// {
-			// 	label: 'Expected production (kg)',
-			// 	value: `${Number(
-			// 		total_tape_in_mtr /
-			// 			parseFloat(order_description?.dyed_per_kg_meter)
-			// 	).toFixed(3)}`,
-			// },
-			// {
-			// 	label: 'production (kg)',
-			// 	value: `${Number(tape_production).toFixed(3)}`,
-			// },
+
 			{
 				label: 'Tape Prod. (KG)',
 				value: `${Number(tape_production).toFixed(3)} / ${Number(

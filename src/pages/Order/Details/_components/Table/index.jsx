@@ -25,8 +25,6 @@ export default function Index({
 }) {
 	const haveAccess = useAccess('order__details');
 
-	console.log('total', total);
-
 	const [history, setHistory] = useState(null);
 	let title = item_description;
 

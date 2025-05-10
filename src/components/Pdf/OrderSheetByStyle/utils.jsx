@@ -11,15 +11,15 @@ export const getPageHeader = (order_info) => {
 			: order_info.order_number;
 
 	let formatedDate = '';
-	if (order_info?.order_description_updated_at) {
+	if (order_info?.order_description_created_at) {
 		formatedDate = format(
-			new Date(order_info?.order_description_updated_at),
+			new Date(order_info?.order_description_created_at),
 			'dd-MM-yyyy'
 		);
 	} else if (order_info?.created_at) {
 		formatedDate = format(new Date(order_info?.created_at), 'dd-MM-yyyy');
 	}
-	console.log(order_info?.order_description_updated_at);
+	console.log(order_info?.order_description_created_at);
 	return [
 		// CompanyAndORDER
 		[

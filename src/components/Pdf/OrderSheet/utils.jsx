@@ -23,9 +23,9 @@ export const getPageHeader = (order_info) => {
 	const haveAccess = useAccess('order__details');
 
 	let formatedDate = '';
-	if (order_info?.order_description_updated_at) {
+	if (order_info?.order_description_created_at) {
 		formatedDate = format(
-			new Date(order_info?.order_description_updated_at),
+			new Date(order_info?.order_description_created_at),
 			'dd-MM-yyyy'
 		);
 	} else if (order_info?.created_at) {

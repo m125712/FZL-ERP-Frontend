@@ -965,6 +965,12 @@ export const RESET_PASSWORD_NULL = {
 export const TAPE_STOCK_ADD_SCHEMA = {
 	name: STRING_REQUIRED,
 	material_uuid: STRING.nullable(),
+	thread_material_uuid: STRING.nullable(),
+	thread_consumption_per_kg: NUMBER_DOUBLE_REQUIRED,
+	cord_material_uuid: STRING.nullable(),
+	cord_consumption_per_kg: NUMBER_DOUBLE_REQUIRED,
+	monofilament_material_uuid: STRING.nullable(),
+	monofilament_consumption_per_kg: NUMBER_DOUBLE_REQUIRED,
 	item_uuid: STRING_REQUIRED,
 	nylon_stopper_uuid: STRING.nullable(),
 	zipper_number_uuid: STRING_REQUIRED,
@@ -981,6 +987,12 @@ export const TAPE_STOCK_ADD_NULL = {
 	uuid: null,
 	name: '',
 	material_uuid: null,
+	thread_material_uuid: null,
+	thread_consumption_per_kg: 0,
+	cord_material_uuid: null,
+	cord_consumption_per_kg: 0,
+	monofilament_material_uuid: null,
+	monofilament_consumption_per_kg: 0,
 	item_uuid: '',
 	zipper_number_uuid: '',
 	is_imported: 0,
@@ -3055,6 +3067,7 @@ export const FINISHING_BATCH_ENTRY_NULL = {
 // *Slider/Die Casting --> (STOCK)*//
 export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 	name: STRING_REQUIRED, //
+	pcs_per_kg: NUMBER_DOUBLE,
 	item: STRING.when('type', {
 		is: 'body',
 		then: (schema) => schema.required('Required'),
@@ -3129,7 +3142,7 @@ export const SLIDER_DIE_CASTING_STOCK_NULL = {
 	stopper_type: null,
 	// quantity: null,
 	// weight: null,
-	// pcs_per_kg: null,
+	pcs_per_kg: 0,
 	created_at: '',
 	updated_at: '',
 	remarks: '',
@@ -3148,6 +3161,7 @@ export const SLIDER_DIE_CASTING_STOCK_NULL = {
 // * Slider Assembly --> (STOCK)*//
 export const SLIDER_ASSEMBLY_STOCK_SCHEMA = {
 	name: STRING_REQUIRED, //
+	pcs_per_kg: NUMBER_DOUBLE,
 	material_uuid: STRING.nullable().transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? null : value
 	),
@@ -3175,6 +3189,7 @@ export const SLIDER_ASSEMBLY_STOCK_SCHEMA = {
 
 export const SLIDER_ASSEMBLY_STOCK_NULL = {
 	name: '',
+	pcs_per_kg: 0,
 	material_uuid: null,
 	die_casting_body_uuid: null,
 	die_casting_puller_uuid: null,

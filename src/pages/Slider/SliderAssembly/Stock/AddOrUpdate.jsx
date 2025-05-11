@@ -136,6 +136,11 @@ export default function Index({
 						}}
 					/>
 				</FormField>
+				<Input
+					label='pcs_per_kg'
+					title='Pcs (Per/Kg)'
+					{...{ register, errors }}
+				/>
 			</div>
 			<div className='grid grid-cols-1 gap-4 md:grid-cols-4'>
 				{/* Body */}

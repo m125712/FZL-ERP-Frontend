@@ -31,6 +31,7 @@ export default function Index({
 	const { data: nylon_stopper } = useOtherOrderPropertiesByNylonStopper();
 	const { data: zipper_number } = useOtherOrderPropertiesByZipperNumber();
 	const { data: materials } = useOtherMaterial();
+
 	const { invalidateQuery: invalidateOtherTapeCoil } = useOtherTapeCoil();
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
@@ -271,6 +272,101 @@ export default function Index({
 				<Input
 					label='dyed_per_kg_meter'
 					title='Dyed Tape (Meter/Kg)'
+					{...{ register, errors }}
+				/>
+			</div>
+
+			<div className='grid grid-cols-2 gap-2'>
+				<FormField
+					label='thread_material_uuid'
+					title='Thread Material'
+					errors={errors}
+				>
+					<Controller
+						name={'thread_material_uuid'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Item'
+									options={materials}
+									value={materials?.filter(
+										(item) =>
+											item.value ==
+											getValues('thread_material_uuid')
+									)}
+									onChange={(e) => onChange(e.value)}
+									// isDisabled={order_info_id !== undefined}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+				<Input
+					label='thread_consumption_per_kg'
+					title='Thread Con (Per/Kg)'
+					{...{ register, errors }}
+				/>
+				<FormField
+					label='cord_material_uuid'
+					title='Cord Material'
+					errors={errors}
+				>
+					<Controller
+						name={'cord_material_uuid'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Item'
+									options={materials}
+									value={materials?.filter(
+										(item) =>
+											item.value ==
+											getValues('cord_material_uuid')
+									)}
+									onChange={(e) => onChange(e.value)}
+									// isDisabled={order_info_id !== undefined}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+				<Input
+					label='cord_consumption_per_kg'
+					title='Cord Con (Per/Kg)'
+					{...{ register, errors }}
+				/>
+				<FormField
+					label='monofilament_material_uuid'
+					title='Monofilament Material'
+					errors={errors}
+				>
+					<Controller
+						name={'monofilament_material_uuid'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Item'
+									options={materials}
+									value={materials?.filter(
+										(item) =>
+											item.value ==
+											getValues(
+												'monofilament_material_uuid'
+											)
+									)}
+									onChange={(e) => onChange(e.value)}
+									// isDisabled={order_info_id !== undefined}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+				<Input
+					label='monofilament_consumption_per_kg'
+					title='Monofilament Con (Per/Kg)'
 					{...{ register, errors }}
 				/>
 			</div>

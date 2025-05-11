@@ -3,6 +3,8 @@ export const dashboardQK = {
 
 	order_entry: (from, to) => [...dashboardQK.all(), 'order-entry', from, to],
 
+	work_in_hand: () => [...dashboardQK.all(), 'work-in-hand'],
+
 	amount_and_doc: () => [...dashboardQK.all(), 'amount-and-doc'],
 	amount_percentage: () => [...dashboardQK.all(), 'amount-percentage'],
 	no_of_doc: () => [...dashboardQK.all(), 'no-of-doc'],

@@ -7,8 +7,8 @@ import {
 	XAxis,
 	YAxis,
 } from 'recharts';
-import { useFetch } from '@/hooks';
 
+import Loader from '@/components/layout/loader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
 	ChartContainer,
@@ -17,6 +17,8 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from '@/components/ui/chart';
+
+import { useDashboardWorkInHand } from '../../query';
 
 const chartConfig = {
 	not_approved: {
@@ -37,12 +39,16 @@ const chartConfig = {
 };
 
 export function BarChartHorizontal2(props) {
-	const { value: data } = useFetch(`/dashboard/work-in-hand`, [props.status]);
+	const { data, isLoading } = useDashboardWorkInHand();
 
 	const chartData = data?.map((item) => ({
 		...item,
 		total: item.approved + item.not_approved,
 	}));
+
+	if (isLoading) {
+		return <Loader />;
+	}
 
 	return (
 		<Card className='w-full'>

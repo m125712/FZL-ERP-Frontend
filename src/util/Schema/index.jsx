@@ -3067,6 +3067,7 @@ export const FINISHING_BATCH_ENTRY_NULL = {
 // *Slider/Die Casting --> (STOCK)*//
 export const SLIDER_DIE_CASTING_STOCK_SCHEMA = {
 	name: STRING_REQUIRED, //
+	pcs_per_kg: NUMBER_DOUBLE,
 	item: STRING.when('type', {
 		is: 'body',
 		then: (schema) => schema.required('Required'),
@@ -3141,7 +3142,7 @@ export const SLIDER_DIE_CASTING_STOCK_NULL = {
 	stopper_type: null,
 	// quantity: null,
 	// weight: null,
-	// pcs_per_kg: null,
+	pcs_per_kg: 0,
 	created_at: '',
 	updated_at: '',
 	remarks: '',
@@ -3160,6 +3161,7 @@ export const SLIDER_DIE_CASTING_STOCK_NULL = {
 // * Slider Assembly --> (STOCK)*//
 export const SLIDER_ASSEMBLY_STOCK_SCHEMA = {
 	name: STRING_REQUIRED, //
+	pcs_per_kg: NUMBER_DOUBLE,
 	material_uuid: STRING.nullable().transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? null : value
 	),
@@ -3187,6 +3189,7 @@ export const SLIDER_ASSEMBLY_STOCK_SCHEMA = {
 
 export const SLIDER_ASSEMBLY_STOCK_NULL = {
 	name: '',
+	pcs_per_kg: 0,
 	material_uuid: null,
 	die_casting_body_uuid: null,
 	die_casting_puller_uuid: null,

@@ -4,7 +4,6 @@ import { dashboardQK } from './queryKeys';
 
 // Dashboard Order Entry
 export const useDashboardOrderEntry = (from, to) => {
-	console.log(from, to);
 	return createGlobalState({
 		queryKey: dashboardQK.order_entry(from, to),
 		url: `/dashboard/order-entry?from=${from}&to=${to}`,
@@ -22,6 +21,12 @@ export const useDashboardAmountPercentage = () =>
 	createGlobalState({
 		queryKey: dashboardQK.amount_percentage(),
 		url: '/dashboard/amount-percentage',
+	});
+
+export const useDashboardWorkInHand = () =>
+	createGlobalState({
+		queryKey: dashboardQK.work_in_hand(),
+		url: '/dashboard/work-in-hand',
 	});
 
 export const useDashboardNoOfDoc = () =>

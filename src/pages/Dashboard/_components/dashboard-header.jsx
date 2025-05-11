@@ -11,7 +11,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 
-const DashboardHeader = ({ handleRefresh, dataPreview, setDataPreview }) => {
+const DashboardHeader = () => {
 	const auth = useAuth();
 	const userInfo = useMemo(() => auth?.user, [auth?.user]);
 
@@ -38,13 +38,12 @@ const DashboardHeader = ({ handleRefresh, dataPreview, setDataPreview }) => {
 						</SelectContent>
 					</Select> */}
 
-					<button
+					{/* <button
 						onClick={handleRefresh}
-						className='btn btn-accent btn-sm'
-					>
+						className='btn btn-accent btn-sm'>
 						Refresh
 						<RefreshCw className='size-4' />
-					</button>
+					</button> */}
 				</div>
 			</div>
 		</div>

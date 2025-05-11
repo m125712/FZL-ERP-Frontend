@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { addDays, format } from 'date-fns';
-import { useFetch } from '@/hooks';
+import { defaultFetch } from '@/hooks';
 
+import Loader from '@/components/layout/loader';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -25,23 +27,26 @@ export function TableWithTime(props) {
 		setDateRange({ from, to });
 	}, [time]);
 
-	const fetchUrl = useMemo(() => {
-		if (props?.time) {
-			return `${props?.url}?start_date=${dateRange.from}&end_date=${dateRange.to}`;
-		}
-		return props?.url;
-	}, [props?.url, props?.time, dateRange]);
+	const { data, isLoading } = useQuery({
+		queryKey: [props?.url, props.status, dateRange.from, dateRange.to],
+		queryFn: () =>
+			defaultFetch(
+				props?.time
+					? `${props?.url}?start_date=${dateRange.from}&end_date=${dateRange.to}`
+					: props?.url
+			).then((res) => res?.data),
+	});
 
-	const { value: data, isLoading } = useFetch(fetchUrl, [
-		fetchUrl,
-		props.status,
-	]);
 	const tableColumns = useMemo(() => [...props?.columns], [props?.columns]);
 	const tableData = useMemo(() => data?.chart_data || data || [], [data]);
 
 	const handleTimeChange = (e) => {
 		setTime(e.target.value);
 	};
+
+	if (isLoading) {
+		return <Loader />;
+	}
 
 	return (
 		<Card className='w-full'>

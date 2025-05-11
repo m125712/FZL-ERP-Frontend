@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { addDays, format } from 'date-fns';
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts';
-import { useFetch } from '@/hooks';
+import { defaultFetch, useFetch } from '@/hooks';
 
+import Loader from '@/components/layout/loader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
 	ChartContainer,
@@ -31,10 +33,18 @@ export function BarChartVertical() {
 	let to = format(addDays(new Date(), -1), 'yyyy-MM-dd');
 	let from = format(addDays(new Date(), -daysMap[time] || 1), 'yyyy-MM-dd');
 
-	const { value: data } = useFetch(
-		`/dashboard/production-status?start_date=${from}&end_date=${to}`,
-		[from, to]
-	);
+	const { data, isLoading } = useQuery({
+		queryKey: ['dashboard', 'production-status', from, to],
+		queryFn: () =>
+			defaultFetch(
+				`/dashboard/production-status?start_date=${from}&end_date=${to}`
+			).then((res) => res?.data),
+	});
+
+	if (isLoading) {
+		return <Loader />;
+	}
+
 	return (
 		<Card className='w-full'>
 			<CardHeader>

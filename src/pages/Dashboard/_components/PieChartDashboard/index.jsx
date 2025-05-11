@@ -1,5 +1,6 @@
 import { Pie, PieChart, ResponsiveContainer } from 'recharts';
 
+import Loader from '@/components/layout/loader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
 	ChartContainer,
@@ -8,6 +9,8 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from '@/components/ui/chart';
+
+import { useDashboardAmountPercentage, useDashboardNoOfDoc } from '../../query';
 
 const chartConfig = {
 	amount: {
@@ -27,7 +30,12 @@ const chartConfig = {
 	},
 };
 
-export function PieChartDashboard({ amount_percentage, no_of_doc }) {
+export function PieChartDashboard() {
+	const { data: no_of_doc, isLoading: noOfDocLoading } =
+		useDashboardNoOfDoc();
+	const { data: amount_percentage, isLoading: amountPercentageLoading } =
+		useDashboardAmountPercentage();
+
 	const mainChartData = amount_percentage?.map((item) => ({
 		...item,
 		amount: parseFloat(item.amount || 0),
@@ -38,6 +46,10 @@ export function PieChartDashboard({ amount_percentage, no_of_doc }) {
 		amount: parseFloat(item.amount || 0),
 		fill: `var(--color-${item.name})`,
 	}));
+
+	if (noOfDocLoading || amountPercentageLoading) {
+		return <Loader />;
+	}
 
 	return (
 		<Card className='flex flex-col'>

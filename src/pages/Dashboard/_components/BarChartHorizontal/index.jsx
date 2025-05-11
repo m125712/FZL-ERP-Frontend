@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { addDays, format } from 'date-fns';
 import { RefreshCcw, TrendingUp } from 'lucide-react';
 import {
@@ -11,8 +12,9 @@ import {
 	XAxis,
 	YAxis,
 } from 'recharts';
-import { useFetch } from '@/hooks';
+import { defaultFetch, useFetch } from '@/hooks';
 
+import Loader from '@/components/layout/loader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
 	ChartContainer,
@@ -57,12 +59,17 @@ export function BarChartHorizontal(props) {
 		},
 	};
 
-	const { value: data } = useFetch(
-		props.time
-			? `${props?.url}?start_date=${from}&end_date=${to}`
-			: `${props?.url}`,
-		[from, to, props.status]
-	);
+	const { data, isLoading } = useQuery({
+		queryKey: [props?.url, props.status, from, to],
+		queryFn: () =>
+			defaultFetch(
+				`${props?.url}?start_date=${from}&end_date=${to}`
+			).then((res) => res?.data),
+	});
+
+	if (isLoading) {
+		return <Loader />;
+	}
 
 	return (
 		<Card className='w-full'>

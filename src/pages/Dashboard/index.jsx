@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { BarChartHorizontal } from '@/pages/Dashboard/_components/BarChartHorizontal';
-import { format, subDays } from 'date-fns';
 
+import AmountAndDoc from './_components/amount-doc';
 import { BarChartHorizontal2 } from './_components/BarChartHorizontal2';
 import { BarChartOverall } from './_components/BarChartOverall';
 import { BarChartVertical } from './_components/BarChartVertical';
-import DashboardCard from './_components/dashboard-card/dashboard-card';
 import DashboardHeader from './_components/dashboard-header';
 import { PieChartDashboard } from './_components/PieChartDashboard';
 import { TableWithTime } from './_components/TableWithTime';
@@ -17,84 +16,26 @@ import {
 	sample_lead_time_columns,
 	stock_status_columns,
 } from './columns';
-import { fake_order_entry } from './fakeData';
-import useDashboardData from './hooks/useDashboardData';
 
 export default function Dashboard() {
-	const [dataPreview, setDataPreview] = useState('real');
-
-	const [from, setFrom] = useState(
-		format(subDays(new Date(), 30), 'yyyy-MM-dd')
-	);
-	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
-
-	const {
-		amount_and_doc,
-		order_entry,
-		amount_percentage,
-		no_of_doc,
-		refreshAll,
-	} = useDashboardData(dataPreview, from, to);
-
 	useEffect(() => {
 		document.title = 'Dashboard';
 	}, []);
 
 	return (
 		<div className='relative'>
-			<DashboardHeader
-				dataPreview={dataPreview}
-				setDataPreview={setDataPreview}
-				handleRefresh={refreshAll}
-			/>
+			<DashboardHeader />
 			<div className='space-y-2 px-2 py-2 lg:px-2'>
 				{/* Order Received */}
-				<BarChartOverall data={order_entry} {...{ setFrom, setTo }} />
+				<BarChartOverall />
 				{/* Production: Demand */}
 				<div className='flex flex-col gap-2 md:flex-row'>
 					<BarChartHorizontal2 />
 				</div>
 				{/* Amounts */}
 				<div className='grid grid-cols-1 gap-2 lg:grid-cols-2'>
-					<div className='grid grid-cols-1 gap-2 lg:grid-cols-2'>
-						<DashboardCard
-							title='Payment Due'
-							subtitle='# Pending'
-							totalValue={amount_and_doc?.total_payment_due}
-							pendingValue={
-								amount_and_doc?.number_of_pending_payment_due
-							}
-						/>
-						<DashboardCard
-							title='Maturity Due'
-							subtitle='# Pending'
-							totalValue={amount_and_doc?.total_maturity_due}
-							pendingValue={
-								amount_and_doc?.number_of_pending_maturity_due
-							}
-						/>
-						<DashboardCard
-							title='Acceptance Due'
-							subtitle='# Pending'
-							totalValue={amount_and_doc?.total_acceptance_due}
-							pendingValue={
-								amount_and_doc?.number_of_pending_acceptance_due
-							}
-						/>
-						<DashboardCard
-							title='Document Receive Due'
-							subtitle='# Pending'
-							totalValue={amount_and_doc?.total_doc_rcv_due}
-							pendingValue={
-								amount_and_doc?.number_of_pending_doc_rcv
-							}
-						/>
-					</div>
-
-					<PieChartDashboard
-						amount_percentage={amount_percentage}
-						no_of_doc={no_of_doc}
-					/>
+					<AmountAndDoc />
+					<PieChartDashboard />
 				</div>
 				{/* Challan  */}
 				<div className='flex flex-col gap-2 md:flex-row'>

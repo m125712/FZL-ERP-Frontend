@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react';
 import { format, subDays, subMonths } from 'date-fns';
+import { RefreshCw } from 'lucide-react';
 import numeral from 'numeral';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
+import Loader from '@/components/layout/loader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
 	ChartContainer,
@@ -10,6 +12,8 @@ import {
 	ChartTooltipContent,
 } from '@/components/ui/chart';
 import { ReactSelect } from '@/ui';
+
+import { useDashboardOrderEntry } from '../../query';
 
 export const description = 'An interactive bar chart';
 
@@ -31,13 +35,16 @@ const chartConfig = {
 	},
 };
 
-export function BarChartOverall(
-	{ data, setFrom, setTo } = {
-		data: [],
-		setFrom: () => {},
-		setTo: () => {},
-	}
-) {
+export function BarChartOverall() {
+	const [from, setFrom] = useState(
+		format(subDays(new Date(), 30), 'yyyy-MM-dd')
+	);
+	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
+
+	const { data, isLoading, refetch, isFetching } = useDashboardOrderEntry(
+		from,
+		to
+	);
 	// var numeral = numeral();
 	const [activeChart, setActiveChart] = useState('zipper');
 	const [status, setStatus] = useState('30');
@@ -52,45 +59,51 @@ export function BarChartOverall(
 			zipper: data?.reduce((acc, curr) => acc + curr.zipper, 0),
 			thread: data?.reduce((acc, curr) => acc + curr.thread, 0),
 		}),
-		[data]
+		[data, isLoading]
 	);
+
+	if (isLoading) {
+		return <Loader />;
+	}
 
 	return (
 		<Card>
 			<CardHeader className='flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row'>
-				<div className='flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6'>
-					<CardTitle className='flex gap-4 text-3xl'>
-						Order Received{' '}
-						<ReactSelect
-							className='h-4 min-w-36 text-sm'
-							placeholder='Select Status'
-							options={options}
-							value={options?.filter(
-								(item) => item.value == status
-							)}
-							onChange={(e) => {
-								setStatus(e.value);
-								setTo(format(new Date(), 'yyyy-MM-dd'));
-								if (e.value === '30') {
-									setFrom(
-										format(
-											subDays(new Date(), 30),
-											'yyyy-MM-dd'
-										)
-									);
-								} else if (e.value === '12') {
-									setFrom(
-										format(
-											subMonths(new Date(), 12),
-											'yyyy-MM-dd'
-										)
-									);
-								} else {
-									setFrom('');
-									setTo('');
-								}
-							}}
-						/>
+				<div className='flex flex-1 flex-col justify-center gap-1 px-6 py-5 pr-10 sm:py-6'>
+					<CardTitle className='flex items-center justify-between gap-4 text-3xl'>
+						<div className='flex items-center gap-4'>
+							Order Received{' '}
+							<ReactSelect
+								className='h-4 min-w-36 text-sm'
+								placeholder='Select Status'
+								options={options}
+								value={options?.filter(
+									(item) => item.value == status
+								)}
+								onChange={(e) => {
+									setStatus(e.value);
+									setTo(format(new Date(), 'yyyy-MM-dd'));
+									if (e.value === '30') {
+										setFrom(
+											format(
+												subDays(new Date(), 30),
+												'yyyy-MM-dd'
+											)
+										);
+									} else if (e.value === '12') {
+										setFrom(
+											format(
+												subMonths(new Date(), 12),
+												'yyyy-MM-dd'
+											)
+										);
+									} else {
+										setFrom('');
+										setTo('');
+									}
+								}}
+							/>
+						</div>
 					</CardTitle>
 				</div>
 				<div className='flex'>

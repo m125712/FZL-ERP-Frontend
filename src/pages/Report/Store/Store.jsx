@@ -3,16 +3,24 @@ import { useReportStock } from '@/state/Report';
 import { format } from 'date-fns';
 
 import ReactTable from '@/components/Table';
-import { SimpleDatePicker } from '@/ui';
+import { ReactSelect, SimpleDatePicker, StatusSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 export default function index() {
 	const [from, setFrom] = useState(new Date());
 	const [to, setTo] = useState(new Date());
+	const [type, setType] = useState('rm');
+
+	const options = [
+		{ value: 'rm', label: 'RM' },
+		{ value: 'accessories', label: 'Accessories' },
+	];
+
 	const { data, isLoading } = useReportStock(
 		format(from, 'yyyy-MM-dd'),
 		format(to, 'yyyy-MM-dd'),
+		type,
 		{
 			enabled: !!(from && to),
 		}
@@ -97,6 +105,11 @@ export default function index() {
 							onChange={(data) => {
 								setTo(data);
 							}}
+						/>
+						<StatusSelect
+							status={type}
+							setStatus={setType}
+							options={options}
 						/>
 					</div>
 				}

@@ -2,10 +2,10 @@ import createGlobalState from '.';
 import { reportQK } from './QueryKeys';
 
 //* Stock
-export const useReportStock = (from, to, { enabled = false }) =>
+export const useReportStock = (from, to, type, { enabled = false }) =>
 	createGlobalState({
-		queryKey: reportQK.stock(from, to),
-		url: `/report/material-stock-report?from_date=${from}&to_date=${to}`,
+		queryKey: reportQK.stock(from, to, type),
+		url: `/report/material-stock-report?from_date=${from}&to_date=${to}&store_type=${type}`,
 		enabled,
 	});
 

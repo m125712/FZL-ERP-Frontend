@@ -1186,6 +1186,11 @@ export const deliveryQk = {
 		from,
 		to,
 	],
+	deliveryReturnQuantity: (query) => [
+		...deliveryQk.all(),
+		'return-quantity',
+		query,
+	],
 };
 
 //Thread
@@ -1594,6 +1599,13 @@ export const otherQK = {
 
 	//* GET RM
 	rm: (field, param) => [...otherQK.all(), 'rm', field, param],
+
+	orderEntryBy: (uuid, isZipper) => [
+		...otherQK.all(),
+		'order-entry-by',
+		uuid,
+		isZipper ? 'zipper' : 'thread',
+	],
 };
 
 //* Challan
@@ -1632,7 +1644,7 @@ export const reportQK = {
 	all: () => ['report'],
 
 	//* Stock
-	stock: (from, to) => [...reportQK.all(), 'stock', from, to],
+	stock: (from, to, type) => [...reportQK.all(), 'stock', from, to, type],
 	storeApproved: (query) => [
 		...reportQK.all(),
 		'store-approved',

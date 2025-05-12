@@ -234,3 +234,19 @@ export const useWarehouseNotOutLog = (
 		url: `/delivery/packing-list-received-warehouse-notout-log?from=${from}&to=${to}`,
 		enabled,
 	});
+
+// * Delivery Return Quantity
+export const useDeliveryReturnQuantity = (query) =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryReturnQuantity(query),
+		url: query
+			? `/delivery/quantity-return?${query}`
+			: '/delivery/quantity-return',
+	});
+
+export const useDeliveryReturnQuantityByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: deliveryQk.deliveryReturnQuantityByUUID(uuid),
+		url: `/delivery/quantity-return/${uuid}`,
+		enabled: !!uuid,
+	});

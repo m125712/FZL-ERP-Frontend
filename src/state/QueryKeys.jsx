@@ -1191,6 +1191,11 @@ export const deliveryQk = {
 		'return-quantity',
 		query,
 	],
+	deliveryReturnQuantityByUUID: (uuid) => [
+		...deliveryQk.deliveryReturnQuantity(),
+		'return-quantity',
+		uuid,
+	],
 };
 
 //Thread

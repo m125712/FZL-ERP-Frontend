@@ -118,6 +118,21 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorFn(row) {
+					if (row.item_for === 'thread') {
+						return Math.ceil(
+							row.total_quantity / row.cone_per_carton || 1
+						);
+					} else {
+						return 1;
+					}
+				},
+				id: 'carton_quantity',
+				header: 'Carton Qty',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'warehouse_received_date',
 				header: 'Received Date',
 				enableColumnFilter: false,

@@ -583,3 +583,13 @@ export const useOtherRM = (field = 'single-field', param) =>
 		queryKey: otherQK.rm(field, param),
 		url: `/material/stock/by/${field}/${param}`,
 	});
+
+// * GET Order Entry By
+export const useOtherOrderEntryBy = (uuid, isZipper) =>
+	createGlobalState({
+		queryKey: otherQK.orderEntryBy(uuid, isZipper),
+		url: isZipper
+			? `/delivery/zipper-order-entry/by/${uuid}`
+			: `/delivery/thread-order-entry/by/${uuid}`,
+		enabled: !!uuid,
+	});

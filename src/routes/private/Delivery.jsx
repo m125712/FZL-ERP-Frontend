@@ -22,6 +22,10 @@ const Log = lazy(() => import('@pages/Delivery/Log'));
 const RM = lazy(() => import('@pages/Delivery/RM'));
 const Vehicle = lazy(() => import('@pages/Delivery/Vehicle'));
 const PackingListsBulk = lazy(() => import('@pages/Delivery/PackingList-Bulk'));
+const QuantityReturn = lazy(() => import('@/pages/Delivery/Quantity-Return'));
+const QuantityReturnEntry = lazy(
+	() => import('@/pages/Delivery/Quantity-Return/Entry')
+);
 
 export const DeliveryRoutes = [
 	{
@@ -301,6 +305,29 @@ export const DeliveryRoutes = [
 					'click_update_rm_order',
 					'click_delete_rm_order',
 				],
+			},
+			{
+				name: 'Quantity Return',
+				path: '/delivery/quantity-return',
+				element: <QuantityReturn />,
+				page_name: 'delivery__quantity_return',
+				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Quantity Return Entry',
+				path: '/delivery/quantity-return/entry',
+				element: <QuantityReturnEntry />,
+				page_name: 'delivery__quantity_return_entry',
+				actions: ['create', 'read', 'update', 'delete'],
+				hidden: true,
+			},
+			{
+				name: 'Quantity Return Update',
+				path: '/delivery/quantity-return/:uuid/update',
+				element: <QuantityReturnEntry />,
+				page_name: 'delivery__quantity_return_update',
+				actions: ['create', 'read', 'update', 'delete'],
+				hidden: true,
 			},
 
 			// //* Test

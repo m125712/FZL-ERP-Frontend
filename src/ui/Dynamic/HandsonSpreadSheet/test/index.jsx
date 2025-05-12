@@ -14,11 +14,12 @@ const TestSpreadSheet = (
 		fieldName,
 		form,
 		handleAdd,
+		handleUploadFile,
 		columns,
 		colHeaders,
 		data,
 		isIndex,
-		readOnlyIndex=[],
+		readOnlyIndex = [],
 		onChange,
 	} = {
 		title: '',
@@ -26,6 +27,7 @@ const TestSpreadSheet = (
 		form: {},
 		fieldName: '',
 		handleAdd: () => {},
+		handleUploadFile: () => {},
 		columns: [],
 		colHeaders: [],
 		data: [],
@@ -62,7 +64,9 @@ const TestSpreadSheet = (
 	};
 
 	return (
-		<SpreadSheetContainer {...{ title, extraHeader, handleAdd }}>
+		<SpreadSheetContainer
+			{...{ title, extraHeader, handleAdd, handleUploadFile }}
+		>
 			<HotTable
 				layoutDirection='ltr'
 				headerClassName='h-8 flex items-center whitespace-nowrap !px-3 text-left align-middle text-sm font-medium tracking-wide text-primary first:pl-6 dark:text-neutral-400 [&:has([role=checkbox])]:pr-0 bg-base-200'
@@ -97,7 +101,7 @@ const TestSpreadSheet = (
 							cellProperties.readOnly = true; // Make the specified column read-only
 						}
 					}
-					
+
 					return cellProperties;
 				}}
 				data={data}

@@ -12,6 +12,7 @@ const Slider = (
 		handleAdd,
 		handleCopy,
 		handleRemove,
+		handleUploadFile,
 	} = {
 		title: '',
 		extraHeader: null,
@@ -20,6 +21,7 @@ const Slider = (
 		handleAdd: () => {},
 		handleRemove: () => {},
 		handleCopy: () => {},
+		handleUploadFile: () => {},
 	}
 ) => {
 	const columns = [
@@ -71,6 +73,7 @@ const Slider = (
 				fieldName,
 				form,
 				handleAdd,
+				handleUploadFile,
 				columns,
 				colHeaders,
 				data,

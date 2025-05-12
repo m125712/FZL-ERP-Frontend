@@ -15,6 +15,7 @@ const FullOrder = (
 		handleAdd,
 		handleRemove,
 		handleCopy,
+		handleUploadFile,
 	} = {
 		title: '',
 		extraHeader: null,
@@ -23,6 +24,7 @@ const FullOrder = (
 		handleAdd: () => {},
 		handleRemove: () => {},
 		handleCopy: () => {},
+		handleUploadFile: () => {},
 	}
 ) => {
 	const columns = [
@@ -93,6 +95,7 @@ const FullOrder = (
 				fieldName,
 				form,
 				handleAdd,
+				handleUploadFile,
 				columns,
 				colHeaders,
 				data,

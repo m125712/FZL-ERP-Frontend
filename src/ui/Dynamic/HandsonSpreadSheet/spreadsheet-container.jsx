@@ -1,12 +1,15 @@
 import React from 'react';
 import { Plus } from 'lucide-react';
 
+import ReadFile from '@/ui/Others/read-file';
+
 const SpreadSheetContainer = (
-	{ children, extraHeader, handleAdd, title } = {
+	{ children, extraHeader, handleAdd, title, handleUploadFile } = {
 		children,
 		title,
 		extraHeader,
 		handleAdd,
+		handleUploadFile: (data) => {},
 	}
 ) => {
 	return (
@@ -18,6 +21,9 @@ const SpreadSheetContainer = (
 
 				<div className='flex items-center gap-4'>
 					{extraHeader}
+
+					<ReadFile onChange={handleUploadFile} />
+
 					{handleAdd && (
 						<button
 							onClick={handleAdd}

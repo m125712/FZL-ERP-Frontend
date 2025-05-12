@@ -1,13 +1,7 @@
 import React from 'react';
 
-
-
 import renderActions from '@/ui/Dynamic/HandsonSpreadSheet/_actions/render-actions';
 import TestSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet/test';
-
-
-
-
 
 const Tape = (
 	{
@@ -18,6 +12,7 @@ const Tape = (
 		handleAdd,
 		handleCopy,
 		handleRemove,
+		handleUploadFile,
 	} = {
 		title: '',
 		extraHeader: null,
@@ -26,6 +21,7 @@ const Tape = (
 		handleAdd: () => {},
 		handleRemove: () => {},
 		handleCopy: () => {},
+		handleUploadFile: () => {},
 	}
 ) => {
 	const columns = [
@@ -90,11 +86,12 @@ const Tape = (
 				fieldName,
 				form,
 				handleAdd,
+				handleUploadFile,
 				columns,
 				colHeaders,
 				data,
 				isIndex: true,
-				readOnlyIndex:[5],
+				readOnlyIndex: [5],
 			}}
 		/>
 	);

@@ -143,6 +143,7 @@ function Table({
 					//filterTableHeader={filterTableHeader}
 					showPdf={showPdf}
 					pdfData={pdfData}
+					extraExcelData={props.extraExcelData}
 					//pdf={pdf}
 					//extraData={extraData}
 				/>
@@ -166,7 +167,8 @@ function Table({
 						showTitleOnly && 'mb-6',
 						containerClassName,
 						table.getPageCount() <= 1 && 'rounded-b-md'
-					)}>
+					)}
+				>
 					<table className='w-full'>
 						{showColumnsHeader && (
 							<TableHead

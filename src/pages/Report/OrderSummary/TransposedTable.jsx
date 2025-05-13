@@ -186,6 +186,32 @@ export default function TransposedTable({ data, transformedData }) {
 		[transposed, transformedData]
 	);
 
+	const getTotalBalance = () => {
+		if (!transposed?.[4]) return 0;
+
+		const total_order_quantity = Object.entries(transposed[4])
+			.map(([key, value]) => (key !== 'field' ? value : 0))
+			.reduce((acc, val) => acc + val, 0);
+
+		const total_challan_quantity = transposedTotal.total;
+		const total_balance = transposed?.[5]?.total;
+		const difference = total_order_quantity - total_challan_quantity;
+
+		return {
+			total_order_quantity,
+			total_challan_quantity,
+			difference,
+			total_balance,
+		};
+	};
+
+	const { total_order_quantity, total_challan_quantity, total_balance } =
+		getTotalBalance();
+
+	const extraExcelData = [
+		'Total Balance Quantity',
+		`${total_order_quantity} - ${total_challan_quantity} = ${total_balance}`,
+	];
 	return (
 		<>
 			<ReactTable
@@ -193,6 +219,7 @@ export default function TransposedTable({ data, transformedData }) {
 				data={transposed}
 				columns={transposedCol}
 				extraClass={'py-2'}
+				extraExcelData={extraExcelData}
 			>
 				<tr className='bg-slate-200'>
 					<td className='py-2 text-center font-bold'>Total</td>
@@ -205,20 +232,9 @@ export default function TransposedTable({ data, transformedData }) {
 			</ReactTable>
 
 			{transposed?.[4] && (
-				<div>
-					Total Balance ={' '}
-					{transposed?.[4] &&
-						Object.entries(transposed?.[4])
-							.map(([key, value]) => {
-								if (key !== 'field') {
-									return value;
-								}
-								return 0;
-							})
-							.reduce((acc, value) => {
-								return acc + value;
-							}, 0)}{' '}
-					- {transposedTotal.total} = {transposed?.[5]?.total}
+				<div className='flex items-center justify-center gap-4 rounded-md bg-primary p-2 text-primary-foreground'>
+					Total Balance = {total_order_quantity} -{' '}
+					{total_challan_quantity} = {total_balance}
 				</div>
 			)}
 		</>

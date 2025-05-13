@@ -60,6 +60,20 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'tape',
+				header: 'Tape',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'slider',
+				header: 'Slider',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'order_type',
 				header: 'Type',
 				enableColumnFilter: true,

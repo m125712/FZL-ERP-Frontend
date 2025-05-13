@@ -31,7 +31,8 @@ export default function TransposedTable({ data, transformedData }) {
 			let challanTotal = 0;
 
 			data.forEach((item, index) => {
-				const key = item.item_description + index;
+				const key =
+					item.item_description.replace(/[\s_.]+/g, '-') + index;
 
 				if (field in item) {
 					if (field === 'challan_no') {
@@ -68,7 +69,8 @@ export default function TransposedTable({ data, transformedData }) {
 
 			let balanceTotal = 0;
 			data.forEach((item, index) => {
-				const key = item.item_description + index;
+				const key =
+					item.item_description.replace(/[\s_.]+/g, '-') + index;
 				const orderQty = transposed[orderQtyIndex][key] ?? 0;
 
 				// Sum all challan values for this item
@@ -129,11 +131,13 @@ export default function TransposedTable({ data, transformedData }) {
 			{
 				accessorFn: (row) =>
 					row.field
-						.replace(/_/g, ' ')
+						.replace(/[\s_.]+/g, '-')
 						.replace(/\b\w/g, (c) => c.toUpperCase()),
 				id: 'field',
 				header: 'Field',
 				width: 'w-32',
+				enableColumnFilter: false,
+				enableSorting: false,
 				cell: (info) => {
 					const challan = challanNumbers.find(
 						(challan) => challan.challan_number === info.getValue()
@@ -163,24 +167,28 @@ export default function TransposedTable({ data, transformedData }) {
 			},
 			...(Array.isArray(transformedData) ? transformedData : []).map(
 				(item, index) => ({
-					accessorKey: item.item_description + index,
-					header: () =>
-						item?.order_description_uuid ? (
-							<CustomLink
-								label={item?.item_description}
-								url={`/order/details/${data?.order_number}/${item?.order_description_uuid}`}
-								openInNewTab={true}
-							/>
-						) : (
-							item?.item_description
-						),
+					accessorKey:
+						item.item_description.replace(/[\s_.]+/g, '-') + index,
+					header: item.item_description,
+					// header: () =>
+					// 	item?.order_description_uuid ? (
+					// 		<CustomLink
+					// 			label={item?.item_description}
+					// 			url={`/order/details/${data?.order_number}/${item?.order_description_uuid}`}
+					// 			openInNewTab={true}
+					// 		/>
+					// 	) : (
+					// 		item?.item_description
+					// 	),
 					enableColumnFilter: false,
+					enableSorting: false,
 				})
 			),
 			{
 				accessorKey: 'total',
 				header: 'Total',
 				enableColumnFilter: false,
+				enableSorting: false,
 			},
 		],
 		[transposed, transformedData]
@@ -212,6 +220,8 @@ export default function TransposedTable({ data, transformedData }) {
 		'Total Balance Quantity',
 		`${total_order_quantity} - ${total_challan_quantity} = ${total_balance}`,
 	];
+
+	console.log(transposed);
 	return (
 		<>
 			<ReactTable

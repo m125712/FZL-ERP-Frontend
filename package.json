@@ -59,6 +59,7 @@
 		"tailwindcss-animate": "^1.0.7",
 		"to-words": "^4.2.0",
 		"use-react-router-breadcrumbs": "^4.0.1",
+		"xlsx": "^0.18.5",
 		"yup": "^1.6.1"
 	},
 	"devDependencies": {

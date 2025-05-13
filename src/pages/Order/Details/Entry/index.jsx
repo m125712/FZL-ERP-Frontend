@@ -28,6 +28,7 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 import { UUID } from '@/util/Schema/utils';
 
+import ReadFile from '../../../../ui/Others/read-file';
 import Header from './header';
 import FullOrder from './spread-sheets/full-order';
 import Slider from './spread-sheets/slider';
@@ -429,6 +430,34 @@ export default function Index() {
 		});
 	};
 
+	/// Upload file function ///
+	const handleUploadFile = (data) => {
+		if (!data || data?.length === 0) return;
+
+		const newData = data?.map((item, index) => ({
+			index: index + 1,
+			style: item.style,
+			color: item.color,
+			size: item.size,
+			quantity: item.quantity,
+			company_price: item.company_price,
+			party_price: item.party_price,
+			bleaching: item.bleaching,
+		}));
+
+		ORDER_SCHEMA.order_entry
+			.validate(newData, {
+				strict: false,
+				stripUnknown: true,
+			})
+			.then((valid) => {
+				form.setValue('order_entry', valid);
+			})
+			.catch((err) => {
+				console.log('----ERROR----', { err });
+			});
+	};
+
 	return (
 		<FormProvider {...form}>
 			<form
@@ -460,6 +489,7 @@ export default function Index() {
 
 				{watch('order_type') === 'full' && (
 					<FullOrder
+						handleUploadFile={handleUploadFile}
 						handleAdd={handelOrderEntryAppend}
 						handleRemove={handleOrderEntryRemove}
 						handleCopy={handleCopy}
@@ -472,6 +502,7 @@ export default function Index() {
 
 				{watch('order_type') === 'tape' && (
 					<Tape
+						handleUploadFile={handleUploadFile}
 						handleAdd={handelOrderEntryAppend}
 						handleRemove={handleOrderEntryRemove}
 						handleCopy={handleCopy}
@@ -483,6 +514,7 @@ export default function Index() {
 				)}
 				{watch('order_type') === 'slider' && (
 					<Slider
+						handleUploadFile={handleUploadFile}
 						handleAdd={handelOrderEntryAppend}
 						handleRemove={handleOrderEntryRemove}
 						handleCopy={handleCopy}

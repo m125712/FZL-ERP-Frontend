@@ -187,20 +187,40 @@ export default function TransposedTable({ data, transformedData }) {
 	);
 
 	return (
-		<ReactTable
-			title={'Summary V2'}
-			data={transposed}
-			columns={transposedCol}
-			extraClass={'py-2'}
-		>
-			<tr className='bg-slate-200'>
-				<td className='py-2 text-center font-bold'>Total</td>
-				{Object.entries(transposedTotal).map(([key, value]) => (
-					<td key={key} className='py-1.5 ps-2.5'>
-						{value}
-					</td>
-				))}
-			</tr>
-		</ReactTable>
+		<>
+			<ReactTable
+				title={'Summary V2'}
+				data={transposed}
+				columns={transposedCol}
+				extraClass={'py-2'}
+			>
+				<tr className='bg-slate-200'>
+					<td className='py-2 text-center font-bold'>Total</td>
+					{Object.entries(transposedTotal).map(([key, value]) => (
+						<td key={key} className='py-1.5 ps-2.5'>
+							{value}
+						</td>
+					))}
+				</tr>
+			</ReactTable>
+
+			{transposed?.[4] && (
+				<div>
+					Total Balance ={' '}
+					{transposed?.[4] &&
+						Object.entries(transposed?.[4])
+							.map(([key, value]) => {
+								if (key !== 'field') {
+									return value;
+								}
+								return 0;
+							})
+							.reduce((acc, value) => {
+								return acc + value;
+							}, 0)}{' '}
+					- {transposedTotal.total} = {transposed?.[5]?.total}
+				</div>
+			)}
+		</>
 	);
 }

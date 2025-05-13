@@ -1698,6 +1698,58 @@ export const DELIVERY_VEHICLE_NULL = {
 	remarks: '',
 };
 
+//* Quantity Return
+export const QUANTITY_RETURN_SCHEMA = {
+	order_description_uuid: STRING_REQUIRED,
+
+	order_details: yup.array().of(
+		yup.object().shape({
+			uuid: STRING.nullable(),
+			size: STRING.nullable(),
+
+			length: STRING.nullable(),
+			count_length_name: STRING.nullable(),
+
+			style: STRING.nullable(),
+			color: STRING.nullable(),
+			quantity: NUMBER.nullable(),
+
+			fresh_quantity: NUMBER.default(0).nullable(),
+			repair_quantity: NUMBER.default(0).nullable(),
+		})
+	),
+};
+
+export const QUANTITY_RETURN_NULL = {
+	order_description_uuid: null,
+	order_details: [
+		{
+			size: '',
+
+			length: '',
+			count_length_name: '',
+
+			style: '',
+			color: '',
+			quantity: 0,
+
+			fresh_quantity: 0,
+			repair_quantity: 0,
+		},
+	],
+};
+
+//* Return Quantity Update
+export const RETURN_QUANTITY_UPDATE_SCHEMA = {
+	fresh_quantity: NUMBER,
+	repair_quantity: NUMBER.nullable(),
+};
+
+export const RETURN_QUANTITY_UPDATE_NULL = {
+	fresh_quantity: 0,
+	repair_quantity: 0,
+};
+
 //* Carton
 export const DELIVERY_CARTON_SCHEMA = {
 	size: STRING_REQUIRED,

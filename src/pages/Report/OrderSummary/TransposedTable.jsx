@@ -31,7 +31,8 @@ export default function TransposedTable({ data, transformedData }) {
 			let challanTotal = 0;
 
 			data.forEach((item, index) => {
-				const key = item.item_description + index;
+				const key =
+					item.item_description.replace(/[\s_.]+/g, '-') + index;
 
 				if (field in item) {
 					if (field === 'challan_no') {
@@ -68,7 +69,8 @@ export default function TransposedTable({ data, transformedData }) {
 
 			let balanceTotal = 0;
 			data.forEach((item, index) => {
-				const key = item.item_description + index;
+				const key =
+					item.item_description.replace(/[\s_.]+/g, '-') + index;
 				const orderQty = transposed[orderQtyIndex][key] ?? 0;
 
 				// Sum all challan values for this item
@@ -129,11 +131,13 @@ export default function TransposedTable({ data, transformedData }) {
 			{
 				accessorFn: (row) =>
 					row.field
-						.replace(/_/g, ' ')
+						.replace(/[\s_.]+/g, '-')
 						.replace(/\b\w/g, (c) => c.toUpperCase()),
 				id: 'field',
 				header: 'Field',
 				width: 'w-32',
+				enableColumnFilter: false,
+				enableSorting: false,
 				cell: (info) => {
 					const challan = challanNumbers.find(
 						(challan) => challan.challan_number === info.getValue()
@@ -163,44 +167,86 @@ export default function TransposedTable({ data, transformedData }) {
 			},
 			...(Array.isArray(transformedData) ? transformedData : []).map(
 				(item, index) => ({
-					accessorKey: item.item_description + index,
-					header: () =>
-						item?.order_description_uuid ? (
-							<CustomLink
-								label={item?.item_description}
-								url={`/order/details/${data?.order_number}/${item?.order_description_uuid}`}
-								openInNewTab={true}
-							/>
-						) : (
-							item?.item_description
-						),
+					accessorKey:
+						item.item_description.replace(/[\s_.]+/g, '-') + index,
+					header: item.item_description,
+					// header: () =>
+					// 	item?.order_description_uuid ? (
+					// 		<CustomLink
+					// 			label={item?.item_description}
+					// 			url={`/order/details/${data?.order_number}/${item?.order_description_uuid}`}
+					// 			openInNewTab={true}
+					// 		/>
+					// 	) : (
+					// 		item?.item_description
+					// 	),
 					enableColumnFilter: false,
+					enableSorting: false,
 				})
 			),
 			{
 				accessorKey: 'total',
 				header: 'Total',
 				enableColumnFilter: false,
+				enableSorting: false,
 			},
 		],
 		[transposed, transformedData]
 	);
 
+	const getTotalBalance = () => {
+		if (!transposed?.[4]) return 0;
+
+		const total_order_quantity = Object.entries(transposed[4])
+			.map(([key, value]) => (key !== 'field' ? value : 0))
+			.reduce((acc, val) => acc + val, 0);
+
+		const total_challan_quantity = transposedTotal.total;
+		const total_balance = transposed?.[5]?.total;
+		const difference = total_order_quantity - total_challan_quantity;
+
+		return {
+			total_order_quantity,
+			total_challan_quantity,
+			difference,
+			total_balance,
+		};
+	};
+
+	const { total_order_quantity, total_challan_quantity, total_balance } =
+		getTotalBalance();
+
+	const extraExcelData = [
+		'Total Balance Quantity',
+		`${total_order_quantity} - ${total_challan_quantity} = ${total_balance}`,
+	];
+
+	console.log(transposed);
 	return (
-		<ReactTable
-			title={'Summary V2'}
-			data={transposed}
-			columns={transposedCol}
-			extraClass={'py-2'}
-		>
-			<tr className='bg-slate-200'>
-				<td className='py-2 text-center font-bold'>Total</td>
-				{Object.entries(transposedTotal).map(([key, value]) => (
-					<td key={key} className='py-1.5 ps-2.5'>
-						{value}
-					</td>
-				))}
-			</tr>
-		</ReactTable>
+		<>
+			<ReactTable
+				title={'Summary V2'}
+				data={transposed}
+				columns={transposedCol}
+				extraClass={'py-2'}
+				extraExcelData={extraExcelData}
+			>
+				<tr className='bg-slate-200'>
+					<td className='py-2 text-center font-bold'>Total</td>
+					{Object.entries(transposedTotal).map(([key, value]) => (
+						<td key={key} className='py-1.5 ps-2.5'>
+							{value}
+						</td>
+					))}
+				</tr>
+			</ReactTable>
+
+			{transposed?.[4] && (
+				<div className='flex items-center justify-center gap-4 rounded-md bg-primary p-2 text-primary-foreground'>
+					Total Balance = {total_order_quantity} -{' '}
+					{total_challan_quantity} = {total_balance}
+				</div>
+			)}
+		</>
 	);
 }

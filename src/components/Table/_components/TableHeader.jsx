@@ -70,6 +70,7 @@ const TableHeader = (props) => {
 							getAllLeafColumns: props.getAllLeafColumns,
 							filteredRows: props.filteredRows,
 							title: props.title,
+							extraExcelData: props.extraExcelData,
 						}}
 					/>
 					{props.showPdf && (

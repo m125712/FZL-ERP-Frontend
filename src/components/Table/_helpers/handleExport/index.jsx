@@ -4,7 +4,12 @@ import { CSVLink } from 'react-csv';
 
 import { GetFlatHeader } from '../../utils';
 
-const HandleExport = ({ getAllLeafColumns, filteredRows, title }) => {
+const HandleExport = ({
+	getAllLeafColumns,
+	filteredRows,
+	title,
+	extraExcelData,
+}) => {
 	// * Exclude unnecessary columns and filter visible ones
 	const excludedColumns = new Set(['action', 'actions', 'resetPass']);
 	const csvHeaders = [];
@@ -23,6 +28,8 @@ const HandleExport = ({ getAllLeafColumns, filteredRows, title }) => {
 		...filteredRows.map((row) =>
 			csvHeadersId.map((id) => row.getValue(id))
 		), // * Data rows
+
+		extraExcelData ? extraExcelData : [], // * Extra data rows
 	];
 
 	// * Generate filename with current date

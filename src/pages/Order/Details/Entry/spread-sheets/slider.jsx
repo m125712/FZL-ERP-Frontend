@@ -13,6 +13,7 @@ const Slider = (
 		handleCopy,
 		handleRemove,
 		handleUploadFile,
+		csvData,
 	} = {
 		title: '',
 		extraHeader: null,
@@ -22,6 +23,7 @@ const Slider = (
 		handleRemove: () => {},
 		handleCopy: () => {},
 		handleUploadFile: () => {},
+		csvData: [],
 	}
 ) => {
 	const columns = [
@@ -79,6 +81,7 @@ const Slider = (
 				data,
 				readOnlyIndex: [3],
 				isIndex: true,
+				csvData,
 			}}
 		/>
 	);

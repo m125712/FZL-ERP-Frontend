@@ -1,15 +1,17 @@
 import React from 'react';
-import { Plus } from 'lucide-react';
+import { FileSpreadsheet, Plus } from 'lucide-react';
+import { CSVLink } from 'react-csv';
 
 import ReadFile from '@/ui/Others/read-file';
 
 const SpreadSheetContainer = (
-	{ children, extraHeader, handleAdd, title, handleUploadFile } = {
+	{ children, extraHeader, handleAdd, title, handleUploadFile, csvData } = {
 		children,
 		title,
 		extraHeader,
 		handleAdd,
 		handleUploadFile: (data) => {},
+		csvData: [],
 	}
 ) => {
 	return (
@@ -21,9 +23,19 @@ const SpreadSheetContainer = (
 
 				<div className='flex items-center gap-4'>
 					{extraHeader}
+					{csvData && csvData.length > 0 && (
+						<CSVLink
+							title='Demo Sheet'
+							type='button'
+							className='btn btn-warning btn-xs gap-1 rounded'
+							data={csvData}
+						>
+							<FileSpreadsheet className='size-4' />
+							Demo
+						</CSVLink>
+					)}
 
 					<ReadFile onChange={handleUploadFile} />
-
 					{handleAdd && (
 						<button
 							onClick={handleAdd}

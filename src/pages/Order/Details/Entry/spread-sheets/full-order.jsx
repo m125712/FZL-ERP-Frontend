@@ -16,6 +16,7 @@ const FullOrder = (
 		handleRemove,
 		handleCopy,
 		handleUploadFile,
+		csvData,
 	} = {
 		title: '',
 		extraHeader: null,
@@ -25,6 +26,7 @@ const FullOrder = (
 		handleRemove: () => {},
 		handleCopy: () => {},
 		handleUploadFile: () => {},
+		csvData: [],
 	}
 ) => {
 	const columns = [
@@ -101,6 +103,7 @@ const FullOrder = (
 				data,
 				readOnlyIndex: [6],
 				isIndex: true,
+				csvData,
 			}}
 		/>
 	);

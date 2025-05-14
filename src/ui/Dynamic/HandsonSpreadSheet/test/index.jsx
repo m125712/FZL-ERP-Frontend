@@ -21,6 +21,7 @@ const TestSpreadSheet = (
 		isIndex,
 		readOnlyIndex = [],
 		onChange,
+		csvData,
 	} = {
 		title: '',
 		extraHeader: null,
@@ -33,6 +34,7 @@ const TestSpreadSheet = (
 		data: [],
 		isIndex: false,
 		onChange: (newData, setValue, fieldName, row, prop) => {},
+		csvData: [],
 	}
 ) => {
 	data?.map((item, index) => {
@@ -65,7 +67,7 @@ const TestSpreadSheet = (
 
 	return (
 		<SpreadSheetContainer
-			{...{ title, extraHeader, handleAdd, handleUploadFile }}
+			{...{ title, extraHeader, handleAdd, handleUploadFile, csvData }}
 		>
 			<HotTable
 				layoutDirection='ltr'

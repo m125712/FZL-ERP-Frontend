@@ -3,12 +3,14 @@ import { useOrderDescription, useOrderDetailsByQuery } from '@/state/Order';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import { useAccess, useFetchForOrderReset, useRHF } from '@/hooks';
 
+import FileUploading from '@/components/layout/file-uploading';
 import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
-import { ShowLocalToast } from '@/components/Toast';
+import { ErrorToast, ShowLocalToast } from '@/components/Toast';
 import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet'; //! why it is must??
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { CheckBox } from '@/ui';
@@ -431,10 +433,39 @@ export default function Index() {
 	};
 
 	/// Upload file function ///
-	const handleUploadFile = (data) => {
-		if (!data || data?.length === 0) return;
 
-		const newData = data?.map((item, index) => ({
+	const [isLoading, setIsLoading] = useState(false);
+
+	const appendInChunks = async (appendFn, items, chunkSize = 10) => {
+		let index = 0;
+
+		return new Promise((resolve) => {
+			const process = () => {
+				const chunk = items.slice(index, index + chunkSize);
+
+				chunk.forEach((item) => {
+					appendFn(item, { shouldFocus: false }); // Prevent re-render/focus
+				});
+
+				index += chunkSize;
+
+				if (index < items.length) {
+					// Let UI breathe
+					setTimeout(process, 0);
+				} else {
+					resolve();
+				}
+			};
+
+			process();
+		});
+	};
+
+	const handleUploadFile = async (data) => {
+		if (!data || data.length === 0) return;
+
+		// Prepare your data
+		const newData = data.map((item, index) => ({
 			index: index + 1,
 			style: item.style,
 			color: item.color,
@@ -445,18 +476,31 @@ export default function Index() {
 			bleaching: item.bleaching,
 		}));
 
-		ORDER_SCHEMA.order_entry
-			.validate(newData, {
-				strict: false,
-				stripUnknown: true,
-			})
-			.then((valid) => {
-				form.setValue('order_entry', valid);
-			})
-			.catch((err) => {
-				console.log('----ERROR----', { err });
-			});
+		try {
+			setIsLoading(true);
+
+			const isValid = ORDER_SCHEMA.order_entry.isValid(newData[0]);
+			if (!isValid) throw new Error('Invalid data');
+
+			// Clear existing fields
+			orderEntryRemove();
+
+			// Append items in chunks with shouldFocus: false
+			await appendInChunks(orderEntryAppend, newData, 20);
+		} catch (error) {
+			toast.error(error.message);
+		} finally {
+			setIsLoading(false);
+		}
 	};
+
+	if (isLoading) {
+		return <FileUploading />;
+	}
+
+	const csvData = Object.keys(
+		ORDER_SCHEMA.order_entry.describe().innerType.fields
+	);
 
 	return (
 		<FormProvider {...form}>
@@ -497,6 +541,7 @@ export default function Index() {
 						extraHeader={headerButtons}
 						form={form}
 						fieldName='order_entry'
+						csvData={[csvData]}
 					/>
 				)}
 
@@ -510,6 +555,7 @@ export default function Index() {
 						extraHeader={headerButtons}
 						form={form}
 						fieldName='order_entry'
+						csvData={[csvData]}
 					/>
 				)}
 				{watch('order_type') === 'slider' && (
@@ -522,6 +568,7 @@ export default function Index() {
 						extraHeader={headerButtons}
 						form={form}
 						fieldName='order_entry'
+						csvData={[csvData]}
 					/>
 				)}
 

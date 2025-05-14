@@ -13,6 +13,7 @@ const Tape = (
 		handleCopy,
 		handleRemove,
 		handleUploadFile,
+		csvData,
 	} = {
 		title: '',
 		extraHeader: null,
@@ -22,6 +23,7 @@ const Tape = (
 		handleRemove: () => {},
 		handleCopy: () => {},
 		handleUploadFile: () => {},
+		csvData: [],
 	}
 ) => {
 	const columns = [
@@ -92,6 +94,7 @@ const Tape = (
 				data,
 				isIndex: true,
 				readOnlyIndex: [5],
+				csvData,
 			}}
 		/>
 	);

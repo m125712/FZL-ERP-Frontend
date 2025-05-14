@@ -202,11 +202,12 @@ export const useOrderAgainstDeliveryRMLogByUUID = (uuid) =>
 export const useWarehouseRcvLog = (
 	from,
 	to,
+	status,
 	{ enabled = false } = { enabled: false }
 ) =>
 	createGlobalState({
-		queryKey: deliveryQk.warehouseRcvLog(from, to),
-		url: `/delivery/packing-list-received-log?from=${from}&to=${to}`,
+		queryKey: deliveryQk.warehouseRcvLog(from, to, status),
+		url: `/delivery/packing-list-received-log?from=${from}&to=${to}&is_sample=${status}`,
 		enabled,
 	});
 
@@ -214,11 +215,12 @@ export const useWarehouseRcvLog = (
 export const useWarehouseOutLog = (
 	from,
 	to,
+	status,
 	{ enabled = false } = { enabled: false }
 ) =>
 	createGlobalState({
-		queryKey: deliveryQk.warehouseOutLog(from, to),
-		url: `/delivery/packing-list-warehouse-out-log?from=${from}&to=${to}`,
+		queryKey: deliveryQk.warehouseOutLog(from, to, status),
+		url: `/delivery/packing-list-warehouse-out-log?from=${from}&to=${to}&is_sample=${status}`,
 		enabled,
 	});
 
@@ -227,11 +229,12 @@ export const useWarehouseOutLog = (
 export const useWarehouseNotOutLog = (
 	from,
 	to,
+	status,
 	{ enabled = false } = { enabled: false }
 ) =>
 	createGlobalState({
-		queryKey: deliveryQk.warehouseNotOutLog(from, to),
-		url: `/delivery/packing-list-received-warehouse-notout-log?from=${from}&to=${to}`,
+		queryKey: deliveryQk.warehouseNotOutLog(from, to, status),
+		url: `/delivery/packing-list-received-warehouse-notout-log?from=${from}&to=${to}&is_sample=${status}`,
 		enabled,
 	});
 

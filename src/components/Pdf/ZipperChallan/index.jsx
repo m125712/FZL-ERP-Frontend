@@ -41,7 +41,7 @@ const sliderNode = createNode([
 ]);
 
 export default function Index(data) {
-	const headerHeight = 240;
+	const headerHeight = 220;
 	const footerHeight = 50;
 	const isTapeChallan = data?.item_for === 'tape';
 	const isSliderChallan = data?.item_for === 'slider';
@@ -202,7 +202,7 @@ export default function Index(data) {
 						? ''
 						: `(${pl.carton_weight ? pl.carton_weight : 0} Kg)`
 				}`,
-				fontSize: DEFAULT_FONT_SIZE + 2,
+				fontSize: DEFAULT_FONT_SIZE + 1,
 				bold: true,
 				alignment: 'left',
 			},
@@ -211,7 +211,7 @@ export default function Index(data) {
 					headerRows: 1,
 					widths: isSliderChallan
 						? [70, 110, 90, 80, 80]
-						: [70, 110, 90, 70, 60, 50, 30],
+						: [70, 110, 90, 80, 60, 40, 30],
 					body: [
 						// * Header
 						TableHeader(node),

@@ -8,7 +8,7 @@ const getDateFormate = (date) => {
 		return '--/--/--';
 	}
 };
-export default function Index(data, from, to) {
+export default function Index(data, from, to, priceFor) {
 	const PdfData = data || [];
 	const title = [
 		'Current Total',
@@ -453,23 +453,68 @@ export default function Index(data, from, to) {
 											)
 										: '---',
 								},
-								{
-									text: String(
-										Number(
-											otherItem.running_total_value
-										).toFixed(3)
-									),
-								},
-								{
-									text: String(
-										Number(
-											title.includes(otherItem.size)
-												? otherItem.running_total_value_bdt
-												: otherItem.running_total_value *
-														otherItem.conversion_rate
-										).toFixed(3)
-									),
-								},
+								...(priceFor === 'both'
+									? [
+											{
+												text: String(
+													Number(
+														otherItem.running_total_value_company
+													).toFixed(3)
+												),
+											},
+											{
+												text: String(
+													Number(
+														title.includes(
+															otherItem.size
+														)
+															? otherItem.running_total_value_bdt
+															: otherItem.running_total_value_company *
+																	otherItem.conversion_rate
+													).toFixed(3)
+												),
+											},
+											{
+												text: String(
+													Number(
+														otherItem.running_total_value_party
+													).toFixed(3)
+												),
+											},
+											{
+												text: String(
+													Number(
+														title.includes(
+															otherItem.size
+														)
+															? otherItem.running_total_value_bdt
+															: otherItem.running_total_value_party *
+																	otherItem.conversion_rate
+													).toFixed(3)
+												),
+											},
+										]
+									: [
+											{
+												text: String(
+													Number(
+														otherItem.running_total_value
+													).toFixed(3)
+												),
+											},
+											{
+												text: String(
+													Number(
+														title.includes(
+															otherItem.size
+														)
+															? otherItem.running_total_value_bdt
+															: otherItem.running_total_value *
+																	otherItem.conversion_rate
+													).toFixed(3)
+												),
+											},
+										]),
 							];
 						});
 					}
@@ -514,116 +559,135 @@ export default function Index(data, from, to) {
 		{
 			text: 'Unit Price',
 		},
-		{
-			text: 'Value',
-		},
-		{
-			text: 'Value (BDT)',
-		},
+
+		...(priceFor === 'both'
+			? [
+					{
+						text: 'Value (Company)',
+					},
+					{
+						text: 'Value Company (BDT)',
+					},
+					{
+						text: 'Value (Party)',
+					},
+					{
+						text: 'Value Party (BDT)',
+					},
+				]
+			: [
+					{
+						text: 'Value',
+					},
+					{
+						text: 'Value (BDT)',
+					},
+				]),
 	]);
-	tableData.push([
-		{
-			text: 'Grand Current Total',
+	// tableData.push([
+	// 	{
+	// 		text: 'Grand Current Total',
 
-			colSpan: 7,
-		},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
+	// 		colSpan: 7,
+	// 	},
+	// 	{},
+	// 	{},
+	// 	{},
+	// 	{},
+	// 	{},
+	// 	{},
 
-		{
-			text: Number(grandTotal.current.close_end_quantity).toFixed(2),
-		},
-		{
-			text: Number(grandTotal.current.open_end_quantity).toFixed(2),
-		},
+	// 	{
+	// 		text: Number(grandTotal.current.close_end_quantity).toFixed(2),
+	// 	},
+	// 	{
+	// 		text: Number(grandTotal.current.open_end_quantity).toFixed(2),
+	// 	},
 
-		{
-			text: Number(grandTotal.current.quantity).toFixed(2),
-		},
-		{},
-		{
-			text: Number(grandTotal.current.value).toFixed(2),
-		},
-		{
-			text: Number(grandTotal.current.value_bdt).toFixed(2),
-		},
-	]);
-	tableData.push([
-		{
-			text: 'Grand Opening Total',
-			bold: true,
-			colSpan: 7,
-		},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
+	// 	{
+	// 		text: Number(grandTotal.current.quantity).toFixed(2),
+	// 	},
+	// 	{},
+	// 	{
+	// 		text: Number(grandTotal.current.value).toFixed(2),
+	// 	},
+	// 	{
+	// 		text: Number(grandTotal.current.value_bdt).toFixed(2),
+	// 	},
+	// ]);
+	// tableData.push([
+	// 	{
+	// 		text: 'Grand Opening Total',
+	// 		bold: true,
+	// 		colSpan: 7,
+	// 	},
+	// 	{},
+	// 	{},
+	// 	{},
+	// 	{},
+	// 	{},
+	// 	{},
 
-		{
-			text: Number(grandTotal.opening.close_end_quantity).toFixed(2),
-			bold: true,
-		},
-		{
-			text: Number(grandTotal.opening.open_end_quantity).toFixed(2),
-			bold: true,
-		},
+	// 	{
+	// 		text: Number(grandTotal.opening.close_end_quantity).toFixed(2),
+	// 		bold: true,
+	// 	},
+	// 	{
+	// 		text: Number(grandTotal.opening.open_end_quantity).toFixed(2),
+	// 		bold: true,
+	// 	},
 
-		{
-			text: Number(grandTotal.opening.quantity).toFixed(2),
-			bold: true,
-		},
-		{},
-		{
-			text: Number(grandTotal.opening.value).toFixed(2),
-			bold: true,
-		},
-		{
-			text: Number(grandTotal.opening.value_bdt).toFixed(2),
-			bold: true,
-		},
-	]);
-	tableData.push([
-		{
-			text: 'Grand Closing Total',
-			bold: true,
-			colSpan: 7,
-		},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
+	// 	{
+	// 		text: Number(grandTotal.opening.quantity).toFixed(2),
+	// 		bold: true,
+	// 	},
+	// 	{},
+	// 	{
+	// 		text: Number(grandTotal.opening.value).toFixed(2),
+	// 		bold: true,
+	// 	},
+	// 	{
+	// 		text: Number(grandTotal.opening.value_bdt).toFixed(2),
+	// 		bold: true,
+	// 	},
+	// ]);
+	// tableData.push([
+	// 	{
+	// 		text: 'Grand Closing Total',
+	// 		bold: true,
+	// 		colSpan: 7,
+	// 	},
+	// 	{},
+	// 	{},
+	// 	{},
+	// 	{},
+	// 	{},
+	// 	{},
 
-		{
-			text: Number(grandTotal.closing.close_end_quantity).toFixed(2),
-			bold: true,
-		},
-		{
-			text: Number(grandTotal.closing.open_end_quantity).toFixed(2),
-			bold: true,
-		},
+	// 	{
+	// 		text: Number(grandTotal.closing.close_end_quantity).toFixed(2),
+	// 		bold: true,
+	// 	},
+	// 	{
+	// 		text: Number(grandTotal.closing.open_end_quantity).toFixed(2),
+	// 		bold: true,
+	// 	},
 
-		{
-			text: Number(grandTotal.closing.quantity).toFixed(2),
-			bold: true,
-		},
-		{},
-		{
-			text: Number(grandTotal.closing.value).toFixed(2),
-			bold: true,
-		},
-		{
-			text: Number(grandTotal.closing.value_bdt).toFixed(2),
-			bold: true,
-		},
-	]);
+	// 	{
+	// 		text: Number(grandTotal.closing.quantity).toFixed(2),
+	// 		bold: true,
+	// 	},
+	// 	{},
+	// 	{
+	// 		text: Number(grandTotal.closing.value).toFixed(2),
+	// 		bold: true,
+	// 	},
+	// 	{
+	// 		text: Number(grandTotal.closing.value_bdt).toFixed(2),
+	// 		bold: true,
+	// 	},
+	// ]);
+
 	const content = {
 		title: 'Production Statement',
 		data: tableData,

@@ -68,7 +68,7 @@ export default function index() {
 					window.open(url); // or use a new tab/window
 				});
 			} else {
-				Excel(data, from, to);
+				Excel(data, from, to, priceFor);
 			}
 		} catch (error) {
 			console.error('Failed to generate PDF:', error);

@@ -67,6 +67,7 @@ export default function Header({
 	const priceForOptions = [
 		{ label: 'Party', value: 'party' },
 		{ label: 'Company ', value: 'company' },
+		{ label: 'Both ', value: 'both' },
 	];
 
 	return (

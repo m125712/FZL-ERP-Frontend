@@ -11,6 +11,7 @@ import {
 	LinkWithCopy,
 	SimpleDatePicker,
 	StatusButton,
+	StatusSelect,
 } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
@@ -26,12 +27,19 @@ const getPath = (haveAccess, userUUID) => {
 export default function Index() {
 	const [from, setFrom] = useState(new Date());
 	const [to, setTo] = useState(new Date());
+	const [status, setStatus] = useState('0');
+	// * options for extra select in table
+	const options = [
+		{ value: '0', label: 'Bulk' },
+		{ value: '1', label: 'Sample' },
+	];
 
 	const haveAccess = useAccess('delivery__warehouse_out');
 	const { user } = useAuth();
 	const { data, isLoading, url } = useWarehouseNotOutLog(
 		format(from, 'yyyy-MM-dd'),
 		format(to, 'yyyy-MM-dd'),
+		status,
 		{
 			enabled: true,
 		}
@@ -299,6 +307,11 @@ export default function Index() {
 							setTo(data);
 						}}
 						selected={to}
+					/>
+					<StatusSelect
+						status={status}
+						setStatus={setStatus}
+						options={options}
 					/>
 				</div>
 			}

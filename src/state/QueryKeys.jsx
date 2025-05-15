@@ -1168,23 +1168,26 @@ export const deliveryQk = {
 		uuid,
 	],
 	//* Warehouse Rcv Log
-	warehouseRcvLog: (from, to) => [
+	warehouseRcvLog: (from, to, status) => [
 		...deliveryQk.all(),
 		'warehouse-rcv-log',
 		from,
 		to,
+		status,
 	],
-	warehouseOutLog: (from, to) => [
+	warehouseOutLog: (from, to, status) => [
 		...deliveryQk.all(),
 		'warehouse-out-log',
 		from,
 		to,
+		status,
 	],
-	warehouseNotOutLog: (from, to) => [
+	warehouseNotOutLog: (from, to, status) => [
 		...deliveryQk.all(),
 		'warehouse-not-out-log',
 		from,
 		to,
+		status,
 	],
 	deliveryReturnQuantity: (query) => [
 		...deliveryQk.all(),

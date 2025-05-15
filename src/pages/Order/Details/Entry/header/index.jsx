@@ -31,9 +31,11 @@ import {
 	Input,
 	ReactSelect,
 	SectionEntryBody,
+	StatusButton,
 	Textarea,
 } from '@/ui';
 
+import { cn } from '@/lib/utils';
 import { ORDER_NULL } from '@/util/Schema';
 
 import { provided, sliderSections, types } from '../utils';
@@ -66,8 +68,9 @@ export default function Header({
 		value: '',
 		label: '',
 	});
+	const [orderNoDetails, setOrderNoDetails] = useState({});
 
-	const { data: order } = useOtherOrder();
+	const { data: order } = useOtherOrder('page=order_sheet');
 	const { data: item } = useOtherOrderPropertiesByItem();
 	const { data: zipper_number } = useOtherOrderPropertiesByZipperNumber();
 	const { data: end_type } = useOtherOrderPropertiesByEndType();
@@ -151,6 +154,16 @@ export default function Header({
 			item,
 		};
 	});
+
+	const orderInfoUuid = watch('order_info_uuid');
+
+	useEffect(() => {
+		if ((isUpdate || refOrder) && order && orderInfoUuid) {
+			const x = order.find((item) => item.value === orderInfoUuid);
+			setOrderNoDetails(x);
+			console.log(x);
+		}
+	}, [isUpdate, order, orderInfoUuid, refOrder]);
 
 	return (
 		<div className='flex flex-col gap-4'>
@@ -329,172 +342,104 @@ export default function Header({
 					</div>
 				}
 			>
-				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
-					<FormField
-						label='order_info_uuid'
-						title='O/N'
-						errors={errors}
+				<div className='grid grid-cols-5 gap-4'>
+					<div
+						className={cn(
+							watch('order_info_uuid')
+								? 'col-span-4'
+								: 'col-span-5'
+						)}
 					>
-						<Controller
-							name={'order_info_uuid'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Order'
-										options={order}
-										value={order?.filter(
-											(item) =>
-												item.value ==
-												getValues('order_info_uuid')
-										)}
-										onChange={(e) => {
-											onChange(e.value);
-											setOrderNo(e.label);
-										}}
-										isDisabled={order_number !== undefined}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					<FormField label='item' title='Item' errors={errors}>
-						<Controller
-							name={'item'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Item'
-										options={item}
-										value={item?.filter(
-											(item) =>
-												item.value === getValues('item')
-										)}
-										onChange={(e) => {
-											onChange(e.value);
-											setItemType(e.label);
-											if (e.value !== 'nylon') {
-												reset({
-													...watch(),
-													nylon_stopper: null,
-												});
-											}
-										}}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					{item
-						?.find((item) => item.value === watch('item'))
-						?.label?.toLowerCase() === 'nylon' && (
-						<FormField
-							label='nylon_stopper'
-							title='nylon_stopper'
-							errors={errors}
-						>
-							{' '}
-							<Controller
-								name={'nylon_stopper'}
-								control={control}
-								render={({ field: { onChange } }) => {
-									return (
-										<ReactSelect
-											placeholder='Select nylon stopper'
-											options={nylon_stop}
-											value={nylon_stop?.filter(
-												(item) =>
-													item.value ==
-													getValues('nylon_stopper')
-											)}
-											onChange={(e) => onChange(e.value)}
-										/>
-									);
-								}}
-							/>
-						</FormField>
-					)}
-					<FormField
-						label='zipper_number'
-						title='Zipper Number'
-						errors={errors}
-					>
-						<Controller
-							name={'zipper_number'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Zipper Number'
-										options={zipper_number}
-										value={zipper_number?.filter(
-											(zipper_number) =>
-												zipper_number.value ==
-												getValues('zipper_number')
-										)}
-										onChange={(e) => onChange(e.value)}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-
-					{/* conditional rendering: checking if order type is full */}
-					{watch('order_type') === 'full' && (
-						<>
+						<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
 							<FormField
-								label='end_type'
-								title='End Type'
+								label='order_info_uuid'
+								title='O/N'
 								errors={errors}
 							>
 								<Controller
-									name={'end_type'}
+									name={'order_info_uuid'}
 									control={control}
 									render={({ field: { onChange } }) => {
 										return (
 											<ReactSelect
-												placeholder='Select End Type'
-												options={end_type}
-												value={end_type?.filter(
-													(end_type) =>
-														end_type.value ==
-														getValues('end_type')
+												placeholder='Select Order'
+												options={order}
+												value={order?.filter(
+													(item) =>
+														item.value ==
+														getValues(
+															'order_info_uuid'
+														)
 												)}
 												onChange={(e) => {
 													onChange(e.value);
-													setEndType(e.label);
+													setOrderNo(e.label);
+													setOrderNoDetails(e);
+												}}
+												isDisabled={
+													order_number !== undefined
+												}
+											/>
+										);
+									}}
+								/>
+							</FormField>
+							<FormField
+								label='item'
+								title='Item'
+								errors={errors}
+							>
+								<Controller
+									name={'item'}
+									control={control}
+									render={({ field: { onChange } }) => {
+										return (
+											<ReactSelect
+												placeholder='Select Item'
+												options={item}
+												value={item?.filter(
+													(item) =>
+														item.value ===
+														getValues('item')
+												)}
+												onChange={(e) => {
+													onChange(e.value);
+													setItemType(e.label);
+													if (e.value !== 'nylon') {
+														reset({
+															...watch(),
+															nylon_stopper: null,
+														});
+													}
 												}}
 											/>
 										);
 									}}
 								/>
 							</FormField>
-							{(end_type?.find(
-								(end_type) =>
-									end_type.value == getValues('end_type')
-							)?.label === 'Open End' ||
-								end_type?.find(
-									(end_type) =>
-										end_type.value === getValues('end_type')
-								)?.label === '2 Way - Open End') && (
+							{item
+								?.find((item) => item.value === watch('item'))
+								?.label?.toLowerCase() === 'nylon' && (
 								<FormField
-									label='hand'
-									title='Hand'
+									label='nylon_stopper'
+									title='nylon_stopper'
 									errors={errors}
 								>
+									{' '}
 									<Controller
-										name={'hand'}
+										name={'nylon_stopper'}
 										control={control}
 										render={({ field: { onChange } }) => {
 											return (
 												<ReactSelect
-													placeholder='Select Hand'
-													options={hand}
-													value={hand?.filter(
-														(hand) =>
-															hand.value ==
-															getValues('hand')
+													placeholder='Select nylon stopper'
+													options={nylon_stop}
+													value={nylon_stop?.filter(
+														(item) =>
+															item.value ==
+															getValues(
+																'nylon_stopper'
+															)
 													)}
 													onChange={(e) =>
 														onChange(e.value)
@@ -505,121 +450,301 @@ export default function Header({
 									/>
 								</FormField>
 							)}
-						</>
-					)}
-				</div>
+							<FormField
+								label='zipper_number'
+								title='Zipper Number'
+								errors={errors}
+							>
+								<Controller
+									name={'zipper_number'}
+									control={control}
+									render={({ field: { onChange } }) => {
+										return (
+											<ReactSelect
+												placeholder='Select Zipper Number'
+												options={zipper_number}
+												value={zipper_number?.filter(
+													(zipper_number) =>
+														zipper_number.value ==
+														getValues(
+															'zipper_number'
+														)
+												)}
+												onChange={(e) =>
+													onChange(e.value)
+												}
+											/>
+										);
+									}}
+								/>
+							</FormField>
 
-				{/* conditional rendering: checking if order type is full */}
-				{watch('order_type') === 'full' && (
-					<>
-						<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
-							<FormField
-								label='teeth_type'
-								title='Teeth Type'
-								errors={errors}
-							>
-								<Controller
-									name={'teeth_type'}
-									control={control}
-									render={({ field: { onChange } }) => {
-										return (
-											<ReactSelect
-												placeholder='Select Teeth Type'
-												options={teeth_type}
-												value={teeth_type?.filter(
-													(teeth_type) =>
-														teeth_type.value ==
-														getValues('teeth_type')
-												)}
-												onChange={(e) =>
-													onChange(e.value)
-												}
-											/>
-										);
-									}}
-								/>
-							</FormField>
-							<FormField
-								label='teeth_color'
-								title='Teeth Color'
-								errors={errors}
-							>
-								<Controller
-									name={'teeth_color'}
-									control={control}
-									render={({ field: { onChange } }) => {
-										return (
-											<ReactSelect
-												placeholder='Select Teeth Color'
-												options={color}
-												value={color?.filter(
-													(color) =>
-														color.value ==
-														getValues('teeth_color')
-												)}
-												onChange={(e) =>
-													onChange(e.value)
-												}
-											/>
-										);
-									}}
-								/>
-							</FormField>
-						</div>
-						<FormField
-							label='special_requirement'
-							title='Special Req'
-							errors={errors}
-						>
-							<Controller
-								name={'special_requirement'}
-								control={control}
-								render={({ field: { onChange } }) => {
-									return (
-										<ReactSelect
-											placeholder='Select Multi Requirement'
-											options={special_requirement}
-											value={special_requirement?.filter(
-												(item) =>
-													sp_req?.special_req?.includes(
-														item.value
-													)
-											)}
-											onChange={(e) => {
-												setSpReq((prev) => ({
-													...prev,
-													special_req: e.map(
-														(item) => item.value
-													),
-												}));
-												onChange(
-													JSON.stringify({
-														values: e.map(
-															(item) => item.value
-														),
-													})
+							{/* conditional rendering: checking if order type is full */}
+							{watch('order_type') === 'full' && (
+								<>
+									<FormField
+										label='end_type'
+										title='End Type'
+										errors={errors}
+									>
+										<Controller
+											name={'end_type'}
+											control={control}
+											render={({
+												field: { onChange },
+											}) => {
+												return (
+													<ReactSelect
+														placeholder='Select End Type'
+														options={end_type}
+														value={end_type?.filter(
+															(end_type) =>
+																end_type.value ==
+																getValues(
+																	'end_type'
+																)
+														)}
+														onChange={(e) => {
+															onChange(e.value);
+															setEndType(e.label);
+														}}
+													/>
 												);
 											}}
-											isMulti={true}
 										/>
-									);
-								}}
-							/>
-						</FormField>
-					</>
-				)}
+									</FormField>
+									{(end_type?.find(
+										(end_type) =>
+											end_type.value ==
+											getValues('end_type')
+									)?.label === 'Open End' ||
+										end_type?.find(
+											(end_type) =>
+												end_type.value ===
+												getValues('end_type')
+										)?.label === '2 Way - Open End') && (
+										<FormField
+											label='hand'
+											title='Hand'
+											errors={errors}
+										>
+											<Controller
+												name={'hand'}
+												control={control}
+												render={({
+													field: { onChange },
+												}) => {
+													return (
+														<ReactSelect
+															placeholder='Select Hand'
+															options={hand}
+															value={hand?.filter(
+																(hand) =>
+																	hand.value ==
+																	getValues(
+																		'hand'
+																	)
+															)}
+															onChange={(e) =>
+																onChange(
+																	e.value
+																)
+															}
+														/>
+													);
+												}}
+											/>
+										</FormField>
+									)}
+								</>
+							)}
+						</div>
 
-				<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2'>
-					<Textarea
-						rows={3}
-						label='description'
-						{...{ register, errors }}
-					/>
-					<Textarea
-						rows={3}
-						label='remarks'
-						{...{ register, errors }}
-					/>
+						{/* conditional rendering: checking if order type is full */}
+						{watch('order_type') === 'full' && (
+							<>
+								<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
+									<FormField
+										label='teeth_type'
+										title='Teeth Type'
+										errors={errors}
+									>
+										<Controller
+											name={'teeth_type'}
+											control={control}
+											render={({
+												field: { onChange },
+											}) => {
+												return (
+													<ReactSelect
+														placeholder='Select Teeth Type'
+														options={teeth_type}
+														value={teeth_type?.filter(
+															(teeth_type) =>
+																teeth_type.value ==
+																getValues(
+																	'teeth_type'
+																)
+														)}
+														onChange={(e) =>
+															onChange(e.value)
+														}
+													/>
+												);
+											}}
+										/>
+									</FormField>
+									<FormField
+										label='teeth_color'
+										title='Teeth Color'
+										errors={errors}
+									>
+										<Controller
+											name={'teeth_color'}
+											control={control}
+											render={({
+												field: { onChange },
+											}) => {
+												return (
+													<ReactSelect
+														placeholder='Select Teeth Color'
+														options={color}
+														value={color?.filter(
+															(color) =>
+																color.value ==
+																getValues(
+																	'teeth_color'
+																)
+														)}
+														onChange={(e) =>
+															onChange(e.value)
+														}
+													/>
+												);
+											}}
+										/>
+									</FormField>
+								</div>
+								<FormField
+									label='special_requirement'
+									title='Special Req'
+									errors={errors}
+								>
+									<Controller
+										name={'special_requirement'}
+										control={control}
+										render={({ field: { onChange } }) => {
+											return (
+												<ReactSelect
+													placeholder='Select Multi Requirement'
+													options={
+														special_requirement
+													}
+													value={special_requirement?.filter(
+														(item) =>
+															sp_req?.special_req?.includes(
+																item.value
+															)
+													)}
+													onChange={(e) => {
+														setSpReq((prev) => ({
+															...prev,
+															special_req: e.map(
+																(item) =>
+																	item.value
+															),
+														}));
+														onChange(
+															JSON.stringify({
+																values: e.map(
+																	(item) =>
+																		item.value
+																),
+															})
+														);
+													}}
+													isMulti={true}
+												/>
+											);
+										}}
+									/>
+								</FormField>
+							</>
+						)}
+
+						<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2'>
+							<Textarea
+								rows={3}
+								label='description'
+								{...{ register, errors }}
+							/>
+							<Textarea
+								rows={3}
+								label='remarks'
+								{...{ register, errors }}
+							/>
+						</div>
+					</div>
+
+					{watch('order_info_uuid') && (
+						<div className='rounded-md border bg-accent-foreground p-4 text-sm text-primary'>
+							<ul className='flex flex-col gap-2'>
+								<li className='flex flex-col gap-2'>
+									Buyer
+									<span className='rounded-md border bg-secondary-foreground p-2'>
+										{orderNoDetails?.buyer_name}
+									</span>
+								</li>
+								<li className='flex flex-col gap-2'>
+									Factory
+									<span className='rounded-md border bg-secondary-foreground p-2'>
+										{orderNoDetails?.factory_name}
+									</span>
+								</li>
+								<li className='flex flex-col gap-2'>
+									Marketing
+									<span className='rounded-md border bg-secondary-foreground p-2'>
+										{orderNoDetails?.marketing_name}
+									</span>
+								</li>
+								<li className='flex flex-col gap-2'>
+									Merchandiser
+									<span className='rounded-md border bg-secondary-foreground p-2'>
+										{orderNoDetails?.merchandiser_name}
+									</span>
+								</li>
+								<li className='flex flex-col gap-2'>
+									Party
+									<span className='rounded-md border bg-secondary-foreground p-2'>
+										{orderNoDetails?.party_name}
+									</span>
+								</li>
+								<li className='flex items-center gap-2'>
+									Sample/Bill/Cash:{' '}
+									<StatusButton
+										size='btn-xs'
+										value={orderNoDetails?.is_sample}
+									/>
+									<StatusButton
+										size='btn-xs'
+										value={orderNoDetails?.is_bill}
+									/>
+									<StatusButton
+										size='btn-xs'
+										value={orderNoDetails?.is_cash}
+									/>
+								</li>
+
+								<li className='flex items-center gap-2'>
+									Cancelled:{' '}
+									<StatusButton
+										size='btn-xs'
+										value={orderNoDetails?.is_cancelled}
+									/>
+								</li>
+							</ul>
+						</div>
+					)}
 				</div>
 			</SectionEntryBody>
 

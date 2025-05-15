@@ -19,9 +19,9 @@ export default function index() {
 
 	return (
 		<div className='flex flex-col gap-8'>
-			<Production />
+			{/* <Production /> */}
 			<ProductionV2 />
-			<Order />
+			{/* <Order /> */}
 			<OrderV2 />
 		</div>
 	);

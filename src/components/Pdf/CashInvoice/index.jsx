@@ -235,7 +235,7 @@ export default function Index(data) {
 						`${order_types[index] === 'tape' ? ' mtr' : ' pcs'}`,
 					// unit_price: unitPrice + '/dzn',
 					unit_price_dollar: `${unitPrice} /${order_types[index] === 'tape' ? 'mtr' : 'dzn'}`,
-					unit_price: `${Number(unitPrice).toFixed(2) * Number(data?.conversion_rate).toFixed(2).toLocaleString()} /${order_types[index] === 'tape' ? 'mtr' : 'dzn'}`,
+					unit_price: `${(Number(unitPrice).toFixed(2) * Number(data?.conversion_rate).toFixed(2)).toFixed(2).toLocaleString()} /${order_types[index] === 'tape' ? 'mtr' : 'dzn'}`,
 					value_dollar:
 						TotalValue[index][priceIndex].toLocaleString(),
 					value: (
@@ -397,7 +397,7 @@ export default function Index(data) {
 				? {
 						table: {
 							headerRows: 1,
-							widths: [45, 40, 50, '*', 46, 40, 45, 40],
+							widths: [40, '*', 50, '*', 46, 40, 45, 40],
 							body: [
 								// Header
 								TableHeader(zipperNode),

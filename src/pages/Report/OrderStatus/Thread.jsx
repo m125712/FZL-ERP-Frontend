@@ -5,7 +5,9 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
+import { CustomLink, DateTime, SimpleDatePicker, Status } from '@/ui';
+
+import { cn } from '@/lib/utils';
 
 import { REPORT_DATE_FORMATE } from '../utils';
 
@@ -33,6 +35,7 @@ export default function Index() {
 		}
 	);
 
+	let rowStyle = 'border border-gray-300 px-2 py-1';
 	const columns = useMemo(
 		() => [
 			{
@@ -55,20 +58,56 @@ export default function Index() {
 				},
 			},
 			{
-				accessorFn: (row) => row.pi_numbers.join(', '),
+				accessorFn: (row) => {
+					const piArr = Array.isArray(row?.pi_numbers)
+						? row.pi_numbers
+						: [];
+					if (piArr.length === 0) return '--';
+					return piArr.map((pi) => pi.pi_number).join(', ');
+				},
 				id: 'pi_numbers',
-				header: 'PI',
+				header: <>Pi No.</>,
 				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const piArr = Array.isArray(info.row.original.pi_numbers)
+						? info.row.original.pi_numbers
+						: [];
+					if (piArr.length === 0) return '--';
+					return piArr.map((pi) => (
+						<CustomLink
+							key={pi.pi_number}
+							label={pi.pi_number}
+							url={`/commercial/pi/${pi.pi_number}`}
+							openInNewTab
+						/>
+					));
+				},
 			},
 			{
-				accessorFn: (row) => row.lc_numbers.join(', '),
+				accessorFn: (row) => {
+					const lcArr = Array.isArray(row?.lc_numbers)
+						? row.lc_numbers
+						: [];
+					if (lcArr.length === 0) return '--';
+					return lcArr.map((pi) => pi.pi_number).join(', ');
+				},
 				id: 'lc_numbers',
-				header: 'LC',
+				header: <>LC No.</>,
 				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const lcArr = Array.isArray(info.row.original.lc_numbers)
+						? info.row.original.lc_numbers
+						: [];
+					if (lcArr.length === 0) return '--';
+					return lcArr.map((pi) => (
+						<CustomLink
+							key={pi.pi_number}
+							label={pi.pi_number}
+							url={`/commercial/pi/${pi.pi_number}`}
+							openInNewTab
+						/>
+					));
+				},
 			},
 			{
 				accessorKey: 'marketing_name',
@@ -122,6 +161,70 @@ export default function Index() {
 				header: 'App. QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_expected_weight',
+				header: 'Exp. Yarn Wgt',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) => {
+					return row.batch
+						?.map((item) => item.batch_number)
+						.join(', ');
+				},
+				id: 'batches',
+				header: 'Batch',
+				enableColumnFilter: false,
+				cell: ({ row }) => {
+					const { batches } = row.original;
+
+					if (!batches?.length) return '--';
+
+					return (
+						<table className='border-2 border-gray-300'>
+							<thead>
+								<tr className='text-xs text-gray-600'>
+									<th className={cn(rowStyle)}>BA/N</th>
+									<th className={cn(rowStyle)}>Qty</th>
+									<th className={cn(rowStyle)}>Yarn</th>
+									<th className={cn(rowStyle)}>D/C</th>
+								</tr>
+							</thead>
+							<tbody>
+								{batches?.map((item) => (
+									<tr>
+										<td className={cn(rowStyle)}>
+											<CustomLink
+												label={item.batch_number}
+												url={`/dyeing-and-iron/zipper-batch/${item.batch_uuid}`}
+												openInNewTab={true}
+												showCopyButton={false}
+											/>
+											<DateTime
+												date={item.production_date}
+												customizedDateFormate='dd MMM, yy'
+												isTime={false}
+											/>
+										</td>
+										<td className={cn(rowStyle)}>
+											{item.total_quantity}
+										</td>
+										<td className={cn(rowStyle)}>
+											{item.yarn_issued}
+										</td>
+										<td className={cn(rowStyle)}>
+											<Status
+												status={item.is_drying_complete}
+											/>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					);
+				},
 			},
 			{
 				accessorKey: 'total_yarn_quantity',

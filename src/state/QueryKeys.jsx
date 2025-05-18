@@ -1590,7 +1590,11 @@ export const otherQK = {
 	recipe: (query) => [...otherQK.all(), 'recipe', ...(query ? [query] : [])],
 
 	//*Challan
-	challan: () => [...otherQK.all(), 'challan'],
+	challan: (query) => [
+		...otherQK.all(),
+		'challan',
+		...(query ? [query] : []),
+	],
 
 	//* TAPE-COIL
 	tapeCoil: (query) => [

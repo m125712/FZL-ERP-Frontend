@@ -47,12 +47,12 @@ export default function Index() {
 		});
 
 	const { data: orderData } = useOtherOrderEntryBy(
-		watch('order_description_uuid'),
+		watch('order_info_uuid'),
 		type?.is_zipper
 	);
 
 	useEffect(() => {
-		if (watch('order_description_uuid')) {
+		if (watch('order_info_uuid')) {
 			setValue('order_details', orderData);
 		}
 	}, [reset, orderData]);
@@ -72,9 +72,10 @@ export default function Index() {
 				[type?.is_zipper
 					? 'order_entry_uuid'
 					: 'thread_order_entry_uuid']: item?.order_entry_uuid,
-
+				challan_uuid: data?.challan_uuid,
 				created_at,
 				created_by,
+
 				uuid: nanoid(),
 			}));
 
@@ -85,16 +86,11 @@ export default function Index() {
 					'Please add at least one order detail with a fresh or repair quantity greater than 0.',
 			});
 		} else {
-			let promises = [
-				...order_details_entry.map(
-					async (item) =>
-						await postData.mutateAsync({
-							url: '/delivery/quantity-return',
-							newData: item,
-							isOnCloseNeeded: false,
-						})
-				),
-			];
+			let promises = await postData.mutateAsync({
+				url: '/delivery/quantity-return',
+				newData: order_details_entry,
+				isOnCloseNeeded: false,
+			});
 
 			await Promise.all(promises)
 				.then(() => {

@@ -298,40 +298,48 @@ export default function Index() {
 				})
 			);
 
-			//* Post new entry */ //
-			let order_entry_updated_promises = [
-				...order_entry_updated.map(async (item) => {
-					if (item.order_entry_uuid) {
-						await updateData.mutateAsync({
-							url: `/zipper/order-entry/${item.order_entry_uuid}`,
-							updatedData: {
-								...item,
-								updated_at: GetDateTime(),
-								created_by: user?.uuid,
-							},
-							isOnCloseNeeded: false,
-						});
-					} else {
-						await postData.mutateAsync({
-							url: '/zipper/order-entry',
-							newData: {
-								...item,
-								uuid: nanoid(),
-								order_description_uuid:
-									rest?.order_description_uuid,
-								created_at: GetDateTime(),
-								created_by: user?.uuid,
-							},
-							isOnCloseNeeded: false,
-						});
-					}
-				}),
-			];
+			const newOrder = order_entry_updated
+				.filter((item) => !item.order_entry_uuid)
+				.map((item) => ({
+					...item,
+					uuid: nanoid(),
+					order_description_uuid: rest?.order_description_uuid,
+					created_at: GetDateTime(),
+					created_by: user?.uuid,
+				}));
+
+			const updateOrder = order_entry_updated.filter(
+				(item) => item.order_entry_uuid
+			);
+
+			const updatedOrderEntryPromis = updateOrder.map(async (item) => {
+				await updateData.mutateAsync({
+					url: `/zipper/order-entry/${item.order_entry_uuid}`,
+					updatedData: {
+						...item,
+						updated_at: GetDateTime(),
+						created_by: user?.uuid,
+					},
+					isOnCloseNeeded: false,
+				});
+			});
+
+			const newOrderEntryPromis = await postData.mutateAsync({
+				url: '/zipper/order-entry',
+				newData: newOrder,
+				isOnCloseNeeded: false,
+			});
 
 			// swatchInvalidate();
-			navigate(
-				`/order/details/${order_number}/${order_description_uuid}`
-			);
+
+			await Promise.all([
+				...updatedOrderEntryPromis,
+				newOrderEntryPromis,
+			]).then(() => {
+				navigate(
+					`/order/details/${order_number}/${order_description_uuid}`
+				);
+			});
 
 			return;
 		}
@@ -379,19 +387,14 @@ export default function Index() {
 		}));
 
 		//* Post new entry */ //
-		let order_entry_promises = [
-			...new_order_entry.map(
-				async (item) =>
-					await postData.mutateAsync({
-						url: '/zipper/order-entry',
-						newData: item,
-						isOnCloseNeeded: false,
-					})
-			),
-		];
+		let order_entry_promises = await postData.mutateAsync({
+			url: '/zipper/order-entry',
+			newData: new_order_entry,
+			isOnCloseNeeded: false,
+		});
 
 		// * All promises
-		await Promise.all([orderPromise, ...order_entry_promises])
+		await Promise.all([orderPromise, order_entry_promises])
 			.then(() => reset(Object.assign({}, ORDER_NULL)))
 			.then(async () => {
 				// await indexPageInvalidate();

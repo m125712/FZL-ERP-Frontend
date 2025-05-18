@@ -196,6 +196,7 @@ export const useDyeingFinishingBatchByUUID = (uuid, params) =>
 		url: params
 			? `/zipper/finishing-batch/by/finishing_batch_uuid/${uuid}?${params}`
 			: `/zipper/finishing-batch/by/finishing_batch_uuid/${uuid}`,
+		enabled: !!uuid,
 	});
 
 //* Get orders for finishing batch using order_description_uuid

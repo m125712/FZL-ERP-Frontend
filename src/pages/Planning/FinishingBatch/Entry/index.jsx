@@ -231,24 +231,23 @@ export default function index() {
 				});
 			}
 
+			const newBatch = newFinishingEntry.map((item) => ({
+				...item,
+				uuid: nanoid(),
+				finishing_batch_uuid: rest.uuid,
+				created_at: GetDateTime(),
+			}));
+
 			// * create new finishing batch entry
-			const newFinishingEntryDataPromises = [...newFinishingEntry].map(
-				async (item) =>
-					await postData.mutateAsync({
-						url: '/zipper/finishing-batch-entry',
-						newData: {
-							...item,
-							uuid: nanoid(),
-							finishing_batch_uuid: rest.uuid,
-							created_at: GetDateTime(),
-						},
-						isOnCloseNeeded: false,
-					})
-			);
+			const newFinishingEntryDataPromises = await postData.mutateAsync({
+				url: '/zipper/finishing-batch-entry',
+				newData: newBatch,
+				isOnCloseNeeded: false,
+			});
 
 			await Promise.all([
 				...finishingEntryUpdatedPromises,
-				...newFinishingEntryDataPromises,
+				newFinishingEntryDataPromises,
 			])
 				.then(() => reset(FINISHING_BATCH_ENTRY_NULL))
 				.then(() => {
@@ -331,16 +330,11 @@ export default function index() {
 			});
 		}
 
-		let promises = [
-			...finishingEntryData.map(
-				async (item) =>
-					await postData.mutateAsync({
-						url: '/zipper/finishing-batch-entry',
-						newData: item,
-						isOnCloseNeeded: false,
-					})
-			),
-		];
+		let promises = await postData.mutateAsync({
+			url: '/zipper/finishing-batch-entry',
+			newData: finishingEntryData,
+			isOnCloseNeeded: false,
+		});
 
 		await Promise.all(promises)
 			.then(() => reset(FINISHING_BATCH_ENTRY_NULL))
@@ -479,7 +473,7 @@ export default function index() {
 					setItems={BatchOrdersField}
 					deleteData={deleteData}
 					url={`/zipper/finishing-batch-entry`}
-					invalidateQuery={invalidateNewFinishingBatch}
+					// invalidateQuery={invalidateNewFinishingBatch}
 				/>
 			</Suspense>
 		</FormProvider>

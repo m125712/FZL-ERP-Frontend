@@ -42,7 +42,7 @@ const sliderNode = createNode([
 
 export default function Index(data) {
 	const headerHeight = 210;
-	const footerHeight = 65;
+	const footerHeight = 50;
 	const isTapeChallan = data?.item_for === 'tape';
 	const isSliderChallan = data?.item_for === 'slider';
 	const isSampleZipper = data?.item_for === 'sample_zipper';
@@ -196,8 +196,8 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 2,
-					keepWithHeaderRows: 1,
-					dontBreakRows: true,
+					keepWithHeaderRows: 2,
+
 					widths: isSliderChallan
 						? [70, 110, 90, 80, 80]
 						: [70, 110, 90, 80, 60, 40, 30],

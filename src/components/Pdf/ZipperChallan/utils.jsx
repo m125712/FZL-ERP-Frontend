@@ -123,49 +123,50 @@ export const getPageHeader = (data) => {
 };
 
 export const getPageFooter = ({ currentPage, pageCount }) => {
+	const body = [];
+	if (currentPage === pageCount) {
+		body.push([
+			{
+				text: 'Received By',
+				fontSize: DEFAULT_FONT_SIZE + 3,
+				alignment: 'center',
+				border: [false, true, false, false],
+			},
+			{
+				text: '',
+				alignment: 'center',
+				border: [false, false, false, false],
+			},
+			{
+				text: 'Checked By',
+				fontSize: DEFAULT_FONT_SIZE + 3,
+				alignment: 'center',
+				border: [false, true, false, false],
+			},
+			{
+				text: '',
+				alignment: 'center',
+				border: [false, false, false, false],
+			},
+			{
+				text: 'Prepared By',
+				fontSize: DEFAULT_FONT_SIZE + 3,
+				alignment: 'center',
+				border: [false, true, false, false],
+			},
+		]);
+	}
+	body.push([
+		{
+			colSpan: 5,
+			text: `Page ${currentPage} / ${pageCount}`,
+			alignment: 'left',
+			border: [false, false, false, false],
+		},
+		...getEmptyColumn(5),
+	]);
 	return {
 		widths: ['*', '*', '*', '*', '*'],
-		body: [
-			[
-				{
-					text: 'Received By',
-					fontSize: DEFAULT_FONT_SIZE + 3,
-					alignment: 'center',
-					border: [false, true, false, false],
-				},
-				{
-					text: '',
-					alignment: 'center',
-					border: [false, false, false, false],
-				},
-				{
-					text: 'Checked By',
-					fontSize: DEFAULT_FONT_SIZE + 3,
-					alignment: 'center',
-					border: [false, true, false, false],
-				},
-				{
-					text: '',
-					alignment: 'center',
-					border: [false, false, false, false],
-				},
-				{
-					text: 'Prepared By',
-					fontSize: DEFAULT_FONT_SIZE + 3,
-					alignment: 'center',
-					border: [false, true, false, false],
-				},
-			],
-			[
-				{
-					colSpan: 5,
-					text: `Page ${currentPage} / ${pageCount}`,
-					alignment: 'left',
-					border: [false, false, false, false],
-					// color,
-				},
-				...getEmptyColumn(5),
-			],
-		],
+		body,
 	};
 };

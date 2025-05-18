@@ -39,7 +39,8 @@ const AuthProvider = ({ children }) => {
 			updateUserCookie(userData || '');
 			updateUserCanAccess(can_access || '');
 
-			const path = firstRoute?.path || '/login';
+			// const path = firstRoute?.path || '/login';
+			const path = '/profile';
 			window.location.href = path;
 
 			// ! it is the main point where the user will be redirected to its first page after login
@@ -48,10 +49,10 @@ const AuthProvider = ({ children }) => {
 			// if (token && userData && can_access)
 			// 	return (window.location.href = path);
 
-			ShowToast({
-				type: res?.data?.type,
-				message: res?.data?.message,
-			});
+			// ShowToast({
+			// 	type: res?.data?.type,
+			// 	message: res?.data?.message,
+			// });
 		} catch (error) {
 			ShowToast(error.response);
 		}

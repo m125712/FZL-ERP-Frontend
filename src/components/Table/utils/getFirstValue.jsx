@@ -5,12 +5,6 @@ const getFirstValue = ({ getPreFilteredRowModel, id }) => {
 
 			if (value !== null) {
 				const type = typeof value;
-				// console.log({
-				// 	id,
-				// 	value,
-				// 	length: value?.length,
-				// 	type: typeof value,
-				// });
 
 				switch (type) {
 					case 'string':

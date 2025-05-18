@@ -75,15 +75,6 @@ export default function ItemDescription({ order_description, className }) {
 		(total_size + total_top_bottom) / 100
 	).toFixed(3);
 
-	// console.log({
-	// 	sliderQuantity,
-	// 	top: order_description?.top,
-	// 	bottom: order_description?.bottom || 0,
-	// 	total_size,
-	// 	total_top_bottom,
-	// 	total_tape_in_mtr,
-	// });
-
 	// * garments info
 	const garments_info = getGarmentInfo(order_description);
 	const special_req_info = getSpecialReqInfo(order_description);

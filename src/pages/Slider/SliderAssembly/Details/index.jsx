@@ -139,8 +139,6 @@ export default function Index() {
 		[slider]
 	);
 
-	// console.log(slider);
-
 	// Fetching data from server
 	useEffect(() => {
 		useFetchFunc(info.getFetchUrl(), setSlider, setLoading, setError);

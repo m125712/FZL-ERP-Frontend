@@ -19,7 +19,6 @@ export const getPageHeader = (order_info) => {
 	} else if (order_info?.created_at) {
 		formatedDate = format(new Date(order_info?.created_at), 'dd-MM-yyyy');
 	}
-	console.log(order_info?.order_description_created_at);
 	return [
 		// CompanyAndORDER
 		[

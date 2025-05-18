@@ -221,7 +221,6 @@ export default function TransposedTable({ data, transformedData }) {
 		`${total_order_quantity} - ${total_challan_quantity} = ${total_balance}`,
 	];
 
-	console.log(transposed);
 	return (
 		<>
 			<ReactTable

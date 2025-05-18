@@ -60,23 +60,33 @@ export default function ZipperTable({ pi }) {
 			},
 			{
 				accessorKey: 'pi_cash_quantity',
-				header: 'QTY (PCS)',
+				header: (
+					<>
+						QTY <br />
+						(PCS)
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'pi_cash_quantity_dzn',
-				header: 'QTY (Dzn)',
+				header: (
+					<>
+						QTY <br />
+						(Dzn)
+					</>
+				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()).toFixed(2),
 			},
 			{
 				accessorKey: 'unit_price_pcs',
 				header: (
-					<div className='flex flex-col'>
-						<span>Unit Price</span>
-						<span>(PCS) ($)</span>
-					</div>
+					<>
+						Unit Price <br />
+						(PCS) ($)
+					</>
 				),
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()).toFixed(2),
@@ -96,7 +106,7 @@ export default function ZipperTable({ pi }) {
 				accessorKey: 'value',
 				header: 'Value ($)',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => Number(info.getValue()).toFixed(3),
 			},
 			{
 				accessorKey: 'remarks',

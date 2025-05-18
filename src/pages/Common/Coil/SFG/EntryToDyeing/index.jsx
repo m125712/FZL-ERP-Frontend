@@ -267,10 +267,6 @@ export default function Index() {
 								)
 						);
 
-						const mtr_per_kg = data?.raw_mtr_per_kg;
-
-						console.log(selectedValue);
-
 						const top_bottom =
 							parseFloat(selectedValue?.total_quantity || 0) *
 							parseFloat(

@@ -18,8 +18,6 @@ export default function ChallanPdf(challan) {
 	let footerHeight = 30;
 	const { challan_info, challan_entry } = challan;
 
-	// console.log(challan_info, challan_entry);
-
 	const pdfDocGenerator = pdfMake.createPdf({
 		pageSize: 'A4',
 		pageOrientation: 'portrait',

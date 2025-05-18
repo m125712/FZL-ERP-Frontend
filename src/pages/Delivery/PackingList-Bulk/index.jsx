@@ -258,7 +258,6 @@ export default function Index() {
 						if (!gate_pass && access) permission = true;
 						if (overrideAccess) permission = true;
 					}
-					console.log(gate_pass_by_name);
 
 					return (
 						<div className='flex flex-col'>

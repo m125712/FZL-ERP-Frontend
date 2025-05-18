@@ -18,6 +18,13 @@ const getPath = (haveAccess, userUUID) => {
 	return ``;
 };
 
+const StatusValueLabel = ({ value, label }) => (
+	<div className='flex gap-2'>
+		<StatusButton size='btn-xs' value={value} />
+		{label}
+	</div>
+);
+
 export default function Index() {
 	const navigate = useNavigate();
 	const haveAccess = useAccess('commercial__lc');
@@ -52,63 +59,100 @@ export default function Index() {
 				),
 			},
 
+			// {
+			// 	accessorKey: 'is_old_pi',
+			// 	header: 'Old LC',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<StatusButton size='btn-xs' value={info.getValue()} />
+			// 	),
+			// },
+			// {
+			// 	accessorKey: 'is_rtgs',
+			// 	header: 'RTGS',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<StatusButton size='btn-xs' value={info.getValue()} />
+			// 	),
+			// },
+			// {
+			// 	accessorKey: 'problematical',
+			// 	header: 'Problematic',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<StatusButton size='btn-xs' value={info.getValue()} />
+			// 	),
+			// },
+			// {
+			// 	accessorKey: 'epz',
+			// 	header: 'EPZ',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<StatusButton size='btn-xs' value={info.getValue()} />
+			// 	),
+			// },
+			// {
+			// 	accessorKey: 'production_complete',
+			// 	header: (
+			// 		<>
+			// 			Production <br />
+			// 			Complete
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<StatusButton size='btn-xs' value={info.getValue()} />
+			// 	),
+			// },
+			// {
+			// 	accessorKey: 'lc_cancel',
+			// 	header: (
+			// 		<>
+			// 			LC <br />
+			// 			Canceled
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<StatusButton size='btn-xs' value={info.getValue()} />
+			// 	),
+			// },
 			{
-				accessorKey: 'is_old_pi',
-				header: 'Old LC',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
-				),
-			},
-			{
-				accessorKey: 'is_rtgs',
-				header: 'RTGS',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
-				),
-			},
-			{
-				accessorKey: 'problematical',
-				header: 'Problematic',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
-				),
-			},
-			{
-				accessorKey: 'epz',
-				header: 'EPZ',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
-				),
-			},
-			{
-				accessorKey: 'production_complete',
-				header: (
-					<>
-						Production <br />
-						Complete
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
-				),
-			},
-			{
-				accessorKey: 'lc_cancel',
-				header: (
-					<>
-						LC <br />
-						Canceled
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
-				),
+				id: 'status',
+				header: 'Status',
+				cell: (info) => {
+					const {
+						is_old_pi,
+						is_rtgs,
+						problematical,
+						epz,
+						production_complete,
+						lc_cancel,
+					} = info.row.original;
+
+					return (
+						<div className='flex flex-col gap-1'>
+							<StatusValueLabel
+								value={is_old_pi}
+								label='Old LC'
+							/>
+							<StatusValueLabel value={is_rtgs} label='RTGS' />
+							<StatusValueLabel
+								value={problematical}
+								label='Problematic'
+							/>
+							<StatusValueLabel value={epz} label='EPZ' />
+							<StatusValueLabel
+								value={production_complete}
+								label='Prod Complete'
+							/>
+							<StatusValueLabel
+								value={lc_cancel}
+								label='LC Canceled'
+							/>
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'file_number',
@@ -220,7 +264,12 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'commercial_executive',
-				header: 'Commercial Executive',
+				header: (
+					<>
+						Commercial <br />
+						Executive
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -275,7 +324,8 @@ export default function Index() {
 				accessorKey: 'amd_count',
 				header: (
 					<>
-						AMD <br /> Count
+						AMD <br />
+						Count
 					</>
 				),
 				enableColumnFilter: false,

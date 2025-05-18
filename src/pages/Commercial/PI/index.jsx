@@ -55,16 +55,13 @@ export default function Index() {
 				header: 'PI ID',
 				enableColumnFilter: true,
 				width: 'w-36',
-				cell: (info) => {
-					const { order_info_uuid } = info.row.original;
-					return (
-						<CustomLink
-							label={info.getValue()}
-							url={`/commercial/pi/${info.getValue()}`}
-							openInNewTab={true}
-						/>
-					);
-				},
+				cell: (info) => (
+					<CustomLink
+						label={info.getValue()}
+						url={`/commercial/pi/${info.getValue()}`}
+						openInNewTab={true}
+					/>
+				),
 			},
 			{
 				accessorFn: (row) => row?.lc_number || '--',
@@ -108,7 +105,7 @@ export default function Index() {
 					return '--';
 				},
 				id: 'order_numbers',
-				header: 'O/N',
+				header: 'O/N & Status',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { order_numbers, thread_order_numbers } =
@@ -149,39 +146,38 @@ export default function Index() {
 							<thead>
 								<tr>
 									<th>O/N</th>
-									<th>D/Q</th>
 									<th>P/Q</th>
+									<th>D/Q</th>
 								</tr>
 							</thead>
 							<tbody>
-								{links?.map((item, index) => (
-									<tr key={index}>
-										<td>
-											<CustomLink
-												label={item.label}
-												url={item.url}
-												showCopyButton={false}
-												openInNewTab
-											/>
-										</td>
-										<td>
-											{Number(
-												(item.delivered /
-													item.quantity) *
-													100 || 0
-											).toFixed(0)}
-											%
-										</td>
-										<td>
-											{Number(
-												(item.packing_list /
-													item.quantity) *
-													100 || 0
-											).toFixed(0)}
-											%
-										</td>
-									</tr>
-								))}
+								{links?.map((item, index) => {
+									const getPercentage = (qty) =>
+										Number(
+											(qty / item.quantity) * 100 || 0
+										).toFixed(1);
+									return (
+										<tr key={index}>
+											<td>
+												<CustomLink
+													label={item.label}
+													url={item.url}
+													showCopyButton={false}
+													openInNewTab
+												/>
+											</td>
+											<td>
+												{getPercentage(
+													item.packing_list
+												)}
+												%
+											</td>
+											<td>
+												{getPercentage(item.delivered)}%
+											</td>
+										</tr>
+									);
+								})}
 							</tbody>
 						</table>
 					);

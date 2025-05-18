@@ -80,9 +80,6 @@ export default function Index({
 		}
 	);
 
-	// Debugging: Log the value of 'type' to ensure it is resolved correctly
-	console.log('Type field value:', watch('type'));
-
 	const onClose = () => {
 		setConingProd((prev) => ({
 			...prev,
@@ -127,7 +124,6 @@ export default function Index({
 	useEffect(() => {
 		setQty(watch('production_quantity'));
 	}, [watch('production_quantity')]);
-	console.log(formState.errors);
 	return (
 		<AddModal
 			id='ConingProdModal'
@@ -136,12 +132,14 @@ export default function Index({
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
-			isSmall={true}>
+			isSmall={true}
+		>
 			<FormField
 				label='type'
 				title='Type'
 				is_title_needed='false'
-				errors={errors}>
+				errors={errors}
+			>
 				<Controller
 					name={'type'}
 					control={control}

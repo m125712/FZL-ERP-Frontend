@@ -57,7 +57,6 @@ export default function index() {
 				width: 'w-32',
 				cell: (info) => {
 					const { order_description_uuid } = info.row.original;
-					console.log(order_description_uuid);
 
 					if (order_description_uuid)
 						return (

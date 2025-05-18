@@ -223,7 +223,6 @@ export default function Index(data, from) {
 			});
 		});
 	});
-	console.log(tableData);
 	const grandTotalCloseEnd = tableData.reduce((total, item) => {
 		if (title.includes(item.size.text) || item.size.text === '')
 			return total;

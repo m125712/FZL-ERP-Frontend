@@ -28,7 +28,6 @@ export default function Index() {
 		{ value: 'vislon ', label: 'Vislon' },
 	];
 
-	console.log(items);
 	const info = new PageInfo(
 		`Daily Production Plan (${format(new Date(date), 'dd/MM/yyyy')})`,
 		url,

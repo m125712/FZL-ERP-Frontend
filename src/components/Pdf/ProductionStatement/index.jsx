@@ -369,11 +369,6 @@ export default function Index(data, from, to) {
 								partyTotal.closing.value_bdt,
 						});
 					}
-					if (
-						orderItem.order_number_with_cash.includes('STS24-0014')
-					) {
-						console.log('order total', orderTotal);
-					}
 				});
 			});
 		});

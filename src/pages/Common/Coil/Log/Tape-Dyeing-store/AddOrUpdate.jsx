@@ -72,7 +72,6 @@ export default function Index({
 			updated_at: GetDateTime(),
 			remarks: data.remarks,
 		};
-		console.log(updatedData);
 		await updateData.mutateAsync({
 			url: `/zipper/tape-transfer-to-dyeing/${entry.uuid}`,
 			updatedData: updatedData,

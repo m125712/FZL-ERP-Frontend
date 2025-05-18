@@ -102,7 +102,6 @@ export default function Information({ pi }) {
 				party: 0,
 			}
 		);
-		console.log(stylesZipper);
 		const basicInfo = [
 			{
 				label: 'PI No',

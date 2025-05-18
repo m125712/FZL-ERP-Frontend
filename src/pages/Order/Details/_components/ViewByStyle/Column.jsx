@@ -112,8 +112,6 @@ const getColumn = ({ show_price, is_sample }) => {
 		}),
 		createColumn({
 			accessorFn: (row) => {
-				console.log(row);
-
 				if (row.order_type === 'slider' || row.order_type === 'tape')
 					return '---';
 				return row.is_inch ? '---' : row.size;

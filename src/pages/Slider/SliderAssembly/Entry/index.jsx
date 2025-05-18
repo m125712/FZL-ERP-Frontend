@@ -119,8 +119,6 @@ export default function Index() {
 	const isUpdate = slider_slider_assembly_uuid !== undefined;
 	// Submit
 	const onSubmit = async (data) => {
-		// console.log(data, "data");
-
 		const issued_by = user?.id;
 
 		var slider_slider_assembly_uuid_old_or_new = isUpdate
@@ -137,7 +135,6 @@ export default function Index() {
 				};
 			}
 		);
-		// console.log(slider_die_casting, "slider_die_casting");
 
 		if (isUpdate) {
 			let promises = slider_die_casting.map(async (item) => {

@@ -219,7 +219,6 @@ export default function Index(data) {
 						// * Body
 						...pl.packingListDetails?.map((item, idx) =>
 							node.map((nodeItem) => {
-								console.log('item', item);
 								const text =
 									nodeItem.field === 'size'
 										? `${item[nodeItem.field]} ${

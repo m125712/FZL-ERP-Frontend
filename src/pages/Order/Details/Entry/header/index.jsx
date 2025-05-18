@@ -161,7 +161,6 @@ export default function Header({
 		if ((isUpdate || refOrder) && order && orderInfoUuid) {
 			const x = order.find((item) => item.value === orderInfoUuid);
 			setOrderNoDetails(x);
-			console.log(x);
 		}
 	}, [isUpdate, order, orderInfoUuid, refOrder]);
 

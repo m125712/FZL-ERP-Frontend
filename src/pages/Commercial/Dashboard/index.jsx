@@ -9,7 +9,6 @@ import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
 	const { data, isLoading, url } = useCommercialDashboard();
-	// console.log(data);
 
 	const info = new PageInfo('Dashboard', url, 'commercial__dashboard');
 	const haveAccess = useAccess('commercial__dashboard');

@@ -9,7 +9,6 @@ const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 
 export const getPageHeader = (from, to) => {
-	console.log('from', from);
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
 		widths: [70, '*', 70, '*'],

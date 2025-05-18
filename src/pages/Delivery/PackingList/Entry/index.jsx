@@ -353,9 +353,6 @@ export default function Index() {
 		[watch()]
 	);
 
-	// const totalQuantity = (e) => {
-	// 	console.log(e);
-	// }
 	return (
 		<FormProvider {...form}>
 			<form

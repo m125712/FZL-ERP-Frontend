@@ -111,7 +111,6 @@ export default function Index(data) {
 		const rowSpan = sortedThreadData.filter(
 			(data) => data.order_number === item.order_number
 		).length;
-		console.log('rowSpan', rowSpan);
 		const sizeRowSpan = sortedThreadData.filter(
 			(data) =>
 				data.size === item.size &&

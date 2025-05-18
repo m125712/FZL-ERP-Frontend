@@ -1,5 +1,9 @@
 import { lazy, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { format } from 'date-fns';
+import { LogOut } from 'lucide-react';
+import { motion } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -21,7 +25,7 @@ export default function Information({ data }) {
 		updated_at,
 		remarks,
 	} = data;
-
+	const navigate = useNavigate();
 	const haveAccess = useAccess('profile');
 	const updateAccess = haveAccess.includes('update');
 	const resetAccess = haveAccess.includes('reset_password');
@@ -29,6 +33,12 @@ export default function Information({ data }) {
 		uuid: null,
 		department_designation: null,
 	});
+	const { Logout } = useAuth();
+
+	const handleLogout = async () => {
+		await Logout();
+		navigate('/login', { replace: true });
+	};
 
 	const handelUpdate = () => {
 		setUpdateUser({
@@ -105,6 +115,18 @@ export default function Information({ data }) {
 					>
 						Reset Password
 					</button>
+				),
+			},
+			{
+				label: 'Log Out',
+				value: (
+					<motion.button
+						className='flex items-center gap-2 rounded-md bg-gradient-to-r from-error/50 to-error/70 px-4 py-2 text-left font-normal text-primary-content'
+						whileTap={{ scale: 0.95 }}
+						onClick={() => handleLogout()}
+					>
+						<LogOut className='size-6 text-primary-content' />
+					</motion.button>
 				),
 			},
 		];

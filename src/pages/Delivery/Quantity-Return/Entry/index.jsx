@@ -92,7 +92,7 @@ export default function Index() {
 				isOnCloseNeeded: false,
 			});
 
-			await Promise.all(promises)
+			await Promise.all([promises])
 				.then(() => {
 					reset(Object.assign({}, QUANTITY_RETURN_NULL));
 				})

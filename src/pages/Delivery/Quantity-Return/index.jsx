@@ -66,6 +66,21 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'challan_number',
+				header: 'Challan ID',
+				width: 'w-40',
+				cell: (info) => {
+					const { uuid } = info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/delivery/challan/${uuid}`}
+							openInNewTab
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'item_description',
 				header: 'Item Description',
 				enableColumnFilter: true,

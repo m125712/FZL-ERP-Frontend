@@ -50,8 +50,8 @@ export default function index() {
 		useDyeingFinishingBatchByUUID(batch_uuid);
 
 	const { invalidateQuery } = useDyeingFinishingBatch(`type=pending`);
-	const { invalidateQuery: invalidateSliderAssembly } =
-		useSliderAssemblyProduction();
+	// const { invalidateQuery: invalidateSliderAssembly } =
+	// 	useSliderAssemblyProduction();
 
 	const {
 		register,
@@ -231,30 +231,29 @@ export default function index() {
 				});
 			}
 
+			const newBatch = newFinishingEntry.map((item) => ({
+				...item,
+				uuid: nanoid(),
+				finishing_batch_uuid: rest.uuid,
+				created_at: GetDateTime(),
+			}));
+
 			// * create new finishing batch entry
-			const newFinishingEntryDataPromises = [...newFinishingEntry].map(
-				async (item) =>
-					await postData.mutateAsync({
-						url: '/zipper/finishing-batch-entry',
-						newData: {
-							...item,
-							uuid: nanoid(),
-							finishing_batch_uuid: rest.uuid,
-							created_at: GetDateTime(),
-						},
-						isOnCloseNeeded: false,
-					})
-			);
+			const newFinishingEntryDataPromises = await postData.mutateAsync({
+				url: '/zipper/finishing-batch-entry',
+				newData: newBatch,
+				isOnCloseNeeded: false,
+			});
 
 			await Promise.all([
 				...finishingEntryUpdatedPromises,
-				...newFinishingEntryDataPromises,
+				newFinishingEntryDataPromises,
 			])
 				.then(() => reset(FINISHING_BATCH_ENTRY_NULL))
 				.then(() => {
 					invalidateQuery();
 					invalidateDetails();
-					invalidateSliderAssembly();
+					// invalidateSliderAssembly();
 					navigate(`/planning/finishing-batch/${rest.uuid}`);
 				})
 				.catch((err) => console.log(err));
@@ -331,23 +330,18 @@ export default function index() {
 			});
 		}
 
-		let promises = [
-			...finishingEntryData.map(
-				async (item) =>
-					await postData.mutateAsync({
-						url: '/zipper/finishing-batch-entry',
-						newData: item,
-						isOnCloseNeeded: false,
-					})
-			),
-		];
+		let promises = await postData.mutateAsync({
+			url: '/zipper/finishing-batch-entry',
+			newData: finishingEntryData,
+			isOnCloseNeeded: false,
+		});
 
 		await Promise.all(promises)
 			.then(() => reset(FINISHING_BATCH_ENTRY_NULL))
 			.then(() => {
 				invalidateQuery();
 				invalidateDetails();
-				invalidateSliderAssembly();
+				// invalidateSliderAssembly();
 				navigate(`/planning/finishing-batch/${finishingData.uuid}`);
 			})
 			.catch((err) => console.log(err));
@@ -479,7 +473,7 @@ export default function index() {
 					setItems={BatchOrdersField}
 					deleteData={deleteData}
 					url={`/zipper/finishing-batch-entry`}
-					invalidateQuery={invalidateNewFinishingBatch}
+					// invalidateQuery={invalidateNewFinishingBatch}
 				/>
 			</Suspense>
 		</FormProvider>

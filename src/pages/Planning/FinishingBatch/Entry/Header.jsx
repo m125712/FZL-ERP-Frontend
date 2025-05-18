@@ -18,7 +18,6 @@ import {
 import { cn } from '@/lib/utils';
 
 import QuantityCard from './quantity-card';
-import TableView from './TableView';
 
 export default function Header({
 	register,
@@ -36,7 +35,7 @@ export default function Header({
 }) {
 	const { batch_uuid } = useParams();
 	const { originalData } = useOtherOrderDescription(
-		`dyed_tape_required=false&swatch_approved=true&is_balance=true&page=finishing_batch&is_update=${isUpdate}`
+		`dyed_tape_required=false&swatch_approved=true&is_balance=true&is_update=${isUpdate}`
 	);
 	const statuses = [
 		{ value: 'running', label: 'Running' },
@@ -53,18 +52,17 @@ export default function Header({
 		!!(watch('order_description_uuid') && watch('production_date'))
 	);
 
-	const { data: qty } = useGetURLData(
-		`/zipper/finishing-batch-entry/production-quantity/max/${watch('order_description_uuid')}?production_date=${watch('production_date') ? format(watch('production_date'), 'yyyy-MM-dd') : ''}`,
-		{
-			enabled: !!(
-				watch('order_description_uuid') && watch('production_date')
-			),
-		}
-	);
+	// const { data: qty } = useGetURLData(
+	// 	`/zipper/finishing-batch-entry/production-quantity/max/${watch('order_description_uuid')}?production_date=${watch('production_date') ? format(watch('production_date'), 'yyyy-MM-dd') : ''}`,
+	// 	{
+	// 		enabled: !!(
+	// 			watch('order_description_uuid') && watch('production_date')
+	// 		),
+	// 	}
+	// );
 
 	return (
 		<div className='flex flex-col gap-8'>
-			<TableView data={originalData?.pageData} />
 			<SectionEntryBody
 				title={
 					<div className='flex flex-col gap-4'>

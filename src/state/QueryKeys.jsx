@@ -559,6 +559,13 @@ export const dyeingQK = {
 		'orders',
 	],
 
+	//* overview
+	finishingBatchOverview: (query) => [
+		...dyeingQK.all(),
+		'finishing-batch/overview',
+		...(query ? [query] : []),
+	],
+
 	//* Dyeing Dashboard
 	dyeingDashboard: (param) => [...dyeingQK.all(), 'dyeing-dashboard', param],
 
@@ -1583,7 +1590,11 @@ export const otherQK = {
 	recipe: (query) => [...otherQK.all(), 'recipe', ...(query ? [query] : [])],
 
 	//*Challan
-	challan: () => [...otherQK.all(), 'challan'],
+	challan: (query) => [
+		...otherQK.all(),
+		'challan',
+		...(query ? [query] : []),
+	],
 
 	//* TAPE-COIL
 	tapeCoil: (query) => [

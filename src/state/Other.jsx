@@ -543,8 +543,10 @@ export const useOtherRecipe = (query) =>
 //* GET CHALLAN
 export const useOtherChallan = (query) =>
 	createGlobalState({
-		queryKey: otherQK.challan(),
-		url: `/other/delivery/challan/value/label?${query}`,
+		queryKey: otherQK.challan(query),
+		url: query
+			? `/other/delivery/challan/value/label?${query}`
+			: `/other/delivery/challan/value/label`,
 	});
 
 // TAPE-COIL

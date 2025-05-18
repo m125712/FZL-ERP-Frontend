@@ -1700,7 +1700,8 @@ export const DELIVERY_VEHICLE_NULL = {
 
 //* Quantity Return
 export const QUANTITY_RETURN_SCHEMA = {
-	order_description_uuid: STRING_REQUIRED,
+	order_info_uuid: STRING_REQUIRED,
+	challan_uuid: STRING.nullable(),
 
 	order_details: yup.array().of(
 		yup.object().shape({
@@ -1721,7 +1722,8 @@ export const QUANTITY_RETURN_SCHEMA = {
 };
 
 export const QUANTITY_RETURN_NULL = {
-	order_description_uuid: null,
+	order_info_uuid: null,
+	challan_uuid: null,
 	order_details: [
 		{
 			size: '',

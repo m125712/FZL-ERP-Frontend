@@ -54,7 +54,9 @@ const SimpleDatePicker = ({
 			showTimeSelect={showTime}
 			timeFormat='HH:mm'
 			timeIntervals={timeIntervals}
+			menuPortalTarget={document.body}
 			// dateFormat={showTime ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'} // ✅ Adjust format accordingly
+			className='z-50'
 		/>
 	);
 };

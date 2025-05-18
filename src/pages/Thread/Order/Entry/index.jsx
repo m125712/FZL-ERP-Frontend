@@ -159,36 +159,45 @@ export default function Index() {
 				isOnCloseNeeded: false,
 			});
 
-			const order_info_entries_promise = data.order_info_entry.map(
-				async (item) => {
-					if (item.uuid === undefined) {
-						item.order_info_uuid = order_info_uuid;
-						item.created_at = GetDateTime();
-						item.uuid = nanoid();
-						return await postData.mutateAsync({
-							url: threadOrderEntryUrl,
-							newData: item,
-							isOnCloseNeeded: false,
-						});
-					} else {
-						item.updated_at = GetDateTime();
-						const updatedData = {
-							...item,
-						};
-						return await updateData.mutateAsync({
-							url: `${threadOrderEntryUrl}/${item.uuid}`,
-							uuid: item.uuid,
-							updatedData,
-							isOnCloseNeeded: false,
-						});
-					}
-				}
-			);
+			const newEntry = data.order_info_entry
+				.filter((item) => {
+					return item.uuid === undefined;
+				})
+				.map((item) => ({
+					...item,
+					order_info_uuid: order_info_uuid,
+					created_at: GetDateTime(),
+					uuid: nanoid(),
+				}));
+
+			const updateEntry = data.order_info_entry.filter((item) => {
+				return item.uuid !== undefined;
+			});
+
+			const entryUpdatePromise = updateEntry.map(async (item) => {
+				item.updated_at = GetDateTime();
+				const updatedData = {
+					...item,
+				};
+				return await updateData.mutateAsync({
+					url: `${threadOrderEntryUrl}/${item.uuid}`,
+					uuid: item.uuid,
+					updatedData,
+					isOnCloseNeeded: false,
+				});
+			});
+
+			const entryCreatePromise = await postData.mutateAsync({
+				url: threadOrderEntryUrl,
+				newData: newEntry,
+				isOnCloseNeeded: false,
+			});
 
 			try {
 				await Promise.all([
 					order_info_promise,
-					...order_info_entries_promise,
+					entryCreatePromise,
+					...entryUpdatePromise,
 				])
 					.then(() => reset(THREAD_ORDER_INFO_ENTRY_NULL))
 					.then(() => {
@@ -238,22 +247,14 @@ export default function Index() {
 			// 	item.recipe_uuid === null ? null : GetDateTime(),
 		}));
 
-		const order_info_entries_promise = [
-			...order_info_entries.map(
-				async (item) =>
-					await postData.mutateAsync({
-						url: threadOrderEntryUrl,
-						newData: item,
-						isOnCloseNeeded: false,
-					})
-			),
-		];
+		const order_info_entries_promise = await postData.mutateAsync({
+			url: threadOrderEntryUrl,
+			newData: order_info_entries,
+			isOnCloseNeeded: false,
+		});
 
 		try {
-			await Promise.all([
-				order_info_promise,
-				...order_info_entries_promise,
-			])
+			await Promise.all([order_info_promise, order_info_entries_promise])
 				.then(() => reset(THREAD_ORDER_INFO_ENTRY_NULL))
 				.then(() => {
 					invalidateOtherZipperThreadOrderList();

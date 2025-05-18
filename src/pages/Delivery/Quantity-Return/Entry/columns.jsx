@@ -20,6 +20,12 @@ export const Columns = ({
 
 	const zipperColumns = [
 		{
+			accessorKey: 'item_description',
+			header: 'Item Description',
+			enableColumnFilter: true,
+			enableSorting: true,
+		},
+		{
 			accessorKey: 'size',
 			header: 'Size',
 			enableColumnFilter: true,

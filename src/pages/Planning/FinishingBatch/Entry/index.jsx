@@ -50,8 +50,8 @@ export default function index() {
 		useDyeingFinishingBatchByUUID(batch_uuid);
 
 	const { invalidateQuery } = useDyeingFinishingBatch(`type=pending`);
-	const { invalidateQuery: invalidateSliderAssembly } =
-		useSliderAssemblyProduction();
+	// const { invalidateQuery: invalidateSliderAssembly } =
+	// 	useSliderAssemblyProduction();
 
 	const {
 		register,
@@ -254,7 +254,7 @@ export default function index() {
 				.then(() => {
 					invalidateQuery();
 					invalidateDetails();
-					invalidateSliderAssembly();
+					// invalidateSliderAssembly();
 					navigate(`/planning/finishing-batch/${rest.uuid}`);
 				})
 				.catch((err) => console.log(err));
@@ -347,7 +347,7 @@ export default function index() {
 			.then(() => {
 				invalidateQuery();
 				invalidateDetails();
-				invalidateSliderAssembly();
+				// invalidateSliderAssembly();
 				navigate(`/planning/finishing-batch/${finishingData.uuid}`);
 			})
 			.catch((err) => console.log(err));

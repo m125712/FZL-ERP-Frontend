@@ -559,6 +559,13 @@ export const dyeingQK = {
 		'orders',
 	],
 
+	//* overview
+	finishingBatchOverview: (query) => [
+		...dyeingQK.all(),
+		'finishing-batch/overview',
+		...(query ? [query] : []),
+	],
+
 	//* Dyeing Dashboard
 	dyeingDashboard: (param) => [...dyeingQK.all(), 'dyeing-dashboard', param],
 

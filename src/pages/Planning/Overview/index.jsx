@@ -1,9 +1,25 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useDyeingFinishingBatchOverview } from '@/state/Dyeing';
+import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import { CustomLink, DateTime, LinkWithCopy, StatusButton } from '@/ui';
 
-export default function index({ data }) {
+import PageInfo from '@/util/PageInfo';
+
+export default function index() {
+	const haveAccess = useAccess('planning__overview');
+
+	const { data, isLoading, url } = useDyeingFinishingBatchOverview(
+		`dyed_tape_required=false&swatch_approved=true&is_balance=true`
+	);
+
+	const info = new PageInfo('Overview', url, 'planning__overview');
+
+	useEffect(() => {
+		document.title = info.getTabName();
+	}, []);
+
 	const columns = useMemo(
 		() => [
 			{
@@ -125,9 +141,8 @@ export default function index({ data }) {
 		[data]
 	);
 
-	// if (isLoading)
-	// 	return <span className='loading loading-dots loading-lg z-50' />;
-
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
 	return (
 		<div>
 			<ReactTable

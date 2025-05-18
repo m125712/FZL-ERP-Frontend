@@ -19,6 +19,8 @@ const DateWiseBatchReport = lazy(
 const ProductionCapacity = lazy(
 	() => import('@/pages/Planning/ProductionCapacity')
 );
+const PlanningOverview = lazy(() => import('@/pages/Planning/Overview'));
+
 export const PlanningRoutes = [
 	{
 		name: 'Planning',
@@ -29,6 +31,14 @@ export const PlanningRoutes = [
 				path: '/planning/finishing-dashboard',
 				element: <FinishingDashboard />,
 				page_name: 'planning__finishing_dashboard',
+				actions: ['read', 'create', 'update', 'delete'],
+			},
+			// * Overview
+			{
+				name: 'Order Overview',
+				path: '/planning/overview',
+				element: <PlanningOverview />,
+				page_name: 'planning__overview',
 				actions: ['read', 'create', 'update', 'delete'],
 			},
 			{

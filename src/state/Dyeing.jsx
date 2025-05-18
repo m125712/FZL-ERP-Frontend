@@ -180,6 +180,15 @@ export const useDyeingFinishingBatch = (query) =>
 			: '/zipper/finishing-batch',
 	});
 
+//* Overview
+export const useDyeingFinishingBatchOverview = (query) =>
+	createGlobalState({
+		queryKey: dyeingQK.finishingBatchOverview(query),
+		url: query
+			? `/zipper/finishing-batch-order-overview?${query}`
+			: '/zipper/finishing-batch-order-overview',
+	});
+
 //* Get Specific Finishing Batch
 export const useDyeingFinishingBatchByUUID = (uuid, params) =>
 	createGlobalState({
@@ -194,6 +203,7 @@ export const useDyeingFinishingBatchOrders = (uuid) =>
 	createGlobalState({
 		queryKey: dyeingQK.finishingBatchOrders(uuid),
 		url: `/zipper/finishing-order-batch/${uuid}`,
+		enabled: !!uuid,
 	});
 
 // * Dyeing Dashboard

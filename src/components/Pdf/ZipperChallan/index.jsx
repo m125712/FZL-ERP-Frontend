@@ -41,7 +41,7 @@ const sliderNode = createNode([
 ]);
 
 export default function Index(data) {
-	const headerHeight = 220;
+	const headerHeight = 210;
 	const footerHeight = 50;
 	const isTapeChallan = data?.item_for === 'tape';
 	const isSliderChallan = data?.item_for === 'slider';
@@ -193,26 +193,45 @@ export default function Index(data) {
 
 		// * Main Table
 		content: packingListTable.map((pl, index) => [
-			index > 0 && index % 4 === 0
-				? { text: '', pageBreak: 'before' }
-				: null,
-			{
-				text: `PL NO: ${pl.packing_number} ${
-					isSampleZipper
-						? ''
-						: `(${pl.carton_weight ? pl.carton_weight : 0} Kg)`
-				}`,
-				fontSize: DEFAULT_FONT_SIZE + 1,
-				bold: true,
-				alignment: 'left',
-			},
 			{
 				table: {
-					headerRows: 1,
+					headerRows: 2,
+					keepWithHeaderRows: 2,
+
 					widths: isSliderChallan
 						? [70, 110, 90, 80, 80]
 						: [70, 110, 90, 80, 60, 40, 30],
 					body: [
+						isSliderChallan
+							? [
+									{
+										text: `PL NO: ${pl.packing_number} ${isSampleZipper ? '' : `(${pl.carton_weight ? pl.carton_weight : 0} Kg)`}`,
+										fontSize: DEFAULT_FONT_SIZE,
+										bold: true,
+										alignment: 'left',
+										border: [false, false, false, false],
+										colSpan: 5,
+									},
+									{},
+									{},
+									{},
+									{},
+								]
+							: [
+									{
+										text: `PL NO: ${pl.packing_number} ${isSampleZipper ? '' : `(${pl.carton_weight ? pl.carton_weight : 0} Kg)`}`,
+										fontSize: DEFAULT_FONT_SIZE + 1,
+										bold: true,
+										alignment: 'left',
+										colSpan: 7,
+									},
+									{},
+									{},
+									{},
+									{},
+									{},
+									{},
+								],
 						// * Header
 						TableHeader(node),
 
@@ -221,13 +240,7 @@ export default function Index(data) {
 							node.map((nodeItem) => {
 								const text =
 									nodeItem.field === 'size'
-										? `${item[nodeItem.field]} ${
-												isTapeChallan
-													? 'mtr'
-													: item.is_inch === 1
-														? 'inch'
-														: 'cm' || ''
-											}`
+										? `${item[nodeItem.field]} ${isTapeChallan ? 'mtr' : item.is_inch === 1 ? 'inch' : 'cm' || ''}`
 										: item[nodeItem.field];
 								return {
 									text,
@@ -240,7 +253,6 @@ export default function Index(data) {
 								};
 							})
 						),
-
 						isSliderChallan
 							? [
 									{
@@ -277,7 +289,7 @@ export default function Index(data) {
 														item.packing_number ===
 														pl.packing_number
 												)
-											)?.styles.size
+											).styles.size
 										} Style`,
 										bold: true,
 										fontSize: DEFAULT_FONT_SIZE + 2,
@@ -376,6 +388,19 @@ export default function Index(data) {
 									},
 								],
 					],
+				},
+				pageBreakBefore: function (
+					currentNode,
+					followingNodesOnPage,
+					nodesOnNextPage,
+					previousNodesOnPage
+				) {
+					if (currentNode.table && previousNodesOnPage.length > 0) {
+						if (currentNode.table.body.length < 5) {
+							return true;
+						}
+					}
+					return false;
 				},
 			},
 			{ text: '\n' },

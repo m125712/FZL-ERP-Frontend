@@ -23,7 +23,12 @@ import { CustomLink, DynamicDeliveryField, LinkWithCopy } from '@/ui';
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
-import { CHALLAN_NULL, CHALLAN_SCHEMA } from '@util/Schema';
+import {
+	CHALLAN_NULL,
+	CHALLAN_SCHEMA,
+	STRING,
+	STRING_REQUIRED,
+} from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
@@ -61,7 +66,13 @@ export default function Index() {
 		watch,
 		setValue,
 		context: form,
-	} = useRHF(CHALLAN_SCHEMA, CHALLAN_NULL);
+	} = useRHF(
+		{
+			...CHALLAN_SCHEMA,
+			remarks: isUpdate ? STRING_REQUIRED : STRING.nullable(),
+		},
+		CHALLAN_NULL
+	);
 	// const { invalidateQuery: invalidatePackingList } = isUpdate
 	// 	? useOtherPackingListByOrderInfoUUIDAndChallanUUID(
 	// 			watch('order_info_uuid'),

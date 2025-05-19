@@ -76,7 +76,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'item_name_with_stopper',
-				header: 'Item W. Stopper',
+				header: 'Item & Stopper',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
@@ -85,7 +85,6 @@ export default function Index() {
 				accessorKey: 'zipper_number_name',
 				header: 'Zipper No.',
 				enableColumnFilter: false,
-				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -211,8 +210,14 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'expected_kg',
+				header: 'Exp. KG',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'total_slider_required',
-				header: 'Slider Required',
+				header: 'Slider Req.',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -228,6 +233,121 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+			{
+				accessorFn: (row) => row.dyeing_batch_number,
+				id: 'dyeing_batch_number',
+				header: 'D/B',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { dyeing_batch_uuid, dyeing_batch_number } =
+						info.row.original;
+					return (
+						<CustomLink
+							label={dyeing_batch_number}
+							url={`/dyeing-and-iron/zipper-batch/${dyeing_batch_uuid}`}
+							openInNewTab={true}
+							showCopyButton={false}
+						/>
+					);
+				},
+			},
+			{
+				accessorFn: (row) =>
+					row.production_date &&
+					REPORT_DATE_FORMATE(row.production_date),
+				id: 'production_date',
+				header: 'P/D',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.production_date}
+						isTime={false}
+						customizedDateFormate='dd MMM,yyyy'
+					/>
+				),
+			},
+			{
+				accessorKey: 'total_quantity',
+				header: 'T/Q',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_production_quantity',
+				header: 'P/Q',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) => (row.received ? 'Y' : 'N'),
+				id: 'received',
+				header: 'STA',
+				enableColumnFilter: false,
+				cell: (info) => <Status status={info.getValue()} />,
+			},
+			{
+				accessorKey: 'dyeing_machine',
+				header: 'D/M',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			// {
+			// 	accessorFn: (row) => {
+			// 		return row.dyeing_batch
+			// 			?.map((item) => item.dyeing_batch_number)
+			// 			.join(', ');
+			// 	},
+			// 	id: 'dyeing_batches',
+			// 	header: 'Dyeing Batch',
+			// 	enableColumnFilter: false,
+			// 	cell: ({ row }) => {
+			// 		const { dyeing_batches } = row.original;
+
+			// 		if (!dyeing_batches?.length) return '--';
+
+			// 		return (
+			// 			<table className='border-2 border-gray-300'>
+			// 				<thead>
+			// 					<tr className='text-xs text-gray-600'>
+			// 						<th className={cn(rowStyle)}>BA/N</th>
+			// 						<th className={cn(rowStyle)}>STA</th>
+			// 						<th className={cn(rowStyle)}>P/Q</th>
+			// 						<th className={cn(rowStyle)}>D/M</th>
+			// 					</tr>
+			// 				</thead>
+			// 				<tbody>
+			// 					{dyeing_batches?.map((item) => (
+			// 						<tr>
+			// 							<td className={cn(rowStyle)}>
+			// 								<CustomLink
+			// 									label={item.dyeing_batch_number}
+			// 									url={`/dyeing-and-iron/zipper-batch/${item.dyeing_batch_uuid}`}
+			// 									openInNewTab={true}
+			// 									showCopyButton={false}
+			// 								/>
+			// 								<DateTime
+			// 									date={item.dyeing_batch_date}
+			// 									customizedDateFormate='dd MMM, yy'
+			// 									isTime={false}
+			// 								/>
+			// 							</td>
+			// 							<td className={cn(rowStyle)}>
+			// 								{/* {item.dyeing_batch_quantity} */}
+			// 								<Status status={item.received} />
+			// 							</td>
+			// 							<td className={cn(rowStyle)}>
+			// 								{item.total_production_quantity}
+			// 							</td>
+			// 							<td className={cn(rowStyle)}>
+			// 								{item.dyeing_machine}
+			// 							</td>
+			// 						</tr>
+			// 					))}
+			// 				</tbody>
+			// 			</table>
+			// 		);
+			// 	},
+			// },
 			{
 				accessorKey: 'not_approved_quantity',
 				header: 'Not App. QTY',
@@ -245,63 +365,6 @@ export default function Index() {
 				header: 'Dyeing QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
-			},
-			{
-				accessorFn: (row) => {
-					return row.dyeing_batch
-						?.map((item) => item.dyeing_batch_number)
-						.join(', ');
-				},
-				id: 'dyeing_batches',
-				header: 'Dyeing Batch',
-				enableColumnFilter: false,
-				cell: ({ row }) => {
-					const { dyeing_batches } = row.original;
-
-					if (!dyeing_batches?.length) return '--';
-
-					return (
-						<table className='border-2 border-gray-300'>
-							<thead>
-								<tr className='text-xs text-gray-600'>
-									<th className={cn(rowStyle)}>BA/N</th>
-									<th className={cn(rowStyle)}>STA</th>
-									<th className={cn(rowStyle)}>P/Q</th>
-									<th className={cn(rowStyle)}>D/M</th>
-								</tr>
-							</thead>
-							<tbody>
-								{dyeing_batches?.map((item) => (
-									<tr>
-										<td className={cn(rowStyle)}>
-											<CustomLink
-												label={item.dyeing_batch_number}
-												url={`/dyeing-and-iron/zipper-batch/${item.dyeing_batch_uuid}`}
-												openInNewTab={true}
-												showCopyButton={false}
-											/>
-											<DateTime
-												date={item.dyeing_batch_date}
-												customizedDateFormate='dd MMM, yy'
-												isTime={false}
-											/>
-										</td>
-										<td className={cn(rowStyle)}>
-											{/* {item.dyeing_batch_quantity} */}
-											<Status status={item.received} />
-										</td>
-										<td className={cn(rowStyle)}>
-											{item.total_production_quantity}
-										</td>
-										<td className={cn(rowStyle)}>
-											{item.dyeing_machine}
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					);
-				},
 			},
 			{
 				accessorKey: 'total_coloring_quantity',

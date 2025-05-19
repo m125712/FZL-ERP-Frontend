@@ -254,6 +254,8 @@ export default function index() {
 					invalidateQuery();
 					invalidateDetails();
 					// invalidateSliderAssembly();
+				})
+				.then(() => {
 					navigate(`/planning/finishing-batch/${rest.uuid}`);
 				})
 				.catch((err) => console.log(err));
@@ -336,12 +338,14 @@ export default function index() {
 			isOnCloseNeeded: false,
 		});
 
-		await Promise.all(promises)
+		await Promise.all([promises])
 			.then(() => reset(FINISHING_BATCH_ENTRY_NULL))
 			.then(() => {
 				invalidateQuery();
 				invalidateDetails();
 				// invalidateSliderAssembly();
+			})
+			.then(() => {
 				navigate(`/planning/finishing-batch/${finishingData.uuid}`);
 			})
 			.catch((err) => console.log(err));

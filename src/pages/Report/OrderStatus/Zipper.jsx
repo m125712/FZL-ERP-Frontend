@@ -75,6 +75,27 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'item_name_with_stopper',
+				header: 'Item W. Stopper',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'zipper_number_name',
+				header: 'Zipper No.',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'end_type_name',
+				header: 'End Type',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorFn: (row) => {
 					const piArr = Array.isArray(row?.pi_numbers)
 						? row.pi_numbers
@@ -157,6 +178,21 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorFn: (row) =>
+					row.swatch_approval_date &&
+					REPORT_DATE_FORMATE(row.swatch_approval_date),
+				id: 'swatch_approval_date',
+				header: 'Swatch App. Date',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.swatch_approval_date}
+						isTime={false}
+						customizedDateFormate='dd MMM,yyyy'
+					/>
+				),
+			},
+			{
 				accessorKey: 'size',
 				header: 'Size',
 				enableColumnFilter: false,
@@ -171,6 +207,24 @@ export default function Index() {
 			{
 				accessorKey: 'quantity',
 				header: 'QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_slider_required',
+				header: 'Slider Required',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_slider_required_kg',
+				header: 'Total Slider KG',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'recipe_name',
+				header: 'Recipe',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -213,6 +267,7 @@ export default function Index() {
 									<th className={cn(rowStyle)}>BA/N</th>
 									<th className={cn(rowStyle)}>STA</th>
 									<th className={cn(rowStyle)}>P/Q</th>
+									<th className={cn(rowStyle)}>D/M</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -237,6 +292,9 @@ export default function Index() {
 										</td>
 										<td className={cn(rowStyle)}>
 											{item.total_production_quantity}
+										</td>
+										<td className={cn(rowStyle)}>
+											{item.dyeing_machine}
 										</td>
 									</tr>
 								))}

@@ -138,30 +138,39 @@ export default function Index() {
 				isOnCloseNeeded: false,
 			});
 
-			const purchase_entries_promise = data.purchase.map(async (item) => {
-				if (item.uuid === undefined) {
-					item.purchase_description_uuid = purchase_description_uuid;
-					item.created_at = GetDateTime();
-					item.created_by = user?.uuid;
-					item.uuid = nanoid();
-					return await postData.mutateAsync({
-						url: purchaseEntryUrl,
-						newData: item,
-						isOnCloseNeeded: false,
-					});
-				} else {
-					item.updated_at = GetDateTime();
-					const updatedData = {
-						...item,
-					};
+			const newEntries = data.purchase
+				.filter((item) => item.uuid === undefined)
+				.map((item) => ({
+					...item,
+					purchase_description_uuid: purchase_description_uuid,
+					created_at: GetDateTime(),
+					created_by: user?.uuid,
+					uuid: nanoid(),
+				}));
+
+			const updatedEntries = data.purchase
+				.filter((item) => item.uuid !== undefined)
+				.map((item) => ({
+					...item,
+					updated_at: GetDateTime(),
+				}));
+
+			const purchase_entries_promise = [
+				...updatedEntries.map(async (item) => {
 					return await updateData.mutateAsync({
 						url: `${purchaseEntryUrl}/${item.uuid}`,
-						uuid: item.uuid,
-						updatedData,
+						updatedData: item,
 						isOnCloseNeeded: false,
 					});
-				}
-			});
+				}),
+
+				newEntries.length > 0 &&
+					(await postData.mutateAsync({
+						url: purchaseEntryUrl,
+						newData: newEntries,
+						isOnCloseNeeded: false,
+					})),
+			];
 
 			try {
 				await Promise.all([
@@ -216,14 +225,11 @@ export default function Index() {
 		}));
 
 		const purchase_entries_promise = [
-			...purchase_entries.map(
-				async (item) =>
-					await postData.mutateAsync({
-						url: purchaseEntryUrl,
-						newData: item,
-						isOnCloseNeeded: false,
-					})
-			),
+			await postData.mutateAsync({
+				url: purchaseEntryUrl,
+				newData: purchase_entries,
+				isOnCloseNeeded: false,
+			}),
 		];
 
 		try {

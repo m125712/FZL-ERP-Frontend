@@ -76,7 +76,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'item_name_with_stopper',
-				header: 'Item W. Stopper',
+				header: 'Item & Stopper',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
@@ -85,7 +85,6 @@ export default function Index() {
 				accessorKey: 'zipper_number_name',
 				header: 'Zipper No.',
 				enableColumnFilter: false,
-				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -211,8 +210,14 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'expected_kg',
+				header: 'Exp. KG',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'total_slider_required',
-				header: 'Slider Required',
+				header: 'Slider Req.',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -225,24 +230,6 @@ export default function Index() {
 			{
 				accessorKey: 'recipe_name',
 				header: 'Recipe',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'not_approved_quantity',
-				header: 'Not App. QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'approved_quantity',
-				header: 'App. QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'total_dyeing_quantity',
-				header: 'Dyeing QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -302,6 +289,24 @@ export default function Index() {
 						</table>
 					);
 				},
+			},
+			{
+				accessorKey: 'not_approved_quantity',
+				header: 'Not App. QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'approved_quantity',
+				header: 'App. QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_dyeing_quantity',
+				header: 'Dyeing QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_coloring_quantity',

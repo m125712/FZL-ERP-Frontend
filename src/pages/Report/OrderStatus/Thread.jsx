@@ -172,18 +172,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'not_approved_quantity',
-				header: 'Not App. QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'approved_quantity',
-				header: 'App. QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'total_expected_weight',
 				header: 'Exp. Yarn Wgt',
 				enableColumnFilter: false,
@@ -250,6 +238,18 @@ export default function Index() {
 						</table>
 					);
 				},
+			},
+			{
+				accessorKey: 'not_approved_quantity',
+				header: 'Not App. QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'approved_quantity',
+				header: 'App. QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_yarn_quantity',

@@ -138,6 +138,21 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorFn: (row) =>
+					row.swatch_approval_date &&
+					REPORT_DATE_FORMATE(row.swatch_approval_date),
+				id: 'swatch_approval_date',
+				header: 'Swatch App. Date',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.swatch_approval_date}
+						isTime={false}
+						customizedDateFormate='dd MMM,yyyy'
+					/>
+				),
+			},
+			{
 				accessorKey: 'count_length_name',
 				header: 'Count Length',
 				enableColumnFilter: false,
@@ -147,6 +162,12 @@ export default function Index() {
 			{
 				accessorKey: 'quantity',
 				header: 'QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'recipe_name',
+				header: 'Recipe',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -190,6 +211,7 @@ export default function Index() {
 									<th className={cn(rowStyle)}>Qty</th>
 									<th className={cn(rowStyle)}>Yarn</th>
 									<th className={cn(rowStyle)}>D/C</th>
+									<th className={cn(rowStyle)}>M</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -198,7 +220,7 @@ export default function Index() {
 										<td className={cn(rowStyle)}>
 											<CustomLink
 												label={item.batch_number}
-												url={`/dyeing-and-iron/zipper-batch/${item.batch_uuid}`}
+												url={`/dyeing-and-iron/thread-batch/${item.batch_uuid}`}
 												openInNewTab={true}
 												showCopyButton={false}
 											/>
@@ -218,6 +240,9 @@ export default function Index() {
 											<Status
 												status={item.is_drying_complete}
 											/>
+										</td>{' '}
+										<td className={cn(rowStyle)}>
+											{item.machine}
 										</td>
 									</tr>
 								))}

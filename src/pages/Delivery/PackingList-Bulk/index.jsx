@@ -193,7 +193,7 @@ export default function Index() {
 								checked={info.getValue() === true}
 							/>
 							<DateTime date={warehouse_received_date} />
-							<span className='ml-2'>
+							<span className=''>
 								{warehouse_received_by_name}
 							</span>
 						</div>

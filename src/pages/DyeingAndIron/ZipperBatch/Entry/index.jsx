@@ -261,17 +261,16 @@ export default function Index() {
 								isOnCloseNeeded: false,
 							});
 						}),
-						...new_dyeing_batch_entry.map(
-							async (item) =>
-								await postData.mutateAsync({
-									url: '/zipper/dyeing-batch-entry',
-									newData: item,
-									isOnCloseNeeded: false,
-								})
-						),
+
+						new_dyeing_batch_entry.length > 0 &&
+							(await postData.mutateAsync({
+								url: '/zipper/dyeing-batch-entry',
+								newData: new_dyeing_batch_entry,
+								isOnCloseNeeded: false,
+							})),
 					];
 
-					await Promise.all(dyeing_batch_entry_updated_promises)
+					await Promise.all([...dyeing_batch_entry_updated_promises])
 						.then(() => reset(Object.assign({}, DYEING_BATCH_NULL)))
 						.then(() => {
 							invalidateDyeingZipperBatch();
@@ -339,27 +338,22 @@ export default function Index() {
 					isOnCloseNeeded: false,
 				});
 
-				let promises = [
-					...dyeing_batch_entry.map(
-						async (item) =>
-							await postData.mutateAsync({
-								url: '/zipper/dyeing-batch-entry',
-								newData: item,
-								isOnCloseNeeded: false,
-							})
-					),
-				];
+				let promises = await postData.mutateAsync({
+					url: '/zipper/dyeing-batch-entry',
+					newData: dyeing_batch_entry,
+					isOnCloseNeeded: false,
+				});
 
-				await Promise.all(promises)
+				await Promise.all([promises])
 					.then(() => {
 						reset(Object.assign({}, DYEING_BATCH_NULL));
 					})
 
 					.then(() => {
 						invalidateDyeingZipperBatch();
-						navigate(
-							`/dyeing-and-iron/zipper-batch/${batch_data.uuid}`
-						);
+						// navigate(
+						// 	`/dyeing-and-iron/zipper-batch/${batch_data.uuid}`
+						// );
 					})
 					.catch((err) => console.log(err));
 
@@ -375,7 +369,7 @@ export default function Index() {
 			// * UPDATE
 			if (isUpdate) {
 				const batchDataPromise = await updateData.mutateAsync({
-					url: `${url}/${batchData?.uuid}`,
+					url: `/zipper/dyeing-batch/${batchData?.uuid}`,
 					updatedData: batchData,
 					isOnCloseNeeded: false,
 				});
@@ -388,14 +382,13 @@ export default function Index() {
 							isOnCloseNeeded: false,
 						});
 					}),
-					...batchEntry.map(
-						async (item) =>
-							await postData.mutateAsync({
-								url: '/zipper/dyeing-batch-entry',
-								newData: item,
-								isOnCloseNeeded: false,
-							})
-					),
+
+					batchEntry.length > 0 &&
+						postData.mutateAsync({
+							url: '/zipper/dyeing-batch-entry',
+							newData: batchEntry,
+							isOnCloseNeeded: false,
+						}),
 				];
 
 				await Promise.all([
@@ -423,14 +416,11 @@ export default function Index() {
 			});
 
 			let promises = [
-				...batchEntry.map(
-					async (item) =>
-						await postData.mutateAsync({
-							url: '/zipper/dyeing-batch-entry',
-							newData: item,
-							isOnCloseNeeded: false,
-						})
-				),
+				await postData.mutateAsync({
+					url: '/zipper/dyeing-batch-entry',
+					newData: batchEntry,
+					isOnCloseNeeded: false,
+				}),
 			];
 
 			await Promise.all(promises)
@@ -438,7 +428,7 @@ export default function Index() {
 
 				.then(() => {
 					invalidateDyeingZipperBatch();
-					navigate(`/dyeing-and-iron/zipper-batch/${batchData.uuid}`);
+					// navigate(`/dyeing-and-iron/zipper-batch/${batchData.uuid}`);
 				})
 				.catch((err) => console.log(err));
 

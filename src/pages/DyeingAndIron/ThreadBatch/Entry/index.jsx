@@ -297,14 +297,13 @@ export default function Index() {
 								isOnCloseNeeded: false,
 							});
 						}),
-						...new_batch_entry.map(
-							async (item) =>
-								await postData.mutateAsync({
-									url: '/thread/batch-entry',
-									newData: item,
-									isOnCloseNeeded: false,
-								})
-						),
+
+						new_batch_entry.length > 0 &&
+							(await postData.mutateAsync({
+								url: '/thread/batch-entry',
+								newData: new_batch_entry,
+								isOnCloseNeeded: false,
+							})),
 					];
 
 					await Promise.all(batch_entry_updated_promises)
@@ -372,14 +371,11 @@ export default function Index() {
 				});
 
 				let promises = [
-					...batch_entry.map(
-						async (item) =>
-							await postData.mutateAsync({
-								url: '/thread/batch-entry',
-								newData: item,
-								isOnCloseNeeded: false,
-							})
-					),
+					await postData.mutateAsync({
+						url: '/thread/batch-entry',
+						newData: batch_entry,
+						isOnCloseNeeded: false,
+					}),
 				];
 
 				await Promise.all(promises)
@@ -406,7 +402,7 @@ export default function Index() {
 			// * UPDATE
 			if (isUpdate) {
 				const batchDataPromise = await updateData.mutateAsync({
-					url: `${url}/${batchData?.uuid}`,
+					url: `/thread/batch/${batchData?.uuid}`,
 					updatedData: batchData,
 					isOnCloseNeeded: false,
 				});
@@ -419,14 +415,13 @@ export default function Index() {
 							isOnCloseNeeded: false,
 						});
 					}),
-					...batchEntry.map(
-						async (item) =>
-							await postData.mutateAsync({
-								url: '/thread/batch-entry',
-								newData: item,
-								isOnCloseNeeded: false,
-							})
-					),
+
+					batchEntry.length > 0 &&
+						(await postData.mutateAsync({
+							url: '/thread/batch-entry',
+							newData: batchEntry,
+							isOnCloseNeeded: false,
+						})),
 				];
 
 				await Promise.all([
@@ -455,14 +450,11 @@ export default function Index() {
 			});
 
 			let promises = [
-				...batchEntry.map(
-					async (item) =>
-						await postData.mutateAsync({
-							url: '/thread/batch-entry',
-							newData: item,
-							isOnCloseNeeded: false,
-						})
-				),
+				await postData.mutateAsync({
+					url: '/thread/batch-entry',
+					newData: batchEntry,
+					isOnCloseNeeded: false,
+				}),
 			];
 
 			await Promise.all(promises)

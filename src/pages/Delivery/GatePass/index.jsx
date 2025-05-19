@@ -29,7 +29,7 @@ import GetDateTime from '@/util/GetDateTime';
 import { GATE_PASS_NULL, GATE_PASS_SCHEMA } from '@/util/Schema';
 
 export default function Index() {
-	const user = useAuth();
+	const { user } = useAuth();
 	const containerRef = useRef(null);
 	const [symbol, setSymbol] = useState(null);
 	const [scannerActive, setScannerActive] = useState(true);

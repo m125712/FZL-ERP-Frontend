@@ -28,7 +28,7 @@ import {
 } from '@/util/Schema';
 
 export default function Index() {
-	const user = useAuth();
+	const { user } = useAuth();
 	const navigate = useNavigate();
 	const containerRef = useRef(null);
 
@@ -175,7 +175,7 @@ export default function Index() {
 								item.warehouse_received_date,
 							is_warehouse_received: true,
 							warehouse_received_by: user.uuid,
-							updated_at: GetDateTime(),
+							// updated_at: GetDateTime(),
 						};
 						return await updateData.mutateAsync({
 							url: `/delivery/packing-list/${item?.uuid}`,

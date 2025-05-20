@@ -283,7 +283,10 @@ export default function Index() {
 				id: 'received',
 				header: 'STA',
 				enableColumnFilter: false,
-				cell: (info) => <Status status={info.getValue()} />,
+				cell: (info) => {
+					const { received } = info.row.original;
+					return <Status status={received} />;
+				},
 			},
 			{
 				accessorKey: 'dyeing_machine',

@@ -135,36 +135,39 @@ export default function Index() {
 			});
 
 			// * updated order entry * //
-			const recipe_entry_updated = [...data.recipe_entry].map(
-				(item, index) => ({
+			const recipe_entry_updated = data.recipe_entry
+				.filter((item) => item.uuid)
+				.map((item, index) => ({
 					...item,
 					index: index,
 					updated_at: GetDateTime(),
-				})
-			);
+				}));
+
+			const newEntry = data.recipe_entry
+				.filter((item) => item.uuid === undefined)
+				.map((item) => ({
+					...item,
+					uuid: nanoid(),
+					recipe_uuid: data?.uuid,
+					created_at: GetDateTime(),
+				}));
 
 			//* Post new entry */ //
 			let order_entry_updated_promises = [
 				...recipe_entry_updated.map(async (item) => {
-					if (item.uuid) {
-						await updateData.mutateAsync({
-							url: `/lab-dip/recipe-entry/${item.uuid}`,
-							updatedData: item,
-							isOnCloseNeeded: false,
-						});
-					} else {
-						await postData.mutateAsync({
-							url: '/lab-dip/recipe-entry',
-							newData: {
-								...item,
-								uuid: nanoid(),
-								recipe_uuid: data?.uuid,
-								created_at: GetDateTime(),
-							},
-							isOnCloseNeeded: false,
-						});
-					}
+					await updateData.mutateAsync({
+						url: `/lab-dip/recipe-entry/${item.uuid}`,
+						updatedData: item,
+						isOnCloseNeeded: false,
+					});
 				}),
+
+				newEntry.length > 0 &&
+					(await postData.mutateAsync({
+						url: '/lab-dip/recipe-entry',
+						newData: newEntry,
+						isOnCloseNeeded: false,
+					})),
 			];
 			await Promise.all(order_entry_updated_promises)
 				.then(() => reset(LAB_RECIPE_NULL))
@@ -211,14 +214,11 @@ export default function Index() {
 
 		//* Post new entry */ //
 		let recipe_entry_promises = [
-			...recipe_entry.map(
-				async (item) =>
-					await postData.mutateAsync({
-						url: '/lab-dip/recipe-entry',
-						newData: item,
-						isOnCloseNeeded: false,
-					})
-			),
+			await postData.mutateAsync({
+				url: '/lab-dip/recipe-entry',
+				newData: recipe_entry,
+				isOnCloseNeeded: false,
+			}),
 		];
 
 		await Promise.all(recipe_entry_promises)
@@ -273,7 +273,8 @@ export default function Index() {
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
-					className='flex flex-col gap-4'>
+					className='flex flex-col gap-4'
+				>
 					<Header
 						{...{
 							register,
@@ -300,10 +301,12 @@ export default function Index() {
 							<th
 								key={item}
 								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'
+							>
 								{item}
 							</th>
-						))}>
+						))}
+					>
 						{recipeEntryField.map((item, index) => (
 							<tr key={item.id}>
 								<td>
@@ -325,7 +328,8 @@ export default function Index() {
 										dynamicerror={
 											errors?.recipe_entry?.[index]
 												?.material_uuid
-										}>
+										}
+									>
 										<Controller
 											name={`recipe_entry[${index}].material_uuid`}
 											control={control}
@@ -396,7 +400,8 @@ export default function Index() {
 									/>
 								</td>
 								<td
-									className={`w-16 ${rowClass} border-l-4 border-l-primary`}>
+									className={`w-16 ${rowClass} border-l-4 border-l-primary`}
+								>
 									<ActionButtons
 										duplicateClick={() =>
 											handelDuplicateDynamicField(index)

@@ -128,19 +128,35 @@ export default function Index() {
 			});
 
 			// * updated recipe * //
-			const recipe_updated = [...data.recipe].map((item) => ({
-				...item,
-				lab_dip_info_uuid: data?.uuid,
-				approved: item.approved ? 1 : 0,
-				is_pps_req: item.is_pps_req ? 1 : 0,
-				approved_date: item.approved ? GetDateTime() : null,
-				is_pps_req_date: item.is_pps_req ? GetDateTime() : null,
-			}));
+			const recipe_updated = data.recipe
+				.filter((item) => item.info_entry_uuid !== undefined)
+				.map((item) => ({
+					...item,
+					lab_dip_info_uuid: data?.uuid,
+					approved: item.approved ? 1 : 0,
+					is_pps_req: item.is_pps_req ? 1 : 0,
+					approved_date: item.approved ? GetDateTime() : null,
+					is_pps_req_date: item.is_pps_req ? GetDateTime() : null,
+				}));
+
+			const newEntry = data.recipe
+				.filter((item) => item.info_entry_uuid === undefined)
+				.map((item) => ({
+					...item,
+					uuid: nanoid(),
+					lab_dip_info_uuid: data?.uuid,
+					approved: item.approved ? 1 : 0,
+					is_pps_req: item.is_pps_req ? 1 : 0,
+					approved_date: item.approved ? GetDateTime() : null,
+					is_pps_req_date: item.is_pps_req ? GetDateTime() : null,
+					created_by: user?.uuid,
+					created_at: GetDateTime(),
+				}));
 
 			//* Post new entry */ //
 			let recipe_updated_promises = [
-				...recipe_updated.map(async (item) => {
-					if (item.info_entry_uuid) {
+				...recipe_updated.map(
+					async (item) =>
 						await updateData.mutateAsync({
 							url: `/lab-dip/info-entry/${item.info_entry_uuid}`,
 							updatedData: {
@@ -149,20 +165,15 @@ export default function Index() {
 								updated_at: GetDateTime(),
 							},
 							isOnCloseNeeded: false,
-						});
-					} else {
-						await postData.mutateAsync({
-							url: '/lab-dip/info-entry',
-							newData: {
-								...item,
-								uuid: nanoid(),
-								created_by: user?.uuid,
-								created_at: GetDateTime(),
-							},
-							isOnCloseNeeded: false,
-						});
-					}
-				}),
+						})
+				),
+
+				newEntry.length > 0 &&
+					(await postData.mutateAsync({
+						url: '/lab-dip/info-entry',
+						newData: newEntry,
+						isOnCloseNeeded: false,
+					})),
 			];
 			await Promise.all(recipe_updated_promises)
 				.then(() => reset(LAB_INFO_NULL))
@@ -212,14 +223,11 @@ export default function Index() {
 
 		//* Post new entry */ //
 		let recipe_promises = [
-			...recipe.map(
-				async (item) =>
-					await postData.mutateAsync({
-						url: '/lab-dip/info-entry',
-						newData: item,
-						isOnCloseNeeded: false,
-					})
-			),
+			await postData.mutateAsync({
+				url: '/lab-dip/info-entry',
+				newData: recipe,
+				isOnCloseNeeded: false,
+			}),
 		];
 
 		//* Post new entry *//

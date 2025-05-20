@@ -225,7 +225,10 @@ export default function Index() {
 				accessorKey: 'is_drying_complete',
 				header: 'D/C',
 				enableColumnFilter: false,
-				cell: (info) => <Status status={info.getValue()} />,
+				cell: (info) => {
+					const { is_drying_complete } = info.row.original;
+					return <Status status={is_drying_complete} />;
+				},
 			},
 			{
 				accessorKey: 'machine',

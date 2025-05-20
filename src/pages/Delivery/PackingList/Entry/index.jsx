@@ -203,24 +203,26 @@ export default function Index() {
 					});
 				});
 
-			let updatableNewPackingListEntryPromises =
-				data.new_packing_list_entry
-					.filter((item) => item.quantity > 0 && !item.isDeletable)
-					.map(async (item) => {
-						return await postData.mutateAsync({
-							url: deliveryPackingListEntryUrl,
-							newData: {
-								...item,
-								uuid: nanoid(),
-								item_for: data.item_for,
-								is_checked: item.is_checked,
-								quantity: item?.quantity,
-								packing_list_uuid: uuid,
-								created_at: GetDateTime(),
-							},
-							isOnCloseNeeded: false,
-						});
-					});
+			const newEntry = data.new_packing_list_entry
+				.filter((item) => item.quantity > 0 && !item.isDeletable)
+				.map((item) => ({
+					...item,
+					uuid: nanoid(),
+					item_for: data.item_for,
+					is_checked: item.is_checked,
+					quantity: item?.quantity,
+					packing_list_uuid: uuid,
+					created_at: GetDateTime(),
+				}));
+
+			let updatableNewPackingListEntryPromises = [
+				newEntry.length > 0 &&
+					(await postData.mutateAsync({
+						url: deliveryPackingListEntryUrl,
+						newData: newEntry,
+						isOnCloseNeeded: false,
+					})),
+			];
 
 			let deletablePackingListEntryPromises = data.packing_list_entry
 				.filter((item) => item.isDeletable)
@@ -290,14 +292,13 @@ export default function Index() {
 				isOnCloseNeeded: false,
 			});
 			// create new /packing/list/entry
-			const commercial_packing_list_entry_promises =
-				packingListEntryData.map((item) =>
-					postData.mutateAsync({
-						url: deliveryPackingListEntryUrl,
-						newData: item,
-						isOnCloseNeeded: false,
-					})
-				);
+			const commercial_packing_list_entry_promises = [
+				await postData.mutateAsync({
+					url: deliveryPackingListEntryUrl,
+					newData: packingListEntryData,
+					isOnCloseNeeded: false,
+				}),
+			];
 			try {
 				await Promise.all([...commercial_packing_list_entry_promises])
 					.then(() => reset(Object.assign({}, PACKING_LIST_NULL)))

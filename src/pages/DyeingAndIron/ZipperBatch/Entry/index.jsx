@@ -351,9 +351,9 @@ export default function Index() {
 
 					.then(() => {
 						invalidateDyeingZipperBatch();
-						// navigate(
-						// 	`/dyeing-and-iron/zipper-batch/${batch_data.uuid}`
-						// );
+						navigate(
+							`/dyeing-and-iron/zipper-batch/${batch_data.uuid}`
+						);
 					})
 					.catch((err) => console.log(err));
 
@@ -428,7 +428,7 @@ export default function Index() {
 
 				.then(() => {
 					invalidateDyeingZipperBatch();
-					// navigate(`/dyeing-and-iron/zipper-batch/${batchData.uuid}`);
+					navigate(`/dyeing-and-iron/zipper-batch/${batchData.uuid}`);
 				})
 				.catch((err) => console.log(err));
 

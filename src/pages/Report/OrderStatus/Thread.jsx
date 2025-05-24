@@ -9,8 +9,6 @@ import { CustomLink, DateTime, SimpleDatePicker, Status } from '@/ui';
 
 import { REPORT_DATE_FORMATE } from '../utils';
 
-THREAD;
-
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
 		return `own_uuid=${userUUID}`;

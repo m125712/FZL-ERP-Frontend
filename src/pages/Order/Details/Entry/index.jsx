@@ -312,7 +312,7 @@ export default function Index() {
 				(item) => item.order_entry_uuid
 			);
 
-			const updatedOrderEntryPromis = updateOrder.map(async (item) => {
+			const updatedOrderEntryPromise = updateOrder.map(async (item) => {
 				await updateData.mutateAsync({
 					url: `/zipper/order-entry/${item.order_entry_uuid}`,
 					updatedData: {
@@ -324,17 +324,19 @@ export default function Index() {
 				});
 			});
 
-			const newOrderEntryPromis = await postData.mutateAsync({
-				url: '/zipper/order-entry',
-				newData: newOrder,
-				isOnCloseNeeded: false,
+			const newOrderEntryPromise = newOrder?.map(async (item) => {
+				await postData.mutateAsync({
+					url: '/zipper/order-entry',
+					newData: item,
+					isOnCloseNeeded: false,
+				});
 			});
 
 			// swatchInvalidate();
 
 			await Promise.all([
-				...updatedOrderEntryPromis,
-				newOrderEntryPromis,
+				...updatedOrderEntryPromise,
+				newOrderEntryPromise,
 			]).then(() => {
 				navigate(
 					`/order/details/${order_number}/${order_description_uuid}`

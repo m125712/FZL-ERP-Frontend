@@ -324,13 +324,14 @@ export default function Index() {
 				});
 			});
 
-			const newOrderEntryPromise = newOrder?.map(async (item) => {
-				await postData.mutateAsync({
-					url: '/zipper/order-entry',
-					newData: item,
-					isOnCloseNeeded: false,
-				});
-			});
+			const newOrderEntryPromise =
+				newOrder.length > 0
+					? await postData.mutateAsync({
+							url: '/zipper/order-entry',
+							newData: newOrder,
+							isOnCloseNeeded: false,
+						})
+					: null;
 
 			// swatchInvalidate();
 

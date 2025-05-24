@@ -5,9 +5,7 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, SimpleDatePicker, Status } from '@/ui';
-
-import { cn } from '@/lib/utils';
+import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
 
 import { REPORT_DATE_FORMATE } from '../utils';
 
@@ -253,6 +251,21 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
+					row.batch_number &&
+					REPORT_DATE_FORMATE(row.batch_created_at),
+				id: 'batch_created_at',
+				header: 'B/D',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.batch_created_at}
+						isTime={false}
+						customizedDateFormate='dd MMM,yyyy'
+					/>
+				),
+			},
+			{
+				accessorFn: (row) =>
 					row.production_date &&
 					REPORT_DATE_FORMATE(row.production_date),
 				id: 'production_date',
@@ -268,25 +281,21 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_quantity',
-				header: 'T/Q',
+				header: 'B/Qty',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_production_quantity',
-				header: 'P/Q',
+				header: 'B/Kg',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => (row.received ? 'Y' : 'N'),
-				id: 'received',
-				header: 'STA',
+				accessorKey: 'batch_expected_kg',
+				header: 'EB/Kg',
 				enableColumnFilter: false,
-				cell: (info) => {
-					const { received } = info.row.original;
-					return <Status status={received} />;
-				},
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'dyeing_machine',
@@ -294,63 +303,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorFn: (row) => {
-			// 		return row.dyeing_batch
-			// 			?.map((item) => item.dyeing_batch_number)
-			// 			.join(', ');
-			// 	},
-			// 	id: 'dyeing_batches',
-			// 	header: 'Dyeing Batch',
-			// 	enableColumnFilter: false,
-			// 	cell: ({ row }) => {
-			// 		const { dyeing_batches } = row.original;
-
-			// 		if (!dyeing_batches?.length) return '--';
-
-			// 		return (
-			// 			<table className='border-2 border-gray-300'>
-			// 				<thead>
-			// 					<tr className='text-xs text-gray-600'>
-			// 						<th className={cn(rowStyle)}>BA/N</th>
-			// 						<th className={cn(rowStyle)}>STA</th>
-			// 						<th className={cn(rowStyle)}>P/Q</th>
-			// 						<th className={cn(rowStyle)}>D/M</th>
-			// 					</tr>
-			// 				</thead>
-			// 				<tbody>
-			// 					{dyeing_batches?.map((item) => (
-			// 						<tr>
-			// 							<td className={cn(rowStyle)}>
-			// 								<CustomLink
-			// 									label={item.dyeing_batch_number}
-			// 									url={`/dyeing-and-iron/zipper-batch/${item.dyeing_batch_uuid}`}
-			// 									openInNewTab={true}
-			// 									showCopyButton={false}
-			// 								/>
-			// 								<DateTime
-			// 									date={item.dyeing_batch_date}
-			// 									customizedDateFormate='dd MMM, yy'
-			// 									isTime={false}
-			// 								/>
-			// 							</td>
-			// 							<td className={cn(rowStyle)}>
-			// 								{/* {item.dyeing_batch_quantity} */}
-			// 								<Status status={item.received} />
-			// 							</td>
-			// 							<td className={cn(rowStyle)}>
-			// 								{item.total_production_quantity}
-			// 							</td>
-			// 							<td className={cn(rowStyle)}>
-			// 								{item.dyeing_machine}
-			// 							</td>
-			// 						</tr>
-			// 					))}
-			// 				</tbody>
-			// 			</table>
-			// 		);
-			// 	},
-			// },
 			{
 				accessorKey: 'not_approved_quantity',
 				header: 'Not App. QTY',

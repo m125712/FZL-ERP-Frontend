@@ -7,9 +7,9 @@ import { useAccess } from '@/hooks';
 import ReactTable from '@/components/Table';
 import { CustomLink, DateTime, SimpleDatePicker, Status } from '@/ui';
 
-import { cn } from '@/lib/utils';
-
 import { REPORT_DATE_FORMATE } from '../utils';
+
+THREAD;
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
@@ -196,6 +196,21 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
+					row.batch_number &&
+					REPORT_DATE_FORMATE(row.batch_created_at),
+				id: 'batch_created_at',
+				header: 'B/D',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.batch_created_at}
+						isTime={false}
+						customizedDateFormate='dd MMM,yyyy'
+					/>
+				),
+			},
+			{
+				accessorFn: (row) =>
 					row.production_date &&
 					REPORT_DATE_FORMATE(row.production_date),
 				id: 'production_date',
@@ -211,13 +226,19 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_quantity',
-				header: 'Qty',
+				header: 'B/Qty',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'yarn_issued',
 				header: 'Yarn',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'batch_expected_kg',
+				header: 'EB/KG',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -236,68 +257,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorFn: (row) => {
-			// 		return row.batch
-			// 			?.map((item) => item.batch_number)
-			// 			.join(', ');
-			// 	},
-			// 	id: 'batches',
-			// 	header: 'Batch',
-			// 	enableColumnFilter: false,
-			// 	cell: ({ row }) => {
-			// 		const { batches } = row.original;
-
-			// 		if (!batches?.length) return '--';
-
-			// 		return (
-			// 			<table className='border-2 border-gray-300'>
-			// 				<thead>
-			// 					<tr className='text-xs text-gray-600'>
-			// 						<th className={cn(rowStyle)}>BA/N</th>
-			// 						<th className={cn(rowStyle)}>Qty</th>
-			// 						<th className={cn(rowStyle)}>Yarn</th>
-			// 						<th className={cn(rowStyle)}>D/C</th>
-			// 						<th className={cn(rowStyle)}>M</th>
-			// 					</tr>
-			// 				</thead>
-			// 				<tbody>
-			// 					{batches?.map((item) => (
-			// 						<tr>
-			// 							<td className={cn(rowStyle)}>
-			// 								<CustomLink
-			// 									label={item.batch_number}
-			// 									url={`/dyeing-and-iron/thread-batch/${item.batch_uuid}`}
-			// 									openInNewTab={true}
-			// 									showCopyButton={false}
-			// 								/>
-			// 								<DateTime
-			// 									date={item.production_date}
-			// 									customizedDateFormate='dd MMM, yy'
-			// 									isTime={false}
-			// 								/>
-			// 							</td>
-			// 							<td className={cn(rowStyle)}>
-			// 								{item.total_quantity}
-			// 							</td>
-			// 							<td className={cn(rowStyle)}>
-			// 								{item.yarn_issued}
-			// 							</td>
-			// 							<td className={cn(rowStyle)}>
-			// 								<Status
-			// 									status={item.is_drying_complete}
-			// 								/>
-			// 							</td>{' '}
-			// 							<td className={cn(rowStyle)}>
-			// 								{item.machine}
-			// 							</td>
-			// 						</tr>
-			// 					))}
-			// 				</tbody>
-			// 			</table>
-			// 		);
-			// 	},
-			// },
 			{
 				accessorKey: 'not_approved_quantity',
 				header: 'Not App. QTY',

@@ -185,9 +185,6 @@ export default function Header({
 										onChange={(e) => {
 											onChange(e.value);
 										}}
-										isDisabled={
-											manual_pi_uuid !== undefined
-										}
 									/>
 								);
 							}}

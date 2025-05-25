@@ -72,3 +72,6 @@ export const consumptionTypes = [
 ];
 
 export const REPORT_DATE_FORMATE = (date) => format(date, 'dd-MMM-yyyy');
+
+export const REPORT_DATE_TIME_FORMAT = (date) =>
+	format(date, 'dd-MMM-yyyy HH:mm:ss');

@@ -217,9 +217,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorFn: (row) =>
-					row.drying_created_at &&
-					REPORT_DATE_FORMATE(row.drying_created_at),
+				accessorFn: (row) => row.drying_created_at,
 				id: 'drying_created_at',
 				header: 'Drying Created',
 				enableColumnFilter: false,
@@ -254,8 +252,7 @@ export default function Index() {
 
 			// * created_at
 			{
-				accessorFn: (row) =>
-					row.created_at && REPORT_DATE_FORMATE(row.created_at),
+				accessorFn: (row) => row.created_at,
 				id: 'created_at',
 				header: 'Created at',
 				enableColumnFilter: false,
@@ -266,8 +263,7 @@ export default function Index() {
 			},
 			// * updated_at
 			{
-				accessorFn: (row) =>
-					row.updated_at && REPORT_DATE_FORMATE(row.updated_at),
+				accessorFn: (row) => row.updated_at,
 				id: 'updated_at',
 				header: 'Updated at',
 				enableColumnFilter: false,

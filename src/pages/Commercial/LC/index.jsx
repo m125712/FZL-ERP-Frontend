@@ -157,7 +157,7 @@ export default function Index() {
 			{
 				accessorKey: 'file_number',
 				header: 'File No',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -170,7 +170,7 @@ export default function Index() {
 			{
 				accessorKey: 'lc_number',
 				header: 'LC Number',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					const url = `/commercial/lc/details/${uuid}`;

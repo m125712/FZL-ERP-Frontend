@@ -25,7 +25,7 @@ export default function index() {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				width: 'w-36',
 				cell: (info) => (
 					<LinkWithCopy
@@ -111,7 +111,7 @@ export default function index() {
 			},
 			{
 				accessorKey: 'approved',
-				header: 'Bulk Approved',
+				header: 'Bulk App.',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<StatusButton size='btn-xs' value={info.getValue()} />
@@ -119,7 +119,7 @@ export default function index() {
 			},
 			{
 				accessorKey: 'is_pps_req',
-				header: 'PP Approved',
+				header: 'PP App.',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<StatusButton size='btn-xs' value={info.getValue()} />
@@ -127,7 +127,12 @@ export default function index() {
 			},
 			{
 				accessorKey: 'order_quantity',
-				header: 'Order QTY',
+				header: (
+					<div className='flex flex-col'>
+						<span>Order </span>
+						<span>Qty</span>
+					</div>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

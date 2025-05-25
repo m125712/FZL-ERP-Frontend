@@ -50,7 +50,7 @@ export default function Index() {
 			{
 				accessorKey: 'batch_number',
 				header: 'Batch No.',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => (
 					<CustomLink
 						label={info.getValue()}

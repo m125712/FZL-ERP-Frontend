@@ -45,6 +45,12 @@ export default function index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'total_quantity',
+				header: 'Total Quantity',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'not_approved',
 				header: 'Not Approved',
 				enableColumnFilter: false,

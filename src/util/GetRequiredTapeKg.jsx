@@ -46,19 +46,19 @@ export const getRequiredTapeKg = ({
 	const isInch = unit?.toLowerCase() === 'inch';
 	const mtr_per_kg = type === 'raw' ? raw_mtr_per_kg : dyed_mtr_per_kg;
 
-	let total_size_in_mtr = 0;
+	let total_size_in_mtr_with_extra = 0;
 
 	if (order_type === 'tape') {
 		const quantity = input_quantity !== null ? input_quantity : size;
 
-		total_size_in_mtr = parseFloat(quantity); // * the size is given in MTR
+		total_size_in_mtr_with_extra = parseFloat(quantity); // * the size is given in MTR
 	} else {
 		const quantity =
 			input_quantity !== null ? input_quantity : order_quantity;
-		const extra =
-			quantity < 1000
-				? calculateExtraModel1({ item_name, quantity })
-				: calculateExtraModel2({ item_name, quantity });
+		// const extra =
+		// 	quantity < 1000
+		// 		? calculateExtraModel1({ item_name, quantity })
+		// 		: calculateExtraModel2({ item_name, quantity });
 
 		const top_bottom = parseFloat(top) + parseFloat(bottom);
 
@@ -70,8 +70,11 @@ export const getRequiredTapeKg = ({
 			total_size = top_bottom + parseFloat(size);
 		}
 
-		total_size_in_mtr = (total_size * parseFloat(quantity + extra)) / 100;
+		// total_size_in_mtr = (total_size * parseFloat(quantity + extra)) / 100;
+		const total_size_in_mtr = (total_size * parseFloat(quantity)) / 100;
+		total_size_in_mtr_with_extra =
+			total_size_in_mtr + 0.05 * total_size_in_mtr; // fixed 5% extra given
 	}
 
-	return total_size_in_mtr / parseFloat(mtr_per_kg);
+	return total_size_in_mtr_with_extra / parseFloat(mtr_per_kg);
 };

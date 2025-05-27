@@ -37,6 +37,7 @@ const ProductionSummary = lazy(
 const Consumption = lazy(() => import('@/pages/Report/Consumption'));
 
 const ThreadBatch = lazy(() => import('@/pages/Report/ThreadBatch'));
+const OrderSummaryPL = lazy(() => import('@/pages/Report/OrderSummaryPL'));
 
 export const ReportRoutes = [
 	{
@@ -173,6 +174,13 @@ export const ReportRoutes = [
 				path: '/report/order-summary',
 				element: <OrderSummary />,
 				page_name: 'report__order_summary',
+				actions: ['read', 'show_own_orders'],
+			},
+			{
+				name: 'Order Summary (PL)',
+				path: '/report/order-summary-pl',
+				element: <OrderSummaryPL />,
+				page_name: 'report__order_summary_pl',
 				actions: ['read', 'show_own_orders'],
 			},
 			{

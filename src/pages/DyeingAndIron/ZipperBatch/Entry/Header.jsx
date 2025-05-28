@@ -7,6 +7,11 @@ import { FormField, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
 
 import cn from '@/lib/cn';
 
+const batchType = [
+	{ value: 'normal', label: 'Normal' },
+	{ value: 'extra', label: 'Extra' },
+];
+
 export default function Header({
 	Controller,
 	register,
@@ -15,7 +20,6 @@ export default function Header({
 	watch,
 	getValues,
 	setValue,
-	reset,
 	totalQuantity,
 	totalCalTape,
 	isUpdate,
@@ -28,17 +32,13 @@ export default function Header({
 			? format(new Date(watch('production_date')), 'yyyy-MM-dd')
 			: ''
 	);
-
-	const { data: orders } = useOtherOrder('page=dyeing_batch');
-
 	const res = machine?.find(
 		(item) => item.value == getValues('machine_uuid')
 	);
 
-	// filtering the machines with available slots in can_book is true
-	// const filtered_machine = machine
-	// 	? machine?.filter((item) => item.can_book == true)
-	// 	: [];
+	const { data: orders } = useOtherOrder('page=dyeing_batch', {
+		enabled: !isUpdate && watch('batch_type') === 'extra',
+	});
 
 	// setting the setSLot sate if the request is for update to show the options for slots
 	useEffect(() => {
@@ -78,11 +78,6 @@ export default function Header({
 		}
 	}, [machine, watch('machine_uuid')]);
 
-	const batchType = [
-		{ value: 'normal', label: 'Normal' },
-		{ value: 'extra', label: 'Extra' },
-	];
-
 	return (
 		<div className='flex flex-col gap-4'>
 			<SectionEntryBody
@@ -103,7 +98,7 @@ export default function Header({
 										? 'text-error'
 										: ''
 								)}
-							>{`Batch Quantity (KG): ${Number(totalCalTape).toFixed(3)}`}</span>
+							>{`Batch Quantity (With 5% Extra) (KG): ${Number(totalCalTape).toFixed(3)}`}</span>
 							<br />
 							<span>{`Batch Quantity (PCS): ${totalQuantity}`}</span>
 						</div>

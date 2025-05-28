@@ -43,13 +43,13 @@ export default function index() {
 		postData,
 		updateData,
 		deleteData,
-		invalidateQuery: invalidateNewFinishingBatch,
+		invalidateQuery: invalidateDetails,
 	} = useDyeingFinishingBatchByUUID(batch_uuid, 'is_update=true');
 
-	const { invalidateQuery: invalidateDetails } =
-		useDyeingFinishingBatchByUUID(batch_uuid);
-
-	const { invalidateQuery } = useDyeingFinishingBatch(`type=pending`);
+	const { invalidateQuery } = useDyeingFinishingBatch(
+		`type=pending`,
+		!isUpdate
+	);
 	// const { invalidateQuery: invalidateSliderAssembly } =
 	// 	useSliderAssemblyProduction();
 
@@ -133,7 +133,7 @@ export default function index() {
 	}, [batchOrders, watch('order_description_uuid'), data]);
 
 	const onSubmit = async (data) => {
-		// * seperate the finishing_batch_entry and new_finishing_batch_entry
+		// * separate the finishing_batch_entry and new_finishing_batch_entry
 		const { finishing_batch_entry, new_finishing_batch_entry, ...rest } =
 			data;
 
@@ -431,8 +431,8 @@ export default function index() {
 					>
 						<tr className='bg-slate-100'>
 							<td
-								colSpan={6}
-								className='p-2 text-right font-semibold'
+								colSpan={5}
+								className='pe-2 text-right font-semibold'
 							>
 								Total:
 							</td>
@@ -445,7 +445,7 @@ export default function index() {
 						</tr>
 					</ReactTable>
 
-					{isUpdate && (
+					{isUpdate && NewBatchOrdersField?.length > 0 && (
 						<ReactTable
 							title={'Add New Batch Orders'}
 							data={NewBatchOrdersField}

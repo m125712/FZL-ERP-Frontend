@@ -274,7 +274,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: '/zipper/dyed-tape-transaction',
 						deleteData,
 					}}
 				/>

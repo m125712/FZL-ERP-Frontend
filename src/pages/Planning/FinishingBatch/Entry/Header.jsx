@@ -1,5 +1,4 @@
 import {
-	useGetURLData,
 	useOtherOrderDescription,
 	useOtherPlanningBatchByDate,
 } from '@/state/Other';
@@ -19,6 +18,13 @@ import { cn } from '@/lib/utils';
 
 import QuantityCard from './quantity-card';
 
+const statuses = [
+	{ value: 'running', label: 'Running' },
+	{ value: 'completed', label: 'Completed' },
+	{ value: 'hold', label: 'Hold' },
+	{ value: 'rejected ', label: 'Rejected ' },
+];
+
 export default function Header({
 	register,
 	errors,
@@ -35,14 +41,9 @@ export default function Header({
 }) {
 	const { batch_uuid } = useParams();
 	const { originalData } = useOtherOrderDescription(
-		`dyed_tape_required=false&swatch_approved=true&is_balance=true&is_update=${isUpdate}`
+		`dyed_tape_required=false&swatch_approved=true&is_balance=true&is_update=${isUpdate}&od_uuid=${watch('order_description_uuid')}`,
+		{ enabled: !!watch('order_description_uuid') }
 	);
-	const statuses = [
-		{ value: 'running', label: 'Running' },
-		{ value: 'completed', label: 'Completed' },
-		{ value: 'hold', label: 'Hold' },
-		{ value: 'rejected ', label: 'Rejected ' },
-	];
 
 	const { data: batches } = useOtherPlanningBatchByDate(
 		watch('production_date')
@@ -51,15 +52,6 @@ export default function Header({
 		watch('order_description_uuid'),
 		!!(watch('order_description_uuid') && watch('production_date'))
 	);
-
-	// const { data: qty } = useGetURLData(
-	// 	`/zipper/finishing-batch-entry/production-quantity/max/${watch('order_description_uuid')}?production_date=${watch('production_date') ? format(watch('production_date'), 'yyyy-MM-dd') : ''}`,
-	// 	{
-	// 		enabled: !!(
-	// 			watch('order_description_uuid') && watch('production_date')
-	// 		),
-	// 	}
-	// );
 
 	return (
 		<div className='flex flex-col gap-8'>

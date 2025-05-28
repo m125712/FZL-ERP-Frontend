@@ -69,13 +69,17 @@ export const useOtherMarketing = () =>
 	});
 
 // GET OTHER ORDER
-export const useOtherOrder = (query) =>
+export const useOtherOrder = (
+	query,
+	{ enabled = true, refetchOnWindowFocus = false }
+) =>
 	createGlobalState({
 		queryKey: otherQK.order(query),
 		url: query
 			? `/other/order/info/value/label?${query}`
 			: '/other/order/info/value/label',
-		refetchOnWindowFocus: false,
+		enabled,
+		refetchOnWindowFocus,
 	});
 
 // GET OTHER ORDER FOR PACKING LIST
@@ -110,12 +114,13 @@ export const useThreadOrderForChallan = () =>
 		url: '/other/thread/value/label?page=challan',
 	});
 
-export const useOtherOrderDescription = (params) =>
+export const useOtherOrderDescription = (params, { enabled = true }) =>
 	createGlobalState({
 		queryKey: otherQK.orderDescription(params),
 		url: params
 			? `/other/order/description/value/label?${params}`
 			: '/other/order/description/value/label',
+		enabled,
 	});
 
 export const useOtherPlanningBatchByDate = (date, uuid, enabled = false) =>

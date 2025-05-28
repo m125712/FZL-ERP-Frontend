@@ -172,12 +172,13 @@ export const useDyeingDummy = () =>
 
 //? Finishing Batch
 //* Get all Finishing Batch
-export const useDyeingFinishingBatch = (query) =>
+export const useDyeingFinishingBatch = (query, enabled = false) =>
 	createGlobalState({
 		queryKey: dyeingQK.finishingBatch(query),
 		url: query
 			? `/zipper/finishing-batch?${query}`
 			: '/zipper/finishing-batch',
+		enabled,
 	});
 
 //* Overview

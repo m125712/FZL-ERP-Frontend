@@ -170,7 +170,7 @@ export const ReportRoutes = [
 				actions: ['read'],
 			},
 			{
-				name: 'Order Summary',
+				name: 'Order Summary (Challan)',
 				path: '/report/order-summary',
 				element: <OrderSummary />,
 				page_name: 'report__order_summary',

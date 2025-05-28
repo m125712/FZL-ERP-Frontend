@@ -71,7 +71,8 @@ export const useOtherMarketing = () =>
 // GET OTHER ORDER
 export const useOtherOrder = (
 	query,
-	{ enabled = true, refetchOnWindowFocus = false }
+	enabled = true,
+	refetchOnWindowFocus = false
 ) =>
 	createGlobalState({
 		queryKey: otherQK.order(query),
@@ -114,7 +115,7 @@ export const useThreadOrderForChallan = () =>
 		url: '/other/thread/value/label?page=challan',
 	});
 
-export const useOtherOrderDescription = (params, { enabled = true }) =>
+export const useOtherOrderDescription = (params, enabled = true) =>
 	createGlobalState({
 		queryKey: otherQK.orderDescription(params),
 		url: params

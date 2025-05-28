@@ -42,7 +42,7 @@ export default function Header({
 	const { batch_uuid } = useParams();
 	const { originalData } = useOtherOrderDescription(
 		`dyed_tape_required=false&swatch_approved=true&is_balance=true&is_update=${isUpdate}&od_uuid=${watch('order_description_uuid')}`,
-		{ enabled: !!watch('order_description_uuid') }
+		!!watch('order_description_uuid')
 	);
 
 	const { data: batches } = useOtherPlanningBatchByDate(

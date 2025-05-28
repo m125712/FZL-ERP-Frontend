@@ -36,9 +36,10 @@ export default function Header({
 		(item) => item.value == getValues('machine_uuid')
 	);
 
-	const { data: orders } = useOtherOrder('page=dyeing_batch', {
-		enabled: !isUpdate && watch('batch_type') === 'extra',
-	});
+	const { data: orders } = useOtherOrder(
+		'page=dyeing_batch',
+		!isUpdate && watch('batch_type') === 'extra'
+	);
 
 	// setting the setSLot sate if the request is for update to show the options for slots
 	useEffect(() => {

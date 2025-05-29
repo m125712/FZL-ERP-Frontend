@@ -6,6 +6,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import {
 	CustomLink,
 	DateTime,
@@ -15,6 +16,7 @@ import {
 	StatusSelect,
 } from '@/ui';
 
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
@@ -55,13 +57,51 @@ export default function Index() {
 	const haveAccess = useAccess('thread__order_info_details');
 	const { user } = useAuth();
 
-	const { data, isLoading, url, deleteData } = useThreadOrderInfoByQuery(
-		getPath(haveAccess, user?.uuid) + `&type=${status}`,
-		{
-			enabled: !!user?.uuid,
-		}
-	);
-
+	const { data, isLoading, url, deleteData, updateData } =
+		useThreadOrderInfoByQuery(
+			getPath(haveAccess, user?.uuid) + `&type=${status}`,
+			{
+				enabled: !!user?.uuid,
+			}
+		);
+	const handelSNOFromHeadOfficeStatus = async (idx) => {
+		await updateData.mutateAsync({
+			url: `/thread/order-info/send-from-ho/update/by/${data[idx]?.uuid}`,
+			updatedData: {
+				sno_from_head_office:
+					data[idx]?.sno_from_head_office === true ? false : true,
+				sno_from_head_office_time:
+					data[idx]?.sno_from_head_office === true
+						? null
+						: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
+	};
+	const handelReceiveByFactoryStatus = async (idx) => {
+		await updateData.mutateAsync({
+			url: `/thread/order-info/receive-from-factory/update/by/${data[idx]?.uuid}`,
+			updatedData: {
+				receive_by_factory:
+					data[idx]?.receive_by_factory === true ? false : true,
+				receive_by_factory_time:
+					data[idx]?.receive_by_factory === true
+						? null
+						: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
+	};
+	const handelProductionPausedStatus = async (idx) => {
+		await updateData.mutateAsync({
+			url: `/thread/order-info/production-pause/update/by/${data[idx]?.uuid}`,
+			updatedData: {
+				production_pause:
+					data[idx]?.production_pause === true ? false : true,
+			},
+			isOnCloseNeeded: false,
+		});
+	};
 	const info = new PageInfo('Order Info', url, 'thread__order_info_details');
 
 	const columns = useMemo(
@@ -107,6 +147,103 @@ export default function Index() {
 									/>
 								</>
 							)}
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'production_pause',
+				header: (
+					<>
+						Production <br />
+						Paused
+					</>
+				),
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_production_paused'
+					);
+
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelProductionPausedStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+						</div>
+					);
+				},
+			},
+
+			{
+				accessorKey: 'sno_from_head_office',
+				header: (
+					<>
+						SNO From <br />
+						Head Office
+					</>
+				),
+				enableColumnFilter: true,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_sno_from_head_office'
+					);
+					const { sno_from_head_office_time } = info.row.original;
+
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelSNOFromHeadOfficeStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={sno_from_head_office_time} />
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'receive_by_factory',
+				header: (
+					<>
+						Receive By <br />
+						Factory
+					</>
+				),
+				enableColumnFilter: true,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_receive_by_factory'
+					);
+
+					const { receive_by_factory_time } = info.row.original;
+					const { sno_from_head_office } = info.row.original;
+
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission || !sno_from_head_office}
+								onChange={() => {
+									handelReceiveByFactoryStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={receive_by_factory_time} />
 						</div>
 					);
 				},

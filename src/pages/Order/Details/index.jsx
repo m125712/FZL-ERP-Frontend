@@ -89,7 +89,6 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 	};
-
 	const handleWhatsApp = (idx) => {
 		const val = data[idx];
 

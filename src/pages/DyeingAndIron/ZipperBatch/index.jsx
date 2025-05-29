@@ -34,6 +34,26 @@ export default function Index() {
 
 	const columns = useMemo(
 		() => [
+			// * actions
+			{
+				accessorKey: 'actions',
+				header: 'Actions',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('update'),
+				width: 'w-24',
+				cell: (info) => (
+					<EditDelete
+						idx={info.row.index}
+						handelUpdate={handelUpdate}
+						showUpdate={
+							haveAccess.includes('update') &&
+							info.row.original.received == 0
+						}
+						showDelete={false}
+					/>
+				),
+			},
 			{
 				accessorKey: 'batch_id',
 				header: 'Batch ID',
@@ -292,26 +312,6 @@ export default function Index() {
 				width: 'w-24',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
-			},
-			// * actions
-			{
-				accessorKey: 'actions',
-				header: 'Actions',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
-				width: 'w-24',
-				cell: (info) => (
-					<EditDelete
-						idx={info.row.index}
-						handelUpdate={handelUpdate}
-						showUpdate={
-							haveAccess.includes('update') &&
-							info.row.original.received == 0
-						}
-						showDelete={false}
-					/>
-				),
 			},
 		],
 		[data, status]

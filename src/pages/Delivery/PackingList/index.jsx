@@ -219,6 +219,7 @@ export default function Index() {
 			{
 				accessorKey: 'challan_number',
 				header: 'Challan',
+				enableColumnFilter: true,
 				width: 'w-36',
 				cell: (info) => {
 					const { challan_number, challan_uuid } = info.row.original;

@@ -1897,6 +1897,14 @@ export const reportQK = {
 		'order-summary-report',
 		uuid,
 	],
+
+	//* Order Summary PL Report
+	orderSummaryPlReport: (uuid) => [
+		...reportQK.all(),
+		'order-summary-pl-report',
+		uuid,
+	],
+
 	//* Delivery Report
 	deliveryReportZipper: (from, to, query) => [
 		...reportQK.all(),

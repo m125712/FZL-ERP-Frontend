@@ -29,7 +29,8 @@ export default function index() {
 	const haveAccess = useAccess('planning__finishing_batch');
 
 	const { data, isLoading, url, updateData } = useDyeingFinishingBatch(
-		`type=${status}`
+		`type=${status}`,
+		true
 	);
 
 	const info = new PageInfo('Batch', url, 'planning__finishing_batch');
@@ -48,8 +49,29 @@ export default function index() {
 		});
 	};
 
+	const isCompletedTogglePermission = haveAccess.includes(
+		'click_status_complete'
+	);
+	const showActions = haveAccess.includes('update');
+
 	const columns = useMemo(
 		() => [
+			{
+				accessorKey: 'actions',
+				header: 'Actions',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !showActions,
+				width: 'w-8',
+				cell: (info) => (
+					<EditDelete
+						idx={info.row.index}
+						handelUpdate={handelUpdate}
+						showDelete={false}
+						showUpdate={showActions}
+					/>
+				),
+			},
 			{
 				accessorKey: 'batch_number',
 				header: 'Batch',
@@ -99,6 +121,7 @@ export default function index() {
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
+				width: 'w-44',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -119,13 +142,9 @@ export default function index() {
 				header: 'Completed',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const permission = haveAccess.includes(
-						'click_status_complete'
-					);
-
 					return (
 						<SwitchToggle
-							disabled={!permission}
+							disabled={!isCompletedTogglePermission}
 							onChange={() => {
 								handelCompleteStatus(info.row.index);
 							}}
@@ -298,24 +317,8 @@ export default function index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'actions',
-				header: 'Actions',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
-				width: 'w-24',
-				cell: (info) => (
-					<EditDelete
-						idx={info.row.index}
-						handelUpdate={handelUpdate}
-						showDelete={false}
-						showUpdate={haveAccess.includes('update')}
-					/>
-				),
-			},
 		],
-		[data]
+		[data, haveAccess]
 	);
 
 	const handelAdd = () => navigate('/planning/finishing-batch/entry');

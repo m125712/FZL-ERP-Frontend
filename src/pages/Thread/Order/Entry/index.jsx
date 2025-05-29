@@ -187,11 +187,14 @@ export default function Index() {
 				});
 			});
 
-			const entryCreatePromise = await postData.mutateAsync({
-				url: threadOrderEntryUrl,
-				newData: newEntry,
-				isOnCloseNeeded: false,
-			});
+			const entryCreatePromise =
+				newEntry.length > 0
+					? await postData.mutateAsync({
+							url: threadOrderEntryUrl,
+							newData: newEntry,
+							isOnCloseNeeded: false,
+						})
+					: null;
 
 			try {
 				await Promise.all([

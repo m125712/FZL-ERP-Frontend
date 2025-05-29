@@ -25,7 +25,7 @@ export default function index() {
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				width: 'w-36',
 				cell: (info) => (
 					<LinkWithCopy
@@ -65,24 +65,7 @@ export default function index() {
 			// 	width: 'w-28',
 			// 	cell: (info) => info.getValue(),
 			// },
-			{
-				accessorFn: (row) =>
-					row.order_type == 'slider' ? '--' : row.recipe_id,
-				id: 'recipe_id',
-				header: 'Recipe',
-				enableColumnFilter: true,
-				cell: (info) => {
-					info.getValue();
 
-					if (info.row.original.order_type == 'slider') return '--';
-					return (
-						<CustomLink
-							label={info.getValue()}
-							url={`/lab-dip/recipe/details/${info.row.original.recipe_uuid}`}
-						/>
-					);
-				},
-			},
 			{
 				accessorKey: 'style',
 				header: 'Style',
@@ -98,6 +81,25 @@ export default function index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorFn: (row) =>
+					row.order_type == 'slider' ? '--' : row.recipe_id,
+				id: 'recipe_id',
+				header: 'Recipe',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => {
+					info.getValue();
+
+					if (info.row.original.order_type == 'slider') return '--';
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/lab-dip/recipe/details/${info.row.original.recipe_uuid}`}
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'size',
 				header: 'Size',
 				enableColumnFilter: false,
@@ -111,7 +113,12 @@ export default function index() {
 			},
 			{
 				accessorKey: 'approved',
-				header: 'Bulk Approved',
+				header: (
+					<>
+						Bulk <br />
+						App.
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => (
 					<StatusButton size='btn-xs' value={info.getValue()} />
@@ -119,7 +126,12 @@ export default function index() {
 			},
 			{
 				accessorKey: 'is_pps_req',
-				header: 'PP Approved',
+				header: (
+					<>
+						PP <br />
+						App.
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => (
 					<StatusButton size='btn-xs' value={info.getValue()} />
@@ -127,7 +139,12 @@ export default function index() {
 			},
 			{
 				accessorKey: 'order_quantity',
-				header: 'Order QTY',
+				header: (
+					<>
+						Order <br />
+						Qty
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -147,6 +164,7 @@ export default function index() {
 		<div>
 			<ReactTable
 				title={'Order Overview'}
+				subtitle='all the orders with the recipe setup and tape assigned to them'
 				data={data}
 				columns={columns}
 			/>

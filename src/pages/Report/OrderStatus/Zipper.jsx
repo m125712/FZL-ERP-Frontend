@@ -7,7 +7,7 @@ import { useAccess } from '@/hooks';
 import ReactTable from '@/components/Table';
 import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
 
-import { REPORT_DATE_FORMATE } from '../utils';
+import { REPORT_DATE_FORMATE, REPORT_DATE_TIME_FORMAT } from '../utils';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
@@ -124,7 +124,7 @@ export default function Index() {
 						? row.lc_numbers
 						: [];
 					if (lcArr.length === 0) return '--';
-					return lcArr.map((pi) => pi.pi_number).join(', ');
+					return lcArr.map((pi) => pi.lc_numbers).join(', ');
 				},
 				id: 'lc_numbers',
 				header: <>LC No.</>,
@@ -134,11 +134,11 @@ export default function Index() {
 						? info.row.original.lc_numbers
 						: [];
 					if (lcArr.length === 0) return '--';
-					return lcArr.map((pi) => (
+					return lcArr.map((lc) => (
 						<CustomLink
-							key={pi.pi_number}
-							label={pi.pi_number}
-							url={`/commercial/pi/${pi.pi_number}`}
+							key={lc.lc_number}
+							label={lc.lc_number}
+							url={`/commercial/lc/details/${lc.lc_uuid}`}
 							openInNewTab
 						/>
 					));
@@ -251,30 +251,14 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					row.batch_number &&
-					REPORT_DATE_FORMATE(row.batch_created_at),
+					row.batch_created_at &&
+					REPORT_DATE_TIME_FORMAT(row.batch_created_at),
 				id: 'batch_created_at',
 				header: 'B/D',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime
 						date={info.row.original.batch_created_at}
-						isTime={false}
-						customizedDateFormate='dd MMM,yyyy'
-					/>
-				),
-			},
-			{
-				accessorFn: (row) =>
-					row.production_date &&
-					REPORT_DATE_FORMATE(row.production_date),
-				id: 'production_date',
-				header: 'P/D',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime
-						date={info.row.original.production_date}
-						isTime={false}
 						customizedDateFormate='dd MMM,yyyy'
 					/>
 				),
@@ -290,6 +274,21 @@ export default function Index() {
 				header: 'B/Kg',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) =>
+					row.production_date &&
+					REPORT_DATE_FORMATE(row.production_date),
+				id: 'production_date',
+				header: 'P/D',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.production_date}
+						isTime={false}
+						customizedDateFormate='dd MMM,yyyy'
+					/>
+				),
 			},
 			{
 				accessorKey: 'batch_expected_kg',

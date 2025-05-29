@@ -344,6 +344,13 @@ export const useOrderSummary = (uuid) =>
 		enabled: !!uuid,
 	});
 
+export const useOrderSummaryPl = (uuid) =>
+	createGlobalState({
+		queryKey: reportQK.orderSummaryPlReport(uuid),
+		url: `/report/order-register-report-for-packing-list/${uuid}`,
+		enabled: !!uuid,
+	});
+
 //* Delivery Report
 export const useDeliveryReportZipper = (
 	from,

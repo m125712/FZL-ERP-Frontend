@@ -109,7 +109,7 @@ export const Columns = ({
 			enableColumnFilter: false,
 			enableSorting: false,
 			cell: (info) => {
-				const idx = info.row.index;
+				const { index } = info.row;
 				return (
 					<div className='flex gap-4'>
 						{!isUpdate && (
@@ -117,7 +117,7 @@ export const Columns = ({
 								className='btn btn-primary btn-xs'
 								onClick={() =>
 									setValue(
-										`finishing_batch_entry[${idx}].quantity`,
+										`finishing_batch_entry[${index}].quantity`,
 										info.getValue(),
 										{
 											shouldDirty: true,

@@ -37,7 +37,8 @@ export default function Order() {
 			{
 				accessorKey: 'name',
 				header: 'Name',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
+				width: 'w-32',
 				cell: (info) => (
 					<span className='capitalize'>{info.getValue()}</span>
 				),

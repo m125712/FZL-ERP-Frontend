@@ -5,6 +5,7 @@ import { useAccess } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 import { InfoColumns } from '../columns';
@@ -13,7 +14,7 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData, invalidateQuery } =
+	const { data, isLoading, url, updateData, deleteData, invalidateQuery } =
 		useOrderInfo();
 	const info = new PageInfo(
 		'Party Description',
@@ -62,12 +63,53 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
+	const handelSNOFromHeadOfficeStatus = async (idx) => {
+		await updateData.mutateAsync({
+			url: `/zipper/order-info/send-from-ho/update/by/${data[idx]?.uuid}`,
+			updatedData: {
+				sno_from_head_office:
+					data[idx]?.sno_from_head_office === true ? false : true,
+				sno_from_head_office_time:
+					data[idx]?.sno_from_head_office === true
+						? null
+						: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
+	};
 
+	const handelReceiveByFactoryStatus = async (idx) => {
+		await updateData.mutateAsync({
+			url: `/zipper/order-info/receive-from-factory/update/by/${data[idx]?.uuid}`,
+			updatedData: {
+				receive_by_factory:
+					data[idx]?.receive_by_factory === true ? false : true,
+				receive_by_factory_time:
+					data[idx]?.receive_by_factory === true
+						? null
+						: GetDateTime(),
+			},
+			isOnCloseNeeded: false,
+		});
+	};
+	const handelProductionPausedStatus = async (idx) => {
+		await updateData.mutateAsync({
+			url: `/zipper/order-info/production-pause/update/by/${data[idx]?.uuid}`,
+			updatedData: {
+				production_pause:
+					data[idx]?.production_pause === true ? false : true,
+			},
+			isOnCloseNeeded: false,
+		});
+	};
 	const columns = InfoColumns({
 		handelUpdate,
 		handelDelete,
 		haveAccess,
 		data,
+		handelSNOFromHeadOfficeStatus,
+		handelReceiveByFactoryStatus,
+		handelProductionPausedStatus,
 	});
 
 	if (isLoading)

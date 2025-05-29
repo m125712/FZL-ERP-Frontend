@@ -31,6 +31,10 @@ export const ThreadRoutes = [
 					'show_approved_orders',
 					'show_price',
 					'show_cash_bill_lc',
+					'click_status_marketing_checked',
+					'click_status_production_paused',
+					'click_status_sno_from_head_office',
+					'click_status_receive_by_factory',
 				],
 			},
 			{

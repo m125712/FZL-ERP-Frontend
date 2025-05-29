@@ -264,6 +264,9 @@ export const InfoColumns = ({
 	handelDelete,
 	haveAccess,
 	data,
+	handelSNOFromHeadOfficeStatus,
+	handelReceiveByFactoryStatus,
+	handelProductionPausedStatus,
 }) => {
 	return useMemo(
 		() => [
@@ -278,6 +281,106 @@ export const InfoColumns = ({
 						value={info.row.original.is_canceled}
 					/>
 				),
+			},
+			{
+				accessorKey: 'production_pause',
+				header: (
+					<>
+						Production <br />
+						Paused
+					</>
+				),
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_production_paused'
+					);
+
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelProductionPausedStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+						</div>
+					);
+				},
+			},
+
+			{
+				accessorKey: 'sno_from_head_office',
+				header: (
+					<>
+						SNO From <br />
+						Head Office
+					</>
+				),
+				enableColumnFilter: true,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_sno_from_head_office'
+					);
+
+					const { sno_from_head_office_time } = info.row.original;
+
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelSNOFromHeadOfficeStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={sno_from_head_office_time} />
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'receive_by_factory',
+				header: (
+					<>
+						Receive By <br />
+						Factory
+					</>
+				),
+				enableColumnFilter: true,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_receive_by_factory'
+					);
+
+					const { receive_by_factory_time } = info.row.original;
+
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={
+									!permission ||
+									!info.row.original.sno_from_head_office
+								}
+								onChange={() => {
+									handelReceiveByFactoryStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={receive_by_factory_time} />
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'id',
@@ -377,6 +480,9 @@ export const DetailsColumns = ({
 	data,
 	handleWhatsApp,
 	handelMarketingCheckedStatus,
+	handelSNOFromHeadOfficeStatus,
+	handelReceiveByFactoryStatus,
+	handelProductionPausedStatus,
 }) => {
 	return useMemo(
 		() => [
@@ -425,6 +531,7 @@ export const DetailsColumns = ({
 				width: 'w-36',
 				cell: (info) => info.getValue(),
 			},
+
 			{
 				accessorKey: 'item_description',
 				header: 'Item',

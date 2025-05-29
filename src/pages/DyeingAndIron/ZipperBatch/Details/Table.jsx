@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-import { DateTime, LinkWithCopy } from '@/ui';
+import { DateTime, LinkWithCopy, StatusButton } from '@/ui';
 
 import { getRequiredTapeKg } from '@/util/GetRequiredTapeKg';
 
@@ -35,22 +35,40 @@ export default function Index({ dyeing_batch_entry }) {
 		() => [
 			{
 				accessorKey: 'order_number',
-				header: 'O/N',
-				enableColumnFilter: false,
+				header: 'Order ID',
+				width: 'w-36',
+				enableSorting: true,
 				cell: (info) => {
+					const { order_number, order_type, bleaching } =
+						info.row.original;
+					const isBleached = bleaching === 'bleach';
 					return (
-						<LinkWithCopy
-							title={info.getValue()}
-							id={info.getValue()}
-							uri='/order/details'
-						/>
+						<div className='flex flex-col gap-1'>
+							<LinkWithCopy
+								title={info.getValue()}
+								id={order_number}
+								uri='/order/details'
+							/>
+
+							<div className='grid grid-cols-2 gap-1'>
+								<span>Type:</span>
+								<span>{order_type}</span>
+								<span>Bleach:</span>
+								<StatusButton
+									value={isBleached}
+									className='h-4 min-h-4 pl-1 pr-1 text-xs'
+								/>
+							</div>
+						</div>
 					);
 				},
 			},
 			{
 				accessorKey: 'item_description',
 				header: 'Item Description',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
+				width: 'w-36',
+				enableSorting: true,
 			},
 			{
 				accessorKey: 'style',
@@ -63,10 +81,42 @@ export default function Index({ dyeing_batch_entry }) {
 				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'bleaching',
-				header: 'Bleaching',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				accessorKey: 'recipe_name',
+				header: 'Recipe',
+				enableColumnFilter: true,
+				enableSorting: true,
+				width: 'w-44',
+				cell: (info) => {
+					const {
+						recipe_name,
+						approved,
+						approved_date,
+						is_pps_req,
+						is_pps_req_date,
+					} = info.row.original;
+					return (
+						<div className='flex flex-col gap-1'>
+							<span>{recipe_name}</span>
+							<div className='grid grid-cols-3 gap-1'>
+								Bulk:
+								<StatusButton
+									value={approved}
+									className='h-4 min-h-4 pl-1 pr-1 text-xs'
+								/>
+								<DateTime date={approved_date} isTime={false} />
+								PP:
+								<StatusButton
+									value={is_pps_req}
+									className='h-4 min-h-4 pl-1 pr-1 text-xs'
+								/>
+								<DateTime
+									date={is_pps_req_date}
+									isTime={false}
+								/>
+							</div>
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'size',

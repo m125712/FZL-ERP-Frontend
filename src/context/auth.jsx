@@ -96,7 +96,7 @@ const AuthProvider = ({ children }) => {
 	}, [userCookie, userCanAccess]);
 
 	const value = {
-		signed: !!authCookie,
+		signed: !!userCookie,
 		user,
 		userCanAccess,
 		userCookie,

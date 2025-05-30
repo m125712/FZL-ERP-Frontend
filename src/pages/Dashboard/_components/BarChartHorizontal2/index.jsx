@@ -8,7 +8,6 @@ import {
 	YAxis,
 } from 'recharts';
 
-import Loader from '@/components/layout/loader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
 	ChartContainer,
@@ -47,7 +46,9 @@ export function BarChartHorizontal2(props) {
 	}));
 
 	if (isLoading) {
-		return <Loader />;
+		return (
+			<div className='skeleton aspect-auto h-[400px] w-full rounded-lg'></div>
+		);
 	}
 
 	return (

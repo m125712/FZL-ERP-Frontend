@@ -1,10 +1,8 @@
 import { useMemo, useState } from 'react';
 import { format, subDays, subMonths } from 'date-fns';
-import { RefreshCw } from 'lucide-react';
 import numeral from 'numeral';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
-import Loader from '@/components/layout/loader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
 	ChartContainer,
@@ -63,7 +61,9 @@ export function BarChartOverall() {
 	);
 
 	if (isLoading) {
-		return <Loader />;
+		return (
+			<div className='skeleton aspect-auto h-[400px] w-full rounded-lg border'></div>
+		);
 	}
 
 	return (

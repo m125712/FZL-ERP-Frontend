@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
-import { Outlet, useResolvedPath } from 'react-router';
+import { useAuth } from '@/context/auth';
+import { Navigate, Outlet, useResolvedPath } from 'react-router';
 
 import { cn } from '@/lib/utils';
 
@@ -10,6 +11,9 @@ import Sidebar from './sidebar';
 
 const Layout = () => {
 	const { pathname } = useResolvedPath();
+	const { signed } = useAuth();
+
+	if (!signed) return <Navigate to={`/login`} replace />;
 
 	return (
 		<LayoutProvider>

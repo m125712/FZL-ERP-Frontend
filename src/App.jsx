@@ -4,10 +4,12 @@ import { RouterProvider } from 'react-router/dom';
 
 import { Toast } from '@/components/Toast';
 
+import { Loader } from './components/Feedback';
+
 function App() {
 	return (
 		<AuthProvider>
-			<RouterProvider router={router} />
+			<RouterProvider router={router} fallbackElement={<Loader />} />
 			<Toast />
 		</AuthProvider>
 	);

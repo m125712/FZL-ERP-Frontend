@@ -7,7 +7,7 @@ import Layout from '@/components/layout';
 
 import { flatRoutes } from '.';
 
-export const router = createBrowserRouter([
+const routes = [
 	{
 		path: '/login',
 		element: <Login />,
@@ -28,4 +28,6 @@ export const router = createBrowserRouter([
 		element: <Layout />,
 		children: flatRoutes,
 	},
-]);
+];
+
+export const router = createBrowserRouter(routes);

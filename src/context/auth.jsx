@@ -5,7 +5,6 @@ import {
 	useEffect,
 	useState,
 } from 'react';
-import { firstRoute } from '@/routes';
 import { useCookie, useLocalStorage } from '@/hooks';
 
 import { ShowToast } from '@/components/Toast';
@@ -27,6 +26,11 @@ const AuthProvider = ({ children }) => {
 	const Login = async (data) => {
 		try {
 			const res = await api.post('/hr/user/login', data);
+			if (res?.data?.status === 400) {
+				ShowToast(res?.data);
+				return false;
+			}
+
 			const { token, user: loginUser, can_access } = res?.data;
 
 			updateAuthCookie(`Bearer ` + token || '');
@@ -39,23 +43,17 @@ const AuthProvider = ({ children }) => {
 			updateUserCookie(userData || '');
 			updateUserCanAccess(can_access || '');
 
-			// const path = firstRoute?.path || '/login';
 			const path = '/profile';
-			window.location.href = path;
-
-			// ! it is the main point where the user will be redirected to its first page after login
-			// ! but because of path = undefined, the user is redirected undefined route
-			// ! need to check this
-			// if (token && userData && can_access)
-			// 	return (window.location.href = path);
-
-			// ShowToast({
-			// 	type: res?.data?.type,
-			// 	message: res?.data?.message,
-			// });
+			// window.location.href = path;
+			return true;
 		} catch (error) {
-			ShowToast(error.response);
+			console.log(error);
+			ShowToast({
+				type: 'error',
+				message: error?.code,
+			});
 		}
+		return false;
 	};
 
 	const Logout = useCallback(async () => {
@@ -98,7 +96,7 @@ const AuthProvider = ({ children }) => {
 	}, [userCookie, userCanAccess]);
 
 	const value = {
-		signed: !!user,
+		signed: !!authCookie,
 		user,
 		userCanAccess,
 		userCookie,

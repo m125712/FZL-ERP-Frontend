@@ -1,9 +1,13 @@
-function filterRoutes(routes) {
+const getUserAccessList = () => {
 	const can_access = localStorage.getItem('can_access');
 
 	if (String(can_access).length < 3) return [];
 
-	const userAccess = JSON.parse(JSON.parse(can_access)) || {};
+	return JSON.parse(JSON.parse(can_access)) || {};
+};
+
+function filterRoutes(routes) {
+	const userAccess = getUserAccessList();
 
 	//* Helper function to check if a route has read access
 	function hasReadAccess(route) {

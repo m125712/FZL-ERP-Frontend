@@ -4,7 +4,7 @@ import { useDeliveryPackingList } from '@/state/Delivery';
 import { useOtherPackingList } from '@/state/Other';
 import { useSymbologyScanner } from '@use-symbology-scanner/react';
 import { FormProvider } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess, useFetch, useRHF } from '@/hooks';
 
 import { Footer } from '@/components/Modal/ui';

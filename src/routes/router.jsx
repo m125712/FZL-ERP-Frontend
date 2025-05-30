@@ -1,7 +1,7 @@
 import Login from '@/pages/Public/Login';
 import NoAccess from '@/pages/Public/NoEntry/noAccess';
 import NotFound from '@/pages/Public/NoEntry/notFound';
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router';
 
 import Layout from '@/components/layout';
 

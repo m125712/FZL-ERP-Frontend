@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDeliveryChallan } from '@/state/Delivery';
 import { useOtherVehicle } from '@/state/Other';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import Pdf from '@/components/Pdf/ChallanByDate';

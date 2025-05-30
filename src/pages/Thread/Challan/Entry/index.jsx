@@ -5,7 +5,7 @@ import {
 	useThreadOrderDetailsForChallanByUUID,
 } from '@/state/Thread';
 import { useAuth } from '@context/auth';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import * as yup from 'yup';
 import { useAccess, useRHF } from '@/hooks';
 

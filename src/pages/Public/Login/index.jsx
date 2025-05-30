@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { firstRoute } from '@/routes';
 import { useAuth } from '@context/auth';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router';
 import { useRHF } from '@/hooks';
 
 import { Input, PasswordInput } from '@/ui';

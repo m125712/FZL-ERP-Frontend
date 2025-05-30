@@ -1,6 +1,6 @@
 import { useAuth } from '@/context/auth';
 import { firstRoute } from '@/routes';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 function V1() {
 	return (

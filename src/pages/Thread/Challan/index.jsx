@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useThreadChallan } from '@/state/Thread';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';

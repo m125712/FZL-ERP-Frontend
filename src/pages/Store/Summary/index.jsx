@@ -4,7 +4,7 @@ import Issue from '@/pages/Issue/History';
 import Maintenance from '@pages/Issue/Maintenance';
 import SpareParts from '@pages/Issue/SpareParts';
 import Wastage from '@pages/Issue/Wastage';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import Information from './Information';
 

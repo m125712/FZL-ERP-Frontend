@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { NavLink, useResolvedPath } from 'react-router-dom';
+import { NavLink, useResolvedPath } from 'react-router';
 
 import cn from '@/lib/cn';
 import matchUrl from '@/util/matchUrl';

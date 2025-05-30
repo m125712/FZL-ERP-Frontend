@@ -4,7 +4,7 @@ import {
 	useDyeingThreadBatch,
 	useDyeingThreadBatchEntry,
 } from '@/state/Dyeing';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';

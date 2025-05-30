@@ -1,6 +1,6 @@
 import { router } from '@/routes/router';
 import AuthProvider from '@context/auth';
-import { RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router/dom';
 
 import { Toast } from '@/components/Toast';
 

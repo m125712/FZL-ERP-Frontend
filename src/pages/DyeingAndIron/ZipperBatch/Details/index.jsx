@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useDyeingBatchDetailsByUUID } from '@/state/Dyeing';
 import { useLabDipRecipeDetailsByUUID } from '@/state/LabDip';
 import { useThreadMachineByUUID } from '@/state/Thread';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import SecondPdf from '@/components/Pdf/ZipperBulkRecipe';

@@ -1,7 +1,7 @@
 import { lazy, useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useOrderDetailsByStyleForPDF } from '@/state/Order';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 import { useAccess, useFetchFunc } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';

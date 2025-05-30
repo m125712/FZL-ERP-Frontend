@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useThreadDetailsByUUID } from '@/state/Thread';
 import OrderSheetPdf from '@components/Pdf/ThreadOrderSheet';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 import { useFetchFunc } from '@/hooks';
 
 import Information from './Information';

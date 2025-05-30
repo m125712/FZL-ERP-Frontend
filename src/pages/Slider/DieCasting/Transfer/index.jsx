@@ -4,7 +4,7 @@ import {
 	useSliderDieCastingTransferAgainstStock,
 	useSliderDiecastingTrxLog,
 } from '@/state/Slider';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';

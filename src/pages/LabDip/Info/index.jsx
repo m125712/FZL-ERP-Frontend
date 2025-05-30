@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLabDipInfo } from '@/state/LabDip';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess, useFetchFunc } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';

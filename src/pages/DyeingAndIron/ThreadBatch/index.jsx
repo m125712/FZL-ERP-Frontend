@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useDyeingThreadBatch } from '@/state/Dyeing';
 import { useDyeingCone } from '@/state/Thread';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';

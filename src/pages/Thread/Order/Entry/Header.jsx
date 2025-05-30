@@ -7,7 +7,7 @@ import {
 	useOtherParty,
 } from '@/state/Other';
 import DatePicker from 'react-datepicker';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { Textarea } from '@/ui/Core';
 import { CheckBox, FormField, ReactSelect, SectionEntryBody } from '@/ui';

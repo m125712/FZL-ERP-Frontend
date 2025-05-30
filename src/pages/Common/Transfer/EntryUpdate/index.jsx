@@ -9,7 +9,7 @@ import { useOtherOrderDescription } from '@/state/Other';
 import { useVislonTMP } from '@/state/Vislon';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import * as yup from 'yup';
 import { useRHF } from '@/hooks';
 

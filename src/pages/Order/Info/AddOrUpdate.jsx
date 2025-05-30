@@ -20,9 +20,14 @@ import { DevTool } from '@/lib/react-hook-devtool';
 import { ORDER_INFO_NULL, ORDER_INFO_SCHEMA } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
+const PriorityOptions = [
+	{ value: 'FIFO', label: 'FIFO' },
+	{ value: 'URGENT', label: 'URGENT' },
+	{ value: '---', label: '---' },
+];
+
 export default function Index({
 	modalId = '',
-
 	updateOrderInfo = {
 		uuid: null,
 		order_number: null,
@@ -42,7 +47,6 @@ export default function Index({
 		control,
 		getValues,
 		context,
-		watch,
 		setValue,
 	} = useRHF(ORDER_INFO_SCHEMA, ORDER_INFO_NULL);
 
@@ -57,17 +61,16 @@ export default function Index({
 	const { invalidateQuery: invalidateOtherZipperThreadOrderList } =
 		useAllZipperThreadOrderList();
 
-	const PriorityOptions = [
-		{ value: 'FIFO', label: 'FIFO' },
-		{ value: 'URGENT', label: 'URGENT' },
-		{ value: '---', label: '---' },
-	];
-
 	useEffect(() => {
 		if (data && updateOrderInfo?.uuid) {
 			reset(data);
 		}
 	}, [data]);
+	useEffect(() => {
+		if (getValues('party_uuid') !== partyId) {
+			setPartyId(getValues('party_uuid'));
+		}
+	}, [getValues('party_uuid')]);
 
 	const onClose = () => {
 		setUpdateOrderInfo((prev) => ({
@@ -123,10 +126,6 @@ export default function Index({
 		invalidateOrderInfoValueLabel();
 		invalidateOtherZipperThreadOrderList();
 	};
-
-	useEffect(() => {
-		setPartyId(getValues('party_uuid'));
-	}, [getValues('party_uuid')]);
 
 	return (
 		<AddModal

@@ -1,4 +1,4 @@
-import { useResolvedPath } from 'react-router-dom';
+import { useResolvedPath } from 'react-router';
 
 import GlobalBreadcrumbs from '@/ui/Others/GlobalBreadcrumbs';
 

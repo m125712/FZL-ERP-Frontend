@@ -13,7 +13,7 @@ import {
 import { useAuth } from '@context/auth';
 import { format } from 'date-fns';
 import { FormProvider } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { useRHF } from '@/hooks';
 
 import { UpdateModal } from '@/components/Modal';

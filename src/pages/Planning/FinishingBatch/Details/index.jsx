@@ -1,5 +1,5 @@
 import { useDyeingFinishingBatchByUUID } from '@/state/Dyeing';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import Information from './Information';
 import Table from './Table';

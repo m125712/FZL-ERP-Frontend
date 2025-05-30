@@ -10,7 +10,7 @@ import { useOtherChallan } from '@/state/Other';
 import { useSymbologyScanner } from '@use-symbology-scanner/react';
 import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess, useRHF } from '@/hooks';
 
 import { Footer } from '@/components/Modal/ui';

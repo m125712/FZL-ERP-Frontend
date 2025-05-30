@@ -2,7 +2,7 @@ import { Suspense, useCallback, useEffect, useMemo } from 'react';
 import { useDyeingBatch, useDyeingBatchDetailsByUUID } from '@/state/Dyeing';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import { useRHF } from '@/hooks';
 
 import { ProceedModal } from '@/components/Modal';

@@ -1,7 +1,7 @@
 import { useAuth } from '@/context/auth';
 import { LogOut } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import User from '@/ui/Others/User';
 

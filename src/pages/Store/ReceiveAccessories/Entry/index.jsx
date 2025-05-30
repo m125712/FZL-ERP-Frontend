@@ -10,7 +10,7 @@ import {
 import { useAuth } from '@context/auth';
 import { FormProvider, get } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';

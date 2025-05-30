@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useGetURLData } from '@/state/Other';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import {
 	CheckBox,

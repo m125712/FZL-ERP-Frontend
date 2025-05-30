@@ -2,7 +2,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { useMarketingTeamDetails, useMarketingTeams } from '@/state/Marketing';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';

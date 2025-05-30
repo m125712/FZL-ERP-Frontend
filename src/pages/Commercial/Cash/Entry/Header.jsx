@@ -4,7 +4,7 @@ import {
 	useOtherMerchandiserByPartyUUID,
 	useOtherParty,
 } from '@/state/Other';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import {
 	FormField,
@@ -41,7 +41,8 @@ export default function Header({
 				<FormField
 					label='marketing_uuid'
 					title='Marketing'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name='marketing_uuid'
 						control={control}
@@ -99,7 +100,8 @@ export default function Header({
 				<FormField
 					label='merchandiser_uuid'
 					title='Merchandiser'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name='merchandiser_uuid'
 						control={control}

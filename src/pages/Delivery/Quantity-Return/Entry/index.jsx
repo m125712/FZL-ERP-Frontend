@@ -3,7 +3,7 @@ import { useDeliveryReturnQuantity } from '@/state/Delivery';
 import { useOtherOrderEntryBy } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { useRHF } from '@/hooks';
 
 import { Footer } from '@/components/Modal/ui';

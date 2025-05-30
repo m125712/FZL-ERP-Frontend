@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Outlet, useResolvedPath } from 'react-router-dom';
+import { Outlet, useResolvedPath } from 'react-router';
 
 import { cn } from '@/lib/utils';
 

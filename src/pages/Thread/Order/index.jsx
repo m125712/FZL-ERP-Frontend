@@ -1,7 +1,7 @@
 import { lazy, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useThreadOrderInfoByQuery } from '@/state/Thread';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';

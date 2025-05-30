@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDyeingBatch } from '@/state/Dyeing';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';

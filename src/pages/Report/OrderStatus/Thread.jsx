@@ -87,7 +87,7 @@ export default function Index() {
 						? row.lc_numbers
 						: [];
 					if (lcArr.length === 0) return '--';
-					return lcArr.map((pi) => pi.pi_number).join(', ');
+					return lcArr.map((lc) => lc.lc_numbers).join(', ');
 				},
 				id: 'lc_numbers',
 				header: <>LC No.</>,
@@ -97,11 +97,11 @@ export default function Index() {
 						? info.row.original.lc_numbers
 						: [];
 					if (lcArr.length === 0) return '--';
-					return lcArr.map((pi) => (
+					return lcArr.map((lc) => (
 						<CustomLink
-							key={pi.pi_number}
-							label={pi.pi_number}
-							url={`/commercial/pi/${pi.pi_number}`}
+							key={lc.lc_number}
+							label={lc.lc_number}
+							url={`/commercial/lc/details/${lc.lc_uuid}`}
 							openInNewTab
 						/>
 					));

@@ -1,4 +1,5 @@
 import { lazy, useEffect, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useOrderInfo } from '@/state/Order';
 import { useAccess } from '@/hooks';
 
@@ -14,6 +15,7 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
+	const { user } = useAuth();
 	const { data, isLoading, url, updateData, deleteData, invalidateQuery } =
 		useOrderInfo();
 	const info = new PageInfo(
@@ -73,6 +75,8 @@ export default function Index() {
 					data[idx]?.sno_from_head_office === true
 						? null
 						: GetDateTime(),
+				sno_from_head_office_by:
+					data[idx]?.sno_from_head_office === true ? null : user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});
@@ -88,6 +92,8 @@ export default function Index() {
 					data[idx]?.receive_by_factory === true
 						? null
 						: GetDateTime(),
+				receive_by_factory_by:
+					data[idx]?.receive_by_factory === true ? null : user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});
@@ -98,6 +104,10 @@ export default function Index() {
 			updatedData: {
 				production_pause:
 					data[idx]?.production_pause === true ? false : true,
+				production_pause_time:
+					data[idx]?.production_pause === true ? null : GetDateTime(),
+				production_pause_by:
+					data[idx]?.production_pause === true ? null : user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

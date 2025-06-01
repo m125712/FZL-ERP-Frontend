@@ -5,7 +5,7 @@ import {
 	useDyeingThreadBatchDetailsByUUID,
 	useDyeingThreadBatchEntry,
 } from '@/state/Dyeing';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { useRHF } from '@/hooks';
 
 import { CustomLink, DynamicDeliveryField, Input } from '@/ui';

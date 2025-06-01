@@ -1,7 +1,7 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useSliderDieCastingProduction } from '@/state/Slider';
 import Pdf from '@components/Pdf/SliderDieCastingProduction';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';

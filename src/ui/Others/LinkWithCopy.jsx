@@ -1,5 +1,5 @@
 import { Clipboard } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import { ShowLocalToast } from '@/components/Toast';
 
@@ -73,7 +73,7 @@ const CustomLink = ({
 	if (!label) return '--';
 
 	return (
-		<div className={cn('flex items-center gap-2', className)}>
+		<div key={label} className={cn('flex items-center gap-2', className)}>
 			{showCopyButton && (
 				<CopyButton
 					id={label}

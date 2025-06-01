@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { UseLabDipInfoByDetails } from '@/state/LabDip';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import Information from './Information';

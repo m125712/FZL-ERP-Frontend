@@ -3,7 +3,7 @@ import { useOtherOrderPropertiesByItem } from '@/state/Other';
 import { usePlanningDateWiseBatchReport } from '@/state/Planning';
 import { usePIToBeSubmitted } from '@/state/Report';
 import { format } from 'date-fns';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import Pdf from '@/components/Pdf/BatchReportDateWise';

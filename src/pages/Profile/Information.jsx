@@ -3,7 +3,7 @@ import { useAuth } from '@/context/auth';
 import { format } from 'date-fns';
 import { LogOut } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';

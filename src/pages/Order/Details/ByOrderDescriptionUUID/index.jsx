@@ -4,7 +4,7 @@ import {
 	useOtherOrderPropertiesByGarmentsWash,
 	useOtherOrderPropertiesBySpecialRequirement,
 } from '@/state/Other';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 import { useFetchFunc } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';

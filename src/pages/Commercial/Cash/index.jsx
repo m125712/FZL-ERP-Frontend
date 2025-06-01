@@ -1,7 +1,7 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useCommercialPIByQuery } from '@/state/Commercial';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDyeingThreadBatchDetailsByUUID } from '@/state/Dyeing';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import Information from './Information';

@@ -11,7 +11,7 @@ import {
 	useNavigate,
 	useParams,
 	useSearchParams,
-} from 'react-router-dom';
+} from 'react-router';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal, ProceedModal } from '@/components/Modal';

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useCommercialLCPIByUUID } from '@/state/Commercial';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import Information from './Information';
 import PI from './PI';

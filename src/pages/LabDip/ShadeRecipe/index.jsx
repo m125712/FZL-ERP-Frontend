@@ -1,6 +1,6 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useLabDipShadeRecipeDescription } from '@/state/LabDip';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';

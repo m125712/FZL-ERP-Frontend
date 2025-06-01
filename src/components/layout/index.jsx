@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
-import { Outlet, useResolvedPath } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { Navigate, Outlet, useResolvedPath } from 'react-router';
 
 import { cn } from '@/lib/utils';
 
@@ -10,6 +11,10 @@ import Sidebar from './sidebar';
 
 const Layout = () => {
 	const { pathname } = useResolvedPath();
+	const hasUserCookie = Cookies.get('user');
+	const signed = !!hasUserCookie;
+
+	if (!signed) return <Navigate to={`/login`} replace />;
 
 	return (
 		<LayoutProvider>

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { allFlatRoutes } from '@/routes';
 import { useAdminUsers, useGetUserAccessByUUID } from '@/state/Admin';
 import { useOtherHRUserByDesignation } from '@/state/Other';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';

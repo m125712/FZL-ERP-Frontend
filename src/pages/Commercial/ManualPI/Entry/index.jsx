@@ -5,7 +5,7 @@ import {
 } from '@/state/Commercial';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
@@ -319,7 +319,8 @@ export default function Index() {
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				noValidate
-				className='flex flex-col gap-4'>
+				className='flex flex-col gap-4'
+			>
 				<Header
 					{...{
 						register,

@@ -8,7 +8,7 @@ import { useOtherPiValues } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { format } from 'date-fns';
 import { FormProvider, useFieldArray } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { useAccess, useRHF } from '@/hooks';
 
 import { DeleteModal, UpdateModal } from '@/components/Modal';
@@ -40,7 +40,7 @@ export default function Index() {
 	const { lc_uuid } = useParams();
 	const { invalidateQuery: invalidate } = useCommercialLCByQuery(
 		getPath(haveAccess, user?.uuid),
-		{enabled: !!user?.uuid}
+		{ enabled: !!user?.uuid }
 	);
 
 	const {
@@ -440,7 +440,8 @@ export default function Index() {
 			<form
 				className='flex flex-col gap-4'
 				onSubmit={handleSubmit(onSubmit)}
-				noValidate>
+				noValidate
+			>
 				<Header
 					{...{
 						register,
@@ -481,10 +482,12 @@ export default function Index() {
 							<th
 								key={item}
 								scope='col'
-								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'>
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'
+							>
 								{item}
 							</th>
-						))}>
+						))}
+					>
 						{piFields.map((item, index) => {
 							const piIdxValue = pi?.find(
 								(e) => e.value === watch(`pi[${index}].uuid`)
@@ -498,7 +501,8 @@ export default function Index() {
 											is_title_needed='false'
 											dynamicerror={
 												errors?.pi?.[index]?.uuid
-											}>
+											}
+										>
 											<Controller
 												name={`pi[${index}].uuid`}
 												control={control}
@@ -564,7 +568,8 @@ export default function Index() {
 												?.map((e) => (
 													<span
 														key={e}
-														className='badge badge-accent badge-sm'>
+														className='badge badge-accent badge-sm'
+													>
 														{e}
 													</span>
 												))}
@@ -572,7 +577,8 @@ export default function Index() {
 									</td>
 
 									<td
-										className={`w-16 border-l-4 border-l-primary ${rowClass}`}>
+										className={`w-16 border-l-4 border-l-primary ${rowClass}`}
+									>
 										<RemoveButton
 											onClick={() => {
 												handlePIRemove(index);

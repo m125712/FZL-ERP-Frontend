@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useThreadChallanDetailsByUUID } from '@/state/Thread';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 
 import Pdf from '@/components/Pdf/ThreadChallan';
 

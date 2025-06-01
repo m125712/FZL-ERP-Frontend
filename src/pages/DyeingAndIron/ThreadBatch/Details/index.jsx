@@ -4,7 +4,7 @@ import { useLabDipRecipeDetailsByUUID } from '@/state/LabDip';
 import { useThreadMachineByUUID } from '@/state/Thread';
 import BatchSheetPdf from '@components/Pdf/ThreadBulkRecipe';
 import TravelingCard from '@components/Pdf/ThreadTravelCard';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import Information from './Information';

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDyeingFinishingBatch } from '@/state/Dyeing';
 import { differenceInDays, format, subDays } from 'date-fns';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';

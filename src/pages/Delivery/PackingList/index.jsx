@@ -7,7 +7,7 @@ import {
 } from '@/state/Delivery';
 import { useOtherChallan, useOtherOrder, useThreadOrder } from '@/state/Other';
 import { BookOpen } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import Pdf2 from '@/components/Pdf/PackingListSticker';

@@ -1,7 +1,7 @@
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { useOtherOrderNumberForZipperByMarketingAndPartyUUID } from '@/state/Other';
 import { Controller } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { DeleteModal } from '@/components/Modal';
 import {

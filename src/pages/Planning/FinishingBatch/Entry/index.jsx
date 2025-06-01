@@ -7,7 +7,7 @@ import {
 } from '@/state/Dyeing';
 import { useSliderAssemblyProduction } from '@/state/Slider';
 import { FormProvider } from 'react-hook-form';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';

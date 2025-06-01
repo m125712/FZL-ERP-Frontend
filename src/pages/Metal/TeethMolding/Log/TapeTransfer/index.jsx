@@ -1,7 +1,7 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useDyeingTransfer } from '@/state/Dyeing';
 import { useMetalTMTapeLog } from '@/state/Metal';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess, useFetchFunc } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';

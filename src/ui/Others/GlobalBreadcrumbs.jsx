@@ -1,6 +1,6 @@
 import { House } from 'lucide-react';
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import useBreadcrumbs from 'use-react-router-breadcrumbs';
 
 import cn from '@/lib/cn';

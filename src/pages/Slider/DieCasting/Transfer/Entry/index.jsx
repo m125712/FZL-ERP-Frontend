@@ -10,7 +10,7 @@ import {
 	useSliderDiecastingTrxLog,
 } from '@/state/Slider';
 import { FormProvider } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useRHF } from '@/hooks';
 
 import { Footer } from '@/components/Modal/ui';

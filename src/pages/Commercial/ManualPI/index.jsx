@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useAuth } from '@/context/auth';
 import { useCommercialManualPI } from '@/state/Commercial';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDeliveryPackingListDetailsByUUID } from '@/state/Delivery';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import Pdf2 from '@/components/Pdf/PackingListSticker';
 import Pdf from '@/components/Pdf/ThreadPackeListSticker';

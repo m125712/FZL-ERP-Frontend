@@ -2,7 +2,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { useOrderDescription, useOrderDetailsByQuery } from '@/state/Order';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import { useAccess, useFetchForOrderReset, useRHF } from '@/hooks';

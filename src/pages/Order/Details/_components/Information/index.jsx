@@ -97,20 +97,6 @@ export default function SingleInformation({
 	);
 }
 
-const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
-	let value = is_cash == 1 ? 'Cash' : 'LC';
-	let sample_bill = [];
-
-	if (is_sample === 1) sample_bill.push('Sample');
-	if (is_bill === 1) sample_bill.push('Bill');
-
-	if (sample_bill.length > 0) value += ` (${sample_bill.join(', ')})`;
-
-	if (is_only_value) return value;
-
-	return <TitleValue title='Cash / LC' value={value} />;
-};
-
 const renderOrderStatus = (is_sample, is_bill) => {
 	let value = is_sample == 1 ? 'Sample' : 'Bulk';
 	value = is_bill == 1 ? `${value} (Bill)` : `${value} (No Bill)`;
@@ -140,8 +126,6 @@ export function OrderInformation({
 		pi_numbers,
 		revision_no,
 	} = order;
-
-	const haveAccess = useAccess('order__details');
 
 	const renderItems = () => {
 		const order_details = [
@@ -238,7 +222,8 @@ export function OrderInformation({
 				key='pdf'
 				type='button'
 				className='btn btn-accent btn-sm rounded-badge'
-				onClick={handelPdfDownload}>
+				onClick={handelPdfDownload}
+			>
 				<PDF className='w-4' /> PDF
 			</button>,
 			<div className='flex items-center gap-2'>
@@ -255,10 +240,12 @@ export function OrderInformation({
 
 	return (
 		<SectionContainer
+			key='order_information_section'
 			title='Order Information'
 			buttons={renderButtons()}
 			// selector={renderSelector()}
-			className={'mb-8'}>
+			className={'mb-8'}
+		>
 			<div className='grid grid-cols-1 bg-base-100 md:grid-cols-2 md:gap-8'>
 				<RenderTable
 					className={

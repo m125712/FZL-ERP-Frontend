@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useMarketingTeamDetails } from '@/state/Marketing';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import Information from './Information';
 import Table from './Table';

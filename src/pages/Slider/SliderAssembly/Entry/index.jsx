@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { NotFound } from '@/pages/Public/NoEntry';
 import { useAuth } from '@context/auth';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import {
 	useAccess,
 	useFetch,

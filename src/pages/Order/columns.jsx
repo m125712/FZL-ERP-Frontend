@@ -271,6 +271,25 @@ export const InfoColumns = ({
 	return useMemo(
 		() => [
 			{
+				accessorKey: 'actions',
+				header: 'Actions',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
+				width: 'w-24',
+				cell: (info) => (
+					<EditDelete
+						idx={info.row.index}
+						handelUpdate={handelUpdate}
+						handelDelete={handelDelete}
+						showUpdate={haveAccess.includes('update')}
+						showDelete={haveAccess.includes('delete')}
+					/>
+				),
+			},
+			{
 				accessorFn: (row) => (row.is_canceled ? 'YES' : 'NO'),
 				id: 'is_cancelled',
 				header: 'Cancelled',
@@ -281,6 +300,82 @@ export const InfoColumns = ({
 						value={info.row.original.is_canceled}
 					/>
 				),
+			},
+			{
+				accessorKey: 'id',
+				header: 'Sample/Bill/Cash',
+				enableColumnFilter: false,
+				width: 'w-28',
+				cell: (info) => {
+					const { is_sample, is_bill, is_cash } = info.row.original;
+					return (
+						// TODO: need to fix bill vs cash
+						<div className='flex gap-6'>
+							<StatusButton size='btn-xs' value={is_sample} />
+							<StatusButton size='btn-xs' value={is_bill} />
+							<StatusButton size='btn-xs' value={is_cash} />
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'order_number',
+				header: 'O/N',
+				enableColumnFilter: true,
+				cell: (info) => {
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${info.getValue()}`}
+							openInNewTab={true}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'buyer_name',
+				header: 'Buyer',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'marketing_name',
+				header: 'Marketing',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'merchandiser_name',
+				header: 'Merchandiser',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'factory_name',
+				header: 'Factory',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'marketing_priority',
+				header: 'Priority (Mkt/Fac)',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { marketing_priority, factory_priority } =
+						info.row.original;
+					return `${marketing_priority}/${factory_priority}`;
+				},
 			},
 			{
 				accessorKey: 'production_pause',
@@ -400,92 +495,32 @@ export const InfoColumns = ({
 				},
 			},
 			{
-				accessorKey: 'id',
-				header: 'Sample/Bill/Cash',
-				enableColumnFilter: false,
-				width: 'w-28',
-				cell: (info) => {
-					const { is_sample, is_bill, is_cash } = info.row.original;
-					return (
-						// TODO: need to fix bill vs cash
-						<div className='flex gap-6'>
-							<StatusButton size='btn-xs' value={is_sample} />
-							<StatusButton size='btn-xs' value={is_bill} />
-							<StatusButton size='btn-xs' value={is_cash} />
-						</div>
-					);
-				},
-			},
-			{
-				accessorKey: 'order_number',
-				header: 'O/N',
-				enableColumnFilter: true,
-				cell: (info) => {
-					return (
-						<CustomLink
-							label={info.getValue()}
-							url={`/order/details/${info.getValue()}`}
-							openInNewTab={true}
-						/>
-					);
-				},
-			},
-			{
-				accessorKey: 'buyer_name',
-				header: 'Buyer',
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'party_name',
-				header: 'Party',
+				accessorKey: 'created_by_name',
+				header: 'Created By',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'marketing_name',
-				header: 'Marketing',
+				accessorKey: 'created_at',
+				header: 'Created',
 				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
+				filterFn: 'isWithinRange',
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
-				accessorKey: 'merchandiser_name',
-				header: 'Merchandiser',
+				accessorKey: 'updated_at',
+				header: 'Updated',
 				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
-			{
-				accessorKey: 'factory_name',
-				header: 'Factory',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'marketing_priority',
-				header: 'Priority (Mkt/Fac)',
-				enableColumnFilter: false,
-				cell: (info) => {
-					const { marketing_priority, factory_priority } =
-						info.row.original;
-					return `${marketing_priority}/${factory_priority}`;
-				},
-			},
-
-			// {
-			// 	accessorKey: 'status',
-			// 	header: 'Status',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<StatusButton size='btn-xs' value={info.getValue()} />
-			// 	),
-			// },
-
-			...DEFAULT_COLUMNS({ handelUpdate, handelDelete, haveAccess }),
 		],
 		[data]
 	);

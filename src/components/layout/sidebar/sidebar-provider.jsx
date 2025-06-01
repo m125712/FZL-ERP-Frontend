@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import { useResolvedPath } from 'react-router-dom';
+import { useResolvedPath } from 'react-router';
 
 const SidebarContext = createContext({
 	path: {

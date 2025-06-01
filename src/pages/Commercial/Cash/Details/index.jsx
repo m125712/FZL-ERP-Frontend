@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useCommercialPIDetailsByPiId } from '@/state/Commercial';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import PiPdfSheet from '@/components/Pdf/CashInvoice';
 

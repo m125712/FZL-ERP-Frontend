@@ -1,6 +1,6 @@
 import React from 'react';
 import { Plus } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 const EmptySlotCard = ({ dyeingDate, machine_uuid, slot_no }) => {
 	let navigate = useNavigate();

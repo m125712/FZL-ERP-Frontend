@@ -6,7 +6,7 @@ import {
 	useOtherMerchandiserByPartyUUID,
 	useOtherParty,
 } from '@/state/Other';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { DateInput } from '@/ui/Core';
 import {

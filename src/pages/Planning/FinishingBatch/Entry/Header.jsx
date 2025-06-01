@@ -3,7 +3,7 @@ import {
 	useOtherPlanningBatchByDate,
 } from '@/state/Other';
 import { format } from 'date-fns';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { DateInput } from '@/ui/Core';
 import {

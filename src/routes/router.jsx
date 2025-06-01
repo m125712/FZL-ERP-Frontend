@@ -1,13 +1,13 @@
 import Login from '@/pages/Public/Login';
 import NoAccess from '@/pages/Public/NoEntry/noAccess';
 import NotFound from '@/pages/Public/NoEntry/notFound';
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router';
 
 import Layout from '@/components/layout';
 
 import { flatRoutes } from '.';
 
-export const router = createBrowserRouter([
+const routes = [
 	{
 		path: '/login',
 		element: <Login />,
@@ -28,4 +28,6 @@ export const router = createBrowserRouter([
 		element: <Layout />,
 		children: flatRoutes,
 	},
-]);
+];
+
+export const router = createBrowserRouter(routes);

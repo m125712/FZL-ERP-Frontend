@@ -11,7 +11,7 @@ import { useOrderDescription } from '@/state/Order';
 import { useGetURLData } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';

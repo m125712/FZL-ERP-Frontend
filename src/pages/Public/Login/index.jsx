@@ -1,7 +1,6 @@
-import { useEffect } from 'react';
 import { firstRoute } from '@/routes';
 import { useAuth } from '@context/auth';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, redirect, useNavigate } from 'react-router';
 import { useRHF } from '@/hooks';
 
 import { Input, PasswordInput } from '@/ui';
@@ -9,26 +8,15 @@ import { Input, PasswordInput } from '@/ui';
 import { LOGIN_NULL, LOGIN_SCHEMA } from '@/util/Schema';
 
 export default function Index() {
-	const { Login, signed, can_access } = useAuth();
-	const navigate = useNavigate();
+	const { Login, signed } = useAuth();
 
-	useEffect(() => {
-		if (signed === true && can_access && firstRoute?.path) {
-			navigate(firstRoute?.path, { replace: true });
-		} else {
-			navigate('/login', { replace: true });
-		}
-	}, [signed, can_access, firstRoute?.path]);
+	if (signed) return <Navigate to={firstRoute?.path} replace />;
 
 	const { register, handleSubmit, errors } = useRHF(LOGIN_SCHEMA, LOGIN_NULL);
 
 	const onSubmit = async (data) => {
-		const updatedData = {
-			...data,
-			email: `${data?.email}@fortunezip.com`,
-		};
-
-		await Login(data);
+		const isLogin = await Login(data);
+		if (isLogin) return redirect(firstRoute?.path, { replace: true });
 	};
 
 	return (
@@ -53,12 +41,6 @@ export default function Index() {
 								type='email'
 								{...{ register, errors }}
 							/>
-							{/* <JoinInput
-								label="email"
-								type="email"
-								unit="@fortunezip.com"
-								{...{ register, errors }}
-							/> */}
 							<PasswordInput
 								title='Password'
 								label='pass'

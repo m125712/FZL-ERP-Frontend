@@ -4,7 +4,7 @@ import { useOtherMaterialByParams } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
 import { configure, HotKeys } from 'react-hotkeys';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';

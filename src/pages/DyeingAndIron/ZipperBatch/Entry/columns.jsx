@@ -26,24 +26,6 @@ export const Columns = ({
 }) => {
 	const haveAccess = useAccess('dyeing__zipper_batch_entry_update');
 
-	// * setting all quantity in finishing_batch_entry to the balance quantity
-	const setAllQty = () => {
-		if (is_new) {
-			NewBatchOrdersField.map((item, idx) => {
-				setValue(
-					`new_dyeing_batch_entry[${idx}].quantity`,
-					item.balance_quantity
-				);
-			});
-		} else {
-			BatchOrdersField.map((item, idx) => {
-				setValue(
-					`dyeing_batch_entry[${idx}].quantity`,
-					item.balance_quantity
-				);
-			});
-		}
-	};
 	const commonColumns = [
 		{
 			accessorKey: 'order_number',
@@ -51,12 +33,8 @@ export const Columns = ({
 			width: 'w-36',
 			enableSorting: true,
 			cell: (info) => {
-				const {
-					order_number,
-					item_description,
-					order_type,
-					bleaching,
-				} = info.row.original;
+				const { order_number, order_type, bleaching } =
+					info.row.original;
 				const isBleached = bleaching === 'bleach';
 				return (
 					<div className='flex flex-col gap-1'>
@@ -65,11 +43,11 @@ export const Columns = ({
 							id={order_number}
 							uri='/order/details'
 						/>
-						<span className='capitalize'>{item_description}</span>
-						<span className='capitalize'>Type: {order_type}</span>
 
-						<div className='flex items-center gap-1'>
-							Bleach:
+						<div className='grid grid-cols-2 gap-1'>
+							<span>Type:</span>
+							<span>{order_type}</span>
+							<span>Bleach:</span>
 							<StatusButton
 								value={isBleached}
 								className='h-4 min-h-4 pl-1 pr-1 text-xs'
@@ -79,13 +57,13 @@ export const Columns = ({
 				);
 			},
 		},
-		// {
-		// 	accessorKey: 'item_description',
-		// 	header: 'Item Description',
-		// 	enableColumnFilter: true,
-		// 	width: 'w-36',
-		// 	enableSorting: true,
-		// },
+		{
+			accessorKey: 'item_description',
+			header: 'Item Description',
+			enableColumnFilter: true,
+			width: 'w-36',
+			enableSorting: true,
+		},
 		// {
 		// 	accessorKey: 'order_type',
 		// 	header: 'Type',
@@ -108,6 +86,7 @@ export const Columns = ({
 		{
 			accessorKey: 'color',
 			header: 'Color',
+			width: 'w-36',
 			enableColumnFilter: true,
 			enableSorting: true,
 		},
@@ -116,6 +95,7 @@ export const Columns = ({
 			header: 'Recipe',
 			enableColumnFilter: true,
 			enableSorting: true,
+			width: 'w-44',
 			cell: (info) => {
 				const {
 					recipe_name,
@@ -127,15 +107,13 @@ export const Columns = ({
 				return (
 					<div className='flex flex-col gap-1'>
 						<span>{recipe_name}</span>
-						<div className='flex items-center justify-between gap-1'>
+						<div className='grid grid-cols-3 gap-1'>
 							Bulk:
 							<StatusButton
 								value={approved}
 								className='h-4 min-h-4 pl-1 pr-1 text-xs'
 							/>
 							<DateTime date={approved_date} isTime={false} />
-						</div>
-						<div className='flex items-center justify-between gap-1'>
 							PP:
 							<StatusButton
 								value={is_pps_req}

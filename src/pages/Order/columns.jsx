@@ -296,7 +296,8 @@ export const InfoColumns = ({
 					const permission = haveAccess.includes(
 						'click_status_production_paused'
 					);
-
+					const { production_pause_time, production_pause_by_name } =
+						info.row.original;
 					return (
 						<div className='flex flex-col'>
 							<SwitchToggle
@@ -308,6 +309,10 @@ export const InfoColumns = ({
 								}}
 								checked={info.getValue() === true}
 							/>
+							<DateTime date={production_pause_time} />
+							<span className='text-xs'>
+								{production_pause_by_name}
+							</span>
 						</div>
 					);
 				},
@@ -328,7 +333,10 @@ export const InfoColumns = ({
 						'click_status_sno_from_head_office'
 					);
 
-					const { sno_from_head_office_time } = info.row.original;
+					const {
+						sno_from_head_office_time,
+						sno_from_head_office_by_name,
+					} = info.row.original;
 
 					return (
 						<div className='flex flex-col'>
@@ -342,6 +350,9 @@ export const InfoColumns = ({
 								checked={info.getValue() === true}
 							/>
 							<DateTime date={sno_from_head_office_time} />
+							<span className='text-xs'>
+								{sno_from_head_office_by_name}
+							</span>
 						</div>
 					);
 				},
@@ -361,7 +372,10 @@ export const InfoColumns = ({
 						'click_status_receive_by_factory'
 					);
 
-					const { receive_by_factory_time } = info.row.original;
+					const {
+						receive_by_factory_time,
+						receive_by_factory_by_name,
+					} = info.row.original;
 
 					return (
 						<div className='flex flex-col'>
@@ -378,6 +392,9 @@ export const InfoColumns = ({
 								checked={info.getValue() === true}
 							/>
 							<DateTime date={receive_by_factory_time} />
+							<span className='text-xs'>
+								{receive_by_factory_by_name}
+							</span>
 						</div>
 					);
 				},

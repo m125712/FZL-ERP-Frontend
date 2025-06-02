@@ -28,12 +28,9 @@ export default function Index() {
 		format(date, 'yyyy-MM-dd'),
 		format(toDate, 'yyyy-MM-dd'),
 		getPath(haveAccess, user?.uuid),
-		{
-			enabled: !!user?.uuid,
-		}
+		{ enabled: !!user?.uuid }
 	);
 
-	let rowStyle = 'border border-gray-300 px-2 py-1';
 	const columns = useMemo(
 		() => [
 			{
@@ -57,25 +54,24 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) => {
-					const piArr = Array.isArray(row?.pi_numbers)
-						? row.pi_numbers
-						: [];
-					if (piArr.length === 0) return '--';
-					return piArr.map((pi) => pi.pi_number).join(', ');
+					const { lc_numbers } = row;
+					if (lc_numbers.length === 0) return '--';
+
+					return lc_numbers.map((lc) => lc.lc_number).join(', ');
 				},
-				id: 'pi_numbers',
-				header: <>Pi No.</>,
+				id: 'lc_numbers',
+				header: 'LC No.',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const piArr = Array.isArray(info.row.original.pi_numbers)
-						? info.row.original.pi_numbers
-						: [];
-					if (piArr.length === 0) return '--';
-					return piArr.map((pi) => (
+					const { lc_numbers } = info.row.original;
+
+					if (lc_numbers.length === 0) return '--';
+
+					return lc_numbers.map((lc) => (
 						<CustomLink
-							key={pi.pi_number}
-							label={pi.pi_number}
-							url={`/commercial/pi/${pi.pi_number}`}
+							key={lc.lc_number}
+							label={lc.lc_number}
+							url={`/commercial/lc/details/${lc.lc_uuid}`}
 							openInNewTab
 						/>
 					));
@@ -83,25 +79,24 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) => {
-					const lcArr = Array.isArray(row?.lc_numbers)
-						? row.lc_numbers
-						: [];
-					if (lcArr.length === 0) return '--';
-					return lcArr.map((lc) => lc.lc_numbers).join(', ');
+					const { pi_numbers } = row;
+
+					if (pi_numbers.length === 0) return '--';
+
+					return pi_numbers.map((pi) => pi.pi_number).join(', ');
 				},
-				id: 'lc_numbers',
-				header: <>LC No.</>,
+				id: 'pi_numbers',
+				header: 'Pi No.',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const lcArr = Array.isArray(info.row.original.lc_numbers)
-						? info.row.original.lc_numbers
-						: [];
-					if (lcArr.length === 0) return '--';
-					return lcArr.map((lc) => (
+					const { pi_numbers } = info.row.original;
+					if (pi_numbers.length === 0) return '--';
+
+					return pi_numbers.map((pi) => (
 						<CustomLink
-							key={lc.lc_number}
-							label={lc.lc_number}
-							url={`/commercial/lc/details/${lc.lc_uuid}`}
+							key={pi.pi_number}
+							label={pi.pi_number}
+							url={`/commercial/pi/${pi.pi_number}`}
 							openInNewTab
 						/>
 					));

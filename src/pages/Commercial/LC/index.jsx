@@ -155,9 +155,29 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'lc_number',
+				header: 'LC',
+				enableColumnFilter: true,
+				cell: (info) => {
+					const { uuid, lc_date } = info.row.original;
+					const url = `/commercial/lc/details/${uuid}`;
+					return (
+						<div className='flex flex-col gap-1'>
+							<CustomLink
+								label={info.getValue()}
+								url={url}
+								openInNewTab={true}
+							/>
+							<DateTime date={lc_date} isTime={false} />
+						</div>
+					);
+				},
+			},
+			{
 				accessorKey: 'file_number',
 				header: 'File No',
 				enableColumnFilter: true,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -167,31 +187,15 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'lc_number',
-				header: 'LC Number',
-				enableColumnFilter: true,
-				cell: (info) => {
-					const { uuid } = info.row.original;
-					const url = `/commercial/lc/details/${uuid}`;
-					return (
-						<CustomLink
-							label={info.getValue()}
-							url={url}
-							openInNewTab={true}
-						/>
-					);
-				},
-			},
 
-			{
-				accessorKey: 'lc_date',
-				header: 'LC Date',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
-				),
-			},
+			// {
+			// 	accessorKey: 'lc_date',
+			// 	header: 'LC Date',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<DateTime date={info.getValue()} isTime={false} />
+			// 	),
+			// },
 			{
 				accessorFn: (row) => {
 					if (row.is_old_pi === 1) {
@@ -206,7 +210,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'pi_ids',
-				header: 'PI ID',
+				header: 'PI No.',
 				width: 'w-28',
 				enableColumnFilter: false,
 				cell: (info) => {
@@ -225,43 +229,63 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'export_lc_number',
-				header: 'Export LC Number',
+				header: 'Export LC',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				width: 'w-28',
+				cell: (info) => {
+					const { export_lc_number, export_lc_date } =
+						info.row.original;
+					if (!export_lc_number) return '--';
+					return (
+						<div className='flex flex-col gap-1'>
+							{export_lc_number}
+							<DateTime date={export_lc_date} isTime={false} />
+						</div>
+					);
+				},
 			},
-			{
-				accessorKey: 'export_lc_date',
-				header: (
-					<>
-						Export LC <br />
-						Date
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
-				),
-			},
+			// {
+			// 	accessorKey: 'export_lc_date',
+			// 	header: (
+			// 		<>
+			// 			Export LC <br />
+			// 			Date
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<DateTime date={info.getValue()} isTime={false} />
+			// 	),
+			// },
 
 			{
-				accessorKey: 'up_date',
-				header: (
-					<>
-						Up <br />
-						Date
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
-				),
-			},
-			{
 				accessorKey: 'up_number',
-				header: 'Up Number',
+				header: 'Up',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { up_number, up_date } = info.row.original;
+					if (!up_number) return '--';
+					return (
+						<div className='flex flex-col gap-1'>
+							{up_number}
+							<DateTime date={up_date} isTime={false} />
+						</div>
+					);
+				},
 			},
+			// {
+			// 	accessorKey: 'up_date',
+			// 	header: (
+			// 		<>
+			// 			Up <br />
+			// 			Date
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => (
+			// 		<DateTime date={info.getValue()} isTime={false} />
+			// 	),
+			// },
 			{
 				accessorKey: 'commercial_executive',
 				header: (
@@ -314,29 +338,31 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'amd_date',
-				header: 'AMD Date',
+				header: 'Amendment',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
-				),
+				cell: (info) => {
+					if (!info.getValue()) return '--';
+
+					const { amd_count } = info.row.original;
+					return (
+						<div className='flex flex-col gap-1'>
+							<DateTime date={info.getValue()} isTime={false} />
+							<span>#{amd_count}</span>
+						</div>
+					);
+				},
 			},
-			{
-				accessorKey: 'amd_count',
-				header: (
-					<>
-						AMD <br />
-						Count
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'amd_count',
+			// 	header: (
+			// 		<>
+			// 			AMD <br />
+			// 			Count
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
 
 			// {
 			// 	accessorKey: 'payment_value',
@@ -445,7 +471,7 @@ export default function Index() {
 			// },
 			{
 				accessorKey: 'lc_entry',
-				header: <>Progression</>,
+				header: 'Progression',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const value = info.getValue();
@@ -459,19 +485,11 @@ export default function Index() {
 								header: 'Amount',
 								enableColumnFilter: false,
 							},
-
 							{
-								accessorKey: 'received_date',
-								header: 'Received',
+								accessorKey: 'ldbc_fdbc',
+								header: 'Value',
 								enableColumnFilter: false,
-								cell: (info) => (
-									<DateTime
-										date={info.getValue()}
-										isTime={false}
-									/>
-								),
 							},
-
 							{
 								accessorKey: 'handover_date',
 								header: 'Handover',
@@ -484,13 +502,8 @@ export default function Index() {
 								),
 							},
 							{
-								accessorKey: 'ldbc_fdbc',
-								header: 'Value',
-								enableColumnFilter: false,
-							},
-							{
 								accessorKey: 'payment_date',
-								header: 'Payment Date',
+								header: 'Payment',
 								enableColumnFilter: false,
 								cell: (info) => (
 									<DateTime
@@ -523,7 +536,7 @@ export default function Index() {
 							},
 							{
 								accessorKey: 'bank_forward_date',
-								header: 'Bank Forward Date',
+								header: 'Bank Forward ',
 								enableColumnFilter: false,
 								cell: (info) => (
 									<DateTime
@@ -535,7 +548,7 @@ export default function Index() {
 
 							{
 								accessorKey: 'acceptance_date',
-								header: 'Acceptance Date',
+								header: 'Bank Acceptance',
 								enableColumnFilter: false,
 								cell: (info) => (
 									<DateTime
@@ -558,7 +571,7 @@ export default function Index() {
 							},
 							{
 								accessorKey: 'payment_date',
-								header: 'Payment Date',
+								header: 'Payment',
 								enableColumnFilter: false,
 								cell: (info) => (
 									<DateTime
@@ -569,7 +582,7 @@ export default function Index() {
 							},
 							{
 								accessorKey: 'payment_value',
-								header: 'Payment Value',
+								header: 'Value',
 								enableColumnFilter: false,
 							},
 						];
@@ -591,7 +604,12 @@ export default function Index() {
 						: value;
 				},
 			},
-
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',

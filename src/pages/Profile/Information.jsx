@@ -4,7 +4,6 @@ import { format } from 'date-fns';
 import { LogOut } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router';
-import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import SectionContainer from '@/ui/Others/SectionContainer';
@@ -14,21 +13,8 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const ResetPass = lazy(() => import('../Admin/User/ResetPass'));
 
 export default function Information({ data }) {
-	const {
-		name,
-		email,
-		designation,
-		department,
-		phone,
-		ext,
-		created_at,
-		updated_at,
-		remarks,
-	} = data;
 	const navigate = useNavigate();
-	const haveAccess = useAccess('profile');
-	const updateAccess = haveAccess.includes('update');
-	const resetAccess = haveAccess.includes('reset_password');
+
 	const [updateUser, setUpdateUser] = useState({
 		uuid: null,
 		department_designation: null,
@@ -67,37 +53,37 @@ export default function Information({ data }) {
 		return [
 			{
 				label: 'Name',
-				value: name,
+				value: data?.name,
 			},
 			{
 				label: 'Email',
-				value: email,
+				value: data?.email,
 			},
 			{
 				label: 'Designation',
-				value: designation,
+				value: data?.designation,
 			},
 			{
 				label: 'Department',
-				value: department,
+				value: data?.department,
 			},
 			{
 				label: 'Phone',
-				value: phone,
+				value: data?.phone,
 			},
 			{
 				label: 'Ext',
-				value: ext,
+				value: data?.ext,
 			},
 			{
 				label: 'Created',
-				value: format(new Date(created_at), 'dd/MM/yy'),
+				value: format(new Date(data?.created_at), 'dd/MM/yy'),
 			},
 			{
 				label: 'Updated',
-				value: format(new Date(updated_at), 'dd/MM/yy'),
+				value: format(new Date(data?.updated_at), 'dd/MM/yy'),
 			},
-			{ label: 'Remarks', value: remarks },
+			{ label: 'Remarks', value: data?.remarks },
 			{
 				label: 'Edit',
 				value: (

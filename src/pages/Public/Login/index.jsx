@@ -7,19 +7,18 @@ import { Input, PasswordInput } from '@/ui';
 
 import { LOGIN_NULL, LOGIN_SCHEMA } from '@/util/Schema';
 
-import { SVG1 } from './svg';
-
 export default function Index() {
-	const { Login, signed } = useAuth();
+	const { signed, Login } = useAuth();
 
-	// if (signed) return <Navigate to={firstRoute?.path} replace />;
 	if (signed) return <Navigate to='/profile' replace />;
 
 	const { register, handleSubmit, errors } = useRHF(LOGIN_SCHEMA, LOGIN_NULL);
 
 	const onSubmit = async (data) => {
 		const isLogin = await Login(data);
-		if (isLogin) return redirect(firstRoute?.path, { replace: true });
+		if (isLogin) {
+			redirect(firstRoute?.path, { replace: true });
+		}
 	};
 
 	return (

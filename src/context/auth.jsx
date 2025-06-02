@@ -1,10 +1,4 @@
-import {
-	createContext,
-	useCallback,
-	useContext,
-	useEffect,
-	useState,
-} from 'react';
+import { createContext, useCallback, useContext, useMemo } from 'react';
 import { useCookie, useLocalStorage } from '@/hooks';
 
 import { ShowToast } from '@/components/Toast';
@@ -14,10 +8,6 @@ import { api } from '@/lib/api';
 const AuthContext = createContext({});
 
 const AuthProvider = ({ children }) => {
-	const [user, setUser] = useState(null);
-	const [canAccess, setCanAccess] = useState(null);
-	const [loading, setLoading] = useState(true);
-
 	const [authCookie, updateAuthCookie, removeAuthCookie] = useCookie('auth');
 	const [userCookie, updateUserCookie, removeUserCookie] = useCookie('user');
 	const [userCanAccess, updateUserCanAccess, removeUserCanAccess] =
@@ -33,18 +23,10 @@ const AuthProvider = ({ children }) => {
 
 			const { token, user: loginUser, can_access } = res?.data;
 
-			updateAuthCookie(`Bearer ` + token || '');
+			await updateAuthCookie(`Bearer ` + token || '');
+			await updateUserCookie(JSON.stringify(loginUser) || '');
+			await updateUserCanAccess(can_access || '');
 
-			const userData = JSON.stringify(loginUser);
-
-			setUser(userData);
-			setCanAccess(can_access);
-
-			updateUserCookie(userData || '');
-			updateUserCanAccess(can_access || '');
-
-			const path = '/profile';
-			// window.location.href = path;
 			return true;
 		} catch (error) {
 			console.log(error);
@@ -60,64 +42,24 @@ const AuthProvider = ({ children }) => {
 		await removeAuthCookie();
 		await removeUserCookie();
 		await removeUserCanAccess();
-		setUser(null);
-		setCanAccess(null);
 	}, [removeAuthCookie, removeUserCanAccess, removeUserCookie]);
 
-	useEffect(() => {
-		async function loadCookieData() {
-			try {
-				let parsedUser = null;
-				let parsedCanAccess = null;
-
-				if (userCookie) {
-					parsedUser = JSON.parse(userCookie);
-				}
-				if (userCanAccess) {
-					parsedCanAccess = JSON.parse(userCanAccess);
-				}
-
-				setUser(parsedUser);
-				setCanAccess((prev) => {
-					if (prev === null || prev === undefined) {
-						return parsedCanAccess;
-					}
-					return prev;
-				});
-			} catch (error) {
-				console.error('Error parsing stored data:', error);
-				// Clear invalid credentials
-				await removeAuthCookie();
-				await removeUserCookie();
-				await removeUserCanAccess();
-				setUser(null);
-				setCanAccess(null);
-			} finally {
-				setLoading(false);
-			}
-		}
-
-		loadCookieData();
-	}, [userCookie, userCanAccess]);
-
-	const value = {
-		signed: !!userCookie,
-		user,
-		userCanAccess,
-		userCookie,
-		can_access: canAccess,
-		loading,
-		Login,
-		Logout,
-	};
+	const value = useMemo(
+		() => ({
+			signed: !!userCookie,
+			user: userCookie ? JSON?.parse(userCookie) : null,
+			can_access: userCanAccess,
+			Login,
+			Logout,
+		}),
+		[userCanAccess, userCookie]
+	);
 
 	return (
 		<AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 	);
 };
 
-export const useAuth = () => {
-	return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);
 
 export default AuthProvider;

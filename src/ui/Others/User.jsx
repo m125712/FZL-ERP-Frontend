@@ -1,19 +1,19 @@
-import { useMemo } from 'react';
 import { useAuth } from '@/context/auth';
 import { useNetworkState } from '@uidotdev/usehooks';
 
+import { cn } from '@/lib/utils';
+
 const User = ({ avatar = false }) => {
-	const auth = useAuth();
-	const userInfo = useMemo(() => auth?.user, [auth?.user]);
+	const { user } = useAuth();
 	const isOnline = useNetworkState().online;
 
 	const userInfos = [
 		{
-			label: userInfo?.name,
+			label: user?.name,
 			className: 'truncate capitalize',
 		},
 		{
-			label: userInfo?.department,
+			label: user?.department,
 			className: 'text-[.6rem] capitalize text-primary-content/70',
 		},
 	];

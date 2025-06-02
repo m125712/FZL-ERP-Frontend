@@ -23,6 +23,42 @@ const AuthProvider = ({ children }) => {
 	const [userCanAccess, updateUserCanAccess, removeUserCanAccess] =
 		useLocalStorage('can_access', '');
 
+	useEffect(() => {
+		async function loadCookieData() {
+			try {
+				let parsedUser = null;
+				let parsedCanAccess = null;
+
+				if (userCookie) {
+					parsedUser = JSON.parse(userCookie);
+				}
+				if (userCanAccess) {
+					parsedCanAccess = JSON.parse(userCanAccess);
+				}
+
+				setUser(parsedUser);
+				setCanAccess((prev) => {
+					if (prev === null || prev === undefined) {
+						return parsedCanAccess;
+					}
+					return prev;
+				});
+			} catch (error) {
+				console.error('Error parsing stored data:', error);
+				// Clear invalid credentials
+				await removeAuthCookie();
+				await removeUserCookie();
+				await removeUserCanAccess();
+				setUser(null);
+				setCanAccess(null);
+			} finally {
+				setLoading(false);
+			}
+		}
+
+		loadCookieData();
+	}, [userCookie, userCanAccess]);
+
 	const Login = async (data) => {
 		try {
 			const res = await api.post('/hr/user/login', data);
@@ -64,37 +100,6 @@ const AuthProvider = ({ children }) => {
 		setCanAccess(null);
 	}, [removeAuthCookie, removeUserCanAccess, removeUserCookie]);
 
-	useEffect(() => {
-		async function loadCookieData() {
-			try {
-				let parsedUser = null;
-				let parsedCanAccess = null;
-
-				if (userCookie) {
-					parsedUser = JSON.parse(userCookie);
-				}
-				if (userCanAccess) {
-					parsedCanAccess = JSON.parse(userCanAccess);
-				}
-
-				setUser(parsedUser);
-				setCanAccess(parsedCanAccess);
-			} catch (error) {
-				console.error('Error parsing stored data:', error);
-				// Clear invalid credentials
-				await removeAuthCookie();
-				await removeUserCookie();
-				await removeUserCanAccess();
-				setUser(null);
-				setCanAccess(null);
-			} finally {
-				setLoading(false);
-			}
-		}
-
-		loadCookieData();
-	}, [userCookie, userCanAccess]);
-
 	const value = {
 		signed: !!userCookie,
 		user,
@@ -111,8 +116,6 @@ const AuthProvider = ({ children }) => {
 	);
 };
 
-export const useAuth = () => {
-	return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);
 
 export default AuthProvider;

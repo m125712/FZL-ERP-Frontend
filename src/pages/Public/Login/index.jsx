@@ -1,16 +1,19 @@
-import { firstRoute } from '@/routes';
+import { firstRoute, sidebarRoutes } from '@/routes';
 import { useAuth } from '@context/auth';
-import { Navigate, redirect, useNavigate } from 'react-router';
+import { Navigate, redirect } from 'react-router';
 import { useRHF } from '@/hooks';
 
 import { Input, PasswordInput } from '@/ui';
 
 import { LOGIN_NULL, LOGIN_SCHEMA } from '@/util/Schema';
 
+import { SVG1 } from './svg';
+
 export default function Index() {
 	const { Login, signed } = useAuth();
 
-	if (signed) return <Navigate to={firstRoute?.path} replace />;
+	// if (signed) return <Navigate to={firstRoute?.path} replace />;
+	if (signed) return <Navigate to='/profile' replace />;
 
 	const { register, handleSubmit, errors } = useRHF(LOGIN_SCHEMA, LOGIN_NULL);
 
@@ -20,21 +23,25 @@ export default function Index() {
 	};
 
 	return (
-		<div className='flex min-h-screen min-w-max flex-col justify-center py-6 sm:py-12'>
-			<div className='relative min-w-[40%] py-3 sm:mx-auto sm:max-w-xl'>
-				<div className='absolute inset-0 -skew-y-6 transform animate-pulse bg-gradient-to-r from-primary to-primary/50 shadow-lg sm:-rotate-6 sm:skew-y-0 sm:rounded-3xl'></div>
-				<div className='relative bg-white px-4 py-10 shadow-lg sm:rounded-3xl sm:p-20'>
-					<div className='mx-auto'>
-						<span className='font-heading flex items-center justify-center text-2xl font-bold'>
-							<span className='text-4xl text-primary'>
-								Fortune Zipper LTD
-							</span>
+		<div className='flex h-screen w-screen items-center justify-center'>
+			<div className='flex w-full max-w-md flex-col justify-center bg-white shadow-lg backdrop-blur-sm'>
+				<div className='flex min-h-[400px] flex-col rounded-lg border shadow-lg'>
+					<div className='font-heading flex-wrap rounded-t-sm bg-primary py-4 text-center text-2xl font-semibold text-primary-content'>
+						Fortune Zipper LTD
+					</div>
+					<div className='mt-8 flex flex-col px-4 text-center'>
+						<span className='font-semibold text-primary'>
+							Sign In
+						</span>
+						<span className='mt-2 text-sm text-gray-500'>
+							Enter Your Email and password <br />
+							to access the admin panel
 						</span>
 						<form
 							onSubmit={handleSubmit(onSubmit)}
 							noValidate
 							method='dialog'
-							className='mx-auto mt-6 flex max-w-md flex-col space-y-6 sm:mt-10 sm:space-y-8'
+							className='flex flex-col space-y-4 py-4'
 						>
 							<Input
 								label='email'
@@ -47,7 +54,7 @@ export default function Index() {
 								{...{ register, errors }}
 							/>
 
-							<div className='modal-action'>
+							<div className='modal-action pt-4'>
 								<button
 									type='submit'
 									className='btn btn-primary btn-block'

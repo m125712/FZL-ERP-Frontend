@@ -7,7 +7,7 @@ import { HOSTED_SERVER } from '@/lib/secret';
 const isProduction = process.env.NODE_ENV === 'production';
 
 const BrandLogo = ({ className, ...props }) => {
-	const route = sidebarRoutes[0];
+	const route = sidebarRoutes()[0];
 
 	return (
 		<NavLink

@@ -13,11 +13,11 @@ export const allFlatRoutes = flattenRoutes(allPrivateRoutes);
 //* filtered routes which has read access
 export const filteredRoutes = filterRoutes(privateRoutes);
 
+//* sidebar routes which has view access only in sidebar
+export const sidebarRoutes = () => filterSidebarRoutes(filteredRoutes);
+
 //* flatten routes which has read access
 export const flatRoutes = flattenRoutes(filteredRoutes);
-
-//* sidebar routes which has view access only in sidebar
-export const sidebarRoutes = filterSidebarRoutes(filteredRoutes);
 
 // first route
 export const firstRoute = flatRoutes[0]?.children

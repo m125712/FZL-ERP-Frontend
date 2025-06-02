@@ -42,7 +42,6 @@ export const CommercialRoutes = [
 					'show_own_orders',
 				],
 				disableCollapse: true,
-
 				children: [
 					{
 						name: 'LC Details',
@@ -69,7 +68,7 @@ export const CommercialRoutes = [
 					},
 					{
 						id: 3,
-						name: 'PI Update',
+						name: 'LC Update',
 						path: '/commercial/lc/:lc_uuid/update',
 						element: <LCEntry />,
 						page_name: 'commercial__lc_update',

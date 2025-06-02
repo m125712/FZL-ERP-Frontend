@@ -1,4 +1,4 @@
-import { firstRoute, sidebarRoutes } from '@/routes';
+import { firstRoute } from '@/routes';
 import { useAuth } from '@context/auth';
 import { Navigate, redirect } from 'react-router';
 import { useRHF } from '@/hooks';

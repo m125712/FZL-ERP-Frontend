@@ -619,7 +619,7 @@ export default function Index() {
 
 	const handelUpdate = (idx) => {
 		const uuid = data[idx]?.uuid;
-		navigate(`/commercial/lc/${uuid}/update`);
+		navigate(`/commercial/lc/${uuid}/update`); // /commercial/lc/:lc_uuid/update
 	};
 
 	if (isLoading)

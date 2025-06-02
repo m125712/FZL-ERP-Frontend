@@ -290,35 +290,6 @@ export const InfoColumns = ({
 				),
 			},
 			{
-				accessorFn: (row) => (row.is_canceled ? 'YES' : 'NO'),
-				id: 'is_cancelled',
-				header: 'Cancelled',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton
-						size='btn-xs'
-						value={info.row.original.is_canceled}
-					/>
-				),
-			},
-			{
-				accessorKey: 'id',
-				header: 'Sample/Bill/Cash',
-				enableColumnFilter: false,
-				width: 'w-28',
-				cell: (info) => {
-					const { is_sample, is_bill, is_cash } = info.row.original;
-					return (
-						// TODO: need to fix bill vs cash
-						<div className='flex gap-6'>
-							<StatusButton size='btn-xs' value={is_sample} />
-							<StatusButton size='btn-xs' value={is_bill} />
-							<StatusButton size='btn-xs' value={is_cash} />
-						</div>
-					);
-				},
-			},
-			{
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
@@ -333,55 +304,10 @@ export const InfoColumns = ({
 				},
 			},
 			{
-				accessorKey: 'buyer_name',
-				header: 'Buyer',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'party_name',
-				header: 'Party',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'marketing_name',
-				header: 'Marketing',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'merchandiser_name',
-				header: 'Merchandiser',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'factory_name',
-				header: 'Factory',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'marketing_priority',
-				header: 'Priority (Mkt/Fac)',
-				enableColumnFilter: false,
-				cell: (info) => {
-					const { marketing_priority, factory_priority } =
-						info.row.original;
-					return `${marketing_priority}/${factory_priority}`;
-				},
-			},
-			{
 				accessorKey: 'production_pause',
 				header: (
 					<>
-						Production <br />
+						Prod <br />
 						Paused
 					</>
 				),
@@ -417,8 +343,8 @@ export const InfoColumns = ({
 				accessorKey: 'sno_from_head_office',
 				header: (
 					<>
-						SNO From <br />
-						Head Office
+						Send From <br />
+						H/O
 					</>
 				),
 				enableColumnFilter: true,
@@ -456,7 +382,7 @@ export const InfoColumns = ({
 				accessorKey: 'receive_by_factory',
 				header: (
 					<>
-						Receive By <br />
+						Received By <br />
 						Factory
 					</>
 				),
@@ -494,6 +420,83 @@ export const InfoColumns = ({
 					);
 				},
 			},
+			{
+				accessorFn: (row) => (row.is_canceled ? 'YES' : 'NO'),
+				id: 'is_cancelled',
+				header: 'Cancelled',
+				enableColumnFilter: false,
+				width: 'w-16',
+				cell: (info) => (
+					<StatusButton
+						size='btn-xs'
+						value={info.row.original.is_canceled}
+					/>
+				),
+			},
+			{
+				accessorKey: 'id',
+				header: 'Sample/Bill/Cash',
+				enableColumnFilter: false,
+				width: 'w-28',
+				cell: (info) => {
+					const { is_sample, is_bill, is_cash } = info.row.original;
+					return (
+						// TODO: need to fix bill vs cash
+						<div className='flex gap-6'>
+							<StatusButton size='btn-xs' value={is_sample} />
+							<StatusButton size='btn-xs' value={is_bill} />
+							<StatusButton size='btn-xs' value={is_cash} />
+						</div>
+					);
+				},
+			},
+
+			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'marketing_name',
+				header: 'Marketing',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'merchandiser_name',
+				header: 'Merchandiser',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'factory_name',
+				header: 'Factory',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'buyer_name',
+				header: 'Buyer',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'marketing_priority',
+				header: 'Priority (Mkt/Fac)',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { marketing_priority, factory_priority } =
+						info.row.original;
+					return `${marketing_priority}/${factory_priority}`;
+				},
+			},
+
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',

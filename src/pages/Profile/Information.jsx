@@ -36,8 +36,8 @@ export default function Information({ data }) {
 	const { Logout } = useAuth();
 
 	const handleLogout = async () => {
-		navigate('/login', { replace: true });
 		await Logout();
+		navigate('/login', { replace: true });
 	};
 
 	const handelUpdate = () => {

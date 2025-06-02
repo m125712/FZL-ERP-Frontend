@@ -9,7 +9,7 @@ function flattenRoutes(array) {
 		flattenedArray.push(object);
 
 		if (object.children) {
-			object.children.forEach((child) => flattenRecursive(child));
+			object.children?.forEach((child) => flattenRecursive(child));
 		}
 	}
 

@@ -65,49 +65,49 @@ export default function Index() {
 
 		window[info.getDeleteModalId()].showModal();
 	};
+
 	const handelSNOFromHeadOfficeStatus = async (idx) => {
+		const { sno_from_head_office } = data[idx];
 		await updateData.mutateAsync({
 			url: `/zipper/order-info/send-from-ho/update/by/${data[idx]?.uuid}`,
 			updatedData: {
 				sno_from_head_office:
-					data[idx]?.sno_from_head_office === true ? false : true,
+					sno_from_head_office === true ? false : true,
 				sno_from_head_office_time:
-					data[idx]?.sno_from_head_office === true
-						? null
-						: GetDateTime(),
+					sno_from_head_office === true ? null : GetDateTime(),
 				sno_from_head_office_by:
-					data[idx]?.sno_from_head_office === true ? null : user.uuid,
+					sno_from_head_office === true ? null : user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});
 	};
 
 	const handelReceiveByFactoryStatus = async (idx) => {
+		const { receive_by_factory, sno_from_head_office } = data[idx];
+
 		await updateData.mutateAsync({
 			url: `/zipper/order-info/receive-from-factory/update/by/${data[idx]?.uuid}`,
 			updatedData: {
-				receive_by_factory:
-					data[idx]?.receive_by_factory === true ? false : true,
+				receive_by_factory: receive_by_factory === true ? false : true,
 				receive_by_factory_time:
-					data[idx]?.receive_by_factory === true
-						? null
-						: GetDateTime(),
+					receive_by_factory === true ? null : GetDateTime(),
 				receive_by_factory_by:
-					data[idx]?.receive_by_factory === true ? null : user.uuid,
+					receive_by_factory === true ? null : user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});
 	};
+
 	const handelProductionPausedStatus = async (idx) => {
+		const { production_pause } = data[idx];
 		await updateData.mutateAsync({
 			url: `/zipper/order-info/production-pause/update/by/${data[idx]?.uuid}`,
 			updatedData: {
-				production_pause:
-					data[idx]?.production_pause === true ? false : true,
+				production_pause: production_pause === true ? false : true,
 				production_pause_time:
-					data[idx]?.production_pause === true ? null : GetDateTime(),
+					production_pause === true ? null : GetDateTime(),
 				production_pause_by:
-					data[idx]?.production_pause === true ? null : user.uuid,
+					production_pause === true ? null : user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

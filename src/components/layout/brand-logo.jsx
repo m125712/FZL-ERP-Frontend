@@ -1,4 +1,4 @@
-import { sidebarRoutes } from '@/routes';
+import { firstRoute } from '@/routes';
 import { NavLink } from 'react-router';
 
 import cn from '@/lib/cn';
@@ -7,7 +7,7 @@ import { HOSTED_SERVER } from '@/lib/secret';
 const isProduction = process.env.NODE_ENV === 'production';
 
 const BrandLogo = ({ className, ...props }) => {
-	const route = sidebarRoutes()[0];
+	const route = firstRoute;
 
 	return (
 		<NavLink
@@ -20,7 +20,7 @@ const BrandLogo = ({ className, ...props }) => {
 		>
 			FZL
 			{!isProduction ? (
-				<span className='text-error'>({HOSTED_SERVER})</span>
+				<span className='ps-1 text-error'>({HOSTED_SERVER})</span>
 			) : (
 				''
 			)}

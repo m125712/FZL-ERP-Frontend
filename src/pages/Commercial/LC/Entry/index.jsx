@@ -35,6 +35,7 @@ const getPath = (haveAccess, userUUID) => {
 
 export default function Index() {
 	const haveAccess = useAccess('commercial__lc');
+	console.log('haveAccess', haveAccess);
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const { lc_uuid } = useParams();

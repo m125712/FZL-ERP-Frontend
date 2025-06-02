@@ -1,10 +1,10 @@
-function hasVisible(route) {
-	return route.hidden !== true;
-}
-
 function filterSidebarRoutes(routes) {
+	function hasVisible(route) {
+		return route.hidden !== true;
+	}
+
 	function filterRecursive(routes) {
-		return routes.filter((route) => {
+		return routes?.filter((route) => {
 			if (route.children) {
 				//* Recursively filter children and keep only those with visible access
 				route.children = filterRecursive(route.children);

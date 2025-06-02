@@ -2177,9 +2177,9 @@ export const LC_SCHEMA = {
 				String(originalValue).trim() === '' ? 0 : value
 			),
 			ldbc_fdbc: STRING.nullable(),
-			receive_date: STRING.nullable().transform((value, originalValue) =>
-				String(originalValue).trim() === '' ? null : value
-			),
+			// receive_date: STRING.nullable().transform((value, originalValue) =>
+			// 	String(originalValue).trim() === '' ? null : value
+			// ),
 			document_submission_date: STRING.nullable().transform(
 				(value, originalValue) =>
 					String(originalValue).trim() === '' ? null : value

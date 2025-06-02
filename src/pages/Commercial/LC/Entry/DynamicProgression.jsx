@@ -41,8 +41,7 @@ export default function index({
 		progressionRemove(index);
 	};
 
-	const rowClass =
-		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
+	const rowClass = '';
 
 	return (
 		<>
@@ -52,44 +51,40 @@ export default function index({
 				tableHead={[
 					'Amount',
 					'LDBC/FDBC',
-					'Receive Date',
-					'Handover Date',
-					'Doc Sub Date',
-					'Doc Receive Date',
-					'Bank Forward Date',
-					'Acceptance Date',
-					'Maturity Date',
-					'Payment Date',
+					// 'Receive Date',
+					'Handover',
+					'Doc Submit',
+					'Doc Receive',
+					'Bank Forward',
+					'Bank Accep.',
+					'Maturity',
+					'Payment',
 					'Payment Value',
-					'Approved',
+					// 'Approved',
 					'Action',
 				].map((item) => (
-					<th
-						key={item}
-						scope='col'
-						className='group cursor-pointer select-none whitespace-nowrap bg-secondary py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300 first:pl-2'
-					>
+					<th key={item} scope='col' className=''>
 						{item}
 					</th>
 				))}
 			>
 				{progressionField.map((item, index) => (
 					<tr key={item.id}>
-						<td className={`${rowClass}`}>
+						<td className={rowClass}>
 							<Input
 								label={`lc_entry[${index}].amount`}
 								is_title_needed='false'
 								{...{ register, errors }}
 							/>
 						</td>
-						<td className={`${rowClass}`}>
+						<td className={rowClass}>
 							<Input
 								label={`lc_entry[${index}].ldbc_fdbc`}
 								is_title_needed='false'
 								{...{ register, errors }}
 							/>
 						</td>
-						<td className={`w-44 ${rowClass}`}>
+						{/* <td className={rowClass}>
 							<DateInput
 								label={`lc_entry[${index}].receive_date`}
 								is_title_needed='false'
@@ -100,8 +95,8 @@ export default function index({
 								)}
 								{...{ register, errors }}
 							/>
-						</td>
-						<td className={`w-44 ${rowClass}`}>
+						</td> */}
+						<td className={rowClass}>
 							<DateInput
 								label={`lc_entry[${index}].handover_date`}
 								is_title_needed='false'
@@ -110,15 +105,15 @@ export default function index({
 								selected={watch(
 									`lc_entry[${index}].handover_date`
 								)}
-								disabled={
-									watch(`lc_entry[${index}].receive_date`)
-										? false
-										: true
-								}
+								// disabled={
+								// 	watch(`lc_entry[${index}].receive_date`)
+								// 		? false
+								// 		: true
+								// }
 								{...{ register, errors }}
 							/>
 						</td>
-						<td className={`w-44 ${rowClass}`}>
+						<td className={rowClass}>
 							<DateInput
 								label={`lc_entry[${index}].document_submission_date`}
 								is_title_needed='false'
@@ -127,15 +122,15 @@ export default function index({
 								selected={watch(
 									`lc_entry[${index}].document_submission_date`
 								)}
-								disabled={
-									watch(`lc_entry[${index}].handover_date`)
-										? false
-										: true
-								}
+								// disabled={
+								// 	watch(`lc_entry[${index}].handover_date`)
+								// 		? false
+								// 		: true
+								// }
 								{...{ register, errors }}
 							/>
 						</td>
-						<td className={`w-44 ${rowClass}`}>
+						<td className={rowClass}>
 							<DateInput
 								label={`lc_entry[${index}].document_receive_date`}
 								is_title_needed='false'
@@ -147,14 +142,15 @@ export default function index({
 								disabled={
 									watch(
 										`lc_entry[${index}].document_submission_date`
-									)
+									) ||
+									watch(`lc_entry[${index}].handover_date`)
 										? false
 										: true
 								}
 								{...{ register, errors }}
 							/>
 						</td>
-						<td className={`w-44 ${rowClass}`}>
+						<td className={rowClass}>
 							<DateInput
 								label={`lc_entry[${index}].bank_forward_date`}
 								is_title_needed='false'
@@ -173,7 +169,7 @@ export default function index({
 								{...{ register, errors }}
 							/>
 						</td>
-						<td className={`w-44 ${rowClass}`}>
+						<td className={rowClass}>
 							<DateInput
 								label={`lc_entry[${index}].acceptance_date`}
 								is_title_needed='false'
@@ -192,7 +188,7 @@ export default function index({
 								{...{ register, errors }}
 							/>
 						</td>
-						<td className={`w-44 ${rowClass}`}>
+						<td className={rowClass}>
 							<DateInput
 								label={`lc_entry[${index}].maturity_date`}
 								is_title_needed='false'
@@ -209,7 +205,7 @@ export default function index({
 								{...{ register, errors }}
 							/>
 						</td>
-						<td className={`w-44 ${rowClass}`}>
+						<td className={rowClass}>
 							<DateInput
 								label={`lc_entry[${index}].payment_date`}
 								is_title_needed='false'
@@ -226,7 +222,7 @@ export default function index({
 								{...{ register, errors }}
 							/>
 						</td>
-						<td className={`${rowClass}`}>
+						<td className={rowClass}>
 							<Input
 								label={`lc_entry[${index}].payment_value`}
 								is_title_needed='false'

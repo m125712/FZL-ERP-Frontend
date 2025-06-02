@@ -271,6 +271,25 @@ export const InfoColumns = ({
 	return useMemo(
 		() => [
 			{
+				accessorKey: 'actions',
+				header: 'Actions',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
+				width: 'w-24',
+				cell: (info) => (
+					<EditDelete
+						idx={info.row.index}
+						handelUpdate={handelUpdate}
+						handelDelete={handelDelete}
+						showUpdate={haveAccess.includes('update')}
+						showDelete={haveAccess.includes('delete')}
+					/>
+				),
+			},
+			{
 				accessorFn: (row) => (row.is_canceled ? 'YES' : 'NO'),
 				id: 'is_cancelled',
 				header: 'Cancelled',
@@ -281,106 +300,6 @@ export const InfoColumns = ({
 						value={info.row.original.is_canceled}
 					/>
 				),
-			},
-			{
-				accessorKey: 'production_pause',
-				header: (
-					<>
-						Production <br />
-						Paused
-					</>
-				),
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					const permission = haveAccess.includes(
-						'click_status_production_paused'
-					);
-
-					return (
-						<div className='flex flex-col'>
-							<SwitchToggle
-								disabled={!permission}
-								onChange={() => {
-									handelProductionPausedStatus(
-										info.row.index
-									);
-								}}
-								checked={info.getValue() === true}
-							/>
-						</div>
-					);
-				},
-			},
-
-			{
-				accessorKey: 'sno_from_head_office',
-				header: (
-					<>
-						SNO From <br />
-						Head Office
-					</>
-				),
-				enableColumnFilter: true,
-				width: 'w-24',
-				cell: (info) => {
-					const permission = haveAccess.includes(
-						'click_status_sno_from_head_office'
-					);
-
-					const { sno_from_head_office_time } = info.row.original;
-
-					return (
-						<div className='flex flex-col'>
-							<SwitchToggle
-								disabled={!permission}
-								onChange={() => {
-									handelSNOFromHeadOfficeStatus(
-										info.row.index
-									);
-								}}
-								checked={info.getValue() === true}
-							/>
-							<DateTime date={sno_from_head_office_time} />
-						</div>
-					);
-				},
-			},
-			{
-				accessorKey: 'receive_by_factory',
-				header: (
-					<>
-						Receive By <br />
-						Factory
-					</>
-				),
-				enableColumnFilter: true,
-				width: 'w-24',
-				cell: (info) => {
-					const permission = haveAccess.includes(
-						'click_status_receive_by_factory'
-					);
-
-					const { receive_by_factory_time } = info.row.original;
-
-					return (
-						<div className='flex flex-col'>
-							<SwitchToggle
-								disabled={
-									!permission ||
-									!info.row.original.sno_from_head_office
-								}
-								onChange={() => {
-									handelReceiveByFactoryStatus(
-										info.row.index
-									);
-								}}
-								checked={info.getValue() === true}
-							/>
-							<DateTime date={receive_by_factory_time} />
-						</div>
-					);
-				},
 			},
 			{
 				accessorKey: 'id',
@@ -458,17 +377,150 @@ export const InfoColumns = ({
 					return `${marketing_priority}/${factory_priority}`;
 				},
 			},
+			{
+				accessorKey: 'production_pause',
+				header: (
+					<>
+						Production <br />
+						Paused
+					</>
+				),
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_production_paused'
+					);
+					const { production_pause_time, production_pause_by_name } =
+						info.row.original;
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelProductionPausedStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={production_pause_time} />
+							<span className='text-xs'>
+								{production_pause_by_name}
+							</span>
+						</div>
+					);
+				},
+			},
 
-			// {
-			// 	accessorKey: 'status',
-			// 	header: 'Status',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<StatusButton size='btn-xs' value={info.getValue()} />
-			// 	),
-			// },
+			{
+				accessorKey: 'sno_from_head_office',
+				header: (
+					<>
+						SNO From <br />
+						Head Office
+					</>
+				),
+				enableColumnFilter: true,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_sno_from_head_office'
+					);
 
-			...DEFAULT_COLUMNS({ handelUpdate, handelDelete, haveAccess }),
+					const {
+						sno_from_head_office_time,
+						sno_from_head_office_by_name,
+					} = info.row.original;
+
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelSNOFromHeadOfficeStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={sno_from_head_office_time} />
+							<span className='text-xs'>
+								{sno_from_head_office_by_name}
+							</span>
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'receive_by_factory',
+				header: (
+					<>
+						Receive By <br />
+						Factory
+					</>
+				),
+				enableColumnFilter: true,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_receive_by_factory'
+					);
+
+					const {
+						receive_by_factory_time,
+						receive_by_factory_by_name,
+					} = info.row.original;
+
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={
+									!permission ||
+									!info.row.original.sno_from_head_office
+								}
+								onChange={() => {
+									handelReceiveByFactoryStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={receive_by_factory_time} />
+							<span className='text-xs'>
+								{receive_by_factory_by_name}
+							</span>
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
 		],
 		[data]
 	);

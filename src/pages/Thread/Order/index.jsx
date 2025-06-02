@@ -74,6 +74,8 @@ export default function Index() {
 					data[idx]?.sno_from_head_office === true
 						? null
 						: GetDateTime(),
+				sno_from_head_office_by:
+					data[idx]?.sno_from_head_office === true ? null : user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});
@@ -88,6 +90,8 @@ export default function Index() {
 					data[idx]?.receive_by_factory === true
 						? null
 						: GetDateTime(),
+				receive_by_factory_by:
+					data[idx]?.receive_by_factory === true ? null : user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});
@@ -98,6 +102,10 @@ export default function Index() {
 			updatedData: {
 				production_pause:
 					data[idx]?.production_pause === true ? false : true,
+				production_pause_time:
+					data[idx]?.production_pause === true ? null : GetDateTime(),
+				production_pause_by:
+					data[idx]?.production_pause === true ? null : user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});
@@ -165,7 +173,8 @@ export default function Index() {
 					const permission = haveAccess.includes(
 						'click_status_production_paused'
 					);
-
+					const { production_pause_time, production_pause_by_name } =
+						info.row.original;
 					return (
 						<div className='flex flex-col'>
 							<SwitchToggle
@@ -177,6 +186,10 @@ export default function Index() {
 								}}
 								checked={info.getValue() === true}
 							/>
+							<DateTime date={production_pause_time} />
+							<span className='text-xs'>
+								{production_pause_by_name}
+							</span>
 						</div>
 					);
 				},
@@ -196,7 +209,10 @@ export default function Index() {
 					const permission = haveAccess.includes(
 						'click_status_sno_from_head_office'
 					);
-					const { sno_from_head_office_time } = info.row.original;
+					const {
+						sno_from_head_office_time,
+						sno_from_head_office_by_name,
+					} = info.row.original;
 
 					return (
 						<div className='flex flex-col'>
@@ -210,6 +226,9 @@ export default function Index() {
 								checked={info.getValue() === true}
 							/>
 							<DateTime date={sno_from_head_office_time} />
+							<span className='text-xs'>
+								{sno_from_head_office_by_name}
+							</span>
 						</div>
 					);
 				},
@@ -229,7 +248,10 @@ export default function Index() {
 						'click_status_receive_by_factory'
 					);
 
-					const { receive_by_factory_time } = info.row.original;
+					const {
+						receive_by_factory_time,
+						receive_by_factory_by_name,
+					} = info.row.original;
 					const { sno_from_head_office } = info.row.original;
 
 					return (
@@ -244,6 +266,9 @@ export default function Index() {
 								checked={info.getValue() === true}
 							/>
 							<DateTime date={receive_by_factory_time} />
+							<span className='text-xs'>
+								{receive_by_factory_by_name}
+							</span>
 						</div>
 					);
 				},

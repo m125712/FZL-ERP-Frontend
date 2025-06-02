@@ -124,7 +124,7 @@ export default function Index() {
 						? row.lc_numbers
 						: [];
 					if (lcArr.length === 0) return '--';
-					return lcArr.map((pi) => pi.lc_numbers).join(', ');
+					return lcArr.map((lc) => lc.lc_numbers).join(', ');
 				},
 				id: 'lc_numbers',
 				header: <>LC No.</>,

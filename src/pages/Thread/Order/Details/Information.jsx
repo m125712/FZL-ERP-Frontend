@@ -100,7 +100,9 @@ export default function Information({ orderInfo }) {
 			},
 			{
 				label: 'Delivery Date',
-				value: format(new Date(delivery_date), 'dd/MM/yyyy'),
+				value: delivery_date
+					? format(new Date(delivery_date), 'dd/MM/yyyy')
+					: '',
 			},
 		];
 

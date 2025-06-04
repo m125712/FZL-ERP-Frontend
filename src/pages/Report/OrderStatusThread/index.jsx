@@ -3,13 +3,12 @@ import { useEffect } from 'react';
 import PageInfo from '@/util/PageInfo';
 
 import Thread from './Thread';
-import Zipper from './Zipper';
 
 export default function Index() {
 	const info = new PageInfo(
-		'Order Status',
-		'report/order-status',
-		'report__order_status'
+		'Order Status (Thread)',
+		'report/order-status-thread',
+		'report__order_status_thread'
 	);
 
 	useEffect(() => {
@@ -18,7 +17,6 @@ export default function Index() {
 
 	return (
 		<div className='flex flex-col gap-8'>
-			<Zipper />
 			<Thread />
 		</div>
 	);

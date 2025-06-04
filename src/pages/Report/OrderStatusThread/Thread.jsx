@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import { useZipperStatus } from '@/state/Report';
+import { useThreadStatus } from '@/state/Report';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
+import { CustomLink, DateTime, SimpleDatePicker, Status } from '@/ui';
 
-import { REPORT_DATE_FORMATE, REPORT_DATE_TIME_FORMAT } from '../utils';
+import { REPORT_DATE_FORMATE } from '../utils';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
@@ -18,13 +18,13 @@ const getPath = (haveAccess, userUUID) => {
 };
 
 export default function Index() {
-	const haveAccess = useAccess('report__order_status');
+	const haveAccess = useAccess('report__order_status_thread');
 	const { user } = useAuth();
 
 	const [date, setDate] = useState(new Date());
 	const [toDate, setToDate] = useState(new Date());
 
-	const { data, isLoading, url } = useZipperStatus(
+	const { data, isLoading, url } = useThreadStatus(
 		format(date, 'yyyy-MM-dd'),
 		format(toDate, 'yyyy-MM-dd'),
 		getPath(haveAccess, user?.uuid),
@@ -51,43 +51,6 @@ export default function Index() {
 						/>
 					);
 				},
-			},
-			{
-				accessorKey: 'item_description',
-				header: 'Item',
-				enableColumnFilter: true,
-				width: 'w-32',
-				cell: (info) => {
-					const { order_description_uuid, order_number } =
-						info.row.original;
-					return (
-						<CustomLink
-							label={info.getValue()}
-							url={`/order/details/${order_number}/${order_description_uuid}`}
-							openInNewTab={true}
-						/>
-					);
-				},
-			},
-			{
-				accessorKey: 'item_name_with_stopper',
-				header: 'Item & Stopper',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'zipper_number_name',
-				header: 'Zipper No.',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'end_type_name',
-				header: 'End Type',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
 			},
 			{
 				accessorFn: (row) => {
@@ -139,7 +102,6 @@ export default function Index() {
 					));
 				},
 			},
-
 			{
 				accessorKey: 'marketing_name',
 				header: 'Marketing',
@@ -155,16 +117,14 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => (row.style ? row.style : '---'),
-				id: 'style',
+				accessorKey: 'style',
 				header: 'Style',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => (row.color ? row.color : '---'),
-				id: 'color',
+				accessorKey: 'color',
 				header: 'Color',
 				enableColumnFilter: false,
 				width: 'w-32',
@@ -186,38 +146,15 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'size',
-				header: 'Size',
+				accessorKey: 'count_length_name',
+				header: 'Count Length',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'unit',
-				header: 'Unit',
-				enableColumnFilter: false,
+				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'quantity',
 				header: 'QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'expected_kg',
-				header: 'Exp. KG',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'total_slider_required',
-				header: 'Slider Req.',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'total_slider_required_kg',
-				header: 'Total Slider KG',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -228,17 +165,22 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => row.dyeing_batch_number,
-				id: 'dyeing_batch_number',
-				header: 'D/B',
+				accessorKey: 'total_expected_weight',
+				header: 'Exp. Yarn Wgt',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) => row.batch_number,
+				id: 'batch_number',
+				header: 'BA/N',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const { dyeing_batch_uuid, dyeing_batch_number } =
-						info.row.original;
+					const { batch_uuid, batch_number } = info.row.original;
 					return (
 						<CustomLink
-							label={dyeing_batch_number}
-							url={`/dyeing-and-iron/zipper-batch/${dyeing_batch_uuid}`}
+							label={batch_number}
+							url={`/dyeing-and-iron/thread-batch/${batch_uuid}`}
 							openInNewTab={true}
 							showCopyButton={false}
 						/>
@@ -247,29 +189,18 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					row.batch_created_at &&
-					REPORT_DATE_TIME_FORMAT(row.batch_created_at),
+					row.batch_number &&
+					REPORT_DATE_FORMATE(row.batch_created_at),
 				id: 'batch_created_at',
 				header: 'B/D',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime
 						date={info.row.original.batch_created_at}
+						isTime={false}
 						customizedDateFormate='dd MMM,yyyy'
 					/>
 				),
-			},
-			{
-				accessorKey: 'total_quantity',
-				header: 'B/Qty',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'total_production_quantity',
-				header: 'B/Kg',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 			{
 				accessorFn: (row) =>
@@ -287,13 +218,34 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'batch_expected_kg',
-				header: 'EB/Kg',
+				accessorKey: 'total_quantity',
+				header: 'B/Qty',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'dyeing_machine',
+				accessorKey: 'yarn_issued',
+				header: 'Yarn',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'batch_expected_kg',
+				header: 'EB/KG',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_drying_complete',
+				header: 'D/C',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { is_drying_complete } = info.row.original;
+					return <Status status={is_drying_complete} />;
+				},
+			},
+			{
+				accessorKey: 'machine',
 				header: 'D/M',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
@@ -311,20 +263,14 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'total_dyeing_quantity',
+				accessorKey: 'total_yarn_quantity',
 				header: 'Dyeing QTY',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => info.getValue() + ' kg',
 			},
 			{
-				accessorKey: 'total_coloring_quantity',
-				header: 'Slider QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'total_finishing_quantity',
-				header: 'Finishing QTY',
+				accessorKey: 'total_coning_production_quantity',
+				header: 'Coning QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -391,9 +337,9 @@ export default function Index() {
 
 	return (
 		<ReactTable
-			key='zipper'
+			key='Thread Status'
 			showDateRange={false}
-			title={'Zipper Status'}
+			title={'Thread Status'}
 			subtitle={
 				<div className='flex flex-col'>
 					<span>

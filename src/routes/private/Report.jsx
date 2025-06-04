@@ -9,7 +9,12 @@ const LCDue = lazy(() => import('@/pages/Report/LC'));
 const PIRegister = lazy(() => import('@/pages/Report/PIRegister'));
 const PIToBeSubmit = lazy(() => import('@/pages/Report/PIToBeSubmit'));
 
-const OrderStatus = lazy(() => import('@/pages/Report/OrderStatus'));
+const OrderStatusZipper = lazy(
+	() => import('@/pages/Report/OrderStatusZipper')
+);
+const OrderStatusThread = lazy(
+	() => import('@/pages/Report/OrderStatusThread')
+);
 const ThreadProduction = lazy(
 	() => import('@/pages/Report/ThreadProductionStatus')
 );
@@ -142,10 +147,17 @@ export const ReportRoutes = [
 				actions: ['read', 'show_own_orders'],
 			},
 			{
-				name: 'Order Status',
-				path: '/report/order-status',
-				element: <OrderStatus />,
-				page_name: 'report__order_status',
+				name: 'Order Status (Zipper)',
+				path: '/report/order-status-zipper',
+				element: <OrderStatusZipper />,
+				page_name: 'report__order_status_zipper',
+				actions: ['read', 'show_own_orders', 'show_price'],
+			},
+			{
+				name: 'Order Status (Thread)',
+				path: '/report/order-status-thread',
+				element: <OrderStatusThread />,
+				page_name: 'report__order_status_thread',
 				actions: ['read', 'show_own_orders', 'show_price'],
 			},
 			{

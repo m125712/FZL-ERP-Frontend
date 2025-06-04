@@ -26,6 +26,7 @@ const options = [
 	{ value: 'pending', label: 'Pending' },
 	{ value: 'challan', label: 'Challan' },
 	{ value: 'gate_pass', label: 'W/H Out' },
+	{ value: 'deleted', label: 'Deleted' },
 ];
 
 export default function Index() {

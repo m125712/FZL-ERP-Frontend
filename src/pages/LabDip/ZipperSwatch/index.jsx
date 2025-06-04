@@ -16,32 +16,33 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
+const options = [
+	{ value: 'all', label: 'All' },
+	{ value: 'pending', label: 'Pending' },
+	{ value: 'completed', label: 'Completed' },
+];
+
+const options2 = [
+	{ value: 'complete_order', label: 'Complete Order' },
+	{ value: 'incomplete_order', label: 'Incomplete Order' },
+];
+
 export default function Index() {
 	const [status, setStatus] = useState('pending');
 	const [status2, setStatus2] = useState('incomplete_order');
-	const options = [
-		{ value: 'all', label: 'All' },
-		{ value: 'pending', label: 'Pending' },
-		{ value: 'completed', label: 'Completed' },
-	];
-	const options2 = [
-		{ value: 'complete_order', label: 'Complete Order' },
-		{ value: 'incomplete_order', label: 'Incomplete Order' },
-	];
+
 	const { data, isLoading } = useDyeingSwatch(
 		status2 === 'complete_order'
 			? `order_type=${status2}`
 			: `type=${status}&order_type=${status2}`
 	);
-	const { updateData } = useDyeingDummy();
+	const { updateData } = useDyeingDummy(); //! need to update the data
 	const info = new PageInfo(
 		'LabDip/ZipperSwatch',
 		'order/swatch',
 		'lab_dip__zipper_swatch'
 	);
 	const haveAccess = useAccess('lab_dip__zipper_swatch');
-
-	// * fetching the data
 
 	const handleSwatchStatus = useCallback(
 		async (e, idx) => {
@@ -77,7 +78,7 @@ export default function Index() {
 				accessorKey: 'item_description',
 				header: 'Item Description',
 				// enableColumnFilter: false,
-				width: 'w-24',
+				width: 'w-32',
 				cell: (info) => {
 					const { order_description_uuid, order_number } =
 						info.row.original;
@@ -90,25 +91,19 @@ export default function Index() {
 					);
 				},
 			},
-			{
-				accessorKey: 'order_type',
-				header: 'Type',
-				width: 'w-24',
-				// enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'order_type',
+			// 	header: 'Type',
+			// 	width: 'w-24',
+			// 	// enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
 			{
 				accessorKey: 'style',
 				header: 'Style',
 				width: 'w-40',
 				// enableColumnFilter: false,
 				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'bleaching',
-				header: 'Bleach',
-				enableColumnFilter: true,
-				enableSorting: true,
 			},
 			{
 				accessorKey: 'color',
@@ -126,40 +121,46 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) => {
-					if (row.order_type === 'tape') {
-						return 'MTR';
-					} else {
-						return row.is_inch === 1 ? 'INCH' : 'CM';
-					}
+					if (row.order_type === 'tape') return 'MTR';
+
+					return row.is_inch === 1 ? 'INCH' : 'CM';
 				},
 				id: 'unit',
 				header: 'Unit',
-				width: 'w-24',
+				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'quantity',
 				header: (
-					<span>
-						Quantity <br />
+					<>
+						QTY <br />
 						(PCS)
-					</span>
+					</>
 				),
-				width: 'w-24',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => {
-					const { is_batch_created } = row;
-					if (is_batch_created) {
-						return 'Yes';
-					}
-					if (!is_batch_created) {
-						return 'No';
-					}
+				accessorKey: 'bleaching',
+				header: 'Bleach',
+				enableColumnFilter: true,
+				enableSorting: true,
+				cell: (info) => {
+					const isBleach = info.getValue() === 'bleach';
+					return (
+						<StatusButton className={'btn-xs'} value={isBleach} />
+					);
 				},
+			},
+			{
+				accessorFn: (row) => (row.is_batch_created ? 'Yes' : 'No'),
 				id: 'is_dyeing_batch_entry',
-				header: 'Dyeing Batch Created',
+				header: (
+					<>
+						Batch <br />
+						Created
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => (
 					<StatusButton
@@ -169,8 +170,24 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'receive_by_factory_time',
+				header: (
+					<>
+						Factory <br />
+						Received
+					</>
+				),
+				width: 'w-24',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.receive_by_factory_time}
+					/>
+				),
+			},
+			{
 				accessorKey: 'recipe_name',
-				header: 'Swatch Status',
+				header: 'Recipe',
 				enableColumnFilter: false,
 				hidden: !haveAccess.includes('update'),
 				width: 'min-w-52',
@@ -184,6 +201,11 @@ export default function Index() {
 					const swatchAccessOverride = haveAccess.includes(
 						'click_swatch_status_override'
 					);
+
+					let isDisabled = true;
+					if (swatchAccessOverride) isDisabled = false;
+					if (recipe_uuid === null && swatchAccess)
+						isDisabled = false;
 
 					return (
 						<ReactSelect
@@ -202,13 +224,7 @@ export default function Index() {
 							onChange={(e) =>
 								handleSwatchStatus(e, info.row.index)
 							}
-							isDisabled={
-								swatchAccessOverride
-									? false
-									: recipe_uuid === null && swatchAccess
-										? false
-										: true
-							}
+							isDisabled={isDisabled}
 							menuPortalTarget={document.body}
 						/>
 					);
@@ -222,10 +238,10 @@ export default function Index() {
 				},
 				id: 'swatch_approval_date',
 				header: (
-					<span>
-						Approval <br />
+					<>
+						Setup <br />
 						Date
-					</span>
+					</>
 				),
 				width: 'w-24',
 				enableColumnFilter: false,

@@ -16,19 +16,20 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
+const options = [
+	{ value: 'all', label: 'All' },
+	{ value: 'pending', label: 'Pending' },
+	{ value: 'completed', label: 'Completed' },
+];
+
+const options2 = [
+	{ value: 'complete_order', label: 'Complete Order' },
+	{ value: 'incomplete_order', label: 'Incomplete Order' },
+];
+
 export default function Index() {
 	const [status, setStatus] = useState('pending');
 	const [status2, setStatus2] = useState('incomplete_order');
-	const options = [
-		{ value: 'all', label: 'All' },
-		{ value: 'pending', label: 'Pending' },
-		{ value: 'completed', label: 'Completed' },
-	];
-
-	const options2 = [
-		{ value: 'complete_order', label: 'Complete Order' },
-		{ value: 'incomplete_order', label: 'Incomplete Order' },
-	];
 
 	const { data, updateData, isLoading } = useThreadSwatch(
 		status2 === 'complete_order'
@@ -79,49 +80,41 @@ export default function Index() {
 				accessorKey: 'count_length_name',
 				header: 'Count Length',
 				width: 'w-24',
-
 				cell: (info) => info.getValue(),
 			},
-			// {
-			// 	accessorKey: 'po',
-			// 	header: 'PO',
-			// 	width: 'w-40',
-
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'bleaching',
-				header: 'Bleaching',
-				width: 'w-16',
-
-				cell: (info) => info.getValue(),
+				header: 'Bleach',
+				enableColumnFilter: true,
+				enableSorting: true,
+				cell: (info) => {
+					const isBleach = info.getValue() === 'bleach';
+					return (
+						<StatusButton className={'btn-xs'} value={isBleach} />
+					);
+				},
 			},
 
 			{
 				accessorKey: 'order_quantity',
 				header: (
-					<span>
-						Quantity
-						<br />
+					<>
+						QTY <br />
 						(Cone)
-					</span>
+					</>
 				),
-				width: 'w-24',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => {
-					const { is_batch_created } = row;
-					if (is_batch_created) {
-						return 'Yes';
-					}
-					if (!is_batch_created) {
-						return 'No';
-					}
-				},
+				accessorFn: (row) => (row.is_batch_created ? 'Yes' : 'No'),
 				id: 'is_dyeing_batch_entry',
-				header: 'Dyeing Batch Created',
+				header: (
+					<>
+						Batch <br />
+						Created
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => (
 					<StatusButton
@@ -131,8 +124,24 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'receive_by_factory_time',
+				header: (
+					<>
+						Factory <br />
+						Received
+					</>
+				),
+				width: 'w-24',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.receive_by_factory_time}
+					/>
+				),
+			},
+			{
 				accessorKey: 'recipe_name',
-				header: 'Swatch Status',
+				header: 'Recipe',
 				width: 'min-w-60',
 				enableColumnFilter: false,
 				cell: (info) => {
@@ -145,6 +154,11 @@ export default function Index() {
 					const swatchAccessOverride = haveAccess.includes(
 						'click_swatch_status_override'
 					);
+
+					let isDisabled = true;
+					if (swatchAccessOverride) isDisabled = false;
+					if (recipe_uuid === null && swatchAccess)
+						isDisabled = false;
 
 					return (
 						<ReactSelect
@@ -166,13 +180,7 @@ export default function Index() {
 							onChange={(e) =>
 								handleSwatchStatus(e, info.row.index)
 							}
-							isDisabled={
-								swatchAccessOverride
-									? false
-									: recipe_uuid === null && swatchAccess
-										? false
-										: true
-							}
+							isDisabled={isDisabled}
 							menuPortalTarget={document.body}
 						/>
 					);
@@ -187,7 +195,7 @@ export default function Index() {
 				id: 'swatch_approval_date',
 				header: (
 					<span>
-						Approval <br />
+						Setup <br />
 						Date
 					</span>
 				),

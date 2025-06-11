@@ -12,26 +12,10 @@ import {
 import { ReactSelect } from '@/ui';
 
 import { useDashboardOrderEntry } from '../../query';
+import { LabelValue } from './components';
+import { chartConfig, options } from './utils';
 
 export const description = 'An interactive bar chart';
-
-const chartConfig = {
-	views: {
-		label: 'Qty',
-	},
-	zipper: {
-		label: 'Zipper',
-		color: '#27374D',
-	},
-	thread: {
-		label: 'Thread',
-		color: '#00ADB5',
-	},
-	metal: {
-		label: 'Metal',
-		color: '#f31260',
-	},
-};
 
 export function BarChartOverall() {
 	const [from, setFrom] = useState(
@@ -39,18 +23,10 @@ export function BarChartOverall() {
 	);
 	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
 
-	const { data, isLoading, refetch, isFetching } = useDashboardOrderEntry(
-		from,
-		to
-	);
+	const { data, isLoading } = useDashboardOrderEntry(from, to);
 	// var numeral = numeral();
 	const [activeChart, setActiveChart] = useState('zipper');
 	const [status, setStatus] = useState('30');
-	const options = [
-		{ value: 'all', label: 'All' },
-		{ value: '30', label: '30 days' },
-		{ value: '12', label: '12 months' },
-	];
 
 	const total = useMemo(
 		() => ({
@@ -164,7 +140,7 @@ export function BarChartOverall() {
 
 										return format(
 											new Date(value),
-											'dd MMM, yy'
+											'EEE - dd MMM, yy'
 										);
 									}}
 									formatter={(value, name, item) => {
@@ -172,53 +148,48 @@ export function BarChartOverall() {
 											<div className='grid min-w-[130px] grid-cols-2 items-center text-xs text-muted-foreground'>
 												{name === 'zipper' ? (
 													<>
-														<div>Nylon</div>
-														<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
-															{numeral(
+														<LabelValue
+															label='Nylon'
+															value={
 																item.payload
 																	.nylon
-															).format('0a')}
-														</div>
-														<div>N-Plastic</div>
-														<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
-															{numeral(
+															}
+														/>
+														<LabelValue
+															label='Nylon - P'
+															value={
 																item.payload
 																	.nylon_plastic
-															).format('0a')}
-														</div>
-														<div>Metal</div>
-														<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
-															{numeral(
+															}
+														/>
+														<LabelValue
+															label='Metal'
+															value={
 																item.payload
 																	.metal
-															).format('0a')}
-														</div>
-														<div>Vislon</div>
-														<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
-															{numeral(
+															}
+														/>
+														<LabelValue
+															label='Vislon'
+															value={
 																item.payload
 																	.vislon
-															).format('0a')}
-														</div>
-														<div>Total</div>
-														<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
-															{numeral(
-																value
-															).format('0a')}
-														</div>
+															}
+														/>
+														<hr className='col-span-2 my-1 bg-primary' />
+														<LabelValue
+															label='Total'
+															value={value}
+														/>
 													</>
 												) : (
-													<>
-														<div>
-															{chartConfig[name]
-																?.label || name}
-														</div>
-														<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
-															{numeral(
-																value
-															).format('0a')}
-														</div>
-													</>
+													<LabelValue
+														label={
+															chartConfig[name]
+																?.label || name
+														}
+														value={value}
+													/>
 												)}
 											</div>
 										);

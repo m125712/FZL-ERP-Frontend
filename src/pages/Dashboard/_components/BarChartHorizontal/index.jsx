@@ -40,19 +40,18 @@ function capitalizeAndRemoveUnderscore(str) {
 
 export function BarChartHorizontal(props) {
 	const [time, setTime] = useState('yesterday');
-	const [status, setStatus] = useState(false);
 
 	let to = format(addDays(new Date(), -1), 'yyyy-MM-dd');
 	let from = format(addDays(new Date(), -daysMap[time] || 1), 'yyyy-MM-dd');
 
 	const chartConfig = {
-		[props.label2]: {
-			label: capitalizeAndRemoveUnderscore(props.label2),
-			color: '#27374D',
-		},
 		[props.label1]: {
 			label: capitalizeAndRemoveUnderscore(props.label1),
 			color: '#00ADB5',
+		},
+		[props.label2]: {
+			label: capitalizeAndRemoveUnderscore(props.label2),
+			color: '#27374D',
 		},
 		label: {
 			color: 'hsl(var(--background))',

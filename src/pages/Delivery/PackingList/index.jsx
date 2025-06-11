@@ -319,8 +319,19 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'count',
+				header: 'Count',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { packing_list_wise_rank, packing_list_wise_count } =
+						info.row.original;
+
+					return `${packing_list_wise_rank}/${packing_list_wise_count}`;
+				},
+			},
+			{
 				accessorKey: 'total_quantity',
-				header: 'Total Qty',
+				header: 'QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -356,17 +367,6 @@ export default function Index() {
 				header: 'Weight',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'count',
-				header: 'Count',
-				enableColumnFilter: false,
-				cell: (info) => {
-					const { packing_list_wise_rank } = info.row.original;
-					const { packing_list_wise_count } = info.row.original;
-
-					return `${packing_list_wise_rank}/${packing_list_wise_count}`;
-				},
 			},
 
 			{

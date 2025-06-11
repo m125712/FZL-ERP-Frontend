@@ -90,6 +90,7 @@ export function BarChartHorizontal2(props) {
 										const total = numeral(
 											approved + not_approved
 										).format('0a');
+
 										return (
 											<>
 												<div
@@ -130,6 +131,7 @@ export function BarChartHorizontal2(props) {
 								position='center'
 								className='fill-[--color-label]'
 								fontSize={12}
+								format={(value) => numeral(value).format('0a')}
 							/>
 						</Bar>
 						<Bar

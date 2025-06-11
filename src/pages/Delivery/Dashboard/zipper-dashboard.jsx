@@ -3,22 +3,17 @@ import { useDeliveryZipperDashboard } from '@/state/Delivery';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { DateTime, LinkWithCopy, StatusSelect } from '@/ui';
+import { LinkWithCopy, StatusSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
+
+import { options } from './utils';
 
 export default function Index() {
 	const [status, setStatus] = useState('in_warehouse');
 	const { data, isLoading, url } = useDeliveryZipperDashboard(
 		`type=${status}`
 	);
-
-	const options = [
-		{ value: 'delivered', label: 'Delivered' },
-		{ value: 'in_warehouse', label: 'In Warehouse' },
-		{ value: 'in_vehicle', label: 'In Vehicle' },
-		{ value: 'in_floor', label: 'In Floor' },
-	];
 
 	const info = new PageInfo(
 		'Delivery/Zipper Dashboard',
@@ -135,19 +130,17 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<div>
-			<ReactTable
-				title={info.getTitle()}
-				data={data}
-				columns={columns}
-				extraButton={
-					<StatusSelect
-						status={status}
-						setStatus={setStatus}
-						options={options}
-					/>
-				}
-			/>
-		</div>
+		<ReactTable
+			title={info.getTitle()}
+			data={data}
+			columns={columns}
+			extraButton={
+				<StatusSelect
+					status={status}
+					setStatus={setStatus}
+					options={options}
+				/>
+			}
+		/>
 	);
 }

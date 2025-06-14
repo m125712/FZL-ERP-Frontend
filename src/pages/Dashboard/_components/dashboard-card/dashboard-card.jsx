@@ -1,5 +1,5 @@
 import React from 'react';
-import { NumericFormat } from 'react-number-format';
+import numeral from 'numeral';
 
 import {
 	Card,
@@ -20,28 +20,15 @@ const DashboardCard = ({
 			<CardHeader className='px-3 py-2'>
 				<CardDescription>{title}</CardDescription>
 				<CardTitle className='text-3xl font-medium'>
-					<NumericFormat
-						displayType={'text'}
-						prefix='US $'
-						value={totalValue}
-						thousandSeparator
-						thousandsGroupStyle={'thousand'}
-						decimalScale={2}
-					/>
+					{numeral(totalValue).format('$ 0,0[.]00')}
 				</CardTitle>
 			</CardHeader>
 
 			<CardFooter className='flex items-center bg-neutral-100 px-3 py-2'>
 				<CardDescription>
-					{subtitle} :{' '}
-					<NumericFormat
-						displayType={'text'}
-						prefix='$'
-						value={pendingValue}
-						thousandSeparator
-						thousandsGroupStyle={'thousand'}
-						decimalScale={2}
-					/>
+					{subtitle}:{' '}
+					{/* {numeral(pendingValue).format('$ 0,0[.]00')} */}
+					{pendingValue}
 				</CardDescription>
 			</CardFooter>
 		</Card>

@@ -14,6 +14,9 @@ export const chartConfig = {
 
 export const options = [
 	{ value: 'all', label: 'All' },
-	{ value: '30', label: '30 days' },
-	{ value: '12', label: '12 months' },
+	{ value: '30', label: 'last 30 days' },
+	{ value: '3', label: 'last 3 months' },
+	{ value: '6', label: 'last 6 months' },
+	{ value: '9', label: 'last 9 months' },
+	{ value: '12', label: 'last 12 months' },
 ];

@@ -38,6 +38,7 @@ const chartConfig = {
 };
 
 export function BarChartHorizontal2(props) {
+	const NUMBER_FORMATE = '0.00a';
 	const { data, isLoading } = useDashboardWorkInHand();
 
 	const chartData = data?.map((item) => ({
@@ -45,11 +46,38 @@ export function BarChartHorizontal2(props) {
 		total: item.approved + item.not_approved,
 	}));
 
-	if (isLoading) {
+	if (isLoading)
 		return (
 			<div className='skeleton aspect-auto h-[400px] w-full rounded-lg'></div>
 		);
-	}
+
+	const handelTooltip = (value, name, item, index) => {
+		const { approved, not_approved } = item.payload;
+		const total = numeral(approved + not_approved).format('0.00a');
+
+		return (
+			<>
+				<div
+					className='h-2.5 w-2.5 shrink-0 rounded-[2px] bg-[--color-bg]'
+					style={{
+						'--color-bg': `var(--color-${name})`,
+					}}
+				/>
+				{chartConfig[name]?.label || name}
+				<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium text-foreground'>
+					{numeral(value).format(NUMBER_FORMATE)}
+				</div>
+				{index === 1 && (
+					<div className='mt-1.5 flex basis-full items-center border-t pt-1.5 text-xs font-medium text-foreground'>
+						Total
+						<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium text-foreground'>
+							{total}
+						</div>
+					</div>
+				)}
+			</>
+		);
+	};
 
 	return (
 		<Card className='w-full'>
@@ -75,7 +103,7 @@ export function BarChartHorizontal2(props) {
 							dataKey='total'
 							type='number'
 							tickFormatter={(value) =>
-								numeral(value).format('0a')
+								numeral(value).format('0.0a')
 							}
 						/>
 						<ChartLegend content={<ChartLegendContent />} />
@@ -83,40 +111,9 @@ export function BarChartHorizontal2(props) {
 							cursor={false}
 							content={
 								<ChartTooltipContent
-									formatter={(value, name, item, index) => {
-										const { approved, not_approved } =
-											item.payload;
-
-										const total = numeral(
-											approved + not_approved
-										).format('0a');
-
-										return (
-											<>
-												<div
-													className='h-2.5 w-2.5 shrink-0 rounded-[2px] bg-[--color-bg]'
-													style={{
-														'--color-bg': `var(--color-${name})`,
-													}}
-												/>
-												{chartConfig[name]?.label ||
-													name}
-												<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
-													{numeral(value).format(
-														'0a'
-													)}
-												</div>
-												{index === 1 && (
-													<div className='mt-1.5 flex basis-full items-center border-t pt-1.5 text-xs font-medium text-foreground'>
-														Total
-														<div className='ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground'>
-															{total}
-														</div>
-													</div>
-												)}
-											</>
-										);
-									}}
+									formatter={(value, name, item, index) =>
+										handelTooltip(value, name, item, index)
+									}
 								/>
 							}
 						/>
@@ -131,7 +128,9 @@ export function BarChartHorizontal2(props) {
 								position='center'
 								className='fill-[--color-label]'
 								fontSize={12}
-								format={(value) => numeral(value).format('0a')}
+								formatter={(value) =>
+									numeral(value).format(NUMBER_FORMATE)
+								}
 							/>
 						</Bar>
 						<Bar
@@ -145,6 +144,9 @@ export function BarChartHorizontal2(props) {
 								position='center'
 								className='fill-[--color-label]'
 								fontSize={12}
+								formatter={(value) =>
+									numeral(value).format(NUMBER_FORMATE)
+								}
 							/>
 							<LabelList
 								dataKey='total'
@@ -152,6 +154,9 @@ export function BarChartHorizontal2(props) {
 								offset={8}
 								className='fill-[--color-total]'
 								fontSize={12}
+								formatter={(value) =>
+									numeral(value).format(NUMBER_FORMATE)
+								}
 							/>
 						</Bar>
 					</BarChart>

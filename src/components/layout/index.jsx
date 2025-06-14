@@ -26,7 +26,7 @@ const Layout = () => {
 						<div
 							className={cn(
 								'size-full flex-1 overflow-auto',
-								pathname !== '/' && 'px-1 py-2 lg:px-4'
+								pathname !== '/' && 'px-1 py-2 lg:px-2'
 							)}
 						>
 							<Suspense fallback={<Loader />}>

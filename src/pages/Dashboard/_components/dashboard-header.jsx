@@ -1,15 +1,6 @@
 import { useMemo } from 'react';
 import { useAuth } from '@/context/auth';
 import { format } from 'date-fns';
-import { RefreshCw } from 'lucide-react';
-
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select';
 
 const DashboardHeader = () => {
 	const auth = useAuth();
@@ -25,25 +16,6 @@ const DashboardHeader = () => {
 					<p className='text-sm text-secondary'>
 						{format(new Date(), 'EEEE, dd MMM yyyy')}
 					</p>
-				</div>
-
-				<div className='flex items-center gap-2'>
-					{/* <Select value={dataPreview} onValueChange={setDataPreview}>
-						<SelectTrigger className='h-9 w-[180px]'>
-							<SelectValue placeholder='Data Preview' />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value='real'>Real</SelectItem>
-							<SelectItem value='demo'>Demo</SelectItem>
-						</SelectContent>
-					</Select> */}
-
-					{/* <button
-						onClick={handleRefresh}
-						className='btn btn-accent btn-sm'>
-						Refresh
-						<RefreshCw className='size-4' />
-					</button> */}
 				</div>
 			</div>
 		</div>

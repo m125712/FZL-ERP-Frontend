@@ -27,9 +27,13 @@ export default function Dashboard() {
 			<DashboardHeader />
 			<div className='space-y-2 px-2 py-2 lg:px-2'>
 				{/* Order Received */}
-				<BarChartOverall />
+				{/* <BarChartOverall /> */}
 				{/* Production: Demand */}
-				<div className='flex flex-col gap-2 md:flex-row'>
+				{/* <div className='flex flex-col gap-2 md:flex-row'>
+					<BarChartHorizontal2 />
+				</div> */}
+				<div className='grid grid-cols-1 gap-2 lg:grid-cols-2'>
+					<BarChartOverall />
 					<BarChartHorizontal2 />
 				</div>
 				{/* Amounts */}

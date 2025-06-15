@@ -34,7 +34,6 @@ import {
 	LinkCopyOnly,
 	LinkOnly,
 	LinkWithCopy,
-	Pdf,
 	Progress,
 	ReactSelect,
 	ResetPassword,

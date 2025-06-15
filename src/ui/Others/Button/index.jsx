@@ -1,5 +1,5 @@
-import { ArrowBack, PDF, TransferIn } from '@/assets/icons';
-import { Eye, MessageCircleReply, Send } from 'lucide-react';
+import { ArrowBack, TransferIn } from '@/assets/icons';
+import { Eye, Send } from 'lucide-react';
 
 import BadgeCheckbox from './BadgeCheckbox';
 import { EditDelete } from './EditDelete';
@@ -16,18 +16,6 @@ const ResetPassword = ({ onClick }) => {
 		</button>
 	);
 };
-
-function Pdf({ props }) {
-	return (
-		<button
-			className='btn btn-xs rounded-full bg-secondary text-secondary-content'
-			{...props}
-		>
-			PDF
-			<PDF className='h-4 w-4' />
-		</button>
-	);
-}
 
 const Transfer = ({ onClick, disabled = false }) => {
 	return (
@@ -69,10 +57,9 @@ const EyeBtn = ({ onClick, disabled = false }) => {
 export {
 	BadgeCheckbox,
 	EditDelete,
-	Pdf,
+	EyeBtn,
 	ResetPassword,
 	StatusButton,
 	Transfer,
 	WhatsApp,
-	EyeBtn,
 };

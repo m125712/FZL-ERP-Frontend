@@ -4,7 +4,6 @@ import DatePicker from 'react-datepicker';
 import { DatePickerDefaultConfig } from '@/ui/Core/base';
 
 const MultiCalendar = ({
-	className,
 	selected,
 	onChange = () => {},
 	monthsShown = 2,

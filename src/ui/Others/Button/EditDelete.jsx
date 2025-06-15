@@ -1,6 +1,6 @@
 import { SquarePen, Trash2 } from 'lucide-react';
 
-const ActionButton = ({ children, className = '', ...rest }) => {
+const ActionButton = ({ children, ...rest }) => {
 	return (
 		<button
 			className='btn btn-circle btn-ghost btn-sm transition-all duration-300'

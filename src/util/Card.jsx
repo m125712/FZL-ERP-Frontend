@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 const items = [
 	{
@@ -50,7 +50,7 @@ export default function Card() {
 						<div className='content'>
 							<h2 className='title'>{item.title}</h2>
 							<p className='description'>{item.description}</p>
-							<button>Read More</button>
+							<button type='button'>Read More</button>
 						</div>
 					</li>
 				))}

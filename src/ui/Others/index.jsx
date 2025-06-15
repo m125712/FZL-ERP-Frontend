@@ -2,7 +2,6 @@ import BatchType from './BatchType';
 import {
 	BadgeCheckbox,
 	EditDelete,
-	Pdf,
 	ResetPassword,
 	StatusButton,
 	Transfer,
@@ -35,7 +34,6 @@ export {
 	LinkCopyOnly,
 	LinkOnly,
 	LinkWithCopy,
-	Pdf,
 	Progress,
 	ReactSelect,
 	ResetPassword,

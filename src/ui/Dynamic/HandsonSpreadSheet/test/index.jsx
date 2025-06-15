@@ -1,8 +1,6 @@
 import HotTable from '@handsontable/react';
 import { registerAllModules } from 'handsontable/registry';
 
-import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet';
-
 import SpreadSheetContainer from '../spreadsheet-container';
 
 registerAllModules();

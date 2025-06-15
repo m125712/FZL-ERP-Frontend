@@ -21,7 +21,7 @@ const SimpleDatePicker = ({
 	timeIntervals = 30,
 	props,
 }) => {
-	const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
+	const ExampleCustomInput = ({ ref, value, onClick }) => (
 		<button
 			type='button'
 			className={cn(
@@ -37,7 +37,7 @@ const SimpleDatePicker = ({
 			{value ? value : placeholder ? placeholder : 'Select Date'}
 			<Calendar className='mb-0.5 ml-1 w-4' />
 		</button>
-	));
+	);
 
 	return (
 		<DatePicker

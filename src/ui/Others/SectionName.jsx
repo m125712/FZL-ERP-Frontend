@@ -1,5 +1,5 @@
 export default function SectionName({ section }) {
-	const { type, area } = res?.[section];
+	const { type, area } = res[section];
 	return (
 		<div className='flex flex-col gap-1'>
 			<div className='badge badge-accent badge-sm'>{type}</div>

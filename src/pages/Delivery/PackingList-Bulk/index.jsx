@@ -415,20 +415,20 @@ export default function Index() {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
-			{
-				accessorKey: 'date_count',
-				header: 'Days',
-				enableColumnFilter: false,
-				cell: (info) => {
-					const { created_at } = info.row.original;
-					const days = accessDays(created_at);
-					return (
-						<span className='badge badge-secondary badge-sm'>
-							{days ? 'Access' : 'No Access'}
-						</span>
-					);
-				},
-			},
+			// {
+			// 	accessorKey: 'date_count',
+			// 	header: 'Days',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => {
+			// 		const { created_at } = info.row.original;
+			// 		const days = accessDays(created_at);
+			// 		return (
+			// 			<span className='badge badge-secondary badge-sm'>
+			// 				{days ? 'Access' : 'No Access'}
+			// 			</span>
+			// 		);
+			// 	},
+			// },
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated At',

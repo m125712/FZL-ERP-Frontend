@@ -5,9 +5,16 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, SimpleDatePicker, StatusButton } from '@/ui';
+import {
+	CustomLink,
+	DateTime,
+	SimpleDatePicker,
+	StatusButton,
+	StatusSelect,
+} from '@/ui';
 
 import { REPORT_DATE_FORMATE } from '../utils';
+import { types } from './utils';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
@@ -23,10 +30,12 @@ export default function Index() {
 
 	const [date, setDate] = useState(new Date());
 	const [toDate, setToDate] = useState(new Date());
+	const [type, setType] = useState('all');
 
-	const { data, isLoading, url } = useDeliveryReportZipper(
+	const { data, isLoading } = useDeliveryReportZipper(
 		format(date, 'yyyy-MM-dd'),
 		format(toDate, 'yyyy-MM-dd'),
+		type,
 		getPath(haveAccess, user?.uuid),
 		{ enabled: !!user?.uuid }
 	);
@@ -273,6 +282,11 @@ export default function Index() {
 							setToDate(data);
 						}}
 						selected={toDate}
+					/>
+					<StatusSelect
+						status={type}
+						setStatus={setType}
+						options={types}
 					/>
 				</div>
 			}

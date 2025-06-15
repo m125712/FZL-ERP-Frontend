@@ -4,11 +4,6 @@
  ** https://tkdodo.eu/blog/leveraging-the-query-function-context#query-key-factories
  **/
 
-import { all } from 'axios';
-
-import { useDeliveryThreadDashboard } from './Delivery';
-import { useOtherThreadOrderPackingList } from './Other';
-
 export const orderQK = {
 	all: () => ['order'],
 
@@ -629,7 +624,7 @@ export const nylonQK = {
 	//*Plastic Finishing
 	//*Tape Log
 	nylonPlasticFinishingTapeLog: () => [...nylonQK.all(), 'plastic-tape-log'],
-	nylonPlasticFinishingTapeLogByUUID: (uuid) => [
+	nylonPlasticFinishingTapeLogByUUID: () => [
 		...nylonQK.nylonPlasticFinishingTapeLog(),
 	],
 	//* Production Log
@@ -1574,7 +1569,7 @@ export const otherQK = {
 	//* Carton
 	carton: () => [...otherQK.all(), 'delivery-carton'],
 	//* Party All
-	partyAll: (params) => [...otherQK.all(), 'party-all'],
+	partyAll: () => [...otherQK.all(), 'party-all'],
 	//* Count Length
 	countLength: () => [...otherQK.all(), 'thread-count-length'],
 	//* All Zipper Thread Order list
@@ -1906,18 +1901,20 @@ export const reportQK = {
 	],
 
 	//* Delivery Report
-	deliveryReportZipper: (from, to, query) => [
+	deliveryReportZipper: (from, to, type, query) => [
 		...reportQK.all(),
 		'delivery-report-zipper',
 		from,
 		to,
+		type,
 		query,
 	],
-	deliveryReportThread: (from, to, query) => [
+	deliveryReportThread: (from, to, type, query) => [
 		...reportQK.all(),
 		'delivery-report-thread',
 		from,
 		to,
+		type,
 		query,
 	],
 

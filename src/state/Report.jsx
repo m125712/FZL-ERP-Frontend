@@ -355,24 +355,26 @@ export const useOrderSummaryPl = (uuid) =>
 export const useDeliveryReportZipper = (
 	from,
 	to,
+	type,
 	query,
 	{ enabled = false } = {}
 ) =>
 	createGlobalState({
-		queryKey: reportQK.deliveryReportZipper(from, to, query),
-		url: `/report/delivery-report?${query}&from=${from}&to=${to}`,
+		queryKey: reportQK.deliveryReportZipper(from, to, type, query),
+		url: `/report/delivery-report?${query}&from=${from}&to=${to}&order_type=${type}`,
 		enabled,
 	});
 
 export const useDeliveryReportThread = (
 	from,
 	to,
+	type,
 	query,
 	{ enabled = false } = {}
 ) =>
 	createGlobalState({
-		queryKey: reportQK.deliveryReportThread(from, to, query),
-		url: `/report/delivery-report-thread?${query}&from=${from}&to=${to}`,
+		queryKey: reportQK.deliveryReportThread(from, to, type, query),
+		url: `/report/delivery-report-thread?${query}&from=${from}&to=${to}&order_type=${type}`,
 		enabled,
 	});
 

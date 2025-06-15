@@ -3,9 +3,7 @@ import { useReportStock } from '@/state/Report';
 import { format } from 'date-fns';
 
 import ReactTable from '@/components/Table';
-import { ReactSelect, SimpleDatePicker, StatusSelect } from '@/ui';
-
-import PageInfo from '@/util/PageInfo';
+import { SimpleDatePicker, StatusSelect } from '@/ui';
 
 export default function index() {
 	const [from, setFrom] = useState(new Date());

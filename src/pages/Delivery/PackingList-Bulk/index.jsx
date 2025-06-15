@@ -6,6 +6,7 @@ import {
 	useDeliveryPackingListDetailsByUUID,
 } from '@/state/Delivery';
 import { useOtherChallan, useOtherOrder, useThreadOrder } from '@/state/Other';
+import { getDate, isSameMonth } from 'date-fns';
 import { BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
@@ -28,6 +29,37 @@ const options = [
 	{ value: 'gate_pass', label: 'W/H Out' },
 	{ value: 'deleted', label: 'Deleted' },
 ];
+
+const accessDays = (date) => {
+	const today = new Date();
+	const giveDayNo = getDate(date);
+	const todayDayNo = getDate(today);
+	const sameMonth = isSameMonth(date, new Date());
+
+	if (sameMonth) {
+		if (
+			todayDayNo >= 1 &&
+			todayDayNo <= 15 &&
+			giveDayNo >= 1 &&
+			giveDayNo <= 15
+		) {
+			return true;
+		}
+
+		if (
+			todayDayNo > 15 &&
+			todayDayNo <= 31 &&
+			giveDayNo > 15 &&
+			giveDayNo <= 31
+		) {
+			return true;
+		}
+
+		return false;
+	} else {
+		return false;
+	}
+};
 
 export default function Index() {
 	const { user } = useAuth();
@@ -384,6 +416,20 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'date_count',
+				header: 'Days',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { created_at } = info.row.original;
+					const days = accessDays(created_at);
+					return (
+						<span className='badge badge-secondary badge-sm'>
+							{days ? 'Access' : 'No Access'}
+						</span>
+					);
+				},
+			},
+			{
 				accessorKey: 'updated_at',
 				header: 'Updated At',
 				enableColumnFilter: false,
@@ -406,21 +452,27 @@ export default function Index() {
 					!haveAccess.includes('update') &&
 					!haveAccess.includes('delete'),
 				width: 'w-24',
-				cell: (info) => (
-					<EditDelete
-						idx={info.row.index}
-						handelUpdate={handelUpdate}
-						handelDelete={handelDelete}
-						showDelete={
-							haveAccess.includes('delete') &&
-							!info.row.original.is_warehouse_received
-						}
-						showUpdate={
-							haveAccess.includes('update') &&
-							!info.row.original.is_warehouse_received
-						}
-					/>
-				),
+				cell: (info) => {
+					return (
+						<EditDelete
+							idx={info.row.index}
+							handelUpdate={handelUpdate}
+							handelDelete={handelDelete}
+							showDelete={
+								(accessDays(info.row.original.created_at) &&
+									haveAccess.includes('delete') &&
+									!info.row.original.is_warehouse_received) ||
+								haveAccess.includes('override_access')
+							}
+							showUpdate={
+								(accessDays(info.row.original.created_at) &&
+									haveAccess.includes('update') &&
+									!info.row.original.is_warehouse_received) ||
+								haveAccess.includes('override_access')
+							}
+						/>
+					);
+				},
 			},
 		],
 		[data]

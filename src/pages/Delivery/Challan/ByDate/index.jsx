@@ -20,7 +20,7 @@ export default function Index() {
 		: [];
 
 	const { data, isLoading, url, updateData } = useDeliveryChallan(
-		`?delivery_date=${date}&vehicle=${vehicle}`,
+		`delivery_date=${date}&vehicle=${vehicle}`,
 		{ enabled: true }
 	);
 

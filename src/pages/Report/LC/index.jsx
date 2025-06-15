@@ -87,7 +87,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => REPORT_DATE_FORMATE(row.receive_status),
+				accessorFn: (row) => REPORT_DATE_FORMATE(row.handover_date),
 				id: 'handover_date',
 				header: 'Handover Date',
 				enableColumnFilter: false,
@@ -95,7 +95,7 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					REPORT_DATE_FORMATE(row.document_receive_status),
+					REPORT_DATE_FORMATE(row.document_receive_date),
 				id: 'document_receive_date',
 				header: 'Doc Received Date',
 				enableColumnFilter: false,

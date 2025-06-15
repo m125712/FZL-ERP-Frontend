@@ -93,7 +93,6 @@ export default function Index() {
 				accessorKey: 'revise',
 				header: 'Revise',
 				enableColumnFilter: false,
-
 				cell: (info) => info.getValue(),
 			},
 			{

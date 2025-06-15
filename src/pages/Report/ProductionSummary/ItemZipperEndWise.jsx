@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useItemZipperEndWise } from '@/state/Report';
-import { format, startOfMonth, subMonths } from 'date-fns';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
+import { SimpleDatePicker } from '@/ui';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
@@ -22,7 +22,7 @@ export default function Index() {
 	const [date, setDate] = useState(new Date());
 	const [toDate, setToDate] = useState(new Date());
 
-	const { data, isLoading, url } = useItemZipperEndWise(
+	const { data, isLoading } = useItemZipperEndWise(
 		format(date, 'yyyy-MM-dd'),
 		format(toDate, 'yyyy-MM-dd'),
 		getPath(haveAccess, user?.uuid),
@@ -59,6 +59,12 @@ export default function Index() {
 				header: 'Total Production',
 				enableColumnFilter: false,
 				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'unit',
+				header: 'Unit',
+				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 		],

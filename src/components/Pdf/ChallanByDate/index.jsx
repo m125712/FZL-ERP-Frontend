@@ -1,5 +1,3 @@
-import { get } from 'react-hook-form';
-
 import {
 	DEFAULT_FONT_SIZE,
 	tableLayoutStyle,
@@ -56,11 +54,13 @@ export default function Index(data) {
 						// * Header
 						TableHeader(node),
 						// * Body
-						...data?.map((item) =>
+						...(data ?? []).map((item) =>
 							node.map((nodeItem) => ({
 								text:
 									nodeItem.field === 'packing_numbers'
-										? item[nodeItem.field].join(', ')
+										? (item[nodeItem.field] || []).join(
+												', '
+											)
 										: nodeItem.field === 'receive_status'
 											? item[nodeItem.field] === 0
 												? 'pending'

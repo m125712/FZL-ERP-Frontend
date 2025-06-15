@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { useDeliveryChallan } from '@/state/Delivery';
 import { useOtherVehicle } from '@/state/Other';
 import { useParams } from 'react-router';
-import { useAccess } from '@/hooks';
 
 import Pdf from '@/components/Pdf/ChallanByDate';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
@@ -19,13 +18,12 @@ export default function Index() {
 		? [...vehicles, { label: 'All', value: 'all' }]
 		: [];
 
-	const { data, isLoading, url, updateData } = useDeliveryChallan(
+	const { data, isLoading, url } = useDeliveryChallan(
 		`delivery_date=${date}&vehicle=${vehicle}`,
 		{ enabled: true }
 	);
 
 	const info = new PageInfo(`Challan `, url, 'delivery__challan_by_date');
-	const haveAccess = useAccess('delivery__challan_by_date');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -68,7 +66,7 @@ export default function Index() {
 				width: 'w-28',
 				enableColumnFilter: false,
 				cell: (info) => {
-					return info?.getValue()?.map((packingList, index) => {
+					return info?.getValue()?.map((packingList) => {
 						if (packingList === 'PL-') return '-';
 						return (
 							<LinkWithCopy
@@ -85,7 +83,6 @@ export default function Index() {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				cell: (info) => {
-					const { order_number } = info.row.original;
 					return (
 						<LinkWithCopy
 							title={info.getValue()}

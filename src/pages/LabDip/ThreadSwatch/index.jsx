@@ -82,18 +82,6 @@ export default function Index() {
 				width: 'w-24',
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'bleaching',
-				header: 'Bleach',
-				enableColumnFilter: true,
-				enableSorting: true,
-				cell: (info) => {
-					const isBleach = info.getValue() === 'bleach';
-					return (
-						<StatusButton className={'btn-xs'} value={isBleach} />
-					);
-				},
-			},
 
 			{
 				accessorKey: 'order_quantity',
@@ -105,6 +93,18 @@ export default function Index() {
 				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'bleaching',
+				header: 'Bleach',
+				enableColumnFilter: true,
+				enableSorting: true,
+				// cell: (info) => {
+				// 	const isBleach = info.getValue() === 'bleach';
+				// 	return (
+				// 		<StatusButton className={'btn-xs'} value={isBleach} />
+				// 	);
+				// },
 			},
 			{
 				accessorFn: (row) => (row.is_batch_created ? 'Yes' : 'No'),

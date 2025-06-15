@@ -145,12 +145,12 @@ export default function Index() {
 				header: 'Bleach',
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: (info) => {
-					const isBleach = info.getValue() === 'bleach';
-					return (
-						<StatusButton className={'btn-xs'} value={isBleach} />
-					);
-				},
+				// cell: (info) => {
+				// 	const isBleach = info.getValue() === 'bleach';
+				// 	return (
+				// 		<StatusButton className={'btn-xs'} value={isBleach} />
+				// 	);
+				// },
 			},
 			{
 				accessorFn: (row) => (row.is_batch_created ? 'Yes' : 'No'),

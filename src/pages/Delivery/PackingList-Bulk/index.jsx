@@ -32,33 +32,16 @@ const options = [
 
 const accessDays = (date) => {
 	const today = new Date();
-	const giveDayNo = getDate(date);
-	const todayDayNo = getDate(today);
-	const sameMonth = isSameMonth(date, new Date());
+	if (!isSameMonth(date, today)) return false;
 
-	if (sameMonth) {
-		if (
-			todayDayNo >= 1 &&
-			todayDayNo <= 15 &&
-			giveDayNo >= 1 &&
-			giveDayNo <= 15
-		) {
-			return true;
-		}
+	const created_at_day = getDate(date);
+	const todayDay = getDate(today);
 
-		if (
-			todayDayNo > 15 &&
-			todayDayNo <= 31 &&
-			giveDayNo > 15 &&
-			giveDayNo <= 31
-		) {
-			return true;
-		}
-
-		return false;
-	} else {
-		return false;
-	}
+	// Both in 1-15 or both in 16-31
+	return (
+		(created_at_day <= 15 && todayDay <= 15) ||
+		(created_at_day > 15 && todayDay > 15)
+	);
 };
 
 export default function Index() {
@@ -415,20 +398,20 @@ export default function Index() {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
-			// {
-			// 	accessorKey: 'date_count',
-			// 	header: 'Days',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => {
-			// 		const { created_at } = info.row.original;
-			// 		const days = accessDays(created_at);
-			// 		return (
-			// 			<span className='badge badge-secondary badge-sm'>
-			// 				{days ? 'Access' : 'No Access'}
-			// 			</span>
-			// 		);
-			// 	},
-			// },
+			{
+				accessorKey: 'date_count',
+				header: 'Days',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { created_at } = info.row.original;
+					const days = accessDays(created_at);
+					return (
+						<span className='badge badge-secondary badge-sm'>
+							{days ? 'Access' : 'No Access'}
+						</span>
+					);
+				},
+			},
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated At',

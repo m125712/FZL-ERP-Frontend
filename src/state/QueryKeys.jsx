@@ -1919,6 +1919,22 @@ export const reportQK = {
 	],
 
 	threadBatch: (query) => [...reportQK.all(), 'thread-batch', query],
+
+	orderSheetSRZipper: (from, to, query) => [
+		...reportQK.all(),
+		'delivery-report-order-sheet-zipper',
+		from,
+		to,
+		query,
+	],
+
+	orderSheetSRThread: (from, to, query) => [
+		...reportQK.all(),
+		'delivery-report-order-sheet-thread',
+		from,
+		to,
+		query,
+	],
 };
 
 export const marketingQK = {

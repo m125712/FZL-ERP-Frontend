@@ -43,6 +43,7 @@ const Consumption = lazy(() => import('@/pages/Report/Consumption'));
 
 const ThreadBatch = lazy(() => import('@/pages/Report/ThreadBatch'));
 const OrderSummaryPL = lazy(() => import('@/pages/Report/OrderSummaryPL'));
+const OrderSheetSR = lazy(() => import('@/pages/Report/OrderSheetSR'));
 
 export const ReportRoutes = [
 	{
@@ -235,6 +236,13 @@ export const ReportRoutes = [
 				path: '/report/thread-batch',
 				element: <ThreadBatch />,
 				page_name: 'report__thread_batch',
+				actions: ['read', 'show_own_orders'],
+			},
+			{
+				name: 'Order-Sheet Send & Receive',
+				path: '/report/order-sheet-sr',
+				element: <OrderSheetSR />,
+				page_name: 'report__order_sheet_sr',
 				actions: ['read', 'show_own_orders'],
 			},
 		],

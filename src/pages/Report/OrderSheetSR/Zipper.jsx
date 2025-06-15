@@ -107,6 +107,13 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'revise',
+				header: 'Revise',
+				enableColumnFilter: false,
+
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorFn: (row) => (row.sno_from_head_office ? 'Y' : 'N'),
 				id: 'sno_from_head_office',
 				header: 'SNO Rcv.',

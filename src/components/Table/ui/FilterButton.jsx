@@ -1,11 +1,11 @@
-import { Column } from '@/assets/icons';
+import { Columns3 } from 'lucide-react';
 
 const FilterButton = ({ title, children }) => {
 	return (
 		<div className='dropdown'>
 			<button type='button' className='btn-filter-outline'>
-				<Column className='size-5' />
-				<span className='hidden lg:block'> {title}</span>
+				<Columns3 className='size-5' />
+				<span className='hidden lg:block'>{title}</span>
 			</button>
 			<ul
 				tabIndex={0}

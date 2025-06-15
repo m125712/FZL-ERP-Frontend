@@ -1,4 +1,4 @@
-import { Copy } from '@/assets/icons';
+import { Copy } from 'lucide-react';
 
 export default function RemoveButton({ showButton = true, onClick }) {
 	if (!showButton) return null;

@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { CalenderIcon } from '@/assets/icons';
 import { format } from 'date-fns';
 import DatePicker from 'react-datepicker';
@@ -14,18 +14,18 @@ import {
 	utilFunc,
 } from '../handleDateRange/utils';
 
-const ExampleCustomInput = forwardRef(({ value, onClick, className }, ref) => {
+const ExampleCustomInput = ({ ref, value, onClick, className }) => {
 	return (
-		<button className={className} onClick={onClick} ref={ref}>
+		<button type='button' className={className} onClick={onClick} ref={ref}>
 			<CalenderIcon className='size-4' />
 			<span className='hidden text-xs sm:block lg:text-sm'>{value}</span>
 		</button>
 	);
-});
+};
 
 ExampleCustomInput.displayName = 'ExampleCustomInput';
 
-const FilterDate = ({ columnName, column, isFullFilter }) => {
+const FilterDate = ({ columnName, column }) => {
 	if (!column) return null;
 
 	const { id, setFilterValue, getFacetedUniqueValues } = column;

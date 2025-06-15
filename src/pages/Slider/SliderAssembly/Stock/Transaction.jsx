@@ -6,7 +6,6 @@ import {
 	useSliderAssemblyStockTransaction,
 	useSliderColoringProduction,
 } from '@/state/Slider';
-import { Watch } from 'lucide';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';

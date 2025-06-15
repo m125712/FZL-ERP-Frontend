@@ -1,11 +1,7 @@
 import { useAuth } from '@/context/auth';
-import { useNetworkState } from '@uidotdev/usehooks';
 
-import { cn } from '@/lib/utils';
-
-const User = ({ avatar = false }) => {
+const User = () => {
 	const { user } = useAuth();
-	const isOnline = useNetworkState().online;
 
 	const userInfos = [
 		{

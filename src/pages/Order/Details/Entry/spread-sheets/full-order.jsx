@@ -1,10 +1,5 @@
-import React from 'react';
-import { createIcons, icons } from 'lucide';
-
 import renderActions from '@/ui/Dynamic/HandsonSpreadSheet/_actions/render-actions';
 import TestSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet/test';
-
-createIcons({ icons });
 
 const FullOrder = (
 	{

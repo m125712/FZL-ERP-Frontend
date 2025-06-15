@@ -1,11 +1,11 @@
-import { Close, FilterIcon } from '@/assets/icons';
+import { CircleX, Funnel } from 'lucide-react';
 
 export const Drawer = ({ htmlId, children }) => (
 	<div className='drawer drawer-end z-50 mt-1.5 w-auto'>
 		<input id={htmlId} type='checkbox' className='drawer-toggle' />
 		<div className='drawer-content'>
 			<label htmlFor={htmlId} className='btn-filter-outline'>
-				<FilterIcon className='size-5' />
+				<Funnel className='size-4' />
 				<span className='hidden lg:block'>Filter</span>
 			</label>
 		</div>
@@ -18,7 +18,7 @@ export const Drawer = ({ htmlId, children }) => (
 			<div className='relative min-h-full min-w-[16.5rem] bg-base-200'>
 				<div className='flex items-center justify-between bg-primary px-4 py-2 text-xl font-bold text-primary-content'>
 					Filter
-					<FilterIcon />
+					<Funnel className='size-5' />
 				</div>
 				<div className='p-2'>{children}</div>
 			</div>
@@ -41,7 +41,7 @@ export const Template = ({
 					className='group/btn btn btn-circle btn-ghost btn-error btn-xs'
 					onClick={onClick}
 				>
-					<Close className='h-4 w-4 text-error group-hover/btn:text-primary-content' />
+					<CircleX className='h-4 w-4 text-error group-hover/btn:text-primary-content' />
 				</button>
 			)}
 		</span>

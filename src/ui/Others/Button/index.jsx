@@ -1,5 +1,4 @@
-import { ArrowBack, TransferIn } from '@/assets/icons';
-import { Eye, Send } from 'lucide-react';
+import { CircleChevronRight, Eye, Send, Undo2 } from 'lucide-react';
 
 import BadgeCheckbox from './BadgeCheckbox';
 import { EditDelete } from './EditDelete';
@@ -12,7 +11,7 @@ const ResetPassword = ({ onClick }) => {
 			className='btn btn-circle btn-accent btn-xs font-semibold'
 			onClick={onClick}
 		>
-			<ArrowBack className='w-4' />
+			<Undo2 className='w-4' />
 		</button>
 	);
 };
@@ -25,7 +24,7 @@ const Transfer = ({ onClick, disabled = false }) => {
 			className='btn btn-circle btn-accent btn-sm font-semibold text-white shadow-md'
 			onClick={onClick}
 		>
-			<TransferIn className='w-4' />
+			<CircleChevronRight className='w-4' />
 		</button>
 	);
 };

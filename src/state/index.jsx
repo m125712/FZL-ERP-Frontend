@@ -15,7 +15,7 @@ export default function createGlobalState({
 
 	const { data, isError, isLoading, isPending, refetch, isFetching, status } =
 		useQuery({
-			queryKey,
+			queryKey: [...queryKey, { url }],
 			queryFn: () => defaultFetch(url),
 			refetchInterval: false,
 			refetchOnMount: false,
@@ -35,7 +35,7 @@ export default function createGlobalState({
 
 			return { newData };
 		},
-		onSuccess: (data, variables, context) => {
+		onSuccess: (data) => {
 			ShowToast(data?.toast);
 		},
 		onError: (error, newUser, context) => {
@@ -47,7 +47,7 @@ export default function createGlobalState({
 
 			ShowToast(error?.response?.data?.toast);
 		},
-		onSettled: (data, error, variables, context) => {
+		onSettled: (data, error, variables) => {
 			queryClient.invalidateQueries({ queryKey });
 			if (variables?.isOnCloseNeeded !== false) {
 				variables?.onClose();
@@ -67,7 +67,7 @@ export default function createGlobalState({
 
 			return { previousData: previousData };
 		},
-		onSuccess: (data, variables, context) => {
+		onSuccess: (data) => {
 			ShowToast(data?.toast);
 		},
 		onError: (error, variables, context) => {
@@ -77,7 +77,7 @@ export default function createGlobalState({
 
 			ShowToast(error?.response?.data?.toast);
 		},
-		onSettled: (data, error, variables, context) => {
+		onSettled: (data, error, variables) => {
 			queryClient.invalidateQueries(queryKey);
 
 			if (variables?.isOnCloseNeeded !== false) {
@@ -94,14 +94,14 @@ export default function createGlobalState({
 		onMutate: async () => {
 			await queryClient.cancelQueries({ queryKey });
 		},
-		onSuccess: (data, variables, context) => {
+		onSuccess: (data) => {
 			ShowToast(data?.toast);
 		},
-		onError: (error, variables, context) => {
+		onError: (error) => {
 			console.log(error);
 			ShowToast(error?.response?.data?.toast);
 		},
-		onSettled: (data, error, variables, context) => {
+		onSettled: (data, error, variables) => {
 			queryClient.invalidateQueries({ queryKey });
 			if (variables?.isOnCloseNeeded !== false) {
 				variables?.onClose();

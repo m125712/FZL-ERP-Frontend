@@ -1,11 +1,8 @@
-import React from 'react';
 import { Copy } from '@/assets/icons';
 import { ChevronDown, Plus, Trash2 } from 'lucide-react';
 import Spreadsheet from 'react-spreadsheet';
 
 import cn from '@/lib/cn';
-
-import { ReactSelect } from '..';
 
 const DynamicFormSpreadSheet = (
 	{

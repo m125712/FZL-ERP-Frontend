@@ -8,7 +8,6 @@ export default function ActionButtons({
 	removeClick,
 	showDuplicateButton = true,
 	showRemoveButton,
-	className,
 }) {
 	return (
 		<div className={cn('flex w-10 gap-2')}>

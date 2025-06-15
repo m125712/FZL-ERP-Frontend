@@ -1,5 +1,3 @@
-import React from 'react';
-
 import SpreadSheet from './spread-sheet';
 import SpreadSheetContainer from './spreadsheet-container';
 

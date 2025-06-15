@@ -1,4 +1,3 @@
-import React from 'react';
 import { FileSpreadsheet, Plus } from 'lucide-react';
 import { CSVLink } from 'react-csv';
 

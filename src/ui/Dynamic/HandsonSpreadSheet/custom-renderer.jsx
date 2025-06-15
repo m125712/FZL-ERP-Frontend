@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 const CustomRenderer = (props) => {
 	const {
 		watch,
-		formState: { errors, isSubmitting, isValidating },
+		formState: { errors },
 	} = useFormContext();
 
 	if (props.field.isLoading) {

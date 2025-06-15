@@ -32,7 +32,6 @@ export const getRequiredTapeKg = ({
 	input_quantity = null,
 }) => {
 	const {
-		item_name,
 		top,
 		bottom,
 		size,

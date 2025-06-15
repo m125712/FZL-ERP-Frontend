@@ -34,7 +34,10 @@ const CopyButton = ({ id, className }) => {
 const BaseBody = ({ value, to, showCopyButton = true }) => {
 	if (!value) return '--';
 	return (
-		<button className='flex items-center gap-2 text-left font-semibold underline underline-offset-2 transition-colors duration-300 hover:text-info hover:decoration-info'>
+		<button
+			type='button'
+			className='flex items-center gap-2 text-left font-semibold underline underline-offset-2 transition-colors duration-300 hover:text-info hover:decoration-info'
+		>
 			{showCopyButton && <CopyButton id={value} />}
 
 			<Link to={to}>{value}</Link>

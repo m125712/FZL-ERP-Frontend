@@ -355,24 +355,26 @@ export const useOrderSummaryPl = (uuid) =>
 export const useDeliveryReportZipper = (
 	from,
 	to,
+	type,
 	query,
 	{ enabled = false } = {}
 ) =>
 	createGlobalState({
-		queryKey: reportQK.deliveryReportZipper(from, to, query),
-		url: `/report/delivery-report?${query}&from=${from}&to=${to}`,
+		queryKey: reportQK.deliveryReportZipper(from, to, type, query),
+		url: `/report/delivery-report?${query}&from=${from}&to=${to}&order_type=${type}`,
 		enabled,
 	});
 
 export const useDeliveryReportThread = (
 	from,
 	to,
+	type,
 	query,
 	{ enabled = false } = {}
 ) =>
 	createGlobalState({
-		queryKey: reportQK.deliveryReportThread(from, to, query),
-		url: `/report/delivery-report-thread?${query}&from=${from}&to=${to}`,
+		queryKey: reportQK.deliveryReportThread(from, to, type, query),
+		url: `/report/delivery-report-thread?${query}&from=${from}&to=${to}&order_type=${type}`,
 		enabled,
 	});
 
@@ -380,4 +382,30 @@ export const useThreadBatch = (query) =>
 	createGlobalState({
 		queryKey: reportQK.threadBatch(query),
 		url: `/report/thread-batch-report?${query}`,
+	});
+
+// * Order Sheet send & receive
+
+export const useOrderSheetSRZipper = (
+	from,
+	to,
+	type,
+	{ enabled = false } = {}
+) =>
+	createGlobalState({
+		queryKey: reportQK.orderSheetSRZipper(from, to, type),
+		url: `/report/order-sheet-send-receive-report?from_date=${from}&to_date=${to}&date_type=${type}`,
+		enabled,
+	});
+
+export const useOrderSheetSRThread = (
+	from,
+	to,
+	type,
+	{ enabled = false } = {}
+) =>
+	createGlobalState({
+		queryKey: reportQK.orderSheetSRThread(from, to, type),
+		url: `/report/order-sheet-send-receive-report-thread?from_date=${from}&to_date=${to}&date_type=${type}`,
+		enabled,
 	});

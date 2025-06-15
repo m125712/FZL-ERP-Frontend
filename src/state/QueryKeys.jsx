@@ -1901,22 +1901,40 @@ export const reportQK = {
 	],
 
 	//* Delivery Report
-	deliveryReportZipper: (from, to, query) => [
+	deliveryReportZipper: (from, to, type, query) => [
 		...reportQK.all(),
 		'delivery-report-zipper',
 		from,
 		to,
+		type,
 		query,
 	],
-	deliveryReportThread: (from, to, query) => [
+	deliveryReportThread: (from, to, type, query) => [
 		...reportQK.all(),
 		'delivery-report-thread',
+		from,
+		to,
+		type,
+		query,
+	],
+
+	threadBatch: (query) => [...reportQK.all(), 'thread-batch', query],
+
+	orderSheetSRZipper: (from, to, query) => [
+		...reportQK.all(),
+		'delivery-report-order-sheet-zipper',
 		from,
 		to,
 		query,
 	],
 
-	threadBatch: (query) => [...reportQK.all(), 'thread-batch', query],
+	orderSheetSRThread: (from, to, query) => [
+		...reportQK.all(),
+		'delivery-report-order-sheet-thread',
+		from,
+		to,
+		query,
+	],
 };
 
 export const marketingQK = {

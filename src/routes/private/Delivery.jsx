@@ -150,6 +150,7 @@ export const DeliveryRoutes = [
 					'zipper',
 					'sample_zipper',
 					'thread',
+					'override_access',
 				],
 			},
 			{
@@ -214,6 +215,7 @@ export const DeliveryRoutes = [
 					'zipper',
 					'sample_zipper',
 					'thread',
+					'override_access',
 				],
 			},
 			{

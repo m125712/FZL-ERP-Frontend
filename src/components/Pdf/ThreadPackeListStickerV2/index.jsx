@@ -53,7 +53,7 @@ export default function Index(data) {
 				text: data?.packing_number + `(${index + 1}/${cartonNumber})`,
 				bold: true,
 				alignment: 'center',
-				fontSize: DEFAULT_FONT_SIZE + 12,
+				fontSize: DEFAULT_FONT_SIZE + 10,
 				colSpan: 6,
 			},
 			{

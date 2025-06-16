@@ -1,6 +1,5 @@
 import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
-import { useAccess } from '@/hooks';
 
 import { DEFAULT_FONT_SIZE } from '../ui';
 import { company } from '../utils';
@@ -19,9 +18,7 @@ const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
 	return value;
 };
 
-export const getPageHeader = (order_info) => {
-	const haveAccess = useAccess('order__details');
-
+export const getPageHeader = (order_info, currentPage, pageCount) => {
 	let formatedDate = '';
 	if (order_info?.order_description_created_at) {
 		formatedDate = format(
@@ -50,6 +47,17 @@ export const getPageHeader = (order_info) => {
 	);
 	return [
 		// CompanyAndORDER
+		[
+			{
+				colSpan: 4,
+				text: `Page ${currentPage} of ${pageCount}`,
+				alignment: 'center',
+				border: [false, false, false, false],
+			},
+			'',
+			'',
+			'',
+		],
 		[
 			{
 				image: FZL_LOGO.src,

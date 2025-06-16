@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { DEFAULT_FONT_SIZE } from '../ui';
 import { company } from '../utils';
 
-export const getPageHeader = (order_info) => {
+export const getPageHeader = (order_info, currentPage, pageCount) => {
 	const order_number =
 		order_info.is_sample === 1
 			? order_info.order_number + ' (S)'
@@ -21,6 +21,17 @@ export const getPageHeader = (order_info) => {
 	}
 	return [
 		// CompanyAndORDER
+		[
+			{
+				colSpan: 4,
+				text: `Page ${currentPage} of ${pageCount}`,
+				alignment: 'center',
+				border: [false, false, false, false],
+			},
+			'',
+			'',
+			'',
+		],
 		[
 			{
 				image: FZL_LOGO.src,

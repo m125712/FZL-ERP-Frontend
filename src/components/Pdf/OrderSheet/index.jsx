@@ -29,13 +29,15 @@ export default function OrderSheetPdf(order_sheet) {
 		styles,
 
 		// * Page Header
-		header: {
-			table: {
-				widths: [35, '*', 50, '*'],
-				body: getPageHeader(order_info),
-			},
-			layout: 'noBorders',
-			margin: [xMargin, 10, xMargin, 0],
+		header: function (currentPage, pageCount) {
+			return {
+				table: {
+					widths: [35, '*', 50, '*'],
+					body: getPageHeader(order_info, currentPage, pageCount),
+				},
+				layout: 'noBorders',
+				margin: [xMargin, 10, xMargin, 0],
+			};
 		},
 
 		// * Page Footer

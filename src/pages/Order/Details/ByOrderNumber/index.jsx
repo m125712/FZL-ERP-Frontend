@@ -1,14 +1,12 @@
 import { lazy, useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useOrderDetailsByStyleForPDF } from '@/state/Order';
-import { Navigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { useAccess, useFetchFunc } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import OrderSheetPdf from '@/components/Pdf/OrderSheet';
-import OrderSheetPdf2 from '@/components/Pdf/OrderSheet2';
 import OrderSheetByStyle from '@/components/Pdf/OrderSheetByStyle';
-import OrderSheetByStyleV2 from '@/components/Pdf/OrderSheetByStyleV2';
 
 import { OrderInformation } from '../_components/Information';
 
@@ -43,8 +41,7 @@ const createPDF = (pdfdata, setData, setGetPdfData, OrderSheetPdf) => {
 export default function Index() {
 	const { user } = useAuth();
 	const { order_number } = useParams();
-	const { data: orderbystyle, updateData } =
-		useOrderDetailsByStyleForPDF(order_number);
+	const { data: orderbystyle } = useOrderDetailsByStyleForPDF(order_number);
 	const haveAccess = useAccess('order__details');
 
 	const [orders, setOrders] = useState([]);

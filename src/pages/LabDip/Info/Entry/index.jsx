@@ -20,14 +20,18 @@ import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
 
+const approved = [
+	{ label: 'Pending', value: 0 },
+	{ label: 'Approved', value: 1 },
+];
+
+const PPsRequired = [
+	{ label: 'No', value: 0 },
+	{ label: 'Yes', value: 1 },
+];
+
 export default function Index() {
-	const {
-		url,
-		updateData,
-		postData,
-		deleteData,
-		invalidateQuery: invalidateQueryLabDipInfo,
-	} = useLabDipInfo();
+	const { url, updateData, postData, deleteData } = useLabDipInfo();
 	const { info_number, info_uuid } = useParams();
 	const { invalidateQuery: invalidateQueryLabDipInfoByDetails } =
 		UseLabDipInfoByDetails(info_uuid);
@@ -39,7 +43,6 @@ export default function Index() {
 	const { user } = useAuth();
 	const navigate = useNavigate();
 
-	const [Status, setStatus] = useState(false);
 	// * used for checking if it is for update*//
 	const isUpdate = info_uuid !== undefined && info_number !== undefined;
 
@@ -88,7 +91,6 @@ export default function Index() {
 
 	const handleRecipeRemove = (index) => {
 		const infoUuid = getValues(`recipe[${index}].info_entry_uuid`);
-		const recipeUuid = getValues(`recipe[${index}].recipe_uuid`);
 		const recipeName = rec_uuid?.find(
 			(item) => item.value == getValues(`recipe[${index}].recipe_uuid`)
 		);
@@ -108,8 +110,6 @@ export default function Index() {
 			recipe_uuid: '',
 		});
 	};
-
-	const onClose = () => reset(LAB_INFO_NULL);
 
 	// Submit
 	const onSubmit = async (data) => {
@@ -258,27 +258,7 @@ export default function Index() {
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
-	const getApproved = (e, index) => {
-		//setApproved((prevApproved) => ({ ...prevApproved, [index]: approved }));
-		setValue(`recipe[${index}].approved`, e.approved);
-	};
-
-	// const status = [
-	// 	{ label: 'Pending', value: 0 },
-	// 	{ label: 'Approved', value: 1 },
-	// ];
-
-	const approved = [
-		{ label: 'Pending', value: 0 },
-		{ label: 'Approved', value: 1 },
-	];
-
-	const PPsRequired = [
-		{ label: 'No', value: 0 },
-		{ label: 'Yes', value: 1 },
-	];
-
-	let excludeItem = exclude(watch, rec_uuid, 'recipe', 'recipe_uuid', Status);
+	let excludeItem = exclude(watch, rec_uuid, 'recipe', 'recipe_uuid', false);
 
 	return (
 		<FormProvider {...form}>
@@ -304,10 +284,8 @@ export default function Index() {
 					handelAppend={handelRecipeAppend}
 					tableHead={[
 						'Recipe',
-						//'Status',
 						'PP Sample Required?',
 						'Approved',
-
 						'Action',
 					].map((item) => (
 						<th

@@ -16,16 +16,10 @@ export default function Header({
 	getValues,
 	watch,
 	Controller,
-	lab_status,
 	isUpdate,
 }) {
 	const [colors, setColors] = useState([]);
-	// * state for lab status field *//
-	const [labStatus, setLabStatus] = useState(
-		typeof lab_status !== 'boolean' && Number(lab_status) === 1
-			? true
-			: false
-	);
+
 	const { data: order_info_uuid } = useAllZipperThreadOrderList();
 
 	return (
@@ -62,7 +56,7 @@ export default function Header({
 							render={({ field: { onChange } }) => {
 								return (
 									<ReactSelect
-										placeholder='Select order info uuid'
+										placeholder='Select Order'
 										options={order_info_uuid}
 										value={order_info_uuid?.find(
 											(item) =>
@@ -87,14 +81,14 @@ export default function Header({
 						/>
 					</FormField>
 					{watch('order_info_uuid') ? (
-						<FormField label='name' title='name' errors={errors}>
+						<FormField label='name' title='Color' errors={errors}>
 							<Controller
 								name={'name'}
 								control={control}
 								render={({ field: { onChange } }) => {
 									return (
 										<ReactSelect
-											placeholder='Select order info uuid'
+											placeholder='Select Color'
 											options={colors}
 											value={colors?.find(
 												(item) =>
@@ -113,6 +107,12 @@ export default function Header({
 					) : (
 						<Input label={`name`} {...{ register, errors }} />
 					)}
+					<Input
+						label={`name`}
+						title='Selected Color'
+						{...{ register, errors }}
+						disabled
+					/>
 				</div>
 
 				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>

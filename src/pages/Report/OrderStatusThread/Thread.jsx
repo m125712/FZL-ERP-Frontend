@@ -24,7 +24,7 @@ export default function Index() {
 	const [date, setDate] = useState(new Date());
 	const [toDate, setToDate] = useState(new Date());
 
-	const { data, isLoading, url } = useThreadStatus(
+	const { data, isLoading } = useThreadStatus(
 		format(date, 'yyyy-MM-dd'),
 		format(toDate, 'yyyy-MM-dd'),
 		getPath(haveAccess, user?.uuid),
@@ -271,6 +271,12 @@ export default function Index() {
 			{
 				accessorKey: 'total_coning_production_quantity',
 				header: 'Coning QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'warehouse',
+				header: 'Warehouse QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

@@ -15,7 +15,7 @@ import {
 } from './utils';
 
 export default function OrderSheetByStyle(orderByStyle) {
-	const headerHeight = 110;
+	const headerHeight = 120;
 	let footerHeight = 40;
 	const { order_info, orders, sr, garments } = orderByStyle;
 	let grandTotal = 0;

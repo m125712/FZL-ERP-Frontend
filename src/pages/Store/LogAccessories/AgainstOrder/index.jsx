@@ -37,7 +37,7 @@ export default function Index() {
 		useSliderAssemblyStock();
 
 	const info = new PageInfo('Store / Transfer Against Order', url);
-	const haveAccess = useAccess('store__log');
+	const haveAccess = useAccess('store__accessories_log');
 
 	const columns = useMemo(
 		() => [

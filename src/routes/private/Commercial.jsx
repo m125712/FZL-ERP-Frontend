@@ -90,6 +90,7 @@ export const CommercialRoutes = [
 					'delete',
 					'click_receive_status',
 					'show_own_orders',
+					'input_manual_lc_pi_access',
 				],
 				disableCollapse: true,
 				children: [

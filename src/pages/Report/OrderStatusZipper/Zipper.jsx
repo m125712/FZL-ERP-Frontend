@@ -24,7 +24,7 @@ export default function Index() {
 	const [date, setDate] = useState(new Date());
 	const [toDate, setToDate] = useState(new Date());
 
-	const { data, isLoading, url } = useZipperStatus(
+	const { data, isLoading } = useZipperStatus(
 		format(date, 'yyyy-MM-dd'),
 		format(toDate, 'yyyy-MM-dd'),
 		getPath(haveAccess, user?.uuid),

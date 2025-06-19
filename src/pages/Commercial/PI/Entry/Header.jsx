@@ -7,6 +7,7 @@ import {
 	useOtherParty,
 } from '@/state/Other';
 import { useParams } from 'react-router';
+import { useAccess } from '@/hooks';
 
 import { DateInput } from '@/ui/Core';
 import {
@@ -29,7 +30,10 @@ export default function Header({
 	reset,
 }) {
 	const { pi_uuid } = useParams();
-
+	const haveAccess = useAccess('commercial__pi');
+	const is_lc_input_manual_access = haveAccess.includes(
+		'input_manual_lc_pi_access'
+	);
 	const { data: bank } = useOtherBank();
 	const { data: party } = useOtherParty(
 		'marketing=' + watch('marketing_uuid') + '&is_cash=false'
@@ -53,6 +57,14 @@ export default function Header({
 						text='text-primary-content'
 						{...{ register, errors }}
 					/>
+					{is_lc_input_manual_access && (
+						<CheckBox
+							title='LC Input Manual'
+							label='is_lc_input_manual'
+							text='text-primary-content'
+							{...{ register, errors }}
+						/>
+					)}
 				</div>
 			}
 		>
@@ -73,7 +85,10 @@ export default function Header({
 									onChange={(e) => {
 										onChange(e.value);
 									}}
-									isDisabled={true}
+									isDisabled={
+										!is_lc_input_manual_access ||
+										!watch('is_lc_input_manual')
+									}
 								/>
 							);
 						}}

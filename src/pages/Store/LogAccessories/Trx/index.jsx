@@ -21,7 +21,7 @@ export default function Index() {
 		format(toDate, 'yyyy-MM-dd')
 	);
 	const info = new PageInfo('Store / Transfer', url);
-	const haveAccess = useAccess('store__log');
+	const haveAccess = useAccess('store__accessories_log');
 
 	const columns = useMemo(
 		() => [

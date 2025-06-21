@@ -295,41 +295,6 @@ export const InfoColumns = ({
 					);
 				},
 			},
-			{
-				accessorKey: 'production_pause',
-				header: (
-					<>
-						Prod <br />
-						Paused
-					</>
-				),
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					const permission = haveAccess.includes(
-						'click_status_production_paused'
-					);
-					const { production_pause_time, production_pause_by_name } =
-						info.row.original;
-					return (
-						<div className='flex flex-col'>
-							<SwitchToggle
-								disabled={!permission}
-								onChange={() => {
-									handelProductionPausedStatus(
-										info.row.index
-									);
-								}}
-								checked={info.getValue() === true}
-							/>
-							<DateTime date={production_pause_time} />
-							<span className='text-xs'>
-								{production_pause_by_name}
-							</span>
-						</div>
-					);
-				},
-			},
 
 			{
 				accessorKey: 'sno_from_head_office',
@@ -515,6 +480,41 @@ export const InfoColumns = ({
 				header: 'Updated',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'production_pause',
+				header: (
+					<>
+						Prod <br />
+						Paused
+					</>
+				),
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_production_paused'
+					);
+					const { production_pause_time, production_pause_by_name } =
+						info.row.original;
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelProductionPausedStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={production_pause_time} />
+							<span className='text-xs'>
+								{production_pause_by_name}
+							</span>
+						</div>
+					);
+				},
 			},
 		],
 		[data]

@@ -6,7 +6,7 @@ import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, LinkWithCopy, StatusButton, StatusSelect } from '@/ui';
+import { DateTime, LinkWithCopy, StatusSelect } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
@@ -148,23 +148,6 @@ export default function Index() {
 				// },
 			},
 			{
-				accessorFn: (row) => (row.is_batch_created ? 'Yes' : 'No'),
-				id: 'is_dyeing_batch_entry',
-				header: (
-					<>
-						Batch <br />
-						Created
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton
-						className={'btn-xs'}
-						value={info.row.original.is_batch_created}
-					/>
-				),
-			},
-			{
 				accessorKey: 'receive_by_factory_time',
 				header: (
 					<>
@@ -178,6 +161,15 @@ export default function Index() {
 					<DateTime
 						date={info.row.original.receive_by_factory_time}
 					/>
+				),
+			},
+			{
+				accessorKey: 'swatch_approval_date',
+				header: <>Swatch App.</>,
+				width: 'w-24',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime date={info.row.original.swatch_approval_date} />
 				),
 			},
 			{

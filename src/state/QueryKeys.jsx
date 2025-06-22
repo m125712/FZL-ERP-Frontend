@@ -1971,4 +1971,5 @@ export const planningQK = {
 		date,
 		item,
 	],
+	planningApprovalDate: (query) => [...planningQK.all(), query],
 };

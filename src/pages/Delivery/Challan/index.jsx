@@ -91,7 +91,12 @@ export default function Index() {
 				header: 'Delivered',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const { is_delivered, gate_pass } = info.row.original;
+					const {
+						is_delivered,
+						gate_pass,
+						is_delivered_by_name,
+						is_delivered_date,
+					} = info.row.original;
 
 					const access = haveAccess.includes('click_delivered');
 					const overrideAccess = haveAccess.includes(
@@ -104,13 +109,17 @@ export default function Index() {
 					}
 
 					return (
-						<SwitchToggle
-							checked={Number(info.getValue()) === 1}
-							onChange={() =>
-								handelDeliveryStatus(info.row.index)
-							}
-							disabled={!permission}
-						/>
+						<div className='flex flex-col'>
+							<SwitchToggle
+								checked={Number(info.getValue()) === 1}
+								onChange={() =>
+									handelDeliveryStatus(info.row.index)
+								}
+								disabled={!permission}
+							/>
+							<DateTime date={is_delivered_date} />
+							<span className=''>{is_delivered_by_name}</span>
+						</div>
 					);
 				},
 			},
@@ -139,7 +148,12 @@ export default function Index() {
 				header: 'Received',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const { is_delivered, receive_status } = info.row.original;
+					const {
+						is_delivered,
+						receive_status,
+						receive_status_by_name,
+						receive_status_date,
+					} = info.row.original;
 
 					const access = haveAccess.includes('click_receive_status');
 					const overrideAccess = haveAccess.includes(
@@ -152,11 +166,17 @@ export default function Index() {
 					}
 
 					return (
-						<SwitchToggle
-							checked={Number(info.getValue()) === 1}
-							onChange={() => handelReceiveStatus(info.row.index)}
-							disabled={!permission}
-						/>
+						<div className='flex flex-col'>
+							<SwitchToggle
+								checked={Number(info.getValue()) === 1}
+								onChange={() =>
+									handelReceiveStatus(info.row.index)
+								}
+								disabled={!permission}
+							/>
+							<DateTime date={receive_status_date} />
+							<span className=''>{receive_status_by_name}</span>
+						</div>
 					);
 				},
 			},
@@ -338,24 +358,31 @@ export default function Index() {
 	const handelReceiveStatus = async (idx) => {
 		const challan = data[idx];
 		const status = challan?.receive_status == 1 ? 0 : 1;
-		const updated_at = GetDateTime();
 
 		await updateData.mutateAsync({
 			url: `/delivery/challan/update-receive-status/${challan?.uuid}`,
 			uuid: challan?.uuid,
-			updatedData: { receive_status: status, updated_at },
+			updatedData: {
+				receive_status: status,
+				receive_status_by: status ? user?.uuid : null,
+				receive_status_date: status ? GetDateTime() : null,
+			},
 			isOnCloseNeeded: false,
 		});
 	};
 	const handelDeliveryStatus = async (idx) => {
 		const challan = data[idx];
 		const status = challan?.is_delivered == 1 ? 0 : 1;
-		const updated_at = GetDateTime();
 
 		await updateData.mutateAsync({
 			url: `/delivery/challan/update-delivered/${challan?.uuid}`,
 			uuid: challan?.uuid,
-			updatedData: { is_delivered: status, updated_at },
+			updatedData: {
+				is_delivered: status,
+
+				is_delivered_by: status ? user?.uuid : null,
+				is_delivered_date: status ? GetDateTime() : null,
+			},
 			isOnCloseNeeded: false,
 		});
 	};

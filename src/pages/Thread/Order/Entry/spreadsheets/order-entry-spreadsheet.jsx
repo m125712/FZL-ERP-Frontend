@@ -35,6 +35,9 @@ const OrderEntrySpreadsheet = (
 			data: 'color',
 		},
 		{
+			data: 'color_ref',
+		},
+		{
 			data: 'style',
 		},
 		{
@@ -92,6 +95,7 @@ const OrderEntrySpreadsheet = (
 		return {
 			index: item.index,
 			color: item.color,
+			color_ref: item.color_ref,
 			style: item.style,
 			count_length_uuid: item.count_length_uuid,
 			bleaching: item.bleaching,
@@ -106,6 +110,7 @@ const OrderEntrySpreadsheet = (
 	const colHeaders = [
 		'Id',
 		'Color',
+		'Color Ref',
 		'Style',
 		'Count Length',
 		'Bleaching',
@@ -126,7 +131,7 @@ const OrderEntrySpreadsheet = (
 				handleAdd,
 				columns,
 				colHeaders,
-				readOnlyIndex: [6],
+				readOnlyIndex: [7],
 				data,
 				isIndex: true,
 			}}

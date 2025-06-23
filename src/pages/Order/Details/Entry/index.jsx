@@ -261,11 +261,6 @@ export default function Index() {
 
 		// * Update data * //
 		if (isUpdate) {
-			// * extract only the edited entries from the current entries
-			const extractedUpdatedEntries = order_entry.filter(
-				(entry, index) => dirtyFields?.order_entry?.[index]
-			);
-
 			// * updated order description * //
 			const order_description_updated = {
 				...rest,
@@ -286,6 +281,23 @@ export default function Index() {
 				isOnCloseNeeded: false,
 			});
 
+			// * extract only the edited entries from the current entries & add color_ref_update_date if color_ref is dirty
+			const extractedUpdatedEntries = order_entry
+				.map((entry, index) => {
+					const isDirty = dirtyFields?.order_entry?.[index];
+					if (!isDirty) return null;
+
+					const isColorRefDirty = isDirty?.color_ref;
+					return {
+						...entry,
+						...(isColorRefDirty &&
+							entry.order_entry_uuid && {
+								color_ref_update_date: GetDateTime(),
+							}),
+					};
+				})
+				.filter(Boolean);
+
 			// * updated order entry * //
 			const order_entry_updated = [...extractedUpdatedEntries].map(
 				(item) => ({
@@ -305,6 +317,7 @@ export default function Index() {
 					uuid: nanoid(),
 					order_description_uuid: rest?.order_description_uuid,
 					created_at: GetDateTime(),
+					color_ref_entry_date: item.color_ref ? GetDateTime() : null,
 					created_by: user?.uuid,
 				}));
 
@@ -386,6 +399,7 @@ export default function Index() {
 			quantity: watch('order_type') === 'tape' ? 1 : item.quantity,
 			swatch_approval_date: DEFAULT_SWATCH_APPROVAL_DATE,
 			order_description_uuid: new_order_description_uuid,
+			color_ref_entry_date: item.color_ref ? created_at : null,
 			created_at,
 		}));
 
@@ -431,6 +445,7 @@ export default function Index() {
 			bleaching: field.bleaching,
 			quantity: field.quantity,
 			color: field.color,
+			color_ref: field.color_ref,
 			style: field.style,
 			size: field.size,
 			company_price: field.company_price,

@@ -35,6 +35,9 @@ const FullOrder = (
 			data: 'color',
 		},
 		{
+			data: 'color_ref',
+		},
+		{
 			data: 'bleaching',
 			type: 'select',
 			selectOptions: ['bleach', 'non-bleach'],
@@ -63,6 +66,7 @@ const FullOrder = (
 			index: item.index,
 			style: item.style,
 			color: item.color,
+			color_ref: item.color_ref,
 			bleaching: item.bleaching,
 			size: item.size,
 			quantity: item.quantity,
@@ -76,6 +80,7 @@ const FullOrder = (
 		'Id',
 		'Style',
 		'Color',
+		'Color Ref',
 		'Bleaching',
 		'Size',
 		'Quantity',
@@ -96,7 +101,7 @@ const FullOrder = (
 				columns,
 				colHeaders,
 				data,
-				readOnlyIndex: [6],
+				readOnlyIndex: [7],
 				isIndex: true,
 				csvData,
 			}}

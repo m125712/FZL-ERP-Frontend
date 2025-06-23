@@ -1,7 +1,7 @@
 import { useAccess } from '@/hooks';
 
 import { EyeBtn } from '@/ui/Others/Button';
-import { StatusButton } from '@/ui';
+import { DateTime, StatusButton } from '@/ui';
 
 const createColumn = (props) => ({
 	...props,
@@ -86,6 +86,12 @@ const getColumn = ({
 		createColumn({
 			accessorKey: 'color',
 			header: 'Color',
+			enableColumnFilter: true,
+			cell: (info) => info.getValue(),
+		}),
+		createColumn({
+			accessorKey: 'color_ref',
+			header: 'Color Ref',
 			enableColumnFilter: true,
 			cell: (info) => info.getValue(),
 		}),
@@ -270,6 +276,18 @@ const getColumn = ({
 
 	return [
 		...column,
+		createColumn({
+			accessorKey: 'color_ref_entry_date',
+			header: 'Color Ref Entry',
+			enableColumnFilter: false,
+			cell: (info) => <DateTime date={info.getValue()} />,
+		}),
+		createColumn({
+			accessorKey: 'color_ref_update_date',
+			header: 'Color Ref Update',
+			enableColumnFilter: false,
+			cell: (info) => <DateTime date={info.getValue()} />,
+		}),
 		createColumn({
 			accessorKey: 'history',
 			header: 'History',

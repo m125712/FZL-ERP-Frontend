@@ -54,6 +54,7 @@ export default function Index() {
 		getValues,
 		watch,
 		setValue,
+		formState: { dirtyFields },
 		context: form,
 	} = useRHF(THREAD_ORDER_INFO_ENTRY_SCHEMA, THREAD_ORDER_INFO_ENTRY_NULL);
 
@@ -166,11 +167,29 @@ export default function Index() {
 				.map((item) => ({
 					...item,
 					order_info_uuid: order_info_uuid,
+					color_ref_entry_date: item.color_ref ? GetDateTime() : null,
 					created_at: GetDateTime(),
 					uuid: nanoid(),
 				}));
 
-			const updateEntry = data.order_info_entry.filter((item) => {
+			// * extract only the edited entries from the current entries & add color_ref_update_date if color_ref is dirty
+			const updatedColorRefEntries = data.order_info_entry
+				.map((entry, index) => {
+					const isDirty = dirtyFields?.order_info_entry?.[index];
+					if (!isDirty) return null;
+
+					const isColorRefDirty = isDirty?.color_ref;
+					return {
+						...entry,
+						...(isColorRefDirty &&
+							entry.uuid && {
+								color_ref_update_date: GetDateTime(),
+							}),
+					};
+				})
+				.filter(Boolean);
+
+			const updateEntry = updatedColorRefEntries.filter((item) => {
 				return item.uuid !== undefined;
 			});
 
@@ -244,6 +263,7 @@ export default function Index() {
 			...item,
 			order_info_uuid: new_order_info_uuid,
 			uuid: nanoid(),
+			color_ref_entry_date: item.color_ref ? GetDateTime() : null,
 			created_at,
 			created_by,
 			// swatch_approval_date:
@@ -300,6 +320,7 @@ export default function Index() {
 		threadOrderInfoEntryAppend({
 			index: newIndex,
 			color: field.color,
+			color_ref: field.color_ref,
 			style: field.style,
 			count_length_uuid: field.count_length_uuid,
 			bleaching: field.bleaching,

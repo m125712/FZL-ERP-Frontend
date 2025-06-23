@@ -71,6 +71,12 @@ export default function Index({ order_info_entry }) {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'color_ref',
+				header: 'Color Ref',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'recipe_name',
 				header: 'Recipe',
 				enableColumnFilter: false,
@@ -154,6 +160,34 @@ export default function Index({ order_info_entry }) {
 				: []),
 
 			{
+				accessorKey: 'color_ref_entry_date',
+				header: (
+					<>
+						Color Ref <br /> Entry
+					</>
+				),
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'color_ref_update_date',
+				header: (
+					<>
+						Color Ref <br /> Update
+					</>
+				),
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
 				accessorKey: 'created_at',
 				header: 'Created',
 				filterFn: 'isWithinRange',
@@ -202,7 +236,7 @@ export default function Index({ order_info_entry }) {
 			columns={columns}
 		>
 			<tr className='text-sm'>
-				<td colSpan='6' className='py-2 text-right'>
+				<td colSpan='8' className='py-2 text-right'>
 					Total QTY
 				</td>
 				<td className='pl-3 text-left font-semibold'>{totalQty}</td>

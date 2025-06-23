@@ -27,7 +27,7 @@ export default function Table({ order_entry, total }) {
 	return (
 		<ReactTable title='Details' data={order_entry} columns={columns}>
 			<tr className='text bg-slate-200 font-bold text-primary'>
-				<td colSpan={11} className='text-right'>
+				<td colSpan={12} className='text-right'>
 					Total:
 				</td>
 				<td className='px-3 py-1'>{total.Quantity}</td>
@@ -45,6 +45,8 @@ export default function Table({ order_entry, total }) {
 				{!is_sample && <td className='px-3 py-1'></td>}
 				<td className='px-3 py-1'>{total.warehouseQuantity}</td>
 				<td className='px-3 py-1'>{total.deliveryQuantity}</td>
+				<td className='px-3 py-1'></td>
+				<td className='px-3 py-1'></td>
 				<td className='px-3 py-1'></td>
 			</tr>
 		</ReactTable>

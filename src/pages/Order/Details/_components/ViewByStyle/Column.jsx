@@ -1,4 +1,4 @@
-import { StatusButton } from '@/ui';
+import { DateTime, StatusButton } from '@/ui';
 
 const createColumn = (props) => ({
 	...props,
@@ -82,6 +82,12 @@ const getColumn = ({ show_price, is_sample }) => {
 		createColumn({
 			accessorKey: 'color',
 			header: 'Color',
+			enableColumnFilter: true,
+			cell: (info) => info.getValue(),
+		}),
+		createColumn({
+			accessorKey: 'color_ref',
+			header: 'Color Ref',
 			enableColumnFilter: true,
 			cell: (info) => info.getValue(),
 		}),
@@ -240,6 +246,18 @@ const getColumn = ({ show_price, is_sample }) => {
 				Number(info.getValue()) +
 				' / ' +
 				Number(info.row.original.party_price),
+		}),
+		createColumn({
+			accessorKey: 'color_ref_entry_date',
+			header: 'Color Ref Entry',
+			enableColumnFilter: false,
+			cell: (info) => <DateTime date={info.getValue()} />,
+		}),
+		createColumn({
+			accessorKey: 'color_ref_update_date',
+			header: 'Color Ref Update',
+			enableColumnFilter: false,
+			cell: (info) => <DateTime date={info.getValue()} />,
 		}),
 	];
 

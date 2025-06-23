@@ -645,6 +645,7 @@ export const ORDER_SCHEMA = {
 			index: NUMBER_REQUIRED,
 			style: STRING_REQUIRED,
 			color: STRING,
+			color_ref: STRING,
 			size: NUMBER_DOUBLE,
 			quantity: STRING,
 			company_price: NUMBER_DOUBLE_REQUIRED.transform(
@@ -691,6 +692,7 @@ export const ORDER_NULL = {
 			order_description_uuid: null,
 			style: '',
 			color: '',
+			color_ref: '',
 			size: '',
 			quantity: '',
 			company_price: 0,
@@ -2582,6 +2584,7 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 		yup.object().shape({
 			index: NUMBER_REQUIRED,
 			color: STRING_REQUIRED,
+			color_ref: STRING,
 			// shade_recipe_uuid: STRING.nullable(),
 			// po: STRING_REQUIRED,
 			style: STRING_REQUIRED,
@@ -2622,6 +2625,7 @@ export const THREAD_ORDER_INFO_ENTRY_NULL = {
 			// shade_recipe_uuid: null,
 			style: '',
 			color: '',
+			color_ref: '',
 			count_length_uuid: null,
 			bleaching: 'non-bleach',
 			quantity: 0,

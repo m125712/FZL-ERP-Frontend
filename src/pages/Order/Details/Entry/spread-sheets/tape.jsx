@@ -37,11 +37,13 @@ const Tape = (
 			data: 'color',
 		},
 		{
+			data: 'color_ref',
+		},
+		{
 			data: 'bleaching',
 			type: 'select',
 			selectOptions: ['bleach', 'non-bleach'],
 		},
-
 		{
 			data: 'size',
 		},
@@ -61,6 +63,7 @@ const Tape = (
 			index: item.index,
 			style: item.style,
 			color: item.color,
+			color_ref: item.color_ref,
 			bleaching: item.bleaching,
 			size: item.size,
 			planning_batch_quantity: item.planning_batch_quantity,
@@ -73,6 +76,7 @@ const Tape = (
 		'Id',
 		'Style',
 		'Color',
+		'Color Ref',
 		'Bleaching',
 		'Size (MTR)',
 		'P.Batch',
@@ -93,7 +97,7 @@ const Tape = (
 				colHeaders,
 				data,
 				isIndex: true,
-				readOnlyIndex: [5],
+				readOnlyIndex: [6],
 				csvData,
 			}}
 		/>

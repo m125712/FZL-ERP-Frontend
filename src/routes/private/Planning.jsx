@@ -21,6 +21,8 @@ const ProductionCapacity = lazy(
 );
 const PlanningOverview = lazy(() => import('@/pages/Planning/Overview'));
 
+const ApprovalDate = lazy(() => import('@/pages/Planning/ApprovalDate'));
+
 export const PlanningRoutes = [
 	{
 		name: 'Planning',
@@ -95,6 +97,14 @@ export const PlanningRoutes = [
 				path: '/planning/production-capacity',
 				element: <ProductionCapacity />,
 				page_name: 'planning__production_capacity',
+				actions: ['read', 'create', 'update', 'delete'],
+			},
+			//*Approval Date
+			{
+				name: 'Approval Date',
+				path: '/planning/approval-date',
+				element: <ApprovalDate />,
+				page_name: 'planning__approval_date',
 				actions: ['read', 'create', 'update', 'delete'],
 			},
 		],

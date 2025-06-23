@@ -82,6 +82,8 @@ function BankInfo(lc) {
 
 export default function Information({ lc }) {
 	const {
+		pi_number,
+		is_old_pi,
 		pi_ids,
 		party_name,
 		total_value,
@@ -137,6 +139,10 @@ export default function Information({ lc }) {
 				value: Number(total_value).toFixed(2),
 			},
 			{
+				label: 'Old PI',
+				value: <StatusButton value={is_old_pi} className={'btn-xs'} />,
+			},
+			{
 				label: 'RTGS',
 				value: <StatusButton value={is_rtgs} className={'btn-xs'} />,
 			},
@@ -181,6 +187,7 @@ export default function Information({ lc }) {
 				label: 'LC Date',
 				value: lc_date ? format(new Date(lc_date), dateType) : '',
 			},
+			is_old_pi && { label: 'PI Number', value: pi_number },
 		];
 
 		const ExportDetails = [

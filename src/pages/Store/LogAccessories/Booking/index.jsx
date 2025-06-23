@@ -24,7 +24,7 @@ export default function Index() {
 	);
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const info = new PageInfo('Store / Booking', url);
-	const haveAccess = useAccess('store__log');
+	const haveAccess = useAccess('store__accessories_log');
 
 	const columns = useMemo(
 		() => [

@@ -6,7 +6,6 @@ import {
 	useDeliveryPackingListDetailsByUUID,
 } from '@/state/Delivery';
 import { useOtherChallan, useOtherOrder, useThreadOrder } from '@/state/Other';
-import { getDate, isSameMonth } from 'date-fns';
 import { BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
@@ -17,6 +16,8 @@ import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy, StatusSelect } from '@/ui';
 
+import { cn } from '@/lib/utils';
+import { CanEditPackingList } from '@/util/CanEditPackingList';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
@@ -29,37 +30,6 @@ const options = [
 	{ value: 'gate_pass', label: 'W/H Out' },
 	{ value: 'deleted', label: 'Deleted' },
 ];
-
-const accessDays = (date) => {
-	const today = new Date();
-	const giveDayNo = getDate(date);
-	const todayDayNo = getDate(today);
-	const sameMonth = isSameMonth(date, new Date());
-
-	if (sameMonth) {
-		if (
-			todayDayNo >= 1 &&
-			todayDayNo <= 15 &&
-			giveDayNo >= 1 &&
-			giveDayNo <= 15
-		) {
-			return true;
-		}
-
-		if (
-			todayDayNo > 15 &&
-			todayDayNo <= 31 &&
-			giveDayNo > 15 &&
-			giveDayNo <= 31
-		) {
-			return true;
-		}
-
-		return false;
-	} else {
-		return false;
-	}
-};
 
 export default function Index() {
 	const { user } = useAuth();
@@ -105,22 +75,20 @@ export default function Index() {
 		});
 
 	useEffect(() => {
-		if (
-			pdfData &&
-			!pdfLoading &&
-			pdfData?.item_for !== 'thread' &&
-			pdfData?.item_for !== 'sample_thread'
-		) {
-			Pdf2(pdfData)?.print({}, window);
-			setPdfUuid(null);
-		} else if (
-			pdfData &&
-			!pdfLoading &&
-			(pdfData?.item_for === 'thread' ||
-				pdfData?.item_for === 'sample_thread')
-		) {
-			Pdf(pdfData)?.print({}, window);
-			setPdfUuid(null);
+		if (pdfData && !pdfLoading) {
+			if (
+				pdfData?.item_for === 'thread' ||
+				pdfData?.item_for === 'sample_thread'
+			) {
+				Pdf(pdfData)?.print({}, window);
+			} else if (
+				pdfData?.item_for !== 'thread' &&
+				pdfData?.item_for !== 'sample_thread'
+			) {
+				Pdf2(pdfData)?.print({}, window);
+			}
+			const timeoutId = setTimeout(() => setPdfUuid(null), 0);
+			return () => clearTimeout(timeoutId);
 		}
 	}, [pdfData, pdfLoading]);
 
@@ -363,7 +331,12 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_quantity',
-				header: 'QTY',
+				header: (
+					<>
+						Total <br />
+						QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -379,27 +352,31 @@ export default function Index() {
 						return Math.ceil(
 							row.total_quantity / row.cone_per_carton || 1
 						);
-					} else {
-						return 1;
 					}
+					return 1;
 				},
 				id: 'carton_quantity',
-				header: 'Carton Qty',
+				header: (
+					<>
+						Carton <br />
+						QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'carton_size',
-				header: 'Carton Size',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'carton_weight',
-				header: 'Weight',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+			// {
+			// 	accessorKey: 'carton_size',
+			// 	header: 'Carton Size',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
+			// {
+			// 	accessorKey: 'carton_weight',
+			// 	header: 'Weight',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
 
 			{
 				accessorKey: 'created_by_name',
@@ -416,20 +393,7 @@ export default function Index() {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
-			// {
-			// 	accessorKey: 'date_count',
-			// 	header: 'Days',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => {
-			// 		const { created_at } = info.row.original;
-			// 		const days = accessDays(created_at);
-			// 		return (
-			// 			<span className='badge badge-secondary badge-sm'>
-			// 				{days ? 'Access' : 'No Access'}
-			// 			</span>
-			// 		);
-			// 	},
-			// },
+
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated At',
@@ -459,19 +423,39 @@ export default function Index() {
 						handelUpdate={handelUpdate}
 						handelDelete={handelDelete}
 						showDelete={
-							(accessDays(info.row.original.created_at) &&
+							(CanEditPackingList(info.row.original.created_at) &&
 								haveAccess.includes('delete') &&
 								!info.row.original.is_warehouse_received) ||
 							haveAccess.includes('override_access')
 						}
 						showUpdate={
-							(accessDays(info.row.original.created_at) &&
+							(CanEditPackingList(info.row.original.created_at) &&
 								haveAccess.includes('update') &&
 								!info.row.original.is_warehouse_received) ||
 							haveAccess.includes('override_access')
 						}
 					/>
 				),
+			},
+			{
+				accessorKey: 'date_count',
+				header: 'Can Edit?',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const canAccess = CanEditPackingList(
+						info.row.original.created_at
+					);
+					return (
+						<span
+							className={cn(
+								'badge badge-sm',
+								canAccess ? 'badge-success' : 'badge-error'
+							)}
+						>
+							{canAccess ? 'YES' : 'NO'}
+						</span>
+					);
+				},
 			},
 		],
 		[data]

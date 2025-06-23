@@ -1,15 +1,7 @@
 import { useMemo } from 'react';
 
-import { WhatsApp } from '@/ui/Others/Button';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import {
-	CustomLink,
-	DateTime,
-	EditDelete,
-	LinkWithCopy,
-	Progress,
-	StatusButton,
-} from '@/ui';
+import { CustomLink, DateTime, EditDelete, StatusButton } from '@/ui';
 
 import { DEFAULT_COLUMNS } from '@/util/Table/DefaultColumns';
 
@@ -303,41 +295,6 @@ export const InfoColumns = ({
 					);
 				},
 			},
-			{
-				accessorKey: 'production_pause',
-				header: (
-					<>
-						Prod <br />
-						Paused
-					</>
-				),
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					const permission = haveAccess.includes(
-						'click_status_production_paused'
-					);
-					const { production_pause_time, production_pause_by_name } =
-						info.row.original;
-					return (
-						<div className='flex flex-col'>
-							<SwitchToggle
-								disabled={!permission}
-								onChange={() => {
-									handelProductionPausedStatus(
-										info.row.index
-									);
-								}}
-								checked={info.getValue() === true}
-							/>
-							<DateTime date={production_pause_time} />
-							<span className='text-xs'>
-								{production_pause_by_name}
-							</span>
-						</div>
-					);
-				},
-			},
 
 			{
 				accessorKey: 'sno_from_head_office',
@@ -524,6 +481,41 @@ export const InfoColumns = ({
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
+			{
+				accessorKey: 'production_pause',
+				header: (
+					<>
+						Prod <br />
+						Paused
+					</>
+				),
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_production_paused'
+					);
+					const { production_pause_time, production_pause_by_name } =
+						info.row.original;
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelProductionPausedStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={production_pause_time} />
+							<span className='text-xs'>
+								{production_pause_by_name}
+							</span>
+						</div>
+					);
+				},
+			},
 		],
 		[data]
 	);
@@ -533,11 +525,7 @@ export const DetailsColumns = ({
 	handelUpdate,
 	haveAccess,
 	data,
-	handleWhatsApp,
 	handelMarketingCheckedStatus,
-	handelSNOFromHeadOfficeStatus,
-	handelReceiveByFactoryStatus,
-	handelProductionPausedStatus,
 }) => {
 	return useMemo(
 		() => [
@@ -608,9 +596,6 @@ export const DetailsColumns = ({
 				accessorKey: 'order_type',
 				header: 'Type',
 				enableColumnFilter: false,
-				// cell: (info) =>
-				// 	info.getValue().charAt(0).toUpperCase() +
-				// 	info.getValue().slice(1),
 			},
 			{
 				accessorKey: 'is_multi_color',
@@ -726,15 +711,6 @@ export const DetailsColumns = ({
 				enableColumnFilter: false,
 				width: 'w-12',
 			},
-			// {
-			// 	accessorKey: 'is_swatch_approved',
-			// 	header: 'Status',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<StatusButton size='btn-xs' value={info.getValue()} />
-			// 	),
-			// },
-			// * for order_details the created_at needs to be order_description_created at
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',
@@ -762,8 +738,6 @@ export const DetailsColumns = ({
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
-
-			// ...DEFAULT_COLUMNS({ handelUpdate, haveAccess }),
 		],
 		[data]
 	);

@@ -6,7 +6,6 @@ import {
 	useDeliveryPackingListDetailsByUUID,
 } from '@/state/Delivery';
 import { useOtherChallan, useOtherOrder, useThreadOrder } from '@/state/Other';
-import { getDate, isSameMonth } from 'date-fns';
 import { BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
@@ -17,6 +16,8 @@ import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkWithCopy, StatusSelect } from '@/ui';
 
+import { cn } from '@/lib/utils';
+import { CanEditPackingList } from '@/util/CanEditPackingList';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
@@ -29,20 +30,6 @@ const options = [
 	{ value: 'gate_pass', label: 'W/H Out' },
 	{ value: 'deleted', label: 'Deleted' },
 ];
-
-const accessDays = (date) => {
-	const today = new Date();
-	if (!isSameMonth(date, today)) return false;
-
-	const created_at_day = getDate(date);
-	const todayDay = getDate(today);
-
-	// Both in 1-15 or both in 16-31
-	return (
-		(created_at_day <= 15 && todayDay <= 15) ||
-		(created_at_day > 15 && todayDay > 15)
-	);
-};
 
 export default function Index() {
 	const { user } = useAuth();
@@ -88,22 +75,20 @@ export default function Index() {
 		});
 
 	useEffect(() => {
-		if (
-			pdfData &&
-			!pdfLoading &&
-			pdfData?.item_for !== 'thread' &&
-			pdfData?.item_for !== 'sample_thread'
-		) {
-			Pdf2(pdfData)?.print({}, window);
-			setPdfUuid(null);
-		} else if (
-			pdfData &&
-			!pdfLoading &&
-			(pdfData?.item_for === 'thread' ||
-				pdfData?.item_for === 'sample_thread')
-		) {
-			Pdf(pdfData)?.print({}, window);
-			setPdfUuid(null);
+		if (pdfData && !pdfLoading) {
+			if (
+				pdfData?.item_for === 'thread' ||
+				pdfData?.item_for === 'sample_thread'
+			) {
+				Pdf(pdfData)?.print({}, window);
+			} else if (
+				pdfData?.item_for !== 'thread' &&
+				pdfData?.item_for !== 'sample_thread'
+			) {
+				Pdf2(pdfData)?.print({}, window);
+			}
+			const timeoutId = setTimeout(() => setPdfUuid(null), 0);
+			return () => clearTimeout(timeoutId);
 		}
 	}, [pdfData, pdfLoading]);
 
@@ -250,10 +235,10 @@ export default function Index() {
 			{
 				accessorKey: 'gate_pass',
 				header: (
-					<span>
+					<>
 						Warehouse <br />
 						Out
-					</span>
+					</>
 				),
 				enableColumnFilter: false,
 				cell: (info) => {
@@ -334,7 +319,12 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_quantity',
-				header: 'Total Qty',
+				header: (
+					<>
+						Total <br />
+						QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -350,12 +340,16 @@ export default function Index() {
 						return Math.ceil(
 							row.total_quantity / row.cone_per_carton || 1
 						);
-					} else {
-						return 1;
 					}
+					return 1;
 				},
 				id: 'carton_quantity',
-				header: 'Carton Qty',
+				header: (
+					<>
+						Carton <br />
+						QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -398,20 +392,7 @@ export default function Index() {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
-			{
-				accessorKey: 'date_count',
-				header: 'Days',
-				enableColumnFilter: false,
-				cell: (info) => {
-					const { created_at } = info.row.original;
-					const days = accessDays(created_at);
-					return (
-						<span className='badge badge-secondary badge-sm'>
-							{days ? 'Access' : 'No Access'}
-						</span>
-					);
-				},
-			},
+
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated At',
@@ -436,24 +417,46 @@ export default function Index() {
 					!haveAccess.includes('delete'),
 				width: 'w-24',
 				cell: (info) => {
+					const { is_warehouse_received, created_at } =
+						info.row.original;
 					return (
 						<EditDelete
 							idx={info.row.index}
 							handelUpdate={handelUpdate}
 							handelDelete={handelDelete}
 							showDelete={
-								(accessDays(info.row.original.created_at) &&
+								(CanEditPackingList(created_at) &&
 									haveAccess.includes('delete') &&
-									!info.row.original.is_warehouse_received) ||
+									!is_warehouse_received) ||
 								haveAccess.includes('override_access')
 							}
 							showUpdate={
-								(accessDays(info.row.original.created_at) &&
+								(CanEditPackingList(created_at) &&
 									haveAccess.includes('update') &&
-									!info.row.original.is_warehouse_received) ||
+									!is_warehouse_received) ||
 								haveAccess.includes('override_access')
 							}
 						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'date_count',
+				header: 'Can Edit?',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const canAccess = CanEditPackingList(
+						info.row.original.created_at
+					);
+					return (
+						<span
+							className={cn(
+								'badge badge-sm',
+								canAccess ? 'badge-success' : 'badge-error'
+							)}
+						>
+							{canAccess ? 'YES' : 'NO'}
+						</span>
 					);
 				},
 			},
@@ -467,6 +470,7 @@ export default function Index() {
 		const uuid = data[idx]?.uuid;
 		navigate(`/delivery/packing-list-bulk/${uuid}/update`);
 	};
+
 	const handelReceivedStatus = async (idx) => {
 		await updateData.mutateAsync({
 			url: `/delivery/packing-list/${data[idx]?.uuid}`,
@@ -489,6 +493,7 @@ export default function Index() {
 		invalidateThreadOrderSample();
 		invalidateThreadOrder();
 	};
+
 	const handelGatePass = async (idx) => {
 		await updateData.mutateAsync({
 			url: `/delivery/packing-list/${data[idx]?.uuid}`,

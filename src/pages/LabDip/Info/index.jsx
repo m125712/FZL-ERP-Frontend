@@ -14,18 +14,19 @@ import {
 } from '@/ui';
 
 import { cn } from '@/lib/utils';
-import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
+
+const options = [
+	{ value: 'zipper_sample', label: 'Zipper Sample' },
+	{ value: 'zipper_bulk', label: 'Zipper Bulk' },
+	{ value: 'thread_sample', label: 'Thread Sample' },
+	{ value: 'thread_bulk', label: 'Thread Bulk' },
+];
 
 export default function Index() {
 	const [status, setStatus] = useState('zipper_sample');
-	const options = [
-		{ value: 'zipper_sample', label: 'Zipper Sample' },
-		{ value: 'zipper_bulk', label: 'Zipper Bulk' },
-		{ value: 'thread_sample', label: 'Thread Sample' },
-		{ value: 'thread_bulk', label: 'Thread Bulk' },
-	];
-	const { data, isLoading, url, updateData } = useLabDipInfo(status);
+
+	const { data, isLoading, url } = useLabDipInfo(status);
 	const navigate = useNavigate();
 	const info = new PageInfo('Lab Dip/Card', url, 'lab_dip__info');
 	const haveAccess = useAccess('lab_dip__info');
@@ -50,33 +51,29 @@ export default function Index() {
 			{
 				accessorKey: 'order_number',
 				header: 'Order ID',
-				width: 'w-32',
+				width: 'w-40',
 				cell: (info) => {
-					const { order_number } = info.row.original;
-					const { is_thread_order } = info.row.original;
-					const { order_info_uuid } = info.row.original;
-					if (!is_thread_order) {
-						return (
-							<LinkWithCopy
-								title={info.getValue()}
-								id={order_number}
-								uri='/order/details'
-							/>
-						);
-					} else {
-						return (
-							<LinkWithCopy
-								uri='/thread/order-info'
-								id={order_info_uuid}
-								title={info.getValue()}
-							/>
-						);
-					}
+					const { order_number, is_thread_order, order_info_uuid } =
+						info.row.original;
+
+					return !is_thread_order ? (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={order_number}
+							uri='/order/details'
+						/>
+					) : (
+						<LinkWithCopy
+							title={info.getValue()}
+							id={order_info_uuid}
+							uri='/thread/order-info'
+						/>
+					);
 				},
 			},
 			{
 				accessorKey: 'name',
-				header: 'Name',
+				header: 'Color',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
@@ -149,12 +146,12 @@ export default function Index() {
 								<tr className='text-xs text-gray-600'>
 									<th className={cn(rowStyle)}>RC/N</th>
 									<th className={cn(rowStyle)}>PP</th>
-									<th className={cn(rowStyle)}>APP</th>
+									<th className={cn(rowStyle)}>BULK</th>
 								</tr>
 							</thead>
 							<tbody>
 								{recipe_array?.map((item) => (
-									<tr>
+									<tr key={item.recipe_name}>
 										<td className={cn(rowStyle)}>
 											<CustomLink
 												label={item.recipe_name}
@@ -270,16 +267,7 @@ export default function Index() {
 
 		navigate(`/lab-dip/info/${info_id}/${uuid}/update`);
 	};
-	const handelStatusChange = async (idx) => {
-		await updateData.mutateAsync({
-			url: `${url}/${data[idx]?.uuid}`,
-			updatedData: {
-				lab_status: data[idx]?.lab_status === 1 ? 0 : 1,
-				updated_at: GetDateTime(),
-			},
-			isOnCloseNeeded: false,
-		});
-	};
+
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 

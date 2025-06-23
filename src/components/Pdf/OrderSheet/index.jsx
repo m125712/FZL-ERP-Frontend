@@ -17,7 +17,7 @@ import {
 } from './utils';
 
 export default function OrderSheetPdf(order_sheet) {
-	const headerHeight = 110;
+	const headerHeight = 140;
 	let footerHeight = 40;
 	const { order_info, order_entry, garments, sr } = order_sheet;
 

@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useDailyChallan } from '@/state/Report';
-import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, LinkWithCopy, StatusButton } from '@/ui';
+import { CustomLink, DateTime, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -129,16 +128,54 @@ export default function Index() {
 			},
 
 			{
-				accessorKey: 'pi_cash_number',
-				header: 'PI No.',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'lc_number',
+				accessorFn: (row) => {
+					const { lc_numbers } = row;
+					if (lc_numbers?.length === 0) return '--';
+
+					return lc_numbers?.map((lc) => lc?.lc_number).join(', ');
+				},
+				id: 'lc_numbers',
 				header: 'LC No.',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { lc_numbers } = info.row.original;
+
+					if (lc_numbers?.length === 0) return '--';
+
+					return lc_numbers?.map((lc) => (
+						<CustomLink
+							key={lc?.lc_number}
+							label={lc?.lc_number}
+							url={`/commercial/lc/details/${lc?.lc_uuid}`}
+							openInNewTab
+						/>
+					));
+				},
+			},
+			{
+				accessorFn: (row) => {
+					const { pi_numbers } = row;
+
+					if (pi_numbers?.length === 0) return '--';
+
+					return pi_numbers?.map((pi) => pi?.pi_number).join(', ');
+				},
+				id: 'pi_numbers',
+				header: 'Pi No.',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { pi_numbers } = info.row.original;
+					if (pi_numbers?.length === 0) return '--';
+
+					return pi_numbers?.map((pi) => (
+						<CustomLink
+							key={pi?.pi_number}
+							label={pi?.pi_number}
+							url={`/commercial/pi/${pi?.pi_number}`}
+							openInNewTab
+						/>
+					));
+				},
 			},
 			{
 				accessorKey: 'marketing_name',

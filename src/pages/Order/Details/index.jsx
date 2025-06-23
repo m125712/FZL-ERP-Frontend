@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useOrderDetailsByQuery } from '@/state/Order';
-import { useLocation, useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
@@ -35,15 +34,14 @@ const getPath = (haveAccess, userUUID) => {
 	return `?all=false`;
 };
 
+const options = [
+	{ value: 'bulk', label: 'Bulk' },
+	{ value: 'sample', label: 'Sample' },
+	{ value: 'all', label: 'All' },
+];
+
 export default function Index() {
-	// const [path, setPath] = useState(null);
 	const [status, setStatus] = useState('all');
-	// * options for extra select in table
-	const options = [
-		{ value: 'bulk', label: 'Bulk' },
-		{ value: 'sample', label: 'Sample' },
-		{ value: 'all', label: 'All' },
-	];
 
 	const haveAccess = useAccess('order__details');
 	const { user } = useAuth();
@@ -53,8 +51,6 @@ export default function Index() {
 		{ enabled: !!user?.uuid }
 	);
 
-	const navigate = useNavigate();
-	const location = useLocation();
 	const info = new PageInfo('Order/Details', url, 'order__details');
 
 	// Fetching data from server

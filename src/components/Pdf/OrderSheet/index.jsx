@@ -66,7 +66,7 @@ export default function OrderSheetPdf(order_sheet) {
 				].sort((a, b) => a - b);
 				const res = order_entry.reduce((acc, item) => {
 					const key = item.style;
-					const color = item.color;
+					const color = item.color + ' - ' + item.color_ref;
 					const size = Number(item.size);
 					const quantity = Number(item.quantity);
 					const bleach = item.bleaching;
@@ -101,7 +101,7 @@ export default function OrderSheetPdf(order_sheet) {
 
 					return acc;
 				}, {});
-
+				console.log(res);
 				//todo: order_type condition will start from here
 				if (entry.order_type !== 'slider') {
 					// * garments info
@@ -152,7 +152,7 @@ export default function OrderSheetPdf(order_sheet) {
 													// * the bleaching status for each quantity
 													const bleaching =
 														color.bleach;
-
+													// console.log(color.color_ref);
 													// * Slicing the quantities array for each chunk
 													const slicedQuantities =
 														quantities.slice(

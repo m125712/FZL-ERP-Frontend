@@ -2584,7 +2584,7 @@ export const THREAD_ORDER_INFO_ENTRY_SCHEMA = {
 		yup.object().shape({
 			index: NUMBER_REQUIRED,
 			color: STRING_REQUIRED,
-			color_ref: STRING,
+			color_ref: STRING.nullable(),
 			// shade_recipe_uuid: STRING.nullable(),
 			// po: STRING_REQUIRED,
 			style: STRING_REQUIRED,

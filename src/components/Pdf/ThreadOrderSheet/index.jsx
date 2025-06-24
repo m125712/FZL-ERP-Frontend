@@ -86,9 +86,17 @@ export default function Index(orderInfo) {
 						TableHeader(node),
 
 						// * Body
-						...order_info_entry?.map((item) =>
+						...(Array.isArray(order_info_entry)
+							? order_info_entry
+							: []
+						).map((item) =>
 							node.map((nodeItem) => ({
-								text: item[nodeItem.field],
+								text:
+									nodeItem.field === 'color'
+										? item[nodeItem.field] +
+											' - ' +
+											item.color_ref
+										: item[nodeItem.field],
 								style: nodeItem.cellStyle,
 								alignment: nodeItem.alignment,
 							}))

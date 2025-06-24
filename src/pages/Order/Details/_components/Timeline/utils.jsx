@@ -1,3 +1,5 @@
+import { capitalize } from '@/ui/Core/utils';
+
 import { getTapeRequired } from '@/util/Need';
 
 const getPercent = (total, req) => ((total / req) * 100).toFixed(0);

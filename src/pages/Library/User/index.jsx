@@ -62,8 +62,6 @@ export default function Index() {
 				cell: (info) => (
 					<EditDelete
 						idx={info.row.index}
-						handelUpdate={handelUpdate}
-						handelDelete={handelDelete}
 						showEdit={haveAccess.includes('update')}
 						showDelete={haveAccess.includes('delete')}
 					/>

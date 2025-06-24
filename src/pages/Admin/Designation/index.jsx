@@ -105,7 +105,6 @@ export default function Index() {
 		}));
 
 		window[info.getDeleteModalId()].showModal();
-		invalidateUsers();
 	};
 
 	if (isLoading)

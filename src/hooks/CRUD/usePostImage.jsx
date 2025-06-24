@@ -20,7 +20,7 @@ async function usePostImage({
 }) {
 	try {
 		const response = await image_api.post(uri, data);
-		const { id } = response?.data;
+		const { id } = response.data;
 
 		setItems((prev) => postItem(prev, data, id));
 		ShowToast(response);

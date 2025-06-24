@@ -119,7 +119,6 @@ export default function Index() {
 					])
 						.then(() => reset(MARKETING_TEAM_NULL))
 						.then(() => {
-							invalidateCommercialManualPI();
 							navigate(`/commercial/manual-pi/${data?.uuid}`);
 						});
 				} catch (err) {

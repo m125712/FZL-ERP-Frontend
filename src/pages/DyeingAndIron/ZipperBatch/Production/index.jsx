@@ -80,7 +80,7 @@ export default function Index() {
 			return;
 		}
 
-		const dyeing_batch_entry = [...data?.dyeing_batch_entry]
+		const dyeing_batch_entry = data?.dyeing_batch_entry
 			.filter((item) => item.production_quantity_in_kg > 0)
 			.map((item) => ({
 				uuid: nanoid(),

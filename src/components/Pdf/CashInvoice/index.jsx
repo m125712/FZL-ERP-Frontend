@@ -127,7 +127,6 @@ export default function Index(data) {
 					value += parseFloat(item2.value);
 					quantity += parseFloat(item2.pi_cash_quantity);
 					grand_total_slider += parseFloat(item2.pi_cash_quantity);
-					isSliderOrder = true;
 				}
 			});
 			total_quantity.push(quantity);
@@ -340,7 +339,7 @@ export default function Index(data) {
 							Number(data?.conversion_rate)
 								.toFixed(2)
 								.toLocaleString();
-						unit_price = unit_price;
+
 						const value = Number(
 							TotalThreadValue[index][countLength][
 								unit_price_index

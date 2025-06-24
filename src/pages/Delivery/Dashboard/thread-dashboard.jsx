@@ -52,7 +52,7 @@ export default function Index() {
 					);
 				},
 			},
-			,
+
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',

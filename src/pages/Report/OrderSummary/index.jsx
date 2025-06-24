@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useOrderSummary } from '@/state/Report';
 
-import ReactTable from '@/components/Table';
 import { CustomLink, DateTime } from '@/ui';
 
 import Header from './Header';
@@ -101,7 +100,7 @@ export default function index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			...uniqueChallanNumbers?.map((challan, index) => ({
+			...uniqueChallanNumbers.map((challan, index) => ({
 				accessorFn: (row) => row[challan?.challan_number] || '--',
 				id: 'challan-number-' + index,
 				header: (

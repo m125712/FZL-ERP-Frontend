@@ -103,8 +103,6 @@ export default function Index() {
 			itemName: data[idx].department,
 		}));
 		window[info.getDeleteModalId()].showModal();
-		invalidateUsers();
-		invalidateDesignations();
 	};
 
 	if (isLoading)

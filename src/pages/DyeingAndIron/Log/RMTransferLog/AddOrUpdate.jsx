@@ -84,7 +84,6 @@ export default function Index({
 				updatedData,
 				onClose,
 			});
-			invalidateDyeingRM();
 
 			return;
 		}

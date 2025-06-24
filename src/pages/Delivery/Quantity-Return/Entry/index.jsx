@@ -62,7 +62,7 @@ export default function Index() {
 		const created_at = GetDateTime();
 		const created_by = user.uuid;
 
-		const order_details_entry = [...data?.order_details]
+		const order_details_entry = data?.order_details
 			.filter(
 				(item) => item.fresh_quantity > 0 || item.repair_quantity > 0
 			)

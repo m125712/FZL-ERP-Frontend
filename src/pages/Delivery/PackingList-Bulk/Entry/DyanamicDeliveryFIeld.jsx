@@ -48,7 +48,6 @@ const DynamicDeliveryTable = ({
 			'Poly QTY',
 			'Reject QTY',
 			'Remarks',
-			,
 		];
 	} else if (
 		watch('item_for') === 'thread' ||
@@ -83,7 +82,6 @@ const DynamicDeliveryTable = ({
 			'Poly QTY',
 			'Reject QTY',
 			'Remarks',
-			,
 		];
 	}
 

@@ -160,7 +160,7 @@ export default function Index() {
 	});
 
 	const handelUpdate = (idx) => {
-		const selected = teethMoldingLog[idx];
+		const selected = finishingLog[idx];
 		setUpdateFinishingLog((prev) => ({
 			...prev,
 			...selected,
@@ -176,8 +176,8 @@ export default function Index() {
 	const handelDelete = (idx) => {
 		setDeleteItem((prev) => ({
 			...prev,
-			itemId: teethMoldingLog[idx].id,
-			itemName: teethMoldingLog[idx].order_description,
+			itemId: finishingLog[idx].id,
+			itemName: finishingLog[idx].order_description,
 		}));
 
 		window[info.getDeleteModalId()].showModal();

@@ -189,16 +189,16 @@ export default function Index() {
 			});
 
 			if (flag) return;
-			const dyeing_batch_entry_updated = [
-				...data?.dyeing_batch_entry,
-			].map((item) => ({
-				...item,
-				dyeing_batch_entry_uuid: item.dyeing_batch_entry_uuid,
-				remarks: item.remarks,
-				updated_at: GetDateTime(),
-			}));
+			const dyeing_batch_entry_updated = data?.dyeing_batch_entry.map(
+				(item) => ({
+					...item,
+					dyeing_batch_entry_uuid: item.dyeing_batch_entry_uuid,
+					remarks: item.remarks,
+					updated_at: GetDateTime(),
+				})
+			);
 
-			const new_dyeing_batch_entry = [...data?.new_dyeing_batch_entry]
+			const new_dyeing_batch_entry = data?.new_dyeing_batch_entry
 				.filter((item) => item.quantity > 0)
 				.map((item) => ({
 					...item,
@@ -301,7 +301,7 @@ export default function Index() {
 			created_by: user.uuid,
 		};
 
-		const dyeing_batch_entry = [...data?.dyeing_batch_entry]
+		const dyeing_batch_entry = data?.dyeing_batch_entry
 			.filter((item) => item.quantity > 0)
 			.map((item) => ({
 				...item,

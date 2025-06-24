@@ -11,9 +11,8 @@ import PageInfo from '@/util/PageInfo';
 import { ProductionStatus, REPORT_DATE_FORMATE } from '../utils';
 
 const getPath = (haveAccess, userUUID) => {
-	if (haveAccess.includes('show_own_orders') && userUUID) {
+	if (haveAccess.includes('show_own_orders') && userUUID)
 		return `own_uuid=${userUUID}`;
-	}
 
 	return `all=true`;
 };
@@ -25,15 +24,9 @@ export default function Index() {
 	const [status, setStatus] = useState('pending');
 	const { data, isLoading, url } = useDailyChallan(
 		getPath(haveAccess, user?.uuid),
-		{
-			enabled: !!user?.uuid,
-		}
+		{ enabled: !!user?.uuid }
 	);
-	const info = new PageInfo(
-		'Daily Challan Status',
-		url,
-		'report__daily_challan'
-	);
+	const info = new PageInfo('Daily Challan', url, 'report__daily_challan');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -58,6 +51,7 @@ export default function Index() {
 				accessorKey: 'challan_id',
 				header: 'Challan No.',
 				enableColumnFilter: true,
+				width: 'w-40',
 				cell: (info) => {
 					const { uuid } = info.row.original;
 					return (
@@ -73,6 +67,7 @@ export default function Index() {
 				accessorKey: 'order_number',
 				header: 'O/N',
 				enableColumnFilter: true,
+				width: 'w-40',
 				cell: (info) => {
 					const { product, order_info_uuid } = info.row.original;
 					return (
@@ -97,7 +92,12 @@ export default function Index() {
 			{
 				accessorFn: (row) => (row.gate_pass ? 'YES' : 'NO'),
 				id: 'gate_pass',
-				header: 'Gate Pass',
+				header: (
+					<>
+						W/H <br />
+						Out
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => (
 					<StatusButton
@@ -108,7 +108,12 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_quantity',
-				header: 'Total Quantity',
+				header: (
+					<>
+						Total <br />
+						QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -130,7 +135,7 @@ export default function Index() {
 			{
 				accessorFn: (row) => {
 					const { lc_numbers } = row;
-					if (lc_numbers?.length === 0) return '--';
+					if (lc_numbers === null) return '--';
 
 					return lc_numbers?.map((lc) => lc?.lc_number).join(', ');
 				},
@@ -140,7 +145,7 @@ export default function Index() {
 				cell: (info) => {
 					const { lc_numbers } = info.row.original;
 
-					if (lc_numbers?.length === 0) return '--';
+					if (lc_numbers === null) return '--';
 
 					return lc_numbers?.map((lc) => (
 						<CustomLink
@@ -155,8 +160,7 @@ export default function Index() {
 			{
 				accessorFn: (row) => {
 					const { pi_numbers } = row;
-
-					if (pi_numbers?.length === 0) return '--';
+					if (pi_numbers === null) return '--';
 
 					return pi_numbers?.map((pi) => pi?.pi_number).join(', ');
 				},
@@ -165,7 +169,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => {
 					const { pi_numbers } = info.row.original;
-					if (pi_numbers?.length === 0) return '--';
+					if (pi_numbers === null) return '--';
 
 					return pi_numbers?.map((pi) => (
 						<CustomLink
@@ -208,7 +212,7 @@ export default function Index() {
 			accessor={false}
 			data={data}
 			columns={columns}
-			extraClass={'py-0.5'}
+			extraClass={'py-2'}
 			extraButton={
 				<ProductionStatus
 					className='w-44'

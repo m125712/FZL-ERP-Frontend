@@ -359,7 +359,6 @@ export default function Index() {
 		'Short QTY',
 		'Reject QTY',
 		'Remarks',
-		,
 	];
 
 	if (watch('item_for') === 'slider') {
@@ -372,7 +371,6 @@ export default function Index() {
 			'Short QTY',
 			'Reject QTY',
 			'Remarks',
-			,
 		];
 	} else if (
 		watch('item_for') === 'thread' ||
@@ -389,7 +387,6 @@ export default function Index() {
 			'Short QTY',
 			'Reject QTY',
 			'Remarks',
-			,
 		];
 	}
 

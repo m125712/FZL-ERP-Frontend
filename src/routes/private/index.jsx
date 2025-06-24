@@ -4,7 +4,6 @@ import { DashboardRoutes } from './Dashboard';
 import { DeliveryRoutes } from './Delivery';
 import { DyeingAndIronRoutes } from './DyeingAndIron';
 import { HrRoutes } from './Hr';
-import { IssueRoutes } from './Issue';
 import { LabDipRoutes } from './LabDip';
 import { LibraryRoutes } from './Library';
 import { MarketingRoutes } from './Marketing';
@@ -37,7 +36,6 @@ const privateRoutes = [
 	...DeliveryRoutes,
 	...HrRoutes,
 	...LibraryRoutes,
-	...IssueRoutes,
 	...MarketingRoutes,
 	...ProfileRoutes,
 ];

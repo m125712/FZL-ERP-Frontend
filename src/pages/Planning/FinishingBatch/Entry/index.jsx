@@ -5,7 +5,6 @@ import {
 	useDyeingFinishingBatchByUUID,
 	useDyeingFinishingBatchOrders,
 } from '@/state/Dyeing';
-import { useSliderAssemblyProduction } from '@/state/Slider';
 import { FormProvider } from 'react-hook-form';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { useRHF } from '@/hooks';
@@ -14,7 +13,6 @@ import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
 import ReactTable from '@/components/Table';
 import { ShowLocalToast } from '@/components/Toast';
-import SubmitButton from '@/ui/Others/Button/SubmitButton';
 
 import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
@@ -195,7 +193,9 @@ export default function index() {
 
 			// * slider batch entry update depending on order_type and slider_provided
 			if (orderType === 'tape') {
+				const tape_quantity_current = 0;
 			} else if (sliderType === 'completely_provided') {
+				const tape_quantity_current = 0;
 			} else {
 				const slider_quantity_current =
 					finishing_batch_entry.length === 1
@@ -301,7 +301,9 @@ export default function index() {
 
 		// * slider batch entry depending on order_type and slider_provided
 		if (orderType === 'tape') {
+			const tape_quantity_current = 0;
 		} else if (sliderType === 'completely_provided') {
+			const tape_quantity_current = 0;
 		} else {
 			let slider_quantity =
 				finishingEntry.length === 1

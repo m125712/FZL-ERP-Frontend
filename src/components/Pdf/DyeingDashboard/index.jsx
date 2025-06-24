@@ -40,7 +40,7 @@ export default function Index(data, dyeingDate) {
 
 		'\n',
 		{ text: 'Status ', bold: true },
-		,
+
 		'\n',
 	];
 

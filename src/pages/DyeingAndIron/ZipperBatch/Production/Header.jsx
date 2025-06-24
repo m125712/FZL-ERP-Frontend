@@ -112,8 +112,6 @@ export default function Header({
 											const value = e.value;
 											onChange(value);
 											setSlot(e.open_slot);
-											setMinCapacity(e.min_capacity);
-											setMaxCapacity(e.max_capacity);
 										}}
 										isDisabled={true}
 									/>

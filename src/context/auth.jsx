@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo } from 'react';
+import { createContext, use, useCallback, useMemo } from 'react';
 import { useCookie, useLocalStorage } from '@/hooks';
 
 import { ShowToast } from '@/components/Toast';
@@ -21,7 +21,7 @@ const AuthProvider = ({ children }) => {
 				return false;
 			}
 
-			const { token, user: loginUser, can_access } = res?.data;
+			const { token, user: loginUser, can_access } = res.data;
 
 			await updateAuthCookie(`Bearer ` + token || '');
 			await updateUserCookie(JSON.stringify(loginUser) || '');
@@ -55,11 +55,9 @@ const AuthProvider = ({ children }) => {
 		[userCanAccess, userCookie]
 	);
 
-	return (
-		<AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-	);
+	return <AuthContext value={value}>{children}</AuthContext>;
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => use(AuthContext);
 
 export default AuthProvider;

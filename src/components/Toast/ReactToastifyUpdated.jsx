@@ -98,7 +98,7 @@ const ShowLocalToast = ({ type, message }) => {
 
 const ShowToast = (toast) => {
 	// console.log("toast", toast?.data);
-	const { type, message } = toast?.data;
+	const { type, message } = toast.data;
 	ShowLocalToast({ ...{ type, message } });
 };
 

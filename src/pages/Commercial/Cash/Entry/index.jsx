@@ -246,7 +246,7 @@ export default function Index() {
 			//* pi entry new
 			const newPiEntryData =
 				new_pi_cash_entry?.length > 0
-					? [...data?.new_pi_cash_entry]
+					? data?.new_pi_cash_entry
 							.filter(
 								(item) => item.is_checked && item.quantity > 0
 							)

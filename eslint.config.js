@@ -37,6 +37,8 @@ export default defineConfig([
 		// Custom rule overrides (modify rule levels or disable rules)
 		rules: {
 			'@eslint-react/no-missing-key': 'warn',
+			'no-unused-vars': 'warn',
+			'@eslint-react/dom/no-missing-iframe-sandbox': 'off',
 			// ...pluginQuery.configs.recommended.rules,
 			'@tanstack/query/exhaustive-deps': 'error',
 			// '@tanstack/query/no-deprecated-options': 'error',

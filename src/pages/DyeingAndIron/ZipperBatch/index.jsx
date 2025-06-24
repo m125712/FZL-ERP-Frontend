@@ -285,7 +285,6 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			,
 			// * created_at
 			{
 				accessorKey: 'created_at',

@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useOrderSummaryPl } from '@/state/Report';
 
-import ReactTable from '@/components/Table';
 import { CustomLink, DateTime } from '@/ui';
 
 import Header from './Header';
@@ -101,7 +100,7 @@ export default function index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			...uniquePLNumbers?.map((pl, index) => ({
+			...uniquePLNumbers.map((pl, index) => ({
 				accessorFn: (row) => row[pl?.packing_list_number] || '--',
 				id: 'pl-number-' + index,
 				header: (

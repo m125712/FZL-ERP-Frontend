@@ -49,7 +49,7 @@ export const getSpecialReqInfo = (order_description) => {
 
 export default function ItemDescription({ order_description, className }) {
 	const [sliderQuantity, total_size, tape_production] =
-		order_description?.order_entry.reduce(
+		order_description.order_entry.reduce(
 			([sliderQuantity, total_size, tape_production], item) => {
 				return [
 					(sliderQuantity += parseFloat(item.quantity)),

@@ -20,7 +20,7 @@ async function usePostFunc({
 }) {
 	try {
 		const response = await api.post(uri, data);
-		const { id } = response?.data;
+		const { id } = response.data;
 
 		setItems((prev) => postItem(prev, data, id));
 		ShowToast(response);

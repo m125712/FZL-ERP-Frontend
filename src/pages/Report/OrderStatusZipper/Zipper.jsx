@@ -177,6 +177,34 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'color_ref_entry_date',
+				header: (
+					<>
+						Color Ref <br /> Entry
+					</>
+				),
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'color_ref_update_date',
+				header: (
+					<>
+						Color Ref <br /> Update
+					</>
+				),
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
 				accessorFn: (row) =>
 					row.swatch_approval_date &&
 					REPORT_DATE_FORMATE(row.swatch_approval_date),
@@ -232,6 +260,21 @@ export default function Index() {
 				header: 'Recipe',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'swatch_approval_date',
+				header: (
+					<>
+						Setup <br />
+						Date
+					</>
+				),
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
 			},
 			{
 				accessorFn: (row) => row.dyeing_batch_number,

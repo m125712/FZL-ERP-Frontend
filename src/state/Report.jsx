@@ -107,10 +107,12 @@ export const useThreadProductionOrderWise = (query, { enabled = false } = {}) =>
 		enabled,
 	});
 
-export const useDailyChallan = (query, { enabled = false } = {}) =>
+export const useDailyChallan = (from, to, query, { enabled = false } = {}) =>
 	createGlobalState({
-		queryKey: reportQK.dailyChallan(query),
-		url: '/report/daily-challan-report?' + query,
+		queryKey: reportQK.dailyChallan(from, to, query),
+		url: query
+			? `/report/daily-challan-report?from=${from}&to=${to}&${query}`
+			: `/report/daily-challan-report?from=${from}&to=${to}`,
 		enabled,
 	});
 

@@ -66,7 +66,9 @@ export default function OrderSheetPdf(order_sheet) {
 				].sort((a, b) => a - b);
 				const res = order_entry.reduce((acc, item) => {
 					const key = item.style;
-					const color = item.color + ' - ' + item.color_ref;
+					const color =
+						item.color +
+						`${item.color_ref ? ` (Ref: ${item.color_ref})` : ''}`;
 					const size = Number(item.size);
 					const quantity = Number(item.quantity);
 					const bleach = item.bleaching;

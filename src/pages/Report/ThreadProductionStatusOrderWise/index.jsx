@@ -104,6 +104,13 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'buyer_name',
+				header: 'Buyer',
+				width: 'w-24',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorFn: (row) => row.style,
 				id: 'style',
 				header: 'Style',

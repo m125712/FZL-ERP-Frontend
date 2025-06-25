@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useDailyChallan } from '@/state/Report';
+import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, StatusButton } from '@/ui';
+import { CustomLink, DateTime, SimpleDatePicker, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -21,8 +22,12 @@ export default function Index() {
 	const haveAccess = useAccess('report__daily_challan');
 	const { user } = useAuth();
 
-	const [status, setStatus] = useState('pending');
+	const [date, setDate] = useState(new Date());
+	const [toDate, setToDate] = useState(new Date());
+
 	const { data, isLoading, url } = useDailyChallan(
+		format(date, 'yyyy-MM-dd'),
+		format(toDate, 'yyyy-MM-dd'),
 		getPath(haveAccess, user?.uuid),
 		{ enabled: !!user?.uuid }
 	);
@@ -118,12 +123,60 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'is_delivered',
+				header: 'Delivered',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
+				),
+			},
+			{
+				accessorKey: 'is_delivered_by_name',
+				header: 'Delivered By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_delivered_date',
+				header: (
+					<>
+						Delivered <br /> Date
+					</>
+				),
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
 				accessorKey: 'receive_status',
 				header: 'Received',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<StatusButton size='btn-xs' value={info.getValue()} />
 				),
+			},
+			{
+				accessorKey: 'receive_status_by_name',
+				header: 'Received By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'receive_status_date',
+				header: (
+					<>
+						Received <br /> Date
+					</>
+				),
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
 			},
 			{
 				accessorKey: 'created_by_name',
@@ -214,12 +267,28 @@ export default function Index() {
 			columns={columns}
 			extraClass={'py-2'}
 			extraButton={
-				<ProductionStatus
-					className='w-44'
-					status={status}
-					setStatus={setStatus}
-					page='report__daily_challan'
-				/>
+				<div className='flex items-center gap-2'>
+					<SimpleDatePicker
+						className='h-[2.34rem] w-32'
+						key={'Date'}
+						value={date}
+						placeholder='Date'
+						onChange={(data) => {
+							setDate(data);
+						}}
+						selected={date}
+					/>
+					<SimpleDatePicker
+						className='h-[2.34rem] w-32'
+						key={'toDate'}
+						value={toDate}
+						placeholder='To'
+						onChange={(data) => {
+							setToDate(data);
+						}}
+						selected={toDate}
+					/>
+				</div>
 			}
 		/>
 	);

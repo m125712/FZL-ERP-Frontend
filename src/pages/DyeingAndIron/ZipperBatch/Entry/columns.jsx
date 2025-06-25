@@ -91,6 +91,12 @@ export const Columns = ({
 			enableSorting: true,
 		},
 		{
+			accessorKey: 'color_ref',
+			header: 'Color Ref',
+			enableColumnFilter: true,
+			cell: (info) => info.getValue(),
+		},
+		{
 			accessorKey: 'recipe_name',
 			header: 'Recipe',
 			enableColumnFilter: true,

@@ -113,6 +113,12 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'color_ref',
+				header: 'Color Ref',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'size',
 				header: 'Size',
 				enableColumnFilter: false,

@@ -51,6 +51,12 @@ export default function Index({ batch_entry }) {
 				enableColumnFilter: false,
 			},
 			{
+				accessorKey: 'color_ref',
+				header: 'Color Ref',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'bleaching',
 				header: 'Bleaching',
 				enableColumnFilter: false,

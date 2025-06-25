@@ -81,6 +81,12 @@ export default function Index({ dyeing_batch_entry }) {
 				enableColumnFilter: false,
 			},
 			{
+				accessorKey: 'color_ref',
+				header: 'Color Ref',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'recipe_name',
 				header: 'Recipe',
 				enableColumnFilter: true,

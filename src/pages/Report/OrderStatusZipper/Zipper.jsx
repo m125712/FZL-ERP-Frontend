@@ -171,6 +171,12 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'color_ref',
+				header: 'Color Ref',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorFn: (row) =>
 					row.swatch_approval_date &&
 					REPORT_DATE_FORMATE(row.swatch_approval_date),

@@ -111,8 +111,8 @@ export const useDailyChallan = (from, to, query, { enabled = false } = {}) =>
 	createGlobalState({
 		queryKey: reportQK.dailyChallan(from, to, query),
 		url: query
-			? `/report/daily-challan-report?from=${from}&to=${to}&${query}`
-			: `/report/daily-challan-report?from=${from}&to=${to}`,
+			? `/report/daily-challan-report?from_date=${from}&to_date=${to}&${query}`
+			: `/report/daily-challan-report?from_date=${from}&to_date=${to}`,
 		enabled,
 	});
 

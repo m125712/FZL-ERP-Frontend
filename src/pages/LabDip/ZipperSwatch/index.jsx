@@ -119,34 +119,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'color_ref_entry_date',
-				header: (
-					<>
-						Color Ref <br /> Entry
-					</>
-				),
-				filterFn: 'isWithinRange',
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
-				accessorKey: 'color_ref_update_date',
-				header: (
-					<>
-						Color Ref <br /> Update
-					</>
-				),
-				filterFn: 'isWithinRange',
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
 				accessorKey: 'size',
 				header: 'Size',
 				width: 'w-24',
@@ -282,6 +254,34 @@ export default function Index() {
 				cell: (info) => (
 					<DateTime date={info.row.original.swatch_approval_date} />
 				),
+			},
+			{
+				accessorKey: 'color_ref_entry_date',
+				header: (
+					<>
+						Color Ref <br /> Entry
+					</>
+				),
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+			{
+				accessorKey: 'color_ref_update_date',
+				header: (
+					<>
+						Color Ref <br /> Update
+					</>
+				),
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
 			},
 		],
 		[data, recipe, handleSwatchStatus, haveAccess]

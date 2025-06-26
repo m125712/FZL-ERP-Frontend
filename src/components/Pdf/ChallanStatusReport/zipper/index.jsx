@@ -93,9 +93,7 @@ export default function Index(data, isPageBrake) {
 					quantity: challan_entry
 						.filter(
 							(i) =>
-								(item.packing_list_uuid ===
-									i.packing_list_uuid &&
-									i.item_description) ===
+								(item.uuid === i.uuid && i.item_description) ===
 									item.item_description &&
 								i.style === item.style &&
 								i.color === item.color &&
@@ -105,9 +103,7 @@ export default function Index(data, isPageBrake) {
 					poli_quantity: challan_entry
 						.filter(
 							(i) =>
-								(item.packing_list_uuid ===
-									i.packing_list_uuid &&
-									i.item_description) ===
+								(item.uuid === i.uuid && i.item_description) ===
 									item.item_description &&
 								i.style === item.style &&
 								i.color === item.color &&
@@ -197,7 +193,7 @@ export default function Index(data, isPageBrake) {
 						TableHeader(node),
 
 						// * Body
-						...pl.packingListDetails?.map((item, idx) =>
+						...(pl.packingListDetails || []).map((item, idx) =>
 							node.map((nodeItem) => {
 								const text =
 									nodeItem.field === 'size'
@@ -206,7 +202,7 @@ export default function Index(data, isPageBrake) {
 													? 'mtr'
 													: item.is_inch === 1
 														? 'inch'
-														: 'cm' || ''
+														: 'cm'
 											}`
 										: item[nodeItem.field];
 								return {

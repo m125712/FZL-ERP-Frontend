@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useApprovedOrdersPartyWise } from '@/state/Report';
+import numeral from 'numeral';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
@@ -37,13 +38,13 @@ export default function Index() {
 				accessorKey: 'not_approved',
 				header: 'Not Approved',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => numeral(info.getValue()).format('0.0a'),
 			},
 			{
 				accessorKey: 'approved',
 				header: 'Approved',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => numeral(info.getValue()).format('0.0a'),
 			},
 		],
 		[data, status]

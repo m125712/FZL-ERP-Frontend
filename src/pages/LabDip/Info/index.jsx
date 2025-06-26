@@ -78,12 +78,6 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'color_ref',
-				header: 'Color Ref',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
 			// {
 			// 	accessorFn: (row) => {
 			// 		return row.recipe_array

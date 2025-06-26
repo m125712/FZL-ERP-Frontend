@@ -52,7 +52,7 @@ export default function ChallanStatusSheetPdf(data) {
 
 		content: [
 			...(isThread
-				? data?.flatMap((item) => {
+				? (Array.isArray(data) ? data : []).flatMap((item) => {
 						let isPageBrake = false;
 
 						if (
@@ -64,7 +64,7 @@ export default function ChallanStatusSheetPdf(data) {
 						prevChallanNo = item?.challan_number;
 						return threadPDF(item, isPageBrake);
 					})
-				: data?.flatMap((item) => {
+				: (Array.isArray(data) ? data : []).flatMap((item) => {
 						let isPageBrake = false;
 
 						if (

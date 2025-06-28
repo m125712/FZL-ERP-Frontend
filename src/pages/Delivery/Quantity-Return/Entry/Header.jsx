@@ -63,6 +63,7 @@ export default function Header({
 									<ReactSelect
 										placeholder='Select Slot'
 										options={challans}
+										isDisabled={!watch('order_info_uuid')}
 										value={challans?.filter(
 											(item) =>
 												item.value ==

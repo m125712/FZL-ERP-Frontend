@@ -136,12 +136,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'color_ref',
-				header: 'Color Ref',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'total_quantity',
 				header: (
 					<>

@@ -1614,11 +1614,12 @@ export const otherQK = {
 	//* GET RM
 	rm: (field, param) => [...otherQK.all(), 'rm', field, param],
 
-	orderEntryBy: (uuid, isZipper) => [
+	orderEntryBy: (uuid, isZipper, challanUuid) => [
 		...otherQK.all(),
 		'order-entry-by',
 		uuid,
 		isZipper ? 'zipper' : 'thread',
+		challanUuid,
 	],
 };
 

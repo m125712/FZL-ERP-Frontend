@@ -63,6 +63,12 @@ export const Columns = ({
 			enableSorting: true,
 		},
 		{
+			accessorKey: 'color_ref',
+			header: 'Color Ref',
+			enableColumnFilter: true,
+			enableSorting: true,
+		},
+		{
 			accessorKey: 'quantity',
 			header: 'Quantity',
 			enableColumnFilter: true,

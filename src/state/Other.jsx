@@ -593,11 +593,11 @@ export const useOtherRM = (field = 'single-field', param) =>
 	});
 
 // * GET Order Entry By
-export const useOtherOrderEntryBy = (uuid, isZipper) =>
+export const useOtherOrderEntryBy = (uuid, isZipper, challanUuid) =>
 	createGlobalState({
-		queryKey: otherQK.orderEntryBy(uuid, isZipper),
+		queryKey: otherQK.orderEntryBy(uuid, isZipper, challanUuid),
 		url: isZipper
-			? `/delivery/zipper-order-entry/by/${uuid}`
-			: `/delivery/thread-order-entry/by/${uuid}`,
+			? `/delivery/zipper-order-entry/by/${uuid}?challan_uuid=${challanUuid}`
+			: `/delivery/thread-order-entry/by/${uuid}?challan_uuid=${challanUuid}`,
 		enabled: !!uuid,
 	});

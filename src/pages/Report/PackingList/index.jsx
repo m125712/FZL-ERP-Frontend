@@ -188,40 +188,6 @@ export default function Index() {
 				cell: (info) => info.getValue().join(', '),
 			},
 			{
-				accessorKey: 'color_ref',
-				header: 'Color Ref',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'color_ref_entry_date',
-				header: (
-					<>
-						Color Ref <br /> Entry
-					</>
-				),
-				filterFn: 'isWithinRange',
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
-				accessorKey: 'color_ref_update_date',
-				header: (
-					<>
-						Color Ref <br /> Update
-					</>
-				),
-				filterFn: 'isWithinRange',
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
-			},
-			{
 				accessorKey: 'unit',
 				header: 'Unit',
 				enableColumnFilter: false,

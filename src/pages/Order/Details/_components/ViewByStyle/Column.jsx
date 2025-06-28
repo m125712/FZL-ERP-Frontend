@@ -89,7 +89,7 @@ const getColumn = ({ show_price, is_sample }) => {
 			accessorKey: 'color_ref',
 			header: 'Color Ref',
 			enableColumnFilter: true,
-			cell: (info) => info.getValue(),
+			cell: (info) => (info.getValue() ? info.getValue() : '---'),
 		}),
 		createColumn({
 			accessorFn: (row) => row?.bleaching === 'bleach',

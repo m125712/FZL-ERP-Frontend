@@ -124,12 +124,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'color_ref',
-				header: 'Color Ref',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorFn: (row) => row.recipe_name.join(', '),
 				id: 'recipe_name',
 				header: 'Shade',

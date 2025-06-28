@@ -35,7 +35,7 @@ export default function Index() {
 					const { uuid } = info.row.original;
 					return (
 						<LinkOnly
-							uri='/store/receive'
+							uri='/store/receive-rm'
 							id={uuid}
 							title={info.getValue()}
 						/>
@@ -61,12 +61,6 @@ export default function Index() {
 				cell: (info) => {
 					return info.getValue() == 1 ? 'Local' : 'LC';
 				},
-			},
-			{
-				accessorKey: 'created_by_name',
-				header: 'Created By',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_at',

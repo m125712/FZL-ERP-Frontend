@@ -411,3 +411,12 @@ export const useOrderSheetSRThread = (
 		url: `/report/order-sheet-send-receive-report-thread?from_date=${from}&to_date=${to}&date_type=${type}`,
 		enabled,
 	});
+
+export const useIndividualMaterial = (material_uuid, query) =>
+	createGlobalState({
+		queryKey: reportQK.individualMaterial(material_uuid, query),
+		url: query
+			? `/report/individual-material-report/${material_uuid}?${query}`
+			: `/report/individual-material-report/${material_uuid}`,
+		enabled: !!material_uuid,
+	});

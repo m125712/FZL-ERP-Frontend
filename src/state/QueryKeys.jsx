@@ -1942,6 +1942,13 @@ export const reportQK = {
 		to,
 		query,
 	],
+
+	individualMaterial: (material_uuid, query) => [
+		...reportQK.all(),
+		'individual-material-report',
+		material_uuid,
+		query,
+	],
 };
 
 export const marketingQK = {

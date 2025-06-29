@@ -45,6 +45,10 @@ const ThreadBatch = lazy(() => import('@/pages/Report/ThreadBatch'));
 const OrderSummaryPL = lazy(() => import('@/pages/Report/OrderSummaryPL'));
 const OrderSheetSR = lazy(() => import('@/pages/Report/OrderSheetSR'));
 
+const IndividualMaterial = lazy(
+	() => import('@/pages/Report/IndividualMaterial')
+);
+
 export const ReportRoutes = [
 	{
 		name: 'Report',
@@ -243,6 +247,13 @@ export const ReportRoutes = [
 				path: '/report/order-sheet-sr',
 				element: <OrderSheetSR />,
 				page_name: 'report__order_sheet_sr',
+				actions: ['read', 'show_own_orders'],
+			},
+			{
+				name: 'Individual Material',
+				path: '/report/individual-material',
+				element: <IndividualMaterial />,
+				page_name: 'report__individual_material',
 				actions: ['read', 'show_own_orders'],
 			},
 		],

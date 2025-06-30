@@ -208,7 +208,11 @@ export const purchaseQK = {
 	all: () => ['purchase'],
 
 	//* vendor
-	vendor: () => [...purchaseQK.all(), 'vendor'],
+	vendor: (query) => [
+		...purchaseQK.all(),
+		'vendor',
+		...(query ? [query] : []),
+	],
 	vendorByUUID: (uuid) => [...purchaseQK.vendor(), uuid],
 
 	//* description

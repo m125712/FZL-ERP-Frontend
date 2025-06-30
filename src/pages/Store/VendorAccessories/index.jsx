@@ -14,7 +14,8 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { invalidateQuery: invalidateVendor } = useOtherVendor();
-	const { data, isLoading, url, deleteData } = usePurchaseVendor();
+	const { data, isLoading, url, deleteData } =
+		usePurchaseVendor('s_type=accessories');
 	const info = new PageInfo('Store / Vendor', url, 'store__vendor');
 
 	const haveAccessAccessor = useAccess('store__accessories_vendor');

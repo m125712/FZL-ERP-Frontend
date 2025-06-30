@@ -95,10 +95,10 @@ export const useMaterialStockToSFGByUUID = (uuid) =>
 	});
 
 // * Purchase Vendor * //
-export const usePurchaseVendor = () =>
+export const usePurchaseVendor = (query) =>
 	createGlobalState({
-		queryKey: purchaseQK.vendor(),
-		url: '/purchase/vendor',
+		queryKey: purchaseQK.vendor(query),
+		url: query ? `/purchase/vendor?${query}` : '/purchase/vendor',
 	});
 
 export const usePurchaseVendorByUUID = (uuid) =>

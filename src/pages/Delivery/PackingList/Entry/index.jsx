@@ -3,7 +3,6 @@ import {
 	useDeliveryPackingList,
 	useDeliveryPackingListByOrderInfoUUID,
 	useDeliveryPackingListDetailsByUUID,
-	useDeliveryPackingListEntry,
 } from '@/state/Delivery';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
@@ -31,16 +30,11 @@ export default function Index() {
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const {
-		url: deliveryPackingListUrl,
 		postData,
 		updateData,
 		deleteData,
 		invalidateQuery: invalidateDeliveryPackingList,
 	} = useDeliveryPackingList();
-	const {
-		url: deliveryPackingListEntryUrl,
-		deleteData: deletePackingListEntry,
-	} = useDeliveryPackingListEntry();
 
 	const isUpdate = uuid !== undefined;
 
@@ -71,13 +65,10 @@ export default function Index() {
 		name: 'new_packing_list_entry',
 	});
 
-	const {
-		data: details,
-		url,
-		invalidateQuery: invalidateDetails,
-	} = useDeliveryPackingListDetailsByUUID(uuid, {
-		params: `is_update=true`,
-	});
+	const { data: details, invalidateQuery: invalidateDetails } =
+		useDeliveryPackingListDetailsByUUID(uuid, {
+			params: `is_update=true`,
+		});
 
 	const { data: packingListEntries } = useDeliveryPackingListByOrderInfoUUID(
 		watch('order_info_uuid'),
@@ -174,7 +165,7 @@ export default function Index() {
 
 			// update /packing/list/uuid
 			const packingListPromise = await updateData.mutateAsync({
-				url: `${deliveryPackingListUrl}/${data?.uuid}`,
+				url: `/delivery/packing-list/${data?.uuid}`,
 				updatedData: packingListData,
 				uuid: data.uuid,
 				isOnCloseNeeded: false,
@@ -196,7 +187,7 @@ export default function Index() {
 					};
 
 					return await updateData.mutateAsync({
-						url: `${deliveryPackingListEntryUrl}/${item?.uuid}`,
+						url: `/delivery/packing-list-entry/${item?.uuid}`,
 						updatedData: updatedData,
 						uuid: item.uuid,
 						isOnCloseNeeded: false,
@@ -218,7 +209,7 @@ export default function Index() {
 			let updatableNewPackingListEntryPromises = [
 				newEntry.length > 0 &&
 					(await postData.mutateAsync({
-						url: deliveryPackingListEntryUrl,
+						url: '/delivery/packing-list-entry',
 						newData: newEntry,
 						isOnCloseNeeded: false,
 					})),
@@ -228,7 +219,7 @@ export default function Index() {
 				.filter((item) => item.isDeletable)
 				.map(async (item) => {
 					return await deleteData.mutateAsync({
-						url: `${deliveryPackingListEntryUrl}/${item?.uuid}`,
+						url: `/delivery/packing-list-entry/${item?.uuid}`,
 						isOnCloseNeeded: false,
 					});
 				});
@@ -287,14 +278,14 @@ export default function Index() {
 		} else {
 			// create new /packing/list
 			await postData.mutateAsync({
-				url: deliveryPackingListUrl,
+				url: '/delivery/packing-list',
 				newData: packingListData,
 				isOnCloseNeeded: false,
 			});
 			// create new /packing/list/entry
 			const commercial_packing_list_entry_promises = [
 				await postData.mutateAsync({
-					url: deliveryPackingListEntryUrl,
+					url: '/delivery/packing-list-entry',
 					newData: packingListEntryData,
 					isOnCloseNeeded: false,
 				}),
@@ -412,8 +403,8 @@ export default function Index() {
 					deleteItem={deleteItem}
 					setDeleteItem={setDeleteItem}
 					setItems={packingListEntryField}
-					url={deliveryPackingListEntryUrl}
-					deleteData={deletePackingListEntry}
+					url='/delivery/packing-list-entry'
+					deleteData={deleteData}
 					onSuccess={invalidateDetails}
 				/>
 			</Suspense>

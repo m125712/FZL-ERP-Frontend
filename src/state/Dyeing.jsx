@@ -35,6 +35,24 @@ export const useDyeingSwatch = (query) =>
 		url: query ? `/zipper/sfg-swatch?${query}` : '/zipper/sfg-swatch',
 	});
 
+// *  Swatch Approval (Zipper)
+export const useSwatchApprovalZipper = (query) =>
+	createGlobalState({
+		queryKey: dyeingQK.swatchApprovalZipper(query),
+		url: query
+			? `/zipper/swatch-approval-received?${query}`
+			: '/zipper/swatch-approval-received',
+	});
+
+// *  Swatch Approval (Thread)
+export const useSwatchApprovalThread = (query) =>
+	createGlobalState({
+		queryKey: dyeingQK.swatchApprovalThread(query),
+		url: query
+			? `/thread/swatch-approval-received?${query}`
+			: '/thread/swatch-approval-received',
+	});
+
 export const useDyeingSwatchByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: dyeingQK.swatchByUUID(uuid),

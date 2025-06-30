@@ -16,6 +16,12 @@ const ShadeRecipeEntry = lazy(() => import('@pages/LabDip/ShadeRecipe/Entry'));
 const ThreadSwatch = lazy(() => import('@pages/LabDip/ThreadSwatch'));
 const ZipperSwatch = lazy(() => import('@pages/LabDip/ZipperSwatch'));
 const DashBoard = lazy(() => import('@pages/LabDip/Dashboard'));
+const SwatchApprovalZipper = lazy(
+	() => import('@pages/LabDip/SwatchApprovalZipper')
+);
+const SwatchApprovalThread = lazy(
+	() => import('@pages/LabDip/SwatchApprovalThread')
+);
 
 export const LabDipRoutes = [
 	{
@@ -143,6 +149,30 @@ export const LabDipRoutes = [
 				path: '/lab-dip/thread-swatch',
 				element: <ThreadSwatch />,
 				page_name: 'lab_dip__thread_swatch',
+				actions: [
+					'read',
+					'update',
+					'click_swatch_status',
+					'click_swatch_status_override',
+				],
+			},
+			{
+				name: 'Swatch Approval (Zipper)',
+				path: '/lab-dip/swatch-approval-zipper',
+				element: <SwatchApprovalZipper />,
+				page_name: 'lab_dip__swatch_approval_zipper',
+				actions: [
+					'read',
+					'update',
+					'click_swatch_status',
+					'click_swatch_status_override',
+				],
+			},
+			{
+				name: 'Swatch Approval (Thread)',
+				path: '/lab-dip/swatch-approval-thread',
+				element: <SwatchApprovalThread />,
+				page_name: 'lab_dip__swatch_approval_thread',
 				actions: [
 					'read',
 					'update',

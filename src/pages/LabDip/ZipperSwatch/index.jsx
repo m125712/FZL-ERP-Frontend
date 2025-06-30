@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { useDyeingDummy, useDyeingSwatch } from '@/state/Dyeing';
+import { useDyeingSwatch } from '@/state/Dyeing';
 import { useOtherRecipe } from '@/state/Other';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
@@ -31,12 +31,11 @@ export default function Index() {
 	const [status, setStatus] = useState('pending');
 	const [status2, setStatus2] = useState('incomplete_order');
 
-	const { data, isLoading } = useDyeingSwatch(
+	const { data, isLoading, updateData } = useDyeingSwatch(
 		status2 === 'complete_order'
 			? `order_type=${status2}`
 			: `type=${status}&order_type=${status2}`
 	);
-	const { updateData } = useDyeingDummy(); //! need to update the data
 	const info = new PageInfo(
 		'LabDip/ZipperSwatch',
 		'order/swatch',

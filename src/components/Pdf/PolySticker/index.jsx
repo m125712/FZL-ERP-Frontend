@@ -100,7 +100,7 @@ export default function Index(data) {
 							},
 							{
 								text: `${data?.order_number}`,
-
+								bold: true,
 								fontSize: DEFAULT_FONT_SIZE - 1,
 								colSpan: 1,
 							},
@@ -160,11 +160,13 @@ export default function Index(data) {
 							{
 								text: `${data.style}`,
 								fontSize: DEFAULT_FONT_SIZE - 1,
+								bold: true,
 							},
 							{
 								text: `${
 									orderType === 'slider' ? '-' : data?.color
 								}`,
+								bold: true,
 								fontSize: DEFAULT_FONT_SIZE - 1,
 							},
 							{
@@ -177,6 +179,7 @@ export default function Index(data) {
 								text: `${data.quantity}`,
 								fontSize: DEFAULT_FONT_SIZE - 1,
 								alignment: 'right',
+								bold: true,
 							},
 						],
 					],

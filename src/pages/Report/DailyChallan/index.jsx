@@ -5,7 +5,13 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, SimpleDatePicker, StatusButton } from '@/ui';
+import {
+	CustomLink,
+	DateTime,
+	SimpleDatePicker,
+	StatusButton,
+	StatusSelect,
+} from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -22,12 +28,22 @@ export default function Index() {
 	const haveAccess = useAccess('report__daily_challan');
 	const { user } = useAuth();
 
-	const [date, setDate] = useState(new Date());
-	const [toDate, setToDate] = useState(new Date());
+	// const [date, setDate] = useState(new Date());
+	// const [toDate, setToDate] = useState(new Date());
+	const [type, setType] = useState('pending');
+
+	const options = [
+		{ value: 'pending', label: 'Pending' },
+		{ value: 'gate_pass', label: 'Gate Pass' },
+		{ value: 'delivered', label: 'Delivered' },
+		{ value: 'received', label: 'Received' },
+		{ value: 'all', label: 'All' },
+	];
 
 	const { data, isLoading, url } = useDailyChallan(
-		format(date, 'yyyy-MM-dd'),
-		format(toDate, 'yyyy-MM-dd'),
+		// format(date, 'yyyy-MM-dd'),
+		// format(toDate, 'yyyy-MM-dd'),
+		type,
 		getPath(haveAccess, user?.uuid),
 		{ enabled: !!user?.uuid }
 	);
@@ -268,7 +284,7 @@ export default function Index() {
 			extraClass={'py-2'}
 			extraButton={
 				<div className='flex items-center gap-2'>
-					<SimpleDatePicker
+					{/* <SimpleDatePicker
 						className='h-[2.34rem] w-32'
 						key={'Date'}
 						value={date}
@@ -287,6 +303,11 @@ export default function Index() {
 							setToDate(data);
 						}}
 						selected={toDate}
+					/> */}
+					<StatusSelect
+						options={options}
+						status={type}
+						setStatus={setType}
 					/>
 				</div>
 			}

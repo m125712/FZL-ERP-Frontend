@@ -1739,11 +1739,10 @@ export const reportQK = {
 	],
 
 	//* Daily Challan
-	dailyChallan: (from, to, query) => [
+	dailyChallan: (type, query) => [
 		...reportQK.all(),
 		'daily-challan',
-		from,
-		to,
+		type,
 		query,
 	],
 

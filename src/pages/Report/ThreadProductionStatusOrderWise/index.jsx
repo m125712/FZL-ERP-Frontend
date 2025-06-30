@@ -23,11 +23,11 @@ export default function Index() {
 	const haveAccess = useAccess('report__thread_production_order_wise');
 	const { user } = useAuth();
 
-	const [from, setFrom] = useState(format(new Date(), 'yyyy-MM-dd'));
-	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
+	// const [from, setFrom] = useState(format(new Date(), 'yyyy-MM-dd'));
+	// const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
 	const [status, setStatus] = useState('pending');
 	const { data, isLoading, url } = useThreadProductionOrderWise(
-		`status=${status}&from=${format(from, 'yyyy-MM-dd')}&to=${format(to, 'yyyy-MM-dd')}${getPath(haveAccess, user?.uuid)}`,
+		`status=${status}${getPath(haveAccess, user?.uuid)}`,
 		{
 			enabled: !!user?.uuid,
 		}
@@ -304,7 +304,7 @@ export default function Index() {
 				extraClass={'py-0.5'}
 				extraButton={
 					<div className='flex items-center gap-2'>
-						<SimpleDatePicker
+						{/* <SimpleDatePicker
 							className='h-[2.34rem] w-32'
 							key={'from'}
 							value={from}
@@ -323,7 +323,7 @@ export default function Index() {
 							onChange={(data) => {
 								setTo(data);
 							}}
-						/>
+						/> */}
 						<ProductionStatus
 							className='w-44'
 							status={status}

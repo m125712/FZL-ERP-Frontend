@@ -12,6 +12,7 @@ const FullOrder = (
 		handleCopy,
 		handleUploadFile,
 		csvData,
+		haveAccess,
 	} = {
 		title: '',
 		extraHeader: null,
@@ -22,8 +23,24 @@ const FullOrder = (
 		handleCopy: () => {},
 		handleUploadFile: () => {},
 		csvData: [],
+		haveAccess: [],
 	}
 ) => {
+	const data = form.watch(fieldName).map((item) => {
+		return {
+			index: item.index,
+			style: item.style,
+			color: item.color,
+			color_ref: item.color_ref,
+			bleaching: item.bleaching,
+			size: item.size,
+			quantity: item.quantity,
+			planning_batch_quantity: item.planning_batch_quantity,
+			company_price: item.company_price,
+			party_price: item.party_price,
+		};
+	});
+
 	const columns = [
 		{
 			data: 'index',
@@ -59,22 +76,8 @@ const FullOrder = (
 			data: 'party_price',
 		},
 
-		renderActions(handleRemove, handleCopy),
+		renderActions(handleRemove, handleCopy, data, haveAccess),
 	];
-	const data = form.watch(fieldName).map((item) => {
-		return {
-			index: item.index,
-			style: item.style,
-			color: item.color,
-			color_ref: item.color_ref,
-			bleaching: item.bleaching,
-			size: item.size,
-			quantity: item.quantity,
-			planning_batch_quantity: item.planning_batch_quantity,
-			company_price: item.company_price,
-			party_price: item.party_price,
-		};
-	});
 
 	const colHeaders = [
 		'Id',
@@ -104,6 +107,7 @@ const FullOrder = (
 				readOnlyIndex: [7],
 				isIndex: true,
 				csvData,
+				haveAccess,
 			}}
 		/>
 	);

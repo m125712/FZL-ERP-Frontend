@@ -341,15 +341,17 @@ export default function Header({
 					</div>
 				}
 			>
-				<div className='grid grid-cols-5 gap-4'>
+				<div className='grid grid-cols-3 gap-4'>
 					<div
 						className={cn(
+							'grid grid-cols-3 gap-4',
 							watch('order_info_uuid')
-								? 'col-span-4'
-								: 'col-span-5'
+								? 'col-span-1'
+								: 'col-span-2'
 						)}
 					>
-						<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
+						{/* 1,2,3: O/N, Item, Nylon Stopper(conditional) */}
+						<div className='flex flex-col gap-4'>
 							<FormField
 								label='order_info_uuid'
 								title='O/N'
@@ -449,6 +451,10 @@ export default function Header({
 									/>
 								</FormField>
 							)}
+						</div>
+
+						{/* 4,5,6: Zipper Number, End Type, Hand(conditional) */}
+						<div className='flex flex-col gap-4'>
 							<FormField
 								label='zipper_number'
 								title='Zipper Number'
@@ -559,10 +565,11 @@ export default function Header({
 							)}
 						</div>
 
+						{/* 7,8: Teeth Type, Teeth Color */}
 						{/* conditional rendering: checking if order type is full */}
 						{watch('order_type') === 'full' && (
 							<>
-								<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2 lg:grid-cols-4'>
+								<div className='flex flex-col gap-4 text-secondary-content'>
 									<FormField
 										label='teeth_type'
 										title='Teeth Type'
@@ -624,65 +631,65 @@ export default function Header({
 										/>
 									</FormField>
 								</div>
-								<FormField
-									label='special_requirement'
-									title='Special Req'
-									errors={errors}
-								>
-									<Controller
-										name={'special_requirement'}
-										control={control}
-										render={({ field: { onChange } }) => {
-											return (
-												<ReactSelect
-													placeholder='Select Multi Requirement'
-													options={
-														special_requirement
-													}
-													value={special_requirement?.filter(
-														(item) =>
-															sp_req?.special_req?.includes(
-																item.value
-															)
-													)}
-													onChange={(e) => {
-														setSpReq((prev) => ({
-															...prev,
-															special_req: e.map(
+							</>
+						)}
+					</div>
+
+					{/* Special req & Remarks & Description */}
+					<div className='flex flex-col gap-4 text-secondary-content'>
+						{watch('order_type') === 'full' && (
+							<FormField
+								label='special_requirement'
+								title='Special Req'
+								errors={errors}
+							>
+								<Controller
+									name={'special_requirement'}
+									control={control}
+									render={({ field: { onChange } }) => {
+										return (
+											<ReactSelect
+												placeholder='Select Multi Requirement'
+												options={special_requirement}
+												value={special_requirement?.filter(
+													(item) =>
+														sp_req?.special_req?.includes(
+															item.value
+														)
+												)}
+												onChange={(e) => {
+													setSpReq((prev) => ({
+														...prev,
+														special_req: e.map(
+															(item) => item.value
+														),
+													}));
+													onChange(
+														JSON.stringify({
+															values: e.map(
 																(item) =>
 																	item.value
 															),
-														}));
-														onChange(
-															JSON.stringify({
-																values: e.map(
-																	(item) =>
-																		item.value
-																),
-															})
-														);
-													}}
-													isMulti={true}
-												/>
-											);
-										}}
-									/>
-								</FormField>
-							</>
+														})
+													);
+												}}
+												isMulti={true}
+											/>
+										);
+									}}
+								/>
+							</FormField>
 						)}
-
-						<div className='grid grid-cols-1 gap-4 text-secondary-content sm:grid-cols-2'>
-							<Textarea
-								rows={3}
-								label='description'
-								{...{ register, errors }}
-							/>
-							<Textarea
-								rows={3}
-								label='remarks'
-								{...{ register, errors }}
-							/>
-						</div>
+						<Textarea
+							rows={3}
+							label='description'
+							{...{ register, errors }}
+						/>
+						<Textarea
+							rows={3}
+							label='remarks'
+							{...{ register, errors }}
+						/>
 					</div>
 
 					{watch('order_info_uuid') && (

@@ -563,6 +563,7 @@ export default function Index() {
 						form={form}
 						fieldName='order_entry'
 						csvData={[csvData]}
+						haveAccess={haveAccess}
 					/>
 				)}
 
@@ -577,6 +578,7 @@ export default function Index() {
 						form={form}
 						fieldName='order_entry'
 						csvData={[csvData]}
+						haveAccess={haveAccess}
 					/>
 				)}
 				{watch('order_type') === 'slider' && (
@@ -590,6 +592,7 @@ export default function Index() {
 						form={form}
 						fieldName='order_entry'
 						csvData={[csvData]}
+						haveAccess={haveAccess}
 					/>
 				)}
 

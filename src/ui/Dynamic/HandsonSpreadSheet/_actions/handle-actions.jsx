@@ -7,7 +7,9 @@ function handleActions(
 	value,
 	_cellProperties,
 	handleRemove,
-	handleCopy
+	handleCopy,
+	data,
+	haveAccess
 ) {
 	// Create delete button
 	const deleteButton = document.createElement('button');
@@ -31,8 +33,14 @@ function handleActions(
 
 	// Create div element
 	const divElement = document.createElement('div');
-	divElement.appendChild(copyButton);
-	divElement.appendChild(deleteButton);
+	if (
+		!data[_row]?.planning_batch_quantity > 0 ||
+		haveAccess.includes('override_access')
+	) {
+		divElement.appendChild(copyButton);
+		divElement.appendChild(deleteButton);
+	}
+
 	divElement.classList.add('flex', 'items-center', 'gap-2');
 
 	td.innerText = '';

@@ -14,6 +14,7 @@ const Slider = (
 		handleRemove,
 		handleUploadFile,
 		csvData,
+		haveAccess,
 	} = {
 		title: '',
 		extraHeader: null,
@@ -24,8 +25,20 @@ const Slider = (
 		handleCopy: () => {},
 		handleUploadFile: () => {},
 		csvData: [],
+		haveAccess: [],
 	}
 ) => {
+	const data = form.watch(fieldName).map((item) => {
+		return {
+			index: item.index,
+			style: item.style,
+			quantity: item.quantity,
+			planning_batch_quantity: item.planning_batch_quantity,
+			company_price: item.company_price,
+			party_price: item.party_price,
+		};
+	});
+
 	const columns = [
 		{
 			data: 'index',
@@ -45,18 +58,8 @@ const Slider = (
 		{
 			data: 'party_price',
 		},
-		renderActions(handleRemove, handleCopy),
+		renderActions(handleRemove, handleCopy, data, haveAccess),
 	];
-	const data = form.watch(fieldName).map((item) => {
-		return {
-			index: item.index,
-			style: item.style,
-			quantity: item.quantity,
-			planning_batch_quantity: item.planning_batch_quantity,
-			company_price: item.company_price,
-			party_price: item.party_price,
-		};
-	});
 
 	const colHeaders = [
 		'Id',
@@ -82,6 +85,7 @@ const Slider = (
 				readOnlyIndex: [3],
 				isIndex: true,
 				csvData,
+				haveAccess,
 			}}
 		/>
 	);

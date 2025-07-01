@@ -1,21 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useDailyChallan } from '@/state/Report';
-import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import {
-	CustomLink,
-	DateTime,
-	SimpleDatePicker,
-	StatusButton,
-	StatusSelect,
-} from '@/ui';
+import { CustomLink, DateTime, StatusButton, StatusSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
-import { ProductionStatus, REPORT_DATE_FORMATE } from '../utils';
+import { REPORT_DATE_FORMATE } from '../utils';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID)
@@ -265,6 +258,12 @@ export default function Index() {
 			{
 				accessorKey: 'factory_name',
 				header: 'Factory',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'buyer_name',
+				header: 'Buyer',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

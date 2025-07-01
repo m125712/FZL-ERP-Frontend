@@ -52,6 +52,7 @@ export const OrderRoutes = [
 					'show_history',
 					'click_status_marketing_checked',
 					'override_access',
+					'show_uuid',
 				],
 			},
 			{

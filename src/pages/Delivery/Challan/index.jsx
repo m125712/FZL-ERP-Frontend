@@ -251,6 +251,13 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'buyer_name',
+				header: 'Buyer',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorFn(row) {
 					const { color } = row;
 					return color?.join(', ') || '--';

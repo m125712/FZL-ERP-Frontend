@@ -69,6 +69,13 @@ const getColumn = ({
 			enableColumnFilter: false,
 			cell: (info) => info.getValue(),
 		}),
+		createColumn({
+			accessorKey: 'order_entry_uuid',
+			header: 'uuid',
+			enableColumnFilter: false,
+			hidden: !haveAccess.includes('show_uuid'),
+			cell: (info) => info.getValue(),
+		}),
 		createStatusColumn({
 			accessorKey: 'swatch_status',
 			header: (

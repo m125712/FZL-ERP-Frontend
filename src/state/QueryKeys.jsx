@@ -1750,6 +1750,14 @@ export const reportQK = {
 		query,
 	],
 
+	dailyChallanDR: (from, to, query) => [
+		...reportQK.all(),
+		'daily-challan-dr',
+		from,
+		to,
+		query,
+	],
+
 	// * Thread Status
 	threadStatus: (query, from, to) => [
 		...reportQK.all(),

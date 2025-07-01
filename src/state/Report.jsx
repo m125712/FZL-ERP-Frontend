@@ -116,6 +116,15 @@ export const useDailyChallan = (type, query, { enabled = false } = {}) =>
 		enabled,
 	});
 
+export const useDailyChallanDR = (from, to, query, { enabled = false } = {}) =>
+	createGlobalState({
+		queryKey: reportQK.dailyChallanDR(from, to, query),
+		url: query
+			? `/report/daily-challan-report?from_date=${from}&to_date=${to}&${query}`
+			: `/report/daily-challan-report?from_date=${from}&to_date=${to}`,
+		enabled,
+	});
+
 export const useThreadStatus = (from, to, query, { enabled = false } = {}) =>
 	createGlobalState({
 		queryKey: reportQK.threadStatus(query, from, to),

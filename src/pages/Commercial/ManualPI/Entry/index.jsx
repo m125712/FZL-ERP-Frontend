@@ -10,6 +10,8 @@ import { useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
+import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet'; //! why it is must??
+
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 
 import nanoid from '@/lib/nanoid';
@@ -335,6 +337,7 @@ export default function Index() {
 
 				<ManualPiSpreadsheet
 					title='Zipper Details'
+					extraHeader={<div>asdasd</div>}
 					form={form}
 					fieldName='manual_zipper_pi_entry'
 					handleCopy={handleZipperCopy}

@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 
 const DailyChallan = lazy(() => import('@/pages/Report/DailyChallan'));
+const DailyChallanDR = lazy(() => import('@/pages/Report/DailtChallanDR'));
 
 const ProductionStatement = lazy(
 	() => import('@/pages/Report/ProductionStatement')
@@ -79,6 +80,13 @@ export const ReportRoutes = [
 				path: '/report/daily-challan',
 				element: <DailyChallan />,
 				page_name: 'report__daily_challan',
+				actions: ['read', 'show_own_orders'],
+			},
+			{
+				name: 'Daily Challan (DR)',
+				path: '/report/daily-challan-dr',
+				element: <DailyChallanDR />,
+				page_name: 'report__daily_challan_dr',
 				actions: ['read', 'show_own_orders'],
 			},
 			{

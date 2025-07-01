@@ -132,6 +132,7 @@ export const useThreadStatus = (from, to, query, { enabled = false } = {}) =>
 			`/report/production-report-thread-sales-marketing?from=${from}&to=${to}&` +
 			query,
 		enabled,
+		refetchOnWindowFocus: false,
 	});
 
 export const useZipperStatus = (from, to, query, { enabled = false } = {}) =>
@@ -141,6 +142,7 @@ export const useZipperStatus = (from, to, query, { enabled = false } = {}) =>
 			`/report/production-report-sales-marketing?from=${from}&to=${to}&` +
 			query,
 		enabled,
+		refetchOnWindowFocus: false,
 	});
 
 export const useItemWise = (from, to, query, { enabled = false } = {}) =>

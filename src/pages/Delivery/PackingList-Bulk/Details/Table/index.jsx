@@ -9,7 +9,7 @@ import { DateTime, LinkWithCopy } from '@/ui';
 const PolyTransfer = lazy(() => import('./PolyTransfer'));
 
 export default function Index({ packing_list_entry, data }) {
-	const haveAccess = useAccess('delivery__packing_list_sample');
+	const haveAccess = useAccess('delivery__packing_list_bulk');
 	const columns = useMemo(
 		() => [
 			{

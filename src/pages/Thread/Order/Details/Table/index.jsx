@@ -5,6 +5,8 @@ import ReactTable from '@/components/Table';
 import { DateTime, StatusButton } from '@/ui';
 
 export default function Index({ order_info_entry }) {
+	const haveAccess = useAccess('thread__order_info_details');
+
 	const totalQty = order_info_entry.reduce(
 		(acc, cur) => acc + cur.quantity,
 		0
@@ -21,6 +23,13 @@ export default function Index({ order_info_entry }) {
 				accessorKey: 'index',
 				header: 'ID',
 				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'order_entry_uuid',
+				header: 'uuid',
+				enableColumnFilter: false,
+				hidden: !haveAccess.includes('show_developer'),
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -236,7 +245,10 @@ export default function Index({ order_info_entry }) {
 			columns={columns}
 		>
 			<tr className='text-sm'>
-				<td colSpan='8' className='py-2 text-right'>
+				<td
+					colSpan={haveAccess?.includes('show_developer') ? 9 : 8}
+					className='py-2 text-right'
+				>
 					Total QTY
 				</td>
 				<td className='pl-3 text-left font-semibold'>{totalQty}</td>

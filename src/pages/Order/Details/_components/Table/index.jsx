@@ -87,7 +87,10 @@ export default function Index({
 				columns={columns}
 			>
 				<tr className='bg-slate-200 font-bold'>
-					<td colSpan={7} className='text-right'>
+					<td
+						colSpan={haveAccess?.includes('show_developer') ? 8 : 7}
+						className='text-right'
+					>
 						Total:
 					</td>
 					<td className='px-3 py-1'>{total.Quantity}</td>

@@ -20,6 +20,7 @@ const TestSpreadSheet = (
 		readOnlyIndex = [],
 		onChange,
 		csvData,
+		isZipperEntryDisabled,
 		haveAccess,
 	} = {
 		title: '',
@@ -34,6 +35,7 @@ const TestSpreadSheet = (
 		isIndex: false,
 		onChange: (newData, setValue, fieldName, row, prop) => {},
 		csvData: [],
+		isZipperEntryDisabled: false,
 		haveAccess: [],
 	}
 ) => {
@@ -103,11 +105,14 @@ const TestSpreadSheet = (
 							cellProperties.readOnly = true; // Make the specified column read-only
 						}
 					}
-					if (
-						data[row]?.planning_batch_quantity > 0 &&
-						!haveAccess.includes('override_access')
-					) {
-						cellProperties.readOnly = true;
+
+					if (isZipperEntryDisabled) {
+						if (
+							data[row]?.planning_batch_quantity > 0 &&
+							!haveAccess.includes('override_access')
+						) {
+							cellProperties.readOnly = true;
+						}
 					}
 
 					return cellProperties;

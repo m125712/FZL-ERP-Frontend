@@ -125,7 +125,7 @@ export default function Index() {
 						<LinkWithCopy
 							title={info.getValue()}
 							id={uuid}
-							uri='/delivery/packing-list'
+							uri='/delivery/packing-list-bulk'
 						/>
 					);
 				},

@@ -1,9 +1,11 @@
 import { useMemo } from 'react';
+import { useAccess } from '@/hooks';
 
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, LinkWithCopy } from '@/ui';
 
 export default function Table({ entries }) {
+	const haveAccess = useAccess('planning__finishing_batch');
 	const total_qty = entries.reduce(
 		(a, b) => {
 			a.batchQty += b.batch_quantity;
@@ -27,6 +29,13 @@ export default function Table({ entries }) {
 
 	const columns = useMemo(
 		() => [
+			{
+				accessorKey: 'uuid',
+				header: 'uuid',
+				enableColumnFilter: false,
+				hidden: !haveAccess.includes('show_developer'),
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'style',
 				header: 'Style',
@@ -154,7 +163,7 @@ export default function Table({ entries }) {
 				<tr className='bg-slate-200 font-semibold'>
 					<td
 						className='px-4 py-2 text-right text-sm font-semibold'
-						colSpan={5}
+						colSpan={haveAccess.includes('show_developer') ? 6 : 5}
 					>
 						Total:
 					</td>

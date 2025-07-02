@@ -6,6 +6,9 @@ const PackingListsSample = lazy(() => import('@pages/Delivery/PackingList'));
 const PackingListsDetails = lazy(
 	() => import('@pages/Delivery/PackingList/Details')
 );
+const PackingListsBulkDetails = lazy(
+	() => import('@pages/Delivery/PackingList-Bulk/Details')
+);
 const PackingListsEntry = lazy(
 	() => import('@pages/Delivery/PackingList/Entry')
 );
@@ -151,6 +154,7 @@ export const DeliveryRoutes = [
 					'sample_zipper',
 					'thread',
 					'override_access',
+					'show_developer',
 				],
 			},
 			{
@@ -216,6 +220,7 @@ export const DeliveryRoutes = [
 					'sample_zipper',
 					'thread',
 					'override_access',
+					'show_developer',
 				],
 			},
 			{
@@ -235,7 +240,7 @@ export const DeliveryRoutes = [
 			{
 				name: 'Packing List Bulk Details',
 				path: '/delivery/packing-list-bulk/:uuid',
-				element: <PackingListsDetails />,
+				element: <PackingListsBulkDetails />,
 				page_name: 'delivery__packing_list_bulk_details',
 				actions: [
 					'create',

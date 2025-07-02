@@ -1,10 +1,12 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useDyeingSwatch } from '@/state/Dyeing';
 import { useOtherRecipe } from '@/state/Other';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import {
 	DateTime,
 	LinkWithCopy,
@@ -28,6 +30,8 @@ const options2 = [
 ];
 
 export default function Index() {
+	const { user } = useAuth();
+
 	const [status, setStatus] = useState('pending');
 	const [status2, setStatus2] = useState('incomplete_order');
 
@@ -57,6 +61,24 @@ export default function Index() {
 		[updateData, data]
 	);
 	const { data: recipe } = useOtherRecipe(`approved=true`);
+
+	const handleSwatchApprovalDate = async (idx) => {
+		await updateData.mutateAsync({
+			url: `/zipper/swatch-approval-received/${data[idx]?.uuid}`,
+			updatedData: {
+				swatch_approval_received: data[idx]?.swatch_approval_received
+					? false
+					: true,
+				swatch_approval_received_date: data[idx]
+					?.swatch_approval_received
+					? null
+					: GetDateTime(),
+				swatch_approval_received_by: user?.uuid,
+			},
+			isOnCloseNeeded: false,
+		});
+	};
+
 	const columns = useMemo(
 		() => [
 			{
@@ -187,6 +209,63 @@ export default function Index() {
 				cell: (info) => (
 					<DateTime
 						date={info.row.original.receive_by_factory_time}
+					/>
+				),
+			},
+			{
+				accessorFn: (row) =>
+					row.swatch_approval_received ? 'Yes' : 'No',
+				id: 'swatch_approval_received',
+				header: (
+					<>
+						Swatch <br />
+						App.
+					</>
+				),
+				width: 'w-24',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<div className='flex flex-col'>
+						<SwitchToggle
+							disabled={
+								!haveAccess.includes('click_swatch_status')
+							}
+							onChange={() => {
+								handleSwatchApprovalDate(info.row.index);
+							}}
+							checked={
+								info.row.original.swatch_approval_received ===
+								true
+							}
+						/>
+						{/* <DateTime date={info.row.original.bulk_approval_date} /> */}
+						<span>
+							{info.row.original.swatch_approval_received_by_name}
+						</span>
+					</div>
+				),
+			},
+			{
+				accessorFn: (row) => {
+					if (row.swatch_approval_received_date === null) return null;
+
+					return format(
+						row.swatch_approval_received_date,
+						'dd/MM/yyyy'
+					);
+				},
+				id: 'swatch_approval_received_date',
+				header: (
+					<>
+						Swatch App <br />
+						Rcv Date
+					</>
+				),
+				width: 'w-24',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.swatch_approval_received_date}
 					/>
 				),
 			},

@@ -1,9 +1,12 @@
 import { useMemo } from 'react';
+import { useAccess } from '@/hooks';
 
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, LinkWithCopy } from '@/ui';
 
 export default function Index({ batch_entry }) {
+	const haveAccess = useAccess('dyeing__thread_batch');
+
 	const total = batch_entry?.reduce(
 		(acc, item) => {
 			acc.quantity += item.quantity;
@@ -21,6 +24,13 @@ export default function Index({ batch_entry }) {
 	);
 	const columns = useMemo(
 		() => [
+			{
+				accessorKey: 'batch_entry_uuid',
+				header: 'uuid',
+				enableColumnFilter: false,
+				hidden: !haveAccess.includes('show_developer'),
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'order_number',
 				header: 'O/N',
@@ -127,7 +137,10 @@ export default function Index({ batch_entry }) {
 			columns={columns}
 		>
 			<tr className='text-lg font-bold'>
-				<th className='pe-4 text-right' colSpan={6}>
+				<th
+					className='pe-4 text-right'
+					colSpan={haveAccess?.includes('show_price') ? 7 : 6}
+				>
 					Total
 				</th>
 				<td className='ps-3'>{total?.quantity}</td>

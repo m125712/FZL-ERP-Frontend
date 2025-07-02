@@ -58,7 +58,7 @@ const Slider = (
 		{
 			data: 'party_price',
 		},
-		renderActions(handleRemove, handleCopy, data, haveAccess),
+		renderActions(handleRemove, handleCopy, true, data, haveAccess),
 	];
 
 	const colHeaders = [
@@ -85,6 +85,7 @@ const Slider = (
 				readOnlyIndex: [3],
 				isIndex: true,
 				csvData,
+				isZipperEntryDisabled: true,
 				haveAccess,
 			}}
 		/>

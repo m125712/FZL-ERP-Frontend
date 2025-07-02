@@ -76,7 +76,7 @@ const FullOrder = (
 			data: 'party_price',
 		},
 
-		renderActions(handleRemove, handleCopy, data, haveAccess),
+		renderActions(handleRemove, handleCopy, true, data, haveAccess),
 	];
 
 	const colHeaders = [
@@ -107,6 +107,7 @@ const FullOrder = (
 				readOnlyIndex: [7],
 				isIndex: true,
 				csvData,
+				isZipperEntryDisabled: true,
 				haveAccess,
 			}}
 		/>

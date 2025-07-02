@@ -35,6 +35,7 @@ export const ThreadRoutes = [
 					'click_status_production_paused',
 					'click_status_sno_from_head_office',
 					'click_status_receive_by_factory',
+					'show_developer',
 				],
 			},
 			{

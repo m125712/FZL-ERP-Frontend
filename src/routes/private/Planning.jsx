@@ -64,6 +64,7 @@ export const PlanningRoutes = [
 					'update',
 					'delete',
 					'click_status_complete',
+					'show_developer',
 				],
 			},
 			{

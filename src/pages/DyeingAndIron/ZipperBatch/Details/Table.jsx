@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useAccess } from '@/hooks';
 
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
 import { DateTime, LinkWithCopy, StatusButton } from '@/ui';
@@ -6,6 +7,8 @@ import { DateTime, LinkWithCopy, StatusButton } from '@/ui';
 import { getRequiredTapeKg } from '@/util/GetRequiredTapeKg';
 
 export default function Index({ dyeing_batch_entry }) {
+	const haveAccess = useAccess('dyeing__zipper_batch');
+
 	const total = dyeing_batch_entry?.reduce(
 		(acc, item) => {
 			acc.quantity += item?.quantity;
@@ -33,6 +36,13 @@ export default function Index({ dyeing_batch_entry }) {
 
 	const columns = useMemo(
 		() => [
+			{
+				accessorKey: 'dyeing_batch_entry_uuid',
+				header: 'uuid',
+				enableColumnFilter: false,
+				hidden: !haveAccess.includes('show_developer'),
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'order_number',
 				header: 'Order ID',
@@ -212,7 +222,10 @@ export default function Index({ dyeing_batch_entry }) {
 			columns={columns}
 		>
 			<tr className='text-lg font-bold'>
-				<th className='pe-4 text-right' colSpan={7}>
+				<th
+					className='pe-4 text-right'
+					colSpan={haveAccess?.includes('show_price') ? 8 : 7}
+				>
 					Total
 				</th>
 				<td className='ps-3'>{total?.quantity}</td>

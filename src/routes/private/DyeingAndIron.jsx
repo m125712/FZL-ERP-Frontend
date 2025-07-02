@@ -111,6 +111,7 @@ export const DyeingAndIronRoutes = [
 					'click_production',
 					'click_receive_status',
 					'click_receive_status_override',
+					'show_developer',
 				],
 			},
 			{
@@ -160,6 +161,7 @@ export const DyeingAndIronRoutes = [
 					'update',
 					'click_drying_status',
 					'click_drying_status_override',
+					'show_developer',
 				],
 			},
 

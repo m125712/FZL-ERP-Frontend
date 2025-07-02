@@ -33,10 +33,9 @@ function handleActions(
 
 	// Create div element
 	const divElement = document.createElement('div');
-	if (
-		!data[_row]?.planning_batch_quantity > 0 ||
-		haveAccess.includes('override_access')
-	) {
+	const hasBatchQty =
+		data && data[_row] && data[_row].planning_batch_quantity > 0;
+	if (!hasBatchQty || haveAccess.includes('override_access')) {
 		divElement.appendChild(copyButton);
 		divElement.appendChild(deleteButton);
 	}

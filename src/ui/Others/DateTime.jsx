@@ -4,12 +4,7 @@ import { cn } from '@/lib/utils';
 
 const Body = ({ value, className = '' }) => {
 	return (
-		<span
-			className={cn(
-				'text-[0.7rem] font-semibold capitalize text-primary',
-				className
-			)}
-		>
+		<span className={cn('text-[0.7rem] capitalize text-black', className)}>
 			{value}
 		</span>
 	);

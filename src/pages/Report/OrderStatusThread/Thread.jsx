@@ -21,8 +21,11 @@ export default function Index() {
 	const haveAccess = useAccess('report__order_status_thread');
 	const { user } = useAuth();
 
-	const [date, setDate] = useState(new Date());
-	const [toDate, setToDate] = useState(new Date());
+	// const [date, setDate] = useState(() => new Date('2025-02-04'));
+	// const [toDate, setToDate] = useState(() => new Date('2025-02-04'));
+
+	const [date, setDate] = useState(() => new Date());
+	const [toDate, setToDate] = useState(() => new Date());
 
 	const { data, isLoading } = useThreadStatus(
 		format(date, 'yyyy-MM-dd'),
@@ -140,7 +143,8 @@ export default function Index() {
 				accessorKey: 'color_ref_entry_date',
 				header: (
 					<>
-						Color Ref <br /> Entry
+						Color Ref <br />
+						Entry
 					</>
 				),
 				filterFn: 'isWithinRange',
@@ -151,29 +155,31 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'color_ref_update_date',
+				accessorKey: 'swatch_approval_received',
 				header: (
 					<>
-						Color Ref <br /> Update
+						Swatch <br />
+						App.
 					</>
 				),
-				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				cell: (info) => <Status status={info.getValue()} />,
 			},
 			{
 				accessorFn: (row) =>
 					row.swatch_approval_date &&
 					REPORT_DATE_FORMATE(row.swatch_approval_date),
 				id: 'swatch_approval_date',
-				header: 'Swatch App. Date',
+				header: (
+					<>
+						Swatch App. <br />
+						Date
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => (
 					<DateTime
-						date={info.row.original.swatch_approval_date}
+						date={info.getValue()}
 						isTime={false}
 						customizedDateFormate='dd MMM,yyyy'
 					/>
@@ -186,9 +192,32 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
+
 			{
 				accessorKey: 'quantity',
 				header: 'QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'not_approved_quantity',
+				header: (
+					<>
+						Not App. <br />
+						QTY
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'approved_quantity',
+				header: (
+					<>
+						App. <br />
+						QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -215,7 +244,12 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_expected_weight',
-				header: 'Exp. Yarn Wgt',
+				header: (
+					<>
+						Exp. Yarn <br />
+						Wgt
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -235,6 +269,12 @@ export default function Index() {
 						/>
 					);
 				},
+			},
+			{
+				accessorKey: 'batch_type',
+				header: 'Type',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorFn: (row) =>
@@ -268,7 +308,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_quantity',
-				header: 'B/Qty',
+				header: 'B/QTY',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -300,57 +340,69 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'not_approved_quantity',
-				header: 'Not App. QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'approved_quantity',
-				header: 'App. QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'total_yarn_quantity',
-				header: 'Dyeing QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue() + ' kg',
-			},
-			{
 				accessorKey: 'total_coning_production_quantity',
-				header: 'Coning QTY',
+				header: (
+					<>
+						Coning <br />
+						QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'warehouse',
-				header: 'Warehouse QTY',
+				header: (
+					<>
+						W/H <br />
+						QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'delivered',
-				header: 'Delivered QTY',
+				header: (
+					<>
+						Del. <br />
+						QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'balance_quantity',
-				header: 'Balance QTY',
-				enableColumnFilter: false,
+				header: (
+					<>
+						Bal. <br />
+						QTY
+					</>
+				),
+				enableColumnFilter: true,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'party_price',
-				header: 'Party Price',
+				header: (
+					<>
+						Party <br />
+						Price
+					</>
+				),
 				enableColumnFilter: false,
 				hidden: !haveAccess.includes('show_price'),
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'company_price',
-				header: 'Company Price',
+				header: (
+					<>
+						Com. <br />
+						Price
+					</>
+				),
 				enableColumnFilter: false,
 				hidden: !haveAccess.includes('show_price'),
 				cell: (info) => info.getValue(),
@@ -382,6 +434,21 @@ export default function Index() {
 						customizedDateFormate='dd MMM,yyyy'
 					/>
 				),
+			},
+			{
+				accessorKey: 'color_ref_update_date',
+				header: (
+					<>
+						Color Ref <br />
+						Update
+					</>
+				),
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
 			},
 		],
 		[data]

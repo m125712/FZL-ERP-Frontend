@@ -72,7 +72,7 @@ const Tape = (
 		{
 			data: 'party_price',
 		},
-		renderActions(handleRemove, handleCopy, data, haveAccess),
+		renderActions(handleRemove, handleCopy, true, data, haveAccess),
 	];
 
 	const colHeaders = [
@@ -102,6 +102,7 @@ const Tape = (
 				isIndex: true,
 				readOnlyIndex: [6],
 				csvData,
+				isZipperEntryDisabled: true,
 				haveAccess,
 			}}
 		/>

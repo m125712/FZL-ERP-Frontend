@@ -1,6 +1,12 @@
 import handleActions from './handle-actions';
 
-function renderActions(handleRemove, handleCopy, data, haveAccess) {
+function renderActions(
+	handleRemove,
+	handleCopy,
+	isZipperEntryDisabled = false,
+	data = [],
+	haveAccess = []
+) {
 	return {
 		data: 'actions',
 		renderer: (_instance, td, _row, _col, _prop, value, _cellProperties) =>
@@ -14,6 +20,7 @@ function renderActions(handleRemove, handleCopy, data, haveAccess) {
 				_cellProperties,
 				handleRemove,
 				handleCopy,
+				isZipperEntryDisabled,
 				data,
 				haveAccess
 			),

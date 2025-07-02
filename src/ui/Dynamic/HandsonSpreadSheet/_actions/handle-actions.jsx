@@ -8,8 +8,9 @@ function handleActions(
 	_cellProperties,
 	handleRemove,
 	handleCopy,
-	data,
-	haveAccess
+	isZipperEntryDisabled = false,
+	data = [],
+	haveAccess = []
 ) {
 	// Create delete button
 	const deleteButton = document.createElement('button');
@@ -33,9 +34,16 @@ function handleActions(
 
 	// Create div element
 	const divElement = document.createElement('div');
-	const hasBatchQty =
-		data && data[_row] && data[_row].planning_batch_quantity > 0;
-	if (!hasBatchQty || haveAccess.includes('override_access')) {
+
+	if (isZipperEntryDisabled) {
+		const hasBatchQty =
+			data && data[_row] && data[_row].planning_batch_quantity > 0;
+
+		if (!hasBatchQty || haveAccess.includes('override_access')) {
+			divElement.appendChild(copyButton);
+			divElement.appendChild(deleteButton);
+		}
+	} else {
 		divElement.appendChild(copyButton);
 		divElement.appendChild(deleteButton);
 	}

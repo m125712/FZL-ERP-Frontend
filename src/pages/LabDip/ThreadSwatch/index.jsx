@@ -172,7 +172,7 @@ export default function Index() {
 				header: (
 					<>
 						Swatch <br />
-						App.
+						Rcv.
 					</>
 				),
 				width: 'w-24',

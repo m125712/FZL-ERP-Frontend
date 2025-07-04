@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
+import { CustomLink, DateTime, SimpleDatePicker, Status } from '@/ui';
 
 import { REPORT_DATE_FORMATE, REPORT_DATE_TIME_FORMAT } from '../utils';
 
@@ -51,43 +51,6 @@ export default function Index() {
 						/>
 					);
 				},
-			},
-			{
-				accessorKey: 'item_description',
-				header: 'Item',
-				enableColumnFilter: true,
-				width: 'w-32',
-				cell: (info) => {
-					const { order_description_uuid, order_number } =
-						info.row.original;
-					return (
-						<CustomLink
-							label={info.getValue()}
-							url={`/order/details/${order_number}/${order_description_uuid}`}
-							openInNewTab={true}
-						/>
-					);
-				},
-			},
-			{
-				accessorKey: 'item_name_with_stopper',
-				header: 'Item & Stopper',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'zipper_number_name',
-				header: 'Zipper No.',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'end_type_name',
-				header: 'End Type',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
 			},
 			{
 				accessorFn: (row) => {
@@ -139,7 +102,6 @@ export default function Index() {
 					));
 				},
 			},
-
 			{
 				accessorKey: 'marketing_name',
 				header: 'Marketing',
@@ -191,18 +153,15 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'color_ref_update_date',
+				accessorKey: 'swatch_approval_received',
 				header: (
 					<>
-						Color Ref <br /> Update
+						Swatch <br />
+						App.
 					</>
 				),
-				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				cell: (info) => <Status status={info.getValue()} />,
 			},
 			{
 				accessorFn: (row) =>
@@ -218,6 +177,46 @@ export default function Index() {
 						customizedDateFormate='dd MMM,yyyy'
 					/>
 				),
+			},
+			{
+				accessorKey: 'item_description',
+				header: 'Item',
+				enableColumnFilter: true,
+				width: 'w-32',
+				cell: (info) => {
+					const { order_description_uuid, order_number } =
+						info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${order_number}/${order_description_uuid}`}
+							openInNewTab={true}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'item_name_with_stopper',
+				header: 'Item & Stopper',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'zipper_number_name',
+				header: (
+					<>
+						Zipper <br /> No.
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'end_type_name',
+				header: 'End Type',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'size',
@@ -238,20 +237,22 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'expected_kg',
-				header: 'Exp. KG',
+				accessorKey: 'not_approved_quantity',
+				header: (
+					<>
+						Not App. <br /> QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'total_slider_required',
-				header: 'Slider Req.',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'total_slider_required_kg',
-				header: 'Total Slider KG',
+				accessorKey: 'approved_quantity',
+				header: (
+					<>
+						App. <br /> QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -271,11 +272,42 @@ export default function Index() {
 				),
 				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
-				width: 'w-24',
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
 			},
+
+			{
+				accessorKey: 'expected_kg',
+				header: (
+					<>
+						Exp. <br /> KG
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_slider_required',
+				header: (
+					<>
+						Slider <br /> Req.
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_slider_required_kg',
+				header: (
+					<>
+						Total Slider <br /> KG
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
 			{
 				accessorFn: (row) => row.dyeing_batch_number,
 				id: 'dyeing_batch_number',
@@ -309,18 +341,6 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'total_quantity',
-				header: 'B/Qty',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'total_production_quantity',
-				header: 'B/Kg',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorFn: (row) =>
 					row.production_date &&
 					REPORT_DATE_FORMATE(row.production_date),
@@ -336,6 +356,18 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'total_quantity',
+				header: 'B/Qty',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_production_quantity',
+				header: 'B/Kg',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'batch_expected_kg',
 				header: 'EB/Kg',
 				enableColumnFilter: false,
@@ -348,57 +380,74 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'not_approved_quantity',
-				header: 'Not App. QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'approved_quantity',
-				header: 'App. QTY',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'total_dyeing_quantity',
-				header: 'Dyeing QTY',
+				header: (
+					<>
+						Dyeing <br /> QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_coloring_quantity',
-				header: 'Slider QTY',
+				header: (
+					<>
+						Slider <br /> QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'total_finishing_quantity',
-				header: 'Finishing QTY',
+				header: (
+					<>
+						Finishing <br /> QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'delivered',
-				header: 'Delivered QTY',
+				header: (
+					<>
+						Delivered <br /> QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'balance_quantity',
-				header: 'Balance QTY',
+				header: (
+					<>
+						Balance <br /> QTY
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'party_price',
-				header: 'Party Price',
+				header: (
+					<>
+						Party <br />
+						Price
+					</>
+				),
 				enableColumnFilter: false,
 				hidden: !haveAccess.includes('show_price'),
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'company_price',
-				header: 'Company Price',
+				header: (
+					<>
+						Comp. <br /> Price
+					</>
+				),
 				enableColumnFilter: false,
 				hidden: !haveAccess.includes('show_price'),
 				cell: (info) => info.getValue(),
@@ -430,6 +479,20 @@ export default function Index() {
 						customizedDateFormate='dd MMM,yyyy'
 					/>
 				),
+			},
+			{
+				accessorKey: 'color_ref_update_date',
+				header: (
+					<>
+						Color Ref <br /> Update
+					</>
+				),
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
 			},
 		],
 		[data]

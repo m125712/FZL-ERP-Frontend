@@ -92,7 +92,6 @@ export default function index() {
 
 	const generate = (btnType) => {
 		if (btnType == 'excel' && !isLoading) {
-			console.log(data);
 			Excel(data, from, to);
 		} else {
 			setIsGenerating(true);

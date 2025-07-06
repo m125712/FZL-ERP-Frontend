@@ -9,7 +9,6 @@ const getDateFormate = (date) => {
 	}
 };
 export default function Index(data, from, to, priceFor) {
-	console.log(data);
 	const PdfData = data || [];
 	const title = [
 		'Current Total',

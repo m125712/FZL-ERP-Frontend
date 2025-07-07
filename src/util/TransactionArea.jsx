@@ -65,6 +65,7 @@ const getTransactionArea = () => {
 		}, // vislon finishing
 		{ label: 'Vislon Section', value: 'vislon' },
 		{ label: 'Zipper Dying', value: 'zipper_dying' }, // dyeing and ironing
+		{ label: 'Sample Zipper', value: 'sample_zipper' }, // sample zipper
 	];
 };
 

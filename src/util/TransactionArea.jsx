@@ -66,6 +66,8 @@ const getTransactionArea = () => {
 		{ label: 'Vislon Section', value: 'vislon' },
 		{ label: 'Zipper Dying', value: 'zipper_dying' }, // dyeing and ironing
 		{ label: 'Sample Zipper', value: 'sample_zipper' }, // sample zipper
+		{ label: 'ETP', value: 'etp' }, // ! etp: we dont know what is this
+		{ label: 'Lab Zipper', value: 'lab_zipper' }, // ! lab zipper: why need this?
 	];
 };
 

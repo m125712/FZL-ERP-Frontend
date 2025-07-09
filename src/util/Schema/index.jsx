@@ -2312,7 +2312,7 @@ export const MANUAL_PI_SCHEMA = {
 	marketing_uuid: STRING_REQUIRED,
 	party_uuid: STRING_REQUIRED,
 	buyer_uuid: STRING_REQUIRED,
-	merchandiser_uuid: STRING_REQUIRED,
+	merchandiser_uuid: STRING.nullable(),
 	factory_uuid: STRING_REQUIRED,
 	bank_uuid: STRING_REQUIRED,
 	validity: NUMBER_REQUIRED,

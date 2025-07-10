@@ -1,11 +1,12 @@
+/* eslint-disable @eslint-react/hooks-extra/no-unnecessary-use-prefix */
 import createGlobalState from '.';
 import { materialQK, purchaseQK } from './QueryKeys';
 
 // * Material Section * //
-export const useMaterialSection = () =>
+export const useMaterialSection = (type) =>
 	createGlobalState({
-		queryKey: materialQK.section(),
-		url: '/material/section',
+		queryKey: materialQK.section(type),
+		url: type ? `/material/section?s_type=${type}` : '/material/section',
 	});
 
 export const useMaterialSectionByUUID = (uuid) =>

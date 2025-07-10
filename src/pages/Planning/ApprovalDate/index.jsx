@@ -70,6 +70,13 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				width: 'w-40',
+				// enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'item_description',
 				header: 'Item Description',
 				// enableColumnFilter: false,

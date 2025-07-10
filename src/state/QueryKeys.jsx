@@ -154,7 +154,11 @@ export const materialQK = {
 	stockByUUID: (uuid) => [...materialQK.stock(), uuid],
 
 	//* section
-	section: () => [...materialQK.all(), 'section'],
+	section: (type) => [
+		...materialQK.all(),
+		'section',
+		...(type ? [type] : []),
+	],
 	sectionByUUID: (uuid) => [...materialQK.section(), uuid],
 
 	//* types

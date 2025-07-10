@@ -110,7 +110,7 @@ export const getPageHeader = (batch) => {
 				{
 					colSpan: 4,
 					table: {
-						widths: [50, 50, 50, 50, 50, 70, 45, 95],
+						widths: [50, 50, 50, 50, 50, 60, 45, 105],
 						headerRows: 1,
 						body: [
 							[

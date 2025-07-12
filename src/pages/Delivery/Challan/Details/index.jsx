@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDeliveryChallanDetailsByUUID } from '@/state/Delivery';
-import { Navigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import ThreadPdf from '@/components/Pdf/ThreadChallan';
 import Pdf from '@/components/Pdf/ZipperChallan';
@@ -41,11 +41,16 @@ export default function Index() {
 
 	return (
 		<div className='space-y-2'>
-			<iframe
-				src={data2}
-				className='h-[40rem] w-full rounded-md border-none'
-			/>
-			<Information challan={data} />
+			<div className='flex flex-col-reverse gap-2 md:flex-row'>
+				<Information challan={data} className='md:w-1/5' />
+				<div className='md:w-4/5'>
+					<iframe
+						src={data2}
+						className='h-[27rem] w-full rounded-md border-none'
+					/>
+				</div>
+			</div>
+
 			<Table challan={data?.challan_entry} item_for={data?.item_for} />
 		</div>
 	);

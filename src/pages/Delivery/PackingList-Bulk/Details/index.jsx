@@ -34,7 +34,7 @@ export default function Index() {
 	// }, [data]);
 	// ! FOR TESTING
 	// ! FOR TESTING
-	const [data3, setData2] = useState('');
+	const [data3, setData3] = useState('');
 	const [data4, setData4] = useState('');
 
 	useEffect(() => {
@@ -43,15 +43,15 @@ export default function Index() {
 				data?.item_for === 'thread' ||
 				data?.item_for === 'sample_thread'
 			) {
-				Pdf(data)?.getDataUrl((dataUrl) => {
-					setData2(dataUrl);
-				});
+				// Pdf(data)?.getDataUrl((dataUrl) => {
+				// 	setData3(dataUrl);
+				// });
 				PdfV2(data)?.getDataUrl((dataUrl) => {
 					setData4(dataUrl);
 				});
 			} else {
 				Pdf2(data)?.getDataUrl((dataUrl) => {
-					setData2(dataUrl);
+					setData3(dataUrl);
 				});
 			}
 		}
@@ -63,24 +63,24 @@ export default function Index() {
 
 	return (
 		<div className='space-y-2'>
-			{/* <iframe
-				src={data2}
-				className='h-[40rem] w-full rounded-md border-none'
-			/> */}
-			<div className='flex'>
-				<iframe
-					src={data3}
-					className='h-[40rem] w-full rounded-md border-none'
-				/>
-				{(data?.item_for === 'thread' ||
-					data?.item_for === 'sample_thread') && (
-					<iframe
-						src={data4}
-						className='h-[40rem] w-full rounded-md border-none'
-					/>
-				)}
+			<div className='flex flex-col-reverse gap-2 md:flex-row'>
+				<Information packing_list={data} className='md:w-2/5' />
+				<div className='md:w-3/5'>
+					{data?.item_for === 'thread' ||
+					data?.item_for === 'sample_thread' ? (
+						<iframe
+							src={data4}
+							className='h-[20rem] w-full rounded-md border-none'
+						/>
+					) : (
+						<iframe
+							src={data3}
+							className='h-[20rem] w-full rounded-md border-none'
+						/>
+					)}
+				</div>
 			</div>
-			<Information packing_list={data} />
+
 			<Table packing_list_entry={data?.packing_list_entry} data={data} />
 		</div>
 	);

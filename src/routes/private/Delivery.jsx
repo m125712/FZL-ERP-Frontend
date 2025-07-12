@@ -75,6 +75,8 @@ export const DeliveryRoutes = [
 					'click_receive_status_override',
 					'click_delivered',
 					'click_delivered_override',
+					'click_is_out_for_delivery',
+					'click_is_out_for_delivery_override',
 					'show_own_orders',
 				],
 			},

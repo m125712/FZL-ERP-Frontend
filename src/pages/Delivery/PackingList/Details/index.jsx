@@ -68,13 +68,19 @@ export default function Index() {
 					{data?.item_for === 'thread' ||
 					data?.item_for === 'sample_thread' ? (
 						<iframe
-							src={data4}
+							src={`${data4}#toolbar=1&navpanes=1&scrollbar=1&view=FitH`}
 							className='h-[20rem] w-full rounded-md border-none'
+							title='Packing List PDF'
+							allow='fullscreen'
+							sandbox='allow-same-origin allow-scripts allow-popups allow-forms'
 						/>
 					) : (
 						<iframe
-							src={data3}
+							src={`${data3}#toolbar=1&navpanes=1&scrollbar=1&view=FitH`}
 							className='h-[20rem] w-full rounded-md border-none'
+							title='Packing List PDF'
+							allow='fullscreen'
+							sandbox='allow-same-origin allow-scripts allow-popups allow-forms'
 						/>
 					)}
 				</div>

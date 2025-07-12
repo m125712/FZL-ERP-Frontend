@@ -87,6 +87,54 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'is_out_for_delivery',
+				header: (
+					<span>
+						Out For
+						<br />
+						Del.
+					</span>
+				),
+				enableColumnFilter: false,
+				cell: (info) => {
+					const {
+						is_out_for_delivery,
+						gate_pass,
+						is_out_for_delivery_by_name,
+						is_out_for_delivery_date,
+					} = info.row.original;
+
+					const access = haveAccess.includes(
+						'click_is_out_for_delivery'
+					);
+					const overrideAccess = haveAccess.includes(
+						'click_is_out_for_delivery_override'
+					);
+					let permission = false;
+					if (gate_pass === 1) {
+						if (is_out_for_delivery === 0 && access)
+							permission = true;
+						if (overrideAccess) permission = true;
+					}
+
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								checked={Number(info.getValue()) === 1}
+								onChange={() =>
+									handelIsOutForDelivery(info.row.index)
+								}
+								disabled={!permission}
+							/>
+							<DateTime date={is_out_for_delivery_date} />
+							<span className=''>
+								{is_out_for_delivery_by_name}
+							</span>
+						</div>
+					);
+				},
+			},
+			{
 				accessorKey: 'is_delivered',
 				header: 'Delivered',
 				enableColumnFilter: false,
@@ -389,6 +437,22 @@ export default function Index() {
 
 				is_delivered_by: status ? user?.uuid : null,
 				is_delivered_date: status ? GetDateTime() : null,
+			},
+			isOnCloseNeeded: false,
+		});
+	};
+
+	const handelIsOutForDelivery = async (idx) => {
+		const challan = data[idx];
+		const status = challan?.is_out_for_delivery == true ? false : true;
+
+		await updateData.mutateAsync({
+			url: `/delivery/challan/is-out-for-delivery/${challan?.uuid}`,
+			uuid: challan?.uuid,
+			updatedData: {
+				is_out_for_delivery: status,
+				is_out_for_delivery_by: user?.uuid,
+				is_out_for_delivery_date: status ? GetDateTime() : null,
 			},
 			isOnCloseNeeded: false,
 		});

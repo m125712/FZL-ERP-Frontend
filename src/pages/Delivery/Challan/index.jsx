@@ -141,7 +141,7 @@ export default function Index() {
 				cell: (info) => {
 					const {
 						is_delivered,
-						gate_pass,
+						is_out_for_delivery,
 						is_delivered_by_name,
 						is_delivered_date,
 					} = info.row.original;
@@ -151,7 +151,7 @@ export default function Index() {
 						'click_delivered_override'
 					);
 					let permission = false;
-					if (gate_pass === 1) {
+					if (is_out_for_delivery) {
 						if (is_delivered === 0 && access) permission = true;
 						if (overrideAccess) permission = true;
 					}

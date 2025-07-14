@@ -44,7 +44,7 @@ export const getPageHeader = (data) => {
 							bold: true,
 						},
 						`Date: ${getDateFormate(data[0]?.delivery_date)}\n`,
-						`Vehicle: ${data[0]?.vehicle_name || '-'}\n`,
+						`Vehicle: ${data[0]?.is_all ? 'All' : data[0]?.vehicle_name ? data[0].vehicle_name : '--'}\n`,
 						``,
 					],
 					alignment: 'right',

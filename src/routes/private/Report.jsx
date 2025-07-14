@@ -50,6 +50,8 @@ const IndividualMaterial = lazy(
 	() => import('@/pages/Report/IndividualMaterial')
 );
 
+const OutForDelivery = lazy(() => import('@/pages/Report/OutForDelivery'));
+
 export const ReportRoutes = [
 	{
 		name: 'Report',
@@ -263,6 +265,13 @@ export const ReportRoutes = [
 				element: <IndividualMaterial />,
 				page_name: 'report__individual_material',
 				actions: ['read', 'show_own_orders'],
+			},
+			{
+				name: 'Out For Delivery',
+				path: '/report/out-for-delivery',
+				element: <OutForDelivery />,
+				page_name: 'report__out_for_delivery',
+				actions: ['read'],
 			},
 		],
 	},

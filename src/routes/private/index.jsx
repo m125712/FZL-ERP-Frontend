@@ -6,6 +6,7 @@ import { DyeingAndIronRoutes } from './DyeingAndIron';
 import { HrRoutes } from './Hr';
 import { LabDipRoutes } from './LabDip';
 import { LibraryRoutes } from './Library';
+import { MaintenanceRoutes } from './Maintenance';
 import { MarketingRoutes } from './Marketing';
 import { MetalRoutes } from './Metal';
 import { NylonRoutes } from './Nylon';
@@ -27,6 +28,7 @@ const privateRoutes = [
 	...CommercialRoutes,
 	...StoreRoutes,
 	...StoreMaintenanceRoutes,
+	...MaintenanceRoutes,
 	...CommonRoutes,
 	...LabDipRoutes,
 	...PlanningRoutes,

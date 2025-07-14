@@ -78,7 +78,7 @@ export const getPageHeader = (data) => {
 					colSpan: 3,
 					text: [
 						{
-							text: data?.party_address,
+							text: data?.factory_address,
 						},
 					],
 					alignment: 'left',

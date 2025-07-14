@@ -2012,3 +2012,9 @@ export const planningQK = {
 	],
 	planningApprovalDate: (query) => [...planningQK.all(), query],
 };
+
+export const maintenanceQK = {
+	all: () => ['maintenance'],
+
+	machine: () => [...maintenanceQK.all(), 'machine'],
+};

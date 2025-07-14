@@ -3645,3 +3645,17 @@ export const MARKETING_TARGET_NULL = {
 	thread_amount: null,
 	remarks: null,
 };
+
+export const MAINTENANCE_MACHINE_SCHEMA = {
+	section: STRING_REQUIRED,
+	name: STRING_REQUIRED,
+	status: BOOLEAN_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const MAINTENANCE_MACHINE_NULL = {
+	section: '',
+	name: '',
+	status: false,
+	remarks: '',
+};

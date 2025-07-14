@@ -1,17 +1,18 @@
 import { useAuth } from '@/context/auth';
+import { useMaintenanceMachine } from '@/state/Maintenance';
 import { useOtherCountLength } from '@/state/Other';
 import { useThreadCountLength } from '@/state/Thread';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast';
-import { Input } from '@/ui';
+import { CheckBox, Input } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
 import {
-	THREAD_COUNT_LENGTH_NULL,
-	THREAD_COUNT_LENGTH_SCHEMA,
+	MAINTENANCE_MACHINE_NULL,
+	MAINTENANCE_MACHINE_SCHEMA,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
 
@@ -22,14 +23,17 @@ export default function Index({
 	},
 	setUpdateCountLength,
 }) {
-	const { url, updateData, postData } = useThreadCountLength();
-	const { invalidateQuery: invalidateOtherCountLength } =
-		useOtherCountLength();
+	const { url, updateData, postData } = useMaintenanceMachine();
 	const { user } = useAuth();
-	const { register, handleSubmit, errors, reset, control, context } = useRHF(
-		THREAD_COUNT_LENGTH_SCHEMA,
-		THREAD_COUNT_LENGTH_NULL
-	);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		control,
+		context,
+		getValues,
+	} = useRHF(MAINTENANCE_MACHINE_SCHEMA, MAINTENANCE_MACHINE_NULL);
 
 	useFetchForRhfReset(
 		`${url}/${updateCountLength?.uuid}`,
@@ -42,7 +46,7 @@ export default function Index({
 			...prev,
 			uuid: null,
 		}));
-		reset(THREAD_COUNT_LENGTH_NULL);
+		reset(MAINTENANCE_MACHINE_NULL);
 		window[modalId].close();
 	};
 
@@ -81,29 +85,23 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
-		invalidateOtherCountLength();
 	};
 	return (
 		<AddModal
 			id={modalId}
 			title={
 				updateCountLength?.uuid !== null
-					? 'Update Count Length'
-					: 'Count Length'
+					? `Update Machine ${getValues('section_machine_id')}`
+					: 'Machine'
 			}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}
 		>
-			<Input label='count' {...{ register, errors }} />
-			<Input label='length' {...{ register, errors }} />
-			<Input label='min_weight' {...{ register, errors }} />
-			<Input label='max_weight' {...{ register, errors }} />
-			<Input label='cone_per_carton' {...{ register, errors }} />
-			<Input label='price' {...{ register, errors }} />
-			<Input label='sst' {...{ register, errors }} />
-			<Input label='remarks' {...{ register, errors }} />
+			<CheckBox label='status' {...{ register, errors }} />
+			<Input label='section' {...{ register, errors }} />
+			<Input label='name' {...{ register, errors }} />
 
 			<DevTool control={control} placement='top-left' />
 		</AddModal>

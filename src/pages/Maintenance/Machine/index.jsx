@@ -1,11 +1,10 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
-import { useOtherCountLength } from '@/state/Other';
-import { useThreadCountLength } from '@/state/Thread';
+import { useMaintenanceMachine } from '@/state/Maintenance';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete } from '@/ui';
+import { DateTime, EditDelete, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -13,64 +12,40 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useThreadCountLength();
-	const { invalidateQuery: invalidateOtherCountLength } =
-		useOtherCountLength();
-	const info = new PageInfo('Count Length', url, 'thread__count_length');
-	const haveAccess = useAccess('thread__count_length');
+	const { data, isLoading, url, deleteData } = useMaintenanceMachine();
+	const info = new PageInfo(
+		'Maintenance/Section-Machine',
+		url,
+		'maintenance__machine'
+	);
+	const haveAccess = useAccess('maintenance__machine');
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'count',
-				header: 'Count',
+				accessorKey: 'status',
+				header: 'Status',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'length',
-				header: 'Length',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'min_weight',
-				// header: 'Min Weight(kg)',
-				header: (
-					<span>
-						Min Weight <br />
-						(kg)
-					</span>
+				hidden: !haveAccess.includes('update'),
+				cell: (info) => (
+					<StatusButton size='btn-xs' value={info.getValue()} />
 				),
+			},
+			{
+				accessorKey: 'section_machine_id',
+				header: 'ID',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'max_weight',
-				header: (
-					<span>
-						Max Weight <br />
-						(kg)
-					</span>
-				),
+				accessorKey: 'section',
+				header: 'Section',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'cone_per_carton',
-				header: 'Cone/Carton',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'price',
-				header: 'Price',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'sst',
-				header: 'SST',
+				accessorKey: 'name',
+				header: 'Name',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -190,7 +165,6 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					invalidateQuery={invalidateOtherCountLength}
 					{...{
 						deleteItem,
 						setDeleteItem,

@@ -195,13 +195,13 @@ export default function Index() {
 		// Add new item
 		const new_purchase_description_uuid = nanoid();
 		const created_at = GetDateTime();
-		const created_by = user.uuid;
+		const created_by = user?.uuid;
 
 		// Create purchase description
 		const purchase_description_data = {
 			...data,
 			uuid: new_purchase_description_uuid,
-			store_type: 'rm',
+			store_type: 'maintenance',
 			created_at,
 			created_by,
 		};

@@ -17,10 +17,10 @@ export const useMaterialSectionByUUID = (uuid) =>
 	});
 
 // * Material Types * //
-export const useMaterialType = () =>
+export const useMaterialType = (query) =>
 	createGlobalState({
-		queryKey: materialQK.type(),
-		url: '/material/type',
+		queryKey: materialQK.type(query),
+		url: query ? `/material/type?${query}` : '/material/type',
 	});
 
 export const useMaterialTypeByUUID = (uuid) =>

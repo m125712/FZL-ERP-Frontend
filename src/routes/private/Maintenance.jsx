@@ -7,11 +7,11 @@ export const MaintenanceRoutes = [
 		name: 'Maintenance',
 		children: [
 			{
-				name: 'Machine',
-				path: '/maintenance/machine',
+				name: 'Section-Machine',
+				path: '/maintenance/section-machine',
 				element: <Machine />,
-				page_name: 'maintenance__machine',
-				actions: ['create', 'read', 'update', 'delete'],
+				page_name: 'maintenance__section_machine',
+				actions: ['create', 'read', 'update', 'delete', 'click_status'],
 			},
 		],
 	},

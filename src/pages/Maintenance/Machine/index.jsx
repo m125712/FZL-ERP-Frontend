@@ -4,32 +4,62 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
+
+import { sections } from './Utils';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useMaintenanceMachine();
+	const { data, isLoading, url, deleteData, updateData } =
+		useMaintenanceMachine();
 	const info = new PageInfo(
 		'Maintenance/Section-Machine',
 		url,
-		'maintenance__machine'
+		'maintenance__section_machine'
 	);
-	const haveAccess = useAccess('maintenance__machine');
+	const haveAccess = useAccess('maintenance__section_machine');
+	const handelReceiveByFactoryStatus = async (idx) => {
+		const { status } = data[idx];
+
+		await updateData.mutateAsync({
+			url: `/maintain/section-machine/${data[idx]?.uuid}`,
+
+			updatedData: {
+				status: status === true ? false : true,
+			},
+			isOnCloseNeeded: false,
+		});
+	};
 
 	const columns = useMemo(
 		() => [
 			{
 				accessorKey: 'status',
 				header: 'Status',
-				enableColumnFilter: false,
-				hidden: !haveAccess.includes('update'),
-				cell: (info) => (
-					<StatusButton size='btn-xs' value={info.getValue()} />
-				),
+				enableColumnFilter: true,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes('click_status');
+
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelReceiveByFactoryStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'section_machine_id',
@@ -38,16 +68,17 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'section',
-				header: 'Section',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'section',
+				header: 'Section',
+				enableColumnFilter: false,
+				cell: (info) =>
+					sections.find((s) => s?.value === info.getValue())?.label,
 			},
 			{
 				accessorKey: 'created_by_name',
@@ -133,7 +164,7 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].count + '-' + data[idx].length,
+			itemName: data[idx].name,
 		}));
 
 		window[info.getDeleteModalId()].showModal();

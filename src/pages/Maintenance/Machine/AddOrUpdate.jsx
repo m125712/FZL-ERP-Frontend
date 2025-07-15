@@ -6,7 +6,7 @@ import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast';
-import { CheckBox, Input } from '@/ui';
+import { FormField, Input, ReactSelect, Switch } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
@@ -15,6 +15,8 @@ import {
 	MAINTENANCE_MACHINE_SCHEMA,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
+
+import { sections } from './Utils';
 
 export default function Index({
 	modalId = '',
@@ -32,6 +34,7 @@ export default function Index({
 		reset,
 		control,
 		context,
+		Controller,
 		getValues,
 	} = useRHF(MAINTENANCE_MACHINE_SCHEMA, MAINTENANCE_MACHINE_NULL);
 
@@ -91,16 +94,34 @@ export default function Index({
 			id={modalId}
 			title={
 				updateCountLength?.uuid !== null
-					? `Update Machine ${getValues('section_machine_id')}`
-					: 'Machine'
+					? `Update Section Machine ${getValues('section_machine_id')}`
+					: 'Section Machine'
 			}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}
 		>
-			<CheckBox label='status' {...{ register, errors }} />
-			<Input label='section' {...{ register, errors }} />
+			<Switch label='status' {...{ register, errors }} />
+			<FormField label='section' title='Section' errors={errors}>
+				<Controller
+					name={'section'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<ReactSelect
+								placeholder='Select Section'
+								options={sections}
+								value={sections?.filter(
+									(item) => item.value == getValues('section')
+								)}
+								onChange={(e) => onChange(e.value)}
+								// isDisabled={order_info_id !== undefined}
+							/>
+						);
+					}}
+				/>
+			</FormField>
 			<Input label='name' {...{ register, errors }} />
 
 			<DevTool control={control} placement='top-left' />

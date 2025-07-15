@@ -29,17 +29,21 @@ pdfMake.fonts = {
 // Listen for messages from the main thread
 self.onmessage = async (event) => {
 	const { type, data } = event.data;
+	console.log('Received message:', event.data);
 
 	if (type === 'generatePdf') {
 		const { documentDefinition, options } = data; // Receive doc definition and optional options
-
+		console.log('Generating PDF with options:', options);
+		console.log('Document Definition:', documentDefinition);
 		try {
 			// Create the PDF document
 			const pdfDocGenerator = pdfMake.createPdf(documentDefinition);
+			console.log('PDF Document Generator:', pdfDocGenerator);
 
 			// Get the PDF as a blob or data URL
 			// Using getBlob() is generally preferred for performance and memory
 			pdfDocGenerator.getBlob((blob) => {
+				console.log(blob);
 				// Send the Blob back to the main thread
 				self.postMessage({ type: 'pdfGenerated', blob: blob });
 			});

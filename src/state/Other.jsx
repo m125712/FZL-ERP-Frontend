@@ -601,3 +601,9 @@ export const useOtherOrderEntryBy = (uuid, isZipper, challanUuid) =>
 			: `/delivery/thread-order-entry/by/${uuid}?challan_uuid=${challanUuid}`,
 		enabled: !!uuid,
 	});
+
+export const useOtherSectionMachine = () =>
+	createGlobalState({
+		queryKey: otherQK.sectionMachine(),
+		url: '/other/maintain/section-machine/value/label',
+	});

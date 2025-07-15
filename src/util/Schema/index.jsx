@@ -3659,3 +3659,33 @@ export const MAINTENANCE_MACHINE_NULL = {
 	status: false,
 	remarks: '',
 };
+
+export const ISSUE_SCHEMA = {
+	section: STRING_REQUIRED,
+	problem_type: STRING_REQUIRED,
+	parts_problem: STRING.nullable(),
+	section_machine_uuid: STRING_REQUIRED,
+	description: STRING,
+	emergence: STRING_REQUIRED,
+};
+
+export const ISSUE_NULL = {
+	section: '',
+	problem_type: '',
+	parts_problem: null,
+	section_machine_uuid: '',
+	description: '',
+	emergence: '',
+};
+
+export const ISSUE_PROCUREMENT_SCHEMA = {
+	material_uuid: STRING_REQUIRED,
+	quantity: NUMBER_REQUIRED.moreThan(0, 'More Than 0'),
+	description: STRING,
+};
+
+export const ISSUE_PROCUREMENT_NULL = {
+	material_uuid: '',
+	quantity: null,
+	description: '',
+};

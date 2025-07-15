@@ -1639,6 +1639,8 @@ export const otherQK = {
 		isZipper ? 'zipper' : 'thread',
 		challanUuid,
 	],
+
+	sectionMachine: () => [...otherQK.all(), 'section-machine'],
 };
 
 //* Challan
@@ -2017,4 +2019,19 @@ export const maintenanceQK = {
 	all: () => ['maintenance'],
 
 	machine: () => [...maintenanceQK.all(), 'machine'],
+
+	issue: () => [...maintenanceQK.all(), 'issue'],
+	issueByUUID: (uuid) => [...maintenanceQK.all(), 'issue', uuid],
+
+	issueProcurement: () => [...maintenanceQK.all(), 'issue-procurement'],
+	issueProcurementByUUID: (uuid) => [
+		...maintenanceQK.all(),
+		'issue-procurement',
+		uuid,
+	],
+	procurementByIssueUUID: (uuid) => [
+		...maintenanceQK.all(),
+		'issue-procurement',
+		uuid,
+	],
 };

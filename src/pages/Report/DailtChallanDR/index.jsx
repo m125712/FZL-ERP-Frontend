@@ -137,7 +137,7 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'is_out_for_delivery_by',
+				accessorKey: 'is_out_for_delivery_by_name',
 				header: (
 					<>
 						Out For <br />

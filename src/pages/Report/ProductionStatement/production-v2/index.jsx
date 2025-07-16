@@ -1,27 +1,20 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useProductionStatementReport } from '@/state/Report';
 import { format } from 'date-fns';
-import { LoaderCircle } from 'lucide-react';
+import { Download, FileText, LoaderCircle } from 'lucide-react';
 import { usePdfGenerator } from '@/hooks/usePdfGenerator';
 import { useAccess } from '@/hooks';
 
 import Pdf from '@/components/Pdf/ProductionStatement';
+import PdfGeneratorButton from '@/components/ui/generate-pdf-button';
 
 import Excel from './Excel';
 import Header from './Header';
 
-const getPath = (haveAccess, userUUID) => {
-	if (haveAccess.includes('show_own_orders') && userUUID) {
-		return `own_uuid=${userUUID}`;
-	}
-	return '';
-};
-
 export default function ProductionStatementReport() {
 	const haveAccess = useAccess('report__production_statement');
 	const { user } = useAuth();
-
 	const [from, setFrom] = useState(new Date());
 	const [to, setTo] = useState(new Date());
 	const [marketing, setMarketing] = useState('');
@@ -31,7 +24,12 @@ export default function ProductionStatementReport() {
 	const [order, setOrder] = useState('');
 	const [reportFor, setReportFor] = useState('');
 
-	const { data, isLoading } = useProductionStatementReport(
+	const path =
+		haveAccess.includes('show_own_orders') && user && user.uuid
+			? `own_uuid=${user.uuid}`
+			: '';
+
+	const { data, isFetching, refetch } = useProductionStatementReport(
 		format(from, 'yyyy-MM-dd'),
 		format(to, 'yyyy-MM-dd'),
 		party,
@@ -40,21 +38,33 @@ export default function ProductionStatementReport() {
 		order,
 		reportFor,
 		priceFor,
-		getPath(haveAccess, user?.uuid),
-		{ isEnabled: !!user?.uuid }
+		path
 	);
-	console.log(data);
 
-	const { isGenerating, pdfUrl, error, generatePdf } = usePdfGenerator();
+	const {
+		isGenerating,
+		progress,
+		status,
+		pdfUrl,
+		error,
+		generatePdf,
+		reset,
+	} = usePdfGenerator();
 
-	const handlePdfClick = useCallback(() => {
-		if (data && !isGenerating) {
-			generatePdf(Pdf(data, from, to));
+	const handleGenerateClick = useCallback(async () => {
+		if (isFetching || isGenerating) return;
+		reset();
+
+		const result = await refetch();
+		const { data } = result;
+		const { data: value } = data;
+		if (value) {
+			generatePdf(Pdf(value, from, to));
 		}
-	}, [data, isGenerating, generatePdf]);
+	}, [isFetching, isGenerating, refetch, generatePdf, reset, from, to]);
 
 	const handleExcelClick = useCallback(() => {
-		Excel(data);
+		if (data) Excel(data);
 	}, [data]);
 
 	return (
@@ -76,43 +86,27 @@ export default function ProductionStatementReport() {
 				setReportFor={setReportFor}
 				priceFor={priceFor}
 				setPriceFor={setPriceFor}
-				isLoading={isLoading}
+				isLoading={isFetching || isGenerating}
 			/>
 
 			<div className='grid grid-cols-1 gap-2 md:grid-cols-2'>
-				<div className='flex gap-2'>
-					<button
-						type='button'
-						onClick={handlePdfClick}
-						className='btn btn-primary flex-1'
-						disabled={isLoading || isGenerating}
-					>
-						{isGenerating && (
-							<LoaderCircle className='animate-spin' />
-						)}
-						{pdfUrl ? 'Regenerate PDF' : 'Generate PDF'}
-					</button>
-
-					{error && <p style={{ color: 'red' }}>{error}</p>}
-
-					{pdfUrl && (
-						<a
-							className='btn btn-primary flex-1'
-							href={pdfUrl}
-							download='production_statement.pdf'
-						>
-							Download PDF
-						</a>
-					)}
-				</div>
+				<PdfGeneratorButton
+					handleGenerateClick={handleGenerateClick}
+					isFetching={isFetching}
+					isGenerating={isGenerating}
+					pdfUrl={pdfUrl}
+					status={status}
+					progress={progress}
+					error={error}
+				/>
 
 				<button
 					type='button'
 					onClick={handleExcelClick}
-					className='btn btn-secondary flex-1'
-					disabled={isLoading}
+					disabled={!data || isFetching}
+					className='btn btn-secondary'
 				>
-					{isLoading && <LoaderCircle className='animate-spin' />}
+					{isFetching && <LoaderCircle className='animate-spin' />}
 					Excel
 				</button>
 			</div>

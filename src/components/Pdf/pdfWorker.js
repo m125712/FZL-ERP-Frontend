@@ -1,16 +1,4 @@
 // pdfWorker.js
-
-// Import pdfmake. You'll need to adjust the path based on your project setup
-// For CommonJS/Node-like environments (e.g., if using a build tool like Webpack/Rollup):
-// import * as pdfmake from 'pdfmake/build/pdfmake';
-// import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-
-// For direct browser use (UMD build - usually not used with bundlers for workers):
-// You might need to directly include the scripts if your bundler doesn't handle this well.
-// A common approach is to make pdfmake a global in the worker context
-// by either importing it directly or making sure it's bundled in.
-
-// The most reliable way for bundlers (Webpack, Rollup, Vite) is usually:
 import pdfMake from 'pdfmake/build/pdfmake';
 
 import { vfs } from './vfs_fonts';
@@ -26,35 +14,136 @@ pdfMake.fonts = {
 	},
 };
 
+// Status messages for different phases
+const STATUS_MESSAGES = {
+	INITIALIZING: 'Initializing PDF generation...',
+	PROCESSING_DOCUMENT: 'Processing document definition...',
+	CREATING_PAGES: 'Creating pages...',
+	RENDERING_CONTENT: 'Rendering content...',
+	APPLYING_STYLES: 'Applying styles and formatting...',
+	GENERATING_FINAL: 'Generating final PDF...',
+	FINALIZING: 'Finalizing document...',
+	COMPLETED: 'PDF generation completed!',
+};
+
 // Listen for messages from the main thread
 self.onmessage = async (event) => {
 	const { type, data } = event.data;
 	console.log('Received message:', event.data);
 
 	if (type === 'generatePdf') {
-		const { documentDefinition, options } = data; // Receive doc definition and optional options
+		const { documentDefinition, options } = data;
 		console.log('Generating PDF with options:', options);
 		console.log('Document Definition:', documentDefinition);
+
+		// Record start time using performance.now() for high precision
+		const startTime = performance.now();
+
 		try {
+			// Send initialization status with timer start
+			self.postMessage({
+				type: 'pdfStatus',
+				status: STATUS_MESSAGES.INITIALIZING,
+				progress: 0,
+				startTime: startTime,
+				elapsedTime: 0,
+			});
+
+			// Simulate processing phases with status updates
+			await new Promise((resolve) => setTimeout(resolve, 100));
+			self.postMessage({
+				type: 'pdfStatus',
+				status: STATUS_MESSAGES.PROCESSING_DOCUMENT,
+				progress: 10,
+				startTime: startTime,
+				elapsedTime: performance.now() - startTime,
+			});
+
+			await new Promise((resolve) => setTimeout(resolve, 100));
+			self.postMessage({
+				type: 'pdfStatus',
+				status: STATUS_MESSAGES.CREATING_PAGES,
+				progress: 20,
+				startTime: startTime,
+				elapsedTime: performance.now() - startTime,
+			});
+
 			// Create the PDF document
 			const pdfDocGenerator = pdfMake.createPdf(documentDefinition);
 			console.log('PDF Document Generator:', pdfDocGenerator);
 
-			// Get the PDF as a blob or data URL
-			// Using getBlob() is generally preferred for performance and memory
-			pdfDocGenerator.getBlob((blob) => {
-				console.log(blob);
-				// Send the Blob back to the main thread
-				self.postMessage({ type: 'pdfGenerated', blob: blob });
-			});
+			// Enhanced progress callback with status messages and timing
+			const progressCallback = (progress) => {
+				console.log('PDF Generation Progress:', progress);
+				const percentage = Math.round(progress * 100);
+				const currentTime = performance.now();
+				const elapsedTime = currentTime - startTime;
 
-			// Alternatively, for dataURL (less efficient for large PDFs):
-			// pdfDocGenerator.getDataUrl((dataUrl) => {
-			//     self.postMessage({ type: 'pdfGenerated', dataUrl: dataUrl });
-			// });
+				let statusMessage = STATUS_MESSAGES.RENDERING_CONTENT;
+
+				// Update status based on progress
+				if (percentage < 30) {
+					statusMessage = STATUS_MESSAGES.CREATING_PAGES;
+				} else if (percentage < 60) {
+					statusMessage = STATUS_MESSAGES.RENDERING_CONTENT;
+				} else if (percentage < 90) {
+					statusMessage = STATUS_MESSAGES.APPLYING_STYLES;
+				} else {
+					statusMessage = STATUS_MESSAGES.GENERATING_FINAL;
+				}
+
+				// Send progress update with status and timing to main thread
+				self.postMessage({
+					type: 'pdfProgress',
+					progress: percentage,
+					status: statusMessage,
+					startTime: startTime,
+					elapsedTime: elapsedTime,
+				});
+			};
+
+			// Get the PDF as a blob with progress tracking
+			pdfDocGenerator.getBlob(
+				(blob) => {
+					console.log('PDF Generation completed:', blob);
+
+					const finalTime = performance.now();
+					const totalElapsedTime = finalTime - startTime;
+
+					// Send finalizing status
+					self.postMessage({
+						type: 'pdfStatus',
+						status: STATUS_MESSAGES.FINALIZING,
+						progress: 95,
+						startTime: startTime,
+						elapsedTime: totalElapsedTime,
+					});
+
+					// Send the final blob back to the main thread
+					setTimeout(() => {
+						self.postMessage({
+							type: 'pdfGenerated',
+							blob: blob,
+							progress: 100,
+							status: STATUS_MESSAGES.COMPLETED,
+							startTime: startTime,
+							elapsedTime: totalElapsedTime,
+							totalTime: totalElapsedTime,
+						});
+					}, 200);
+				},
+				{ progressCallback: progressCallback }
+			);
 		} catch (error) {
 			console.error('Error generating PDF in worker:', error);
-			self.postMessage({ type: 'pdfError', error: error.message });
+			const errorTime = performance.now();
+			self.postMessage({
+				type: 'pdfError',
+				error: error.message,
+				status: 'Error occurred during PDF generation',
+				startTime: startTime,
+				elapsedTime: errorTime - startTime,
+			});
 		}
 	}
 };

@@ -29,6 +29,7 @@ const TableHeader = (props) => {
 					{...{
 						title: props.title,
 						subtitle: props.subtitle,
+						info: props.info,
 					}}
 				/>
 

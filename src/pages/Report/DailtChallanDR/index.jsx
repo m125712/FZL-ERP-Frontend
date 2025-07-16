@@ -119,6 +119,51 @@ export default function Index() {
 				),
 			},
 			{
+				accessorFn: (row) => (row.is_out_for_delivery ? 'YES' : 'NO'),
+				id: 'is_out_for_delivery',
+				header: (
+					<>
+						Out For
+						<br />
+						Delivery
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton
+						size='btn-xs'
+						value={info.row.original.is_out_for_delivery}
+					/>
+				),
+			},
+			{
+				accessorKey: 'is_out_for_delivery_by',
+				header: (
+					<>
+						Out For <br />
+						Delivery By
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'is_out_for_delivery_date',
+				header: (
+					<>
+						Out For <br />
+						Delivery Date
+					</>
+				),
+				filterFn: 'isWithinRange',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return <DateTime date={info.getValue()} />;
+				},
+			},
+
+			{
 				accessorKey: 'total_quantity',
 				header: (
 					<>

@@ -198,6 +198,7 @@ export default function Index() {
 				cell: (info) => {
 					const res = {
 						cancelled: 'badge-error',
+						running: 'badge-info',
 						completed: 'badge-success',
 						pending: 'badge-warning',
 					};

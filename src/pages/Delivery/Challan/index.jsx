@@ -112,7 +112,7 @@ export default function Index() {
 					);
 					let permission = false;
 					if (gate_pass === 1) {
-						if (is_out_for_delivery === 0 && access)
+						if (is_out_for_delivery === false && access)
 							permission = true;
 						if (overrideAccess) permission = true;
 					}
@@ -120,7 +120,7 @@ export default function Index() {
 					return (
 						<div className='flex flex-col'>
 							<SwitchToggle
-								checked={Number(info.getValue()) === 1}
+								checked={info.getValue() === true}
 								onChange={() =>
 									handelIsOutForDelivery(info.row.index)
 								}

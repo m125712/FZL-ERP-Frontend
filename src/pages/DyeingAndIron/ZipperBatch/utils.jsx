@@ -1,7 +1,3 @@
-import { ReactSelect } from '@/ui';
-
-import { cn } from '@/lib/utils';
-
 export const slot = [
 	{ label: 'Slot 1', value: 1 },
 	{ label: 'Slot 2', value: 2 },
@@ -11,6 +7,7 @@ export const slot = [
 
 export const states = [
 	{ value: 'pending', label: 'Pending' },
+	{ value: 'running', label: 'Running' },
 	{ value: 'completed', label: 'Completed' },
 	{ value: 'cancelled', label: 'Cancelled' },
 ];

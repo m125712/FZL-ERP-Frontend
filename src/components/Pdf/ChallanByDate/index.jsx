@@ -17,6 +17,7 @@ const node = [
 	getTable('total_quantity', 'Qty', 'right'),
 	getTable('total_poly_quantity', 'Poly', 'right'),
 ];
+
 export default function Index(data) {
 	const headerHeight = 100;
 	let footerHeight = 50;

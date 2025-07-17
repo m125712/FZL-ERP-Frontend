@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { router } from '@/routes/router';
 import AuthProvider from '@context/auth';
 import { RouterProvider } from 'react-router/dom';
@@ -10,8 +11,22 @@ import NotificationSocket from './util/Notification';
 
 function App() {
 	const handleNewIssue = (issue) => {
-		toast.info(`🚨 New issue reported: ${issue}`);
+		console.log(issue);
+		if ('Notification' in window && Notification.permission === 'granted') {
+			new Notification('🚨 New Issue Reported', {
+				body: issue || 'HEHE',
+			});
+		}
 	};
+
+	useEffect(() => {
+		if ('Notification' in window && Notification.permission !== 'granted') {
+			Notification.requestPermission().then((permission) => {
+				console.log('Notification permission:', permission);
+			});
+		}
+	}, []);
+
 	return (
 		<AuthProvider>
 			<RouterProvider router={router} fallbackElement={<Loader />} />

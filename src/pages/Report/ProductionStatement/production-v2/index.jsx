@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useAuth } from '@/context/auth';
-import { useProductionStatementReport } from '@/state/Report';
 import { format } from 'date-fns';
 import { LoaderCircle } from 'lucide-react';
 import { useAccess } from '@/hooks';
@@ -25,8 +24,8 @@ export default function index() {
 	const { user } = useAuth();
 	const [isLoading, setIsLoading] = useState(false);
 
-	const [from, setFrom] = useState(new Date());
-	const [to, setTo] = useState(new Date());
+	const [from, setFrom] = useState(() => new Date());
+	const [to, setTo] = useState(() => new Date());
 	const [marketing, setMarketing] = useState('');
 	const [type, setType] = useState('');
 	const [priceFor, setPriceFor] = useState('company');

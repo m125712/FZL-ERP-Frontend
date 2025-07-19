@@ -149,9 +149,14 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'bleaching',
-				header: 'Bleach',
-				enableColumnFilter: true,
+				accessorKey: 'balance_quantity',
+				header: (
+					<>
+						Balance <br />
+						QTY (PCS)
+					</>
+				),
+				enableColumnFilter: false,
 				enableSorting: true,
 				// cell: (info) => {
 				// 	const isBleach = info.getValue() === 'bleach';

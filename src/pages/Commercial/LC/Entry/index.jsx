@@ -157,7 +157,6 @@ export default function Index() {
 				type: 'warning',
 				message: 'Must add Amount & LDBC/FDBC in Progression Section',
 			});
-			return;
 		} else if (data?.is_old_pi === false && data?.pi[0]?.uuid === null) {
 			ShowLocalToast({
 				type: 'warning',
@@ -268,28 +267,26 @@ export default function Index() {
 			// * Dynamic progresson/Lc_entry
 			const lc_entry_update_promise = [...data.lc_entry].map(
 				async (item) => {
-					if (item.amount > 0) {
-						if (item.uuid) {
-							await updateData.mutateAsync({
-								url: `/commercial/lc-entry/${item.uuid}`,
-								updatedData: {
-									...item,
-									updated_at: GetDateTime(),
-								},
-								isOnCloseNeeded: false,
-							});
-						} else {
-							await postData.mutateAsync({
-								url: `/commercial/lc-entry`,
-								newData: {
-									...item,
-									lc_uuid: data.uuid,
-									uuid: nanoid(),
-									created_at: GetDateTime(),
-								},
-								isOnCloseNeeded: false,
-							});
-						}
+					if (item.uuid) {
+						await updateData.mutateAsync({
+							url: `/commercial/lc-entry/${item.uuid}`,
+							updatedData: {
+								...item,
+								updated_at: GetDateTime(),
+							},
+							isOnCloseNeeded: false,
+						});
+					} else {
+						await postData.mutateAsync({
+							url: `/commercial/lc-entry`,
+							newData: {
+								...item,
+								lc_uuid: data.uuid,
+								uuid: nanoid(),
+								created_at: GetDateTime(),
+							},
+							isOnCloseNeeded: false,
+						});
 					}
 				}
 			);
@@ -364,18 +361,16 @@ export default function Index() {
 
 		// * Dynamic progresson/Lc_entry
 		const lc_entry_promise = [...data.lc_entry].map(async (item) => {
-			if (item.amount > 0) {
-				await postData.mutateAsync({
-					url: `/commercial/lc-entry`,
-					newData: {
-						...item,
-						lc_uuid: new_lc_uuid,
-						uuid: nanoid(),
-						created_at: GetDateTime(),
-					},
-					isOnCloseNeeded: false,
-				});
-			}
+			await postData.mutateAsync({
+				url: `/commercial/lc-entry`,
+				newData: {
+					...item,
+					lc_uuid: new_lc_uuid,
+					uuid: nanoid(),
+					created_at: GetDateTime(),
+				},
+				isOnCloseNeeded: false,
+			});
 		});
 
 		// const new_lc_number = res?.data?.[0].insertedId;

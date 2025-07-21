@@ -4,7 +4,13 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, StatusButton, Transfer } from '@/ui';
+import {
+	DateTime,
+	EditDelete,
+	StatusButton,
+	StatusSelect,
+	Transfer,
+} from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -15,11 +21,18 @@ const AgainstOrderTransfer = lazy(() => import('./AgainstOrderTransfer'));
 const MaterialTrx = lazy(() => import('./MaterialTrx'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData, refetch } =
-		useMaterialInfo('accessories');
+	const [hidden, setHidden] = useState(false);
+	const options = [
+		{ value: true, label: 'Show Hidden' },
+		{ value: false, label: 'Dont Show Hidden' },
+	];
+	const { data, isLoading, deleteData, refetch } = useMaterialInfo(
+		'accessories',
+		hidden
+	);
 	const info = new PageInfo(
 		'Store / Stock Accessories',
-		url,
+		'store/stock-accessories',
 		'store__stock_accessories'
 	);
 	const haveAccess = useAccess('store__stock_accessories');
@@ -313,6 +326,9 @@ export default function Index() {
 		window[info.getDeleteModalId()].showModal();
 	};
 
+	if (isLoading)
+		return <span className='loading loading-dots loading-lg z-50' />;
+
 	return (
 		<div>
 			<ReactTable
@@ -323,6 +339,13 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				data={data}
 				columns={columns}
+				extraButton={
+					<StatusSelect
+						status={hidden}
+						setStatus={setHidden}
+						options={options}
+					/>
+				}
 			/>
 
 			<Suspense>
@@ -354,7 +377,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: '/material/info',
 						deleteData,
 					}}
 				/>

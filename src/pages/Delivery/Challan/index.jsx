@@ -36,14 +36,22 @@ const options = [
 	{ value: 'gate_pass', label: 'W/H Out' },
 ];
 
+const orderTypeOptions = [
+	{ value: 'all', label: 'All' },
+	{ value: 'sample', label: 'Sample' },
+	{ value: 'bulk', label: 'Bulk' },
+];
+
 export default function Index() {
 	const [status, setStatus] = useState('received');
+	const [orderType, setOrderType] = useState('bulk');
 	const navigate = useNavigate();
 	const haveAccess = useAccess('delivery__challan');
 	const { user } = useAuth();
 
 	const { data, isLoading, url, deleteData, updateData } = useDeliveryChallan(
-		getPath(haveAccess, user?.uuid) + `&type=${status}`,
+		getPath(haveAccess, user?.uuid) +
+			`&type=${status}&order_type=${orderType}`,
 		{ enabled: !!user?.uuid }
 	);
 
@@ -494,11 +502,18 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				handelAdd={handelAdd}
 				extraButton={
-					<StatusSelect
-						status={status}
-						setStatus={setStatus}
-						options={options}
-					/>
+					<>
+						<StatusSelect
+							status={status}
+							setStatus={setStatus}
+							options={options}
+						/>
+						<StatusSelect
+							status={orderType}
+							setStatus={setOrderType}
+							options={orderTypeOptions}
+						/>
+					</>
 				}
 			/>
 

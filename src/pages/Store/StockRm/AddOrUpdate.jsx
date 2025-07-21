@@ -73,6 +73,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				is_priority_material: data.is_priority_material ? 1 : 0,
+				is_hidden: data.is_hidden ? 1 : 0,
 				updated_at: GetDateTime(),
 			};
 
@@ -90,6 +91,7 @@ export default function Index({
 		const updatedData = {
 			...data,
 			is_priority_material: data.is_priority_material ? 1 : 0,
+			is_hidden: data.is_hidden ? 1 : 0,
 			uuid: nanoid(),
 			store_type: 'rm',
 			created_at: GetDateTime(),
@@ -180,6 +182,16 @@ export default function Index({
 							height='h-[2.9rem]'
 							label='is_priority_material'
 							title='Priority Material'
+							{...{ register, errors }}
+						/>
+					</div>
+				</div>
+				<div className='mt-6 flex items-center text-sm'>
+					<div className='w-40 rounded-md border border-secondary/30 px-1'>
+						<CheckBox
+							height='h-[2.9rem]'
+							label='is_hidden'
+							title='Hidden'
 							{...{ register, errors }}
 						/>
 					</div>

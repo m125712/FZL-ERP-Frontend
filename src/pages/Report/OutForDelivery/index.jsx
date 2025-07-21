@@ -94,6 +94,13 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'marketing_name',
+				header: 'Marketing',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,

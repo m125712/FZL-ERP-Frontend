@@ -31,10 +31,13 @@ export const useMaterialTypeByUUID = (uuid) =>
 	});
 
 // * Material Info * //
-export const useMaterialInfo = (type) =>
+export const useMaterialInfo = (type, hidden) =>
 	createGlobalState({
-		queryKey: materialQK.info(type),
-		url: type ? `/material/info?s_type=${type}` : '/material/info',
+		queryKey: materialQK.info(type, hidden),
+		url:
+			type && hidden !== undefined
+				? `/material/info?s_type=${type}&is_hidden=${hidden}`
+				: `/material/info`,
 	});
 
 export const useMaterialInfoByUUID = (uuid) =>

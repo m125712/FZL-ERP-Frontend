@@ -10,13 +10,20 @@ export default function Header({
 	setMachines,
 	orderType,
 	setOrderType,
+	isSample,
+	setIsSample,
 }) {
 	const { data: machineOptions } = useOtherMachines();
 
 	const orderTypes = [
-		{ label: 'Bulk', value: 'bulk' },
-		{ label: 'Sample', value: 'sample' },
+		{ label: 'Zipper', value: 'zipper' },
+		{ label: 'Thread', value: 'thread' },
 		{ label: 'All', value: 'all' },
+	];
+	const sampleTypes = [
+		{ label: 'Bulk', value: 0 },
+		{ label: 'Sample', value: 1 },
+		{ label: 'All', value: 2 },
 	];
 	return (
 		<div>
@@ -50,6 +57,18 @@ export default function Header({
 						)}
 						onChange={(e) => {
 							setOrderType(e.value);
+						}}
+						menuPortalTarget={document.body}
+					/>
+					<ReactSelect
+						className='md:min-w-96'
+						placeholder='Select Sample Type'
+						options={sampleTypes}
+						value={sampleTypes?.find(
+							(item) => item.value == isSample
+						)}
+						onChange={(e) => {
+							setIsSample(e.value);
 						}}
 						menuPortalTarget={document.body}
 					/>

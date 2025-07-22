@@ -1982,6 +1982,13 @@ export const reportQK = {
 		material_uuid,
 		query,
 	],
+
+	dailyOrderStatus: (date, toDate) => [
+		...reportQK.all(),
+		'daily-order-status',
+		date,
+		toDate,
+	],
 };
 
 export const marketingQK = {

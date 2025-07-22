@@ -585,7 +585,12 @@ export const dyeingQK = {
 	],
 
 	//* Dyeing Dashboard
-	dyeingDashboard: (param) => [...dyeingQK.all(), 'dyeing-dashboard', param],
+	dyeingDashboard: (param, orderType) => [
+		...dyeingQK.all(),
+		'dyeing-dashboard',
+		param,
+		orderType,
+	],
 
 	//* Finishing Dashboard
 	finishingDashboard: (from, to) => [

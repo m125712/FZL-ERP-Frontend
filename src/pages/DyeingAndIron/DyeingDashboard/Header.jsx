@@ -8,8 +8,16 @@ export default function Header({
 	setDyeingDate = () => {},
 	machines,
 	setMachines,
+	orderType,
+	setOrderType,
 }) {
 	const { data: machineOptions } = useOtherMachines();
+
+	const orderTypes = [
+		{ label: 'Bulk', value: 'bulk' },
+		{ label: 'Sample', value: 'sample' },
+		{ label: 'All', value: 'all' },
+	];
 	return (
 		<div>
 			<SectionEntryBody title={'Dyeing Dashboard'}>
@@ -31,6 +39,18 @@ export default function Header({
 							setMachines(e);
 						}}
 						isMulti={true}
+						menuPortalTarget={document.body}
+					/>
+					<ReactSelect
+						className='md:min-w-96'
+						placeholder='Select Order Type'
+						options={orderTypes}
+						value={orderTypes?.find(
+							(item) => item.value == orderType
+						)}
+						onChange={(e) => {
+							setOrderType(e.value);
+						}}
 						menuPortalTarget={document.body}
 					/>
 				</div>

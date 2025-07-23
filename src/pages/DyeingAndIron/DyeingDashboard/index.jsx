@@ -14,6 +14,7 @@ import Header from './Header';
 export default function index() {
 	const [machines, setMachines] = useState([]);
 	const [orderType, setOrderType] = useState('all');
+	const [isSample, setIsSample] = useState(2);
 
 	const haveAccess = useAccess('dyeing__dyeing_dashboard');
 
@@ -26,7 +27,7 @@ export default function index() {
 	const [dyeingDate, setDyeingDate] = useState(
 		format(new Date(), 'yyyy-MM-dd')
 	);
-	const { data } = useDyeingDashboard(dyeingDate, orderType);
+	const { data } = useDyeingDashboard(dyeingDate, orderType, isSample);
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -69,6 +70,8 @@ export default function index() {
 					setMachines,
 					orderType,
 					setOrderType,
+					isSample,
+					setIsSample,
 				}}
 			/>
 			<Content data={data} dyeingDate={dyeingDate} />

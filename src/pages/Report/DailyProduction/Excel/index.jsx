@@ -5,10 +5,10 @@ export default function Index(data, from, to) {
 
 	const tableData = pdfData.flatMap((item) => {
 		return item.marketing?.flatMap((marketingItem) => {
-			return marketingItem.parties?.flatMap((partyItem, partyIndex) => {
-				return partyItem.orders?.flatMap((orderItem, orderIndex) => {
-					return orderItem.items?.flatMap((itemItem, itemIndex) => {
-						return itemItem.other?.map((otherItem, otherIndex) => {
+			return marketingItem.parties?.flatMap((partyItem) => {
+				return partyItem.orders?.flatMap((orderItem) => {
+					return orderItem.items?.flatMap((itemItem) => {
+						return itemItem.other?.map((otherItem) => {
 							return [
 								{
 									text: item.type,

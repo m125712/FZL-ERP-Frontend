@@ -1,5 +1,3 @@
-import { format } from 'date-fns';
-
 import {
 	FormField,
 	ReactSelect,
@@ -7,13 +5,15 @@ import {
 	SimpleDatePicker,
 } from '@/ui';
 
+const noop = () => {};
+
 export default function Header({
 	from = '',
-	setFrom = () => {},
+	setFrom = noop,
 	to = '',
-	setTo = () => {},
+	setTo = noop,
 	type = '',
-	setType = () => {},
+	setType = noop,
 }) {
 	const types = [
 		{ label: 'All', value: 'all' },
@@ -30,10 +30,11 @@ export default function Header({
 							key={'from'}
 							value={from}
 							placeholder='From'
-							onChange={(data) => {
+							selected={from}
+							onChangeForTime={(data) => {
 								setFrom(data);
 							}}
-							selected={from}
+							showTime={true}
 						/>
 					</FormField>
 					<FormField label='' title='To'>
@@ -45,6 +46,7 @@ export default function Header({
 								setTo(data);
 							}}
 							selected={to}
+							showTime={true}
 						/>
 					</FormField>
 					<FormField label='' title='Type'>

@@ -17,7 +17,7 @@ const node = [
 	getTable('running_total_quantity', 'Total Qty'),
 ];
 
-export default function Index(data, from) {
+export default function Index(data, from, to) {
 	const headerHeight = 80;
 	let footerHeight = 50;
 
@@ -509,7 +509,7 @@ export default function Index(data, from) {
 		}),
 
 		header: {
-			table: getPageHeader(from),
+			table: getPageHeader(from, to),
 			layout: 'noBorders',
 			margin: [xMargin, 30, xMargin, 0],
 		},

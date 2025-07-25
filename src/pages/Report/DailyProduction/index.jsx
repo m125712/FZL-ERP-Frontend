@@ -56,7 +56,7 @@ export default function index() {
 					<button
 						type='button'
 						onClick={() => {
-							Pdf(data, from)?.print(
+							Pdf(data, from, to)?.print(
 								{},
 								window.open('', '_blank')
 							);

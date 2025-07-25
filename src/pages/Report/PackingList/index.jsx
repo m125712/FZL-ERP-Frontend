@@ -14,7 +14,7 @@ import {
 
 import PageInfo from '@/util/PageInfo';
 
-import { REPORT_DATE_FORMATE } from '../utils';
+import { REPORT_DATE_FORMATE, REPORT_DATE_TIME_FORMAT } from '../utils';
 
 const options = [
 	{ value: 'all', label: 'All' },
@@ -26,11 +26,11 @@ const options = [
 export default function Index() {
 	const haveAccess = useAccess('report__packing_list');
 	const [status, setStatus] = useState('pending');
-	const [date, setDate] = useState(new Date());
-	const [toDate, setToDate] = useState(new Date());
+	const [date, setDate] = useState(() => new Date());
+	const [toDate, setToDate] = useState(() => new Date());
 
 	const { data, isLoading, url } = usePackingList(
-		`type=${status}&from_date=${format(date, 'yyyy-MM-dd')}&to_date=${format(toDate, 'yyyy-MM-dd')}`
+		`type=${status}&from_date=${format(date, 'yyyy-MM-dd HH:mm:ss')}&to_date=${format(toDate, 'yyyy-MM-dd HH:mm:ss')}`
 	);
 	const info = new PageInfo('PackingList', url, 'report__packing_list');
 
@@ -41,7 +41,7 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorFn: (row) => REPORT_DATE_FORMATE(row.created_at),
+				accessorFn: (row) => REPORT_DATE_TIME_FORMAT(row.created_at),
 				id: 'created_at',
 				header: (
 					<>
@@ -51,11 +51,7 @@ export default function Index() {
 				),
 				enableColumnFilter: false,
 				cell: (info) => (
-					<DateTime
-						date={info.row.original.created_at}
-						isTime={false}
-						customizedDateFormate='dd MMM,yyyy'
-					/>
+					<DateTime date={info.row.original.created_at} />
 				),
 			},
 			{
@@ -404,24 +400,26 @@ export default function Index() {
 			extraButton={
 				<div className='flex items-center gap-2'>
 					<SimpleDatePicker
-						className='h-[2.34rem] w-32'
-						key={'Date'}
+						className='m-w-32 h-[2.34rem]'
+						key={'date'}
 						value={date}
 						placeholder='Date'
-						onChange={(data) => {
+						selected={date}
+						onChangeForTime={(data) => {
 							setDate(data);
 						}}
-						selected={date}
+						showTime={true}
 					/>
 					<SimpleDatePicker
-						className='h-[2.34rem] w-32'
+						className='m-w-32 h-[2.34rem]'
 						key={'toDate'}
 						value={toDate}
 						placeholder='To'
-						onChange={(data) => {
+						selected={toDate}
+						onChangeForTime={(data) => {
 							setToDate(data);
 						}}
-						selected={toDate}
+						showTime={true}
 					/>
 					<StatusSelect
 						options={options}

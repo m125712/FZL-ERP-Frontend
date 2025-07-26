@@ -6,7 +6,7 @@ import { company, getEmptyColumn } from '../utils';
 
 const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 
-const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
+const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy HH:mm:ss');
 
 export const getPageHeader = (from, to) => {
 	return {

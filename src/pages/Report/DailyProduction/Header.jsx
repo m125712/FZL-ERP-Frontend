@@ -42,7 +42,7 @@ export default function Header({
 							key={'to'}
 							value={to}
 							placeholder='To'
-							onChange={(data) => {
+							onChangeForTime={(data) => {
 								setTo(data);
 							}}
 							selected={to}

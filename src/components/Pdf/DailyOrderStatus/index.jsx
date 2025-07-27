@@ -20,6 +20,28 @@ export default function Index(data, from, to) {
 	let footerHeight = 50;
 	let total = 0;
 
+	// * Getting the marketing name and quantity
+	const marketingWise = data.flatMap((item) =>
+		item.marketing.map((mark) => mark)
+	);
+	const totalsMap = {};
+
+	marketingWise.forEach((item) => {
+		if (totalsMap[item.marketing_name]) {
+			totalsMap[item.marketing_name] += item.marketing_quantity;
+		} else {
+			totalsMap[item.marketing_name] = item.marketing_quantity;
+		}
+	});
+
+	// * Getting the total marketing wise
+	const marketingWiseResult = Object.entries(totalsMap).map(
+		([marketing_name, total]) => ({
+			marketing_name,
+			total,
+		})
+	);
+
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
 			xMargin,
@@ -105,12 +127,14 @@ export default function Index(data, from, to) {
 										text: `${data[index].type} Total`,
 										alignment: 'right',
 										colSpan: 2,
+										bold: true,
 									},
 									{},
 									{
 										text: total,
 										alignment: 'left',
 										colSpan: 2,
+										bold: true,
 									},
 									{},
 								]);
@@ -121,6 +145,44 @@ export default function Index(data, from, to) {
 					],
 				},
 				// layout: tableLayoutStyle,
+			},
+			{
+				table: {
+					headerRows: 1,
+					widths: ['*', '*'],
+					body: [
+						// * Header
+						[
+							{
+								text: 'Marketing Name',
+								style: 'tableCell',
+								alignment: 'left',
+								bold: true,
+							},
+							{
+								text: 'Total',
+								style: 'tableCell',
+								alignment: 'left',
+								bold: true,
+							},
+						],
+
+						// * Body
+						...(marketingWiseResult ?? []).map((item) => [
+							{
+								text: item.marketing_name,
+								style: 'tableCell',
+								alignment: 'left',
+							},
+							{
+								text: item.total,
+								style: 'tableCell',
+								alignment: 'left',
+							},
+						]),
+					],
+				},
+				pageBreak: 'before',
 			},
 		],
 	});

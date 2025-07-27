@@ -10,6 +10,7 @@ import {
 	CustomLink,
 	DateTime,
 	EditDelete,
+	StatusButton,
 	StatusSelect,
 	Transfer,
 } from '@/ui';
@@ -92,6 +93,27 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'item_descriptions',
+				header: 'Item Description',
+				// enableColumnFilter: true,
+				cell: (info) => {
+					const idx = info.row.index;
+
+					return info?.row?.original?.item_descriptions?.map(
+						(item, index) => {
+							return (
+								<CustomLink
+									key={item.item_description + index + idx}
+									label={item.item_description}
+									url={`/order/details/${item.order_number}/${item.order_description_uuid}`}
+									openInNewTab={true}
+								/>
+							);
+						}
+					);
+				},
+			},
+			{
 				accessorKey: 'batch_type',
 				header: 'Type',
 				enableColumnFilter: false,
@@ -134,6 +156,29 @@ export default function Index() {
 				width: 'w-24',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'bulk_approval_date',
+				header: () => (
+					<>
+						Bulk <br />
+						App.
+					</>
+				),
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => (
+					<div className='flex flex-col gap-2'>
+						<StatusButton
+							size='btn-sm'
+							value={info.getValue() ? true : false}
+						/>
+
+						{info.getValue() && (
+							<DateTime date={info.getValue()} isTime={false} />
+						)}
+					</div>
+				),
 			},
 			{
 				accessorKey: 'total_quantity',

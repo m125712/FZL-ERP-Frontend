@@ -18,6 +18,7 @@ const node = [
 export default function Index(data, from, to) {
 	const headerHeight = 100;
 	let footerHeight = 50;
+	let total = 0;
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
@@ -52,14 +53,23 @@ export default function Index(data, from, to) {
 						// * Header
 						TableHeader(node),
 						// * Body
-						...(data ?? []).flatMap((item) =>
-							// node.map((nodeItem) => ({
-							// 	text: item[nodeItem.field],
-							// 	style: nodeItem.cellStyle,
-							// 	alignment: nodeItem.alignment,
-							// }))
+						...(data ?? []).flatMap((item, index) => {
+							// * If the type changes, reset the Total
+							if (
+								index > 0 &&
+								data[index].type !== data[index - 1]?.type
+							) {
+								total = 0;
+							}
 
-							item.marketing.map((m) => [
+							// * storing the current total
+							total += item.marketing.reduce(
+								(acc, item) => acc + item.marketing_quantity,
+								0
+							);
+
+							// * Storing the Inner Map data
+							let innerMap = item.marketing.map((m) => [
 								{
 									text: item.item_name,
 									style: 'tableCell',
@@ -86,8 +96,28 @@ export default function Index(data, from, to) {
 									style: 'tableCell',
 									alignment: 'right',
 								},
-							])
-						),
+							]);
+
+							// * Printing total if type changes
+							if (data[index].type !== data[index + 1]?.type) {
+								innerMap.push([
+									{
+										text: `${data[index].type} Total`,
+										alignment: 'right',
+										colSpan: 2,
+									},
+									{},
+									{
+										text: total,
+										alignment: 'left',
+										colSpan: 2,
+									},
+									{},
+								]);
+							}
+
+							return innerMap;
+						}),
 					],
 				},
 				// layout: tableLayoutStyle,

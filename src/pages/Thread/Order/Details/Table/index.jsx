@@ -153,6 +153,12 @@ export default function Index({ order_info_entry }) {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+			{
+				accessorKey: 'damage_quantity',
+				header: 'Damaged',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 
 			...(useAccess('thread__order_info_details').includes('show_price')
 				? [

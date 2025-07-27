@@ -20,7 +20,6 @@ export default function Index(data, from, to) {
 	];
 	let orderRowSpan = 0;
 	let typeRowSpan = 0;
-	let itemRowSpan = 0;
 
 	const nextIndex = {
 		type: 0,
@@ -208,19 +207,14 @@ export default function Index(data, from, to) {
 					orderTotal.closing.quantity += CloseTotalQuantity;
 					partyTotal.closing.quantity += CloseTotalQuantity;
 					grandTotal.closing.quantity += CloseTotalQuantity;
-					const totalValue = packingList.other?.reduce(
-						(total, item) => {
-							return (
-								total +
-								(packingList.other?.reduce((total, item) => {
-									return (
-										total + (item.running_total_value || 0)
-									);
-								}, 0) || 0)
-							);
-						},
-						0
-					);
+					const totalValue = packingList.other?.reduce((total) => {
+						return (
+							total +
+							(packingList.other?.reduce((total, item) => {
+								return total + (item.running_total_value || 0);
+							}, 0) || 0)
+						);
+					}, 0);
 					orderTotal.current.value += totalValue;
 					partyTotal.current.value += totalValue;
 					grandTotal.current.value += totalValue;
@@ -386,7 +380,7 @@ export default function Index(data, from, to) {
 				);
 			}, 0) || 0;
 
-		return item?.orders?.flatMap((orderItem, orderIndex) => {
+		return item?.orders?.flatMap((orderItem) => {
 			nextIndex.order += orderRowSpan;
 
 			orderRowSpan =
@@ -394,86 +388,82 @@ export default function Index(data, from, to) {
 					return total + (item.other?.length || 1);
 				}, 0) || 0;
 
-			return orderItem.items?.flatMap((itemItem, itemIndex) => {
-				return itemItem.packing_lists?.flatMap(
-					(packingList, packingIndex) => {
-						return packingList.other?.map((otherItem, index) => {
-							return [
-								{
-									text: item.party_name,
-								},
-								{
-									text: item.type,
-								},
-								{
-									text: item.marketing_name,
-								},
+			return orderItem.items?.flatMap((itemItem) => {
+				return itemItem.packing_lists?.flatMap((packingList) => {
+					return packingList.other?.map((otherItem) => {
+						return [
+							{
+								text: item.party_name,
+							},
+							{
+								text: item.type,
+							},
+							{
+								text: item.marketing_name,
+							},
 
-								{
-									text: orderItem.order_number_with_cash,
-								},
-								{
-									text: orderItem.total_quantity,
-								},
-								{
-									text: itemItem.item_description,
-								},
-								{
-									text: `${packingList.packing_number} (${getDateFormate(packingList.packing_list_created_at)})`,
-								},
+							{
+								text: orderItem.order_number_with_cash,
+							},
+							{
+								text: orderItem.total_quantity,
+							},
+							{
+								text: itemItem.item_description,
+							},
+							{
+								text: `${packingList.packing_number} (${getDateFormate(packingList.packing_list_created_at)})`,
+							},
 
-								{
-									text: title.includes(otherItem.size)
+							{
+								text: title.includes(otherItem.size)
+									? otherItem.size
 										? otherItem.size
-											? otherItem.size
-											: '---'
-										: `${otherItem.size.includes('-') ? `(${otherItem.size})` : otherItem.size} ${otherItem.unit}`,
-								},
-								{
-									text: String(
-										otherItem.running_total_close_end_quantity
-									),
-								},
-								{
-									text: String(
-										otherItem.running_total_open_end_quantity
-									),
-								},
-								{
-									text: String(
-										otherItem.running_total_quantity
-									),
-								},
-								{
-									text: otherItem.company_price_dzn
-										? String(
-												otherItem.company_price_dzn +
-													'/' +
-													otherItem.price_unit
-											)
-										: '---',
-								},
-								{
-									text: String(
-										Number(
-											otherItem.running_total_value
-										).toFixed(3)
-									),
-								},
-								{
-									text: String(
-										Number(
-											title.includes(otherItem.size)
-												? otherItem.running_total_value_bdt
-												: otherItem.running_total_value *
-														otherItem.conversion_rate
-										).toFixed(3)
-									),
-								},
-							];
-						});
-					}
-				);
+										: '---'
+									: `${otherItem.size.includes('-') ? `(${otherItem.size})` : otherItem.size} ${otherItem.unit}`,
+							},
+							{
+								text: String(
+									otherItem.running_total_close_end_quantity
+								),
+							},
+							{
+								text: String(
+									otherItem.running_total_open_end_quantity
+								),
+							},
+							{
+								text: String(otherItem.running_total_quantity),
+							},
+							{
+								text: otherItem.company_price_dzn
+									? String(
+											otherItem.company_price_dzn +
+												'/' +
+												otherItem.price_unit
+										)
+									: '---',
+							},
+							{
+								text: String(
+									Number(
+										otherItem.running_total_value
+									).toFixed(3)
+								),
+							},
+							{
+								text: String(
+									Number(
+										title.includes(otherItem.size)
+											? otherItem.running_total_value_bdt
+											: otherItem.running_total_value *
+													otherItem.conversion_rate
+									).toFixed(3)
+								),
+							},
+						];
+					});
+				});
 			});
 		});
 	});

@@ -166,7 +166,12 @@ export const materialQK = {
 	typeByUUID: (uuid) => [...materialQK.type(), uuid],
 
 	//* infos
-	info: (type) => [...materialQK.all(), 'info', ...(type ? [type] : [])],
+	info: (type, hidden) => [
+		...materialQK.all(),
+		'info',
+		...(type ? [type] : []),
+		hidden,
+	],
 	infoByUUID: (uuid) => [...materialQK.info(), uuid],
 
 	//* trx
@@ -580,7 +585,13 @@ export const dyeingQK = {
 	],
 
 	//* Dyeing Dashboard
-	dyeingDashboard: (param) => [...dyeingQK.all(), 'dyeing-dashboard', param],
+	dyeingDashboard: (param, orderType, isSample) => [
+		...dyeingQK.all(),
+		'dyeing-dashboard',
+		param,
+		orderType,
+		isSample,
+	],
 
 	//* Finishing Dashboard
 	finishingDashboard: (from, to) => [
@@ -1978,6 +1989,13 @@ export const reportQK = {
 		'individual-material-report',
 		material_uuid,
 		query,
+	],
+
+	dailyOrderStatus: (date, toDate) => [
+		...reportQK.all(),
+		'daily-order-status',
+		date,
+		toDate,
 	],
 };
 

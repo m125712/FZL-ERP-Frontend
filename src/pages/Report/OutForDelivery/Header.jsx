@@ -1,3 +1,5 @@
+import { useOtherVehicle } from '@/state/Other';
+
 import {
 	FormField,
 	ReactSelect,
@@ -5,13 +7,25 @@ import {
 	SimpleDatePicker,
 } from '@/ui';
 
+const ORDER_TYPE = [
+	{ label: 'All', value: 'all' },
+	{ label: 'Bulk', value: 'bulk' },
+	{ label: 'Sample', value: 'sample' },
+];
+
 export default function Header({
 	date = '',
 	setDate = () => {},
 	vehicle = '',
 	setVehicle = () => {},
-	modifiedVehicles = [],
+	orderType = '',
+	setOrderType = () => {},
 }) {
+	const { data: vehicles } = useOtherVehicle();
+	const modifiedVehicles = vehicles
+		? [...vehicles, { label: 'All', value: 'all' }]
+		: [];
+
 	return (
 		<div>
 			<SectionEntryBody title={'Out for Delivery'}>
@@ -36,6 +50,18 @@ export default function Header({
 							)}
 							onChange={(e) => {
 								setVehicle(e.value);
+							}}
+						/>
+					</FormField>
+					<FormField label='' title='Order Type'>
+						<ReactSelect
+							placeholder='Select order Type'
+							options={ORDER_TYPE}
+							value={ORDER_TYPE?.find(
+								(item) => item.value == orderType
+							)}
+							onChange={(e) => {
+								setOrderType(e.value);
 							}}
 						/>
 					</FormField>

@@ -1,12 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import { useProductionReportDateWise, useReportStock } from '@/state/Report';
-import { formToJSON } from 'axios';
+import { useProductionReportDateWise } from '@/state/Report';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import Pdf from '@/components/Pdf/DailyProduction';
-import ReactTable from '@/components/Table';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -31,12 +29,12 @@ export default function index() {
 		'report__daily_production'
 	);
 
-	const [from, setFrom] = useState(new Date());
-	const [to, setTo] = useState(new Date());
+	const [from, setFrom] = useState(() => new Date());
+	const [to, setTo] = useState(() => new Date());
 	const [type, setType] = useState('all');
 	const { data, isLoading } = useProductionReportDateWise(
-		format(from, 'yyyy-MM-dd'),
-		format(to, 'yyyy-MM-dd'),
+		format(from, 'yyyy-MM-dd HH:mm:ss'),
+		format(to, 'yyyy-MM-dd HH:mm:ss'),
 		type,
 		getPath(haveAccess, user?.uuid),
 		{
@@ -58,7 +56,7 @@ export default function index() {
 					<button
 						type='button'
 						onClick={() => {
-							Pdf(data, from)?.print(
+							Pdf(data, from, to)?.print(
 								{},
 								window.open('', '_blank')
 							);

@@ -28,25 +28,31 @@ const getPath = (haveAccess, userUUID) => {
 	return `all=true`;
 };
 
-export default function Index() {
-	const [status, setStatus] = useState('pending');
-	const options = [
-		{ value: 'all', label: 'All' },
-		{ value: 'pending', label: 'Pending' },
-		{ value: 'delivered', label: 'Delivered' },
-		{ value: 'received', label: 'Received' },
-		{ value: 'gate_pass', label: 'W/H Out' },
-	];
-	const navigate = useNavigate();
+const options = [
+	{ value: 'all', label: 'All' },
+	{ value: 'pending', label: 'Pending' },
+	{ value: 'delivered', label: 'Delivered' },
+	{ value: 'received', label: 'Received' },
+	{ value: 'gate_pass', label: 'W/H Out' },
+];
 
+const orderTypeOptions = [
+	{ value: 'all', label: 'All' },
+	{ value: 'sample', label: 'Sample' },
+	{ value: 'bulk', label: 'Bulk' },
+];
+
+export default function Index() {
+	const [status, setStatus] = useState('received');
+	const [orderType, setOrderType] = useState('bulk');
+	const navigate = useNavigate();
 	const haveAccess = useAccess('delivery__challan');
 	const { user } = useAuth();
 
 	const { data, isLoading, url, deleteData, updateData } = useDeliveryChallan(
-		getPath(haveAccess, user?.uuid) + `&type=${status}`,
-		{
-			enabled: !!user?.uuid,
-		}
+		getPath(haveAccess, user?.uuid) +
+			`&type=${status}&order_type=${orderType}`,
+		{ enabled: !!user?.uuid }
 	);
 
 	const info = new PageInfo('Challan', url, 'delivery__challan');
@@ -60,10 +66,10 @@ export default function Index() {
 			{
 				accessorKey: 'is_hand_delivery',
 				header: (
-					<span>
+					<>
 						Hand <br />
 						Del.
-					</span>
+					</>
 				),
 				enableColumnFilter: false,
 				cell: (info) => (
@@ -73,10 +79,10 @@ export default function Index() {
 			{
 				accessorKey: 'gate_pass',
 				header: (
-					<span>
+					<>
 						W/H <br />
 						Out
-					</span>
+					</>
 				),
 				enableColumnFilter: false,
 				cell: (info) => (
@@ -89,11 +95,10 @@ export default function Index() {
 			{
 				accessorKey: 'is_out_for_delivery',
 				header: (
-					<span>
-						Out For
-						<br />
+					<>
+						Out For <br />
 						Del.
-					</span>
+					</>
 				),
 				enableColumnFilter: false,
 				cell: (info) => {
@@ -102,6 +107,7 @@ export default function Index() {
 						gate_pass,
 						is_out_for_delivery_by_name,
 						is_out_for_delivery_date,
+						is_delivered,
 					} = info.row.original;
 
 					const access = haveAccess.includes(
@@ -110,15 +116,17 @@ export default function Index() {
 					const overrideAccess = haveAccess.includes(
 						'click_is_out_for_delivery_override'
 					);
+
 					let permission = false;
 					if (gate_pass === 1) {
 						if (is_out_for_delivery === false && access)
 							permission = true;
 						if (overrideAccess) permission = true;
+						if (is_delivered === 1) permission = false;
 					}
 
 					return (
-						<div className='flex flex-col'>
+						<div className='flex flex-col gap-1'>
 							<SwitchToggle
 								checked={info.getValue() === true}
 								onChange={() =>
@@ -144,6 +152,7 @@ export default function Index() {
 						is_out_for_delivery,
 						is_delivered_by_name,
 						is_delivered_date,
+						receive_status,
 					} = info.row.original;
 
 					const access = haveAccess.includes('click_delivered');
@@ -154,10 +163,11 @@ export default function Index() {
 					if (is_out_for_delivery) {
 						if (is_delivered === 0 && access) permission = true;
 						if (overrideAccess) permission = true;
+						if (receive_status === 1) permission = false;
 					}
 
 					return (
-						<div className='flex flex-col'>
+						<div className='flex flex-col gap-1'>
 							<SwitchToggle
 								checked={Number(info.getValue()) === 1}
 								onChange={() =>
@@ -171,26 +181,26 @@ export default function Index() {
 					);
 				},
 			},
-			{
-				accessorFn: (row) => format(row.delivery_date, 'dd/MM/yy'),
-				id: 'delivery_date',
-				header: 'Challan Date',
-				enableColumnFilter: true,
-				width: 'w-32',
-				cell: (info) => {
-					const { delivery_date } = info.row.original;
-					const date = format(new Date(delivery_date), 'yyyy-MM-dd');
-					return (
-						<CustomLink
-							label={
-								<DateTime date={delivery_date} isTime={false} />
-							}
-							url={`/delivery/challan-by-date/${date}`}
-							openInNewTab
-						/>
-					);
-				},
-			},
+			// {
+			// 	accessorFn: (row) => format(row.delivery_date, 'dd/MM/yy'),
+			// 	id: 'delivery_date',
+			// 	header: 'Challan Date',
+			// 	enableColumnFilter: true,
+			// 	width: 'w-32',
+			// 	cell: (info) => {
+			// 		const { delivery_date } = info.row.original;
+			// 		const date = format(new Date(delivery_date), 'yyyy-MM-dd');
+			// 		return (
+			// 			<CustomLink
+			// 				label={
+			// 					<DateTime date={delivery_date} isTime={false} />
+			// 				}
+			// 				url={`/delivery/challan-by-date/${date}`}
+			// 				openInNewTab
+			// 			/>
+			// 		);
+			// 	},
+			// },
 			{
 				accessorKey: 'receive_status',
 				header: 'Received',
@@ -492,11 +502,18 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				handelAdd={handelAdd}
 				extraButton={
-					<StatusSelect
-						status={status}
-						setStatus={setStatus}
-						options={options}
-					/>
+					<>
+						<StatusSelect
+							status={status}
+							setStatus={setStatus}
+							options={options}
+						/>
+						<StatusSelect
+							status={orderType}
+							setStatus={setOrderType}
+							options={orderTypeOptions}
+						/>
+					</>
 				}
 			/>
 

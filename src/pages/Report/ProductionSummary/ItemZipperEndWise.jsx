@@ -19,8 +19,8 @@ export default function Index() {
 	const haveAccess = useAccess('report__production_summary');
 	const { user } = useAuth();
 
-	const [date, setDate] = useState(new Date());
-	const [toDate, setToDate] = useState(new Date());
+	const [date, setDate] = useState(() => new Date());
+	const [toDate, setToDate] = useState(() => new Date());
 
 	const { data, isLoading } = useItemZipperEndWise(
 		format(date, 'yyyy-MM-dd'),
@@ -80,6 +80,7 @@ export default function Index() {
 			key='zipper'
 			showDateRange={false}
 			title={'Item Zipper End Wise'}
+			info='This much of item has been produced. Its not bound with warehouse in.'
 			accessor={false}
 			data={data}
 			columns={columns}

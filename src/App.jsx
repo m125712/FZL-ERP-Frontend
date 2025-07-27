@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { router } from '@/routes/router';
 import AuthProvider from '@context/auth';
+import { get } from 'react-hook-form';
 import { RouterProvider } from 'react-router/dom';
 import { toast } from 'react-toastify';
 
@@ -9,6 +10,7 @@ import { Toast } from '@/components/Toast';
 import { Loader } from './components/Feedback';
 import { BASE_API, PUBLIC_VAPID_KEY } from './lib/secret';
 import { useSubscribe } from './state/Other';
+import GetDateTime from './util/GetDateTime';
 import NotificationSocket from './util/Notification';
 
 function App() {
@@ -101,7 +103,7 @@ function App() {
 
 		postData.mutate({
 			url,
-			newData: { endpoint: subscription.endpoint },
+			newData: { endpoint: subscription, created_at: GetDateTime() },
 		});
 
 		localStorage.setItem('pushEndpoint', subscription.endpoint);

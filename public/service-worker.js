@@ -5,7 +5,7 @@ self.addEventListener('push', function (event) {
 
 	const options = {
 		body: data.body,
-		icon: '/logo192.png', // Optional: an icon to show with the notification
+		icon: '✅', // Optional: an icon to show with the notification
 	};
 
 	// Show the notification

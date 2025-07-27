@@ -378,7 +378,7 @@ export const InfoColumns = ({
 				},
 			},
 			{
-				accessorFn: (row) => (row.is_canceled ? 'YES' : 'NO'),
+				accessorFn: (row) => (row.is_cancelled ? 'YES' : 'NO'),
 				id: 'is_cancelled',
 				header: 'Cancelled',
 				enableColumnFilter: false,
@@ -386,7 +386,7 @@ export const InfoColumns = ({
 				cell: (info) => (
 					<StatusButton
 						size='btn-xs'
-						value={info.row.original.is_canceled}
+						value={info.row.original.is_cancelled}
 					/>
 				),
 			},

@@ -19,8 +19,8 @@ import { types } from './utils';
 export default function Index() {
 	const { user } = useAuth();
 
-	const [date, setDate] = useState(new Date());
-	const [toDate, setToDate] = useState(new Date());
+	const [date, setDate] = useState(() => new Date());
+	const [toDate, setToDate] = useState(() => new Date());
 	const [type, setType] = useState('sno');
 
 	const { data, isLoading, updateData } = useOrderSheetSRZipper(
@@ -115,7 +115,12 @@ export default function Index() {
 			{
 				accessorFn: (row) => (row.sno_from_head_office ? 'Y' : 'N'),
 				id: 'sno_from_head_office',
-				header: 'SNO Rcv.',
+				header: (
+					<>
+						SNO <br />
+						Send
+					</>
+				),
 				enableColumnFilter: false,
 
 				cell: (info) => (
@@ -127,7 +132,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'sno_from_head_office_by_name',
-				header: 'SNO Rcv. By',
+				header: 'Send By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -135,7 +140,7 @@ export default function Index() {
 				accessorFn: (row) =>
 					REPORT_DATE_FORMATE(row.sno_from_head_office_time),
 				id: 'sno_from_head_office_time',
-				header: 'SNO Rcv. Time',
+				header: 'Send Time',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => (
@@ -149,7 +154,12 @@ export default function Index() {
 			{
 				accessorFn: (row) => (row.receive_by_factory ? 'Y' : 'N'),
 				id: 'receive_by_factory',
-				header: 'Factory Rcv.',
+				header: (
+					<>
+						Factory <br />
+						Rcv.
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => (
 					<StatusButton
@@ -160,7 +170,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'receive_by_factory_by_name',
-				header: 'Factory Rcv. By',
+				header: 'Rcv. By',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -168,7 +178,7 @@ export default function Index() {
 				accessorFn: (row) =>
 					REPORT_DATE_FORMATE(row.receive_by_factory_time),
 				id: 'receive_by_factory_time',
-				header: 'Factory Rcv. Time',
+				header: 'Rcv. Time',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => (

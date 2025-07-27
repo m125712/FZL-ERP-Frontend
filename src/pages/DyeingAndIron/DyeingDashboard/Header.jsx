@@ -8,8 +8,23 @@ export default function Header({
 	setDyeingDate = () => {},
 	machines,
 	setMachines,
+	orderType,
+	setOrderType,
+	isSample,
+	setIsSample,
 }) {
 	const { data: machineOptions } = useOtherMachines();
+
+	const orderTypes = [
+		{ label: 'Zipper', value: 'zipper' },
+		{ label: 'Thread', value: 'thread' },
+		{ label: 'All', value: 'all' },
+	];
+	const sampleTypes = [
+		{ label: 'Bulk', value: 0 },
+		{ label: 'Sample', value: 1 },
+		{ label: 'All', value: 2 },
+	];
 	return (
 		<div>
 			<SectionEntryBody title={'Dyeing Dashboard'}>
@@ -31,6 +46,30 @@ export default function Header({
 							setMachines(e);
 						}}
 						isMulti={true}
+						menuPortalTarget={document.body}
+					/>
+					<ReactSelect
+						className='md:min-w-96'
+						placeholder='Select Order Type'
+						options={orderTypes}
+						value={orderTypes?.find(
+							(item) => item.value == orderType
+						)}
+						onChange={(e) => {
+							setOrderType(e.value);
+						}}
+						menuPortalTarget={document.body}
+					/>
+					<ReactSelect
+						className='md:min-w-96'
+						placeholder='Select Sample Type'
+						options={sampleTypes}
+						value={sampleTypes?.find(
+							(item) => item.value == isSample
+						)}
+						onChange={(e) => {
+							setIsSample(e.value);
+						}}
 						menuPortalTarget={document.body}
 					/>
 				</div>

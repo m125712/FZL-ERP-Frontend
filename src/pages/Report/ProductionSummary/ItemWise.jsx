@@ -61,6 +61,7 @@ export default function Index() {
 			key='Thread Status'
 			showDateRange={false}
 			title={'Item Wise'}
+			info='This much of item has been produced. Its not bound with warehouse in.'
 			accessor={false}
 			data={data}
 			columns={columns}

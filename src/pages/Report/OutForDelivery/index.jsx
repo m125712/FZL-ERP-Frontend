@@ -1,29 +1,23 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDeliveryChallan } from '@/state/Delivery';
-import { useOtherVehicle } from '@/state/Other';
 import { format } from 'date-fns';
-import { useParams } from 'react-router';
 
 import Pdf from '@/components/Pdf/ChallanByDate';
 import ReactTableTitleOnly from '@/components/Table/ReactTableTitleOnly';
-import { DateTime, LinkWithCopy, ReactSelect, StatusButton } from '@/ui';
+import { DateTime, LinkWithCopy, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 import Header from './Header';
 
 export default function Index() {
+	const [date, setDate] = useState(() => new Date());
 	const [vehicle, setVehicle] = useState('all');
-	const [date, setDate] = useState(new Date());
-
-	const { data: vehicles } = useOtherVehicle();
-	const modifiedVehicles = vehicles
-		? [...vehicles, { label: 'All', value: 'all' }]
-		: [];
+	const [orderType, setOrderType] = useState('bulk');
 
 	const { data, isLoading } = useDeliveryChallan(
-		`delivery_date=${format(date, 'yyyy-MM-dd')}&vehicle=${vehicle}`,
-		{ enabled: !!date && !!vehicle }
+		`delivery_date=${format(date, 'yyyy-MM-dd')}&vehicle=${vehicle}&order_type=${orderType}`,
+		{ enabled: !!date && !!vehicle && !!orderType }
 	);
 
 	const info = new PageInfo(
@@ -98,6 +92,13 @@ export default function Index() {
 						/>
 					);
 				},
+			},
+			{
+				accessorKey: 'marketing_name',
+				header: 'Marketing',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'party_name',
@@ -195,7 +196,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 		],
-		[data, vehicle, modifiedVehicles]
+		[data, vehicle, orderType]
 	);
 
 	const [data2, setData] = useState('');
@@ -215,7 +216,14 @@ export default function Index() {
 	return (
 		<div className='flex flex-col gap-6'>
 			<Header
-				{...{ date, setDate, vehicle, setVehicle, modifiedVehicles }}
+				{...{
+					date,
+					setDate,
+					vehicle,
+					setVehicle,
+					orderType,
+					setOrderType,
+				}}
 			/>
 			{data && (
 				<iframe

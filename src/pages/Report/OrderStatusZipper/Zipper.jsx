@@ -21,8 +21,8 @@ export default function Index() {
 	const haveAccess = useAccess('report__order_status_zipper');
 	const { user } = useAuth();
 
-	const [date, setDate] = useState(new Date());
-	const [toDate, setToDate] = useState(new Date());
+	const [date, setDate] = useState(() => new Date());
+	const [toDate, setToDate] = useState(() => new Date());
 
 	const { data, isLoading } = useZipperStatus(
 		format(date, 'yyyy-MM-dd'),
@@ -286,6 +286,31 @@ export default function Index() {
 				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'bulk_approval',
+				header: (
+					<>
+						Bulk <br />
+						App.
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => <Status status={info.getValue()} />,
+			},
+			{
+				accessorFn: (row) =>
+					row.bulk_approval_date &&
+					REPORT_DATE_TIME_FORMAT(row.bulk_approval_date),
+				id: 'bulk_approval_date',
+				header: 'Bulk App. Date',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.bulk_approval_date}
+						customizedDateFormate='dd MMM,yyyy'
+					/>
+				),
 			},
 			{
 				accessorKey: 'total_slider_required',

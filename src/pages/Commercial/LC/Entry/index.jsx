@@ -139,7 +139,7 @@ export default function Index() {
 				return 0;
 			}
 
-			return piArray.reduce((acc, item, index) => {
+			return piArray.reduce((acc, item) => {
 				if (item.uuid === null || item.uuid === undefined) return acc;
 				const piIdxValue = pi?.find((e) => e.value === item.uuid);
 				return acc + piIdxValue?.pi_value;
@@ -149,16 +149,7 @@ export default function Index() {
 	);
 	// Submit
 	const onSubmit = async (data) => {
-		if (
-			data?.lc_entry[0]?.ldbc_fdbc === null ||
-			data?.lc_entry[0]?.amount === 0
-		) {
-			ShowLocalToast({
-				type: 'warning',
-				message: 'Must add Amount & LDBC/FDBC in Progression Section',
-			});
-			return;
-		} else if (data?.is_old_pi === false && data?.pi[0]?.uuid === null) {
+		if (data?.is_old_pi === false && data?.pi[0]?.uuid === null) {
 			ShowLocalToast({
 				type: 'warning',
 				message: 'Select at least one PI',
@@ -268,28 +259,26 @@ export default function Index() {
 			// * Dynamic progresson/Lc_entry
 			const lc_entry_update_promise = [...data.lc_entry].map(
 				async (item) => {
-					if (item.amount > 0) {
-						if (item.uuid) {
-							await updateData.mutateAsync({
-								url: `/commercial/lc-entry/${item.uuid}`,
-								updatedData: {
-									...item,
-									updated_at: GetDateTime(),
-								},
-								isOnCloseNeeded: false,
-							});
-						} else {
-							await postData.mutateAsync({
-								url: `/commercial/lc-entry`,
-								newData: {
-									...item,
-									lc_uuid: data.uuid,
-									uuid: nanoid(),
-									created_at: GetDateTime(),
-								},
-								isOnCloseNeeded: false,
-							});
-						}
+					if (item.uuid) {
+						await updateData.mutateAsync({
+							url: `/commercial/lc-entry/${item.uuid}`,
+							updatedData: {
+								...item,
+								updated_at: GetDateTime(),
+							},
+							isOnCloseNeeded: false,
+						});
+					} else {
+						await postData.mutateAsync({
+							url: `/commercial/lc-entry`,
+							newData: {
+								...item,
+								lc_uuid: data.uuid,
+								uuid: nanoid(),
+								created_at: GetDateTime(),
+							},
+							isOnCloseNeeded: false,
+						});
 					}
 				}
 			);
@@ -364,18 +353,16 @@ export default function Index() {
 
 		// * Dynamic progresson/Lc_entry
 		const lc_entry_promise = [...data.lc_entry].map(async (item) => {
-			if (item.amount > 0) {
-				await postData.mutateAsync({
-					url: `/commercial/lc-entry`,
-					newData: {
-						...item,
-						lc_uuid: new_lc_uuid,
-						uuid: nanoid(),
-						created_at: GetDateTime(),
-					},
-					isOnCloseNeeded: false,
-				});
-			}
+			await postData.mutateAsync({
+				url: `/commercial/lc-entry`,
+				newData: {
+					...item,
+					lc_uuid: new_lc_uuid,
+					uuid: nanoid(),
+					created_at: GetDateTime(),
+				},
+				isOnCloseNeeded: false,
+			});
 		});
 
 		// const new_lc_number = res?.data?.[0].insertedId;
@@ -390,7 +377,7 @@ export default function Index() {
 
 			const pi_numbers_promise = [
 				...pi_numbers.map(
-					async (item, index) =>
+					async (item) =>
 						await updateData.mutateAsync({
 							url: `/commercial/pi-cash-lc-uuid/${item.uuid}`,
 							updatedData: item,

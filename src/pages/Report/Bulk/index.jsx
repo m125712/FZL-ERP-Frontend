@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, SimpleDatePicker } from '@/ui';
+import { CustomLink, DateTime, SimpleDatePicker, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -202,6 +202,37 @@ export default function Index() {
 				header: 'Unit',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) => (row.bulk_approval ? 'Y' : 'N'),
+				id: 'bulk_approval',
+				header: 'Bulk Approval',
+				enableColumnFilter: false,
+				width: 'w-28',
+				cell: (info) => {
+					const { bulk_approval, bulk_approval_date } =
+						info.row.original;
+					return (
+						<div className='flex gap-6'>
+							<StatusButton size='btn-xs' value={bulk_approval} />
+							<DateTime
+								date={bulk_approval_date}
+								isTime={false}
+								customizedDateFormate='dd MMM, yy'
+							/>
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'bulk_approval',
+				header: 'Bulk Approval',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { bulk_approval } = info.row.original;
+
+					return bulk_approval;
+				},
 			},
 			{
 				accessorKey: 'quantity',

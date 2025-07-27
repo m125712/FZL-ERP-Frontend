@@ -1,4 +1,3 @@
-import { forwardRef } from 'react';
 import { format } from 'date-fns';
 import { Calendar } from 'lucide-react';
 import DatePicker from 'react-datepicker';
@@ -10,12 +9,14 @@ import {
 
 import cn from '@/lib/cn';
 
+const noop = () => {};
+
 const SimpleDatePicker = ({
 	className = '',
 	selected,
 	placeholder = '',
-	onChange = () => {},
-	onChangeForTime = () => {},
+	onChange = noop,
+	onChangeForTime = noop,
 	disabled = false,
 	showTime = false,
 	timeIntervals = 30,

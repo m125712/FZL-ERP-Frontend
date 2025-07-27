@@ -39,7 +39,7 @@ export const getPageHeader = (data) => {
 					colSpan: 2,
 					text: [
 						{
-							text: `Gate Pass Report\n`,
+							text: `Out For Delivery\n`,
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
@@ -51,9 +51,6 @@ export const getPageHeader = (data) => {
 				},
 				'',
 			],
-			PAGE_HEADER_EMPTY_ROW,
-
-			// * Start of table
 		],
 	};
 };

@@ -614,6 +614,7 @@ export const useOtherIssue = () =>
 		url: '/other/maintain/issue/value/label',
 	});
 
+
 export const useSubscribe = () =>
 	createGlobalState({
 		queryKey: otherQK.subscribe(),

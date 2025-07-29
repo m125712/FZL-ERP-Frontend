@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { usePlanningApprovalDate } from '@/state/Planning';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
@@ -24,6 +25,7 @@ const options2 = [
 export default function Index() {
 	const [status, setStatus] = useState('pending');
 	const [status2, setStatus2] = useState('incomplete_order');
+	const { user } = useAuth();
 
 	const { data, isLoading, updateData } = usePlanningApprovalDate(
 		status2 === 'complete_order'
@@ -45,6 +47,7 @@ export default function Index() {
 				bulk_approval_date: data[idx]?.bulk_approval
 					? null
 					: GetDateTime(),
+				bulk_approval_by: user?.uuid,
 				updated_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,

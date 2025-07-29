@@ -119,12 +119,12 @@ export default function Index() {
 					const { order_numbers, thread_order_numbers } = row;
 					const zipper =
 						order_numbers
-							.map((order) => order.order_number)
-							.join(', ') || '';
+							?.map((order) => order.order_number)
+							?.join(', ') || '';
 					const thread =
 						thread_order_numbers
-							.map((order) => order.thread_order_number)
-							.join(', ') || '';
+							?.map((order) => order.thread_order_number)
+							?.join(', ') || '';
 
 					if (zipper.length > 0 && thread.length > 0)
 						return `${zipper}, ${thread}`;
@@ -145,8 +145,8 @@ export default function Index() {
 					let links = [];
 
 					order_numbers
-						.filter((order) => order.order_info_uuid)
-						.forEach((order) => {
+						?.filter((order) => order.order_info_uuid)
+						?.forEach((order) => {
 							links.push({
 								label: order.order_number,
 								url: `/order/details/${order.order_number}`,
@@ -154,8 +154,8 @@ export default function Index() {
 						});
 
 					thread_order_numbers
-						.filter((order) => order.thread_order_info_uuid)
-						.forEach((order) => {
+						?.filter((order) => order.thread_order_info_uuid)
+						?.forEach((order) => {
 							links.push({
 								label: order.thread_order_number,
 								url: `/thread/order-info/${order.thread_order_info_uuid}`,
@@ -172,7 +172,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorFn: (row) => row.order_type.join(', ') || '--',
+				accessorFn: (row) => row.order_type?.join(', ') || '--',
 				id: 'order_type',
 				header: 'Type',
 				enableColumnFilter: false,

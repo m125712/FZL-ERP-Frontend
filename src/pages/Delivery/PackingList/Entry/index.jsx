@@ -7,7 +7,7 @@ import {
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router';
-import { useRHF } from '@/hooks';
+import { useAccess, useRHF } from '@/hooks';
 
 import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
@@ -29,6 +29,7 @@ export default function Index() {
 	const { uuid } = useParams();
 	const { user } = useAuth();
 	const navigate = useNavigate();
+	const haveAccess = useAccess('delivery__packing_list_sample');
 	const {
 		postData,
 		updateData,
@@ -76,7 +77,11 @@ export default function Index() {
 	);
 
 	useEffect(() => {
-		if (isUpdate && details?.is_warehouse_received) {
+		if (
+			isUpdate &&
+			details?.is_warehouse_received &&
+			!haveAccess.includes('override_access')
+		) {
 			ShowLocalToast({
 				type: 'error',
 				message: 'Packing List is already received',

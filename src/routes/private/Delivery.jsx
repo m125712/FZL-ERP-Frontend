@@ -198,6 +198,7 @@ export const DeliveryRoutes = [
 					'update',
 					'delete',
 					'click_receive_status',
+					'override_access',
 				],
 
 				hidden: true,
@@ -264,6 +265,7 @@ export const DeliveryRoutes = [
 					'update',
 					'delete',
 					'click_receive_status',
+					'override_access',
 				],
 
 				hidden: true,

@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import { useOtherRecipe } from '@/state/Other';
 import { usePlanningApprovalDate } from '@/state/Planning';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
@@ -52,7 +51,6 @@ export default function Index() {
 		});
 	};
 
-	const { data: recipe } = useOtherRecipe(`approved=true`);
 	const columns = useMemo(
 		() => [
 			{
@@ -218,7 +216,7 @@ export default function Index() {
 				),
 			},
 		],
-		[data, recipe, haveAccess]
+		[data, haveAccess]
 	);
 
 	if (isLoading)

@@ -1,6 +1,6 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
-import { useIssue, useMaintenanceMachine } from '@/state/Maintenance';
+import { useIssue } from '@/state/Maintenance';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -18,17 +18,29 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
+import { usePushSubscription } from './Notification';
+
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const Procurement = lazy(() => import('./Procurement'));
 const History = lazy(() => import('./History'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
+	const { registerAndSubscribe, unregisterPushSubscription } =
+		usePushSubscription();
 	const { user } = useAuth();
-	const { data, isLoading, url, deleteData, updateData, invalidateQuery } =
-		useIssue();
+	const { data, isLoading, url, deleteData, updateData } = useIssue();
 	const info = new PageInfo('Issue', url, 'maintenance__issue');
 	const haveAccess = useAccess('maintenance__issue');
+
+	useEffect(() => {
+		if (
+			'serviceWorker' in navigator &&
+			haveAccess.includes('notification')
+		) {
+			registerAndSubscribe();
+		}
+	}, []);
 
 	const columns = useMemo(
 		() => [
@@ -301,6 +313,20 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				data={data}
 				columns={columns}
+				extraButton={
+					haveAccess.includes('unsubscribe') && (
+						<button
+							type='button'
+							disabled={!localStorage.getItem('pushEndpoint')}
+							onClick={() => unregisterPushSubscription()}
+							className='btn btn-sm h-[2.3rem] border-none bg-rose-400 text-black hover:bg-rose-500'
+						>
+							{localStorage.getItem('pushEndpoint')
+								? 'Unsubscribe'
+								: 'Unsubscribed'}
+						</button>
+					)
+				}
 			/>
 
 			<Suspense>

@@ -93,7 +93,12 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'item_descriptions',
+				accessorFn: (row) => {
+					return row.item_descriptions
+						?.map((item) => item.item_description)
+						.join(', ');
+				},
+				id: 'item_descriptions',
 				header: 'Item Description',
 				// enableColumnFilter: true,
 				cell: (info) => {

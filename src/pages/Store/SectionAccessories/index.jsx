@@ -15,7 +15,8 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const { invalidateQuery: invalidateMaterialSection } =
 		useOtherMaterialSection();
-	const { data, isLoading, url, deleteData } = useMaterialSection();
+	const { data, isLoading, url, deleteData } =
+		useMaterialSection('accessories');
 	const info = new PageInfo(
 		'Store / Material Section',
 		url,
@@ -160,7 +161,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: '/material/section',
 						deleteData,
 					}}
 					invalidateQuery={invalidateMaterialSection}

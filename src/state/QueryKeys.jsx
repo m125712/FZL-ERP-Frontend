@@ -154,7 +154,11 @@ export const materialQK = {
 	stockByUUID: (uuid) => [...materialQK.stock(), uuid],
 
 	//* section
-	section: () => [...materialQK.all(), 'section'],
+	section: (type) => [
+		...materialQK.all(),
+		'section',
+		...(type ? [type] : []),
+	],
 	sectionByUUID: (uuid) => [...materialQK.section(), uuid],
 
 	//* types
@@ -162,7 +166,12 @@ export const materialQK = {
 	typeByUUID: (uuid) => [...materialQK.type(), uuid],
 
 	//* infos
-	info: (type) => [...materialQK.all(), 'info', ...(type ? [type] : [])],
+	info: (type, hidden) => [
+		...materialQK.all(),
+		'info',
+		...(type ? [type] : []),
+		hidden,
+	],
 	infoByUUID: (uuid) => [...materialQK.info(), uuid],
 
 	//* trx
@@ -576,7 +585,13 @@ export const dyeingQK = {
 	],
 
 	//* Dyeing Dashboard
-	dyeingDashboard: (param) => [...dyeingQK.all(), 'dyeing-dashboard', param],
+	dyeingDashboard: (param, orderType, isSample) => [
+		...dyeingQK.all(),
+		'dyeing-dashboard',
+		param,
+		orderType,
+		isSample,
+	],
 
 	//* Finishing Dashboard
 	finishingDashboard: (from, to) => [
@@ -1635,6 +1650,11 @@ export const otherQK = {
 		isZipper ? 'zipper' : 'thread',
 		challanUuid,
 	],
+
+	sectionMachine: () => [...otherQK.all(), 'section-machine'],
+	otherIssue: () => [...otherQK.all(), 'other-issue'],
+
+	subscribe: () => [...otherQK.all(), 'subscribe'],
 };
 
 //* Challan
@@ -1970,6 +1990,13 @@ export const reportQK = {
 		material_uuid,
 		query,
 	],
+
+	dailyOrderStatus: (date, toDate) => [
+		...reportQK.all(),
+		'daily-order-status',
+		date,
+		toDate,
+	],
 };
 
 export const marketingQK = {
@@ -2007,4 +2034,25 @@ export const planningQK = {
 		item,
 	],
 	planningApprovalDate: (query) => [...planningQK.all(), query],
+};
+
+export const maintenanceQK = {
+	all: () => ['maintenance'],
+
+	machine: () => [...maintenanceQK.all(), 'machine'],
+
+	issue: () => [...maintenanceQK.all(), 'issue'],
+	issueByUUID: (uuid) => [...maintenanceQK.all(), 'issue', uuid],
+
+	issueProcurement: () => [...maintenanceQK.all(), 'issue-procurement'],
+	issueProcurementByUUID: (uuid) => [
+		...maintenanceQK.all(),
+		'issue-procurement',
+		uuid,
+	],
+	procurementByIssueUUID: (uuid) => [
+		...maintenanceQK.all(),
+		'issue-procurement',
+		uuid,
+	],
 };

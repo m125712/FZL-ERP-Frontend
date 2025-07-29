@@ -1,11 +1,12 @@
+/* eslint-disable @eslint-react/hooks-extra/no-unnecessary-use-prefix */
 import createGlobalState from '.';
 import { materialQK, purchaseQK } from './QueryKeys';
 
 // * Material Section * //
-export const useMaterialSection = () =>
+export const useMaterialSection = (type) =>
 	createGlobalState({
-		queryKey: materialQK.section(),
-		url: '/material/section',
+		queryKey: materialQK.section(type),
+		url: type ? `/material/section?s_type=${type}` : '/material/section',
 	});
 
 export const useMaterialSectionByUUID = (uuid) =>
@@ -16,10 +17,10 @@ export const useMaterialSectionByUUID = (uuid) =>
 	});
 
 // * Material Types * //
-export const useMaterialType = () =>
+export const useMaterialType = (query) =>
 	createGlobalState({
-		queryKey: materialQK.type(),
-		url: '/material/type',
+		queryKey: materialQK.type(query),
+		url: query ? `/material/type?${query}` : '/material/type',
 	});
 
 export const useMaterialTypeByUUID = (uuid) =>
@@ -30,10 +31,13 @@ export const useMaterialTypeByUUID = (uuid) =>
 	});
 
 // * Material Info * //
-export const useMaterialInfo = (type) =>
+export const useMaterialInfo = (type, hidden) =>
 	createGlobalState({
-		queryKey: materialQK.info(type),
-		url: type ? `/material/info?s_type=${type}` : '/material/info',
+		queryKey: materialQK.info(type, hidden),
+		url:
+			type && hidden !== undefined
+				? `/material/info?s_type=${type}&is_hidden=${hidden}`
+				: `/material/info`,
 	});
 
 export const useMaterialInfoByUUID = (uuid) =>

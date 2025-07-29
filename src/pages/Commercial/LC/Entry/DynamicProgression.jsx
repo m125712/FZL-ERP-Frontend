@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { useAccess } from '@/hooks';
 
 import { DateInput } from '@/ui/Core';
 import { ActionButtons, DynamicField, Input } from '@/ui';
@@ -15,6 +16,16 @@ export default function index({
 	progressionRemove,
 	setDeleteLCEntry,
 }) {
+	// Permission checks for different sections of LC progression
+	const haveAccess = useAccess('commercial__lc_entry');
+
+	// Permission for document-related fields: Handover, Doc Submit, Doc Receive
+	const canEditDocuments = haveAccess.includes('edit_document_progression');
+
+	// Permission for bank/payment-related fields: Bank Forward, Bank Accep., Maturity, Payment, Payment Value
+	const canEditBankPayment = haveAccess.includes(
+		'edit_bank_payment_progression'
+	);
 	const handelProgressionAppend = () => {
 		progressionAppend({
 			recipe_uuid: '',
@@ -105,6 +116,7 @@ export default function index({
 								selected={watch(
 									`lc_entry[${index}].handover_date`
 								)}
+								disabled={!canEditDocuments}
 								// disabled={
 								// 	watch(`lc_entry[${index}].receive_date`)
 								// 		? false
@@ -122,6 +134,7 @@ export default function index({
 								selected={watch(
 									`lc_entry[${index}].document_submission_date`
 								)}
+								disabled={!canEditDocuments}
 								// disabled={
 								// 	watch(`lc_entry[${index}].handover_date`)
 								// 		? false
@@ -140,12 +153,13 @@ export default function index({
 									`lc_entry[${index}].document_receive_date`
 								)}
 								disabled={
-									watch(
+									!canEditDocuments ||
+									(!watch(
 										`lc_entry[${index}].document_submission_date`
-									) ||
-									watch(`lc_entry[${index}].handover_date`)
-										? false
-										: true
+									) &&
+										!watch(
+											`lc_entry[${index}].handover_date`
+										))
 								}
 								{...{ register, errors }}
 							/>
@@ -160,11 +174,10 @@ export default function index({
 									`lc_entry[${index}].bank_forward_date`
 								)}
 								disabled={
-									watch(
+									!canEditBankPayment ||
+									!watch(
 										`lc_entry[${index}].document_receive_date`
 									)
-										? false
-										: true
 								}
 								{...{ register, errors }}
 							/>
@@ -179,11 +192,10 @@ export default function index({
 									`lc_entry[${index}].acceptance_date`
 								)}
 								disabled={
-									watch(
+									!canEditBankPayment ||
+									!watch(
 										`lc_entry[${index}].bank_forward_date`
 									)
-										? false
-										: true
 								}
 								{...{ register, errors }}
 							/>
@@ -198,9 +210,8 @@ export default function index({
 									`lc_entry[${index}].maturity_date`
 								)}
 								disabled={
-									watch(`lc_entry[${index}].acceptance_date`)
-										? false
-										: true
+									!canEditBankPayment ||
+									!watch(`lc_entry[${index}].acceptance_date`)
 								}
 								{...{ register, errors }}
 							/>
@@ -215,9 +226,8 @@ export default function index({
 									`lc_entry[${index}].payment_date`
 								)}
 								disabled={
-									watch(`lc_entry[${index}].maturity_date`)
-										? false
-										: true
+									!canEditBankPayment ||
+									!watch(`lc_entry[${index}].maturity_date`)
 								}
 								{...{ register, errors }}
 							/>
@@ -226,6 +236,7 @@ export default function index({
 							<Input
 								label={`lc_entry[${index}].payment_value`}
 								is_title_needed='false'
+								disabled={!canEditBankPayment}
 								{...{ register, errors }}
 							/>
 						</td>

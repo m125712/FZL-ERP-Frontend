@@ -39,21 +39,18 @@ export const getPageHeader = (data) => {
 					colSpan: 2,
 					text: [
 						{
-							text: `Gate Pass Report\n`,
+							text: `Out For Delivery\n`,
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
 						`Date: ${getDateFormate(data[0]?.delivery_date)}\n`,
-						`Vehicle: ${data[0]?.vehicle_name || '-'}\n`,
+						`Vehicle: ${data[0]?.is_all ? 'All' : data[0]?.vehicle_name ? data[0].vehicle_name : '--'}\n`,
 						``,
 					],
 					alignment: 'right',
 				},
 				'',
 			],
-			PAGE_HEADER_EMPTY_ROW,
-
-			// * Start of table
 		],
 	};
 };

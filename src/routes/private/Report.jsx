@@ -45,10 +45,12 @@ const Consumption = lazy(() => import('@/pages/Report/Consumption'));
 const ThreadBatch = lazy(() => import('@/pages/Report/ThreadBatch'));
 const OrderSummaryPL = lazy(() => import('@/pages/Report/OrderSummaryPL'));
 const OrderSheetSR = lazy(() => import('@/pages/Report/OrderSheetSR'));
-
+const DailyOrderStatus = lazy(() => import('@/pages/Report/DailyOrderStatus'));
 const IndividualMaterial = lazy(
 	() => import('@/pages/Report/IndividualMaterial')
 );
+
+const OutForDelivery = lazy(() => import('@/pages/Report/OutForDelivery'));
 
 export const ReportRoutes = [
 	{
@@ -263,6 +265,20 @@ export const ReportRoutes = [
 				element: <IndividualMaterial />,
 				page_name: 'report__individual_material',
 				actions: ['read', 'show_own_orders'],
+			},
+			{
+				name: 'Out For Delivery',
+				path: '/report/out-for-delivery',
+				element: <OutForDelivery />,
+				page_name: 'report__out_for_delivery',
+				actions: ['read'],
+			},
+			{
+				name: 'Daily Order Status',
+				path: '/report/daily-order-status',
+				element: <DailyOrderStatus />,
+				page_name: 'report__daily_order_status',
+				actions: ['read'],
 			},
 		],
 	},

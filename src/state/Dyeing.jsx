@@ -227,10 +227,10 @@ export const useDyeingFinishingBatchOrders = (uuid) =>
 	});
 
 // * Dyeing Dashboard
-export const useDyeingDashboard = (param) =>
+export const useDyeingDashboard = (param, orderType, isSample) =>
 	createGlobalState({
-		queryKey: dyeingQK.dyeingDashboard(param),
-		url: `/public/machine/by/${param}`,
+		queryKey: dyeingQK.dyeingDashboard(param, orderType, isSample),
+		url: `/public/machine/by/${param}?order_type=${orderType}&is_sample=${isSample}`,
 	});
 
 // * Finishing Dashboard

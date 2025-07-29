@@ -432,3 +432,10 @@ export const useIndividualMaterial = (material_uuid, query) =>
 			: `/report/individual-material-report/${material_uuid}`,
 		enabled: !!material_uuid,
 	});
+
+export const useDailyOrderStatus = (date, toDate) =>
+	createGlobalState({
+		queryKey: reportQK.dailyOrderStatus(date, toDate),
+		url: `/report/item-marketing-wise-order-quantity?from_date=${date}&to_date=${toDate}`,
+		enabled: !!date && !!toDate,
+	});

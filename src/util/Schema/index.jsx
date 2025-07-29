@@ -199,6 +199,7 @@ export const MATERIAL_SCHEMA = {
 	unit: STRING_REQUIRED,
 	short_name: STRING,
 	is_priority_material: BOOLEAN_DEFAULT_VALUE(false),
+	is_hidden: BOOLEAN_DEFAULT_VALUE(false),
 	average_lead_time: NUMBER.nullable(),
 	threshold: NUMBER_DOUBLE,
 	description: STRING.nullable(),
@@ -212,6 +213,7 @@ export const MATERIAL_NULL = {
 	short_name: '',
 	average_lead_time: 0,
 	is_priority_material: false,
+	is_hidden: false,
 	unit: 'kg',
 	threshold: 0,
 	description: '',
@@ -253,6 +255,22 @@ export const MATERIAL_TRX_AGAINST_ORDER_NULL = {
 	trx_quantity: '',
 	weight: 0,
 	created_by: '',
+	remarks: '',
+};
+
+export const MATERIAL_TRX_AGAINST_ISSUE_SCHEMA = {
+	issue_uuid: STRING_REQUIRED,
+	trx_to: STRING_REQUIRED,
+	trx_quantity: NUMBER_DOUBLE_REQUIRED,
+	weight: NUMBER_DOUBLE.default(0),
+	remarks: STRING.nullable(),
+};
+
+export const MATERIAL_TRX_AGAINST_ISSUE_NULL = {
+	issue_uuid: null,
+	trx_to: '',
+	trx_quantity: '',
+	weight: 0,
 	remarks: '',
 };
 
@@ -2312,7 +2330,7 @@ export const MANUAL_PI_SCHEMA = {
 	marketing_uuid: STRING_REQUIRED,
 	party_uuid: STRING_REQUIRED,
 	buyer_uuid: STRING_REQUIRED,
-	merchandiser_uuid: STRING_REQUIRED,
+	merchandiser_uuid: STRING.nullable(),
 	factory_uuid: STRING_REQUIRED,
 	bank_uuid: STRING_REQUIRED,
 	validity: NUMBER_REQUIRED,
@@ -3644,4 +3662,48 @@ export const MARKETING_TARGET_NULL = {
 	zipper_amount: null,
 	thread_amount: null,
 	remarks: null,
+};
+
+export const MAINTENANCE_MACHINE_SCHEMA = {
+	section: STRING_REQUIRED,
+	name: STRING_REQUIRED,
+	status: BOOLEAN_REQUIRED,
+	remarks: STRING.nullable(),
+};
+
+export const MAINTENANCE_MACHINE_NULL = {
+	section: '',
+	name: '',
+	status: false,
+	remarks: '',
+};
+
+export const ISSUE_SCHEMA = {
+	section: STRING_REQUIRED,
+	problem_type: STRING_REQUIRED,
+	parts_problem: STRING.nullable(),
+	section_machine_uuid: STRING_REQUIRED,
+	description: STRING,
+	emergence: STRING_REQUIRED,
+};
+
+export const ISSUE_NULL = {
+	section: '',
+	problem_type: '',
+	parts_problem: null,
+	section_machine_uuid: '',
+	description: '',
+	emergence: '',
+};
+
+export const ISSUE_PROCUREMENT_SCHEMA = {
+	material_uuid: STRING_REQUIRED,
+	quantity: NUMBER_REQUIRED.moreThan(0, 'More Than 0'),
+	description: STRING,
+};
+
+export const ISSUE_PROCUREMENT_NULL = {
+	material_uuid: '',
+	quantity: null,
+	description: '',
 };

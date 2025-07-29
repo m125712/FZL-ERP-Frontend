@@ -67,7 +67,7 @@ export default function Index() {
 				src={data2}
 				className='h-[40rem] w-full rounded-md border-none'
 			/> */}
-			<div className='flex'>
+			<div className='flex gap-2'>
 				<iframe
 					src={data3}
 					className='h-[40rem] w-full rounded-md border-none'

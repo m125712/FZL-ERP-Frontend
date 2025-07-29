@@ -10,35 +10,7 @@ import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 import { DetailsColumns } from '../columns';
-
-const getPath = (haveAccess, userUUID) => {
-	if (haveAccess.includes('show_all_orders')) {
-		return `?all=true`;
-	}
-	if (
-		haveAccess.includes('show_approved_orders') &&
-		haveAccess.includes('show_own_orders') &&
-		userUUID
-	) {
-		return `?own_uuid=${userUUID}&approved=true`;
-	}
-
-	if (haveAccess.includes('show_approved_orders')) {
-		return '?all=false&approved=true';
-	}
-
-	if (haveAccess.includes('show_own_orders') && userUUID) {
-		return `?own_uuid=${userUUID}`;
-	}
-
-	return `?all=false`;
-};
-
-const options = [
-	{ value: 'bulk', label: 'Bulk' },
-	{ value: 'sample', label: 'Sample' },
-	{ value: 'all', label: 'All' },
-];
+import { getPath, options } from './utils';
 
 export default function Index() {
 	const [status, setStatus] = useState('all');
@@ -69,8 +41,8 @@ export default function Index() {
 			`/order/${order_number}/${order_description_uuid}/update`,
 			'_blank'
 		);
-		// navigate(`/order/${order_number}/${order_description_uuid}/update`);
 	};
+
 	const handelMarketingCheckedStatus = async (idx) => {
 		await updateData.mutateAsync({
 			url: `/zipper/order/description/update-is-marketing-checked/by/${data[idx]?.order_description_uuid}`,
@@ -85,17 +57,15 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 	};
+
 	const handleWhatsApp = (idx) => {
 		const val = data[idx];
-
 		const fullUrl = `${window.location.href}/${val.order_number}`;
 		let message = `Hello, please check the order: ${fullUrl}`;
 
 		const whatsappUrl = `https://web.whatsapp.com/send?phone=88${val.marketing_phone}&text=${encodeURIComponent(message)}&app_absent=0`;
 
-		window.open(whatsappUrl, '_blank'); // opens in new tab
-		// OR use this if you want to redirect in the same tab:
-		// window.location.href = whatsappUrl;
+		window.open(whatsappUrl, '_blank');
 	};
 
 	const columns = DetailsColumns({
@@ -112,6 +82,7 @@ export default function Index() {
 	return (
 		<ReactTable
 			title={info.getTitle()}
+			info='Order details, including item descriptions and status, allowing for updates and marketing checks.'
 			accessor={haveAccess.includes('create')}
 			data={data}
 			columns={columns}

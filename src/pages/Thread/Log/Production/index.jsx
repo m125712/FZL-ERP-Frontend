@@ -6,20 +6,14 @@ import { useAccess } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import {
-	CustomLink,
-	DateTime,
-	EditDelete,
-	LinkOnly,
-	SimpleDatePicker,
-} from '@/ui';
+import { CustomLink, DateTime, EditDelete, SimpleDatePicker } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 import SFGAddOrUpdate from './AddOrUpdate';
 
 export default function Index() {
-	const [from, setFrom] = useState(
+	const [from, setFrom] = useState(() =>
 		parse(
 			format(
 				subWeeks(new Date(), 1), // Subtract 1 week from current time
@@ -29,7 +23,7 @@ export default function Index() {
 			new Date()
 		)
 	);
-	const [to, setTo] = useState(new Date());
+	const [to, setTo] = useState(() => new Date());
 
 	const { data, isLoading, deleteData } = useConningProdLog(
 		`from=${format(from, 'yyyy-MM-dd HH:mm:ss')}&to=${format(to, 'yyyy-MM-dd HH:mm:ss')}`

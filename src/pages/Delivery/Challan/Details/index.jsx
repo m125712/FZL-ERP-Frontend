@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDeliveryChallanDetailsByUUID } from '@/state/Delivery';
-import { Navigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import ThreadPdf from '@/components/Pdf/ThreadChallan';
 import Pdf from '@/components/Pdf/ZipperChallan';

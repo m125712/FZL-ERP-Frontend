@@ -1,29 +1,43 @@
-import { FZL_LOGO } from '@/assets/img/base64';
+// import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
 
-import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../ui';
+import { DEFAULT_FONT_SIZE } from '../ui';
 import { company, getEmptyColumn } from '../utils';
 
 const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 
-const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
+const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy HH:mm:ss');
 
-export const getPageHeader = (from) => {
+export const getPageHeader = (from, to) => {
 	return {
 		heights: ['auto', 2, 'auto', 'auto'],
-		widths: [70, '*', 70, '*'],
+		widths: [80, '*', 60, '*'],
 		body: [
 			[
+				// {
+				// 	image: FZL_LOGO.src,
+				// 	width: 70,
+				// 	height: 40,
+				// 	alignment: 'left',
+				// },
 				{
-					image: FZL_LOGO.src,
-					width: 70,
-					height: 40,
+					colSpan: 2,
+					text: [
+						{
+							text: `Fortune Zipper Ltd.\n`,
+							fontSize: DEFAULT_FONT_SIZE + 4,
+							bold: true,
+						},
+						`${company.address}\n`,
+						`${company.phone}\n`,
+					],
 					alignment: 'left',
 				},
-				{
-					text: [`${company.address}\n`, `${company.phone}\n`],
-					alignment: 'left',
-				},
+				'',
+				// {
+				// 	text: [`${company.address}\n`, `${company.phone}\n`],
+				// 	alignment: 'center',
+				// },
 				{
 					colSpan: 2,
 					text: [
@@ -32,7 +46,7 @@ export const getPageHeader = (from) => {
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
-						`Date: ${getDateFormate(from)} \n`,
+						`Date: ${getDateFormate(from)} - ${getDateFormate(to)} \n`,
 					],
 					alignment: 'right',
 				},

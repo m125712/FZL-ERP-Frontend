@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
 
-export default function Information({ packing_list }) {
+export default function Information({ packing_list, className }) {
 	const {
 		packing_number,
 		remarks,
@@ -52,7 +52,9 @@ export default function Information({ packing_list }) {
 			},
 			{
 				label: 'Updated At',
-				value: format(new Date(updated_at), 'dd/MM/yy'),
+				value: updated_at
+					? format(new Date(updated_at), 'dd/MM/yy')
+					: '--',
 			},
 		];
 
@@ -75,7 +77,11 @@ export default function Information({ packing_list }) {
 	};
 
 	return (
-		<SectionContainer buttons={renderButtons()} title={'Information'}>
+		<SectionContainer
+			buttons={renderButtons()}
+			title={'Information'}
+			className={className}
+		>
 			<div className='grid lg:grid-cols-2'>
 				<RenderTable
 					title='Basic Info'

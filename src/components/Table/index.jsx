@@ -26,6 +26,7 @@ const TablePagination = lazy(() => import('./_components/table-pagination'));
 function Table({
 	title = '',
 	subtitle = '',
+	info = '',
 	handelAdd = () => {},
 	handleReload = null,
 	isLoading = false,
@@ -114,6 +115,7 @@ function Table({
 					<TableTitleOnly
 						title={title}
 						subtitle={subtitle}
+						info={info}
 						handelAdd={handelAdd}
 					/>
 				</Suspense>
@@ -124,6 +126,7 @@ function Table({
 				<TableHeader
 					title={title}
 					subtitle={subtitle}
+					info={info}
 					handelAdd={handelAdd}
 					handleReload={handleReload}
 					accessor={accessor}

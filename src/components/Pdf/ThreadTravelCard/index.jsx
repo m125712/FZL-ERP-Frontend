@@ -27,7 +27,7 @@ const node = [
 ];
 
 export default function Index(batch, shade_recipes_entries, programs) {
-	const headerHeight = 200;
+	const headerHeight = 220;
 	let footerHeight = 50;
 	const { batch_entry } = batch;
 	batch_entry?.forEach((item) => {

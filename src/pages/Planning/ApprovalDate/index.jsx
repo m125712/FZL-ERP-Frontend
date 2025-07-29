@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useOtherRecipe } from '@/state/Other';
+import { useAuth } from '@/context/auth';
 import { usePlanningApprovalDate } from '@/state/Planning';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
@@ -25,6 +25,7 @@ const options2 = [
 export default function Index() {
 	const [status, setStatus] = useState('pending');
 	const [status2, setStatus2] = useState('incomplete_order');
+	const { user } = useAuth();
 
 	const { data, isLoading, updateData } = usePlanningApprovalDate(
 		status2 === 'complete_order'
@@ -46,13 +47,13 @@ export default function Index() {
 				bulk_approval_date: data[idx]?.bulk_approval
 					? null
 					: GetDateTime(),
+				bulk_approval_by: user?.uuid,
 				updated_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,
 		});
 	};
 
-	const { data: recipe } = useOtherRecipe(`approved=true`);
 	const columns = useMemo(
 		() => [
 			{
@@ -149,9 +150,14 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'bleaching',
-				header: 'Bleach',
-				enableColumnFilter: true,
+				accessorKey: 'balance_quantity',
+				header: (
+					<>
+						Balance <br />
+						QTY (PCS)
+					</>
+				),
+				enableColumnFilter: false,
 				enableSorting: true,
 				// cell: (info) => {
 				// 	const isBleach = info.getValue() === 'bleach';
@@ -209,11 +215,14 @@ export default function Index() {
 							checked={info.row.original.bulk_approval === true}
 						/>
 						<DateTime date={info.row.original.bulk_approval_date} />
+						<span className='text-xs text-gray-500'>
+							{info.row.original.bulk_approval_by_name}
+						</span>
 					</div>
 				),
 			},
 		],
-		[data, recipe, haveAccess]
+		[data, haveAccess]
 	);
 
 	if (isLoading)

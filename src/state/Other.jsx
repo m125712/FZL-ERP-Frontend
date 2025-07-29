@@ -601,3 +601,22 @@ export const useOtherOrderEntryBy = (uuid, isZipper, challanUuid) =>
 			: `/delivery/thread-order-entry/by/${uuid}?challan_uuid=${challanUuid}`,
 		enabled: !!uuid,
 	});
+
+export const useOtherSectionMachine = () =>
+	createGlobalState({
+		queryKey: otherQK.sectionMachine(),
+		url: '/other/maintain/section-machine/value/label',
+	});
+
+export const useOtherIssue = () =>
+	createGlobalState({
+		queryKey: otherQK.otherIssue(),
+		url: '/other/maintain/issue/value/label',
+	});
+
+
+export const useSubscribe = () =>
+	createGlobalState({
+		queryKey: otherQK.subscribe(),
+		url: '/public/subscribe',
+	});

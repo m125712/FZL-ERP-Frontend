@@ -6,6 +6,7 @@ import { DyeingAndIronRoutes } from './DyeingAndIron';
 import { HrRoutes } from './Hr';
 import { LabDipRoutes } from './LabDip';
 import { LibraryRoutes } from './Library';
+import { MaintenanceRoutes } from './Maintenance';
 import { MarketingRoutes } from './Marketing';
 import { MetalRoutes } from './Metal';
 import { NylonRoutes } from './Nylon';
@@ -15,6 +16,7 @@ import { ProfileRoutes } from './Profile';
 import { ReportRoutes } from './Report';
 import { SliderRoutes } from './Slider';
 import { StoreRoutes } from './Store';
+import { StoreMaintenanceRoutes } from './StoreMaintenance';
 import { ThreadRoutes } from './Thread';
 import { VislonRoutes } from './Vislon';
 
@@ -25,6 +27,8 @@ const privateRoutes = [
 	...ThreadRoutes,
 	...CommercialRoutes,
 	...StoreRoutes,
+	...StoreMaintenanceRoutes,
+	...MaintenanceRoutes,
 	...CommonRoutes,
 	...LabDipRoutes,
 	...PlanningRoutes,

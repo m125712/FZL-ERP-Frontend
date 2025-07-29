@@ -215,6 +215,9 @@ export default function Index() {
 							checked={info.row.original.bulk_approval === true}
 						/>
 						<DateTime date={info.row.original.bulk_approval_date} />
+						<span className='text-xs text-gray-500'>
+							{info.row.original.bulk_approval_by_name}
+						</span>
 					</div>
 				),
 			},

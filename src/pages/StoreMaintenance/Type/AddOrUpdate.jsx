@@ -19,7 +19,8 @@ export default function Index({
 	setUpdateMaterialType,
 }) {
 	const { user } = useAuth();
-	const { invalidateQuery: invalidateMaterialType } = useOtherMaterialType();
+	const { invalidateQuery: invalidateMaterialType } =
+		useOtherMaterialType('maintenance');
 	const { url, updateData, postData } = useMaterialType();
 	const { data } = useMaterialTypeByUUID(updateMaterialType?.uuid);
 

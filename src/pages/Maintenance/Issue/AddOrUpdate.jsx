@@ -240,7 +240,7 @@ export default function Index({
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								menuPortalTarget={document.body}
+								// menuPortalTarget={document.body}
 								placeholder='Select emergence'
 								options={emergenceOptions}
 								value={emergenceOptions?.filter(

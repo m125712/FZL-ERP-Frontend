@@ -31,6 +31,7 @@ const ShowLocalToast = ({ type, message }) => {
 
 const ShowToast = (toast) => {
 	const { type, message } = toast;
+	if (type === 'unseen') return;
 	ShowLocalToast({ ...{ type, message } });
 };
 

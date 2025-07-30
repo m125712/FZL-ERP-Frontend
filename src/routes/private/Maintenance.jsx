@@ -26,6 +26,8 @@ export const MaintenanceRoutes = [
 					'delete',
 					'notification',
 					'unsubscribe',
+					'verification',
+					'procurement',
 				],
 			},
 		],

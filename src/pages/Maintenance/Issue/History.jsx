@@ -1,5 +1,6 @@
 import { lazy, Suspense, useMemo, useState } from 'react';
 import { useProcurementByIssueUUID } from '@/state/Maintenance';
+import { useOtherMaterial } from '@/state/Other';
 
 import { DeleteModal, HistoryModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
@@ -14,6 +15,7 @@ export default function Index({ modalId = '', history = {}, setHistory }) {
 	};
 
 	const { data, deleteData } = useProcurementByIssueUUID(history?.uuid);
+	const { invalidateQuery } = useOtherMaterial('maintenance');
 
 	const columns = useMemo(
 		() => [
@@ -108,6 +110,7 @@ export default function Index({ modalId = '', history = {}, setHistory }) {
 						setDeleteItem,
 						url: '/maintain/issue-procurement',
 						deleteData,
+						invalidateQuery,
 					}}
 				/>
 			</Suspense>

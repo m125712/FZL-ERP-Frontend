@@ -169,6 +169,7 @@ export default function Index() {
 					return (
 						<div>
 							<SwitchToggle
+								disabled={!haveAccess.includes('verification')}
 								onChange={() => {
 									handelVerificationApprove(info.row.index);
 								}}
@@ -193,11 +194,13 @@ export default function Index() {
 					return (
 						<div className='flex gap-2'>
 							<Transfer
+								disabled={!haveAccess.includes('procurement')}
 								onClick={() =>
 									handelProcurement(info.row.index)
 								}
 							/>
 							<EyeBtn
+								disabled={!haveAccess.includes('procurement')}
 								onClick={() =>
 									handelProcurementHistory(info.row.index)
 								}
@@ -239,6 +242,7 @@ export default function Index() {
 	const [procurement, setProcurement] = useState({
 		uuid: null,
 	});
+
 	const handelProcurement = (idx) => {
 		const val = data[idx];
 		setProcurement((prev) => ({

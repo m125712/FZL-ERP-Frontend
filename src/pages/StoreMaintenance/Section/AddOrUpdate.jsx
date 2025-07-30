@@ -20,7 +20,7 @@ export default function Index({
 }) {
 	const { user } = useAuth();
 	const { invalidateQuery: invalidateMaterialSection } =
-		useOtherMaterialSection();
+		useOtherMaterialSection('maintenance');
 	const { url, updateData, postData } = useMaterialSection();
 	const { data } = useMaterialSectionByUUID(updateSection?.uuid);
 

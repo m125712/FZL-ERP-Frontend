@@ -30,7 +30,8 @@ export default function Index({
 	const { data, postData, updateData } = useIssueProcurementByUUID(
 		procurement?.procurement_uuid
 	);
-	const { data: materials, invalidateQuery } = useOtherMaterial();
+	const { data: materials, invalidateQuery } =
+		useOtherMaterial('maintenance');
 
 	const {
 		register,
@@ -74,7 +75,7 @@ export default function Index({
 				updatedData,
 				onClose,
 			});
-
+			invalidateQuery();
 			return;
 		}
 		const updatedData = {

@@ -1,6 +1,6 @@
 import { useAuth } from '@/context/auth';
 import { useMaintenanceMachine } from '@/state/Maintenance';
-import { useOtherCountLength } from '@/state/Other';
+import { useOtherCountLength, useOtherSectionMachine } from '@/state/Other';
 import { useThreadCountLength } from '@/state/Thread';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
@@ -26,6 +26,8 @@ export default function Index({
 	setUpdateCountLength,
 }) {
 	const { url, updateData, postData } = useMaintenanceMachine();
+	const { invalidateQuery: invalidateOtherCountLength } =
+		useOtherSectionMachine();
 	const { user } = useAuth();
 	const {
 		register,
@@ -70,7 +72,7 @@ export default function Index({
 				updatedData,
 				onClose,
 			});
-
+			invalidateOtherCountLength();
 			return;
 		}
 
@@ -88,6 +90,8 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
+
+		invalidateOtherCountLength();
 	};
 	return (
 		<AddModal

@@ -172,7 +172,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: '/material/type',
 						deleteData,
 					}}
 					invalidateQuery={invalidateMaterialType}

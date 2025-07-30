@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
 import {
+	useOtherMaterial,
 	useOtherMaterialByParams,
 	useOtherMaterialSection,
 	useOtherMaterialType,
@@ -33,12 +34,17 @@ export default function Index({
 	setUpdateMaterialDetails,
 }) {
 	const { user } = useAuth();
-	const { url, updateData, postData } = useMaterialInfo();
+	const { invalidateQuery, updateData, postData } = useMaterialInfo(
+		'maintenance',
+		false
+	);
 	const { data } = useMaterialInfoByUUID(updateMaterialDetails?.uuid);
 	const { data: section } = useOtherMaterialSection('maintenance');
 	const { data: materialType } = useOtherMaterialType('maintenance');
 	const { invalidateQuery: invalidateMaterialByDyes } =
 		useOtherMaterialByParams('type=dyes');
+	const { invalidateQuery: invalidateMaterialByMaintenance } =
+		useOtherMaterial('maintenance');
 	const {
 		register,
 		handleSubmit,
@@ -77,12 +83,13 @@ export default function Index({
 			};
 
 			await updateData.mutateAsync({
-				url: `${url}/${updateMaterialDetails?.uuid}`,
+				url: `/material/info/${updateMaterialDetails?.uuid}`,
 				uuid: updateMaterialDetails?.uuid,
 				updatedData,
 				onClose,
 			});
-
+			invalidateQuery();
+			invalidateMaterialByMaintenance();
 			return;
 		}
 
@@ -97,11 +104,13 @@ export default function Index({
 		};
 
 		await postData.mutateAsync({
-			url,
+			url: '/material/info',
 			newData: updatedData,
 			onClose,
 		});
 		invalidateMaterialByDyes();
+		invalidateQuery();
+		invalidateMaterialByMaintenance();
 	};
 
 	const selectUnit = [

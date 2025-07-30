@@ -614,9 +614,23 @@ export const useOtherIssue = () =>
 		url: '/other/maintain/issue/value/label',
 	});
 
-
+//* NOTIFICATION SUBSCRIBE
 export const useSubscribe = () =>
 	createGlobalState({
 		queryKey: otherQK.subscribe(),
 		url: '/public/subscribe',
+	});
+
+//* Get schema for global log
+export const useOtherSchema = () =>
+	createGlobalState({
+		queryKey: otherQK.schema(),
+		url: '/audit/schema-names',
+	});
+
+//* Get table for global log
+export const useOtherTable = (query) =>
+	createGlobalState({
+		queryKey: otherQK.table(query),
+		url: query ? `/audit/table-names?${query}` : '/audit/table-names',
 	});

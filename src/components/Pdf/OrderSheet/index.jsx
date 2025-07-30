@@ -103,7 +103,7 @@ export default function OrderSheetPdf(order_sheet) {
 
 					return acc;
 				}, {});
-				console.log(res);
+
 				//todo: order_type condition will start from here
 				if (entry.order_type !== 'slider') {
 					// * garments info
@@ -154,7 +154,7 @@ export default function OrderSheetPdf(order_sheet) {
 													// * the bleaching status for each quantity
 													const bleaching =
 														color.bleach;
-													// console.log(color.color_ref);
+
 													// * Slicing the quantities array for each chunk
 													const slicedQuantities =
 														quantities.slice(

@@ -42,16 +42,23 @@ const orderTypeOptions = [
 	{ value: 'bulk', label: 'Bulk' },
 ];
 
+const productTypeOptions = [
+	{ value: 'all', label: 'All' },
+	{ value: 'zipper', label: 'Zipper' },
+	{ value: 'thread', label: 'Thread' },
+];
+
 export default function Index() {
 	const [status, setStatus] = useState('received');
 	const [orderType, setOrderType] = useState('bulk');
+	const [productType, setProductType] = useState('all');
 	const navigate = useNavigate();
 	const haveAccess = useAccess('delivery__challan');
 	const { user } = useAuth();
 
 	const { data, isLoading, url, deleteData, updateData } = useDeliveryChallan(
 		getPath(haveAccess, user?.uuid) +
-			`&type=${status}&order_type=${orderType}`,
+			`&type=${status}&order_type=${orderType}&product_type=${productType}`,
 		{ enabled: !!user?.uuid }
 	);
 
@@ -512,6 +519,11 @@ export default function Index() {
 							status={orderType}
 							setStatus={setOrderType}
 							options={orderTypeOptions}
+						/>
+						<StatusSelect
+							status={productType}
+							setStatus={setProductType}
+							options={productTypeOptions}
 						/>
 					</>
 				}

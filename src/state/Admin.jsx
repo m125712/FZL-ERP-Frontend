@@ -12,7 +12,6 @@ export const useAdminUsersByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: adminQK.userByUUID(uuid),
 		url: `/hr/user/${uuid}`,
-		
 	});
 
 export const useGetUserAccessByUUID = (uuid) =>
@@ -51,4 +50,11 @@ export const useAdminPermissions = () =>
 	createGlobalState({
 		queryKey: adminQK.permissions(),
 		url: '/hr/user-all-can-access',
+	});
+
+//* Global Log
+export const useAdminGlobalLog = (schema, table, operation, from, to) =>
+	createGlobalState({
+		queryKey: adminQK.globalLog(schema, table, operation, from, to),
+		url: `/audit/global-audit-log?schema_name=${schema}&table_name=${table}&operation=${operation}&from_date=${from}&to_date=${to}`,
 	});

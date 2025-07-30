@@ -60,10 +60,12 @@ export const useSliderDieCastingStockByOrderNumbers = (
 	});
 
 // * Die Casting --> (PRODUCTION)
-export const useSliderDieCastingProduction = () =>
+export const useSliderDieCastingProduction = (query) =>
 	createGlobalState({
-		queryKey: sliderQK.sliderDieCastingProduction(),
-		url: '/slider/die-casting-production',
+		queryKey: sliderQK.sliderDieCastingProduction(query),
+		url: query
+			? `/slider/die-casting-production?${query}`
+			: '/slider/die-casting-production',
 	});
 
 export const useSliderDieCastingProductionByUUID = (uuid, { enabled = true }) =>

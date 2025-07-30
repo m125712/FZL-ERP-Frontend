@@ -4,6 +4,7 @@ const Department = lazy(() => import('@/pages/Admin/Department'));
 const Designation = lazy(() => import('@/pages/Admin/Designation'));
 const User = lazy(() => import('@/pages/Admin/User'));
 const Permissions = lazy(() => import('@/pages/Admin/Permissions'));
+const GlobalLog = lazy(() => import('@/pages/Admin/GlobalLog'));
 
 export const HrRoutes = [
 	{
@@ -45,6 +46,13 @@ export const HrRoutes = [
 				element: <Permissions />,
 				page_name: 'admin__user_permissions',
 				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Global Log',
+				path: '/hr/global-log',
+				element: <GlobalLog />,
+				page_name: 'admin__global_log',
+				actions: ['read'],
 			},
 		],
 	},

@@ -7,11 +7,12 @@ export const StatusSelect = ({
 	status,
 	setStatus,
 	options = [],
+	placeholder = 'Select Status',
 }) => {
 	return (
 		<ReactSelect
 			className={cn('h-4 min-w-36 text-sm', className)}
-			placeholder='Select Status'
+			placeholder={placeholder}
 			options={options}
 			value={options?.filter((item) => item.value == status)}
 			onChange={(e) => {

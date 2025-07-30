@@ -89,6 +89,17 @@ export const adminQK = {
 	//* permissions
 	permissions: () => [...adminQK.all(), 'permissions'],
 	permission: (uuid) => [...adminQK.permissions(), uuid],
+
+	//* global log
+	globalLog: (schema, table, operation, from, to) => [
+		...adminQK.all(),
+		'globalLog',
+		schema,
+		table,
+		operation,
+		from,
+		to,
+	],
 };
 
 export const commercialQK = {
@@ -1658,7 +1669,11 @@ export const otherQK = {
 	sectionMachine: () => [...otherQK.all(), 'section-machine'],
 	otherIssue: () => [...otherQK.all(), 'other-issue'],
 
+	//* NOTIFICATION SUBSCRIBE
 	subscribe: () => [...otherQK.all(), 'subscribe'],
+
+	schema: () => [...otherQK.all(), 'schema-names'],
+	table: (query) => [...otherQK.all(), 'table-names', query],
 };
 
 //* Challan

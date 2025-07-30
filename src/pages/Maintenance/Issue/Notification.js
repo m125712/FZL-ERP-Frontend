@@ -22,9 +22,9 @@ export function usePushSubscription() {
 			newData: { endpoint: subscription, created_at: GetDateTime() },
 		});
 		localStorage.setItem('pushEndpoint', subscription.endpoint);
-		console.log(
-			'✅ Subscription sent to backend and endpoint saved locally.'
-		);
+		// console.log(
+		// 	'✅ Subscription sent to backend and endpoint saved locally.'
+		// );
 	}
 
 	async function registerAndSubscribe() {
@@ -70,9 +70,9 @@ export function usePushSubscription() {
 				let deleteItem = subscription;
 				const success = await subscription.unsubscribe();
 				if (success) {
-					console.log(
-						'✅ Push subscription successfully unsubscribed.'
-					);
+					// console.log(
+					// 	'✅ Push subscription successfully unsubscribed.'
+					// );
 					// Optionally, notify your backend here too:
 					postData.mutate({
 						url: '/public/unsubscribe',

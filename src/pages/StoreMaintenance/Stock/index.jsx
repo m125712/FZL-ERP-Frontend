@@ -15,8 +15,10 @@ const AgainstOrderTransfer = lazy(() => import('./AgainstOrderTransfer'));
 const MaterialTrx = lazy(() => import('./MaterialTrx'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData, refetch } =
-		useMaterialInfo('maintenance');
+	const { data, isLoading, url, deleteData, refetch } = useMaterialInfo(
+		'maintenance',
+		false
+	);
 	const info = new PageInfo('Maintenance / Stock', url, 'maintenance__stock');
 	const haveAccess = useAccess('store_maintenance__stock');
 

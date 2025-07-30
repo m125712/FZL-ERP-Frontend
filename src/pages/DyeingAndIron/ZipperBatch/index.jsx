@@ -25,9 +25,17 @@ export default function Index() {
 		{ value: 'pending', label: 'Pending' },
 		{ value: 'completed', label: 'Completed' },
 	];
+
+	const orderTypeOptions = [
+		{ value: 'all', label: 'All' },
+		{ value: 'bulk', label: 'Bulk' },
+		{ value: 'sample', label: 'Sample' },
+	];
+
 	const [status, setStatus] = useState('pending');
+	const [orderType, setOrderType] = useState('bulk');
 	const { data, url, isLoading, updateData } = useDyeingBatch(
-		`type=${status}`
+		`type=${status}&order_type=${orderType}`
 	);
 	const info = new PageInfo('Batch', url, 'dyeing__zipper_batch');
 	const haveAccess = useAccess('dyeing__zipper_batch');
@@ -101,6 +109,7 @@ export default function Index() {
 				id: 'item_descriptions',
 				header: 'Item Description',
 				// enableColumnFilter: true,
+				width: 'w-44',
 				cell: (info) => {
 					const idx = info.row.index;
 
@@ -404,11 +413,18 @@ export default function Index() {
 				columns={columns}
 				accessor={haveAccess.includes('create')}
 				extraButton={
-					<StatusSelect
-						options={options}
-						status={status}
-						setStatus={setStatus}
-					/>
+					<>
+						<StatusSelect
+							options={options}
+							status={status}
+							setStatus={setStatus}
+						/>
+						<StatusSelect
+							options={orderTypeOptions}
+							status={orderType}
+							setStatus={setOrderType}
+						/>
+					</>
 				}
 			/>
 		</div>

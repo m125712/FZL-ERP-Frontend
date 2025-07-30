@@ -19,6 +19,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 	let footerHeight = 40;
 	const { order_info, orders, sr, garments } = orderByStyle;
 	let grandTotal = 0;
+	let grandTotalMeter = 0;
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		pageSize: 'A4',
@@ -56,12 +57,13 @@ export default function OrderSheetByStyle(orderByStyle) {
 			...(Array.isArray(orders)
 				? orders.map((item) => {
 						let total = 0;
+						let totalMeter = 0;
 
 						return {
 							margin: [0, 5],
 							table: {
 								headerRows: 2,
-								widths: ['*', 80, 30, 25, 35],
+								widths: ['*', 80, 30, 25, 35, 35],
 								body: [
 									// Header
 									...TableHeader(item),
@@ -81,20 +83,37 @@ export default function OrderSheetByStyle(orderByStyle) {
 														);
 
 													//* Total for each description
-													let TotalDescQty =
+													const TotalDescQty =
 														entry.details.reduce(
-															(acc, item) =>
-																acc +
-																item.sizes.reduce(
-																	(
-																		acc,
-																		item
-																	) =>
-																		acc +
-																		item.quantity,
-																	0
-																),
-															0
+															(acc, detail) => {
+																const sizeTotals =
+																	detail.sizes.reduce(
+																		(
+																			sizeAcc,
+																			sizeItem
+																		) => {
+																			sizeAcc.quantity +=
+																				sizeItem.quantity;
+																			sizeAcc.quantity_meter +=
+																				sizeItem.quantity_meter;
+																			return sizeAcc;
+																		},
+																		{
+																			quantity: 0,
+																			quantity_meter: 0,
+																		}
+																	);
+
+																acc.quantity +=
+																	sizeTotals.quantity;
+																acc.quantity_meter +=
+																	sizeTotals.quantity_meter;
+																return acc;
+															},
+															{
+																quantity: 0,
+																quantity_meter: 0,
+															}
 														);
 
 													const TotalDescQtyRow = [
@@ -108,7 +127,13 @@ export default function OrderSheetByStyle(orderByStyle) {
 														{},
 														{},
 														{
-															text: TotalDescQty,
+															text: TotalDescQty.quantity,
+															alignment: 'right',
+															bold: true,
+															color: 'blue',
+														},
+														{
+															text: TotalDescQty.quantity_meter,
 															alignment: 'right',
 															bold: true,
 															color: 'blue',
@@ -118,15 +143,25 @@ export default function OrderSheetByStyle(orderByStyle) {
 													const entireRow =
 														entry.details.flatMap(
 															(detail) => {
+																//* Total for each color
 																let TotalColorQty =
 																	detail.sizes.reduce(
 																		(
 																			acc,
 																			item
-																		) =>
-																			acc +
-																			item.quantity,
-																		0
+																		) => {
+																			acc.color =
+																				acc.color +
+																				item.quantity;
+																			acc.meter =
+																				acc.meter +
+																				item.quantity_meter;
+																			return acc;
+																		},
+																		{
+																			color: 0,
+																			meter: 0,
+																		}
 																	);
 
 																const TotalColorQtyRow =
@@ -140,12 +175,21 @@ export default function OrderSheetByStyle(orderByStyle) {
 																		{},
 																		{},
 																		{
-																			text: TotalColorQty,
+																			text: TotalColorQty.color,
+																			alignment:
+																				'right',
+																			bold: true,
+																		},
+																		{
+																			text: TotalColorQty.meter.toFixed(
+																				2
+																			),
 																			alignment:
 																				'right',
 																			bold: true,
 																		},
 																	];
+
 																const detailsRow =
 																	detail.sizes.map(
 																		(
@@ -153,8 +197,12 @@ export default function OrderSheetByStyle(orderByStyle) {
 																		) => {
 																			total +=
 																				size.quantity;
+																			totalMeter +=
+																				size.quantity_meter;
 																			grandTotal +=
 																				size.quantity;
+																			grandTotalMeter +=
+																				size.quantity_meter;
 
 																			const DetailsRowSpan =
 																				entry.details
@@ -347,21 +395,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 																								]
 																							: []),
 																					],
-																					// table: {
-																					// 	widths: ['*'],
-																					// 	body: getInnerTable(
-																					// 		entry,
-																					// 		special_req,
-																					// 		garments_info,
-																					// 		TotalDescQty
-																					// 	),
-																					// },
-																					// customPadding: {
-																					// 	left: 0,
-																					// 	top: 3,
-																					// 	right: 0,
-																					// 	bottom: 3,
-																					// },
+
 																					rowSpan:
 																						sizeRowSpan +
 																						DetailsRowSpan,
@@ -398,6 +432,13 @@ export default function OrderSheetByStyle(orderByStyle) {
 																							? size.quantity
 																							: 'B - ' +
 																								size.quantity
+																						: '---',
+																					alignment:
+																						'right',
+																				},
+																				{
+																					text: size.quantity_meter
+																						? size.quantity_meter
 																						: '---',
 																					alignment:
 																						'right',
@@ -445,6 +486,12 @@ export default function OrderSheetByStyle(orderByStyle) {
 											bold: true,
 											color: 'red',
 										},
+										{
+											text: totalMeter,
+											alignment: 'right',
+											bold: true,
+											color: 'red',
+										},
 									],
 								],
 							},
@@ -456,7 +503,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 			{
 				margin: [0, 5],
 				table: {
-					widths: ['*', 'auto'],
+					widths: ['*', 'auto', 'auto'],
 					body: [
 						[
 							{
@@ -466,6 +513,11 @@ export default function OrderSheetByStyle(orderByStyle) {
 							},
 							{
 								text: grandTotal,
+								style: 'tableFooter',
+								alignment: 'Center',
+							},
+							{
+								text: grandTotalMeter,
 								style: 'tableFooter',
 								alignment: 'Center',
 							},

@@ -177,32 +177,35 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<FormField
-				label='parts_problem'
-				title='Part Problem'
-				errors={errors}
-			>
-				<Controller
-					name={'parts_problem'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select part problem'
-								options={options}
-								value={options?.filter(
-									(item) =>
-										item.value ===
-										getValues('parts_problem')
-								)}
-								onChange={(e) => {
-									onChange(e.value);
-								}}
-							/>
-						);
-					}}
-				/>
-			</FormField>
+			{options.length > 0 && (
+				<FormField
+					label='parts_problem'
+					title='Part Problem'
+					errors={errors}
+				>
+					<Controller
+						name={'parts_problem'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select part problem'
+									options={options}
+									value={options?.filter(
+										(item) =>
+											item.value ===
+											getValues('parts_problem')
+									)}
+									onChange={(e) => {
+										onChange(e.value);
+									}}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+			)}
+
 			<FormField
 				label='section_machine_uuid'
 				title='Section Machine'
@@ -237,6 +240,7 @@ export default function Index({
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
+								menuPortalTarget={document.body}
 								placeholder='Select emergence'
 								options={emergenceOptions}
 								value={emergenceOptions?.filter(

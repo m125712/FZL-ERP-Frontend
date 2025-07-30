@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
 import {
+	useOtherMaterial,
 	useOtherMaterialByParams,
 	useOtherMaterialSection,
 	useOtherMaterialType,
@@ -42,6 +43,8 @@ export default function Index({
 	const { data: materialType } = useOtherMaterialType('maintenance');
 	const { invalidateQuery: invalidateMaterialByDyes } =
 		useOtherMaterialByParams('type=dyes');
+	const { invalidateQuery: invalidateMaterialByMaintenance } =
+		useOtherMaterial('maintenance');
 	const {
 		register,
 		handleSubmit,
@@ -86,6 +89,7 @@ export default function Index({
 				onClose,
 			});
 			invalidateQuery();
+			invalidateMaterialByMaintenance();
 			return;
 		}
 
@@ -106,6 +110,7 @@ export default function Index({
 		});
 		invalidateMaterialByDyes();
 		invalidateQuery();
+		invalidateMaterialByMaintenance();
 	};
 
 	const selectUnit = [

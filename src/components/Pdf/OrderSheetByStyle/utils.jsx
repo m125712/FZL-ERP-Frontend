@@ -129,8 +129,9 @@ export const TableHeader = (item, idx) => {
 			{
 				text: item.style,
 				style: 'tableHeader',
-				colSpan: 6,
+				colSpan: 7,
 			},
+			{},
 			{},
 			{},
 			{},
@@ -142,8 +143,9 @@ export const TableHeader = (item, idx) => {
 			{ text: 'Color', style: 'tableHeader' },
 			{ text: 'Size', style: 'tableHeader', alignment: 'right' },
 			{ text: 'Unit', style: 'tableHeader' },
-			{ text: 'Quantity', style: 'tableHeader', alignment: 'right' },
+			{ text: 'Qty.', style: 'tableHeader', alignment: 'right' },
 			{ text: 'Meter', style: 'tableHeader', alignment: 'right' },
+			{ text: 'Kg', style: 'tableHeader', alignment: 'right' },
 		],
 	];
 };

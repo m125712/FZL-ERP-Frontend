@@ -20,6 +20,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 	const { order_info, orders, sr, garments } = orderByStyle;
 	let grandTotal = 0;
 	let grandTotalMeter = 0;
+	let grandTotalKg = 0;
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		pageSize: 'A4',
@@ -58,12 +59,13 @@ export default function OrderSheetByStyle(orderByStyle) {
 				? orders.map((item) => {
 						let total = 0;
 						let totalMeter = 0;
+						let totalKg = 0;
 
 						return {
 							margin: [0, 5],
 							table: {
 								headerRows: 2,
-								widths: ['*', 80, 30, 25, 35, 35],
+								widths: ['*', 80, 30, 25, 35, 35, 35],
 								body: [
 									// Header
 									...TableHeader(item),
@@ -96,11 +98,14 @@ export default function OrderSheetByStyle(orderByStyle) {
 																				sizeItem.quantity;
 																			sizeAcc.quantity_meter +=
 																				sizeItem.quantity_meter;
+																			sizeAcc.quantity_kg +=
+																				sizeItem.quantity_kg;
 																			return sizeAcc;
 																		},
 																		{
 																			quantity: 0,
 																			quantity_meter: 0,
+																			quantity_kg: 0,
 																		}
 																	);
 
@@ -108,11 +113,14 @@ export default function OrderSheetByStyle(orderByStyle) {
 																	sizeTotals.quantity;
 																acc.quantity_meter +=
 																	sizeTotals.quantity_meter;
+																acc.quantity_kg +=
+																	sizeTotals.quantity_kg;
 																return acc;
 															},
 															{
 																quantity: 0,
 																quantity_meter: 0,
+																quantity_kg: 0,
 															}
 														);
 
@@ -133,7 +141,17 @@ export default function OrderSheetByStyle(orderByStyle) {
 															color: 'blue',
 														},
 														{
-															text: TotalDescQty.quantity_meter,
+															text: TotalDescQty.quantity_meter.toFixed(
+																2
+															),
+															alignment: 'right',
+															bold: true,
+															color: 'blue',
+														},
+														{
+															text: TotalDescQty.quantity_kg.toFixed(
+																2
+															),
 															alignment: 'right',
 															bold: true,
 															color: 'blue',
@@ -156,11 +174,15 @@ export default function OrderSheetByStyle(orderByStyle) {
 																			acc.meter =
 																				acc.meter +
 																				item.quantity_meter;
+																			acc.quantity_kg =
+																				acc.quantity_kg +
+																				item.quantity_kg;
 																			return acc;
 																		},
 																		{
 																			color: 0,
 																			meter: 0,
+																			quantity_kg: 0,
 																		}
 																	);
 
@@ -188,6 +210,14 @@ export default function OrderSheetByStyle(orderByStyle) {
 																				'right',
 																			bold: true,
 																		},
+																		{
+																			text: TotalColorQty.quantity_kg.toFixed(
+																				2
+																			),
+																			alignment:
+																				'right',
+																			bold: true,
+																		},
 																	];
 
 																const detailsRow =
@@ -199,10 +229,14 @@ export default function OrderSheetByStyle(orderByStyle) {
 																				size.quantity;
 																			totalMeter +=
 																				size.quantity_meter;
+																			totalKg +=
+																				size.quantity_kg;
 																			grandTotal +=
 																				size.quantity;
 																			grandTotalMeter +=
 																				size.quantity_meter;
+																			grandTotalKg +=
+																				size.quantity_kg;
 
 																			const DetailsRowSpan =
 																				entry.details
@@ -443,6 +477,13 @@ export default function OrderSheetByStyle(orderByStyle) {
 																					alignment:
 																						'right',
 																				},
+																				{
+																					text: size.quantity_kg
+																						? size.quantity_kg
+																						: '---',
+																					alignment:
+																						'right',
+																				},
 																			];
 																		}
 																	);
@@ -487,7 +528,13 @@ export default function OrderSheetByStyle(orderByStyle) {
 											color: 'red',
 										},
 										{
-											text: totalMeter,
+											text: totalMeter.toFixed(2),
+											alignment: 'right',
+											bold: true,
+											color: 'red',
+										},
+										{
+											text: totalKg.toFixed(2),
 											alignment: 'right',
 											bold: true,
 											color: 'red',
@@ -503,7 +550,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 			{
 				margin: [0, 5],
 				table: {
-					widths: ['*', 'auto', 'auto'],
+					widths: ['*', 35, 35, 35],
 					body: [
 						[
 							{
@@ -517,7 +564,12 @@ export default function OrderSheetByStyle(orderByStyle) {
 								alignment: 'Center',
 							},
 							{
-								text: grandTotalMeter,
+								text: grandTotalMeter.toFixed(2),
+								style: 'tableFooter',
+								alignment: 'Center',
+							},
+							{
+								text: grandTotalKg.toFixed(2),
 								style: 'tableFooter',
 								alignment: 'Center',
 							},

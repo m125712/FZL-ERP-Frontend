@@ -1,21 +1,32 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useSliderDieCastingProduction } from '@/state/Slider';
 import Pdf from '@components/Pdf/SliderDieCastingProduction';
+import { format } from 'date-fns';
 import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import { DeleteModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, EditDelete, LinkWithCopy } from '@/ui';
+import {
+	CustomLink,
+	DateTime,
+	EditDelete,
+	LinkWithCopy,
+	SimpleDatePicker,
+} from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } =
-		useSliderDieCastingProduction();
+	const [from, setFrom] = useState(new Date());
+	const [to, setTo] = useState(new Date());
+	const [pdfData, setPdfData] = useState('');
+	const { data, isLoading, url, deleteData } = useSliderDieCastingProduction(
+		`from_date=${format(from, 'yyyy-MM-dd')}&to_date=${format(to, 'yyyy-MM-dd')}`
+	);
 	const navigate = useNavigate();
 	const info = new PageInfo(
 		'Production 1',
@@ -40,14 +51,14 @@ export default function Index() {
 		'weight',
 		'remarks',
 	];
-	const extraData = [];
-	const pdfData = useMemo(() => {
-		return {
-			filterTableHeader: headers,
-			pdf: Pdf,
-			extraData: extraData,
-		};
-	}, [extraData, Pdf]);
+
+	useEffect(() => {
+		if (data) {
+			Pdf(data)?.getDataUrl((dataUrl) => {
+				setPdfData(dataUrl);
+			});
+		}
+	}, [data]);
 
 	const columns = useMemo(
 		() => [
@@ -258,16 +269,47 @@ export default function Index() {
 
 	return (
 		<>
-			<ReactTable
-				title={info.getTitle()}
-				accessor={haveAccess.includes('create')}
-				data={data}
-				columns={columns}
-				handelAdd={handelAdd}
-				extraClass={'py-0.5'}
-				showPdf={true}
-				pdfData={pdfData}
-			/>
+			<div className='flex flex-col gap-8'>
+				<ReactTable
+					title={info.getTitle()}
+					accessor={haveAccess.includes('create')}
+					data={data}
+					columns={columns}
+					handelAdd={handelAdd}
+					extraClass={'py-0.5'}
+					showDateRange={false}
+					// showPdf={true}
+					// pdfData={pdfData}
+					extraButton={
+						<div className='flex items-center gap-2'>
+							<SimpleDatePicker
+								className='m-w-32 h-[2.34rem]'
+								key={'from'}
+								value={from}
+								placeholder='From'
+								selected={from}
+								onChangeForTime={(data) => {
+									setFrom(data);
+								}}
+							/>
+							<SimpleDatePicker
+								className='m-w-32 h-[2.34rem]'
+								key={'to'}
+								value={to}
+								placeholder='To'
+								selected={to}
+								onChangeForTime={(data) => {
+									setTo(data);
+								}}
+							/>
+						</div>
+					}
+				/>
+				<iframe
+					src={pdfData}
+					className='h-[40rem] w-full rounded-md border-none'
+				/>
+			</div>
 
 			<Suspense>
 				<AddOrUpdate

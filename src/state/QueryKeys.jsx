@@ -934,7 +934,11 @@ export const sliderQK = {
 	],
 
 	//* Die Casting --> (PRODUCTION)
-	sliderDieCastingProduction: () => [...sliderQK.all(), 'dc-production'],
+	sliderDieCastingProduction: (query) => [
+		...sliderQK.all(),
+		'dc-production',
+		query,
+	],
 	sliderDieCastingProductionByUUID: (uuid) => [
 		...sliderQK.sliderDieCastingProduction(),
 		uuid,

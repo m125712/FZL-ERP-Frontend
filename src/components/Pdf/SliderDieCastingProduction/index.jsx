@@ -24,7 +24,7 @@ const node = [
 export default function Index(information) {
 	const headerHeight = 100;
 	let footerHeight = 50;
-	const { data } = information;
+	const data = information;
 
 	let date;
 	if (information.startDate === information.endDate) {
@@ -78,7 +78,7 @@ export default function Index(information) {
 						TableHeader(node),
 
 						// * Body
-						...data?.map((item) =>
+						...(Array.isArray(data) ? data : []).map((item) =>
 							node.map((nodeItem) => ({
 								text: item[nodeItem.field],
 								style: nodeItem.cellStyle,

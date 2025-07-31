@@ -183,7 +183,7 @@ export default function Index() {
 			<div className='flex gap-6'>
 				<iframe
 					id='iframeContainer'
-					src={data3}
+					src={data}
 					className='h-[40rem] w-full rounded-md border-none'
 				/>
 				<iframe
@@ -196,7 +196,7 @@ export default function Index() {
 			<OrderInformation
 				order={order_info}
 				handelPdfDownload={() =>
-					getPdfData?.download(`Order Sheet ${order_number}.pdf`)
+					getPdfData3?.download(`Order Sheet ${order_number}.pdf`)
 				}
 				handleViewChange={() => setUpdateView(!updateView)}
 				updateView={updateView}

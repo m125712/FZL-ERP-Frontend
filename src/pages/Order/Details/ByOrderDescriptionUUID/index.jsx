@@ -170,7 +170,7 @@ export default function Index({ initial_order, idx }) {
 				<div className='flex gap-6'>
 					<iframe
 						id='iframeContainer'
-						src={getPdfData3}
+						src={getPdfData}
 						className='h-[40rem] w-full rounded-md border-none'
 					/>
 					<iframe

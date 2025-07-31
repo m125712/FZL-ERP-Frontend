@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useProductionReportDateWise } from '@/state/Report';
 import { format } from 'date-fns';
+import { usePdfGenerator } from '@/hooks/usePdfGenerator';
 import { useAccess } from '@/hooks';
 
 import Pdf from '@/components/Pdf/DailyProduction';
+import PdfGeneratorButton from '@/components/ui/generate-pdf-button';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -32,16 +34,36 @@ export default function index() {
 	const [from, setFrom] = useState(() => new Date());
 	const [to, setTo] = useState(() => new Date());
 	const [type, setType] = useState('all');
-	const { data, isLoading } = useProductionReportDateWise(
-		format(from, 'yyyy-MM-dd HH:mm:ss'),
-		format(to, 'yyyy-MM-dd HH:mm:ss'),
-		type,
-		getPath(haveAccess, user?.uuid),
-		{
-			enabled: !!user?.uuid,
-		}
-	);
+	const { data, isFetching, refetch, isLoading } =
+		useProductionReportDateWise(
+			format(from, 'yyyy-MM-dd HH:mm:ss'),
+			format(to, 'yyyy-MM-dd HH:mm:ss'),
+			type,
+			getPath(haveAccess, user?.uuid),
+			{
+				enabled: !!user?.uuid,
+			}
+		);
+	const {
+		isGenerating,
+		progress,
+		status,
+		pdfUrl,
+		error,
+		generatePdf,
+		reset,
+	} = usePdfGenerator();
+	const handleGenerateClick = useCallback(async () => {
+		if (isFetching || isGenerating) return;
+		reset();
 
+		const result = await refetch();
+		const { data } = result;
+		const { data: value } = data;
+		if (value) {
+			generatePdf(Pdf(value, from, to));
+		}
+	}, [isFetching, isGenerating, refetch, generatePdf, reset, from, to]);
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
@@ -53,18 +75,19 @@ export default function index() {
 			<div className='flex flex-col gap-8'>
 				<Header {...{ from, setFrom, to, setTo, type, setType }} />
 				<div className='flex gap-2'>
-					<button
-						type='button'
-						onClick={() => {
-							Pdf(data, from, to)?.print(
-								{},
-								window.open('', '_blank')
-							);
-						}}
-						className='btn btn-primary flex-1'
-					>
-						PDF
-					</button>
+					<div className='flex-1'>
+						<PdfGeneratorButton
+							handleGenerateClick={handleGenerateClick}
+							isFetching={isFetching}
+							isGenerating={isGenerating}
+							pdfUrl={pdfUrl}
+							status={status}
+							download={true}
+							progress={progress}
+							pdf_name={`Daily_Production_${type}_(${format(from, 'yyyy-MM-dd')}-${format(to, 'yyyy-MM-dd')})`}
+							error={error}
+						/>
+					</div>
 					<button
 						type='button'
 						onClick={() => {

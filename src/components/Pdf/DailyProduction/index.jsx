@@ -501,7 +501,7 @@ export default function Index(data, from, to) {
 		},
 	});
 
-	const pdfDocGenerator = pdfMake.createPdf({
+	const pdfDocGenerator = {
 		...DEFAULT_A4_PAGE({
 			xMargin,
 			headerHeight,
@@ -513,14 +513,14 @@ export default function Index(data, from, to) {
 			layout: 'noBorders',
 			margin: [xMargin, 30, xMargin, 0],
 		},
-		footer: (currentPage, pageCount) => ({
-			table: getPageFooter({
-				currentPage,
-				pageCount,
-			}),
-			margin: [xMargin, 2],
-			fontSize: DEFAULT_FONT_SIZE - 2,
-		}),
+		// footer: (currentPage, pageCount) => ({
+		// 	table: getPageFooter({
+		// 		currentPage,
+		// 		pageCount,
+		// 	}),
+		// 	margin: [xMargin, 2],
+		// 	fontSize: DEFAULT_FONT_SIZE - 2,
+		// }),
 		content: [
 			{
 				table: {
@@ -547,7 +547,7 @@ export default function Index(data, from, to) {
 				},
 			},
 		],
-	});
+	};
 
 	return pdfDocGenerator;
 }

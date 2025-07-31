@@ -33,6 +33,7 @@ export const useProductionReportDateWise = (
 		enabled: false, // never auto-fetch
 		refetchOnWindowFocus: false,
 	});
+
 export const useProductionStatementReport = (
 	from = '',
 	to = '',
@@ -84,7 +85,8 @@ export const useOrderStatementReport = (
 		url: query
 			? `/report/order-sheet-pdf-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&type=${type}&${query}`
 			: `/report/order-sheet-pdf-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&type=${type}`,
-		enabled: !!from && !!to && isEnabled,
+		// enabled: !!from && !!to && isEnabled,
+		enabled: false,
 	});
 
 export const useZipperProduction = (query, { enabled = false } = {}) =>

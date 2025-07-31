@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { data } from 'react-router';
 
-import PdfWorker from '@/components/Pdf/pdfWorker.js?worker';
+import PdfWorker from '@/components/Pdf/PDFWorker/index.js?worker';
 
 export function usePdfGenerator() {
 	const workerRef = useRef(null);
@@ -9,7 +10,6 @@ export function usePdfGenerator() {
 	const [status, setStatus] = useState('');
 	const [pdfUrl, setPdfUrl] = useState(null);
 	const [error, setError] = useState(null);
-
 	useEffect(() => {
 		workerRef.current = new PdfWorker();
 
@@ -49,7 +49,7 @@ export function usePdfGenerator() {
 		};
 	}, [pdfUrl]);
 
-	const generatePdf = useCallback((docDefinition) => {
+	const generatePdf = useCallback((docDefinition, options) => {
 		setIsGenerating(true);
 		setProgress(0);
 		setStatus('Starting PDF generation…');
@@ -59,7 +59,7 @@ export function usePdfGenerator() {
 		workerRef.current &&
 			workerRef.current.postMessage({
 				type: 'generatePdf',
-				data: { documentDefinition: docDefinition },
+				data: { documentDefinition: docDefinition, options: options },
 			});
 	}, []);
 

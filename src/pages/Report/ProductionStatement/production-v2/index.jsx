@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { useAuth } from '@/context/auth';
+import { useProductionStatementReport } from '@/state/Report';
 import { format } from 'date-fns';
-import { Download, FileText, LoaderCircle } from 'lucide-react';
+import { LoaderCircle } from 'lucide-react';
 import { usePdfGenerator } from '@/hooks/usePdfGenerator';
 import { useAccess } from '@/hooks';
 
@@ -14,12 +15,12 @@ import Header from './Header';
 export default function ProductionStatementReport() {
 	const haveAccess = useAccess('report__production_statement');
 	const { user } = useAuth();
-  
+
 	const [isLoading, setIsLoading] = useState(false);
 
 	const [from, setFrom] = useState(() => new Date());
 	const [to, setTo] = useState(() => new Date());
-  
+
 	const [marketing, setMarketing] = useState('');
 	const [type, setType] = useState('');
 	const [priceFor, setPriceFor] = useState('company');
@@ -99,7 +100,9 @@ export default function ProductionStatementReport() {
 					isGenerating={isGenerating}
 					pdfUrl={pdfUrl}
 					status={status}
+					download={true}
 					progress={progress}
+					pdf_name={`ProductionStatement_${party}_${marketing}_${type}_(${format(from, 'yyyy-MM-dd')}-${format(to, 'yyyy-MM-dd')})`}
 					error={error}
 				/>
 

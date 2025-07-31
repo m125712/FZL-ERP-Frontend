@@ -7,6 +7,7 @@ import { useAccess, useFetchFunc } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import OrderSheetPdf from '@/components/Pdf/OrderSheet';
 import OrderSheetByStyle from '@/components/Pdf/OrderSheetByStyle';
+import OrderSheetByStyleV3 from '@/components/Pdf/OrderSheetByStyleV3';
 
 import { OrderInformation } from '../_components/Information';
 
@@ -51,8 +52,10 @@ export default function Index() {
 	const [error, setError] = useState(null);
 	const [data, setData] = useState('');
 	const [data2, setData2] = useState('');
+	const [data3, setData3] = useState('');
 	const [getPdfData, setGetPdfData] = useState(null);
 	const [getPdfData2, setGetPdfData2] = useState(null);
+	const [getPdfData3, setGetPdfData3] = useState(null);
 	const [updateView, setUpdateView] = useState(false);
 
 	const path = getPath(haveAccess, order_number, user?.uuid);
@@ -126,6 +129,12 @@ export default function Index() {
 				setGetPdfData2,
 				OrderSheetByStyle
 			);
+			createPDF(
+				orderByStyle,
+				setData3,
+				setGetPdfData3,
+				OrderSheetByStyleV3
+			);
 			// OrderSheetByStyle(order_sheet);
 			// getPdfData.download();
 		}
@@ -174,7 +183,7 @@ export default function Index() {
 			<div className='flex gap-6'>
 				<iframe
 					id='iframeContainer'
-					src={data}
+					src={data3}
 					className='h-[40rem] w-full rounded-md border-none'
 				/>
 				<iframe
@@ -186,9 +195,9 @@ export default function Index() {
 
 			<OrderInformation
 				order={order_info}
-				// handelPdfDownload={() =>
-				// 	getPdfData?.download(`Order Sheet ${order_number}.pdf`)
-				// }
+				handelPdfDownload={() =>
+					getPdfData?.download(`Order Sheet ${order_number}.pdf`)
+				}
 				handleViewChange={() => setUpdateView(!updateView)}
 				updateView={updateView}
 			/>

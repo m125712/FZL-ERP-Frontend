@@ -10,6 +10,7 @@ import { useFetchFunc } from '@/hooks';
 import { Suspense } from '@/components/Feedback';
 import OrderSheetPdf from '@/components/Pdf/OrderSheet';
 import OrderSheetByStyle from '@/components/Pdf/OrderSheetByStyle';
+import OrderSheetByStyleV3 from '@/components/Pdf/OrderSheetByStyleV3';
 
 import InformationSkeleton from '../_components/Information/skeleton';
 
@@ -44,6 +45,7 @@ export default function Index({ initial_order, idx }) {
 
 	const [getPdfData, setGetPdfData] = useState(null);
 	const [getPdfData2, setGetPdfData2] = useState(null);
+	const [getPdfData3, setGetPdfData3] = useState(null);
 
 	const [order, setOrder] = useState(initial_order || []);
 	const [loading, setLoading] = useState(true);
@@ -105,6 +107,7 @@ export default function Index({ initial_order, idx }) {
 
 			createPDF(order_sheet, setGetPdfData, OrderSheetPdf);
 			createPDF(orderByStyle, setGetPdfData2, OrderSheetByStyle);
+			createPDF(orderByStyle, setGetPdfData3, OrderSheetByStyleV3);
 		}
 	}, [order, garments, sr, order_description_uuid]);
 
@@ -167,7 +170,7 @@ export default function Index({ initial_order, idx }) {
 				<div className='flex gap-6'>
 					<iframe
 						id='iframeContainer'
-						src={getPdfData}
+						src={getPdfData3}
 						className='h-[40rem] w-full rounded-md border-none'
 					/>
 					<iframe

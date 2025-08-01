@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import {
 	useOtherOrderPropertiesByGarmentsWash,
@@ -6,16 +6,31 @@ import {
 } from '@/state/Other';
 import { useOrderStatementReport } from '@/state/Report';
 import { format } from 'date-fns';
-import { LoaderCircle } from 'lucide-react';
+import { usePdfGenerator } from '@/hooks/usePdfGenerator';
 import { useAccess } from '@/hooks';
 
 import OrderSheetPdf from '@/components/Pdf/OrderStatement';
+import PdfGeneratorButton from '@/components/ui/generate-pdf-button';
 
 import { api } from '@lib/api';
 
 import Excel from './Excel';
 import Header from './Header';
 
+function removeFunctions(obj) {
+	if (Array.isArray(obj)) {
+		return obj.map(removeFunctions);
+	} else if (obj && typeof obj === 'object') {
+		const newObj = {};
+		for (const key in obj) {
+			if (typeof obj[key] !== 'function') {
+				newObj[key] = removeFunctions(obj[key]);
+			}
+		}
+		return newObj;
+	}
+	return obj;
+}
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
 		return `own_uuid=${userUUID}`;
@@ -27,7 +42,6 @@ const getPath = (haveAccess, userUUID) => {
 export default function index() {
 	const haveAccess = useAccess('report__production_statement');
 	const { user } = useAuth();
-	const [isLoading, setIsLoading] = useState(false);
 
 	const [from, setFrom] = useState(format(new Date(), 'yyyy-MM-dd'));
 	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
@@ -36,56 +50,40 @@ export default function index() {
 	const [party, setParty] = useState('');
 	const { data: garments } = useOtherOrderPropertiesByGarmentsWash();
 	const { data: sr } = useOtherOrderPropertiesBySpecialRequirement();
-	// const { data, isLoading } = useOrderStatementReport(
-	// 	from,
-	// 	to,
-	// 	party,
-	// 	marketing,
-	// 	type,
-	// 	getPath(haveAccess, user?.uuid),
-	// 	{
-	// 		isEnabled: !!user?.uuid && get,
-	// 	}
-	// );
+	const { data, isLoading, isFetching, refetch } = useOrderStatementReport(
+		from,
+		to,
+		party,
+		marketing,
+		type,
 
-	// useEffect(() => {
-	// 	if (get && data && !isLoading) {
-	// 		OrderSheetPdf(data, garments, sr, from, to)?.open();
-	// 		setGet(false);
-	// 	}
-	// }, [get, data, isLoading]);
-
-	const handlePdf = async (btnType) => {
-		setIsLoading(true);
-		try {
-			const path = getPath(haveAccess, user?.uuid);
-
-			const response = await api.get(
-				`/report/order-sheet-pdf-report?from_date=${from}&to_date=${to}&party=${party}&marketing=${marketing}&type=${type}&${path}`
-			);
-
-			const data = response?.data?.data || [];
-
-			if (btnType == 'pdf') {
-				const pdf = OrderSheetPdf(data, garments, sr, from, to); // should return pdfDoc from pdfmake.createPdf()
-
-				// Wait for PDF to be ready before opening
-				pdf.getBlob((blob) => {
-					const url = URL.createObjectURL(blob);
-					window.open(url); // or use a new tab/window
-				});
-			} else {
-				Excel(data, from, to);
-			}
-		} catch (error) {
-			console.error('Failed to generate PDF:', error);
-		} finally {
-			setIsLoading(false);
+		getPath(haveAccess, user?.uuid),
+		{
+			isEnabled: !!user?.uuid,
 		}
-	};
+	);
+	const {
+		isGenerating,
+		progress,
+		status,
+		pdfUrl,
+		error,
+		generatePdf,
+		reset,
+	} = usePdfGenerator();
+	const handleGenerateClick = useCallback(async () => {
+		if (isFetching || isGenerating) return;
+		reset();
 
-	// if (isLoading)
-	// 	return <span className='loading loading-dots loading-lg z-50' />;
+		const result = await refetch();
+		const { data } = result;
+		const { data: value } = data;
+		if (value) {
+			generatePdf(
+				removeFunctions(OrderSheetPdf(value, garments, sr, from, to))
+			);
+		}
+	}, [isFetching, isGenerating, refetch, generatePdf, reset, from, to]);
 
 	return (
 		<div className='flex flex-col gap-8'>
@@ -104,25 +102,23 @@ export default function index() {
 					isLoading,
 				}}
 			/>
-			<div className='flex gap-2'>
-				<button
-					type='button'
-					onClick={() => {
-						handlePdf('pdf');
-					}}
-					className='btn btn-primary flex-1'
-					disabled={isLoading}
-				>
-					{isLoading && <LoaderCircle className='animate-spin' />}
-					PDF
-				</button>
-				{/* <button
+			<PdfGeneratorButton
+				handleGenerateClick={handleGenerateClick}
+				isFetching={isFetching}
+				isGenerating={isGenerating}
+				pdfUrl={pdfUrl}
+				download={true}
+				status={status}
+				pdf_name={`order_statement_${marketing}_${type}_${party}_(${from}-${to}) `}
+				progress={progress}
+				error={error}
+			/>
+			{/* <button
 					type='button'
 					onClick={() => Excel(data, from, to)}
 					className='btn btn-secondary flex-1'>
 					Excel
 				</button> */}
-			</div>
 		</div>
 	);
 }

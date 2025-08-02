@@ -110,7 +110,7 @@ export default function ProductionStatementReport() {
 				<button
 					type='button'
 					onClick={handleExcelClick}
-					disabled={isFetching}
+					disabled={!data || isFetching}
 					className='btn btn-secondary'
 				>
 					{isFetching && <LoaderCircle className='animate-spin' />}

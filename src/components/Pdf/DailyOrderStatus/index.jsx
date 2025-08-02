@@ -1,8 +1,4 @@
-import {
-	DEFAULT_FONT_SIZE,
-	tableLayoutStyle,
-	xMargin,
-} from '@/components/Pdf/ui';
+import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
 import pdfMake from '..';
@@ -40,6 +36,12 @@ export default function Index(data, from, to) {
 			marketing_name,
 			total,
 		})
+	);
+
+	// * Calculate grand total for marketing wise table
+	const grandTotal = marketingWiseResult.reduce(
+		(sum, item) => sum + item.total,
+		0
 	);
 
 	const pdfDocGenerator = pdfMake.createPdf({
@@ -180,6 +182,22 @@ export default function Index(data, from, to) {
 								alignment: 'left',
 							},
 						]),
+
+						// * Grand Total Row
+						[
+							{
+								text: 'Grand Total',
+								style: 'tableCell',
+								alignment: 'left',
+								bold: true,
+							},
+							{
+								text: grandTotal,
+								style: 'tableCell',
+								alignment: 'left',
+								bold: true,
+							},
+						],
 					],
 				},
 				pageBreak: 'before',

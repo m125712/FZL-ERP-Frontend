@@ -83,6 +83,7 @@ export default function index() {
 							pdfUrl={pdfUrl}
 							status={status}
 							download={true}
+							viewPdf={true}
 							progress={progress}
 							pdf_name={`Daily_Production_${type}_(${format(from, 'yyyy-MM-dd')}-${format(to, 'yyyy-MM-dd')})`}
 							error={error}

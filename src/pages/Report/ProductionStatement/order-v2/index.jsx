@@ -12,9 +12,6 @@ import { useAccess } from '@/hooks';
 import OrderSheetPdf from '@/components/Pdf/OrderStatement';
 import PdfGeneratorButton from '@/components/ui/generate-pdf-button';
 
-import { api } from '@lib/api';
-
-import Excel from './Excel';
 import Header from './Header';
 
 function removeFunctions(obj) {
@@ -43,8 +40,8 @@ export default function index() {
 	const haveAccess = useAccess('report__production_statement');
 	const { user } = useAuth();
 
-	const [from, setFrom] = useState(format(new Date(), 'yyyy-MM-dd'));
-	const [to, setTo] = useState(format(new Date(), 'yyyy-MM-dd'));
+	const [from, setFrom] = useState(() => format(new Date(), 'yyyy-MM-dd'));
+	const [to, setTo] = useState(() => format(new Date(), 'yyyy-MM-dd'));
 	const [marketing, setMarketing] = useState('');
 	const [type, setType] = useState('');
 	const [party, setParty] = useState('');
@@ -108,6 +105,7 @@ export default function index() {
 				isGenerating={isGenerating}
 				pdfUrl={pdfUrl}
 				download={true}
+				viewPdf={true}
 				status={status}
 				pdf_name={`order_statement_${marketing}_${type}_${party}_(${from}-${to}) `}
 				progress={progress}

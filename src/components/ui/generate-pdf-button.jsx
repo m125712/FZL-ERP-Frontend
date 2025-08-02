@@ -1,6 +1,4 @@
-import { Download, FileText, LoaderCircle } from 'lucide-react';
-
-import PDF from '@/ui/Others/PDF';
+import { Download, Eye, FileText, LoaderCircle } from 'lucide-react';
 
 const PdfGeneratorButton = ({
 	handleGenerateClick,
@@ -12,6 +10,7 @@ const PdfGeneratorButton = ({
 	generateButton = true,
 	download = false,
 	iframe = false,
+	viewPdf = false,
 	pdf_name = 'generate-pdf',
 	error,
 	className = '', // Add className prop with default empty string
@@ -73,6 +72,16 @@ const PdfGeneratorButton = ({
 					>
 						<Download size={16} /> Download PDF
 					</a>
+				)}
+
+				{pdfUrl && viewPdf && (
+					<button
+						type='button'
+						onClick={() => window.open(pdfUrl, '_blank')}
+						className='btn btn-info flex items-center gap-2'
+					>
+						<Eye size={16} /> View PDF
+					</button>
 				)}
 				{pdfUrl && iframe && (
 					<iframe

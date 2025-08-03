@@ -409,6 +409,7 @@ export default function Index() {
 							setDate(data);
 						}}
 						showTime={true}
+						timeIntervals={120}
 					/>
 					<SimpleDatePicker
 						className='m-w-32 h-[2.34rem]'
@@ -420,6 +421,7 @@ export default function Index() {
 							setToDate(data);
 						}}
 						showTime={true}
+						timeIntervals={120}
 					/>
 					<StatusSelect
 						options={options}

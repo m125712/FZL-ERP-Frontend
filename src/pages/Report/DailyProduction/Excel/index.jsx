@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { ExcelConverter } from 'pdfmake-to-excel';
 
 export default function Index(data, from, to) {
@@ -215,7 +216,7 @@ export default function Index(data, from, to) {
 
 	function downloadFile() {
 		const exporter = new ExcelConverter(
-			`Daily Production Report-${from}-${to}`,
+			`Daily Production Report(${format(from, 'yyyy-MM-dd HH:mm')}-${format(to, 'yyyy-MM-dd HH:mm')})`,
 			content,
 			{
 				defaultOptions: { defaultColWidth: 20 },

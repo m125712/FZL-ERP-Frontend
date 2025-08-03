@@ -104,7 +104,7 @@ export default function index() {
 				isFetching={isFetching}
 				isGenerating={isGenerating}
 				pdfUrl={pdfUrl}
-				download={true}
+				download={false}
 				viewPdf={true}
 				status={status}
 				pdf_name={`order_statement_${marketing}_${type}_${party}_(${from}-${to}) `}

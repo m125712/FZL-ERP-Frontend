@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { format } from 'date-fns';
 import { Calendar } from 'lucide-react';
 import DatePicker from 'react-datepicker';
@@ -22,7 +23,59 @@ const SimpleDatePicker = ({
 	timeIntervals = 30,
 	props,
 }) => {
-	const ExampleCustomInput = ({ ref, value, onClick }) => (
+	const [isOpen, setIsOpen] = useState(false);
+
+	return (
+		<DatePicker
+			{...props}
+			customInput={
+				<ExampleCustomInput
+					disabled={disabled}
+					className={className}
+					placeholder={placeholder}
+					selected={selected}
+				/>
+			}
+			disabled={disabled}
+			selected={selected}
+			onChange={(date) => {
+				onChange(format(date, 'yyyy-MM-dd hh:mm:ss a'));
+				onChangeForTime(date);
+
+				// If you only want to close AFTER both date and time are selected,
+				// you can decide here. Or keep it open and let the user click outside.
+				// Example: close when time is set
+				if (showTime) {
+					setIsOpen(false);
+				}
+			}}
+			renderCustomHeader={DatePickerCustomHeader}
+			{...DatePickerDefaultConfig}
+			showTimeSelect={showTime}
+			timeFormat='hh a'
+			timeIntervals={timeIntervals}
+			dateFormat={showTime ? 'dd MMM, yy - hh a' : 'dd MMM, yy'}
+			shouldCloseOnSelect={false} // still needed, but manual control is key
+			open={isOpen}
+			onClickOutside={() => setIsOpen(false)}
+			onInputClick={() => setIsOpen(true)}
+			menuPortalTarget={document.body}
+			className='z-50'
+		/>
+	);
+};
+
+export default SimpleDatePicker;
+
+const ExampleCustomInput = ({
+	ref,
+	value,
+	onClick,
+	disabled,
+	className,
+	placeholder,
+}) => {
+	return (
 		<button
 			type='button'
 			className={cn(
@@ -39,27 +92,4 @@ const SimpleDatePicker = ({
 			<Calendar className='mb-0.5 ml-1 w-4' />
 		</button>
 	);
-
-	return (
-		<DatePicker
-			{...props}
-			customInput={<ExampleCustomInput />}
-			disabled={disabled}
-			selected={selected}
-			onChange={(date) => {
-				onChange(format(date, 'yyyy-MM-dd HH:mm:ss'));
-				onChangeForTime(date);
-			}}
-			renderCustomHeader={DatePickerCustomHeader}
-			{...DatePickerDefaultConfig}
-			showTimeSelect={showTime}
-			timeFormat='HH:mm'
-			timeIntervals={timeIntervals}
-			menuPortalTarget={document.body}
-			// dateFormat={showTime ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'} // ✅ Adjust format accordingly
-			className='z-50'
-		/>
-	);
 };
-
-export default SimpleDatePicker;

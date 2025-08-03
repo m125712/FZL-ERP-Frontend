@@ -35,6 +35,7 @@ export default function Header({
 								setFrom(data);
 							}}
 							showTime={true}
+							timeIntervals={120}
 						/>
 					</FormField>
 					<FormField label='' title='To'>
@@ -47,6 +48,7 @@ export default function Header({
 							}}
 							selected={to}
 							showTime={true}
+							timeIntervals={120}
 						/>
 					</FormField>
 					<FormField label='' title='Type'>

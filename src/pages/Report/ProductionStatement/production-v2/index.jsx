@@ -100,7 +100,7 @@ export default function ProductionStatementReport() {
 					isGenerating={isGenerating}
 					pdfUrl={pdfUrl}
 					status={status}
-					download={true}
+					download={false}
 					viewPdf={true}
 					progress={progress}
 					pdf_name={`ProductionStatement_${party}_${marketing}_${type}_(${format(from, 'yyyy-MM-dd')}-${format(to, 'yyyy-MM-dd')})`}

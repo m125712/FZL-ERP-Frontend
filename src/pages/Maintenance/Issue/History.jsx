@@ -4,7 +4,7 @@ import { useOtherMaterial } from '@/state/Other';
 
 import { DeleteModal, HistoryModal } from '@/components/Modal';
 import ReactTable from '@/components/Table';
-import { EditDelete } from '@/ui';
+import { DateTime, EditDelete } from '@/ui';
 
 const Procurement = lazy(() => import('./Procurement'));
 
@@ -33,6 +33,14 @@ export default function Index({ modalId = '', history = {}, setHistory }) {
 				accessorKey: 'description',
 				header: 'Description',
 				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created At',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime date={info.row.original.created_at} />
+				),
 			},
 			{
 				accessorKey: 'actions',

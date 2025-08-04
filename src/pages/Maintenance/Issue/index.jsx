@@ -129,7 +129,7 @@ export default function Index() {
 						info.row.original;
 					const options = [
 						{ value: 'pending', label: 'Pending' },
-						{ value: 'ok', label: 'OK' },
+						{ value: 'okay', label: 'OK' },
 						{ value: 'waiting', label: 'Waiting' },
 					];
 					return (

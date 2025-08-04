@@ -23,7 +23,7 @@ const SimpleDatePicker = ({
 	timeIntervals = 30,
 	props,
 }) => {
-	const [isOpen, setIsOpen] = useState(false);
+	const [internalDate, setInternalDate] = useState(selected);
 
 	return (
 		<DatePicker
@@ -33,20 +33,20 @@ const SimpleDatePicker = ({
 					disabled={disabled}
 					className={className}
 					placeholder={placeholder}
-					selected={selected}
+					selected={internalDate}
 				/>
 			}
 			disabled={disabled}
-			selected={selected}
+			selected={internalDate}
 			onChange={(date) => {
-				onChange(format(date, 'yyyy-MM-dd hh:mm:ss a'));
-				onChangeForTime(date);
-
-				// If you only want to close AFTER both date and time are selected,
-				// you can decide here. Or keep it open and let the user click outside.
-				// Example: close when time is set
-				if (showTime) {
-					setIsOpen(false);
+				if (!showTime) {
+					onChange(format(date, 'yyyy-MM-dd hh:mm:ss a'));
+				}
+				setInternalDate(date);
+			}}
+			onCalendarClose={() => {
+				if (internalDate) {
+					onChangeForTime(internalDate);
 				}
 			}}
 			renderCustomHeader={DatePickerCustomHeader}
@@ -55,10 +55,6 @@ const SimpleDatePicker = ({
 			timeFormat='hh a'
 			timeIntervals={timeIntervals}
 			dateFormat={showTime ? 'dd MMM, yy - hh a' : 'dd MMM, yy'}
-			shouldCloseOnSelect={false} // still needed, but manual control is key
-			open={isOpen}
-			onClickOutside={() => setIsOpen(false)}
-			onInputClick={() => setIsOpen(true)}
 			menuPortalTarget={document.body}
 			className='z-50'
 		/>

@@ -23,14 +23,22 @@ const options = [
 	{ value: 'gate_pass', label: 'W/H Out' },
 ];
 
+const itemOptions = [
+	{ value: 'zipper_sample', label: 'Zipper Sample' },
+	{ value: 'zipper_bulk', label: 'Zipper Bulk' },
+	{ value: 'thread', label: 'Thread' },
+	{ value: 'all', label: 'All' },
+];
+
 export default function Index() {
 	const haveAccess = useAccess('report__packing_list');
-	const [status, setStatus] = useState('pending');
+	const [status, setStatus] = useState('all');
+	const [item, setItem] = useState('zipper_bulk');
 	const [date, setDate] = useState(() => new Date());
 	const [toDate, setToDate] = useState(() => new Date());
 
 	const { data, isLoading, url } = usePackingList(
-		`type=${status}&from_date=${format(date, 'yyyy-MM-dd HH:mm:ss')}&to_date=${format(toDate, 'yyyy-MM-dd HH:mm:ss')}`
+		`type=${status}&item_type=${item}&from_date=${format(date, 'yyyy-MM-dd HH:mm:ss')}&to_date=${format(toDate, 'yyyy-MM-dd HH:mm:ss')}`
 	);
 	const info = new PageInfo('PackingList', url, 'report__packing_list');
 
@@ -427,6 +435,11 @@ export default function Index() {
 						options={options}
 						status={status}
 						setStatus={setStatus}
+					/>
+					<StatusSelect
+						options={itemOptions}
+						status={item}
+						setStatus={setItem}
 					/>
 				</div>
 			}

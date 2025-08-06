@@ -93,6 +93,7 @@ export default function Index() {
 			...data,
 			[isCreatedAtNull ? 'dyeing_created_at' : 'dyeing_updated_at']:
 				GetDateTime(),
+			status_date: data?.status !== 'pending' ? GetDateTime() : null,
 			yarn_issue_created_by: user.uuid,
 			yarn_issue_created_at: GetDateTime(),
 		};

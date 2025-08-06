@@ -197,14 +197,20 @@ export default function Index() {
 						pending: 'badge-warning',
 					};
 					return (
-						<span
-							className={cn(
-								'badge badge-sm uppercase',
-								res[info.getValue()]
-							)}
-						>
-							{info.getValue()}
-						</span>
+						<div className='flex flex-col gap-1'>
+							<span
+								className={cn(
+									'badge badge-sm uppercase',
+									res[info.getValue()]
+								)}
+							>
+								{info.getValue()}
+							</span>
+							<DateTime
+								date={info.row.original.status_date}
+								isTime={false}
+							/>
+						</div>
 					);
 				},
 			},
@@ -233,16 +239,23 @@ export default function Index() {
 						}
 					}
 					return (
-						<SwitchToggle
-							disabled={isDisabled}
-							onChange={() =>
-								handelDryingComplete(info.row.index)
-							}
-							checked={info.getValue() === 'true'}
-						/>
+						<div className='flex flex-col gap-1'>
+							<SwitchToggle
+								disabled={isDisabled}
+								onChange={() =>
+									handelDryingComplete(info.row.index)
+								}
+								checked={info.getValue() === 'true'}
+							/>
+							<DateTime
+								date={info.row.original.drying_created_at}
+								isTime={false}
+							/>
+						</div>
 					);
 				},
 			},
+
 			{
 				accessorKey: 'machine_name',
 				header: 'Machine',

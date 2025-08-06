@@ -262,14 +262,20 @@ export default function Index() {
 						pending: 'badge-warning',
 					};
 					return (
-						<span
-							className={cn(
-								'badge badge-sm uppercase',
-								res[info.getValue()]
-							)}
-						>
-							{info.getValue()}
-						</span>
+						<div className='flex flex-col gap-1'>
+							<span
+								className={cn(
+									'badge badge-sm uppercase',
+									res[info.getValue()]
+								)}
+							>
+								{info.getValue()}
+							</span>
+							<DateTime
+								date={info.row.original.batch_status_date}
+								isTime={false}
+							/>
+						</div>
 					);
 				},
 			},
@@ -300,25 +306,18 @@ export default function Index() {
 						}
 					}
 					return (
-						<SwitchToggle
-							disabled={isDisabled}
-							onChange={() => handelReceived(info.row.index)}
-							checked={info.getValue() === 1}
-						/>
+						<div className='flex flex-col gap-1'>
+							<SwitchToggle
+								disabled={isDisabled}
+								onChange={() => handelReceived(info.row.index)}
+								checked={info.getValue() === 1}
+							/>
+							<DateTime
+								date={info.row.original.received_date}
+								isTime={false}
+							/>
+						</div>
 					);
-				},
-			},
-			{
-				accessorKey: 'received_date',
-				header: (
-					<div>
-						Stock Received <br />
-						Date
-					</div>
-				),
-				enableColumnFilter: false,
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
 				},
 			},
 			{

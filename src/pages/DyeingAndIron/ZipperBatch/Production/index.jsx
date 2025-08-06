@@ -100,6 +100,8 @@ export default function Index() {
 				machine_uuid: data.machine_uuid,
 				slot: data.slot,
 				batch_status: data.batch_status,
+				batch_status_date:
+					data?.batch_status !== 'pending' ? GetDateTime() : null,
 				updated_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,

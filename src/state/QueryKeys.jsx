@@ -1986,6 +1986,7 @@ export const reportQK = {
 	],
 
 	threadBatch: (query) => [...reportQK.all(), 'thread-batch', query],
+	zipperBatch: (query) => [...reportQK.all(), 'zipper-batch', query],
 
 	orderSheetSRZipper: (from, to, query) => [
 		...reportQK.all(),

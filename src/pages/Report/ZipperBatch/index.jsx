@@ -1,68 +1,53 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useDyeingBatch } from '@/state/Dyeing';
-import { useNavigate } from 'react-router';
+import { useAuth } from '@/context/auth';
+import { useZipperBatch } from '@/state/Report';
+import { format, parse, subDays } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import SwitchToggle from '@/ui/Others/SwitchToggle';
+import BatchType from '@/ui/Others/BatchType';
 import {
-	BatchType,
 	CustomLink,
 	DateTime,
-	EditDelete,
+	SimpleDatePicker,
 	StatusButton,
 	StatusSelect,
-	Transfer,
 } from '@/ui';
 
 import { cn } from '@/lib/utils';
-import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
+import { REPORT_DATE_FORMATE } from '../utils';
+
+const orderTypeOptions = [
+	{ value: 'all', label: 'All' },
+	{ value: 'bulk', label: 'Bulk' },
+	{ value: 'sample', label: 'Sample' },
+];
+
 export default function Index() {
-	const options = [
-		{ value: 'all', label: 'All' },
-		{ value: 'pending', label: 'Pending' },
-		{ value: 'completed', label: 'Completed' },
-	];
-
-	const orderTypeOptions = [
-		{ value: 'all', label: 'All' },
-		{ value: 'bulk', label: 'Bulk' },
-		{ value: 'sample', label: 'Sample' },
-	];
-
-	const [status, setStatus] = useState('pending');
 	const [orderType, setOrderType] = useState('bulk');
-	const { data, url, isLoading, updateData } = useDyeingBatch(
-		`type=${status}&order_type=${orderType}`
+	const [from, setFrom] = useState(() =>
+		parse(
+			format(
+				subDays(new Date(), 1), // Subtract 1 week from current time
+				'yyyy-MM-dd HH:mm:ss'
+			),
+			'yyyy-MM-dd HH:mm:ss',
+			new Date()
+		)
 	);
-	const info = new PageInfo('Batch', url, 'dyeing__zipper_batch');
-	const haveAccess = useAccess('dyeing__zipper_batch');
-	const navigate = useNavigate();
+	const [to, setTo] = useState(new Date());
+	const { data, url, isLoading } = useZipperBatch(
+		`from=${format(from, 'yyyy-MM-dd HH:mm:ss')}&to=${format(to, 'yyyy-MM-dd HH:mm:ss')}&order_type=${orderType}`
+	);
+
+	const info = new PageInfo('Zipper Batch', url, 'report__zipper_batch');
+	const { user } = useAuth();
+	const haveAccess = useAccess('report__zipper_batch');
 
 	const columns = useMemo(
 		() => [
-			// * actions
-			{
-				accessorKey: 'actions',
-				header: 'Actions',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('update'),
-				width: 'w-24',
-				cell: (info) => (
-					<EditDelete
-						idx={info.row.index}
-						handelUpdate={handelUpdate}
-						showUpdate={
-							haveAccess.includes('update') &&
-							info.row.original.received == 0
-						}
-						showDelete={false}
-					/>
-				),
-			},
 			{
 				accessorKey: 'batch_id',
 				header: 'Batch ID',
@@ -217,29 +202,6 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'add_actions',
-				header: '',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden: !haveAccess.includes('create'),
-				cell: (info) => {
-					const { uuid, received } = info.row.original;
-					return (
-						<Transfer
-							onClick={() =>
-								navigate(
-									`/dyeing-and-iron/zipper-batch/batch-production/${uuid}`
-								)
-							}
-							disabled={
-								received === 1 ||
-								!haveAccess.includes('click_production')
-							}
-						/>
-					);
-				},
-			},
-			{
 				accessorKey: 'total_actual_production_quantity',
 				header: (
 					<span>
@@ -252,11 +214,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'batch_status',
-				header: () => (
-					<>
-						Dyeing <br /> Status
-					</>
-				),
+				header: 'Dyeing Status',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const res = {
@@ -283,38 +241,16 @@ export default function Index() {
 					);
 				},
 			},
-
 			{
 				accessorKey: 'received',
-				header: (
-					<span>
-						Stock
-						<br />
-						Received
-					</span>
-				),
+				header: 'Stock Received',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const { received } = info.row.original;
-					const access = haveAccess.includes('click_receive_status');
-					const overrideAccess = haveAccess.includes(
-						'click_receive_status_override'
-					);
-					// overrideAccess ? false : access ? received === 1 : true;
-					let isDisabled = false;
-					if (!overrideAccess) {
-						if (access) {
-							isDisabled = received === 1;
-						} else {
-							isDisabled = true;
-						}
-					}
 					return (
-						<div className='flex flex-col gap-1'>
-							<SwitchToggle
-								disabled={isDisabled}
-								onChange={() => handelReceived(info.row.index)}
-								checked={info.getValue() === 1}
+						<div className='flex gap-2'>
+							<StatusButton
+								size='btn-xs'
+								value={info.getValue()}
 							/>
 							<DateTime
 								date={info.row.original.received_date}
@@ -376,29 +312,8 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 		],
-		[data, status]
+		[data]
 	);
-
-	// Add
-	const handelAdd = () => navigate('/dyeing-and-iron/zipper-batch/entry');
-
-	// Update
-	const handelUpdate = (idx) => {
-		const { uuid } = data[idx];
-
-		navigate(`/dyeing-and-iron/zipper-batch/${uuid}/update`);
-	};
-	// Received
-	const handelReceived = async (idx) => {
-		await updateData.mutateAsync({
-			url: `zipper/dyeing-batch/${data[idx]?.uuid}`,
-			updatedData: {
-				received: data[idx]?.received === 1 ? 0 : 1,
-				received_date: data[idx]?.received === 1 ? null : GetDateTime(),
-			},
-			isOnCloseNeeded: false,
-		});
-	};
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -406,28 +321,46 @@ export default function Index() {
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
+	// if (error) return <h1>Error:{error}</h1>;
 
 	return (
 		<div>
 			<ReactTable
-				handelAdd={handelAdd}
 				title={info.getTitle()}
 				data={data}
 				columns={columns}
+				showDateRange={false}
 				accessor={haveAccess.includes('create')}
 				extraButton={
-					<>
-						<StatusSelect
-							options={options}
-							status={status}
-							setStatus={setStatus}
+					<div className='flex items-center gap-2'>
+						<SimpleDatePicker
+							className='m-w-32 h-[2.34rem]'
+							key={'from'}
+							value={from}
+							placeholder='From'
+							selected={from}
+							onChangeForTime={(data) => {
+								setFrom(data);
+							}}
+							showTime={true}
+						/>
+						<SimpleDatePicker
+							className='m-w-32 h-[2.34rem]'
+							key={'to'}
+							value={to}
+							placeholder='To'
+							selected={to}
+							onChangeForTime={(data) => {
+								setTo(data);
+							}}
+							showTime={true}
 						/>
 						<StatusSelect
 							options={orderTypeOptions}
 							status={orderType}
 							setStatus={setOrderType}
 						/>
-					</>
+					</div>
 				}
 			/>
 		</div>

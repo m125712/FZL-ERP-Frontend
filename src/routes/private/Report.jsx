@@ -43,6 +43,7 @@ const ProductionSummary = lazy(
 const Consumption = lazy(() => import('@/pages/Report/Consumption'));
 
 const ThreadBatch = lazy(() => import('@/pages/Report/ThreadBatch'));
+const ZipperBatch = lazy(() => import('@/pages/Report/ZipperBatch'));
 const OrderSummaryPL = lazy(() => import('@/pages/Report/OrderSummaryPL'));
 const OrderSheetSR = lazy(() => import('@/pages/Report/OrderSheetSR'));
 const DailyOrderStatus = lazy(() => import('@/pages/Report/DailyOrderStatus'));
@@ -250,6 +251,13 @@ export const ReportRoutes = [
 				path: '/report/thread-batch',
 				element: <ThreadBatch />,
 				page_name: 'report__thread_batch',
+				actions: ['read', 'show_own_orders'],
+			},
+			{
+				name: 'Zipper Batch',
+				path: '/report/zipper-batch',
+				element: <ZipperBatch />,
+				page_name: 'report__zipper_batch',
 				actions: ['read', 'show_own_orders'],
 			},
 			{

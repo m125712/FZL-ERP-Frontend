@@ -167,7 +167,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'status',
-				header: 'Status',
+				header: 'Dyeing Status',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const res = {
@@ -176,14 +176,20 @@ export default function Index() {
 						pending: 'badge-warning',
 					};
 					return (
-						<span
-							className={cn(
-								'badge badge-sm uppercase',
-								res[info.getValue()]
-							)}
-						>
-							{info.getValue()}
-						</span>
+						<div className='flex flex-col gap-1'>
+							<span
+								className={cn(
+									'badge badge-sm uppercase',
+									res[info.getValue()]
+								)}
+							>
+								{info.getValue()}
+							</span>{' '}
+							<DateTime
+								date={info.row.original.status_date}
+								isTime={false}
+							/>
+						</div>
 					);
 				},
 			},
@@ -212,16 +218,17 @@ export default function Index() {
 						}
 					}
 					return (
-						<StatusButton size='btn-xs' value={info.getValue()} />
+						<div className='flex items-center gap-2'>
+							<StatusButton
+								size='btn-xs'
+								value={info.getValue()}
+							/>
+							<DateTime
+								date={info.row.original.drying_created_at}
+							/>
+						</div>
 					);
 				},
-			},
-			{
-				accessorFn: (row) => row.drying_created_at,
-				id: 'drying_created_at',
-				header: 'Drying Created',
-				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'machine_name',

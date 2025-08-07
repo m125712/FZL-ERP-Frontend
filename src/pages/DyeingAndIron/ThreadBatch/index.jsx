@@ -188,7 +188,11 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'status',
-				header: 'Status',
+				header: () => (
+					<>
+						Dyeing <br /> Status
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => {
 					const res = {

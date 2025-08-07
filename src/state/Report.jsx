@@ -400,6 +400,12 @@ export const useThreadBatch = (query) =>
 		url: `/report/thread-batch-report?${query}`,
 	});
 
+export const useZipperBatch = (query) =>
+	createGlobalState({
+		queryKey: reportQK.zipperBatch(query),
+		url: `/report/zipper-batch-report?${query}`,
+	});
+
 // * Order Sheet send & receive
 
 export const useOrderSheetSRZipper = (

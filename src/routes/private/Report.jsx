@@ -254,10 +254,10 @@ export const ReportRoutes = [
 				actions: ['read', 'show_own_orders'],
 			},
 			{
-				name: 'Zipper Batch',
-				path: '/report/zipper-batch',
+				name: 'Zipper Dyeing Batch',
+				path: '/report/zipper-dyeing-batch',
 				element: <ZipperBatch />,
-				page_name: 'report__zipper_batch',
+				page_name: 'report__zipper_dyeing_batch',
 				actions: ['read', 'show_own_orders'],
 			},
 			{

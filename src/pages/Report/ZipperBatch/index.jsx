@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useAuth } from '@/context/auth';
 import { useZipperBatch } from '@/state/Report';
 import { format, parse, subDays } from 'date-fns';
 import { useAccess } from '@/hooks';
@@ -16,8 +15,6 @@ import {
 
 import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
-
-import { REPORT_DATE_FORMATE } from '../utils';
 
 const orderTypeOptions = [
 	{ value: 'all', label: 'All' },
@@ -37,14 +34,18 @@ export default function Index() {
 			new Date()
 		)
 	);
-	const [to, setTo] = useState(new Date());
+	const [to, setTo] = useState(() => new Date());
 	const { data, url, isLoading } = useZipperBatch(
 		`from=${format(from, 'yyyy-MM-dd HH:mm:ss')}&to=${format(to, 'yyyy-MM-dd HH:mm:ss')}&order_type=${orderType}`
 	);
 
-	const info = new PageInfo('Zipper Batch', url, 'report__zipper_batch');
-	const { user } = useAuth();
-	const haveAccess = useAccess('report__zipper_batch');
+	const info = new PageInfo(
+		'Zipper Dyeing Batch',
+		url,
+		'report__zipper_dyeing_batch'
+	);
+
+	const haveAccess = useAccess('report__zipper_dyeing_batch');
 
 	const columns = useMemo(
 		() => [
@@ -71,12 +72,11 @@ export default function Index() {
 				width: 'w-28',
 				// enableColumnFilter: false,
 				cell: (info) => {
-					const idx = info.row.index;
 					return info?.row?.original?.order_numbers?.map(
-						(order_number, index) => {
+						(order_number) => {
 							return (
 								<CustomLink
-									key={order_number + index + idx}
+									key={order_number}
 									label={order_number}
 									url={`/order/details/${order_number}`}
 								/>
@@ -96,13 +96,15 @@ export default function Index() {
 				// enableColumnFilter: true,
 				width: 'w-44',
 				cell: (info) => {
-					const idx = info.row.index;
-
 					return info?.row?.original?.item_descriptions?.map(
-						(item, index) => {
+						(item) => {
 							return (
 								<CustomLink
-									key={item.item_description + index + idx}
+									key={
+										item.order_description_uuid +
+										'-' +
+										item.order_number
+									}
 									label={item.item_description}
 									url={`/order/details/${item.order_number}/${item.order_description_uuid}`}
 									openInNewTab={true}

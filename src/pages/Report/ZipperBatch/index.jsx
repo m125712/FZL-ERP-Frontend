@@ -22,8 +22,14 @@ const orderTypeOptions = [
 	{ value: 'sample', label: 'Sample' },
 ];
 
+const filterTypeOptions = [
+	{ value: 'dyeing_status_date', label: 'Dyeing Status' },
+	{ value: 'received_date', label: 'Stock Received' },
+];
+
 export default function Index() {
 	const [orderType, setOrderType] = useState('bulk');
+	const [filterType, setFilterType] = useState('dyeing_status_date');
 	const [from, setFrom] = useState(() =>
 		parse(
 			format(
@@ -36,7 +42,7 @@ export default function Index() {
 	);
 	const [to, setTo] = useState(() => new Date());
 	const { data, url, isLoading } = useZipperBatch(
-		`from=${format(from, 'yyyy-MM-dd HH:mm:ss')}&to=${format(to, 'yyyy-MM-dd HH:mm:ss')}&order_type=${orderType}`
+		`from=${format(from, 'yyyy-MM-dd HH:mm:ss')}&to=${format(to, 'yyyy-MM-dd HH:mm:ss')}&order_type=${orderType}&filter_type=${filterType}`
 	);
 
 	const info = new PageInfo(
@@ -356,6 +362,11 @@ export default function Index() {
 								setTo(data);
 							}}
 							showTime={true}
+						/>
+						<StatusSelect
+							options={filterTypeOptions}
+							status={filterType}
+							setStatus={setFilterType}
 						/>
 						<StatusSelect
 							options={orderTypeOptions}

@@ -94,6 +94,27 @@ export default function Index() {
 				},
 			},
 			{
+				accessorKey: 'item_type',
+				header: 'Item',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'zipper_number_name',
+				header: 'Zipper No.',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'end_type_name ',
+				header: 'End Type',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorFn: (row) => (row.is_warehouse_received ? 'Y' : 'N'),
 				id: 'is_warehouse_received',
 				header: 'Recv.',

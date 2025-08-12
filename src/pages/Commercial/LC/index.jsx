@@ -187,7 +187,13 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-
+			{
+				accessorKey: 'marketing_name',
+				header: 'Marketing',
+				width: 'w-32',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue()[0] ?? '--',
+			},
 			// {
 			// 	accessorKey: 'lc_date',
 			// 	header: 'LC Date',
@@ -219,6 +225,7 @@ export default function Index() {
 						const url = `/commercial/pi/${piId}`;
 						return (
 							<CustomLink
+								key={piId}
 								label={piId}
 								url={url}
 								openInNewTab={true}
@@ -296,6 +303,13 @@ export default function Index() {
 				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'bank_name',
+				header: 'Own Bank',
+				width: 'w-32',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue()[0] ?? '--',
 			},
 			{
 				accessorKey: 'party_bank',

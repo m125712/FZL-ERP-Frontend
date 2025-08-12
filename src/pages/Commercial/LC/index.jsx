@@ -220,16 +220,19 @@ export default function Index() {
 				width: 'w-28',
 				enableColumnFilter: false,
 				cell: (info) => {
+					const { is_old_pi } = info.row.original;
 					return info?.getValue()?.map((piId) => {
 						if (piId === 'PI-') return '--';
 						const url = `/commercial/pi/${piId}`;
-						return (
+						return is_old_pi == 0 ? (
 							<CustomLink
 								key={piId}
 								label={piId}
 								url={url}
 								openInNewTab={true}
 							/>
+						) : (
+							<span key={piId}>{piId}</span>
 						);
 					});
 				},

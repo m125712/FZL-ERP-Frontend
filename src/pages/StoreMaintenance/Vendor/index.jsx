@@ -29,14 +29,14 @@ export default function Index() {
 		() => [
 			{
 				accessorKey: 'name',
-				header: 'Name',
+				header: 'Comp. Name',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'contact_name',
-				header: 'Person',
+				header: 'Contact Person',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),

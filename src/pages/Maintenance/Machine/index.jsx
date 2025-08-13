@@ -81,6 +81,12 @@ export default function Index() {
 					sections.find((s) => s?.value === info.getValue())?.label,
 			},
 			{
+				accessorKey: 'model_number',
+				header: 'Model Number',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
 				enableColumnFilter: false,

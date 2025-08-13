@@ -1,10 +1,9 @@
 import { format } from 'date-fns';
 
-import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
+import { xMargin } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
-import pdfMake from '..';
-import { getPageFooter, getPageHeader } from './utils';
+import { getPageHeader } from './utils';
 
 const getDateFormate = (date) => {
 	if (date) {
@@ -538,6 +537,7 @@ export default function Index(data, from, to) {
 						TableHeader(node),
 
 						// Body
+						// eslint-disable-next-line no-unsafe-optional-chaining
 						...tableData?.map((item) =>
 							node?.map((nodeItem) => {
 								const cellData = nodeItem.field

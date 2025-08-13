@@ -397,126 +397,114 @@ export default function Index(data, from, to, priceFor) {
 			return orderItem.items?.flatMap((itemItem, itemIndex) => {
 				return itemItem.packing_lists?.flatMap(
 					(packingList, packingIndex) => {
-						return packingList.other?.map((otherItem, index) => {
-							return [
-								{
-									text: item.party_name,
-								},
-								{
-									text: item.type,
-								},
-								{
-									text: item.marketing_name,
-								},
+						return packingList.other
+							?.filter(
+								(otherItem) => !title.includes(otherItem.size)
+							)
+							.map((otherItem, index) => {
+								return [
+									{
+										text: item.party_name,
+									},
+									{
+										text: item.type,
+									},
+									{
+										text: item.marketing_name,
+									},
 
-								{
-									text: orderItem.order_number_with_cash,
-								},
-								{
-									text: orderItem.total_quantity,
-								},
-								{
-									text: itemItem.item_description,
-								},
-								{
-									text: `${packingList.packing_number} (${getDateFormate(packingList.packing_list_created_at)})`,
-								},
+									{
+										text: orderItem.order_number_with_cash,
+									},
+									{
+										text: orderItem.total_quantity,
+									},
+									{
+										text: itemItem.item_description,
+									},
+									{
+										text: `${packingList.packing_number} (${getDateFormate(packingList.packing_list_created_at)})`,
+									},
 
-								{
-									text: title.includes(otherItem.size)
-										? otherItem.size
-											? otherItem.size
-											: '---'
-										: `${otherItem.size.includes('-') ? `(${otherItem.size})` : otherItem.size} ${otherItem.unit}`,
-								},
-								{
-									text: String(
-										otherItem.running_total_close_end_quantity
-									),
-								},
-								{
-									text: String(
-										otherItem.running_total_open_end_quantity
-									),
-								},
-								{
-									text: String(
-										otherItem.running_total_quantity
-									),
-								},
-								{
-									text: otherItem.company_price_dzn
-										? String(
-												otherItem.company_price_dzn +
-													'/' +
-													otherItem.price_unit
-											)
-										: '---',
-								},
-								...(priceFor === 'both'
-									? [
-											{
-												text: String(
-													Number(
-														otherItem.running_total_value_company
-													).toFixed(3)
-												),
-											},
-											{
-												text: String(
-													Number(
-														title.includes(
-															otherItem.size
-														)
-															? otherItem.running_total_value_bdt
-															: otherItem.running_total_value_company *
-																	otherItem.conversion_rate
-													).toFixed(3)
-												),
-											},
-											{
-												text: String(
-													Number(
-														otherItem.running_total_value_party
-													).toFixed(3)
-												),
-											},
-											{
-												text: String(
-													Number(
-														title.includes(
-															otherItem.size
-														)
-															? otherItem.running_total_value_bdt
-															: otherItem.running_total_value_party *
-																	otherItem.conversion_rate
-													).toFixed(3)
-												),
-											},
-										]
-									: [
-											{
-												text: String(
-													Number(
-														otherItem.running_total_value
-													).toFixed(3)
-												),
-											},
-											{
-												text: String(
-													Number(
-														title.includes(
-															otherItem.size
-														)
-															? otherItem.running_total_value_bdt
-															: otherItem.running_total_value *
-																	otherItem.conversion_rate
-													).toFixed(3)
-												),
-											},
-										]),
-							];
-						});
+									{
+										text: `${otherItem.size.includes('-') ? `(${otherItem.size})` : otherItem.size} ${otherItem.unit}`,
+									},
+									{
+										text: String(
+											otherItem.running_total_close_end_quantity
+										),
+									},
+									{
+										text: String(
+											otherItem.running_total_open_end_quantity
+										),
+									},
+									{
+										text: String(
+											otherItem.running_total_quantity
+										),
+									},
+									{
+										text: otherItem.company_price_dzn
+											? String(
+													otherItem.company_price_dzn +
+														'/' +
+														otherItem.price_unit
+												)
+											: '---',
+									},
+									...(priceFor === 'both'
+										? [
+												{
+													text: String(
+														Number(
+															otherItem.running_total_value_company
+														).toFixed(3)
+													),
+												},
+												{
+													text: String(
+														Number(
+															otherItem.running_total_value_company *
+																otherItem.conversion_rate
+														).toFixed(3)
+													),
+												},
+												{
+													text: String(
+														Number(
+															otherItem.running_total_value_party
+														).toFixed(3)
+													),
+												},
+												{
+													text: String(
+														Number(
+															otherItem.running_total_value_party *
+																otherItem.conversion_rate
+														).toFixed(3)
+													),
+												},
+											]
+										: [
+												{
+													text: String(
+														Number(
+															otherItem.running_total_value
+														).toFixed(3)
+													),
+												},
+												{
+													text: String(
+														Number(
+															otherItem.running_total_value *
+																otherItem.conversion_rate
+														).toFixed(3)
+													),
+												},
+											]),
+								];
+							});
 					}
 				);
 			});

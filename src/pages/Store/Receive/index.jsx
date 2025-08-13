@@ -145,7 +145,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: '/purchase/description',
 						deleteData,
 					}}
 				/>

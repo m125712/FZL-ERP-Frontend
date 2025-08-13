@@ -36,7 +36,7 @@ export default function Index() {
 					const { uuid } = info.row.original;
 					return (
 						<LinkOnly
-							uri='/store/receive-rm'
+							uri='/store-maintenance/receive'
 							id={uuid}
 							title={info.getValue()}
 						/>
@@ -146,7 +146,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: '/purchase/description',
 						deleteData,
 					}}
 				/>

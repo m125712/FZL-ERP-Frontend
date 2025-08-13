@@ -399,6 +399,21 @@ export const PURCHASE_RECEIVE_SCHEMA = {
 			Schema.matches(/^$/, 'Enter Challan Number or L/C Number'),
 		otherwise: (Schema) => Schema,
 	}),
+	transport_cost: NUMBER_DOUBLE_REQUIRED.default(0),
+	misc_cost: NUMBER_DOUBLE_REQUIRED.default(0),
+	file: yup
+		.mixed()
+		.test(
+			'is-file',
+			'Must be a valid file',
+			(value) =>
+				value === undefined || // allow no value
+				value === null || // allow null
+				value instanceof File || // allow File
+				(typeof value === 'string' && value.trim() !== '')
+		)
+		.nullable()
+		.optional(),
 	remarks: STRING.nullable(),
 	purchase: yup.array().of(
 		yup.object().shape({
@@ -416,6 +431,9 @@ export const PURCHASE_RECEIVE_NULL = {
 	is_local: null,
 	lc_number: '',
 	challan_number: null,
+	transport_cost: 0,
+	misc_cost: 0,
+	file: null,
 	remarks: '',
 	purchase: [
 		{
@@ -3680,6 +3698,7 @@ export const MAINTENANCE_MACHINE_NULL = {
 
 export const ISSUE_SCHEMA = {
 	section: STRING_REQUIRED,
+	extra_section: STRING.default('normal'),
 	problem_type: STRING_REQUIRED,
 	parts_problem: STRING.nullable(),
 	section_machine_uuid: STRING_REQUIRED,
@@ -3689,6 +3708,7 @@ export const ISSUE_SCHEMA = {
 
 export const ISSUE_NULL = {
 	section: '',
+	extra_section: 'normal',
 	problem_type: '',
 	parts_problem: null,
 	section_machine_uuid: '',

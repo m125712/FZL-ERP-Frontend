@@ -9,6 +9,12 @@ export const sections = [
 	{ value: 'sewing_thread', label: 'সুইং থ্রেড' },
 ];
 
+export const extraSectionOptions = [
+	{ value: 'normal', label: 'Normal' },
+	{ value: 'utility', label: 'Utility' },
+	{ value: 'others', label: 'Others' },
+];
+
 export const types = [
 	{ value: 'machine', label: 'Machine' },
 	{ value: 'others', label: 'Others' },

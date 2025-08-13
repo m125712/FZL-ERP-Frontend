@@ -3,7 +3,7 @@ import { defaultFetch } from '@/hooks';
 
 import { ShowToast } from '@/components/Toast';
 
-import { api } from '@/lib/api';
+import { api, image_api } from '@/lib/api';
 
 export default function createGlobalState({
 	queryKey,
@@ -55,6 +55,37 @@ export default function createGlobalState({
 		},
 	});
 
+	const imagePostData = useMutation({
+		mutationFn: async ({ url, newData }) => {
+			const response = await image_api.post(url, newData);
+			return response?.data;
+		},
+		onMutate: async ({ newData }) => {
+			await queryClient.cancelQueries({ queryKey });
+			return { newData };
+		},
+
+		onSuccess: (data) => {
+			ShowToast(data?.toast);
+		},
+
+		onError: (error, context) => {
+			queryClient.setQueryData(queryKey, ({ data }) =>
+				data?.filter((item) => item.id !== context?.newData?.uuid)
+			);
+			console.error(error);
+			ShowToast(error?.response?.data?.toast);
+		},
+
+		onSettled: (data, error, variables) => {
+			queryClient.invalidateQueries({ queryKey });
+
+			if (variables?.isOnCloseNeeded !== false) {
+				variables?.onClose?.();
+			}
+		},
+	});
+
 	const updateData = useMutation({
 		mutationFn: async ({ url, updatedData }) => {
 			const response = await api.put(url, updatedData);
@@ -82,6 +113,35 @@ export default function createGlobalState({
 
 			if (variables?.isOnCloseNeeded !== false) {
 				variables?.onClose();
+			}
+		},
+	});
+
+	const imageUpdateData = useMutation({
+		mutationFn: async ({ url, updatedData }) => {
+			const response = await image_api.patch(url, updatedData);
+			return response.data;
+		},
+		onMutate: async () => {
+			await queryClient.cancelQueries({
+				queryKey,
+			});
+			const previousData = queryClient.getQueryData(queryKey);
+			return { previousData: previousData };
+		},
+		onSuccess: (data) => {
+			ShowToast(data?.toast);
+		},
+		onError: (error, variables, context) => {
+			queryClient.setQueryData(queryKey, context.previousData);
+			console.log(error);
+			ShowToast(error?.response?.data?.toast);
+		},
+
+		onSettled: (data, error, variables) => {
+			queryClient.invalidateQueries({ queryKey });
+			if (variables?.isOnCloseNeeded !== false) {
+				variables?.onClose?.();
 			}
 		},
 	});
@@ -124,6 +184,8 @@ export default function createGlobalState({
 		// * Mutations
 		updateData,
 		postData,
+		imagePostData,
+		imageUpdateData,
 		deleteData,
 		// * Refetch
 		refetch,

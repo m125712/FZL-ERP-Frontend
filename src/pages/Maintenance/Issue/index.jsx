@@ -1,6 +1,8 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useIssue } from '@/state/Maintenance';
+import { formatDuration, intervalToDuration } from 'date-fns';
+import { Clock } from 'lucide-react';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -128,9 +130,10 @@ export default function Index() {
 					const { maintain_by_name, maintain_date } =
 						info.row.original;
 					const options = [
-						{ value: 'pending', label: 'Pending' },
 						{ value: 'okay', label: 'OK' },
 						{ value: 'waiting', label: 'Waiting' },
+						{ value: 'rejected', label: 'Rejected' },
+						{ value: 'on_going', label: 'On Going' },
 					];
 					return (
 						<div>
@@ -155,6 +158,42 @@ export default function Index() {
 					);
 				},
 			},
+
+			{
+				accessorKey: 'time_diff',
+				header: 'Time Difference',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { maintain_condition, maintain_date, created_at } =
+						info.row.original;
+
+					if (maintain_condition !== 'okay') return '---';
+
+					const duration = intervalToDuration({
+						start: new Date(created_at),
+						end: new Date(maintain_date),
+					});
+
+					// Filter out zero values and create a short string
+					const parts = [
+						duration.years ? `${duration.years}y` : '',
+						duration.months ? `${duration.months}m` : '',
+						duration.days ? `${duration.days}d` : '',
+						duration.hours ? `${duration.hours}h` : '',
+						duration.minutes ? `${duration.minutes}min` : '',
+					].filter(Boolean);
+
+					const result = parts.length > 0 ? parts.join(' ') : '---';
+
+					return (
+						<div className='flex items-center gap-1 text-gray-700'>
+							<Clock size={14} className='text-teal-500' />
+							<span>{result}</span>
+						</div>
+					);
+				},
+			},
+
 			{
 				accessorKey: 'verification_approved',
 				header: () => (

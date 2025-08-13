@@ -53,6 +53,29 @@ const IndividualMaterial = lazy(
 
 const OutForDelivery = lazy(() => import('@/pages/Report/OutForDelivery'));
 
+//* Production section
+const VislonFinishing = lazy(
+	() => import('@/pages/Report/Production/VislonFinishing')
+);
+const VislonTeethMolding = lazy(
+	() => import('@/pages/Report/Production/VislonTeenthMolding')
+);
+const NylonFinishingPlastic = lazy(
+	() => import('@/pages/Report/Production/NylonFinishingPlastic')
+);
+const NylonFinishingMetallic = lazy(
+	() => import('@/pages/Report/Production/NylonFinishingMetallic')
+);
+const MetalTeethMolding = lazy(
+	() => import('@/pages/Report/Production/MetalTeethMolding')
+);
+const MetalTeethColoring = lazy(
+	() => import('@/pages/Report/Production/MetalTeethColoring')
+);
+const MetalFinishing = lazy(
+	() => import('@/pages/Report/Production/MetalFinishing')
+);
+
 export const ReportRoutes = [
 	{
 		name: 'Report',
@@ -287,6 +310,61 @@ export const ReportRoutes = [
 				element: <DailyOrderStatus />,
 				page_name: 'report__daily_order_status',
 				actions: ['read'],
+			},
+			{
+				name: 'Production',
+				children: [
+					{
+						name: 'Nylon Finishing (plastic)',
+						path: '/report/production/nylon-finishing-plastic',
+						element: <NylonFinishingPlastic />,
+						page_name: 'report__production_nylon_finishing_plastic',
+						actions: ['read'],
+					},
+					{
+						name: 'Nylon Finishing (Metallic)',
+						path: '/report/production/nylon-finishing-metallic',
+						element: <NylonFinishingMetallic />,
+						page_name:
+							'report__production_nylon_finishing_metallic',
+						actions: ['read'],
+					},
+					{
+						name: 'Vislon Teeth Molding',
+						path: '/report/production/vislon-teeth-molding',
+						element: <VislonTeethMolding />,
+						page_name: 'report__production_vislon_teeth_molding',
+						actions: ['read'],
+					},
+					{
+						name: 'Vislon Finishing',
+						path: '/report/production/vislon-finishing',
+						element: <VislonFinishing />,
+						page_name: 'report__production_vislon_finishing',
+						actions: ['read'],
+					},
+					{
+						name: 'Metal Teeth Molding',
+						path: '/report/production/metal-teeth-molding',
+						element: <MetalTeethMolding />,
+						page_name: 'report__production_metal_teeth_molding',
+						actions: ['read'],
+					},
+					{
+						name: 'Metal Teeth Coloring',
+						path: '/report/production/metal-teeth-coloring',
+						element: <MetalTeethColoring />,
+						page_name: 'report__production_metal_teeth_coloring',
+						actions: ['read'],
+					},
+					{
+						name: 'Metal Finishing',
+						path: '/report/production/metal-finishing',
+						element: <MetalFinishing />,
+						page_name: 'report__production_metal_finishing',
+						actions: ['read'],
+					},
+				],
 			},
 		],
 	},

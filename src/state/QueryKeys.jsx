@@ -2017,6 +2017,16 @@ export const reportQK = {
 		date,
 		toDate,
 	],
+
+	productionSectionReport: (section, item_name, nylon_stopper, from, to) => [
+		...reportQK.all(),
+		'production-section-report',
+		section,
+		item_name,
+		from,
+		to,
+		nylon_stopper || '',
+	],
 };
 
 export const marketingQK = {

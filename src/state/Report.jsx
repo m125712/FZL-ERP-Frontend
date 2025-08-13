@@ -447,3 +447,25 @@ export const useDailyOrderStatus = (date, toDate) =>
 		url: `/report/item-marketing-wise-order-quantity?from_date=${date}&to_date=${toDate}`,
 		enabled: !!date && !!toDate,
 	});
+
+//? Production reports
+
+export const useProductionSectionReport = (
+	section,
+	item_name,
+	from,
+	to,
+	nylon_stopper
+) =>
+	createGlobalState({
+		queryKey: reportQK.productionSectionReport(
+			section,
+			item_name,
+			from,
+			to,
+			nylon_stopper
+		),
+		url: nylon_stopper
+			? `/zipper/finishing-batch-production/by/${section}?item_name=${item_name}&nylon_stopper=${nylon_stopper}&from=${from}&to=${to}`
+			: `/zipper/finishing-batch-production/by/${section}?item_name=${item_name}&from=${from}&to=${to}`,
+	});

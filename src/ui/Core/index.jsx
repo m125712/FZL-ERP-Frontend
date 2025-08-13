@@ -1,13 +1,17 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { CalenderIcon } from '@/assets/icons';
 import { format } from 'date-fns';
 import DatePicker from 'react-datepicker';
+import { useDropzone } from 'react-dropzone';
 
 import cn from '@/lib/cn';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, FileUp, ImagePlus, Repeat } from 'lucide-react';
+import { useFormContext } from 'react-hook-form';
+
+import { API_IMG_URL } from '@/lib/secret';
 
 import {
 	DatePickerCustomHeader,
@@ -33,6 +37,117 @@ export const Input = ({ register, ...props }) => (
 		/>
 	</FormField>
 );
+
+export const File = ({ field, isUpdate, IframeClassName, ...props }) => {
+	const [preview, setPreview] = useState('');
+	const form = useFormContext();
+
+	const onDrop = useCallback(
+		(acceptedFiles) => {
+			const reader = new FileReader();
+			try {
+				reader.onload = () => setPreview(reader.result);
+				reader.readAsDataURL(acceptedFiles[0]);
+				field.onChange(acceptedFiles[0]);
+				form.clearErrors(field.name);
+			} catch (error) {
+				setPreview(null);
+				form.resetField(field.name);
+			}
+		},
+		[field, form]
+	);
+
+	useEffect(() => {
+		if (isUpdate) {
+			if (field.value) {
+				setPreview(API_IMG_URL + field.value);
+			}
+		}
+	}, [isUpdate, field.value]);
+
+	const {
+		acceptedFiles,
+		getRootProps,
+		getInputProps,
+		fileRejections,
+		inputRef,
+	} = useDropzone({
+		onDrop,
+		maxFiles: 1,
+		maxSize: 10000000,
+	});
+	return (
+		<FormField
+			{...props}
+			className='relative flex w-full flex-col space-y-1.5'
+		>
+			{preview && (
+				<div className='absolute bottom-10 right-10 z-50 size-10'>
+					<button
+						className='rounded bg-teal-500 p-2'
+						type={'button'}
+						variant={'default'}
+						size={'icon'}
+						onClick={() => {
+							inputRef.current?.click();
+						}}
+					>
+						<Repeat className='size-4' />
+					</button>
+				</div>
+			)}
+			<div
+				{...getRootProps()}
+				className='flex flex-1 items-center justify-center'
+			>
+				<label
+					htmlFor='dropzone-file'
+					className='relative flex size-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500'
+				>
+					<div className='flex size-full flex-col items-center justify-center p-4'>
+						{preview ? (
+							<iframe
+								className={cn(
+									'size-full h-[300px] rounded-lg',
+									IframeClassName
+								)}
+								src={preview}
+							/>
+						) : (
+							<>
+								<FileUp
+									className={cn(
+										`block size-7`,
+										preview && 'hidden'
+									)}
+								/>
+								<p className='my-2 text-sm text-gray-500 dark:text-gray-400'>
+									<span className='font-semibold'>
+										Click to upload
+									</span>{' '}
+									or drag and drop
+								</p>
+								<p className='text-xs text-gray-500 dark:text-gray-400'>
+									Document, PDF, Word
+								</p>
+							</>
+						)}
+					</div>
+					<input
+						disabled={props.disabled}
+						{...getInputProps()}
+						type='file'
+					/>
+				</label>
+			</div>
+			{/* <div className='border text-black' {...getRootProps()}>
+				<input {...getInputProps()} />
+				<p>Drag 'n' drop some files here, or click to select files</p>
+			</div> */}
+		</FormField>
+	);
+};
 
 export const DateInput = ({
 	register,

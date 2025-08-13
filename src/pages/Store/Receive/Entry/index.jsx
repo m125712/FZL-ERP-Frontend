@@ -28,6 +28,7 @@ import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
 import { PURCHASE_RECEIVE_NULL, PURCHASE_RECEIVE_SCHEMA } from '@util/Schema';
 import { exclude } from '@/util/Exclude';
+import Formdata from '@/util/formData';
 import GetDateTime from '@/util/GetDateTime';
 
 import Header from './Header';
@@ -42,6 +43,8 @@ export default function Index() {
 		url: purchaseDescriptionUrl,
 		updateData,
 		postData,
+		imagePostData,
+		imageUpdateData,
 		deleteData,
 	} = usePurchaseDescription();
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
@@ -131,12 +134,20 @@ export default function Index() {
 				updated_at: GetDateTime(),
 			};
 
-			const purchase_description_promise = await updateData.mutateAsync({
-				url: `${purchaseDescriptionUrl}/${data?.uuid}`,
-				updatedData: purchase_description_data,
-				uuid: data.uuid,
-				isOnCloseNeeded: false,
+			// delete purchase field from data to be sent
+			delete purchase_description_data['purchase'];
+
+			const formData = Formdata({
+				...purchase_description_data,
 			});
+
+			const purchase_description_promise =
+				await imageUpdateData.mutateAsync({
+					url: `${purchaseDescriptionUrl}/${data?.uuid}`,
+					updatedData: formData,
+					uuid: data.uuid,
+					isOnCloseNeeded: false,
+				});
 
 			const newEntries = data.purchase
 				.filter((item) => item.uuid === undefined)
@@ -193,6 +204,7 @@ export default function Index() {
 		}
 
 		// Add new item
+
 		const new_purchase_description_uuid = nanoid();
 		const created_at = GetDateTime();
 		const created_by = user.uuid;
@@ -209,9 +221,13 @@ export default function Index() {
 		// delete purchase field from data to be sent
 		delete purchase_description_data['purchase'];
 
-		const purchase_description_promise = await postData.mutateAsync({
+		const formData = Formdata({
+			...purchase_description_data,
+		});
+
+		const purchase_description_promise = await imagePostData.mutateAsync({
 			url: purchaseDescriptionUrl,
-			newData: purchase_description_data,
+			newData: formData,
 			isOnCloseNeeded: false,
 		});
 
@@ -294,6 +310,7 @@ export default function Index() {
 								getValues,
 								Controller,
 								watch,
+								isUpdate,
 							}}
 						/>
 

@@ -15,6 +15,7 @@ import GetDateTime from '@/util/GetDateTime';
 
 import {
 	emergenceOptions,
+	extraSectionOptions,
 	machineVislon,
 	partsDyeing,
 	partsMetal,
@@ -131,27 +132,55 @@ export default function Index({
 			onClose={onClose}
 			isSmall={true}
 		>
-			<FormField label='section' title='Section' errors={errors}>
-				<Controller
-					name={'section'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select section'
-								options={sections}
-								value={sections?.filter(
-									(item) =>
-										item.value === getValues('section')
-								)}
-								onChange={(e) => {
-									onChange(e.value);
-								}}
-							/>
-						);
-					}}
-				/>
-			</FormField>
+			<div className='flex gap-2'>
+				<FormField label='section' title='Section' errors={errors}>
+					<Controller
+						name={'section'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select section'
+									options={sections}
+									value={sections?.filter(
+										(item) =>
+											item.value === getValues('section')
+									)}
+									onChange={(e) => {
+										onChange(e.value);
+									}}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+				<FormField
+					label='extra_section'
+					title='Extra Section'
+					errors={errors}
+				>
+					<Controller
+						name={'extra_section'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select extra section'
+									options={extraSectionOptions}
+									value={extraSectionOptions?.filter(
+										(item) =>
+											item.value ===
+											getValues('extra_section')
+									)}
+									onChange={(e) => {
+										onChange(e.value);
+									}}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+			</div>
 			<FormField
 				label='problem_type'
 				title='Problem Type'

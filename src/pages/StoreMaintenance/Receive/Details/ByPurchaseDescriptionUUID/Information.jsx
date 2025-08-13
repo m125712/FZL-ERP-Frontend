@@ -3,6 +3,8 @@ import { format } from 'date-fns';
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
 
+import { API_IMG_URL } from '@/lib/secret';
+
 export default function Information({
 	purchase = {
 		uuid: null,
@@ -17,6 +19,7 @@ export default function Information({
 		created_at: null,
 		updated_at: null,
 		remarks: null,
+		file: null,
 	},
 }) {
 	const {
@@ -29,6 +32,7 @@ export default function Information({
 		purchase_id,
 		remarks,
 		updated_at,
+		file,
 	} = purchase;
 
 	const renderItems = () => {
@@ -82,17 +86,27 @@ export default function Information({
 
 	return (
 		<SectionContainer title={'Information'}>
-			<div className='grid grid-cols-1 border-secondary/30 lg:grid-cols-2'>
-				<RenderTable
-					className={'border-secondary/30 lg:border-r'}
-					title={'Invoice'}
-					items={renderItems().items}
-				/>
-				<RenderTable
-					className={'border-secondary/30 lg:border-r'}
-					title={'Created'}
-					items={renderItems().create}
-				/>
+			<div className='flex flex-col gap-2 lg:flex-row'>
+				<div className='grid w-full grid-cols-1 border-secondary/30 lg:grid-cols-2'>
+					<RenderTable
+						className={'border-secondary/30 lg:border-r'}
+						title={'Invoice'}
+						items={renderItems().items}
+					/>
+					<RenderTable
+						className={'border-secondary/30 lg:border-r'}
+						title={'Created'}
+						items={renderItems().create}
+					/>
+				</div>
+				<div>
+					{file && (
+						<iframe
+							src={`${API_IMG_URL + file}#zoom=50`}
+							className='h-[600px] w-full lg:w-[500px]'
+						/>
+					)}
+				</div>
 			</div>
 		</SectionContainer>
 	);

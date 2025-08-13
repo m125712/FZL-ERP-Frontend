@@ -2,6 +2,7 @@ import {
 	CheckBox,
 	CheckBoxWithoutLabel,
 	DescriptionStyle,
+	File,
 	FileInput,
 	FormField,
 	Input,
@@ -94,4 +95,5 @@ export {
 	CustomLink,
 	Collapse,
 	Status,
+	File,
 };

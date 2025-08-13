@@ -91,10 +91,14 @@ export default function Index({
 			onClose={onClose}
 			isSmall={true}
 		>
-			<Input label='name' {...{ register, errors }} />
+			<Input
+				label='name'
+				title='Company Name'
+				{...{ register, errors }}
+			/>
 			<Input
 				label='contact_name'
-				title='Person'
+				title='Contact Person'
 				{...{ register, errors }}
 			/>
 			<Input

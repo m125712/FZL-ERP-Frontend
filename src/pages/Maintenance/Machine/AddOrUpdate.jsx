@@ -127,6 +127,7 @@ export default function Index({
 				/>
 			</FormField>
 			<Input label='name' {...{ register, errors }} />
+			<Input label='model_number' {...{ register, errors }} />
 
 			<DevTool control={control} placement='top-left' />
 		</AddModal>

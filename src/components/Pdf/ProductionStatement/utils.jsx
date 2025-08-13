@@ -1,7 +1,6 @@
-import { FZL_LOGO } from '@/assets/img/base64';
 import { format } from 'date-fns';
 
-import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../ui';
+import { DEFAULT_FONT_SIZE } from '../ui';
 import { company, getEmptyColumn } from '../utils';
 
 const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
@@ -15,9 +14,7 @@ export const getPageHeader = (from, to) => {
 		body: [
 			[
 				{
-					image: FZL_LOGO.src,
-					width: 70,
-					height: 40,
+					text: [`Fortune Zipper Ltd\n`],
 					alignment: 'left',
 				},
 				{

@@ -153,10 +153,10 @@ export const useOrderPropertiesByUUID = (uuid) =>
 	});
 
 // * Info * //
-export const useOrderInfo = () =>
+export const useOrderInfo = (query) =>
 	createGlobalState({
-		queryKey: orderQK.info(),
-		url: '/zipper/order-info',
+		queryKey: orderQK.info(query),
+		url: query ? `/zipper/order-info?${query}` : '/zipper/order-info',
 	});
 
 export const useOrderInfoByUUID = (uuid) =>

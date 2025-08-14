@@ -41,7 +41,7 @@ export const orderQK = {
 	entry: (uuid) => [...orderQK.entries(), uuid],
 
 	//* info
-	info: () => [...orderQK.all(), 'info'],
+	info: (query) => [...orderQK.all(), 'info', query],
 	infoByUUID: (uuid) => [...orderQK.info(), uuid],
 
 	//* buyers
@@ -2071,7 +2071,7 @@ export const maintenanceQK = {
 
 	machine: () => [...maintenanceQK.all(), 'machine'],
 
-	issue: () => [...maintenanceQK.all(), 'issue'],
+	issue: (query) => [...maintenanceQK.all(), 'issue', query],
 	issueByUUID: (uuid) => [...maintenanceQK.all(), 'issue', uuid],
 
 	issueProcurement: () => [...maintenanceQK.all(), 'issue-procurement'],

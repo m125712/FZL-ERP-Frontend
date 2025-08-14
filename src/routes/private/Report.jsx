@@ -270,20 +270,6 @@ export const ReportRoutes = [
 				actions: ['read', 'show_own_orders'],
 			},
 			{
-				name: 'Thread Batch',
-				path: '/report/thread-batch',
-				element: <ThreadBatch />,
-				page_name: 'report__thread_batch',
-				actions: ['read', 'show_own_orders'],
-			},
-			{
-				name: 'Zipper Dyeing Batch',
-				path: '/report/zipper-dyeing-batch',
-				element: <ZipperBatch />,
-				page_name: 'report__zipper_dyeing_batch',
-				actions: ['read', 'show_own_orders'],
-			},
-			{
 				name: 'Order-Sheet Send & Receive',
 				path: '/report/order-sheet-sr',
 				element: <OrderSheetSR />,
@@ -314,6 +300,20 @@ export const ReportRoutes = [
 			{
 				name: 'Production',
 				children: [
+					{
+						name: 'Thread Batch',
+						path: '/report/thread-batch',
+						element: <ThreadBatch />,
+						page_name: 'report__thread_batch',
+						actions: ['read', 'show_own_orders'],
+					},
+					{
+						name: 'Zipper Dyeing Batch',
+						path: '/report/zipper-dyeing-batch',
+						element: <ZipperBatch />,
+						page_name: 'report__zipper_dyeing_batch',
+						actions: ['read', 'show_own_orders'],
+					},
 					{
 						name: 'Nylon Finishing (plastic)',
 						path: '/report/production/nylon-finishing-plastic',

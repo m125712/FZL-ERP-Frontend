@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
 import { useIssue, useIssueByUUID } from '@/state/Maintenance';
 import { useOtherSectionMachine } from '@/state/Other';
-import { useFetchForRhfReset, useRHF } from '@/hooks';
+import { useAccess, useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast';
@@ -31,12 +31,18 @@ export default function Index({
 	},
 	setUpdateIssueData,
 }) {
+	const haveAccess = useAccess('maintenance__issue');
+	const { user } = useAuth();
+
 	const { data, updateData, postData } = useIssueByUUID(
 		updateIssueData?.uuid
 	);
-	const { invalidateQuery } = useIssue();
+
+	const { invalidateQuery } = useIssue(
+		haveAccess.includes('show_own_issue') ? `own_uuid =${user.uuid}` : ''
+	);
 	const { data: sectionMachines } = useOtherSectionMachine();
-	const { user } = useAuth();
+
 	const {
 		register,
 		handleSubmit,

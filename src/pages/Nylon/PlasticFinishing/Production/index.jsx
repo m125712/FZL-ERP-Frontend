@@ -183,15 +183,17 @@ export default function Index() {
 						slider_finishing_stock,
 						order_type,
 						slider_provided,
+						skip_slider_production,
 					} = info.row.original;
 
 					const access =
-						order_type === 'tape'
-							? balance_quantity <= 0
+						order_type === 'tape' || skip_slider_production
+							? Number(balance_quantity) <= 0
 							: Math.min(
 									Number(balance_quantity),
 									Number(slider_finishing_stock)
 								) <= 0;
+
 					return (
 						<Transfer
 							onClick={() => handelProduction(info.row.index)}

@@ -178,10 +178,11 @@ export default function Index() {
 						slider_finishing_stock,
 						order_type,
 						slider_provided,
+						skip_slider_production,
 					} = info.row.original;
 
 					const access =
-						order_type === 'tape'
+						order_type === 'tape' || skip_slider_production
 							? Math.min(
 									Number(balance_quantity),
 									Number(finishing_stock)

@@ -5,7 +5,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { CustomLink, LinkWithCopy, StatusButton, Transfer } from '@/ui';
+import { CustomLink, StatusButton, Transfer } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -184,10 +184,11 @@ export default function Index() {
 						slider_finishing_stock,
 						order_type,
 						slider_provided,
+						skip_slider_production,
 					} = info.row.original;
 
 					const access =
-						order_type === 'tape'
+						order_type === 'tape' || skip_slider_production
 							? Number(balance_quantity) <= 0
 							: Math.min(
 									Number(balance_quantity),

@@ -714,6 +714,7 @@ export const SettingsColumns = ({
 	handelReceiveByFactoryStatus,
 	handelProductionPausedStatus,
 	handelSkipSliderProduction,
+	handelCancel,
 }) => {
 	return useMemo(
 		() => [
@@ -814,17 +815,102 @@ export const SettingsColumns = ({
 				},
 			},
 			{
-				accessorFn: (row) => (row.is_cancelled ? 'YES' : 'NO'),
-				id: 'is_cancelled',
+				accessorKey: 'production_pause',
+				header: (
+					<>
+						Prod <br />
+						Paused
+					</>
+				),
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_production_paused'
+					);
+					const { production_pause_time, production_pause_by_name } =
+						info.row.original;
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelProductionPausedStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={production_pause_time} />
+							<span className='text-xs'>
+								{production_pause_by_name}
+							</span>
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'skip_slider_production',
+				header: (
+					<>
+						Skip Slider <br />
+						Production
+					</>
+				),
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_skip_slider_production'
+					);
+					const {
+						skip_slider_production_time,
+						skip_slider_production_by_name,
+					} = info.row.original;
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelSkipSliderProduction(info.row.index);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={skip_slider_production_time} />
+							<span className='text-xs'>
+								{skip_slider_production_by_name}
+							</span>
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'is_cancelled',
 				header: 'Cancelled',
 				enableColumnFilter: false,
-				width: 'w-16',
-				cell: (info) => (
-					<StatusButton
-						size='btn-xs'
-						value={info.row.original.is_cancelled}
-					/>
-				),
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_cancel'
+					);
+					const { is_cancelled_time, is_cancelled_by_name } =
+						info.row.original;
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelCancel(info.row.index);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={is_cancelled_time} />
+							<span className='text-xs'>
+								{is_cancelled_by_name}
+							</span>
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'id',
@@ -916,76 +1002,6 @@ export const SettingsColumns = ({
 				header: 'Updated',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
-			},
-			{
-				accessorKey: 'production_pause',
-				header: (
-					<>
-						Prod <br />
-						Paused
-					</>
-				),
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					const permission = haveAccess.includes(
-						'click_status_production_paused'
-					);
-					const { production_pause_time, production_pause_by_name } =
-						info.row.original;
-					return (
-						<div className='flex flex-col'>
-							<SwitchToggle
-								disabled={!permission}
-								onChange={() => {
-									handelProductionPausedStatus(
-										info.row.index
-									);
-								}}
-								checked={info.getValue() === true}
-							/>
-							<DateTime date={production_pause_time} />
-							<span className='text-xs'>
-								{production_pause_by_name}
-							</span>
-						</div>
-					);
-				},
-			},
-			{
-				accessorKey: 'skip_slider_production',
-				header: (
-					<>
-						Skip Slider <br />
-						Production
-					</>
-				),
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					const permission = haveAccess.includes(
-						'click_status_skip_slider_production'
-					);
-					const {
-						skip_slider_production_time,
-						skip_slider_production_by_name,
-					} = info.row.original;
-					return (
-						<div className='flex flex-col'>
-							<SwitchToggle
-								disabled={!permission}
-								onChange={() => {
-									handelSkipSliderProduction(info.row.index);
-								}}
-								checked={info.getValue() === true}
-							/>
-							<DateTime date={skip_slider_production_time} />
-							<span className='text-xs'>
-								{skip_slider_production_by_name}
-							</span>
-						</div>
-					);
-				},
 			},
 		],
 		[data]

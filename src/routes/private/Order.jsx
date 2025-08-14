@@ -160,6 +160,7 @@ export const OrderRoutes = [
 					'click_status_sno_from_head_office',
 					'click_status_receive_by_factory',
 					'click_status_skip_slider_production',
+					'click_status_cancel',
 				],
 			},
 		],

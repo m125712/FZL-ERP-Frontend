@@ -16,14 +16,19 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
 	const { user } = useAuth();
+	const haveAccess = useAccess('order__party_description');
 	const { data, isLoading, url, updateData, deleteData, invalidateQuery } =
-		useOrderInfo();
+		useOrderInfo(
+			haveAccess.includes('show_own_orders')
+				? `own_uuid=${user.uuid}`
+				: ''
+		);
+
 	const info = new PageInfo(
 		'Party Description',
-		url,
+		'/order/party-description',
 		'order__party_description'
 	);
-	const haveAccess = useAccess(info.getTab());
 
 	// Fetching data from server
 	useEffect(() => {
@@ -98,20 +103,6 @@ export default function Index() {
 		});
 	};
 
-	const handelProductionPausedStatus = async (idx) => {
-		const { production_pause } = data[idx];
-		await updateData.mutateAsync({
-			url: `/zipper/order-info/production-pause/update/by/${data[idx]?.uuid}`,
-			updatedData: {
-				production_pause: production_pause === true ? false : true,
-				production_pause_time:
-					production_pause === true ? null : GetDateTime(),
-				production_pause_by:
-					production_pause === true ? null : user.uuid,
-			},
-			isOnCloseNeeded: false,
-		});
-	};
 	const columns = InfoColumns({
 		handelUpdate,
 		handelDelete,
@@ -119,7 +110,6 @@ export default function Index() {
 		data,
 		handelSNOFromHeadOfficeStatus,
 		handelReceiveByFactoryStatus,
-		handelProductionPausedStatus,
 	});
 
 	if (isLoading)
@@ -151,7 +141,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: '/zipper/order-info',
 						deleteData,
 					}}
 					invalidateQuery={invalidateQuery}

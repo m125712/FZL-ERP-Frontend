@@ -258,7 +258,6 @@ export const InfoColumns = ({
 	data,
 	handelSNOFromHeadOfficeStatus,
 	handelReceiveByFactoryStatus,
-	handelProductionPausedStatus,
 }) => {
 	return useMemo(
 		() => [
@@ -481,41 +480,6 @@ export const InfoColumns = ({
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
 			},
-			{
-				accessorKey: 'production_pause',
-				header: (
-					<>
-						Prod <br />
-						Paused
-					</>
-				),
-				enableColumnFilter: false,
-				width: 'w-24',
-				cell: (info) => {
-					const permission = haveAccess.includes(
-						'click_status_production_paused'
-					);
-					const { production_pause_time, production_pause_by_name } =
-						info.row.original;
-					return (
-						<div className='flex flex-col'>
-							<SwitchToggle
-								disabled={!permission}
-								onChange={() => {
-									handelProductionPausedStatus(
-										info.row.index
-									);
-								}}
-								checked={info.getValue() === true}
-							/>
-							<DateTime date={production_pause_time} />
-							<span className='text-xs'>
-								{production_pause_by_name}
-							</span>
-						</div>
-					);
-				},
-			},
 		],
 		[data]
 	);
@@ -734,6 +698,307 @@ export const DetailsColumns = ({
 			},
 			{
 				accessorKey: 'order_description_updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+		],
+		[data]
+	);
+};
+
+export const SettingsColumns = ({
+	haveAccess,
+	data,
+	handelSNOFromHeadOfficeStatus,
+	handelReceiveByFactoryStatus,
+	handelProductionPausedStatus,
+	handelSkipSliderProduction,
+	handelCancel,
+}) => {
+	return useMemo(
+		() => [
+			{
+				accessorKey: 'order_number',
+				header: 'O/N',
+				enableColumnFilter: true,
+				cell: (info) => {
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${info.getValue()}`}
+							openInNewTab={true}
+						/>
+					);
+				},
+			},
+
+			{
+				accessorKey: 'sno_from_head_office',
+				header: (
+					<>
+						Send From <br />
+						H/O
+					</>
+				),
+				enableColumnFilter: true,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_sno_from_head_office'
+					);
+
+					const {
+						sno_from_head_office_time,
+						sno_from_head_office_by_name,
+					} = info.row.original;
+
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelSNOFromHeadOfficeStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={sno_from_head_office_time} />
+							<span className='text-xs'>
+								{sno_from_head_office_by_name}
+							</span>
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'receive_by_factory',
+				header: (
+					<>
+						Received By <br />
+						Factory
+					</>
+				),
+				enableColumnFilter: true,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_receive_by_factory'
+					);
+
+					const {
+						receive_by_factory_time,
+						receive_by_factory_by_name,
+					} = info.row.original;
+
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={
+									!permission ||
+									!info.row.original.sno_from_head_office
+								}
+								onChange={() => {
+									handelReceiveByFactoryStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={receive_by_factory_time} />
+							<span className='text-xs'>
+								{receive_by_factory_by_name}
+							</span>
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'production_pause',
+				header: (
+					<>
+						Prod <br />
+						Paused
+					</>
+				),
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_production_paused'
+					);
+					const { production_pause_time, production_pause_by_name } =
+						info.row.original;
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelProductionPausedStatus(
+										info.row.index
+									);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={production_pause_time} />
+							<span className='text-xs'>
+								{production_pause_by_name}
+							</span>
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'skip_slider_production',
+				header: (
+					<>
+						Skip Slider <br />
+						Production
+					</>
+				),
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_skip_slider_production'
+					);
+					const {
+						skip_slider_production_time,
+						skip_slider_production_by_name,
+					} = info.row.original;
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelSkipSliderProduction(info.row.index);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={skip_slider_production_time} />
+							<span className='text-xs'>
+								{skip_slider_production_by_name}
+							</span>
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'is_cancelled',
+				header: 'Cancelled',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					const permission = haveAccess.includes(
+						'click_status_cancel'
+					);
+					const { is_cancelled_time, is_cancelled_by_name } =
+						info.row.original;
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={!permission}
+								onChange={() => {
+									handelCancel(info.row.index);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={is_cancelled_time} />
+							<span className='text-xs'>
+								{is_cancelled_by_name}
+							</span>
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'id',
+				header: 'Sample/Bill/Cash',
+				enableColumnFilter: false,
+				width: 'w-28',
+				cell: (info) => {
+					const { is_sample, is_bill, is_cash } = info.row.original;
+					return (
+						// TODO: need to fix bill vs cash
+						<div className='flex gap-6'>
+							<StatusButton size='btn-xs' value={is_sample} />
+							<StatusButton size='btn-xs' value={is_bill} />
+							<StatusButton size='btn-xs' value={is_cash} />
+						</div>
+					);
+				},
+			},
+
+			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'marketing_name',
+				header: 'Marketing',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'merchandiser_name',
+				header: 'Merchandiser',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'factory_name',
+				header: 'Factory',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'buyer_name',
+				header: 'Buyer',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'marketing_priority',
+				header: 'Priority (Mkt/Fac)',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { marketing_priority, factory_priority } =
+						info.row.original;
+					return `${marketing_priority}/${factory_priority}`;
+				},
+			},
+
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'updated_at',
 				header: 'Updated',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,

@@ -14,10 +14,10 @@ export const useMaintenanceMachineByUUID = (uuid) =>
 		url: `/maintain/section-machine/${uuid}`,
 	});
 
-export const useIssue = () =>
+export const useIssue = (query) =>
 	createGlobalState({
-		queryKey: maintenanceQK.issue(),
-		url: `/maintain/issue`,
+		queryKey: maintenanceQK.issue(query),
+		url: query ? `/maintain/issue?${query}` : `/maintain/issue`,
 	});
 
 export const useIssueByUUID = (uuid) =>

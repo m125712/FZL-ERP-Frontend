@@ -1,7 +1,7 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useIssue } from '@/state/Maintenance';
-import { formatDuration, intervalToDuration } from 'date-fns';
+import { intervalToDuration } from 'date-fns';
 import { Clock } from 'lucide-react';
 import { useAccess } from '@/hooks';
 
@@ -9,13 +9,7 @@ import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { EyeBtn } from '@/ui/Others/Button';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import {
-	DateTime,
-	EditDelete,
-	ReactSelect,
-	StatusButton,
-	Transfer,
-} from '@/ui';
+import { DateTime, EditDelete, ReactSelect, Transfer } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
@@ -30,10 +24,15 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const { registerAndSubscribe, unregisterPushSubscription } =
 		usePushSubscription();
+
 	const { user } = useAuth();
-	const { data, isLoading, url, deleteData, updateData } = useIssue();
-	const info = new PageInfo('Issue', url, 'maintenance__issue');
 	const haveAccess = useAccess('maintenance__issue');
+
+	const { data, isLoading, url, deleteData, updateData } = useIssue(
+		haveAccess.includes('show_own_issue') ? `own_uuid=${user.uuid}` : ''
+	);
+
+	const info = new PageInfo('Issue', url, 'maintenance__issue');
 
 	useEffect(() => {
 		if (

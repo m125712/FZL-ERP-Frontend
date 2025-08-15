@@ -28,6 +28,7 @@ export const MaintenanceRoutes = [
 					'unsubscribe',
 					'verification',
 					'procurement',
+					'show_own_issue',
 				],
 			},
 		],

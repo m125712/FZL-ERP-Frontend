@@ -27,6 +27,7 @@ const Marketing = lazy(() => import('@/pages/Order/Marketing'));
 const Merchandiser = lazy(() => import('@/pages/Order/Merchandiser'));
 const Party = lazy(() => import('@/pages/Order/Party'));
 const Properties = lazy(() => import('@/pages/Order/Properties'));
+const Settings = lazy(() => import('@/pages/Order/Settings'));
 
 export const OrderRoutes = [
 	{
@@ -103,6 +104,7 @@ export const OrderRoutes = [
 					'click_status_production_paused',
 					'click_status_sno_from_head_office',
 					'click_status_receive_by_factory',
+					'show_own_orders',
 				],
 			},
 			{
@@ -146,6 +148,20 @@ export const OrderRoutes = [
 				element: <Properties />,
 				page_name: 'order__properties',
 				actions: ['create', 'read', 'update', 'delete'],
+			},
+			{
+				name: 'Settings',
+				path: '/order/settings',
+				element: <Settings />,
+				page_name: 'order__settings',
+				actions: [
+					'read',
+					'click_status_production_paused',
+					'click_status_sno_from_head_office',
+					'click_status_receive_by_factory',
+					'click_status_skip_slider_production',
+					'click_status_cancel',
+				],
 			},
 		],
 	},

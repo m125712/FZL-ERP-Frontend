@@ -273,6 +273,7 @@ export default function Index() {
 				is_multi_color: rest?.is_multi_color ? 1 : 0,
 				hand: rest?.hand,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({
@@ -331,7 +332,7 @@ export default function Index() {
 					updatedData: {
 						...item,
 						updated_at: GetDateTime(),
-						created_by: user?.uuid,
+						updated_by: user?.uuid,
 					},
 					isOnCloseNeeded: false,
 				});

@@ -359,6 +359,8 @@ export default function Index() {
 					is_drying_complete:
 						is_drying_complete === 'true' ? false : true,
 					drying_updated_at: GetDateTime(),
+					updated_at: GetDateTime(),
+					updated_by: user?.uuid,
 				},
 				isOnCloseNeeded: false,
 			});

@@ -175,7 +175,11 @@ export default function index() {
 
 			await updateData.mutateAsync({
 				url: `/zipper/finishing-batch/${rest.uuid}`,
-				updatedData: { ...rest, updated_at: GetDateTime() },
+				updatedData: {
+					...rest,
+					updated_at: GetDateTime(),
+					updated_by: user.uuid,
+				},
 				isOnCloseNeeded: false,
 			});
 
@@ -186,7 +190,11 @@ export default function index() {
 				async (item) =>
 					await updateData.mutateAsync({
 						url: `/zipper/finishing-batch-entry/${item.uuid}`,
-						updatedData: { ...item, updated_at: GetDateTime() },
+						updatedData: {
+							...item,
+							updated_at: GetDateTime(),
+							updated_by: user.uuid,
+						},
 						isOnCloseNeeded: false,
 					})
 			);
@@ -226,6 +234,7 @@ export default function index() {
 					updatedData: {
 						batch_quantity: slider_qty,
 						updated_at: GetDateTime(),
+						updated_by: user.uuid,
 					},
 					isOnCloseNeeded: false,
 				});

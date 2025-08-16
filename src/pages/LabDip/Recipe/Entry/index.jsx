@@ -126,6 +126,7 @@ export default function Index() {
 				approved: data.approved ? 1 : 0,
 				status: data.status ? 1 : 0,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({
@@ -141,6 +142,7 @@ export default function Index() {
 					...item,
 					index: index,
 					updated_at: GetDateTime(),
+					updated_by: user?.uuid,
 				}));
 
 			const newEntry = data.recipe_entry

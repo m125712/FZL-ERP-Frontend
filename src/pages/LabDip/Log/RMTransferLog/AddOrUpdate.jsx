@@ -1,7 +1,7 @@
 import { useAuth } from '@/context/auth';
-import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
+import { useCommonMaterialUsed } from '@/state/Common';
 import { useLabDipRM } from '@/state/LabDip';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast';
@@ -27,6 +27,7 @@ export default function Index({
 }) {
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateLabDipRM } = useLabDipRM();
+	const { user } = useAuth();
 
 	// const MAX_QUANTITY =
 	// 	Number(updateLabDipRMLog?.lab_dip) +
@@ -90,6 +91,7 @@ export default function Index({
 				...data,
 				material_name: updateLabDipRMLog?.material_name,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

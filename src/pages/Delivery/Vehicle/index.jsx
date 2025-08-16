@@ -1,4 +1,5 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useDeliveryVehicle } from '@/state/Delivery';
 import { useOtherVehicle } from '@/state/Other';
 import { useAccess } from '@/hooks';
@@ -20,6 +21,7 @@ export default function Index() {
 	const { invalidateQuery: invalidateOtherVehicle } = useOtherVehicle();
 	const info = new PageInfo('Delivery Vehicle', url, 'delivery__vehicle');
 	const haveAccess = useAccess('delivery__vehicle');
+	const { user } = useAuth();
 
 	const columns = useMemo(
 		() => [
@@ -159,6 +161,7 @@ export default function Index() {
 			updatedData: {
 				active: data[idx]?.active === 1 ? 0 : 1,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

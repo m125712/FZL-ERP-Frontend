@@ -259,6 +259,7 @@ export default function Index() {
 				pi_date: rest?.pi_date,
 				cross_weight: rest?.cross_weight,
 				is_rtgs: rest?.is_rtgs,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 
@@ -272,6 +273,7 @@ export default function Index() {
 						const updatedData = {
 							pi_cash_quantity: item.pi_cash_quantity,
 							is_checked: item.is_checked,
+							updated_by: user?.uuid,
 							updated_at: GetDateTime(),
 						};
 
@@ -333,6 +335,7 @@ export default function Index() {
 							const updatedData = {
 								pi_cash_quantity: item.pi_cash_quantity,
 								is_checked: item.is_checked,
+								updated_by: user?.uuid,
 								updated_at: GetDateTime(),
 							};
 

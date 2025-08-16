@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useVislonFinishingProd,
 	useVislonTMPEntryByUUID,
@@ -9,8 +10,6 @@ import { AddModal } from '@/components/Modal';
 import { Input, JoinInput } from '@/ui';
 
 import {
-	NUMBER_DOUBLE_REQUIRED,
-	NUMBER_REQUIRED,
 	SFG_PRODUCTION_SCHEMA_IN_PCS,
 	SFG_PRODUCTION_SCHEMA_IN_PCS_NULL,
 } from '@util/Schema';
@@ -34,6 +33,7 @@ export default function Index({
 		updateFinishingLog?.uuid
 	);
 	const { invalidateQuery } = useVislonFinishingProd();
+	const { user } = useAuth();
 	const MAX_PROD =
 		Number(updateFinishingLog.balance_quantity) +
 		Number(data?.production_quantity);
@@ -79,6 +79,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

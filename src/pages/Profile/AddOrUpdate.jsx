@@ -1,3 +1,4 @@
+import { useAuth } from '@/context/auth';
 import { useAdminUsers } from '@/state/Admin';
 import * as yup from 'yup';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
@@ -16,6 +17,7 @@ export default function Index({
 }) {
 	const { url, updateData, postData } = useAdminUsers();
 	var schema = USER_SCHEMA;
+	const { user } = useAuth();
 
 	if (updateUser?.uuid == null) {
 		schema = {
@@ -54,6 +56,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

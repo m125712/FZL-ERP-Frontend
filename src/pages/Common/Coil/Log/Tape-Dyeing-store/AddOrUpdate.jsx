@@ -69,6 +69,7 @@ export default function Index({
 	const onSubmit = async (data) => {
 		const updatedData = {
 			trx_quantity: data.trx_quantity,
+			updated_by: user?.uuid,
 			updated_at: GetDateTime(),
 			remarks: data.remarks,
 		};

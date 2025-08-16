@@ -1,4 +1,5 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useLibraryPolicy } from '@/state/Library';
 import { useAccess } from '@/hooks';
 
@@ -15,16 +16,10 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const {
-		data,
-		isLoading,
-		url,
-		deleteData,
-		updateData,
-		invalidateQuery: invalidateLibraryPolicy,
-	} = useLibraryPolicy();
+	const { data, isLoading, url, deleteData, updateData } = useLibraryPolicy();
 	const info = new PageInfo('Library/Policy', url, 'library__policy');
 	const haveAccess = useAccess(info.getTab());
+	const { user } = useAuth();
 
 	// Fetching data from server
 	useEffect(() => {
@@ -161,6 +156,7 @@ export default function Index() {
 			updatedData: {
 				status: data[idx]?.status === 1 ? 0 : 1,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

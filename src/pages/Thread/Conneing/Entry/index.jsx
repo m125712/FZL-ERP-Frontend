@@ -101,6 +101,7 @@ export default function Index() {
 				coning_machines: data?.coning_machines,
 				coning_updated_at: GetDateTime(),
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 			// update /commercial/pi/{uuid}
 			const threadBatchPromise = await updateData.mutateAsync({
@@ -120,6 +121,7 @@ export default function Index() {
 						coning_production_quantity_in_kg:
 							item?.coning_production_quantity_in_kg,
 						updated_at: GetDateTime(),
+						updated_by: user?.uuid,
 					};
 
 					return await updateData.mutateAsync({
@@ -150,6 +152,7 @@ export default function Index() {
 				coning_created_at: GetDateTime(),
 				coning_created_by: user?.uuid,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 			// update /commercial/pi/{uuid}
 			const threadBatchPromise = await updateData.mutateAsync({
@@ -169,6 +172,7 @@ export default function Index() {
 						coning_production_quantity_in_kg:
 							item?.coning_production_quantity_in_kg,
 						updated_at: GetDateTime(),
+						updated_by: user?.uuid,
 					};
 
 					return await updateData.mutateAsync({

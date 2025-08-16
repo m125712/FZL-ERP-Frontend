@@ -1,8 +1,8 @@
 import { useAuth } from '@/context/auth';
-import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
+import { useCommonMaterialUsed } from '@/state/Common';
 import { useNylonMetallicFinishingRM } from '@/state/Nylon';
 import { useOtherMaterial } from '@/state/Other';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast';
@@ -31,6 +31,7 @@ export default function Index({
 	const { invalidateQuery: invalidateFinishingRM } =
 		useNylonMetallicFinishingRM();
 	const { data: material } = useOtherMaterial();
+	const { user } = useAuth();
 
 	const MAX_QUANTITY =
 		updateFinishingRMLog?.section === 'n_t_cutting'
@@ -95,6 +96,7 @@ export default function Index({
 				...data,
 				material_name: updateFinishingRMLog?.material_name,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

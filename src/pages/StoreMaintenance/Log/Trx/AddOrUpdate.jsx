@@ -1,22 +1,10 @@
 import { useEffect } from 'react';
-import { useCommonCoilRM, useCommonTapeRM } from '@/state/Common';
-import { useDeliveryRM } from '@/state/Delivery';
-import { useDyeingRM } from '@/state/Dyeing';
+import { useAuth } from '@/context/auth';
+import { useCommonTapeRM } from '@/state/Common';
 import { useLabDipRM } from '@/state/LabDip';
-import { useMetalFinishingRM, useMetalTCRM, useMetalTMRM } from '@/state/Metal';
-import { useNylonMetallicFinishingRM } from '@/state/Nylon';
 import { useOtherMaterial } from '@/state/Other';
-import {
-	useSliderAssemblyRM,
-	useSliderColoringRM,
-	useSliderDieCastingRM,
-} from '@/state/Slider';
-import {
-	useMaterialInfo,
-	useMaterialTrx,
-	useMaterialTrxByUUID,
-} from '@/state/Store';
-import { useVislonFinishingRM, useVislonTMRM } from '@/state/Vislon';
+import { useSliderAssemblyRM, useSliderDieCastingRM } from '@/state/Slider';
+import { useMaterialInfo, useMaterialTrxByUUID } from '@/state/Store';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -45,6 +33,7 @@ export default function Index({
 	const { invalidateQuery: invalidateDieCastingRM } = useSliderDieCastingRM();
 
 	const { data: material } = useOtherMaterial();
+	const { user } = useAuth();
 
 	const MAX_QUANTITY =
 		Number(updateMaterialTrx?.stock) +
@@ -92,6 +81,7 @@ export default function Index({
 				...data,
 				material_name: updateMaterialTrx?.material_name,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommonMaterialUsedByUUID } from '@/state/Common';
 import { useRHF } from '@/hooks';
 
@@ -22,7 +23,7 @@ export default function Index({
 	const { data, url, updateData } = useCommonMaterialUsedByUUID(
 		updateDyeingLog?.uuid
 	);
-	// const { invalidateQuery: invalidateDyeingRM } = useDyeingRM();
+	const { user } = useAuth();
 
 	const MAX_QUANTITY = Number(updateDyeingLog?.dying_and_iron);
 
@@ -76,6 +77,7 @@ export default function Index({
 				...formData,
 				material_name: data?.material_name,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

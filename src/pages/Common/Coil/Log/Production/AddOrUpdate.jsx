@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useCommonCoilSFG,
 	useCommonTapeProductionByUUID,
@@ -33,6 +34,7 @@ export default function Index({
 		updateCoilLog?.uuid
 	);
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
+	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, reset, context, getValues, watch } =
 		useRHF(
@@ -87,6 +89,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				type_of_zipper: updateCoilLog?.type_of_zipper,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 

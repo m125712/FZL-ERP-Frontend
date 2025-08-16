@@ -46,6 +46,7 @@ export default function Index({
 		if (updateBank?.uuid !== null && updateBank?.uuid !== undefined) {
 			const updatedData = {
 				...data,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 

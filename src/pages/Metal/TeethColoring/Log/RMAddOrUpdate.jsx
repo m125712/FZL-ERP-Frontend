@@ -32,6 +32,7 @@ export default function Index({
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateMetalTCRM } = useMetalTCRM();
 	const { data: material } = useOtherMaterial();
+	const { user } = useAuth();
 
 	const MAX_QUANTITY = Number(
 		updateMetalTCRMLog?.section === 'teeth_assembling_and_polishing'
@@ -98,6 +99,7 @@ export default function Index({
 				...data,
 				material_name: updateMetalTCRMLog?.material_name,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

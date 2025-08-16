@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useDyeingTransfer } from '@/state/Dyeing';
 import { useOrderBuyer } from '@/state/Order';
 import { Controller, useWatch } from 'react-hook-form';
@@ -23,6 +24,7 @@ export default function Index({
 	setUpdateTransfer,
 }) {
 	const { url, updateData } = useDyeingTransfer();
+	const { user } = useAuth();
 	const {
 		register,
 		handleSubmit,
@@ -57,6 +59,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

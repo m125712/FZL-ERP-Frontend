@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useOtherOrderBatchDescription,
 	useOtherSliderItem,
@@ -31,6 +32,7 @@ export default function Index({
 		enabled: true,
 	});
 	const { invalidateQuery } = useSliderDieCastingStock();
+	const { user } = useAuth();
 
 	const { data: slider_item_name } = useOtherSliderItem();
 	const { data: orders } = useOtherOrderBatchDescription();
@@ -70,6 +72,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 			await updateData.mutateAsync({
 				url: `${url}/${update?.uuid}`,

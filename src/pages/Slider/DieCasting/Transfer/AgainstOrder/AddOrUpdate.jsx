@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useOtherSliderStockWithDescription } from '@/state/Other';
+import { useAuth } from '@/context/auth';
 import {
 	useSliderDashboardInfo,
 	useSliderDieCastingTransferAgainstOrderByUUID,
@@ -25,6 +25,7 @@ export default function Index({
 	const { data, url, updateData } =
 		useSliderDieCastingTransferAgainstOrderByUUID(update?.uuid);
 	const { invalidateQuery } = useSliderDashboardInfo();
+	const { user } = useAuth();
 	const {
 		register,
 		handleSubmit,
@@ -62,6 +63,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 			await updateData.mutateAsync({
 				url,

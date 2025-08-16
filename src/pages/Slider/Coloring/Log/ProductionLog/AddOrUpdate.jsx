@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useSliderAssemblyProductionEntryByUUID,
 	useSliderColoringProduction,
 } from '@/state/Slider';
 import * as yup from 'yup';
-import { useRHF, useUpdateFunc } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+import { Input, JoinInput } from '@/ui';
 
 import { DevTool } from '@/lib/react-hook-devtool';
 import {
@@ -35,6 +36,7 @@ export default function Index({
 		updateSliderProd?.uuid
 	);
 	const { invalidateQuery } = useSliderColoringProduction();
+	const { user } = useAuth();
 
 	const MAX_QUANTITY =
 		updateSliderProd?.slider_assembly_prod + updateSliderProd?.trx_quantity;
@@ -89,6 +91,7 @@ export default function Index({
 				...data,
 				with_link: data.with_link ? 1 : 0,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommonMaterialUsedByUUID, useCommonTapeRM } from '@/state/Common';
 import { useOtherMaterial } from '@/state/Other';
 import { useRHF } from '@/hooks';
@@ -30,6 +31,7 @@ export default function Index({
 	const { data } = useCommonMaterialUsedByUUID(updateTapeLog?.uuid);
 	const { invalidateQuery: invalidateCommonTapeRM } = useCommonTapeRM();
 	const { data: material } = useOtherMaterial();
+	const { user } = useAuth();
 
 	const {
 		register,
@@ -87,6 +89,7 @@ export default function Index({
 		if (updateTapeLog?.uuid !== null) {
 			const updatedData = {
 				...data,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 

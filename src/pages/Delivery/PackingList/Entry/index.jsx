@@ -166,6 +166,7 @@ export default function Index() {
 			const packingListData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			// update /packing/list/uuid
@@ -189,6 +190,7 @@ export default function Index() {
 						is_checked: item.is_checked,
 						remarks: item.remarks,
 						updated_at: GetDateTime(),
+						updated_by: user?.uuid,
 					};
 
 					return await updateData.mutateAsync({

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useNylonPlasticFinishingProduction,
 	useNylonPlasticFinishingTrxLog,
@@ -35,6 +36,7 @@ export default function Index({
 			enabled: updateTeethMoldingLog.uuid !== null,
 		}
 	);
+	const { user } = useAuth();
 	const MAX_QUANTITY =
 		Number(updateTeethMoldingLog?.finishing_prod) +
 		Number(updateTeethMoldingLog?.trx_quantity);
@@ -85,6 +87,7 @@ export default function Index({
 				...data,
 				order_entry_uuid: updateTeethMoldingLog?.order_entry_uuid,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

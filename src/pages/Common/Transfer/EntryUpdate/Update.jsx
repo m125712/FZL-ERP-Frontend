@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import { useDyeingTransferByUUID } from '@/state/Dyeing';
 import { useMetalTMProduction } from '@/state/Metal';
 import {
@@ -39,6 +40,7 @@ export default function Index({
 	const { invalidateQuery: invalidateMetalTMProduction } =
 		useMetalTMProduction();
 	const { invalidateQuery: invalidateQueryVislonTMP } = useVislonTMP();
+	const { user } = useAuth();
 	const {
 		register,
 		handleSubmit,
@@ -81,6 +83,7 @@ export default function Index({
 		) {
 			const updatedData = {
 				...data,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 

@@ -1,3 +1,4 @@
+import { useAuth } from '@/context/auth';
 import {
 	useFetchForRhfReset,
 	usePostFunc,
@@ -23,6 +24,7 @@ export default function Index({
 		ITEM_LIBRARY_SCHEMA,
 		ITEM_LIBRARY_NULL
 	);
+	const { user } = useAuth();
 
 	useFetchForRhfReset(
 		`/item-library/${updateItemLibrary?.id}`,
@@ -45,6 +47,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 			useUpdateFunc({
 				uri: `/item-library/${updateItemLibrary?.id}/${data?.name}`,

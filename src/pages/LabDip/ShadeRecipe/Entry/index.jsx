@@ -119,6 +119,7 @@ export default function Index() {
 				...data,
 				lab_status: data.lab_status ? 1 : 0,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			const shade_recipe_description_promise =

@@ -151,6 +151,7 @@ export default function Index() {
 				const updatedData = {
 					...item,
 					updated_at: GetDateTime(),
+					updated_by: user?.uuid,
 				};
 				return await useUpdateFunc({
 					uri: `/slider/slider-assembly/entry/${item?.id}/${updatedData?.slider_slider_assembly_uuid}`,

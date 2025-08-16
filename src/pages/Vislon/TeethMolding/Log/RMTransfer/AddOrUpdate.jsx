@@ -1,8 +1,8 @@
 import { useAuth } from '@/context/auth';
-import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
+import { useCommonMaterialUsed } from '@/state/Common';
 import { useOtherMaterial } from '@/state/Other';
 import { useVislonTMRM } from '@/state/Vislon';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast/ReactToastify';
@@ -29,6 +29,7 @@ export default function Index({
 	const { invalidateQuery: invalidateVislonTMRM } = useVislonTMRM();
 
 	const { data: material } = useOtherMaterial();
+	const { user } = useAuth();
 	const MAX_QUANTITY = Number(updateVislonTMRMLog?.v_teeth_molding);
 
 	// const schema = {
@@ -88,6 +89,7 @@ export default function Index({
 				...data,
 				material_name: updateVislonTMRMLog?.material_name,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

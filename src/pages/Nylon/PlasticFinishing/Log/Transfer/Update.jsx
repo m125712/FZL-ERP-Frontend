@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useDyeingTransfer } from '@/state/Dyeing';
-import { useOrderBuyer } from '@/state/Order';
-import { Controller, useWatch } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -32,6 +31,7 @@ export default function Index({
 		getValues,
 		context,
 	} = useRHF(UPDATE_DYEING_TRANSFER_SCHEMA, UPDATE_DYEING_TRANSFER_NULL);
+	const { user } = useAuth();
 
 	useFetchForRhfReset(
 		`${url}/${updateTransfer?.uuid}`,
@@ -57,6 +57,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

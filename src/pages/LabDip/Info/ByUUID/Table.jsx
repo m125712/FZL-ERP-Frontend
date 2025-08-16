@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useAuth } from '@/context/auth';
 import { UseLabDipInfoByDetails, useLabDipRecipe } from '@/state/LabDip';
 import { useAccess } from '@/hooks';
 
@@ -14,6 +15,7 @@ export default function Index({ recipe, order_info_uuid }) {
 		UseLabDipInfoByDetails(recipe?.uuid);
 
 	const haveAccess = useAccess('lab_dip__recipe');
+	const { user } = useAuth();
 
 	const columns = useMemo(
 		() => [
@@ -155,6 +157,8 @@ export default function Index({ recipe, order_info_uuid }) {
 				approved: recipe[idx]?.approved === 1 ? 0 : 1,
 				approved_date:
 					recipe[idx]?.approved === 1 ? null : GetDateTime(),
+				updated_by: user?.uuid,
+				updated_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,
 		});
@@ -168,6 +172,8 @@ export default function Index({ recipe, order_info_uuid }) {
 				is_pps_req: recipe[idx]?.is_pps_req === 1 ? 0 : 1,
 				is_pps_req_date:
 					recipe[idx]?.is_pps_req === 1 ? null : GetDateTime(),
+				updated_by: user?.uuid,
+				updated_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,
 		});
@@ -180,6 +186,7 @@ export default function Index({ recipe, order_info_uuid }) {
 			updatedData: {
 				status: recipe[idx]?.status === 1 ? 0 : 1,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

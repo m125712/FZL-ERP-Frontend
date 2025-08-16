@@ -81,6 +81,7 @@ export default function Index({
 				...data,
 				order_entry_id: updateDyeingAndIronLog?.order_entry_id,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await useUpdateFunc({

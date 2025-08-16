@@ -103,6 +103,7 @@ export default function Index() {
 				batch_status_date:
 					data?.batch_status !== 'pending' ? GetDateTime() : null,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});
@@ -129,6 +130,7 @@ export default function Index() {
 									item.production_quantity_in_kg,
 								remarks: item.remarks,
 								updated_at: GetDateTime(),
+								updated_by: user?.uuid,
 							},
 							isOnCloseNeeded: false,
 						});

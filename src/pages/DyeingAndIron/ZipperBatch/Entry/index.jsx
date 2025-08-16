@@ -171,6 +171,7 @@ export default function Index() {
 				order_info_uuid: data.order_info_uuid,
 				remarks: data.remarks,
 				updated_at: GetDateTime(),
+				updated_by: user.uuid,
 			};
 
 			setBatchData(batch_data_updated); // * use for modal
@@ -195,6 +196,7 @@ export default function Index() {
 					dyeing_batch_entry_uuid: item.dyeing_batch_entry_uuid,
 					remarks: item.remarks,
 					updated_at: GetDateTime(),
+					updated_by: user.uuid,
 				})
 			);
 

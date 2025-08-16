@@ -64,6 +64,7 @@ export default function Index({
 				is_bulk: data?.is_bulk ? 1 : 0,
 				is_sample: data?.is_sample ? 1 : 0,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

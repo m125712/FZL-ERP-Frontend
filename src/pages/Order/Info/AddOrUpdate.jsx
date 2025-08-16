@@ -95,6 +95,7 @@ export default function Index({
 				is_cash: data?.is_cash ? 1 : 0,
 				status: data.status ? 1 : 0,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

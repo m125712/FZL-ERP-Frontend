@@ -75,6 +75,7 @@ export default function Index({
 				is_priority_material: data.is_priority_material ? 1 : 0,
 				is_hidden: data.is_hidden ? 1 : 0,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useLabDipRecipe } from '@/state/LabDip';
 import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
@@ -20,6 +21,7 @@ export default function Index() {
 	];
 	const { data, isLoading, isError, url, updateData } =
 		useLabDipRecipe(status);
+	const { user } = useAuth();
 	const navigate = useNavigate();
 	const info = new PageInfo('Lab Dip/Recipe', url, 'lab_dip__recipe');
 	const haveAccess = useAccess('lab_dip__recipe');
@@ -130,6 +132,8 @@ export default function Index() {
 			updatedData: {
 				approved: data[idx]?.approved === 1 ? 0 : 1,
 				approved_date: data[idx]?.approved === 1 ? null : GetDateTime(),
+				updated_by: user?.uuid,
+				updated_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,
 		});
@@ -140,6 +144,7 @@ export default function Index() {
 			updatedData: {
 				status: data[idx]?.status === 1 ? 0 : 1,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

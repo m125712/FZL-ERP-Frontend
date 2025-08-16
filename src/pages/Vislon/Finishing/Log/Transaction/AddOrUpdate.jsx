@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useVislonFinishingProd,
 	useVislonTMTEntryByUUID,
@@ -37,6 +38,7 @@ export default function Index({
 		updateFinishingLog?.uuid
 	);
 	const { invalidateQuery } = useVislonFinishingProd();
+	const { user } = useAuth();
 	const { register, handleSubmit, errors, reset, context } = useRHF(
 		{
 			...VISLON_TRANSACTION_SCHEMA,
@@ -81,6 +83,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

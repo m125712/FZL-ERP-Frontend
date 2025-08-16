@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommonTapeSFG, useCommonTapeTransferByUUID } from '@/state/Common';
 import { useRHF } from '@/hooks';
 
@@ -24,6 +25,7 @@ export default function Index({
 		updateTapeLog?.uuid
 	);
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
+	const { user } = useAuth();
 
 	const MAX_QUANTITY =
 		Number(updateTapeLog?.stock_quantity) +
@@ -66,6 +68,7 @@ export default function Index({
 		if (updateTapeLog?.uuid !== null && updateTapeLog?.uuid !== undefined) {
 			const updatedData = {
 				...data,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 

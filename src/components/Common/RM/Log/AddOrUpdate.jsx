@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommonMaterialUsedByUUID } from '@/state/Common';
 import { useOtherRM } from '@/state/Other';
 import { useRHF } from '@/hooks';
@@ -33,6 +34,8 @@ export default function Index({
 		updateDyeingLog[updateDyeingLog?.section] +
 			updateDyeingLog?.used_quantity
 	);
+
+	const { user } = useAuth();
 
 	const {
 		register,
@@ -83,6 +86,7 @@ export default function Index({
 			const updatedData = {
 				...formData,
 				material_name: data?.material_name,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 

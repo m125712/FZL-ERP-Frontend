@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useSliderAssemblyStock,
 	useSliderAssemblyStockProductionByUUID,
@@ -32,6 +33,7 @@ export default function Index({
 		updateSliderProd?.uuid
 	);
 	const { invalidateQuery } = useSliderAssemblyStock();
+	const { user } = useAuth();
 
 	const {
 		register,
@@ -96,6 +98,7 @@ export default function Index({
 				...data,
 				with_link: data.with_link ? 1 : 0,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

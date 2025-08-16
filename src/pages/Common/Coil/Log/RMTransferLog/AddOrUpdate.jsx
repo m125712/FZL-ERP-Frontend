@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommonCoilRM, useCommonMaterialUsedByUUID } from '@/state/Common';
 import { useOtherMaterial } from '@/state/Other';
 import { useRHF } from '@/hooks';
@@ -30,6 +31,7 @@ export default function Index({
 	const { data } = useCommonMaterialUsedByUUID(updateCoilLog?.uuid);
 	const { data: material } = useOtherMaterial();
 	const { invalidateQuery: invalidateCommonCoilRM } = useCommonCoilRM();
+	const { user } = useAuth();
 
 	const {
 		register,
@@ -88,6 +90,7 @@ export default function Index({
 		if (updateCoilLog?.uuid !== null) {
 			const updatedData = {
 				...data,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 

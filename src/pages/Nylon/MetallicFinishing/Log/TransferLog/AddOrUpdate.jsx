@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useNylonMFProduction,
 	useNylonMFTrxLog,
@@ -32,6 +33,7 @@ export default function Index({
 	const { data: dataByUUID } = useNylonMFTrxLogByUUID(updateLog.uuid, {
 		enabled: updateLog.uuid !== null,
 	});
+	const { user } = useAuth();
 	const MAX_QUANTITY =
 		Number(updateLog?.finishing_prod) + Number(updateLog?.trx_quantity);
 
@@ -82,6 +84,7 @@ export default function Index({
 				...data,
 				order_entry_uuid: updateLog?.order_entry_uuid,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useMetalFProduction,
 	useMetalTCProductionLogByUUID,
@@ -36,6 +37,7 @@ export default function Index({
 			enabled: updateFinishingLog.uuid !== null,
 		}
 	);
+	const { user } = useAuth();
 
 	const { invalidateQuery } = useMetalFProduction();
 
@@ -106,6 +108,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

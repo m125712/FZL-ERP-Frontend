@@ -85,6 +85,7 @@ export default function Index({
 				is_logo_body: data.is_logo_body === true ? 1 : 0,
 				is_logo_puller: data.is_logo_puller === true ? 1 : 0,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

@@ -145,6 +145,7 @@ export default function Index({
 		const updatedData = {
 			...data,
 			can_access: JSON.stringify(result),
+			updated_by: user?.uuid,
 			updated_at: GetDateTime(),
 		};
 

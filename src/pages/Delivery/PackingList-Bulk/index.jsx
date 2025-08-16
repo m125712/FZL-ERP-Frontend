@@ -483,6 +483,7 @@ export default function Index() {
 						: GetDateTime(),
 				warehouse_received_by: user.uuid,
 				updated_at: GetDateTime(),
+				updated_by: user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});
@@ -503,6 +504,7 @@ export default function Index() {
 					data[idx]?.gate_pass === 1 ? null : GetDateTime(),
 				gate_pass_by: user.uuid,
 				updated_at: GetDateTime(),
+				updated_by: user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

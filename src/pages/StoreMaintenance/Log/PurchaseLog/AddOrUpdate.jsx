@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import { useOtherMaterial } from '@/state/Other';
 import {
 	useMaterialInfo,
@@ -27,6 +28,7 @@ export default function Index({
 	const { data, updateData } = usePurchaseEntryByUUID(
 		updatePurchaseLog?.entry_uuid
 	);
+	const { user } = useAuth();
 	const {
 		register,
 		handleSubmit,
@@ -75,6 +77,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 			await updateData.mutateAsync({
 				url: `/purchase/entry/${updatePurchaseLog?.entry_uuid}`,

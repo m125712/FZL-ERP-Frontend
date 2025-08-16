@@ -65,6 +65,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				active: data.active ? 1 : 0,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 

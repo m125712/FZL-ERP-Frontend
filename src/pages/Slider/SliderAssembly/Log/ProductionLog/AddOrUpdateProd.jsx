@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useSliderAssemblyProduction,
 	useSliderAssemblyProductionEntryByUUID,
 } from '@/state/Slider';
-import { Weight } from 'lucide-react';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+import { Input, JoinInput } from '@/ui';
 
 import { DevTool } from '@/lib/react-hook-devtool';
 import {
@@ -28,6 +28,7 @@ export default function Index({
 		updateSliderProd?.uuid
 	);
 	const { invalidateQuery } = useSliderAssemblyProduction();
+	const { user } = useAuth();
 	const MAX_QUANTITY = Math.floor(Number(updateSliderProd?.max_sa_quantity));
 	const {
 		register,
@@ -72,6 +73,7 @@ export default function Index({
 				...data,
 				with_link: updateSliderProd?.with_link,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

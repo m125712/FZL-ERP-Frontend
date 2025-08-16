@@ -1,9 +1,10 @@
 import { useAuth } from '@/context/auth';
-import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
+import { useCommonMaterialUsed } from '@/state/Common';
 import { useSliderAssemblyRM } from '@/state/Slider';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
+import { ShowLocalToast } from '@/components/Toast';
 import { FormField, Input, ReactSelect } from '@/ui';
 
 import {
@@ -27,6 +28,7 @@ export default function Index({
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateSliderAssemblyRM } =
 		useSliderAssemblyRM();
+	const { user } = useAuth();
 
 	const MAX_QUANTITY =
 		Number(updateSliderAssemblyRMLog?.slider_assembly) +
@@ -90,6 +92,7 @@ export default function Index({
 				...data,
 				material_name: updateSliderAssemblyRMLog?.material_name,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

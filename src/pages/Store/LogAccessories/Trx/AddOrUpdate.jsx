@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommonCoilRM, useCommonTapeRM } from '@/state/Common';
 import { useDeliveryRM } from '@/state/Delivery';
 import { useDyeingRM } from '@/state/Dyeing';
@@ -45,6 +46,7 @@ export default function Index({
 	const { invalidateQuery: invalidateDieCastingRM } = useSliderDieCastingRM();
 
 	const { data: material } = useOtherMaterial();
+	const { user } = useAuth();
 
 	const MAX_QUANTITY =
 		Number(updateMaterialTrx?.stock) +
@@ -92,6 +94,7 @@ export default function Index({
 				...data,
 				material_name: updateMaterialTrx?.material_name,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

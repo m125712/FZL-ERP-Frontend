@@ -238,6 +238,7 @@ export default function Index() {
 							url: `/commercial/lc-entry-others/${item.uuid}`,
 							updatedData: {
 								...item,
+								updated_by: user?.uuid,
 								updated_at: GetDateTime(),
 							},
 							isOnCloseNeeded: false,
@@ -264,6 +265,7 @@ export default function Index() {
 							url: `/commercial/lc-entry/${item.uuid}`,
 							updatedData: {
 								...item,
+								updated_by: user?.uuid,
 								updated_at: GetDateTime(),
 							},
 							isOnCloseNeeded: false,

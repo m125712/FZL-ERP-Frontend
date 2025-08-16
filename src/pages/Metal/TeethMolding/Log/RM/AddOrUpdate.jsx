@@ -29,6 +29,7 @@ export default function Index({
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateMetalTMRM } = useMetalTMRM();
 	const { data: material } = useOtherMaterial();
+	const { user } = useAuth();
 
 	const MAX_QUANTITY = Number(updateMetalTMRMLog?.m_teeth_molding);
 	// const schema = {
@@ -89,6 +90,7 @@ export default function Index({
 				...data,
 				material_name: updateMetalTMRMLog?.material_name,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

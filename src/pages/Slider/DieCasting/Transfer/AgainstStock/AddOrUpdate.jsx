@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useSliderDieCastingStock,
 	useSliderDieCastingTransferAgainstStockByUUID,
@@ -24,6 +25,7 @@ export default function Index({
 	const { data, url, updateData } =
 		useSliderDieCastingTransferAgainstStockByUUID(update?.uuid);
 	const { invalidateQuery } = useSliderDieCastingStock();
+	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, reset, getValues, context } =
 		useRHF(
@@ -52,6 +54,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 			await updateData.mutateAsync({
 				url,

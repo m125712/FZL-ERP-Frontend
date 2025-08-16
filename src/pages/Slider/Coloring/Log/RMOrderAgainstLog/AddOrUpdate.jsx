@@ -30,6 +30,7 @@ export default function Index({
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { invalidateQuery: invalidateMaterialTrx } =
 		useMaterialTrxAgainstOrderDescription();
+	const { user } = useAuth();
 
 	const MAX_QUANTITY =
 		Number(updateLog?.stock) + Number(updateLog?.trx_quantity);
@@ -73,6 +74,7 @@ export default function Index({
 				...data,
 				material_name: updateLog?.material_name,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

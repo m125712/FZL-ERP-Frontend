@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
@@ -26,6 +27,7 @@ export default function Information({ data, updateData }) {
 		updated_at,
 		remarks,
 	} = data;
+	const { user } = useAuth();
 	const [completedStatus, setCompletedStatus] = useState(is_completed);
 	const haveAccess = useAccess('planning__finishing_batch');
 	const renderItems = () => {
@@ -104,6 +106,7 @@ export default function Information({ data, updateData }) {
 			updatedData: {
 				is_completed: completedStatus === true ? false : true,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

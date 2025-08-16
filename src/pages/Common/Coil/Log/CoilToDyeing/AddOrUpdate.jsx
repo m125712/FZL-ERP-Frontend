@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommonCoilSFG, useCommonCoilToDyeingByUUID } from '@/state/Common';
 import { useOtherOrderDescription } from '@/state/Other';
 import { useRHF } from '@/hooks';
@@ -20,6 +21,8 @@ export default function Index({
 	const { data, url, updateData } = useCommonCoilToDyeingByUUID(
 		entryUUID?.uuid
 	);
+
+	const { user } = useAuth();
 
 	const { invalidateQuery: invalidateCommonCoilSFG } = useCommonCoilSFG();
 	const MAX_QTY = Number(entryUUID?.max_trf_qty);
@@ -61,6 +64,7 @@ export default function Index({
 		if (entryUUID?.uuid !== null) {
 			const updatedData = {
 				...data,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 

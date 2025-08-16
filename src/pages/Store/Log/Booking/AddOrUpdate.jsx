@@ -1,10 +1,7 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import { useOtherMarketing } from '@/state/Other';
-import {
-	useMaterialBooking,
-	useMaterialBookingByUUID,
-	useMaterialInfo,
-} from '@/state/Store';
+import { useMaterialBookingByUUID, useMaterialInfo } from '@/state/Store';
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -26,6 +23,7 @@ export default function Index({
 	);
 	const { data: marketing } = useOtherMarketing();
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { user } = useAuth();
 
 	const {
 		register,
@@ -68,6 +66,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

@@ -80,6 +80,7 @@ export default function Index({
 				...data,
 				is_priority_material: data.is_priority_material ? 1 : 0,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

@@ -1,3 +1,4 @@
+import { useAuth } from '@/context/auth';
 import { useAdminUsers } from '@/state/Admin';
 import { useRHF } from '@/hooks';
 
@@ -13,6 +14,7 @@ export default function Index({
 	setResPass,
 }) {
 	const { updateData } = useAdminUsers();
+	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, context } = useRHF(
 		RESET_PASSWORD_SCHEMA,
@@ -33,6 +35,7 @@ export default function Index({
 		if (resPass?.uuid !== null && resPass?.uuid !== undefined) {
 			const updatedData = {
 				...data,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 

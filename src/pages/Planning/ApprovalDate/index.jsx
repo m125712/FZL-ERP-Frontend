@@ -49,6 +49,7 @@ export default function Index() {
 					: GetDateTime(),
 				bulk_approval_by: user?.uuid,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

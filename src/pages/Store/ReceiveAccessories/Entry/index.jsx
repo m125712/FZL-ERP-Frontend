@@ -132,6 +132,7 @@ export default function Index() {
 			const purchase_description_data = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			// delete purchase field from data to be sent
@@ -164,6 +165,7 @@ export default function Index() {
 				.map((item) => ({
 					...item,
 					updated_at: GetDateTime(),
+					updated_by: user?.uuid,
 				}));
 
 			const purchase_entries_promise = [

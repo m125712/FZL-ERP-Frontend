@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useSliderAssemblyProduction,
 	useSliderAssemblyStock,
@@ -7,7 +8,7 @@ import {
 import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
+import { Input, JoinInput } from '@/ui';
 
 import { DevTool } from '@/lib/react-hook-devtool';
 import {
@@ -30,6 +31,7 @@ export default function Index({
 	const { invalidateQuery } = useSliderAssemblyStock();
 	const { invalidateQuery: invalidateSliderAssembly } =
 		useSliderAssemblyProduction();
+	const { user } = useAuth();
 	const {
 		register,
 		handleSubmit,
@@ -89,6 +91,7 @@ export default function Index({
 				...data,
 				with_link: updateSliderProd.with_link,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

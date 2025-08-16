@@ -164,6 +164,7 @@ export default function Index() {
 				...data,
 				is_hand_delivery: data?.delivery_type === 'hand' ? true : false,
 				is_own: data?.delivery_type === 'own' ? true : false,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 				receive_status: data.receive_status === true ? 1 : 0,
 				carton_quantity:

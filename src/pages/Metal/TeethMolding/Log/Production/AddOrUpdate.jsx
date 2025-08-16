@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useMetalTMProduction,
 	useMetalTMProductionLog,
@@ -31,6 +32,7 @@ export default function Index({
 	},
 	setUpdateTeethMoldingLog,
 }) {
+	const { user } = useAuth();
 	const { invalidateQuery } = useMetalTMProduction();
 	const { updateData } = useMetalTMProductionLog();
 	const { data: dataByUUID } = useMetalTMProductionLogByUUID(
@@ -95,6 +97,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

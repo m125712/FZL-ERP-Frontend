@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useCommonOrderAgainstCoilRMLog,
 	useCommonOrderAgainstTapeRMLog,
@@ -91,6 +92,7 @@ export default function Index({
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 	const { invalidateQuery: invalidateSliderAssemblyStock } =
 		useSliderAssemblyStock();
+	const { user } = useAuth();
 
 	const { data: material } = useOtherMaterial();
 	const MAX_QUANTITY =
@@ -143,6 +145,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 			await updateData.mutateAsync({
 				url: `/zipper/material-trx-against-order/${updateMaterialTrxToOrder?.uuid}`,

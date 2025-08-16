@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useSliderAssemblyStock,
 	useSliderAssemblyStockTransactionByUUID,
@@ -33,6 +34,7 @@ export default function Index({
 		updateSliderTrx?.uuid
 	);
 	const { invalidateQuery } = useSliderAssemblyStock();
+	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, control, reset, context } = useRHF(
 		{
@@ -73,6 +75,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

@@ -151,6 +151,7 @@ export default function Index() {
 				is_bill: data.is_bill ? 1 : 0,
 				is_cash: data.is_cash ? 1 : 0,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			const order_info_promise = await updateData.mutateAsync({

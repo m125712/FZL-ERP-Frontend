@@ -119,6 +119,7 @@ export default function Index() {
 			const lab_info_updated = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({
@@ -163,6 +164,7 @@ export default function Index() {
 								...item,
 								uuid: item.info_entry_uuid,
 								updated_at: GetDateTime(),
+								updated_by: user?.uuid,
 							},
 							isOnCloseNeeded: false,
 						})

@@ -12,7 +12,7 @@ import {
 	useOrderAgainstMetalTMRMLog,
 } from '@/state/Metal';
 import { useOrderAgainstNylonMetallicFinishingRMLog } from '@/state/Nylon';
-import { useOtherMaterial } from '@/state/Other';
+import { useOtherIssue } from '@/state/Other';
 import {
 	useOrderAgainstDieCastingRMLog,
 	useOrderAgainstSliderAssemblyRMLog,
@@ -32,11 +32,13 @@ import { FormField, Input, ReactSelect } from '@/ui';
 import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
 import {
-	MATERIAL_TRX_AGAINST_ORDER_NULL,
-	MATERIAL_TRX_AGAINST_ORDER_SCHEMA,
+	MATERIAL_TRX_AGAINST_ISSUE_NULL,
+	MATERIAL_TRX_AGAINST_ISSUE_SCHEMA,
 } from '@util/Schema';
 import GetDateTime from '@/util/GetDateTime';
-import getTransactionArea, { getPurposes } from '@/util/TransactionArea';
+import { getPurposes } from '@/util/TransactionArea';
+
+import { sections } from './Utils';
 
 export default function Index({
 	modalId = '',
@@ -47,10 +49,13 @@ export default function Index({
 	},
 	setUpdateMaterialDetails,
 }) {
-	const { data, updateData } = useMaterialTrxAgainstOrderDescriptionByUUID(
-		updateMaterialTrxToOrder?.uuid
+	const { postData } = useMaterialInfo();
+	const { data: issues } = useOtherIssue();
+	const { invalidateQuery: invalidateMaterialStockToSFG } =
+		useMaterialStockToSFG();
+	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo(
+		updateMaterialDetails?.type
 	);
-	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { invalidateQuery: invalidateOrderAgainstDeliveryRMLog } =
 		useOrderAgainstDeliveryRMLog();
 	const { invalidateQuery: invalidateOrderAgainstDieCastingRMLog } =
@@ -122,10 +127,10 @@ export default function Index({
 				uuid: nanoid(),
 				created_at: GetDateTime(),
 			};
-			await updateData.mutateAsync({
-				url: `/zipper/material-trx-against-order/${updateMaterialTrxToOrder?.uuid}`,
-				uuid: updateMaterialTrxToOrder?.uuid,
-				updatedData,
+
+			await postData.mutateAsync({
+				url: '/zipper/material-trx-against-order',
+				newData: updatedData,
 				onClose,
 			});
 

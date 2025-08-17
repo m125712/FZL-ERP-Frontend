@@ -15,8 +15,9 @@ import { PlanningRoutes } from './Planning';
 import { ProfileRoutes } from './Profile';
 import { ReportRoutes } from './Report';
 import { SliderRoutes } from './Slider';
-import { StoreRoutes } from './Store';
+import { StoreAccessoriesRoutes } from './StoreAccessories';
 import { StoreMaintenanceRoutes } from './StoreMaintenance';
+import { StoreRmRoutes } from './StoreRm';
 import { ThreadRoutes } from './Thread';
 import { VislonRoutes } from './Vislon';
 
@@ -26,8 +27,9 @@ const privateRoutes = [
 	...OrderRoutes,
 	...ThreadRoutes,
 	...CommercialRoutes,
-	...StoreRoutes,
 	...StoreMaintenanceRoutes,
+	...StoreRmRoutes,
+	...StoreAccessoriesRoutes,
 	...MaintenanceRoutes,
 	...CommonRoutes,
 	...LabDipRoutes,

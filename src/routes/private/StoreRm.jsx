@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 
-const MaterialLog = lazy(() => import('@/pages/Store/Maintenance/Log'));
-const Receive = lazy(() => import('@/pages/Store/Maintenance/Receive'));
+const MaterialLog = lazy(() => import('@/pages/Store/Rm/Log'));
+const Receive = lazy(() => import('@/pages/Store/Rm/Receive'));
 const ReceiveDetails = lazy(
 	() => import('@/pages/Store/_components/Receive/Details')
 );
@@ -9,21 +9,21 @@ const ReceiveEntry = lazy(
 	() => import('@/pages/Store/_components/Receive/Entry')
 );
 
-const Section = lazy(() => import('@/pages/Store/Maintenance/section'));
-const Stock = lazy(() => import('@/pages/Store/Maintenance/stock'));
-const MaterialType = lazy(() => import('@/pages/Store/Maintenance/Type'));
+const Section = lazy(() => import('@/pages/Store/Rm/section'));
+const Stock = lazy(() => import('@/pages/Store/Rm/stock'));
+const MaterialType = lazy(() => import('@/pages/Store/Rm/Type'));
 
-const Vendor = lazy(() => import('@/pages/Store/Maintenance/Vendor'));
+const Vendor = lazy(() => import('@/pages/Store/Rm/Vendor'));
 
-export const StoreMaintenanceRoutes = [
+export const StoreRmRoutes = [
 	{
-		name: 'Store (Maintenance)',
+		name: 'Store (Rm)',
 		children: [
 			{
 				name: 'Stock',
-				path: '/store-maintenance/stock',
+				path: '/store-rm/stock',
 				element: <Stock />,
-				page_name: 'store_maintenance__stock',
+				page_name: 'store_rm__stock',
 				actions: [
 					'create',
 					'read',
@@ -31,69 +31,69 @@ export const StoreMaintenanceRoutes = [
 					'delete',
 					'click_trx_against_order',
 					'click_action',
-					// 'click_booking',
+					'click_booking',
 				],
 			},
 			{
 				name: 'Receive',
-				path: '/store-maintenance/receive',
+				path: '/store-rm/receive',
 				element: <Receive />,
-				page_name: 'store_maintenance__receive',
+				page_name: 'store_rm__receive',
 				actions: ['create', 'read', 'update', 'delete'],
 				disableCollapse: true,
 				children: [
 					{
 						name: 'Details',
-						path: '/store-maintenance/receive/:purchase_description_uuid',
+						path: '/store-rm/receive/:purchase_description_uuid',
 						element: <ReceiveDetails />,
 						hidden: true,
-						page_name: 'store_maintenance__receive_details',
+						page_name: 'store_rm__receive_details',
 						actions: ['read'],
 					},
 					{
 						name: 'Entry',
-						path: '/store-maintenance/receive/entry',
+						path: '/store-rm/receive/entry',
 						element: <ReceiveEntry />,
 						hidden: true,
-						page_name: 'store_maintenance__receive_entry',
+						page_name: 'store_rm__receive_entry',
 						actions: ['create', 'read', 'update'],
 					},
 					{
 						name: 'Entry',
-						path: '/store-maintenance/receive/:purchase_description_uuid/update',
+						path: '/store-rm/receive/:purchase_description_uuid/update',
 						element: <ReceiveEntry />,
 						hidden: true,
-						page_name: 'store_maintenance__receive_update',
+						page_name: 'store_rm__receive_update',
 						actions: ['create', 'read', 'update'],
 					},
 				],
 			},
 			{
 				name: 'Section',
-				path: '/store-maintenance/section',
+				path: '/store-rm/section',
 				element: <Section />,
-				page_name: 'store_maintenance__section',
+				page_name: 'store_rm__section',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
 			{
 				name: 'Material Type',
-				path: '/store-maintenance/type',
+				path: '/store-rm/type',
 				element: <MaterialType />,
-				page_name: 'store_maintenance__type',
+				page_name: 'store_rm__type',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
 			{
 				name: 'Vendor',
-				path: '/store-maintenance/vendor',
+				path: '/store-rm/vendor',
 				element: <Vendor />,
-				page_name: 'store_maintenance__vendor',
+				page_name: 'store_rm__vendor',
 				actions: ['create', 'read', 'update', 'delete'],
 			},
 			{
 				name: 'Log',
-				path: '/store-maintenance/log',
+				path: '/store-rm/log',
 				element: <MaterialLog />,
-				page_name: 'store_maintenance__log',
+				page_name: 'store_rm__log',
 				actions: [
 					'read',
 					'update_log',

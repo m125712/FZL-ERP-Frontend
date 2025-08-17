@@ -1,3 +1,4 @@
+import { useAuth } from '@/context/auth';
 import { useCommonMaterialTrx } from '@/state/Common';
 import {
 	useMaterialInfo,
@@ -39,6 +40,7 @@ export default function Index({
 				MAX_QUANTITY
 			),
 	};
+	const { user } = useAuth();
 
 	const {
 		register,
@@ -72,6 +74,7 @@ export default function Index({
 				...data,
 				material_name: updateLog?.material_name,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

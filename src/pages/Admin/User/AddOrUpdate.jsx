@@ -1,3 +1,4 @@
+import { useAuth } from '@/context/auth';
 import { useAdminUsers } from '@/state/Admin';
 import * as yup from 'yup';
 import { useFetch, useFetchForRhfReset, useRHF } from '@/hooks';
@@ -27,6 +28,7 @@ export default function Index({
 			),
 		};
 	}
+	const { user } = useAuth();
 	const {
 		register,
 		handleSubmit,
@@ -59,6 +61,7 @@ export default function Index({
 		if (updateUser?.uuid !== null) {
 			const updatedData = {
 				...data,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 

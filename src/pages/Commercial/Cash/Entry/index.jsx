@@ -206,6 +206,7 @@ export default function Index() {
 				conversion_rate: rest?.conversion_rate,
 				receive_amount: rest?.receive_amount,
 				remarks: rest?.remarks,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 				is_pi: 0,
 			};
@@ -220,6 +221,7 @@ export default function Index() {
 						const updatedData = {
 							pi_cash_quantity: item.pi_cash_quantity,
 							is_checked: item.is_checked,
+							updated_by: user?.uuid,
 							updated_at: GetDateTime(),
 						};
 
@@ -281,6 +283,7 @@ export default function Index() {
 							const updatedData = {
 								pi_cash_quantity: item.pi_cash_quantity,
 								is_checked: item.is_checked,
+								updated_by: user?.uuid,
 								updated_at: GetDateTime(),
 							};
 

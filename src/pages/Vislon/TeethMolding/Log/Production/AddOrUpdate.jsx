@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import { useVislonTMP, useVislonTMPEntryByUUID } from '@/state/Vislon';
 import { useRHF } from '@/hooks';
 
@@ -29,6 +30,7 @@ export default function Index({
 		updateTeethMoldingLog?.uuid
 	);
 	const { invalidateQuery } = useVislonTMP();
+	const { user } = useAuth();
 
 	const MAX_DYED_TAPE_KG =
 		Number(updateTeethMoldingLog.dyed_tape_used_in_kg) +
@@ -73,6 +75,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

@@ -34,6 +34,7 @@ export default function Index({
 	const { invalidateQuery: invalidateDieCastingRM } = useSliderDieCastingRM();
 
 	const { data: material } = useOtherMaterial();
+	const { user } = useAuth();
 
 	const MAX_QUANTITY =
 		Number(updateMaterialTrx?.stock) +

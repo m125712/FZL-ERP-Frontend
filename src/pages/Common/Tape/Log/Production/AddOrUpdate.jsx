@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useCommonTapeProductionByUUID,
 	useCommonTapeSFG,
@@ -32,6 +33,7 @@ export default function Index({
 		updateTapeLog?.uuid
 	);
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
+	const { user } = useAuth();
 
 	const { register, handleSubmit, errors, reset, context, getValues } =
 		useRHF(
@@ -67,6 +69,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				type_of_zipper: updateTapeLog?.type_of_zipper,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 

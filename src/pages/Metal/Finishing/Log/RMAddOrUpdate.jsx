@@ -32,6 +32,7 @@ export default function Index({
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateFinishingRM } = useMetalFinishingRM();
 	const { data: material } = useOtherMaterial();
+	const { user } = useAuth();
 
 	const MAX_QUANTITY = Number(
 		updateFinishingRMLog?.section === 'm_gapping'
@@ -104,6 +105,7 @@ export default function Index({
 				...data,
 				material_name: updateFinishingRMLog?.material_name,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

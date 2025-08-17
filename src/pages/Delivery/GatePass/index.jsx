@@ -191,6 +191,7 @@ export default function Index() {
 							gate_pass: 1,
 							gate_pass_by: user.uuid,
 							updated_at: GetDateTime(),
+							updated_by: user.uuid,
 						};
 						return await updateData.mutateAsync({
 							url: `/delivery/packing-list/${item?.uuid}`,

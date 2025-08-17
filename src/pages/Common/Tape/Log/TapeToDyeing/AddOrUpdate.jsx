@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommonCoilToDyeingByUUID, useCommonTapeSFG } from '@/state/Common';
 import { useOtherMaterial } from '@/state/Other';
 import { useRHF } from '@/hooks';
@@ -28,6 +29,8 @@ export default function Index({
 		trx_quantity:
 			COMMON_COIL_TO_DYEING_LOG_SCHEMA.trx_quantity.max(MAX_QTY),
 	};
+	const { user } = useAuth();
+
 	const {
 		register,
 		handleSubmit,
@@ -61,6 +64,7 @@ export default function Index({
 		if (entry?.uuid !== null) {
 			const updatedData = {
 				...data,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 

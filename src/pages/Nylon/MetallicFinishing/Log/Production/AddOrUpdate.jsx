@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useNylonMFProduction,
 	useNylonMFProductionLog,
@@ -40,6 +41,7 @@ export default function Index({
 			enabled: updateProductionLog.uuid !== null,
 		}
 	);
+	const { user } = useAuth();
 
 	const MAX_QUANTITY =
 		Math.min(
@@ -87,6 +89,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

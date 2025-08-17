@@ -71,6 +71,7 @@ export default function Index() {
 			const marketing_team_data_updated = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			if (data.marketing_team_entry.length === 0) {
@@ -106,6 +107,7 @@ export default function Index() {
 								updatedData: {
 									...item,
 									updated_at: GetDateTime(),
+									updated_by: user.uuid,
 								},
 								isOnCloseNeeded: false,
 							});

@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useSliderAssemblyTransferEntryByUUID,
 	useSliderColoringProduction,
 } from '@/state/Slider';
-import { useRHF, useUpdateFunc } from '@/hooks';
+import { useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { FormField, Input, JoinInput, ReactSelect } from '@/ui';
@@ -34,6 +35,7 @@ export default function Index({
 		updateSliderTrx?.uuid
 	);
 	const { invalidateQuery } = useSliderColoringProduction();
+	const { user } = useAuth();
 
 	const {
 		register,
@@ -84,6 +86,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

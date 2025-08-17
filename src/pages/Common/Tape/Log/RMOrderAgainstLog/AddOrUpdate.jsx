@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommonMaterialTrxByUUID } from '@/state/Common';
 import { useOtherMaterial } from '@/state/Other';
 import {
@@ -34,6 +35,7 @@ export default function Index({
 	const { invalidateQuery: invalidateMaterialTrx } =
 		useMaterialTrxAgainstOrderDescription();
 	const { data: material } = useOtherMaterial();
+	const { user } = useAuth();
 
 	const MAX_QUANTITY =
 		Number(updateLog?.stock) + Number(updateLog?.trx_quantity);
@@ -80,6 +82,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				material_name: updateLog?.material_name,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 

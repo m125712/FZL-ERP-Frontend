@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import {
 	useMetalTCProduction,
 	useMetalTCTrxLog,
@@ -35,6 +36,7 @@ export default function Index({
 			enabled: updateTeethColoringLog.uuid !== null,
 		}
 	);
+	const { user } = useAuth();
 	const MAX_QUANTITY =
 		Number(updateTeethColoringLog?.teeth_coloring_prod) +
 		Number(updateTeethColoringLog?.trx_quantity);
@@ -85,6 +87,7 @@ export default function Index({
 				...data,
 				order_entry_uuid: updateTeethColoringLog?.order_entry_uuid,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

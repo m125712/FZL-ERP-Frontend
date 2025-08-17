@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommonCoilToDyeingByUUID, useCommonTapeSFG } from '@/state/Common';
 import { useOtherMaterial } from '@/state/Other';
 import { useRHF } from '@/hooks';
@@ -30,6 +31,7 @@ export default function Index({
 			'Beyound Max'
 		),
 	};
+	const { user } = useAuth();
 	const {
 		register,
 		handleSubmit,
@@ -63,6 +65,7 @@ export default function Index({
 		if (entry?.uuid !== null) {
 			const updatedData = {
 				...data,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 

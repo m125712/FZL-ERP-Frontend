@@ -48,12 +48,10 @@ export default function Index({
 	},
 	setUpdateMaterialDetails,
 }) {
-	const { postData } = useMaterialInfo();
-	const { invalidateQuery: invalidateMaterialStockToSFG } =
-		useMaterialStockToSFG();
-	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo(
-		updateMaterialDetails?.type
+	const { data, updateData } = useMaterialTrxAgainstOrderDescriptionByUUID(
+		updateMaterialTrxToOrder?.uuid
 	);
+	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
 	const { invalidateQuery: invalidateOrderAgainstDeliveryRMLog } =
 		useOrderAgainstDeliveryRMLog();
 	const { invalidateQuery: invalidateOrderAgainstDieCastingRMLog } =

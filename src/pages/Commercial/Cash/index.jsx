@@ -55,6 +55,7 @@ export default function Index() {
 			url: `/commercial/pi-cash-update-is-completed/${data[idx]?.uuid}`,
 			updatedData: {
 				is_completed: data[idx]?.is_completed === true ? false : true,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,

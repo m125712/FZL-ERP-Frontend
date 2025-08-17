@@ -24,6 +24,7 @@ export default function Index({
 	);
 	const { data: marketing } = useOtherMarketing();
 	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo();
+	const { user } = useAuth();
 
 	const {
 		register,

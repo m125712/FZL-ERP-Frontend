@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useConeTrxByUUID, useDyeingCone } from '@/state/Thread';
 import { useRHF } from '@/hooks';
 
@@ -22,6 +23,7 @@ export default function Index({
 	const { data, updateData, url } = useConeTrxByUUID(updateConingTrx?.uuid);
 	const { invalidateQuery } = useDyeingCone();
 	const [qty, setQty] = useState();
+	const { user } = useAuth();
 
 	const MAX_TRX =
 		Number(updateConingTrx?.quantity) +
@@ -74,6 +76,7 @@ export default function Index({
 			const updatedData = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

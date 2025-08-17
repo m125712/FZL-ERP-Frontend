@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommonMaterialUsedByUUID } from '@/state/Common';
 import { useDeliveryRM } from '@/state/Delivery';
 import { useOtherMaterial } from '@/state/Other';
@@ -33,6 +34,7 @@ export default function Index({
 	);
 	const { invalidateQuery: invalidateRM } = useDeliveryRM();
 	const { data: material } = useOtherMaterial();
+	const { user } = useAuth();
 
 	const MAX_QUANTITY = Number(
 		updateRMLog?.section === 'n_qc_and_packing'
@@ -108,6 +110,7 @@ export default function Index({
 				...data,
 				material_name: updateRMLog?.material_name,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

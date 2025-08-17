@@ -64,6 +64,7 @@ export default function Index({
 				...data,
 				party_name: party_name,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 			await updateData.mutateAsync({
 				url: `${url}/${updateMerchandiser?.uuid}`,

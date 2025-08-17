@@ -59,65 +59,6 @@ export default function Index() {
 					/>
 				),
 			},
-
-			// {
-			// 	accessorKey: 'is_old_pi',
-			// 	header: 'Old LC',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<StatusButton size='btn-xs' value={info.getValue()} />
-			// 	),
-			// },
-			// {
-			// 	accessorKey: 'is_rtgs',
-			// 	header: 'RTGS',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<StatusButton size='btn-xs' value={info.getValue()} />
-			// 	),
-			// },
-			// {
-			// 	accessorKey: 'problematical',
-			// 	header: 'Problematic',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<StatusButton size='btn-xs' value={info.getValue()} />
-			// 	),
-			// },
-			// {
-			// 	accessorKey: 'epz',
-			// 	header: 'EPZ',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<StatusButton size='btn-xs' value={info.getValue()} />
-			// 	),
-			// },
-			// {
-			// 	accessorKey: 'production_complete',
-			// 	header: (
-			// 		<>
-			// 			Production <br />
-			// 			Complete
-			// 		</>
-			// 	),
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<StatusButton size='btn-xs' value={info.getValue()} />
-			// 	),
-			// },
-			// {
-			// 	accessorKey: 'lc_cancel',
-			// 	header: (
-			// 		<>
-			// 			LC <br />
-			// 			Canceled
-			// 		</>
-			// 	),
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<StatusButton size='btn-xs' value={info.getValue()} />
-			// 	),
-			// },
 			{
 				id: 'status',
 				header: 'Status',
@@ -185,15 +126,15 @@ export default function Index() {
 				accessorKey: 'party_name',
 				header: 'Party',
 				width: 'w-32',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'marketing_name',
+				accessorFn: (row) => row.marketing_name[0],
 				header: 'Marketing',
 				width: 'w-32',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue()[0] ?? '--',
+				enableColumnFilter: true,
+				cell: (info) => info.getValue() ?? '--',
 			},
 			// {
 			// 	accessorKey: 'lc_date',
@@ -216,13 +157,16 @@ export default function Index() {
 				cell: (info) => info.getValue() && info.getValue().toFixed(2),
 			},
 			{
-				accessorKey: 'pi_ids',
+				accessorFn: (row) => {
+					return row?.pi_ids.join(', ') || '--';
+				},
+				id: 'pi_ids',
 				header: 'PI No.',
 				width: 'w-28',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => {
-					const { is_old_pi } = info.row.original;
-					return info?.getValue()?.map((piId) => {
+					const { is_old_pi, pi_ids } = info.row.original;
+					return pi_ids?.map((piId) => {
 						if (piId === 'PI-') return '--';
 						const url = `/commercial/pi/${piId}`;
 						return is_old_pi == 0 ? (
@@ -240,28 +184,35 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) => {
-					const { order_numbers, thread_order_numbers } = row;
-					const zipper =
-						order_numbers
+					const { zipper, thread } = row;
+					const zipperOrder =
+						zipper
 							?.map((order) => order?.order_number)
 							?.join(', ') || '';
-					const thread =
-						thread_order_numbers
+					const threadOrder =
+						thread
 							?.map((order) => order?.thread_order_number)
 							?.join(', ') || '';
 
-					if (zipper?.length > 0 && thread?.length > 0)
-						return `${zipper}, ${thread}`;
-
-					if (zipper?.length > 0) return zipper;
-
-					if (thread?.length > 0) return thread;
-
-					return '--';
+					if (zipperOrder?.length > 0 && threadOrder?.length > 0) {
+						console.log(
+							`Zipper: ${zipperOrder}, Thread: ${threadOrder}`
+						);
+						return `${zipperOrder}, ${threadOrder}`;
+					} else if (zipperOrder?.length > 0) {
+						console.log(`Zipper: ${zipperOrder}`);
+						return zipperOrder;
+					} else if (threadOrder?.length > 0) {
+						console.log(`Thread: ${threadOrder}`);
+						return threadOrder;
+					} else {
+						console.log('Neither zipper nor thread found');
+						return '--';
+					}
 				},
 				id: 'zipper',
 				header: 'O/N & Status',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				cell: (info) => {
 					const { zipper, thread } = info.row.original;
 
@@ -305,13 +256,13 @@ export default function Index() {
 								</tr>
 							</thead>
 							<tbody>
-								{links?.map((item, index) => {
+								{links?.map((item) => {
 									const getPercentage = (qty) =>
 										Number(
 											(qty / item.quantity) * 100 || 0
 										).toFixed(1);
 									return (
-										<tr key={index}>
+										<tr key={item.label}>
 											<td>
 												<CustomLink
 													label={item.label}
@@ -354,20 +305,6 @@ export default function Index() {
 					);
 				},
 			},
-			// {
-			// 	accessorKey: 'export_lc_date',
-			// 	header: (
-			// 		<>
-			// 			Export LC <br />
-			// 			Date
-			// 		</>
-			// 	),
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<DateTime date={info.getValue()} isTime={false} />
-			// 	),
-			// },
-
 			{
 				accessorKey: 'up_number',
 				header: 'Up',
@@ -383,19 +320,6 @@ export default function Index() {
 					);
 				},
 			},
-			// {
-			// 	accessorKey: 'up_date',
-			// 	header: (
-			// 		<>
-			// 			Up <br />
-			// 			Date
-			// 		</>
-			// 	),
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<DateTime date={info.getValue()} isTime={false} />
-			// 	),
-			// },
 			{
 				accessorKey: 'commercial_executive',
 				header: (
@@ -469,123 +393,6 @@ export default function Index() {
 					);
 				},
 			},
-			// {
-			// 	accessorKey: 'amd_count',
-			// 	header: (
-			// 		<>
-			// 			AMD <br />
-			// 			Count
-			// 		</>
-			// 	),
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-
-			// {
-			// 	accessorKey: 'payment_value',
-			// 	header: 'Payment Value',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'payment_date',
-			// 	header: 'Payment Date',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<DateTime date={info.getValue()} isTime={false} />
-			// 	),
-			// },
-			// {
-			// 	accessorKey: 'ldbc_fdbc',
-			// 	header: 'LDBC/FDBC',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'acceptance_date',
-			// 	header: (
-			// 		<>
-			// 			Acceptance <br />
-			// 			Date
-			// 		</>
-			// 	),
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<DateTime date={info.getValue()} isTime={false} />
-			// 	),
-			// },
-			// {
-			// 	accessorKey: 'maturity_date',
-			// 	header: (
-			// 		<>
-			// 			Maturity <br />
-			// 			Date
-			// 		</>
-			// 	),
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<DateTime date={info.getValue()} isTime={false} />
-			// 	),
-			// },
-
-			// {
-			// 	accessorKey: 'pi_number',
-			// 	header: 'PI Number',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// // {
-			// // 	accessorKey: 'lc_value',
-			// // 	header: 'LC Value',
-			// // 	enableColumnFilter: false,
-			// // 	cell: (info) => info.getValue(),
-			// // },
-
-			// // {
-			// // 	accessorKey: 'commercial_executive',
-			// // 	header: (
-			// // 		<>
-			// // 			Commercial <br />
-			// // 			Executive
-			// // 		</>
-			// // 	),
-			// // 	enableColumnFilter: false,
-			// // 	cell: (info) => info.getValue(),
-			// // },
-			// // {
-			// // 	accessorKey: 'party_bank',
-			// // 	header: 'Party Bank',
-			// // 	enableColumnFilter: false,
-			// // 	width: 'w-32',
-			// // 	cell: (info) => info.getValue(),
-			// // },
-
-			// {
-			// 	accessorKey: 'handover_date',
-			// 	header: (
-			// 		<>
-			// 			Handover <br />
-			// 			Date
-			// 		</>
-			// 	),
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => (
-			// 		<DateTime date={info.getValue()} isTime={false} />
-			// 	),
-			// },
-
-			// {
-			// 	accessorKey: 'ud_no',
-			// 	header: 'UD No',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
-			// {
-			// 	accessorKey: 'ud_received',
-			// 	header: 'UD Received',
-			// 	enableColumnFilter: false,
-			// 	cell: (info) => info.getValue(),
-			// },
 			{
 				accessorKey: 'lc_entry',
 				header: 'Progression',
@@ -610,17 +417,6 @@ export default function Index() {
 							{
 								accessorKey: 'handover_date',
 								header: 'Handover',
-								enableColumnFilter: false,
-								cell: (info) => (
-									<DateTime
-										date={info.getValue()}
-										isTime={false}
-									/>
-								),
-							},
-							{
-								accessorKey: 'payment_date',
-								header: 'Payment',
 								enableColumnFilter: false,
 								cell: (info) => (
 									<DateTime

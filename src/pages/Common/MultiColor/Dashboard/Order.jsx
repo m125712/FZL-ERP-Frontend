@@ -24,6 +24,7 @@ export default function Index({
 	const { data, updateData } = useCommonMultiColorDashboardByUUID(
 		order?.uuid
 	);
+	const { user } = useAuth();
 
 	const MAX_PROD_KG = Number(order.balance_quantity).toFixed(3);
 
@@ -62,6 +63,7 @@ export default function Index({
 	const onSubmit = async (data) => {
 		const updatedData = {
 			...data,
+			updated_by: user?.uuid,
 			updated_at: GetDateTime(),
 		};
 

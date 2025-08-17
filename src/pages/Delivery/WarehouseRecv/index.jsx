@@ -175,7 +175,8 @@ export default function Index() {
 								item.warehouse_received_date,
 							is_warehouse_received: true,
 							warehouse_received_by: user.uuid,
-							// updated_at: GetDateTime(),
+							updated_at: GetDateTime(),
+							updated_by: user?.uuid, // Uncomment if needed
 						};
 						return await updateData.mutateAsync({
 							url: `/delivery/packing-list/${item?.uuid}`,

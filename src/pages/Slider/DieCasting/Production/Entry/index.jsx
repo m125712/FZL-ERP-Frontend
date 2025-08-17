@@ -142,6 +142,7 @@ export default function Index() {
 				const updatedData = {
 					...item,
 					updated_at: GetDateTime(),
+					updated_by: user?.uuid,
 				};
 				return updateData.mutateAsync({
 					url: `${url}/${item.uuid}`,

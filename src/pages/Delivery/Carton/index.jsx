@@ -1,4 +1,5 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useDeliveryCarton } from '@/state/Delivery';
 import { useOtherCarton } from '@/state/Other';
 import { useThreadDyesCategory } from '@/state/Thread';
@@ -22,6 +23,7 @@ export default function Index() {
 		useOtherCarton();
 	const info = new PageInfo('Delivery Carton', url, 'delivery__carton');
 	const haveAccess = useAccess('delivery__carton');
+	const { user } = useAuth();
 
 	const columns = useMemo(
 		() => [
@@ -154,6 +156,7 @@ export default function Index() {
 			url: `${url}/${data[idx]?.uuid}`,
 			updatedData: {
 				active: data[idx]?.active === 1 ? 0 : 1,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,

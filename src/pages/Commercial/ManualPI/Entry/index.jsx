@@ -148,6 +148,7 @@ export default function Index() {
 		if (isUpdate) {
 			const manual_pi_updated_data = {
 				...data,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			};
 
@@ -172,6 +173,7 @@ export default function Index() {
 						item.updated_at = GetDateTime();
 						const updatedData = {
 							...item,
+							updated_by: user?.uuid,
 							updated_at: GetDateTime(),
 						};
 						return await updateData.mutateAsync({

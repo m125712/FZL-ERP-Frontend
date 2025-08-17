@@ -25,6 +25,7 @@ export default function Index({
 	const { data, updateData } = usePurchaseEntryByUUID(
 		updatePurchaseLog?.entry_uuid
 	);
+	const { user } = useAuth();
 	const {
 		register,
 		handleSubmit,

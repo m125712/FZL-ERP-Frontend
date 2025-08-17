@@ -1,7 +1,7 @@
 import { useAuth } from '@/context/auth';
-import { useCommonMaterialUsed, useCommonTapeRM } from '@/state/Common';
+import { useCommonMaterialUsed } from '@/state/Common';
 import { useSliderColoringRM } from '@/state/Slider';
-import { useFetchForRhfReset, useRHF, useUpdateFunc } from '@/hooks';
+import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
 import { ShowLocalToast } from '@/components/Toast/ReactToastify';
@@ -28,6 +28,7 @@ export default function Index({
 	const { url, updateData } = useCommonMaterialUsed();
 	const { invalidateQuery: invalidateSliderColoringRM } =
 		useSliderColoringRM();
+	const { user } = useAuth();
 
 	const {
 		register,
@@ -83,6 +84,7 @@ export default function Index({
 				...data,
 				material_name: updateSliderColoringRMLog?.material_name,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

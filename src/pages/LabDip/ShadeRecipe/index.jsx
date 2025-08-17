@@ -1,4 +1,5 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useLabDipShadeRecipeDescription } from '@/state/LabDip';
 import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
@@ -8,7 +9,6 @@ import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, LinkOnly } from '@/ui';
 
-import cn from '@/lib/cn';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
@@ -17,6 +17,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const { data, isLoading, url, deleteData, updateData } =
 		useLabDipShadeRecipeDescription();
+	const { user } = useAuth();
 
 	const navigate = useNavigate();
 	const info = new PageInfo('Details', url, 'lab_dip__shade_recipe');
@@ -153,6 +154,7 @@ export default function Index() {
 			updatedData: {
 				lab_status: data[idx]?.lab_status === 1 ? 0 : 1,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

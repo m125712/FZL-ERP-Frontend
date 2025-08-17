@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useDyeingFinishingBatch } from '@/state/Dyeing';
 import { differenceInDays, format, subDays } from 'date-fns';
 import { useNavigate } from 'react-router';
@@ -24,6 +25,7 @@ export default function index() {
 		{ value: 'pending', label: 'Pending' },
 		{ value: 'completed', label: 'Completed' },
 	];
+	const { user } = useAuth();
 
 	const navigate = useNavigate();
 	const haveAccess = useAccess('planning__finishing_batch');
@@ -44,6 +46,7 @@ export default function index() {
 			updatedData: {
 				is_completed: data[idx]?.is_completed === true ? false : true,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

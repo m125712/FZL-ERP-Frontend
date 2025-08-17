@@ -20,14 +20,8 @@ export default function Index({
 	},
 	setUpdateMaterialDetails,
 }) {
-	const { user } = useAuth();
-	const {
-		url,
-		postData,
-		invalidateQuery: invalidateMaterialbooking,
-	} = useMaterialBooking();
-	const { invalidateQuery: invalidateMaterialInfo } = useMaterialInfo(
-		updateMaterialDetails?.type
+	const { data, updateData } = useMaterialBookingByUUID(
+		updateMaterialDetails?.uuid
 	);
 	const { data: marketing } = useOtherMarketing();
 

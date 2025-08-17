@@ -566,6 +566,18 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'updated_by_name',
+				header: 'Updated By',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'color_ref_update_date',
 				header: (
 					<>

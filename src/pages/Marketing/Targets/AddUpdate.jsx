@@ -71,6 +71,7 @@ export default function Index({
 			const targetDataUpdated = {
 				...data,
 				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			};
 
 			await updateData.mutateAsync({

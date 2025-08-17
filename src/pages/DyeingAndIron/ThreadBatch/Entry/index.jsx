@@ -211,6 +211,7 @@ export default function Index() {
 			const batch_data_updated = {
 				...rest,
 				updated_at: GetDateTime(),
+				updated_by: user.uuid,
 			};
 
 			let flag = false;
@@ -235,6 +236,7 @@ export default function Index() {
 					uuid: item.batch_entry_uuid,
 					remarks: item.batch_remarks,
 					updated_at: GetDateTime(),
+					updated_by: user.uuid,
 				}));
 
 			const new_batch_entry = [...new_batch_entries]

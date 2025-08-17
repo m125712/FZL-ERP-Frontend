@@ -1,5 +1,3 @@
-import { useFetch } from '@/hooks';
-
 import { ReactSelect, SectionEntryBody } from '@/ui';
 
 export default function Header({ due, setDue }) {
@@ -8,7 +6,6 @@ export default function Header({ due, setDue }) {
 			value: '/report/lc-report?document_receiving=true',
 			label: 'Document Receiving',
 		},
-		{ value: '/report/lc-report?acceptance=true', label: 'Acceptance' },
 		{ value: '/report/lc-report?maturity=true', label: 'Maturity Due' },
 		{ value: '/report/lc-report?payment=true', label: 'Payment Due' },
 	];

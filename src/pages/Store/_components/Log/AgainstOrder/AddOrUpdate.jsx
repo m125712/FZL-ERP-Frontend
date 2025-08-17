@@ -92,7 +92,6 @@ export default function Index({
 	const { invalidateQuery: invalidateCommonTapeSFG } = useCommonTapeSFG();
 	const { invalidateQuery: invalidateSliderAssemblyStock } =
 		useSliderAssemblyStock();
-	const { user } = useAuth();
 
 	const { data: material } = useOtherMaterial();
 	const MAX_QUANTITY =

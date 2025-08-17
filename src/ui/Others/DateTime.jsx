@@ -16,24 +16,50 @@ function DateTime({
 	isTime = true,
 	customizedDateFormate = 'dd/MM/yy',
 	customizedTimeFormate = 'h:mm a',
+	className = '',
+	showInOneLine = false,
 }) {
 	if (!date) return '--';
 
 	const customizedDate = format(new Date(date), customizedDateFormate);
 	const customizedTime = format(new Date(date), customizedTimeFormate);
 
-	return (
-		<div className='flex flex-col'>
-			{isDate && (
-				<Body
-					className={isTime ? '' : 'text-md'}
-					value={customizedDate}
-				/>
-			)}
-			{isTime && (
-				<Body className='-mt-1 text-secondary' value={customizedTime} />
-			)}
-		</div>
-	);
+	if (showInOneLine)
+		return (
+			<div
+				className={cn(
+					'flex items-center justify-center gap-2',
+					className
+				)}
+			>
+				{isDate && (
+					<Body
+						className={isTime ? '' : 'text-md'}
+						value={customizedDate}
+					/>
+				)}
+				{isTime && (
+					<Body className='text-secondary' value={customizedTime} />
+				)}
+			</div>
+		);
+	else {
+		return (
+			<div className={cn('flex flex-col', className)}>
+				{isDate && (
+					<Body
+						className={isTime ? '' : 'text-md'}
+						value={customizedDate}
+					/>
+				)}
+				{isTime && (
+					<Body
+						className='-mt-1 text-secondary'
+						value={customizedTime}
+					/>
+				)}
+			</div>
+		);
+	}
 }
 export { DateTime };

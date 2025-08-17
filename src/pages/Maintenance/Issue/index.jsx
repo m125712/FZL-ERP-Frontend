@@ -1,7 +1,7 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useIssue } from '@/state/Maintenance';
-import { intervalToDuration } from 'date-fns';
+import { differenceInMinutes, intervalToDuration } from 'date-fns';
 import { Clock } from 'lucide-react';
 import { useAccess } from '@/hooks';
 
@@ -65,79 +65,102 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'issue_id',
-				header: 'ID',
+				header: 'আইডি (ID)',
 				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'section',
-				header: 'Section',
+				header: () => (
+					<>
+						সেকশন <br /> (Section)
+					</>
+				),
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'extra_section',
+				header: () => (
+					<>
+						অন্যান্য সেকশন <br /> (Extra Section)
+					</>
+				),
 				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'problem_type',
-				header: 'Type',
+				header: () => (
+					<>
+						কোথায় সমস্যা <br />
+						(Problem In)
+					</>
+				),
 				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'parts_problem',
-				header: 'Parts Problem',
+				header: () => (
+					<>
+						পার্টস সমস্যা <br /> (Parts Problem)
+					</>
+				),
 				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'section_machine_name',
 				header: () => (
 					<>
-						Machine <br /> Name/No.
+						মেশিন নাম/নম্বর <br />
+						(Machine Name/No.)
 					</>
 				),
 				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'description',
-				header: 'Description',
+				header: () => (
+					<>
+						বর্ণনা <br /> (Description)
+					</>
+				),
 				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'emergence',
-				header: 'Emergency',
+				header: () => (
+					<>
+						জরুরী <br /> (Emergency)
+					</>
+				),
 				enableColumnFilter: false,
-			},
-			{
-				accessorKey: 'created_by_name',
-				header: 'Created By',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'created_at',
-				header: 'Created',
-				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
-			},
-			{
-				accessorKey: 'updated_at',
-				header: 'Updated',
-				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'maintain_condition',
-				header: () => <>Maintain Condition</>,
+				header: () => (
+					<>
+						রক্ষণাবেক্ষণ অবস্থা <br /> (Maintain Condition)
+					</>
+				),
 				enableColumnFilter: false,
-				width: 'w-36',
+				width: 'w-40',
 				cell: (info) => {
-					const { maintain_by_name, maintain_date } =
-						info.row.original;
+					const {
+						maintain_condition,
+						maintain_by_name,
+						maintain_date,
+						created_at,
+					} = info.row.original;
+
 					const options = [
 						{ value: 'okay', label: 'OK' },
 						{ value: 'waiting', label: 'Waiting' },
 						{ value: 'rejected', label: 'Rejected' },
-						{ value: 'on_going', label: 'On Going' },
+						{ value: 'ongoing', label: 'On Going' },
 					];
+
 					return (
 						<div>
 							<ReactSelect
-								className={'w-36'}
+								className='w-40'
 								menuPortalTarget={document.body}
 								placeholder='Select condition'
 								options={options}
@@ -149,15 +172,28 @@ export default function Index() {
 								}}
 							/>
 
-							<span className='flex flex-col text-xs'>
-								{maintain_by_name}
-								<DateTime date={maintain_date} isTime={false} />
+							<span className='mt-3 flex flex-col text-xs'>
+								{/* Maintainer name */}
+								<p className='text-center text-sm font-semibold uppercase text-gray-800'>
+									{maintain_by_name}
+								</p>
+
+								{/* Date + Duration card */}
+								<div className='mt-2 flex w-full items-center justify-evenly rounded-full border border-gray-200 bg-white px-2 py-1.5 shadow-sm'>
+									{/* Date */}
+									<div className='text-gray-600'>
+										<DateTime
+											showInOneLine
+											date={maintain_date}
+											isTime
+										/>
+									</div>
+								</div>
 							</span>
 						</div>
 					);
 				},
 			},
-
 			{
 				accessorKey: 'time_diff',
 				header: 'Time Difference',
@@ -166,59 +202,126 @@ export default function Index() {
 					const { maintain_condition, maintain_date, created_at } =
 						info.row.original;
 
-					if (maintain_condition !== 'okay') return '---';
+					// if (maintain_condition !== 'okay') return '---';
 
-					const duration = intervalToDuration({
-						start: new Date(created_at),
-						end: new Date(maintain_date),
-					});
+					let diffInMinutes = 0;
+					if (!maintain_date) {
+						diffInMinutes = differenceInMinutes(
+							new Date(),
+							new Date(created_at)
+						);
+					} else {
+						diffInMinutes = differenceInMinutes(
+							new Date(maintain_date),
+							new Date(created_at)
+						);
+					}
 
-					// Filter out zero values and create a short string
-					const parts = [
-						duration.years ? `${duration.years}y` : '',
-						duration.months ? `${duration.months}m` : '',
-						duration.days ? `${duration.days}d` : '',
-						duration.hours ? `${duration.hours}h` : '',
-						duration.minutes ? `${duration.minutes}min` : '',
-					].filter(Boolean);
+					const hours = Math.floor(diffInMinutes / 60);
+					const minutes = diffInMinutes % 60;
 
-					const result = parts.length > 0 ? parts.join(' ') : '---';
+					// Format as "HH.MM"
+					const duration = `${hours}.${minutes.toString().padStart(2, '0')}`;
 
 					return (
 						<div className='flex items-center gap-1 text-gray-700'>
 							<Clock size={14} className='text-teal-500' />
-							<span>{result}</span>
+							<span>{duration}</span>
 						</div>
 					);
 				},
 			},
-
 			{
 				accessorKey: 'verification_approved',
 				header: () => (
 					<>
-						Verification <br /> Approved
+						অনুমোদন <br />
+						(Approval)
 					</>
 				),
 				enableColumnFilter: false,
+
 				cell: (info) => {
-					const { verification_by_name, verification_date } =
-						info.row.original;
+					const {
+						verification_approved,
+						verification_by_name,
+						verification_date,
+						created_at,
+						created_by,
+					} = info.row.original;
+
+					let duration = '';
+					if (!verification_date) {
+						const diffInMinutes = differenceInMinutes(
+							new Date(),
+							new Date(created_at)
+						);
+
+						const hours = Math.floor(diffInMinutes / 60);
+						const minutes = diffInMinutes % 60;
+
+						// Format as "HH.MM"
+						duration = `${hours}.${minutes.toString().padStart(2, '0')}`;
+					} else {
+						const diffInMinutes = differenceInMinutes(
+							new Date(verification_date),
+							new Date(created_at)
+						);
+
+						const hours = Math.floor(diffInMinutes / 60);
+						const minutes = diffInMinutes % 60;
+
+						// Format as "HH.MM"
+						duration = `${hours}.${minutes.toString().padStart(2, '0')}`;
+					}
+
+					const access =
+						(haveAccess.includes('verification') &&
+							user.uuid === created_by &&
+							!verification_approved) ||
+						haveAccess.includes('override');
+
 					return (
-						<div>
+						<div className=''>
 							<SwitchToggle
-								disabled={!haveAccess.includes('verification')}
+								disabled={!access}
 								onChange={() => {
 									handelVerificationApprove(info.row.index);
 								}}
 								checked={info.getValue() === true}
 							/>
-							<span className='flex flex-col text-xs'>
-								{verification_by_name}
-								<DateTime
-									date={verification_date}
-									isTime={false}
-								/>
+
+							<span className='mt-3 flex flex-col text-xs'>
+								{/* Maintainer name */}
+								<p className='text-sm font-semibold uppercase text-gray-800'>
+									{verification_by_name}
+								</p>
+
+								{/* Date + Duration card */}
+								<div className='mt-2 flex w-full items-center justify-evenly gap-2 rounded-full border border-gray-200 bg-white px-2 py-1.5 shadow-sm'>
+									{/* Date */}
+									<div className='text-gray-600'>
+										<DateTime
+											date={verification_date}
+											isTime
+											showInOneLine
+										/>
+									</div>
+
+									{/* Divider line */}
+									<div className='h-4 w-px bg-gray-300' />
+
+									{/* Duration with clock */}
+									<div className='flex items-center gap-1 text-gray-700'>
+										<Clock
+											size={14}
+											className='text-teal-500'
+										/>
+										<span className='font-medium'>
+											{duration}
+										</span>
+									</div>
+								</div>
 							</span>
 						</div>
 					);
@@ -226,7 +329,12 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'procurement',
-				header: 'Procurement',
+				header: () => (
+					<>
+						সংগ্রহ <br />
+						(Procurement)
+					</>
+				),
 				enableColumnFilter: false,
 				cell: (info) => {
 					return (
@@ -246,6 +354,39 @@ export default function Index() {
 						</div>
 					);
 				},
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: () => (
+					<>
+						তৈরি করেছেন <br />
+						(Created By)
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: () => (
+					<>
+						তৈরির তারিখ <br />
+						(Created)
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'updated_at',
+				header: () => (
+					<>
+						পরিবর্তন তারিখ <br />
+						(Updated)
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 		],
 		[data, haveAccess]
@@ -271,8 +412,8 @@ export default function Index() {
 			url: `/maintain/issue/${data[idx]?.uuid}`,
 			updatedData: {
 				maintain_condition: e,
-				maintain_date: GetDateTime(),
 				maintain_by: user.uuid,
+				maintain_date: GetDateTime(),
 			},
 		});
 	};

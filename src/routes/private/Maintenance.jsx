@@ -29,6 +29,7 @@ export const MaintenanceRoutes = [
 					'verification',
 					'procurement',
 					'show_own_issue',
+					'override',
 				],
 			},
 		],

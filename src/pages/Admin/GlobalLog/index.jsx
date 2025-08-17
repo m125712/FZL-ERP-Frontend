@@ -5,13 +5,7 @@ import { useOtherSchema, useOtherTable } from '@/state/Other';
 import { format } from 'date-fns';
 
 import ReactTable from '@/components/Table';
-import {
-	CustomLink,
-	DateTime,
-	SimpleDatePicker,
-	StatusButton,
-	StatusSelect,
-} from '@/ui';
+import { DateTime, SimpleDatePicker, StatusSelect } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -117,9 +111,24 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'new_value',
+				accessorFn: (row) => {
+					if (row.operation === 'DELETE') {
+						return '---';
+					} else {
+						return row.new_value;
+					}
+				},
+				id: 'new_value',
 				header: 'New Value',
+				width: 'w-10',
 				enableColumnFilter: false,
+				cell: (info) => {
+					if (info.row.original.operation === 'DELETE') {
+						return '---';
+					} else {
+						return info.getValue();
+					}
+				},
 			},
 			{
 				accessorKey: 'changed_at',
@@ -128,6 +137,11 @@ export default function Index() {
 				cell: (info) => (
 					<DateTime date={info.getValue()} isTime={true} />
 				),
+			},
+			{
+				accessorKey: 'changed_by_name',
+				header: 'Changed By',
+				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'remarks',

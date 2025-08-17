@@ -409,6 +409,66 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
+					row.first_production_date &&
+					REPORT_DATE_FORMATE(row.first_production_date),
+				id: 'first_production_date',
+				header: 'F/P/D',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.first_production_date}
+						isTime={false}
+						customizedDateFormate='dd MMM,yyyy'
+					/>
+				),
+			},
+			{
+				accessorFn: (row) =>
+					row.last_production_date &&
+					REPORT_DATE_FORMATE(row.last_production_date),
+				id: 'last_production_date',
+				header: 'L/P/D',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.last_production_date}
+						isTime={false}
+						customizedDateFormate='dd MMM,yyyy'
+					/>
+				),
+			},
+			{
+				accessorFn: (row) =>
+					row.first_delivery_date &&
+					REPORT_DATE_FORMATE(row.first_delivery_date),
+				id: 'first_delivery_date',
+				header: 'F/D/D',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.first_delivery_date}
+						isTime={false}
+						customizedDateFormate='dd MMM,yyyy'
+					/>
+				),
+			},
+			{
+				accessorFn: (row) =>
+					row.last_delivery_date &&
+					REPORT_DATE_FORMATE(row.last_delivery_date),
+				id: 'last_delivery_date',
+				header: 'L/D/D',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.last_delivery_date}
+						isTime={false}
+						customizedDateFormate='dd MMM,yyyy'
+					/>
+				),
+			},
+			{
+				accessorFn: (row) =>
 					row.created_at && REPORT_DATE_FORMATE(row.created_at),
 				id: 'created_at',
 				header: 'Created',
@@ -468,6 +528,10 @@ export default function Index() {
 						delivered = when the packing list is warehouse out
 					</span>
 					<span>balance = order qty - delivered</span>
+					<span>F/P/D = First Production Date</span>
+					<span>L/P/D = Last Production Date</span>
+					<span>F/D/D = First Delivery Date</span>
+					<span>L/D/D = Last Delivery Date</span>
 				</div>
 			}
 			accessor={false}

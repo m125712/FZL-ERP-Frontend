@@ -1,5 +1,3 @@
-import * as yup from 'yup';
-
 import {
 	BOOLEAN, // default
 	BOOLEAN_DEFAULT_VALUE, // default
@@ -25,7 +23,7 @@ import {
 	UUID, // default
 	UUID_FK, // default
 	UUID_REQUIRED,
-} from './utils';
+} from '@/util/Schema/utils';
 
 export {
 	BOOLEAN,
@@ -48,31 +46,49 @@ export {
 	STRING_REQUIRED,
 };
 
-export const THREAD_COUNT_LENGTH_SCHEMA = {
-	count: STRING_REQUIRED,
-	length: NUMBER_REQUIRED,
-	min_weight: NUMBER_DOUBLE_REQUIRED.max(
-		yup.ref('max_weight'),
-		'Beyond Max Weight'
-	),
-	max_weight: NUMBER_DOUBLE_REQUIRED.min(
-		yup.ref('min_weight'),
-		'Less than Min Weight'
-	),
-	con_per_carton: NUMBER_REQUIRED.default(0),
-	price: NUMBER_DOUBLE_REQUIRED,
-	sst: STRING_REQUIRED,
+export const FISCAL_YEAR_SCHEMA = {
+	year_no: NUMBER_REQUIRED,
+	start_date: STRING_REQUIRED,
+	end_date: STRING_REQUIRED,
+	active: BOOLEAN_REQUIRED,
+	locked: BOOLEAN_REQUIRED,
+	jan_budget: NUMBER_DOUBLE_REQUIRED,
+	feb_budget: NUMBER_DOUBLE_REQUIRED,
+	mar_budget: NUMBER_DOUBLE_REQUIRED,
+	apr_budget: NUMBER_DOUBLE_REQUIRED,
+	may_budget: NUMBER_DOUBLE_REQUIRED,
+	jun_budget: NUMBER_DOUBLE_REQUIRED,
+	jul_budget: NUMBER_DOUBLE_REQUIRED,
+	aug_budget: NUMBER_DOUBLE_REQUIRED,
+	sep_budget: NUMBER_DOUBLE_REQUIRED,
+	oct_budget: NUMBER_DOUBLE_REQUIRED,
+	nov_budget: NUMBER_DOUBLE_REQUIRED,
+	dec_budget: NUMBER_DOUBLE_REQUIRED,
+	currency_uuid: STRING_REQUIRED,
+	rate: NUMBER_DOUBLE_REQUIRED,
 	remarks: STRING.nullable(),
 };
 
-export const THREAD_COUNT_LENGTH_NULL = {
+export const FISCAL_YEAR_NULL = {
 	uuid: null,
-	count: '',
-	length: '',
-	min_weight: null,
-	max_weight: null,
-	con_per_carton: 0,
-	price: null,
-	sst: '',
+	year_no: '',
+	start_date: '',
+	end_date: '',
+	activate: false,
+	locked: false,
+	jan_budget: 0,
+	feb_budget: 0,
+	mar_budget: 0,
+	apr_budget: 0,
+	may_budget: 0,
+	jun_budget: 0,
+	jul_budget: 0,
+	aug_budget: 0,
+	sep_budget: 0,
+	oct_budget: 0,
+	nov_budget: 0,
+	dec_budget: 0,
+	currency_uuid: '',
+	rate: 0,
 	remarks: '',
 };

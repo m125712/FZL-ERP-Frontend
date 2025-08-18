@@ -3,14 +3,19 @@ import createGlobalState from '@/state';
 import { accQK } from './QueryKeys';
 
 //Count-length
-export const useThreadCountLength = () =>
+export const useAccountingCurrency = () =>
 	createGlobalState({
-		queryKey: accQK.countLength(),
-		url: '/thread/count-length',
+		queryKey: accQK.currency(),
+		url: '/acc/currency',
 	});
 
-export const useThreadCountLengthByUUID = (uuid) =>
+export const useAccountingCurrencyByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: accQK.countLengthByUUID(uuid),
-		url: `/thread/count-length/${uuid}`,
+		queryKey: accQK.currencyByUUID(uuid),
+		url: `/acc/currency/${uuid}`,
+	});
+export const useOtherCurrency = () =>
+	createGlobalState({
+		queryKey: accQK.otherCurrency(),
+		url: '/other/accounts/currency/value/label',
 	});

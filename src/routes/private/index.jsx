@@ -1,3 +1,4 @@
+import { AccountingRoutes } from './Acounting';
 import { CommercialRoutes } from './Commercial';
 import { CommonRoutes } from './Common';
 import { DashboardRoutes } from './Dashboard';
@@ -44,6 +45,7 @@ const privateRoutes = [
 	...LibraryRoutes,
 	...MarketingRoutes,
 	...ProfileRoutes,
+	...AccountingRoutes,
 ];
 
 export default privateRoutes;

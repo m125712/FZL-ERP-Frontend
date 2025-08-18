@@ -2,15 +2,16 @@ import createGlobalState from '@/state';
 
 import { accQK } from './QueryKeys';
 
-//Count-length
-export const useThreadCountLength = () =>
+//* Accounting Head
+export const useAccHead = () =>
 	createGlobalState({
-		queryKey: accQK.countLength(),
-		url: '/thread/count-length',
+		queryKey: accQK.head(),
+		url: '/acc/head',
 	});
 
-export const useThreadCountLengthByUUID = (uuid) =>
+export const useAccHeadByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: accQK.countLengthByUUID(uuid),
-		url: `/thread/count-length/${uuid}`,
+		queryKey: accQK.headByUUID(uuid),
+		url: `/acc/head/${uuid}`,
+		enabled: !!uuid,
 	});

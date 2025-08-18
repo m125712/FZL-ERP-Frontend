@@ -1,85 +1,60 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
-import { useOtherCountLength } from '@/state/Other';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete } from '@/ui';
+import { DateTime, EditDelete, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
-import { useThreadCountLength } from './config/query';
+import { useAccGroup } from './config/query';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useThreadCountLength();
-	const { invalidateQuery: invalidateOtherCountLength } =
-		useOtherCountLength();
-	const info = new PageInfo('Count Length', url, 'thread__count_length');
-	const haveAccess = useAccess('thread__count_length');
+	const { data, isLoading, deleteData } = useAccGroup();
+
+	const info = new PageInfo(
+		'Group',
+		'/accounting/group',
+		'accounting__group'
+	);
+	const haveAccess = useAccess('accounting__group');
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'count',
-				header: 'Count',
+				accessorKey: 'name',
+				header: 'Name',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'length',
-				header: 'Length',
+				accessorKey: 'code',
+				header: 'Code',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'min_weight',
-				// header: 'Min Weight(kg)',
-				header: (
-					<span>
-						Min Weight <br />
-						(kg)
-					</span>
+				accessorKey: 'head_name',
+				header: 'Accounting Head',
+				enableColumnFilter: false,
+				width: 'w-32',
+			},
+			{
+				accessorKey: 'is_fixed',
+				header: 'Fixed',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton
+						size='btn-xs'
+						value={info.row.original.is_fixed}
+					/>
 				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'max_weight',
-				header: (
-					<span>
-						Max Weight <br />
-						(kg)
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'cone_per_carton',
-				header: 'Cone/Carton',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'price',
-				header: 'Price',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'sst',
-				header: 'SST',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_by_name',
 				header: 'Created By',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'created_at',
@@ -93,13 +68,6 @@ export default function Index() {
 				header: 'Updated',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
-			},
-			{
-				accessorKey: 'remarks',
-				header: 'Remarks',
-				enableColumnFilter: false,
-				width: 'w-32',
-				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'actions',
@@ -137,12 +105,12 @@ export default function Index() {
 	};
 
 	// Update
-	const [updateCountLength, setUpdateCountLength] = useState({
+	const [updateItem, setUpdateItem] = useState({
 		uuid: null,
 	});
 
 	const handelUpdate = (idx) => {
-		setUpdateCountLength((prev) => ({
+		setUpdateItem((prev) => ({
 			...prev,
 			uuid: data[idx].uuid,
 		}));
@@ -159,7 +127,7 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].count + '-' + data[idx].length,
+			itemName: data[idx].name,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -182,8 +150,8 @@ export default function Index() {
 				<AddOrUpdate
 					modalId={info.getAddOrUpdateModalId()}
 					{...{
-						updateCountLength,
-						setUpdateCountLength,
+						updateItem,
+						setUpdateItem,
 					}}
 				/>
 			</Suspense>
@@ -191,11 +159,10 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					invalidateQuery={invalidateOtherCountLength}
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: '/acc/group',
 						deleteData,
 					}}
 				/>

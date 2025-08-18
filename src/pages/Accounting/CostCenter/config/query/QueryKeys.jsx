@@ -1,6 +1,10 @@
 export const accQK = {
 	all: () => ['accQK'],
-	//Count-length
-	countLength: () => [...accQK.all(), 'count-length'],
-	countLengthByUUID: (uuid) => [...accQK.countLength(), uuid],
+
+	//Cost center
+	costCenter: () => [...accQK.all(), 'cost-center'],
+	costCenterByUUID: (uuid) => [...accQK.costCenter(), uuid],
+
+	//? Other Value Label ?//
+	otherLedger: () => [...accQK.all(), 'other', 'ledger'],
 };

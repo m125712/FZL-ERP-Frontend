@@ -1,5 +1,5 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
-import { useOtherCountLength } from '@/state/Other';
+// import { useOtherCountLength } from '@/state/Other';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
@@ -8,70 +8,34 @@ import { DateTime, EditDelete } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
-import { useThreadCountLength } from './config/query';
+import { useAccountingCurrency, useOtherCurrency } from './config/query';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useThreadCountLength();
-	const { invalidateQuery: invalidateOtherCountLength } =
-		useOtherCountLength();
-	const info = new PageInfo('Count Length', url, 'thread__count_length');
-	const haveAccess = useAccess('thread__count_length');
+	const { data, isLoading, url, deleteData } = useAccountingCurrency();
+	const info = new PageInfo('Currency', url, 'accounting__currency');
+	const haveAccess = useAccess('accounting__currency');
+	const { invalidateQuery: invalidateCurrency } = useOtherCurrency();
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'count',
-				header: 'Count',
+				accessorKey: 'currency',
+				header: 'Currency',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'length',
-				header: 'Length',
+				accessorKey: 'currency_name',
+				header: 'Name',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'min_weight',
-				// header: 'Min Weight(kg)',
-				header: (
-					<span>
-						Min Weight <br />
-						(kg)
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'max_weight',
-				header: (
-					<span>
-						Max Weight <br />
-						(kg)
-					</span>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'cone_per_carton',
-				header: 'Cone/Carton',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'price',
-				header: 'Price',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
-			{
-				accessorKey: 'sst',
-				header: 'SST',
+				accessorKey: 'symbol',
+				header: 'Symbol',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -191,7 +155,7 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					invalidateQuery={invalidateOtherCountLength}
+					invalidateQuery={invalidateCurrency}
 					{...{
 						deleteItem,
 						setDeleteItem,

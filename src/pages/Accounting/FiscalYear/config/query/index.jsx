@@ -3,14 +3,14 @@ import createGlobalState from '@/state';
 import { accQK } from './QueryKeys';
 
 //Count-length
-export const useThreadCountLength = () =>
+export const useAccountingFiscalYear = () =>
 	createGlobalState({
-		queryKey: accQK.countLength(),
-		url: '/thread/count-length',
+		queryKey: accQK.fiscalYear(),
+		url: '/acc/fiscal-year',
 	});
 
-export const useThreadCountLengthByUUID = (uuid) =>
+export const useAccountingFiscalYearByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: accQK.countLengthByUUID(uuid),
-		url: `/thread/count-length/${uuid}`,
+		queryKey: accQK.fiscalYearByUUID(uuid),
+		url: `/acc/fiscal-year/${uuid}`,
 	});

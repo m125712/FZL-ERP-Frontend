@@ -1,5 +1,4 @@
 import { useAuth } from '@/context/auth';
-import { useOtherCountLength } from '@/state/Other';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
@@ -9,10 +8,10 @@ import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
 import GetDateTime from '@/util/GetDateTime';
 
-import { useThreadCountLength } from './config/query';
+import { useAccountingCurrency, useOtherCurrency } from './config/query';
 import {
-	THREAD_COUNT_LENGTH_NULL,
-	THREAD_COUNT_LENGTH_SCHEMA,
+	ACCOUNTING_CURRENCY_NULL,
+	ACCOUNTING_CURRENCY_SCHEMA,
 } from './config/schema';
 
 export default function Index({
@@ -22,13 +21,12 @@ export default function Index({
 	},
 	setUpdateCountLength,
 }) {
-	const { url, updateData, postData } = useThreadCountLength();
-	const { invalidateQuery: invalidateOtherCountLength } =
-		useOtherCountLength();
+	const { url, updateData, postData } = useAccountingCurrency();
+	const { invalidateQuery: invalidateCurrency } = useOtherCurrency();
 	const { user } = useAuth();
 	const { register, handleSubmit, errors, reset, control, context } = useRHF(
-		THREAD_COUNT_LENGTH_SCHEMA,
-		THREAD_COUNT_LENGTH_NULL
+		ACCOUNTING_CURRENCY_SCHEMA,
+		ACCOUNTING_CURRENCY_NULL
 	);
 
 	useFetchForRhfReset(
@@ -42,7 +40,7 @@ export default function Index({
 			...prev,
 			uuid: null,
 		}));
-		reset(THREAD_COUNT_LENGTH_NULL);
+		reset(ACCOUNTING_CURRENCY_NULL);
 		window[modalId].close();
 	};
 
@@ -82,30 +80,24 @@ export default function Index({
 			newData: updatedData,
 			onClose,
 		});
-		invalidateOtherCountLength();
+		invalidateCurrency();
 	};
 	return (
 		<AddModal
 			id={modalId}
 			title={
 				updateCountLength?.uuid !== null
-					? 'Update Count Length'
-					: 'Count Length'
+					? 'Update Currency'
+					: 'Add Currency'
 			}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 			isSmall={true}
 		>
-			<Input label='count' {...{ register, errors }} />
-			<Input label='length' {...{ register, errors }} />
-			<Input label='min_weight' {...{ register, errors }} />
-			<Input label='max_weight' {...{ register, errors }} />
-			<Input label='cone_per_carton' {...{ register, errors }} />
-			<Input label='price' {...{ register, errors }} />
-			<Input label='sst' {...{ register, errors }} />
-			<Input label='remarks' {...{ register, errors }} />
-
+			<Input label='currency' {...{ register, errors }} />
+			<Input label='currency_name' {...{ register, errors }} />
+			<Input label='symbol' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);

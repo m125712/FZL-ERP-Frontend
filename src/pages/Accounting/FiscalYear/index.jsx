@@ -1,77 +1,179 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
-import { useOtherCountLength } from '@/state/Other';
+import { format, getYear } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
-import { useThreadCountLength } from './config/query';
+import { useAccountingFiscalYear } from './config/query';
+import { generateYearRanges } from './utils';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useThreadCountLength();
-	const { invalidateQuery: invalidateOtherCountLength } =
-		useOtherCountLength();
-	const info = new PageInfo('Count Length', url, 'thread__count_length');
-	const haveAccess = useAccess('thread__count_length');
+	const { data, isLoading, url, deleteData, updateData } =
+		useAccountingFiscalYear();
+	const info = new PageInfo('Fiscal Year', url, 'accounting__fiscal_year');
+	const haveAccess = useAccess('accounting__fiscal_year');
+	const handleActive = async (idx) => {
+		const active = data[idx].active ? false : true;
+		await updateData.mutateAsync({
+			url: `${url}/${data[idx].uuid}`,
+			uuid: data[idx].uuid,
+			updatedData: { active },
+		});
+	};
+	const handleLocked = async (idx) => {
+		const locked = data[idx].locked ? false : true;
+		await updateData.mutateAsync({
+			url: `${url}/${data[idx].uuid}`,
+			uuid: data[idx].uuid,
+			updatedData: { locked },
+		});
+	};
 
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'count',
-				header: 'Count',
+				accessorKey: 'active',
+				header: 'Active',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<SwitchToggle
+						onChange={() => handleActive(info.row.index)}
+						checked={info.getValue()}
+					/>
+				),
 			},
 			{
-				accessorKey: 'length',
-				header: 'Length',
+				accessorKey: 'locked',
+				header: 'Locked',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => (
+					<SwitchToggle
+						onChange={() => handleLocked(info.row.index)}
+						checked={info.getValue()}
+					/>
+				),
 			},
 			{
-				accessorKey: 'min_weight',
-				// header: 'Min Weight(kg)',
-				header: (
+				accessorKey: 'year_no',
+				header: 'Year',
+				enableColumnFilter: false,
+				cell: (info) =>
+					generateYearRanges(2025, getYear(new Date()) + 15).find(
+						(y) => y.value === info.getValue()
+					).label,
+			},
+			{
+				accessorKey: 'start_date',
+				header: 'Start',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => (
 					<span>
-						Min Weight <br />
-						(kg)
+						{format(new Date(info.getValue()), 'dd MMM, yyyy')}
 					</span>
 				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'max_weight',
-				header: (
+				accessorKey: 'end_date',
+				header: 'End',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => (
 					<span>
-						Max Weight <br />
-						(kg)
+						{format(new Date(info.getValue()), 'dd MMM, yyyy')}
 					</span>
 				),
+			},
+			{
+				accessorKey: 'rate',
+				header: 'Default Rate',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'cone_per_carton',
-				header: 'Cone/Carton',
+				accessorKey: 'currency_name',
+				header: 'Currency',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'price',
-				header: 'Price',
+				accessorKey: 'jan_budget',
+				header: 'January',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'sst',
-				header: 'SST',
+				accessorKey: 'feb_budget',
+				header: 'February',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
+			{
+				accessorKey: 'mar_budget',
+				header: 'March',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'apr_budget',
+				header: 'April',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'may_budget',
+				header: 'May',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'jun_budget',
+				header: 'June',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'jul_budget',
+				header: 'July',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'aug_budget',
+				header: 'August',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'sep_budget',
+				header: 'September',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'oct_budget',
+				header: 'October',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'nov_budget',
+				header: 'November',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'dec_budget',
+				header: 'December',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -159,7 +261,9 @@ export default function Index() {
 		setDeleteItem((prev) => ({
 			...prev,
 			itemId: data[idx].uuid,
-			itemName: data[idx].count + '-' + data[idx].length,
+			itemName: generateYearRanges(2025, getYear(new Date()) + 15).find(
+				(y) => y.value === data[idx].year_no
+			).label,
 		}));
 
 		window[info.getDeleteModalId()].showModal();
@@ -191,7 +295,6 @@ export default function Index() {
 				<DeleteModal
 					modalId={info.getDeleteModalId()}
 					title={info.getTitle()}
-					invalidateQuery={invalidateOtherCountLength}
 					{...{
 						deleteItem,
 						setDeleteItem,

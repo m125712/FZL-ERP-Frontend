@@ -109,7 +109,7 @@ export default function Index({
 					render={({ field: { onChange } }) => {
 						return (
 							<ReactSelect
-								placeholder='Select Material Type'
+								placeholder='Select Marketing'
 								options={marketing}
 								value={marketing?.filter(
 									(item) =>

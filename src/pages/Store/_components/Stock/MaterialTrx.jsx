@@ -75,6 +75,11 @@ export default function Index({
 
 	const transactionArea = getTransactionArea();
 
+	const options =
+		updateMaterialDetails?.type === 'maintenance'
+			? sections
+			: transactionArea;
+
 	return (
 		<AddModal
 			id={modalId}
@@ -92,8 +97,8 @@ export default function Index({
 						return (
 							<ReactSelect
 								placeholder='Select Transaction Area'
-								options={sections}
-								value={sections?.filter(
+								options={options}
+								value={options?.filter(
 									(item) => item.value === getValues('trx_to')
 								)}
 								onChange={(e) => {

@@ -25,7 +25,7 @@ import {
 	UUID, // default
 	UUID_FK, // default
 	UUID_REQUIRED,
-} from './utils';
+} from '@/util/Schema/utils';
 
 export {
 	BOOLEAN,
@@ -48,31 +48,30 @@ export {
 	STRING_REQUIRED,
 };
 
-export const THREAD_COUNT_LENGTH_SCHEMA = {
-	count: STRING_REQUIRED,
-	length: NUMBER_REQUIRED,
-	min_weight: NUMBER_DOUBLE_REQUIRED.max(
-		yup.ref('max_weight'),
-		'Beyond Max Weight'
-	),
-	max_weight: NUMBER_DOUBLE_REQUIRED.min(
-		yup.ref('min_weight'),
-		'Less than Min Weight'
-	),
-	con_per_carton: NUMBER_REQUIRED.default(0),
-	price: NUMBER_DOUBLE_REQUIRED,
-	sst: STRING_REQUIRED,
-	remarks: STRING.nullable(),
+export const LEDGER_SCHEMA = {
+	table_uuid: STRING,
+	name: STRING_REQUIRED,
+	category: STRING_REQUIRED,
+	account_no: STRING_REQUIRED,
+	type: STRING_REQUIRED.default('asset'),
+	is_active: BOOLEAN_DEFAULT_VALUE(true),
+	restrictions: STRING_REQUIRED.default('none'),
+	group_uuid: STRING_REQUIRED,
+	vat_deduction: NUMBER_DOUBLE_REQUIRED.default(0),
+	tax_deduction: NUMBER_DOUBLE_REQUIRED.default(0),
+	old_ledger_id: NUMBER.default(0),
 };
 
-export const THREAD_COUNT_LENGTH_NULL = {
-	uuid: null,
-	count: '',
-	length: '',
-	min_weight: null,
-	max_weight: null,
-	con_per_carton: 0,
-	price: null,
-	sst: '',
-	remarks: '',
+export const LEDGER_NULL = {
+	table_uuid: '',
+	name: '',
+	category: '',
+	account_no: '',
+	type: 'asset',
+	is_active: true,
+	restrictions: 'none',
+	group_uuid: '',
+	vat_deduction: 0,
+	tax_deduction: 0,
+	old_ledger_id: 0,
 };

@@ -2,15 +2,23 @@ import createGlobalState from '@/state';
 
 import { accQK } from './QueryKeys';
 
-//Count-length
-export const useThreadCountLength = () =>
+//* Accounting cost center
+export const useAccCostCenter = () =>
 	createGlobalState({
-		queryKey: accQK.countLength(),
-		url: '/thread/count-length',
+		queryKey: accQK.costCenter(),
+		url: '/acc/cost-center',
 	});
 
-export const useThreadCountLengthByUUID = (uuid) =>
+export const useAccCostCenterByUUID = (uuid) =>
 	createGlobalState({
-		queryKey: accQK.countLengthByUUID(uuid),
-		url: `/thread/count-length/${uuid}`,
+		queryKey: accQK.costCenterByUUID(uuid),
+		url: `/acc/cost-center/${uuid}`,
+		enabled: !!uuid,
+	});
+
+//? Other Value Label ?//
+export const useOtherAccLedger = () =>
+	createGlobalState({
+		queryKey: accQK.otherLedger(),
+		url: '/other/accounts/ledger/value/label',
 	});

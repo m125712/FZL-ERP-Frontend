@@ -1,6 +1,10 @@
 export const accQK = {
 	all: () => ['accQK'],
-	//Count-length
-	countLength: () => [...accQK.all(), 'count-length'],
-	countLengthByUUID: (uuid) => [...accQK.countLength(), uuid],
+
+	//Group
+	group: () => [...accQK.all(), 'group'],
+	groupByUUID: (uuid) => [...accQK.group(), uuid],
+
+	//? Other Value Label ?//
+	otherHead: () => [...accQK.all(), 'other', 'head'],
 };

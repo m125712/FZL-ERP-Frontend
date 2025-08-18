@@ -25,7 +25,7 @@ import {
 	UUID, // default
 	UUID_FK, // default
 	UUID_REQUIRED,
-} from './utils';
+} from '@/util/Schema/utils';
 
 export {
 	BOOLEAN,
@@ -48,31 +48,16 @@ export {
 	STRING_REQUIRED,
 };
 
-export const THREAD_COUNT_LENGTH_SCHEMA = {
-	count: STRING_REQUIRED,
-	length: NUMBER_REQUIRED,
-	min_weight: NUMBER_DOUBLE_REQUIRED.max(
-		yup.ref('max_weight'),
-		'Beyond Max Weight'
-	),
-	max_weight: NUMBER_DOUBLE_REQUIRED.min(
-		yup.ref('min_weight'),
-		'Less than Min Weight'
-	),
-	con_per_carton: NUMBER_REQUIRED.default(0),
-	price: NUMBER_DOUBLE_REQUIRED,
-	sst: STRING_REQUIRED,
-	remarks: STRING.nullable(),
+export const HEAD_SCHEMA = {
+	name: STRING_REQUIRED,
+	title: STRING_REQUIRED,
+	bs: BOOLEAN_DEFAULT_VALUE(false),
+	is_fixed: BOOLEAN_DEFAULT_VALUE(true),
 };
 
-export const THREAD_COUNT_LENGTH_NULL = {
-	uuid: null,
-	count: '',
-	length: '',
-	min_weight: null,
-	max_weight: null,
-	con_per_carton: 0,
-	price: null,
-	sst: '',
-	remarks: '',
+export const HEAD_NULL = {
+	name: '',
+	title: '',
+	bs: false,
+	is_fixed: true,
 };

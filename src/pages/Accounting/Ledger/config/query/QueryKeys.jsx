@@ -1,6 +1,10 @@
 export const accQK = {
 	all: () => ['accQK'],
-	//Count-length
-	countLength: () => [...accQK.all(), 'count-length'],
-	countLengthByUUID: (uuid) => [...accQK.countLength(), uuid],
+
+	//Ledger
+	ledger: () => [...accQK.all(), 'ledger'],
+	ledgerByUUID: (uuid) => [...accQK.ledger(), uuid],
+
+	//? Other Value Label ?//
+	otherGroup: () => [...accQK.all(), 'other', 'group'],
 };

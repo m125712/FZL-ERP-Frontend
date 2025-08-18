@@ -1,6 +1,7 @@
 export const accQK = {
 	all: () => ['accQK'],
-	//Count-length
-	countLength: () => [...accQK.all(), 'count-length'],
-	countLengthByUUID: (uuid) => [...accQK.countLength(), uuid],
+
+	//Head
+	head: () => [...accQK.all(), 'head'],
+	headByUUID: (uuid) => [...accQK.head(), uuid],
 };

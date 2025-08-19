@@ -7,4 +7,6 @@ export const accQK = {
 
 	//? Other Value Label ?//
 	otherGroup: () => [...accQK.all(), 'other', 'group'],
+	otherTableName: () => [...accQK.all(), 'other', 'table-name'],
+	otherTableNameBy: (name) => [...accQK.otherTableName(), name],
 };

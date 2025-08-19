@@ -49,7 +49,8 @@ export {
 };
 
 export const LEDGER_SCHEMA = {
-	table_uuid: STRING,
+	table_name: STRING_REQUIRED,
+	table_uuid: STRING_REQUIRED,
 	name: STRING_REQUIRED,
 	category: STRING_REQUIRED,
 	account_no: STRING_REQUIRED,
@@ -63,6 +64,7 @@ export const LEDGER_SCHEMA = {
 };
 
 export const LEDGER_NULL = {
+	table_name: '',
 	table_uuid: '',
 	name: '',
 	category: '',

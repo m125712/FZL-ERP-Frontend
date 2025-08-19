@@ -14,6 +14,8 @@ import {
 	useAccLedger,
 	useAccLedgerByUUID,
 	useOtherAccGroup,
+	useOtherTableName,
+	useOtherTableNameBy,
 } from './config/query';
 import { LEDGER_NULL, LEDGER_SCHEMA } from './config/schema';
 import { restrictionOptions, typeOptions } from './utils';
@@ -29,7 +31,8 @@ export default function Index({
 
 	const { data, updateData, postData } = useAccLedgerByUUID(updateItem?.uuid);
 	const { invalidateQuery } = useAccLedger();
-	const { data: groupOptions } = useOtherAccGroup(updateItem?.uuid);
+	const { data: groupOptions } = useOtherAccGroup();
+	const { data: tableOptions } = useOtherTableName();
 
 	const {
 		register,
@@ -39,8 +42,12 @@ export default function Index({
 		control,
 		context,
 		Controller,
+		setValue,
 		getValues,
+		watch,
 	} = useRHF(LEDGER_SCHEMA, LEDGER_NULL);
+
+	const { data: tableDataOptions } = useOtherTableNameBy(watch('table_name'));
 
 	useEffect(() => {
 		if (data) {
@@ -105,8 +112,60 @@ export default function Index({
 			<div className='grid grid-cols-2 gap-4'>
 				<Input label='name' {...{ register, errors }} />
 				<Input label='category' {...{ register, errors }} />
-				<Input label='account_no' {...{ register, errors }} />
 
+				<FormField
+					label='table_name'
+					title='Table Name'
+					errors={errors}
+				>
+					<Controller
+						name={'table_name'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Table'
+									options={tableOptions}
+									value={tableOptions?.filter(
+										(item) =>
+											item.value ==
+											getValues('table_name')
+									)}
+									onChange={(e) => {
+										onChange(e.value);
+										setValue('table_uuid', null);
+									}}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+				<FormField
+					label='table_uuid'
+					title='Table Data'
+					errors={errors}
+				>
+					<Controller
+						name={'table_uuid'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Table Data'
+									options={tableDataOptions}
+									value={
+										tableDataOptions?.filter(
+											(item) =>
+												item.value ==
+												getValues('table_uuid')
+										) || []
+									}
+									onChange={(e) => onChange(e.value)}
+								/>
+							);
+						}}
+					/>
+				</FormField>
 				<FormField label='group_uuid' title='Group' errors={errors}>
 					<Controller
 						name={'group_uuid'}
@@ -170,7 +229,7 @@ export default function Index({
 						}}
 					/>
 				</FormField>
-
+				<Input label='account_no' {...{ register, errors }} />
 				<Input label='vat_deduction' {...{ register, errors }} />
 
 				<Input label='tax_deduction' {...{ register, errors }} />

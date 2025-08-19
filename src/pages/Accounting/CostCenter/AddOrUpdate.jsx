@@ -10,6 +10,7 @@ import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
 import GetDateTime from '@/util/GetDateTime';
 
+import { useOtherTableName, useOtherTableNameBy } from '../Ledger/config/query';
 import {
 	useAccCostCenter,
 	useAccCostCenterByUUID,
@@ -30,7 +31,8 @@ export default function Index({
 		updateItem?.uuid
 	);
 	const { invalidateQuery } = useAccCostCenter();
-	const { data: ledgerOptions } = useOtherAccLedger(updateItem?.uuid);
+	const { data: ledgerOptions } = useOtherAccLedger();
+	const { data: tableOptions } = useOtherTableName();
 
 	const {
 		register,
@@ -40,8 +42,12 @@ export default function Index({
 		control,
 		context,
 		Controller,
+		setValue,
 		getValues,
+		watch,
 	} = useRHF(COST_CENTER_SCHEMA, COST_CENTER_NULL);
+
+	const { data: tableDataOptions } = useOtherTableNameBy(watch('table_name'));
 
 	useEffect(() => {
 		if (data) {
@@ -106,6 +112,50 @@ export default function Index({
 			onClose={onClose}
 			isSmall={true}
 		>
+			<FormField label='table_name' title='Table Name' errors={errors}>
+				<Controller
+					name={'table_name'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<ReactSelect
+								placeholder='Select Table'
+								options={tableOptions}
+								value={tableOptions?.filter(
+									(item) =>
+										item.value == getValues('table_name')
+								)}
+								onChange={(e) => {
+									onChange(e.value);
+									setValue('table_uuid', null);
+								}}
+							/>
+						);
+					}}
+				/>
+			</FormField>
+			<FormField label='table_uuid' title='Table Data' errors={errors}>
+				<Controller
+					name={'table_uuid'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<ReactSelect
+								placeholder='Select Table Data'
+								options={tableDataOptions}
+								value={
+									tableDataOptions?.filter(
+										(item) =>
+											item.value ==
+											getValues('table_uuid')
+									) || []
+								}
+								onChange={(e) => onChange(e.value)}
+							/>
+						);
+					}}
+				/>
+			</FormField>
 			<FormField label='ledger_uuid' title='Ledger' errors={errors}>
 				<Controller
 					name={'ledger_uuid'}

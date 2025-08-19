@@ -45,6 +45,7 @@ export default function Index() {
 				accessorKey: 'table_name',
 				header: 'Table',
 				enableColumnFilter: false,
+				cell: (info) => info.getValue()?.replace('.', ' '),
 			},
 			{
 				accessorKey: 'name',

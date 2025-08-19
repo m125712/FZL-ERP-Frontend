@@ -52,10 +52,14 @@ export const COST_CENTER_SCHEMA = {
 	name: STRING_REQUIRED,
 	ledger_uuid: STRING_REQUIRED,
 	invoice_no: STRING_REQUIRED,
+	table_name: STRING_REQUIRED,
+	table_uuid: STRING_REQUIRED,
 };
 
 export const COST_CENTER_NULL = {
 	name: '',
 	ledger_uuid: '',
 	invoice_no: '',
+	table_name: '',
+	table_uuid: '',
 };

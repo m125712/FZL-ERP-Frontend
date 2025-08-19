@@ -22,3 +22,16 @@ export const useOtherAccGroup = () =>
 		queryKey: accQK.otherGroup(),
 		url: '/other/accounts/group/value/label',
 	});
+
+export const useOtherTableName = () =>
+	createGlobalState({
+		queryKey: accQK.otherTableName(),
+		url: '/other/accounts/table-name',
+	});
+
+export const useOtherTableNameBy = (name) =>
+	createGlobalState({
+		queryKey: accQK.otherTableNameBy(name),
+		url: `/other/accounts/table-data/by/${name}`,
+		enabled: !!name,
+	});

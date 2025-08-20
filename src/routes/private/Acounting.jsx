@@ -7,6 +7,9 @@ const FiscalYear = lazy(() => import('@/pages/Accounting/FiscalYear'));
 const Group = lazy(() => import('@/pages/Accounting/Group'));
 const Head = lazy(() => import('@/pages/Accounting/Head'));
 const Ledger = lazy(() => import('@/pages/Accounting/Ledger'));
+const Voucher = lazy(() => import('@/pages/Accounting/Voucher'));
+const VoucherEntry = lazy(() => import('@/pages/Accounting/Voucher/Entry'));
+const VoucherDetails = lazy(() => import('@/pages/Accounting/Voucher/Details'));
 export const AccountingRoutes = [
 	{
 		name: 'Accounting',
@@ -51,6 +54,37 @@ export const AccountingRoutes = [
 				path: '/accounting/ledger',
 				element: <Ledger />,
 				page_name: 'accounting__ledger',
+				actions: ['read', 'create', 'update', 'delete'],
+			},
+			{
+				name: 'Voucher',
+				path: '/accounting/voucher',
+				element: <Voucher />,
+				page_name: 'accounting__voucher',
+				actions: ['read', 'create', 'update', 'delete'],
+			},
+			{
+				name: 'Voucher Entry',
+				path: '/accounting/voucher/entry',
+				element: <VoucherEntry />,
+				page_name: 'accounting__voucher_entry',
+				hidden: true,
+				actions: ['read', 'create', 'update', 'delete'],
+			},
+			{
+				name: 'Voucher Update',
+				path: '/accounting/voucher/:uuid/update',
+				element: <VoucherEntry />,
+				page_name: 'accounting__voucher_update',
+				hidden: true,
+				actions: ['read', 'create', 'update', 'delete'],
+			},
+			{
+				name: 'Voucher Details',
+				path: '/accounting/voucher/:uuid/details',
+				element: <VoucherDetails />,
+				page_name: 'accounting__voucher_details',
+				hidden: true,
 				actions: ['read', 'create', 'update', 'delete'],
 			},
 			//! This NEED Replace with the new routes

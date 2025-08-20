@@ -67,6 +67,18 @@ export default function index() {
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
+
+	const handleGenerateExcel = useCallback(async () => {
+		if (isFetching) return;
+		reset();
+
+		const result = await refetch();
+		const { data } = result;
+		const { data: value } = data;
+		if (value) {
+			Excel(value, from, to);
+		}
+	}, [isFetching, isGenerating, refetch, reset, from, to]);
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 
@@ -91,9 +103,7 @@ export default function index() {
 					</div>
 					<button
 						type='button'
-						onClick={() => {
-							Excel(data, from, to);
-						}}
+						onClick={() => handleGenerateExcel()}
 						className='btn btn-secondary flex-1'
 					>
 						Excel

@@ -10,6 +10,9 @@ const getDateFormate = (date) => format(new Date(date), 'MMM dd, yyyy');
 
 export const getPageHeader = (batch) => {
 	const created_at = getDateFormate(batch?.created_at);
+	const uniquePartyNames = [
+		...new Set(batch?.dyeing_batch_entry.map((entry) => entry.party_name)),
+	];
 	// const updated_at = getDateFormate(batch?.updated_at);
 
 	return {
@@ -57,6 +60,13 @@ export const getPageHeader = (batch) => {
 
 				{ text: 'Slot', bold: true, color: PRIMARY_COLOR },
 				batch?.slot,
+			],
+			[
+				{ text: 'Party', bold: true, color: PRIMARY_COLOR },
+				uniquePartyNames.join(', '),
+
+				{},
+				{},
 			],
 		],
 	};

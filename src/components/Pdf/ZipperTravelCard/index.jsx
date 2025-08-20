@@ -16,7 +16,7 @@ const node = [
 ];
 
 export default function Index(batch) {
-	const headerHeight = 120;
+	const headerHeight = 140;
 	let footerHeight = 50;
 	const { dyeing_batch_entry } = batch;
 	const totals = dyeing_batch_entry?.reduce(

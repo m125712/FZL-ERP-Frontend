@@ -49,131 +49,131 @@ export default function Index(data, from, to) {
 		});
 	});
 
-	// Calculate grand totals from original data
-	const grandTotalCloseEnd = tableData.reduce((total, item) => {
-		return total + (Number(item[7]?.text) || 0);
-	}, 0);
+	// // Calculate grand totals from original data
+	// const grandTotalCloseEnd = tableData.reduce((total, item) => {
+	// 	return total + (Number(item[7]?.text) || 0);
+	// }, 0);
 
-	const grandTotalOpenEnd = tableData.reduce((total, item) => {
-		return total + (Number(item[8]?.text) || 0);
-	}, 0);
+	// const grandTotalOpenEnd = tableData.reduce((total, item) => {
+	// 	return total + (Number(item[8]?.text) || 0);
+	// }, 0);
 
-	const grandTotalQuantity = tableData.reduce((total, item) => {
-		return total + (Number(item[9]?.text) || 0);
-	}, 0);
+	// const grandTotalQuantity = tableData.reduce((total, item) => {
+	// 	return total + (Number(item[9]?.text) || 0);
+	// }, 0);
 
-	// Calculate zipper and thread totals separately
-	const grandZipperTotalCloseEnd = tableData.reduce((total, item) => {
-		return (
-			total +
-			(item[0]?.text !== 'Thread' ? Number(item[7]?.text) || 0 : 0)
-		);
-	}, 0);
+	// // Calculate zipper and thread totals separately
+	// const grandZipperTotalCloseEnd = tableData.reduce((total, item) => {
+	// 	return (
+	// 		total +
+	// 		(item[0]?.text !== 'Thread' ? Number(item[7]?.text) || 0 : 0)
+	// 	);
+	// }, 0);
 
-	const grandZipperTotalOpenEnd = tableData.reduce((total, item) => {
-		return (
-			total +
-			(item[0]?.text !== 'Thread' ? Number(item[8]?.text) || 0 : 0)
-		);
-	}, 0);
+	// const grandZipperTotalOpenEnd = tableData.reduce((total, item) => {
+	// 	return (
+	// 		total +
+	// 		(item[0]?.text !== 'Thread' ? Number(item[8]?.text) || 0 : 0)
+	// 	);
+	// }, 0);
 
-	const grandZipperTotalQuantity = tableData.reduce((total, item) => {
-		return (
-			total +
-			(item[0]?.text !== 'Thread' ? Number(item[9]?.text) || 0 : 0)
-		);
-	}, 0);
+	// const grandZipperTotalQuantity = tableData.reduce((total, item) => {
+	// 	return (
+	// 		total +
+	// 		(item[0]?.text !== 'Thread' ? Number(item[9]?.text) || 0 : 0)
+	// 	);
+	// }, 0);
 
-	const grandThreadTotalCloseEnd = tableData.reduce((total, item) => {
-		return (
-			total +
-			(item[0]?.text === 'Thread' ? Number(item[7]?.text) || 0 : 0)
-		);
-	}, 0);
+	// const grandThreadTotalCloseEnd = tableData.reduce((total, item) => {
+	// 	return (
+	// 		total +
+	// 		(item[0]?.text === 'Thread' ? Number(item[7]?.text) || 0 : 0)
+	// 	);
+	// }, 0);
 
-	const grandThreadTotalOpenEnd = tableData.reduce((total, item) => {
-		return (
-			total +
-			(item[0]?.text === 'Thread' ? Number(item[8]?.text) || 0 : 0)
-		);
-	}, 0);
+	// const grandThreadTotalOpenEnd = tableData.reduce((total, item) => {
+	// 	return (
+	// 		total +
+	// 		(item[0]?.text === 'Thread' ? Number(item[8]?.text) || 0 : 0)
+	// 	);
+	// }, 0);
 
-	const grandThreadTotalQuantity = tableData.reduce((total, item) => {
-		return (
-			total +
-			(item[0]?.text === 'Thread' ? Number(item[9]?.text) || 0 : 0)
-		);
-	}, 0);
+	// const grandThreadTotalQuantity = tableData.reduce((total, item) => {
+	// 	return (
+	// 		total +
+	// 		(item[0]?.text === 'Thread' ? Number(item[9]?.text) || 0 : 0)
+	// 	);
+	// }, 0);
 
 	// Add grand totals
 	const threadIndex = tableData.findIndex(
 		(item) => item[0]?.text === 'Thread'
 	);
 
-	if (threadIndex > -1) {
-		tableData.splice(threadIndex, 0, [
-			{
-				text: 'Grand Total Zipper',
-			},
-			{ text: '' },
-			{ text: '' },
-			{ text: '' },
-			{ text: '' },
-			{ text: '' },
-			{ text: '' },
-			{
-				text: grandZipperTotalCloseEnd.toFixed(2),
-			},
-			{
-				text: grandZipperTotalOpenEnd.toFixed(2),
-			},
-			{
-				text: grandZipperTotalQuantity.toFixed(2),
-			},
-		]);
-	}
+	// if (threadIndex > -1) {
+	// 	tableData.splice(threadIndex, 0, [
+	// 		{
+	// 			text: 'Grand Total Zipper',
+	// 		},
+	// 		{ text: '' },
+	// 		{ text: '' },
+	// 		{ text: '' },
+	// 		{ text: '' },
+	// 		{ text: '' },
+	// 		{ text: '' },
+	// 		{
+	// 			text: grandZipperTotalCloseEnd.toFixed(2),
+	// 		},
+	// 		{
+	// 			text: grandZipperTotalOpenEnd.toFixed(2),
+	// 		},
+	// 		{
+	// 			text: grandZipperTotalQuantity.toFixed(2),
+	// 		},
+	// 	]);
+	// }
 
-	tableData.push([
-		{
-			text: 'Grand Thread Total',
-		},
-		{ text: '' },
-		{ text: '' },
-		{ text: '' },
-		{ text: '' },
-		{ text: '' },
-		{ text: '' },
-		{
-			text: grandThreadTotalCloseEnd.toFixed(2),
-		},
-		{
-			text: grandThreadTotalOpenEnd.toFixed(2),
-		},
-		{
-			text: grandThreadTotalQuantity.toFixed(2),
-		},
-	]);
+	// tableData.push([
+	// 	{
+	// 		text: 'Grand Thread Total',
+	// 	},
+	// 	{ text: '' },
+	// 	{ text: '' },
+	// 	{ text: '' },
+	// 	{ text: '' },
+	// 	{ text: '' },
+	// 	{ text: '' },
+	// 	{
+	// 		text: grandThreadTotalCloseEnd.toFixed(2),
+	// 	},
+	// 	{
+	// 		text: grandThreadTotalOpenEnd.toFixed(2),
+	// 	},
+	// 	{
+	// 		text: grandThreadTotalQuantity.toFixed(2),
+	// 	},
+	// ]);
 
-	tableData.push([
-		{
-			text: 'Grand Total',
-		},
-		{ text: '' },
-		{ text: '' },
-		{ text: '' },
-		{ text: '' },
-		{ text: '' },
-		{ text: '' },
-		{
-			text: grandTotalCloseEnd.toFixed(2),
-		},
-		{
-			text: grandTotalOpenEnd.toFixed(2),
-		},
-		{
-			text: grandTotalQuantity.toFixed(2),
-		},
-	]);
+	// tableData.push([
+	// 	{
+	// 		text: 'Grand Total',
+	// 	},
+	// 	{ text: '' },
+	// 	{ text: '' },
+	// 	{ text: '' },
+	// 	{ text: '' },
+	// 	{ text: '' },
+	// 	{ text: '' },
+	// 	{
+	// 		text: grandTotalCloseEnd.toFixed(2),
+	// 	},
+	// 	{
+	// 		text: grandTotalOpenEnd.toFixed(2),
+	// 	},
+	// 	{
+	// 		text: grandTotalQuantity.toFixed(2),
+	// 	},
+	// ]);
 
 	// Add header row
 	tableData.unshift([

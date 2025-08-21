@@ -67,8 +67,14 @@ export default function ProductionStatementReport() {
 		}
 	}, [isFetching, isGenerating, refetch, generatePdf, reset, from, to]);
 
-	const handleExcelClick = useCallback(() => {
-		if (data) Excel(data);
+	const handleExcelClick = useCallback(async () => {
+		if (isFetching) return;
+		reset();
+
+		const result = await refetch();
+		const { data } = result;
+		const { data: value } = data;
+		if (data) Excel(value);
 	}, [data]);
 
 	return (
@@ -110,7 +116,7 @@ export default function ProductionStatementReport() {
 				<button
 					type='button'
 					onClick={handleExcelClick}
-					disabled={!data || isFetching}
+					disabled={isFetching}
 					className='btn btn-secondary'
 				>
 					{isFetching && <LoaderCircle className='animate-spin' />}

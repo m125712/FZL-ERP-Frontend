@@ -48,14 +48,11 @@ export const CostCentersField = React.memo(function CostCentersField({
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide  p-3';
 
 	return (
-		<div className='ml-4 mt-2 border-l-2 border-gray-200 pl-4'>
+		<div className='ml-4 mt-1 border-l-2 border-gray-200 pl-32'>
 			<div className='mb-2 flex items-center justify-between'>
 				<button
 					type='button'
 					onClick={handleCostCenterAppend}
-					disabled={
-						costCenterFields?.length === costCenterOption?.length
-					}
 					className='btn btn-outline btn-sm disabled:border-red-500 disabled:bg-red-50 disabled:text-red-400'
 				>
 					<Plus className='size-4' />
@@ -67,6 +64,7 @@ export const CostCentersField = React.memo(function CostCentersField({
 				<table className='w-full table-auto'>
 					<thead>
 						<tr>
+							<th className='pl-4'>No.</th>
 							<th className='pl-4'>Cost Center</th>
 							<th></th>
 							<th className='pl-4'>Debit</th>
@@ -77,6 +75,9 @@ export const CostCentersField = React.memo(function CostCentersField({
 					<tbody>
 						{costCenterFields.map((item, index) => (
 							<tr key={item.id} className='gap-4'>
+								<td className={`w-10 ${rowClass}`}>
+									{item.index + 1}
+								</td>
 								<td className={`w-48 ${rowClass}`}>
 									<FormField
 										label={`voucher_entry.${voucherIndex}.voucher_entry_cost_center.${index}.cost_center_uuid`}

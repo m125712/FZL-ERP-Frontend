@@ -1,4 +1,5 @@
 import React from 'react';
+import { format } from 'date-fns';
 
 const VoucherDetailsTable = ({ data }) => {
 	// Filter out UUID fields and unwanted fields
@@ -17,7 +18,6 @@ const VoucherDetailsTable = ({ data }) => {
 			'remarks',
 			'created_at',
 			'updated_at',
-			'index',
 			'is_need_cost_center',
 			'is_payment',
 			'_uuid',
@@ -57,6 +57,9 @@ const VoucherDetailsTable = ({ data }) => {
 					<thead className='bg-gray-100'>
 						<tr>
 							<th className='border-r border-gray-300 px-3 py-2 text-left text-xs font-medium text-gray-700'>
+								No.
+							</th>
+							<th className='border-r border-gray-300 px-3 py-2 text-left text-xs font-medium text-gray-700'>
 								Cost Center Name
 							</th>
 							<th className='px-3 py-2 text-right text-xs font-medium text-gray-700'>
@@ -67,6 +70,9 @@ const VoucherDetailsTable = ({ data }) => {
 					<tbody>
 						{costCenters.map((center, i) => (
 							<tr key={i} className='border-t border-gray-200'>
+								<td className='w-20 border-r border-gray-300 px-3 py-2 text-sm text-gray-800'>
+									{center.index + 1 || 'N/A'}
+								</td>
 								<td className='border-r border-gray-300 px-3 py-2 text-sm text-gray-800'>
 									{center.cost_center_name || 'N/A'}
 								</td>
@@ -93,6 +99,9 @@ const VoucherDetailsTable = ({ data }) => {
 					<thead className='bg-gray-100'>
 						<tr>
 							<th className='border-r border-gray-300 px-3 py-2 text-left text-xs font-medium text-gray-700'>
+								No.
+							</th>
+							<th className='border-r border-gray-300 px-3 py-2 text-left text-xs font-medium text-gray-700'>
 								Payment Type
 							</th>
 							<th className='border-r border-gray-300 px-3 py-2 text-left text-xs font-medium text-gray-700'>
@@ -109,6 +118,9 @@ const VoucherDetailsTable = ({ data }) => {
 					<tbody>
 						{payments.map((payment, i) => (
 							<tr key={i} className='border-t border-gray-200'>
+								<td className='w-20 border-r border-gray-300 px-3 py-2 text-sm text-gray-800'>
+									{payment.index + 1 || 'N/A'}
+								</td>
 								<td className='border-r border-gray-300 px-3 py-2 text-sm text-gray-800'>
 									{payment.payment_type || 'N/A'}
 								</td>
@@ -116,7 +128,8 @@ const VoucherDetailsTable = ({ data }) => {
 									{payment.trx_no || 'N/A'}
 								</td>
 								<td className='border-r border-gray-300 px-3 py-2 text-sm text-gray-800'>
-									{payment.date || 'N/A'}
+									{format(payment.date, 'dd MMM, yyyy') ||
+										'N/A'}
 								</td>
 								<td className='px-3 py-2 text-right text-sm text-gray-800'>
 									{payment.amount || 'N/A'}
@@ -153,6 +166,9 @@ const VoucherDetailsTable = ({ data }) => {
 						<thead className='bg-gray-50'>
 							<tr>
 								<th className='border-r border-gray-300 px-4 py-3 text-left text-sm font-medium text-gray-700'>
+									No.
+								</th>
+								<th className='border-r border-gray-300 px-4 py-3 text-left text-sm font-medium text-gray-700'>
 									Ledger Name
 								</th>
 								<th className='border-r border-gray-300 px-4 py-3 text-left text-sm font-medium text-gray-700'>
@@ -183,6 +199,9 @@ const VoucherDetailsTable = ({ data }) => {
 									<React.Fragment key={idx}>
 										<tr className='border-t border-gray-300 hover:bg-gray-50'>
 											<td className='border-r border-gray-300 px-4 py-3 text-sm text-gray-800'>
+												{fields.index + 1 || 'N/A'}
+											</td>
+											<td className='border-r border-gray-300 px-4 py-3 text-sm text-gray-800'>
 												{fields.ledger_name || 'N/A'}
 											</td>
 											<td className='border-r border-gray-300 px-4 py-3 text-sm text-gray-800'>
@@ -198,7 +217,7 @@ const VoucherDetailsTable = ({ data }) => {
 										{(hasCostCenter || hasPayment) && (
 											<tr className='border-t border-gray-200'>
 												<td
-													colSpan='4'
+													colSpan='5'
 													className='bg-gray-50 px-4 py-3'
 												>
 													<div className='space-y-4'>
@@ -225,6 +244,7 @@ const VoucherDetailsTable = ({ data }) => {
 										Narration
 									</span>
 								</td>
+								<td></td>
 								<td></td>
 								<td className={`text-right font-bold`}>
 									{totals.debit.toFixed(2)}

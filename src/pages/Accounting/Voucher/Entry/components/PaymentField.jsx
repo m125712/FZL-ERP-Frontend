@@ -41,7 +41,7 @@ const PaymentField = React.memo(function PaymentField({
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide p-3';
 
 	return (
-		<div className='ml-4 mt-2 border-l-2 border-gray-200 pl-4'>
+		<div className='ml-4 mt-2 border-l-2 border-gray-200 pl-32'>
 			<div className='mb-2 flex items-center justify-between'>
 				<button
 					type='button'
@@ -56,6 +56,7 @@ const PaymentField = React.memo(function PaymentField({
 				<table className='w-full table-auto'>
 					<thead>
 						<tr>
+							<th className='pl-4'>No.</th>
 							<th className='pl-4'>Payment Method</th>
 							<th className='pl-4'>Transaction No.</th>
 							<th className='pl-4'>Date</th>
@@ -66,6 +67,9 @@ const PaymentField = React.memo(function PaymentField({
 					<tbody>
 						{paymentFields.map((item, index) => (
 							<tr key={item.id} className='gap-4'>
+								<td className={`w-10 ${rowClass}`}>
+									{item.index + 1}
+								</td>
 								<td className={`w-48 ${rowClass}`}>
 									<FormField
 										label={`voucher_entry.${voucherIndex}.voucher_entry_payment.${index}.payment_type`}

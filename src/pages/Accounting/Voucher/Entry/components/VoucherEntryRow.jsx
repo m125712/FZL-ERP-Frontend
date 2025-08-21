@@ -54,6 +54,7 @@ const VoucherEntryRow = React.memo(function VoucherEntryRow(props) {
 	return (
 		<>
 			<tr>
+				<td className={`w-6 ${rowClass}`}>{index + 1}</td>
 				<td className={`w-24 ${rowClass}`}>
 					<FormField
 						label={`voucher_entry[${index}].type`}

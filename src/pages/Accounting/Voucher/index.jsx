@@ -4,7 +4,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, LinkOnly } from '@/ui';
+import { CustomLink, DateTime, EditDelete, LinkOnly } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -29,6 +29,24 @@ export default function Index() {
 
 	const columns = useMemo(
 		() => [
+			{
+				accessorKey: 'voucher_id',
+				header: 'LC',
+				enableColumnFilter: true,
+				cell: (info) => {
+					const { uuid, lc_date } = info.row.original;
+					const url = `/accounting/voucher/${uuid}/details/`;
+					return (
+						<div className='flex flex-col gap-1'>
+							<CustomLink
+								label={info.getValue()}
+								url={url}
+								openInNewTab={true}
+							/>
+						</div>
+					);
+				},
+			},
 			{
 				accessorKey: 'date',
 				header: 'Date',
@@ -137,7 +155,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url: '/accounts/voucher/entry',
+						url: '/accounts/voucher',
 						deleteData,
 					}}
 				/>

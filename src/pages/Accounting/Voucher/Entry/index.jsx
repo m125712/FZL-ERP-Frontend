@@ -1,11 +1,12 @@
 // Index.jsx - Updated with narration totals
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@context/auth';
 import { Plus } from 'lucide-react';
 import { FormProvider } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { useRHF } from '@/hooks';
 
+import { Suspense } from '@/components/Feedback';
 import { Footer } from '@/components/Modal/ui';
 import { DynamicField } from '@/ui';
 
@@ -20,6 +21,8 @@ import Header from './components/Header';
 import VoucherEntryRow from './components/VoucherEntryRow';
 import { useVoucherEntries } from './hooks/useVoucherEntries';
 import { useVoucherSubmission } from './hooks/useVoucherSubmission';
+
+const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 function normalizeVoucher(v) {
 	if (!v) return VOUCHER_NULLABLE;
@@ -45,7 +48,7 @@ export default function Index() {
 	const navigate = useNavigate();
 	const { uuid } = useParams();
 
-	const { url: purchaseDescriptionUrl } = useVoucher();
+	const { url: purchaseDescriptionUrl, deleteData } = useVoucher();
 	const { data } = useVoucherByUUID(uuid);
 	const { data: ledgerOptions = [] } = useOtherAccLedger();
 
@@ -124,6 +127,7 @@ export default function Index() {
 	const handleVoucherRemove = useCallback(
 		(index) => {
 			const entryUuid = getValues(`voucher_entry[${index}].uuid`);
+			console.log('Removing entry of data:', entryUuid);
 			if (entryUuid !== undefined) {
 				setDeleteItem({
 					itemId: entryUuid,
@@ -131,8 +135,7 @@ export default function Index() {
 						`voucher_entry[${index}].material_name`
 					),
 				});
-				if (window['voucher_delete']?.showModal)
-					window['voucher_delete'].showModal();
+				window['voucher_entry_delete'].showModal();
 			}
 			remove(index);
 		},
@@ -221,6 +224,7 @@ export default function Index() {
 							</div>
 						}
 						tableHead={[
+							'No.',
 							'Type',
 							'Ledger',
 							'Description',
@@ -272,6 +276,17 @@ export default function Index() {
 				<Footer buttonClassName='!btn-primary' />
 				<DevTool placement='top-left' control={control} />
 			</form>
+			<Suspense>
+				<DeleteModal
+					modalId={'voucher_entry_delete'}
+					title={'Delete Voucher Entry'}
+					deleteItem={deleteItem}
+					setDeleteItem={setDeleteItem}
+					setItems={deleteItem}
+					url='/acc/voucher-entry'
+					deleteData={deleteData}
+				/>
+			</Suspense>
 		</FormProvider>
 	);
 }

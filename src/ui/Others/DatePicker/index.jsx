@@ -20,7 +20,7 @@ const SimpleDatePicker = ({
 	onChangeForTime = noop,
 	disabled = false,
 	showTime = false,
-	timeIntervals = 30,
+	timeIntervals = 120,
 	props,
 }) => {
 	const [internalDate, setInternalDate] = useState(selected);

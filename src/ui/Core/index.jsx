@@ -352,34 +352,46 @@ export const Radio = ({
 	defaultValue,
 	register,
 	...props
-}) => (
-	<FormField {...props}>
-		<Controller
-			name={name}
-			control={control}
-			defaultValue={defaultValue}
-			render={({ field }) => (
-				<div className='flex gap-2 border-secondary/30'>
-					{options?.map((item) => (
-						<div key={item.value} className='flex gap-2 p-2'>
-							<input
-								type='radio'
-								value={item.value}
-								checked={field.value === item.value}
-								onChange={() => field.onChange(item.value)}
-								className='radio flex-shrink-0 checked:bg-primary'
-								{...register(name)}
-							/>
-							<span className='label-text break-words text-sm leading-tight text-black sm:text-sm'>
-								{item.label}
-							</span>
+}) => {
+	return (
+		<FormField {...props}>
+			<Controller
+				name={name}
+				control={control}
+				defaultValue={defaultValue}
+				render={({ field }) => (
+					<div className='flex flex-col'>
+						<div className='flex gap-2 border-secondary/30'>
+							{options?.map((item) => (
+								<div
+									key={item.value}
+									className='flex gap-2 p-2'
+								>
+									<input
+										type='radio'
+										value={item.value}
+										checked={field.value === item.value}
+										onChange={() =>
+											field.onChange(item.value)
+										}
+										className='radio flex-shrink-0 checked:bg-primary'
+										{...register(name)}
+									/>
+									<span className='label-text break-words text-sm leading-tight text-black sm:text-sm'>
+										{item.label}
+									</span>
+								</div>
+							))}
 						</div>
-					))}
-				</div>
-			)}
-		/>
-	</FormField>
-);
+						<span className='label-text-alt text-xs font-medium capitalize text-error/80'>
+							{props.errors?.[name]?.message}
+						</span>
+					</div>
+				)}
+			/>
+		</FormField>
+	);
+};
 
 export const Textarea = ({ register, ...props }) => (
 	<FormField {...props}>

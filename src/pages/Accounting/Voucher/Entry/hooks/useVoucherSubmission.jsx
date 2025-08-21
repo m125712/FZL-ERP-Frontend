@@ -1,5 +1,7 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useAuth } from '@/context/auth';
+
+import { ShowLocalToast } from '@/components/Toast';
 
 import Formdata from '@/util/formData';
 
@@ -14,12 +16,79 @@ export const useVoucherSubmission = ({
 	reset,
 	VOUCHER_NULLABLE,
 	purchaseDescriptionUrl,
+	setError,
 }) => {
 	const { postData, updateData } = useVoucher();
 	const { user } = useAuth();
 
 	return useCallback(
 		async (data) => {
+			let flag = false;
+			const totals = data?.voucher_entry.reduce(
+				(acc, entry) => {
+					const amount = parseFloat(entry?.amount) || 0;
+					if (entry?.type === 'dr') {
+						acc.debit += amount;
+					} else if (entry?.type === 'cr') {
+						acc.credit += amount;
+					}
+					return acc;
+				},
+				{ debit: 0, credit: 0 }
+			);
+
+			if (totals.credit !== totals.debit) {
+				ShowLocalToast({
+					type: 'error',
+					message: 'Debit and Credit must be equal',
+				});
+				flag = true;
+				return;
+			}
+
+			data?.voucher_entry.map((entry, index) => {
+				const {
+					type,
+					amount,
+					voucher_entry_cost_center = [],
+					voucher_entry_payment = [],
+				} = entry;
+				const sumCostCenters = voucher_entry_cost_center.reduce(
+					(sum, cc) => sum + Number(cc.amount || 0),
+					0
+				);
+				const sumPayments = voucher_entry_payment.reduce(
+					(sum, p) => sum + Number(p.amount || 0),
+					0
+				);
+
+				if (
+					type === 'dr' &&
+					sumCostCenters !== Number(amount) &&
+					voucher_entry_cost_center.length > 0
+				) {
+					setError(`voucher_entry.${index}.amount`, {
+						type: 'validation',
+						message: `Entry "${index}" debit amount ${amount} must equal total cost centers ${sumCostCenters}.`,
+					});
+					flag = true;
+				}
+
+				if (
+					type === 'cr' &&
+					sumPayments !== Number(amount) &&
+					voucher_entry_payment.length > 0
+				) {
+					setError(`voucher_entry.${index}.amount`, {
+						type: 'validation',
+						message: `Entry "${index}" credit amount ${amount} must equal total payments ${sumPayments}.`,
+					});
+					flag = true;
+				}
+			});
+			if (flag) {
+				return;
+			}
 			try {
 				if (isUpdate) {
 					// 1) Update the voucher itself

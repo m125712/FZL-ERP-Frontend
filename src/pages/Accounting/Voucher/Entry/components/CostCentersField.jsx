@@ -34,7 +34,14 @@ export const CostCentersField = React.memo(function CostCentersField({
 			amount: 0,
 		});
 	};
-
+	const filterCostOptions = (options) => {
+		return options?.filter((option) => {
+			const isSelected = costCenterFields.some(
+				(item) => item.cost_center_uuid === option.value
+			);
+			return !isSelected;
+		});
+	};
 	useEffect(() => {
 		if (watch(`voucher_entry.${voucherIndex}.type`) === 'cr') {
 			setValue(
@@ -53,6 +60,9 @@ export const CostCentersField = React.memo(function CostCentersField({
 				<button
 					type='button'
 					onClick={handleCostCenterAppend}
+					disabled={
+						costCenterFields.length >= costCenterOption?.length
+					}
 					className='btn btn-outline btn-sm disabled:border-red-500 disabled:bg-red-50 disabled:text-red-400'
 				>
 					<Plus className='size-4' />
@@ -76,7 +86,7 @@ export const CostCentersField = React.memo(function CostCentersField({
 						{costCenterFields.map((item, index) => (
 							<tr key={item.id} className='gap-4'>
 								<td className={`w-10 ${rowClass}`}>
-									{item.index + 1}
+									{index + 1}
 								</td>
 								<td className={`w-48 ${rowClass}`}>
 									<FormField
@@ -99,7 +109,9 @@ export const CostCentersField = React.memo(function CostCentersField({
 											}) => (
 												<ReactSelect
 													placeholder='Select Cost Center'
-													options={costCenterOption}
+													options={filterCostOptions(
+														costCenterOption
+													)}
 													value={
 														costCenterOption?.find(
 															(o) =>

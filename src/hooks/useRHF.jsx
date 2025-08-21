@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { set } from 'date-fns';
 import {
 	Controller,
 	useController,
@@ -26,6 +27,7 @@ export default function useRHF(schema = {}, defaultValues = {}) {
 		unregister,
 		getFieldState,
 		clearErrors,
+		setError,
 		formState,
 	} = form;
 
@@ -46,6 +48,7 @@ export default function useRHF(schema = {}, defaultValues = {}) {
 		getFieldState,
 		clearErrors,
 		formState,
+		setError,
 		context: form,
 	};
 }

@@ -72,6 +72,7 @@ export default function Index() {
 		watch,
 		setValue,
 		formState,
+		setError,
 		context: form,
 	} = useRHF(VOUCHER_SCHEMA, VOUCHER_NULLABLE);
 
@@ -79,28 +80,68 @@ export default function Index() {
 
 	const {
 		fields: voucherFields,
+		append,
 		remove,
-		appendDrEntry,
-		appendCrEntry,
 		replace,
-	} = useVoucherEntries(control);
+	} = useFieldArray({ control, name: 'voucher_entry', keyName: 'id' });
 
-	// Calculate totals
-	const voucherEntries = watch('voucher_entry') || [];
-	const totals = useMemo(() => {
-		return voucherEntries.reduce(
-			(acc, entry) => {
-				const amount = parseFloat(entry?.amount) || 0;
-				if (entry?.type === 'dr') {
-					acc.debit += amount;
-				} else if (entry?.type === 'cr') {
-					acc.credit += amount;
+	// Seed from last opposite entry
+	const getSeedAmount = useCallback(
+		(newType) => {
+			if (watch(`voucher_entry`).length === 0) {
+				return 0;
+			}
+			const crTotal = watch(`voucher_entry`).reduce((acc, entry) => {
+				if (entry.type === 'cr') {
+					return acc + Number(entry.amount);
 				}
 				return acc;
-			},
-			{ debit: 0, credit: 0 }
-		);
-	}, [voucherEntries]);
+			}, 0);
+			const drTotal = watch(`voucher_entry`).reduce((acc, entry) => {
+				if (entry.type === 'dr') {
+					return acc + Number(entry.amount);
+				}
+				return acc;
+			}, 0);
+
+			if (newType === 'cr' && drTotal > crTotal) {
+				return drTotal - crTotal;
+			} else if (newType === 'dr' && crTotal > drTotal) {
+				return crTotal - drTotal;
+			}
+			return 0;
+		},
+		[voucherFields]
+	);
+
+	// Append handlers
+	const appendDrEntry = useCallback(() => {
+		append({
+			uuid: undefined,
+			index: voucherFields.length,
+			type: 'dr',
+			ledger_uuid: '',
+			description: '',
+			amount: getSeedAmount('dr'),
+			voucher_entry_cost_center: [],
+			voucher_entry_payment: [],
+		});
+	}, [append, getSeedAmount, voucherFields.length]);
+
+	const appendCrEntry = useCallback(() => {
+		append({
+			uuid: undefined,
+			index: voucherFields.length,
+			type: 'cr',
+			ledger_uuid: '',
+			description: '',
+			amount: Number(getSeedAmount('cr')),
+			voucher_entry_cost_center: [],
+			voucher_entry_payment: [],
+		});
+	}, [append, getSeedAmount, voucherFields.length]);
+
+	useEffect(() => {}, [voucherFields]);
 
 	// Sync form + field array on load
 	useEffect(() => {
@@ -127,7 +168,6 @@ export default function Index() {
 	const handleVoucherRemove = useCallback(
 		(index) => {
 			const entryUuid = getValues(`voucher_entry[${index}].uuid`);
-			console.log('Removing entry of data:', entryUuid);
 			if (entryUuid !== undefined) {
 				setDeleteItem({
 					itemId: entryUuid,
@@ -178,10 +218,24 @@ export default function Index() {
 		reset: resetWithArraySync,
 		VOUCHER_NULLABLE,
 		purchaseDescriptionUrl,
+		setError,
 	});
-
+	const allEntries = watch('voucher_entry');
+	const selectedLedgers = allEntries
+		.map((entry) => entry.ledger_uuid)
+		.filter(Boolean);
 	const rowClass =
 		'group whitespace-nowrap text-left text-sm font-normal tracking-wide p-3';
+
+	const totalCr = watch(`voucher_entry`)?.reduce((acc, curr) => {
+		if (curr.type === 'cr') return acc + Number(curr.amount);
+		return acc;
+	}, 0);
+
+	const totalDr = watch(`voucher_entry`)?.reduce((acc, curr) => {
+		if (curr.type === 'dr') return acc + Number(curr.amount);
+		return acc;
+	}, 0);
 
 	return (
 		<FormProvider {...form}>
@@ -256,19 +310,32 @@ export default function Index() {
 								rowClass={rowClass}
 								onRemove={() => handleVoucherRemove(index)}
 								onTypeChange={handleTypeChange}
+								selectedLedgers={selectedLedgers}
 							/>
 						))}
 
 						{/* Narration Row with Totals */}
 						{voucherFields.length > 0 && (
-							<VoucherEntryRow
-								key='narration'
-								watch={watch}
-								isNarrationRow={true}
-								totalDebit={totals.debit}
-								totalCredit={totals.credit}
-								rowClass={rowClass}
-							/>
+							<tr className='border-t-2 border-gray-300 bg-gray-100'>
+								<td className={`${rowClass} font-bold`}>
+									<span className='font-bold text-gray-700'>
+										Narration
+									</span>
+								</td>
+								<td className={`${rowClass}`}></td>
+								<td className={`${rowClass}`}></td>
+								<td
+									className={`${rowClass} text-right font-bold`}
+								>
+									{totalDr}
+								</td>
+								<td
+									className={`${rowClass} text-right font-bold`}
+								>
+									{totalCr}
+								</td>
+								<td className={`${rowClass}`}></td>
+							</tr>
 						)}
 					</DynamicField>
 				</div>

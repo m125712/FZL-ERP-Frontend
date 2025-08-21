@@ -20,9 +20,7 @@ const VoucherEntryRow = React.memo(function VoucherEntryRow(props) {
 		rowClass,
 		onRemove,
 		onTypeChange,
-		isNarrationRow,
-		totalDebit,
-		totalCredit,
+		selectedLedgers,
 	} = props;
 
 	const type = watch(`voucher_entry[${index}].type`);
@@ -30,26 +28,13 @@ const VoucherEntryRow = React.memo(function VoucherEntryRow(props) {
 	const selectedLedger = ledgerOptions?.find(
 		(l) => l.value === selectedLedgerUuid
 	);
-
-	// If this is narration row, render totals
-	if (isNarrationRow) {
-		return (
-			<tr className='border-t-2 border-gray-300 bg-gray-100'>
-				<td className={`${rowClass} font-bold`}>
-					<span className='font-bold text-gray-700'>Narration</span>
-				</td>
-				<td className={`${rowClass}`}></td>
-				<td className={`${rowClass}`}></td>
-				<td className={`${rowClass} text-right font-bold`}>
-					{totalDebit.toFixed(2)}
-				</td>
-				<td className={`${rowClass} text-right font-bold`}>
-					{totalCredit.toFixed(2)}
-				</td>
-				<td className={`${rowClass}`}></td>
-			</tr>
+	const filteredLedgerOptions = React.useMemo(() => {
+		return ledgerOptions?.filter(
+			(opt) =>
+				!selectedLedgers.includes(opt.value) ||
+				opt.value === selectedLedgerUuid
 		);
-	}
+	}, [ledgerOptions, selectedLedgers, selectedLedgerUuid]);
 
 	return (
 		<>
@@ -74,9 +59,9 @@ const VoucherEntryRow = React.memo(function VoucherEntryRow(props) {
 											(inItem) => inItem.value === value
 										) ?? null
 									}
-									onChange={(e) =>
-										onTypeChange(index, e?.value, onChange)
-									}
+									onChange={(e) => {
+										onTypeChange(index, e?.value, onChange);
+									}}
 									menuPortalTarget={document.body}
 								/>
 							)}
@@ -99,9 +84,9 @@ const VoucherEntryRow = React.memo(function VoucherEntryRow(props) {
 							render={({ field: { onChange, value } }) => (
 								<ReactSelect
 									placeholder='Select Ledger'
-									options={ledgerOptions}
+									options={filteredLedgerOptions}
 									value={
-										ledgerOptions.find(
+										filteredLedgerOptions.find(
 											(o) => o.value === value
 										) ?? null
 									}
@@ -125,12 +110,19 @@ const VoucherEntryRow = React.memo(function VoucherEntryRow(props) {
 					/>
 				</td>
 
-				<td className={`w-48 ${rowClass} pl-`}>
+				<td className={`w-48 ${rowClass} `}>
 					{type === 'dr' && (
 						<Input
 							title='Debit'
 							label={`voucher_entry[${index}].amount`}
 							is_title_needed='false'
+							type='number'
+							onChange={(e) => {
+								setValue(
+									`voucher_entry.${index}.amount`,
+									e.target.value
+								);
+							}}
 							dynamicerror={
 								errors?.voucher_entry?.[index]?.amount
 							}
@@ -145,6 +137,12 @@ const VoucherEntryRow = React.memo(function VoucherEntryRow(props) {
 							title='Credit'
 							label={`voucher_entry[${index}].amount`}
 							is_title_needed='false'
+							onChange={(e) => {
+								setValue(
+									`voucher_entry.${index}.amount`,
+									e.target.value
+								);
+							}}
 							dynamicerror={
 								errors?.voucher_entry?.[index]?.amount
 							}

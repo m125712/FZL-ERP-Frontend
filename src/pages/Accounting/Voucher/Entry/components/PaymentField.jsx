@@ -68,7 +68,7 @@ const PaymentField = React.memo(function PaymentField({
 						{paymentFields.map((item, index) => (
 							<tr key={item.id} className='gap-4'>
 								<td className={`w-10 ${rowClass}`}>
-									{item.index + 1}
+									{index + 1}
 								</td>
 								<td className={`w-48 ${rowClass}`}>
 									<FormField

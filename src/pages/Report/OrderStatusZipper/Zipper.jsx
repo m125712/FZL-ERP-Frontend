@@ -5,7 +5,13 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, SimpleDatePicker, Status } from '@/ui';
+import {
+	CustomLink,
+	DateTime,
+	SimpleDatePicker,
+	Status,
+	StatusButton,
+} from '@/ui';
 
 import { REPORT_DATE_FORMATE, REPORT_DATE_TIME_FORMAT } from '../utils';
 
@@ -397,6 +403,41 @@ export default function Index() {
 				header: 'EB/Kg',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'received',
+				header: 'Received',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					const { received, received_date } = info.row.original;
+					return (
+						<div className='flex items-center gap-2'>
+							<StatusButton size='btn-sm' value={received} />
+
+							{received_date && <DateTime date={received_date} />}
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'batch_status',
+				header: 'Batch Status',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					const { batch_status, batch_status_date } =
+						info.row.original;
+					return (
+						<div className='flex items-center gap-2'>
+							<StatusButton size='btn-sm' value={batch_status} />
+
+							{batch_status_date && (
+								<DateTime date={batch_status_date} />
+							)}
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'dyeing_machine',

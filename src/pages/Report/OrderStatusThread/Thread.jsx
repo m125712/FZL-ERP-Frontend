@@ -5,7 +5,13 @@ import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, SimpleDatePicker, Status } from '@/ui';
+import {
+	CustomLink,
+	DateTime,
+	SimpleDatePicker,
+	Status,
+	StatusButton,
+} from '@/ui';
 
 import { REPORT_DATE_FORMATE } from '../utils';
 
@@ -325,14 +331,44 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'status',
+				header: 'Status',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					const { status, status_date } = info.row.original;
+					return (
+						<div className='flex items-center gap-2'>
+							<StatusButton size='btn-sm' value={status} />
+
+							{status_date && <DateTime date={status_date} />}
+						</div>
+					);
+				},
+			},
+			{
 				accessorKey: 'is_drying_complete',
 				header: 'D/C',
 				enableColumnFilter: false,
+				width: 'w-24',
 				cell: (info) => {
-					const { is_drying_complete } = info.row.original;
-					return <Status status={is_drying_complete} />;
+					const { is_drying_complete, drying_created_at } =
+						info.row.original;
+					return (
+						<div className='flex items-center gap-2'>
+							<StatusButton
+								size='btn-sm'
+								value={is_drying_complete}
+							/>
+
+							{drying_created_at && (
+								<DateTime date={drying_created_at} />
+							)}
+						</div>
+					);
 				},
 			},
+
 			{
 				accessorKey: 'machine',
 				header: 'D/M',

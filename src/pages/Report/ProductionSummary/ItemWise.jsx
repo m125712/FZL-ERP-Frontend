@@ -22,9 +22,9 @@ export default function Index() {
 	const [date, setDate] = useState(new Date());
 	const [toDate, setToDate] = useState(new Date());
 
-	const { data, isLoading, url } = useItemWise(
-		format(date, 'yyyy-MM-dd'),
-		format(toDate, 'yyyy-MM-dd'),
+	const { data, isLoading } = useItemWise(
+		format(date, 'yyyy-MM-dd HH:mm:ss'),
+		format(toDate, 'yyyy-MM-dd HH:mm:ss'),
 		getPath(haveAccess, user?.uuid),
 		{
 			enabled: !!user?.uuid,
@@ -68,24 +68,26 @@ export default function Index() {
 			extraButton={
 				<div className='flex items-center gap-2'>
 					<SimpleDatePicker
-						className='h-[2.34rem] w-32'
+						className='m-w-32 h-[2.34rem]'
 						key={'Date'}
 						value={date}
 						placeholder='Date'
-						onChange={(data) => {
+						onChangeForTime={(data) => {
 							setDate(data);
 						}}
 						selected={date}
+						showTime={true}
 					/>
 					<SimpleDatePicker
-						className='h-[2.34rem] w-32'
+						className='m-w-32 h-[2.34rem]'
 						key={'toDate'}
 						value={toDate}
 						placeholder='To'
-						onChange={(data) => {
+						onChangeForTime={(data) => {
 							setToDate(data);
 						}}
 						selected={toDate}
+						showTime={true}
 					/>
 				</div>
 			}

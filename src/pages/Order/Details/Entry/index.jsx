@@ -271,7 +271,10 @@ export default function Index() {
 				is_meter: rest?.is_meter ? 1 : 0,
 				is_cm: rest?.is_cm ? 1 : 0,
 				is_multi_color: rest?.is_multi_color ? 1 : 0,
-				hand: rest?.hand,
+				hand:
+					endType === 'Open End' || endType === '2 Way - Open End'
+						? rest?.hand
+						: null,
 				updated_at: GetDateTime(),
 				updated_by: user?.uuid,
 			};

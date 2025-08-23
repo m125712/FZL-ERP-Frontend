@@ -210,7 +210,7 @@ export default function Header({
 													quantity: '',
 													company_price: 0,
 													party_price: 0,
-													bleaching: 'non-bleach',
+													bleaching: e.item.bleaching,
 												},
 											],
 											...e.item,

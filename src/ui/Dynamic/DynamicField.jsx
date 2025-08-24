@@ -9,6 +9,7 @@ export default function DynamicField({
 	headerButtons = [],
 	showAppendButton = true,
 	handelAppend,
+	extraButton,
 	children,
 }) {
 	return (
@@ -30,6 +31,7 @@ export default function DynamicField({
 							<Plus className='w-5' /> NEW
 						</button>
 					)}
+					{extraButton && extraButton}
 				</div>
 			</div>
 

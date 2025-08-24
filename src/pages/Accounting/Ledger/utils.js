@@ -3,6 +3,7 @@ export const typeOptions = [
 	{ label: 'Liability', value: 'liability' },
 	{ label: 'Income', value: 'income' },
 	{ label: 'Expense', value: 'expense' },
+	{ label: 'Cost Of Goods', value: 'cost_of_goods' },
 ];
 
 export const restrictionOptions = [

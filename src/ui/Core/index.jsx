@@ -157,7 +157,7 @@ export const DateInput = ({
 	startDate = null,
 	...props
 }) => {
-	const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
+	const ExampleCustomInput = ({ ref, value, onClick }) => (
 		<button
 			type='button'
 			className={cn(
@@ -172,7 +172,7 @@ export const DateInput = ({
 			{value || 'Select Date'}
 			<CalenderIcon className='w-4' />
 		</button>
-	));
+	);
 	return (
 		<FormField {...props}>
 			<props.Controller
@@ -344,27 +344,54 @@ export const Select = ({ register, ...props }) => (
 	</FormField>
 );
 
-export const Radio = ({ register, checker = 0, value, rest, ...props }) => (
-	<FormField {...props}>
-		<div className='flex gap-6 rounded border border-primary bg-white px-2 py-2.5'>
-			{props.option?.map((item) => (
-				<label
-					key={item.value}
-					className='flex cursor-pointer items-center gap-2'
-				>
-					<input
-						type='radio'
-						className='radio checked:bg-primary'
-						checked={checker == item.value}
-						{...register(props.label)}
-						{...rest}
-					/>
-					<span className='label-text'>{item.label}</span>
-				</label>
-			))}
-		</div>
-	</FormField>
-);
+export const Radio = ({
+	name,
+	options,
+	control,
+	Controller,
+	defaultValue,
+	register,
+	...props
+}) => {
+	return (
+		<FormField {...props}>
+			<Controller
+				name={name}
+				control={control}
+				defaultValue={defaultValue}
+				render={({ field }) => (
+					<div className='flex flex-col'>
+						<div className='flex gap-2 border-secondary/30'>
+							{options?.map((item) => (
+								<div
+									key={item.value}
+									className='flex gap-2 p-2'
+								>
+									<input
+										type='radio'
+										value={item.value}
+										checked={field.value === item.value}
+										onChange={() =>
+											field.onChange(item.value)
+										}
+										className='radio flex-shrink-0 checked:bg-primary'
+										{...register(name)}
+									/>
+									<span className='label-text break-words text-sm leading-tight text-black sm:text-sm'>
+										{item.label}
+									</span>
+								</div>
+							))}
+						</div>
+						<span className='label-text-alt text-xs font-medium capitalize text-error/80'>
+							{props.errors?.[name]?.message}
+						</span>
+					</div>
+				)}
+			/>
+		</FormField>
+	);
+};
 
 export const Textarea = ({ register, ...props }) => (
 	<FormField {...props}>

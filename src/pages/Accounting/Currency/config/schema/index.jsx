@@ -49,16 +49,20 @@ export {
 };
 
 export const ACCOUNTING_CURRENCY_SCHEMA = {
+	default: BOOLEAN_REQUIRED,
 	currency: STRING_REQUIRED,
 	currency_name: STRING_REQUIRED,
 	symbol: STRING_REQUIRED,
+	conversion_rate: NUMBER_DOUBLE_REQUIRED.min(1),
 	remarks: STRING.nullable(),
 };
 
 export const ACCOUNTING_CURRENCY_NULL = {
+	default: false,
 	uuid: null,
 	currency: '',
 	currency_name: '',
+	conversion_rate: 1,
 	symbol: null,
 	remarks: '',
 };

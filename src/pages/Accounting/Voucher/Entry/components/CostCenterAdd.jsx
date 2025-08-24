@@ -1,22 +1,27 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
-import { useRHF } from '@/hooks';
-
-import { AddModal } from '@/components/Modal';
-import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { FormField, Input, ReactSelect } from '@/ui';
-
-import nanoid from '@/lib/nanoid';
-import { DevTool } from '@/lib/react-hook-devtool';
-import GetDateTime from '@/util/GetDateTime';
-
-import { useOtherTableName, useOtherTableNameBy } from '../Ledger/config/query';
 import {
 	useAccCostCenter,
 	useAccCostCenterByUUID,
 	useOtherAccLedger,
-} from './config/query';
-import { COST_CENTER_NULL, COST_CENTER_SCHEMA } from './config/schema';
+} from '@/pages/Accounting/CostCenter/config/query';
+import {
+	COST_CENTER_NULL,
+	COST_CENTER_SCHEMA,
+	STRING,
+} from '@/pages/Accounting/CostCenter/config/schema';
+import {
+	useOtherTableName,
+	useOtherTableNameBy,
+} from '@/pages/Accounting/Ledger/config/query';
+import { nanoid } from 'nanoid';
+import { useRHF } from '@/hooks';
+
+import { AddModal } from '@/components/Modal';
+import { FormField, Input, ReactSelect } from '@/ui';
+
+import { DevTool } from '@/lib/react-hook-devtool';
+import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
@@ -24,15 +29,15 @@ export default function Index({
 		uuid: null,
 	},
 	setUpdateItem,
+	postData,
 }) {
 	const { user } = useAuth();
 
-	const { data, updateData, postData } = useAccCostCenterByUUID(
-		updateItem?.uuid
-	);
+	const { data } = useAccCostCenterByUUID(updateItem?.uuid);
 	const { invalidateQuery } = useAccCostCenter();
 	const { data: ledgerOptions } = useOtherAccLedger();
 	const { data: tableOptions } = useOtherTableName();
+	const schema = { ...COST_CENTER_SCHEMA, ledger_uuid: STRING.nullable() };
 
 	const {
 		register,
@@ -45,7 +50,7 @@ export default function Index({
 		setValue,
 		getValues,
 		watch,
-	} = useRHF(COST_CENTER_SCHEMA, COST_CENTER_NULL);
+	} = useRHF(schema, COST_CENTER_NULL);
 
 	const { data: tableDataOptions } = useOtherTableNameBy(watch('table_name'));
 
@@ -54,43 +59,24 @@ export default function Index({
 			reset(data);
 		}
 	}, [data]);
-	console.log('');
 
 	const onClose = () => {
 		setUpdateItem((prev) => ({
 			...prev,
 			uuid: null,
 		}));
-		console.log(updateItem);
 		reset(COST_CENTER_NULL);
 		window[modalId].close();
 	};
 
 	const onSubmit = async (data) => {
-		// Update item
-		if (updateItem?.uuid !== null && updateItem?.uuid !== undefined) {
-			const updatedData = {
-				...data,
-				updated_at: GetDateTime(),
-				updated_by: user?.uuid,
-			};
-
-			await updateData.mutateAsync({
-				url: `/acc/cost-center/${updateItem?.uuid}`,
-				uuid: updateItem?.uuid,
-				updatedData,
-				onClose,
-			});
-
-			return;
-		}
-
+		const new_uuid = nanoid();
 		// Add new item
 		const updatedData = {
 			...data,
-			uuid: updateItem?.new_uuid || nanoid(),
+			uuid: new_uuid,
+			ledger_uuid: updateItem?.leader_uuid,
 			created_by: user?.uuid,
-
 			created_at: GetDateTime(),
 		};
 
@@ -100,16 +86,24 @@ export default function Index({
 			onClose,
 		});
 
-		invalidateQuery();
-		updateItem?.invalidQueryCostCenter();
+		await invalidateQuery();
+		await updateItem?.invalidQueryCostCenter();
+		updateItem?.voucher_entry_set_value(
+			`voucher_entry[${updateItem.index}].voucher_entry_cost_center`,
+			[
+				...updateItem.currentCostCenters,
+				{
+					cost_center_uuid: new_uuid,
+					amount: 0,
+				},
+			]
+		);
 	};
 
 	return (
 		<AddModal
 			id={modalId}
-			title={
-				updateItem?.uuid !== null ? 'Update Cost Center' : 'Cost Center'
-			}
+			title={'Add Cost Center'}
 			formContext={context}
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
@@ -153,25 +147,6 @@ export default function Index({
 											getValues('table_uuid')
 									) || []
 								}
-								onChange={(e) => onChange(e.value)}
-							/>
-						);
-					}}
-				/>
-			</FormField>
-			<FormField label='ledger_uuid' title='Ledger' errors={errors}>
-				<Controller
-					name={'ledger_uuid'}
-					control={control}
-					render={({ field: { onChange } }) => {
-						return (
-							<ReactSelect
-								placeholder='Select Ledger'
-								options={ledgerOptions}
-								value={ledgerOptions?.filter(
-									(item) =>
-										item.value == getValues('ledger_uuid')
-								)}
 								onChange={(e) => onChange(e.value)}
 							/>
 						);

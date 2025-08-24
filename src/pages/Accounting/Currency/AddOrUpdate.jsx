@@ -2,7 +2,8 @@ import { useAuth } from '@/context/auth';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { Input } from '@/ui';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
+import { FormField, Input } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
@@ -24,10 +25,16 @@ export default function Index({
 	const { url, updateData, postData } = useAccountingCurrency();
 	const { invalidateQuery: invalidateCurrency } = useOtherCurrency();
 	const { user } = useAuth();
-	const { register, handleSubmit, errors, reset, control, context } = useRHF(
-		ACCOUNTING_CURRENCY_SCHEMA,
-		ACCOUNTING_CURRENCY_NULL
-	);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		control,
+		context,
+		getValues,
+		Controller,
+	} = useRHF(ACCOUNTING_CURRENCY_SCHEMA, ACCOUNTING_CURRENCY_NULL);
 
 	useFetchForRhfReset(
 		`${url}/${updateCountLength?.uuid}`,
@@ -95,9 +102,26 @@ export default function Index({
 			onClose={onClose}
 			isSmall={true}
 		>
+			<FormField label='is_fixed' title='Default' errors={errors}>
+				<Controller
+					name={'default'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<SwitchToggle
+								onChange={(e) => {
+									onChange(e);
+								}}
+								checked={getValues('default')}
+							/>
+						);
+					}}
+				/>
+			</FormField>
 			<Input label='currency' {...{ register, errors }} />
 			<Input label='currency_name' {...{ register, errors }} />
 			<Input label='symbol' {...{ register, errors }} />
+			<Input label='conversion_rate' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>
 	);

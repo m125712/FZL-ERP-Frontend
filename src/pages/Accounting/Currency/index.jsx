@@ -4,7 +4,8 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete } from '@/ui';
+import SwitchToggle from '@/ui/Others/SwitchToggle';
+import { DateTime, EditDelete, Switch } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -14,13 +15,32 @@ const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { data, isLoading, url, deleteData } = useAccountingCurrency();
+	const { data, isLoading, url, deleteData, updateData } =
+		useAccountingCurrency();
 	const info = new PageInfo('Currency', url, 'accounting__currency');
 	const haveAccess = useAccess('accounting__currency');
 	const { invalidateQuery: invalidateCurrency } = useOtherCurrency();
-
+	const handleActive = async (idx) => {
+		await updateData.mutateAsync({
+			url: `${url}/${data[idx].uuid}`,
+			uuid: data[idx].uuid,
+			updatedData: { default: data[idx].default ? false : true },
+		});
+	};
 	const columns = useMemo(
 		() => [
+			{
+				accessorKey: 'default',
+				header: 'Default',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<SwitchToggle
+						onChange={() => handleActive(info.row.index)}
+						checked={info.getValue()}
+					/>
+				),
+			},
+
 			{
 				accessorKey: 'currency',
 				header: 'Currency',
@@ -36,6 +56,12 @@ export default function Index() {
 			{
 				accessorKey: 'symbol',
 				header: 'Symbol',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'conversion_rate',
+				header: 'Conversion Rate',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

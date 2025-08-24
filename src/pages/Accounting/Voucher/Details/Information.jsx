@@ -28,6 +28,8 @@ export default function Information({
 		created_by_name,
 		created_at,
 		updated_at,
+		currency_name,
+		conversion_rate,
 		remarks,
 	} = voucher;
 
@@ -49,6 +51,14 @@ export default function Information({
 			{
 				label: 'TAX Deduction',
 				value: tax_deduction,
+			},
+			{
+				label: 'Currency',
+				value: currency_name,
+			},
+			{
+				label: 'Conversion Rate',
+				value: conversion_rate,
 			},
 		];
 		const create = [

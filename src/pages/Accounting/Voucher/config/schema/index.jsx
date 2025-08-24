@@ -53,6 +53,11 @@ export const VOUCHER_SCHEMA = {
 	category: STRING_REQUIRED,
 	vat_deduction: NUMBER_DOUBLE_REQUIRED,
 	tax_deduction: NUMBER_DOUBLE_REQUIRED,
+	currency_uuid: STRING_REQUIRED,
+	conversion_rate: NUMBER_DOUBLE_REQUIRED.min(
+		1,
+		'Conversion rate must be greater than 0'
+	),
 	voucher_entry: yup.array().of(
 		yup.object().shape({
 			ledger_uuid: STRING_REQUIRED,
@@ -96,6 +101,8 @@ export const VOUCHER_NULLABLE = {
 	category: null,
 	vat_deduction: 0,
 	tax_deduction: 0,
+	conversion_rate: 1,
+	currency_uuid: null,
 	voucher_entry: [
 		{
 			ledger_uuid: null,

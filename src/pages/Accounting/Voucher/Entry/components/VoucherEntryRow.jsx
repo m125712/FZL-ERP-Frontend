@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
-import { nanoid } from 'nanoid';
 
 import { DateInput } from '@/ui/Core';
-import { FormField, Input, ReactSelect, RemoveButton, Textarea } from '@/ui';
+import { FormField, Input, ReactSelect, RemoveButton } from '@/ui';
 
 import { useOtherCostCenter } from '../../config/query';
 import { paymentTypeOption, typeOptions } from '../utils';
@@ -340,52 +339,56 @@ function VoucherEntryRow({
 																<Plus className='h-3 w-3' />
 															</button>
 														)}
-														{!showPaymentButton && (
-															<button
-																type='button'
-																onClick={() => {
-																	handelUpdate(
-																		p
-																	);
+														{!showPaymentButton &&
+															type === 'dr' && (
+																<button
+																	type='button'
+																	onClick={() => {
+																		handelUpdate(
+																			p
+																		);
 
-																	setIndex(p);
+																		setIndex(
+																			p
+																		);
 
-																	setValue(
-																		`voucher_entry[${p}].voucher_entry_cost_center`,
+																		setValue(
+																			`voucher_entry[${p}].voucher_entry_cost_center`,
 
-																		watch(
-																			`voucher_entry[${p}].voucher_entry_cost_center`
-																		).filter(
-																			(
-																				item
-																			) =>
-																				item.cost_center_uuid !==
-																					null &&
-																				item.cost_center_uuid !==
-																					undefined &&
-																				item.cost_center_uuid !==
-																					''
-																		) || []
-																	);
-																	setTimeout(
-																		() =>
-																			setRenderKey(
+																			watch(
+																				`voucher_entry[${p}].voucher_entry_cost_center`
+																			).filter(
 																				(
-																					prev
+																					item
 																				) =>
-																					prev +
-																					1
-																			),
-																		50
-																	);
-																}}
-																className='btn btn-outline btn-sm flex items-center justify-center gap-1 rounded bg-accent text-white'
-																title='Add Cost Center Entry'
-															>
-																New CC
-																<Plus className='h-3 w-3' />
-															</button>
-														)}
+																					item.cost_center_uuid !==
+																						null &&
+																					item.cost_center_uuid !==
+																						undefined &&
+																					item.cost_center_uuid !==
+																						''
+																			) ||
+																				[]
+																		);
+																		setTimeout(
+																			() =>
+																				setRenderKey(
+																					(
+																						prev
+																					) =>
+																						prev +
+																						1
+																				),
+																			50
+																		);
+																	}}
+																	className='btn btn-outline btn-sm flex items-center justify-center gap-1 rounded bg-accent text-white'
+																	title='Add Cost Center Entry'
+																>
+																	New CC
+																	<Plus className='h-3 w-3' />
+																</button>
+															)}
 													</div>
 
 													{showPaymentButton && (

@@ -52,7 +52,21 @@ export default function Index() {
 				header: 'Date',
 				enableColumnFilter: false,
 				filterFn: 'isWithinRange',
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
+			},
+			{
+				accessorKey: 'currency_name',
+				header: 'Currency',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'conversion_rate',
+				header: 'Conversion Rate',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'category',

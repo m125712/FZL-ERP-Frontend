@@ -182,7 +182,7 @@ const VoucherDetailsTable = ({ data }) => {
 									className={`border-t border-gray-300 ${
 										row.type === 'main'
 											? 'hover:bg-gray-50'
-											: 'bg-gray-50'
+											: 'bg-gray-50 italic'
 									}`}
 								>
 									{/* Index column with rowSpan for main entries */}
@@ -229,12 +229,12 @@ const VoucherDetailsTable = ({ data }) => {
 
 									{/* Transaction Number column */}
 									<td className='border-r border-gray-300 px-3 py-3 text-sm text-gray-600'>
-										{row.data.transactionNo}
+										{row.data.transactionNo || '--'}
 									</td>
 
 									{/* Date column */}
 									<td className='border-r border-gray-300 px-3 py-3 text-sm text-gray-600'>
-										{row.data.date}
+										{row.data.date || '--'}
 									</td>
 
 									{/* Debit column */}

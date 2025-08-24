@@ -49,8 +49,8 @@ export {
 };
 
 export const LEDGER_SCHEMA = {
-	table_name: STRING_REQUIRED,
-	table_uuid: STRING_REQUIRED,
+	table_name: STRING.nullable(),
+	table_uuid: STRING.nullable(),
 	name: STRING_REQUIRED,
 	category: STRING_REQUIRED,
 	account_no: STRING_REQUIRED,

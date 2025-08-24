@@ -38,6 +38,10 @@ export default function Index() {
 			document.title = 'New Voucher Entry';
 		}
 	}, [uuid]);
+	const defaultValue = {
+		...VOUCHER_NULLABLE,
+		...normalizeVoucher(data),
+	};
 
 	const {
 		register,
@@ -194,70 +198,21 @@ export default function Index() {
 		}
 	}, [data, reset, replace]);
 
-	// Warning modal state
-	const [warning, setWarning] = useState({
-		open: false,
-		index: null,
-		field: '',
-		from: '',
-		to: '',
-		apply: null,
-	});
-
-	const getLedgerLabel = (uuid) => {
-		const opt = ledgerOptions.find((o) => o.value === uuid);
-		return opt?.label || '';
-	};
-
-	const openWarning = (idx, field, from, to, applyFn) => {
-		setWarning({ open: true, index: idx, field, from, to, apply: applyFn });
-	};
-	const confirmWarning = () => {
-		warning.apply();
-		setWarning((w) => ({ ...w, open: false }));
-	};
-	const cancelWarning = () => setWarning((w) => ({ ...w, open: false }));
-
-	// Handlers with warning
-	const handleLedgerChange = (idx, newVal, onChange) => {
-		const prev = prevRef.current[idx]?.ledger_uuid;
-		if (prev && prev !== newVal) {
-			openWarning(
-				idx,
-				'Ledger',
-				getLedgerLabel(prev),
-				getLedgerLabel(newVal),
-				() => {
-					onChange(newVal);
-					prevRef.current[idx].ledger_uuid = newVal;
-				}
-			);
-		} else {
-			onChange(newVal);
-			if (!prevRef.current[idx]) prevRef.current[idx] = {};
-			prevRef.current[idx].ledger_uuid = newVal;
-		}
-	};
-
-	const handleTypeChange = (idx, newVal, onChange) => {
-		const prev = prevRef.current[idx]?.type;
-		if (prev && prev !== newVal) {
-			openWarning(
-				idx,
-				'Entry Type',
-				prev.toUpperCase(),
-				newVal.toUpperCase(),
-				() => {
-					onChange(newVal);
-					prevRef.current[idx].type = newVal;
-				}
-			);
-		} else {
-			onChange(newVal);
-			if (!prevRef.current[idx]) prevRef.current[idx] = {};
-			prevRef.current[idx].type = newVal;
-		}
-	};
+	const handleTypeChange = useCallback(
+		(index, newType, onChange) => {
+			onChange(newType);
+			if (newType === 'cr') {
+				setValue(
+					`voucher_entry[${index}].voucher_entry_cost_center`,
+					[]
+				);
+			} else if (newType === 'dr') {
+				setValue(`voucher_entry[${index}].voucher_entry_payment`, []);
+			}
+			setValue(`voucher_entry[${index}].amount`, 0);
+		},
+		[setValue]
+	);
 	const onSubmit = useVoucherSubmission({
 		isUpdate,
 		uuid,
@@ -379,6 +334,7 @@ export default function Index() {
 						errors,
 						control,
 						getValues,
+						setValue,
 						Controller,
 						watch,
 						isUpdate,

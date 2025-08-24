@@ -283,6 +283,7 @@ export default function Index() {
 						tableHead={[
 							'Packet List',
 							'Order Number',
+							'Carton Qty',
 							'Carton Size',
 							'Carton Weight',
 							'Total Poly Quantity',
@@ -331,6 +332,11 @@ export default function Index() {
 												`entry[${index}].order_number`
 											)}`}
 										/>
+									)}
+								</td>
+								<td className={`w-80 ${rowClass}`}>
+									{getValues(
+										`entry[${index}].carton_quantity`
 									)}
 								</td>
 								<td className={`w-80 ${rowClass}`}>

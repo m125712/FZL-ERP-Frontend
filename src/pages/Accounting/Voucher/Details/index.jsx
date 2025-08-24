@@ -9,7 +9,6 @@ export default function Index() {
 	const { uuid } = useParams();
 
 	const { data, isLoading } = useVoucherByUUID(uuid);
-	console.log(data);
 
 	useEffect(() => {
 		document.title = 'Voucher Details';

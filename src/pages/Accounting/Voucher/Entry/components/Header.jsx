@@ -1,16 +1,7 @@
-import { From } from '@/assets/icons';
-import { useOtherVendor } from '@/state/Other';
 import { useParams } from 'react-router';
 
 import { DateInput, Radio } from '@/ui/Core';
-import {
-	File,
-	FormField,
-	Input,
-	ReactSelect,
-	SectionEntryBody,
-	Textarea,
-} from '@/ui';
+import { Input, SectionEntryBody, Textarea } from '@/ui';
 
 import { categoryOptions } from '../utils';
 
@@ -18,11 +9,8 @@ export default function Header({
 	register,
 	errors,
 	control,
-	getValues,
 	Controller,
 	watch,
-	isUpdate,
-	type,
 }) {
 	const { uuid } = useParams();
 

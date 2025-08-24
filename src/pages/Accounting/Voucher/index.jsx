@@ -155,7 +155,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url: '/accounts/voucher',
+						url: '/acc/voucher',
 						deleteData,
 					}}
 				/>

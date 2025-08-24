@@ -56,15 +56,20 @@ export const VOUCHER_SCHEMA = {
 	voucher_entry: yup.array().of(
 		yup.object().shape({
 			ledger_uuid: STRING_REQUIRED,
-			description: STRING_REQUIRED,
-			amount: NUMBER_DOUBLE_REQUIRED,
+			amount: NUMBER_DOUBLE_REQUIRED.min(
+				1,
+				'Amount must be greater than 0'
+			),
 			type: STRING_REQUIRED,
 			voucher_entry_cost_center: yup
 				.array()
 				.of(
 					yup.object().shape({
 						cost_center_uuid: STRING_REQUIRED,
-						amount: NUMBER_DOUBLE_REQUIRED,
+						amount: NUMBER_DOUBLE_REQUIRED.min(
+							1,
+							'Amount must be greater than 0'
+						),
 					})
 				)
 				.optional(),
@@ -74,7 +79,10 @@ export const VOUCHER_SCHEMA = {
 					yup.object().shape({
 						payment_type: STRING_REQUIRED,
 						trx_no: STRING_REQUIRED,
-						amount: NUMBER_DOUBLE_REQUIRED,
+						amount: NUMBER_DOUBLE_REQUIRED.min(
+							1,
+							'Amount must be greater than 0'
+						),
 						date: STRING_REQUIRED,
 					})
 				)
@@ -88,6 +96,19 @@ export const VOUCHER_NULLABLE = {
 	category: null,
 	vat_deduction: 0,
 	tax_deduction: 0,
-	voucher_entry: [],
+	voucher_entry: [
+		{
+			ledger_uuid: null,
+			amount: 0,
+			type: 'dr',
+			voucher_entry_cost_center: [],
+		},
+		{
+			ledger_uuid: null,
+			amount: 0,
+			type: 'cr',
+			voucher_entry_cost_center: [],
+		},
+	],
 	remarks: null,
 };

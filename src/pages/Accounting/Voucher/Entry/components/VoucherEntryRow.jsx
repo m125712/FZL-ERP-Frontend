@@ -1,197 +1,729 @@
-// VoucherEntryRow.jsx - Updated to include narration logic
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Plus } from 'lucide-react';
+import { nanoid } from 'nanoid';
 
+import { DateInput } from '@/ui/Core';
 import { FormField, Input, ReactSelect, RemoveButton, Textarea } from '@/ui';
 
-import { CostCentersField } from './CostCentersField';
-import PaymentField from './PaymentField';
+import { useOtherCostCenter } from '../../config/query';
+import { paymentTypeOption, typeOptions } from '../utils';
+import CostCenter from './CostCenter';
 
-const VoucherEntryRow = React.memo(function VoucherEntryRow(props) {
-	const {
-		index,
-		Controller,
-		control,
-		register,
-		errors,
-		watch,
-		setValue,
-		ledgerOptions,
-		typeOptions,
-		rowClass,
-		onRemove,
-		onTypeChange,
-		selectedLedgers,
-	} = props;
+function VoucherEntryRow({
+	control,
+	register,
+	errors,
+	Controller,
+	watch,
+	setValue,
+	ledgerOptions,
+	voucherFields,
+	appendDrEntry,
+	appendCrEntry,
+	handleVoucherRemove,
+	handleTypeChange,
+	handlePaymentAppend,
+	handlePaymentRemove,
+	handleCostCenterAppend,
+	handleCostCenterRemove,
+	setUpdateItem,
+	children,
+}) {
+	// Force re-render state
+	const [renderKey, setRenderKey] = useState(0);
 
-	const type = watch(`voucher_entry[${index}].type`);
-	const selectedLedgerUuid = watch(`voucher_entry[${index}].ledger_uuid`);
-	const selectedLedger = ledgerOptions?.find(
-		(l) => l.value === selectedLedgerUuid
+	// Watch all form data
+	const allFormData = watch();
+	const voucherEntries = allFormData?.voucher_entry || [];
+	const category = watch('category');
+
+	// Force re-render when data changes
+	useEffect(() => {
+		setRenderKey((prev) => prev + 1);
+	}, [
+		voucherEntries.length,
+		JSON.stringify(
+			voucherEntries.map((entry) => ({
+				type: entry?.type,
+				ledger: entry?.ledger_uuid,
+				paymentCount: entry?.voucher_entry_payment?.length || 0,
+				costCenterCount: entry?.voucher_entry_cost_center?.length || 0,
+			}))
+		),
+	]);
+	const [index, setIndex] = useState(0);
+
+	const { invalidateQuery: invalidQueryCostCenter } = useOtherCostCenter(
+		`ledger_uuid=${watch(`voucher_entry.${index}.ledger_uuid`)}`
 	);
+	const selectedLedgers =
+		watch('voucher_entry')?.map((e) => e?.ledger_uuid) || [];
 	const filteredLedgerOptions = React.useMemo(() => {
 		return ledgerOptions?.filter(
 			(opt) =>
 				!selectedLedgers.includes(opt.value) ||
-				opt.value === selectedLedgerUuid
+				opt.value === selectedLedgers
 		);
-	}, [ledgerOptions, selectedLedgers, selectedLedgerUuid]);
+	}, [ledgerOptions, selectedLedgers, selectedLedgers]);
+	const allRows = useMemo(() => {
+		const rows = [];
+
+		voucherFields.forEach((fieldEntry, idx) => {
+			const voucherEntry = voucherEntries[idx];
+			if (!voucherEntry) return;
+
+			const type = voucherEntry.type;
+			const payments = voucherEntry.voucher_entry_payment || [];
+			const costCenters = voucherEntry.voucher_entry_cost_center || [];
+			const ledgerUuid = voucherEntry.ledger_uuid;
+			const selectedLedger = ledgerOptions.find(
+				(l) => l.value === ledgerUuid
+			);
+
+			// Calculate sub-rows
+			let subRows = [];
+			if (type === 'cr' && category === 'payment') {
+				subRows = payments.map((_, j) => ({
+					type: 'payment',
+					parent: idx,
+					subIdx: j,
+					id: `payment-${idx}-${j}-${renderKey}`,
+				}));
+			} else if (type === 'dr' && selectedLedger?.has_cost_center) {
+				subRows = costCenters.map((_, j) => ({
+					type: 'costCenter',
+					parent: idx,
+					subIdx: j,
+					id: `costCenter-${idx}-${j}-${renderKey}`,
+				}));
+			}
+
+			const mainRow = {
+				type: 'main',
+				parent: idx,
+				rowSpan: Math.max(1, subRows.length + 1),
+				fieldId: fieldEntry.id,
+				id: `main-${idx}-${renderKey}`,
+			};
+
+			rows.push(mainRow);
+			rows.push(...subRows);
+		});
+
+		return rows;
+	}, [voucherFields, voucherEntries, category, ledgerOptions, renderKey]);
+
+	const rowClass = 'border px-3 py-2 text-sm align-top';
+	const handelUpdate = async (idx) => {
+		setIndex(idx);
+		const currentCostCenters =
+			watch(`voucher_entry[${idx}].voucher_entry_cost_center`) || [];
+
+		await setUpdateItem((prev) => ({
+			...prev,
+			leader_uuid: watch(`voucher_entry.${idx}.ledger_uuid`),
+			voucher_entry_set_value: setValue,
+			currentCostCenters: currentCostCenters,
+			index: idx,
+			invalidQueryCostCenter: invalidQueryCostCenter,
+		}));
+		window['voucher_entry_cost_center_add'].showModal();
+	};
 
 	return (
-		<>
-			<tr>
-				<td className={`w-6 ${rowClass}`}>{index + 1}</td>
-				<td className={`w-24 ${rowClass}`}>
-					<FormField
-						label={`voucher_entry[${index}].type`}
-						title='Type'
-						is_title_needed='false'
-						dynamicerror={errors?.voucher_entry?.[index]?.type}
+		<div className=''>
+			{/* Header */}
+			<div className='flex items-center justify-between rounded-lg border bg-primary p-4 text-white shadow-sm'>
+				<div>
+					<h2 className='text-lg font-semibold text-white'>
+						Voucher Entry
+					</h2>
+					<p className='mt-1 text-sm text-white'>
+						Add debit and credit entries for your voucher
+					</p>
+				</div>
+				<div className='flex items-center gap-3'>
+					<button
+						type='button'
+						onClick={appendDrEntry}
+						className='btn btn-accent btn-sm flex items-center gap-2 rounded-lg px-4 py-2'
 					>
-						<Controller
-							name={`voucher_entry[${index}].type`}
-							control={control}
-							render={({ field: { onChange, value } }) => (
-								<ReactSelect
-									placeholder='Select Type'
-									options={typeOptions}
-									value={
-										typeOptions.find(
-											(inItem) => inItem.value === value
-										) ?? null
-									}
-									onChange={(e) => {
-										onTypeChange(index, e?.value, onChange);
-									}}
-									menuPortalTarget={document.body}
-								/>
-							)}
-						/>
-					</FormField>
-				</td>
-
-				<td className={`w-64 ${rowClass}`}>
-					<FormField
-						label={`voucher_entry[${index}].ledger_uuid`}
-						title='Ledger'
-						is_title_needed='false'
-						dynamicerror={
-							errors?.voucher_entry?.[index]?.ledger_uuid
-						}
+						<Plus className='h-4 w-4' /> DR
+					</button>
+					<button
+						type='button'
+						onClick={appendCrEntry}
+						className='btn btn-error btn-sm flex items-center gap-2 rounded-lg px-4 py-2'
 					>
-						<Controller
-							name={`voucher_entry[${index}].ledger_uuid`}
-							control={control}
-							render={({ field: { onChange, value } }) => (
-								<ReactSelect
-									placeholder='Select Ledger'
-									options={filteredLedgerOptions}
-									value={
-										filteredLedgerOptions.find(
-											(o) => o.value === value
-										) ?? null
-									}
-									onChange={(e) => onChange(e?.value)}
-									menuPortalTarget={document.body}
-								/>
-							)}
-						/>
-					</FormField>
-				</td>
+						<Plus className='h-4 w-4' /> CR
+					</button>
+				</div>
+			</div>
 
-				<td className={`w-48 ${rowClass}`}>
-					<Textarea
-						title='Description'
-						label={`voucher_entry[${index}].description`}
-						is_title_needed='false'
-						dynamicerror={
-							errors?.voucher_entry?.[index]?.description
-						}
-						register={register}
-					/>
-				</td>
+			{/* Table */}
+			<div className='overflow-scroll rounded-lg border bg-white shadow-sm'>
+				<div className='overflow-x-auto'>
+					<table className='w-full border-collapse'>
+						<thead>
+							<tr className='bg-secondary text-secondary-content'>
+								<th
+									className={`${rowClass} text-left font-semibold`}
+								>
+									No.
+								</th>
+								<th
+									className={`${rowClass} text-left font-semibold`}
+								>
+									Type
+								</th>
+								<th
+									className={`${rowClass} text-left font-semibold`}
+								>
+									Ledger
+								</th>
+								<th
+									className={`${rowClass} text-left font-semibold`}
+								>
+									Txn No.
+								</th>
+								<th
+									className={`${rowClass} text-left font-semibold`}
+								>
+									Date
+								</th>
+								<th
+									className={`${rowClass} text-right font-semibold`}
+								>
+									Debit
+								</th>
+								<th
+									className={`${rowClass} text-right font-semibold`}
+								>
+									Credit
+								</th>
+								<th
+									className={`${rowClass} text-center font-semibold`}
+								>
+									Action
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{allRows.map((row) => {
+								const p = row.parent;
+								const entryPath = `voucher_entry[${p}]`;
+								const voucherEntry = voucherEntries[p];
 
-				<td className={`w-48 ${rowClass} `}>
-					{type === 'dr' && (
-						<Input
-							title='Debit'
-							label={`voucher_entry[${index}].amount`}
-							is_title_needed='false'
-							type='number'
-							onChange={(e) => {
-								setValue(
-									`voucher_entry.${index}.amount`,
-									e.target.value
+								if (!voucherEntry) return null;
+
+								const type = voucherEntry.type;
+								const ledgerUuid = voucherEntry.ledger_uuid;
+								const selectedLedger = ledgerOptions.find(
+									(l) => l.value === ledgerUuid
 								);
-							}}
-							dynamicerror={
-								errors?.voucher_entry?.[index]?.amount
-							}
-							register={register}
-						/>
-					)}
-				</td>
 
-				<td className={`w-48 ${rowClass}`}>
-					{type === 'cr' && (
-						<Input
-							title='Credit'
-							label={`voucher_entry[${index}].amount`}
-							is_title_needed='false'
-							onChange={(e) => {
-								setValue(
-									`voucher_entry.${index}.amount`,
-									e.target.value
+								const showPaymentButton =
+									type === 'cr' && category === 'payment';
+								const showCostCenterButton =
+									type === 'dr' &&
+									selectedLedger?.has_cost_center === true;
+
+								return (
+									<tr
+										key={row.id}
+										className={` ${rowClass} hover:bg-gray-50 ${
+											p % 2 === 0
+												? 'bg-gray-50'
+												: 'bg-white'
+										} `}
+									>
+										{/* Main entry fields with rowSpan */}
+										{row.type === 'main' && (
+											<>
+												<td
+													rowSpan={row.rowSpan}
+													className={`${rowClass} w-10 align-top`}
+												>
+													{p + 1}
+												</td>
+												<td
+													rowSpan={row.rowSpan}
+													className={`${rowClass} w-32 align-top`}
+												>
+													<FormField
+														label={`${entryPath}.type`}
+														is_title_needed='false'
+														dynamicerror={
+															errors
+																.voucher_entry?.[
+																p
+															]?.type
+														}
+													>
+														<Controller
+															name={`${entryPath}.type`}
+															control={control}
+															render={({
+																field: {
+																	onChange,
+																	value,
+																},
+															}) => (
+																<ReactSelect
+																	placeholder='Select Type'
+																	options={
+																		typeOptions
+																	}
+																	value={
+																		typeOptions.find(
+																			(
+																				o
+																			) =>
+																				o.value ===
+																				value
+																		) ??
+																		null
+																	}
+																	onChange={(
+																		e
+																	) =>
+																		handleTypeChange(
+																			p,
+																			e?.value,
+																			onChange
+																		)
+																	}
+																	menuPortalTarget={
+																		document.body
+																	}
+																/>
+															)}
+														/>
+													</FormField>
+
+													<div className='flex w-full flex-col justify-items-end gap-2 py-2'>
+														{showCostCenterButton && (
+															<button
+																type='button'
+																onClick={() => {
+																	handleCostCenterAppend(
+																		p
+																	);
+
+																	setTimeout(
+																		() =>
+																			setRenderKey(
+																				(
+																					prev
+																				) =>
+																					prev +
+																					1
+																			),
+																		50
+																	);
+																}}
+																disabled={
+																	watch(
+																		`voucher_entry.${p}.voucher_entry_cost_center`
+																	)?.length >=
+																	ledgerOptions.find(
+																		(l) =>
+																			l.value ===
+																			ledgerUuid
+																	)
+																		.cost_center_count
+																}
+																className='btn btn-outline btn-sm flex items-center justify-center gap-1 rounded'
+																title='Add Cost Center Entry'
+															>
+																CC
+																<Plus className='h-3 w-3' />
+															</button>
+														)}
+														{!showPaymentButton && (
+															<button
+																type='button'
+																onClick={() => {
+																	handelUpdate(
+																		p
+																	);
+
+																	setIndex(p);
+
+																	setValue(
+																		`voucher_entry[${p}].voucher_entry_cost_center`,
+
+																		watch(
+																			`voucher_entry[${p}].voucher_entry_cost_center`
+																		).filter(
+																			(
+																				item
+																			) =>
+																				item.cost_center_uuid !==
+																					null &&
+																				item.cost_center_uuid !==
+																					undefined &&
+																				item.cost_center_uuid !==
+																					''
+																		) || []
+																	);
+																	setTimeout(
+																		() =>
+																			setRenderKey(
+																				(
+																					prev
+																				) =>
+																					prev +
+																					1
+																			),
+																		50
+																	);
+																}}
+																className='btn btn-outline btn-sm flex items-center justify-center gap-1 rounded bg-accent text-white'
+																title='Add Cost Center Entry'
+															>
+																New CC
+																<Plus className='h-3 w-3' />
+															</button>
+														)}
+													</div>
+
+													{showPaymentButton && (
+														<div className='w-full justify-items-end py-2'>
+															<button
+																type='button'
+																onClick={() => {
+																	handlePaymentAppend(
+																		p
+																	);
+																	setTimeout(
+																		() =>
+																			setRenderKey(
+																				(
+																					prev
+																				) =>
+																					prev +
+																					1
+																			),
+																		50
+																	);
+																}}
+																className='btn btn-outline btn-sm flex flex-shrink-0 items-center gap-1 rounded'
+																title='Add Payment Entry'
+															>
+																<Plus className='h-3 w-3' />
+																Payment
+															</button>
+														</div>
+													)}
+												</td>
+											</>
+										)}
+										<td
+											// rowSpan={row.rowSpan}
+											className={`${rowClass}`}
+										>
+											{row.type === 'main' && (
+												<FormField
+													label={`${entryPath}.ledger_uuid`}
+													is_title_needed='false'
+													dynamicerror={
+														errors.voucher_entry?.[
+															p
+														]?.ledger_uuid
+													}
+												>
+													<Controller
+														name={`${entryPath}.ledger_uuid`}
+														control={control}
+														render={({
+															field: {
+																onChange,
+																value,
+															},
+														}) => (
+															<ReactSelect
+																placeholder='Select Ledger'
+																options={
+																	filteredLedgerOptions
+																}
+																value={
+																	ledgerOptions.find(
+																		(o) =>
+																			o.value ===
+																			value
+																	) ?? null
+																}
+																onChange={(e) =>
+																	onChange(
+																		e?.value
+																	)
+																}
+																menuPortalTarget={
+																	document.body
+																}
+															/>
+														)}
+													/>
+												</FormField>
+											)}
+
+											{row.type === 'payment' && (
+												<FormField
+													label={`${entryPath}.voucher_entry_payment[${row.subIdx}].payment_type`}
+													is_title_needed='false'
+													dynamicerror={
+														errors.voucher_entry?.[
+															p
+														]
+															?.voucher_entry_payment?.[
+															row.subIdx
+														]?.payment_type
+													}
+												>
+													<Controller
+														name={`${entryPath}.voucher_entry_payment[${row.subIdx}].payment_type`}
+														control={control}
+														render={({
+															field: {
+																onChange,
+																value,
+															},
+														}) => (
+															<ReactSelect
+																placeholder='Select Payment Method'
+																options={
+																	paymentTypeOption
+																}
+																value={
+																	paymentTypeOption.find(
+																		(o) =>
+																			o.value ===
+																			value
+																	) ?? null
+																}
+																onChange={(e) =>
+																	onChange(
+																		e?.value
+																	)
+																}
+																menuPortalTarget={
+																	document.body
+																}
+															/>
+														)}
+													/>
+												</FormField>
+											)}
+											{row.type === 'costCenter' && (
+												<CostCenter
+													entryPath={entryPath}
+													control={control}
+													errors={errors}
+													p={p}
+													Controller={Controller}
+													subIdx={row.subIdx}
+													watch={watch}
+												></CostCenter>
+											)}
+										</td>
+
+										{/* Transaction No */}
+										<td className={`${rowClass} w-48`}>
+											{row.type === 'payment' && (
+												<Input
+													title='Transaction No.'
+													label={`${entryPath}.voucher_entry_payment[${row.subIdx}].trx_no`}
+													is_title_needed='false'
+													register={register}
+													dynamicerror={
+														errors.voucher_entry?.[
+															p
+														]
+															?.voucher_entry_payment?.[
+															row.subIdx
+														]?.trx_no
+													}
+												/>
+											)}
+										</td>
+
+										{/* Date */}
+										<td className={`${rowClass} w-48`}>
+											{row.type === 'payment' && (
+												<DateInput
+													label={`${entryPath}.voucher_entry_payment[${row.subIdx}].date`}
+													control={control}
+													Controller={Controller}
+													is_title_needed='false'
+													register={register}
+													errors={errors}
+													selected={watch(
+														`${entryPath}.voucher_entry_payment[${row.subIdx}].date`
+													)}
+												/>
+											)}
+										</td>
+
+										{/* Debit Amount */}
+										<td
+											className={`${rowClass} w-32 text-right`}
+										>
+											{row.type === 'main' &&
+												type === 'dr' && (
+													<Input
+														title='Debit'
+														label={`${entryPath}.amount`}
+														is_title_needed='false'
+														register={register}
+														dynamicerror={
+															errors
+																.voucher_entry?.[
+																p
+															]?.amount
+														}
+													/>
+												)}
+											{row.type === 'costCenter' && (
+												<Input
+													title='Debit'
+													label={`${entryPath}.voucher_entry_cost_center[${row.subIdx}].amount`}
+													is_title_needed='false'
+													register={register}
+													dynamicerror={
+														errors.voucher_entry?.[
+															p
+														]
+															?.voucher_entry_cost_center?.[
+															row.subIdx
+														]?.amount
+													}
+												/>
+											)}
+										</td>
+
+										{/* Credit Amount */}
+										<td
+											className={`${rowClass} w-32 text-right`}
+										>
+											{row.type === 'main' &&
+												type === 'cr' && (
+													<Input
+														title='Credit'
+														label={`${entryPath}.amount`}
+														is_title_needed='false'
+														register={register}
+														dynamicerror={
+															errors
+																.voucher_entry?.[
+																p
+															]?.amount
+														}
+													/>
+												)}
+											{row.type === 'payment' && (
+												<Input
+													title='Credit'
+													label={`${entryPath}.voucher_entry_payment[${row.subIdx}].amount`}
+													is_title_needed='false'
+													register={register}
+													dynamicerror={
+														errors.voucher_entry?.[
+															p
+														]
+															?.voucher_entry_payment?.[
+															row.subIdx
+														]?.amount
+													}
+												/>
+											)}
+										</td>
+
+										{/* Action Column */}
+										<td
+											className={`${rowClass} w-4 text-center`}
+										>
+											{row.type === 'main' ? (
+												<div className='flex flex-wrap items-center justify-center gap-1'>
+													<RemoveButton
+														onClick={() =>
+															handleVoucherRemove(
+																p
+															)
+														}
+														showButton
+														className='flex-shrink-0'
+													/>
+												</div>
+											) : (
+												<RemoveButton
+													onClick={() => {
+														if (
+															row.type ===
+															'payment'
+														) {
+															handlePaymentRemove(
+																p,
+																row.subIdx
+															);
+														} else {
+															handleCostCenterRemove(
+																p,
+																row.subIdx
+															);
+														}
+														setTimeout(
+															() =>
+																setRenderKey(
+																	(prev) =>
+																		prev + 1
+																),
+															50
+														);
+													}}
+													showButton
+													className='flex-shrink-0'
+												/>
+											)}
+										</td>
+									</tr>
 								);
-							}}
-							dynamicerror={
-								errors?.voucher_entry?.[index]?.amount
-							}
-							register={register}
-						/>
-					)}
-				</td>
+							})}
+							{children}
+						</tbody>
+					</table>
+				</div>
+			</div>
 
-				<td className={`w-12 ${rowClass} pl-6`}>
-					<RemoveButton
-						className={'justify-center'}
-						onClick={onRemove}
-						showButton
-					/>
-				</td>
-			</tr>
-
-			{type === 'dr' && selectedLedger?.has_cost_center && (
-				<tr key={`cc-${index}`}>
-					<td colSpan={6} className='p-0'>
-						<CostCentersField
-							voucherIndex={index}
-							control={control}
-							register={register}
-							errors={errors}
-							Controller={Controller}
-							setValue={setValue}
-							watch={watch}
-						/>
-					</td>
-				</tr>
+			{/* Empty State */}
+			{voucherFields.length === 0 && (
+				<div className='rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 py-12 text-center'>
+					<h3 className='mb-2 text-lg font-medium text-gray-700'>
+						No voucher entries yet
+					</h3>
+					<p className='mb-4 text-gray-500'>
+						Start by adding your first debit or credit entry
+					</p>
+					<div className='flex items-center justify-center gap-3'>
+						<button
+							type='button'
+							onClick={appendDrEntry}
+							className='btn btn-accent btn-sm flex items-center gap-2 rounded-lg'
+						>
+							<Plus className='h-4 w-4' /> Add Debit Entry
+						</button>
+						<button
+							type='button'
+							onClick={appendCrEntry}
+							className='btn btn-error btn-sm flex items-center gap-2 rounded-lg'
+						>
+							<Plus className='h-4 w-4' /> Add Credit Entry
+						</button>
+					</div>
+				</div>
 			)}
-
-			{type === 'cr' && watch(`category`) === 'payment' && (
-				<tr key={`payment-${index}`}>
-					<td colSpan={6} className='p-0'>
-						<PaymentField
-							voucherIndex={index}
-							control={control}
-							register={register}
-							errors={errors}
-							Controller={Controller}
-							watch={watch}
-						/>
-					</td>
-				</tr>
-			)}
-		</>
+		</div>
 	);
-});
+}
 
-export default VoucherEntryRow;
+export default React.memo(VoucherEntryRow);

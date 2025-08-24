@@ -1,6 +1,8 @@
 import React from 'react';
 import { format } from 'date-fns';
 
+import { paymentTypeOption } from '../../Entry/utils';
+
 const VoucherDetailsTable = ({ data }) => {
 	// Filter out UUID fields and unwanted fields
 	const filterFields = (obj) => {
@@ -44,108 +46,93 @@ const VoucherDetailsTable = ({ data }) => {
 		{ debit: 0, credit: 0 }
 	);
 
-	// Render cost centers: only Amount column
-	const renderCostCenterTable = (costCenters, parentType) => {
-		if (!costCenters || costCenters.length === 0) return null;
-		const isDebit = parentType === 'dr';
-		return (
-			<div className='mt-2'>
-				<h4 className='mb-2 text-sm font-semibold text-gray-700'>
-					Cost Centers
-				</h4>
-				<table className='min-w-full rounded border border-gray-300 bg-gray-50'>
-					<thead className='bg-gray-100'>
-						<tr>
-							<th className='border-r border-gray-300 px-3 py-2 text-left text-xs font-medium text-gray-700'>
-								No.
-							</th>
-							<th className='border-r border-gray-300 px-3 py-2 text-left text-xs font-medium text-gray-700'>
-								Cost Center Name
-							</th>
-							<th className='px-3 py-2 text-right text-xs font-medium text-gray-700'>
-								Amount
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						{costCenters.map((center, i) => (
-							<tr key={i} className='border-t border-gray-200'>
-								<td className='w-20 border-r border-gray-300 px-3 py-2 text-sm text-gray-800'>
-									{center.index + 1 || 'N/A'}
-								</td>
-								<td className='border-r border-gray-300 px-3 py-2 text-sm text-gray-800'>
-									{center.cost_center_name || 'N/A'}
-								</td>
-								<td className='px-3 py-2 text-right text-sm text-gray-800'>
-									{center.amount || 'N/A'}
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-			</div>
-		);
+	// Prepare flat structure with rowSpan calculations
+	const prepareTableRows = () => {
+		const rows = [];
+
+		entries.forEach((entry, entryIndex) => {
+			const {
+				voucher_entry_cost_center = [],
+				voucher_entry_payment = [],
+				...fields
+			} = entry;
+
+			const costCenters = voucher_entry_cost_center || [];
+			const payments = voucher_entry_payment || [];
+			const totalSubRows = costCenters.length + payments.length;
+			const totalRows = totalSubRows > 0 ? totalSubRows + 1 : 1;
+
+			const isDebit = fields.type === 'dr';
+
+			// Main entry row
+			rows.push({
+				type: 'main',
+				entryIndex,
+				rowSpan: totalRows,
+				isFirst: true,
+				data: {
+					index: fields.index + 1,
+					ledgerName: fields.ledger_name,
+					transactionNo: '',
+					date: '',
+					debit: isDebit ? fields.amount : '',
+					credit: !isDebit ? fields.amount : '',
+				},
+			});
+
+			// Cost center rows
+			costCenters.forEach((center, centerIndex) => {
+				rows.push({
+					type: 'cost_center',
+					entryIndex,
+					isFirst: false,
+					data: {
+						label: centerIndex === 0 ? 'Cost Centers' : '',
+						name: center.cost_center_name || 'N/A',
+						transactionNo: '',
+						date: '',
+						debit: isDebit ? center.amount || 'N/A' : '',
+						credit: !isDebit ? center.amount || 'N/A' : '',
+					},
+				});
+			});
+
+			// Payment rows - payment type now under ledger column
+			payments.forEach((payment, paymentIndex) => {
+				const paymentDate = payment.date
+					? format(new Date(payment.date), 'dd MMM, yyyy')
+					: '';
+
+				rows.push({
+					type: 'payment',
+					entryIndex,
+					isFirst: false,
+					data: {
+						label: paymentIndex === 0 ? 'Payments' : '',
+						paymentType: payment.payment_type || 'N/A',
+						transactionNo: payment.trx_no || '',
+						date: paymentDate,
+						debit: '',
+						credit: payment.amount || '',
+					},
+				});
+			});
+		});
+
+		return rows;
 	};
 
-	// Render payments: only Credit column
-	const renderPaymentTable = (payments, parentType) => {
-		if (!payments || payments.length === 0) return null;
-		return (
-			<div className='mt-2'>
-				<h4 className='mb-2 text-sm font-semibold text-gray-700'>
-					Payments
-				</h4>
-				<table className='min-w-full rounded border border-gray-300 bg-gray-50'>
-					<thead className='bg-gray-100'>
-						<tr>
-							<th className='border-r border-gray-300 px-3 py-2 text-left text-xs font-medium text-gray-700'>
-								No.
-							</th>
-							<th className='border-r border-gray-300 px-3 py-2 text-left text-xs font-medium text-gray-700'>
-								Payment Type
-							</th>
-							<th className='border-r border-gray-300 px-3 py-2 text-left text-xs font-medium text-gray-700'>
-								Transaction No
-							</th>
-							<th className='border-r border-gray-300 px-3 py-2 text-left text-xs font-medium text-gray-700'>
-								Date
-							</th>
-							<th className='px-3 py-2 text-right text-xs font-medium text-gray-700'>
-								Amount
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						{payments.map((payment, i) => (
-							<tr key={i} className='border-t border-gray-200'>
-								<td className='w-20 border-r border-gray-300 px-3 py-2 text-sm text-gray-800'>
-									{payment.index + 1 || 'N/A'}
-								</td>
-								<td className='border-r border-gray-300 px-3 py-2 text-sm text-gray-800'>
-									{payment.payment_type || 'N/A'}
-								</td>
-								<td className='border-r border-gray-300 px-3 py-2 text-sm text-gray-800'>
-									{payment.trx_no || 'N/A'}
-								</td>
-								<td className='border-r border-gray-300 px-3 py-2 text-sm text-gray-800'>
-									{format(payment.date, 'dd MMM, yyyy') ||
-										'N/A'}
-								</td>
-								<td className='px-3 py-2 text-right text-sm text-gray-800'>
-									{payment.amount || 'N/A'}
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-			</div>
-		);
-	};
+	const tableRows = prepareTableRows();
 
 	if (!entries.length) {
 		return (
-			<div className='mx-auto max-w-6xl rounded-lg bg-white p-6 shadow-md'>
-				<p className='text-center text-gray-500'>
+			<div className='mx-auto w-full rounded-lg border bg-transparent shadow-md'>
+				<header className='w-full rounded-md bg-primary py-6 text-white'>
+					<h1 className='mx-2 text-2xl font-semibold'>
+						Voucher Entries
+					</h1>
+				</header>
+				<p className='py-6 text-center text-red-500'>
 					No voucher entries available
 				</p>
 			</div>
@@ -159,100 +146,152 @@ const VoucherDetailsTable = ({ data }) => {
 					<h1 className='mx-2 text-2xl font-semibold'>
 						Voucher Entries
 					</h1>
+					<p className='mx-2 text-sm'>
+						{entries.length} voucher entries
+					</p>
 				</header>
 
-				<div>
+				<div className='overflow-x-auto'>
 					<table className='min-w-full border border-gray-300'>
 						<thead className='bg-gray-50'>
 							<tr>
-								<th className='border-r border-gray-300 px-4 py-3 text-left text-sm font-medium text-gray-700'>
+								<th className='w-12 border-r border-gray-300 px-3 py-3 text-left text-sm font-medium text-gray-700'>
 									No.
 								</th>
 								<th className='border-r border-gray-300 px-4 py-3 text-left text-sm font-medium text-gray-700'>
-									Ledger Name
+									Ledger
 								</th>
-								<th className='border-r border-gray-300 px-4 py-3 text-left text-sm font-medium text-gray-700'>
-									Description
+								<th className='w-48 border-r border-gray-300 px-3 py-3 text-left text-sm font-medium text-gray-700'>
+									Transaction No.
 								</th>
-								<th className='border-r border-gray-300 px-4 py-3 text-right text-sm font-medium text-gray-700'>
+								<th className='w-32 border-r border-gray-300 px-3 py-3 text-left text-sm font-medium text-gray-700'>
+									Date
+								</th>
+								<th className='w-28 border-r border-gray-300 px-4 py-3 text-right text-sm font-medium text-gray-700'>
 									Debit
 								</th>
-								<th className='px-4 py-3 text-right text-sm font-medium text-gray-700'>
+								<th className='w-28 px-4 py-3 text-right text-sm font-medium text-gray-700'>
 									Credit
 								</th>
 							</tr>
 						</thead>
 						<tbody>
-							{entries.map((entry, idx) => {
-								const {
-									voucher_entry_cost_center,
-									voucher_entry_payment,
-									...fields
-								} = entry;
-								const hasCostCenter =
-									voucher_entry_cost_center?.length > 0;
-								const hasPayment =
-									voucher_entry_payment?.length > 0;
-								const isDebit = fields.type === 'dr';
+							{tableRows.map((row, index) => (
+								<tr
+									key={`${row.entryIndex}-${index}`}
+									className={`border-t border-gray-300 ${
+										row.type === 'main'
+											? 'hover:bg-gray-50'
+											: 'bg-gray-50'
+									}`}
+								>
+									{/* Index column with rowSpan for main entries */}
+									{row.isFirst && (
+										<td
+											className='border-r border-gray-300 px-3 py-3 text-center align-top text-sm text-gray-800'
+											rowSpan={row.rowSpan}
+										>
+											{row.data.index || 'N/A'}
+										</td>
+									)}
 
-								return (
-									<React.Fragment key={idx}>
-										<tr className='border-t border-gray-300 hover:bg-gray-50'>
-											<td className='border-r border-gray-300 px-4 py-3 text-sm text-gray-800'>
-												{fields.index + 1 || 'N/A'}
-											</td>
-											<td className='border-r border-gray-300 px-4 py-3 text-sm text-gray-800'>
-												{fields.ledger_name || 'N/A'}
-											</td>
-											<td className='border-r border-gray-300 px-4 py-3 text-sm text-gray-800'>
-												{fields.description || 'N/A'}
-											</td>
-											<td className='border-r border-gray-300 px-4 py-3 text-right text-sm font-medium text-gray-800'>
-												{isDebit ? fields.amount : ''}
-											</td>
-											<td className='px-4 py-3 text-right text-sm font-medium text-gray-800'>
-												{!isDebit ? fields.amount : ''}
-											</td>
-										</tr>
-										{(hasCostCenter || hasPayment) && (
-											<tr className='border-t border-gray-200'>
-												<td
-													colSpan='5'
-													className='bg-gray-50 px-4 py-3'
-												>
-													<div className='space-y-4'>
-														{renderCostCenterTable(
-															voucher_entry_cost_center,
-															fields.type
-														)}
-														{renderPaymentTable(
-															voucher_entry_payment,
-															fields.type
-														)}
-													</div>
-												</td>
-											</tr>
+									{/* Ledger Name / Details column */}
+									<td
+										className={`border-r border-gray-300 px-4 py-3 text-sm ${
+											row.type === 'main'
+												? 'font-medium text-gray-800'
+												: 'pl-8 text-gray-600'
+										}`}
+									>
+										{row.type === 'main' ? (
+											row.data.ledgerName || 'N/A'
+										) : row.type === 'cost_center' ? (
+											<div className='flex items-center gap-2'>
+												<span className='flex-1'>
+													{row.data.name}
+												</span>
+											</div>
+										) : (
+											<div className='flex items-center gap-2'>
+												<span className='flex-1 font-medium'>
+													{
+														paymentTypeOption.find(
+															(option) =>
+																option.value ===
+																row.data
+																	.paymentType
+														).label
+													}
+												</span>
+											</div>
 										)}
-									</React.Fragment>
-								);
-							})}
+									</td>
+
+									{/* Transaction Number column */}
+									<td className='border-r border-gray-300 px-3 py-3 text-sm text-gray-600'>
+										{row.data.transactionNo}
+									</td>
+
+									{/* Date column */}
+									<td className='border-r border-gray-300 px-3 py-3 text-sm text-gray-600'>
+										{row.data.date}
+									</td>
+
+									{/* Debit column */}
+									<td
+										className={`border-r border-gray-300 px-4 py-3 text-right text-sm ${
+											row.type === 'main'
+												? 'font-medium text-gray-800'
+												: 'text-gray-600'
+										}`}
+									>
+										{row.data.debit && (
+											<span>
+												{typeof row.data.debit ===
+												'number'
+													? row.data.debit.toFixed(2)
+													: row.data.debit}
+											</span>
+										)}
+									</td>
+
+									{/* Credit column */}
+									<td
+										className={`px-4 py-3 text-right text-sm ${
+											row.type === 'main'
+												? 'font-medium text-gray-800'
+												: 'text-gray-600'
+										}`}
+									>
+										{row.data.credit && (
+											<span>
+												{typeof row.data.credit ===
+												'number'
+													? row.data.credit.toFixed(2)
+													: row.data.credit}
+											</span>
+										)}
+									</td>
+								</tr>
+							))}
 						</tbody>
 						<tfoot>
-							<tr className='mx-2 h-10 border border-gray-300 bg-gray-100'>
-								<td className={`font-bold`}>
-									<span className='font-bold text-gray-700'>
-										Narration
+							<tr className='border-t-2 border-gray-400 bg-gray-100'>
+								<td
+									className='px-4 py-3 font-bold text-gray-700'
+									colSpan={4}
+								>
+									Narration :{' '}
+									<span className='font-normal text-black'>
+										{data?.narration}
 									</span>
 								</td>
-								<td></td>
-								<td></td>
-								<td className={`text-right font-bold`}>
-									{totals.debit.toFixed(2)}
+								<td className='px-4 py-3 text-right font-bold text-gray-800'>
+									<span>{totals.debit.toFixed(2)}</span>
 								</td>
-								<td className={`text-right font-bold`}>
-									{totals.credit.toFixed(2)}
+								<td className='px-4 py-3 text-right font-bold text-gray-800'>
+									<span>{totals.credit.toFixed(2)}</span>
 								</td>
-								<td></td>
 							</tr>
 						</tfoot>
 					</table>

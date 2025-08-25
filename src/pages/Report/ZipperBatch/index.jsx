@@ -71,7 +71,7 @@ export default function Index() {
 				accessorFn: (row) => {
 					return row.order_numbers
 						?.map((order_number) => order_number)
-						?.join(', ');
+						?.join(' -- ');
 				},
 				id: 'order_numbers',
 				header: 'O/N',
@@ -95,7 +95,7 @@ export default function Index() {
 				accessorFn: (row) => {
 					return row.item_descriptions
 						?.map((item) => item.item_description)
-						.join(', ');
+						.join(' -- ');
 				},
 				id: 'item_descriptions',
 				header: 'Item Description',
@@ -148,7 +148,7 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					row.style?.map((style) => style)?.join(', '),
+					row.style?.map((style) => style)?.join(' -- '),
 				id: 'style',
 				header: 'Style',
 				width: 'w-24',
@@ -157,7 +157,7 @@ export default function Index() {
 			},
 			{
 				accessorFn: (row) =>
-					row.color?.map((color) => color)?.join(', '),
+					row.color?.map((color) => color)?.join(' -- '),
 				id: 'color',
 				header: 'Color',
 				width: 'w-24',

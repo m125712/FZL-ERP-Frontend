@@ -63,7 +63,7 @@ export default function Index() {
 					if (order_numbers) {
 						concat = order_numbers
 							.map((order_number) => order_number.order_number)
-							.join(', ');
+							.join(' -- ');
 					}
 
 					return concat;
@@ -117,7 +117,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => row.color.join(', '),
+				accessorFn: (row) => row.color.join(' -- '),
 				id: 'color',
 				header: 'Color',
 				enableColumnFilter: false,
@@ -125,7 +125,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => row.recipe_name.join(', '),
+				accessorFn: (row) => row.recipe_name.join(' -- '),
 				id: 'recipe_name',
 				header: 'Shade',
 				width: 'w-24',

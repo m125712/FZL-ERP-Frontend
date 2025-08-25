@@ -97,19 +97,19 @@ export default function Index() {
 				accessorKey: 'item_type',
 				header: 'Item',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue()?.join(', '),
+				cell: (info) => info.getValue()?.join(' -- '),
 			},
 			{
 				accessorKey: 'zipper_number_name',
 				header: 'Zipper No.',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue()?.join(', '),
+				cell: (info) => info.getValue()?.join(' -- '),
 			},
 			{
 				accessorKey: 'end_type_name',
 				header: 'End Type',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue()?.join(', '),
+				cell: (info) => info.getValue()?.join(' -- '),
 			},
 			{
 				accessorFn: (row) => (row.is_warehouse_received ? 'Y' : 'N'),
@@ -187,7 +187,7 @@ export default function Index() {
 						row.item_description?.map((item) => item)
 					);
 
-					return [...uniqueItemDescription].join(', ');
+					return [...uniqueItemDescription].join(' -- ');
 				},
 				id: 'item_description',
 				header: <>Item Description</>,
@@ -200,14 +200,14 @@ export default function Index() {
 				header: 'Style',
 				enableColumnFilter: false,
 				width: 'w-32',
-				cell: (info) => info.getValue().join(', '),
+				cell: (info) => info.getValue().join(' -- '),
 			},
 			{
 				accessorKey: 'color',
 				header: 'Color',
 				enableColumnFilter: false,
 				width: 'w-32',
-				cell: (info) => info.getValue().join(', '),
+				cell: (info) => info.getValue().join(' -- '),
 			},
 			{
 				accessorKey: 'unit',
@@ -224,7 +224,7 @@ export default function Index() {
 					if (row?.pi_numbers == null) return '--';
 
 					const pis = row.pi_numbers?.map((pi) => pi.pi_numbers);
-					return pis.join(', ');
+					return pis.join(' -- ');
 				},
 				id: 'pi_numbers',
 				header: <>Pi No.</>,

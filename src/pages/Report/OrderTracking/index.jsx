@@ -326,7 +326,7 @@ export default function Index() {
 				accessorFn: (row) => {
 					return row.dyeing_batch
 						?.map((item) => item.dyeing_batch_number)
-						.join(', ');
+						.join(' -- ');
 				},
 				id: 'dyeing_batch',
 				header: 'Dyeing Batch',
@@ -365,7 +365,7 @@ export default function Index() {
 				accessorFn: (row) => {
 					return row.finishing_batch
 						?.map((item) => item.finishing_batch_number)
-						.join(', ');
+						.join(' -- ');
 				},
 				id: 'finishing_batch',
 				header: 'Finishing Batch',

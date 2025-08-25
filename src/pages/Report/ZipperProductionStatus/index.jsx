@@ -133,7 +133,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorFn: (row) => row.colors.join(', '),
+				accessorFn: (row) => row.colors.join(' -- '),
 				id: 'colors',
 				header: 'Colors',
 				enableColumnFilter: false,
@@ -149,7 +149,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => row.styles.join(', '),
+				accessorFn: (row) => row.styles.join(' -- '),
 				id: 'styles',
 				header: 'Styles',
 				enableColumnFilter: false,
@@ -214,7 +214,7 @@ export default function Index() {
 				accessorFn: (row) => {
 					return row.dyeing_batch
 						?.map((item) => item.dyeing_batch_number)
-						.join(', ');
+						.join(' -- ');
 				},
 				id: 'dyeing_batch',
 				header: 'Dyeing Batch',
@@ -267,7 +267,7 @@ export default function Index() {
 				accessorFn: (row) => {
 					return row.finishing_batch
 						?.map((item) => item.finishing_batch_number)
-						.join(', ');
+						.join(' -- ');
 				},
 				id: 'finishing_batch',
 				header: 'Finishing Batch',

@@ -37,7 +37,7 @@ export default function Index() {
 				accessorFn: (row) => {
 					return row.order_object
 						.map((order) => order.label)
-						.join(', ');
+						.join(' -- ');
 				},
 				id: 'order_object',
 				header: 'O/N',

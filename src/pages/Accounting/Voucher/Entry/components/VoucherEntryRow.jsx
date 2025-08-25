@@ -472,51 +472,62 @@ function VoucherEntryRow({
 											)}
 
 											{row.type === 'payment' && (
-												<FormField
-													label={`${entryPath}.voucher_entry_payment[${row.subIdx}].payment_type`}
-													is_title_needed='false'
-													dynamicerror={
-														errors.voucher_entry?.[
-															p
-														]
-															?.voucher_entry_payment?.[
-															row.subIdx
-														]?.payment_type
-													}
-												>
-													<Controller
-														name={`${entryPath}.voucher_entry_payment[${row.subIdx}].payment_type`}
-														control={control}
-														render={({
-															field: {
-																onChange,
-																value,
-															},
-														}) => (
-															<ReactSelect
-																placeholder='Select Payment Method'
-																options={
-																	paymentTypeOption
-																}
-																value={
-																	paymentTypeOption.find(
-																		(o) =>
-																			o.value ===
-																			value
-																	) ?? null
-																}
-																onChange={(e) =>
-																	onChange(
-																		e?.value
-																	)
-																}
-																menuPortalTarget={
-																	document.body
-																}
-															/>
-														)}
-													/>
-												</FormField>
+												<div className='flex gap-2'>
+													<p className='justify-center py-4 align-baseline text-sm font-medium text-gray-900'>
+														{p + 1}.{row.subIdx + 1}
+													</p>
+													<FormField
+														label={`${entryPath}.voucher_entry_payment[${row.subIdx}].payment_type`}
+														is_title_needed='false'
+														dynamicerror={
+															errors
+																.voucher_entry?.[
+																p
+															]
+																?.voucher_entry_payment?.[
+																row.subIdx
+															]?.payment_type
+														}
+													>
+														<Controller
+															name={`${entryPath}.voucher_entry_payment[${row.subIdx}].payment_type`}
+															control={control}
+															render={({
+																field: {
+																	onChange,
+																	value,
+																},
+															}) => (
+																<ReactSelect
+																	placeholder='Select Payment Method'
+																	options={
+																		paymentTypeOption
+																	}
+																	value={
+																		paymentTypeOption.find(
+																			(
+																				o
+																			) =>
+																				o.value ===
+																				value
+																		) ??
+																		null
+																	}
+																	onChange={(
+																		e
+																	) =>
+																		onChange(
+																			e?.value
+																		)
+																	}
+																	menuPortalTarget={
+																		document.body
+																	}
+																/>
+															)}
+														/>
+													</FormField>
+												</div>
 											)}
 											{row.type === 'costCenter' && (
 												<CostCenter

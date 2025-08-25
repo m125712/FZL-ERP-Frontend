@@ -5,7 +5,7 @@ import { DateInput } from '@/ui/Core';
 import { FormField, Input, ReactSelect, RemoveButton } from '@/ui';
 
 import { useOtherCostCenter } from '../../config/query';
-import { paymentTypeOption, typeOptions } from '../utils';
+import { paymentTypeOption, typeOptions } from '../../utils';
 import CostCenter from './CostCenter';
 
 function VoucherEntryRow({
@@ -587,6 +587,7 @@ function VoucherEntryRow({
 												type === 'dr' && (
 													<Input
 														title='Debit'
+														type='number'
 														label={`${entryPath}.amount`}
 														is_title_needed='false'
 														register={register}
@@ -602,6 +603,7 @@ function VoucherEntryRow({
 												<Input
 													title='Debit'
 													label={`${entryPath}.voucher_entry_cost_center[${row.subIdx}].amount`}
+													type='number'
 													is_title_needed='false'
 													register={register}
 													dynamicerror={

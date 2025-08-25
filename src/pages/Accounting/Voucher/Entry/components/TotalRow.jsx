@@ -4,6 +4,8 @@ import { useWatch } from 'react-hook-form';
 
 import { Input } from '@/ui';
 
+import { formatAmountSmart } from '../../utils';
+
 export default function TotalsRow({
 	control,
 	register,
@@ -70,12 +72,12 @@ export default function TotalsRow({
 
 			<td className={`${rowClass} text-right font-bold text-green-600`}>
 				{currencySymbol}
-				{totalDr.toFixed(precision)}
+				{formatAmountSmart(totalDr.toFixed(precision))}
 			</td>
 
 			<td className={`${rowClass} text-right font-bold text-red-600`}>
 				{currencySymbol}
-				{totalCr.toFixed(precision)}
+				{formatAmountSmart(totalCr.toFixed(precision))}
 			</td>
 
 			<td className={rowClass}>

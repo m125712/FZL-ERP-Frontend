@@ -53,7 +53,11 @@ export const COST_CENTER_SCHEMA = {
 	ledger_uuid: STRING_REQUIRED,
 	invoice_no: STRING_REQUIRED,
 	table_name: STRING.nullable(),
-	table_uuid: STRING.nullable(),
+	table_uuid: STRING.when('table_name', {
+		is: (value) => value != null && value !== '',
+		then: (schema) => schema.required('Required'),
+		otherwise: (schema) => schema.nullable(),
+	}),
 };
 
 export const COST_CENTER_NULL = {

@@ -3102,7 +3102,7 @@ export const UPDATE_DYEING_TRANSFER_SCHEMA = {
 	order_description_uuid: UUID_FK,
 	trx_quantity: NUMBER_DOUBLE_REQUIRED.transform((value, originalValue) =>
 		String(originalValue).trim() === '' ? null : value
-	), // Transforms empty strings to null
+	),
 	remarks: STRING.nullable(),
 };
 

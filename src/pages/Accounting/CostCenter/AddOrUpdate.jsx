@@ -61,7 +61,6 @@ export default function Index({
 			...prev,
 			uuid: null,
 		}));
-		console.log(updateItem);
 		reset(COST_CENTER_NULL);
 		window[modalId].close();
 	};

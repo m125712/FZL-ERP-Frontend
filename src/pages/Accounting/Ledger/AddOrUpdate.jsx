@@ -108,6 +108,26 @@ export default function Index({
 			onSubmit={handleSubmit(onSubmit)}
 			onClose={onClose}
 		>
+			<div>
+				<div className='text-right'>
+					<FormField label='is_active' title='Active' errors={errors}>
+						<Controller
+							name={'is_active'}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<SwitchToggle
+										onChange={(e) => {
+											onChange(e);
+										}}
+										checked={getValues('is_active')}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+				</div>
+			</div>
 			<div className='grid grid-cols-2 gap-4'>
 				<Input label='name' {...{ register, errors }} />
 				<Input label='category' {...{ register, errors }} />
@@ -228,14 +248,17 @@ export default function Index({
 						}}
 					/>
 				</FormField>
-				<Input label='account_no' {...{ register, errors }} />
-				<Input label='vat_deduction' {...{ register, errors }} />
-
-				<Input label='tax_deduction' {...{ register, errors }} />
-
-				<FormField label='is_active' title='Active' errors={errors}>
+				<div className='flex gap-2'>
+					<Input label='vat_deduction' {...{ register, errors }} />
+					<Input label='tax_deduction' {...{ register, errors }} />
+				</div>
+				<FormField
+					label='is_bank_ledger'
+					title='Bank Ledger'
+					errors={errors}
+				>
 					<Controller
-						name={'is_active'}
+						name={'is_bank_ledger'}
 						control={control}
 						render={({ field: { onChange } }) => {
 							return (
@@ -243,12 +266,15 @@ export default function Index({
 									onChange={(e) => {
 										onChange(e);
 									}}
-									checked={getValues('is_active')}
+									checked={getValues('is_bank_ledger')}
 								/>
 							);
 						}}
 					/>
 				</FormField>
+				{watch('is_bank_ledger') && (
+					<Input label='account_no' {...{ register, errors }} />
+				)}
 			</div>
 			<DevTool control={control} placement='top-left' />
 		</AddModal>

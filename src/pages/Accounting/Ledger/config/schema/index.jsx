@@ -49,11 +49,20 @@ export {
 };
 
 export const LEDGER_SCHEMA = {
+	is_bank_ledger: BOOLEAN_REQUIRED,
 	table_name: STRING.nullable(),
-	table_uuid: STRING.nullable(),
+	table_uuid: STRING.when('table_name', {
+		is: (value) => value != null && value !== '',
+		then: (schema) => schema.required('Required'),
+		otherwise: (schema) => schema.nullable(),
+	}),
 	name: STRING_REQUIRED,
 	category: STRING_REQUIRED,
-	account_no: STRING_REQUIRED,
+	account_no: STRING.when('is_bank_ledger', {
+		is: (value) => value === true,
+		then: (schema) => schema.required('Required'),
+		otherwise: (schema) => schema.nullable(),
+	}),
 	type: STRING_REQUIRED.default('asset'),
 	is_active: BOOLEAN_DEFAULT_VALUE(true),
 	restrictions: STRING_REQUIRED.default('none'),
@@ -64,11 +73,11 @@ export const LEDGER_SCHEMA = {
 };
 
 export const LEDGER_NULL = {
-	table_name: '',
-	table_uuid: '',
+	table_name: null,
+	table_uuid: null,
 	name: '',
 	category: '',
-	account_no: '',
+	account_no: null,
 	type: 'asset',
 	is_active: true,
 	restrictions: 'none',

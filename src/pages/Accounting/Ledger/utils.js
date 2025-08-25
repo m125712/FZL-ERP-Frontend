@@ -4,6 +4,7 @@ export const typeOptions = [
 	{ label: 'Income', value: 'income' },
 	{ label: 'Expense', value: 'expense' },
 	{ label: 'Cost Of Goods', value: 'cost_of_goods' },
+	{ label: 'Revenue', value: 'revenue' },
 ];
 
 export const restrictionOptions = [

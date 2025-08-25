@@ -25,8 +25,8 @@ export const useVoucherSubmission = ({
 	async function handleCostCentersForExistingEntry(costCenters, entryUuid) {
 		if (!costCenters?.length) return;
 
-		const newCCs = costCenters.filter((cc) => !cc.uuid);
-		const existingCCs = costCenters.filter((cc) => cc.uuid);
+		const newCCs = costCenters.filter((cc) => !cc?.uuid);
+		const existingCCs = costCenters.filter((cc) => cc?.uuid);
 
 		// Create new cost centers with correct index
 		for (let i = 0; i < newCCs.length; i++) {
@@ -49,11 +49,11 @@ export const useVoucherSubmission = ({
 		for (let i = 0; i < existingCCs.length; i++) {
 			const cc = existingCCs[i];
 			await updateData.mutateAsync({
-				url: `/acc/voucher-entry-cost-center/${cc.uuid}`,
+				url: `/acc/voucher-entry-cost-center/${cc?.uuid}`,
 				updatedData: {
 					...cc,
 					index: costCenters.findIndex((item) => item === cc),
-					updated_by: user.uuid,
+					updated_by: user?.uuid,
 					updated_at: GetDateTime(),
 				},
 				isOnCloseNeeded: false,
@@ -65,8 +65,8 @@ export const useVoucherSubmission = ({
 	async function handlePaymentsForExistingEntry(payments, entryUuid) {
 		if (!payments?.length) return;
 
-		const newPs = payments.filter((p) => !p.uuid);
-		const existingPs = payments.filter((p) => p.uuid);
+		const newPs = payments.filter((p) => !p?.uuid);
+		const existingPs = payments.filter((p) => p?.uuid);
 
 		// Create new payments
 		for (let i = 0; i < newPs.length; i++) {
@@ -89,11 +89,11 @@ export const useVoucherSubmission = ({
 		for (let i = 0; i < existingPs.length; i++) {
 			const p = existingPs[i];
 			await updateData.mutateAsync({
-				url: `/acc/voucher-entry-payment/${p.uuid}`,
+				url: `/acc/voucher-entry-payment/${p?.uuid}`,
 				updatedData: {
 					...p,
 					index: payments.findIndex((item) => item === p),
-					updated_by: user.uuid,
+					updated_by: user?.uuid,
 					updated_at: GetDateTime(),
 				},
 				isOnCloseNeeded: false,
@@ -117,7 +117,7 @@ export const useVoucherSubmission = ({
 				newData: {
 					...entryData,
 					index: entryData?.index ?? entryIndex,
-					created_by: user.uuid,
+					created_by: user?.uuid,
 					created_at: GetDateTime(),
 				},
 				isOnCloseNeeded: false,
@@ -132,7 +132,7 @@ export const useVoucherSubmission = ({
 						...cc,
 						index: ccIndex,
 						uuid: nanoid(),
-						created_by: user.uuid,
+						created_by: user?.uuid,
 						created_at: GetDateTime(),
 					},
 					isOnCloseNeeded: false,
@@ -147,7 +147,7 @@ export const useVoucherSubmission = ({
 					newData: {
 						...p,
 						index: pIndex,
-						created_by: user.uuid,
+						created_by: user?.uuid,
 						created_at: GetDateTime(),
 						uuid: nanoid(),
 					},
@@ -163,28 +163,28 @@ export const useVoucherSubmission = ({
 		const voucherData = { ...data };
 		delete voucherData.voucher_entry;
 		await updateData.mutateAsync({
-			url: `${voucherURL}/${data.uuid}`,
+			url: `${voucherURL}/${data?.uuid}`,
 			updatedData: {
 				...voucherData,
-				updated_by: user.uuid,
+				updated_by: user?.uuid,
 				updated_at: GetDateTime(),
 			},
-			uuid: data.uuid,
+			uuid: data?.uuid,
 			isOnCloseNeeded: false,
 		});
 
 		// 2) Split entries into existing vs new
 		const allEntries = data.voucher_entry || [];
-		const existingEntries = allEntries.filter((e) => e.uuid);
+		const existingEntries = allEntries.filter((e) => e?.uuid);
 		const newEntries = allEntries
-			.filter((e) => !e.uuid)
+			.filter((e) => !e?.uuid)
 			.map((item) => {
 				const entryUuid = nanoid();
 				return {
 					...item,
 					index: allEntries.findIndex((entry) => entry === item),
 					uuid: entryUuid,
-					voucher_uuid: data.uuid,
+					voucher_uuid: data?.uuid,
 					voucher_entry_cost_center: (
 						item.voucher_entry_cost_center || []
 					).map((cc) => ({
@@ -210,20 +210,20 @@ export const useVoucherSubmission = ({
 
 			// Update the entry itself
 			await updateData.mutateAsync({
-				url: `/acc/voucher-entry/${entry.uuid}`,
+				url: `/acc/voucher-entry/${entry?.uuid}`,
 				updatedData: {
 					...entry,
-					index: allEntries.findIndex((e) => e.uuid === entry.uuid),
-					voucher_uuid: data.uuid,
-					updated_by: user.uuid,
+					index: allEntries.findIndex((e) => e?.uuid === entry?.uuid),
+					voucher_uuid: data?.uuid,
+					updated_by: user?.uuid,
 					updated_at: GetDateTime(),
 				},
 				isOnCloseNeeded: false,
 			});
 
 			// Update nested cost centers & payments
-			await handleCostCentersForExistingEntry(costCenters, entry.uuid);
-			await handlePaymentsForExistingEntry(payments, entry.uuid);
+			await handleCostCentersForExistingEntry(costCenters, entry?.uuid);
+			await handlePaymentsForExistingEntry(payments, entry?.uuid);
 		}
 
 		// 4) Create any new entries
@@ -245,7 +245,7 @@ export const useVoucherSubmission = ({
 			url: voucherURL,
 			newData: {
 				...voucherData,
-				created_by: user.uuid,
+				created_by: user?.uuid,
 				created_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,
@@ -350,17 +350,6 @@ export const useVoucherSubmission = ({
 				});
 			}
 		},
-		[
-			isUpdate,
-			postData,
-			updateData,
-			voucherURL,
-			uuid,
-			reset,
-			VOUCHER_NULLABLE,
-			setError,
-			user,
-			navigate,
-		]
+		[isUpdate, uuid, reset, VOUCHER_NULLABLE, voucherURL, setError]
 	);
 };

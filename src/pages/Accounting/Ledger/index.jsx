@@ -26,13 +26,24 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'is_bank_ledger',
+				header: 'Bank Ledger',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton
+						size='btn-xs'
+						value={info.row.original.is_bank_ledger}
+					/>
+				),
+			},
+			{
 				accessorKey: 'is_active',
 				header: 'Active',
 				enableColumnFilter: false,
 				cell: (info) => (
 					<StatusButton
 						size='btn-xs'
-						value={info.row.original.is_fixed}
+						value={info.row.original.is_active}
 					/>
 				),
 			},

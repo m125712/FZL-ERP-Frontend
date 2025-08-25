@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import { DateInput, FormField, Radio } from '@/ui/Core';
 import { Input, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
 
-import { categoryOptions } from '../utils';
+import { categoryOptions } from '../../utils';
 
 export default function Header({
 	register,

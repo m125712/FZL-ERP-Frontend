@@ -214,7 +214,7 @@ export default function Index() {
 				accessorFn: (row) => {
 					return row.challan_info
 						?.map((item) => item.challan_number)
-						.join(', ');
+						.join(' -- ');
 				},
 				id: 'challan_info',
 				header: 'Challan Info',

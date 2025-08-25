@@ -242,7 +242,7 @@ export default function Index() {
 					const { lc_numbers } = row;
 					if (lc_numbers === null) return '--';
 
-					return lc_numbers?.map((lc) => lc?.lc_number).join(', ');
+					return lc_numbers?.map((lc) => lc?.lc_number).join(' -- ');
 				},
 				id: 'lc_numbers',
 				header: 'LC No.',
@@ -267,7 +267,7 @@ export default function Index() {
 					const { pi_numbers } = row;
 					if (pi_numbers === null) return '--';
 
-					return pi_numbers?.map((pi) => pi?.pi_number).join(', ');
+					return pi_numbers?.map((pi) => pi?.pi_number).join(' -- ');
 				},
 				id: 'pi_numbers',
 				header: 'Pi No.',

@@ -161,7 +161,7 @@ export default function Index() {
 				accessorFn: (row) => {
 					return row.thread_batch
 						?.map((item) => item.finishing_batch_number)
-						.join(', ');
+						.join(' -- ');
 				},
 				id: 'thread_batch',
 				header: 'Thread Batch',
